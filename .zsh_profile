@@ -1,0 +1,49 @@
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+
+echo "Welcome back, William"
+
+# use vi bindings for terminal input
+set -o vi
+
+# BEGIN: aliases
+alias ll="ls -l"
+alias catn="cat -n"
+
+alias egrep="egrep --color"
+alias grep="egrep"
+
+alias c="clear"
+
+alias vi="vim"
+# END: aliases
+
+# BEGIN: functions
+functon npms() {
+  clear;
+  npm start;
+}
+# END: functions
+
+# bindkey reverse-i search from emacs bindings
+bindkey "^R" history-incremental-search-backward
+
+# export docker env variables
+eval "$(docker-machine env default)"
+
+# custom js functions
+source ~/.js_to_bash.sh
+
+# custom git functions
+source ~/.git_functions.sh
+
+# generates placeholder content for FE work
+function lorem {
+    text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+    echo $text
+}
+
+# generates lorem and adds to pasteboard
+function loremcp {
+    lorem | pbcopy
+}
