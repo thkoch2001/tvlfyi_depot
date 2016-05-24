@@ -12,6 +12,8 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * oh my zsh - z-shell for Mac
 * sublime text - text editor
 * webstorm - web IDE
+* docker - for running containers and virtual environments
+* mou - markdown editor
 
 ### other notes
 * add Adobe Source Code Pro font for shell and text editors
