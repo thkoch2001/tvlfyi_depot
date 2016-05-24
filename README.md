@@ -14,4 +14,5 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * webstorm - web IDE
 
 ### other notes
+* add Adobe Source Code Pro font for shell and text editors
 * increase trackpad / mouse speed to maximum levels
