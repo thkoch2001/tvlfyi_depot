@@ -9,3 +9,6 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * oh my zsh - z-shell for Mac
 * sublime text - text editor
 * webstorm - web IDE
+
+### other notes
+* increase trackpad / mouse speed to maximum levels
