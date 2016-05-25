@@ -15,6 +15,13 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * docker - for running containers and virtual environments
 * mou - markdown editor
 
+### Sublime Text settings
+* SublimeLinter - lints files
+* SublimeLinter-contrib-eslint - lints using eslint
+* Oceanic Next Theme - buffer and editor theme
+* Vintageous - extended Vim key-binding support
+* babel-sublime - supports JSNext features
+
 ### other notes
 * add Adobe Source Code Pro font for shell and text editors
 * increase trackpad / mouse speed to maximum levels
