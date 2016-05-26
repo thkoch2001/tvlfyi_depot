@@ -20,6 +20,7 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * SublimeLinter-contrib-eslint - lints using eslint
 * Oceanic Next Theme - buffer and editor theme
 * Vintageous - extended Vim key-binding support
+* Vintageous-Origami - extended Vintageous support for window pane mgt (ctrl + w) `"vintageous_use_ctrl_keys": true`
 * babel-sublime - supports JSNext features
 
 ### other notes
