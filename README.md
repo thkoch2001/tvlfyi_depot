@@ -21,6 +21,7 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * Oceanic Next Theme - buffer and editor theme
 * Vintageous - extended Vim key-binding support
 * Vintageous-Origami - extended Vintageous support for window pane mgt (ctrl + w) `"vintageous_use_ctrl_keys": true`
+* Origami - dep. of Vintageous-Origami (see above)
 * babel-sublime - supports JSNext features
 
 ### other notes
