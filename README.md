@@ -23,6 +23,7 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * Vintageous-Origami - extended Vintageous support for window pane mgt (ctrl + w) `"vintageous_use_ctrl_keys": true`
 * Origami - dep. of Vintageous-Origami (see above)
 * babel-sublime - supports JSNext features
+* SublimeCodeIntel - robust autocomplete engine
 
 #### Sublime preferences (user)
 
