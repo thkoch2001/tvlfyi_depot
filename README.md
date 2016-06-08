@@ -24,6 +24,7 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * Origami - dep. of Vintageous-Origami (see above)
 * babel-sublime - supports JSNext features
 * SublimeCodeIntel - robust autocomplete engine
+* PackageResourceViewer - quickly view / edit installed Sublime Packages to enhance customization options
 
 #### Sublime preferences (user)
 
