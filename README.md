@@ -12,8 +12,10 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * oh my zsh - z-shell for Mac
 * sublime text - text editor
 * webstorm - web IDE
+* pycharm - python IDE
 * docker - for running containers and virtual environments
 * mou - markdown editor
+* f.lux - modulates the blue amount from the screen throughout the day
 
 ### Sublime Text settings
 * SublimeLinter - lints files
