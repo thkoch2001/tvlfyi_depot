@@ -27,6 +27,7 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * babel-sublime - supports JSNext features
 * SublimeCodeIntel - robust autocomplete engine
 * PackageResourceViewer - quickly view / edit installed Sublime Packages to enhance customization options
+* SidebarEnhancements - extensions for Sublime Text's sidebar
 
 #### Sublime preferences (user)
 
