@@ -30,3 +30,7 @@ function slice {
 
     echo $RES1
 }
+
+function setInterval {
+  eval "while true; do $1; sleep $2; done"
+}
