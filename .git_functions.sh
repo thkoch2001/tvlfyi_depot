@@ -10,6 +10,26 @@ function wgtix {
 }
 
 
+# search for a git branch by ticket number
+# useful when combined with `wgcheckout`
+# e.g.
+# $ wgcheckout "$(wgfind 1045)"
+# checks-out feature/GDMX-1045 ...
+#
+# if the `TICKET_NO` cannot be found, it will return the current branch
+function wgfind {
+  TICKET_NO="$1"
+
+  BRANCHNAME=$(git branch | grep "$TICKET_NO" | perl -p -e 's/^\s*//')
+
+  if [ -z $BRANCHNAME ]; then
+    BRANCHNAME="$(wgbranch)"
+  fi
+
+  echo "$BRANCHNAME"
+}
+
+
 # wrapper fn for "git checkout" that exports previous branch to env
 function wgcheckout {
   if [ -z $1 ]; then
