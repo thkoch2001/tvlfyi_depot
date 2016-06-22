@@ -49,16 +49,6 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 }
 ```
 
-#### Sublime key-bindings (user)
-
-```
-[
-  { "keys": ["super+\\"], "command": "toggle_side_bar" },
-  { "keys": ["ctrl+tab"], "command": "next_view" },
-  { "keys": ["ctrl+shift+tab"], "command": "prev_view" }
-]
-```
-
 ### other notes
 * add Adobe Source Code Pro font for shell and text editors
 * increase trackpad / mouse speed to maximum levels
