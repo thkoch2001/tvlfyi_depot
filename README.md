@@ -32,23 +32,7 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 
 #### Sublime preferences (user)
 
-```
-{
-	"color_scheme": "Packages/User/SublimeLinter/Oceanic Next (SL).tmTheme",
-	"font_face": "Source Code Pro",
-	"font_size": 12,
-	"ignored_packages":
-	[
-		"Vintage",
-		"VintageousOrigami"
-	],
-	"tab_size": 2,
-	"theme": "Oceanic Next.sublime-theme",
-	"translate_tabs_to_spaces": true,
-	"vintage_start_in_command_mode": true,
-	"vintageous_use_ctrl_keys": true
-}
-```
+[Preferences.sublime-settings](https://github.com/wpcarro/pc_settings/blob/master/Preferences.sublime-settings)
 
 ### other notes
 * add Adobe Source Code Pro font for shell and text editors
