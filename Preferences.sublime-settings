@@ -1,0 +1,27 @@
+{
+	"auto_complete_triggers":
+	[
+		{
+			"characters": "<",
+			"selector": "text.html"
+		},
+		{
+			"characters": "/",
+			"selector": "string.quoted.double.html,string.quoted.single.html, source.css"
+		}
+	],
+	"color_scheme": "Packages/User/SublimeLinter/Oceanic Next (SL).tmTheme",
+	"font_face": "Operator Mono",
+	"font_size": 16,
+	"ignored_packages":
+	[
+		"Vintage",
+		"VintageousOrigami"
+	],
+	"tab_size": 2,
+	"theme": "Oceanic Next.sublime-theme",
+	"translate_tabs_to_spaces": true,
+	"vintage_start_in_command_mode": true,
+	"vintageous_use_ctrl_keys": true,
+	"rulers": [80]
+}
