@@ -23,5 +23,18 @@
   {
     "keys": ["super+shift+o"],
     "command": "reveal_in_side_bar"
+  },
+  {
+    "keys": ["super+shift+r"],
+    "command": "repl_open",
+    "args": {
+      "cmd": ["python", "-i", "-u"],
+      "cwd": "$file_path",
+      "encoding": "utf8",
+      "extend_env": { "PYTHONIOENCODING": "utf-8" },
+      "external_id": "python",
+      "syntax": "Packages/Python/Python.tmLanguage",
+      "type": "subprocess"
+    }
   }
 ]
