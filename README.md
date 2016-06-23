@@ -17,7 +17,7 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * mou - markdown editor
 * f.lux - modulates the blue amount from the screen throughout the day
 
-### Sublime Text settings
+### Sublime Text Packages
 * SublimeLinter - lints files
 * SublimeLinter-contrib-eslint - lints using eslint
 * Oceanic Next Theme - buffer and editor theme
@@ -33,6 +33,10 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 #### Sublime preferences (user)
 
 [Preferences.sublime-settings](https://github.com/wpcarro/pc_settings/blob/master/Preferences.sublime-settings)
+
+#### Sublime keybindings (user)
+
+[Default (OSX).sublime-keymap](https://github.com/wpcarro/pc_settings/blob/master/Default%20(OSX).sublime-keymap)
 
 ### other notes
 * add Adobe Source Code Pro font for shell and text editors
