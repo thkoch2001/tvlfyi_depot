@@ -1,4 +1,4 @@
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:$PATH
 
 echo "Welcome back, William"
 
@@ -28,7 +28,9 @@ functon npms() {
 bindkey "^R" history-incremental-search-backward
 
 # export docker env variables
-eval "$(docker-machine env default)"
+# re-enable this line when using docker otherwise you will receive
+# a TLS error since docker-machine won't be running
+# eval "$(docker-machine env default)"
 
 # custom js functions
 source ~/.js_to_bash.sh
@@ -47,3 +49,11 @@ function lorem {
 function loremcp {
     lorem | pbcopy
 }
+
+# run cmatrix command for 3 seconds before exiting
+#. $HOME/.matrix_intro.sh
+
+# syntax highlighting for CLI; if not installed, run the following command
+# brew install zsh-syntax-highlighting
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
