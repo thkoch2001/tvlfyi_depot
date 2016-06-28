@@ -1,6 +1,6 @@
 export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:$PATH
 
-echo "Welcome back, William"
+echo "Welcome back, $USER"
 
 # use vi bindings for terminal input
 set -o vi
@@ -15,6 +15,15 @@ alias grep="egrep"
 alias c="clear"
 
 alias vi="vim"
+
+alias find="find -E"
+
+# if pygmentize isn't installed run...
+# sudo pip install pygments
+# colorizes syntax of files
+alias ccat="pygmentize -g"
+
+alias dir='find . -maxdepth 1 -type d -regex "\.\/[^.].+"'
 # END: aliases
 
 # BEGIN: functions
@@ -24,8 +33,12 @@ functon npms() {
 }
 # END: functions
 
-# bindkey reverse-i search from emacs bindings
+# BEGIN: bindkeys
 bindkey "^R" history-incremental-search-backward
+
+bindkey -M viins 'jj' vi-cmd-mode
+# END: bindkeys
+
 
 # export docker env variables
 # re-enable this line when using docker otherwise you will receive
