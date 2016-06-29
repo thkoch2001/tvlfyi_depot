@@ -18,17 +18,10 @@ function length {
 }
 
 function slice {
-    STR=$3
-    AMT0=$1
-    AMT1=$2
-
-    LEN=$(length $STR)
-    BACK=$((LEN-AMT1))
-
-    RES0=$(trimfront $STR $AMT0)
-    RES1=$(trimend $RES0 $BACK)
-
-    echo $RES1
+  start="$1"
+  end="$2"
+  string="$3"
+  echo "${string:${start}:${end}}"
 }
 
 function setInterval {
