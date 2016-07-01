@@ -29,6 +29,7 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 * PackageResourceViewer - quickly view / edit installed Sublime Packages to enhance customization options
 * SidebarEnhancements - extensions for Sublime Text's sidebar
 * SublimeREPL - convenient REPL for ST
+* FoldComments - collapse comments with keystrokes
 
 #### Sublime preferences (user)
 
