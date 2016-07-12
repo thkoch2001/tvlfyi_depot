@@ -5,37 +5,11 @@ echo "Welcome back, $USER"
 # use vi bindings for terminal input
 set -o vi
 
-# BEGIN: aliases
-alias ll="ls -l"
-alias catn="cat -n"
+# aliases
+source $HOME/pc_settings/.w_aliases.sh
 
-alias egrep="egrep --color"
-alias grep="egrep"
-
-alias c="clear"
-
-alias vi="vim"
-
-alias find="find -E"
-
-# if pygmentize isn't installed run...
-# sudo pip install pygments
-# colorizes syntax of files
-alias ccat="pygmentize -g"
-
-alias dir='find . -maxdepth 1 -type d -regex "\.\/[^.].+"'
-
-# view the Unix directory stack as maintained through
-#     pushd and popd commands
-alias wdirs='dirs | tr " " "\n" | sort -r'
-# END: aliases
-
-# BEGIN: functions
-functon npms() {
-  clear;
-  npm start;
-}
-# END: functions
+# functions
+source $HOME/pc_settings/.w_functions.sh
 
 # BEGIN: bindkeys
 bindkey "^R" history-incremental-search-backward
@@ -43,40 +17,13 @@ bindkey "^R" history-incremental-search-backward
 bindkey -M viins 'jj' vi-cmd-mode
 # END: bindkeys
 
-
 # export docker env variables
 # re-enable this line when using docker otherwise you will receive
 # a TLS error since docker-machine won't be running
 # eval "$(docker-machine env default)"
 
-# custom js functions
-source ~/.js_to_bash.sh
-
-# custom git functions
-source ~/.git_functions.sh
-
-# custom bash helpers functions
-source ~/.misc_functions.sh
-
-# generates placeholder content for FE work
-function lorem {
-    text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
-    echo $text
-}
-
-# generates lorem and adds to pasteboard
-function loremcp {
-    lorem | pbcopy
-}
-
-# searches all PATH directories for a keyword
-function wsearchpath {
-  echo $PATH | tr ':' '\n' | xargs -I {} find {} -type f -perm +111 -maxdepth 1 -name "*${1}*" -print | xargs basename
-}
-
 # run cmatrix command for 3 seconds before exiting
-#. $HOME/.matrix_intro.sh
+#. $HOME/pc_settings/.matrix_intro.sh
 
 # syntax highlighting for CLI; if not installed, run the following command
 # brew install zsh-syntax-highlighting
