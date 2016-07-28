@@ -30,7 +30,10 @@
 `shift` + `i`: insert at the beginning of a line.
 `shift` + `a`: insert at the end of a line.
 
+`c`: combines a delete operation with an insert operation.
+
 `d` + `d`: deletes a line.
+`c` + `c`: changes a line.
 
 `shift` + `o`: inserts above the current line.
 `o`: inserts below the current line.
