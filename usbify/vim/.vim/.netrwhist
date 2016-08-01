@@ -1,11 +1,5 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =9
-let g:netrw_dirhist_1='/Users/wcarroll/huge/projects/google/cerebro/static/js'
-let g:netrw_dirhist_2='/Users/wcarroll/huge/projects/google/cerebro/static'
-let g:netrw_dirhist_3='/Users/wcarroll/huge/projects/google/cerebro'
-let g:netrw_dirhist_4='/Users/wcarroll'
-let g:netrw_dirhist_5='/Users'
-let g:netrw_dirhist_6='/'
-let g:netrw_dirhist_7='/Users/wcarroll/huge/projects/google/cerebro'
-let g:netrw_dirhist_8='/Users/wcarroll'
-let g:netrw_dirhist_9='/Users/wcarroll/huge/projects/google/cerebro'
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/Volumes/usb_vim/.Spotlight-V100'
+let g:netrw_dirhist_2='/Users/wcarroll'
+let g:netrw_dirhist_3='/Users/wcarroll/pc_settings/usbify/vim'
