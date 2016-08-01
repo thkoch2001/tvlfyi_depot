@@ -2,41 +2,50 @@
 
 path_to_ext_device="/Volumes/usb_vim"
 
+
+# ensure there is an external device connected and that the path to it is 
+# accurate.
+if [ ! -d "$path_to_ext_device" ]; then
+  echo "No external device found at: $path_to_ext_device"
+  echo "Ensure that the value set for path_to_ext_device is correct."
+  echo "path_to_ext_device: $path_to_ext_device"
+  echo "Exiting."
+  return 1
+fi
+
+
+
 # This script toggles between local vim and a version that can be stored on an 
 # external device like a USB.
 
-if [ -L "$HOME/.vim" ]; then
+# USB --> local machine
+if [ -L "$HOME/.vim" ] && [ -L "$HOME/.vimrc" ]; then
   echo "Pointing to USB. Toggling back to local machine..."
 
-  # remove the symlink and .vimrc
+  # remove the symlinks
   rm "$HOME/.vim"
-
-  # remove the USB's version of the .vimrc and use the backed-up copy
   rm "$HOME/.vimrc"
-  mv "$HOME/.vimrc.bak" "$HOME/.vimrc"
 
-  # rename the .vim.bak directory
-  mv "$HOME/.vim.bak" "$HOME/.vim"
+  # restore back-ups as active files
+  [ -d "$HOME/.vim.bak" ] && mv "$HOME/.vim.bak" "$HOME/.vim"
+  [ -f "$HOME/.vimrc.bak" ] && mv "$HOME/.vimrc.bak" "$HOME/.vimrc"
 
   echo ".vim now points to $HOME/.vim"
+  echo ".vimrc now points to $HOME/.vimrc"
+
+# local machine --> USB
 else
   echo "Pointing to local machine. Toggling to USB..."
 
-  # back-up local machine's .vim folder
-  mv "$HOME/.vim" "$HOME/.vim.bak"
+  # back-up local machine's files
+  [ -d "$HOME/.vim" ] && mv "$HOME/.vim" "$HOME/.vim.bak"
+  [ -f "$HOME/.vimrc" ] && mv "$HOME/.vimrc" "$HOME/.vimrc.bak"
 
-  # back-up the local machine's .vimrc
-  if [ -f "HOME/.vimrc" ]; then
-    mv "$HOME/.vimrc" "$HOME/.vimrc.bak"
-  fi
+  # symlink .vim and .vimrc to external device
+  ln -s "${path_to_ext_device}/vim/.vim" "$HOME/.vim"
+  ln -s "${path_to_ext_device}/vim/.vimrc" "$HOME/.vimrc"
 
-
-  # point the $HOME/.vim name to the USB for source routing
-  # use the USB drive's copy of .vimrc
-  ln -s "${path_to_ext_device}/.vim" "$HOME/.vim"
-  ln -s "${path_to_ext_device}/.vimrc" "$HOME/.vimrc"
-
-  echo ".vim now points to ${path_to_ext_device}/.vim"
+  echo ".vim now points to ${path_to_ext_device}/vim/.vim"
 fi
 
 echo "Done."
