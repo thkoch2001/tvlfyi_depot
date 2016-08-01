@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-# This script points the .vim directory to a USB to increase portability
-# it will toggle between modes
+# This script toggles between local vim and a version that can be stored on an 
+# external device like a USB.
 
 if [ -L "$HOME/.vim" ]; then
-  echo "Already pointing to USB. Toggling back..."
+  echo "Pointing to USB. Toggling back to local machine..."
 
   # remove the symlink and .vimrc
   rm "$HOME/.vim"
@@ -18,7 +18,7 @@ if [ -L "$HOME/.vim" ]; then
 
   echo ".vim now points to $HOME/.vim"
 else
-  echo "Not pointing to USB. Getting to work..."
+  echo "Pointing to local machine. Toggling to USB..."
 
   # rename the current .vim directory and .vimrc
   mv "$HOME/.vim" "$HOME/.vim.bak"
