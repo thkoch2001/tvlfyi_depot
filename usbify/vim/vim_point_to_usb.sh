@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+path_to_ext_device="/Volumes/usb_vim"
+
 # This script toggles between local vim and a version that can be stored on an 
 # external device like a USB.
 
@@ -26,10 +28,10 @@ else
 
   # point the $HOME/.vim name to the USB for source routing
   # use the USB drive's copy of .vimrc
-  ln -s /Volumes/Untitled\ 1/.vim "$HOME/.vim"
-  cp /Volumes/Untitled\ 1/.vimrc "$HOME/"
+  ln -s "${path_to_ext_device}/.vim" "$HOME/.vim"
+  ln -s "${path_to_ext_device}/.vimrc" "$HOME/.vimrc"
 
-  echo ".vim now points to /Volumes/Untitled\ 1/.vim"
+  echo ".vim now points to ${path_to_ext_device}/.vim"
 fi
 
 echo "Done."
