@@ -22,9 +22,14 @@ if [ -L "$HOME/.vim" ]; then
 else
   echo "Pointing to local machine. Toggling to USB..."
 
-  # rename the current .vim directory and .vimrc
+  # back-up local machine's .vim folder
   mv "$HOME/.vim" "$HOME/.vim.bak"
-  mv "$HOME/.vimrc" "$HOME/.vimrc.bak"
+
+  # back-up the local machine's .vimrc
+  if [ -f "HOME/.vimrc" ]; then
+    mv "$HOME/.vimrc" "$HOME/.vimrc.bak"
+  fi
+
 
   # point the $HOME/.vim name to the USB for source routing
   # use the USB drive's copy of .vimrc
