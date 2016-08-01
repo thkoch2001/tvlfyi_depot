@@ -1,4 +1,4 @@
-functon npms() {
+npms() {
   clear;
   npm start;
 }
@@ -10,7 +10,7 @@ source $HOME/pc_settings/.js_to_bash.sh
 source $HOME/pc_settings/.git_functions.sh
 
 # custom bash helpers functions
-source $HOME/pc_settings/.misc_functions.sh
+# source $HOME/pc_settings/.misc_functions.sh
 
 # generates placeholder content for FE work
 function lorem {
@@ -27,5 +27,19 @@ function loremcp {
 # searches all PATH directories for a keyword
 function wsearchpath {
   echo $PATH | tr ':' '\n' | xargs -I {} find {} -type f -perm +111 -maxdepth 1 -name "*${1}*" -print | xargs basename
+}
+
+
+# tests an internet connection
+function is_online {
+  wget -q --spider "http://google.com"
+
+  if [ $? -eq 0 ]; then
+    echo "Online"
+    return 0
+  else
+    echo "Offline"
+    return 1
+  fi
 }
 
