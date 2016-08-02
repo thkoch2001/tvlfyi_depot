@@ -49,6 +49,12 @@ function wgcheckout {
 }
 
 
+# wgcheckout combined with a fuzzy search
+function wgfcheckout {
+  wgcheckout $(git branch | fzf)
+}
+
+
 # combine fetch and rebase (git frebase)
 function wgfreebase {
     if [ -z $1 ]; then
