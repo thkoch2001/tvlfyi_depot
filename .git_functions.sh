@@ -51,7 +51,7 @@ function wgcheckout {
 
 # wgcheckout combined with a fuzzy search
 function wgfcheckout {
-  branchname=$(git branch | fzf)
+  branchname=$(trim $(git branch | fzf))
 
   [ ! -z "$branchname" ] && wgcheckout "$branchname" || return
 }

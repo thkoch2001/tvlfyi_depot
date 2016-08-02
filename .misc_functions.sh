@@ -22,7 +22,14 @@ function wfd {
 
 # pushd into a directory on your dirs stack
 function wpushd {
-  dir=$(dirs | tr ' ' '\n' | fzf | dirname) && pushd "$dir"
+  dir="$(dirs | tr ' ' '\n' | fzf)" && pushd "$dir"
 }
 
+
+# trims leading and trailing whitespace
+function trim {
+  input="$1"
+
+  echo "${input//[[:blank:]]/}"
+}
 
