@@ -33,3 +33,8 @@ function trim {
   echo "${input//[[:blank:]]/}"
 }
 
+
+function wgreviewers {
+  echo "BJ Warshaw\nDaniel Wasilewski\nSean Sullivan\nCharles Morrissey\nRyan Balch\nZach Goldstein\nWilliam Anderson"
+}
+

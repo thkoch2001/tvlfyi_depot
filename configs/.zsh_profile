@@ -1,4 +1,7 @@
-export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:$PATH
+export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:$PATH
+
+# make vim the default editor for commit messages etc
+export EDITOR=$(which vim)
 
 echo "Welcome back, $USER"
 
@@ -6,10 +9,15 @@ echo "Welcome back, $USER"
 set -o vi
 
 # aliases
-source $HOME/pc_settings/.w_aliases.sh
+source $HOME/pc_settings/aliases.sh
 
 # functions
-source $HOME/pc_settings/.w_functions.sh
+source $HOME/pc_settings/functions/index.sh
+
+
+# setup keybindings for history functions
+source $HOME/pc_settings/scripts/setup_keybindings.sh
+
 
 # BEGIN: bindkeys
 bindkey "^R" history-incremental-search-backward
