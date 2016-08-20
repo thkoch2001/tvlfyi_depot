@@ -21,6 +21,8 @@ Plugin 'othree/yajs.vim'
 Plugin 'crusoexia/vim-monokai'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree'
+Plugin 'mileszs/ack.vim'
+Plugin 'sjl/clam.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
