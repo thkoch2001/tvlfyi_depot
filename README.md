@@ -1,9 +1,6 @@
 # My Mac Configuration
 I'm documenting this for personal use. Shell settings, vim settings, commonly used applications, et cetera...
 
-### to do
-* migrate Google Chrome bookmarks to new machine
-
 ### Commonly used applications
 * homebrew - necessary for procuring shell applications
 * karabiner - `key-repeat: 50ms delay-until-repeat: 300ms` increase your Mac's key repeat settings beyond the default range

@@ -49,26 +49,30 @@ function wgcheckout {
 }
 
 
-# combine fetch and rebase (git frebase)
-function wgfreebase {
-    if [ -z $1 ]; then
-        branchname="$(git symbolic-ref HEAD 2> /dev/null | cut -f3 -d'/')"
-    else
-        branchname="$1"
-    fi
+# opens the current ticket-branch in web browser
+function wgjira {
+  base_url="https://jira.hugeinc.com/browse"
+  ticket=$(wgtix)
 
-    git fetch origin "$branchname" && git rebase origin/"$branchname"
+  open "${base_url}/${ticket}"
 }
 
 
-# push to current branch
-function wgpush {
-    if [ -z $1 ]; then
-        branchname="$(git symbolic-ref HEAD 2> /dev/null | cut -f3 -d'/')"
-    else
-        branchname="$1"
-    fi
+# wgcheckout combined with a fuzzy search
+function wgfcheckout {
+  branchname=$(trim $(git branch | fzf))
 
-    git push origin $branchname
+  [ ! -z "$branchname" ] && wgcheckout "$branchname" || return
+}
+
+
+# View an author's work within a specified date range. 
+function wgviewcommits {
+  author=$([ -z "$1" ] && echo "William Carroll" || echo "$1")
+  todays_date=$(date +'%Y-%m-%d')
+  date=$([ -z "$2" ] && echo "${todays_date}" || echo "$2")
+
+  git log --all --author="${author}" --after="${date} 00:00" \
+        --before="${date} 23:59"
 }
 

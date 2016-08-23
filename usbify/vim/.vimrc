@@ -21,6 +21,8 @@ Plugin 'othree/yajs.vim'
 Plugin 'crusoexia/vim-monokai'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree'
+Plugin 'mileszs/ack.vim'
+Plugin 'sjl/clam.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -50,6 +52,7 @@ let g:syntastic_check_on_wq = 1
 let g:syntastic_javascript_checkers = ['gjslint']
 
 
+" Basic settings
 syntax on
 set number
 set tabstop=2
@@ -57,6 +60,32 @@ set expandtab
 set shiftwidth=2
 colorscheme monokai
 set t_Co=255
+
+
+" Ensure that <header> is "," character
+let mapleader = ","
+
+
+" Define highlighting groups
+highlight InterestingWord1 ctermbg=Cyan ctermfg=Black
+highlight InterestingWord2 ctermbg=Yellow ctermfg=Black
+highlight InterestingWord3 ctermbg=Magenta ctermfg=Black
+
+
+" h1 highlighting
+nnoremap <silent> <leader>h1 :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<CR>
+nnoremap <silent> <leader>xh1 :execute 'match none'<CR>
+
+" h2 highlighting
+nnoremap <silent> <leader>h2 :execute '2match InterestingWord2 /\<<c-r><c-w>\>/'<CR>
+nnoremap <silent> <leader>xh2 :execute '2match none'<CR>
+
+" h3 highlighting
+nnoremap <silent> <leader>h3 :execute '3match InterestingWord3 /\<<c-r><c-w>\>/'<CR>
+nnoremap <silent> <leader>xh3 :execute '3match none'<CR>
+
+"clear all highlighted groups
+nnoremap <silent> <leader>xhh :execute 'match none'<CR> :execute '2match none'<CR> :execute '3match none'<CR>
 
 
 " add 80 character wrap line
@@ -71,9 +100,19 @@ imap jj <Esc>
 map <C-n> :NERDTreeToggle<CR>
 
 
+" BOL and EOL
+nnoremap H ^
+nnoremap L $
+
+
+" set -o emacs line-editor defaults
+inoremap <C-a> <Esc>I
+inoremap <C-e> <Esc>A
+
 
 " trim trailing whitespace on save
 autocmd BufWritePre *.{js,py,tpl,html} :%s/\s\+$//e
+
 
 " set default font and size
 set guifont=Operator\ Mono:h16
