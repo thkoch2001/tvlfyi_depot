@@ -23,6 +23,7 @@ Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree'
 Plugin 'mileszs/ack.vim'
 Plugin 'sjl/clam.vim'
+Plugin 'kien/ctrlp.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -38,6 +39,15 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 " -- END: Vundle config --
+
+
+" backspace settings
+set backspace=2
+set backspace=indent,eol,start
+
+
+" keyword completion
+inoremap ;; <C-n>
 
 
 " -- Syntastic Settings --

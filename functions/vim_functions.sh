@@ -21,7 +21,8 @@ function vfzopen() {
 
 
   if [ ! -z "$filename" ]; then
-    vim "$filename"
+    echo "$filename"
+    vim +/"$search_query" "$filename"
     return 0
   else
     return 1
