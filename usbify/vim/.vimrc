@@ -19,6 +19,7 @@ Plugin 'tpope/vim-fugitive'
 " All of your Plugins must be added before the following line
 Plugin 'Raimondi/delimitMate'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'airblade/vim-gitgutter'
 Plugin 'kien/ctrlp.vim'
 Plugin 'mileszs/ack.vim'
 Plugin 'pangloss/vim-javascript'
@@ -26,7 +27,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'sickill/vim-monokai'
 Plugin 'sjl/clam.vim'
-Plugin 'airblade/vim-gitgutter'
+Plugin 'terryma/vim-multiple-cursors'
 
 
 call vundle#end()            " required
@@ -64,8 +65,21 @@ set conceallevel=1
 set concealcursor=nvic
 
 " JavaScript thanks to pangloss/vim-javascript
-let g:javascript_conceal_function = "ƒ"
-match ErrorMsg /ƒ/
+" let g:javascript_conceal_function = "ƒ"
+" match ErrorMsg /ƒ/
+
+
+" Ultisnips
+" Track the engine.
+Plugin 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<c-x>"
+" let g:UltiSnipsJumpForwardTrigger="<c-j>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 
 
@@ -119,6 +133,13 @@ nnoremap <silent> <leader>xh3 :execute '3match none'<CR>
 
 "clear all highlighted groups
 nnoremap <silent> <leader>xhh :execute 'match none'<CR> :execute '2match none'<CR> :execute '3match none'<CR>
+
+
+" pasteboard copy & paste
+nnoremap <C-c> V"+y
+vnoremap <C-c> "+y
+nnoremap <C-v> "+p
+vnoremap <C-v> "+p
 
 
 " add 80 character wrap line
