@@ -1,9 +1,12 @@
-export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:$PATH
+export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/local/sbin:$PATH
 
 # make vim the default editor for commit messages etc
 export EDITOR=$(which vim)
 
 echo "Welcome back, $USER"
+
+# display the space available on each mounted Volume
+df -hl
 
 # use vi bindings for terminal input
 set -o vi
@@ -13,7 +16,6 @@ source $HOME/pc_settings/aliases.sh
 
 # functions
 source $HOME/pc_settings/functions/index.sh
-
 
 # setup keybindings for history functions
 source $HOME/pc_settings/scripts/setup_keybindings.sh
