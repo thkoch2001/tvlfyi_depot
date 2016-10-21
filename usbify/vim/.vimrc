@@ -46,6 +46,12 @@ filetype plugin indent on    " required
 " -- END: Vundle config --
 
 
+set noswapfile
+
+
+set grepprg=ack\ -k
+
+
 " backspace settings
 set backspace=2
 set backspace=indent,eol,start
@@ -82,9 +88,27 @@ let g:UltiSnipsExpandTrigger="<c-x>"
 " let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 
-
 " keyword completion
 inoremap ;; <C-n>
+
+" tab movement bindings
+nnoremap <C-h> gT
+nnoremap <C-l> gt
+
+" scrolling and maintaing mouse position
+nnoremap <C-j> j<C-e>
+nnoremap <C-k> k<C-y>
+
+
+" reload file after git changes
+nnoremap <C-r> :e<CR>
+
+
+" resize vertical and horizontal splits
+nnoremap <C-w><C-l> :vertical resize +3<CR>
+nnoremap <C-w><C-h> :vertical resize -3<CR>
+nnoremap <C-w><C-k> :resize +3<CR>
+nnoremap <C-w><C-j> :resize -3<CR>
 
 
 " -- Syntastic Settings --
@@ -105,7 +129,7 @@ set number
 set tabstop=2
 set expandtab
 set shiftwidth=2
-colorscheme monokai
+colorscheme elflord
 set t_Co=255
 
 
@@ -138,7 +162,7 @@ nnoremap <silent> <leader>xhh :execute 'match none'<CR> :execute '2match none'<C
 " pasteboard copy & paste
 nnoremap <C-c> V"+y
 vnoremap <C-c> "+y
-nnoremap <C-v> "+p
+nnoremap <C-v> o<Esc>"+p
 vnoremap <C-v> "+p
 
 

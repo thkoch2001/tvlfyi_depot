@@ -1,3 +1,15 @@
+# fuzzily-find-file
+function wgff {
+  echo $(find . -type f | fzf)
+}
+
+
+# fuzzily-find-branch
+function wgfb {
+  echo $(git branch -a | fzf)
+}
+
+
 # download files to /tmp directory
 function wdownload {
   URL="$1"
