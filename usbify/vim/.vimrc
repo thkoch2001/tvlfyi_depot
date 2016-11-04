@@ -93,6 +93,27 @@ let g:UltiSnipsExpandTrigger="<c-x>"
 inoremap ;; <C-n>
 
 
+" remap <C- keys in insert mode to have similar directional behavior to the
+" behavior that they have in normal and visual modes
+inoremap <C-w> <Esc>lwi
+inoremap <C-W> <Esc>lWi
+
+" TODO: debug why <C-b><C-b> repetition is needed
+inoremap <C-b> <Esc>bi
+inoremap <C-B> <Esc>Bi
+
+
+" set -o emacs line-editor defaults
+inoremap <C-a> <Esc>I
+inoremap <C-e> <Esc>A
+
+
+" keybinds to close a buffer
+inoremap <C-q> <Esc>:q<CR>
+nnoremap <C-q> :q<CR>
+nnoremap <C-q> :q<CR>
+
+
 " vs and sp keybinding
 nnoremap vs <Esc>:vs<CR>
 nnoremap vv <Esc>:vs<CR>
@@ -217,8 +238,12 @@ set number
 set tabstop=2
 set expandtab
 set shiftwidth=2
-colorscheme elflord
+colorscheme monokai
 set t_Co=255
+
+
+" Remove all characters until the end of the line
+inoremap <C-c> <Esc>lC
 
 
 " Ensure that <header> is "," character
@@ -271,11 +296,6 @@ map <C-n> :NERDTreeToggle<CR>
 " BOL and EOL
 nnoremap H ^
 nnoremap L $
-
-
-" set -o emacs line-editor defaults
-inoremap <C-a> <Esc>I
-inoremap <C-e> <Esc>A
 
 
 " trim trailing whitespace on save
