@@ -27,6 +27,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'sickill/vim-monokai'
 Plugin 'sjl/clam.vim'
+" NOTE: use <C-n> to run miltiple cursors not <C-d>
 Plugin 'terryma/vim-multiple-cursors'
 
 
@@ -92,6 +93,17 @@ let g:UltiSnipsExpandTrigger="<c-x>"
 inoremap ;; <C-n>
 
 
+" vs and sp keybinding
+nnoremap vs <Esc>:vs<CR>
+nnoremap vv <Esc>:vs<CR>
+nnoremap sp <Esc>:sp<CR>
+nnoremap ss <Esc>:sp<CR>
+
+
+" Remap window keybinding
+nnoremap <space> <C-w>
+
+
 " tab movement bindings
 nnoremap <C-h> gT
 nnoremap <C-l> gt
@@ -151,6 +163,24 @@ nnoremap F7 F&
 nnoremap F8 F*
 nnoremap F9 F(
 nnoremap F0 F)
+
+
+" Karate edits
+nnoremap ca9 ca(
+nnoremap da9 da(
+nnoremap va9 va(
+
+nnoremap ca0 ca)
+nnoremap da0 da)
+nnoremap va0 va)
+
+nnoremap ci9 ci(
+nnoremap di9 di(
+nnoremap vi9 vi(
+
+nnoremap ci0 ci)
+nnoremap di0 di)
+nnoremap vi0 vi)
 
 
 " scrolling and maintaing mouse position
@@ -221,6 +251,7 @@ nnoremap <silent> <leader>xhh :execute 'match none'<CR> :execute '2match none'<C
 nnoremap <C-c> V"+y
 vnoremap <C-c> "+y
 
+inoremap <C-v> <Esc>"+pa
 nnoremap <C-v> o<Esc>"+p
 vnoremap <C-v> "+p
 
