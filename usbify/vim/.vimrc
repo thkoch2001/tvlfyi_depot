@@ -295,7 +295,9 @@ map <C-n> :NERDTreeToggle<CR>
 
 " BOL and EOL
 nnoremap H ^
+vnoremap H ^
 nnoremap L $
+vnoremap L $
 
 
 " trim trailing whitespace on save
