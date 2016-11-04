@@ -91,9 +91,67 @@ let g:UltiSnipsExpandTrigger="<c-x>"
 " keyword completion
 inoremap ;; <C-n>
 
+
 " tab movement bindings
 nnoremap <C-h> gT
 nnoremap <C-l> gt
+
+
+" make Y do what is intuitive given D, etc.
+nnoremap Y y$
+
+
+" new tab keybinding
+nnoremap <C-t> :tabnew<CR>
+inoremap <C-t> <Esc>:tabnew<CR>
+vnoremap <C-t> <Esc>:tabnew<CR>
+
+
+" flip number keys to their shift+ counterparts
+nnoremap t1 t!
+nnoremap t2 t@
+nnoremap t3 t#
+nnoremap t4 t$
+nnoremap t5 t%
+nnoremap t6 t^
+nnoremap t7 t&
+nnoremap t8 t*
+nnoremap t9 t(
+nnoremap t0 t)
+
+nnoremap T1 T!
+nnoremap T2 T@
+nnoremap T3 T#
+nnoremap T4 T$
+nnoremap T5 T%
+nnoremap T6 T^
+nnoremap T7 T&
+nnoremap T8 T*
+nnoremap T9 T(
+nnoremap T0 T)
+
+nnoremap f1 f!
+nnoremap f2 f@
+nnoremap f3 f#
+nnoremap f4 f$
+nnoremap f5 f%
+nnoremap f6 f^
+nnoremap f7 f&
+nnoremap f8 f*
+nnoremap f9 f(
+nnoremap f0 f)
+
+nnoremap F1 F!
+nnoremap F2 F@
+nnoremap F3 F#
+nnoremap F4 F$
+nnoremap F5 F%
+nnoremap F6 F^
+nnoremap F7 F&
+nnoremap F8 F*
+nnoremap F9 F(
+nnoremap F0 F)
+
 
 " scrolling and maintaing mouse position
 nnoremap <C-j> j<C-e>
@@ -162,6 +220,7 @@ nnoremap <silent> <leader>xhh :execute 'match none'<CR> :execute '2match none'<C
 " pasteboard copy & paste
 nnoremap <C-c> V"+y
 vnoremap <C-c> "+y
+
 nnoremap <C-v> o<Esc>"+p
 vnoremap <C-v> "+p
 
