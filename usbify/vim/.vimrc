@@ -25,7 +25,10 @@ Plugin 'mileszs/ack.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
+
 Plugin 'sickill/vim-monokai'
+Plugin 'altercation/vim-colors-solarized'
+
 Plugin 'sjl/clam.vim'
 " NOTE: use <C-n> to run miltiple cursors not <C-d>
 Plugin 'terryma/vim-multiple-cursors'
@@ -106,12 +109,6 @@ inoremap <C-B> <Esc>Bi
 " set -o emacs line-editor defaults
 inoremap <C-a> <Esc>I
 inoremap <C-e> <Esc>A
-
-
-" keybinds to close a buffer
-inoremap <C-q> <Esc>:q<CR>
-nnoremap <C-q> :q<CR>
-nnoremap <C-q> :q<CR>
 
 
 " vs and sp keybinding
@@ -233,13 +230,26 @@ let g:syntastic_javascript_checkers = ['gjslint']
 
 
 " Basic settings
-syntax on
 set number
 set tabstop=2
 set expandtab
 set shiftwidth=2
-colorscheme monokai
+
+syntax enable
+
+if has('gui_running')
+  set background=light
+else
+  set background=dark
+endif
+
+colorscheme solarized
+
 set t_Co=255
+
+
+" Support italics
+highlight Comment cterm=italic
 
 
 " Remove all characters until the end of the line
