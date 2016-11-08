@@ -13,12 +13,16 @@ Plugin 'VundleVim/Vundle.vim'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
+
+" Displays git information in airline.
 Plugin 'tpope/vim-fugitive'
 
-" All of your Plugins must be added before the following line
 Plugin 'Raimondi/delimitMate'
+
+" Autocompletion
 Plugin 'Valloric/YouCompleteMe'
+
+" Displays git-tracked C*UD ops within gutter.
 Plugin 'airblade/vim-gitgutter'
 Plugin 'kien/ctrlp.vim'
 Plugin 'mileszs/ack.vim'
@@ -26,34 +30,49 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 
+" Themes
 Plugin 'sickill/vim-monokai'
 Plugin 'altercation/vim-colors-solarized'
 
+" Executes shell commands and pipes output into new Vim buffer.
 Plugin 'sjl/clam.vim'
+
+" Multiple cursors for simultaneous edits.
 " NOTE: use <C-n> to run miltiple cursors not <C-d>
 Plugin 'terryma/vim-multiple-cursors'
+
+" Visualize buffers
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 
 call vundle#end()            " required
 filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 " -- END: Vundle config --
 
 
+" Airline Settings
+" Enables the list of buffers.
+let g:airline#extensions#tabline#enabled = 1
+
+" Shows the filename only.
+let g:airline#extensions#tabline#fnamemod = ':t'
+
+" Allow glyphs in airline
+let g:airline_powerline_fonts = 1
+
+
+" It's the twenty-first century...no swaps.
 set noswapfile
 
 
-set grepprg=ack\ -k
+" Changes <leader> to <space> character.
+let mapleader = " "
+
+
+" Supports mouse interaction.
+set mouse=a
 
 
 " backspace settings
@@ -70,7 +89,7 @@ set list
 set listchars=eol:¶,trail:~,nbsp:␣
 
 
-" Keeps everything concealed at all times. Even when my cursor is on the word.
+" Keeps everything concealed at all times. Even when cursor is on the word.
 set conceallevel=1
 set concealcursor=nvic
 
@@ -92,49 +111,34 @@ let g:UltiSnipsExpandTrigger="<c-x>"
 " let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 
-" keyword completion
-inoremap ;; <C-n>
-
-
-" remap <C- keys in insert mode to have similar directional behavior to the
-" behavior that they have in normal and visual modes
-inoremap <C-w> <Esc>lwi
-inoremap <C-W> <Esc>lWi
-
-" TODO: debug why <C-b><C-b> repetition is needed
-inoremap <C-b> <Esc>bi
-inoremap <C-B> <Esc>Bi
-
-
-" set -o emacs line-editor defaults
+" Conventional Emacs line-editor defaults
 inoremap <C-a> <Esc>I
 inoremap <C-e> <Esc>A
 
 
-" vs and sp keybinding
+" Manage Vertical and Horizontal splits
 nnoremap vs <Esc>:vs<CR>
 nnoremap vv <Esc>:vs<CR>
 nnoremap sp <Esc>:sp<CR>
 nnoremap ss <Esc>:sp<CR>
 
 
-" Remap window keybinding
-nnoremap <space> <C-w>
+" Buffer creation and management
+" Buffer movement
+nnoremap <C-l> :1bnext<CR>
+nnoremap <C-h> :1bprevious<CR>
+
+" Buffer creation
+nnoremap <C-t> :enew<CR>
+
+" Buffer deletion
+nnoremap <leader>bq :bp <BAR> bd #<CR>
 
 
-" tab movement bindings
-nnoremap <C-h> gT
-nnoremap <C-l> gt
-
-
-" make Y do what is intuitive given D, etc.
+" make Y do what is intuitive given: 
+"   D: deletes until EOL
+"   C: changes until EOL
 nnoremap Y y$
-
-
-" new tab keybinding
-nnoremap <C-t> :tabnew<CR>
-inoremap <C-t> <Esc>:tabnew<CR>
-vnoremap <C-t> <Esc>:tabnew<CR>
 
 
 " flip number keys to their shift+ counterparts
@@ -210,13 +214,6 @@ nnoremap <C-k> k<C-y>
 nnoremap <C-r> :e<CR>
 
 
-" resize vertical and horizontal splits
-nnoremap <C-w><C-l> :vertical resize +3<CR>
-nnoremap <C-w><C-h> :vertical resize -3<CR>
-nnoremap <C-w><C-k> :resize +3<CR>
-nnoremap <C-w><C-j> :resize -3<CR>
-
-
 " -- Syntastic Settings --
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -236,13 +233,7 @@ set expandtab
 set shiftwidth=2
 
 syntax enable
-
-if has('gui_running')
-  set background=light
-else
-  set background=dark
-endif
-
+set background=dark
 colorscheme solarized
 
 set t_Co=255
@@ -256,30 +247,27 @@ highlight Comment cterm=italic
 inoremap <C-c> <Esc>lC
 
 
-" Ensure that <header> is "," character
-let mapleader = ","
-
-
 " Define highlighting groups
-highlight InterestingWord1 ctermbg=Cyan ctermfg=Black
-highlight InterestingWord2 ctermbg=Yellow ctermfg=Black
+" NOTE: The ANSII aliases for colors will change when iTerm2 settings are
+" changed.
+highlight InterestingWord1 ctermbg=White ctermfg=Black
+highlight InterestingWord2 ctermbg=Blue ctermfg=Black
 highlight InterestingWord3 ctermbg=Magenta ctermfg=Black
 
-
 " h1 highlighting
-nnoremap <silent> <leader>h1 :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<CR>
-nnoremap <silent> <leader>xh1 :execute 'match none'<CR>
+nnoremap <silent> <leader>1 :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<CR>
+nnoremap <silent> <leader>x1 :execute 'match none'<CR>
 
 " h2 highlighting
-nnoremap <silent> <leader>h2 :execute '2match InterestingWord2 /\<<c-r><c-w>\>/'<CR>
-nnoremap <silent> <leader>xh2 :execute '2match none'<CR>
+nnoremap <silent> <leader>2 :execute '2match InterestingWord2 /\<<c-r><c-w>\>/'<CR>
+nnoremap <silent> <leader>x2 :execute '2match none'<CR>
 
 " h3 highlighting
-nnoremap <silent> <leader>h3 :execute '3match InterestingWord3 /\<<c-r><c-w>\>/'<CR>
-nnoremap <silent> <leader>xh3 :execute '3match none'<CR>
+nnoremap <silent> <leader>3 :execute '3match InterestingWord3 /\<<c-r><c-w>\>/'<CR>
+nnoremap <silent> <leader>x3 :execute '3match none'<CR>
 
 "clear all highlighted groups
-nnoremap <silent> <leader>xhh :execute 'match none'<CR> :execute '2match none'<CR> :execute '3match none'<CR>
+nnoremap <silent> <leader>xx :execute 'match none'<CR> :execute '2match none'<CR> :execute '3match none'<CR>
 
 
 " pasteboard copy & paste
@@ -291,16 +279,35 @@ nnoremap <C-v> o<Esc>"+p
 vnoremap <C-v> "+p
 
 
-" add 80 character wrap line
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+" Manage 80 char line limits
+highlight OverLength ctermbg=White ctermfg=Black
 match OverLength /\%81v.\+/
+set wrap!
+
+
+" Toggle word-wrapping
+nnoremap <leader>w :set wrap!<CR>
+
+
+" Resize split to 10,20,...,100 chars
+nnoremap <leader>1 :vertical resize 10<CR>
+nnoremap <leader>2 :vertical resize 20<CR>
+nnoremap <leader>3 :vertical resize 30<CR>
+nnoremap <leader>4 :vertical resize 40<CR>
+nnoremap <leader>5 :vertical resize 50<CR>
+nnoremap <leader>6 :vertical resize 60<CR>
+nnoremap <leader>7 :vertical resize 70<CR>
+nnoremap <leader>8 :vertical resize 80<CR>
+nnoremap <leader>9 :vertical resize 90<CR>
+nnoremap <leader>0 :vertical resize 100<CR>
 
 
 " map jj to <Esc>
 imap jj <Esc>
 
-" map ctrl + n to :NERDTree
-map <C-n> :NERDTreeToggle<CR>
+
+" View Directory tree with ctrl + \
+nnoremap <C-\> :NERDTreeToggle<CR>
 
 
 " BOL and EOL
@@ -318,11 +325,22 @@ autocmd BufWritePre *.{js,py,tpl,html} :%s/\s\+$//e
 set guifont=Operator\ Mono:h16
 
 
-" -- fuzzy-finder --
+" CtrlP Config.
 set runtimepath^=~/.vim/bundle/ctrlp.vim
-let g:ctrlp_map = '<c-p>'
+" let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+
+" Maps CtrlP to leader to future-proof config.
+nnoremap <leader>p :CtrlP<CR>
+
+" Fuzzy-finds files within cwd.
+" nnoremap <leader>pf :CtrlP<CR>
+" Fuzzy-finds files within open buffers.
+" nnoremap <leader>pb :CtrlPBuffer<CR>
+
+" Ignores dirs and files
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  'node_modules'
-  \ }
+  \ 'dir':  'node_modules',
+  \ 'file': '\v\.(exe|dll|png|jpg|jpeg)$'
+\}
 
