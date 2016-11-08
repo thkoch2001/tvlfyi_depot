@@ -123,6 +123,17 @@ nnoremap sp <Esc>:sp<CR>
 nnoremap ss <Esc>:sp<CR>
 
 
+" Move around splits with <leader>
+nnoremap <leader>h <C-w>h
+nnoremap <leader>j <C-w>j
+nnoremap <leader>k <C-w>k
+nnoremap <leader>l <C-w>l
+
+
+" Fuzzy-find open buffer via CtrlP
+nnoremap <leader>bg :CtrlPBuffer<CR>
+
+
 " Buffer creation and management
 " Buffer movement
 nnoremap <C-l> :1bnext<CR>
@@ -335,8 +346,6 @@ nnoremap <leader>p :CtrlP<CR>
 
 " Fuzzy-finds files within cwd.
 " nnoremap <leader>pf :CtrlP<CR>
-" Fuzzy-finds files within open buffers.
-" nnoremap <leader>pb :CtrlPBuffer<CR>
 
 " Ignores dirs and files
 let g:ctrlp_custom_ignore = {
