@@ -75,6 +75,12 @@ let mapleader = " "
 set mouse=a
 
 
+" Highlights matches during a search.
+set hlsearch
+
+nnoremap <leader>/ :set hlsearch!<CR>
+
+
 " backspace settings
 set backspace=2
 set backspace=indent,eol,start
@@ -111,6 +117,10 @@ let g:UltiSnipsExpandTrigger="<c-x>"
 " let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 
+" map jk to <Esc>
+inoremap jk <Esc>
+
+
 " Conventional Emacs line-editor defaults
 inoremap <C-a> <Esc>I
 inoremap <C-e> <Esc>A
@@ -128,6 +138,7 @@ nnoremap <leader>h <C-w>h
 nnoremap <leader>j <C-w>j
 nnoremap <leader>k <C-w>k
 nnoremap <leader>l <C-w>l
+nnoremap <leader>q <C-w>q
 
 
 " Fuzzy-find open buffer via CtrlP
@@ -254,31 +265,22 @@ set t_Co=255
 highlight Comment cterm=italic
 
 
-" Remove all characters until the end of the line
-inoremap <C-c> <Esc>lC
-
-
 " Define highlighting groups
 " NOTE: The ANSII aliases for colors will change when iTerm2 settings are
 " changed.
-highlight InterestingWord1 ctermbg=White ctermfg=Black
+highlight InterestingWord1 ctermbg=Magenta ctermfg=Black
 highlight InterestingWord2 ctermbg=Blue ctermfg=Black
-highlight InterestingWord3 ctermbg=Magenta ctermfg=Black
 
 " h1 highlighting
-nnoremap <silent> <leader>1 :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<CR>
-nnoremap <silent> <leader>x1 :execute 'match none'<CR>
+nnoremap <silent> <leader>1 :execute '2match InterestingWord1 /\<<c-r><c-w>\>/'<CR>
+nnoremap <silent> <leader>x1 :execute '2match none'<CR>
 
 " h2 highlighting
-nnoremap <silent> <leader>2 :execute '2match InterestingWord2 /\<<c-r><c-w>\>/'<CR>
-nnoremap <silent> <leader>x2 :execute '2match none'<CR>
-
-" h3 highlighting
-nnoremap <silent> <leader>3 :execute '3match InterestingWord3 /\<<c-r><c-w>\>/'<CR>
-nnoremap <silent> <leader>x3 :execute '3match none'<CR>
+nnoremap <silent> <leader>2 :execute '3match InterestingWord2 /\<<c-r><c-w>\>/'<CR>
+nnoremap <silent> <leader>x2 :execute '3match none'<CR>
 
 "clear all highlighted groups
-nnoremap <silent> <leader>xx :execute 'match none'<CR> :execute '2match none'<CR> :execute '3match none'<CR>
+nnoremap <silent> <leader>xx :execute '2match none'<CR> :execute '3match none'<CR> hh
 
 
 " pasteboard copy & paste
@@ -301,8 +303,10 @@ nnoremap <leader>w :set wrap!<CR>
 
 
 " Resize split to 10,20,...,100 chars
-nnoremap <leader>1 :vertical resize 10<CR>
-nnoremap <leader>2 :vertical resize 20<CR>
+" Uncomment the next lines for support at those sizes.
+" These bindings interfere with the highlight groups, however.
+" nnoremap <leader>1 :vertical resize 10<CR>
+" nnoremap <leader>2 :vertical resize 20<CR>
 nnoremap <leader>3 :vertical resize 30<CR>
 nnoremap <leader>4 :vertical resize 40<CR>
 nnoremap <leader>5 :vertical resize 50<CR>
@@ -311,10 +315,6 @@ nnoremap <leader>7 :vertical resize 70<CR>
 nnoremap <leader>8 :vertical resize 80<CR>
 nnoremap <leader>9 :vertical resize 90<CR>
 nnoremap <leader>0 :vertical resize 100<CR>
-
-
-" map jj to <Esc>
-imap jj <Esc>
 
 
 " View Directory tree with ctrl + \
