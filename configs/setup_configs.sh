@@ -20,7 +20,7 @@ else
 fi
 
 
-# backup .tmux.conf
+# .tmux.conf
 if [ -f "$HOME"/.tmux.conf ] && [ ! -L "$HOME"/.tmux.conf ]; then
     echo -n "Backing up .tmux.conf ... " && \
     mv "$HOME"/.tmux.conf "$HOME"/.tmux.conf.bak && \
@@ -34,6 +34,25 @@ else
     # create symlink to pc_settings .tmux.conf
     echo -n "Symlinking to pc_settings/configs/.tmux.conf ... " && \
     ln -s "$HOME"/pc_settings/configs/.tmux.conf "$HOME"/.tmux.conf && \
+    echo "Done."
+fi
+
+
+# .ctags
+if [ -f "$HOME"/.ctags ] && [ ! -L "$HOME"/.ctags ]; then
+    # backup .ctags
+    echo -n "Backing up .ctags ... " && \
+    mv "$HOME"/.ctags "$HOME"/.ctags.bak && \
+    echo "Done."
+fi
+
+if [ -L "$HOME"/.ctags ]; then
+    # TODO: make sure that .ctags is symlinked to the correct location.
+    echo ".ctags is already symlinked."
+else
+    # create symlink to pc_settings .ctags
+    echo -n "Symlinking to pc_settings/configs/.ctags ... " && \
+    ln -s "$HOME"/pc_settings/configs/.ctags "$HOME"/.ctags && \
     echo "Done."
 fi
 

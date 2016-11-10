@@ -67,6 +67,14 @@ let g:airline_powerline_fonts = 1
 set noswapfile
 
 
+" Allow visual tab completion in command mode
+set wildmenu
+
+
+" Show Vim commands as they're being input.
+set showcmd
+
+
 " Changes <leader> to <space> character.
 let mapleader = " "
 
@@ -79,6 +87,10 @@ set mouse=a
 set hlsearch
 
 nnoremap <leader>/ :set hlsearch!<CR>
+
+
+" Use custom-made snippets.
+nnoremap ,jsfn :-1read $HOME/.vim/function_skeleton.js<CR>o
 
 
 " backspace settings
@@ -305,6 +317,7 @@ nnoremap <leader>w :set wrap!<CR>
 " Resize split to 10,20,...,100 chars
 " Uncomment the next lines for support at those sizes.
 " These bindings interfere with the highlight groups, however.
+" Increases the width of a vertical split.
 " nnoremap <leader>1 :vertical resize 10<CR>
 " nnoremap <leader>2 :vertical resize 20<CR>
 nnoremap <leader>3 :vertical resize 30<CR>
@@ -315,6 +328,16 @@ nnoremap <leader>7 :vertical resize 70<CR>
 nnoremap <leader>8 :vertical resize 80<CR>
 nnoremap <leader>9 :vertical resize 90<CR>
 nnoremap <leader>0 :vertical resize 100<CR>
+
+" Increases the height of a horizontal split.
+nnoremap <leader>v1 :resize 5<CR>
+nnoremap <leader>v2 :resize 10<CR>
+nnoremap <leader>v3 :resize 15<CR>
+nnoremap <leader>v4 :resize 20<CR>
+nnoremap <leader>v5 :resize 25<CR>
+nnoremap <leader>v6 :resize 30<CR>
+nnoremap <leader>v7 :resize 35<CR>
+nnoremap <leader>v8 :resize 40<CR>
 
 
 " View Directory tree with ctrl + \
