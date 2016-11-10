@@ -1,58 +1,30 @@
 #!/usr/bin/env bash
 
 
-# .zsh_profile
-if [ -f "$HOME"/.zsh_profile ] && [ ! -L "$HOME"/.zsh_profile ]; then
-    # backup .zsh_profile
-    echo -n "Backing up .zsh_profile ... " && \
-    mv "$HOME"/.zsh_profile "$HOME"/.zsh_profile.bak && \
-    echo "Done."
-fi
-
-if [ -L "$HOME"/.zsh_profile ]; then
-    # TODO: make sure that .zsh_profile is symlinked to the correct location.
-    echo ".zsh_profile is already symlinked."
-else
-    # create symlink to pc_settings .zsh_profile
-    echo -n "Symlinking to pc_settings/configs/.zsh_profile ... " && \
-    ln -s "$HOME"/pc_settings/configs/.zsh_profile "$HOME"/.zsh_profile && \
-    echo "Done."
-fi
+pc_settings_path="$HOME/pc_settings"
 
 
-# .tmux.conf
-if [ -f "$HOME"/.tmux.conf ] && [ ! -L "$HOME"/.tmux.conf ]; then
-    echo -n "Backing up .tmux.conf ... " && \
-    mv "$HOME"/.tmux.conf "$HOME"/.tmux.conf.bak && \
-    echo "Done."
-fi
-
-if [ -L "$HOME"/.tmux.conf ]; then
-    # TODO: make sure that .tmux.conf is symlinked to the correct location.
-    echo ".tmux.conf is already symlinked."
-else
-    # create symlink to pc_settings .tmux.conf
-    echo -n "Symlinking to pc_settings/configs/.tmux.conf ... " && \
-    ln -s "$HOME"/pc_settings/configs/.tmux.conf "$HOME"/.tmux.conf && \
-    echo "Done."
-fi
+config_files=( ".zsh_profile" ".tmux.conf" ".ctags" )
 
 
-# .ctags
-if [ -f "$HOME"/.ctags ] && [ ! -L "$HOME"/.ctags ]; then
-    # backup .ctags
-    echo -n "Backing up .ctags ... " && \
-    mv "$HOME"/.ctags "$HOME"/.ctags.bak && \
-    echo "Done."
-fi
+for i in {1..3}; do
+    cf="${config_files[i]}"
+    if [ -f "$HOME/$cf" ] && [ ! -L "$HOME/$cf" ]; then
+        echo -n "Backing up $cf ... " && \
+        mv "$HOME/$cf" "$HOME/$cf.bak" && \
+        echo "Done."
+    fi
 
-if [ -L "$HOME"/.ctags ]; then
-    # TODO: make sure that .ctags is symlinked to the correct location.
-    echo ".ctags is already symlinked."
-else
-    # create symlink to pc_settings .ctags
-    echo -n "Symlinking to pc_settings/configs/.ctags ... " && \
-    ln -s "$HOME"/pc_settings/configs/.ctags "$HOME"/.ctags && \
-    echo "Done."
-fi
+    if [ -L "$HOME/$cf" ]; then
+        if [ $(readlink "$HOME/$cf") = "$pc_settings_path/configs/$cf" ]; then
+            echo "\"$cf\" is already properly symlinked to \"$pc_settings_path/configs\"."
+        else
+            echo "\"$cf\" is symlinked but not to the proper location."
+        fi
+    else
+        echo -n "Symlinking to $pc_settings_path/configs/$cf ... " && \
+        ln -s "$pc_settings_path/configs/$cf" "$HOME/$cf" && \
+        echo "Done."
+    fi
+done
 
