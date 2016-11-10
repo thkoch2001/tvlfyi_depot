@@ -75,6 +75,35 @@ set wildmenu
 set showcmd
 
 
+" Code folding
+set foldmethod=indent
+set foldnestmax=10
+set nofoldenable
+set foldlevel=4
+
+" Opens all folds within the buffer
+nnoremap ZZ zR
+
+" Closes all folds within the buffer
+nnoremap zz zM
+
+" Opens all folds beneath the cursor
+" NOTE: j is the character to go down
+nnoremap zJ zO
+
+" Opens single fold beneath the cursor
+" NOTE: j is the character to go down
+nnoremap zj zo
+
+" Opens single fold beneath the cursor
+" NOTE: k is the character to go down
+nnoremap zK zC
+
+" Opens single fold beneath the cursor
+" NOTE: k is the character to go down
+nnoremap zk zc
+
+
 " Changes <leader> to <space> character.
 let mapleader = " "
 
@@ -100,7 +129,6 @@ set backspace=indent,eol,start
 
 " Javascript specific variables
 let g:javascript_plugin_jsdoc = 1
-" set foldmethod=syntax
 
 " GlobalListchars
 set list
@@ -172,6 +200,7 @@ nnoremap <leader>bq :bp <BAR> bd #<CR>
 " make Y do what is intuitive given: 
 "   D: deletes until EOL
 "   C: changes until EOL
+"   Y: (should) yank until EOL
 nnoremap Y y$
 
 
