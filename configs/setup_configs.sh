@@ -15,6 +15,7 @@ config_files=( \
 for i in {0..3}; do
     cf="${config_files[i]}"
     echo "\"$cf\": "
+
     if [ -f "$HOME/$cf" ] && [ ! -L "$HOME/$cf" ]; then
         echo -n "Backing up $cf ... " && \
         mv "$HOME/$cf" "$HOME/$cf.bak" && \

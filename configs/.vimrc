@@ -340,8 +340,15 @@ nnoremap <leader>v7 :resize 35<CR>
 nnoremap <leader>v8 :resize 40<CR>
 
 
+" NERDTree settings
+" Show hidden files by default. (Toggle with capital 'i')
+let NERDTreeShowHidden=1
+
 " View Directory tree with ctrl + \
 nnoremap <C-\> :NERDTreeToggle<CR>
+
+" View open buffer location in tree.
+nnoremap <C-o> :NERDTreeFind<CR>
 
 
 " BOL and EOL

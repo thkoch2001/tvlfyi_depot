@@ -24,7 +24,7 @@ source $HOME/pc_settings/scripts/setup_keybindings.sh
 # BEGIN: bindkeys
 bindkey "^R" history-incremental-search-backward
 
-bindkey -M viins 'jj' vi-cmd-mode
+bindkey -M viins 'jk' vi-cmd-mode
 # END: bindkeys
 
 # export docker env variables
