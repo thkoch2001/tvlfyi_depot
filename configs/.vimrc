@@ -30,6 +30,9 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 
+" Syntax Highlighting Support
+Plugin 'lambdatoast/elm.vim'
+
 " Themes
 Plugin 'sickill/vim-monokai'
 Plugin 'altercation/vim-colors-solarized'
