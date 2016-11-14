@@ -391,7 +391,7 @@ vnoremap L $
 
 
 " trim trailing whitespace on save
-autocmd BufWritePre *.{js,py,tpl,html} :%s/\s\+$//e
+autocmd BufWritePre *.{js,py,tpl,less,html} :%s/\s\+$//e
 
 
 " set default font and size
