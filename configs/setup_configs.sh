@@ -1,39 +1,38 @@
 #!/usr/bin/env bash
 
 
-# .zsh_profile
-if [ -f "$HOME"/.zsh_profile ] && [ ! -L "$HOME"/.zsh_profile ]; then
-    # backup .zsh_profile
-    echo -n "Backing up .zsh_profile ... " && \
-    mv "$HOME"/.zsh_profile "$HOME"/.zsh_profile.bak && \
-    echo "Done."
-fi
-
-if [ -L "$HOME"/.zsh_profile ]; then
-    # TODO: make sure that .zsh_profile is symlinked to the correct location.
-    echo ".zsh_profile is already symlinked."
-else
-    # create symlink to pc_settings .zsh_profile
-    echo -n "Symlinking to pc_settings/configs/.zsh_profile ... " && \
-    ln -s "$HOME"/pc_settings/configs/.zsh_profile "$HOME"/.zsh_profile && \
-    echo "Done."
-fi
+pc_settings_path="$HOME/pc_settings"
 
 
-# backup .tmux.conf
-if [ -f "$HOME"/.tmux.conf ] && [ ! -L "$HOME"/.tmux.conf ]; then
-    echo -n "Backing up .tmux.conf ... " && \
-    mv "$HOME"/.tmux.conf "$HOME"/.tmux.conf.bak && \
-    echo "Done."
-fi
+config_files=( \
+  ".zsh_profile" \
+  ".tmux.conf" \
+  ".ctags" \
+  ".vimrc" \
+)
 
-if [ -L "$HOME"/.tmux.conf ]; then
-    # TODO: make sure that .tmux.conf is symlinked to the correct location.
-    echo ".tmux.conf is already symlinked."
-else
-    # create symlink to pc_settings .tmux.conf
-    echo -n "Symlinking to pc_settings/configs/.tmux.conf ... " && \
-    ln -s "$HOME"/pc_settings/configs/.tmux.conf "$HOME"/.tmux.conf && \
-    echo "Done."
-fi
+
+for i in {0..3}; do
+    cf="${config_files[i]}"
+    echo "\"$cf\": "
+
+    if [ -f "$HOME/$cf" ] && [ ! -L "$HOME/$cf" ]; then
+        echo -n "Backing up $cf ... " && \
+        mv "$HOME/$cf" "$HOME/$cf.bak" && \
+        echo "Done."
+    fi
+
+    if [ -L "$HOME/$cf" ]; then
+        if [ $(readlink "$HOME/$cf") = "$pc_settings_path/configs/$cf" ]; then
+            echo "Already properly symlinked to \"$pc_settings_path/configs\"."
+        else
+            echo "Already symlinked but NOT to the proper location. Aborting..."
+        fi
+    else
+        echo -n "Symlinking to $pc_settings_path/configs/$cf ... " && \
+        ln -s "$pc_settings_path/configs/$cf" "$HOME/$cf" && \
+        echo "Done."
+    fi
+    echo ""
+done
 

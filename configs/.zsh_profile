@@ -24,7 +24,7 @@ source $HOME/pc_settings/scripts/setup_keybindings.sh
 # BEGIN: bindkeys
 bindkey "^R" history-incremental-search-backward
 
-bindkey -M viins 'jj' vi-cmd-mode
+bindkey -M viins 'jk' vi-cmd-mode
 # END: bindkeys
 
 # export docker env variables
@@ -38,4 +38,8 @@ bindkey -M viins 'jj' vi-cmd-mode
 # syntax highlighting for CLI; if not installed, run the following command
 # brew install zsh-syntax-highlighting
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Regain control of CLI <C- mappings for vim keybindings
+# RE: http://superuser.com/questions/588846/cannot-get-vim-to-remap-ctrls-to-w
+stty -ixon
 
