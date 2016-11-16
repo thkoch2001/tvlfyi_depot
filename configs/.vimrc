@@ -84,6 +84,11 @@ set foldnestmax=10
 set nofoldenable
 set foldlevel=4
 
+
+" Use relative line numbers
+set relativenumber
+
+
 " Opens all folds within the buffer
 nnoremap ZZ zR
 
@@ -360,6 +365,7 @@ nnoremap <leader>7 :vertical resize 70<CR>
 nnoremap <leader>8 :vertical resize 80<CR>
 nnoremap <leader>9 :vertical resize 90<CR>
 nnoremap <leader>0 :vertical resize 100<CR>
+
 
 " Increases the height of a horizontal split.
 nnoremap <leader>v1 :resize 5<CR>
