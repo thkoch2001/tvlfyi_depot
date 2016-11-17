@@ -140,16 +140,12 @@ let g:javascript_plugin_jsdoc = 1
 
 " GlobalListchars
 set list
-set listchars=eol:¶,trail:~,nbsp:␣
+set listchars=tab:··,trail:·,nbsp:·
 
 
 " Keeps everything concealed at all times. Even when cursor is on the word.
 set conceallevel=1
 set concealcursor=nvic
-
-" JavaScript thanks to pangloss/vim-javascript
-" let g:javascript_conceal_function = "ƒ"
-" match ErrorMsg /ƒ/
 
 
 " Ultisnips
