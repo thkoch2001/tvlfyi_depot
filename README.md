@@ -37,7 +37,8 @@ I'm documenting this for personal use. Shell settings, vim settings, commonly us
 [Default (OSX).sublime-keymap](https://github.com/wpcarro/pc_settings/blob/master/Default%20(OSX).sublime-keymap)
 
 ### other notes
-* Use [Hasklig](https://github.com/i-tu/Hasklig) for ligature support in Elm, Elixir, etc
+* Install [Hasklig](https://github.com/i-tu/Hasklig) for ligature support in Elm, Elixir, etc
+* Install [FiraCode](https://github.com/tonsky/FiraCode/wiki) for ligature support
 * Install [Operator Mono](http://www.typography.com/blog/introducing-operator) for expressive Italics
 * Install powerline fonts 
 * add Adobe Source Code Pro font for shell and text editors
