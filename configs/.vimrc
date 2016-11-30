@@ -46,6 +46,9 @@ Plugin 'sickill/vim-monokai'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'mhartington/oceanic-next'
 
+" Tmux tooling
+Plugin 'christoomey/vim-tmux-navigator'
+
 " Executes shell commands and pipes output into new Vim buffer.
 Plugin 'sjl/clam.vim'
 
