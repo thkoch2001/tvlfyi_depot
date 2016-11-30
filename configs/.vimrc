@@ -33,9 +33,18 @@ Plugin 'scrooloose/syntastic'
 " Syntax Highlighting Support
 Plugin 'lambdatoast/elm.vim'
 
+" Elixir Plugins
+Plugin 'elixir-lang/vim-elixir'
+Plugin 'slashmili/alchemist.vim'
+Plugin 'powerman/vim-plugin-ANsiEsc'
+
+" TypeScript Plugins
+Plugin 'rschmukler/typescript-vim'
+
 " Themes
 Plugin 'sickill/vim-monokai'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'mhartington/oceanic-next'
 
 " Executes shell commands and pipes output into new Vim buffer.
 Plugin 'sjl/clam.vim'
@@ -301,7 +310,7 @@ set shiftwidth=2
 
 syntax enable
 set background=dark
-colorscheme solarized
+colorscheme OceanicNext
 
 set t_Co=255
 
