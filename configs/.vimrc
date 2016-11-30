@@ -160,19 +160,6 @@ set conceallevel=1
 set concealcursor=nvic
 
 
-" Ultisnips
-" Track the engine.
-Plugin 'SirVer/ultisnips'
-
-" Snippets are separated from the engine. Add this if you want them:
-Plugin 'honza/vim-snippets'
-
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<c-x>"
-" let g:UltiSnipsJumpForwardTrigger="<c-j>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-
-
 " map jk to <Esc>
 inoremap jk <Esc>
 
@@ -315,6 +302,9 @@ syntax enable
 set background=dark
 colorscheme OceanicNext
 
+set history=1000
+set undolevels=1000
+
 set t_Co=255
 
 
@@ -402,6 +392,10 @@ nnoremap H ^
 vnoremap H ^
 nnoremap L $
 vnoremap L $
+
+
+" Search for visually selected text
+vnoremap // y/<C-r>"<CR>
 
 
 " trim trailing whitespace on save
