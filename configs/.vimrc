@@ -19,9 +19,6 @@ Plugin 'tpope/vim-fugitive'
 
 Plugin 'Raimondi/delimitMate'
 
-" Autocompletion
-Plugin 'Valloric/YouCompleteMe'
-
 " Displays git-tracked C*UD ops within gutter.
 Plugin 'airblade/vim-gitgutter'
 Plugin 'kien/ctrlp.vim'
@@ -36,7 +33,7 @@ Plugin 'lambdatoast/elm.vim'
 " Elixir Plugins
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'slashmili/alchemist.vim'
-Plugin 'powerman/vim-plugin-ANsiEsc'
+Plugin 'powerman/vim-plugin-AnsiEsc'
 
 " TypeScript Plugins
 Plugin 'rschmukler/typescript-vim'
@@ -194,7 +191,7 @@ nnoremap <C-l> :1bnext<CR>
 nnoremap <C-h> :1bprevious<CR>
 
 " Buffer creation
-nnoremap <C-t> :enew<CR>
+" nnoremap <C-t> :enew<CR>
 
 " Buffer deletion
 nnoremap <leader>bq :bp <BAR> bd #<CR>
@@ -380,11 +377,16 @@ nnoremap <leader>v8 :resize 40<CR>
 " Show hidden files by default. (Toggle with capital 'i')
 let NERDTreeShowHidden=1
 
-" View Directory tree with ctrl + \
-nnoremap <C-\> :NERDTreeToggle<CR>
+" View Directory tree with ctrl + n
+nnoremap <C-t> :NERDTreeToggle<CR>
 
 " View open buffer location in tree.
 nnoremap <C-o> :NERDTreeFind<CR>
+
+
+" Jump to the top / bottom of the Viewport
+nnoremap K H
+nnoremap J L
 
 
 " BOL and EOL
@@ -399,7 +401,7 @@ vnoremap // y/<C-r>"<CR>
 
 
 " trim trailing whitespace on save
-autocmd BufWritePre *.{js,py,tpl,less,html} :%s/\s\+$//e
+autocmd BufWritePre *.{js,py,tpl,less,html,ex} :%s/\s\+$//e
 
 
 " set default font and size
@@ -416,6 +418,11 @@ nnoremap <leader>p :CtrlP<CR>
 
 " Fuzzy-finds files within cwd.
 " nnoremap <leader>pf :CtrlP<CR>
+
+
+" Use .gitignore file to populate Ctrl-P
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+
 
 " Ignores dirs and files
 let g:ctrlp_custom_ignore = {
