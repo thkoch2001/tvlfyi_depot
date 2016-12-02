@@ -125,6 +125,10 @@ nnoremap zk zc
 let mapleader = " "
 
 
+" Switch to MRU'd buffer
+nnoremap <leader><leader> <C-^>
+
+
 " Supports mouse interaction.
 set mouse=a
 
@@ -178,7 +182,10 @@ nnoremap <leader>h <C-w>h
 nnoremap <leader>j <C-w>j
 nnoremap <leader>k <C-w>k
 nnoremap <leader>l <C-w>l
-nnoremap <leader>q <C-w>q
+
+
+" Delete (i.e. "close") the currently opened buffer
+nnoremap <leader>q :bdelete<CR>
 
 
 " Fuzzy-find open buffer via CtrlP
@@ -375,13 +382,13 @@ nnoremap <leader>v8 :resize 40<CR>
 
 " NERDTree settings
 " Show hidden files by default. (Toggle with capital 'i')
-let NERDTreeShowHidden=1
+let NERDTreeShowHidden = 1
 
 " View Directory tree with ctrl + n
-nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <leader>n :NERDTreeToggle<CR>
 
 " View open buffer location in tree.
-nnoremap <C-o> :NERDTreeFind<CR>
+nnoremap <leader>f :NERDTreeFind<CR>
 
 
 " Jump to the top / bottom of the Viewport
