@@ -57,6 +57,9 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
+" Visually align assignments
+Plugin 'godlygeek/tabular'
+
 
 call vundle#end()            " required
 filetype plugin indent on    " required
