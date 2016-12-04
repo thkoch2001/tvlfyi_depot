@@ -43,3 +43,8 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # RE: http://superuser.com/questions/588846/cannot-get-vim-to-remap-ctrls-to-w
 stty -ixon
 
+
+# Run Autojump at shell startup
+[[ $(brew --prefix)/etc/profile.d/autojump.sh ]] && \
+. $(brew --prefix)/etc/profile.d/autojump.sh
+

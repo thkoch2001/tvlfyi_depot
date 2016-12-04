@@ -298,12 +298,13 @@ let g:syntastic_javascript_checkers = ['gjslint']
 
 " Basic settings
 set number
+set wrap!
 set tabstop=2
 set expandtab
 set shiftwidth=2
+set background=dark
 
 syntax enable
-set background=dark
 colorscheme OceanicNext
 
 set history=1000
@@ -344,9 +345,12 @@ vnoremap <C-v> "+p
 
 
 " Manage 80 char line limits
-highlight OverLength ctermbg=White ctermfg=Black
-match OverLength /\%81v.\+/
-set wrap!
+highlight OverLength1 ctermbg=Magenta ctermfg=Black
+highlight OverLength2 ctermbg=LightMagenta ctermfg=Black
+highlight OverLength3 ctermbg=White ctermfg=Black
+" match OverLength3 /\%81v.\+/
+match OverLength2 /\%91v.\+/
+" match OverLength3 /\%101v.\+/
 
 
 " Toggle word-wrapping
