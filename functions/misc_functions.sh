@@ -46,6 +46,23 @@ function trim {
 }
 
 
+# Extends `codemod` to exclude dirs in .gitignore file
+function cm {
+  extensions="$1"
+  regex="$2"
+  replacement="$3"
+
+  ignore_dirs=""
+
+  if [ -f ./.gitignore ]; then
+    # Sanitizes .gitignore and converts it to a comma-separated list
+    ignore_dirs="$(sed 's/^\//.\//g' <./.gitignore | sed -e 's/#.*$//' -e '/^$/d' | tr '\n' ',' | sed 's/,$//')"
+  fi
+
+  codemod -m -d . --extensions ${extensions} --exclude-paths ${ignore_dirs} ${regex} ${replacement}
+}
+
+
 function tt() {
   sessionName="${1}"
   if ! tmux has-session -t "${sessionName}" 2> /dev/null; then
