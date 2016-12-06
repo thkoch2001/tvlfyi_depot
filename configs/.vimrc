@@ -60,6 +60,9 @@ Plugin 'vim-airline/vim-airline-themes'
 " Visually align assignments
 Plugin 'godlygeek/tabular'
 
+" Visually Highlight and comment code.
+Plugin 'tpope/vim-commentary'
+
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -139,7 +142,9 @@ set mouse=a
 " Highlights matches during a search.
 set hlsearch
 
-nnoremap <leader>/ :set hlsearch!<CR>
+" Search for gibberish to clear the most recent search
+" nnoremap <leader>/ :set hlsearch!<CR>
+noremap <leader>/ /__wc_gibberish__<CR>
 
 
 " Use custom-made snippets.
@@ -191,8 +196,22 @@ nnoremap <leader>l <C-w>l
 nnoremap <leader>q :bdelete<CR>
 
 
-" Fuzzy-find open buffer via CtrlP
-nnoremap <leader>bg :CtrlPBuffer<CR>
+" CtrlP config
+" Set default CtrlP command.
+let g:ctrlp_cmd = 'CtrlP'
+" let g:ctrlp_cmd = 'CtrlPMRU'
+
+" Set runtime path
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+" Fuzzy-find files.
+nnoremap <leader>pf :CtrlP<CR>
+
+" Fuzzy-find open buffers.
+nnoremap <leader>pb :CtrlPBuffer<CR>
+
+" Fuzzy-find open buffers.
+nnoremap <leader>pm :CtrlPMRUFiles<CR>
 
 
 " Buffer creation and management
@@ -320,6 +339,11 @@ set t_Co=255
 highlight Comment cterm=italic
 
 
+" Repeat last colon-command
+nnoremap ;; @:<CR>
+vnoremap ;; @:<CR>
+
+
 " Define highlighting groups
 " NOTE: The ANSII aliases for colors will change when iTerm2 settings are
 " changed.
@@ -329,6 +353,7 @@ highlight InterestingWord2 ctermbg=Blue ctermfg=Black
 " h1 highlighting
 nnoremap <silent> <leader>1 :execute '2match InterestingWord1 /\<<c-r><c-w>\>/'<CR>
 nnoremap <silent> <leader>x1 :execute '2match none'<CR>
+vnoremap <silent> <leader>1 :execute '2match InterestingWord1 /\<<c-r><c-w>\>/'<CR>
 
 " h2 highlighting
 nnoremap <silent> <leader>2 :execute '3match InterestingWord2 /\<<c-r><c-w>\>/'<CR>
@@ -385,6 +410,8 @@ nnoremap <leader>v5 :resize 25<CR>
 nnoremap <leader>v6 :resize 30<CR>
 nnoremap <leader>v7 :resize 35<CR>
 nnoremap <leader>v8 :resize 40<CR>
+nnoremap <leader>v9 :resize 45<CR>
+nnoremap <leader>v0 :resize 50<CR>
 
 
 " NERDTree settings
@@ -411,7 +438,7 @@ vnoremap L $
 
 
 " Search for visually selected text
-vnoremap // y/<C-r>"<CR>
+vnoremap // y/<C-r>"<CR>N
 
 
 " trim trailing whitespace on save
@@ -420,18 +447,6 @@ autocmd BufWritePre *.{js,py,tpl,less,html,ex} :%s/\s\+$//e
 
 " set default font and size
 set guifont=Operator\ Mono:h16
-
-
-" CtrlP Config.
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-" let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-
-" Maps CtrlP to leader to future-proof config.
-nnoremap <leader>p :CtrlP<CR>
-
-" Fuzzy-finds files within cwd.
-" nnoremap <leader>pf :CtrlP<CR>
 
 
 " Use .gitignore file to populate Ctrl-P
