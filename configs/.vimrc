@@ -476,3 +476,45 @@ endfunction
 vnoremap <silent> / :<C-U>call RangeSearch('/')<CR>:if strlen(g:srchstr) > 0\|exec '/'.g:srchstr\|endif<CR>
 vnoremap <silent> ? :<C-U>call RangeSearch('?')<CR>:if strlen(g:srchstr) > 0\|exec '?'.g:srchstr\|endif<CR>
 
+
+" Elixir linting via Neomake
+let g:neomake_elixir_credo_maker = {
+      \ 'exe': 'mix',
+      \ 'args': ['credo', 'list', '%:p', '--format=oneline'],
+      \ 'errorformat':
+      \   '%W[F] %. %f:%l:%c %m,' .
+      \   '%W[F] %. %f:%l %m,' .
+      \   '%W[R] %. %f:%l:%c %m,' .
+      \   '%W[R] %. %f:%l %m,' .
+      \   '%I[C] %. %f:%l:%c %m,' .
+      \   '%I[C] %. %f:%l %m,' .
+      \   '%-Z%.%#'
+      \ }
+
+
+" WIP: Run elixir tests on that line
+nnoremap <leader>t :call ExTestToggle()<CR>
+
+
+" Jumps from an Elixir module file to an Elixir test file.
+fun! ExTestToggle()
+
+  if expand('%:e') == "ex"
+    let l:test_file_name = expand('%:t:r') . "_test.exs"
+    let l:test_file_dir = substitute(expand('%:p:h'), "/lib/core/", "/test/", "")
+    let l:full_test_path = join([test_file_dir, test_file_name], "/")
+
+    e `=full_test_path`
+
+  elseif match(expand('%:t'), "_test.exs") != -1
+    let l:current_file_name = expand('%:t:r')
+    let l:offset_amt = strlen(current_file_name) - strlen("_test")
+    let l:module_file_name = strpart(current_file_name, 0, offset_amt) . ".ex"
+    let l:module_file_dir = substitute(expand('%:p:h'), "/test/", "/lib/core/", "")
+    let l:full_module_path = join([module_file_dir, module_file_name], "/")
+
+    e `=full_module_path`
+  endif
+
+endfun
+
