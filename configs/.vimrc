@@ -25,7 +25,6 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'mileszs/ack.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/syntastic'
 
 " Syntax Highlighting Support
 Plugin 'lambdatoast/elm.vim'
@@ -42,9 +41,6 @@ Plugin 'rschmukler/typescript-vim'
 Plugin 'sickill/vim-monokai'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'mhartington/oceanic-next'
-
-" Tmux tooling
-Plugin 'christoomey/vim-tmux-navigator'
 
 " Executes shell commands and pipes output into new Vim buffer.
 Plugin 'sjl/clam.vim'
@@ -63,11 +59,35 @@ Plugin 'godlygeek/tabular'
 " Visually Highlight and comment code.
 Plugin 'tpope/vim-commentary'
 
+" Seamlessly navigate Vim and Tmux with similar bindings.
+Plugin 'christoomey/vim-tmux-navigator'
+
+" Async `:make` for code linting etc.
+Plugin 'neomake/neomake'
+
 
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 " -- END: Vundle config --
+
+
+" Neomake Settings
+autocmd! BufWritePost * Neomake
+
+" Elixir linting
+let g:neomake_elixir_credo_maker = {
+      \ 'exe': 'mix',
+      \ 'args': ['credo', 'list', '%:p', '--format=oneline'],
+      \ 'errorformat':
+      \   '%W[F] %. %f:%l:%c %m,' .
+      \   '%W[F] %. %f:%l %m,' .
+      \   '%W[R] %. %f:%l:%c %m,' .
+      \   '%W[R] %. %f:%l %m,' .
+      \   '%I[C] %. %f:%l:%c %m,' .
+      \   '%I[C] %. %f:%l %m,' .
+      \   '%-Z%.%#'
+      \ }
 
 
 " Airline Settings
@@ -79,6 +99,9 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 
 " Allow glyphs in airline
 let g:airline_powerline_fonts = 1
+
+" Change Airline theme
+let g:airline_theme = 'base16_google'
 
 
 " It's the twenty-first century...no swaps.
@@ -125,6 +148,11 @@ nnoremap zK zC
 " Opens single fold beneath the cursor
 " NOTE: k is the character to go down
 nnoremap zk zc
+
+
+" Smart Comment code (has dependency 'tpope/vim-commentary')
+nnoremap <C-/> Vgc
+vnoremap <C-/> gc
 
 
 " Changes <leader> to <space> character.
@@ -186,13 +214,15 @@ nnoremap ss <Esc>:sp<CR>
 
 
 " Move around splits with <leader>
-nnoremap <leader>h <C-w>h
-nnoremap <leader>j <C-w>j
-nnoremap <leader>k <C-w>k
-nnoremap <leader>l <C-w>l
+" NOTE: no longer needed with tmux navigator plugin
+" nnoremap <leader>h <C-w>h
+" nnoremap <leader>j <C-w>j
+" nnoremap <leader>k <C-w>k
+" nnoremap <leader>l <C-w>l
 
 
 " Delete (i.e. "close") the currently opened buffer
+" TODO: unless it's a split window, which should be :q
 nnoremap <leader>q :bdelete<CR>
 
 
@@ -216,8 +246,8 @@ nnoremap <leader>pm :CtrlPMRUFiles<CR>
 
 " Buffer creation and management
 " Buffer movement
-nnoremap <C-l> :1bnext<CR>
-nnoremap <C-h> :1bprevious<CR>
+nnoremap <Tab> :1bnext<CR>
+nnoremap <S-Tab> :1bprevious<CR>
 
 " Buffer creation
 " nnoremap <C-t> :enew<CR>
@@ -233,89 +263,13 @@ nnoremap <leader>bq :bp <BAR> bd #<CR>
 nnoremap Y y$
 
 
-" flip number keys to their shift+ counterparts
-nnoremap t1 t!
-nnoremap t2 t@
-nnoremap t3 t#
-nnoremap t4 t$
-nnoremap t5 t%
-nnoremap t6 t^
-nnoremap t7 t&
-nnoremap t8 t*
-nnoremap t9 t(
-nnoremap t0 t)
-
-nnoremap T1 T!
-nnoremap T2 T@
-nnoremap T3 T#
-nnoremap T4 T$
-nnoremap T5 T%
-nnoremap T6 T^
-nnoremap T7 T&
-nnoremap T8 T*
-nnoremap T9 T(
-nnoremap T0 T)
-
-nnoremap f1 f!
-nnoremap f2 f@
-nnoremap f3 f#
-nnoremap f4 f$
-nnoremap f5 f%
-nnoremap f6 f^
-nnoremap f7 f&
-nnoremap f8 f*
-nnoremap f9 f(
-nnoremap f0 f)
-
-nnoremap F1 F!
-nnoremap F2 F@
-nnoremap F3 F#
-nnoremap F4 F$
-nnoremap F5 F%
-nnoremap F6 F^
-nnoremap F7 F&
-nnoremap F8 F*
-nnoremap F9 F(
-nnoremap F0 F)
-
-
-" Karate edits
-nnoremap ca9 ca(
-nnoremap da9 da(
-nnoremap va9 va(
-
-nnoremap ca0 ca)
-nnoremap da0 da)
-nnoremap va0 va)
-
-nnoremap ci9 ci(
-nnoremap di9 di(
-nnoremap vi9 vi(
-
-nnoremap ci0 ci)
-nnoremap di0 di)
-nnoremap vi0 vi)
-
-
 " scrolling and maintaing mouse position
-nnoremap <C-j> j<C-e>
-nnoremap <C-k> k<C-y>
+" nnoremap <C-j> j<C-e>
+" nnoremap <C-k> k<C-y>
 
 
 " reload file after git changes
 nnoremap <C-r> :e<CR>
-
-
-" -- Syntastic Settings --
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 1
-let g:syntastic_javascript_checkers = ['gjslint']
 
 
 " Basic settings
@@ -327,7 +281,7 @@ set shiftwidth=2
 set background=dark
 
 syntax enable
-colorscheme OceanicNext
+colorscheme solarized
 
 set history=1000
 set undolevels=1000
@@ -438,7 +392,7 @@ vnoremap L $
 
 
 " Search for visually selected text
-" vnoremap // y/<C-r>"<CR>N
+vnoremap // y/<C-r>"<CR>N
 
 
 " trim trailing whitespace on save
@@ -460,38 +414,6 @@ let g:ctrlp_custom_ignore = {
 \}
 
 
-" Search within a visual selection
-function! RangeSearch(direction)
-  call inputsave()
-  let g:srchstr = input(a:direction)
-  call inputrestore()
-  if strlen(g:srchstr) > 0
-    let g:srchstr = g:srchstr.
-          \ '\%>'.(line("'<")-1).'l'.
-          \ '\%<'.(line("'>")+1).'l'
-  else
-    let g:srchstr = ''
-  endif
-endfunction
-vnoremap <silent> / :<C-U>call RangeSearch('/')<CR>:if strlen(g:srchstr) > 0\|exec '/'.g:srchstr\|endif<CR>
-vnoremap <silent> ? :<C-U>call RangeSearch('?')<CR>:if strlen(g:srchstr) > 0\|exec '?'.g:srchstr\|endif<CR>
-
-
-" Elixir linting via Neomake
-let g:neomake_elixir_credo_maker = {
-      \ 'exe': 'mix',
-      \ 'args': ['credo', 'list', '%:p', '--format=oneline'],
-      \ 'errorformat':
-      \   '%W[F] %. %f:%l:%c %m,' .
-      \   '%W[F] %. %f:%l %m,' .
-      \   '%W[R] %. %f:%l:%c %m,' .
-      \   '%W[R] %. %f:%l %m,' .
-      \   '%I[C] %. %f:%l:%c %m,' .
-      \   '%I[C] %. %f:%l %m,' .
-      \   '%-Z%.%#'
-      \ }
-
-
 " WIP: Run elixir tests on that line
 nnoremap <leader>t :call ExTestToggle()<CR>
 
@@ -501,7 +423,7 @@ fun! ExTestToggle()
 
   if expand('%:e') == "ex"
     let l:test_file_name = expand('%:t:r') . "_test.exs"
-    let l:test_file_dir = substitute(expand('%:p:h'), "/lib/core/", "/test/", "")
+    let l:test_file_dir = substitute(expand('%:p:h'), "/lib/core/", "/lib/test/", "")
     let l:full_test_path = join([test_file_dir, test_file_name], "/")
 
     e `=full_test_path`
@@ -517,4 +439,15 @@ fun! ExTestToggle()
   endif
 
 endfun
+
+
+" Creates intermediate directories and file to match current buffer's filepath
+fun! CreateNonExistingDirsAndFile()
+  ! echo "Creating directory..." && mkdir -p %:p:h && echo "Created directory." && echo "Creating file..." && touch %:t:p && echo "Created file."
+
+  " Write the buffer to the recently created file.
+  w
+endfun
+
+
 
