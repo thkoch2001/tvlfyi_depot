@@ -1,6 +1,15 @@
 # My Mac Configuration
 I'm documenting this for personal use. Shell settings, vim settings, commonly used applications, et cetera...
 
+# Neovim
+
+The following snippet fixes the `<C-h>` issue in neovim on macOS.
+
+```
+$ infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
+$ tic $TERM.ti
+```
+
 ### Commonly used applications
 * homebrew - necessary for procuring shell applications
 * karabiner - `key-repeat: 50ms delay-until-repeat: 300ms` increase your Mac's key repeat settings beyond the default range
