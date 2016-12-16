@@ -21,9 +21,17 @@ Plugin 'Raimondi/delimitMate'
 
 " Displays git-tracked C*UD ops within gutter.
 Plugin 'airblade/vim-gitgutter'
+
+" Fuzzy-finder
 Plugin 'kien/ctrlp.vim'
+
+" Grep file contents
 Plugin 'mileszs/ack.vim'
+
+" JS support
 Plugin 'pangloss/vim-javascript'
+
+" Visual dir-tree navigation
 Plugin 'scrooloose/nerdtree'
 
 " Syntax Highlighting Support
@@ -65,6 +73,9 @@ Plugin 'christoomey/vim-tmux-navigator'
 " Async `:make` for code linting etc.
 Plugin 'neomake/neomake'
 
+" Color pack
+Plugin 'flazz/vim-colorschemes'
+
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -94,6 +105,9 @@ let g:neomake_elixir_credo_maker = {
 " Enables the list of buffers.
 let g:airline#extensions#tabline#enabled = 1
 
+" Buffer numbers alongside files
+let g:airline#extensions#tabline#buffer_nr_show = 1
+
 " Shows the filename only.
 let g:airline#extensions#tabline#fnamemod = ':t'
 
@@ -101,7 +115,20 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline_powerline_fonts = 1
 
 " Change Airline theme
-let g:airline_theme = 'base16_google'
+let g:airline_theme = 'hybrid'
+
+
+" Jump to buffers.
+nmap <F1> :1b<CR>
+nmap <F2> :2b<CR>
+nmap <F3> :3b<CR>
+nmap <F4> :4b<CR>
+nmap <F5> :5b<CR>
+nmap <F6> :6b<CR>
+nmap <F7> :7b<CR>
+nmap <F8> :8b<CR>
+nmap <F9> :9b<CR>
+
 
 
 " It's the twenty-first century...no swaps.
@@ -171,8 +198,7 @@ set mouse=a
 set hlsearch
 
 " Search for gibberish to clear the most recent search
-" nnoremap <leader>/ :set hlsearch!<CR>
-noremap <leader>/ /__wc_gibberish__<CR>
+noremap <leader>/ :silent! /__wc_gibberish__/<CR>:echo "Search cleared."<CR>
 
 
 " Use custom-made snippets.
@@ -207,10 +233,10 @@ inoremap <C-e> <Esc>A
 
 
 " Manage Vertical and Horizontal splits
-nnoremap vs <Esc>:vs<CR>
-nnoremap vv <Esc>:vs<CR>
-nnoremap sp <Esc>:sp<CR>
-nnoremap ss <Esc>:sp<CR>
+nnoremap sl <Esc>:vs<CR><C-w>l
+nnoremap sh <Esc>:vs<CR>
+nnoremap sj <Esc>:sp<CR><C-w>j
+nnoremap sk <Esc>:sp<CR>
 
 
 " Move around splits with <leader>
@@ -228,7 +254,7 @@ nnoremap <leader>q :bdelete<CR>
 
 " CtrlP config
 " Set default CtrlP command.
-let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_cmd = 'CtrlPBuffer'
 " let g:ctrlp_cmd = 'CtrlPMRU'
 
 " Set runtime path
@@ -268,8 +294,8 @@ nnoremap Y y$
 " nnoremap <C-k> k<C-y>
 
 
-" reload file after git changes
-nnoremap <C-r> :e<CR>
+" Shorter binding for window rotations
+nnoremap <C-r> <C-w><C-r>
 
 
 " Basic settings
@@ -281,7 +307,7 @@ set shiftwidth=2
 set background=dark
 
 syntax enable
-colorscheme solarized
+colorscheme hybrid
 
 set history=1000
 set undolevels=1000
@@ -291,6 +317,10 @@ set t_Co=255
 
 " Support italics
 highlight Comment cterm=italic
+
+
+" remap redo key that is eclipsed by `rotate` currently
+nnoremap U :redo<CR>
 
 
 " Repeat last colon-command
@@ -322,7 +352,7 @@ nnoremap <C-c> V"+y
 vnoremap <C-c> "+y
 
 inoremap <C-v> <Esc>"+pa
-nnoremap <C-v> o<Esc>"+p
+" nnoremap <C-v> o<Esc>"+p
 vnoremap <C-v> "+p
 
 
@@ -396,7 +426,7 @@ vnoremap // y/<C-r>"<CR>N
 
 
 " trim trailing whitespace on save
-autocmd BufWritePre *.{js,py,tpl,less,html,ex} :%s/\s\+$//e
+autocmd BufWritePre *.{js,py,tpl,less,html,ex,exs,txt} :%s/\s\+$//e
 
 
 " set default font and size
@@ -420,24 +450,25 @@ nnoremap <leader>t :call ExTestToggle()<CR>
 
 " Jumps from an Elixir module file to an Elixir test file.
 fun! ExTestToggle()
-
   if expand('%:e') == "ex"
-    let l:test_file_name = expand('%:t:r') . "_test.exs"
-    let l:test_file_dir = substitute(expand('%:p:h'), "/lib/core/", "/lib/test/", "")
-    let l:full_test_path = join([test_file_dir, test_file_name], "/")
+
+    let test_file_name = expand('%:t:r') . "_test.exs"
+    let test_file_dir = substitute(expand('%:p:h'), "/lib/", "/test/", "")
+    let full_test_path = join([test_file_dir, test_file_name], "/")
 
     e `=full_test_path`
 
   elseif match(expand('%:t'), "_test.exs") != -1
-    let l:current_file_name = expand('%:t:r')
-    let l:offset_amt = strlen(current_file_name) - strlen("_test")
-    let l:module_file_name = strpart(current_file_name, 0, offset_amt) . ".ex"
-    let l:module_file_dir = substitute(expand('%:p:h'), "/test/", "/lib/core/", "")
-    let l:full_module_path = join([module_file_dir, module_file_name], "/")
+
+    let test_file_name = expand('%:t:r')
+    let offset_amt = strlen(test_file_name) - strlen("_test")
+    let module_file_name = strpart(test_file_name, 0, offset_amt) . ".ex"
+    let module_file_dir = substitute(expand('%:p:h'), "/test/", "/lib/", "")
+    let full_module_path = join([module_file_dir, module_file_name], "/")
 
     e `=full_module_path`
-  endif
 
+  endif
 endfun
 
 
@@ -448,6 +479,4 @@ fun! CreateNonExistingDirsAndFile()
   " Write the buffer to the recently created file.
   w
 endfun
-
-
 

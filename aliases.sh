@@ -8,7 +8,7 @@ alias grep="egrep"
 
 alias c="clear"
 
-alias vi="vim"
+alias vim="nvim"
 
 alias find="find -E"
 
