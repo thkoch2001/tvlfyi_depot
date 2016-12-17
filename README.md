@@ -22,7 +22,7 @@ In the file `/configs/.tmux.conf` there is a line to add italics support to tmux
 set -g default-terminal "tmux-256color-italic"
 ```
 
-The `$TERM` entry, `tmux-256color-italic` will be unavailable until you add the file, `/configs/tmux-256color-italic` to your terminal database. You can do this with the following command:
+The `$TERM` entry, `tmux-256color-italic`, will be unavailable until you add the file, `/configs/tmux-256color-italic`, to your terminal database. You can do this with the following command:
 
 ```bash
 $ tic ~/pc_settings/configs/tmux-256color-italic
