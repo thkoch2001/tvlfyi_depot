@@ -35,6 +35,8 @@ To support ligatures make sure Hasklig is installed (link at the bottom). Ensure
 
 
 ### Commonly used applications
+* dash - provides quick access to offline documentation (use with Alfred)
+* Alfred - replaces macOS Spotlight and integrates with external Apps like Dash
 * homebrew - necessary for procuring shell applications
 * karabiner - `key-repeat: 50ms delay-until-repeat: 300ms` increase your Mac's key repeat settings beyond the default range
 * spectacle - resize and move your windows with keyboard shortcuts
