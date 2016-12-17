@@ -1,5 +1,8 @@
 # My Mac Configuration
-I'm documenting this for personal use. Shell settings, vim settings, commonly used applications, et cetera...
+I'm documenting this primarily for personal use. This reposity contains shell configs, vim configs, emacs configs, a list of commonly used applications, and other items.
+
+The overall goal of this repository is to reduce the time it takes to adopt a new computer and equip it with the necessary tooling to do meaningful work.
+
 
 # Neovim
 
@@ -9,6 +12,7 @@ The following snippet fixes the `<C-h>` issue in neovim on macOS.
 $ infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
 $ tic $TERM.ti
 ```
+
 
 ## Italics in tmux and vim
 
@@ -24,12 +28,18 @@ The `$TERM` entry, `tmux-256color-italic` will be unavailable until you add the 
 $ tic ~/pc_settings/configs/tmux-256color-italic
 ```
 
+
+## Ligature Support
+
+To support ligatures make sure Hasklig is installed (link at the bottom). Ensure that you are using an iTerm 2 build that supports ligatures. With both of these tasks completed, ligatures should function in Neovim.
+
+
 ### Commonly used applications
 * homebrew - necessary for procuring shell applications
 * karabiner - `key-repeat: 50ms delay-until-repeat: 300ms` increase your Mac's key repeat settings beyond the default range
 * spectacle - resize and move your windows with keyboard shortcuts
 * iterm - substitute for Terminal application
-* oh my zsh - z-shell for Mac
+* oh my zsh - a full suite of z-shell extensions
 * sublime text - text editor
 * webstorm - web IDE
 * pycharm - python IDE
