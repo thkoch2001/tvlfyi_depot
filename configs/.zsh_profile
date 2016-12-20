@@ -3,6 +3,11 @@ export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/loca
 # make vim the default editor for commit messages etc
 export EDITOR=$(which vim)
 
+
+# Adds a newline after the prompt to increase linespace for commands.
+PS1="${PS1}
+   "
+
 echo "Welcome back, $USER"
 
 # display the space available on each mounted Volume

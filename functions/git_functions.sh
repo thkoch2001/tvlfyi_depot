@@ -60,7 +60,7 @@ function wgjira {
 
 # wgcheckout combined with a fuzzy search
 function wgfcheckout {
-  branchname=$(trim $(git branch | fzf))
+  branchname=$(trim $(git branch | fzf-tmux))
 
   [ ! -z "$branchname" ] && wgcheckout "$branchname" || return
 }

@@ -77,6 +77,10 @@ Plugin 'neomake/neomake'
 Plugin 'flazz/vim-colorschemes'
 
 
+" Dash integration (macOS only)
+Plugin 'rizzatti/dash.vim'
+
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
@@ -99,6 +103,10 @@ let g:neomake_elixir_credo_maker = {
       \   '%I[C] %. %f:%l %m,' .
       \   '%-Z%.%#'
       \ }
+
+
+" Alchemist settings
+let g:alchemist#elixir_erlang_src = '/usr/local/share/src'
 
 
 " Airline Settings
@@ -128,7 +136,6 @@ nmap <F6> :6b<CR>
 nmap <F7> :7b<CR>
 nmap <F8> :8b<CR>
 nmap <F9> :9b<CR>
-
 
 
 " It's the twenty-first century...no swaps.
@@ -184,6 +191,14 @@ vnoremap <C-/> gc
 
 " Changes <leader> to <space> character.
 let mapleader = " "
+
+
+" Lookup Dash word under cursor in Dash
+nnoremap <leader>j :Dash<CR>
+
+
+" Save shortcut
+nnoremap <C-s> :w<CR>
 
 
 " Switch to MRU'd buffer
@@ -308,6 +323,8 @@ set background=dark
 
 syntax enable
 colorscheme hybrid
+
+set termguicolors
 
 set history=1000
 set undolevels=1000

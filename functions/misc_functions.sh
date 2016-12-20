@@ -1,12 +1,12 @@
 # fuzzily-find-file
 function wgff {
-  echo $(find . -type f | fzf)
+  echo $(find . -type f | fzf-tmux)
 }
 
 
 # fuzzily-find-branch
 function wgfb {
-  echo $(git branch -a | fzf)
+  echo $(git branch -a | fzf-tmux)
 }
 
 
@@ -28,13 +28,13 @@ function wspcheck {
 
 # fuzzily search through dirs stack
 function wfd {
-  dir=$(dirname $(fzf)) && pushd "$dir" >/dev/null
+  dir=$(dirname $(fzf-tmux)) && pushd "$dir" >/dev/null
 }
 
 
 # pushd into a directory on your dirs stack
 function wpushd {
-  dir="$(dirs | tr ' ' '\n' | fzf)" && pushd "$dir"
+  dir="$(dirs | tr ' ' '\n' | fzf-tmux)" && pushd "$dir"
 }
 
 

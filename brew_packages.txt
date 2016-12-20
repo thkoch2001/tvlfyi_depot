@@ -1,5 +1,4 @@
 ack
-arpack
 autojump
 bash-completion
 bdw-gc
@@ -30,14 +29,12 @@ giflib
 gl2ps
 glib
 global
-glpk
 gmp
 gnu-sed
 gnupg
 gnuplot
 go
 graphicsmagick
-hdf5
 httpie
 imagemagick
 isl
@@ -56,11 +53,9 @@ libyaml
 little-cms2
 lua
 macvim
-metis
 mpfr
 nethogs
 newsbeuter
-octave
 oniguruma
 openssl
 par
@@ -76,8 +71,6 @@ pup
 pyqt5
 python
 python3
-qhull
-qrupdate
 qscintilla2
 qt5
 readline
@@ -88,15 +81,12 @@ sassc
 shc
 sip
 sqlite
-suite-sparse
 szip
 tbb
 texinfo
 tig
 tmux
-transfig
 tree
-veclibfort
 vim
 w3m
 webp

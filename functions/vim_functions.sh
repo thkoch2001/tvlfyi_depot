@@ -13,10 +13,10 @@ function vfzopen() {
 
   if [ ! -z "$exclude_dirs" ]; then
     filename=$(find . -type f -name "$filetype" | \
-       xargs grep -l "$search_query" | fzf)
+       xargs grep -l "$search_query" | fzf-tmux)
   else
     filename=$(find . -type f -name "$filetype" -not -path "./${exclude_dir}/*" \
-       | xargs grep -l "$search_query" | fzf)
+       | xargs grep -l "$search_query" | fzf-tmux)
   fi
 
 
