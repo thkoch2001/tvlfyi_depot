@@ -17,8 +17,6 @@ Plugin 'VundleVim/Vundle.vim'
 " Displays git information in airline.
 Plugin 'tpope/vim-fugitive'
 
-Plugin 'Raimondi/delimitMate'
-
 " Displays git-tracked C*UD ops within gutter.
 Plugin 'airblade/vim-gitgutter'
 
@@ -76,15 +74,38 @@ Plugin 'neomake/neomake'
 " Color pack
 Plugin 'flazz/vim-colorschemes'
 
-
 " Dash integration (macOS only)
 Plugin 'rizzatti/dash.vim'
-
 
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 " -- END: Vundle config --
+
+
+" Basic settings
+set number
+set wrap!
+set tabstop=2
+set expandtab
+set shiftwidth=2
+set background=dark
+
+syntax enable
+colorscheme hybrid
+
+set termguicolors
+
+set history=1000
+set undolevels=1000
+
+set t_Co=255
+
+" Support italics
+highlight Comment cterm=italic
+
+" Changes <leader> to <space> character.
+let mapleader = " "
 
 
 " Neomake Settings
@@ -184,15 +205,6 @@ nnoremap zK zC
 nnoremap zk zc
 
 
-" Smart Comment code (has dependency 'tpope/vim-commentary')
-nnoremap <C-/> Vgc
-vnoremap <C-/> gc
-
-
-" Changes <leader> to <space> character.
-let mapleader = " "
-
-
 " Lookup Dash word under cursor in Dash
 nnoremap <leader>j :Dash<CR>
 
@@ -214,10 +226,6 @@ set hlsearch
 
 " Search for gibberish to clear the most recent search
 noremap <leader>/ :silent! /__wc_gibberish__/<CR>:echo "Search cleared."<CR>
-
-
-" Use custom-made snippets.
-nnoremap ,jsfn :-1read $HOME/.vim/function_skeleton.js<CR>o
 
 
 " backspace settings
@@ -243,6 +251,7 @@ inoremap jk <Esc>
 
 
 " Conventional Emacs line-editor defaults
+" NOTE: <C-a> interferes w/ current tmux prefix
 inoremap <C-a> <Esc>I
 inoremap <C-e> <Esc>A
 
@@ -252,14 +261,6 @@ nnoremap sl <Esc>:vs<CR><C-w>l
 nnoremap sh <Esc>:vs<CR>
 nnoremap sj <Esc>:sp<CR><C-w>j
 nnoremap sk <Esc>:sp<CR>
-
-
-" Move around splits with <leader>
-" NOTE: no longer needed with tmux navigator plugin
-" nnoremap <leader>h <C-w>h
-" nnoremap <leader>j <C-w>j
-" nnoremap <leader>k <C-w>k
-" nnoremap <leader>l <C-w>l
 
 
 " Delete (i.e. "close") the currently opened buffer
@@ -275,26 +276,11 @@ let g:ctrlp_cmd = 'CtrlPBuffer'
 " Set runtime path
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
-" Fuzzy-find files.
-nnoremap <leader>pf :CtrlP<CR>
-
-" Fuzzy-find open buffers.
-nnoremap <leader>pb :CtrlPBuffer<CR>
-
-" Fuzzy-find open buffers.
-nnoremap <leader>pm :CtrlPMRUFiles<CR>
-
 
 " Buffer creation and management
 " Buffer movement
 nnoremap <Tab> :1bnext<CR>
 nnoremap <S-Tab> :1bprevious<CR>
-
-" Buffer creation
-" nnoremap <C-t> :enew<CR>
-
-" Buffer deletion
-nnoremap <leader>bq :bp <BAR> bd #<CR>
 
 
 " make Y do what is intuitive given: 
@@ -313,36 +299,8 @@ nnoremap Y y$
 nnoremap <C-r> <C-w><C-r>
 
 
-" Basic settings
-set number
-set wrap!
-set tabstop=2
-set expandtab
-set shiftwidth=2
-set background=dark
-
-syntax enable
-colorscheme hybrid
-
-set termguicolors
-
-set history=1000
-set undolevels=1000
-
-set t_Co=255
-
-
-" Support italics
-highlight Comment cterm=italic
-
-
 " remap redo key that is eclipsed by `rotate` currently
 nnoremap U :redo<CR>
-
-
-" Repeat last colon-command
-nnoremap ;; @:<CR>
-vnoremap ;; @:<CR>
 
 
 " Define highlighting groups
@@ -446,10 +404,6 @@ vnoremap // y/<C-r>"<CR>N
 autocmd BufWritePre *.{js,py,tpl,less,html,ex,exs,txt} :%s/\s\+$//e
 
 
-" set default font and size
-set guifont=Operator\ Mono:h16
-
-
 " Use .gitignore file to populate Ctrl-P
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
 
@@ -462,6 +416,7 @@ let g:ctrlp_custom_ignore = {
 
 
 " WIP: Run elixir tests on that line
+" TODO: only register binding in *.exs? file extensions
 nnoremap <leader>t :call ExTestToggle()<CR>
 
 
