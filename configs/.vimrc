@@ -65,6 +65,12 @@ Plugin 'godlygeek/tabular'
 " Visually Highlight and comment code.
 Plugin 'tpope/vim-commentary'
 
+" Macros for quotes, parens, etc.
+Plugin 'tpope/vim-surround'
+
+" Allows Plugins to be repeated with `.` character
+Plugin 'tpope/vim-repeat'
+
 " Seamlessly navigate Vim and Tmux with similar bindings.
 Plugin 'christoomey/vim-tmux-navigator'
 
@@ -106,6 +112,10 @@ highlight Comment cterm=italic
 
 " Changes <leader> to <space> character.
 let mapleader = " "
+
+
+" Auto resize window splits
+autocmd VimResized * wincmd =
 
 
 " Neomake Settings
@@ -180,6 +190,16 @@ set foldlevel=4
 
 " Use relative line numbers
 set relativenumber
+
+
+" emulate ci" and ci' behavior
+nnoremap ci( f)ci(
+nnoremap ci[ f]ci[
+
+
+" extend functionality of <C-e> & <C-y> scrolling
+nnoremap <C-e> <C-e>j
+nnoremap <C-y> <C-y>k
 
 
 " Opens all folds within the buffer
