@@ -83,6 +83,9 @@ Plugin 'flazz/vim-colorschemes'
 " Dash integration (macOS only)
 Plugin 'rizzatti/dash.vim'
 
+" Better buffer mgt than CtrlP
+Plugin 'yegappan/mru'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
@@ -193,13 +196,15 @@ set relativenumber
 
 
 " emulate ci" and ci' behavior
-nnoremap ci( f)ci(
-nnoremap ci[ f]ci[
+nnoremap ci( f(%ci(
+nnoremap ci[ f[%ci[
 
 
 " extend functionality of <C-e> & <C-y> scrolling
 nnoremap <C-e> <C-e>j
+vnoremap <C-e> <C-e>j
 nnoremap <C-y> <C-y>k
+vnoremap <C-y> <C-y>k
 
 
 " Opens all folds within the buffer
@@ -237,6 +242,10 @@ nnoremap <C-s> :w<CR>
 nnoremap <leader><leader> <C-^>
 
 
+" Alternative MRU to CtrlP MRU
+nnoremap <leader>b :MRU<CR>
+
+
 " Supports mouse interaction.
 set mouse=a
 
@@ -244,8 +253,8 @@ set mouse=a
 " Highlights matches during a search.
 set hlsearch
 
-" Search for gibberish to clear the most recent search
-noremap <leader>/ :silent! /__wc_gibberish__/<CR>:echo "Search cleared."<CR>
+" Clear highlight
+noremap <leader>/ :nohlsearch<CR>
 
 
 " backspace settings
@@ -288,12 +297,7 @@ nnoremap sk <Esc>:sp<CR>
 nnoremap <leader>q :bdelete<CR>
 
 
-" CtrlP config
-" Set default CtrlP command.
-let g:ctrlp_cmd = 'CtrlPBuffer'
-" let g:ctrlp_cmd = 'CtrlPMRU'
-
-" Set runtime path
+" Set CtrlP runtime path
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 
