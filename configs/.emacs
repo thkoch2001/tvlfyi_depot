@@ -101,7 +101,7 @@
   (define-key evil-normal-state-map (kbd "L") 'evil-end-of-line))
 
 ;; Line Numbers in margin for source code mode
-;; (add-hook 'prog-mode-hook 'linum-mode)
+(add-hook 'prog-mode-hook 'linum-mode)
 (add-hook 'prog-mode-hook 'bootstrap-evil-mode)
 
 ;; Add transparency
