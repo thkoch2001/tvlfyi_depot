@@ -61,6 +61,10 @@
 (add-hook 'elixir-mode-hook 'alchemist-mode)
 
 
+;; Evil Settings
+(require 'evil)
+
+
 ;; Buffer scrolling functions
 (global-set-key (kbd "M-n") (lambda () (interactive) (scroll-up 1) (next-line 1)))
 (global-set-key (kbd "M-p") (lambda () (interactive) (scroll-down 1) (previous-line 1)))
@@ -95,7 +99,7 @@
 (defun bootstrap-evil-mode()
   "Custom evil-mode boostrapping"
   (interactive)
-  (evil-mode)
+  (evil-local-mode)
   (define-key evil-insert-state-map (kbd "j k") 'evil-force-normal-state)
   (define-key evil-normal-state-map (kbd "H") 'evil-beginning-of-line)
   (define-key evil-normal-state-map (kbd "L") 'evil-end-of-line))
