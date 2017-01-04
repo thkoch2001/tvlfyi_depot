@@ -14,7 +14,40 @@ $ tic $TERM.ti
 ```
 
 
-## Italics in tmux and vim
+## True Color and Italics in tmux and vim
+
+### TrueColor
+
+Note: make sure that the terminal you are using supports TrueColor (hint: recent version of iTerm2 do). Also make sure that the tmux version you are using supports TrueColor (hint: versions north of 2.2 should).
+
+At each step of the way, test TrueColor using the following shell pipeline (hint: the gradients should be smooth):
+
+```bash
+$ curl https://raw.githubusercontent.com/JohnMorales/dotfiles/master/colors/24-bit-color.sh | bash
+```
+
+
+* Terminal: recent versions of iTerm 2 should support TrueColor
+* Tmux: versions 2.2 and after should support TrueColor
+* NeoVim: recent versions of NeoVim should support TrueColor
+
+Enable TrueColor in your `~/.vimrc` (already done in this repository):
+
+```viml
+set termguicolors
+```
+
+
+Enable TrueColor in your `~/.tmux.conf` (already done in this repository):
+
+NOTE: This may conflict with the setting for italics. Need to verify to confirm / disconfirm this (pending).
+
+```
+set -ga terminal-overrides ",xterm-256color-italic:Tc"
+```
+
+
+### Italics
 
 In the file `/configs/.tmux.conf` there is a line to add italics support to tmux:
 
