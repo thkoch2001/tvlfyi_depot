@@ -20,6 +20,13 @@ $ tic $TERM.ti
 
 Note: make sure that the terminal you are using supports TrueColor (hint: recent version of iTerm2 do). Also make sure that the tmux version you are using supports TrueColor (hint: versions north of 2.2 should).
 
+At each step of the way, test TrueColor using the following shell pipeline (hint: the gradients should be smooth):
+
+```bash
+$ curl https://raw.githubusercontent.com/JohnMorales/dotfiles/master/colors/24-bit-color.sh | bash
+```
+
+
 * Terminal: recent versions of iTerm 2 should support TrueColor
 * Tmux: versions 2.2 and after should support TrueColor
 * NeoVim: recent versions of NeoVim should support TrueColor
