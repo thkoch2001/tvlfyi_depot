@@ -86,6 +86,8 @@ Plugin 'rizzatti/dash.vim'
 " Better buffer mgt than CtrlP
 Plugin 'yegappan/mru'
 
+Plugin 'zanglg/nova.vim'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
@@ -101,7 +103,7 @@ set shiftwidth=2
 set background=dark
 
 syntax enable
-colorscheme hybrid
+colorscheme nova
 
 set termguicolors
 
