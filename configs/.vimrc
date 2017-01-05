@@ -428,11 +428,6 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>f :NERDTreeFind<CR>
 
 
-" Jump to the top / bottom of the Viewport
-nnoremap K H
-nnoremap J L
-
-
 " BOL and EOL
 nnoremap H ^
 vnoremap H ^
