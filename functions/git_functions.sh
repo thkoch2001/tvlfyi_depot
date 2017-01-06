@@ -4,6 +4,16 @@ function wgbranch {
 }
 
 
+# compare file with another branch
+function wgcompare_file {
+  file_path="$1"
+  compare_branch_a="master"
+  compare_branch_b="$(wgbranch)"
+
+  git diff "${compare_branch_a}:${file_path}" "${compare_branch_b}:${file_path}"
+}
+
+
 # output the stash ticket number to STDOUT
 function wgtix {
   wgbranch | perl -p -e 's/(?:feature|bugfix|refactor)\/(\w+-\d+).+$/\1/'

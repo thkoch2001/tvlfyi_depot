@@ -88,6 +88,9 @@ Plugin 'yegappan/mru'
 
 Plugin 'zanglg/nova.vim'
 
+" Emulates Emacs's Helm Swoop search
+Plugin 'pelodelfuego/vim-swoop'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
@@ -95,6 +98,11 @@ filetype plugin indent on    " required
 
 
 " Basic settings
+" Thin cursor on INSERT mode
+if has('nvim')
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+endif
+
 set number
 set wrap!
 set tabstop=2
@@ -103,7 +111,7 @@ set shiftwidth=2
 set background=dark
 
 syntax enable
-colorscheme nova
+colorscheme onedark
 
 set termguicolors
 
@@ -162,6 +170,11 @@ let g:airline_powerline_fonts = 1
 let g:airline_theme = 'hybrid'
 
 
+" Vim-Swoop Settings
+" Edits colorscheme
+let g:swoopHighlight = ["hi! link SwoopBufferLineHi Warning", "hi! link SwoopPatternHi Error"]
+
+
 " Jump to buffers.
 nmap <F1> :1b<CR>
 nmap <F2> :2b<CR>
@@ -187,14 +200,10 @@ set showcmd
 
 
 " Code folding
-set foldmethod=indent
-set foldnestmax=10
-set nofoldenable
-set foldlevel=4
-
-
-" Use relative line numbers
-set relativenumber
+" set foldmethod=indent
+" set foldnestmax=10
+" set nofoldenable
+" set foldlevel=4
 
 
 " emulate ci" and ci' behavior
@@ -210,26 +219,26 @@ vnoremap <C-y> <C-y>k
 
 
 " Opens all folds within the buffer
-nnoremap ZZ zR
+" nnoremap ZZ zR
 
 " Closes all folds within the buffer
-nnoremap zz zM
+" nnoremap zz zM
 
 " Opens all folds beneath the cursor
 " NOTE: j is the character to go down
-nnoremap zJ zO
+" nnoremap zJ zO
 
 " Opens single fold beneath the cursor
 " NOTE: j is the character to go down
-nnoremap zj zo
+" nnoremap zj zo
 
 " Opens single fold beneath the cursor
 " NOTE: k is the character to go down
-nnoremap zK zC
+" nnoremap zK zC
 
 " Opens single fold beneath the cursor
 " NOTE: k is the character to go down
-nnoremap zk zc
+" nnoremap zk zc
 
 
 " Lookup Dash word under cursor in Dash

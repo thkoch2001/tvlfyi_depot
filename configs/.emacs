@@ -7,33 +7,51 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
+ '(evil-shift-width 2)
  '(mouse-wheel-mode nil)
  '(neo-window-fixed-size nil)
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (neotree evil helm-swoop iedit vimrc-mode helm-ispell transpose-frame helm-projectile helm-ack nyan-mode alchemist helm magit dockerfile-mode elixir-mode elm-mode ack))))
+    (atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil helm-swoop iedit vimrc-mode helm-ispell transpose-frame helm-projectile helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(hl-line ((t (:background "gray7")))))
+ '(hl-line ((t (:inherit nil)))))
+
 
 ;; Colorscheme
-(load-theme 'wombat)
+(load-theme 'atom-one-dark)
 
-;; Emacs backup files
-(setq-default make-backup-files nil)
+
+;; Properly configure GUI Emacs to use $PATH values
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
+
+;; Emacs backup / autosave files
+;; (setq-default make-backup-files nil)
+(setq backup-inhibited t)
+(setq auto-save-default nil)
+
 
 ;; Automatically follow symlinks
 (setq vc-follow-symlinks t)
 
-;; NyanCat progress bar
-;; (nyan-mode)
 
 ;; Enable autocompletion
 (add-hook 'after-init-hook 'global-company-mode)
+
+
+;; Fullscreen settings
+(setq ns-use-native-fullscreen nil)
+(global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen)
+
 
 ;; Helm Settings
 (require 'helm)
@@ -46,6 +64,7 @@
 (global-set-key (kbd "C-x C-f") 'helm-projectile)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
 (global-set-key (kbd "C-c h o") 'helm-swoop)
 
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
@@ -63,21 +82,54 @@
 (helm-mode 1)
 
 
+;; Add 80 column marker
+(require 'whitespace)
+(setq whitespace-line-column 80) ;; limit line length
+(setq whitespace-style '(face lines-tail))
+(add-hook 'prog-mode-hook 'whitespace-mode)
+
+
 ;; Projectile Settings
-(projectile-mode)
+(projectile-mode t)
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
-
 (setq projectile-switch-project-action 'helm-projectile)
 
 
 ;; Alchemist Settings
-(add-hook 'elixir-mode-hook 'alchemist-mode)
+(require 'alchemist)
+(setq alchemist-mix-env "prod")
+
+(setq alchemist-goto-erlang-source-dir "/usr/local/bin/source/")
+(setq alchemist-goto-elixir-source-dir "/usr/local/bin/erl")
+
+;; Borrow keybinding from list-mode eval
+(define-key global-map (kbd "C-j") nil)
+(define-key alchemist-mode-keymap (kbd "C-j") 'alchemist-eval-current-line)
+
+;; Allow Elixir -> Erlang -> Elixir definition jumping
+(defun custom-erlang-mode-hook ()
+  (define-key erlang-mode-map (kbd "M-,") 'alchemist-goto-jump-back))
+
+(add-hook 'erlang-mode-hook 'custom-erlang-mode-hook)
+
+;; Run tests on file writes
+;; (setq alchemist-hooks-test-on-save t)
 
 
 ;; Evil Settings
 (require 'evil)
 
+(defun register-evil-keybindings-for-neotree ()
+  "Registers keybindings for Evil mode for NeoTree plugin."
+  (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
+  (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-enter)
+  (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+  (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
+
+
+;; Display column number alongside row number
+(column-number-mode t)
 
 ;; NeoTree Settings
 (require 'neotree)
@@ -100,11 +152,6 @@
 (add-hook 'neotree-mode-hook (lambda () (bootstrap-evil-mode) (hl-line-mode)) )
 
 
-;; Buffer scrolling functions
-(global-set-key (kbd "M-n") (lambda () (interactive) (scroll-up 1) (next-line 1)))
-(global-set-key (kbd "M-p") (lambda () (interactive) (scroll-down 1) (previous-line 1)))
-
-
 ;; Window movement
 (global-set-key (kbd "C-c w f") 'windmove-right)
 (global-set-key (kbd "C-c w b") 'windmove-left)
@@ -116,9 +163,6 @@
 ;; Hide the menu-bar
 (setq ns-auto-hide-menu-bar t)
 
-;; Use non-native fullscreen
-(setq ns-use-native-fullscreen nil)
-
 ;; Native App Settings
 (tool-bar-mode -1)
 
@@ -129,7 +173,8 @@
 (setq-default indent-tabs-mode nil)
 
 ;; Change font settings
-(add-to-list 'default-frame-alist '(font . "Hasklig"))
+(set-face-attribute 'default nil :height 100)
+(add-to-list 'default-frame-alist '(font . "Operator Mono"))
 
 
 ;; Personalized Evil-mode settings
@@ -138,19 +183,23 @@
 `global-map` when inside Vim's `normal` mode. It disables Vim key-bindings
 when in Vim's `insert` mode, favoring native Emacs bindings instead."
   (interactive)
-  (evil-local-mode)
+  (evil-local-mode t)
 
   ;; Toggle off Emacs bindings when in Vim `normal` mode except:
   ;;   * `M-x`
   ;; (setcdr global-map nil)
   ;; (define-key global-map (kbd "M-x") 'helm-M-x)
 
+  (define-key evil-normal-state-map (kbd "") nil)
+
   ;; unbind <SPC> and <CR> in normal mode since they're hardly used
   (define-key evil-motion-state-map (kbd "RET") nil)
   (define-key evil-motion-state-map (kbd "SPC") nil)
+  (define-key evil-normal-state-map (kbd "M-.") nil)
 
   ;; use 'helm-swoop for interactive search
   (define-key evil-motion-state-map (kbd "/") 'helm-swoop)
+  (define-key evil-motion-state-map (kbd "?") 'helm-swoop)
 
   (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
   (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
@@ -161,6 +210,9 @@ when in Vim's `insert` mode, favoring native Emacs bindings instead."
   (define-key evil-normal-state-map (kbd "M-h") (lambda () (interactive) (evil-window-vsplit) ))
   (define-key evil-normal-state-map (kbd "M-j") (lambda () (interactive) (evil-window-split) (evil-window-down 1) ))
   (define-key evil-normal-state-map (kbd "M-k") (lambda () (interactive) (evil-window-split) ))
+
+  ;; Plugin-specific keybindings
+  (register-evil-keybindings-for-neotree)
   
   ;; Toggle off Vim bindings when in Vim `insert` mode except:
   ;;   * `<escape>` <ESC>
@@ -182,6 +234,3 @@ when in Vim's `insert` mode, favoring native Emacs bindings instead."
 ;; Add transparency
 (set-frame-parameter (selected-frame) 'alpha '(90 . 50))
 (add-to-list 'default-frame-alist '(alpha . (90 . 50)))
-
-;; Full-screen as Command <CR>
-(global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen)
