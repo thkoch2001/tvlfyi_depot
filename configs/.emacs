@@ -96,6 +96,13 @@
 (setq projectile-switch-project-action 'helm-projectile)
 
 
+;; Elixir Mode
+;; Add support for local function invocation highlighting
+;; (font-lock-add-keywords 'elixir-mode
+;;                         '(("[_a-z]+\\.\\(" . font-lock-variable-name-face)))
+
+
+
 ;; Alchemist Settings
 (require 'alchemist)
 (setq alchemist-mix-env "prod")
@@ -232,5 +239,5 @@ when in Vim's `insert` mode, favoring native Emacs bindings instead."
 (add-hook 'prog-mode-hook 'bootstrap-evil-mode)
 
 ;; Add transparency
-(set-frame-parameter (selected-frame) 'alpha '(90 . 50))
-(add-to-list 'default-frame-alist '(alpha . (90 . 50)))
+(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
