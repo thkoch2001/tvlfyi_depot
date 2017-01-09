@@ -1,12 +1,16 @@
+(require 'package)
+
+(add-to-list 'package-archives
+             '("MELPA Stable" . "https://stable.melpa.org/packages/") t)
+
 (package-initialize)
 
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(command-log-mode-window-size 50)
  '(custom-safe-themes
    (quote
     ("6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
@@ -16,7 +20,7 @@
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil helm-swoop iedit vimrc-mode helm-ispell transpose-frame helm-projectile helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack))))
+    (flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil helm-swoop iedit vimrc-mode helm-ispell transpose-frame helm-projectile helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -36,8 +40,8 @@
 
 ;; Emacs backup / autosave files
 ;; (setq-default make-backup-files nil)
-(setq backup-inhibited t)
-(setq auto-save-default nil)
+(setq backup-directory-alist `(("." . "~/.emacs-tmp")))
+(setq auto-save-file-name-transforms `((".*" "~/.emacs-tmp/" t)))
 
 
 ;; Automatically follow symlinks
@@ -46,6 +50,28 @@
 
 ;; Enable autocompletion
 (add-hook 'after-init-hook 'global-company-mode)
+
+
+;; View stream of Emacs commands
+(require 'command-log-mode)
+(global-command-log-mode)
+
+
+;; Flycheck Settings
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; Elixir (Credo) Settings
+(eval-after-load 'flycheck
+  (lambda ()
+    (flycheck-credo-setup)
+    (setq flycheck-elixir-credo-strict t)))
+
+(add-hook 'elixir-mode-hook 'flycheck-mode)
+
+
+;; Magit Settings
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
 
 ;; Fullscreen settings
@@ -100,7 +126,6 @@
 ;; Add support for local function invocation highlighting
 ;; (font-lock-add-keywords 'elixir-mode
 ;;                         '(("[_a-z]+\\.\\(" . font-lock-variable-name-face)))
-
 
 
 ;; Alchemist Settings
