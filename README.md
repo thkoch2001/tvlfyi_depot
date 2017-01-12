@@ -71,17 +71,18 @@ To support ligatures make sure Hasklig is installed (link at the bottom). Ensure
 
 
 ### Commonly used applications
+* Emacs OS X - text editor
+* sublime text - text editor
+* webstorm - web IDE
+* pycharm - python IDE
 * dash - provides quick access to offline documentation (use with Alfred)
 * Alfred - replaces macOS Spotlight and integrates with external Apps like Dash
+* iterm - substitute for Terminal application
 * homebrew - necessary for procuring shell applications
-* karabiner - `key-repeat: 50ms delay-until-repeat: 300ms` increase your Mac's key repeat settings beyond the default range
 * spectacle - resize and move your windows with keyboard shortcuts
 * iterm - substitute for Terminal application
 * Fish Shell - a more modern alternative to Bash or Zsh
 * oh my zsh - a full suite of z-shell extensions
-* sublime text - text editor
-* webstorm - web IDE
-* pycharm - python IDE
 * docker - for running containers and virtual environments
 * mou - markdown editor
 * f.lux - modulates the blue amount from the screen throughout the day
@@ -112,6 +113,6 @@ To support ligatures make sure Hasklig is installed (link at the bottom). Ensure
 * Install [Hasklig](https://github.com/i-tu/Hasklig) for ligature support in Elm, Elixir, etc
 * Install [FiraCode](https://github.com/tonsky/FiraCode/wiki) for ligature support
 * Install [Operator Mono](http://www.typography.com/blog/introducing-operator) for expressive Italics
-* Install powerline fonts 
+* Install powerline fonts
 * add Adobe Source Code Pro font for shell and text editors
 * increase trackpad / mouse speed to maximum levels
