@@ -1,15 +1,22 @@
+;; William Carroll's Emacs configuration
+
+
+;; From `https://github.com/melpa/melpa`
 (require 'package)
-
 (add-to-list 'package-archives
-             '("MELPA Stable" . "https://stable.melpa.org/packages/") t)
-
+             '("melpa" . "https://melpa.org/packages/") t)
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
  '(command-log-mode-window-size 50)
  '(custom-safe-themes
    (quote
@@ -20,7 +27,10 @@
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil helm-swoop iedit vimrc-mode helm-ispell transpose-frame helm-projectile helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack))))
+    (evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil helm-swoop iedit vimrc-mode helm-ispell transpose-frame helm-projectile helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
+ '(popwin-mode t)
+ '(popwin:popup-window-height 25)
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -33,9 +43,18 @@
 (load-theme 'atom-one-dark)
 
 
+;; Scrolling Settings
+(setq scroll-step 1)
+(setq scroll-conservatively 10000)
+
+
 ;; Properly configure GUI Emacs to use $PATH values
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
+
+
+;; Trim trailing whitespace on save
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 
 ;; Emacs backup / autosave files
@@ -57,16 +76,17 @@
 (global-command-log-mode)
 
 
+;; Commenting / Uncommenting
+(global-set-key (kbd "C-x C-;") 'comment-or-uncomment-region)
+
+
 ;; Flycheck Settings
-(add-hook 'after-init-hook #'global-flycheck-mode)
+;; (add-hook 'after-init-hook #'global-flycheck-mode)
+
 
 ;; Elixir (Credo) Settings
-(eval-after-load 'flycheck
-  (lambda ()
-    (flycheck-credo-setup)
-    (setq flycheck-elixir-credo-strict t)))
-
-(add-hook 'elixir-mode-hook 'flycheck-mode)
+;; (require 'flycheck-credo)
+;; (add-hook 'elixir-mode-hook 'flycheck-credo-setup)
 
 
 ;; Magit Settings
@@ -108,11 +128,42 @@
 (helm-mode 1)
 
 
+;; Global search in projects
+(global-set-key (kbd "C-x p") 'helm-projectile-ack)
+
+
+;; disable popwin-mode in an active Helm session It should be disabled
+;; otherwise it will conflict with other window opened by Helm persistent
+;; action, such as *Help* window.
+(require 'popwin)
+
+(push '("^\*helm.+\*$" :regexp t) popwin:special-display-config)
+(add-hook 'helm-after-initialize-hook (lambda ()
+                                        (popwin:display-buffer helm-buffer t)
+                                        (popwin-mode -1)))
+
+;;  Restore popwin-mode after a Helm session finishes.
+(add-hook 'helm-cleanup-hook (lambda () (popwin-mode 1)))
+
+;; Popwin Helm-Swoop workaround
+(defvar helm-swoop-split-window-function
+  (lambda ($buf)
+    (display-buffer $buf)))
+
+
 ;; Add 80 column marker
 (require 'whitespace)
 (setq whitespace-line-column 80) ;; limit line length
 (setq whitespace-style '(face lines-tail))
 (add-hook 'prog-mode-hook 'whitespace-mode)
+
+
+;; Allow `C-x C-s` to write to unmodified buffers, allowing the file to be `touch`'d
+(set-buffer-modified-p t)
+
+
+;; Git-Commit prog-mode
+;; (add-hook 'git-commit-mode 'prog-mode)
 
 
 ;; Projectile Settings
@@ -122,18 +173,12 @@
 (setq projectile-switch-project-action 'helm-projectile)
 
 
-;; Elixir Mode
-;; Add support for local function invocation highlighting
-;; (font-lock-add-keywords 'elixir-mode
-;;                         '(("[_a-z]+\\.\\(" . font-lock-variable-name-face)))
-
-
 ;; Alchemist Settings
 (require 'alchemist)
 (setq alchemist-mix-env "prod")
 
-(setq alchemist-goto-erlang-source-dir "/usr/local/bin/source/")
-(setq alchemist-goto-elixir-source-dir "/usr/local/bin/erl")
+(setq alchemist-goto-elixir-source-dir "/Users/wpcarro/source_code/elixir")
+(setq alchemist-goto-erlang-source-dir "/Users/wpcarro/source_code/otp/")
 
 ;; Borrow keybinding from list-mode eval
 (define-key global-map (kbd "C-j") nil)
@@ -158,6 +203,11 @@
   (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-enter)
   (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
   (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
+
+
+;; Evil Surround
+(require 'evil-surround)
+(global-evil-surround-mode 1)
 
 
 ;; Display column number alongside row number
@@ -205,13 +255,12 @@
 (setq-default indent-tabs-mode nil)
 
 ;; Change font settings
-(set-face-attribute 'default nil :height 100)
-(add-to-list 'default-frame-alist '(font . "Operator Mono"))
+(set-frame-font "Operator Mono 10")
 
 
 ;; Personalized Evil-mode settings
 (defun bootstrap-evil-mode()
-  "Custom evil-mode settings. This disables Emacs key-bindings found in 
+  "Custom evil-mode settings. This disables Emacs key-bindings found in
 `global-map` when inside Vim's `normal` mode. It disables Vim key-bindings
 when in Vim's `insert` mode, favoring native Emacs bindings instead."
   (interactive)
@@ -245,7 +294,7 @@ when in Vim's `insert` mode, favoring native Emacs bindings instead."
 
   ;; Plugin-specific keybindings
   (register-evil-keybindings-for-neotree)
-  
+
   ;; Toggle off Vim bindings when in Vim `insert` mode except:
   ;;   * `<escape>` <ESC>
   ;;   * `j k` <ESC>
@@ -254,7 +303,7 @@ when in Vim's `insert` mode, favoring native Emacs bindings instead."
   (define-key evil-insert-state-map (kbd "<escape>") 'evil-force-normal-state)
   (define-key evil-insert-state-map (kbd "j k") 'evil-force-normal-state)
   (define-key evil-insert-state-map (kbd "jj") (lambda () (interactive) (insert "j")))
-  
+
   (define-key evil-normal-state-map (kbd "H") 'evil-first-non-blank)
   (define-key evil-normal-state-map (kbd "L") 'evil-end-of-line))
 
