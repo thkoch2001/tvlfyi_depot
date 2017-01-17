@@ -1,3 +1,9 @@
+" Set shell variable to "sh" if current shell is "fish shell"
+if &shell =~# 'fish$'
+  set shell=sh
+endif
+
+
 " -- BEGIN: Vundle config --
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -90,6 +96,9 @@ Plugin 'zanglg/nova.vim'
 
 " Emulates Emacs's Helm Swoop search
 Plugin 'pelodelfuego/vim-swoop'
+
+" Fish Shell support
+Plugin 'dag/vim-fish'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
