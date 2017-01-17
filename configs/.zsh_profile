@@ -10,7 +10,9 @@ echo "Welcome back, $USER"
 df -hl
 
 # use vi bindings for terminal input
-set -o vi
+# set -o vi
+# use emacs bindings (default) for terminal input
+set -o emacs
 
 # aliases
 source $HOME/pc_settings/aliases.sh
