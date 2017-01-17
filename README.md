@@ -1,5 +1,8 @@
-# My Mac Configuration
+# My P(ersonal) C(omputer) Settings
+
 I'm documenting this primarily for personal use. This reposity contains shell configs, vim configs, emacs configs, a list of commonly used applications, and other items.
+
+Ironically, I prefer to use a Mac as my personal computer, so hopefully the name, `pc_settings` isn't misleading.
 
 The overall goal of this repository is to reduce the time it takes to adopt a new computer and equip it with the necessary tooling to do meaningful work.
 
@@ -74,6 +77,7 @@ To support ligatures make sure Hasklig is installed (link at the bottom). Ensure
 * karabiner - `key-repeat: 50ms delay-until-repeat: 300ms` increase your Mac's key repeat settings beyond the default range
 * spectacle - resize and move your windows with keyboard shortcuts
 * iterm - substitute for Terminal application
+* Fish Shell - a more modern alternative to Bash or Zsh
 * oh my zsh - a full suite of z-shell extensions
 * sublime text - text editor
 * webstorm - web IDE
