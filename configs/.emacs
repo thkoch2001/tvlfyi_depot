@@ -1,4 +1,4 @@
-;; William Carroll's Emacs configuration
+; William Carroll's Emacs configuration
 
 
 ;; From `https://github.com/melpa/melpa`
@@ -97,6 +97,11 @@
 ;; Fullscreen settings
 (setq ns-use-native-fullscreen nil)
 (global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen)
+
+
+;; Dired Settings
+(require 'dired)
+(define-key dired-mode-map (kbd "c") 'find-file)
 
 
 ;; Helm Settings
