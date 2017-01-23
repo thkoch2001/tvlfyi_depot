@@ -26,3 +26,6 @@ alias wdirs='dirs | tr " " "\n" | sort -r'
 # Pretty-print git history
 alias glp="git log --graph --pretty=format:'%Cred%h%Creset -%Cblue %an %Creset - %C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 
+# Convenient alias for git status
+alias gst="git status"
+
