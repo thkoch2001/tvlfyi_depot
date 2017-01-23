@@ -27,7 +27,7 @@
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil helm-swoop iedit vimrc-mode helm-ispell transpose-frame helm-projectile helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
+    (evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil helm-swoop iedit vimrc-mode helm-ispell transpose-frame helm-projectile helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(tool-bar-mode nil))
@@ -70,6 +70,9 @@
 ;; Enable autocompletion
 (add-hook 'after-init-hook 'global-company-mode)
 
+;; Remove company delay
+(setq-default company-idle-delay 0)
+
 
 ;; View stream of Emacs commands
 (require 'command-log-mode)
@@ -81,12 +84,14 @@
 
 
 ;; Flycheck Settings
-;; (add-hook 'after-init-hook #'global-flycheck-mode)
+(require 'flycheck)
+(add-hook 'after-init-hook 'global-flycheck-mode)
 
 
-;; Elixir (Credo) Settings
-;; (require 'flycheck-credo)
-;; (add-hook 'elixir-mode-hook 'flycheck-credo-setup)
+;; Elixir flycheck compile-time errors
+(require 'flycheck-mix)
+(require 'flycheck-credo)
+(eval-after-load 'flycheck (lambda () (flycheck-credo-setup) (flycheck-mix-setup)))
 
 
 ;; Magit Settings
@@ -130,6 +135,13 @@
 
 ;; Global search in projects
 (global-set-key (kbd "C-x p") 'helm-projectile-ack)
+
+
+;; Ansi Term Settings
+;; (define-key 'term-mode-map (kbd "C-h") 'window-left)
+;; (define-key 'term-mode-map (kbd "C-l") 'window-right)
+;; (define-key 'term-mode-map (kbd "C-k") 'window-up)
+;; (define-key 'term-mode-map (kbd "C-j") 'window-down)
 
 
 ;; disable popwin-mode in an active Helm session It should be disabled
@@ -196,6 +208,7 @@
 
 ;; Evil Settings
 (require 'evil)
+(require 'evil-leader)
 
 (defun register-evil-keybindings-for-neotree ()
   "Registers keybindings for Evil mode for NeoTree plugin."
@@ -204,10 +217,13 @@
   (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
   (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
 
-
-;; Evil Surround
-(require 'evil-surround)
-(global-evil-surround-mode 1)
+;; Evil colored-cursors
+(setq evil-emacs-state-cursor '("red" box))
+(setq evil-normal-state-cursor '("green" box))
+(setq evil-visual-state-cursor '("orange" box))
+(setq evil-insert-state-cursor '("red" bar))
+(setq evil-replace-state-cursor '("red" bar))
+(setq evil-operator-state-cursor '("red" hollow))
 
 
 ;; Display column number alongside row number
@@ -232,6 +248,17 @@
 (global-set-key (kbd "<f8>") 'neotree-project-dir)
 
 (add-hook 'neotree-mode-hook (lambda () (bootstrap-evil-mode) (hl-line-mode)) )
+
+
+;; Evil Plugins
+
+;; Evil Match-it
+(require 'evil-matchit)
+(global-evil-matchit-mode 1)
+
+;; Evil Surround
+(require 'evil-surround)
+(global-evil-surround-mode 1)
 
 
 ;; Window movement
@@ -265,6 +292,10 @@
 when in Vim's `insert` mode, favoring native Emacs bindings instead."
   (interactive)
   (evil-local-mode t)
+
+  ;; Evil-leader
+  (global-evil-leader-mode)
+  (evil-leader/set-leader (kbd "SPC"))
 
   ;; Toggle off Emacs bindings when in Vim `normal` mode except:
   ;;   * `M-x`
