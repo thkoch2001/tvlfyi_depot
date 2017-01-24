@@ -1,4 +1,4 @@
-export PATH=/Users/wpcarro/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/fzf/bin:/Users/wpcarro/n/bin
+export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/local/sbin:$PATH
 
 # make vim the default editor for commit messages etc
 export EDITOR=$(which vim)
@@ -6,14 +6,11 @@ export EDITOR=$(which vim)
 
 echo "Welcome back, $USER"
 
-
 # display the space available on each mounted Volume
 df -hl
 
 # use vi bindings for terminal input
-# set -o vi
-# use emacs bindings (default) for terminal input
-set -o emacs
+set -o vi
 
 # aliases
 source $HOME/pc_settings/aliases.sh
@@ -51,3 +48,4 @@ stty -ixon
 # Run Autojump at shell startup
 [[ $(brew --prefix)/etc/profile.d/autojump.sh ]] && \
 . $(brew --prefix)/etc/profile.d/autojump.sh
+

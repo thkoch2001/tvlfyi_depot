@@ -1,4 +1,4 @@
-; William Carroll's Emacs configuration
+;;; William Carroll's Emacs configuration
 
 
 ;; From `https://github.com/melpa/melpa`
@@ -20,14 +20,14 @@
  '(command-log-mode-window-size 50)
  '(custom-safe-themes
    (quote
-    ("9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
+    ("0f0db69b7a75a7466ef2c093e127a3fe3213ce79b87c95d39ed1eccd6fe69f74" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
  '(evil-shift-width 2)
  '(mouse-wheel-mode nil)
  '(neo-window-fixed-size nil)
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil helm-swoop iedit vimrc-mode helm-ispell transpose-frame helm-projectile helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
+    (doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(tool-bar-mode nil))
@@ -39,8 +39,267 @@
  '(hl-line ((t (:inherit nil)))))
 
 
-;; Colorscheme
-(load-theme 'atom-one-dark)
+;; All-the-fonts
+(use-package all-the-icons
+  :ensure t)
+
+
+;; Doom Themes
+(use-package doom-themes
+  :ensure t
+  :init
+  (load-theme 'doom-one t)
+  (use-package doom-neotree)
+  (use-package doom-nlinum))
+
+
+;; Magit Settings
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)
+         ("C-x M-g" . magit-dispatch-popup)))
+
+
+;; View stream of Emacs commands
+(use-package command-log-mode
+  :ensure t
+  :commands (global-command-log-mode))
+
+
+;; Flycheck Settings
+(use-package flycheck
+  :ensure t)
+
+
+;; Ansi Term
+(use-package term
+  :bind (:map term-mode-map
+         ("M-p" . term-send-up)
+         ("M-n" . term-send-down)
+
+         :map term-raw-map
+         ("C-h" . evil-window-left)
+         ("C-l" . evil-window-right)
+         ("C-k" . evil-window-up)
+         ("C-j" . evil-window-down)))
+
+
+;; Projectile Settings
+(use-package projectile
+  :ensure t
+  :commands (projectile-mode))
+
+
+;; Evil Settings
+(use-package evil
+  :ensure t
+  :commands (evil-mode local-evil-mode)
+  :bind (:map evil-insert-state-map
+         ("<escape>" . evil-force-normal-state)
+         ("j k" . evil-force-normal-state)
+
+         :map evil-motion-state-map
+         ("<return>" . nil)
+         ("<tab>" . nil)
+         ("SPC" . nil)
+         ("M-." . nil)
+         ("/" . helm-do-ag-this-file)
+         ("?" . helm-do-ag-this-file)
+
+         :map evil-normal-state-map
+         ("<return>" . nil)
+         ("<tab>" . nil)
+         ("C-h" . evil-window-left)
+         ("C-l" . evil-window-right)
+         ("C-k" . evil-window-up)
+         ("C-j" . evil-window-down)
+         ("s" . nil)
+         ("s l" . evil-window-vsplit)
+         ("s j" . evil-window-split)
+         ("H" . evil-first-non-blank)
+         ("L" . evil-end-of-line))
+  :init
+  (setq evil-emacs-state-cursor '("red" box))
+  (setq evil-normal-state-cursor '("green" box))
+  (setq evil-visual-state-cursor '("orange" box))
+  (setq evil-insert-state-cursor '("red" bar))
+  (setq evil-replace-state-cursor '("red" bar))
+  (setq evil-operator-state-cursor '("red" hollow))
+  (global-evil-matchit-mode t)
+  (global-evil-surround-mode t)
+  (global-evil-leader-mode t))
+
+
+;; Evil Leader Settings
+(use-package evil-leader
+  :ensure t
+  :commands (global-evil-leader-mode)
+  :config
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "x" 'helm-M-x
+    "<SPC>" 'mode-line-other-buffer
+    "n" 'neotree-project-dir
+    "b" 'helm-mini))
+
+
+;; Evil Match-it
+(use-package evil-matchit
+  :ensure t
+  :commands (global-evil-matchit-mode))
+
+
+;; Evil Surround
+(use-package evil-surround
+  :ensure t
+  :commands (global-evil-surround-mode))
+
+
+;; Flycheck Mix Settings
+(use-package flycheck-mix
+  :ensure t
+  :init
+  (flycheck-mix-setup))
+
+
+;; Flycheck Credo Settings
+(use-package flycheck-credo
+  :ensure t
+  :init
+  (flycheck-credo-setup))
+
+
+;; Popwin Settings
+(use-package popwin
+  :ensure t)
+
+(defun *-popwin-help-mode-off ()
+  "Turn `popwin-mode' off for *Help* buffers."
+
+  (when (boundp 'popwin:special-display-config)
+    (customize-set-variable 'popwin:special-display-config
+                            (delq 'help-mode popwin:special-display-config))))
+
+(defun *-popwin-help-mode-on ()
+  "Turn `popwin-mode' on for *Help* buffers."
+
+  (when (boundp 'popwin:special-display-config)
+    (customize-set-variable 'popwin:special-display-config
+                            (add-to-list 'popwin:special-display-config 'help-mode nil #'eq))))
+
+(add-hook 'helm-minibuffer-set-up-hook #'*-popwin-help-mode-off)
+(add-hook 'helm-cleanup-hook #'*-popwin-help-mode-on)
+
+(setq display-buffer-function 'popwin:display-buffer)
+(setq helm-split-window-preferred-function 'ignore)
+(push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
+(push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
+
+
+;; Alchemist Settings
+(use-package alchemist
+  :ensure t
+  :config
+  (setq alchemist-mix-env "prod")
+  (setq alchemist-goto-elixir-source-dir "/Users/wpcarro/source_code/elixir")
+  (setq alchemist-goto-erlang-source-dir "/Users/wpcarro/source_code/otp/")
+  :init
+  (linum-mode))
+
+(defun custom-erlang-mode-hook ()
+  "Jump to and from Elixir, Erlang, Elixir files."
+
+  (define-key erlang-mode-map (kbd "M-,") 'alchemist-goto-jump-back))
+
+(add-hook 'erlang-mode-hook 'custom-erlang-mode-hook)
+
+
+;; NeoTree Settings
+(use-package neotree
+  :ensure t
+  :bind (:map neotree-mode-map
+         ("j" . next-line)
+         ("k" . previous-line)
+
+         ("<return>" . neotree-enter)
+         ("<tab>" . neotree-enter)
+
+         ("C-h" . evil-window-left)
+         ("C-l" . evil-window-right)
+         ("C-k" . evil-window-up)
+         ("C-j" . evil-window-down))
+  :init
+  (hl-line-mode))
+
+(defun neotree-project-dir ()
+  "Open NeoTree using the git root."
+
+  (interactive)
+  (let ((project-dir (projectile-project-root))
+        (file-name (buffer-file-name)))
+    (neotree-toggle)
+    (if project-dir
+        (if (neo-global--window-exists-p)
+            (progn
+              (neotree-dir project-dir)
+              (neotree-find file-name)))
+      (message "Could not find git project root."))))
+
+
+;; Whitespace Settings
+(use-package whitespace
+  :ensure t
+  :commands (whitespace-mode)
+  :config
+  (setq whitespace-line-column 80)
+  (setq whitespace-style '(face lines-tail)))
+
+
+;; Helm Settings
+(use-package helm
+  :ensure t
+  :commands (helm-mode)
+  :bind (
+         ("M-x" . helm-M-x)
+         ("M-y" . helm-show-kill-ring)
+         ("C-x b" . helm-mini)
+         :map helm-map
+         ("TAB" . helm-execute-persistent-action)
+         ("C-z" . helm-select-action)
+
+         :term-raw-map
+         ("M-x" . helm-M-x))
+  :init
+  (setq helm-buffers-fuzzy-matching t)
+  (setq helm-recentf-fuzzy-match t)
+  (setq helm-semantic-fuzzy-match t)
+  (setq helm-imenu-fuzzy-match t)
+  (setq helm-locate-fuzzy-match t))
+
+
+;; Helm Projectile Settings
+(use-package helm-projectile
+  :ensure t
+  :bind ("C-x C-f" . helm-projectile)
+  :init
+  (bind-key "C-x p" 'helm-projectile-ag))
+
+
+;; Company Settings
+(use-package company
+  :config
+  (setq company-idle-delay 0))
+
+
+(add-hook 'after-init-hook 'evil-mode)
+(add-hook 'after-init-hook 'global-whitespace-mode)
+(add-hook 'after-init-hook 'global-hl-line-mode)
+(add-hook 'after-init-hook 'global-linum-mode)
+(add-hook 'after-init-hook 'global-flycheck-mode)
+(add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'after-init-hook 'projectile-mode)
+(add-hook 'after-init-hook 'helm-mode)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 
 ;; Scrolling Settings
@@ -53,10 +312,6 @@
   (exec-path-from-shell-initialize))
 
 
-;; Trim trailing whitespace on save
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-
 ;; Emacs backup / autosave files
 ;; (setq-default make-backup-files nil)
 (setq backup-directory-alist `(("." . "~/.emacs-tmp")))
@@ -67,210 +322,13 @@
 (setq vc-follow-symlinks t)
 
 
-;; Enable autocompletion
-(add-hook 'after-init-hook 'global-company-mode)
-
-;; Remove company delay
-(setq-default company-idle-delay 0)
-
-
-;; View stream of Emacs commands
-(require 'command-log-mode)
-(global-command-log-mode)
-
-
 ;; Commenting / Uncommenting
 (global-set-key (kbd "C-x C-;") 'comment-or-uncomment-region)
-
-
-;; Flycheck Settings
-(require 'flycheck)
-(add-hook 'after-init-hook 'global-flycheck-mode)
-
-
-;; Elixir flycheck compile-time errors
-(require 'flycheck-mix)
-(require 'flycheck-credo)
-(eval-after-load 'flycheck (lambda () (flycheck-credo-setup) (flycheck-mix-setup)))
-
-
-;; Magit Settings
-(global-set-key (kbd "C-x g") 'magit-status)
-(global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
 
 ;; Fullscreen settings
 (setq ns-use-native-fullscreen nil)
 (global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen)
-
-
-;; Dired Settings
-(require 'dired)
-(define-key dired-mode-map (kbd "c") 'find-file)
-
-
-;; Helm Settings
-(require 'helm)
-(require 'helm-config)
-
-(global-set-key (kbd "C-c h") 'helm-command-prefix)
-(global-unset-key (kbd "C-x c"))
-
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x C-f") 'helm-projectile)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
-(global-set-key (kbd "C-c h o") 'helm-swoop)
-
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-z")  'helm-select-action)
-
-(setq helm-buffers-fuzzy-matching t
-      helm-recentf-fuzzy-match    t)
-
-(setq helm-semantic-fuzzy-match t
-      helm-imenu-fuzzy-match    t)
-
-(setq helm-locate-fuzzy-match t)
-
-(helm-mode 1)
-
-
-;; Global search in projects
-(global-set-key (kbd "C-x p") 'helm-projectile-ack)
-
-
-;; Ansi Term Settings
-;; (define-key 'term-mode-map (kbd "C-h") 'window-left)
-;; (define-key 'term-mode-map (kbd "C-l") 'window-right)
-;; (define-key 'term-mode-map (kbd "C-k") 'window-up)
-;; (define-key 'term-mode-map (kbd "C-j") 'window-down)
-
-
-;; disable popwin-mode in an active Helm session It should be disabled
-;; otherwise it will conflict with other window opened by Helm persistent
-;; action, such as *Help* window.
-(require 'popwin)
-
-(push '("^\*helm.+\*$" :regexp t) popwin:special-display-config)
-(add-hook 'helm-after-initialize-hook (lambda ()
-                                        (popwin:display-buffer helm-buffer t)
-                                        (popwin-mode -1)))
-
-;;  Restore popwin-mode after a Helm session finishes.
-(add-hook 'helm-cleanup-hook (lambda () (popwin-mode 1)))
-
-;; Popwin Helm-Swoop workaround
-(defvar helm-swoop-split-window-function
-  (lambda ($buf)
-    (display-buffer $buf)))
-
-
-;; Add 80 column marker
-(require 'whitespace)
-(setq whitespace-line-column 80) ;; limit line length
-(setq whitespace-style '(face lines-tail))
-(add-hook 'prog-mode-hook 'whitespace-mode)
-
-
-;; Allow `C-x C-s` to write to unmodified buffers, allowing the file to be `touch`'d
-(set-buffer-modified-p t)
-
-
-;; Git-Commit prog-mode
-;; (add-hook 'git-commit-mode 'prog-mode)
-
-
-;; Projectile Settings
-(projectile-mode t)
-(setq projectile-completion-system 'helm)
-(helm-projectile-on)
-(setq projectile-switch-project-action 'helm-projectile)
-
-
-;; Alchemist Settings
-(require 'alchemist)
-(setq alchemist-mix-env "prod")
-
-(setq alchemist-goto-elixir-source-dir "/Users/wpcarro/source_code/elixir")
-(setq alchemist-goto-erlang-source-dir "/Users/wpcarro/source_code/otp/")
-
-;; Borrow keybinding from list-mode eval
-(define-key global-map (kbd "C-j") nil)
-(define-key alchemist-mode-keymap (kbd "C-j") 'alchemist-eval-current-line)
-
-;; Allow Elixir -> Erlang -> Elixir definition jumping
-(defun custom-erlang-mode-hook ()
-  (define-key erlang-mode-map (kbd "M-,") 'alchemist-goto-jump-back))
-
-(add-hook 'erlang-mode-hook 'custom-erlang-mode-hook)
-
-;; Run tests on file writes
-;; (setq alchemist-hooks-test-on-save t)
-
-
-;; Evil Settings
-(require 'evil)
-(require 'evil-leader)
-
-(defun register-evil-keybindings-for-neotree ()
-  "Registers keybindings for Evil mode for NeoTree plugin."
-  (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
-  (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-enter)
-  (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
-  (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
-
-;; Evil colored-cursors
-(setq evil-emacs-state-cursor '("red" box))
-(setq evil-normal-state-cursor '("green" box))
-(setq evil-visual-state-cursor '("orange" box))
-(setq evil-insert-state-cursor '("red" bar))
-(setq evil-replace-state-cursor '("red" bar))
-(setq evil-operator-state-cursor '("red" hollow))
-
-
-;; Display column number alongside row number
-(column-number-mode t)
-
-;; NeoTree Settings
-(require 'neotree)
-
-(defun neotree-project-dir ()
-  "Open NeoTree using the git root."
-  (interactive)
-  (let ((project-dir (projectile-project-root))
-        (file-name (buffer-file-name)))
-    (neotree-toggle)
-    (if project-dir
-        (if (neo-global--window-exists-p)
-            (progn
-              (neotree-dir project-dir)
-              (neotree-find file-name)))
-      (message "Could not find git project root."))))
-
-(global-set-key (kbd "<f8>") 'neotree-project-dir)
-
-(add-hook 'neotree-mode-hook (lambda () (bootstrap-evil-mode) (hl-line-mode)) )
-
-
-;; Evil Plugins
-
-;; Evil Match-it
-(require 'evil-matchit)
-(global-evil-matchit-mode 1)
-
-;; Evil Surround
-(require 'evil-surround)
-(global-evil-surround-mode 1)
-
-
-;; Window movement
-(global-set-key (kbd "C-c w f") 'windmove-right)
-(global-set-key (kbd "C-c w b") 'windmove-left)
-(global-set-key (kbd "C-c w p") 'windmove-up)
-(global-set-key (kbd "C-c w n") 'windmove-down)
 
 
 ;; General Settings
@@ -290,63 +348,48 @@
 (set-frame-font "Operator Mono 10")
 
 
-;; Personalized Evil-mode settings
-(defun bootstrap-evil-mode()
-  "Custom evil-mode settings. This disables Emacs key-bindings found in
-`global-map` when inside Vim's `normal` mode. It disables Vim key-bindings
-when in Vim's `insert` mode, favoring native Emacs bindings instead."
+;; Force save buffers
+(defun save-buffer-always ()
+  "Save the buffer even if it is not modified."
   (interactive)
-  (evil-local-mode t)
+  (set-buffer-modified-p t)
+  (save-buffer))
 
-  ;; Evil-leader
-  (global-evil-leader-mode)
-  (evil-leader/set-leader (kbd "SPC"))
-
-  ;; Toggle off Emacs bindings when in Vim `normal` mode except:
-  ;;   * `M-x`
-  ;; (setcdr global-map nil)
-  ;; (define-key global-map (kbd "M-x") 'helm-M-x)
-
-  (define-key evil-normal-state-map (kbd "") nil)
-
-  ;; unbind <SPC> and <CR> in normal mode since they're hardly used
-  (define-key evil-motion-state-map (kbd "RET") nil)
-  (define-key evil-motion-state-map (kbd "SPC") nil)
-  (define-key evil-normal-state-map (kbd "M-.") nil)
-
-  ;; use 'helm-swoop for interactive search
-  (define-key evil-motion-state-map (kbd "/") 'helm-swoop)
-  (define-key evil-motion-state-map (kbd "?") 'helm-swoop)
-
-  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-
-  (define-key evil-normal-state-map (kbd "M-l") (lambda () (interactive) (evil-window-vsplit) (evil-window-right 1) ))
-  (define-key evil-normal-state-map (kbd "M-h") (lambda () (interactive) (evil-window-vsplit) ))
-  (define-key evil-normal-state-map (kbd "M-j") (lambda () (interactive) (evil-window-split) (evil-window-down 1) ))
-  (define-key evil-normal-state-map (kbd "M-k") (lambda () (interactive) (evil-window-split) ))
-
-  ;; Plugin-specific keybindings
-  (register-evil-keybindings-for-neotree)
-
-  ;; Toggle off Vim bindings when in Vim `insert` mode except:
-  ;;   * `<escape>` <ESC>
-  ;;   * `j k` <ESC>
-  ;;   * `j j` "j"
-  (setcdr evil-insert-state-map nil)
-  (define-key evil-insert-state-map (kbd "<escape>") 'evil-force-normal-state)
-  (define-key evil-insert-state-map (kbd "j k") 'evil-force-normal-state)
-  (define-key evil-insert-state-map (kbd "jj") (lambda () (interactive) (insert "j")))
-
-  (define-key evil-normal-state-map (kbd "H") 'evil-first-non-blank)
-  (define-key evil-normal-state-map (kbd "L") 'evil-end-of-line))
+(global-set-key (kbd "C-x C-s") nil)
+(global-set-key (kbd "C-x C-s") 'save-buffer-always)
 
 
-;; Line Numbers in margin for source code mode
-(add-hook 'prog-mode-hook 'linum-mode)
-(add-hook 'prog-mode-hook 'bootstrap-evil-mode)
+;; Upgrade all packages
+(defun package-upgrade-all ()
+  "Upgrade all packages automatically without showing *Packages* buffer."
+  (interactive)
+  (package-refresh-contents)
+  (let (upgrades)
+    (cl-flet ((get-version (name where)
+                (let ((pkg (cadr (assq name where))))
+                  (when pkg
+                    (package-desc-version pkg)))))
+      (dolist (package (mapcar #'car package-alist))
+        (let ((in-archive (get-version package package-archive-contents)))
+          (when (and in-archive
+                     (version-list-< (get-version package package-alist)
+                                     in-archive))
+            (push (cadr (assq package package-archive-contents))
+                  upgrades)))))
+    (if upgrades
+        (when (yes-or-no-p
+               (message "Upgrade %d package%s (%s)? "
+                        (length upgrades)
+                        (if (= (length upgrades) 1) "" "s")
+                        (mapconcat #'package-desc-full-name upgrades ", ")))
+          (save-window-excursion
+            (dolist (package-desc upgrades)
+              (let ((old-package (cadr (assq (package-desc-name package-desc)
+                                             package-alist))))
+                (package-install package-desc)
+                (package-delete  old-package)))))
+      (message "All packages are up to date"))))
+
 
 ;; Add transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
