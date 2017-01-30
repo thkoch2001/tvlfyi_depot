@@ -20,14 +20,14 @@
  '(command-log-mode-window-size 50)
  '(custom-safe-themes
    (quote
-    ("0f0db69b7a75a7466ef2c093e127a3fe3213ce79b87c95d39ed1eccd6fe69f74" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
+    ("945fe66fbc30a7cbe0ed3e970195a7ee79ee34f49a86bc96d02662ab449b8134" "0f0db69b7a75a7466ef2c093e127a3fe3213ce79b87c95d39ed1eccd6fe69f74" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
  '(evil-shift-width 2)
  '(mouse-wheel-mode nil)
  '(neo-window-fixed-size nil)
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
+    (synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(tool-bar-mode nil))
@@ -44,14 +44,17 @@
   :ensure t)
 
 
+;; Thesaurus
+(use-package synonyms
+  :ensure t)
+
+
 ;; Doom Themes
 (use-package doom-themes
   :ensure t
   :init
-  (load-theme 'doom-one t)
-  (use-package doom-neotree)
+  (load-theme 'doom-molokai t)
   (use-package doom-nlinum))
-
 
 ;; Magit Settings
 (use-package magit
@@ -90,32 +93,37 @@
   :commands (projectile-mode))
 
 
+;; Dired Settings
+(use-package dired
+  :bind (:map dired-mode-map
+        ("c" . find-file)))
+
+
 ;; Evil Settings
 (use-package evil
   :ensure t
   :commands (evil-mode local-evil-mode)
   :bind (:map evil-insert-state-map
          ("<escape>" . evil-force-normal-state)
-         ("j k" . evil-force-normal-state)
 
          :map evil-motion-state-map
          ("<return>" . nil)
          ("<tab>" . nil)
          ("SPC" . nil)
          ("M-." . nil)
-         ("/" . helm-do-ag-this-file)
-         ("?" . helm-do-ag-this-file)
 
          :map evil-normal-state-map
          ("<return>" . nil)
+         ("M-." . nil)
          ("<tab>" . nil)
          ("C-h" . evil-window-left)
          ("C-l" . evil-window-right)
          ("C-k" . evil-window-up)
          ("C-j" . evil-window-down)
          ("s" . nil)
-         ("s l" . evil-window-vsplit)
-         ("s j" . evil-window-split)
+         ("g c" . comment-or-uncomment-region)
+         ("s h" . evil-window-vsplit)
+         ("s k" . evil-window-split)
          ("H" . evil-first-non-blank)
          ("L" . evil-end-of-line))
   :init
@@ -127,7 +135,10 @@
   (setq evil-operator-state-cursor '("red" hollow))
   (global-evil-matchit-mode t)
   (global-evil-surround-mode t)
-  (global-evil-leader-mode t))
+  (global-evil-leader-mode t)
+  :config
+  (define-key evil-normal-state-map "sl" (lambda () (evil-window-vsplit) (evil-window-right)))
+  (define-key evil-normal-state-map "sj" (lambda () (evil-window-split) (evil-window-down))))
 
 
 ;; Evil Leader Settings
@@ -140,6 +151,14 @@
     "x" 'helm-M-x
     "<SPC>" 'mode-line-other-buffer
     "n" 'neotree-project-dir
+    "t" 'alchemist-project-toggle-file-and-tests
+    "f" 'helm-projectile
+    "p" 'helm-projectile-ag
+    "d" 'dired-jump-other-window
+    "h" 'evil-window-left
+    "l" 'evil-window-right
+    "k" 'evil-window-up
+    "j" 'evil-window-down
     "b" 'helm-mini))
 
 
@@ -229,7 +248,9 @@
          ("C-k" . evil-window-up)
          ("C-j" . evil-window-down))
   :init
-  (hl-line-mode))
+  (hl-line-mode)
+  :after
+  (patch-neotree-icons))
 
 (defun neotree-project-dir ()
   "Open NeoTree using the git root."
@@ -279,10 +300,7 @@
 
 ;; Helm Projectile Settings
 (use-package helm-projectile
-  :ensure t
-  :bind ("C-x C-f" . helm-projectile)
-  :init
-  (bind-key "C-x p" 'helm-projectile-ag))
+  :ensure t)
 
 
 ;; Company Settings
