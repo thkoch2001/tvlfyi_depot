@@ -27,7 +27,7 @@
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
+    (all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(tool-bar-mode nil))
@@ -37,6 +37,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(hl-line ((t (:inherit nil)))))
+
+
+;; Ace Window
+(use-package ace-window
+  :ensure t
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 
 ;; All-the-fonts
@@ -135,10 +142,7 @@
   (setq evil-operator-state-cursor '("red" hollow))
   (global-evil-matchit-mode t)
   (global-evil-surround-mode t)
-  (global-evil-leader-mode t)
-  :config
-  (define-key evil-normal-state-map "sl" (lambda () (evil-window-vsplit) (evil-window-right)))
-  (define-key evil-normal-state-map "sj" (lambda () (evil-window-split) (evil-window-down))))
+  (global-evil-leader-mode t))
 
 
 ;; Evil Leader Settings
@@ -150,11 +154,14 @@
   (evil-leader/set-key
     "x" 'helm-M-x
     "<SPC>" 'mode-line-other-buffer
+    "a" 'ace-window
     "n" 'neotree-project-dir
     "t" 'alchemist-project-toggle-file-and-tests
     "f" 'helm-projectile
     "p" 'helm-projectile-ag
     "d" 'dired-jump-other-window
+    "D" 'projectile-dired
+    "q" 'kill-this-buffer
     "h" 'evil-window-left
     "l" 'evil-window-right
     "k" 'evil-window-up
@@ -239,22 +246,18 @@
   :bind (:map neotree-mode-map
          ("j" . next-line)
          ("k" . previous-line)
-
          ("<return>" . neotree-enter)
          ("<tab>" . neotree-enter)
-
          ("C-h" . evil-window-left)
          ("C-l" . evil-window-right)
          ("C-k" . evil-window-up)
          ("C-j" . evil-window-down))
   :init
   (hl-line-mode)
-  :after
-  (patch-neotree-icons))
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
 
 (defun neotree-project-dir ()
   "Open NeoTree using the git root."
-
   (interactive)
   (let ((project-dir (projectile-project-root))
         (file-name (buffer-file-name)))
@@ -265,6 +268,15 @@
               (neotree-dir project-dir)
               (neotree-find file-name)))
       (message "Could not find git project root."))))
+
+
+(defun message-project-root ()
+  "Outputs project-root."
+  (interactive)
+  (let (project-dir (projectile-project-root))
+    (if project-dir
+        (message "Project dir found!")
+      (message "No project-dir found."))))
 
 
 ;; Whitespace Settings
@@ -287,7 +299,6 @@
          :map helm-map
          ("TAB" . helm-execute-persistent-action)
          ("C-z" . helm-select-action)
-
          :term-raw-map
          ("M-x" . helm-M-x))
   :init
@@ -363,7 +374,7 @@
 (setq-default indent-tabs-mode nil)
 
 ;; Change font settings
-(set-frame-font "Operator Mono 10")
+(add-to-list 'default-frame-alist '(font . "Operator Mono 10"))
 
 
 ;; Force save buffers
