@@ -17,10 +17,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(command-log-mode-window-size 50)
  '(custom-safe-themes
    (quote
-    ("945fe66fbc30a7cbe0ed3e970195a7ee79ee34f49a86bc96d02662ab449b8134" "0f0db69b7a75a7466ef2c093e127a3fe3213ce79b87c95d39ed1eccd6fe69f74" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
+    ("9f3181dc1fabe5d58bbbda8c48ef7ece59b01bed606cfb868dd147e8b36af97c" "ad1c2abad40e11d22156fe3987fd9b74b9e1c822264a07dacb24e0b3133aaed1" "945fe66fbc30a7cbe0ed3e970195a7ee79ee34f49a86bc96d02662ab449b8134" "0f0db69b7a75a7466ef2c093e127a3fe3213ce79b87c95d39ed1eccd6fe69f74" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
  '(evil-shift-width 2)
  '(mouse-wheel-mode nil)
  '(neo-window-fixed-size nil)
@@ -30,6 +29,27 @@
     (all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
+ '(popwin:special-display-config
+   (quote
+    (help-mode
+     ("^*helm-.+*$" :regexp t)
+     ("^*helm .+*$" :regexp t)
+     ("^*helm-.+*$" :regexp t)
+     ("^*helm .+*$" :regexp t)
+     ("*Miniedit Help*" :noselect t)
+     (completion-list-mode :noselect t)
+     (compilation-mode :noselect t)
+     (grep-mode :noselect t)
+     (occur-mode :noselect t)
+     ("*Pp Macroexpand Output*" :noselect t)
+     "*Shell Command Output*" "*vc-diff*" "*vc-change-log*"
+     (" *undo-tree*" :width 60 :position right)
+     ("^\\*anything.*\\*$" :regexp t)
+     "*slime-apropos*" "*slime-macroexpansion*" "*slime-description*"
+     ("*slime-compilation*" :noselect t)
+     "*slime-xref*"
+     (sldb-mode :stick t)
+     slime-repl-mode slime-connection-list-mode)))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -37,6 +57,27 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(hl-line ((t (:inherit nil)))))
+
+
+;; Window Auto-Balancing
+(defadvice split-window-below (after restore-balanace-below activate)
+  (balance-windows))
+
+(defadvice split-window-right (after restore-balance-right activate)
+  (balance-windows))
+
+(defadvice delete-window (after restore-balance activate)
+  (balance-windows))
+
+
+;; Command Log Mode
+(use-package command-log-mode
+  :ensure t
+  :init
+  (setq-default command-log-mode-window-font-size 5)
+  (setq-default command-log-mode-window-size 50)
+  )
+
 
 
 ;; Ace Window
@@ -110,8 +151,9 @@
 (use-package evil
   :ensure t
   :commands (evil-mode local-evil-mode)
-  :bind (:map evil-insert-state-map
-         ("<escape>" . evil-force-normal-state)
+  :bind (:map evil-visual-state-map
+         ("H" . evil-first-non-blank)
+         ("L" . evil-end-of-visual-line)
 
          :map evil-motion-state-map
          ("<return>" . nil)
@@ -121,28 +163,51 @@
 
          :map evil-normal-state-map
          ("<return>" . nil)
-         ("M-." . nil)
          ("<tab>" . nil)
+         ("K" . nil)
+         ("M-." . nil)
+         ("s" . nil)
          ("C-h" . evil-window-left)
          ("C-l" . evil-window-right)
          ("C-k" . evil-window-up)
          ("C-j" . evil-window-down)
-         ("s" . nil)
          ("g c" . comment-or-uncomment-region)
          ("s h" . evil-window-vsplit)
+         ("s l" . evil-window-vsplit-right)
          ("s k" . evil-window-split)
+         ("s j" . evil-window-split-down)
          ("H" . evil-first-non-blank)
-         ("L" . evil-end-of-line))
+         ("L" . evil-end-of-line)
+
+         :map evil-ex-map
+         ("e" . helm-find-files)
+         ("tb" . alchemist-test-this-buffer)
+         ("tap" . alchemist-test-at-point)
+         ("lt" . alchemist-mix-rerun-last-test)
+         )
   :init
-  (setq evil-emacs-state-cursor '("red" box))
-  (setq evil-normal-state-cursor '("green" box))
+  (setq evil-emacs-state-cursor '("VioletRed3" box))
+  (setq evil-normal-state-cursor '("DeepSkyBlue2" box))
   (setq evil-visual-state-cursor '("orange" box))
-  (setq evil-insert-state-cursor '("red" bar))
-  (setq evil-replace-state-cursor '("red" bar))
-  (setq evil-operator-state-cursor '("red" hollow))
+  (setq evil-insert-state-cursor '("VioletRed3" bar))
+  (setq evil-replace-state-cursor '("VioletRed3" bar))
+  (setq evil-operator-state-cursor '("VioletRed3" hollow))
   (global-evil-matchit-mode t)
   (global-evil-surround-mode t)
   (global-evil-leader-mode t))
+
+
+(defun evil-window-vsplit-right ()
+  "Vertically split a window and move right."
+  (interactive)
+  (evil-window-vsplit nil)
+  (evil-window-right 1))
+
+(defun evil-window-split-down ()
+  "Split a window and move right."
+  (interactive)
+  (evil-window-split nil)
+  (evil-window-down 1))
 
 
 ;; Evil Leader Settings
@@ -156,6 +221,7 @@
     "<SPC>" 'mode-line-other-buffer
     "a" 'ace-window
     "n" 'neotree-project-dir
+    "N" 'neotree-reveal-current-buffer
     "t" 'alchemist-project-toggle-file-and-tests
     "f" 'helm-projectile
     "p" 'helm-projectile-ag
@@ -166,7 +232,11 @@
     "l" 'evil-window-right
     "k" 'evil-window-up
     "j" 'evil-window-down
-    "b" 'helm-mini))
+    "b" 'helm-mini
+    "T" 'alchemist-mix-test-at-point
+    "B" 'alchemist-mix-test-this-buffer
+    "L" 'alchemist-mix-rerun-last-test
+    ))
 
 
 ;; Evil Match-it
@@ -248,25 +318,44 @@
          ("k" . previous-line)
          ("<return>" . neotree-enter)
          ("<tab>" . neotree-enter)
+         ("D" . neotree-delete-node)
+         ("R" . neotree-rename-node)
+         ("c" . neotree-create-node)
          ("C-h" . evil-window-left)
          ("C-l" . evil-window-right)
          ("C-k" . evil-window-up)
          ("C-j" . evil-window-down))
   :init
   (hl-line-mode)
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  (setq-default neo-show-hidden-files t))
 
 (defun neotree-project-dir ()
   "Open NeoTree using the git root."
   (interactive)
-  (let ((project-dir (projectile-project-root))
-        (file-name (buffer-file-name)))
+  (let ((project-dir (projectile-project-root)))
     (neotree-toggle)
     (if project-dir
         (if (neo-global--window-exists-p)
             (progn
               (neotree-dir project-dir)
-              (neotree-find file-name)))
+              (neotree-show)))
+      (message "Could not find git project root."))))
+
+
+(defun neotree-reveal-current-buffer ()
+  "Reveal current buffer in Neotree."
+  (interactive)
+  (let ((project-dir (projectile-project-root))
+        (file-name (buffer-file-name)))
+
+    (neotree-show)
+    (if project-dir
+        (if (neo-global--window-exists-p)
+            (progn
+              (neotree-dir project-dir)
+              (neotree-find file-name)
+              (evil-window-mru)))
       (message "Could not find git project root."))))
 
 
@@ -317,7 +406,8 @@
 ;; Company Settings
 (use-package company
   :config
-  (setq company-idle-delay 0))
+  (setq company-idle-delay 0)
+  )
 
 
 (add-hook 'after-init-hook 'evil-mode)

@@ -22,6 +22,8 @@ alias ccat="pygmentize -g"
 # self-evident git alias
 alias gprom="git pull --rebase origin master"
 
+alias 'glp'="git log --graph --pretty=format:'%Cred%h%Creset -%Cblue %an %Creset - %C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
+
 # view the Unix directory stack as maintained through
 #     pushd and popd commands
 alias wdirs='dirs | tr " " "\n" | sort -r'
