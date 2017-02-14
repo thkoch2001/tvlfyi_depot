@@ -19,19 +19,27 @@
  '(column-number-mode t)
  '(custom-safe-themes
    (quote
-    ("9f3181dc1fabe5d58bbbda8c48ef7ece59b01bed606cfb868dd147e8b36af97c" "ad1c2abad40e11d22156fe3987fd9b74b9e1c822264a07dacb24e0b3133aaed1" "945fe66fbc30a7cbe0ed3e970195a7ee79ee34f49a86bc96d02662ab449b8134" "0f0db69b7a75a7466ef2c093e127a3fe3213ce79b87c95d39ed1eccd6fe69f74" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
+    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "20e23cba00cf376ea6f20049022241c02a315547fc86df007544852c94ab44cb" "60d4556ebff0dc94849f177b85dcb6956fe9bd394c18a37e339c0fcd7c83e4a9" "707227acad0cf8d4db55dcf1e574b3644b68eab8aca4a8ce6635c8830bc72144" "1c656eb3f6ae6c84ced46282cb4ed697bffe2f6c764bb5a737ed7ca6d068f798" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "9f3181dc1fabe5d58bbbda8c48ef7ece59b01bed606cfb868dd147e8b36af97c" "ad1c2abad40e11d22156fe3987fd9b74b9e1c822264a07dacb24e0b3133aaed1" "945fe66fbc30a7cbe0ed3e970195a7ee79ee34f49a86bc96d02662ab449b8134" "0f0db69b7a75a7466ef2c093e127a3fe3213ce79b87c95d39ed1eccd6fe69f74" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
  '(evil-shift-width 2)
  '(mouse-wheel-mode nil)
  '(neo-window-fixed-size nil)
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
+    (creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(popwin:special-display-config
    (quote
     (help-mode
+     ("^*helm-.+*$" :regexp t)
+     ("^*helm .+*$" :regexp t)
+     ("^*helm-.+*$" :regexp t)
+     ("^*helm .+*$" :regexp t)
+     ("^*helm-.+*$" :regexp t)
+     ("^*helm .+*$" :regexp t)
+     ("^*helm-.+*$" :regexp t)
+     ("^*helm .+*$" :regexp t)
      ("^*helm-.+*$" :regexp t)
      ("^*helm .+*$" :regexp t)
      ("^*helm-.+*$" :regexp t)
@@ -70,13 +78,22 @@
   (balance-windows))
 
 
+;; Smart mode line
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (load-theme 'smart-mode-line-respectful t)
+  :config
+  (setq sml/no-confirm-load-theme t)
+  (sml/setup))
+
+
 ;; Command Log Mode
 (use-package command-log-mode
   :ensure t
-  :init
-  (setq-default command-log-mode-window-font-size 5)
-  (setq-default command-log-mode-window-size 50)
-  )
+  :config
+  (setq-default command-log-mode-window-font-size 1)
+  (setq-default command-log-mode-window-size 40))
 
 
 
@@ -97,11 +114,11 @@
   :ensure t)
 
 
+
 ;; Doom Themes
 (use-package doom-themes
   :ensure t
   :init
-  (load-theme 'doom-molokai t)
   (use-package doom-nlinum))
 
 ;; Magit Settings
@@ -160,6 +177,9 @@
          ("<tab>" . nil)
          ("SPC" . nil)
          ("M-." . nil)
+
+         :map evil-insert-state-map
+         ("C-k" . nil)
 
          :map evil-normal-state-map
          ("<return>" . nil)
@@ -220,7 +240,7 @@
     "x" 'helm-M-x
     "<SPC>" 'mode-line-other-buffer
     "a" 'ace-window
-    "n" 'neotree-project-dir
+    "n" 'neotree-toggle-project-dir
     "N" 'neotree-reveal-current-buffer
     "t" 'alchemist-project-toggle-file-and-tests
     "f" 'helm-projectile
@@ -236,6 +256,7 @@
     "T" 'alchemist-mix-test-at-point
     "B" 'alchemist-mix-test-this-buffer
     "L" 'alchemist-mix-rerun-last-test
+    "g" 'magit-status
     ))
 
 
@@ -304,7 +325,6 @@
 
 (defun custom-erlang-mode-hook ()
   "Jump to and from Elixir, Erlang, Elixir files."
-
   (define-key erlang-mode-map (kbd "M-,") 'alchemist-goto-jump-back))
 
 (add-hook 'erlang-mode-hook 'custom-erlang-mode-hook)
@@ -330,16 +350,18 @@
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
   (setq-default neo-show-hidden-files t))
 
-(defun neotree-project-dir ()
-  "Open NeoTree using the git root."
+(defun neotree-toggle-project-dir ()
+  "Toggle neotree sidebar."
   (interactive)
-  (let ((project-dir (projectile-project-root)))
+  (let ((project-dir (projectile-project-root))
+        (file-name (buffer-file-name)))
     (neotree-toggle)
     (if project-dir
         (if (neo-global--window-exists-p)
             (progn
               (neotree-dir project-dir)
-              (neotree-show)))
+              (neotree-show)
+              (evil-window-mru)))
       (message "Could not find git project root."))))
 
 
@@ -348,7 +370,6 @@
   (interactive)
   (let ((project-dir (projectile-project-root))
         (file-name (buffer-file-name)))
-
     (neotree-show)
     (if project-dir
         (if (neo-global--window-exists-p)
@@ -405,9 +426,11 @@
 
 ;; Company Settings
 (use-package company
+  :bind (
+         ("C-j" . company-select-next)
+         ("C-k" . company-select-previous))
   :config
-  (setq company-idle-delay 0)
-  )
+  (setq company-idle-delay 0))
 
 
 (add-hook 'after-init-hook 'evil-mode)
