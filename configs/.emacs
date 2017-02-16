@@ -19,30 +19,19 @@
  '(column-number-mode t)
  '(custom-safe-themes
    (quote
-    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "20e23cba00cf376ea6f20049022241c02a315547fc86df007544852c94ab44cb" "60d4556ebff0dc94849f177b85dcb6956fe9bd394c18a37e339c0fcd7c83e4a9" "707227acad0cf8d4db55dcf1e574b3644b68eab8aca4a8ce6635c8830bc72144" "1c656eb3f6ae6c84ced46282cb4ed697bffe2f6c764bb5a737ed7ca6d068f798" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "9f3181dc1fabe5d58bbbda8c48ef7ece59b01bed606cfb868dd147e8b36af97c" "ad1c2abad40e11d22156fe3987fd9b74b9e1c822264a07dacb24e0b3133aaed1" "945fe66fbc30a7cbe0ed3e970195a7ee79ee34f49a86bc96d02662ab449b8134" "0f0db69b7a75a7466ef2c093e127a3fe3213ce79b87c95d39ed1eccd6fe69f74" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
+    ("398e6465d45d5af4cbf94f8ebfb24deb71249f28cdfb4b0fa7197354ee0c9802" "db34c17b9a7810856352a341e15d701696fb4710fe7e0dab57b8268515c2b082" "ee93cac221c92b580bde1326209e1a327287cd49931ba319a9af7a7af201967c" "68f66d916f4e90f11f2dc815e9580c1aaf9e9c75eeee3fbd8b663d706e121a1a" "c158c2a9f1c5fcf27598d313eec9f9dceadf131ccd10abc6448004b14984767c" "cc0dbb53a10215b696d391a90de635ba1699072745bf653b53774706999208e3" "3e335d794ed3030fefd0dbd7ff2d3555e29481fe4bbb0106ea11c660d6001767" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "20e23cba00cf376ea6f20049022241c02a315547fc86df007544852c94ab44cb" "60d4556ebff0dc94849f177b85dcb6956fe9bd394c18a37e339c0fcd7c83e4a9" "707227acad0cf8d4db55dcf1e574b3644b68eab8aca4a8ce6635c8830bc72144" "1c656eb3f6ae6c84ced46282cb4ed697bffe2f6c764bb5a737ed7ca6d068f798" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "9f3181dc1fabe5d58bbbda8c48ef7ece59b01bed606cfb868dd147e8b36af97c" "ad1c2abad40e11d22156fe3987fd9b74b9e1c822264a07dacb24e0b3133aaed1" "945fe66fbc30a7cbe0ed3e970195a7ee79ee34f49a86bc96d02662ab449b8134" "0f0db69b7a75a7466ef2c093e127a3fe3213ce79b87c95d39ed1eccd6fe69f74" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "6254372d3ffe543979f21c4a4179cd819b808e5dd0f1787e2a2a647f5759c1d1" "8ec2e01474ad56ee33bc0534bdbe7842eea74dccfb576e09f99ef89a705f5501" "5b24babd20e58465e070a8d7850ec573fe30aca66c8383a62a5e7a3588db830b" "eb0a314ac9f75a2bf6ed53563b5d28b563eeba938f8433f6d1db781a47da1366" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" default)))
  '(evil-shift-width 2)
  '(mouse-wheel-mode nil)
  '(neo-window-fixed-size nil)
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
+    (green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(popwin:special-display-config
    (quote
     (help-mode
-     ("^*helm-.+*$" :regexp t)
-     ("^*helm .+*$" :regexp t)
-     ("^*helm-.+*$" :regexp t)
-     ("^*helm .+*$" :regexp t)
-     ("^*helm-.+*$" :regexp t)
-     ("^*helm .+*$" :regexp t)
-     ("^*helm-.+*$" :regexp t)
-     ("^*helm .+*$" :regexp t)
-     ("^*helm-.+*$" :regexp t)
-     ("^*helm .+*$" :regexp t)
-     ("^*helm-.+*$" :regexp t)
      ("^*helm .+*$" :regexp t)
      ("*Miniedit Help*" :noselect t)
      (completion-list-mode :noselect t)
@@ -67,6 +56,9 @@
  '(hl-line ((t (:inherit nil)))))
 
 
+(load-theme 'doom-one)
+
+
 ;; Window Auto-Balancing
 (defadvice split-window-below (after restore-balanace-below activate)
   (balance-windows))
@@ -82,7 +74,7 @@
 (use-package smart-mode-line
   :ensure t
   :init
-  (load-theme 'smart-mode-line-respectful t)
+  (load-theme 'smart-mode-line-dark t)
   :config
   (setq sml/no-confirm-load-theme t)
   (sml/setup))
@@ -161,7 +153,8 @@
 ;; Dired Settings
 (use-package dired
   :bind (:map dired-mode-map
-        ("c" . find-file)))
+        ("c" . find-file)
+        ("K" . dired-up-directory)))
 
 
 ;; Evil Settings
@@ -187,6 +180,7 @@
          ("K" . nil)
          ("M-." . nil)
          ("s" . nil)
+         ("C-p" . nil)
          ("C-h" . evil-window-left)
          ("C-l" . evil-window-right)
          ("C-k" . evil-window-up)
@@ -217,6 +211,22 @@
   (global-evil-leader-mode t))
 
 
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+
+
+(defun load-unfriendly-theme ()
+  "Load a monochromatic theme without syntax highlighting."
+  (interactive)
+  (load-theme 'retro-green)
+  (global-font-lock-mode 0))
+
+(defun load-friendly-theme ()
+  "Load a user-friendly theme."
+  (interactive)
+  (load-theme 'wombat)
+  (global-font-lock-mode t))
+
+
 (defun evil-window-vsplit-right ()
   "Vertically split a window and move right."
   (interactive)
@@ -245,12 +255,14 @@
     "t" 'alchemist-project-toggle-file-and-tests
     "f" 'helm-projectile
     "p" 'helm-projectile-ag
-    "d" 'dired-jump-other-window
+    "d" 'dired-jump
     "D" 'projectile-dired
     "q" 'kill-this-buffer
     "h" 'evil-window-left
     "l" 'evil-window-right
     "k" 'evil-window-up
+    "s" 'load-unfriendly-theme
+    "S" 'load-friendly-theme
     "j" 'evil-window-down
     "b" 'helm-mini
     "T" 'alchemist-mix-test-at-point
@@ -330,6 +342,18 @@
 (add-hook 'erlang-mode-hook 'custom-erlang-mode-hook)
 
 
+(defun helm-ag-neotree-node ()
+  "Run Helm-ag on Neotree directory."
+  (interactive)
+  (let* ((search-root (neo-buffer--get-filename-current-line)))
+    (if search-root
+        ;; search directory
+        (progn
+          (evil-window-right 1)
+          (helm-ag search-root))
+      (message "Could not find directory at point."))))
+
+
 ;; NeoTree Settings
 (use-package neotree
   :ensure t
@@ -344,7 +368,9 @@
          ("C-h" . evil-window-left)
          ("C-l" . evil-window-right)
          ("C-k" . evil-window-up)
-         ("C-j" . evil-window-down))
+         ("C-j" . evil-window-down)
+         ("C-p" . helm-ag-neotree-node)
+         )
   :init
   (hl-line-mode)
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
