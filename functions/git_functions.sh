@@ -4,6 +4,21 @@ function wgbranch {
 }
 
 
+# git status "plumbing" version
+# Useful for piping into grep -> xargs git add
+function wgst {
+  git status -s | awk '{ print $2 }'
+}
+
+
+# git add by file regex pattern
+function wgadd {
+  pattern="$2"
+
+  wgst | grep "${pattern}" | xargs git add
+}
+
+
 # compare file with another branch
 function wgcompare_file {
   file_path="$1"
