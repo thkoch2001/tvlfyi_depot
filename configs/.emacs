@@ -26,12 +26,16 @@
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
+    (flycheck-elm popup-kill-ring flycheck-pos-tip green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(popwin:special-display-config
    (quote
     (help-mode
+     ("^*helm-.+*$" :regexp t)
+     ("^*helm .+*$" :regexp t)
+     ("^*helm-.+*$" :regexp t)
+     ("^*helm .+*$" :regexp t)
      ("^*helm .+*$" :regexp t)
      ("*Miniedit Help*" :noselect t)
      (completion-list-mode :noselect t)
@@ -47,6 +51,7 @@
      "*slime-xref*"
      (sldb-mode :stick t)
      slime-repl-mode slime-connection-list-mode)))
+ '(pos-tip-background-color "red")
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -56,8 +61,12 @@
  '(hl-line ((t (:inherit nil)))))
 
 
-(load-theme 'doom-one)
+;; Turn off line-wrapping (default)
+(set-default 'truncate-lines t)
+(setq truncate-partial-width-windows nil)
 
+(setq css-indent-offset 2)
+(setq js-indent-offset 2)
 
 ;; Window Auto-Balancing
 (defadvice split-window-below (after restore-balanace-below activate)
@@ -88,7 +97,6 @@
   (setq-default command-log-mode-window-size 40))
 
 
-
 ;; Ace Window
 (use-package ace-window
   :ensure t
@@ -104,7 +112,6 @@
 ;; Thesaurus
 (use-package synonyms
   :ensure t)
-
 
 
 ;; Doom Themes
@@ -192,6 +199,10 @@
          ("s j" . evil-window-split-down)
          ("H" . evil-first-non-blank)
          ("L" . evil-end-of-line)
+         ("<S-left>" . evil-window-increase-width)
+         ("<S-right>" . evil-window-decrease-width)
+         ("<S-up>" . evil-window-decrease-height)
+         ("<S-down>" . evil-window-increase-height)
 
          :map evil-ex-map
          ("e" . helm-find-files)
@@ -214,19 +225,6 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
 
-(defun load-unfriendly-theme ()
-  "Load a monochromatic theme without syntax highlighting."
-  (interactive)
-  (load-theme 'retro-green)
-  (global-font-lock-mode 0))
-
-(defun load-friendly-theme ()
-  "Load a user-friendly theme."
-  (interactive)
-  (load-theme 'wombat)
-  (global-font-lock-mode t))
-
-
 (defun evil-window-vsplit-right ()
   "Vertically split a window and move right."
   (interactive)
@@ -247,6 +245,7 @@
   :config
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
+    "w" 'toggle-truncate-lines
     "x" 'helm-M-x
     "<SPC>" 'mode-line-other-buffer
     "a" 'ace-window
@@ -259,6 +258,7 @@
     "D" 'projectile-dired
     "q" 'kill-this-buffer
     "h" 'evil-window-left
+    "i" 'helm-semantic-or-imenu
     "l" 'evil-window-right
     "k" 'evil-window-up
     "s" 'load-unfriendly-theme
@@ -289,6 +289,14 @@
   :ensure t
   :init
   (flycheck-mix-setup))
+
+
+;; Flycheck
+(use-package flycheck
+  :ensure t
+  :config
+  (setq flycheck-display-errors-function 'ignore)
+  (flycheck-pos-tip-mode))
 
 
 ;; Flycheck Credo Settings
@@ -345,7 +353,7 @@
 (defun helm-ag-neotree-node ()
   "Run Helm-ag on Neotree directory."
   (interactive)
-  (let* ((search-root (neo-buffer--get-filename-current-line)))
+  (let ((search-root (neo-buffer--get-filename-current-line)))
     (if search-root
         ;; search directory
         (progn
@@ -450,6 +458,12 @@
   :ensure t)
 
 
+;; Elm Mode
+(use-package elm-mode
+  :config
+  (add-to-list 'company-backends 'company-elm))
+
+
 ;; Company Settings
 (use-package company
   :bind (
@@ -507,13 +521,15 @@
 (tool-bar-mode -1)
 
 ;; Disable GUI scrollbars
-(scroll-bar-mode -1)
+(when (display-graphic-p)
+  (scroll-bar-mode -1)
+  )
 
 ;; Use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
 
 ;; Change font settings
-(add-to-list 'default-frame-alist '(font . "Operator Mono 10"))
+(add-to-list 'default-frame-alist '(font . "Hasklig"))
 
 
 ;; Force save buffers
@@ -557,6 +573,9 @@
                 (package-install package-desc)
                 (package-delete  old-package)))))
       (message "All packages are up to date"))))
+
+
+(load-theme 'doom-one)
 
 
 ;; Add transparency
