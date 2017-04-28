@@ -28,3 +28,6 @@ alias 'glp'="git log --graph --pretty=format:'%Cred%h%Creset -%Cblue %an %Creset
 #     pushd and popd commands
 alias wdirs='dirs | tr " " "\n" | sort -r'
 
+# GitHub integration
+alias git=hub
+
