@@ -14,8 +14,7 @@
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+ ;; Your init file should contain only one such instance. ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
@@ -462,7 +461,7 @@
     :ensure t
     :commands (whitespace-mode)
     :config
-    (setq whitespace-line-column 80)
+    (setq whitespace-line-column 100)
     (setq whitespace-style '(face lines-tail)))
 
 
@@ -563,7 +562,7 @@
   (setq-default indent-tabs-mode nil)
 
   ;; Change font settings
-  (add-to-list 'default-frame-alist '(font . "Operator Mono"))
+  (add-to-list 'default-frame-alist '(font . "Menlo"))
 
 
   ;; Force save buffers
@@ -609,10 +608,14 @@
         (message "All packages are up to date"))))
 
 
-  ;; Colorscheme
+;; Colorscheme
 (load-theme 'atom-one-dark t)
 
 
+;; Line Height
+(setq-default line-spacing 4)
+
+
 ;; Add transparency
-(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+(set-frame-parameter (selected-frame) 'alpha '(90 . 100))
+(add-to-list 'default-frame-alist '(alpha . (90 . 100)))
