@@ -14,7 +14,8 @@
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance. ;; If there is more than one, they won't work right.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
@@ -31,7 +32,7 @@
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (markdown-mode yaml-mode haskell-mode color-theme-sanityinc-tomorrow graphql-mode flycheck-elm popup-kill-ring flycheck-pos-tip green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
+    (markdown-mode yaml-mode haskell-mode color-theme-sanityinc-tomorrow graphql-mode flycheck-elm popup-kill-ring green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(popwin:special-display-config
@@ -56,7 +57,6 @@
      "*slime-xref*"
      (sldb-mode :stick t)
      slime-repl-mode slime-connection-list-mode)))
- '(pos-tip-background-color "red")
  '(tool-bar-mode nil)
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
@@ -88,6 +88,7 @@
  '(hl-line ((t (:inherit nil)))))
 
 
+
 ;; Turn off line-wrapping (default)
 (set-default 'truncate-lines t)
 (setq truncate-partial-width-windows nil)
@@ -114,6 +115,34 @@
   :config
   (setq sml/no-confirm-load-theme t)
   (sml/setup))
+
+
+(defun wc/projectile-shell-pop ()
+  "Opens `ansi-term' at the project root according to Projectile."
+  (interactive)
+  (let ((default-directory (projectile-project-root)))
+    (if (get-buffer "*ansi-term*")
+        (switch-to-buffer "*ansi-term*")
+      (ansi-term "/bin/zsh"))
+    (term-send-string (terminal) (format "cd '%s'\n" default-directory))
+    (get-buffer-process "*ansi-term*")))
+
+
+;; Disable C-c binding (future only have this for Ansi-Term
+(global-unset-key (kbd "C-c"))
+
+
+;; ERC configuration (IRC in Emacs)
+(use-package erc
+  :ensure t
+  :init
+  (setq erc-autojoin-channels-alist '(("freenode.net" "#emacs" "#elixir"))))
+
+
+(defun wc/join-erc ()
+  "Boots `erc' and autojoins channels."
+  (interactive)
+  (erc :server "irc.freenode.net" :port "6667" :nick "wpcarro"))
 
 
 ;; Disable fringes in Emacs
@@ -172,17 +201,29 @@
   :ensure t)
 
 
-;; Ansi Term
-(use-package term
-  :bind (:map term-mode-map
-         ("M-p" . term-send-up)
-         ("M-n" . term-send-down)
+(defun wc/bootstrap-ansi-term ()
+  "Custom `ansi-term' configuration."
+  (interactive)
+  (linum-mode nil)
+  (local-set-key (kbd "C-h") 'evil-window-left)
+  (local-set-key (kbd "C-l") 'evil-window-right)
+  (local-set-key (kbd "C-k") 'evil-window-up)
+  (local-set-key (kbd "C-j") 'evil-window-down))
 
-         :map term-raw-map
-         ("C-h" . evil-window-left)
-         ("C-l" . evil-window-right)
-         ("C-k" . evil-window-up)
-         ("C-j" . evil-window-down)))
+
+;; Ansi-Term
+(use-package term
+  :ensure t
+  :init
+  (setq explicit-shell-file-name "/bin/zsh")
+  :config
+  (add-hook 'term-mode-hook 'wc/bootstrap-ansi-term)
+  (linum-mode nil))
+
+
+;; Disable linum-mode in terminal
+(add-hook 'after-change-major-mode-hook
+          '(lambda () (linum-mode (if (equal major-mode 'term-mode) 0 1))))
 
 
 ;; Projectile Settings
@@ -214,6 +255,16 @@
 
          :map evil-insert-state-map
          ("C-k" . nil)
+         ("C-p" . nil)
+         ("C-n" . nil)
+         ("C-r" . nil)
+         ("C-t" . nil)
+         ("C-e" . nil)
+         ("C-a" . nil)
+         ("C-h" . evil-window-left)
+         ("C-l" . evil-window-right)
+         ("C-k" . evil-window-up)
+         ("C-j" . evil-window-down)
 
          :map evil-normal-state-map
          ("<return>" . nil)
@@ -255,6 +306,18 @@
   (global-evil-leader-mode t))
 
 
+;; Hack at the moment for extending the behavior of the jump to mark command
+(evil-define-command evil-goto-mark-line (char)
+  "Go to line of marker denoted by CHAR."
+  :keep-visual t
+  :repeat nil
+  :type line
+  (interactive (list (read-char)))
+  (evil-goto-mark char)
+  (evil-first-non-blank)
+  (call-interactively 'evil-scroll-line-to-center))
+
+
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
 
@@ -281,7 +344,7 @@
       "w" 'toggle-truncate-lines
       "x" 'helm-M-x
       "<SPC>" 'mode-line-other-buffer
-      "a" 'ace-window
+      "a" 'ace-delete-window
       "n" 'neotree-toggle-project-dir
       "N" 'neotree-reveal-current-buffer
       "t" 'alchemist-project-toggle-file-and-tests
@@ -302,6 +365,7 @@
       "B" 'alchemist-mix-test-this-buffer
       "L" 'alchemist-mix-rerun-last-test
       "g" 'magit-status
+      "z" 'wc/projectile-shell-pop
       ))
 
 
@@ -328,8 +392,7 @@
   (use-package flycheck
     :ensure t
     :config
-    (setq flycheck-display-errors-function 'ignore)
-    (flycheck-pos-tip-mode))
+    (setq flycheck-display-errors-function 'ignore))
 
 
   ;; Flycheck Credo Settings
