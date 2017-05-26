@@ -4,7 +4,7 @@
 // Hotkeys for quickly opening apps & changing window size
 
 
-var modal_key = ":s,ctrl";
+var modal_key = ":alt";
 
 // Configs
 S.cfga({
@@ -22,7 +22,11 @@ S.cfga({
 S.bnda({
   // Push Bindings
   "l:ctrl;shift" : S.op("move", { "x": "screenSizeX/2 + screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX*0.5 - 40", "height": "screenSizeY-100" }),
+  ";:ctrl;shift" : S.op("move", { "x": "screenSizeX/3*2 + screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX/3 - 40", "height": "screenSizeY-100" }),
+
   "h:ctrl;shift" : S.op("move", { "x": "screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX*0.5 - 40", "height": "screenSizeY-100" }),
+  "g:ctrl;shift" : S.op("move", { "x": "screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX/3*2 - 40", "height": "screenSizeY-100" }),
+
   "k:ctrl;shift" : S.op("move", { "x": "screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX - 40", "height": "screenSizeY/2 - 20" }),
   "j:ctrl;shift" : S.op("move", { "x": "screenOriginX+20", "y": "screenSizeY/2 + screenOriginY+20", "width": "screenSizeX - 40", "height": "screenSizeY/2 - 40" }),
   "m:ctrl;shift" : S.op("move", { "x": "screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX - 40", "height": "screenSizeY - 100" }),
@@ -31,39 +35,27 @@ S.bnda({
 });
 
 
-// Split dev layout
-
-function appIsOpen(name) {
-  var isOpen = false;
-  slate.eachApp(function(app) {
-    if (app.name == name) isOpen = true;
-  });
-  return isOpen;
-}
+// Moves applications across multiple screens
+// S.bnda('1:ctrl,alt', S.op('throw', { screen: '0', style: 'resize' });
+// S.bnda('2:ctrl,alt', S.op('throw', { screen: '1', style: 'resize' });
 
 
 // Binds modal key + {char} to focus different open apps
-// ctrl-s + h = focus hipchat
-// ctrl-s + f = focus iterm
-// etc, see below
+// alt + d = focus Dash
 
 var focus_apps = {
-  f: 'iTerm2',
+  h: 'Dash',
+  e: 'Emacs',
+  t: 'iTerm2',
   m: 'Messages',
-  x: 'Xcode',
-  i: 'iOS Simulator',
-  j: 'Jira',
   p: 'Spotify',
   c: 'Google Chrome',
-  g: 'Google Chrome',
-  s: 'Safari',
   l: 'LimeChat',
-  k: 'Slack',
-  w: 'Workflowy',
-  t: 'iTunes'
+  s: 'Slack',
 };
 
 
-_(focus_apps).forEach(function(app, key) {
+Object.keys(focus_apps).forEach(function(key) {
+  app = focus_apps[key];
   S.bind(key + modal_key, S.op("focus", {app: app}));
 });
