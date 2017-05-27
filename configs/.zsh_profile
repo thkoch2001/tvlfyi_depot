@@ -1,4 +1,4 @@
-export PATH=/Users/wpcarro/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/fzf/bin:/Users/wpcarro/n/bin
+export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/fzf/bin:$HOME/n/bin:$HOME/.cargo/bin
 
 # make vim the default editor for commit messages etc
 export EDITOR=$(which vim)
@@ -51,6 +51,28 @@ stty -ixon
 # Allows FZF to search hidden files (excluding .git repository)
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# CTRL-Y - Paste the selected branch(es) into the command line
+__bsel() {
+  local cmd="git branch -a | tr -d '* ' | sed 's/^remotes\/origin\///' | sort | uniq"
+  setopt localoptions pipefail 2> /dev/null
+  eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
+    echo -n "${(q)item} "
+  done
+  local ret=$?
+  echo
+  return $ret
+}
+
+fzf-branch-widget() {
+  LBUFFER="${LBUFFER}$(__bsel)"
+  local ret=$?
+  zle redisplay
+  typeset -f zle-line-init >/dev/null && zle zle-line-init
+  return $ret
+}
+zle     -N   fzf-branch-widget
+bindkey '^Y' fzf-branch-widget
 
 
 # Run Autojump at shell startup
