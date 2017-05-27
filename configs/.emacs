@@ -625,7 +625,7 @@
   (setq-default indent-tabs-mode nil)
 
   ;; Change font settings
-  (add-to-list 'default-frame-alist '(font . "Menlo"))
+  (add-to-list 'default-frame-alist '(font . "Menlo-10"))
 
 
   ;; Force save buffers
