@@ -345,6 +345,7 @@
       "x" 'helm-M-x
       "<SPC>" 'mode-line-other-buffer
       "a" 'ace-delete-window
+      "s" 'ace-swap-window
       "n" 'neotree-toggle-project-dir
       "N" 'neotree-reveal-current-buffer
       "t" 'alchemist-project-toggle-file-and-tests
@@ -357,8 +358,6 @@
       "i" 'helm-semantic-or-imenu
       "l" 'evil-window-right
       "k" 'evil-window-up
-      "s" 'load-unfriendly-theme
-      "S" 'load-friendly-theme
       "j" 'evil-window-down
       "b" 'helm-mini
       "T" 'alchemist-mix-test-at-point
