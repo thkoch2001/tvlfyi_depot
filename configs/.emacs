@@ -106,15 +106,11 @@
 (defadvice delete-window (after restore-balance activate)
   (balance-windows))
 
-
-;; Smart mode line
-(use-package smart-mode-line
+;; Powerline
+(use-package powerline
   :ensure t
-  :init
-  (load-theme 'smart-mode-line-dark t)
   :config
-  (setq sml/no-confirm-load-theme t)
-  (sml/setup))
+  (powerline-default-theme))
 
 
 (defun wc/projectile-shell-pop ()
@@ -126,11 +122,6 @@
       (ansi-term "/bin/zsh"))
     (term-send-string (terminal) (format "cd '%s'\n" default-directory))
     (get-buffer-process "*ansi-term*")))
-
-
-;; Disable C-c binding (future only have this for Ansi-Term
-(global-unset-key (kbd "C-c"))
-
 
 ;; ERC configuration (IRC in Emacs)
 (use-package erc
@@ -220,11 +211,21 @@
 (ad-activate 'term-sentinel)
 
 
+
+(defun wc/ansi-term-paste (&amp;optional string)
+  "Paste into `ansi-term'."
+  (interactive)
+  (process-send-string
+   (get-buffer-process (current-buffer))
+   (if string string (current-kill 0)))))
+
+
 ;; Ansi-Term
 (use-package term
   :ensure t
   :init
   (setq explicit-shell-file-name "/bin/zsh")
+  :bind (("C-v" . wc/ansi-term-paste))
   :config
   (add-hook 'term-mode-hook 'wc/bootstrap-ansi-term)
   (linum-mode nil))
@@ -274,6 +275,8 @@
          ("C-l" . evil-window-right)
          ("C-k" . evil-window-up)
          ("C-j" . evil-window-down)
+         ("C-c" . term-interrupt-subjob)
+
 
          :map evil-normal-state-map
          ("<return>" . nil)
