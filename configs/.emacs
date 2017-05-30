@@ -208,7 +208,16 @@
   (local-set-key (kbd "C-h") 'evil-window-left)
   (local-set-key (kbd "C-l") 'evil-window-right)
   (local-set-key (kbd "C-k") 'evil-window-up)
-  (local-set-key (kbd "C-j") 'evil-window-down))
+  (local-set-key (kbd "C-j") 'evil-window-down)
+  (define-key term-raw-map (kbd "s-v") 'term-paste))
+
+(defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
+  (if (memq (process-status proc) '(signal exit))
+      (let ((buffer (process-buffer proc)))
+        ad-do-it
+        (kill-buffer buffer))
+    ad-do-it))
+(ad-activate 'term-sentinel)
 
 
 ;; Ansi-Term
@@ -624,7 +633,7 @@
   (setq-default indent-tabs-mode nil)
 
   ;; Change font settings
-  (add-to-list 'default-frame-alist '(font . "Menlo-10"))
+  (add-to-list 'default-frame-alist '(font . "Menlo-12"))
 
 
   ;; Force save buffers
