@@ -113,27 +113,15 @@
   (powerline-default-theme))
 
 
-(defun wc/projectile-shell-pop ()
-  "Opens `ansi-term' at the project root according to Projectile."
-  (interactive)
-  (let ((default-directory (projectile-project-root)))
-    (if (get-buffer "*ansi-term*")
-        (switch-to-buffer "*ansi-term*")
-      (ansi-term "/bin/zsh"))
-    (term-send-string (terminal) (format "cd '%s'\n" default-directory))
-    (get-buffer-process "*ansi-term*")))
+;; Load custom Emacs functions
+(load "~/.emacs/wc-helper-functions.lisp")
+
 
 ;; ERC configuration (IRC in Emacs)
 (use-package erc
   :ensure t
   :init
   (setq erc-autojoin-channels-alist '(("freenode.net" "#emacs" "#elixir"))))
-
-
-(defun wc/join-erc ()
-  "Boots `erc' and autojoins channels."
-  (interactive)
-  (erc :server "irc.freenode.net" :port "6667" :nick "wpcarro"))
 
 
 ;; Disable fringes in Emacs
@@ -192,16 +180,6 @@
   :ensure t)
 
 
-(defun wc/bootstrap-ansi-term ()
-  "Custom `ansi-term' configuration."
-  (interactive)
-  (linum-mode nil)
-  (local-set-key (kbd "C-h") 'evil-window-left)
-  (local-set-key (kbd "C-l") 'evil-window-right)
-  (local-set-key (kbd "C-k") 'evil-window-up)
-  (local-set-key (kbd "C-j") 'evil-window-down)
-  (define-key term-raw-map (kbd "s-v") 'term-paste))
-
 (defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
   (if (memq (process-status proc) '(signal exit))
       (let ((buffer (process-buffer proc)))
@@ -209,15 +187,6 @@
         (kill-buffer buffer))
     ad-do-it))
 (ad-activate 'term-sentinel)
-
-
-
-(defun wc/ansi-term-paste (&amp;optional string)
-  "Paste into `ansi-term'."
-  (interactive)
-  (process-send-string
-   (get-buffer-process (current-buffer))
-   (if string string (current-kill 0)))))
 
 
 ;; Ansi-Term
@@ -245,8 +214,8 @@
 ;; Dired Settings
 (use-package dired
   :bind (:map dired-mode-map
-        ("c" . find-file)
-        ("K" . dired-up-directory)))
+              ("c" . find-file)
+              ("K" . dired-up-directory)))
 
 
 ;; Evil Settings
@@ -254,58 +223,58 @@
   :ensure t
   :commands (evil-mode local-evil-mode)
   :bind (:map evil-visual-state-map
-         ("H" . evil-first-non-blank)
-         ("L" . evil-end-of-visual-line)
+              ("H" . evil-first-non-blank)
+              ("L" . evil-end-of-visual-line)
 
-         :map evil-motion-state-map
-         ("<return>" . nil)
-         ("<tab>" . nil)
-         ("SPC" . nil)
-         ("M-." . nil)
+              :map evil-motion-state-map
+              ("<return>" . nil)
+              ("<tab>" . nil)
+              ("SPC" . nil)
+              ("M-." . nil)
 
-         :map evil-insert-state-map
-         ("C-k" . nil)
-         ("C-p" . nil)
-         ("C-n" . nil)
-         ("C-r" . nil)
-         ("C-t" . nil)
-         ("C-e" . nil)
-         ("C-a" . nil)
-         ("C-h" . evil-window-left)
-         ("C-l" . evil-window-right)
-         ("C-k" . evil-window-up)
-         ("C-j" . evil-window-down)
-         ("C-c" . term-interrupt-subjob)
+              :map evil-insert-state-map
+              ("C-k" . nil)
+              ("C-p" . nil)
+              ("C-n" . nil)
+              ("C-r" . nil)
+              ("C-t" . nil)
+              ("C-e" . nil)
+              ("C-a" . nil)
+              ("C-h" . evil-window-left)
+              ("C-l" . evil-window-right)
+              ("C-k" . evil-window-up)
+              ("C-j" . evil-window-down)
+              ("C-c" . term-interrupt-subjob)
 
 
-         :map evil-normal-state-map
-         ("<return>" . nil)
-         ("<tab>" . nil)
-         ("K" . nil)
-         ("M-." . nil)
-         ("s" . nil)
-         ("C-p" . nil)
-         ("C-h" . evil-window-left)
-         ("C-l" . evil-window-right)
-         ("C-k" . evil-window-up)
-         ("C-j" . evil-window-down)
-         ("g c" . comment-or-uncomment-region)
-         ("s h" . evil-window-vsplit)
-         ("s l" . evil-window-vsplit-right)
-         ("s k" . evil-window-split)
-         ("s j" . evil-window-split-down)
-         ("H" . evil-first-non-blank)
-         ("L" . evil-end-of-line)
-         ("<S-left>" . evil-window-increase-width)
-         ("<S-right>" . evil-window-decrease-width)
-         ("<S-up>" . evil-window-decrease-height)
-         ("<S-down>" . evil-window-increase-height)
+              :map evil-normal-state-map
+              ("<return>" . nil)
+              ("<tab>" . nil)
+              ("K" . nil)
+              ("M-." . nil)
+              ("s" . nil)
+              ("C-p" . nil)
+              ("C-h" . evil-window-left)
+              ("C-l" . evil-window-right)
+              ("C-k" . evil-window-up)
+              ("C-j" . evil-window-down)
+              ("g c" . comment-or-uncomment-region)
+              ("s h" . evil-window-vsplit)
+              ("s l" . evil-window-vsplit-right)
+              ("s k" . evil-window-split)
+              ("s j" . evil-window-split-down)
+              ("H" . evil-first-non-blank)
+              ("L" . evil-end-of-line)
+              ("<S-left>" . evil-window-increase-width)
+              ("<S-right>" . evil-window-decrease-width)
+              ("<S-up>" . evil-window-decrease-height)
+              ("<S-down>" . evil-window-increase-height)
 
-         :map evil-ex-map
-         ("tb" . alchemist-test-this-buffer)
-         ("tap" . alchemist-test-at-point)
-         ("lt" . alchemist-mix-rerun-last-test)
-         )
+              :map evil-ex-map
+              ("tb" . alchemist-test-this-buffer)
+              ("tap" . alchemist-test-at-point)
+              ("lt" . alchemist-mix-rerun-last-test)
+              )
   :init
   (setq evil-emacs-state-cursor '("VioletRed3" box))
   (setq evil-normal-state-cursor '("DeepSkyBlue2" box))
@@ -330,362 +299,234 @@
   (call-interactively 'evil-scroll-line-to-center))
 
 
-  (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-
-
-  (defun evil-window-vsplit-right ()
-    "Vertically split a window and move right."
-    (interactive)
-    (evil-window-vsplit nil)
-    (evil-window-right 1))
-
-  (defun evil-window-split-down ()
-    "Split a window and move right."
-    (interactive)
-    (evil-window-split nil)
-    (evil-window-down 1))
-
-
-(defun wc/switch-to-mru-buffer ()
-  "Switches to the most recently used buffer, including visible buffers."
-  (interactive)
-  (switch-to-buffer (other-buffer (current-buffer) t (selected-frame))))
-
-
-  ;; Evil Leader Settings
-  (use-package evil-leader
-    :ensure t
-    :commands (global-evil-leader-mode)
-    :config
-    (evil-leader/set-leader "<SPC>")
-    (evil-leader/set-key
-      "w" 'toggle-truncate-lines
-      "x" 'helm-M-x
-      "<SPC>" 'wc/switch-to-mru-buffer
-      "a" 'ace-delete-window
-      "s" 'ace-swap-window
-      "n" 'neotree-toggle-project-dir
-      "N" 'neotree-reveal-current-buffer
-      "t" 'alchemist-project-toggle-file-and-tests
-      "f" 'helm-projectile
-      "p" 'helm-projectile-ag
-      "d" 'dired-jump
-      "D" 'projectile-dired
-      "q" 'kill-this-buffer
-      "h" 'evil-window-left
-      "i" 'helm-semantic-or-imenu
-      "l" 'evil-window-right
-      "k" 'evil-window-up
-      "j" 'evil-window-down
-      "b" 'helm-mini
-      "T" 'alchemist-mix-test-at-point
-      "B" 'alchemist-mix-test-this-buffer
-      "L" 'alchemist-mix-rerun-last-test
-      "g" 'magit-status
-      "z" 'wc/projectile-shell-pop
-      ))
-
-
-  ;; Evil Match-it
-  (use-package evil-matchit
-    :ensure t
-    :commands (global-evil-matchit-mode))
-
-
-  ;; Evil Surround
-  (use-package evil-surround
-    :ensure t
-    :commands (global-evil-surround-mode))
-
-
-  ;; Flycheck Mix Settings
-  (use-package flycheck-mix
-    :ensure t
-    :init
-    (flycheck-mix-setup))
-
-
-  ;; Flycheck
-  (use-package flycheck
-    :ensure t
-    :config
-    (setq flycheck-display-errors-function 'ignore))
-
-
-  ;; Flycheck Credo Settings
-  (use-package flycheck-credo
-    :ensure t
-    :init
-    (flycheck-credo-setup))
-
-
-  ;; Popwin Settings
-  (use-package popwin
-    :ensure t)
-
-  (defun *-popwin-help-mode-off ()
-    "Turn `popwin-mode' off for *Help* buffers."
-
-    (when (boundp 'popwin:special-display-config)
-      (customize-set-variable 'popwin:special-display-config
-                              (delq 'help-mode popwin:special-display-config))))
-
-  (defun *-popwin-help-mode-on ()
-    "Turn `popwin-mode' on for *Help* buffers."
-
-    (when (boundp 'popwin:special-display-config)
-      (customize-set-variable 'popwin:special-display-config
-                              (add-to-list 'popwin:special-display-config 'help-mode nil #'eq))))
-
-  (add-hook 'helm-minibuffer-set-up-hook #'*-popwin-help-mode-off)
-  (add-hook 'helm-cleanup-hook #'*-popwin-help-mode-on)
-
-  (setq display-buffer-function 'popwin:display-buffer)
-  (setq helm-split-window-preferred-function 'ignore)
-  (push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
-  (push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
-
-
-  ;; Alchemist Settings
-  (use-package alchemist
-    :ensure t
-    :config
-    (setq alchemist-mix-env "prod")
-    (setq alchemist-goto-elixir-source-dir "~/source_code/elixir/")
-    (setq alchemist-goto-erlang-source-dir "~/source_code/otp/")
-    :init
-    (linum-mode))
-
-  (defun custom-erlang-mode-hook ()
-    "Jump to and from Elixir, Erlang, Elixir files."
-    (define-key erlang-mode-map (kbd "M-,") 'alchemist-goto-jump-back))
-
-  (add-hook 'erlang-mode-hook 'custom-erlang-mode-hook)
-
-
-  (defun helm-ag-neotree-node ()
-    "Run Helm-ag on Neotree directory."
-    (interactive)
-    (let ((search-root (neo-buffer--get-filename-current-line)))
-      (if search-root
-          ;; search directory
-          (progn
-            (evil-window-right 1)
-            (helm-ag search-root))
-        (message "Could not find directory at point."))))
-
-
-  ;; NeoTree Settings
-  (use-package neotree
-    :ensure t
-    :bind (:map neotree-mode-map
-          ("j" . next-line)
-          ("k" . previous-line)
-          ("<return>" . neotree-enter)
-          ("<tab>" . neotree-enter)
-          ("D" . neotree-delete-node)
-          ("R" . neotree-rename-node)
-          ("c" . neotree-create-node)
-          ("C-h" . evil-window-left)
-          ("C-l" . evil-window-right)
-          ("C-k" . evil-window-up)
-          ("C-j" . evil-window-down)
-          ("C-p" . helm-ag-neotree-node)
-          )
-    :init
-    (hl-line-mode)
-    (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-    (setq-default neo-show-hidden-files t))
-
-  (defun neotree-toggle-project-dir ()
-    "Toggle neotree sidebar."
-    (interactive)
-    (let ((project-dir (projectile-project-root))
-          (file-name (buffer-file-name)))
-      (neotree-toggle)
-      (if project-dir
-          (if (neo-global--window-exists-p)
-              (progn
-                (neotree-dir project-dir)
-                (neotree-show)
-                (evil-window-mru)))
-        (message "Could not find git project root."))))
-
-
-  (defun neotree-reveal-current-buffer ()
-    "Reveal current buffer in Neotree."
-    (interactive)
-    (let ((project-dir (projectile-project-root))
-          (file-name (buffer-file-name)))
-      (neotree-show)
-      (if project-dir
-          (if (neo-global--window-exists-p)
-              (progn
-                (neotree-dir project-dir)
-                (neotree-find file-name)
-                (evil-window-mru)))
-        (message "Could not find git project root."))))
-
-
-  (defun message-project-root ()
-    "Outputs project-root."
-    (interactive)
-    (let (project-dir (projectile-project-root))
-      (if project-dir
-          (message "Project dir found!")
-        (message "No project-dir found."))))
-
-
-  ;; Whitespace Settings
-  (use-package whitespace
-    :ensure t
-    :commands (whitespace-mode)
-    :config
-    (setq whitespace-line-column 100)
-    (setq whitespace-style '(face lines-tail)))
-
-
-  ;; Helm Settings
-  (use-package helm
-    :ensure t
-    :commands (helm-mode)
-    :bind (
-          ("M-x" . helm-M-x)
-          ("M-y" . helm-show-kill-ring)
-          ("C-x b" . helm-mini)
-          :map helm-map
-          ("TAB" . helm-execute-persistent-action)
-          ("C-z" . helm-select-action)
-          :term-raw-map
-          ("M-x" . helm-M-x))
-    :init
-    (setq helm-buffers-fuzzy-matching t)
-    (setq helm-recentf-fuzzy-match t)
-    (setq helm-semantic-fuzzy-match t)
-    (setq helm-imenu-fuzzy-match t)
-    (setq helm-locate-fuzzy-match t))
-
-
-  ;; Helm Projectile Settings
-  (use-package helm-projectile
-    :ensure t)
-
-
-  ;; Elm Mode
-  (use-package elm-mode
-    :config
-    (add-to-list 'company-backends 'company-elm))
-
-
-  ;; Company Settings
-  (use-package company
-    :bind (
-          ("C-j" . company-select-next)
-          ("C-k" . company-select-previous))
-    :config
-    (setq company-idle-delay 0))
-
-
-  (add-hook 'after-init-hook 'evil-mode)
-  (add-hook 'after-init-hook 'global-whitespace-mode)
-  (add-hook 'after-init-hook 'global-hl-line-mode)
-  (add-hook 'after-init-hook 'global-linum-mode)
-  (add-hook 'after-init-hook 'global-flycheck-mode)
-  (add-hook 'after-init-hook 'global-company-mode)
-  (add-hook 'after-init-hook 'projectile-mode)
-  (add-hook 'after-init-hook 'helm-mode)
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-
-  ;; Scrolling Settings
-  (setq scroll-step 1)
-  (setq scroll-conservatively 10000)
-
-
-  ;; Properly configure GUI Emacs to use $PATH values
-  (when (memq window-system '(mac ns))
-    (exec-path-from-shell-initialize))
-
-
-  ;; Emacs backup / autosave files
-  ;; (setq-default make-backup-files nil)
-  (setq backup-directory-alist `(("." . "~/.emacs-tmp")))
-  (setq auto-save-file-name-transforms `((".*" "~/.emacs-tmp/" t)))
-
-
-  ;; Automatically follow symlinks
-  (setq vc-follow-symlinks t)
-
-
-  ;; Commenting / Uncommenting
-  (global-set-key (kbd "C-x C-;") 'comment-or-uncomment-region)
-
-
-  ;; Fullscreen settings
-  (setq ns-use-native-fullscreen nil)
-  (global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen)
-
-
-  ;; General Settings
-  ;; Hide the menu-bar
-  (setq ns-auto-hide-menu-bar t)
-
-  ;; Native App Settings
-  (tool-bar-mode -1)
-
-  ;; Disable GUI scrollbars
-  (when (display-graphic-p)
-    (scroll-bar-mode -1)
-    )
-
-  ;; Use spaces instead of tabs
-  (setq-default indent-tabs-mode nil)
-
-  ;; Change font settings
-  (add-to-list 'default-frame-alist '(font . "Menlo-12"))
-
-
-  ;; Force save buffers
-  (defun save-buffer-always ()
-    "Save the buffer even if it is not modified."
-    (interactive)
-    (set-buffer-modified-p t)
-    (save-buffer))
-
-  (global-set-key (kbd "C-x C-s") nil)
-  (global-set-key (kbd "C-x C-s") 'save-buffer-always)
-
-
-  ;; Upgrade all packages
-  (defun package-upgrade-all ()
-    "Upgrade all packages automatically without showing *Packages* buffer."
-    (interactive)
-    (package-refresh-contents)
-    (let (upgrades)
-      (cl-flet ((get-version (name where)
-                  (let ((pkg (cadr (assq name where))))
-                    (when pkg
-                      (package-desc-version pkg)))))
-        (dolist (package (mapcar #'car package-alist))
-          (let ((in-archive (get-version package package-archive-contents)))
-            (when (and in-archive
-                      (version-list-< (get-version package package-alist)
-                                      in-archive))
-              (push (cadr (assq package package-archive-contents))
-                    upgrades)))))
-      (if upgrades
-          (when (yes-or-no-p
-                (message "Upgrade %d package%s (%s)? "
-                          (length upgrades)
-                          (if (= (length upgrades) 1) "" "s")
-                          (mapconcat #'package-desc-full-name upgrades ", ")))
-            (save-window-excursion
-              (dolist (package-desc upgrades)
-                (let ((old-package (cadr (assq (package-desc-name package-desc)
-                                              package-alist))))
-                  (package-install package-desc)
-                  (package-delete  old-package)))))
-        (message "All packages are up to date"))))
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+
+
+;; Evil Leader Settings
+(use-package evil-leader
+  :ensure t
+  :commands (global-evil-leader-mode)
+  :config
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "w" 'toggle-truncate-lines
+    "x" 'helm-M-x
+    "<SPC>" 'wc/switch-to-mru-buffer
+    "a" 'ace-delete-window
+    "s" 'ace-swap-window
+    "n" 'neotree-toggle-project-dir
+    "N" 'neotree-reveal-current-buffer
+    "t" 'alchemist-project-toggle-file-and-tests
+    "f" 'helm-projectile
+    "p" 'helm-projectile-ag
+    "d" 'dired-jump
+    "D" 'projectile-dired
+    "q" 'kill-this-buffer
+    "h" 'evil-window-left
+    "i" 'helm-semantic-or-imenu
+    "l" 'evil-window-right
+    "k" 'evil-window-up
+    "j" 'evil-window-down
+    "b" 'helm-mini
+    "T" 'alchemist-mix-test-at-point
+    "B" 'alchemist-mix-test-this-buffer
+    "L" 'alchemist-mix-rerun-last-test
+    "g" 'magit-status
+    "z" 'wc/projectile-shell-pop
+    ))
+
+
+;; Evil Match-it
+(use-package evil-matchit
+  :ensure t
+  :commands (global-evil-matchit-mode))
+
+
+;; Evil Surround
+(use-package evil-surround
+  :ensure t
+  :commands (global-evil-surround-mode))
+
+
+;; Flycheck Mix Settings
+(use-package flycheck-mix
+  :ensure t
+  :init
+  (flycheck-mix-setup))
+
+
+;; Flycheck
+(use-package flycheck
+  :ensure t
+  :config
+  (setq flycheck-display-errors-function 'ignore))
+
+
+;; Flycheck Credo Settings
+(use-package flycheck-credo
+  :ensure t
+  :init
+  (flycheck-credo-setup))
+
+
+;; Popwin Settings
+(use-package popwin
+  :ensure t)
+
+
+(add-hook 'helm-minibuffer-set-up-hook #'*-popwin-help-mode-off)
+(add-hook 'helm-cleanup-hook #'*-popwin-help-mode-on)
+
+(setq display-buffer-function 'popwin:display-buffer)
+(setq helm-split-window-preferred-function 'ignore)
+(push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
+(push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
+
+
+;; Alchemist Settings
+(use-package alchemist
+  :ensure t
+  :config
+  (setq alchemist-mix-env "prod")
+  (setq alchemist-goto-elixir-source-dir "~/source_code/elixir/")
+  (setq alchemist-goto-erlang-source-dir "~/source_code/otp/")
+  :init
+  (linum-mode))
+
+
+(add-hook 'erlang-mode-hook 'wc/custom-erlang-mode-hook)
+
+
+;; NeoTree Settings
+(use-package neotree
+  :ensure t
+  :bind (:map neotree-mode-map
+              ("j" . next-line)
+              ("k" . previous-line)
+              ("<return>" . neotree-enter)
+              ("<tab>" . neotree-enter)
+              ("D" . neotree-delete-node)
+              ("R" . neotree-rename-node)
+              ("c" . neotree-create-node)
+              ("C-h" . evil-window-left)
+              ("C-l" . evil-window-right)
+              ("C-k" . evil-window-up)
+              ("C-j" . evil-window-down)
+              ("C-p" . helm-ag-neotree-node)
+              )
+  :init
+  (hl-line-mode)
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  (setq-default neo-show-hidden-files t))
+
+
+;; Whitespace Settings
+(use-package whitespace
+  :ensure t
+  :commands (whitespace-mode)
+  :config
+  (setq whitespace-line-column 100)
+  (setq whitespace-style '(face lines-tail)))
+
+
+;; Helm Settings
+(use-package helm
+  :ensure t
+  :commands (helm-mode)
+  :bind (
+         ("M-x" . helm-M-x)
+         ("M-y" . helm-show-kill-ring)
+         ("C-x b" . helm-mini)
+         :map helm-map
+         ("TAB" . helm-execute-persistent-action)
+         ("C-z" . helm-select-action)
+         :term-raw-map
+         ("M-x" . helm-M-x))
+  :init
+  (setq helm-buffers-fuzzy-matching t)
+  (setq helm-recentf-fuzzy-match t)
+  (setq helm-semantic-fuzzy-match t)
+  (setq helm-imenu-fuzzy-match t)
+  (setq helm-locate-fuzzy-match t))
+
+
+;; Helm Projectile Settings
+(use-package helm-projectile
+  :ensure t)
+
+
+;; Elm Mode
+(use-package elm-mode
+  :config
+  (add-to-list 'company-backends 'company-elm))
+
+
+;; Company Settings
+(use-package company
+  :bind (
+         ("C-j" . company-select-next)
+         ("C-k" . company-select-previous))
+  :config
+  (setq company-idle-delay 0))
+
+
+(add-hook 'after-init-hook 'evil-mode)
+(add-hook 'after-init-hook 'global-whitespace-mode)
+(add-hook 'after-init-hook 'global-hl-line-mode)
+(add-hook 'after-init-hook 'global-linum-mode)
+(add-hook 'after-init-hook 'global-flycheck-mode)
+(add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'after-init-hook 'projectile-mode)
+(add-hook 'after-init-hook 'helm-mode)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+
+;; Scrolling Settings
+(setq scroll-step 1)
+(setq scroll-conservatively 10000)
+
+
+;; Properly configure GUI Emacs to use $PATH values
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
+
+;; Emacs backup / autosave files
+;; (setq-default make-backup-files nil)
+(setq backup-directory-alist `(("." . "~/.emacs-tmp")))
+(setq auto-save-file-name-transforms `((".*" "~/.emacs-tmp/" t)))
+
+
+;; Automatically follow symlinks
+(setq vc-follow-symlinks t)
+
+
+;; Commenting / Uncommenting
+(global-set-key (kbd "C-x C-;") 'comment-or-uncomment-region)
+
+
+;; Fullscreen settings
+(setq ns-use-native-fullscreen nil)
+(global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen)
+
+
+;; General Settings
+;; Hide the menu-bar
+(setq ns-auto-hide-menu-bar t)
+
+;; Native App Settings
+(tool-bar-mode -1)
+
+;; Disable GUI scrollbars
+(when (display-graphic-p)
+  (scroll-bar-mode -1)
+  )
+
+;; Use spaces instead of tabs
+(setq-default indent-tabs-mode nil)
+
+;; Change font settings
+(add-to-list 'default-frame-alist '(font . "Menlo-12"))
 
 
 ;; Colorscheme
@@ -699,3 +540,4 @@
 ;; Add transparency
 (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
 (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
+(put 'narrow-to-region 'disabled nil)
