@@ -26,12 +26,12 @@
   (define-key term-raw-map (kbd "s-v") 'term-paste))
 
 
-(defun wc/ansi-term-paste (&amp;optional string)
+(defun wc/ansi-term-paste (&optional string)
   "Paste into `ansi-term'."
   (interactive)
   (process-send-string
    (get-buffer-process (current-buffer))
-   (if string string (current-kill 0)))))
+   (if string string (current-kill 0))))
 
 
 (defun evil-window-vsplit-right ()

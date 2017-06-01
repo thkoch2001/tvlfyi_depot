@@ -48,10 +48,10 @@ var focus_apps = {
   e: 'Emacs',
   t: 'iTerm2',
   m: 'Messages',
-  p: 'Spotify',
+  s: 'Spotify',
   c: 'Google Chrome',
   l: 'LimeChat',
-  s: 'Slack',
+  k: 'Slack',
 };
 
 
