@@ -346,6 +346,12 @@
     (evil-window-down 1))
 
 
+(defun wc/switch-to-mru-buffer ()
+  "Switches to the most recently used buffer, including visible buffers."
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) t (selected-frame))))
+
+
   ;; Evil Leader Settings
   (use-package evil-leader
     :ensure t
@@ -355,7 +361,7 @@
     (evil-leader/set-key
       "w" 'toggle-truncate-lines
       "x" 'helm-M-x
-      "<SPC>" 'mode-line-other-buffer
+      "<SPC>" 'wc/switch-to-mru-buffer
       "a" 'ace-delete-window
       "s" 'ace-swap-window
       "n" 'neotree-toggle-project-dir
