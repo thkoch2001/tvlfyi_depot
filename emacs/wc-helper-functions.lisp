@@ -9,20 +9,81 @@
     (get-buffer-process "*ansi-term*")))
 
 
+(defun wc/shell-history ()
+  (setq history (shell-command-to-string "history"))
+  (split-string history "\n"))
+
+
+(defun wc/git-branches ()
+  (setq branches (shell-command-to-string "git branch -a | tr -d '* ' | sed 's/^remotes\\/origin\\///' | sort | uniq"))
+  (split-string branches "\n"))
+
+
+(defun wc/helm-git-branches ()
+  "Reverse-I search using Helm."
+  (interactive)
+  (helm :sources (helm-build-in-buffer-source "test1"
+                 :data (wc/git-branches)
+                 :action 'wc/handle-branch)
+      :buffer "*helm git branches*"))
+
+
+(defun wc/autojump-directories ()
+  (setq directories (shell-command-to-string "j -s | awk '{ if($2 ~ /^\\// && $1 != \"data:\") print;}' | sort -rn | head -n 100 | awk '{print $2}'"))
+  (split-string directories "\n"))
+
+
+(defun wc/helm-autojump ()
+  "Helm interface to autojump."
+  (interactive)
+  (helm :sources (helm-build-in-buffer-source "test1"
+                 :data (wc/autojump-directories)
+                 :action (lambda (path) (wc/exec-cmd (format "cd %s" path))))
+      :buffer "*helm git branches*"))
+
+
+(defun wc/handle-branch (branch)
+  (setq action "git diff")
+  (term-send-raw-string (format "%s %s" action branch)))
+
+
+(defun wc/helm-shell-history ()
+  "Reverse-I search using Helm."
+  (interactive)
+  (helm :sources (helm-build-in-buffer-source "test1"
+                 :data (wc/shell-history)
+                 :action 'wc/exec-cmd)
+      :buffer "*helm shell history*"))
+
+
+(defun wc/exec-cmd (cmd)
+  (term-send-raw-string (format "%s\n" cmd)))
+
+
 (defun wc/join-erc ()
   "Boots `erc' and autojoins channels."
   (interactive)
   (erc :server "irc.freenode.net" :port "6667" :nick "wpcarro"))
 
 
+(defun wc/expose-global-binding-in-term (binding)
+   (define-key term-raw-map binding
+     (lookup-key (current-global-map) binding)))
+
+
 (defun wc/bootstrap-ansi-term ()
   "Custom `ansi-term' configuration."
   (interactive)
+  (goto-address-mode t)
   (linum-mode nil)
   (local-set-key (kbd "C-h") 'evil-window-left)
   (local-set-key (kbd "C-l") 'evil-window-right)
   (local-set-key (kbd "C-k") 'evil-window-up)
   (local-set-key (kbd "C-j") 'evil-window-down)
+  (wc/expose-global-binding-in-term (kbd "M-x"))
+  (define-key term-raw-map (kbd "C-r") 'wc/helm-shell-history)
+  (define-key term-raw-map (kbd "M-:") 'eval-expression)
+  (define-key term-raw-map (kbd "M-j") 'wc/helm-autojump)
   (define-key term-raw-map (kbd "s-v") 'term-paste))
 
 
