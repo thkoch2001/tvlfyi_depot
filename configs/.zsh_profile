@@ -4,6 +4,11 @@ export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/loca
 export EDITOR=$(which vim)
 
 
+# update prompt to save space
+PS1="${PS1}
+   "
+
+
 echo "Welcome back, $USER"
 
 
