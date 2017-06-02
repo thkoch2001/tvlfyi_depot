@@ -114,7 +114,7 @@
 
 
 ;; Load custom Emacs functions
-(load "~/.emacs/wc-helper-functions.lisp")
+(load "~/.emacs.d/wc-helper-functions.lisp")
 
 
 ;; ERC configuration (IRC in Emacs)
@@ -184,7 +184,7 @@
   (if (memq (process-status proc) '(signal exit))
       (let ((buffer (process-buffer proc)))
         ad-do-it
-        (kill-buffer buffer))
+        (kill-buffer-and-window))
     ad-do-it))
 (ad-activate 'term-sentinel)
 
