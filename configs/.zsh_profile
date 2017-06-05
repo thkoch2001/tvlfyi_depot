@@ -1,5 +1,14 @@
 export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/fzf/bin:$HOME/n/bin:$HOME/.cargo/bin
 
+
+# Have zsh export variables for Emacs to track the cwd
+if [ -n "$INSIDE_EMACS" ]; then
+  chpwd() { print -P "\033AnSiTc %d" }
+  print -P "\033AnSiTu %n"
+  print -P "\033AnSiTc %d"
+fi
+
+
 # make vim the default editor for commit messages etc
 export EDITOR=$(which vim)
 
