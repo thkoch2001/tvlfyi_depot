@@ -244,6 +244,7 @@
               ("C-l" . evil-window-right)
               ("C-k" . evil-window-up)
               ("C-j" . evil-window-down)
+              ("C-c" . term-interrupt-subjob)
 
               :map evil-normal-state-map
               ("<return>" . nil)

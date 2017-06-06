@@ -76,6 +76,15 @@
       :buffer "*helm shell history*"))
 
 
+(defun wc/helm-ctrl-t-find-files ()
+  "Fuzzily searches files within a directory."
+  (interactive)
+  (helm :sources (helm-build-in-buffer-source "test1"
+                 :data (shell-command-to-string "ag --hidden --ignore .git -l -g \"\"")
+                 :action 'term-send-raw-string)
+      :buffer "*helm CTRL_T find files *"))
+
+
 (defun wc/exec-cmd (cmd)
   (term-send-raw-string (format "%s\n" cmd)))
 
@@ -110,9 +119,9 @@
   (local-set-key (kbd "C-j") 'evil-window-down)
   (wc/expose-global-binding-in-term (kbd "M-x"))
   (evil-define-key 'normal term-raw-map
-    (kbd "C-c") 'term-interrupt-subjob
     (kbd "i") 'wc/focus-term-at-bottom)
   (define-key term-raw-map (kbd "C-r") 'wc/helm-shell-history)
+  (define-key term-raw-map (kbd "C-t") 'wc/helm-ctrl-t-find-files)
   (define-key term-raw-map (kbd "M-:") 'eval-expression)
   (define-key term-raw-map (kbd "M-j") 'wc/helm-autojump)
   (define-key term-raw-map (kbd "s-v") 'term-paste))
@@ -140,10 +149,39 @@
   (evil-window-down 1))
 
 
+(defun wc/file-buffer-p (buffer-candidate)
+  "Returns t if the buffer argument is backed by a file and is therefore presumably a code buffer."
+  (interactive)
+  (let ((buff-name (buffer-name buffer-candidate))
+        (buff-mode (wc/buffer-major-mode buffer-candidate)))
+    (not (or (string-match-p "^\*.+\*$" buff-name)
+             (string-match-p "^dired-mode$" buff-mode)))))
+
+
+(defun wc/buffer-major-mode (buffer-handle)
+  "Returns a symbol representing the buffer's active major-mode"
+  (interactive)
+  (symbol-name (with-current-buffer buffer-handle major-mode)))
+
+
 (defun wc/switch-to-mru-buffer ()
   "Switches to the most recently used buffer, including visible buffers."
   (interactive)
-  (switch-to-buffer (other-buffer (current-buffer) t (selected-frame))))
+  (setq current-buffer-name (buffer-name (current-buffer)))
+  (setq buffer-candidates (remove-if #'(lambda (buffer) (string-match-p current-buffer-name (buffer-name buffer))) (buffer-list)))
+  (wc/do-switch-to-mru-buffer buffer-candidates))
+
+
+(defun wc/do-switch-to-mru-buffer (buffer-candidates)
+  (setq buffer-candidate (car buffer-candidates))
+  (setq rest (cdr buffer-candidates))
+  (if (string-match-p current-buffer-name (buffer-name buffer-candidate))
+      (wc/do-switch-to-mru-buffer rest)
+    (if (eq 0 (list-length buffer-candidates))
+        (message "No more buffer candidates.")
+      (if (wc/file-buffer-p buffer-candidate)
+          (switch-to-buffer buffer-candidate)
+        (wc/do-switch-to-mru-buffer rest)))))
 
 
 (defun *-popwin-help-mode-off ()
