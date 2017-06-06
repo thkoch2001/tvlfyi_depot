@@ -244,8 +244,6 @@
               ("C-l" . evil-window-right)
               ("C-k" . evil-window-up)
               ("C-j" . evil-window-down)
-              ("C-c" . term-interrupt-subjob)
-
 
               :map evil-normal-state-map
               ("<return>" . nil)
@@ -322,18 +320,14 @@
     "d" 'dired-jump
     "D" 'projectile-dired
     "q" 'kill-this-buffer
-    "h" 'evil-window-left
+    "h" 'help
     "i" 'helm-semantic-or-imenu
-    "l" 'evil-window-right
-    "k" 'evil-window-up
-    "j" 'evil-window-down
     "b" 'helm-mini
     "T" 'alchemist-mix-test-at-point
     "B" 'alchemist-mix-test-this-buffer
     "L" 'alchemist-mix-rerun-last-test
     "g" 'magit-status
-    "z" 'wc/projectile-shell-pop
-    ))
+    "z" 'wc/projectile-shell-pop))
 
 
 ;; Evil Match-it

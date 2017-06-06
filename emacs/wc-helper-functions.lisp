@@ -1,12 +1,32 @@
 (defun wc/projectile-shell-pop ()
   "Opens `ansi-term' at the project root according to Projectile."
   (interactive)
-  (let ((default-directory (projectile-project-root)))
-    (if (get-buffer "*ansi-term*")
-        (switch-to-buffer "*ansi-term*")
-      (ansi-term "/bin/zsh"))
-    (term-send-string (terminal) (format "cd '%s'\n" default-directory))
-    (get-buffer-process "*ansi-term*")))
+  (let* ((project-name (projectile-project-root))
+         (default-directory project-name)
+         (buffer-name (format "ansi-term <%s>" project-name)))
+    (if (get-buffer buffer-name)
+        (switch-to-buffer buffer-name)
+      (ansi-term "/bin/zsh" buffer-name))))
+
+
+(defun wc/ansi-term-project-p (input)
+  (string-match-p "*ansi-term <[^>]+>*" input))
+
+
+(defun wc/list-project-terminals ()
+  "Returns a list of ansi-term buffers with associated projects."
+  (interactive)
+  (let ((buffer-names (mapcar 'buffer-name (buffer-list))))
+    (remove-if-not #'wc/ansi-term-project-p buffer-names)))
+
+
+(defun wc/open-terminals ()
+  "Lists active terminal buffers."
+  (interactive)
+  (helm :sources (helm-build-in-buffer-source "test1"
+                 :data (wc/list-project-terminals)
+                 :action 'switch-to-buffer)
+      :buffer "*helm projectile terminals*"))
 
 
 (defun wc/shell-history ()
@@ -71,6 +91,14 @@
      (lookup-key (current-global-map) binding)))
 
 
+(defun wc/focus-term-at-bottom ()
+  "Moves term to the bottom of the page on insert mode."
+  (interactive)
+  (end-of-buffer)
+  (evil-insert-state)
+  (term-send-raw-string "\b"))
+
+
 (defun wc/bootstrap-ansi-term ()
   "Custom `ansi-term' configuration."
   (interactive)
@@ -81,6 +109,9 @@
   (local-set-key (kbd "C-k") 'evil-window-up)
   (local-set-key (kbd "C-j") 'evil-window-down)
   (wc/expose-global-binding-in-term (kbd "M-x"))
+  (evil-define-key 'normal term-raw-map
+    (kbd "C-c") 'term-interrupt-subjob
+    (kbd "i") 'wc/focus-term-at-bottom)
   (define-key term-raw-map (kbd "C-r") 'wc/helm-shell-history)
   (define-key term-raw-map (kbd "M-:") 'eval-expression)
   (define-key term-raw-map (kbd "M-j") 'wc/helm-autojump)
