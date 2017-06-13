@@ -1,0 +1,7 @@
+#!/bin/sh
+
+file=$(mktemp -t "$USER-"XXXXXXXX.emacs-pager) || exit 127
+trap 'rm -f "$file"' EXIT
+trap 'exit 255' HUP INT QUIT TERM
+cat "$@" >"$file"
+emacsclient -e "(wc/open-in-pager \"$file\")"

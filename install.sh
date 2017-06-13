@@ -1,5 +1,9 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-# install brew and its packages
-. ./install_brew.sh
 
+# install custom bin/ executables to $HOME/bin
+source $HOME/pc_settings/bins/setup_bins.sh
+
+
+# symlink config files
+source $HOME/pc_settings/configs/setup_configs.sh

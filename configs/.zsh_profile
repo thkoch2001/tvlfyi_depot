@@ -24,10 +24,10 @@ echo "Welcome back, $USER"
 # display the space available on each mounted Volume
 df -hl
 
-# use vi bindings for terminal input
-# set -o vi
+
 # use emacs bindings (default) for terminal input
 set -o emacs
+
 
 # aliases
 source $HOME/pc_settings/aliases.sh
@@ -37,6 +37,9 @@ source $HOME/pc_settings/functions/index.sh
 
 # setup keybindings for history functions
 source $HOME/pc_settings/scripts/setup_keybindings.sh
+
+# setup emacs + shell configuration
+source $HOME/pc_settings/emacs/index.sh
 
 
 # BEGIN: bindkeys
