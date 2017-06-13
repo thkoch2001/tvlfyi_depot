@@ -19,6 +19,7 @@ source $HOME/pc_settings/functions/history_functions.sh
 # custom functions to work with vim
 source $HOME/pc_settings/functions/vim_functions.sh
 
+
 # generates placeholder content for FE work
 function lorem {
     text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
@@ -49,4 +50,3 @@ function is_online {
     return 1
   fi
 }
-

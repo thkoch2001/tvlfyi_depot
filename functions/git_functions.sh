@@ -4,6 +4,17 @@ function wgbranch {
 }
 
 
+# Outputs staged, unstaged, untracked files
+# Similar to `git status` output but without the cruft
+function wg-git-changed-files {
+    tracked_staged=$(git diff --name-only --staged)
+    tracked_unstaged=$(git diff --name-only)
+    untracked_unstaged=$(git ls-files --others --exclude-standard)
+
+    echo "${tracked_staged}\n${tracked_unstaged}\n${untracked_unstaged}"
+}
+
+
 # git status "plumbing" version
 # Useful for piping into grep -> xargs git add
 function wgst {
@@ -91,7 +102,7 @@ function wgfcheckout {
 }
 
 
-# View an author's work within a specified date range. 
+# View an author's work within a specified date range.
 function wgviewcommits {
   author=$([ -z "$1" ] && echo "William Carroll" || echo "$1")
   todays_date=$(date +'%Y-%m-%d')
@@ -100,4 +111,3 @@ function wgviewcommits {
   git log --all --author="${author}" --after="${date} 00:00" \
         --before="${date} 23:59"
 }
-

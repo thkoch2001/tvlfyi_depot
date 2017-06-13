@@ -31,12 +31,14 @@ alias wdirs='dirs | tr " " "\n" | sort -r'
 # GitHub integration
 alias git=hub
 
+
 # Git aliases
 # List MRU branches
 git config --global alias.recent 'for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"'
 
 # List today's work
 git config --global alias.today 'log --since=00:00:00 --all --no-merges --oneline --author="$(git config --get user.email)"'
+
 
 # git commit --amend --no-edit
 alias gcan='git commit --amend --no-edit'
