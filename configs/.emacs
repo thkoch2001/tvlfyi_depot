@@ -32,7 +32,7 @@
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (markdown-mode yaml-mode haskell-mode color-theme-sanityinc-tomorrow graphql-mode flycheck-elm popup-kill-ring green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm magit dockerfile-mode elm-mode ack)))
+    (git markdown-mode yaml-mode haskell-mode color-theme-sanityinc-tomorrow graphql-mode flycheck-elm popup-kill-ring green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(popwin:special-display-config
@@ -88,6 +88,13 @@
  '(hl-line ((t (:inherit nil)))))
 
 
+;; Avoid re-read from disk prompt after switching git branches
+(global-auto-revert-mode t)
+
+
+;; server stuff
+(server-start)
+
 
 ;; Turn off line-wrapping (default)
 (set-default 'truncate-lines t)
@@ -111,6 +118,11 @@
   :ensure t
   :config
   (powerline-default-theme))
+
+
+;; Git client
+(use-package git
+  :ensure t)
 
 
 ;; Load custom Emacs functions
@@ -161,12 +173,6 @@
   :ensure t
   :init
   (use-package doom-nlinum))
-
-;; Magit Settings
-(use-package magit
-  :ensure t
-  :bind (("C-x g" . magit-status)
-         ("C-x M-g" . magit-dispatch-popup)))
 
 
 ;; View stream of Emacs commands
@@ -228,7 +234,7 @@
 
               :map evil-motion-state-map
               ("<return>" . nil)
-              ("<tab>" . nil)
+              ([tab] . nil)
               ("SPC" . nil)
               ("M-." . nil)
 
@@ -248,7 +254,7 @@
 
               :map evil-normal-state-map
               ("<return>" . nil)
-              ("<tab>" . nil)
+              ([tab] . nil)
               ("K" . nil)
               ("M-." . nil)
               ("s" . nil)
@@ -327,7 +333,6 @@
     "T" 'alchemist-mix-test-at-point
     "B" 'alchemist-mix-test-this-buffer
     "L" 'alchemist-mix-rerun-last-test
-    "g" 'magit-status
     "z" 'wc/projectile-shell-pop))
 
 
@@ -399,7 +404,7 @@
               ("j" . next-line)
               ("k" . previous-line)
               ("<return>" . neotree-enter)
-              ("<tab>" . neotree-enter)
+              ([tab] . neotree-enter)
               ("D" . neotree-delete-node)
               ("R" . neotree-rename-node)
               ("c" . neotree-create-node)
@@ -432,9 +437,14 @@
          ("M-x" . helm-M-x)
          ("M-y" . helm-show-kill-ring)
          ("C-x b" . helm-mini)
+
          :map helm-map
-         ("TAB" . helm-execute-persistent-action)
+         ([backtab] . helm-previous-source)
+         ([tab] . helm-next-source)
+         ("C-j" . helm-next-line)
+         ("C-k" . helm-previous-line)
          ("C-z" . helm-select-action)
+
          :term-raw-map
          ("M-x" . helm-M-x))
   :init
