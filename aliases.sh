@@ -39,9 +39,11 @@ git config --global alias.recent 'for-each-ref --count=10 --sort=-committerdate 
 # List today's work
 git config --global alias.today 'log --since=00:00:00 --all --no-merges --oneline --author="$(git config --get user.email)"'
 
-
 # git commit --amend --no-edit
 alias gcan='git commit --amend --no-edit'
 
 # git commit --amend --no-edit
 alias gpf='git push --force'
+
+# git commit --amend --no-edit
+alias gds='git diff --staged'
