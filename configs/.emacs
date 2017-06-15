@@ -278,8 +278,7 @@
               :map evil-ex-map
               ("tb" . alchemist-test-this-buffer)
               ("tap" . alchemist-test-at-point)
-              ("lt" . alchemist-mix-rerun-last-test)
-              )
+              ("lt" . alchemist-mix-rerun-last-test))
   :init
   (setq evil-emacs-state-cursor '("VioletRed3" box))
   (setq evil-normal-state-cursor '("DeepSkyBlue2" box))
@@ -358,8 +357,8 @@
 ;; Flycheck
 (use-package flycheck
   :ensure t
-  :config
-  (setq flycheck-display-errors-function 'ignore))
+  :config)
+  ;; (setq flycheck-display-errors-function 'ignore))
 
 
 ;; Flycheck Credo Settings
@@ -452,7 +451,9 @@
   (setq helm-recentf-fuzzy-match t)
   (setq helm-semantic-fuzzy-match t)
   (setq helm-imenu-fuzzy-match t)
-  (setq helm-locate-fuzzy-match t))
+  (setq helm-locate-fuzzy-match t)
+  :config
+  (load "~/.emacs.d/wc-helm-functions.lisp"))
 
 
 ;; Helm Projectile Settings
