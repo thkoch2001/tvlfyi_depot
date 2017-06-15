@@ -7,11 +7,23 @@ function wgbranch {
 # Outputs staged, unstaged, untracked files
 # Similar to `git status` output but without the cruft
 function wg-git-changed-files {
-    tracked_staged=$(git diff --name-only --staged)
-    tracked_unstaged=$(git diff --name-only)
-    untracked_unstaged=$(git ls-files --others --exclude-standard)
+  tracked_staged=$(wg-diff-tracked-staged)
+  tracked_unstaged=$(wg-diff-tracked-unstaged)
+  untracked_unstaged=$(wg-diff-untracked-unstaged)
 
-    echo "${tracked_staged}\n${tracked_unstaged}\n${untracked_unstaged}"
+  echo "${tracked_staged}\n${tracked_unstaged}\n${untracked_unstaged}"
+}
+
+function wg-diff-tracked-staged {
+  git --no-pager diff --name-only --staged
+}
+
+function wg-diff-tracked-unstaged {
+  git --no-pager diff --name-only
+}
+
+function wg-diff-untracked-unstaged {
+  git ls-files --others --exclude-standard
 }
 
 
