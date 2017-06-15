@@ -1,6 +1,41 @@
+(defun wc/edit-file-in-emacs (file)
+  "Edits a file in a buffer in Emacs. On :wq, the buffer is deleted and the previous term session restored."
+  (find-file file)
+  (quick-edit-file-mode))
+
+
 (defun wc/open-in-pager (file)
+  "Opens a file in a simulated pager in emacs."
   (find-file file)
   (emacs-pager-mode))
+
+
+(defun wc/write-quit-kill-buffer ()
+  "Writes, quits, kills a buffer."
+  (interactive)
+  (save-buffer)
+  (kill-this-buffer))
+
+
+(defvar quick-edit-file-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "q") 'wc/write-quit-kill-buffer)
+    map)
+  "Keymap for emacs quick-edit file mode.")
+
+
+(define-derived-mode quick-edit-file-mode fundamental-mode "QuickEdit"
+  "Mode quickly editing files."
+  (setq-local make-backup-files nil)
+  (setq buffer-name "*quick-edit*"))
+
+
+(defun wc/quick-edit-evil-quit (old-fun &rest args)
+  (if (eq major-mode 'quick-edit-file-mode)
+      (wc/write-quit-kill-buffer)
+    (apply old-fun args)))
+
+(advice-add #'evil-quit :around #'wc/quick-edit-evil-quit)
 
 
 (defvar emacs-pager-mode-map
@@ -53,24 +88,6 @@
     (remove-if-not #'wc/ansi-term-project-p buffer-names)))
 
 
-(defun wc/open-terminals ()
-  "Lists active terminal buffers."
-  (interactive)
-  (helm :sources (helm-build-in-buffer-source "test1"
-                 :data (wc/list-project-terminals)
-                 :action 'switch-to-buffer)
-      :buffer "*helm projectile terminals*"))
-
-
-(defun wc/git-changed-files ()
-  "Lists active terminal buffers."
-  (interactive)
-  (helm :sources (helm-build-in-buffer-source "test1"
-                 :data ((lambda () (shell-command-to-string "wc-git-changed-files")))
-                 :action 'term-send-raw-string)
-      :buffer "*helm git changed file*"))
-
-
 (defun wc/shell-history ()
   (setq history (shell-command-to-string "history"))
   (split-string history "\n"))
@@ -81,50 +98,14 @@
   (split-string branches "\n"))
 
 
-(defun wc/helm-git-branches ()
-  "Reverse-I search using Helm."
-  (interactive)
-  (helm :sources (helm-build-in-buffer-source "test1"
-                 :data (wc/git-branches)
-                 :action 'wc/handle-branch)
-      :buffer "*helm git branches*"))
-
-
 (defun wc/autojump-directories ()
   (setq directories (shell-command-to-string "j -s | awk '{ if($2 ~ /^\\// && $1 != \"data:\") print;}' | sort -rn | head -n 100 | awk '{print $2}'"))
   (split-string directories "\n"))
 
 
-(defun wc/helm-autojump ()
-  "Helm interface to autojump."
-  (interactive)
-  (helm :sources (helm-build-in-buffer-source "test1"
-                 :data (wc/autojump-directories)
-                 :action (lambda (path) (wc/exec-cmd (format "cd %s" path))))
-      :buffer "*helm git branches*"))
-
-
 (defun wc/handle-branch (branch)
   (setq action "git diff")
   (term-send-raw-string (format "%s %s" action branch)))
-
-
-(defun wc/helm-shell-history ()
-  "Reverse-I search using Helm."
-  (interactive)
-  (helm :sources (helm-build-in-buffer-source "test1"
-                 :data (wc/shell-history)
-                 :action 'wc/exec-cmd)
-      :buffer "*helm shell history*"))
-
-
-(defun wc/helm-ctrl-t-find-files ()
-  "Fuzzily searches files within a directory."
-  (interactive)
-  (helm :sources (helm-build-in-buffer-source "test1"
-                 :data (shell-command-to-string "ag --hidden --ignore .git -l -g \"\"")
-                 :action 'term-send-raw-string)
-      :buffer "*helm CTRL_T find files *"))
 
 
 (defun wc/exec-cmd (cmd)
