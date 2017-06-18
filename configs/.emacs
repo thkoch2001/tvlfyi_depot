@@ -221,9 +221,15 @@
 
 ;; Dired Settings
 (use-package dired
+  :init
+  (load "~/.emacs.d/wc-dired-functions.lisp")
   :bind (:map dired-mode-map
+              ("e" . wdired-change-to-wdired-mode)
               ("c" . find-file)
-              ("K" . dired-up-directory)))
+              ("RET" . dired-find-alternate-file)
+              ("^" . wc/dired-up-directory))
+  :config
+  (setq wdired-allow-to-change-permissions t))
 
 
 ;; Evil Settings
@@ -549,3 +555,4 @@
 (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
 (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
 (put 'narrow-to-region 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
