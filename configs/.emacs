@@ -294,9 +294,12 @@
   (setq evil-insert-state-cursor '("VioletRed3" bar))
   (setq evil-replace-state-cursor '("VioletRed3" bar))
   (setq evil-operator-state-cursor '("VioletRed3" hollow))
+
   (global-evil-matchit-mode t)
   (global-evil-surround-mode t)
-  (global-evil-leader-mode t))
+  (global-evil-leader-mode t)
+  :config
+  (evil-ex-define-cmd (kbd "w") 'save-buffer-always))
 
 
 ;; Hack at the moment for extending the behavior of the jump to mark command
