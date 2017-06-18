@@ -512,10 +512,10 @@
   (exec-path-from-shell-initialize))
 
 
-;; Emacs backup / autosave files
-;; (setq-default make-backup-files nil)
-(setq backup-directory-alist `(("." . "~/.emacs-tmp")))
-(setq auto-save-file-name-transforms `((".*" "~/.emacs-tmp/" t)))
+;; Emacs autosave, backup, interlocking files
+(setq auto-save-default nil)
+(setq make-backup-files nil)
+(setq create-lockfiles nil)
 
 
 ;; Automatically follow symlinks
