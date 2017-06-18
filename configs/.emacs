@@ -96,6 +96,10 @@
 (server-start)
 
 
+;; File extensions and their associated major modes
+(add-to-list 'auto-mode-alist '("\\.zsh_profile\\'" . shell-script-mode))
+
+
 ;; Turn off line-wrapping (default)
 (set-default 'truncate-lines t)
 (setq truncate-partial-width-windows nil)
