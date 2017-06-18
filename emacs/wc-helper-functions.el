@@ -135,7 +135,6 @@
   "Custom `ansi-term' configuration."
   (interactive)
   (goto-address-mode t)
-  (linum-mode nil)
   (local-set-key (kbd "C-h") 'evil-window-left)
   (local-set-key (kbd "C-l") 'evil-window-right)
   (local-set-key (kbd "C-k") 'evil-window-up)

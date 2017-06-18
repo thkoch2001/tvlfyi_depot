@@ -32,7 +32,7 @@
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (git markdown-mode yaml-mode haskell-mode color-theme-sanityinc-tomorrow graphql-mode flycheck-elm popup-kill-ring green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm dockerfile-mode elm-mode ack)))
+   (linum-off git markdown-mode yaml-mode haskell-mode color-theme-sanityinc-tomorrow graphql-mode flycheck-elm popup-kill-ring green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(popwin:special-display-config
@@ -118,6 +118,10 @@
   (balance-windows))
 
 
+;; Extend load-path
+(add-to-list 'load-path "~/.emacs.d/wc-downloads")
+
+
 ;; Smart Mode Line
 (use-package smart-mode-line
   :ensure t
@@ -132,7 +136,7 @@
 
 
 ;; Load custom Emacs functions
-(load "~/.emacs.d/wc-helper-functions.lisp")
+(load "~/.emacs.d/wc-helper-functions.el")
 
 
 ;; ERC configuration (IRC in Emacs)
@@ -146,7 +150,17 @@
 (fringe-mode 0)
 
 
-(setq linum-format " %d  ")
+;; Linum
+(use-package linum
+  :init
+  (setq linum-disabled-modes-list '(term-mode dired-mode Man-mode))
+  :config
+  (defun linum-on ()
+    (if (memq major-mode linum-disabled-modes-list)
+        (linum-mode -1)
+      (linum-mode nil)))
+  (setq linum-format " %d  ")
+  (global-linum-mode t))
 
 
 ;; Command Log Mode
@@ -208,13 +222,7 @@
   (setq explicit-shell-file-name "/bin/zsh")
   :bind (("C-v" . wc/ansi-term-paste))
   :config
-  (add-hook 'term-mode-hook 'wc/bootstrap-ansi-term)
-  (linum-mode nil))
-
-
-;; Disable linum-mode in terminal
-(add-hook 'after-change-major-mode-hook
-          '(lambda () (linum-mode (if (equal major-mode 'term-mode) 0 1))))
+  (add-hook 'term-mode-hook 'wc/bootstrap-ansi-term))
 
 
 ;; Projectile Settings
@@ -226,7 +234,7 @@
 ;; Dired Settings
 (use-package dired
   :init
-  (load "~/.emacs.d/wc-dired-functions.lisp")
+  (load "~/.emacs.d/wc-dired-functions.el")
   :bind (:map dired-mode-map
               ("e" . wdired-change-to-wdired-mode)
               ("c" . find-file)
@@ -403,9 +411,7 @@
   :config
   (setq alchemist-mix-env "prod")
   (setq alchemist-goto-elixir-source-dir "~/source_code/elixir/")
-  (setq alchemist-goto-erlang-source-dir "~/source_code/otp/")
-  :init
-  (linum-mode))
+  (setq alchemist-goto-erlang-source-dir "~/source_code/otp/"))
 
 
 (add-hook 'erlang-mode-hook 'wc/custom-erlang-mode-hook)
@@ -468,7 +474,7 @@
   (setq helm-imenu-fuzzy-match t)
   (setq helm-locate-fuzzy-match t)
   :config
-  (load "~/.emacs.d/wc-helm-functions.lisp"))
+  (load "~/.emacs.d/wc-helm-functions.el"))
 
 
 ;; Helm Projectile Settings
@@ -494,7 +500,6 @@
 (add-hook 'after-init-hook 'evil-mode)
 (add-hook 'after-init-hook 'global-whitespace-mode)
 (add-hook 'after-init-hook 'global-hl-line-mode)
-(add-hook 'after-init-hook 'global-linum-mode)
 (add-hook 'after-init-hook 'global-flycheck-mode)
 (add-hook 'after-init-hook 'global-company-mode)
 (add-hook 'after-init-hook 'projectile-mode)
