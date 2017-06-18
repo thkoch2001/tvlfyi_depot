@@ -11,7 +11,7 @@ fi
 if [ -n "$INSIDE_EMACS" ]; then
     export EDITOR="edit-file-in-emacs.sh"
 else
-    export EDITOR=$(which vim)
+    export EDITOR="command nvim"
 fi
 
 
@@ -19,7 +19,7 @@ vim () {
     if [ -n "$INSIDE_EMACS" ]; then
         emacsclient -e "(find-file-other-window \"$1\")"
     else
-        eval "$EDITOR \"$1\""
+        nvim "$1"
     fi
 }
 
