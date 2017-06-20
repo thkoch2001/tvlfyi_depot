@@ -1,1 +1,1 @@
-xset r rate 150 20
+startkde
