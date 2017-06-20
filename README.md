@@ -2,9 +2,46 @@
 
 I'm documenting this primarily for personal use. This reposity contains shell configs, vim configs, emacs configs, a list of commonly used applications, and other items.
 
-Ironically, I prefer to use a Mac as my personal computer, so hopefully the name, `pc_settings` isn't misleading.
-
 The overall goal of this repository is to reduce the time it takes to adopt a new computer and equip it with the necessary tooling to do meaningful work.
+
+Ironically, I prefer to use a Mac or a Linux as my personal computer, so hopefully the connotations associated with, `PC` aren't misleading.
+
+
+# GnuPG
+
+  1. Download public key from keyserver
+  2. Transfer backed-up private key information from secure disk
+  3. Create `[E]` encrypting and `[S]` signing subkeys for personal computer
+
+## Commentary
+
+By default `gpg2` interfaces with `gpg-agent`. `gpg` does not unless `--use-agent` is specified.
+I suggest using `gpg2`, but if you must use `gpg`, add the following entry to `~/.gnupg/gpg.conf`:
+
+```
+use-agent
+```
+
+## GnuPG + Git
+
+  1. Register newly created `[S]` signing subkey as `signingkey`
+  2. Enforce commit-signing
+  3. Opt into `gpg2` usage
+
+```bash
+$ git config --global user.signingkey <SIGNING_KEY>
+$ git config --global commit.gpgsign true
+$ git config --global gpg.program gpg2
+```
+
+## GnuPG + GPG-Agent
+
+Setup `gpg-agent` to use password caching by adding the following entries to `~/.gnupg/gpg-agent.conf`:
+
+```
+default-cache-ttl 300
+max-cache-ttl 3600
+```
 
 
 # Neovim
@@ -28,7 +65,6 @@ At each step of the way, test TrueColor using the following shell pipeline (hint
 ```bash
 $ curl https://raw.githubusercontent.com/JohnMorales/dotfiles/master/colors/24-bit-color.sh | bash
 ```
-
 
 * Terminal: recent versions of iTerm 2 should support TrueColor
 * Tmux: versions 2.2 and after should support TrueColor
@@ -65,54 +101,32 @@ $ tic ~/pc_settings/configs/tmux-256color-italic
 ```
 
 
-## Ligature Support
-
-To support ligatures make sure Hasklig is installed (link at the bottom). Ensure that you are using an iTerm 2 build that supports ligatures. With both of these tasks completed, ligatures should function in Neovim.
-
-
-### Commonly used applications
+## Commonly used applications (Mac)
 * Emacs OS X - text editor
-* sublime text - text editor
-* webstorm - web IDE
-* pycharm - python IDE
 * dash - provides quick access to offline documentation (use with Alfred)
 * Alfred - replaces macOS Spotlight and integrates with external Apps like Dash
-* iterm - substitute for Terminal application
-* homebrew - necessary for procuring shell applications
-* spectacle - resize and move your windows with keyboard shortcuts
-* iterm - substitute for Terminal application
-* Fish Shell - a more modern alternative to Bash or Zsh
+* iTerm 2 - substitute for standard `Terminal.app` that ships with OS X
+* homebrew - CLI for procuring third-party applications
+* slate.js - resize and move your windows with keyboard shortcuts
 * oh my zsh - a full suite of z-shell extensions
 * docker - for running containers and virtual environments
-* mou - markdown editor
 * f.lux - modulates the blue amount from the screen throughout the day
 
-### Sublime Text Packages
-* SublimeLinter - lints files
-* SublimeLinter-contrib-eslint - lints using eslint
-* Oceanic Next Theme - buffer and editor theme
-* Vintageous - extended Vim key-binding support
-* Vintageous-Origami - extended Vintageous support for window pane mgt (ctrl + w) `"vintageous_use_ctrl_keys": true`
-* Origami - dep. of Vintageous-Origami (see above)
-* babel-sublime - supports JSNext features
-* SublimeCodeIntel - robust autocomplete engine
-* PackageResourceViewer - quickly view / edit installed Sublime Packages to enhance customization options
-* SidebarEnhancements - extensions for Sublime Text's sidebar
-* SublimeREPL - convenient REPL for ST
-* FoldComments - collapse comments with keystrokes
 
-#### Sublime preferences (user)
-
-[Preferences.sublime-settings](https://github.com/wpcarro/pc_settings/blob/master/Preferences.sublime-settings)
-
-#### Sublime keybindings (user)
-
-[Default (OSX).sublime-keymap](https://github.com/wpcarro/pc_settings/blob/master/Default%20(OSX).sublime-keymap)
-
-### other notes
+## Commonly used fonts
 * Install [Hasklig](https://github.com/i-tu/Hasklig) for ligature support in Elm, Elixir, etc
-* Install [FiraCode](https://github.com/tonsky/FiraCode/wiki) for ligature support
-* Install [Operator Mono](http://www.typography.com/blog/introducing-operator) for expressive Italics
+* Install [Operator Mono](http://www.typography.com/blog/introducing-operator) for expressive monospaced font
 * Install powerline fonts
+* Install `Neotree` fonts
 * add Adobe Source Code Pro font for shell and text editors
-* increase trackpad / mouse speed to maximum levels
+
+### Ligature Support
+
+To support ligatures make sure Hasklig is installed (link at the bottom). Ensure that you are using an terminal emulator that supports ligatures. With both of these tasks completed, ligatures should function in Neovim.
+
+
+## Miscellaneous notes
+* Map `<CAPS_LOCK>` key to `<ESC>`
+* Increase key-repeat rate
+* Decrease key-repeat-delay
+* Increase trackpad / mouse speed
