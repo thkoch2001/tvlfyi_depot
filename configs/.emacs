@@ -32,7 +32,7 @@
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-   (linum-off git markdown-mode yaml-mode haskell-mode color-theme-sanityinc-tomorrow graphql-mode flycheck-elm popup-kill-ring green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm dockerfile-mode elm-mode ack)))
+    (dired+ linum-off git markdown-mode yaml-mode haskell-mode color-theme-sanityinc-tomorrow graphql-mode flycheck-elm popup-kill-ring green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(popwin:special-display-config
@@ -130,6 +130,11 @@
   (smart-mode-line-enable))
 
 
+;; Nyan cat
+(use-package nyan-mode
+  :ensure t)
+
+
 ;; Git client
 (use-package git
   :ensure t)
@@ -153,10 +158,12 @@
 ;; Linum
 (use-package linum
   :init
-  (setq linum-disabled-modes-list '(term-mode dired-mode Man-mode))
+  (setq linum-disabled-modes-list '(term-mode dired-mode Man-mode org-mode emacs-pager-mode))
   :config
   (defun linum-on ()
-    (if (memq major-mode linum-disabled-modes-list)
+    (if (or (memq major-mode linum-disabled-modes-list)
+            (minibufferp)
+            (string-match-p "*" (buffer-name)))
         (linum-mode -1)
       (linum-mode nil)))
   (setq linum-format " %d  ")
@@ -220,7 +227,6 @@
   :ensure t
   :init
   (setq explicit-shell-file-name "/bin/zsh")
-  :bind (("C-v" . wc/ansi-term-paste))
   :config
   (add-hook 'term-mode-hook 'wc/bootstrap-ansi-term))
 
@@ -242,6 +248,13 @@
               ("^" . wc/dired-up-directory))
   :config
   (setq wdired-allow-to-change-permissions t))
+
+
+;; Dired-plus
+(use-package dired+
+  :ensure t
+  :init
+  (setq diredp-hide-details-initially-flag nil))
 
 
 ;; Evil Settings
@@ -300,18 +313,20 @@
               ("tap" . alchemist-test-at-point)
               ("lt" . alchemist-mix-rerun-last-test))
   :init
+  (global-evil-matchit-mode t)
+  (global-evil-surround-mode t)
+  (global-evil-leader-mode t)
+  :config
   (setq evil-emacs-state-cursor '("VioletRed3" box))
   (setq evil-normal-state-cursor '("DeepSkyBlue2" box))
   (setq evil-visual-state-cursor '("orange" box))
   (setq evil-insert-state-cursor '("VioletRed3" bar))
   (setq evil-replace-state-cursor '("VioletRed3" bar))
   (setq evil-operator-state-cursor '("VioletRed3" hollow))
-
-  (global-evil-matchit-mode t)
-  (global-evil-surround-mode t)
-  (global-evil-leader-mode t)
-  :config
-  (evil-ex-define-cmd (kbd "w") 'save-buffer-always))
+  (evil-ex-define-cmd (kbd "w") 'save-buffer-always)
+  (add-hook 'prog-mode-hook 'evil-local-mode)
+  (add-hook 'org-mode-hook 'evil-local-mode)
+  (add-hook 'markdown-mode-hook 'evil-local-mode))
 
 
 ;; Hack at the moment for extending the behavior of the jump to mark command
@@ -428,12 +443,7 @@
               ("D" . neotree-delete-node)
               ("R" . neotree-rename-node)
               ("c" . neotree-create-node)
-              ("C-h" . evil-window-left)
-              ("C-l" . evil-window-right)
-              ("C-k" . evil-window-up)
-              ("C-j" . evil-window-down)
-              ("C-p" . helm-ag-neotree-node)
-              )
+              ("C-p" . helm-ag-neotree-node))
   :init
   (hl-line-mode)
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
@@ -453,10 +463,12 @@
 (use-package helm
   :ensure t
   :commands (helm-mode)
-  :bind (
-         ("M-x" . helm-M-x)
+  :bind (("M-x" . helm-M-x)
          ("M-y" . helm-show-kill-ring)
          ("C-x b" . helm-mini)
+         ("C-x f" . helm-projectile-find-file)
+         ("C-x p" . helm-projectile-ag)
+         ("C-x C-f" . helm-find-files)
 
          :map helm-map
          ([backtab] . helm-previous-source)
@@ -474,7 +486,7 @@
   (setq helm-imenu-fuzzy-match t)
   (setq helm-locate-fuzzy-match t)
   :config
-  (load "~/.emacs.d/wc-helm-functions.el"))
+  (load "~/.emacs.d/wc-helm-functions.el")
 
 
 ;; Helm Projectile Settings
@@ -497,7 +509,6 @@
   (setq company-idle-delay 0))
 
 
-(add-hook 'after-init-hook 'evil-mode)
 (add-hook 'after-init-hook 'global-whitespace-mode)
 (add-hook 'after-init-hook 'global-hl-line-mode)
 (add-hook 'after-init-hook 'global-flycheck-mode)
@@ -529,6 +540,13 @@
 
 ;; Commenting / Uncommenting
 (global-set-key (kbd "C-x C-;") 'comment-or-uncomment-region)
+
+
+;; Window movements
+(global-set-key (kbd "C-h") 'windmove-left)
+(global-set-key (kbd "C-l") 'windmove-right)
+(global-set-key (kbd "C-k") 'windmove-up)
+(global-set-key (kbd "C-j") 'windmove-up)
 
 
 ;; Fullscreen settings

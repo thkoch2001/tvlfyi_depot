@@ -135,10 +135,11 @@
   "Custom `ansi-term' configuration."
   (interactive)
   (goto-address-mode t)
-  (local-set-key (kbd "C-h") 'evil-window-left)
-  (local-set-key (kbd "C-l") 'evil-window-right)
-  (local-set-key (kbd "C-k") 'evil-window-up)
-  (local-set-key (kbd "C-j") 'evil-window-down)
+  (define-key term-raw-map (kbd "C-c") 'term-interrupt-subjob)
+  (define-key term-raw-map (kbd "C-h") 'windmove-left)
+  (define-key term-raw-map (kbd "C-l") 'windmove-right)
+  (define-key term-raw-map (kbd "C-k") 'windmove-up)
+  (define-key term-raw-map (kbd "C-j") 'windmove-down)
   (wc/expose-global-binding-in-term (kbd "M-x"))
   (evil-define-key 'normal term-raw-map
     (kbd "i") 'wc/focus-term-at-bottom)
