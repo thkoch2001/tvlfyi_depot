@@ -326,7 +326,9 @@
   (evil-ex-define-cmd (kbd "w") 'save-buffer-always)
   (add-hook 'prog-mode-hook 'evil-local-mode)
   (add-hook 'org-mode-hook 'evil-local-mode)
-  (add-hook 'markdown-mode-hook 'evil-local-mode))
+  (add-hook 'markdown-mode-hook 'evil-local-mode)
+  (add-hook 'text-mode-hook 'evil-local-mode)
+  )
 
 
 ;; Hack at the moment for extending the behavior of the jump to mark command
@@ -486,7 +488,7 @@
   (setq helm-imenu-fuzzy-match t)
   (setq helm-locate-fuzzy-match t)
   :config
-  (load "~/.emacs.d/wc-helm-functions.el")
+  (load "~/.emacs.d/wc-helm-functions.el"))
 
 
 ;; Helm Projectile Settings
