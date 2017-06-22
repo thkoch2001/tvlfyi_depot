@@ -165,7 +165,9 @@
             (minibufferp)
             (string-match-p "*" (buffer-name)))
         (linum-mode -1)
-      (linum-mode nil)))
+      (progn
+        (linum-mode nil)
+        (evil-local-mode))))
   (setq linum-format " %d  ")
   (global-linum-mode t))
 
@@ -328,11 +330,7 @@
   (setq evil-replace-state-cursor '("VioletRed3" bar))
   (setq evil-operator-state-cursor '("VioletRed3" hollow))
   (evil-ex-define-cmd (kbd "w") 'save-buffer-always)
-  (add-hook 'prog-mode-hook 'evil-local-mode)
-  (add-hook 'org-mode-hook 'evil-local-mode)
-  (add-hook 'markdown-mode-hook 'evil-local-mode)
-  (add-hook 'text-mode-hook 'evil-local-mode)
-  )
+  (add-hook 'org-mode-hook 'evil-local-mode))
 
 
 ;; Hack at the moment for extending the behavior of the jump to mark command
