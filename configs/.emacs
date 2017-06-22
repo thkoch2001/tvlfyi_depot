@@ -562,21 +562,26 @@
 
 ;; General Settings
 ;; Hide the menu-bar
-(setq ns-auto-hide-menu-bar t)
+(if (string-equal system-type "gnu/linux") (menu-bar-mode -1)
+  (if (string-equal system-type "darwin") (setq ns-auto-hide-menu-bar t)))
+
 
 ;; Native App Settings
 (tool-bar-mode -1)
 
 ;; Disable GUI scrollbars
 (when (display-graphic-p)
-  (scroll-bar-mode -1)
-  )
+  (scroll-bar-mode -1))
 
 ;; Use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
 
+
 ;; Change font settings
-(add-to-list 'default-frame-alist '(font . "Menlo-12"))
+(if (string-equal system-type "gnu/linux")
+    (add-to-list 'default-frame-alist '(font . "Hack 9"))
+  (if (string-equal system-type "darwin")
+      (add-to-list 'default-frame-alist '(font . "Menlo 12"))))
 
 
 ;; Colorscheme
