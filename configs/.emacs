@@ -242,6 +242,10 @@
   :init
   (load "~/.emacs.d/wc-dired-functions.el")
   :bind (:map dired-mode-map
+              ;; remove bindings that interfere with globally-set windmove bindings
+              ("C-h" . nil)
+              ("C-k" . nil)
+
               ("e" . wdired-change-to-wdired-mode)
               ("c" . find-file)
               ("RET" . dired-find-alternate-file)
@@ -548,7 +552,7 @@
 (global-set-key (kbd "C-h") 'windmove-left)
 (global-set-key (kbd "C-l") 'windmove-right)
 (global-set-key (kbd "C-k") 'windmove-up)
-(global-set-key (kbd "C-j") 'windmove-up)
+(global-set-key (kbd "C-j") 'windmove-down)
 
 
 ;; Fullscreen settings
