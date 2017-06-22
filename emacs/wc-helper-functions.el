@@ -1,3 +1,5 @@
+(require 'cl)
+
 (defun wc/edit-file-in-emacs (file)
   "Edits a file in a buffer in Emacs. On :wq, the buffer is deleted and the previous term session restored."
   (find-file file)
@@ -172,21 +174,6 @@
   (evil-window-down 1))
 
 
-(defun wc/file-buffer-p (buffer-candidate)
-  "Returns t if the buffer argument is backed by a file and is therefore presumably a code buffer."
-  (interactive)
-  (let ((buff-name (buffer-name buffer-candidate))
-        (buff-mode (wc/buffer-major-mode buffer-candidate)))
-    (not (or (string-match-p "^\*.+\*$" buff-name)
-             (string-match-p "^dired-mode$" buff-mode)))))
-
-
-(defun wc/buffer-major-mode (buffer-handle)
-  "Returns a symbol representing the buffer's active major-mode"
-  (interactive)
-  (symbol-name (with-current-buffer buffer-handle major-mode)))
-
-
 (defun wc/switch-to-mru-buffer ()
   "Switches to the most recently used buffer, including visible buffers."
   (interactive)
@@ -199,12 +186,26 @@
   (setq buffer-candidate (car buffer-candidates))
   (setq rest (cdr buffer-candidates))
   (if (string-match-p current-buffer-name (buffer-name buffer-candidate))
-      (wc/do-switch-to-mru-buffer rest)
+      (wc/do-switch-to--buffer rest)
     (if (eq 0 (list-length buffer-candidates))
         (message "No more buffer candidates.")
       (if (wc/file-buffer-p buffer-candidate)
           (switch-to-buffer buffer-candidate)
         (wc/do-switch-to-mru-buffer rest)))))
+
+
+(defun wc/file-buffer-p (buffer-candidate)
+  "Returns t if the buffer argument is backed by a file and is therefore presumably a code buffer."
+  (interactive)
+  (let ((buff-name (buffer-name buffer-candidate))
+        (buff-mode (wc/buffer-major-mode buffer-candidate)))
+    (not (or (string-match-p "*" buff-name)
+             (member buff-mode '(neotree-mode dired-mode))))))
+
+
+(defun wc/buffer-major-mode (buffer-handle)
+  "Returns a buffer's active major-mode."
+  (with-current-buffer buffer-handle major-mode))
 
 
 (defun *-popwin-help-mode-off ()
