@@ -244,10 +244,6 @@
   :init
   (load "~/.emacs.d/wc-dired-functions.el")
   :bind (:map dired-mode-map
-              ;; remove bindings that interfere with globally-set windmove bindings
-              ("C-h" . nil)
-              ("C-k" . nil)
-
               ("e" . wdired-change-to-wdired-mode)
               ("c" . find-file)
               ("RET" . dired-find-alternate-file)
@@ -260,7 +256,13 @@
 (use-package dired+
   :ensure t
   :init
-  (setq diredp-hide-details-initially-flag nil))
+  (setq diredp-hide-details-initially-flag nil)
+  :config
+  ;; remove bindings that interfere with globally-set windmove bindings
+  (define-key dired-mode-map (kbd "C-h") nil)
+  (define-key dired-mode-map (kbd "C-j") nil)
+  (define-key dired-mode-map (kbd "C-k") nil)
+  (define-key dired-mode-map (kbd "C-l") nil))
 
 
 ;; Evil Settings
