@@ -19,7 +19,7 @@ function symlink_configs () {
         echo "$filename: "
 
         if [ -f "${HOME}/${filename}" ] && [ ! -L "${HOME}/${filename}" ]; then
-            echo -n "Backing up ${filename} ... " && \
+            echo -n "Backing up ${filename}... " && \
             mv "${HOME}/${filename}" "${HOME}/${filename}.bak" && \
             echo "Done."
         fi
@@ -31,7 +31,7 @@ function symlink_configs () {
                 echo "Already symlinked but NOT to the proper location. Aborting..."
             fi
         else
-            echo -n "Symlinking to ${filename} ... " && \
+            echo -n "Symlinking to ${filename}... " && \
             ln -s $cf "${HOME}/${filename}" && \
             echo "Done."
         fi
