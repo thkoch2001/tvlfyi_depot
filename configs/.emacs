@@ -369,6 +369,8 @@
   :config
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
+    "[" 'flycheck-previous-error
+    "]" 'flycheck-next-error
     "w" 'toggle-truncate-lines
     "x" 'helm-M-x
     "<SPC>" 'wc/switch-to-mru-buffer
