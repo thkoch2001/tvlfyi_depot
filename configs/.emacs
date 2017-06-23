@@ -334,6 +334,16 @@
   (setq evil-replace-state-cursor '("VioletRed3" bar))
   (setq evil-operator-state-cursor '("VioletRed3" hollow))
   (evil-ex-define-cmd (kbd "w") 'save-buffer-always)
+
+  ;; center search results
+  (defadvice evil-search-next
+      (after center-evil-search-next)
+    (call-interactively 'evil-scroll-line-to-center))
+
+  (defadvice evil-search-previous
+      (after center-evil-search-previous)
+    (call-interactively 'evil-scroll-line-to-center))
+
   (add-hook 'org-mode-hook 'evil-local-mode))
 
 
