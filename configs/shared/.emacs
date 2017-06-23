@@ -246,6 +246,7 @@
   :init
   (load "~/.emacs.d/wc-dired-functions.el")
   :bind (:map dired-mode-map
+              ("C-p" . helm-ag-neotree-node)
               ("e" . wdired-change-to-wdired-mode)
               ("c" . find-file)
               ("RET" . dired-find-alternate-file)
@@ -337,11 +338,11 @@
 
   ;; center search results
   (defadvice evil-search-next
-      (after center-evil-search-next)
+      (after center-evil-search-next activate)
     (call-interactively 'evil-scroll-line-to-center))
 
   (defadvice evil-search-previous
-      (after center-evil-search-previous)
+      (after center-evil-search-previous activate)
     (call-interactively 'evil-scroll-line-to-center))
 
   (add-hook 'org-mode-hook 'evil-local-mode))

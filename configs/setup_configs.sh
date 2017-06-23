@@ -1,62 +1,47 @@
 #!/usr/bin/env bash
 
-
 pc_settings_path="${HOME}/pc_settings"
+configs_dir="${pc_settings_path}/configs"
+shared_configs="${configs_dir}/shared"
+
+if [[  $(uname) == 'Darwin' ]]; then
+    os_specific_configs="${configs_dir}/os_x"
+elif [[ $(uname) == 'Linux' ]]; then
+    os_specific_configs="${configs_dir}/linux"
+fi
 
 
-config_files=( \
-  ".zsh_profile" \
-  ".tmux.conf" \
-  ".ctags" \
-  ".vimrc" \
-  ".emacs" \
-)
+function symlink_configs () {
+    configs_dir=$1
 
+    for cf in $(find $configs_dir -type f -name ".*"); do
+        filename=$(grep -o "[^\/]+$" <<<$cf)
+        echo "$filename: "
 
-for i in {1..5}; do
-    cf="${config_files[i]}"
-    echo "\"${cf}\": "
-
-    if [ -f "${HOME}/${cf}" ] && [ ! -L "${HOME}/${cf}" ]; then
-        echo -n "Backing up ${cf} ... " && \
-        mv "${HOME}/${cf}" "${HOME}/${cf}.bak" && \
-        echo "Done."
-    fi
-
-    if [ -L "${HOME}/${cf}" ]; then
-        if [ $(readlink "${HOME}/${cf}") = "${pc_settings_path}/configs/${cf}" ]; then
-            echo "Already properly symlinked to \"${pc_settings_path}/configs\"."
-        else
-            echo "Already symlinked but NOT to the proper location. Aborting..."
+        if [ -f "${HOME}/${filename}" ] && [ ! -L "${HOME}/${filename}" ]; then
+            echo -n "Backing up ${filename} ... " && \
+            mv "${HOME}/${filename}" "${HOME}/${filename}.bak" && \
+            echo "Done."
         fi
-    else
-        echo -n "Symlinking to ${pc_settings_path}/configs/${cf} ... " && \
-        ln -s "${pc_settings_path}/configs/${cf}" "${HOME}/${cf}" && \
-        echo "Done."
-    fi
-    echo ""
-done
+
+        if [ -L "${HOME}/${filename}" ]; then
+            if [ $(readlink "${HOME}/${filename}") = $cf ]; then
+                echo "Already properly symlinked to ${configs_dir}."
+            else
+                echo "Already symlinked but NOT to the proper location. Aborting..."
+            fi
+        else
+            echo -n "Symlinking to ${filename} ... " && \
+            ln -s $cf "${HOME}/${filename}" && \
+            echo "Done."
+        fi
+        echo ""
+    done
+}
 
 
-# Fish Shell is a special case
-# cf_dir="${HOME}/.configs/fish"
-# cf="config.fish"
+# handle shared configs
+symlink_configs $shared_configs
 
-# if [ -f "${cf_dir}/${cf}" ] && [ ! -L "${cf_dir}/${cf}" ]; then
-#     echo -n "Backing up ${cf} ... " && \
-#     mv "${cf_dir}/${cf}" "${HOME}/${cf}.bak" && \
-#     echo "Done."
-# fi
-
-# if [ -L "${cf_dir}/${cf}" ]; then
-#     if [ $(readlink "${cf_dir}/${cf}") = "${pc_settings_path}/configs/${cf}" ]; then
-#         echo "Already properly symlinked to \"${pc_settings_path}/configs\"."
-#     else
-#         echo "Already symlinked but NOT to the proper location. Aborting..."
-#     fi
-# else
-#     echo -n "Symlinking to ${pc_settings_path}/configs/${cf} ... " && \
-#     ln -s "${pc_settings_path}/configs/${cf}" "${cf_dir}/${cf}" && \
-#     echo "Done."
-# fi
-# echo ""
+# handle os-specific configs
+symlink_configs $os_specific_configs
