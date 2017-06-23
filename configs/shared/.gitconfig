@@ -1,0 +1,12 @@
+[user]
+	name = William Carroll
+	email = wpcarro@gmail.com
+	signingkey = C7A53CC58D3B1F8C
+[alias]
+	recent = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format=\"%(refname:short)\"
+	today = log --since=00:00:00 --all --no-merges --oneline --author=\"$(git config --get user.email)\"
+	changed-files = 
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg2
