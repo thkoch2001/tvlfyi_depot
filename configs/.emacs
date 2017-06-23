@@ -486,7 +486,7 @@
   :bind (("M-x" . helm-M-x)
          ("M-y" . helm-show-kill-ring)
          ("C-x b" . helm-mini)
-         ("C-x f" . helm-projectile-find-file)
+         ("C-x f" . helm-projectile-switch-project)
          ("C-x p" . helm-projectile-ag)
          ("C-x C-f" . helm-find-files)
 
