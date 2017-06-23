@@ -212,7 +212,9 @@
 
 ;; Flycheck Settings
 (use-package flycheck
-  :ensure t)
+  :ensure t
+  :config
+  (setq flycheck-display-errors-delay 0.0))
 
 
 (defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
