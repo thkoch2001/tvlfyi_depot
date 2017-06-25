@@ -1,52 +1,23 @@
 export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/fzf/bin:$HOME/n/bin:$HOME/.cargo/bin
 
 
-# Have zsh export variables for Emacs to track the cwd
-if [ -n "$INSIDE_EMACS" ]; then
-  chpwd() { print -P "\033AnSiTc %d" }
-  print -P "\033AnSiTu %n"
-  print -P "\033AnSiTc %d"
-fi
 
-
-# make vim the default editor for commit messages etc
-export EDITOR=$(which vim)
-
-
-# update prompt to save space
-PS1="${PS1}
-   "
-
-
-echo "Welcome back, $USER"
-
-
-# display the space available on each mounted Volume
-df -hl
+# minimalistic theme
+ZSH_THEME="spaceship"
 
 
 # use emacs bindings (default) for terminal input
 set -o emacs
 
 
-# aliases
 source $HOME/pc_settings/aliases.sh
-
-# functions
 source $HOME/pc_settings/functions/index.sh
-
-# setup keybindings for history functions
 source $HOME/pc_settings/scripts/setup_keybindings.sh
-
-# setup emacs + shell configuration
 source $HOME/pc_settings/emacs/index.sh
 
 
-# BEGIN: bindkeys
 bindkey "^R" history-incremental-search-backward
 
-bindkey -M viins 'jk' vi-cmd-mode
-# END: bindkeys
 
 # export docker env variables
 # re-enable this line when using docker otherwise you will receive
@@ -68,6 +39,7 @@ stty -ixon
 # Allows FZF to search hidden files (excluding .git repository)
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 
 # CTRL-Y - Paste the selected branch(es) into the command line
 __bsel() {
