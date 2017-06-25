@@ -106,3 +106,21 @@ function is_online {
     return 1
   fi
 }
+
+
+function du-it-live () {
+  # live updates the du information for the current directory
+  directory=$1
+
+  while true; do
+    du -hc $directory | tail -n 1 | tr -d '\n' && echo -n ' ' && sleep 0.5
+
+    # elipsis
+    echo -n '.' && sleep 0.5 && 
+    echo -n '.' && sleep 0.5 && 
+    echo -n '.' && sleep 0.5 &&
+
+    # clear the three-dots
+    echo -n '\b\b\b' && echo -n '   ' && echo -n '\r'
+  done
+}
