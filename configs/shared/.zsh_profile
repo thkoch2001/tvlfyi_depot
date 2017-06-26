@@ -1,11 +1,6 @@
 export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/fzf/bin:$HOME/n/bin:$HOME/.cargo/bin
 
 
-
-# minimalistic theme
-ZSH_THEME="spaceship"
-
-
 # use emacs bindings (default) for terminal input
 set -o emacs
 
