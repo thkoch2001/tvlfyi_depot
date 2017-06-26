@@ -1,11 +1,5 @@
 (require 'cl)
 
-(defun wc/edit-file-in-emacs (file)
-  "Edits a file in a buffer in Emacs. On :wq, the buffer is deleted and the previous term session restored."
-  (find-file file)
-  (quick-edit-file-mode))
-
-
 (defun wc/open-in-pager (file)
   "Opens a file in a simulated pager in emacs."
   (find-file file)
@@ -19,25 +13,34 @@
   (kill-this-buffer))
 
 
-(defvar quick-edit-file-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "q") 'wc/write-quit-kill-buffer)
-    map)
-  "Keymap for emacs quick-edit file mode.")
+;; (defun wc/edit-file-in-emacs (file)
+;;   "Edits a file in a buffer in Emacs. On :wq, the buffer is deleted and the previous term session restored."
+;;   (find-file file)
+;;   (quick-edit-file-mode))
 
 
-(define-derived-mode quick-edit-file-mode fundamental-mode "QuickEdit"
-  "Mode quickly editing files."
-  (setq-local make-backup-files nil)
-  (setq buffer-name "*quick-edit*"))
+;; (defvar quick-edit-file-mode-map
+;;   (let ((map (make-sparse-keymap)))
+;;     (define-key map (kbd "q") 'wc/write-quit-kill-buffer)
+;;     map)
+;;   "Keymap for emacs quick-edit file mode.")
 
 
-(defun wc/quick-edit-evil-quit (old-fun &rest args)
-  (if (eq major-mode 'quick-edit-file-mode)
-      (wc/write-quit-kill-buffer)
-    (apply old-fun args)))
+;; (define-derived-mode quick-edit-file-mode fundamental-mode "QuickEdit"
+;;   "Mode quickly editing files."
+;;   (setq-local make-backup-files nil)
+;;   (setq buffer-name "*quick-edit*"))
 
-(advice-add #'evil-quit :around #'wc/quick-edit-evil-quit)
+
+;; (defun wc/quick-edit-evil-quit (old-fun &rest args)
+;;   (if (eq major-mode 'quick-edit-file-mode)
+;;       (wc/write-quit-kill-buffer)
+;;     (apply old-fun args)))
+
+
+;; (defadvice evil-quit
+;;     (around wc/quick-edit-quick activate)
+;;   (wc/quick-edit-evil-quit))
 
 
 (defvar emacs-pager-mode-map
