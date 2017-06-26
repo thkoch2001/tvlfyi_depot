@@ -126,7 +126,8 @@
 (use-package smart-mode-line
   :ensure t
   :config
-  (load-theme 'smart-mode-line-dark)
+  (display-time)
+  (load-theme 'smart-mode-line-respectful)
   (smart-mode-line-enable))
 
 
