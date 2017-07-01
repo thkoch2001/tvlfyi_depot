@@ -4,6 +4,53 @@ function wgbranch {
 }
 
 
+function git-discard {
+  option=$1
+
+  if [[ $option == '' ]]; then
+      echo "Please supply option: --staged, --unstaged, --untracked, or --all"
+  fi
+
+  if [[ $option == '--all' ]]; then
+      git-discard --staged && git-discard --unstaged && git-discard --untracked
+  fi
+
+  if [[ $option == '--staged' ]]; then
+      staged_files=$(git --no-pager diff --name-only --staged)
+
+      echo -n "Discarding staged..." &&
+      git reset HEAD $staged_files >/dev/null &&
+      echo "done."
+  fi
+
+  if [[ $option == '--unstaged' ]]; then
+      unstaged_files=$(git --no-pager diff --name-only)
+
+      echo -n "Discarding unstaged..." &&
+      git checkout -- $unstaged_files >/dev/null
+      echo "done."
+  fi
+
+  if [[ $option == '--untracked' ]]; then
+      untracked_files=$(git ls-files --others --exclude-standard)
+
+      echo -n "Discarding untracked..."
+      for file in $untracked_files; do
+        if [ -f $file ]; then
+            rm $file
+        else
+          rm -rf $file
+        fi
+      done
+      echo "done."
+  fi
+}
+
+
+function git-list {
+}
+
+
 # Outputs staged, unstaged, untracked files
 # Similar to `git status` output but without the cruft
 function wg-git-changed-files {
@@ -81,7 +128,7 @@ function wgfind {
 # wrapper fn for "git checkout" that exports previous branch to env
 function wgcheckout {
   if [ -z $1 ]; then
-    branchname="develop"
+      branchname="develop"
   else
     branchname="$1"
   fi
