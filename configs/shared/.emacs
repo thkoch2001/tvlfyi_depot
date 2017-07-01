@@ -118,8 +118,6 @@
 (set-default 'truncate-lines t)
 (setq truncate-partial-width-windows nil)
 
-(setq css-indent-offset 2)
-(setq js-indent-level 2)
 
 ;; Window Auto-Balancing
 (defadvice split-window-below (after restore-balanace-below activate)
@@ -642,6 +640,12 @@
 
 ;; Line Height
 (setq-default line-spacing 4)
+
+
+;; Default spaces indentation
+(setq css-indent-offset 2)
+(setq js-indent-level 2)
+(setq sh-basic-offset 2)
 
 
 ;; Add transparency
