@@ -130,6 +130,13 @@
 (add-to-list 'load-path "~/.emacs.d/wc-downloads")
 
 
+;; Extend linum to highlight current line numbers
+(use-package hlinum
+  :ensure t
+  :config
+  (hlinum-activate))
+
+
 ;; Smart Mode Line
 (use-package smart-mode-line
   :ensure t
