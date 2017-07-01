@@ -40,12 +40,14 @@
  '(org-fontify-whole-heading-line t)
  '(package-selected-packages
    (quote
-    (nlinum tabbar rainbow-delimiters s font-lock+ f diminish dash avy all-the-icons dired+ linum-off git markdown-mode yaml-mode haskell-mode color-theme-sanityinc-tomorrow graphql-mode flycheck-elm popup-kill-ring green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm dockerfile-mode elm-mode ack)))
+    (swiper ivy nlinum tabbar rainbow-delimiters s font-lock+ f diminish dash avy all-the-icons dired+ linum-off git markdown-mode yaml-mode haskell-mode color-theme-sanityinc-tomorrow graphql-mode flycheck-elm popup-kill-ring green-phosphor-theme green-screen-theme minimal-theme creamsody-theme autothemer solarized-theme avk-emacs-themes github-theme all-the-icons-dired ace-window yasnippet chess synonyms powerline doom-neotree doom-themes persp-mode use-package helm-projectile persp-projectile perspective projectile with-editor helm-core company helm-ag evil-leader flycheck-mix flycheck-elixir evil-matchit typescript-mode evil-surround erlang elixir-mode golden-ratio flycheck-credo flycheck command-log-mode atom-one-dark-theme exec-path-from-shell clues-theme gotham-theme dracula-theme zenburn-theme fill-column-indicator neotree evil iedit vimrc-mode helm-ispell transpose-frame helm-ack nyan-mode alchemist helm dockerfile-mode elm-mode ack)))
  '(popwin-mode t)
  '(popwin:popup-window-height 25)
  '(popwin:special-display-config
    (quote
     (help-mode
+     ("^*helm-.+*$" :regexp t)
+     ("^*helm .+*$" :regexp t)
      ("^*helm-.+*$" :regexp t)
      ("^*helm .+*$" :regexp t)
      ("^*helm-.+*$" :regexp t)
@@ -168,14 +170,23 @@
   (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer))
 
 
+;; Colorized delimiters
+(use-package rainbow-delimiters
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+
 ;; Colorscheme
 (use-package doom-themes
   :ensure t
   :config
   (setq doom-themes-enable-bold nil
         doom-themes-enable-italic nil)
-  (load-theme 'doom-molokai)
-  (doom-themes-neotree-config))
+  (load-theme 'doom-one)
+  (doom-themes-visual-bell-config)
+  (doom-themes-neotree-config)
+  (load "~/.emacs.d/wc-doom-functions.el"))
 
 
 ;; Nyan cat
@@ -237,19 +248,15 @@
 
 ;; All-the-fonts
 (use-package all-the-icons
-  :ensure t)
+  :ensure t
+  :config
+  ;; (all-the-icons-install-fonts)
+  )
 
 
 ;; Thesaurus
 (use-package synonyms
   :ensure t)
-
-
-;; Doom Themes
-(use-package doom-themes
-  :ensure t
-  :init
-  (use-package doom-nlinum))
 
 
 ;; View stream of Emacs commands
@@ -346,7 +353,8 @@
 
               :map evil-normal-state-map
               ("<return>" . nil)
-              ([tab] . nil)
+              ([tab] . tabbar-forward-tab)
+              ([backtab] . tabbar-backward-tab)
               ("K" . nil)
               ("M-." . nil)
               ("s" . nil)
@@ -383,6 +391,7 @@
   (setq evil-replace-state-cursor '("VioletRed3" bar))
   (setq evil-operator-state-cursor '("VioletRed3" hollow))
   (evil-ex-define-cmd (kbd "w") 'save-buffer-always)
+  (evil-ex-define-cmd (kbd "qb") 'kill-this-buffer)
 
   ;; center search results
   (defadvice evil-search-next
@@ -424,6 +433,7 @@
     "x" 'helm-M-x
     "<SPC>" 'wc/switch-to-mru-buffer
     "a" 'ace-delete-window
+    "l" 'global-linum-mode
     "s" 'ace-swap-window
     "n" 'neotree-toggle-project-dir
     "N" 'neotree-reveal-current-buffer
@@ -507,6 +517,8 @@
   :bind (:map neotree-mode-map
               ("j" . next-line)
               ("k" . previous-line)
+              ("g" . beginning-of-buffer)
+              ("G" . end-of-buffer)
               ("<return>" . neotree-enter)
               ([tab] . neotree-enter)
               ("D" . neotree-delete-node)
@@ -540,8 +552,6 @@
          ("C-x C-f" . helm-find-files)
 
          :map helm-map
-         ([backtab] . helm-previous-source)
-         ([tab] . helm-next-source)
          ("C-j" . helm-next-line)
          ("C-k" . helm-previous-line)
          ("C-z" . helm-select-action)
