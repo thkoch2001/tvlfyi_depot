@@ -141,6 +141,15 @@
   (hlinum-activate))
 
 
+;; Tabbed buffer support
+(use-package tabbar
+  :ensure t
+  :config
+  (setq tabbar-hide-header-button t)
+  (setq tabbar-use-images nil)
+  (tabbar-mode))
+
+
 ;; Smart Mode Line
 (use-package smart-mode-line
   :ensure t
