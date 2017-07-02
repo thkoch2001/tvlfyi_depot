@@ -208,6 +208,13 @@
   :ensure t)
 
 
+;; Man configuration
+(define-key Man-mode-map (kbd "j") 'next-line)
+(define-key Man-mode-map (kbd "k") 'previous-line)
+(define-key Man-mode-map (kbd "h") 'backward-char)
+(define-key Man-mode-map (kbd "l") 'forward-char)
+
+
 ;; Git client
 (use-package git
   :ensure t)
