@@ -236,7 +236,8 @@
   (defun linum-on ()
     (if (or (memq major-mode linum-disabled-modes-list)
             (minibufferp)
-            (string-match-p "*" (buffer-name)))
+            (and (string-match-p "*" (buffer-name))
+                 (not (string-match-p "*scratch*" (buffer-name)))))
         (linum-mode -1)
       (progn
         (linum-mode nil)
