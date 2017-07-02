@@ -148,9 +148,20 @@
 ;; Tabbed buffer support
 (use-package tabbar
   :ensure t
+  :init
+  (load "~/.emacs.d/wc-tabbar-functions.el")
   :config
   (setq tabbar-hide-header-button t)
   (setq tabbar-use-images nil)
+
+  (defun wc/conditionally-activate-tabbar ()
+    (if (and (derived-mode-p 'prog-mode)
+             (not (string-match-p "*" (buffer-name))))
+        (tabbar-local-mode -1)
+      (tabbar-local-mode 1)))
+
+  (add-hook 'after-change-major-mode-hook 'wc/conditionally-activate-tabbar)
+
   (tabbar-mode))
 
 
