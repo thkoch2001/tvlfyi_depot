@@ -1,10 +1,13 @@
 # My P(ersonal) C(omputer) Settings
 
-I'm documenting this primarily for personal use. This reposity contains shell configs, vim configs, emacs configs, a list of commonly used applications, and other items.
+I'm documenting this primarily for personal use. This reposity contains shell configs, vim configs,
+emacs configs, a list of commonly used applications, and other items.
 
-The overall goal of this repository is to reduce the time it takes to adopt a new computer and equip it with the necessary tooling to do meaningful work.
+The overall goal of this repository is to reduce the time it takes to adopt a new computer and equip
+it with the necessary tooling to do meaningful work.
 
-Ironically, I prefer to use a Mac or a Linux as my personal computer, so hopefully the connotations associated with, `PC` aren't misleading.
+Ironically, I prefer to use a Mac or a Linux as my personal computer, so hopefully the connotation
+associated with "PCs" as Windows boxes isn't misleading.
 
 
 # Python Scripts or Bash Scripts?
