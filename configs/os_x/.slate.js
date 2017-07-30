@@ -44,6 +44,7 @@ S.bnda({
 // alt + d = focus Dash
 
 var focus_apps = {
+  a: 'Atom',
   h: 'Dash',
   e: 'Emacs',
   t: 'iTerm2',
@@ -52,6 +53,7 @@ var focus_apps = {
   c: 'Google Chrome',
   l: 'LimeChat',
   k: 'Slack',
+  w: 'Wireshark',
 };
 
 
