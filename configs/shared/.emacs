@@ -210,23 +210,17 @@
 
 ;; Nyan cat
 (use-package nyan-mode
-  :ensure t)
 
 
-;; Man configuration
-(define-key Man-mode-map (kbd "j") 'next-line)
-(define-key Man-mode-map (kbd "k") 'previous-line)
-(define-key Man-mode-map (kbd "h") 'backward-char)
-(define-key Man-mode-map (kbd "l") 'forward-char)
-
-
-;; Git client
-(use-package git
-  :ensure t)
-
-
-;; Load custom Emacs functions
-(load "~/.emacs.d/wc-helper-functions.el")
+;; Man page viewing
+(use-package man
+  :bind (:map Man-mode-map
+              ("j" . next-line)
+              ("k" . previous-line)
+              ("h" . backward-char)
+              ("l" . forward-char)
+              ("g" . beginning-of-buffer)
+              ("G" . end-of-buffer)))
 
 
 ;; ERC configuration (IRC in Emacs)
