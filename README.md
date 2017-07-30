@@ -7,6 +7,27 @@ The overall goal of this repository is to reduce the time it takes to adopt a ne
 Ironically, I prefer to use a Mac or a Linux as my personal computer, so hopefully the connotations associated with, `PC` aren't misleading.
 
 
+# Python Scripts or Bash Scripts?
+
+Let me start by saying that I enjoy shell scripting. I even love the spirit of shell scripting: a
+hacker's preferred tool for quickly piecing together logic to make his or her life easier. As a
+staunch supporter of building one's own tools, shell-scripting has been a staple of my programming
+career for multiple years. It is, however, this same hackish spirit of POSIX shell scripting that
+has motivated me to seek more robust tools.
+
+I have decided to switch to Python scripts in lieu of shell scripts to improve the code readability
+and maintainability, and write more powerful cross-platform installation and configuration scripts.
+While I do worry that the switch to Python will eventually dull my knowledge of shell scripts, I
+feel secure for a few reasons. Firstly, Python is widely available on most computers. Secondly, most
+of my day-to-day tasks on the CLI require shell knowledge.
+
+I am reluctant to leave the piping syntax behind, but I am encouraged by third-party Python
+libraries, such as [plumbum](http://plumbum.readthedocs.io/en/latest/), that are attempting to
+provide this syntactic convenience to Python. This should not be seen as my farewell to Bash
+scripting. That is too severe. Instead, I see this as a necessary upgrade for my tooling and my
+foray into writing more sophisticated tools for myself and others.
+
+
 # GnuPG
 
   1. Download public key from keyserver
