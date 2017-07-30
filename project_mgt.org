@@ -1,2 +1,3 @@
 * Roadmap
 ** TODO Replace shell scripts with Python scripts
+** TODO Create `brew cask' install file for OSX GUI applications
