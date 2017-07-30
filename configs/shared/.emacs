@@ -424,13 +424,17 @@
   (global-evil-surround-mode t)
   (global-evil-leader-mode t)
   :config
+
+  (defadvice evil-write (around force-evil-write activate)
+    (set-buffer-modified-p t)
+    (save-buffer))
+
   (setq evil-emacs-state-cursor '("VioletRed3" box))
   (setq evil-normal-state-cursor '("DeepSkyBlue2" box))
   (setq evil-visual-state-cursor '("orange" box))
   (setq evil-insert-state-cursor '("VioletRed3" bar))
   (setq evil-replace-state-cursor '("VioletRed3" bar))
   (setq evil-operator-state-cursor '("VioletRed3" hollow))
-  (evil-ex-define-cmd (kbd "w") 'save-buffer-always)
   (evil-ex-define-cmd (kbd "qb") 'kill-this-buffer)
 
   ;; center search results
