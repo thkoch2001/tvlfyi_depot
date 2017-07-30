@@ -272,15 +272,6 @@
       (message "Could not find git project root."))))
 
 
-(defun save-buffer-always ()
-  "Save the buffer even if it is not modified."
-  (interactive)
-  (set-buffer-modified-p t)
-  (save-buffer))
-(global-set-key (kbd "C-x C-s") nil)
-(global-set-key (kbd "C-x C-s") 'save-buffer-always)
-
-
 ;; Upgrade all packages
 (defun package-upgrade-all ()
   "Upgrade all packages automatically without showing *Packages* buffer."
