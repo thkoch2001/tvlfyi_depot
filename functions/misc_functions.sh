@@ -94,6 +94,13 @@ function wsearchpath {
 }
 
 
+function ff {
+  # finds files smartly; using rg under-the-hood so blacklisted files are ignored
+  glob=$1
+  rg -g "*$glob*" --files
+}
+
+
 # tests an internet connection
 function is_online {
   wget -q --spider "http://google.com"
