@@ -347,6 +347,26 @@
   (define-key dired-mode-map (kbd "C-l") nil))
 
 
+(defun wc/evil-window-split-down ()
+  "Convenience function that does 3 things: 1. creates a horizontal split (downward),2. Center both the previous window and the newly created window,3. Moves (downward) to the newly created window."
+  (interactive)
+  (evil-window-split-down)
+  (call-interactively 'evil-window-up)
+  (call-interactively 'evil-scroll-line-to-center)
+  (call-interactively 'evil-window-down)
+  (call-interactively 'evil-scroll-line-to-center))
+
+
+(defun wc/evil-window-split ()
+  "Convenience function that does 3 things: 1. creates a horizontal split (upward),2. Center both the previous window and the newly created window,3. Moves (upward) to the newly created window."
+  (interactive)
+  (evil-window-split)
+  (call-interactively 'evil-scroll-line-to-center)
+  (call-interactively 'evil-window-down)
+  (call-interactively 'evil-scroll-line-to-center)
+  (call-interactively 'evil-window-up))
+
+
 ;; Evil Settings
 (use-package evil
   :ensure t
@@ -383,15 +403,11 @@
               ("M-." . nil)
               ("s" . nil)
               ("C-p" . nil)
-              ("C-h" . evil-window-left)
-              ("C-l" . evil-window-right)
-              ("C-k" . evil-window-up)
-              ("C-j" . evil-window-down)
               ("g c" . comment-or-uncomment-region)
               ("s h" . evil-window-vsplit)
               ("s l" . evil-window-vsplit-right)
-              ("s k" . evil-window-split)
-              ("s j" . evil-window-split-down)
+              ("s k" . wc/evil-window-split)
+              ("s j" . wc/evil-window-split-down)
               ("H" . evil-first-non-blank)
               ("L" . evil-end-of-line)
               ("<S-left>" . evil-window-increase-width)
