@@ -242,6 +242,8 @@
   :init
   (setq linum-disabled-modes-list '(term-mode dired-mode Man-mode org-mode emacs-pager-mode))
   :config
+  (require 'evil)
+
   (defun linum-on ()
     (if (or (memq major-mode linum-disabled-modes-list)
             (minibufferp)
