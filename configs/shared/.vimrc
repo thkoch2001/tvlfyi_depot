@@ -1,9 +1,3 @@
-" Set shell variable to "sh" if current shell is "fish shell"
-if &shell =~# 'fish$'
-  set shell=sh
-endif
-
-
 " -- BEGIN: Vundle config --
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -378,7 +372,7 @@ nnoremap <Tab> :1bnext<CR>
 nnoremap <S-Tab> :1bprevious<CR>
 
 
-" make Y do what is intuitive given: 
+" make Y do what is intuitive given:
 "   D: deletes until EOL
 "   C: changes until EOL
 "   Y: (should) yank until EOL
@@ -541,4 +535,3 @@ fun! CreateNonExistingDirsAndFile()
   " Write the buffer to the recently created file.
   w
 endfun
-
