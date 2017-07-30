@@ -31,6 +31,63 @@ scripting. That is too severe. Instead, I see this as a necessary upgrade for my
 foray into writing more sophisticated tools for myself and others.
 
 
+# SSH
+
+Here are a few useful tips for working with SSH.
+
+## ssh_config
+
+Instead of creating shell aliases and functions for conveniently accessing remote nodes over SSH,
+edit your `~/.ssh/config` file.
+
+Instead of doing this...
+
+```bash
+$ alias ec2='ssh -i /path/to/identity_file.pem ubuntu@<ec2-instance-public-ip>'
+```
+
+...edit your `~/.ssh/config`:
+
+```
+Host ec2
+ User ubuntu
+ HostName <ec2-instance-public-ip>
+ IdentityFile /path/to/identity_file.pem
+
+# Host * configuration below...
+```
+
+## sshfs
+
+SSHFS enables seamless file transfers from your local machine to a remote machine.
+
+To install, run:
+
+```bash
+$ brew cask install osxfuse
+$ brew install sshfs
+```
+
+Assuming your remote machine is configured in your `~/.ssh/config` (see above), you can mount your
+remote machine's home directory on your local machine like so:
+
+```bash
+$ mkdir ~/ec2
+$ sshfs ec2:/home/ubuntu ~/ec2 -o reconnect,follow_symlinks
+```
+
+Now your remote machine's home directory can be accessed using the `~/ec2` directory. This directory
+can be transparently treated as if it were an ordinary local directory. To illustrate how easy it is
+to use, let's install `Vundle`, a Vim package manager, on our remote machine.
+
+```bash
+$ git clone https://github.com/VundleVim/Vundle.vim.git ~/ec2/.vim/bundle/Vundle.vim
+```
+
+Voila! We now have `Vundle` installed on our ec2 instance without needing to SSH into that machine
+ourselves. That's all there is to it.
+
+
 # GnuPG
 
   1. Download public key from keyserver
