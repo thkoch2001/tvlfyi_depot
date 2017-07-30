@@ -27,3 +27,9 @@ alias gprom="git pull --rebase origin master"
 alias gcan='git commit --amend --no-edit'
 alias gpf='git push --force'
 alias gds='git diff --staged'
+
+
+# elixir-specific aliases
+alias ism='iex -S mix'
+alias tism='MIX_ENV=test iex -S mix'
+alias mdg='mix deps.get'
