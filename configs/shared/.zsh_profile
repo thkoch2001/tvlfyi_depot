@@ -5,6 +5,10 @@ export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/loca
 set -o emacs
 
 
+# iex and erl shared interactive shell history
+export ERL_AFLAGS="-kernel shell_history enabled"
+
+
 source $HOME/pc_settings/aliases.sh
 source $HOME/pc_settings/functions/index.sh
 source $HOME/pc_settings/scripts/setup_keybindings.sh
