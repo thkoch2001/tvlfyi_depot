@@ -531,16 +531,11 @@
 
 ;; Popwin Settings
 (use-package popwin
-  :ensure t)
-
-
-(add-hook 'helm-minibuffer-set-up-hook #'*-popwin-help-mode-off)
-(add-hook 'helm-cleanup-hook #'*-popwin-help-mode-on)
-
-(setq display-buffer-function 'popwin:display-buffer)
-(setq helm-split-window-preferred-function 'ignore)
-(push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
-(push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
+  :ensure t
+  :config
+  (setq display-buffer-function 'popwin:display-buffer)
+  (setq helm-split-window-preferred-function 'ignore)
+  (push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config))
 
 
 ;; Alchemist Settings
