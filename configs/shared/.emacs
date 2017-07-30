@@ -164,7 +164,8 @@
         (tabbar-local-mode -1)
       (tabbar-local-mode 1)))
 
-  (add-hook 'after-change-major-mode-hook 'wc/conditionally-activate-tabbar)
+  (add-hook 'emacs-startup-hook #'wc/conditionally-activate-tabbar)
+  (add-hook 'after-change-major-mode-hook #'wc/conditionally-activate-tabbar)
 
   (tabbar-mode))
 
