@@ -47,7 +47,15 @@ function git-discard {
 }
 
 
-function git-list {
+function wgd {
+  input=$1
+  git diff "./**/*/${input}*"
+}
+
+
+function wga {
+  input=$1
+  git add "./**/*/${input}*"
 }
 
 
