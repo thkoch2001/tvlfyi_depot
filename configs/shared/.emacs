@@ -138,6 +138,10 @@
 (add-to-list 'load-path "~/.emacs.d/wc-downloads")
 
 
+;; Basic functions used within configuration
+(load "~/.emacs.d/wc-helper-functions.el")
+
+
 ;; Extend linum to highlight current line numbers
 (use-package hlinum
   :ensure t
