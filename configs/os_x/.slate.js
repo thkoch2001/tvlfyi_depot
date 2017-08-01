@@ -44,6 +44,7 @@ S.bnda({
 // alt + d = focus Dash
 
 var focus_apps = {
+  1: '1Password',
   a: 'Atom',
   h: 'Dash',
   e: 'Emacs',
