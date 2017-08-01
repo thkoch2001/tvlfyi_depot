@@ -6,6 +6,7 @@
 	recent = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format=\"%(refname:short)\"
 	today = log --since=00:00:00 --all --no-merges --oneline --author=\"$(git config --get user.email)\"
 	changed-files = 
+	conflicts = diff --name-only --diff-filter=U
 [commit]
 	gpgsign = true
 [gpg]

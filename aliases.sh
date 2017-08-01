@@ -21,6 +21,7 @@ command -v tmux >/dev/null && alias tls='tmux list-sessions' || \
 # git-specific aliases
 git config --global alias.recent 'for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"'
 git config --global alias.today 'log --since=00:00:00 --all --no-merges --oneline --author="$(git config --get user.email)"'
+git config --global alias.conflicts 'diff --name-only --diff-filter=U'
 
 alias glp="git log --graph --pretty=format:'%Cred%h%Creset -%Cblue %an %Creset - %C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gprom="git pull --rebase origin master"
