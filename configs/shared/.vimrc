@@ -97,6 +97,9 @@ Plugin 'pelodelfuego/vim-swoop'
 " Fish Shell support
 Plugin 'dag/vim-fish'
 
+" Transparent encryption + decryption
+Plugin 'jamessan/vim-gnupg'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
