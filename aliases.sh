@@ -59,14 +59,17 @@ fi
 
 # git-specific aliases
 git config --global alias.recent 'for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"'
-git config --global alias.today 'log --since=00:00:00 --all --no-merges --oneline --author="$(git config --get user.email)"'
+git config --global alias.yday '! git log --name-only --since=yesterday.midnight --until=today.midnight --author="$(git config --get user.email)"'
 git config --global alias.conflicts 'diff --name-only --diff-filter=U'
+
+alias gyday='git log --name-only --since=yesterday.midnight --until=today.midnight --author="$(git config --get user.email)"'
 
 alias glp="git log --graph --pretty=format:'%Cred%h%Creset -%Cblue %an %Creset - %C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gprom="git pull --rebase origin master"
 alias gcan='git commit --amend --no-edit'
 alias gpf='git push --force'
 alias gds='git diff --staged'
+alias gfx='git commit --fixup'
 
 
 # elixir-specific aliases

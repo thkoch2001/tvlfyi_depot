@@ -4,9 +4,10 @@
 	signingkey = C7A53CC58D3B1F8C
 [alias]
 	recent = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format=\"%(refname:short)\"
-	today = log --since=00:00:00 --all --no-merges --oneline --author=\"$(git config --get user.email)\"
+	today = ! git log --date=relative --since=00:00:00 --all --no-merges --oneline --author=\"$(git config --get user.email)\"
 	changed-files = 
 	conflicts = diff --name-only --diff-filter=U
+	yday = ! git log --name-only --since=yesterday.midnight --until=today.midnight --author=\"$(git config --get user.email)\"
 [commit]
 	gpgsign = true
 [gpg]
@@ -17,3 +18,4 @@
 	default = current
 [rebase]
 	autosquash = true
+	autostash = true
