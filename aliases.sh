@@ -77,3 +77,10 @@ alias m=mix
 alias ism='iex -S mix'
 alias tism='MIX_ENV=test iex -S mix'
 alias mdg='mix deps.get'
+
+
+# docker-specific aliases
+alias dps='docker ps'
+alias drm='docker rm'
+alias drmi='docker rmi'
+alias dsh='docker exec -it /bin/bash'
