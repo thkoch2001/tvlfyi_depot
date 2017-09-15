@@ -182,6 +182,29 @@ $ tic ~/pc_settings/tmux-256color-italic
 ```
 
 
+### Powerline
+
+Install Powerline...
+
+```bash
+$ pip install powerline-status
+```
+
+Install the Powerline fonts...
+
+```bash
+$ hub clone 'powerline/fonts'
+$ cd fonts && ./install.sh && cd ../ && rm -rf fonts
+```
+
+Lastly, ensure that the line in `.tmux.conf` that sources the `powerline.conf` is uncommented:
+
+```
+run-shell "powerline-daemon -q"
+source "/usr/local/lib/python2.7/site-packages/powerline/bindings/tmux/powerline.conf"
+```
+
+
 ## Commonly used applications (Mac)
 * Emacs OS X - text editor
 * dash - provides quick access to offline documentation (use with Alfred)
