@@ -1,4 +1,3 @@
-alias ll="ls -l"
 alias c="clear"
 alias dir='find . -maxdepth 1 -type d -regex "\.\/[^.].+"'
 
@@ -16,6 +15,19 @@ command -v hub >/dev/null && alias git=hub || \
         echo "Missing dependency (hub). Failed to alias git -> hub"
 command -v tmux >/dev/null && alias tls='tmux list-sessions' || \
         echo "Missing dependency (tmux). Failed to alias tls -> tmux list-sessions"
+
+
+# exa-specific aliases
+command -v exa >/dev/null && alias ls='exa' || \
+        echo 'Missing dependency (exa). Failed to alias ls -> exa'
+command -v exa >/dev/null && alias ll='exa -l' || \
+        echo 'Missing dependency (exa). Failed to alias ll -> exa -l' && \
+        alias ll='ls -l' # fallback to ls -l
+command -v exa >/dev/null && alias la='exa -la' || \
+        echo 'Missing dependency (exa). Failed to alias la -> exa -la' && \
+        alias la='ls -la' # fallback to ls -la
+command -v exa >/dev/null && alias lt='exa --tree' || \
+        echo 'Missing dependency (exa). Failed to alias lt -> exa --tree'
 
 
 if command -v kubectl >/dev/null; then
