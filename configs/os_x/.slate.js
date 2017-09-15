@@ -8,10 +8,10 @@ var modal_key = ":alt;shift";
 
 // Configs
 S.cfga({
-  "defaultToCurrentScreen" : true,
-  "secondsBetweenRepeat" : 0.1,
-  "checkDefaultsOnLoad" : true,
-  "focusCheckWidthMax" : 3000
+  defaultToCurrentScreen: true,
+  secondsBetweenRepeat: 0.1,
+  checkDefaultsOnLoad: true,
+  focusCheckWidthMax: 3000,
 });
 
 // Window size /position shortcuts
