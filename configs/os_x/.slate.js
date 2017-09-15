@@ -4,7 +4,7 @@
 // Hotkeys for quickly opening apps & changing window size
 
 
-var modal_key = ":alt";
+var modal_key = ":alt;shift";
 
 // Configs
 S.cfga({
