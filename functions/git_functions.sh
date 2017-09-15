@@ -4,6 +4,25 @@ function wgbranch {
 }
 
 
+# edit git conflicts one-by-one
+function vconflicts() {
+  $EDITOR $(git status --porcelain | awk '/^UU/ { print $2 }')
+}
+
+
+function git-tasks {
+  echo "fix - bug patching"
+  echo "refactor - changing structure; functionality remains unchanged"
+  echo "feat - introducing a new feature"
+  echo "style - updating UI / UX"
+  echo "chore - changing configuration, adding comments, etc"
+  echo "wip - placeholder tag signifying ongoing work"
+  echo "build - updating anything related to building and deploying"
+  echo "deps - updating related to project dependencies"
+  echo "docs - updating related to project documentation"
+}
+
+
 function git-discard {
   option=$1
 
