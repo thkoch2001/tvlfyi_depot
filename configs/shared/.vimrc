@@ -97,6 +97,9 @@ Plugin 'pelodelfuego/vim-swoop'
 " Fish Shell support
 Plugin 'dag/vim-fish'
 
+" Gotham colorscheme
+Plugin 'whatyouhide/vim-gotham'
+
 " Transparent encryption + decryption
 Plugin 'jamessan/vim-gnupg'
 
@@ -120,7 +123,7 @@ set shiftwidth=2
 set background=dark
 
 syntax enable
-colorscheme onedark
+colorscheme gotham
 
 if has('termguicolors')
   set termguicolors
