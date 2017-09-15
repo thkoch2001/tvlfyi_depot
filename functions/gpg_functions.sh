@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+# wip
 function gpg-encrypt-dir() {
     dirname=$1
     echo "Encrypting..."
@@ -8,6 +9,7 @@ function gpg-encrypt-dir() {
 }
 
 
+# wip
 function gpg-decrypt-dir() {
     dirname=$1
     outdir=${dirname%.tar.gz.gpg}
@@ -24,19 +26,23 @@ function gpg-decrypt-dir() {
 }
 
 
-# WIP
+# encrypts a file, appending a .gpg extension
+# deletes the non-encrypted source
 function gpg-encrypt-file() {
     filename=$1
-    echo "Encrypting..."
-    gpg --symmetric $filename
+    echo "Encrypting..." && \
+    gpg --symmetric ${filename} && \
+    rm ${filename} && \
     echo "Done."
 }
 
 
-# WIP
+# decrypts a file
+# deletes the original encrypted file with the .gpg extension
 function gpg-decrypt-file() {
     filename=$1
-    echo "Decrypting..."
-    gpg --decrypt $filename >"${filename%.gpg}"
+    echo "Decrypting..." && \
+    gpg --decrypt ${filename} >"${filename%.gpg}" && \
+    rm ${filename} && \
     echo "Done."
 }
