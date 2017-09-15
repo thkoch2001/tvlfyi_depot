@@ -71,6 +71,9 @@ Plugin 'tpope/vim-surround'
 " Allows Plugins to be repeated with `.` character
 Plugin 'tpope/vim-repeat'
 
+" Pairs of mappings
+Plugin 'tpope/vim-unimpaired'
+
 " Seamlessly navigate Vim and Tmux with similar bindings.
 Plugin 'christoomey/vim-tmux-navigator'
 
