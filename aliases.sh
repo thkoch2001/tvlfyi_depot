@@ -18,6 +18,33 @@ command -v tmux >/dev/null && alias tls='tmux list-sessions' || \
         echo "Missing dependency (tmux). Failed to alias tls -> tmux list-sessions"
 
 
+if command -v kubectl >/dev/null; then
+  # kubernetes aliases
+  alias kpods='kubectl get pods'
+  alias kdeploys='kubectl get deployments'
+
+  # the following functions rely on gcloud being installed
+  if command -v gcloud >/dev/null; then
+    function kedit {
+      deployment=$1
+      kubectl edit deployments $deployment
+    }
+
+    function kswitch {
+      environment=$1
+      gcloud container clusters get-credentials $environment
+    }
+  fi
+
+  # kubernetes functions
+  function kush {
+    name=$1
+    cmd=${2-/bin/bash}
+    kubectl exec -it $name -- $cmd
+  }
+fi
+
+
 # git-specific aliases
 git config --global alias.recent 'for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"'
 git config --global alias.today 'log --since=00:00:00 --all --no-merges --oneline --author="$(git config --get user.email)"'
