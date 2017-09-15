@@ -73,6 +73,7 @@ alias gfx='git commit --fixup'
 
 
 # elixir-specific aliases
+alias m=mix
 alias ism='iex -S mix'
 alias tism='MIX_ENV=test iex -S mix'
 alias mdg='mix deps.get'
