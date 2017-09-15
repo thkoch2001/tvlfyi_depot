@@ -36,8 +36,11 @@ S.bnda({
 
 
 // Moves applications across multiple screens
-// S.bnda('1:ctrl,alt', S.op('throw', { screen: '0', style: 'resize' });
-// S.bnda('2:ctrl,alt', S.op('throw', { screen: '1', style: 'resize' });
+var throwLeft  = slate.operation('throw', {screen: '0', width: 'screenSizeX', height: 'screenSizeY',});
+var throwRight = slate.operation('throw', {screen: '1', width: 'screenSizeX', height: 'screenSizeY',});
+
+slate.bind('1:ctrl', throwLeft);
+slate.bind('2:ctrl', throwRight);
 
 
 // Binds modal key + {char} to focus different open apps
