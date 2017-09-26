@@ -15,6 +15,8 @@ command -v hub >/dev/null && alias git=hub || \
         echo 'Missing dependency (hub). Failed to alias git -> hub'
 command -v tmux >/dev/null && alias tls='tmux list-sessions' || \
         echo 'Missing dependency (tmux). Failed to alias tls -> tmux list-sessions'
+command -v gpg2 >/dev/null && alias gpg=gpg2 || \
+        echo 'Missing dependency (gpg2). Failed to alias gpg -> gpg2'
 
 
 # exa-specific aliases
@@ -61,6 +63,7 @@ fi
 git config --global alias.recent 'for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"'
 git config --global alias.yday '! git log --name-only --since=yesterday.midnight --until=today.midnight --author="$(git config --get user.email)"'
 git config --global alias.conflicts 'diff --name-only --diff-filter=U'
+git config --global alias.patch-grep 'log -p -S'
 
 alias gyday='git log --name-only --since=yesterday.midnight --until=today.midnight --author="$(git config --get user.email)"'
 
@@ -80,7 +83,18 @@ alias mdg='mix deps.get'
 
 
 # docker-specific aliases
-alias dps='docker ps'
-alias drm='docker rm'
-alias drmi='docker rmi'
-alias dsh='docker exec -it /bin/bash'
+if command -v docker >/dev/null; then
+  # personal aliases
+  alias d=docker
+  alias dps='docker ps'
+  alias drm='docker rm'
+  alias drmi='docker rmi'
+  alias drit='docker run -it'
+  alias drd='docker run -d'
+  alias di='docker images'
+
+  function dsh {
+    container=$1
+    docker exec -it "${container}" /bin/bash
+  }
+fi
