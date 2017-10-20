@@ -74,6 +74,12 @@ Plugin 'tpope/vim-repeat'
 " Pairs of mappings
 Plugin 'tpope/vim-unimpaired'
 
+" LISPs support
+Plugin 'guns/vim-sexp'
+Plugin 'tpope/vim-sexp-mappings-for-regular-people'
+let g:sexp_enable_insert_mode_mappings = 0
+let g:sexp_filetypes = ''
+
 " Seamlessly navigate Vim and Tmux with similar bindings.
 Plugin 'christoomey/vim-tmux-navigator'
 
@@ -219,6 +225,9 @@ nnoremap <Leader>[ :call <SID>LocationPrevious()<CR>
 nnoremap <Leader>] :call <SID>LocationNext()<CR>
 
 
+nnoremap <leader>h :noh<CR>
+
+
 " Alchemist settings
 let g:alchemist#elixir_erlang_src = '/usr/local/share/src'
 
@@ -243,6 +252,9 @@ let g:airline_theme = 'hybrid'
 " Vim-Swoop Settings
 " Edits colorscheme
 let g:swoopHighlight = ["hi! link SwoopBufferLineHi Warning", "hi! link SwoopPatternHi Error"]
+
+
+nnoremap <M-q> :q<CR>
 
 
 " Jump to buffers.
@@ -360,10 +372,17 @@ set concealcursor=nvic
 inoremap jk <Esc>
 
 
-" Conventional Emacs line-editor defaults
-" NOTE: <C-a> interferes w/ current tmux prefix
+" Hybrid mode for Vim
 inoremap <C-a> <Esc>I
 inoremap <C-e> <Esc>A
+
+inoremap <M-b> <S-Left>
+inoremap <M-f> <S-Right>
+
+inoremap <C-b> <Left>
+inoremap <C-f> <Right>
+inoremap <C-p> <Up>
+inoremap <C-n> <Down>
 
 
 " Manage Vertical and Horizontal splits
@@ -380,6 +399,21 @@ nnoremap <leader>q :bdelete<CR>
 
 " Set CtrlP runtime path
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+
+" Pane movement
+let g:tmux_navigator_no_mappings = 1
+
+nnoremap <silent> <M-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
+
+" May need redundant mappings bc of LISP plugin
+nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 
 
 " Buffer creation and management
@@ -486,7 +520,7 @@ let NERDTreeShowHidden = 1
 nnoremap <leader>n :NERDTreeToggle<CR>
 
 " View open buffer location in tree.
-nnoremap <leader>f :NERDTreeFind<CR>
+nnoremap <leader>N :NERDTreeFind<CR>
 
 
 " BOL and EOL
