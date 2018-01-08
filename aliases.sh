@@ -20,16 +20,23 @@ command -v gpg2 >/dev/null && alias gpg=gpg2 || \
 
 
 # exa-specific aliases
-command -v exa >/dev/null && alias ls='exa' || \
-        echo 'Missing dependency (exa). Failed to alias ls -> exa'
-command -v exa >/dev/null && alias ll='exa -l' || \
-        echo 'Missing dependency (exa). Failed to alias ll -> exa -l' && \
-        alias ll='ls -l' # fallback to ls -l
-command -v exa >/dev/null && alias la='exa -la' || \
-        echo 'Missing dependency (exa). Failed to alias la -> exa -la' && \
-        alias la='ls -la' # fallback to ls -la
-command -v exa >/dev/null && alias lt='exa --tree' || \
-        echo 'Missing dependency (exa). Failed to alias lt -> exa --tree'
+if command -v exa >/dev/null || echo 'Missing dependency (exa). Failed to create dependent aliases.'; then
+  alias ls='exa'
+  alias ll='exa -l'
+  alias ll='ls -l'
+  alias la='exa -la'
+  alias la='ls -la'
+
+  # tree-views of dirs and subdirs
+  function lt {
+    if [ -z $1 ]; then
+      exa --tree
+    else
+      depth=$1
+      exa --tree --level ${depth}
+    fi
+  }
+fi
 
 
 if command -v kubectl >/dev/null; then
@@ -39,18 +46,24 @@ if command -v kubectl >/dev/null; then
 
   # the following functions rely on gcloud being installed
   if command -v gcloud >/dev/null; then
-    function kedit {
-      deployment=$1
-      kubectl edit deployments $deployment
-    }
-
     function kswitch {
+      # environment should be "staging" or "public"
       environment=$1
       gcloud container clusters get-credentials $environment
     }
   fi
 
   # kubernetes functions
+  function kedit {
+    deployment=$1
+    kubectl edit deployments $deployment
+  }
+
+  function kdns {
+    # Returns the domain names of the ingress points
+    kubectl get ing
+  }
+
   function kush {
     name=$1
     cmd=${2-/bin/bash}
@@ -71,8 +84,10 @@ alias glp="git log --graph --pretty=format:'%Cred%h%Creset -%Cblue %an %Creset -
 alias gprom="git pull --rebase origin master"
 alias gcan='git commit --amend --no-edit'
 alias gpf='git push --force'
+alias gpff='git push --force --no-verify' # aka git push fucking force
 alias gds='git diff --staged'
 alias gfx='git commit --fixup'
+alias gsh='git show'
 
 
 # elixir-specific aliases
