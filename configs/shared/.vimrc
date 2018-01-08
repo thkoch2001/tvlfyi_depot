@@ -17,6 +17,9 @@ Plugin 'VundleVim/Vundle.vim'
 " Displays git information in airline.
 Plugin 'tpope/vim-fugitive'
 
+" easier file navigation
+Plugin 'tpope/vim-vinegar'
+
 " Displays git-tracked C*UD ops within gutter.
 Plugin 'airblade/vim-gitgutter'
 
@@ -28,9 +31,6 @@ Plugin 'mileszs/ack.vim'
 
 " JS support
 Plugin 'pangloss/vim-javascript'
-
-" Visual dir-tree navigation
-Plugin 'scrooloose/nerdtree'
 
 " Syntax Highlighting Support
 Plugin 'lambdatoast/elm.vim'
@@ -109,10 +109,30 @@ Plugin 'whatyouhide/vim-gotham'
 " Transparent encryption + decryption
 Plugin 'jamessan/vim-gnupg'
 
+" Javascript auto-formatting
+Plugin 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
+
+" Support Org mode
+Plugin 'jceb/vim-orgmode'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 " -- END: Vundle config --
+
+
+" Maximize the current window
+" Similar to Tmux mapping alt-z in my tmux.conf
+nnoremap t% :tab sp<CR>
+
+
+" Prettier configuration
+let g:prettier#exec_cmd_async = 1
+" force Prettier to run on files even without the @format pragma
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md PrettierAsync
 
 
 " Basic settings
@@ -129,7 +149,7 @@ set shiftwidth=2
 set background=dark
 
 syntax enable
-colorscheme gotham
+colorscheme material
 
 if has('termguicolors')
   set termguicolors
@@ -234,10 +254,10 @@ let g:alchemist#elixir_erlang_src = '/usr/local/share/src'
 
 " Airline Settings
 " Enables the list of buffers.
-let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 0
 
 " Buffer numbers alongside files
-let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#buffer_nr_show = 0
 
 " Shows the filename only.
 let g:airline#extensions#tabline#fnamemod = ':t'
@@ -416,12 +436,6 @@ nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 
 
-" Buffer creation and management
-" Buffer movement
-nnoremap <Tab> :1bnext<CR>
-nnoremap <S-Tab> :1bprevious<CR>
-
-
 " make Y do what is intuitive given:
 "   D: deletes until EOL
 "   C: changes until EOL
@@ -432,10 +446,6 @@ nnoremap Y y$
 " scrolling and maintaing mouse position
 " nnoremap <C-j> j<C-e>
 " nnoremap <C-k> k<C-y>
-
-
-" Shorter binding for window rotations
-nnoremap <C-r> <C-w><C-r>
 
 
 " remap redo key that is eclipsed by `rotate` currently
@@ -510,17 +520,6 @@ nnoremap <leader>v7 :resize 35<CR>
 nnoremap <leader>v8 :resize 40<CR>
 nnoremap <leader>v9 :resize 45<CR>
 nnoremap <leader>v0 :resize 50<CR>
-
-
-" NERDTree settings
-" Show hidden files by default. (Toggle with capital 'i')
-let NERDTreeShowHidden = 1
-
-" View Directory tree with ctrl + n
-nnoremap <leader>n :NERDTreeToggle<CR>
-
-" View open buffer location in tree.
-nnoremap <leader>N :NERDTreeFind<CR>
 
 
 " BOL and EOL
