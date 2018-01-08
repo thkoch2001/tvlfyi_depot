@@ -4,7 +4,9 @@
 // Hotkeys for quickly opening apps & changing window size
 
 
-var modal_key = ":alt;shift";
+var modal_key  = ":alt;shift;cmd;ctrl"; // hyper key
+var resize_key = ":alt;shift;ctrl";     // meh key
+
 
 // Configs
 S.cfga({
@@ -14,25 +16,66 @@ S.cfga({
   focusCheckWidthMax: 3000,
 });
 
-// Window size /position shortcuts
-// ctrl+shift+h = use left half of screen.
-// ctrl+shift+l = right half, hjkl
-// ctrl+shift+m = use full window
 
-S.bnda({
-  // Push Bindings
-  "l:ctrl;shift" : S.op("move", { "x": "screenSizeX/2 + screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX*0.5 - 40", "height": "screenSizeY-100" }),
-  ";:ctrl;shift" : S.op("move", { "x": "screenSizeX/3*2 + screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX/3 - 40", "height": "screenSizeY-100" }),
 
-  "h:ctrl;shift" : S.op("move", { "x": "screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX*0.5 - 40", "height": "screenSizeY-100" }),
-  "g:ctrl;shift" : S.op("move", { "x": "screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX/3*2 - 40", "height": "screenSizeY-100" }),
+// window resizing bindings
+var window_resizing_bindings = {
+  ';': {
+    x: 'screenSizeX/3*2 + screenOriginX+20',
+    y: 'screenOriginY+20',
+    width: 'screenSizeX/3 - 40',
+    height: 'screenSizeY-100'
+  },
+  'g': {
+    x: 'screenOriginX+20',
+    y: 'screenOriginY+20',
+    width: 'screenSizeX/3*2 - 40',
+    height: 'screenSizeY-100'
+  },
+  'o': {
+    x: 'screenSizeX / 2 + screenOriginX + 20',
+    y: 'screenOriginY + 20',
+    width: 'screenSizeX / 2 - 40',
+    height: '(screenSizeY - 120) / 2'
+  },
+  ',': {
+    x: 'screenSizeX / 2 + screenOriginX + 20',
+    y: '(screenSizeY - 120) / 2 + 20 + 20',
+    width: 'screenSizeX / 2 - 40',
+    height: '(screenSizeY - 120) / 2'
+  },
+  'h': {
+    x: 'screenOriginX+20',
+    y: 'screenOriginY+20',
+    width: 'screenSizeX*0.5 - 40',
+    height: 'screenSizeY-100'
+  },
+  'j': {
+    x: 'screenOriginX+screenSizeX/6',
+    y: 'screenOriginY+20',
+    width: '2*screenSizeX/3',
+    height: 'screenSizeY - 100'
+  },
+  'k': {
+    x: 'screenOriginX+20',
+    y: 'screenOriginY+20',
+    width: 'screenSizeX - 40',
+    height: 'screenSizeY - 100'
+  },
+  'l': {
+    x: 'screenSizeX/2 + screenOriginX+20',
+    y: 'screenOriginY+20',
+    width: 'screenSizeX*0.5 - 40',
+    height: 'screenSizeY-100'
+  },
+}
 
-  "k:ctrl;shift" : S.op("move", { "x": "screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX - 40", "height": "screenSizeY/2 - 20" }),
-  "j:ctrl;shift" : S.op("move", { "x": "screenOriginX+20", "y": "screenSizeY/2 + screenOriginY+20", "width": "screenSizeX - 40", "height": "screenSizeY/2 - 40" }),
-  "m:ctrl;shift" : S.op("move", { "x": "screenOriginX+20", "y": "screenOriginY+20", "width": "screenSizeX - 40", "height": "screenSizeY - 100" }),
-  "n:ctrl;shift" : S.op("move", { "x": "screenOriginX+screenSizeX/6", "y": "screenOriginY+20", "width": "2*screenSizeX/3", "height": "screenSizeY - 100" }),
-  "b:ctrl;shift" : S.op("move", { "x": "screenOriginX+screenSizeX/4", "y": "screenOriginY+20", "width": "screenSizeX/2", "height": "screenSizeY - 100" }),
-});
+var window_resizing_bindings = Object.keys(window_resizing_bindings).reduce(function(acc, kbd) {
+  acc[kbd + resize_key] = S.op('move', window_resizing_bindings[kbd]);
+  return acc;
+}, {});
+
+S.bnda(window_resizing_bindings);
 
 
 // Moves applications across multiple screens
@@ -43,11 +86,9 @@ slate.bind('1:ctrl', throwLeft);
 slate.bind('2:ctrl', throwRight);
 
 
-// Binds modal key + {char} to focus different open apps
-// alt + d = focus Dash
-
 var focus_apps = {
   1: '1Password',
+  i: 'iTunes',
   a: 'Atom',
   h: 'Dash',
   e: 'Emacs',
@@ -58,6 +99,8 @@ var focus_apps = {
   l: 'LimeChat',
   k: 'Slack',
   w: 'Wireshark',
+  p: 'Tomato One',
+  d: 'Discord',
 };
 
 
