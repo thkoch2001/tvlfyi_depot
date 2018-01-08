@@ -15,3 +15,6 @@ source $HOME/pc_settings/functions/vim_functions.sh
 
 # custom functions to work with gpg
 source $HOME/pc_settings/functions/gpg_functions.sh
+
+# custom functions for editing the ZSH line editor
+source $HOME/pc_settings/functions/zle.sh
