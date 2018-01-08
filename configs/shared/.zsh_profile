@@ -1,12 +1,27 @@
 export PATH=$HOME/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/fzf/bin:$HOME/n/bin:$HOME/.cargo/bin
 
 
+# export the path this repository
+export PC_SETTINGS_PATH=$HOME/pc_settings
+
+
 # use emacs bindings (default) for terminal input
 set -o emacs
 
 
+# Configure default editor
+command -v nvim >/dev/null && \
+    export EDITOR=nvim || \
+    export EDITOR=vim
+
+
 # iex and erl shared interactive shell history
 export ERL_AFLAGS="-kernel shell_history enabled"
+
+
+# drone env variables
+export DRONE_SERVER="https://ci.urbinternal.com"
+export DRONE_TOKEN=$(<"${PC_SETTINGS_PATH}/configs/secrets/drone_token.txt")
 
 
 source $HOME/pc_settings/aliases.sh
