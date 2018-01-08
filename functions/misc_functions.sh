@@ -4,6 +4,29 @@ function wgfb {
 }
 
 
+# utility function for swapping filenames, eg init.el and init.el.bak
+function swap-file-names {
+  file_a=$1
+  file_b=$2
+  backup=$(mktemp backup.XXX)
+
+  mv ${file_a} ${backup}
+  mv ${file_b} ${file_a}
+  mv ${backup} ${file_b}
+  rm ${backup}
+  echo "Swapped: ${file_a} <-> ${file_b}"
+}
+
+
+# View a directory's contents in a periodically updated fashion.
+function periodically-refresh-contents {
+  clear
+  lt .
+  sleep 1
+  refresh-contents
+}
+
+
 # download files to /tmp directory
 function wdownload {
   URL="$1"
@@ -17,18 +40,6 @@ function wdownload {
 function wspcheck {
   if [ $# -ge 1 -a -f "$1" ] && input="$1" || input="-"
   cat "$input" | tr '[:upper:]' '[:lower:]' | tr -cd '[:alpha:]_ \n' | tr -s ' ' '\n' | sort | comm -23 - ~/english_words.txt
-}
-
-
-# fuzzily search through dirs stack
-function wfd {
-  dir=$(dirname $(fzf-tmux)) && pushd "$dir" >/dev/null
-}
-
-
-# pushd into a directory on your dirs stack
-function wpushd {
-  dir="$(dirs | tr ' ' '\n' | fzf-tmux)" && pushd "$dir"
 }
 
 
@@ -130,4 +141,10 @@ function du-it-live () {
     # clear the three-dots
     echo -n '\b\b\b' && echo -n '   ' && echo -n '\r'
   done
+}
+
+
+# programmatically get the router's IP address
+function router {
+  netstat -nr | grep default | head -n 1 | awk '{ print $2 }'
 }
