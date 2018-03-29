@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: source-block
+# key: src
+# expand-env: ((yas-indent-line 'fixed))
+# --
+#+BEGIN_SRC ${1:elisp}
+$2
+#+END_SRC

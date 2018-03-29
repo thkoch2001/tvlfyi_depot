@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: nologdone
+# key: nologdone
+# --
+#+STARTUP: nologdone$0
