@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-pc_settings_path="${HOME}/pc_settings"
-configs_dir="${pc_settings_path}/configs"
+dotfiles_path="${HOME}/dotfiles"
+configs_dir="${dotfiles_path}/configs"
 shared_configs="${configs_dir}/shared"
 
 if [[  $(uname) == 'Darwin' ]]; then

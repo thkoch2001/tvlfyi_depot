@@ -1,15 +1,10 @@
-# My P(ersonal) C(omputer) Settings
+# dotfiles
 
 I'm documenting this primarily for personal use. This reposity contains shell
 configs, vim configs, emacs configs, a list of commonly used applications, and
 other items.
 
-The overall goal of this repository is to reduce the time it takes to adopt a
-new computer and equip it with the necessary tooling to do meaningful work.
-
-Ironically, I prefer to use a Mac or a Linux as my personal computer, so
-hopefully the connotation associated with "PCs" as Windows boxes isn't
-misleading.
+Configuration is everything.
 
 
 # SSH
@@ -168,7 +163,7 @@ file, `tmux-256color-italic`, to your terminal database. You can do this with
 the following command:
 
 ```bash
-$ tic ~/pc_settings/tmux-256color-italic
+$ tic ~/dotfiles/tmux-256color-italic
 ```
 
 

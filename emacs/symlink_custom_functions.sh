@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
-SCRIPT_DIR="$HOME/pc_settings/emacs"
-EMACS_FUNC_DIR="$HOME/.emacs.d"
+SCRIPT_DIR="${HOME}/dotfiles/emacs"
+EMACS_FUNC_DIR="${HOME}/.emacs.d"
 
 for source in $(find $SCRIPT_DIR -type f -name '*.el'); do
   filename=$(basename $source)

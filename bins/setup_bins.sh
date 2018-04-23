@@ -1,3 +1,3 @@
 #!/usr/bin/env zsh
 
-ln -s $HOME/pc_settings/bins/bin/* ~/bin
+ln -s ${HOME}/dotfiles/bins/bin/* ~/bin
