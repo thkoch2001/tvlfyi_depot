@@ -1,7 +1,6 @@
 [user]
 	name = William Carroll
 	email = wpcarro@gmail.com
-	signingkey = C7A53CC58D3B1F8C
 [alias]
 	recent = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format=\"%(refname:short)\"
 	today = ! git log --date=relative --since=00:00:00 --all --no-merges --oneline --author=\"$(git config --get user.email)\"
@@ -9,10 +8,6 @@
 	conflicts = diff --name-only --diff-filter=U
 	yday = ! git log --name-only --since=yesterday.midnight --until=today.midnight --author=\"$(git config --get user.email)\"
 	patch-grep = log -p -S
-[commit]
-	gpgsign = true
-[gpg]
-	program = gpg2
 [credential]
 	helper = osxkeychain
 [push]
