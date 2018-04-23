@@ -1,6 +1,6 @@
 # dotfiles
 
-I'm documenting this primarily for personal use. This reposity contains shell
+I'm documenting this primarily for personal use. This repository contains shell
 configs, vim configs, emacs configs, a list of commonly used applications, and
 other items.
 
@@ -79,7 +79,8 @@ By default `gpg2` interfaces with `gpg-agent`. `gpg` does not unless
 `--use-agent` is specified.  I suggest using `gpg2`, but if you must use `gpg`,
 add the following entry to `~/.gnupg/gpg.conf`:
 
-``` use-agent
+```
+use-agent
 ```
 
 ## GnuPG + Git
@@ -99,7 +100,8 @@ $ git config --global gpg.program gpg2
 Setup `gpg-agent` to use password caching by adding the following entries to
 `~/.gnupg/gpg-agent.conf`:
 
-``` default-cache-ttl 300 max-cache-ttl 3600
+```
+default-cache-ttl 300 max-cache-ttl 3600
 ```
 
 
@@ -205,6 +207,7 @@ The following applications need to be downloaded / installed manually:
 * oh-my-zsh: a full suite of z-shell extensions
 * homebrew: CLI for procuring third-party applications
 * slate.js: resize and move your windows with keyboard shortcuts
+* google chrome: web browser
 
 
 ## Commonly used fonts
