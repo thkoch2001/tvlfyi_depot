@@ -15,3 +15,5 @@
 [rebase]
 	autosquash = true
 	autostash = true
+[github]
+	user = wpcarro
