@@ -1,4 +1,0 @@
-(
- (:id "sha1:88d4df3ce5800820f90edda8f27d13572234b2b9" :fingerprint "sha1:13:0e:b7:b0:c1:b7:75:40:89:0f:0b:64:20:6b:53:a5:d2:2a:a8:07" :host "api.github.com:443" :conditions (:insecure :unknown-ca :invalid))
- (:id "sha1:85b31c268009209a8d3c5387033b219264f7e62b" :fingerprint "sha1:f8:e1:fc:e4:34:8e:19:e8:48:c1:61:fe:3d:09:dd:d4:d2:7a:cb:db" :host "melpa.org:443" :conditions (:insecure :unknown-ca :invalid))
-)

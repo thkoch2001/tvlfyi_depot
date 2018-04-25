@@ -1,13 +1,13 @@
 
 ;; ----- smex-history -----
 (
+ ibuffer
+ find-file
  load-theme
  disable-theme
  cycle-themes-mode
- cycle-themes
- rjsx-mode
- enable-theme
- package-list-packages
+ emacs-lisp-macroexpand
+ package-install
 )
 
 ;; ----- smex-data -----
@@ -59,7 +59,7 @@
  (indent-pp-sexp . 1)
  (describe-personal-keybindings . 2)
  (wpc/insert-flow-annotation . 3)
- (ibuffer . 2)
+ (ibuffer . 3)
  (flow-minor-mode . 4)
  (paredit-mode . 1)
  (evil-mode . 6)
@@ -78,7 +78,7 @@
  (counsel-semantic-or-imenu . 1)
  (evil-leader-mode . 9)
  (intero-targets . 5)
- (find-file . 1)
+ (find-file . 2)
  (electric-pair-mode . 8)
  (eval-print-last-sexp . 3)
  (evil-inner-haskell-comment-block . 5)
@@ -157,4 +157,5 @@
  (writeroom-mode . 7)
  (cycle-themes . 2)
  (cycle-themes-mode . 2)
+ (dired-find-file . 1)
 )
