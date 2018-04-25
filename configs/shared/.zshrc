@@ -1,4 +1,5 @@
 export META_DIR="${HOME}/urbint/meta"
+export DOTFILES="${HOME}/dotfiles"
 export ZSH="${HOME}/.oh-my-zsh"
 
 ZSH_THEME=refined
