@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Provide footer
+# key: elf
+# --
+(provide '`(-> (buffer-file-name) f-filename f-no-ext)`)
+;;; `(-> (buffer-file-name) f-filename)` ends here

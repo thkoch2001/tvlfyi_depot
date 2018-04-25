@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: const function
+# key: cfn
+# --
+const $1 = ($2) => {
+  $3
+}

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Console.log helper
+# key: clo
+# --
+console.log($1)
