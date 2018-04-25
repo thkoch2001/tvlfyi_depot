@@ -8,3 +8,4 @@ emacs.d/auto-save-list/
 emacs.d/eshell/
 emacs.d/var/**/*
 emacs.d/request
+emacs.d/projectile-bookmarks.eld
