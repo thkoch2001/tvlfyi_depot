@@ -10,3 +10,4 @@ emacs.d/var/**/*
 emacs.d/request
 emacs.d/projectile-bookmarks.eld
 emacs.d/network-security.data
+emacs.d/smex-items
