@@ -10,8 +10,5 @@
 
 (use-package magit)
 
-(use-package magit-gh-pulls
-  :ghook ('magit-mode-hook #'turn-on-magit-gh-pulls))
-
 (provide 'wpc-git)
 ;;; git.el ends here
