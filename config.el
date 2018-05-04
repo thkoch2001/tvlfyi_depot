@@ -350,10 +350,10 @@
 
 (defun magit-commit-wip ()
   (interactive)
-  (magit-commit "-m wip"))
+  (magit-commit '("-m" "wip")))
 
-;; (magit-define-popup-action 'magit-commit-popup
-;;   ?w "WIP" 'magit-commit-wip)
+(magit-define-popup-action 'magit-commit-popup
+  ?W "WIP" 'magit-commit-wip)
 
 ;; (defun grfn/split-window-more-sensibly (&optional window)
 ;;   (let ((window (or window (selected-window))))
