@@ -223,5 +223,11 @@
       (term-char-mode)
     (term-line-mode)))
 
+(defun buffer-dirname ()
+  "Return the directory name of the current buffer as a string."
+  (->> buffer-file-name
+       f-dirname
+       f-filename))
+
 (provide 'functions)
 ;;; functions.el ends here
