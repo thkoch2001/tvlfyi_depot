@@ -12,6 +12,17 @@
    :fetcher github))
 (general-evil-setup t)
 
+(defun wpc/goto-definition ()
+  "Support a goto-definition that dispatches off of the `major-mode'."
+  (interactive)
+  (require 'flow-minor-mode)
+  (cond ((eq major-mode 'rjsx-mode)
+         (flow-minor-jump-to-definition))
+        ((eq major-mode 'haskell-mode)
+         (intero-goto-definition))
+        (t
+         (evil-goto-definition))))
+
 ;; vim...
 (use-package evil
   :general
@@ -25,6 +36,8 @@
    "sk"  'evil-window-split
    "sj"  'wpc/evil-window-split-down
    "sj"  'wpc/evil-window-split-down)
+  (n
+   "gd"  'wpc/goto-definition)
   (general-unbind m "M-." "C-p")
   (general-unbind n "s" "M-.")
   (general-unbind i "C-d" "C-a" "C-e" "C-n" "C-p" "C-k")
