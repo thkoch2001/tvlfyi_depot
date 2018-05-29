@@ -69,7 +69,7 @@ into that machine ourselves. That's all there is to it.
 
 # GnuPG
 
-  1. Download public key from keyserver
+  1. Download public key from keyserver. `gpg --receive-keys [KEY_ID]`
   2. Transfer backed-up private key information from secure disk
   3. Create `[E]` encrypting and `[S]` signing subkeys for personal computer
 
