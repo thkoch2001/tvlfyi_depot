@@ -25,6 +25,16 @@
        s-upcase
        (s-replace "-" "_")))
 
+(defun lower->caps (x)
+  "Change the casing of X from lowercase to CAPS_CASE."
+  (->> x
+       s-upcase
+       (s-replace " " "_")))
+
+(defun lower->kebab (x)
+  "Change the casing of X from lowercase to kebab-case"
+  (s-replace " " "-" x))
+
 ;;; Tests:
 
 (ert-deftest caps->kebab-test ()
