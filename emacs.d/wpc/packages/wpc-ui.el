@@ -54,7 +54,7 @@
 ;;(add-hook 'after-init-hook (lambda () (set-face-foreground 'linum "#da5468")))
 
 ;; set default buffer for Emacs
-(setq initial-buffer-choice "~/urbint/grid-front-end")
+(setq initial-buffer-choice "~/urbint/grid-client")
 
 ;; transparent Emacs
 (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
@@ -90,6 +90,9 @@
 (menu-bar-mode -1)
 (when (string-equal system-type "darwin")
   (setq ns-auto-hide-menu-bar t))
+
+;; reduce noisiness of auto-revert-mode
+(setq auto-revert-verbose nil)
 
 ;; highlight lines that are over 100 characters long
 (use-package whitespace
