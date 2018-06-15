@@ -54,7 +54,7 @@
 ;;(add-hook 'after-init-hook (lambda () (set-face-foreground 'linum "#da5468")))
 
 ;; set default buffer for Emacs
-(setq initial-buffer-choice "~/urbint/grid-client")
+(setq initial-buffer-choice wpc/current-project)
 
 ;; transparent Emacs
 (set-frame-parameter (selected-frame) 'alpha '(100 . 100))

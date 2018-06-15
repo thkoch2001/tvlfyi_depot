@@ -34,7 +34,7 @@
 (set-register ?o '(file . "~/Dropbox/org/"))
 (set-register ?c '(file . "~/Dropbox/org/chains.org"))
 (set-register ?b '(file . "~/Dropbox/org/backlog.org"))
-(set-register ?p '(file . "~/urbint/grid-client"))
+(set-register ?p `(file . ,wpc/current-project))
 
 ;; persist history etc b/w Emacs sessions
 (setq desktop-save 'if-exists)
