@@ -57,8 +57,18 @@
 (setq initial-buffer-choice wpc/current-project)
 
 ;; transparent Emacs
-(set-frame-parameter (selected-frame) 'alpha '(100 . 100))
-(add-to-list 'default-frame-alist '(alpha . (100 . 100)))
+(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+(setq frame-transparent? t)
+
+(defun wpc/toggle-transparency ()
+  "Toggle the frame transparency."
+  (interactive)
+  (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+  (let ((alpha (if frame-transparent? 100 90)))
+    (set-frame-parameter (selected-frame) 'alpha `(,alpha . ,alpha)))
+  (setq frame-transparent? (not frame-transparent?)))
+
+(general-def "s-u" #'wpc/toggle-transparency)
 
 ;; premium Emacs themes
 (use-package doom-themes
