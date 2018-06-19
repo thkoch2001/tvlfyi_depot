@@ -12,6 +12,26 @@
 ;; change font
 (add-to-list 'default-frame-alist '(font . "Operator Mono-10"))
 
+(defconst wpc/font-size-step 10
+  "The amount (%) by which to increase or decrease a font.")
+
+(defun wpc/increase-font ()
+  "Increase font size."
+  (interactive)
+  (->> (face-attribute 'default :height)
+       (+ wpc/font-size-step)
+       (set-face-attribute 'default (selected-frame) :height)))
+
+(defun wpc/decrease-font ()
+  "Decrease font size."
+  (interactive)
+  (->> (face-attribute 'default :height)
+       (+ (- wpc/font-size-step))
+       (set-face-attribute 'default (selected-frame) :height)))
+
+(general-def "s-j" #'wpc/decrease-font)
+(general-def "s-k" #'wpc/increase-font)
+
 ;; smooth scrolling settings
 (setq scroll-step 1
       scroll-conservatively 10000)
