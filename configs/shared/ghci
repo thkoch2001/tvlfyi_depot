@@ -1,0 +1,13 @@
+-- Useful Typeclasses
+import Control.Applicative
+import Data.Monoid
+
+-- Data Structures
+import qualified Data.Map.Internal as Map
+
+-- Lenses
+import qualified Control.Lens           as Lens 
+import qualified Control.Lens.Traversal as Lens
+
+-- Friendly prompt
+:set prompt "\ESC[34mλ> \ESC[m"
