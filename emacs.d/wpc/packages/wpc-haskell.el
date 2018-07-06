@@ -26,7 +26,9 @@
          '(("`mappend`" . "⊕")
            ("<>"        . "⊕"))))
     (dolist (item m-symbols) (add-to-list 'haskell-font-lock-symbols-alist item)))
-  (setq haskell-font-lock-symbols t))
+  (setq haskell-font-lock-symbols t)
+  (add-hook 'before-save-hook #'haskell-align-imports))
+
 
 (defun empire/haskell/module->test ()
   "Jump from a module to a test."
@@ -54,4 +56,4 @@
     (empire/haskell/test->module)))
 
 (provide 'wpc-haskell)
-;;; haskell.el ends here
+;;; wpc-haskell.el ends here
