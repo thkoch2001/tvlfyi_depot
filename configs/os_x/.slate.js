@@ -7,7 +7,7 @@
 // unavailable. Slate KBDs. Under these circumstances, potential collisions
 // with Emacs KBDs is acceptable.
 
-var ergodox_attached = false;
+var ergodox_attached = true;
 
 var HYPER = ":alt;shift;cmd;ctrl";
 var MEH = ":alt;shift;ctrl";
