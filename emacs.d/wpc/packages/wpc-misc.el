@@ -10,6 +10,9 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
 
+;; start emacs server so `emacsclient' can work
+(server-start)
+
 ;; transparently edit compressed files
 (auto-compression-mode t)
 
