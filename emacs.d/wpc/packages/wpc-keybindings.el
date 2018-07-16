@@ -71,6 +71,7 @@
     "p"  #'counsel-git-grep
     "P"  #'counsel-git-grep
     "f"  #'wpc/find-file
+    "n"  #'flycheck-next-error
     "N"  #'smerge-next
     "P"  #'smerge-prev
     "s"  #'slack-send-code-snippet
