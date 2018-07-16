@@ -33,6 +33,7 @@
 (set-register ?e '(file . "~/.emacs.d/wpc/packages"))
 (set-register ?u '(file . "~/urbint"))
 (set-register ?d '(file . "~/dotfiles"))
+(set-register ?s '(file . "~/dotfiles/configs/os_x/.slate.js"))
 (set-register ?D '(file . "~/Dropbox"))
 (set-register ?o '(file . "~/Dropbox/org/"))
 (set-register ?c '(file . "~/Dropbox/org/chains.org"))
