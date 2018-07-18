@@ -3,6 +3,9 @@ export DOTFILES="${HOME}/dotfiles"
 export ZSH="${HOME}/.oh-my-zsh"
 export PATH="${PATH}:${HOME}/.local/bin"
 
+# Put this here temporarily until we have a better place for it.
+export FPP_EDITOR='emacsclient -n'
+
 ZSH_THEME=refined
 plugins=(zsh-autosuggestions git git-extras github)
 

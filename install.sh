@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
-source "${DOTFILES}/configs/setup"
-ln -s "${DOTFILES}/emacs.d" "${HOME}/.emacs.d"
+source "$HOME/dotfiles/configs/setup"
+ln -s "$DOTFILES/emacs.d" "$HOME/.emacs.d"
