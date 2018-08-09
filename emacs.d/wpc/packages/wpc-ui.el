@@ -127,8 +127,11 @@
 ;; highlight lines that are over 100 characters long
 (use-package whitespace
   :config
-  (setq whitespace-line-column 100)
-  (setq whitespace-style '(face lines-tail)))
+  (setq whitespace-line-column wpc/fill-column)
+  (setq whitespace-style '(face lines-tail))
+  (add-hook 'prog-mode-hook #'whitespace-mode))
+
+
 
 ;; disable GUI scrollbars
 (when (display-graphic-p)

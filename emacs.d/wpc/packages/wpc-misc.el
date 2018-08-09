@@ -70,7 +70,7 @@
       create-lockfiles nil)
 
 ;; ensure code wraps at 80 characters by default
-(setq-default fill-column 80)
+(setq-default fill-column wpc/fill-column)
 
 (put 'narrow-to-region 'disabled nil)
 

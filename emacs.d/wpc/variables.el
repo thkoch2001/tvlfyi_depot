@@ -18,5 +18,9 @@
     [mouse-5] [down-mouse-5] [drag-mouse-5] [double-mouse-5] [triple-mouse-5])
   "This variable stores all of the mouse-related keybindings that Emacs recognizes.")
 
+(defconst wpc/fill-column
+  80
+  "Variable used to set the defaults for wrapping, highlighting, etc.")
+
 (provide 'variables)
 ;;; variables.el ends here
