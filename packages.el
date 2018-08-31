@@ -1,6 +1,8 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; private/grfn/packages.el
 
+;; (package! 'tide :disable t)
+
 ;; Editor
 (package! solarized-theme)
 (package! fill-column-indicator)
@@ -16,6 +18,11 @@
 (package! fill-column-indicator)
 (package! writeroom-mode)
 (package! dash)
+
+;; Presentation
+(package! epresent)
+(package! org-tree-slide)
+(package! ox-reveal)
 
 ;; Slack etc
 (package! slack)
@@ -56,3 +63,13 @@
 (package! flycheck-flow)
 (package! company-flow)
 (package! prettier-js)
+
+;; GraphQL
+(package! graphql-mode)
+
+;; Haskell
+(package! lsp-mode)
+(package! lsp-ui)
+(package! lsp-haskell)
+(package! company-lsp)
+(package! lsp-imenu)

@@ -1,6 +1,7 @@
 # -*- mode: snippet -*-
 # name: test-module
 # key: test
+# expand-env: ((yas-indent-line 'fixed))
 # --
 {-# LANGUAGE ApplicativeDo #-}
 --------------------------------------------------------------------------------
@@ -13,9 +14,9 @@ module ${1:`(if (not buffer-file-name) "Module"
                              (car (last (split-string name "src")))))
                          (file-name-nondirectory name))))`} where
 --------------------------------------------------------------------------------
-import Test.Prelude
+import           Test.Prelude
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 --------------------------------------------------------------------------------
-import ${1:$(s-chop-suffix "Test" yas-text)}
+import           ${1:$(s-chop-suffix "Test" yas-text)}
 --------------------------------------------------------------------------------

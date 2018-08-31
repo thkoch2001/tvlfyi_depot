@@ -1,14 +1,15 @@
 ;;; private/grfn/config.el -*- lexical-binding: t; -*-
 
+
 (defvar +grfn-dir (file-name-directory load-file-name))
 (defvar +grfn-snippets-dir (expand-file-name "snippets/" +grfn-dir))
 
 ;;
 (when (featurep! :feature evil)
-  (load! +bindings)
-  (load! +commands))
+  (load! "+bindings")
+  (load! "+commands"))
 
-(load! +private)
+(load! "+private")
 
 (require 'dash)
 
@@ -52,11 +53,6 @@
         (append (list '+grfn-snippets-dir)
                 (delq 'yas-installed-snippets-dir yas-snippet-dirs))))
 
-;; completion/helm
-(after! helm
-  ;; Hide header lines in helm. I don't like them
-  (set-face-attribute 'helm-source-header nil :height 0.1))
-
 (after! company
   (setq company-idle-delay 0.2
         company-minimum-prefix-length 1))
@@ -95,6 +91,51 @@
 ; (require 'doom-themes)
 
 ;; Should really figure out which of these is correct, eventually
+
+(setq +solarized-s-base03    "#002b36"
+      +solarized-s-base02    "#073642"
+      ;; emphasized content
+      +solarized-s-base01    "#586e75"
+      ;; primary content
+      +solarized-s-base00    "#657b83"
+      +solarized-s-base0     "#839496"
+      ;; comments
+      +solarized-s-base1     "#93a1a1"
+      ;; background highlight light
+      +solarized-s-base2     "#eee8d5"
+      ;; background light
+      +solarized-s-base3     "#fdf6e3"
+
+      ;; Solarized accented colors
+      +solarized-yellow    "#b58900"
+      +solarized-orange    "#cb4b16"
+      +solarized-red       "#dc322f"
+      +solarized-magenta   "#d33682"
+      +solarized-violet    "#6c71c4"
+      +solarized-blue      "#268bd2"
+      +solarized-cyan      "#2aa198"
+      +solarized-green     "#859900"
+
+      ;; Darker and lighter accented colors
+      ;; Only use these in exceptional circumstances!
+      +solarized-yellow-d  "#7B6000"
+      +solarized-yellow-l  "#DEB542"
+      +solarized-orange-d  "#8B2C02"
+      +solarized-orange-l  "#F2804F"
+      +solarized-red-d     "#990A1B"
+      +solarized-red-l     "#FF6E64"
+      +solarized-magenta-d "#93115C"
+      +solarized-magenta-l "#F771AC"
+      +solarized-violet-d  "#3F4D91"
+      +solarized-violet-l  "#9EA0E5"
+      +solarized-blue-d    "#00629D"
+      +solarized-blue-l    "#69B7F0"
+      +solarized-cyan-d    "#00736F"
+      +solarized-cyan-l    "#69CABF"
+      +solarized-green-d   "#546E00"
+      +solarized-green-l "#B4C342")
+
+(set-cursor-color +solarized-s-base02)
 
 (after! doom-theme
   (set-face-foreground 'font-lock-doc-face +solarized-s-base1)
@@ -149,7 +190,7 @@
    org-tags-column -130
    org-ellipsis "⤵"
    org-capture-templates
-   '(("t" "Todo" entry
+   `(("t" "Todo" entry
       (file+headline +org-default-todo-file "Inbox")
       "* TODO %?\n%i" :prepend t :kill-buffer t)
 
@@ -157,13 +198,17 @@
       (file+headline +org-default-notes-file "Inbox")
       "* %u %?\n%i" :prepend t :kill-buffer t))
    org-deadline-warning-days 1
-   org-agenda-skip-scheduled-if-deadline-is-shown 't)
+   org-agenda-skip-scheduled-if-deadline-is-shown 'todo
+   org-agenda-custom-commands
+   '(("p" "Sprint Tasks" tags-todo "sprint")
+     ("i" "Inbox" tags "inbox")))
   (set-face-foreground 'org-block +solarized-s-base00)
   (add-hook! org-mode
     (add-hook! evil-normal-state-entry-hook
       #'org-align-all-tags))
   (setf (alist-get 'file org-link-frame-setup) 'find-file-other-window)
-  (set-face-foreground 'org-block +solarized-s-base00))
+  (set-face-foreground 'org-block +solarized-s-base00)
+  )
 
 (after! magit
   (setq git-commit-summary-max-length 50)
@@ -194,27 +239,31 @@
 
 (let ((m-symbols
       '(("`mappend`" . "⊕")
-        ("<>"        . "⊕"))))
+        ("<>"        . "⊕")
+        ("`elem`"   . "∈")
+        ("`notElem`" . "∉"))))
   (dolist (item m-symbols) (add-to-list 'haskell-font-lock-symbols-alist item)))
 
 (setq haskell-font-lock-symbols t)
 
 
 (add-hook! haskell-mode
-  (intero-mode)
-  (flycheck-add-next-checker
-   'intero
-   'haskell-hlint)
-  (set-fill-column 100))
+  ;; (intero-mode)
+  (lsp-mode)
+  ;; (flycheck-add-next-checker
+  ;;  'intero
+  ;;  'haskell-hlint)
+  (set-fill-column 80)
+  (setq evil-shift-width 2))
 
 ;; (load! org-clubhouse)
 (add-hook! org-mode #'org-clubhouse-mode)
 
-(load! slack-snippets)
+(load! "slack-snippets")
 
 (after! magit
   (require 'evil-magit)
-  (require 'magithub)
+  ;; (require 'magithub)
   )
 
 ; (require 'auth-password-store)
@@ -244,37 +293,39 @@
 
 
 ;; https://github.com/alpaker/Fill-Column-Indicator/issues/67#issuecomment-195611974
-(add-hook 'prog-mode-hook #'fci-mode)
-(after! fill-column-indicator
-  (add-hook 'prog-mode-hook #'fci-mode)
-  (defvar eos/fci-disabled nil)
-  (make-variable-buffer-local 'eos/fci-disabled)
+;; (add-hook 'prog-mode-hook #'fci-mode)
+;; (after! fill-column-indicator
+;;   (add-hook 'prog-mode-hook #'fci-mode)
+;;   (defvar eos/fci-disabled nil)
+;;   (make-variable-buffer-local 'eos/fci-disabled)
 
-  ;; Add a hook that disables fci if enabled when the window changes and it
-  ;; isn't wide enough to display it.
-  (defun eos/maybe-disable-fci ()
-    (interactive)
-    ;; Disable FCI if necessary
-    (when (and fci-mode
-               (< (window-width) (or fci-rule-column fill-column)))
-      (fci-mode -1)
-      (setq-local eos/fci-disabled t))
-    ;; Enable FCI if necessary
-    (when (and eos/fci-disabled
-               (eq fci-mode nil)
-               (> (window-width) (or fci-rule-column fill-column)))
-      (fci-mode 1)
-      (setq-local eos/fci-disabled nil)))
+;;   ;; Add a hook that disables fci if enabled when the window changes and it
+;;   ;; isn't wide enough to display it.
+;;   (defun eos/maybe-disable-fci ()
+;;     (interactive)
+;;     ;; Disable FCI if necessary
+;;     (when (and fci-mode
+;;                (< (window-width) (or fci-rule-column fill-column)))
+;;       (fci-mode -1)
+;;       (setq-local eos/fci-disabled t))
+;;     ;; Enable FCI if necessary
+;;     (when (and eos/fci-disabled
+;;                (eq fci-mode nil)
+;;                (> (window-width) (or fci-rule-column fill-column)))
+;;       (fci-mode 1)
+;;       (setq-local eos/fci-disabled nil)))
 
-  (defun eos/add-fci-disabling-hook ()
-    (interactive)
-    (add-hook 'window-configuration-change-hook
-              #'eos/maybe-disable-fci))
+;;   (defun eos/add-fci-disabling-hook ()
+;;     (interactive)
+;;     (add-hook 'window-configuration-change-hook
+;;               #'eos/maybe-disable-fci))
 
-  (add-hook 'prog-mode-hook #'eos/add-fci-disabling-hook))
+;;   (add-hook 'prog-mode-hook #'eos/add-fci-disabling-hook))
 
 
 ;;; Javascript
+
+(require 'smartparens)
 
 (setq js-indent-level 2)
 
@@ -292,7 +343,31 @@
   (flycheck-add-mode 'javascript-eslint 'flow-minor-mode)
   (flycheck-add-next-checker 'javascript-flow 'javascript-eslint))
 
+
 (require 'flow-minor-mode)
+
+(remove-hook 'js2-mode-hook 'tide-setup t)
+
+(require 'company-flow)
+(eval-after-load 'company
+  (lambda () (add-to-list 'company-backends 'company-flow)))
+(defun flow/set-flow-executable ()
+  (interactive)
+  (let* ((os (pcase system-type
+               ('darwin "osx")
+               ('gnu/linux "linux64")
+               (_ nil)))
+         (root (locate-dominating-file  buffer-file-name  "node_modules/flow-bin"))
+         (executable (car (file-expand-wildcards
+                           (concat root "node_modules/flow-bin/*" os "*/flow")))))
+    (setq-local company-flow-executable executable)
+    ;; These are not necessary for this package, but a good idea if you use
+    ;; these other packages
+    (setq-local flow-minor-default-binary executable)
+    (setq-local flycheck-javascript-flow-executable executable)))
+
+;; Set this to the mode you use, I use rjsx-mode
+(add-hook 'rjsx-mode-hook #'flow/set-flow-executable t)
 
 
 ;; Auto-format Haskell on save, with a combination of hindent + brittany
@@ -352,8 +427,9 @@
   (interactive)
   (magit-commit '("-m" "wip")))
 
-(magit-define-popup-action 'magit-commit-popup
-  ?W "WIP" 'magit-commit-wip)
+(after! magit
+  (magit-define-popup-action 'magit-commit-popup
+    ?W "WIP" 'magit-commit-wip))
 
 ;; (defun grfn/split-window-more-sensibly (&optional window)
 ;;   (let ((window (or window (selected-window))))
@@ -375,35 +451,104 @@
 ;;                  (with-selected-window window
 ;;                    (split-window-below))))))))
 
-;; (def-package! lsp-mode
-;;   :after (:any haskell-mode)
-;;   :config
-;;   (lsp-mode))
+(def-package! lsp-mode
+  :after (:any haskell-mode)
+  :config
+  (lsp-mode)
+  (setq lsp-project-whitelist '("^/home/griffin/code/urb/grid/$")
+        lsp-response-timeout 60)
+  :hook
+  (haskell-mode . lsp-mode))
 
-;; (def-package! lsp-ui
-;;   :after lsp-mode
-;;   :config
-;;   (setq lsp-ui-flycheck-enable t)
-;;   (setq imenu-auto-rescan t)
-;;   (set-face-background 'lsp-ui-doc-background +solarized-s-base2)
-;;   (set-face-background 'lsp-face-highlight-read +solarized-s-base2)
-;;   (set-face-background 'lsp-face-highlight-orite +solarized-s-base2)
-;;   :hook
-;;   (lsp-mode . lsp-ui-mode)
-;;   (lsp-ui-mode . flycheck-mode))
+(def-package! lsp-ui
+  :after lsp-mode
+  :config
+  (setq lsp-ui-flycheck-enable t)
+  (setq imenu-auto-rescan t)
+  (set-face-background 'lsp-ui-doc-background +solarized-s-base2)
+  (set-face-background 'lsp-face-highlight-read +solarized-s-base2)
+  (set-face-background 'lsp-face-highlight-write +solarized-s-base2)
+  :hook
+  (lsp-mode . lsp-ui-mode)
+  (lsp-ui-mode . flycheck-mode))
 
-;; (def-package! company-lsp
-;;   :after (lsp-mode lsp-ui)
-;;   :config
-;;   (setq company-backends '(company-lsp))
-;;   (setq company-lsp-async t))
+(def-package! company-lsp
+  :after (lsp-mode lsp-ui)
+  :config
+  (setq company-backends '(company-lsp))
+  (setq company-lsp-async t))
 
-;; (def-package! lsp-haskell
-;;   :after (lsp-mode lsp-ui haskell-mode)
-;;   :hook
-;;   (haskell-mode . lsp-haskell-enable))
+(def-package! lsp-haskell
+  :after (lsp-mode lsp-ui haskell-mode)
+  :hook
+  (haskell-mode . lsp-haskell-enable)
+  :config
+  (setq lsp-haskell-process-path-hie "/home/griffin/.local/bin/hie-wrapper"))
+
+(def-package! lsp-imenu
+  :after (lsp-mode lsp-ui)
+  :hook
+  (lsp-after-open . lsp-enable-imenu))
 
 (def-package! evil-magit
   :after (magit))
 
 (def-package! writeroom-mode)
+
+(def-package! graphql-mode)
+
+(require 'whitespace)
+(setq whitespace-style '(face lines-tail))
+(global-whitespace-mode t)
+(add-hook! 'org-mode-hook (lambda () (whitespace-mode -1)))
+
+(set-face-foreground 'whitespace-line +solarized-red)
+(set-face-attribute 'whitespace-line nil :underline 't)
+
+;; (set-face-background 'ivy-posframe +solarized-s-base3)
+;; (set-face-foreground 'ivy-posframe +solarized-s-base01)
+
+(let ((base03    "#002b36")
+      (base02    "#073642")
+      (base01    "#586e75")
+      (base00    "#657b83")
+      (base0     "#839496")
+      (base1     "#93a1a1")
+      (base2     "#eee8d5")
+      (base3     "#fdf6e3")
+      (yellow    "#b58900")
+      (orange    "#cb4b16")
+      (red       "#dc322f")
+      (magenta   "#d33682")
+      (violet    "#6c71c4")
+      (blue      "#268bd2")
+      (cyan      "#2aa198")
+      (green     "#859900"))
+  (custom-set-faces
+   `(agda2-highlight-keyword-face ((t (:foreground ,green))))
+   `(agda2-highlight-string-face ((t (:foreground ,cyan))))
+   `(agda2-highlight-number-face ((t (:foreground ,violet))))
+   `(agda2-highlight-symbol-face ((((background ,base3)) (:foreground ,base01))))
+   `(agda2-highlight-primitive-type-face ((t (:foreground ,blue))))
+   `(agda2-highlight-bound-variable-face ((t nil)))
+   `(agda2-highlight-inductive-constructor-face ((t (:foreground ,green))))
+   `(agda2-highlight-coinductive-constructor-face ((t (:foreground ,yellow))))
+   `(agda2-highlight-datatype-face ((t (:foreground ,blue))))
+   `(agda2-highlight-field-face ((t (:foreground ,red))))
+   `(agda2-highlight-function-face ((t (:foreground ,blue))))
+   `(agda2-highlight-module-face ((t (:foreground ,yellow))))
+   `(agda2-highlight-postulate-face ((t (:foreground ,blue))))
+   `(agda2-highlight-primitive-face ((t (:foreground ,blue))))
+   `(agda2-highlight-record-face ((t (:foreground ,blue))))
+   `(agda2-highlight-dotted-face ((t nil)))
+   `(agda2-highlight-operator-face ((t nil)))
+   `(agda2-highlight-error-face ((t (:foreground ,red :underline t))))
+   `(agda2-highlight-unsolved-meta-face ((t (:background ,base2))))
+   `(agda2-highlight-unsolved-constraint-face ((t (:background ,base2))))
+   `(agda2-highlight-termination-problem-face ((t (:background ,orange :foreground ,base03))))
+   `(agda2-highlight-incomplete-pattern-face ((t (:background ,orange :foreground ,base03))))
+   `(agda2-highlight-typechecks-face ((t (:background ,cyan :foreground ,base03))))))
+
+;; (with-eval-after-load 'intero
+;;   (setq intero-package-version "0.1.31"))
+

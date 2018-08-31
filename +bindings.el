@@ -1,6 +1,6 @@
 ;; private/grfn/+bindings.el -*- lexical-binding: t; -*-
 
-(load! utils)
+(load! "utils")
 (require 'f)
 
 (defmacro find-file-in! (path &optional project-p)
@@ -63,7 +63,7 @@
   (forward-sexp)
   (insert " "))
 
-(load! splitjoin)
+(load! "splitjoin")
 
 (defun +hlissner/install-snippets ()
   "Install my snippets from https://github.com/hlissner/emacs-snippets into
@@ -89,7 +89,7 @@ private/hlissner/snippets."
              projectile-require-project-root
              projectile-cached-buffer-file-name
              projectile-cached-project-root)
-         (call-interactively (command-remapping #'projectile-find-file))))
+         (call-interactively #'projectile-find-file)))
      (defun ,(intern (format "+hlissner/browse-%s" name)) ()
        (interactive)
        (let ((default-directory ,dir))
@@ -346,7 +346,8 @@ private/hlissner/snippets."
 
      :desc "Slack IM"              :n  "i" #'slack-im-select
      :desc "Slack Channel"         :n  "c" #'slack-channel-select
-     :desc "Slack Unreads"         :n  "u" #'slack-channel-select
+     :desc "Slack Group"           :n  "g" #'slack-group-select
+     :desc "Slack Unreads"         :n  "u" #'slack-select-unread-rooms
 
      ;; applications
      :desc "APP: elfeed"           :n "E" #'=rss
@@ -1015,12 +1016,35 @@ private/hlissner/snippets."
      (get-buffer-process (current-buffer))
      "main")))
 
+(defun grfn/run-sputnik-test-for-file ()
+  (interactive)
+  (haskell-interactive-mode-))
+
 (map!
   (:map haskell-mode-map
-     :n "K"     'intero-info
-     :n "g d"   'intero-goto-definition
-     :n "g SPC" 'intero-repl-load
-     :n "g \\"  'intero-repl
-     :n "g y"   'intero-type-at
-     :n "gET" 'grfn/intero-run-main))
+     :n "K"     'lsp-info-under-point
+     :n "g d"   'lsp-ui-peek-find-definitions
+     :n "g r"   'lsp-ui-peek-find-references
+     ;; :n "g SPC" 'intero-repl-load
+     :n "g \\"  '+haskell/repl
+     ;; :n "g y"   'intero-type-at
+     ;; :n "g RET" 'grfn/run-sputnik-test-for-file
+
+     (:localleader
+       :desc "Apply action"  :n "a" 'lsp-execute-code-action
+       :desc "Rename symbol" :n "r" 'lsp-rename))
+
+  (:after agda2-mode
+    (:map agda2-mode-map
+      :n "g SPC" 'agda2-load
+      :n "g d"   'agda2-goto-definition-keyboard
+      :n "] g"   'agda2-next-goal
+      :n "[ g"   'agda2-previous-goal
+
+      (:localleader
+        :desc "Give"                               :n "SPC" 'agda2-give
+        :desc "Refine"                             :n "r"   'agda2-refine
+        :desc "Auto"                               :n "a"   'agda2-auto
+        :desc "Goal type and context"              :n "t"   'agda2-goal-and-context
+        :desc "Goal type and context and inferred" :n ";"   'agda2-goal-and-context-and-inferred))))
 

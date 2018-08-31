@@ -1,7 +1,7 @@
 ;;; private/grfn/splitjoin.el -*- lexical-binding: t; -*-
 
 (require 'dash)
-(load! utils)
+(load! "utils")
 
 ;;;
 ;;; Vars
