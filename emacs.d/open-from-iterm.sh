@@ -31,7 +31,7 @@ e "file:   $file"
 e "number: $number"
 
 if ! [ -z "$number" ]; then
-  $emacs -n -e "(find-file \"$file\")" "(goto-line $number)"
+  $emacs -n -e "(find-file \"$file\")" "(goto-line $number)" "(call-interactively #'evil-scroll-line-to-center)"
 else
   $emacs -n -e "(find-file \"$file\")"
 fi
