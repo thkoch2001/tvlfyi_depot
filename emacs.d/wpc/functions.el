@@ -103,17 +103,6 @@
   (evil-window-vsplit)
   (find-file "~/.emacs.d/init.el"))
 
-(defun wpc/set-flow-executable ()
-  (interactive)
-  (let* ((root (locate-dominating-file buffer-file-name  "node_modules/flow-bin"))
-         (executable (car (file-expand-wildcards
-                           (concat root "node_modules/flow-bin/*osx*/flow")))))
-    (setq-local company-flow-executable executable)
-    ;; These are not necessary for this package, but a good idea if you use
-    ;; these other packages
-    (setq-local flow-minor-default-binary executable)
-    (setq-local flycheck-javascript-flow-executable executable)))
-
 (defun wpc/jump-to-parent-file ()
   "Jumps to a React store or component's parent file. Useful for store or index file."
   (interactive)
