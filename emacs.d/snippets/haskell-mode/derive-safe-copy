@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Derive Safe Copy
+# key: dsc
+# --
+deriveSafeCopy 0 'base ''$1

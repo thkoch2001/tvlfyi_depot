@@ -50,8 +50,6 @@
    "<up>"   'cider-repl-previous-input
    "<down>" 'cider-repl-next-input
    "C-c 'j" 'wpc/find-or-create-clojure-or-clojurescript-repl)
-  (n
-   "M-." 'cider-find-var)
   :config
   (setq cider-cljs-lein-repl
         "(do (require 'figwheel-sidecar.repl-api)

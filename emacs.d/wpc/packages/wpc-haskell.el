@@ -7,21 +7,10 @@
 ;;; Code:
 
 ;; Haskell support
-(use-package intero
-  :config
-  (intero-global-mode 1))
 
-;; text objects for Haskell
-(quelpa '(evil-text-objects-haskell
-          :fetcher github
-          :repo "urbint/evil-text-objects-haskell"))
-(require 'evil-text-objects-haskell)
-
+;; font-locking, glyph support, etc
 (use-package haskell-mode
-  :gfhook #'evil-text-objects-haskell/install
-  :after (intero evil-text-objects-haskell)
   :config
-  (flycheck-add-next-checker 'intero 'haskell-hlint)
   (let ((m-symbols
          '(("`mappend`" . "⊕")
            ("<>"        . "⊕"))))
@@ -29,7 +18,15 @@
   (setq haskell-font-lock-symbols t)
   (add-hook 'before-save-hook #'haskell-align-imports))
 
+;; LSP support
+(use-package lsp-haskell
+  :after (haskell-mode)
+  :config
+  (setq lsp-haskell-process-path-hie "hie-wrapper")
+  (add-hook 'haskell-mode-hook #'lsp-haskell-enable)
+  (add-hook 'haskell-mode-hook #'flycheck-mode))
 
+;; Test toggling
 (defun empire/haskell/module->test ()
   "Jump from a module to a test."
   (let ((filename (->> buffer-file-name

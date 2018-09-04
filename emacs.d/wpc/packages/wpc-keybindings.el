@@ -12,17 +12,6 @@
    :fetcher github))
 (general-evil-setup t)
 
-(defun wpc/goto-definition ()
-  "Support a goto-definition that dispatches off of the `major-mode'."
-  (interactive)
-  (require 'flow-minor-mode)
-  (cond ((eq major-mode 'rjsx-mode)
-         (flow-minor-jump-to-definition))
-        ((eq major-mode 'haskell-mode)
-         (intero-goto-definition))
-        (t
-         (evil-goto-definition))))
-
 ;; vim...
 (use-package evil
   :general
@@ -37,7 +26,7 @@
    "sj"  'wpc/evil-window-split-down
    "sj"  'wpc/evil-window-split-down)
   (n
-   "gd"  'wpc/goto-definition)
+   "gd"  'xref-find-definitions)
   (general-unbind m "M-." "C-p")
   (general-unbind n "s" "M-.")
   (general-unbind i "C-d" "C-a" "C-e" "C-n" "C-p" "C-k")
@@ -68,7 +57,7 @@
     "j"  #'jump-to-register
     "h"  #'help
     "a"  #'wpc/toggle-terminal
-    "p"  #'counsel-git-grep
+    "p"  #'flycheck-previous-error
     "P"  #'counsel-git-grep
     "f"  #'wpc/find-file
     "n"  #'flycheck-next-error

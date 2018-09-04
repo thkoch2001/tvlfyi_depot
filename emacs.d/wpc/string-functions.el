@@ -14,6 +14,16 @@
   "Append \"-hook\" to X."
   (s-append "-hook" x))
 
+(defun symbol->string (symbol)
+  "Alias for `symbol-name' with SYMBOL, since I can never remember that
+function's name."
+  (symbol-name symbol))
+
+(defun string->symbol (string)
+  "Alias for `intern' for STRING since I can never remember that function's
+  name."
+  (intern string))
+
 (defun string/ensure-hookified (x)
   "Ensure that X has \"-hook\" appended to it."
   (if (s-ends-with? "-hook" x)

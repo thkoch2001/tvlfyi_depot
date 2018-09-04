@@ -33,7 +33,7 @@
 (set-register ?e '(file . "~/.emacs.d/wpc/packages"))
 (set-register ?u '(file . "~/urbint"))
 (set-register ?d '(file . "~/dotfiles"))
-(set-register ?s '(file . "~/dotfiles/configs/os_x/.slate.js"))
+(set-register ?s '(file . "~/.slate.js"))
 (set-register ?D '(file . "~/Dropbox"))
 (set-register ?o '(file . "~/Dropbox/org/"))
 (set-register ?c '(file . "~/Dropbox/org/chains.org"))
@@ -155,5 +155,14 @@
 (use-package markdown-mode)
 (use-package yaml-mode)
 
+;; Microsoft's Language Server Protocol (LSP)
+(use-package lsp-mode)
+(use-package lsp-ui
+  :config
+  (add-hook 'lsp-mode-hook #'lsp-ui-mode))
+(use-package company-lsp
+  :config
+  (push 'company-lsp company-backends))
+
 (provide 'wpc-misc)
-;;; misc.el ends here
+;;; wpc-misc.el ends here

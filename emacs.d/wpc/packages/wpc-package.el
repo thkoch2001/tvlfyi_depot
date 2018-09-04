@@ -22,7 +22,7 @@
 (setq use-package-always-ensure t)
 ;; Remove this line once general integration with use-package calls
 ;; with-eval-after-load 'use-package-core instead of 'use-package
-(require 'general)
+(use-package general)
 
 (add-to-list 'load-path "~/.emacs.d/vendor/")
 (add-to-list 'load-path "~/.emacs.d/wpc/")
