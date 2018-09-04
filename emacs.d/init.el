@@ -25,5 +25,6 @@
 (require 'wpc-docker)
 (require 'wpc-lisp)
 (require 'wpc-haskell)
+(require 'wpc-nix)
 (require 'wpc-clojure)
 (require 'wpc-javascript)
