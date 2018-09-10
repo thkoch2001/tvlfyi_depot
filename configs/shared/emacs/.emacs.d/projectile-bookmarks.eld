@@ -1,0 +1,1 @@
+("~/programming/nixify/" "~/urbint/grid/" "~/Dropbox/dotfiles/" "~/programming/nixpkgs/" "~/programming/nix-config/" "~/urbint/meta/")
