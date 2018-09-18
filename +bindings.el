@@ -1022,17 +1022,20 @@ private/hlissner/snippets."
 
 (map!
   (:map haskell-mode-map
-     :n "K"     'lsp-info-under-point
-     :n "g d"   'lsp-ui-peek-find-definitions
-     :n "g r"   'lsp-ui-peek-find-references
-     ;; :n "g SPC" 'intero-repl-load
-     :n "g \\"  '+haskell/repl
-     ;; :n "g y"   'intero-type-at
+     ;; :n "K"     'lsp-info-under-point
+     ;; :n "g d"   'lsp-ui-peek-find-definitions
+     ;; :n "g r"   'lsp-ui-peek-find-references
+     ;; :n "g \\"  '+haskell/repl
+     :n "K"     'intero-info
+     :n "g d"   'intero-goto-definition
+     :n "g SPC" 'intero-repl-load
+     :n "g \\"  'intero-repl
+     :n "g y"   'intero-type-at
      ;; :n "g RET" 'grfn/run-sputnik-test-for-file
 
      (:localleader
-       :desc "Apply action"  :n "a" 'lsp-execute-code-action
-       :desc "Rename symbol" :n "r" 'lsp-rename))
+       :desc "Apply action"  :n "e" 'intero-repl-eval-region
+       :desc "Rename symbol" :n "r" 'intero-apply-suggestions))
 
   (:after agda2-mode
     (:map agda2-mode-map

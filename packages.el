@@ -68,8 +68,8 @@
 (package! graphql-mode)
 
 ;; Haskell
-(package! lsp-mode)
-(package! lsp-ui)
-(package! lsp-haskell)
-(package! company-lsp)
-(package! lsp-imenu)
+;; (package! lsp-mode)
+;; (package! lsp-ui)
+;; (package! lsp-haskell)
+;; (package! company-lsp)
+;; (package! lsp-imenu)
