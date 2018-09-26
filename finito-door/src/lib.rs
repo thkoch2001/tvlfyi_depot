@@ -1,3 +1,5 @@
+//! Example implementation of a lockable door in Finito
+//!
 //! # What & why?
 //!
 //! This module serves as a (hopefully simple) example of how to

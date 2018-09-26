@@ -1,3 +1,5 @@
+//! PostgreSQL-backed persistence for Finito state machines
+//!
 //! This module implements ... TODO when I can write again.
 
 #[macro_use] extern crate postgres;

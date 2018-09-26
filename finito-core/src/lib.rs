@@ -1,3 +1,5 @@
+//! Finito's core finite-state machine abstraction.
+//!
 //! # What & why?
 //!
 //! Most processes that occur in software applications can be modeled
