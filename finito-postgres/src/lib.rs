@@ -13,6 +13,9 @@ extern crate serde;
 extern crate serde_json;
 extern crate uuid;
 
+#[cfg(test)] mod tests;
+#[cfg(test)] extern crate finito_door;
+
 mod error;
 pub use error::{Result, Error};
 
