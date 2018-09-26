@@ -71,6 +71,7 @@
 //!
 //! Alright, enough foreplay, lets dive in!
 
+#[macro_use] extern crate serde_derive;
 extern crate finito;
 
 use finito::FSM;
@@ -89,7 +90,7 @@ type Attempts = usize;
 ///
 /// This type is the one for which `finito::FSM` will be implemented, making it
 /// the wooden (?) heart of our door.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum DoorState {
     /// In `Opened` state, the door is wide open and anyone who fits through can
     /// go through.
@@ -114,7 +115,7 @@ pub enum DoorState {
 
 /// This type represents the events that can occur in our door, i.e. the input
 /// and interactions it receives.
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum DoorEvent {
     /// `Open` means someone is opening the door!
     Open,
@@ -136,7 +137,7 @@ pub enum DoorEvent {
 /// **Note**: This type by itself *is not* a collection of side-effects, it
 /// merely describes the side-effects we want to occur (which are then
 /// interpreted by the machinery later).
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum DoorAction {
     /// `NotifyIRC` is used to display some kind of message on the
     /// aforementioned IRC channel that is, for some reason, very interested in
