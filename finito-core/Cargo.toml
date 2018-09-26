@@ -1,0 +1,6 @@
+[package]
+name = "finito"
+version = "0.1.0"
+authors = ["Vincent Ambo <vincent@aprila.no>"]
+
+[dependencies]
