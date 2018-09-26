@@ -69,7 +69,7 @@
 //! documentation. Unfortunately those assumptions are not
 //! automatically verifiable in Rust.
 //!
-//! == Example
+//! ## Example
 //!
 //! Please consult `finito-door` for an example representing a simple,
 //! lockable door as a finite-state machine. This gives an overview
@@ -88,15 +88,16 @@
 //!
 //! Currently, those libraries include:
 //!
-//!   * @finito@: Core components and classes of Finito
+//!   * `finito`: Core components and classes of Finito
 //!
-//!   * @finito-in-mem@: In-memory implementation of state machines
+//!   * `finito-in-mem`: In-memory implementation of state machines
 //!     that do not need to live longer than an application using
 //!     standard library concurrency primitives.
 //!
-//!   * @finito-postgres@: Postgres-backed, persistent implementation
+//!   * `finito-postgres`: Postgres-backed, persistent implementation
 //!     of state machines that, well, do need to live longer. Uses
-//!     Postgres for concurrency synchronisation, so keep that in mind.
+//!     Postgres for concurrency synchronisation, so keep that in
+//!     mind.
 //!
 //! Which should cover most use-cases. Okay, enough prose, lets dive
 //! in.
