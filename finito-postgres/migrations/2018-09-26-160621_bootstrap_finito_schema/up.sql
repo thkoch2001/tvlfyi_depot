@@ -30,7 +30,7 @@ CREATE TABLE actions (
   event_id UUID NOT NULL REFERENCES events(id),
   content JSONB NOT NULL,
   status ActionStatus NOT NULL,
-  error JSONB
+  error TEXT
 );
 
 CREATE INDEX idx_actions_machines ON actions(fsm_id);

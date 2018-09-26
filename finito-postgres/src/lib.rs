@@ -110,10 +110,9 @@ struct ActionT {
     /// Current status of the action.
     status: ActionStatus,
 
-    /// Serialised error representation, if an error occured during
-    /// processing. TODO: Use some actual error type. Maybe failure
-    /// has serialisation support?
-    error: Option<Value>,
+    /// Detailed (i.e. Debug-trait formatted) error message, if an
+    /// error occured during action processing.
+    error: Option<String>,
 }
 
 // The following functions implement the public interface of
@@ -292,7 +291,7 @@ fn get_action<C, S>(conn: &C, id: Uuid) -> Result<(ActionStatus, S::Action)> whe
 fn update_action_status<C, S>(conn: &C,
                               id: Uuid,
                               status: ActionStatus,
-                              error: Option<Value>,
+                              error: Option<String>,
                               _fsm: PhantomData<S>) -> Result<()> where
     C: GenericConnection,
     S: FSM {
@@ -371,12 +370,26 @@ fn run_action<S>(tx: Transaction, id: Uuid, _fsm: PhantomData<S>)
 
     let result = match status {
         ActionStatus::Pending => {
-            let events = <S as FSM>::act(action);
-            update_action_status(
-                &tx, id, ActionStatus::Completed, None, PhantomData::<S>
-            )?;
+            match <S as FSM>::act(action) {
+                // If the action succeeded, update its status to
+                // completed and return the created events.
+                Ok(events) => {
+                    update_action_status(
+                        &tx, id, ActionStatus::Completed, None, PhantomData::<S>
+                    )?;
+                    events
+                },
 
-            events
+                // If the action failed, persist the debug message and
+                // return nothing.
+                Err(err) => {
+                    let msg = Some(format!("{:?}", err));
+                    update_action_status(
+                        &tx, id, ActionStatus::Failed, msg, PhantomData::<S>
+                    )?;
+                    vec![]
+                },
+            }
         },
 
         _ => {

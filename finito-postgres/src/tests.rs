@@ -1,5 +1,5 @@
 use super::*;
-use finito;
+
 use finito_door::*;
 use postgres::{Connection, TlsMode};
 
