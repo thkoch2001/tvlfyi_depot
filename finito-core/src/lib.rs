@@ -113,6 +113,11 @@ use std::mem;
 /// This trait is used to implement transition logic and to "tie the
 /// room together", with the room being our triplet of types.
 pub trait FSM where Self: Sized {
+    /// A human-readable string uniquely describing what this FSM
+    /// models. This is used in log messages, database tables and
+    /// various other things throughout Finito.
+    const FSM_NAME: &'static str;
+
     /// The associated event type of an FSM represents all possible
     /// events that can occur in the state-machine.
     type Event;

@@ -40,6 +40,7 @@ pub enum DoorAction {
 }
 
 impl FSM for DoorState {
+    const FSM_NAME: &'static str = "door";
     type Event = DoorEvent;
     type Action = DoorAction;
 
