@@ -72,6 +72,8 @@
 //! Alright, enough foreplay, lets dive in!
 
 #[macro_use] extern crate serde_derive;
+
+extern crate failure;
 extern crate finito;
 
 use finito::FSM;
@@ -170,6 +172,11 @@ impl FSM for DoorState {
     type Event = DoorEvent;
     type Action = DoorAction;
 
+    // For error handling, the door simply uses `failure` which provides a
+    // generic, chainable error type. In real-world implementations you may want
+    // to use a custom error type or similar.
+    type Error = failure::Error;
+
     // The implementation of `handle` provides us with the actual transition
     // logic of the door.
     //
@@ -254,18 +261,25 @@ impl FSM for DoorState {
     // Additionally the `act` function can return new events. This is useful for
     // a sort of "callback-like" pattern (cause an action to fetch some data,
     // receive it as an event) but is not used in this example.
-    fn act(action: DoorAction) -> Vec<DoorEvent> {
+    fn act(action: DoorAction) -> Result<Vec<DoorEvent>, failure::Error> {
         match action {
             DoorAction::NotifyIRC(msg) => {
-                // TODO: write to file in example
-                println!("IRC: {}", msg);
-                vec![]
+                use std::fs::OpenOptions;
+                use std::io::Write;
+
+                let mut file = OpenOptions::new()
+                    .append(true)
+                    .create(true)
+                    .open("/tmp/door-irc.log")?;
+
+                write!(file, "<doorbot> {}\n", msg)?;
+                Ok(vec![])
             }
 
             DoorAction::CallThePolice => {
                 // TODO: call the police
                 println!("The police was called! For real!");
-                vec![]
+                Ok(vec![])
             }
         }
     }
