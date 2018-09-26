@@ -1,5 +1,6 @@
 [workspace]
 members = [
   "finito-core",
-  "finito-door"
+  "finito-door",
+  "finito-postgres"
 ]
