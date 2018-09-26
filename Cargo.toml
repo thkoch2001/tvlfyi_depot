@@ -1,4 +1,5 @@
 [workspace]
 members = [
-  "finito-core"
+  "finito-core",
+  "finito-door"
 ]
