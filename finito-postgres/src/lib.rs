@@ -1,6 +1,8 @@
 //! PostgreSQL-backed persistence for Finito state machines
 //!
 //! This module implements ... TODO when I can write again.
+//!
+//! TODO: events & actions should have `SERIAL` keys
 
 #[macro_use] extern crate postgres;
 #[macro_use] extern crate postgres_derive;
@@ -97,6 +99,7 @@ struct ActionT {
     event_id: Uuid,
 
     /// Serialised content of the action.
+    #[postgres(name = "content")] // renamed because 'action' is a keyword in PG
     action: Value,
 
     /// Current status of the action.
@@ -105,7 +108,7 @@ struct ActionT {
     /// Serialised error representation, if an error occured during
     /// processing. TODO: Use some actual error type. Maybe failure
     /// has serialisation support?
-    error: Option<String>,
+    error: Option<Value>,
 }
 
 // The following functions implement the public interface of
@@ -149,8 +152,8 @@ pub fn insert_machine<C, S>(conn: &C, initial: S) -> Result<MachineId<S>> where
     C: GenericConnection,
     S: FSM + Serialize {
     let query = r#"
-      INSERT INTO machines (id, created, fsm, state)
-      VALUES ($1, NOW(), $2, $3)
+      INSERT INTO machines (id, fsm, state)
+      VALUES ($1, $2, $3)
     "#;
 
     let id = Uuid::new_v4();
@@ -171,8 +174,8 @@ where
     S: FSM,
     S::Event: Serialize {
     let query = r#"
-      INSERT INTO events (id, created, fsm, fsm_id, event)
-      VALUES ($1, NOW(), $2, $3, $4)
+      INSERT INTO events (id, fsm, fsm_id, event)
+      VALUES ($1, $2, $3, $4)
     "#;
 
     let id = Uuid::new_v4();
@@ -192,8 +195,8 @@ fn insert_action<C, S>(conn: &C,
     S: FSM,
     S::Action: Serialize {
     let query = r#"
-      INSERT INTO actions (id, created, fsm, fsm_id, event_id, action, status)
-      VALUES ($1, NOW(), $2, $3, $4, $5, $6)
+      INSERT INTO actions (id, fsm, fsm_id, event_id, action, status)
+      VALUES ($1, $2, $3, $4, $5, $6)
     "#;
 
     let id = Uuid::new_v4();
