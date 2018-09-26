@@ -67,6 +67,7 @@ struct EventT {
 
 /// This enum represents the possible statuses an action can be in.
 #[derive(Debug, ToSql, FromSql)]
+#[postgres(name = "actionstatus")]
 enum ActionStatus {
     /// The action was requested but has not run yet.
     Pending,
@@ -195,7 +196,7 @@ fn insert_action<C, S>(conn: &C,
     S: FSM,
     S::Action: Serialize {
     let query = r#"
-      INSERT INTO actions (id, fsm, fsm_id, event_id, action, status)
+      INSERT INTO actions (id, fsm, fsm_id, event_id, content, status)
       VALUES ($1, $2, $3, $4, $5, $6)
     "#;
 
@@ -239,7 +240,7 @@ pub fn get_machine<C, S>(conn: &C,
     C: GenericConnection,
     S: FSM + DeserializeOwned {
     let query = r#"
-      SELECT (id, created, fsm, state) FROM machines WHERE id = $1
+      SELECT id, created, fsm, state FROM machines WHERE id = $1
     "#;
 
     // If the machine is being fetched in the context of a
@@ -252,7 +253,7 @@ pub fn get_machine<C, S>(conn: &C,
 
     let rows = conn.query(&query, &[&id.to_uuid()]).expect("TODO");
     let mut machines = rows.into_iter().map(|row| MachineT {
-        id: row.get(0),
+        id: id.to_uuid(),
         created: row.get(1),
         fsm: row.get(2),
         state: row.get(3),
@@ -300,5 +301,7 @@ pub fn advance<C, S>(conn: &C,
 
     // And finally the state is updated:
     update_state(&tx, id, &new_state).expect("TODO");
+    tx.commit().expect("TODO");
+
     Ok(new_state)
 }

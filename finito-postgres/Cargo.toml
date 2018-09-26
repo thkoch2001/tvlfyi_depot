@@ -19,3 +19,6 @@ features = [ "v4" ]
 
 [dependencies.finito]
 path = "../finito-core"
+
+[dev-dependencies.finito-door]
+path = "../finito-door"
