@@ -108,6 +108,7 @@
 //!
 //! Please reach out! I want to know why!
 
+use std::fmt::Debug;
 use std::mem;
 
 /// Primary trait that needs to be implemented for every state type
@@ -128,6 +129,10 @@ pub trait FSM where Self: Sized {
     /// The associated action type of an FSM represents all possible
     /// actions that can occur in the state-machine.
     type Action;
+
+    /// The associated error type of an FSM represents failures that
+    /// can occur during action processing.
+    type Error: Debug;
 
     /// `handle` deals with any incoming events to cause state
     /// transitions and emit actions. This function is the core logic
@@ -152,7 +157,7 @@ pub trait FSM where Self: Sized {
 
     /// `act` interprets and executes FSM actions. This is the only
     /// part of an FSM in which side-effects are allowed.
-    fn act(Self::Action) -> Vec<Self::Event>;
+    fn act(Self::Action) -> Result<Vec<Self::Event>, Self::Error>;
 }
 
 /// This function is the primary function used to advance a state
