@@ -18,10 +18,11 @@
  '(org-fontify-whole-heading-line t t)
  '(package-selected-packages
    (quote
-    (writeroom-mode general rainbow-delimiters zen-mode flx-ido xterm-color evil-collection evil-text-objects-javascript evil-text-objects-haskell dired+ org-bullets slack emojify circe oauth2 engine-mode uniquify diminish elisp-slime-nav pcre2el magit-gh-pulls org-mode intero f cycle-themes ansi-term request dash-functional company-flow flycheck-flow flow-minor-mode elixir-mode oceanic-theme git-timemachine dockerfile-mode docker yaml-mode s key-chord yasnippet prettier-js rjsx-mode indium reason-mode flycheck markdown-mode smex magit all-the-icons-ivy which-key doom-themes cider hydra ace-window counsel-projectile counsel paredit projectile company evil exec-path-from-shell use-package)))
+    (lsp-python writeroom-mode general rainbow-delimiters zen-mode flx-ido xterm-color evil-collection evil-text-objects-javascript evil-text-objects-haskell dired+ org-bullets slack emojify circe oauth2 engine-mode uniquify diminish elisp-slime-nav pcre2el magit-gh-pulls org-mode f cycle-themes ansi-term request dash-functional company-flow flycheck-flow flow-minor-mode elixir-mode oceanic-theme git-timemachine dockerfile-mode docker yaml-mode s key-chord yasnippet prettier-js rjsx-mode indium reason-mode flycheck markdown-mode smex magit all-the-icons-ivy which-key doom-themes cider hydra ace-window counsel-projectile counsel paredit projectile company evil exec-path-from-shell use-package)))
  '(safe-local-variable-values
    (quote
-    ((intero-targets "grid:lib" "grid:exe:grid-exe" "grid:test:doctests" "grid:test:grid-test"))))
+    ((intero-targets "grid:lib" "grid:test:grid-test" "grid:bench:grid-bench")
+     (intero-targets "grid:lib" "grid:exe:grid-exe" "grid:test:doctests" "grid:test:grid-test"))))
  '(vc-annotate-background "#10151C")
  '(vc-annotate-color-map
    (list
