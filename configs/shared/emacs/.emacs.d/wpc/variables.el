@@ -7,7 +7,7 @@
 ;;; Code:
 
 (defconst wpc/current-project
-  "~/urbint/grid/"
+  "~/"
   "Variable holding the directory for my currently active project.")
 
 (defvar wpc/mouse-kbds

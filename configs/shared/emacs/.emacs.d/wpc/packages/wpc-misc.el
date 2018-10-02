@@ -16,6 +16,9 @@
 ;; transparently edit compressed files
 (auto-compression-mode t)
 
+;; link to Emacs source code
+(setq find-function-C-source-directory "~/programming/emacs/src")
+
 ;; change emacs prompts from "yes or no" -> "y or n"
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -31,6 +34,7 @@
 
 ;; create file bookmarks
 (set-register ?e '(file . "~/.emacs.d/wpc/packages"))
+(set-register ?n '(file . "~/programming/nixify/darwin-configuration.nix"))
 (set-register ?u '(file . "~/urbint"))
 (set-register ?d '(file . "~/dotfiles"))
 (set-register ?s '(file . "~/.slate.js"))
