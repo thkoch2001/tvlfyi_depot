@@ -1,0 +1,19 @@
+[global_config]
+[keybindings]
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]
+[profiles]
+  [[default]]
+    cursor_color = "#aaaaaa"
+    cursor_shape = ibeam
+    font = Monospace 14
+    use_system_font = False
+    scrollbar_position = "disabled"
+    show_titlebar = False

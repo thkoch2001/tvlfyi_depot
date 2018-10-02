@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-configs="$HOME/dotfiles/configs"
+configs="$DOTFILES/configs"
 
 if [[  $(uname) == 'Darwin' ]]; then
   (cd "$configs/os_x" && stow --target="$HOME" *)
