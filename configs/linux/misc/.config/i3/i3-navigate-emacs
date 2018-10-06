@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# Heavily inspired by this blog post:
+# https://bl.ocks.org/mijoharas/b9d09daed9654ca8d0d081015209ecd0
+
+get_focused_window() {
+  i3-msg -t get_tree | jq -r ".. | select(.focused? == true).window_properties.class"
+}
+
+perform_close() {
+  if [ "$(get_focused_window)" = "Emacs" ]; then
+    emacsclient -e "(delete-window)"
+  else
+    i3-msg kill
+  fi
+}
+
+perform_move() {
+  if [ "$(get_focused_window)" = "Emacs" ]; then
+    emacsclient -e "(evil-window-$1 1)"
+    result=$?
+    if [ $result -ne 0 ]; then
+      i3-msg focus "$1"
+    fi
+  else
+    i3-msg focus "$1"
+  fi
+}
+
+case "$1" in
+  left)  ;&
+  right) ;&
+  up)    ;&
+  down)
+    perform_move "$1"
+    ;;
+  quit)
+    perform_close
+    ;;
+  *) echo "command not found" ;;
+esac
