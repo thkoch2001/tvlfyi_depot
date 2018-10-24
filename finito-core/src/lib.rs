@@ -134,6 +134,11 @@ pub trait FSM where Self: Sized {
     /// can occur during action processing.
     type Error: Debug;
 
+    /// The associated state type of an FSM describes the state that
+    /// is made available to the implementation of action
+    /// interpretations.
+    type State;
+
     /// `handle` deals with any incoming events to cause state
     /// transitions and emit actions. This function is the core logic
     /// of any state machine.
@@ -157,7 +162,7 @@ pub trait FSM where Self: Sized {
 
     /// `act` interprets and executes FSM actions. This is the only
     /// part of an FSM in which side-effects are allowed.
-    fn act(Self::Action) -> Result<Vec<Self::Event>, Self::Error>;
+    fn act(Self::Action, Self::State) -> Result<Vec<Self::Event>, Self::Error>;
 }
 
 /// This function is the primary function used to advance a state
@@ -186,4 +191,44 @@ pub fn advance<S: FSM>(state: S, event: S::Event) -> (S, Vec<S::Action>) {
     actions.append(&mut enter_actions);
 
     (new_state, actions)
+}
+
+/// This trait is implemented by Finito backends. Backends are
+/// expected to be able to keep track of the current state of an FSM
+/// and retrieve it / apply updates transactionally.
+///
+/// See the `finito-postgres` and `finito-in-mem` crates for example
+/// implementations of this trait.
+pub trait FSMBackend {
+    /// Custom state type that is made available to action handlers by
+    /// the backend.
+    ///
+    /// TODO: Something something `Into<FSM::State> for State`.
+    type State;
+
+    /// Key type used to identify individual state machines in this
+    /// backend.
+    ///
+    /// TODO: Should be parameterised over FSM type after rustc
+    /// #44265.
+    type Key;
+
+    /// Error type for all potential failures that can occur when
+    /// interacting with this backend.
+    type Error: Debug;
+
+    /// Insert a new state-machine into the backend's storage and
+    /// return its newly allocated key.
+    fn insert_machine<S: FSM>(&self, initial: S) -> Result<Self::Key, Self::Error>;
+
+    /// Retrieve the current state of an FSM by its key.
+    fn get_machine<S: FSM>(&self, key: Self::Key) -> Result<S, Self::Error>;
+
+    /// Advance a state machine by applying an event and persisting it
+    /// as well as any resulting actions.
+    ///
+    /// **Note**: Whether actions are automatically executed depends
+    /// on the backend used. Please consult the backend's
+    /// documentation for details.
+    fn advance<S: FSM>(&self, key: Self::Key, event: S::Event) -> Result<S, Self::Error>;
 }
