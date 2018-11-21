@@ -110,6 +110,8 @@
 (ex! "tabs"        #'+workspace/display)
 (ex! "tabsave"     #'+workspace:save)
 
+(ex! "scr[atch]" #'cider-scratch)
+
 ;; Org-mode
 (ex! "cap"         #'+org-capture/dwim)
 

@@ -1,4 +1,4 @@
-;; private/grfn/+bindings.el -*- lexical-binding: t; -*-
+;; /+bindings.el -*- lexical-binding: t; -*-
 
 (load! "utils")
 (require 'f)
@@ -333,7 +333,8 @@ private/hlissner/snippets."
      :desc "Browse mode notes"      :n  "m" #'+org/browse-notes-for-major-mode
      :desc "Browse project notes"   :n  "p" #'+org/browse-notes-for-project
      :desc "Create clubhouse story" :n  "c" #'org-clubhouse-create-story
-     :desc "Archive subtree"        :n  "k" #'org-archive-subtree)
+     :desc "Archive subtree"        :n  "k" #'org-archive-subtree
+     :desc "Goto clocked-in note"   :n  "g" #'org-clock-goto)
 
    (:desc "open" :prefix "o"
      :desc "Default browser"       :n  "b" #'browse-url-of-file
@@ -413,11 +414,17 @@ private/hlissner/snippets."
  ;; --- vim-sexp-mappings-for-regular-people
  (:after paxedit
    (:map paxedit-mode-map
+     :i ";"                          #'paxedit-insert-semicolon
+     :i "("                          #'paxedit-open-round
+     :i "["                          #'paxedit-open-bracket
+     :i "{"                          #'paxedit-open-curly
      :n [remap evil-yank-line]       #'paxedit-copy
-     :n [remap evil-delete-line]     #'paxedit-delete
-     :n "go"                         #'paxedit-sexp-raise
+     :n [remap evil-delete-line]     #'paxedit-kill
+     :n "g o"                        #'paxedit-sexp-raise
      :n [remap evil-join-whitespace] #'paxedit-compress
-     :n "gS"                         #'paxedit-format-1))
+     :n "g S"                        #'paxedit-format-1
+     :n "g k"                        #'paxedit-backward-up
+     :n "g j"                        #'paxedit-backward-end))
 
  ;; --- vim-splitjoin
  :n [remap evil-join-whitespace] #'+splitjoin/join
@@ -981,7 +988,6 @@ private/hlissner/snippets."
 ;;  "<e" #'paxedit-transpose-backward)
 
 (require 'paxedit)
-
 (require 'general)
 (general-evil-setup t)
 
@@ -1001,12 +1007,22 @@ private/hlissner/snippets."
             "I" 'grfn/insert-at-sexp-start
             "a" 'grfn/insert-at-form-start))
 
-;; (require 'doom-themes)
-(require 'haskell)
+;; (nmap :keymaps 'cider-mode-map
+;;   "c" (general-key-dispatch 'evil-change
+;;         "p" 'cider-eval-sexp-at-point-in-context))
 
+
+;; >) ; slurp forward
+;; <) ; barf forward
+;; <( ; slurp backward
+;; >( ; slurp backward
+
+;; (require 'doom-themes)
 (defun grfn/haskell-test-file-p ()
   (string-match-p (rx (and "Spec.hs" eol))
                   (buffer-file-name)))
+
+(require 'haskell)
 
 (defun grfn/intero-run-main ()
   (interactive)
@@ -1016,9 +1032,11 @@ private/hlissner/snippets."
      (get-buffer-process (current-buffer))
      "main")))
 
-(defun grfn/run-sputnik-test-for-file ()
+(defun grfn/run-clj-or-cljs-test ()
   (interactive)
-  (haskell-interactive-mode-))
+  (cl-case (cider-repl-type-for-buffer)
+    ("cljs" (cider-interactive-eval "(with-out-string (cljs.test/run-tests))"))
+    ("clj"  (cider-test-run-ns-tests))))
 
 (map!
   (:map haskell-mode-map
@@ -1049,5 +1067,24 @@ private/hlissner/snippets."
         :desc "Refine"                             :n "r"   'agda2-refine
         :desc "Auto"                               :n "a"   'agda2-auto
         :desc "Goal type and context"              :n "t"   'agda2-goal-and-context
-        :desc "Goal type and context and inferred" :n ";"   'agda2-goal-and-context-and-inferred))))
+        :desc "Goal type and context and inferred" :n ";"   'agda2-goal-and-context-and-inferred)))
 
+  (:after cider-mode
+    (:map cider-mode-map
+      :n "g SPC" 'cider-eval-buffer
+      :n "g \\"  'cider-switch-to-repl-buffer
+      :n "K"     'cider-doc
+      :n "g K"   'cider-grimoire
+      :n "g d"   'cider-find-dwim
+      :n "C-w ]" 'cider-find-dwim-other-window
+      :n "g RET" 'cider-test-run-ns-tests
+
+      "C-c C-r r" 'cljr-add-require-to-ns
+
+      (:localleader
+        ;; :desc "Inspect last result" :n "i" 'cider-inspect-last-result
+        ;; :desc "Search for documentation" :n "h s" 'cider-apropos-doc
+        :desc "Add require to ns" :n "n r" 'cljr-add-require-to-ns))
+    (:map cider-repl-mode-map
+      :n "g \\" 'cider-switch-to-last-clojure-buffer))
+  )

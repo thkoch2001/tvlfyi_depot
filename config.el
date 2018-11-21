@@ -379,11 +379,28 @@
    org-capture-templates
    `(("t" "Todo" entry
       (file+headline +org-default-todo-file "Inbox")
-      "* TODO %?\n%i" :prepend t :kill-buffer t)
+      "* TODO %?\n%i"
+      :prepend t
+      :kill-buffer t)
 
      ("n" "Notes" entry
       (file+headline +org-default-notes-file "Inbox")
-      "* %u %?\n%i" :prepend t :kill-buffer t))
+      "* %u %?\n%i"
+      :prepend t
+      :kill-buffer t)
+
+     ("c" "Task note" entry
+      (clock)
+      "* %u %?\n%i[[%l][Context]]\n"
+      :kill-buffer t
+      :unnarrowed t)
+
+     ("d" "Tech debt" entry
+      (file+headline ,(concat org-directory "/work.org")
+                     "Inbox")
+      "* TODO %? :debt:\nContext: %a\nIn task: %K"
+      :prepend t
+      :kill-buffer t))
    org-deadline-warning-days 1
    org-agenda-skip-scheduled-if-deadline-is-shown 'todo
    org-agenda-custom-commands
@@ -738,3 +755,99 @@
    `(agda2-highlight-termination-problem-face ((t (:background ,orange :foreground ,base03))))
    `(agda2-highlight-incomplete-pattern-face ((t (:background ,orange :foreground ,base03))))
    `(agda2-highlight-typechecks-face ((t (:background ,cyan :foreground ,base03))))))
+
+
+(after! cider
+  (setq cider-prompt-for-symbol nil
+        cider-font-lock-dynamically 't
+        cider-save-file-on-load 't)
+  )
+
+(defun +org-clocked-in-element ()
+  (when-let ((item (car org-clock-history)))
+    (save-mark-and-excursion
+    (with-current-buffer (marker-buffer item)
+      (goto-char (marker-position item))
+      (org-element-at-point)))))
+
+(comment
+ (setq elt (+org-clocked-in-item))
+
+ (eq 'headline (car elt))
+ (plist-get (cadr elt) :raw-value)
+ )
+
+(defun +org-headline-title (headline)
+  (when (eq 'headline (car elt))
+    (plist-get (cadr elt) :raw-value)))
+
+(setq +pretty-code-symbols
+      (append +pretty-code-symbols
+              '(:equal     "≡"
+                :not-equal "≠"
+                :is        "≣"
+                :isnt      "≢"
+                :lte       "≤"
+                :gte       "≥"
+                :subseteq  "⊆"
+                )))
+
+(after! python
+  (set-pretty-symbols! 'python-mode :merge t
+    :equal      "=="
+    :not-equal "!="
+    :lte "<="
+    :gte ">="
+    :is  "is"
+    :isnt "is not"
+    :subseteq "issubset"
+
+    ;; doom builtins
+
+    ;; Functional
+    :def "def"
+    :lambda "lambda"
+    ;; Types
+    :null "None"
+    :true "True" :false "False"
+    :int "int" :str "str"
+    :float "float"
+    :bool "bool"
+    :tuple "tuple"
+    ;; Flow
+    :not "not"
+    :in "in" :not-in "not in"
+    :and "and" :or "or"
+    :for "for"
+    :return "return" :yield "yield"))
+
+(after! clojure-mode
+  (define-clojure-indent
+    (PUT 2)
+    (POST 2)
+    (GET 2)
+    (PATCH 2)
+    (DELETE 2)
+    (context 2)
+    (checking 3)))
+
+(def-package! flycheck-clojure
+  :disabled t
+  :after flycheck
+  :config
+  (flycheck-clojure-setup))
+
+(after! clj-refactor
+  (setq cljr-magic-requires :prompt
+        cljr-clojure-test-declaration "[clojure.test :refer :all]"
+        cljr-cljc-clojure-test-declaration"#?(:clj [clojure.test :refer :all]
+:cljs [cljs.test :refer-macros [deftest is testing])"
+        )
+  (add-to-list
+   'cljr-magic-require-namespaces
+   '("s" . "clojure.spec.alpha")))
+
+(def-package! sqlup-mode
+  :hook
+  (sql-mode-hook . sqlup-mode)
+  (sql-interactive-mode-hook . sqlup-mode))

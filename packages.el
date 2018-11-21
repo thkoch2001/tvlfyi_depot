@@ -73,3 +73,9 @@
 ;; (package! lsp-haskell)
 ;; (package! company-lsp)
 ;; (package! lsp-imenu)
+
+;; Clojure
+(package! flycheck-clojure)
+
+;; SQL
+(package! sqlup-mode)
