@@ -171,6 +171,7 @@ impl FSM for DoorState {
     // type is 'DoorAction'.
     type Event = DoorEvent;
     type Action = DoorAction;
+    type State = ();
 
     // For error handling, the door simply uses `failure` which provides a
     // generic, chainable error type. In real-world implementations you may want
@@ -261,7 +262,7 @@ impl FSM for DoorState {
     // Additionally the `act` function can return new events. This is useful for
     // a sort of "callback-like" pattern (cause an action to fetch some data,
     // receive it as an event) but is not used in this example.
-    fn act(action: DoorAction) -> Result<Vec<DoorEvent>, failure::Error> {
+    fn act(action: DoorAction, _state: ()) -> Result<Vec<DoorEvent>, failure::Error> {
         match action {
             DoorAction::NotifyIRC(msg) => {
                 use std::fs::OpenOptions;
