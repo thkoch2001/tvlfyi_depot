@@ -1,7 +1,8 @@
 # Hit List
 
-Note: there is no information encoded in the order.
+A crude journal of cities I have visited and cities I would like to visit.
 
+# Europe
 * ~~Berlin, Germany~~
 * Munich, Germany
 * Heidelberg, Germany
@@ -11,6 +12,14 @@ Note: there is no information encoded in the order.
 * Lausanne, Switzerland
 * ~~Paris, France~~
 * ~~Aix-en-Provence, France~~
+* Monaco, France
+* Barcelona, Spain
+* Lisbon, Portugal
+* Cinque Terre, Italy
+* Rome, Italy
+* Milan, Italy
+* Venice, Italy
+* Florence, Italy
 * Oslo, Norway
 * Bergen, Norway
 * Copenhagen, Denmark
@@ -20,22 +29,34 @@ Note: there is no information encoded in the order.
 * Amsterdam, Netherlands
 * Dubrovnik, Croatia,
 * Split, Croatia
-* Montreal, Canada
-* Quebec City, Canada
-* Vancouver, Canada
-* Monaco, France
-* Mexico City, Mexico
-* Cabo San Lucas, Mexico
+* Lake Bled, Slovenia
 * Santorini, Greece
 * Vienna, Austria
 * Salzburg, Austria
-* Cinque Terre, Italy
+* St. Petersburg, Russia
+* London, England
+* Cambridge, England
+* Chester, England
+* Edinburgh, Scotland
+* Dublin, Ireland
+* Galway, Ireland
+* Luxembourg, Luxembourg
+
+# North and South America
+* Montreal, Canada
+* Quebec City, Canada
+* Vancouver, Canada
 * Oahu Hawaii, USA
 * Chicago, USA
-* St. Petersburg, Russia
+* New Orleans, USA
+* Mexico City, Mexico
+* Cabo San Lucas, Mexico
+* Rio de Janerio, Brazil
+* Cartegena, Colombia
+
+# Asia / Pacific
 * Gold Coast, Australia
 * Sydney, Australia
-* Luxembourg, Luxembourg
 * Auckland, New Zealand
 * Kohphiphi Islands, Thailand
 * Hong Kong, China
@@ -43,14 +64,8 @@ Note: there is no information encoded in the order.
 * Tokyo, Japan
 * Kyoto, Japan
 * Seoul, South Korea
-* London, England
-* Cambridge, England
-* Chester, England
-* Edinburgh, Scotland
-* Dublin, Ireland
-* Galway, Ireland
-* Rio de Janerio, Brazil
-* Cartegena, Colombia
+
+# Middle East
 * Jaffa, Israel
 * Tel Aviv, Israel
 * Beirut, Lebanon
