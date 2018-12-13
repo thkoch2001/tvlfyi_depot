@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Vincent Ambo <mail@tazj.in>"]
 
 [dependencies]
+serde = "1.0"

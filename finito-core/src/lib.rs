@@ -108,6 +108,10 @@
 //!
 //! Please reach out! I want to know why!
 
+extern crate serde;
+
+use serde::Serialize;
+use serde::de::DeserializeOwned;
 use std::fmt::Debug;
 use std::mem;
 
@@ -199,13 +203,12 @@ pub fn advance<S: FSM>(state: S, event: S::Event) -> (S, Vec<S::Action>) {
 ///
 /// See the `finito-postgres` and `finito-in-mem` crates for example
 /// implementations of this trait.
-pub trait FSMBackend {
-    /// Custom state type that is made available to action handlers by
-    /// the backend.
-    ///
-    /// TODO: Something something `Into<FSM::State> for State`.
-    type State;
-
+///
+/// Backends must be parameterised over an additional (user-supplied)
+/// state type which can be used to track application state that must
+/// be made available to action handlers, for example to pass along
+/// database connections.
+pub trait FSMBackend<S> {
     /// Key type used to identify individual state machines in this
     /// backend.
     ///
@@ -219,10 +222,12 @@ pub trait FSMBackend {
 
     /// Insert a new state-machine into the backend's storage and
     /// return its newly allocated key.
-    fn insert_machine<S: FSM>(&self, initial: S) -> Result<Self::Key, Self::Error>;
+    fn insert_machine<F>(&self, initial: F) -> Result<Self::Key, Self::Error>
+    where F: FSM + Serialize + DeserializeOwned;
 
     /// Retrieve the current state of an FSM by its key.
-    fn get_machine<S: FSM>(&self, key: Self::Key) -> Result<S, Self::Error>;
+    fn get_machine<F: FSM>(&self, key: Self::Key) -> Result<F, Self::Error>
+    where F: FSM + Serialize + DeserializeOwned;
 
     /// Advance a state machine by applying an event and persisting it
     /// as well as any resulting actions.
@@ -230,5 +235,9 @@ pub trait FSMBackend {
     /// **Note**: Whether actions are automatically executed depends
     /// on the backend used. Please consult the backend's
     /// documentation for details.
-    fn advance<S: FSM>(&self, key: Self::Key, event: S::Event) -> Result<S, Self::Error>;
+    fn advance<F: FSM>(&self, key: Self::Key, event: F::Event) -> Result<F, Self::Error>
+    where F: FSM + Serialize + DeserializeOwned,
+          F::State: From<S>,
+          F::Event: Serialize + DeserializeOwned,
+          F::Action: Serialize + DeserializeOwned;
 }
