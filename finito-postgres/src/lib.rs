@@ -17,8 +17,9 @@ extern crate uuid;
 #[cfg(test)] extern crate finito_door;
 
 mod error;
-pub use error::{Result, Error};
+pub use error::{Result, Error, ErrorKind};
 
+use error::ResultExt;
 use chrono::prelude::{DateTime, Utc};
 use finito::{FSM, FSMBackend};
 use postgres::{Connection, GenericConnection};
@@ -118,9 +119,9 @@ impl <State: 'static> FSMBackend<State> for FinitoPostgres<State> {
 
         let id = Uuid::new_v4();
         let fsm = S::FSM_NAME.to_string();
-        let state = serde_json::to_value(initial).expect("TODO");
+        let state = serde_json::to_value(initial).context("failed to serialise FSM")?;
 
-        self.conn.execute(query, &[&id, &fsm, &state]).expect("TODO");
+        self.conn.execute(query, &[&id, &fsm, &state]).context("failed to insert FSM")?;
 
         return Ok(id);
 
@@ -146,7 +147,7 @@ impl <State: 'static> FSMBackend<State> for FinitoPostgres<State> {
           S::State: From<&'a State>,
           S::Event: Serialize + DeserializeOwned,
           S::Action: Serialize + DeserializeOwned {
-        let tx = self.conn.transaction().expect("TODO");
+        let tx = self.conn.transaction().context("could not begin transaction")?;
         let state = get_machine_internal(&tx, key, true)?;
 
         // Advancing the FSM consumes the event, so it is persisted first:
@@ -163,8 +164,8 @@ impl <State: 'static> FSMBackend<State> for FinitoPostgres<State> {
         }
 
         // And finally the state is updated:
-        update_state(&tx, key, &new_state).expect("TODO");
-        tx.commit().expect("TODO");
+        update_state(&tx, key, &new_state)?;
+        tx.commit().context("could not commit transaction")?;
 
         self.run_actions::<S>(key, action_ids);
 
@@ -211,9 +212,9 @@ pub fn insert_machine<C, S>(conn: &C, initial: S) -> Result<Uuid> where
 
     let id = Uuid::new_v4();
     let fsm = S::FSM_NAME.to_string();
-    let state = serde_json::to_value(initial).expect("TODO");
+    let state = serde_json::to_value(initial).context("failed to serialize FSM")?;
 
-    conn.execute(query, &[&id, &fsm, &state]).expect("TODO");
+    conn.execute(query, &[&id, &fsm, &state])?;
 
     return Ok(id);
 }
@@ -233,9 +234,10 @@ where
 
     let id = Uuid::new_v4();
     let fsm = S::FSM_NAME.to_string();
-    let event_value = serde_json::to_value(event).expect("TODO");
+    let event_value = serde_json::to_value(event)
+        .context("failed to serialize event")?;
 
-    conn.execute(query, &[&id, &fsm, &fsm_id, &event_value]).expect("TODO");
+    conn.execute(query, &[&id, &fsm, &fsm_id, &event_value])?;
     return Ok(id)
 }
 
@@ -254,12 +256,13 @@ fn insert_action<C, S>(conn: &C,
 
     let id = Uuid::new_v4();
     let fsm = S::FSM_NAME.to_string();
-    let action_value = serde_json::to_value(action).expect("TODO");
+    let action_value = serde_json::to_value(action)
+        .context("failed to serialize action")?;
 
     conn.execute(
         query,
         &[&id, &fsm, &fsm_id, &event_id, &action_value, &ActionStatus::Pending]
-    ).expect("TODO");
+    )?;
 
     return Ok(id)
 }
@@ -274,13 +277,11 @@ fn update_state<C, S>(conn: &C,
       UPDATE machines SET state = $1 WHERE id = $2
     "#;
 
-    let state_value = serde_json::to_value(state).expect("TODO");
-    let res_count = conn.execute(query, &[&state_value, &fsm_id])
-        .expect("TODO");
+    let state_value = serde_json::to_value(state).context("failed to serialize FSM")?;
+    let res_count = conn.execute(query, &[&state_value, &fsm_id])?;
 
     if res_count != 1 {
-        // TODO: not found error!
-        unimplemented!()
+        Err(ErrorKind::FSMNotFound(fsm_id).into())
     } else {
         Ok(())
     }
@@ -307,13 +308,12 @@ fn get_machine_internal<C, S>(conn: &C,
       SELECT state FROM machines WHERE id = $1
     "#);
 
-    let rows = conn.query(&query, &[&id]).expect("TODO");
+    let rows = conn.query(&query, &[&id]).context("failed to retrieve FSM")?;
 
     if let Some(row) = rows.into_iter().next() {
-        Ok(serde_json::from_value(row.get(0)).expect("TODO"))
+        Ok(serde_json::from_value(row.get(0)).context("failed to deserialize FSM")?)
     } else {
-        // TODO: return appropriate not found error
-        Err(Error::SomeError)
+        Err(ErrorKind::FSMNotFound(id).into())
     }
 }
 
@@ -328,14 +328,14 @@ fn get_action<C, S>(conn: &C, id: Uuid) -> Result<(ActionStatus, S::Action)> whe
       WHERE id = $1 AND fsm = $2
     "#);
 
-    let rows = conn.query(&query, &[&id, &S::FSM_NAME]).expect("TODO");
+    let rows = conn.query(&query, &[&id, &S::FSM_NAME])?;
 
     if let Some(row) = rows.into_iter().next() {
-        let action = serde_json::from_value(row.get(1)).expect("TODO");
+        let action = serde_json::from_value(row.get(1))
+            .context("failed to deserialize FSM action")?;
         Ok((row.get(0), action))
     } else {
-        // TODO: return appropriate not found error
-        Err(Error::SomeError)
+        Err(ErrorKind::ActionNotFound(id).into())
     }
 }
 
@@ -352,15 +352,13 @@ fn update_action_status<C, S>(conn: &C,
       WHERE id = $3 AND fsm = $4
     "#;
 
-    let result = conn.execute(&query, &[&status, &error, &id, &S::FSM_NAME])
-        .expect("TODO");
+    let result = conn.execute(&query, &[&status, &error, &id, &S::FSM_NAME])?;
 
     if result != 1 {
-        // TODO: Fail in the most gruesome way!
-        unimplemented!()
+        Err(ErrorKind::ActionNotFound(id).into())
+    } else {
+        Ok(())
     }
-
-    Ok(())
 }
 
 /// Execute a single action in case it is pending or retryable. Holds
@@ -408,6 +406,6 @@ fn run_action<S>(tx: Transaction, id: Uuid, state: &S::State, _fsm: PhantomData<
         },
     };
 
-    tx.commit().expect("TODO");
+    tx.commit().context("failed to commit transaction")?;
     Ok(result)
 }
