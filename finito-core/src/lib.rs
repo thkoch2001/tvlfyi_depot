@@ -166,7 +166,7 @@ pub trait FSM where Self: Sized {
 
     /// `act` interprets and executes FSM actions. This is the only
     /// part of an FSM in which side-effects are allowed.
-    fn act(Self::Action, Self::State) -> Result<Vec<Self::Event>, Self::Error>;
+    fn act(Self::Action, &Self::State) -> Result<Vec<Self::Event>, Self::Error>;
 }
 
 /// This function is the primary function used to advance a state
@@ -208,7 +208,7 @@ pub fn advance<S: FSM>(state: S, event: S::Event) -> (S, Vec<S::Action>) {
 /// state type which can be used to track application state that must
 /// be made available to action handlers, for example to pass along
 /// database connections.
-pub trait FSMBackend<S> {
+pub trait FSMBackend<S: 'static> {
     /// Key type used to identify individual state machines in this
     /// backend.
     ///
@@ -235,9 +235,9 @@ pub trait FSMBackend<S> {
     /// **Note**: Whether actions are automatically executed depends
     /// on the backend used. Please consult the backend's
     /// documentation for details.
-    fn advance<F: FSM>(&self, key: Self::Key, event: F::Event) -> Result<F, Self::Error>
+    fn advance<'a, F: FSM>(&'a self, key: Self::Key, event: F::Event) -> Result<F, Self::Error>
     where F: FSM + Serialize + DeserializeOwned,
-          F::State: From<S>,
+          F::State: From<&'a S>,
           F::Event: Serialize + DeserializeOwned,
           F::Action: Serialize + DeserializeOwned;
 }
