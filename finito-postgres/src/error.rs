@@ -7,8 +7,9 @@ use uuid::Uuid;
 use std::error::Error as StdError;
 
 // errors to chain:
-use serde_json::Error as JsonError;
 use postgres::Error as PgError;
+use r2d2_postgres::r2d2::Error as PoolError;
+use serde_json::Error as JsonError;
 
 pub type Result<T> = result::Result<T, Error>;
 
@@ -26,6 +27,9 @@ pub enum ErrorKind {
     /// Errors occuring during communication with the database.
     Database(String),
 
+    /// Errors with the database connection pool.
+    DBPool(String),
+
     /// State machine could not be found.
     FSMNotFound(Uuid),
 
@@ -42,6 +46,9 @@ impl fmt::Display for Error {
 
             Database(err) =>
                 format!("PostgreSQL error: {}", err),
+
+            DBPool(err) =>
+                format!("Database connection pool error: {}", err),
 
             FSMNotFound(id) =>
                 format!("FSM with ID {} not found", id),
@@ -77,6 +84,12 @@ impl From<JsonError> for ErrorKind {
 impl From<PgError> for ErrorKind {
     fn from(err: PgError) -> ErrorKind {
         ErrorKind::Database(err.to_string())
+    }
+}
+
+impl From<PoolError> for ErrorKind {
+    fn from(err: PoolError) -> ErrorKind {
+        ErrorKind::DBPool(err.to_string())
     }
 }
 
