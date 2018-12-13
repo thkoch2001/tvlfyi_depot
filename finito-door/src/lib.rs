@@ -262,7 +262,7 @@ impl FSM for DoorState {
     // Additionally the `act` function can return new events. This is useful for
     // a sort of "callback-like" pattern (cause an action to fetch some data,
     // receive it as an event) but is not used in this example.
-    fn act(action: DoorAction, _state: ()) -> Result<Vec<DoorEvent>, failure::Error> {
+    fn act(action: DoorAction, _state: &()) -> Result<Vec<DoorEvent>, failure::Error> {
         match action {
             DoorAction::NotifyIRC(msg) => {
                 use std::fs::OpenOptions;
