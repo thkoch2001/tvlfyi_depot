@@ -33,6 +33,7 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Santorini, Greece
 * Vienna, Austria
 * Salzburg, Austria
+* Hallstatt, Austria
 * St. Petersburg, Russia
 * London, England
 * Cambridge, England
