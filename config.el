@@ -356,7 +356,9 @@
    org-default-notes-file (concat org-directory "/inbox.org")
    +org-default-todo-file (concat org-directory "/inbox.org")
    org-agenda-files (list (expand-file-name "~/notes"))
-   org-refile-targets '((org-agenda-files :maxlevel . 1))
+   org-refile-targets '((org-agenda-files :maxlevel . 3))
+   org-outline-path-complete-in-steps nil
+   org-refile-use-outline-path t
    org-file-apps `((auto-mode . emacs)
                    (,(rx (or (and "." (optional "x") (optional "htm") (optional "l") buffer-end)
                              (and buffer-start "http" (optional "s") "://")))
@@ -376,6 +378,7 @@
    org-hidden-keywords '(title)
    org-tags-column -130
    org-ellipsis "⤵"
+   org-imenu-depth 9
    org-capture-templates
    `(("t" "Todo" entry
       (file+headline +org-default-todo-file "Inbox")
@@ -385,13 +388,13 @@
 
      ("n" "Notes" entry
       (file+headline +org-default-notes-file "Inbox")
-      "* %u %?\n%i"
+      "* %U %?\n%i"
       :prepend t
       :kill-buffer t)
 
      ("c" "Task note" entry
       (clock)
-      "* %u %?\n%i[[%l][Context]]\n"
+      "* %U %?\n%i[[%l][Context]]\n"
       :kill-buffer t
       :unnarrowed t)
 
@@ -405,7 +408,9 @@
    org-agenda-skip-scheduled-if-deadline-is-shown 'todo
    org-agenda-custom-commands
    '(("p" "Sprint Tasks" tags-todo "sprint")
-     ("i" "Inbox" tags "inbox")))
+     ("i" "Inbox" tags "inbox")
+     ("r" "Running jobs" todo "RUNNING")))
+
   (set-face-foreground 'org-block +solarized-s-base00)
   (add-hook! org-mode
     (add-hook! evil-normal-state-entry-hook
@@ -627,6 +632,8 @@
           ('npm ".test")
           (otherwise (projectile-test-suffix project-type)))))
 
+(setq projectile-create-missing-test-files 't)
+
 (defun magit-commit-wip ()
   (interactive)
   (magit-commit '("-m" "wip")))
@@ -707,7 +714,7 @@
 (require 'whitespace)
 (setq whitespace-style '(face lines-tail))
 (global-whitespace-mode t)
-(add-hook! 'org-mode-hook (lambda () (whitespace-mode -1)))
+(add-hook 'org-mode-hook (lambda ()  (whitespace-mode -1)) t)
 
 (set-face-foreground 'whitespace-line +solarized-red)
 (set-face-attribute 'whitespace-line nil :underline 't)
@@ -829,7 +836,9 @@
     (PATCH 2)
     (DELETE 2)
     (context 2)
-    (checking 3)))
+    (checking 3)
+    (match 1)
+    (domonad 0)))
 
 (def-package! flycheck-clojure
   :disabled t
@@ -851,3 +860,21 @@
   :hook
   (sql-mode-hook . sqlup-mode)
   (sql-interactive-mode-hook . sqlup-mode))
+
+(def-package! yapfify
+  :hook
+  (python-mode-hook . yapf-mode))
+
+(def-package! w3m
+  :hook
+  (setq browse-url-browser-function 'w3m-browse-url))
+
+(def-package! ob-http
+  :config
+  (add-to-list 'org-babel-load-languages '(http . t)))
+
+(def-package! ob-ipython
+  :config
+  (add-to-list 'org-babel-load-languages '(ipython . t))
+  (setq ob-ipython-command
+        "/home/griffin/code/urb/ciml-video-classifier/bin/jupyter"))

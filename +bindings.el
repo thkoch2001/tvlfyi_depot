@@ -174,7 +174,7 @@ private/hlissner/snippets."
    :desc "M-x"                     :nv ":"  #'execute-extended-command
    :desc "Pop up scratch buffer"   :nv "x"  #'doom/open-scratch-buffer
    :desc "Org Capture"             :nv "X"  #'org-capture
-   :desc "Org Capture"             :nv "a"  #'+org-capture/open
+   :desc "Org Capture"             :nv "a"  #'org-capture
 
    ;; Most commonly used
    :desc "Find file in project"    :n "SPC" #'projectile-find-file
@@ -886,13 +886,6 @@ private/hlissner/snippets."
       :i "C-e" #'doom/forward-to-last-non-comment-or-eol
       :i "C-u" #'doom/backward-kill-to-bol-and-indent
 
-      ;; textmate-esque newline insertion
-      :i [M-return]     #'evil-open-below
-      :i [S-M-return]   #'evil-open-above
-      ;; textmate-esque deletion
-      [M-backspace]     #'doom/backward-kill-to-bol-and-indent
-      :i [backspace]    #'delete-backward-char
-      :i [M-backspace]  #'doom/backward-kill-to-bol-and-indent
       ;; Emacsien motions for insert mode
       :i "C-b" #'backward-word
       :i "C-f" #'forward-word
@@ -908,8 +901,7 @@ private/hlissner/snippets."
       (:after org
         (:map org-mode-map
           :i [remap doom/inflate-space-maybe] #'org-self-insert-command
-          :i "C-e" #'org-end-of-line
-          :i "C-a" #'org-beginning-of-line))
+          ))
 
       ;; Restore common editing keys (and ESC) in minibuffer
       (:map (minibuffer-local-map
@@ -920,7 +912,7 @@ private/hlissner/snippets."
              evil-ex-completion-map
              evil-ex-search-keymap
              read-expression-map)
-        [escape] #'abort-recursive-edit
+        ;; [escape] #'abort-recursive-edit
         "C-r" #'evil-paste-from-register
         "C-a" #'move-beginning-of-line
         "C-w" #'doom/minibuffer-kill-word
@@ -1087,4 +1079,14 @@ private/hlissner/snippets."
         :desc "Add require to ns" :n "n r" 'cljr-add-require-to-ns))
     (:map cider-repl-mode-map
       :n "g \\" 'cider-switch-to-last-clojure-buffer))
-  )
+
+  (:after w3m
+    (:map w3m-mode-map
+      "/" 'evil-search-forward
+      "?" 'evil-search-backward))
+
+  (:after org
+    (:map org-mode-map
+      [remap counsel-imenu] #'counsel-org-goto
+      (:localleader
+        :n "g" #'counsel-org-goto))))

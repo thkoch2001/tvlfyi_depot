@@ -11,13 +11,18 @@
   :recipe (general
            :fetcher github
            :repo "noctuid/general.el"))
+(package! fill-column-indicator)
+(package! writeroom-mode)
+(package! dash)
+(package! w3m)
+
+;;; Org
 (package! org-clubhouse
   :recipe (org-clubhouse
            :fetcher file
            :path "~/code/urb/org-clubhouse"))
-(package! fill-column-indicator)
-(package! writeroom-mode)
-(package! dash)
+(package! ob-http)
+(package! ob-ipython)
 
 ;; Presentation
 (package! epresent)
@@ -79,3 +84,6 @@
 
 ;; SQL
 (package! sqlup-mode)
+
+;;; Python
+(package! yapfify)
