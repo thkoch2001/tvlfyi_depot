@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: shell.nix boilerplate
+# key: import
+# --
+with import <nixpkgs> {};
+
+stdenv.mkDerivation {
+  name = "$1";
+  buildInputs = [
+    $2
+  ];
+}
