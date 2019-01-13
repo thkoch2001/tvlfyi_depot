@@ -18,8 +18,8 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
 
 # screen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20
+bindsym XF86MonBrightnessUp   exec light -A 10
+bindsym XF86MonBrightnessDown exec light -U 10
 
 # ensure wallpaper
 exec --no-startup-id feh --bg-scale ~/pictures/blurred.jpg
@@ -28,22 +28,37 @@ exec --no-startup-id feh --bg-scale ~/pictures/blurred.jpg
 bindsym $mod+Return exec terminator
 
 # no title bars
-for_window [class="^.*"] border pixel 0
+for_window [class="^.*"] border pixel 3
 
 # disable mouse hover focus
 focus_follows_mouse no
 
 # kill focused window
-bindsym $mod+q exec ~/.config/i3/i3-navigate-emacs quit
+bindsym $mod+q exec ~/.config/i3/i3-and-emacs quit
 
 # start dmenu (a program launcher)
 bindsym Mod4+space exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -i -dmenu -width 40 -lines 8'
 
+# GTK Themes
+exec --no-startup-id gnome-settings-daemon
+
+# wireless selection mechanism
+exec --no-startup-id nm-applet
+
+# lock the screen
+bindsym $mod+Shift+o exec "gnome-screensaver-command --lock "
+
+# sound applet
+exec --no-startup-id gnome-sound-applet
+
+# polybar
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
 # change focus
-bindsym $mod+h exec ~/.config/i3/i3-navigate-emacs left
-bindsym $mod+j exec ~/.config/i3/i3-navigate-emacs down
-bindsym $mod+k exec ~/.config/i3/i3-navigate-emacs up
-bindsym $mod+l exec ~/.config/i3/i3-navigate-emacs right
+bindsym $mod+h exec ~/.config/i3/i3-and-emacs left
+bindsym $mod+j exec ~/.config/i3/i3-and-emacs down
+bindsym $mod+k exec ~/.config/i3/i3-and-emacs up
+bindsym $mod+l exec ~/.config/i3/i3-and-emacs right
 
 # move focused window
 bindsym $mod+Shift+h move left
@@ -115,10 +130,12 @@ bindsym $mod+Shift+0 move container to workspace $ws10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+# lock screen
+bindsym $mod+Control+BackSpace exec "i3lock -c 232423"
+# implemented a sleeping KBD
+# sudo pm-suspend
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -126,17 +143,17 @@ mode "resize" {
         bindsym j resize shrink height 10 px or 10 ppt
         bindsym k resize grow height 10 px or 10 ppt
         bindsym l resize grow width 10 px or 10 ppt
-
-        # back to normal: Enter or Escape or $mod+r
         bindsym Return mode "default"
         bindsym Caps_Lock mode "default"
-        bindsym $mod+r mode "default"
+        bindsym $mod+Shift+r mode "default"
 }
 
-bindsym $mod+r mode "resize"
+bindsym $mod+Shift+r mode "resize"
 
-bar {
-        status_command i3status
-        position top
-        font pango:monospace 12
-}
+# Colors
+set $foreground #e60053
+set $background #dfdfdf
+
+# window borders
+# Format:      border      background  text        indicator   child_border
+client.focused $foreground $background $foreground $foreground $foreground

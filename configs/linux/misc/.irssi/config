@@ -1,0 +1,33 @@
+servers = (
+  {
+    address = "chat.freenode.net";
+    chatnet = "Freenode";
+    port = "6697";
+    use_tls = "yes";
+    tls_verify = "yes";
+    autoconnect = "yes";
+  }
+);
+
+chatnets = {
+  Freenode = {
+    type = "IRC";
+    autosendcmd = "/msg nickserv identify wpcarro ]3Fwus]YF7yXPB6Re/Me";
+  };
+};
+
+channels = (
+  { name = "#nixos"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "#i3"; chatnet = "Freenode"; autojoin = "No"; },
+  { name = "#haskell"; chatnet = "GameSurge"; autojoin = "No"; },
+);
+
+settings = {
+  core = {
+    real_name = "William Carroll's account";
+    user_name = "wpcarro";
+    nick = "wpcarro";
+  };
+  "fe-text" = { actlist_sort = "refnum"; };
+  "fe-common/core" = { theme = "default"; };
+};

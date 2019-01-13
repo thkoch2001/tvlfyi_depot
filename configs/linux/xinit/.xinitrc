@@ -1,1 +1,1 @@
-startkde
+xrdb ~/.Xresources

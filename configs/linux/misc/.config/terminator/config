@@ -11,9 +11,10 @@
 [plugins]
 [profiles]
   [[default]]
+    background_type = transparent
     cursor_color = "#aaaaaa"
     cursor_shape = ibeam
-    font = Monospace 14
-    use_system_font = False
-    scrollbar_position = "disabled"
+    font = Source Code Pro 12
+    scrollbar_position = hidden
     show_titlebar = False
+    use_system_font = False

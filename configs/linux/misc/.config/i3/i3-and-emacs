@@ -10,6 +10,10 @@ get_focused_window() {
 perform_close() {
   if [ "$(get_focused_window)" = "Emacs" ]; then
     emacsclient -e "(delete-window)"
+    result=$?
+    if [ $result -ne 0 ]; then
+      i3-msg kill
+    fi
   else
     i3-msg kill
   fi
