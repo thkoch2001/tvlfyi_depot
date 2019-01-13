@@ -32,25 +32,15 @@
           (switch-to-buffer buffer-name)
         (funcall repl-function)))))
 
-;; (defun wpc/evil-leader/set-key-for-clojure-modes (kbd callback)
-;;   (evil-leader/set-key-for-mode 'clojure-mode kbd callback)
-;;   (evil-leader/set-key-for-mode 'clojurec-mode kbd callback)
-;;   (evil-leader/set-key-for-mode 'clojurescript-mode kbd callback))
-
-;; ;; clojure
-;; (wpc/evil-leader/set-key-for-clojure-modes "d" #'cider-doc)
-;; (wpc/evil-leader/set-key-for-clojure-modes "e" #'cider-eval-defun-at-point)
-;; (wpc/evil-leader/set-key-for-clojure-modes "r" #'wpc/find-or-create-clojure-or-clojurescript-repl)
-
 (use-package cider
-  :general
-  (cider-repl-mode-map
-   "C-l"    'cider-repl-clear-buffer
-   "C-u"    'kill-whole-line
-   "<up>"   'cider-repl-previous-input
-   "<down>" 'cider-repl-next-input
-   "C-c 'j" 'wpc/find-or-create-clojure-or-clojurescript-repl)
   :config
+  (general-define-key
+    :keymaps 'cider-repl-mode-map
+    "C-l"    #'cider-repl-clear-buffer
+    "C-u"    #'kill-whole-line
+    "<up>"   #'cider-repl-previous-input
+    "<down>" #'cider-repl-next-input
+    "C-c 'j" #'wpc/find-or-create-clojure-or-clojurescript-repl)
   (setq cider-cljs-lein-repl
         "(do (require 'figwheel-sidecar.repl-api)
              (figwheel-sidecar.repl-api/start-figwheel!)

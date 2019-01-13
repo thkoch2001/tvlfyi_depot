@@ -3,45 +3,42 @@
 
 ;;; Commentary:
 ;; This module hosts my Evil preferences
+;;
+;; Wish List:
+;; - drop support for `evil-leader' library in favor of `general.el'
+;; - restore support for concise (n <kbd> <function>) instead of `general-mmap'
+;; - restore support for `general-unbind'
 
 ;;; Code:
 
-(quelpa
- '(general
-   :repo "noctuid/general.el"
-   :fetcher github))
-(general-evil-setup t)
-
-;; vim...
 (use-package evil
-  :general
-  (m
-   "RET" 'evil-goto-line
-   "H"   'evil-first-non-blank
-   "L"   'evil-end-of-line
-   "-"   'dired-jump
-   "sl"  'wpc/evil-window-vsplit-right
-   "sh"  'evil-window-vsplit
-   "sk"  'evil-window-split
-   "sj"  'wpc/evil-window-split-down
-   "sj"  'wpc/evil-window-split-down)
-  (n
-   "gd"  'xref-find-definitions)
-  (general-unbind m "M-." "C-p")
-  (general-unbind n "s" "M-.")
-  (general-unbind i "C-d" "C-a" "C-e" "C-n" "C-p" "C-k")
-  (evil-ex-map
-   "M-p" 'previous-complete-history-element
-   "M-n" 'next-complete-history-element)
   :init
   (setq evil-want-integration nil)
+  (general-evil-setup)
   :config
+  (general-mmap
+    :keymaps 'override
+    "RET" #'evil-goto-line
+    "H"   #'evil-first-non-blank
+    "L"   #'evil-end-of-line
+    "-"   #'dired-jump
+    "sl"  #'wpc/evil-window-vsplit-right
+    "sh"  #'evil-window-vsplit
+    "sk"  #'evil-window-split
+    "sj"  #'wpc/evil-window-split-down
+    "sj"  #'wpc/evil-window-split-down)
+  (general-nmap
+    :keymaps 'override
+    "gd"  #'xref-find-definitions)
+  (general-unbind 'motion "M-." "C-p")
+  (general-unbind 'normal "s"   "M-.")
+  (general-unbind 'insert "C-d" "C-a" "C-e" "C-n" "C-p" "C-k")
   (setq evil-symbol-word-search t)
   (evil-mode 1))
 
 ;; evil keybindings
 (use-package evil-collection
-  :after evil
+  :after (evil)
   :config
   (evil-collection-init))
 
@@ -63,8 +60,6 @@
     "n"  #'flycheck-next-error
     "N"  #'smerge-next
     "P"  #'smerge-prev
-    "s"  #'slack-send-code-snippet
-    "S"  #'slack-select-unread-rooms
     "b"  #'ivy-switch-buffer
     "gs" #'magit-status
     "es" #'wpc/create-snippet

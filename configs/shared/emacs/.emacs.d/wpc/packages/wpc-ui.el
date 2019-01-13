@@ -10,7 +10,7 @@
 (setq-default line-spacing 4)
 
 ;; change font
-(add-to-list 'default-frame-alist '(font . "Operator Mono-10"))
+(add-to-list 'default-frame-alist '(font . "Source Code Pro-10"))
 
 (defconst wpc/font-size-step 10
   "The amount (%) by which to increase or decrease a font.")
@@ -29,8 +29,8 @@
        (+ (- wpc/font-size-step))
        (set-face-attribute 'default (selected-frame) :height)))
 
-(general-def "s-j" #'wpc/decrease-font)
-(general-def "s-k" #'wpc/increase-font)
+(general-define-key "s-j" #'wpc/decrease-font)
+(general-define-key "s-k" #'wpc/increase-font)
 
 ;; smooth scrolling settings
 (setq scroll-step 1
@@ -88,7 +88,7 @@
     (set-frame-parameter (selected-frame) 'alpha `(,alpha . ,alpha)))
   (setq frame-transparent? (not frame-transparent?)))
 
-(general-def "s-u" #'wpc/toggle-transparency)
+(general-define-key "s-u" #'wpc/toggle-transparency)
 
 ;; premium Emacs themes
 (use-package doom-themes
@@ -159,14 +159,5 @@
   :config
   (setq alert-default-style 'notifier))
 
-;; focus mode
-(quelpa '(zen-mode
-          :fetcher github
-          :repo "aki237/zen-mode"))
-(require 'zen-mode)
-
-;; focus mode
-(use-package writeroom-mode)
-
 (provide 'wpc-ui)
-;;; ui.el ends here
+;;; wpc-ui.el ends here

@@ -1,1 +1,1 @@
-("~/programming/nixify/" "~/programming/dotfiles/")
+("~/programming/nixify/" "~/programming/brush-butter/" "~/programming/dotfiles/" "~/programming/website/" "~/programming/datadog/" "~/programming/cljs-for-js-devs-starter/" "/nix/store/qpc45xqs08sy0pmp9fn1h6drz21zhixk-emacs-25.3/share/emacs/25.3/lisp/" "~/programming/client_boilerplate/" "~/programming/signafire/")

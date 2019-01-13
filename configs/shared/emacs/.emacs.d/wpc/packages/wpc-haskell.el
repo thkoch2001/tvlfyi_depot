@@ -27,7 +27,7 @@
   (add-hook 'haskell-mode-hook #'flycheck-mode))
 
 ;; Test toggling
-(defun empire/haskell/module->test ()
+(defun haskell/module->test ()
   "Jump from a module to a test."
   (let ((filename (->> buffer-file-name
                        (s-replace "/src/" "/test/")
@@ -36,7 +36,7 @@
     (make-directory (f-dirname filename) t)
     (find-file filename)))
 
-(defun empire/haskell/test->module ()
+(defun haskell/test->module ()
   "Jump from a test to a module."
   (let ((filename (->> buffer-file-name
                        (s-replace "/test/" "/src/")
@@ -45,12 +45,12 @@
     (make-directory (f-dirname filename) t)
     (find-file filename)))
 
-(defun empire/haskell/test<->module ()
+(defun haskell/test<->module ()
   "Toggle between test and module in Haskell."
   (interactive)
   (if (s-contains? "/src/" buffer-file-name)
-      (empire/haskell/module->test)
-    (empire/haskell/test->module)))
+      (haskell/module->test)
+    (haskell/test->module)))
 
 (provide 'wpc-haskell)
 ;;; wpc-haskell.el ends here

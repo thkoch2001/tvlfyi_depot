@@ -1,4 +1,4 @@
-;;; wpc-javascript.el --- My Javascript preferences -*- lexical-binding: t -*-
+;; wpc-javascript.el --- My Javascript preferences -*- lexical-binding: t -*-
 ;; Author: William Carroll <wpcarro@gmail.com>
 
 ;;; Commentary:
@@ -33,24 +33,23 @@
 ;; (evil-leader/set-key-for-mode 'rjsx-mode "x" #'wpc/toggle-between-js-component-and-store)
 ;; (evil-leader/set-key-for-mode 'rjsx-mode "u" #'wpc/jump-to-parent-file)
 
-;; javascript text objects
-(quelpa '(evil-text-objects-javascript
-          :fetcher github
-          :repo "urbint/evil-text-objects-javascript"))
-(require 'evil-text-objects-javascript)
-
 ;; Flow for Javascript
 (use-package add-node-modules-path
   :config
   (general-add-hook wpc/js-hooks #'add-node-modules-path))
 
 (use-package flow-minor-mode
-  :general
-  (n "gd" 'flow-minor-jump-to-definition)
   :requires evil-leader
   :config
   (general-add-hook wpc/js-hooks #'flow-minor-mode)
   (evil-leader/set-key-for-mode 'rjsx-mode "F" #'wpc/insert-flow-annotation))
+
+(use-package web-mode
+  :mode "\\.html\\'"
+  :config
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-markup-indent-offset 2))
 
 ;; Shouldn't need this once LSP is setup properly
 ;; (use-package company-flow
@@ -70,13 +69,12 @@
 
 ;; JSX highlighting
 (use-package rjsx-mode
-  :after (evil-text-objects-javascript)
-  :general
-  (general-unbind rjsx-mode-map "<" ">" "C-d")
-  (n rjsx-mode-map
-     "K" 'flow-minor-type-at-pos)
   :mode "\\.js\\'"
   :config
+  (general-unbind rjsx-mode-map "<" ">" "C-d")
+  (general-nmap
+    :keymaps 'rjsx-mode-map
+    "K" #'flow-minor-type-at-pos)
   (setq js2-mode-show-parse-errors nil
         js2-mode-show-strict-warnings nil))
 

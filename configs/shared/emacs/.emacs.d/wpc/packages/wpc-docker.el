@@ -12,7 +12,5 @@
   (setenv "DOCKER_HOST" "tcp://10.11.12.13:2376")
   (setenv "DOCKER_MACHINE_NAME" "name"))
 
-(use-package dockerfile-mode)
-
 (provide 'wpc-docker)
-;;; docker.el ends here
+;;; wpc-docker.el ends here

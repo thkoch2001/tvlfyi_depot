@@ -7,7 +7,7 @@
  rename-file
  mkdir
  prettier-js-mode
- lsp-rename
+ nix-mode
 )
 
 ;; ----- smex-data -----

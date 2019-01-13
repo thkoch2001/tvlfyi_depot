@@ -6,19 +6,7 @@
 
 ;;; Code:
 
-;; Griffin's org clubhouse integration
-;;(load-file "~/.emacs.d/vendor/org-clubhouse.el")
-;;(setq org-clubhouse-auth-token (wpc/read-file-as-string "~/dotfiles/configs/secrets/clubhouse_token.txt")
-;;      org-clubhouse-team-name "urbint")
-;;(add-hook 'org-mode-hook #'org-clubhouse-mode)
-
 (use-package org
-  :ghook (nil (disable linum-mode))
-  :general
-  (:prefix "C-c"
-           "l" 'org-store-link
-           "a" 'org-agenda
-           "c" 'org-capture)
   :preface
   (defconst wpc-org-directory
     "~/Dropbox/org")
@@ -29,6 +17,11 @@
   (defun ub/org-file (file)
     (f-join ub-org-directory (f-swap-ext file "org")))
   :config
+  ; (general-add-hook org-mode-hook (disable linum-mode))
+  (general-define-key :prefix "C-c"
+           "l" #'org-store-link
+           "a" #'org-agenda
+           "c" #'org-capture)
   (setq org-default-notes-file (wpc/org-file "notes"))
   (setq org-log-done 'time)
   (setq org-agenda-files (list (wpc/org-file "work")
@@ -39,7 +32,8 @@
 
 (use-package org-bullets
   :after (org)
-  :ghook ('org-mode-hook (enable org-bullets-mode)))
+  :config
+  (general-add-hook 'org-mode-hook (enable org-bullets-mode)))
 
 (provide 'wpc-org)
-;;; org.el ends here
+;;; wpc-org.el ends here

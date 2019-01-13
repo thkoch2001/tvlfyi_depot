@@ -11,4 +11,4 @@
   (global-flycheck-mode))
 
 (provide 'wpc-flycheck)
-;;; flycheck.el ends here
+;;; wpc-flycheck.el ends here

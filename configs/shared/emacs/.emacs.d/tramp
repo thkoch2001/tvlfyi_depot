@@ -1,0 +1,42 @@
+;; -*- emacs-lisp -*- <18/11/04 17:19:20 /home/wpcarro/.emacs.d/tramp>
+;; Tramp connection history.  Don't change this file.
+;; You can delete it, forcing Tramp to reapply the checks.
+
+((["sudo" "root" "nixos" nil nil]
+  ("uname" "Linux 4.14.71")
+  ("locale" "LC_ALL=en_US.utf8")
+  ("test" "test")
+  ("remote-path"
+   ("/run/current-system/sw/bin" "/bin" "/usr/bin"))
+  ("remote-shell" "/bin/sh")
+  ("readlink" "\\readlink")
+  ("stat" nil)
+  ("perl-file-spec" t)
+  ("perl-cwd-realpath" t)
+  ("perl" "\\perl")
+  ("id" "/run/current-system/sw/bin/id")
+  ("gid-integer" 0)
+  ("file-exists" "test -e")
+  ("gid-string" "root")
+  ("uid-integer" 0)
+  ("git" "\\git")
+  ("~root" "/root")
+  ("env-u-option" t))
+ (["ssh" nil "chords" nil nil]
+  ("uname" "Linux 4.4.0-138-generic")
+  ("locale" "LC_ALL=en_US.utf8")
+  ("test" "test")
+  ("remote-path"
+   ("/bin" "/usr/bin" "/sbin" "/usr/sbin" "/usr/local/bin" "/usr/local/sbin"))
+  ("remote-shell" "/bin/sh")
+  ("readlink" "\\readlink")
+  ("stat" nil)
+  ("perl-file-spec" t)
+  ("perl-cwd-realpath" t)
+  ("perl" "\\perl")
+  ("id" "/usr/bin/id")
+  ("gid-integer" 0)
+  ("gid-string" "root")
+  ("file-exists" "test -e")
+  ("ls" "/bin/ls --color=never")
+  ("ls-dired" t)))

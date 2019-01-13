@@ -1,1 +1,0 @@
-((evil-text-objects-haskell :fetcher github :repo "urbint/evil-text-objects-haskell") (evil-text-objects-javascript :fetcher github :repo "urbint/evil-text-objects-javascript") (general :repo "noctuid/general.el" :fetcher github) (quelpa :url "https://framagit.org/steckerhalter/quelpa.git" :fetcher git) (zen-mode :fetcher github :repo "aki237/zen-mode"))

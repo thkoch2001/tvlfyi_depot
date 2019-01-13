@@ -3,17 +3,20 @@
 
 ;;; Commentary:
 ;; My attempts at creating a sane Emacs terminal
+;;
+;; This module previously contained more logic, which has since been stripped.
+;;
+;; If the variable `explicit-shell-file-name' is `nil', Emacs will use the value
+;; for the $SHELL environment variable.  When running on NixOS, since binaries
+;; like `zsh' won't be available at `/bin/zsh' or other common places, we need
+;; to ensure that `explicit-shell-file-name' remain `nil'.
+;;
+;; Wish List:
+;; - prevent Emacs from asking: "Run program: /run/current-system/sw/bin/zsh"
 
 ;;; Code:
 
 (setq wpc/terminal-name "wpc/terminal")
 
-;; 256 color support in term (instead of 8)
-(use-package xterm-color)
-
-(use-package term
-  :config
-  (setq explicit-shell-file-name "/bin/zsh"))
-
 (provide 'wpc-terminal)
-;;; terminal.el ends here
+;;; wpc-terminal.el ends here

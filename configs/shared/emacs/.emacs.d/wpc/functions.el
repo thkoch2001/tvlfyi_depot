@@ -5,11 +5,7 @@
 ;; This file hopefully contains friendly APIs that making ELisp development more enjoyable.
 
 ;;; Code:
-
-;; TODO: clean up this file so this isn't necessary
-(setq evil-want-integration nil)
 (require 'evil)
-
 (require 'projectile)
 (require 'paredit)
 (require 'term)

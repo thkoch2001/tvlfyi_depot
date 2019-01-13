@@ -7,14 +7,6 @@
 
 (require 'wpc-package "~/.emacs.d/wpc/packages/wpc-package.el")
 
-;; third-party libraries
-(use-package dash)
-(use-package dash-functional)
-(use-package s)
-(use-package f)
-(use-package request)
-(use-package pcre2el)
-
 ;; load order is intentional
 (require 'variables)
 (require 'wpc-misc)
@@ -30,14 +22,13 @@
 (require 'wpc-dired)
 (require 'wpc-terminal)
 (require 'wpc-org)
-(require 'wpc-slack)
 (require 'wpc-company)
 (require 'wpc-flycheck)
-(require 'wpc-git)
 (require 'wpc-docker)
 (require 'wpc-lisp)
 (require 'wpc-haskell)
 (require 'wpc-python)
+(require 'wpc-elixir)
 (require 'wpc-nix)
 (require 'wpc-clojure)
 (require 'wpc-javascript)

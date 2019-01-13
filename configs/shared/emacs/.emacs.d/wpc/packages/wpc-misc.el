@@ -10,11 +10,21 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
 
+;; integrate Emacs with X11 clipboard
+(setq x-select-enable-primary t)
+(setq x-select-enable-clipboard t)
+(general-def 'insert
+  "s-v" #'x-clipboard-yank
+  "C-S-v" #'x-clipboard-yank)
+
 ;; start emacs server so `emacsclient' can work
 (server-start)
 
 ;; transparently edit compressed files
 (auto-compression-mode t)
+
+;; autowrap when over the fill-column
+(auto-fill-mode 1)
 
 ;; link to Emacs source code
 (setq find-function-C-source-directory "~/programming/emacs/src")
@@ -34,14 +44,10 @@
 
 ;; create file bookmarks
 (set-register ?e '(file . "~/.emacs.d/wpc/packages"))
-(set-register ?n '(file . "~/programming/nixify/darwin-configuration.nix"))
-(set-register ?u '(file . "~/urbint"))
-(set-register ?d '(file . "~/dotfiles"))
+(set-register ?n '(file . "~/programming/nixify/configuration.nix"))
+(set-register ?d '(file . "~/programming/dotfiles"))
 (set-register ?s '(file . "~/.slate.js"))
 (set-register ?D '(file . "~/Dropbox"))
-(set-register ?o '(file . "~/Dropbox/org/"))
-(set-register ?c '(file . "~/Dropbox/org/chains.org"))
-(set-register ?b '(file . "~/Dropbox/org/backlog.org"))
 (set-register ?p `(file . ,wpc/current-project))
 
 ;; persist history etc b/w Emacs sessions
@@ -101,12 +107,11 @@
   (defvar url-callback-function ())
   (defvar url-callback-arguments ()))
 
-(use-package smex
-  :general
-  ("M-x" 'smex)
-  :ghook ('ido-setup-hook #'wpc/bind-ido-keys)
-  :config
-  (smex-initialize))
+; (use-package smex
+;   :config
+;   (general-define-key "M-x" #'smex)
+;   (general-add-hook 'ido-setup-hook #'wpc/bind-ido-keys)
+;   (smex-initialize))
 
 (use-package flx-ido
   :after (smex)
@@ -116,18 +121,18 @@
         ido-use-faces nil))
 
 (use-package swiper
-  :general
-  ("C-s" 'swiper
-   "C-r" 'swiper))
+  :config
+  (general-define-key
+    "C-s" #'swiper
+    "C-r" #'swiper))
 
 (use-package yasnippet
   :config
   (yas-global-mode 1))
 
 (use-package ace-window
-  :general
-  ("C-x o" 'ace-window)
   :config
+  (general-define-key "C-x o" #'ace-window)
   (setq aw-keys '(?a ?s ?d ?f ?j ?k ?k ?\;)))
 
 (use-package projectile
@@ -143,9 +148,6 @@
           (counsel-git-grep)
         (counsel-git-grep nil maybe-symbol)))))
 
-;; projectile intergration with ivy
-(use-package counsel-projectile)
-
 ;; search Google, Stackoverflow from within Emacs
 (use-package engine-mode
   :config
@@ -156,11 +158,7 @@
     "https://stackoverflow.com/search?q=%s"
     :keybinding "s"))
 
-(use-package markdown-mode)
-(use-package yaml-mode)
-
 ;; Microsoft's Language Server Protocol (LSP)
-(use-package lsp-mode)
 (use-package lsp-ui
   :config
   (add-hook 'lsp-mode-hook #'lsp-ui-mode))
