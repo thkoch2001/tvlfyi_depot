@@ -340,8 +340,6 @@ private/hlissner/snippets."
      :desc "Default browser"       :n  "b" #'browse-url-of-file
      :desc "Debugger"              :n  "d" #'+debug/open
      :desc "REPL"                  :n  "r" #'+eval/open-repl
-                                   :v  "r" #'+eval:repl
-     :desc "Neotree"               :n  "n" #'+neotree/toggle
      :desc "Terminal"              :n  "t" #'+term/open-popup
      :desc "Terminal in project"   :n  "T" #'+term/open-popup-in-project
 
@@ -999,9 +997,75 @@ private/hlissner/snippets."
             "I" 'grfn/insert-at-sexp-start
             "a" 'grfn/insert-at-form-start))
 
-;; (nmap :keymaps 'cider-mode-map
-;;   "c" (general-key-dispatch 'evil-change
-;;         "p" 'cider-eval-sexp-at-point-in-context))
+(evil-define-operator fireplace-eval (beg end)
+  (cider-interactive-eval nil nil (list beg end)))
+
+(defun cider-insert-current-sexp-in-repl (&optional arg)
+  "Insert the expression at point in the REPL buffer.
+If invoked with a prefix ARG eval the expression after inserting it"
+  (interactive "P")
+  (cider-insert-in-repl (cider-sexp-at-point) arg))
+
+(evil-define-operator fireplace-send (beg end)
+  (cider-insert-current-sexp-in-repl nil nil (list beg end)))
+
+(defun +clojure-pprint-expr (form)
+  (format "(with-out-str (clojure.pprint/pprint %s))"
+          form))
+
+(defun cider-eval-read-and-print-handler (&optional buffer)
+  "Make a handler for evaluating and reading then printing result in BUFFER."
+  (nrepl-make-response-handler
+   (or buffer (current-buffer))
+   (lambda (buffer value)
+     (let ((value* (read value)))
+       (with-current-buffer buffer
+         (insert
+          (if (derived-mode-p 'cider-clojure-interaction-mode)
+              (format "\n%s\n" value*)
+            value*)))))
+   (lambda (_buffer out) (cider-emit-interactive-eval-output out))
+   (lambda (_buffer err) (cider-emit-interactive-eval-err-output err))
+   '()))
+
+(defun cider-eval-and-replace (beg end)
+  "Evaluate the expression in region and replace it with its result"
+  (interactive "r")
+  (let ((form (buffer-substring beg end)))
+    (cider-nrepl-sync-request:eval form)
+    (kill-region beg end)
+    (cider-interactive-eval
+     (+clojure-pprint-expr form)
+     (cider-eval-read-and-print-handler))))
+
+(defun cider-eval-current-sexp-and-replace ()
+  "Evaluate the expression at point and replace it with its result"
+  (interactive)
+  (apply #'cider-eval-and-replace (cider-sexp-at-point 'bounds)))
+
+(evil-define-operator fireplace-replace (beg end)
+  (cider-eval-and-replace beg end))
+
+(evil-define-operator fireplace-eval-context (beg end)
+  (cider--eval-in-context (buffer-substring beg end)))
+
+;;; fireplace-esque eval binding
+(nmap :keymaps 'cider-mode-map
+  "c" (general-key-dispatch 'evil-change
+        "p" (general-key-dispatch 'fireplace-eval
+              "p" 'cider-eval-sexp-at-point
+              "c" 'cider-eval-last-sexp
+              "d" 'cider-eval-defun-at-point
+              "r" 'cider-test-run-test)
+        "q" (general-key-dispatch 'fireplace-send
+              "q" 'cider-insert-current-sexp-in-repl
+              "c" 'cider-insert-last-sexp-in-repl)
+        "x" (general-key-dispatch 'fireplace-eval-context
+              "x" 'cider-eval-sexp-at-point-in-context
+              "c" 'cider-eval-last-sexp-in-context)
+        "!" (general-key-dispatch 'fireplace-replace
+              "!" 'cider-eval-current-sexp-and-replace
+              "c" 'cider-eval-last-sexp-and-replace)))
 
 
 ;; >) ; slurp forward
@@ -1061,6 +1125,11 @@ private/hlissner/snippets."
         :desc "Goal type and context"              :n "t"   'agda2-goal-and-context
         :desc "Goal type and context and inferred" :n ";"   'agda2-goal-and-context-and-inferred)))
 
+  (:after clojure-mode
+    (:map clojure-mode-map
+      :n "] f" 'forward-sexp
+      :n "[ f" 'backward-sexp))
+
   (:after cider-mode
     (:map cider-mode-map
       :n "g SPC" 'cider-eval-buffer
@@ -1072,11 +1141,13 @@ private/hlissner/snippets."
       :n "g RET" 'cider-test-run-ns-tests
 
       "C-c C-r r" 'cljr-add-require-to-ns
+      "C-c C-r i" 'cljr-add-import-to-ns
 
       (:localleader
         ;; :desc "Inspect last result" :n "i" 'cider-inspect-last-result
         ;; :desc "Search for documentation" :n "h s" 'cider-apropos-doc
-        :desc "Add require to ns" :n "n r" 'cljr-add-require-to-ns))
+        :desc "Add require to ns" :n "n r" 'cljr-add-require-to-ns
+        :desc "Add import to ns" :n "n i" 'cljr-add-import-to-ns))
     (:map cider-repl-mode-map
       :n "g \\" 'cider-switch-to-last-clojure-buffer))
 
