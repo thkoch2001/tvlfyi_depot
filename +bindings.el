@@ -330,11 +330,10 @@ private/hlissner/snippets."
      :desc "Store link"             :n  "l" #'org-store-link
      :desc "Browse notes"           :n  "N" #'+hlissner/browse-notes
      :desc "Org capture"            :n  "x" #'+org-capture/open
-     :desc "Browse mode notes"      :n  "m" #'+org/browse-notes-for-major-mode
-     :desc "Browse project notes"   :n  "p" #'+org/browse-notes-for-project
      :desc "Create clubhouse story" :n  "c" #'org-clubhouse-create-story
      :desc "Archive subtree"        :n  "k" #'org-archive-subtree
-     :desc "Goto clocked-in note"   :n  "g" #'org-clock-goto)
+     :desc "Goto clocked-in note"   :n  "g" #'org-clock-goto
+     :desc "Clock Out"              :n  "o" #'org-clock-out)
 
    (:desc "open" :prefix "o"
      :desc "Default browser"       :n  "b" #'browse-url-of-file
@@ -353,6 +352,11 @@ private/hlissner/snippets."
      :desc "APP: email"            :n "M" #'=email
      :desc "APP: twitter"          :n "T" #'=twitter
      :desc "APP: regex"            :n "X" #'=regex
+
+     (:desc "spotify" :prefix "s"
+       :desc "Search track"  :n "t" #'counsel-spotify-search-track
+       :desc "Search album"  :n "a" #'counsel-spotify-search-album
+       :desc "Search artist" :n "A" #'counsel-spotify-search-artist)
 
      ;; macos
      (:when IS-MAC
@@ -533,9 +537,6 @@ private/hlissner/snippets."
 
  ;; evil-exchange
  :n  "gx"  #'evil-exchange
-
- ;; evil-matchit
- :nv [tab] #'+evil/matchit-or-toggle-fold
 
  ;; evil-magit
  (:after evil-magit
@@ -1065,7 +1066,8 @@ If invoked with a prefix ARG eval the expression after inserting it"
               "c" 'cider-eval-last-sexp-in-context)
         "!" (general-key-dispatch 'fireplace-replace
               "!" 'cider-eval-current-sexp-and-replace
-              "c" 'cider-eval-last-sexp-and-replace)))
+              "c" 'cider-eval-last-sexp-and-replace)
+        "y" 'cider-copy-last-result))
 
 
 ;; >) ; slurp forward
@@ -1094,70 +1096,91 @@ If invoked with a prefix ARG eval the expression after inserting it"
     ("cljs" (cider-interactive-eval "(with-out-string (cljs.test/run-tests))"))
     ("clj"  (cider-test-run-ns-tests))))
 
+(defun cider-copy-last-result ()
+  (interactive)
+  (cider-interactive-eval
+   "*1"
+   (nrepl-make-response-handler
+    (current-buffer)
+    (lambda (_ value)
+      (kill-new value)
+      (message "Copied last result (%s) to clipboard"
+               (if (= (length value) 1) "1 char"
+                 (format "%d chars" (length value)))))
+    nil nil nil)))
+
+
 (map!
-  (:map haskell-mode-map
-     ;; :n "K"     'lsp-info-under-point
-     ;; :n "g d"   'lsp-ui-peek-find-definitions
-     ;; :n "g r"   'lsp-ui-peek-find-references
-     ;; :n "g \\"  '+haskell/repl
-     :n "K"     'intero-info
-     :n "g d"   'intero-goto-definition
-     :n "g SPC" 'intero-repl-load
-     :n "g \\"  'intero-repl
-     :n "g y"   'intero-type-at
-     ;; :n "g RET" 'grfn/run-sputnik-test-for-file
+
+ (:map magit-mode-map
+   :n "#" 'forge-dispatch)
+
+ (:map haskell-mode-map
+   ;; :n "K"     'lsp-info-under-point
+   ;; :n "g d"   'lsp-ui-peek-find-definitions
+   ;; :n "g r"   'lsp-ui-peek-find-references
+   ;; :n "g \\"  '+haskell/repl
+   :n "K"     'intero-info
+   :n "g d"   'intero-goto-definition
+   :n "g SPC" 'intero-repl-load
+   :n "g \\"  'intero-repl
+   :n "g y"   'intero-type-at
+   ;; :n "g RET" 'grfn/run-sputnik-test-for-file
+
+   (:localleader
+     :desc "Apply action"  :n "e" 'intero-repl-eval-region
+     :desc "Rename symbol" :n "r" 'intero-apply-suggestions))
+
+ (:after agda2-mode
+   (:map agda2-mode-map
+     :n "g SPC" 'agda2-load
+     :n "g d"   'agda2-goto-definition-keyboard
+     :n "] g"   'agda2-next-goal
+     :n "[ g"   'agda2-previous-goal
 
      (:localleader
-       :desc "Apply action"  :n "e" 'intero-repl-eval-region
-       :desc "Rename symbol" :n "r" 'intero-apply-suggestions))
+       :desc "Give"                               :n "SPC" 'agda2-give
+       :desc "Refine"                             :n "r"   'agda2-refine
+       :desc "Auto"                               :n "a"   'agda2-auto
+       :desc "Goal type and context"              :n "t"   'agda2-goal-and-context
+       :desc "Goal type and context and inferred" :n ";"   'agda2-goal-and-context-and-inferred)))
 
-  (:after agda2-mode
-    (:map agda2-mode-map
-      :n "g SPC" 'agda2-load
-      :n "g d"   'agda2-goto-definition-keyboard
-      :n "] g"   'agda2-next-goal
-      :n "[ g"   'agda2-previous-goal
+ (:after clojure-mode
+   (:map clojure-mode-map
+     :n "] f" 'forward-sexp
+     :n "[ f" 'backward-sexp))
 
-      (:localleader
-        :desc "Give"                               :n "SPC" 'agda2-give
-        :desc "Refine"                             :n "r"   'agda2-refine
-        :desc "Auto"                               :n "a"   'agda2-auto
-        :desc "Goal type and context"              :n "t"   'agda2-goal-and-context
-        :desc "Goal type and context and inferred" :n ";"   'agda2-goal-and-context-and-inferred)))
+ (:after cider-mode
+   (:map cider-mode-map
+     :n "g SPC" 'cider-eval-buffer
+     :n "g \\"  'cider-switch-to-repl-buffer
+     :n "K"     'cider-doc
+     :n "g K"   'cider-grimoire
+     :n "g d"   'cider-find-dwim
+     :n "C-w ]" 'cider-find-dwim-other-window
+     :n "g RET" 'cider-test-run-ns-tests
 
-  (:after clojure-mode
-    (:map clojure-mode-map
-      :n "] f" 'forward-sexp
-      :n "[ f" 'backward-sexp))
+     "C-c C-r r" 'cljr-add-require-to-ns
+     "C-c C-r i" 'cljr-add-import-to-ns
 
-  (:after cider-mode
-    (:map cider-mode-map
-      :n "g SPC" 'cider-eval-buffer
-      :n "g \\"  'cider-switch-to-repl-buffer
-      :n "K"     'cider-doc
-      :n "g K"   'cider-grimoire
-      :n "g d"   'cider-find-dwim
-      :n "C-w ]" 'cider-find-dwim-other-window
-      :n "g RET" 'cider-test-run-ns-tests
+     (:localleader
+       ;; :desc "Inspect last result" :n "i" 'cider-inspect-last-result
+       ;; :desc "Search for documentation" :n "h s" 'cider-apropos-doc
+       :desc "Add require to ns" :n "n r" 'cljr-add-require-to-ns
+       :desc "Add import to ns" :n "n i" 'cljr-add-import-to-ns))
+   (:map cider-repl-mode-map
+     :n "g \\" 'cider-switch-to-last-clojure-buffer))
 
-      "C-c C-r r" 'cljr-add-require-to-ns
-      "C-c C-r i" 'cljr-add-import-to-ns
+ (:after w3m
+   (:map w3m-mode-map
+     "/" 'evil-search-forward
+     "?" 'evil-search-backward))
 
-      (:localleader
-        ;; :desc "Inspect last result" :n "i" 'cider-inspect-last-result
-        ;; :desc "Search for documentation" :n "h s" 'cider-apropos-doc
-        :desc "Add require to ns" :n "n r" 'cljr-add-require-to-ns
-        :desc "Add import to ns" :n "n i" 'cljr-add-import-to-ns))
-    (:map cider-repl-mode-map
-      :n "g \\" 'cider-switch-to-last-clojure-buffer))
-
-  (:after w3m
-    (:map w3m-mode-map
-      "/" 'evil-search-forward
-      "?" 'evil-search-backward))
-
-  (:after org
-    (:map org-mode-map
-      [remap counsel-imenu] #'counsel-org-goto
-      (:localleader
-        :n "g" #'counsel-org-goto))))
+ (:after org
+   :n "C-c C-x C-o" #'org-clock-out
+   (:map org-mode-map
+     [remap counsel-imenu] #'counsel-org-goto
+     "M-k" #'org-move-subtree-up
+     "M-j" #'org-move-subtree-down
+     (:localleader
+       :n "g" #'counsel-org-goto))))

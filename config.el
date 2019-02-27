@@ -12,6 +12,8 @@
 (after! rust
   (setq rust-format-on-save t))
 
+(load! "utils")
+
 ; (defconst rust-src-path
 ;   (-> "/Users/griffin/.cargo/bin/rustc --print sysroot"
 ;       shell-command-to-string
@@ -106,7 +108,9 @@
 (alist-set 'theme-overrides 'grfn-solarized-light
            `((font-lock-doc-face ((t (:foreground ,+solarized-s-base1))))
              (font-lock-preprocessor-face ((t (:foreground ,+solarized-red))))
-             (font-lock-keyword-face ((t (:foreground ,+solarized-green))))
+             (font-lock-keyword-face ((t (:foreground ,+solarized-green :bold nil))))
+             (font-lock-builtin-face ((t (:foreground ,+solarized-s-base01
+                                          :bold t))))
 
              (elixir-attribute-face ((t (:foreground ,+solarized-blue))))
              (elixir-atom-face ((t (:foreground ,+solarized-cyan))))
@@ -117,7 +121,8 @@
              (haskell-keyword-face ((t (:foreground ,+solarized-cyan))))))
 
 (setq solarized-use-variable-pitch nil
-      solarized-scale-org-headlines nil)
+      solarized-scale-org-headlines nil
+      solarized-use-less-bold t)
 
 (add-to-list 'custom-theme-load-path "~/.doom.d/themes")
 (load-theme 'grfn-solarized-light t)
@@ -129,7 +134,8 @@
 
 (add-hook! doom-post-init
   (set-face-attribute 'bold nil :weight 'ultra-light)
-  (set-face-bold-p 'bold nil))
+  (set-face-bold 'bold nil)
+  (enable-theme 'grfn-solarized-light))
 
 (defun rx-words (&rest words)
   (rx-to-string
@@ -273,7 +279,16 @@
 ;;             (hook-name)
 ;;             (symbol-name mode)))))
 
-(def-package! org-clubhouse)
+(def-package! org-clubhouse
+  :config
+  (setq org-clubhouse-state-alist
+        '(("PROPOSED" . "Proposed")
+          ("BACKLOG"  . "Backlog")
+          ("TODO"     . "Scheduled")
+          ("ACTIVE"   . "In Progress")
+          ("PR"       . "In Review")
+          ("TESTING"  . "In Testing")
+          ("DONE"     . "Completed"))))
 
 ; (require 'doom-themes)
 
@@ -409,7 +424,8 @@
    org-agenda-custom-commands
    '(("p" "Sprint Tasks" tags-todo "sprint")
      ("i" "Inbox" tags "inbox")
-     ("r" "Running jobs" todo "RUNNING")))
+     ("r" "Running jobs" todo "RUNNING")
+     ("w" "@Work" tags-todo "@work")))
 
   (set-face-foreground 'org-block +solarized-s-base00)
   (add-hook! org-mode
@@ -420,9 +436,10 @@
   )
 
 (after! magit
-  (setq git-commit-summary-max-length 50)
-  (require 'magit-gh-pulls)
-  (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
+  (setq git-commit-summary-max-length 50))
+
+;; (def-package! forge
+;;   :after magit)
 
 (comment
 
@@ -471,7 +488,7 @@
 (load! "slack-snippets")
 
 (after! magit
-  (require 'evil-magit)
+  ;; (require 'evil-magit)
   ;; (require 'magithub)
   )
 
@@ -581,12 +598,12 @@
 
 ;; Auto-format Haskell on save, with a combination of hindent + brittany
 
-(define-minor-mode brittany-haskell-mode
-  :init-value nil
-  :group 'haskell
-  :lighter "Brittany-Haskell"
-  :keymap '()
-  )
+; (define-minor-mode brittany-haskell-mode
+;   :init-value nil
+;   :group 'haskell
+;   :lighter "Brittany-Haskell"
+;   :keymap '()
+;   )
 
 
 (defun urbint/format-haskell-source ()
@@ -620,6 +637,7 @@
 (require 'slack)
 (setq slack-buffer-emojify 't
       slack-prefer-current-team 't)
+
 (require 'alert)
 (setq alert-default-style 'libnotify)
 
@@ -634,13 +652,15 @@
 
 (setq projectile-create-missing-test-files 't)
 
-(defun magit-commit-wip ()
-  (interactive)
-  (magit-commit '("-m" "wip")))
-
 (after! magit
-  (magit-define-popup-action 'magit-commit-popup
-    ?W "WIP" 'magit-commit-wip))
+  (define-suffix-command magit-commit-wip ()
+    (interactive)
+    (magit-commit-create '("-m" "wip")))
+
+  (transient-append-suffix
+    #'magit-commit
+    ["c"]
+    (list "W" "Commit WIP" #'magit-commit-wip)))
 
 ;; (defun grfn/split-window-more-sensibly (&optional window)
 ;;   (let ((window (or window (selected-window))))
@@ -838,11 +858,14 @@
     (context 2)
     (checking 3)
     (match 1)
-    (domonad 0)))
+    (domonad 0)
+    (describe 1)
+    (before 1)
+    (it 2)))
 
 (def-package! flycheck-clojure
-  :disabled t
-  :after flycheck
+  ;; :disabled t
+  :after (flycheck cider)
   :config
   (flycheck-clojure-setup))
 
@@ -878,3 +901,20 @@
   (add-to-list 'org-babel-load-languages '(ipython . t))
   (setq ob-ipython-command
         "/home/griffin/code/urb/ciml-video-classifier/bin/jupyter"))
+
+(def-package! counsel-spotify)
+
+(def-package! evil-snipe :disabled t)
+(evil-snipe-mode -1)
+
+(def-package! rainbow-mode)
+
+(def-package! org-alert
+  :config
+  (org-alert-enable)
+  (setq alert-default-style 'libnotify
+        org-alert-headline-title "org"))
+
+(def-package! ob-async)
+
+(enable-theme 'grfn-solarized-light)

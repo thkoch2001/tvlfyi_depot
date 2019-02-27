@@ -3,6 +3,8 @@
 
 ;; (package! 'tide :disable t)
 
+(package! moody)
+
 ;; Editor
 (package! solarized-theme)
 (package! fill-column-indicator)
@@ -15,14 +17,17 @@
 (package! writeroom-mode)
 (package! dash)
 (package! w3m)
+(package! rainbow-mode)
 
 ;;; Org
 (package! org-clubhouse
   :recipe (org-clubhouse
            :fetcher file
            :path "~/code/urb/org-clubhouse"))
+(package! org-alert)
 (package! ob-http)
 (package! ob-ipython)
+(package! ob-async)
 
 ;; Presentation
 (package! epresent)
@@ -35,10 +40,8 @@
 
 ;; Git
 (package! evil-magit)
-(package! magithub)
-(package! magit-gh-pulls)
 (package! marshal)
-; (package! auth-password-store)
+(package! forge)
 
 ;; Elisp
 (package! dash)
@@ -87,3 +90,6 @@
 
 ;;; Python
 (package! yapfify)
+
+;;; Desktop interaction
+(package! counsel-spotify)
