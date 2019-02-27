@@ -1,0 +1,2 @@
+! Load keybindings
+xmodmap ~/.Xmodmap
