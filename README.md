@@ -7,33 +7,7 @@ other items.
 Configuration is everything.
 
 
-# SSH
-
-Here are a few useful tips for working with SSH.
-
-## ssh_config
-
-Instead of creating shell aliases and functions for conveniently accessing
-remote nodes over SSH, edit your `~/.ssh/config` file.
-
-Instead of doing this...
-
-```bash
-$ alias ec2='ssh -i /path/to/identity_file.pem ubuntu@<ec2-instance-public-ip>'
-```
-
-...edit your `~/.ssh/config`:
-
-```
-Host ec2
- User ubuntu
- HostName <ec2-instance-public-ip>
- IdentityFile /path/to/identity_file.pem
-
-# Host * configuration below...
-```
-
-## sshfs
+# SSHFS
 
 SSHFS enables seamless file transfers from your local machine to a remote
 machine.
