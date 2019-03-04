@@ -25,6 +25,7 @@ alias mdu="mix deps.update"
 alias mdup="mix docker.up"
 alias cat="bat"
 alias g="git"
+alias glp='git log --graph --pretty=format:"%Cred%h%Creset -%Cblue %an %Creset - %C(yellow)%d%Creset %s %Cgreen(%cr)%Creset" --abbrev-commit --date=relative'
 alias git="hub"
 alias gprom="git pull --rebase origin master"
 alias gcan="git commit --amend --no-edit"
