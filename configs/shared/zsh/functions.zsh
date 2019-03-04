@@ -1,14 +1,15 @@
 # From Google's ZSH Hacks
+# NOTE: this file has since been modified by me.
 
 # Improvement to fasd's existing `zz` alias
 unalias zz
-function zz() {
+zz() {
   # TODO: Add documentation
   local dir
   dir="$(fasd -Rdl "$1" | fzf --query="$1" -1 -0 --no-sort +m)" && cd "${dir}" || return 1
 }
 
-function fv() {
+fv() {
   # Usage: fv file pattern
   # This is useful when you know the fuzzy name of the file you want to edit
   local file
@@ -16,7 +17,7 @@ function fv() {
   [[ -n "$file" ]] && vim "$file"
 }
 
-function bb() {
+tb() {
   # Toggle between blaze-bin and your source.
   # Useful if you like to cd into the dir where your source lives.
   if [[ $PWD =~ '(.*)/blaze-bin(.*)' ]]; then
@@ -26,7 +27,7 @@ function bb() {
   fi
 }
 
-function jt() {
+tj() {
   # Toggle between the source dir and test dir.
   if [[ $PWD =~ '(.*)/javatests(.*)' ]]; then
     cd "${match[1]}/java${match[2]}"
