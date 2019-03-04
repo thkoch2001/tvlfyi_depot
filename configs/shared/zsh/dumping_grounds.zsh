@@ -207,6 +207,11 @@ router() {
   netstat -nr | grep default | head -n 1 | awk '{ print $2 }'
 }
 
+monitor_dimensions() {
+  # Outputs the dimensions of your computer monitor
+  xdpyinfo | awk '/dimensions/{ print $2 }'
+}
+
 lt() {
   # Convenience wrapper around `exa --tree`.
   # Optionally accepts a number for the max-depth and a directory to list.
