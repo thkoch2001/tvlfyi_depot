@@ -41,7 +41,7 @@ alias sb="stack build"
 alias se="stack exec --"
 alias sc="stack clean"
 alias st="stack test"
-# Currently broken 
+# Currently broken
 # alias haddocks=''open "$(stack path --local-doc-root)/index.html"''
 alias kc="kubectl"
 alias kpods="kubectl get pods"
@@ -55,4 +55,35 @@ alias nsh="nix-shell"
 alias nshp="nix-shell --pure"
 alias nr="nix repl"
 alias md=mkdir_cd
-alias j=z # to emulate autojump; my muscle memory is hardened here
+alias j='fasd_cd -d' # to emulate autojump; my muscle memory is hardened here
+alias vim=nvim # prefer neovim to vim
+alias links='find ~ -maxdepth 1 -type l -exec exa {} \;' # list all of the links in the home directory
+
+# couple the e* aliases to the <leader>e* kbds in vim
+alias ev='vim ~/.config/nvim/init.vim'
+alias ee='vim ~/.emacs.d/init.el'
+alias ez='vim ~/.zshrc'
+alias ea='vim ~/aliases.zsh'
+alias ef='vim ~/functions.zsh'
+alias el='vim ~/variables.zsh'
+alias ex='vim ~/.xsessionrc'
+alias ei='vim ~/.config/i3/config'
+
+# couple the s* aliases to the <leader>s* kbds in vim
+alias sz='source ~/.zshrc'
+alias sa='source ~/aliases.zsh'
+alias sf='source ~/functions.zsh'
+alias sl='source ~/variables.zsh'
+alias sx='sudo systemctl restart display-manager'
+alias si='i3-msg restart'
+
+# Google aliases
+# blaze:   b
+# borgcfg: bfg (NOTE: `bg` already exists as a shell built-in)
+# piper:   p
+alias b=blaze
+alias bb='blaze build'
+alias bfg='borgcfg'
+alias pl='p4 listclients'
+alias prm='p4 citc -d'
+alias ra=ranger
