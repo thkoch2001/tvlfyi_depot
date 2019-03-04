@@ -1,0 +1,23 @@
+#!/bin/sh
+
+export DESKTOP_SESSION=cinnamon  # gnome for trusty.
+
+# NOTE: This may break your compose key.
+# See http://g/i3-users/YBexXGbik7E for more details.
+export GTK_IM_MODULE=xim
+
+# Desktop background color.
+xsetroot -solid "#333333"
+
+# set kbds
+xmodmap -e 'remove Lock = Caps_Lock'
+xmodmap -e 'keysym Caps_Lock = Escape'
+
+# set key repeat preferences
+xset r rate 250 60
+
+# setup OSX style scrolling for gLinux Mouse
+xinput --set-prop 'PixArt Lenovo USB Optical Mouse' 'libinput Natural Scrolling Enabled' 1
+
+# increase mouse speed
+xinput --set-prop 'PixArt Lenovo USB Optical Mouse' 'libinput Accel Speed' 1
