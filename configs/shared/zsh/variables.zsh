@@ -1,6 +1,7 @@
-EDITOR="emacs"
-BROWSER="chrome"
+EDITOR=emacs
+BROWSER=google-chrome
 NIXIFY="$HOME/programming/nixify"
+DATE_FMT=%b-%d-%Y_%T # my preferred date formatting string used for generated filename
 
 # commonly used config files
 v="$HOME/.config/nvim/init.vim"
