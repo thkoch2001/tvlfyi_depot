@@ -207,6 +207,8 @@ autocmd FileType javascript nnoremap <buffer> gf :Prettier<CR>
 " Similar to Tmux mapping alt-z in my tmux.conf
 nnoremap t% :tab sp<CR>
 
+" Allow C-g to act like C-c the way it does in Emacs
+cnoremap <C-g> <C-c>
 
 " Prettier configuration
 let g:prettier#exec_cmd_async = 1
@@ -221,7 +223,7 @@ if has('nvim')
 endif
 
 set number
-set wrap!
+set nowrap
 set tabstop=2
 set expandtab
 set shiftwidth=2
@@ -229,7 +231,7 @@ set background=dark
 
 syntax enable
 colorscheme one
-set background=light
+set background=dark
 
 " Vim in terminal cannot have a different font from the one set within your
 " terminal. However, this setting will set the font for the GUI version.
@@ -255,8 +257,15 @@ set t_Co=255
 highlight Comment cterm=italic
 
 
-" quickly edit your vimrc
+" quickly edit popular configuration files
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <leader>ee :vsplit ~/.emacs.d/init.el<CR>
+nnoremap <leader>ez :vsplit ~/.zshrc<CR>
+nnoremap <leader>ea :vsplit ~/aliases.zsh<CR>
+nnoremap <leader>ef :vsplit ~/functions.zsh<CR>
+nnoremap <leader>el :vsplit ~/variables.zsh<CR>
+nnoremap <leader>ex :vsplit ~/.xsessionrc<CR>
+nnoremap <leader>ei :vsplit ~/.config/i3/config<CR>
 
 " quickly source your vimrc
 nnoremap <leader>sv :source $MYVIMRC<CR>
