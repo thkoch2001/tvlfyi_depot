@@ -14,7 +14,7 @@ antigen bundle zsh-completions # extracts archives polymorphically
 antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Theming
-antigen theme robbyrussell
+antigen theme refined
 
 # Leave this last
 antigen apply
