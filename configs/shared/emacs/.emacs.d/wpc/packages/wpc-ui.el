@@ -1,4 +1,4 @@
-;;; ui.el --- Any related to the UI/UX goes here -*- lexical-binding: t -*-
+;;; wpc-ui.el --- Any related to the UI/UX goes here -*- lexical-binding: t -*-
 ;; Author: William Carroll <wpcarro@gmail.com>
 
 ;;; Commentary:
@@ -10,7 +10,7 @@
 (setq-default line-spacing 4)
 
 ;; change font
-(add-to-list 'default-frame-alist '(font . "Source Code Pro-10"))
+(add-to-list 'default-frame-alist '(font . "Source Code Pro-9"))
 
 (defconst wpc/font-size-step 10
   "The amount (%) by which to increase or decrease a font.")
