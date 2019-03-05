@@ -1,6 +1,6 @@
 # These were haphazardly ported from wpcarro/nixify, so some may be broken.
-alias pbcopy="xclip -selection clipboard -i"
-alias pbpaste="xclip -selection clipboard -o"
+alias c="xclip -selection clipboard -i"
+alias p="xclip -selection clipboard -o"
 alias md="mkdir_cd"
 alias ls="exa"
 alias ll="exa -l"
@@ -58,6 +58,8 @@ alias md=mkdir_cd
 alias j='fasd_cd -d' # to emulate autojump; my muscle memory is hardened here
 alias vim=nvim # prefer neovim to vim
 alias links='find ~ -maxdepth 1 -type l -exec exa {} \;' # list all of the links in the home directory
+alias ra=ranger
+alias chrome=google-chrome
 
 # couple the e* aliases to the <leader>e* kbds in vim
 alias ev='vim ~/.config/nvim/init.vim'
@@ -78,12 +80,14 @@ alias sx='sudo systemctl restart display-manager'
 alias si='i3-msg restart'
 
 # Google aliases
-# blaze:   b
-# borgcfg: bfg (NOTE: `bg` already exists as a shell built-in)
-# piper:   p
-alias b=blaze
-alias bb='blaze build'
-alias bfg='borgcfg'
-alias pl='p4 listclients'
-alias prm='p4 citc -d'
-alias ra=ranger
+# blaze:    bz
+# borgcfg:  bg (NOTE: `bg` already exists as a shell built-in)
+# piper:    pi
+# pastebin: pb
+alias bzb='blaze build'
+alias bg='borgcfg'
+alias pil='p4 listclients'
+alias pirm='p4 citc -d'
+alias pb=/google/src/head/depot/eng/tools/pastebin
+alias pbc='p | pb --private --title $(date +${DATE_FMT})| tee >(c && chrome $(p))' # create a private gPaste from your clipboard's content; open the result in a browser
+alias pbls='$BROWSER https://paste.googleplex.com/$(whoami)'
