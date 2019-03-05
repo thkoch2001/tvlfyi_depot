@@ -25,7 +25,6 @@
     "sl"  #'wpc/evil-window-vsplit-right
     "sh"  #'evil-window-vsplit
     "sk"  #'evil-window-split
-    "sj"  #'wpc/evil-window-split-down
     "sj"  #'wpc/evil-window-split-down)
   (general-nmap
     :keymaps 'override
@@ -62,8 +61,17 @@
     "P"  #'smerge-prev
     "b"  #'ivy-switch-buffer
     "gs" #'magit-status
+
     "es" #'wpc/create-snippet
-    "ev" #'wpc/edit-init-el
+    "ev" (lambda () (interactive) (wpc/find-file-split "~/.config/nvim/init.vim"))
+    "ee" (lambda () (interactive) (wpc/find-file-split "~/.emacs.d/init.el"))
+    "ez" (lambda () (interactive) (wpc/find-file-split "~/.zshrc"))
+    "ea" (lambda () (interactive) (wpc/find-file-split "~/aliases.zsh"))
+    "ef" (lambda () (interactive) (wpc/find-file-split "~/functions.zsh"))
+    "el" (lambda () (interactive) (wpc/find-file-split "~/variables.zsh"))
+    "ex" (lambda () (interactive) (wpc/find-file-split "~/.xsessionrc"))
+    "ei" (lambda () (interactive) (wpc/find-file-split "~/.config/i3/config"))
+
     "B"  #'magit-blame
     "w"  #'save-buffer
     "x"  #'evil-save-and-close

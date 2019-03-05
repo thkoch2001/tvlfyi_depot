@@ -93,11 +93,11 @@
   (evil-window-vsplit)
   (call-interactively #'yas-new-snippet))
 
-(defun wpc/edit-init-el ()
-  "Creates a window split and then edits the init.el file."
+(defun wpc/find-file-split (filename)
+  "Creates a window split and then edits `filename'."
   (interactive)
   (evil-window-vsplit)
-  (find-file "~/.emacs.d/init.el"))
+  (find-file filename))
 
 (defun wpc/jump-to-parent-file ()
   "Jumps to a React store or component's parent file. Useful for store or index file."
