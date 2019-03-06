@@ -30,6 +30,14 @@ source "$(fzf-share)/key-bindings.zsh"
 # Configure fasd
 eval "$(fasd --init auto)"
 
+# Configure g4 with zsh
+source /etc/bash_completion.d/g4d
+# the above line slows tab-completion down dramatically because it attemtps to
+# autocomplete for the 600k+ users found in `compgen -u`. Below is a fix which
+# also restores the function of `cd ~<tab>` to display only ZSH Named
+# Directories.
+zstyle ':completion:*' users root $USER
+
 # use full path instead of $DOTFILES, since DOTFILES is set herein
 DOTFILES="$HOME/programming/dotfiles"
 source "$DOTFILES/configs/shared/zsh/variables.zsh"
