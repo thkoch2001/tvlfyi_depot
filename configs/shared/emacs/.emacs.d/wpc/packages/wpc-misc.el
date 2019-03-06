@@ -48,6 +48,16 @@
 (set-register ?d '(file . "~/programming/dotfiles"))
 (set-register ?s '(file . "~/.slate.js"))
 (set-register ?D '(file . "~/Dropbox"))
+
+(set-register ?v '(file . "~/.config/nvim/init.vim"))
+(set-register ?e '(file . "~/.emacs.d/init.el"))
+(set-register ?z '(file . "~/.zshrc"))
+(set-register ?a '(file . "~/aliases.zsh"))
+(set-register ?f '(file . "~/functions.zsh"))
+(set-register ?l '(file . "~/variables.zsh"))
+(set-register ?x '(file . "~/.Xresources"))
+(set-register ?i '(file . "~/.config/i3/config"))
+
 (set-register ?p `(file . ,wpc/current-project))
 
 ;; persist history etc b/w Emacs sessions
