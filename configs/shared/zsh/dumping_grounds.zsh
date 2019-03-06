@@ -108,6 +108,22 @@ kush() {
 }
 
 # Misc
+all_users() {
+  # Lists all of the known users in the Linux system
+  # Useful because when you type `~art` in a prompt and tab-complete, ZSH looks
+  # up all users whose names start with "art". It's also just interesting to
+  # have access to this information.
+  #
+  # NOTE: this is not as simple as `cat /etc/passwd` for reasons of which I'm
+  # not entirely sure.
+  getent passwd
+}
+
+test_true_color() {
+  # Run this to test if your terminal emulator supports True Color
+  curl --silent https://raw.githubusercontent.com/JohnMorales/dotfiles/master/colors/24-bit-color.sh | bash
+}
+
 path() {
   # Pretty-print the $PATH variable
   echo "$PATH" | tr : '\n'
@@ -212,6 +228,16 @@ monitor_dimensions() {
   xdpyinfo | awk '/dimensions/{ print $2 }'
 }
 
+list_sinks() {
+  # Lists the available output sources (speakers?)
+  pacmd list-sinks | grep -e 'name:' -e 'index:'
+}
+
+list_sources() {
+  # List available input sources (microphones?)
+  pacmd list-sources | grep -e 'index:' -e device.string -e 'name:'
+}
+
 lt() {
   # Convenience wrapper around `exa --tree`.
   # Optionally accepts a number for the max-depth and a directory to list.
@@ -296,7 +322,43 @@ tk() {
   fi
 }
 
+tmux_is_running() {
+  # Returns zero if tmux is running
+  # Although this is a simple function body, it's useful to encode esoteric
+  # knowledge that I will easily forget.
+  test -n "$TMUX"
+}
+
+tmux_focused_pane() {
+  # Returns the ID of the focused tmux pane.
+  # WIP
+  # tmux list-panes -F '#{pane_active} #{pane_tty}' | awk /1/{ print $1 }
+  echo 'Not implemented'
+}
+
 # zsh
+fns() {
+  # Outputs all available functions.
+  # `fns` was chosen instead of `functions`, since `functions` was already
+  # taken.
+  compgen -A function
+}
+
+aliases() {
+  # Outputs all available aliases.
+  compgen -a
+}
+
+keywords() {
+  # Outputs all of the shell's reserved keywords.
+  compgen -k
+}
+
+builtins() {
+  # Outputs all of the shell's builtin commands.
+  compgen -b
+}
+
 zle_insert_subshell() {
   LBUFFER+='$(' ; RBUFFER=")$RBUFFER"
 }
