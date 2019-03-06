@@ -20,7 +20,6 @@
 (require 'wpc-docker)
 (require 'wpc-lisp)
 (require 'wpc-haskell)
-(require 'wpc-python)
 (require 'wpc-elixir)
 (require 'wpc-nix)
 (require 'wpc-clojure)
