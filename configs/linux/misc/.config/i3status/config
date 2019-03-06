@@ -1,0 +1,29 @@
+general {
+        markup = "pango"
+        separator = " "
+        colors = true
+}
+
+order += "disk /"
+order += "time"
+order += "tztime est"
+order += "tztime pst"
+
+disk "/" {
+     prefix_type = "decimal"
+     format = "%free free | %avail available | %total total"
+}
+
+time {
+     format = "%d/%m/%Y %H:%M"
+}
+
+tztime est {
+     format = "%H:%M EST"
+     timezone = "US/Eastern"
+}
+
+tztime pst {
+     format = "%H:%M PST"
+     timezone = "US/Pacific"
+}

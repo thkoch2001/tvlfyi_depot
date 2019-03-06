@@ -1,0 +1,9 @@
+! Load theme from custom themes package
+#include "/usr/local/google/home/wpcarro/programming/Xresources-themes/base16-monokai-256.Xresources"
+
+! urxvt settings
+URxvt.cursorBlink:     true
+URxvt.cursorUnderline: true
+URxvt.scrollBar:       false
+URxvt.font:            xft:source code pro:size=12:antialias=true
+URxvt.boldFont:        xft:source code pro:bold:size=12:antialias=true
