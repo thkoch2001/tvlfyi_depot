@@ -84,10 +84,5 @@
   :config
   (general-add-hook wpc/frontend-hooks #'prettier-js-mode))
 
-;; LSP support
-(use-package lsp-javascript-flow
-  :config
-  (general-add-hook wpc/js-hooks #'lsp-javascript-flow-enable))
-
 (provide 'wpc-javascript)
 ;;; wpc-javascript.el ends here
