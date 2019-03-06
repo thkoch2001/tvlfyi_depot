@@ -69,7 +69,7 @@
     "ea" (lambda () (interactive) (wpc/find-file-split "~/aliases.zsh"))
     "ef" (lambda () (interactive) (wpc/find-file-split "~/functions.zsh"))
     "el" (lambda () (interactive) (wpc/find-file-split "~/variables.zsh"))
-    "ex" (lambda () (interactive) (wpc/find-file-split "~/.xsessionrc"))
+    "ex" (lambda () (interactive) (wpc/find-file-split "~/.Xresources"))
     "ei" (lambda () (interactive) (wpc/find-file-split "~/.config/i3/config"))
 
     "B"  #'magit-blame
@@ -114,8 +114,8 @@
                ("M-l"  . wpc/tmux-emacs-windmove-right)
                ("M-k"  . wpc/tmux-emacs-windmove-up)
                ("M-j"  . wpc/tmux-emacs-windmove-down)
-               ("M--"  . split-window-below)
-               ("M-\\" . split-window-right)
+               ("M--"  . wpc/evil-window-split-down)
+               ("M-\\" . wpc/evil-window-vsplit-right)
                ("M-q"  . delete-window))
     map)
   "William Carroll's keybindings that should have the highest precedence.")

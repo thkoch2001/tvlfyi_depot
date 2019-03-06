@@ -264,7 +264,7 @@ nnoremap <leader>ez :vsplit ~/.zshrc<CR>
 nnoremap <leader>ea :vsplit ~/aliases.zsh<CR>
 nnoremap <leader>ef :vsplit ~/functions.zsh<CR>
 nnoremap <leader>el :vsplit ~/variables.zsh<CR>
-nnoremap <leader>ex :vsplit ~/.xsessionrc<CR>
+nnoremap <leader>ex :vsplit ~/.Xresources<CR>
 nnoremap <leader>ei :vsplit ~/.config/i3/config<CR>
 
 " quickly source your vimrc

@@ -6,7 +6,7 @@ alias ls="exa"
 alias ll="exa -l"
 alias la="exa -la"
 alias lorem="echo Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-alias e="emacsclient --alternate-editor=${EDITOR}"
+alias e="emacsclient --no-wait --alternate-editor=vim"
 alias d="docker"
 alias dps="docker ps"
 alias dpsa="docker ps -a"
@@ -60,23 +60,24 @@ alias vim=nvim # prefer neovim to vim
 alias links='find ~ -maxdepth 1 -type l -exec exa {} \;' # list all of the links in the home directory
 alias ra=ranger
 alias chrome=google-chrome
+alias btctl=bluetoothctl
 
 # couple the e* aliases to the <leader>e* kbds in vim
-alias ev='vim ~/.config/nvim/init.vim'
-alias ee='vim ~/.emacs.d/init.el'
-alias ez='vim ~/.zshrc'
-alias ea='vim ~/aliases.zsh'
-alias ef='vim ~/functions.zsh'
-alias el='vim ~/variables.zsh'
-alias ex='vim ~/.xsessionrc'
-alias ei='vim ~/.config/i3/config'
+alias ev='e ~/.config/nvim/init.vim'
+alias ee='e ~/.emacs.d/init.el'
+alias ez='e ~/.zshrc'
+alias ea='e ~/aliases.zsh'
+alias ef='e ~/functions.zsh'
+alias el='e ~/variables.zsh'
+alias ex='e ~/.Xresources'
+alias ei='e ~/.config/i3/config'
 
 # couple the s* aliases to the <leader>s* kbds in vim
 alias sz='source ~/.zshrc'
 alias sa='source ~/aliases.zsh'
 alias sf='source ~/functions.zsh'
 alias sl='source ~/variables.zsh'
-alias sx='sudo systemctl restart display-manager'
+alias sx='xrdb ~/.Xresources'
 alias si='i3-msg restart'
 
 # Google aliases
