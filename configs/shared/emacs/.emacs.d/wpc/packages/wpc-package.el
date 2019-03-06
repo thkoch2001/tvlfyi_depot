@@ -8,10 +8,12 @@
 ;;; Code:
 
 (require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 
-(require 'general)
 (require 'use-package)
+(setq use-package-always-ensure t)
+(use-package general)
 
 (add-to-list 'load-path "~/.emacs.d/vendor/")
 (add-to-list 'load-path "~/.emacs.d/wpc/")
