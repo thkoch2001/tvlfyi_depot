@@ -9,6 +9,9 @@ export GTK_IM_MODULE=xim
 # Desktop background color.
 xsetroot -solid "#333333"
 
+# start the urxvt daemon
+urxvtd -q -f -o
+
 # set kbds
 xmodmap -e 'remove Lock = Caps_Lock'
 xmodmap -e 'keysym Caps_Lock = Escape'

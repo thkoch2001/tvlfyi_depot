@@ -38,25 +38,25 @@ floating_modifier $mod
 # spotify  = s
 #
 # Vertical
-bindsym $mod+Ctrl+t            split v; exec gnome-terminal
-bindsym $mod+Ctrl+Return       split v; exec gnome-terminal
+bindsym $mod+Ctrl+t            split v; exec urxvtc
+bindsym $mod+Ctrl+Return       split v; exec urxvtc
 bindsym $mod+Ctrl+e            split v; exec emacs
 bindsym $mod+Ctrl+c            split v; exec google-chrome
 bindsym $mod+Ctrl+s            split v; exec spotify
 # Horizontal
-bindsym $mod+Ctrl+Shift+t      split h; exec gnome-terminal
-bindsym $mod+Ctrl+Shift+Return split h; exec gnome-terminal
+bindsym $mod+Ctrl+Shift+t      split h; exec urxvtc
+bindsym $mod+Ctrl+Shift+Return split h; exec urxvtc
 bindsym $mod+Ctrl+Shift+e      split h; exec emacs
 bindsym $mod+Ctrl+Shift+c      split h; exec google-chrome
 bindsym $mod+Ctrl+Shift+s      split h; exec spotify
 
 # audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +10%   # MBP Volume Up
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -10%   # MBP Volume Down
-bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute   0 toggle # MBP Mute
-bindsym F12                  exec --no-startup-id pactl set-sink-volume 2 +10%   # same Fn keys as MBP
-bindsym F11                  exec --no-startup-id pactl set-sink-volume 2 -10%   # same Fn keys as MBP
-bindsym F10                  exec --no-startup-id pactl set-sink-mute   2 toggle # same Fn keys as MBP
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%   # MBP Volume Up
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%   # MBP Volume Down
+bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle # MBP Mute
+bindsym F12                  exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%   # same Fn keys as MBP
+bindsym F11                  exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%   # same Fn keys as MBP
+bindsym F10                  exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle # same Fn keys as MBP
 
 # screen brightness controls
 bindsym XF86MonBrightnessUp   exec light -A 10
@@ -111,9 +111,6 @@ bindsym $mod+Shift+q     exec "/usr/share/goobuntu-desktop-files/xsecurelock.sh"
 
 # sound applet
 exec --no-startup-id gnome-sound-applet
-
-# polybar
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # change focus
 bindsym $mod+h exec ~/.config/i3/i3-and-emacs left
@@ -190,10 +187,6 @@ bindsym $mod+Shift+0 move container to workspace $ws10; workspace $ws10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-# implemented a sleeping KBD
-# sudo pm-suspend
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
