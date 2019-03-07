@@ -12,12 +12,13 @@ Configuration is everything.
 1. Authorize computer to access dotfiles
 
 ```bash
-$ ssh-keygen -b 4096 -c 'wpcarro@gmail.com'
-$ eval $(ssh-agent -option)
+$ ssh-keygen -t rsa -b 4096 -C 'wpcarro@gmail.com'
+$ eval $(ssh-agent -s)
+$ ssh-add ~/.ssh/id_rsa
 $ xclip -sel clip <~/.ssh/id_rsa.pub
 $ browse github.com # paste ssh public key in settings
 $ mkdir ~/programming
-$ git clone git@github.com:wpcarro/dotfiles ~/programming
+$ git clone git@github.com:wpcarro/dotfiles ~/programming/dotfiles
 ```
 
 2. Install Antigen, Vundle, nix-env for package management
@@ -26,7 +27,7 @@ $ git clone git@github.com:wpcarro/dotfiles ~/programming
 $ # antigen
 $ curl -L git.io/antigen >~/antigen.zsh
 $ # vundle
-$ g clone VundleVim/Vundle.vim.git ~/.config/nvim/bundle/Vundle.vim
+$ g clone VundleVim/Vundle.vim ~/.config/nvim/bundle/Vundle.vim
 $ # nix-env
 $ curl https://nixos.org/nix/install | sh
 $ for p in $(cat nix-env.txt); do
