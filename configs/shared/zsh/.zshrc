@@ -14,7 +14,12 @@ antigen bundle zsh-completions # extracts archives polymorphically
 antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Theming
-antigen theme refined
+# This supports different ZSH themes for each machine
+case "$(hostname)" in
+  wpcarro.c.googlers.com)      antigen theme cloud;;
+  wpcarro.lon.corp.google.com) antigen theme frisk;;
+  *)                           antigen theme refined;;
+esac
 
 # Leave this last
 antigen apply
