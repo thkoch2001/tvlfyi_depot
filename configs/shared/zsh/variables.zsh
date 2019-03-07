@@ -1,5 +1,6 @@
 export TERMINAL=urxvtc
 export EDITOR=emacsclient
+export ALTERNATE_EDITOR=nvim
 
 BROWSER=google-chrome
 NIXIFY="$HOME/programming/nixify"
