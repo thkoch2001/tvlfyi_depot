@@ -61,6 +61,8 @@ alias links='find ~ -maxdepth 1 -type l -exec exa {} \;' # list all of the links
 alias ra=ranger
 alias chrome=google-chrome
 alias btctl=bluetoothctl
+alias rg='rg --hidden' # By default, rg skips hidden files
+alias fd='fd --hidden' # By default, rg skips hidden files
 
 # couple the e* aliases to the <leader>e* kbds in vim
 alias ev='e ~/.config/nvim/init.vim'
