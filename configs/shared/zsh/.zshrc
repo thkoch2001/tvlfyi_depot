@@ -22,7 +22,7 @@ antigen apply
 # Personal Configuration
 
 # Set environment variables for Nix
-source /usr/local/google/home/wpcarro/.nix-profile/etc/profile.d/nix.sh
+source ~/.nix-profile/etc/profile.d/nix.sh
 
 # Configure fzf
 source "$(fzf-share)/key-bindings.zsh"
@@ -31,7 +31,9 @@ source "$(fzf-share)/key-bindings.zsh"
 eval "$(fasd --init auto)"
 
 # Configure g4 with zsh
-source /etc/bash_completion.d/g4d
+if [ -f /etc/bash_completion.d/g4d ]; then
+  source /etc/bash_completion.d/g4d
+fi
 # the above line slows tab-completion down dramatically because it attemtps to
 # autocomplete for the 600k+ users found in `compgen -u`. Below is a fix which
 # also restores the function of `cd ~<tab>` to display only ZSH Named

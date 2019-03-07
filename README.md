@@ -7,6 +7,54 @@ other items.
 Configuration is everything.
 
 
+# Setting up new computer
+
+1. Authorize computer to access dotfiles
+
+```bash
+$ ssh-keygen -b 4096 -c 'wpcarro@gmail.com'
+$ eval $(ssh-agent -option)
+$ xclip -sel clip <~/.ssh/id_rsa.pub
+$ browse github.com # paste ssh public key in settings
+$ mkdir ~/programming
+$ git clone git@github.com:wpcarro/dotfiles ~/programming
+```
+
+2. Install Antigen, Vundle, nix-env for package management
+
+```bash
+$ # antigen
+$ curl -L git.io/antigen >~/antigen.zsh
+$ # vundle
+$ g clone VundleVim/Vundle.vim.git ~/.config/nvim/bundle/Vundle.vim
+$ # nix-env
+$ curl https://nixos.org/nix/install | sh
+$ for p in $(cat nix-env.txt); do
+>   nix-env -i "$p"
+> done
+```
+
+3. Install i3
+
+```bash
+$ sudo apt-get install i3
+```
+
+4. Install dotfiles
+
+TODO: include steps 2-4 in the `make install` command.
+
+```bash
+$ cd ~/programming/dotfiles
+$ DOTFILES="$(pwd)" make install
+```
+
+
+# TODOS
+
+- support dependencies like fonts, terminal themes
+
+
 # SSHFS
 
 SSHFS enables seamless file transfers from your local machine to a remote
