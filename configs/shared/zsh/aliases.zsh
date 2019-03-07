@@ -89,7 +89,7 @@ alias si='i3-msg restart'
 # pastebin: pb
 alias bzb='blaze build'
 alias bg='borgcfg'
-alias pil='p4 listclients'
+alias pils='p4 listclients'
 alias pirm='p4 citc -d'
 alias pb=/google/src/head/depot/eng/tools/pastebin
 alias pbc='p | pb --private --title $(date +${DATE_FMT})| tee >(c && chrome $(p))' # create a private gPaste from your clipboard's content; open the result in a browser
