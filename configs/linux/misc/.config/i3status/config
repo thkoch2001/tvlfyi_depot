@@ -4,18 +4,18 @@ general {
         colors = true
 }
 
-order += "disk /"
 order += "time"
 order += "tztime est"
 order += "tztime pst"
+order += "disk /"
 
 disk "/" {
      prefix_type = "decimal"
-     format = "%free free | %avail available | %total total"
+     format = "%avail / %total"
 }
 
 time {
-     format = "%d/%m/%Y %H:%M"
+     format = "%H:%M - %D"
 }
 
 tztime est {
