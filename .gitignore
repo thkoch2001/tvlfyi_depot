@@ -13,3 +13,4 @@
 **/*/.emacs.d/network-security.data
 **/*/.emacs.d/smex-items
 nvim/.netrwhist
+Vundle.vim
