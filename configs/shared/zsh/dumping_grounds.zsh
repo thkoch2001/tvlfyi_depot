@@ -129,6 +129,11 @@ path() {
   echo "$PATH" | tr : '\n'
 }
 
+nix_installed() {
+  # Lists the packages installed with `nix-env`
+  nix-env -q
+}
+
 nix_store() {
   # Print the packages in /nix/store without the preceding hash
   ls /nix/store | sed 's/[a-z0-9]*-//'
