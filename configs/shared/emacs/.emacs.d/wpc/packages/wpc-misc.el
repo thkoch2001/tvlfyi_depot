@@ -48,6 +48,7 @@
 (set-register ?d '(file . "~/programming/dotfiles"))
 (set-register ?s '(file . "~/.slate.js"))
 (set-register ?D '(file . "~/Dropbox"))
+(set-register ?o '(file . "~/Documents/org/"))
 
 (set-register ?v '(file . "~/.config/nvim/init.vim"))
 (set-register ?e '(file . "~/.emacs.d/init.el"))
@@ -175,6 +176,10 @@
 (use-package company-lsp
   :config
   (push 'company-lsp company-backends))
+
+(defun wpc/frame-name ()
+  "Return the name of the current frame."
+  (frame-parameter nil 'name))
 
 (provide 'wpc-misc)
 ;;; wpc-misc.el ends here
