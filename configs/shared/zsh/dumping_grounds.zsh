@@ -9,6 +9,23 @@ dsh() {
   docker exec -it "${container}" "${cmd}"
 }
 
+# Emacs
+dired() {
+  # Opens either the `$(pwd)` or `$1` in Emacs's `dired`.
+  # Uses i3 to focus Emacs.
+  directory=${1:-$(pwd)}
+  echo $directory
+  emacsclient --eval "(dired \"$directory\")" && focus Emacs
+}
+
+org_capture() {
+  # Spawns an Emacs frame running org-capture.
+  echo called
+  emacsclient --create-frame \
+              --frame-parameters '(quote (name . "org-protocol-capture"))' \
+              --eval '(org-capture)'
+}
+
 # Git
 conflicts() {
   # Edit git conflicts one-by-one in your favorite editor.
