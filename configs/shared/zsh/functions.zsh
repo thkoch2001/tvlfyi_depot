@@ -17,7 +17,7 @@ fv() {
   [[ -n "$file" ]] && vim "$file"
 }
 
-tb() {
+tbz() {
   # Toggle between blaze-bin and your source.
   # Useful if you like to cd into the dir where your source lives.
   if [[ $PWD =~ '(.*)/blaze-bin(.*)' ]]; then
@@ -28,7 +28,7 @@ tb() {
 }
 
 tj() {
-  # Toggle between the source dir and test dir.
+  # Toggle between the source dir and test dir in a Java project.
   if [[ $PWD =~ '(.*)/javatests(.*)' ]]; then
     cd "${match[1]}/java${match[2]}"
   else

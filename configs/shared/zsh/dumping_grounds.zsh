@@ -161,6 +161,13 @@ browse() {
   nohup "$BROWSER" $@ &
 }
 
+lh() {
+  # Opens http://localhost:<port> in your $BROWSER.
+  # Usage: `lh 8080`
+  # Here, in case it wasn't obvious, `lh` stands for "localhost".
+  browse "http://localhost:$1"
+}
+
 essids() {
   # Returns a list of all ESSIDs the network card detects
   local interface=${1-wlp4s0}
@@ -356,6 +363,20 @@ tmux_focused_pane() {
   # WIP
   # tmux list-panes -F '#{pane_active} #{pane_tty}' | awk /1/{ print $1 }
   echo 'Not implemented'
+}
+
+# Google3
+g3_root() {
+  # Outputs the root of the CitC client in g3
+  # NOTE: there is probably a function already supported by g4 to cd to the
+  # root, so support for this function may be dropped shortly.
+  echo "${PWD%%/google3/*}/google3"
+}
+
+# i3
+focus() {
+  # Focuses an i3 window by application name.
+  i3-msg "[class=\"$1\"] focus" >/dev/null
 }
 
 # zsh
