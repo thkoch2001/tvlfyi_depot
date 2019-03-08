@@ -42,6 +42,7 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Dublin, Ireland
 * Galway, Ireland
 * Luxembourg, Luxembourg
+* Cappadocia, Turkey
 
 # North and South America
 * Montreal, Canada
@@ -62,6 +63,7 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Kohphiphi Islands, Thailand
 * Hong Kong, China
 * Shanghai, China
+* Xitang, China
 * Tokyo, Japan
 * Kyoto, Japan
 * Seoul, South Korea
