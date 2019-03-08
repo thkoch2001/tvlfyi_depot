@@ -12,5 +12,5 @@
 **/*/.emacs.d/projectile-bookmarks.eld
 **/*/.emacs.d/network-security.data
 **/*/.emacs.d/smex-items
-nvim/.netrwhist
+.netrwhist
 Vundle.vim
