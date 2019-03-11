@@ -1,6 +1,7 @@
 export TERMINAL=urxvtc
 export EDITOR=emacsclient
 export ALTERNATE_EDITOR=nvim
+export GPG_TTY=$(tty) # "It is important that this environment variable always reflects the output of the tty command". Source: https://gnupg.org/documentation/manuals/gnupg-devel/Invoking-GPG_002dAGENT.html
 
 BROWSER=google-chrome
 NIXIFY="$HOME/programming/nixify"

@@ -58,15 +58,12 @@ $ DOTFILES="$(pwd)" make install
 
 # SSHFS
 
+TODO: add explanation about `unison`, `rsync`, etc.
+
 SSHFS enables seamless file transfers from your local machine to a remote
 machine.
 
-To install, run:
-
-```bash
-$ brew cask install osxfuse
-$ brew install sshfs
-```
+## Usage
 
 Assuming your remote machine is configured in your `~/.ssh/config` (see above),
 you can mount your remote machine's home directory on your local machine like
@@ -78,33 +75,38 @@ $ sshfs ec2:/home/ubuntu ~/ec2 -o reconnect,follow_symlinks
 ```
 
 Now your remote machine's home directory can be accessed using the `~/ec2`
-directory. This directory can be transparently treated as if it were an ordinary
-local directory. To illustrate how easy it is to use, let's install `Vundle`, a
-Vim package manager, on our remote machine.
+directory. This directory can be treated as if it were an ordinary local
+directory. To illustrate how easy it is to use, let's install `Vundle` onto our
+remote machine.
 
 ```bash
 $ git clone https://github.com/VundleVim/Vundle.vim.git ~/ec2/.vim/bundle/Vundle.vim
 ```
 
-Voila! We now have `Vundle` installed on our ec2 instance without needing to SSH
-into that machine ourselves. That's all there is to it.
+Voila! We now have `Vundle` installed on our ec2 instance without needing to
+manually SSH into that machine.
 
 
 # GnuPG
 
-  1. Download public key from keyserver. `gpg --receive-keys [KEY_ID]`
-  2. Transfer backed-up private key information from secure disk
-  3. Create `[E]` encrypting and `[S]` signing subkeys for personal computer
+Entering a new system?
 
-## Commentary
-
-By default `gpg2` interfaces with `gpg-agent`. `gpg` does not unless
-`--use-agent` is specified.  I suggest using `gpg2`, but if you must use `gpg`,
-add the following entry to `~/.gnupg/gpg.conf`:
-
+```bash
+$ ./configs/shared/gpg/.gnupg/import.sh path/to/directory
 ```
-use-agent
+
+Leaving an old system? TODO: create a job that runs this periodically.
+
+```bash
+$ ./configs/shared/gpg/.gnupg/export.sh [directory]
 ```
+
+## Reference
+
+    - sec: secret key
+    - pub: public key
+    - ssb: secret sub-key
+    - sub: public sub-key
 
 ## GnuPG + Git
 

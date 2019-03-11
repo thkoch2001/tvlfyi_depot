@@ -49,6 +49,12 @@ alias mdg="mix deps.get"
 alias mdu="mix deps.update"
 alias mdup="mix docker.up"
 
+# GPG
+alias gpged='gpg --edit-key wpcarro@gmail.com'
+alias gpge='gpg --encrypt'
+alias gpgd='gpg --decrypt'
+alias gpgls='gpg --list-keys'
+
 # Git
 alias g="git"
 alias glp='git log --graph --pretty=format:"%Cred%h%Creset -%Cblue %an %Creset - %C(yellow)%d%Creset %s %Cgreen(%cr)%Creset" --abbrev-commit --date=relative'
