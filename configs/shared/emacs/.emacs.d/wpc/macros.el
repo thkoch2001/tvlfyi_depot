@@ -5,11 +5,6 @@
 ;; This file contains helpful variables that I use in my ELisp development.
 
 ;;; Code:
-
-(require 'dash)
-(require 's)
-(require 'string-functions)
-
 (defmacro xi (&rest FORMS)
   `(lambda ,(--filter (s-contains? (symbol-name it)
                                    (prin1-to-string FORMS))

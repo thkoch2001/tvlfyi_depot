@@ -5,10 +5,6 @@
 ;; Hosts ergonomic functions for working with a filesystem.
 
 ;;; Code:
-
-(require 'dash)
-(require 'f)
-
 (defun ensure-file-path (path)
   "Ensure that a file and its directories in PATH exist.
 Will error for inputs with a trailing slash."

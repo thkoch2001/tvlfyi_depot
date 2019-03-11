@@ -5,14 +5,6 @@
 ;; This file hopefully contains friendly APIs that making ELisp development more enjoyable.
 
 ;;; Code:
-(require 'evil)
-(require 'projectile)
-(require 'paredit)
-(require 'term)
-(require 'f)
-(require 'yasnippet)
-(require 'ido)
-
 (defun wpc/evil-window-vsplit-right ()
   (interactive)
   (evil-window-vsplit)

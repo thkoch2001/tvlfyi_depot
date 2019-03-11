@@ -7,9 +7,6 @@
 
 ;;; Code:
 
-(require 's)
-(require 'dash)
-
 ;; todo - grab the string at point and replace it with the output of
 ;; each fn
 

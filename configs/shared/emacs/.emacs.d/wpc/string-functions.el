@@ -6,9 +6,6 @@
 
 ;;; Code:
 
-(require 'dash)
-(require 's)
-
 ;; Strings
 (defun string/hookify (x)
   "Append \"-hook\" to X."
