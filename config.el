@@ -14,6 +14,8 @@
 
 (load! "utils")
 
+(load! "company-sql")
+
 ; (defconst rust-src-path
 ;   (-> "/Users/griffin/.cargo/bin/rustc --print sysroot"
 ;       shell-command-to-string
@@ -883,6 +885,10 @@
   :hook
   (sql-mode-hook . sqlup-mode)
   (sql-interactive-mode-hook . sqlup-mode))
+
+(def-package! emacsql)
+(def-package! emacsql-psql
+  :after (emacsql))
 
 (def-package! yapfify
   :hook

@@ -87,6 +87,8 @@
 
 ;; SQL
 (package! sqlup-mode)
+(package! emacsql)
+(package! emacsql-psql)
 
 ;;; Python
 (package! yapfify)
