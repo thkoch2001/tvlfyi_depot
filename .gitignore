@@ -14,3 +14,5 @@
 **/*/.emacs.d/smex-items
 .netrwhist
 Vundle.vim
+custom.el
+projectile-bookmarks.eld
