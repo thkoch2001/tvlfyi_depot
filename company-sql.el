@@ -38,9 +38,6 @@
                               :port (number-to-string company-sql-db-port))))
   company-sql/connection)
 
-(defun company-sql/query (&rest args)
-  (apply 'emacsql (cons (company-sql/connect) args)))
-
 ;;; Utils
 
 (defmacro comment (&rest _))
@@ -50,23 +47,29 @@
    ((stringp x) x)
    ((symbolp x) (symbol-name x))))
 
+(defun alist-get-equal (key alist)
+  "Like `alist-get', but uses `equal' instead of `eq' for comparing keys"
+  (->> alist
+       (-find (lambda (pair) (equal key (car pair))))
+       (cdr)))
+
 ;;; Listing relations
 
-(defun company-sql/list-tables ()
+(cl-defun company-sql/list-tables (conn)
   (-map (-compose 'symbol-name 'car)
-        (company-sql/query
+        (emacsql conn
          [:select [tablename]
           :from pg_catalog:pg_tables
           :where (and (!= schemaname '"information_schema")
                       (!= schemaname '"pg_catalog"))])))
 
-(defun company-sql/list-columns ()
+(cl-defun company-sql/list-columns (conn)
   (-map
    (lambda (row)
      (propertize (symbol-name (nth 0 row))
                  'table-name (nth 1 row)
                  'data-type  (nth 2 row)))
-   (company-sql/query
+   (emacsql conn
     [:select [column_name
               table_name
               data_type]
@@ -187,12 +190,12 @@
 
 ;;; Company backend
 
-(defun company-postgresql/candidates (prefix)
+(cl-defun company-postgresql/candidates (prefix conn)
   (-filter
    (apply-partially #'s-starts-with? prefix)
    (append (-map (lambda (s)
                    (propertize s 'company-postgresql-annotation "table"))
-                 (company-sql/list-tables))
+                 (company-sql/list-tables conn))
            (-map (lambda (s)
                    (propertize s 'company-postgresql-annotation
                                (format "%s.%s %s"
@@ -202,7 +205,7 @@
                                         (get-text-property 0 'data-type s)
                                         (->string)
                                         (upcase)))))
-                 (company-sql/list-columns))
+                 (company-sql/list-columns conn))
            (-map (lambda (s)
                    (propertize s 'company-postgresql-annotation "keyword"))
                  company-postgresql/keywords))))
@@ -212,31 +215,85 @@
   (cl-case command
     (interactive (company-begin-backend 'company-postgresql))
     (init (company-sql/connect))
-    (prefix (if (bound-and-true-p org-mode)
-                (when (company-sql/in-sql-source-block-p)
-                  (company-grab-symbol))
-              (company-grab-symbol)))
+    (prefix (company-grab-symbol))
     (annotation
      (get-text-property 0 'company-postgresql-annotation arg))
-    (candidates (company-postgresql/candidates arg))
+    (candidates (company-postgresql/candidates
+                 arg
+                 (company-sql/connect)))
     (duplicates t)
     (ignore-case t)))
 
 ;;; org-babel company sql
 
-(defvar-local org-company-sql/connections)
+(defvar-local org-company-sql/connections
+  ())
 
-(defun company-sql/in-sql-source-block-p ()
+(defun org-company-sql/connect (conn-params)
+  (car                                  ; ???
+   (or (alist-get-equal conn-params org-company-sql/connections)
+       (let ((conn (apply 'emacsql-psql conn-params)))
+         (add-to-list 'org-company-sql/connections (cons conn-params conn))
+         conn))))
+
+(defun org-company-sql/in-sql-source-block-p ()
   (let ((org-elt (org-element-at-point)))
     (and (eq 'src-block (car org-elt))
          (equal "sql" (plist-get (cadr org-elt)
                                  :language)))))
 
+(defun org-company-sql/parse-cmdline (cmdline)
+  (let* ((lexed (s-split (rx (one-or-more blank)) cmdline))
+         (go (lambda (state tokens)
+               (if (null tokens) ()
+                 (let ((token (car tokens))
+                       (tokens (cdr tokens)))
+                   (if (null state)
+                       (if (s-starts-with? "-" token)
+                           (funcall go token tokens)
+                         (cons token (funcall go state tokens)))
+                     (cons (cons state token)  ; ("-h" . "localhost")
+                           (funcall go nil tokens)))))))
+         (opts (funcall go nil lexed)))
+    opts))
+
+(defun org-company-sql/source-block-conn-params ()
+  (let* ((block-info (org-babel-get-src-block-info))
+         (params (caddr block-info))
+         (cmdline (alist-get :cmdline params))
+         (parsed (org-company-sql/parse-cmdline cmdline))
+         (opts (-filter #'listp parsed))
+         (positional (-filter #'stringp parsed))
+         (host (alist-get-equal "-h" opts))
+         (port (or (alist-get-equal "-p" opts)
+                   "5432"))
+         (dbname (or (alist-get-equal "-d" opts)
+                     (car positional)))
+         (username (or (alist-get-equal "-U" opts)
+                       (cadr positional))))
+    (list dbname
+          :hostname host
+          :username username
+          :port port)))
+
+(defun org-company-sql/connection-for-source-block ()
+  (org-company-sql/connect
+   (org-company-sql/source-block-conn-params)))
+
+
 (defun company-ob-postgresql (command &optional arg &rest _)
   (interactive (list 'interactive))
   (cl-case command
     (interactive (company-begin-backend 'company-ob-postgresql))
-    (init (company-sql/connect))))
+    (prefix (and (org-company-sql/in-sql-source-block-p)
+                 (company-grab-symbol)))
+    (annotation (get-text-property 0 'company-postgresql-annotation arg))
+    (candidates
+     (company-postgresql/candidates
+      arg
+      (org-company-sql/connection-for-source-block)))
+    (duplicates t)
+    (ignore-case t)))
 
 ;;;
 
