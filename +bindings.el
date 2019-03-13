@@ -1110,6 +1110,37 @@ If invoked with a prefix ARG eval the expression after inserting it"
     nil nil nil)))
 
 
+(defun grfn/insert-new-src-block ()
+  (interactive)
+  (let* ((current-src-block (org-element-at-point))
+         (src-block-head (save-excursion
+                           (goto-char (org-element-property
+                                       :begin current-src-block))
+                           (thing-at-point 'line t)))
+         (point-to-insert
+          (if-let (results-loc (org-babel-where-is-src-block-result))
+              (save-excursion
+                (goto-char results-loc)
+                (org-element-property
+                 :end
+                 (org-element-at-point)))
+            (org-element-property :end (org-element-at-point)))))
+    (goto-char point-to-insert)
+    (insert "\n")
+    (insert src-block-head)
+    (let ((contents (point-marker)))
+      (insert "\n#+END_SRC\n")
+      (goto-char contents))))
+
+(defun grfn/+org-insert-item (orig direction)
+  (interactive)
+  (if (and (org-in-src-block-p)
+           (equal direction 'below))
+      (grfn/insert-new-src-block)
+    (funcall orig direction)))
+
+(advice-add #'+org/insert-item :around #'grfn/+org-insert-item)
+
 (map!
 
  (:map magit-mode-map
