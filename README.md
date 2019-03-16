@@ -9,6 +9,17 @@ Configuration is everything.
 
 # Setting up new computer
 
+1. Install Dropbox
+
+```bash
+$ cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+$ crontab -e # add the following line...
+@reboot ~/.dropbox-dist/dropboxd 2>&1 >/tmp/dropbox.log
+$ reboot            # 1/3 verify installation
+$ pgrep dropbox     # 2/3 verify installation
+$ dropbox.py status # 3/3 verify installation
+```
+
 1. Authorize computer to access dotfiles
 
 ```bash
@@ -18,10 +29,10 @@ $ ssh-add ~/.ssh/id_rsa
 $ xclip -sel clip <~/.ssh/id_rsa.pub
 $ browse github.com # paste ssh public key in settings
 $ mkdir ~/programming
-$ git clone git@github.com:wpcarro/dotfiles ~/programming/dotfiles
+$ git clone git@github.com:wpcarro/dotfiles ~/Dropbox/dotfiles
 ```
 
-2. Install Antigen, Vundle, nix-env for package management
+1. Install Antigen, Vundle, nix-env for package management
 
 ```bash
 $ # antigen
@@ -35,25 +46,25 @@ $ for p in $(cat nix-env.txt); do
 > done
 ```
 
-3. Install i3
+1. Install i3
 
 ```bash
 $ sudo apt-get install i3
 ```
 
-4. Install dotfiles
+1. Install dotfiles
 
 TODO: include steps 2-4 in the `make install` command.
 
 ```bash
-$ cd ~/programming/dotfiles
+$ cd ~/Dropbox/dotfiles
 $ DOTFILES="$(pwd)" make install
 ```
 
 
 # TODOS
 
-- support dependencies like fonts, terminal themes
+- support dependencies like terminal themes
 
 
 # SSHFS
@@ -111,8 +122,8 @@ $ ./configs/shared/gpg/.gnupg/export.sh [directory]
 ## GnuPG + Git
 
   1. Register newly created `[S]` signing subkey as `signingkey`
-  2. Enforce commit-signing
-  3. Opt into `gpg2` usage
+  1. Enforce commit-signing
+  1. Opt into `gpg2` usage
 
 ```bash
 $ git config --global user.signingkey <SIGNING_KEY>
