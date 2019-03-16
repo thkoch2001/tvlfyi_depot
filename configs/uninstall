@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+configs="$DOTFILES/configs"
+
+if [[  $(uname) == 'Darwin' ]]; then
+  (cd "$configs/os_x" && stow --delete --target="$HOME" *)
+elif [[ $(uname) == 'Linux' ]]; then
+  (cd "$configs/linux" && stow --delete --target="$HOME" *)
+fi
+
+(cd "$configs/shared" && stow --delete --target="$HOME" *)

@@ -1,2 +1,5 @@
 install:
-	source "${DOTFILES}/configs/setup"
+	source "${DOTFILES}/configs/install"
+
+uninstall:
+	source "${DOTFILES}/configs/uninstall"
