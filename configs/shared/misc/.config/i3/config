@@ -84,7 +84,7 @@ bindsym $mod+space exec --no-startup-id dmenu_run
 bindsym $mod+t exec --no-startup-id ~/.config/i3/dmenu_timer.sh ~/.local/share/sounds/gong.mp3
 
 # file manager
-bindsym $mod+x exec st -e ~/bin/lf # TODO: reconsider hardlink and expose ZSH's PATH to i3
+bindsym $mod+x exec st -e lf
 
 # music player kbds
 bindsym F9 exec --no-startup-id playerctl next       # same Fn keys as MBP
