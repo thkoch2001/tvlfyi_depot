@@ -6,29 +6,39 @@
 
 ;;; Code:
 
+(getenv "ORG_DIRECTORY")
+
 ;; TODO: figure out how to nest this in (use-package org ...)
 (setq org-capture-templates
-      (quote (
+      `(
 
-("w" "work" entry (file+headline "~/Documents/org/work.org" "Tasks")
- "* TODO %?")
+        ("w" "work" entry (file+headline
+                           ,(f-join (getenv "ORG_DIRECTORY") "work.org")
+                           "Tasks")
+         "* TODO %?")
 
-("p" "personal" entry (file+headline "~/Documents/org/personal.org" "Tasks")
- "* TODO %? ")
+        ("p" "personal" entry (file+headline
+                               ,(f-join (getenv "ORG_DIRECTORY") "personal.org")
+                               "Tasks")
+         "* TODO %? ")
 
-)))
+        ("i" "ideas" entry (file+headline
+                            ,(f-join (getenv "ORG_DIRECTORY") "ideas.org")
+                            "Tasks")
+         "* %? ")
+
+        ))
 (evil-set-initial-state 'org-mode 'insert)
 
 (use-package org
-  :preface
-  (defconst wpc-org-directory
-    "~/Documents/org")
   :config
   ; (general-add-hook org-mode-hook (disable linum-mode))
   (general-define-key :prefix "C-c"
            "l" #'org-store-link
            "a" #'org-agenda
            "c" #'org-capture)
+  (setq org-todo-keywords
+        '((sequence "TODO" "BLOCKED" "DONE")))
   (setq org-default-notes-file (wpc/org-file "notes"))
   (setq org-log-done 'time)
   (setq org-agenda-files (list (wpc/org-file "work")

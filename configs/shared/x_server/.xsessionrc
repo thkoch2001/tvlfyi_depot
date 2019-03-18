@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ~/.profile
+
 export DESKTOP_SESSION=cinnamon  # gnome for trusty.
 
 # NOTE: This may break your compose key.

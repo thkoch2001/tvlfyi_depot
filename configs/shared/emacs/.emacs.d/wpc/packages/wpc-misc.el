@@ -45,10 +45,10 @@
 ;; create file bookmarks
 (set-register ?e '(file . "~/.emacs.d/wpc/packages"))
 (set-register ?n '(file . "~/programming/nixify/configuration.nix"))
-(set-register ?d '(file . "~/programming/dotfiles"))
+(set-register ?d '(file . "~/Dropbox/dotfiles"))
 (set-register ?s '(file . "~/.slate.js"))
 (set-register ?D '(file . "~/Dropbox"))
-(set-register ?o '(file . "~/Documents/org/"))
+(set-register ?o '(file . "~/Dropbox/org/")) ;; TODO: change this to `(getenv "ORG_DIRECTORY")'
 
 (set-register ?v '(file . "~/.config/nvim/init.vim"))
 (set-register ?e '(file . "~/.emacs.d/init.el"))
@@ -58,6 +58,7 @@
 (set-register ?l '(file . "~/variables.zsh"))
 (set-register ?x '(file . "~/.Xresources"))
 (set-register ?i '(file . "~/.config/i3/config"))
+(set-register ?m '(file . "~/.tmux.conf"))
 
 (set-register ?p `(file . ,wpc/current-project))
 

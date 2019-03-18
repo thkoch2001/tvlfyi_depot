@@ -19,7 +19,7 @@ chatnets = {
 channels = (
   { name = "#nixos"; chatnet = "Freenode"; autojoin = "Yes"; },
   { name = "#i3"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#haskell"; chatnet = "GameSurge"; autojoin = "No"; },
+  { name = "#pass"; chatnet = "Freenode"; autojoin = "No"; },
 );
 
 settings = {

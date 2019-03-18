@@ -2,10 +2,16 @@
 
 configs="$DOTFILES/configs"
 
-if [[  $(uname) == 'Darwin' ]]; then
-  (cd "$configs/os_x" && stow --target="$HOME" *)
-elif [[ $(uname) == 'Linux' ]]; then
-  (cd "$configs/linux" && stow --target="$HOME" *)
-fi
+case $(hostname) in
+  # desktop
+  wpcarro.lon.corp.google.com)
+    (cd "$configs/desktop" && stow --target="$HOME" *);;
+  # laptop
+  wpcarro.roam.googlers.com)
+    (cd "$configs/laptop" && stow --target="$HOME" *);;
+  # cloudtop
+  wpcarro.c.googlers.com)
+    (cd "$configs/cloudtop" && stow --target="$HOME" *);;
+esac
 
 (cd "$configs/shared" && stow --target="$HOME" *)

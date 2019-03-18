@@ -1,0 +1,7 @@
+root = /usr/local/google/home/wpcarro/cloud
+root = ssh://cloudtop//usr/local/google/home/wpcarro/cloud
+auto = true
+batch = true
+backuploc = local
+backupsuffix = ~~
+ignore = Name *~

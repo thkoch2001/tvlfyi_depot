@@ -1,11 +1,21 @@
 # Applications
-# dired:  di
-# docker: dk
+#
+# Supported qualifiers:
+#   hidden:      h
+#   ignore-case: i
+#
+# Supported verbs:
+#   source:  s
+#   install: i
+#   test:    t
+#   build:   b
+#   list:    ls
 
 # Misc
 alias c="xclip -selection clipboard -i"
 alias p="xclip -selection clipboard -o"
-alias md="mkdir_cd"
+alias mdd="mkdir_cd"
+alias mdp='mkdir --parents'
 alias ls="exa"
 alias ll="exa -l"
 alias la="exa -la"
@@ -21,13 +31,20 @@ alias btctl=bluetoothctl
 alias rg='rg --ignore-case'
 alias rgh='rg --hidden' # By default, rg skips hidden files
 alias fdh='fd --hidden' # By default, rg skips hidden files
+alias define=sdcv # uses stardict to lookup a word
 
 # Gnome
 alias na=nautilus # Gnome's graphical file browser. Useful to click and dragging files into emails
 
+# Tmux
+alias tls='tmux list-sessions'
+
 # Chrome
 alias cssh='chrome --app-id=pnhechapfaindjhompbnflcldabbghjo' # Secure Shell
 alias crd='chrome --app-id=gbchcmhmhahfdphkhkmpfmihenigjmpp'  # Chrome Remote Desktop
+
+# Dropbox
+alias drst='dropbox.py status'
 
 # Docker
 alias dk="docker"
@@ -90,7 +107,7 @@ alias hgco='hg update'
 alias sb="stack build"
 alias se="stack exec --"
 alias sc="stack clean"
-alias st="stack test"
+# alias st="stack test" # blocks suckless-terminal
 alias haddocks='open "$(stack path --local-doc-root)/index.html"'
 
 # Kubernetes
@@ -107,6 +124,12 @@ alias nq="nix_introspect"
 alias nsh="nix-shell"
 alias nshp="nix-shell --pure"
 alias nr="nix repl"
+alias ni='nix-env --install'
+alias nrm='nix-env --uninstall'
+alias nls='nix-env --query'
+
+# Aptitude (apt)
+alias apti='sudo apt-get install'
 
 # couple the e* aliases to the <leader>e* kbds in vim
 alias ev='e ~/.config/nvim/init.vim'
@@ -117,6 +140,7 @@ alias ef='e ~/functions.zsh'
 alias el='e ~/variables.zsh'
 alias ex='e ~/.Xresources'
 alias ei='e ~/.config/i3/config'
+alias em='e ~/.tmux.conf'
 
 # couple the s* aliases to the <leader>s* kbds in vim
 alias sz='source ~/.zshrc'
@@ -125,6 +149,7 @@ alias sf='source ~/functions.zsh'
 alias sl='source ~/variables.zsh'
 alias sx='xrdb ~/.Xresources'
 alias si='i3-msg restart'
+alias sm='tmux source-file ~/.tmux.conf'
 
 # Google aliases
 # blaze:      bz
@@ -138,5 +163,6 @@ alias br='borgcfg'
 alias pils='p4 listclients'
 alias pirm='p4 citc -d'
 alias pb=/google/src/head/depot/eng/tools/pastebin
-alias pbc='p | pb --private --title $(date +${DATE_FMT})| tee >(c && chrome $(p))' # create a private gPaste from your clipboard's content; open the result in a browser
+alias pbc='pb --private --title $(date +${date_fmt})| tee >(c && chrome $(p))' # create a private gPaste from your clipboard's content; open the result in a browser
+alias pbcp='p | pb --private --title $(date +${date_fmt})| tee >(c && chrome $(p))' # create a private gPaste from your clipboard's content; open the result in a browser
 alias pbls='$BROWSER https://paste.googleplex.com/$(whoami)'

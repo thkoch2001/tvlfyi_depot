@@ -10,7 +10,7 @@
 (setq-default line-spacing 4)
 
 ;; change font
-(add-to-list 'default-frame-alist '(font . "Source Code Pro-9"))
+(add-to-list 'default-frame-alist '(font . "Operator Mono Book-9"))
 
 (defconst wpc/font-size-step 10
   "The amount (%) by which to increase or decrease a font.")

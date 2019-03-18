@@ -375,9 +375,6 @@ let g:airline_theme = 'hybrid'
 let g:swoopHighlight = ["hi! link SwoopBufferLineHi Warning", "hi! link SwoopPatternHi Error"]
 
 
-nnoremap <M-q> :q<CR>
-
-
 " Jump to buffers.
 nmap <F1> :1b<CR>
 nmap <F2> :2b<CR>
@@ -525,6 +522,7 @@ nnoremap <silent> <M-h> :TmuxNavigateLeft<CR>
 nnoremap <silent> <M-j> :TmuxNavigateDown<CR>
 nnoremap <silent> <M-k> :TmuxNavigateUp<CR>
 nnoremap <silent> <M-l> :TmuxNavigateRight<CR>
+nnoremap <silent> <M-q> :q<CR>
 
 " make Y do what is intuitive given:
 "   D: deletes until EOL

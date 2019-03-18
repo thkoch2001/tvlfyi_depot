@@ -3,7 +3,7 @@
 set -e
 
 # Run this script to import all of the information exported by `export.sh`.
-# Usage: ./export.sh path/to/directory
+# Usage: ./import.sh path/to/directory
 
 gpg --import "$1/public.asc"
 gpg --import "$1/secret.asc"

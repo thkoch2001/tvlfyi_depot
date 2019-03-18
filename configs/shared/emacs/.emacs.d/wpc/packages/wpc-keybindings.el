@@ -71,6 +71,7 @@
     "el" (lambda () (interactive) (wpc/find-file-split "~/variables.zsh"))
     "ex" (lambda () (interactive) (wpc/find-file-split "~/.Xresources"))
     "ei" (lambda () (interactive) (wpc/find-file-split "~/.config/i3/config"))
+    "em" (lambda () (interactive) (wpc/find-file-split "~/.tmux.conf"))
 
     "B"  #'magit-blame
     "w"  #'save-buffer

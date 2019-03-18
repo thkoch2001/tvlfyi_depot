@@ -1,4 +1,5 @@
 set $mod Mod1
+set $super Mod4
 
 # Keymapping philosophy:
 # When I feel it's appropriate, I try to borrow existing KBDs from OSX or
@@ -38,14 +39,14 @@ floating_modifier $mod
 # spotify  = s
 #
 # Vertical
-bindsym $mod+Ctrl+t            split v; exec gnome-terminal
-bindsym $mod+Ctrl+Return       split v; exec gnome-terminal
+bindsym $mod+Ctrl+t            split v; exec st
+bindsym $mod+Ctrl+Return       split v; exec st
 bindsym $mod+Ctrl+e            split v; exec emacs
 bindsym $mod+Ctrl+c            split v; exec google-chrome
 bindsym $mod+Ctrl+s            split v; exec spotify
 # Horizontal
-bindsym $mod+Ctrl+Shift+t      split h; exec gnome-terminal
-bindsym $mod+Ctrl+Shift+Return split h; exec gnome-terminal
+bindsym $mod+Ctrl+Shift+t      split h; exec st
+bindsym $mod+Ctrl+Shift+Return split h; exec st
 bindsym $mod+Ctrl+Shift+e      split h; exec emacs
 bindsym $mod+Ctrl+Shift+c      split h; exec google-chrome
 bindsym $mod+Ctrl+Shift+s      split h; exec spotify
@@ -58,6 +59,9 @@ bindsym F12                  exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym F11                  exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%   # same Fn keys as MBP
 bindsym F10                  exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle # same Fn keys as MBP
 
+# pass integration
+bindsym $mod+Ctrl+backslash exec ~/.config/i3/passmenu # mirroring the 1password KBD
+
 # screen brightness controls
 bindsym XF86MonBrightnessUp   exec light -A 10
 bindsym XF86MonBrightnessDown exec light -U 10
@@ -66,17 +70,21 @@ bindsym XF86MonBrightnessDown exec light -U 10
 bindsym $mod+o exec zsh -i -c org_capture
 for_window [class="GoogleEmacs" instance="org-protocol-capture"] floating enable
 
+# ensure Spotify windows float
+for_window [class="Spotify"] floating enable
+
 # ensure wallpaper
-exec --no-startup-id feh --bg-scale ~/Pictures/cartoon-outdoors.jpg
+exec --no-startup-id feh --bg-scale ~/.local/share/wallpaper/cartoon-outdoors.jpg
 
 # ensure system service that run through XDG start
 exec dex -ae i3
 
-# rofi window, workspace settings
-bindsym Mod4+space exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -i -dmenu -width 40 -lines 8'
-bindsym $mod+space exec "rofi -show run"
-bindsym $mod+w     exec "rofi -show window"
-bindsym $mod+b     exec "rofi -show Workspace"
+# dmenu configuration
+bindsym $mod+space exec --no-startup-id dmenu_run
+bindsym $mod+t exec --no-startup-id ~/.config/i3/dmenu_timer.sh ~/.local/share/sounds/gong.mp3
+
+# file manager
+bindsym $mod+x exec st -e ~/bin/lf # TODO: reconsider hardlink and expose ZSH's PATH to i3
 
 # music player kbds
 bindsym F9 exec --no-startup-id playerctl next       # same Fn keys as MBP
@@ -84,12 +92,14 @@ bindsym F8 exec --no-startup-id playerctl play-pause # same Fn keys as MBP
 bindsym F7 exec --no-startup-id playerctl previous   # same Fn keys as MBP
 
 # Screenshot
+bindsym $mod+s       exec zsh -i -c snipit
 bindsym Ctrl+Print   exec scrot  ~/Pictures/screenshots/%b-%d-%Y_%T.png          # Windows style
 # TODO: debug
 bindsym $mod+Print   exec scrot --focused ~/Pictures/screenshots/%b-%d-%Y_%T.png # Windows style
 bindsym $mod+Shift+3 exec scrot ~/Pictures/screenshots/%b-%d-%Y_%T.png           # OSX style
 # TODO: debug
 bindsym $mod+Shift+4 exec scrot --select ~/Pictures/screenshots/%b-%d-%Y_%T.png  # OSX style
+# Integration with Google's screenshot hosting server
 
 # online documentation
 bindsym $mod+Shift+slash exec google-chrome https://i3wm.org/docs/userguide.html
@@ -101,7 +111,7 @@ for_window [class="^.*"] border pixel 2
 focus_follows_mouse no
 
 # kill focused window
-bindsym $mod+q exec ~/.config/i3/i3-and-emacs quit
+bindsym $mod+q kill
 
 # GTK Themes
 exec --no-startup-id gnome-settings-daemon
@@ -117,10 +127,10 @@ bindsym $mod+Shift+q     exec "/usr/share/goobuntu-desktop-files/xsecurelock.sh"
 exec --no-startup-id gnome-sound-applet
 
 # change focus
-bindsym $mod+h exec ~/.config/i3/i3-and-emacs left
-bindsym $mod+j exec ~/.config/i3/i3-and-emacs down
-bindsym $mod+k exec ~/.config/i3/i3-and-emacs up
-bindsym $mod+l exec ~/.config/i3/i3-and-emacs right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
 # move focused window
 bindsym $mod+Shift+h move left  100
@@ -136,9 +146,9 @@ bindsym $mod+Shift+l move right 100
 bindsym $mod+z fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+t layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $super+e layout toggle split
+bindsym $super+s layout stacking
+bindsym $super+t layout tabbed
 
 # toggle tiling / floating
 bindsym $mod+Shift+f floating toggle
@@ -189,8 +199,22 @@ bindsym $mod+Shift+8 move container to workspace $ws8;  workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9;  workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10; workspace $ws10
 
-# reload the configuration file
-bindsym $mod+Shift+c reload
+# move focused container to workspace
+bindsym $mod+Ctrl+1 move container to workspace $ws1
+bindsym $mod+Ctrl+2 move container to workspace $ws2
+bindsym $mod+Ctrl+3 move container to workspace $ws3
+bindsym $mod+Ctrl+4 move container to workspace $ws4
+bindsym $mod+Ctrl+5 move container to workspace $ws5
+bindsym $mod+Ctrl+6 move container to workspace $ws6
+bindsym $mod+Ctrl+7 move container to workspace $ws7
+bindsym $mod+Ctrl+8 move container to workspace $ws8
+bindsym $mod+Ctrl+9 move container to workspace $ws9
+bindsym $mod+Ctrl+0 move container to workspace $ws10
+
+# reload, restart i3
+bindsym $super+r       reload
+bindsym $super+Shift+r restart
+
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -203,11 +227,15 @@ mode "resize" {
         bindsym $mod+Shift+r mode "default"
 }
 bindsym $mod+Shift+r mode "resize"
-# NOTE: this eclipses the restart kbd, so rebind that to something useful
-bindsym $mod+r restart
+
+# passthrough mode to support Emacs, Tmux, Vim KBDs for window and pane management
+mode "passthrough" {
+     bindsym $mod+Escape mode "default"
+}
+bindsym $mod+Escape mode "passthrough"
 
 # Colors
-set $foreground #8cffa9
+set $foreground #61afef
 set $background #dfdfdf
 
 # window borders

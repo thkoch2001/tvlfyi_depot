@@ -260,6 +260,8 @@ these tasks completed, ligatures should function in Neovim.
 
 
 ## Miscellaneous notes
+* Install executables or scripts to `~/bin`
+  * should be fine as long as they are shared between computers with i386 architectures
 * Map `<CAPS_LOCK>` key to `<ESC>`
 * Increase key-repeat rate
 * Decrease key-repeat-delay
