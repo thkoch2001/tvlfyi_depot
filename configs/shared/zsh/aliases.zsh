@@ -38,6 +38,8 @@ alias na=nautilus # Gnome's graphical file browser. Useful to click and dragging
 
 # Tmux
 alias tls='tmux list-sessions'
+alias ta='tmux attach' # NOTE: `t` works for this as well
+alias td='tmux detach' # prefer using the KBD for this (i.e. <leader>d)
 
 # Chrome
 alias cssh='chrome --app-id=pnhechapfaindjhompbnflcldabbghjo' # Secure Shell
