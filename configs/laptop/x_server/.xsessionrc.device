@@ -1,0 +1,8 @@
+# setup OSX style scrolling for laptop
+xinput --set-prop 'DLL07BF:01 06CB:7A13 Touchpad' 'libinput Natural Scrolling Enabled' 1
+
+# increase cursor speed
+xinput --set-prop 'DLL07BF:01 06CB:7A13 Touchpad' 'libinput Accel Speed' 1
+
+# disable touchscreen on laptop
+xinput disable 'ELAN Touchscreen'
