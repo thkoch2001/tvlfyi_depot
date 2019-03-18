@@ -134,129 +134,45 @@ $ git config --global gpg.program gpg2
 ## GnuPG + GPG-Agent
 
 Setup `gpg-agent` to use password caching by adding the following entries to
-`~/.gnupg/gpg-agent.conf`:
+`~/.gnupg/gpg-agent.conf` (already done in this repository):
 
 ```
 default-cache-ttl 300 max-cache-ttl 3600
 ```
 
 
-# Neovim
+## True Color and Italics
 
-The following snippet fixes the `<C-h>` issue in neovim on macOS.
-
-```
-$ infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
-$ tic $TERM.ti
-```
-
-
-## True Color and Italics in tmux and vim
+At the time of this writing, Suckless's `st` terminal provides True Color and
+italics support. It's also important to test that this support remains when
+inside of Vim or inside of a Tmux session or both.
 
 ### TrueColor
 
-Note: make sure that the terminal you are using supports TrueColor (hint: recent
-version of iTerm2 do). Also make sure that the tmux version you are using
-supports TrueColor (hint: versions north of 2.2 should).
-
-At each step of the way, test TrueColor using the following shell pipeline
-(hint: the gradients should be smooth):
+To test for your terminal's True Color support, run:
 
 ```bash
-$ curl https://raw.githubusercontent.com/JohnMorales/dotfiles/master/colors/24-bit-color.sh | bash
+$ test_true_color
 ```
 
-* Terminal: recent versions of iTerm 2 should support TrueColor
-* Tmux: versions 2.2 and after should support TrueColor
-* NeoVim: recent versions of NeoVim should support TrueColor
-
-Enable TrueColor in your `~/.vimrc` (already done in this repository):
+Enable TrueColor in your `init.vim` (already done in this repository):
 
 ```viml
 set termguicolors
 ```
 
-
-Enable TrueColor in your `~/.tmux.conf` (already done in this repository):
-
-Note: This may conflict with the setting for italics. Need to verify to confirm
-/ disconfirm this (pending).
-
-```
-set -ga terminal-overrides ",xterm-256color-italic:Tc"
-```
-
-
 ### Italics
 
-In the file `/configs/shared/.tmux.conf` there is a line to add italics support
-to tmux:
-
-```
-set -g default-terminal "tmux-256color-italic"
-```
-
-The `$TERM` entry, `tmux-256color-italic`, will be unavailable until you add the
-file, `tmux-256color-italic`, to your terminal database. You can do this with
-the following command:
+To test if your terminal supports italics and other text treatments, run:
 
 ```bash
-$ tic ~/dotfiles/tmux-256color-italic
+$ test_text_formatting
 ```
 
+### Ligatures
 
-### Powerline
-
-Install Powerline...
-
-```bash
-$ pip install powerline-status
-```
-
-Install the Powerline fonts...
-
-```bash
-$ hub clone 'powerline/fonts'
-$ cd fonts && ./install.sh && cd ../ && rm -rf fonts
-```
-
-Lastly, ensure that the line in `.tmux.conf` that sources the `powerline.conf`
-is uncommented:
-
-```
-run-shell "powerline-daemon -q"
-source "/usr/local/lib/python2.7/site-packages/powerline/bindings/tmux/powerline.conf"
-```
-
-
-## Commonly used applications (Mac)
-
-Thankfully `brew cask` simplifies the installation of many of my commonly used
-applications:
-
-```bash
-$ brew cask install alfred dash slack 1password slack emacs dropbox iterm2 flux docker
-```
-
-The following applications need to be downloaded / installed manually:
-
-* oh-my-zsh: a full suite of z-shell extensions
-* homebrew: CLI for procuring third-party applications
-* slate.js: resize and move your windows with keyboard shortcuts
-* google chrome: web browser
-
-
-## Commonly used fonts
-* Install [Hasklig](https://github.com/i-tu/Hasklig) for ligature support in Elm, Elixir, etc
-* Install [Operator Mono](http://www.typography.com/blog/introducing-operator) for expressive monospaced font
-* Install powerline fonts
-* Install Adobe Source Code Pro font for shell and text editors
-
-### Ligature Support
-
-To support ligatures make sure Hasklig is installed (link at the bottom). Ensure
-that you are using an terminal emulator that supports ligatures. With both of
-these tasks completed, ligatures should function in Neovim.
+At the time of this writing, Suckless's `st` does not appear to support
+ligatures.
 
 
 ## Miscellaneous notes
