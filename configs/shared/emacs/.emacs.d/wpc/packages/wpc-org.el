@@ -27,6 +27,11 @@
                             "Tasks")
          "* %? ")
 
+        ("s" "shopping list" entry (file+headline
+                            ,(f-join (getenv "ORG_DIRECTORY") "shopping.org")
+                            "Items")
+         "* TODO %? ")
+
         ))
 (evil-set-initial-state 'org-mode 'insert)
 
