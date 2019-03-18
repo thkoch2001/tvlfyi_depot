@@ -7,7 +7,7 @@ case $(hostname) in
   wpcarro.lon.corp.google.com)
     (cd "$configs/desktop" && stow --target="$HOME" *);;
   # laptop
-  wpcarro.roam.googlers.com)
+  wpcarro)
     (cd "$configs/laptop" && stow --target="$HOME" *);;
   # cloudtop
   wpcarro.c.googlers.com)
