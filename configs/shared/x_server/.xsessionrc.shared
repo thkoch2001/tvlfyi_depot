@@ -11,8 +11,10 @@ export GTK_IM_MODULE=xim
 # Desktop background color.
 xsetroot -solid "#333333"
 
-# start the urxvt daemon
-urxvtd -q -f -o
+# start tmux with a few commonly used sessions
+# TODO: consider moving this else like ~/.profile, so it doesn't depend on X.
+# This might be better for SSH.
+tmux new -d -s main
 
 # set kbds
 xmodmap -e 'remove Lock = Caps_Lock'
