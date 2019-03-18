@@ -458,7 +458,8 @@ nix_introspect() {
 
 # Tmux
 t() {
-  # Find or create a Tmux session.
+  # Find or create a Tmux session. This should work both from within Tmux or
+  # outside of Tmux.
   local session_name="${1}"
   if ! tmux has-session -t "${session_name}" 2> /dev/null; then
     local oldTMUX="${TMUX}"
@@ -466,12 +467,6 @@ t() {
     tmux new -d -s "${session_name}" -n "${session_name}"
     export TMUX="${oldTMUX}"
     unset oldTMUX
-
-    if command -v j >/dev/null; then
-      tmux send-keys -t "${session_name}" "j ${session_name}; clear" "C-m"
-    else
-      tmux send-keys -t "${session_name}"
-    fi
   fi
   if [[ -n "${TMUX}" ]]; then
     tmux switch-client -t "${session_name}"
