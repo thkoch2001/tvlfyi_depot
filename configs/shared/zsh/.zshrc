@@ -1,3 +1,5 @@
+source ~/.profile
+
 source ~/antigen.zsh
 
 # Load the oh-my-zsh library
@@ -12,8 +14,7 @@ antigen bundle zsh-completions # extracts archives polymorphically
 antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Theming
-# This supports different ZSH themes for each machine
-case "$(hostname)" in
+case $(hostname) in
   # desktop
   wpcarro.lon.corp.google.com)
     antigen theme frisk;;
@@ -21,7 +22,7 @@ case "$(hostname)" in
   wpcarro.c.googlers.com)
     antigen theme cloud;;
   # laptop
-  wpcarro.roam.googlers.com)
+  wpcarro)
     antigen theme refined;;
 esac
 
