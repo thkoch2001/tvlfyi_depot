@@ -1,1 +1,0 @@
-("~/programming/dotfiles/" "~/programming/nixify/" "/nix/store/mf0fmp8khbp83f038wgcri7szf579giw-emacs-26.1/share/emacs/26.1/lisp/")
