@@ -1,5 +1,3 @@
-source ~/.profile
-
 source ~/antigen.zsh
 
 # Load the oh-my-zsh library
