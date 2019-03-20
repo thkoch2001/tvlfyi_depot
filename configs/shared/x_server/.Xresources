@@ -1,2 +1,2 @@
-! value for laptop
-Xft.dpi: 200
+#include ".Xresources.shared"
+#include ".Xresources.device"
