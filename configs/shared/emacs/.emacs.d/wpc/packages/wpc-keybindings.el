@@ -92,16 +92,16 @@
   :config
   (global-evil-surround-mode 1))
 
-;; Custom minor mode that ensures that my kbds are available no matter which major
-;; or minor modes are active.
-(add-hook 'after-load-functions #'ensure-william-carroll-kbds)
-
-(defun ensure-william-carroll-kbds (_ignore)
+(defun wpc/ensure-kbds (_ignore)
   "Try to ensure that my keybindings retain priority over other minor modes."
   (unless (eq (caar minor-mode-map-alist) 'wpc/kbds-minor-mode)
     (let ((mykbds (assq 'wpc/kbds-minor-mode minor-mode-map-alist)))
       (assq-delete-all 'wpc/kbds-minor-mode minor-mode-map-alist)
       (add-to-list 'minor-mode-map-alist mykbds))))
+
+;; Custom minor mode that ensures that my kbds are available no matter which
+;; major or minor modes are active.
+(add-hook 'after-load-functions #'wpc/ensure-kbds)
 
 (defvar wpc/kbds
   (let ((map (make-sparse-keymap)))
