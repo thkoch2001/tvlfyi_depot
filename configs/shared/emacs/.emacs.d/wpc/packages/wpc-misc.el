@@ -17,14 +17,11 @@
   "s-v" #'x-clipboard-yank
   "C-S-v" #'x-clipboard-yank)
 
-;; start emacs server so `emacsclient' can work
-(server-start)
-
 ;; transparently edit compressed files
 (auto-compression-mode t)
 
 ;; autowrap when over the fill-column
-(auto-fill-mode 1)
+(add-hook 'fundamental-mode-hook 'turn-on-auto-fill)
 
 ;; link to Emacs source code
 (setq find-function-C-source-directory "~/programming/emacs/src")
