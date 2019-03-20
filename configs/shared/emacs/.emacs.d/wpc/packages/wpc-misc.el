@@ -39,6 +39,11 @@
 (setq sh-basic-offset 2)
 (setq sh-indentation 2)
 
+;; disable company mode when editing markdown
+;; TODO: move this out of wpc-misc.el and into a later file to call
+;; `(disable company-mode)'
+(add-hook 'markdown-mode-hook (company-mode -1))
+
 ;; create file bookmarks
 (set-register ?e '(file . "~/.emacs.d/wpc/packages"))
 (set-register ?n '(file . "~/programming/nixify/configuration.nix"))
