@@ -172,6 +172,26 @@ kush() {
 }
 
 # Misc
+monzo_balance() {
+  # Return the balance of my Monzo bank account. Intended to be used in my i3
+  # status bar.
+  # Usage: monzo_balance
+  # Depends:
+  #   - ~/Dropbox/monzo_creds.json.gpg (encrypted asymmetrically for yourself)
+  #   - httpie
+  #   - jq
+  #   - gpg
+  local creds=$(gpg --decrypt ~/Dropbox/monzo_creds.json.gpg 2>/dev/null)
+  local access_token=$(echo $creds | jq --raw-output .access_token)
+  local account_id=$(echo $creds | jq --raw-output .account_id)
+  local balance=$(http --body https://api.monzo.com/balance \
+                       "Authorization: Bearer ${access_token}" \
+                       "account_id==${account_id}" | \
+                    jq .balance)
+
+  echo "£$balance"
+}
+
 tldr_docs() {
   # Helper function for submitting a new page to `tldr`.
   # Usage: tldr_docs <cmd-name>
