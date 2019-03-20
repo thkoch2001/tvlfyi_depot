@@ -104,6 +104,7 @@ alias hgpr='hg mail -r . -m' # this may be similar to `hub pull-request`
 alias hgd='hg diff'
 alias hgsh='hg export'
 alias hgco='hg update'
+alias hgls='hg citc --list' # should have different output from `pils`
 
 # Haskell
 alias sb="stack build"
