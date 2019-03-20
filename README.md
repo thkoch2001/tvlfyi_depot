@@ -46,6 +46,28 @@ $ for p in $(cat nix-env.txt); do
 > done
 ```
 
+1. Install shared executables
+
+Some files should be kept out of this repository. Things that come to mind
+include secrets (e.g. `monzo_creds.json.gpg`) and binaries.
+
+Secrets should be kept out of this repository in case. It might be okay to
+include them herein since they should be encrypted. But just to add an
+additional layer of security, I avoid adding them.
+
+Executables are kept out of version control since they can be quite large. For
+example, my `/usr/bin` is `8.9G` at the time of this writing. Also it can be
+noisy to see diffs of binaries after upgrading programs.
+
+While sharing binaries across systems feels brittle, everything should function
+as long as the machines across which the binaries are shared run Linux and have
+i386 architectures.
+
+```bash
+$ ln -s ~/Dropbox/bin ~/bin
+```
+
+
 1. Install i3
 
 ```bash
@@ -176,8 +198,8 @@ ligatures.
 
 
 ## Miscellaneous notes
-* Install executables or scripts to `~/bin`
-  * should be fine as long as they are shared between computers with i386 architectures
+* Executables are shared at `~/Dropbox/bin` and not kept within this repository
+  to avoid the bloat.
 * Map `<CAPS_LOCK>` key to `<ESC>`
 * Increase key-repeat rate
 * Decrease key-repeat-delay
