@@ -6,8 +6,6 @@
 
 ;;; Code:
 
-(getenv "ORG_DIRECTORY")
-
 ;; TODO: figure out how to nest this in (use-package org ...)
 (setq org-capture-templates
       `(
@@ -37,17 +35,25 @@
 
 (use-package org
   :config
-  ; (general-add-hook org-mode-hook (disable linum-mode))
+  (general-add-hook 'org-mode-hook
+                    ;; TODO: consider supporting `(disable (list linum-mode company-mode))'
+                    (list (disable linum-mode)
+                          (disable company-mode)))
   (general-define-key :prefix "C-c"
            "l" #'org-store-link
            "a" #'org-agenda
            "c" #'org-capture)
   (setq org-todo-keywords
         '((sequence "TODO" "BLOCKED" "DONE")))
-  (setq org-default-notes-file (wpc/org-file "notes"))
+  (setq org-default-notes-file (f-join (getenv "ORG_DIRECTORY") "notes.org"))
   (setq org-log-done 'time)
-  (setq org-agenda-files (list (wpc/org-file "work")
-                               (wpc/org-file "personal"))))
+  (setq org-agenda-files (list (f-join (getenv "ORG_DIRECTORY") "work.org")
+                               (f-join (getenv "ORG_DIRECTORY") "personal.org")))
+  ;; TODO: troubleshoot why `wpc/kbds-minor-mode', `wpc/ensure-kbds' aren't
+  ;; enough to override the following KBDs. See this discussion for more context
+  ;; on where the idea came from:
+  ;; https://stackoverflow.com/questions/683425/globally-override-key-binding-in-emacs
+  (general-unbind 'normal org-mode-map "M-h" "M-j" "M-k" "M-l"))
 
 (use-package org-bullets
   :after (org)
