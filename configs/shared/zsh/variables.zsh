@@ -9,9 +9,9 @@ hash -d citc=/google/src/cloud/$USER
 hash -d doc=~/Documents
 hash -d d=~/Downloads
 hash -d ss=~/Pictures/screenshots
-hash -d fonts="$DOTFILES/configs/linux/misc/.local/share/fonts"
-hash -d sounds="$DOTFILES/configs/linux/misc/.local/share/sounds"
-hash -d wallpaper="$DOTFILES/configs/linux/misc/.local/share/wallpaper"
+hash -d fonts="$DOTFILES/configs/shared/misc/.local/share/fonts"
+hash -d sounds="$DOTFILES/configs/shared/misc/.local/share/sounds"
+hash -d wallpaper="$DOTFILES/configs/shared/misc/.local/share/wallpaper"
 hash -d org="$ORG_DIRECTORY"
 hash -d x20=/google/data/rw/users/wp/wpcarro # remember: to access x20, you need to run `prodaccess`
 # named directories for commonly used projects
