@@ -184,5 +184,22 @@
   "Return the name of the current frame."
   (frame-parameter nil 'name))
 
+;; Having difficulty starting the server using systemd or calling
+;; `emacs --daemon' in ~/.profile, ~/.xsessionrc, and similar files.
+
+;; systemd has issues syncing the socket-name, so it becomes messy. I also
+;; experienced strange initialization where things like wpc-org and other
+;; modules wouldn't get loaded.
+;;
+;; Even if I resolved the socket-name resolution issue, I couldn't find an
+;; elegant way to reuse GUI frames. GUIs for me have the advantage of supporting
+;; True Color, support additional keys for KBDs (i.e. super), and aren't limited
+;; by the terminal for rendering certain things.
+;;
+;; For these reasons, it seems preferable to start the server from here. I'm
+;; considering starting emacs in my ~/.xsessionrc so that the server will be
+;; running after X initializes.
+(server-start)
+
 (provide 'wpc-misc)
 ;;; wpc-misc.el ends here
