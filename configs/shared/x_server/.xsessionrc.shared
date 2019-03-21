@@ -16,6 +16,9 @@ xsetroot -solid "#333333"
 # This might be better for SSH.
 tmux new -d -s main
 
+# Start the Emacs server
+emacs --daemon
+
 # set kbds
 xmodmap -e 'remove Lock = Caps_Lock'
 xmodmap -e 'keysym Caps_Lock = Escape'

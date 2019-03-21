@@ -41,13 +41,13 @@ floating_modifier $mod
 # Vertical
 bindsym $mod+Ctrl+t            split v; exec st
 bindsym $mod+Ctrl+Return       split v; exec st
-bindsym $mod+Ctrl+e            split v; exec emacs
+bindsym $mod+Ctrl+e            split v; exec emacsclient --create-frame ~/programming
 bindsym $mod+Ctrl+c            split v; exec google-chrome
 bindsym $mod+Ctrl+s            split v; exec spotify
 # Horizontal
 bindsym $mod+Ctrl+Shift+t      split h; exec st
 bindsym $mod+Ctrl+Shift+Return split h; exec st
-bindsym $mod+Ctrl+Shift+e      split h; exec emacs
+bindsym $mod+Ctrl+Shift+e      split h; exec emacsclient --create-frame ~/programming
 bindsym $mod+Ctrl+Shift+c      split h; exec google-chrome
 bindsym $mod+Ctrl+Shift+s      split h; exec spotify
 
