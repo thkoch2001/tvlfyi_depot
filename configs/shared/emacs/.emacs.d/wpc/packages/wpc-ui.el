@@ -133,10 +133,6 @@
 
 
 
-;; disable GUI scrollbars
-(when (display-graphic-p)
-  (scroll-bar-mode -1))
-
 ;; rebalance emacs windows after splits are created
 (defadvice split-window-below (after rebalance-windows activate)
   (balance-windows))
@@ -154,7 +150,7 @@
 (show-paren-mode 1)
 
 ;; hide the scroll-bars in the GUI
-(toggle-scroll-bar -1)
+(scroll-bar-mode -1)
 
 ;; GUI alerts in emacs
 (use-package alert
