@@ -530,6 +530,15 @@ g3_root() {
   echo "${PWD%%/google3/*}/google3"
 }
 
+p4_filelog() {
+  # Logs a file's Piper history. This is a convenience wrapper around
+  # `p4 filelog`.
+  # `filename` should be a relative path.
+  # Usage: p4_filelog <filename>
+  # Depends: p4
+  p4 filelog "//depot/$(pwd | grep -P -o 'google3\/.+$')/$1"
+}
+
 citc_workspace() {
   # Returns the name of your current CitC workspace
   pwd | grep -o -P "$(whoami)\/[^\/]+"
