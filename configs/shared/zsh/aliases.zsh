@@ -21,7 +21,7 @@ alias ll="exa -l"
 alias la="exa -la"
 alias lorem="echo Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 alias e="emacsclient --no-wait --create-frame"
-alias cat="bat"
+alias cat="bat --theme=TwoDark"
 alias j='fasd_cd -d' # to emulate autojump; my muscle memory is hardened here
 alias vim=nvim # prefer neovim to vim
 alias links='find ~ -maxdepth 1 -type l -exec exa {} \;' # list all of the links in the home directory
