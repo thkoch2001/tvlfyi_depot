@@ -234,15 +234,40 @@ mode "passthrough" {
 }
 bindsym $mod+Escape mode "passthrough"
 
-# Colors
-set $foreground #61afef
-set $background #dfdfdf
+# Atom One Dark colors
+set $black          #1e2127
+set $red            #e06c75
+set $green          #98c379
+set $yellow         #d19a66
+set $blue           #61afef
+set $magenta        #c678dd
+set $cyan           #56b6c2
+set $white          #abb2bf
+set $bright_black   #5c6370
+set $bright_red     #e06c75
+set $bright_green   #98c379
+set $bright_yellow  #d19a66
+set $bright_white   #ffffff
+set $bright_blue    #61afef
+set $bright_magenta #c678dd
+set $bright_cyan    #56b6c2
+set $selection      #3a3f4b
 
-# window borders
-# Format:      border      background  text        indicator   child_border
-client.focused $foreground $background $foreground $foreground $foreground
+# class                 # border    # bg # text #indicator #child_border
+client.focused          $red        $red $red   $red       $bright_cyan
+client.focused_inactive $red        $red $red   $red       $black
+client.unfocused        $red        $red $red   $red       $black
 
 bar {
     status_command i3status
     position top
+    colors {
+           background $black
+           statusline $white
+           separator  $yellow
+           focused_workspace  $black $black $bright_cyan
+           active_workspace   $red $bright_blue $blue
+           inactive_workspace $black $black $bright_black
+           urgent_workspace   $bright_black $black $magenta
+    }
 }
