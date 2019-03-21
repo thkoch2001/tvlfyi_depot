@@ -153,6 +153,9 @@
 ;; highlight matching parens, brackets, etc
 (show-paren-mode 1)
 
+;; hide the scroll-bars in the GUI
+(toggle-scroll-bar -1)
+
 ;; GUI alerts in emacs
 (use-package alert
   :commands (alert)
