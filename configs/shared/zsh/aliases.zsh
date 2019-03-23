@@ -133,6 +133,7 @@ alias nls='nix-env --query'
 
 # Aptitude (apt)
 alias apti='sudo apt-get install'
+alias aptrm='sudo apt remove'
 
 # couple the e* aliases to the <leader>e* kbds in vim
 alias ev='e ~/.config/nvim/init.vim'
