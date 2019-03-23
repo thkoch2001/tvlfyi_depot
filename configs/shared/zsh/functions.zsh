@@ -9,7 +9,7 @@ fv() {
 tbz() {
   # Toggle between blaze-bin and your source.
   # Useful if you like to cd into the dir where your source lives.
-  if [[ $PWD =~ '(.*)/blaze-bin(.*)' ]]; then
+  if [[ "$(pwd)" =~ '(.*)/blaze-bin(.*)' ]]; then
     cd "${match[1]}${match[2]}"
   else
     cd "${PWD/\/google3//google3/blaze-bin}"
