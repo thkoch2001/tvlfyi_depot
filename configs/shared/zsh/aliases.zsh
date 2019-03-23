@@ -142,7 +142,7 @@ alias ea='e ~/aliases.zsh'
 alias ef='e ~/functions.zsh'
 alias el='e ~/variables.zsh'
 alias ex='e ~/.Xresources'
-alias ei='e ~/.config/i3/config'
+alias ei='e ~/.config/i3/config.shared'
 alias em='e ~/.tmux.conf'
 
 # couple the s* aliases to the <leader>s* kbds in vim

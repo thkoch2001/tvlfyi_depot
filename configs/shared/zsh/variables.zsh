@@ -48,4 +48,4 @@ a="$HOME/aliases.zsh"
 f="$HOME/functions.zsh"
 l="$HOME/variables.zsh" # v is taken by vim
 x="$HOME/.Xresources"
-i="$HOME/.config/i3/config"
+i="$HOME/.config/i3/config.shared"

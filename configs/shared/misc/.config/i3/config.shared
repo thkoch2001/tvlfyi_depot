@@ -1,6 +1,3 @@
-set $mod Mod1
-set $super Mod4
-
 # Keymapping philosophy:
 # When I feel it's appropriate, I try to borrow existing KBDs from OSX or
 # Windows. For example, I use Ctrl+Alt+Del to start the screen lock, since this
@@ -14,6 +11,9 @@ set $super Mod4
 # Linux and OSX quite often. Since OSX is much more difficult to remap KBDs
 # than it is in Linux, I prefer to support the OSX KBDs to reduce the number of
 # KBDs my feeble memory needs to store.
+
+set $mod Mod1
+set $super Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -51,20 +51,8 @@ bindsym $mod+Ctrl+Shift+e      split h; exec emacsclient --create-frame ~/progra
 bindsym $mod+Ctrl+Shift+c      split h; exec google-chrome
 bindsym $mod+Ctrl+Shift+s      split h; exec spotify
 
-# audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%   # MBP Volume Up
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%   # MBP Volume Down
-bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle # MBP Mute
-bindsym F12                  exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%   # same Fn keys as MBP
-bindsym F11                  exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%   # same Fn keys as MBP
-bindsym F10                  exec --no-startup-id pactl set-sink-mute   @DEFAULT_SINK@ toggle # same Fn keys as MBP
-
 # pass integration
 bindsym $mod+Ctrl+backslash exec ~/.config/i3/passmenu # mirroring the 1password KBD
-
-# screen brightness controls
-bindsym XF86MonBrightnessUp   exec light -A 10
-bindsym XF86MonBrightnessDown exec light -U 10
 
 # integrate with Emacs's org-mode
 bindsym $mod+o exec zsh -i -c org_capture
@@ -84,21 +72,16 @@ bindsym $mod+space exec --no-startup-id dmenu_run
 bindsym $mod+t exec --no-startup-id ~/.config/i3/dmenu_timer.sh ~/.local/share/sounds/gong.mp3
 
 # file manager
-bindsym $mod+x exec st -e lf
-
-# music player kbds
-bindsym F9 exec --no-startup-id playerctl next       # same Fn keys as MBP
-bindsym F8 exec --no-startup-id playerctl play-pause # same Fn keys as MBP
-bindsym F7 exec --no-startup-id playerctl previous   # same Fn keys as MBP
+bindsym $mod+n exec st -e lf
 
 # Screenshot
-bindsym $mod+s       exec zsh -i -c snipit
-bindsym Ctrl+Print   exec scrot  ~/Pictures/screenshots/%b-%d-%Y_%T.png          # Windows style
+bindsym $mod+Shift+4 exec zsh -i -c snipit
+bindsym Ctrl+Print   exec scrot ~/Pictures/screenshots/%b-%d-%Y_%T.png # Windows style
+bindsym $mod+Shift+3 exec scrot ~/Pictures/screenshots/%b-%d-%Y_%T.png # OSX style
 # TODO: debug
-bindsym $mod+Print   exec scrot --focused ~/Pictures/screenshots/%b-%d-%Y_%T.png # Windows style
-bindsym $mod+Shift+3 exec scrot ~/Pictures/screenshots/%b-%d-%Y_%T.png           # OSX style
+# bindsym $mod+Print   exec scrot --focused ~/Pictures/screenshots/%b-%d-%Y_%T.png # Windows style
 # TODO: debug
-bindsym $mod+Shift+4 exec scrot --select ~/Pictures/screenshots/%b-%d-%Y_%T.png  # OSX style
+# bindsym $mod+Shift+4 exec scrot --select ~/Pictures/screenshots/%b-%d-%Y_%T.png  # OSX style
 # Integration with Google's screenshot hosting server
 
 # online documentation
@@ -212,8 +195,8 @@ bindsym $mod+Ctrl+9 move container to workspace $ws9
 bindsym $mod+Ctrl+0 move container to workspace $ws10
 
 # reload, restart i3
-bindsym $super+r       reload
-bindsym $super+Shift+r restart
+bindsym $super+r       exec cat ~/.config/i3/config.shared ~/.config/i3/config.device >~/.config/i3/config; reload
+bindsym $super+Shift+r exec cat ~/.config/i3/config.shared ~/.config/i3/config.device >~/.config/i3/config; restart
 
 
 # resize window (you can also use the mouse for that)
@@ -268,6 +251,6 @@ bar {
            focused_workspace  $black $black $bright_cyan
            active_workspace   $red $bright_blue $blue
            inactive_workspace $black $black $bright_black
-           urgent_workspace   $bright_black $black $magenta
+           urgent_workspace   $magenta $black $magenta
     }
 }

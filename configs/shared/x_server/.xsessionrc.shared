@@ -23,5 +23,10 @@ emacs --daemon
 xmodmap -e 'remove Lock = Caps_Lock'
 xmodmap -e 'keysym Caps_Lock = Escape'
 
+# since we separated our i3 configurations between a shared and device-specific
+# setup, we need to make sure that when we start an X session, our i3
+# configuration is up-to-date.
+cat ~/.config/i3/config.{shared,device} >~/.config/i3/config
+
 # set key repeat preferences
 xset r rate 250 60

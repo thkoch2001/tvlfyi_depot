@@ -59,7 +59,7 @@
 (set-register ?f '(file . "~/functions.zsh"))
 (set-register ?l '(file . "~/variables.zsh"))
 (set-register ?x '(file . "~/.Xresources"))
-(set-register ?i '(file . "~/.config/i3/config"))
+(set-register ?i '(file . "~/.config/i3/config.shared"))
 (set-register ?m '(file . "~/.tmux.conf"))
 
 (set-register ?p `(file . ,wpc/current-project))
