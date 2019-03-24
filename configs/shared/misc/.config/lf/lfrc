@@ -14,6 +14,14 @@
 #    &  shell-async     shell command running asynchronously
 #    /  search          search file in current directory
 #    ?  search-back     search file in the reverse order
+#
+# `x` will be used as a generic prefix KBD for most of my user-defined KBDs. Do
+# not map anything to just `x`. Instead prefer `x<char>`. Mneumonically, "x" is
+# intended to resemble "eXecute".
+#
+# If `x<char>` does one thing; `x<uppercase-char>` should do the opposite when
+# possible. This is convenient for things that pass the round-trip test like
+# encrypt/decrypt, archive/unarchive.
 
 # TODO: move most of these commands to function.zsh and call those functions
 # herein. Especially the `archive` and `extract` functions.
@@ -37,6 +45,9 @@
 #
 # TODO: support "toggle" for archive/unarchive that detects which function to
 # run based on the extension.
+
+# Basic configuration
+set hidden on
 
 # Arguably the most import function herein
 cmd help $lf -doc | less
@@ -73,6 +84,7 @@ cmd encrypt_file %{{
   read recipient
   gpg --encrypt --recipient "$recipient" "$f" && rm "$f"
 }}
+map xe :encrypt_file
 
 cmd decrypt_file %{{
   # Decrypts a file that was encrypted with `encrypt_file`.
@@ -87,6 +99,7 @@ cmd decrypt_file %{{
     gpg --decrypt "$f" >"${f%.gpg}" 2>/dev/null && rm "$f"
   fi
 }}
+map xE :decrypt_file
 
 cmd archive %{{
     # Generic function for archiving directories.
@@ -101,6 +114,7 @@ cmd archive %{{
          *)      printf "\"$1\" is not a support archive. Aborting..."
     esac
 }}
+map xa :archive
 
 cmd unarchive %{{
     # Generic function for extracting archived directories.
@@ -114,6 +128,7 @@ cmd unarchive %{{
          *)        printf "Unsupported archive type. Aborting..."
     esac
 }}
+map xA: unarchive
 
 cmd tar %{{
     # tars a directory
@@ -126,6 +141,7 @@ cmd tar %{{
          *) printf "\"$answer\" is not a supported answer. Aborting...";;
     esac
 }}
+map xt :tar
 
 cmd untar %{{
     # untars a directory tar'd with `tar`.
@@ -135,6 +151,7 @@ cmd untar %{{
          *.tar)    tar -xvf  $f; rm "$f";;
     esac
 }}
+map xT :untar
 
 cmd zip %{{
     # zip a directory
@@ -142,6 +159,7 @@ cmd zip %{{
     zip -r "$f.zip" "$(basename $f)"
     rm -rf "$f"
 }}
+map xz :zip
 
 cmd unzip %{{
     # unzip a directory
@@ -149,3 +167,9 @@ cmd unzip %{{
     unzip "$f"
     rm "$f"
 }}
+map xZ :unzip
+
+# outputs the size of a particular file, dir
+# TODO: consider mapping this to a KBD
+cmd size %du -hs "$f"
+map xs :size
