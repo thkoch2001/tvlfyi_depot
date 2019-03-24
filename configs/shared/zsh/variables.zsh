@@ -40,6 +40,15 @@ bright_magenta='\u001b[35;1m'
 bright_cyan='\u001b[36;1m'
 bright_white='\u001b[37;1m'
 
+# some of my favorite emojis as unicode
+facepalm='\U1F926'
+eyeroll='\U1F644'
+sheesh='\U1F62C'
+see_no_evil='\U1F648'
+blush='\U1F60A'
+wink='\U1F609'
+laugh='\U1F923'
+
 # commonly used config files
 v="$HOME/.config/nvim/init.vim"
 e="$HOME/.emacs.d/init.el"

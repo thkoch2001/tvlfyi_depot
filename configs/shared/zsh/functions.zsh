@@ -303,6 +303,16 @@ test_unicode() {
   echo -e '\u26FD \u26FE \u26FF'
 }
 
+test_emojis() {
+  # Outputs a few emojis to see if your terminal supports colored or
+  # monochromatic emojis.
+  for n in {0..9}
+  do
+    echo -e -n "\U1F60$n"
+  done
+  echo # newline to clean output
+}
+
 path() {
   # Pretty-print the $PATH variable
   echo "$PATH" | tr : '\n'
