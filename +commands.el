@@ -115,6 +115,14 @@
 ;; Org-mode
 (ex! "cap"         #'+org-capture/dwim)
 
+(ex! "arev" #'generate-alembic-migration)
+
+(evil-define-command evil-alembic-upgrade (&optional revision)
+  (interactive "<a>")
+  (alembic-upgrade revision))
+
+(ex! "aup" #'evil-alembic-upgrade)
+
 ;; Elixir
 (add-hook! elixir-mode
   (ex! "AV" #'alchemist-project-toggle-file-and-tests-other-window)

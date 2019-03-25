@@ -923,4 +923,63 @@
 
 (def-package! ob-async)
 
+(def-package! org-recent-headings
+  :after (org)
+  :config
+  (map! :n "SPC n r" #'org-recent-headings-ivy))
+
+(def-package! org-sticky-header
+  :after (org)
+  :hook (org-mode-hook . org-sticky-header-mode)
+  :config
+  (setq-default org-sticky-header-heading-star "●"))
+
 (enable-theme 'grfn-solarized-light)
+
+;;; word-char
+(add-hook! prog-mode
+  (modify-syntax-entry ?_ "w"))
+
+(add-hook! lisp-mode
+  (modify-syntax-entry ?- "w"))
+
+(after! flycheck
+  (put 'flycheck-python-pylint-executable 'safe-local-variable (lambda (_) t)))
+
+(defvar alembic-command "alembic"
+  "Command to execute when running alembic")
+
+(defvar alembic-dir-fun (lambda () default-directory)
+  "Reference to a function whose return value will be used as the directory to
+  run Alembic in")
+
+(comment
+ (+grfn/extract-alembic-migration-name
+   "Generating
+/home/griffin/code/urb/grid/backend/src/grid/migrations/versions/15fb1b518507_test.py
+... done"))
+
+(defun +grfn/extract-alembic-migration-name (output)
+  (string-match (rx (0+ anything) "Generating "
+                    (group (one-or-more (not (syntax whitespace))))
+                    " ... done"
+                    (0+ anything))
+                output)
+  (match-string-no-properties 1 output))
+
+(defun generate-alembic-migration (msg)
+  (interactive "sMessage: ")
+  (let* ((default-directory (funcall alembic-dir-fun))
+         (out (shell-command-to-string
+               (format "%s revision -m \"%s\""
+                       alembic-command
+                       msg)))
+         (migration-name (+grfn/extract-alembic-migration-name out)))
+    (find-file-other-window migration-name)))
+
+(defun alembic-upgrade (&optional revision)
+  (let ((default-directory (funcall alembic-dir-fun)))
+    (message
+     (shell-command-to-string (format "%s upgrade %s"
+                                      alembic-command
+                                      (or revision "head"))))))
