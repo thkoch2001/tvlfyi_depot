@@ -72,7 +72,7 @@ bindsym $mod+space exec --no-startup-id dmenu_run
 bindsym $mod+t exec --no-startup-id ~/.config/i3/dmenu_timer.sh ~/.local/share/sounds/gong.mp3
 
 # file manager
-bindsym $mod+n exec st -e lf
+bindsym $mod+n exec st -e lf ~/Downloads
 
 # Screenshot
 # TODO: find a better KBD for this
