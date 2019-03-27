@@ -171,3 +171,4 @@ alias pb=/google/src/head/depot/eng/tools/pastebin
 alias pbc='pb --private --title $(date +${date_fmt})| tee >(c && chrome $(p))' # create a private gPaste from your clipboard's content; open the result in a browser
 alias pbcp='p | pb --private --title $(date +${date_fmt})| tee >(c && chrome $(p))' # create a private gPaste from your clipboard's content; open the result in a browser
 alias pbls='$BROWSER https://paste.googleplex.com/$(whoami)'
+alias flagpick=/google/data/ro/users/sk/skaushik/www/public-tools/flagpick
