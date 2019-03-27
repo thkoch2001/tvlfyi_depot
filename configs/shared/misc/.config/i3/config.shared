@@ -76,7 +76,7 @@ bindsym $mod+n exec st -e lf ~/Downloads
 
 # Screenshot
 # TODO: find a better KBD for this
-# bindsym $mod+Shift+4 exec zsh -i -c snipit
+bindsym $mod+s exec zsh -i -c snipit # note that this eclipses Tmux's M-s KBD for switching b/w session
 bindsym Ctrl+Print   exec scrot ~/Pictures/screenshots/%b-%d-%Y_%T.png # Windows style
 # TODO: debug
 # bindsym $mod+Print   exec scrot --focused ~/Pictures/screenshots/%b-%d-%Y_%T.png # Windows style
@@ -98,6 +98,11 @@ exec --no-startup-id gnome-settings-daemon
 
 # wireless selection mechanism
 exec --no-startup-id nm-applet
+
+# set the split direction
+bindsym $mod+v split vertical
+# cannot bind $mod+h because of movement commands
+bindsym $mod+Shift+v split horizontal
 
 # lock the screen (Window's famous Ctrl-Alt-Delete)
 bindsym $mod+Ctrl+Delete exec "/usr/share/goobuntu-desktop-files/xsecurelock.sh"
@@ -234,13 +239,15 @@ set $bright_cyan    #56b6c2
 set $selection      #3a3f4b
 
 # class                 # border    # bg # text #indicator #child_border
-client.focused          $red        $red $red   $red       $bright_cyan
-client.focused_inactive $red        $red $red   $red       $black
-client.unfocused        $red        $red $red   $red       $black
+client.focused          $red        $red $red   $magenta   $bright_cyan
+client.focused_inactive $red        $red $red   $magenta   $black
+client.unfocused        $red        $red $red   $magenta   $black
 
 bar {
     status_command i3status
     position top
+    # disable system tray icons
+    tray_output none
     colors {
            background $black
            statusline $white

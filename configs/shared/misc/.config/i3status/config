@@ -4,26 +4,31 @@ general {
         colors = true
 }
 
-order += "time"
+order += "tztime lon"
 order += "tztime est"
 order += "tztime pst"
 order += "disk /"
 
 disk "/" {
      prefix_type = "decimal"
-     format = "%avail / %total"
+     format = "%used/%total"
 }
 
-time {
-     format = "%H:%M - %D"
+# Useful commands for dealing with timezones:
+# - cat /etc/timezone
+# - man date
+# - timedatectl
+tztime lon {
+     format = "LON %H:%M"
+     timezone = "Europe/London"
 }
 
 tztime est {
-     format = "%H:%M EST"
+     format = "NYC %H:%M"
      timezone = "US/Eastern"
 }
 
 tztime pst {
-     format = "%H:%M PST"
+     format = "MTV %H:%M"
      timezone = "US/Pacific"
 }
