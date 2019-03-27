@@ -1,3 +1,10 @@
+prodaccess() {
+  # Wraps existing `prodaccess` command to provide Google-specific tips.
+  # Take from this: https://g3doc.corp.google.com/experimental/users/diamondm/fortunes/README.md?cl=head
+  command prodaccess "$@" && \
+    cowsay $(/google/data/ro/users/di/diamondm/engfortunes/fortune.sh --extra_space)
+}
+
 fv() {
   # Usage: fv file pattern
   # This is useful when you know the fuzzy name of the file you want to edit
