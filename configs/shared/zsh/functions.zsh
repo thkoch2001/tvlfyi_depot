@@ -337,7 +337,7 @@ nix_store() {
 
 browse() {
   # Open a URL in $BROWSER. Friendly for terminal input and output.
-  nohup "$BROWSER" $@ &
+  "$BROWSER" $@ &
 }
 
 lh() {
