@@ -79,6 +79,7 @@ alias g="git"
 alias glp='git log --graph --pretty=format:"%Cred%h%Creset -%Cblue %an %Creset - %C(yellow)%d%Creset %s %Cgreen(%cr)%Creset" --abbrev-commit --date=relative'
 alias git="hub"
 alias gprom="git pull --rebase origin master"
+alias gca="git commit --amend"
 alias gcan="git commit --amend --no-edit"
 alias gpf="git push --force"
 alias gpff="git push --force --no-verify"
