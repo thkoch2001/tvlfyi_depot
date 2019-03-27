@@ -406,6 +406,28 @@ is_online() {
   fi
 }
 
+loop() {
+  # Continuously loop `command` every `sleep_amt` interval. `sleep_amt` defaults
+  # to 1 second. Pass y/n for `should_clear` if you'd like to clear the screen
+  # at the end of each iteration.
+  # Usage: loop <command> <sleep_amt> <should_clear>
+  local command=$1;
+  local sleep_amt=${2:-1};
+  local should_clear=${3:-n}
+
+  # clear the screen before kicking things off
+  if [ $should_clear = y ]; then
+    clear
+  fi
+
+  while true; do
+    eval $command && sleep $sleep_amt
+    if [ $should_clear = y ]; then
+      clear
+    fi
+  done
+}
+
 du_it_live() {
   # Outputs and refreshes the size of a directory's content.
   # Useful for watching a directory as large amounts of data are
