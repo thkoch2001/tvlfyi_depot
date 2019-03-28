@@ -51,6 +51,8 @@ bindsym $mod+Ctrl+Shift+e      split h; exec emacsclient --create-frame ~/progra
 bindsym $mod+Ctrl+Shift+c      split h; exec google-chrome
 bindsym $mod+Ctrl+Shift+s      split h; exec spotify
 
+bindsym $mod+Return exec st
+
 # pass integration
 bindsym $mod+Ctrl+backslash exec ~/.config/i3/passmenu # mirroring the 1password KBD
 
