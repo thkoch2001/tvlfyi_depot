@@ -593,7 +593,8 @@ cider() {
   # Opens the current workspace and current directory in Google's Cider
   # Not very useful at the moment because it cannot jump to the current file or
   # line number. Should also support an Emacs integration at some point.
-  browse "https://cider.corp.google.com/?ws=$(citc_workspace)"
+  google-chrome \
+    --app="https://cider.corp.google.com/?ws=$(citc_workspace)"
 }
 
 # i3
