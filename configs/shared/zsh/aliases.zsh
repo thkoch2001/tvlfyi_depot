@@ -1,4 +1,18 @@
 # Applications
+#   java:       jv
+#   tmux:       t
+#   $EDITOR:    e
+#   vim:        v
+#   GnuPG:      gpg
+#   blaze:      bz
+#   borgcfg:    br
+#   piper:      pi
+#   pastebin:   pb
+#   codesearch: cs
+#   git:        g
+#   mercurial:  hg
+#   aptitude:   apt
+#   chrome:     c
 #
 # Supported qualifiers:
 #   hidden:      h
@@ -10,6 +24,7 @@
 #   test:    t
 #   build:   b
 #   list:    ls
+#   shell:   sh
 
 # Misc
 alias c="xclip -selection clipboard -i"
@@ -57,6 +72,10 @@ alias dkrmi="docker rmi"
 alias dkrit="docker run -it"
 alias dkrd="docker run -d"
 alias dki="docker images"
+
+# Java
+alias jvsh='CLASSPATH=$(fd \\.jar$ ~pro/jars | tr \\n :) jshell'
+
 
 # Elixir
 alias m="mix"
@@ -157,11 +176,6 @@ alias si='i3-msg restart'
 alias sm='tmux source-file ~/.tmux.conf'
 
 # Google aliases
-# blaze:      bz
-# borgcfg:    br
-# piper:      pi
-# pastebin:   pb
-# codesearch: cs
 alias bzb='blaze build'
 alias bzt='blaze test --test_output=all'
 alias br='borgcfg'
