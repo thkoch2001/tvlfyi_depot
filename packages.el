@@ -48,6 +48,10 @@
 (package! dash-functional)
 (package! s)
 (package! request)
+(package! predd
+  :recipe (predd
+           :fetcher github
+           :repo "skeeto/predd"))
 
 ;; Haskell
 (package! lsp-mode)

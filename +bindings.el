@@ -2,6 +2,7 @@
 
 (load! "utils")
 (require 'f)
+(require 'predd)
 
 (defmacro find-file-in! (path &optional project-p)
   "Returns an interactive function for searching files."
@@ -101,6 +102,14 @@ private/hlissner/snippets."
 (+hlissner-def-finder! doomd (expand-file-name ".doom.d" "~"))
 (+hlissner-def-finder! notes +org-dir)
 
+(defun +grfn/paxedit-kill (&optional n)
+  (interactive "p")
+  (or (paxedit-comment-kill)
+      (when (paxedit-symbol-cursor-within?)
+        (paxedit-symbol-kill))
+      (paxedit-implicit-sexp-kill n)
+      (paxedit-sexp-kill n)
+      (message paxedit-message-kill)))
 ;;;
 
 (map!
@@ -421,7 +430,7 @@ private/hlissner/snippets."
      :i "["                          #'paxedit-open-bracket
      :i "{"                          #'paxedit-open-curly
      :n [remap evil-yank-line]       #'paxedit-copy
-     :n [remap evil-delete-line]     #'paxedit-kill
+     :n [remap evil-delete-line]     #'+grfn/paxedit-kill
      :n "g o"                        #'paxedit-sexp-raise
      :n [remap evil-join-whitespace] #'paxedit-compress
      :n "g S"                        #'paxedit-format-1
@@ -998,8 +1007,55 @@ private/hlissner/snippets."
             "I" 'grfn/insert-at-sexp-start
             "a" 'grfn/insert-at-form-start))
 
-(evil-define-operator fireplace-eval (beg end)
+(predd-defmulti eval-sexp (lambda (form) major-mode))
+
+(predd-defmethod eval-sexp 'clojure-mode (form)
+  (cider-interactive-eval form))
+
+(predd-defmethod eval-sexp 'emacs-lisp-mode (form)
+  (pp-eval-expression form))
+
+(predd-defmulti eval-sexp-region (lambda (_beg _end) major-mode))
+
+(predd-defmethod eval-sexp-region 'clojure-mode (beg end)
   (cider-interactive-eval nil nil (list beg end)))
+
+(predd-defmethod eval-sexp-region 'emacs-lisp-mode (beg end)
+  (pp-eval-expression (read (buffer-substring beg end))))
+
+(predd-defmulti eval-sexp-region-context (lambda (_beg _end _context) major-mode))
+
+(predd-defmethod eval-sexp-region-context 'clojure-mode (beg end context)
+  (cider--eval-in-context (buffer-substring beg end)))
+
+(defun pp-eval-context-region (beg end context)
+  (interactive "r\nxContext: ")
+  (let* ((inner-expr (read (buffer-substring beg end)))
+         (full-expr (list 'let* context inner-expr)))
+    (pp-eval-expression full-expr)))
+
+(predd-defmethod eval-sexp-region-context 'emacs-lisp-mode (beg end context)
+  (pp-eval-context-region beg end context))
+
+(predd-defmulti preceding-sexp (lambda () major-mode))
+
+(predd-defmethod preceding-sexp 'clojure-mode ()
+  (cider-last-sexp))
+
+(predd-defmethod preceding-sexp 'emacs-lisp-mode ()
+  (elisp--preceding-sexp))
+
+(defun eval-sexp-at-point ()
+  (interactive)
+  (let ((bounds (bounds-of-thing-at-point 'sexp)))
+    (eval-sexp-region (car bounds)
+                      (cdr bounds))))
+
+(defun eval-last-sexp ()
+  (interactive)
+  (eval-sexp (preceding-sexp)))
+
+;;;
 
 (defun cider-insert-current-sexp-in-repl (&optional arg)
   "Insert the expression at point in the REPL buffer.
@@ -1044,11 +1100,16 @@ If invoked with a prefix ARG eval the expression after inserting it"
   (interactive)
   (apply #'cider-eval-and-replace (cider-sexp-at-point 'bounds)))
 
+;;;
+
+(evil-define-operator fireplace-eval (beg end)
+  (eval-sexp-region beg end))
+
 (evil-define-operator fireplace-replace (beg end)
   (cider-eval-and-replace beg end))
 
 (evil-define-operator fireplace-eval-context (beg end)
-  (cider--eval-in-context (buffer-substring beg end)))
+  (eval-sexp-region-context beg end))
 
 ;;; fireplace-esque eval binding
 (nmap :keymaps 'cider-mode-map
@@ -1061,6 +1122,23 @@ If invoked with a prefix ARG eval the expression after inserting it"
         "q" (general-key-dispatch 'fireplace-send
               "q" 'cider-insert-current-sexp-in-repl
               "c" 'cider-insert-last-sexp-in-repl)
+        "x" (general-key-dispatch 'fireplace-eval-context
+              "x" 'cider-eval-sexp-at-point-in-context
+              "c" 'cider-eval-last-sexp-in-context)
+        "!" (general-key-dispatch 'fireplace-replace
+              "!" 'cider-eval-current-sexp-and-replace
+              "c" 'cider-eval-last-sexp-and-replace)
+        "y" 'cider-copy-last-result))
+
+;;;
+
+(nmap :keymaps 'emacs-lisp-mode-map
+  "c" (general-key-dispatch 'evil-change
+        "p" (general-key-dispatch 'fireplace-eval
+              "p" 'eval-sexp-at-point
+              "c" 'eval-last-sexp
+              "d" 'cider-eval-defun-at-point
+              "r" 'cider-test-run-test)
         "x" (general-key-dispatch 'fireplace-eval-context
               "x" 'cider-eval-sexp-at-point-in-context
               "c" 'cider-eval-last-sexp-in-context)
@@ -1206,6 +1284,10 @@ If invoked with a prefix ARG eval the expression after inserting it"
    (:map w3m-mode-map
      "/" 'evil-search-forward
      "?" 'evil-search-backward))
+
+ (:after slack
+   (:map slack-message-buffer-mode-map
+     :i "<up>" #'slack-message-edit))
 
  (:after org
    :n "C-c C-x C-o" #'org-clock-out
