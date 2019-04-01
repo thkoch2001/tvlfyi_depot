@@ -76,6 +76,12 @@ bindsym $mod+t exec --no-startup-id ~/.config/i3/dmenu_timer.sh ~/.local/share/s
 # file manager
 bindsym $mod+n exec st -e lf ~/Downloads
 
+# clipboard manager
+# NOTE: Ctrl-c is already covered since `clipmenu` listens for X clipboard
+# events using `clipnotify`.
+# NOTE: `clipmenud` is started in `.xsessionrc.shared`
+bindsym Ctrl+$mod+v exec clipmenu
+
 # Screenshot
 # TODO: find a better KBD for this
 bindsym $mod+s exec zsh -i -c snipit # note that this eclipses Tmux's M-s KBD for switching b/w session

@@ -16,6 +16,10 @@ xsetroot -solid "#333333"
 # This might be better for SSH.
 tmux new -d -s main
 
+# start `clipmenud`,
+# TODO: research if this would be better handled by init/clipmenud.service?
+clipmenud &
+
 # Start the Emacs server
 emacs --daemon
 
