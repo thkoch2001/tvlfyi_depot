@@ -47,6 +47,15 @@ snipit() {
     echo "Copied \"$uri\" to your clipboard."
 }
 
+# Java
+run_java() {
+  # Usage: run_java path/to/file.java
+  # Intended to be similar in spirit to Haskell's `runhaskell`.
+  set -e
+  javac $1
+  java ${1%.java}
+}
+
 # Aptitude
 apts() {
   # Searches aptitude package repository for $1, surrounding it in ^$ to ensure
