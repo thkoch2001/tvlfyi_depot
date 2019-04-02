@@ -64,12 +64,26 @@ apts() {
 }
 
 # Docker
-dsh() {
+dkcsh() {
   # Drop into a Docker shell. Shell defaults to /bin/bash.
+  # `dkcsh` stands for DocKer Container SHell.
+  # Usage: dkcsh
   container=$1
   cmd=${2-/bin/bash}
 
-  docker exec -it "${container}" "${cmd}"
+  docker exec -it "$container" "$cmd"
+}
+
+dkish() {
+  # Runs a Docker container with `/usr/bin/env bash`.
+  # `dkish` stands for DocKer Image SHell.
+  # Note: This defers from `dksh`, which accepts a container instead of an
+  # image.
+  # Usage: dkrit <container_name> [command]
+  image=$1
+  cmd=${2-/bin/bash}
+
+  docker run -it "$image" "$cmd"
 }
 
 # Emacs

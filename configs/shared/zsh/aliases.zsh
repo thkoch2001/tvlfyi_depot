@@ -13,6 +13,8 @@
 #   mercurial:  hg
 #   aptitude:   apt
 #   chrome:     c
+#   elixir:     ex
+#   haskell:    hk
 #
 # Supported qualifiers:
 #   hidden:      h
@@ -69,13 +71,11 @@ alias dkps="docker ps"
 alias dkpsa="docker ps -a"
 alias dkrm="docker rm"
 alias dkrmi="docker rmi"
-alias dkrit="docker run -it"
 alias dkrd="docker run -d"
 alias dki="docker images"
 
 # Java
 alias jvsh='CLASSPATH=$(fd \\.jar$ ~pro/jars | tr \\n :) jshell'
-
 
 # Elixir
 alias m="mix"
@@ -86,6 +86,7 @@ alias tism="MIX_ENV=test iex -S mix"
 alias mdg="mix deps.get"
 alias mdu="mix deps.update"
 alias mdup="mix docker.up"
+alias sandbox_ex='dkish elixir iex' # depends on the docker aliases
 
 # GPG
 alias gpged='gpg --edit-key wpcarro@gmail.com'
@@ -132,6 +133,7 @@ alias se="stack exec --"
 alias sc="stack clean"
 # alias st="stack test" # blocks suckless-terminal
 alias haddocks='open "$(stack path --local-doc-root)/index.html"'
+alias sandbox_hk='dkish haskell ghci'
 
 # Kubernetes
 alias kc="kubectl"
