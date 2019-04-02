@@ -80,7 +80,11 @@ bindsym $mod+n exec st -e lf ~/Downloads
 # NOTE: Ctrl-c is already covered since `clipmenu` listens for X clipboard
 # events using `clipnotify`.
 # NOTE: `clipmenud` is started in `.xsessionrc.shared`
-bindsym Ctrl+$mod+v exec clipmenu
+# NOTE: This is a bit of a hack intended to support pasting in both the terminal
+# and in GUI applications. `st` expects `ctrl+Shift+v` while GUIs expect
+# `ctrl+v`. In the instances where GUIs don't support `ctrl+Shift+v` already, it
+# acts like `ctrl+v`, so it should "just work".
+bindsym Ctrl+$mod+v exec clipmenu && xdotool key --clearmodifiers ctrl+Shift+v
 
 # Screenshot
 # TODO: find a better KBD for this
