@@ -49,6 +49,7 @@ alias rg='rg --ignore-case'
 alias rgh='rg --hidden' # By default, rg skips hidden files
 alias fdh='fd --hidden' # By default, rg skips hidden files
 alias define=sdcv # uses stardict to lookup a word
+alias intellij='nohup /opt/intellij-ce-stable/bin/idea.sh >/dev/null 2>&1 &'
 
 # Gnome
 alias na=nautilus # Gnome's graphical file browser. Useful to click and dragging files into emails
