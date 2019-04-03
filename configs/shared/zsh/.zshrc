@@ -47,3 +47,9 @@ source "$DOTFILES/configs/shared/zsh/variables.zsh"
 source "$DOTFILES/configs/shared/zsh/aliases.zsh"
 source "$DOTFILES/configs/shared/zsh/functions.zsh"
 source "$DOTFILES/configs/shared/zsh/zle.zsh"
+
+preexec() {
+  # `preexec` runs before every command is run.
+  update_x11_forwarding
+}
+

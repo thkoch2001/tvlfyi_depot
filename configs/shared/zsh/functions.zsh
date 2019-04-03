@@ -202,6 +202,21 @@ kush() {
 }
 
 # Misc
+update_x11_forwarding() {
+  # Sometime Tmux misbehaves with X11 applications (e.g. Emacs). This is because
+  # the DISPLAY variable is not set properly to `:0`. This function w
+  # Cache the DISPLAY when outside of Tmux. When inside of Tmux, use the cached
+  # value for DISPLAY.
+  #
+  # This cooperates with my `preexec` function, which runs before every command.
+  # Adapted from here: http://alexteichman.com/octo/blog/2014/01/01/x11-forwarding-and-terminal-multiplexers/
+  if [ -z "$TMUX" ]; then
+    echo $DISPLAY > ~/.display.txt
+  else
+    export DISPLAY=$(cat ~/.display.txt)
+  fi
+}
+
 monzo_balance() {
   # Return the balance of my Monzo bank account. Intended to be used in my i3
   # status bar.
