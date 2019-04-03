@@ -375,7 +375,10 @@ nix_store() {
 
 browse() {
   # Open a URL in $BROWSER. Friendly for terminal input and output.
-  "$BROWSER" $@ &
+  # NOTE: `nohup` ensures that if I close the terminal, I won't all kill the
+  # browser. Maybe this is similar to calling `disown %<job_id>`. The redirect
+  # to `/dev/null` ensures that no `nohup.out` file is created.
+  nohup "$BROWSER" $@ >/dev/null 2>&1 &
 }
 
 lh() {
@@ -600,13 +603,6 @@ tmux_focused_pane() {
 }
 
 # Google3
-g3_root() {
-  # Outputs the root of the CitC client in g3
-  # NOTE: there is probably a function already supported by g4 to cd to the
-  # root, so support for this function may be dropped shortly.
-  echo "${PWD%%/google3/*}/google3"
-}
-
 p4_filelog() {
   # Logs a file's Piper history. This is a convenience wrapper around
   # `p4 filelog`.
