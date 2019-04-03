@@ -16,6 +16,15 @@
   (setq evil-want-integration nil)
   (general-evil-setup)
   :config
+  ;; ensure [_-] are part of \w character set
+  ;; Note: there must be a better way to accomplish this.
+  (progn
+    ;; underscore
+    (modify-syntax-entry ?_ "w" sh-mode-syntax-table)
+
+    ;; dash
+    (modify-syntax-entry ?- "w" sh-mode-syntax-table)
+    (modify-syntax-entry ?- "w" emacs-lisp-mode-syntax-table))
   (general-mmap
     :keymaps 'override
     "RET" #'evil-goto-line
