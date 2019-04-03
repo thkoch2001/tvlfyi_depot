@@ -51,6 +51,9 @@ bindsym $mod+Ctrl+Shift+e      split h; exec emacsclient --create-frame ~/progra
 bindsym $mod+Ctrl+Shift+c      split h; exec google-chrome
 bindsym $mod+Ctrl+Shift+s      split h; exec spotify
 
+# support dmenu-based bookmarks
+bindsym $mod+Ctrl+b exec dmenu <$DOTFILES/bookmarks.txt | xargs $BROWSER
+
 bindsym $mod+Return exec st
 
 # pass integration
