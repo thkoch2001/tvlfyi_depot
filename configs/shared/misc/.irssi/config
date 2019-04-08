@@ -5,7 +5,16 @@ servers = (
     port = "6697";
     use_tls = "yes";
     tls_verify = "yes";
-    autoconnect = "yes";
+    autoconnect = "no";
+  },
+  {
+    address = "irc.corp.google.com";
+    chatnet = "Google";
+    port = "6697";
+    use_tls = "yes";
+    tls_verify = "yes";
+    autoconnect = "no";
+    server_reconnect_time = 5;
   }
 );
 
@@ -14,10 +23,13 @@ chatnets = {
     type = "IRC";
     autosendcmd = "/msg nickserv identify wpcarro ]3Fwus]YF7yXPB6Re/Me";
   };
+  Google = {
+    type = "IRC";
+  };
 };
 
 channels = (
-  { name = "#nixos"; chatnet = "Freenode"; autojoin = "Yes"; },
+  { name = "#nixos"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#i3"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#pass"; chatnet = "Freenode"; autojoin = "No"; },
 );
