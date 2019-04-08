@@ -28,8 +28,7 @@ floating_modifier $mod
 # smart_gaps on
 
 # KBD Principles:
-# $mod+Ctrl+<app_char>       = starting an application vertically
-# $mod+Ctrl+Shift+<app_char> = starting an application horizontally
+# $mod+Ctrl+<app_char>       = starting an application
 # where <app_char> is a reserved character for a commonly used application.
 #
 # <app_char> definitions:
@@ -37,19 +36,15 @@ floating_modifier $mod
 # emacs    = e
 # chrome   = c
 # spotify  = s
+# intellij = i
 #
 # Vertical
-bindsym $mod+Ctrl+t            split v; exec st
-bindsym $mod+Ctrl+Return       split v; exec st
-bindsym $mod+Ctrl+e            split v; exec emacsclient --create-frame ~/programming
-bindsym $mod+Ctrl+c            split v; exec google-chrome
-bindsym $mod+Ctrl+s            split v; exec spotify
-# Horizontal
-bindsym $mod+Ctrl+Shift+t      split h; exec st
-bindsym $mod+Ctrl+Shift+Return split h; exec st
-bindsym $mod+Ctrl+Shift+e      split h; exec emacsclient --create-frame ~/programming
-bindsym $mod+Ctrl+Shift+c      split h; exec google-chrome
-bindsym $mod+Ctrl+Shift+s      split h; exec spotify
+bindsym $mod+Ctrl+t      exec st
+bindsym $mod+Ctrl+Return exec st
+bindsym $mod+Ctrl+e      exec emacsclient --create-frame ~/programming
+bindsym $mod+Ctrl+c      exec google-chrome
+bindsym $mod+Ctrl+s      exec spotify
+bindsym $mod+Ctrl+i      exec zsh -i -c intellij
 
 # support dmenu-based bookmarks
 bindsym $mod+Ctrl+b exec dmenu <$DOTFILES/bookmarks.txt | xargs $BROWSER
