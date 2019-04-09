@@ -14,6 +14,7 @@ hash -d sounds="$DOTFILES/configs/shared/misc/.local/share/sounds"
 hash -d wallpaper="$DOTFILES/configs/shared/misc/.local/share/wallpaper"
 hash -d org="$ORG_DIRECTORY"
 hash -d x20=/google/data/rw/users/wp/wpcarro # remember: to access x20, you need to run `prodaccess`
+hash -d experimental=./experimental/users/wpcarro
 # named directories for commonly used projects
 hash -d korvus_framework=./java/com/google/corp/sales
 hash -d korvus_services=./corp/sales/casesautomation
