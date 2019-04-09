@@ -53,6 +53,7 @@
     "j"  #'jump-to-register
     "h"  #'help
     "a"  #'wpc/toggle-terminal
+    "="  #'align
     "p"  #'flycheck-previous-error
     "P"  #'counsel-git-grep
     "f"  #'wpc/find-file
