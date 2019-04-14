@@ -18,7 +18,7 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Cinque Terre, Italy
 * Rome, Italy
 * Milan, Italy
-* Venice, Italy
+* ~~Venice, Italy~~
 * Florence, Italy
 * Oslo, Norway
 * Bergen, Norway
