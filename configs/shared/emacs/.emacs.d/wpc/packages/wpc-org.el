@@ -46,7 +46,6 @@
   (setq org-todo-keywords
         '((sequence "TODO" "BLOCKED" "DONE")))
   (setq org-default-notes-file (f-join (getenv "ORG_DIRECTORY") "notes.org"))
-  (setq org-log-done 'time)
   (setq org-agenda-files (list (f-join (getenv "ORG_DIRECTORY") "work.org")
                                (f-join (getenv "ORG_DIRECTORY") "personal.org")))
   ;; TODO: troubleshoot why `wpc/kbds-minor-mode', `wpc/ensure-kbds' aren't
