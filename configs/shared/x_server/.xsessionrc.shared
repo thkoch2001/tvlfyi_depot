@@ -23,6 +23,9 @@ clipmenud &
 # Start the Emacs server
 emacs --daemon
 
+# start comption
+compton &
+
 # set kbds
 xmodmap -e 'remove Lock = Caps_Lock'
 xmodmap -e 'keysym Caps_Lock = Escape'
