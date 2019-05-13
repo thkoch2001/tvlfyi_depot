@@ -15,6 +15,7 @@
 #   chrome:     c
 #   elixir:     ex
 #   haskell:    hk
+#   wifi:       wf
 #
 # Supported qualifiers:
 #   hidden:      h
@@ -51,6 +52,17 @@ alias fdh='fd --hidden' # By default, rg skips hidden files
 alias define=sdcv # uses stardict to lookup a word
 alias intellij='nohup /opt/intellij-ce-stable/bin/idea.sh >/dev/null 2>&1 &'
 alias tpr='tput reset'
+alias nordvpn='sudo openvpn /etc/openvpn/ovpn_tcp/us3559.nordvpn.com.tcp.ovpn' # connects to the nordvpn servers in USA
+
+# device / power mgt
+alias off='shutdown now'
+alias suspend='systemctl suspend'
+alias hibernate='systemctl hibernate'
+
+# nmcli
+# NOTE: check out `tldr nmcli` for more information
+alias wfls='nmcli device wifi' # list available wifi network
+alias wfc='nmcli device wifi connect' # connect to a Wifi network
 
 # Gnome
 alias na=nautilus # Gnome's graphical file browser. Useful to click and dragging files into emails
