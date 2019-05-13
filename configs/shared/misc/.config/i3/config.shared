@@ -66,6 +66,9 @@ for_window [class="GoogleEmacs" instance="org-protocol-capture"] floating enable
 # ensure Spotify windows float
 for_window [class="Spotify"] floating enable
 
+# ensure `lf` instances float
+for_window [title="lf"] floating enable
+
 # ensure wallpaper
 exec --no-startup-id feh --bg-scale ~/.local/share/wallpaper/cartoon-outdoors.jpg
 
@@ -77,7 +80,7 @@ bindsym $mod+space exec --no-startup-id dmenu_run
 bindsym $mod+t exec --no-startup-id ~/.config/i3/dmenu_timer.sh ~/.local/share/sounds/gong.mp3
 
 # file manager
-bindsym $mod+n exec st -e lf ~/Downloads
+bindsym $mod+n exec st -e lf ~/Dropbox
 
 # clipboard manager
 # NOTE: Ctrl-c is already covered since `clipmenu` listens for X clipboard
