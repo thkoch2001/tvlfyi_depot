@@ -104,15 +104,9 @@ dkcsh() {
 }
 
 dkish() {
-  # Runs a Docker container with `/usr/bin/env bash`.
-  # `dkish` stands for DocKer Image SHell.
-  # Note: This defers from `dksh`, which accepts a container instead of an
-  # image.
-  # Usage: dkrit <container_name> [command]
-  image=$1
-  cmd=${2-/bin/bash}
-
-  docker run -it "$image" "$cmd"
+  # Runs a Docker container interactively
+  # Usage: dkrit <container_name> <command> [...args]
+  docker run -it $@
 }
 
 # Emacs

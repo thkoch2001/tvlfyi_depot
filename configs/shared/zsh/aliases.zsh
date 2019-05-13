@@ -88,7 +88,10 @@ alias tism="MIX_ENV=test iex -S mix"
 alias mdg="mix deps.get"
 alias mdu="mix deps.update"
 alias mdup="mix docker.up"
-alias sandbox_ex='dkish elixir iex' # depends on the docker aliases
+alias repl_ex='dkish elixir iex' # depends on the docker aliases
+
+# Clojure
+alias repl_clj='dkish clojure lein repl'
 
 # GPG
 alias gpged='gpg --edit-key wpcarro@gmail.com'
@@ -135,7 +138,7 @@ alias se="stack exec --"
 alias sc="stack clean"
 # alias st="stack test" # blocks suckless-terminal
 alias haddocks='open "$(stack path --local-doc-root)/index.html"'
-alias sandbox_hk='dkish haskell ghci'
+alias repl_hk='dkish haskell ghci'
 
 # Kubernetes
 alias kc="kubectl"
