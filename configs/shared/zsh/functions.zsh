@@ -5,6 +5,35 @@ prodaccess() {
     cowsay $(/google/data/ro/users/di/diamondm/engfortunes/fortune.sh --extra_space)
 }
 
+home_theater() {
+  # Does the following:
+  #   - connects to NordVPN for HBO
+  #   - connects to the TV via the attached HDMI cable
+  #   - connects to the bluetooth speaker
+
+  # `nordvpn` is an alias defined in `aliases.zsh`
+  echo 'Run the following to stream HBOGo from this laptop to your TV:'
+  echo '  1. nordvpn'
+  echo '  2. xrandr --output HDMI1 --mode 3840x2160'
+  echo '  3. bluetoothctl'
+  echo '  4. connect CC:6E:A4:32:6B:BB'
+  echo
+  echo 'Having trouble? Use the following tools to troubleshoot:'
+  echo '  - blueman-manager'
+  echo '  - pavucontrol'
+  echo '  - gnome-control-center'
+}
+
+create_citc() {
+  # Creates an `hg` citc client and `cd`s to its root.
+  # Usage: create_citc esc-b-119275355
+  # Note: May want to get into the habit of naming citc clients after the
+  # Buganizer tickets. The buganizer portion can be prefixed with the shorthand
+  # representation of the project it relates to. This coupling could lead to
+  # more integrated tooling.
+  hg citc $1 && g4d $1
+}
+
 fv() {
   # Usage: fv file pattern
   # This is useful when you know the fuzzy name of the file you want to edit
