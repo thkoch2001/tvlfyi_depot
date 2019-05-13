@@ -6,6 +6,9 @@ export DESKTOP_SESSION=cinnamon  # gnome for trusty.
 
 # NOTE: This may break your compose key.
 # See http://g/i3-users/YBexXGbik7E for more details.
+# NOTE: IM_MODULE is an "Input Method" module, which I believe affects the way
+# keyboard events are processed. `xim` is "X Input Method"; other options
+# include: `ibus`, `fcitx`, but I'm unsure what features each offers.
 export GTK_IM_MODULE=xim
 
 # Desktop background color.
@@ -23,7 +26,7 @@ clipmenud &
 # Start the Emacs server
 emacs --daemon
 
-# start comption
+# start compton for shadows, transparency, fading, etc.
 compton &
 
 # set kbds

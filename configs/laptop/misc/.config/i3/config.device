@@ -16,3 +16,6 @@ bindsym XF86AudioNext exec --no-startup-id playerctl next
 # screen brightness controls
 bindsym XF86MonBrightnessUp   exec xbacklight -inc 15
 bindsym XF86MonBrightnessDown exec xbacklight -dec 15
+
+# suspend laptop
+bindsym Ctrl+Escape exec systemctl suspend

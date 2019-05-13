@@ -120,8 +120,8 @@ bindsym $mod+v split vertical
 bindsym $mod+Shift+v split horizontal
 
 # lock the screen (Window's famous Ctrl-Alt-Delete)
-bindsym $mod+Ctrl+Delete exec "/usr/share/goobuntu-desktop-files/xsecurelock.sh"
-bindsym $mod+Shift+q     exec "/usr/share/goobuntu-desktop-files/xsecurelock.sh"
+bindsym $mod+Ctrl+Delete exec xsecurelock
+bindsym $mod+Shift+q     exec xsecurelock
 
 # sound applet
 exec --no-startup-id gnome-sound-applet
