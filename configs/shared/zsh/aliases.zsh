@@ -131,6 +131,9 @@ alias hgd='hg diff'
 alias hgsh='hg export'
 alias hgco='hg update'
 alias hgls='hg citc --list' # should have different output from `pils`
+alias hgrc='hg rebase --continue'
+alias hgra='hg rebase --abort'
+alias hgconflicts="hg resolve --list 'set:unresolved()'" # much like `gconflicts`
 
 # Haskell
 alias sb="stack build"

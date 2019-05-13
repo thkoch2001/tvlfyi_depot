@@ -127,7 +127,7 @@ org_capture() {
 }
 
 # Git
-conflicts() {
+gconflicts() {
   # Edit git conflicts one-by-one in your favorite editor.
   ${EDITOR} "$(git status --porcelain | awk '/^UU/ { print $2 }')"
 }
