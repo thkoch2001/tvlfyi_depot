@@ -1,8 +1,14 @@
-# setup OSX style scrolling for laptop
+# natural scrolling - trackpad
 xinput --set-prop 'DLL07BF:01 06CB:7A13 Touchpad' 'libinput Natural Scrolling Enabled' 1
 
-# increase cursor speed
+# increase cursor speed - trackpad
 xinput --set-prop 'DLL07BF:01 06CB:7A13 Touchpad' 'libinput Accel Speed' 1
+
+# natural scrolling - mouse
+xinput --set-prop 'Logitech USB Receiver Mouse' 'libinput Natural Scrolling Enabled' 1
+
+# increase cursor speed - mouse
+xinput --set-prop 'Logitech USB Receiver Mouse' 'libinput Accel Speed' 1
 
 # disable touchscreen on laptop
 xinput disable 'ELAN Touchscreen'
