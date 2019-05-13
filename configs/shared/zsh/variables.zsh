@@ -23,7 +23,6 @@ hash -d ultra=./ads/doubleclick/systems/crm
 hash -d incentives_fe=./experimental/adservices/jarvis/jarvis_extension/jarvis_staging/js
 hash -d incentives_be=./experimental/adservices/tesseract/handlers/incentives
 hash -d spewall_fe=./alkali/apps/speakeasydashboard
-hash -d spewall_be=./alkali/apps/speakeasydashboard
 hash -d spewall_be=./java/com/google/alkali/applications/speakeasydashboard
 hash -d spewall_protos=./google/internal/alkali/applications/speakeasydashboard
 hash -d spewall_tests=./javatests/com/google/alkali/applications/speakeasydashboard
