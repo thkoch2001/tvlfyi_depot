@@ -42,6 +42,29 @@ fv() {
   [[ -n "$file" ]] && vim "$file"
 }
 
+project_root() {
+  # Changes to the directory of the project root.
+  if [[ "$(pwd)" =~ '(.*)/blaze-bin(.*)' ]]; then
+    cd "${match[1]}${match[2]}"
+  elif [[ "$(pwd)" =~ '(.*)/blaze-genfiles(.*)' ]]; then
+    cd "${match[1]}${match[2]}"
+  fi
+}
+
+blaze_bin() {
+  # Changes to the blaze-bin directory.
+  # Depends:
+  #   - project_root
+  project_root && cd "${PWD/\/google3//google3/blaze-bin}"
+}
+
+blaze_genfiles() {
+  # Changes to the blaze-genfiles directory.
+  # Depends:
+  #   - project_root
+  project_root && cd "${PWD/\/google3//google3/blaze-genfiles}"
+}
+
 tbz() {
   # Toggle between blaze-bin and your source.
   # Useful if you like to cd into the dir where your source lives.
