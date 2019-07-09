@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: count(*) group by
+# key: countby
+# --
+SELECT count(*), ${1:column} FROM ${2:table} GROUP BY $1;
