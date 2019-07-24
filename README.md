@@ -40,7 +40,7 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Cambridge, England
 * Chester, England
 * Edinburgh, Scotland
-* Dublin, Ireland
+* ~~Dublin, Ireland~~
 * Galway, Ireland
 * Luxembourg, Luxembourg
 * Cappadocia, Turkey
