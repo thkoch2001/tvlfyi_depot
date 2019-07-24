@@ -16,7 +16,7 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Barcelona, Spain
 * Lisbon, Portugal
 * Cinque Terre, Italy
-* Rome, Italy
+* ~~Rome, Italy~~
 * Milan, Italy
 * ~~Venice, Italy~~
 * Florence, Italy
