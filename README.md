@@ -36,7 +36,7 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Salzburg, Austria
 * Hallstatt, Austria
 * St. Petersburg, Russia
-* London, England
+* ~~London, England~~
 * Cambridge, England
 * Chester, England
 * Edinburgh, Scotland
