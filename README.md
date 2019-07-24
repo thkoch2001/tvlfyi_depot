@@ -14,7 +14,8 @@ A crude journal of cities I have visited and cities I would like to visit.
 * ~~Aix-en-Provence, France~~
 * Monaco, France
 * Barcelona, Spain
-* Lisbon, Portugal
+* ~~Lisbon, Portugal~~
+* ~~Lagos, Portugal~~
 * Cinque Terre, Italy
 * ~~Rome, Italy~~
 * Milan, Italy
