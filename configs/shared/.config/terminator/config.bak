@@ -1,0 +1,23 @@
+[global_config]
+  enabled_plugins = LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler
+[keybindings]
+[profiles]
+  [[default]]
+    background_color = "#01022E"
+    cursor_shape = ibeam
+    cursor_color = "#434AA6"
+    font = Source Code Pro 10
+    foreground_color = "#0278C6"
+    show_titlebar = False
+    scrollbar_position = hidden
+    palette = "#01022E:#434AA6:#0278C6:#9B6DB0:#018CD5:#07AAE9:#3FA4E0:#a7dff4:#749caa:#434AA6:#0278C6:#9B6DB0:#018CD5:#07AAE9:#3FA4E0:#a7dff4"
+    use_system_font = False
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]

@@ -5,13 +5,16 @@ configs="$DOTFILES/configs"
 case $(hostname) in
   # desktop
   wpcarro.lon.corp.google.com)
-    (cd "$configs/desktop" && stow --target="$HOME" *);;
+    (cd "$configs/desktop" && stow --target="$HOME" .);;
   # laptop
-  wpcarro)
-    (cd "$configs/laptop" && stow --target="$HOME" *);;
+  wpcarro2)
+    (cd "$configs/work_laptop" && stow --target="$HOME" .);;
   # cloudtop
   wpcarro.c.googlers.com)
-    (cd "$configs/cloudtop" && stow --target="$HOME" *);;
+    (cd "$configs/cloudtop" && stow --target="$HOME" .);;
+  # Acer Manjaro laptop
+  acer-manjaro)
+    (cd "$configs/personal_laptop" && stow --target="$HOME" .);;
 esac
 
-(cd "$configs/shared" && stow --target="$HOME" *)
+(cd "$configs/shared" && stow --target="$HOME" .)

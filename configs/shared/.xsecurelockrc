@@ -1,0 +1,11 @@
+# Replace the gLinux penguin with a custom image.
+XSECURELOCK_LOGO_IMAGE=~/Dropbox/static/pickle-rick.jpg
+
+# Enable this to remove the background imagery from the xsecurelock screen.
+# XSECURELOCK_SAVER=saver_blank
+
+# Enable this to use the famous "Flying Toasters" screensaver.
+# XSECURELOCK_SAVER=saver_xscreensaver
+
+# Turn this off on laptop (not on desktop).
+XSECURELOCK_BLANK_DPMS_STATE=on

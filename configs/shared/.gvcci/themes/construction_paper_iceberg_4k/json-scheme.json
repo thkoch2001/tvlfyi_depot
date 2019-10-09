@@ -1,0 +1,24 @@
+{
+  "name": "GVCCI Color Scheme",
+  "author": "",
+  "color": [
+    "#37293d",
+    "#767676",
+    "#1133fa",
+    "#92669b",
+    "#5328e6",
+    "#c00bfb",
+    "#8702f8",
+    "#e7bcf6",
+    "#523e5b",
+    "#969393",
+    "#4a65fe",
+    "#ad89b5",
+    "#7d5cef",
+    "#d145ff",
+    "#a339ff",
+    "#faf1fd"
+  ],
+  "foreground": "#0c024d",
+  "background": "#dad0df"
+}

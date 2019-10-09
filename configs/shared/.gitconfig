@@ -1,0 +1,26 @@
+[user]
+	name = William Carroll
+	email = wpcarro@gmail.com
+[alias]
+	recent = ! git for-each-ref --count=10 --sort=-committerdate refs/heads/ --format=\"%(refname:short)\" | fzf | xargs git checkout
+	today = ! git log --date=relative --since=00:00:00 --all --no-merges --oneline --author=\"$(git config --get user.email)\"
+	changed-files = ! git --no-pager diff --name-only $(current_branch) $(git merge-base $(current_branch) master)
+	conflicts = ! git --no-pager diff --name-only --diff-filter=U
+	yday = ! git log --name-only --since=yesterday.midnight --until=today.midnight --author=\"$(git config --get user.email)\"
+	patch-grep = log -p -S
+	unstage = reset HEAD --
+	appraise = ! $HOME/go/bin/git-appraise
+[push]
+	default = current
+[rebase]
+	autosquash = true
+	autostash = true
+[remote "origin"]
+  fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
+[github]
+	user = wpcarro
+[core]
+	excludesfile = ~/.gitignore
+	pager = less
+[rerere]
+	enabled = true

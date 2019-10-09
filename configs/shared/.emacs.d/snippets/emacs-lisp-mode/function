@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Function
+# key: fn
+# expand-env: ((yas-indent-line 'fixed))
+# --
+(defun $1 ($2)
+  "$3"
+  $4)

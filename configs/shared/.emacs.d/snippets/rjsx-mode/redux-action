@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: redux-action
+# key: rax
+# --
+export const ${1:$$(string/lower->caps yas-text)} = '`(downcase (buffer-dirname))`/${1:$(string/caps->kebab yas-text)}'

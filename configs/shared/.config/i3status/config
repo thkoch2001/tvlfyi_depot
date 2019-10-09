@@ -1,0 +1,58 @@
+general {
+  markup = pango
+  separator = " "
+  colors = true
+}
+
+/* order += "battery 0" # TODO: remove this if "battery 1" works for Dell */
+order += "battery 1" # trying to support two different laptops
+order += "tztime local"
+order += "tztime lon"
+order += "tztime est"
+order += "tztime pst"
+order += "disk /"
+
+disk "/" {
+  prefix_type = "decimal"
+  format = "%used/%total"
+}
+
+# Useful commands for dealing with timezones:
+# - cat /etc/timezone
+# - man date
+# - timedatectl
+tztime local {
+  format = "%d/%m/%Y"
+}
+
+tztime lon {
+  format = "LON %H:%M"
+  timezone = "Europe/London"
+}
+
+tztime est {
+  format = "NYC %H:%M"
+  timezone = "US/Eastern"
+}
+
+tztime pst {
+  format = "MTV %H:%M"
+  timezone = "US/Pacific"
+}
+
+# TODO: remove this if "battery 1" works for Dell laptop
+/* battery 0 { */
+/*   format = "Battery %percentage" */
+/*   format_down = "" # This hides the battery when there isn't any (e.g. on a Desktop) */
+/*   low_threshold = 30 */
+/*   threshold_type = time */
+/*   integer_battery_capacity = true */
+/* } */
+
+battery 1 {
+  format = "Battery %percentage"
+  format_down = "" # This hides the battery when there isn't any (e.g. on a Desktop)
+  low_threshold = 30
+  threshold_type = time
+  integer_battery_capacity = true
+}

@@ -1,8 +1,0 @@
-alias @escalations    /google3/corp/gtech/pto/tda/beacons_extension
-
-alias @spewall_fe     /google3/alkali/apps/speakeasydashboard
-alias @spewall_be     /google3/java/com/google/alkali/applications/speakeasydashboard
-alias @spewall_protos /google3/google/internal/alkali/applications/speakeasydashboard
-alias @spewall_tests  /google3/javatests/com/google/alkali/applications/speakeasydashboard
-
-alias @gti            /google3/experimental/engedu/gti/projects/week20190422/mtv/Team10

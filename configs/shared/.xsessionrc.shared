@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# Might be unnecessary...
+. ~/.profile
+
+export DESKTOP_SESSION=cinnamon  # gnome for trusty.
+
+# NOTE: This may break your compose key.
+# See http://g/i3-users/YBexXGbik7E for more details.
+# NOTE: IM_MODULE is an "Input Method" module, which I believe affects the way
+# keyboard events are processed. `xim` is "X Input Method"; other options
+# include: `ibus`, `fcitx`, but I'm unsure what features each offers.
+# export GTK_IM_MODULE=xim
+
+# Desktop background color.
+xsetroot -solid "#333333"
+
+# Set fallback cursor.
+xsetroot -cursor_name left_ptr
+
+# Set KBDs.
+xmodmap -e 'remove Lock = Caps_Lock'
+xmodmap -e 'keysym Caps_Lock = Escape'
+
+# set key repeat preferences
+# NOTE: This is now being handled with my keyboard.el module in Emacs.
+# xset r rate 250 60
+
+# start tmux with a few commonly used sessions
+# TODO: consider moving this else like ~/.profile, so it doesn't depend on X.
+# This might be better for SSH.
+tmux new -d -s main
+
+# Start the Emacs server
+# TODO: Consider starting this with `systemctl --user enable emacs.service`
+emacs --daemon
+
+# Start ssh-agent
+eval "$(ssh-agent -s)"
+
+# TODO: Prefer `systemctl start docker.service`
+dockerd &
+
+# start compton for shadows, transparency, fading, etc.
+# TODO: Consider starting this with `systemctl --user enable compton.service`
+compton &
+
+# `unclutter` hide the cursor in when it is inactive
+unclutter &
+
+# Startup Emacs (and EXWM).
+exec dbus-launch --exit-with-session emacs

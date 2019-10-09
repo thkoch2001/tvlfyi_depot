@@ -1,0 +1,6 @@
+rofi.font:                           Source Code Pro 10
+rofi.color-normal:                   #01022E, #a7dff4, #01022E, #015f9e, #a7dff4
+rofi.color-urgent:                   #01022E, #d6b48d, #22231D, #d6b48d, #a7dff4
+rofi.color-active:                   #01022E, #3FA4E0, #01022E, #3FA4E0, #01022E
+rofi.color-window:                   #01022E, #015f9e, #01416c
+rofi.modi: window,run,ssh,combi
