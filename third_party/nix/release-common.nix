@@ -51,7 +51,7 @@ rec {
     [ curl
       bzip2 xz brotli editline
       openssl pkgconfig sqlite
-      boost
+      boost meson ninja
 
       # Tests
       git
