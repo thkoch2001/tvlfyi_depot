@@ -48,8 +48,8 @@ struct CmdDoctor final : StoreCommand {
   static bool checkNixInPath() {
     PathSet dirs;
 
-    for (auto& dir :
-         absl::StrSplit(getEnv("PATH"), absl::ByChar(':'), absl::SkipEmpty())) {
+    for (auto& dir : absl::StrSplit(getEnv("PATH").value_or(""),
+                                    absl::ByChar(':'), absl::SkipEmpty())) {
       if (pathExists(absl::StrCat(dir, "/nix-env"))) {
         dirs.insert(dirOf(canonPath(absl::StrCat(dir, "/nix-env"), true)));
       }
@@ -72,8 +72,8 @@ struct CmdDoctor final : StoreCommand {
   static bool checkProfileRoots(const ref<Store>& store) {
     PathSet dirs;
 
-    for (auto dir :
-         absl::StrSplit(getEnv("PATH"), absl::ByChar(':'), absl::SkipEmpty())) {
+    for (auto dir : absl::StrSplit(getEnv("PATH").value_or(""),
+                                   absl::ByChar(':'), absl::SkipEmpty())) {
       Path profileDir = dirOf(dir);
       try {
         Path userEnv = canonPath(profileDir, true);
