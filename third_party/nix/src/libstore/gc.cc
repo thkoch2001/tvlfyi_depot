@@ -906,7 +906,8 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
 }
 
 void LocalStore::autoGC(bool sync) {
-  static auto fakeFreeSpaceFile = getEnv("_NIX_TEST_FREE_SPACE_FILE", "");
+  static auto fakeFreeSpaceFile =
+      getEnv("_NIX_TEST_FREE_SPACE_FILE").value_or("");
 
   auto getAvail = [this]() -> uint64_t {
     if (!fakeFreeSpaceFile.empty()) {

@@ -53,7 +53,7 @@ struct CmdEdit final : InstallableCommand {
       throw Error("cannot parse line number '%s'", pos);
     }
 
-    auto editor = getEnv("EDITOR", "cat");
+    auto editor = getEnv("EDITOR").value_or("cat");
 
     Strings args =
         absl::StrSplit(editor, absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty());

@@ -413,7 +413,7 @@ static void prim_getEnv(EvalState& state, const Pos& pos, Value** args,
   std::string name = state.forceStringNoCtx(*args[0], pos);
   mkString(v, evalSettings.restrictEval || evalSettings.pureEval
                   ? ""
-                  : getEnv(name));
+                  : getEnv(name).value_or(""));
 }
 
 /* Evaluate the first argument, then return the second argument. */
