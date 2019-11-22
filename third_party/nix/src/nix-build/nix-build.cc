@@ -377,9 +377,12 @@ static void _main(int argc, char** argv) {
     /* Figure out what bash shell to use. If $NIX_BUILD_SHELL
        is not set, then build bashInteractive from
        <nixpkgs>. */
-    auto shell = getEnv("NIX_BUILD_SHELL", "");
+    auto opt_shell = getEnv("NIX_BUILD_SHELL");
+    std::string shell;
 
-    if (shell.empty()) {
+    if (opt_shell.has_value()) {
+      shell = opt_shell.value();
+    } else {
       try {
         auto expr = state->parseExprFromString(
             "(import <nixpkgs> {}).bashInteractive", absPath("."));
@@ -427,7 +430,8 @@ static void _main(int argc, char** argv) {
     // Set the environment.
     auto env = getEnv();
 
-    auto tmp = getEnv("TMPDIR", getEnv("XDG_RUNTIME_DIR", "/tmp"));
+    auto tmp =
+        getEnv("TMPDIR").value_or(getEnv("XDG_RUNTIME_DIR").value_or("/tmp"));
 
     if (pure) {
       decltype(env) newEnv;

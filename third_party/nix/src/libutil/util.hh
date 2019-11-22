@@ -26,7 +26,7 @@ struct Source;
 extern const std::string nativeSystem;
 
 /* Return an environment variable. */
-std::string getEnv(const std::string& key, const std::string& def = "");
+std::optional<std::string> getEnv(const std::string& key);
 
 /* Get the entire environment. */
 std::map<std::string, std::string> getEnv();

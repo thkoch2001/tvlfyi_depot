@@ -22,8 +22,8 @@ SSHMaster::SSHMaster(const std::string& host, std::string keyFile,
 
 void SSHMaster::addCommonSSHOpts(Strings& args) {
   for (auto& i :
-       absl::StrSplit(getEnv("NIX_SSHOPTS"), absl::ByAnyChar(" \t\n\r"),
-                      absl::SkipEmpty())) {
+       absl::StrSplit(getEnv("NIX_SSHOPTS").value_or(""),
+                      absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty())) {
     args.push_back(std::string(i));
   }
   if (!keyFile.empty()) {

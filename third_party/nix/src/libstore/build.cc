@@ -2582,7 +2582,7 @@ void DerivationGoal::initEnv() {
   if (fixedOutput) {
     for (auto& i :
          parsedDrv->getStringsAttr("impureEnvVars").value_or(Strings())) {
-      env[i] = getEnv(i);
+      env[i] = getEnv(i).value_or("");
     }
   }
 
