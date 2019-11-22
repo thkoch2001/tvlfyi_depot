@@ -123,8 +123,8 @@ struct CmdRun final : InstallablesCommand {
       todo.push(path);
     }
 
-    Strings unixPath =
-        absl::StrSplit(getEnv("PATH"), absl::ByChar(':'), absl::SkipEmpty());
+    Strings unixPath = absl::StrSplit(getEnv("PATH").value_or(""),
+                                      absl::ByChar(':'), absl::SkipEmpty());
 
     while (!todo.empty()) {
       Path path = todo.front();

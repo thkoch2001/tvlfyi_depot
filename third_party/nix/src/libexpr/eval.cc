@@ -287,11 +287,11 @@ EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
       staticBaseEnv(false, nullptr) {
   expr::InitGC();
 
-  countCalls = getEnv("NIX_COUNT_CALLS", "0") != "0";
+  countCalls = getEnv("NIX_COUNT_CALLS").value_or("0") != "0";
 
   /* Initialise the Nix expression search path. */
   if (!evalSettings.pureEval) {
-    Strings paths = parseNixPath(getEnv("NIX_PATH", ""));
+    Strings paths = parseNixPath(getEnv("NIX_PATH").value_or(""));
     for (auto& i : _searchPath) {
       addToSearchPath(i);
     }
@@ -1644,7 +1644,7 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
 }
 
 void EvalState::printStats() {
-  bool showStats = getEnv("NIX_SHOW_STATS", "0") != "0";
+  bool showStats = getEnv("NIX_SHOW_STATS").value_or("0") != "0";
 
   struct rusage buf;
   getrusage(RUSAGE_SELF, &buf);
@@ -1658,7 +1658,7 @@ void EvalState::printStats() {
       nrAttrsets * sizeof(Bindings) + nrAttrsInAttrsets * sizeof(Attr);
 
   if (showStats) {
-    auto outPath = getEnv("NIX_SHOW_STATS_PATH", "-");
+    auto outPath = getEnv("NIX_SHOW_STATS_PATH").value_or("-");
     std::fstream fs;
     if (outPath != "-") {
       fs.open(outPath, std::fstream::out);

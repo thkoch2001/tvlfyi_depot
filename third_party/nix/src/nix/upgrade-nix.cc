@@ -103,8 +103,8 @@ struct CmdUpgradeNix final : MixDryRun, StoreCommand {
   static Path getProfileDir(const ref<Store>& store) {
     Path where;
 
-    for (auto& dir :
-         absl::StrSplit(getEnv("PATH"), absl::ByChar(':'), absl::SkipEmpty())) {
+    for (auto& dir : absl::StrSplit(getEnv("PATH").value_or(""),
+                                    absl::ByChar(':'), absl::SkipEmpty())) {
       if (pathExists(absl::StrCat(dir, "/nix-env"))) {
         where = dir;
         break;
