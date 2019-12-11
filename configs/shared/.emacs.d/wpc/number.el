@@ -106,16 +106,18 @@ While this function is undeniably trivial, I have unintentionally done (- 1 x)
 
 ;; TODO: Does this belong in a math module?  Is math too vague?  Or is number
 ;; too vague?
-(defun number/factorial (x)
-  "Return factorial of `X'."
-  (cond
-   ((number/negative? x) (error "Will not take factorial of negative numbers"))
-   ((= 0 x) 1)
-   ;; NOTE: Using `series/range' introduces a circular dependency because:
-   ;; series -> number -> series.  Conceptually, however, this should be
-   ;; perfectly acceptable.
-   (t (->> (series/range 1 x)
-           (list/reduce 1 #'*)))))
+;; TODO: Resolve the circular dependency that this introduces with series.el,
+;; and then re-enable this function and its tests below.
+;; (defun number/factorial (x)
+;;   "Return factorial of `X'."
+;;   (cond
+;;    ((number/negative? x) (error "Will not take factorial of negative numbers"))
+;;    ((= 0 x) 1)
+;;    ;; NOTE: Using `series/range' introduces a circular dependency because:
+;;    ;; series -> number -> series.  Conceptually, however, this should be
+;;    ;; perfectly acceptable.
+;;    (t (->> (series/range 1 x)
+;;            (list/reduce 1 #'*)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
@@ -132,8 +134,8 @@ While this function is undeniably trivial, I have unintentionally done (- 1 x)
    (number/whole? 0))
   (prelude/assert
    (number/integer? 10))
-  (prelude/assert
-   (= 120 (number/factorial 5)))
+  ;; (prelude/assert
+  ;;  (= 120 (number/factorial 5)))
   (prelude/assert
    (number/even? 6))
   (prelude/refute

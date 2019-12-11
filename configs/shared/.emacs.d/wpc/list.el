@@ -49,7 +49,9 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'prelude)
+;; TODO: Move `prelude/assert' elsewhere so that I can require it without
+;; introducing the circular dependency of list.el -> prelude.el -> list.el.
+;;(require 'prelude)
 (require 'dash)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -179,19 +181,19 @@ Be leery of using this with things like alists.  Many data structures in Elisp
 ;; Tests
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(when list/tests?
-  (prelude/assert
-   (= 0
-      (list/length '())))
-  (prelude/assert
-   (= 5
-      (list/length '(1 2 3 4 5))))
-  (prelude/assert
-   (= 16
-      (list/reduce 1 (lambda (x acc) (+ x acc)) '(1 2 3 4 5))))
-  (prelude/assert
-   (equal '(2 4 6 8 10)
-          (list/map (lambda (x) (* x 2)) '(1 2 3 4 5)))))
+;; (when list/tests?
+;;   (prelude/assert
+;;    (= 0
+;;       (list/length '())))
+;;   (prelude/assert
+;;    (= 5
+;;       (list/length '(1 2 3 4 5))))
+;;   (prelude/assert
+;;    (= 16
+;;       (list/reduce 1 (lambda (x acc) (+ x acc)) '(1 2 3 4 5))))
+;;   (prelude/assert
+;;    (equal '(2 4 6 8 10)
+;;           (list/map (lambda (x) (* x 2)) '(1 2 3 4 5)))))
 
 (provide 'list)
 ;;; list.el ends here
