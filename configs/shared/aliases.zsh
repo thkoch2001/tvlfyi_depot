@@ -242,10 +242,6 @@ alias sn='sudo nixos-rebuild switch'
 alias cci='circleci local'
 alias ccijob='circleci local execute --job'
 
-# Personal projects
-alias ide_client='cd ~/Dropbox/ide && nsh'
-alias ide_server='cd ~/Dropbox/ide-server && nsh'
-
 # Google aliases
 alias bzb='blaze build'
 alias bzt='blaze test --test_output=all'
