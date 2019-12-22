@@ -12,10 +12,15 @@
 
 (require 's)
 (require 'dash)
+;; TODO: Resolve the circular dependency that this introduces.
+;; (require 'prelude)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst string/test? t
+  "When t, run the tests.")
 
 ;; Strings
 (defun string/hookify (x)
@@ -98,29 +103,19 @@
 ;; Tests
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Support these.
-;; (require 'macros)
-;; (macros/test
-;;  :function string/surround
-;;  :test "works as expected"
-;;  :args '("-*-" "surround")
-;;  :expect "-*-surround-*-"
-;;  :equality string=)
-;
-;; (macros/test
-;;  :function string/caps->kebab
-;;  :test "works as expected"
-;;  :args '("CAPS_CASE_STRING")
-;;  :expect "caps-case-string"
-;;  :equality string=)
-;
-;; ;; TODO: Generate :test from docs of defun.
-;; (macros/test
-;;  :function string/kebab->caps
-;;  :test "works as expected"
-;;  :args '("kebab-case-string")
-;;  :expect "KEBAB_CASE_STRING"
-;;  :equality =)
+;; (when string/test?
+;;   (prelude/assert
+;;    (string=
+;;     (string/surround "-*-" "surround")
+;;     "-*-surround-*-"))
+;;   (prelude/assert
+;;    (string=
+;;     (string/caps->kebab "CAPS_CASE_STRING")
+;;     "caps-case-string"))
+;;   (prelude/assert
+;;    (string=
+;;     (string/kebab->caps "kebab-case-string")
+;;     "KEBAB_CASE_STRING")))
 
 (provide 'string)
 ;;; string.el ends here
