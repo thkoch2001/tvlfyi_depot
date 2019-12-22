@@ -7,7 +7,7 @@
 ;; Dependencies:
 ;; - `opam install tuareg`
 ;; - `opam install merlin`
-;; - `opam install user-setup`
+;; - `opam install user-setup && opam user-setup install`
 ;; - `opam install ocamlformat`
 
 ;;; Code:

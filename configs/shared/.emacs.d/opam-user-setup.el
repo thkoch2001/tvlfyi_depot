@@ -120,11 +120,11 @@
 
 (opam-auto-tools-setup)
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
-;; ## added by OPAM user-setup for emacs / tuareg ## 02c044af5abd4321e32578768beeca77 ## you can edit, but keep this line
+;; ## added by OPAM user-setup for emacs / tuareg ## b10f42abebd2259b784b70d1a7f7e426 ## you can edit, but keep this line
 ;; Set to autoload tuareg from its original switch when not found in current
 ;; switch (don't load tuareg-site-file as it adds unwanted load-paths)
 (defun opam-tuareg-autoload (fct file doc args)
-  (let ((load-path (cons "/usr/local/google/home/wpcarro/.opam/4.08.0/share/emacs/site-lisp" load-path)))
+  (let ((load-path (cons "/home/wpcarro/.opam/default/share/emacs/site-lisp" load-path)))
     (load file))
   (apply fct args))
 (when (not (member "tuareg" opam-tools-installed))
