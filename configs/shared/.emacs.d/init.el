@@ -49,3 +49,8 @@
 (require 'wpc-python)
 (require 'wpc-javascript)
 (require 'wpc-java)
+(require 'wpc-prolog)
+
+
+(provide 'init)
+;;; init.el ends here
