@@ -12,10 +12,7 @@
 
 (require 'prelude)
 (require 'alist)
-(require 'wallpaper)
-(require 'fonts)
 (require 'themes)
-(require 'window-manager)
 (require 'device)
 (require 'laptop-battery)
 
@@ -68,8 +65,8 @@
 ;; set default buffer for Emacs
 (setq initial-buffer-choice constants/current-project)
 
-;; integration with wpgtk (in vendor directory)
 ;; TODO: Re-enable this when base16-wpgtk are looking better.
+;; integration with wpgtk (in vendor directory)
 ;; (require 'wpgtk-theme)
 
 ;; base-16 themes to integrate with wpgtk
@@ -124,9 +121,8 @@
 ;; all-the-icons
 (use-package all-the-icons
   :config
-  ;; Only run this once after installing.
-  ;; (all-the-icons-install-fonts)
-  )
+  (unless (f-exists? "~/.local/share/fonts/all-the-icons.ttf")
+    (all-the-icons-install-fonts)))
 
 ;; icons for Ivy
 (use-package all-the-icons-ivy
@@ -136,26 +132,19 @@
 
 ;; disable menubar
 (menu-bar-mode -1)
-(when (string-equal system-type "darwin")
-  (setq ns-auto-hide-menu-bar t))
 
 ;; reduce noisiness of auto-revert-mode
 (setq auto-revert-verbose nil)
 
-;; highlight lines that are over 100 characters long
+;; highlight lines that are over `constants/fill-column' characters long
 (use-package whitespace
   :config
+  ;; TODO: This should change depending on the language and project. For
+  ;; example, Google Java projects prefer 100 character width instead of 80
+  ;; character width.
   (setq whitespace-line-column constants/fill-column)
   (setq whitespace-style '(face lines-tail))
   (add-hook 'prog-mode-hook #'whitespace-mode))
-
-;; rebalance emacs windows after splits are created
-;; (defadvice split-window-below (after rebalance-windows activate)
-;;   (balance-windows))
-;; (defadvice split-window-right (after rebalance-windows activate)
-;;   (balance-windows))
-;; (defadvice delete-window (after rebalance-window activate)
-;;   (balance-windows))
 
 ;; dirname/filename instead of filename<dirname>
 (setq uniquify-buffer-name-style 'forward)
@@ -166,6 +155,8 @@
 ;; hide the scroll-bars in the GUI
 (scroll-bar-mode -1)
 
+;; TODO: Learn how to properly integrate this with dunst or another system-level
+;; notification program.
 ;; GUI alerts in emacs
 (use-package alert
   :commands (alert)
@@ -178,8 +169,7 @@
   (laptop-battery/display))
 
 ;; Load a theme
-(->> (themes/random)
-     themes/set)
+(themes/set (themes/random))
 
 (provide 'wpc-ui)
 ;;; wpc-ui.el ends here
