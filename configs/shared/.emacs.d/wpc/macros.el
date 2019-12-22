@@ -87,7 +87,7 @@ Usage: (add-hook-before-save 'reason-mode-hook #'refmt-before-save)"
 
 (defmacro macros/support-file-extension (ext mode)
   "Register MODE to automatically load with files ending with EXT extension.
-Usage: (macros/support-file-extension \".pb\" protobuf-mode)"
+Usage: (macros/support-file-extension \"pb\" protobuf-mode)"
   (let ((extension (string/format "\\.%s\\'" ext)))
     `(add-to-list 'auto-mode-alist '(,extension . ,mode))))
 
