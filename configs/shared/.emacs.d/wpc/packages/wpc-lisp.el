@@ -16,6 +16,10 @@
     racket-mode-hook)
   "List of LISP modes.")
 
+(use-package rainbow-delimiters
+  :config
+  (general-add-hook wpc/lisp-mode-hooks #'rainbow-delimiters-mode))
+
 (use-package racket-mode
   :config
   (general-define-key
