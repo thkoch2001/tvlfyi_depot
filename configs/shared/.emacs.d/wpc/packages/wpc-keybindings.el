@@ -75,11 +75,16 @@
   (setq evil-symbol-word-search t)
   (evil-mode 1))
 
+;; TODO: Write `evil-collection' KBDs for `refine'.
 ;; evil keybindings
 (use-package evil-collection
   :after (evil)
   :config
   (evil-collection-init))
+
+;; `evil-collection' does not support `magit', and the preferred way to get evil
+;; kbds for magit is with `evil-magit'.
+(use-package evil-magit)
 
 ;; expose a leader key
 (use-package evil-leader
@@ -108,6 +113,7 @@
     "b"   #'ivy-switch-buffer
     "W"   #'balance-windows
     "gs"  #'magit-status
+    "E"   #'refine
 
     "es" #'wpc/create-snippet
     ;; TODO: Replace with `macros/ilambda' when that is working again.

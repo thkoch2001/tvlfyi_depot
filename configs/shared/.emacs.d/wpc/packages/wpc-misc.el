@@ -56,7 +56,10 @@
   ;; Emacs.
   (setq markdown-command "pandoc")
   (setq markdown-split-window-direction 'right)
-  (add-hook 'markdown-mode-hook #'markdown-live-preview-mode))
+  ;; (add-hook 'markdown-mode-hook #'markdown-live-preview-mode)
+  )
+
+(use-package refine)
 
 ;; Required by some google-emacs package commands.
 (use-package deferred)
