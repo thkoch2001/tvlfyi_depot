@@ -65,7 +65,7 @@
   "Swaps the caps lock and escape keys using xmodmap."
   (interactive)
   (shell-command "xmodmap -e 'remove Lock = Caps_Lock'")
-  (shell-command "xmodmap -e 'keysym Caps_Lock = Escape"))
+  (shell-command "xmodmap -e 'keysym Caps_Lock = Escape'"))
 
 (defun keyboard/inc-repeat-rate ()
   "Increment `keyboard/repeat-rate'."
