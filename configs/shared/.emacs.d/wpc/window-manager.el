@@ -374,7 +374,7 @@
                       (exwm/terminal-open "python3"))
  (kbd/raw 'x11 "t") (lambda ()
                       (interactive)
-                      (exwm/terminal-open "zsh"))
+                      (exwm/open exwm/preferred-terminal))
  (kbd/raw 'x11 "c") (lambda ()
                       (interactive)
                       (exwm/open exwm/preferred-browser)))
@@ -474,59 +474,6 @@ Ivy is used to capture the user's input."
   (window-manager/execute-from-counsel
    :prompt "Application: "
    :list window-manager/applications))
-
-;; TODO: KBDs for {enlarge,shrink}-window
-
-(use-package window-purpose
-  :config
-  (purpose-mode 1)
-
-  ;; call `purpose-compile-user-configuration' after making changes.
-
-  ;; Example configuration:
-  ;; (setq purpose-user-mode-purposes
-  ;;       '((term-mode . terminal)
-  ;;         (shell-mode . terminal)
-  ;;         (ansi-term-mode . terminal)
-  ;;         (tuareg-mode . coding)
-  ;;         (compilation-mode . messages)))
-
-  (setq purpose-user-mode-purposes
-        '(
-          ;; Overview:
-          ;; - coding: buffers for editing code
-          ;; - repl: interactive REPLs -- including terminals
-          ;; - documentation: help buffers and language documentation
-          ;;
-          ;; Ideas:
-          ;; - racket and racket-project and two different variants where the
-          ;;   project version includes a file browser.
-          ;; - google3 workspace
-
-          ;; Racket
-          (racket-mode . coding)
-          (racket-repl-mode . repl)
-          (racket-describe-mode . documentation)
-          ;; Elisp
-          (emacs-lisp-mode . coding)
-          (ielm-mode . repl)
-          ;; Python
-          ;; (python-mode . coding)
-          ;; (emacs-lisp-mode . coding)
-          ))
-
-  (macros/comment
-   (purpose-compile-user-configuration))
-
-  ;; (setq purpose-user-name-purposes
-  ;;       `(("name" . "purpose")
-  ;;         ("name" . "purpose")))
-
-  ;; (setq purpose-user-regexp-purposes
-  ;;       `(("regexp" . "purpose")
-  ;;         ("regexp" . "purpose")))
-
-  )
 
 (defun exwm/label->index (label workspaces)
   "Return the index of the workspace in WORKSPACES named LABEL."
