@@ -85,6 +85,19 @@ compliments() {
 # Filesystem operations
 ################################################################################
 
+ensure_dir() {
+  # Ensures that the directory and its children exist.
+  # Usage: ensure_dir <path-to-dir>
+  mkdir -p $1
+}
+
+ensure_file() {
+  # Ensures that the file and the path to that file exist.
+  # Usage: ensure_dir <path-to-file>
+  # depends ensure_dir
+  ensure_dir $(dirname $1) && touch $1
+}
+
 tar_dir() {
   # Tars dir as dir.tar. Removes dir.
   # compliments untar_dir
@@ -204,11 +217,12 @@ wallpaper() {
 dotfilify() {
   # Moves a regular, non-symlinked file into my dotfiles.
   # compliments undotfilify
+  # depends ensure_dir
   local original_path=$(realpath $1)
-  # Trim $HOME prefix
-  local dotfile_path="${DOTFILES#$HOME/}/configs/shared/${original_path#$HOME/}"
-
-  mv $original_path $dotfile_path && ln --force -s $dotfile_path $original_path
+  local dotfile_path="${DOTFILES}/configs/shared/${original_path#$HOME/}"
+  ensure_dir $(dirname $dotfile_path) && \
+    mv $original_path $dotfile_path && \
+    ln --force -s $dotfile_path $original_path
 }
 
 # TODO: Write more robust, tested dotfile manager application in Elisp.
