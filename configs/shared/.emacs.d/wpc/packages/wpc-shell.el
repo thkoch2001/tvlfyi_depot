@@ -11,5 +11,7 @@
   :init
   (add-hook 'sh-mode-hook #'flymake-shellcheck-load))
 
+(use-package fish-mode)
+
 (provide 'wpc-shell)
 ;;; wpc-shell.el ends here
