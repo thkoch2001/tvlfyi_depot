@@ -79,7 +79,7 @@
      (iso/as-to #'symbol-name)
      )
 
-(cl-defun iso/new (x &keys to)
+(cl-defun iso/new (x &key to)
   "Create a new isomorphism of X mapping to TO."
   (let ((from (iso/classify x)))
     (prelude/assert (iso/exists? to from))

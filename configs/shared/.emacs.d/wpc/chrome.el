@@ -47,7 +47,7 @@
        chrome/open-urls))
 
 ;; TODO: Support optional kwargs.
-(cl-defun chrome/open-url (url &keys new-window?)
+(cl-defun chrome/open-url (url &key new-window?)
   "Opens `URL' in google-chrome.
 Will open without toolbars if APP-MODE? is t."
   (shell-command (s-concat
