@@ -179,6 +179,8 @@ abbr --add g     hub
 abbr --add git   hub
 abbr --add ga    git add
 abbr --add gc    git commit
+abbr --add gco   git checkout
+abbr --add gd    git diff
 abbr --add gp    git push
 abbr --add grbi  git rebase --interactive
 abbr --add grba  git rebase --abort
