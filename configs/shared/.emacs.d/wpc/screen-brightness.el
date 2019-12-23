@@ -9,13 +9,6 @@
 ;; TODO: Define some isomorphisms. E.g. int->string, string->int.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Dependencies
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'string)
-(require 'dash)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -32,19 +25,23 @@
 (defun screen-brightness/increase ()
   "Increase the screen brightness."
   (interactive)
-  (->> screen-brightness/step-size
-       int-to-string
-       (string/concat "xbacklight -inc ")
-       shell-command)
+  (start-process
+   "*xbacklight<screen-brightness/increase>*"
+   nil
+   "xbacklight"
+   "-inc"
+   (int-to-string screen-brightness/step-size))
   (message "[screen-brightness.el] Increased screen brightness."))
 
 (defun screen-brightness/decrease ()
   "Decrease the screen brightness."
   (interactive)
-  (->> screen-brightness/step-size
-       int-to-string
-       (string/concat "xbacklight -dec ")
-       shell-command)
+  (start-process
+   "*xbacklight<screen-brightness/decrease>*"
+   nil
+   "xbacklight"
+   "-dec"
+   (int-to-string screen-brightness/step-size))
   (message "[screen-brightness.el] Decreased screen brightness."))
 
 (when screen-brightness/install-kbds?
