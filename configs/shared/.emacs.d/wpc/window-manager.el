@@ -385,7 +385,7 @@
   (list "google-chrome --new-window --app=https://chat.google.com"
         "google-chrome --new-window --app=https://calendar.google.com"
         "google-chrome --new-window --app=https://gmail.com"
-        "google-chrome --new-window --app=https://web.telegram.org"
+        "telegram-desktop"
         "google-chrome --new-window --app=https://teknql.slack.com"
         "google-chrome --new-window --app=https://web.whatsapp.com"
         "google-chrome --new-window --app=https://irccloud.com"
