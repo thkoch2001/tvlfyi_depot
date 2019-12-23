@@ -23,6 +23,12 @@
   (shell-command "pactl set-sink-mute @DEFAULT_SINK@ toggle")
   (message (string/format "[pulse-audio.el] Mute toggled.")))
 
+(defun pulse-audio/toggle-microphone ()
+  "Mute the default sink."
+  (interactive)
+  (shell-command "pactl set-source-mute @DEFAULT_SOURCE@ toggle")
+  (message (string/format "[pulse-audio.el] Microphone toggled.")))
+
 (defun pulse-audio/lower-volume ()
   "Low the volume output of the default sink."
   (interactive)
@@ -42,7 +48,9 @@
   (exwm-input-set-key
    (kbd "<XF86AudioLowerVolume>") #'pulse-audio/lower-volume)
   (exwm-input-set-key
-   (kbd "<XF86AudioRaiseVolume>") #'pulse-audio/raise-volume))
+   (kbd "<XF86AudioRaiseVolume>") #'pulse-audio/raise-volume)
+  (exwm-input-set-key
+   (kbd "<XF86AudioMicMute>") #'pulse-audio/toggle-microphone))
 
 (provide 'pulse-audio)
 ;;; pulse-audio.el ends here
