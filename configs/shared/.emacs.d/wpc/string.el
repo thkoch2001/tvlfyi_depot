@@ -22,10 +22,13 @@
 (defconst string/test? t
   "When t, run the tests.")
 
-;; Strings
 (defun string/hookify (x)
   "Append \"-hook\" to X."
   (s-append "-hook" x))
+
+(defun string/split (y x)
+  "Map string X into a list of strings that were separated by Y."
+  (s-split y x))
 
 (defun string/ensure-hookified (x)
   "Ensure that X has \"-hook\" appended to it."

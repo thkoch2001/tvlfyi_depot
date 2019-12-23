@@ -51,8 +51,9 @@
                                    (rate keyboard/repeat-rate)
                                    (delay keyboard/repeat-delay))
   "Use xset to set the key-repeat RATE and DELAY."
-   (shell-command
-    (string/format "xset r rate %s %s" delay rate)))
+  (prelude/start-process
+   :name "keyboard/set-key-repeat"
+   :command (string/format "xset r rate %s %s" delay rate)))
 
 ;; NOTE: Settings like this are machine-dependent. For instance I only need to
 ;; do this on my laptop and other devices where I don't have access to my split
@@ -64,8 +65,12 @@
 (defun keyboard/swap-caps-lock-and-escape ()
   "Swaps the caps lock and escape keys using xmodmap."
   (interactive)
-  (shell-command "xmodmap -e 'remove Lock = Caps_Lock'")
-  (shell-command "xmodmap -e 'keysym Caps_Lock = Escape'"))
+  (prelude/start-process
+   :name "keyboard/swap-caps-lock-and-escape"
+   :command "xmodmap -e 'remove Lock = Caps_Lock'")
+  (prelude/start-process
+   :name "keyboard/swap-caps-lock-and-escape"
+   :command "xmodmap -e 'keysym Caps_Lock = Escape'"))
 
 (defun keyboard/inc-repeat-rate ()
   "Increment `keyboard/repeat-rate'."

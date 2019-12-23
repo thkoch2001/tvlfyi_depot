@@ -10,6 +10,7 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'prelude)
 (require 'fs)
 (require 'cycle)
 (require 'string)
@@ -34,12 +35,9 @@
   "Set computer wallpaper to image at `PATH' using `feh` under-the-hood.
 `PATH' can be absolute or relative since `f-expand' is called in the function
   body to ensure feh can resolve the path."
-  (start-process "*feh<wallpaper/set>*"
-                 nil
-                 "feh"
-                 "--bg-scale"
-                 "--no-feh-bg"
-                 (f-expand path)))
+  (prelude/start-process
+   :name "wallpaper/set"
+   :command (string/format "feh --bg-scale --no-feh-bg %s" (f-expand path))))
 
 (defun wallpaper/whitelist-set (wallpaper)
   "Focuses the WALLPAPER in the `wallpaper/whitelist' cycle."

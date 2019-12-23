@@ -14,6 +14,12 @@
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'prelude)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -31,17 +37,18 @@
 (defun display/enable-4k ()
   "Attempt to connect to my 4K monitor."
   (interactive)
-  (shell-command
-   (string/format "xrandr --output %s --dpi 144 --auto --right-of %s"
-                  display/4k
-                  display/primary)))
+  (prelude/start-process
+   :name "display"
+   :command (string/format "xrandr --output %s --dpi 144 --auto --right-of %s"
+                           display/4k
+                           display/primary)))
 
 (defun display/disable-4k ()
   "Disconnect from the 4K monitor."
   (interactive)
-  (shell-command
-   (string/format "xrandr --output %s --off"
-                  display/4k)))
+  (prelude/start-process
+   :name "display/disable-4k"
+   :command (string/format "xrandr --output %s --off" display/4k)))
 
 (provide 'display)
 ;;; display.el ends here

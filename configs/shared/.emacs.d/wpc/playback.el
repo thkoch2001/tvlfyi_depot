@@ -6,20 +6,36 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'prelude)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Library
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun playback/prev ()
   "Move to the previous song."
   (interactive)
-  (shell-command "playerctl previous"))
+  (prelude/start-process
+   :name "playback/prev"
+   :command "playerctl previous"))
 
 (defun playback/next ()
   "Move to the next song."
   (interactive)
-  (shell-command "playerctl next"))
+  (prelude/start-process
+   :name "playback/next"
+   :command "playerctl next"))
 
 (defun playback/play-pause ()
   "Play or pause the current song."
   (interactive)
-  (shell-command "playerctl play-pause"))
+  (prelude/start-process
+   :name "playback/play-pause"
+   :command "playerctl play-pause"))
 
 (provide 'playback)
 ;;; playback.el ends here
