@@ -7,8 +7,17 @@
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'string)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst pulse-audio/step-size 5
+  "The size by which to increase or decrease the volume.")
 
 (defconst pulse-audio/install-kbds? t
   "When t, install keybindings defined herein.")
@@ -17,38 +26,65 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun pulse-audio/message (x)
+  "Output X to *Messages*."
+  (message (string/format "[pulse-audio.el] %s" x)))
+
 (defun pulse-audio/toggle-mute ()
   "Mute the default sink."
   (interactive)
-  (shell-command "pactl set-sink-mute @DEFAULT_SINK@ toggle")
-  (message (string/format "[pulse-audio.el] Mute toggled.")))
+  (start-process
+   "*pactl<pulse-audio/toggle-mute>*"
+   nil
+   "pactl"
+   "set-sink-mute"
+   "@DEFAULT_SINK@"
+   "toggle")
+  (pulse-audio/message "Mute toggled."))
 
 (defun pulse-audio/toggle-microphone ()
   "Mute the default sink."
   (interactive)
-  (shell-command "pactl set-source-mute @DEFAULT_SOURCE@ toggle")
-  (message (string/format "[pulse-audio.el] Microphone toggled.")))
+  (start-process
+   "*pactl<pulse-audio/toggle-mute>*"
+   nil
+   "pactl"
+   "set-source-mute"
+   "@DEFAULT_SOURCE@"
+   "toggle")
+  (pulse-audio/message "Microphone toggled."))
 
-(defun pulse-audio/lower-volume ()
+(defun pulse-audio/decrease-volume ()
   "Low the volume output of the default sink."
   (interactive)
-  (shell-command "pactl set-sink-volume @DEFAULT_SINK@ -10%")
-  (message (string/format "[pulse-audio.el] Volume lowered.")))
+  (start-process
+   "*pactl<pulse-audio/toggle-mute>*"
+   nil
+   "pactl"
+   "set-sink-volume"
+   "@DEFAULT_SINK@"
+   (string/format "-%s%%" pulse-audio/step-size))
+  (pulse-audio/message "Volume decreased."))
 
-(defun pulse-audio/raise-volume ()
+(defun pulse-audio/increase-volume ()
   "Raise the volume output of the default sink."
   (interactive)
-  (shell-command "pactl set-sink-volume @DEFAULT_SINK@ +10%")
-  (message (string/format "[pulse-audio.el] Volume raised.")))
-
+  (start-process
+   "*pactl<pulse-audio/toggle-mute>*"
+   nil
+   "pactl"
+   "set-sink-volume"
+   "@DEFAULT_SINK@"
+   (string/format "+%s%%" pulse-audio/step-size))
+  (pulse-audio/message "Volume increased."))
 
 (when pulse-audio/install-kbds?
   (exwm-input-set-key
    (kbd "<XF86AudioMute>") #'pulse-audio/toggle-mute)
   (exwm-input-set-key
-   (kbd "<XF86AudioLowerVolume>") #'pulse-audio/lower-volume)
+   (kbd "<XF86AudioLowerVolume>") #'pulse-audio/decrease-volume)
   (exwm-input-set-key
-   (kbd "<XF86AudioRaiseVolume>") #'pulse-audio/raise-volume)
+   (kbd "<XF86AudioRaiseVolume>") #'pulse-audio/increase-volume)
   (exwm-input-set-key
    (kbd "<XF86AudioMicMute>") #'pulse-audio/toggle-microphone))
 
