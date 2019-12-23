@@ -2,7 +2,23 @@
 ;; Author: William Carroll <wpcarro@gmail.com>
 
 ;;; Commentary:
-;; Some of this is just encoding my learnings as notes in Elisp format.
+
+;; First, I must opine.  Feel free to skip this section.  In general, it seems
+;; that the typical programmer's workflow suffer from what economists call
+;; "inelastic demand".  This means that any increase in the price of something
+;; plummets the demand.  Another way of saying this is that programmers are
+;; "price sensitive" when it comes to adopting new workflows.
+;;
+;; For us, any deviation from our "established" workflow feels costly.  This
+;; makes sense to me because programming is already mentally taxing, so any
+;; additional taxation can sometimes feel unbearable.  Until programming changes
+;; dramatically and we relieve our dependence on files and text for modeling
+;; complex applications, this price sensitivity will most likely remain the
+;; status quo.  Therefore, it's critical to reduce the price of experimenting
+;; with new tools such that new, superior workflows may emerge.  In this vain,
+;; this module attempts to surface "luxury tools" (i.e. dependency pruners, code
+;; linters, code formatters) via Emacs to reduce the price of experimenting with
+;; them.
 
 ;;; Code:
 
@@ -15,6 +31,7 @@
 (require 'evil-leader)
 (require 'maybe)
 (require 'device)
+(require 'macros)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -39,6 +56,17 @@ to access to the Google corp network.")
 corp to authenticate each other. It's more efficient than SSL and works with
 Stubby.")
     ))
+
+(defconst google-stuff/tools
+  '(("Depana" . "depana")
+    ("Build cleaner" . "build_cleaner")
+    ("Java formatter" . "google-java-format")
+    ("Proto formatter" . "clang-format"))
+  "Mapping of names of tools to the names of the executables that run them.")
+
+(use-package protobuf-mode
+  :config
+  (macros/support-file-extension "pb" protobuf-mode))
 
 ;; TODO: Straighten out fig, citc, google3 and have modules for each.
 
@@ -65,7 +93,7 @@ Stubby.")
     ("authwf" . "/google3/customer_support/automation/workflow")
     ("redwood" . "/google3/customer_support/kms/redwood/ui")
     ("wf-fe" . "/google3/customer_support/kms/redwood/ui/client/components/item/workflow_editor")
-    ("ac" . "/google3/google/internal/alkali/applications/casesconsultservice")
+    ("ac (alkali)" . "/google3/google/internal/alkali/applications/casesconsultservice")
     ("ac-server" . "/google3/java/com/google/alkali/applications/casesconsultservice/server/")
     ("ac-server (tests)" . "/google3/javatests/com/google/alkali/applications/casesconsultservice/server/"))
   "Mapping of a label to commonly visited locations in Google3.")

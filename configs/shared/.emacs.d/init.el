@@ -11,11 +11,9 @@
 (require 'kaomoji)
 
 ;; Google
-(require 'google-tooling)
-;; TODO: How should I handle google-stuff.el?
-
 ;; TODO: Debug why wallpaper is changing randomly.  It seems to happen every 5
 ;; seconds when init.el is open...
+(require 'google-stuff)
 
 ;; Laptop XF-functionality
 (require 'pulse-audio)
