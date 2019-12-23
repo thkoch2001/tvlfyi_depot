@@ -11,6 +11,7 @@
 **/*/.emacs.d/request
 **/*/.emacs.d/network-security.data
 **/*/.emacs.d/smex-items
+**/*/.gnupg/random_seed
 .netrwhist
 Vundle.vim
 **/*/.emacs.d/custom.el
