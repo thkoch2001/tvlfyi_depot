@@ -11,8 +11,6 @@
 (require 'kaomoji)
 
 ;; Google
-;; TODO: Debug why wallpaper is changing randomly.  It seems to happen every 5
-;; seconds when init.el is open...
 (require 'google-stuff)
 
 ;; Laptop XF-functionality
@@ -33,7 +31,9 @@
 (require 'wpc-terminal)
 (require 'wpc-org)
 (require 'wpc-company)
-(require 'wpc-flycheck)
+;; TODO: Re-enable flycheck for all languages besides Elisp once I learn more
+;; about the issue with the `emacs-lisp' `flycheck-checker'.
+;; (require 'wpc-flycheck)
 (require 'wpc-shell)
 (require 'wpc-docker)
 (require 'wpc-lisp)
@@ -48,7 +48,3 @@
 (require 'wpc-javascript)
 (require 'wpc-java)
 (require 'wpc-prolog)
-
-
-(provide 'init)
-;;; init.el ends here
