@@ -253,7 +253,6 @@ nnoremap <leader>ea :vsplit ~/aliases.zsh<CR>
 nnoremap <leader>ef :vsplit ~/functions.zsh<CR>
 nnoremap <leader>el :vsplit ~/variables.zsh<CR>
 nnoremap <leader>ex :vsplit ~/.Xresources<CR>
-nnoremap <leader>ei :vsplit ~/.config/i3/config.shared<CR>
 
 " quickly source your vimrc
 nnoremap <leader>sv :source $MYVIMRC<CR>

@@ -60,19 +60,5 @@
   :config
   (general-add-hook 'org-mode-hook (enable org-bullets-mode)))
 
-;; i3, `org-mode' integration
-;; Heavily influenced by: https://somethingsomething.us/post/i3_and_orgmode/
-;; TODO: Consider generalizing this since we're using "floating".
-(defadvice org-switch-to-buffer-other-window
-    (after supress-window-splitting activate)
-  "Delete the extra window if we're in a capture frame."
-  (if (equal "floating" (wpc/frame-name))
-      (delete-other-windows)))
-
-(add-hook 'org-capture-after-finalize-hook
-          (lambda ()
-            (when (equal "floating" (wpc/frame-name))
-                (delete-frame))))
-
 (provide 'wpc-org)
 ;;; wpc-org.el ends here

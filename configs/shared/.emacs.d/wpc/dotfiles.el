@@ -23,7 +23,6 @@
     ("variables" . "~/variables.zsh")
     ("Xresources" . "~/.Xresources.shared")
     ("tmux" . "~/.tmux.conf")
-    ("i3" . "~/.config/i3/config") ;; TODO: Remove this one day.
     ("zshrc" . "~/.zshrc")
     ("configuration.nix" . "~/Dropbox/programming/nixify/configuration.nix")
     ("init.el" . "~/.emacs.d/init.el")

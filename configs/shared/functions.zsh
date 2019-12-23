@@ -431,7 +431,6 @@ snipit() {
   # Take a screenshot and host it at https://screenshot.googleplex.com
   # Adapted from SnipIt to fit my workflow.
   # depends alert_echo
-  # TODO: Ensure C-c works with i3 integration.
   server="https://screenshot.googleplex.com/upload"
   file="${TEMP:-/tmp}/snipit_temp_$$.png"
 
@@ -475,33 +474,6 @@ dkish() {
   # Runs a Docker container interactively
   # Usage: dkrit <container_name> <command> [...args]
   docker run -it $@
-}
-
-# Emacs
-dired() {
-  # Opens either the `$(pwd)` or `$1` in Emacs's `dired`.
-  # Uses i3 to focus Emacs.
-  directory=${1:-$(pwd)}
-  echo $directory
-  emacsclient --eval "(dired \"$directory\")" && focus Emacs
-}
-
-emacsclient_floating() {
-  # Creates an Emacs frame that i3 will float.
-  # All additional arguments are forwarded to `emacsclient`.
-  # Usage: emacs_floating [...additional-args]
-  # depends emacsclient
-  emacsclient \
-    --create-frame \
-    --frame-parameters '(quote (name . "floating"))' \
-    "$@"
-}
-
-org_capture() {
-  # Spawns an Emacs frame running org-capture.
-  # Usage: org_capture
-  # depends emacsclient_floating
-  emacsclient_floating --eval '(org-capture)'
 }
 
 # gist
@@ -684,8 +656,7 @@ update_x11_forwarding() {
 }
 
 monzo_balance() {
-  # Return the balance of my Monzo bank account. Intended to be used in my i3
-  # status bar.
+  # Return the balance of my Monzo bank account.
   # Usage: monzo_balance
   # Depends:
   #   - ~/Dropbox/monzo_creds.json.gpg (encrypted asymmetrically for yourself)
@@ -699,7 +670,6 @@ monzo_balance() {
                        "Authorization: Bearer ${access_token}" \
                        "account_id==${account_id}" | \
                     jq .balance)
-
   echo "£$balance"
 }
 
@@ -1129,12 +1099,6 @@ cider() {
     --app="https://cider.corp.google.com/?ws=$(citc_workspace)"
 }
 
-# i3
-focus() {
-  # Focuses an i3 window by application name.
-  i3-msg "[class=\"$1\"] focus" >/dev/null
-}
-
 # C
 runc() {
   # Compile and run $1. Pass $1 as file.c.
@@ -1207,72 +1171,4 @@ gvcci() {
 
   # TODO: Why do I need this?
   sleep 0.1 && feh --bg-scale $1
-}
-
-
-################################################################################
-# Configuration file management
-################################################################################
-
-# Easily management the myriad of configuration files required to set my
-# preferences. This is intended to be integrated with i3.
-# TODO: Support editing config name.
-# TODO: Support editing config filepath.
-# TODO: Is there a way to get rofi to just display information.
-#       E.g. output of `ls_configs`.
-
-prompt_config() {
-  # Asks the user which file they'd like to edit. Returns the filepath to that
-  # configuration file.
-  local name=$(kv_keys configuration_files | rofi -dmenu)
-  kv_get configuration_files "$name"
-}
-
-add_config() {
-  # Adds a configuration file to the configuration file database.
-
-  # NOTE: Cannot use `local` here if I want to capture the exit code of the
-  # subshell.
-  name=$(rofi_prompt 'Config name')
-  local ec=$?
-
-  if [ $ec -eq 0 ]; then
-    filepath=$(rofi_prompt 'Path to file')
-    ec=$?
-
-    if [ $ec -eq 0 ]; then
-      kv_set configuration_files "$name" "$filepath"
-    else
-      echo 'Failed to get a path for the config. Exiting...'
-      return $ec
-    fi
-  else
-    echo 'Failed to get a name for the config. Exiting...'
-    return $ec
-  fi
-
-}
-
-edit_config() {
-  # Opens the selected configuration file in an editor.
-  # depends emacsclient_floating
-  emacsclient_floating "$(prompt_config)"
-}
-
-rm_config() {
-  # Removes a configuration file from the configuration file database.
-  name=$(kv_keys configuration_files | rofi -dmenu)
-  local ec=$?
-
-  if [ $ec -eq 0 ]; then
-    kv_delete configuration_files "$name"
-  else
-    echo 'Failed to get a name for the config. Exiting...'
-    return $ec
-  fi
-}
-
-ls_configs() {
-  # Lists
-  kv_entries configuration_files
 }

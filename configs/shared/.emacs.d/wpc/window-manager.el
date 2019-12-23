@@ -1,10 +1,10 @@
-;;; window-manager.el --- Functions to ease my transition to EXWM. -*- lexical-binding: t -*-
+;;; window-manager.el --- Functions augmenting my usage of EXWM. -*- lexical-binding: t -*-
 ;; Author: William Carroll <wpcarro@gmail.com>
 
 ;;; Commentary:
-;; It's possible that this module will be entirely temporary.  Creating it after
-;; switching to EXWM to help transfer my reliance from i3 to EXWM.
-;;
+;; I switched to EXWM from i3, and I haven't looked back.  One day I may write a
+;; poem declaring my love for Emacs and EXWM.  For now, I haven't the time.
+
 ;; Wish list:
 ;; - TODO: Support different startup commands and layouts depending on laptop or
 ;;   desktop.

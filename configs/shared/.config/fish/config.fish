@@ -262,7 +262,6 @@ abbr --add ea e ~/aliases.zsh
 abbr --add ef e ~/functions.zsh
 abbr --add el e ~/variables.zsh
 abbr --add ex e ~/.Xresources
-abbr --add ei e ~/.config/i3/config
 abbr --add em e ~/.tmux.conf
 abbr --add er e ~/Dropbox/dotfiles/README.md
 # TODO: consider DRYing this up with `e`. Unfortunately, `sudo` won't support
@@ -275,7 +274,6 @@ abbr --add sa source ~/aliases.zsh
 abbr --add sf source ~/functions.zsh
 abbr --add sl source ~/variables.zsh
 abbr --add sx xrdb ~/.Xresources
-abbr --add si i3-msg restart
 abbr --add sm tmux source-file ~/.tmux.conf
 abbr --add sn sudo nixos-rebuild switch
 

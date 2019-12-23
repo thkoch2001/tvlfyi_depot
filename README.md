@@ -17,7 +17,6 @@ $ cd ..
 $ gclone FabriceCastel/gvcci
 ```
 
-- TODO: Ensure edits to `i3.base` work as expected.
 - TODO: Integrate Emacs themes into wpgtk.
 - TODO: Integrate Vim themes into wpgtk.
 - TODO: add these to the install script
@@ -83,12 +82,6 @@ $ cat ~/Dropbox/install_nix.sh | sh
 $ for p in $(cat nix-env.txt); do
 >   nix-env -i "$p"
 > done
-```
-
-1. Install i3
-
-```bash
-$ sudo apt-get install i3
 ```
 
 1. Install dotfiles

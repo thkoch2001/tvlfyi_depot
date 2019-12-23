@@ -221,7 +221,6 @@ alias ea='e ~/aliases.zsh'
 alias ef='e ~/functions.zsh'
 alias el='e ~/variables.zsh'
 alias ex='e ~/.Xresources'
-alias ei='e ~/.config/i3/config'
 alias em='e ~/.tmux.conf'
 # TODO: consider DRYing this up with `e`. Unfortunately, `sudo` won't support
 # aliases.
@@ -234,7 +233,6 @@ alias sa='source ~/aliases.zsh'
 alias sf='source ~/functions.zsh'
 alias sl='source ~/variables.zsh'
 alias sx='xrdb ~/.Xresources'
-alias si='i3-msg restart'
 alias sm='tmux source-file ~/.tmux.conf'
 alias sn='sudo nixos-rebuild switch'
 

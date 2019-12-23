@@ -30,7 +30,6 @@ chatnets = {
 
 channels = (
   { name = "#nixos"; chatnet = "Freenode"; autojoin = "No"; },
-  { name = "#i3"; chatnet = "Freenode"; autojoin = "No"; },
   { name = "#pass"; chatnet = "Freenode"; autojoin = "No"; },
 );
 

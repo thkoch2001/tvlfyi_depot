@@ -124,7 +124,6 @@
     "ef" (lambda () (interactive) (wpc/find-file-split "~/functions.zsh"))
     "el" (lambda () (interactive) (wpc/find-file-split "~/variables.zsh"))
     "ex" (lambda () (interactive) (wpc/find-file-split "~/.Xresources"))
-    "ei" (lambda () (interactive) (wpc/find-file-split "~/.config/i3/config.shared"))
     "em" (lambda () (interactive) (wpc/find-file-split "~/.tmux.conf"))
 
     "l"  #'locate
