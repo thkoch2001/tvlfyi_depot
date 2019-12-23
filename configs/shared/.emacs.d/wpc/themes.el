@@ -73,6 +73,12 @@
           :wallpaper "lego_manhattan.jpg"
           :colorscheme 'base16-atelier-sulphurpool))
         (dotted/new
+         "Shapely Patterns"
+         (make-theme
+          :font "Operator Mono Light"
+          :wallpaper "geometric_dark_4k.jpg"
+          :colorscheme 'doom-vibrant))
+        (dotted/new
          "Edison Lightbulb"
          (make-theme
           :font "Operator Mono Light"
