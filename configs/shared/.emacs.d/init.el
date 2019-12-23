@@ -23,6 +23,7 @@
 (require 'dotfiles)
 (require 'bookmark)
 (require 'keyboard)
+(require 'email)
 
 (require 'wpc-keybindings)
 (require 'window-manager)
