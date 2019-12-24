@@ -26,10 +26,10 @@
 ;; `xs' is the original list
 (cl-defstruct cycle current-index xs)
 
-(defun cycle/new ()
+(defun cycle/new (&rest xs)
   "Create an empty cycle."
   (make-cycle :current-index 0
-              :xs '()))
+              :xs xs))
 
 (defun cycle/from-list (xs)
   "Create a cycle from a list of `XS'."
