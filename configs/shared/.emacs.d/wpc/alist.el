@@ -85,6 +85,17 @@
 
 ;; TODO: Consider wrapping all of this with `(cl-defstruct alist xs)'.
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Constants
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst alist/enable-tests? t
+  "When t, run the test suite.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Library
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun alist/new ()
   "Return a new, empty alist."
   '())
@@ -181,8 +192,29 @@ Mutative variant of `alist/delete'."
   "Return the number of entries in XS."
   (length xs))
 
+;; TODO: Should I support `alist/find-key' and `alist/find-value' variants?
+(defun alist/find (p xs)
+  "Apply a predicate fn, P, to each key and value in XS and return the key of
+  the first element that returns t."
+  (let ((result (list/find (lambda (x) (funcall p (car x) (cdr x))) xs)))
+    (if result
+        (car result)
+      nil)))
+
+(defun alist/map-keys (f xs)
+  "Call F on the values in XS, returning a new alist."
+  (list/map (lambda (x)
+              `(,(funcall f (car x)) . ,(cdr x)))
+            xs))
+
+(defun alist/map-values (f xs)
+  "Call F on the values in XS, returning a new alist."
+  (list/map (lambda (x)
+              `(,(car x) . ,(funcall f (cdr x))))
+            xs))
+
 (defun alist/reduce (acc f xs)
-  "Return a new alist by calling, F, on k v and ACC from XS.
+  "Return a new alist by calling F on k v and ACC from XS.
 F should return a tuple.  See tuple.el for more information."
   (->> (alist/keys xs)
        (list/reduce acc
@@ -219,7 +251,24 @@ In this case, the last writer wins, which is B."
    (alist/dedupe-entries person)
    (alist/count person)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when alist/enable-tests?
+  (prelude/assert
+   (equal '((2 . one)
+            (3 . two))
+          (alist/map-keys #'1+
+                          '((1 . one)
+                            (2 . two)))))
+  (prelude/assert
+   (equal '((one . 2)
+            (two . 3))
+          (alist/map-values #'1+
+                            '((one . 1)
+                              (two . 2))))))
+
 
 ;; TODO: Support test cases for the entire API.
 
