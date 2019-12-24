@@ -194,6 +194,12 @@
     map)
   "William Carroll's keybindings that should have the highest precedence.")
 
+;; Support pasting in M-:.
+(general-define-key
+ :keymaps 'read-expression-map
+ "C-v"   #'clipboard-yank
+ "C-S-v" #'clipboard-yank)
+
 (define-minor-mode wpc/kbds-minor-mode
   "A minor mode so that my key settings override annoying major modes."
   :init-value t
