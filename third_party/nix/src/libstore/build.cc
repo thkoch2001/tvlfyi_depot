@@ -2485,12 +2485,12 @@ void DerivationGoal::initTmpDir() {
   if (!parsedDrv->getStructuredAttrs()) {
     std::set<std::string> passAsFile =
         absl::StrSplit(get(drv->env, "passAsFile"), absl::ByAnyChar(" \t\n\r"));
-    int fileNr = 0;
     for (auto& i : drv->env) {
       if (passAsFile.find(i.first) == passAsFile.end()) {
         env[i.first] = i.second;
       } else {
-        std::string fn = ".attr-" + std::to_string(fileNr++);
+        auto hash = hashString(htSHA256, i.first);
+        std::string fn = ".attr-" + hash.to_string();
         Path p = tmpDir + "/" + fn;
         writeFile(p, rewriteStrings(i.second, inputRewrites));
         chownToBuilder(p);
