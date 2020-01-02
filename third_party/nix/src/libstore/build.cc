@@ -2490,7 +2490,7 @@ void DerivationGoal::initTmpDir() {
         env[i.first] = i.second;
       } else {
         auto hash = hashString(htSHA256, i.first);
-        std::string fn = ".attr-" + hash.to_string();
+        std::string fn = ".attr-" + hash.to_string(Base32, false);
         Path p = tmpDir + "/" + fn;
         writeFile(p, rewriteStrings(i.second, inputRewrites));
         chownToBuilder(p);
