@@ -80,6 +80,11 @@
 ;; highlighting.
 (use-package prism)
 
+;; Superior Elisp library for working with dates and times.
+;; TODO: Put this where my other installations for dash.el, s.el, a.el, and
+;; other utility Elisp libraries are located.
+(use-package ts)
+
 ;; persist history etc b/w Emacs sessions
 (setq desktop-save 'if-exists)
 (desktop-save-mode 1)
