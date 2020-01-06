@@ -968,7 +968,7 @@ lt() {
   elif [[ "${1}" =~ '^[0-9]+$' ]] && [ -z ${2} ]; then
     local depth="${1}"
 
-    exa --tree -all --level "${depth}"
+    exa --tree --all --level "${depth}"
 
   # lt ./scripts
   elif [ -z ${2} ]; then
