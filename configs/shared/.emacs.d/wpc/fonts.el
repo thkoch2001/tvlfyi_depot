@@ -29,7 +29,7 @@
 
 (defconst fonts/size
   (pcase (device/classify)
-    ('work-laptop "12")
+    ('work-laptop  "9")
     ('work-desktop "8"))
   "My preferred default font-size, which is device specific.")
 
