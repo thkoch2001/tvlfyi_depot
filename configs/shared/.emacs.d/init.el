@@ -1,8 +1,4 @@
 (require 'wpc-package "~/.emacs.d/wpc/packages/wpc-package.el")
-(require 'f)
-(setq user-init-file (or load-file-name (buffer-file-name)))
-(setq user-emacs-directory (f-dirname user-init-file))
-;; TODO: Troubleshoot broken terminator.
 
 ;; load order is intentional
 (require 'constants)
@@ -15,7 +11,7 @@
 (require 'kaomoji)
 
 ;; Google
-;; (require 'google-stuff)
+(require 'google-stuff)
 
 ;; Laptop XF-functionality
 (require 'pulse-audio)
@@ -45,7 +41,7 @@
 (require 'wpc-lisp)
 (require 'wpc-haskell)
 (require 'wpc-reasonml)
-;; (require 'wpc-ocaml)
+(require 'wpc-ocaml)
 (require 'wpc-elixir)
 (require 'wpc-nix)
 (require 'wpc-rust)
@@ -54,5 +50,3 @@
 (require 'wpc-javascript)
 (require 'wpc-java)
 (require 'wpc-prolog)
-
-(run-hooks 'after-init-hook)
