@@ -169,7 +169,7 @@
   (laptop-battery/display))
 
 ;; Load a theme
-(themes/set (themes/random))
+(themes/set "Wall-E")
 
 (provide 'wpc-ui)
 ;;; wpc-ui.el ends here

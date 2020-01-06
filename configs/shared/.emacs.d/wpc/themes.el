@@ -85,6 +85,12 @@
           :wallpaper "lightbulb_4k.jpg"
           :colorscheme 'base16-atelier-cave))
         (dotted/new
+         "Wall-E"
+         (make-theme
+          :font "Input Mono Medium"
+          :wallpaper "walle_4k.jpg"
+          :colorscheme 'doom-material))
+        (dotted/new
          "Galaxy"
          (make-theme
           :font "Source Code Pro"
