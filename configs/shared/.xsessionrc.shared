@@ -26,7 +26,7 @@ tmux new -d -s main
 
 # Start the Emacs server
 # TODO: Consider starting this with `systemctl --user enable emacs.service`
-emacs --daemon
+# emacs --daemon
 
 # Start ssh-agent
 eval "$(ssh-agent -s)"
@@ -42,4 +42,7 @@ compton &
 unclutter &
 
 # Startup Emacs (and EXWM).
-exec dbus-launch --exit-with-session emacs
+# TODO: Does this prevent the Emacs server (i.e. `emacs --daemon`) from running?
+# NOTE: wpcarros-emacs is built with `nix-env -iA emacs -f .` from
+# `CWD=~/Dropbox/dotfiles`
+exec dbus-launch --exit-with-session wpcarros-emacs
