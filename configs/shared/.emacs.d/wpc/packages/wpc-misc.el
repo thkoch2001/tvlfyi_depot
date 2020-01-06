@@ -76,6 +76,10 @@
 ;; alternative to help
 (use-package helpful)
 
+;; Similar to Douglas Crockford's idea of scope highlighting instead of syntax
+;; highlighting.
+(use-package prism)
+
 ;; persist history etc b/w Emacs sessions
 (setq desktop-save 'if-exists)
 (desktop-save-mode 1)
