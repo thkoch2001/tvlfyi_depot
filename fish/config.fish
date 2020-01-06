@@ -55,6 +55,7 @@
 # Remove the default greeting from fish
 set fish_greeting ""
 
+# TODO: This installs $1, which is most likely not desirable.
 function nix_find
     nix-build '<nixpkgs>' --no-build-output -A $argv[1]
 end
@@ -159,7 +160,7 @@ abbr --add td  tmux detach
 # Chrome
 abbr --add chrome google-chrome
 abbr --add cssh   chrome --app-id=pnhechapfaindjhompbnflcldabbghjo # Secure Shell
-abbr --add crd    chrome --app-id=gbchcmhmhahfdphkhkmpfmihenigjmpp # Chrome Remote Desktop
+abbr --add crd    chrome --app-id=gbchcmhmhahfdphkhkmpfmihenigjmpp  # Chrome Remote Desktop
 
 # Dropbox
 abbr --add drst dropbox.py status
