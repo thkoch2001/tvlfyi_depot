@@ -85,8 +85,12 @@
          :index 6
          :kbd "h")
         (make-exwm/named-workspace
-         :label "Work"
+         :label "IRC"
          :index 7
+         :kbd "i")
+        (make-exwm/named-workspace
+         :label "Work"
+         :index 8
          :kbd "w"))
   "List of `exwm/named-workspace' structs.")
 
@@ -287,11 +291,33 @@
  #'exwm/char-mode)
 
 ;; Interface to the Linux password manager
+;; TODO: Consider writing a better client for this.
 (use-package ivy-pass)
 
+;; TODO: Prefer a more idiomatic Emacs way like `with-output-to-temp-buffer'.
+
+;; TODO: Create a mode similar to `help-mode' that also kills the buffer when
+;; "q" is pressed since this is sensitive information that we probably don't
+;; want persisting.
+
+;; TODO: Have this interactively show all of the listings in ~/.password-store
+;; in an ivy list.
+(defun password-store/show (key)
+  "Show the contents of KEY from the password-store in a buffer."
+  (interactive)
+  (let ((b (buffer/find-or-create (string/format "*password-store<%s>*" key))))
+    (with-current-buffer b
+      (insert (password-store-get key))
+      (help-mode))
+    (buffer/show b)))
+
+;; TODO: I'm having difficulties with the Nix-built terminator. The one at
+;; /usr/bin/terminator (i.e. built w/o Nix) works just fine. Using this,
+;; however, cheapens my Nix setup.
 (defconst exwm/preferred-terminal "terminator"
   "My preferred terminal.")
 
+;; TODO: How do I handle this dependency?
 (defconst exwm/preferred-browser "google-chrome"
   "My preferred web browser.")
 
@@ -553,7 +579,8 @@ Currently using super- as the prefix for switching workspaces."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
        (exwm/switch "Project")
-       (find-file constants/current-project))
+       ;; (find-file constants/current-project)
+       )
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Scratch
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -573,19 +600,20 @@ Currently using super- as the prefix for switching workspaces."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
        (exwm/switch "Todos")
-       (find-file "~/Dropbox/org/today.org")
+       ;; (find-file "~/Dropbox/org/today.org")
        (wpc/evil-window-vsplit-right)
-       (find-file "~/Dropbox/org/emacs.org"))
+       ;; (find-file "~/Dropbox/org/emacs.org")
+       )
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Dotfiles
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
        (exwm/switch "Dotfiles")
        ;; TODO: Support (dotfiles/find-file "window-manager.el")?
-       (find-file "~/Dropbox/dotfiles/configs/shared/.emacs.d/init.el")
+       ;; (find-file "~/Dropbox/dotfiles/configs/shared/.emacs.d/init.el")
        (wpc/evil-window-vsplit-right)
-       (find-file
-        "~/Dropbox/dotfiles/configs/shared/.emacs.d/wpc/window-manager.el"))
+       ;; (find-file "~/Dropbox/dotfiles/configs/shared/.emacs.d/wpc/window-manager.el")
+       )
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Chatter
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
