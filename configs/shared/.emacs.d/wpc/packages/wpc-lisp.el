@@ -75,9 +75,10 @@
      "M-k" nil
      ;; second rebind
      ;; TODO: Rebind to something that doesn't conflict with window resizing.
-     ;; "C-M-h" #'lispyville-drag-backward
-     ;; "C-M-l" #'lispyville-drag-forward
-     )))
+     "C-s-h" #'lispyville-drag-backward
+     "C-s-l" #'lispyville-drag-forward
+     "C-s-e" #'lispyville-end-of-defun
+     "C-s-a" #'lispyville-beginning-of-defun)))
 
 ;; deletes all bindings of f->kbd
 ;; binds kbd->
