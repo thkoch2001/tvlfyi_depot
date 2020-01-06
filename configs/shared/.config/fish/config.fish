@@ -52,6 +52,10 @@
 # TODO: Decide if I prefer `abbr` or `alias` for fish. `abbr` is a new concept
 # for me.
 
+function nix_find
+    nix-build '<nixpkgs>' --no-build-output -A $argv[1]
+end
+
 # Prompt
 function fish_prompt
     set -l color_cwd
