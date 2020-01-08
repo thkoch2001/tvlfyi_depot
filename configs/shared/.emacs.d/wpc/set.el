@@ -8,6 +8,7 @@
 
 (require 'ht) ;; friendlier API for hash-tables
 (require 'dotted)
+(require 'struct)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Wish List
