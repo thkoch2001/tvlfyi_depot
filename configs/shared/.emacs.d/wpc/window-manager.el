@@ -12,6 +12,10 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'prelude)
 (require 'string)
 (require 'cycle)
@@ -19,6 +23,8 @@
 (require 'kbd)
 (require 'ivy-helpers)
 (require 'display)
+(require 'dotfiles)
+(require 'org-helpers)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -579,8 +585,7 @@ Currently using super- as the prefix for switching workspaces."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
        (exwm/switch "Project")
-       ;; (find-file constants/current-project)
-       )
+       (find-file constants/current-project))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Scratch
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -600,20 +605,17 @@ Currently using super- as the prefix for switching workspaces."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
        (exwm/switch "Todos")
-       ;; (find-file "~/Dropbox/org/today.org")
+       (org-helpers/find-file "today.org")
        (wpc/evil-window-vsplit-right)
-       ;; (find-file "~/Dropbox/org/emacs.org")
-       )
+       (org-helpers/find-file "emacs.org"))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Dotfiles
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
        (exwm/switch "Dotfiles")
-       ;; TODO: Support (dotfiles/find-file "window-manager.el")?
-       ;; (find-file "~/Dropbox/dotfiles/configs/shared/.emacs.d/init.el")
+       (dotfiles/find-emacs-file "init.el")
        (wpc/evil-window-vsplit-right)
-       ;; (find-file "~/Dropbox/dotfiles/configs/shared/.emacs.d/wpc/window-manager.el")
-       )
+       (dotfiles/find-emacs-file "wpc/window-manager.el"))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Chatter
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -640,8 +642,9 @@ Currently using super- as the prefix for switching workspaces."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Reset to default
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     (exwm/switch "Dotfiles")
-     )))
+     (exwm/switch "Dotfiles"))))
+
+
 
 (provide 'window-manager)
 ;;; window-manager.el ends here

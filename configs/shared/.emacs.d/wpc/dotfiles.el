@@ -6,7 +6,12 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'macros)
+(require 'f)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; API
@@ -38,6 +43,11 @@
    "Dotfile: "
    dotfiles/whitelist
    :action (>> cdr find-file)))
+
+(defun dotfiles/find-emacs-file (name)
+  "Call `find-file' on NAME located in dotfiles's emacs.d directory."
+  (find-file
+   (f-join "~/Dropbox/dotfiles/configs/shared/.emacs.d" name)))
 
 (when dotfiles/install-kbds?
   (evil-leader/set-key "J" #'dotfiles/edit))
