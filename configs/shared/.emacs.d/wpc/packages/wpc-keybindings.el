@@ -110,7 +110,6 @@
     "f"   #'wpc/find-file
     "n"   #'flycheck-next-error
     "N"   #'smerge-next
-    "b"   #'ivy-switch-buffer
     "W"   #'balance-windows
     "gs"  #'magit-status
     "E"   #'refine
