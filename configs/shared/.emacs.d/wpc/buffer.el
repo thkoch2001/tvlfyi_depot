@@ -40,7 +40,11 @@
   "When t, install the keybindings defined herein.")
 
 (defconst buffer/source-code-blacklist
-  (set/new 'dired-mode 'erc-mode 'magit-status-mode)
+  (set/new 'dired-mode
+           'erc-mode
+           'magit-status-mode
+           'magit-process-mode
+           'magit-log-mode)
   "A blacklist of major-modes to ignore for listing source code buffers.")
 
 (defconst buffer/source-code-timeout 2
