@@ -27,6 +27,7 @@
 (require 'maybe)
 (require 'set)
 (require 'cycle)
+(require 'struct)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -112,14 +113,18 @@ Return a reference to that buffer."
     (if (> (ts-diff (ts-now) last-called)
            buffer/source-code-timeout)
         (progn
-          (setf (source-code-cycle-cycle buffer/source-code-cycle-state)
-                (cycle/from-list (buffer/source-code-buffers)))
+          (struct/set! source-code-cycle
+                       cycle
+                       (cycle/from-list (buffer/source-code-buffers))
+                       buffer/source-code-cycle-state)
           (let ((cycle (source-code-cycle-cycle
                         buffer/source-code-cycle-state)))
             (funcall cycle-fn cycle)
             (switch-to-buffer (cycle/current cycle)))
-          (setf (source-code-cycle-last-called buffer/source-code-cycle-state)
-                (ts-now)))
+          (struct/set! source-code-cycle
+                       last-called
+                       (ts-now)
+                       buffer/source-code-cycle-state))
       (progn
         (funcall cycle-fn cycle)
         (switch-to-buffer (cycle/current cycle))))))
