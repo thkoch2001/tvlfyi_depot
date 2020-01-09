@@ -249,22 +249,12 @@
 (defun exwm/next-workspace ()
   "Cycle forwards to the next workspace."
   (interactive)
-  (exwm-workspace-switch
-   (exwm/named-workspace-index (cycle/next exwm/workspaces)))
-  (window-manager/alert
-   (string/concat
-    "Current workspace: "
-    (exwm/named-workspace-label (cycle/current exwm/workspaces)))))
+  (exwm/change-workspace (cycle/next exwm/workspaces)))
 
 (defun exwm/prev-workspace ()
   "Cycle backwards to the previous workspace."
   (interactive)
-  (exwm-workspace-switch
-   (exwm/named-workspace-index (cycle/prev exwm/workspaces)))
-  (window-manager/alert
-   (string/concat
-    "Current workspace: "
-    (exwm/named-workspace-label (cycle/current exwm/workspaces)))))
+  (exwm/change-workspace (cycle/prev exwm/workspaces)))
 
 ;; TODO: Create friendlier API for working with EXWM.
 
@@ -534,17 +524,26 @@ Currently using super- as the prefix for switching workspaces."
      (kbd/for 'workspace (s-capitalize key))
      handler)))
 
+(defun exwm/change-workspace (workspace)
+  "Switch EXWM workspaces to the WORKSPACE struct."
+  (exwm-workspace-switch (exwm/named-workspace-index workspace))
+  (window-manager/alert
+   (string/format "Switched to: %s" (exwm/named-workspace-label workspace))))
+
 (defun exwm/switch (label)
   "Switch to a named workspaces using LABEL."
-  (cycle/focus
-   (lambda (x)
-     (equal label
-            (exwm/named-workspace-label x)))
-   exwm/workspaces)
-  (exwm-workspace-switch
-   (exwm/named-workspace-index (cycle/current exwm/workspaces)))
-  (window-manager/alert
-   (string/concat "Switched to: " label)))
+  (cycle/focus (lambda (x)
+                 (equal label
+                        (exwm/named-workspace-label x)))
+               exwm/workspaces)
+  (exwm/change-workspace (cycle/current exwm/workspaces)))
+
+;; TODO: Assign an easy-to-remember keybinding to this.
+(exwm-input-set-key (kbd "C-S-f") #'exwm/toggle-previous)
+(defun exwm/toggle-previous ()
+  "Focus the previously active EXWM workspace."
+  (interactive)
+  (exwm/change-workspace (cycle/focus-previous! exwm/workspaces)))
 
 (defun exwm/ivy-switch ()
   "Use ivy to switched between named workspaces."

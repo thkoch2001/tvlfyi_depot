@@ -75,6 +75,19 @@
         (nth i (cycle-xs cycle))
       nil)))
 
+;; TODO: Consider adding "!" to the function name herein since many of them
+;; mutate the collection, and the APIs are beginning to confuse me.
+(defun cycle/focus-previous! (xs)
+  "Jump to the item in XS that was most recently focused; return the cycle.
+This will error when previous-index is nil.  This function mutates the
+underlying struct."
+  (let ((i (cycle-previous-index xs)))
+    (if (maybe/some? i)
+        (progn
+          (cycle/jump i xs)
+          (cycle/current xs))
+      (error "Cannot focus the previous element since cycle-previous-index is nil"))))
+
 (defun cycle/next (xs)
   "Return the next value in `XS' and update `current-index'."
   (let* ((current-index (cycle-current-index xs))
@@ -135,7 +148,8 @@
     (prelude/assert (= 1 (->> xs (cycle/jump 0) cycle/current)))
     (prelude/assert (= 2 (->> xs (cycle/jump 1) cycle/current)))
     (prelude/assert (= 3 (->> xs (cycle/jump 2) cycle/current)))
-    (prelude/assert (= 2 (cycle/previous-focus xs)))))
+    (prelude/assert (= 2 (cycle/previous-focus xs)))
+    (prelude/assert (= 2 (cycle/focus-previous! xs)))))
 
 (provide 'cycle)
 ;;; cycle.el ends here
