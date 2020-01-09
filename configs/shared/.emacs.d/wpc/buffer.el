@@ -169,9 +169,10 @@ This function ignores Emacs-generated buffers, i.e. the ones that look like
    "C-f" #'buffer/cycle-next
    "C-b" #'buffer/cycle-prev)
   (evil-leader/set-key
-   "b" #'buffer/ivy-source-code
-   "<SPC>" #'buffer/show-previous)
-  )
+    "b" #'buffer/ivy-source-code
+    "<SPC>" #'buffer/show-previous)
+  (evil-leader/set-key
+    "k" #'kill-buffer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
