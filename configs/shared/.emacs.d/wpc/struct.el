@@ -24,8 +24,11 @@
 (require 'dash)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Functions
+;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar struct/enable-tests? t
+  "When t, run the test suite defined herein.")
 
 (defmacro struct/update (type field f xs)
   "Apply F to FIELD in XS, which is a struct of TYPE.
@@ -64,8 +67,22 @@ This is an adapter interface to `setf'."
                        (string/prepend (string/concat (symbol-name type) "-"))
                        intern)))
     `(progn
-       (setf (,accessor xs) ,x)
-       xs)))
+       (setf (,accessor ,xs) ,x)
+       ,xs)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Tests
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when struct/enable-tests?
+  (cl-defstruct dummy name age)
+  (defvar test-dummy (make-dummy :name "Roofus" :age 19))
+  (struct/set! dummy name "Doofus" test-dummy)
+  (prelude/assert (string= "Doofus" (dummy-name test-dummy)))
+  (let ((result (struct/set dummy name "Shoofus" test-dummy)))
+    ;; Test the immutability of `struct/set'
+    (prelude/assert (string= "Doofus" (dummy-name test-dummy)))
+    (prelude/assert (string= "Shoofus" (dummy-name result)))))
 
 (provide 'struct)
 ;;; struct.el ends here
