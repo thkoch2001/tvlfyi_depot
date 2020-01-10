@@ -44,7 +44,9 @@
            'erc-mode
            'magit-status-mode
            'magit-process-mode
-           'magit-log-mode)
+           'magit-log-mode
+           'org-mode
+           'fundamental-mode)
   "A blacklist of major-modes to ignore for listing source code buffers.")
 
 (defconst buffer/source-code-timeout 2
