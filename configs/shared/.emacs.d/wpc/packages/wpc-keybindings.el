@@ -212,5 +212,18 @@
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
 
+;; Ensure the Evil search results get centered vertically.
+;; TODO: Consider packaging this up for others.
+(progn
+  (defadvice isearch-update
+      (before advice-for-isearch-update activate)
+    (evil-scroll-line-to-center (line-number-at-pos)))
+  (defadvice evil-search-next
+      (after advice-for-evil-search-next activate)
+    (evil-scroll-line-to-center (line-number-at-pos)))
+  (defadvice evil-search-previous
+      (after advice-for-evil-search-previous activate)
+    (evil-scroll-line-to-center (line-number-at-pos))))
+
 (provide 'wpc-keybindings)
 ;;; wpc-keybindings.el ends here
