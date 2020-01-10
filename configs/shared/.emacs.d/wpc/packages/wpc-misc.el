@@ -148,6 +148,19 @@
    :keymaps 'deadgrep-mode-map
    :states 'normal
    "o" #'deadgrep-visit-result-other-window)
+  (setq-default deadgrep--context '(0 . 3))
+  (defun deadgrep/region ()
+    "Run a ripgrep search on the active region."
+    (interactive)
+    (deadgrep (region/to-string)))
+  (defun deadgrep/dwim ()
+    "If a region is active, use that as the search, otherwise don't."
+    (interactive)
+    (with-current-buffer (current-buffer)
+      (if (region-active-p)
+          (setq deadgrep--additional-flags '("--multiline"))
+          (deadgrep/region)
+        (call-interactively #'deadgrep))))
   (advice-add
    'deadgrep--format-command
    :filter-return
