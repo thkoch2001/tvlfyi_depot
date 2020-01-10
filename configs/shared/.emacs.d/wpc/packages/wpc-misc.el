@@ -13,7 +13,7 @@
 (display-time-mode 1)
 
 ;; disable custom variable entries from being written to ~/.emacs.d/init.el
-(setq custom-file "/tmp/custom.el")
+(setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
 
 ;; integrate Emacs with X11 clipboard
