@@ -79,6 +79,12 @@
           :wallpaper "geometric_dark_4k.jpg"
           :colorscheme 'doom-vibrant))
         (dotted/new
+         "Lightness"
+         (make-theme
+          :font "Input Mono Medium"
+          :wallpaper "construction_paper_iceberg_4k.jpg"
+          :colorscheme 'doom-one-light))
+        (dotted/new
          "Edison Lightbulb"
          (make-theme
           :font "Operator Mono Light"
