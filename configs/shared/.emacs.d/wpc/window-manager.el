@@ -123,8 +123,9 @@
   (exwm-randr-enable)
   ;; TODO: Consider generating this plist.
   ;; TODO: Replace integer index values with their named workspace equivalents.
-  (setq exwm-randr-workspace-monitor-plist (list 0 display/4k
-                                                 1 display/primary))
+  (setq exwm-randr-workspace-monitor-plist
+        (list 0 display/4k-monitor
+              1 display/laptop-monitor))
 
   (evil-set-initial-state 'exwm-mode 'emacs)
   (ido-mode 1)
