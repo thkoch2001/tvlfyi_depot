@@ -87,9 +87,7 @@ source (fzf-share)/key-bindings.fish && fzf_key_bindings
 # TODO: Debug why I couldn't get `fasd` to work with Nix and fish.
 source (nix_find autojump)/share/autojump/autojump.fish
 
-# TODO: What is the difference between `source` and `eval`
-# direnv
-source (direnv hook fish)
+eval (direnv hook fish)
 
 # Miscellaneous
 abbr --add c xclip -selection clipboard -i
