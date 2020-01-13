@@ -3,32 +3,13 @@
 [keybindings]
 [profiles]
   [[default]]
-    background_color = "#ffffff"
+    background_color = "#fcf4dc"
     cursor_shape = ibeam
-    cursor_color = "#E29B61"
+    cursor_color = "#536870"
     font = Input Mono Medium 12
-    foreground_color = "#000000"
+    foreground_color = "#536870"
     show_titlebar = False
     scrollbar_position = hidden
-    palette = "#31213f:#e29b61:#e8c35f:#565b87:#a56785:#20a89e:#3cc2b5:#8de0e1:#629c9d:#e29b61:#e8c35f:#565b87:#a56785:#20a89e:#3cc2b5:#8de0e1"
+    palette = "#002831:#d11c24:#738a05:#a57706:#2176c7:#c61c6f:#259286:#eae3cb:#001e27:#bd3613:#475b62:#536870:#708284:#5956ba:#819090:#fcf4dc"
     use_system_font = False
-  [[Molokai]]
-    background_color = "#121212"
-    cursor_shape = ibeam
-    cursor_color = "#bbbbbb"
-    font = Input Mono Medium 12
-    foreground_color = "#bbbbbb"
-    show_titlebar = False
-    scrollbar_position = hidden
-    palette = "#121212:#fa2573:#98e123:#dfd460:#1080d0:#8700ff:#43a8d0:#bbbbbb:#555555:#f6669d:#b1e05f:#fff26d:#00afff:#af87ff:#51ceff:#ffffff"
-    use_system_font = False
-[layouts]
-  [[default]]
-    [[[child1]]]
-      parent = window0
-      type = Terminal
-      profile = Molokai
-    [[[window0]]]
-      parent = ""
-      type = Window
 [plugins]

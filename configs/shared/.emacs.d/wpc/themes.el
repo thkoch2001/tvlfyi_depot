@@ -79,6 +79,12 @@
           :wallpaper "geometric_dark_4k.jpg"
           :colorscheme 'doom-vibrant))
         (dotted/new
+         "Solarized Light"
+         (make-theme
+          :font "Input Mono Medium"
+          :wallpaper "solarized_light_thinkpad.jpg"
+          :colorscheme 'doom-solarized-light))
+        (dotted/new
          "Lightness"
          (make-theme
           :font "Input Mono Medium"
