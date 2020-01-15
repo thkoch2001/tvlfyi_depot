@@ -55,10 +55,6 @@
 # Remove the default greeting from fish
 set fish_greeting ""
 
-function nix_find
-    nix-build '<nixpkgs>' --no-build-output -A $argv[1]
-end
-
 # Prompt
 function fish_prompt
     set -l color_cwd
@@ -82,10 +78,6 @@ end
 
 # Setup fzf for fuzzily finding commands, files, directories
 source (fzf-share)/key-bindings.fish && fzf_key_bindings
-
-# Setup autojump for a frequency-based alternative to cd.
-# TODO: Debug why I couldn't get `fasd` to work with Nix and fish.
-source (nix_find autojump)/share/autojump/autojump.fish
 
 eval (direnv hook fish)
 
