@@ -47,6 +47,9 @@
 (setq sh-basic-offset 2)
 (setq sh-indentation 2)
 
+;; Emacs library that interfaces with my Linux password manager.
+(use-package password-store)
+
 ;; disable company mode when editing markdown
 ;; TODO: move this out of wpc-misc.el and into a later file to call
 ;; `(disable company-mode)'
@@ -58,6 +61,8 @@
   (setq markdown-split-window-direction 'right)
   ;; (add-hook 'markdown-mode-hook #'markdown-live-preview-mode)
   )
+
+(use-package alert)
 
 (use-package refine)
 
