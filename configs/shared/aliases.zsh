@@ -225,7 +225,6 @@ alias em='e ~/.tmux.conf'
 # TODO: consider DRYing this up with `e`. Unfortunately, `sudo` won't support
 # aliases.
 alias en='sudo ALTERNATE_EDITOR=nvim emacsclient --no-wait --create-frame /etc/nixos/configuration.nix'
-alias er='e ~/Dropbox/dotfiles/README.md'
 
 # couple the s* aliases to the <leader>s* kbds in vim
 alias sz='source ~/.zshrc'
