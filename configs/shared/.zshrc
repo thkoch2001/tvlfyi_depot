@@ -21,9 +21,6 @@ command_exists() {
   command -v $1 >/dev/null
 }
 
-# TODO: remove this from here
-export DOTFILES=$HOME/Dropbox/dotfiles
-
 # Load the oh-my-zsh library
 antigen use oh-my-zsh
 

@@ -22,7 +22,7 @@
 
 (defconst dotfiles/whitelist
   '(("compton" . "~/.config/compton.conf")
-    ("dotfiles" . "~/Dropbox/dotfiles/")
+    ("dotfiles" . "~/dotfiles/")
     ("functions" . "~/functions.zsh")
     ("aliases" . "~/aliases.zsh")
     ("variables" . "~/variables.zsh")
@@ -47,7 +47,7 @@
 (defun dotfiles/find-emacs-file (name)
   "Call `find-file' on NAME located in dotfiles's emacs.d directory."
   (find-file
-   (f-join "~/Dropbox/dotfiles/configs/shared/.emacs.d" name)))
+   (f-join "~/dotfiles/configs/shared/.emacs.d" name)))
 
 (when dotfiles/install-kbds?
   (evil-leader/set-key "J" #'dotfiles/edit)

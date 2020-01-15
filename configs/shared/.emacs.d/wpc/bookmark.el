@@ -52,7 +52,7 @@ Otherwise, open with `counsel-find-file'."
                   :path "~/Dropbox/org"
                   :kbd "o")
    (make-bookmark :label "dotfiles"
-                  :path "~/Dropbox/dotfiles"
+                  :path "~/dotfiles"
                   :kbd "d")
    (make-bookmark :label "current project"
                   :path constants/current-project
