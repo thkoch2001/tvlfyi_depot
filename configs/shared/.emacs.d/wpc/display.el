@@ -38,6 +38,8 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; TODO: Debug why something this scales to 4k appropriately and other times it
+;; doesn't.
 (defun display/enable-4k ()
   "Attempt to connect to my 4K monitor."
   (interactive)
