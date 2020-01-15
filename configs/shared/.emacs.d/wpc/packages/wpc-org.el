@@ -6,6 +6,20 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'prelude)
+(require 'f)
+
+;; TODO: Define function like env/set? to handle this.
+(prelude/assert (f-exists? (getenv "ORG_DIRECTORY")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; TODO: figure out how to nest this in (use-package org ...)
 (setq org-capture-templates
       `(
@@ -31,6 +45,7 @@
          "* TODO %? ")
 
         ))
+
 (evil-set-initial-state 'org-mode 'normal)
 
 (use-package org

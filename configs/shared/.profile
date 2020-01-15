@@ -31,13 +31,12 @@ export RUST_SRC_PATH
 
 # TODO: Decide if clipmenu is compatible with EXWM.
 # Ensure clipmenu uses rofi instead of dmenu
+# TODO: Remove this after fully supporting Emacs client for clipmenu.
 export CM_LAUNCHER=rofi
 
 # Application configuration
 export FZF_DEFAULT_COMMAND='fd --hidden --follow --exclude ".git"'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
-export ORG_DIRECTORY="$HOME/Dropbox/org"
 
 # Prevent compton from fading to the lock screen. This also prevents the white
 # overlay that compton was causing to appear. Still unsure why that was
