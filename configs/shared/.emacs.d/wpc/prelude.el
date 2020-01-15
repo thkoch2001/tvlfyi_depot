@@ -133,5 +133,9 @@ This is a wrapper around `start-process' that has an API that resembles
         (f-exists? file)
       nil)))
 
+(defmacro prelude/time (x)
+  "Print the time it takes to evaluate X."
+  `(benchmark 1 ',x))
+
 (provide 'prelude)
 ;;; prelude.el ends here
