@@ -50,6 +50,9 @@
 ;; Emacs library that interfaces with my Linux password manager.
 (use-package password-store)
 
+;; Parser combinators in Elisp.
+(use-package parsec)
+
 ;; disable company mode when editing markdown
 ;; TODO: move this out of wpc-misc.el and into a later file to call
 ;; `(disable company-mode)'
