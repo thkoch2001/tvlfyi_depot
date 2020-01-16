@@ -81,7 +81,7 @@
         (dotted/new
          "Solarized Light"
          (make-theme
-          :font "Input Mono Medium"
+          :font "JetBrainsMono"
           :wallpaper "solarized_light_thinkpad.jpg"
           :colorscheme 'doom-solarized-light))
         (dotted/new
@@ -93,7 +93,7 @@
         (dotted/new
          "Edison Lightbulb"
          (make-theme
-          :font "Operator Mono Light"
+          :font "Mononoki Medium"
           :wallpaper "lightbulb_4k.jpg"
           :colorscheme 'base16-atelier-cave))
         (dotted/new
