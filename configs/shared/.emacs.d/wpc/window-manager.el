@@ -422,14 +422,6 @@ These are the types of items that would usually appear in dmenu.")
 ;; can provide a small mode for accepting user-input.
 ;; TODO: Put this somewhere more diliberate.
 
-(defun window-manager/screenshot ()
-  "Choose between \"Local\" and \"Google\" screenshots."
-  (interactive)
-  (pcase (ivy-read "Type of screenshot: " '("Google" "Local"))
-    ;; TODO: Drop `zsh -i -c' dependency and reimplement in Elisp.
-    ("Google" (shell-command "zsh -i -c snipit"))
-    ("Local"  (shell-command "zsh -i -c screenshot"))))
-
 ;; TODO: Configure the environment variables for xsecurelock so that the font is
 ;; smaller, different, and the glinux wallpaper doesn't show.
 ;; - XSECURELOCK_FONT="InputMono-Black 10"
