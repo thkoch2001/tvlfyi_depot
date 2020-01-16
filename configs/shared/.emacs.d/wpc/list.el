@@ -177,6 +177,20 @@ Be leery of using this with things like alists.  Many data structures in Elisp
   "Return t if X is in XS using `equal'."
   (-contains? xs x))
 
+;; TODO: Support dedupe.
+;; TODO: Should we call this unique? Or distinct?
+
+;; TODO: Add tests.
+(defun list/dedupe-adjacent (xs)
+  "Return XS without adjacent duplicates."
+  (prelude/assert (not (list/empty? xs)))
+  (list/reduce (list (list/first xs))
+    (lambda (x acc)
+      (if (equal x (list/first acc))
+          acc
+        (list/cons x acc)))
+    xs))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
