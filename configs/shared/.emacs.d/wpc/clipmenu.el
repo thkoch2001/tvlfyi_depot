@@ -66,33 +66,41 @@
   "Glob pattern matching the locations on disk for clipmenu's labels.")
 
 (defcustom clipmenu/history-length
-  (or (getenv "CM_HISTLENGTH") 20)
+  (or (getenv "CM_HISTLENGTH") 50)
   "Limit the number of clips in the history.
-This value defaults to 20.")
+This value defaults to 50.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Ensure the clips are sorted in a LRU order.
-;; TODO: Ensure entries are deduped.
-;; TODO: Ensure multiline entries can be handled.
+(defun clipmenu/parse-line (x)
+  "Parse the entry in the clipmenu's line-cache."
+  (string-to-number
+   (list/join "" (parsec-with-input x (parsec-count 19 (parsec-digit))))))
+
+(defun clipmenu/parse-content (x)
+  "Parse the label from the entry in clipmenu's line-cache."
+  (list/join
+   ""
+   (parsec-with-input x
+     (parsec-count 19 (parsec-digit))
+     (parsec-str " ")
+     (parsec-many (parsec-any-ch)))))
+
 (defun clipmenu/list-clips ()
   "Return a list of the content of all of the clips."
   (->> clipmenu/cache-file-pattern
        f-glob
        (-map (lambda (path)
-               (->> path f-read (s-split "\n"))))
+               (s-split "\n" (f-read path) t)))
        -flatten
+       (-reject #'s-blank?)
        (-sort (lambda (a b)
-                (> (->> a (s-split " ") (nth 0) string-to-number)
-                   (->> b (s-split " ") (nth 0) string-to-number))))
-       (-map (lambda (entry)
-               (->> entry (s-split " ") (nth 1))))
-       ;; TODO: Here we should actually only be deleting adjacent
-       ;; duplicates. This will be both faster and more similar to the behavior
-       ;; of the clipmenu program the author wrote.
-       delete-dups
+                (< (clipmenu/parse-line a)
+                   (clipmenu/parse-line b))))
+       (-map #'clipmenu/parse-content)
+       list/dedupe-adjacent
        (-take clipmenu/history-length)))
 
 ;; TODO: Add tests.
@@ -102,55 +110,38 @@ This value defaults to 20.")
        (s-replace "\"" "\\\"")
        (s-replace "'" "\\'")))
 
-;; TODO: Properly handle errors when the file doesn't exist.
 (defun clipmenu/line-to-clip (line)
   "Map the chosen LINE to a clip stored on disk."
   (->> line
-       clipmenu/cksum
+       clipmenu/checksum
        (f-join clipmenu/cache-directory)
        f-read
        clipboard/copy))
 
 ;; TODO: Consider supporting :history keyword.
-;; TODO: Ensure ivy maintains the sort from `clipmenu/list-clips'.
+
 ;; TODO: Ensure you can handle special characters like:
 ;; r}_rh,pmj~kCR.<5w"PUk#Z^>.
-;; TODO: Consider adding tests.
+
 (defun clipmenu/ivy-copy ()
   "Use `ivy-read' to select and copy a clip."
   (interactive)
-  (ivy-read "Clipmenu: "
-            (clipmenu/list-clips)
-            :action #'clipmenu/line-to-clip))
+  (let ((ivy-sort-functions-alist nil))
+    (ivy-read "Clipmenu: "
+              (clipmenu/list-clips)
+              :action #'clipmenu/line-to-clip)))
 
-;; TODO: Delete this once `clipmenu/ivy-copy' is working as expected.
-;; TODO: Use this to compare behavior with `clipmenu/ivy-copy'. These functions
-;; should behave in almost exactly the same way.
-(defun clipmenu/dmenu-copy ()
-  "Call clipmenu with dmenu as the client."
-  (interactive)
-  (prelude/start-process
-   :name "clipboard/select"
-   :command "clipmenu"))
-
-;; TODO: Write a faster alternative because this currently takes 1/2s to run,
-;; which is ridiculous. Perhaps `call-process' is what we need.
-(defun clipmenu/cksum (content)
+(defun clipmenu/checksum (content)
   "Return the CRC checksum of CONTENT."
-  (->> (shell-command-to-string
-        (format "zsh -c 'cksum <<<\"%s\"'"
-                ;; TODO: I'm not sure this is working as intended.
-                (clipmenu/escape-quotes content)))
-       s-trim-right))
+  (s-trim-right
+   (prelude/call-process-to-string
+    "/bin/bash" "-c" (string/format "/usr/bin/cksum <<<'%s'" content))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when clipmenu/install-kbds?
-  ;; TODO: Delete this once `clipmenu/ivy-copy' is working as expected.
-  (exwm-input-set-key
-   (kbd "C-M-S-v") #'clipmenu/dmenu-copy)
   (exwm-input-set-key
    (kbd "C-M-v") #'clipmenu/ivy-copy))
 
