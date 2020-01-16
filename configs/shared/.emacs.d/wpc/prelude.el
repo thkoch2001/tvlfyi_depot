@@ -44,6 +44,12 @@
        (apply #'string/concat)
        message))
 
+(defmacro prelude/call-process-to-string (cmd &rest args)
+  "Return the string output of CMD called with ARGS."
+  `(with-temp-buffer
+     (call-process ,cmd nil (current-buffer) nil ,@args)
+     (buffer-string)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Assertions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
