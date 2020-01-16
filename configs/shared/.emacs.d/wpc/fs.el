@@ -4,10 +4,17 @@
 ;;; Commentary:
 ;; Ergonomic alternatives for working with the filesystem.
 
+;;; Code:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'f)
 
-;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Library
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun fs/ensure-file (path)
   "Ensure that a file and its directories in `PATH' exist.
@@ -32,7 +39,6 @@ Will error for inputs with a trailing slash."
 Should behave similarly in spirit to the Unix command, ls.
 If `FULL-PATH?' is set, return the full-path of the files."
   (-drop 2 (directory-files dir full-path?)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
