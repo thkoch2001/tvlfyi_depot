@@ -50,6 +50,9 @@
 ;; Emacs library that interfaces with my Linux password manager.
 (use-package password-store)
 
+;; Run `package-lint' before publishing to MELPA.
+(use-package package-lint)
+
 ;; Parser combinators in Elisp.
 (use-package parsec)
 
