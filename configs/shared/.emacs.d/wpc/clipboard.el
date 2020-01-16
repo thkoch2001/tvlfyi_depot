@@ -26,15 +26,15 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun clipboard/copy (x)
+(cl-defun clipboard/copy (x &key (message "[clipboard.el] Copied!"))
   "Copy string, X, to X11's clipboard."
   (kill-new x)
-  (message "Copied!"))
+  (message message))
 
-(defun clipboard/paste ()
+(cl-defun clipboard/paste (&key (message "[clipboard.el] Pasted!"))
   "Paste contents of X11 clipboard."
   (yank)
-  (message "Pasted!"))
+  (message message))
 
 (exwm-input-set-key
  (kbd "C-M-v") #'ivy-clipmenu/copy)
