@@ -52,7 +52,9 @@
   (cycle/from-list
    (list/concat
     fonts/hacker-news-recommendations
-    '("Monospace"
+    '("JetBrainsMono"
+      "Mononoki Medium"
+      "Monospace"
       "Operator Mono Light"
       "Courier"
       "Andale Mono"
