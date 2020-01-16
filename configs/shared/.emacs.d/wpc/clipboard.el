@@ -13,6 +13,16 @@
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'prelude)
+(require 'ivy-clipmenu)
+
+(prelude/assert (prelude/executable-exists? "clipmenu"))
+(prelude/assert (prelude/executable-exists? "clipmenud"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -25,6 +35,9 @@
   "Paste contents of X11 clipboard."
   (yank)
   (message "Pasted!"))
+
+(exwm-input-set-key
+ (kbd "C-M-v") #'ivy-clipmenu/copy)
 
 (provide 'clipboard)
 ;;; clipboard.el ends here
