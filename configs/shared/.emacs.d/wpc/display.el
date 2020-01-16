@@ -58,7 +58,36 @@
    :command (string/format "xrandr --output %s --off"
                            display/4k-monitor)))
 
+(defun display/enable-laptop ()
+  "Turn the laptop monitor off.
+Sometimes this is useful when I'm sharing my screen in a Google Hangout and I
+  only want to present one of my monitors."
+  (interactive)
+  (prelude/start-process
+   :name "display/disable-laptop"
+   :command (string/format "xrandr --output %s --auto"
+                           display/laptop-monitor)))
+
+(defun display/disable-laptop ()
+  "Turn the laptop monitor off.
+Sometimes this is useful when I'm sharing my screen in a Google Hangout and I
+  only want to present one of my monitors."
+  (interactive)
+  (prelude/start-process
+   :name "display/disable-laptop"
+   :command (string/format "xrandr --output %s --off"
+                           display/laptop-monitor)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Keybindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (when display/install-kbds?
+  (general-define-key
+   :prefix "<SPC>"
+   :states '(normal)
+   "d0" #'display/disable-laptop
+   "d1" #'display/enable-laptop)
   (general-define-key
    :prefix "<SPC>"
    :states '(normal)
