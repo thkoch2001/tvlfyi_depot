@@ -90,10 +90,6 @@
 ;; alternative to help
 (use-package helpful)
 
-;; Similar to Douglas Crockford's idea of scope highlighting instead of syntax
-;; highlighting.
-(use-package prism)
-
 ;; Superior Elisp library for working with dates and times.
 ;; TODO: Put this where my other installations for dash.el, s.el, a.el, and
 ;; other utility Elisp libraries are located.

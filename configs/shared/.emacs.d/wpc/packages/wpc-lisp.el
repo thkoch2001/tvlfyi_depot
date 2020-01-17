@@ -92,9 +92,6 @@
   :config
   (general-add-hook 'emacs-lisp-mode #'ielm-mode))
 
-;; Prefer scope-highlighting instead of syntax highlighting for Elisp.
-(add-hook 'emacs-lisp-mode #'prism-mode)
-
 ;; TODO: Should I be using `general-define-key' or `evil-leader/set-key'?  My
 ;; gut say `general-define-key'.
 (general-define-key
