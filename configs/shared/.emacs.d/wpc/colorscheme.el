@@ -29,7 +29,10 @@
 
 (defcustom colorscheme/whitelist
   (cycle/from-list
-   (custom-available-themes))
+   (->> (custom-available-themes)
+        (list/map #'symbol-name)
+        (list/filter (>> (s-starts-with? "doom-")))
+        (list/map #'intern)))
   "The whitelist of colorschemes through which to cycle.")
 
 (defun colorscheme/current ()
