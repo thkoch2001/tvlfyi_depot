@@ -11,14 +11,6 @@ xsetroot -solid "#333333"
 # Set fallback cursor.
 xsetroot -cursor_name left_ptr
 
-# Set KBDs.
-xmodmap -e 'remove Lock = Caps_Lock'
-xmodmap -e 'keysym Caps_Lock = Escape'
-
-# set key repeat preferences
-# NOTE: This is now being handled with my keyboard.el module in Emacs.
-# xset r rate 250 60
-
 # Start the Emacs server
 # TODO: Consider starting this with `systemctl --user enable emacs.service`
 emacs --daemon
