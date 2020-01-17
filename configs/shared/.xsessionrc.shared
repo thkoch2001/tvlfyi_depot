@@ -11,10 +11,6 @@ xsetroot -solid "#333333"
 # Set fallback cursor.
 xsetroot -cursor_name left_ptr
 
-# Start the Emacs server
-# TODO: Consider starting this with `systemctl --user enable emacs.service`
-emacs --daemon
-
 # Start ssh-agent
 eval "$(ssh-agent -s)"
 
@@ -29,7 +25,6 @@ compton &
 unclutter &
 
 # Startup Emacs (and EXWM).
-# TODO: Does this prevent the Emacs server (i.e. `emacs --daemon`) from running?
 # TODO: Do I even want `--exit-with-session`? This makes debugging Emacs more
 # expensive than perhaps it should be.
 exec dbus-launch --exit-with-session emacs
