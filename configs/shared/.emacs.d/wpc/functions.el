@@ -31,6 +31,12 @@
         (call-interactively #'counsel-projectile-find-file)
       (call-interactively #'find-file))))
 
+(defun wpc/find-file-split (filename)
+  "Creates a window split and then edits `filename'."
+  (interactive)
+  (evil-window-vsplit)
+  (find-file filename))
+
 (defun wpc/find-or-create-js-test ()
   (->> buffer-file-name
        (s-chop-suffix ".js")
@@ -82,12 +88,6 @@
   (interactive)
   (evil-window-vsplit)
   (call-interactively #'yas-new-snippet))
-
-(defun wpc/find-file-split (filename)
-  "Creates a window split and then edits `filename'."
-  (interactive)
-  (evil-window-vsplit)
-  (find-file filename))
 
 (defun wpc/jump-to-parent-file ()
   "Jumps to a React store or component's parent file. Useful for store or index file."
