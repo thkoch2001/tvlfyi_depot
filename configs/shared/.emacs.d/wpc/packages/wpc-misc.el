@@ -90,6 +90,11 @@
 ;; alternative to help
 (use-package helpful)
 
+;; Emacs integration with direnv
+(use-package direnv
+  :config
+  (direnv-mode))
+
 ;; Superior Elisp library for working with dates and times.
 ;; TODO: Put this where my other installations for dash.el, s.el, a.el, and
 ;; other utility Elisp libraries are located.

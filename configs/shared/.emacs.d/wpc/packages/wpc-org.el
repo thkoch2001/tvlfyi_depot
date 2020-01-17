@@ -12,9 +12,10 @@
 
 (require 'prelude)
 (require 'f)
+(require 'maybe)
 
-;; TODO: Define function like env/set? to handle this.
-(prelude/assert (f-exists? (getenv "ORG_DIRECTORY")))
+(prelude/assert (and (maybe/some? (getenv "ORG_DIRECTORY"))
+                     (f-exists? (getenv "ORG_DIRECTORY"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -22,29 +23,22 @@
 
 ;; TODO: figure out how to nest this in (use-package org ...)
 (setq org-capture-templates
-      `(
-
-        ("w" "work" entry (file+headline
+      `(("w" "work" entry (file+headline
                            ,(f-join (getenv "ORG_DIRECTORY") "work.org")
                            "Tasks")
          "* TODO %?")
-
         ("p" "personal" entry (file+headline
                                ,(f-join (getenv "ORG_DIRECTORY") "personal.org")
                                "Tasks")
          "* TODO %? ")
-
         ("i" "ideas" entry (file+headline
                             ,(f-join (getenv "ORG_DIRECTORY") "ideas.org")
                             "Tasks")
          "* %? ")
-
         ("s" "shopping list" entry (file+headline
                             ,(f-join (getenv "ORG_DIRECTORY") "shopping.org")
                             "Items")
-         "* TODO %? ")
-
-        ))
+         "* TODO %? ")))
 
 (evil-set-initial-state 'org-mode 'normal)
 
