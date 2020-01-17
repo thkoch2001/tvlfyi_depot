@@ -36,6 +36,10 @@
   (yank)
   (message message))
 
+(defun clipboard/contents ()
+  "Return the contents of the clipboard as a string."
+  (substring-no-properties (current-kill 0)))
+
 (exwm-input-set-key
  (kbd "C-M-v") #'ivy-clipmenu/copy)
 
