@@ -70,7 +70,7 @@ Cycle prev otherwise."
   (let ((theme (if forward?
                    (cycle/next colorscheme/whitelist)
                  (cycle/prev colorscheme/whitelist))))
-    (colorscheme/load theme)
+    (colorscheme/set theme)
     (message (s-concat "Active theme: " (symbol/to-string theme)))))
 
 (defun colorscheme/next ()
