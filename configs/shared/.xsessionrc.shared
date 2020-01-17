@@ -19,11 +19,6 @@ xmodmap -e 'keysym Caps_Lock = Escape'
 # NOTE: This is now being handled with my keyboard.el module in Emacs.
 # xset r rate 250 60
 
-# start tmux with a few commonly used sessions
-# TODO: consider moving this else like ~/.profile, so it doesn't depend on X.
-# This might be better for SSH.
-tmux new -d -s main
-
 # Start the Emacs server
 # TODO: Consider starting this with `systemctl --user enable emacs.service`
 emacs --daemon
