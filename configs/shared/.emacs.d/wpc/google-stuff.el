@@ -84,7 +84,8 @@ Stubby.")
 
 ;; TODO: Can this be sourced from ~/.g4d?
 (defconst google-stuff/citc-aliases
-  '(("escalations" . "/google3/corp/gtech/pto/tda/beacons_extension")
+  '(("google3" . "/google3")
+    ("escalations" . "/google3/corp/gtech/pto/tda/beacons_extension")
     ("spewall_fe" . "/google3/alkali/apps/speakeasydashboard")
     ("spewall_be" . "/google3/java/com/google/alkali/applications/speakeasydashboard")
     ("spewall_protos" . "/google3/google/internal/alkali/applications/speakeasydashboard")
