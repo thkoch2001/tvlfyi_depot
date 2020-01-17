@@ -17,3 +17,4 @@ Vundle.vim
 **/*/.emacs.d/custom.el
 **/*/.emacs.d/projectile-bookmarks.eld
 **/*/.emacs.d/bookmarks
+__pycache__/
