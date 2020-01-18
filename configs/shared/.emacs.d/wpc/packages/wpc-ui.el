@@ -49,6 +49,10 @@
   (diminish 'counsel-mode)
   (diminish 'ivy-mode))
 
+;; TODO: Further customize `mode-line-format' variable.
+(delete 'mode-line-modes mode-line-format)
+(delete '(vc-mode vc-mode) mode-line-format)
+
 ;; disable startup screen
 (setq inhibit-startup-screen t)
 
