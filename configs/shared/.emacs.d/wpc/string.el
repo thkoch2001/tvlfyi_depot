@@ -22,6 +22,10 @@
 (defconst string/test? t
   "When t, run the tests.")
 
+(defun string/contains? (c x)
+  "Return t if X is in C."
+  (s-contains? c x))
+
 (defun string/hookify (x)
   "Append \"-hook\" to X."
   (s-append "-hook" x))
