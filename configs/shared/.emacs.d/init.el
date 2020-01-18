@@ -25,6 +25,8 @@
 (require 'keyboard)
 (require 'irc)
 (require 'email)
+;; TODO: Consider renaming entr.el.
+(require 'entr)
 
 (require 'wpc-keybindings)
 (require 'window-manager)
