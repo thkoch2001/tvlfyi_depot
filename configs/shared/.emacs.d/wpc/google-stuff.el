@@ -28,10 +28,10 @@
 
 (require 'f)
 (require 'ivy-helpers)
-(require 'evil-leader)
 (require 'maybe)
 (require 'device)
 (require 'macros)
+(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -204,9 +204,12 @@ When on a corporate laptop, remote connections are made using Tramp."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when google-stuff/install-kbds?
-  (evil-leader/set-key "Gs" #'fig-status)
-  (evil-leader/set-key "Cs" #'google-stuff/open-buffer-in-cs)
-  (evil-leader/set-key "jc" #'google-stuff/jump-to-citc-alias))
+  (general-define-key
+   :prefix "<SPC>"
+   :states '(normal)
+   "Gs" #'fig-status
+   "Cs" #'google-stuff/open-buffer-in-cs
+   "jc" #'google-stuff/jump-to-citc-alias))
 
 (provide 'google-stuff)
 ;;; google-stuff.el ends here

@@ -93,16 +93,20 @@ Otherwise, open with `counsel-find-file'."
                            bookmark/open))))
 
 (when bookmark/install-kbds?
-  (evil-leader/set-key
-    "jj" #'bookmark/ivy-open)
+  (general-define-key
+   :prefix "<SPC>"
+   :states '(normal)
+   "jj" #'bookmark/ivy-open)
   (->> bookmark/whitelist
        (list/map
         (lambda (b)
-          (evil-leader/set-key
-            (string/concat "j" (bookmark-kbd b))
-            ;; TODO: Consider `cl-labels' so `which-key' minibuffer is more
-            ;; helpful.
-            (lambda () (interactive) (bookmark/open b)))))))
+          (general-define-key
+           :prefix "<SPC>"
+           :states '(normal)
+           (string/concat "j" (bookmark-kbd b))
+           ;; TODO: Consider `cl-labels' so `which-key' minibuffer is more
+           ;; helpful.
+           (lambda () (interactive) (bookmark/open b)))))))
 
 (provide 'bookmark)
 ;;; bookmark.el ends here
