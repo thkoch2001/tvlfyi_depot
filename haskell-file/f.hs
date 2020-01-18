@@ -1,7 +1,14 @@
 module F
   ( join
+  , split
   ) where
 
+--------------------------------------------------------------------------------
+-- Dependencies
+--------------------------------------------------------------------------------
+
+import Data.List (span)
+import System.FilePath (FilePath, pathSeparator)
 import System.FilePath.Posix (FilePath)
 import qualified System.FilePath.Posix as F
 
@@ -24,6 +31,16 @@ simpleAssert x y =
 
 join :: [FilePath] -> FilePath
 join = F.joinPath
+
+-- | Split path and return  list containing parts.
+split :: FilePath -> [String]
+split = splitJoin . span (/= pathSeparator)
+  where
+    splitJoin :: (String, String) -> [String]
+    splitJoin ([], []) = []
+    splitJoin (a, []) = [a]
+    splitJoin (a, [_]) = [a]
+    splitJoin (a, _:b) = a : split b
 
 --------------------------------------------------------------------------------
 -- Tests
