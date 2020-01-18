@@ -49,11 +49,5 @@
   (find-file
    (f-join "~/dotfiles/configs/shared/.emacs.d" name)))
 
-(when dotfiles/install-kbds?
-  (evil-leader/set-key "J" #'dotfiles/edit)
-  (evil-leader/set-key "c" (lambda ()
-                             (interactive)
-                             (counsel-find-file "~/.config"))))
-
 (provide 'dotfiles)
 ;;; dotfiles.el ends here
