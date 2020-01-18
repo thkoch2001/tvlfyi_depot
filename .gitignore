@@ -18,3 +18,4 @@ Vundle.vim
 **/*/.emacs.d/projectile-bookmarks.eld
 **/*/.emacs.d/bookmarks
 __pycache__/
+**/*/transient/history.el
