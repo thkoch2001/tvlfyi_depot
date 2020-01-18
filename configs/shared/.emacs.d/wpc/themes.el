@@ -78,6 +78,13 @@
           :font "Operator Mono Light"
           :wallpaper "geometric_dark_4k.jpg"
           :colorscheme 'doom-vibrant))
+        ;; TODO: Support setting backgrounds as solid colors.
+        (dotted/new
+         "Gruvbox"
+         (make-theme
+          :font "JetBrainsMono"
+          :wallpaper "geometric_dark_4k.jpg"
+          :colorscheme 'doom-gruvbox))
         (dotted/new
          "Solarized Light"
          (make-theme
