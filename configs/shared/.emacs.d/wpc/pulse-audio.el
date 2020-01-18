@@ -20,9 +20,6 @@
 (defconst pulse-audio/step-size 5
   "The size by which to increase or decrease the volume.")
 
-(defconst pulse-audio/install-kbds? t
-  "When t, install keybindings defined herein.")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -64,16 +61,6 @@
    :command (string/format "pactl set-sink-volume @DEFAULT_SINK@ +%s%%"
                            pulse-audio/step-size))
   (pulse-audio/message "Volume increased."))
-
-(when pulse-audio/install-kbds?
-  (exwm-input-set-key
-   (kbd "<XF86AudioMute>") #'pulse-audio/toggle-mute)
-  (exwm-input-set-key
-   (kbd "<XF86AudioLowerVolume>") #'pulse-audio/decrease-volume)
-  (exwm-input-set-key
-   (kbd "<XF86AudioRaiseVolume>") #'pulse-audio/increase-volume)
-  (exwm-input-set-key
-   (kbd "<XF86AudioMicMute>") #'pulse-audio/toggle-microphone))
 
 (provide 'pulse-audio)
 ;;; pulse-audio.el ends here
