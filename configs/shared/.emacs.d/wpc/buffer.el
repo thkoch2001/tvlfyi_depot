@@ -164,17 +164,17 @@ This function ignores Emacs-generated buffers, i.e. the ones that look like
     (prelude/assert (maybe/some? candidate))
     (switch-to-buffer candidate)))
 
-;; TODO: Replace `evil-leader/set-key' with `general-def'.
 (when buffer/install-kbds?
   (general-define-key
    :states '(normal)
    "C-f" #'buffer/cycle-next
    "C-b" #'buffer/cycle-prev)
-  (evil-leader/set-key
-    "b" #'buffer/ivy-source-code
-    "<SPC>" #'buffer/show-previous)
-  (evil-leader/set-key
-    "k" #'kill-buffer))
+  (general-define-key
+   :prefix "<SPC>"
+   :states '(normal)
+   "b" #'buffer/ivy-source-code
+   "<SPC>" #'buffer/show-previous
+   "k" #'kill-buffer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
