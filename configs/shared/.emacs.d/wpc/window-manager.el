@@ -635,7 +635,5 @@ Currently using super- as the prefix for switching workspaces."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (exwm/switch "Dotfiles"))))
 
-
-
 (provide 'window-manager)
 ;;; window-manager.el ends here
