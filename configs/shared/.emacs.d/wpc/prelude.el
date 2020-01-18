@@ -116,13 +116,14 @@ difficult to troubleshoot bugs in your init files."
   "Read input from user with PROMPT."
   (read-string prompt))
 
-;; TODO: Fix the bug with tokenizing here, since it will split any whitespace
-;; character, (even though it shouldn't in the case of quoted string in shell).
-;; e.g. - "xmodmap -e 'one two three'" => '("xmodmap" "-e" "'one two three'")
 (cl-defun prelude/start-process (&key name command)
   "Pass command string, COMMAND, and the function name, NAME.
 This is a wrapper around `start-process' that has an API that resembles
 `shell-command'."
+  ;; TODO: Fix the bug with tokenizing here, since it will split any whitespace
+  ;; character, even though it shouldn't in the case of quoted string in shell.
+  ;; e.g. - "xmodmap -e 'one two three'" => '("xmodmap" "-e" "'one two three'")
+  (prelude/refute (string/contains? "'" command))
   (let* ((tokens (string/split " " command))
          (program-name (list/head tokens))
          (program-args (list/tail tokens)))

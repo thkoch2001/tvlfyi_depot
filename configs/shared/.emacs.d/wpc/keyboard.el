@@ -65,6 +65,8 @@
 (defun keyboard/swap-caps-lock-and-escape ()
   "Swaps the caps lock and escape keys using xmodmap."
   (interactive)
+  ;; TODO: Ensure these work once the tokenizing in prelude/start-process works
+  ;; as expected.
   (prelude/start-process
    :name "keyboard/swap-caps-lock-and-escape"
    :command "xmodmap -e 'remove Lock = Caps_Lock'")
