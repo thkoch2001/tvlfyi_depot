@@ -67,12 +67,10 @@
   (interactive)
   ;; TODO: Ensure these work once the tokenizing in prelude/start-process works
   ;; as expected.
-  (prelude/start-process
-   :name "keyboard/swap-caps-lock-and-escape"
-   :command "xmodmap -e 'remove Lock = Caps_Lock'")
-  (prelude/start-process
-   :name "keyboard/swap-caps-lock-and-escape"
-   :command "xmodmap -e 'keysym Caps_Lock = Escape'"))
+  (start-process "keyboard/swap-caps-lock-and-escape" nil "/usr/bin/xmodmap" "-e"
+                 "remove Lock = Caps_Lock")
+  (start-process "keyboard/swap-caps-lock-and-escape" nil "/usr/bin/xmodmap" "-e"
+                 "keysym Caps_Lock = Escape"))
 
 (defun keyboard/inc-repeat-rate ()
   "Increment `keyboard/repeat-rate'."
