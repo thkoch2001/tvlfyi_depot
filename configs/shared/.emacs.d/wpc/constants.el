@@ -10,7 +10,7 @@
 ;; current consumers of these constants, and I'm unsure if the indirection that
 ;; globally defined constants introduces is worth it.
 
-(defconst constants/current-project "~/Dropbox/ide/src"
+(defconst constants/current-project "~/mono"
   "Variable holding the directory for my currently active project.")
 
 (defconst constants/mouse-kbds
