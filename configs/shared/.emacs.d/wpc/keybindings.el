@@ -26,10 +26,10 @@
 (keybinding/exwm "<XF86MonBrightnessUp>" #'screen-brightness/increase)
 (keybinding/exwm "<XF86MonBrightnessDown>" #'screen-brightness/decrease)
 
-(keybindings/exwm "<XF86AudioMute>" #'pulse-audio/toggle-mute)
-(keybindings/exwm "<XF86AudioLowerVolume>" #'pulse-audio/decrease-volume)
-(keybindings/exwm "<XF86AudioRaiseVolume>" #'pulse-audio/increase-volume)
-(keybindings/exwm "<XF86AudioMicMute>" #'pulse-audio/toggle-microphone)
+(keybinding/exwm "<XF86AudioMute>" #'pulse-audio/toggle-mute)
+(keybinding/exwm "<XF86AudioLowerVolume>" #'pulse-audio/decrease-volume)
+(keybinding/exwm "<XF86AudioRaiseVolume>" #'pulse-audio/increase-volume)
+(keybinding/exwm "<XF86AudioMicMute>" #'pulse-audio/toggle-microphone)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here
