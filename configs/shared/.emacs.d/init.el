@@ -28,6 +28,8 @@
 ;; TODO: Consider renaming entr.el.
 (require 'entr)
 
+;; TODO: Reconcile kbd.el, keybindings.el, wpc-keybindings.el, keyboard.el.
+(require 'keybindings)
 (require 'wpc-keybindings)
 (require 'window-manager)
 (require 'wpc-ui)
