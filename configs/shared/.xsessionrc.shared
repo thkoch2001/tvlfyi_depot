@@ -25,6 +25,4 @@ compton &
 unclutter &
 
 # Startup Emacs (and EXWM).
-# TODO: Do I even want `--exit-with-session`? This makes debugging Emacs more
-# expensive than perhaps it should be.
-exec dbus-launch --exit-with-session emacs
+exec dbus-launch --exit-with-session emacs --debug-init
