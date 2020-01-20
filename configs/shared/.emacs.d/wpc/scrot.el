@@ -60,7 +60,5 @@ The output path is copied to the user's clipboard."
     (scrot/call "--select" screenshot-path)
     (scrot/copy-image screenshot-path)))
 
-(exwm-input-set-key (kbd/raw 'x11 "s") #'scrot/select)
-
 (provide 'scrot)
 ;;; scrot.el ends here

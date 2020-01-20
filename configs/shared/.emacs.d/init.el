@@ -27,6 +27,7 @@
 (require 'email)
 ;; TODO: Consider renaming entr.el.
 (require 'entr)
+(require 'scrot)
 
 ;; TODO: Reconcile kbd.el, keybindings.el, wpc-keybindings.el, keyboard.el.
 (require 'keybindings)

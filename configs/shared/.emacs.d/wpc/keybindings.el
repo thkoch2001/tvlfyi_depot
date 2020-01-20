@@ -13,6 +13,7 @@
 (require 'clipboard)
 (require 'screen-brightness)
 (require 'chrome)
+(require 'scrot)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -33,6 +34,8 @@
 (keybinding/exwm "<XF86AudioMicMute>" #'pulse-audio/toggle-microphone)
 
 (keybinding/exwm "C-M-c" #'chrome/browse)
+
+(keybinding/exwm (kbd/raw 'x11 "s") #'scrot/select)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here
