@@ -96,6 +96,7 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; TODO: Support a variadic version of this to easily construct alists.
 (defun alist/new ()
   "Return a new, empty alist."
   '())
