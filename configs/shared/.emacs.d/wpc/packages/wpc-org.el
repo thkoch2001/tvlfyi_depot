@@ -10,33 +10,30 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'prelude)
 (require 'f)
-(require 'maybe)
-
-(prelude/assert (and (maybe/some? (getenv "ORG_DIRECTORY"))
-                     (f-exists? (getenv "ORG_DIRECTORY"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setq org-directory "~/Dropbox/org")
+
 ;; TODO: figure out how to nest this in (use-package org ...)
 (setq org-capture-templates
       `(("w" "work" entry (file+headline
-                           ,(f-join (getenv "ORG_DIRECTORY") "work.org")
+                           ,(f-join org-directory "work.org")
                            "Tasks")
          "* TODO %?")
         ("p" "personal" entry (file+headline
-                               ,(f-join (getenv "ORG_DIRECTORY") "personal.org")
+                               ,(f-join org-directory "personal.org")
                                "Tasks")
          "* TODO %? ")
         ("i" "ideas" entry (file+headline
-                            ,(f-join (getenv "ORG_DIRECTORY") "ideas.org")
+                            ,(f-join org-directory "ideas.org")
                             "Tasks")
          "* %? ")
         ("s" "shopping list" entry (file+headline
-                            ,(f-join (getenv "ORG_DIRECTORY") "shopping.org")
+                            ,(f-join org-directory "shopping.org")
                             "Items")
          "* TODO %? ")))
 
@@ -55,9 +52,9 @@
   (setq org-startup-folded nil)
   (setq org-todo-keywords
         '((sequence "TODO" "BLOCKED" "DONE")))
-  (setq org-default-notes-file (f-join (getenv "ORG_DIRECTORY") "notes.org"))
-  (setq org-agenda-files (list (f-join (getenv "ORG_DIRECTORY") "work.org")
-                               (f-join (getenv "ORG_DIRECTORY") "personal.org")))
+  (setq org-default-notes-file (f-join org-directory "notes.org"))
+  (setq org-agenda-files (list (f-join org-directory "work.org")
+                               (f-join org-directory "personal.org")))
   ;; TODO: troubleshoot why `wpc/kbds-minor-mode', `wpc/ensure-kbds' aren't
   ;; enough to override the following KBDs. See this discussion for more context
   ;; on where the idea came from:

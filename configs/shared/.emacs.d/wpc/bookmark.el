@@ -47,7 +47,6 @@ Otherwise, open with `counsel-find-file'."
 
 (defconst bookmark/whitelist
   (list
-   ;; TODO: Consider using (getenv "ORG_DIRECTORY")
    (make-bookmark :label "org"
                   :path "~/Dropbox/org"
                   :kbd "o")
