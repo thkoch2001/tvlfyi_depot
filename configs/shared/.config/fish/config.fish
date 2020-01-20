@@ -88,8 +88,7 @@ abbr --add p xclip -selection clipboard -o
 abbr --add cp cp_dwim
 abbr --add lorem echo "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
-# TODO: Ensure this works as expect with current EXWM setup.
-abbr --add e emacsclient --no-wait --create-frame
+abbr --add e emacsclient
 
 abbr --add cat bat --theme=TwoDark
 # TODO: Support this once `fasd` works.
@@ -282,9 +281,6 @@ abbr --add el e ~/variables.zsh
 abbr --add ex e ~/.Xresources
 abbr --add em e ~/.tmux.conf
 abbr --add er e ~/Dropbox/dotfiles/README.md
-# TODO: consider DRYing this up with `e`. Unfortunately, `sudo` won't support
-# aliases.
-abbr --add en sudo ALTERNATE_EDITOR=nvim emacsclient --no-wait --create-frame /etc/nixos/configuration.nix
 
 # Couple the s* aliases to the <leader>s* kbds in vim.
 abbr --add sz source ~/.zshrc

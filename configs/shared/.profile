@@ -22,7 +22,7 @@ fi
 export BROWSER=google-chrome-stable
 export TERMINAL=alacritty # temporary; change this back to `st`
 export VISUAL=emacsclient
-export EDITOR=$VISUAL
+export EDITOR=emacsclient
 export ALTERNATE_EDITOR=nvim
 
 # Rust integration. Keep here so programs like Emacs can read this value.
