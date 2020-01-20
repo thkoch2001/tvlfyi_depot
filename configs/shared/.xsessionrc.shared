@@ -24,5 +24,8 @@ compton &
 # `unclutter` hide the cursor in when it is inactive
 unclutter &
 
+# Control X's pointer with the keyboard. Activate by pressing <C-;>
+keynav &
+
 # Startup Emacs (and EXWM).
 exec dbus-launch --exit-with-session emacs --debug-init
