@@ -598,7 +598,9 @@ Currently using super- as the prefix for switching workspaces."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
        (exwm/switch "Todos")
-       (org-helpers/find-file "today.org"))
+       (org-helpers/find-file "today-expected.org")
+       (wpc/evil-window-vsplit-right)
+       (org-helpers/find-file "today-actual.org"))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Dotfiles
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
