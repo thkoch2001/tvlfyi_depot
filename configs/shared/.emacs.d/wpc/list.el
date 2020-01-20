@@ -124,6 +124,28 @@
   "Return over `XS' calling `F' on an element in `XS'and `ACC'."
   (-reduce-from (lambda (acc x) (funcall f x acc)) acc xs))
 
+;; TODO: Support this. It seems like `alist/set' is not working as I expected it
+;; to. Perhaps we should add some tests to confirm the expected behavior.
+;; (cl-defun list/index (f xs &key (transform (lambda (x) x)))
+;;   "Return a mapping of F applied to each x in XS to TRANSFORM applied to x.
+;; The TRANSFORM function defaults to the identity function."
+;;   (->> xs
+;;        (list/reduce (alist/new)
+;;                     (lambda (x acc)
+;;                       (let ((k (funcall f x))
+;;                             (v (funcall transform x)))
+;;                         (if (alist/has-key? k acc)
+;;                             (setf (alist-get k acc) (list v))
+;;                           (setf (alist-get k acc) (list v))))))))
+;; (prelude/assert
+;;  (equal '(("John" . ("Cleese" "Malkovich"))
+;;           ("Thomas" . ("Aquinas")))
+;;         (list/index (lambda (x) (plist-get x :first-name))
+;;                     '((:first-name "John" :last-name "Cleese")
+;;                       (:first-name "John" :last-name "Malkovich")
+;;                       (:first-name "Thomas" :last-name "Aquinas"))
+;;                     :transform (lambda (x) (plist-get x :last-name)))))
+
 (defun list/map (f xs)
   "Call `F' on each element of `XS'."
   (-map f xs))
