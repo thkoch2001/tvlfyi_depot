@@ -76,7 +76,7 @@
                   (cycle/next fonts/whitelist)
                 (cycle/prev fonts/whitelist))))
     (message (s-concat "Active font: " font))
-    (fonts/set (fonts/fontify font))))
+    (fonts/set font)))
 
 (defun fonts/next ()
   "Quickly cycle through preferred fonts."
