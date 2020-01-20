@@ -5,11 +5,16 @@
 ;; This module hosts my Evil preferences
 ;;
 ;; Wish List:
-;; - drop support for `evil-leader' library in favor of `general.el'
 ;; - restore support for concise (n <kbd> <function>) instead of `general-mmap'
 ;; - restore support for `general-unbind'
 
 ;;; Code:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Packages
@@ -86,51 +91,46 @@
 ;; kbds for magit is with `evil-magit'.
 (use-package evil-magit)
 
-;; expose a leader key
-(use-package evil-leader
-  :after (evil)
-  :config
-  (global-evil-leader-mode 1)
-  (evil-leader/set-leader "<SPC>")
-  (evil-leader/set-key
-    "i"   #'counsel-semantic-or-imenu
-    "I"   #'ibuffer
-    "hk"  #'helpful-callable
-    "hf"  #'helpful-function
-    "hm"  #'helpful-macro
-    "hc"  #'helpful-command
-    "hk"  #'helpful-key
-    "hv"  #'helpful-variable
-    "hp"  #'helpful-at-point
-    "s"   #'flyspell-mode
-    "S"   #'sort-lines
-    "a"   #'wpc-terminal/toggle
-    "="   #'align
-    "p"   #'flycheck-previous-error
-    "f"   #'wpc/find-file
-    "n"   #'flycheck-next-error
-    "N"   #'smerge-next
-    "W"   #'balance-windows
-    "gs"  #'magit-status
-    "E"   #'refine
-
-    "es" #'wpc/create-snippet
-    ;; TODO: Replace with `macros/ilambda' when that is working again.
-    "ev" (lambda () (interactive) (wpc/find-file-split "~/.config/nvim/init.vim"))
-    "ee" (lambda () (interactive) (wpc/find-file-split "~/.emacs.d/init.el"))
-    "ez" (lambda () (interactive) (wpc/find-file-split "~/.zshrc"))
-    "ea" (lambda () (interactive) (wpc/find-file-split "~/aliases.zsh"))
-    "ef" (lambda () (interactive) (wpc/find-file-split "~/functions.zsh"))
-    "el" (lambda () (interactive) (wpc/find-file-split "~/variables.zsh"))
-    "ex" (lambda () (interactive) (wpc/find-file-split "~/.Xresources"))
-    "em" (lambda () (interactive) (wpc/find-file-split "~/.tmux.conf"))
-
-    "l"  #'locate
-    "L"  #'list-packages
-    "B"  #'magit-blame
-    "w"  #'save-buffer
-    "r"  #'wpc/evil-replace-under-point
-    "R"  #'deadgrep))
+;; TODO: Consider moving this to another module.
+(general-define-key
+ :prefix "<SPC>"
+ :states '(normal)
+ "i" #'counsel-semantic-or-imenu
+ "I" #'ibuffer
+ "hk" #'helpful-callable
+ "hf" #'helpful-function
+ "hm" #'helpful-macro
+ "hc" #'helpful-command
+ "hk" #'helpful-key
+ "hv" #'helpful-variable
+ "hp" #'helpful-at-point
+ "s" #'flyspell-mode
+ "S" #'sort-lines
+ "a" #'wpc-terminal/toggle
+ "=" #'align
+ "p" #'flycheck-previous-error
+ "f" #'wpc/find-file
+ "n" #'flycheck-next-error
+ "N" #'smerge-next
+ "W" #'balance-windows
+ "gs" #'magit-status
+ "E" #'refine
+ "es" #'wpc/create-snippet
+ ;; TODO: Replace with `macros/ilambda' when that is working again.
+ "ev" (lambda () (interactive) (wpc/find-file-split "~/.config/nvim/init.vim"))
+ "ee" (lambda () (interactive) (wpc/find-file-split "~/.emacs.d/init.el"))
+ "ez" (lambda () (interactive) (wpc/find-file-split "~/.zshrc"))
+ "ea" (lambda () (interactive) (wpc/find-file-split "~/aliases.zsh"))
+ "ef" (lambda () (interactive) (wpc/find-file-split "~/functions.zsh"))
+ "el" (lambda () (interactive) (wpc/find-file-split "~/variables.zsh"))
+ "ex" (lambda () (interactive) (wpc/find-file-split "~/.Xresources"))
+ "em" (lambda () (interactive) (wpc/find-file-split "~/.tmux.conf"))
+ "l" #'locate
+ "L" #'list-packages
+ "B" #'magit-blame
+ "w" #'save-buffer
+ "r" #'wpc/evil-replace-under-point
+ "R" #'deadgrep)
 
 ;; create comments easily
 (use-package evil-commentary

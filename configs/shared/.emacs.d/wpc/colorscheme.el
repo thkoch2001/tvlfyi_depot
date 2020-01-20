@@ -15,6 +15,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'cycle)
+(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
@@ -84,11 +85,12 @@ Cycle prev otherwise."
   (colorscheme/cycle :forward? nil))
 
 ;; Keybindings
-;; TODO: Prefer minor mode definition with a custom keymap.
 (when colorscheme/install-kbds?
-  (evil-leader/set-key
-    "Ft" #'colorscheme/next
-    "Pt" #'colorscheme/prev))
+  (general-define-key
+   :prefix "<SPC>"
+   :states '(normal)
+   "Ft" #'colorscheme/next
+   "Pt" #'colorscheme/prev))
 
 (provide 'colorscheme)
 ;;; colorscheme.el ends here

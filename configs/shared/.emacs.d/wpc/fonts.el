@@ -18,6 +18,7 @@
 (require 'cycle)
 (require 'device)
 (require 'maybe)
+(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
@@ -138,9 +139,11 @@ The size of the font is determined by `fonts/size'."
 
 (when fonts/keybindings?
   (progn
-    (evil-leader/set-key
-      "Ff" #'fonts/next
-      "Pf" #'fonts/prev)
+    (general-define-key
+     :prefix "<SPC>"
+     :states '(normal)
+     "Ff" #'fonts/next
+     "Pf" #'fonts/prev)
     (general-define-key "s-9" #'fonts/ivy-select)
     (general-define-key "s-0" #'fonts/reset-size)
     (general-define-key "s-j" #'fonts/decrease-size)

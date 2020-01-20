@@ -6,9 +6,18 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'macros)
 (require 'alist)
 (require 'list)
+(require 'general)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Library
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar chrome/install-kbds? t
   "If t, install keybinding.")
@@ -68,11 +77,6 @@ Will open without toolbars if APP-MODE? is t."
    chrome/label->url
    :action (lambda (entry)
              (chrome/open-url (cdr entry)))))
-
-(when chrome/install-kbds?
-  (evil-leader/set-key
-    "cb" #'chrome/browse
-    "cs" #'chrome/open-splash-pages))
 
 (provide 'chrome)
 ;;; chrome.el ends here

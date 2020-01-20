@@ -289,9 +289,5 @@
   (todo/export-to-org todo/today)
   (alert (string/concat  "Exported today's TODOs to: " todo/org-file-path)))
 
-(when todo/install-kbds?
-  (evil-leader/set-key
-    "to" #'todo/orgify-today))
-
 (provide 'todo)
 ;;; todo.el ends here

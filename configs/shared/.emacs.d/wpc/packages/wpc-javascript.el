@@ -11,6 +11,10 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Constants
 (defconst wpc/js-hooks
   '(js-mode-hook web-mode-hook typescript-mode-hook js2-mode-hook rjsx-mode-hook)
@@ -25,11 +29,6 @@
 (setq typescript-indent-level 2
       js-indent-level 2
       css-indent-offset 2)
-
-;; ;; javascript
-;; (evil-leader/set-key-for-mode 'rjsx-mode "t" #'wpc/toggle-between-js-test-and-module)
-;; (evil-leader/set-key-for-mode 'rjsx-mode "x" #'wpc/toggle-between-js-component-and-store)
-;; (evil-leader/set-key-for-mode 'rjsx-mode "u" #'wpc/jump-to-parent-file)
 
 ;; Flow for Javascript
 (use-package add-node-modules-path

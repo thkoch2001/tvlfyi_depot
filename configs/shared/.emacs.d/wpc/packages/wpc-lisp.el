@@ -8,6 +8,16 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'general)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defconst wpc/lisp-mode-hooks
   '(lisp-mode-hook
     emacs-lisp-mode-hook
@@ -92,24 +102,12 @@
   :config
   (general-add-hook 'emacs-lisp-mode #'ielm-mode))
 
-;; TODO: Should I be using `general-define-key' or `evil-leader/set-key'?  My
-;; gut say `general-define-key'.
 (general-define-key
  :keymaps 'emacs-lisp-mode-map
- :states 'normal
  :prefix "<SPC>"
- "x" #'eval-defun)
-
-(general-define-key
- :keymaps 'emacs-lisp-mode-map
  :states 'normal
- :prefix "<SPC>"
- "X" #'eval-buffer)
-
-(general-define-key
- :keymaps 'emacs-lisp-mode-map
- :states 'normal
- :prefix "<SPC>"
+ "x" #'eval-defun
+ "X" #'eval-buffer
  "d" (lambda ()
        (interactive)
        (with-current-buffer (current-buffer)

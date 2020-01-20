@@ -29,7 +29,6 @@ let
       evil
       evil-collection
       evil-magit
-      evil-leader
       evil-commentary
       evil-surround
       key-chord

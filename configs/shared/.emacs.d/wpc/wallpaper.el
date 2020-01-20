@@ -14,6 +14,7 @@
 (require 'fs)
 (require 'cycle)
 (require 'string)
+(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -81,9 +82,11 @@
 ;; constants, etc. with the filename like `wallpaper'.
 
 (when wallpaper/keybindings?
-  (evil-leader/set-key
-    "Fw" #'wallpaper/next
-    "Pw" #'wallpaper/prev))
+  (general-define-key
+   :prefix "<SPC>"
+   :states '(normal)
+   "Fw" #'wallpaper/next
+   "Pw" #'wallpaper/prev))
 
 (provide 'wallpaper)
 ;;; wallpaper.el ends here
