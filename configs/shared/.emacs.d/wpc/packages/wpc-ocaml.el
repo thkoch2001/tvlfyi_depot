@@ -22,17 +22,10 @@
 (prelude/assert
  (prelude/executable-exists? "opam"))
 
-(defvar opam-installs "~/.opam/4.08.0/share/emacs/site-lisp"
-  "Path to the Ocaml PAckage Manager installations.")
-
 (defvar opam-user-setup "~/.emacs.d/opam-user-setup.el"
   "File for the OPAM Emacs integration.")
 
-(prelude/assert
- (f-file? opam-user-setup))
-
-(prelude/assert
- (f-dir? opam-installs))
+(prelude/assert (f-file? opam-user-setup))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -45,7 +38,6 @@
 ;; ocamlformat
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 (require 'ocamlformat)
-(add-to-list 'load-path opam-installs)
 
 (provide 'wpc-ocaml)
 ;;; wpc-ocaml.el ends here
