@@ -47,9 +47,15 @@ Otherwise, open with `counsel-find-file'."
 
 (defconst bookmark/whitelist
   (list
+   (make-bookmark :label "tazjins-depot"
+                  :path "~/Dropbox/programming/tazjins-depot/"
+                  :kbd "t")
    (make-bookmark :label "org"
                   :path "~/Dropbox/org"
                   :kbd "o")
+   (make-bookmark :label "mono"
+                  :path "~/mono"
+                  :kbd "m")
    (make-bookmark :label "dotfiles"
                   :path "~/dotfiles"
                   :kbd "d")
