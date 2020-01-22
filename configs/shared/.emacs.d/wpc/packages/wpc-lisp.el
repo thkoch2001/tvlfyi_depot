@@ -36,16 +36,8 @@
    :keymaps 'racket-mode-map
    :states 'normal
    :prefix "<SPC>"
-   "x" #'racket-send-definition)
-  (general-define-key
-   :keymaps 'racket-mode-map
-   :states 'normal
-   :prefix "<SPC>"
-   "X" #'racket-run)
-  (general-define-key
-   :keymaps 'racket-mode-map
-   :states 'normal
-   :prefix "<SPC>"
+   "x" #'racket-send-definition
+   "X" #'racket-run
    "d" #'racket-describe)
   (setq racket-program "~/.nix-profile/bin/racket"))
 
