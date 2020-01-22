@@ -23,11 +23,15 @@
 
 (cl-defstruct bookmark label path kbd)
 
+(defconst bookmark/install-kbds? t
+  "When t, install keybindings.")
+
 ;; TODO: Consider hosting this function somewhere other than here, since it
 ;; feels useful above of the context of bookmarks.
 ;; TODO: Assess whether it'd be better to use the existing function:
 ;; `counsel-projectile-switch-project-action'.  See the noise I made on GH for
 ;; more context: https://github.com/ericdanan/counsel-projectile/issues/137
+
 (defun bookmark/handle-directory-dwim (path)
   "Open PATH as either a project directory or a regular directory.
 If PATH is `projectile-project-p', open with `counsel-projectile-find-file'.
@@ -64,8 +68,6 @@ Otherwise, open with `counsel-find-file'."
                   :kbd "p"))
   "List of registered bookmarks.")
 
-(defconst bookmark/install-kbds? t
-  "When t, install keybindings.")
 
 ;; TODO: Consider `ivy-read' extension that takes a list of structs,
 ;; `struct-to-label' and `label-struct' functions.
