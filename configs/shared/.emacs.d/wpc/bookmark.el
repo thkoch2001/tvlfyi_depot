@@ -68,6 +68,11 @@ Otherwise, open with `counsel-find-file'."
                   :kbd "p"))
   "List of registered bookmarks.")
 
+(defun bookmark/from-label (label)
+  "Return the bookmark with LABEL or nil."
+  (->> bookmark/whitelist
+       (list/find (lambda (b) (equal label (bookmark-label b))))))
+
 
 ;; TODO: Consider `ivy-read' extension that takes a list of structs,
 ;; `struct-to-label' and `label-struct' functions.
@@ -93,11 +98,7 @@ Otherwise, open with `counsel-find-file'."
                  (list/map #'bookmark-label))
             :require-match t
             :action (lambda (label)
-                      (->> bookmark/whitelist
-                           (list/find
-                            (lambda (b)
-                              (equal label (bookmark-label b))))
-                           bookmark/open))))
+                      (bookmark/open (bookmark/from-label label)))))
 
 (when bookmark/install-kbds?
   (general-define-key
