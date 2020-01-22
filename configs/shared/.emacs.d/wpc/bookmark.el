@@ -73,6 +73,17 @@ Otherwise, open with `counsel-find-file'."
   (->> bookmark/whitelist
        (list/find (lambda (b) (equal label (bookmark-label b))))))
 
+(defun bookmark/magit-status ()
+  "Use ivy to select a bookmark and jump to its `magit-status' buffer."
+  (interactive)
+  (ivy-read "Repository: "
+            '("dotfiles" "mono" "tazjins-depot")
+            :require-match t
+            :action (lambda (label)
+                      (->> label
+                           bookmark/from-label
+                           bookmark-path
+                           magit-status))))
 
 ;; TODO: Consider `ivy-read' extension that takes a list of structs,
 ;; `struct-to-label' and `label-struct' functions.
@@ -114,7 +125,11 @@ Otherwise, open with `counsel-find-file'."
            (string/concat "j" (bookmark-kbd b))
            ;; TODO: Consider `cl-labels' so `which-key' minibuffer is more
            ;; helpful.
-           (lambda () (interactive) (bookmark/open b)))))))
+           (lambda () (interactive) (bookmark/open b))))))
+  (general-define-key
+   :states '(normal)
+   :prefix "<SPC>"
+   "gS" #'bookmark/magit-status))
 
 (provide 'bookmark)
 ;;; bookmark.el ends here
