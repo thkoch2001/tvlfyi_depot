@@ -58,8 +58,6 @@
     '(c-w
       operators
       text-objects
-      ;; Disabling this because I don't enjoy the way it moves around comments.
-      ;; atom-motions
       prettify
       commentary
       slurp/barf-cp
@@ -73,7 +71,6 @@
   (general-add-hook wpc/lisp-mode-hooks #'lispyville-mode)
   (lispyville-set-key-theme lispyville-key-themes)
   (progn
-    ;;
     (general-define-key
      :keymaps 'lispyville-mode-map
      :states 'motion
@@ -87,18 +84,10 @@
      "M-j" nil
      "M-k" nil
      ;; second rebind
-     ;; TODO: Rebind to something that doesn't conflict with window resizing.
      "C-s-h" #'lispyville-drag-backward
      "C-s-l" #'lispyville-drag-forward
      "C-s-e" #'lispyville-end-of-defun
      "C-s-a" #'lispyville-beginning-of-defun)))
-
-;; deletes all bindings of f->kbd
-;; binds kbd->
-;; (kbd/bind-function->key
-;;  :keymap 'lispyville-mode-map
-;;  :states 'motion
-;;  #'lispyville-drag-backward "H")
 
 ;; Elisp
 (use-package elisp-slime-nav
