@@ -85,6 +85,8 @@
   (setq magit-display-buffer-function
         #'magit-display-buffer-fullframe-status-v1))
 
+(use-package magit-popup)
+
 ;; http
 (use-package request)
 
