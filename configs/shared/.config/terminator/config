@@ -6,7 +6,7 @@
     background_color = "#fcf4dc"
     cursor_shape = ibeam
     cursor_color = "#536870"
-    font = Input Mono Medium 12
+    font = JetBrainsMono 9
     foreground_color = "#536870"
     show_titlebar = False
     scrollbar_position = hidden
