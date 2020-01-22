@@ -26,6 +26,17 @@
     racket-mode-hook)
   "List of LISP modes.")
 
+(use-package sly
+  :config
+  (setq inferior-lisp-program "sbcl")
+  (general-define-key
+   :keymaps 'sly-mode-map
+   :states '(normal)
+   :prefix "<SPC>"
+   "x" #'sly-eval-defun
+   "X" #'sly-eval-buffer
+   "d" #'sly-describe-symbol))
+
 (use-package rainbow-delimiters
   :config
   (general-add-hook wpc/lisp-mode-hooks #'rainbow-delimiters-mode))
