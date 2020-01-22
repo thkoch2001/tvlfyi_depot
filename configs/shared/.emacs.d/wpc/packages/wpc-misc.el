@@ -50,6 +50,10 @@
 ;; Emacs library that interfaces with my Linux password manager.
 (use-package password-store)
 
+;; Use en Emacs buffer as a REST client.
+;; For more information: http://emacsrocks.com/e15.html
+(use-package restclient)
+
 ;; Run `package-lint' before publishing to MELPA.
 (use-package package-lint)
 
