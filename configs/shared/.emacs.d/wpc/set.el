@@ -97,6 +97,16 @@
   "Return t if sets A and B have no shared members."
   (set/empty? (set/intersection a b)))
 
+(defun set/superset? (a b)
+  "Return t if set A contains all of the members of set B."
+  (->> b
+       set/to-list
+       (list/all? (lambda (x) (set/contains? x a)))))
+
+(defun set/subset? (a b)
+  "Return t if each member of set A is present in set B."
+  (set/superset? b a))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -132,6 +142,24 @@
                          (->> '(1 1 2 2 3 3)
                               set/from-list
                               set/to-list)))
+  (let ((primary-colors (set/new "red" "green" "blue")))
+    ;; set/subset?
+    (prelude/refute
+     (set/subset? (set/new "black" "grey")
+                  primary-colors))
+    (prelude/assert
+     (set/subset? (set/new "red")
+                  primary-colors))
+    ;; set/superset?
+    (prelude/refute
+     (set/superset? primary-colors
+                    (set/new "black" "grey")))
+    (prelude/assert
+     (set/superset? primary-colors
+                    (set/new "red" "green" "blue")))
+    (prelude/assert
+     (set/superset? primary-colors
+                    (set/new "red" "blue"))))
   ;; set/empty?
   (prelude/assert (set/empty? (set/new)))
   (prelude/refute (set/empty? (set/new 1 2 3)))
