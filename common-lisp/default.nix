@@ -1,10 +1,13 @@
-{ tpkgs ? (import (builtins.fetchGit "https://git.tazj.in/") {}), ... }:
+{ depot ? import <depot> {},
+  universe ? import <universe> {},
+  ...
+}:
 
-tpkgs.nix.buildLisp.program {
+depot.nix.buildLisp.program {
   name = "unit-testing";
 
-  deps = with tpkgs.third_party.lisp; [
-    (import ./prove.nix {})
+  deps = with universe.third_party.lisp; [
+    prove
   ];
 
   srcs = [
