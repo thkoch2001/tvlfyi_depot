@@ -1,18 +1,22 @@
-{ tpkgs ? (import (builtins.fetchGit "https://git.tazj.in/") {}), ... }:
+{
+  depot ? import <depot> {},
+  universe? import <universe> {},
+  ...
+}:
 
 let
   src = builtins.fetchGit {
     url = "https://github.com/fukamachi/prove.git";
     rev = "5d71f02795b89e36f34e8c7d50e69b67ec6ca2de";
   };
-in tpkgs.nix.buildLisp.library {
+in depot.nix.buildLisp.library {
   name = "prove";
-  deps = with tpkgs.third_party.lisp; [
-    cl-ppcre
-    cl-ansi-text
-    (import ./cl-colors.nix {})
-    alexandria
-    uiop
+  deps = [
+    depot.third_party.lisp.cl-ppcre
+    depot.third_party.lisp.cl-ansi-text
+    depot.third_party.lisp.alexandria
+    depot.third_party.lisp.uiop
+    universe.third_party.lisp.cl-colors
   ];
   srcs = [
     "${src}/src/asdf.lisp"

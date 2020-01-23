@@ -1,11 +1,11 @@
-{ tpkgs ? (import (builtins.fetchGit "https://git.tazj.in/") {}), ... }:
+{ depot ? import <depot> {}, ... }:
 
 let
   src = builtins.fetchGit {
     url = "https://github.com/tokenrove/anaphora.git";
     rev = "aeace4c68cf55098a67112750b28f8f2dc6d0e30";
   };
-in tpkgs.nix.buildLisp.library {
+in depot.nix.buildLisp.library {
   name = "anaphora";
   deps = [];
   srcs = [

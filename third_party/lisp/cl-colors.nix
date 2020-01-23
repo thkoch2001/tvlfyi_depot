@@ -1,15 +1,19 @@
-{ tpkgs ? (import (builtins.fetchGit "https://git.tazj.in/") {}), ... }:
+{
+  depot ? import <depot> {},
+  universe ? import <universe> {},
+  ...
+}:
 
 let
   src = builtins.fetchGit {
     url = "https://github.com/tpapp/cl-colors.git";
     rev = "827410584553f5c717eec6182343b7605f707f75";
   };
-in tpkgs.nix.buildLisp.library {
+in depot.nix.buildLisp.library {
   name = "cl-colors";
-  deps = with tpkgs.third_party.lisp; [
-    alexandria
-    (import ./let-plus.nix {})
+  deps = [
+    depot.third_party.lisp.alexandria
+    universe.third_party.lisp.let-plus
   ];
   srcs = [
     "${src}/package.lisp"
