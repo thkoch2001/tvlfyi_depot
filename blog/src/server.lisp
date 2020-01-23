@@ -2,6 +2,7 @@
 (defpackage #:server
   (:documentation "Robot condemned to a life of admin work for my blog.")
   (:use #:cl)
+  (:import-from #:cl-arrows #:->>)
   (:export :main))
 (in-package #:server)
 
@@ -9,7 +10,9 @@
 ;; Nix-injected dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar *path-to-posts* "/tmp"
+;; TODO: Wrap this in an assert or ensure that there's a trailing slash so it's
+;; treated as a directory.
+(defvar *path-to-posts* "/tmp/"
   "File path pointing to the posts directory.")
 
 (defvar *pandoc-bin* "/usr/bin/pandoc")
@@ -21,7 +24,7 @@
 (defun render-post (path)
   "Render the markdown file stored at PATH to HTML using pandoc."
   (uiop:run-program (list *pandoc-bin* path "--to" "html")
-                    :output t))
+                    :output :string))
 
 ;; TODO: Figure out how to handle this with Nix.
 (defvar *posts* (uiop:directory-files *path-to-posts*)
@@ -29,8 +32,7 @@
 
 (hunchentoot:define-easy-handler
     (get-latest :uri "/latest") ()
-  (print (parameter "name"))
-  (uiop:read-file-string (car *posts*)))
+  (render-post (concatenate 'string *path-to-posts* "/" "test.md")))
 
 (hunchentoot:define-easy-handler
     (get-posts :uri "/posts") ()

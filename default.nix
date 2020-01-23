@@ -15,8 +15,11 @@ let
 
   readTree' = import /home/wpcarro/depot/nix/readTree {};
 
+  # TODO: Find a better way to expose entire monorepo without introducing
+  # "infinite recursion".
   localPkgs = readTree: {
-    third_party   = readTree ./third_party;
+    blog = readTree ./blog;
+    third_party = readTree ./third_party;
   };
 in fix(self: {
   config = config self;
