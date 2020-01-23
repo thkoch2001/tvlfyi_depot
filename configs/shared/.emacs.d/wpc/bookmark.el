@@ -16,6 +16,7 @@
 (require 'buffer)
 (require 'list)
 (require 'string)
+(require 'set)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
@@ -76,14 +77,19 @@ Otherwise, open with `counsel-find-file'."
 (defun bookmark/magit-status ()
   "Use ivy to select a bookmark and jump to its `magit-status' buffer."
   (interactive)
-  (ivy-read "Repository: "
-            '("dotfiles" "mono" "tazjins-depot")
-            :require-match t
-            :action (lambda (label)
-                      (->> label
-                           bookmark/from-label
-                           bookmark-path
-                           magit-status))))
+  (let ((labels (set/new "dotfiles" "mono" "depot"))
+        (all-labels (->> bookmark/whitelist
+                         (list/map (>> bookmark-label))
+                         set/from-list)))
+    (prelude/assert (set/subset? labels all-labels))
+    (ivy-read "Repository: "
+              (set/to-list labels)
+              :require-match t
+              :action (lambda (label)
+                        (->> label
+                             bookmark/from-label
+                             bookmark-path
+                             magit-status)))))
 
 ;; TODO: Consider `ivy-read' extension that takes a list of structs,
 ;; `struct-to-label' and `label-struct' functions.
