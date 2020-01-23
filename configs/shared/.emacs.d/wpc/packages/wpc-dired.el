@@ -18,9 +18,11 @@
         dired-dwim-target t)
   (general-define-key
    :keymaps 'dired-mode-map
-   :states 'normal
-   "s" nil
-   "q" (lambda () (interactive) (kill-buffer nil))
+   :states '(normal)
+   ;; Overriding some KBDs defined in the evil-collection module.
+   "o" #'dired-find-file-other-window
+   "<SPC>" nil ;; This unblocks some of my leader-prefixed KBDs.
+   "s" nil ;; This unblocks my window-splitting KBDs.
    "c" #'find-file
    "f" #'wpc/find-file
    "-" (lambda () (interactive) (find-alternate-file "..")))
