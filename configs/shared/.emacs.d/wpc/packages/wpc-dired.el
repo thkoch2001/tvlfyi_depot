@@ -35,7 +35,7 @@
   (general-define-key
    :keymaps 'locate-mode-map
    :states 'normal
-   "o" #'dired-display-file))
+   "o" #'dired-find-file-other-window))
 
 (provide 'wpc-dired)
 ;;; wpc-dired.el ends here
