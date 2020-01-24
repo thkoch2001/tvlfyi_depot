@@ -28,6 +28,7 @@
 ;; TODO: Consider renaming entr.el.
 (require 'entr)
 (require 'scrot)
+(require 'alarm)
 
 ;; TODO: Reconcile kbd.el, keybindings.el, wpc-keybindings.el, keyboard.el.
 (require 'keybindings)
