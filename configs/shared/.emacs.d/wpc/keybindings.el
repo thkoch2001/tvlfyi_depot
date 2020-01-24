@@ -37,5 +37,9 @@
 
 (keybinding/exwm (kbd/raw 'x11 "s") #'scrot/select)
 
+;; TODO: I need this because my Ergodox EZ sends super+shift instead of just
+;; super. Remove this once I fix my Ergodox.
+(keybinding/exwm "C-S-s-s" #'scrot/select)
+
 (provide 'keybindings)
 ;;; keybindings.el ends here
