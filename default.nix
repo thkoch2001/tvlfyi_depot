@@ -19,6 +19,7 @@ let
   # "infinite recursion".
   localPkgs = readTree: {
     blog = readTree ./blog;
+    lisp = readTree ./lisp;
     third_party = readTree ./third_party;
   };
 in fix(self: {
