@@ -31,6 +31,12 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; TODO: Move this function to another module.
+(defun pkill (name)
+  "Call the pkill executable using NAME as its argument."
+  (interactive "sProcess name: ")
+  (call-process "pkill" nil nil nil name))
+
 ;; TODO: Associate `window-purpose' window-layouts with each of these named
 ;; workspaces.
 
