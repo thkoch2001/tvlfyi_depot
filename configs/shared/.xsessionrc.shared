@@ -25,7 +25,7 @@ compton &
 unclutter &
 
 # Control X's pointer with the keyboard. Activate by pressing <C-;>
-keynav &
+keynav daemonize
 
 # Startup Emacs (and EXWM).
 exec dbus-launch --exit-with-session emacs --debug-init
