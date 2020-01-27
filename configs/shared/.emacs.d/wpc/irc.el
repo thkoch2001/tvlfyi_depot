@@ -148,6 +148,9 @@
       (irc/message
        (string/format "Current IRC channel: %s" (cycle/current cycle))))))
 
+(add-hook 'erc-mode-hook (disable auto-fill-mode))
+(add-hook 'erc-mode-hook (disable company-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
