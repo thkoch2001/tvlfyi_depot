@@ -1,6 +1,5 @@
 # While I work use a variety of programs, below of some of my more commonly used
-# programs that I have decided to support with aliases.
-# Applications
+# programs that I have decided to support with aliases. # Applications
 #   java:       jv
 #   tmux:       t
 #   $EDITOR:    e
@@ -74,6 +73,13 @@ function fish_prompt
 
     echo -n -s "$USER" @ (prompt_hostname) ' ' (set_color $color_cwd) (pwd) (set_color normal)
     echo -e "\n$suffix "
+end
+
+function nix-eval --description 'Evaluate Nix expression from file, $1.'
+    # Notice the empty string at the end of the invocation here. This is
+    # intentional. For more information, see this issue:
+    # https://github.com/NixOS/nix/issues/2078
+    nix eval --file $argv[1] ""
 end
 
 # Setup fzf for fuzzily finding commands, files, directories
