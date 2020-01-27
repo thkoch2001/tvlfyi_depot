@@ -11,7 +11,7 @@
 (require 'kaomoji)
 
 ;; Google
-(require 'google-stuff)
+;; (require 'google-stuff)
 
 ;; Laptop XF-functionality
 (require 'pulse-audio)

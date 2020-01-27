@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # Might be unnecessary...
 . ~/.profile
 
@@ -28,4 +27,4 @@ unclutter &
 keynav daemonize
 
 # Startup Emacs (and EXWM).
-exec dbus-launch --exit-with-session emacs --debug-init
+exec emacs --debug-init --no-site-file --no-site-lisp
