@@ -28,7 +28,8 @@
 ;; TODO: Consider renaming entr.el.
 (require 'entr)
 (require 'scrot)
-(require 'alarm)
+;; TODO: Remove path once published to MELPA.
+(require 'egg-timer "~/programming/egg-timer.el/egg-timer.el")
 
 ;; TODO: Reconcile kbd.el, keybindings.el, wpc-keybindings.el, keyboard.el.
 (require 'keybindings)
