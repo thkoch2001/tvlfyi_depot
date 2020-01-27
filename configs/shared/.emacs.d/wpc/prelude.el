@@ -136,6 +136,7 @@ This is a wrapper around `start-process' that has an API that resembles
 (defun prelude/executable-exists? (name)
   "Return t if CLI tool NAME exists according to `exec-path'."
   (let ((file (locate-file name exec-path)))
+    (require 'maybe)
     (if (maybe/some? file)
         (f-exists? file)
       nil)))
