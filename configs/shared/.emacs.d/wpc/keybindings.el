@@ -14,6 +14,7 @@
 (require 'screen-brightness)
 (require 'chrome)
 (require 'scrot)
+(require 'ivy-clipmenu)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
