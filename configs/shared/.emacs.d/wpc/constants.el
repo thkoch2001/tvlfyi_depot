@@ -10,8 +10,10 @@
 ;; current consumers of these constants, and I'm unsure if the indirection that
 ;; globally defined constants introduces is worth it.
 
-(defconst constants/current-project "~/mono"
+(defconst constants/current-project "~/universe"
   "Variable holding the directory for my currently active project.")
+
+(prelude/assert (f-directory? constants/current-project))
 
 (defconst constants/mouse-kbds
   '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]
