@@ -100,9 +100,9 @@
 
 ;; completion framework
 (use-package ivy
-  ;; TODO: Restore behavior where `counsel' is used everywhere.
   :config
   (counsel-mode t)
+  (ivy-mode t)
   (alist/set! #'counsel-M-x "" ivy-initial-inputs-alist)
   ;; prefer using `helpful' variants
   (progn
