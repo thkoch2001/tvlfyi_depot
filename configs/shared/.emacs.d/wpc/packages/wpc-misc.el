@@ -244,13 +244,5 @@
   "Return the name of the current frame."
   (frame-parameter nil 'name))
 
-;; Even if I resolved the socket-name resolution issue, I couldn't find an
-;; elegant way to reuse GUI frames. GUIs for me have the advantage of supporting
-;; True Color, support additional keys for KBDs (i.e. super), and aren't limited
-;; by the terminal for rendering certain things.
-(require 'server)
-(when (not (server-running-p))
-  (server-start))
-
 (provide 'wpc-misc)
 ;;; wpc-misc.el ends here
