@@ -13,7 +13,7 @@ let
     inherit pkgs;
   };
 
-  readTree' = import /home/wpcarro/depot/nix/readTree {};
+  readTree' = import ~/depot/nix/readTree {};
 
   # TODO: Find a better way to expose entire monorepo without introducing
   # "infinite recursion".
