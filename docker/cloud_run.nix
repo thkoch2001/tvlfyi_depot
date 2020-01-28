@@ -1,9 +1,18 @@
-# Attempting to build a Docker image with Nix to run using Google Cloud Run.
-{ pkgs ? import <nixpkgs> {}, ... }:
+{
+  pkgs ? import <nixpkgs> {},
+  depot ? import <depot> {},
+  ...
+}:
 
 pkgs.dockerTools.buildLayeredImage {
-  name = "mysql";
+  name = "gemma";
   tag = "latest";
-  config.Cmd = [ "${pkgs.mysql}/bin/mysqld" ];
+  config.ExposedPorts = {
+    "4242" = {};
+  };
+  config.Env = [
+    "GEMMA_CONFIG=${./config.lisp}"
+  ];
+  config.Cmd = [ "${depot.fun.gemma}/bin/gemma" ];
   maxLayers = 120;
 }
