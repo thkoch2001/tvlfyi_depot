@@ -222,7 +222,7 @@ abbr --add gst   'git status && hub pr list'
 # Mercurial counterparts. Some may map 1:1, others may be like putting a square
 # peg into a round hole. I will try and use my best judgement in these cases
 # while erring on the side of unifying the two APIs.
-abbr --add hgst  PAGER="" hg status
+abbr --add hgst  hg status
 abbr --add hglp  hg xl
 abbr --add hgp   hg uploadchain # this is like `git push`
 abbr --add hga   hg add
