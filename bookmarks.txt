@@ -1,6 +1,0 @@
-reddit.com/r/unixporn
-reddit.com/r/nixos
-news.ycombinator.com
-gmail.com
-github.com
-github.com/wpcarro
