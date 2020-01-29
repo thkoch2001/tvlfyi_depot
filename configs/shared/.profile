@@ -51,16 +51,10 @@ export XSECURELOCK_NO_COMPOSITE=1
 LOCALE_ARCHIVE=$(readlink ~/.nix-profile/lib/locale)/locale-archive
 export LOCALE_ARCHIVE
 
-# Set environment variables for Nix
-# Don't run this for systems running NixOS
+# Set environment variables for Nix. Don't run this for systems running NixOS.
+# TODO: Learn why I can't use the variables from ~/dotfiles/.envrc.
 case $(hostname) in
-  # desktop
-  wpcarro.lon.corp.google.com)
-    . ~/.nix-profile/etc/profile.d/nix.sh;;
-  # cloudtop
-  wpcarro.c.googlers.com)
-    . ~/.nix-profile/etc/profile.d/nix.sh;;
-  # work_laptop
-  wpcarro2)
-    . ~/.nix-profile/etc/profile.d/nix.sh;;
+  zeno.lon.corp.google.com) . ~/.nix-profile/etc/profile.d/nix.sh;;
+  seneca) . ~/.nix-profile/etc/profile.d/nix.sh;;
+  wpcarro.c.googlers.com) . ~/.nix-profile/etc/profile.d/nix.sh;;
 esac

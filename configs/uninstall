@@ -3,14 +3,11 @@
 configs="$DOTFILES/configs"
 
 case $(hostname) in
-  # desktop
-  wpcarro.lon.corp.google.com)
+  $DESKTOP)
     (cd "$configs/desktop" && stow --delete --target="$HOME" .);;
-  # laptop
-  wpcarro2)
+  $LAPTOP)
     (cd "$configs/laptop" && stow --delete --target="$HOME" .);;
-  # cloudtop
-  wpcarro.c.googlers.com)
+  $CLOUDTOP)
     (cd "$configs/cloudtop" && stow --delete --target="$HOME" .);;
 esac
 

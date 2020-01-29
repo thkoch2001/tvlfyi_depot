@@ -3,14 +3,11 @@
 configs="$DOTFILES/configs"
 
 case $(hostname) in
-  # desktop
-  wpcarro.lon.corp.google.com)
+  $DESKTOP)
     (cd "$configs/desktop" && stow --target="$HOME" .);;
-  # laptop
-  wpcarro2)
+  $LAPTOP)
     (cd "$configs/work_laptop" && stow --target="$HOME" .);;
-  # cloudtop
-  wpcarro.c.googlers.com)
+  $CLOUDTOP)
     (cd "$configs/cloudtop" && stow --target="$HOME" .);;
   # Acer Manjaro laptop
   acer-manjaro)

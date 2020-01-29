@@ -34,18 +34,10 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Theming
 case $(hostname) in
-  # desktop
-  wpcarro.lon.corp.google.com)
-    antigen theme frisk;;
-  # cloudtop
-  wpcarro.c.googlers.com)
-    antigen theme cloud;;
-  # laptop
-  wpcarro2)
-    antigen theme refined;;
-  # acer NixOS laptop
-  acer-manjaro)
-    antigen theme frisk;;
+  $DESKTOP)     antigen theme frisk;;
+  $LAPTOP)      antigen theme refined;;
+  $CLOUDTOP)    antigen theme cloud;;
+  acer-manjaro) antigen theme frisk;;
 esac
 
 # Leave this last

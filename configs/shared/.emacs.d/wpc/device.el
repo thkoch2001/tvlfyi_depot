@@ -14,8 +14,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defconst device/hostname->device
-  '(("wpcarro2" . work-laptop)
-    ("wpcarro.lon.corp.google.com" . work-desktop))
+  '(("zeno.lon.corp.google.com" . work-desktop)
+    ("seneca" . work-laptop))
   "Mapping hostname to a device symbol.")
 
 ;; TODO: Should I generate these predicates?
