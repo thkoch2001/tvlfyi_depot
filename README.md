@@ -73,10 +73,9 @@ $ xclip -sel clip <~/.ssh/id_rsa.pub
 $ browse github.com # paste ssh public key in settings
 ```
 
-1. Install Antigen, Vundle, nix-env
+1. Install Vundle, nix-env
 
 ```bash
-$ ln -s ~/Dropbox/antigen.zsh ~/antigen.zsh
 $ ln -s ~/Dropbox/Vundle.vim ~/.config/nvim/bundle/Vundle.vim
 $ cat ~/Dropbox/install_nix.sh | sh
 $ for p in $(cat nix-env.txt); do
@@ -112,10 +111,10 @@ $ DOTFILES="$(pwd)" make install
 
 For now, this deserves its own section since it isn't automated.
 
-```zsh
-gclone tj/n       # clone repo
-sudo make install # build from source
-n stable          # install the stable version of node
+```bash
+$ gclone tj/n       # clone repo
+$ sudo make install # build from source
+$ n stable          # install the stable version of node
 ```
 
 - TODO: support dependencies like terminal themes
