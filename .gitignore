@@ -17,5 +17,12 @@ Vundle.vim
 **/*/.emacs.d/custom.el
 **/*/.emacs.d/projectile-bookmarks.eld
 **/*/.emacs.d/bookmarks
-__pycache__/
 **/*/transient/history.el
+
+# Haskell
+*.hi
+*.o
+
+# Python
+__pycache__
+*.class

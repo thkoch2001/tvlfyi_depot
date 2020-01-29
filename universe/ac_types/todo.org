@@ -1,5 +1,0 @@
-* DONE Ensure order matches trix.
-* DONE Use FRD identifier and not its display name for inputs.CONSTANT.
-* DONE Ensure "Non-Sensitive Ads Review (Olympus)" support "olympus" and "olympus_plus".
-* DONE Append output to consult.textproto.
-* DONE Run `hg fix` on consult.textproto.

@@ -1,7 +1,0 @@
-# Haskell
-*.hi
-*.o
-
-# Python
-__pycache__
-*.class
