@@ -1,0 +1,550 @@
+consult_settings {
+  taxonomy_id: "9249441"
+  view_id: "Routing - Ads_certs"
+  max_wait_time_for_consult_secs: 86400
+  reroute_on_customer_interaction: true
+  neo_organization: "trust_safety"
+  parent_lookup_frds {
+    id: "^88149"
+    value: "ads_certs_autoconsult"
+  }
+  parent_lookup_frds {
+    id: "^87379"
+    value: "olympus"
+  }
+  parent_lookup_frds {
+    id: "^16296"
+    value: "Germany"
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"
+    value: "ads"
+  }
+  consult_routing_frds {
+    id: "REQUEST_TYPE"
+    value: "Certifications"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "neo.country"
+    is_optional: false
+    parent_frd_id: "^16296"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.policy"
+    is_optional: false
+    constant_value: "elections"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.complexity"
+    is_optional: false
+    constant_value: "easy"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "neo.product"
+    is_optional: false
+    signal_type: CID
+  }
+}
+consult_settings {
+  taxonomy_id: "9249441"
+  view_id: "Routing - Ads_certs"
+  max_wait_time_for_consult_secs: 86400
+  reroute_on_customer_interaction: true
+  neo_organization: "trust_safety"
+  parent_lookup_frds {
+    id: "^88149"
+    value: "ads_certs_autoconsult"
+  }
+  parent_lookup_frds {
+    id: "^87379"
+    value: "olympus"
+  }
+  parent_lookup_frds {
+    id: "^16296"
+    value: "Netherlands"
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"
+    value: "ads"
+  }
+  consult_routing_frds {
+    id: "REQUEST_TYPE"
+    value: "Certifications"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "neo.country"
+    is_optional: false
+    parent_frd_id: "^16296"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.policy"
+    is_optional: false
+    constant_value: "elections"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.complexity"
+    is_optional: false
+    constant_value: "easy"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "neo.product"
+    is_optional: false
+    signal_type: CID
+  }
+}
+consult_settings {
+  taxonomy_id: "9249441"
+  view_id: "Routing - Ads_certs"
+  max_wait_time_for_consult_secs: 86400
+  reroute_on_customer_interaction: true
+  neo_organization: "trust_safety"
+  parent_lookup_frds {
+    id: "^88149"
+    value: "ads_certs_autoconsult"
+  }
+  parent_lookup_frds {
+    id: "^87379"
+    value: "olympus"
+  }
+  parent_lookup_frds {
+    id: "^16296"
+    value: "Spain"
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"
+    value: "ads"
+  }
+  consult_routing_frds {
+    id: "REQUEST_TYPE"
+    value: "Certifications"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "neo.country"
+    is_optional: false
+    parent_frd_id: "^16296"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.policy"
+    is_optional: false
+    constant_value: "elections"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.complexity"
+    is_optional: false
+    constant_value: "easy"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "neo.product"
+    is_optional: false
+    signal_type: CID
+  }
+}
+consult_settings {
+  taxonomy_id: "9249441"
+  view_id: "Routing - Ads_certs"
+  max_wait_time_for_consult_secs: 86400
+  reroute_on_customer_interaction: true
+  neo_organization: "trust_safety"
+  parent_lookup_frds {
+    id: "^88149"
+    value: "ads_certs_autoconsult"
+  }
+  parent_lookup_frds {
+    id: "^87379"
+    value: "olympus"
+  }
+  parent_lookup_frds {
+    id: "^16296"
+    value: "Check Republic"
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"
+    value: "ads"
+  }
+  consult_routing_frds {
+    id: "REQUEST_TYPE"
+    value: "Certifications"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "neo.country"
+    is_optional: false
+    parent_frd_id: "^16296"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.policy"
+    is_optional: false
+    constant_value: "elections"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.complexity"
+    is_optional: false
+    constant_value: "easy"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "neo.product"
+    is_optional: false
+    signal_type: CID
+  }
+}
+consult_settings {
+  taxonomy_id: "9249441"
+  view_id: "Routing - Ads_certs"
+  max_wait_time_for_consult_secs: 86400
+  reroute_on_customer_interaction: true
+  neo_organization: "trust_safety"
+  parent_lookup_frds {
+    id: "^88149"
+    value: "ads_certs_autoconsult"
+  }
+  parent_lookup_frds {
+    id: "^87379"
+    value: "olympus"
+  }
+  parent_lookup_frds {
+    id: "^16296"
+    value: "United Kingdom"
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"
+    value: "ads"
+  }
+  consult_routing_frds {
+    id: "REQUEST_TYPE"
+    value: "Certifications"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "neo.country"
+    is_optional: false
+    parent_frd_id: "^16296"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.policy"
+    is_optional: false
+    constant_value: "elections"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.complexity"
+    is_optional: false
+    constant_value: "easy"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "neo.product"
+    is_optional: false
+    signal_type: CID
+  }
+}
+consult_settings {
+  taxonomy_id: "9249441"
+  view_id: "Routing - Ads_certs"
+  max_wait_time_for_consult_secs: 86400
+  reroute_on_customer_interaction: true
+  neo_organization: "trust_safety"
+  parent_lookup_frds {
+    id: "^88149"
+    value: "ads_certs_autoconsult"
+  }
+  parent_lookup_frds {
+    id: "^87379"
+    value: "olympus_plus"
+  }
+  parent_lookup_frds {
+    id: "^16296"
+    value: "Germany"
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"
+    value: "ads"
+  }
+  consult_routing_frds {
+    id: "REQUEST_TYPE"
+    value: "Certifications"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "neo.country"
+    is_optional: false
+    parent_frd_id: "^16296"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.policy"
+    is_optional: false
+    constant_value: "elections"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.complexity"
+    is_optional: false
+    constant_value: "easy"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "neo.product"
+    is_optional: false
+    signal_type: CID
+  }
+}
+consult_settings {
+  taxonomy_id: "9249441"
+  view_id: "Routing - Ads_certs"
+  max_wait_time_for_consult_secs: 86400
+  reroute_on_customer_interaction: true
+  neo_organization: "trust_safety"
+  parent_lookup_frds {
+    id: "^88149"
+    value: "ads_certs_autoconsult"
+  }
+  parent_lookup_frds {
+    id: "^87379"
+    value: "olympus_plus"
+  }
+  parent_lookup_frds {
+    id: "^16296"
+    value: "Netherlands"
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"
+    value: "ads"
+  }
+  consult_routing_frds {
+    id: "REQUEST_TYPE"
+    value: "Certifications"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "neo.country"
+    is_optional: false
+    parent_frd_id: "^16296"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.policy"
+    is_optional: false
+    constant_value: "elections"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.complexity"
+    is_optional: false
+    constant_value: "easy"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "neo.product"
+    is_optional: false
+    signal_type: CID
+  }
+}
+consult_settings {
+  taxonomy_id: "9249441"
+  view_id: "Routing - Ads_certs"
+  max_wait_time_for_consult_secs: 86400
+  reroute_on_customer_interaction: true
+  neo_organization: "trust_safety"
+  parent_lookup_frds {
+    id: "^88149"
+    value: "ads_certs_autoconsult"
+  }
+  parent_lookup_frds {
+    id: "^87379"
+    value: "olympus_plus"
+  }
+  parent_lookup_frds {
+    id: "^16296"
+    value: "Spain"
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"
+    value: "ads"
+  }
+  consult_routing_frds {
+    id: "REQUEST_TYPE"
+    value: "Certifications"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "neo.country"
+    is_optional: false
+    parent_frd_id: "^16296"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.policy"
+    is_optional: false
+    constant_value: "elections"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.complexity"
+    is_optional: false
+    constant_value: "easy"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "neo.product"
+    is_optional: false
+    signal_type: CID
+  }
+}
+consult_settings {
+  taxonomy_id: "9249441"
+  view_id: "Routing - Ads_certs"
+  max_wait_time_for_consult_secs: 86400
+  reroute_on_customer_interaction: true
+  neo_organization: "trust_safety"
+  parent_lookup_frds {
+    id: "^88149"
+    value: "ads_certs_autoconsult"
+  }
+  parent_lookup_frds {
+    id: "^87379"
+    value: "olympus_plus"
+  }
+  parent_lookup_frds {
+    id: "^16296"
+    value: "Check Republic"
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"
+    value: "ads"
+  }
+  consult_routing_frds {
+    id: "REQUEST_TYPE"
+    value: "Certifications"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "neo.country"
+    is_optional: false
+    parent_frd_id: "^16296"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.policy"
+    is_optional: false
+    constant_value: "elections"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.complexity"
+    is_optional: false
+    constant_value: "easy"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "neo.product"
+    is_optional: false
+    signal_type: CID
+  }
+}
+consult_settings {
+  taxonomy_id: "9249441"
+  view_id: "Routing - Ads_certs"
+  max_wait_time_for_consult_secs: 86400
+  reroute_on_customer_interaction: true
+  neo_organization: "trust_safety"
+  parent_lookup_frds {
+    id: "^88149"
+    value: "ads_certs_autoconsult"
+  }
+  parent_lookup_frds {
+    id: "^87379"
+    value: "olympus_plus"
+  }
+  parent_lookup_frds {
+    id: "^16296"
+    value: "United Kingdom"
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"
+    value: "ads"
+  }
+  consult_routing_frds {
+    id: "REQUEST_TYPE"
+    value: "Certifications"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "neo.country"
+    is_optional: false
+    parent_frd_id: "^16296"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.policy"
+    is_optional: false
+    constant_value: "elections"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "neo.complexity"
+    is_optional: false
+    constant_value: "easy"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "neo.product"
+    is_optional: false
+    signal_type: CID
+  }
+}

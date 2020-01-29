@@ -1,0 +1,60 @@
+# TODO: Handle Cartesian product for each "or" in row["Data Source/Value"]
+
+# Notes from Jason:
+# Type
+# - Require ID
+#   - Parent Routing FRD
+#   - Consult Input
+# - Raw
+#   - everything else...
+#
+# Hard-Code: CONSTANT...constant_value
+#
+# Atlas.CustomerID == SIGNAL
+# all else (!Hard-Code && !Atlas.CustomerID): Parent FRD
+
+
+consult_settings {
+  # Consult Parameter
+  taxonomy_id: # (row['Name'] == 'Taxonomy ID') row['Data Source/Value']
+  view_id: # (row['Name'] == 'View ID') row['Data Source/Value']
+  neo_organization: # (row['Name'] == 'ORGANIZATION') row['Data Source/Value']
+  max_wait_time_for_consult_secs: # (row['Name'] == 'Timeout') hours_to_seconds(as_hours(row['Data Source/Value']))
+  reroute_on_customer_interaction: # (row['Name'] == 'Re-Route if Customer Responds') as_yes_no(row['Data Source/Value'])
+
+  # Parent Routing FRD
+  rows
+  |> filter(row['Type'] == 'Parent Routing FRD')
+  |> map((row) => parent_lookup_frds {
+       id: ??? # as_id(row['Name'])
+       value: ??? row['Data Source/Value']
+     })
+
+  # Consult Routing FRD
+  rows
+  |> filter(row['Type'] == 'Consult Routing FRD')
+  |> map((row) => consult_routing_frds {
+       id: row['Name']
+       value: row['Data Source/Value']
+     })
+
+  # Return Routing FRD
+  rows
+  |> filter(row['Type'] == 'Return Routing FRD')
+  |> map((row) => parent_return_routing_frds {
+       id: ???
+       value: ???
+     })
+
+  # Input (Note: There seem to be more than one variant of these)
+  rows
+  |> filter(row['Type'] == 'Input')
+  |> map((row) => inputs {
+       constant_value: ???
+       consult_frd_id: ???
+       is_optional: ???
+       parent_frd_id: ???
+       signal_type: ???
+       type: ???
+     })
+}

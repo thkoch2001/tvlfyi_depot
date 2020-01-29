@@ -1,0 +1,523 @@
+# Please, see the link below for the definition of the messages in this file.
+# https://cs.corp.google.com/piper///depot/google3/google/internal/alkali/applications/casesconsultservice/v1/consult.proto
+
+# Instances of ConsultMetadata message.
+
+## The following ConsultMetadata instance is just an example.
+consult_settings {
+  taxonomy_id: "9126664"  # Ads Taxonomy: http://composer/9126664
+  view_id: "Routing"
+  neo_organization: "gcc"
+  max_wait_time_for_consult_secs: 3600  # 1 hr
+  reroute_on_customer_interaction: false
+  parent_lookup_frds {
+    # Instances of Attribute message.
+    id: "^^11"  # Attribute name: PRODUCT.
+    value: "ac-demo-value1"
+  }
+  parent_lookup_frds {
+    id: "^^1"  # Attribute name: CATEGORY.
+    value: "ac-demo-value2"
+  }
+  parent_return_routing_frds {
+    # Instances of Attribute message.
+    id: "^123"  # Attribute name: XYZ.
+    value: "sample 1"
+  }
+  consult_routing_frds {
+    # Instances of Attribute message.
+    id: "^987"  # Attribute name: Demo.
+    value: "sample 2"
+  }
+  inputs {
+    # Instance of ConsultInput
+    type: CONSTANT
+    consult_frd_id: "^0123"
+    is_optional: true
+    constant_value: "This is an input"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "^9876"
+    is_optional: false
+    signal_type: CID
+  }
+}
+
+# Note the following test case must be modeled with a LACK of configuration
+#  * AC-004: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=5:5
+# As such, it's imperative that all "autoconsult_test" fixtures also match a language
+# This test will be performed by specifying a language that's not covered in this configuration
+
+# General Success Case - consults to T&S robot test pool
+# Supports Test Cases:
+#  * AC-001: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=2:2
+#  * AC-003: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=4:4
+consult_settings {
+  taxonomy_id: "9249441"  # T&S Taxonomy: http://composer/9249441
+  view_id: "Routing"
+  neo_organization: "trust_safety"
+  max_wait_time_for_consult_secs: 3600  # 1 hr
+  reroute_on_customer_interaction: false
+  parent_lookup_frds {
+    id: "^88149"  # Attribute name: neoenum.consult_type https://cases.corp.google.com/Client.html#A~%5E88149
+    value: "autoconsult_test"
+  }
+  parent_lookup_frds {
+    id: "^3906"  # Form.ad_language https://cases.corp.google.com/Client.html#A~%5E3906
+    value: "af"  # Afrikaans
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "VERTICAL"  # FRD Name: Product Group
+    value: "engineering"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "GOOGLE_ADS_INTERNAL_CUSTOMER_ID"
+    is_optional: false
+    signal_type: CID
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "ISSUE_DESCRIPTION"
+    is_optional: true
+    parent_frd_id: "^5305"  # Form.summary_of_issue https://cases.corp.google.com/Client.html#A~%5E5305
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "REQUEST"
+    is_optional: false
+    constant_value: "unreviewed_ads_keywords_and_extensions"
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "FEATURE"
+    is_optional: false
+    constant_value: "regular_review"
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "BUSINESS_LANGUAGE"
+    is_optional: true
+    parent_frd_id: "^3906"  # Form.ad_language https://cases.corp.google.com/Client.html#A~%5E3906
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "COMPLEXITY"
+    is_optional: false
+    constant_value: "easy"
+  }
+}
+
+# General success case - consults to TDA manual test pool
+# Defines a non-optional input that will be Empty
+# Supports Test Cases:
+#  * AC-002: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=3:3
+#  * AC-008: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=9:9
+#  * AC-015: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=16:16
+#  * AC-016: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=17:17
+#  * AC-017: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=18:18
+#  * AC-018: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=19:19
+#  * AC-019: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=20:20
+#  * AC-020: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=21:21
+#  * AC-021: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=22:22
+#  * AC-022: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=23:23
+consult_settings {
+  taxonomy_id: "9126664"  # Ads Taxonomy: http://composer/9126664
+  view_id: "Routing"
+  neo_organization: "gcc"
+  max_wait_time_for_consult_secs: 3600  # 1 hr
+  reroute_on_customer_interaction: false
+  parent_lookup_frds {
+    id: "^88149"  # Attribute name: neoenum.consult_type https://cases.corp.google.com/Client.html#A~%5E88149
+    value: "autoconsult_test"
+  }
+  parent_lookup_frds {
+    id: "^3906"  # Form.ad_language https://cases.corp.google.com/Client.html#A~%5E3906
+    value: "da"  # dansk
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "CONSULT_TYPE"  # FRD Name: Consult Type
+    value: "autoconsult_test"
+  }
+  consult_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "GOOGLE_ADS_INTERNAL_CUSTOMER_ID"
+    is_optional: false
+    signal_type: CID
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "ISSUE_DESCRIPTION"
+    is_optional: true
+    parent_frd_id: "^5305"  # Form.summary_of_issue https://cases.corp.google.com/Client.html#A~%5E5305
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "REQUEST"
+    is_optional: false
+    constant_value: "unreviewed_ads_keywords_and_extensions"
+  }
+}
+
+# This tests a misconfigured signal type
+# Supports Test Cases:
+#  * AC-005: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=6:6
+consult_settings {
+  taxonomy_id: "9126664"  # Ads Taxonomy: http://composer/9126664
+  view_id: "Routing"
+  neo_organization: "gcc"
+  max_wait_time_for_consult_secs: 3600  # 1 hr
+  reroute_on_customer_interaction: false
+  parent_lookup_frds {
+    id: "^88149"  # Attribute name: neoenum.consult_type https://cases.corp.google.com/Client.html#A~%5E88149
+    value: "autoconsult_test"
+  }
+  parent_lookup_frds {
+    id: "^3906"  # Form.ad_language https://cases.corp.google.com/Client.html#A~%5E3906
+    value: "en-AU"  # English (Australia)
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "CONSULT_TYPE"  # FRD Name: Consult Type
+    value: "autoconsult_test"
+  }
+  consult_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "GOOGLE_ADS_INTERNAL_CUSTOMER_ID"
+    is_optional: false
+    signal_type: UNKNOWN
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "ISSUE_DESCRIPTION"
+    is_optional: true
+    parent_frd_id: "^5305"  # Form.summary_of_issue https://cases.corp.google.com/Client.html#A~%5E5305
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "REQUEST"
+    is_optional: false
+    constant_value: "unreviewed_ads_keywords_and_extensions"
+  }
+}
+
+# Defines a non-optional input that will be missing
+# Supports Test Cases:
+#  * AC-006: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=7:7
+consult_settings {
+  taxonomy_id: "9126664"  # Ads Taxonomy: http://composer/9126664
+  view_id: "Routing"
+  neo_organization: "gcc"
+  max_wait_time_for_consult_secs: 3600  # 1 hr
+  reroute_on_customer_interaction: false
+  parent_lookup_frds {
+    id: "^88149"  # Attribute name: neoenum.consult_type https://cases.corp.google.com/Client.html#A~%5E88149
+    value: "autoconsult_test"
+  }
+  parent_lookup_frds {
+    id: "^3906"  # Form.ad_language https://cases.corp.google.com/Client.html#A~%5E3906
+    value: "en-CA"  # English (Canada)
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "CONSULT_TYPE"  # FRD Name: Consult Type
+    value: "autoconsult_test"
+  }
+  consult_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "GOOGLE_ADS_INTERNAL_CUSTOMER_ID"
+    is_optional: false
+    signal_type: CID
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "ISSUE_DESCRIPTION"
+    is_optional: false
+    parent_frd_id: "^999999"  # Made-up attribute ID
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "REQUEST"
+    is_optional: false
+    constant_value: "unreviewed_ads_keywords_and_extensions"
+  }
+}
+
+# Defines a non-optional input that will be empty
+# Supports Test Cases:
+#  * AC-008: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=9:9
+consult_settings {
+  taxonomy_id: "9126664"  # Ads Taxonomy: http://composer/9126664
+  view_id: "Routing"
+  neo_organization: "gcc"
+  max_wait_time_for_consult_secs: 3600  # 1 hr
+  reroute_on_customer_interaction: false
+  parent_lookup_frds {
+    id: "^88149"  # Attribute name: neoenum.consult_type https://cases.corp.google.com/Client.html#A~%5E88149
+    value: "autoconsult_test"
+  }
+  parent_lookup_frds {
+    id: "^3906"  # Form.ad_language https://cases.corp.google.com/Client.html#A~%5E3906
+    value: "en-GB"  # English (United Kingdom)
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "CONSULT_TYPE"  # FRD Name: Consult Type
+    value: "autoconsult_test"
+  }
+  consult_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "GOOGLE_ADS_INTERNAL_CUSTOMER_ID"
+    is_optional: false
+    signal_type: CID
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "ISSUE_DESCRIPTION"
+    is_optional: false  # Not optional
+    parent_frd_id: "^5305"  # Form.summary_of_issue https://cases.corp.google.com/Client.html#A~%5E5305
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "REQUEST"
+    is_optional: false
+    constant_value: "unreviewed_ads_keywords_and_extensions"
+  }
+}
+
+# Defines a non-optional input that will be missing
+# Supports Test Cases:
+#  * AC-009: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=10:10
+consult_settings {
+  taxonomy_id: "9126664"  # Ads Taxonomy: http://composer/9126664
+  view_id: "Routing"
+  neo_organization: "gcc"
+  max_wait_time_for_consult_secs: 3600  # 1 hr
+  reroute_on_customer_interaction: false
+  parent_lookup_frds {
+    id: "^88149"  # Attribute name: neoenum.consult_type https://cases.corp.google.com/Client.html#A~%5E88149
+    value: "autoconsult_test"
+  }
+  parent_lookup_frds {
+    id: "^3906"  # Form.ad_language https://cases.corp.google.com/Client.html#A~%5E3906
+    value: "en"  # English
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "CONSULT_TYPE"  # FRD Name: Consult Type
+    value: "autoconsult_test"
+  }
+  consult_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "GOOGLE_ADS_INTERNAL_CUSTOMER_ID"
+    is_optional: false
+    signal_type: CID
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "ISSUE_DESCRIPTION"
+    is_optional: false  # Not optional
+    parent_frd_id: "^999999"  # Made-up attribute ID
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "REQUEST"
+    is_optional: false
+    constant_value: "unreviewed_ads_keywords_and_extensions"
+  }
+}
+
+# Defines multiple non-optional inputs that will not validate
+# Supports Test Cases:
+#  * AC-011: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=12:12
+consult_settings {
+  taxonomy_id: "9126664"  # Ads Taxonomy: http://composer/9126664
+  view_id: "Routing"
+  neo_organization: "gcc"
+  max_wait_time_for_consult_secs: 3600  # 1 hr
+  reroute_on_customer_interaction: false
+  parent_lookup_frds {
+    id: "^88149"  # Attribute name: neoenum.consult_type https://cases.corp.google.com/Client.html#A~%5E88149
+    value: "autoconsult_test"
+  }
+  parent_lookup_frds {
+    id: "^3906"  # Form.ad_language https://cases.corp.google.com/Client.html#A~%5E3906
+    value: "en-IN"  # English (India)
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "CONSULT_TYPE"  # FRD Name: Consult Type
+    value: "autoconsult_test"
+  }
+  consult_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "GOOGLE_ADS_INTERNAL_CUSTOMER_ID"
+    is_optional: false
+    signal_type: CID
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "ISSUE_DESCRIPTION"
+    is_optional: false  # Not optional
+    parent_frd_id: "^999999"  # Made-up attribute ID
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "ISSUE_DESCRIPTION"
+    is_optional: false  # Not optional
+    parent_frd_id: "^5305"  # Form.summary_of_issue https://cases.corp.google.com/Client.html#A~%5E5305
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "REQUEST"
+    is_optional: false
+    constant_value: "unreviewed_ads_keywords_and_extensions"
+  }
+}
+
+# Long Timeout Fixture
+# Re-Route On Customer Interaction set at this level
+# Supports Test Cases:
+#  * AC-013: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=14:14
+consult_settings {
+  taxonomy_id: "9126664"  # Ads Taxonomy: http://composer/9126664
+  view_id: "Routing"
+  neo_organization: "gcc"
+  max_wait_time_for_consult_secs: 36000  # 10 hrs
+  reroute_on_customer_interaction: true
+  parent_lookup_frds {
+    id: "^88149"  # Attribute name: neoenum.consult_type https://cases.corp.google.com/Client.html#A~%5E88149
+    value: "autoconsult_test"
+  }
+  parent_lookup_frds {
+    id: "^3906"  # Form.ad_language https://cases.corp.google.com/Client.html#A~%5E3906
+    value: "en-NZ"  # English (New Zealand)
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "CONSULT_TYPE"  # FRD Name: Consult Type
+    value: "autoconsult_test"
+  }
+  consult_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "GOOGLE_ADS_INTERNAL_CUSTOMER_ID"
+    is_optional: false
+    signal_type: CID
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "ISSUE_DESCRIPTION"
+    is_optional: true
+    parent_frd_id: "^5305"  # Form.summary_of_issue https://cases.corp.google.com/Client.html#A~%5E5305
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "REQUEST"
+    is_optional: false
+    constant_value: "unreviewed_ads_keywords_and_extensions"
+  }
+}
+
+# Zero Timeout Fixture
+# Supports Test Cases:
+#  * AC-014: https://docs.google.com/spreadsheets/d/1yec_SVbkGL3vHegNkqFweF-Ea8YaFczeZYuhXChavJM/edit#gid=505426631&range=15:15
+consult_settings {
+  taxonomy_id: "9126664"  # Ads Taxonomy: http://composer/9126664
+  view_id: "Routing"
+  neo_organization: "gcc"
+  max_wait_time_for_consult_secs: 0  # 0 hrs
+  reroute_on_customer_interaction: false
+  parent_lookup_frds {
+    id: "^88149"  # Attribute name: neoenum.consult_type https://cases.corp.google.com/Client.html#A~%5E88149
+    value: "autoconsult_test"
+  }
+  parent_lookup_frds {
+    id: "^3906"  # Form.ad_language https://cases.corp.google.com/Client.html#A~%5E3906
+    value: "en-NZ"  # English (New Zealand)
+  }
+  parent_return_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  consult_routing_frds {
+    id: "CONSULT_TYPE"  # FRD Name: Consult Type
+    value: "autoconsult_test"
+  }
+  consult_routing_frds {
+    id: "ROBOT_WORKFLOW_STATE"  # FRD Name: Robot Workflow State.
+    value: "automation_escalate"
+  }
+  inputs {
+    type: SIGNAL
+    consult_frd_id: "GOOGLE_ADS_INTERNAL_CUSTOMER_ID"
+    is_optional: false
+    signal_type: CID
+  }
+  inputs {
+    type: PARENT_FRD
+    consult_frd_id: "ISSUE_DESCRIPTION"
+    is_optional: true
+    parent_frd_id: "^5305"  # Form.summary_of_issue https://cases.corp.google.com/Client.html#A~%5E5305
+  }
+  inputs {
+    type: CONSTANT
+    consult_frd_id: "REQUEST"
+    is_optional: false
+    constant_value: "unreviewed_ads_keywords_and_extensions"
+  }
+}
