@@ -1,4 +1,4 @@
-(require 'wpc-package "~/.emacs.d/wpc/packages/wpc-package.el")
+(require 'wpc-package)
 
 ;; load order is intentional
 (require 'constants)
@@ -28,8 +28,10 @@
 ;; TODO: Consider renaming entr.el.
 (require 'entr)
 (require 'scrot)
+
 ;; TODO: Remove path once published to MELPA.
-(require 'egg-timer "~/programming/egg-timer.el/egg-timer.el")
+;; TODO: How can I package this using Nix?
+;; (require 'egg-timer "~/programming/egg-timer.el/egg-timer.el")
 
 ;; TODO: Reconcile kbd.el, keybindings.el, wpc-keybindings.el, keyboard.el.
 (require 'keybindings)

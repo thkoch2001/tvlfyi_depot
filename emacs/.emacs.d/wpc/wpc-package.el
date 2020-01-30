@@ -8,20 +8,20 @@
 ;;; Code:
 
 (require 'package)
+
+;; Even though we're packaging our Emacs with Nix, having MELPA registered is
+;; helpful to ad-hoc test out packages before declaratively adding them to
+;; emacs/default.nix.
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
+  ;; TODO: Consider removing this to improve initialization speed.
   (package-refresh-contents)
   (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
-(setq use-package-always-ensure t)
 (use-package general)
-
-(add-to-list 'load-path "~/.emacs.d/vendor/")
-(add-to-list 'load-path "~/.emacs.d/wpc/")
-(add-to-list 'load-path "~/.emacs.d/wpc/packages")
 
 (provide 'wpc-package)
 ;;; wpc-package.el ends here
