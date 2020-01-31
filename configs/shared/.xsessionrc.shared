@@ -26,5 +26,6 @@ unclutter &
 # Control X's pointer with the keyboard. Activate by pressing <C-;>
 keynav daemonize
 
-# Startup Emacs (and EXWM).
-exec emacs --debug-init --no-site-file --no-site-lisp
+# Startup Emacs (and EXWM). This is built by calling `make install` from within
+# ~/dotfiles/emacs.
+exec wpcarros-emacs

@@ -36,6 +36,12 @@ let
       neotree # TODO: Remove this dependency from my config.
       which-key
       ivy
+      restclient
+      package-lint
+      parsec
+      magit-popup
+      direnv
+      emr
       ivy-prescient
       all-the-icons
       all-the-icons-ivy
