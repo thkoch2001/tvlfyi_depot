@@ -31,7 +31,7 @@ This outputs a Docker image at `./result`.
 1. (Optionally) Run the image locally to verify its integrity.
 
 ```shell
-> sudo docker run -d <name>:<tag>
+> sudo docker run -d -p 8080:4242 <name>:<tag>
 ```
 
 1. Tag and push the image to GCR.
@@ -45,7 +45,6 @@ This outputs a Docker image at `./result`.
 1. Visit Google Cloud Run; create a new service with "Create Service"; select
    the uploaded Docker image from the "Container Image URL" field; click
    "Create" to deploy.
-
 
 ## Notes
 
