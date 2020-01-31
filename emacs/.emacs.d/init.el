@@ -59,3 +59,4 @@
 (require 'wpc-javascript)
 (require 'wpc-java)
 (require 'wpc-prolog)
+(require 'wpc-golang)
