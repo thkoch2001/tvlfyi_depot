@@ -6,13 +6,11 @@
 }:
 
 let
-  injectedPosts = nixpkgs.writeText "posts.lisp" ''
+  injections = nixpkgs.writeText "injections.lisp" ''
     (in-package #:server)
     (setq *path-to-posts* "${./posts}")
-  '';
-  injectedExecutables = nixpkgs.writeText "executables.lisp" ''
-    (in-package #:server)
     (setq *pandoc-bin* "${nixpkgs.pandoc}/bin/pandoc")
+    (setq *html-template* "${./src/index.html}")
   '';
 in depot.nix.buildLisp.program {
   name = "server";
@@ -23,7 +21,6 @@ in depot.nix.buildLisp.program {
   ];
   srcs = [
     ./src/server.lisp
-    injectedPosts
-    injectedExecutables
+    injections
   ];
 }
