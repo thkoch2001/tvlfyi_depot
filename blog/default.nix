@@ -19,6 +19,7 @@ in depot.nix.buildLisp.program {
   deps = with depot.third_party.lisp; with briefcase.third_party.lisp; [
     hunchentoot
     cl-arrows
+    cl-ppcre
   ];
   srcs = [
     ./src/server.lisp

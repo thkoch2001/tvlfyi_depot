@@ -2,6 +2,7 @@
 (defpackage #:server
   (:documentation "Robot condemned to a life of admin work for my blog.")
   (:use #:cl)
+  (:use #:cl-ppcre)
   (:import-from #:cl-arrows #:->>)
   (:export :main))
 (in-package #:server)
@@ -10,25 +11,29 @@
 ;; Nix-injected dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Wrap this in an assert or ensure that there's a trailing slash so it's
-;; treated as a directory.
 (defvar *path-to-posts* "/tmp/"
   "File path pointing to the posts directory.")
 
 (defvar *pandoc-bin* "/usr/bin/pandoc")
 
+(defvar *html-template* "./index.html"
+  "The path to the HTML template used for the blog posts.")
+
+(defvar *posts* (uiop:directory-files *path-to-posts*)
+  "List of the paths to the blog posts.")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; TODO: Support properly indenting the output from pandoc to nest within the
+;; template. Or just use a proper templating library.
 (defun render-post (path)
   "Render the markdown file stored at PATH to HTML using pandoc."
-  (uiop:run-program (list *pandoc-bin* path "--to" "html")
-                    :output :string))
-
-;; TODO: Figure out how to handle this with Nix.
-(defvar *posts* (uiop:directory-files *path-to-posts*)
-  "List of the paths to the blog posts.")
+  (cl-ppcre:regex-replace-all
+   "{{ blog }}"
+   (uiop:read-file-string *html-template*)
+   (uiop:run-program (list *pandoc-bin* path "--to" "html") :output :string)))
 
 (hunchentoot:define-easy-handler
     (get-latest :uri "/latest") ()
