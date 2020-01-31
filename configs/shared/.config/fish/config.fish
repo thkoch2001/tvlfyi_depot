@@ -286,7 +286,7 @@ abbr --add ef e ~/functions.zsh
 abbr --add el e ~/variables.zsh
 abbr --add ex e ~/.Xresources
 abbr --add em e ~/.tmux.conf
-abbr --add er e ~/Dropbox/dotfiles/README.md
+abbr --add er e $BRIEFCASE/README.md
 
 # Couple the s* aliases to the <leader>s* kbds in vim.
 abbr --add sz source ~/.zshrc

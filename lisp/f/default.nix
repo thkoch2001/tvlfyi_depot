@@ -1,12 +1,12 @@
 {
   depot ? import <depot> {},
-  universe ? import <universe> {},
+  briefcase ? import <briefcase> {},
   ...
 }:
 
 depot.nix.buildLisp.library {
   name = "f";
-  deps = with universe.lisp; [
+  deps = with briefcase.lisp; [
     prelude
   ];
   srcs = [

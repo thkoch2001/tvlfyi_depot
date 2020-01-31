@@ -52,7 +52,7 @@ LOCALE_ARCHIVE=$(readlink ~/.nix-profile/lib/locale)/locale-archive
 export LOCALE_ARCHIVE
 
 # Set environment variables for Nix. Don't run this for systems running NixOS.
-# TODO: Learn why I can't use the variables from ~/dotfiles/.envrc.
+# TODO: Learn why I can't use the variables from ~/briefcase/.envrc.
 case $(hostname) in
   zeno.lon.corp.google.com) . ~/.nix-profile/etc/profile.d/nix.sh;;
   seneca) . ~/.nix-profile/etc/profile.d/nix.sh;;

@@ -1,8 +1,8 @@
-{ universe ? import <universe> {}, ... }:
+{ briefcase ? import <briefcase> {}, ... }:
 
-universe.nix.buildClojure.program {
+briefcase.nix.buildClojure.program {
   name = "test";
-  deps = with universe.third_party.clojure; [
+  deps = with briefcase.third_party.clojure; [
 
   ];
   srcs = [

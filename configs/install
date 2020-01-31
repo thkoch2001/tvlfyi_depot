@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-configs="$DOTFILES/configs"
+configs="$BRIEFCASE/configs"
 
 case $(hostname) in
   $DESKTOP)

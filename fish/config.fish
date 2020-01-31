@@ -292,7 +292,7 @@ abbr --add ef e ~/functions.zsh
 abbr --add el e ~/variables.zsh
 abbr --add ex e ~/.Xresources
 abbr --add em e ~/.tmux.conf
-abbr --add er e ~/Dropbox/dotfiles/README.md
+abbr --add er e $BRIEFCASE/README.md
 # TODO: consider DRYing this up with `e`. Unfortunately, `sudo` won't support
 # aliases.
 abbr --add en sudo ALTERNATE_EDITOR=nvim emacsclient --no-wait --create-frame /etc/nixos/configuration.nix

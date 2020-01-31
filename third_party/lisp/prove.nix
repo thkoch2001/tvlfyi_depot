@@ -1,6 +1,6 @@
 {
   depot ? import <depot> {},
-  universe? import <universe> {},
+  briefcase ? import <briefcase> {},
   ...
 }:
 
@@ -16,7 +16,7 @@ in depot.nix.buildLisp.library {
     depot.third_party.lisp.cl-ansi-text
     depot.third_party.lisp.alexandria
     depot.third_party.lisp.uiop
-    universe.third_party.lisp.cl-colors
+    briefcase.third_party.lisp.cl-colors
   ];
   srcs = [
     "${src}/src/asdf.lisp"

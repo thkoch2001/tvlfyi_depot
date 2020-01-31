@@ -1,8 +1,8 @@
 install:
-	source "${DOTFILES}/configs/install"
+	source "${BRIEFCASE}/configs/install"
 
 uninstall:
-	source "${DOTFILES}/configs/uninstall"
+	source "${BRIEFCASE}/configs/uninstall"
 
 list-broken-links:
 	find "${HOME}" -maxdepth 1 -xtype l && \

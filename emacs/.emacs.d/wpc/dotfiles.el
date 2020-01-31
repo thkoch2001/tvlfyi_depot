@@ -20,9 +20,12 @@
 (defconst dotfiles/install-kbds? t
   "When t, install the keybindings.")
 
+(defconst dotfiles/directory (getenv "BRIEFCASE")
+  "The root directory of my configuration files.")
+
 (defconst dotfiles/whitelist
-  '(("compton" . "~/.config/compton.conf")
-    ("dotfiles" . "~/dotfiles/")
+  `(("compton" . "~/.config/compton.conf")
+    ("dotfiles" . ,dotfiles/directory)
     ("functions" . "~/functions.zsh")
     ("aliases" . "~/aliases.zsh")
     ("variables" . "~/variables.zsh")
@@ -47,7 +50,7 @@
 (defun dotfiles/find-emacs-file (name)
   "Call `find-file' on NAME located in dotfiles's emacs.d directory."
   (find-file
-   (f-join "~/dotfiles/configs/shared/.emacs.d" name)))
+   (f-join dotfiles/directory "emacs/.emacs.d" name)))
 
 (provide 'dotfiles)
 ;;; dotfiles.el ends here

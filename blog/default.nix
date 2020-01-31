@@ -1,7 +1,7 @@
 {
   nixpkgs ? import <nixpkgs> {},
   depot ? import <depot> {},
-  universe ? import <universe> {},
+  briefcase ? import <briefcase> {},
   ...
 }:
 
@@ -16,7 +16,7 @@ let
   '';
 in depot.nix.buildLisp.program {
   name = "server";
-  deps = with depot.third_party.lisp; with universe.third_party.lisp; [
+  deps = with depot.third_party.lisp; with briefcase.third_party.lisp; [
     hunchentoot
     cl-arrows
   ];

@@ -62,11 +62,8 @@ Otherwise, open with `counsel-find-file'."
    (make-bookmark :label "org"
                   :path "~/Dropbox/org"
                   :kbd "o")
-   (make-bookmark :label "universe"
-                  :path "~/universe"
-                  :kbd "m")
-   (make-bookmark :label "dotfiles"
-                  :path "~/dotfiles"
+   (make-bookmark :label "briefcase"
+                  :path (getenv "BRIEFCASE")
                   :kbd "d")
    (make-bookmark :label "current project"
                   :path constants/current-project
@@ -81,7 +78,7 @@ Otherwise, open with `counsel-find-file'."
 (defun bookmark/magit-status ()
   "Use ivy to select a bookmark and jump to its `magit-status' buffer."
   (interactive)
-  (let ((labels (set/new "dotfiles" "universe" "depot"))
+  (let ((labels (set/new "briefcase" "depot"))
         (all-labels (->> bookmark/whitelist
                          (list/map (>> bookmark-label))
                          set/from-list)))

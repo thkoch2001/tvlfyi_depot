@@ -1,17 +1,16 @@
-# dotfiles
+# briefcase
 
-This is my mono-repo. Having a personal mono-repo is a new idea for me, so at
-the time of this writing, the state of this repository is fledgling.
+Welcome to my briefcase: my monorepo.
 
-I'm attempting to amass a collection of functions across a variety of languages
-while minimizing the costs of sharing the code across a projects. Stay tuned for
-more updates as my definition of the mono-repo becomes more clear, my opinions
-evolve, and my preferences change.
+I'm attempting to amass a collection of packages that span a variety of
+languages while minimizing the costs of sharing the code. This also includes
+configuration for things like emacs, tmux, ssh, and other tools.
 
-My configuration also lives inside of my mono-repo. Things like Emacs, Tmux,
-SSH, and other tools are configured herein.
+# Installation (Deprecated)
 
-# Installation
+The installation instructions here are deprecated. I'd like to manage packaging
+and installing with Nix, but that is only partially supported at the
+moment.
 
 ## wpgtk and gvcci
 

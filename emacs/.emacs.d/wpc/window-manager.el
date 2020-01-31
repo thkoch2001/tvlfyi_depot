@@ -78,7 +78,7 @@
          :index 1
          :kbd "p")
         (make-exwm/named-workspace
-         :label "Dotfiles"
+         :label "Briefcase"
          :index 2
          :kbd "d")
         (make-exwm/named-workspace
@@ -611,10 +611,8 @@ Currently using super- as the prefix for switching workspaces."
      ;; Dotfiles
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
-       (exwm/switch "Dotfiles")
-       (dotfiles/find-emacs-file "init.el")
-       (wpc/evil-window-vsplit-right)
-       (dotfiles/find-emacs-file "wpc/window-manager.el"))
+       (exwm/switch "Briefcase")
+       (dotfiles/find-emacs-file "init.el"))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Chatter
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -641,7 +639,7 @@ Currently using super- as the prefix for switching workspaces."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Reset to default
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     (exwm/switch "Dotfiles"))))
+     (exwm/switch "Briefcase"))))
 
 (provide 'window-manager)
 ;;; window-manager.el ends here

@@ -1,6 +1,6 @@
 {
   depot ? import <depot> {},
-  universe ? import <universe> {},
+  briefcase ? import <briefcase> {},
   ...
 }:
 
@@ -13,7 +13,7 @@ in depot.nix.buildLisp.library {
   name = "let-plus";
   deps = [
     depot.third_party.lisp.alexandria
-    universe.third_party.lisp.anaphora
+    briefcase.third_party.lisp.anaphora
   ];
   srcs = [
     "${src}/package.lisp"
