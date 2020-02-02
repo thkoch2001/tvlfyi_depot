@@ -42,9 +42,11 @@
 (defconst buffer/source-code-blacklist
   (set/new 'dired-mode
            'erc-mode
+           'vterm-mode
            'magit-status-mode
            'magit-process-mode
            'magit-log-mode
+           'magit-diff-mode
            'org-mode
            'fundamental-mode)
   "A blacklist of major-modes to ignore for listing source code buffers.")
