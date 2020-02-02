@@ -46,7 +46,7 @@
   (prelude/start-process
    :name "display/enable-4k"
    :command (string/format
-             "xrandr --output %s --above %s --primary --auto --dpi 144"
+             "xrandr --output %s --above %s --primary --auto --size 3840x2160 --rate 30.00 --dpi 144"
              display/4k-monitor
              display/laptop-monitor)))
 
