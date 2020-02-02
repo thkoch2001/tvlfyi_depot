@@ -50,6 +50,20 @@
 ;; Emacs library that interfaces with my Linux password manager.
 (use-package password-store)
 
+(use-package vterm
+  :config
+  (general-define-key
+   :keymaps '(vterm-mode-map)
+   :states '(insert)
+   "C-S-v" #'vterm-yank)
+  (general-define-key
+   :keymaps '(vterm-mode-map)
+   :states '(normal)
+   "K" #'evil-scroll-line-up
+   "J" #'evil-scroll-line-down
+   "C-b" #'evil-scroll-page-up
+   "C-f" #'evil-scroll-page-down))
+
 ;; Use en Emacs buffer as a REST client.
 ;; For more information: http://emacsrocks.com/e15.html
 (use-package restclient)
