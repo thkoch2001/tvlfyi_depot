@@ -26,6 +26,7 @@
 (require 'display)
 (require 'dotfiles)
 (require 'org-helpers)
+(require 'vterm)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -206,12 +207,6 @@
                 (:key "C-M-\\"            :fn ivy-pass)
 
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                ;; REPLs
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-                (:key ,(kbd/raw 'x11 "r") :fn exwm/ivy-find-or-create-repl)
-
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                 ;; Workspaces
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -315,12 +310,6 @@
       (help-mode))
     (buffer/show b)))
 
-;; TODO: I'm having difficulties with the Nix-built terminator. The one at
-;; /usr/bin/terminator (i.e. built w/o Nix) works just fine. Using this,
-;; however, cheapens my Nix setup.
-(defconst exwm/preferred-terminal "terminator"
-  "My preferred terminal.")
-
 ;; TODO: How do I handle this dependency?
 (defconst exwm/preferred-browser "google-chrome"
   "My preferred web browser.")
@@ -331,83 +320,6 @@
    (string/format "%s %s" exwm/preferred-browser url)
    :buffer-name (string/format "*%s*<%s>" exwm/preferred-browser url)
    :process-name url))
-
-;; TODO: Consider storing local state of all processes started with this command
-;; for some nice ways to cycle through existing terminals, etc.
-(defun exwm/terminal-open (cmd)
-  "Call CMD using `exwm/preferred-terminal'."
-  (exwm/open (string/format
-              "%s --command '%s'"
-              exwm/preferred-terminal
-              cmd)
-             :buffer-name (string/format "*%s*<%s>" exwm/preferred-terminal cmd)
-             :process-name cmd))
-
-;; TODO: Create a KBD that calls the `C-x b<Enter>' I call often.
-;; TODO: Consider auto-generating KBDs for spawning these using the first
-;; character in their name.  Also assert that none of the generated keybindings
-;; will clash with one another.
-(defconst exwm/repls
-  '(("python" . (lambda () (exwm/terminal-open "python3")))
-    ("zsh"    . (lambda () (exwm/terminal-open "zsh")))
-    ("fish"   . (lambda () (exwm/terminal-open "fish")))
-    ("nix"    . (lambda () (exwm/terminal-open "nix repl")))
-    ("racket" . racket-repl)
-    ;; NOTE: `ielm' as-is is a find-or-create operation.
-    ("elisp"  . ielm))
-  "Mapping of REPL labels to the commands needed to initialize those REPLs.")
-
-;; NOTE: Some of these commands split the window already.  Some of these
-;; commands find-or-create already.
-;;
-;; Find-or-create:
-;;        +---+---+
-;;        | Y | N |
-;;        +---+---+
-;; python |   | x |
-;; zsh    |   | x |
-;; racket | x |   |
-;; elisp  | x |   |
-;;        +---+---+
-;;
-;; Split:
-;;        +---+---+
-;;        | Y | N |
-;;        +---+---+
-;; python |   | x |
-;; zsh    |   | x |
-;; racket | x |   |
-;; elisp  |   | x |
-;;        +---+---+
-
-;; - Split:
-;;   - racket
-(defun exwm/ivy-find-or-create-repl ()
-  "Select a type of REPL using `ivy' and then find-or-create it."
-  (interactive)
-  (ivy-helpers/kv "REPLs: "
-                  exwm/repls
-                  (lambda (_ v)
-                    (funcall v))))
-
-;; KBDs to quickly open X11 applications.
-(general-define-key
- ;; TODO: Eventually switch this to a find-or-create operation.  In general, I
- ;; shouldn't need multiple instances of `python3` REPLs.
- ;; TODO: Consider coupling these KBDs with the `exwm/ivy-find-or-create-repl'
- ;; functionality defined above.
- (kbd/raw 'x11 "n") (lambda ()
-                      (interactive)
-                      (exwm/terminal-open "nix repl"))
- (kbd/raw 'x11 "p") (lambda ()
-                      (interactive)
-                      (exwm/terminal-open "python3"))
- (kbd/raw 'x11 "t") (lambda ()
-                      (interactive)
-                      (exwm/open exwm/preferred-terminal))
- (kbd/raw 'x11 "c") (lambda ()
-                      (interactive)
-                      (exwm/open exwm/preferred-browser)))
 
 ;; TODO: Support searching all "launchable" applications like OSX's Spotlight.
 ;; TODO: Model this as key-value pairs.
@@ -596,9 +508,7 @@ Currently using super- as the prefix for switching workspaces."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
        (exwm/switch "Terminal")
-       ;; TODO: Why does "gnome-terminal" work but not "terminator"?
-       ;; (call-process-shell-command "gnome-terminal")
-       )
+       (vterm))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Todos
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

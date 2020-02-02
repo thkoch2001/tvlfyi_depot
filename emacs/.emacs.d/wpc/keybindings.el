@@ -15,6 +15,8 @@
 (require 'chrome)
 (require 'scrot)
 (require 'ivy-clipmenu)
+(require 'term-switcher)
+(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -41,6 +43,8 @@
 ;; TODO: I need this because my Ergodox EZ sends super+shift instead of just
 ;; super. Remove this once I fix my Ergodox.
 (keybinding/exwm "C-S-s-s" #'scrot/select)
+
+(general-define-key (kbd/raw 'x11 "t") #'ts/switch-to-terminal)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here
