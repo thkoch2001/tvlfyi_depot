@@ -21,6 +21,13 @@
 (use-package nix-mode
   :mode "\\.nix\\'")
 
+(defun nix/rebuild-emacs ()
+  "Use nix-env to rebuild wpcarros-emacs."
+  (interactive)
+  (start-process "nix-build/<briefcase>.emacs" "*nix-build/<briefcase>.emacs*"
+                 "nix-env" "-f" (f-join (getenv "BRIEFCASE") "emacs") "-i")
+  (display-buffer "*nix-build/<briefcase>.emacs*"))
+
 (defun nix/sly-from-briefcase (attribute)
   "Start a Sly REPL configured with a Lisp matching a derivation
   from my monorepo.
