@@ -27,6 +27,8 @@
 (require 'dotfiles)
 (require 'org-helpers)
 (require 'vterm)
+(require 'dash)
+(require 'evil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -202,8 +204,6 @@
                 (:key "<M-tab>"           :fn exwm/next-workspace)
                 (:key "<M-S-iso-lefttab>" :fn exwm/prev-workspace)
                 (:key "<M-iso-lefttab>"   :fn exwm/prev-workspace)
-                ;; <M-escape> doesn't work in X11 windows.
-                (:key "<M-escape>"        :fn exwm/ivy-switch)
                 (:key "C-M-\\"            :fn ivy-pass)
 
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -331,8 +331,7 @@
         "google-chrome --new-window --app=https://teknql.slack.com"
         "google-chrome --new-window --app=https://web.whatsapp.com"
         "google-chrome --new-window --app=https://irccloud.com"
-        exwm/preferred-browser
-        exwm/preferred-terminal)
+        exwm/preferred-browser)
   "Applications that I commonly use.
 These are the types of items that would usually appear in dmenu.")
 
@@ -457,7 +456,7 @@ Currently using super- as the prefix for switching workspaces."
   (interactive)
   (exwm/change-workspace (cycle/focus-previous! exwm/workspaces)))
 
-(defun exwm/ivy-switch ()
+(defun exwm/switch-to-exwm-workspace ()
   "Use ivy to switched between named workspaces."
   (interactive)
   (ivy-read
@@ -465,6 +464,30 @@ Currently using super- as the prefix for switching workspaces."
    (->> exwm/named-workspaces
         (list/map #'exwm/named-workspace-label))
    :action #'exwm/switch))
+
+(defun exwm/exwm-buffer? (x)
+  "Return t if buffer X is an EXWM buffer."
+  (equal 'exwm-mode (buffer-local-value 'major-mode x)))
+
+(defun exwm/application-name (buffer)
+  "Return the name of the application running in the EXWM BUFFER.
+This function asssumes that BUFFER passes the `exwm/exwm-buffer?' predicate."
+  (with-current-buffer buffer exwm-class-name))
+
+;; TODO: Support disambiguating between two or more instances of the same
+;; application. For instance if two `exwm-class-name' values are
+;; "Google-chrome", find a encode this information in the `buffer-alist'.
+(defun exwm/switch-to-exwm-buffer ()
+  "Use `completing-read' to focus an EXWM buffer."
+  (interactive)
+  (let* ((buffer-alist (->> (buffer-list)
+                            (-filter #'exwm/exwm-buffer?)
+                            (-map (lambda (buffer)
+                                    (cons (exwm/application-name buffer)
+                                          buffer)))))
+         (label (completing-read "Switch to EXWM buffer: " buffer-alist)))
+    (exwm-workspace-switch-to-buffer
+     (alist-get label buffer-alist nil nil #'string=))))
 
 (when exwm/install-workspace-kbds?
   (progn
