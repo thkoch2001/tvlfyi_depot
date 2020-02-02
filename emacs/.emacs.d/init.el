@@ -28,6 +28,7 @@
 ;; TODO: Consider renaming entr.el.
 (require 'entr)
 (require 'scrot)
+(require 'timestring)
 
 ;; TODO: Remove path once published to MELPA.
 ;; TODO: How can I package this using Nix?
