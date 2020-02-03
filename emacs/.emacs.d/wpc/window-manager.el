@@ -210,13 +210,8 @@
                 ;; Workspaces
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-                ;; NOTE: Here I need to generate lowercase and uppercase
-                ;; variants of each because my Ergodox is sending capitalized
-                ;; variants of the keycodes to EXWM.
                 (:key ,(kbd/raw 'workspace "l") :fn window-manager/logout)
-                (:key ,(kbd/raw 'workspace "L") :fn window-manager/logout)
-                (:key ,(kbd/raw 'workspace "i") :fn exwm/toggle-mode)
-                (:key ,(kbd/raw 'workspace "I") :fn exwm/toggle-mode))))
+                (:key ,(kbd/raw 'workspace "i") :fn exwm/toggle-mode))))
     (setq exwm-input-global-keys
           (->> kbds
                (-map (lambda (plist)
@@ -428,11 +423,6 @@ Currently using super- as the prefix for switching workspaces."
         (key (exwm/named-workspace-kbd workspace)))
     (exwm-input-set-key
      (kbd/for 'workspace key)
-     handler)
-    ;; Note: We need to capitalize the KBD here because of the signals that my
-    ;; Ergodox is sending Emacs on my desktop.
-    (exwm-input-set-key
-     (kbd/for 'workspace (s-capitalize key))
      handler)))
 
 (defun exwm/change-workspace (workspace)

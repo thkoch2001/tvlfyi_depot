@@ -41,10 +41,6 @@
 
 (keybinding/exwm (kbd/raw 'x11 "s") #'scrot/select)
 
-;; TODO: I need this because my Ergodox EZ sends super+shift instead of just
-;; super. Remove this once I fix my Ergodox.
-(keybinding/exwm "C-S-s-s" #'scrot/select)
-
 (keybinding/exwm "<C-M-tab>" #'exwm/switch-to-exwm-buffer)
 
 (general-define-key (kbd/raw 'x11 "t") #'ts/switch-to-terminal)
