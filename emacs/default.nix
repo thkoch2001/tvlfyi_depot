@@ -56,6 +56,7 @@ let
       py-yapf
       reason-mode
       elixir-mode
+      go-mode
       company
       markdown-mode
       refine
