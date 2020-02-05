@@ -222,20 +222,21 @@ abbr --add gst   'git status && hub pr list'
 # Mercurial counterparts. Some may map 1:1, others may be like putting a square
 # peg into a round hole. I will try and use my best judgement in these cases
 # while erring on the side of unifying the two APIs.
-abbr --add hgst  hg status
-abbr --add hglp  hg xl
-abbr --add hgp   hg uploadchain # this is like `git push`
-abbr --add hga   hg add
-abbr --add hgc   hg commit
-abbr --add hgcan hg amend # like `git commit --amend --no-edit'
-abbr --add hgpr  hg mail -r . -m # this may be similar to `hub pull-request`
-abbr --add hgd   hg diff
-abbr --add hgsh  hg export
-abbr --add hgco  hg update
-abbr --add hgls  hg citc --list # should have different output from `pils`
-abbr --add hgrc  hg rebase --continue
-abbr --add hgra  hg rebase --abort
-abbr --add hgrm  hg citc -d # delete a CitC client created with Fig
+abbr --add hgst   hg status
+abbr --add hglp   hg xl
+abbr --add hgp    hg uploadchain # this is like `git push`
+abbr --add hga    hg add
+abbr --add hgc    hg commit
+abbr --add hgcan  hg amend # like `git commit --amend --no-edit'
+abbr --add hgpr   hg mail -r . -m # this may be similar to `hub pull-request`
+abbr --add hgd    hg diff
+abbr --add hgsh   hg export
+abbr --add hgco   hg update
+abbr --add hgls   hg citc --list # should have different output from `pils`
+abbr --add hgrc   hg rebase --continue
+abbr --add hgra   hg rebase --abort
+abbr --add hgrm   hg citc -d # delete a CitC client created with Fig
+abbr --add hgwhat 'hg status --rev p4base:(hg id -i)'
 abbr --add hgconflicts hg resolve --list 'set:unresolved()' # much like `gconflicts`
 
 # Haskell
