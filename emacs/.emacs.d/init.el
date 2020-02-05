@@ -51,7 +51,7 @@
 (require 'wpc-lisp)
 (require 'wpc-haskell)
 (require 'wpc-reasonml)
-(require 'wpc-ocaml)
+;; (require 'wpc-ocaml)
 (require 'wpc-elixir)
 (require 'wpc-nix)
 (require 'wpc-rust)

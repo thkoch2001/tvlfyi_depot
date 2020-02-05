@@ -13,7 +13,6 @@
 (require 'prelude)
 
 (prelude/assert (prelude/executable-exists? "goimports"))
-(prelude/assert (prelude/executable-exists? "godoc"))
 (prelude/assert (prelude/executable-exists? "godef"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
