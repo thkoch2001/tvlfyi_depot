@@ -19,9 +19,6 @@
 (require 'prelude)
 (require 'f)
 
-(prelude/assert
- (prelude/executable-exists? "opam"))
-
 (defvar opam-user-setup "~/.emacs.d/opam-user-setup.el"
   "File for the OPAM Emacs integration.")
 

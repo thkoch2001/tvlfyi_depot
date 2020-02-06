@@ -6,7 +6,12 @@
 
 let
   utils = import ~/briefcase/utils;
-  emacsBinPath = pkgs.lib.strings.makeBinPath [ pkgs.terminator ];
+  emacsBinPath = pkgs.lib.strings.makeBinPath (with pkgs; [
+    scrot
+    clipmenu
+    ocaml
+    ocamlformat
+  ]);
   emacsWithPackages = (pkgs.emacsPackagesNgGen pkgs.emacs26).emacsWithPackages;
   wpcarrosEmacs = emacsWithPackages (epkgs:
     (with epkgs.elpaPackages; [

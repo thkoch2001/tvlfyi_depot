@@ -19,9 +19,6 @@
 (require 'prelude)
 (require 'ivy-clipmenu)
 
-(prelude/assert (prelude/executable-exists? "clipmenu"))
-(prelude/assert (prelude/executable-exists? "clipmenud"))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

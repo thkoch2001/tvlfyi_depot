@@ -12,9 +12,6 @@
 
 (require 'prelude)
 
-(prelude/assert (prelude/executable-exists? "goimports"))
-(prelude/assert (prelude/executable-exists? "godef"))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
