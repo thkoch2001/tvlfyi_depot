@@ -181,11 +181,6 @@ abbr --add tism MIX_ENV=test iex -S mix
 abbr --add mdg mix deps.get
 abbr --add mdu mix deps.update
 abbr --add mdup mix docker.up
-# TODO: Support `repl_ex` and company as Nix-built programs.
-abbr --add repl_ex dkish elixir iex
-
-# Clojure
-abbr --add cljsh dkish clojure lein repl
 
 # GPG
 abbr --add gpged gpg --edit-key wpcarro@gmail.com
@@ -245,8 +240,6 @@ abbr --add se stack exec --
 abbr --add sc stack clean
 abbr --add st stack test
 abbr --add haddocks open (stack path --local-doc-root)/index.html
-# TODO: Remove `dkish` in favor of a Nix-built solution.
-abbr --add hksh 'dkish haskell ghci'
 
 # Kubernetes
 abbr --add kc kubectl
