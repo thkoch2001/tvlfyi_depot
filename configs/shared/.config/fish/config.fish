@@ -239,7 +239,7 @@ abbr --add sb stack build
 abbr --add se stack exec --
 abbr --add sc stack clean
 abbr --add st stack test
-abbr --add haddocks open (stack path --local-doc-root)/index.html
+abbr --add haddocks 'open (stack path --local-doc-root)/index.html'
 
 # Kubernetes
 abbr --add kc kubectl
