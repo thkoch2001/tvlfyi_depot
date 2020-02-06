@@ -6,11 +6,29 @@
 
 let
   utils = import ~/briefcase/utils;
+  # NOTE: I'm trying to keep the list of dependencies herein constrained to a
+  # list of generic dependencies (i.e. not project or language specific). For
+  # language-specific tooling, I'm intending to use shell.nix alongside lorri
+  # and direnv.
   emacsBinPath = pkgs.lib.strings.makeBinPath (with pkgs; [
+    lorri
+    direnv
+    tdesktop # native telegram client
+    diskus
+    bat
+    exa
+    fd
+    fzf
+    tldr
+    tokei
+    nmap
+    ripgrep
+    gitAndTools.hub
+    kubectl
+    google-cloud-sdk
+    xsv
     scrot
     clipmenu
-    ocaml
-    ocamlformat
   ]);
   emacsWithPackages = (pkgs.emacsPackagesNgGen pkgs.emacs26).emacsWithPackages;
   wpcarrosEmacs = emacsWithPackages (epkgs:
