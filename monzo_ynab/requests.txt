@@ -1,0 +1,10 @@
+:endpoint = https://api.youneedabudget.com/v1
+:access-token := (password-store-get "finance/youneedabudget.com/personal-access-token")
+:budget-id := (password-store-get "finance/youneedabudget.com/budget-id")
+
+# Test
+GET :endpoint/budgets
+Authorization: Bearer :access-token
+
+# List transactions
+GET :endpoint/budgets/:budget-id/transactions
