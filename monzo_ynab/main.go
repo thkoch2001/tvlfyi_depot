@@ -24,8 +24,8 @@ import (
 ////////////////////////////////////////////////////////////////////////////////
 
 var (
-	clientId     = os.Getenv("client_id")
-	clientSecret = os.Getenv("client_secret")
+	clientId     = os.Getenv("monzo_client_id")
+	clientSecret = os.Getenv("monzo_client_secret")
 )
 
 const (
