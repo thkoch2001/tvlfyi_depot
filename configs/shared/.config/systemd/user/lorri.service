@@ -1,0 +1,12 @@
+[Unit]
+ConditionUser=!@system
+Description=Lorri build daemon
+After=lorri.socket
+Wants=lorri.socket
+
+[Service]
+ExecStart=%h/.nix-profile/bin/lorri daemon
+PrivateTmp=true
+ProtectSystem=strict
+Restart=on-failure
+WorkingDirectory=%h

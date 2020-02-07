@@ -51,6 +51,9 @@ eval "$(ssh-agent -s)"
 # TODO: Prefer `systemctl start docker.service`
 dockerd &
 
+# Start lorri
+systemctl --user start lorri.service
+
 # Set environment variables for Nix. Don't run this for systems running NixOS.
 # TODO: Learn why I can't use the variables from ~/briefcase/.envrc.
 case $(hostname) in
@@ -58,8 +61,3 @@ case $(hostname) in
   seneca) . ~/.nix-profile/etc/profile.d/nix.sh;;
   wpcarro.c.googlers.com) . ~/.nix-profile/etc/profile.d/nix.sh;;
 esac
-
-# NOTE: `lorri` needs to be below the calls to source Nix environment since it's
-# installed with `nix-env -iA nixpkgs.lorri`.
-# Start lorri daemon
-lorri daemon &
