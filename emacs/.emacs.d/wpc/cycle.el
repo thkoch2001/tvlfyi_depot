@@ -131,6 +131,11 @@ underlying struct."
         (cycle/jump i cycle)
       (error "No element in cycle matches predicate"))))
 
+(defun cycle/focus-item (x xs)
+  "Focus ITEM in cycle XS.
+ITEM is the first item in XS that t for `equal'."
+  (cycle/focus (lambda (y) (equal x y)) xs))
+
 (defun cycle/contains? (x xs)
   "Return t if cycle, XS, has member X."
   (->> xs
