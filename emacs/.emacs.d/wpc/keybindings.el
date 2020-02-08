@@ -15,9 +15,10 @@
 (require 'chrome)
 (require 'scrot)
 (require 'ivy-clipmenu)
-(require 'term-switcher)
 (require 'general)
 (require 'window-manager)
+(require 'vterm-mgt)
+(require 'buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -43,7 +44,27 @@
 
 (keybinding/exwm "<C-M-tab>" #'exwm/switch-to-exwm-buffer)
 
-(general-define-key (kbd/raw 'x11 "t") #'ts/switch-to-terminal)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Vterm
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Show or hide a vterm buffer.  I'm intentionally not defining this in
+;; vterm-mgt.el because it consumes `buffer/show-previous', and I'd like to
+;; avoid bloating vterm-mgt.el with dependencies that others may not want.
+(general-define-key (kbd/raw 'x11 "t")
+                    (lambda ()
+                      (interactive)
+                      (if (vterm-mgt--instance? (current-buffer))
+                          (switch-to-buffer (first (buffer/source-code-buffers)))
+                        (call-interactively #'vterm-mgt-find-or-create))))
+
+(general-define-key
+ :keymaps '(vterm-mode-map)
+ "C-S-n" #'vterm-mgt-instantiate
+ "C-S-w" #'vterm-mgt-kill
+ "<C-tab>" #'vterm-mgt-next
+ "<C-S-iso-lefttab>" #'vterm-mgt-prev
+ "<s-backspace>" #'vterm-mgt-rename-buffer)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here

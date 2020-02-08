@@ -37,6 +37,7 @@ let
     ]) ++
 
     (with epkgs.melpaPackages; [
+      vterm
       base16-theme
       ivy-pass
       clipmon # TODO: Prefer an Emacs client for clipmenud.
@@ -122,7 +123,6 @@ let
 
     (with depot.tools.emacs-pkgs; [
       dottime
-      term-switcher
     ]));
 
 # TODO: Do I need `pkgs.lib.fix`?

@@ -26,7 +26,7 @@
 (require 'display)
 (require 'dotfiles)
 (require 'org-helpers)
-(require 'vterm)
+(require 'vterm-mgt)
 (require 'dash)
 (require 'evil)
 
@@ -521,7 +521,7 @@ This function asssumes that BUFFER passes the `exwm/exwm-buffer?' predicate."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
        (exwm/switch "Terminal")
-       (vterm))
+       (vterm-mgt-instantiate))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Todos
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
