@@ -57,3 +57,48 @@ for row in reversed(board):
     for col in reversed(row):
         result.append(col)
 print(result)
+
+################################################################################
+# Neighbors
+################################################################################
+
+import random
+
+
+# Generate a matrix of size `rows` x `cols` where each cell contains an item
+# randomly selected from `xs`.
+def generate_board(rows, cols, xs):
+    result = []
+    for _ in range(rows):
+        row = []
+        for _ in range(cols):
+            row.append(random.choice(xs))
+        result.append(row)
+    return result
+
+
+# Print the `board` to the screen.
+def print_board(board):
+    print('\n'.join([' '.join(row) for row in board]))
+
+
+board = generate_board(4, 5, ['R', 'G', 'B'])
+print_board(board)
+
+
+# Return all of the cells horizontally and vertically accessible from a starting
+# cell at `row`, `col` in `board`.
+def neighbors(row, col, board):
+    result = {'top': [], 'bottom': [], 'left': [], 'right': []}
+    for i in range(row - 1, -1, -1):
+        result['top'].append(board[i][col])
+    for i in range(row + 1, len(board)):
+        result['bottom'].append(board[i][col])
+    for i in range(col - 1, -1, -1):
+        result['left'].append(board[row][i])
+    for i in range(col + 1, len(board[0])):
+        result['right'].append(board[row][i])
+    return result
+
+
+print(neighbors(1, 2, board))
