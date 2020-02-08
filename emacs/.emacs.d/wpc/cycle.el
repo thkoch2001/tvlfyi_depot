@@ -34,17 +34,19 @@
 (defconst cycle/enable-tests? t
   "When t, run the tests defined herein.")
 
-(defun cycle/new (&rest xs)
-  "Create an empty cycle."
-  (make-cycle :current-index 0
-              :previous-index nil
-              :xs xs))
-
 (defun cycle/from-list (xs)
   "Create a cycle from a list of `XS'."
-  (make-cycle :current-index 0
-              :previous-index nil
-              :xs xs))
+  (if (= 0 (length xs))
+      (make-cycle :current-index nil
+                  :previous-index nil
+                  :xs xs)
+    (make-cycle :current-index 0
+                :previous-index nil
+                :xs xs)))
+
+(defun cycle/new (&rest xs)
+  "Create a cycle with XS as the values."
+  (cycle/from-list xs))
 
 (defun cycle/to-list (xs)
   "Return the list representation of a cycle, XS."
@@ -134,6 +136,14 @@ underlying struct."
   (->> xs
        cycle-xs
        (list/contains? x)))
+
+(defun cycle/empty? (xs)
+  "Return t if cycle XS has no elements."
+  (= 0 (length (cycle-xs xs))))
+
+(defun cycle/focused? (xs)
+  "Return t if cycle XS has a non-nil value for current-index."
+  (maybe/some? (cycle-current-index xs)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
