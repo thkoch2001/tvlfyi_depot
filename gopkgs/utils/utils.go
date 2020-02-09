@@ -2,8 +2,9 @@
 package utils
 
 import (
-	"log"
+	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/httputil"
 )
@@ -13,6 +14,18 @@ func FailOn(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// Prints the verbose form of an HTTP request.
+func DebugRequest(req *http.Request) {
+	bytes, _ := httputil.DumpRequest(req, true)
+	fmt.Println(string(bytes))
+}
+
+// Prints out the verbose form of an HTTP response.
+func DebugResponse(res *http.Response) {
+	bytes, _ := httputil.DumpResponse(res, true)
+	fmt.Println(string(bytes))
 }
 
 // Make a simple GET request to `url`. Fail if anything returns an error. I'd
@@ -36,10 +49,8 @@ func SimpleGet(url string, headers map[string]string, debug bool) string {
 	defer res.Body.Close()
 
 	if debug {
-		bytes, _ := httputil.DumpRequest(req, true)
-		log.Println(string(bytes))
-		bytes, _ = httputil.DumpResponse(res, true)
-		log.Println(string(bytes))
+		DebugRequest(req)
+		DebugResponse(res)
 	}
 
 	if res.StatusCode == http.StatusOK {
