@@ -10,11 +10,15 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
+	"strings"
 	"os"
 	"os/exec"
 )
@@ -24,6 +28,7 @@ import (
 ////////////////////////////////////////////////////////////////////////////////
 
 var (
+	accountId    = os.Getenv("monzo_account_id")
 	clientId     = os.Getenv("monzo_client_id")
 	clientSecret = os.Getenv("monzo_client_secret")
 )
@@ -45,13 +50,27 @@ const (
 type accessTokenResponse struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
+	ExpiresIn    int    `json:"expires_in"`
+}
+
+type setTokensRequest struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+	ExpiresIn    int    `json:"expires_in"`
+}
+
+type Tokens struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+	ExpiresIn    int    `json:"expires_in"`
 }
 
 // TODO(wpcarro): Replace http.PostForm and other similar calls with
 // client.postForm. The default http.Get and other methods doesn't timeout, so
 // it's better to create a configured client with a value for the timeout.
 
-func getAccessToken(code string) {
+// Returns the access token and refresh tokens for the Monzo API.
+func getTokens(code string) *Tokens {
 	res, err := http.PostForm("https://api.monzo.com/oauth2/token", url.Values{
 		"grant_type":    {"authorization_code"},
 		"client_id":     {clientId},
@@ -59,67 +78,93 @@ func getAccessToken(code string) {
 		"redirect_uri":  {redirectURI},
 		"code":          {code},
 	})
-	failOn(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer res.Body.Close()
+	payload := &accessTokenResponse{}
+	json.NewDecoder(res.Body).Decode(payload)
 
-	payload := accessTokenResponse{}
-	json.NewDecoder(res.Body).Decode(&payload)
-
-	log.Printf("Access token: %s\n", payload.AccessToken)
-	log.Printf("Refresh token: %s\n", payload.AccessToken)
+	return &Tokens{payload.AccessToken, payload.RefreshToken, payload.ExpiresIn}
 }
 
-func listenHttp(sigint chan os.Signal) {
-	// Use a go-routine to listen for interrupt signals to shutdown our HTTP
-	// server.
-	go func() {
-		<-sigint
-		// TODO(wpcarro): Do we need context here? I took this example from the
-		// example on golang.org.
-		log.Println("Warning: I should be shutting down and closing the connection here, but I'm not.")
-		close(sigint)
-	}()
-
-	log.Fatal(http.ListenAndServe(":8080", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		// 1. Get authorization code from Monzo.
-		if req.URL.Path == "/authorization-code" {
-			params := req.URL.Query()
-			reqState := params["state"][0]
-			code := params["code"][0]
-
-			if reqState != state {
-				log.Fatalf("Value for state returned by Monzo does not equal our state. %s != %s", reqState, state)
-			}
-
-			// TODO(wpcarro): Add a more interesting authorization confirmation
-			// screen -- or even nothing at all.
-			fmt.Fprintf(w, "Authorized!")
-
-			// Exchange the authorization code for an access token.
-			getAccessToken(code)
-			return
-		}
-
-		log.Printf("Unhandled request: %v\n", *req)
-	})))
-}
-
-// Open a web browser to allow the user to authorize this application.
 // TODO(wpcarro): Prefer using an environment variable for the web browser
 // instead of assuming it will be google-chrome.
-func authorizeClient() {
+// Open a web browser to allow the user to authorize this application. Return
+// the authorization code sent from Monzo.
+func getAuthCode() string {
 	url := fmt.Sprintf("https://auth.monzo.com/?client_id=%s&redirect_uri=%s&response_type=code&state=%s", clientId, redirectURI, state)
 	exec.Command("google-chrome", url).Start()
+
+	authCode := make(chan string)
+	go func() {
+		log.Fatal(http.ListenAndServe(":8080", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			// 1. Get authorization code from Monzo.
+			if req.URL.Path == "/authorization-code" {
+				params := req.URL.Query()
+				reqState := params["state"][0]
+				code := params["code"][0]
+
+				if reqState != state {
+					log.Fatalf("Value for state returned by Monzo does not equal our state. %s != %s", reqState, state)
+				}
+				authCode <- code
+
+				fmt.Fprintf(w, "Authorized!")
+			} else {
+				log.Printf("Unhandled request: %v\n", *req)
+			}
+		})))
+	}()
+	result := <-authCode
+	return result
+}
+
+// TODO(wpcarro): Move this logic out of here and into the tokens server.
+func authorize() {
+	authCode := getAuthCode()
+	tokens := getTokens(authCode)
+	client := &http.Client{}
+
+	payload, _ := json.Marshal(setTokensRequest{
+		tokens.AccessToken,
+		tokens.RefreshToken,
+		tokens.ExpiresIn})
+	log.Printf("Access token: %s\n", tokens.AccessToken)
+	log.Printf("Refresh token: %s\n", tokens.RefreshToken)
+	log.Printf("Expires: %s\n", tokens.ExpiresIn)
+	req, _ := http.NewRequest("POST", "http://localhost:4242/set-tokens", bytes.NewBuffer(payload))
+	req.Header.Set("Content-Type", "application/json")
+	_, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// Retrieves the access token from the tokens server.
+func getAccessToken() string {
+	return simpleGet("http://localhost:4242/token")
 }
 
 func main() {
-	sigint := make(chan os.Signal, 1)
-	// TODO(wpcarro): Remove state here. I'm using as a hack to prevent my
-	// program from halting before I'd like it to. Once I'm more comfortable
-	// using channels, this should be a trivial change.
-	state := make(chan bool)
+	accessToken := getAccessToken()
+	// authHeaders := map[string]string{
+	// 	"Authorization": fmt.Sprintf("Bearer %s", accessToken),
+	// }
 
-	authorizeClient()
-	listenHttp(sigint)
-	<-state
+	client := &http.Client{}
+	form := url.Values{"account_id": {accountId}}
+	req, _ := http.NewRequest("GET", "https://api.monzo.com/transactions", strings.NewReader(form.Encode()))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	bytes, _ := httputil.DumpRequest(req, true)
+	fmt.Println(string(bytes))
+	res, _ := client.Do(req)
+	bytes, _ = httputil.DumpResponse(res, true)
+	fmt.Println(string(bytes))
+
+	// res := simpleGet("https://api.monzo.com/accounts", authHeaders, true)
+	// fmt.Println(res)
+
+	os.Exit(0)
 }

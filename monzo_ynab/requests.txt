@@ -34,3 +34,25 @@ Content-Type: application/x-www-form-urlencoded
 Authorization: Bearer :monzo-access-token
 grant_type=refresh_token&client_id=:monzo-client-id&client_secret=:monzo-client-secret&refresh_token=:monzo-refresh-token
 
+################################################################################
+# Tokens server
+################################################################################
+:tokens = http://localhost:4242
+
+# Get tokens
+GET :tokens/tokens
+
+# Get application state for debugging purposes
+GET :tokens/state
+
+# Force refresh tokens
+POST :tokens/refresh-tokens
+
+# Set tokens
+POST :tokens/set-tokens
+Content-Type: application/json
+{
+  "access_token": "access-token",
+  "refresh_token": "refresh-token",
+  "expires_in": 120
+}
