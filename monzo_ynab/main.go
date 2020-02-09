@@ -13,7 +13,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -21,6 +20,7 @@ import (
 	"strings"
 	"os"
 	"os/exec"
+	"utils"
 )
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -78,9 +78,7 @@ func getTokens(code string) *Tokens {
 		"redirect_uri":  {redirectURI},
 		"code":          {code},
 	})
-	if err != nil {
-		log.Fatal(err)
-	}
+	utils.FailOn(err)
 	defer res.Body.Close()
 	payload := &accessTokenResponse{}
 	json.NewDecoder(res.Body).Decode(payload)
@@ -136,9 +134,7 @@ func authorize() {
 	req, _ := http.NewRequest("POST", "http://localhost:4242/set-tokens", bytes.NewBuffer(payload))
 	req.Header.Set("Content-Type", "application/json")
 	_, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
+	utils.FailOn(err)
 }
 
 // Retrieves the access token from the tokens server.

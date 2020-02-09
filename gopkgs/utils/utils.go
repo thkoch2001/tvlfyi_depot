@@ -1,8 +1,15 @@
-package main
+// Some utility functions to tidy up my Golang.
+package utils
 
-import "log"
+import (
+	"log"
+	"io/ioutil"
+	"net/http"
+	"net/http/httputil"
+)
 
-func failOn(err error) {
+// Call log.Fatal with `err` when it's not nil.
+func FailOn(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -12,7 +19,7 @@ func failOn(err error) {
 // like to accumulate a library of these, so that I can write scrappy Go
 // quickly. For now, this function just returns the body of the response back as
 // a string.
-func simpleGet(url string, headers map[string]string, debug bool) string {
+func SimpleGet(url string, headers map[string]string, debug bool) string {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

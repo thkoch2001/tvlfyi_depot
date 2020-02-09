@@ -20,6 +20,8 @@ let
   localPkgs = readTree: {
     blog = readTree ./blog;
     lisp = readTree ./lisp;
+    gopkgs = readTree ./gopkgs;
+    monzo_ynab = readTree ./monzo_ynab;
     third_party = readTree ./third_party;
   };
 in fix(self: {
