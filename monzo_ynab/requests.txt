@@ -1,10 +1,36 @@
-:endpoint = https://api.youneedabudget.com/v1
-:access-token := (password-store-get "finance/youneedabudget.com/personal-access-token")
-:budget-id := (password-store-get "finance/youneedabudget.com/budget-id")
+################################################################################
+# YNAB
+################################################################################
+:ynab = https://api.youneedabudget.com/v1
+:ynab-access-token := (getenv "ynab_personal_access_token")
+:ynab-budget-id := (getenv "ynab_budget_id")
 
 # Test
-GET :endpoint/budgets
-Authorization: Bearer :access-token
+GET :ynab/budgets
+Authorization: Bearer :ynab-access-token
 
 # List transactions
-GET :endpoint/budgets/:budget-id/transactions
+GET :ynab/budgets/:ynab-budget-id/transactions
+
+################################################################################
+# Monzo
+################################################################################
+:monzo = https://api.monzo.com
+:monzo-access-token := (getenv "monzo_cached_access_token")
+:monzo-refresh-token := (getenv "monzo_cached_refresh_token")
+:monzo-client-id := (getenv "monzo_client_id")
+:monzo-client-secret := (getenv "monzo_client_secret")
+:monzo-account-id := (getenv "monzo_account_id")
+
+# List transactions
+GET :monzo/transactions
+Authorization: Bearer :monzo-access-token
+account_id==:monzo-account-id
+
+# Refresh access token
+# According from the docs, the access token expires in 6 hours.
+POST :monzo/oauth2/token
+Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer :monzo-access-token
+grant_type=refresh_token&client_id=:monzo-client-id&client_secret=:monzo-client-secret&refresh_token=:monzo-refresh-token
+
