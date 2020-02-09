@@ -16,6 +16,7 @@ import (
 	"net/url"
 	"os"
 	"time"
+	"kv"
 )
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -70,8 +71,6 @@ var chans = &channels{
 var (
 	monzoClientId      = os.Getenv("monzo_client_id")
 	monzoClientSecret  = os.Getenv("monzo_client_secret")
-	cachedAccessToken  = os.Getenv("monzo_cached_access_token")
-	cachedRefreshToken = os.Getenv("monzo_cached_access_token")
 )
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -124,9 +123,21 @@ func refreshTokens(refreshToken string) (string, string) {
 ////////////////////////////////////////////////////////////////////////////////
 
 func main() {
+	// Retrieve cached tokens from store.
+	accessToken := fmt.Sprintf("%v", kv.Get("monzoAccessToken"))
+	refreshToken := fmt.Sprintf("%v", kv.Get("monzoRefreshToken"))
+
+	log.Println("Attempting to retrieve cached credentials...")
+	log.Printf("Access token: %s\n", accessToken)
+	log.Printf("Refresh token: %s\n", refreshToken)
+
+	if accessToken == "" || refreshToken == "" {
+		log.Fatal("Cannot start server without access or refresh tokens.")
+	}
+
 	// Manage application state.
 	go func() {
-		state := &state{cachedAccessToken, cachedRefreshToken}
+		state := &state{accessToken, refreshToken}
 		for {
 			select {
 			case msg := <-chans.reads:
