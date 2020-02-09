@@ -17,6 +17,8 @@ import (
 	"os"
 	"time"
 	"kv"
+	"os/signal"
+	"syscall"
 )
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -118,6 +120,34 @@ func refreshTokens(refreshToken string) (string, string) {
 	return payload.AccessToken, payload.RefreshToken
 }
 
+// Listen for SIGINT and SIGTERM signals. When received, persist the access and
+// refresh tokens and shutdown the server.
+func handleInterrupts() {
+	// Gracefully handle interruptions.
+	sigs := make(chan os.Signal)
+	done := make(chan bool)
+
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		sig := <-sigs
+		log.Printf("Received signal to shutdown. %v\n", sig)
+		// Persist existing tokens
+		log.Println("Persisting existing credentials...")
+		msg := readMsg{make(chan state)}
+		chans.reads <- msg
+		state := <-msg.sender
+		kv.Set("monzoAccessToken", state.accessToken)
+		kv.Set("monzoRefreshToken", state.refreshToken)
+		log.Println("Credentials persisted.")
+		done <- true
+	}()
+
+	<-done
+	log.Println("Received signal to shutdown. Exiting...")
+	os.Exit(0)
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Main
 ////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +164,9 @@ func main() {
 	if accessToken == "" || refreshToken == "" {
 		log.Fatal("Cannot start server without access or refresh tokens.")
 	}
+
+	// Gracefully shutdown.
+	go handleInterrupts()
 
 	// Manage application state.
 	go func() {
