@@ -159,7 +159,7 @@ func persistTokens(access string, refresh string) {
 // refresh tokens and shutdown the server.
 func handleInterrupts() {
 	// Gracefully handle interruptions.
-	sigs := make(chan os.Signal)
+	sigs := make(chan os.Signal, 1)
 	done := make(chan bool)
 
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
@@ -173,7 +173,7 @@ func handleInterrupts() {
 	}()
 
 	<-done
-	log.Println("Received signal to shutdown. Exiting...")
+	log.Println("Exiting...")
 	os.Exit(0)
 }
 
@@ -203,17 +203,7 @@ func main() {
 		accessToken, refreshToken = tokens.AccessToken, tokens.RefreshToken
 		go persistTokens(accessToken, refreshToken)
 		go scheduleTokenRefresh(tokens.ExpiresIn, refreshToken)
-	} else {
-		// If we have tokens, they may be expiring soon. We don't know because
-		// we aren't storing the expiration timestamp in the state or in the
-		// store. Until we have that information, and to be safe, let's refresh
-		// the tokens.
-		scheduleTokenRefresh(0, refreshToken)
 	}
-
-	// Gracefully shutdown.
-	go handleInterrupts()
-
 	// Manage application state.
 	go func() {
 		state := &state{accessToken, refreshToken}
@@ -231,6 +221,15 @@ func main() {
 			}
 		}
 	}()
+
+	// Gracefully shutdown.
+	go handleInterrupts()
+
+	// If we have tokens, they may be expiring soon. We don't know because
+	// we aren't storing the expiration timestamp in the state or in the
+	// store. Until we have that information, and to be safe, let's refresh
+	// the tokens.
+	scheduleTokenRefresh(0, refreshToken)
 
 	// Listen to inbound requests.
 	fmt.Println("Listening on http://localhost:4242 ...")
