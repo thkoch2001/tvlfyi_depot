@@ -4,6 +4,7 @@ A crude journal of cities I have visited and cities I would like to visit.
 
 # Europe
 * ~~Berlin, Germany~~
+* ~~Hamburg, Germany~~
 * Munich, Germany
 * Heidelberg, Germany
 * ~~Geneva, Switzerland~~
@@ -12,7 +13,10 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Lausanne, Switzerland
 * ~~Paris, France~~
 * ~~Aix-en-Provence, France~~
+* ~~Bordeaux, France~~
 * Monaco, France
+* ~~Ibiza, Spain~~
+* ~~Formentera, Spain~~
 * Barcelona, Spain
 * ~~Lisbon, Portugal~~
 * ~~Lagos, Portugal~~
@@ -27,8 +31,8 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Reykjavik, Iceland
 * Stockholm, Sweden
 * Gothenburg, Sweden
-* Amsterdam, Netherlands
 * Dubrovnik, Croatia,
+* ~~Amsterdam, Netherlands~~
 * Split, Croatia
 * Lake Bled, Slovenia
 * Santorini, Greece
