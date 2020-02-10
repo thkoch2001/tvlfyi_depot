@@ -11,6 +11,8 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Bern, Switzerland
 * Zurich, Switzerland
 * Lausanne, Switzerland
+* ~~Grenoble, France~~
+* ~~Lyons, France~~
 * ~~Paris, France~~
 * ~~Aix-en-Provence, France~~
 * ~~Bordeaux, France~~
