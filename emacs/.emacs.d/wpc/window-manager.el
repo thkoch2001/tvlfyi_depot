@@ -138,8 +138,6 @@
               1 display/laptop-monitor))
 
   (evil-set-initial-state 'exwm-mode 'emacs)
-  (ido-mode 1)
-  (exwm-config-ido)
   (setq exwm-workspace-number
         (list/length exwm/named-workspaces))
   ;; EXWM supports "line-mode" and "char-mode".
