@@ -31,8 +31,8 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Reykjavik, Iceland
 * Stockholm, Sweden
 * Gothenburg, Sweden
-* Dubrovnik, Croatia,
 * ~~Amsterdam, Netherlands~~
+* Dubrovnik, Croatia
 * Split, Croatia
 * Lake Bled, Slovenia
 * Santorini, Greece
