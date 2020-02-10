@@ -23,4 +23,4 @@ keynav daemonize
 
 # Startup Emacs (and EXWM). This is built by calling `make install` from within
 # ~/dotfiles/emacs.
-exec wpcarros-emacs
+dbus-launch --exit-with-session wpcarros-emacs
