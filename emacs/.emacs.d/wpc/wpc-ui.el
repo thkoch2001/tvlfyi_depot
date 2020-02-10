@@ -109,7 +109,7 @@
     (setq counsel-describe-function-function #'helpful-callable)
     (setq counsel-describe-variable-function #'helpful-variable))
   (general-define-key
-   :keymaps 'ivy-minibuffer-map
+   :keymaps '(ivy-minibuffer-map ivy-switch-buffer-map)
    ;; prev
    "C-k" #'ivy-previous-line
    "<backtab>" #'ivy-previous-line
