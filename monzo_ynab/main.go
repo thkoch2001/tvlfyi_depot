@@ -13,10 +13,31 @@ import (
 	"fmt"
 )
 
+var (
+	ynabAccountID = os.Getenv("ynab_account_id")
+)
+
 ////////////////////////////////////////////////////////////////////////////////
 // Business Logic
 ////////////////////////////////////////////////////////////////////////////////
 
+// Convert a Monzo transaction struct, `tx`, into a YNAB transaction struct.
+func toYnab(tx monzoSerde.Transaction) ynabSerde.Transaction {
+	return ynabSerde.Transaction{
+		Id: tx.Id,
+		Date: tx.Created,
+		Amount: tx.Amount,
+		Memo: tx.Notes,
+		AccountId: ynabAccountID,
+	}
+}
+
 func main() {
-	fmt.Println("To be implemented...")
+	txs := monzo.TransactionsLast24Hours()
+	var ynabTxs []ynabSerde.Transaction{}
+	for tx := range txs {
+		append(ynabTxs, toYnab(tx))
+	}
+	ynab.PostTransactions(ynabTxs)
+	os.Exit(0)
 }

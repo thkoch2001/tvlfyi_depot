@@ -4,6 +4,7 @@
 :ynab = https://api.youneedabudget.com/v1
 :ynab-access-token := (getenv "ynab_personal_access_token")
 :ynab-budget-id := (getenv "ynab_budget_id")
+:ynab-account-id := (getenv "ynab_account_id")
 
 # Test
 GET :ynab/budgets
@@ -11,6 +12,27 @@ Authorization: Bearer :ynab-access-token
 
 # List transactions
 GET :ynab/budgets/:ynab-budget-id/transactions
+Authorization: Bearer :ynab-access-token
+
+# Post transactions
+POST :ynab/budgets/:ynab-budget-id/transactions
+Authorization: Bearer :ynab-access-token
+Content-Type: application/json
+{
+  "transactions": [
+    {
+      "account_id": ":ynab-account-id",
+      "date": "2019-12-30",
+      "amount": 10000,
+      "payee_name": "Richard Stallman",
+      "memo": "Not so free software after all...",
+      "cleared": "cleared",
+      "approved": true,
+      "flag_color": "red",
+      "import_id": "xyz-123"
+    }
+  ]
+}
 
 ################################################################################
 # Monzo
