@@ -37,6 +37,7 @@ let
     ]) ++
 
     (with epkgs.melpaPackages; [
+      ts
       vterm
       base16-theme
       ivy-pass
