@@ -50,6 +50,8 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Galway, Ireland
 * Luxembourg, Luxembourg
 * Cappadocia, Turkey
+* Istanbul, Turkey
+* Ankara, Turkey
 
 # North and South America
 * Montreal, Canada
