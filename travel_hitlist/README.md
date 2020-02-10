@@ -22,10 +22,10 @@ A crude journal of cities I have visited and cities I would like to visit.
 * Barcelona, Spain
 * ~~Lisbon, Portugal~~
 * ~~Lagos, Portugal~~
-* Cinque Terre, Italy
 * ~~Rome, Italy~~
-* Milan, Italy
 * ~~Venice, Italy~~
+* Cinque Terre, Italy
+* Milan, Italy
 * Florence, Italy
 * Oslo, Norway
 * Bergen, Norway
