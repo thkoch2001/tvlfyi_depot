@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"os"
 	"os/user"
 )
 
@@ -17,6 +18,15 @@ func HomeDir() string {
 		log.Fatal(err)
 	}
 	return user.HomeDir
+}
+
+// Return true if `path` exists and false otherwise.
+func FileExists(path string) bool {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return false
+	} else {
+		return true
+	}
 }
 
 // Call log.Fatal with `err` when it's not nil.
