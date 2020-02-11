@@ -29,3 +29,4 @@ __pycache__
 /monzo_ynab/ynab/fixture.json
 /monzo_ynab/monzo/fixture.json
 /monzo_ynab/kv.json
+node_modules/
