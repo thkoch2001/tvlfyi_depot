@@ -7,7 +7,17 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"os/user"
 )
+
+// Return the absolute path to the current uesr's home directory.
+func HomeDir() string {
+	user, err := user.Current()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return user.HomeDir
+}
 
 // Call log.Fatal with `err` when it's not nil.
 func FailOn(err error) {
