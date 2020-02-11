@@ -9,6 +9,7 @@ import (
 	"net/http/httputil"
 	"os"
 	"os/user"
+	"path/filepath"
 )
 
 // Return the absolute path to the current uesr's home directory.
@@ -27,6 +28,44 @@ func FileExists(path string) bool {
 	} else {
 		return true
 	}
+}
+
+// Return the absolute file path of `file` using the following resolution
+// strategy:
+// - Traverse and search upwards until you reach the user's home directory
+// - Return the first path in `backupPaths` that exists
+// - Fail
+func Resolve(fileName string, backupPaths []string) string {
+	// TODO(wpcarro): Drop hardcoding when whoami behaves as expected.
+	boundary := "/home"
+	cwd := "."
+	files, _ := ioutil.ReadDir(cwd)
+
+	for {
+		fullCwd, _ := filepath.Abs(cwd)
+		if fullCwd == boundary {
+			break
+		}
+		for _, file := range files {
+			if file.Name() == fileName {
+				path, _ := filepath.Abs(cwd + "/" + file.Name())
+				return path
+			}
+		}
+		cwd += "/.."
+		files, _ = ioutil.ReadDir(cwd)
+	}
+
+	// TODO(wpcarro): Support expanding these paths to allow the consumer to
+	// pass in relative paths, and paths with "~" in them.
+	for _, backup := range backupPaths {
+		if FileExists(backup) {
+			return backup
+		}
+	}
+	log.Fatal("Cannot find a run.json to use.")
+	// This code should be unreachable.
+	return ""
 }
 
 // Call log.Fatal with `err` when it's not nil.
