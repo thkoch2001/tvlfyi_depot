@@ -19,6 +19,8 @@
 (require 'window-manager)
 (require 'vterm-mgt)
 (require 'buffer)
+(require 'display)
+(require 'device)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -65,6 +67,23 @@
  "<C-tab>" #'vterm-mgt-next
  "<C-S-iso-lefttab>" #'vterm-mgt-prev
  "<s-backspace>" #'vterm-mgt-rename-buffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Displays
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (device/work-laptop?)
+  (keybinding/exwm "<XF86Display>" #'display/cycle-display-states)
+  (general-define-key
+   :prefix "<SPC>"
+   :states '(normal)
+   "d0" #'display/disable-laptop
+   "d1" #'display/enable-laptop)
+  (general-define-key
+   :prefix "<SPC>"
+   :states '(normal)
+   "D0" #'display/disable-4k
+   "D1" #'display/enable-4k))
 
 (provide 'keybindings)
 ;;; keybindings.el ends here

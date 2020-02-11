@@ -18,13 +18,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'prelude)
+(require 'cycle)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defconst display/install-kbds? t
-  "When t, install the keybindings defined in this module.")
 
 ;; TODO: Consider if this logic should be conditioned by `device/work-laptop?'.
 (defconst display/laptop-monitor "eDP1"
@@ -33,6 +31,11 @@
 ;; TODO: Why is HDMI-1, eDP-1 sometimes and HDMI1, eDP1 other times.
 (defconst display/4k-monitor "HDMI1"
   "The xrandr identifer for my 4K monitor.")
+
+(defconst display/display-states (cycle/from-list '((t . t) (t . nil) (nil . t)))
+  "A list of cons cells modelling enabled and disabled states for my displays.
+The car models the enabled state of my laptop display; the cdr models the
+  enabled state of my external monitor.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -78,21 +81,12 @@ Sometimes this is useful when I'm sharing my screen in a Google Hangout and I
    :command (string/format "xrandr --output %s --off"
                            display/laptop-monitor)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Keybindings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(when display/install-kbds?
-  (general-define-key
-   :prefix "<SPC>"
-   :states '(normal)
-   "d0" #'display/disable-laptop
-   "d1" #'display/enable-laptop)
-  (general-define-key
-   :prefix "<SPC>"
-   :states '(normal)
-   "D0" #'display/disable-4k
-   "D1" #'display/enable-4k))
+(defun display/cycle-display-states ()
+  "Cycle through `display/display-states' enabling and disabling displays."
+  (interactive)
+  (let ((state (cycle/next display/display-states)))
+    (if (car state) (display/enable-laptop) (display/disable-laptop))
+    (if (cdr state) (display/enable-4k) (display/disable-4k))))
 
 (provide 'display)
 ;;; display.el ends here
