@@ -1,6 +1,6 @@
 * Array and string manipulation
 ** TODO Merging Meeting Times
-** TODO Reverse String in Place
+** DONE Reverse String in Place
 ** TODO Reverse Words
 ** TODO Merge Sorted Arrays
 ** TODO Cafe Order Checker
