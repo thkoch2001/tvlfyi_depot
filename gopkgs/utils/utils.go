@@ -21,6 +21,11 @@ func HomeDir() string {
 	return user.HomeDir
 }
 
+// Returns true if `info` is a symlink.
+func IsSymlink(info os.FileMode) bool {
+	return info&os.ModeSymlink != 0
+}
+
 // Return true if `path` exists and false otherwise.
 func FileExists(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {

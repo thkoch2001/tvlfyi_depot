@@ -23,6 +23,7 @@ let
     gopkgs = readTree ./gopkgs;
     monzo_ynab = readTree ./monzo_ynab;
     third_party = readTree ./third_party;
+    tools = readTree ./tools;
   };
 in fix(self: {
   config = config self;
