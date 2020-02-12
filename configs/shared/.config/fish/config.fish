@@ -87,6 +87,9 @@ source (fzf-share)/key-bindings.fish && fzf_key_bindings
 
 eval (direnv hook fish)
 
+# Aliases
+alias briefcase='cd $BRIEFCASE'
+
 # Miscellaneous
 abbr --add c xclip -selection clipboard -i
 abbr --add p xclip -selection clipboard -o
