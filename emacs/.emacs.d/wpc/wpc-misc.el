@@ -166,9 +166,6 @@
 ;; fullscreen settings
 (defvar ns-use-native-fullscreen nil)
 
-;; auto-close parens, brackets, quotes
-(electric-pair-mode 1)
-
 (use-package yasnippet
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
