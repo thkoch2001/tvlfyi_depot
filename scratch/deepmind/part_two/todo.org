@@ -1,5 +1,5 @@
 * Array and string manipulation
-** TODO Merging Meeting Times
+** DONE Merging Meeting Times
 ** DONE Reverse String in Place
 ** TODO Reverse Words
 ** TODO Merge Sorted Arrays
