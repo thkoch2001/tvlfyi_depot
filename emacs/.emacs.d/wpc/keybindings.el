@@ -21,6 +21,7 @@
 (require 'buffer)
 (require 'display)
 (require 'device)
+(require 'evil-ex)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -84,6 +85,49 @@
    :states '(normal)
    "D0" #'display/disable-4k
    "D1" #'display/enable-4k))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; notmuch
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; evil-collection adds many KBDs to notmuch modes. Some of these I find
+;; disruptive.
+(general-define-key
+ :states '(normal)
+ :keymaps '(notmuch-show-mode-map)
+ "M-j" nil
+ "M-k" nil
+ "<C-S-iso-lefttab>" #'notmuch-show-previous-thread-show
+ "<C-tab>" #'notmuch-show-next-thread-show
+ "e" #'notmuch-show-archive-message-then-next-or-next-thread)
+
+;; TODO(wpcarro): Consider moving this to a separate module
+(defun evil-ex-define-cmd-local (cmd f)
+  "Define CMD to F locally to a buffer."
+  (unless (local-variable-p 'evil-ex-commands)
+    (setq-local evil-ex-commands (copy-alist evil-ex-commands)))
+  (evil-ex-define-cmd cmd f))
+
+;; TODO(wpcarro): Support a macro that can easily define evil-ex commands for a
+;; particular mode.
+;; Consumption:
+;; (evil-ex-for-mode 'notmuch-message-mode
+;;                   "x" #'notmuch-mua-send-and-exit)
+
+(add-hook 'notmuch-message-mode-hook
+          (lambda ()
+            (evil-ex-define-cmd-local "x" #'notmuch-mua-send-and-exit)))
+
+;; For now, I'm mimmicking Gmail KBDs that I have memorized and enjoy
+(general-define-key
+ :states '(normal)
+ :keymaps '(notmuch-search-mode-map)
+ "e" #'notmuch-search-archive-thread)
+
+(general-define-key
+ :states '(normal)
+ :prefix "<SPC>"
+ "gn" #'notmuch)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here
