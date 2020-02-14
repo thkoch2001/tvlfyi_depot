@@ -27,6 +27,9 @@
                                (:name "review" :query "tag:review" :key "r")
                                (:name "waiting" :query "tag:waiting" :key "w")))
 
+;; Sort results from newest-to-oldest.
+(setq notmuch-search-oldest-first nil)
+
 ;; Assert that no two saved searches share share a KBD
 (prelude/assert
  (list/xs-distinct-by? (lambda (x) (plist-get x :key)) notmuch-saved-searches))
