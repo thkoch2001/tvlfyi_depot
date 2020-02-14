@@ -199,6 +199,11 @@ Be leery of using this with things like alists.  Many data structures in Elisp
   "Return t if X is in XS using `equal'."
   (-contains? xs x))
 
+(defun list/xs-distinct-by? (f xs)
+  "Return t if all elements in XS are distinct after applying F to each."
+  (= (length xs)
+     (->> xs (-map f) set/from-list set/count)))
+
 ;; TODO: Support dedupe.
 ;; TODO: Should we call this unique? Or distinct?
 
