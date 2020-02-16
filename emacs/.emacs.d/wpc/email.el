@@ -17,15 +17,16 @@
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq notmuch-saved-searches '((:name "inbox" :query "tag:inbox" :key "i")
-                               (:name "unread" :query "tag:unread" :key "u")
-                               (:name "flagged" :query "tag:flagged" :key "f")
-                               (:name "sent" :query "tag:sent" :key "t")
-                               (:name "drafts" :query "tag:draft" :key "d")
-                               (:name "all mail" :query "*" :key "A")
-                               (:name "action" :query "tag:action" :key "a")
-                               (:name "review" :query "tag:review" :key "r")
-                               (:name "waiting" :query "tag:waiting" :key "w")))
+(setq notmuch-saved-searches
+      '((:name "inbox" :query "tag:inbox" :key "i")
+        (:name "direct" :query "tag:direct and tag:inbox" :key "d")
+        (:name "action" :query "tag:action" :key "a")
+        (:name "review" :query "tag:review" :key "r")
+        (:name "waiting" :query "tag:waiting" :key "w")
+        (:name "broadcast" :query "tag:/broadcast\/.+/" :key "b")
+        (:name "systems" :query "tag:/systems\/.+/" :key "s")
+        (:name "sent" :query "tag:sent" :key "t")
+        (:name "drafts" :query "tag:draft" :key "D")))
 
 ;; Sort results from newest-to-oldest.
 (setq notmuch-search-oldest-first nil)
