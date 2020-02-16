@@ -102,6 +102,8 @@ alias open=xdg-open
 alias stopx='sudo service lightdm stop' # stop X server session
 alias please='eval sudo $history[1]'
 alias chrome=google-chrome
+alias sys='systemctl'
+alias sysu='systemctl --user'
 
 # Filesystem
 # TODO: Depend on `mkdir_cd`.
