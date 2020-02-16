@@ -120,8 +120,23 @@
 
 ;; For now, I'm mimmicking Gmail KBDs that I have memorized and enjoy
 (general-define-key
- :states '(normal)
+ :states '(normal visual)
  :keymaps '(notmuch-search-mode-map)
+ "M"  (lambda ()
+        (interactive)
+        (notmuch-search-tag '("-inbox" "+muted")))
+ "mi" (lambda ()
+        (interactive)
+        (notmuch-search-tag '("+inbox" "-action" "-review" "-waiting" "-muted")))
+ "ma" (lambda ()
+        (interactive)
+        (notmuch-search-tag '("-inbox" "+action" "-review" "-waiting")))
+ "mr" (lambda ()
+        (interactive)
+        (notmuch-search-tag '("-inbox" "-action" "+review" "-waiting")))
+ "mw" (lambda ()
+        (interactive)
+        (notmuch-search-tag '("-inbox" "-action" "-review" "+waiting")))
  "e" #'notmuch-search-archive-thread)
 
 (general-define-key
