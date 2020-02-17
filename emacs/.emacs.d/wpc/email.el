@@ -19,12 +19,12 @@
 
 (setq notmuch-saved-searches
       '((:name "inbox" :query "tag:inbox" :key "i")
-        (:name "direct" :query "tag:direct and tag:inbox" :key "d")
+        (:name "direct" :query "tag:direct and tag:unread and not tag:sent" :key "d")
         (:name "action" :query "tag:action" :key "a")
         (:name "review" :query "tag:review" :key "r")
         (:name "waiting" :query "tag:waiting" :key "w")
-        (:name "broadcast" :query "tag:/broadcast\/.+/" :key "b")
-        (:name "systems" :query "tag:/systems\/.+/" :key "s")
+        (:name "broadcast" :query "tag:/broadcast\/.+/ and tag:unread" :key "b")
+        (:name "systems" :query "tag:/systems\/.+/ and tag:unread" :key "s")
         (:name "sent" :query "tag:sent" :key "t")
         (:name "drafts" :query "tag:draft" :key "D")))
 
