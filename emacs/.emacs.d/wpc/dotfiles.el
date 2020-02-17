@@ -24,8 +24,7 @@
   "The root directory of my configuration files.")
 
 (defconst dotfiles/whitelist
-  `(("compton" . "~/.config/compton.conf")
-    ("dotfiles" . ,dotfiles/directory)
+  `(("dotfiles" . ,dotfiles/directory)
     ("functions" . "~/functions.zsh")
     ("aliases" . "~/aliases.zsh")
     ("variables" . "~/variables.zsh")

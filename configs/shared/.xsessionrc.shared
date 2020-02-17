@@ -11,10 +11,6 @@ xsetroot -solid "#333333"
 # Set fallback cursor.
 xsetroot -cursor_name left_ptr
 
-# start compton for shadows, transparency, fading, etc.
-# TODO: Consider starting this with `systemctl --user enable compton.service`
-compton &
-
 # `unclutter` hide the cursor in when it is inactive
 unclutter &
 
