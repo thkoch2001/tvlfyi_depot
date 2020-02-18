@@ -10,6 +10,9 @@ def reverse(xs, i, j):
 
 
 def reverse_words(xs):
+    punctuation = None
+    if len(xs) > 0 and xs[-1] in ".?!":
+        punctuation = xs.pop()
     reverse(xs, 0, len(xs) - 1)
     i = 0
     j = i
@@ -19,6 +22,8 @@ def reverse_words(xs):
         reverse(xs, i, j - 1)
         j += 1
         i = j
+    if punctuation:
+        xs.append(punctuation)
 
 
 # Tests
@@ -57,6 +62,12 @@ class Test(unittest.TestCase):
         message = list('')
         reverse_words(message)
         expected = list('')
+        self.assertEqual(message, expected)
+
+    def test_bonus_support_punctuation(self):
+        message = list('yummy is cake bundt chocolate this!')
+        reverse_words(message)
+        expected = list('this chocolate bundt cake is yummy!')
         self.assertEqual(message, expected)
 
 
