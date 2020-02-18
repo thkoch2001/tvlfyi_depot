@@ -31,6 +31,38 @@
 ;; Sort results from newest-to-oldest.
 (setq notmuch-search-oldest-first nil)
 
+;; Discard noisy email signatures.
+(setq notmuch-mua-cite-function #'message-cite-original-without-signature)
+
+;; By default, this is just '("-inbox")
+(setq notmuch-archive-tags '("-inbox" "-unread" "+archive"))
+
+;; Show saved searches even when they're empty.
+(setq notmuch-show-empty-saved-searches t)
+
+;; Currently the sendmail executable on my system is symlinked to msmtp.
+(setq send-mail-function #'sendmail-send-it)
+
+;; I'm not sure if I need this or not. Copying it from tazjin@'s monorepo.
+(setq notmuch-always-prompt-for-sender nil)
+
+;; Add the "User-Agent" header to my emails and ensure that it includes Emacs
+;; and notmuch information.
+(setq notmuch-mua-user-agent-function
+      (lambda ()
+        (format "Emacs %s; notmuch.el %s" emacs-version notmuch-emacs-version)))
+
+;; I was informed that Gmail does this server-side
+(setq notmuch-fcc-dirs nil)
+
+;; Ensure buffers are closed after sending mail.
+(setq message-kill-buffer-on-exit t)
+
+;; Ensure sender is correctly passed to msmtp.
+(setq mail-specify-envelope-from t
+      message-sendmail-envelope-from 'header
+      mail-envelope-from 'header)
+
 ;; Assert that no two saved searches share share a KBD
 (prelude/assert
  (list/xs-distinct-by? (lambda (x) (plist-get x :key)) notmuch-saved-searches))
