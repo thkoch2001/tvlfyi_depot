@@ -18,6 +18,7 @@
 (require 'screen-brightness)
 
 ;; miscellaneous
+(require 'ssh)
 (require 'clipboard)
 (require 'battery)
 (require 'dotfiles)
