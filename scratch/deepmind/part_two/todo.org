@@ -1,7 +1,7 @@
 * Array and string manipulation
 ** DONE Merging Meeting Times
 ** DONE Reverse String in Place
-** TODO Reverse Words
+** DONE Reverse Words
 ** TODO Merge Sorted Arrays
 ** TODO Cafe Order Checker
 * Hashing and hash tables
