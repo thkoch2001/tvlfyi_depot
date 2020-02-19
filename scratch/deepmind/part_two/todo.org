@@ -2,7 +2,7 @@
 ** DONE Merging Meeting Times
 ** DONE Reverse String in Place
 ** DONE Reverse Words
-** TODO Merge Sorted Arrays
+** DONE Merge Sorted Arrays
 ** TODO Cafe Order Checker
 * Hashing and hash tables
 ** TODO Inflight Entertainment
