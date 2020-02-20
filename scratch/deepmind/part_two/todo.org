@@ -3,7 +3,7 @@
 ** DONE Reverse String in Place
 ** DONE Reverse Words
 ** DONE Merge Sorted Arrays
-** TODO Cafe Order Checker
+** DONE Cafe Order Checker
 * Hashing and hash tables
 ** TODO Inflight Entertainment
 ** TODO Permutation Palindrome
