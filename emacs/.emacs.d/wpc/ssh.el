@@ -33,10 +33,24 @@
 ;; Maximizes the tramp debugging noisiness while I'm still learning about tramp.
 (setq tramp-verbose 10)
 
-(defun ssh/desktop-cd-home ()
-  "Open a dired buffer of my desktop's home directory for wpcarro."
+(defcustom ssh/hosts '("desktop" "flattop")
+  "List of hosts to which I commonly connect.
+Note: It could be interesting to read these values from ~/.ssh/config, but
+  that's more than I need at the moment.")
+
+(defun ssh/sudo-buffer ()
+  "Open the current buffer with sudo rights."
   (interactive)
-  (find-file "/ssh:wpcarro@desktop:~"))
+  (with-current-buffer (current-buffer)
+    (if (s-starts-with? "/ssh:" buffer-file-name)
+        (message "[ssh.el] calling ssh/sudo-buffer for remote files isn't currently supported")
+      (find-file (format "/sudo::%s" buffer-file-name)))))
+
+(defun ssh/cd-home ()
+  "Prompt for an SSH host and open a dired buffer for wpcarro on that machine."
+  (interactive)
+  (let ((machine (completing-read "Machine: " ssh/hosts)))
+    (find-file (format "/ssh:wpcarro@%s:~" machine))))
 
 (provide 'ssh)
 ;;; ssh.el ends here
