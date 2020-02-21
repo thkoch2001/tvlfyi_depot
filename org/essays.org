@@ -186,5 +186,5 @@
 * TODO Lisp for Web-Based Applications
 * TODO Chapter 1 of Ansi Common Lisp
 * TODO Chapter 2 of Ansi Common Lisp
-* TODO Programming Bottom-Up
-* TODO This Year We Can End the Death Penalty in California
+* DONE Programming Bottom-Up
+* DONE This Year We Can End the Death Penalty in California
