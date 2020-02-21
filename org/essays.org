@@ -183,7 +183,7 @@
 * TODO Being Popular
 * DONE Java's Cover
 * DONE Beating the Averages
-* TODO Lisp for Web-Based Applications
+* DONE Lisp for Web-Based Applications
 * TODO Chapter 1 of Ansi Common Lisp
 * TODO Chapter 2 of Ansi Common Lisp
 * DONE Programming Bottom-Up
