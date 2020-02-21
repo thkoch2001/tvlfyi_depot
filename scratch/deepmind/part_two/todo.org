@@ -5,7 +5,7 @@
 ** DONE Merge Sorted Arrays
 ** DONE Cafe Order Checker
 * Hashing and hash tables
-** TODO Inflight Entertainment
+** DONE Inflight Entertainment
 ** TODO Permutation Palindrome
 ** TODO Word Cloud Data
 ** TODO Top Scores
