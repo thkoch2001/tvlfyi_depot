@@ -33,7 +33,7 @@
 ;; Maximizes the tramp debugging noisiness while I'm still learning about tramp.
 (setq tramp-verbose 10)
 
-(defcustom ssh/hosts '("desktop" "flattop")
+(defcustom ssh/hosts '("desktop" "socrates")
   "List of hosts to which I commonly connect.
 Note: It could be interesting to read these values from ~/.ssh/config, but
   that's more than I need at the moment.")
