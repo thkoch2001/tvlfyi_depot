@@ -1,3 +1,4 @@
+# This expression can be used to create NixOS .iso images.
 { config, pkgs, ...  }:
 
 {
