@@ -1,6 +1,9 @@
 { pkgs ? import <nixpkgs> {}, ... }:
 
-{
+let
+  trimNewline = x: pkgs.lib.removeSuffix "\n" x;
+  readSecret = x: trimNewline (builtins.readFile ("/etc/secrets/" + x));
+in {
   imports = [ ./hardware.nix ];
 
   # Use the systemd-boot EFI boot loader.
@@ -72,12 +75,18 @@
 
   services.lorri.enable = true;
 
-  # TODO(wpcarro): Expose the Monzo credentials to this job. Currently they're
-  # managed with direnv and pass, which presumably systemd isn't accessing.
   systemd.user.services.monzo-token-server = {
     enable = true;
     description = "Ensure my Monzo access token is valid";
     script = "/home/wpcarro/.nix-profile/bin/token-server";
+
+    environment = {
+      monzo_client_id = readSecret "monzo-client-id";
+      monzo_client_secret = readSecret "monzo-client-secret";
+      ynab_personal_access_token = readSecret "ynab-personal-access-token";
+      ynab_account_id = readSecret "ynab-account-id";
+      ynab_budget_id = readSecret "ynab-budget-id";
+    };
 
     serviceConfig = {
       WorkingDirectory = "%h/briefcase/monzo_ynab";
