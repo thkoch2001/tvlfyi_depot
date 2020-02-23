@@ -5,13 +5,12 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"path"
 )
 
-const storePath = "./kv.json"
-
 // Return the decoded store from disk.
-func getStore() map[string]interface{} {
-	b, err := ioutil.ReadFile(storePath)
+func getStore(storePath string) map[string]interface{} {
+	b, err := ioutil.ReadFile(path.Join(storePath, "kv.json"))
 	if err != nil {
 		log.Fatal("Could not read store: ", err)
 	}
@@ -24,17 +23,17 @@ func getStore() map[string]interface{} {
 }
 
 // Set `key` to `value` in the store.
-func Set(key string, value interface{}) error {
-	state := getStore()
+func Set(storePath string, key string, value interface{}) error {
+	state := getStore(storePath)
 	state[key] = value
 	b, err := json.Marshal(state)
 	if err != nil {
 		log.Fatal("Could not encode state as JSON: ", err)
 	}
-	return ioutil.WriteFile(storePath, b, 0644)
+	return ioutil.WriteFile(path.Join(storePath, "kv.json"), b, 0644)
 }
 
 // Get `key` from the store.
-func Get(key string) interface{} {
-	return getStore()[key]
+func Get(storePath string, key string) interface{} {
+	return getStore(path.Join(storePath, "kv.json"))[key]
 }
