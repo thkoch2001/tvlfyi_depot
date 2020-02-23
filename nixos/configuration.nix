@@ -1,4 +1,8 @@
-{ pkgs ? import <nixpkgs> {}, ... }:
+{
+  pkgs ? import <nixpkgs> {},
+  briefcase ? import <briefcase> {},
+  ...
+}:
 
 let
   trimNewline = x: pkgs.lib.removeSuffix "\n" x;
@@ -75,11 +79,14 @@ in {
 
   services.lorri.enable = true;
 
-  systemd.user.services.monzo-token-server = {
+  systemd.services.monzo-token-server = {
     enable = true;
     description = "Ensure my Monzo access token is valid";
-    script = "/home/wpcarro/.nix-profile/bin/token-server";
+    script = "${briefcase.monzo_ynab.tokens}/bin/token-server";
 
+    # TODO(wpcarro): I'm unsure of the size of this security risk, but if a
+    # non-root user runs `systemctl cat monzo-token-server`, they could read the
+    # following, sensitive environment variables.
     environment = {
       store_path = "/var/cache/monzo_ynab";
       monzo_client_id = readSecret "monzo-client-id";
@@ -90,7 +97,6 @@ in {
     };
 
     serviceConfig = {
-      WorkingDirectory = "%h/briefcase/monzo_ynab";
       Type = "simple";
     };
   };
