@@ -76,6 +76,7 @@ var chans = &channels{
 var (
 	monzoClientId     = os.Getenv("monzo_client_id")
 	monzoClientSecret = os.Getenv("monzo_client_secret")
+	storePath         = os.Getenv("store_path")
 )
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -151,8 +152,8 @@ func refreshTokens(refreshToken string) (string, string) {
 
 func persistTokens(access string, refresh string) {
 	log.Println("Persisting tokens...")
-	kv.Set("monzoAccessToken", access)
-	kv.Set("monzoRefreshToken", refresh)
+	kv.Set(storePath, "monzoAccessToken", access)
+	kv.Set(storePath, "monzoRefreshToken", refresh)
 	log.Println("Successfully persisted tokens.")
 }
 
@@ -221,8 +222,8 @@ func main() {
 	}()
 
 	// Retrieve cached tokens from store.
-	accessToken := fmt.Sprintf("%v", kv.Get("monzoAccessToken"))
-	refreshToken := fmt.Sprintf("%v", kv.Get("monzoRefreshToken"))
+	accessToken := fmt.Sprintf("%v", kv.Get(storePath, "monzoAccessToken"))
+	refreshToken := fmt.Sprintf("%v", kv.Get(storePath, "monzoRefreshToken"))
 
 	log.Println("Attempting to retrieve cached credentials...")
 	logTokens(accessToken, refreshToken)

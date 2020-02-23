@@ -81,6 +81,7 @@ in {
     script = "/home/wpcarro/.nix-profile/bin/token-server";
 
     environment = {
+      store_path = "/var/cache/monzo_ynab";
       monzo_client_id = readSecret "monzo-client-id";
       monzo_client_secret = readSecret "monzo-client-secret";
       ynab_personal_access_token = readSecret "ynab-personal-access-token";
