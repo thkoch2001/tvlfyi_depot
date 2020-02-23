@@ -1,4 +1,4 @@
-{ depot ? import <depot> {}, ... }:
+{ depot, ... }:
 
 let
   src = builtins.fetchGit {

@@ -1,11 +1,7 @@
-{
-  pkgs ? import <nixpkgs> {},
-  depot ? import <depot> {},
-  ...
-}:
+{ pkgs, depot, ... }:
 
 let
-  utils = import ~/briefcase/utils;
+  utils = import <briefcase/utils>;
   # NOTE: I'm trying to keep the list of dependencies herein constrained to a
   # list of generic dependencies (i.e. not project or language specific). For
   # language-specific tooling, I'm intending to use shell.nix alongside lorri

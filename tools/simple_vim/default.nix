@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}, ... }:
+{ pkgs, ... }:
 
 let
   script = pkgs.writeShellScriptBin "simple_vim" ''

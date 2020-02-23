@@ -9,11 +9,14 @@ let
   fix = f: let x = f x; in x;
 
   # Global configuration that all packages are called with.
-  config = pkgs: {
-    inherit pkgs;
+  config = self: {
+    inherit self;
+    pkgs = import <nixpkgs> {};
+    depot = import <depot> {};
+    briefcase = import <briefcase> {};
   };
 
-  readTree' = import ~/depot/nix/readTree {};
+  readTree' = import <depot/nix/readTree> {};
 
   # TODO: Find a better way to expose entire monorepo without introducing
   # "infinite recursion".
@@ -27,12 +30,6 @@ let
   };
 in fix(self: {
   config = config self;
-
-  # Expose readTree for downstream repo consumers.
-  readTree = {
-    __functor = x: (readTree' x.config);
-    config = self.config;
-  };
 }
 
 # Add local packages as structured by readTree

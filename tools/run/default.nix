@@ -1,9 +1,4 @@
-{
-  pkgs ? import <nixpkgs> {},
-  depot ? import <depot> {},
-  briefcase ? import <briefcase> {},
-  ...
-}:
+{ pkgs, depot, briefcase, ... }:
 
 depot.buildGo.program {
   name = "run";

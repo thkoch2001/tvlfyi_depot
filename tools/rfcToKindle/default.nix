@@ -1,6 +1,4 @@
-{
-  depot ? import <depot> {}, ...
-}:
+{ depot, ... }:
 
 # TODO: This doesn't depend on `sendgmr` at the moment, but it should. As such,
 # it's an imcomplete packaging.

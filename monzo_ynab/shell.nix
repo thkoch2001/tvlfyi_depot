@@ -1,8 +1,4 @@
-{
-  pkgs ? import <nixpkgs> {},
-  briefcase ? import <briefcase> {},
-  ...
-}:
+{ pkgs, briefcase, ... }:
 
 pkgs.mkShell {
   buildInputs = [

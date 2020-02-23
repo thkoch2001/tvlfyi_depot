@@ -1,8 +1,4 @@
-{
-  depot ? import <depot> {},
-  briefcase ? import <briefcase> {},
-  ...
-}:
+{ depot, briefcase, ... }:
 
 depot.nix.buildLisp.library {
   name = "f";

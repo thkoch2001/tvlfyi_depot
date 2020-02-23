@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} , ... }:
+{ pkgs, ... }:
 
 # TODO: Is it appropriate to put programming language dependencies here? Should
 # I have a bin dependency for every fish `abbr` and `alias` that I use? What

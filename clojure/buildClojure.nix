@@ -1,4 +1,4 @@
-{ briefcase ? import <briefcase> {}, ... }:
+{ briefcase, ... }:
 
 briefcase.nix.buildClojure.program {
   name = "test";

@@ -1,7 +1,4 @@
-{
-  depot ? import <depot> {},
-  ...
-}:
+{ depot, ... }:
 
 depot.buildGo.package {
   name = "kv";

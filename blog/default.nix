@@ -1,15 +1,10 @@
-{
-  nixpkgs ? import <nixpkgs> {},
-  depot ? import <depot> {},
-  briefcase ? import <briefcase> {},
-  ...
-}:
+{ pkgs, depot, briefcase, ... }:
 
 let
-  injections = nixpkgs.writeText "injections.lisp" ''
+  injections = pkgs.writeText "injections.lisp" ''
     (in-package #:server)
     (setq *path-to-posts* "${./posts}")
-    (setq *pandoc-bin* "${nixpkgs.pandoc}/bin/pandoc")
+    (setq *pandoc-bin* "${pkgs.pandoc}/bin/pandoc")
     (setq *html-template* "${./src/index.html}")
   '';
 in depot.nix.buildLisp.program {

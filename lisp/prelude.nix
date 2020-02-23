@@ -1,4 +1,4 @@
-{ depot ? import <depot> {}, ... }:
+{ depot, ... }:
 
 depot.nix.buildLisp.library {
   name = "prelude";
