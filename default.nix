@@ -21,6 +21,7 @@ let
   # TODO: Find a better way to expose entire monorepo without introducing
   # "infinite recursion".
   localPkgs = readTree: {
+    nixos = readTree ./nixos;
     blog = readTree ./blog;
     lisp = readTree ./lisp;
     gopkgs = readTree ./gopkgs;
