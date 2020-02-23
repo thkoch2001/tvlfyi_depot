@@ -1,13 +1,9 @@
-{
-  pkgs ? import <nixpkgs> {},
-  briefcase ? import <briefcase> {},
-  ...
-}:
+{ pkgs, briefcase, ... }:
 
 let
   trimNewline = x: pkgs.lib.removeSuffix "\n" x;
   readSecret = x: trimNewline (builtins.readFile ("/etc/secrets/" + x));
-in {
+in pkgs.lib.fix(self: {
   imports = [ ./hardware.nix ];
 
   # Use the systemd-boot EFI boot loader.
@@ -68,7 +64,6 @@ in {
       "nixpkgs=/home/wpcarro/nixpkgs"
     ];
 
-    # Allow wpcarro to call nixos-rebuild
     trustedUsers = [ "root" "wpcarro" ];
   };
 
@@ -153,4 +148,4 @@ in {
   };
 
   system.stateVersion = "20.09"; # Did you read the comment?
-}
+})
