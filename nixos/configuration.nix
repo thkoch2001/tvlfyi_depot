@@ -90,7 +90,7 @@ in {
 
     serviceConfig = {
       WorkingDirectory = "%h/briefcase/monzo_ynab";
-      Type = "oneshot";
+      Type = "simple";
     };
   };
 
