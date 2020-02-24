@@ -6,7 +6,7 @@
 ** DONE Cafe Order Checker
 * Hashing and hash tables
 ** DONE Inflight Entertainment
-** TODO Permutation Palindrome
+** DONE Permutation Palindrome
 ** TODO Word Cloud Data
 ** TODO Top Scores
 * Greedy Algorithms
