@@ -180,7 +180,7 @@
 * TODO The Other Road Ahead
 * TODO The Roots of Lisp
 * TODO Five Questions about Language Design
-* TODO Being Popular
+* DONE Being Popular
 * DONE Java's Cover
 * DONE Beating the Averages
 * DONE Lisp for Web-Based Applications
