@@ -179,7 +179,7 @@
 * TODO What Made Lisp Different
 * TODO The Other Road Ahead
 * TODO The Roots of Lisp
-* TODO Five Questions about Language Design
+* DONE Five Questions about Language Design
 * DONE Being Popular
 * DONE Java's Cover
 * DONE Beating the Averages
