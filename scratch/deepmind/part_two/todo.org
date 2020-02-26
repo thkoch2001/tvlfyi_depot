@@ -7,7 +7,7 @@
 * Hashing and hash tables
 ** DONE Inflight Entertainment
 ** DONE Permutation Palindrome
-** TODO Word Cloud Data
+** DONE Word Cloud Data
 ** TODO Top Scores
 * Greedy Algorithms
 ** TODO Apple Stocks
