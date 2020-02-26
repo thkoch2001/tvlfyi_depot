@@ -8,7 +8,7 @@
 ** DONE Inflight Entertainment
 ** DONE Permutation Palindrome
 ** DONE Word Cloud Data
-** TODO Top Scores
+** DONE Top Scores
 * Greedy Algorithms
 ** TODO Apple Stocks
 ** TODO Highest Product of 3
