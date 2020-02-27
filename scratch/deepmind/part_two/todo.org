@@ -65,7 +65,7 @@
 ** TODO Two Egg Problem
 * JavaScript
 ** TODO JavaScript Scope
-** TODO What&#39;s Wrong with This JavaScript?
+** TODO What's Wrong with This JavaScript?
 * Coding interview tips
 ** TODO How The Coding Interview Works
 ** TODO General Coding Interview Advice
