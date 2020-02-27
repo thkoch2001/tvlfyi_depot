@@ -10,7 +10,7 @@
 ** DONE Word Cloud Data
 ** DONE Top Scores
 * Greedy Algorithms
-** TODO Apple Stocks
+** DONE Apple Stocks
 ** TODO Highest Product of 3
 ** TODO Product of All Other Numbers
 ** TODO Cafe Order Checker
