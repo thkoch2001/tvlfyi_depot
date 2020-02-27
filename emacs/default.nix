@@ -54,6 +54,7 @@ let
       flycheck
       diminish
       doom-themes
+      doom-modeline
       neotree # TODO: Remove this dependency from my config.
       which-key
       ivy

@@ -175,5 +175,9 @@
 ;; Load a theme
 (themes/set "Solarized Light")
 
+;; Use the Doom modeline
+(use-package 'doom-modeline)
+(doom-modeline-mode 1)
+
 (provide 'wpc-ui)
 ;;; wpc-ui.el ends here
