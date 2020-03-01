@@ -1,6 +1,12 @@
-{ pkgs, briefcase, ... }:
-
 let
+  # TODO(wpcarro): Instead of importing these dependencies as parameters that
+  # readTree will expose I need to import these dependencies manually because
+  # I'm building this using `nixos-rebuild`. When I better understand how to
+  # build socrates using readTree, prefer defining this as an anonymous
+  # function.
+  pkgs = import <nixpkgs> {};
+  briefcase = import <briefcase> {};
+
   trimNewline = x: pkgs.lib.removeSuffix "\n" x;
   readSecret = x: trimNewline (builtins.readFile ("/etc/secrets/" + x));
 in pkgs.lib.fix(self: {
