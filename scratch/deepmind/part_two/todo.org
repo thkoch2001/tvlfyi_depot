@@ -11,7 +11,7 @@
 ** DONE Top Scores
 * Greedy Algorithms
 ** DONE Apple Stocks
-** TODO Highest Product of 3
+** DONE Highest Product of 3
 ** TODO Product of All Other Numbers
 ** TODO Cafe Order Checker
 ** TODO In-Place Shuffle
