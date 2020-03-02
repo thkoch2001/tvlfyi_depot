@@ -174,7 +174,7 @@
 * TODO Revenge of the Nerds
 * TODO Succinctness is Power
 * TODO What Languages Fix
-* TODO Taste for Makers
+* DONE Taste for Makers
 * TODO Why Arc Isn't Especially Object-Oriented
 * TODO What Made Lisp Different
 * TODO The Other Road Ahead
