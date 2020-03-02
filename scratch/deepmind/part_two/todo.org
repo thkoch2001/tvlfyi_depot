@@ -12,7 +12,7 @@
 * Greedy Algorithms
 ** DONE Apple Stocks
 ** DONE Highest Product of 3
-** TODO Product of All Other Numbers
+** DONE Product of All Other Numbers
 ** TODO Cafe Order Checker
 ** TODO In-Place Shuffle
 * Sorting, searching, and logarithms
