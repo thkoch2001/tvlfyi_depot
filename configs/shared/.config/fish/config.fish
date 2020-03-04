@@ -194,8 +194,6 @@ else
 
     # Git
     # alias glp='git log --graph --pretty="format:"%Cred%h%Creset -%Cblue %an %Creset - %C(yellow)%d%Creset %s %Cgreen(%cr)%Creset" --abbrev-commit --date=relative'
-    alias g=hub
-    alias git=hub
     alias ga='git add'
     alias gc='git commit'
     alias gco='git checkout'
@@ -214,7 +212,7 @@ else
     alias gsh='git show'
     alias gwip='git add . && git commit -m wip'
     alias gpr='git pull-request'
-    alias gst='git status && hub pr list'
+    alias gst='git status'
 
     # Mercurial
     # The attempt here is to map my well-known, existing `git` aliases to their
