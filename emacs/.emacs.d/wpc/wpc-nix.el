@@ -21,12 +21,13 @@
 (use-package nix-mode
   :mode "\\.nix\\'")
 
+;; TODO(wpcarro): Ensure the sub-process can resolve <briefcase>.
 (defun nix/rebuild-emacs ()
   "Use nix-env to rebuild wpcarros-emacs."
   (interactive)
-  (start-process "nix-build/<briefcase>.emacs" "*nix-build/<briefcase>.emacs*"
-                 "nix-env" "-f" (f-join (getenv "BRIEFCASE") "emacs") "-i")
-  (display-buffer "*nix-build/<briefcase>.emacs*"))
+  (start-process "nix-build/<briefcase/emacs>" "*nix-build/<briefcase/emacs>*"
+                 "nix-env" "-f" "<briefcase>" "-iA" "emacs")
+  (display-buffer "*nix-build/<briefcase/emacs>*"))
 
 (defun nix/sly-from-briefcase (attribute)
   "Start a Sly REPL configured with a Lisp matching a derivation
