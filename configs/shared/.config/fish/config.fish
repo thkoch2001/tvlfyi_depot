@@ -129,8 +129,6 @@ else
         end
     end
 
-    source ./functions.fish
-
     # Setup fzf for fuzzily finding commands, files, directories
     source (fzf-share)/key-bindings.fish && fzf_key_bindings
 
