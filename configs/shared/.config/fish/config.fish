@@ -50,23 +50,74 @@ set fish_greeting ""
 
 # Prompt
 function fish_prompt
-    set -l color_cwd
-    set -l suffix
-    switch "$USER"
-        case root toor
-            if set -q fish_color_cwd_root
-                set color_cwd $fish_color_cwd_root
-            else
-                set color_cwd $fish_color_cwd
-            end
-            set suffix '#'
-        case '*'
-            set color_cwd $fish_color_cwd
-            set suffix '>'
+    # My custom prompt.
+    #
+    # Design objectives:
+    # - max-length <= 80 characters
+    # - minimal
+    # - no dependencies (well, you know what I mean)
+    #
+    # Components
+    # - ssh connection
+    # - user
+    # - host
+    # - git repo
+    # - git branch
+    # - lambda character as prompt
+
+    # Cache status before we overwrite it.
+    set -l last_status $status
+
+    # Colors
+    set -l color_inactive (set_color red --bold)
+    set -l color_active (set_color green --bold)
+    set -l color_normal (set_color normal)
+
+    # SSH information
+    if set -q SSH_CLIENT; or set -q SSH_TTY
+        echo -en "$color_active \bssh ✓ [$color_normal$USER@"(hostname)"$color_active]$color_normal"
+    else
+        echo -en "$color_inactive \bssh ✗ [$color_normal$USER@"(hostname)"$color_inactive]$color_normal"
     end
 
-    echo -n -s "$USER" @ (prompt_hostname) ' ' (set_color $color_cwd) (pwd) (set_color normal)
-    echo -e "\n$suffix "
+    # Separator
+    echo -n " "
+
+    # Git information
+    set -l git_repo (git rev-parse --show-toplevel 2>/dev/null)
+    set -l git_status $status
+    set -l dir_parent (basename (realpath ..))
+    set -l dir_current (basename (realpath .))
+    if test $git_status -eq 0
+        set -l git_repo_name (basename (git rev-parse --show-toplevel))
+        set -l git_branch (git branch 2>/dev/null | grep '^\*' | cut -d' ' -f2-)
+        echo -en "$color_active \bgit ✓ [$color_normal$git_branch$color_active|$color_normal$git_repo_name$color_active|$color_normal$dir_parent/$dir_current$color_active]$color_normal"
+    else
+        echo -en "$color_inactive \bgit ✗ [$color_normal$dir_parent/$dir_current$color_inactive]$color_normal"
+    end
+
+    # Newline
+    echo
+
+    # Handle root vs non-root
+    if [ "$USER" = "root" ]
+        set -g prompt_sigil "#"
+    else
+        set -g prompt_sigil "λ"
+    end
+
+    # TODO(wpcarro): For root directories like /tmp, there will not be a parent
+    # directory. Support these directories.
+    set -l time (date +"%T")
+    if test $last_status -eq 0
+        # TODO(wpcarro): I'd prefer to use black here instead of white, but for
+        # some reason white is black and black is invisible.
+        set -l color_prompt (set_color white --bold)
+        echo -n "$time$color_prompt $prompt_sigil$color_normal "
+    else
+        set -l color_prompt (set_color red --bold)
+        echo -n "$time$color_prompt $prompt_sigil$color_normal "
+    end
 end
 
 source ./functions.fish
