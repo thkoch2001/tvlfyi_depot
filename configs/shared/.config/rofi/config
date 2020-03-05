@@ -1,6 +1,0 @@
-rofi.font:                           Monospace 10
-rofi.color-normal:                   #31213f, #8de0e1, #31213f, #83526a, #8de0e1
-rofi.color-urgent:                   #31213f, #d6b48d, #22231D, #d6b48d, #8de0e1
-rofi.color-active:                   #31213f, #3CC2B5, #31213f, #3CC2B5, #31213f
-rofi.color-window:                   #31213f, #83526a, #5a3849
-rofi.modi: window,run,ssh,combi
