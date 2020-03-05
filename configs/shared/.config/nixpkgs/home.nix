@@ -43,6 +43,20 @@
     };
   };
 
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      desktop = {
+        user = "wpcarro";
+        hostname = "zeno.lon.corp.google.com";
+      };
+      socrates = {
+        user = "wpcarro";
+        hostname = "84.92.33.141";
+      };
+    };
+  };
+
   ##############################################################################
   # Services
   ##############################################################################
