@@ -1,5 +1,0 @@
-# setup OSX style scrolling for desktop
-xinput --set-prop 'PixArt Lenovo USB Optical Mouse' 'libinput Natural Scrolling Enabled' 1
-
-# increase mouse speed
-xinput --set-prop 'PixArt Lenovo USB Optical Mouse' 'libinput Accel Speed' 1

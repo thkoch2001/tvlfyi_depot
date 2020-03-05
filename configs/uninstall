@@ -2,11 +2,4 @@
 
 configs="$BRIEFCASE/configs"
 
-case $(hostname) in
-  $DESKTOP)
-    (cd "$configs/desktop" && stow --delete --target="$HOME" .);;
-  $LAPTOP)
-    (cd "$configs/laptop" && stow --delete --target="$HOME" .);;
-esac
-
 (cd "$configs/shared" && stow --delete --target="$HOME" .)

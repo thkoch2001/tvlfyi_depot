@@ -1,4 +1,22 @@
 #!/bin/sh
 
-. ~/.xsessionrc.shared
-. ~/.xsessionrc.device
+# Might be unnecessary...
+. ~/.profile
+
+export DESKTOP_SESSION=cinnamon  # gnome for trusty.
+
+# Desktop background color.
+xsetroot -solid "#333333"
+
+# Set fallback cursor.
+xsetroot -cursor_name left_ptr
+
+# `unclutter` hide the cursor in when it is inactive
+unclutter &
+
+# Control X's pointer with the keyboard. Activate by pressing <C-;>
+keynav daemonize
+
+# Startup Emacs (and EXWM). This is built by calling `make install` from within
+# ~/dotfiles/emacs.
+dbus-launch --exit-with-session wpcarros-emacs
