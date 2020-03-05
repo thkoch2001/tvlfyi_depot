@@ -2,4 +2,4 @@
 
 configs="$BRIEFCASE/configs"
 
-(cd "$configs/shared" && stow --target="$HOME" .)
+(cd "$configs" && stow --target="$HOME" .)
