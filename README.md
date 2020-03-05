@@ -95,16 +95,10 @@ Missing the following dependencies:
 
 - `stow`
 - `neovim`
-- `bat`
-- `exa`
 - `fasd`
 - `opam`
 - `ghcup`
-- `ripgrep`
-- `fzf`
-- `fd`
 - `hub`
-- `pass`
 
 ```bash
 $ cd ~/Dropbox/dotfiles

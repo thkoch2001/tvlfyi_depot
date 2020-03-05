@@ -7,17 +7,7 @@ let
   # language-specific tooling, I'm intending to use shell.nix alongside lorri
   # and direnv.
   emacsBinPath = pkgs.lib.strings.makeBinPath (with pkgs; [
-    lorri
-    direnv
     tdesktop # native telegram client
-    diskus
-    bat
-    exa
-    fd
-    fzf
-    tldr
-    tokei
-    nmap
     ripgrep
     gitAndTools.hub
     kubectl

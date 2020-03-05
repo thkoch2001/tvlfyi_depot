@@ -1,10 +1,24 @@
 { config, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-  ];
-
-  home.stateVersion = "19.09";
+  home = {
+    packages = with pkgs; [
+      bat
+      exa
+      ripgrep
+      fd
+      pass
+      tokei
+      nmap
+      tldr
+      diskus
+      jq
+      pup
+    ];
+    sessionVariables = {
+    };
+    stateVersion = "19.09";
+  };
 
   ##############################################################################
   # Programs
