@@ -81,4 +81,10 @@
   ##############################################################################
 
   services.lorri.enable = true;
+
+  services.gpg-agent = {
+    enable = true;
+    defaultCacheTtl = 7200;
+    maxCacheTtl = 7200;
+  };
 }
