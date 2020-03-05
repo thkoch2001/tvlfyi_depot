@@ -12,9 +12,8 @@ import (
 )
 
 var hostnames = map[string]string{
-	os.Getenv("DESKTOP"):  "desktop",
-	os.Getenv("LAPTOP"):   "work_laptop",
-	os.Getenv("CLOUDTOP"): "cloudtop",
+	os.Getenv("DESKTOP"): "desktop",
+	os.Getenv("LAPTOP"):  "work_laptop",
 }
 
 func main() {

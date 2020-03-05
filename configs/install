@@ -7,8 +7,6 @@ case $(hostname) in
     (cd "$configs/desktop" && stow --target="$HOME" .);;
   $LAPTOP)
     (cd "$configs/work_laptop" && stow --target="$HOME" .);;
-  $CLOUDTOP)
-    (cd "$configs/cloudtop" && stow --target="$HOME" .);;
 esac
 
 (cd "$configs/shared" && stow --target="$HOME" .)

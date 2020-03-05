@@ -10,5 +10,4 @@ pkgs.mkShell rec {
   NIX_PATH="nixpkgs=${NIXPKGS}:depot=${DEPOT}:briefcase=${BRIEFCASE}";
   DESKTOP = "zeno.lon.corp.google.com";
   LAPTOP = "seneca";
-  CLOUDTOP = "wpcarro.c.googlers.com";
 }

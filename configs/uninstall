@@ -7,8 +7,6 @@ case $(hostname) in
     (cd "$configs/desktop" && stow --delete --target="$HOME" .);;
   $LAPTOP)
     (cd "$configs/laptop" && stow --delete --target="$HOME" .);;
-  $CLOUDTOP)
-    (cd "$configs/cloudtop" && stow --delete --target="$HOME" .);;
 esac
 
 (cd "$configs/shared" && stow --delete --target="$HOME" .)
