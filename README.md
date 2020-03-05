@@ -4,7 +4,7 @@ Welcome to my briefcase: my monorepo.
 
 I'm attempting to amass a collection of packages that span a variety of
 languages while minimizing the costs of sharing the code. This also includes
-configuration for things like emacs, tmux, ssh, and other tools.
+configuration for things like emacs, ssh, and other tools.
 
 # Installation (Deprecated)
 
