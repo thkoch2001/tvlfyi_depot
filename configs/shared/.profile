@@ -44,9 +44,6 @@ eval "$(ssh-agent -s)"
 # TODO: Prefer `systemctl start docker.service`
 dockerd &
 
-# Start lorri
-systemctl --user start lorri.service
-
 # Set environment variables for Nix. Don't run this for systems running NixOS.
 # TODO: Learn why I can't use the variables from ~/briefcase/.envrc.
 case $(hostname) in

@@ -1,9 +1,0 @@
-[Unit]
-Description=Lorri build daemon
-
-[Socket]
-ListenStream=%t/lorri/daemon.socket
-RuntimeDirectory=lorri
-
-[Install]
-WantedBy=sockets.target
