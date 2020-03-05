@@ -9,9 +9,6 @@ case $(hostname) in
     (cd "$configs/work_laptop" && stow --target="$HOME" .);;
   $CLOUDTOP)
     (cd "$configs/cloudtop" && stow --target="$HOME" .);;
-  # Acer Manjaro laptop
-  acer-manjaro)
-    (cd "$configs/personal_laptop" && stow --target="$HOME" .);;
 esac
 
 (cd "$configs/shared" && stow --target="$HOME" .)
