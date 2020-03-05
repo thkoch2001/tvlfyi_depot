@@ -29,10 +29,6 @@ export ALTERNATE_EDITOR=nvim
 # Rust integration. Keep here so programs like Emacs can read this value.
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 
-# Application configuration
-export FZF_DEFAULT_COMMAND='fd --hidden --follow --exclude ".git"'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
 # This fixes nixpkgs that rely on glibc-2.27, which allegedly breaks locale
 # issues.
 # See this thread for more details: https://github.com/NixOS/nixpkgs/issues/8398

@@ -57,6 +57,11 @@
     };
   };
 
+  programs.fzf = rec {
+    defaultCommand = "fd --hidden --follow --exclude '.git'";
+    fileWidgetCommand = defaultCommand;
+  };
+
   ##############################################################################
   # Services
   ##############################################################################
