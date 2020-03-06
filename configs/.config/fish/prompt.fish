@@ -45,14 +45,21 @@ else
         # Git information
         set -l git_repo (git rev-parse --show-toplevel 2>/dev/null)
         set -l git_status $status
-        set -l dir_parent (basename (realpath ..))
-        set -l dir_current (basename (realpath .))
+
+        if [ (realpath .) = "/" ]
+            set -g dir_path (realpath .)
+        else if [ (realpath ..) = "/" ]
+            set -g dir_path (realpath .)
+        else
+            set -g dir_path (echo (basename (realpath ..))"/"(basename (realpath .)))
+        end
+
         if test $git_status -eq 0
             set -l git_repo_name (basename (git rev-parse --show-toplevel))
             set -l git_branch (git branch 2>/dev/null | grep '^\*' | cut -d' ' -f2-)
-            echo -en "$color_active \bgit ✓ [$color_normal$git_branch$color_active|$color_normal$git_repo_name$color_active|$color_normal$dir_parent/$dir_current$color_active]$color_normal"
+            echo -en "$color_active \bgit ✓ [$color_normal$git_branch$color_active|$color_normal$git_repo_name$color_active|$color_normal$dir_path$color_active]$color_normal"
         else
-            echo -en "$color_inactive \bgit ✗ [$color_normal$dir_parent/$dir_current$color_inactive]$color_normal"
+            echo -en "$color_inactive \bgit ✗ [$color_normal$dir_path$color_inactive]$color_normal"
         end
 
         # Newline
@@ -65,8 +72,6 @@ else
             set -g prompt_sigil "λ"
         end
 
-        # TODO(wpcarro): For root directories like /tmp, there will not be a parent
-        # directory. Support these directories.
         set -l time (date +"%T")
         if test $last_status -eq 0
             set -l color_prompt (set_color white --bold)
