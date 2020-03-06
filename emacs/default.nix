@@ -23,6 +23,7 @@ let
     ]) ++
 
     (with epkgs.melpaPackages; [
+      notmuch
       ts
       vterm
       base16-theme
