@@ -71,9 +71,40 @@
     };
   };
 
+  programs.fish = {
+    enable = true;
+    shellAliases = {
+      c = "xclip -selection clipboard -i";
+      p = "xclip -selection clipboard -o";
+      cat = "bat";
+      rgh = "rg --hidden";
+      fdh = "fd --hidden";
+      tpr = "tput reset";
+      ls = "exa --sort=type";
+      ll = "exa --long --sort=type";
+      la = "exa --long --all --sort=type";
+      gst = "git status";
+      gsh = "git show HEAD";
+      gpf = "git push --force-with-lease";
+      gd = "git diff";
+    };
+    shellAbbrs = {
+      sys = "systemctl";
+      sysu = "systemctl --user";
+    };
+    promptInit = builtins.readFile ../fish/prompt.fish;
+  };
+
   programs.fzf = rec {
+    enable = true;
     defaultCommand = "fd --hidden --follow --exclude '.git'";
     fileWidgetCommand = defaultCommand;
+    enableFishIntegration = true;
+  };
+
+  programs.direnv = {
+    enable = true;
+    enableFishIntegration = true;
   };
 
   ##############################################################################
