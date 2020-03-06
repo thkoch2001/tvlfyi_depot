@@ -29,6 +29,16 @@
                  "nix-env" "-f" "<briefcase>" "-iA" "emacs")
   (display-buffer "*nix-build/<briefcase/emacs>*"))
 
+(defun nix/home-manager-switch ()
+  "Use Nix to reconfigure the user environment."
+  (interactive)
+  (start-process "nix/home-manager-switch" "*nix/home-manager-switch*"
+                 "home-manager"
+                 "-I" (format "nixpkgs=%s" (f-expand "~/nixpkgs"))
+                 "-I" (format "home-manager=%s" (f-expand "~/home-manager"))
+                 "switch")
+  (display-buffer "*nix/home-manager-switch*"))
+
 (defun nix/sly-from-briefcase (attribute)
   "Start a Sly REPL configured with a Lisp matching a derivation
   from my monorepo.
