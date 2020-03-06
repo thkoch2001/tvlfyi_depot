@@ -17,7 +17,6 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; Code:
 (use-package nix-mode
   :mode "\\.nix\\'")
 
@@ -26,7 +25,11 @@
   "Use nix-env to rebuild wpcarros-emacs."
   (interactive)
   (start-process "nix-build/<briefcase/emacs>" "*nix-build/<briefcase/emacs>*"
-                 "nix-env" "-f" "<briefcase>" "-iA" "emacs")
+                 "nix-env"
+                 "-I" (format "nixpkgs=%s" (f-expand "~/nixpkgs"))
+                 "-I" (format "depot=%s" (f-expand "~/depot"))
+                 "-I" (format "briefcase=%s" (f-expand "~/briefcase"))
+                 "-f" "<briefcase>" "-iA" "emacs")
   (display-buffer "*nix-build/<briefcase/emacs>*"))
 
 (defun nix/home-manager-switch ()
