@@ -27,7 +27,7 @@ export EDITOR=emacsclient
 export ALTERNATE_EDITOR=nvim
 
 # Rust integration. Keep here so programs like Emacs can read this value.
-export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+# export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 
 # This fixes nixpkgs that rely on glibc-2.27, which allegedly breaks locale
 # issues.
@@ -38,7 +38,7 @@ export LOCALE_ARCHIVE="$(readlink ~/.nix-profile/lib/locale)/locale-archive"
 eval "$(ssh-agent -s)"
 
 # TODO: Prefer `systemctl start docker.service`
-dockerd &
+# dockerd &
 
 # Set environment variables for Nix. Don't run this for systems running NixOS.
 # TODO: Learn why I can't use the variables from ~/briefcase/.envrc.
