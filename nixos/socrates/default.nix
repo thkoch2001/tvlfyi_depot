@@ -115,7 +115,7 @@ in {
 
   # Provision SSL certificates to support HTTPS connections.
   security.acme.acceptTerms = true;
-  security.acme.certs."wpcarro.dev".email = "wpcarro@gmail.com";
+  security.acme.email = "wpcarro@gmail.com";
 
   services.nginx = {
     enable = true;
@@ -141,15 +141,17 @@ in {
       access_log syslog:server=unix:/dev/log json_combined;
     '';
 
-    virtualHosts.blog = {
-      serverName = "blog.wpcarro.dev";
-      useACMEHost = "wpcarro.dev";
-      addSSL = true;
-      extraConfig = ''
-        location / {
-          proxy_pass http://localhost:80
-        }
-      '';
+    virtualHosts = {
+      "learn.wpcarro.dev" = {
+        addSSL = true;
+        enableACME = true;
+        root = "/var/www/learn";
+      };
+      "blog.wpcarro.dev" = {
+        addSSL = true;
+        enableACME = true;
+        root = "/var/www/blog";
+      };
     };
   };
 
