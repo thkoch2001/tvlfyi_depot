@@ -30,3 +30,5 @@ __pycache__
 /monzo_ynab/monzo/fixture.json
 /monzo_ynab/kv.json
 node_modules/
+/configs/.config/fish/config.fish
+/configs/.config/fish/fish_variables
