@@ -9,7 +9,7 @@ let
 
   trimNewline = x: pkgs.lib.removeSuffix "\n" x;
   readSecret = x: trimNewline (builtins.readFile ("/etc/secrets/" + x));
-in pkgs.lib.fix(self: {
+in {
   imports = [ ./hardware.nix ];
 
   # Use the systemd-boot EFI boot loader.
@@ -154,4 +154,4 @@ in pkgs.lib.fix(self: {
   };
 
   system.stateVersion = "20.09"; # Did you read the comment?
-})
+}
