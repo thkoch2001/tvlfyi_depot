@@ -147,7 +147,9 @@ in {
       "learn.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
-        root = "/var/www/learn";
+        # TODO(wpcarro): Prefer creating a default.nix in //learn and using
+        # briefcase.learn as root.
+        root = ~/briefcase/learn/static;
       };
       "blog.wpcarro.dev" = {
         addSSL = true;
