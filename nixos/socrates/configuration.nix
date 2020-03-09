@@ -154,7 +154,7 @@ in {
       "blog.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
-        root = "/var/www/blog";
+        root = briefcase.blog;
       };
     };
   };
