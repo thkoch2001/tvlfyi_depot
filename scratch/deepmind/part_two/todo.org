@@ -16,7 +16,7 @@
 ** DONE Cafe Order Checker
 ** DONE In-Place Shuffle
 * Sorting, searching, and logarithms
-** TODO Find Rotation Point
+** DONE Find Rotation Point
 ** TODO Find Repeat, Space Edition
 ** TODO Top Scores
 ** TODO Merging Meeting Times
