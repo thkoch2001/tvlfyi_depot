@@ -32,3 +32,4 @@ __pycache__
 node_modules/
 /configs/.config/fish/config.fish
 /configs/.config/fish/fish_variables
+/blog/public/

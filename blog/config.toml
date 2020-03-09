@@ -1,0 +1,25 @@
+baseURL = "https://blog.wpcarro.dev"
+disqusShortname = "wpcarro"
+languageCode = "en-us"
+title = "blog.wpcarro.dev"
+theme = "tailwind"
+pygmentsCodeFences = true
+pygmentsUseClasses = true
+
+[taxonomies]
+    tag = "tags"
+
+[permalinks]
+    posts = "/posts/:year/:month/:title/"
+
+[params]
+    author = "William Carroll"
+    description = "Loosely structured streams of consciousness"
+    tagline = "Loosely structured streams of consciousness"
+
+[languages]
+    [languages.en]
+        contentDir = "content/english"
+        languageCode = "en-us"
+        languageName = "English"
+        weight = 1
