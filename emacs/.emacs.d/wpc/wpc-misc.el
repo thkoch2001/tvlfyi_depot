@@ -255,5 +255,8 @@
   "Return the name of the current frame."
   (frame-parameter nil 'name))
 
+;; Start the Emacs server
+(server-start)
+
 (provide 'wpc-misc)
 ;;; wpc-misc.el ends here
