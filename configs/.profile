@@ -19,9 +19,6 @@ if [ -z "$DISPLAY" -a "$(tty)" = '/dev/tty5' ]; then
   exec xinit -- vt05
 fi
 
-# Rust integration. Keep here so programs like Emacs can read this value.
-# export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
-
 # This fixes nixpkgs that rely on glibc-2.27, which allegedly breaks locale
 # issues.
 # See this thread for more details: https://github.com/NixOS/nixpkgs/issues/8398
