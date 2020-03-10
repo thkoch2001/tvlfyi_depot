@@ -23,6 +23,9 @@
       ];
     };
     sessionVariables = {
+      BROWSER = "google-chrome";
+      EDITOR = "emacsclient";
+      ALTERNATE_EDITOR = "vim";
     };
     stateVersion = "19.09";
   };

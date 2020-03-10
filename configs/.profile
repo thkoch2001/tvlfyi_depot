@@ -19,13 +19,6 @@ if [ -z "$DISPLAY" -a "$(tty)" = '/dev/tty5' ]; then
   exec xinit -- vt05
 fi
 
-# Application preferences
-export BROWSER=google-chrome-stable
-export TERMINAL=alacritty
-export VISUAL=emacsclient
-export EDITOR=emacsclient
-export ALTERNATE_EDITOR=nvim
-
 # Rust integration. Keep here so programs like Emacs can read this value.
 # export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 
