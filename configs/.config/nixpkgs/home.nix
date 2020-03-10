@@ -123,6 +123,11 @@
   # Services
   ##############################################################################
 
+  xsession = {
+    enable = true;
+    windowManager.command = "dbus-launch --exit-with-session wpcarros-emacs";
+  };
+
   # Filter blue light from screen after sunset.
   services.redshift = {
     enable = true;
