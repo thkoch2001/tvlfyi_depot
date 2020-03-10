@@ -3,17 +3,6 @@
 # everytime a new shell is created. The ~/.profile, on the other hand, is
 # typically sourced only once at login.
 
-# TODO: Consider getting rid of all of these variables and prefer using lorri.
-PATH+=":$HOME/bin"                            # personal
-PATH+=":$HOME/.local/bin"                     # personal
-PATH+=":$HOME/.cargo/bin"                     # Rust
-PATH+=":$HOME/.rvm/bin"                       # Ruby
-PATH+=":$HOME/n/bin"                          # JavaScript, et al
-PATH+=":$HOME/.yarn/bin"                      # JavaScript, et al
-PATH+=":$HOME/.yarn/global/node_modules/.bin" # JavaScript, et al
-export PATH
-systemctl --user import-environment PATH
-
 # Taken from the EXWM configuration documentation.
 if [ -z "$DISPLAY" -a "$(tty)" = '/dev/tty5' ]; then
   exec xinit -- vt05
