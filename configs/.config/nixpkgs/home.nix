@@ -139,6 +139,9 @@
     '';
   };
 
+  # Hide the cursor during X sessions after 1 second.
+  services.unclutter.enable = true;
+
   # Support mouseless workflows.
   services.keynav.enable = true;
 
