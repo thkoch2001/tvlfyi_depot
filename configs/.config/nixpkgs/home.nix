@@ -15,6 +15,13 @@
       jq
       pup
     ];
+    keyboard = {
+      options = [
+        # Swap Caps-Lock and Escape
+        "remove Lock = Caps_Lock"
+        "keysym Caps_Lock = Escape"
+      ];
+    };
     sessionVariables = {
     };
     stateVersion = "19.09";
