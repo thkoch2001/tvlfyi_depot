@@ -123,6 +123,17 @@
   # Services
   ##############################################################################
 
+  # Filter blue light from screen after sunset.
+  services.redshift = {
+    enable = true;
+    latitude = "51.49";
+    longitude = "-0.18";
+    # The redshift from <nixpkgs> isn't working on gLinux.
+    package = pkgs.writeShellScriptBin "redshift" ''
+      exec /usr/bin/redshift "$@"
+    '';
+  };
+
   services.lorri.enable = true;
 
   services.gpg-agent = {
