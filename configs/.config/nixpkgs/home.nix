@@ -100,7 +100,9 @@
     };
     shellAbbrs = {
       sys = "systemctl";
+      sysst = "systemctl status";
       sysu = "systemctl --user";
+      sysust = "systemctl --user status";
     };
     promptInit = builtins.readFile ../fish/prompt.fish;
   };
