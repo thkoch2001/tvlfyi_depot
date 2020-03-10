@@ -34,9 +34,6 @@ export ALTERNATE_EDITOR=nvim
 # See this thread for more details: https://github.com/NixOS/nixpkgs/issues/8398
 export LOCALE_ARCHIVE="$(readlink ~/.nix-profile/lib/locale)/locale-archive"
 
-# Start ssh-agent
-eval "$(ssh-agent -s)"
-
 # TODO: Prefer `systemctl start docker.service`
 # dockerd &
 
