@@ -78,9 +78,19 @@ in {
   ##############################################################################
   # Services
   ##############################################################################
+
   services.openssh.enable = true;
 
   services.lorri.enable = true;
+
+  systemd.services.gogs = {
+    enable = true;
+    description = "Easy-to-use Git server written in golang";
+    script = "${pkgs.gogs}/bin/gogs web";
+    serviceConfig = {
+      Type = "simple";
+    };
+  };
 
   systemd.services.monzo-token-server = {
     enable = true;
@@ -150,6 +160,13 @@ in {
         # TODO(wpcarro): Prefer creating a default.nix in //learn and using
         # briefcase.learn as root.
         root = /home/wpcarro/briefcase/learn/static;
+      };
+      "git.wpcarro.dev" = {
+        addSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://localhost:3000";
+        };
       };
       "blog.wpcarro.dev" = {
         addSSL = true;
