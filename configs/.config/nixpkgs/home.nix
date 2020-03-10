@@ -139,6 +139,9 @@
     '';
   };
 
+  # Support mouseless workflows.
+  services.keynav.enable = true;
+
   services.lorri.enable = true;
 
   services.gpg-agent = {
