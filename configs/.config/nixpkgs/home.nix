@@ -76,7 +76,7 @@
     shellAliases = {
       c = "xclip -selection clipboard -i";
       p = "xclip -selection clipboard -o";
-      cat = "bat";
+      cat = "bat --theme='Monokai Extended Light'";
       rgh = "rg --hidden";
       fdh = "fd --hidden";
       tpr = "tput reset";
