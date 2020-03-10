@@ -13,9 +13,6 @@ fi
 # See this thread for more details: https://github.com/NixOS/nixpkgs/issues/8398
 export LOCALE_ARCHIVE="$(readlink ~/.nix-profile/lib/locale)/locale-archive"
 
-# TODO: Prefer `systemctl start docker.service`
-# dockerd &
-
 # Set environment variables for Nix. Don't run this for systems running NixOS.
 # TODO: Learn why I can't use the variables from ~/briefcase/.envrc.
 case $(hostname) in
