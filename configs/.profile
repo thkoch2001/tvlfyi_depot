@@ -8,6 +8,12 @@ if [ -z "$DISPLAY" -a "$(tty)" = '/dev/tty5' ]; then
   exec xinit -- vt05
 fi
 
+# I tried configuring home-manager to generate the ssh-agent init code (i.e. the
+# code below), but it seems that the home-manager community support using
+# gpg-agent to emulate the ssh-agent. I tried that, but I didn't fully
+# understand the benefits.
+eval "$(ssh-agent -s)"
+
 # This fixes nixpkgs that rely on glibc-2.27, which allegedly breaks locale
 # issues.
 # See this thread for more details: https://github.com/NixOS/nixpkgs/issues/8398
