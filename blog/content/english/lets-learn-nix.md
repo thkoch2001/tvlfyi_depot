@@ -33,8 +33,8 @@ I aim to make each tutorial in the "Let's Learn Nix" series:
 ## About the author
 
 My name is William ([@wpcarro][who-wpcarro]). My three favorite tools are Git,
-Emacs, and Nix. I am an American expat currently working at Google in London,
-UK. While during the day I primarily write Java, Python, and TypeScript, I
+Emacs, and Nix. I am an American expat currently working at Google in
+London. While during the day I primarily write Java, Python, and TypeScript, I
 prefer functional programming. I use Nix to deploy software and manage the
 multiple machines across which I work.
 
