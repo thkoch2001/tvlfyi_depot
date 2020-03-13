@@ -105,6 +105,15 @@
       sysust = "systemctl --user status";
     };
     promptInit = builtins.readFile ../fish/prompt.fish;
+    functions = {
+      ptree = {
+        body = ''
+          for pid in (pgrep $argv[1])
+            pstree -s -p $pid
+          end
+        '';
+      };
+    };
   };
 
   programs.fzf = rec {
