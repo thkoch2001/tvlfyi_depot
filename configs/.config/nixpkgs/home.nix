@@ -41,6 +41,9 @@
 
   programs.git = {
     enable = true;
+    package = pkgs.writeShellScriptBin "git" ''
+      exec /usr/bin/git "$@"
+    '';
     userName = "William Carroll";
     userEmail = "wpcarro@gmail.com";
     aliases = {
