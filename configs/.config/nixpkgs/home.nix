@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
-{
+let
+  wrapNonNixProgram = { path, as }: pkgs.writeShellScriptBin as ''
+    exec ${path} "$@"
+  '';
+in {
   home = {
     packages = with pkgs; [
       bat
@@ -41,9 +45,7 @@
 
   programs.git = {
     enable = true;
-    package = pkgs.writeShellScriptBin "git" ''
-      exec /usr/bin/git "$@"
-    '';
+    package = wrapNonNixProgram { path = "/usr/bin/git"; as = "git"; };
     userName = "William Carroll";
     userEmail = "wpcarro@gmail.com";
     aliases = {
@@ -145,10 +147,7 @@
     enable = true;
     latitude = "51.49";
     longitude = "-0.18";
-    # The redshift from <nixpkgs> isn't working on gLinux.
-    package = pkgs.writeShellScriptBin "redshift" ''
-      exec /usr/bin/redshift "$@"
-    '';
+    package = wrapNonNixProgram { path = "/usr/bin/redshift"; as = "redshift"; };
   };
 
   # Hide the cursor during X sessions after 1 second.
