@@ -1,9 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  wrapNonNixProgram = { path, as }: pkgs.writeShellScriptBin as ''
-    exec ${path} "$@"
-  '';
+  briefcase = import <briefcase> {};
 in {
   home = {
     packages = with pkgs; [
@@ -45,7 +43,10 @@ in {
 
   programs.git = {
     enable = true;
-    package = wrapNonNixProgram { path = "/usr/bin/git"; as = "git"; };
+    package = briefcase.utils.wrapNonNixProgram {
+      path = "/usr/bin/git";
+      as = "git";
+    };
     userName = "William Carroll";
     userEmail = "wpcarro@gmail.com";
     aliases = {
@@ -147,7 +148,10 @@ in {
     enable = true;
     latitude = "51.49";
     longitude = "-0.18";
-    package = wrapNonNixProgram { path = "/usr/bin/redshift"; as = "redshift"; };
+    package = briefcase.utils.wrapNonNixProgram {
+      path = "/usr/bin/redshift";
+      as = "redshift";
+    };
   };
 
   # Hide the cursor during X sessions after 1 second.
