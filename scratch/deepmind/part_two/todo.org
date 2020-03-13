@@ -18,7 +18,7 @@
 * Sorting, searching, and logarithms
 ** DONE Find Rotation Point
 ** TODO Find Repeat, Space Edition
-** TODO Top Scores
+** DONE Top Scores
 ** TODO Merging Meeting Times
 * Trees and graphs
 ** TODO Balanced Binary Tree
