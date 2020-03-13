@@ -8,6 +8,7 @@ let
   };
 in {
   nixos       = readTree ./nixos;
+  utils       = readTree ./utils;
   emacs       = readTree ./emacs;
   blog        = readTree ./blog;
   lisp        = readTree ./lisp;
