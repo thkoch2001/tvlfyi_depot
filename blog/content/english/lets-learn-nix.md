@@ -52,7 +52,7 @@ Dotfiles][lln-dotfiles]
 [wtf-git]: https://git-scm.com
 [wtf-emacs]: https://www.gnu.org/software/emacs
 [who-dmjio]: https://twitter.com/dmjio
-[who-tazjin]: https://twitter.com/dmjio
+[who-tazjin]: https://twitter.com/tazjin
 [who-wpcarro]: https://twitter.com/wpcarro
 [lln-dotfiles]: /lets-learn-nix-dotfiles
 [nix-1p]: https://github.com/tazjin/nix-1p
