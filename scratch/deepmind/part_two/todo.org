@@ -19,7 +19,7 @@
 ** DONE Find Rotation Point
 ** TODO Find Repeat, Space Edition
 ** DONE Top Scores
-** TODO Merging Meeting Times
+** DONE Merging Meeting Times
 * Trees and graphs
 ** TODO Balanced Binary Tree
 ** TODO Binary Search Tree Checker
@@ -59,7 +59,7 @@
 * Combinatorics, probability, and other math
 ** TODO Which Appears Twice
 ** TODO Find in Ordered Set
-** TODO In-Place Shuffle
+** DONE In-Place Shuffle
 ** TODO Simulate 5-sided die
 ** TODO Simulate 7-sided die
 ** TODO Two Egg Problem
