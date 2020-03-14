@@ -21,7 +21,7 @@
 ** DONE Top Scores
 ** DONE Merging Meeting Times
 * Trees and graphs
-** TODO Balanced Binary Tree
+** DONE Balanced Binary Tree
 ** TODO Binary Search Tree Checker
 ** TODO 2nd Largest Item in a Binary Search Tree
 ** TODO Graph Coloring
@@ -32,7 +32,7 @@
 ** TODO Compute nth Fibonacci Number
 ** TODO Making Change
 ** TODO The Cake Thief
-** TODO Balanced Binary Tree
+** DONE Balanced Binary Tree
 ** TODO Binary Search Tree Checker
 ** TODO 2nd Largest Item in a Binary Search Tree
 * Queues and stacks
