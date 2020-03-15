@@ -22,7 +22,7 @@
 ** DONE Merging Meeting Times
 * Trees and graphs
 ** DONE Balanced Binary Tree
-** TODO Binary Search Tree Checker
+** DONE Binary Search Tree Checker
 ** TODO 2nd Largest Item in a Binary Search Tree
 ** TODO Graph Coloring
 ** TODO MeshMessage
@@ -33,7 +33,7 @@
 ** TODO Making Change
 ** TODO The Cake Thief
 ** DONE Balanced Binary Tree
-** TODO Binary Search Tree Checker
+** DONE Binary Search Tree Checker
 ** TODO 2nd Largest Item in a Binary Search Tree
 * Queues and stacks
 ** TODO Largest Stack
