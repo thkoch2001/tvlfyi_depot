@@ -134,6 +134,52 @@ in {
     enableFishIntegration = true;
   };
 
+  programs.autorandr = {
+    enable = true;
+    profiles = let
+      # To get these values, I ran `xrandr --props` and searched for
+      # 'EDID:'. While these are long and a bit unsightly, I cannot think of a
+      # desirable workaround, so I'm going to leave them for now.
+      laptop = "00ffffffffffff000daed71400000000151b0104a51f117802ee95a3544c99260f505400000001010101010101010101010101010101363680a0703820402e1e240035ad10000018000000fe004e3134304843452d474e320a20000000fe00434d4e0a202020202020202020000000fe004e3134304843452d474e320a2000e2";
+      hdmi4k = "00ffffffffffff001e6d085b6d4a0400061c0103803c2278ea3035a7554ea3260f50542108007140818081c0a9c0d1c081000101010108e80030f2705a80b0588a0058542100001e04740030f2705a80b0588a0058542100001a000000fd00383d1e873c000a202020202020000000fc004c4720556c7472612048440a200150020330714d902220050403020161605d5e5f230907076d030c001000b83c20006001020367d85dc401788003e30f0003023a801871382d40582c450058542100001a565e00a0a0a029503020350058542100001a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000ad";
+    in {
+      mobile = {
+        fingerprint = {
+          eDP1 = laptop;
+          HDMI1 = hdmi4k;
+        };
+        config = {
+          eDP1 = {
+            enable = true;
+            primary = true;
+            mode = "1920x1080";
+            rate = "59.93";
+          };
+          HDMI1 = {
+            enable = false;
+          };
+        };
+      };
+      docked = {
+        fingerprint = {
+          eDP1 = laptop;
+          HDMI1 = hdmi4k;
+        };
+        config = {
+          eDP1 = {
+            enable = false;
+          };
+          HDMI1 = {
+            enable = true;
+            primary = true;
+            mode = "3840x2160";
+            rate = "30.00";
+          };
+        };
+      };
+    };
+  };
+
   ##############################################################################
   # Services
   ##############################################################################
