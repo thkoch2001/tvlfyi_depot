@@ -32,7 +32,7 @@
 (defconst display/4k-monitor "HDMI1"
   "The xrandr identifer for my 4K monitor.")
 
-(defconst display/display-states (cycle/from-list '((t . t) (t . nil) (nil . t)))
+(defconst display/display-states (cycle/from-list '((t . nil) (nil . t)))
   "A list of cons cells modelling enabled and disabled states for my displays.
 The car models the enabled state of my laptop display; the cdr models the
   enabled state of my external monitor.")
