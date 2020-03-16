@@ -10,6 +10,7 @@ in {
   nixos       = readTree ./nixos;
   utils       = readTree ./utils;
   emacs       = readTree ./emacs;
+  learn       = readTree ./learn;
   blog        = readTree ./blog;
   lisp        = readTree ./lisp;
   gopkgs      = readTree ./gopkgs;
