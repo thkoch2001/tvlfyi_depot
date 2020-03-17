@@ -198,6 +198,8 @@ in {
       path = "/usr/bin/redshift";
       as = "redshift";
     };
+    # Disable the fading animation.
+    extraOptions = [ "-r" ];
   };
 
   # Hide the cursor during X sessions after 1 second.
