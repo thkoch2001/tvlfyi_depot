@@ -171,6 +171,11 @@ in {
         enableACME = true;
         root = briefcase.blog;
       };
+      "wpcarro.dev" = {
+        addSSL = true;
+        enableACME = true;
+        root = briefcase.covid-uk;
+      };
     };
   };
 
