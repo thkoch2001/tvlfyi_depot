@@ -159,13 +159,6 @@ in {
         enableACME = true;
         root = briefcase.learn;
       };
-      "git.wpcarro.dev" = {
-        addSSL = true;
-        enableACME = true;
-        locations."/" = {
-          proxyPass = "http://localhost:3000";
-        };
-      };
       "blog.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
