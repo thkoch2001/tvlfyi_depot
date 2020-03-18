@@ -11,6 +11,7 @@ in {
   utils       = readTree ./utils;
   emacs       = readTree ./emacs;
   learn       = readTree ./learn;
+  covid-uk    = readTree ./covid-uk;
   blog        = readTree ./blog;
   lisp        = readTree ./lisp;
   gopkgs      = readTree ./gopkgs;
