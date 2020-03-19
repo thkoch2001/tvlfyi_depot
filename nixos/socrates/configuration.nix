@@ -164,7 +164,7 @@ in {
         enableACME = true;
         root = briefcase.blog;
       };
-      "wpcarro.dev" = {
+      "sandbox.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
         root = briefcase.covid-uk;
@@ -172,5 +172,5 @@ in {
     };
   };
 
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "20.09";
 }
