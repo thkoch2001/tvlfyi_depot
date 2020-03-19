@@ -167,7 +167,9 @@ in {
       "sandbox.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
-        root = briefcase.covid-uk;
+        locations."/covid-19/" = {
+          alias = "${briefcase.covid-uk}/";
+        };
       };
     };
   };
