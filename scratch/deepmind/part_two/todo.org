@@ -24,7 +24,7 @@
 ** DONE Balanced Binary Tree
 ** DONE Binary Search Tree Checker
 ** DONE 2nd Largest Item in a Binary Search Tree
-** TODO Graph Coloring
+** DONE Graph Coloring
 ** TODO MeshMessage
 ** TODO Find Repeat, Space Edition BEAST MODE
 * Dynamic programming and recursion
