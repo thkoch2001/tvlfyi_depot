@@ -172,7 +172,7 @@ in {
       "sandbox.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
-        root = briefcase.sandbox;
+        root = briefcase.website.sandbox;
       };
     };
   };

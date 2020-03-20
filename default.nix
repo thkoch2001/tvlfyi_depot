@@ -10,7 +10,6 @@ in {
   nixos       = readTree ./nixos;
   utils       = readTree ./utils;
   emacs       = readTree ./emacs;
-  sandbox     = readTree ./sandbox;
   website     = readTree ./website;
   lisp        = readTree ./lisp;
   gopkgs      = readTree ./gopkgs;
