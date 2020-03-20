@@ -154,6 +154,11 @@ in {
     '';
 
     virtualHosts = {
+      "wpcarro.dev" = {
+        addSSL = true;
+        enableACME = true;
+        root = briefcase.website;
+      };
       "learn.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
@@ -167,9 +172,7 @@ in {
       "sandbox.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
-        locations."/covid-19/" = {
-          alias = "${briefcase.covid-uk}/";
-        };
+        root = briefcase.sandbox;
       };
     };
   };
