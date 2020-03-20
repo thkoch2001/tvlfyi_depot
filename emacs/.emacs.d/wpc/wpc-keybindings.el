@@ -74,7 +74,7 @@
            (interactive)
            (let ((xref-prompt-for-identifier nil))
              (call-interactively #'xref-find-references))))
-  (general-unbind 'motion "M-." "C-p")
+  (general-unbind 'motion "M-." "C-p" "<SPC>")
   (general-unbind 'normal "s"   "M-." "C-p" "C-n")
   (general-unbind 'insert "C-v" "C-d" "C-a" "C-e" "C-n" "C-p" "C-k")
   (setq evil-symbol-word-search t)
