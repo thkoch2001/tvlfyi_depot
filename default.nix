@@ -13,7 +13,6 @@ in {
   learn       = readTree ./learn;
   sandbox     = readTree ./sandbox;
   website     = readTree ./website;
-  blog        = readTree ./blog;
   lisp        = readTree ./lisp;
   gopkgs      = readTree ./gopkgs;
   monzo_ynab  = readTree ./monzo_ynab;
