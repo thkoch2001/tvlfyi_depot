@@ -125,8 +125,7 @@
  "el" (lambda () (interactive) (wpc/find-file-split "~/variables.zsh"))
  "ex" (lambda () (interactive) (wpc/find-file-split "~/.Xresources"))
  "em" (lambda () (interactive) (wpc/find-file-split "~/.tmux.conf"))
- "l" #'locate
- "L" #'list-packages
+ "l" #'linum-mode
  "B" #'magit-blame
  "w" #'save-buffer
  "r" #'wpc/evil-replace-under-point
