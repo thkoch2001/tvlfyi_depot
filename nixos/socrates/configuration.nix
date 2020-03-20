@@ -162,7 +162,7 @@ in {
       "learn.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
-        root = briefcase.learn;
+        root = briefcase.website.learn;
       };
       "blog.wpcarro.dev" = {
         addSSL = true;
