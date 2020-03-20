@@ -167,7 +167,7 @@ in {
       "blog.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
-        root = briefcase.blog;
+        root = briefcase.website.blog;
       };
       "sandbox.wpcarro.dev" = {
         addSSL = true;
