@@ -21,7 +21,7 @@
 ;; current consumers of these constants, and I'm unsure if the indirection that
 ;; globally defined constants introduces is worth it.
 
-(defconst constants/current-project "~/briefcase/blog"
+(defconst constants/current-project "~/briefcase/website"
   "Variable holding the directory for my currently active project.")
 
 (prelude/assert (f-directory? constants/current-project))
