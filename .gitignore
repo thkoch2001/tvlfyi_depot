@@ -33,11 +33,3 @@ node_modules/
 /configs/.config/fish/config.fish
 /configs/.config/fish/fish_variables
 /website/blog/public/
-
-# ReasonML
-.merlin
-.bsb.lock
-npm-debug.log
-/nut-score/lib/bs/
-/nut-score/node_modules/
-/nut-score/bundleOutput/
