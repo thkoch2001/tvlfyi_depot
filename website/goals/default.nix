@@ -11,7 +11,7 @@ pkgs.stdenv.mkDerivation {
   # parcel.js needs number of CPUs
   PARCEL_WORKERS = "1";
   buildPhase = ''
-    npx parcel build src/index.html
+    npx parcel build src/index.html --public-url ./
   '';
   installPhase = ''
     mv dist $out
