@@ -1,12 +1,19 @@
-function ProgressBar(props) {
+import React  from "react";
+
+function ProgressBar(props: {
+  done: number,
+  total: number,
+  units: string,
+  color: string,
+}) {
   const { done, total, units, color } = props
   const width = Math.floor(done / total * 100)
   const rest = 100 - width
 
-  let [fg, bg] = [`bg-${color}`, `bg-${color}-lightest`]
+  let [fg, bg] = [`bg-${color}-600`, `bg-${color}-100`]
 
   if (color === 'white') {
-    [fg, bg] = ['bg-grey', 'bg-grey-lightest']
+    [fg, bg] = ['bg-gray-600', 'bg-gray-100']
   }
 
   return (
@@ -17,13 +24,24 @@ function ProgressBar(props) {
   )
 }
 
-function Goal(props) {
+function Goal(props: {
+  subject: string,
+  goal: string,
+  done: number,
+  total: number,
+  units: string,
+  color: string,
+}) {
   const { subject, goal, done, total, units, color } = props
   const width = "6em"
 
-  const Tr = (props) => (
+  const Tr = (props: {
+    label: string,
+    value: string,
+    valueComponent?: React.ReactElement,
+  }) => (
     <tr className="flex py-2">
-      <td className="text-grey-dark" style={{width: width}}>{props.label}</td>
+      <td className="text-gray-600" style={{width: width}}>{props.label}</td>
       <td className="flex-1">
         {props.valueComponent ? props.valueComponent : props.value}
       </td>
@@ -43,7 +61,9 @@ function Goal(props) {
   )
 }
 
-function Copy(props) {
+function Copy(props: {
+  children: React.ReactNode
+}) {
   return (
     <p className="pb-4 leading-loose">
       {props.children}
@@ -93,5 +113,4 @@ function App() {
   )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
-
+export default App;
