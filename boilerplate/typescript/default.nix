@@ -1,7 +1,7 @@
-let
-  pkgs = import <nixpkgs> {};
-in pkgs.stdenv.mkDerivation {
-  name = "ideal-website";
+{ pkgs, ... }:
+
+pkgs.stdenv.mkDerivation {
+  name = "typescript";
   srcs = ./.;
   buildInputs = with pkgs; [
     nodejs
@@ -11,7 +11,7 @@ in pkgs.stdenv.mkDerivation {
   # parcel.js needs number of CPUs
   PARCEL_WORKERS = "1";
   buildPhase = ''
-    npx parcel build index.html
+    npx parcel build $src/index.html
   '';
   installPhase = ''
     mv dist $out
