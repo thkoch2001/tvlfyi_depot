@@ -28,7 +28,7 @@
 ** DONE MeshMessage
 ** DONE Find Repeat, Space Edition BEAST MODE
 * Dynamic programming and recursion
-** TODO Recursive String Permutations
+** DONE Recursive String Permutations
 ** TODO Compute nth Fibonacci Number
 ** TODO Making Change
 ** TODO The Cake Thief
