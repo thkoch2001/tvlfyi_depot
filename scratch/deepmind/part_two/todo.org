@@ -26,7 +26,7 @@
 ** DONE 2nd Largest Item in a Binary Search Tree
 ** DONE Graph Coloring
 ** DONE MeshMessage
-** TODO Find Repeat, Space Edition BEAST MODE
+** DONE Find Repeat, Space Edition BEAST MODE
 * Dynamic programming and recursion
 ** TODO Recursive String Permutations
 ** TODO Compute nth Fibonacci Number
@@ -45,7 +45,7 @@
 ** TODO Does This Linked List Have A Cycle?
 ** TODO Reverse A Linked List
 ** TODO Kth to Last Node in a Singly-Linked List
-** TODO Find Repeat, Space Edition BEAST MODE
+** DONE Find Repeat, Space Edition BEAST MODE
 * System design
 ** TODO URL Shortener
 ** TODO MillionGazillion
