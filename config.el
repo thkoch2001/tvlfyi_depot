@@ -4,17 +4,26 @@
 (setq x-super-keysym 'alt
       x-alt-keysym   'meta)
 
-(setq user-mail-address "root@gws.fyi"
+(setq user-mail-address "griffin@urbint.com"
       user-full-name    "Griffin Smith")
 
-; (def-package-hook! doom-themes :disable)
+(setq doom-font (font-spec :family "Meslo LGSDZ Nerd Font" :size 14)
+      doom-big-font (font-spec :family "Meslo LGSDZ Nerd Font" :size 19)
+      doom-big-font-increment 5
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans")
+      doom-unicode-font (font-spec :family "Meslo LG S DZ"))
 
 (after! rust
-  (setq rust-format-on-save t))
+  ;; (require 'ein)
+  (setq rust-format-on-save t)
+  (add-hook! :after rust-mode-hook #'lsp)
+  (add-hook! :after rust-mode-hook #'rust-enable-format-on-save))
 
 (load! "utils")
-
 (load! "company-sql")
+(load! "org-query")
+(load! "nix-yapf-mode")
+(load! "show-matching-paren")
 
 ; (defconst rust-src-path
 ;   (-> "/Users/griffin/.cargo/bin/rustc --print sysroot"
@@ -30,8 +39,11 @@
 (add-hook! rust-mode
   (flycheck-rust-setup)
   (flycheck-mode)
-  (racer-mode)
-  (cargo-minor-mode))
+  (cargo-minor-mode)
+  (lsp)
+  (rust-enable-format-on-save)
+  (map! :map rust-mode-map
+        "C-c C-f" #'rust-format-buffer))
 
 (add-hook! elixir-mode
   (require 'flycheck-credo)
@@ -97,8 +109,9 @@
     (let ((theme (car theme-settings))
           (faces (cadr theme-settings)))
       (if (member theme custom-enabled-themes)
-          (dolist (face faces)
-            (custom-theme-set-faces theme face))))))
+          (progn
+            (dolist (face faces)
+              (custom-theme-set-faces theme face)))))))
 
 (defcustom theme-overrides nil
   "Association list of override faces to set for different custom themes.")
@@ -107,12 +120,23 @@
   "Set VALUE of a KEY in ALIST-SYMBOL."
   (set alist-symbol (cons (list key value) (assq-delete-all key (eval alist-symbol)))))
 
+(comment
+ (custom-theme-set-faces 'grfn-solarized-light
+                         `(font-lock-doc-face
+                           ((t (:foreground ,+solarized-s-base1)))))
+
++solarized-s-base1
+(custom-theme-)
+ (custom-face-get-current-spec 'font-lock-doc-face)
+
+ )
+
 (alist-set 'theme-overrides 'grfn-solarized-light
            `((font-lock-doc-face ((t (:foreground ,+solarized-s-base1))))
              (font-lock-preprocessor-face ((t (:foreground ,+solarized-red))))
              (font-lock-keyword-face ((t (:foreground ,+solarized-green :bold nil))))
              (font-lock-builtin-face ((t (:foreground ,+solarized-s-base01
-                                          :bold t))))
+                                                      :bold t))))
 
              (elixir-attribute-face ((t (:foreground ,+solarized-blue))))
              (elixir-atom-face ((t (:foreground ,+solarized-cyan))))
@@ -120,7 +144,10 @@
              (line-number ((t (:background ,+solarized-s-base2 :foreground ,+solarized-s-base1))))
 
              (haskell-operator-face ((t (:foreground ,+solarized-green))))
-             (haskell-keyword-face ((t (:foreground ,+solarized-cyan))))))
+             (haskell-keyword-face ((t (:foreground ,+solarized-cyan))))
+
+             (org-drawer ((t (:foreground ,+solarized-s-base1
+                              :bold t))))))
 
 (setq solarized-use-variable-pitch nil
       solarized-scale-org-headlines nil
@@ -203,15 +230,14 @@
 (defvar +grfn-snippets-dir (expand-file-name "snippets/" +grfn-dir))
 
 ;;
-(when (featurep! :feature evil)
-  (load! "+bindings")
-  (load! "+commands"))
+(load! "+bindings")
+(load! "+commands")
 
 (load! "+private")
 
 (require 'dash)
 
-(def-package! predd)
+(use-package! predd)
 
 
 ;;
@@ -238,14 +264,6 @@
   (sp-pair "[" nil :post-handlers '(("| " " "))
            :unless '(sp-point-before-word-p sp-point-before-same-p)))
 
-;; feature/evil
-(after! evil-mc
-  ;; Make evil-mc resume its cursors when I switch to insert mode
-  (add-hook! 'evil-mc-before-cursors-created
-    (add-hook 'evil-insert-state-entry-hook #'evil-mc-resume-cursors nil t))
-  (add-hook! 'evil-mc-after-cursors-deleted
-    (remove-hook 'evil-insert-state-entry-hook #'evil-mc-resume-cursors t)))
-
 ;; feature/snippets
 (after! yasnippet
   ;; Don't use default snippets, use mine.
@@ -257,44 +275,36 @@
   (setq company-idle-delay 0.2
         company-minimum-prefix-length 1))
 
-(setq +doom-modeline-height 10)
+(setq doom-modeline-height 12)
 
-;; lang/org
-;; (after! org-bullets
-;;   ;; The standard unicode characters are usually misaligned depending on the
-;;   ;; font. This bugs me. Personally, markdown #-marks for headlines are more
-;;   ;; elegant, so we use those.
-;;   (setq org-bullets-bullet-list '("#")))
-
-;; (defmacro faces! (mode &rest forms)
-;;   (let ((hook-name (-> mode symbol-name (concat "-hook"))))
-;;     (if-let ((hook-sym (intern-soft hook-name)))
-;;         `(add-hook! ,hook-sym
-;;            (message "HELLO I AM MACRO TIME")
-;;            ,@(->
-;;               forms
-;;               (seq-partition 2)
-;;               (->> (seq-map
-;;                     (lambda (pair)
-;;                       (let ((face  (car pair))
-;;                             (color (cadr pair)))
-;;                         `(set-face-foreground ,face ,color)))))))
-;;       (warn "Hook name %s (for mode %s) does not exist as symbol!"
-;;             (hook-name)
-;;             (symbol-name mode)))))
-
-(def-package! org-clubhouse
+(load "/home/griffin/code/org-clubhouse/org-clubhouse.el")
+(use-package! org-clubhouse
   :config
   (setq org-clubhouse-state-alist
         '(("PROPOSED" . "Proposed")
           ("BACKLOG"  . "Backlog")
           ("TODO"     . "Scheduled")
           ("ACTIVE"   . "In Progress")
-          ("PR"       . "In Review")
-          ("TESTING"  . "In Testing")
-          ("DONE"     . "Completed"))))
+          ("PR"       . "Peer Review")
+          ("TESTING"  . "Stakeholder Review")
+          ("DONE"     . "Completed"))
+        org-clubhouse-username "griffin"
+        org-clubhouse-claim-story-on-status-update
+        '("ACTIVE" "PR" "TESTING" "DONE")
+        org-clubhouse-create-stories-with-labels 'existing
+        org-clubhouse-workflow-name "Urbint")
 
-; (require 'doom-themes)
+  (defun grfn/sprint-tasks ()
+    (interactive)
+    (find-file "/home/griffin/notes/work.org")
+    (goto-char 1)
+    (search-forward "* Sprint Tasks")
+    (goto-eol) (insert-char ?\n)
+    (org-clubhouse-headlines-from-query
+     2
+     "owner:griffin state:Scheduled")))
+
+
 
 ;; Should really figure out which of these is correct, eventually
 
@@ -369,95 +379,30 @@
   (setq evil-shift-width 2))
 
 (after! org
-  (setq
-   org-directory (expand-file-name "~/notes")
-   +org-dir (expand-file-name "~/notes")
-   org-default-notes-file (concat org-directory "/inbox.org")
-   +org-default-todo-file (concat org-directory "/inbox.org")
-   org-agenda-files (list (expand-file-name "~/notes"))
-   org-refile-targets '((org-agenda-files :maxlevel . 3))
-   org-outline-path-complete-in-steps nil
-   org-refile-use-outline-path t
-   org-file-apps `((auto-mode . emacs)
-                   (,(rx (or (and "." (optional "x") (optional "htm") (optional "l") buffer-end)
-                             (and buffer-start "http" (optional "s") "://")))
-                    . "firefox %s")
-                   (,(rx ".pdf" buffer-end) . "apvlv %s")
-                   (,(rx "." (or "png"
-                                 "jpg"
-                                 "jpeg"
-                                 "gif"
-                                 "tif"
-                                 "tiff")
-                         buffer-end)
-                    . "feh %s"))
-   org-log-done 'time
-   org-archive-location "~/notes/trash::* From %s"
-   org-cycle-separator-lines 2
-   org-hidden-keywords '(title)
-   org-tags-column -130
-   org-ellipsis "⤵"
-   org-imenu-depth 9
-   org-capture-templates
-   `(("t" "Todo" entry
-      (file+headline +org-default-todo-file "Inbox")
-      "* TODO %?\n%i"
-      :prepend t
-      :kill-buffer t)
-
-     ("n" "Notes" entry
-      (file+headline +org-default-notes-file "Inbox")
-      "* %U %?\n%i"
-      :prepend t
-      :kill-buffer t)
-
-     ("c" "Task note" entry
-      (clock)
-      "* %U %?\n%i[[%l][Context]]\n"
-      :kill-buffer t
-      :unnarrowed t)
-
-     ("d" "Tech debt" entry
-      (file+headline ,(concat org-directory "/work.org")
-                     "Inbox")
-      "* TODO %? :debt:\nContext: %a\nIn task: %K"
-      :prepend t
-      :kill-buffer t))
-   org-deadline-warning-days 1
-   org-agenda-skip-scheduled-if-deadline-is-shown 'todo
-   org-agenda-custom-commands
-   '(("p" "Sprint Tasks" tags-todo "sprint")
-     ("i" "Inbox" tags "inbox")
-     ("r" "Running jobs" todo "RUNNING")
-     ("w" "@Work" tags-todo "@work")))
+  (load! "org-config")
 
   (set-face-foreground 'org-block +solarized-s-base00)
   (add-hook! org-mode
     (add-hook! evil-normal-state-entry-hook
       #'org-align-all-tags))
+  (add-hook 'org-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (setq whitespace-global-modes '(not org-mode magit-mode))
   (setf (alist-get 'file org-link-frame-setup) 'find-file-other-window)
   (set-face-foreground 'org-block +solarized-s-base00)
-  )
+
+  (add-hook! org-mode
+    (set-company-backend! 'org-mode
+      '(:separate company-ob-postgresql
+                  company-dabbrev
+                  company-yasnippet
+                  company-ispell))))
 
 (after! magit
   (setq git-commit-summary-max-length 50))
 
-;; (def-package! forge
-;;   :after magit)
-
-(comment
-
- (string-match-p "(?!foo).*" "bar")
- )
-
 (after! ivy
   (setq ivy-re-builders-alist
         '((t . ivy--regex-fuzzy))))
-
-(setq doom-font (font-spec :family "Meslo LGSDZ Nerd Font" :size 14)
-      doom-big-font (font-spec :family "Meslo LGSDZ Nerd Font" :size 19)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans")
-      doom-unicode-font (font-spec :family "Meslo LG S DZ"))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -478,11 +423,11 @@
 
 
 (add-hook! haskell-mode
-  (intero-mode)
-  ;; (lsp-mode)
-  (flycheck-add-next-checker
-   'intero
-   'haskell-hlint)
+  ;; (intero-mode)
+  (lsp-mode)
+  ;; (flycheck-add-next-checker
+  ;;  'intero
+  ;;  'haskell-hlint)
   (set-fill-column 80)
   (setq evil-shift-width 2))
 
@@ -491,13 +436,6 @@
 
 (load! "slack-snippets")
 
-(after! magit
-  ;; (require 'evil-magit)
-  ;; (require 'magithub)
-  )
-
-; (require 'auth-password-store)
-; (auth-pass-enable)
 (auth-source-pass-enable)
 
 (require 'fill-column-indicator)
@@ -520,37 +458,6 @@
              (null popup-instances))
     (setq sanityinc/fci-mode-suppressed nil)
     (turn-on-fci-mode)))
-
-
-;; https://github.com/alpaker/Fill-Column-Indicator/issues/67#issuecomment-195611974
-;; (add-hook 'prog-mode-hook #'fci-mode)
-;; (after! fill-column-indicator
-;;   (add-hook 'prog-mode-hook #'fci-mode)
-;;   (defvar eos/fci-disabled nil)
-;;   (make-variable-buffer-local 'eos/fci-disabled)
-
-;;   ;; Add a hook that disables fci if enabled when the window changes and it
-;;   ;; isn't wide enough to display it.
-;;   (defun eos/maybe-disable-fci ()
-;;     (interactive)
-;;     ;; Disable FCI if necessary
-;;     (when (and fci-mode
-;;                (< (window-width) (or fci-rule-column fill-column)))
-;;       (fci-mode -1)
-;;       (setq-local eos/fci-disabled t))
-;;     ;; Enable FCI if necessary
-;;     (when (and eos/fci-disabled
-;;                (eq fci-mode nil)
-;;                (> (window-width) (or fci-rule-column fill-column)))
-;;       (fci-mode 1)
-;;       (setq-local eos/fci-disabled nil)))
-
-;;   (defun eos/add-fci-disabling-hook ()
-;;     (interactive)
-;;     (add-hook 'window-configuration-change-hook
-;;               #'eos/maybe-disable-fci))
-
-;;   (add-hook 'prog-mode-hook #'eos/add-fci-disabling-hook))
 
 
 ;;; Javascript
@@ -657,6 +564,11 @@
 (setq projectile-create-missing-test-files 't)
 
 (after! magit
+  (map! :map magit-mode-map
+        ;; :n "] ]" #'magit-section-forward
+        ;; :n "[ [" #'magit-section-backward
+        )
+
   (define-suffix-command magit-commit-wip ()
     (interactive)
     (magit-commit-create '("-m" "wip")))
@@ -664,7 +576,50 @@
   (transient-append-suffix
     #'magit-commit
     ["c"]
-    (list "W" "Commit WIP" #'magit-commit-wip)))
+    (list "W" "Commit WIP" #'magit-commit-wip))
+
+  (define-suffix-command magit-reset-head-back ()
+    (interactive)
+    (magit-reset-mixed "HEAD~"))
+
+  (define-suffix-command magit-reset-head-previous ()
+    (interactive)
+    (magit-reset-mixed "HEAD@{1}"))
+
+  (transient-append-suffix
+    #'magit-reset
+    ["f"]
+    (list "b" "Reset HEAD~"    #'magit-reset-head-back))
+  (transient-append-suffix
+    #'magit-reset
+    ["f"]
+    (list "o" "Reset HEAD@{1}" #'magit-reset-head-previous))
+
+  (defun magit-read-org-clubhouse-branch-args ()
+    (if-let ((story-id (org-clubhouse-clocked-in-story-id)))
+        (let ((start-point (magit-read-starting-point
+                            "Create and checkout branch for Clubhouse story"
+                            nil
+                            "origin/master")))
+          (if (magit-rev-verify start-point)
+              (let ((desc (magit-read-string-ns
+                           (format "Story description (to go after gs/ch%d/)"
+                                   story-id))))
+                (list
+                 (format "gs/ch%d/%s" story-id desc)
+                 start-point))
+            (user-error "Not a valid starting point: %s" choice)))
+      (user-error "No currently clocked-in clubhouse story")))
+
+  (define-suffix-command magit-checkout-org-clubhouse-branch (branch start-point)
+    (interactive (magit-read-org-clubhouse-branch-args))
+    (magit-branch-and-checkout branch start-point))
+
+  (transient-append-suffix
+    #'magit-branch
+    ["c"]
+    (list "C" "Checkout Clubhouse branch" #'magit-checkout-org-clubhouse-branch))
+  )
 
 ;; (defun grfn/split-window-more-sensibly (&optional window)
 ;;   (let ((window (or window (selected-window))))
@@ -686,54 +641,104 @@
 ;;                  (with-selected-window window
 ;;                    (split-window-below))))))))
 
-;; (def-package! lsp-mode
-;;   :after (:any haskell-mode)
+(use-package! lsp-mode
+  :after (:any haskell-mode)
+  :config
+  (lsp-mode)
+  (setq lsp-response-timeout 60)
+  :hook
+  (haskell-mode . lsp-mode))
+
+(use-package! lsp-ui
+  :after lsp-mode
+  :config
+  (defun +grfn/lsp-ui-doc-frame-hook (frame window)
+    (set-frame-font (if doom-big-font-mode doom-big-font doom-font)
+                    nil (list frame)))
+  (setq lsp-ui-flycheck-enable t
+        lsp-ui-doc-header nil
+        lsp-ui-doc-position 'top
+        lsp-ui-doc-alignment 'window
+        lsp-ui-doc-frame-hook '+grfn/lsp-ui-doc-frame-hook)
+  (setq imenu-auto-rescan t)
+  (set-face-background 'lsp-ui-doc-background +solarized-s-base2)
+  (set-face-background 'lsp-face-highlight-read +solarized-s-base2)
+  (set-face-background 'lsp-face-highlight-write +solarized-s-base2)
+  :hook
+  (lsp-mode . lsp-ui-mode)
+  (lsp-ui-mode . flycheck-mode))
+
+(use-package! company-lsp
+  :after (lsp-mode lsp-ui)
+  :config
+  ;; (setq company-backends '(company-lsp))
+  (setq company-lsp-async t))
+
+(use-package! lsp-treemacs
+  :config
+  (map! :map lsp-mode-map
+        (:leader
+          "c X" #'lsp-treemacs-errors-list)))
+
+(use-package! dap-mode)
+
+(defun +grfn/haskell-mode-setup ()
+  (interactive)
+  (flymake-mode -1)
+  ;; If there’s a 'hie.sh' defined locally by a project
+  ;; (e.g. to run HIE in a nix-shell), use it…
+  (let ((hie-directory (locate-dominating-file default-directory "hie.sh")))
+    (when hie-directory
+      (setq-local lsp-haskell-process-path-hie (expand-file-name "hie.sh" hie-directory))
+      (setq-local
+       haskell-hoogle-command
+       (s-trim
+        (shell-command-to-string
+         (concat
+          "nix-shell " (expand-file-name "shell.nix" hie-directory)
+          " --run \"which hoogle\" 2>/dev/null"))))))
+  ;; … and only then setup the LSP.
+  (lsp))
+
+(defun never-flymake-mode (orig &rest args)
+  (when (and (bound-and-true-p flymake-mode))
+    (funcall orig 0)
+    (message "disabled flymake-mode")))
+(advice-add #'flymake-mode :around #'never-flymake-mode)
+
+(use-package! lsp-haskell
+  :after (lsp-mode lsp-ui haskell-mode)
+  ;; :hook
+  ;; (haskell-mode . lsp-haskell-enable)
+  :config
+  (add-hook 'haskell-mode-hook #'+grfn/haskell-mode-setup 't)
+  (setq lsp-haskell-process-path-hie "/home/griffin/.nix-profile/bin/hie-8.6.5"
+        lsp-haskell-process-args-hie
+        '("-d" "-l" "/tmp/hie.log" "+RTS" "-M4G" "-H1G" "-K4G" "-A16M" "-RTS")))
+
+(use-package! lsp-imenu
+  :after (lsp-mode lsp-ui)
+  :hook
+  (lsp-after-open . lsp-enable-imenu))
+
+;; (use-package! counsel-etags
+;;   :ensure t
+;;   :init
+;;   (add-hook 'haskell-mode-hook
+;;             (lambda ()
+;;               (add-hook 'after-save-hook
+;;                         'counsel-etags-virtual-update-tags 'append 'local)))
 ;;   :config
-;;   (lsp-mode)
-;;   (setq lsp-project-whitelist '("^/home/griffin/code/urb/grid/$")
-;;         lsp-response-timeout 60)
-;;   :hook
-;;   (haskell-mode . lsp-mode))
+;;   (setq counsel-etags-update-interval 60)
+;;   ;; (push "build" counsel-etags-ignore-directories)
+;;   )
 
-;; (def-package! lsp-ui
-;;   :after lsp-mode
-;;   :config
-;;   (setq lsp-ui-flycheck-enable t)
-;;   (setq imenu-auto-rescan t)
-;;   (set-face-background 'lsp-ui-doc-background +solarized-s-base2)
-;;   (set-face-background 'lsp-face-highlight-read +solarized-s-base2)
-;;   (set-face-background 'lsp-face-highlight-write +solarized-s-base2)
-;;   :hook
-;;   (lsp-mode . lsp-ui-mode)
-;;   (lsp-ui-mode . flycheck-mode))
-
-;; (def-package! company-lsp
-;;   :after (lsp-mode lsp-ui)
-;;   :config
-;;   (setq company-backends '(company-lsp))
-;;   (setq company-lsp-async t))
-
-;; (def-package! lsp-haskell
-;;   :after (lsp-mode lsp-ui haskell-mode)
-;;   :hook
-;;   (haskell-mode . lsp-haskell-enable)
-;;   :config
-;;   (setq lsp-haskell-process-path-hie "/home/griffin/.local/bin/hie-wrapper"
-;;         lsp-haskell-process-args-hie
-;;           '("-d" "-l" "/tmp/hie.log" "+RTS" "-M4G" "-H1G" "-K4G" "-A16M" "-RTS"
-;;             "--lsp")))
-
-;; (def-package! lsp-imenu
-;;   :after (lsp-mode lsp-ui)
-;;   :hook
-;;   (lsp-after-open . lsp-enable-imenu))
-
-(def-package! evil-magit
+(use-package! evil-magit
   :after (magit))
 
-(def-package! writeroom-mode)
+(use-package! writeroom-mode)
 
-(def-package! graphql-mode)
+(use-package! graphql-mode)
 
 (require 'whitespace)
 (setq whitespace-style '(face lines-tail))
@@ -867,7 +872,7 @@
     (before 1)
     (it 2)))
 
-(def-package! flycheck-clojure
+(use-package! flycheck-clojure
   ;; :disabled t
   :after (flycheck cider)
   :config
@@ -883,54 +888,67 @@
    'cljr-magic-require-namespaces
    '("s" . "clojure.spec.alpha")))
 
-(def-package! sqlup-mode
+(use-package! sqlup-mode
   :hook
   (sql-mode-hook . sqlup-mode)
   (sql-interactive-mode-hook . sqlup-mode))
 
-(def-package! emacsql)
-(def-package! emacsql-psql
+(use-package! emacsql)
+(use-package! emacsql-psql
   :after (emacsql))
 
-(def-package! yapfify
-  :hook
-  (python-mode-hook . yapf-mode))
+(use-package! pyimport
+  :after (python))
 
-(def-package! w3m
-  :hook
-  (setq browse-url-browser-function 'w3m-browse-url))
+(use-package! yapfify
+  :after (python)
+  :init
+  (add-hook! python-mode #'yapf-mode))
 
-(def-package! ob-http
+(use-package! w3m
+  :config
+  (setq browse-url-browser-function
+        `(("^https://app.clubhouse.io.*" . browse-url-firefox)
+          ("^https://github.com.*" . browse-url-firefox)
+          (".*" . browse-url-firefox))))
+
+(use-package! ob-http
   :config
   (add-to-list 'org-babel-load-languages '(http . t)))
 
-(def-package! ob-ipython
+(use-package! ob-ipython
+  :after (pyimport)
   :config
   (add-to-list 'org-babel-load-languages '(ipython . t))
   (setq ob-ipython-command
         "/home/griffin/code/urb/ciml-video-classifier/bin/jupyter"))
 
-(def-package! counsel-spotify)
+(use-package! counsel-spotify)
 
-(def-package! evil-snipe :disabled t)
+(after! counsel
+  (map! [remap counsel-org-capture] #'org-capture
+        [remap org-capture] #'org-capture))
+
+(use-package! evil-snipe :disabled t)
 (evil-snipe-mode -1)
 
-(def-package! rainbow-mode)
+(use-package! rainbow-mode)
 
-(def-package! org-alert
+(use-package! org-alert
+  :disabled t
   :config
   (org-alert-enable)
   (setq alert-default-style 'libnotify
         org-alert-headline-title "org"))
 
-(def-package! ob-async)
+(use-package! ob-async)
 
-(def-package! org-recent-headings
+(use-package! org-recent-headings
   :after (org)
   :config
   (map! :n "SPC n r" #'org-recent-headings-ivy))
 
-(def-package! org-sticky-header
+(use-package! org-sticky-header
   :after (org)
   :hook (org-mode-hook . org-sticky-header-mode)
   :config
@@ -955,11 +973,13 @@
   "Reference to a function whose return value will be used as the directory to
   run Alembic in")
 
-(comment
- (+grfn/extract-alembic-migration-name
-   "Generating
-/home/griffin/code/urb/grid/backend/src/grid/migrations/versions/15fb1b518507_test.py
-... done"))
+(put 'alembic-command 'safe-local-variable (lambda (_) t))
+(put 'alembic-dir-fun 'safe-local-variable (lambda (_) t))
+
+(defun make-alembic-command (args)
+  (if (functionp alembic-command)
+      (funcall alembic-command args)
+    (concat alembic-command " " args)))
 
 (defun +grfn/extract-alembic-migration-name (output)
   (string-match (rx (0+ anything) "Generating "
@@ -969,19 +989,227 @@
                 output)
   (match-string-no-properties 1 output))
 
-(defun generate-alembic-migration (msg)
-  (interactive "sMessage: ")
+(defun -run-alembic (args)
   (let* ((default-directory (funcall alembic-dir-fun))
-         (out (shell-command-to-string
-               (format "%s revision -m \"%s\""
-                       alembic-command
-                       msg)))
-         (migration-name (+grfn/extract-alembic-migration-name out)))
-    (find-file-other-window migration-name)))
+         (command (make-alembic-command args))
+         ;; (format "nix-shell --run 'alembic %s'" args)
+         ;; (format "%s %s" alembic-command args)
+         (res
+          (with-temp-buffer
+            (cons
+             (shell-command command t)
+             (s-replace-regexp
+              "^.*Nix search path entry.*$" ""
+              (buffer-string)))))
+         (exit-code (car res))
+         (out (cdr res)))
+    ;; (if (= 0 exit-code)
+    ;;     out
+    ;;   (error "Error running %s: %s" command out))
+    out
+    ))
 
-(defun alembic-upgrade (&optional revision)
+(comment
+ --exit-code
+ --bs
+ )
+
+(defun run-alembic (args)
+  (interactive "sAlembic command: ")
+  (message "%s" (-run-alembic args)))
+
+(defun generate-alembic-migration (msg &rest args)
+  (interactive "sMessage: ")
+  (->
+   (format "revision %s -m \"%s\""
+           (s-join " " args)
+           msg)
+   (-run-alembic)
+   (+grfn/extract-alembic-migration-name)
+   (find-file-other-window)))
+
+(cl-defun alembic-upgrade (&optional revision &key namespace)
+  (interactive "sRevision: ")
   (let ((default-directory (funcall alembic-dir-fun)))
-    (message
-     (shell-command-to-string (format "%s upgrade %s"
-                                      alembic-command
-                                      (or revision "head"))))))
+    (run-alembic (format "%s upgrade %s"
+                         (if namespace (concat "-n " namespace) "")
+                         (or revision "head")))))
+
+(defun alembic-downgrade (revision)
+  (interactive "sRevision: ")
+  (let ((default-directory (funcall alembic-dir-fun)))
+    (run-alembic (format "downgrade %s" (or revision "head")))))
+
+(use-package! gnuplot)
+(use-package! gnuplot-mode :after gnuplot)
+(use-package! string-inflection)
+
+(after! anaconda-mode
+  (set-company-backend! 'anaconda-mode #'company-yasnippet))
+
+;; (add-hook! python-mode
+;;   (capf))
+
+(cl-defstruct pull-request url number title author repository)
+
+(defun grfn/alist->plist (alist)
+  (->> alist
+       (-mapcat (lambda (pair)
+                  (list (intern (concat ":" (symbol-name (car pair))))
+                        (cdr pair))))))
+
+(defun grfn/review-requests ()
+  (let ((resp (ghub-graphql "query reviewRequests {
+    reviewRequests: search(
+      type:ISSUE,
+      query: \"is:open is:pr review-requested:glittershark archived:false\",
+      first: 100
+    ) {
+      issueCount
+      nodes {
+        ... on PullRequest {
+          url
+          number
+          title
+          author {
+            login
+            ... on User { name }
+          }
+          repository {
+            name
+            owner { login }
+          }
+        }
+      }
+    }
+  }")))
+    (->> resp
+         (alist-get 'data)
+         (alist-get 'reviewRequests)
+         (alist-get 'nodes)
+         (-map
+          (lambda (pr)
+            (apply
+             #'make-pull-request
+             (grfn/alist->plist pr)))))))
+
+(defun grfn/pr->org-headline (level pr)
+  (check-type level integer)
+  (check-type pr pull-request)
+  (format "%s TODO Review %s's PR on %s/%s: %s :pr:
+SCHEDULED: <%s>"
+          (make-string level ?*)
+          (->> pr (pull-request-author) (alist-get 'name))
+          (->> pr (pull-request-repository)
+               (alist-get 'owner)
+               (alist-get 'login))
+          (->> pr (pull-request-repository) (alist-get 'name))
+          (org-make-link-string
+           (pull-request-url pr)
+           (pull-request-title pr))
+          (format-time-string "%Y-%m-%d %a")))
+
+(require 'ghub)
+(defun grfn/org-headlines-from-review-requests (level)
+  "Create org-mode headlines at LEVEL from all review-requested PRs on Github"
+  (interactive "*nLevel: ")
+  (let* ((prs (grfn/review-requests))
+         (text (mapconcat (apply-partially #'grfn/pr->org-headline level) prs "\n")))
+    (save-mark-and-excursion
+      (insert text))
+    (org-align-tags 't)))
+
+(comment
+ (require 'ghub)
+
+ (intern (substring (symbol-name :foo) 1))
+
+ ((data (reviewRequests
+         (issueCount . 2)
+         (nodes ((url . "https://github.com/urbint/grid/pull/819")
+                 (number . 819)
+                 (title . "Hector.blanco/ch11498/take storagebucket out of crossbores schema")
+                 (repository (name . "grid")
+                             (owner (login . "urbint"))))
+                ((url . "https://github.com/urbint/ml/pull/32")
+                 (number . 32)
+                 (title . "Quality scoring")
+                 (repository (name . "ml")
+                             (owner (login . "urbint"))))))))
+ )
+
+(defun grfn/num-inbox-items ()
+  (length (org-elements-agenda-match "inbox" t)))
+
+(use-package! dhall-mode
+  :mode "\\.dhall\\'")
+
+(use-package! github-review
+  :after forge)
+
+(after! mu4e
+  (setq sendmail-program "/usr/bin/msmtp"
+        send-mail-function #'smtpmail-send-it
+        message-sendmail-f-is-evil t
+        message-sendmail-extra-arguments '("--read-envelope-from")
+        message-send-mail-function #'message-send-mail-with-sendmail))
+
+(defun grfn/org-add-db-connection-params ()
+  (interactive)
+  (ivy-read
+   "DB to connect to: "
+   (-map (lambda (opts)
+           (propertize (symbol-name (car opts))
+                       'header-args (cdr opts)))
+         db-connection-param-options)
+   :require-match t
+   :action
+   (lambda (opt)
+     (let ((header-args (get-text-property 0 'header-args opt)))
+       (org-set-property "header-args" header-args)))))
+
+(use-package! kubernetes
+  :commands (kubernetes-overview))
+
+(use-package! k8s-mode
+  :hook (k8s-mode . yas-minor-mode))
+
+(use-package! sx)
+
+;; (use-package! nix-update
+;;   :config
+;;   (map! (:map nix-mode-map
+;;           (:leader
+;;             :desc "Update fetcher" :nv #'nix-update-fetch))))
+
+
+(after! lsp-haskell
+  (lsp-register-client
+   (make-lsp--client
+    :new-connection (lsp-stdio-connection (lambda () (lsp-haskell--hie-command)))
+    :major-modes '(haskell-mode)
+    :server-id 'hie
+    ;; :multi-root t
+    ;; :initialization-options 'lsp-haskell--make-init-options
+    )
+   )
+  )
+
+(after! mu4e
+  (setq mu4e-contexts
+        `(,(make-mu4e-context
+            :name "work"
+            :vars
+            '())
+          ,(make-mu4e-context
+            :name "personal"
+            :vars
+            '()))))
+
+(solaire-global-mode -1)
+
+(use-package! wsd-mode)
+
+(use-package! metal-mercury-mode)
+(use-package! flycheck-mercury
+  :after (metal-mercury-mode flycheck-mercury))

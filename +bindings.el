@@ -304,7 +304,11 @@ private/hlissner/snippets."
      :desc "Git grep"              :n  "g" #'counsel-git-grep
      :desc "Checkout Branch"       :n  "c" #'counsel-git-checkout
      :desc "Next hunk"             :nv "]" #'git-gutter:next-hunk
-     :desc "Previous hunk"         :nv "[" #'git-gutter:previous-hunk)
+     :desc "Previous hunk"         :nv "[" #'git-gutter:previous-hunk
+
+     (:desc "smerge" :prefix "m"
+       :desc "Keep Current" :n "SPC" #'smerge-keep-current
+       :desc "Keep All"     :n "a" #'smerge-keep-all))
 
    (:desc "help" :prefix "h"
      :n "h" help-map
@@ -344,6 +348,7 @@ private/hlissner/snippets."
      :desc "Goto clocked-in note"   :n  "g" #'org-clock-goto
      :desc "Clock Out"              :n  "o" #'org-clock-out)
 
+
    (:desc "open" :prefix "o"
      :desc "Default browser"       :n  "b" #'browse-url-of-file
      :desc "Debugger"              :n  "d" #'+debug/open
@@ -356,9 +361,10 @@ private/hlissner/snippets."
      :desc "Slack Group"           :n  "g" #'slack-group-select
      :desc "Slack Unreads"         :n  "u" #'slack-select-unread-rooms
 
+     :desc "Email"                 :n "m" #'mu4e
+
      ;; applications
      :desc "APP: elfeed"           :n "E" #'=rss
-     :desc "APP: email"            :n "M" #'=email
      :desc "APP: twitter"          :n "T" #'=twitter
      :desc "APP: regex"            :n "X" #'=regex
 
@@ -375,6 +381,12 @@ private/hlissner/snippets."
        :desc "Send project to Transmit"  :n "U" #'+macos/send-project-to-transmit
        :desc "Send to Launchbar"         :n "l" #'+macos/send-to-launchbar
        :desc "Send project to Launchbar" :n "L" #'+macos/send-project-to-launchbar))
+
+   (:desc "Email" :prefix "M"
+     :desc "Compose" :n "m" #'mu4e-compose-new
+     :desc "Update"  :n "u" #'mu4e-update-mail-and-index
+     :desc "Sync"    :n "s" #'mu4e-update-mail-and-index
+     :desc "Open"    :n "o" #'mu4e)
 
    (:desc "project" :prefix "p"
      :desc "Browse project"          :n  "." (find-file-in! (doom-project-root))
@@ -421,6 +433,9 @@ private/hlissner/snippets."
  (:after dired-mode
          (:map dired-mode-map
         "-" #'grfn/dired-minus))
+
+ (:map smartparens-mode-map
+   :n "g o" #'sp-raise-sexp)
 
  ;; --- vim-sexp-mappings-for-regular-people
  (:after paxedit
@@ -535,14 +550,13 @@ private/hlissner/snippets."
      [escape]     #'company-search-abort))
 
  ;; counsel
- (:after counsel
-   (:map counsel-ag-map
-     [backtab]  #'+ivy/wgrep-occur      ; search/replace on results
-     "C-SPC"    #'ivy-call-and-recenter ; preview
-     "M-RET"    (+ivy-do-action! #'+ivy-git-grep-other-window-action)))
+;  (:after counsel
+;    (:map counsel-ag-map
+;      [backtab]  #'+ivy/wgrep-occur      ; search/replace on results
+;      "C-SPC"    #'ivy-call-and-recenter ; preview))
 
  ;; evil-commentary
- :n  "gc"  #'evil-commentary
+ ;; :n  "gc"  #'evil-commentary
 
  ;; evil-exchange
  :n  "gx"  #'evil-exchange
@@ -795,10 +809,13 @@ private/hlissner/snippets."
  ;; Haskell
  (:after haskell-mode
    (:map haskell-mode-map
-     :n "K"     #'intero-info
+     ;; :n "K"     #'intero-info
+     :n "K"     #'lsp-describe-thing-at-point
+     ;; :n "g d"   #'lsp-ui-peek-find-definitions
      :n "g d"   #'lsp-ui-peek-find-definitions
-     :n "g SPC" #'intero-repl-load
-     :n "g y"   #'intero-type-at))
+     ;; :n "g SPC" #'intero-repl-load
+     ;; :n "g y"   #'lsp-ui-
+     ))
 
  ;; Javascript
  ;; (:after rjsx-mode
@@ -813,7 +830,8 @@ private/hlissner/snippets."
 
  ;; Elisp
  (:map emacs-lisp-mode-map
-   :n "g SPC" #'eval-buffer)
+   :n "g SPC" #'eval-buffer
+   :n "g RET" (λ! () (ert t)))
 
 
  ;; --- Custom evil text-objects ---------------------
@@ -991,21 +1009,41 @@ private/hlissner/snippets."
 (require 'general)
 (general-evil-setup t)
 
-(nmap :keymaps 'paxedit-mode-map
-      ">" (general-key-dispatch 'evil-shift-right
-            "e" 'paxedit-transpose-forward
-            ")" 'sp-forward-slurp-sexp
-            "(" 'sp-backward-barf-sexp
-            "I" 'grfn/insert-at-sexp-end
-            "a" 'grfn/insert-at-form-end))
+(nmap
+  ">" (general-key-dispatch 'evil-shift-right
+        "e" 'paxedit-transpose-forward
+        ")" 'sp-forward-slurp-sexp
+        "(" 'sp-backward-barf-sexp
+        "I" 'grfn/insert-at-sexp-end
+        ;; "a" 'grfn/insert-at-form-end
+        ))
 
-(nmap :keymaps 'paxedit-mode-map
-      "<" (general-key-dispatch 'evil-shift-left
-            "e" 'paxedit-transpose-backward
-            ")" 'sp-forward-barf-sexp
-            "(" 'sp-backward-slurp-sexp
-            "I" 'grfn/insert-at-sexp-start
-            "a" 'grfn/insert-at-form-start))
+(nmap
+  "<" (general-key-dispatch 'evil-shift-left
+        "e" 'paxedit-transpose-backward
+        ")" 'sp-forward-barf-sexp
+        "(" 'sp-backward-slurp-sexp
+        "I" 'grfn/insert-at-sexp-start
+        ;; "a" 'grfn/insert-at-form-start
+        ))
+
+
+(defmacro saving-excursion (&rest body)
+  `(λ! () (save-excursion ,@body)))
+
+(nmap "c" (general-key-dispatch 'evil-change
+            "r c" (saving-excursion (string-inflection-lower-camelcase))
+            "r C" (saving-excursion (string-inflection-camelcase))
+            "r m" (saving-excursion (string-inflection-camelcase))
+            "r s" (saving-excursion (string-inflection-underscore))
+            "r u" (saving-excursion (string-inflection-upcase))
+            "r -" (saving-excursion (string-inflection-kebab-case))
+            "r k" (saving-excursion (string-inflection-kebab-case))
+            ;; "r ." (saving-excursion (string-inflection-dot-case))
+            ;; "r ." (saving-excursion (string-inflection-space-case))
+            ;; "r ." (saving-excursion (string-inflection-title-case))
+            ))
+
 
 (predd-defmulti eval-sexp (lambda (form) major-mode))
 
@@ -1137,7 +1175,7 @@ If invoked with a prefix ARG eval the expression after inserting it"
         "p" (general-key-dispatch 'fireplace-eval
               "p" 'eval-sexp-at-point
               "c" 'eval-last-sexp
-              "d" 'cider-eval-defun-at-point
+              "d" 'eval-defun
               "r" 'cider-test-run-test)
         "x" (general-key-dispatch 'fireplace-eval-context
               "x" 'cider-eval-sexp-at-point-in-context
@@ -1214,10 +1252,21 @@ If invoked with a prefix ARG eval the expression after inserting it"
   (interactive)
   (if (and (org-in-src-block-p)
            (equal direction 'below))
-      (grfn/insert-new-src-block)
+    (grfn/insert-new-src-block)
     (funcall orig direction)))
 
-(advice-add #'+org/insert-item :around #'grfn/+org-insert-item)
+(advice-add #'+org--insert-item :around #'grfn/+org-insert-item)
+;; (advice-add #'+org/insert-item-below :around
+;;             (lambda (orig) (grfn/+org-insert-item orig 'below)))
+
+(defun set-pdb-trace ()
+  (interactive)
+  (end-of-line)
+  (insert (format "\n%simport pdb;pdb.set_trace()"
+                  (make-string (python-indent-calculate-indentation)
+                               ?\s)))
+  (evil-indent (line-beginning-position)
+               (line-end-position)))
 
 (map!
 
@@ -1225,20 +1274,27 @@ If invoked with a prefix ARG eval the expression after inserting it"
    :n "#" 'forge-dispatch)
 
  (:map haskell-mode-map
-   ;; :n "K"     'lsp-info-under-point
-   ;; :n "g d"   'lsp-ui-peek-find-definitions
-   ;; :n "g r"   'lsp-ui-peek-find-references
-   ;; :n "g \\"  '+haskell/repl
-   :n "K"     'intero-info
-   :n "g d"   'intero-goto-definition
-   :n "g SPC" 'intero-repl-load
-   :n "g \\"  'intero-repl
-   :n "g y"   'intero-type-at
+   :n "K"     'lsp-info-under-point
+   :n "g d"   'lsp-ui-peek-find-definitions
+   :n "g r"   'lsp-ui-peek-find-references
+   :n "g \\"  '+haskell/repl
+   ;; :n "K"     'intero-info
+   ;; :n "g d"   'intero-goto-definition
+   ;; :n "g SPC" 'intero-repl-load
+   ;; :n "g \\"  'intero-repl
+   ;; :n "g y"   'intero-type-at
    ;; :n "g RET" 'grfn/run-sputnik-test-for-file
 
    (:localleader
      :desc "Apply action"  :n "e" 'intero-repl-eval-region
      :desc "Rename symbol" :n "r" 'intero-apply-suggestions))
+
+ (:map python-mode-map
+   :n "K" #'anaconda-mode-show-doc
+   :n "g SPC" #'+eval/buffer
+   :n "g RET" #'python-pytest-file
+   :n "g \\" #'+python/open-ipython-repl
+   [remap evil-commentary-yank] #'set-pdb-trace)
 
  (:after agda2-mode
    (:map agda2-mode-map
@@ -1249,8 +1305,10 @@ If invoked with a prefix ARG eval the expression after inserting it"
 
      (:localleader
        :desc "Give"                               :n "SPC" 'agda2-give
+       :desc "Case Split"                         :n "c"   'agda2-make-case
+       :desc "Make Helper"                        :n "h"   'agda2-helper-function-type
        :desc "Refine"                             :n "r"   'agda2-refine
-       :desc "Auto"                               :n "a"   'agda2-auto
+       :desc "Auto"                               :n "a"   'agda2-auto-maybe-all
        :desc "Goal type and context"              :n "t"   'agda2-goal-and-context
        :desc "Goal type and context and inferred" :n ";"   'agda2-goal-and-context-and-inferred)))
 
@@ -1296,4 +1354,15 @@ If invoked with a prefix ARG eval the expression after inserting it"
      "M-k" #'org-move-subtree-up
      "M-j" #'org-move-subtree-down
      (:localleader
-       :n "g" #'counsel-org-goto))))
+       :n "g" #'counsel-org-goto))
+
+   (:map org-capture-mode-map
+     :n "g RET" #'org-capture-finalize
+     :n "g \\"  #'org-captue-refile))
+
+ (:after lsp
+   (:map lsp-mode-map
+     :n "K"   #'lsp-describe-thing-at-point
+     :n "g r" #'lsp-rename
+     (:localleader
+       :n "a" #'lsp-execute-code-action))))

@@ -56,24 +56,26 @@
 ;;; Listing relations
 
 (cl-defun company-sql/list-tables (conn)
-  (-map (-compose 'symbol-name 'car)
-        (emacsql conn
-         [:select [tablename]
-          :from pg_catalog:pg_tables
-          :where (and (!= schemaname '"information_schema")
-                      (!= schemaname '"pg_catalog"))])))
+  (with-timeout (3)
+    (-map (-compose 'symbol-name 'car)
+          (emacsql conn
+                   [:select [tablename]
+                            :from pg_catalog:pg_tables
+                            :where (and (!= schemaname '"information_schema")
+                                        (!= schemaname '"pg_catalog"))]))))
 
 (cl-defun company-sql/list-columns (conn)
-  (-map
-   (lambda (row)
-     (propertize (symbol-name (nth 0 row))
-                 'table-name (nth 1 row)
-                 'data-type  (nth 2 row)))
-   (emacsql conn
-    [:select [column_name
-              table_name
-              data_type]
-     :from information_schema:columns])))
+  (with-timeout (3)
+    (-map
+     (lambda (row)
+       (propertize (symbol-name (nth 0 row))
+                   'table-name (nth 1 row)
+                   'data-type  (nth 2 row)))
+     (emacsql conn
+              [:select [column_name
+                        table_name
+                        data_type]
+                       :from information_schema:columns]))))
 
 ;;; Keywords
 
@@ -195,7 +197,7 @@
    (apply-partially #'s-starts-with? prefix)
    (append (-map (lambda (s)
                    (propertize s 'company-postgresql-annotation "table"))
-                 (company-sql/list-tables conn))
+
            (-map (lambda (s)
                    (propertize s 'company-postgresql-annotation
                                (format "%s.%s %s"
@@ -208,7 +210,7 @@
                  (company-sql/list-columns conn))
            (-map (lambda (s)
                    (propertize s 'company-postgresql-annotation "keyword"))
-                 company-postgresql/keywords))))
+                 company-postgresql/keywords)))))
 
 (defun company-postgresql (command &optional arg &rest _)
   (interactive (list 'interactive))
@@ -230,11 +232,10 @@
   ())
 
 (defun org-company-sql/connect (conn-params)
-  (car                                  ; ???
-   (or (alist-get-equal conn-params org-company-sql/connections)
-       (let ((conn (apply 'emacsql-psql conn-params)))
-         (add-to-list 'org-company-sql/connections (cons conn-params conn))
-         conn))))
+  (or (alist-get-equal conn-params org-company-sql/connections)
+      (let ((conn (apply 'emacsql-psql conn-params)))
+        (add-to-list 'org-company-sql/connections (cons conn-params conn))
+        conn)))
 
 (defun org-company-sql/in-sql-source-block-p ()
   (let ((org-elt (org-element-at-point)))

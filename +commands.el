@@ -1,4 +1,4 @@
-;;; private/grfn/+commands.el -*- lexical-binding: t; -*-
+
 
 (defalias 'ex! 'evil-ex-define-cmd)
 
@@ -28,6 +28,8 @@
 (ex! "iedit"        #'evil-multiedit-ex-match)
 (ex! "na[rrow]"     #'+evil:narrow-buffer)
 (ex! "retab"        #'+evil:retab)
+
+(ex! "glog" #'magit-log-buffer-file)
 
 ;; External resources
 ;; TODO (ex! "db"          #'doom:db)
@@ -115,13 +117,31 @@
 ;; Org-mode
 (ex! "cap"         #'+org-capture/dwim)
 
-(ex! "arev" #'generate-alembic-migration)
+(evil-define-command evil-alembic-revision (args)
+  (interactive "<a>")
+  (apply
+   #'generate-alembic-migration
+   (read-string "Message: ")
+   (s-split "\\s+" (or args ""))))
+(ex! "arev[ision]" #'evil-alembic-revision)
 
 (evil-define-command evil-alembic-upgrade (&optional revision)
   (interactive "<a>")
-  (alembic-upgrade revision))
+  (alembic-upgrade (or revision "head")))
 
-(ex! "aup" #'evil-alembic-upgrade)
+(ex! "aup[grade]" #'evil-alembic-upgrade)
+
+(evil-define-command evil-alembic-downgrade (&optional revision)
+  (interactive "<a>")
+  (alembic-downgrade revision))
+
+(ex! "adown[grade]" #'evil-alembic-downgrade)
+
+(evil-define-command evil-alembic (args)
+  (interactive "<a>")
+  (run-alembic args))
+
+(ex! "alemb[ic]" #'evil-alembic)
 
 ;; Elixir
 (add-hook! elixir-mode

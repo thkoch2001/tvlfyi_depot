@@ -192,10 +192,11 @@
      (ivy-read
       "Select channel: "
       ;; TODO want to potentially use purpose / topic stuff here
-      (-map (lambda (chan) (let ((label (assoc-default 'label (cdr chan)))
-                            (id (car chan)))
-                        (propertize label 'channel-id id)))
-            conversations)
+      (->> conversations
+           (-filter (lambda (c) (assoc-default 'label (cdr c))))
+           (-map (lambda (chan) (let ((label (assoc-default 'label (cdr chan)))
+                                 (id (car chan)))
+                             (propertize label 'channel-id id)))))
       :history 'slack/channel-history
       :action (lambda (selected)
                 (let ((channel-id (get-text-property 0 'channel-id selected)))
@@ -203,14 +204,24 @@
                   (message "Sent message to %s" selected))))))
   nil)
 
+(comment
+ (prompt-for-channel #'message)
+ (->> --convos
+      (-filter (lambda (c) (assoc-default 'label (cdr c))))
+      (-map (lambda (chan) (let ((label (assoc-default 'label (cdr chan)))
+                       (id (car chan)))
+                   (propertize label 'channel-id id)))))
+
+ (->> --convos (car) (cdr) (assoc-default 'label))
+ )
+
 (defun slack-send-code-snippet (&optional snippet-text)
-  (interactive)
-  (when-let ((snippet-text (or snippet-text
-                               (buffer-substring-no-properties (mark) (point)))))
-    (prompt-for-channel
-     (lambda (channel-id)
-       (slack/post-message
-        :text       (format "```\n%s```" snippet-text)
-        :channel-id channel-id)))))
+  (interactive
+   (list (buffer-substring-no-properties (mark) (point))))
+  (prompt-for-channel
+   (lambda (channel-id)
+     (slack/post-message
+      :text       (format "```\n%s```" snippet-text)
+      :channel-id channel-id))))
 
 (provide 'slack-snippets)

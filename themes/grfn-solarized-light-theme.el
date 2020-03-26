@@ -1,4 +1,6 @@
 (require 'solarized)
+(eval-when-compile
+  (require 'solarized-palettes))
 
 ;; (defun grfn-solarized-theme ()
 ;;   (custom-theme-set-faces
@@ -56,30 +58,58 @@
 
 (deftheme grfn-solarized-light "The light variant of Griffin's solarized theme")
 
-(create-solarized-theme
- 'light 'grfn-solarized-light
- (lambda ()
-   (custom-theme-set-faces
-    'grfn-solarized-light
-    `(font-lock-doc-face ((t (:foreground ,+solarized-s-base1))))
-    `(font-lock-preprocessor-face ((t (:foreground ,+solarized-red))))
-    `(font-lock-keyword-face ((t (:foreground ,+solarized-green))))
+(setq grfn-solarized-faces
+      '("Griffin's solarized theme customization"
+        (custom-theme-set-faces
+         theme-name
+         `(font-lock-doc-face ((t (:foreground ,+solarized-s-base1))))
+         `(font-lock-preprocessor-face ((t (:foreground ,+solarized-red))))
+         `(font-lock-keyword-face ((t (:foreground ,+solarized-green))))
 
-    `(elixir-attribute-face ((t (:foreground ,+solarized-blue))))
-    `(elixir-atom-face ((t (:foreground ,+solarized-cyan))))
-    )
+         `(elixir-attribute-face ((t (:foreground ,+solarized-blue))))
+         `(elixir-atom-face ((t (:foreground ,+solarized-cyan))))
+         `(agda2-highlight-keyword-face ((t (:foreground ,green))))
+         `(agda2-highlight-string-face ((t (:foreground ,cyan))))
+         `(agda2-highlight-number-face ((t (:foreground ,violet))))
+         `(agda2-highlight-symbol-face ((((background ,base3)) (:foreground ,base01))))
+         `(agda2-highlight-primitive-type-face ((t (:foreground ,blue))))
+         `(agda2-highlight-bound-variable-face ((t nil)))
+         `(agda2-highlight-inductive-constructor-face ((t (:foreground ,green))))
+         `(agda2-highlight-coinductive-constructor-face ((t (:foreground ,yellow))))
+         `(agda2-highlight-datatype-face ((t (:foreground ,blue))))
+         `(agda2-highlight-field-face ((t (:foreground ,red))))
+         `(agda2-highlight-function-face ((t (:foreground ,blue))))
+         `(agda2-highlight-module-face ((t (:foreground ,yellow))))
+         `(agda2-highlight-postulate-face ((t (:foreground ,blue))))
+         `(agda2-highlight-primitive-face ((t (:foreground ,blue))))
+         `(agda2-highlight-record-face ((t (:foreground ,blue))))
+         `(agda2-highlight-dotted-face ((t nil)))
+         `(agda2-highlight-operator-face ((t nil)))
+         `(agda2-highlight-error-face ((t (:foreground ,red :underline t))))
+         `(agda2-highlight-unsolved-meta-face ((t (:background ,base2))))
+         `(agda2-highlight-unsolved-constraint-face ((t (:background ,base2))))
+         `(agda2-highlight-termination-problem-face ((t (:background ,orange :foreground ,base03))))
+         `(agda2-highlight-incomplete-pattern-face ((t (:background ,orange :foreground ,base03))))
+         `(agda2-highlight-typechecks-face ((t (:background ,cyan :foreground ,base03))))
 
-   ))
+         `(font-lock-doc-face ((t (:foreground ,+solarized-s-base1))))
+         `(font-lock-preprocessor-face ((t (:foreground ,+solarized-red))))
+         `(font-lock-keyword-face ((t (:foreground ,+solarized-green :bold nil))))
+         `(font-lock-builtin-face ((t (:foreground ,+solarized-s-base01
+                                                  :bold t))))
 
-(custom-theme-set-faces
- 'grfn-solarized-light
- `(font-lock-doc-face ((t (:foreground ,+solarized-s-base1))))
- `(font-lock-preprocessor-face ((t (:foreground ,+solarized-red))))
- `(font-lock-keyword-face ((t (:foreground ,+solarized-green))))
+         `(elixir-attribute-face ((t (:foreground ,+solarized-blue))))
+         `(elixir-atom-face ((t (:foreground ,+solarized-cyan))))
+         `(linum ((t (:background ,+solarized-s-base2 :foreground ,+solarized-s-base1))))
+         `(line-number ((t (:background ,+solarized-s-base2 :foreground ,+solarized-s-base1))))
 
- `(elixir-attribute-face ((t (:foreground ,+solarized-blue))))
- `(elixir-atom-face ((t (:foreground ,+solarized-cyan))))
- )
+         `(haskell-operator-face ((t (:foreground ,+solarized-green))))
+         `(haskell-keyword-face ((t (:foreground ,+solarized-cyan))))
+
+         `(org-drawer ((t (:foreground ,+solarized-s-base1
+                                      :bold t)))))))
+
+(solarized-with-color-variables
+  'light 'grfn-solarized-light solarized-light-color-palette-alist)
 
 (provide-theme 'grfn-solarized-light)
-

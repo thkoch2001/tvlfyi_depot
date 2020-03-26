@@ -1,8 +1,6 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; private/grfn/packages.el
 
-;; (package! 'tide :disable t)
-
 (package! moody)
 
 ;; Editor
@@ -10,24 +8,26 @@
 (package! fill-column-indicator)
 (package! flx)
 (package! general
-  :recipe (general
-           :fetcher github
-           :repo "noctuid/general.el"))
+  :recipe (:host github :repo "noctuid/general.el"))
 (package! fill-column-indicator)
 (package! writeroom-mode)
 (package! dash)
 (package! w3m)
 (package! rainbow-mode)
+(package! string-inflection)
 
 ;;; Org
 (package! org-clubhouse
-  :recipe (org-clubhouse
-           :fetcher file
-           :path "~/code/urb/org-clubhouse"))
+  :recipe (:host file
+           :local-repo "~/code/org-clubhouse"))
 (package! org-alert)
 (package! ob-http)
 (package! ob-ipython)
 (package! ob-async)
+(package! org-recent-headings)
+(package! org-sticky-header)
+(package! gnuplot)
+(package! gnuplot-mode)
 
 ;; Presentation
 (package! epresent)
@@ -42,6 +42,12 @@
 (package! evil-magit)
 (package! marshal)
 (package! forge)
+(package!
+  github-review
+  :recipe
+  (:host github
+         :repo "charignon/github-review"
+         :files ("github-review.el")))
 
 ;; Elisp
 (package! dash)
@@ -49,17 +55,22 @@
 (package! s)
 (package! request)
 (package! predd
-  :recipe (predd
-           :fetcher github
-           :repo "skeeto/predd"))
+  :recipe (:host github :repo "skeeto/predd"))
 
 ;; Haskell
-(package! lsp-mode)
-(package! lsp-ui :recipe (:fetcher github :repo "emacs-lsp/lsp-ui"))
 (package! lsp-haskell)
+(package! counsel-etags)
+
+;;; LSP
+(package! lsp-mode)
+(package! lsp-ui :recipe (:host github :repo "emacs-lsp/lsp-ui"))
 (package! company-lsp)
+(package! lsp-treemacs)
+(package! dap-mode)
 
 ;; Rust
+(package! rustic :disable t)
+(package! racer :disable t)
 (package! cargo)
 
 ;; Elixir
@@ -80,10 +91,10 @@
 (package! graphql-mode)
 
 ;; Haskell
-;; (package! lsp-mode)
-;; (package! lsp-ui)
-;; (package! lsp-haskell)
-;; (package! company-lsp)
+(package! lsp-mode)
+(package! lsp-ui)
+(package! lsp-haskell)
+(package! company-lsp)
 ;; (package! lsp-imenu)
 
 ;; Clojure
@@ -95,7 +106,35 @@
 (package! emacsql-psql)
 
 ;;; Python
+(package! pyimport)
 (package! yapfify)
 
 ;;; Desktop interaction
 (package! counsel-spotify)
+
+;;; Dhall
+(package! dhall-mode)
+
+;;; Kubernetes
+(package! kubernetes)
+(package! kubernetes-evil)
+(package! k8s-mode)
+
+;;; Stack Exchange
+(package! sx)
+
+;;; Nix
+(package! nix-update
+  :recipe (:host github
+           :repo "glittershark/nix-update-el"))
+
+;;; Sequence diagrams
+(package! wsd-mode
+  :recipe (:host github
+           :repo "josteink/wsd-mode"))
+
+;;; logic?
+(package! metal-mercury-mode
+  :recipe (:host github
+                 :repo "ahungry/metal-mercury-mode"))
+(package! flycheck-mercury)
