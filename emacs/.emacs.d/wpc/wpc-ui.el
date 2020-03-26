@@ -173,7 +173,7 @@
   (laptop-battery/display))
 
 ;; Load a theme
-(themes/set "Solarized Light")
+(colorscheme/set 'doom-one)
 
 ;; Use the Doom modeline
 (use-package 'doom-modeline)
