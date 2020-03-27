@@ -9,5 +9,8 @@ pkgs.stdenv.mkDerivation {
 
     mkdir -p $out/goals
     cp -r ${briefcase.website.goals}/* $out/goals
+
+    mkdir -p $out/habits
+    cp ${briefcase.website.habits} $out/habits/index.html
   '';
 }
