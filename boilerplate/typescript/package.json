@@ -4,11 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "npx parcel src/index.html & npx tsc --watch --noEmit"
+    "dev": "parcel src/index.html & npx tsc --watch --noEmit",
+    "prettier": "prettier --ignore-path .gitignore --write \"**/*.{js,ts,jsx,tsx,html,css.json}\""
   },
   "devDependencies": {
     "@types/node": "^13.9.3",
     "parcel-bundler": "^1.12.4",
+    "prettier": "^2.0.2",
     "tailwindcss": "^1.2.0",
     "typescript": "^3.8.3"
   },

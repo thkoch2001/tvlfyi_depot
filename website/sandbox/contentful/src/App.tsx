@@ -8,7 +8,7 @@ import type { Book } from "./store";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, books } = useTypedSelector(state => ({
+  const { isLoading, books } = useTypedSelector((state) => ({
     isLoading: state.isLoading,
     books: state.books,
   }));
@@ -16,7 +16,7 @@ const App: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       const entries = await getClient().getEntries();
-      const books = entries.items.map(x => x.fields) as Book[];
+      const books = entries.items.map((x) => x.fields) as Book[];
 
       dispatch(actions.setBooks(books));
     }
@@ -30,9 +30,12 @@ const App: React.FC = () => {
           <div className="container mx-auto">
             <h1 className="py-6 text-2xl">Books</h1>
             <ul>
-              {books.map(book => (
+              {books.map((book) => (
                 <li key={book.title} className="py-3">
-                  <p><span className="font-bold pr-3">{book.title}</span><span className="text-gray-600">{book.author}</span></p>
+                  <p>
+                    <span className="font-bold pr-3">{book.title}</span>
+                    <span className="text-gray-600">{book.author}</span>
+                  </p>
                 </li>
               ))}
             </ul>
