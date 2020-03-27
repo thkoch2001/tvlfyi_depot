@@ -44,7 +44,6 @@
 
 ;; JSX highlighting
 (use-package rjsx-mode
-  :mode "\\.js\\'"
   :config
   (general-unbind rjsx-mode-map "<" ">" "C-d")
   (general-nmap
@@ -75,7 +74,6 @@
 
 ;; JS autoformatting
 (use-package prettier-js
-  :after (rjsx-mode)
   :config
   (general-add-hook wpc/frontend-hooks #'prettier-js-mode))
 
