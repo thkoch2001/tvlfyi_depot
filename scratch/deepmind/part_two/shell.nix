@@ -1,6 +1,6 @@
-{ pkgs ? import <nixpkgs> {}, ... }:
-
-pkgs.mkShell {
+let
+  pkgs = import <nixpkgs> {};
+in pkgs.mkShell {
   buildInputs = with pkgs; [
     nodejs
     python3

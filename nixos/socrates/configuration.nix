@@ -81,8 +81,6 @@ in {
 
   services.openssh.enable = true;
 
-  services.lorri.enable = true;
-
   systemd.services.gogs = {
     enable = true;
     description = "Easy-to-use Git server written in golang";
