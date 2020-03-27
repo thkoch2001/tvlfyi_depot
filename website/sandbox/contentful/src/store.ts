@@ -22,9 +22,9 @@ export const { actions, reducer } = createSlice({
   name: "application",
   initialState,
   reducers: {
-    toggleIsLoading: state => ({ ...state, isLoading: !state.isLoading }),
-    setBooks: (state, action) => ({ ... state, books: action.payload }),
-  }
+    toggleIsLoading: (state) => ({ ...state, isLoading: !state.isLoading }),
+    setBooks: (state, action) => ({ ...state, books: action.payload }),
+  },
 });
 
 /**

@@ -8,7 +8,7 @@ function sortScores(xs: Array<number>, highest: number): Array<number> {
   }
 
   for (let i = 0; i < xs.length; i += 1) {
-    counts[xs[i]] += 1
+    counts[xs[i]] += 1;
   }
 
   for (let i = highest; i >= 0; i -= 1) {
@@ -22,29 +22,28 @@ function sortScores(xs: Array<number>, highest: number): Array<number> {
   return result;
 }
 
-
 // Tests
-let desc = 'no scores';
+let desc = "no scores";
 let actual = sortScores([], 100);
 let expected = [];
 assertEqual(JSON.stringify(actual), JSON.stringify(expected), desc);
 
-desc = 'one score';
+desc = "one score";
 actual = sortScores([55], 100);
 expected = [55];
 assertEqual(JSON.stringify(actual), JSON.stringify(expected), desc);
 
-desc = 'two scores';
+desc = "two scores";
 actual = sortScores([30, 60], 100);
 expected = [60, 30];
 assertEqual(JSON.stringify(actual), JSON.stringify(expected), desc);
 
-desc = 'many scores';
+desc = "many scores";
 actual = sortScores([37, 89, 41, 65, 91, 53], 100);
 expected = [91, 89, 65, 53, 41, 37];
 assertEqual(JSON.stringify(actual), JSON.stringify(expected), desc);
 
-desc = 'repeated scores';
+desc = "repeated scores";
 actual = sortScores([20, 10, 30, 30, 10, 20], 100);
 expected = [30, 30, 20, 20, 10, 10];
 assertEqual(JSON.stringify(actual), JSON.stringify(expected), desc);

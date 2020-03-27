@@ -8,10 +8,10 @@ let client: ContentfulClientApi;
 
 // Idempotent way to get a reference to the Contentful client.
 export const getClient = (): ContentfulClientApi => {
-  if (typeof client !== 'undefined') {
+  if (typeof client !== "undefined") {
     return client;
   } else {
-    if (typeof space === 'string' && typeof accessToken === 'string') {
+    if (typeof space === "string" && typeof accessToken === "string") {
       let client = createClient({
         space,
         accessToken,
@@ -19,7 +19,9 @@ export const getClient = (): ContentfulClientApi => {
 
       return client;
     } else {
-      throw new Error('Please set CONTENTFUL_SPACE_ID and CONTENTFUL_ACCESS_TOKEN');
+      throw new Error(
+        "Please set CONTENTFUL_SPACE_ID and CONTENTFUL_ACCESS_TOKEN"
+      );
     }
   }
-}
+};
