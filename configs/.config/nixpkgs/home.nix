@@ -208,8 +208,6 @@ in {
   # Support mouseless workflows.
   services.keynav.enable = true;
 
-  services.lorri.enable = true;
-
   services.gpg-agent = {
     enable = true;
     defaultCacheTtl = 8 * 60 * 60; # 8 hours

@@ -11,4 +11,10 @@
   wrapNonNixProgram = { path, as }: pkgs.writeShellScriptBin as ''
     exec ${path} "$@"
   '';
+
+  # Expose the buildInputs from a Nix shell to an Emacs buffer. Intended to be
+  # called from dir-locals.nix files.
+  nixBufferFromShell = path: let
+    shell = import path;
+  in pkgs.nixBufferBuilders.withPackages shell.buildInputs;
 }
