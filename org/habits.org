@@ -1,5 +1,5 @@
 * First of the year
-** Write a post mortem for the previous year
+** [1hr] Write a post mortem for the previous year
 * First of the month
 ** [20m] Create habit template in journal.
 ** [45m] Assess previous month's performance.
@@ -8,40 +8,45 @@
 ** [10m] Plan one museum date in London.
 ** [20m] Plan each weekend for month.
 * Payday
-** Audit Monzo expenses
-** Review "finances_2020" spreadsheet
-** Transfer GBP to USD account
-** Withdraw cash from ATM
+** [10m] Audit Monzo expenses
+** [05m] Review "finances_2020" spreadsheet
+** [05m] Transfer GBP to USD account
+** [10m] Withdraw cash from ATM
 * Morning
-** Wake up at 7:00
-** Brush teeth
-** Make bed
-** 12 rounds of forward folds
-** 12 rounds Pranayama
-** Transcendental meditation
-** Shower
+** [00m] Wake up at 7:00
+** [02m] Brush teeth
+** [01m] Make bed
+** [10m] 12 rounds of forward folds
+** [05m] 12 rounds Pranayama
+** [30m] Transcendental meditation
+** [10m] Shower
+** [05m] Put on clothes
 * Evening
-** Read for 30 minutes
-** Journal daily progress
+** [01m] Layout tomorrow's outfit
+** [01m] Floss
+** [02m] Brush teeth
+** [01m] Mouth wash
+** [30m] Read
+** [01m] Journal daily progress
 * Monday
-** Jiu Jitsu
+** [1hr] Jiu Jitsu
 * Tuesday
 ** Work from 6PS
-** Jiu Jitsu
+** [1hr] Jiu Jitsu
 * Wednesday
-** Hot Yoga
-** Shave
-** Clean apartment sinks
+** [1hr] Hot Yoga
+** [10m] Shave
+** [15m] Clean apartment sinks
 * Thursday
 * Friday
-** Hot Yoga
+** [1hr] Hot Yoga
 * Saturday
-** Vacuum
-** Nap
+** [10m] Vacuum
+** [30m] Nap
 * Sunday
-** Jiu Jitsu
-** Nap
-** Shave
-** Trim nails
-** Take out trash
-** Laundry
+** [1hr] Jiu Jitsu
+** [30m] Nap
+** [10m] Shave
+** [05m] Trim nails
+** [05m] Take out trash
+** [05m] Laundry
