@@ -2,7 +2,7 @@
 
 pkgs.stdenv.mkDerivation {
   name = "goals-webpage";
-  srcs = ./.;
+  src = ./.;
   buildInputs = with pkgs; [
     nodejs
     # Exposes lscpu for parcel.js
