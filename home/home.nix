@@ -28,13 +28,28 @@
   home.stateVersion = "19.09";
 
   home.packages = with pkgs; [
-    nix-prefetch-github
+    # Desktop stuff
+    arandr
+    firefox
+    chromium
+    xclip
+    xorg.xev
+
+    # System utilities
     htop
     powertop
-    pass
-    gitAndTools.hub
-    shellcheck
+    usbutils
+    killall
+
+    # Security
     gnupg
+
+    # Programming
+    jq
+    gitAndTools.hub
+    gitAndTools.tig
+    shellcheck
+    httpie
 
     # Spotify...etc
     spotify
@@ -43,6 +58,9 @@
     # games
     crawl
     dwarf-fortress
+
+    # Nix things
+    nix-prefetch-github
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -51,7 +69,12 @@
     enable = true;
     userEmail = "root@gws.fyi";
     userName  = "Griffin Smith";
+    extraConfig = {
+      github.user = "glittershark";
+    };
   };
+
+  programs.password-store.enable = true;
 
   services.redshift = {
     enable = true;
@@ -63,6 +86,18 @@
   impure.clonedRepos.passwordStore = {
     github = "glittershark/pass";
     path = ".password-store";
+  };
+
+  services.gpg-agent = {
+    enable = true;
+  };
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = [ "firefox.desktop" ];
+    };
+  };
   };
 
   services.gpg-agent = {
