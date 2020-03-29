@@ -4,6 +4,7 @@
   imports = [
     ./modules/alacritty.nix
     ./modules/emacs.nix
+    ./modules/email.nix
     ./modules/i3.nix
     ./modules/shell.nix
     ./modules/vim.nix
