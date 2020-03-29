@@ -6,12 +6,12 @@
       ./xserver.nix
       ./emacs.nix
       ./sound.nix
+      ./urbint.nix
     ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "bumblebee";
   networking.useDHCP = false;
   networking.networkmanager.enable = true;
 
@@ -65,9 +65,10 @@
     isNormalUser = true;
     initialPassword = "password";
     extraGroups = [
-      "wheel"  # Enable ‘sudo’ for the user.
+      "wheel"
       "networkmanager"
       "audio"
+      "docker"
     ];
     shell = pkgs.zsh;
   };
@@ -90,7 +91,7 @@
 
   powerManagement = {
     enable = true;
-    cpuFreqGovernor = "powersave";
+    cpuFreqGovernor = lib.mkDefault "powersave";
     powertop.enable = true;
   };
   # Hibernate on low battery
