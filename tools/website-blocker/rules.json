@@ -5,9 +5,9 @@
       "www.facebook.com",
       "twitter.com",
       "www.twitter.com",
-      "youtube.com"
-      "www.youtube.com"
-      "instagram.com"
+      "youtube.com",
+      "www.youtube.com",
+      "instagram.com",
       "www.instagram.com"
     ],
     "allowed": []
@@ -18,8 +18,10 @@
     ],
     "allowed": [
       {
-        "day": "Tuesday",
-        "timeslots": []
+        "day": "Sunday",
+        "timeslots": [
+          "18:35-18:39"
+        ]
       }
     ]
   }

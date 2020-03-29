@@ -2,7 +2,11 @@ let
   pkgs = import <unstable> {};
 in pkgs.mkShell {
   buildInputs = with pkgs; [
-    ghc
-    haskellPackages.time
+    (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
+      time
+      aeson
+      either
+      hspec
+    ]))
   ];
 }
