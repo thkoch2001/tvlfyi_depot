@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 
+let machine = ./machines/chupacabra.nix; in
 {
   imports = [
     ./modules/alacritty.nix
@@ -11,6 +12,7 @@
     ./modules/alsi.nix
     ./modules/lib/cloneRepo.nix
 
+    machine
   ];
 
   # Let Home Manager install and manage itself.
@@ -97,10 +99,5 @@
     defaultApplications = {
       "text/html" = [ "firefox.desktop" ];
     };
-  };
-  };
-
-  services.gpg-agent = {
-    enable = true;
   };
 }
