@@ -50,7 +50,7 @@ with lib;
     home.activation =
       mapAttrs
       (_: {
-        url, path, github, onClone, after
+        url, path, github, onClone, after, ...
       }:
         let repoURL = if isNull url then "git@github.com:${github}" else url;
         in hm.dag.entryAfter (["writeBoundary"] ++ after) ''
