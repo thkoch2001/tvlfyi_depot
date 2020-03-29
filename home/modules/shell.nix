@@ -22,11 +22,40 @@
       hms = "home-manager switch";
       nor = "sudo nixos-rebuild switch";
       nrs = nor;
-      vihome = "vim ~/.config/nixpkgs/home.nix && home-manager switch";
-      virc = "vim ~/.config/nixpkgs/home/shell.nix && home-manager switch && source ~/.zshrc";
+      nrb = "sudo nixos-rebuild boot";
+      vihome = "vim ~/code/system/home/home.nix && home-manager switch";
+      virc = "vim ~/code/system/home/modules/shell.nix && home-manager switch && source ~/.zshrc";
+      visystem = "sudo vim /etc/nixos/configuration.nix && sudo nixos-rebuild switch";
 
       # Nix
       ns = "nix-shell";
+      nb = "nix build -f .";
+      "nc." = "nix copy -f . --to https://nix.urbinternal.com";
+
+      # Kubernetes
+      "kc" = "kubectl";
+      "kg" = "kc get";
+      "kga" = "kc get --all-namespaces";
+      "kpd" = "kubectl get pods";
+      "kpa" = "kubectl get pods --all-namespaces";
+      "kdep" = "kubectl get deployments";
+      "ked" =  "kubectl edit deployment";
+      "kpw" = "kubectl get pods -w";
+      "kew" = "kubectl get events -w";
+      "kdel" = "kubectl delete";
+      "knw" = "kubectl get nodes -w";
+      "arsy" = "argocd app sync --prune";
+
+      # Docker and friends
+      "dcu" = "docker-compose up";
+      "dcud" = "docker-compose up -d";
+      "dc" = "docker-compose";
+      "dcr" = "docker-compose restart";
+      "dclf" = "docker-compose logs -f";
+      "dck" = "docker";
+      "dockerclean" = "dockercleancontainers && dockercleanimages";
+      "dockercleanimages" = "docker images -a --no-trunc | grep none | awk '{print \$$3}' | xargs -L 1 -r docker rmi";
+      "dockercleancontainers" = "docker ps -a --no-trunc| grep 'Exit' | awk '{print \$$1}' | xargs -L 1 -r docker rm";
 
       # Aliases from old config
       stck = "dirs -v";
@@ -50,12 +79,6 @@
       "gnn" = "gn notebook-list";
       "mytl" = "t tl $TWITTER_WHOAMI";
       "first" = "awk '{print \$$1}'";
-      "dcu" = "docker-compose up";
-      "dc" = "docker-compose";
-      "dck" = "docker";
-      "dockerclean" = "dockercleancontainers && dockercleanimages";
-      "dockercleanimages" = "docker images -a --no-trunc | grep none | awk '{print \$$3}' | xargs -L 1 -r docker rmi";
-      "dockercleancontainers" = "docker ps -a --no-trunc| grep 'Exit' | awk '{print \$$1}' | xargs -L 1 -r docker rm";
       "cmt" = "git log --oneline | fzf-tmux | awk '{print \$$1}'";
       "workmon" = "xrandr --output DP-2 --pos 1440x900 --primary";
       "vi" = "vim";
