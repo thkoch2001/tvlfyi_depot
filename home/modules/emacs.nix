@@ -21,7 +21,6 @@ in {
   ];
 
   programs.emacs.enable = true;
-  home.file.".doom.d".source = ./doom.d;
 
   impure.clonedRepos = {
     orgClubhouse = {
@@ -30,10 +29,16 @@ in {
     };
 
     doomEmacs = {
-      github = "hlissner/org-clubhouse";
+      github = "hlissner/doom-emacs";
       path = ".emacs.d";
-      after = ["orgClubhouse"];
+      after = ["emacs.d"];
       onClone = "bin/doom install";
+    };
+
+    "emacs.d" = {
+      github = "glittershark/emacs.d";
+      path = ".doom.d";
+      after = ["orgClubhouse"];
     };
   };
 
