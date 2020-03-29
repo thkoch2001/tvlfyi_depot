@@ -1,16 +1,13 @@
 {-# LANGUAGE NamedFieldPuns #-}
-module Main
-  ( main
-  )where
+module Main (main) where
 
 --------------------------------------------------------------------------------
 -- Dependencies
 --------------------------------------------------------------------------------
 
 import qualified Data.Maybe as Maybe
-import Data.Time.Calendar as Calendar
-
--- I'm running this as a systemd timer that runs once per minute.
+import qualified Data.Time.Clock as Clock
+import qualified Data.Time.Calendar as Calendar
 
 --------------------------------------------------------------------------------
 -- Types
@@ -30,7 +27,6 @@ data EtcHostEntry = EtcHostEntry { ip :: IPAddress
                                  , domains :: [Domain]
                                  } deriving (Show)
 
-
 data TimeRange = TimeRange { beg :: (Hour, Minute)
                            , end :: (Hour, Minute)
                            }
@@ -47,17 +43,13 @@ data Rule = Rule { urls :: [URL]
 -- Functions
 --------------------------------------------------------------------------------
 
--- create the current /etc/hosts file
--- schedule the script to run again at the next relevant time
+isToday :: Clock.UTCTime -> Calendar.DayOfWeek -> Bool
+isToday date day = Calendar.dayOfWeek (Clock.utctDay date) == day
 
-isToday :: Calendar.DayOfWeek -> Bool
-isToday Monday = True
-isToday _      = False
-
-isAllowed :: [Allowance] -> Bool
-isAllowed [] = False
-isAllowed xs = do
-  let rules = filter (isToday . day) xs
+isAllowed :: Clock.UTCTime -> [Allowance] -> Bool
+isAllowed _ [] = False
+isAllowed date xs = do
+  let rules = filter (isToday date . day) xs
   case rules of
     [day] -> True
     []    -> False
@@ -68,9 +60,9 @@ serializeEntry :: EtcHostEntry -> String
 serializeEntry EtcHostEntry{ip, domains} =
   (getIPAddress ip) ++ "\t" ++ (unwords $ fmap getDomain domains)
 
-toEtcHostEntry :: Rule -> Maybe EtcHostEntry
-toEtcHostEntry Rule{urls, allowed} =
-  if isAllowed allowed then
+toEtcHostEntry :: Clock.UTCTime -> Rule -> Maybe EtcHostEntry
+toEtcHostEntry date Rule{urls, allowed} =
+  if isAllowed date allowed then
     Nothing
   else
     Just $ EtcHostEntry { ip = IPAddress "127.0.0.1"
@@ -93,7 +85,7 @@ getRules = pure $
          , allowed = []
          }
   , Rule { urls = [ URL "chat.googleplex.com" ]
-         , allowed = [ Allowance { day = Tuesday
+         , allowed = [ Allowance { day = Calendar.Saturday
                                  , timeslots = [ TimeRange { beg = (Hour 0, Minute 0)
                                                            , end = (Hour 0, Minute 0)
                                                            }
@@ -106,5 +98,6 @@ getRules = pure $
 main :: IO ()
 main = do
   rules <- getRules
-  let etcHosts = unlines . fmap serializeEntry . Maybe.catMaybes $ fmap toEtcHostEntry rules
+  date <- Clock.getCurrentTime
+  let etcHosts = unlines . fmap serializeEntry . Maybe.catMaybes $ fmap (toEtcHostEntry date) rules
   putStrLn etcHosts
