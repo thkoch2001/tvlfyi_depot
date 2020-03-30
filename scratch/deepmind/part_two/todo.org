@@ -29,7 +29,7 @@
 ** DONE Find Repeat, Space Edition BEAST MODE
 * Dynamic programming and recursion
 ** DONE Recursive String Permutations
-** TODO Compute nth Fibonacci Number
+** DONE Compute nth Fibonacci Number
 ** TODO Making Change
 ** TODO The Cake Thief
 ** DONE Balanced Binary Tree
