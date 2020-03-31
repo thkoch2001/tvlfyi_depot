@@ -31,6 +31,8 @@ let machine = ./machines/chupacabra.nix; in
   home.stateVersion = "19.09";
 
   home.packages = with pkgs; [
+    (import (fetchTarball "https://github.com/ashkitten/nixpkgs/archive/init-glimpse.tar.gz") {}).glimpse
+
     # Desktop stuff
     arandr
     firefox
@@ -42,7 +44,9 @@ let machine = ./machines/chupacabra.nix; in
     htop
     powertop
     usbutils
+    pciutils
     killall
+    gdmap
 
     # Security
     gnupg
@@ -53,6 +57,7 @@ let machine = ./machines/chupacabra.nix; in
     gitAndTools.tig
     shellcheck
     httpie
+    entr
 
     # Spotify...etc
     spotify
