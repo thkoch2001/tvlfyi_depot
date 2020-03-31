@@ -7,6 +7,14 @@ let
     msg=$(emacsclient --eval '${eval}' 2>&1)
     echo "''${msg:1:-1}"
   '';
+  screenlayout = {
+    home = pkgs.writeShellScript "screenlayout_home.sh" ''
+      xrandr \
+        --output eDP1 --mode 3840x2160 --pos 0x0 --rotate normal \
+        --output DP1 --primary --mode 3840x2160 --pos 0x2160 --rotate normal \
+        --output DP2 --off --output DP3 --off --output VIRTUAL1 --off
+    '';
+  };
 in {
   options = with lib; {
     system.machine.wirelessInterface = mkOption {
@@ -71,7 +79,7 @@ in {
             "${mod}+m" = ''exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: ' '';
 
             # Screenshots
-            "${mod}+q" = "exec maim";
+            "${mod}+q" = "exec \"maim | xclip -selection clipboard -t image/png\"";
             "${mod}+Shift+q" = "exec \"maim -s | xclip -selection clipboard -t image/png\"";
 
             # Launching applications
@@ -99,9 +107,10 @@ in {
 
             # Screen Layout
             "${mod}+Shift+t" = "exec xrandr --auto";
-            # TODO
-            # $mod+t exec /home/griffin/.screenlayout/work.sh
-            # $mod+Ctrl+t exec /home/griffin/bin/fix_screen.sh
+            "${mod}+t" = "exec ${screenlayout.home}";
+            "${mod}+Ctrl+t" = "exec ${pkgs.writeShellScript "fix_term.sh" ''
+              xrandr --output eDP-1 --off && ${screenlayout.home}
+            ''}";
           };
 
           fonts = [ decorationFont ];
@@ -243,14 +252,18 @@ in {
         enable = true;
         settings = with solarized; {
           global = {
-            font = "Meslo 10";
+            font = "MesloLGSDZ ${toString (config.system.machine.i3FontSize * 1.5)}";
             allow_markup = true;
             format = "<b>%s</b>\n%b";
             sort = true;
             alignment = "left";
-            geometry = "600x15-30+20";
+            geometry = "600x15-40+40";
             idle_threshold = 120;
             separator_color = "frame";
+            separator_height = 1;
+            word_wrap = true;
+            padding = 8;
+            horizontal_padding = 8;
           };
 
           frame = {
