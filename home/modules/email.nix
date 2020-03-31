@@ -8,6 +8,7 @@
 
   home.packages = with pkgs; [
     mu
+    msmtp
   ];
 
   accounts.email.maildirBasePath = "mail";
