@@ -6,6 +6,7 @@ let machine = ./machines/chupacabra.nix; in
     ./modules/alacritty.nix
     ./modules/emacs.nix
     ./modules/email.nix
+    ./modules/firefox.nix
     ./modules/i3.nix
     ./modules/shell.nix
     ./modules/vim.nix
@@ -87,17 +88,12 @@ let machine = ./machines/chupacabra.nix; in
 
   impure.clonedRepos.passwordStore = {
     github = "glittershark/pass";
-    path = ".password-store";
+    path = ".local/share/password-store";
   };
+
+  urbint.projectPath = "code/urb";
 
   services.gpg-agent = {
     enable = true;
-  };
-
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "text/html" = [ "firefox.desktop" ];
-    };
   };
 }
