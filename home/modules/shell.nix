@@ -38,6 +38,7 @@
       "kga" = "kc get --all-namespaces";
       "kpd" = "kubectl get pods";
       "kpa" = "kubectl get pods --all-namespaces";
+      "klf" = "kubectl logs -f";
       "kdep" = "kubectl get deployments";
       "ked" =  "kubectl edit deployment";
       "kpw" = "kubectl get pods -w";
