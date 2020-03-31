@@ -8,6 +8,9 @@
     enable = true;
     settings = {
       font.size = 6;
+      font.normal.family = "Meslo LGSDZ Nerd Font";
+
+      draw_bold_text_with_bright_colors = false;
 
       colors = with import ../common/solarized.nix; rec {
         # Default colors
@@ -29,17 +32,17 @@
         };
 
         # Bright colors
-        bright = normal;
-        # bright = {
-        #   black = base03;
-        #   red = orange;
-        #   green = base01;
-        #   yellow = base00;
-        #   blue = base0;
-        #   magenta = violet;
-        #   cyan = base1;
-        #   white = base3;
-        # };
+        # bright = normal;
+        bright = {
+          black = base03;
+          red = orange;
+          green = base01;
+          yellow = base00;
+          blue = base0;
+          magenta = violet;
+          cyan = base1;
+          white = base3;
+        };
       };
     };
   };
