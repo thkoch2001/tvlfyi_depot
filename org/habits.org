@@ -14,8 +14,10 @@
 ** [10m] Withdraw cash from ATM
 * Morning
 ** [00m] Wake up at 7:00
+** [15m] Read
 ** [02m] Brush teeth
 ** [01m] Make bed
+** [01m] Water plants
 ** [10m] 12 rounds of forward folds
 ** [05m] 12 rounds Pranayama
 ** [30m] Transcendental meditation
