@@ -21,6 +21,7 @@
 (require 'list)
 (require 'string)
 (require 'set)
+(require 'org-helpers)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
@@ -60,7 +61,7 @@ Otherwise, open with `counsel-find-file'."
                   :path "~/depot"
                   :kbd "t")
    (make-bookmark :label "org"
-                  :path "~/Dropbox/org"
+                  :path org-helpers/directory
                   :kbd "o")
    (make-bookmark :label "briefcase"
                   :path (getenv "BRIEFCASE")
