@@ -17,7 +17,7 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst org-helpers/directory "~/Dropbox/org"
+(defconst org-helpers/directory "~/briefcase/org"
   "The directory where I store most of my Org files.")
 
 (defun org-helpers/find-file (name)
