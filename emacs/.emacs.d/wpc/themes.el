@@ -3,7 +3,6 @@
 
 ;;; Commentary:
 
-
 ;; Because I couldn't get cycle-themes to work, I'm writing my own version.
 ;;
 ;; Terminology:
@@ -13,9 +12,6 @@
 ;;   (see above), font, wallpaper.  "theme" is a superset of "colorscheme".
 ;;
 ;; Wishlist:
-;; - TODO: Find a way to update the terminal (e.g. terminator) theme.
-;; - TODO: Ensure terminal font is updated when Emacs font changes.
-;; - TODO: Support a light theme.
 ;; - TODO: Support Rick & Morty theme.
 ;; - TODO: Support retro/arcade/80s theme.
 
@@ -42,95 +38,46 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; The theme struct couples a font, a wallpaper, and a colorschemes.
-(cl-defstruct theme
-  font
-  wallpaper
-  colorscheme)
+(cl-defstruct theme font wallpaper colorscheme)
 
 (defvar themes/current nil
   "Store the name of the currently enabled theme.")
 
+(defconst themes/preferred-font "JetBrainsMono"
+  "The font I currently favor.")
+
 (defconst themes/themes
-  (list (dotted/new
-         "Forest"
-         (make-theme
-          :font "Operator Mono Light"
-          :wallpaper "forest_8k.jpg"
-          :colorscheme 'doom-peacock))
-        (dotted/new
-         "Geometry"
-         (make-theme
-          :font "Input Mono Medium"
-          :wallpaper "geometric_4k.jpg"
-          :colorscheme 'doom-molokai))
-        (dotted/new
-         "Ice"
-         (make-theme
-          :font "Go Mono"
-          :wallpaper "construction_paper_iceberg_4k.jpg"
-          :colorscheme 'doom-dracula))
-        (dotted/new
-         "Lego Manhattan"
-         (make-theme
-          :font "Input Mono Medium"
-          :wallpaper "lego_manhattan.jpg"
-          :colorscheme 'base16-atelier-sulphurpool))
-        (dotted/new
-         "Shapely Patterns"
-         (make-theme
-          :font "Operator Mono Light"
-          :wallpaper "geometric_dark_4k.jpg"
-          :colorscheme 'doom-vibrant))
+  (list (dotted/new "Forest"
+                    (make-theme
+                     :font themes/preferred-font
+                     :wallpaper "forest_8k.jpg"
+                     :colorscheme 'doom-peacock))
+        (dotted/new "Geometry"
+                    (make-theme
+                     :font themes/preferred-font
+                     :wallpaper "geometric_4k.jpg"
+                     :colorscheme 'doom-molokai))
+        (dotted/new "Shapely Patterns"
+                    (make-theme
+                     :font themes/preferred-font
+                     :wallpaper "geometric_dark_4k.jpg"
+                     :colorscheme 'doom-vibrant))
         ;; TODO: Support setting backgrounds as solid colors.
-        (dotted/new
-         "Gruvbox"
-         (make-theme
-          :font "JetBrainsMono"
-          :wallpaper "geometric_dark_4k.jpg"
-          :colorscheme 'doom-gruvbox))
-        (dotted/new
-         "Solarized Light"
-         (make-theme
-          :font "JetBrainsMono"
-          :wallpaper "solarized_light_thinkpad.jpg"
-          :colorscheme 'doom-solarized-light))
-        (dotted/new
-         "Lightness"
-         (make-theme
-          :font "Input Mono Medium"
-          :wallpaper "construction_paper_iceberg_4k.jpg"
-          :colorscheme 'doom-one-light))
-        (dotted/new
-         "Edison Lightbulb"
-         (make-theme
-          :font "Mononoki Medium"
-          :wallpaper "lightbulb_4k.jpg"
-          :colorscheme 'base16-atelier-cave))
-        (dotted/new
-         "Wall-E"
-         (make-theme
-          :font "Input Mono Medium"
-          :wallpaper "walle_4k.jpg"
-          :colorscheme 'doom-material))
-        (dotted/new
-         "Galaxy"
-         (make-theme
-          :font "Source Code Pro"
-          :wallpaper "galaxy_4k.jpg"
-          :colorscheme 'doom-moonlight))
-        (dotted/new
-         "Underwater"
-         (make-theme
-          :font "Go Mono"
-          ;; TODO: Change this wallpaper to an oceanic scene.
-          :wallpaper "galaxy_4k.jpg"
-          :colorscheme 'doom-solarized-dark))
-        (dotted/new
-         "Fantasy Tree"
-         (make-theme
-          :font "Go Mono"
-          :wallpaper "fantasy_tree_4k.jpg"
-          :colorscheme 'doom-outrun-electric)))
+        (dotted/new "Gruvbox"
+                    (make-theme
+                     :font themes/preferred-font
+                     :wallpaper "forest_8k.jpg"
+                     :colorscheme 'doom-gruvbox))
+        (dotted/new "Solarized Light"
+                    (make-theme
+                     :font themes/preferred-font
+                     :wallpaper "solarized_light_thinkpad.jpg"
+                     :colorscheme 'doom-solarized-light))
+        (dotted/new "Fantasy Tree"
+                    (make-theme
+                     :font themes/preferred-font
+                     :wallpaper "fantasy_tree_4k.jpg"
+                     :colorscheme 'doom-outrun-electric)))
   "Predefined themes to suit my whims.")
 
 ;; TODO: Choose between plural and singular names for Elisp modules.  For
