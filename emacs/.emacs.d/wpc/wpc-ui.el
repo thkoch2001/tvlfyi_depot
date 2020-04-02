@@ -173,7 +173,7 @@
   (laptop-battery/display))
 
 ;; Load a theme
-(colorscheme/set 'doom-one)
+(themes/set "Gruvbox")
 
 ;; Use the Doom modeline
 (use-package 'doom-modeline)
