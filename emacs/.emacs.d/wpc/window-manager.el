@@ -60,10 +60,7 @@
 ;; TODO: Support MRU cache of workspaces for easily switching back-and-forth
 ;; between workspaces.
 
-(cl-defstruct exwm/named-workspace
-  label
-  index
-  kbd)
+(cl-defstruct exwm/named-workspace label kbd)
 
 (defconst exwm/install-workspace-kbds? t
   "When t, install the keybindings to switch between named-workspaces.")
@@ -131,8 +128,6 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (require 'exwm-randr)
   (exwm-randr-enable)
-  ;; TODO: Consider generating this plist.
-  ;; TODO: Replace integer index values with their named workspace equivalents.
   (setq exwm-randr-workspace-monitor-plist
         (list 0 display/4k-monitor
               1 display/laptop-monitor))
@@ -154,10 +149,6 @@
   ;; `exwm-input-global-keys' = {line,char}-mode; can also call `exwm-input-set-key'
   ;; `exwm-mode-map'          = line-mode
   ;; `???'                    = char-mode. Is there a mode-map for this?
-  ;;
-  ;; TODO: What is `exwm-input-prefix-keys'?
-  ;; TODO: Once I get `exwm-input-global-keys' functions, drop support for
-  ;; `wpc/kbds'.
   (let ((kbds `(
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                 ;; Window sizing
@@ -278,41 +269,15 @@
       (funcall (cycle/next exwm/modes)))))
 
 ;; Ensure exwm apps open in char-mode.
-(add-hook
- 'exwm-manage-finish-hook
- #'exwm/char-mode)
+(add-hook 'exwm-manage-finish-hook #'exwm/char-mode)
 
 ;; Interface to the Linux password manager
 ;; TODO: Consider writing a better client for this.
 (use-package ivy-pass)
 
-;; TODO: Prefer a more idiomatic Emacs way like `with-output-to-temp-buffer'.
-
-;; TODO: Create a mode similar to `help-mode' that also kills the buffer when
-;; "q" is pressed since this is sensitive information that we probably don't
-;; want persisting.
-
-;; TODO: Have this interactively show all of the listings in ~/.password-store
-;; in an ivy list.
-(defun password-store/show (key)
-  "Show the contents of KEY from the password-store in a buffer."
-  (interactive)
-  (let ((b (buffer/find-or-create (string/format "*password-store<%s>*" key))))
-    (with-current-buffer b
-      (insert (password-store-get key))
-      (help-mode))
-    (buffer/show b)))
-
 ;; TODO: How do I handle this dependency?
 (defconst exwm/preferred-browser "google-chrome"
   "My preferred web browser.")
-
-(defun exwm/browser-open (&optional url)
-  "Opens the URL in `exwm/preferred-browser'."
-  (exwm/open
-   (string/format "%s %s" exwm/preferred-browser url)
-   :buffer-name (string/format "*%s*<%s>" exwm/preferred-browser url)
-   :process-name url))
 
 ;; TODO: Support searching all "launchable" applications like OSX's Spotlight.
 ;; TODO: Model this as key-value pairs.
@@ -415,21 +380,12 @@ Currently using super- as the prefix for switching workspaces."
                exwm/workspaces)
   (exwm/change-workspace (cycle/current exwm/workspaces)))
 
-;; TODO: Assign an easy-to-remember keybinding to this.
 (exwm-input-set-key (kbd "C-S-f") #'exwm/toggle-previous)
+
 (defun exwm/toggle-previous ()
   "Focus the previously active EXWM workspace."
   (interactive)
   (exwm/change-workspace (cycle/focus-previous! exwm/workspaces)))
-
-(defun exwm/switch-to-exwm-workspace ()
-  "Use ivy to switched between named workspaces."
-  (interactive)
-  (ivy-read
-   "Workspace: "
-   (->> exwm/named-workspaces
-        (list/map #'exwm/named-workspace-label))
-   :action #'exwm/switch))
 
 (defun exwm/exwm-buffer? (x)
   "Return t if buffer X is an EXWM buffer."
