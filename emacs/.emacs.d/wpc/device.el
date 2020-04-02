@@ -34,5 +34,9 @@
   (equal 'work-desktop
          (device/classify)))
 
+(defun device/corporate? ()
+  "Return t if the current device is owned by my company."
+  (or (device/work-laptop?) (device/work-desktop?)))
+
 (provide 'device)
 ;;; device.el ends here
