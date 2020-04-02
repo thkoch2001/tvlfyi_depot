@@ -79,6 +79,7 @@ let machine = ./machines/chupacabra.nix; in
     userName  = "Griffin Smith";
     extraConfig = {
       github.user = "glittershark";
+      merge.conflictstyle = "diff3";
     };
   };
 
