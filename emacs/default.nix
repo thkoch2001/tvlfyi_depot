@@ -1,7 +1,6 @@
-{ pkgs, depot, ... }:
+{ pkgs, ... }:
 
 let
-  utils = import <briefcase/utils>;
   # NOTE: I'm trying to keep the list of dependencies herein constrained to a
   # list of generic dependencies (i.e. not project or language specific). For
   # language-specific tooling, I'm intending to use shell.nix alongside lorri
@@ -16,7 +15,9 @@ let
     scrot
     clipmenu
   ]);
+
   emacsWithPackages = (pkgs.emacsPackagesNgGen pkgs.emacs26).emacsWithPackages;
+
   wpcarrosEmacs = emacsWithPackages (epkgs:
     (with epkgs.elpaPackages; [
       exwm
@@ -108,38 +109,9 @@ let
       flycheck
       ivy
       magit
-    ]) ++
-
-    (with depot.tools.emacs-pkgs; [
-      dottime
     ]));
 
-# TODO: Do I need `pkgs.lib.fix`?
-in pkgs.lib.fix(self: l: f: pkgs.writeShellScriptBin "wpcarros-emacs" ''
-   # TODO: Is this the best way to handle environment variables using Nix?
-   export BRIEFCASE=$HOME/briefcase
-   export DEPOT=$HOME/depot
-
-   export PATH="${emacsBinPath}:$PATH"
-   exec ${wpcarrosEmacs}/bin/emacs \
-     --debug-init \
-     --no-site-file \
-     --no-site-lisp \
-     --directory ${ ./.emacs.d/vendor } \
-     --directory ${ ./.emacs.d/wpc } \
-     --load ${ ./.emacs.d/wpc/wpc-package.el } \
-     --load ${ ./.emacs.d/init.el } \
-     --no-init-file $@
-'' // {
-  # TODO: Ascertain whether I need this.
-  overrideEmacs = f': self l f';
-
-  # Call with a local.el file containing local system configuration.
-  withLocalConfig = confDir: self confDir f;
-
-  # This accepts the path to an Emacs binary outside of /nix/store. On gLinux,
-  # this will ensure that X and GL linkage behaves as expected.
-  withLocalEmacs = emacsBin: pkgs.writeShellScriptBin "wpcarros-emacs" ''
+  withEmacsPath = emacsBin: pkgs.writeShellScriptBin "wpcarros-emacs" ''
     # TODO: Is this the best way to handle environment variables using Nix?
     export BRIEFCASE=$HOME/briefcase
     export DEPOT=$HOME/depot
@@ -156,4 +128,12 @@ in pkgs.lib.fix(self: l: f: pkgs.writeShellScriptBin "wpcarros-emacs" ''
      --load ${ ./.emacs.d/init.el } \
       --no-init-file $@
   '';
-}) null utils.identity
+in {
+  # Use `nix-env -f '<briefcase>' emacs.glinux` to install `wpcarro-emacs` on
+  # gLinux machines. This will ensure that X and GL linkage behaves as expected.
+  glinux = withEmacsPath "/usr/bin/emacs";
+
+  # Use `nix-env -f '<briefcase>' emacs.nixos` to install `wpcarros-emacs` on
+  # NixOS machines.
+  nixos = withEmacsPath "${wpcarrosEmacs}/bin/emacs";
+}
