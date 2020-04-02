@@ -8,6 +8,8 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'device)
+
 ;; TODO: These may fail at startup. How can I make sure that the .envrc is
 ;; consulted when Emacs starts?
 (prelude/assert (f-exists? (getenv "BRIEFCASE")))
@@ -24,13 +26,16 @@
 (defun nix/rebuild-emacs ()
   "Use nix-env to rebuild wpcarros-emacs."
   (interactive)
-  (start-process "nix-build/<briefcase/emacs>" "*nix-build/<briefcase/emacs>*"
-                 "nix-env"
-                 "-I" (format "nixpkgs=%s" (f-expand "~/nixpkgs"))
-                 "-I" (format "depot=%s" (f-expand "~/depot"))
-                 "-I" (format "briefcase=%s" (f-expand "~/briefcase"))
-                 "-f" "<briefcase>" "-iA" "emacs")
-  (display-buffer "*nix-build/<briefcase/emacs>*"))
+  (let* ((emacs (if (device/corporate?) "emacs.glinux" "emacs.nixos"))
+         (pname (format "nix-build <briefcase/%s>" emacs))
+         (bname (format "*%s*" pname)))
+    (start-process pname bname
+                   "nix-env"
+                   "-I" (format "nixpkgs=%s" (f-expand "~/nixpkgs"))
+                   "-I" (format "depot=%s" (f-expand "~/depot"))
+                   "-I" (format "briefcase=%s" (f-expand "~/briefcase"))
+                   "-f" "<briefcase>" "-iA" emacs)
+    (display-buffer bname)))
 
 (defun nix/home-manager-switch ()
   "Use Nix to reconfigure the user environment."
