@@ -71,40 +71,19 @@
 (defconst exwm/named-workspaces
   (list (make-exwm/named-workspace
          :label "Web surfing"
-         :index 0
          :kbd "c")
         (make-exwm/named-workspace
-         :label "Project"
-         :index 1
-         :kbd "p")
-        (make-exwm/named-workspace
          :label "Briefcase"
-         :index 2
          :kbd "d")
         (make-exwm/named-workspace
-         :label "Scratch"
-         :index 3
-         :kbd "s")
-        (make-exwm/named-workspace
          :label "Terminal"
-         :index 4
          :kbd "t")
         (make-exwm/named-workspace
          :label "Todos"
-         :index 5
          :kbd "o")
         (make-exwm/named-workspace
          :label "Chatter"
-         :index 6
-         :kbd "h")
-        (make-exwm/named-workspace
-         :label "IRC"
-         :index 7
-         :kbd "i")
-        (make-exwm/named-workspace
-         :label "Work"
-         :index 8
-         :kbd "w"))
+         :kbd "h"))
   "List of `exwm/named-workspace' structs.")
 
 ;; Assert that no two workspaces share KBDs.
@@ -346,14 +325,8 @@ Ivy is used to capture the user's input."
 
 (defun exwm/label->index (label workspaces)
   "Return the index of the workspace in WORKSPACES named LABEL."
-  (let ((workspace (->> workspaces
-                        (list/find
-                         (lambda (x)
-                           (equal label
-                                  (exwm/named-workspace-label x)))))))
-    (if (prelude/set? workspace)
-        (exwm/named-workspace-index workspace)
-      (error (string/concat "No workspace found for label: " label)))))
+  (let ((index (-elem-index label (-map #'exwm/named-workspace-label workspaces))))
+    (if index index (error (format "No workspace found for label: %s" label)))))
 
 (defun exwm/register-kbd (workspace)
   "Registers a keybinding for WORKSPACE struct.
@@ -368,7 +341,9 @@ Currently using super- as the prefix for switching workspaces."
 
 (defun exwm/change-workspace (workspace)
   "Switch EXWM workspaces to the WORKSPACE struct."
-  (exwm-workspace-switch (exwm/named-workspace-index workspace))
+  (exwm-workspace-switch
+   (exwm/label->index (exwm/named-workspace-label workspace)
+                      exwm/named-workspaces))
   (window-manager/alert
    (string/format "Switched to: %s" (exwm/named-workspace-label workspace))))
 
@@ -425,29 +400,19 @@ This function asssumes that BUFFER passes the `exwm/exwm-buffer?' predicate."
  'exwm-init-hook
  (lambda ()
    ;; TODO: Refactor this into a bigger solution where the named-workspaces are
-   ;; coupled to their startup commands.  Expedience wins this time.
+   ;; coupled to their startup commands. Expedience wins this time.
    (progn
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     ;; Chrome
+     ;; Web surfing
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
-       (exwm/switch "Web surfing")
-       ;; make sure this blocks.
-       ;; TODO: Support shell-cmd.el that has `shell-cmd/{sync,async}'.
-       ;; (call-process-shell-command "google-chrome")
-       )
+       (exwm/switch "Web surfing"))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     ;; Project
+     ;; Briefcase
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
-       (exwm/switch "Project")
-       (find-file constants/current-project))
-     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     ;; Scratch
-     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     (progn
-       (exwm/switch "Scratch")
-       (switch-to-buffer "*scratch*"))
+       (exwm/switch "Briefcase")
+       (dotfiles/find-emacs-file "init.el"))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Terminal
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -459,38 +424,12 @@ This function asssumes that BUFFER passes the `exwm/exwm-buffer?' predicate."
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
        (exwm/switch "Todos")
-       (org-helpers/find-file "today-expected.org")
-       (wpc/evil-window-vsplit-right)
-       (org-helpers/find-file "today-actual.org"))
-     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     ;; Dotfiles
-     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     (progn
-       (exwm/switch "Briefcase")
-       (dotfiles/find-emacs-file "init.el"))
+       (org-helpers/find-file "today-expected.org"))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Chatter
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
-       (exwm/switch "Chatter")
-       ;; TODO: Support the following chat applications:
-       ;; - Slack teknql
-       ;; - irccloud.net
-       ;; - web.whatsapp.com
-       ;; - Telegram
-       ;; NOTE: Perhaps all of these should be borderless.
-       ;; (call-process-shell-command "terminator")
-       )
-     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     ;; Work
-     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     (progn
-       (exwm/switch "Work")
-       ;; TODO: Support opening the following in chrome:
-       ;; - calendar
-       ;; - gmail
-       ;; - chat (in a horizontal split)
-       )
+       (exwm/switch "Chatter"))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Reset to default
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
