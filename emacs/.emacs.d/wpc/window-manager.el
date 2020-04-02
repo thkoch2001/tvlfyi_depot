@@ -197,7 +197,7 @@
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
                 (:key "M-:"               :fn eval-expression)
-                (:key "M-SPC"             :fn window-manager/apps)
+                (:key "M-SPC"             :fn ivy-helpers/run-external-command)
                 (:key "M-x"               :fn counsel-M-x)
                 (:key "<M-tab>"           :fn exwm/next-workspace)
                 (:key "<M-S-iso-lefttab>" :fn exwm/prev-workspace)
@@ -378,28 +378,6 @@ Ivy is used to capture the user's input."
        (shell-command
         (alist/get (ivy-read "System: " (alist/keys name->cmd))
                    name->cmd))))))
-
-(cl-defun exwm/open (command &key
-                             (process-name command)
-                             (buffer-name command))
-  "Open COMMAND, which should be an X11 window."
-  (start-process-shell-command process-name buffer-name command))
-
-(cl-defun window-manager/execute-from-counsel (&key prompt list)
-  "Display a counsel menu of `LIST' with `PROMPT' and pipe the output through
-`start-process-shell-command'."
-  (let ((x (ivy-read prompt list)))
-    (exwm/open
-     x
-     :buffer-name (string/format "*exwm/open*<%s>" x)
-     :process-name x)))
-
-(defun window-manager/apps ()
-  "Open commonly used applications from counsel."
-  (interactive)
-  (window-manager/execute-from-counsel
-   :prompt "Application: "
-   :list window-manager/applications))
 
 (defun exwm/label->index (label workspaces)
   "Return the index of the workspace in WORKSPACES named LABEL."
