@@ -1,92 +1,270 @@
 ---
 title: "Cell Phone Experiment"
-date: 2020-03-09T22:02:07Z
-draft: true
+date: 2020-04-02T02:02:07Z
+draft: false
 ---
 
 ### TL;DR
 
-I will not use my cell phone during March to challenge myself and learn more
-about how much I depend on my device.
+I will not use my cell phone during March to learn more about how much I depend
+on it.
 
-### Background
+### Explore/Exploit
 
 Ever since I read Charles Duhigg's book, [The Power of Habit](poh), I try to
-habituate as many aspects of my life that I can.
+habituate as many aspects of my life as I can.
+
+Making my bed every morning is an example of a habit -- so too is flossing at
+night before bed.
 
 The *exploit* axis of the [explore/exploit tradeoff](exp-exp) endows habits with
-their power. If you are interested in learning more about the explore/exploit
-tradeoff, Brian Christian and Tom Griffiths explain this concept more clearly
-than I could in Chapter 2 of their exceptional book, [Algorithms to Live
+their power. Brian Christian and Tom Griffiths explain this concept more clearly
+than I can in Chapter 2 of their exceptional book, [Algorithms to Live
 By](algos).
 
-One pitfall of overly exploiting an activity, however, is neglecting global
-optima in favor of local optima. Thus we must also explore. Is it possible to
-habituate exploration? I think so.
+Habits are powerful, but if I overly exploit an activity, I may settle on a
+local optimum in lieu of settling on a global optimum; these are the opportunity
+costs of exploiting (i.e. habits) versus exploring (i.e. spontaneity).
 
-Every month since October 2018, I commit to a monthly challenge. In the past,
-monthly challenges have been things like:
-- sign up and take Brazilian Jiu Jitsu lessons
-- buy a guitar and learn [Freight Train by Elizabeth Cotton](https://www.youtube.com/watch?v=IUK8emiWabU)
+But what if it was possible to habituate exploration?
+
+### Monthly challenges
+
+Every month since October 2018, I challenge myself to try something new. In the
+past, monthly challenges have been things like:
+- sign up and take Brazilian Jiu Jitsu classes
+- buy a guitar and learn [Freight Train](https://www.youtube.com/watch?v=IUK8emiWabU)
 - study Italian
-- attempt to learn a handstand
+- learn a handstand
 
-Typically for an activity to qualify as a challenge, I must spend at least
-fifteen minutes working on it at least five days each week. Oftentimes
-challenges have concrete deliverables (e.g. playing the "Freight Train" song
-from start-to-finish). Other times, with Jiu Jitsu, the challenge consists of
-attending classes five days a week without any absences.
+Typically for an activity to qualify as a challenge, I must spend *at least
+fifteen minutes* working on it *at least five days* each week.
 
-This month I'm challenging myself to avoid using my cell phone for the entire
-month. I am interested in partially digitally detoxing.
+This month (i.e. March) I'm challenging myself to avoid using my cell phone.
 
-My parents gave me a cell phone when when I was a freshman in High School; those
-days, I was fourteen years old. I am now twenty-eight years old, which means I
-have been using a cell phone semi-daily for over ten years.
+My parents gave me a cell phone when when I was a freshman in High School; I was
+14 years old. I am now 28, so I have been using a cell phone semi-daily for over
+a decade.
 
 While I enjoy the convenience that my cell phone provides me, I am curious to
-suspend my usage aiming to more clearly understand how much I depend on it.
+suspend my usage to more clearly understand how much I depend on it...
 
-### What was different?
+### April
 
-Things that I am missing:
-- Alarm clock: I decided to avoid buying an alarm clock. I theorize that alarms
-  and caffeine may distort my reality. An excuse to sleep in? Twist my arm...
-- Waking Up with Sam Harris: Thankfully, Waking Up supports web browsers, so
-  this was easy to replace.
-- Banking with Monzo: Monzo has a web client for doing simple banking tasks. I
-  needed to internationally transfer GBP to my USD account.
-- Spotify: I either read while taking public transport, attempted to briefly
-  meditate, or (most commonly) started blankly.
-- Taking notes
-- Timers
-- Google Calendar for meeting room information
+Now it is early April, and I completed March's challenge. So how was it?
 
-Things that I did miss:
-- Phone calls: My birthday is March 5, and I wanted to talk to my family then
-  since I'm currently living abroad in London; I'm originally from a suburb
-  outside of Washington D.C.
+Below I outline the parts of using a cell phone that I missed and the parts that
+I surprisingly did not miss. I will also mention the two times that I used my
+cell phone and why.
 
-Things that I thought I would miss but I didn't miss:
-- Email: I prefer checking my emails minimally anyhow.
-- Text messaging: Maybe I enjoyed this because I knew the whole time it was
-  temporary. I'm unsure if I'd feel this way if it was permanent.
+The first three things that I missed all relate to time.
 
-Exploits
-- Telegram native client
-- Instagram's web client
+#### Timekeeping
 
-### What was bad?
+On the first day I realized that unless I was near a computer, I did not know
+what time it was.
 
-Not much.
+I exclusively use my cell phone as my watch; I do not wear a watch. To adapt, I
+started looking for clocks around my office and while I was taking public
+transportation. Thankfully London posts the current time on the digital train
+schedules. This oriented me while I was traveling, which was also when I needed
+to know the time the most.
 
-### Will I use a cell phone in April?
+Most of the month, however, I never precisely knew what time it was.
 
-Probably. I think this exercise removed some of the long-standing barnacles, but
-some of the old habits and triggers exist. Also with web browser and native
-client alternatives to mobile apps, the partial digital detox felt even more
-partial.
+#### Alarm clocks
+
+While I anticipated living without an alarm clock prior to the experiment, I
+decided against buying a substitute. Prior to this month, I theorized that
+morning alarms probably disrupt the quality of my sleep. If I'm tired, shouldn't
+I keep sleeping?
+
+As the month progressed and my 24 hour day morphed into a 25 hour day, I learned
+that I would prefer waking up at the set time every day.
+
+I am still unsure if alarm clocks are helpful in the long-term. I would have
+slept with the curtains drawn to allow the morning sun to wake me
+up. Unfortunately, I live on the ground floor nearby a brightly shining street
+lamp that spills into my bedroom.
+
+If I lived somewhere more remote (perhaps even a suburb would do) I would like
+to repeat an experiment where I live for a month without an alarm clock.
+
+For now, I must return to the Temple of Chronology and supplicate until Father
+Time restores my sanity.
+
+#### Timers
+
+Using timers motivates me to do a bunch of short tasks like cleaning my flat for
+fifteen minutes, stretching, or reading before bed. Thankfully, I already owned
+a physical timer that I keep in my kitchen. This replaced my phone's timer
+application with minimal disruption.
+
+#### Maps
+
+Speaking of lacking orientation, what about living without maps software?  On
+the few occasions where I traveled somewhere that was unfamiliar to me, I had to
+memorize the directions from my computer before I departed.
+
+At least I didn't need to visit gas stations or museums to buy trifold tourist
+maps...
+
+I once left my office -- mistakenly assuming that I would download the
+directions to my destination while commuting. As I awaited the office elevator,
+I realized that I had no clue where I was heading.
+
+Thankfully I wasn't far from the safety, comfort, and familiarity of my desktop
+computer -- with its fatty WiFi connection. In no time I was studying Google
+Maps in my web browser and memorizing the directions.
+
+Overall this was also hardly an inconvenience, and I think I even enjoyed
+stress-testing my memory: a job that I so often outsource to hardware.
+
+#### Rendezvouses
+
+A couple of times I met friends in various parts of the city. Organizing these
+particular rendezvouses was a novel (read: anachronistic) experience. For all
+you young whippersnappers reading, take out your stone tables and chisels. I'm
+going to explain how this works:
+
+First I would tell my friends where are when to meet me. I emphasized that I
+would be quite helpless to any changes they might make to the plans once I began
+commuting, which made the commitments unusually more binding.
+
+On one occasion my friend -- who is characteristically prompt, and even chides
+me for when I'm late -- was twenty minutes late for our engagement. My friend is
+German, so I figured I should do my civic duty of alerting the German embassy
+that my friend has broken German code, is obscenely late, and should therefore
+hand-in his passport and renounce his citizenship. After awhile my conscience
+advised me to reconsider.
+
+It was fortunate for both of us that I did not fully understand how late he was;
+I didn't know what time it was.
+
+I decided this would be a useful opportunity to test my patience, so I loitered
+for twenty minutes outside of our meeting point. He couldn't text me to tell me
+that he was late. I couldn't listen to music, call family or friends to pass the
+time. In the end he showed up, and it was scarcely a big deal.
+
+This experience made me wonder what the policy for abandoning plans is when
+someone is running late. Before smart phones, how long did people wait?  Long
+enough to absolve themselves of flaking on their friend in the unlikely event
+that their friend showed shortly after they left.
+
+So... thirty minutes? I'll call my grandma tomorrow and ask her.
+
+#### Boredom
+
+My phone couldn't entertain me while I waited in line at the grocery store. Same
+too when commuted.
+
+I also found myself listening to less music than I usually do. I decided to read
+to occupy the void when I could; this helped me progress towards completing my
+[GoodReads annual reading challenge][gr-annual].
+
+#### Cheating
+
+I used my phone twice during March.
+
+1. Once to use my bank's mobile app to internationally transfer money from my
+   U.K. account to my U.S. account. I could have used [TransferWise's][tw]
+   website, but I didn't.
+2. Another time I used my phone to take pictures of an item that I wanted to
+   sell on [CraigsList][cl]. I could have and perhaps should have used my laptop's
+   webcam, but at the time, I didn't want to. I am accustomed to using my phone
+   to take pictures, and I wanted to sell something.
+
+In both of these cases, prior habits eroded my resolve to stay the course. These
+are useful reminders that habits don't distinguish between helpful and hurtful;
+they just exist.
+
+In total I would estimate that I spent somewhere around fifteen minutes using
+my phone in March.
+
+I consider this a success.
+
+### Substitution = Dilution
+
+While the explicit goal of this challenge was to avoid using my cell phone for a
+month, the implicit goal was to disengage from many of the
+[nonessential][essentialism] activities that compete for my attention.
+
+There were some things that I didn't miss about not having a cell phone. This
+wasn't because I don't value these things, but rather because I can adequately
+replace them with alternatives.
+
+For texting and making phone calls, I used [Telegram][wtf-telegram]. Telegram
+helped me sustain a healthy relationship with my girlfriend while still honoring
+the constraints of the challenge.
+
+While I appreciated the convenience Telegram provided, I felt that I remained
+about as [available][wtf-availability] during March as I was in February. If I
+ever experiment with drastically reducing my availability, I will be more
+explicit about my objectives.
+
+### Distraction displacement (whack-a-mole)
+
+Because cell phones and other electronics have conditioned my behavior, I
+habitually avoid boredom and seek entertainment. On its face this may not sound
+like a harmful practice. My generation drills the aphorism "you only live once",
+suggesting that we may want to embrace a Hedonistic lifestyle.
+
+A life spent indulging may or may not be a wise way to play the game of Life,
+but living a life where I am often stimulated but equally distracted appeals
+increasingly less to me as time progresses.
+
+During March I noticed that once I freed my attention from sending/receiving
+texts, my brain quickly reassigned my attention to maintaining a vigil over
+other social media outposts that I maintain.
+
+For example, once I discovered that I could use Instagram in a web browser
+instead of on my phone, I filled my newfound time and attention on
+[Instagram.com][ig] (don't click!): displacing the time that I spent on an app
+on my phone to time that I spent on a website in a web browser.
+
+Holy whack-a-mole!
+
+Halfway through the month, I wrote a [program to block websites][url-blocker] on
+my computer. Surprisingly this worked and forced me to more deliberately fill
+this hard-fought, foreign time with other activities.
+
+### Easy come, easy go?
+
+As the saying for making friends goes, "easy come, easy go", implying that
+friendships that you easily form can just as easily be destroyed.
+
+Habits invert this creation/destruction relationship. In my experience "easy
+come" implies "difficult to go".
+
+For example, you might be able to easily form the habit of eating chocolate
+around 15:00 at work. Compare this to the difficulty people experience
+habituating a meditation practice.
+
+I suspect that while my cravings for using a cell phone have temporarily ceased,
+they will return shortly after I start using my cell phone. And as if nothing
+happened, I return to where I was at the end of February just before I decided
+to curb my cell phone usage.
+
+Because of this, I'm planning on keeping my cell phone in my closet where I
+stored it during the month of March. As noted, enough substitutes exist for me
+to live a mostly normal life: one where I am not unnecessarily straining the
+relationships of my friends and my family. After all these are the people who
+matter most to me and those who drive me to explore new ways to improve.
+
+I recognize that the "self" in self-experimentation is a misnomer. My decisions
+impact the people in my life, and I want to thank everyone who tolerates my
+eccentric and oftentimes annoying experimentation.
+
+Thank you for reading.
 
 [pod]: https://www.goodreads.com/book/show/12609433-the-power-of-habit
 [exp-exp]: https://en.wikipedia.org/wiki/Multi-armed_bandit
 [algos]: https://www.goodreads.com/book/show/25666050-algorithms-to-live-by
+[gr-annual]: https://www.goodreads.com/user_challenges/19737920
+[cl]: http://craigslist.com
+[tw]: https://transferwise.com
+[url-blocker]: https://github.com/wpcarro/url-blocker
+[wtf-telegram]: https://telegram.org
+[wtf-availability]: https://landing.google.com/sre/sre-book/chapters/availability-table
+[essentialism]: https://www.goodreads.com/book/show/18077875-essentialism
+[ig]: https://instagram.com
