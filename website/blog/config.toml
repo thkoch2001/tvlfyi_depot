@@ -1,5 +1,5 @@
 baseURL = "https://blog.wpcarro.dev"
-disqusShortname = "wpcarro"
+disqusShortname = "blog-wpcarro-dev"
 languageCode = "en-us"
 title = "blog.wpcarro.dev"
 theme = "tailwind"
