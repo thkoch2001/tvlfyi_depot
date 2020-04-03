@@ -128,7 +128,7 @@ particular rendezvouses was a novel (read: anachronistic) experience. For all
 you young whippersnappers reading, take out your stone tablets and chisels. I'm
 going to explain how this works:
 
-First I would tell my friends where are when to meet me. I emphasized that I
+First I would tell my friends where and when to meet me. I emphasized that I
 would be quite helpless to any changes they might make to the plans once I began
 commuting, which made the commitments unusually more binding.
 
@@ -242,10 +242,10 @@ friendships that you easily form can just as easily be destroyed.
 Habits invert this creation/destruction relationship. In my experience "easy
 come" implies "difficult to go".
 
-For example, I could to easily form the habit of eating chocolate around 15:00
-at work; curbing this habit would require more effort. When I compare this to
-the difficulty I experienced habituating a meditation practice, and how easily
-I can dislodge my meditation practice, it seems to me that the laws of habits
+For example, I could easily form the habit of eating chocolate around 15:00 at
+work; curbing this habit would require more effort. When I compare this to the
+difficulty I experienced habituating a meditation practice, and how easily I
+can dislodge my meditation practice, it seems to me that the laws of habits
 dictate "easy come, difficult go; difficult come, easy go".
 
 I suspect that while my cravings for using a cell phone have temporarily ceased,
