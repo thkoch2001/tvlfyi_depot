@@ -76,9 +76,6 @@
          :label "Briefcase"
          :kbd "d")
         (make-exwm/named-workspace
-         :label "Terminal"
-         :kbd "t")
-        (make-exwm/named-workspace
          :label "Todos"
          :kbd "o")
         (make-exwm/named-workspace
