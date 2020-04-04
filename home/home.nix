@@ -36,9 +36,12 @@ let machine = ./machines/chupacabra.nix; in
     # Desktop stuff
     arandr
     firefox
+    feh
     chromium
     xclip
     xorg.xev
+    picom
+    peek
 
     # System utilities
     htop
@@ -47,6 +50,8 @@ let machine = ./machines/chupacabra.nix; in
     pciutils
     killall
     gdmap
+    bind
+    lsof
 
     # Security
     gnupg
