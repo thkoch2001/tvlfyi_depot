@@ -27,9 +27,9 @@ let maplocalleader = '\'
 set undofile
 " set undodir=~/.vim/undo
 set wildignore=*.pyc,*.o,.git
-set clipboard=unnamed
-" set backupdir=$HOME/.vim/backup   
-" set directory=$HOME/.vim/tmp     
+set clipboard=unnamedplus
+" set backupdir=$HOME/.vim/backup
+" set directory=$HOME/.vim/tmp
 set foldmarker={{{,}}}
 set colorcolumn=+1
 set concealcursor=
@@ -276,7 +276,7 @@ let g:syntastic_enable_signs = 0
 let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_python_flake8_post_args = "--ignore=E101,E223,E224,E301,E302,E303,E501,E701,W,F401,E111,E261"
 
-" }}} 
+" }}}
 " Javascript {{{
 let g:syntastic_javascript_checkers = ['eslint']
 let g:flow#autoclose = 1
@@ -284,7 +284,7 @@ let g:flow#enable = 1
 
 " augroup syntastic_javascript_jsx
 "   autocmd!
-"   autocmd BufReadPre,BufNewFile *.js 
+"   autocmd BufReadPre,BufNewFile *.js
 "   autocmd BufReadPre,BufNewFile *.jsx
 "         \ let g:syntastic_javascript_checkers = ['jsxhint']
 " augroup END
@@ -502,7 +502,7 @@ let g:projectionist_heuristics = {
       \   }
       \ },
       \ "pom.xml&src/main/clj/|src/main/cljs": {
-      \   "*": { 
+      \   "*": {
       \     "start": "USE_NREPL=1 bin/run -m elephant.dev-system" ,
       \     "connect": "nrepl://localhost:5554",
       \     "piggieback": "(figwheel-sidecar.repl-api/repl-env)"
@@ -542,7 +542,7 @@ let g:AutoPairsCenterLine = 0
 " Filetypes {{{
 
 " Python {{{
-aug Python 
+aug Python
   au!
   au FileType python set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 aug END
@@ -556,7 +556,7 @@ aug PHP
 aug END " }}}
 
 " Mail {{{
-aug Mail 
+aug Mail
   au FileType mail setlocal spell
 aug END " }}}
 
@@ -591,15 +591,15 @@ endfunction
 " Ruby {{{
 
 function! s:RSpecSyntax()
-  syn keyword rspecMethod describe context it its specify shared_context 
-        \ shared_examples shared_examples_for shared_context include_examples 
-        \ include_context it_should_behave_like it_behaves_like before after 
-        \ around fixtures controller_name helper_name scenario feature 
+  syn keyword rspecMethod describe context it its specify shared_context
+        \ shared_examples shared_examples_for shared_context include_examples
+        \ include_context it_should_behave_like it_behaves_like before after
+        \ around fixtures controller_name helper_name scenario feature
         \ background given described_class
   syn match rspecMethod '\<let\>!\='
   syn match rspecMethod '\<subject\>!\='
-  syn keyword rspecMethod violated pending expect expect_any_instance_of allow 
-        \ allow_any_instance_of double instance_double mock mock_model 
+  syn keyword rspecMethod violated pending expect expect_any_instance_of allow
+        \ allow_any_instance_of double instance_double mock mock_model
         \ stub_model xit
   syn match rspecMethod '\.\@<!\<stub\>!\@!'
 
@@ -610,7 +610,7 @@ function! s:RSpecHiDefaults()
   hi def link rspecMethod rubyFunction
 endfunction
 
-augroup Ruby 
+augroup Ruby
   au!
   " au FileType ruby let b:surround_114 = "\\(module|class,def,if,unless,case,while,until,begin,do) \r end"
   " au FileType ruby set fdm=syntax
@@ -618,7 +618,7 @@ augroup Ruby
   au FileType ruby set omnifunc=
   au FileType ruby nnoremap <buffer> gy orequire 'pry'; binding.pry<ESC>^
   au FileType ruby nnoremap <buffer> gY Orequire 'pry'; binding.pry<ESC>^
-  au FileType ruby nnoremap <buffer> yu :g/require 'pry'; binding.pry/d<CR> 
+  au FileType ruby nnoremap <buffer> yu :g/require 'pry'; binding.pry/d<CR>
   au BufNewFile,BufRead *_spec.rb call <SID>RSpecSyntax()
 augroup END
 
@@ -657,7 +657,7 @@ aug Clojure
         \ '[': ']'}
         " Don't auto-pair quote reader macros
         " \'`': '`',
-        " \ '''': '''', 
+        " \ '''': '''',
 
   autocmd User ProjectionistActivate call s:projectionist_connect()
 
@@ -674,7 +674,7 @@ aug Clojure
       endfor
     endif
 
-    " if connected && exists(':Piggieback') 
+    " if connected && exists(':Piggieback')
     "   for [root, value] in projectionist#query('piggieback')
     "     silent execute "Piggieback" value
     "     break
@@ -1102,10 +1102,10 @@ function! s:sort_motion(mode) abort
   endif
 endfunction
 
-function! s:sort_lines() 
+function! s:sort_lines()
   let beginning = line('.')
   let end = v:count + beginning - 1
-  execute beginning . ',' . end . 'sort' 
+  execute beginning . ',' . end . 'sort'
 endfunction
 
 xnoremap <silent> <Plug>SortMotionVisual :<C-U>call <SID>sort_motion(visualmode())<CR>
