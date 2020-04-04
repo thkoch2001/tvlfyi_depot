@@ -38,6 +38,7 @@ in {
       home.packages = with pkgs; [
         maim
         rofi
+        rofi-pass
         i3status
         python38Packages.py3status
         i3lock
@@ -88,10 +89,13 @@ in {
               rofi \
                 -modi 'combi' \
                 -combi-modi "window,drun,ssh,run" \
-                -font 'MesloLGSDZ 10' \
+                -font '${decorationFont}' \
                 -show combi
             '';
               in "exec ${rofi}";
+
+            # Passwords
+            "${mod}+p" = "exec rofi-pass -font '${decorationFont}'";
 
             # Media
             "XF86AudioPlay" = "exec playerctl play-pause";
