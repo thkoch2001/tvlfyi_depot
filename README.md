@@ -1,187 +1,85 @@
 # briefcase
 
-Welcome to my briefcase: my monorepo.
+Welcome to my monorepo: briefcase.
 
-I'm attempting to amass a collection of packages that span a variety of
-languages while minimizing the costs of sharing the code. This also includes
-configuration for things like emacs, ssh, and other tools.
+Herein you will find a variety of libraries, packages, and documents. Some of
+this work in finished and other work is incomplete or just a sketch for a
+future project.
 
-# Installation (Deprecated)
+Where applicable, I try to include `README.md` files in some of the
+subdirectories to help orient both myself and any onlookers.
 
-The installation instructions here are deprecated. I'd like to manage packaging
-and installing with Nix, but that is only partially supported at the
-moment.
+## Languages
 
-## wpgtk and gvcci
+To give you a general idea of the source code inside of this monorepo, here is
+the latest output from `tokei --hidden --sort code .`:
 
-```bash
-$ apti python-pip3
-$ gclone deviantfero/wpgtk
-$ cd ..
-$ gclone FabriceCastel/gvcci
+```text
+-------------------------------------------------------------------------------
+ Language            Files        Lines         Code     Comments       Blanks
+-------------------------------------------------------------------------------
+ CSS                     9        67324        50733          218        16373
+ Emacs Lisp            111        25326        15790         6337         3199
+ Python                 99         7432         5414          623         1395
+ JSON                   18         2235         2235            0            0
+ Markdown               34         1771         1771            0            0
+ TypeScript             25         1665         1317          115          233
+ Nix                    65         1302         1115           82          105
+ Go                     17         1256          926          173          157
+ Vim Script              2          766          470           87          209
+ HTML                   17          496          459           11           26
+ Org                     8          420          411            8            1
+ Haskell                 4          319          217           57           45
+ Plain Text              5          145          145            0            0
+ JavaScript             13          105           99            0            6
+ Fish                    1           87           54           23           10
+ Lisp                    3           83           43           23           17
+ Elixir                  1           50           39            5            6
+ Sass                    1           51           38            2           11
+ TOML                    2           37           32            0            5
+ Shell                   2           34           15            9           10
+ Java                    2           11           11            0            0
+ Makefile                2           14            9            3            2
+ C                       1            6            5            0            1
+ BASH                    2           10            4            2            4
+ YAML                    1            5            4            0            1
+ Rust                    1            5            3            1            1
+-------------------------------------------------------------------------------
+ Total                 446       110955        81359         7779        21817
+-------------------------------------------------------------------------------
 ```
 
-- TODO: Integrate Emacs themes into wpgtk.
-- TODO: Integrate Vim themes into wpgtk.
-- TODO: add these to the install script
+67,321 of the 67,324 lines of CSS comes from `//website`, which includes the
+template I use for my blog. Because I use TailwindCSS for my personal projects,
+most of the styling is embedded in the class atribute of HTML and JSX tags.
 
-```bash
-$ ln -s ~/Dropbox/.password-store ~/.password-store
-$ ln -s ~/Dropbox/bin ~/bin
-$ import_gpg $DOTFILES/configs/shared/gpg/.gnupg/exported
-```
+## Sign posts
 
-1. Clipmenu
+Below I have outlined a few projects that you might find interesting. I am
+using `//` to indicate the root of my monorepo, the directory in which this
+`README.md` resides.
 
-Clipmenu is a service to store a history of copied strings.
+- `//boilerplate`: scaffolding for projects. Boilerplate's goal is to
+  reduce the startup costs of a project.
+- `//configs`: my dotfiles (e.g. `config.fish`, `init.vim`). Eventually Nix
+  `home-manager` should replace this.
+- `//emacs`: Emacs is both my preferred text editor and my window manager; with
+  tens of thousands of lines of Emacs Lisp, you can safely assume that this
+  directory hosts a lot of libraries and packages.
+- `//monzo_ynab`: `systemd` timer unit that imports my Monzo (i.e. a U.K.-based
+  online bank) transactions into the personal finance tool YNAB (i.e.
+  youneedabudget.com).
+- `//nixos`: my declarative configuration for my NixOS machines. If you are
+  unfamiliar with Nix, I recommend reading about the NixOS project.
+- `//tools`: some scripts and projects that simplify my life.
+- `//website`: everything required to build my website, wpcarro.dev.
 
-Install it as:
-```bash
-$ cd ~/programming && g clone cdown/clipmenu
-```
+## Notes to self
 
-- TODO: Include `~/.config/systemd/user` in `configs/shared`.
-- TODO: Obviate installation.
+Here are a few reminders when setting up a new machine:
 
-Ensure that it runs on startup:
-```bash
-$ cd ~/programming/clipmenu
-$ cp clipmenu clipmenud clipdel ~/bin # You may not need to do this step.
-$ vim init/clipmenud.service
-# Change the ExecStart line to point to ~/bin/clipmenud
-$ cp init/clipmenud.service ~/.config/systemd/user/clipmenud.service
-$ systemctl --user start clipmenud
-$ systemctl --user enable clipmenud # This step may be optional.
-$ reboot
-$ systemctl --user status clipmenud # Verify installation worked.
-```
-
-1. Install Dropbox
-
-```bash
-$ cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
-$ crontab -e # add the following line...
-@reboot ~/.dropbox-dist/dropboxd 2>&1 >/tmp/dropbox.log
-$ reboot            # 1/3 verify installation
-$ pgrep dropbox     # 2/3 verify installation
-$ dropbox.py status # 3/3 verify installation
-```
-
-1. Authorize computer to access GitHub
-
-```bash
-$ ssh-keygen -t rsa -b 4096 -C 'wpcarro@gmail.com'
-$ eval $(ssh-agent -s)
-$ ssh-add ~/.ssh/id_rsa
-$ xclip -sel clip <~/.ssh/id_rsa.pub
-$ browse github.com # paste ssh public key in settings
-```
-
-1. Install Vundle, nix-env
-
-```bash
-$ ln -s ~/Dropbox/Vundle.vim ~/.config/nvim/bundle/Vundle.vim
-$ cat ~/Dropbox/install_nix.sh | sh
-$ for p in $(cat nix-env.txt); do
->   nix-env -i "$p"
-> done
-```
-
-1. Install dotfiles
-
-- TODO: include steps 2-4 in the `make install` command.
-
-Missing the following dependencies:
-
-- `stow`
-- `neovim`
-- `fasd`
-- `opam`
-- `ghcup`
-- `hub`
-
-```bash
-$ cd ~/Dropbox/dotfiles
-$ DOTFILES="$(pwd)" make install
-```
-
-1. Install Node dependencies
-
-For now, this deserves its own section since it isn't automated.
-
-```bash
-$ gclone tj/n       # clone repo
-$ sudo make install # build from source
-$ n stable          # install the stable version of node
-```
-
-- TODO: support dependencies like terminal themes
-
-# SSHFS
-
-TODO: add explanation about `unison`, `rsync`, etc.
-
-SSHFS enables seamless file transfers from your local machine to a remote
-machine.
-
-## Usage
-
-Assuming your remote machine is configured in your `~/.ssh/config` (see above),
-you can mount your remote machine's home directory on your local machine like
-so:
-
-```bash
-$ mkdir ~/ec2
-$ sshfs ec2:/home/ubuntu ~/ec2 -o reconnect,follow_symlinks
-```
-
-Now your remote machine's home directory can be accessed using the `~/ec2`
-directory. This directory can be treated as if it were an ordinary local
-directory. To illustrate how easy it is to use, let's install `Vundle` onto our
-remote machine.
-
-```bash
-$ git clone https://github.com/VundleVim/Vundle.vim.git ~/ec2/.vim/bundle/Vundle.vim
-```
-
-Voila! We now have `Vundle` installed on our ec2 instance without needing to
-manually SSH into that machine.
-
-
-# GnuPG
-
-To install GPG run the following:
-
-```bash
-$ import_gpg
-```
-
-TODO: create a job that runs this periodically.
-
-```bash
-$ export_gpg
-```
-
-## Reference
-
-    - sec: secret key
-    - pub: public key
-    - ssb: secret sub-key
-    - sub: public sub-key
-
-
-## Terminals and Fonts
-
-Any terminal or font I choose should pass the following checks:
-
-```bash
-$ test_true_color
-$ test_16_colors
-$ test_text_formatting
-$ test_unicode
-$ test_emojis
-```
-
-### Ligatures
-
-If using a font with ligature (e.g. Hasklig) assert that your terminal also support ligatures.
+- Use Nix `home-manager` to configure the new machine.
+- Ensure `~/.password-store` exists.
+- Run `export_gpg` from a computer with my gpg credentials. Run `import_gpg`
+  from the new machine.
+- Ensure the new machine can access my Github.
