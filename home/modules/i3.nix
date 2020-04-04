@@ -36,13 +36,18 @@ in {
     let decorationFont = "MesloLGSDZ ${toString config.system.machine.i3FontSize}"; in
     {
       home.packages = with pkgs; [
-        maim
         rofi
         rofi-pass
-        i3status
         python38Packages.py3status
         i3lock
         dconf # for gtk
+
+        # Screenshots
+        maim
+
+        # GIFs
+        picom
+        peek
       ];
 
       xsession.scriptPath = ".hm-xsession";
@@ -82,6 +87,12 @@ in {
             # Screenshots
             "${mod}+q" = "exec \"maim | xclip -selection clipboard -t image/png\"";
             "${mod}+Shift+q" = "exec \"maim -s | xclip -selection clipboard -t image/png\"";
+            "${mod}+Ctrl+q" = "exec ${pkgs.writeShellScript "peek.sh" ''
+            picom &
+            picom_pid=$!
+            peek || true
+            kill -SIGINT $picom_pid
+            ''}";
 
             # Launching applications
             "${mod}+u" =
