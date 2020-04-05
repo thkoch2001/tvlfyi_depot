@@ -1,6 +1,7 @@
-# Deployments
+# Nix + Google Cloud Run (i.e. GCR)
 
-I'm documenting how I currently deploy things.
+I'm documenting how I currently deploy projects that I package with Nix on
+Google Cloud Run.
 
 I'd like to automate this workflow as much as possible, and I intend to do just
 that. For now, I'm running things manually until I can design an generalization
@@ -40,8 +41,6 @@ This outputs a Docker image at `./result`.
 > sudo docker tag <name>:<label> gcr.io/<google-cloud-project-id>/<name>:<latest>
 ```
 
-# TODO: Prefer using a command line tool like `gcloud` for these steps.
-
 1. Visit Google Cloud Run; create a new service with "Create Service"; select
    the uploaded Docker image from the "Container Image URL" field; click
    "Create" to deploy.
@@ -56,3 +55,8 @@ You may need to authorize `gcloud` by running the following:
 
 You must use `sudo` here since the `docker` invocations are prefixed with `sudo`
 as well.
+
+## Todos
+
+- If possible, prefer using a command line tool like `gcloud` to create the
+  Cloud Run service.
