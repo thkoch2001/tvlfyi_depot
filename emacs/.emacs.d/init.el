@@ -40,7 +40,6 @@
 (require 'window-manager)
 (require 'wpc-ui)
 (require 'wpc-dired)
-(require 'wpc-terminal)
 (require 'wpc-org)
 (require 'wpc-company)
 ;; TODO: Re-enable flycheck for all languages besides Elisp once I learn more
