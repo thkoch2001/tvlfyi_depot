@@ -18,4 +18,6 @@
     action = "hibernate";
     thresholdPercentage = 5;
   };
+
+  services.xserver.xkbOptions = "caps:swapescape";
 }

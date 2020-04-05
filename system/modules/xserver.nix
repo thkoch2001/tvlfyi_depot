@@ -4,7 +4,6 @@
   services.xserver = {
     enable = true;
     layout = "us";
-    xkbOptions = "caps:swapescape";
 
     libinput.enable = true;
 
