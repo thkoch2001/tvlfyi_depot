@@ -47,7 +47,6 @@
 ;; about the issue with the `emacs-lisp' `flycheck-checker'.
 ;; (require 'wpc-flycheck)
 (require 'wpc-shell)
-(require 'wpc-docker)
 (require 'wpc-lisp)
 (require 'wpc-haskell)
 (require 'wpc-reasonml)
