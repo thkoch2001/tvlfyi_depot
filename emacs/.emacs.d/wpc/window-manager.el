@@ -24,7 +24,6 @@
 (require 'kbd)
 (require 'ivy-helpers)
 (require 'display)
-(require 'dotfiles)
 (require 'org-helpers)
 (require 'vterm-mgt)
 (require 'dash)
@@ -408,8 +407,7 @@ This function asssumes that BUFFER passes the `exwm/exwm-buffer?' predicate."
      ;; Briefcase
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      (progn
-       (exwm/switch "Briefcase")
-       (dotfiles/find-emacs-file "init.el"))
+       (exwm/switch "Briefcase"))
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ;; Terminal
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
