@@ -10,9 +10,6 @@
 (require 'macros)
 (require 'kaomoji)
 
-;; Google
-;; (require 'google-stuff)
-
 ;; Laptop XF-functionality
 (require 'pulse-audio)
 (require 'screen-brightness)
