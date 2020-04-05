@@ -21,7 +21,6 @@
 (require 'ssh)
 (require 'clipboard)
 (require 'battery)
-(require 'dotfiles)
 (require 'bookmark)
 (require 'keyboard)
 (require 'irc)
