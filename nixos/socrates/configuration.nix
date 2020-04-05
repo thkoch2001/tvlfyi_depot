@@ -81,14 +81,7 @@ in {
 
   services.openssh.enable = true;
 
-  systemd.services.gogs = {
-    enable = true;
-    description = "Easy-to-use Git server written in golang";
-    script = "${pkgs.gogs}/bin/gogs web";
-    serviceConfig = {
-      Type = "simple";
-    };
-  };
+  services.gitea.enable = true;
 
   systemd.services.monzo-token-server = {
     enable = true;
