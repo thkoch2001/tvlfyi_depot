@@ -81,7 +81,12 @@ in {
 
   services.openssh.enable = true;
 
-  services.gitea.enable = true;
+  services.gitea = {
+    enable = true;
+    # Without this the links to clone a repository like briefcase will be
+    # "http://localhost:3000/wpcarro/briefcase".
+    rootUrl = "https://git.wpcarro.dev/";
+  };
 
   systemd.services.monzo-token-server = {
     enable = true;
