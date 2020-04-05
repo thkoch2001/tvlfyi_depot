@@ -33,3 +33,4 @@ node_modules/
 /configs/.config/fish/config.fish
 /configs/.config/fish/fish_variables
 /website/blog/public/
+/emacs/.emacs.d/tramp
