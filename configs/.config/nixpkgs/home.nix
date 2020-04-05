@@ -122,7 +122,7 @@ in {
     };
   };
 
-  programs.fzf = rec {
+  programs.fzf = {
     enable = true;
     defaultCommand = "fd --hidden --follow --exclude '.git'";
     fileWidgetCommand = defaultCommand;
