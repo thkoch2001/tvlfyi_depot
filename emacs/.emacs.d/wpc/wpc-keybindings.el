@@ -106,7 +106,6 @@
  "hp" #'helpful-at-point
  "s" #'flyspell-mode
  "S" #'sort-lines
- "a" #'wpc-terminal/toggle
  "=" #'align
  "p" #'flycheck-previous-error
  "f" #'wpc/find-file
