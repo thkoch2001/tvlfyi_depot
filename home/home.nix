@@ -42,6 +42,8 @@ let machine = ./machines/chupacabra.nix; in
     xorg.xev
     picom
     peek
+    signal-desktop
+    apvlv # pdf viewer
 
     # System utilities
     htop
@@ -52,6 +54,9 @@ let machine = ./machines/chupacabra.nix; in
     gdmap
     bind
     lsof
+    zip
+    tree
+    ncat
 
     # Security
     gnupg
@@ -63,6 +68,7 @@ let machine = ./machines/chupacabra.nix; in
     shellcheck
     httpie
     entr
+    gnumake
 
     # Spotify...etc
     spotify
