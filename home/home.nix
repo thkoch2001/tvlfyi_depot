@@ -88,6 +88,15 @@ let machine = ./machines/chupacabra.nix; in
     enable = true;
     userEmail = "root@gws.fyi";
     userName  = "Griffin Smith";
+    ignores = [
+      "*.sw*"
+      ".classpath"
+      ".project"
+      ".settings/"
+      ".dir-locals.el"
+      ".stack-work-profiling"
+      ".projectile"
+    ];
     extraConfig = {
       github.user = "glittershark";
       merge.conflictstyle = "diff3";
