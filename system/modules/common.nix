@@ -85,6 +85,7 @@
 
   fonts.fonts = with pkgs; [
     nerdfonts
+    noto-fonts-emoji
   ];
 
   services.geoclue2.enable = true;
