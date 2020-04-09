@@ -95,15 +95,13 @@ in {
             ''}";
 
             # Launching applications
-            "${mod}+u" =
-              let rofi = pkgs.writeShellScript "rofi" ''
+            "${mod}+u" = "exec ${pkgs.writeShellScript "rofi" ''
               rofi \
                 -modi 'combi' \
                 -combi-modi "window,drun,ssh,run" \
                 -font '${decorationFont}' \
                 -show combi
-            '';
-              in "exec ${rofi}";
+            ''}";
 
             # Passwords
             "${mod}+p" = "exec rofi-pass -font '${decorationFont}'";
