@@ -59,35 +59,7 @@
       "dockercleanimages" = "docker images -a --no-trunc | grep none | awk '{print \$$3}' | xargs -L 1 -r docker rmi";
       "dockercleancontainers" = "docker ps -a --no-trunc| grep 'Exit' | awk '{print \$$1}' | xargs -L 1 -r docker rm";
 
-      # Aliases from old config
-      stck = "dirs -v";
-      b= "cd ~1";
-      ".." = "cd ..";
-      "..." = "cd ../..";
-      "...." = "cd ../../..";
-      "....." = "cd ../../../..";
-      "http" = "http --style solarized";
-      "grep" = "grep $GREP_OPTIONS";
-      "bak" = "~/bin/backup.sh";
-      "xmm" = "xmodmap ~/.Xmodmap";
-      "asdflkj" = "asdf";
-      "asdf" = "asdfghjkl";
-      "asdfghjkl" = "echo \"Having some trouble?\"";
-      "ift" = "sudo iftop -i wlp3s0";
-      "rvpn" = "sudo systemctl restart openvpn@bldr-dev openvpn@lsvl-dev";
-      "gne" = "gn edit";
-      "gnf" = "gn find";
-      "gnt" = "gn tag-list";
-      "gnn" = "gn notebook-list";
-      "mytl" = "t tl $TWITTER_WHOAMI";
-      "first" = "awk '{print \$$1}'";
-      "cmt" = "git log --oneline | fzf-tmux | awk '{print \$$1}'";
-      "workmon" = "xrandr --output DP-2 --pos 1440x900 --primary";
-      "vi" = "vim";
-      "awa" = "ssh aw2-admin.nomi.host";
-      "dtf" = "cd ~/.dotfiles";
-      "adbdev" = "adb devices";
-      "adbcon" = "adb connect $GNEX_IP";
+      # Git
       "gwip" = "git add . && git commit -am wip";
       "gpr" = "g pull-request";
       "gcl" = "git clone";
@@ -128,6 +100,37 @@
       "gnp" = "git --no-pager";
       "g" = "git";
       "git" = "hub";
+      "grim" = " git fetch && git rebase -i origin/master";
+
+      # Aliases from old config
+      stck = "dirs -v";
+      b= "cd ~1";
+      ".." = "cd ..";
+      "..." = "cd ../..";
+      "...." = "cd ../../..";
+      "....." = "cd ../../../..";
+      "http" = "http --style solarized";
+      "grep" = "grep $GREP_OPTIONS";
+      "bak" = "~/bin/backup.sh";
+      "xmm" = "xmodmap ~/.Xmodmap";
+      "asdflkj" = "asdf";
+      "asdf" = "asdfghjkl";
+      "asdfghjkl" = "echo \"Having some trouble?\"";
+      "ift" = "sudo iftop -i wlp3s0";
+      "rvpn" = "sudo systemctl restart openvpn@bldr-dev openvpn@lsvl-dev";
+      "gne" = "gn edit";
+      "gnf" = "gn find";
+      "gnt" = "gn tag-list";
+      "gnn" = "gn notebook-list";
+      "mytl" = "t tl $TWITTER_WHOAMI";
+      "first" = "awk '{print \$$1}'";
+      "cmt" = "git log --oneline | fzf-tmux | awk '{print \$$1}'";
+      "workmon" = "xrandr --output DP-2 --pos 1440x900 --primary";
+      "vi" = "vim";
+      "awa" = "ssh aw2-admin.nomi.host";
+      "dtf" = "cd ~/.dotfiles";
+      "adbdev" = "adb devices";
+      "adbcon" = "adb connect $GNEX_IP";
       "mpalb" = "mpc search album";
       "mpart" = "mpc search artist";
       "mps" = "mpc search";
