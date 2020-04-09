@@ -16,8 +16,18 @@ in {
   # '';
   #
 
-  home.packages = [
+  home.packages = with pkgs; [
     # haskellPackages.Agda BROKEN
+
+    # LaTeX (for org export)
+    (pkgs.texlive.combine {
+      inherit (pkgs.texlive)
+        scheme-basic collection-fontsrecommended ulem
+        fncychap titlesec tabulary varwidth framed fancyvrb float parskip
+        wrapfig upquote capt-of needspace;
+    })
+
+    ispell
   ];
 
   programs.emacs.enable = true;
