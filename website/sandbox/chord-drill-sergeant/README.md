@@ -45,3 +45,13 @@ Here are some useful features of CDS:
 - Chaos-mode: Feeling confident? Throw the classical notions of harmony to the
   wayside and use CDS in "chaos-mode" where CDS samples randomly from the Circle
   of Fifths.
+
+## Developing
+
+If you're interested in contributing, the following will create an environment
+in which you can develop:
+
+```shell
+$ nix-shell
+$ elm reactor
+```
