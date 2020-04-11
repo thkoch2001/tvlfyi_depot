@@ -62,35 +62,19 @@ octave highlight =
   let
     isHighlit note = List.member note highlight
   in
-    [ natural    0    (isHighlit Theory.C)
-    , accidental 25   (isHighlit Theory.C_sharp)
-    , natural    40   (isHighlit Theory.D)
-    , accidental 65   (isHighlit Theory.D_sharp)
-    , natural    80   (isHighlit Theory.E)
-    , natural    120  (isHighlit Theory.F)
-    , accidental 145  (isHighlit Theory.F_sharp)
-    , natural    160  (isHighlit Theory.G)
-    , accidental 185  (isHighlit Theory.G_sharp)
-    , natural    200  (isHighlit Theory.A)
-    , accidental 225  (isHighlit Theory.A_sharp)
-    , natural    240  (isHighlit Theory.B)
+    [ natural    0    (isHighlit Theory.C4)
+    , accidental 25   (isHighlit Theory.C_sharp4)
+    , natural    40   (isHighlit Theory.D4)
+    , accidental 65   (isHighlit Theory.D_sharp4)
+    , natural    80   (isHighlit Theory.E4)
+    , natural    120  (isHighlit Theory.F4)
+    , accidental 145  (isHighlit Theory.F_sharp4)
+    , natural    160  (isHighlit Theory.G4)
+    , accidental 185  (isHighlit Theory.G_sharp4)
+    , natural    200  (isHighlit Theory.A4)
+    , accidental 225  (isHighlit Theory.A_sharp4)
+    , natural    240  (isHighlit Theory.B4)
     ]
-
-indexForNote : Theory.Note -> Int
-indexForNote note =
-  case note of
-    Theory.C       -> 0
-    Theory.C_sharp -> 1
-    Theory.D       -> 2
-    Theory.D_sharp -> 3
-    Theory.E       -> 4
-    Theory.F       -> 5
-    Theory.F_sharp -> 6
-    Theory.G       -> 7
-    Theory.G_sharp -> 8
-    Theory.A       -> 9
-    Theory.A_sharp -> 10
-    Theory.B       -> 11
 
 {-| Return the HTML that renders a piano representation. -}
 render : { highlight : List Theory.Note } -> Html a
