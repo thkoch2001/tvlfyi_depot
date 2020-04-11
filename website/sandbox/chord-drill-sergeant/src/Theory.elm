@@ -36,7 +36,11 @@ type Interval = Half
               | MinorThird
 
 {-| A bundle of notes which are usually, but not necessarily harmonious. -}
-type Chord = Chord (Note, ChordType, ChordPosition)
+type alias Chord =
+  { note : Note
+  , chordType : ChordType
+  , chordPosition : ChordPosition
+  }
 
 {-| Many possible chords exist. This type encodes the possibilities. I am
 tempted to model these in a more "DRY" way, but I worry that this abstraction
@@ -62,7 +66,10 @@ type ChordPosition = First
 
 {-| Songs are written in one or more keys, which define the notes and therefore
 chords that harmonize with one another. -}
-type Key = Key (Note, Mode)
+type alias Key =
+  { note : Note
+  , mode : Mode
+  }
 
 {-| We create "scales" by enumerating the notes of a given key. These keys are
 defined by the "tonic" note and the "mode".  I thought about including Ionian,
@@ -160,16 +167,13 @@ applySteps steps note =
 
 {-| Return a list of the notes that comprise a `chord` -}
 notesForChord : Chord -> List Note
-notesForChord chord =
-  case chord of
-    -- TODO(wpcarro): Use the Position to rotate the chord n times
-    Chord (note, chordType, _) -> note :: applySteps (intervalsForChordType chordType) note
+notesForChord {note, chordType} =
+  note :: applySteps (intervalsForChordType chordType) note
 
 {-| Return the scale for a given `key` -}
 notesForKey : Key -> List Note
-notesForKey key =
-  case key of
-    Key (note, mode) -> applySteps (intervalsForMode mode) note
+notesForKey {note, mode} =
+  applySteps (intervalsForMode mode) note
 
 {-| Return a list of all of the chords that we know about. -}
 allChords : List Chord
@@ -206,4 +210,7 @@ allChords =
     notes
     |> List.Extra.andThen (\note -> chordTypes
     |> List.Extra.andThen (\chordType -> chordPositions
-    |> List.Extra.andThen (\chordPosition -> [Chord (note, chordType, chordPosition)])))
+    |> List.Extra.andThen (\chordPosition -> [{ note = note
+                                             , chordType = chordType
+                                             , chordPosition = chordPosition
+                                             }])))
