@@ -11,11 +11,12 @@ import Time exposing (..)
 import Piano
 import Theory
 
-type Model = Model { whitelistedChords : List Theory.Chord
-                   , selectedChord : Theory.Chord
-                   , isPaused : Bool
-                   , tempo : Int
-                   }
+type alias Model =
+  { whitelistedChords : List Theory.Chord
+  , selectedChord : Theory.Chord
+  , isPaused : Bool
+  , tempo : Int
+  }
 
 type Msg = NextChord
          | NewChord Theory.Chord
@@ -28,7 +29,7 @@ tempoStep : Int
 tempoStep = 100
 
 viewChord : Theory.Chord -> String
-viewChord (Theory.Chord (note, chordType, chordPosition)) =
+viewChord {note, chordType, chordPosition} =
   viewNote note ++ " " ++
   (case chordType of
      Theory.Major -> "major"
@@ -65,19 +66,23 @@ viewNote note =
     Theory.B -> "B"
 
 cmajor : Theory.Chord
-cmajor = Theory.Chord (Theory.C, Theory.Major, Theory.First)
+cmajor =
+  { note = Theory.C
+  , chordType = Theory.Major
+  , chordPosition = Theory.First
+  }
 
 {-| The initial state for the application. -}
 init : Model
 init =
-  Model { whitelistedChords = Theory.allChords
-        , selectedChord = cmajor
-        , isPaused = True
-        , tempo = 1000
-        }
+  { whitelistedChords = Theory.allChords
+  , selectedChord = cmajor
+  , isPaused = True
+  , tempo = 1000
+  }
 
 subscriptions : Model -> Sub Msg
-subscriptions (Model {isPaused, tempo}) =
+subscriptions {isPaused, tempo} =
   if isPaused then
     Sub.none
   else
@@ -85,71 +90,47 @@ subscriptions (Model {isPaused, tempo}) =
 
 {-| Now that we have state, we need a function to change the state. -}
 update : Msg -> Model -> (Model, Cmd Msg)
-update msg (Model {whitelistedChords, selectedChord, isPaused, tempo}) =
+update msg model =
   case msg of
-    NewChord chord -> ( Model { whitelistedChords = whitelistedChords
-                              , selectedChord = chord
-                              , isPaused = isPaused
-                              , tempo = tempo
-                              }
+    NewChord chord -> ( { model | selectedChord = chord }
                       , Cmd.none
                       )
-    NextChord -> ( Model { whitelistedChords = whitelistedChords
-                         , selectedChord = selectedChord
-                         , isPaused = isPaused
-                         , tempo = tempo
-                         }
+    NextChord -> ( model
                  , Random.generate (\x ->
                                       case x of
                                         (Just chord, _) -> NewChord chord
                                         (Nothing, _)    -> NewChord cmajor)
-                   (Random.List.choose whitelistedChords)
+                   (Random.List.choose model.whitelistedChords)
                  )
-    Play -> ( Model { whitelistedChords = whitelistedChords
-                    , selectedChord = selectedChord
-                    , isPaused = False
-                    , tempo = tempo
-                    }
+    Play -> ( { model | isPaused = False }
             , Cmd.none
             )
-    Pause -> ( Model { whitelistedChords = whitelistedChords
-                     , selectedChord = selectedChord
-                     , isPaused = True
-                     , tempo = tempo
-                    }
+    Pause -> ( { model | isPaused = True }
              , Cmd.none
              )
-    IncreaseTempo -> ( Model { whitelistedChords = whitelistedChords
-                             , selectedChord = selectedChord
-                             , isPaused = isPaused
-                             , tempo = tempo - tempoStep
-                             }
+    IncreaseTempo -> ( { model | tempo = model.tempo - tempoStep }
                      , Cmd.none
                      )
-    DecreaseTempo -> ( Model { whitelistedChords = whitelistedChords
-                             , selectedChord = selectedChord
-                             , isPaused = isPaused
-                             , tempo = tempo + tempoStep
-                             }
+    DecreaseTempo -> ( { model | tempo = model.tempo + tempoStep }
                      , Cmd.none
                      )
 
 playPause : Model -> Html Msg
-playPause (Model {isPaused}) =
+playPause {isPaused} =
   if isPaused then
     button [ onClick Play ] [ text "Play" ]
   else
     button [ onClick Pause ] [ text "Pause" ]
 
 view : Model -> Html Msg
-view (Model {selectedChord, tempo} as model) =
-  div [] [ p [] [ text (viewChord selectedChord) ]
-         , p [] [ text (String.fromInt tempo) ]
+view model =
+  div [] [ p [] [ text (viewChord model.selectedChord) ]
+         , p [] [ text (String.fromInt model.tempo) ]
          , button [ onClick NextChord ] [ text "Next Chord" ]
          , button [ onClick IncreaseTempo ] [ text "Faster" ]
          , button [ onClick DecreaseTempo ] [ text "Slower" ]
          , playPause model
-         , Piano.render { highlight = Theory.notesForChord selectedChord }
+         , Piano.render { highlight = Theory.notesForChord model.selectedChord }
          ]
 
 {-| For now, I'm just dumping things onto the page to sketch ideas. -}
