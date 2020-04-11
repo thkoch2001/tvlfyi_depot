@@ -87,7 +87,7 @@ view : State -> Html Msg
 view (State {selectedChord}) =
   div [] [ p [] [ text (viewChord selectedChord) ]
          , button [ onClick NextChord ] [ text "Next Chord" ]
-         , Piano.render { highlight = [] }
+         , Piano.render { highlight = Theory.notesForChord selectedChord }
          ]
 
 {-| For now, I'm just dumping things onto the page to sketch ideas. -}
