@@ -25,6 +25,7 @@ let
 
     (with epkgs.melpaPackages; [
       notmuch
+      elm-mode
       ts
       vterm
       base16-theme

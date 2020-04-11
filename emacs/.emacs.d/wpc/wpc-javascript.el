@@ -77,5 +77,8 @@
   :config
   (general-add-hook wpc/frontend-hooks #'prettier-js-mode))
 
+;; Support Elm
+(use-package elm-mode)
+
 (provide 'wpc-javascript)
 ;;; wpc-javascript.el ends here
