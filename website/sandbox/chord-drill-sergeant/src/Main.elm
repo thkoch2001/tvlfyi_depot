@@ -10,6 +10,7 @@ import Time exposing (..)
 
 import Piano
 import Theory
+import Tempo
 
 type alias Model =
   { whitelistedChords : List Theory.Chord
@@ -24,9 +25,18 @@ type Msg = NextChord
          | Pause
          | IncreaseTempo
          | DecreaseTempo
+         | SetTempo String
 
 tempoStep : Int
-tempoStep = 100
+tempoStep = 5
+
+{-| Return the number of milliseconds that elapse during an interval in a
+`target` bpm.
+-}
+bpmToMilliseconds : Int -> Int
+bpmToMilliseconds target =
+  let msPerMinute = 1000 * 60
+  in round (toFloat msPerMinute / toFloat target)
 
 viewChord : Theory.Chord -> String
 viewChord {note, chordType, chordPosition} =
@@ -78,7 +88,7 @@ init =
   { whitelistedChords = Theory.allChords
   , selectedChord = cmajor
   , isPaused = True
-  , tempo = 1000
+  , tempo = 60
   }
 
 subscriptions : Model -> Sub Msg
@@ -86,7 +96,7 @@ subscriptions {isPaused, tempo} =
   if isPaused then
     Sub.none
   else
-    Time.every (toFloat tempo) (\_ -> NextChord)
+    Time.every (tempo |> bpmToMilliseconds |> toFloat) (\_ -> NextChord)
 
 {-| Now that we have state, we need a function to change the state. -}
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -108,12 +118,19 @@ update msg model =
     Pause -> ( { model | isPaused = True }
              , Cmd.none
              )
-    IncreaseTempo -> ( { model | tempo = model.tempo - tempoStep }
+    IncreaseTempo -> ( { model | tempo = model.tempo + tempoStep }
                      , Cmd.none
                      )
-    DecreaseTempo -> ( { model | tempo = model.tempo + tempoStep }
+    DecreaseTempo -> ( { model | tempo = model.tempo - tempoStep }
                      , Cmd.none
                      )
+    SetTempo tempo -> ( { model |
+                          tempo = case String.toInt tempo of
+                                    Just x  -> x
+                                    Nothing -> model.tempo
+                         }
+                      , Cmd.none
+                      )
 
 playPause : Model -> Html Msg
 playPause {isPaused} =
@@ -124,12 +141,13 @@ playPause {isPaused} =
 
 view : Model -> Html Msg
 view model =
-  div [] [ p [] [ text (viewChord model.selectedChord) ]
-         , p [] [ text (String.fromInt model.tempo) ]
-         , button [ onClick NextChord ] [ text "Next Chord" ]
-         , button [ onClick IncreaseTempo ] [ text "Faster" ]
-         , button [ onClick DecreaseTempo ] [ text "Slower" ]
+  div [] [ Tempo.render { tempo = model.tempo
+                        , handleIncrease = IncreaseTempo
+                        , handleDecrease = DecreaseTempo
+                        , handleInput    = SetTempo
+                        }
          , playPause model
+         , p [] [ text (viewChord model.selectedChord) ]
          , Piano.render { highlight = Theory.notesForChord model.selectedChord }
          ]
 
