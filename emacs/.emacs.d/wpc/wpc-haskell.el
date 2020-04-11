@@ -11,11 +11,6 @@
 ;; font-locking, glyph support, etc
 (use-package haskell-mode
   :config
-  (let ((m-symbols
-         '(("`mappend`" . "⊕")
-           ("<>"        . "⊕"))))
-    (dolist (item m-symbols) (add-to-list 'haskell-font-lock-symbols-alist item)))
-  (setq haskell-font-lock-symbols t)
   (add-hook-before-save 'haskell-mode #'haskell-align-imports))
 
 ;; LSP support
