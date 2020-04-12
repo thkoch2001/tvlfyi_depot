@@ -284,6 +284,45 @@ inversionName inversion =
             "Second"
 
 
+{-| Return the human-readable version of a chord type.
+-}
+chordTypeName : ChordType -> String
+chordTypeName chordType =
+    case chordType of
+        Major ->
+            "major"
+
+        Major7 ->
+            "major 7th"
+
+        MajorDominant7 ->
+            "major dominant 7th"
+
+        Minor ->
+            "minor"
+
+        MinorMajor7 ->
+            "minor major 7th"
+
+        MinorDominant7 ->
+            "minor dominant 7th"
+
+        Augmented ->
+            "augmented"
+
+        AugmentedDominant7 ->
+            "augmented dominant 7th"
+
+        Diminished ->
+            "diminished"
+
+        DiminishedDominant7 ->
+            "diminished dominant 7th"
+
+        DiminishedMajor7 ->
+            "diminished major 7th"
+
+
 {-| Return the note that is one half step away from `note` in the direction,
 `dir`.
 In the case of stepping up or down from the end of the piano, this returns a
@@ -794,14 +833,17 @@ allChordTypes =
 Only create chords from the range of notes delimited by the range `start` and
 `end`.
 -}
-allChords : Note -> Note -> List ChordInversion -> List Chord
-allChords start end chordInversions =
+allChords :
+    { start : Note
+    , end : Note
+    , inversions : List ChordInversion
+    , chordTypes : List ChordType
+    }
+    -> List Chord
+allChords { start, end, inversions, chordTypes } =
     let
         notes =
             notesFromRange start end
-
-        chordTypes =
-            allChordTypes
     in
     notes
         |> List.Extra.andThen
@@ -809,12 +851,12 @@ allChords start end chordInversions =
                 chordTypes
                     |> List.Extra.andThen
                         (\chordType ->
-                            chordInversions
+                            inversions
                                 |> List.Extra.andThen
-                                    (\chordInversion ->
+                                    (\inversion ->
                                         [ { note = note
                                           , chordType = chordType
-                                          , chordInversion = chordInversion
+                                          , chordInversion = inversion
                                           }
                                         ]
                                     )
@@ -1085,104 +1127,12 @@ viewNote note =
 
 inspectChord : Chord -> String
 inspectChord { note, chordType, chordInversion } =
-    viewNote note
-        ++ " "
-        ++ (case chordType of
-                Major ->
-                    "major"
-
-                Major7 ->
-                    "major 7th"
-
-                MajorDominant7 ->
-                    "major dominant 7th"
-
-                Minor ->
-                    "minor"
-
-                MinorMajor7 ->
-                    "minor major 7th"
-
-                MinorDominant7 ->
-                    "minor dominant 7th"
-
-                Augmented ->
-                    "augmented"
-
-                AugmentedDominant7 ->
-                    "augmented dominant 7th"
-
-                Diminished ->
-                    "diminished"
-
-                DiminishedDominant7 ->
-                    "diminished dominant 7th"
-
-                DiminishedMajor7 ->
-                    "diminished major 7th"
-           )
-        ++ " "
-        ++ (case chordInversion of
-                Root ->
-                    "root position"
-
-                First ->
-                    "1st inversion"
-
-                Second ->
-                    "2nd inversion"
-           )
+    viewNote note ++ " " ++ chordTypeName chordType ++ " " ++ inversionName chordInversion ++ " position"
 
 
 viewChord : Chord -> String
 viewChord { note, chordType, chordInversion } =
-    viewNoteClass (classifyNote note)
-        ++ " "
-        ++ (case chordType of
-                Major ->
-                    "major"
-
-                Major7 ->
-                    "major 7th"
-
-                MajorDominant7 ->
-                    "major dominant 7th"
-
-                Minor ->
-                    "minor"
-
-                MinorMajor7 ->
-                    "minor 7th"
-
-                MinorDominant7 ->
-                    "minor dominant 7th"
-
-                Augmented ->
-                    "augmented"
-
-                AugmentedDominant7 ->
-                    "augmented 7th"
-
-                Diminished ->
-                    "diminished"
-
-                DiminishedDominant7 ->
-                    "diminished 7th"
-
-                DiminishedMajor7 ->
-                    "diminished major 7th"
-           )
-        ++ " "
-        ++ (case chordInversion of
-                Root ->
-                    "root position"
-
-                First ->
-                    "1st inversion"
-
-                Second ->
-                    "2nd inversion"
-           )
+    viewNoteClass (classifyNote note) ++ " " ++ chordTypeName chordType ++ " " ++ inversionName chordInversion ++ " position"
 
 
 {-| Serialize a human-readable format of `noteClass`.

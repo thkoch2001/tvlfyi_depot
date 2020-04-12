@@ -15,6 +15,8 @@ import Time exposing (..)
 
 type alias Model =
     { whitelistedChords : List Theory.Chord
+    , whitelistedChordTypes : List Theory.ChordType
+    , whitelistedInversions : List Theory.ChordInversion
     , selectedChord : Theory.Chord
     , isPaused : Bool
     , tempo : Int
@@ -24,7 +26,6 @@ type alias Model =
         { enable : Bool
         , inspectChord : Bool
         }
-    , whitelistedInversions : List Theory.ChordInversion
     }
 
 
@@ -38,6 +39,7 @@ type Msg
     | SetTempo String
     | ToggleInspectChord
     | ToggleInversion Theory.ChordInversion
+    | ToggleChordType Theory.ChordType
 
 
 tempoStep : Int
@@ -73,7 +75,14 @@ init =
         ( firstNote, lastNote ) =
             ( Theory.C3, Theory.C5 )
     in
-    { whitelistedChords = Theory.allChords firstNote lastNote Theory.allInversions
+    { whitelistedChords =
+        Theory.allChords
+            { start = firstNote
+            , end = lastNote
+            , inversions = Theory.allInversions
+            , chordTypes = Theory.allChordTypes
+            }
+    , whitelistedChordTypes = Theory.allChordTypes
     , whitelistedInversions = Theory.allInversions
     , selectedChord = cmajor
     , isPaused = True
@@ -150,6 +159,28 @@ update msg model =
             , Cmd.none
             )
 
+        ToggleChordType chordType ->
+            let
+                chordTypes =
+                    if List.member chordType model.whitelistedChordTypes then
+                        List.filter ((/=) chordType) model.whitelistedChordTypes
+
+                    else
+                        chordType :: model.whitelistedChordTypes
+            in
+            ( { model
+                | whitelistedChordTypes = chordTypes
+                , whitelistedChords =
+                    Theory.allChords
+                        { start = model.firstNote
+                        , end = model.lastNote
+                        , inversions = model.whitelistedInversions
+                        , chordTypes = chordTypes
+                        }
+              }
+            , Cmd.none
+            )
+
         ToggleInversion inversion ->
             let
                 inversions =
@@ -161,7 +192,13 @@ update msg model =
             in
             ( { model
                 | whitelistedInversions = inversions
-                , whitelistedChords = Theory.allChords model.firstNote model.lastNote inversions
+                , whitelistedChords =
+                    Theory.allChords
+                        { start = model.firstNote
+                        , end = model.lastNote
+                        , inversions = inversions
+                        , chordTypes = model.whitelistedChordTypes
+                        }
               }
             , Cmd.none
             )
@@ -195,6 +232,25 @@ debugger =
         [ label [] [ text "Inspect Chord" ]
         , input [ type_ "checkbox", onClick ToggleInspectChord, checked init.debug.inspectChord ] []
         ]
+
+
+chordTypeCheckboxes : List Theory.ChordType -> Html Msg
+chordTypeCheckboxes chordTypes =
+    ul []
+        (Theory.allChordTypes
+            |> List.map
+                (\chordType ->
+                    li []
+                        [ label [] [ text (Theory.chordTypeName chordType) ]
+                        , input
+                            [ type_ "checkbox"
+                            , onClick (ToggleChordType chordType)
+                            , checked (List.member chordType chordTypes)
+                            ]
+                            []
+                        ]
+                )
+        )
 
 
 inversionCheckboxes : List Theory.ChordInversion -> Html Msg
@@ -238,6 +294,7 @@ view model =
                     , handleInput = SetTempo
                     }
                 , inversionCheckboxes model.whitelistedInversions
+                , chordTypeCheckboxes model.whitelistedChordTypes
                 , playPause model
                 , if model.debug.enable then
                     debugger
