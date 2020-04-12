@@ -1,5 +1,6 @@
 module Theory exposing (..)
 
+import Array exposing (Array)
 import List.Extra
 import Maybe.Extra
 import Misc
@@ -219,6 +220,14 @@ type Mode
     = BluesMode
     | MajorMode
     | MinorMode
+
+
+type alias NoteMetadata =
+    { note : Note
+    , label : String
+    , noteClass : NoteClass
+    , natural : Bool
+    }
 
 
 scaleDegree : Int -> Key -> NoteClass
@@ -624,41 +633,7 @@ keyClass note =
 -}
 classifyNote : Note -> NoteClass
 classifyNote note =
-    if List.member note [ C1, C2, C3, C4, C5, C6, C7, C8 ] then
-        C
-
-    else if List.member note [ C_sharp1, C_sharp2, C_sharp3, C_sharp4, C_sharp5, C_sharp6, C_sharp7 ] then
-        C_sharp
-
-    else if List.member note [ D1, D2, D3, D4, D5, D6, D7 ] then
-        D
-
-    else if List.member note [ D_sharp1, D_sharp2, D_sharp3, D_sharp4, D_sharp5, D_sharp6, D_sharp7 ] then
-        D_sharp
-
-    else if List.member note [ E1, E2, E3, E4, E5, E6, E7 ] then
-        E
-
-    else if List.member note [ F1, F2, F3, F4, F5, F6, F7 ] then
-        F
-
-    else if List.member note [ F_sharp1, F_sharp2, F_sharp3, F_sharp4, F_sharp5, F_sharp6, F_sharp7 ] then
-        F_sharp
-
-    else if List.member note [ G1, G2, G3, G4, G5, G6, G7 ] then
-        G
-
-    else if List.member note [ G_sharp1, G_sharp2, G_sharp3, G_sharp4, G_sharp5, G_sharp6, G_sharp7 ] then
-        G_sharp
-
-    else if List.member note [ A1, A2, A3, A4, A5, A6, A7 ] then
-        A
-
-    else if List.member note [ A_sharp1, A_sharp2, A_sharp3, A_sharp4, A_sharp5, A_sharp6, A_sharp7 ] then
-        A_sharp
-
-    else
-        B
+    note |> getNoteMetadata |> .noteClass
 
 
 {-| Return a list of the notes that comprise a `chord`
@@ -692,49 +667,14 @@ notesForKey { noteClass, mode } =
 -}
 isAccidental : Note -> Bool
 isAccidental note =
-    case classifyNote note of
-        C ->
-            False
-
-        C_sharp ->
-            True
-
-        D ->
-            False
-
-        D_sharp ->
-            True
-
-        E ->
-            False
-
-        F ->
-            False
-
-        F_sharp ->
-            True
-
-        G ->
-            False
-
-        G_sharp ->
-            True
-
-        A ->
-            False
-
-        A_sharp ->
-            True
-
-        B ->
-            False
+    note |> isNatural |> not
 
 
 {-| Return true if `note` is a white key.
 -}
 isNatural : Note -> Bool
 isNatural note =
-    note |> isAccidental |> not
+    note |> getNoteMetadata |> .natural
 
 
 {-| Return a list of all of the notes that we know about.
@@ -742,92 +682,9 @@ Only return the notes within the range `start` and `end`.
 -}
 notesFromRange : Note -> Note -> List Note
 notesFromRange start end =
-    [ C1
-    , C_sharp1
-    , D1
-    , D_sharp1
-    , E1
-    , F1
-    , F_sharp1
-    , G1
-    , G_sharp1
-    , A1
-    , A_sharp1
-    , B1
-    , C2
-    , C_sharp2
-    , D2
-    , D_sharp2
-    , E2
-    , F2
-    , F_sharp2
-    , G2
-    , G_sharp2
-    , A2
-    , A_sharp2
-    , B2
-    , C3
-    , C_sharp3
-    , D3
-    , D_sharp3
-    , E3
-    , F3
-    , F_sharp3
-    , G3
-    , G_sharp3
-    , A3
-    , A_sharp3
-    , B3
-    , C4
-    , C_sharp4
-    , D4
-    , D_sharp4
-    , E4
-    , F4
-    , F_sharp4
-    , G4
-    , G_sharp4
-    , A4
-    , A_sharp4
-    , B4
-    , C5
-    , C_sharp5
-    , D5
-    , D_sharp5
-    , E5
-    , F5
-    , F_sharp5
-    , G5
-    , G_sharp5
-    , A5
-    , A_sharp5
-    , B5
-    , C6
-    , C_sharp6
-    , D6
-    , D_sharp6
-    , E6
-    , F6
-    , F_sharp6
-    , G6
-    , G_sharp6
-    , A6
-    , A_sharp6
-    , B6
-    , C7
-    , C_sharp7
-    , D7
-    , D_sharp7
-    , E7
-    , F7
-    , F_sharp7
-    , G7
-    , G_sharp7
-    , A7
-    , A_sharp7
-    , B7
-    , C8
-    ]
+    noteMetadata
+        |> Array.toList
+        |> List.map .note
         |> List.Extra.dropWhile ((/=) start)
         |> List.Extra.takeWhile ((/=) end)
 
@@ -859,6 +716,415 @@ allChordTypes =
     ]
 
 
+noteMetadata : Array NoteMetadata
+noteMetadata =
+    Array.fromList
+        [ { note = A1, label = "A1", noteClass = A, natural = True }
+        , { note = A_sharp1, label = "A♯/B♭1", noteClass = A_sharp, natural = False }
+        , { note = B1, label = "B1", noteClass = B, natural = True }
+        , { note = C1, label = "C1", noteClass = C, natural = True }
+        , { note = C_sharp1, label = "C♯/D♭1", noteClass = C_sharp, natural = False }
+        , { note = D1, label = "D1", noteClass = D, natural = True }
+        , { note = D_sharp1, label = "D♯/E♭1", noteClass = D_sharp, natural = False }
+        , { note = E1, label = "E1", noteClass = E, natural = True }
+        , { note = F1, label = "F1", noteClass = F, natural = True }
+        , { note = F_sharp1, label = "F♯/G♭1", noteClass = F_sharp, natural = False }
+        , { note = G1, label = "G1", noteClass = G, natural = True }
+        , { note = G_sharp1, label = "G♯/A♭1", noteClass = G, natural = False }
+        , { note = A2, label = "A2", noteClass = A, natural = True }
+        , { note = A_sharp2, label = "A♯/B♭2", noteClass = A_sharp, natural = False }
+        , { note = B2, label = "B2", noteClass = B, natural = True }
+        , { note = C2, label = "C2", noteClass = C, natural = True }
+        , { note = C_sharp2, label = "C♯/D♭2", noteClass = C_sharp, natural = False }
+        , { note = D2, label = "D2", noteClass = D, natural = True }
+        , { note = D_sharp2, label = "D♯/E♭2", noteClass = D_sharp, natural = False }
+        , { note = E2, label = "E2", noteClass = E, natural = True }
+        , { note = F2, label = "F2", noteClass = F, natural = True }
+        , { note = F_sharp2, label = "F♯/G♭2", noteClass = F_sharp, natural = False }
+        , { note = G2, label = "G2", noteClass = G, natural = True }
+        , { note = G_sharp2, label = "G♯/A♭2", noteClass = G, natural = False }
+        , { note = A3, label = "A3", noteClass = A, natural = True }
+        , { note = A_sharp3, label = "A♯/B♭3", noteClass = A_sharp, natural = False }
+        , { note = B3, label = "B3", noteClass = B, natural = True }
+        , { note = C3, label = "C3", noteClass = C, natural = True }
+        , { note = C_sharp3, label = "C♯/D♭3", noteClass = C_sharp, natural = False }
+        , { note = D3, label = "D3", noteClass = D, natural = True }
+        , { note = D_sharp3, label = "D♯/E♭3", noteClass = D_sharp, natural = False }
+        , { note = E3, label = "E3", noteClass = E, natural = True }
+        , { note = F3, label = "F3", noteClass = F, natural = True }
+        , { note = F_sharp3, label = "F♯/G♭3", noteClass = F_sharp, natural = False }
+        , { note = G3, label = "G3", noteClass = G, natural = True }
+        , { note = G_sharp3, label = "G♯/A♭3", noteClass = G, natural = False }
+        , { note = A4, label = "A4", noteClass = A, natural = True }
+        , { note = A_sharp4, label = "A♯/B♭4", noteClass = A_sharp, natural = False }
+        , { note = B4, label = "B4", noteClass = B, natural = True }
+        , { note = C4, label = "C4", noteClass = C, natural = True }
+        , { note = C_sharp4, label = "C♯/D♭4", noteClass = C_sharp, natural = False }
+        , { note = D4, label = "D4", noteClass = D, natural = True }
+        , { note = D_sharp4, label = "D♯/E♭4", noteClass = D_sharp, natural = False }
+        , { note = E4, label = "E4", noteClass = E, natural = True }
+        , { note = F4, label = "F4", noteClass = F, natural = True }
+        , { note = F_sharp4, label = "F♯/G♭4", noteClass = F_sharp, natural = False }
+        , { note = G4, label = "G4", noteClass = G, natural = True }
+        , { note = G_sharp4, label = "G♯/A♭4", noteClass = G, natural = False }
+        , { note = A5, label = "A5", noteClass = A, natural = True }
+        , { note = A_sharp5, label = "A♯/B♭5", noteClass = A_sharp, natural = False }
+        , { note = B5, label = "B5", noteClass = B, natural = True }
+        , { note = C5, label = "C5", noteClass = C, natural = True }
+        , { note = C_sharp5, label = "C♯/D♭5", noteClass = C_sharp, natural = False }
+        , { note = D5, label = "D5", noteClass = D, natural = True }
+        , { note = D_sharp5, label = "D♯/E♭5", noteClass = D_sharp, natural = False }
+        , { note = E5, label = "E5", noteClass = E, natural = True }
+        , { note = F5, label = "F5", noteClass = F, natural = True }
+        , { note = F_sharp5, label = "F♯/G♭5", noteClass = F_sharp, natural = False }
+        , { note = G5, label = "G5", noteClass = G, natural = True }
+        , { note = G_sharp5, label = "G♯/A♭5", noteClass = G, natural = False }
+        , { note = A6, label = "A6", noteClass = A, natural = True }
+        , { note = A_sharp6, label = "A♯/B♭6", noteClass = A_sharp, natural = False }
+        , { note = B6, label = "B6", noteClass = B, natural = True }
+        , { note = C6, label = "C6", noteClass = C, natural = True }
+        , { note = C_sharp6, label = "C♯/D♭6", noteClass = C_sharp, natural = False }
+        , { note = D6, label = "D6", noteClass = D, natural = True }
+        , { note = D_sharp6, label = "D♯/E♭6", noteClass = D_sharp, natural = False }
+        , { note = E6, label = "E6", noteClass = E, natural = True }
+        , { note = F6, label = "F6", noteClass = F, natural = True }
+        , { note = F_sharp6, label = "F♯/G♭6", noteClass = F_sharp, natural = False }
+        , { note = G6, label = "G6", noteClass = G, natural = True }
+        , { note = G_sharp6, label = "G♯/A♭6", noteClass = G, natural = False }
+        , { note = A7, label = "A7", noteClass = A, natural = True }
+        , { note = A_sharp7, label = "A♯/B♭7", noteClass = A_sharp, natural = False }
+        , { note = B7, label = "B7", noteClass = B, natural = True }
+        , { note = C7, label = "C7", noteClass = C, natural = True }
+        , { note = C_sharp7, label = "C♯/D♭7", noteClass = C_sharp, natural = False }
+        , { note = D7, label = "D7", noteClass = D, natural = True }
+        , { note = D_sharp7, label = "D♯/E♭7", noteClass = D_sharp, natural = False }
+        , { note = E7, label = "E7", noteClass = E, natural = True }
+        , { note = F7, label = "F7", noteClass = F, natural = True }
+        , { note = F_sharp7, label = "F♯/G♭7", noteClass = F_sharp, natural = False }
+        , { note = G7, label = "G7", noteClass = G, natural = True }
+        , { note = G_sharp7, label = "G♯/A♭7", noteClass = G, natural = False }
+        , { note = C8, label = "C8", noteClass = C, natural = True }
+        ]
+
+
+{-| Mapping of note data to commonly needed metadata for that note.
+-}
+getNoteMetadata : Note -> NoteMetadata
+getNoteMetadata note =
+    case Array.get (noteAsNumber note) noteMetadata of
+        Just metadata ->
+            metadata
+
+        -- This case should never hit, so we just return C1 to appease the
+        -- compiler.
+        Nothing ->
+            getNoteMetadata C1
+
+
+{-| Return the numeric representation of `note` to ues when comparing two
+notes.
+-}
+noteAsNumber : Note -> Int
+noteAsNumber note =
+    case note of
+        C1 ->
+            0
+
+        C_sharp1 ->
+            1
+
+        D1 ->
+            2
+
+        D_sharp1 ->
+            3
+
+        E1 ->
+            4
+
+        F1 ->
+            5
+
+        F_sharp1 ->
+            6
+
+        G1 ->
+            7
+
+        G_sharp1 ->
+            8
+
+        A1 ->
+            9
+
+        A_sharp1 ->
+            10
+
+        B1 ->
+            11
+
+        C2 ->
+            12
+
+        C_sharp2 ->
+            13
+
+        D2 ->
+            14
+
+        D_sharp2 ->
+            15
+
+        E2 ->
+            16
+
+        F2 ->
+            17
+
+        F_sharp2 ->
+            18
+
+        G2 ->
+            19
+
+        G_sharp2 ->
+            20
+
+        A2 ->
+            21
+
+        A_sharp2 ->
+            22
+
+        B2 ->
+            23
+
+        C3 ->
+            24
+
+        C_sharp3 ->
+            25
+
+        D3 ->
+            26
+
+        D_sharp3 ->
+            27
+
+        E3 ->
+            28
+
+        F3 ->
+            29
+
+        F_sharp3 ->
+            30
+
+        G3 ->
+            31
+
+        G_sharp3 ->
+            32
+
+        A3 ->
+            33
+
+        A_sharp3 ->
+            34
+
+        B3 ->
+            35
+
+        C4 ->
+            36
+
+        C_sharp4 ->
+            37
+
+        D4 ->
+            38
+
+        D_sharp4 ->
+            39
+
+        E4 ->
+            40
+
+        F4 ->
+            41
+
+        F_sharp4 ->
+            42
+
+        G4 ->
+            43
+
+        G_sharp4 ->
+            44
+
+        A4 ->
+            45
+
+        A_sharp4 ->
+            46
+
+        B4 ->
+            47
+
+        C5 ->
+            48
+
+        C_sharp5 ->
+            49
+
+        D5 ->
+            50
+
+        D_sharp5 ->
+            51
+
+        E5 ->
+            52
+
+        F5 ->
+            53
+
+        F_sharp5 ->
+            54
+
+        G5 ->
+            55
+
+        G_sharp5 ->
+            56
+
+        A5 ->
+            57
+
+        A_sharp5 ->
+            58
+
+        B5 ->
+            59
+
+        C6 ->
+            60
+
+        C_sharp6 ->
+            61
+
+        D6 ->
+            62
+
+        D_sharp6 ->
+            63
+
+        E6 ->
+            64
+
+        F6 ->
+            65
+
+        F_sharp6 ->
+            66
+
+        G6 ->
+            67
+
+        G_sharp6 ->
+            68
+
+        A6 ->
+            69
+
+        A_sharp6 ->
+            70
+
+        B6 ->
+            71
+
+        C7 ->
+            72
+
+        C_sharp7 ->
+            73
+
+        D7 ->
+            74
+
+        D_sharp7 ->
+            75
+
+        E7 ->
+            76
+
+        F7 ->
+            77
+
+        F_sharp7 ->
+            78
+
+        G7 ->
+            79
+
+        G_sharp7 ->
+            80
+
+        A7 ->
+            81
+
+        A_sharp7 ->
+            82
+
+        B7 ->
+            83
+
+        C8 ->
+            84
+
+
+{-| Return true if all of the notes that comprise `chord` can be played on a
+piano whose keys begin at `start` and end at `end`.
+-}
+chordWithinRange : Note -> Note -> Chord -> Bool
+chordWithinRange start end chord =
+    case notesForChord chord of
+        Just notes ->
+            let
+                nums =
+                    List.map noteAsNumber notes
+
+                lo =
+                    List.minimum nums |> Maybe.withDefault (noteAsNumber start)
+
+                hi =
+                    List.maximum nums |> Maybe.withDefault (noteAsNumber end)
+            in
+            lo >= noteAsNumber start && hi < noteAsNumber end
+
+        Nothing ->
+            False
+
+
+{-| Return a list of all of the chords that we know about.
+-}
+allNoteClasses : List NoteClass
+allNoteClasses =
+    [ C
+    , C_sharp
+    , D
+    , D_sharp
+    , E
+    , F
+    , F_sharp
+    , G
+    , G_sharp
+    , A
+    , A_sharp
+    , B
+    ]
+
+
 {-| Return a list of all of the chords that we know about.
 Only create chords from the range of notes delimited by the range `start` and
 `end`.
@@ -868,12 +1134,14 @@ allChords :
     , end : Note
     , inversions : List ChordInversion
     , chordTypes : List ChordType
+    , noteClasses : List NoteClass
     }
     -> List Chord
-allChords { start, end, inversions, chordTypes } =
+allChords { start, end, inversions, chordTypes, noteClasses } =
     let
         notes =
             notesFromRange start end
+                |> List.filter (\note -> List.member (classifyNote note) noteClasses)
     in
     notes
         |> List.Extra.andThen
@@ -892,267 +1160,14 @@ allChords { start, end, inversions, chordTypes } =
                                     )
                         )
             )
+        |> List.filter (chordWithinRange start end)
 
 
 {-| Serialize a human-readable format of `note`.
 -}
 viewNote : Note -> String
 viewNote note =
-    case note of
-        C1 ->
-            "C1"
-
-        C_sharp1 ->
-            "C♯/D♭1"
-
-        D1 ->
-            "D1"
-
-        D_sharp1 ->
-            "D♯/E♭1"
-
-        E1 ->
-            "E1"
-
-        F1 ->
-            "F1"
-
-        F_sharp1 ->
-            "F♯/G♭1"
-
-        G1 ->
-            "G1"
-
-        G_sharp1 ->
-            "G♯/A♭1"
-
-        A1 ->
-            "A1"
-
-        A_sharp1 ->
-            "A♯/B♭1"
-
-        B1 ->
-            "B1"
-
-        C2 ->
-            "C2"
-
-        C_sharp2 ->
-            "C♯/D♭2"
-
-        D2 ->
-            "D2"
-
-        D_sharp2 ->
-            "D♯/E♭2"
-
-        E2 ->
-            "E2"
-
-        F2 ->
-            "F2"
-
-        F_sharp2 ->
-            "F♯/G♭2"
-
-        G2 ->
-            "G2"
-
-        G_sharp2 ->
-            "G♯/A♭2"
-
-        A2 ->
-            "A2"
-
-        A_sharp2 ->
-            "A♯/B♭2"
-
-        B2 ->
-            "B2"
-
-        C3 ->
-            "C3"
-
-        C_sharp3 ->
-            "C♯/D♭3"
-
-        D3 ->
-            "D3"
-
-        D_sharp3 ->
-            "D♯/E♭3"
-
-        E3 ->
-            "E3"
-
-        F3 ->
-            "F3"
-
-        F_sharp3 ->
-            "F♯/G♭3"
-
-        G3 ->
-            "G3"
-
-        G_sharp3 ->
-            "G♯/A♭3"
-
-        A3 ->
-            "A3"
-
-        A_sharp3 ->
-            "A♯/B♭3"
-
-        B3 ->
-            "B3"
-
-        C4 ->
-            "C4"
-
-        C_sharp4 ->
-            "C♯/D♭4"
-
-        D4 ->
-            "D4"
-
-        D_sharp4 ->
-            "D♯/E♭4"
-
-        E4 ->
-            "E4"
-
-        F4 ->
-            "F4"
-
-        F_sharp4 ->
-            "F♯/G♭4"
-
-        G4 ->
-            "G4"
-
-        G_sharp4 ->
-            "G♯/A♭4"
-
-        A4 ->
-            "A4"
-
-        A_sharp4 ->
-            "A♯/B♭4"
-
-        B4 ->
-            "B4"
-
-        C5 ->
-            "C5"
-
-        C_sharp5 ->
-            "C♯/D♭5"
-
-        D5 ->
-            "D5"
-
-        D_sharp5 ->
-            "D♯/E♭5"
-
-        E5 ->
-            "E5"
-
-        F5 ->
-            "F5"
-
-        F_sharp5 ->
-            "F♯/G♭5"
-
-        G5 ->
-            "G5"
-
-        G_sharp5 ->
-            "G♯/A♭5"
-
-        A5 ->
-            "A5"
-
-        A_sharp5 ->
-            "A♯/B♭5"
-
-        B5 ->
-            "B5"
-
-        C6 ->
-            "C6"
-
-        C_sharp6 ->
-            "C♯/D♭6"
-
-        D6 ->
-            "D6"
-
-        D_sharp6 ->
-            "D♯/E♭6"
-
-        E6 ->
-            "E6"
-
-        F6 ->
-            "F6"
-
-        F_sharp6 ->
-            "F♯/G♭6"
-
-        G6 ->
-            "G6"
-
-        G_sharp6 ->
-            "G♯/A♭6"
-
-        A6 ->
-            "A6"
-
-        A_sharp6 ->
-            "A♯/B♭6"
-
-        B6 ->
-            "B6"
-
-        C7 ->
-            "C7"
-
-        C_sharp7 ->
-            "C♯/D♭7"
-
-        D7 ->
-            "D7"
-
-        D_sharp7 ->
-            "D♯/E♭7"
-
-        E7 ->
-            "E7"
-
-        F7 ->
-            "F7"
-
-        F_sharp7 ->
-            "F♯/G♭7"
-
-        G7 ->
-            "G7"
-
-        G_sharp7 ->
-            "G♯/A♭7"
-
-        A7 ->
-            "A7"
-
-        A_sharp7 ->
-            "A♯/B♭7"
-
-        B7 ->
-            "B7"
-
-        C8 ->
-            "C8"
+    note |> getNoteMetadata |> .label
 
 
 inspectChord : Chord -> String
