@@ -24,6 +24,7 @@ type alias Model =
         { enable : Bool
         , inspectChord : Bool
         }
+    , whitelistedInversions : List Theory.ChordInversion
     }
 
 
@@ -36,6 +37,7 @@ type Msg
     | DecreaseTempo
     | SetTempo String
     | ToggleInspectChord
+    | ToggleInversion Theory.ChordInversion
 
 
 tempoStep : Int
@@ -71,7 +73,8 @@ init =
         ( firstNote, lastNote ) =
             ( Theory.C3, Theory.C5 )
     in
-    { whitelistedChords = Theory.allChords firstNote lastNote
+    { whitelistedChords = Theory.allChords firstNote lastNote Theory.allInversions
+    , whitelistedInversions = Theory.allInversions
     , selectedChord = cmajor
     , isPaused = True
     , tempo = 60
@@ -147,6 +150,22 @@ update msg model =
             , Cmd.none
             )
 
+        ToggleInversion inversion ->
+            let
+                inversions =
+                    if List.member inversion model.whitelistedInversions then
+                        List.filter ((/=) inversion) model.whitelistedInversions
+
+                    else
+                        inversion :: model.whitelistedInversions
+            in
+            ( { model
+                | whitelistedInversions = inversions
+                , whitelistedChords = Theory.allChords model.firstNote model.lastNote inversions
+              }
+            , Cmd.none
+            )
+
         SetTempo tempo ->
             ( { model
                 | tempo =
@@ -178,6 +197,26 @@ debugger =
         ]
 
 
+inversionCheckboxes : List Theory.ChordInversion -> Html Msg
+inversionCheckboxes inversions =
+    ul []
+        (Theory.allInversions
+            |> List.map
+                (\inversion ->
+                    li []
+                        [ label [] [ text (Theory.inversionName inversion) ]
+                        , input
+                            [ type_
+                                "checkbox"
+                            , onClick (ToggleInversion inversion)
+                            , checked (List.member inversion inversions)
+                            ]
+                            []
+                        ]
+                )
+        )
+
+
 view : Model -> Html Msg
 view model =
     case Theory.notesForChord model.selectedChord of
@@ -198,6 +237,7 @@ view model =
                     , handleDecrease = DecreaseTempo
                     , handleInput = SetTempo
                     }
+                , inversionCheckboxes model.whitelistedInversions
                 , playPause model
                 , if model.debug.enable then
                     debugger
