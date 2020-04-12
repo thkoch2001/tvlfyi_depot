@@ -269,6 +269,21 @@ noteInCentralOctave noteClass =
             B4
 
 
+{-| Return the human-readable version of a chord inversion.
+-}
+inversionName : ChordInversion -> String
+inversionName inversion =
+    case inversion of
+        Root ->
+            "Root"
+
+        First ->
+            "First"
+
+        Second ->
+            "Second"
+
+
 {-| Return the note that is one half step away from `note` in the direction,
 `dir`.
 In the case of stepping up or down from the end of the piano, this returns a
@@ -750,24 +765,43 @@ notesFromRange start end =
         |> List.Extra.takeWhile ((/=) end)
 
 
+{-| Return a list of all of the chord inversions about which we know.
+-}
+allInversions : List ChordInversion
+allInversions =
+    [ Root, First, Second ]
+
+
+{-| Return a list of all of the chord types about which we know.
+-}
+allChordTypes : List ChordType
+allChordTypes =
+    [ Major
+    , Major7
+    , MajorDominant7
+    , Minor
+    , MinorMajor7
+    , MinorDominant7
+    , Augmented
+    , AugmentedDominant7
+    , Diminished
+    , DiminishedDominant7
+    , DiminishedMajor7
+    ]
+
+
 {-| Return a list of all of the chords that we know about.
 Only create chords from the range of notes delimited by the range `start` and
 `end`.
 -}
-allChords : Note -> Note -> List Chord
-allChords start end =
+allChords : Note -> Note -> List ChordInversion -> List Chord
+allChords start end chordInversions =
     let
         notes =
             notesFromRange start end
 
         chordTypes =
-            [ Major
-            ]
-
-        chordInversions =
-            [ Root
-            , First
-            ]
+            allChordTypes
     in
     notes
         |> List.Extra.andThen
