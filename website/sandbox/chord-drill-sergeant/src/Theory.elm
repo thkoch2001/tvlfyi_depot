@@ -169,6 +169,8 @@ may cause more problems than it solves.
 -}
 type ChordType
     = Major
+    | Sus2
+    | Sus4
     | Major7
     | MajorDominant7
     | Minor
@@ -292,6 +294,12 @@ chordTypeName chordType =
         Major ->
             "major"
 
+        Sus2 ->
+            "suspended 2"
+
+        Sus4 ->
+            "suspended 4"
+
         Major7 ->
             "major 7th"
 
@@ -387,6 +395,26 @@ intervalsForChordType chordType chordInversion =
 
         ( Major, Second ) ->
             [ down (NHalves 5), up MajorThird ]
+
+        -- Sus2
+        ( Sus2, Root ) ->
+            [ up Whole, up PerfectFifth ]
+
+        ( Sus2, First ) ->
+            [ down (NHalves 10), down (NHalves 5) ]
+
+        ( Sus2, Second ) ->
+            [ down (NHalves 5), up Whole ]
+
+        -- Sus4
+        ( Sus4, Root ) ->
+            [ up (NHalves 5), up PerfectFifth ]
+
+        ( Sus4, First ) ->
+            [ down (NHalves 7), down (NHalves 5) ]
+
+        ( Sus4, Second ) ->
+            [ down (NHalves 5), up (NHalves 5) ]
 
         -- Major7
         ( Major7, Root ) ->
@@ -816,6 +844,8 @@ allInversions =
 allChordTypes : List ChordType
 allChordTypes =
     [ Major
+    , Sus2
+    , Sus4
     , Major7
     , MajorDominant7
     , Minor
