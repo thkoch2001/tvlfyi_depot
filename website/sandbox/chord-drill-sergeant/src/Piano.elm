@@ -78,7 +78,7 @@ natural { offset, isHighlit, note } =
         , style "position" "absolute"
         , style "left" (String.fromInt offset ++ "px")
         ]
-        [ p [] [ text (Theory.viewNote note) ] ]
+        []
 
 
 {-| These are the black keys on most modern pianos.
