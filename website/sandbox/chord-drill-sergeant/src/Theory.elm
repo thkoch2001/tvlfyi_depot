@@ -1,6 +1,7 @@
 module Theory exposing (..)
 
 import Array exposing (Array)
+import Dict exposing (Dict)
 import List.Extra
 import Maybe.Extra
 import Misc
@@ -230,11 +231,10 @@ type alias NoteMetadata =
     }
 
 
-scaleDegree : Int -> Key -> PitchClass
-scaleDegree which { pitchClass } =
-    case pitchClass of
-        _ ->
-            C
+{-| An integer representing which note in a given scale to play.
+-}
+type alias ScaleDegree =
+    Int
 
 
 {-| Returns the Note in the cental octave of the piano for a given
@@ -373,16 +373,16 @@ intervalsForMode mode =
     in
     case mode of
         MajorMode ->
-            List.map up [ Whole, Whole, Half, Whole, Whole, Whole, Half ]
+            List.map up [ Whole, Whole, Half, Whole, Whole, Whole ]
 
         MinorMode ->
-            List.map up [ Whole, Half, Whole, Whole, Half, Whole, Whole ]
+            List.map up [ Whole, Half, Whole, Whole, Half, Whole ]
 
         BluesMode ->
             List.map up [ MinorThird, Whole, Half, Half, MinorThird ]
 
 
-{-| Return a list of the intervals the comprise a chord. Each interval measures
+{-| Return a list of the intervals that a chord. Each interval measures
 the distance away from the root-note of the chord.
 -}
 intervalsForChordType : ChordType -> ChordInversion -> List IntervalVector
@@ -648,7 +648,7 @@ notesForChord { note, chordType, chordInversion } =
         |> Maybe.map (\notes -> note :: notes)
 
 
-{-| Return the scale for a given `key`
+{-| Return the scale for a given `key`.
 -}
 notesForKey : Key -> List Note
 notesForKey { pitchClass, mode } =
@@ -716,6 +716,31 @@ allChordTypes =
     , DiminishedDominant7
     , DiminishedMajor7
     ]
+
+
+{-| Return a list of all of the key modes about which we know.
+-}
+allModes : List Mode
+allModes =
+    [ MajorMode, MinorMode, BluesMode ]
+
+
+{-| Return a list of all of the keys about which we know.
+-}
+allKeys : List Key
+allKeys =
+    allPitchClasses
+        |> List.Extra.andThen
+            (\pitchClass ->
+                allModes
+                    |> List.Extra.andThen
+                        (\mode ->
+                            [ { pitchClass = pitchClass
+                              , mode = mode
+                              }
+                            ]
+                        )
+            )
 
 
 {-| Return an array of every note on a piano.
@@ -832,261 +857,19 @@ notes.
 -}
 noteAsNumber : Note -> Int
 noteAsNumber note =
-    case note of
-        C1 ->
+    let
+        result =
+            noteMetadata
+                |> Array.toList
+                |> List.indexedMap Tuple.pair
+                |> Misc.find (\( _, x ) -> x.note == note)
+    in
+    case result of
+        Nothing ->
             0
 
-        C_sharp1 ->
-            1
-
-        D1 ->
-            2
-
-        D_sharp1 ->
-            3
-
-        E1 ->
-            4
-
-        F1 ->
-            5
-
-        F_sharp1 ->
-            6
-
-        G1 ->
-            7
-
-        G_sharp1 ->
-            8
-
-        A1 ->
-            9
-
-        A_sharp1 ->
-            10
-
-        B1 ->
-            11
-
-        C2 ->
-            12
-
-        C_sharp2 ->
-            13
-
-        D2 ->
-            14
-
-        D_sharp2 ->
-            15
-
-        E2 ->
-            16
-
-        F2 ->
-            17
-
-        F_sharp2 ->
-            18
-
-        G2 ->
-            19
-
-        G_sharp2 ->
-            20
-
-        A2 ->
-            21
-
-        A_sharp2 ->
-            22
-
-        B2 ->
-            23
-
-        C3 ->
-            24
-
-        C_sharp3 ->
-            25
-
-        D3 ->
-            26
-
-        D_sharp3 ->
-            27
-
-        E3 ->
-            28
-
-        F3 ->
-            29
-
-        F_sharp3 ->
-            30
-
-        G3 ->
-            31
-
-        G_sharp3 ->
-            32
-
-        A3 ->
-            33
-
-        A_sharp3 ->
-            34
-
-        B3 ->
-            35
-
-        C4 ->
-            36
-
-        C_sharp4 ->
-            37
-
-        D4 ->
-            38
-
-        D_sharp4 ->
-            39
-
-        E4 ->
-            40
-
-        F4 ->
-            41
-
-        F_sharp4 ->
-            42
-
-        G4 ->
-            43
-
-        G_sharp4 ->
-            44
-
-        A4 ->
-            45
-
-        A_sharp4 ->
-            46
-
-        B4 ->
-            47
-
-        C5 ->
-            48
-
-        C_sharp5 ->
-            49
-
-        D5 ->
-            50
-
-        D_sharp5 ->
-            51
-
-        E5 ->
-            52
-
-        F5 ->
-            53
-
-        F_sharp5 ->
-            54
-
-        G5 ->
-            55
-
-        G_sharp5 ->
-            56
-
-        A5 ->
-            57
-
-        A_sharp5 ->
-            58
-
-        B5 ->
-            59
-
-        C6 ->
-            60
-
-        C_sharp6 ->
-            61
-
-        D6 ->
-            62
-
-        D_sharp6 ->
-            63
-
-        E6 ->
-            64
-
-        F6 ->
-            65
-
-        F_sharp6 ->
-            66
-
-        G6 ->
-            67
-
-        G_sharp6 ->
-            68
-
-        A6 ->
-            69
-
-        A_sharp6 ->
-            70
-
-        B6 ->
-            71
-
-        C7 ->
-            72
-
-        C_sharp7 ->
-            73
-
-        D7 ->
-            74
-
-        D_sharp7 ->
-            75
-
-        E7 ->
-            76
-
-        F7 ->
-            77
-
-        F_sharp7 ->
-            78
-
-        G7 ->
-            79
-
-        G_sharp7 ->
-            80
-
-        A7 ->
-            81
-
-        A_sharp7 ->
-            82
-
-        B7 ->
-            83
-
-        C8 ->
-            84
+        Just ( i, _ ) ->
+            i
 
 
 {-| Return true if all of the notes that comprise `chord` can be played on a
@@ -1223,3 +1006,95 @@ viewPitchClass pitchClass =
 
         B ->
             "B"
+
+
+viewMode : Mode -> String
+viewMode mode =
+    case mode of
+        MajorMode ->
+            "major"
+
+        MinorMode ->
+            "minor"
+
+        BluesMode ->
+            "blues"
+
+
+{-| Return the human-readable format of `key`.
+-}
+viewKey : Key -> String
+viewKey { pitchClass, mode } =
+    viewPitchClass pitchClass ++ " " ++ viewMode mode
+
+
+{-| Returns a pairing of a scale-degree to the type of chord at that scale
+degree.
+-}
+practiceChordsForMode : Mode -> Dict ScaleDegree ChordType
+practiceChordsForMode mode =
+    case mode of
+        MajorMode ->
+            Dict.fromList
+                [ ( 1, Major )
+                , ( 2, Minor )
+                , ( 3, Minor )
+                , ( 4, Major )
+                , ( 5, Major )
+                , ( 6, Minor )
+                , ( 7, Diminished )
+                ]
+
+        MinorMode ->
+            Dict.fromList
+                [ ( 1, Minor )
+                , ( 2, Diminished )
+                , ( 3, Major )
+                , ( 4, Minor )
+                , ( 5, Minor )
+                , ( 6, Major )
+                , ( 7, Major )
+                ]
+
+        BluesMode ->
+            Dict.fromList
+                [ ( 1, MajorDominant7 )
+
+                -- While many refer to the blues progression as a I-IV-V, the IV
+                -- chord is really a MajorDominant7 made from the third scale
+                -- degree.
+                , ( 3, MajorDominant7 )
+                , ( 5, MajorDominant7 )
+                ]
+
+
+{-| Returns a list of chords for a particular `key`.
+-}
+chordsForKey : Key -> List Chord
+chordsForKey key =
+    let
+        chords =
+            practiceChordsForMode key.mode
+    in
+    notesForKey key
+        |> List.indexedMap
+            (\i note ->
+                case Dict.get (i + 1) chords of
+                    Nothing ->
+                        Nothing
+
+                    Just chordType ->
+                        Just
+                            (allInversions
+                                |> List.Extra.andThen
+                                    (\inversion ->
+                                        [ { note = note
+                                          , chordType = chordType
+                                          , chordInversion = inversion
+                                          }
+                                        ]
+                                    )
+                            )
+            )
+        |> Maybe.Extra.values
+        |> List.concat
