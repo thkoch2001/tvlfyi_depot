@@ -1,17 +1,16 @@
 module Main exposing (main)
 
 import Browser
-import ChordInspector
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import NoteInspector
 import Piano
 import Random
 import Random.List
 import Tempo
 import Theory
 import Time exposing (..)
+import UI
 
 
 type alias Model =
@@ -26,11 +25,13 @@ type alias Model =
     , firstNote : Theory.Note
     , lastNote : Theory.Note
     , practiceMode : PracticeMode
-    , debug :
-        { enable : Bool
-        , inspectChord : Bool
-        }
+    , view : View
     }
+
+
+type View
+    = Preferences
+    | Practice
 
 
 {-| Control the type of practice you'd like.
@@ -48,7 +49,6 @@ type Msg
     | IncreaseTempo
     | DecreaseTempo
     | SetTempo String
-    | ToggleInspectChord
     | ToggleInversion Theory.ChordInversion
     | ToggleChordType Theory.ChordType
     | TogglePitchClass Theory.PitchClass
@@ -84,7 +84,7 @@ init : Model
 init =
     let
         ( firstNote, lastNote ) =
-            ( Theory.C3, Theory.C5 )
+            ( Theory.A1, Theory.C8 )
 
         inversions =
             Theory.allInversions
@@ -96,7 +96,7 @@ init =
             Theory.allPitchClasses
 
         keys =
-            Theory.allKeys
+            []
 
         practiceMode =
             KeyMode
@@ -121,13 +121,10 @@ init =
     , whitelistedKeys = keys
     , selectedChord = Nothing
     , isPaused = True
-    , tempo = 60
+    , tempo = 30
     , firstNote = firstNote
     , lastNote = lastNote
-    , debug =
-        { enable = False
-        , inspectChord = True
-        }
+    , view = Preferences
     }
 
 
@@ -209,16 +206,6 @@ update msg model =
 
         DecreaseTempo ->
             ( { model | tempo = model.tempo - tempoStep }
-            , Cmd.none
-            )
-
-        ToggleInspectChord ->
-            ( { model
-                | debug =
-                    { inspectChord = not model.debug.inspectChord
-                    , enable = model.debug.enable
-                    }
-              }
             , Cmd.none
             )
 
@@ -331,33 +318,6 @@ playPause { isPaused } =
         button [ onClick Pause ] [ text "Pause" ]
 
 
-debugger : Html Msg
-debugger =
-    fieldset []
-        [ label [] [ text "Inspect Chord" ]
-        , input [ type_ "checkbox", onClick ToggleInspectChord, checked init.debug.inspectChord ] []
-        ]
-
-
-pitchClassCheckboxes : List Theory.PitchClass -> Html Msg
-pitchClassCheckboxes pitchClasses =
-    ul []
-        (Theory.allPitchClasses
-            |> List.map
-                (\pitchClass ->
-                    li []
-                        [ label [] [ text (Theory.viewPitchClass pitchClass) ]
-                        , input
-                            [ type_ "checkbox"
-                            , onClick (TogglePitchClass pitchClass)
-                            , checked (List.member pitchClass pitchClasses)
-                            ]
-                            []
-                        ]
-                )
-        )
-
-
 chordTypeCheckboxes : List Theory.ChordType -> Html Msg
 chordTypeCheckboxes chordTypes =
     ul []
@@ -396,45 +356,71 @@ inversionCheckboxes inversions =
         )
 
 
-keyCheckboxes : List Theory.Key -> Html Msg
-keyCheckboxes keys =
+selectKey :
+    Model
+    ->
+        { pitchClass : Theory.PitchClass
+        , majorKey : Theory.Key
+        , minorKey : Theory.Key
+        , bluesKey : Theory.Key
+        }
+    -> Html Msg
+selectKey model { pitchClass, majorKey, minorKey, bluesKey } =
+    let
+        active key =
+            List.member key model.whitelistedKeys
+    in
+    div [ class "flex pt-0" ]
+        [ p [ class "text-gray-500 text-center text-5xl flex-1 py-10" ] [ text (Theory.viewPitchClass pitchClass) ]
+        , UI.textToggleButton
+            { label = "major"
+            , handleClick = ToggleKey majorKey
+            , classes = [ "flex-1" ]
+            , toggled = active majorKey
+            }
+        , UI.textToggleButton
+            { label = "minor"
+            , handleClick = ToggleKey minorKey
+            , classes = [ "flex-1" ]
+            , toggled = active minorKey
+            }
+        , UI.textToggleButton
+            { label = "blues"
+            , handleClick = ToggleKey bluesKey
+            , classes = [ "flex-1" ]
+            , toggled = active bluesKey
+            }
+        ]
+
+
+keyCheckboxes : Model -> Html Msg
+keyCheckboxes model =
     div []
-        [ h2 [] [ text "Choose Key" ]
-        , button [ onClick SelectAllKeys ] [ text "Select all" ]
-        , button [ onClick DeselectAllKeys ] [ text "Deselect all" ]
+        [ h2 [ class "text-center py-10 text-5xl" ] [ text "Select Keys" ]
         , ul []
-            (Theory.allKeys
+            (Theory.allPitchClasses
                 |> List.map
-                    (\key ->
-                        li []
-                            [ label [] [ text (Theory.viewKey key) ]
-                            , input
-                                [ type_ "checkbox"
-                                , onClick (ToggleKey key)
-                                , checked (List.member key keys)
-                                ]
-                                []
-                            ]
+                    (\pitchClass ->
+                        selectKey model
+                            { pitchClass = pitchClass
+                            , majorKey = { pitchClass = pitchClass, mode = Theory.MajorMode }
+                            , minorKey = { pitchClass = pitchClass, mode = Theory.MinorMode }
+                            , bluesKey = { pitchClass = pitchClass, mode = Theory.BluesMode }
+                            }
                     )
             )
         ]
 
 
 displayChord :
-    { debug : Bool
-    , chord : Theory.Chord
+    { chord : Theory.Chord
     , firstNote : Theory.Note
     , lastNote : Theory.Note
     }
     -> Html Msg
-displayChord { debug, chord, firstNote, lastNote } =
+displayChord { chord, firstNote, lastNote } =
     div []
-        [ if debug then
-            ChordInspector.render chord
-
-          else
-            span [] []
-        , p [] [ text (Theory.viewChord chord) ]
+        [ p [] [ text (Theory.viewChord chord) ]
         , case Theory.notesForChord chord of
             Just x ->
                 Piano.render
@@ -448,57 +434,65 @@ displayChord { debug, chord, firstNote, lastNote } =
         ]
 
 
-view : Model -> Html Msg
-view model =
-    div []
+practiceModeButtons : Model -> Html Msg
+practiceModeButtons model =
+    div [ class "text-center" ]
+        [ h2 [ class "py-10 text-5xl" ] [ text "Practice Mode" ]
+        , div [ class "flex pb-6" ]
+            [ UI.simpleButton
+                { label = "Key"
+                , classes = [ "flex-1", "rounded-r-none" ]
+                , handleClick = SetPracticeMode KeyMode
+                , color =
+                    if model.practiceMode == KeyMode then
+                        UI.Primary
+
+                    else
+                        UI.Secondary
+                }
+            , UI.simpleButton
+                { label = "Fine Tune"
+                , handleClick = SetPracticeMode FineTuneMode
+                , classes = [ "flex-1", "rounded-l-none" ]
+                , color =
+                    if model.practiceMode == FineTuneMode then
+                        UI.Primary
+
+                    else
+                        UI.Secondary
+                }
+            ]
+        ]
+
+
+preferences : Model -> Html Msg
+preferences model =
+    div [ class "pt-10 pb-20 px-10" ]
         [ Tempo.render
             { tempo = model.tempo
-            , handleIncrease = IncreaseTempo
-            , handleDecrease = DecreaseTempo
             , handleInput = SetTempo
             }
-        , div []
-            [ h2 [] [ text "Practice Mode" ]
-            , input
-                [ type_ "radio"
-                , id "key-mode"
-                , name "key-mode"
-                , checked (model.practiceMode == KeyMode)
-                , onClick (SetPracticeMode KeyMode)
-                ]
-                []
-            , label [ for "key-mode" ] [ text "Key Mode" ]
-            , input
-                [ type_ "radio"
-                , id "fine-tune-mode"
-                , name "fine-tune-mode"
-                , checked (model.practiceMode == FineTuneMode)
-                , onClick (SetPracticeMode FineTuneMode)
-                ]
-                []
-            , label [ for "fine-tune-mode" ] [ text "Fine-tuning Mode" ]
-            ]
+        , practiceModeButtons model
         , case model.practiceMode of
             KeyMode ->
-                keyCheckboxes model.whitelistedKeys
+                keyCheckboxes model
 
             FineTuneMode ->
                 div []
-                    [ pitchClassCheckboxes model.whitelistedPitchClasses
-                    , inversionCheckboxes model.whitelistedInversions
+                    [ inversionCheckboxes model.whitelistedInversions
                     , chordTypeCheckboxes model.whitelistedChordTypes
                     ]
-        , playPause model
-        , if model.debug.enable then
-            debugger
+        ]
 
-          else
-            span [] []
+
+practice : Model -> Html Msg
+practice model =
+    div []
+        [ playPause model
         , case model.selectedChord of
             Just chord ->
                 displayChord
-                    { debug = model.debug.inspectChord
-                    , chord = chord
+                    { chord = chord
                     , firstNote = model.firstNote
                     , lastNote = model.lastNote
                     }
@@ -506,6 +500,16 @@ view model =
             Nothing ->
                 p [] [ text "No chord to display" ]
         ]
+
+
+view : Model -> Html Msg
+view model =
+    case model.view of
+        Preferences ->
+            preferences model
+
+        Practice ->
+            practice model
 
 
 {-| For now, I'm just dumping things onto the page to sketch ideas.
