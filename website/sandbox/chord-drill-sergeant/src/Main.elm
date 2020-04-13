@@ -18,7 +18,7 @@ type alias Model =
     , whitelistedChordTypes : List Theory.ChordType
     , whitelistedInversions : List Theory.ChordInversion
     , whitelistedNoteClasses : List Theory.NoteClass
-    , selectedChord : Theory.Chord
+    , selectedChord : Maybe Theory.Chord
     , isPaused : Bool
     , tempo : Int
     , firstNote : Theory.Note
@@ -42,8 +42,11 @@ type Msg
     | ToggleInversion Theory.ChordInversion
     | ToggleChordType Theory.ChordType
     | ToggleNoteClass Theory.NoteClass
+    | DoNothing
 
 
+{-| The amount by which we increase or decrease tempo.
+-}
 tempoStep : Int
 tempoStep =
     5
@@ -59,14 +62,6 @@ bpmToMilliseconds target =
             1000 * 60
     in
     round (toFloat msPerMinute / toFloat target)
-
-
-cmajor : Theory.Chord
-cmajor =
-    { note = Theory.C4
-    , chordType = Theory.MajorDominant7
-    , chordInversion = Theory.Root
-    }
 
 
 {-| The initial state for the application.
@@ -97,7 +92,7 @@ init =
     , whitelistedChordTypes = chordTypes
     , whitelistedInversions = inversions
     , whitelistedNoteClasses = noteClasses
-    , selectedChord = cmajor
+    , selectedChord = Nothing
     , isPaused = True
     , tempo = 60
     , firstNote = firstNote
@@ -123,8 +118,11 @@ subscriptions { isPaused, tempo } =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        DoNothing ->
+            ( model, Cmd.none )
+
         NewChord chord ->
-            ( { model | selectedChord = chord }
+            ( { model | selectedChord = Just chord }
             , Cmd.none
             )
 
@@ -137,7 +135,7 @@ update msg model =
                             NewChord chord
 
                         ( Nothing, _ ) ->
-                            NewChord cmajor
+                            DoNothing
                 )
                 (Random.List.choose model.whitelistedChords)
             )
@@ -329,47 +327,64 @@ inversionCheckboxes inversions =
         )
 
 
+displayChord :
+    { debug : Bool
+    , chord : Theory.Chord
+    , firstNote : Theory.Note
+    , lastNote : Theory.Note
+    }
+    -> Html Msg
+displayChord { debug, chord, firstNote, lastNote } =
+    div []
+        [ if debug then
+            ChordInspector.render chord
+
+          else
+            span [] []
+        , p [] [ text (Theory.viewChord chord) ]
+        , case Theory.notesForChord chord of
+            Just x ->
+                Piano.render
+                    { highlight = x
+                    , start = firstNote
+                    , end = lastNote
+                    }
+
+            Nothing ->
+                p [] [ text "No chord to show" ]
+        ]
+
+
 view : Model -> Html Msg
 view model =
-    case Theory.notesForChord model.selectedChord of
-        Nothing ->
-            p [] [ text ("""
-                       We cannot render the chord that you provided because the
-                       notes that comprise the chord fall off either the upper
-                       or lower end of the piano.
+    div []
+        [ Tempo.render
+            { tempo = model.tempo
+            , handleIncrease = IncreaseTempo
+            , handleDecrease = DecreaseTempo
+            , handleInput = SetTempo
+            }
+        , noteClassCheckboxes model.whitelistedNoteClasses
+        , inversionCheckboxes model.whitelistedInversions
+        , chordTypeCheckboxes model.whitelistedChordTypes
+        , playPause model
+        , if model.debug.enable then
+            debugger
 
-                       Chord:
-                       """ ++ Theory.inspectChord model.selectedChord) ]
-
-        Just x ->
-            div []
-                [ Tempo.render
-                    { tempo = model.tempo
-                    , handleIncrease = IncreaseTempo
-                    , handleDecrease = DecreaseTempo
-                    , handleInput = SetTempo
+          else
+            span [] []
+        , case model.selectedChord of
+            Just chord ->
+                displayChord
+                    { debug = model.debug.inspectChord
+                    , chord = chord
+                    , firstNote = model.firstNote
+                    , lastNote = model.lastNote
                     }
-                , noteClassCheckboxes model.whitelistedNoteClasses
-                , inversionCheckboxes model.whitelistedInversions
-                , chordTypeCheckboxes model.whitelistedChordTypes
-                , playPause model
-                , if model.debug.enable then
-                    debugger
 
-                  else
-                    span [] []
-                , if model.debug.inspectChord then
-                    ChordInspector.render model.selectedChord
-
-                  else
-                    span [] []
-                , p [] [ text (Theory.viewChord model.selectedChord) ]
-                , Piano.render
-                    { highlight = x
-                    , start = model.firstNote
-                    , end = model.lastNote
-                    }
-                ]
+            Nothing ->
+                p [] [ text "No chord to display" ]
+        ]
 
 
 {-| For now, I'm just dumping things onto the page to sketch ideas.
