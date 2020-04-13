@@ -5,6 +5,7 @@ import ChordInspector
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import NoteInspector
 import Piano
 import Random
 import Random.List
@@ -18,16 +19,25 @@ type alias Model =
     , whitelistedChordTypes : List Theory.ChordType
     , whitelistedInversions : List Theory.ChordInversion
     , whitelistedPitchClasses : List Theory.PitchClass
+    , whitelistedKeys : List Theory.Key
     , selectedChord : Maybe Theory.Chord
     , isPaused : Bool
     , tempo : Int
     , firstNote : Theory.Note
     , lastNote : Theory.Note
+    , practiceMode : PracticeMode
     , debug :
         { enable : Bool
         , inspectChord : Bool
         }
     }
+
+
+{-| Control the type of practice you'd like.
+-}
+type PracticeMode
+    = KeyMode
+    | FineTuneMode
 
 
 type Msg
@@ -42,7 +52,11 @@ type Msg
     | ToggleInversion Theory.ChordInversion
     | ToggleChordType Theory.ChordType
     | TogglePitchClass Theory.PitchClass
+    | ToggleKey Theory.Key
     | DoNothing
+    | SetPracticeMode PracticeMode
+    | SelectAllKeys
+    | DeselectAllKeys
 
 
 {-| The amount by which we increase or decrease tempo.
@@ -80,18 +94,31 @@ init =
 
         pitchClasses =
             Theory.allPitchClasses
+
+        keys =
+            Theory.allKeys
+
+        practiceMode =
+            KeyMode
     in
-    { whitelistedChords =
-        Theory.allChords
-            { start = firstNote
-            , end = lastNote
-            , inversions = inversions
-            , chordTypes = chordTypes
-            , pitchClasses = pitchClasses
-            }
+    { practiceMode = practiceMode
+    , whitelistedChords =
+        case practiceMode of
+            KeyMode ->
+                keys |> List.concatMap Theory.chordsForKey
+
+            FineTuneMode ->
+                Theory.allChords
+                    { start = firstNote
+                    , end = lastNote
+                    , inversions = inversions
+                    , chordTypes = chordTypes
+                    , pitchClasses = pitchClasses
+                    }
     , whitelistedChordTypes = chordTypes
     , whitelistedInversions = inversions
     , whitelistedPitchClasses = pitchClasses
+    , whitelistedKeys = keys
     , selectedChord = Nothing
     , isPaused = True
     , tempo = 60
@@ -120,6 +147,31 @@ update msg model =
     case msg of
         DoNothing ->
             ( model, Cmd.none )
+
+        SetPracticeMode practiceMode ->
+            ( { model
+                | practiceMode = practiceMode
+                , isPaused = True
+              }
+            , Cmd.none
+            )
+
+        SelectAllKeys ->
+            ( { model
+                | whitelistedKeys = Theory.allKeys
+                , whitelistedChords =
+                    Theory.allKeys |> List.concatMap Theory.chordsForKey
+              }
+            , Cmd.none
+            )
+
+        DeselectAllKeys ->
+            ( { model
+                | whitelistedKeys = []
+                , whitelistedChords = []
+              }
+            , Cmd.none
+            )
 
         NewChord chord ->
             ( { model | selectedChord = Just chord }
@@ -239,6 +291,23 @@ update msg model =
             , Cmd.none
             )
 
+        ToggleKey key ->
+            let
+                keys =
+                    if List.member key model.whitelistedKeys then
+                        List.filter ((/=) key) model.whitelistedKeys
+
+                    else
+                        key :: model.whitelistedKeys
+            in
+            ( { model
+                | whitelistedKeys = keys
+                , whitelistedChords =
+                    keys |> List.concatMap Theory.chordsForKey
+              }
+            , Cmd.none
+            )
+
         SetTempo tempo ->
             ( { model
                 | tempo =
@@ -327,6 +396,30 @@ inversionCheckboxes inversions =
         )
 
 
+keyCheckboxes : List Theory.Key -> Html Msg
+keyCheckboxes keys =
+    div []
+        [ h2 [] [ text "Choose Key" ]
+        , button [ onClick SelectAllKeys ] [ text "Select all" ]
+        , button [ onClick DeselectAllKeys ] [ text "Deselect all" ]
+        , ul []
+            (Theory.allKeys
+                |> List.map
+                    (\key ->
+                        li []
+                            [ label [] [ text (Theory.viewKey key) ]
+                            , input
+                                [ type_ "checkbox"
+                                , onClick (ToggleKey key)
+                                , checked (List.member key keys)
+                                ]
+                                []
+                            ]
+                    )
+            )
+        ]
+
+
 displayChord :
     { debug : Bool
     , chord : Theory.Chord
@@ -364,9 +457,37 @@ view model =
             , handleDecrease = DecreaseTempo
             , handleInput = SetTempo
             }
-        , pitchClassCheckboxes model.whitelistedPitchClasses
-        , inversionCheckboxes model.whitelistedInversions
-        , chordTypeCheckboxes model.whitelistedChordTypes
+        , div []
+            [ h2 [] [ text "Practice Mode" ]
+            , input
+                [ type_ "radio"
+                , id "key-mode"
+                , name "key-mode"
+                , checked (model.practiceMode == KeyMode)
+                , onClick (SetPracticeMode KeyMode)
+                ]
+                []
+            , label [ for "key-mode" ] [ text "Key Mode" ]
+            , input
+                [ type_ "radio"
+                , id "fine-tune-mode"
+                , name "fine-tune-mode"
+                , checked (model.practiceMode == FineTuneMode)
+                , onClick (SetPracticeMode FineTuneMode)
+                ]
+                []
+            , label [ for "fine-tune-mode" ] [ text "Fine-tuning Mode" ]
+            ]
+        , case model.practiceMode of
+            KeyMode ->
+                keyCheckboxes model.whitelistedKeys
+
+            FineTuneMode ->
+                div []
+                    [ pitchClassCheckboxes model.whitelistedPitchClasses
+                    , inversionCheckboxes model.whitelistedInversions
+                    , chordTypeCheckboxes model.whitelistedChordTypes
+                    ]
         , playPause model
         , if model.debug.enable then
             debugger

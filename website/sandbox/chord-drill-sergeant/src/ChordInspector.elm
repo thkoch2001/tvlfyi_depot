@@ -1,6 +1,7 @@
 module ChordInspector exposing (render)
 
 import Html exposing (..)
+import NoteInspector
 import Theory
 
 
@@ -11,15 +12,4 @@ render chord =
             p [] [ text "Cannot retrieve the notes for the chord." ]
 
         Just notes ->
-            ul []
-                (notes
-                    |> List.map
-                        (\note ->
-                            li []
-                                [ text
-                                    (Theory.viewNote
-                                        note
-                                    )
-                                ]
-                        )
-                )
+            NoteInspector.render notes

@@ -1,5 +1,7 @@
 module Misc exposing (..)
 
+import Array exposing (Array)
+
 
 comesAfter : a -> List a -> Maybe a
 comesAfter x xs =
@@ -33,3 +35,13 @@ comesBefore x xs =
 
             else
                 comesBefore x (z :: rest)
+
+
+find : (a -> Bool) -> List a -> Maybe a
+find pred xs =
+    case xs |> List.filter pred of
+        [] ->
+            Nothing
+
+        x :: _ ->
+            Just x
