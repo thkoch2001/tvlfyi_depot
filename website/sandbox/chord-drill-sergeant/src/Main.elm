@@ -17,7 +17,7 @@ type alias Model =
     { whitelistedChords : List Theory.Chord
     , whitelistedChordTypes : List Theory.ChordType
     , whitelistedInversions : List Theory.ChordInversion
-    , whitelistedNoteClasses : List Theory.NoteClass
+    , whitelistedPitchClasses : List Theory.PitchClass
     , selectedChord : Maybe Theory.Chord
     , isPaused : Bool
     , tempo : Int
@@ -41,7 +41,7 @@ type Msg
     | ToggleInspectChord
     | ToggleInversion Theory.ChordInversion
     | ToggleChordType Theory.ChordType
-    | ToggleNoteClass Theory.NoteClass
+    | TogglePitchClass Theory.PitchClass
     | DoNothing
 
 
@@ -78,8 +78,8 @@ init =
         chordTypes =
             Theory.allChordTypes
 
-        noteClasses =
-            Theory.allNoteClasses
+        pitchClasses =
+            Theory.allPitchClasses
     in
     { whitelistedChords =
         Theory.allChords
@@ -87,11 +87,11 @@ init =
             , end = lastNote
             , inversions = inversions
             , chordTypes = chordTypes
-            , noteClasses = noteClasses
+            , pitchClasses = pitchClasses
             }
     , whitelistedChordTypes = chordTypes
     , whitelistedInversions = inversions
-    , whitelistedNoteClasses = noteClasses
+    , whitelistedPitchClasses = pitchClasses
     , selectedChord = Nothing
     , isPaused = True
     , tempo = 60
@@ -187,7 +187,7 @@ update msg model =
                         , end = model.lastNote
                         , inversions = model.whitelistedInversions
                         , chordTypes = chordTypes
-                        , noteClasses = model.whitelistedNoteClasses
+                        , pitchClasses = model.whitelistedPitchClasses
                         }
               }
             , Cmd.none
@@ -210,30 +210,30 @@ update msg model =
                         , end = model.lastNote
                         , inversions = inversions
                         , chordTypes = model.whitelistedChordTypes
-                        , noteClasses = model.whitelistedNoteClasses
+                        , pitchClasses = model.whitelistedPitchClasses
                         }
               }
             , Cmd.none
             )
 
-        ToggleNoteClass noteClass ->
+        TogglePitchClass pitchClass ->
             let
-                noteClasses =
-                    if List.member noteClass model.whitelistedNoteClasses then
-                        List.filter ((/=) noteClass) model.whitelistedNoteClasses
+                pitchClasses =
+                    if List.member pitchClass model.whitelistedPitchClasses then
+                        List.filter ((/=) pitchClass) model.whitelistedPitchClasses
 
                     else
-                        noteClass :: model.whitelistedNoteClasses
+                        pitchClass :: model.whitelistedPitchClasses
             in
             ( { model
-                | whitelistedNoteClasses = noteClasses
+                | whitelistedPitchClasses = pitchClasses
                 , whitelistedChords =
                     Theory.allChords
                         { start = model.firstNote
                         , end = model.lastNote
                         , inversions = model.whitelistedInversions
                         , chordTypes = model.whitelistedChordTypes
-                        , noteClasses = noteClasses
+                        , pitchClasses = pitchClasses
                         }
               }
             , Cmd.none
@@ -270,18 +270,18 @@ debugger =
         ]
 
 
-noteClassCheckboxes : List Theory.NoteClass -> Html Msg
-noteClassCheckboxes noteClasses =
+pitchClassCheckboxes : List Theory.PitchClass -> Html Msg
+pitchClassCheckboxes pitchClasses =
     ul []
-        (Theory.allNoteClasses
+        (Theory.allPitchClasses
             |> List.map
-                (\noteClass ->
+                (\pitchClass ->
                     li []
-                        [ label [] [ text (Theory.viewNoteClass noteClass) ]
+                        [ label [] [ text (Theory.viewPitchClass pitchClass) ]
                         , input
                             [ type_ "checkbox"
-                            , onClick (ToggleNoteClass noteClass)
-                            , checked (List.member noteClass noteClasses)
+                            , onClick (TogglePitchClass pitchClass)
+                            , checked (List.member pitchClass pitchClasses)
                             ]
                             []
                         ]
@@ -364,7 +364,7 @@ view model =
             , handleDecrease = DecreaseTempo
             , handleInput = SetTempo
             }
-        , noteClassCheckboxes model.whitelistedNoteClasses
+        , pitchClassCheckboxes model.whitelistedPitchClasses
         , inversionCheckboxes model.whitelistedInversions
         , chordTypeCheckboxes model.whitelistedChordTypes
         , playPause model
