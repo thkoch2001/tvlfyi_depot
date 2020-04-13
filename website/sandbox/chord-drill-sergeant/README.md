@@ -53,5 +53,5 @@ in which you can develop:
 
 ```shell
 $ nix-shell
-$ elm reactor
+$ elm-live -- src/Main.elm --output=elm.js
 ```
