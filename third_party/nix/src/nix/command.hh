@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "libexpr/common-eval-args.hh"
 #include "libutil/args.hh"
 
@@ -80,8 +81,7 @@ struct SourceExprCommand : virtual Args, StoreCommand, MixEvalArgs {
 
  private:
   std::shared_ptr<EvalState> evalState;
-
-  Value* vSourceExpr = 0;
+  std::shared_ptr<Value> vSourceExpr;
 };
 
 enum RealiseMode { Build, NoBuild, DryRun };

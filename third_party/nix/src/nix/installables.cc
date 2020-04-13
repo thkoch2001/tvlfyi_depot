@@ -1,6 +1,8 @@
 #include <regex>
 #include <utility>
 
+#include <gc/gc.h>
+
 #include "libexpr/attr-path.hh"
 #include "libexpr/common-eval-args.hh"
 #include "libexpr/eval-inline.hh"
@@ -24,12 +26,15 @@ SourceExprCommand::SourceExprCommand() {
 
 Value* SourceExprCommand::getSourceExpr(EvalState& state) {
   if (vSourceExpr != nullptr) {
-    return vSourceExpr;
+    return vSourceExpr.get();
   }
 
   auto sToplevel = state.symbols.Create("_toplevel");
 
-  vSourceExpr = state.allocValue();
+  // Allocate the vSourceExpr Value as uncollectable. Boehm GC doesn't
+  // consider the member variable "alive" during execution causing it to be
+  // GC'ed in the middle of evaluation.
+  vSourceExpr = std::allocate_shared<Value>(traceable_allocator<Value>());
 
   if (!file.empty()) {
     state.evalFile(lookupFileArg(state, file), *vSourceExpr);
@@ -74,7 +79,7 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
     }
   }
 
-  return vSourceExpr;
+  return vSourceExpr.get();
 }
 
 ref<EvalState> SourceExprCommand::getEvalState() {
