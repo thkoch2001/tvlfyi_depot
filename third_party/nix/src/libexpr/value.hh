@@ -242,9 +242,9 @@ void mkPath(Value& v, const char* s);
    not included. */
 size_t valueSize(Value& v);
 
-typedef std::vector<Value*, gc_allocator<Value*> > ValueVector;
+typedef std::vector<Value*, traceable_allocator<Value*>> ValueVector;
 typedef std::map<Symbol, Value*, std::less<Symbol>,
-                 gc_allocator<std::pair<const Symbol, Value*> > >
+                 traceable_allocator<std::pair<const Symbol, Value*>>>
     ValueMap;
 
 }  // namespace nix
