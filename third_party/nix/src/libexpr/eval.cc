@@ -5,9 +5,12 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <new>
 #include <optional>
 #include <variant>
+
+#define GC_INCLUDE_NEW
 
 #include <absl/strings/match.h>
 #include <gc/gc.h>
@@ -38,6 +41,10 @@ static char* dupString(const char* s) {
     throw std::bad_alloc();
   }
   return t;
+}
+
+std::shared_ptr<Value*> allocRootValue(Value* v) {
+  return std::allocate_shared<Value*>(traceable_allocator<Value*>(), v);
 }
 
 static void printValue(std::ostream& str, std::set<const Value*>& active,

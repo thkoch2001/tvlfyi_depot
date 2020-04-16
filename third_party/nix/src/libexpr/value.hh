@@ -247,4 +247,6 @@ typedef std::map<Symbol, Value*, std::less<Symbol>,
                  traceable_allocator<std::pair<const Symbol, Value*>>>
     ValueMap;
 
+std::shared_ptr<Value*> allocRootValue(Value* v);
+
 }  // namespace nix

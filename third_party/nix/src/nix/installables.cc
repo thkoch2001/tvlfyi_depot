@@ -1,8 +1,6 @@
 #include <regex>
 #include <utility>
 
-#include <gc/gc.h>
-
 #include "libexpr/attr-path.hh"
 #include "libexpr/common-eval-args.hh"
 #include "libexpr/eval-inline.hh"
@@ -26,7 +24,7 @@ SourceExprCommand::SourceExprCommand() {
 
 Value* SourceExprCommand::getSourceExpr(EvalState& state) {
   if (vSourceExpr != nullptr) {
-    return vSourceExpr.get();
+    return *vSourceExpr;
   }
 
   auto sToplevel = state.symbols.Create("_toplevel");
@@ -34,18 +32,18 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
   // Allocate the vSourceExpr Value as uncollectable. Boehm GC doesn't
   // consider the member variable "alive" during execution causing it to be
   // GC'ed in the middle of evaluation.
-  vSourceExpr = std::allocate_shared<Value>(traceable_allocator<Value>());
+  vSourceExpr = allocRootValue(state.allocValue());
 
   if (!file.empty()) {
-    state.evalFile(lookupFileArg(state, file), *vSourceExpr);
+    state.evalFile(lookupFileArg(state, file), **vSourceExpr);
   } else {
     /* Construct the installation source from $NIX_PATH. */
 
     auto searchPath = state.getSearchPath();
 
-    state.mkAttrs(*vSourceExpr, 1024);
+    state.mkAttrs(**vSourceExpr, 1024);
 
-    mkBool(*state.allocAttr(*vSourceExpr, sToplevel), true);
+    mkBool(*state.allocAttr(**vSourceExpr, sToplevel), true);
 
     std::unordered_set<std::string> seen;
 
@@ -61,7 +59,7 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
                   state.getBuiltin("nixPath"));
       Value* v2 = state.allocValue();
       mkApp(*v2, *v1, mkString(*state.allocValue(), name));
-      mkApp(*state.allocAttr(*vSourceExpr, state.symbols.Create(name)),
+      mkApp(*state.allocAttr(**vSourceExpr, state.symbols.Create(name)),
             state.getBuiltin("import"), *v2);
     };
 
@@ -79,7 +77,7 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
     }
   }
 
-  return vSourceExpr.get();
+  return *vSourceExpr;
 }
 
 ref<EvalState> SourceExprCommand::getEvalState() {
