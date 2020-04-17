@@ -126,7 +126,7 @@ init =
     , tempo = 30
     , firstNote = firstNote
     , lastNote = lastNote
-    , view = Practice
+    , view = Preferences
     }
 
 
@@ -158,6 +158,7 @@ update msg model =
         SetView x ->
             ( { model
                 | view = x
+                , isPaused = True
               }
             , Cmd.none
             )
@@ -368,53 +369,61 @@ inversionCheckboxes inversions =
 selectKey :
     Model
     ->
-        { pitchClass : Theory.PitchClass
-        , majorKey : Theory.Key
-        , minorKey : Theory.Key
-        , bluesKey : Theory.Key
+        { relativeMajor : Theory.Key
+        , relativeMinor : Theory.Key
         }
     -> Html Msg
-selectKey model { pitchClass, majorKey, minorKey, bluesKey } =
+selectKey model { relativeMajor, relativeMinor } =
     let
         active key =
             List.member key model.whitelistedKeys
+
+        buttonLabel major minor =
+            Theory.viewKey major ++ ", " ++ Theory.viewKey minor
     in
     div [ class "flex pt-0" ]
-        [ p [ class "text-gray-500 text-center text-5xl flex-1 py-10" ] [ text (Theory.viewPitchClass pitchClass) ]
-        , UI.textToggleButton
-            { label = "major"
-            , handleClick = ToggleKey majorKey
+        [ UI.textToggleButton
+            { label = buttonLabel relativeMajor relativeMinor
+            , handleClick = ToggleKey relativeMinor
             , classes = [ "flex-1" ]
-            , toggled = active majorKey
-            }
-        , UI.textToggleButton
-            { label = "minor"
-            , handleClick = ToggleKey minorKey
-            , classes = [ "flex-1" ]
-            , toggled = active minorKey
-            }
-        , UI.textToggleButton
-            { label = "blues"
-            , handleClick = ToggleKey bluesKey
-            , classes = [ "flex-1" ]
-            , toggled = active bluesKey
+            , toggled = active relativeMinor
             }
         ]
 
 
 keyCheckboxes : Model -> Html Msg
 keyCheckboxes model =
+    let
+        majorKey pitchClass =
+            { pitchClass = pitchClass, mode = Theory.MajorMode }
+
+        minorKey pitchClass =
+            { pitchClass = pitchClass, mode = Theory.MinorMode }
+
+        circleOfFifths =
+            [ ( Theory.C, Theory.A )
+            , ( Theory.G, Theory.E )
+            , ( Theory.D, Theory.B )
+            , ( Theory.A, Theory.F_sharp )
+            , ( Theory.E, Theory.C_sharp )
+            , ( Theory.B, Theory.G_sharp )
+            , ( Theory.F_sharp, Theory.D_sharp )
+            , ( Theory.C_sharp, Theory.A_sharp )
+            , ( Theory.G_sharp, Theory.F )
+            , ( Theory.D_sharp, Theory.C )
+            , ( Theory.A_sharp, Theory.G )
+            , ( Theory.F, Theory.D )
+            ]
+    in
     div []
-        [ h2 [ class "text-center py-10 text-5xl" ] [ text "Select Keys" ]
+        [ h2 [ class "text-gray-500 text-center pt-10 text-5xl" ] [ text "Select keys" ]
         , ul []
-            (Theory.allPitchClasses
+            (circleOfFifths
                 |> List.map
-                    (\pitchClass ->
+                    (\( major, minor ) ->
                         selectKey model
-                            { pitchClass = pitchClass
-                            , majorKey = { pitchClass = pitchClass, mode = Theory.MajorMode }
-                            , minorKey = { pitchClass = pitchClass, mode = Theory.MinorMode }
-                            , bluesKey = { pitchClass = pitchClass, mode = Theory.BluesMode }
+                            { relativeMajor = majorKey major
+                            , relativeMinor = minorKey minor
                             }
                     )
             )
@@ -478,7 +487,6 @@ preferences model =
             { tempo = model.tempo
             , handleInput = SetTempo
             }
-        , practiceModeButtons model
         , case model.practiceMode of
             KeyMode ->
                 keyCheckboxes model
@@ -505,7 +513,7 @@ practice model =
 
         ( handleClick, extraClasses, buttonText ) =
             if model.isPaused then
-                ( Play, [ "opacity-50" ], "Press to resume" )
+                ( Play, [ "opacity-50" ], "Press to practice" )
 
             else
                 ( Pause, [ "opacity-0" ], "" )
