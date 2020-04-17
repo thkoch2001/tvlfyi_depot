@@ -4,6 +4,7 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Icon
 import Piano
 import Random
 import Random.List
@@ -57,6 +58,7 @@ type Msg
     | SetPracticeMode PracticeMode
     | SelectAllKeys
     | DeselectAllKeys
+    | SetView View
 
 
 {-| The amount by which we increase or decrease tempo.
@@ -84,7 +86,7 @@ init : Model
 init =
     let
         ( firstNote, lastNote ) =
-            ( Theory.A1, Theory.C8 )
+            ( Theory.C3, Theory.C6 )
 
         inversions =
             Theory.allInversions
@@ -124,7 +126,7 @@ init =
     , tempo = 30
     , firstNote = firstNote
     , lastNote = lastNote
-    , view = Preferences
+    , view = Practice
     }
 
 
@@ -149,6 +151,13 @@ update msg model =
             ( { model
                 | practiceMode = practiceMode
                 , isPaused = True
+              }
+            , Cmd.none
+            )
+
+        SetView x ->
+            ( { model
+                | view = x
               }
             , Cmd.none
             )
@@ -412,28 +421,6 @@ keyCheckboxes model =
         ]
 
 
-displayChord :
-    { chord : Theory.Chord
-    , firstNote : Theory.Note
-    , lastNote : Theory.Note
-    }
-    -> Html Msg
-displayChord { chord, firstNote, lastNote } =
-    div []
-        [ p [] [ text (Theory.viewChord chord) ]
-        , case Theory.notesForChord chord of
-            Just x ->
-                Piano.render
-                    { highlight = x
-                    , start = firstNote
-                    , end = lastNote
-                    }
-
-            Nothing ->
-                p [] [ text "No chord to show" ]
-        ]
-
-
 practiceModeButtons : Model -> Html Msg
 practiceModeButtons model =
     div [ class "text-center" ]
@@ -465,10 +452,29 @@ practiceModeButtons model =
         ]
 
 
+openPreferences : Html Msg
+openPreferences =
+    button
+        [ class "w-48 h-48 absolute left-0 top-0 z-20"
+        , onClick (SetView Preferences)
+        ]
+        [ Icon.cog ]
+
+
+closePreferences : Html Msg
+closePreferences =
+    button
+        [ class "w-48 h-48 absolute right-0 top-0 z-10"
+        , onClick (SetView Practice)
+        ]
+        [ Icon.close ]
+
+
 preferences : Model -> Html Msg
 preferences model =
     div [ class "pt-10 pb-20 px-10" ]
-        [ Tempo.render
+        [ closePreferences
+        , Tempo.render
             { tempo = model.tempo
             , handleInput = SetTempo
             }
@@ -487,18 +493,36 @@ preferences model =
 
 practice : Model -> Html Msg
 practice model =
-    div []
-        [ playPause model
-        , case model.selectedChord of
-            Just chord ->
-                displayChord
-                    { chord = chord
-                    , firstNote = model.firstNote
-                    , lastNote = model.lastNote
-                    }
+    let
+        classes =
+            [ "bg-gray-600"
+            , "h-screen"
+            , "w-full"
+            , "absolute"
+            , "z-10"
+            , "text-6xl"
+            ]
 
-            Nothing ->
-                p [] [ text "No chord to display" ]
+        ( handleClick, extraClasses, buttonText ) =
+            if model.isPaused then
+                ( Play, [ "opacity-50" ], "Press to resume" )
+
+            else
+                ( Pause, [ "opacity-0" ], "" )
+    in
+    div []
+        [ button
+            [ [ classes, extraClasses ] |> List.concat |> UI.tw |> class
+            , onClick handleClick
+            ]
+            [ text buttonText
+            ]
+        , openPreferences
+        , Piano.render
+            { highlight = model.selectedChord |> Maybe.andThen Theory.notesForChord |> Maybe.withDefault []
+            , start = model.firstNote
+            , end = model.lastNote
+            }
         ]
 
 

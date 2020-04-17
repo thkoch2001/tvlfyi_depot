@@ -79,7 +79,7 @@ textToggleButton { label, toggled, handleClick, classes } =
         buttonClasses =
             [ textColor
             , textTreatment
-            , "py-10"
+            , "py-8"
             , "px-10"
             , "text-5xl"
             ]

@@ -8,10 +8,18 @@ import List.Extra
 import Theory
 
 
+{-| On mobile phones, the keyboard displays vertically.
+-}
+type Direction
+    = Horizontal
+    | Vertical
+
+
 type alias KeyMarkup a =
     { offset : Int
     , isHighlit : Bool
     , note : Theory.Note
+    , direction : Direction
     }
     -> Html a
 
@@ -32,121 +40,149 @@ pixelate x =
 
 {-| Pixel width of the white keys.
 -}
-naturalWidth : Int
-naturalWidth =
-    45
+naturalWidth : Direction -> Int
+naturalWidth direction =
+    case direction of
+        Vertical ->
+            -- Right now, I'm designing this specifically for my Google Pixel 4
+            -- phone, which has a screen width of 1080px.
+            1080
+
+        Horizontal ->
+            45
 
 
 {-| Pixel height of the white keys.
 -}
-naturalHeight : Int
-naturalHeight =
-    250
+naturalHeight : Direction -> Int
+naturalHeight direction =
+    case direction of
+        Vertical ->
+            -- Right now, I'm designing this specifically for my Google Pixel 4
+            -- phone, which has a screen height of 2280px. 2280 / 21
+            -- (i.e. no. natural keys) ~= 108
+            108
+
+        Horizontal ->
+            250
 
 
 {-| Pixel width of the black keys.
 -}
-accidentalWidth : Int
-accidentalWidth =
-    round (toFloat naturalWidth * 0.4)
+accidentalWidth : Direction -> Int
+accidentalWidth direction =
+    case direction of
+        Vertical ->
+            round (toFloat (naturalWidth direction) * 0.6)
+
+        Horizontal ->
+            round (toFloat (naturalWidth direction) * 0.4)
 
 
 {-| Pixel height of the black keys.
 -}
-accidentalHeight : Int
-accidentalHeight =
-    round (toFloat naturalHeight * 0.63)
+accidentalHeight : Direction -> Int
+accidentalHeight direction =
+    case direction of
+        Vertical ->
+            round (toFloat (naturalHeight direction) * 0.63)
+
+        Horizontal ->
+            round (toFloat (naturalHeight direction) * 0.63)
 
 
-{-| These are the white keys on most modern pianos.
+{-| Return the markup for either a white or a black key.
 -}
-natural : KeyMarkup a
-natural { offset, isHighlit, note } =
+pianoKey : KeyMarkup a
+pianoKey { offset, isHighlit, note, direction } =
+    let
+        sharedClasses =
+            [ "box-border" ]
+
+        { keyWidth, keyHeight, keyColor, offsetEdge, extraClasses } =
+            case ( Theory.keyClass note, direction ) of
+                ( Theory.Natural, Vertical ) ->
+                    { keyWidth = naturalWidth Vertical
+                    , keyHeight = naturalHeight Vertical
+                    , keyColor = "white"
+                    , offsetEdge = "top"
+                    , extraClasses = []
+                    }
+
+                ( Theory.Natural, Horizontal ) ->
+                    { keyWidth = naturalWidth Horizontal
+                    , keyHeight = naturalHeight Horizontal
+                    , keyColor = "white"
+                    , offsetEdge = "left"
+                    , extraClasses = []
+                    }
+
+                ( Theory.Accidental, Vertical ) ->
+                    { keyWidth = accidentalWidth Vertical
+                    , keyHeight = accidentalHeight Vertical
+                    , keyColor = "black"
+                    , offsetEdge = "top"
+                    , extraClasses = [ "z-10" ]
+                    }
+
+                ( Theory.Accidental, Horizontal ) ->
+                    { keyWidth = accidentalWidth Horizontal
+                    , keyHeight = accidentalHeight Horizontal
+                    , keyColor = "black"
+                    , offsetEdge = "left"
+                    , extraClasses = [ "z-10" ]
+                    }
+    in
     div
         [ style "background-color"
             (if isHighlit then
                 "red"
 
              else
-                "white"
+                keyColor
             )
-        , style "border-right" "1px solid black"
         , style "border-top" "1px solid black"
         , style "border-bottom" "1px solid black"
-        , style "width" (pixelate naturalWidth)
-        , style "height" (pixelate naturalHeight)
-        , style "position" "absolute"
-        , style "left" (String.fromInt offset ++ "px")
-        ]
-        []
-
-
-{-| These are the black keys on most modern pianos.
--}
-accidental : KeyMarkup a
-accidental { offset, isHighlit, note } =
-    div
-        [ style "background-color"
-            (if isHighlit then
-                "red"
-
-             else
-                "black"
-            )
-        , style "border-top" "1px solid black"
         , style "border-left" "1px solid black"
         , style "border-right" "1px solid black"
-        , style "border-bottom" "1px solid black"
-        , style "width" (pixelate accidentalWidth)
-        , style "height" (pixelate accidentalHeight)
+        , style "width" (pixelate keyWidth)
+        , style "height" (pixelate keyHeight)
         , style "position" "absolute"
-        , style "left" (String.fromInt offset ++ "px")
-        , style "z-index" "1"
+        , style offsetEdge (String.fromInt offset ++ "px")
+        , class <| String.join " " (List.concat [ sharedClasses, extraClasses ])
         ]
         []
 
 
-makeKey : List Theory.Note -> Theory.Note -> (Int -> Html a)
-makeKey highlight note =
-    if Theory.isNatural note then
-        \x ->
-            natural
-                { offset = x
-                , isHighlit = List.member note highlight
-                , note = note
-                }
-
-    else
-        \x ->
-            accidental
-                { offset = x
-                , isHighlit = List.member note highlight
-                , note = note
-                }
-
-
-{-| A section of the piano consisting of all twelve notes. The name octave
-implies eight notes, which most scales (not the blues scale) honor.
+{-| A section of the piano consisting of all twelve notes.
 -}
-octave : Theory.Note -> Theory.Note -> List Theory.Note -> List (Html a)
-octave start end highlight =
+keys : Direction -> Theory.Note -> Theory.Note -> List Theory.Note -> List (Html a)
+keys direction start end highlight =
     let
         isHighlit note =
             List.member note highlight
 
         spacing prevOffset prev curr =
-            case ( Theory.keyClass prev, Theory.keyClass curr ) of
-                ( Theory.Natural, Theory.Accidental ) ->
-                    -- idk this calculation yet
-                    prevOffset + naturalWidth - round (toFloat accidentalWidth / 2)
+            case ( Theory.keyClass prev, Theory.keyClass curr, direction ) of
+                -- Horizontal
+                ( Theory.Natural, Theory.Accidental, Horizontal ) ->
+                    prevOffset + naturalWidth direction - round (toFloat (accidentalWidth direction) / 2)
 
-                ( Theory.Accidental, Theory.Natural ) ->
-                    -- accidentalWidth / 2
-                    prevOffset + round (toFloat accidentalWidth / 2)
+                ( Theory.Accidental, Theory.Natural, Horizontal ) ->
+                    prevOffset + round (toFloat (accidentalWidth direction) / 2)
 
-                ( Theory.Natural, Theory.Natural ) ->
-                    -- naturalWidth
-                    prevOffset + naturalWidth
+                ( Theory.Natural, Theory.Natural, Horizontal ) ->
+                    prevOffset + naturalWidth direction
+
+                -- Vertical
+                ( Theory.Natural, Theory.Accidental, Vertical ) ->
+                    prevOffset + naturalHeight direction - round (toFloat (accidentalHeight direction) / 2)
+
+                ( Theory.Accidental, Theory.Natural, Vertical ) ->
+                    prevOffset + round (toFloat (accidentalHeight direction) / 2)
+
+                ( Theory.Natural, Theory.Natural, Vertical ) ->
+                    prevOffset + naturalHeight direction
 
                 -- This pattern should never hit.
                 _ ->
@@ -158,7 +194,16 @@ octave start end highlight =
                     (\curr ( prevOffset, prev, result ) ->
                         case ( prevOffset, prev ) of
                             ( Nothing, Nothing ) ->
-                                ( Just 0, Just curr, makeKey highlight curr 0 :: result )
+                                ( Just 0
+                                , Just curr
+                                , pianoKey
+                                    { offset = 0
+                                    , isHighlit = List.member curr highlight
+                                    , note = curr
+                                    , direction = direction
+                                    }
+                                    :: result
+                                )
 
                             ( Just po, Just p ) ->
                                 let
@@ -167,7 +212,13 @@ octave start end highlight =
                                 in
                                 ( Just offset
                                 , Just curr
-                                , makeKey highlight curr offset :: result
+                                , pianoKey
+                                    { offset = offset
+                                    , isHighlit = List.member curr highlight
+                                    , note = curr
+                                    , direction = direction
+                                    }
+                                    :: result
                                 )
 
                             -- This pattern should never hit.
@@ -184,4 +235,4 @@ octave start end highlight =
 render : Props -> Html a
 render { highlight, start, end } =
     div [ style "display" "flex" ]
-        (octave start end highlight |> List.reverse |> List.repeat 1 |> List.concat)
+        (keys Vertical start end highlight |> List.reverse |> List.repeat 1 |> List.concat)
