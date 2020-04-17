@@ -177,6 +177,11 @@ in {
         enableACME = true;
         root = briefcase.website.sandbox;
       };
+      "learnpianochords.app" = {
+        addSSL = true;
+        enableACME = true;
+        root = briefcase.website.sandbox.chord-drill-sergeant;
+      };
     };
   };
 
