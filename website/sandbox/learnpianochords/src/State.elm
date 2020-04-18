@@ -234,6 +234,7 @@ update msg model =
                 | whitelistedKeys = keys
                 , whitelistedChords =
                     keys |> List.concatMap Theory.chordsForKey
+                , selectedChord = Nothing
               }
             , Cmd.none
             )
