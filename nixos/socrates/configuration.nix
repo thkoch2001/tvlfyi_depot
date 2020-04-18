@@ -180,7 +180,7 @@ in {
       "learnpianochords.app" = {
         addSSL = true;
         enableACME = true;
-        root = briefcase.website.sandbox.chord-drill-sergeant;
+        root = briefcase.website.sandbox.learnpianochords;
       };
     };
   };
