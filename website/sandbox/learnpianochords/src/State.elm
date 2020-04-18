@@ -17,8 +17,6 @@ type Msg
     | ToggleKey Theory.Key
     | DoNothing
     | SetPracticeMode PracticeMode
-    | SelectAllKeys
-    | DeselectAllKeys
     | SetView View
 
 
@@ -121,23 +119,6 @@ update msg model =
             ( { model
                 | view = x
                 , isPaused = True
-              }
-            , Cmd.none
-            )
-
-        SelectAllKeys ->
-            ( { model
-                | whitelistedKeys = Theory.allKeys
-                , whitelistedChords =
-                    Theory.allKeys |> List.concatMap Theory.chordsForKey
-              }
-            , Cmd.none
-            )
-
-        DeselectAllKeys ->
-            ( { model
-                | whitelistedKeys = []
-                , whitelistedChords = []
               }
             , Cmd.none
             )
