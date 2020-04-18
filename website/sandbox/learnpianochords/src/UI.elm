@@ -114,3 +114,49 @@ textField { placeholderText, handleInput, classes } =
         , placeholder placeholderText
         ]
         []
+
+
+overlayButton :
+    { label : String
+    , handleClick : msg
+    , isVisible : Bool
+    }
+    -> Html msg
+overlayButton { label, handleClick, isVisible } =
+    let
+        classes =
+            [ "bg-red-600"
+            , "absolute"
+            , "top-0"
+            , "left-0"
+            , "h-screen"
+            , "w-screen"
+            , "z-30"
+            ]
+
+        extraClasses =
+            if isVisible then
+                [ "opacity-100" ]
+
+            else
+                [ "opacity-0" ]
+    in
+    button
+        [ List.concat [ classes, extraClasses ] |> tw |> class
+        , style "background-color" "rgba(0,0,0,0.30)"
+        , onClick handleClick
+        ]
+        [ h1
+            [ style "-webkit-text-stroke-width" "2px"
+            , style "-webkit-text-stroke-color" "black"
+            , class <|
+                tw
+                    [ "transform"
+                    , "-rotate-90"
+                    , "text-6xl"
+                    , "text-white"
+                    , "font-mono"
+                    ]
+            ]
+            [ text label ]
+        ]

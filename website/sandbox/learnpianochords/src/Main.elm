@@ -98,7 +98,7 @@ init =
             Theory.allPitchClasses
 
         keys =
-            []
+            [ { pitchClass = Theory.C, mode = Theory.MajorMode } ]
 
         practiceMode =
             KeyMode
@@ -386,7 +386,7 @@ selectKey model { relativeMajor, relativeMinor } =
             { label = buttonLabel relativeMajor relativeMinor
             , handleClick = ToggleKey relativeMinor
             , classes = [ "flex-1" ]
-            , toggled = active relativeMinor
+            , toggled = active relativeMinor || active relativeMajor
             }
         ]
 
@@ -464,7 +464,7 @@ practiceModeButtons model =
 openPreferences : Html Msg
 openPreferences =
     button
-        [ class "w-48 h-48 absolute left-0 top-0 z-20"
+        [ class "w-48 h-48 absolute left-0 top-0 z-40"
         , onClick (SetView Preferences)
         ]
         [ Icon.cog ]
@@ -502,30 +502,20 @@ preferences model =
 practice : Model -> Html Msg
 practice model =
     let
-        classes =
-            [ "bg-gray-600"
-            , "h-screen"
-            , "w-full"
-            , "absolute"
-            , "z-10"
-            , "text-6xl"
-            ]
-
-        ( handleClick, extraClasses, buttonText ) =
+        ( handleClick, buttonText ) =
             if model.isPaused then
-                ( Play, [ "opacity-50" ], "Press to practice" )
+                ( Play, "Press to practice" )
 
             else
-                ( Pause, [ "opacity-0" ], "" )
+                ( Pause, "" )
     in
     div []
-        [ button
-            [ [ classes, extraClasses ] |> List.concat |> UI.tw |> class
-            , onClick handleClick
-            ]
-            [ text buttonText
-            ]
-        , openPreferences
+        [ openPreferences
+        , UI.overlayButton
+            { label = buttonText
+            , handleClick = handleClick
+            , isVisible = model.isPaused
+            }
         , Piano.render
             { highlight = model.selectedChord |> Maybe.andThen Theory.notesForChord |> Maybe.withDefault []
             , start = model.firstNote
