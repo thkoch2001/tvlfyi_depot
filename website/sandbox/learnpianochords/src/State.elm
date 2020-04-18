@@ -97,7 +97,7 @@ init =
     , tempo = 20
     , firstNote = firstNote
     , lastNote = lastNote
-    , view = Preferences
+    , view = Overview
     }
 
 
