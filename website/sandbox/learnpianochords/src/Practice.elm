@@ -37,8 +37,8 @@ render model =
             , isVisible = model.isPaused
             }
         , Piano.render
-            { highlight = model.selectedChord |> Maybe.andThen Theory.notesForChord |> Maybe.withDefault []
-            , start = model.firstNote
-            , end = model.lastNote
+            { chord = model.selectedChord
+            , firstNote = model.firstNote
+            , lastNote = model.lastNote
             }
         ]

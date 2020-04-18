@@ -6,6 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import List.Extra
 import Theory
+import UI
 
 
 {-| On mobile phones, the keyboard displays vertically.
@@ -17,17 +18,18 @@ type Direction
 
 type alias KeyMarkup a =
     { offset : Int
+    , direction : Direction
     , isHighlit : Bool
     , note : Theory.Note
-    , direction : Direction
+    , isRootNote : Bool
     }
     -> Html a
 
 
 type alias Props =
-    { highlight : List Theory.Note
-    , start : Theory.Note
-    , end : Theory.Note
+    { chord : Maybe Theory.Chord
+    , firstNote : Theory.Note
+    , lastNote : Theory.Note
     }
 
 
@@ -44,8 +46,6 @@ naturalWidth : Direction -> Int
 naturalWidth direction =
     case direction of
         Vertical ->
-            -- Right now, I'm designing this specifically for my Google Pixel 4
-            -- phone, which has a screen width of 1080px.
             1080
 
         Horizontal ->
@@ -58,10 +58,7 @@ naturalHeight : Direction -> Int
 naturalHeight direction =
     case direction of
         Vertical ->
-            -- Right now, I'm designing this specifically for my Google Pixel 4
-            -- phone, which has a screen height of 2280px. 2280 / 21
-            -- (i.e. no. natural keys) ~= 108
-            108
+            130
 
         Horizontal ->
             250
@@ -94,17 +91,28 @@ accidentalHeight direction =
 {-| Return the markup for either a white or a black key.
 -}
 pianoKey : KeyMarkup a
-pianoKey { offset, isHighlit, note, direction } =
+pianoKey { offset, isHighlit, note, direction, isRootNote } =
     let
+        { natColor, accColor, hiColor, rootColor } =
+            { natColor = "bg-white"
+            , accColor = "bg-black"
+            , hiColor = "bg-red-400"
+            , rootColor = "bg-red-600"
+            }
+
         sharedClasses =
-            [ "box-border" ]
+            [ "box-border"
+            , "absolute"
+            , "border"
+            , "border-black"
+            ]
 
         { keyWidth, keyHeight, keyColor, offsetEdge, extraClasses } =
             case ( Theory.keyClass note, direction ) of
                 ( Theory.Natural, Vertical ) ->
                     { keyWidth = naturalWidth Vertical
                     , keyHeight = naturalHeight Vertical
-                    , keyColor = "white"
+                    , keyColor = natColor
                     , offsetEdge = "top"
                     , extraClasses = []
                     }
@@ -112,7 +120,7 @@ pianoKey { offset, isHighlit, note, direction } =
                 ( Theory.Natural, Horizontal ) ->
                     { keyWidth = naturalWidth Horizontal
                     , keyHeight = naturalHeight Horizontal
-                    , keyColor = "white"
+                    , keyColor = natColor
                     , offsetEdge = "left"
                     , extraClasses = []
                     }
@@ -120,7 +128,7 @@ pianoKey { offset, isHighlit, note, direction } =
                 ( Theory.Accidental, Vertical ) ->
                     { keyWidth = accidentalWidth Vertical
                     , keyHeight = accidentalHeight Vertical
-                    , keyColor = "black"
+                    , keyColor = accColor
                     , offsetEdge = "top"
                     , extraClasses = [ "z-10" ]
                     }
@@ -128,26 +136,25 @@ pianoKey { offset, isHighlit, note, direction } =
                 ( Theory.Accidental, Horizontal ) ->
                     { keyWidth = accidentalWidth Horizontal
                     , keyHeight = accidentalHeight Horizontal
-                    , keyColor = "black"
+                    , keyColor = accColor
                     , offsetEdge = "left"
                     , extraClasses = [ "z-10" ]
                     }
     in
     div
-        [ style "background-color"
-            (if isHighlit then
-                "red"
+        [ class
+            (case ( isHighlit, isRootNote ) of
+                ( False, _ ) ->
+                    keyColor
 
-             else
-                keyColor
+                ( True, True ) ->
+                    rootColor
+
+                ( True, False ) ->
+                    hiColor
             )
-        , style "border-top" "1px solid black"
-        , style "border-bottom" "1px solid black"
-        , style "border-left" "1px solid black"
-        , style "border-right" "1px solid black"
         , style "width" (pixelate keyWidth)
         , style "height" (pixelate keyHeight)
-        , style "position" "absolute"
         , style offsetEdge (String.fromInt offset ++ "px")
         , class <| String.join " " (List.concat [ sharedClasses, extraClasses ])
         ]
@@ -156,11 +163,18 @@ pianoKey { offset, isHighlit, note, direction } =
 
 {-| A section of the piano consisting of all twelve notes.
 -}
-keys : Direction -> Theory.Note -> Theory.Note -> List Theory.Note -> List (Html a)
-keys direction start end highlight =
+keys :
+    { direction : Direction
+    , start : Theory.Note
+    , end : Theory.Note
+    , highlitNotes : List Theory.Note
+    , rootNote : Maybe Theory.Note
+    }
+    -> List (Html a)
+keys { direction, start, end, highlitNotes, rootNote } =
     let
         isHighlit note =
-            List.member note highlight
+            List.member note highlitNotes
 
         spacing prevOffset prev curr =
             case ( Theory.keyClass prev, Theory.keyClass curr, direction ) of
@@ -190,6 +204,7 @@ keys direction start end highlight =
 
         ( _, _, notes ) =
             Theory.notesFromRange start end
+                |> List.reverse
                 |> List.foldl
                     (\curr ( prevOffset, prev, result ) ->
                         case ( prevOffset, prev ) of
@@ -198,9 +213,13 @@ keys direction start end highlight =
                                 , Just curr
                                 , pianoKey
                                     { offset = 0
-                                    , isHighlit = List.member curr highlight
+                                    , isHighlit = List.member curr highlitNotes
                                     , note = curr
                                     , direction = direction
+                                    , isRootNote =
+                                        rootNote
+                                            |> Maybe.map (\x -> x == curr)
+                                            |> Maybe.withDefault False
                                     }
                                     :: result
                                 )
@@ -214,9 +233,13 @@ keys direction start end highlight =
                                 , Just curr
                                 , pianoKey
                                     { offset = offset
-                                    , isHighlit = List.member curr highlight
+                                    , isHighlit = List.member curr highlitNotes
                                     , note = curr
                                     , direction = direction
+                                    , isRootNote =
+                                        rootNote
+                                            |> Maybe.map (\x -> x == curr)
+                                            |> Maybe.withDefault False
                                     }
                                     :: result
                                 )
@@ -227,12 +250,22 @@ keys direction start end highlight =
                     )
                     ( Nothing, Nothing, [] )
     in
-    List.reverse notes
+    notes
 
 
 {-| Return the HTML that renders a piano representation.
 -}
 render : Props -> Html a
-render { highlight, start, end } =
+render { chord } =
     div [ style "display" "flex" ]
-        (keys Vertical start end highlight |> List.reverse |> List.repeat 1 |> List.concat)
+        (keys
+            { direction = Vertical
+            , start = Theory.G3
+            , end = Theory.C6
+            , rootNote = chord |> Maybe.map .note
+            , highlitNotes =
+                chord
+                    |> Maybe.andThen Theory.notesForChord
+                    |> Maybe.withDefault []
+            }
+        )
