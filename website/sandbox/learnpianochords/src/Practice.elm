@@ -24,7 +24,7 @@ render model =
     let
         ( handleClick, buttonText ) =
             if model.isPaused then
-                ( State.Play, "Press to practice" )
+                ( State.Play, "Tap to practice" )
 
             else
                 ( State.Pause, "" )
