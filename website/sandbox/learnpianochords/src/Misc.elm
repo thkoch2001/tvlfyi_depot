@@ -45,3 +45,15 @@ find pred xs =
 
         x :: _ ->
             Just x
+
+
+{-| Return the number of milliseconds that elapse during an interval in a
+`target` bpm.
+-}
+bpmToMilliseconds : Int -> Int
+bpmToMilliseconds target =
+    let
+        msPerMinute =
+            1000 * 60
+    in
+    round (toFloat msPerMinute / toFloat target)
