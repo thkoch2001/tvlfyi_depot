@@ -28,9 +28,9 @@ selectKey model { relativeMajor, relativeMinor } =
     div [ class "flex pt-0" ]
         [ UI.textToggleButton
             { label = buttonLabel relativeMajor relativeMinor
-            , handleClick = State.ToggleKey relativeMinor
+            , handleClick = State.ToggleKey relativeMajor
             , classes = [ "flex-1" ]
-            , toggled = active relativeMinor || active relativeMajor
+            , toggled = active relativeMajor
             }
         ]
 
