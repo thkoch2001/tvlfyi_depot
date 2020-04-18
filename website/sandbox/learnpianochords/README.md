@@ -14,10 +14,9 @@ internalizing music theory.
 1. Grab a cell phone or a laptop and your instrument.
 2. Open a web browser and visit the Learn Piano Chords app (URL and app
    forthcoming).
-3. Set the tempo at which you would like to practice.
+6. Set the tempo (i.e. pace) at which you would like to practice.
 4. Set the target duration of your session.
 5. Select the key(s) and chord(s) you would like to practice.
-6. Set the tempo (i.e. pace) at which you would like to practice.
 7. LPC will display chords at various rhythmic intervals during your practice
    session. It is your job to play these chords in time before the next chord
    appears.
