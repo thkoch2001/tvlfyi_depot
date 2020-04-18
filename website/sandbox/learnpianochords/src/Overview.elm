@@ -49,7 +49,7 @@ numberedList items =
 
 render : State.Model -> Html State.Msg
 render model =
-    div [ [ "container", "mx-auto", "px-20" ] |> UI.tw |> class ]
+    div [ [ "container", "mx-auto" ] |> UI.tw |> class ]
         [ header1 "Welcome to LearnPianoChords.app!"
         , paragraph """
                      Learn Piano Chords helps piano players master chords.
@@ -92,7 +92,7 @@ render model =
                    """
                 ]
             ]
-        , div [ [ "text-center", "pt-20" ] |> UI.tw |> class ]
+        , div [ [ "text-center", "py-20" ] |> UI.tw |> class ]
             [ UI.simpleButton
                 { label = "Let's get started"
                 , handleClick = State.SetView State.Preferences
