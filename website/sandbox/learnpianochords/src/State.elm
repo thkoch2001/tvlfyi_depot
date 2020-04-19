@@ -12,8 +12,6 @@ type Msg
     | Pause
     | SetTempo String
     | ToggleInversion Theory.ChordInversion
-    | ToggleChordType Theory.ChordType
-    | TogglePitchClass Theory.PitchClass
     | ToggleKey Theory.Key
     | DoNothing
     | SetView View
@@ -125,29 +123,6 @@ update msg model =
             , Cmd.none
             )
 
-        ToggleChordType chordType ->
-            let
-                chordTypes =
-                    if List.member chordType model.whitelistedChordTypes then
-                        List.filter ((/=) chordType) model.whitelistedChordTypes
-
-                    else
-                        chordType :: model.whitelistedChordTypes
-            in
-            ( { model
-                | whitelistedChordTypes = chordTypes
-                , whitelistedChords =
-                    Theory.allChords
-                        { start = model.firstNote
-                        , end = model.lastNote
-                        , inversions = model.whitelistedInversions
-                        , chordTypes = chordTypes
-                        , pitchClasses = model.whitelistedPitchClasses
-                        }
-              }
-            , Cmd.none
-            )
-
         ToggleInversion inversion ->
             let
                 inversions =
@@ -163,29 +138,6 @@ update msg model =
                     model.whitelistedKeys
                         |> List.concatMap Theory.chordsForKey
                         |> List.filter (\chord -> List.member chord.chordInversion inversions)
-              }
-            , Cmd.none
-            )
-
-        TogglePitchClass pitchClass ->
-            let
-                pitchClasses =
-                    if List.member pitchClass model.whitelistedPitchClasses then
-                        List.filter ((/=) pitchClass) model.whitelistedPitchClasses
-
-                    else
-                        pitchClass :: model.whitelistedPitchClasses
-            in
-            ( { model
-                | whitelistedPitchClasses = pitchClasses
-                , whitelistedChords =
-                    Theory.allChords
-                        { start = model.firstNote
-                        , end = model.lastNote
-                        , inversions = model.whitelistedInversions
-                        , chordTypes = model.whitelistedChordTypes
-                        , pitchClasses = pitchClasses
-                        }
               }
             , Cmd.none
             )
