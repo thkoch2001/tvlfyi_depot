@@ -73,7 +73,7 @@ init =
     , tempo = 10
     , firstNote = firstNote
     , lastNote = lastNote
-    , view = Preferences
+    , view = Overview
     , showFlashCard = True
     }
 
