@@ -150,13 +150,5 @@ render model =
             { tempo = model.tempo
             , handleInput = State.SetTempo
             }
-        , case model.practiceMode of
-            State.KeyMode ->
-                keyCheckboxes model
-
-            State.FineTuneMode ->
-                div []
-                    [ inversionCheckboxes model.whitelistedInversions
-                    , chordTypeCheckboxes model.whitelistedChordTypes
-                    ]
+        , keyCheckboxes model
         ]
