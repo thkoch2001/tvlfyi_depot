@@ -37,42 +37,35 @@ selectKey model { relativeMajor, relativeMinor } =
         ]
 
 
-chordTypeCheckboxes : List Theory.ChordType -> Html State.Msg
-chordTypeCheckboxes chordTypes =
-    ul []
-        (Theory.allChordTypes
-            |> List.map
-                (\chordType ->
-                    li []
-                        [ label [] [ text (Theory.chordTypeName chordType) ]
-                        , input
-                            [ type_ "checkbox"
-                            , onClick (State.ToggleChordType chordType)
-                            , checked (List.member chordType chordTypes)
+inversionCheckboxes : State.Model -> Html State.Msg
+inversionCheckboxes model =
+    div []
+        [ h2
+            [ [ "text-gray-500"
+              , "text-center"
+              , "pt-10"
+              , Responsive.h2
+              ]
+                |> Tailwind.use
+                |> class
+            ]
+            [ text "Select inversions" ]
+        , ul
+            [ [ "flex", "justify-center" ] |> Tailwind.use |> class ]
+            (Theory.allInversions
+                |> List.map
+                    (\inversion ->
+                        li []
+                            [ UI.textToggleButton
+                                { label = Theory.inversionName inversion
+                                , handleClick = State.ToggleInversion inversion
+                                , classes = []
+                                , toggled = List.member inversion model.whitelistedInversions
+                                }
                             ]
-                            []
-                        ]
-                )
-        )
-
-
-inversionCheckboxes : List Theory.ChordInversion -> Html State.Msg
-inversionCheckboxes inversions =
-    ul []
-        (Theory.allInversions
-            |> List.map
-                (\inversion ->
-                    li []
-                        [ label [] [ text (Theory.inversionName inversion) ]
-                        , input
-                            [ type_ "checkbox"
-                            , onClick (State.ToggleInversion inversion)
-                            , checked (List.member inversion inversions)
-                            ]
-                            []
-                        ]
-                )
-        )
+                    )
+            )
+        ]
 
 
 keyCheckboxes : State.Model -> Html State.Msg
@@ -150,5 +143,6 @@ render model =
             { tempo = model.tempo
             , handleInput = State.SetTempo
             }
+        , inversionCheckboxes model
         , keyCheckboxes model
         ]
