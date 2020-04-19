@@ -3,6 +3,7 @@ module UI exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Responsive
 
 
 type Color
@@ -48,9 +49,11 @@ simpleButton { label, handleClick, color, classes } =
             [ bgForColor color
             , textForColor color
             , "py-10"
+            , "lg:py-6"
             , "px-20"
-            , "text-5xl"
+            , "lg:px-12"
             , "rounded-lg"
+            , Responsive.h2
             ]
     in
     button
@@ -80,8 +83,10 @@ textToggleButton { label, toggled, handleClick, classes } =
             [ textColor
             , textTreatment
             , "py-8"
+            , "lg:py-5"
             , "px-10"
-            , "text-5xl"
+            , "lg:px-6"
+            , Responsive.h2
             ]
     in
     button
@@ -100,12 +105,14 @@ textField :
 textField { placeholderText, handleInput, classes } =
     let
         inputClasses =
-            [ "text-5xl"
-            , "w-full"
+            [ "w-full"
             , "py-10"
+            , "lg:py-6"
             , "px-16"
+            , "lg:px-10"
             , "border"
             , "rounded-lg"
+            , Responsive.h2
             ]
     in
     input
@@ -153,9 +160,9 @@ overlayButton { label, handleClick, isVisible } =
                 tw
                     [ "transform"
                     , "-rotate-90"
-                    , "text-6xl"
                     , "text-white"
                     , "font-mono"
+                    , Responsive.h1
                     ]
             ]
             [ text label ]
