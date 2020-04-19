@@ -51,7 +51,7 @@ init =
             ( Theory.C3, Theory.C6 )
 
         inversions =
-            Theory.allInversions
+            [ Theory.Root ]
 
         chordTypes =
             Theory.allChordTypes
@@ -73,7 +73,7 @@ init =
     , tempo = 10
     , firstNote = firstNote
     , lastNote = lastNote
-    , view = Overview
+    , view = Preferences
     , showFlashCard = True
     }
 
@@ -158,13 +158,9 @@ update msg model =
             ( { model
                 | whitelistedInversions = inversions
                 , whitelistedChords =
-                    Theory.allChords
-                        { start = model.firstNote
-                        , end = model.lastNote
-                        , inversions = inversions
-                        , chordTypes = model.whitelistedChordTypes
-                        , pitchClasses = model.whitelistedPitchClasses
-                        }
+                    model.whitelistedKeys
+                        |> List.concatMap Theory.chordsForKey
+                        |> List.filter (\chord -> List.member chord.chordInversion inversions)
               }
             , Cmd.none
             )
