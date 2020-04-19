@@ -7,6 +7,7 @@ import Html.Events exposing (..)
 import Icon
 import Piano
 import State
+import Tailwind
 import Theory
 import UI
 
@@ -32,11 +33,6 @@ render model =
     in
     div []
         [ openPreferences
-        , UI.overlayButton
-            { label = buttonText
-            , handleClick = handleClick
-            , isVisible = model.isPaused
-            }
         , case model.selectedChord of
             Just chord ->
                 FlashCard.render
@@ -45,7 +41,18 @@ render model =
                     }
 
             Nothing ->
-                span [] []
+                -- Here I'm abusing the overlayButton component to render text
+                -- horizontally. I should support a UI component for this.
+                UI.overlayButton
+                    { label = "Get ready..."
+                    , handleClick = State.DoNothing
+                    , isVisible = True
+                    }
+        , UI.overlayButton
+            { label = buttonText
+            , handleClick = handleClick
+            , isVisible = model.isPaused
+            }
         , Piano.render
             { chord = model.selectedChord
             , firstNote = model.firstNote
