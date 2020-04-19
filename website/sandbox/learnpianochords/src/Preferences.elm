@@ -6,6 +6,7 @@ import Html.Events exposing (..)
 import Icon
 import Responsive
 import State
+import Tailwind
 import Tempo
 import Theory
 import UI
@@ -105,7 +106,7 @@ keyCheckboxes model =
               , "pt-10"
               , Responsive.h2
               ]
-                |> UI.tw
+                |> Tailwind.use
                 |> class
             ]
             [ text "Select keys" ]
@@ -134,7 +135,7 @@ closePreferences =
           , "top-0"
           , "z-10"
           ]
-            |> UI.tw
+            |> Tailwind.use
             |> class
         , onClick (State.SetView State.Practice)
         ]
