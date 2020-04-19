@@ -63,7 +63,9 @@ init =
             [ { pitchClass = Theory.C, mode = Theory.MajorMode } ]
     in
     { whitelistedChords =
-        keys |> List.concatMap Theory.chordsForKey
+        keys
+            |> List.concatMap Theory.chordsForKey
+            |> List.filter (\chord -> List.member chord.chordInversion inversions)
     , whitelistedChordTypes = chordTypes
     , whitelistedInversions = inversions
     , whitelistedPitchClasses = pitchClasses
@@ -200,7 +202,9 @@ update msg model =
             ( { model
                 | whitelistedKeys = keys
                 , whitelistedChords =
-                    keys |> List.concatMap Theory.chordsForKey
+                    keys
+                        |> List.concatMap Theory.chordsForKey
+                        |> List.filter (\chord -> List.member chord.chordInversion model.whitelistedInversions)
                 , selectedChord = Nothing
               }
             , Cmd.none
