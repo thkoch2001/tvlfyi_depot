@@ -132,7 +132,7 @@ overlayButton { label, handleClick, isVisible } =
             , "top-0"
             , "left-0"
             , "block"
-            , "z-30"
+            , "z-40"
             , "w-screen"
             , "h-screen"
             , Tailwind.if_ isVisible "opacity-100" "opacity-0"
@@ -140,7 +140,7 @@ overlayButton { label, handleClick, isVisible } =
     in
     button
         [ classes |> Tailwind.use |> class
-        , style "background-color" "rgba(0,0,0,0.30)"
+        , style "background-color" "rgba(0,0,0,1.0)"
         , onClick handleClick
         ]
         [ h1
