@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Responsive
+import Tailwind
 import UI
 
 
@@ -20,7 +21,7 @@ render { tempo, handleInput } =
             [ [ "py-10"
               , Responsive.h2
               ]
-                |> UI.tw
+                |> Tailwind.use
                 |> class
             ]
             [ text (String.fromInt tempo ++ " BPM") ]

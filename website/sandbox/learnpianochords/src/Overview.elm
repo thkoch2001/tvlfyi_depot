@@ -5,6 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Responsive
 import State
+import Tailwind
 import UI
 
 
@@ -16,7 +17,7 @@ header1 copy =
           , "pb-12"
           , Responsive.h1
           ]
-            |> UI.tw
+            |> Tailwind.use
             |> class
         ]
         [ text copy ]
@@ -29,7 +30,7 @@ header2 copy =
           , "pb-10"
           , Responsive.h2
           ]
-            |> UI.tw
+            |> Tailwind.use
             |> class
         ]
         [ text copy ]
@@ -41,7 +42,7 @@ paragraph copy =
         [ [ "pb-10"
           , Responsive.h3
           ]
-            |> UI.tw
+            |> Tailwind.use
             |> class
         ]
         [ text copy ]
@@ -59,15 +60,15 @@ numberedList items =
           , "list-decimal"
           , Responsive.h3
           ]
-            |> UI.tw
+            |> Tailwind.use
             |> class
         ]
-        (items |> List.map (\x -> li [ [ "pb-10" ] |> UI.tw |> class ] [ text x ]))
+        (items |> List.map (\x -> li [ [ "pb-10" ] |> Tailwind.use |> class ] [ text x ]))
 
 
 render : State.Model -> Html State.Msg
 render model =
-    div [ [ "container", "mx-auto" ] |> UI.tw |> class ]
+    div [ [ "container", "mx-auto" ] |> Tailwind.use |> class ]
         [ header1 "Welcome to LearnPianoChords.app!"
         , paragraph """
                      Learn Piano Chords helps piano players master chords.
@@ -110,7 +111,7 @@ render model =
                    """
                 ]
             ]
-        , div [ [ "text-center", "py-20" ] |> UI.tw |> class ]
+        , div [ [ "text-center", "py-20" ] |> Tailwind.use |> class ]
             [ UI.simpleButton
                 { label = "Let's get started"
                 , handleClick = State.SetView State.Preferences

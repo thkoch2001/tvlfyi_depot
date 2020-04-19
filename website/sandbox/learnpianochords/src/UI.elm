@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Responsive
+import Tailwind
 
 
 type Color
@@ -31,11 +32,6 @@ textForColor color =
             "text-black"
 
 
-tw : List String -> String
-tw styles =
-    String.join " " styles
-
-
 simpleButton :
     { label : String
     , handleClick : msg
@@ -57,7 +53,7 @@ simpleButton { label, handleClick, color, classes } =
             ]
     in
     button
-        [ class (tw <| List.concat [ buttonClasses, classes ])
+        [ class (Tailwind.use <| List.concat [ buttonClasses, classes ])
         , onClick handleClick
         ]
         [ text label ]
@@ -90,7 +86,7 @@ textToggleButton { label, toggled, handleClick, classes } =
             ]
     in
     button
-        [ class (tw <| List.concat [ buttonClasses, classes ])
+        [ class (Tailwind.use <| List.concat [ buttonClasses, classes ])
         , onClick handleClick
         ]
         [ text label ]
@@ -116,7 +112,7 @@ textField { placeholderText, handleInput, classes } =
             ]
     in
     input
-        [ class (tw <| List.concat [ inputClasses, classes ])
+        [ class (Tailwind.use <| List.concat [ inputClasses, classes ])
         , onInput handleInput
         , placeholder placeholderText
         ]
@@ -139,17 +135,11 @@ overlayButton { label, handleClick, isVisible } =
             , "z-30"
             , "w-screen"
             , "h-screen"
+            , Tailwind.if_ isVisible "opacity-100" "opacity-0"
             ]
-
-        extraClasses =
-            if isVisible then
-                [ "opacity-100" ]
-
-            else
-                [ "opacity-0" ]
     in
     button
-        [ List.concat [ classes, extraClasses ] |> tw |> class
+        [ classes |> Tailwind.use |> class
         , style "background-color" "rgba(0,0,0,0.30)"
         , onClick handleClick
         ]
@@ -157,7 +147,7 @@ overlayButton { label, handleClick, isVisible } =
             [ style "-webkit-text-stroke-width" "2px"
             , style "-webkit-text-stroke-color" "black"
             , class <|
-                tw
+                Tailwind.use
                     [ "transform"
                     , "-rotate-90"
                     , "text-white"
