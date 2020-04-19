@@ -761,7 +761,7 @@ noteMetadata =
         , { note = F1, label = "F1", pitchClass = F, natural = True }
         , { note = F_sharp1, label = "F♯/G♭1", pitchClass = F_sharp, natural = False }
         , { note = G1, label = "G1", pitchClass = G, natural = True }
-        , { note = G_sharp1, label = "G♯/A♭1", pitchClass = G, natural = False }
+        , { note = G_sharp1, label = "G♯/A♭1", pitchClass = G_sharp, natural = False }
         , { note = A2, label = "A2", pitchClass = A, natural = True }
         , { note = A_sharp2, label = "A♯/B♭2", pitchClass = A_sharp, natural = False }
         , { note = B2, label = "B2", pitchClass = B, natural = True }
@@ -773,7 +773,7 @@ noteMetadata =
         , { note = F2, label = "F2", pitchClass = F, natural = True }
         , { note = F_sharp2, label = "F♯/G♭2", pitchClass = F_sharp, natural = False }
         , { note = G2, label = "G2", pitchClass = G, natural = True }
-        , { note = G_sharp2, label = "G♯/A♭2", pitchClass = G, natural = False }
+        , { note = G_sharp2, label = "G♯/A♭2", pitchClass = G_sharp, natural = False }
         , { note = A3, label = "A3", pitchClass = A, natural = True }
         , { note = A_sharp3, label = "A♯/B♭3", pitchClass = A_sharp, natural = False }
         , { note = B3, label = "B3", pitchClass = B, natural = True }
@@ -785,7 +785,7 @@ noteMetadata =
         , { note = F3, label = "F3", pitchClass = F, natural = True }
         , { note = F_sharp3, label = "F♯/G♭3", pitchClass = F_sharp, natural = False }
         , { note = G3, label = "G3", pitchClass = G, natural = True }
-        , { note = G_sharp3, label = "G♯/A♭3", pitchClass = G, natural = False }
+        , { note = G_sharp3, label = "G♯/A♭3", pitchClass = G_sharp, natural = False }
         , { note = A4, label = "A4", pitchClass = A, natural = True }
         , { note = A_sharp4, label = "A♯/B♭4", pitchClass = A_sharp, natural = False }
         , { note = B4, label = "B4", pitchClass = B, natural = True }
@@ -797,7 +797,7 @@ noteMetadata =
         , { note = F4, label = "F4", pitchClass = F, natural = True }
         , { note = F_sharp4, label = "F♯/G♭4", pitchClass = F_sharp, natural = False }
         , { note = G4, label = "G4", pitchClass = G, natural = True }
-        , { note = G_sharp4, label = "G♯/A♭4", pitchClass = G, natural = False }
+        , { note = G_sharp4, label = "G♯/A♭4", pitchClass = G_sharp, natural = False }
         , { note = A5, label = "A5", pitchClass = A, natural = True }
         , { note = A_sharp5, label = "A♯/B♭5", pitchClass = A_sharp, natural = False }
         , { note = B5, label = "B5", pitchClass = B, natural = True }
@@ -809,7 +809,7 @@ noteMetadata =
         , { note = F5, label = "F5", pitchClass = F, natural = True }
         , { note = F_sharp5, label = "F♯/G♭5", pitchClass = F_sharp, natural = False }
         , { note = G5, label = "G5", pitchClass = G, natural = True }
-        , { note = G_sharp5, label = "G♯/A♭5", pitchClass = G, natural = False }
+        , { note = G_sharp5, label = "G♯/A♭5", pitchClass = G_sharp, natural = False }
         , { note = A6, label = "A6", pitchClass = A, natural = True }
         , { note = A_sharp6, label = "A♯/B♭6", pitchClass = A_sharp, natural = False }
         , { note = B6, label = "B6", pitchClass = B, natural = True }
@@ -821,7 +821,7 @@ noteMetadata =
         , { note = F6, label = "F6", pitchClass = F, natural = True }
         , { note = F_sharp6, label = "F♯/G♭6", pitchClass = F_sharp, natural = False }
         , { note = G6, label = "G6", pitchClass = G, natural = True }
-        , { note = G_sharp6, label = "G♯/A♭6", pitchClass = G, natural = False }
+        , { note = G_sharp6, label = "G♯/A♭6", pitchClass = G_sharp, natural = False }
         , { note = A7, label = "A7", pitchClass = A, natural = True }
         , { note = A_sharp7, label = "A♯/B♭7", pitchClass = A_sharp, natural = False }
         , { note = B7, label = "B7", pitchClass = B, natural = True }
@@ -833,7 +833,7 @@ noteMetadata =
         , { note = F7, label = "F7", pitchClass = F, natural = True }
         , { note = F_sharp7, label = "F♯/G♭7", pitchClass = F_sharp, natural = False }
         , { note = G7, label = "G7", pitchClass = G, natural = True }
-        , { note = G_sharp7, label = "G♯/A♭7", pitchClass = G, natural = False }
+        , { note = G_sharp7, label = "G♯/A♭7", pitchClass = G_sharp, natural = False }
         , { note = C8, label = "C8", pitchClass = C, natural = True }
         ]
 
