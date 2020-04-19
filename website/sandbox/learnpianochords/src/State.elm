@@ -16,7 +16,6 @@ type Msg
     | TogglePitchClass Theory.PitchClass
     | ToggleKey Theory.Key
     | DoNothing
-    | SetPracticeMode PracticeMode
     | SetView View
     | ToggleFlashCard
 
@@ -25,13 +24,6 @@ type View
     = Preferences
     | Practice
     | Overview
-
-
-{-| Control the type of practice you'd like.
--}
-type PracticeMode
-    = KeyMode
-    | FineTuneMode
 
 
 type alias Model =
@@ -45,7 +37,6 @@ type alias Model =
     , tempo : Int
     , firstNote : Theory.Note
     , lastNote : Theory.Note
-    , practiceMode : PracticeMode
     , view : View
     , showFlashCard : Bool
     }
@@ -70,24 +61,9 @@ init =
 
         keys =
             [ { pitchClass = Theory.C, mode = Theory.MajorMode } ]
-
-        practiceMode =
-            KeyMode
     in
-    { practiceMode = practiceMode
-    , whitelistedChords =
-        case practiceMode of
-            KeyMode ->
-                keys |> List.concatMap Theory.chordsForKey
-
-            FineTuneMode ->
-                Theory.allChords
-                    { start = firstNote
-                    , end = lastNote
-                    , inversions = inversions
-                    , chordTypes = chordTypes
-                    , pitchClasses = pitchClasses
-                    }
+    { whitelistedChords =
+        keys |> List.concatMap Theory.chordsForKey
     , whitelistedChordTypes = chordTypes
     , whitelistedInversions = inversions
     , whitelistedPitchClasses = pitchClasses
@@ -109,14 +85,6 @@ update msg model =
     case msg of
         DoNothing ->
             ( model, Cmd.none )
-
-        SetPracticeMode practiceMode ->
-            ( { model
-                | practiceMode = practiceMode
-                , isPaused = True
-              }
-            , Cmd.none
-            )
 
         SetView x ->
             ( { model
