@@ -132,13 +132,13 @@ overlayButton :
 overlayButton { label, handleClick, isVisible } =
     let
         classes =
-            [ "bg-red-600"
-            , "absolute"
+            [ "fixed"
             , "top-0"
             , "left-0"
-            , "h-screen"
-            , "w-screen"
+            , "block"
             , "z-30"
+            , "w-screen"
+            , "h-screen"
             ]
 
         extraClasses =
