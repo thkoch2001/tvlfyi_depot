@@ -3,6 +3,7 @@ module Tempo exposing (render)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Responsive
 import UI
 
 
@@ -15,7 +16,14 @@ type alias Props msg =
 render : Props msg -> Html msg
 render { tempo, handleInput } =
     div [ class "text-center" ]
-        [ p [ class "text-5xl py-10" ] [ text (String.fromInt tempo ++ " BPM") ]
+        [ p
+            [ [ "py-10"
+              , Responsive.h2
+              ]
+                |> UI.tw
+                |> class
+            ]
+            [ text (String.fromInt tempo ++ " BPM") ]
         , UI.textField
             { placeholderText = "Set tempo..."
             , handleInput = handleInput

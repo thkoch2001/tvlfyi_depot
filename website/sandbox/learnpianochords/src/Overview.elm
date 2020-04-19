@@ -3,6 +3,7 @@ module Overview exposing (render)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Responsive
 import State
 import UI
 
@@ -10,7 +11,11 @@ import UI
 header1 : String -> Html msg
 header1 copy =
     h2
-        [ [ "text-center", "text-6xl", "pt-24", "pb-12" ]
+        [ [ "text-center"
+          , "pt-24"
+          , "pb-12"
+          , Responsive.h1
+          ]
             |> UI.tw
             |> class
         ]
@@ -19,13 +24,26 @@ header1 copy =
 
 header2 : String -> Html msg
 header2 copy =
-    h2 [ [ "text-center", "text-5xl", "pb-10" ] |> UI.tw |> class ]
+    h2
+        [ [ "text-center"
+          , "pb-10"
+          , Responsive.h2
+          ]
+            |> UI.tw
+            |> class
+        ]
         [ text copy ]
 
 
 paragraph : String -> Html msg
 paragraph copy =
-    p [ [ "text-4xl", "pb-10" ] |> UI.tw |> class ]
+    p
+        [ [ "pb-10"
+          , Responsive.h3
+          ]
+            |> UI.tw
+            |> class
+        ]
         [ text copy ]
 
 
@@ -39,7 +57,7 @@ numberedList items =
     ol
         [ [ "list-inside"
           , "list-decimal"
-          , "text-4xl"
+          , Responsive.h3
           ]
             |> UI.tw
             |> class

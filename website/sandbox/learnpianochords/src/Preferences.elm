@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Icon
+import Responsive
 import State
 import Tempo
 import Theory
@@ -98,7 +99,16 @@ keyCheckboxes model =
             ]
     in
     div []
-        [ h2 [ class "text-gray-500 text-center pt-10 text-5xl" ] [ text "Select keys" ]
+        [ h2
+            [ [ "text-gray-500"
+              , "text-center"
+              , "pt-10"
+              , Responsive.h2
+              ]
+                |> UI.tw
+                |> class
+            ]
+            [ text "Select keys" ]
         , ul []
             (circleOfFifths
                 |> List.map
@@ -115,7 +125,17 @@ keyCheckboxes model =
 closePreferences : Html State.Msg
 closePreferences =
     button
-        [ class "w-48 h-48 absolute right-0 top-0 z-10"
+        [ [ "w-48"
+          , "lg:w-32"
+          , "h-48"
+          , "lg:h-32"
+          , "absolute"
+          , "right-0"
+          , "top-0"
+          , "z-10"
+          ]
+            |> UI.tw
+            |> class
         , onClick (State.SetView State.Practice)
         ]
         [ Icon.close ]
