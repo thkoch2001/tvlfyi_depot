@@ -16,7 +16,10 @@ subscriptions model =
         Sub.none
 
     else
-        Time.every (model.tempo |> Misc.bpmToMilliseconds |> toFloat) (\_ -> State.NextChord)
+        Sub.batch
+            [ Time.every (model.tempo * 2 |> Misc.bpmToMilliseconds |> toFloat) (\_ -> State.ToggleFlashCard)
+            , Time.every (model.tempo |> Misc.bpmToMilliseconds |> toFloat) (\_ -> State.NextChord)
+            ]
 
 
 view : State.Model -> Html State.Msg

@@ -1,5 +1,6 @@
 module Practice exposing (render)
 
+import FlashCard
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -13,7 +14,7 @@ import UI
 openPreferences : Html State.Msg
 openPreferences =
     button
-        [ class "w-48 h-48 absolute left-0 top-0 z-40"
+        [ class "w-48 h-48 absolute left-0 top-0 z-50"
         , onClick (State.SetView State.Preferences)
         ]
         [ Icon.cog ]
@@ -36,6 +37,15 @@ render model =
             , handleClick = handleClick
             , isVisible = model.isPaused
             }
+        , case model.selectedChord of
+            Just chord ->
+                FlashCard.render
+                    { chord = chord
+                    , visible = model.showFlashCard
+                    }
+
+            Nothing ->
+                span [] []
         , Piano.render
             { chord = model.selectedChord
             , firstNote = model.firstNote

@@ -18,6 +18,7 @@ type Msg
     | DoNothing
     | SetPracticeMode PracticeMode
     | SetView View
+    | ToggleFlashCard
 
 
 type View
@@ -46,6 +47,7 @@ type alias Model =
     , lastNote : Theory.Note
     , practiceMode : PracticeMode
     , view : View
+    , showFlashCard : Bool
     }
 
 
@@ -92,10 +94,11 @@ init =
     , whitelistedKeys = keys
     , selectedChord = Nothing
     , isPaused = True
-    , tempo = 20
+    , tempo = 10
     , firstNote = firstNote
     , lastNote = lastNote
     , view = Overview
+    , showFlashCard = True
     }
 
 
@@ -251,3 +254,6 @@ update msg model =
               }
             , Cmd.none
             )
+
+        ToggleFlashCard ->
+            ( { model | showFlashCard = not model.showFlashCard }, Cmd.none )
