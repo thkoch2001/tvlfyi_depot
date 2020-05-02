@@ -7,6 +7,7 @@ digraph tvl {
   tazjin -> TVL [style="bold"];
 
   // people
+  ericvolp [href="https://ericv.me"];
   Q [href="https://magicalcodewit.ch/"];
   ac [href="https://the-alex.github.io/about/"];
   andi [label="andi-" href="https://andreas.rammhold.de/"];
@@ -96,6 +97,7 @@ digraph tvl {
   wpcarro -> google;
 
   // random primary
+  ericvolp -> lukegb;
   Q -> cynthia;
   ac -> wpcarro;
   anon1 -> google;
