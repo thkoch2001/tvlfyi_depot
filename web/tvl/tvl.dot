@@ -7,6 +7,7 @@ digraph tvl {
   tazjin -> TVL [style="bold"];
 
   // people
+  artemist [href="https://artem.ist/"];
   ericvolp [href="https://ericv.me"];
   Q [href="https://magicalcodewit.ch/"];
   ac [href="https://the-alex.github.io/about/"];
@@ -97,6 +98,7 @@ digraph tvl {
   wpcarro -> google;
 
   // random primary
+  artemist -> cynthia;
   ericvolp -> lukegb;
   Q -> cynthia;
   ac -> wpcarro;
@@ -121,6 +123,7 @@ digraph tvl {
   aurora -> lgbtslack [weight=0 style="dotted" color="grey" arrowhead="none"];
   leah2 -> lgbtslack  [weight=0 style="dotted" color="grey" arrowhead="none"];
   edef -> lgbtslack  [weight=0 style="dotted" color="grey" arrowhead="none"];
+  artemist -> lgbtslack  [weight=0 style="dotted" color="grey" arrowhead="none"];
 
   // ircv3
   multi -> ircv3  [weight=0 style="dotted" color="grey" arrowhead="none"];
@@ -147,4 +150,5 @@ digraph tvl {
   Q -> baby [weight=0 style="dotted" arrowhead="none" color="pink"];
   aranea -> nix [weight=0 style="dotted" color="grey" arrowhead="none"];
   aranea -> profpatsch [weight=0 style="dotted" color="grey" arrowhead="none"];
+  artemist -> nix [weight=0 style="dotted" color="grey" arrowhead="none"];
 }
