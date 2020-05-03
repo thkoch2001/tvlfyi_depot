@@ -7,19 +7,19 @@ digraph tvl {
   tazjin -> TVL [style="bold"];
 
   // people
-  artemist [href="https://artem.ist/"];
-  ericvolp [href="https://ericv.me"];
   Q [href="https://magicalcodewit.ch/"];
   ac [href="https://the-alex.github.io/about/"];
   andi [label="andi-" href="https://andreas.rammhold.de/"];
   anon1 [color="grey" fontcolor="grey"];
   aranea;
+  artemist [href="https://artem.ist/"];
   aurora [href="https://nonegenderleftfox.aventine.se/"];
   benjojo [href="https://benjojo.co.uk/"];
   borb [href="https://twitter.com/FR31H31T"];
   cynthia [href="https://cynthia.re/"];
   drathier;
   edef [href="https://edef.eu/files/edef.hs"];
+  ericvolp [href="https://ericv.me"];
   espes;
   eta [href="https://theta.eu.org/"];
   firefly [href="http://firefly.nu/"];
@@ -27,6 +27,7 @@ digraph tvl {
   ghuntley [href="https://ghuntley.com/"];
   glittershark [href="http://gws.fyi"];
   grahamc [href="https://grahamc.com/"];
+  hyperfekt [href="https://hyperfekt.net"];
   isomer [href="https://www.lorier.net/"];
   jusrin [href="https://jusrin.dev/"];
   leah2 [href="https://leahneukirchen.org/"];
@@ -116,6 +117,7 @@ digraph tvl {
   poigon -> eve;
   q3k -> unspecific;
   yuuko -> ncl;
+  hyperfekt -> espes;
 
   // secondary edges (how are they connected otherwise?)
 
@@ -151,4 +153,5 @@ digraph tvl {
   aranea -> nix [weight=0 style="dotted" color="grey" arrowhead="none"];
   aranea -> profpatsch [weight=0 style="dotted" color="grey" arrowhead="none"];
   artemist -> nix [weight=0 style="dotted" color="grey" arrowhead="none"];
+  hyperfekt -> edef [weight=0 style="dotted" color="grey" arrowhead="none"];
 }
