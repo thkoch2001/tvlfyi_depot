@@ -100,17 +100,17 @@ digraph tvl {
   wpcarro -> google;
 
   // random primary
-  artemist -> cynthia;
-  ericvolp -> lukegb;
   Q -> cynthia;
   ac -> wpcarro;
   anon1 -> google;
   aranea -> multi;
+  artemist -> cynthia;
   aurora -> eve;
   borb -> unspecific;
   cynthia -> benjojo;
   drathier -> maskerad;
   eta -> anon1;
+  ericvolp -> lukegb;
   glittershark -> wpcarro;
   jooiiee1 -> unspecific;
   kanepyork -> lukegb;
