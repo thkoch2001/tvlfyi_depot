@@ -30,6 +30,7 @@ digraph tvl {
   hyperfekt [href="https://hyperfekt.net"];
   isomer [href="https://www.lorier.net/"];
   jusrin [href="https://jusrin.dev/"];
+  kanepyork [href="https://social.wxcafe.net/@riking"];
   leah2 [href="https://leahneukirchen.org/"];
   lukegb [href="https://lukegb.com/"];
   marcusr [href="http://marcus.nordaaker.com/"];
@@ -112,6 +113,7 @@ digraph tvl {
   eta -> anon1;
   glittershark -> wpcarro;
   jooiiee1 -> unspecific;
+  kanepyork -> lukegb;
   marcusr -> unspecific;
   maskerad -> unspecific;
   poigon -> eve;
@@ -139,6 +141,7 @@ digraph tvl {
   eta -> firefly  [weight=0 style="dotted" color="grey" arrowhead="none"];
   cynthia -> firefly [weight=0 style="dotted" color="grey" arrowhead="none"];
   cynthia -> lukegb [weight=0 style="dotted" color="grey" arrowhead="none"];
+  kanepyork -> google [weight=0 style="dotted" color="grey" arrowhead="none"];
   lukegb -> benjojo [weight=0 style="dotted" color="grey" arrowhead="none"];
   multi -> benjojo [weight=0 style="dotted" color="grey" arrowhead="none"];
   espes -> benjojo [weight=0 style="dotted" color="grey" arrowhead="none"];
