@@ -124,6 +124,10 @@ in {
             "${mod}+Ctrl+t" = "exec ${pkgs.writeShellScript "fix_term.sh" ''
               xrandr --output eDP-1 --off && ${screenlayout.home}
             ''}";
+
+            # Notifications
+            "${mod}+Shift+n" = "exec killall -SIGUSR1 .dunst-wrapped";
+            "${mod}+n" = "exec killall -SIGUSR2 .dunst-wrapped";
           };
 
           fonts = [ decorationFont ];
