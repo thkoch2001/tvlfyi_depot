@@ -4,6 +4,7 @@
   imports =
     [
       ./xserver.nix
+      ./fonts.nix
       ./emacs.nix
       ./sound.nix
       ./urbint.nix
@@ -83,11 +84,6 @@
   system.stateVersion = "20.03"; # Did you read the comment?
 
   nixpkgs.config.allowUnfree = true;
-
-  fonts.fonts = with pkgs; [
-    nerdfonts
-    noto-fonts-emoji
-  ];
 
   services.geoclue2.enable = true;
 

@@ -4,6 +4,8 @@ let machine = ./machines/chupacabra.nix; in
 {
   imports = [
     ./modules/alacritty.nix
+    ./modules/alsi.nix
+    ./modules/development.nix
     ./modules/emacs.nix
     ./modules/email.nix
     ./modules/firefox.nix
