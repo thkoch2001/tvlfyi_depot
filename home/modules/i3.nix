@@ -109,7 +109,7 @@ in {
             # Media
             "XF86AudioPlay" = "exec playerctl play-pause";
             "XF86AudioNext" = "exec playerctl next";
-            "XF86AudioPrevious" = "exec playerctl previous";
+            "XF86AudioPrev" = "exec playerctl previous";
             "XF86AudioRaiseVolume" = "exec pulseaudio-ctl up";
             "XF86AudioLowerVolume" = "exec pulseaudio-ctl down";
             "XF86AudioMute" = "exec pulseaudio-ctl mute";
