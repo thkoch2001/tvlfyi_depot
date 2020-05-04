@@ -1,5 +1,112 @@
 { config, lib, pkgs, ... }:
-{
+let
+  shellAliases = rec {
+    # NixOS stuff
+    hms = "home-manager switch";
+    nor = "sudo nixos-rebuild switch";
+    nrs = nor;
+    nrb = "sudo nixos-rebuild boot";
+    ncg = "nix-collect-garbage";
+    vihome = "vim ~/code/system/home/home.nix && home-manager switch";
+    virc = "vim ~/code/system/home/modules/shell.nix && home-manager switch && source ~/.zshrc";
+    visystem = "sudo vim /etc/nixos/configuration.nix && sudo nixos-rebuild switch";
+
+    # Nix
+    ns = "nix-shell";
+    nb = "nix build -f .";
+    "nc." = "nix copy -f . --to https://nix.urbinternal.com";
+
+    # Docker and friends
+    "dcu" = "docker-compose up";
+    "dcud" = "docker-compose up -d";
+    "dc" = "docker-compose";
+    "dcr" = "docker-compose restart";
+    "dclf" = "docker-compose logs -f";
+    "dck" = "docker";
+    "dockerclean" = "dockercleancontainers && dockercleanimages";
+    "dockercleanimages" = "docker images -a --no-trunc | grep none | awk '{print \$$3}' | xargs -L 1 -r docker rmi";
+    "dockercleancontainers" = "docker ps -a --no-trunc| grep 'Exit' | awk '{print \$$1}' | xargs -L 1 -r docker rm";
+
+    # Git
+    "gwip" = "git add . && git commit -am wip";
+    "gpr" = "g pull-request";
+    "gcl" = "git clone";
+    "grs" = "gr --soft";
+    "grhh" = "grh HEAD";
+    "grh" = "gr --hard";
+    "gr" = "git reset";
+    "gcb" = "gc -b";
+    "gco" = "gc";
+    "gcd" = "gc development";
+    "gcm" = "gc master";
+    "gc" = "git checkout";
+    "gbg" = "git branch | grep";
+    "gba" = "git branch -a";
+    "gb" = "git branch";
+    "gcv" = "git commit --verbose";
+    "gci" = "git commit";
+    "gm" = "git merge";
+    "gdc" = "gd --cached";
+    "gd" = "git diff";
+    "gsl" = "git stash list";
+    "gss" = "git show stash";
+    "gsad" = "git stash drop";
+    "gsa" = "git stash";
+    "gst" = "gs";
+    "gs" = "git status";
+    "gg" = "gl --decorate --oneline --graph --date-order --all";
+    "gl" = "git log";
+    "gf" = "git fetch";
+    "gur" = "gu --rebase";
+    "gu" = "git pull";
+    "gpf" = "gp -f";
+    "gpa" = "gp --all";
+    "gpu" = "git push -u origin \"$(git symbolic-ref --short HEAD)\"";
+    "gp" = "git push";
+    "ganw" = "git diff -w --no-color | git apply --cached --ignore-whitespace";
+    "ga" = "git add";
+    "gnp" = "git --no-pager";
+    "g" = "git";
+    "git" = "hub";
+    "grim" = "git fetch && git rebase -i origin/master";
+    "grc" = "git rebase --continue";
+    "gcan" = "git commit --amend --no-edit";
+
+    # Aliases from old config
+    stck = "dirs -v";
+    b= "cd ~1";
+    ".." = "cd ..";
+    "..." = "cd ../..";
+    "...." = "cd ../../..";
+    "....." = "cd ../../../..";
+    "http" = "http --style solarized";
+    "grep" = "grep $GREP_OPTIONS";
+    "bak" = "~/bin/backup.sh";
+    "xmm" = "xmodmap ~/.Xmodmap";
+    "asdflkj" = "asdf";
+    "asdf" = "asdfghjkl";
+    "asdfghjkl" = "echo \"Having some trouble?\"";
+    "ift" = "sudo iftop -i wlp3s0";
+    "mytl" = "t tl $TWITTER_WHOAMI";
+    "first" = "awk '{print \$$1}'";
+    "cmt" = "git log --oneline | fzf-tmux | awk '{print \$$1}'";
+    "workmon" = "xrandr --output DP-2 --pos 1440x900 --primary";
+    "vi" = "vim";
+    "adbdev" = "adb devices";
+    "adbcon" = "adb connect $GNEX_IP";
+    "mpalb" = "mpc search album";
+    "mpart" = "mpc search artist";
+    "mps" = "mpc search";
+    "mpa" = "mpc add";
+    "mpt" = "mpc toggle";
+    "mpl" = "mpc playlist";
+    "dsstore" = "find . -name '*.DS_Store' -type f -ls -delete";
+    "df" = "df -h";
+    "fs" = "stat -f '%z bytes'";
+    "ll" = "ls -al";
+    "la" = "ls -a";
+  };
+in {
   home.packages = with pkgs; [
     zsh
     autojump
@@ -12,137 +119,17 @@
     BROWSER = "firefox";
   };
 
+  programs.bash = {
+    enable = true;
+    inherit shellAliases;
+  };
+
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;
     autocd = true;
 
-    shellAliases = rec {
-      # NixOS stuff
-      hms = "home-manager switch";
-      nor = "sudo nixos-rebuild switch";
-      nrs = nor;
-      nrb = "sudo nixos-rebuild boot";
-      ncg = "nix-collect-garbage";
-      vihome = "vim ~/code/system/home/home.nix && home-manager switch";
-      virc = "vim ~/code/system/home/modules/shell.nix && home-manager switch && source ~/.zshrc";
-      visystem = "sudo vim /etc/nixos/configuration.nix && sudo nixos-rebuild switch";
-
-      # Nix
-      ns = "nix-shell";
-      nb = "nix build -f .";
-      "nc." = "nix copy -f . --to https://nix.urbinternal.com";
-
-      # Kubernetes
-      "kc" = "kubectl";
-      "kg" = "kc get";
-      "kga" = "kc get --all-namespaces";
-      "kpd" = "kubectl get pods";
-      "kpa" = "kubectl get pods --all-namespaces";
-      "klf" = "kubectl logs -f";
-      "kdep" = "kubectl get deployments";
-      "ked" =  "kubectl edit deployment";
-      "kpw" = "kubectl get pods -w";
-      "kew" = "kubectl get events -w";
-      "kdel" = "kubectl delete";
-      "knw" = "kubectl get nodes -w";
-      "arsy" = "argocd app sync --prune";
-
-      # Docker and friends
-      "dcu" = "docker-compose up";
-      "dcud" = "docker-compose up -d";
-      "dc" = "docker-compose";
-      "dcr" = "docker-compose restart";
-      "dclf" = "docker-compose logs -f";
-      "dck" = "docker";
-      "dockerclean" = "dockercleancontainers && dockercleanimages";
-      "dockercleanimages" = "docker images -a --no-trunc | grep none | awk '{print \$$3}' | xargs -L 1 -r docker rmi";
-      "dockercleancontainers" = "docker ps -a --no-trunc| grep 'Exit' | awk '{print \$$1}' | xargs -L 1 -r docker rm";
-
-      # Git
-      "gwip" = "git add . && git commit -am wip";
-      "gpr" = "g pull-request";
-      "gcl" = "git clone";
-      "grs" = "gr --soft";
-      "grhh" = "grh HEAD";
-      "grh" = "gr --hard";
-      "gr" = "git reset";
-      "gcb" = "gc -b";
-      "gco" = "gc";
-      "gcd" = "gc development";
-      "gcm" = "gc master";
-      "gc" = "git checkout";
-      "gbg" = "git branch | grep";
-      "gba" = "git branch -a";
-      "gb" = "git branch";
-      "gcv" = "git commit --verbose";
-      "gci" = "git commit";
-      "gm" = "git merge";
-      "gdc" = "gd --cached";
-      "gd" = "git diff";
-      "gsl" = "git stash list";
-      "gss" = "git show stash";
-      "gsad" = "git stash drop";
-      "gsa" = "git stash";
-      "gst" = "gs";
-      "gs" = "git status";
-      "gg" = "gl --decorate --oneline --graph --date-order --all";
-      "gl" = "git log";
-      "gf" = "git fetch";
-      "gur" = "gu --rebase";
-      "gu" = "git pull";
-      "gpf" = "gp -f";
-      "gpa" = "gp --all";
-      "gpu" = "git push -u origin \"$(git symbolic-ref --short HEAD)\"";
-      "gp" = "git push";
-      "ganw" = "git diff -w --no-color | git apply --cached --ignore-whitespace";
-      "ga" = "git add";
-      "gnp" = "git --no-pager";
-      "g" = "git";
-      "git" = "hub";
-      "grim" = " git fetch && git rebase -i origin/master";
-
-      # Aliases from old config
-      stck = "dirs -v";
-      b= "cd ~1";
-      ".." = "cd ..";
-      "..." = "cd ../..";
-      "...." = "cd ../../..";
-      "....." = "cd ../../../..";
-      "http" = "http --style solarized";
-      "grep" = "grep $GREP_OPTIONS";
-      "bak" = "~/bin/backup.sh";
-      "xmm" = "xmodmap ~/.Xmodmap";
-      "asdflkj" = "asdf";
-      "asdf" = "asdfghjkl";
-      "asdfghjkl" = "echo \"Having some trouble?\"";
-      "ift" = "sudo iftop -i wlp3s0";
-      "rvpn" = "sudo systemctl restart openvpn@bldr-dev openvpn@lsvl-dev";
-      "gne" = "gn edit";
-      "gnf" = "gn find";
-      "gnt" = "gn tag-list";
-      "gnn" = "gn notebook-list";
-      "mytl" = "t tl $TWITTER_WHOAMI";
-      "first" = "awk '{print \$$1}'";
-      "cmt" = "git log --oneline | fzf-tmux | awk '{print \$$1}'";
-      "workmon" = "xrandr --output DP-2 --pos 1440x900 --primary";
-      "vi" = "vim";
-      "awa" = "ssh aw2-admin.nomi.host";
-      "dtf" = "cd ~/.dotfiles";
-      "adbdev" = "adb devices";
-      "adbcon" = "adb connect $GNEX_IP";
-      "mpalb" = "mpc search album";
-      "mpart" = "mpc search artist";
-      "mps" = "mpc search";
-      "mpa" = "mpc add";
-      "mpt" = "mpc toggle";
-      "mpl" = "mpc playlist";
-      "dsstore" = "find . -name '*.DS_Store' -type f -ls -delete";
-      "df" = "df -h";
-      "fs" = "stat -f '%z bytes'";
-      "ll" = "ls -al";
-      "la" = "ls -a";
-    };
+    inherit shellAliases;
 
     oh-my-zsh = {
       enable = true;
@@ -209,6 +196,7 @@
         sha256 = "0l41ac5b7p8yyjvpfp438kw7zl9dblrpd7icjg1v3ig3xy87zv0n";
       }}/nix-shell.plugin.zsh
 
+      export RPS1=""
       autoload -U promptinit; promptinit
       prompt pure
 
