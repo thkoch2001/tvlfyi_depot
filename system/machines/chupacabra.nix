@@ -25,6 +25,8 @@
   boot.kernelParams = [ "acpi_rev_override" ];
   services.thermald.enable = true;
 
+  hardware.cpu.intel.updateMicrocode = true;
+
   # Intel-only graphics
   hardware.nvidiaOptimus.disable = true;
   boot.blacklistedKernelModules = [ "nouveau" "intel" ];
