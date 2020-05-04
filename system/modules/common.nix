@@ -100,9 +100,8 @@
   };
 
   nix = {
+    trustedUsers = [ "griffin" ];
     autoOptimiseStore = true;
-  };
-}
 
     buildMachines = [{
       hostName = "172.16.0.3";
