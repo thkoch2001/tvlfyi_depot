@@ -9,6 +9,7 @@ let machine = ./machines/chupacabra.nix; in
     ./modules/firefox.nix
     ./modules/i3.nix
     ./modules/shell.nix
+    ./modules/tarsnap.nix
     ./modules/vim.nix
     ./modules/alsi.nix
     ./modules/lib/cloneRepo.nix
