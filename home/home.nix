@@ -13,8 +13,10 @@ let machine = ./machines/chupacabra.nix; in
     ./modules/shell.nix
     ./modules/tarsnap.nix
     ./modules/vim.nix
-    ./modules/alsi.nix
+
     ./modules/lib/cloneRepo.nix
+
+    ./modules/urbint
 
     machine
   ];
@@ -47,6 +49,9 @@ let machine = ./machines/chupacabra.nix; in
     peek
     signal-desktop
     apvlv # pdf viewer
+    vlc
+    irssi
+    gnutls
 
     # System utilities
     htop
@@ -60,18 +65,12 @@ let machine = ./machines/chupacabra.nix; in
     zip
     tree
     ncat
+    unzip
 
     # Security
     gnupg
-
-    # Programming
-    jq
-    gitAndTools.hub
-    gitAndTools.tig
-    shellcheck
-    httpie
-    entr
-    gnumake
+    keybase
+    openssl
 
     # Spotify...etc
     spotify
@@ -86,25 +85,6 @@ let machine = ./machines/chupacabra.nix; in
   ];
 
   nixpkgs.config.allowUnfree = true;
-
-  programs.git = {
-    enable = true;
-    userEmail = "root@gws.fyi";
-    userName  = "Griffin Smith";
-    ignores = [
-      "*.sw*"
-      ".classpath"
-      ".project"
-      ".settings/"
-      ".dir-locals.el"
-      ".stack-work-profiling"
-      ".projectile"
-    ];
-    extraConfig = {
-      github.user = "glittershark";
-      merge.conflictstyle = "diff3";
-    };
-  };
 
   programs.password-store.enable = true;
 
@@ -124,5 +104,12 @@ let machine = ./machines/chupacabra.nix; in
 
   services.gpg-agent = {
     enable = true;
+  };
+
+  gtk = {
+    enable = true;
+    gtk3.bookmarks = [
+      "file:///home/grfn/code"
+    ];
   };
 }
