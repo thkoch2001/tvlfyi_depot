@@ -103,3 +103,17 @@
     autoOptimiseStore = true;
   };
 }
+
+    buildMachines = [{
+      hostName = "172.16.0.3";
+      sshUser = "griffin";
+      sshKey = "/home/grfn/.ssh/id_rsa";
+      system = "x86_64-darwin";
+      maxJobs = 4;
+    }];
+
+    distributedBuilds = true;
+
+    # gc = {
+    #   automatic = true;
+    #   dates = "
