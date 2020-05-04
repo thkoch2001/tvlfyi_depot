@@ -7,6 +7,7 @@
       ./emacs.nix
       ./sound.nix
       ./urbint.nix
+      ./kernel.nix
     ];
 
   boot.loader.systemd-boot.enable = true;
