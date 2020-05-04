@@ -28,6 +28,8 @@ in {
     })
 
     ispell
+
+    gnutls
   ];
 
   programs.emacs.enable = true;
