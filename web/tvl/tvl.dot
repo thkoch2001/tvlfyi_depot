@@ -27,9 +27,10 @@ digraph tvl {
   ghuntley [href="https://ghuntley.com/"];
   glittershark [href="http://gws.fyi"];
   grahamc [href="https://grahamc.com/"];
-  hyperfekt [href="https://hyperfekt.net"];
   hexchen [href="https://hxchn.de"];
+  hyperfekt [href="https://hyperfekt.net"];
   isomer [href="https://www.lorier.net/"];
+  jooiiee [href="https://jooiiee.se/"];
   jusrin [href="https://jusrin.dev/"];
   kanepyork [href="https://social.wxcafe.net/@riking"];
   leah2 [href="https://leahneukirchen.org/"];
@@ -114,7 +115,7 @@ digraph tvl {
   ericvolp -> lukegb;
   glittershark -> wpcarro;
   hexchen -> cynthia;
-  jooiiee1 -> unspecific;
+  jooiiee -> unspecific;
   kanepyork -> lukegb;
   marcusr -> unspecific;
   maskerad -> unspecific;
