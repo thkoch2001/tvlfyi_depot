@@ -28,6 +28,7 @@ digraph tvl {
   glittershark [href="http://gws.fyi"];
   grahamc [href="https://grahamc.com/"];
   hyperfekt [href="https://hyperfekt.net"];
+  hexchen [href="https://hxchn.de"];
   isomer [href="https://www.lorier.net/"];
   jusrin [href="https://jusrin.dev/"];
   kanepyork [href="https://social.wxcafe.net/@riking"];
@@ -112,6 +113,7 @@ digraph tvl {
   eta -> anon1;
   ericvolp -> lukegb;
   glittershark -> wpcarro;
+  hexchen -> cynthia;
   jooiiee1 -> unspecific;
   kanepyork -> lukegb;
   marcusr -> unspecific;
