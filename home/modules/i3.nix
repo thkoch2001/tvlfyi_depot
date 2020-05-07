@@ -183,7 +183,7 @@ in {
                   format = "%artist - %album - %title"
               }
 
-              wireless wlp3s0 {
+              wireless ${config.system.machine.wirelessInterface} {
                   format_up = "W: (%quality - %essid - %bitrate) %ip"
                   format_down = "W: -"
               }
