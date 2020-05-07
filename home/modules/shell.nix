@@ -14,6 +14,7 @@ let
     # Nix
     ns = "nix-shell";
     nb = "nix build -f .";
+    nc = "nix copy --to https://nix.urbinternal.com";
     "nc." = "nix copy -f . --to https://nix.urbinternal.com";
 
     # Docker and friends
@@ -71,6 +72,7 @@ let
     "grim" = "git fetch && git rebase -i origin/master";
     "grc" = "git rebase --continue";
     "gcan" = "git commit --amend --no-edit";
+    "grl" = "git reflog";
 
     # Aliases from old config
     stck = "dirs -v";
@@ -130,6 +132,11 @@ in {
     autocd = true;
 
     inherit shellAliases;
+
+    history = rec {
+      save = 100000;
+      size = save;
+    };
 
     oh-my-zsh = {
       enable = true;
