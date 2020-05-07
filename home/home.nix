@@ -33,6 +33,9 @@ let machine = ./machines/chupacabra.nix; in
   # changes in each release.
   home.stateVersion = "19.09";
 
+  # for when hacking
+  programs.home-manager.path = "/home/grfn/code/home-manager";
+
   home.packages = with pkgs; [
     (import (fetchTarball "https://github.com/ashkitten/nixpkgs/archive/init-glimpse.tar.gz") {}).glimpse
 
@@ -109,5 +112,12 @@ let machine = ./machines/chupacabra.nix; in
     gtk3.bookmarks = [
       "file:///home/grfn/code"
     ];
+  };
+
+  programs.tarsnap = {
+    enable = true;
+    keyfile = "/home/grfn/.private/tarsnap.key";
+    printStats = true;
+    humanizeNumbers = true;
   };
 }
