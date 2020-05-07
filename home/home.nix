@@ -79,7 +79,10 @@ let machine = ./machines/chupacabra.nix; in
 
     # games
     crawl
-    dwarf-fortress
+    (dwarf-fortress-packages.dwarf-fortress-full.override {
+      enableIntro = false;
+      enableFPS = true;
+    })
 
     # Nix things
     nix-prefetch-github
