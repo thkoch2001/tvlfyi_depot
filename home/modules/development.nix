@@ -31,10 +31,7 @@
 
   programs.git = {
     enable = true;
-    # bah, this doesn't work
-    # package = pkgs.git.override {
-    #   sendEmailSupport = true;
-    # };
+    package = pkgs.gitFull;
     userEmail = "root@gws.fyi";
     userName  = "Griffin Smith";
     ignores = [
