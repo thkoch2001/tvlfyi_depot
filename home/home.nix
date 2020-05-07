@@ -14,9 +14,7 @@ let machine = ./machines/chupacabra.nix; in
     ./modules/tarsnap.nix
     ./modules/vim.nix
 
-    ./modules/lib/cloneRepo.nix
-
-    ./modules/urbint
+    ~/code/urb/urbos/home
 
     machine
   ];

@@ -7,8 +7,8 @@
       ./fonts.nix
       ./emacs.nix
       ./sound.nix
-      ./urbint.nix
       ./kernel.nix
+      /home/grfn/code/urb/urbos/system
     ];
 
   boot.loader.systemd-boot.enable = true;
