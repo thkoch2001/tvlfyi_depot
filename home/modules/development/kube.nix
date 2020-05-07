@@ -25,7 +25,7 @@ in
     kubetail
     sops
     kubie
-    pkgs-unstable.argocd
+    # pkgs-unstable.argocd # provided by urbos
   ];
 
   programs.zsh.shellAliases = {

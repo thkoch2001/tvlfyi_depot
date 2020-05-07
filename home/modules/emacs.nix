@@ -8,7 +8,7 @@ let
  #                               # and packages.el files
  # };
 in {
-  imports = [ ./lib/cloneRepo.nix ];
+  # imports = [ ./lib/cloneRepo.nix ];
 
   # home.packages = [ doom-emacs ];
   # home.file.".emacs.d/init.el".text = ''
