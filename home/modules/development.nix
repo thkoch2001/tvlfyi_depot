@@ -47,6 +47,15 @@
       github.user = "glittershark";
       merge.conflictstyle = "diff3";
     };
+
+    delta = {
+      enable = true;
+      options = [
+        "--theme 'Solarized (light)'"
+        "--hunk-style" "plain"
+        "--commit-style" "box"
+      ];
+    };
   };
 
   home.file.".psqlrc".text = ''
