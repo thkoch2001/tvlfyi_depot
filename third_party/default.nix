@@ -33,6 +33,7 @@ let
       cairo
       cargo
       cgit
+      clangStdenv
       clang_9
       cmake
       coreutils
@@ -81,7 +82,6 @@ let
       openssh
       openssl
       overrideCC
-      overrideCCC
       pandoc
       parallel
       pkgconfig
@@ -126,7 +126,7 @@ in exposed // {
 
   # Packages to be overridden
   originals = {
-    inherit (nixpkgs) git notmuch;
+    inherit (nixpkgs) abseil-cpp git notmuch;
     ffmpeg = nixpkgs.ffmpeg-full;
   };
 
