@@ -9,6 +9,7 @@ let machine = ./machines/chupacabra.nix; in
     ./modules/emacs.nix
     ./modules/email.nix
     ./modules/firefox.nix
+    ./modules/games.nix
     ./modules/i3.nix
     ./modules/shell.nix
     ./modules/tarsnap.nix
@@ -76,13 +77,6 @@ let machine = ./machines/chupacabra.nix; in
     # Spotify...etc
     spotify
     playerctl
-
-    # games
-    crawl
-    (dwarf-fortress-packages.dwarf-fortress-full.override {
-      enableIntro = false;
-      enableFPS = true;
-    })
 
     # Nix things
     nix-prefetch-github
