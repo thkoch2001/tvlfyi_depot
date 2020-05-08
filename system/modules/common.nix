@@ -100,7 +100,7 @@
   };
 
   nix = {
-    trustedUsers = [ "griffin" ];
+    trustedUsers = [ "grfn" ];
     autoOptimiseStore = true;
 
     buildMachines = [{
