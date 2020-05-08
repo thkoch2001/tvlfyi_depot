@@ -7,6 +7,7 @@
 
   home.packages = with pkgs; [
     jq
+    yq
     gitAndTools.hub
     gitAndTools.tig
     shellcheck
