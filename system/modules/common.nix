@@ -118,6 +118,9 @@
     #   dates = "
   };
 
+  urbos.enable = true;
+  urbos.username = "grfn";
+
   services.udev.extraRules = ''
     # UDEV rules for Teensy USB devices
     ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", ENV{ID_MM_DEVICE_IGNORE}="1"
