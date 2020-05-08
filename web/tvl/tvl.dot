@@ -60,6 +60,7 @@ digraph tvl {
   nix [color="#DB4437" fontcolor="#DB4437" href="https://nixos.org/nix/"];
   ircv3 [color="#DB4437" fontcolor="#DB4437" href="https://ircv3.net/"];
   lgbtslack [label="lgbt.tech" color="#DB4437" fontcolor="#DB4437" href="https://lgbtq.technology/"];
+  muccc [label="µccc" color="#DB4437" fontcolor="#DB4437" href="https://muc.ccc.de/"];
   unspecific [color="grey" fontcolor="grey"];
   baby [color="pink" fontcolor="pink" href="https://cynthia.re/s/baby"];
 
@@ -136,6 +137,11 @@ digraph tvl {
   multi -> ircv3  [weight=0 style="dotted" color="grey" arrowhead="none"];
   eta -> ircv3  [weight=0 style="dotted" color="grey" arrowhead="none"];
   firefly -> ircv3  [weight=0 style="dotted" color="grey" arrowhead="none"];
+
+  // µccc
+  leah2 -> muccc [weight=0 style="dotted" color="grey" arrowhead="none"];
+  hexchen -> muccc [weight=0 style="dotted" color="grey" arrowhead="none"];
+  q3k -> muccc [weight=0 style="dotted" color="grey" arrowhead="none"];
 
   // random
   leah2 -> edef  [weight=0 style="dotted" color="grey" arrowhead="none"];
