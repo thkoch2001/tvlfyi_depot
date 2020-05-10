@@ -30,15 +30,23 @@ let
   '';
 
   df = runCommand "dwarf-fortress" {} ''
-     mkdir -p $out/bin
-     sed \
-       -e '4icp -f ${init} "$DF_DIR/data/init/init.txt"' \
-       -e '4icp -f ${d_init} "$DF_DIR/data/init/d_init.txt"' \
-       < "${df-full}/bin/dwarf-fortress" >"$out/bin/dwarf-fortress"
-     chmod +x $out/bin/dwarf-fortress
+    mkdir -p $out/bin
+    sed \
+      -e '4icp -f ${init} "$DF_DIR/data/init/init.txt"' \
+      -e '4icp -f ${d_init} "$DF_DIR/data/init/d_init.txt"' \
+      < "${df-full}/bin/dwarf-fortress" >"$out/bin/dwarf-fortress"
+
+    shopt -s extglob
+    ln -s ${df-full}/bin/!(dwarf-fortress) $out/bin
+
+    chmod +x $out/bin/dwarf-fortress
   '';
 
 in {
+  imports = [
+    ./obs.nix
+  ];
+
   home.packages = [
     crawl
     df
