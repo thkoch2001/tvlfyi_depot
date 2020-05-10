@@ -54,6 +54,7 @@ let machine = ./machines/chupacabra.nix; in
     vlc
     irssi
     gnutls
+    pandoc
 
     # System utilities
     htop
