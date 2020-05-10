@@ -82,6 +82,7 @@ let machine = ./machines/chupacabra.nix; in
     # Nix things
     nix-prefetch-github
     nix-review
+    cachix
   ];
 
   nixpkgs.config.allowUnfree = true;

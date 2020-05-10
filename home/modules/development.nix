@@ -85,4 +85,12 @@
       set editing-mode vi
     '';
   };
+
+  programs.zsh.shellAliases = {
+    # Haskell
+    "cnb" = "cabal new-build";
+    "cob" = "cabal old-build";
+    "cnr" = "cabal new-run";
+    "cor" = "cabal old-run";
+  };
 }
