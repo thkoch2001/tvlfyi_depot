@@ -326,6 +326,8 @@ in lib.fix(self: {
       extraConfig = ''
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 
+        rewrite ^/meet/?$ https://meet.google.com/mng-biyw-xbb last;
+
         location ~* \.(webp|woff2)$ {
           add_header Cache-Control "public, max-age=31536000";
         }
