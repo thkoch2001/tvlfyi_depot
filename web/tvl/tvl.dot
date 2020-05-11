@@ -15,6 +15,7 @@ digraph tvl {
     aranea;
     artemist [href="https://artem.ist/"];
     aurora [href="https://nonegenderleftfox.aventine.se/"];
+    ave [href="https://ave.zone/"];
     benjojo [href="https://benjojo.co.uk/"];
     borb [href="https://twitter.com/FR31H31T"];
     cynthia [href="https://cynthia.re/"];
@@ -35,6 +36,7 @@ digraph tvl {
     jusrin [href="https://jusrin.dev/"];
     kanepyork [href="https://social.wxcafe.net/@riking"];
     leah2 [href="https://leahneukirchen.org/"];
+    linuxgemini [href="https://linuxgemini.space"];
     lukegb [href="https://lukegb.com/"];
     marcusr [href="http://marcus.nordaaker.com/"];
     maskerad [href="https://femalelegends.com/"];
@@ -122,6 +124,7 @@ digraph tvl {
     aranea -> multi;
     artemist -> cynthia;
     aurora -> eve;
+    ave -> hexchen;
     borb -> unspecific;
     cynthia -> benjojo;
     drathier -> maskerad;
@@ -131,6 +134,7 @@ digraph tvl {
     hexchen -> cynthia;
     jooiiee -> unspecific;
     kanepyork -> lukegb;
+    linuxgemini -> hexchen;
     marcusr -> unspecific;
     maskerad -> unspecific;
     poigon -> eve;
@@ -183,6 +187,9 @@ digraph tvl {
     aranea -> profpatsch;
     artemist -> nix;
     hyperfekt -> edef;
+    ave -> cynthia;
+    linuxgemini -> ave;
+    linuxgemini -> cynthia;
   }
 
   // baby
