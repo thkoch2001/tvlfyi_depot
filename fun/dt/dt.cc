@@ -10,11 +10,11 @@
 #include "absl/types/optional.h"
 #include "farmhash.h"
 
-ABSL_FLAG(std::vector<std::string>, word, {}, "words to use");
-ABSL_FLAG(int, range, 100, "operating range");
+ABSL_FLAG(std::vector<std::string>, words, {}, "words to use");
 
 struct Result {
   std::string a;
+  int ec;
   absl::optional<std::string> p;
 };
 
@@ -39,22 +39,23 @@ Result decide(const std::vector<std::string>& words) {
     input += w;
   }
 
-  auto base = util::Fingerprint64(input) % (absl::GetFlag(FLAGS_range) + 1);
-
+  auto base = util::Fingerprint64(input);
   Result result = { "nope" };
 
   if (base % 10 == 0) {
     result.a = "ca";
-  } else if (base % 9 == 0) {
+  } else if (base % 8 == 0) {
     result.a = "c1";
     result.p = which(words);
-  } else if (base % 8 == 0) {
-    result.a = "ea";
-  } else if (base % 7 == 0) {
-    result.a = "e1";
-    result.p = which(words);
-  } else if (base % 3 == 0) {
+  } else if (base % 6 == 0) {
     result.a = "skip";
+  } else if (base % 3 == 0) {
+    result.a = "e1";
+    result.ec = base % 10;
+    result.p = which(words);
+  } else if (base % 2 == 0) {
+    result.a = "ea";
+    result.ec = base % 10;
   }
 
   return result;
@@ -63,7 +64,7 @@ Result decide(const std::vector<std::string>& words) {
 int main(int argc, char *argv[]) {
   absl::ParseCommandLine(argc, argv);
 
-  auto words = absl::GetFlag(FLAGS_word);
+  auto words = absl::GetFlag(FLAGS_words);
   if (words.size() < 2) {
     std::cerr << "needs at least two!" << std::endl;
     return 1;
@@ -73,5 +74,6 @@ int main(int argc, char *argv[]) {
   std::cout << result.a
             << (result.p.has_value() ? absl::StrCat(" ", "(", result.p.value(), ")")
                                      : "")
+            << (result.ec > 0 ? absl::StrCat(": ", result.ec) : "")
             << std::endl;
 }
