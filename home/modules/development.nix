@@ -92,5 +92,6 @@
     "cob" = "cabal old-build";
     "cnr" = "cabal new-run";
     "cor" = "cabal old-run";
+    "ho" = "hoogle";
   };
 }
