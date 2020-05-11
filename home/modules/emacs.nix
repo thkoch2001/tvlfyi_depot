@@ -29,10 +29,24 @@ in {
 
     ispell
 
+    ripgrep
+    coreutils
+    fd
+    clang
     gnutls
   ];
 
-  programs.emacs.enable = true;
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = "https://github.com/nix-community/emacs-overlay/archive/54afb061bdd12c61bbfcc13bad98b7a3aab7d8d3.tar.gz";
+      sha256 = "0hrbg65d5h0cb0nky7a46md7vlvhajq1hf0328l2f7ln9hznqz6j";
+    }))
+  ];
+
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacsUnstable;
+  };
 
   impure.clonedRepos = {
     orgClubhouse = {

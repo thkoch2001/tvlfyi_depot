@@ -5,7 +5,6 @@
     [
       ./xserver.nix
       ./fonts.nix
-      ./emacs.nix
       ./sound.nix
       ./kernel.nix
       /home/grfn/code/urb/urbos/system
