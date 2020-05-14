@@ -22,6 +22,7 @@ digraph tvl {
     drathier;
     edef [href="https://edef.eu/files/edef.hs"];
     ericvolp [href="https://ericv.me"];
+    erin [href="https://e2.pm/"];
     espes;
     eta [href="https://theta.eu.org/"];
     firefly [href="http://firefly.nu/"];
@@ -128,6 +129,7 @@ digraph tvl {
     borb -> unspecific;
     cynthia -> benjojo;
     drathier -> maskerad;
+    erin -> linuxgemini;
     eta -> anon1;
     ericvolp -> lukegb;
     glittershark -> wpcarro;
@@ -190,6 +192,8 @@ digraph tvl {
     ave -> cynthia;
     linuxgemini -> ave;
     linuxgemini -> cynthia;
+    erin -> ave;
+    erin -> cynthia;
   }
 
   // baby
