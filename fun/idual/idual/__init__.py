@@ -59,7 +59,7 @@ class LightController:
         "Turn on the lights in the morning, try repeatedly for reasons."
         print('Turning on the lights. Wakey, wakey!')
         for i in range(5):
-            self.send_cmd('morning')
+            self.send_cmd('sun')
             time.sleep(0.3)
             self.send_cmd('on')
             time.sleep(0.3)
