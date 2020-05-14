@@ -34,6 +34,7 @@
     w3m
     libnotify
     file
+    lm_sensors
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
