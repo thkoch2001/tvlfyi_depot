@@ -21,18 +21,6 @@ let
 
   identity = x: x;
 
-  # EXWM straight from GitHub. As of 2020-02-07, XELB in nixpkgs is
-  # already at a recent enough version and does not need to be
-  # overridden.
-  exwmMaster = exwm.overrideAttrs(_: {
-    src = third_party.fetchFromGitHub {
-      owner = "ch11ng";
-      repo = "exwm";
-      rev = "48db94f48bea1137132345abfe8256cfc6219248";
-      sha256 = "0jj12z6m5kvanq19gds3jpvid2mg8w28bbbq9iycl751y2sj4l1r";
-    };
-  });
-
   tazjinsEmacs = pkgfun: (emacsWithPackages(epkgs: pkgfun(
   # Actual ELPA packages (the enlightened!)
   (with epkgs.elpaPackages; [
@@ -111,27 +99,19 @@ let
     xelb
     yaml-mode
     yasnippet
-
-    (vterm.overrideAttrs(_: {
-      src = third_party.fetchFromGitHub{
-        owner = "akermu";
-        repo = "emacs-libvterm";
-        rev = "58b4cc40ee9872a08fc5cbfee78ad0e195a3306c";
-        sha256 = "1w5yfl8nq4k7xyldf0ivzv36vhz3dwdzk6q2vs3xwpx6ljy52px6";
-      };
-    }))
   ]) ++
 
   # Custom packages
   (with depot.tools.emacs-pkgs; [
     carp-mode
-    exwmMaster
     dottime
     nix-util
     term-switcher
 
-    # patched version of rcirc
+    # patched / overridden versions of packages
+    depot.third_party.emacs.exwm
     depot.third_party.emacs.rcirc
+    depot.third_party.emacs.vterm
   ]))));
 in lib.fix(self: l: f: third_party.writeShellScriptBin "tazjins-emacs" ''
   export PATH="${emacsBinPath}:$PATH"
