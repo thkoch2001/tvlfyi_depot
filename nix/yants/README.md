@@ -21,28 +21,32 @@ Currently lacking:
 
 ## Primitives & simple polymorphism
 
-![simple](yants/screenshots/simple.png)
+![simple](/about/nix/yants/screenshots/simple.png)
 
 ## Structs
 
-![structs](yants/screenshots/structs.png)
+![structs](/about/nix/yants/screenshots/structs.png)
 
 ## Nested structs!
 
-![nested structs](yants/screenshots/nested-structs.png)
+![nested structs](/about/nix/yants/screenshots/nested-structs.png)
 
 ## Enums!
 
-![enums](yants/screenshots/enums.png)
+![enums](/about/nix/yants/screenshots/enums.png)
 
 ## Functions!
 
-![functions](yants/screenshots/functions.png)
+![functions](/about/nix/yants/screenshots/functions.png)
 
 # Usage
 
 Yants can be imported from its `default.nix`. A single attribute (`lib`) can be
 passed, which will otherwise be imported from `<nixpkgs>`.
+
+TIP: You do not need to clone my whole repository to use Yants! It is split out
+into the `nix/yants` branch which you can clone with, for example, `git clone -b
+nix/yants https://git.tazj.in yants`.
 
 Examples for the most common import methods would be:
 
