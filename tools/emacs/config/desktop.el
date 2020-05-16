@@ -139,21 +139,25 @@
 (exwm-input-set-key (kbd "<XF86MonBrightnessUp>") #'brightness-up)
 (exwm-input-set-key (kbd "<XF86Display>") #'lock-screen)
 
-;; Keyboard layouts (these are bound separately in Cyrillic
-;; because I don't use reverse-im)
-;; (-map
-;;  (lambda (pair)
-;;    (exwm-input-set-key
-;;     (kbd (format "s-%s" (cadr pair)))
-;;     `(lambda () (interactive) (set-xkb-layout ,(car pair)))))
-;;  '(("de" "k d")
-;;    ("de" "л в")
-;;    ("no" "k n")
-;;    ("no" "л т")
-;;    ("ru" "k r")
-;;    ("ru" "л к")
-;;    ("us" "k u")
-;;    ("us" "л г")))
+;; Shortcuts for switching between keyboard layouts
+(defmacro bind-xkb (lang key)
+  `(exwm-input-set-key (kbd (format "s-%s" ,key))
+                       (lambda ()
+                         (interactive)
+                         (set-xkb-layout ,lang))))
+
+(bind-xkb "us" "k u")
+(bind-xkb "de" "k d")
+(bind-xkb "no" "k n")
+(bind-xkb "ru" "k r")
+
+;; These are commented out because Emacs no longer starts (??) if
+;; they're set at launch.
+;;
+;; (bind-xkb "us" "л г")
+;; (bind-xkb "de" "л в")
+;; (bind-xkb "no" "л т")
+;; (bind-xkb "ru" "л к")
 
 ;; Line-editing shortcuts
 (exwm-input-set-simulation-keys
