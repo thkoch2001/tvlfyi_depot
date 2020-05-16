@@ -41,19 +41,6 @@ let
         we've decided that there isn't enough spontaneous socialising
         on the internet.
       </p>
-      <p>
-        Anyone can join The Virus Lounge, if it is currently open. Its
-        current status is shown in the topic of the <b>##tvl</b>
-        channel on Freenode.
-      </p>
-
-      <div style="text-align:center;">
-        <a href="https://meet.google.com/mng-biyw-xbb" target="_blank">
-          <button style="color:initial;">Join The Lounge!</button>
-        </a>
-        <br>
-        <i>(Hope you've checked that it's open!)</i>
-      </div>
 
       <hr>
       <h2>Where did all these people come from?</h2>
