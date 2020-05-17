@@ -1,15 +1,3 @@
-# Nix project build file
-#============================================================================
-
-
-
-
-# init
-#============================================================================
-
-
-# init project
-#-------------------------------------------------
 project(
     'nix',
     'cpp',
@@ -25,21 +13,14 @@ project(
 )
 
 # init compiler
-#-------------------------------------------------
 cpp = meson.get_compiler('cpp')
 
 add_project_arguments(get_option('cxxflags'), language : 'cpp')
 add_project_link_arguments(get_option('ldflags'), language: 'cpp')
 
-
 cmake = import('cmake')
 pkg = import('pkgconfig')
 
-
-
-
-# init configuration
-#-------------------------------------------------
 config_h = configuration_data()
 
 config_h.set(
@@ -77,12 +58,7 @@ config_h.set_quoted(
     'PACKAGE_BUGREPORT', package_bug_url,
     description : 'Define to the address where bug reports for this package should be sent.')
 
-
-
-
 # env
-#============================================================================
-
 
 # set install directories
 #-------------------------------------------------
@@ -96,7 +72,6 @@ mandir = join_paths(prefix, get_option('mandir'))
 includedir = join_paths(prefix, get_option('includedir'))
 
 # set nix directories
-#-------------------------------------------------
 
 # State should be stored in /nix/var, unless the user overrides it explicitly.
 if get_option('normal_var')
@@ -485,19 +460,14 @@ else
 endif
 
 
-# Look for Boehm garbage collector, an optional dependency.
-#--------------------------------------------------
-if (get_option('with_gc'))
-    gc_dep = declare_dependency(
-        dependencies : dependency('bdw-gc'),
-        link_args :  get_option('gc_link_args'))
-    config_h.set(
-        'HAVE_BOEHMGC', 1,
-        description : 'Whether to use the Boehm garbage collector.')
-else
-    gc_dep = dependency('', required: false)
-endif
-
+# Look for Boehm garbage collector, a required dependency.
+# TODO(tazjin): Remove option to disable GC
+gc_dep = declare_dependency(
+    dependencies : dependency('bdw-gc'),
+    link_args :  get_option('gc_link_args'))
+config_h.set(
+    'HAVE_BOEHMGC', 1,
+    description : 'Whether to use the Boehm garbage collector.')
 
 # Look for aws-cpp-sdk-s3.
 #--------------------------------------------------

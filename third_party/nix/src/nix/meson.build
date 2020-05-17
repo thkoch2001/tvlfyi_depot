@@ -53,6 +53,7 @@ nix_headers = files (
     join_paths(meson.source_root(), 'src/nix-store/graphml.hh'))
 
 nix_dep_list = [
+    gc_dep,
     pthread_dep,
     libdl_dep,
     boost_dep,

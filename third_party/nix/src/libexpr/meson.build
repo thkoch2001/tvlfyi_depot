@@ -38,6 +38,7 @@ libexpr_headers = files(
     join_paths(meson.source_root(), 'src/libexpr/value-to-xml.hh'))
 
 libexpr_dep_list = [
+    gc_dep,
     libdl_dep,
     libsodium_dep]
 
