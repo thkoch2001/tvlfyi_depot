@@ -74,10 +74,12 @@ let
       makeFontsConf
       makeWrapper
       mdbook
+      meson
       mime-types
       moreutils
       nano
       nginx
+      ninja
       nix
       openssh
       openssl

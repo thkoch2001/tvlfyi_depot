@@ -38,6 +38,12 @@ case "${TARGET_TOOL}" in
   rebuilder)
     attr="ops.nixos.rebuilder"
     ;;
+  meson)
+    attr="third_party.meson"
+    ;;
+  ninja)
+    attr="third_party.ninja"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1
