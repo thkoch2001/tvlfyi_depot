@@ -23,6 +23,7 @@ with (import ./default.nix {}); [
   third_party.cgit
   third_party.git
   third_party.lisp # will build all third-party libraries
+  third_party.nix
   tools.cheddar
   tools.emacs
   web.blog
