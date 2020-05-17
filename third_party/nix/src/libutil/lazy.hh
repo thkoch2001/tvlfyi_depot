@@ -12,37 +12,32 @@ namespace nix {
    thread-safe way) on first use, that is, when var() is first
    called. If the initialiser code throws an exception, then all
    subsequent calls to var() will rethrow that exception. */
-template<typename T>
-class Lazy
-{
+template <typename T>
+class Lazy {
+  typedef std::function<T()> Init;
 
-    typedef std::function<T()> Init;
+  Init init;
 
-    Init init;
+  std::once_flag done;
 
-    std::once_flag done;
+  T value;
 
-    T value;
+  std::exception_ptr ex;
 
-    std::exception_ptr ex;
+ public:
+  Lazy(Init init) : init(init) {}
 
-public:
-
-    Lazy(Init init) : init(init)
-    { }
-
-    const T & operator () ()
-    {
-        std::call_once(done, [&]() {
-            try {
-                value = init();
-            } catch (...) {
-                ex = std::current_exception();
-            }
-        });
-        if (ex) std::rethrow_exception(ex);
-        return value;
-    }
+  const T& operator()() {
+    std::call_once(done, [&]() {
+      try {
+        value = init();
+      } catch (...) {
+        ex = std::current_exception();
+      }
+    });
+    if (ex) std::rethrow_exception(ex);
+    return value;
+  }
 };
 
-}
+}  // namespace nix

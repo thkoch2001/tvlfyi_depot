@@ -4,10 +4,9 @@
 
 namespace nix {
 
-DrvInfos queryInstalled(EvalState & state, const Path & userEnv);
+DrvInfos queryInstalled(EvalState& state, const Path& userEnv);
 
-bool createUserEnv(EvalState & state, DrvInfos & elems,
-    const Path & profile, bool keepDerivations,
-    const string & lockToken);
+bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
+                   bool keepDerivations, const string& lockToken);
 
-}
+}  // namespace nix

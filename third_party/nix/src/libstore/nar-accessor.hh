@@ -1,7 +1,6 @@
 #pragma once
 
 #include <functional>
-
 #include "fs-accessor.hh"
 
 namespace nix {
@@ -16,15 +15,14 @@ ref<FSAccessor> makeNarAccessor(ref<const std::string> nar);
    inside the NAR. */
 typedef std::function<std::string(uint64_t, uint64_t)> GetNarBytes;
 
-ref<FSAccessor> makeLazyNarAccessor(
-    const std::string & listing,
-    GetNarBytes getNarBytes);
+ref<FSAccessor> makeLazyNarAccessor(const std::string& listing,
+                                    GetNarBytes getNarBytes);
 
 class JSONPlaceholder;
 
 /* Write a JSON representation of the contents of a NAR (except file
    contents). */
-void listNar(JSONPlaceholder & res, ref<FSAccessor> accessor,
-    const Path & path, bool recurse);
+void listNar(JSONPlaceholder& res, ref<FSAccessor> accessor, const Path& path,
+             bool recurse);
 
-}
+}  // namespace nix

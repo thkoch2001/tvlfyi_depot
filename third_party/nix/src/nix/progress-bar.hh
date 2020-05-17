@@ -8,4 +8,4 @@ void startProgressBar(bool printBuildLogs = false);
 
 void stopProgressBar();
 
-}
+}  // namespace nix

@@ -1,189 +1,142 @@
 #pragma once
 
+#include <cassert>
 #include <iostream>
 #include <vector>
-#include <cassert>
 
 namespace nix {
 
-void toJSON(std::ostream & str, const char * start, const char * end);
-void toJSON(std::ostream & str, const char * s);
+void toJSON(std::ostream& str, const char* start, const char* end);
+void toJSON(std::ostream& str, const char* s);
 
-template<typename T>
-void toJSON(std::ostream & str, const T & n);
+template <typename T>
+void toJSON(std::ostream& str, const T& n);
 
-class JSONWriter
-{
-protected:
+class JSONWriter {
+ protected:
+  struct JSONState {
+    std::ostream& str;
+    bool indent;
+    size_t depth = 0;
+    size_t stack = 0;
+    JSONState(std::ostream& str, bool indent) : str(str), indent(indent) {}
+    ~JSONState() { assert(stack == 0); }
+  };
 
-    struct JSONState
-    {
-        std::ostream & str;
-        bool indent;
-        size_t depth = 0;
-        size_t stack = 0;
-        JSONState(std::ostream & str, bool indent) : str(str), indent(indent) { }
-        ~JSONState()
-        {
-            assert(stack == 0);
-        }
-    };
+  JSONState* state;
 
-    JSONState * state;
+  bool first = true;
 
-    bool first = true;
+  JSONWriter(std::ostream& str, bool indent);
 
-    JSONWriter(std::ostream & str, bool indent);
+  JSONWriter(JSONState* state);
 
-    JSONWriter(JSONState * state);
+  ~JSONWriter();
 
-    ~JSONWriter();
+  void assertActive() { assert(state->stack != 0); }
 
-    void assertActive()
-    {
-        assert(state->stack != 0);
-    }
+  void comma();
 
-    void comma();
-
-    void indent();
+  void indent();
 };
 
 class JSONObject;
 class JSONPlaceholder;
 
-class JSONList : JSONWriter
-{
-private:
+class JSONList : JSONWriter {
+ private:
+  friend class JSONObject;
+  friend class JSONPlaceholder;
 
-    friend class JSONObject;
-    friend class JSONPlaceholder;
+  void open();
 
-    void open();
+  JSONList(JSONState* state) : JSONWriter(state) { open(); }
 
-    JSONList(JSONState * state)
-        : JSONWriter(state)
-    {
-        open();
-    }
+ public:
+  JSONList(std::ostream& str, bool indent = false) : JSONWriter(str, indent) {
+    open();
+  }
 
-public:
+  ~JSONList();
 
-    JSONList(std::ostream & str, bool indent = false)
-        : JSONWriter(str, indent)
-    {
-        open();
-    }
+  template <typename T>
+  JSONList& elem(const T& v) {
+    comma();
+    toJSON(state->str, v);
+    return *this;
+  }
 
-    ~JSONList();
+  JSONList list();
 
-    template<typename T>
-    JSONList & elem(const T & v)
-    {
-        comma();
-        toJSON(state->str, v);
-        return *this;
-    }
+  JSONObject object();
 
-    JSONList list();
-
-    JSONObject object();
-
-    JSONPlaceholder placeholder();
+  JSONPlaceholder placeholder();
 };
 
-class JSONObject : JSONWriter
-{
-private:
+class JSONObject : JSONWriter {
+ private:
+  friend class JSONList;
+  friend class JSONPlaceholder;
 
-    friend class JSONList;
-    friend class JSONPlaceholder;
+  void open();
 
-    void open();
+  JSONObject(JSONState* state) : JSONWriter(state) { open(); }
 
-    JSONObject(JSONState * state)
-        : JSONWriter(state)
-    {
-        open();
-    }
+  void attr(const std::string& s);
 
-    void attr(const std::string & s);
+ public:
+  JSONObject(std::ostream& str, bool indent = false) : JSONWriter(str, indent) {
+    open();
+  }
 
-public:
+  JSONObject(const JSONObject& obj) = delete;
 
-    JSONObject(std::ostream & str, bool indent = false)
-        : JSONWriter(str, indent)
-    {
-        open();
-    }
+  JSONObject(JSONObject&& obj) : JSONWriter(obj.state) { obj.state = 0; }
 
-    JSONObject(const JSONObject & obj) = delete;
+  ~JSONObject();
 
-    JSONObject(JSONObject && obj)
-        : JSONWriter(obj.state)
-    {
-        obj.state = 0;
-    }
+  template <typename T>
+  JSONObject& attr(const std::string& name, const T& v) {
+    attr(name);
+    toJSON(state->str, v);
+    return *this;
+  }
 
-    ~JSONObject();
+  JSONList list(const std::string& name);
 
-    template<typename T>
-    JSONObject & attr(const std::string & name, const T & v)
-    {
-        attr(name);
-        toJSON(state->str, v);
-        return *this;
-    }
+  JSONObject object(const std::string& name);
 
-    JSONList list(const std::string & name);
-
-    JSONObject object(const std::string & name);
-
-    JSONPlaceholder placeholder(const std::string & name);
+  JSONPlaceholder placeholder(const std::string& name);
 };
 
-class JSONPlaceholder : JSONWriter
-{
+class JSONPlaceholder : JSONWriter {
+ private:
+  friend class JSONList;
+  friend class JSONObject;
 
-private:
+  JSONPlaceholder(JSONState* state) : JSONWriter(state) {}
 
-    friend class JSONList;
-    friend class JSONObject;
+  void assertValid() {
+    assertActive();
+    assert(first);
+  }
 
-    JSONPlaceholder(JSONState * state)
-        : JSONWriter(state)
-    {
-    }
+ public:
+  JSONPlaceholder(std::ostream& str, bool indent = false)
+      : JSONWriter(str, indent) {}
 
-    void assertValid()
-    {
-        assertActive();
-        assert(first);
-    }
+  ~JSONPlaceholder() { assert(!first || std::uncaught_exception()); }
 
-public:
+  template <typename T>
+  void write(const T& v) {
+    assertValid();
+    first = false;
+    toJSON(state->str, v);
+  }
 
-    JSONPlaceholder(std::ostream & str, bool indent = false)
-        : JSONWriter(str, indent)
-    {
-    }
+  JSONList list();
 
-    ~JSONPlaceholder()
-    {
-        assert(!first || std::uncaught_exception());
-    }
-
-    template<typename T>
-    void write(const T & v)
-    {
-        assertValid();
-        first = false;
-        toJSON(state->str, v);
-    }
-
-    JSONList list();
-
-    JSONObject object();
+  JSONObject object();
 };
 
-}
+}  // namespace nix

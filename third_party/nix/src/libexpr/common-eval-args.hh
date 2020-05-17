@@ -8,19 +8,17 @@ class Store;
 class EvalState;
 class Bindings;
 
-struct MixEvalArgs : virtual Args
-{
-    MixEvalArgs();
+struct MixEvalArgs : virtual Args {
+  MixEvalArgs();
 
-    Bindings * getAutoArgs(EvalState & state);
+  Bindings* getAutoArgs(EvalState& state);
 
-    Strings searchPath;
+  Strings searchPath;
 
-private:
-
-    std::map<std::string, std::string> autoArgs;
+ private:
+  std::map<std::string, std::string> autoArgs;
 };
 
-Path lookupFileArg(EvalState & state, string s);
+Path lookupFileArg(EvalState& state, string s);
 
-}
+}  // namespace nix

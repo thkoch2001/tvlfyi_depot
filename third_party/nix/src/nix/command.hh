@@ -13,202 +13,177 @@ class EvalState;
 
 /* A command is an argument parser that can be executed by calling its
    run() method. */
-struct Command : virtual Args
-{
-    virtual std::string name() = 0;
-    virtual void prepare() { };
-    virtual void run() = 0;
+struct Command : virtual Args {
+  virtual std::string name() = 0;
+  virtual void prepare(){};
+  virtual void run() = 0;
 
-    struct Example
-    {
-        std::string description;
-        std::string command;
-    };
+  struct Example {
+    std::string description;
+    std::string command;
+  };
 
-    typedef std::list<Example> Examples;
+  typedef std::list<Example> Examples;
 
-    virtual Examples examples() { return Examples(); }
+  virtual Examples examples() { return Examples(); }
 
-    void printHelp(const string & programName, std::ostream & out) override;
+  void printHelp(const string& programName, std::ostream& out) override;
 };
 
 class Store;
 
 /* A command that require a Nix store. */
-struct StoreCommand : virtual Command
-{
-    StoreCommand();
-    void run() override;
-    ref<Store> getStore();
-    virtual ref<Store> createStore();
-    virtual void run(ref<Store>) = 0;
+struct StoreCommand : virtual Command {
+  StoreCommand();
+  void run() override;
+  ref<Store> getStore();
+  virtual ref<Store> createStore();
+  virtual void run(ref<Store>) = 0;
 
-private:
-    std::shared_ptr<Store> _store;
+ private:
+  std::shared_ptr<Store> _store;
 };
 
-struct Buildable
-{
-    Path drvPath; // may be empty
-    std::map<std::string, Path> outputs;
+struct Buildable {
+  Path drvPath;  // may be empty
+  std::map<std::string, Path> outputs;
 };
 
 typedef std::vector<Buildable> Buildables;
 
-struct Installable
-{
-    virtual std::string what() = 0;
+struct Installable {
+  virtual std::string what() = 0;
 
-    virtual Buildables toBuildables()
-    {
-        throw Error("argument '%s' cannot be built", what());
-    }
+  virtual Buildables toBuildables() {
+    throw Error("argument '%s' cannot be built", what());
+  }
 
-    Buildable toBuildable();
+  Buildable toBuildable();
 
-    virtual Value * toValue(EvalState & state)
-    {
-        throw Error("argument '%s' cannot be evaluated", what());
-    }
+  virtual Value* toValue(EvalState& state) {
+    throw Error("argument '%s' cannot be evaluated", what());
+  }
 };
 
-struct SourceExprCommand : virtual Args, StoreCommand, MixEvalArgs
-{
-    Path file;
+struct SourceExprCommand : virtual Args, StoreCommand, MixEvalArgs {
+  Path file;
 
-    SourceExprCommand();
+  SourceExprCommand();
 
-    /* Return a value representing the Nix expression from which we
-       are installing. This is either the file specified by ‘--file’,
-       or an attribute set constructed from $NIX_PATH, e.g. ‘{ nixpkgs
-       = import ...; bla = import ...; }’. */
-    Value * getSourceExpr(EvalState & state);
+  /* Return a value representing the Nix expression from which we
+     are installing. This is either the file specified by ‘--file’,
+     or an attribute set constructed from $NIX_PATH, e.g. ‘{ nixpkgs
+     = import ...; bla = import ...; }’. */
+  Value* getSourceExpr(EvalState& state);
 
-    ref<EvalState> getEvalState();
+  ref<EvalState> getEvalState();
 
-private:
+ private:
+  std::shared_ptr<EvalState> evalState;
 
-    std::shared_ptr<EvalState> evalState;
-
-    Value * vSourceExpr = 0;
+  Value* vSourceExpr = 0;
 };
 
 enum RealiseMode { Build, NoBuild, DryRun };
 
 /* A command that operates on a list of "installables", which can be
    store paths, attribute paths, Nix expressions, etc. */
-struct InstallablesCommand : virtual Args, SourceExprCommand
-{
-    std::vector<std::shared_ptr<Installable>> installables;
+struct InstallablesCommand : virtual Args, SourceExprCommand {
+  std::vector<std::shared_ptr<Installable>> installables;
 
-    InstallablesCommand()
-    {
-        expectArgs("installables", &_installables);
-    }
+  InstallablesCommand() { expectArgs("installables", &_installables); }
 
-    void prepare() override;
+  void prepare() override;
 
-    virtual bool useDefaultInstallables() { return true; }
+  virtual bool useDefaultInstallables() { return true; }
 
-private:
-
-    std::vector<std::string> _installables;
+ private:
+  std::vector<std::string> _installables;
 };
 
-struct InstallableCommand : virtual Args, SourceExprCommand
-{
-    std::shared_ptr<Installable> installable;
+struct InstallableCommand : virtual Args, SourceExprCommand {
+  std::shared_ptr<Installable> installable;
 
-    InstallableCommand()
-    {
-        expectArg("installable", &_installable);
-    }
+  InstallableCommand() { expectArg("installable", &_installable); }
 
-    void prepare() override;
+  void prepare() override;
 
-private:
-
-    std::string _installable;
+ private:
+  std::string _installable;
 };
 
 /* A command that operates on zero or more store paths. */
-struct StorePathsCommand : public InstallablesCommand
-{
-private:
+struct StorePathsCommand : public InstallablesCommand {
+ private:
+  bool recursive = false;
+  bool all = false;
 
-    bool recursive = false;
-    bool all = false;
+ public:
+  StorePathsCommand(bool recursive = false);
 
-public:
+  using StoreCommand::run;
 
-    StorePathsCommand(bool recursive = false);
+  virtual void run(ref<Store> store, Paths storePaths) = 0;
 
-    using StoreCommand::run;
+  void run(ref<Store> store) override;
 
-    virtual void run(ref<Store> store, Paths storePaths) = 0;
-
-    void run(ref<Store> store) override;
-
-    bool useDefaultInstallables() override { return !all; }
+  bool useDefaultInstallables() override { return !all; }
 };
 
 /* A command that operates on exactly one store path. */
-struct StorePathCommand : public InstallablesCommand
-{
-    using StoreCommand::run;
+struct StorePathCommand : public InstallablesCommand {
+  using StoreCommand::run;
 
-    virtual void run(ref<Store> store, const Path & storePath) = 0;
+  virtual void run(ref<Store> store, const Path& storePath) = 0;
 
-    void run(ref<Store> store) override;
+  void run(ref<Store> store) override;
 };
 
 typedef std::map<std::string, ref<Command>> Commands;
 
 /* An argument parser that supports multiple subcommands,
    i.e. ‘<command> <subcommand>’. */
-class MultiCommand : virtual Args
-{
-public:
-    Commands commands;
+class MultiCommand : virtual Args {
+ public:
+  Commands commands;
 
-    std::shared_ptr<Command> command;
+  std::shared_ptr<Command> command;
 
-    MultiCommand(const Commands & commands);
+  MultiCommand(const Commands& commands);
 
-    void printHelp(const string & programName, std::ostream & out) override;
+  void printHelp(const string& programName, std::ostream& out) override;
 
-    bool processFlag(Strings::iterator & pos, Strings::iterator end) override;
+  bool processFlag(Strings::iterator& pos, Strings::iterator end) override;
 
-    bool processArgs(const Strings & args, bool finish) override;
+  bool processArgs(const Strings& args, bool finish) override;
 };
 
 /* A helper class for registering commands globally. */
-struct RegisterCommand
-{
-    static Commands * commands;
+struct RegisterCommand {
+  static Commands* commands;
 
-    RegisterCommand(ref<Command> command)
-    {
-        if (!commands) commands = new Commands;
-        commands->emplace(command->name(), command);
-    }
+  RegisterCommand(ref<Command> command) {
+    if (!commands) commands = new Commands;
+    commands->emplace(command->name(), command);
+  }
 };
 
-std::shared_ptr<Installable> parseInstallable(
-    SourceExprCommand & cmd, ref<Store> store, const std::string & installable,
-    bool useDefaultInstallables);
+std::shared_ptr<Installable> parseInstallable(SourceExprCommand& cmd,
+                                              ref<Store> store,
+                                              const std::string& installable,
+                                              bool useDefaultInstallables);
 
 Buildables build(ref<Store> store, RealiseMode mode,
-    std::vector<std::shared_ptr<Installable>> installables);
+                 std::vector<std::shared_ptr<Installable>> installables);
 
 PathSet toStorePaths(ref<Store> store, RealiseMode mode,
-    std::vector<std::shared_ptr<Installable>> installables);
+                     std::vector<std::shared_ptr<Installable>> installables);
 
 Path toStorePath(ref<Store> store, RealiseMode mode,
-    std::shared_ptr<Installable> installable);
+                 std::shared_ptr<Installable> installable);
 
 PathSet toDerivations(ref<Store> store,
-    std::vector<std::shared_ptr<Installable>> installables,
-    bool useDeriver = false);
+                      std::vector<std::shared_ptr<Installable>> installables,
+                      bool useDeriver = false);
 
-}
+}  // namespace nix

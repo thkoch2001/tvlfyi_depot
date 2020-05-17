@@ -1,14 +1,13 @@
 #pragma once
 
-#include "nixexpr.hh"
-#include "eval.hh"
-
-#include <string>
 #include <map>
+#include <string>
+#include "eval.hh"
+#include "nixexpr.hh"
 
 namespace nix {
 
-void printValueAsXML(EvalState & state, bool strict, bool location,
-    Value & v, std::ostream & out, PathSet & context);
-    
+void printValueAsXML(EvalState& state, bool strict, bool location, Value& v,
+                     std::ostream& out, PathSet& context);
+
 }

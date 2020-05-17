@@ -6,4 +6,4 @@ void setAffinityTo(int cpu);
 int lockToCurrentCPU();
 void restoreAffinity();
 
-}
+}  // namespace nix

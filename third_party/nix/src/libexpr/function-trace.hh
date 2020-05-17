@@ -1,15 +1,13 @@
 #pragma once
 
-#include "eval.hh"
-
 #include <chrono>
+#include "eval.hh"
 
 namespace nix {
 
-struct FunctionCallTrace
-{
-    const Pos & pos;
-    FunctionCallTrace(const Pos & pos);
-    ~FunctionCallTrace();
+struct FunctionCallTrace {
+  const Pos& pos;
+  FunctionCallTrace(const Pos& pos);
+  ~FunctionCallTrace();
 };
-}
+}  // namespace nix

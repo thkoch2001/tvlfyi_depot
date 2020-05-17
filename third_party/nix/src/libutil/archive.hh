@@ -1,11 +1,9 @@
 #pragma once
 
-#include "types.hh"
 #include "serialise.hh"
-
+#include "types.hh"
 
 namespace nix {
-
 
 /* dumpPath creates a Nix archive of the specified path.  The format
    is as follows:
@@ -44,41 +42,36 @@ namespace nix {
 
      `+' denotes string concatenation. */
 
+void dumpPath(const Path& path, Sink& sink,
+              PathFilter& filter = defaultPathFilter);
 
-void dumpPath(const Path & path, Sink & sink,
-    PathFilter & filter = defaultPathFilter);
-
-void dumpString(const std::string & s, Sink & sink);
+void dumpString(const std::string& s, Sink& sink);
 
 /* FIXME: fix this API, it sucks. */
-struct ParseSink
-{
-    virtual void createDirectory(const Path & path) { };
+struct ParseSink {
+  virtual void createDirectory(const Path& path){};
 
-    virtual void createRegularFile(const Path & path) { };
-    virtual void isExecutable() { };
-    virtual void preallocateContents(unsigned long long size) { };
-    virtual void receiveContents(unsigned char * data, unsigned int len) { };
+  virtual void createRegularFile(const Path& path){};
+  virtual void isExecutable(){};
+  virtual void preallocateContents(unsigned long long size){};
+  virtual void receiveContents(unsigned char* data, unsigned int len){};
 
-    virtual void createSymlink(const Path & path, const string & target) { };
+  virtual void createSymlink(const Path& path, const string& target){};
 };
 
-struct TeeSink : ParseSink
-{
-    TeeSource source;
+struct TeeSink : ParseSink {
+  TeeSource source;
 
-    TeeSink(Source & source) : source(source) { }
+  TeeSink(Source& source) : source(source) {}
 };
 
-void parseDump(ParseSink & sink, Source & source);
+void parseDump(ParseSink& sink, Source& source);
 
-void restorePath(const Path & path, Source & source);
+void restorePath(const Path& path, Source& source);
 
 /* Read a NAR from 'source' and write it to 'sink'. */
-void copyNAR(Source & source, Sink & sink);
-
+void copyNAR(Source& source, Sink& sink);
 
 extern const std::string narVersionMagic1;
 
-
-}
+}  // namespace nix
