@@ -122,6 +122,7 @@ in depot.lib.fix(self: {
       jq
       keybase-gui
       kubectl
+      meson
       miller
       msmtp
       nix-prefetch-github
