@@ -42,6 +42,7 @@ in depot.lib.fix(self: {
   };
 
   nix = {
+    package = depot.third_party.nix;
     nixPath = [
       "depot=/home/tazjin/depot"
       "nixpkgs=${depot.third_party.nixpkgsSrc}"
