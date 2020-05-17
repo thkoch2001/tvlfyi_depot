@@ -65,6 +65,7 @@ let
     lsp-mode
     magit
     markdown-toc
+    meson-mode
     multi-term
     multiple-cursors
     nginx-mode
