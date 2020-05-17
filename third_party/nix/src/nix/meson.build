@@ -1,12 +1,3 @@
-# Nix exec build file
-#============================================================================
-
-
-
-
-# src files
-#============================================================================
-
 src_inc += include_directories('.')
 
 nix_src = files(
@@ -53,20 +44,6 @@ nix_src = files(
     join_paths(meson.source_root(), 'src/nix-store/graphml.cc'),
     join_paths(meson.source_root(), 'src/nix-store/nix-store.cc'))
 
-nix_ln_src = [
-    [ bindir, 'nix-build' ],
-    [ bindir, 'nix-channel' ],
-    [ bindir, 'nix-collect-garbage' ],
-    [ bindir, 'nix-copy-closure' ],
-    [ bindir, 'nix-daemon' ],
-    [ bindir, 'nix-env' ],
-    [ bindir, 'nix-hash' ],
-    [ bindir, 'nix-instantiate' ],
-    [ bindir, 'nix-prefetch-url' ],
-    [ bindir, 'nix-shell' ],
-    [ bindir, 'nix-store' ],
-    [ join_paths(libexecdir, 'nix'), 'build-remote' ]]
-
 nix_headers = files (
     join_paths(meson.source_root(), 'src/nix/command.hh'),
     join_paths(meson.source_root(), 'src/nix/legacy.hh'),
@@ -75,9 +52,6 @@ nix_headers = files (
     join_paths(meson.source_root(), 'src/nix-store/dotgraph.hh'),
     join_paths(meson.source_root(), 'src/nix-store/graphml.hh'))
 
-# dependancies
-#============================================================================
-
 nix_dep_list = [
     pthread_dep,
     libdl_dep,
@@ -85,41 +59,12 @@ nix_dep_list = [
     editline_dep,
     libsodium_dep]
 
-
-
-
-
-# Link args
-#============================================================================
-
 nix_link_list = [
     libutil_lib,
     libstore_lib,
     libmain_lib,
     libexpr_lib
 ]
-
-nix_link_args = []
-
-
-
-
-# compiler args
-#============================================================================
-
-nix_cxx_args = []
-
-
-
-
-# targets
-#============================================================================
-
-
-
-
-# build
-#============================================================================
 
 nix_bin = executable(
     'nix',
@@ -130,23 +75,3 @@ nix_bin = executable(
     sources : nix_src,
     link_with : nix_link_list,
     dependencies : nix_dep_list)
-
-
-# meson does not yet support installing symlink files.
-# this is a simple workaround
-foreach name : nix_ln_src
-    meson.add_install_script(
-        'ln',
-        '-sf',
-        join_paths(bindir, 'nix'),
-        name[1])
-    meson.add_install_script(
-        'cp',
-        '-r',
-        name[1],
-        join_paths(name[0], name[1]))   
-endforeach
-
-install_headers(
-    nix_headers,
-    install_dir : join_paths(includedir, 'nix'))

@@ -13,7 +13,7 @@
 project(
     'nix',
     'cpp',
-    
+
     default_options : [
         'cpp_std=c++17',
         'warning_level=3',
@@ -24,7 +24,7 @@ project(
     license : 'MIT'
 )
 
-# init compiler 
+# init compiler
 #-------------------------------------------------
 cpp = meson.get_compiler('cpp')
 
@@ -116,7 +116,7 @@ sys_name = host_machine.system().to_lower()
 
 cpu_archs = ['x86_64', 'armv6', 'armv7', '']
 
-foreach cpu : cpu_archs 
+foreach cpu : cpu_archs
     if (host_machine.cpu().contains(cpu))
         if cpu.contains('armv')
             machine_name = cpu + '1'
@@ -363,11 +363,11 @@ else
 fi
 '''
 
-run_command('sh', '-c', 'rm tmp_link*') 
+run_command('sh', '-c', 'rm tmp_link*')
 can_link_symlink = run_command('sh', '-c', gen_header).stdout().strip()
 if can_link_symlink.to_int() == 1
     run_command('sh', '-c', 'rm tmp_link*')
-endif 
+endif
 
 config_h.set('CAN_LINK_SYMLINK', can_link_symlink,
 description : 'Whether link() works on symlinks')
@@ -447,7 +447,7 @@ libbz2_dep = declare_dependency(
 
 # Look for editline, a required dependency.
 #--------------------------------------------------
-# NOTE: The the libeditline.pc file was added only in libeditline >= 1.15.2, see 
+# NOTE: The the libeditline.pc file was added only in libeditline >= 1.15.2, see
 # https://github.com/troglobit/editline/commit/0a8f2ef4203c3a4a4726b9dd1336869cd0da8607,
 # but e.g. Ubuntu 16.04 has an older version, so we fall back to searching for
 # editline.h when the pkg-config approach fails.
@@ -503,12 +503,12 @@ endif
 #--------------------------------------------------
 if (get_option('with_s3'))
   enable_s3 = meson.get_compiler('cpp').check_header('aws/s3/S3Client.h')
-  
+
   aws_version = meson.get_compiler('cpp').get_define(
     'AWS_SDK_VERSION_STRING',
     prefix : '#include <aws/core/VersionConfig.h>'
   ).strip('"').split('.')
-  
+
   conf_data.set('ENABLE_S3', 1, description : 'Whether to enable S3 support via aws-sdk-cpp.')
   conf_data.set('AWS_VERSION_MAJOR', aws_version[0], description : 'Major version of aws-sdk-cpp.')
   conf_data.set('AWS_VERSION_MINOR', aws_version[1], description : 'Minor version of aws-sdk-cpp.')
@@ -517,7 +517,7 @@ endif
 
 
 
-# OS Specific checks 
+# OS Specific checks
 #============================================================================
 # Look for libsecppomp, required for Linux sandboxing.
 if sys_name.contains('linux')
@@ -534,11 +534,11 @@ endif
 
 if (sys_name.contains('freebsd'))
     add_project_arguments('-D_GNU_SOURCE', language : 'cpp')
-    config_h.set('_GNU_SOURCE', 1)  
+    config_h.set('_GNU_SOURCE', 1)
 endif
 
 if (sys_name.contains('sunos'))
-    # Solaris requires -lsocket -lnsl for network functions 
+    # Solaris requires -lsocket -lnsl for network functions
 endif
 
 
