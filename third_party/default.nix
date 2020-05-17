@@ -54,6 +54,7 @@ let
       freetype
       gettext
       glibc
+      glog
       gnutar
       go
       google-cloud-sdk

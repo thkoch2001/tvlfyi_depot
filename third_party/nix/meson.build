@@ -417,8 +417,13 @@ libdl_dep = declare_dependency(
 #--------------------------------------------------
 libbz2_dep = declare_dependency(
     dependencies : cpp.find_library('bz2'),
-    link_args :  get_option('bz2_link_args'))
+    link_args : get_option('bz2_link_args'))
 
+# Look for glog, a required dependency.
+#--------------------------------------
+glog_dep = declare_dependency(
+  dependencies : cpp.find_library('glog'),
+  link_args : get_option('glog_link_args'))
 
 # Look for editline, a required dependency.
 #--------------------------------------------------
@@ -439,8 +444,6 @@ if not (
     warning('Nix requires libeditline; However, required functions do not work. Maybe ' +\
     'it is too old? >= 1.14 is required.')
 endif
-
-
 
 
 # Optional dependancies
@@ -485,8 +488,6 @@ if (get_option('with_s3'))
 endif
 
 
-
-
 # OS Specific checks
 #============================================================================
 # Look for libsecppomp, required for Linux sandboxing.
@@ -510,8 +511,6 @@ endif
 if (sys_name.contains('sunos'))
     # Solaris requires -lsocket -lnsl for network functions
 endif
-
-
 
 
 # build

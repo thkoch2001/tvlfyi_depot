@@ -140,6 +140,13 @@ option(
         '-lgc'],
     description : 'link args for boehm garbage collector')
 
+option(
+    'glog_link_args',
+    type : 'array',
+    value : [
+        '-L/usr/local/lib',
+        '-lglog'],
+    description : 'link args for glog')
 
 
 # optional dependancies

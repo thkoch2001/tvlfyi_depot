@@ -10,6 +10,7 @@
 #include "eval.hh"
 #include "finally.hh"
 #include "globals.hh"
+#include "glog/logging.h"
 #include "legacy.hh"
 #include "progress-bar.hh"
 #include "shared.hh"
@@ -166,7 +167,10 @@ void mainWrapped(int argc, char** argv) {
 
 }  // namespace nix
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
+  FLAGS_logtostderr = 1;
+  google::InitGoogleLogging(argv[0]);
+
   return nix::handleExceptions(argv[0],
                                [&]() { nix::mainWrapped(argc, argv); });
 }

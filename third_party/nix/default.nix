@@ -36,6 +36,7 @@ in stdenv.mkDerivation {
     curl
     editline
     flex
+    glog
     largeBoehm
     libseccomp
     libsodium
