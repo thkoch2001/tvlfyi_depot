@@ -1,12 +1,3 @@
-# Nix lib store build file
-#============================================================================
-
-
-
-
-# src files
-#============================================================================
-
 src_inc += include_directories('.')
 
 libutil_src = files(
@@ -17,7 +8,6 @@ libutil_src = files(
     join_paths(meson.source_root(), 'src/libutil/config.cc'),
     join_paths(meson.source_root(), 'src/libutil/hash.cc'),
     join_paths(meson.source_root(), 'src/libutil/json.cc'),
-    join_paths(meson.source_root(), 'src/libutil/logging.cc'),
     join_paths(meson.source_root(), 'src/libutil/serialise.cc'),
     join_paths(meson.source_root(), 'src/libutil/thread-pool.cc'),
     join_paths(meson.source_root(), 'src/libutil/util.cc'),
@@ -34,7 +24,6 @@ libutil_headers = files(
     join_paths(meson.source_root(), 'src/libutil/istringstream_nocopy.hh'),
     join_paths(meson.source_root(), 'src/libutil/json.hh'),
     join_paths(meson.source_root(), 'src/libutil/lazy.hh'),
-    join_paths(meson.source_root(), 'src/libutil/logging.hh'),
     join_paths(meson.source_root(), 'src/libutil/lru-cache.hh'),
     join_paths(meson.source_root(), 'src/libutil/monitor-fd.hh'),
     join_paths(meson.source_root(), 'src/libutil/pool.hh'),
@@ -47,11 +36,6 @@ libutil_headers = files(
     join_paths(meson.source_root(), 'src/libutil/xml-writer.hh')
 )
 
-
-
-# dependancies
-#============================================================================
-
 libutil_dep_list = [
     boost_dep,
     libbz2_dep,
@@ -61,35 +45,9 @@ libutil_dep_list = [
     pthread_dep,
     libsodium_dep]
 
-
-
-
-# Link args
-#============================================================================
-
 libutil_link_list = []
-
 libutil_link_args = []
-
-
-
-
-# compiler args
-#============================================================================
-
 libutil_cxx_args = []
-
-
-
-
-# targets
-#============================================================================
-
-
-
-
-# build
-#============================================================================
 
 libutil_lib = library(
     'nixutil',
