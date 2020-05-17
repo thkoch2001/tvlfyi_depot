@@ -125,7 +125,7 @@ let
       boehmgc
       boost # urgh
       brotli
-      busybox
+      busybox-sandbox-shell
       curl
       docbook5
       docbook_xsl_ns

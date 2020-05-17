@@ -14,7 +14,8 @@ let
     enableLargeConfig = true;
   };
 in stdenv.mkDerivation {
-  name = "nix";
+  pname = "nix";
+  version = "2.3.4";
   src = ./.;
 
   nativeBuildInputs = with pkgs; [
@@ -35,6 +36,7 @@ in stdenv.mkDerivation {
     curl
     editline
     flex
+    largeBoehm
     libseccomp
     libsodium
     openssl
@@ -42,8 +44,8 @@ in stdenv.mkDerivation {
     xz
   ];
 
-  propagatedBuildInputs = [
-    largeBoehm
+  mesonFlags = [
+    "-Dsandbox_shell=${pkgs.busybox-sandbox-shell}/bin/busybox"
   ];
 
   # Install the various symlinks to the Nix binary which users expect
@@ -62,7 +64,7 @@ in stdenv.mkDerivation {
     ln -s $out/bin/nix $out/bin/nix-store
 
     mkdir -p $out/libexec/nix
-    ln -s $out/bin/nix $out/libexec/nix/remote-build
+    ln -s $out/bin/nix $out/libexec/nix/build-remote
   '';
 
   # TODO(tazjin): equivalent of --enable-gc
