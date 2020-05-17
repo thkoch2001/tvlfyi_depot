@@ -1,5 +1,5 @@
 { nix ? builtins.fetchGit ./.
-, nixpkgs ? builtins.fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-19.03.tar.gz
+, nixpkgs ? (import <nixpkgs> {}).third_party
 , officialRelease ? false
 , systems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ]
 }:

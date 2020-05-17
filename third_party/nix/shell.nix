@@ -1,10 +1,9 @@
-{ useClang ? false }:
-
-with import (builtins.fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-19.03.tar.gz) {};
+let pkgs = (import <nixpkgs> {}).third_party;
+in with pkgs;
 
 with import ./release-common.nix { inherit pkgs; };
 
-(if useClang then clangStdenv else stdenv).mkDerivation {
+clangStdenv.mkDerivation {
   name = "nix";
 
   buildInputs = buildDeps ++ propagatedDeps ++ tarballDeps ++ perlDeps;

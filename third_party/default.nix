@@ -117,6 +117,30 @@ let
       xz
       zlib
       zstd;
+
+    # Required by //third_party/nix
+    inherit (nixpkgs)
+      autoconf-archive
+      autoreconfHook
+      aws-sdk-cpp
+      bison
+      boehmgc
+      boost # urgh
+      brotli
+      busybox
+      curl
+      docbook5
+      docbook_xsl_ns
+      editline
+      flex
+      libseccomp
+      libsodium
+      libxml2
+      libxslt
+      mercurial
+      perl
+      perlPackages
+      utillinuxMinimal;
   };
 
 in exposed // {
