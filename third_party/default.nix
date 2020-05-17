@@ -120,8 +120,6 @@ let
 
     # Required by //third_party/nix
     inherit (nixpkgs)
-      autoconf-archive
-      autoreconfHook
       aws-sdk-cpp
       bison
       boehmgc
