@@ -72,6 +72,8 @@ rec {
         */
       }));
 
+  nativeBuildDeps = [ meson ninja ];
+
   propagatedDeps =
     [ (boehmgc.override { enableLargeConfig = true; })
     ];
