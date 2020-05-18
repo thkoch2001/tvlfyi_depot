@@ -671,7 +671,7 @@
 (use-package! company-lsp
   :after (lsp-mode lsp-ui)
   :config
-  ;; (setq company-backends '(company-lsp))
+  (add-to-list #'company-backends #'company-lsp)
   (setq company-lsp-async t))
 
 (use-package! lsp-treemacs
