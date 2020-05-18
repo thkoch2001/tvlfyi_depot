@@ -8,10 +8,10 @@
       user-full-name    "Griffin Smith")
 
 (setq doom-font (font-spec :family "Meslo LGSDZ Nerd Font" :size 14)
-      doom-big-font (font-spec :family "Meslo LGSDZ Nerd Font" :size 19)
+      doom-big-font (font-spec :family "Meslo LGSDZ Nerd Font" :size 24)
       doom-big-font-increment 5
       doom-variable-pitch-font (font-spec :family "DejaVu Sans")
-      doom-unicode-font (font-spec :family "Meslo LG S DZ"))
+      doom-unicode-font (font-spec :family "Meslo LGSDZ Nerd Font"))
 
 (after! rust
   ;; (require 'ein)
