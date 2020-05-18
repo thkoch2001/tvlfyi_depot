@@ -56,10 +56,10 @@
 
   (flycheck-mode))
 
-(setq exec-path (append exec-path '("/Users/griffin/.cargo/bin")))
+(setq exec-path (append exec-path '("/home/grfn/.cargo/bin")))
 
 (after! cargo
-  (setq cargo-process--custom-path-to-bin "/Users/griffin/.cargo/bin/cargo"))
+  (setq cargo-process--custom-path-to-bin "/home/grfn/.cargo/bin/cargo"))
 
 (setq +solarized-s-base03    "#002b36"
       +solarized-s-base02    "#073642"
@@ -277,7 +277,7 @@
 
 (setq doom-modeline-height 12)
 
-(load "/home/griffin/code/org-clubhouse/org-clubhouse.el")
+(load "/home/grfn/code/org-clubhouse/org-clubhouse.el")
 (use-package! org-clubhouse
   :config
   (setq org-clubhouse-state-alist
