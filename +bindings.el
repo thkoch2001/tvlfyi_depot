@@ -343,7 +343,7 @@ private/hlissner/snippets."
 
    (:desc "notes" :prefix "n"
      :desc "Agenda"                 :n  "a" #'org-agenda
-     :desc "Find file in notes"     :n  "n" #'+hlissner/find-in-notes
+     :desc "Find file in notes"     :n  "n" #'+find-in-notes
      :desc "Store link"             :n  "l" #'org-store-link
      :desc "Browse notes"           :n  "N" #'+hlissner/browse-notes
      :desc "Org capture"            :n  "x" #'+org-capture/open
@@ -365,12 +365,14 @@ private/hlissner/snippets."
      :desc "Slack Group"           :n  "g" #'slack-group-select
      :desc "Slack Unreads"         :n  "u" #'slack-select-unread-rooms
 
-     :desc "Email"                 :n "m" #'mu4e
+     :desc "Email"                 :n "m" #'notmuch-jump-search
+
+     (:desc "ERC" :prefix "e"
+       :desc "Channel" :n "c" #'erc-switch-to-buffer)
 
      ;; applications
      :desc "APP: elfeed"           :n "E" #'=rss
      :desc "APP: twitter"          :n "T" #'=twitter
-     :desc "APP: regex"            :n "X" #'=regex
 
      (:desc "spotify" :prefix "s"
        :desc "Search track"  :n "t" #'counsel-spotify-search-track
@@ -418,7 +420,7 @@ private/hlissner/snippets."
      :desc "New snippet"            :n  "n" #'yas-new-snippet
      :desc "Insert snippet"         :nv "i" #'yas-insert-snippet
      :desc "Find snippet for mode"  :n  "s" #'yas-visit-snippet-file
-     :desc "Find snippet"           :n  "S" #'+hlissner/find-in-snippets)
+     :desc "Find snippet"           :n  "S" #'+find-in-snippets)
 
    (:desc "toggle" :prefix "t"
      :desc "Flyspell"               :n "s" #'flyspell-mode
@@ -1212,9 +1214,21 @@ If invoked with a prefix ARG eval the expression after inserting it"
 
 (defun grfn/run-clj-or-cljs-test ()
   (interactive)
+  (message "Running tests...")
   (cl-case (cider-repl-type-for-buffer)
-    ("cljs" (cider-interactive-eval "(with-out-string (cljs.test/run-tests))"))
-    ("clj"  (cider-test-run-ns-tests))))
+    ('cljs
+     (cider-interactive-eval
+      "(with-out-str (cljs.test/run-tests))"
+      (nrepl-make-response-handler
+       (current-buffer)
+       (lambda (_ value)
+         (with-output-to-temp-buffer "*cljs-test-results*"
+           (print
+            (->> value
+                 (s-replace "\"" "")
+                 (s-replace "\\n" "\n")))))
+       nil nil nil)))
+    ('clj  (cider-test-run-ns-tests))))
 
 (defun cider-copy-last-result ()
   (interactive)
@@ -1329,7 +1343,8 @@ If invoked with a prefix ARG eval the expression after inserting it"
      :n "g K"   'cider-grimoire
      :n "g d"   'cider-find-dwim
      :n "C-w ]" 'cider-find-dwim-other-window
-     :n "g RET" 'cider-test-run-ns-tests
+     ;; :n "g RET" 'cider-test-run-ns-tests
+     :n "g RET" 'grfn/run-clj-or-cljs-test
 
      "C-c C-r r" 'cljr-add-require-to-ns
      "C-c C-r i" 'cljr-add-import-to-ns
@@ -1364,9 +1379,8 @@ If invoked with a prefix ARG eval the expression after inserting it"
      :n "g RET" #'org-capture-finalize
      :n "g \\"  #'org-captue-refile))
 
- (:after lsp
-   (:map lsp-mode-map
-     :n "K"   #'lsp-describe-thing-at-point
-     :n "g r" #'lsp-rename
-     (:localleader
-       :n "a" #'lsp-execute-code-action))))
+ (:map lsp-mode-map
+   :n "K"   #'lsp-describe-thing-at-point
+   :n "g r" #'lsp-rename
+   (:localleader
+     :n "a" #'lsp-execute-code-action)))
