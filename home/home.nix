@@ -55,6 +55,7 @@ let machine = ./machines/chupacabra.nix; in
     irssi
     gnutls
     pandoc
+    barrier
 
     # System utilities
     htop
@@ -80,6 +81,7 @@ let machine = ./machines/chupacabra.nix; in
     playerctl
 
     # Nix things
+    nixfmt
     nix-prefetch-github
     nix-review
     cachix
