@@ -997,11 +997,12 @@
     (concat alembic-command " " args)))
 
 (defun +grfn/extract-alembic-migration-name (output)
-  (string-match (rx (0+ anything) "Generating "
-                    (group (one-or-more (not (syntax whitespace))))
-                    " ... done"
-                    (0+ anything))
-                output)
+  (unless (string-match (rx (0+ anything) "Generating "
+                            (group (one-or-more (not (syntax whitespace))))
+                            " ..." (one-or-more (syntax whitespace)) "done"
+                            (0+ anything))
+                        output)
+    (user-error "Error: %s" output))
   (match-string-no-properties 1 output))
 
 (defun -run-alembic (args)
