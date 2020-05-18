@@ -22,8 +22,18 @@
 (load! "utils")
 (load! "company-sql")
 (load! "org-query")
-(load! "nix-yapf-mode")
+;; (load! "nix-yapf-mode")
 (load! "show-matching-paren")
+(load! "irc")
+
+(require 's)
+
+;; (add-to-list 'load-path
+;;              (concat
+;;               (s-trim
+;;                (shell-command-to-string
+;;                 "nix-build --no-link '<nixpkgs>' -A mu"))
+;;               "/share/emacs/site-lisp/mu4e"))
 
 ; (defconst rust-src-path
 ;   (-> "/Users/griffin/.cargo/bin/rustc --print sysroot"
