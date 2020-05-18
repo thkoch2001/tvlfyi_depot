@@ -644,7 +644,6 @@
 (use-package! lsp-mode
   :after (:any haskell-mode)
   :config
-  (lsp-mode)
   (setq lsp-response-timeout 60)
   :hook
   (haskell-mode . lsp-mode))
