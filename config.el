@@ -900,28 +900,43 @@
 (use-package! pyimport
   :after (python))
 
-(use-package! yapfify
+(use-package! blacken
   :after (python)
   :init
-  (add-hook! python-mode #'yapf-mode))
-
-(use-package! w3m
+  (add-hook #'python-mode-hook #'blacken-mode)
   :config
-  (setq browse-url-browser-function
-        `(("^https://app.clubhouse.io.*" . browse-url-firefox)
-          ("^https://github.com.*" . browse-url-firefox)
-          (".*" . browse-url-firefox))))
+  (setq blacken-only-if-project-is-blackened t
+        blacken-allow-py36 t
+        blacken-line-length 100))
+
+(after! python
+  (defun +python-setup ()
+    (setq-local fill-column 100
+                whitespace-line-column 100
+                flycheck-disabled-checkers '(python-flake8)
+                flycheck-checker 'python-pylint))
+
+  (add-hook #'python-mode-hook #'+python-setup)
+  (add-hook #'python-mode-hook #'lsp)
+  (remove-hook #'python-mode-hook #'pipenv-mode))
+
+; (use-package! w3m
+;   :config
+;   (setq browse-url-browser-function
+;         `(("^https://app.clubhouse.io.*" . browse-url-firefox)
+;           ("^https://github.com.*" . browse-url-firefox)
+;           (".*" . browse-url-firefox))))
 
 (use-package! ob-http
   :config
   (add-to-list 'org-babel-load-languages '(http . t)))
 
-(use-package! ob-ipython
-  :after (pyimport)
-  :config
-  (add-to-list 'org-babel-load-languages '(ipython . t))
-  (setq ob-ipython-command
-        "/home/griffin/code/urb/ciml-video-classifier/bin/jupyter"))
+;; (use-package! ob-ipython
+;;   :after (pyimport)
+;;   :config
+;;   (add-to-list 'org-babel-load-languages '(ipython . t))
+;;   (setq ob-ipython-command
+        ;; "/home/griffin/code/urb/ciml-video-classifier/bin/jupyter"))
 
 (use-package! counsel-spotify)
 
@@ -1045,7 +1060,8 @@
 (use-package! string-inflection)
 
 (after! anaconda-mode
-  (set-company-backend! 'anaconda-mode #'company-yasnippet))
+  ;; (set-company-backend! 'anaconda-mode #'company-yasnippet)
+  )
 
 ;; (add-hook! python-mode
 ;;   (capf))
@@ -1213,3 +1229,40 @@ SCHEDULED: <%s>"
 (use-package! metal-mercury-mode)
 (use-package! flycheck-mercury
   :after (metal-mercury-mode flycheck-mercury))
+
+(use-package! direnv
+  :config (direnv-mode))
+
+(after! notmuch
+  (setq notmuch-saved-searches
+        '((:name "inbox" :query "tag:inbox tag:important not tag:trash" :key "i")
+          (:name "flagged" :query "tag:flagged" :key "f")
+          (:name "sent" :query "tag:sent" :key "s")
+          (:name "drafts" :query "tag:draft" :key "d")
+
+          (:name "work" :query "tag:inbox and tag:important and path:work/**"
+                 :key "w")
+          (:name "personal" :query "tag:inbox and tag:important and path:personal/**"
+                 :key "p"))
+        message-send-mail-function 'message-send-mail-with-sendmail)
+
+  (add-hook! notmuch-message-mode-hook
+             #'notmuch-company-setup))
+
+(after! erc
+  ;; (setq erc-autojoin-channels-alist '(("freenode.net" "#nixos" "#haskell" "##tvl")))
+  )
+
+(defun evil-disable-insert-state-bindings ()
+  evil-disable-insert-state-bindings)
+
+;; (use-package! terraform-mode)
+;; (use-package! company-terraform
+;;   :after terraform-mode
+;;   :config (company-terraform-init))
+
+(use-package! znc
+  :config
+  (setq znc-servers
+        '(("znc.gws.fyi" 5000 t
+           ((freenode "glittershark" "Ompquy"))))))

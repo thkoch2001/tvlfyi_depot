@@ -107,7 +107,9 @@
 
 ;;; Python
 (package! pyimport)
-(package! yapfify)
+;; (package! yapfify)
+(package! blacken)
+
 
 ;;; Desktop interaction
 (package! counsel-spotify)
@@ -127,6 +129,10 @@
 (package! nix-update
   :recipe (:host github
            :repo "glittershark/nix-update-el"))
+(package! direnv)
+
+;;; Email
+(package! mu4e)
 
 ;;; Sequence diagrams
 (package! wsd-mode
@@ -138,3 +144,11 @@
   :recipe (:host github
                  :repo "ahungry/metal-mercury-mode"))
 (package! flycheck-mercury)
+
+(package! terraform-mode)
+(package! company-terraform)
+
+;;;
+(package! znc
+  :recipe (:host github
+                 :repo "sshirokov/ZNC.el"))
