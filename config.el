@@ -104,6 +104,9 @@
       +solarized-green-d   "#546E00"
       +solarized-green-l "#B4C342")
 
+(defcustom theme-overrides nil
+  "Association list of override faces to set for different custom themes.")
+
 (defadvice load-theme (after theme-set-overrides activate)
   (dolist (theme-settings theme-overrides)
     (let ((theme (car theme-settings))
@@ -112,9 +115,6 @@
           (progn
             (dolist (face faces)
               (custom-theme-set-faces theme face)))))))
-
-(defcustom theme-overrides nil
-  "Association list of override faces to set for different custom themes.")
 
 (defun alist-set (alist-symbol key value)
   "Set VALUE of a KEY in ALIST-SYMBOL."
