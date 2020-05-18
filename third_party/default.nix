@@ -54,7 +54,6 @@ let
       freetype
       gettext
       glibc
-      glog
       gnutar
       go
       google-cloud-sdk
@@ -151,7 +150,7 @@ in exposed // {
 
   # Packages to be overridden
   originals = {
-    inherit (nixpkgs) abseil-cpp git notmuch;
+    inherit (nixpkgs) abseil-cpp git glog notmuch;
     ffmpeg = nixpkgs.ffmpeg-full;
   };
 
