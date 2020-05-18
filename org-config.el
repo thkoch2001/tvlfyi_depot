@@ -4,8 +4,6 @@
 (defun notes-file (f)
   (concat org-directory (if (string-prefix-p "/" f) "" "/") f))
 
-(require 'org-mu4e)
-
 (setq
  org-directory (expand-file-name "~/notes")
  +org-dir (expand-file-name "~/notes")
@@ -88,4 +86,6 @@
    ("r" "Running jobs" todo "RUNNING")
    ("w" "@Work" tags-todo "@work")
    ("n" . "Next...")
-   ("np" "Next Sprint" tags-todo "next_sprint|sprint_planning")))
+   ("np" "Next Sprint" tags-todo "next_sprint|sprint_planning"))
+
+ org-babel-clojure-backend 'cider)
