@@ -59,8 +59,6 @@
        ;;editorconfig      ; let someone else argue about tabs vs spaces
        ;; ein               ; tame Jupyter notebooks with emacs
        eval              ; run code, run (also, repls)
-       flycheck          ; tasing you for every semicolon you forget
-       flyspell          ; tasing you for misspelling mispelling
        gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
@@ -78,13 +76,17 @@
        ;;wakatime
        ;;vterm             ; another terminals in Emacs
 
+       :checkers
+       syntax          ; tasing you for every semicolon you forget
+       spell          ; tasing you for misspelling mispelling
+
        :lang
        agda              ; types of types of types of types...
        ;;assembly          ; assembly for fun or debugging
        cc                ; C/C++/Obj-C madness
        clojure           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
-       coq               ; proofs-as-programs
+       ; coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
        data              ; config/data formats
@@ -110,11 +112,12 @@
        nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        (org              ; organize your plain life in plain text
+        +dragndrop       ; drag & drop files/images into org buffers
         +attach          ; custom attachment system
         +babel           ; running code in org
         +capture         ; org-capture in and outside of Emacs
         +export          ; Exporting org to whatever you want
-        +habit           ; Keep track of your habits
+        ;; +habit           ; Keep track of your habits
         +present         ; Emacs for presentations
         +protocol)       ; Support for org-protocol:// links
        ;;perl              ; write code no one else can comprehend
