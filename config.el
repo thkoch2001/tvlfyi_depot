@@ -1163,13 +1163,6 @@ SCHEDULED: <%s>"
 (use-package! github-review
   :after forge)
 
-(after! mu4e
-  (setq sendmail-program "/usr/bin/msmtp"
-        send-mail-function #'smtpmail-send-it
-        message-sendmail-f-is-evil t
-        message-sendmail-extra-arguments '("--read-envelope-from")
-        message-send-mail-function #'message-send-mail-with-sendmail))
-
 (defun grfn/org-add-db-connection-params ()
   (interactive)
   (ivy-read
@@ -1211,16 +1204,38 @@ SCHEDULED: <%s>"
    )
   )
 
-(after! mu4e
-  (setq mu4e-contexts
-        `(,(make-mu4e-context
-            :name "work"
-            :vars
-            '())
-          ,(make-mu4e-context
-            :name "personal"
-            :vars
-            '()))))
+;; (use-package! mu4e
+;;   :config
+;;   (setq mu4e-contexts
+;;         `(,(make-mu4e-context
+;;             :name "work"
+;;             :match-func
+;;             (lambda (msg)
+;;               (when msg
+;;                 (string-match-p "^/work"
+;;                                 (mu4e-message-field msg :maildir))))
+;;             :vars
+;;             '((user-mail-address . "griffin@urbint.com")))
+;;           ,(make-mu4e-context
+;;             :name "personal"
+;;             :match-func
+;;             (lambda (msg)
+;;               (when msg
+;;                 (string-match-p "^/personal"
+;;                                 (mu4e-message-field msg :maildir))))
+;;             :vars
+;;             '((user-mail-address . "root@gws.fyi"))))
+;;         mu4e-maildir (expand-file-name "mail" "~")
+;;         sendmail-program "msmtp"
+;;         send-mail-function #'smtpmail-send-it
+;;         message-sendmail-f-is-evil t
+;;         message-sendmail-extra-arguments '("--read-envelope-from")
+;;         message-send-mail-function #'message-send-mail-with-sendmail)
+
+;;   (set-email-account!
+;;    "work"
+;;    '((user-mail-address . "griffin@urbint.com")
+;;      (smtmpmail-smtp-user . "griffin@urbint.com"))))
 
 (solaire-global-mode -1)
 
