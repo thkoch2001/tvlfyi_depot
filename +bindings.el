@@ -80,10 +80,10 @@ private/hlissner/snippets."
       (message (kill-new (abbreviate-file-name filename)))
     (error "Couldn't find filename in current buffer")))
 
-(defmacro +hlissner-def-finder! (name dir)
+(defmacro +def-finder! (name dir)
   "Define a pair of find-file and browse functions."
   `(progn
-     (defun ,(intern (format "+hlissner/find-in-%s" name)) ()
+     (defun ,(intern (format "+find-in-%s" name)) ()
        (interactive)
        (let ((default-directory ,dir)
              projectile-project-name
@@ -96,11 +96,13 @@ private/hlissner/snippets."
        (let ((default-directory ,dir))
          (call-interactively (command-remapping #'find-file))))))
 
-(+hlissner-def-finder! templates +file-templates-dir)
-(+hlissner-def-finder! snippets +grfn-snippets-dir)
-(+hlissner-def-finder! dotfiles (expand-file-name ".dotfiles" "~"))
-(+hlissner-def-finder! doomd (expand-file-name ".doom.d" "~"))
-(+hlissner-def-finder! notes +org-dir)
+(+def-finder! templates +file-templates-dir)
+(+def-finder! snippets +grfn-snippets-dir)
+(+def-finder! dotfiles (expand-file-name ".dotfiles" "~"))
+(+def-finder! doomd (expand-file-name ".doom.d" "~"))
+(+def-finder! notes +org-dir)
+(+def-finder! home-config (expand-file-name "code/system/home" "~"))
+(+def-finder! system-config (expand-file-name "code/system/system" "~"))
 
 (defun +grfn/paxedit-kill (&optional n)
   (interactive "p")
@@ -279,19 +281,21 @@ private/hlissner/snippets."
                                        :v  "r" #'+eval:repl)
 
    (:desc "file" :prefix "f"
-     :desc "Find file"                 :n "." #'find-file
-     :desc "Sudo find file"            :n ">" #'doom/sudo-find-file
-     :desc "Find file in project"      :n "/" #'projectile-find-file
-     :desc "Find file from here"       :n "?" #'counsel-file-jump
-     :desc "Find other file"           :n "a" #'projectile-find-other-file
-     :desc "Open project editorconfig" :n "c" #'editorconfig-find-current-editorconfig
-     :desc "Find file in dotfiles"     :n "d" #'+hlissner/find-in-dotfiles
-     :desc "Browse dotfiles"           :n "D" #'+hlissner/browse-dotfiles
-     :desc "Find file in emacs.d"      :n "e" #'+hlissner/find-in-doomd
-     :desc "Browse emacs.d"            :n "E" #'+hlissner/browse-doomd
-     :desc "Recent files"              :n "r" #'recentf-open-files
-     :desc "Recent project files"      :n "R" #'projectile-recentf
-     :desc "Yank filename"             :n "y" #'+hlissner/yank-buffer-filename)
+     :desc "Find file"                  :n "." #'find-file
+     :desc "Sudo find file"             :n ">" #'doom/sudo-find-file
+     :desc "Find file in project"       :n "/" #'projectile-find-file
+     :desc "Find file from here"        :n "?" #'counsel-file-jump
+     :desc "Find other file"            :n "a" #'projectile-find-other-file
+     :desc "Open project editorconfig"  :n "c" #'editorconfig-find-current-editorconfig
+     :desc "Find file in dotfiles"      :n "d" #'+find-in-dotfiles
+     :desc "Find file in system config" :n "s" #'+find-in-system-config
+     :desc "Find file in home config"   :n "h" #'+find-in-home-config
+     :desc "Browse dotfiles"            :n "D" #'+hlissner/browse-dotfiles
+     :desc "Find file in emacs.d"       :n "e" #'+find-in-doomd
+     :desc "Browse emacs.d"             :n "E" #'+hlissner/browse-doomd
+     :desc "Recent files"               :n "r" #'recentf-open-files
+     :desc "Recent project files"       :n "R" #'projectile-recentf
+     :desc "Yank filename"              :n "y" #'+hlissner/yank-buffer-filename)
 
    (:desc "git" :prefix "g"
      :desc "Git status"            :n  "S" #'magit-status
