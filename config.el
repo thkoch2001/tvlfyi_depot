@@ -485,9 +485,9 @@
 
 (remove-hook 'js2-mode-hook 'tide-setup t)
 
-(require 'company-flow)
-(eval-after-load 'company
-  (lambda () (add-to-list 'company-backends 'company-flow)))
+;; (require 'company-flow)
+;; (eval-after-load 'company
+;;   (lambda () (add-to-list 'company-backends 'company-flow)))
 (defun flow/set-flow-executable ()
   (interactive)
   (let* ((os (pcase system-type
