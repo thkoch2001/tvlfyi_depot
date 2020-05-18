@@ -1135,25 +1135,6 @@ SCHEDULED: <%s>"
       (insert text))
     (org-align-tags 't)))
 
-(comment
- (require 'ghub)
-
- (intern (substring (symbol-name :foo) 1))
-
- ((data (reviewRequests
-         (issueCount . 2)
-         (nodes ((url . "https://github.com/urbint/grid/pull/819")
-                 (number . 819)
-                 (title . "Hector.blanco/ch11498/take storagebucket out of crossbores schema")
-                 (repository (name . "grid")
-                             (owner (login . "urbint"))))
-                ((url . "https://github.com/urbint/ml/pull/32")
-                 (number . 32)
-                 (title . "Quality scoring")
-                 (repository (name . "ml")
-                             (owner (login . "urbint"))))))))
- )
-
 (defun grfn/num-inbox-items ()
   (length (org-elements-agenda-match "inbox" t)))
 
