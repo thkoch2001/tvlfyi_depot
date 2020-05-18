@@ -244,7 +244,9 @@
 ;; Global config
 ;;
 
-(setq doom-modeline-buffer-file-name-style 'relative-to-project)
+(setq doom-modeline-buffer-file-name-style 'relative-to-project
+      doom-modeline-modal-icon nil
+      doom-modeline-github t)
 
 ;;
 ;; Modules
