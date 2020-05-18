@@ -7,7 +7,7 @@
 #include <cstring>
 #include <iostream>
 #include "finally.hh"
-#include "logging.hh"
+#include "glog/logging.h"
 #include "util.hh"
 
 namespace nix {
@@ -217,16 +217,18 @@ struct XzCompressionSink : CompressionSink {
       ret = lzma_stream_encoder_mt(&strm, &mt_options);
       done = true;
 #else
-      printMsg(lvlError,
-               "warning: parallel XZ compression requested but not supported, "
-               "falling back to single-threaded compression");
+      LOG(ERROR) << "parallel XZ compression requested but not supported, "
+                 << "falling back to single-threaded compression";
 #endif
     }
 
-    if (!done) ret = lzma_easy_encoder(&strm, 6, LZMA_CHECK_CRC64);
+    if (!done) {
+      ret = lzma_easy_encoder(&strm, 6, LZMA_CHECK_CRC64);
+    }
 
-    if (ret != LZMA_OK)
+    if (ret != LZMA_OK) {
       throw CompressionError("unable to initialise lzma encoder");
+    }
 
     // FIXME: apply the x86 BCJ filter?
 

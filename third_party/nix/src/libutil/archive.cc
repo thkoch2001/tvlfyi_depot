@@ -10,6 +10,7 @@
 #include <map>
 #include <vector>
 #include "config.hh"
+#include "glog/logging.h"
 #include "util.hh"
 
 namespace nix {
@@ -61,8 +62,9 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
   checkInterrupt();
 
   struct stat st;
-  if (lstat(path.c_str(), &st))
+  if (lstat(path.c_str(), &st)) {
     throw SysError(format("getting attributes of path '%1%'") % path);
+  }
 
   sink << "(";
 
@@ -87,8 +89,9 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
         string name(i.name);
         size_t pos = i.name.find(caseHackSuffix);
         if (pos != string::npos) {
-          debug(format("removing case hack suffix from '%1%'") %
-                (path + "/" + i.name));
+          DLOG(INFO) << "removing case hack suffix from " << path << "/"
+                     << i.name;
+
           name.erase(pos);
         }
         if (unhacked.find(name) != unhacked.end())
@@ -247,15 +250,17 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
           if (archiveSettings.useCaseHack) {
             auto i = names.find(name);
             if (i != names.end()) {
-              debug(format("case collision between '%1%' and '%2%'") %
-                    i->first % name);
+              DLOG(INFO) << "case collision between '" << i->first << "' and '"
+                         << name << "'";
               name += caseHackSuffix;
               name += std::to_string(++i->second);
             } else
               names[name] = 0;
           }
         } else if (s == "node") {
-          if (s.empty()) throw badArchive("entry name missing");
+          if (s.empty()) {
+            throw badArchive("entry name missing");
+          }
           parse(sink, source, path + "/" + name);
         } else
           throw badArchive("unknown field " + s);

@@ -1,4 +1,5 @@
 #include "affinity.hh"
+#include <glog/logging.h>
 #include "types.hh"
 #include "util.hh"
 
@@ -15,14 +16,18 @@ static cpu_set_t savedAffinity;
 
 void setAffinityTo(int cpu) {
 #if __linux__
-  if (sched_getaffinity(0, sizeof(cpu_set_t), &savedAffinity) == -1) return;
+  if (sched_getaffinity(0, sizeof(cpu_set_t), &savedAffinity) == -1) {
+    return;
+  }
+
   didSaveAffinity = true;
-  debug(format("locking this thread to CPU %1%") % cpu);
+  DLOG(INFO) << "locking this thread to CPU " << cpu;
   cpu_set_t newAffinity;
   CPU_ZERO(&newAffinity);
   CPU_SET(cpu, &newAffinity);
-  if (sched_setaffinity(0, sizeof(cpu_set_t), &newAffinity) == -1)
-    printError(format("failed to lock thread to CPU %1%") % cpu);
+  if (sched_setaffinity(0, sizeof(cpu_set_t), &newAffinity) == -1) {
+    LOG(ERROR) << "failed to lock thread to CPU " << cpu;
+  }
 #endif
 }
 
@@ -38,9 +43,13 @@ int lockToCurrentCPU() {
 
 void restoreAffinity() {
 #if __linux__
-  if (!didSaveAffinity) return;
-  if (sched_setaffinity(0, sizeof(cpu_set_t), &savedAffinity) == -1)
-    printError("failed to restore affinity %1%");
+  if (!didSaveAffinity) {
+    return;
+  }
+
+  if (sched_setaffinity(0, sizeof(cpu_set_t), &savedAffinity) == -1) {
+    LOG(ERROR) << "failed to restore affinity";
+  }
 #endif
 }
 

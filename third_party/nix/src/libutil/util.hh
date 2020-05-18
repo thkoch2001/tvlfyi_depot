@@ -12,7 +12,6 @@
 #include <map>
 #include <optional>
 #include <sstream>
-#include "logging.hh"
 #include "types.hh"
 
 #ifndef HAVE_STRUCT_DIRENT_D_TYPE

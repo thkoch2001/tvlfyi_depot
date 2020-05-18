@@ -1,6 +1,9 @@
+#define GOOGLE_STRIP_LOG 0
 #include "config.hh"
+#include <glog/logging.h>
 #include "args.hh"
 #include "json.hh"
+// #include <glog/log_severity.h>
 
 namespace nix {
 
@@ -30,9 +33,12 @@ void Config::addSetting(AbstractSetting* setting) {
   for (auto& alias : setting->aliases) {
     auto i = unknownSettings.find(alias);
     if (i != unknownSettings.end()) {
-      if (set)
-        warn("setting '%s' is set, but it's an alias of '%s' which is also set",
-             alias, setting->name);
+      if (set) {
+        LOG(WARNING) << "setting '" << alias
+                     << "' is set, but it's an alias of '" << setting->name
+                     << "', which is also set";
+      }
+
       else {
         setting->set(i->second);
         setting->overriden = true;
@@ -44,7 +50,9 @@ void Config::addSetting(AbstractSetting* setting) {
 }
 
 void AbstractConfig::warnUnknownSettings() {
-  for (auto& s : unknownSettings) warn("unknown setting '%s'", s.first);
+  for (auto& s : unknownSettings) {
+    LOG(WARNING) << "unknown setting: " << s.first;
+  }
 }
 
 void AbstractConfig::reapplyUnknownSettings() {

@@ -37,6 +37,7 @@ libutil_headers = files(
 )
 
 libutil_dep_list = [
+    glog_dep,
     boost_dep,
     libbz2_dep,
     liblzma_dep,
@@ -47,7 +48,6 @@ libutil_dep_list = [
 
 libutil_link_list = []
 libutil_link_args = []
-libutil_cxx_args = []
 
 libutil_lib = library(
     'nixutil',
@@ -57,6 +57,7 @@ libutil_lib = library(
     include_directories : src_inc,
     sources : libutil_src,
     link_args : libutil_link_args,
+    # cpp_args : [ '-E' ],
     dependencies : libutil_dep_list)
 
 install_headers(

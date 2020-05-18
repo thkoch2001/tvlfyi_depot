@@ -1,5 +1,6 @@
 #include "thread-pool.hh"
 #include "affinity.hh"
+#include "glog/logging.h"
 
 namespace nix {
 
@@ -11,7 +12,7 @@ ThreadPool::ThreadPool(size_t _maxThreads) : maxThreads(_maxThreads) {
     if (!maxThreads) maxThreads = 1;
   }
 
-  debug("starting pool of %d threads", maxThreads - 1);
+  DLOG(INFO) << "starting pool of " << maxThreads - 1 << " threads";
 }
 
 ThreadPool::~ThreadPool() { shutdown(); }
@@ -26,18 +27,21 @@ void ThreadPool::shutdown() {
 
   if (workers.empty()) return;
 
-  debug("reaping %d worker threads", workers.size());
+  DLOG(INFO) << "reaping " << workers.size() << " worker threads";
 
   work.notify_all();
 
-  for (auto& thr : workers) thr.join();
+  for (auto& thr : workers) {
+    thr.join();
+  }
 }
 
 void ThreadPool::enqueue(const work_t& t) {
   auto state(state_.lock());
-  if (quit)
+  if (quit) {
     throw ThreadPoolShutDown(
         "cannot enqueue a work item while the thread pool is shutting down");
+  }
   state->pending.push(t);
   /* Note: process() also executes items, so count it as a worker. */
   if (state->pending.size() > state->workers.size() + 1 &&

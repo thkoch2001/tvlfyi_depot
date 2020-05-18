@@ -3,6 +3,7 @@
 #include <cerrno>
 #include <cstring>
 #include <memory>
+#include "glog/logging.h"
 #include "util.hh"
 
 namespace nix {
@@ -47,9 +48,8 @@ FdSink::~FdSink() {
 size_t threshold = 256 * 1024 * 1024;
 
 static void warnLargeDump() {
-  printError(
-      "warning: dumping very large path (> 256 MiB); this may run out of "
-      "memory");
+  LOG(WARNING)
+      << "dumping very large path (> 256 MiB); this may run out of memory";
 }
 
 void FdSink::write(const unsigned char* data, size_t len) {

@@ -18,6 +18,7 @@
 #include <thread>
 #include "affinity.hh"
 #include "finally.hh"
+#include "glog/logging.h"
 #include "lazy.hh"
 #include "serialise.hh"
 #include "sync.hh"
@@ -669,7 +670,7 @@ Pid::operator pid_t() { return pid; }
 int Pid::kill() {
   assert(pid != -1);
 
-  debug(format("killing process %1%") % pid);
+  DLOG(INFO) << "killing process " << pid;
 
   /* Send the requested signal to the child.  If it has its own
      process group, send the signal to every process in the child
@@ -681,7 +682,7 @@ int Pid::kill() {
 #if __FreeBSD__ || __APPLE__
     if (errno != EPERM || ::kill(pid, 0) != 0)
 #endif
-      printError((SysError("killing process %d", pid).msg()));
+      LOG(ERROR) << SysError("killing process %d", pid).msg();
   }
 
   return wait();
@@ -696,7 +697,9 @@ int Pid::wait() {
       pid = -1;
       return status;
     }
-    if (errno != EINTR) throw SysError("cannot get child exit status");
+    if (errno != EINTR) {
+      throw SysError("cannot get child exit status");
+    }
     checkInterrupt();
   }
 }
@@ -712,7 +715,7 @@ pid_t Pid::release() {
 }
 
 void killUser(uid_t uid) {
-  debug(format("killing all processes running under uid '%1%'") % uid);
+  DLOG(INFO) << "killing all processes running under UID " << uid;
 
   assert(uid != 0); /* just to be safe... */
 
@@ -725,7 +728,9 @@ void killUser(uid_t uid) {
 
   Pid pid = startProcess(
       [&]() {
-        if (setuid(uid) == -1) throw SysError("setting uid");
+        if (setuid(uid) == -1) {
+          throw SysError("setting uid");
+        }
 
         while (true) {
 #ifdef __APPLE__
@@ -777,7 +782,6 @@ static pid_t doFork(bool allowVfork, std::function<void()> fun) {
 
 pid_t startProcess(std::function<void()> fun, const ProcessOptions& options) {
   auto wrapper = [&]() {
-    if (!options.allowVfork) logger = makeDefaultLogger();
     try {
 #if __linux__
       if (options.dieWithParent && prctl(PR_SET_PDEATHSIG, SIGKILL) == -1)
@@ -787,7 +791,7 @@ pid_t startProcess(std::function<void()> fun, const ProcessOptions& options) {
       fun();
     } catch (std::exception& e) {
       try {
-        std::cerr << options.errorPrefix << e.what() << "\n";
+        LOG(ERROR) << options.errorPrefix << e.what();
       } catch (...) {
       }
     } catch (...) {
@@ -954,7 +958,7 @@ void closeMostFDs(const set<int>& exceptions) {
     for (auto& s : readDirectory("/proc/self/fd")) {
       auto fd = std::stoi(s.name);
       if (!exceptions.count(fd)) {
-        debug("closing leaked FD %d", fd);
+        DLOG(INFO) << "closing leaked FD " << fd;
         close(fd);
       }
     }
@@ -1111,7 +1115,7 @@ void ignoreException() {
   try {
     throw;
   } catch (std::exception& e) {
-    printError(format("error (ignored): %1%") % e.what());
+    LOG(ERROR) << "error (ignored): " << e.what();
   }
 }
 
@@ -1223,7 +1227,7 @@ void callFailure(const std::function<void(std::exception_ptr exc)>& failure,
   try {
     failure(exc);
   } catch (std::exception& e) {
-    printError(format("uncaught exception: %s") % e.what());
+    LOG(ERROR) << "uncaught exception: " << e.what();
     abort();
   }
 }

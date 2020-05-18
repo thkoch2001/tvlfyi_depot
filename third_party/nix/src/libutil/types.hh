@@ -77,8 +77,8 @@ class BaseError : public std::exception {
   BaseError(Args... args) : err(fmt(args...)) {}
 
 #ifdef EXCEPTION_NEEDS_THROW_SPEC
-  ~BaseError() throw(){};
-  const char* what() const throw() { return err.c_str(); }
+  ~BaseError() noexcept {};
+  const char* what() const noexcept { return err.c_str(); }
 #else
   const char* what() const noexcept { return err.c_str(); }
 #endif
