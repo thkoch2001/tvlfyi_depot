@@ -33,7 +33,9 @@ Path readStorePath(Store& store, Source& from) {
 template <class T>
 T readStorePaths(Store& store, Source& from) {
   T paths = readStrings<T>(from);
-  for (auto& i : paths) store.assertStorePath(i);
+  for (auto& i : paths) {
+    store.assertStorePath(i);
+  }
   return paths;
 }
 
@@ -600,10 +602,11 @@ void RemoteStore::queryMissing(const PathSet& targets, PathSet& willBuild,
                                unsigned long long& narSize) {
   {
     auto conn(getConnection());
-    if (GET_PROTOCOL_MINOR(conn->daemonVersion) < 19)
+    if (GET_PROTOCOL_MINOR(conn->daemonVersion) < 19) {
       // Don't hold the connection handle in the fallback case
       // to prevent a deadlock.
       goto fallback;
+    }
     conn->to << wopQueryMissing << targets;
     conn.processStderr();
     willBuild = readStorePaths<PathSet>(*this, conn->from);

@@ -38,33 +38,39 @@ void EvalState::forceValue(Value& v, const Pos& pos) {
       v.thunk.expr = expr;
       throw;
     }
-  } else if (v.type == tApp)
+  } else if (v.type == tApp) {
     callFunction(*v.app.left, *v.app.right, v, noPos);
-  else if (v.type == tBlackhole)
+  } else if (v.type == tBlackhole) {
     throwEvalError("infinite recursion encountered, at %1%", pos);
+  }
 }
 
 inline void EvalState::forceAttrs(Value& v) {
   forceValue(v);
-  if (v.type != tAttrs)
+  if (v.type != tAttrs) {
     throwTypeError("value is %1% while a set was expected", v);
+  }
 }
 
 inline void EvalState::forceAttrs(Value& v, const Pos& pos) {
   forceValue(v);
-  if (v.type != tAttrs)
+  if (v.type != tAttrs) {
     throwTypeError("value is %1% while a set was expected, at %2%", v, pos);
+  }
 }
 
 inline void EvalState::forceList(Value& v) {
   forceValue(v);
-  if (!v.isList()) throwTypeError("value is %1% while a list was expected", v);
+  if (!v.isList()) {
+    throwTypeError("value is %1% while a list was expected", v);
+  }
 }
 
 inline void EvalState::forceList(Value& v, const Pos& pos) {
   forceValue(v);
-  if (!v.isList())
+  if (!v.isList()) {
     throwTypeError("value is %1% while a list was expected, at %2%", v, pos);
+  }
 }
 
 /* Note: Various places expect the allocated memory to be zeroed. */

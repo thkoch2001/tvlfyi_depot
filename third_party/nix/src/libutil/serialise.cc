@@ -211,7 +211,9 @@ Sink& operator<<(Sink& sink, const string& s) {
 template <class T>
 void writeStrings(const T& ss, Sink& sink) {
   sink << ss.size();
-  for (auto& i : ss) sink << i;
+  for (auto& i : ss) {
+    sink << i;
+  }
 }
 
 Sink& operator<<(Sink& sink, const Strings& s) {

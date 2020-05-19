@@ -102,7 +102,9 @@ void JSONWriter::comma() {
   } else {
     state->str << ',';
   }
-  if (state->indent) indent();
+  if (state->indent) {
+    indent();
+  }
 }
 
 void JSONWriter::indent() {
@@ -116,7 +118,9 @@ void JSONList::open() {
 
 JSONList::~JSONList() {
   state->depth--;
-  if (state->indent && !first) indent();
+  if (state->indent && !first) {
+    indent();
+  }
   state->str << "]";
 }
 
@@ -143,7 +147,9 @@ void JSONObject::open() {
 JSONObject::~JSONObject() {
   if (state) {
     state->depth--;
-    if (state->indent && !first) indent();
+    if (state->indent && !first) {
+      indent();
+    }
     state->str << "}";
   }
 }

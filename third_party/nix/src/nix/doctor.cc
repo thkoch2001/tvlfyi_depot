@@ -36,7 +36,9 @@ struct CmdDoctor : StoreCommand {
     }
     success &= checkStoreProtocol(store->getProtocol());
 
-    if (!success) throw Exit(2);
+    if (!success) {
+      throw Exit(2);
+    }
   }
 
   bool checkNixInPath() {

@@ -23,7 +23,9 @@ namespace nix {
 static bool gcWarning = true;
 
 void printGCWarning() {
-  if (!gcWarning) return;
+  if (!gcWarning) {
+    return;
+  }
 
   static bool haveWarned = false;
   if (!haveWarned) {

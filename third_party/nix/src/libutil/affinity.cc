@@ -36,7 +36,9 @@ void setAffinityTo(int cpu) {
 int lockToCurrentCPU() {
 #if __linux__
   int cpu = sched_getcpu();
-  if (cpu != -1) setAffinityTo(cpu);
+  if (cpu != -1) {
+    setAffinityTo(cpu);
+  }
   return cpu;
 #else
   return -1;

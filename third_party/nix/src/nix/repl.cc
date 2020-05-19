@@ -155,7 +155,9 @@ static char* completionCallback(char* s, int* match) {
     };
     size_t start = strlen(s);
     size_t len = 0;
-    while (checkAllHaveSameAt(start + len)) ++len;
+    while (checkAllHaveSameAt(start + len)) {
+      ++len;
+    }
     if (len > 0) {
       *match = 1;
       auto* res = strdup(std::string(*possible.begin(), start, len).c_str());
@@ -295,7 +297,9 @@ bool NixRepl::getLine(string& input, const std::string& prompt) {
     return true;
   }
 
-  if (!s) return false;
+  if (!s) {
+    return false;
+  }
   input += s;
   input += '\n';
   return true;
@@ -384,7 +388,9 @@ static int runProgram(const string& program, const Strings& args) {
 bool isVarName(const string& s) {
   if (s.size() == 0) return false;
   char c = s[0];
-  if ((c >= '0' && c <= '9') || c == '-' || c == '\'') return false;
+  if ((c >= '0' && c <= '9') || c == '-' || c == '\'') {
+    return false;
+  }
   for (auto& i : s)
     if (!((i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z') ||
           (i >= '0' && i <= '9') || i == '_' || i == '-' || i == '\''))
@@ -682,8 +688,10 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
         }
 
         str << "}";
-      } else
-        str << "{ ... }";
+      } else {
+        str
+      }
+      << "{ ... }";
 
       break;
     }
@@ -694,7 +702,7 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
       seen.insert(&v);
 
       str << "[ ";
-      if (maxDepth > 0)
+      if (maxDepth > 0) {
         for (unsigned int n = 0; n < v.listSize(); ++n) {
           if (seen.find(v.listElems()[n]) != seen.end())
             str << "«repeated»";
@@ -706,8 +714,10 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
             }
           str << " ";
         }
-      else
-        str << "... ";
+      } else {
+        str
+      }
+      << "... ";
       str << "]";
       break;
 

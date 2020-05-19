@@ -59,16 +59,18 @@ N getIntArg(const string& opt, Strings::iterator& i,
   if (allowUnit && !s.empty()) {
     char u = std::toupper(*s.rbegin());
     if (std::isalpha(u)) {
-      if (u == 'K')
+      if (u == 'K') {
         multiplier = 1ULL << 10;
-      else if (u == 'M')
+      } else if (u == 'M') {
         multiplier = 1ULL << 20;
-      else if (u == 'G')
+      } else if (u == 'G') {
         multiplier = 1ULL << 30;
-      else if (u == 'T')
+      } else if (u == 'T') {
         multiplier = 1ULL << 40;
-      else
-        throw UsageError(format("invalid unit specifier '%1%'") % u);
+      } else {
+        throw
+      }
+      UsageError(format("invalid unit specifier '%1%'") % u);
       s.resize(s.size() - 1);
     }
   }

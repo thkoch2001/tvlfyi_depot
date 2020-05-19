@@ -48,7 +48,9 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
                             PathSet& drvsSeen) {
   checkInterrupt();
 
-  if (strict) state.forceValue(v);
+  if (strict) {
+    state.forceValue(v);
+  }
 
   switch (v.type) {
     case tInt:
@@ -85,14 +87,18 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
         Path drvPath;
         a = v.attrs->find(state.sDrvPath);
         if (a != v.attrs->end()) {
-          if (strict) state.forceValue(*a->value);
+          if (strict) {
+            state.forceValue(*a->value);
+          }
           if (a->value->type == tString)
             xmlAttrs["drvPath"] = drvPath = a->value->string.s;
         }
 
         a = v.attrs->find(state.sOutPath);
         if (a != v.attrs->end()) {
-          if (strict) state.forceValue(*a->value);
+          if (strict) {
+            state.forceValue(*a->value);
+          }
           if (a->value->type == tString)
             xmlAttrs["outPath"] = a->value->string.s;
         }
@@ -117,9 +123,10 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
     case tList2:
     case tListN: {
       XMLOpenElement _(doc, "list");
-      for (unsigned int n = 0; n < v.listSize(); ++n)
+      for (unsigned int n = 0; n < v.listSize(); ++n) {
         printValueAsXML(state, strict, location, *v.listElems()[n], doc,
                         context, drvsSeen);
+      }
       break;
     }
 
@@ -135,9 +142,10 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
         XMLOpenElement _(doc, "attrspat", attrs);
         for (auto& i : v.lambda.fun->formals->formals)
           doc.writeEmptyElement("attr", singletonAttrs("name", i.name));
-      } else
-        doc.writeEmptyElement("varpat",
-                              singletonAttrs("name", v.lambda.fun->arg));
+      } else {
+        doc
+      }
+      .writeEmptyElement("varpat", singletonAttrs("name", v.lambda.fun->arg));
 
       break;
     }

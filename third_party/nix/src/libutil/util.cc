@@ -194,7 +194,9 @@ bool pathExists(const Path& path) {
   int res;
   struct stat st;
   res = lstat(path.c_str(), &st);
-  if (!res) return true;
+  if (!res) {
+    return true;
+  }
   if (errno != ENOENT && errno != ENOTDIR)
     throw SysError(format("getting status of %1%") % path);
   return false;
@@ -579,9 +581,9 @@ AutoDelete::AutoDelete(const string& p, bool recursive) : path(p) {
 AutoDelete::~AutoDelete() {
   try {
     if (del) {
-      if (recursive)
+      if (recursive) {
         deletePath(path);
-      else {
+      } else {
         if (remove(path.c_str()) == -1)
           throw SysError(format("cannot unlink '%1%'") % path);
       }
@@ -1200,7 +1202,9 @@ string base64Decode(const string& s) {
   if (!init) {
     // FIXME: not thread-safe.
     memset(decode, -1, sizeof(decode));
-    for (int i = 0; i < 64; i++) decode[(int)base64Chars[i]] = i;
+    for (int i = 0; i < 64; i++) {
+      decode[(int)base64Chars[i]] = i;
+    }
     init = true;
   }
 

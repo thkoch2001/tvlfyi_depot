@@ -94,13 +94,16 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
         string name =
             state->forceStringNoCtx(*i->value->listElems()[j], *i->pos);
         Bindings::iterator out = attrs->find(state->symbols.create(name));
-        if (out == attrs->end()) continue;  // FIXME: throw error?
+        if (out == attrs->end()) {
+          continue;  // FIXME: throw error?
+        }
         state->forceAttrs(*out->value);
 
         /* And evaluate its ‘outPath’ attribute. */
         Bindings::iterator outPath = out->value->attrs->find(state->sOutPath);
-        if (outPath == out->value->attrs->end())
+        if (outPath == out->value->attrs->end()) {
           continue;  // FIXME: throw error?
+        }
         PathSet context;
         outputs[name] =
             state->coerceToPath(*outPath->pos, *outPath->value, context);
@@ -108,11 +111,15 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
     } else
       outputs["out"] = queryOutPath();
   }
-  if (!onlyOutputsToInstall || !attrs) return outputs;
+  if (!onlyOutputsToInstall || !attrs) {
+    return outputs;
+  }
 
   /* Check for `meta.outputsToInstall` and return `outputs` reduced to that. */
   const Value* outTI = queryMeta("outputsToInstall");
-  if (!outTI) return outputs;
+  if (!outTI) {
+    return outputs;
+  }
   const auto errMsg = Error("this derivation has bad 'meta.outputsToInstall'");
   /* ^ this shows during `nix-env -i` right under the bad derivation */
   if (!outTI->isList()) throw errMsg;
@@ -136,10 +143,16 @@ string DrvInfo::queryOutputName() const {
 }
 
 Bindings* DrvInfo::getMeta() {
-  if (meta) return meta;
-  if (!attrs) return 0;
+  if (meta) {
+    return meta;
+  }
+  if (!attrs) {
+    return 0;
+  }
   Bindings::iterator a = attrs->find(state->sMeta);
-  if (a == attrs->end()) return 0;
+  if (a == attrs->end()) {
+    return 0;
+  }
   state->forceAttrs(*a->value, *a->pos);
   meta = a->value->attrs;
   return meta;
@@ -147,7 +160,9 @@ Bindings* DrvInfo::getMeta() {
 
 StringSet DrvInfo::queryMetaNames() {
   StringSet res;
-  if (!getMeta()) return res;
+  if (!getMeta()) {
+    return res;
+  }
   for (auto& i : *meta) res.insert(i.name);
   return res;
 }
@@ -155,24 +170,37 @@ StringSet DrvInfo::queryMetaNames() {
 bool DrvInfo::checkMeta(Value& v) {
   state->forceValue(v);
   if (v.isList()) {
-    for (unsigned int n = 0; n < v.listSize(); ++n)
-      if (!checkMeta(*v.listElems()[n])) return false;
+    for (unsigned int n = 0; n < v.listSize(); ++n) {
+      if (!checkMeta(*v.listElems()[n])) {
+        return false;
+      }
+    }
     return true;
   } else if (v.type == tAttrs) {
     Bindings::iterator i = v.attrs->find(state->sOutPath);
-    if (i != v.attrs->end()) return false;
-    for (auto& i : *v.attrs)
-      if (!checkMeta(*i.value)) return false;
+    if (i != v.attrs->end()) {
+      return false;
+    }
+    for (auto& i : *v.attrs) {
+      if (!checkMeta(*i.value)) {
+        return false;
+      }
+    }
     return true;
-  } else
+  } else {
     return v.type == tInt || v.type == tBool || v.type == tString ||
            v.type == tFloat;
+  }
 }
 
 Value* DrvInfo::queryMeta(const string& name) {
-  if (!getMeta()) return 0;
+  if (!getMeta()) {
+    return 0;
+  }
   Bindings::iterator a = meta->find(state->symbols.create(name));
-  if (a == meta->end() || !checkMeta(*a->value)) return 0;
+  if (a == meta->end() || !checkMeta(*a->value)) {
+    return 0;
+  }
   return a->value;
 }
 
@@ -184,8 +212,12 @@ string DrvInfo::queryMetaString(const string& name) {
 
 NixInt DrvInfo::queryMetaInt(const string& name, NixInt def) {
   Value* v = queryMeta(name);
-  if (!v) return def;
-  if (v->type == tInt) return v->integer;
+  if (!v) {
+    return def;
+  }
+  if (v->type == tInt) {
+    return v->integer;
+  }
   if (v->type == tString) {
     /* Backwards compatibility with before we had support for
        integer meta fields. */
@@ -197,8 +229,12 @@ NixInt DrvInfo::queryMetaInt(const string& name, NixInt def) {
 
 NixFloat DrvInfo::queryMetaFloat(const string& name, NixFloat def) {
   Value* v = queryMeta(name);
-  if (!v) return def;
-  if (v->type == tFloat) return v->fpoint;
+  if (!v) {
+    return def;
+  }
+  if (v->type == tFloat) {
+    return v->fpoint;
+  }
   if (v->type == tString) {
     /* Backwards compatibility with before we had support for
        float meta fields. */
@@ -210,8 +246,12 @@ NixFloat DrvInfo::queryMetaFloat(const string& name, NixFloat def) {
 
 bool DrvInfo::queryMetaBool(const string& name, bool def) {
   Value* v = queryMeta(name);
-  if (!v) return def;
-  if (v->type == tBool) return v->boolean;
+  if (!v) {
+    return def;
+  }
+  if (v->type == tBool) {
+    return v->boolean;
+  }
   if (v->type == tString) {
     /* Backwards compatibility with before we had support for
        Boolean meta fields. */
@@ -226,10 +266,14 @@ void DrvInfo::setMeta(const string& name, Value* v) {
   Bindings* old = meta;
   meta = state->allocBindings(1 + (old ? old->size() : 0));
   Symbol sym = state->symbols.create(name);
-  if (old)
-    for (auto i : *old)
+  if (old) {
+    for (auto i : *old) {
       if (i.name != sym) meta->push_back(i);
-  if (v) meta->push_back(Attr(sym, v));
+    }
+  }
+  if (v) {
+    meta->push_back(Attr(sym, v));
+  }
   meta->sort();
 }
 
@@ -245,7 +289,9 @@ static bool getDerivation(EvalState& state, Value& v, const string& attrPath,
                           bool ignoreAssertionFailures) {
   try {
     state.forceValue(v);
-    if (!state.isDerivation(v)) return true;
+    if (!state.isDerivation(v)) {
+      return true;
+    }
 
     /* Remove spurious duplicates (e.g., a set like `rec { x =
        derivation {...}; y = x;}'. */
@@ -261,7 +307,9 @@ static bool getDerivation(EvalState& state, Value& v, const string& attrPath,
     return false;
 
   } catch (AssertionError& e) {
-    if (ignoreAssertionFailures) return false;
+    if (ignoreAssertionFailures) {
+      return false;
+    }
     throw;
   }
 }
@@ -338,10 +386,12 @@ static void getDerivations(EvalState& state, Value& vIn,
     }
   }
 
-  else
-    throw TypeError(
-        "expression does not evaluate to a derivation (or a set or list of "
-        "those)");
+  else {
+    throw
+  }
+  TypeError(
+      "expression does not evaluate to a derivation (or a set or list of "
+      "those)");
 }
 
 void getDerivations(EvalState& state, Value& v, const string& pathPrefix,

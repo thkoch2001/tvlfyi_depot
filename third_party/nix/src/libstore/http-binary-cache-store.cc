@@ -77,8 +77,9 @@ class HttpBinaryCacheStore : public BinaryCacheStore {
     } catch (DownloadError& e) {
       /* S3 buckets return 403 if a file doesn't exist and the
          bucket is unlistable, so treat 403 as 404. */
-      if (e.error == Downloader::NotFound || e.error == Downloader::Forbidden)
+      if (e.error == Downloader::NotFound || e.error == Downloader::Forbidden) {
         return false;
+      }
       maybeDisable();
       throw;
     }

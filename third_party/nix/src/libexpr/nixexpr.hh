@@ -23,13 +23,25 @@ MakeError(EvalError, Error) MakeError(ParseError, Error)
       : file(file), line(line), column(column){};
   operator bool() const { return line != 0; }
   bool operator<(const Pos& p2) const {
-    if (!line) return p2.line;
-    if (!p2.line) return false;
+    if (!line) {
+      return p2.line;
+    }
+    if (!p2.line) {
+      return false;
+    }
     int d = ((string)file).compare((string)p2.file);
-    if (d < 0) return true;
-    if (d > 0) return false;
-    if (line < p2.line) return true;
-    if (line > p2.line) return false;
+    if (d < 0) {
+      return true;
+    }
+    if (d > 0) {
+      return false;
+    }
+    if (line < p2.line) {
+      return true;
+    }
+    if (line > p2.line) {
+      return false;
+    }
     return column < p2.column;
   }
 };

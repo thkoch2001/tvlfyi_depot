@@ -14,15 +14,19 @@ namespace nix {
   int exterr = sqlite3_extended_errcode(db);
 
   auto path = sqlite3_db_filename(db, nullptr);
-  if (!path) path = "(in-memory)";
+  if (!path) {
+    path = "(in-memory)";
+  }
 
   if (err == SQLITE_BUSY || err == SQLITE_PROTOCOL) {
     throw SQLiteBusy(
         err == SQLITE_PROTOCOL
             ? fmt("SQLite database '%s' is busy (SQLITE_PROTOCOL)", path)
             : fmt("SQLite database '%s' is busy", path));
-  } else
-    throw SQLiteError("%s: %s (in '%s')", fs.s, sqlite3_errstr(exterr), path);
+  } else {
+    throw
+  }
+  SQLiteError("%s: %s (in '%s')", fs.s, sqlite3_errstr(exterr), path);
 }
 
 SQLite::SQLite(const Path& path) {
@@ -34,8 +38,9 @@ SQLite::SQLite(const Path& path) {
 
 SQLite::~SQLite() {
   try {
-    if (db && sqlite3_close(db) != SQLITE_OK)
+    if (db && sqlite3_close(db) != SQLITE_OK) {
       throwSQLiteError(db, "closing database");
+    }
   } catch (...) {
     ignoreException();
   }
@@ -81,8 +86,9 @@ SQLiteStmt::Use& SQLiteStmt::Use::operator()(const std::string& value,
     if (sqlite3_bind_text(stmt, curArg++, value.c_str(), -1,
                           SQLITE_TRANSIENT) != SQLITE_OK)
       throwSQLiteError(stmt.db, "binding argument");
-  } else
+  } else {
     bind();
+  }
   return *this;
 }
 
@@ -90,14 +96,16 @@ SQLiteStmt::Use& SQLiteStmt::Use::operator()(int64_t value, bool notNull) {
   if (notNull) {
     if (sqlite3_bind_int64(stmt, curArg++, value) != SQLITE_OK)
       throwSQLiteError(stmt.db, "binding argument");
-  } else
+  } else {
     bind();
+  }
   return *this;
 }
 
 SQLiteStmt::Use& SQLiteStmt::Use::bind() {
-  if (sqlite3_bind_null(stmt, curArg++) != SQLITE_OK)
+  if (sqlite3_bind_null(stmt, curArg++) != SQLITE_OK) {
     throwSQLiteError(stmt.db, "binding argument");
+  }
   return *this;
 }
 
@@ -134,21 +142,24 @@ bool SQLiteStmt::Use::isNull(int col) {
 
 SQLiteTxn::SQLiteTxn(sqlite3* db) {
   this->db = db;
-  if (sqlite3_exec(db, "begin;", 0, 0, 0) != SQLITE_OK)
+  if (sqlite3_exec(db, "begin;", 0, 0, 0) != SQLITE_OK) {
     throwSQLiteError(db, "starting transaction");
+  }
   active = true;
 }
 
 void SQLiteTxn::commit() {
-  if (sqlite3_exec(db, "commit;", 0, 0, 0) != SQLITE_OK)
+  if (sqlite3_exec(db, "commit;", 0, 0, 0) != SQLITE_OK) {
     throwSQLiteError(db, "committing transaction");
+  }
   active = false;
 }
 
 SQLiteTxn::~SQLiteTxn() {
   try {
-    if (active && sqlite3_exec(db, "rollback;", 0, 0, 0) != SQLITE_OK)
+    if (active && sqlite3_exec(db, "rollback;", 0, 0, 0) != SQLITE_OK) {
       throwSQLiteError(db, "aborting transaction");
+    }
   } catch (...) {
     ignoreException();
   }

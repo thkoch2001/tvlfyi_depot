@@ -157,19 +157,17 @@ LocalStore::LocalStore(const Params& params)
   /* Check the current database schema and if necessary do an
      upgrade.  */
   int curSchema = getSchema();
-  if (curSchema > nixSchemaVersion)
+  if (curSchema > nixSchemaVersion) {
     throw Error(
         format(
             "current Nix store schema is version %1%, but I only support %2%") %
         curSchema % nixSchemaVersion);
 
-  else if (curSchema == 0) { /* new store */
+  } else if (curSchema == 0) { /* new store */
     curSchema = nixSchemaVersion;
     openDB(*state, true);
     writeFile(schemaPath, (format("%1%") % nixSchemaVersion).str());
-  }
-
-  else if (curSchema < nixSchemaVersion) {
+  } else if (curSchema < nixSchemaVersion) {
     if (curSchema < 5)
       throw Error(
           "Your Nix store has a database in Berkeley DB format,\n"
@@ -219,10 +217,9 @@ LocalStore::LocalStore(const Params& params)
     writeFile(schemaPath, (format("%1%") % nixSchemaVersion).str());
 
     lockFile(globalLock.get(), ltRead, true);
-  }
-
-  else
+  } else {
     openDB(*state, false);
+  }
 
   /* Prepare SQL statements. */
   state->stmtRegisterValidPath.create(
@@ -325,8 +322,9 @@ void LocalStore::openDB(State& state, bool create) {
   SetDllDirectoryW(L"");
 #endif
 
-  if (sqlite3_busy_timeout(db, 60 * 60 * 1000) != SQLITE_OK)
+  if (sqlite3_busy_timeout(db, 60 * 60 * 1000) != SQLITE_OK) {
     throwSQLiteError(db, "setting timeout");
+  }
 
   db.exec("pragma foreign_keys = 1");
 
@@ -347,8 +345,9 @@ void LocalStore::openDB(State& state, bool create) {
   {
     SQLiteStmt stmt;
     stmt.create(db, "pragma main.journal_mode;");
-    if (sqlite3_step(stmt) != SQLITE_ROW)
+    if (sqlite3_step(stmt) != SQLITE_ROW) {
       throwSQLiteError(db, "querying journal mode");
+    }
     prevMode = string((const char*)sqlite3_column_text(stmt, 0));
   }
   if (prevMode != mode &&
@@ -622,7 +621,9 @@ uint64_t LocalStore::addValidPath(State& state, const ValidPathInfo& info,
        derivations).  Note that if this throws an error, then the
        DB transaction is rolled back, so the path validity
        registration above is undone. */
-    if (checkOutputs) checkDerivationOutputs(info.path, drv);
+    if (checkOutputs) {
+      checkDerivationOutputs(info.path, drv);
+    }
 
     for (auto& i : drv.outputs) {
       state.stmtAddDerivationOutput.use()(id)(i.first)(i.second.path).exec();
@@ -1046,8 +1047,9 @@ Path LocalStore::addToStoreFromDump(const string& dump, const string& name,
       if (recursive) {
         StringSource source(dump);
         restorePath(realPath, source);
-      } else
+      } else {
         writeFile(realPath, dump);
+      }
 
       canonicalisePathMetaData(realPath, -1);
 
@@ -1059,8 +1061,9 @@ Path LocalStore::addToStoreFromDump(const string& dump, const string& name,
       if (recursive) {
         hash.first = hashAlgo == htSHA256 ? h : hashString(htSHA256, dump);
         hash.second = dump.size();
-      } else
+      } else {
         hash = hashPath(htSHA256, realPath);
+      }
 
       optimisePath(realPath);  // FIXME: combine with hashPath()
 
@@ -1297,14 +1300,16 @@ void LocalStore::verifyPath(const Path& path, const PathSet& store,
     } else {
       LOG(ERROR) << "path '" << path
                  << "' disappeared, but it still has valid referrers!";
-      if (repair) try {
+      if (repair) {
+        try {
           repairPath(path);
         } catch (Error& e) {
           LOG(WARNING) << e.msg();
           errors = true;
         }
-      else
+      } else {
         errors = true;
+      }
     }
 
     return;

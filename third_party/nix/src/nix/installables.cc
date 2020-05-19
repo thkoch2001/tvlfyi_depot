@@ -22,7 +22,9 @@ SourceExprCommand::SourceExprCommand() {
 }
 
 Value* SourceExprCommand::getSourceExpr(EvalState& state) {
-  if (vSourceExpr) return vSourceExpr;
+  if (vSourceExpr) {
+    return vSourceExpr;
+  }
 
   auto sToplevel = state.symbols.create("_toplevel");
 
@@ -223,7 +225,9 @@ std::shared_ptr<Installable> parseInstallable(SourceExprCommand& cmd,
 
 Buildables build(ref<Store> store, RealiseMode mode,
                  std::vector<std::shared_ptr<Installable>> installables) {
-  if (mode != Build) settings.readOnlyMode = true;
+  if (mode != Build) {
+    settings.readOnlyMode = true;
+  }
 
   Buildables buildables;
 
@@ -244,8 +248,10 @@ Buildables build(ref<Store> store, RealiseMode mode,
 
   if (mode == DryRun) {
     printMissing(store, pathsToBuild);
-  } else if (mode == Build)
-    store->buildPaths(pathsToBuild);
+  } else {
+    if
+  }
+  (mode == Build) store->buildPaths(pathsToBuild);
 
   return buildables;
 }

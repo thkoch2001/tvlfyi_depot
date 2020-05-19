@@ -13,13 +13,17 @@ XMLWriter::XMLWriter(bool indent, std::ostream& output)
 XMLWriter::~XMLWriter() { close(); }
 
 void XMLWriter::close() {
-  if (closed) return;
+  if (closed) {
+    return;
+  }
   while (!pendingElems.empty()) closeElement();
   closed = true;
 }
 
 void XMLWriter::indent_(size_t depth) {
-  if (!indent) return;
+  if (!indent) {
+    return;
+  }
   output << string(depth * 2, ' ');
 }
 

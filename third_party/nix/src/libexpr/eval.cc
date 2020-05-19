@@ -545,14 +545,19 @@ Value& mkString(Value& v, const string& s, const PathSet& context) {
 void mkPath(Value& v, const char* s) { mkPathNoCopy(v, dupString(s)); }
 
 inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
-  for (size_t l = var.level; l; --l, env = env->up)
+  for (size_t l = var.level; l; --l, env = env->up) {
     ;
+  }
 
-  if (!var.fromWith) return env->values[var.displ];
+  if (!var.fromWith) {
+    return env->values[var.displ];
+  }
 
   while (1) {
     if (env->type == Env::HasWithExpr) {
-      if (noEval) return 0;
+      if (noEval) {
+        return 0;
+      }
       Value* v = allocValue();
       evalAttrs(*env->up, (Expr*)env->values[0], *v);
       env->values[0] = v;
@@ -566,8 +571,9 @@ inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
     if (!env->prevWith)
       throwUndefinedVarError("undefined variable '%1%' at %2%", var.name,
                              var.pos);
-    for (size_t l = env->prevWith; l; --l, env = env->up)
+    for (size_t l = env->prevWith; l; --l, env = env->up) {
       ;
+    }
   }
 }
 
@@ -601,11 +607,11 @@ Env& EvalState::allocEnv(size_t size) {
 
 void EvalState::mkList(Value& v, size_t size) {
   clearValue(v);
-  if (size == 1)
+  if (size == 1) {
     v.type = tList1;
-  else if (size == 2)
+  } else if (size == 2) {
     v.type = tList2;
-  else {
+  } else {
     v.type = tListN;
     v.bigList.size = size;
     v.bigList.elems = size ? (Value**)allocBytes(size * sizeof(Value*)) : 0;
@@ -699,7 +705,9 @@ void EvalState::evalFile(const Path& path_, Value& v) {
   auto j = fileParseCache.find(path2);
   if (j != fileParseCache.end()) e = j->second;
 
-  if (!e) e = parseExprFromFile(checkSourcePath(path2));
+  if (!e) {
+    e = parseExprFromFile(checkSourcePath(path2));
+  }
 
   fileParseCache[path2] = e;
 
@@ -724,23 +732,26 @@ void EvalState::eval(Expr* e, Value& v) { e->eval(*this, baseEnv, v); }
 inline bool EvalState::evalBool(Env& env, Expr* e) {
   Value v;
   e->eval(*this, env, v);
-  if (v.type != tBool)
+  if (v.type != tBool) {
     throwTypeError("value is %1% while a Boolean was expected", v);
+  }
   return v.boolean;
 }
 
 inline bool EvalState::evalBool(Env& env, Expr* e, const Pos& pos) {
   Value v;
   e->eval(*this, env, v);
-  if (v.type != tBool)
+  if (v.type != tBool) {
     throwTypeError("value is %1% while a Boolean was expected, at %2%", v, pos);
+  }
   return v.boolean;
 }
 
 inline void EvalState::evalAttrs(Env& env, Expr* e, Value& v) {
   e->eval(*this, env, v);
-  if (v.type != tAttrs)
+  if (v.type != tAttrs) {
     throwTypeError("value is %1% while a set was expected", v);
+  }
 }
 
 void Expr::eval(EvalState& state, Env& env, Value& v) { abort(); }
@@ -795,7 +806,9 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
       state.forceAttrs(*vOverrides);
       Bindings* newBnds =
           state.allocBindings(v.attrs->capacity() + vOverrides->attrs->size());
-      for (auto& i : *v.attrs) newBnds->push_back(i);
+      for (auto& i : *v.attrs) {
+        newBnds->push_back(i);
+      }
       for (auto& i : *vOverrides->attrs) {
         AttrDefs::iterator j = attrs.find(i.name);
         if (j != attrs.end()) {
@@ -809,10 +822,12 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
     }
   }
 
-  else
-    for (auto& i : attrs)
-      v.attrs->push_back(
-          Attr(i.first, i.second.e->maybeThunk(state, env), &i.second.pos));
+  else {
+    for
+  }
+  (auto& i
+   : attrs) v.attrs->push_back(Attr(i.first, i.second.e->maybeThunk(state, env),
+                                    &i.second.pos));
 
   /* Dynamic attrs apply *after* rec and __overrides. */
   for (auto& i : dynamicAttrs) {
@@ -980,8 +995,10 @@ void EvalState::callPrimOp(Value& fun, Value& arg, Value& v, const Pos& pos) {
     Value* vArgs[arity];
     auto n = arity - 1;
     vArgs[n--] = &arg;
-    for (Value* arg = &fun; arg->type == tPrimOpApp; arg = arg->primOpApp.left)
+    for (Value* arg = &fun; arg->type == tPrimOpApp;
+         arg = arg->primOpApp.left) {
       vArgs[n--] = arg->primOpApp.right;
+    }
 
     /* And call the primop. */
     nrPrimOpCalls++;
@@ -1024,10 +1041,11 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
     }
   }
 
-  if (fun.type != tLambda)
+  if (fun.type != tLambda) {
     throwTypeError(
         "attempt to call something which is not a function but %1%, at %2%",
         fun, pos);
+  }
 
   ExprLambda& lambda(*fun.lambda.fun);
 
@@ -1038,10 +1056,10 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
 
   size_t displ = 0;
 
-  if (!lambda.matchAttrs)
+  if (!lambda.matchAttrs) {
     env2.values[displ++] = &arg;
 
-  else {
+  } else {
     forceAttrs(arg, pos);
 
     if (!lambda.arg.empty()) env2.values[displ++] = &arg;
@@ -1078,7 +1096,9 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
   }
 
   nrFunctionCalls++;
-  if (countCalls) incrFunctionCall(&lambda);
+  if (countCalls) {
+    incrFunctionCall(&lambda);
+  }
 
   /* Evaluate the body.  This is conditional on showTrace, because
      catching exceptions makes this function not tail-recursive. */
@@ -1223,8 +1243,12 @@ void ExprOpUpdate::eval(EvalState& state, Env& env, Value& v) {
       v.attrs->push_back(*j++);
   }
 
-  while (i != v1.attrs->end()) v.attrs->push_back(*i++);
-  while (j != v2.attrs->end()) v.attrs->push_back(*j++);
+  while (i != v1.attrs->end()) {
+    v.attrs->push_back(*i++);
+  }
+  while (j != v2.attrs->end()) {
+    v.attrs->push_back(*j++);
+  }
 
   state.nrOpUpdateValuesCopied += v.attrs->size();
 }
@@ -1248,7 +1272,9 @@ void EvalState::concatLists(Value& v, size_t nrLists, Value** lists,
     forceList(*lists[n], pos);
     auto l = lists[n]->listSize();
     len += l;
-    if (l) nonEmpty = lists[n];
+    if (l) {
+      nonEmpty = lists[n];
+    }
   }
 
   if (nonEmpty && len == nonEmpty->listSize()) {
@@ -1311,11 +1337,11 @@ void ExprConcatStrings::eval(EvalState& state, Env& env, Value& v) {
                                 firstType == tString);
   }
 
-  if (firstType == tInt)
+  if (firstType == tInt) {
     mkInt(v, n);
-  else if (firstType == tFloat)
+  } else if (firstType == tFloat) {
     mkFloat(v, nf);
-  else if (firstType == tPath) {
+  } else if (firstType == tPath) {
     if (!context.empty())
       throwEvalError(
           "a string that refers to a store path cannot be appended to a path, "
@@ -1323,8 +1349,10 @@ void ExprConcatStrings::eval(EvalState& state, Env& env, Value& v) {
           pos);
     auto path = canonPath(s.str());
     mkPath(v, path.c_str());
-  } else
-    mkString(v, s.str(), context);
+  } else {
+    mkString
+  }
+  (v, s.str(), context);
 }
 
 void ExprPos::eval(EvalState& state, Env& env, Value& v) {
@@ -1362,25 +1390,28 @@ void EvalState::forceValueDeep(Value& v) {
 
 NixInt EvalState::forceInt(Value& v, const Pos& pos) {
   forceValue(v, pos);
-  if (v.type != tInt)
+  if (v.type != tInt) {
     throwTypeError("value is %1% while an integer was expected, at %2%", v,
                    pos);
+  }
   return v.integer;
 }
 
 NixFloat EvalState::forceFloat(Value& v, const Pos& pos) {
   forceValue(v, pos);
-  if (v.type == tInt)
+  if (v.type == tInt) {
     return v.integer;
-  else if (v.type != tFloat)
+  } else if (v.type != tFloat) {
     throwTypeError("value is %1% while a float was expected, at %2%", v, pos);
+  }
   return v.fpoint;
 }
 
 bool EvalState::forceBool(Value& v, const Pos& pos) {
   forceValue(v);
-  if (v.type != tBool)
+  if (v.type != tBool) {
     throwTypeError("value is %1% while a Boolean was expected, at %2%", v, pos);
+  }
   return v.boolean;
 }
 
@@ -1391,19 +1422,21 @@ bool EvalState::isFunctor(Value& fun) {
 void EvalState::forceFunction(Value& v, const Pos& pos) {
   forceValue(v);
   if (v.type != tLambda && v.type != tPrimOp && v.type != tPrimOpApp &&
-      !isFunctor(v))
+      !isFunctor(v)) {
     throwTypeError("value is %1% while a function was expected, at %2%", v,
                    pos);
+  }
 }
 
 string EvalState::forceString(Value& v, const Pos& pos) {
   forceValue(v, pos);
   if (v.type != tString) {
-    if (pos)
+    if (pos) {
       throwTypeError("value is %1% while a string was expected, at %2%", v,
                      pos);
-    else
+    } else {
       throwTypeError("value is %1% while a string was expected", v);
+    }
   }
   return string(v.string.s);
 }
@@ -1437,11 +1470,17 @@ string EvalState::forceStringNoCtx(Value& v, const Pos& pos) {
 }
 
 bool EvalState::isDerivation(Value& v) {
-  if (v.type != tAttrs) return false;
+  if (v.type != tAttrs) {
+    return false;
+  }
   Bindings::iterator i = v.attrs->find(sType);
-  if (i == v.attrs->end()) return false;
+  if (i == v.attrs->end()) {
+    return false;
+  }
   forceValue(*i->value);
-  if (i->value->type != tString) return false;
+  if (i->value->type != tString) {
+    return false;
+  }
   return strcmp(i->value->string.s, "derivation") == 0;
 }
 
@@ -1556,14 +1595,22 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
   /* !!! Hack to support some old broken code that relies on pointer
      equality tests between sets.  (Specifically, builderDefs calls
      uniqList on a list of sets.)  Will remove this eventually. */
-  if (&v1 == &v2) return true;
+  if (&v1 == &v2) {
+    return true;
+  }
 
   // Special case type-compatibility between float and int
-  if (v1.type == tInt && v2.type == tFloat) return v1.integer == v2.fpoint;
-  if (v1.type == tFloat && v2.type == tInt) return v1.fpoint == v2.integer;
+  if (v1.type == tInt && v2.type == tFloat) {
+    return v1.integer == v2.fpoint;
+  }
+  if (v1.type == tFloat && v2.type == tInt) {
+    return v1.fpoint == v2.integer;
+  }
 
   // All other types are not compatible with each other.
-  if (v1.type != v2.type) return false;
+  if (v1.type != v2.type) {
+    return false;
+  }
 
   switch (v1.type) {
     case tInt:
@@ -1584,9 +1631,14 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
     case tList1:
     case tList2:
     case tListN:
-      if (v1.listSize() != v2.listSize()) return false;
-      for (size_t n = 0; n < v1.listSize(); ++n)
-        if (!eqValues(*v1.listElems()[n], *v2.listElems()[n])) return false;
+      if (v1.listSize() != v2.listSize()) {
+        return false;
+      }
+      for (size_t n = 0; n < v1.listSize(); ++n) {
+        if (!eqValues(*v1.listElems()[n], *v2.listElems()[n])) {
+          return false;
+        }
+      }
       return true;
 
     case tAttrs: {
@@ -1595,17 +1647,21 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
       if (isDerivation(v1) && isDerivation(v2)) {
         Bindings::iterator i = v1.attrs->find(sOutPath);
         Bindings::iterator j = v2.attrs->find(sOutPath);
-        if (i != v1.attrs->end() && j != v2.attrs->end())
+        if (i != v1.attrs->end() && j != v2.attrs->end()) {
           return eqValues(*i->value, *j->value);
+        }
       }
 
-      if (v1.attrs->size() != v2.attrs->size()) return false;
+      if (v1.attrs->size() != v2.attrs->size()) {
+        return false;
+      }
 
       /* Otherwise, compare the attributes one by one. */
       Bindings::iterator i, j;
       for (i = v1.attrs->begin(), j = v2.attrs->begin(); i != v1.attrs->end();
-           ++i, ++j)
+           ++i, ++j) {
         if (i->name != j->name || !eqValues(*i->value, *j->value)) return false;
+      }
 
       return true;
     }

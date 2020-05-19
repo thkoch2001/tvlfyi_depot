@@ -108,10 +108,14 @@ struct CurlDownloader : public Downloader {
 
     ~DownloadItem() {
       if (req) {
-        if (active) curl_multi_remove_handle(downloader.curlm, req);
+        if (active) {
+          curl_multi_remove_handle(downloader.curlm, req);
+        }
         curl_easy_cleanup(req);
       }
-      if (requestHeaders) curl_slist_free_all(requestHeaders);
+      if (requestHeaders) {
+        curl_slist_free_all(requestHeaders);
+      }
       try {
         if (!done)
           fail(DownloadError(
@@ -242,7 +246,9 @@ struct CurlDownloader : public Downloader {
     }
 
     void init() {
-      if (!req) req = curl_easy_init();
+      if (!req) {
+        req = curl_easy_init();
+      }
 
       curl_easy_reset(req);
 
@@ -316,8 +322,9 @@ struct CurlDownloader : public Downloader {
                        settings.netrcFile.get().c_str());
       curl_easy_setopt(req, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
 
-      if (writtenToSink)
+      if (writtenToSink) {
         curl_easy_setopt(req, CURLOPT_RESUME_FROM_LARGE, writtenToSink);
+      }
 
       result.data = std::make_shared<std::string>();
       result.bodySize = 0;
@@ -505,7 +512,9 @@ struct CurlDownloader : public Downloader {
 
     workerThread.join();
 
-    if (curlm) curl_multi_cleanup(curlm);
+    if (curlm) {
+      curl_multi_cleanup(curlm);
+    }
   }
 
   void stopWorkerThread() {

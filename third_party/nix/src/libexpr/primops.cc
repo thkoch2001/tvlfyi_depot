@@ -129,9 +129,9 @@ static void prim_scopedImport(EvalState& state, const Pos& pos, Value** args,
     state.forceAttrs(v, pos);
   } else {
     state.forceAttrs(*args[0]);
-    if (args[0]->attrs->empty())
+    if (args[0]->attrs->empty()) {
       state.evalFile(realPath, v);
-    else {
+    } else {
       Env* env = &state.allocEnv(args[0]->attrs->size());
       env->up = &state.baseEnv;
 
@@ -346,8 +346,12 @@ static void prim_isPath(EvalState& state, const Pos& pos, Value** args,
 
 struct CompareValues {
   bool operator()(const Value* v1, const Value* v2) const {
-    if (v1->type == tFloat && v2->type == tInt) return v1->fpoint < v2->integer;
-    if (v1->type == tInt && v2->type == tFloat) return v1->integer < v2->fpoint;
+    if (v1->type == tFloat && v2->type == tInt) {
+      return v1->fpoint < v2->integer;
+    }
+    if (v1->type == tInt && v2->type == tFloat) {
+      return v1->integer < v2->fpoint;
+    }
     if (v1->type != v2->type)
       throw EvalError(format("cannot compare %1% with %2%") % showType(*v1) %
                       showType(*v2));
@@ -562,8 +566,9 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   /* Check whether null attributes should be ignored. */
   bool ignoreNulls = false;
   attr = args[0]->attrs->find(state.sIgnoreNulls);
-  if (attr != args[0]->attrs->end())
+  if (attr != args[0]->attrs->end()) {
     ignoreNulls = state.forceBool(*attr->value, pos);
+  }
 
   /* Build the derivation expression by processing the attributes. */
   Derivation drv;
@@ -890,10 +895,11 @@ static void prim_dirOf(EvalState& state, const Pos& pos, Value** args,
                        Value& v) {
   PathSet context;
   Path dir = dirOf(state.coerceToString(pos, *args[0], context, false, false));
-  if (args[0]->type == tPath)
+  if (args[0]->type == tPath) {
     mkPath(v, dir.c_str());
-  else
+  } else {
     mkString(v, dir, context);
+  }
 }
 
 /* Return the contents of a file as a string. */
@@ -1208,14 +1214,17 @@ static void prim_attrValues(EvalState& state, const Pos& pos, Value** args,
   state.mkList(v, args[0]->attrs->size());
 
   unsigned int n = 0;
-  for (auto& i : *args[0]->attrs) v.listElems()[n++] = (Value*)&i;
+  for (auto& i : *args[0]->attrs) {
+    v.listElems()[n++] = (Value*)&i;
+  }
 
   std::sort(v.listElems(), v.listElems() + n, [](Value* v1, Value* v2) {
     return (string)((Attr*)v1)->name < (string)((Attr*)v2)->name;
   });
 
-  for (unsigned int i = 0; i < n; ++i)
+  for (unsigned int i = 0; i < n; ++i) {
     v.listElems()[i] = ((Attr*)v.listElems()[i])->value;
+  }
 }
 
 /* Dynamic version of the `.' operator. */
@@ -1238,10 +1247,11 @@ void prim_unsafeGetAttrPos(EvalState& state, const Pos& pos, Value** args,
   string attr = state.forceStringNoCtx(*args[0], pos);
   state.forceAttrs(*args[1], pos);
   Bindings::iterator i = args[1]->attrs->find(state.symbols.create(attr));
-  if (i == args[1]->attrs->end())
+  if (i == args[1]->attrs->end()) {
     mkNull(v);
-  else
+  } else {
     state.mkPos(v, i->pos);
+  }
 }
 
 /* Dynamic version of the `?' operator. */
@@ -1335,7 +1345,9 @@ static void prim_intersectAttrs(EvalState& state, const Pos& pos, Value** args,
 
   for (auto& i : *args[0]->attrs) {
     Bindings::iterator j = args[1]->attrs->find(i.name);
-    if (j != args[1]->attrs->end()) v.attrs->push_back(*j);
+    if (j != args[1]->attrs->end()) {
+      v.attrs->push_back(*j);
+    }
   }
 }
 
@@ -1358,11 +1370,15 @@ static void prim_catAttrs(EvalState& state, const Pos& pos, Value** args,
     Value& v2(*args[1]->listElems()[n]);
     state.forceAttrs(v2, pos);
     Bindings::iterator i = v2.attrs->find(attrName);
-    if (i != v2.attrs->end()) res[found++] = i->value;
+    if (i != v2.attrs->end()) {
+      res[found++] = i->value;
+    }
   }
 
   state.mkList(v, found);
-  for (unsigned int n = 0; n < found; ++n) v.listElems()[n] = res[n];
+  for (unsigned int n = 0; n < found; ++n) {
+    v.listElems()[n] = res[n];
+  }
 }
 
 /* Return a set containing the names of the formal arguments expected
@@ -1454,8 +1470,9 @@ static void prim_tail(EvalState& state, const Pos& pos, Value** args,
   if (args[0]->listSize() == 0)
     throw Error(format("'tail' called on an empty list, at %1%") % pos);
   state.mkList(v, args[0]->listSize() - 1);
-  for (unsigned int n = 0; n < v.listSize(); ++n)
+  for (unsigned int n = 0; n < v.listSize(); ++n) {
     v.listElems()[n] = args[0]->listElems()[n + 1];
+  }
 }
 
 /* Apply a function to every element of a list. */
@@ -1464,9 +1481,10 @@ static void prim_map(EvalState& state, const Pos& pos, Value** args, Value& v) {
 
   state.mkList(v, args[1]->listSize());
 
-  for (unsigned int n = 0; n < v.listSize(); ++n)
+  for (unsigned int n = 0; n < v.listSize(); ++n) {
     mkApp(*(v.listElems()[n] = state.allocValue()), *args[0],
           *args[1]->listElems()[n]);
+  }
 }
 
 /* Filter a list using a predicate; that is, return a list containing
@@ -1485,17 +1503,20 @@ static void prim_filter(EvalState& state, const Pos& pos, Value** args,
   for (unsigned int n = 0; n < args[1]->listSize(); ++n) {
     Value res;
     state.callFunction(*args[0], *args[1]->listElems()[n], res, noPos);
-    if (state.forceBool(res, pos))
+    if (state.forceBool(res, pos)) {
       vs[k++] = args[1]->listElems()[n];
-    else
+    } else {
       same = false;
+    }
   }
 
-  if (same)
+  if (same) {
     v = *args[1];
-  else {
+  } else {
     state.mkList(v, k);
-    for (unsigned int n = 0; n < k; ++n) v.listElems()[n] = vs[n];
+    for (unsigned int n = 0; n < k; ++n) {
+      v.listElems()[n] = vs[n];
+    }
   }
 }
 
@@ -1504,11 +1525,12 @@ static void prim_elem(EvalState& state, const Pos& pos, Value** args,
                       Value& v) {
   bool res = false;
   state.forceList(*args[1], pos);
-  for (unsigned int n = 0; n < args[1]->listSize(); ++n)
+  for (unsigned int n = 0; n < args[1]->listSize(); ++n) {
     if (state.eqValues(*args[0], *args[1]->listElems()[n])) {
       res = true;
       break;
     }
+  }
   mkBool(v, res);
 }
 
@@ -1610,8 +1632,9 @@ static void prim_sort(EvalState& state, const Pos& pos, Value** args,
   auto comparator = [&](Value* a, Value* b) {
     /* Optimization: if the comparator is lessThan, bypass
        callFunction. */
-    if (args[0]->type == tPrimOp && args[0]->primOp->fun == prim_lessThan)
+    if (args[0]->type == tPrimOp && args[0]->primOp->fun == prim_lessThan) {
       return CompareValues()(a, b);
+    }
 
     Value vTmp1, vTmp2;
     state.callFunction(*args[0], *a, vTmp1, pos);
@@ -1694,31 +1717,34 @@ static void prim_concatMap(EvalState& state, const Pos& pos, Value** args,
 static void prim_add(EvalState& state, const Pos& pos, Value** args, Value& v) {
   state.forceValue(*args[0], pos);
   state.forceValue(*args[1], pos);
-  if (args[0]->type == tFloat || args[1]->type == tFloat)
+  if (args[0]->type == tFloat || args[1]->type == tFloat) {
     mkFloat(v,
             state.forceFloat(*args[0], pos) + state.forceFloat(*args[1], pos));
-  else
+  } else {
     mkInt(v, state.forceInt(*args[0], pos) + state.forceInt(*args[1], pos));
+  }
 }
 
 static void prim_sub(EvalState& state, const Pos& pos, Value** args, Value& v) {
   state.forceValue(*args[0], pos);
   state.forceValue(*args[1], pos);
-  if (args[0]->type == tFloat || args[1]->type == tFloat)
+  if (args[0]->type == tFloat || args[1]->type == tFloat) {
     mkFloat(v,
             state.forceFloat(*args[0], pos) - state.forceFloat(*args[1], pos));
-  else
+  } else {
     mkInt(v, state.forceInt(*args[0], pos) - state.forceInt(*args[1], pos));
+  }
 }
 
 static void prim_mul(EvalState& state, const Pos& pos, Value** args, Value& v) {
   state.forceValue(*args[0], pos);
   state.forceValue(*args[1], pos);
-  if (args[0]->type == tFloat || args[1]->type == tFloat)
+  if (args[0]->type == tFloat || args[1]->type == tFloat) {
     mkFloat(v,
             state.forceFloat(*args[0], pos) * state.forceFloat(*args[1], pos));
-  else
+  } else {
     mkInt(v, state.forceInt(*args[0], pos) * state.forceInt(*args[1], pos));
+  }
 }
 
 static void prim_div(EvalState& state, const Pos& pos, Value** args, Value& v) {
@@ -1937,10 +1963,12 @@ static void prim_concatStringSep(EvalState& state, const Pos& pos, Value** args,
   bool first = true;
 
   for (unsigned int n = 0; n < args[1]->listSize(); ++n) {
-    if (first)
+    if (first) {
       first = false;
-    else
-      res += sep;
+    } else {
+      res
+    }
+    += sep;
     res += state.coerceToString(pos, *args[1]->listElems()[n], context);
   }
 
@@ -2074,8 +2102,10 @@ void fetch(EvalState& state, const Pos& pos, Value** args, Value& v,
     if (request.uri.empty())
       throw EvalError(format("'url' argument required, at %1%") % pos);
 
-  } else
-    request.uri = state.forceStringNoCtx(*args[0], pos);
+  } else {
+    request
+  }
+  .uri = state.forceStringNoCtx(*args[0], pos);
 
   state.checkURI(request.uri);
 

@@ -208,7 +208,9 @@ void ExprVar::bindVars(const StaticEnv& env) {
   int withLevel = -1;
   for (curEnv = &env, level = 0; curEnv; curEnv = curEnv->up, level++) {
     if (curEnv->isWith) {
-      if (withLevel == -1) withLevel = level;
+      if (withLevel == -1) {
+        withLevel = level;
+      }
     } else {
       StaticEnv::Vars::const_iterator i = curEnv->vars.find(name);
       if (i != curEnv->vars.end()) {
@@ -233,7 +235,9 @@ void ExprVar::bindVars(const StaticEnv& env) {
 
 void ExprSelect::bindVars(const StaticEnv& env) {
   e->bindVars(env);
-  if (def) def->bindVars(env);
+  if (def) {
+    def->bindVars(env);
+  }
   for (auto& i : attrPath)
     if (!i.symbol.set()) i.expr->bindVars(env);
 }
@@ -258,8 +262,10 @@ void ExprAttrs::bindVars(const StaticEnv& env) {
       i.second.e->bindVars(i.second.inherited ? env : newEnv);
   }
 
-  else
-    for (auto& i : attrs) i.second.e->bindVars(env);
+  else {
+    for
+  }
+  (auto& i : attrs) i.second.e->bindVars(env);
 
   for (auto& i : dynamicAttrs) {
     i.nameExpr->bindVars(*dynamicEnv);
@@ -307,11 +313,12 @@ void ExprWith::bindVars(const StaticEnv& env) {
   const StaticEnv* curEnv;
   unsigned int level;
   prevWith = 0;
-  for (curEnv = &env, level = 1; curEnv; curEnv = curEnv->up, level++)
+  for (curEnv = &env, level = 1; curEnv; curEnv = curEnv->up, level++) {
     if (curEnv->isWith) {
       prevWith = level;
       break;
     }
+  }
 
   attrs->bindVars(env);
   StaticEnv newEnv(true, &env);

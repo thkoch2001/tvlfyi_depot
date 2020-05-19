@@ -13,7 +13,9 @@ struct RegisterLegacyCommand {
   static Commands* commands;
 
   RegisterLegacyCommand(const std::string& name, MainFunction fun) {
-    if (!commands) commands = new Commands;
+    if (!commands) {
+      commands = new Commands;
+    }
     (*commands)[name] = fun;
   }
 };

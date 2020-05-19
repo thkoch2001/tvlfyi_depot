@@ -203,8 +203,10 @@ static void prim_fetchMercurial(EvalState& state, const Pos& pos, Value** args,
     if (url.empty())
       throw EvalError(format("'url' argument required, at %1%") % pos);
 
-  } else
-    url = state.coerceToString(pos, *args[0], context, false, false);
+  } else {
+    url
+  }
+  = state.coerceToString(pos, *args[0], context, false, false);
 
   // FIXME: git externals probably can be used to bypass the URI
   // whitelist. Ah well.

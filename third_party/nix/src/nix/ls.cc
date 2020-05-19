@@ -74,8 +74,10 @@ struct MixLs : virtual Args, MixJSON {
     if (json) {
       JSONPlaceholder jsonRoot(std::cout);
       listNar(jsonRoot, accessor, path, recursive);
-    } else
-      listText(accessor);
+    } else {
+      listText
+    }
+    (accessor);
   }
 };
 

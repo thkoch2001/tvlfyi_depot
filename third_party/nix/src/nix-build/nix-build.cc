@@ -379,7 +379,9 @@ static void _main(int argc, char** argv) {
 
     buildPaths(pathsToBuild);
 
-    if (dryRun) return;
+    if (dryRun) {
+      return;
+    }
 
     // Set the environment.
     auto env = getEnv();
@@ -501,7 +503,9 @@ static void _main(int argc, char** argv) {
 
     buildPaths(pathsToBuild);
 
-    if (dryRun) return;
+    if (dryRun) {
+      return;
+    }
 
     for (auto& symlink : resultSymlinks)
       if (auto store2 = store.dynamic_pointer_cast<LocalFSStore>())

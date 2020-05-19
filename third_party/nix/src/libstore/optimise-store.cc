@@ -206,7 +206,9 @@ retry:
      the store itself (we don't want or need to mess with its
      permissions). */
   bool mustToggle = dirOf(path) != realStoreDir;
-  if (mustToggle) makeWritable(dirOf(path));
+  if (mustToggle) {
+    makeWritable(dirOf(path));
+  }
 
   /* When we're done, make the directory read-only again and reset
      its timestamp back to 0. */

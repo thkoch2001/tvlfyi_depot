@@ -185,19 +185,21 @@ Derivation Store::derivationFromPath(const Path& drvPath) {
 
 static void printString(string& res, const string& s) {
   res += '"';
-  for (const char* i = s.c_str(); *i; i++)
+  for (const char* i = s.c_str(); *i; i++) {
     if (*i == '\"' || *i == '\\') {
       res += "\\";
       res += *i;
-    } else if (*i == '\n')
+    } else if (*i == '\n') {
       res += "\\n";
-    else if (*i == '\r')
+    } else if (*i == '\r') {
       res += "\\r";
-    else if (*i == '\t')
+    } else if (*i == '\t') {
       res += "\\t";
-    else
+    } else {
       res += *i;
-  res += '"';
+    }
+    res += '"';
+  }
 }
 
 template <class ForwardIterator>
@@ -205,10 +207,11 @@ static void printStrings(string& res, ForwardIterator i, ForwardIterator j) {
   res += '[';
   bool first = true;
   for (; i != j; ++i) {
-    if (first)
+    if (first) {
       first = false;
-    else
+    } else {
       res += ',';
+    }
     printString(res, *i);
   }
   res += ']';

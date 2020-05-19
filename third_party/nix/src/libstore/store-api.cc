@@ -42,7 +42,9 @@ Path Store::toStorePath(const Path& path) const {
 Path Store::followLinksToStore(const Path& _path) const {
   Path path = absPath(_path);
   while (!isInStore(path)) {
-    if (!isLink(path)) break;
+    if (!isLink(path)) {
+      break;
+    }
     string target = readLink(path);
     path = absPath(target, dirOf(path));
   }
@@ -828,10 +830,11 @@ StoreType getStoreType(const std::string& uri, const std::string& stateDir) {
   } else if (uri == "" || uri == "auto") {
     if (access(stateDir.c_str(), R_OK | W_OK) == 0)
       return tLocal;
-    else if (pathExists(settings.nixDaemonSocketFile))
+    else if (pathExists(settings.nixDaemonSocketFile)) {
       return tDaemon;
-    else
+    } else {
       return tLocal;
+    }
   } else {
     return tOther;
   }

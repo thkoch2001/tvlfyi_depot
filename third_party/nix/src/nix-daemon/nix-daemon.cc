@@ -117,9 +117,9 @@ struct TunnelLogger {
 
     state->canSendStderr = false;
 
-    if (success)
+    if (success) {
       to << STDERR_LAST;
-    else {
+    } else {
       to << STDERR_ERROR << msg;
       if (status != 0) to << status;
     }
@@ -304,8 +304,10 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
            addToStoreFromDump(). */
         ParseSink sink; /* null sink; just parse the NAR */
         parseDump(sink, savedNAR);
-      } else
-        parseDump(savedRegular, from);
+      } else {
+        parseDump
+      }
+      (savedRegular, from);
 
       logger->startWork();
       if (!savedRegular.regular) throw Error("regular file expected");
@@ -575,7 +577,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       try {
         info = store->queryPathInfo(path);
       } catch (InvalidPath&) {
-        if (GET_PROTOCOL_MINOR(clientVersion) < 17) throw;
+        if (GET_PROTOCOL_MINOR(clientVersion) < 17) {
+          throw;
+        }
       }
       logger->stopWork();
       if (info) {
@@ -641,14 +645,18 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       from >> info.registrationTime >> info.narSize >> info.ultimate;
       info.sigs = readStrings<StringSet>(from);
       from >> info.ca >> repair >> dontCheckSigs;
-      if (!trusted && dontCheckSigs) dontCheckSigs = false;
-      if (!trusted) info.ultimate = false;
+      if (!trusted && dontCheckSigs) {
+        dontCheckSigs = false;
+      }
+      if (!trusted) {
+        info.ultimate = false;
+      }
 
       std::string saved;
       std::unique_ptr<Source> source;
-      if (GET_PROTOCOL_MINOR(clientVersion) >= 21)
+      if (GET_PROTOCOL_MINOR(clientVersion) >= 21) {
         source = std::make_unique<TunnelSource>(from);
-      else {
+      } else {
         TeeSink tee(from);
         parseDump(tee, tee.source);
         saved = std::move(*tee.source.data);
@@ -758,7 +766,9 @@ static void processConnection(bool trusted, const std::string& userName,
            happens, just send the error message and exit. */
         bool errorAllowed = tunnelLogger->state_.lock()->canSendStderr;
         tunnelLogger->stopWork(false, e.msg(), e.status);
-        if (!errorAllowed) throw;
+        if (!errorAllowed) {
+          throw;
+        }
       } catch (std::bad_alloc& e) {
         tunnelLogger->stopWork(false, "Nix daemon out of memory", 1);
         throw;

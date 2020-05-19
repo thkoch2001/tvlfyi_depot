@@ -18,7 +18,9 @@ static Path channelsList;
 
 // Reads the list of channels.
 static void readChannels() {
-  if (!pathExists(channelsList)) return;
+  if (!pathExists(channelsList)) {
+    return;
+  }
   auto channelsFile = readFile(channelsList);
 
   for (const auto& line :

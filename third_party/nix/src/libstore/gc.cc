@@ -630,7 +630,9 @@ void LocalStore::tryToDelete(GCState& state, const Path& path) {
        ‘nix-store --delete’ doesn't have the unexpected effect of
        recursing into derivations and outputs. */
     state.dead.insert(visited.begin(), visited.end());
-    if (state.shouldDelete) deletePathRecursive(state, path);
+    if (state.shouldDelete) {
+      deletePathRecursive(state, path);
+    }
   }
 }
 
@@ -704,7 +706,9 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
   state.shouldDelete = options.action == GCOptions::gcDeleteDead ||
                        options.action == GCOptions::gcDeleteSpecific;
 
-  if (state.shouldDelete) deletePath(reservedPath);
+  if (state.shouldDelete) {
+    deletePath(reservedPath);
+  }
 
   /* Acquire the global GC root.  This prevents
      a) New roots from being added.
@@ -737,7 +741,9 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
      that is not reachable from `roots' is garbage. */
 
   if (state.shouldDelete) {
-    if (pathExists(trashDir)) deleteGarbage(state, trashDir);
+    if (pathExists(trashDir)) {
+      deleteGarbage(state, trashDir);
+    }
     try {
       createDirs(trashDir);
     } catch (SysError& e) {

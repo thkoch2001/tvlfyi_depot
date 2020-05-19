@@ -16,35 +16,49 @@
 namespace nix {
 
 void Hash::init() {
-  if (type == htMD5)
+  if (type == htMD5) {
     hashSize = md5HashSize;
-  else if (type == htSHA1)
+  } else if (type == htSHA1) {
     hashSize = sha1HashSize;
-  else if (type == htSHA256)
+  } else if (type == htSHA256) {
     hashSize = sha256HashSize;
-  else if (type == htSHA512)
+  } else if (type == htSHA512) {
     hashSize = sha512HashSize;
-  else
+  } else {
     abort();
+  }
   assert(hashSize <= maxHashSize);
   memset(hash, 0, maxHashSize);
 }
 
 bool Hash::operator==(const Hash& h2) const {
-  if (hashSize != h2.hashSize) return false;
-  for (unsigned int i = 0; i < hashSize; i++)
-    if (hash[i] != h2.hash[i]) return false;
+  if (hashSize != h2.hashSize) {
+    return false;
+  }
+  for (unsigned int i = 0; i < hashSize; i++) {
+    if (hash[i] != h2.hash[i]) {
+      return false;
+    }
+  }
   return true;
 }
 
 bool Hash::operator!=(const Hash& h2) const { return !(*this == h2); }
 
 bool Hash::operator<(const Hash& h) const {
-  if (hashSize < h.hashSize) return true;
-  if (hashSize > h.hashSize) return false;
+  if (hashSize < h.hashSize) {
+    return true;
+  }
+  if (hashSize > h.hashSize) {
+    return false;
+  }
   for (unsigned int i = 0; i < hashSize; i++) {
-    if (hash[i] < h.hash[i]) return true;
-    if (hash[i] > h.hash[i]) return false;
+    if (hash[i] < h.hash[i]) {
+      return true;
+    }
+    if (hash[i] > h.hash[i]) {
+      return false;
+    }
   }
   return false;
 }
@@ -137,9 +151,15 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
 
   if (!isSRI && size == base16Len()) {
     auto parseHexDigit = [&](char c) {
-      if (c >= '0' && c <= '9') return c - '0';
-      if (c >= 'A' && c <= 'F') return c - 'A' + 10;
-      if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+      if (c >= '0' && c <= '9') {
+        return c - '0';
+      }
+      if (c >= 'A' && c <= 'F') {
+        return c - 'A' + 10;
+      }
+      if (c >= 'a' && c <= 'f') {
+        return c - 'a' + 10;
+      }
       throw BadHash("invalid base-16 hash '%s'", s);
     };
 
@@ -292,8 +312,9 @@ HashResult hashPath(HashType ht, const Path& path, PathFilter& filter) {
 Hash compressHash(const Hash& hash, unsigned int newSize) {
   Hash h;
   h.hashSize = newSize;
-  for (unsigned int i = 0; i < hash.hashSize; ++i)
+  for (unsigned int i = 0; i < hash.hashSize; ++i) {
     h.hash[i % newSize] ^= hash.hash[i];
+  }
   return h;
 }
 

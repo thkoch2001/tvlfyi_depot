@@ -151,7 +151,9 @@ static void opRealise(Strings opFlags, Strings opArgs) {
     printMissing(ref<Store>(store), willBuild, willSubstitute, unknown,
                  downloadSize, narSize);
 
-  if (dryRun) return;
+  if (dryRun) {
+    return;
+  }
 
   /* Build all paths at the same time to exploit parallelism. */
   store->buildPaths(PathSet(paths.begin(), paths.end()), buildMode);
@@ -217,7 +219,9 @@ static void opPrintFixedPath(Strings opFlags, Strings opArgs) {
 
 static PathSet maybeUseOutputs(const Path& storePath, bool useOutput,
                                bool forceRealise) {
-  if (forceRealise) realisePath(storePath);
+  if (forceRealise) {
+    realisePath(storePath);
+  }
   if (useOutput && isDerivation(storePath)) {
     Derivation drv = store->derivationFromPath(storePath);
     PathSet outputs;
@@ -334,7 +338,9 @@ static void opQuery(Strings opFlags, Strings opArgs) {
                        i);
   }
 
-  if (query == qDefault) query = qOutputs;
+  if (query == qDefault) {
+    query = qOutputs;
+  }
 
   RunPager pager;
 

@@ -96,10 +96,10 @@ std::shared_ptr<std::string> LocalFSStore::getBuildLog(const Path& path_) {
                           : fmt("%s/%s/%s", logDir, drvsLogDir, baseName);
     Path logBz2Path = logPath + ".bz2";
 
-    if (pathExists(logPath))
+    if (pathExists(logPath)) {
       return std::make_shared<std::string>(readFile(logPath));
 
-    else if (pathExists(logBz2Path)) {
+    } else if (pathExists(logBz2Path)) {
       try {
         return decompress("bzip2", readFile(logBz2Path));
       } catch (Error&) {

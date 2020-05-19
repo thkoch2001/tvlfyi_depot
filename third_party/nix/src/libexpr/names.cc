@@ -57,21 +57,23 @@ static bool componentsLT(const string& c1, const string& c2) {
   int n1, n2;
   bool c1Num = string2Int(c1, n1), c2Num = string2Int(c2, n2);
 
-  if (c1Num && c2Num)
+  if (c1Num && c2Num) {
     return n1 < n2;
-  else if (c1 == "" && c2Num)
+  } else if (c1 == "" && c2Num)
     return true;
   else if (c1 == "pre" && c2 != "pre")
     return true;
   else if (c2 == "pre")
     return false;
   /* Assume that `2.3a' < `2.3.1'. */
-  else if (c2Num)
+  else if (c2Num) {
     return true;
-  else if (c1Num)
+  } else if (c1Num) {
     return false;
-  else
-    return c1 < c2;
+  } else {
+    return
+  }
+  c1 < c2;
 }
 
 int compareVersions(const string& v1, const string& v2) {

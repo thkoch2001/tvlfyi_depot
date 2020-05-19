@@ -40,7 +40,9 @@ struct CmdBuild : MixDryRun, InstallablesCommand {
   void run(ref<Store> store) override {
     auto buildables = build(store, dryRun ? DryRun : Build, installables);
 
-    if (dryRun) return;
+    if (dryRun) {
+      return;
+    }
 
     for (size_t i = 0; i < buildables.size(); ++i) {
       auto& b(buildables[i]);

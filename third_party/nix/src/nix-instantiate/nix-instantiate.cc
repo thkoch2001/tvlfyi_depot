@@ -147,7 +147,9 @@ static int _main(int argc, char** argv) {
 
     initPlugins();
 
-    if (evalOnly && !wantsReadWrite) settings.readOnlyMode = true;
+    if (evalOnly && !wantsReadWrite) {
+      settings.readOnlyMode = true;
+    }
 
     auto store = openStore();
 
@@ -171,8 +173,10 @@ static int _main(int argc, char** argv) {
       Expr* e = state->parseStdin();
       processExpr(*state, attrPaths, parseOnly, strict, autoArgs, evalOnly,
                   outputKind, xmlOutputSourceLocation, e);
-    } else if (files.empty() && !fromArgs)
-      files.push_back("./default.nix");
+    } else {
+      if
+    }
+    (files.empty() && !fromArgs) files.push_back("./default.nix");
 
     for (auto& i : files) {
       Expr* e = fromArgs

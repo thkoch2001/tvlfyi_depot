@@ -13,7 +13,9 @@ void printValueAsJSON(EvalState& state, bool strict, Value& v,
                       JSONPlaceholder& out, PathSet& context) {
   checkInterrupt();
 
-  if (strict) state.forceValue(v);
+  if (strict) {
+    state.forceValue(v);
+  }
 
   switch (v.type) {
     case tInt:

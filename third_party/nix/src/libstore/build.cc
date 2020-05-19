@@ -350,12 +350,17 @@ void Goal::waiteeDone(GoalPtr waitee, ExitCode result) {
   trace(format("waitee '%1%' done; %2% left") % waitee->name % waitees.size());
 
   if (result == ecFailed || result == ecNoSubstituters ||
-      result == ecIncompleteClosure)
+      result == ecIncompleteClosure) {
     ++nrFailed;
+  }
 
-  if (result == ecNoSubstituters) ++nrNoSubstituters;
+  if (result == ecNoSubstituters) {
+    ++nrNoSubstituters;
+  }
 
-  if (result == ecIncompleteClosure) ++nrIncompleteClosure;
+  if (result == ecIncompleteClosure) {
+    ++nrIncompleteClosure;
+  }
 
   if (waitees.empty() || (result == ecFailed && !settings.keepGoing)) {
     /* If we failed and keepGoing is not set, we remove all
@@ -1147,7 +1152,9 @@ void DerivationGoal::outputsSubstituted() {
   /*  If the substitutes form an incomplete closure, then we should
       build the dependencies of this derivation, but after that, we
       can still use the substitutes for this derivation itself. */
-  if (nrIncompleteClosure > 0) retrySubstitution = true;
+  if (nrIncompleteClosure > 0) {
+    retrySubstitution = true;
+  }
 
   nrFailed = nrNoSubstituters = nrIncompleteClosure = 0;
 
@@ -1659,7 +1666,9 @@ MakeError(NotDeterministic, BuildError)
 }
 
 HookReply DerivationGoal::tryBuildHook() {
-  if (!worker.tryBuildHook || !useDerivation) return rpDecline;
+  if (!worker.tryBuildHook || !useDerivation) {
+    return rpDecline;
+  }
 
   if (!worker.hook) worker.hook = std::make_unique<HookInstance>();
 
@@ -2231,7 +2240,9 @@ void DerivationGoal::startBuilder() {
        us.
     */
 
-    if (!fixedOutput) privateNetwork = true;
+    if (!fixedOutput) {
+      privateNetwork = true;
+    }
 
     userNamespaceSync.create();
 
@@ -3117,7 +3128,9 @@ void DerivationGoal::registerOutputs() {
     bool allValid = true;
     for (auto& i : drv->outputs)
       if (!worker.store.isValidPath(i.second.path)) allValid = false;
-    if (allValid) return;
+    if (allValid) {
+      return;
+    }
   }
 
   std::map<std::string, ValidPathInfo> infos;
@@ -3345,7 +3358,9 @@ void DerivationGoal::registerOutputs() {
     infos[i.first] = info;
   }
 
-  if (buildMode == bmCheck) return;
+  if (buildMode == bmCheck) {
+    return;
+  }
 
   /* Apply output checks. */
   checkOutputs(infos);
@@ -4095,9 +4110,10 @@ GoalPtr Worker::makeDerivationGoal(const Path& path,
         std::make_shared<DerivationGoal>(path, wantedOutputs, *this, buildMode);
     derivationGoals[path] = goal;
     wakeUp(goal);
-  } else
+  } else {
     (dynamic_cast<DerivationGoal*>(goal.get()))
         ->addWantedOutputs(wantedOutputs);
+  }
   return goal;
 }
 
@@ -4167,7 +4183,9 @@ void Worker::childStarted(GoalPtr goal, const set<int>& fds, bool inBuildSlot,
   child.inBuildSlot = inBuildSlot;
   child.respectTimeouts = respectTimeouts;
   children.emplace_back(child);
-  if (inBuildSlot) nrLocalBuilds++;
+  if (inBuildSlot) {
+    nrLocalBuilds++;
+  }
 }
 
 void Worker::childTerminated(Goal* goal, bool wakeSleepers) {
@@ -4413,14 +4431,22 @@ unsigned int Worker::exitStatus() {
    */
   unsigned int mask = 0;
   bool buildFailure = permanentFailure || timedOut || hashMismatch;
-  if (buildFailure) mask |= 0x04;  // 100
-  if (timedOut) mask |= 0x01;      // 101
-  if (hashMismatch) mask |= 0x02;  // 102
+  if (buildFailure) {
+    mask |= 0x04;  // 100
+  }
+  if (timedOut) {
+    mask |= 0x01;  // 101
+  }
+  if (hashMismatch) {
+    mask |= 0x02;  // 102
+  }
   if (checkMismatch) {
     mask |= 0x08;  // 104
   }
 
-  if (mask) mask |= 0x60;
+  if (mask) {
+    mask |= 0x60;
+  }
   return mask ? mask : 1;
 }
 
@@ -4430,9 +4456,9 @@ bool Worker::pathContentsGood(const Path& path) {
   LOG(INFO) << "checking path '" << path << "'...";
   auto info = store.queryPathInfo(path);
   bool res;
-  if (!pathExists(path))
+  if (!pathExists(path)) {
     res = false;
-  else {
+  } else {
     HashResult current = hashPath(info->narHash.type, path);
     Hash nullHash(htSHA256);
     res = info->narHash == nullHash || info->narHash == current.first;

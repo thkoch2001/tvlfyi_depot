@@ -18,7 +18,9 @@ static void search(const unsigned char* s, size_t len, StringSet& hashes,
   static bool initialised = false;
   static bool isBase32[256];
   if (!initialised) {
-    for (unsigned int i = 0; i < 256; ++i) isBase32[i] = false;
+    for (unsigned int i = 0; i < 256; ++i) {
+      isBase32[i] = false;
+    }
     for (unsigned int i = 0; i < base32Chars.size(); ++i)
       isBase32[(unsigned char)base32Chars[i]] = true;
     initialised = true;

@@ -449,7 +449,9 @@ static void installDerivations(Globals& globals, const Strings& args,
 
     printMissing(*globals.state, newElems);
 
-    if (globals.dryRun) return;
+    if (globals.dryRun) {
+      return;
+    }
 
     if (createUserEnv(*globals.state, allElems, profile,
                       settings.envKeepDerivations, lockToken))
@@ -557,7 +559,9 @@ static void upgradeDerivations(Globals& globals, const Strings& args,
 
     printMissing(*globals.state, newElems);
 
-    if (globals.dryRun) return;
+    if (globals.dryRun) {
+      return;
+    }
 
     if (createUserEnv(*globals.state, newElems, globals.profile,
                       settings.envKeepDerivations, lockToken))
@@ -654,12 +658,16 @@ static void opSet(Globals& globals, Strings opFlags, Strings opArgs) {
   if (drv.queryDrvPath() != "") {
     PathSet paths = {drv.queryDrvPath()};
     printMissing(globals.state->store, paths);
-    if (globals.dryRun) return;
+    if (globals.dryRun) {
+      return;
+    }
     globals.state->store->buildPaths(
         paths, globals.state->repair ? bmRepair : bmNormal);
   } else {
     printMissing(globals.state->store, {drv.queryOutPath()});
-    if (globals.dryRun) return;
+    if (globals.dryRun) {
+      return;
+    }
     globals.state->store->ensurePath(drv.queryOutPath());
   }
 
@@ -694,7 +702,9 @@ static void uninstallDerivations(Globals& globals, Strings& selectors,
       if (!found) newElems.push_back(i);
     }
 
-    if (globals.dryRun) return;
+    if (globals.dryRun) {
+      return;
+    }
 
     if (createUserEnv(*globals.state, newElems, profile,
                       settings.envKeepDerivations, lockToken))
@@ -1128,7 +1138,9 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
     }
   }
 
-  if (!xmlOutput) printTable(table);
+  if (!xmlOutput) {
+    printTable(table);
+  }
 }
 
 static void opSwitchProfile(Globals& globals, Strings opFlags, Strings opArgs) {
@@ -1168,7 +1180,9 @@ static void switchGeneration(Globals& globals, int dstGen) {
 
   LOG(INFO) << "switching from generation " << curGen << " to " << dst.number;
 
-  if (globals.dryRun) return;
+  if (globals.dryRun) {
+    return;
+  }
 
   switchLink(globals.profile, dst.path);
 }

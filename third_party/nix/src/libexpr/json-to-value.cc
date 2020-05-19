@@ -5,7 +5,9 @@
 namespace nix {
 
 static void skipWhitespace(const char*& s) {
-  while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') s++;
+  while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') {
+    s++;
+  }
 }
 
 static string parseJSONString(const char*& s) {
@@ -39,8 +41,10 @@ static string parseJSONString(const char*& s) {
       else
         throw JSONParseError("invalid escaped character in JSON string");
       s++;
-    } else
-      res += *s++;
+    } else {
+      res
+    }
+    += *s++;
   }
   s++;
   return res;
@@ -62,7 +66,9 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
       parseJSON(state, s, *v2);
       values.push_back(v2);
       skipWhitespace(s);
-      if (*s == ']') break;
+      if (*s == ']') {
+        break;
+      }
       if (*s != ',')
         throw JSONParseError("expected ',' or ']' after JSON array element");
       s++;
@@ -86,7 +92,9 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
       parseJSON(state, s, *v2);
       attrs[state.symbols.create(name)] = v2;
       skipWhitespace(s);
-      if (*s == '}') break;
+      if (*s == '}') {
+        break;
+      }
       if (*s != ',')
         throw JSONParseError("expected ',' or '}' after JSON member");
       s++;
