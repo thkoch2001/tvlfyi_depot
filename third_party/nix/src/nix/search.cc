@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include <fstream>
 #include <regex>
 #include "command.hh"
@@ -99,7 +100,7 @@ struct CmdSearch : SourceExprCommand, MixJSON {
 
     doExpr = [&](Value* v, std::string attrPath, bool toplevel,
                  JSONObject* cache) {
-      debug("at attribute '%s'", attrPath);
+      DLOG(INFO) << "at attribute '" << attrPath << "'";
 
       try {
         uint found = 0;
@@ -174,7 +175,7 @@ struct CmdSearch : SourceExprCommand, MixJSON {
             auto attrs = v->attrs;
             Bindings::iterator j = attrs->find(sRecurse);
             if (j == attrs->end() || !state->forceBool(*j->value, *j->pos)) {
-              debug("skip attribute '%s'", attrPath);
+              DLOG(INFO) << "skip attribute '" << attrPath << "'";
               return;
             }
           }
@@ -209,7 +210,7 @@ struct CmdSearch : SourceExprCommand, MixJSON {
     Path jsonCacheFileName = getCacheDir() + "/nix/package-search.json";
 
     if (useCache && pathExists(jsonCacheFileName)) {
-      warn("using cached results; pass '-u' to update the cache");
+      LOG(WARNING) << "using cached results; pass '-u' to update the cache";
 
       Value vRoot;
       parseJSON(*state, readFile(jsonCacheFileName), vRoot);

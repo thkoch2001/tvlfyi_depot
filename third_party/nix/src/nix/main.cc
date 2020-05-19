@@ -12,7 +12,6 @@
 #include "globals.hh"
 #include "glog/logging.h"
 #include "legacy.hh"
-#include "progress-bar.hh"
 #include "shared.hh"
 #include "store-api.hh"
 
@@ -129,7 +128,6 @@ void mainWrapped(int argc, char** argv) {
     if (legacy) return legacy(argc, argv);
   }
 
-  verbosity = lvlWarn;
   settings.verboseBuild = false;
 
   NixArgs args;
@@ -140,14 +138,9 @@ void mainWrapped(int argc, char** argv) {
 
   if (!args.command) args.showHelpAndExit();
 
-  Finally f([]() { stopProgressBar(); });
-
-  startProgressBar(args.printBuildLogs);
-
   if (args.useNet && !haveInternet()) {
-    warn(
-        "you don't have Internet access; disabling some network-dependent "
-        "features");
+    LOG(WARNING) << "you don't have Internet access; "
+                 << "disabling some network-dependent features";
     args.useNet = false;
   }
 

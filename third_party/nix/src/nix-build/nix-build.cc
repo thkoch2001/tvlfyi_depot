@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -359,8 +360,7 @@ static void _main(int argc, char** argv) {
         shell = drv->queryOutPath() + "/bin/bash";
 
       } catch (Error& e) {
-        printError("warning: %s; will use bash from your environment",
-                   e.what());
+        LOG(WARNING) << e.what() << "; will use bash from your environment";
         shell = "bash";
       }
     }

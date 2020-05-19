@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
@@ -44,15 +45,11 @@ static bool allSupportedLocally(const std::set<std::string>& requiredFeatures) {
 
 static int _main(int argc, char** argv) {
   {
-    logger = makeJSONLogger(*logger);
-
     /* Ensure we don't get any SSH passphrase or host key popups. */
     unsetenv("DISPLAY");
     unsetenv("SSH_ASKPASS");
 
     if (argc != 2) throw UsageError("called without required arguments");
-
-    verbosity = (Verbosity)std::stoll(argv[1]);
 
     FdSource source(STDIN_FILENO);
 
@@ -77,7 +74,7 @@ static int _main(int argc, char** argv) {
     AutoCloseFD bestSlotLock;
 
     auto machines = getMachines();
-    debug("got %d remote builders", machines.size());
+    DLOG(INFO) << "got " << machines.size() << " remote builders";
 
     if (machines.empty()) {
       std::cerr << "# decline-permanently\n";
@@ -119,7 +116,8 @@ static int _main(int argc, char** argv) {
         Machine* bestMachine = nullptr;
         unsigned long long bestLoad = 0;
         for (auto& m : machines) {
-          debug("considering building on remote machine '%s'", m.storeUri);
+          DLOG(INFO) << "considering building on remote machine '" << m.storeUri
+                     << "'";
 
           if (m.enabled &&
               std::find(m.systemTypes.begin(), m.systemTypes.end(),
@@ -183,8 +181,7 @@ static int _main(int argc, char** argv) {
         lock = -1;
 
         try {
-          Activity act(*logger, lvlTalkative, actUnknown,
-                       fmt("connecting to '%s'", bestMachine->storeUri));
+          DLOG(INFO) << "connecting to '" << bestMachine->storeUri << "'";
 
           Store::Params storeParams;
           if (hasPrefix(bestMachine->storeUri, "ssh://")) {
@@ -200,8 +197,8 @@ static int _main(int argc, char** argv) {
 
         } catch (std::exception& e) {
           auto msg = chomp(drainFD(5, false));
-          printError("cannot build on '%s': %s%s", bestMachine->storeUri,
-                     e.what(), (msg.empty() ? "" : ": " + msg));
+          LOG(ERROR) << "cannot build on '" << bestMachine->storeUri
+                     << "': " << e.what() << (msg.empty() ? "" : ": " + msg);
           bestMachine->enabled = false;
           continue;
         }
@@ -222,14 +219,13 @@ static int _main(int argc, char** argv) {
         currentLoad + "/" + escapeUri(storeUri) + ".upload-lock", true);
 
     {
-      Activity act(*logger, lvlTalkative, actUnknown,
-                   fmt("waiting for the upload lock to '%s'", storeUri));
+      DLOG(INFO) << "waiting for the upload lock to '" << storeUri << "'";
 
       auto old = signal(SIGALRM, handleAlarm);
       alarm(15 * 60);
-      if (!lockFile(uploadLock.get(), ltWrite, true))
-        printError(
-            "somebody is hogging the upload lock for '%s', continuing...");
+      if (!lockFile(uploadLock.get(), ltWrite, true)) {
+        LOG(ERROR) << "somebody is hogging the upload lock, continuing...";
+      }
       alarm(0);
       signal(SIGALRM, old);
     }
@@ -238,8 +234,7 @@ static int _main(int argc, char** argv) {
         settings.buildersUseSubstitutes ? Substitute : NoSubstitute;
 
     {
-      Activity act(*logger, lvlTalkative, actUnknown,
-                   fmt("copying dependencies to '%s'", storeUri));
+      DLOG(INFO) << "copying dependencies to '" << storeUri << "'";
       copyPaths(store, ref<Store>(sshStore), inputs, NoRepair, NoCheckSigs,
                 substitute);
     }
@@ -261,8 +256,7 @@ static int _main(int argc, char** argv) {
       if (!store->isValidPath(path)) missing.insert(path);
 
     if (!missing.empty()) {
-      Activity act(*logger, lvlTalkative, actUnknown,
-                   fmt("copying outputs from '%s'", storeUri));
+      DLOG(INFO) << "copying outputs from '" << storeUri << "'";
       store->locksHeld.insert(missing.begin(), missing.end()); /* FIXME: ugly */
       copyPaths(ref<Store>(sshStore), store, missing, NoRepair, NoCheckSigs,
                 NoSubstitute);

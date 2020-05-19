@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include <setjmp.h>
 #include <climits>
 #include <cstdlib>
@@ -242,16 +243,13 @@ void NixRepl::mainLoop(const std::vector<std::string>& files) {
         // next line of input without clearing the input so far.
         continue;
       } else {
-        printMsg(lvlError, format(error + "%1%%2%") %
-                               (settings.showTrace ? e.prefix() : "") %
-                               e.msg());
+        LOG(ERROR) << error << (settings.showTrace ? e.prefix() : "")
+                   << e.msg();
       }
     } catch (Error& e) {
-      printMsg(lvlError, format(error + "%1%%2%") %
-                             (settings.showTrace ? e.prefix() : "") % e.msg());
+      LOG(ERROR) << error << (settings.showTrace ? e.prefix() : "") << e.msg();
     } catch (Interrupted& e) {
-      printMsg(lvlError, format(error + "%1%%2%") %
-                             (settings.showTrace ? e.prefix() : "") % e.msg());
+      LOG(ERROR) << error << (settings.showTrace ? e.prefix() : "") << e.msg();
     }
 
     // We handled the current input fully, so we should clear it

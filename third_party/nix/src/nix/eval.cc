@@ -2,7 +2,6 @@
 #include "command.hh"
 #include "common-args.hh"
 #include "json.hh"
-#include "progress-bar.hh"
 #include "shared.hh"
 #include "store-api.hh"
 #include "value-to-json.hh"
@@ -39,8 +38,6 @@ struct CmdEval : MixJSON, InstallableCommand {
 
     auto v = installable->toValue(*state);
     PathSet context;
-
-    stopProgressBar();
 
     if (raw) {
       std::cout << state->coerceToString(noPos, *v, context);

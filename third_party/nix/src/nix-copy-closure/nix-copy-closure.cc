@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include "legacy.hh"
 #include "shared.hh"
 #include "store-api.hh"
@@ -21,10 +22,10 @@ static int _main(int argc, char** argv) {
           else if (*arg == "--version")
             printVersion("nix-copy-closure");
           else if (*arg == "--gzip" || *arg == "--bzip2" || *arg == "--xz") {
-            if (*arg != "--gzip")
-              printMsg(lvlError, format("Warning: '%1%' is not implemented, "
-                                        "falling back to gzip") %
-                                     *arg);
+            if (*arg != "--gzip") {
+              LOG(WARNING) << "'" << *arg
+                           << "' is not implemented, falling back to gzip";
+            }
             gzip = true;
           } else if (*arg == "--from")
             toMode = false;
@@ -33,7 +34,7 @@ static int _main(int argc, char** argv) {
           else if (*arg == "--include-outputs")
             includeOutputs = true;
           else if (*arg == "--show-progress")
-            printMsg(lvlError, "Warning: '--show-progress' is not implemented");
+            LOG(WARNING) << "'--show-progress' is not implemented";
           else if (*arg == "--dry-run")
             dryRun = true;
           else if (*arg == "--use-substitutes" || *arg == "-s")

@@ -1,4 +1,5 @@
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <iostream>
@@ -10,7 +11,6 @@
 #include "finally.hh"
 #include "hash.hh"
 #include "legacy.hh"
-#include "progress-bar.hh"
 #include "shared.hh"
 #include "store-api.hh"
 
@@ -92,10 +92,6 @@ static int _main(int argc, char** argv) {
 
     if (args.size() > 2) throw UsageError("too many arguments");
 
-    Finally f([]() { stopProgressBar(); });
-
-    if (isatty(STDERR_FILENO)) startProgressBar();
-
     auto store = openStore();
     auto state = std::make_unique<EvalState>(myArgs.searchPath, store);
 
@@ -126,7 +122,7 @@ static int _main(int argc, char** argv) {
       /* Extract the hash mode. */
       attr = v.attrs->find(state->symbols.create("outputHashMode"));
       if (attr == v.attrs->end())
-        printInfo("warning: this does not look like a fetchurl call");
+        LOG(WARNING) << "this does not look like a fetchurl call";
       else
         unpack = state->forceString(*attr->value) == "recursive";
 
@@ -176,7 +172,7 @@ static int _main(int argc, char** argv) {
 
       /* Optionally unpack the file. */
       if (unpack) {
-        printInfo("unpacking...");
+        LOG(INFO) << "unpacking...";
         Path unpacked = (Path)tmpDir + "/unpacked";
         createDirs(unpacked);
         if (hasSuffix(baseNameOf(uri), ".zip"))
@@ -210,9 +206,9 @@ static int _main(int argc, char** argv) {
       assert(storePath == store->makeFixedOutputPath(unpack, hash, name));
     }
 
-    stopProgressBar();
-
-    if (!printPath) printInfo(format("path is '%1%'") % storePath);
+    if (!printPath) {
+      LOG(INFO) << "path is '" << storePath << "'";
+    }
 
     std::cout << printHash16or32(hash) << std::endl;
     if (printPath) std::cout << storePath << std::endl;

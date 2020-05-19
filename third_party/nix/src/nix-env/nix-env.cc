@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -108,9 +109,8 @@ static void getAllExprs(EvalState& state, const Path& path, StringSet& attrs,
       if (hasSuffix(attrName, ".nix"))
         attrName = string(attrName, 0, attrName.size() - 4);
       if (attrs.find(attrName) != attrs.end()) {
-        printError(format("warning: name collision in input Nix expressions, "
-                          "skipping '%1%'") %
-                   path2);
+        LOG(WARNING) << "name collision in input Nix expressions, skipping '"
+                     << path2 << "'";
         continue;
       }
       attrs.insert(attrName);
@@ -264,10 +264,9 @@ static DrvInfos filterBySelector(EvalState& state, const DrvInfos& allElems,
       matches.clear();
       for (auto& j : newest) {
         if (multiple.find(j.second.first.queryName()) != multiple.end())
-          printInfo(
-              "warning: there are multiple derivations named '%1%'; using the "
-              "first one",
-              j.second.first.queryName());
+          LOG(WARNING) << "warning: there are multiple derivations named '"
+                       << j.second.first.queryName()
+                       << "'; using the first one";
         matches.push_back(j.second);
       }
     }
@@ -401,7 +400,7 @@ static bool keep(DrvInfo& drv) { return drv.queryMetaBool("keep", false); }
 
 static void installDerivations(Globals& globals, const Strings& args,
                                const Path& profile) {
-  debug(format("installing derivations"));
+  DLOG(INFO) << "installing derivations";
 
   /* Get the set of user environment elements to be installed. */
   DrvInfos newElems, newElemsTmp;
@@ -436,12 +435,14 @@ static void installDerivations(Globals& globals, const Strings& args,
         DrvName drvName(i.queryName());
         if (!globals.preserveInstalled &&
             newNames.find(drvName.name) != newNames.end() && !keep(i))
-          printInfo("replacing old '%s'", i.queryName());
+          LOG(INFO) << "replacing old '" << i.queryName() << "'";
         else
           allElems.push_back(i);
       }
 
-      for (auto& i : newElems) printInfo("installing '%s'", i.queryName());
+      for (auto& i : newElems) {
+        LOG(INFO) << "installing " << i.queryName();
+      }
     }
 
     printMissing(*globals.state, newElems);
@@ -474,7 +475,7 @@ typedef enum { utLt, utLeq, utEq, utAlways } UpgradeType;
 
 static void upgradeDerivations(Globals& globals, const Strings& args,
                                UpgradeType upgradeType) {
-  debug(format("upgrading derivations"));
+  DLOG(INFO) << "upgrading derivations";
 
   /* Upgrade works as follows: we take all currently installed
      derivations, and for any derivation matching any selector, look
@@ -539,8 +540,8 @@ static void upgradeDerivations(Globals& globals, const Strings& args,
               compareVersions(drvName.version, bestVersion) <= 0
                   ? "upgrading"
                   : "downgrading";
-          printInfo("%1% '%2%' to '%3%'", action, i.queryName(),
-                    bestElem->queryName());
+          LOG(INFO) << action << " '" << i.queryName() << "' to '"
+                    << bestElem->queryName() << "'";
           newElems.push_back(*bestElem);
         } else
           newElems.push_back(i);
@@ -611,7 +612,7 @@ static void opSetFlag(Globals& globals, Strings opFlags, Strings opArgs) {
       DrvName drvName(i.queryName());
       for (auto& j : selectors)
         if (j.matches(drvName)) {
-          printInfo("setting flag on '%1%'", i.queryName());
+          LOG(INFO) << "setting flag on '" << i.queryName() << "'";
           j.hits++;
           setMetaFlag(*globals.state, i, flagName, flagValue);
           break;
@@ -660,7 +661,7 @@ static void opSet(Globals& globals, Strings opFlags, Strings opArgs) {
     globals.state->store->ensurePath(drv.queryOutPath());
   }
 
-  debug(format("switching to new user environment"));
+  DLOG(INFO) << "switching to new user environment";
   Path generation = createGeneration(ref<LocalFSStore>(store2), globals.profile,
                                      drv.queryOutPath());
   switchLink(globals.profile, generation);
@@ -684,7 +685,7 @@ static void uninstallDerivations(Globals& globals, Strings& selectors,
              i.queryOutPath() ==
                  globals.state->store->followLinksToStorePath(j)) ||
             DrvName(j).matches(drvName)) {
-          printInfo("uninstalling '%s'", i.queryName());
+          LOG(INFO) << "uninstalling '" << i.queryName() << "'";
           found = true;
           break;
         }
@@ -799,8 +800,8 @@ static void queryJSON(Globals& globals, vector<DrvInfo>& elems) {
       auto placeholder = metaObj.placeholder(j);
       Value* v = i.queryMeta(j);
       if (!v) {
-        printError("derivation '%s' has invalid meta attribute '%s'",
-                   i.queryName(), j);
+        LOG(ERROR) << "derivation '" << i.queryName()
+                   << "' has invalid meta attribute '" << j << "'";
         placeholder.write(nullptr);
       } else {
         PathSet context;
@@ -902,10 +903,8 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
     for (auto& i : elems) try {
         paths.insert(i.queryOutPath());
       } catch (AssertionError& e) {
-        printMsg(
-            lvlTalkative,
-            "skipping derivation named '%s' which gives an assertion failure",
-            i.queryName());
+        DLOG(WARNING) << "skipping derivation named '" << i.queryName()
+                      << "' which gives an assertion failure";
         i.setFailed();
       }
     validPaths = globals.state->store->queryValidPaths(paths);
@@ -1065,10 +1064,10 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
               XMLAttrs attrs2;
               attrs2["name"] = j;
               Value* v = i.queryMeta(j);
-              if (!v)
-                printError("derivation '%s' has invalid meta attribute '%s'",
-                           i.queryName(), j);
-              else {
+              if (!v) {
+                LOG(ERROR) << "derivation '" << i.queryName()
+                           << "' has invalid meta attribute '" << j << "'";
+              } else {
                 if (v->type == tString) {
                   attrs2["type"] = "string";
                   attrs2["value"] = v->string.s;
@@ -1118,10 +1117,8 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
       cout.flush();
 
     } catch (AssertionError& e) {
-      printMsg(
-          lvlTalkative,
-          "skipping derivation named '%1%' which gives an assertion failure",
-          i.queryName());
+      DLOG(WARNING) << "skipping derivation named '" << i.queryName()
+                    << "' which gives an assertion failure";
     } catch (Error& e) {
       e.addPrefix(
           fmt("while querying the derivation named '%1%':\n", i.queryName()));
@@ -1167,8 +1164,7 @@ static void switchGeneration(Globals& globals, int dstGen) {
       throw Error(format("generation %1% does not exist") % dstGen);
   }
 
-  printInfo(format("switching from generation %1% to %2%") % curGen %
-            dst.number);
+  LOG(INFO) << "switching from generation " << curGen << " to " << dst.number;
 
   if (globals.dryRun) return;
 
@@ -1330,7 +1326,7 @@ static int _main(int argc, char** argv) {
       else if (*arg == "--delete-generations")
         op = opDeleteGenerations;
       else if (*arg == "--dry-run") {
-        printInfo("(dry run; not doing anything)");
+        LOG(INFO) << "(dry run; not doing anything)";
         globals.dryRun = true;
       } else if (*arg == "--system-filter")
         globals.instSource.systemFilter = getArg(*arg, arg, end);

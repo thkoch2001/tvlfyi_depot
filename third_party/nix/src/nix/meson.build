@@ -19,7 +19,6 @@ nix_src = files(
   join_paths(meson.source_root(), 'src/nix/optimise-store.cc'),
   join_paths(meson.source_root(), 'src/nix/path-info.cc'),
   join_paths(meson.source_root(), 'src/nix/ping-store.cc'),
-  join_paths(meson.source_root(), 'src/nix/progress-bar.cc'),
   join_paths(meson.source_root(), 'src/nix/repl.cc'),
   join_paths(meson.source_root(), 'src/nix/run.cc'),
   join_paths(meson.source_root(), 'src/nix/search.cc'),
@@ -47,7 +46,6 @@ nix_src = files(
 nix_headers = files (
   join_paths(meson.source_root(), 'src/nix/command.hh'),
   join_paths(meson.source_root(), 'src/nix/legacy.hh'),
-  join_paths(meson.source_root(), 'src/nix/progress-bar.hh'),
   join_paths(meson.source_root(), 'src/nix-env/user-env.hh'),
   join_paths(meson.source_root(), 'src/nix-store/dotgraph.hh'),
   join_paths(meson.source_root(), 'src/nix-store/graphml.hh'))

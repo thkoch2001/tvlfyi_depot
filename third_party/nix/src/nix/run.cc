@@ -5,7 +5,6 @@
 #include "finally.hh"
 #include "fs-accessor.hh"
 #include "local-store.hh"
-#include "progress-bar.hh"
 #include "shared.hh"
 #include "store-api.hh"
 
@@ -134,8 +133,6 @@ struct CmdRun : InstallablesCommand {
     std::string cmd = *command.begin();
     Strings args;
     for (auto& arg : command) args.push_back(arg);
-
-    stopProgressBar();
 
     restoreSignals();
 

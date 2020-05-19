@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include <cerrno>
 #include <iostream>
 #include "globals.hh"
@@ -34,7 +35,7 @@ void removeOldGenerations(std::string dir) {
         if (e.errNo == ENOENT) continue;
       }
       if (link.find("link") != string::npos) {
-        printInfo(format("removing old generations of profile %1%") % path);
+        LOG(INFO) << "removing old generations of profile " << path;
         if (deleteOlderThan != "")
           deleteGenerationsOlderThan(path, deleteOlderThan, dryRun);
         else

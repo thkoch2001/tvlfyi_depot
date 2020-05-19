@@ -1,10 +1,10 @@
+#include <glog/logging.h>
 #include "attr-path.hh"
 #include "command.hh"
 #include "common-args.hh"
 #include "download.hh"
 #include "eval.hh"
 #include "names.hh"
-#include "progress-bar.hh"
 #include "store-api.hh"
 
 using namespace nix;
@@ -53,48 +53,43 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
 
     if (profileDir == "") profileDir = getProfileDir(store);
 
-    printInfo("upgrading Nix in profile '%s'", profileDir);
+    LOG(INFO) << "upgrading Nix in profile '" << profileDir << "'";
 
     Path storePath;
     {
-      Activity act(*logger, lvlInfo, actUnknown, "querying latest Nix version");
+      LOG(INFO) << "querying latest Nix version";
       storePath = getLatestNix(store);
     }
 
     auto version = DrvName(storePathToName(storePath)).version;
 
     if (dryRun) {
-      stopProgressBar();
-      printError("would upgrade to version %s", version);
+      LOG(ERROR) << "would upgrade to version " << version;
       return;
     }
 
     {
-      Activity act(*logger, lvlInfo, actUnknown,
-                   fmt("downloading '%s'...", storePath));
+      LOG(INFO) << "downloading '" << storePath << "'...";
       store->ensurePath(storePath);
     }
 
     {
-      Activity act(*logger, lvlInfo, actUnknown,
-                   fmt("verifying that '%s' works...", storePath));
+      LOG(INFO) << "verifying that '" << storePath << "' works...";
       auto program = storePath + "/bin/nix-env";
       auto s = runProgram(program, false, {"--version"});
       if (s.find("Nix") == std::string::npos)
         throw Error("could not verify that '%s' works", program);
     }
 
-    stopProgressBar();
-
     {
-      Activity act(
-          *logger, lvlInfo, actUnknown,
-          fmt("installing '%s' into profile '%s'...", storePath, profileDir));
+      LOG(INFO) << "installing '" << storePath << "' into profile '"
+                << profileDir << "'...";
       runProgram(settings.nixBinDir + "/nix-env", false,
                  {"--profile", profileDir, "-i", storePath, "--no-sandbox"});
     }
 
-    printError(ANSI_GREEN "upgrade to version %s done" ANSI_NORMAL, version);
+    LOG(INFO) << ANSI_GREEN << "upgrade to version " << version << " done"
+              << ANSI_NORMAL;
   }
 
   /* Return the profile in which Nix is installed. */
@@ -111,10 +106,11 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
       throw Error(
           "couldn't figure out how Nix is installed, so I can't upgrade it");
 
-    printInfo("found Nix in '%s'", where);
+    LOG(INFO) << "found Nix in '" << where << "'";
 
-    if (hasPrefix(where, "/run/current-system"))
+    if (hasPrefix(where, "/run/current-system")) {
       throw Error("Nix on NixOS must be upgraded via 'nixos-rebuild'");
+    }
 
     Path profileDir = dirOf(where);
 
@@ -123,7 +119,7 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
            isLink(profileDir))
       profileDir = readLink(profileDir);
 
-    printInfo("found profile '%s'", profileDir);
+    LOG(INFO) << "found profile '" << profileDir << "'";
 
     Path userEnv = canonPath(profileDir, true);
 

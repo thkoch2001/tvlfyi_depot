@@ -1,6 +1,6 @@
+#include <glog/logging.h>
 #include "command.hh"
 #include "common-args.hh"
-#include "progress-bar.hh"
 #include "shared.hh"
 #include "store-api.hh"
 
@@ -45,9 +45,8 @@ struct CmdLog : InstallableCommand {
         log = sub->getBuildLog(output.second);
       }
       if (!log) continue;
-      stopProgressBar();
-      printInfo("got build log for '%s' from '%s'", installable->what(),
-                sub->getUri());
+      LOG(INFO) << "got build log for '" << installable->what() << "' from '"
+                << sub->getUri() << "'";
       std::cout << *log;
       return;
     }

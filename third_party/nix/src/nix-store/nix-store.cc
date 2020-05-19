@@ -1,4 +1,5 @@
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <algorithm>
@@ -715,7 +716,7 @@ static void opVerify(Strings opFlags, Strings opArgs) {
       throw UsageError(format("unknown flag '%1%'") % i);
 
   if (store->verifyStore(checkContents, repair)) {
-    printError("warning: not all errors were fixed");
+    LOG(WARNING) << "not all errors were fixed";
     throw Exit(1);
   }
 }
@@ -728,15 +729,15 @@ static void opVerifyPath(Strings opFlags, Strings opArgs) {
 
   for (auto& i : opArgs) {
     Path path = store->followLinksToStorePath(i);
-    printMsg(lvlTalkative, format("checking path '%1%'...") % path);
+    LOG(INFO) << "checking path '" << path << "'...";
     auto info = store->queryPathInfo(path);
     HashSink sink(info->narHash.type);
     store->narFromPath(path, sink);
     auto current = sink.finish();
     if (current.first != info->narHash) {
-      printError(
-          format("path '%1%' was modified! expected hash '%2%', got '%3%'") %
-          path % info->narHash.to_string() % current.first.to_string());
+      LOG(ERROR) << "path '" << path << "' was modified! expected hash '"
+                 << info->narHash.to_string() << "', got '"
+                 << current.first.to_string() << "'";
       status = 1;
     }
   }
@@ -788,7 +789,6 @@ static void opServe(Strings opFlags, Strings opArgs) {
   auto getBuildSettings = [&]() {
     // FIXME: changing options here doesn't work if we're
     // building through the daemon.
-    verbosity = lvlError;
     settings.keepLog = false;
     settings.useSubstitutes = false;
     settings.maxSilentTime = readInt(in);
@@ -836,7 +836,7 @@ static void opServe(Strings opFlags, Strings opArgs) {
           if (!willSubstitute.empty()) try {
               store->buildPaths(willSubstitute);
             } catch (Error& e) {
-              printError(format("warning: %1%") % e.msg());
+              LOG(WARNING) << e.msg();
             }
         }
 

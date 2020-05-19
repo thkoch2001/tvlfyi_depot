@@ -1,8 +1,8 @@
+#include <glog/logging.h>
 #include <unistd.h>
 #include "attr-path.hh"
 #include "command.hh"
 #include "eval.hh"
-#include "progress-bar.hh"
 #include "shared.hh"
 
 using namespace nix;
@@ -36,7 +36,7 @@ struct CmdEdit : InstallableCommand {
     }
 
     auto pos = state->forceString(*v2);
-    debug("position is %s", pos);
+    DLOG(INFO) << "position is " << pos;
 
     auto colon = pos.rfind(':');
     if (colon == std::string::npos)
@@ -60,8 +60,6 @@ struct CmdEdit : InstallableCommand {
       args.push_back(fmt("+%d", lineno));
 
     args.push_back(filename);
-
-    stopProgressBar();
 
     execvp(args.front().c_str(), stringsToCharPtrs(args).data());
 

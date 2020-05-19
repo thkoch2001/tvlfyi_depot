@@ -1,4 +1,5 @@
 #include "user-env.hh"
+#include <glog/logging.h>
 #include "derivations.hh"
 #include "eval-inline.hh"
 #include "eval.hh"
@@ -30,7 +31,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
   for (auto& i : elems)
     if (i.queryDrvPath() != "") drvsToBuild.insert(i.queryDrvPath());
 
-  debug(format("building user environment dependencies"));
+  DLOG(INFO) << "building user environment dependencies";
   state.store->buildPaths(drvsToBuild, state.repair ? bmRepair : bmNormal);
 
   /* Construct the whole top level derivation. */
@@ -111,7 +112,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
   mkApp(topLevel, envBuilder, args);
 
   /* Evaluate it. */
-  debug("evaluating user environment builder");
+  DLOG(INFO) << "evaluating user environment builder";
   state.forceValue(topLevel);
   PathSet context;
   Attr& aDrvPath(*topLevel.attrs->find(state.sDrvPath));
@@ -122,7 +123,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
                                         *(aOutPath.value), context);
 
   /* Realise the resulting store expression. */
-  debug("building user environment");
+  DLOG(INFO) << "building user environment";
   state.store->buildPaths({topLevelDrv}, state.repair ? bmRepair : bmNormal);
 
   /* Switch the current user environment to the output path. */
@@ -134,13 +135,12 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
 
     Path lockTokenCur = optimisticLockProfile(profile);
     if (lockToken != lockTokenCur) {
-      printError(
-          format("profile '%1%' changed while we were busy; restarting") %
-          profile);
+      LOG(WARNING) << "profile '" << profile
+                   << "' changed while we were busy; restarting";
       return false;
     }
 
-    debug(format("switching to new user environment"));
+    DLOG(INFO) << "switching to new user environment";
     Path generation =
         createGeneration(ref<LocalFSStore>(store2), profile, topLevelOut);
     switchLink(profile, generation);

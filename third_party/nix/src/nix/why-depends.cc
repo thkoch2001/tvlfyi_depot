@@ -1,7 +1,7 @@
+#include <glog/logging.h>
 #include <queue>
 #include "command.hh"
 #include "fs-accessor.hh"
-#include "progress-bar.hh"
 #include "shared.hh"
 #include "store-api.hh"
 
@@ -67,12 +67,10 @@ struct CmdWhyDepends : SourceExprCommand {
     store->computeFSClosure({packagePath}, closure, false, false);
 
     if (!closure.count(dependencyPath)) {
-      printError("'%s' does not depend on '%s'", package->what(),
-                 dependency->what());
+      LOG(WARNING) << "'" << package->what() << "' does not depend on '"
+                   << dependency->what() << "'";
       return;
     }
-
-    stopProgressBar();  // FIXME
 
     auto accessor = store->getFSAccessor();
 

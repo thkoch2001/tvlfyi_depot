@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include <atomic>
 #include "command.hh"
 #include "shared.hh"
@@ -53,17 +54,11 @@ struct CmdVerify : StorePathsCommand {
 
     auto publicKeys = getDefaultPublicKeys();
 
-    Activity act(*logger, actVerifyPaths);
-
     std::atomic<size_t> done{0};
     std::atomic<size_t> untrusted{0};
     std::atomic<size_t> corrupted{0};
     std::atomic<size_t> failed{0};
     std::atomic<size_t> active{0};
-
-    auto update = [&]() {
-      act.progress(done, storePaths.size(), active, failed);
-    };
 
     ThreadPool pool;
 
@@ -71,11 +66,9 @@ struct CmdVerify : StorePathsCommand {
       try {
         checkInterrupt();
 
-        Activity act2(*logger, lvlInfo, actUnknown,
-                      fmt("checking '%s'", storePath));
+        LOG(INFO) << "checking '" << storePath << "'";
 
         MaintainCount<std::atomic<size_t>> mcActive(active);
-        update();
 
         auto info = store->queryPathInfo(storePath);
 
@@ -87,11 +80,10 @@ struct CmdVerify : StorePathsCommand {
 
           if (hash.first != info->narHash) {
             corrupted++;
-            act2.result(resCorruptedPath, info->path);
-            printError(
-                format("path '%s' was modified! expected hash '%s', got '%s'") %
-                info->path % info->narHash.to_string() %
-                hash.first.to_string());
+            LOG(WARNING) << "path '" << info->path
+                         << "' was modified! expected hash '"
+                         << info->narHash.to_string() << "', got '"
+                         << hash.first.to_string() << "'";
           }
         }
 
@@ -130,8 +122,7 @@ struct CmdVerify : StorePathsCommand {
                 doSigs(info2->sigs);
               } catch (InvalidPath&) {
               } catch (Error& e) {
-                printError(format(ANSI_RED "error:" ANSI_NORMAL " %s") %
-                           e.what());
+                LOG(ERROR) << e.what();
               }
             }
 
@@ -140,19 +131,16 @@ struct CmdVerify : StorePathsCommand {
 
           if (!good) {
             untrusted++;
-            act2.result(resUntrustedPath, info->path);
-            printError(format("path '%s' is untrusted") % info->path);
+            LOG(WARNING) << "path '" << info->path << "' is untrusted";
           }
         }
 
         done++;
 
       } catch (Error& e) {
-        printError(format(ANSI_RED "error:" ANSI_NORMAL " %s") % e.what());
+        LOG(ERROR) << e.what();
         failed++;
       }
-
-      update();
     };
 
     for (auto& storePath : storePaths)

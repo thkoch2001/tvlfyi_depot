@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include <atomic>
 #include "command.hh"
 #include "shared.hh"
@@ -82,7 +83,7 @@ struct CmdCopySigs : StorePathsCommand {
 
     pool.process();
 
-    printInfo(format("imported %d signatures") % added);
+    LOG(INFO) << "imported " << added << " signatures";
   }
 };
 
@@ -126,7 +127,7 @@ struct CmdSignPaths : StorePathsCommand {
       }
     }
 
-    printInfo(format("added %d signatures") % added);
+    LOG(INFO) << "added " << added << " signatures";
   }
 };
 
