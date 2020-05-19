@@ -100,7 +100,7 @@ Buildable Installable::toBuildable() {
 struct InstallableStorePath : Installable {
   Path storePath;
 
-  InstallableStorePath(const Path& storePath) : storePath(storePath) {}
+  explicit InstallableStorePath(const Path& storePath) : storePath(storePath) {}
 
   std::string what() override { return storePath; }
 
@@ -112,7 +112,7 @@ struct InstallableStorePath : Installable {
 struct InstallableValue : Installable {
   SourceExprCommand& cmd;
 
-  InstallableValue(SourceExprCommand& cmd) : cmd(cmd) {}
+  explicit InstallableValue(SourceExprCommand& cmd) : cmd(cmd) {}
 
   Buildables toBuildables() override {
     auto state = cmd.getEvalState();

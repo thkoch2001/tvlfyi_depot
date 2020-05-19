@@ -151,7 +151,7 @@ void Store::queryMissing(const PathSet& targets, PathSet& willBuild_,
     size_t left;
     bool done = false;
     PathSet outPaths;
-    DrvState(size_t left) : left(left) {}
+    explicit DrvState(size_t left) : left(left) {}
   };
 
   Sync<State> state_(State{PathSet(), unknown_, willSubstitute_, willBuild_,

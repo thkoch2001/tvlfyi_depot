@@ -34,7 +34,7 @@ struct ChunkedCompressionSink : CompressionSink {
 
 struct NoneSink : CompressionSink {
   Sink& nextSink;
-  NoneSink(Sink& nextSink) : nextSink(nextSink) {}
+  explicit NoneSink(Sink& nextSink) : nextSink(nextSink) {}
   void finish() override { flush(); }
   void write(const unsigned char* data, size_t len) override {
     nextSink(data, len);
@@ -47,7 +47,7 @@ struct XzDecompressionSink : CompressionSink {
   lzma_stream strm = LZMA_STREAM_INIT;
   bool finished = false;
 
-  XzDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
+  explicit XzDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
     lzma_ret ret = lzma_stream_decoder(&strm, UINT64_MAX, LZMA_CONCATENATED);
     if (ret != LZMA_OK) {
       throw CompressionError("unable to initialise lzma decoder");
@@ -92,7 +92,7 @@ struct BzipDecompressionSink : ChunkedCompressionSink {
   bz_stream strm;
   bool finished = false;
 
-  BzipDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
+  explicit BzipDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
     memset(&strm, 0, sizeof(strm));
     int ret = BZ2_bzDecompressInit(&strm, 0, 0);
     if (ret != BZ_OK) {
@@ -140,7 +140,7 @@ struct BrotliDecompressionSink : ChunkedCompressionSink {
   BrotliDecoderState* state;
   bool finished = false;
 
-  BrotliDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
+  explicit BrotliDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
     state = BrotliDecoderCreateInstance(nullptr, nullptr, nullptr);
     if (!state) {
       throw CompressionError("unable to initialize brotli decoder");
@@ -284,7 +284,7 @@ struct BzipCompressionSink : ChunkedCompressionSink {
   bz_stream strm;
   bool finished = false;
 
-  BzipCompressionSink(Sink& nextSink) : nextSink(nextSink) {
+  explicit BzipCompressionSink(Sink& nextSink) : nextSink(nextSink) {
     memset(&strm, 0, sizeof(strm));
     int ret = BZ2_bzCompressInit(&strm, 9, 0, 30);
     if (ret != BZ_OK) {
@@ -333,7 +333,7 @@ struct BrotliCompressionSink : ChunkedCompressionSink {
   BrotliEncoderState* state;
   bool finished = false;
 
-  BrotliCompressionSink(Sink& nextSink) : nextSink(nextSink) {
+  explicit BrotliCompressionSink(Sink& nextSink) : nextSink(nextSink) {
     state = BrotliEncoderCreateInstance(nullptr, nullptr, nullptr);
     if (!state) {
       throw CompressionError("unable to initialise brotli encoder");

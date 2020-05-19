@@ -14,7 +14,7 @@ struct CmdHash : Command {
   HashType ht = htSHA256;
   std::vector<std::string> paths;
 
-  CmdHash(Mode mode) : mode(mode) {
+  explicit CmdHash(Mode mode) : mode(mode) {
     mkFlag(0, "sri", "print hash in SRI format", &base, SRI);
     mkFlag(0, "base64", "print hash in base-64", &base, Base64);
     mkFlag(0, "base32", "print hash in base-32 (Nix-specific)", &base, Base32);
@@ -52,7 +52,7 @@ struct CmdToBase : Command {
   HashType ht = htUnknown;
   std::vector<std::string> args;
 
-  CmdToBase(Base base) : base(base) {
+  explicit CmdToBase(Base base) : base(base) {
     mkFlag().longName("type").mkHashTypeFlag(&ht);
     expectArgs("strings", &args);
   }

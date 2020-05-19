@@ -215,7 +215,7 @@ struct ConnectionHandle {
   Pool<RemoteStore::Connection>::Handle handle;
   bool daemonException = false;
 
-  ConnectionHandle(Pool<RemoteStore::Connection>::Handle&& handle)
+  explicit ConnectionHandle(Pool<RemoteStore::Connection>::Handle&& handle)
       : handle(std::move(handle)) {}
 
   ConnectionHandle(ConnectionHandle&& h) : handle(std::move(h.handle)) {}

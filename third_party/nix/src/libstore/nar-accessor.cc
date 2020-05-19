@@ -93,7 +93,7 @@ struct NarAccessor : public FSAccessor {
     }
   };
 
-  NarAccessor(ref<const std::string> nar) : nar(nar) {
+  explicit NarAccessor(ref<const std::string> nar) : nar(nar) {
     NarIndexer indexer(*this, *nar);
     parseDump(indexer, indexer);
   }

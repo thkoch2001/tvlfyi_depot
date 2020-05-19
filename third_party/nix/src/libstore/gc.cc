@@ -505,7 +505,7 @@ struct LocalStore::GCState {
   unsigned long long bytesInvalidated;
   bool moveToTrash = true;
   bool shouldDelete;
-  GCState(GCResults& results_) : results(results_), bytesInvalidated(0) {}
+  explicit GCState(GCResults& results_) : results(results_), bytesInvalidated(0) {}
 };
 
 bool LocalStore::isActiveTempFile(const GCState& state, const Path& path,

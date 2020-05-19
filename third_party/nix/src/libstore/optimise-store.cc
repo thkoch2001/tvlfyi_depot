@@ -27,7 +27,7 @@ static void makeWritable(const Path& path) {
 
 struct MakeReadOnly {
   Path path;
-  MakeReadOnly(const Path& path) : path(path) {}
+  explicit MakeReadOnly(const Path& path) : path(path) {}
   ~MakeReadOnly() {
     try {
       /* This will make the path read-only. */

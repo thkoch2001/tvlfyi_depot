@@ -9,7 +9,7 @@ namespace nix {
 struct HashAndWriteSink : Sink {
   Sink& writeSink;
   HashSink hashSink;
-  HashAndWriteSink(Sink& writeSink)
+  explicit HashAndWriteSink(Sink& writeSink)
       : writeSink(writeSink), hashSink(htSHA256) {}
   virtual void operator()(const unsigned char* data, size_t len) {
     writeSink(data, len);

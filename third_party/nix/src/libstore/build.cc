@@ -133,7 +133,7 @@ class Goal : public std::enable_shared_from_this<Goal> {
   /* Whether the goal is finished. */
   ExitCode exitCode;
 
-  Goal(Worker& worker) : worker(worker) {
+  explicit Goal(Worker& worker) : worker(worker) {
     nrFailed = nrNoSubstituters = nrIncompleteClosure = 0;
     exitCode = ecBusy;
   }
@@ -264,7 +264,7 @@ class Worker {
      it answers with "decline-permanently", we don't try again. */
   bool tryBuildHook = true;
 
-  Worker(LocalStore& store);
+  explicit Worker(LocalStore& store);
   ~Worker();
 
   /* Make a goal (with caching). */
@@ -823,7 +823,7 @@ class DerivationGoal : public Goal {
   struct ChrootPath {
     Path source;
     bool optional;
-    ChrootPath(Path source = "", bool optional = false)
+    explicit ChrootPath(Path source = "", bool optional = false)
         : source(source), optional(optional) {}
   };
   typedef map<Path, ChrootPath>
@@ -2037,12 +2037,12 @@ void DerivationGoal::startBuilder() {
       }
       size_t p = i.find('=');
       if (p == string::npos) {
-        dirsInChroot[i] = {i, optional};
+        dirsInChroot[i] = ChrootPath(i, optional);
       } else {
-        dirsInChroot[string(i, 0, p)] = {string(i, p + 1), optional};
+        dirsInChroot[string(i, 0, p)] = ChrootPath(string(i, p + 1), optional);
       }
     }
-    dirsInChroot[tmpDirInSandbox] = tmpDir;
+    dirsInChroot[tmpDirInSandbox] = ChrootPath(tmpDir);
 
     /* Add the closure of store paths to the chroot. */
     PathSet closure;
@@ -2058,7 +2058,7 @@ void DerivationGoal::startBuilder() {
       }
     }
     for (auto& i : closure) {
-      dirsInChroot[i] = i;
+      dirsInChroot[i] = ChrootPath(i);
     }
 
     PathSet allowedPaths = settings.allowedImpureHostPrefixes;
@@ -2088,7 +2088,7 @@ void DerivationGoal::startBuilder() {
                     drvPath % i);
       }
 
-      dirsInChroot[i] = i;
+      dirsInChroot[i] = ChrootPath(i);
     }
 
 #if __linux__
@@ -2170,7 +2170,7 @@ void DerivationGoal::startBuilder() {
         throw SysError(format("getting attributes of path '%1%'") % i);
       }
       if (S_ISDIR(st.st_mode)) {
-        dirsInChroot[i] = r;
+        dirsInChroot[i] = ChrootPath(r);
       } else {
         Path p = chrootRootDir + i;
         DLOG(INFO) << "linking '" << p << "' to '" << r << "'";
@@ -2264,9 +2264,9 @@ void DerivationGoal::startBuilder() {
         } else {
           auto p = line.find('=');
           if (p == string::npos) {
-            dirsInChroot[line] = line;
+            dirsInChroot[line] = ChrootPath(line);
           } else {
-            dirsInChroot[string(line, 0, p)] = string(line, p + 1);
+            dirsInChroot[string(line, 0, p)] = ChrootPath(string(line, p + 1));
           }
         }
       }

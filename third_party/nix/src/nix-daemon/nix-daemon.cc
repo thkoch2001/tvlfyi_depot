@@ -74,7 +74,7 @@ struct TunnelLogger {
 
   unsigned int clientVersion;
 
-  TunnelLogger(unsigned int clientVersion) : clientVersion(clientVersion) {}
+  explicit TunnelLogger(unsigned int clientVersion) : clientVersion(clientVersion) {}
 
   void enqueueMsg(const std::string& s) {
     auto state(state_.lock());
@@ -150,7 +150,7 @@ struct TunnelLogger {
 
 struct TunnelSink : Sink {
   Sink& to;
-  TunnelSink(Sink& to) : to(to) {}
+  explicit TunnelSink(Sink& to) : to(to) {}
   virtual void operator()(const unsigned char* data, size_t len) {
     to << STDERR_WRITE;
     writeString(data, len, to);
@@ -159,7 +159,7 @@ struct TunnelSink : Sink {
 
 struct TunnelSource : BufferedSource {
   Source& from;
-  TunnelSource(Source& from) : from(from) {}
+  explicit TunnelSource(Source& from) : from(from) {}
 
  protected:
   size_t readUnbuffered(unsigned char* data, size_t len) override {
