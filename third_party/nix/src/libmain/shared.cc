@@ -1,4 +1,5 @@
 #include "shared.hh"
+#include <glog/logging.h>
 #include <openssl/crypto.h>
 #include <signal.h>
 #include <sys/stat.h>
@@ -20,53 +21,66 @@ static bool gcWarning = true;
 
 void printGCWarning() {
   if (!gcWarning) return;
+
   static bool haveWarned = false;
-  warnOnce(haveWarned,
-           "you did not specify '--add-root'; "
-           "the result might be removed by the garbage collector");
+  if (!haveWarned) {
+    haveWarned = true;
+    LOG(WARNING) << "you did not specify '--add-root'; "
+                 << "the result might be removed by the garbage collector";
+  }
 }
 
-void printMissing(ref<Store> store, const PathSet& paths, Verbosity lvl) {
+void printMissing(ref<Store> store, const PathSet& paths) {
   unsigned long long downloadSize, narSize;
   PathSet willBuild, willSubstitute, unknown;
   store->queryMissing(paths, willBuild, willSubstitute, unknown, downloadSize,
                       narSize);
-  printMissing(store, willBuild, willSubstitute, unknown, downloadSize, narSize,
-               lvl);
+  printMissing(store, willBuild, willSubstitute, unknown, downloadSize,
+               narSize);
 }
 
 void printMissing(ref<Store> store, const PathSet& willBuild,
                   const PathSet& willSubstitute, const PathSet& unknown,
-                  unsigned long long downloadSize, unsigned long long narSize,
-                  Verbosity lvl) {
+                  unsigned long long downloadSize, unsigned long long narSize) {
   if (!willBuild.empty()) {
-    printMsg(lvl, "these derivations will be built:");
+    LOG(INFO) << "these derivations will be built:";
     Paths sorted = store->topoSortPaths(willBuild);
     reverse(sorted.begin(), sorted.end());
-    for (auto& i : sorted) printMsg(lvl, fmt("  %s", i));
+    for (auto& i : sorted) {
+      LOG(INFO) << "  " << i;
+    }
   }
 
   if (!willSubstitute.empty()) {
-    printMsg(lvl, fmt("these paths will be fetched (%.2f MiB download, %.2f "
-                      "MiB unpacked):",
-                      downloadSize / (1024.0 * 1024.0),
-                      narSize / (1024.0 * 1024.0)));
-    for (auto& i : willSubstitute) printMsg(lvl, fmt("  %s", i));
+    LOG(INFO) << "these paths will be fetched ("
+              << (downloadSize / (1024.0 * 1024.0)) << " MiB download, "
+              << (narSize / (1024.0 * 1024.0)) << "MiB unpacked):";
+
+    for (auto& i : willSubstitute) {
+      LOG(INFO) << i;
+    }
   }
 
   if (!unknown.empty()) {
-    printMsg(lvl, fmt("don't know how to build these paths%s:",
-                      (settings.readOnlyMode
-                           ? " (may be caused by read-only store access)"
-                           : "")));
-    for (auto& i : unknown) printMsg(lvl, fmt("  %s", i));
+    LOG(INFO) << "don't know how to build these paths"
+              << (settings.readOnlyMode
+                      ? " (may be caused by read-only store access)"
+                      : "")
+              << ":";
+
+    for (auto& i : unknown) {
+      LOG(INFO) << i;
+    }
   }
 }
 
 string getArg(const string& opt, Strings::iterator& i,
               const Strings::iterator& end) {
   ++i;
-  if (i == end) throw UsageError(format("'%1%' requires an argument") % opt);
+  if (i == end) {
+    throw UsageError(format("'%1%' requires an argument") % opt);
+  }
+
   return *i;
 }
 
@@ -236,7 +250,9 @@ void parseCmdLine(
 
 void printVersion(const string& programName) {
   std::cout << format("%1% (Nix) %2%") % programName % nixVersion << std::endl;
-  if (verbosity > lvlInfo) {
+
+  // TODO(tazjin): figure out what the fuck this is
+  /*if (verbosity > lvlInfo) {
     Strings cfg;
 #if HAVE_BOEHMGC
     cfg.push_back("gc");
@@ -249,7 +265,7 @@ void printVersion(const string& programName) {
               << "\n";
     std::cout << "Store directory: " << settings.nixStore << "\n";
     std::cout << "State directory: " << settings.nixStateDir << "\n";
-  }
+    } */
   throw Exit();
 }
 
@@ -278,20 +294,21 @@ int handleExceptions(const string& programName, std::function<void()> fun) {
   } catch (Exit& e) {
     return e.status;
   } catch (UsageError& e) {
-    printError(format(error + "%1%\nTry '%2% --help' for more information.") %
-               e.what() % programName);
+    LOG(INFO) << e.what();
+    LOG(INFO) << "Try '"
+              << " --help' for more information." << programName;
     return 1;
   } catch (BaseError& e) {
-    printError(format(error + "%1%%2%") %
-               (settings.showTrace ? e.prefix() : "") % e.msg());
-    if (e.prefix() != "" && !settings.showTrace)
-      printError("(use '--show-trace' to show detailed location information)");
+    LOG(ERROR) << error << (settings.showTrace ? e.prefix() : "") << e.msg();
+    if (e.prefix() != "" && !settings.showTrace) {
+      LOG(INFO) << "(use '--show-trace' to show detailed location information)";
+    }
     return e.status;
   } catch (std::bad_alloc& e) {
-    printError(error + "out of memory");
+    LOG(ERROR) << error << "out of memory";
     return 1;
   } catch (std::exception& e) {
-    printError(error + e.what());
+    LOG(ERROR) << error << e.what();
     return 1;
   }
 
@@ -342,9 +359,10 @@ string showBytes(unsigned long long bytes) {
 }
 
 PrintFreed::~PrintFreed() {
-  if (show)
+  if (show) {
     std::cout << format("%1% store paths deleted, %2% freed\n") %
                      results.paths.size() % showBytes(results.bytesFreed);
+  }
 }
 
 Exit::~Exit() {}

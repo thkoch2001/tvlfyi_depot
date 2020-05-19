@@ -1,28 +1,11 @@
 #include "common-args.hh"
+#include <glog/logging.h>
 #include "globals.hh"
 
 namespace nix {
 
 MixCommonArgs::MixCommonArgs(const string& programName)
     : programName(programName) {
-  mkFlag()
-      .longName("verbose")
-      .shortName('v')
-      .description("increase verbosity level")
-      .handler([]() { verbosity = (Verbosity)(verbosity + 1); });
-
-  mkFlag()
-      .longName("quiet")
-      .description("decrease verbosity level")
-      .handler([]() {
-        verbosity =
-            verbosity > lvlError ? (Verbosity)(verbosity - 1) : lvlError;
-      });
-
-  mkFlag().longName("debug").description("enable debug output").handler([]() {
-    verbosity = lvlDebug;
-  });
-
   mkFlag()
       .longName("option")
       .labels({"name", "value"})
@@ -32,7 +15,7 @@ MixCommonArgs::MixCommonArgs(const string& programName)
         try {
           globalConfig.set(ss[0], ss[1]);
         } catch (UsageError& e) {
-          warn(e.what());
+          LOG(WARNING) << e.what();
         }
       });
 

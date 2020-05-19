@@ -1,12 +1,3 @@
-# Nix lib store build file
-#============================================================================
-
-
-
-
-# src files
-#============================================================================
-
 src_inc += include_directories('.')
 
 libmain_src = files(
@@ -18,50 +9,20 @@ libmain_headers = files(
     join_paths(meson.source_root(), 'src/libmain/common-args.hh'),
     join_paths(meson.source_root(), 'src/libmain/shared.hh'))
 
-
-
-
-# dependancies
-#============================================================================
-
 libmain_dep_list = [
+    glog_dep,
     pthread_dep,
     openssl_dep,
-    libsodium_dep]
-
-
-
-
-
-# Link args
-#============================================================================
+    libsodium_dep,
+]
 
 libmain_link_list = [
     libutil_lib,
-    libstore_lib
+    libstore_lib,
 ]
 
 libmain_link_args = []
-
-
-
-
-# compiler args
-#============================================================================
-
 libstore_cxx_args = []
-
-
-
-
-# targets
-#============================================================================
-
-
-
-
-# build
-#============================================================================
 
 libmain_lib = library(
     'nixmain',
