@@ -1,5 +1,7 @@
-#include <glog/logging.h>
 #include <atomic>
+
+#include <glog/logging.h>
+
 #include "command.hh"
 #include "shared.hh"
 #include "store-api.hh"

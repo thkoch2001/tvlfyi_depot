@@ -1,4 +1,5 @@
 #include "thread-pool.hh"
+
 #include "affinity.hh"
 #include "glog/logging.h"
 

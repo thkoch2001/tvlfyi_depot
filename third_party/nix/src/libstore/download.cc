@@ -1,4 +1,5 @@
 #include "download.hh"
+
 #include "archive.hh"
 #include "compression.hh"
 #include "finally.hh"
@@ -13,10 +14,6 @@
 #include <aws/core/client/ClientConfiguration.h>
 #endif
 
-#include <curl/curl.h>
-#include <fcntl.h>
-#include <glog/logging.h>
-#include <unistd.h>
 #include <algorithm>
 #include <cmath>
 #include <cstring>
@@ -24,6 +21,11 @@
 #include <queue>
 #include <random>
 #include <thread>
+
+#include <curl/curl.h>
+#include <fcntl.h>
+#include <glog/logging.h>
+#include <unistd.h>
 
 using namespace std::string_literals;
 

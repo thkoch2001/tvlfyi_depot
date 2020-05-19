@@ -1,7 +1,9 @@
 #pragma once
 
-#include <signal.h>
 #include <locale>
+
+#include <signal.h>
+
 #include "args.hh"
 #include "common-args.hh"
 #include "util.hh"

@@ -1,6 +1,8 @@
-#include <glog/logging.h>
 #include <cerrno>
 #include <iostream>
+
+#include <glog/logging.h>
+
 #include "globals.hh"
 #include "legacy.hh"
 #include "profiles.hh"

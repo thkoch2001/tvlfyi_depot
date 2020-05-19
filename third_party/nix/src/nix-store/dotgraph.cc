@@ -1,5 +1,7 @@
 #include "dotgraph.hh"
+
 #include <iostream>
+
 #include "store-api.hh"
 #include "util.hh"
 

@@ -1,12 +1,13 @@
 #pragma once
 
+#include <atomic>
+#include <cstdlib>
+#include <thread>
+
 #include <poll.h>
 #include <signal.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <atomic>
-#include <cstdlib>
-#include <thread>
 
 namespace nix {
 

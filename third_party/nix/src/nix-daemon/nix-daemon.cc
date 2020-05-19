@@ -1,3 +1,6 @@
+#include <algorithm>
+#include <cstring>
+
 #include <errno.h>
 #include <fcntl.h>
 #include <glog/logging.h>
@@ -11,8 +14,7 @@
 #include <sys/un.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <algorithm>
-#include <cstring>
+
 #include "affinity.hh"
 #include "archive.hh"
 #include "derivations.hh"

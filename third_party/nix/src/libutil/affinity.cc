@@ -1,5 +1,7 @@
 #include "affinity.hh"
+
 #include <glog/logging.h>
+
 #include "types.hh"
 #include "util.hh"
 

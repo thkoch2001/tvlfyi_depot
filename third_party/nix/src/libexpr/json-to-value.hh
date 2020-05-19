@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+
 #include "eval.hh"
 
 namespace nix {

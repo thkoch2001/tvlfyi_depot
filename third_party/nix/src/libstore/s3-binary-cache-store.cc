@@ -1,6 +1,7 @@
 #if ENABLE_S3
 
 #include "s3-binary-cache-store.hh"
+
 #include <aws/core/Aws.h>
 #include <aws/core/VersionConfig.h>
 #include <aws/core/auth/AWSCredentialsProvider.h>
@@ -16,6 +17,7 @@
 #include <aws/s3/model/ListObjectsRequest.h>
 #include <aws/s3/model/PutObjectRequest.h>
 #include <aws/transfer/TransferManager.h>
+
 #include "compression.hh"
 #include "download.hh"
 #include "globals.hh"

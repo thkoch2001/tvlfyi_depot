@@ -1,11 +1,14 @@
 #include "pathlocks.hh"
+
+#include <cerrno>
+#include <cstdlib>
+
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <sys/file.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <cerrno>
-#include <cstdlib>
+
 #include "sync.hh"
 #include "util.hh"
 

@@ -2,6 +2,7 @@
 
 #include <limits>
 #include <string>
+
 #include "store-api.hh"
 
 namespace nix {

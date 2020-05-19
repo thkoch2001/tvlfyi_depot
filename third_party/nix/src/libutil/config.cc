@@ -1,6 +1,8 @@
 #define GOOGLE_STRIP_LOG 0
 #include "config.hh"
+
 #include <glog/logging.h>
+
 #include "args.hh"
 #include "json.hh"
 // #include <glog/log_severity.h>

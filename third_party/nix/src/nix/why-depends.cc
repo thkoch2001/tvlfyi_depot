@@ -1,5 +1,7 @@
-#include <glog/logging.h>
 #include <queue>
+
+#include <glog/logging.h>
+
 #include "command.hh"
 #include "fs-accessor.hh"
 #include "shared.hh"

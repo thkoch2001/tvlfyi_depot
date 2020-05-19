@@ -4,6 +4,7 @@
 #include <future>
 #include <string>
 #include <unordered_set>
+
 #include "pathlocks.hh"
 #include "sqlite.hh"
 #include "store-api.hh"

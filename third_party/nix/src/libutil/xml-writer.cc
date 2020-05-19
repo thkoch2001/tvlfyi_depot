@@ -1,4 +1,5 @@
 #include "xml-writer.hh"
+
 #include <assert.h>
 
 namespace nix {

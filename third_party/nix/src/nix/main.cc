@@ -1,9 +1,11 @@
+#include <algorithm>
+
 #include <ifaddrs.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <algorithm>
+
 #include "command.hh"
 #include "common-args.hh"
 #include "download.hh"

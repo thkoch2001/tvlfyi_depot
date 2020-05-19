@@ -1,11 +1,14 @@
 #include "compression.hh"
+
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+
 #include <brotli/decode.h>
 #include <brotli/encode.h>
 #include <bzlib.h>
 #include <lzma.h>
-#include <cstdio>
-#include <cstring>
-#include <iostream>
+
 #include "finally.hh"
 #include "glog/logging.h"
 #include "util.hh"

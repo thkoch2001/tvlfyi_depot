@@ -1,10 +1,5 @@
 #pragma once
 
-#include <dirent.h>
-#include <signal.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
 #include <cstdio>
 #include <functional>
 #include <future>
@@ -12,6 +7,13 @@
 #include <map>
 #include <optional>
 #include <sstream>
+
+#include <dirent.h>
+#include <signal.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 #include "types.hh"
 
 #ifndef HAVE_STRUCT_DIRENT_D_TYPE

@@ -1,4 +1,5 @@
 #include "names.hh"
+
 #include "util.hh"
 
 namespace nix {

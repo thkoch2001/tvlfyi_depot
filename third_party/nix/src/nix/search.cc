@@ -1,6 +1,8 @@
-#include <glog/logging.h>
 #include <fstream>
 #include <regex>
+
+#include <glog/logging.h>
+
 #include "command.hh"
 #include "common-args.hh"
 #include "eval-inline.hh"

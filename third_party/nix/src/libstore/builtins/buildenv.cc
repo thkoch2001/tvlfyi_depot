@@ -1,8 +1,10 @@
+#include <algorithm>
+
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <algorithm>
+
 #include "builtins.hh"
 
 namespace nix {

@@ -1,8 +1,10 @@
 #pragma once
 
-#include <sys/types.h>
 #include <limits>
 #include <map>
+
+#include <sys/types.h>
+
 #include "config.hh"
 #include "types.hh"
 #include "util.hh"

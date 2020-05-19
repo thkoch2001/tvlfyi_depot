@@ -1,11 +1,13 @@
+#include <cstdlib>
+#include <cstring>
+#include <regex>
+
 #include <errno.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <cstdlib>
-#include <cstring>
-#include <regex>
+
 #include "globals.hh"
 #include "glog/logging.h"
 #include "local-store.hh"

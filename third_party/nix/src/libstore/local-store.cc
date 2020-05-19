@@ -1,4 +1,9 @@
 #include "local-store.hh"
+
+#include <algorithm>
+#include <cstring>
+#include <iostream>
+
 #include <errno.h>
 #include <fcntl.h>
 #include <glog/logging.h>
@@ -11,9 +16,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <utime.h>
-#include <algorithm>
-#include <cstring>
-#include <iostream>
+
 #include "archive.hh"
 #include "derivations.hh"
 #include "globals.hh"

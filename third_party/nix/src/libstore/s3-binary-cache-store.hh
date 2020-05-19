@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+
 #include "binary-cache-store.hh"
 
 namespace nix {

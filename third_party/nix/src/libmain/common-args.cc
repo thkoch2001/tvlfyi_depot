@@ -1,5 +1,7 @@
 #include "common-args.hh"
+
 #include <glog/logging.h>
+
 #include "globals.hh"
 
 namespace nix {

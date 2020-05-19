@@ -1,3 +1,14 @@
+#include <algorithm>
+#include <chrono>
+#include <cstring>
+#include <future>
+#include <iostream>
+#include <map>
+#include <queue>
+#include <regex>
+#include <sstream>
+#include <thread>
+
 #include <errno.h>
 #include <fcntl.h>
 #include <grp.h>
@@ -14,16 +25,7 @@
 #include <sys/wait.h>
 #include <termios.h>
 #include <unistd.h>
-#include <algorithm>
-#include <chrono>
-#include <cstring>
-#include <future>
-#include <iostream>
-#include <map>
-#include <queue>
-#include <regex>
-#include <sstream>
-#include <thread>
+
 #include "affinity.hh"
 #include "archive.hh"
 #include "builtins.hh"

@@ -1,8 +1,10 @@
+#include <iostream>
+
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <iostream>
+
 #include "attr-path.hh"
 #include "common-eval-args.hh"
 #include "download.hh"

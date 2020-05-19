@@ -1,4 +1,5 @@
 #include "json-to-value.hh"
+
 #include <cstring>
 
 namespace nix {

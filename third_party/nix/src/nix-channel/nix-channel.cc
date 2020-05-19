@@ -1,6 +1,8 @@
+#include <regex>
+
 #include <fcntl.h>
 #include <pwd.h>
-#include <regex>
+
 #include "download.hh"
 #include "globals.hh"
 #include "legacy.hh"

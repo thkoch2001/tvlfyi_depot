@@ -1,13 +1,16 @@
 #include "eval.hh"
-#include <glog/logging.h>
-#include <sys/resource.h>
-#include <sys/time.h>
-#include <unistd.h>
+
 #include <algorithm>
 #include <chrono>
 #include <cstring>
 #include <fstream>
 #include <iostream>
+
+#include <glog/logging.h>
+#include <sys/resource.h>
+#include <sys/time.h>
+#include <unistd.h>
+
 #include "derivations.hh"
 #include "download.hh"
 #include "eval-inline.hh"

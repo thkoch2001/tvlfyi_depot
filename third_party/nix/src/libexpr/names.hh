@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <regex>
+
 #include "types.hh"
 
 namespace nix {

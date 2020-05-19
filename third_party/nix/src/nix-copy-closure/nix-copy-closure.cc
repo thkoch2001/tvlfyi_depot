@@ -1,4 +1,5 @@
 #include <glog/logging.h>
+
 #include "legacy.hh"
 #include "shared.hh"
 #include "store-api.hh"

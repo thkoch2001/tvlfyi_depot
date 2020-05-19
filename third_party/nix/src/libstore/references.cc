@@ -1,7 +1,10 @@
 #include "references.hh"
-#include <glog/logging.h>
+
 #include <cstdlib>
 #include <map>
+
+#include <glog/logging.h>
+
 #include "archive.hh"
 #include "hash.hh"
 #include "util.hh"

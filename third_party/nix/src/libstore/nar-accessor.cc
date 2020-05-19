@@ -1,8 +1,10 @@
 #include "nar-accessor.hh"
+
 #include <algorithm>
 #include <map>
 #include <nlohmann/json.hpp>
 #include <stack>
+
 #include "archive.hh"
 #include "json.hh"
 

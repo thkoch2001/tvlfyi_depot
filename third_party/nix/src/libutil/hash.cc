@@ -1,11 +1,14 @@
 #include "hash.hh"
+
+#include <cstring>
+#include <iostream>
+
 #include <fcntl.h>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <cstring>
-#include <iostream>
+
 #include "archive.hh"
 #include "istringstream_nocopy.hh"
 #include "util.hh"

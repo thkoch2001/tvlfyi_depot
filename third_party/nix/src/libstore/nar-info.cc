@@ -1,4 +1,5 @@
 #include "nar-info.hh"
+
 #include "globals.hh"
 
 namespace nix {

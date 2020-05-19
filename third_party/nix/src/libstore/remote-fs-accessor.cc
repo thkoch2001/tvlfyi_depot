@@ -1,7 +1,9 @@
 #include "remote-fs-accessor.hh"
+
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
 #include "json.hh"
 #include "nar-accessor.hh"
 

@@ -1,4 +1,5 @@
 #include <glog/logging.h>
+
 #include "derivations.hh"
 #include "globals.hh"
 #include "local-store.hh"

@@ -1,12 +1,15 @@
 #include "primops.hh"
+
+#include <algorithm>
+#include <cstring>
+#include <regex>
+
 #include <dlfcn.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <algorithm>
-#include <cstring>
-#include <regex>
+
 #include "archive.hh"
 #include "derivations.hh"
 #include "download.hh"

@@ -1,14 +1,17 @@
 #include "archive.hh"
+
+#include <algorithm>
+#include <cerrno>
+#include <map>
+#include <vector>
+
 #include <dirent.h>
 #include <fcntl.h>
 #include <strings.h>  // for strcasecmp
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <algorithm>
-#include <cerrno>
-#include <map>
-#include <vector>
+
 #include "config.hh"
 #include "glog/logging.h"
 #include "util.hh"

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+
 #include "crypto.hh"
 #include "pool.hh"
 #include "store-api.hh"

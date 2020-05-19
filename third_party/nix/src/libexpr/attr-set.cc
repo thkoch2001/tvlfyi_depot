@@ -1,5 +1,7 @@
 #include "attr-set.hh"
+
 #include <algorithm>
+
 #include "eval-inline.hh"
 
 namespace nix {

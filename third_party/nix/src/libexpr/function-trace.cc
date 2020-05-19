@@ -1,4 +1,5 @@
 #include "function-trace.hh"
+
 #include <glog/logging.h>
 
 namespace nix {

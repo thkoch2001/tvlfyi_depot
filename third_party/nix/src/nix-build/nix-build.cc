@@ -1,10 +1,12 @@
-#include <glog/logging.h>
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include <regex>
 #include <sstream>
 #include <vector>
+
+#include <glog/logging.h>
+
 #include "affinity.hh"
 #include "attr-path.hh"
 #include "common-eval-args.hh"

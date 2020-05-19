@@ -6,6 +6,7 @@
 #include <memory>
 #include <set>
 #include <string>
+
 #include "ref.hh"
 
 /* Before 4.7, gcc's std::exception uses empty throw() specifiers for

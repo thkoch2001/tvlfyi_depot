@@ -1,6 +1,9 @@
 #include "machines.hh"
-#include <glog/logging.h>
+
 #include <algorithm>
+
+#include <glog/logging.h>
+
 #include "globals.hh"
 #include "util.hh"
 

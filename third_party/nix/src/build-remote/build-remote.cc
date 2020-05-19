@@ -1,4 +1,3 @@
-#include <glog/logging.h>
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
@@ -6,6 +5,8 @@
 #include <memory>
 #include <set>
 #include <tuple>
+
+#include <glog/logging.h>
 #if __APPLE__
 #include <sys/time.h>
 #endif

@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <array>
+
 #include "command.hh"
 #include "common-args.hh"
 #include "json.hh"

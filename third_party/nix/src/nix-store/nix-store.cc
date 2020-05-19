@@ -1,10 +1,12 @@
+#include <algorithm>
+#include <cstdio>
+#include <iostream>
+
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <algorithm>
-#include <cstdio>
-#include <iostream>
+
 #include "archive.hh"
 #include "derivations.hh"
 #include "dotgraph.hh"

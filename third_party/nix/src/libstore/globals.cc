@@ -1,8 +1,11 @@
 #include "globals.hh"
-#include <dlfcn.h>
+
 #include <algorithm>
 #include <map>
 #include <thread>
+
+#include <dlfcn.h>
+
 #include "archive.hh"
 #include "args.hh"
 #include "util.hh"

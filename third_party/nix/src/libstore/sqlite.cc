@@ -1,7 +1,10 @@
 #include "sqlite.hh"
+
+#include <atomic>
+
 #include <glog/logging.h>
 #include <sqlite3.h>
-#include <atomic>
+
 #include "util.hh"
 
 namespace nix {

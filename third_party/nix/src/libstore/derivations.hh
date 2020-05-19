@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+
 #include "hash.hh"
 #include "store-api.hh"
 #include "types.hh"

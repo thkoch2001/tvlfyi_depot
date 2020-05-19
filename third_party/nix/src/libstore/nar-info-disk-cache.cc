@@ -1,6 +1,8 @@
 #include "nar-info-disk-cache.hh"
+
 #include <glog/logging.h>
 #include <sqlite3.h>
+
 #include "globals.hh"
 #include "sqlite.hh"
 #include "sync.hh"

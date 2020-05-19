@@ -1,10 +1,12 @@
 #include "profiles.hh"
+
 #include <errno.h>
 #include <glog/logging.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+
 #include "store-api.hh"
 #include "util.hh"
 

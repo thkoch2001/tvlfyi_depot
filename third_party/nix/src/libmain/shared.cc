@@ -1,16 +1,19 @@
 #include "shared.hh"
-#include <glog/logging.h>
-#include <openssl/crypto.h>
-#include <signal.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <unistd.h>
+
 #include <algorithm>
 #include <cctype>
 #include <cstdlib>
 #include <exception>
 #include <iostream>
 #include <mutex>
+
+#include <glog/logging.h>
+#include <openssl/crypto.h>
+#include <signal.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <unistd.h>
+
 #include "globals.hh"
 #include "store-api.hh"
 #include "util.hh"

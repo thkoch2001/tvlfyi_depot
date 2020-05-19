@@ -1,4 +1,5 @@
 #include "hash.hh"
+
 #include "command.hh"
 #include "legacy.hh"
 #include "shared.hh"

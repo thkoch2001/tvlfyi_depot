@@ -1,12 +1,5 @@
 #include "util.hh"
-#include <fcntl.h>
-#include <grp.h>
-#include <limits.h>
-#include <pwd.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
+
 #include <cctype>
 #include <cerrno>
 #include <cstdio>
@@ -16,6 +9,16 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+
+#include <fcntl.h>
+#include <grp.h>
+#include <limits.h>
+#include <pwd.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
 #include "affinity.hh"
 #include "finally.hh"
 #include "glog/logging.h"

@@ -1,6 +1,9 @@
 #include "store-api.hh"
-#include <glog/logging.h>
+
 #include <future>
+
+#include <glog/logging.h>
+
 #include "crypto.hh"
 #include "derivations.hh"
 #include "globals.hh"

@@ -1,4 +1,5 @@
 #include <atomic>
+
 #include "command.hh"
 #include "shared.hh"
 #include "store-api.hh"

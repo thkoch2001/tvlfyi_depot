@@ -1,4 +1,5 @@
 #include <glog/logging.h>
+
 #include "command.hh"
 #include "common-args.hh"
 #include "shared.hh"
