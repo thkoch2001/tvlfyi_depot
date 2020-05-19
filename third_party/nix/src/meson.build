@@ -7,7 +7,6 @@ src_dirs = [
   'libmain',
   'libexpr',
   'nix',
-  'resolve-system-dependencies'
 ]
 
 foreach dir : src_dirs

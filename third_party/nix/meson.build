@@ -18,7 +18,6 @@ cpp = meson.get_compiler('cpp')
 add_project_arguments(get_option('cxxflags'), language : 'cpp')
 add_project_link_arguments(get_option('ldflags'), language: 'cpp')
 
-cmake = import('cmake')
 pkg = import('pkgconfig')
 
 config_h = configuration_data()
