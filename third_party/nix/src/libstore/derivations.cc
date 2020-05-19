@@ -226,10 +226,11 @@ string Derivation::unparse() const {
 
   bool first = true;
   for (auto& i : outputs) {
-    if (first)
+    if (first) {
       first = false;
-    else
+    } else {
       s += ',';
+    }
     s += '(';
     printString(s, i.first);
     s += ',';
@@ -244,10 +245,11 @@ string Derivation::unparse() const {
   s += "],[";
   first = true;
   for (auto& i : inputDrvs) {
-    if (first)
+    if (first) {
       first = false;
-    else
+    } else {
       s += ',';
+    }
     s += '(';
     printString(s, i.first);
     s += ',';
@@ -268,10 +270,11 @@ string Derivation::unparse() const {
   s += ",[";
   first = true;
   for (auto& i : env) {
-    if (first)
+    if (first) {
       first = false;
-    else
+    } else {
       s += ',';
+    }
     s += '(';
     printString(s, i.first);
     s += ',';
@@ -394,8 +397,9 @@ Source& readDerivation(Source& in, Store& store, BasicDerivation& drv) {
 
 Sink& operator<<(Sink& out, const BasicDerivation& drv) {
   out << drv.outputs.size();
-  for (auto& i : drv.outputs)
+  for (auto& i : drv.outputs) {
     out << i.first << i.second.path << i.second.hashAlgo << i.second.hash;
+  }
   out << drv.inputSrcs << drv.platform << drv.builder << drv.args;
   out << drv.env.size();
   for (auto& i : drv.env) {
