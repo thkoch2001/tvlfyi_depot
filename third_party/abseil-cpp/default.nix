@@ -1,12 +1,12 @@
 { pkgs, ... }:
 
 (pkgs.originals.abseil-cpp.overrideAttrs(_: {
-  version = "20200220-0232c87f";
+  version = "20200519-768eb2ca";
 
   src = pkgs.fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
-    rev = "0232c87f21c26718aa3eb2d86678070f3b498a4e";
-    sha256 = "1shay44sg0glz1f2jbx7dyvrrqmnx07q7azwraigyj61f7b9ccyx";
+    rev = "768eb2ca2857342673fcd462792ce04b8bac3fa3";
+    sha256 = "13cyc5qm8n9zd60vcjwvyvlv237421nvhzrnw43y5w9pxshixn2q";
   };
 }))
