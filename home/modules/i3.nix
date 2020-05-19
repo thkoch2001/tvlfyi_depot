@@ -76,7 +76,7 @@ in {
 
             "${mod}+f" = "fullscreen";
 
-            "${mod}+Shift+r" = "exec home-manager switch";
+            "${mod}+Shift+r" = "restart";
 
             "${mod}+r" = "mode resize";
 
