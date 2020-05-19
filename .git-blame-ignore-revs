@@ -1,0 +1,23 @@
+# This file contains commits that should be ignored when calculating
+# git blame layers.
+#
+# You should add it to your local configuration using:
+#    git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# style(3p/nix): Reformat project in Google C++ style
+0f2cf531f705d370321843e5ba9135b2ebdb5d19
+
+# style(3p/nix): Reformat all includes to match new style
+c758de9d22506eb279c5abe61f621e5c8f61af95
+
+# style(3p/nix): Reformat all includes to match new style
+c758de9d22506eb279c5abe61f621e5c8f61af95
+
+# style(3p/nix): Add braces around single-line conditionals
+867055133d3f487e52dd44149f76347c2c28bf10
+
+# style(3p/nix): Add braces around single-line for-loops
+1841d93ccbe5792a17f5b9a22e65ec898c7c2668
+
+# style(3p/nix): Final act in the brace-wrapping saga
+39087321811e81e26a1a47d6967df1088dcf0e95
