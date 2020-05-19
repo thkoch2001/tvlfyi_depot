@@ -200,8 +200,8 @@ static void printString(string& res, const string& s) {
     } else {
       res += *i;
     }
-    res += '"';
   }
+  res += '"';
 }
 
 template <class ForwardIterator>
