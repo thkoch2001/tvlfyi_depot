@@ -89,59 +89,75 @@ class ExternalValueBase {
 
 std::ostream& operator<<(std::ostream& str, const ExternalValueBase& v);
 
+// Forward declaration of Value is required because the following
+// types are mutually recursive.
+//
+// TODO(tazjin): Really, these types need some serious refactoring.
+struct Value;
+
+/* Strings in the evaluator carry a so-called `context' which
+   is a list of strings representing store paths.  This is to
+   allow users to write things like
+
+   "--with-freetype2-library=" + freetype + "/lib"
+
+   where `freetype' is a derivation (or a source to be copied
+   to the store).  If we just concatenated the strings without
+   keeping track of the referenced store paths, then if the
+   string is used as a derivation attribute, the derivation
+   will not have the correct dependencies in its inputDrvs and
+   inputSrcs.
+
+   The semantics of the context is as follows: when a string
+   with context C is used as a derivation attribute, then the
+   derivations in C will be added to the inputDrvs of the
+   derivation, and the other store paths in C will be added to
+   the inputSrcs of the derivations.
+
+   For canonicity, the store paths should be in sorted order. */
+struct NixString {
+  const char* s;
+  const char** context;  // must be in sorted order
+};
+
+struct NixBigList {
+  size_t size;
+  Value** elems;
+};
+
+struct NixThunk {
+  Env* env;
+  Expr* expr;
+};
+
+struct NixApp {
+  Value *left, *right;
+};
+
+struct NixLambda {
+  Env* env;
+  ExprLambda* fun;
+};
+
+struct NixPrimOpApp {
+  Value *left, *right;
+};
+
 struct Value {
   ValueType type;
-  union {
+  union {  // TODO(tazjin): std::variant
     NixInt integer;
     bool boolean;
-
-    /* Strings in the evaluator carry a so-called `context' which
-       is a list of strings representing store paths.  This is to
-       allow users to write things like
-
-         "--with-freetype2-library=" + freetype + "/lib"
-
-       where `freetype' is a derivation (or a source to be copied
-       to the store).  If we just concatenated the strings without
-       keeping track of the referenced store paths, then if the
-       string is used as a derivation attribute, the derivation
-       will not have the correct dependencies in its inputDrvs and
-       inputSrcs.
-
-       The semantics of the context is as follows: when a string
-       with context C is used as a derivation attribute, then the
-       derivations in C will be added to the inputDrvs of the
-       derivation, and the other store paths in C will be added to
-       the inputSrcs of the derivations.
-
-       For canonicity, the store paths should be in sorted order. */
-    struct {
-      const char* s;
-      const char** context;  // must be in sorted order
-    } string;
-
+    NixString string;
     const char* path;
     Bindings* attrs;
-    struct {
-      size_t size;
-      Value** elems;
-    } bigList;
+    NixBigList bigList;
     Value* smallList[2];
-    struct {
-      Env* env;
-      Expr* expr;
-    } thunk;
-    struct {
-      Value *left, *right;
-    } app;
-    struct {
-      Env* env;
-      ExprLambda* fun;
-    } lambda;
+    NixThunk thunk;
+    NixApp app;  // TODO(tazjin): "app"?
+    NixLambda lambda;
     PrimOp* primOp;
-    struct {
-      Value *left, *right;
-    } primOpApp;
+    NixPrimOpApp primOpApp;
     ExternalValueBase* external;
     NixFloat fpoint;
   };
