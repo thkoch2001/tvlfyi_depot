@@ -50,6 +50,12 @@
   :config (dottime-display-mode t))
 
 (use-package gruber-darker-theme)
+
+(use-package eglot
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-send-changes-idle-time 0.3))
+
 (use-package ht)
 (use-package hydra)
 (use-package idle-highlight-mode :hook ((prog-mode . idle-highlight-mode)))
