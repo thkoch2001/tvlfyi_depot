@@ -61,7 +61,9 @@ void AbstractConfig::warnUnknownSettings() {
 
 void AbstractConfig::reapplyUnknownSettings() {
   auto unknownSettings2 = std::move(unknownSettings);
-  for (auto& s : unknownSettings2) set(s.first, s.second);
+  for (auto& s : unknownSettings2) {
+    set(s.first, s.second);
+  }
 }
 
 void Config::getSettings(std::map<std::string, SettingInfo>& res,
@@ -138,7 +140,9 @@ void AbstractConfig::applyConfigFile(const Path& path) {
 }
 
 void Config::resetOverriden() {
-  for (auto& s : _settings) s.second.setting->overriden = false;
+  for (auto& s : _settings) {
+    s.second.setting->overriden = false;
+  }
 }
 
 void Config::toJSON(JSONObject& out) {
@@ -250,7 +254,9 @@ std::string BaseSetting<Strings>::to_string() {
 template <>
 void BaseSetting<Strings>::toJSON(JSONPlaceholder& out) {
   JSONList list(out.list());
-  for (auto& s : value) list.elem(s);
+  for (auto& s : value) {
+    list.elem(s);
+  }
 }
 
 template <>
@@ -266,7 +272,9 @@ std::string BaseSetting<StringSet>::to_string() {
 template <>
 void BaseSetting<StringSet>::toJSON(JSONPlaceholder& out) {
   JSONList list(out.list());
-  for (auto& s : value) list.elem(s);
+  for (auto& s : value) {
+    list.elem(s);
+  }
 }
 
 template class BaseSetting<int>;
@@ -308,11 +316,15 @@ void GlobalConfig::getSettings(std::map<std::string, SettingInfo>& res,
 }
 
 void GlobalConfig::resetOverriden() {
-  for (auto& config : *configRegistrations) config->resetOverriden();
+  for (auto& config : *configRegistrations) {
+    config->resetOverriden();
+  }
 }
 
 void GlobalConfig::toJSON(JSONObject& out) {
-  for (auto& config : *configRegistrations) config->toJSON(out);
+  for (auto& config : *configRegistrations) {
+    config->toJSON(out);
+  }
 }
 
 void GlobalConfig::convertToArgs(Args& args, const std::string& category) {

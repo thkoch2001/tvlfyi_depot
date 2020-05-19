@@ -69,7 +69,9 @@ std::map<std::string, std::string> getEnv() {
 }
 
 void clearEnv() {
-  for (auto& name : getEnv()) unsetenv(name.first.c_str());
+  for (auto& name : getEnv()) {
+    unsetenv(name.first.c_str());
+  }
 }
 
 void replaceEnv(std::map<std::string, std::string> newEnv) {
@@ -903,7 +905,9 @@ pid_t startProcess(std::function<void()> fun, const ProcessOptions& options) {
 
 std::vector<char*> stringsToCharPtrs(const Strings& ss) {
   std::vector<char*> res;
-  for (auto& s : ss) res.push_back((char*)s.c_str());
+  for (auto& s : ss) {
+    res.push_back((char*)s.c_str());
+  }
   res.push_back(0);
   return res;
 }
@@ -1215,7 +1219,9 @@ bool hasSuffix(const string& s, const string& suffix) {
 
 std::string toLower(const std::string& s) {
   std::string r(s);
-  for (auto& c : r) c = std::tolower(c);
+  for (auto& c : r) {
+    c = std::tolower(c);
+  }
   return r;
 }
 

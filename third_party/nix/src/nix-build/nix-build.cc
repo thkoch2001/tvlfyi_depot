@@ -102,7 +102,9 @@ static void _main(int argc, char** argv) {
       "IN_NIX_SHELL", "TZ",   "PAGER",   "NIX_BUILD_SHELL", "SHLVL"};
 
   Strings args;
-  for (int i = 1; i < argc; ++i) args.push_back(argv[i]);
+  for (int i = 1; i < argc; ++i) {
+    args.push_back(argv[i]);
+  }
 
   // Heuristic to see if we're invoked as a shebang script, namely,
   // if we have at least one argument, it's the name of an
@@ -115,7 +117,9 @@ static void _main(int argc, char** argv) {
       if (std::regex_search(lines.front(), std::regex("^#!"))) {
         lines.pop_front();
         inShebang = true;
-        for (int i = 2; i < argc; ++i) savedArgs.push_back(argv[i]);
+        for (int i = 2; i < argc; ++i) {
+          savedArgs.push_back(argv[i]);
+        }
         args.clear();
         for (auto line : lines) {
           line = chomp(line);
@@ -210,7 +214,9 @@ static void _main(int argc, char** argv) {
             execArgs = "-a PERL";
 
           std::ostringstream joined;
-          for (const auto& i : savedArgs) joined << shellEscape(i) << ' ';
+          for (const auto& i : savedArgs) {
+            joined << shellEscape(i) << ' ';
+          }
 
           if (std::regex_search(interpreter, std::regex("ruby"))) {
             // Hack for Ruby. Ruby also examines the shebang. It tries to
@@ -260,7 +266,9 @@ static void _main(int argc, char** argv) {
     std::ostringstream joined;
     joined << "with import <nixpkgs> { }; (pkgs.runCommandCC or "
               "pkgs.runCommand) \"shell\" { buildInputs = [ ";
-    for (const auto& i : left) joined << '(' << i << ") ";
+    for (const auto& i : left) {
+      joined << '(' << i << ") ";
+    }
     joined << "]; } \"\"";
     fromArgs = true;
     left = {joined.str()};
@@ -389,7 +397,9 @@ static void _main(int argc, char** argv) {
                                                   std::regex(exclude));
                       }))
         pathsToBuild.insert(makeDrvPathWithOutputs(input.first, input.second));
-    for (const auto& src : drv.inputSrcs) pathsToBuild.insert(src);
+    for (const auto& src : drv.inputSrcs) {
+      pathsToBuild.insert(src);
+    }
 
     buildPaths(pathsToBuild);
 
@@ -465,7 +475,9 @@ static void _main(int argc, char** argv) {
             envCommand));
 
     Strings envStrs;
-    for (auto& i : env) envStrs.push_back(i.first + "=" + i.second);
+    for (auto& i : env) {
+      envStrs.push_back(i.first + "=" + i.second);
+    }
 
     auto args = interactive ? Strings{"bash", "--rcfile", rcfile}
                             : Strings{"bash", rcfile};
@@ -531,7 +543,9 @@ static void _main(int argc, char** argv) {
       if (auto store2 = store.dynamic_pointer_cast<LocalFSStore>())
         store2->addPermRoot(symlink.second, absPath(symlink.first), true);
 
-    for (auto& path : outPaths) std::cout << path << '\n';
+    for (auto& path : outPaths) {
+      std::cout << path << '\n';
+    }
   }
 }
 

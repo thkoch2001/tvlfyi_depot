@@ -17,7 +17,9 @@ static std::string hilite(const std::string& s, size_t pos, size_t len,
 
 static std::string filterPrintable(const std::string& s) {
   std::string res;
-  for (char c : s) res += isprint(c) ? c : '.';
+  for (char c : s) {
+    res += isprint(c) ? c : '.';
+  }
   return res;
 }
 
@@ -95,7 +97,9 @@ struct CmdWhyDepends : SourceExprCommand {
 
     // Transpose the graph.
     for (auto& node : graph)
-      for (auto& ref : node.second.refs) graph[ref].rrefs.insert(node.first);
+      for (auto& ref : node.second.refs) {
+        graph[ref].rrefs.insert(node.first);
+      }
 
     /* Run Dijkstra's shortest path algorithm to get the distance
        of every path in the closure to 'dependency'. */
@@ -184,7 +188,9 @@ struct CmdWhyDepends : SourceExprCommand {
 
         if (st.type == FSAccessor::Type::tDirectory) {
           auto names = accessor->readDirectory(p);
-          for (auto& name : names) visitPath(p + "/" + name);
+          for (auto& name : names) {
+            visitPath(p + "/" + name);
+          }
         }
 
         else if (st.type == FSAccessor::Type::tRegular) {

@@ -396,7 +396,9 @@ PathSet Store::queryValidPaths(const PathSet& paths,
         }});
   };
 
-  for (auto& path : paths) pool.enqueue(std::bind(doQuery, path));
+  for (auto& path : paths) {
+    pool.enqueue(std::bind(doQuery, path));
+  }
 
   pool.process();
 
@@ -434,7 +436,9 @@ string Store::makeValidityRegistration(const PathSet& paths, bool showDerivers,
 
     s += (format("%1%\n") % info->references.size()).str();
 
-    for (auto& j : info->references) s += j + "\n";
+    for (auto& j : info->references) {
+      s += j + "\n";
+    }
   }
 
   return s;
@@ -458,7 +462,9 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
 
       {
         auto jsonRefs = jsonPath.list("references");
-        for (auto& ref : info->references) jsonRefs.elem(ref);
+        for (auto& ref : info->references) {
+          jsonRefs.elem(ref);
+        }
       }
 
       if (info->ca != "") {
@@ -486,7 +492,9 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
 
         if (!info->sigs.empty()) {
           auto jsonSigs = jsonPath.list("signatures");
-          for (auto& sig : info->sigs) jsonSigs.elem(sig);
+          for (auto& sig : info->sigs) {
+            jsonSigs.elem(sig);
+          }
         }
 
         auto narInfo = std::dynamic_pointer_cast<const NarInfo>(
@@ -782,7 +790,9 @@ bool ValidPathInfo::checkSignature(const PublicKeys& publicKeys,
 
 Strings ValidPathInfo::shortRefs() const {
   Strings refs;
-  for (auto& r : references) refs.push_back(baseNameOf(r));
+  for (auto& r : references) {
+    refs.push_back(baseNameOf(r));
+  }
   return refs;
 }
 
@@ -918,9 +928,13 @@ std::list<ref<Store>> getDefaultSubstituters() {
       }
     };
 
-    for (auto uri : settings.substituters.get()) addStore(uri);
+    for (auto uri : settings.substituters.get()) {
+      addStore(uri);
+    }
 
-    for (auto uri : settings.extraSubstituters.get()) addStore(uri);
+    for (auto uri : settings.extraSubstituters.get()) {
+      addStore(uri);
+    }
 
     stores.sort([](ref<Store>& a, ref<Store>& b) {
       return a->getPriority() < b->getPriority();

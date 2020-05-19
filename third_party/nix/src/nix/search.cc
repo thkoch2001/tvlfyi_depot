@@ -260,7 +260,9 @@ struct CmdSearch : SourceExprCommand, MixJSON {
       throw Error("no results for the given search term(s)!");
 
     RunPager pager;
-    for (auto el : results) std::cout << el.second << "\n";
+    for (auto el : results) {
+      std::cout << el.second << "\n";
+    }
   }
 };
 

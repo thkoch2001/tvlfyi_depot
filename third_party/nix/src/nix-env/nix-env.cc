@@ -87,7 +87,9 @@ static bool isNixExpr(const Path& path, struct stat& st) {
 static void getAllExprs(EvalState& state, const Path& path, StringSet& attrs,
                         Value& v) {
   StringSet namesSorted;
-  for (auto& i : readDirectory(path)) namesSorted.insert(i.name);
+  for (auto& i : readDirectory(path)) {
+    namesSorted.insert(i.name);
+  }
 
   for (auto& i : namesSorted) {
     /* Ignore the manifest.nix used by profiles.  This is
@@ -927,7 +929,9 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
   /* Sort them by name. */
   /* !!! */
   vector<DrvInfo> elems;
-  for (auto& i : elems_) elems.push_back(i);
+  for (auto& i : elems_) {
+    elems.push_back(i);
+  }
   sort(elems.begin(), elems.end(), cmpElemByName);
 
   /* We only need to know the installed paths when we are querying
@@ -935,7 +939,9 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
   PathSet installed; /* installed paths */
 
   if (printStatus) {
-    for (auto& i : installedElems) installed.insert(i.queryOutPath());
+    for (auto& i : installedElems) {
+      installed.insert(i.queryOutPath());
+    }
   }
 
   /* Query which paths have substitutes. */

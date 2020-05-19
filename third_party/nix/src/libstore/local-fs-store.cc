@@ -48,7 +48,9 @@ struct LocalStoreAccessor : public FSAccessor {
     auto entries = nix::readDirectory(realPath);
 
     StringSet res;
-    for (auto& entry : entries) res.insert(entry.name);
+    for (auto& entry : entries) {
+      res.insert(entry.name);
+    }
 
     return res;
   }

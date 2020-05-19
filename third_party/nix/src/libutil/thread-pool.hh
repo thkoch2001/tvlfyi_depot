@@ -125,7 +125,9 @@ void processGraph(ThreadPool& pool, const std::set<T>& nodes,
     }
   };
 
-  for (auto& node : nodes) pool.enqueue(std::bind(worker, std::ref(node)));
+  for (auto& node : nodes) {
+    pool.enqueue(std::bind(worker, std::ref(node)));
+  }
 
   pool.process();
 

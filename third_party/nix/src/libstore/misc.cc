@@ -53,7 +53,9 @@ void Store::computeFSClosure(const PathSet& startPaths, PathSet& paths_,
                 }
 
               if (includeOutputs)
-                for (auto& i : queryValidDerivers(path)) enqueue(i);
+                for (auto& i : queryValidDerivers(path)) {
+                  enqueue(i);
+                }
 
               if (includeDerivers && isDerivation(path))
                 for (auto& i : queryDerivationOutputs(path))
@@ -97,7 +99,9 @@ void Store::computeFSClosure(const PathSet& startPaths, PathSet& paths_,
         }});
   };
 
-  for (auto& startPath : startPaths) enqueue(startPath);
+  for (auto& startPath : startPaths) {
+    enqueue(startPath);
+  }
 
   {
     auto state(state_.lock());
@@ -251,7 +255,9 @@ void Store::queryMissing(const PathSet& targets, PathSet& willBuild_,
     }
   };
 
-  for (auto& path : targets) pool.enqueue(std::bind(doPath, path));
+  for (auto& path : targets) {
+    pool.enqueue(std::bind(doPath, path));
+  }
 
   pool.process();
 }
@@ -291,7 +297,9 @@ Paths Store::topoSortPaths(const PathSet& paths) {
     parents.erase(path);
   };
 
-  for (auto& i : paths) dfsVisit(i, nullptr);
+  for (auto& i : paths) {
+    dfsVisit(i, nullptr);
+  }
 
   return sorted;
 }

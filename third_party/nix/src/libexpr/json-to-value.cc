@@ -82,7 +82,9 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
     }
     s++;
     state.mkList(v, values.size());
-    for (size_t n = 0; n < values.size(); ++n) v.listElems()[n] = values[n];
+    for (size_t n = 0; n < values.size(); ++n) {
+      v.listElems()[n] = values[n];
+    }
   }
 
   else if (*s == '{') {
@@ -111,7 +113,9 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
       s++;
     }
     state.mkAttrs(v, attrs.size());
-    for (auto& i : attrs) v.attrs->push_back(Attr(i.first, i.second));
+    for (auto& i : attrs) {
+      v.attrs->push_back(Attr(i.first, i.second));
+    }
     v.attrs->sort();
     s++;
   }

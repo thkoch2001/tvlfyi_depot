@@ -52,7 +52,9 @@ struct CmdDoctor : StoreCommand {
       std::cout << "Warning: multiple versions of nix found in PATH."
                 << std::endl;
       std::cout << std::endl;
-      for (auto& dir : dirs) std::cout << "  " << dir << std::endl;
+      for (auto& dir : dirs) {
+        std::cout << "  " << dir << std::endl;
+      }
       std::cout << std::endl;
       return false;
     }
@@ -90,7 +92,9 @@ struct CmdDoctor : StoreCommand {
       std::cout << "garbage collected, resulting in broken symlinks."
                 << std::endl;
       std::cout << std::endl;
-      for (auto& dir : dirs) std::cout << "  " << dir << std::endl;
+      for (auto& dir : dirs) {
+        std::cout << "  " << dir << std::endl;
+      }
       std::cout << std::endl;
       return false;
     }

@@ -243,11 +243,15 @@ Buildables build(ref<Store> store, RealiseMode mode,
     for (auto& b : i->toBuildables()) {
       if (b.drvPath != "") {
         StringSet outputNames;
-        for (auto& output : b.outputs) outputNames.insert(output.first);
+        for (auto& output : b.outputs) {
+          outputNames.insert(output.first);
+        }
         pathsToBuild.insert(b.drvPath + "!" +
                             concatStringsSep(",", outputNames));
       } else
-        for (auto& output : b.outputs) pathsToBuild.insert(output.second);
+        for (auto& output : b.outputs) {
+          pathsToBuild.insert(output.second);
+        }
       buildables.push_back(std::move(b));
     }
   }
@@ -266,7 +270,9 @@ PathSet toStorePaths(ref<Store> store, RealiseMode mode,
   PathSet outPaths;
 
   for (auto& b : build(store, mode, installables))
-    for (auto& output : b.outputs) outPaths.insert(output.second);
+    for (auto& output : b.outputs) {
+      outPaths.insert(output.second);
+    }
 
   return outPaths;
 }

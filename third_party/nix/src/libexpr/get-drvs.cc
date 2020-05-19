@@ -171,7 +171,9 @@ StringSet DrvInfo::queryMetaNames() {
   if (!getMeta()) {
     return res;
   }
-  for (auto& i : *meta) res.insert(i.name);
+  for (auto& i : *meta) {
+    res.insert(i.name);
+  }
   return res;
 }
 

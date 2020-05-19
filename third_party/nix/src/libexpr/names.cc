@@ -99,7 +99,9 @@ int compareVersions(const string& v1, const string& v2) {
 
 DrvNames drvNamesFromArgs(const Strings& opArgs) {
   DrvNames result;
-  for (auto& i : opArgs) result.push_back(DrvName(i));
+  for (auto& i : opArgs) {
+    result.push_back(DrvName(i));
+  }
   return result;
 }
 

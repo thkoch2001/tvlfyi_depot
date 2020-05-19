@@ -70,7 +70,9 @@ class Bindings {
   std::vector<const Attr*> lexicographicOrder() const {
     std::vector<const Attr*> res;
     res.reserve(size_);
-    for (size_t n = 0; n < size_; n++) res.emplace_back(&attrs[n]);
+    for (size_t n = 0; n < size_; n++) {
+      res.emplace_back(&attrs[n]);
+    }
     std::sort(res.begin(), res.end(), [](const Attr* a, const Attr* b) {
       return (const string&)a->name < (const string&)b->name;
     });

@@ -115,7 +115,9 @@ void LocalStore::optimisePath_(OptimiseStats& stats, const Path& path,
 
   if (S_ISDIR(st.st_mode)) {
     Strings names = readDirectoryIgnoringInodes(path, inodeHash);
-    for (auto& i : names) optimisePath_(stats, path + "/" + i, inodeHash);
+    for (auto& i : names) {
+      optimisePath_(stats, path + "/" + i, inodeHash);
+    }
     return;
   }
 

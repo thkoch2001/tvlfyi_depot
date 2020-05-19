@@ -200,7 +200,9 @@ static int listPossibleCallback(char* s, char*** avp) {
 
   vp = check((char**)malloc(possible.size() * sizeof(char*)));
 
-  for (auto& p : possible) vp[ac++] = check(strdup(p.c_str()));
+  for (auto& p : possible) {
+    vp[ac++] = check(strdup(p.c_str()));
+  }
 
   *avp = vp;
 
@@ -221,7 +223,9 @@ void NixRepl::mainLoop(const std::vector<std::string>& files) {
             << std::endl
             << std::endl;
 
-  for (auto& i : files) loadedFiles.push_back(i);
+  for (auto& i : files) {
+    loadedFiles.push_back(i);
+  }
 
   reloadFiles();
   if (!loadedFiles.empty()) {
@@ -576,7 +580,9 @@ void NixRepl::initEnv() {
   staticEnv.vars.clear();
 
   varNames.clear();
-  for (auto& i : state.staticBaseEnv.vars) varNames.insert(i.first);
+  for (auto& i : state.staticBaseEnv.vars) {
+    varNames.insert(i.first);
+  }
 }
 
 void NixRepl::reloadFiles() {
@@ -598,7 +604,9 @@ void NixRepl::reloadFiles() {
 
 void NixRepl::addAttrsToScope(Value& attrs) {
   state.forceAttrs(attrs);
-  for (auto& i : *attrs.attrs) addVarToScope(i.name, *i.value);
+  for (auto& i : *attrs.attrs) {
+    addVarToScope(i.name, *i.value);
+  }
   std::cout << format("Added %1% variables.") % attrs.attrs->size()
             << std::endl;
 }
@@ -696,7 +704,9 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
 
         typedef std::map<string, Value*> Sorted;
         Sorted sorted;
-        for (auto& i : *v.attrs) sorted[i.name] = i.value;
+        for (auto& i : *v.attrs) {
+          sorted[i.name] = i.value;
+        }
 
         for (auto& i : sorted) {
           if (isVarName(i.first))

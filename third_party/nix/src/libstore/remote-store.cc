@@ -189,7 +189,9 @@ void RemoteStore::setOptions(Connection& conn) {
     overrides.erase(settings.useSubstitutes.name);
     overrides.erase(settings.showTrace.name);
     conn.to << overrides.size();
-    for (auto& i : overrides) conn.to << i.first << i.second.value;
+    for (auto& i : overrides) {
+      conn.to << i.first << i.second.value;
+    }
   }
 
   auto ex = conn.processStderr();
@@ -522,7 +524,9 @@ void RemoteStore::buildPaths(const PathSet& drvPaths, BuildMode buildMode) {
     /* For backwards compatibility with old daemons, strip output
        identifiers. */
     PathSet drvPaths2;
-    for (auto& i : drvPaths) drvPaths2.insert(string(i, 0, i.find('!')));
+    for (auto& i : drvPaths) {
+      drvPaths2.insert(string(i, 0, i.find('!')));
+    }
     conn->to << drvPaths2;
   }
   conn.processStderr();

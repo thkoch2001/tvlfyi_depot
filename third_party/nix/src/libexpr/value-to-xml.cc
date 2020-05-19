@@ -29,7 +29,9 @@ static void showAttrs(EvalState& state, bool strict, bool location,
                       PathSet& drvsSeen) {
   StringSet names;
 
-  for (auto& i : attrs) names.insert(i.name);
+  for (auto& i : attrs) {
+    names.insert(i.name);
+  }
 
   for (auto& i : names) {
     Attr& a(*attrs.find(state.symbols.create(i)));

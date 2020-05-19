@@ -153,7 +153,9 @@ bool Args::processArgs(const Strings& args, bool finish) {
   if ((exp.arity == 0 && finish) ||
       (exp.arity > 0 && args.size() == exp.arity)) {
     std::vector<std::string> ss;
-    for (auto& s : args) ss.push_back(s);
+    for (auto& s : args) {
+      ss.push_back(s);
+    }
     exp.handler(std::move(ss));
     expectedArgs.pop_front();
     res = true;
@@ -189,7 +191,9 @@ Strings argvToStrings(int argc, char** argv) {
 std::string renderLabels(const Strings& labels) {
   std::string res;
   for (auto label : labels) {
-    for (auto& c : label) c = std::toupper(c);
+    for (auto& c : label) {
+      c = std::toupper(c);
+    }
     res += " <" + label + ">";
   }
   return res;
@@ -197,7 +201,9 @@ std::string renderLabels(const Strings& labels) {
 
 void printTable(std::ostream& out, const Table2& table) {
   size_t max = 0;
-  for (auto& row : table) max = std::max(max, row.first.size());
+  for (auto& row : table) {
+    max = std::max(max, row.first.size());
+  }
   for (auto& row : table) {
     out << "  " << row.first << std::string(max - row.first.size() + 2, ' ')
         << row.second << "\n";

@@ -68,7 +68,9 @@ static PathSet realisePath(Path path, bool build = true) {
     rootNr++;
 
     if (p.second.empty())
-      for (auto& i : drv.outputs) p.second.insert(i.first);
+      for (auto& i : drv.outputs) {
+        p.second.insert(i.first);
+      }
 
     PathSet outputs;
     for (auto& j : p.second) {
@@ -174,7 +176,9 @@ static void opRealise(Strings opFlags, Strings opArgs) {
     for (auto& i : paths) {
       PathSet paths = realisePath(i, false);
       if (!noOutput)
-        for (auto& j : paths) cout << format("%1%\n") % j;
+        for (auto& j : paths) {
+          cout << format("%1%\n") % j;
+        }
     }
 }
 
@@ -241,7 +245,9 @@ static PathSet maybeUseOutputs(const Path& storePath, bool useOutput,
   if (useOutput && isDerivation(storePath)) {
     Derivation drv = store->derivationFromPath(storePath);
     PathSet outputs;
-    for (auto& i : drv.outputs) outputs.insert(i.second.path);
+    for (auto& i : drv.outputs) {
+      outputs.insert(i.second.path);
+    }
     return outputs;
   } else
     return {storePath};
@@ -370,7 +376,9 @@ static void opQuery(Strings opFlags, Strings opArgs) {
           realisePath(i);
         }
         Derivation drv = store->derivationFromPath(i);
-        for (auto& j : drv.outputs) cout << format("%1%\n") % j.second.path;
+        for (auto& j : drv.outputs) {
+          cout << format("%1%\n") % j.second.path;
+        }
       }
       break;
     }
@@ -387,7 +395,9 @@ static void opQuery(Strings opFlags, Strings opArgs) {
           if (query == qRequisites)
             store->computeFSClosure(j, paths, false, includeOutputs);
           else if (query == qReferences) {
-            for (auto& p : store->queryPathInfo(j)->references) paths.insert(p);
+            for (auto& p : store->queryPathInfo(j)->references) {
+              paths.insert(p);
+            }
           } else if (query == qReferrers)
             store->queryReferrers(j, paths);
           else if (query == qReferrersClosure)
@@ -545,7 +555,9 @@ static void opDumpDB(Strings opFlags, Strings opArgs) {
     throw UsageError("unknown flag");
   }
   if (!opArgs.empty()) {
-    for (auto& i : opArgs) i = store->followLinksToStorePath(i);
+    for (auto& i : opArgs) {
+      i = store->followLinksToStorePath(i);
+    }
     for (auto& i : opArgs)
       cout << store->makeValidityRegistration({i}, true, true);
   } else {
@@ -662,7 +674,9 @@ static void opGC(Strings opFlags, Strings opArgs) {
     std::set<std::pair<Path, Path>> roots2;
     // Transpose and sort the roots.
     for (auto& [target, links] : roots)
-      for (auto& link : links) roots2.emplace(link, target);
+      for (auto& link : links) {
+        roots2.emplace(link, target);
+      }
     for (auto& [link, target] : roots2)
       std::cout << link << " -> " << target << "\n";
   }
@@ -672,7 +686,9 @@ static void opGC(Strings opFlags, Strings opArgs) {
     store->collectGarbage(options, results);
 
     if (options.action != GCOptions::gcDeleteDead)
-      for (auto& i : results.paths) cout << i << std::endl;
+      for (auto& i : results.paths) {
+        cout << i << std::endl;
+      }
   }
 }
 
@@ -728,9 +744,13 @@ static void opRestore(Strings opFlags, Strings opArgs) {
 }
 
 static void opExport(Strings opFlags, Strings opArgs) {
-  for (auto& i : opFlags) throw UsageError(format("unknown flag '%1%'") % i);
+  for (auto& i : opFlags) {
+    throw UsageError(format("unknown flag '%1%'") % i);
+  }
 
-  for (auto& i : opArgs) i = store->followLinksToStorePath(i);
+  for (auto& i : opArgs) {
+    i = store->followLinksToStorePath(i);
+  }
 
   FdSink sink(STDOUT_FILENO);
   store->exportPaths(opArgs, sink);
@@ -738,7 +758,9 @@ static void opExport(Strings opFlags, Strings opArgs) {
 }
 
 static void opImport(Strings opFlags, Strings opArgs) {
-  for (auto& i : opFlags) throw UsageError(format("unknown flag '%1%'") % i);
+  for (auto& i : opFlags) {
+    throw UsageError(format("unknown flag '%1%'") % i);
+  }
 
   if (!opArgs.empty()) {
     throw UsageError("no arguments expected");
@@ -747,7 +769,9 @@ static void opImport(Strings opFlags, Strings opArgs) {
   FdSource source(STDIN_FILENO);
   Paths paths = store->importPaths(source, nullptr, NoCheckSigs);
 
-  for (auto& i : paths) cout << format("%1%\n") % i << std::flush;
+  for (auto& i : paths) {
+    cout << format("%1%\n") % i << std::flush;
+  }
 }
 
 /* Initialise the Nix databases. */
@@ -889,7 +913,9 @@ static void opServe(Strings opFlags, Strings opArgs) {
         bool substitute = readInt(in);
         PathSet paths = readStorePaths<PathSet>(*store, in);
         if (lock && writeAllowed)
-          for (auto& path : paths) store->addTempRoot(path);
+          for (auto& path : paths) {
+            store->addTempRoot(path);
+          }
 
         /* If requested, substitute missing paths. This
            implements nix-copy-closure's --use-substitutes
@@ -1052,7 +1078,9 @@ static void opServe(Strings opFlags, Strings opArgs) {
 }
 
 static void opGenerateBinaryCacheKey(Strings opFlags, Strings opArgs) {
-  for (auto& i : opFlags) throw UsageError(format("unknown flag '%1%'") % i);
+  for (auto& i : opFlags) {
+    throw UsageError(format("unknown flag '%1%'") % i);
+  }
 
   if (opArgs.size() != 3) {
     throw UsageError("three arguments expected");

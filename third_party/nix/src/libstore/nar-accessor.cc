@@ -178,7 +178,9 @@ struct NarAccessor : public FSAccessor {
                   path);
 
     StringSet res;
-    for (auto& child : i.children) res.insert(child.first);
+    for (auto& child : i.children) {
+      res.insert(child.first);
+    }
 
     return res;
   }

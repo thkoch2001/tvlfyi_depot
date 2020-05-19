@@ -1122,7 +1122,9 @@ void DerivationGoal::haveDerivation() {
 
   retrySubstitution = false;
 
-  for (auto& i : drv->outputs) worker.store.addTempRoot(i.second.path);
+  for (auto& i : drv->outputs) {
+    worker.store.addTempRoot(i.second.path);
+  }
 
   /* Check what outputs paths are not already valid. */
   PathSet invalidOutputs = checkPathValidity(false, buildMode == bmRepair);
@@ -1238,7 +1240,9 @@ void DerivationGoal::repairClosure() {
   }
 
   /* Filter out our own outputs (which we have already checked). */
-  for (auto& i : drv->outputs) outputClosure.erase(i.second.path);
+  for (auto& i : drv->outputs) {
+    outputClosure.erase(i.second.path);
+  }
 
   /* Get all dependencies of this derivation so that we know which
      derivation is responsible for which path in the output
@@ -1251,7 +1255,9 @@ void DerivationGoal::repairClosure() {
   for (auto& i : inputClosure)
     if (isDerivation(i)) {
       Derivation drv = worker.store.derivationFromPath(i);
-      for (auto& j : drv.outputs) outputsToDrv[j.second.path] = i;
+      for (auto& j : drv.outputs) {
+        outputsToDrv[j.second.path] = i;
+      }
     }
 
   /* Check each path (slow!). */
@@ -1389,7 +1395,9 @@ void DerivationGoal::tryToBuild() {
 
   missingPaths = drv->outputPaths();
   if (buildMode != bmCheck)
-    for (auto& i : validPaths) missingPaths.erase(i);
+    for (auto& i : validPaths) {
+      missingPaths.erase(i);
+    }
 
   /* If any of the outputs already exist but are not valid, delete
      them. */
@@ -1571,7 +1579,9 @@ MakeError(NotDeterministic, BuildError)
 
       if (!settings.verboseBuild && !logTail.empty()) {
         msg += (format("; last %d log lines:") % logTail.size()).str();
-        for (auto& line : logTail) msg += "\n  " + line;
+        for (auto& line : logTail) {
+          msg += "\n  " + line;
+        }
       }
 
       if (diskFull) {
@@ -1642,7 +1652,9 @@ MakeError(NotDeterministic, BuildError)
     }
 
     /* Delete unused redirected outputs (when doing hash rewriting). */
-    for (auto& i : redirectedOutputs) deletePath(i.second);
+    for (auto& i : redirectedOutputs) {
+      deletePath(i.second);
+    }
 
     /* Delete the chroot (if we were using one). */
     autoDelChroot.reset(); /* this runs the destructor */
@@ -1990,7 +2002,9 @@ void DerivationGoal::startBuilder() {
       } catch (Error& e) {
         throw Error(format("while processing 'sandbox-paths': %s") % e.what());
       }
-    for (auto& i : closure) dirsInChroot[i] = i;
+    for (auto& i : closure) {
+      dirsInChroot[i] = i;
+    }
 
     PathSet allowedPaths = settings.allowedImpureHostPrefixes;
 
@@ -2118,7 +2132,9 @@ void DerivationGoal::startBuilder() {
        rebuilding a path that is in settings.dirsInChroot
        (typically the dependencies of /bin/sh).  Throw them
        out. */
-    for (auto& i : drv->outputs) dirsInChroot.erase(i.second.path);
+    for (auto& i : drv->outputs) {
+      dirsInChroot.erase(i.second.path);
+    }
 
 #elif __APPLE__
     /* We don't really have any parent prep work to do (yet?)
@@ -2142,7 +2158,9 @@ void DerivationGoal::startBuilder() {
        contents of the new outputs to replace the dummy strings
        with the actual hashes. */
     if (validPaths.size() > 0)
-      for (auto& i : validPaths) addHashRewrite(i);
+      for (auto& i : validPaths) {
+        addHashRewrite(i);
+      }
 
     /* If we're repairing, then we don't want to delete the
        corrupt outputs in advance.  So rewrite them as well. */
@@ -2537,7 +2555,9 @@ void DerivationGoal::writeStructuredAttrs() {
       {
         JSONPlaceholder jsonRoot(str, true);
         PathSet storePaths;
-        for (auto& p : *i) storePaths.insert(p.get<std::string>());
+        for (auto& p : *i) {
+          storePaths.insert(p.get<std::string>());
+        }
         worker.store.pathInfoToJSON(jsonRoot, exportReferences(storePaths),
                                     false, true);
       }
@@ -2828,7 +2848,9 @@ void DerivationGoal::runChild() {
           ss.push_back("/var/run/nscd/socket");
       }
 
-      for (auto& i : ss) dirsInChroot.emplace(i, i);
+      for (auto& i : ss) {
+        dirsInChroot.emplace(i, i);
+      }
 
       /* Bind-mount all the directories from the "host"
          filesystem that we want in the chroot
@@ -3046,7 +3068,9 @@ void DerivationGoal::runChild() {
         }
 
         /* Add all our input paths to the chroot */
-        for (auto& i : inputPaths) dirsInChroot[i] = i;
+        for (auto& i : inputPaths) {
+          dirsInChroot[i] = i;
+        }
 
         /* Violations will go to the syslog if you set this. Unfortunately the
          * destination does not appear to be configurable */
@@ -3155,7 +3179,9 @@ void DerivationGoal::runChild() {
       args.push_back(builderBasename);
     }
 
-    for (auto& i : drv->args) args.push_back(rewriteStrings(i, inputRewrites));
+    for (auto& i : drv->args) {
+      args.push_back(rewriteStrings(i, inputRewrites));
+    }
 
     /* Indicate that we managed to set up the build environment. */
     writeFull(STDERR_FILENO, string("\1\n"));
@@ -3532,7 +3558,9 @@ void DerivationGoal::registerOutputs() {
      outputs, this will fail. */
   {
     ValidPathInfos infos2;
-    for (auto& i : infos) infos2.push_back(i.second);
+    for (auto& i : infos) {
+      infos2.push_back(i.second);
+    }
     worker.store.registerValidPaths(infos2);
   }
 
@@ -3579,11 +3607,15 @@ void DerivationGoal::checkOutputs(
         auto i = outputsByPath.find(path);
         if (i != outputsByPath.end()) {
           closureSize += i->second.narSize;
-          for (auto& ref : i->second.references) pathsLeft.push(ref);
+          for (auto& ref : i->second.references) {
+            pathsLeft.push(ref);
+          }
         } else {
           auto info = worker.store.queryPathInfo(path);
           closureSize += info->narSize;
-          for (auto& ref : info->references) pathsLeft.push(ref);
+          for (auto& ref : info->references) {
+            pathsLeft.push(ref);
+          }
         }
       }
 
@@ -4373,7 +4405,9 @@ void Worker::waitForAWhile(GoalPtr goal) {
 }
 
 void Worker::run(const Goals& _topGoals) {
-  for (auto& i : _topGoals) topGoals.insert(i);
+  for (auto& i : _topGoals) {
+    topGoals.insert(i);
+  }
 
   DLOG(INFO) << "entered goal loop";
 

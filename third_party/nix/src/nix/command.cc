@@ -111,7 +111,9 @@ void StorePathsCommand::run(ref<Store> store) {
   if (all) {
     if (installables.size())
       throw UsageError("'--all' does not expect arguments");
-    for (auto& p : store->queryAllValidPaths()) storePaths.push_back(p);
+    for (auto& p : store->queryAllValidPaths()) {
+      storePaths.push_back(p);
+    }
   }
 
   else {

@@ -40,7 +40,9 @@ Path writeDerivation(ref<Store> store, const Derivation& drv,
                      const string& name, RepairFlag repair) {
   PathSet references;
   references.insert(drv.inputSrcs.begin(), drv.inputSrcs.end());
-  for (auto& i : drv.inputDrvs) references.insert(i.first);
+  for (auto& i : drv.inputDrvs) {
+    references.insert(i.first);
+  }
   /* Note that the outputs of a derivation are *not* references
      (that can be missing (of course) and should not necessarily be
      held during a garbage collection). */
@@ -359,7 +361,9 @@ bool wantOutput(const string& output, const std::set<string>& wanted) {
 
 PathSet BasicDerivation::outputPaths() const {
   PathSet paths;
-  for (auto& i : outputs) paths.insert(i.second.path);
+  for (auto& i : outputs) {
+    paths.insert(i.second.path);
+  }
   return paths;
 }
 
@@ -394,7 +398,9 @@ Sink& operator<<(Sink& out, const BasicDerivation& drv) {
     out << i.first << i.second.path << i.second.hashAlgo << i.second.hash;
   out << drv.inputSrcs << drv.platform << drv.builder << drv.args;
   out << drv.env.size();
-  for (auto& i : drv.env) out << i.first << i.second;
+  for (auto& i : drv.env) {
+    out << i.first << i.second;
+  }
   return out;
 }
 

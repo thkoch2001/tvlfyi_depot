@@ -210,7 +210,9 @@ void builtinBuildenv(const BasicDerivation& drv) {
   while (!postponed.empty()) {
     auto pkgDirs = postponed;
     postponed = FileProp{};
-    for (const auto& pkgDir : pkgDirs) addPkg(pkgDir, priorityCounter++);
+    for (const auto& pkgDir : pkgDirs) {
+      addPkg(pkgDir, priorityCounter++);
+    }
   }
 
   LOG(INFO) << "created " << symlinks << " symlinks in user environment";

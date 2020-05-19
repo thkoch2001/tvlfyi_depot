@@ -60,7 +60,9 @@ Settings::Settings()
   auto s = getEnv("NIX_REMOTE_SYSTEMS");
   if (s != "") {
     Strings ss;
-    for (auto& p : tokenizeString<Strings>(s, ":")) ss.push_back("@" + p);
+    for (auto& p : tokenizeString<Strings>(s, ":")) {
+      ss.push_back("@" + p);
+    }
     builders = concatStringsSep(" ", ss);
   }
 

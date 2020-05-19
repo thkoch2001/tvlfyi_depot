@@ -54,7 +54,9 @@ class SymbolTable {
 
   template <typename T>
   void dump(T callback) {
-    for (auto& s : symbols) callback(s);
+    for (auto& s : symbols) {
+      callback(s);
+    }
   }
 };
 

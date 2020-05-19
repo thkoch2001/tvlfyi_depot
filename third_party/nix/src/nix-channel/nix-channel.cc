@@ -148,7 +148,9 @@ static void update(const StringSet& channelNames) {
   Strings envArgs{"--profile", profile,
                   "--file",    "<nix/unpack-channel.nix>",
                   "--install", "--from-expression"};
-  for (auto& expr : exprs) envArgs.push_back(std::move(expr));
+  for (auto& expr : exprs) {
+    envArgs.push_back(std::move(expr));
+  }
   envArgs.push_back("--quiet");
   runProgram(settings.nixBinDir + "/nix-env", false, envArgs);
 

@@ -114,7 +114,9 @@ struct CmdPathInfo : StorePathsCommand, MixJSON {
           if (info->ca != "") {
             ss.push_back("ca:" + info->ca);
           }
-          for (auto& sig : info->sigs) ss.push_back(sig);
+          for (auto& sig : info->sigs) {
+            ss.push_back(sig);
+          }
           std::cout << concatStringsSep(" ", ss);
         }
 

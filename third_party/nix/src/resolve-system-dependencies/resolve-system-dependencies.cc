@@ -153,7 +153,9 @@ std::set<string> getPath(const Path& path) {
     paths.insert(nextPath);
   }
 
-  for (auto& t : resolveTree(nextPath, deps)) paths.insert(t);
+  for (auto& t : resolveTree(nextPath, deps)) {
+    paths.insert(t);
+  }
 
   writeFile(cacheFile, concatStringsSep("\n", paths));
 
@@ -193,10 +195,14 @@ int main(int argc, char** argv) {
     std::set<string> allPaths;
 
     for (auto& path : impurePaths)
-      for (auto& p : getPath(path)) allPaths.insert(p);
+      for (auto& p : getPath(path)) {
+        allPaths.insert(p);
+      }
 
     std::cout << "extra-chroot-dirs" << std::endl;
-    for (auto& path : allPaths) std::cout << path << std::endl;
+    for (auto& path : allPaths) {
+      std::cout << path << std::endl;
+    }
     std::cout << std::endl;
   });
 }

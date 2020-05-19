@@ -101,19 +101,25 @@ struct CmdRun : InstallablesCommand {
 
       clearEnv();
 
-      for (auto& var : kept) setenv(var.first.c_str(), var.second.c_str(), 1);
+      for (auto& var : kept) {
+        setenv(var.first.c_str(), var.second.c_str(), 1);
+      }
 
     } else {
       if (!keep.empty())
         throw UsageError(
             "--keep does not make sense without --ignore-environment");
 
-      for (auto& var : unset) unsetenv(var.c_str());
+      for (auto& var : unset) {
+        unsetenv(var.c_str());
+      }
     }
 
     std::unordered_set<Path> done;
     std::queue<Path> todo;
-    for (auto& path : outPaths) todo.push(path);
+    for (auto& path : outPaths) {
+      todo.push(path);
+    }
 
     auto unixPath = tokenizeString<Strings>(getEnv("PATH"), ":");
 
@@ -130,7 +136,9 @@ struct CmdRun : InstallablesCommand {
 
       auto propPath = path + "/nix-support/propagated-user-env-packages";
       if (accessor->stat(propPath).type == FSAccessor::tRegular) {
-        for (auto& p : tokenizeString<Paths>(readFile(propPath))) todo.push(p);
+        for (auto& p : tokenizeString<Paths>(readFile(propPath))) {
+          todo.push(p);
+        }
       }
     }
 
@@ -138,7 +146,9 @@ struct CmdRun : InstallablesCommand {
 
     std::string cmd = *command.begin();
     Strings args;
-    for (auto& arg : command) args.push_back(arg);
+    for (auto& arg : command) {
+      args.push_back(arg);
+    }
 
     restoreSignals();
 
@@ -157,7 +167,9 @@ struct CmdRun : InstallablesCommand {
     if (store2 && store->storeDir != store2->realStoreDir) {
       Strings helperArgs = {chrootHelperName, store->storeDir,
                             store2->realStoreDir, cmd};
-      for (auto& arg : args) helperArgs.push_back(arg);
+      for (auto& arg : args) {
+        helperArgs.push_back(arg);
+      }
 
       execv(readLink("/proc/self/exe").c_str(),
             stringsToCharPtrs(helperArgs).data());

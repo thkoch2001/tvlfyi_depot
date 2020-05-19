@@ -106,7 +106,9 @@ struct TunnelLogger {
     auto state(state_.lock());
     state->canSendStderr = true;
 
-    for (auto& msg : state->pendingMsgs) to(msg);
+    for (auto& msg : state->pendingMsgs) {
+      to(msg);
+    }
 
     state->pendingMsgs.clear();
 
@@ -443,12 +445,16 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       logger->stopWork();
 
       size_t size = 0;
-      for (auto& i : roots) size += i.second.size();
+      for (auto& i : roots) {
+        size += i.second.size();
+      }
 
       to << size;
 
       for (auto& [target, links] : roots)
-        for (auto& link : links) to << link << target;
+        for (auto& link : links) {
+          to << link << target;
+        }
 
       break;
     }
@@ -511,7 +517,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
             return false;
           }
           StringSet trusted = settings.trustedSubstituters;
-          for (auto& s : settings.substituters.get()) trusted.insert(s);
+          for (auto& s : settings.substituters.get()) {
+            trusted.insert(s);
+          }
           Strings subs;
           auto ss = tokenizeString<Strings>(value);
           for (auto& s : ss)

@@ -97,7 +97,9 @@ void ExprAttrs::show(std::ostream& str) const {
 
 void ExprList::show(std::ostream& str) const {
   str << "[ ";
-  for (auto& i : elems) str << "(" << *i << ") ";
+  for (auto& i : elems) {
+    str << "(" << *i << ") ";
+  }
   str << "]";
 }
 
@@ -294,7 +296,9 @@ void ExprAttrs::bindVars(const StaticEnv& env) {
 }
 
 void ExprList::bindVars(const StaticEnv& env) {
-  for (auto& i : elems) i->bindVars(env);
+  for (auto& i : elems) {
+    i->bindVars(env);
+  }
 }
 
 void ExprLambda::bindVars(const StaticEnv& env) {
@@ -324,7 +328,9 @@ void ExprLet::bindVars(const StaticEnv& env) {
   StaticEnv newEnv(false, &env);
 
   unsigned int displ = 0;
-  for (auto& i : attrs->attrs) newEnv.vars[i.first] = i.second.displ = displ++;
+  for (auto& i : attrs->attrs) {
+    newEnv.vars[i.first] = i.second.displ = displ++;
+  }
 
   for (auto& i : attrs->attrs)
     i.second.e->bindVars(i.second.inherited ? env : newEnv);
@@ -365,7 +371,9 @@ void ExprAssert::bindVars(const StaticEnv& env) {
 void ExprOpNot::bindVars(const StaticEnv& env) { e->bindVars(env); }
 
 void ExprConcatStrings::bindVars(const StaticEnv& env) {
-  for (auto& i : *es) i->bindVars(env);
+  for (auto& i : *es) {
+    i->bindVars(env);
+  }
 }
 
 void ExprPos::bindVars(const StaticEnv& env) {}
@@ -389,7 +397,9 @@ string ExprLambda::showNamePos() const {
 
 size_t SymbolTable::totalSize() const {
   size_t n = 0;
-  for (auto& i : symbols) n += i.size();
+  for (auto& i : symbols) {
+    n += i.size();
+  }
   return n;
 }
 

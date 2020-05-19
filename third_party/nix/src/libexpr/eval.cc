@@ -334,8 +334,12 @@ EvalState::EvalState(const Strings& _searchPath, ref<Store> store)
   /* Initialise the Nix expression search path. */
   if (!evalSettings.pureEval) {
     Strings paths = parseNixPath(getEnv("NIX_PATH", ""));
-    for (auto& i : _searchPath) addToSearchPath(i);
-    for (auto& i : paths) addToSearchPath(i);
+    for (auto& i : _searchPath) {
+      addToSearchPath(i);
+    }
+    for (auto& i : paths) {
+      addToSearchPath(i);
+    }
   }
   addToSearchPath("nix=" +
                   canonPath(settings.nixDataDir + "/nix/corepkgs", true));
@@ -354,7 +358,9 @@ EvalState::EvalState(const Strings& _searchPath, ref<Store> store)
       if (store->isInStore(r.second)) {
         PathSet closure;
         store->computeFSClosure(store->toStorePath(r.second), closure);
-        for (auto& path : closure) allowedPaths->insert(path);
+        for (auto& path : closure) {
+          allowedPaths->insert(path);
+        }
       } else
         allowedPaths->insert(r.second);
     }
@@ -558,7 +564,9 @@ Value& mkString(Value& v, const string& s, const PathSet& context) {
     size_t n = 0;
     v.string.context =
         (const char**)allocBytes((context.size() + 1) * sizeof(char*));
-    for (auto& i : context) v.string.context[n++] = dupString(i.c_str());
+    for (auto& i : context) {
+      v.string.context[n++] = dupString(i.c_str());
+    }
     v.string.context[n] = 0;
   }
   return v;
@@ -1415,7 +1423,9 @@ void EvalState::forceValueDeep(Value& v) {
           throw;
         }
     } else if (v.isList()) {
-      for (size_t n = 0; n < v.listSize(); ++n) recurse(*v.listElems()[n]);
+      for (size_t n = 0; n < v.listSize(); ++n) {
+        recurse(*v.listElems()[n]);
+      }
     }
   };
 
@@ -1477,7 +1487,9 @@ string EvalState::forceString(Value& v, const Pos& pos) {
 
 void copyContext(const Value& v, PathSet& context) {
   if (v.string.context)
-    for (const char** p = v.string.context; *p; ++p) context.insert(*p);
+    for (const char** p = v.string.context; *p; ++p) {
+      context.insert(*p);
+    }
 }
 
 string EvalState::forceString(Value& v, PathSet& context, const Pos& pos) {
@@ -1807,7 +1819,9 @@ void EvalState::printStats() {
     if (countCalls) {
       {
         auto obj = topObj.object("primops");
-        for (auto& i : primOpCalls) obj.attr(i.first, i.second);
+        for (auto& i : primOpCalls) {
+          obj.attr(i.first, i.second);
+        }
       }
       {
         auto list = topObj.list("functions");
@@ -1872,7 +1886,9 @@ size_t valueSize(Value& v) {
       case tString:
         sz += doString(v.string.s);
         if (v.string.context)
-          for (const char** p = v.string.context; *p; ++p) sz += doString(*p);
+          for (const char** p = v.string.context; *p; ++p) {
+            sz += doString(*p);
+          }
         break;
       case tPath:
         sz += doString(v.path);
@@ -1881,7 +1897,9 @@ size_t valueSize(Value& v) {
         if (seen.find(v.attrs) == seen.end()) {
           seen.insert(v.attrs);
           sz += sizeof(Bindings) + sizeof(Attr) * v.attrs->capacity();
-          for (auto& i : *v.attrs) sz += doValue(*i.value);
+          for (auto& i : *v.attrs) {
+            sz += doValue(*i.value);
+          }
         }
         break;
       case tList1:

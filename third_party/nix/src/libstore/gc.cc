@@ -615,7 +615,9 @@ bool LocalStore::canReachRoot(GCState& state, PathSet& visited,
      are derivers of this path that are not garbage. */
   if (state.gcKeepOutputs) {
     PathSet derivers = queryValidDerivers(path);
-    for (auto& i : derivers) incoming.insert(i);
+    for (auto& i : derivers) {
+      incoming.insert(i);
+    }
   }
 
   for (auto& i : incoming)
@@ -775,7 +777,9 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
   FDs fds;
   Roots tempRoots;
   findTempRoots(fds, tempRoots, true);
-  for (auto& root : tempRoots) state.tempRoots.insert(root.first);
+  for (auto& root : tempRoots) {
+    state.tempRoots.insert(root.first);
+  }
   state.roots.insert(state.tempRoots.begin(), state.tempRoots.end());
 
   /* After this point the set of roots or temporary roots cannot
@@ -852,7 +856,9 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
       std::mt19937 gen(1);
       std::shuffle(entries_.begin(), entries_.end(), gen);
 
-      for (auto& i : entries_) tryToDelete(state, i);
+      for (auto& i : entries_) {
+        tryToDelete(state, i);
+      }
 
     } catch (GCLimitReached& e) {
     }

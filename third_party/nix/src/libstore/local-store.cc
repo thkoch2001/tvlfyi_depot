@@ -1227,7 +1227,9 @@ bool LocalStore::verifyStore(bool checkContents, RepairFlag repair) {
   AutoCloseFD fdGCLock = openGCLock(ltWrite);
 
   PathSet store;
-  for (auto& i : readDirectory(realStoreDir)) store.insert(i.name);
+  for (auto& i : readDirectory(realStoreDir)) {
+    store.insert(i.name);
+  }
 
   /* Check whether all valid paths actually exist. */
   LOG(INFO) << "checking path existence...";
@@ -1375,7 +1377,9 @@ static void makeMutable(const Path& path) {
   }
 
   if (S_ISDIR(st.st_mode)) {
-    for (auto& i : readDirectory(path)) makeMutable(path + "/" + i.name);
+    for (auto& i : readDirectory(path)) {
+      makeMutable(path + "/" + i.name);
+    }
   }
 
   /* The O_NOFOLLOW is important to prevent us from changing the

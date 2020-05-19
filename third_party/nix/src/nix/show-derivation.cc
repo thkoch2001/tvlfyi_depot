@@ -72,14 +72,18 @@ struct CmdShowDerivation : InstallablesCommand {
 
         {
           auto inputsList(drvObj.list("inputSrcs"));
-          for (auto& input : drv.inputSrcs) inputsList.elem(input);
+          for (auto& input : drv.inputSrcs) {
+            inputsList.elem(input);
+          }
         }
 
         {
           auto inputDrvsObj(drvObj.object("inputDrvs"));
           for (auto& input : drv.inputDrvs) {
             auto inputList(inputDrvsObj.list(input.first));
-            for (auto& outputId : input.second) inputList.elem(outputId);
+            for (auto& outputId : input.second) {
+              inputList.elem(outputId);
+            }
           }
         }
 
@@ -88,12 +92,16 @@ struct CmdShowDerivation : InstallablesCommand {
 
         {
           auto argsList(drvObj.list("args"));
-          for (auto& arg : drv.args) argsList.elem(arg);
+          for (auto& arg : drv.args) {
+            argsList.elem(arg);
+          }
         }
 
         {
           auto envObj(drvObj.object("env"));
-          for (auto& var : drv.env) envObj.attr(var.first, var.second);
+          for (auto& var : drv.env) {
+            envObj.attr(var.first, var.second);
+          }
         }
       }
     }

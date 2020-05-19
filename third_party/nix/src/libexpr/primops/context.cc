@@ -35,7 +35,9 @@ static void prim_unsafeDiscardOutputDependency(EvalState& state, const Pos& pos,
   string s = state.coerceToString(pos, *args[0], context);
 
   PathSet context2;
-  for (auto& p : context) context2.insert(p.at(0) == '=' ? string(p, 1) : p);
+  for (auto& p : context) {
+    context2.insert(p.at(0) == '=' ? string(p, 1) : p);
+  }
 
   mkString(v, s, context2);
 }

@@ -442,7 +442,9 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
   /* Create the result list. */
   state.mkList(v, res.size());
   unsigned int n = 0;
-  for (auto& i : res) v.listElems()[n++] = i;
+  for (auto& i : res) {
+    v.listElems()[n++] = i;
+  }
 }
 
 static void prim_abort(EvalState& state, const Pos& pos, Value** args,
@@ -2061,7 +2063,9 @@ static void prim_replaceStrings(EvalState& state, const Pos& pos, Value** args,
         } else {
           p += i->size();
         }
-        for (auto& path : j->second) context.insert(path);
+        for (auto& path : j->second) {
+          context.insert(path);
+        }
         j->second.clear();
         break;
       }
