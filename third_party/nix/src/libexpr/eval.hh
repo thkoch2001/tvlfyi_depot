@@ -318,7 +318,7 @@ struct InvalidPathError : EvalError {
   Path path;
   InvalidPathError(const Path& path);
 #ifdef EXCEPTION_NEEDS_THROW_SPEC
-  ~InvalidPathError() throw(){};
+  ~InvalidPathError() noexcept {};
 #endif
 };
 
