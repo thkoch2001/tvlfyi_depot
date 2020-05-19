@@ -54,30 +54,33 @@ struct MixLs : virtual Args, MixJSON {
                  const std::string& relPath, bool showDirectory) {
       if (st.type == FSAccessor::Type::tDirectory && !showDirectory) {
         auto names = accessor->readDirectory(curPath);
-        for (auto& name : names)
+        for (auto& name : names) {
           showFile(curPath + "/" + name, relPath + "/" + name);
+        }
       } else
         showFile(curPath, relPath);
     };
 
     auto st = accessor->stat(path);
-    if (st.type == FSAccessor::Type::tMissing)
+    if (st.type == FSAccessor::Type::tMissing) {
       throw Error(format("path '%1%' does not exist") % path);
+    }
     doPath(st, path,
            st.type == FSAccessor::Type::tDirectory ? "." : baseNameOf(path),
            showDirectory);
   }
 
   void list(ref<FSAccessor> accessor) {
-    if (path == "/") path = "";
+    if (path == "/") {
+      path = "";
+    }
 
     if (json) {
       JSONPlaceholder jsonRoot(std::cout);
       listNar(jsonRoot, accessor, path, recursive);
     } else {
-      listText
+      listText(accessor);
     }
-    (accessor);
   }
 };
 

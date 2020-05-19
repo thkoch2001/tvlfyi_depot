@@ -163,7 +163,9 @@ static int _main(int argc, char** argv) {
     if (findFile) {
       for (auto& i : files) {
         Path p = state->findFile(i);
-        if (p == "") throw Error(format("unable to find '%1%'") % i);
+        if (p == "") {
+          throw Error(format("unable to find '%1%'") % i);
+        }
         std::cout << p << std::endl;
       }
       return 0;
@@ -173,10 +175,9 @@ static int _main(int argc, char** argv) {
       Expr* e = state->parseStdin();
       processExpr(*state, attrPaths, parseOnly, strict, autoArgs, evalOnly,
                   outputKind, xmlOutputSourceLocation, e);
-    } else {
-      if
+    } else if (files.empty() && !fromArgs) {
+      files.push_back("./default.nix");
     }
-    (files.empty() && !fromArgs) files.push_back("./default.nix");
 
     for (auto& i : files) {
       Expr* e = fromArgs

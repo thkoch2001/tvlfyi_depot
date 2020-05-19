@@ -42,9 +42,8 @@ static string parseJSONString(const char*& s) {
         throw JSONParseError("invalid escaped character in JSON string");
       s++;
     } else {
-      res
+      res += *s++;
     }
-    += *s++;
   }
   s++;
   return res;

@@ -1966,9 +1966,9 @@ static void prim_concatStringSep(EvalState& state, const Pos& pos, Value** args,
     if (first) {
       first = false;
     } else {
-      res
+      res += sep;
     }
-    += sep;
+
     res += state.coerceToString(pos, *args[1]->listElems()[n], context);
   }
 
@@ -2103,9 +2103,8 @@ void fetch(EvalState& state, const Pos& pos, Value** args, Value& v,
       throw EvalError(format("'url' argument required, at %1%") % pos);
 
   } else {
-    request
+    request.uri = state.forceStringNoCtx(*args[0], pos);
   }
-  .uri = state.forceStringNoCtx(*args[0], pos);
 
   state.checkURI(request.uri);
 

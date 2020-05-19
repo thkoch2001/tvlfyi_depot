@@ -248,10 +248,9 @@ Buildables build(ref<Store> store, RealiseMode mode,
 
   if (mode == DryRun) {
     printMissing(store, pathsToBuild);
-  } else {
-    if
+  } else if (mode == Build) {
+    store->buildPaths(pathsToBuild);
   }
-  (mode == Build) store->buildPaths(pathsToBuild);
 
   return buildables;
 }

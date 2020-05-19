@@ -24,9 +24,8 @@ namespace nix {
             ? fmt("SQLite database '%s' is busy (SQLITE_PROTOCOL)", path)
             : fmt("SQLite database '%s' is busy", path));
   } else {
-    throw
+    throw SQLiteError("%s: %s (in '%s')", fs.s, sqlite3_errstr(exterr), path);
   }
-  SQLiteError("%s: %s (in '%s')", fs.s, sqlite3_errstr(exterr), path);
 }
 
 SQLite::SQLite(const Path& path) {

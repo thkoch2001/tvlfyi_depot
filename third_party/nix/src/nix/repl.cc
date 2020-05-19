@@ -689,9 +689,8 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
 
         str << "}";
       } else {
-        str
+        str << "{ ... }";
       }
-      << "{ ... }";
 
       break;
     }
@@ -715,9 +714,9 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
           str << " ";
         }
       } else {
-        str
+        str << "... ";
       }
-      << "... ";
+
       str << "]";
       break;
 

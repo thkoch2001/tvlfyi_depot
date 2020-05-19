@@ -71,9 +71,8 @@ static bool componentsLT(const string& c1, const string& c2) {
   } else if (c1Num) {
     return false;
   } else {
-    return
+    return c1 < c2;
   }
-  c1 < c2;
 }
 
 int compareVersions(const string& v1, const string& v2) {

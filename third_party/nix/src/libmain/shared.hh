@@ -68,9 +68,9 @@ N getIntArg(const string& opt, Strings::iterator& i,
       } else if (u == 'T') {
         multiplier = 1ULL << 40;
       } else {
-        throw
+        throw UsageError(format("invalid unit specifier '%1%'") % u);
       }
-      UsageError(format("invalid unit specifier '%1%'") % u);
+
       s.resize(s.size() - 1);
     }
   }

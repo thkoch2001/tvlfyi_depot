@@ -387,11 +387,10 @@ static void getDerivations(EvalState& state, Value& vIn,
   }
 
   else {
-    throw
+    throw TypeError(
+        "expression does not evaluate to a derivation (or a set or list of "
+        "those)");
   }
-  TypeError(
-      "expression does not evaluate to a derivation (or a set or list of "
-      "those)");
 }
 
 void getDerivations(EvalState& state, Value& v, const string& pathPrefix,

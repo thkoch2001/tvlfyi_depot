@@ -256,16 +256,20 @@ void ExprAttrs::bindVars(const StaticEnv& env) {
     dynamicEnv = &newEnv;
 
     unsigned int displ = 0;
-    for (auto& i : attrs) newEnv.vars[i.first] = i.second.displ = displ++;
+    for (auto& i : attrs) {
+      newEnv.vars[i.first] = i.second.displ = displ++;
+    }
 
-    for (auto& i : attrs)
+    for (auto& i : attrs) {
       i.second.e->bindVars(i.second.inherited ? env : newEnv);
+    }
   }
 
   else {
-    for
+    for (auto& i : attrs) {
+      i.second.e->bindVars(env);
+    }
   }
-  (auto& i : attrs) i.second.e->bindVars(env);
 
   for (auto& i : dynamicAttrs) {
     i.nameExpr->bindVars(*dynamicEnv);
@@ -282,10 +286,14 @@ void ExprLambda::bindVars(const StaticEnv& env) {
 
   unsigned int displ = 0;
 
-  if (!arg.empty()) newEnv.vars[arg] = displ++;
+  if (!arg.empty()) {
+    newEnv.vars[arg] = displ++;
+  }
 
   if (matchAttrs) {
-    for (auto& i : formals->formals) newEnv.vars[i.name] = displ++;
+    for (auto& i : formals->formals) {
+      newEnv.vars[i.name] = displ++;
+    }
 
     for (auto& i : formals->formals)
       if (i.def) i.def->bindVars(newEnv);

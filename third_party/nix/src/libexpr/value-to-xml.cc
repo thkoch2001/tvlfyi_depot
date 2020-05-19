@@ -137,15 +137,20 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
 
       if (v.lambda.fun->matchAttrs) {
         XMLAttrs attrs;
-        if (!v.lambda.fun->arg.empty()) attrs["name"] = v.lambda.fun->arg;
-        if (v.lambda.fun->formals->ellipsis) attrs["ellipsis"] = "1";
+        if (!v.lambda.fun->arg.empty()) {
+          attrs["name"] = v.lambda.fun->arg;
+        }
+        if (v.lambda.fun->formals->ellipsis) {
+          attrs["ellipsis"] = "1";
+        }
         XMLOpenElement _(doc, "attrspat", attrs);
-        for (auto& i : v.lambda.fun->formals->formals)
+        for (auto& i : v.lambda.fun->formals->formals) {
           doc.writeEmptyElement("attr", singletonAttrs("name", i.name));
+        }
       } else {
-        doc
+        doc.writeEmptyElement("varpat",
+                              singletonAttrs("name", v.lambda.fun->arg));
       }
-      .writeEmptyElement("varpat", singletonAttrs("name", v.lambda.fun->arg));
 
       break;
     }

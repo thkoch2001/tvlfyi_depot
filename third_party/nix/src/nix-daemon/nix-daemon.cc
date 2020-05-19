@@ -305,9 +305,8 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
         ParseSink sink; /* null sink; just parse the NAR */
         parseDump(sink, savedNAR);
       } else {
-        parseDump
+        parseDump(savedRegular, from);
       }
-      (savedRegular, from);
 
       logger->startWork();
       if (!savedRegular.regular) throw Error("regular file expected");

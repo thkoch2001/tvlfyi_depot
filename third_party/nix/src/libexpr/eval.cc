@@ -820,14 +820,11 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
       newBnds->sort();
       v.attrs = newBnds;
     }
+  } else {
+    for (auto& i : attrs)
+      v.attrs->push_back(
+          Attr(i.first, i.second.e->maybeThunk(state, env), &i.second.pos));
   }
-
-  else {
-    for
-  }
-  (auto& i
-   : attrs) v.attrs->push_back(Attr(i.first, i.second.e->maybeThunk(state, env),
-                                    &i.second.pos));
 
   /* Dynamic attrs apply *after* rec and __overrides. */
   for (auto& i : dynamicAttrs) {
@@ -1350,9 +1347,8 @@ void ExprConcatStrings::eval(EvalState& state, Env& env, Value& v) {
     auto path = canonPath(s.str());
     mkPath(v, path.c_str());
   } else {
-    mkString
+    mkString(v, s.str(), context);
   }
-  (v, s.str(), context);
 }
 
 void ExprPos::eval(EvalState& state, Env& env, Value& v) {
@@ -1378,9 +1374,7 @@ void EvalState::forceValueDeep(Value& v) {
                          i.name, *i.pos);
           throw;
         }
-    }
-
-    else if (v.isList()) {
+    } else if (v.isList()) {
       for (size_t n = 0; n < v.listSize(); ++n) recurse(*v.listElems()[n]);
     }
   };
