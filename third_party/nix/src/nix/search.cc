@@ -251,13 +251,15 @@ struct CmdSearch : SourceExprCommand, MixJSON {
       }
 
       if (writeCache &&
-          rename(tmpFile.c_str(), jsonCacheFileName.c_str()) == -1)
+          rename(tmpFile.c_str(), jsonCacheFileName.c_str()) == -1) {
         throw SysError("cannot rename '%s' to '%s'", tmpFile,
                        jsonCacheFileName);
+      }
     }
 
-    if (results.size() == 0)
+    if (results.size() == 0) {
       throw Error("no results for the given search term(s)!");
+    }
 
     RunPager pager;
     for (auto el : results) {

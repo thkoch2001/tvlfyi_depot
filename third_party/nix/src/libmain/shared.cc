@@ -233,7 +233,9 @@ bool LegacyArgs::processFlag(Strings::iterator& pos, Strings::iterator end) {
     return true;
   }
   bool res = parseArg(pos, end);
-  if (res) ++pos;
+  if (res) {
+    ++pos;
+  }
   return res;
 }
 
@@ -244,8 +246,9 @@ bool LegacyArgs::processArgs(const Strings& args, bool finish) {
   assert(args.size() == 1);
   Strings ss(args);
   auto pos = ss.begin();
-  if (!parseArg(pos, ss.end()))
+  if (!parseArg(pos, ss.end())) {
     throw UsageError(format("unexpected argument '%1%'") % args.front());
+  }
   return true;
 }
 
@@ -346,8 +349,9 @@ RunPager::RunPager() {
   toPager.create();
 
   pid = startProcess([&]() {
-    if (dup2(toPager.readSide.get(), STDIN_FILENO) == -1)
+    if (dup2(toPager.readSide.get(), STDIN_FILENO) == -1) {
       throw SysError("dupping stdin");
+    }
     if (!getenv("LESS")) {
       setenv("LESS", "FRSXMK", 1);
     }
@@ -363,8 +367,9 @@ RunPager::RunPager() {
 
   pid.setKillSignal(SIGINT);
 
-  if (dup2(toPager.writeSide.get(), STDOUT_FILENO) == -1)
+  if (dup2(toPager.writeSide.get(), STDOUT_FILENO) == -1) {
     throw SysError("dupping stdout");
+  }
 }
 
 RunPager::~RunPager() {

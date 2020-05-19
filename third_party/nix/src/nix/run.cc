@@ -31,8 +31,9 @@ struct CmdRun : InstallablesCommand {
         .labels({"command", "args"})
         .arity(ArityAny)
         .handler([&](std::vector<std::string> ss) {
-          if (ss.empty())
+          if (ss.empty()) {
             throw UsageError("--command requires at least one argument");
+          }
           command = ss;
         });
 
@@ -87,9 +88,10 @@ struct CmdRun : InstallablesCommand {
     auto accessor = store->getFSAccessor();
 
     if (ignoreEnvironment) {
-      if (!unset.empty())
+      if (!unset.empty()) {
         throw UsageError(
             "--unset does not make sense with --ignore-environment");
+      }
 
       std::map<std::string, std::string> kept;
       for (auto& var : keep) {
@@ -106,9 +108,10 @@ struct CmdRun : InstallablesCommand {
       }
 
     } else {
-      if (!keep.empty())
+      if (!keep.empty()) {
         throw UsageError(
             "--keep does not make sense without --ignore-environment");
+      }
 
       for (auto& var : unset) {
         unsetenv(var.c_str());
@@ -191,17 +194,21 @@ void chrootHelper(int argc, char** argv) {
   std::string realStoreDir = argv[p++];
   std::string cmd = argv[p++];
   Strings args;
-  while (p < argc) args.push_back(argv[p++]);
+  while (p < argc) {
+    args.push_back(argv[p++]);
+  }
 
 #if __linux__
   uid_t uid = getuid();
   uid_t gid = getgid();
 
-  if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == -1)
+  if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == -1) {
     /* Try with just CLONE_NEWNS in case user namespaces are
        specifically disabled. */
-    if (unshare(CLONE_NEWNS) == -1)
+    if (unshare(CLONE_NEWNS) == -1) {
       throw SysError("setting up a private mount namespace");
+    }
+  }
 
   /* Bind-mount realStoreDir on /nix/store. If the latter mount
      point doesn't already exists, we have to create a chroot
@@ -218,8 +225,9 @@ void chrootHelper(int argc, char** argv) {
     createDirs(tmpDir + storeDir);
 
     if (mount(realStoreDir.c_str(), (tmpDir + storeDir).c_str(), "", MS_BIND,
-              0) == -1)
+              0) == -1) {
       throw SysError("mounting '%s' on '%s'", realStoreDir, storeDir);
+    }
 
     for (auto entry : readDirectory("/")) {
       auto src = "/" + entry.name;
@@ -231,10 +239,12 @@ void chrootHelper(int argc, char** argv) {
       if (pathExists(dst)) {
         continue;
       }
-      if (mkdir(dst.c_str(), 0700) == -1)
+      if (mkdir(dst.c_str(), 0700) == -1) {
         throw SysError("creating directory '%s'", dst);
-      if (mount(src.c_str(), dst.c_str(), "", MS_BIND | MS_REC, 0) == -1)
+      }
+      if (mount(src.c_str(), dst.c_str(), "", MS_BIND | MS_REC, 0) == -1) {
         throw SysError("mounting '%s' on '%s'", src, dst);
+      }
     }
 
     char* cwd = getcwd(0, 0);
@@ -243,14 +253,17 @@ void chrootHelper(int argc, char** argv) {
     }
     Finally freeCwd([&]() { free(cwd); });
 
-    if (chroot(tmpDir.c_str()) == -1)
+    if (chroot(tmpDir.c_str()) == -1) {
       throw SysError(format("chrooting into '%s'") % tmpDir);
+    }
 
-    if (chdir(cwd) == -1)
+    if (chdir(cwd) == -1) {
       throw SysError(format("chdir to '%s' in chroot") % cwd);
+    }
   } else if (mount(realStoreDir.c_str(), storeDir.c_str(), "", MS_BIND, 0) ==
-             -1)
+             -1) {
     throw SysError("mounting '%s' on '%s'", realStoreDir, storeDir);
+  }
 
   writeFile("/proc/self/setgroups", "deny");
   writeFile("/proc/self/uid_map", fmt("%d %d %d", uid, uid, 1));

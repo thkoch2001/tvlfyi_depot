@@ -60,9 +60,10 @@ std::map<std::string, std::string> getEnv() {
   for (size_t i = 0; environ[i]; ++i) {
     auto s = environ[i];
     auto eq = strchr(s, '=');
-    if (!eq)
+    if (!eq) {
       // invalid env, just keep going
       continue;
+    }
     env.emplace(std::string(s, eq), std::string(eq + 1));
   }
   return env;
@@ -91,18 +92,19 @@ Path absPath(Path path, Path dir) {
       if (buf == NULL)
 #else
       char buf[PATH_MAX];
-      if (!getcwd(buf, sizeof(buf)))
+      if (!getcwd(buf, sizeof(buf))) {
 #endif
         throw SysError("cannot get cwd");
-      dir = buf;
-#ifdef __GNU__
-      free(buf);
-#endif
     }
-    path = dir + "/" + path;
+    dir = buf;
+#ifdef __GNU__
+    free(buf);
+#endif
   }
-  return canonPath(path);
+  path = dir + "/" + path;
 }
+return canonPath(path);
+}  // namespace nix
 
 Path canonPath(const Path& path, bool resolveSymlinks) {
   assert(path != "");
@@ -122,7 +124,9 @@ Path canonPath(const Path& path, bool resolveSymlinks) {
 
   while (1) {
     /* Skip slashes. */
-    while (i != end && *i == '/') i++;
+    while (i != end && *i == '/') {
+      i++;
+    }
     if (i == end) {
       break;
     }
@@ -144,14 +148,17 @@ Path canonPath(const Path& path, bool resolveSymlinks) {
     /* Normal component; copy it. */
     else {
       s += '/';
-      while (i != end && *i != '/') s += *i++;
+      while (i != end && *i != '/') {
+        s += *i++;
+      }
 
       /* If s points to a symlink, resolve it and restart (since
          the symlink target might contain new symlinks). */
       if (resolveSymlinks && isLink(s)) {
-        if (++followCount >= maxFollow)
+        if (++followCount >= maxFollow) {
           throw Error(format("infinite symlink recursion in path '%1%'") %
                       path);
+        }
         temp = absPath(readLink(s), dirOf(s)) + string(i, end);
         i = temp.begin(); /* restart */
         end = temp.end();
@@ -182,10 +189,11 @@ string baseNameOf(const Path& path) {
   }
 
   Path::size_type pos = path.rfind('/', last);
-  if (pos == string::npos)
+  if (pos == string::npos) {
     pos = 0;
-  else
+  } else {
     pos += 1;
+  }
 
   return string(path, pos, last - pos + 1);
 }
@@ -201,8 +209,9 @@ bool isDirOrInDir(const Path& path, const Path& dir) {
 
 struct stat lstat(const Path& path) {
   struct stat st;
-  if (lstat(path.c_str(), &st))
+  if (lstat(path.c_str(), &st)) {
     throw SysError(format("getting status of '%1%'") % path);
+  }
   return st;
 }
 
@@ -213,8 +222,9 @@ bool pathExists(const Path& path) {
   if (!res) {
     return true;
   }
-  if (errno != ENOENT && errno != ENOTDIR)
+  if (errno != ENOENT && errno != ENOTDIR) {
     throw SysError(format("getting status of %1%") % path);
+  }
   return false;
 }
 
@@ -224,13 +234,15 @@ Path readLink(const Path& path) {
   for (ssize_t bufSize = PATH_MAX / 4; true; bufSize += bufSize / 2) {
     buf.resize(bufSize);
     ssize_t rlSize = readlink(path.c_str(), buf.data(), bufSize);
-    if (rlSize == -1)
-      if (errno == EINVAL)
+    if (rlSize == -1) {
+      if (errno == EINVAL) {
         throw Error("'%1%' is not a symlink", path);
-      else
+      } else {
         throw SysError("reading symbolic link '%1%'", path);
-    else if (rlSize < bufSize)
+      }
+    } else if (rlSize < bufSize) {
       return string(buf.data(), rlSize);
+    }
   }
 }
 
@@ -351,9 +363,9 @@ string readLine(int fd) {
       if (errno != EINTR) {
         throw SysError("reading a line");
       }
-    } else if (rd == 0)
+    } else if (rd == 0) {
       throw EndOfFile("unexpected EOF reading a line");
-    else {
+    } else {
       if (ch == '\n') {
         return s;
       }
@@ -386,12 +398,14 @@ static void _deletePath(const Path& path, unsigned long long& bytesFreed) {
     /* Make the directory accessible. */
     const auto PERM_MASK = S_IRUSR | S_IWUSR | S_IXUSR;
     if ((st.st_mode & PERM_MASK) != PERM_MASK) {
-      if (chmod(path.c_str(), st.st_mode | PERM_MASK) == -1)
+      if (chmod(path.c_str(), st.st_mode | PERM_MASK) == -1) {
         throw SysError(format("chmod '%1%'") % path);
+      }
     }
 
-    for (auto& i : readDirectory(path))
+    for (auto& i : readDirectory(path)) {
       _deletePath(path + "/" + i.name, bytesFreed);
+    }
   }
 
   if (remove(path.c_str()) == -1) {
@@ -418,11 +432,12 @@ static Path tempName(Path tmpRoot, const Path& prefix, bool includePid,
                      int& counter) {
   tmpRoot =
       canonPath(tmpRoot.empty() ? getEnv("TMPDIR", "/tmp") : tmpRoot, true);
-  if (includePid)
+  if (includePid) {
     return (format("%1%/%2%-%3%-%4%") % tmpRoot % prefix % getpid() % counter++)
         .str();
-  else
+  } else {
     return (format("%1%/%2%-%3%") % tmpRoot % prefix % counter++).str();
+  }
 }
 
 Path createTempDir(const Path& tmpRoot, const Path& prefix, bool includePid,
@@ -449,8 +464,9 @@ Path createTempDir(const Path& tmpRoot, const Path& prefix, bool includePid,
 #endif
       return tmpDir;
     }
-    if (errno != EEXIST)
+    if (errno != EEXIST) {
       throw SysError(format("creating directory '%1%'") % tmpDir);
+    }
   }
 }
 
@@ -470,8 +486,9 @@ static Lazy<Path> getHome2([]() {
     struct passwd pwbuf;
     struct passwd* pw;
     if (getpwuid_r(geteuid(), &pwbuf, buf.data(), buf.size(), &pw) != 0 ||
-        !pw || !pw->pw_dir || !pw->pw_dir[0])
+        !pw || !pw->pw_dir || !pw->pw_dir[0]) {
       throw Error("cannot determine user's home directory");
+    }
     homeDir = pw->pw_dir;
   }
   return homeDir;
@@ -521,25 +538,29 @@ Paths createDirs(const Path& path) {
   struct stat st;
   if (lstat(path.c_str(), &st) == -1) {
     created = createDirs(dirOf(path));
-    if (mkdir(path.c_str(), 0777) == -1 && errno != EEXIST)
+    if (mkdir(path.c_str(), 0777) == -1 && errno != EEXIST) {
       throw SysError(format("creating directory '%1%'") % path);
+    }
     st = lstat(path);
     created.push_back(path);
   }
 
-  if (S_ISLNK(st.st_mode) && stat(path.c_str(), &st) == -1)
+  if (S_ISLNK(st.st_mode) && stat(path.c_str(), &st) == -1) {
     throw SysError(format("statting symlink '%1%'") % path);
+  }
 
-  if (!S_ISDIR(st.st_mode))
+  if (!S_ISDIR(st.st_mode)) {
     throw Error(format("'%1%' is not a directory") % path);
+  }
 
   return created;
 }
 
 void createSymlink(const Path& target, const Path& link) {
-  if (symlink(target.c_str(), link.c_str()))
+  if (symlink(target.c_str(), link.c_str())) {
     throw SysError(format("creating symlink from '%1%' to '%2%'") % link %
                    target);
+  }
 }
 
 void replaceSymlink(const Path& target, const Path& link) {
@@ -555,8 +576,9 @@ void replaceSymlink(const Path& target, const Path& link) {
       throw;
     }
 
-    if (rename(tmp.c_str(), link.c_str()) != 0)
+    if (rename(tmp.c_str(), link.c_str()) != 0) {
       throw SysError(format("renaming '%1%' to '%2%'") % tmp % link);
+    }
 
     break;
   }
@@ -612,15 +634,17 @@ void drainFD(int fd, Sink& sink, bool block) {
 
   Finally finally([&]() {
     if (!block) {
-      if (fcntl(fd, F_SETFL, saved) == -1)
+      if (fcntl(fd, F_SETFL, saved) == -1) {
         throw SysError("making file descriptor blocking");
+      }
     }
   });
 
   if (!block) {
     saved = fcntl(fd, F_GETFL);
-    if (fcntl(fd, F_SETFL, saved | O_NONBLOCK) == -1)
+    if (fcntl(fd, F_SETFL, saved | O_NONBLOCK) == -1) {
       throw SysError("making file descriptor non-blocking");
+    }
   }
 
   std::vector<unsigned char> buf(64 * 1024);
@@ -634,10 +658,11 @@ void drainFD(int fd, Sink& sink, bool block) {
       if (errno != EINTR) {
         throw SysError("reading from file");
       }
-    } else if (rd == 0)
+    } else if (rd == 0) {
       break;
-    else
+    } else {
       sink(buf.data(), rd);
+    }
   }
 }
 
@@ -656,8 +681,9 @@ AutoDelete::~AutoDelete() {
       if (recursive) {
         deletePath(path);
       } else {
-        if (remove(path.c_str()) == -1)
+        if (remove(path.c_str()) == -1) {
           throw SysError(format("cannot unlink '%1%'") % path);
+        }
       }
     }
   } catch (...) {
@@ -700,8 +726,9 @@ int AutoCloseFD::get() const { return fd; }
 
 void AutoCloseFD::close() {
   if (fd != -1) {
-    if (::close(fd) == -1) /* This should never happen. */
+    if (::close(fd) == -1) { /* This should never happen. */
       throw SysError(format("closing file descriptor %1%") % fd);
+    }
   }
 }
 
@@ -835,8 +862,9 @@ void killUser(uid_t uid) {
           if (errno == ESRCH) {
             break;
           } /* no more processes */
-          if (errno != EINTR)
+          if (errno != EINTR) {
             throw SysError(format("cannot kill processes for uid '%1%'") % uid);
+          }
         }
 
         _exit(0);
@@ -844,9 +872,10 @@ void killUser(uid_t uid) {
       options);
 
   int status = pid.wait();
-  if (status != 0)
+  if (status != 0) {
     throw Error(format("cannot kill processes for uid '%1%': %2%") % uid %
                 statusToString(status));
+  }
 
   /* !!! We should really do some check to make sure that there are
      no processes left running under `uid', but there is no portable
@@ -877,8 +906,9 @@ pid_t startProcess(std::function<void()> fun, const ProcessOptions& options) {
   auto wrapper = [&]() {
     try {
 #if __linux__
-      if (options.dieWithParent && prctl(PR_SET_PDEATHSIG, SIGKILL) == -1)
+      if (options.dieWithParent && prctl(PR_SET_PDEATHSIG, SIGKILL) == -1) {
         throw SysError("setting death signal");
+      }
 #endif
       restoreAffinity();
       fun();
@@ -889,10 +919,11 @@ pid_t startProcess(std::function<void()> fun, const ProcessOptions& options) {
       }
     } catch (...) {
     }
-    if (options.runExitHandlers)
+    if (options.runExitHandlers) {
       exit(1);
-    else
+    } else {
       _exit(1);
+    }
   };
 
   pid_t pid = doFork(options.allowVfork, wrapper);
@@ -920,9 +951,10 @@ string runProgram(Path program, bool searchPath, const Strings& args,
 
   auto res = runProgram(opts);
 
-  if (!statusOk(res.first))
+  if (!statusOk(res.first)) {
     throw ExecError(res.first, fmt("program '%1%' %2%", program,
                                    statusToString(res.first)));
+  }
 
   return res.second;
 }
@@ -980,33 +1012,42 @@ void runProgram2(const RunOptions& options) {
           replaceEnv(*options.environment);
         }
         if (options.standardOut &&
-            dup2(out.writeSide.get(), STDOUT_FILENO) == -1)
+            dup2(out.writeSide.get(), STDOUT_FILENO) == -1) {
           throw SysError("dupping stdout");
-        if (options.mergeStderrToStdout)
-          if (dup2(STDOUT_FILENO, STDERR_FILENO) == -1)
+        }
+        if (options.mergeStderrToStdout) {
+          if (dup2(STDOUT_FILENO, STDERR_FILENO) == -1) {
             throw SysError("cannot dup stdout into stderr");
-        if (source && dup2(in.readSide.get(), STDIN_FILENO) == -1)
+          }
+        }
+        if (source && dup2(in.readSide.get(), STDIN_FILENO) == -1) {
           throw SysError("dupping stdin");
+        }
 
-        if (options.chdir && chdir((*options.chdir).c_str()) == -1)
+        if (options.chdir && chdir((*options.chdir).c_str()) == -1) {
           throw SysError("chdir failed");
-        if (options.gid && setgid(*options.gid) == -1)
+        }
+        if (options.gid && setgid(*options.gid) == -1) {
           throw SysError("setgid failed");
+        }
         /* Drop all other groups if we're setgid. */
-        if (options.gid && setgroups(0, 0) == -1)
+        if (options.gid && setgroups(0, 0) == -1) {
           throw SysError("setgroups failed");
-        if (options.uid && setuid(*options.uid) == -1)
+        }
+        if (options.uid && setuid(*options.uid) == -1) {
           throw SysError("setuid failed");
+        }
 
         Strings args_(options.args);
         args_.push_front(options.program);
 
         restoreSignals();
 
-        if (options.searchPath)
+        if (options.searchPath) {
           execvp(options.program.c_str(), stringsToCharPtrs(args_).data());
-        else
+        } else {
           execv(options.program.c_str(), stringsToCharPtrs(args_).data());
+        }
 
         throw SysError("executing '%1%'", options.program);
       },
@@ -1058,9 +1099,10 @@ void runProgram2(const RunOptions& options) {
     promise.get_future().get();
   }
 
-  if (status)
+  if (status) {
     throw ExecError(status, fmt("program '%1%' %2%", options.program,
                                 statusToString(status)));
+  }
 }
 
 void closeMostFDs(const set<int>& exceptions) {
@@ -1080,17 +1122,19 @@ void closeMostFDs(const set<int>& exceptions) {
 
   int maxFD = 0;
   maxFD = sysconf(_SC_OPEN_MAX);
-  for (int fd = 0; fd < maxFD; ++fd)
+  for (int fd = 0; fd < maxFD; ++fd) {
     if (!exceptions.count(fd)) {
       close(fd);
     } /* ignore result */
+  }
 }
 
 void closeOnExec(int fd) {
   int prev;
   if ((prev = fcntl(fd, F_GETFD, 0)) == -1 ||
-      fcntl(fd, F_SETFD, prev | FD_CLOEXEC) == -1)
+      fcntl(fd, F_SETFD, prev | FD_CLOEXEC) == -1) {
     throw SysError("setting close-on-exec flag");
+  }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1187,9 +1231,9 @@ string replaceStrings(const std::string& s, const std::string& from,
 
 string statusToString(int status) {
   if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-    if (WIFEXITED(status))
+    if (WIFEXITED(status)) {
       return (format("failed with exit code %1%") % WEXITSTATUS(status)).str();
-    else if (WIFSIGNALED(status)) {
+    } else if (WIFSIGNALED(status)) {
       int sig = WTERMSIG(status);
 #if HAVE_STRSIGNAL
       const char* description = strsignal(sig);
@@ -1198,10 +1242,12 @@ string statusToString(int status) {
 #else
       return (format("failed due to signal %1%") % sig).str();
 #endif
-    } else
+    } else {
       return "died abnormally";
-  } else
+    }
+  } else {
     return "succeeded";
+  }
 }
 
 bool statusOk(int status) {
@@ -1227,11 +1273,13 @@ std::string toLower(const std::string& s) {
 
 std::string shellEscape(const std::string& s) {
   std::string r = "'";
-  for (auto& i : s)
-    if (i == '\'')
+  for (auto& i : s) {
+    if (i == '\'') {
       r += "'\\''";
-    else
+    } else {
       r += i;
+    }
+  }
   r += '\'';
   return r;
 }
@@ -1259,9 +1307,13 @@ std::string filterANSIEscapes(const std::string& s, bool filterAll,
       if (i != s.end() && *i == '[') {
         e += *i++;
         // eat parameter bytes
-        while (i != s.end() && *i >= 0x30 && *i <= 0x3f) e += *i++;
+        while (i != s.end() && *i >= 0x30 && *i <= 0x3f) {
+          e += *i++;
+        }
         // eat intermediate bytes
-        while (i != s.end() && *i >= 0x20 && *i <= 0x2f) e += *i++;
+        while (i != s.end() && *i >= 0x20 && *i <= 0x2f) {
+          e += *i++;
+        }
         // eat final byte
         if (i != s.end() && *i >= 0x40 && *i <= 0x7e) {
           e += last = *i++;
@@ -1287,11 +1339,11 @@ std::string filterANSIEscapes(const std::string& s, bool filterAll,
       }
     }
 
-    else if (*i == '\r')
+    else if (*i == '\r') {
       // do nothing for now
       i++;
 
-    else {
+    } else {
       t += *i++;
       w++;
     }
@@ -1319,7 +1371,9 @@ string base64Encode(const string& s) {
   if (nbits) {
     res.push_back(base64Chars[data << (6 - nbits) & 0x3f]);
   }
-  while (res.size() % 4) res.push_back('=');
+  while (res.size() % 4) {
+    res.push_back('=');
+  }
 
   return res;
 }
@@ -1395,10 +1449,10 @@ static void signalHandlerThread(sigset_t set) {
     int signal = 0;
     sigwait(&set, &signal);
 
-    if (signal == SIGINT || signal == SIGTERM || signal == SIGHUP)
+    if (signal == SIGINT || signal == SIGTERM || signal == SIGHUP) {
       triggerInterrupt();
 
-    else if (signal == SIGWINCH) {
+    } else if (signal == SIGWINCH) {
       updateWindowSize();
     }
   }
@@ -1424,8 +1478,9 @@ static sigset_t savedSignalMask;
 void startSignalHandlerThread() {
   updateWindowSize();
 
-  if (sigprocmask(SIG_BLOCK, nullptr, &savedSignalMask))
+  if (sigprocmask(SIG_BLOCK, nullptr, &savedSignalMask)) {
     throw SysError("quering signal mask");
+  }
 
   sigset_t set;
   sigemptyset(&set);
@@ -1434,15 +1489,17 @@ void startSignalHandlerThread() {
   sigaddset(&set, SIGHUP);
   sigaddset(&set, SIGPIPE);
   sigaddset(&set, SIGWINCH);
-  if (pthread_sigmask(SIG_BLOCK, &set, nullptr))
+  if (pthread_sigmask(SIG_BLOCK, &set, nullptr)) {
     throw SysError("blocking signals");
+  }
 
   std::thread(signalHandlerThread, set).detach();
 }
 
 void restoreSignals() {
-  if (sigprocmask(SIG_SETMASK, &savedSignalMask, nullptr))
+  if (sigprocmask(SIG_SETMASK, &savedSignalMask, nullptr)) {
     throw SysError("restoring signals");
+  }
 }
 
 /* RAII helper to automatically deregister a callback. */

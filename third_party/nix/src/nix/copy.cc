@@ -72,8 +72,9 @@ struct CmdCopy : StorePathsCommand {
   }
 
   void run(ref<Store> srcStore, Paths storePaths) override {
-    if (srcUri.empty() && dstUri.empty())
+    if (srcUri.empty() && dstUri.empty()) {
       throw UsageError("you must pass '--from' and/or '--to'");
+    }
 
     ref<Store> dstStore = dstUri.empty() ? openStore() : openStore(dstUri);
 

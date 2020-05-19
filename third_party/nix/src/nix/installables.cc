@@ -30,10 +30,10 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
 
   vSourceExpr = state.allocValue();
 
-  if (file != "")
+  if (file != "") {
     state.evalFile(lookupFileArg(state, file), *vSourceExpr);
 
-  else {
+  } else {
     /* Construct the installation source from $NIX_PATH. */
 
     auto searchPath = state.getSearchPath();
@@ -60,14 +60,18 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
             state.getBuiltin("import"), *v2);
     };
 
-    for (auto& i : searchPath) /* Hack to handle channels. */
+    for (auto& i : searchPath) { /* Hack to handle channels. */
       if (i.first.empty() && pathExists(i.second + "/manifest.nix")) {
-        for (auto& j : readDirectory(i.second))
+        for (auto& j : readDirectory(i.second)) {
           if (j.name != "manifest.nix" &&
-              pathExists(fmt("%s/%s/default.nix", i.second, j.name)))
+              pathExists(fmt("%s/%s/default.nix", i.second, j.name))) {
             addEntry(j.name);
-      } else
+          }
+        }
+      } else {
         addEntry(i.first);
+      }
+    }
 
     vSourceExpr->attrs->sort();
   }
@@ -76,18 +80,20 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
 }
 
 ref<EvalState> SourceExprCommand::getEvalState() {
-  if (!evalState)
+  if (!evalState) {
     evalState = std::make_shared<EvalState>(searchPath, getStore());
+  }
   return ref<EvalState>(evalState);
 }
 
 Buildable Installable::toBuildable() {
   auto buildables = toBuildables();
-  if (buildables.size() != 1)
+  if (buildables.size() != 1) {
     throw Error(
         "installable '%s' evaluates to %d derivations, where only one is "
         "expected",
         what(), buildables.size());
+  }
   return std::move(buildables[0]);
 }
 
@@ -127,9 +133,10 @@ struct InstallableValue : Installable {
       drvPaths.insert(b.drvPath);
 
       auto outputName = drv.queryOutputName();
-      if (outputName == "")
+      if (outputName == "") {
         throw Error("derivation '%s' lacks an 'outputName' attribute",
                     b.drvPath);
+      }
 
       b.outputs.emplace(outputName, drv.queryOutPath());
 
@@ -140,11 +147,13 @@ struct InstallableValue : Installable {
     // merge the buildables.
     if (drvPaths.size() == 1) {
       Buildable b{*drvPaths.begin()};
-      for (auto& b2 : res)
+      for (auto& b2 : res) {
         b.outputs.insert(b2.outputs.begin(), b2.outputs.end());
+      }
       return {b};
-    } else
+    } else {
       return res;
+    }
   }
 };
 
@@ -200,21 +209,23 @@ static std::vector<std::shared_ptr<Installable>> parseInstallables(
   }
 
   for (auto& s : ss) {
-    if (s.compare(0, 1, "(") == 0)
+    if (s.compare(0, 1, "(") == 0) {
       result.push_back(std::make_shared<InstallableExpr>(cmd, s));
 
-    else if (s.find("/") != std::string::npos) {
+    } else if (s.find("/") != std::string::npos) {
       auto path = store->toStorePath(store->followLinksToStore(s));
 
-      if (store->isStorePath(path))
+      if (store->isStorePath(path)) {
         result.push_back(std::make_shared<InstallableStorePath>(path));
+      }
     }
 
-    else if (s == "" || std::regex_match(s, attrPathRegex))
+    else if (s == "" || std::regex_match(s, attrPathRegex)) {
       result.push_back(std::make_shared<InstallableAttrPath>(cmd, s));
 
-    else
+    } else {
       throw UsageError("don't know what to do with argument '%s'", s);
+    }
   }
 
   return result;
@@ -248,10 +259,11 @@ Buildables build(ref<Store> store, RealiseMode mode,
         }
         pathsToBuild.insert(b.drvPath + "!" +
                             concatStringsSep(",", outputNames));
-      } else
+      } else {
         for (auto& output : b.outputs) {
           pathsToBuild.insert(output.second);
         }
+      }
       buildables.push_back(std::move(b));
     }
   }
@@ -269,10 +281,11 @@ PathSet toStorePaths(ref<Store> store, RealiseMode mode,
                      std::vector<std::shared_ptr<Installable>> installables) {
   PathSet outPaths;
 
-  for (auto& b : build(store, mode, installables))
+  for (auto& b : build(store, mode, installables)) {
     for (auto& output : b.outputs) {
       outPaths.insert(output.second);
     }
+  }
 
   return outPaths;
 }
@@ -281,9 +294,10 @@ Path toStorePath(ref<Store> store, RealiseMode mode,
                  std::shared_ptr<Installable> installable) {
   auto paths = toStorePaths(store, mode, {installable});
 
-  if (paths.size() != 1)
+  if (paths.size() != 1) {
     throw Error("argument '%s' should evaluate to one store path",
                 installable->what());
+  }
 
   return *paths.begin();
 }
@@ -293,22 +307,26 @@ PathSet toDerivations(ref<Store> store,
                       bool useDeriver) {
   PathSet drvPaths;
 
-  for (auto& i : installables)
+  for (auto& i : installables) {
     for (auto& b : i->toBuildables()) {
       if (b.drvPath.empty()) {
-        if (!useDeriver)
+        if (!useDeriver) {
           throw Error("argument '%s' did not evaluate to a derivation",
                       i->what());
+        }
         for (auto& output : b.outputs) {
           auto derivers = store->queryValidDerivers(output.second);
-          if (derivers.empty())
+          if (derivers.empty()) {
             throw Error("'%s' does not have a known deriver", i->what());
+          }
           // FIXME: use all derivers?
           drvPaths.insert(*derivers.begin());
         }
-      } else
+      } else {
         drvPaths.insert(b.drvPath);
+      }
     }
+  }
 
   return drvPaths;
 }

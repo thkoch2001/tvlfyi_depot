@@ -25,18 +25,21 @@ bool Store::isStorePath(const Path& path) const {
 }
 
 void Store::assertStorePath(const Path& path) const {
-  if (!isStorePath(path))
+  if (!isStorePath(path)) {
     throw Error(format("path '%1%' is not in the Nix store") % path);
+  }
 }
 
 Path Store::toStorePath(const Path& path) const {
-  if (!isInStore(path))
+  if (!isInStore(path)) {
     throw Error(format("path '%1%' is not in the Nix store") % path);
+  }
   Path::size_type slash = path.find('/', storeDir.size() + 1);
-  if (slash == Path::npos)
+  if (slash == Path::npos) {
     return path;
-  else
+  } else {
     return Path(path, 0, slash);
+  }
 }
 
 Path Store::followLinksToStore(const Path& _path) const {
@@ -48,8 +51,9 @@ Path Store::followLinksToStore(const Path& _path) const {
     string target = readLink(path);
     path = absPath(target, dirOf(path));
   }
-  if (!isInStore(path))
+  if (!isInStore(path)) {
     throw Error(format("path '%1%' is not in the Nix store") % path);
+  }
   return path;
 }
 
@@ -86,17 +90,20 @@ void checkStoreName(const string& name) {
 
   /* Disallow names starting with a dot for possible security
      reasons (e.g., "." and ".."). */
-  if (string(name, 0, 1) == ".")
+  if (string(name, 0, 1) == ".") {
     throw Error(baseError % "it is illegal to start the name with a period");
+  }
   /* Disallow names longer than 211 characters. ext4’s max is 256,
      but we need extra space for the hash and .chroot extensions. */
-  if (name.length() > 211)
+  if (name.length() > 211) {
     throw Error(baseError % "name must be less than 212 characters");
-  for (auto& i : name)
+  }
+  for (auto& i : name) {
     if (!((i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z') ||
           (i >= '0' && i <= '9') || validChars.find(i) != string::npos)) {
       throw Error(baseError % (format("the '%1%' character is invalid") % i));
     }
+  }
 }
 
 /* Store paths have the following form:
@@ -261,9 +268,10 @@ bool Store::isValidPath(const Path& storePath) {
 
   bool valid = isValidPathUncached(storePath);
 
-  if (diskCache && !valid)
+  if (diskCache && !valid) {
     // FIXME: handle valid = true case.
     diskCache->upsertNarInfo(getUri(), hashPart, 0);
+  }
 
   return valid;
 }
@@ -306,8 +314,9 @@ void Store::queryPathInfo(const Path& storePath,
       auto res = state.lock()->pathInfoCache.get(hashPart);
       if (res) {
         stats.narInfoReadAverted++;
-        if (!*res)
+        if (!*res) {
           throw InvalidPath(format("path '%s' is not valid") % storePath);
+        }
         return callback(ref<ValidPathInfo>(*res));
       }
     }
@@ -323,8 +332,9 @@ void Store::queryPathInfo(const Path& storePath,
               res.first == NarInfoDiskCache::oInvalid ? 0 : res.second);
           if (res.first == NarInfoDiskCache::oInvalid ||
               (res.second->path != storePath &&
-               storePathToName(storePath) != ""))
+               storePathToName(storePath) != "")) {
             throw InvalidPath(format("path '%s' is not valid") % storePath);
+          }
         }
         return callback(ref<ValidPathInfo>(res.second));
       }
@@ -483,8 +493,9 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
           jsonPath.attr("deriver", info->deriver);
         }
 
-        if (info->registrationTime)
+        if (info->registrationTime) {
           jsonPath.attr("registrationTime", info->registrationTime);
+        }
 
         if (info->ultimate) {
           jsonPath.attr("ultimate", info->ultimate);
@@ -504,12 +515,15 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
           if (!narInfo->url.empty()) {
             jsonPath.attr("url", narInfo->url);
           }
-          if (narInfo->fileHash)
+          if (narInfo->fileHash) {
             jsonPath.attr("downloadHash", narInfo->fileHash.to_string());
-          if (narInfo->fileSize)
+          }
+          if (narInfo->fileSize) {
             jsonPath.attr("downloadSize", narInfo->fileSize);
-          if (showClosureSize)
+          }
+          if (showClosureSize) {
             jsonPath.attr("closureDownloadSize", closureSizes.second);
+          }
         }
       }
 
@@ -544,10 +558,11 @@ const Store::Stats& Store::getStats() {
 }
 
 void Store::buildPaths(const PathSet& paths, BuildMode buildMode) {
-  for (auto& path : paths)
+  for (auto& path : paths) {
     if (isDerivation(path)) {
       unsupported("buildPaths");
     }
+  }
 
   if (queryValidPaths(paths).size() != paths.size()) {
     unsupported("buildPaths");
@@ -621,10 +636,11 @@ void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
   PathSet valid = dstStore->queryValidPaths(storePaths, substitute);
 
   PathSet missing;
-  for (auto& path : storePaths)
+  for (auto& path : storePaths) {
     if (!valid.count(path)) {
       missing.insert(path);
     }
+  }
 
   if (missing.empty()) {
     return;
@@ -729,10 +745,11 @@ string showPaths(const PathSet& paths) {
 }
 
 std::string ValidPathInfo::fingerprint() const {
-  if (narSize == 0 || !narHash)
+  if (narSize == 0 || !narHash) {
     throw Error(format("cannot calculate fingerprint of path '%s' because its "
                        "size/hash is not known") %
                 path);
+  }
   return "1;" + path + ";" + narHash.to_string(Base32) + ";" +
          std::to_string(narSize) + ";" + concatStringsSep(",", references);
 }
@@ -749,10 +766,11 @@ bool ValidPathInfo::isContentAddressed(const Store& store) const {
 
   if (hasPrefix(ca, "text:")) {
     Hash hash(std::string(ca, 5));
-    if (store.makeTextPath(storePathToName(path), hash, references) == path)
+    if (store.makeTextPath(storePathToName(path), hash, references) == path) {
       return true;
-    else
+    } else {
       warn();
+    }
   }
 
   else if (hasPrefix(ca, "fixed:")) {
@@ -760,10 +778,11 @@ bool ValidPathInfo::isContentAddressed(const Store& store) const {
     Hash hash(std::string(ca, recursive ? 8 : 6));
     if (references.empty() &&
         store.makeFixedOutputPath(recursive, hash, storePathToName(path)) ==
-            path)
+            path) {
       return true;
-    else
+    } else {
       warn();
+    }
   }
 
   return false;
@@ -776,10 +795,11 @@ size_t ValidPathInfo::checkSignatures(const Store& store,
   }
 
   size_t good = 0;
-  for (auto& sig : sigs)
+  for (auto& sig : sigs) {
     if (checkSignature(publicKeys, sig)) {
       good++;
     }
+  }
   return good;
 }
 
@@ -838,16 +858,18 @@ std::pair<std::string, Store::Params> splitUriAndParams(
         std::string decoded;
         for (size_t i = 0; i < value.size();) {
           if (value[i] == '%') {
-            if (i + 2 >= value.size())
+            if (i + 2 >= value.size()) {
               throw Error("invalid URI parameter '%s'", value);
+            }
             try {
               decoded += std::stoul(std::string(value, i + 1, 2), 0, 16);
               i += 3;
             } catch (...) {
               throw Error("invalid URI parameter '%s'", value);
             }
-          } else
+          } else {
             decoded += value[i++];
+          }
         }
         params[s.substr(0, e)] = decoded;
       }
@@ -880,9 +902,9 @@ StoreType getStoreType(const std::string& uri, const std::string& stateDir) {
   } else if (uri == "local" || hasPrefix(uri, "/")) {
     return tLocal;
   } else if (uri == "" || uri == "auto") {
-    if (access(stateDir.c_str(), R_OK | W_OK) == 0)
+    if (access(stateDir.c_str(), R_OK | W_OK) == 0) {
       return tLocal;
-    else if (pathExists(settings.nixDaemonSocketFile)) {
+    } else if (pathExists(settings.nixDaemonSocketFile)) {
       return tDaemon;
     } else {
       return tLocal;

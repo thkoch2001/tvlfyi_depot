@@ -16,7 +16,9 @@ void XMLWriter::close() {
   if (closed) {
     return;
   }
-  while (!pendingElems.empty()) closeElement();
+  while (!pendingElems.empty()) {
+    closeElement();
+  }
   closed = true;
 }
 
@@ -68,20 +70,21 @@ void XMLWriter::writeAttrs(const XMLAttrs& attrs) {
     output << " " << i.first << "=\"";
     for (size_t j = 0; j < i.second.size(); ++j) {
       char c = i.second[j];
-      if (c == '"')
+      if (c == '"') {
         output << "&quot;";
-      else if (c == '<')
+      } else if (c == '<') {
         output << "&lt;";
-      else if (c == '>')
+      } else if (c == '>') {
         output << "&gt;";
-      else if (c == '&')
+      } else if (c == '&') {
         output << "&amp;";
-      /* Escape newlines to prevent attribute normalisation (see
-         XML spec, section 3.3.3. */
-      else if (c == '\n')
+        /* Escape newlines to prevent attribute normalisation (see
+           XML spec, section 3.3.3. */
+      } else if (c == '\n') {
         output << "&#xA;";
-      else
+      } else {
         output << c;
+      }
     }
     output << "\"";
   }

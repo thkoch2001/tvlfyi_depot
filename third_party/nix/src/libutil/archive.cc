@@ -76,9 +76,10 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
   if (S_ISREG(st.st_mode)) {
     sink << "type"
          << "regular";
-    if (st.st_mode & S_IXUSR)
+    if (st.st_mode & S_IXUSR) {
       sink << "executable"
            << "";
+    }
     dumpContents(path, (size_t)st.st_size, sink);
   }
 
@@ -89,7 +90,7 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
     /* If we're on a case-insensitive system like macOS, undo
        the case hack applied by restorePath(). */
     std::map<string, string> unhacked;
-    for (auto& i : readDirectory(path))
+    for (auto& i : readDirectory(path)) {
       if (archiveSettings.useCaseHack) {
         string name(i.name);
         size_t pos = i.name.find(caseHackSuffix);
@@ -99,14 +100,17 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
 
           name.erase(pos);
         }
-        if (unhacked.find(name) != unhacked.end())
+        if (unhacked.find(name) != unhacked.end()) {
           throw Error(format("file name collision in between '%1%' and '%2%'") %
                       (path + "/" + unhacked[name]) % (path + "/" + i.name));
+        }
         unhacked[name] = i.name;
-      } else
+      } else {
         unhacked[i.name] = i.name;
+      }
+    }
 
-    for (auto& i : unhacked)
+    for (auto& i : unhacked) {
       if (filter(path + "/" + i.first)) {
         sink << "entry"
              << "("
@@ -114,15 +118,17 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
         dump(path + "/" + i.second, sink, filter);
         sink << ")";
       }
+    }
   }
 
-  else if (S_ISLNK(st.st_mode))
+  else if (S_ISLNK(st.st_mode)) {
     sink << "type"
          << "symlink"
          << "target" << readLink(path);
 
-  else
+  } else {
     throw Error(format("file '%1%' has an unsupported type") % path);
+  }
 
   sink << ")";
 }
@@ -222,8 +228,9 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
         type = tpSymlink;
       }
 
-      else
+      else {
         throw badArchive("unknown file type " + t);
+      }
 
     }
 
@@ -258,8 +265,9 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
           name = readString(source);
           if (name.empty() || name == "." || name == ".." ||
               name.find('/') != string::npos ||
-              name.find((char)0) != string::npos)
+              name.find((char)0) != string::npos) {
             throw Error(format("NAR contains invalid file name '%1%'") % name);
+          }
           if (name <= prevName) {
             throw Error("NAR directory is not sorted");
           }
@@ -271,16 +279,18 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
                          << name << "'";
               name += caseHackSuffix;
               name += std::to_string(++i->second);
-            } else
+            } else {
               names[name] = 0;
+            }
           }
         } else if (s == "node") {
           if (s.empty()) {
             throw badArchive("entry name missing");
           }
           parse(sink, source, path + "/" + name);
-        } else
+        } else {
           throw badArchive("unknown field " + s);
+        }
       }
     }
 
@@ -289,8 +299,9 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
       sink.createSymlink(path, target);
     }
 
-    else
+    else {
       throw badArchive("unknown field " + s);
+    }
   }
 }
 
@@ -302,8 +313,9 @@ void parseDump(ParseSink& sink, Source& source) {
     /* This generally means the integer at the start couldn't be
        decoded.  Ignore and throw the exception below. */
   }
-  if (version != narVersionMagic1)
+  if (version != narVersionMagic1) {
     throw badArchive("input doesn't look like a Nix archive");
+  }
   parse(sink, source, "");
 }
 
@@ -313,8 +325,9 @@ struct RestoreSink : ParseSink {
 
   void createDirectory(const Path& path) {
     Path p = dstPath + path;
-    if (mkdir(p.c_str(), 0777) == -1)
+    if (mkdir(p.c_str(), 0777) == -1) {
       throw SysError(format("creating directory '%1%'") % p);
+    }
   };
 
   void createRegularFile(const Path& path) {
@@ -330,8 +343,9 @@ struct RestoreSink : ParseSink {
     if (fstat(fd.get(), &st) == -1) {
       throw SysError("fstat");
     }
-    if (fchmod(fd.get(), st.st_mode | (S_IXUSR | S_IXGRP | S_IXOTH)) == -1)
+    if (fchmod(fd.get(), st.st_mode | (S_IXUSR | S_IXGRP | S_IXOTH)) == -1) {
       throw SysError("fchmod");
+    }
   }
 
   void preallocateContents(unsigned long long len) {
@@ -342,8 +356,9 @@ struct RestoreSink : ParseSink {
          filesystem doesn't support preallocation (e.g. on
          OpenSolaris).  Since preallocation is just an
          optimisation, ignore it. */
-      if (errno && errno != EINVAL && errno != EOPNOTSUPP && errno != ENOSYS)
+      if (errno && errno != EINVAL && errno != EOPNOTSUPP && errno != ENOSYS) {
         throw SysError(format("preallocating file of %1% bytes") % len);
+      }
     }
 #endif
   }

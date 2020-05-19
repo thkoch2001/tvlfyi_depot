@@ -20,40 +20,44 @@ std::optional<std::string> ParsedDerivation::getStringAttr(
     const std::string& name) const {
   if (structuredAttrs) {
     auto i = structuredAttrs->find(name);
-    if (i == structuredAttrs->end())
+    if (i == structuredAttrs->end()) {
       return {};
-    else {
-      if (!i->is_string())
+    } else {
+      if (!i->is_string()) {
         throw Error("attribute '%s' of derivation '%s' must be a string", name,
                     drvPath);
+      }
       return i->get<std::string>();
     }
   } else {
     auto i = drv.env.find(name);
-    if (i == drv.env.end())
+    if (i == drv.env.end()) {
       return {};
-    else
+    } else {
       return i->second;
+    }
   }
 }
 
 bool ParsedDerivation::getBoolAttr(const std::string& name, bool def) const {
   if (structuredAttrs) {
     auto i = structuredAttrs->find(name);
-    if (i == structuredAttrs->end())
+    if (i == structuredAttrs->end()) {
       return def;
-    else {
-      if (!i->is_boolean())
+    } else {
+      if (!i->is_boolean()) {
         throw Error("attribute '%s' of derivation '%s' must be a Boolean", name,
                     drvPath);
+      }
       return i->get<bool>();
     }
   } else {
     auto i = drv.env.find(name);
-    if (i == drv.env.end())
+    if (i == drv.env.end()) {
       return def;
-    else
+    } else {
       return i->second == "1";
+    }
   }
 }
 
@@ -61,48 +65,54 @@ std::optional<Strings> ParsedDerivation::getStringsAttr(
     const std::string& name) const {
   if (structuredAttrs) {
     auto i = structuredAttrs->find(name);
-    if (i == structuredAttrs->end())
+    if (i == structuredAttrs->end()) {
       return {};
-    else {
-      if (!i->is_array())
+    } else {
+      if (!i->is_array()) {
         throw Error(
             "attribute '%s' of derivation '%s' must be a list of strings", name,
             drvPath);
+      }
       Strings res;
       for (auto j = i->begin(); j != i->end(); ++j) {
-        if (!j->is_string())
+        if (!j->is_string()) {
           throw Error(
               "attribute '%s' of derivation '%s' must be a list of strings",
               name, drvPath);
+        }
         res.push_back(j->get<std::string>());
       }
       return res;
     }
   } else {
     auto i = drv.env.find(name);
-    if (i == drv.env.end())
+    if (i == drv.env.end()) {
       return {};
-    else
+    } else {
       return tokenizeString<Strings>(i->second);
+    }
   }
 }
 
 StringSet ParsedDerivation::getRequiredSystemFeatures() const {
   StringSet res;
-  for (auto& i : getStringsAttr("requiredSystemFeatures").value_or(Strings()))
+  for (auto& i : getStringsAttr("requiredSystemFeatures").value_or(Strings())) {
     res.insert(i);
+  }
   return res;
 }
 
 bool ParsedDerivation::canBuildLocally() const {
   if (drv.platform != settings.thisSystem.get() &&
-      !settings.extraPlatforms.get().count(drv.platform) && !drv.isBuiltin())
+      !settings.extraPlatforms.get().count(drv.platform) && !drv.isBuiltin()) {
     return false;
+  }
 
-  for (auto& feature : getRequiredSystemFeatures())
+  for (auto& feature : getRequiredSystemFeatures()) {
     if (!settings.systemFeatures.get().count(feature)) {
       return false;
     }
+  }
 
   return true;
 }

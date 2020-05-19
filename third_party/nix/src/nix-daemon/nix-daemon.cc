@@ -90,8 +90,9 @@ struct TunnelLogger {
         state->canSendStderr = false;
         throw;
       }
-    } else
+    } else {
       state->pendingMsgs.push_back(s);
+    }
   }
 
   void log(const FormatOrString& fs) {
@@ -253,14 +254,15 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       Path path = readStorePath(*store, from);
       logger->startWork();
       PathSet paths;
-      if (op == wopQueryReferences)
+      if (op == wopQueryReferences) {
         paths = store->queryPathInfo(path)->references;
-      else if (op == wopQueryReferrers)
+      } else if (op == wopQueryReferrers) {
         store->queryReferrers(path, paths);
-      else if (op == wopQueryValidDerivers)
+      } else if (op == wopQueryValidDerivers) {
         paths = store->queryValidDerivers(path);
-      else
+      } else {
         paths = store->queryDerivationOutputs(path);
+      }
       logger->stopWork();
       to << paths;
       break;
@@ -377,10 +379,11 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
 
         /* Repairing is not atomic, so disallowed for "untrusted"
            clients.  */
-        if (mode == bmRepair && !trusted)
+        if (mode == bmRepair && !trusted) {
           throw Error(
               "repairing is not allowed because you are not in "
               "'trusted-users'");
+        }
       }
       logger->startWork();
       store->buildPaths(drvs, mode);
@@ -451,10 +454,11 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
 
       to << size;
 
-      for (auto& [target, links] : roots)
+      for (auto& [target, links] : roots) {
         for (auto& link : links) {
           to << link << target;
         }
+      }
 
       break;
     }
@@ -472,8 +476,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       GCResults results;
 
       logger->startWork();
-      if (options.ignoreLiveness)
+      if (options.ignoreLiveness) {
         throw Error("you are not allowed to ignore liveness");
+      }
       store->collectGarbage(options, results);
       logger->stopWork();
 
@@ -522,30 +527,33 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
           }
           Strings subs;
           auto ss = tokenizeString<Strings>(value);
-          for (auto& s : ss)
-            if (trusted.count(s))
+          for (auto& s : ss) {
+            if (trusted.count(s)) {
               subs.push_back(s);
-            else
+            } else {
               LOG(WARNING) << "ignoring untrusted substituter '" << s << "'";
+            }
+          }
           res = subs;
           return true;
         };
 
         try {
-          if (name == "ssh-auth-sock")  // obsolete
+          if (name == "ssh-auth-sock") {  // obsolete
             ;
-          else if (trusted || name == settings.buildTimeout.name ||
-                   name == "connect-timeout" ||
-                   (name == "builders" && value == ""))
+          } else if (trusted || name == settings.buildTimeout.name ||
+                     name == "connect-timeout" ||
+                     (name == "builders" && value == "")) {
             settings.set(name, value);
-          else if (setSubstituters(settings.substituters))
+          } else if (setSubstituters(settings.substituters)) {
             ;
-          else if (setSubstituters(settings.extraSubstituters))
+          } else if (setSubstituters(settings.extraSubstituters)) {
             ;
-          else
+          } else {
             LOG(WARNING) << "ignoring the user-specified setting '" << name
                          << "', because it is a "
                          << "restricted setting and you are not a trusted user";
+          }
         } catch (UsageError& e) {
           LOG(WARNING) << e.what();
         }
@@ -562,9 +570,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       store->querySubstitutablePathInfos({path}, infos);
       logger->stopWork();
       SubstitutablePathInfos::iterator i = infos.find(path);
-      if (i == infos.end())
+      if (i == infos.end()) {
         to << 0;
-      else {
+      } else {
         to << 1 << i->second.deriver << i->second.references
            << i->second.downloadSize << i->second.narSize;
       }
@@ -632,8 +640,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       bool checkContents, repair;
       from >> checkContents >> repair;
       logger->startWork();
-      if (repair && !trusted)
+      if (repair && !trusted) {
         throw Error("you are not privileged to repair paths");
+      }
       bool errors = store->verifyStore(checkContents, (RepairFlag)repair);
       logger->stopWork();
       to << errors;
@@ -746,8 +755,9 @@ static void processConnection(bool trusted, const std::string& userName,
     DLOG(INFO) << opCount << " operations";
   });
 
-  if (GET_PROTOCOL_MINOR(clientVersion) >= 14 && readInt(from))
+  if (GET_PROTOCOL_MINOR(clientVersion) >= 14 && readInt(from)) {
     setAffinityTo(readInt(from));
+  }
 
   readInt(from);  // obsolete reserveSpace
 
@@ -823,8 +833,9 @@ static void sigChldHandler(int sigNo) {
   // Ensure we don't modify errno of whatever we've interrupted
   auto saved_errno = errno;
   /* Reap all dead children. */
-  while (waitpid(-1, 0, WNOHANG) > 0)
+  while (waitpid(-1, 0, WNOHANG) > 0) {
     ;
+  }
   errno = saved_errno;
 }
 
@@ -833,8 +844,9 @@ static void setSigChldAction(bool autoReap) {
   act.sa_handler = autoReap ? sigChldHandler : SIG_DFL;
   sigfillset(&act.sa_mask);
   act.sa_flags = 0;
-  if (sigaction(SIGCHLD, &act, &oact))
+  if (sigaction(SIGCHLD, &act, &oact)) {
     throw SysError("setting SIGCHLD handler");
+  }
 }
 
 bool matchUser(const string& user, const string& group, const Strings& users) {
@@ -846,7 +858,7 @@ bool matchUser(const string& user, const string& group, const Strings& users) {
     return true;
   }
 
-  for (auto& i : users)
+  for (auto& i : users) {
     if (string(i, 0, 1) == "@") {
       if (group == string(i, 1)) {
         return true;
@@ -855,11 +867,13 @@ bool matchUser(const string& user, const string& group, const Strings& users) {
       if (!gr) {
         continue;
       }
-      for (char** mem = gr->gr_mem; *mem; mem++)
+      for (char** mem = gr->gr_mem; *mem; mem++) {
         if (user == string(*mem)) {
           return true;
         }
+      }
     }
+  }
 
   return false;
 }
@@ -881,8 +895,9 @@ static PeerInfo getPeerInfo(int remote) {
 
   ucred cred;
   socklen_t credLen = sizeof(cred);
-  if (getsockopt(remote, SOL_SOCKET, SO_PEERCRED, &cred, &credLen) == -1)
+  if (getsockopt(remote, SOL_SOCKET, SO_PEERCRED, &cred, &credLen) == -1) {
     throw SysError("getting peer credentials");
+  }
   peer = {true, cred.pid, true, cred.uid, true, cred.gid};
 
 #elif defined(LOCAL_PEERCRED)
@@ -918,8 +933,9 @@ static void daemonLoop(char** argv) {
   /* Handle socket-based activation by systemd. */
   if (getEnv("LISTEN_FDS") != "") {
     if (getEnv("LISTEN_PID") != std::to_string(getpid()) ||
-        getEnv("LISTEN_FDS") != "1")
+        getEnv("LISTEN_FDS") != "1") {
       throw Error("unexpected systemd environment variables");
+    }
     fdSocket = SD_LISTEN_FDS_START;
   }
 
@@ -938,14 +954,16 @@ static void daemonLoop(char** argv) {
     /* Urgh, sockaddr_un allows path names of only 108 characters.
        So chdir to the socket directory so that we can pass a
        relative path name. */
-    if (chdir(dirOf(socketPath).c_str()) == -1)
+    if (chdir(dirOf(socketPath).c_str()) == -1) {
       throw SysError("cannot change current directory");
+    }
     Path socketPathRel = "./" + baseNameOf(socketPath);
 
     struct sockaddr_un addr;
     addr.sun_family = AF_UNIX;
-    if (socketPathRel.size() >= sizeof(addr.sun_path))
+    if (socketPathRel.size() >= sizeof(addr.sun_path)) {
       throw Error(format("socket path '%1%' is too long") % socketPathRel);
+    }
     strcpy(addr.sun_path, socketPathRel.c_str());
 
     unlink(socketPath.c_str());
@@ -956,14 +974,17 @@ static void daemonLoop(char** argv) {
     mode_t oldMode = umask(0111);
     int res = bind(fdSocket.get(), (struct sockaddr*)&addr, sizeof(addr));
     umask(oldMode);
-    if (res == -1)
+    if (res == -1) {
       throw SysError(format("cannot bind to socket '%1%'") % socketPath);
+    }
 
-    if (chdir("/") == -1) /* back to the root */
+    if (chdir("/") == -1) { /* back to the root */
       throw SysError("cannot change current directory");
+    }
 
-    if (listen(fdSocket.get(), 5) == -1)
+    if (listen(fdSocket.get(), 5) == -1) {
       throw SysError(format("cannot listen on socket '%1%'") % socketPath);
+    }
   }
 
   closeOnExec(fdSocket.get());
@@ -1062,16 +1083,17 @@ static int _main(int argc, char** argv) {
 
     parseCmdLine(argc, argv,
                  [&](Strings::iterator& arg, const Strings::iterator& end) {
-                   if (*arg == "--daemon")
+                   if (*arg == "--daemon") {
                      ; /* ignored for backwards compatibility */
-                   else if (*arg == "--help")
+                   } else if (*arg == "--help") {
                      showManPage("nix-daemon");
-                   else if (*arg == "--version")
+                   } else if (*arg == "--version") {
                      printVersion("nix-daemon");
-                   else if (*arg == "--stdio")
+                   } else if (*arg == "--stdio") {
                      stdio = true;
-                   else
+                   } else {
                      return false;
+                   }
                    return true;
                  });
 
@@ -1087,20 +1109,23 @@ static int _main(int argc, char** argv) {
         }
 
         auto socketDir = dirOf(socketPath);
-        if (chdir(socketDir.c_str()) == -1)
+        if (chdir(socketDir.c_str()) == -1) {
           throw SysError(format("changing to socket directory '%1%'") %
                          socketDir);
+        }
 
         auto socketName = baseNameOf(socketPath);
         auto addr = sockaddr_un{};
         addr.sun_family = AF_UNIX;
-        if (socketName.size() + 1 >= sizeof(addr.sun_path))
+        if (socketName.size() + 1 >= sizeof(addr.sun_path)) {
           throw Error(format("socket name %1% is too long") % socketName);
+        }
         strcpy(addr.sun_path, socketName.c_str());
 
-        if (connect(s, (struct sockaddr*)&addr, sizeof(addr)) == -1)
+        if (connect(s, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
           throw SysError(format("cannot connect to daemon at %1%") %
                          socketPath);
+        }
 
         auto nfds = (s > STDIN_FILENO ? s : STDIN_FILENO) + 1;
         while (true) {
@@ -1108,23 +1133,26 @@ static int _main(int argc, char** argv) {
           FD_ZERO(&fds);
           FD_SET(s, &fds);
           FD_SET(STDIN_FILENO, &fds);
-          if (select(nfds, &fds, nullptr, nullptr, nullptr) == -1)
+          if (select(nfds, &fds, nullptr, nullptr, nullptr) == -1) {
             throw SysError("waiting for data from client or server");
+          }
           if (FD_ISSET(s, &fds)) {
             auto res = splice(s, nullptr, STDOUT_FILENO, nullptr, SSIZE_MAX,
                               SPLICE_F_MOVE);
-            if (res == -1)
+            if (res == -1) {
               throw SysError("splicing data from daemon socket to stdout");
-            else if (res == 0)
+            } else if (res == 0) {
               throw EndOfFile("unexpected EOF from daemon socket");
+            }
           }
           if (FD_ISSET(STDIN_FILENO, &fds)) {
             auto res = splice(STDIN_FILENO, nullptr, s, nullptr, SSIZE_MAX,
                               SPLICE_F_MOVE);
-            if (res == -1)
+            if (res == -1) {
               throw SysError("splicing data from stdin to daemon socket");
-            else if (res == 0)
+            } else if (res == 0) {
               return 0;
+            }
           }
         }
       } else {

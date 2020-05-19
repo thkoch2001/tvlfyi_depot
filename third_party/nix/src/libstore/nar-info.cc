@@ -40,19 +40,19 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
         corrupt();
       }
       path = value;
-    } else if (name == "URL")
+    } else if (name == "URL") {
       url = value;
-    else if (name == "Compression")
+    } else if (name == "Compression") {
       compression = value;
-    else if (name == "FileHash")
+    } else if (name == "FileHash") {
       fileHash = parseHashField(value);
-    else if (name == "FileSize") {
+    } else if (name == "FileSize") {
       if (!string2Int(value, fileSize)) {
         corrupt();
       }
-    } else if (name == "NarHash")
+    } else if (name == "NarHash") {
       narHash = parseHashField(value);
-    else if (name == "NarSize") {
+    } else if (name == "NarSize") {
       if (!string2Int(value, narSize)) {
         corrupt();
       }
@@ -76,11 +76,11 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
         }
         deriver = p;
       }
-    } else if (name == "System")
+    } else if (name == "System") {
       system = value;
-    else if (name == "Sig")
+    } else if (name == "Sig") {
       sigs.insert(value);
-    else if (name == "CA") {
+    } else if (name == "CA") {
       if (!ca.empty()) {
         corrupt();
       }

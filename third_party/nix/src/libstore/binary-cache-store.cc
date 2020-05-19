@@ -19,9 +19,10 @@
 namespace nix {
 
 BinaryCacheStore::BinaryCacheStore(const Params& params) : Store(params) {
-  if (secretKeyFile != "")
+  if (secretKeyFile != "") {
     secretKey =
         std::unique_ptr<SecretKey>(new SecretKey(readFile(secretKeyFile)));
+  }
 
   StringSink sink;
   sink << narVersionMagic1;
@@ -44,10 +45,11 @@ void BinaryCacheStore::init() {
       auto name = line.substr(0, colon);
       auto value = trim(line.substr(colon + 1, std::string::npos));
       if (name == "StoreDir") {
-        if (value != storeDir)
+        if (value != storeDir) {
           throw Error(format("binary cache '%s' is for Nix stores with prefix "
                              "'%s', not '%s'") %
                       getUri() % value % storeDir);
+        }
       } else if (name == "WantMassQuery") {
         wantMassQuery_ = value == "1";
       } else if (name == "Priority") {
@@ -108,9 +110,10 @@ void BinaryCacheStore::writeNarInfo(ref<NarInfo> narInfo) {
     state_->pathInfoCache.upsert(hashPart, std::shared_ptr<NarInfo>(narInfo));
   }
 
-  if (diskCache)
+  if (diskCache) {
     diskCache->upsertNarInfo(getUri(), hashPart,
                              std::shared_ptr<NarInfo>(narInfo));
+  }
 }
 
 void BinaryCacheStore::addToStore(const ValidPathInfo& info,
@@ -123,7 +126,8 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
 
   /* Verify that all references are valid. This may do some .narinfo
      reads, but typically they'll already be cached. */
-  for (auto& ref : info.references) try {
+  for (auto& ref : info.references) {
+    try {
       if (ref != info.path) {
         queryPathInfo(ref);
       }
@@ -132,6 +136,7 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
                          "reference '%s' is not valid") %
                   info.path % ref);
     }
+  }
 
   assert(nar->compare(0, narMagic.size(), narMagic) == 0);
 
@@ -140,10 +145,11 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
   narInfo->narSize = nar->size();
   narInfo->narHash = hashString(htSHA256, *nar);
 
-  if (info.narHash && info.narHash != narInfo->narHash)
+  if (info.narHash && info.narHash != narInfo->narHash) {
     throw Error(
         format("refusing to copy corrupted path '%1%' to binary cache") %
         info.path);
+  }
 
   auto accessor_ = std::dynamic_pointer_cast<RemoteFSAccessor>(accessor);
 
@@ -203,8 +209,9 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
   if (repair || !fileExists(narInfo->url)) {
     stats.narWrite++;
     upsertFile(narInfo->url, *narCompressed, "application/x-nix-nar");
-  } else
+  } else {
     stats.narWriteAverted++;
+  }
 
   stats.narWriteBytes += nar->size();
   stats.narWriteCompressedBytes += narCompressed->size();
@@ -349,9 +356,9 @@ void BinaryCacheStore::addSignatures(const Path& storePath,
 std::shared_ptr<std::string> BinaryCacheStore::getBuildLog(const Path& path) {
   Path drvPath;
 
-  if (isDerivation(path))
+  if (isDerivation(path)) {
     drvPath = path;
-  else {
+  } else {
     try {
       auto info = queryPathInfo(path);
       // FIXME: add a "Log" field to .narinfo

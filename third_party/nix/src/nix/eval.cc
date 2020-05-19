@@ -32,8 +32,9 @@ struct CmdEval : MixJSON, InstallableCommand {
   }
 
   void run(ref<Store> store) override {
-    if (raw && json)
+    if (raw && json) {
       throw UsageError("--raw and --json are mutually exclusive");
+    }
 
     auto state = getEvalState();
 

@@ -40,8 +40,9 @@ struct CmdEdit : InstallableCommand {
     DLOG(INFO) << "position is " << pos;
 
     auto colon = pos.rfind(':');
-    if (colon == std::string::npos)
+    if (colon == std::string::npos) {
       throw Error("cannot parse meta.position attribute '%s'", pos);
+    }
 
     std::string filename(pos, 0, colon);
     int lineno;
@@ -57,8 +58,9 @@ struct CmdEdit : InstallableCommand {
 
     if (editor.find("emacs") != std::string::npos ||
         editor.find("nano") != std::string::npos ||
-        editor.find("vim") != std::string::npos)
+        editor.find("vim") != std::string::npos) {
       args.push_back(fmt("+%d", lineno));
+    }
 
     args.push_back(filename);
 

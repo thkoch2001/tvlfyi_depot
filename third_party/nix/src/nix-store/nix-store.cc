@@ -38,8 +38,9 @@ static std::shared_ptr<Store> store;
 
 ref<LocalStore> ensureLocalStore() {
   auto store2 = std::dynamic_pointer_cast<LocalStore>(store);
-  if (!store2)
+  if (!store2) {
     throw Error("you don't have sufficient rights to use this command");
+  }
   return ref<LocalStore>(store2);
 }
 
@@ -48,8 +49,9 @@ static Path useDeriver(Path path) {
     return path;
   }
   Path drvPath = store->queryPathInfo(path)->deriver;
-  if (drvPath == "")
+  if (drvPath == "") {
     throw Error(format("deriver of path '%1%' is not known") % path);
+  }
   return drvPath;
 }
 
@@ -67,23 +69,25 @@ static PathSet realisePath(Path path, bool build = true) {
     Derivation drv = store->derivationFromPath(p.first);
     rootNr++;
 
-    if (p.second.empty())
+    if (p.second.empty()) {
       for (auto& i : drv.outputs) {
         p.second.insert(i.first);
       }
+    }
 
     PathSet outputs;
     for (auto& j : p.second) {
       DerivationOutputs::iterator i = drv.outputs.find(j);
-      if (i == drv.outputs.end())
+      if (i == drv.outputs.end()) {
         throw Error(
             format("derivation '%1%' does not have an output named '%2%'") %
             p.first % j);
+      }
       Path outPath = i->second.path;
       if (store2) {
-        if (gcRoot == "")
+        if (gcRoot == "") {
           printGCWarning();
-        else {
+        } else {
           Path rootName = gcRoot;
           if (rootNr > 1) {
             rootName += "-" + std::to_string(rootNr);
@@ -100,15 +104,16 @@ static PathSet realisePath(Path path, bool build = true) {
   }
 
   else {
-    if (build)
+    if (build) {
       store->ensurePath(path);
-    else if (!store->isValidPath(path))
+    } else if (!store->isValidPath(path)) {
       throw Error(format("path '%1%' does not exist and cannot be created") %
                   path);
+    }
     if (store2) {
-      if (gcRoot == "")
+      if (gcRoot == "") {
         printGCWarning();
-      else {
+      } else {
         Path rootName = gcRoot;
         rootNr++;
         if (rootNr > 1) {
@@ -127,17 +132,19 @@ static void opRealise(Strings opFlags, Strings opArgs) {
   BuildMode buildMode = bmNormal;
   bool ignoreUnknown = false;
 
-  for (auto& i : opFlags)
-    if (i == "--dry-run")
+  for (auto& i : opFlags) {
+    if (i == "--dry-run") {
       dryRun = true;
-    else if (i == "--repair")
+    } else if (i == "--repair") {
       buildMode = bmRepair;
-    else if (i == "--check")
+    } else if (i == "--check") {
       buildMode = bmCheck;
-    else if (i == "--ignore-unknown")
+    } else if (i == "--ignore-unknown") {
       ignoreUnknown = true;
-    else
+    } else {
       throw UsageError(format("unknown flag '%1%'") % i);
+    }
+  }
 
   Paths paths;
   for (auto& i : opArgs) {
@@ -153,17 +160,19 @@ static void opRealise(Strings opFlags, Strings opArgs) {
 
   if (ignoreUnknown) {
     Paths paths2;
-    for (auto& i : paths)
+    for (auto& i : paths) {
       if (unknown.find(i) == unknown.end()) {
         paths2.push_back(i);
       }
+    }
     paths = paths2;
     unknown = PathSet();
   }
 
-  if (settings.printMissing)
+  if (settings.printMissing) {
     printMissing(ref<Store>(store), willBuild, willSubstitute, unknown,
                  downloadSize, narSize);
+  }
 
   if (dryRun) {
     return;
@@ -172,14 +181,16 @@ static void opRealise(Strings opFlags, Strings opArgs) {
   /* Build all paths at the same time to exploit parallelism. */
   store->buildPaths(PathSet(paths.begin(), paths.end()), buildMode);
 
-  if (!ignoreUnknown)
+  if (!ignoreUnknown) {
     for (auto& i : paths) {
       PathSet paths = realisePath(i, false);
-      if (!noOutput)
+      if (!noOutput) {
         for (auto& j : paths) {
           cout << format("%1%\n") % j;
         }
+      }
     }
+  }
 }
 
 /* Add files to the Nix store and print the resulting paths. */
@@ -188,8 +199,9 @@ static void opAdd(Strings opFlags, Strings opArgs) {
     throw UsageError("unknown flag");
   }
 
-  for (auto& i : opArgs)
+  for (auto& i : opArgs) {
     cout << format("%1%\n") % store->addToStore(baseNameOf(i), i);
+  }
 }
 
 /* Preload the output of a fixed-output derivation into the Nix
@@ -197,11 +209,13 @@ static void opAdd(Strings opFlags, Strings opArgs) {
 static void opAddFixed(Strings opFlags, Strings opArgs) {
   bool recursive = false;
 
-  for (auto& i : opFlags)
-    if (i == "--recursive")
+  for (auto& i : opFlags) {
+    if (i == "--recursive") {
       recursive = true;
-    else
+    } else {
       throw UsageError(format("unknown flag '%1%'") % i);
+    }
+  }
 
   if (opArgs.empty()) {
     throw UsageError("first argument must be hash algorithm");
@@ -210,23 +224,27 @@ static void opAddFixed(Strings opFlags, Strings opArgs) {
   HashType hashAlgo = parseHashType(opArgs.front());
   opArgs.pop_front();
 
-  for (auto& i : opArgs)
+  for (auto& i : opArgs) {
     cout << format("%1%\n") %
                 store->addToStore(baseNameOf(i), i, recursive, hashAlgo);
+  }
 }
 
 /* Hack to support caching in `nix-prefetch-url'. */
 static void opPrintFixedPath(Strings opFlags, Strings opArgs) {
   bool recursive = false;
 
-  for (auto i : opFlags)
-    if (i == "--recursive")
+  for (auto i : opFlags) {
+    if (i == "--recursive") {
       recursive = true;
-    else
+    } else {
       throw UsageError(format("unknown flag '%1%'") % i);
+    }
+  }
 
-  if (opArgs.size() != 3)
+  if (opArgs.size() != 3) {
     throw UsageError(format("'--print-fixed-path' requires three arguments"));
+  }
 
   Strings::iterator i = opArgs.begin();
   HashType hashAlgo = parseHashType(*i++);
@@ -249,8 +267,9 @@ static PathSet maybeUseOutputs(const Path& storePath, bool useOutput,
       outputs.insert(i.second.path);
     }
     return outputs;
-  } else
+  } else {
     return {storePath};
+  }
 }
 
 /* Some code to print a tree representation of a derivation dependency
@@ -316,50 +335,52 @@ static void opQuery(Strings opFlags, Strings opArgs) {
 
   for (auto& i : opFlags) {
     QueryType prev = query;
-    if (i == "--outputs")
+    if (i == "--outputs") {
       query = qOutputs;
-    else if (i == "--requisites" || i == "-R")
+    } else if (i == "--requisites" || i == "-R") {
       query = qRequisites;
-    else if (i == "--references")
+    } else if (i == "--references") {
       query = qReferences;
-    else if (i == "--referrers" || i == "--referers")
+    } else if (i == "--referrers" || i == "--referers") {
       query = qReferrers;
-    else if (i == "--referrers-closure" || i == "--referers-closure")
+    } else if (i == "--referrers-closure" || i == "--referers-closure") {
       query = qReferrersClosure;
-    else if (i == "--deriver" || i == "-d")
+    } else if (i == "--deriver" || i == "-d") {
       query = qDeriver;
-    else if (i == "--binding" || i == "-b") {
+    } else if (i == "--binding" || i == "-b") {
       if (opArgs.size() == 0) {
         throw UsageError("expected binding name");
       }
       bindingName = opArgs.front();
       opArgs.pop_front();
       query = qBinding;
-    } else if (i == "--hash")
+    } else if (i == "--hash") {
       query = qHash;
-    else if (i == "--size")
+    } else if (i == "--size") {
       query = qSize;
-    else if (i == "--tree")
+    } else if (i == "--tree") {
       query = qTree;
-    else if (i == "--graph")
+    } else if (i == "--graph") {
       query = qGraph;
-    else if (i == "--graphml")
+    } else if (i == "--graphml") {
       query = qGraphML;
-    else if (i == "--resolve")
+    } else if (i == "--resolve") {
       query = qResolve;
-    else if (i == "--roots")
+    } else if (i == "--roots") {
       query = qRoots;
-    else if (i == "--use-output" || i == "-u")
+    } else if (i == "--use-output" || i == "-u") {
       useOutput = true;
-    else if (i == "--force-realise" || i == "--force-realize" || i == "-f")
+    } else if (i == "--force-realise" || i == "--force-realize" || i == "-f") {
       forceRealise = true;
-    else if (i == "--include-outputs")
+    } else if (i == "--include-outputs") {
       includeOutputs = true;
-    else
+    } else {
       throw UsageError(format("unknown flag '%1%'") % i);
-    if (prev != qDefault && prev != query)
+    }
+    if (prev != qDefault && prev != query) {
       throw UsageError(format("query type '%1%' conflicts with earlier flag") %
                        i);
+    }
   }
 
   if (query == qDefault) {
@@ -392,21 +413,24 @@ static void opQuery(Strings opFlags, Strings opArgs) {
         PathSet ps = maybeUseOutputs(store->followLinksToStorePath(i),
                                      useOutput, forceRealise);
         for (auto& j : ps) {
-          if (query == qRequisites)
+          if (query == qRequisites) {
             store->computeFSClosure(j, paths, false, includeOutputs);
-          else if (query == qReferences) {
+          } else if (query == qReferences) {
             for (auto& p : store->queryPathInfo(j)->references) {
               paths.insert(p);
             }
-          } else if (query == qReferrers)
+          } else if (query == qReferrers) {
             store->queryReferrers(j, paths);
-          else if (query == qReferrersClosure)
+          } else if (query == qReferrersClosure) {
             store->computeFSClosure(j, paths, true);
+          }
         }
       }
       Paths sorted = store->topoSortPaths(paths);
-      for (Paths::reverse_iterator i = sorted.rbegin(); i != sorted.rend(); ++i)
+      for (Paths::reverse_iterator i = sorted.rbegin(); i != sorted.rend();
+           ++i) {
         cout << format("%s\n") % *i;
+      }
       break;
     }
 
@@ -423,11 +447,12 @@ static void opQuery(Strings opFlags, Strings opArgs) {
         Path path = useDeriver(store->followLinksToStorePath(i));
         Derivation drv = store->derivationFromPath(path);
         StringPairs::iterator j = drv.env.find(bindingName);
-        if (j == drv.env.end())
+        if (j == drv.env.end()) {
           throw Error(
               format(
                   "derivation '%1%' has no environment binding named '%2%'") %
               path % bindingName);
+        }
         cout << format("%1%\n") % j->second;
       }
       break;
@@ -442,16 +467,18 @@ static void opQuery(Strings opFlags, Strings opArgs) {
           if (query == qHash) {
             assert(info->narHash.type == htSHA256);
             cout << fmt("%s\n", info->narHash.to_string(Base32));
-          } else if (query == qSize)
+          } else if (query == qSize) {
             cout << fmt("%d\n", info->narSize);
+          }
         }
       }
       break;
 
     case qTree: {
       PathSet done;
-      for (auto& i : opArgs)
+      for (auto& i : opArgs) {
         printTree(store->followLinksToStorePath(i), "", "", done);
+      }
       break;
     }
 
@@ -478,8 +505,9 @@ static void opQuery(Strings opFlags, Strings opArgs) {
     }
 
     case qResolve: {
-      for (auto& i : opArgs)
+      for (auto& i : opArgs) {
         cout << format("%1%\n") % store->followLinksToStorePath(i);
+      }
       break;
     }
 
@@ -493,10 +521,13 @@ static void opQuery(Strings opFlags, Strings opArgs) {
             settings.gcKeepDerivations);
       }
       Roots roots = store->findRoots(false);
-      for (auto& [target, links] : roots)
-        if (referrers.find(target) != referrers.end())
-          for (auto& link : links)
+      for (auto& [target, links] : roots) {
+        if (referrers.find(target) != referrers.end()) {
+          for (auto& link : links) {
             cout << format("%1% -> %2%\n") % link % target;
+          }
+        }
+      }
       break;
     }
 
@@ -509,16 +540,18 @@ static void opPrintEnv(Strings opFlags, Strings opArgs) {
   if (!opFlags.empty()) {
     throw UsageError("unknown flag");
   }
-  if (opArgs.size() != 1)
+  if (opArgs.size() != 1) {
     throw UsageError("'--print-env' requires one derivation store path");
+  }
 
   Path drvPath = opArgs.front();
   Derivation drv = store->derivationFromPath(drvPath);
 
   /* Print each environment variable in the derivation in a format
      that can be sourced by the shell. */
-  for (auto& i : drv.env)
+  for (auto& i : drv.env) {
     cout << format("export %1%; %1%=%2%\n") % i.first % shellEscape(i.second);
+  }
 
   /* Also output the arguments.  This doesn't preserve whitespace in
      arguments. */
@@ -544,8 +577,9 @@ static void opReadLog(Strings opFlags, Strings opArgs) {
   for (auto& i : opArgs) {
     auto path = store->followLinksToStorePath(i);
     auto log = store->getBuildLog(path);
-    if (!log)
+    if (!log) {
       throw Error("build log of derivation '%s' is not available", path);
+    }
     std::cout << *log;
   }
 }
@@ -558,12 +592,14 @@ static void opDumpDB(Strings opFlags, Strings opArgs) {
     for (auto& i : opArgs) {
       i = store->followLinksToStorePath(i);
     }
-    for (auto& i : opArgs)
+    for (auto& i : opArgs) {
       cout << store->makeValidityRegistration({i}, true, true);
+    }
   } else {
     PathSet validPaths = store->queryAllValidPaths();
-    for (auto& i : validPaths)
+    for (auto& i : validPaths) {
       cout << store->makeValidityRegistration({i}, true, true);
+    }
   }
 }
 
@@ -607,13 +643,15 @@ static void opRegisterValidity(Strings opFlags, Strings opArgs) {
   bool reregister = false;  // !!! maybe this should be the default
   bool hashGiven = false;
 
-  for (auto& i : opFlags)
-    if (i == "--reregister")
+  for (auto& i : opFlags) {
+    if (i == "--reregister") {
       reregister = true;
-    else if (i == "--hash-given")
+    } else if (i == "--hash-given") {
       hashGiven = true;
-    else
+    } else {
       throw UsageError(format("unknown flag '%1%'") % i);
+    }
+  }
 
   if (!opArgs.empty()) {
     throw UsageError("no arguments expected");
@@ -625,19 +663,22 @@ static void opRegisterValidity(Strings opFlags, Strings opArgs) {
 static void opCheckValidity(Strings opFlags, Strings opArgs) {
   bool printInvalid = false;
 
-  for (auto& i : opFlags)
-    if (i == "--print-invalid")
+  for (auto& i : opFlags) {
+    if (i == "--print-invalid") {
       printInvalid = true;
-    else
+    } else {
       throw UsageError(format("unknown flag '%1%'") % i);
+    }
+  }
 
   for (auto& i : opArgs) {
     Path path = store->followLinksToStorePath(i);
     if (!store->isValidPath(path)) {
-      if (printInvalid)
+      if (printInvalid) {
         cout << format("%1%\n") % path;
-      else
+      } else {
         throw Error(format("path '%1%' is not valid") % path);
+      }
     }
   }
 }
@@ -650,20 +691,22 @@ static void opGC(Strings opFlags, Strings opArgs) {
   GCResults results;
 
   /* Do what? */
-  for (auto i = opFlags.begin(); i != opFlags.end(); ++i)
-    if (*i == "--print-roots")
+  for (auto i = opFlags.begin(); i != opFlags.end(); ++i) {
+    if (*i == "--print-roots") {
       printRoots = true;
-    else if (*i == "--print-live")
+    } else if (*i == "--print-live") {
       options.action = GCOptions::gcReturnLive;
-    else if (*i == "--print-dead")
+    } else if (*i == "--print-dead") {
       options.action = GCOptions::gcReturnDead;
-    else if (*i == "--delete")
+    } else if (*i == "--delete") {
       options.action = GCOptions::gcDeleteDead;
-    else if (*i == "--max-freed") {
+    } else if (*i == "--max-freed") {
       long long maxFreed = getIntArg<long long>(*i, i, opFlags.end(), true);
       options.maxFreed = maxFreed >= 0 ? maxFreed : 0;
-    } else
+    } else {
       throw UsageError(format("bad sub-operation '%1%' in GC") % *i);
+    }
+  }
 
   if (!opArgs.empty()) {
     throw UsageError("no arguments expected");
@@ -673,22 +716,25 @@ static void opGC(Strings opFlags, Strings opArgs) {
     Roots roots = store->findRoots(false);
     std::set<std::pair<Path, Path>> roots2;
     // Transpose and sort the roots.
-    for (auto& [target, links] : roots)
+    for (auto& [target, links] : roots) {
       for (auto& link : links) {
         roots2.emplace(link, target);
       }
-    for (auto& [link, target] : roots2)
+    }
+    for (auto& [link, target] : roots2) {
       std::cout << link << " -> " << target << "\n";
+    }
   }
 
   else {
     PrintFreed freed(options.action == GCOptions::gcDeleteDead, results);
     store->collectGarbage(options, results);
 
-    if (options.action != GCOptions::gcDeleteDead)
+    if (options.action != GCOptions::gcDeleteDead) {
       for (auto& i : results.paths) {
         cout << i << std::endl;
       }
+    }
   }
 }
 
@@ -699,14 +745,17 @@ static void opDelete(Strings opFlags, Strings opArgs) {
   GCOptions options;
   options.action = GCOptions::gcDeleteSpecific;
 
-  for (auto& i : opFlags)
-    if (i == "--ignore-liveness")
+  for (auto& i : opFlags) {
+    if (i == "--ignore-liveness") {
       options.ignoreLiveness = true;
-    else
+    } else {
       throw UsageError(format("unknown flag '%1%'") % i);
+    }
+  }
 
-  for (auto& i : opArgs)
+  for (auto& i : opArgs) {
     options.pathsToDelete.insert(store->followLinksToStorePath(i));
+  }
 
   GCResults results;
   PrintFreed freed(true, results);
@@ -795,13 +844,15 @@ static void opVerify(Strings opFlags, Strings opArgs) {
   bool checkContents = false;
   RepairFlag repair = NoRepair;
 
-  for (auto& i : opFlags)
-    if (i == "--check-contents")
+  for (auto& i : opFlags) {
+    if (i == "--check-contents") {
       checkContents = true;
-    else if (i == "--repair")
+    } else if (i == "--repair") {
       repair = Repair;
-    else
+    } else {
       throw UsageError(format("unknown flag '%1%'") % i);
+    }
+  }
 
   if (store->verifyStore(checkContents, repair)) {
     LOG(WARNING) << "not all errors were fixed";
@@ -851,8 +902,9 @@ static void opRepairPath(Strings opFlags, Strings opArgs) {
 /* Optimise the disk space usage of the Nix store by hard-linking
    files with the same contents. */
 static void opOptimise(Strings opFlags, Strings opArgs) {
-  if (!opArgs.empty() || !opFlags.empty())
+  if (!opArgs.empty() || !opFlags.empty()) {
     throw UsageError("no arguments expected");
+  }
 
   store->optimiseStore();
 }
@@ -860,11 +912,13 @@ static void opOptimise(Strings opFlags, Strings opArgs) {
 /* Serve the nix store in a way usable by a restricted ssh user. */
 static void opServe(Strings opFlags, Strings opArgs) {
   bool writeAllowed = false;
-  for (auto& i : opFlags)
-    if (i == "--write")
+  for (auto& i : opFlags) {
+    if (i == "--write") {
       writeAllowed = true;
-    else
+    } else {
       throw UsageError(format("unknown flag '%1%'") % i);
+    }
+  }
 
   if (!opArgs.empty()) {
     throw UsageError("no arguments expected");
@@ -889,8 +943,9 @@ static void opServe(Strings opFlags, Strings opArgs) {
     settings.useSubstitutes = false;
     settings.maxSilentTime = readInt(in);
     settings.buildTimeout = readInt(in);
-    if (GET_PROTOCOL_MINOR(clientVersion) >= 2)
+    if (GET_PROTOCOL_MINOR(clientVersion) >= 2) {
       settings.maxLogSize = readNum<unsigned long>(in);
+    }
     if (GET_PROTOCOL_MINOR(clientVersion) >= 3) {
       settings.buildRepeat = readInt(in);
       settings.enforceDeterminism = readInt(in);
@@ -912,10 +967,11 @@ static void opServe(Strings opFlags, Strings opArgs) {
         bool lock = readInt(in);
         bool substitute = readInt(in);
         PathSet paths = readStorePaths<PathSet>(*store, in);
-        if (lock && writeAllowed)
+        if (lock && writeAllowed) {
           for (auto& path : paths) {
             store->addTempRoot(path);
           }
+        }
 
         /* If requested, substitute missing paths. This
            implements nix-copy-closure's --use-substitutes
@@ -923,21 +979,24 @@ static void opServe(Strings opFlags, Strings opArgs) {
         if (substitute && writeAllowed) {
           /* Filter out .drv files (we don't want to build anything). */
           PathSet paths2;
-          for (auto& path : paths)
+          for (auto& path : paths) {
             if (!isDerivation(path)) {
               paths2.insert(path);
             }
+          }
           unsigned long long downloadSize, narSize;
           PathSet willBuild, willSubstitute, unknown;
           store->queryMissing(PathSet(paths2.begin(), paths2.end()), willBuild,
                               willSubstitute, unknown, downloadSize, narSize);
           /* FIXME: should use ensurePath(), but it only
              does one path at a time. */
-          if (!willSubstitute.empty()) try {
+          if (!willSubstitute.empty()) {
+            try {
               store->buildPaths(willSubstitute);
             } catch (Error& e) {
               LOG(WARNING) << e.msg();
             }
+          }
         }
 
         out << store->queryValidPaths(paths);
@@ -954,9 +1013,10 @@ static void opServe(Strings opFlags, Strings opArgs) {
             // !!! Maybe we want compression?
             out << info->narSize  // downloadSize
                 << info->narSize;
-            if (GET_PROTOCOL_MINOR(clientVersion) >= 4)
+            if (GET_PROTOCOL_MINOR(clientVersion) >= 4) {
               out << (info->narHash ? info->narHash.to_string() : "")
                   << info->ca << info->sigs;
+            }
           } catch (InvalidPath&) {
           }
         }
@@ -1020,9 +1080,10 @@ static void opServe(Strings opFlags, Strings opArgs) {
 
         out << status.status << status.errorMsg;
 
-        if (GET_PROTOCOL_MINOR(clientVersion) >= 3)
+        if (GET_PROTOCOL_MINOR(clientVersion) >= 3) {
           out << status.timesBuilt << status.isNonDeterministic
               << status.startTime << status.stopTime;
+        }
 
         break;
       }
@@ -1127,81 +1188,85 @@ static int _main(int argc, char** argv) {
     Strings opFlags, opArgs;
     Operation op = 0;
 
-    parseCmdLine(
-        argc, argv, [&](Strings::iterator& arg, const Strings::iterator& end) {
-          Operation oldOp = op;
+    parseCmdLine(argc, argv,
+                 [&](Strings::iterator& arg, const Strings::iterator& end) {
+                   Operation oldOp = op;
 
-          if (*arg == "--help")
-            showManPage("nix-store");
-          else if (*arg == "--version")
-            op = opVersion;
-          else if (*arg == "--realise" || *arg == "--realize" || *arg == "-r")
-            op = opRealise;
-          else if (*arg == "--add" || *arg == "-A")
-            op = opAdd;
-          else if (*arg == "--add-fixed")
-            op = opAddFixed;
-          else if (*arg == "--print-fixed-path")
-            op = opPrintFixedPath;
-          else if (*arg == "--delete")
-            op = opDelete;
-          else if (*arg == "--query" || *arg == "-q")
-            op = opQuery;
-          else if (*arg == "--print-env")
-            op = opPrintEnv;
-          else if (*arg == "--read-log" || *arg == "-l")
-            op = opReadLog;
-          else if (*arg == "--dump-db")
-            op = opDumpDB;
-          else if (*arg == "--load-db")
-            op = opLoadDB;
-          else if (*arg == "--register-validity")
-            op = opRegisterValidity;
-          else if (*arg == "--check-validity")
-            op = opCheckValidity;
-          else if (*arg == "--gc")
-            op = opGC;
-          else if (*arg == "--dump")
-            op = opDump;
-          else if (*arg == "--restore")
-            op = opRestore;
-          else if (*arg == "--export")
-            op = opExport;
-          else if (*arg == "--import")
-            op = opImport;
-          else if (*arg == "--init")
-            op = opInit;
-          else if (*arg == "--verify")
-            op = opVerify;
-          else if (*arg == "--verify-path")
-            op = opVerifyPath;
-          else if (*arg == "--repair-path")
-            op = opRepairPath;
-          else if (*arg == "--optimise" || *arg == "--optimize")
-            op = opOptimise;
-          else if (*arg == "--serve")
-            op = opServe;
-          else if (*arg == "--generate-binary-cache-key")
-            op = opGenerateBinaryCacheKey;
-          else if (*arg == "--add-root")
-            gcRoot = absPath(getArg(*arg, arg, end));
-          else if (*arg == "--indirect")
-            indirectRoot = true;
-          else if (*arg == "--no-output")
-            noOutput = true;
-          else if (*arg != "" && arg->at(0) == '-') {
-            opFlags.push_back(*arg);
-            if (*arg == "--max-freed" || *arg == "--max-links" ||
-                *arg == "--max-atime") /* !!! hack */
-              opFlags.push_back(getArg(*arg, arg, end));
-          } else
-            opArgs.push_back(*arg);
+                   if (*arg == "--help") {
+                     showManPage("nix-store");
+                   } else if (*arg == "--version") {
+                     op = opVersion;
+                   } else if (*arg == "--realise" || *arg == "--realize" ||
+                              *arg == "-r") {
+                     op = opRealise;
+                   } else if (*arg == "--add" || *arg == "-A") {
+                     op = opAdd;
+                   } else if (*arg == "--add-fixed") {
+                     op = opAddFixed;
+                   } else if (*arg == "--print-fixed-path") {
+                     op = opPrintFixedPath;
+                   } else if (*arg == "--delete") {
+                     op = opDelete;
+                   } else if (*arg == "--query" || *arg == "-q") {
+                     op = opQuery;
+                   } else if (*arg == "--print-env") {
+                     op = opPrintEnv;
+                   } else if (*arg == "--read-log" || *arg == "-l") {
+                     op = opReadLog;
+                   } else if (*arg == "--dump-db") {
+                     op = opDumpDB;
+                   } else if (*arg == "--load-db") {
+                     op = opLoadDB;
+                   } else if (*arg == "--register-validity") {
+                     op = opRegisterValidity;
+                   } else if (*arg == "--check-validity") {
+                     op = opCheckValidity;
+                   } else if (*arg == "--gc") {
+                     op = opGC;
+                   } else if (*arg == "--dump") {
+                     op = opDump;
+                   } else if (*arg == "--restore") {
+                     op = opRestore;
+                   } else if (*arg == "--export") {
+                     op = opExport;
+                   } else if (*arg == "--import") {
+                     op = opImport;
+                   } else if (*arg == "--init") {
+                     op = opInit;
+                   } else if (*arg == "--verify") {
+                     op = opVerify;
+                   } else if (*arg == "--verify-path") {
+                     op = opVerifyPath;
+                   } else if (*arg == "--repair-path") {
+                     op = opRepairPath;
+                   } else if (*arg == "--optimise" || *arg == "--optimize") {
+                     op = opOptimise;
+                   } else if (*arg == "--serve") {
+                     op = opServe;
+                   } else if (*arg == "--generate-binary-cache-key") {
+                     op = opGenerateBinaryCacheKey;
+                   } else if (*arg == "--add-root") {
+                     gcRoot = absPath(getArg(*arg, arg, end));
+                   } else if (*arg == "--indirect") {
+                     indirectRoot = true;
+                   } else if (*arg == "--no-output") {
+                     noOutput = true;
+                   } else if (*arg != "" && arg->at(0) == '-') {
+                     opFlags.push_back(*arg);
+                     if (*arg == "--max-freed" || *arg == "--max-links" ||
+                         *arg == "--max-atime") { /* !!! hack */
+                       opFlags.push_back(getArg(*arg, arg, end));
+                     }
+                   } else {
+                     opArgs.push_back(*arg);
+                   }
 
-          if (oldOp && oldOp != op)
-            throw UsageError("only one operation may be specified");
+                   if (oldOp && oldOp != op) {
+                     throw UsageError("only one operation may be specified");
+                   }
 
-          return true;
-        });
+                   return true;
+                 });
 
     initPlugins();
 
@@ -1209,8 +1274,9 @@ static int _main(int argc, char** argv) {
       throw UsageError("no operation specified");
     }
 
-    if (op != opDump && op != opRestore) /* !!! hack */
+    if (op != opDump && op != opRestore) { /* !!! hack */
       store = openStore();
+    }
 
     op(opFlags, opArgs);
 

@@ -94,10 +94,10 @@ struct CmdVerify : StorePathsCommand {
         if (!noTrust) {
           bool good = false;
 
-          if (info->ultimate && !sigsNeeded)
+          if (info->ultimate && !sigsNeeded) {
             good = true;
 
-          else {
+          } else {
             StringSet sigsSeen;
             size_t actualSigsNeeded = std::max(sigsNeeded, (size_t)1);
             size_t validSigs = 0;
@@ -109,13 +109,15 @@ struct CmdVerify : StorePathsCommand {
                 }
                 sigsSeen.insert(sig);
                 if (validSigs < ValidPathInfo::maxSigs &&
-                    info->checkSignature(publicKeys, sig))
+                    info->checkSignature(publicKeys, sig)) {
                   validSigs++;
+                }
               }
             };
 
-            if (info->isContentAddressed(*store))
+            if (info->isContentAddressed(*store)) {
               validSigs = ValidPathInfo::maxSigs;
+            }
 
             doSigs(info->sigs);
 
@@ -125,8 +127,9 @@ struct CmdVerify : StorePathsCommand {
               }
               try {
                 auto info2 = store2->queryPathInfo(info->path);
-                if (info2->isContentAddressed(*store))
+                if (info2->isContentAddressed(*store)) {
                   validSigs = ValidPathInfo::maxSigs;
+                }
                 doSigs(info2->sigs);
               } catch (InvalidPath&) {
               } catch (Error& e) {
@@ -153,8 +156,9 @@ struct CmdVerify : StorePathsCommand {
       }
     };
 
-    for (auto& storePath : storePaths)
+    for (auto& storePath : storePaths) {
       pool.enqueue(std::bind(doPath, storePath));
+    }
 
     pool.process();
 

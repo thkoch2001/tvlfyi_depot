@@ -31,8 +31,9 @@ namespace nix {
 SQLite::SQLite(const Path& path) {
   if (sqlite3_open_v2(path.c_str(), &db,
                       SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
-                      0) != SQLITE_OK)
+                      0) != SQLITE_OK) {
     throw Error(format("cannot open SQLite database '%s'") % path);
+  }
 }
 
 SQLite::~SQLite() {
@@ -47,24 +48,27 @@ SQLite::~SQLite() {
 
 void SQLite::exec(const std::string& stmt) {
   retrySQLite<void>([&]() {
-    if (sqlite3_exec(db, stmt.c_str(), 0, 0, 0) != SQLITE_OK)
+    if (sqlite3_exec(db, stmt.c_str(), 0, 0, 0) != SQLITE_OK) {
       throwSQLiteError(db, format("executing SQLite statement '%s'") % stmt);
+    }
   });
 }
 
 void SQLiteStmt::create(sqlite3* db, const string& sql) {
   checkInterrupt();
   assert(!stmt);
-  if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0) != SQLITE_OK)
+  if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0) != SQLITE_OK) {
     throwSQLiteError(db, fmt("creating statement '%s'", sql));
+  }
   this->db = db;
   this->sql = sql;
 }
 
 SQLiteStmt::~SQLiteStmt() {
   try {
-    if (stmt && sqlite3_finalize(stmt) != SQLITE_OK)
+    if (stmt && sqlite3_finalize(stmt) != SQLITE_OK) {
       throwSQLiteError(db, fmt("finalizing statement '%s'", sql));
+    }
   } catch (...) {
     ignoreException();
   }
@@ -83,8 +87,9 @@ SQLiteStmt::Use& SQLiteStmt::Use::operator()(const std::string& value,
                                              bool notNull) {
   if (notNull) {
     if (sqlite3_bind_text(stmt, curArg++, value.c_str(), -1,
-                          SQLITE_TRANSIENT) != SQLITE_OK)
+                          SQLITE_TRANSIENT) != SQLITE_OK) {
       throwSQLiteError(stmt.db, "binding argument");
+    }
   } else {
     bind();
   }
@@ -93,8 +98,9 @@ SQLiteStmt::Use& SQLiteStmt::Use::operator()(const std::string& value,
 
 SQLiteStmt::Use& SQLiteStmt::Use::operator()(int64_t value, bool notNull) {
   if (notNull) {
-    if (sqlite3_bind_int64(stmt, curArg++, value) != SQLITE_OK)
+    if (sqlite3_bind_int64(stmt, curArg++, value) != SQLITE_OK) {
       throwSQLiteError(stmt.db, "binding argument");
+    }
   } else {
     bind();
   }
@@ -113,14 +119,16 @@ int SQLiteStmt::Use::step() { return sqlite3_step(stmt); }
 void SQLiteStmt::Use::exec() {
   int r = step();
   assert(r != SQLITE_ROW);
-  if (r != SQLITE_DONE)
+  if (r != SQLITE_DONE) {
     throwSQLiteError(stmt.db, fmt("executing SQLite statement '%s'", stmt.sql));
+  }
 }
 
 bool SQLiteStmt::Use::next() {
   int r = step();
-  if (r != SQLITE_DONE && r != SQLITE_ROW)
+  if (r != SQLITE_DONE && r != SQLITE_ROW) {
     throwSQLiteError(stmt.db, fmt("executing SQLite query '%s'", stmt.sql));
+  }
   return r == SQLITE_ROW;
 }
 

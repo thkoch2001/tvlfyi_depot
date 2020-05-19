@@ -48,9 +48,10 @@ std::pair<ref<FSAccessor>, Path> RemoteFSAccessor::fetch(const Path& path_) {
   auto storePath = store->toStorePath(path);
   std::string restPath = std::string(path, storePath.size());
 
-  if (!store->isValidPath(storePath))
+  if (!store->isValidPath(storePath)) {
     throw InvalidPath(format("path '%1%' is not a valid store path") %
                       storePath);
+  }
 
   auto i = nars.find(storePath);
   if (i != nars.end()) {
@@ -73,8 +74,9 @@ std::pair<ref<FSAccessor>, Path> RemoteFSAccessor::fetch(const Path& path_) {
               throw SysError("opening NAR cache file '%s'", cacheFile);
             }
 
-            if (lseek(fd.get(), offset, SEEK_SET) != (off_t)offset)
+            if (lseek(fd.get(), offset, SEEK_SET) != (off_t)offset) {
               throw SysError("seeking in '%s'", cacheFile);
+            }
 
             std::string buf(length, 0);
             readFull(fd.get(), (unsigned char*)buf.data(), length);

@@ -10,8 +10,9 @@ namespace nix {
    capacity. The space is implicitly reserved after the Bindings
    structure. */
 Bindings* EvalState::allocBindings(size_t capacity) {
-  if (capacity > std::numeric_limits<Bindings::size_t>::max())
+  if (capacity > std::numeric_limits<Bindings::size_t>::max()) {
     throw Error("attribute set of size %d is too big", capacity);
+  }
   return new (allocBytes(sizeof(Bindings) + sizeof(Attr) * capacity))
       Bindings((Bindings::size_t)capacity);
 }

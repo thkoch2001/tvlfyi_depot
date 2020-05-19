@@ -47,35 +47,44 @@ void Store::computeFSClosure(const PathSet& startPaths, PathSet& paths_,
             if (flipDirection) {
               PathSet referrers;
               queryReferrers(path, referrers);
-              for (auto& ref : referrers)
+              for (auto& ref : referrers) {
                 if (ref != path) {
                   enqueue(ref);
                 }
+              }
 
-              if (includeOutputs)
+              if (includeOutputs) {
                 for (auto& i : queryValidDerivers(path)) {
                   enqueue(i);
                 }
+              }
 
-              if (includeDerivers && isDerivation(path))
-                for (auto& i : queryDerivationOutputs(path))
-                  if (isValidPath(i) && queryPathInfo(i)->deriver == path)
+              if (includeDerivers && isDerivation(path)) {
+                for (auto& i : queryDerivationOutputs(path)) {
+                  if (isValidPath(i) && queryPathInfo(i)->deriver == path) {
                     enqueue(i);
+                  }
+                }
+              }
 
             } else {
-              for (auto& ref : info->references)
+              for (auto& ref : info->references) {
                 if (ref != path) {
                   enqueue(ref);
                 }
+              }
 
-              if (includeOutputs && isDerivation(path))
-                for (auto& i : queryDerivationOutputs(path))
+              if (includeOutputs && isDerivation(path)) {
+                for (auto& i : queryDerivationOutputs(path)) {
                   if (isValidPath(i)) {
                     enqueue(i);
                   }
+                }
+              }
 
-              if (includeDerivers && isValidPath(info->deriver))
+              if (includeDerivers && isValidPath(info->deriver)) {
                 enqueue(info->deriver);
+              }
             }
 
             {
@@ -105,7 +114,9 @@ void Store::computeFSClosure(const PathSet& startPaths, PathSet& paths_,
 
   {
     auto state(state_.lock());
-    while (state->pending) state.wait(done);
+    while (state->pending) {
+      state.wait(done);
+    }
     if (state->exc) {
       std::rethrow_exception(state->exc);
     }
@@ -154,9 +165,10 @@ void Store::queryMissing(const PathSet& targets, PathSet& willBuild_,
       state->willBuild.insert(drvPath);
     }
 
-    for (auto& i : drv.inputDrvs)
+    for (auto& i : drv.inputDrvs) {
       pool.enqueue(
           std::bind(doPath, makeDrvPathWithOutputs(i.first, i.second)));
+    }
   };
 
   auto checkOutput = [&](const Path& drvPath, ref<Derivation> drv,
@@ -181,8 +193,9 @@ void Store::queryMissing(const PathSet& targets, PathSet& willBuild_,
         drvState->left--;
         drvState->outPaths.insert(outPath);
         if (!drvState->left) {
-          for (auto& path : drvState->outPaths)
+          for (auto& path : drvState->outPaths) {
             pool.enqueue(std::bind(doPath, path));
+          }
         }
       }
     }
@@ -211,20 +224,24 @@ void Store::queryMissing(const PathSet& targets, PathSet& willBuild_,
       ParsedDerivation parsedDrv(i2.first, drv);
 
       PathSet invalid;
-      for (auto& j : drv.outputs)
-        if (wantOutput(j.first, i2.second) && !isValidPath(j.second.path))
+      for (auto& j : drv.outputs) {
+        if (wantOutput(j.first, i2.second) && !isValidPath(j.second.path)) {
           invalid.insert(j.second.path);
+        }
+      }
       if (invalid.empty()) {
         return;
       }
 
       if (settings.useSubstitutes && parsedDrv.substitutesAllowed()) {
         auto drvState = make_ref<Sync<DrvState>>(DrvState(invalid.size()));
-        for (auto& output : invalid)
+        for (auto& output : invalid) {
           pool.enqueue(std::bind(checkOutput, i2.first,
                                  make_ref<Derivation>(drv), output, drvState));
-      } else
+        }
+      } else {
         mustBuildDrv(i2.first, drv);
+      }
 
     } else {
       if (isValidPath(path)) {
@@ -250,8 +267,9 @@ void Store::queryMissing(const PathSet& targets, PathSet& willBuild_,
         state->narSize += info->second.narSize;
       }
 
-      for (auto& ref : info->second.references)
+      for (auto& ref : info->second.references) {
         pool.enqueue(std::bind(doPath, ref));
+      }
     }
   };
 
@@ -269,10 +287,11 @@ Paths Store::topoSortPaths(const PathSet& paths) {
   std::function<void(const Path& path, const Path* parent)> dfsVisit;
 
   dfsVisit = [&](const Path& path, const Path* parent) {
-    if (parents.find(path) != parents.end())
+    if (parents.find(path) != parents.end()) {
       throw BuildError(
           format("cycle detected in the references of '%1%' from '%2%'") %
           path % *parent);
+    }
 
     if (visited.find(path) != visited.end()) {
       return;
@@ -286,12 +305,13 @@ Paths Store::topoSortPaths(const PathSet& paths) {
     } catch (InvalidPath&) {
     }
 
-    for (auto& i : references)
+    for (auto& i : references) {
       /* Don't traverse into paths that don't exist.  That can
          happen due to substitutes for non-existent paths. */
       if (i != path && paths.find(i) != paths.end()) {
         dfsVisit(i, &path);
       }
+    }
 
     sorted.push_front(path);
     parents.erase(path);

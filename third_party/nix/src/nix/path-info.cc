@@ -75,8 +75,9 @@ struct CmdPathInfo : StorePathsCommand, MixJSON {
 
   void run(ref<Store> store, Paths storePaths) override {
     size_t pathLen = 0;
-    for (auto& storePath : storePaths)
+    for (auto& storePath : storePaths) {
       pathLen = std::max(pathLen, storePath.size());
+    }
 
     if (json) {
       JSONPlaceholder jsonRoot(std::cout);
@@ -93,9 +94,10 @@ struct CmdPathInfo : StorePathsCommand, MixJSON {
 
         std::cout << storePath;
 
-        if (showSize || showClosureSize || showSigs)
+        if (showSize || showClosureSize || showSigs) {
           std::cout << std::string(
               std::max(0, (int)pathLen - (int)storePath.size()), ' ');
+        }
 
         if (showSize) {
           printSize(info->narSize);

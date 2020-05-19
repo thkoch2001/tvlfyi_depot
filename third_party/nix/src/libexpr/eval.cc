@@ -62,17 +62,19 @@ static void printValue(std::ostream& str, std::set<const Value*>& active,
       break;
     case tString:
       str << "\"";
-      for (const char* i = v.string.s; *i; i++)
-        if (*i == '\"' || *i == '\\')
+      for (const char* i = v.string.s; *i; i++) {
+        if (*i == '\"' || *i == '\\') {
           str << "\\" << *i;
-        else if (*i == '\n')
+        } else if (*i == '\n') {
           str << "\\n";
-        else if (*i == '\r')
+        } else if (*i == '\r') {
           str << "\\r";
-        else if (*i == '\t')
+        } else if (*i == '\t') {
           str << "\\t";
-        else
+        } else {
           str << *i;
+        }
+      }
       str << "\"";
       break;
     case tPath:
@@ -281,7 +283,9 @@ static Strings parseNixPath(const string& s) {
     if (*p == ':') {
       if (isUri(std::string(start2, s.end()))) {
         ++p;
-        while (p != s.end() && *p != ':') ++p;
+        while (p != s.end() && *p != ':') {
+          ++p;
+        }
       }
       res.push_back(std::string(start, p));
       if (p == s.end()) {
@@ -361,8 +365,9 @@ EvalState::EvalState(const Strings& _searchPath, ref<Store> store)
         for (auto& path : closure) {
           allowedPaths->insert(path);
         }
-      } else
+      } else {
         allowedPaths->insert(r.second);
+      }
     }
   }
 
@@ -400,9 +405,10 @@ Path EvalState::checkSourcePath(const Path& path_) {
     }
   }
 
-  if (!found)
+  if (!found) {
     throw RestrictedPathError(
         "access to path '%1%' is forbidden in restricted mode", abspath);
+  }
 
   /* Resolve symlinks. */
   DLOG(INFO) << "checking access to '" << abspath << "'";
@@ -428,12 +434,14 @@ void EvalState::checkURI(const std::string& uri) {
      prefix. Thus, the prefix https://github.co does not permit
      access to https://github.com. Note: this allows 'http://' and
      'https://' as prefixes for any http/https URI. */
-  for (auto& prefix : evalSettings.allowedUris.get())
+  for (auto& prefix : evalSettings.allowedUris.get()) {
     if (uri == prefix ||
         (uri.size() > prefix.size() && prefix.size() > 0 &&
          hasPrefix(uri, prefix) &&
-         (prefix[prefix.size() - 1] == '/' || uri[prefix.size()] == '/')))
+         (prefix[prefix.size() - 1] == '/' || uri[prefix.size()] == '/'))) {
       return;
+    }
+  }
 
   /* If the URI is a path, then check it against allowedPaths as
      well. */
@@ -600,9 +608,10 @@ inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
       }
       return j->value;
     }
-    if (!env->prevWith)
+    if (!env->prevWith) {
       throwUndefinedVarError("undefined variable '%1%' at %2%", var.name,
                              var.pos);
+    }
     for (size_t l = env->prevWith; l; --l, env = env->up) {
       ;
     }
@@ -622,8 +631,9 @@ Value* EvalState::allocValue() {
 }
 
 Env& EvalState::allocEnv(size_t size) {
-  if (size > std::numeric_limits<decltype(Env::size)>::max())
+  if (size > std::numeric_limits<decltype(Env::size)>::max()) {
     throw Error("environment size %d is too big", size);
+  }
 
   nrEnvs++;
   nrValuesInEnvs += size;
@@ -669,8 +679,9 @@ void EvalState::mkPos(Value& v, Pos* pos) {
     mkInt(*allocAttr(v, sLine), pos->line);
     mkInt(*allocAttr(v, sColumn), pos->column);
     v.attrs->sort();
-  } else
+  } else {
     mkNull(v);
+  }
 }
 
 /* Create a thunk for the delayed computation of the given expression
@@ -823,8 +834,9 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
       if (hasOverrides && !i.second.inherited) {
         vAttr = state.allocValue();
         mkThunk(*vAttr, env2, i.second.e);
-      } else
+      } else {
         vAttr = i.second.e->maybeThunk(state, i.second.inherited ? env : env2);
+      }
       env2.values[displ++] = vAttr;
       v.attrs->push_back(Attr(i.first, vAttr, &i.second.pos));
     }
@@ -850,16 +862,18 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
         if (j != attrs.end()) {
           (*newBnds)[j->second.displ] = i;
           env2.values[j->second.displ] = i.value;
-        } else
+        } else {
           newBnds->push_back(i);
+        }
       }
       newBnds->sort();
       v.attrs = newBnds;
     }
   } else {
-    for (auto& i : attrs)
+    for (auto& i : attrs) {
       v.attrs->push_back(
           Attr(i.first, i.second.e->maybeThunk(state, env), &i.second.pos));
+    }
   }
 
   /* Dynamic attrs apply *after* rec and __overrides. */
@@ -873,9 +887,10 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
     state.forceStringNoCtx(nameVal);
     Symbol nameSym = state.symbols.create(nameVal.string.s);
     Bindings::iterator j = v.attrs->find(nameSym);
-    if (j != v.attrs->end())
+    if (j != v.attrs->end()) {
       throwEvalError("dynamic attribute '%1%' at %2% already defined at %3%",
                      nameSym, i.pos, *j->pos);
+    }
 
     i.valueExpr->setName(nameSym);
     /* Keep sorted order so find can catch duplicates */
@@ -895,17 +910,19 @@ void ExprLet::eval(EvalState& state, Env& env, Value& v) {
      while the inherited attributes are evaluated in the original
      environment. */
   size_t displ = 0;
-  for (auto& i : attrs->attrs)
+  for (auto& i : attrs->attrs) {
     env2.values[displ++] =
         i.second.e->maybeThunk(state, i.second.inherited ? env : env2);
+  }
 
   body->eval(state, env2, v);
 }
 
 void ExprList::eval(EvalState& state, Env& env, Value& v) {
   state.mkList(v, elems.size());
-  for (size_t n = 0; n < elems.size(); ++n)
+  for (size_t n = 0; n < elems.size(); ++n) {
     v.listElems()[n] = elems[n]->maybeThunk(state, env);
+  }
 }
 
 void ExprVar::eval(EvalState& state, Env& env, Value& v) {
@@ -919,10 +936,11 @@ static string showAttrPath(EvalState& state, Env& env,
   std::ostringstream out;
   bool first = true;
   for (auto& i : attrPath) {
-    if (!first)
+    if (!first) {
       out << '.';
-    else
+    } else {
       first = false;
+    }
     try {
       out << getName(i, state, env);
     } catch (Error& e) {
@@ -956,8 +974,9 @@ void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
         }
       } else {
         state.forceAttrs(*vAttrs, pos);
-        if ((j = vAttrs->attrs->find(name)) == vAttrs->attrs->end())
+        if ((j = vAttrs->attrs->find(name)) == vAttrs->attrs->end()) {
           throwEvalError("attribute '%1%' missing, at %2%", name, pos);
+        }
       }
       vAttrs = j->value;
       pos2 = j->pos;
@@ -969,9 +988,10 @@ void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
     state.forceValue(*vAttrs, (pos2 != NULL ? *pos2 : this->pos));
 
   } catch (Error& e) {
-    if (pos2 && pos2->file != state.sDerivationNix)
+    if (pos2 && pos2->file != state.sDerivationNix) {
       addErrorPrefix(e, "while evaluating the attribute '%1%' at %2%:\n",
                      showAttrPath(state, env, attrPath), *pos2);
+    }
     throw;
   }
 
@@ -1112,9 +1132,10 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
     for (auto& i : lambda.formals->formals) {
       Bindings::iterator j = arg.attrs->find(i.name);
       if (j == arg.attrs->end()) {
-        if (!i.def)
+        if (!i.def) {
           throwTypeError("%1% called without required argument '%2%', at %3%",
                          lambda, i.name, pos);
+        }
         env2.values[displ++] = i.def->maybeThunk(*this, env2);
       } else {
         attrsUsed++;
@@ -1127,11 +1148,13 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
     if (!lambda.formals->ellipsis && attrsUsed != arg.attrs->size()) {
       /* Nope, so show the first unexpected argument to the
          user. */
-      for (auto& i : *arg.attrs)
+      for (auto& i : *arg.attrs) {
         if (lambda.formals->argNames.find(i.name) ==
-            lambda.formals->argNames.end())
+            lambda.formals->argNames.end()) {
           throwTypeError("%1% called with unexpected argument '%2%', at %3%",
                          lambda, i.name, pos);
+        }
+      }
       abort();  // can't happen
     }
   }
@@ -1143,15 +1166,17 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
 
   /* Evaluate the body.  This is conditional on showTrace, because
      catching exceptions makes this function not tail-recursive. */
-  if (settings.showTrace) try {
+  if (settings.showTrace) {
+    try {
       lambda.body->eval(*this, env2, v);
     } catch (Error& e) {
       addErrorPrefix(e, "while evaluating %1%, called from %2%:\n", lambda,
                      pos);
       throw;
     }
-  else
+  } else {
     fun.lambda.fun->body->eval(*this, env2, v);
+  }
 }
 
 // Lifted out of callFunction() because it creates a temporary that
@@ -1181,13 +1206,14 @@ void EvalState::autoCallFunction(Bindings& args, Value& fun, Value& res) {
 
   for (auto& i : fun.lambda.fun->formals->formals) {
     Bindings::iterator j = args.find(i.name);
-    if (j != args.end())
+    if (j != args.end()) {
       actualArgs->attrs->push_back(*j);
-    else if (!i.def)
+    } else if (!i.def) {
       throwTypeError(
           "cannot auto-call a function that has an argument without a default "
           "value ('%1%')",
           i.name);
+    }
   }
 
   actualArgs->attrs->sort();
@@ -1278,10 +1304,11 @@ void ExprOpUpdate::eval(EvalState& state, Env& env, Value& v) {
       v.attrs->push_back(*j);
       ++i;
       ++j;
-    } else if (i->name < j->name)
+    } else if (i->name < j->name) {
       v.attrs->push_back(*i++);
-    else
+    } else {
       v.attrs->push_back(*j++);
+    }
   }
 
   while (i != v1.attrs->end()) {
@@ -1364,20 +1391,23 @@ void ExprConcatStrings::eval(EvalState& state, Env& env, Value& v) {
         firstType = tFloat;
         nf = n;
         nf += vTmp.fpoint;
-      } else
+      } else {
         throwEvalError("cannot add %1% to an integer, at %2%", showType(vTmp),
                        pos);
+      }
     } else if (firstType == tFloat) {
       if (vTmp.type == tInt) {
         nf += vTmp.integer;
       } else if (vTmp.type == tFloat) {
         nf += vTmp.fpoint;
-      } else
+      } else {
         throwEvalError("cannot add %1% to a float, at %2%", showType(vTmp),
                        pos);
-    } else
+      }
+    } else {
       s << state.coerceToString(pos, vTmp, context, false,
                                 firstType == tString);
+    }
   }
 
   if (firstType == tInt) {
@@ -1385,11 +1415,12 @@ void ExprConcatStrings::eval(EvalState& state, Env& env, Value& v) {
   } else if (firstType == tFloat) {
     mkFloat(v, nf);
   } else if (firstType == tPath) {
-    if (!context.empty())
+    if (!context.empty()) {
       throwEvalError(
           "a string that refers to a store path cannot be appended to a path, "
           "at %1%",
           pos);
+    }
     auto path = canonPath(s.str());
     mkPath(v, path.c_str());
   } else {
@@ -1415,13 +1446,15 @@ void EvalState::forceValueDeep(Value& v) {
     forceValue(v);
 
     if (v.type == tAttrs) {
-      for (auto& i : *v.attrs) try {
+      for (auto& i : *v.attrs) {
+        try {
           recurse(*i.value);
         } catch (Error& e) {
           addErrorPrefix(e, "while evaluating the attribute '%1%' at %2%:\n",
                          i.name, *i.pos);
           throw;
         }
+      }
     } else if (v.isList()) {
       for (size_t n = 0; n < v.listSize(); ++n) {
         recurse(*v.listElems()[n]);
@@ -1486,10 +1519,11 @@ string EvalState::forceString(Value& v, const Pos& pos) {
 }
 
 void copyContext(const Value& v, PathSet& context) {
-  if (v.string.context)
+  if (v.string.context) {
     for (const char** p = v.string.context; *p; ++p) {
       context.insert(*p);
     }
+  }
 }
 
 string EvalState::forceString(Value& v, PathSet& context, const Pos& pos) {
@@ -1501,16 +1535,17 @@ string EvalState::forceString(Value& v, PathSet& context, const Pos& pos) {
 string EvalState::forceStringNoCtx(Value& v, const Pos& pos) {
   string s = forceString(v, pos);
   if (v.string.context) {
-    if (pos)
+    if (pos) {
       throwEvalError(
           "the string '%1%' is not allowed to refer to a store path (such as "
           "'%2%'), at %3%",
           v.string.s, v.string.context[0], pos);
-    else
+    } else {
       throwEvalError(
           "the string '%1%' is not allowed to refer to a store path (such as "
           "'%2%')",
           v.string.s, v.string.context[0]);
+    }
   }
   return s;
 }
@@ -1567,13 +1602,15 @@ string EvalState::coerceToString(const Pos& pos, Value& v, PathSet& context,
       return *maybeString;
     }
     auto i = v.attrs->find(sOutPath);
-    if (i == v.attrs->end())
+    if (i == v.attrs->end()) {
       throwTypeError("cannot coerce a set to a string, at %1%", pos);
+    }
     return coerceToString(pos, *i->value, context, coerceMore, copyToStore);
   }
 
-  if (v.type == tExternal)
+  if (v.type == tExternal) {
     return v.external->coerceToString(pos, context, coerceMore, copyToStore);
+  }
 
   if (coerceMore) {
     /* Note that `false' is represented as an empty string for
@@ -1601,9 +1638,10 @@ string EvalState::coerceToString(const Pos& pos, Value& v, PathSet& context,
                                  copyToStore);
         if (n < v.listSize() - 1
             /* !!! not quite correct */
-            &&
-            (!v.listElems()[n]->isList() || v.listElems()[n]->listSize() != 0))
+            && (!v.listElems()[n]->isList() ||
+                v.listElems()[n]->listSize() != 0)) {
           result += " ";
+        }
       }
       return result;
     }
@@ -1613,13 +1651,14 @@ string EvalState::coerceToString(const Pos& pos, Value& v, PathSet& context,
 }
 
 string EvalState::copyPathToStore(PathSet& context, const Path& path) {
-  if (nix::isDerivation(path))
+  if (nix::isDerivation(path)) {
     throwEvalError("file names are not allowed to end in '%1%'", drvExtension);
+  }
 
   Path dstPath;
-  if (srcToStore[path] != "")
+  if (srcToStore[path] != "") {
     dstPath = srcToStore[path];
-  else {
+  } else {
     dstPath =
         settings.readOnlyMode
             ? store
@@ -1638,9 +1677,10 @@ string EvalState::copyPathToStore(PathSet& context, const Path& path) {
 
 Path EvalState::coerceToPath(const Pos& pos, Value& v, PathSet& context) {
   string path = coerceToString(pos, v, context, false, false);
-  if (path == "" || path[0] != '/')
+  if (path == "" || path[0] != '/') {
     throwEvalError("string '%1%' doesn't represent an absolute path, at %2%",
                    path, pos);
+  }
   return path;
 }
 
@@ -1827,10 +1867,11 @@ void EvalState::printStats() {
         auto list = topObj.list("functions");
         for (auto& i : functionCalls) {
           auto obj = list.object();
-          if (i.first->name.set())
+          if (i.first->name.set()) {
             obj.attr("name", (const string&)i.first->name);
-          else
+          } else {
             obj.attr("name", nullptr);
+          }
           if (i.first->pos) {
             obj.attr("file", (const string&)i.first->pos.file);
             obj.attr("line", i.first->pos.line);
@@ -1885,10 +1926,11 @@ size_t valueSize(Value& v) {
     switch (v.type) {
       case tString:
         sz += doString(v.string.s);
-        if (v.string.context)
+        if (v.string.context) {
           for (const char** p = v.string.context; *p; ++p) {
             sz += doString(*p);
           }
+        }
         break;
       case tPath:
         sz += doString(v.path);
@@ -1908,8 +1950,9 @@ size_t valueSize(Value& v) {
         if (seen.find(v.listElems()) == seen.end()) {
           seen.insert(v.listElems());
           sz += v.listSize() * sizeof(Value*);
-          for (size_t n = 0; n < v.listSize(); ++n)
+          for (size_t n = 0; n < v.listSize(); ++n) {
             sz += doValue(*v.listElems()[n]);
+          }
         }
         break;
       case tThunk:
@@ -1947,11 +1990,13 @@ size_t valueSize(Value& v) {
 
     size_t sz = sizeof(Env) + sizeof(Value*) * env.size;
 
-    if (env.type != Env::HasWithExpr)
-      for (size_t i = 0; i < env.size; ++i)
+    if (env.type != Env::HasWithExpr) {
+      for (size_t i = 0; i < env.size; ++i) {
         if (env.values[i]) {
           sz += doValue(*env.values[i]);
         }
+      }
+    }
 
     if (env.up) {
       sz += doEnv(*env.up);

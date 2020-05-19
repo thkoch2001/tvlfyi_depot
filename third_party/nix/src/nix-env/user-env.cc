@@ -30,10 +30,11 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
   /* Build the components in the user environment, if they don't
      exist already. */
   PathSet drvsToBuild;
-  for (auto& i : elems)
+  for (auto& i : elems) {
     if (i.queryDrvPath() != "") {
       drvsToBuild.insert(i.queryDrvPath());
     }
+  }
 
   DLOG(INFO) << "building user environment dependencies";
   state.store->buildPaths(drvsToBuild, state.repair ? bmRepair : bmNormal);
@@ -60,8 +61,9 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
       mkString(*state.allocAttr(v, state.sSystem), system);
     }
     mkString(*state.allocAttr(v, state.sOutPath), i.queryOutPath());
-    if (drvPath != "")
+    if (drvPath != "") {
       mkString(*state.allocAttr(v, state.sDrvPath), i.queryDrvPath());
+    }
 
     // Copy each output meant for installation.
     DrvInfo::Outputs outputs = i.queryOutputs(true);

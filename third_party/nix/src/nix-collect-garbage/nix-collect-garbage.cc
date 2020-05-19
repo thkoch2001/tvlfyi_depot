@@ -42,10 +42,11 @@ void removeOldGenerations(std::string dir) {
       }
       if (link.find("link") != string::npos) {
         LOG(INFO) << "removing old generations of profile " << path;
-        if (deleteOlderThan != "")
+        if (deleteOlderThan != "") {
           deleteGenerationsOlderThan(path, deleteOlderThan, dryRun);
-        else
+        } else {
           deleteOldGenerations(path, dryRun);
+        }
       }
     } else if (type == DT_DIR) {
       removeOldGenerations(path);
@@ -61,22 +62,23 @@ static int _main(int argc, char** argv) {
 
     parseCmdLine(
         argc, argv, [&](Strings::iterator& arg, const Strings::iterator& end) {
-          if (*arg == "--help")
+          if (*arg == "--help") {
             showManPage("nix-collect-garbage");
-          else if (*arg == "--version")
+          } else if (*arg == "--version") {
             printVersion("nix-collect-garbage");
-          else if (*arg == "--delete-old" || *arg == "-d")
+          } else if (*arg == "--delete-old" || *arg == "-d") {
             removeOld = true;
-          else if (*arg == "--delete-older-than") {
+          } else if (*arg == "--delete-older-than") {
             removeOld = true;
             deleteOlderThan = getArg(*arg, arg, end);
-          } else if (*arg == "--dry-run")
+          } else if (*arg == "--dry-run") {
             dryRun = true;
-          else if (*arg == "--max-freed") {
+          } else if (*arg == "--max-freed") {
             long long maxFreed = getIntArg<long long>(*arg, arg, end, true);
             options.maxFreed = maxFreed >= 0 ? maxFreed : 0;
-          } else
+          } else {
             return false;
+          }
           return true;
         });
 

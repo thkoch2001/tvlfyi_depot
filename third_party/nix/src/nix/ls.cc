@@ -35,17 +35,20 @@ struct MixLs : virtual Args, MixJSON {
                                    ? "lrwxrwxrwx"
                                    : "dr-xr-xr-x";
         std::cout << (format("%s %20d %s") % tp % st.fileSize % relPath);
-        if (st.type == FSAccessor::Type::tSymlink)
+        if (st.type == FSAccessor::Type::tSymlink) {
           std::cout << " -> " << accessor->readLink(curPath);
+        }
         std::cout << "\n";
-        if (recursive && st.type == FSAccessor::Type::tDirectory)
+        if (recursive && st.type == FSAccessor::Type::tDirectory) {
           doPath(st, curPath, relPath, false);
+        }
       } else {
         std::cout << relPath << "\n";
         if (recursive) {
           auto st = accessor->stat(curPath);
-          if (st.type == FSAccessor::Type::tDirectory)
+          if (st.type == FSAccessor::Type::tDirectory) {
             doPath(st, curPath, relPath, false);
+          }
         }
       }
     };
@@ -57,8 +60,9 @@ struct MixLs : virtual Args, MixJSON {
         for (auto& name : names) {
           showFile(curPath + "/" + name, relPath + "/" + name);
         }
-      } else
+      } else {
         showFile(curPath, relPath);
+      }
     };
 
     auto st = accessor->stat(path);

@@ -40,12 +40,14 @@ string resolveMirrorUri(EvalState& state, string uri) {
   state.forceAttrs(vMirrors);
 
   auto mirrorList = vMirrors.attrs->find(state.symbols.create(mirrorName));
-  if (mirrorList == vMirrors.attrs->end())
+  if (mirrorList == vMirrors.attrs->end()) {
     throw Error(format("unknown mirror name '%1%'") % mirrorName);
+  }
   state.forceList(*mirrorList->value);
 
-  if (mirrorList->value->listSize() < 1)
+  if (mirrorList->value->listSize() < 1) {
     throw Error(format("mirror URI '%1%' did not expand to anything") % uri);
+  }
 
   string mirror = state.forceString(*mirrorList->value->listElems()[0]);
   return mirror + (hasSuffix(mirror, "/") ? "" : "/") + string(s, p + 1);
@@ -67,28 +69,30 @@ static int _main(int argc, char** argv) {
 
     MyArgs myArgs(baseNameOf(argv[0]),
                   [&](Strings::iterator& arg, const Strings::iterator& end) {
-                    if (*arg == "--help")
+                    if (*arg == "--help") {
                       showManPage("nix-prefetch-url");
-                    else if (*arg == "--version")
+                    } else if (*arg == "--version") {
                       printVersion("nix-prefetch-url");
-                    else if (*arg == "--type") {
+                    } else if (*arg == "--type") {
                       string s = getArg(*arg, arg, end);
                       ht = parseHashType(s);
-                      if (ht == htUnknown)
+                      if (ht == htUnknown) {
                         throw UsageError(format("unknown hash type '%1%'") % s);
-                    } else if (*arg == "--print-path")
+                      }
+                    } else if (*arg == "--print-path") {
                       printPath = true;
-                    else if (*arg == "--attr" || *arg == "-A") {
+                    } else if (*arg == "--attr" || *arg == "-A") {
                       fromExpr = true;
                       attrPath = getArg(*arg, arg, end);
-                    } else if (*arg == "--unpack")
+                    } else if (*arg == "--unpack") {
                       unpack = true;
-                    else if (*arg == "--name")
+                    } else if (*arg == "--name") {
                       name = getArg(*arg, arg, end);
-                    else if (*arg != "" && arg->at(0) == '-')
+                    } else if (*arg != "" && arg->at(0) == '-') {
                       return false;
-                    else
+                    } else {
                       args.push_back(*arg);
+                    }
                     return true;
                   });
 
@@ -123,8 +127,9 @@ static int _main(int argc, char** argv) {
 
       /* Extract the URI. */
       auto attr = v.attrs->find(state->symbols.create("urls"));
-      if (attr == v.attrs->end())
+      if (attr == v.attrs->end()) {
         throw Error("attribute set does not contain a 'urls' attribute");
+      }
       state->forceList(*attr->value);
       if (attr->value->listSize() < 1) {
         throw Error("'urls' list is empty");
@@ -133,10 +138,11 @@ static int _main(int argc, char** argv) {
 
       /* Extract the hash mode. */
       attr = v.attrs->find(state->symbols.create("outputHashMode"));
-      if (attr == v.attrs->end())
+      if (attr == v.attrs->end()) {
         LOG(WARNING) << "this does not look like a fetchurl call";
-      else
+      } else {
         unpack = state->forceString(*attr->value) == "recursive";
+      }
 
       /* Extract the name. */
       if (name.empty()) {
@@ -151,8 +157,9 @@ static int _main(int argc, char** argv) {
     if (name.empty()) {
       name = baseNameOf(uri);
     }
-    if (name.empty())
+    if (name.empty()) {
       throw Error(format("cannot figure out file name for '%1%'") % uri);
+    }
 
     /* If an expected hash is given, the file may already exist in
        the store. */
@@ -161,10 +168,11 @@ static int _main(int argc, char** argv) {
     if (args.size() == 2) {
       expectedHash = Hash(args[1], ht);
       storePath = store->makeFixedOutputPath(unpack, expectedHash, name);
-      if (store->isValidPath(storePath))
+      if (store->isValidPath(storePath)) {
         hash = expectedHash;
-      else
+      } else {
         storePath.clear();
+      }
     }
 
     if (storePath.empty()) {
@@ -193,27 +201,30 @@ static int _main(int argc, char** argv) {
         LOG(INFO) << "unpacking...";
         Path unpacked = (Path)tmpDir + "/unpacked";
         createDirs(unpacked);
-        if (hasSuffix(baseNameOf(uri), ".zip"))
+        if (hasSuffix(baseNameOf(uri), ".zip")) {
           runProgram("unzip", true, {"-qq", tmpFile, "-d", unpacked});
-        else
+        } else {
           // FIXME: this requires GNU tar for decompression.
           runProgram("tar", true, {"xf", tmpFile, "-C", unpacked});
+        }
 
         /* If the archive unpacks to a single file/directory, then use
            that as the top-level. */
         auto entries = readDirectory(unpacked);
-        if (entries.size() == 1)
+        if (entries.size() == 1) {
           tmpFile = unpacked + "/" + entries[0].name;
-        else
+        } else {
           tmpFile = unpacked;
+        }
       }
 
       /* FIXME: inefficient; addToStore() will also hash
          this. */
       hash = unpack ? hashPath(ht, tmpFile).first : hashFile(ht, tmpFile);
 
-      if (expectedHash != Hash(ht) && expectedHash != hash)
+      if (expectedHash != Hash(ht) && expectedHash != hash) {
         throw Error(format("hash mismatch for '%1%'") % uri);
+      }
 
       /* Copy the file to the Nix store. FIXME: if RemoteStore
          implemented addToStoreFromDump() and downloadFile()

@@ -19,16 +19,18 @@ void DerivationOutput::parseHashInfo(bool& recursive, Hash& hash) const {
   }
 
   HashType hashType = parseHashType(algo);
-  if (hashType == htUnknown)
+  if (hashType == htUnknown) {
     throw Error(format("unknown hash algorithm '%1%'") % algo);
+  }
 
   hash = Hash(this->hash, hashType);
 }
 
 Path BasicDerivation::findOutput(const string& id) const {
   auto i = outputs.find(id);
-  if (i == outputs.end())
+  if (i == outputs.end()) {
     throw Error(format("derivation has no output '%1%'") % id);
+  }
   return i->second.path;
 }
 
@@ -57,8 +59,9 @@ Path writeDerivation(ref<Store> store, const Derivation& drv,
 static void expect(std::istream& str, const string& s) {
   char s2[s.size()];
   str.read(s2, s.size());
-  if (string(s2, s.size()) != s)
+  if (string(s2, s.size()) != s) {
     throw FormatError(format("expected string '%1%'") % s);
+  }
 }
 
 /* Read a C-style string from stream `str'. */
@@ -66,26 +69,30 @@ static string parseString(std::istream& str) {
   string res;
   expect(str, "\"");
   int c;
-  while ((c = str.get()) != '"')
+  while ((c = str.get()) != '"') {
     if (c == '\\') {
       c = str.get();
-      if (c == 'n')
+      if (c == 'n') {
         res += '\n';
-      else if (c == 'r')
+      } else if (c == 'r') {
         res += '\r';
-      else if (c == 't')
+      } else if (c == 't') {
         res += '\t';
-      else
+      } else {
         res += c;
-    } else
+      }
+    } else {
       res += c;
+    }
+  }
   return res;
 }
 
 static Path parsePath(std::istream& str) {
   string s = parseString(str);
-  if (s.size() == 0 || s[0] != '/')
+  if (s.size() == 0 || s[0] != '/') {
     throw FormatError(format("bad path '%1%' in derivation") % s);
+  }
   return s;
 }
 
@@ -103,8 +110,9 @@ static bool endOfList(std::istream& str) {
 
 static StringSet parseStrings(std::istream& str, bool arePaths) {
   StringSet res;
-  while (!endOfList(str))
+  while (!endOfList(str)) {
     res.insert(arePaths ? parsePath(str) : parseString(str));
+  }
   return res;
 }
 
@@ -147,7 +155,9 @@ static Derivation parseDerivation(const string& s) {
 
   /* Parse the builder arguments. */
   expect(str, ",[");
-  while (!endOfList(str)) drv.args.push_back(parseString(str));
+  while (!endOfList(str)) {
+    drv.args.push_back(parseString(str));
+  }
 
   /* Parse the environment variables. */
   expect(str, ",[");

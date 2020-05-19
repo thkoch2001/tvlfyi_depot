@@ -36,11 +36,12 @@ DownloadSettings downloadSettings;
 static GlobalConfig::Register r1(&downloadSettings);
 
 std::string resolveUri(const std::string& uri) {
-  if (uri.compare(0, 8, "channel:") == 0)
+  if (uri.compare(0, 8, "channel:") == 0) {
     return "https://nixos.org/channels/" + std::string(uri, 8) +
            "/nixexprs.tar.xz";
-  else
+  } else {
     return uri;
+  }
 }
 
 struct CurlDownloader : public Downloader {
@@ -92,18 +93,21 @@ struct CurlDownloader : public Downloader {
                 writtenToSink += len;
                 this->request.dataCallback((char*)data, len);
               }
-            } else
+            } else {
               this->result.data->append((char*)data, len);
+            }
           }) {
       LOG(INFO) << (request.data ? "uploading '" : "downloading '")
                 << request.uri << "'";
 
-      if (!request.expectedETag.empty())
+      if (!request.expectedETag.empty()) {
         requestHeaders = curl_slist_append(
             requestHeaders, ("If-None-Match: " + request.expectedETag).c_str());
-      if (!request.mimeType.empty())
+      }
+      if (!request.mimeType.empty()) {
         requestHeaders = curl_slist_append(
             requestHeaders, ("Content-Type: " + request.mimeType).c_str());
+      }
     }
 
     ~DownloadItem() {
@@ -117,10 +121,11 @@ struct CurlDownloader : public Downloader {
         curl_slist_free_all(requestHeaders);
       }
       try {
-        if (!done)
+        if (!done) {
           fail(DownloadError(
               Interrupted,
               format("download of '%s' was interrupted") % request.uri));
+        }
       } catch (...) {
         ignoreException();
       }
@@ -147,8 +152,9 @@ struct CurlDownloader : public Downloader {
         size_t realSize = size * nmemb;
         result.bodySize += realSize;
 
-        if (!decompressionSink)
+        if (!decompressionSink) {
           decompressionSink = makeDecompressionSink(encoding, finalSink);
+        }
 
         (*decompressionSink)((unsigned char*)contents, realSize);
 
@@ -192,11 +198,12 @@ struct CurlDownloader : public Downloader {
                   << "shutting down on 200 HTTP response with expected ETag";
               return 0;
             }
-          } else if (name == "content-encoding")
+          } else if (name == "content-encoding") {
             encoding = trim(string(line, i + 1));
-          else if (name == "accept-ranges" &&
-                   toLower(trim(std::string(line, i + 1))) == "bytes")
+          } else if (name == "accept-ranges" &&
+                     toLower(trim(std::string(line, i + 1))) == "bytes") {
             acceptRanges = true;
+          }
         }
       }
       return realSize;
@@ -275,10 +282,11 @@ struct CurlDownloader : public Downloader {
       curl_easy_setopt(req, CURLOPT_PIPEWAIT, 1);
 #endif
 #if LIBCURL_VERSION_NUM >= 0x072f00
-      if (downloadSettings.enableHttp2)
+      if (downloadSettings.enableHttp2) {
         curl_easy_setopt(req, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
-      else
+      } else {
         curl_easy_setopt(req, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+      }
 #endif
       curl_easy_setopt(req, CURLOPT_WRITEFUNCTION,
                        DownloadItem::writeCallbackWrapper);
@@ -306,8 +314,9 @@ struct CurlDownloader : public Downloader {
       }
 
       if (request.verifyTLS) {
-        if (settings.caFile != "")
+        if (settings.caFile != "") {
           curl_easy_setopt(req, CURLOPT_CAINFO, settings.caFile.c_str());
+        }
       } else {
         curl_easy_setopt(req, CURLOPT_SSL_VERIFYPEER, 0);
         curl_easy_setopt(req, CURLOPT_SSL_VERIFYHOST, 0);
@@ -362,14 +371,14 @@ struct CurlDownloader : public Downloader {
         httpStatus = 304;
       }
 
-      if (writeException)
+      if (writeException) {
         failEx(writeException);
 
-      else if (code == CURLE_OK &&
-               (httpStatus == 200 || httpStatus == 201 || httpStatus == 204 ||
-                httpStatus == 206 || httpStatus == 304 ||
-                httpStatus == 226 /* FTP */ ||
-                httpStatus == 0 /* other protocol */)) {
+      } else if (code == CURLE_OK &&
+                 (httpStatus == 200 || httpStatus == 201 || httpStatus == 204 ||
+                  httpStatus == 206 || httpStatus == 304 ||
+                  httpStatus == 226 /* FTP */ ||
+                  httpStatus == 0 /* other protocol */)) {
         result.cached = httpStatus == 304;
         done = true;
         callback(std::move(result));
@@ -464,8 +473,9 @@ struct CurlDownloader : public Downloader {
           embargo =
               std::chrono::steady_clock::now() + std::chrono::milliseconds(ms);
           downloader.enqueueItem(shared_from_this());
-        } else
+        } else {
           fail(exc);
+        }
       }
     }
   };
@@ -548,10 +558,11 @@ struct CurlDownloader : public Downloader {
       /* Let curl do its thing. */
       int running;
       CURLMcode mc = curl_multi_perform(curlm, &running);
-      if (mc != CURLM_OK)
+      if (mc != CURLM_OK) {
         throw nix::Error(
             format("unexpected error from curl_multi_perform(): %s") %
             curl_multi_strerror(mc));
+      }
 
       /* Set the promises of any finished requests. */
       CURLMsg* msg;
@@ -584,9 +595,10 @@ struct CurlDownloader : public Downloader {
               : maxSleepTimeMs;
       DLOG(INFO) << "download thread waiting for " << sleepTimeMs << " ms";
       mc = curl_multi_wait(curlm, extraFDs, 1, sleepTimeMs, &numfds);
-      if (mc != CURLM_OK)
+      if (mc != CURLM_OK) {
         throw nix::Error(format("unexpected error from curl_multi_wait(): %s") %
                          curl_multi_strerror(mc));
+      }
 
       nextWakeup = std::chrono::steady_clock::time_point();
 
@@ -596,8 +608,9 @@ struct CurlDownloader : public Downloader {
       if (extraFDs[0].revents & CURL_WAIT_POLLIN) {
         char buf[1024];
         auto res = read(extraFDs[0].fd, buf, sizeof(buf));
-        if (res == -1 && errno != EINTR)
+        if (res == -1 && errno != EINTR) {
           throw SysError("reading curl wakeup socket");
+        }
       }
 
       std::vector<std::shared_ptr<DownloadItem>> incoming;
@@ -612,8 +625,9 @@ struct CurlDownloader : public Downloader {
             state->incoming.pop();
           } else {
             if (nextWakeup == std::chrono::steady_clock::time_point() ||
-                item->embargo < nextWakeup)
+                item->embargo < nextWakeup) {
               nextWakeup = item->embargo;
+            }
             break;
           }
         }
@@ -643,22 +657,26 @@ struct CurlDownloader : public Downloader {
 
     {
       auto state(state_.lock());
-      while (!state->incoming.empty()) state->incoming.pop();
+      while (!state->incoming.empty()) {
+        state->incoming.pop();
+      }
       state->quit = true;
     }
   }
 
   void enqueueItem(std::shared_ptr<DownloadItem> item) {
     if (item->request.data && !hasPrefix(item->request.uri, "http://") &&
-        !hasPrefix(item->request.uri, "https://"))
+        !hasPrefix(item->request.uri, "https://")) {
       throw nix::Error("uploading to '%s' is not supported", item->request.uri);
+    }
 
     {
       auto state(state_.lock());
-      if (state->quit)
+      if (state->quit) {
         throw nix::Error(
             "cannot enqueue download request because the download thread is "
             "shutting down");
+      }
       state->incoming.push(item);
     }
     writeFull(wakeupPipe.writeSide.get(), " ");
@@ -900,8 +918,9 @@ CachedDownloadResult Downloader::downloadCached(
           expectedETag = ss[1];
         }
       }
-    } else
+    } else {
       storePath = "";
+    }
   }
 
   if (!skip) {

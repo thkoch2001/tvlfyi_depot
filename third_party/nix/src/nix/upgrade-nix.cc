@@ -80,8 +80,9 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
       LOG(INFO) << "verifying that '" << storePath << "' works...";
       auto program = storePath + "/bin/nix-env";
       auto s = runProgram(program, false, {"--version"});
-      if (s.find("Nix") == std::string::npos)
+      if (s.find("Nix") == std::string::npos) {
         throw Error("could not verify that '%s' works", program);
+      }
     }
 
     {
@@ -99,15 +100,17 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
   Path getProfileDir(ref<Store> store) {
     Path where;
 
-    for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":"))
+    for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":")) {
       if (pathExists(dir + "/nix-env")) {
         where = dir;
         break;
       }
+    }
 
-    if (where == "")
+    if (where == "") {
       throw Error(
           "couldn't figure out how Nix is installed, so I can't upgrade it");
+    }
 
     LOG(INFO) << "found Nix in '" << where << "'";
 
@@ -119,19 +122,22 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
 
     // Resolve profile to /nix/var/nix/profiles/<name> link.
     while (canonPath(profileDir).find("/profiles/") == std::string::npos &&
-           isLink(profileDir))
+           isLink(profileDir)) {
       profileDir = readLink(profileDir);
+    }
 
     LOG(INFO) << "found profile '" << profileDir << "'";
 
     Path userEnv = canonPath(profileDir, true);
 
-    if (baseNameOf(where) != "bin" || !hasSuffix(userEnv, "user-environment"))
+    if (baseNameOf(where) != "bin" || !hasSuffix(userEnv, "user-environment")) {
       throw Error("directory '%s' does not appear to be part of a Nix profile",
                   where);
+    }
 
-    if (!store->isValidPath(userEnv))
+    if (!store->isValidPath(userEnv)) {
       throw Error("directory '%s' is not in the Nix store", userEnv);
+    }
 
     return profileDir;
   }

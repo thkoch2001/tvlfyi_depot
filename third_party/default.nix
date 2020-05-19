@@ -33,6 +33,7 @@ let
       cairo
       cargo
       cgit
+      clang-tools
       clangStdenv
       clang_9
       cmake

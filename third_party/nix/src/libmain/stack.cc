@@ -58,8 +58,9 @@ void detectStackOverflow() {
     throw Error("cannot allocate alternative stack");
   }
   stack.ss_flags = 0;
-  if (sigaltstack(&stack, 0) == -1)
+  if (sigaltstack(&stack, 0) == -1) {
     throw SysError("cannot set alternative stack");
+  }
 
   struct sigaction act;
   sigfillset(&act.sa_mask);

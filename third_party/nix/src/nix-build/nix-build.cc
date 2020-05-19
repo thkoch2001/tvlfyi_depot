@@ -125,9 +125,11 @@ static void _main(int argc, char** argv) {
           line = chomp(line);
           std::smatch match;
           if (std::regex_match(line, match,
-                               std::regex("^#!\\s*nix-shell (.*)$")))
-            for (const auto& word : shellwords(match[1].str()))
+                               std::regex("^#!\\s*nix-shell (.*)$"))) {
+            for (const auto& word : shellwords(match[1].str())) {
               args.push_back(word);
+            }
+          }
         }
       }
     } catch (SysError&) {
@@ -145,63 +147,63 @@ static void _main(int argc, char** argv) {
           showManPage(myName);
         }
 
-        else if (*arg == "--version")
+        else if (*arg == "--version") {
           printVersion(myName);
 
-        else if (*arg == "--add-drv-link" || *arg == "--indirect")
+        } else if (*arg == "--add-drv-link" || *arg == "--indirect") {
           ;  // obsolete
 
-        else if (*arg == "--no-out-link" || *arg == "--no-link")
+        } else if (*arg == "--no-out-link" || *arg == "--no-link") {
           outLink = (Path)tmpDir + "/result";
 
-        else if (*arg == "--attr" || *arg == "-A")
+        } else if (*arg == "--attr" || *arg == "-A") {
           attrPaths.push_back(getArg(*arg, arg, end));
 
-        else if (*arg == "--drv-link")
+        } else if (*arg == "--drv-link") {
           getArg(*arg, arg, end);  // obsolete
 
-        else if (*arg == "--out-link" || *arg == "-o")
+        } else if (*arg == "--out-link" || *arg == "-o") {
           outLink = getArg(*arg, arg, end);
 
-        else if (*arg == "--add-root")
+        } else if (*arg == "--add-root") {
           gcRoot = getArg(*arg, arg, end);
 
-        else if (*arg == "--dry-run")
+        } else if (*arg == "--dry-run") {
           dryRun = true;
 
-        else if (*arg == "--repair") {
+        } else if (*arg == "--repair") {
           repair = Repair;
           buildMode = bmRepair;
         }
 
-        else if (*arg == "--run-env")  // obsolete
+        else if (*arg == "--run-env") {  // obsolete
           runEnv = true;
 
-        else if (*arg == "--command" || *arg == "--run") {
+        } else if (*arg == "--command" || *arg == "--run") {
           if (*arg == "--run") {
             interactive = false;
           }
           envCommand = getArg(*arg, arg, end) + "\nexit";
         }
 
-        else if (*arg == "--check")
+        else if (*arg == "--check") {
           buildMode = bmCheck;
 
-        else if (*arg == "--exclude")
+        } else if (*arg == "--exclude") {
           envExclude.push_back(getArg(*arg, arg, end));
 
-        else if (*arg == "--expr" || *arg == "-E")
+        } else if (*arg == "--expr" || *arg == "-E") {
           fromArgs = true;
 
-        else if (*arg == "--pure")
+        } else if (*arg == "--pure") {
           pure = true;
-        else if (*arg == "--impure")
+        } else if (*arg == "--impure") {
           pure = false;
 
-        else if (*arg == "--packages" || *arg == "-p")
+        } else if (*arg == "--packages" || *arg == "-p") {
           packages = true;
 
-        else if (inShebang && *arg == "-i") {
+        } else if (inShebang && *arg == "-i") {
           auto interpreter = getArg(*arg, arg, end);
           interactive = false;
           auto execArgs = "";
@@ -210,8 +212,9 @@ static void _main(int argc, char** argv) {
           // executes it unless it contains the string "perl" or "indir",
           // or (undocumented) argv[0] does not contain "perl". Exploit
           // the latter by doing "exec -a".
-          if (std::regex_search(interpreter, std::regex("perl")))
+          if (std::regex_search(interpreter, std::regex("perl"))) {
             execArgs = "-a PERL";
+          }
 
           std::ostringstream joined;
           for (const auto& i : savedArgs) {
@@ -233,17 +236,18 @@ static void _main(int argc, char** argv) {
           }
         }
 
-        else if (*arg == "--keep")
+        else if (*arg == "--keep") {
           keepVars.insert(getArg(*arg, arg, end));
 
-        else if (*arg == "-")
+        } else if (*arg == "-") {
           readStdin = true;
 
-        else if (*arg != "" && arg->at(0) == '-')
+        } else if (*arg != "" && arg->at(0) == '-') {
           return false;
 
-        else
+        } else {
           left.push_back(*arg);
+        }
 
         return true;
       });
@@ -252,8 +256,9 @@ static void _main(int argc, char** argv) {
 
   initPlugins();
 
-  if (packages && fromArgs)
+  if (packages && fromArgs) {
     throw UsageError("'-p' and '-E' are mutually exclusive");
+  }
 
   auto store = openStore();
 
@@ -290,22 +295,22 @@ static void _main(int argc, char** argv) {
   /* Parse the expressions. */
   std::vector<Expr*> exprs;
 
-  if (readStdin)
+  if (readStdin) {
     exprs = {state->parseStdin()};
-  else
+  } else {
     for (auto i : left) {
-      if (fromArgs)
+      if (fromArgs) {
         exprs.push_back(state->parseExprFromString(i, absPath(".")));
-      else {
+      } else {
         auto absolute = i;
         try {
           absolute = canonPath(absPath(i), true);
         } catch (Error& e) {
         };
         if (store->isStorePath(absolute) &&
-            std::regex_match(absolute, std::regex(".*\\.drv(!.*)?")))
+            std::regex_match(absolute, std::regex(".*\\.drv(!.*)?"))) {
           drvs.push_back(DrvInfo(*state, store, absolute));
-        else
+        } else {
           /* If we're in a #! script, interpret filenames
              relative to the script. */
           exprs.push_back(
@@ -313,8 +318,10 @@ static void _main(int argc, char** argv) {
                   lookupFileArg(*state, inShebang && !packages
                                             ? absPath(i, absPath(dirOf(script)))
                                             : i)))));
+        }
       }
     }
+  }
 
   /* Evaluate them into derivations. */
   if (attrPaths.empty()) {
@@ -342,9 +349,10 @@ static void _main(int argc, char** argv) {
     store->queryMissing(paths, willBuild, willSubstitute, unknown, downloadSize,
                         narSize);
 
-    if (settings.printMissing)
+    if (settings.printMissing) {
       printMissing(ref<Store>(store), willBuild, willSubstitute, unknown,
                    downloadSize, narSize);
+    }
 
     if (!dryRun) {
       store->buildPaths(paths, buildMode);
@@ -352,8 +360,9 @@ static void _main(int argc, char** argv) {
   };
 
   if (runEnv) {
-    if (drvs.size() != 1)
+    if (drvs.size() != 1) {
       throw UsageError("nix-shell requires a single derivation");
+    }
 
     auto& drvInfo = drvs.front();
     auto drv = store->derivationFromPath(drvInfo.queryDrvPath());
@@ -374,10 +383,11 @@ static void _main(int argc, char** argv) {
         state->eval(expr, v);
 
         auto drv = getDerivation(*state, v, false);
-        if (!drv)
+        if (!drv) {
           throw Error(
               "the 'bashInteractive' attribute in <nixpkgs> did not evaluate "
               "to a derivation");
+        }
 
         pathsToBuild.insert(drv->queryDrvPath());
 
@@ -390,13 +400,15 @@ static void _main(int argc, char** argv) {
     }
 
     // Build or fetch all dependencies of the derivation.
-    for (const auto& input : drv.inputDrvs)
+    for (const auto& input : drv.inputDrvs) {
       if (std::all_of(envExclude.cbegin(), envExclude.cend(),
                       [&](const string& exclude) {
                         return !std::regex_search(input.first,
                                                   std::regex(exclude));
-                      }))
+                      })) {
         pathsToBuild.insert(makeDrvPathWithOutputs(input.first, input.second));
+      }
+    }
     for (const auto& src : drv.inputSrcs) {
       pathsToBuild.insert(src);
     }
@@ -414,10 +426,11 @@ static void _main(int argc, char** argv) {
 
     if (pure) {
       decltype(env) newEnv;
-      for (auto& i : env)
+      for (auto& i : env) {
         if (keepVars.count(i.first)) {
           newEnv.emplace(i);
         }
+      }
       env = newEnv;
       // NixOS hack: prevent /etc/bashrc from sourcing /etc/profile.
       env["__ETC_PROFILE_SOURCED"] = "1";
@@ -433,15 +446,17 @@ static void _main(int argc, char** argv) {
     bool keepTmp = false;
     int fileNr = 0;
 
-    for (auto& var : drv.env)
+    for (auto& var : drv.env) {
       if (passAsFile.count(var.first)) {
         keepTmp = true;
         string fn = ".attr-" + std::to_string(fileNr++);
         Path p = (Path)tmpDir + "/" + fn;
         writeFile(p, var.second);
         env[var.first + "Path"] = p;
-      } else
+      } else {
         env[var.first] = var.second;
+      }
+    }
 
     restoreAffinity();
 
@@ -507,16 +522,17 @@ static void _main(int argc, char** argv) {
       auto outPath = drvInfo.queryOutPath();
 
       auto outputName = drvInfo.queryOutputName();
-      if (outputName == "")
+      if (outputName == "") {
         throw Error("derivation '%s' lacks an 'outputName' attribute", drvPath);
+      }
 
       pathsToBuild.insert(drvPath + "!" + outputName);
 
       std::string drvPrefix;
       auto i = drvPrefixes.find(drvPath);
-      if (i != drvPrefixes.end())
+      if (i != drvPrefixes.end()) {
         drvPrefix = i->second;
-      else {
+      } else {
         drvPrefix = outLink;
         if (drvPrefixes.size()) {
           drvPrefix += fmt("-%d", drvPrefixes.size() + 1);
@@ -539,9 +555,11 @@ static void _main(int argc, char** argv) {
       return;
     }
 
-    for (auto& symlink : resultSymlinks)
-      if (auto store2 = store.dynamic_pointer_cast<LocalFSStore>())
+    for (auto& symlink : resultSymlinks) {
+      if (auto store2 = store.dynamic_pointer_cast<LocalFSStore>()) {
         store2->addPermRoot(symlink.second, absPath(symlink.first), true);
+      }
+    }
 
     for (auto& path : outPaths) {
       std::cout << path << '\n';

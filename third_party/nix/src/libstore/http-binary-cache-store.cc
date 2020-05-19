@@ -113,9 +113,10 @@ class HttpBinaryCacheStore : public BinaryCacheStore {
     try {
       getDownloader()->download(std::move(request), sink);
     } catch (DownloadError& e) {
-      if (e.error == Downloader::NotFound || e.error == Downloader::Forbidden)
+      if (e.error == Downloader::NotFound || e.error == Downloader::Forbidden) {
         throw NoSuchBinaryCacheFile(
             "file '%s' does not exist in binary cache '%s'", path, getUri());
+      }
       maybeDisable();
       throw;
     }
@@ -137,8 +138,9 @@ class HttpBinaryCacheStore : public BinaryCacheStore {
             (*callbackPtr)(result.get().data);
           } catch (DownloadError& e) {
             if (e.error == Downloader::NotFound ||
-                e.error == Downloader::Forbidden)
+                e.error == Downloader::Forbidden) {
               return (*callbackPtr)(std::shared_ptr<std::string>());
+            }
             maybeDisable();
             callbackPtr->rethrow();
           } catch (...) {
@@ -154,8 +156,9 @@ static RegisterStoreImplementation regStore(
       if (std::string(uri, 0, 7) != "http://" &&
           std::string(uri, 0, 8) != "https://" &&
           (getEnv("_NIX_FORCE_HTTP_BINARY_CACHE_STORE") != "1" ||
-           std::string(uri, 0, 7) != "file://"))
+           std::string(uri, 0, 7) != "file://")) {
         return 0;
+      }
       auto store = std::make_shared<HttpBinaryCacheStore>(params, uri);
       store->init();
       return store;

@@ -30,13 +30,14 @@ void Args::parseCmdline(const Strings& _cmdline) {
       *pos = (string) "-" + arg[1];
       auto next = pos;
       ++next;
-      for (unsigned int j = 2; j < arg.length(); j++)
-        if (isalpha(arg[j]))
+      for (unsigned int j = 2; j < arg.length(); j++) {
+        if (isalpha(arg[j])) {
           cmdline.insert(next, (string) "-" + arg[j]);
-        else {
+        } else {
           cmdline.insert(next, string(arg, j));
           break;
         }
+      }
       arg = *pos;
     }
 
@@ -44,8 +45,9 @@ void Args::parseCmdline(const Strings& _cmdline) {
       dashDash = true;
       ++pos;
     } else if (!dashDash && std::string(arg, 0, 1) == "-") {
-      if (!processFlag(pos, cmdline.end()))
+      if (!processFlag(pos, cmdline.end())) {
         throw UsageError(format("unrecognised flag '%1%'") % arg);
+      }
     } else {
       pendingArgs.push_back(*pos++);
       if (processArgs(pendingArgs, false)) {
@@ -141,8 +143,9 @@ bool Args::processFlag(Strings::iterator& pos, Strings::iterator end) {
 
 bool Args::processArgs(const Strings& args, bool finish) {
   if (expectedArgs.empty()) {
-    if (!args.empty())
+    if (!args.empty()) {
       throw UsageError(format("unexpected argument '%1%'") % args.front());
+    }
     return true;
   }
 
@@ -161,8 +164,9 @@ bool Args::processArgs(const Strings& args, bool finish) {
     res = true;
   }
 
-  if (finish && !expectedArgs.empty() && !expectedArgs.front().optional)
+  if (finish && !expectedArgs.empty() && !expectedArgs.front().optional) {
     throw UsageError("more arguments are required");
+  }
 
   return res;
 }
@@ -184,7 +188,9 @@ Strings argvToStrings(int argc, char** argv) {
   Strings args;
   argc--;
   argv++;
-  while (argc--) args.push_back(*argv++);
+  while (argc--) {
+    args.push_back(*argv++);
+  }
   return args;
 }
 

@@ -28,10 +28,11 @@ static int parseName(const string& profileName, const string& name) {
     return -1;
   }
   int n;
-  if (string2Int(string(s, 0, p), n) && n >= 0)
+  if (string2Int(string(s, 0, p), n) && n >= 0) {
     return n;
-  else
+  } else {
     return -1;
+  }
 }
 
 Generations findGenerations(Path profile, int& curGen) {
@@ -47,8 +48,9 @@ Generations findGenerations(Path profile, int& curGen) {
       gen.path = profileDir + "/" + i.name;
       gen.number = n;
       struct stat st;
-      if (lstat(gen.path.c_str(), &st) != 0)
+      if (lstat(gen.path.c_str(), &st) != 0) {
         throw SysError(format("statting '%1%'") % gen.path);
+      }
       gen.creationTime = st.st_mtime;
       gens.push_back(gen);
     }
@@ -105,8 +107,9 @@ Path createGeneration(ref<LocalFSStore> store, Path profile, Path outPath) {
 }
 
 static void removeFile(const Path& path) {
-  if (remove(path.c_str()) == -1)
+  if (remove(path.c_str()) == -1) {
     throw SysError(format("cannot unlink '%1%'") % path);
+  }
 }
 
 void deleteGeneration(const Path& profile, unsigned int gen) {
@@ -134,9 +137,10 @@ void deleteGenerations(const Path& profile,
   int curGen;
   Generations gens = findGenerations(profile, curGen);
 
-  if (gensToDelete.find(curGen) != gensToDelete.end())
+  if (gensToDelete.find(curGen) != gensToDelete.end()) {
     throw Error(format("cannot delete current generation of profile %1%'") %
                 profile);
+  }
 
   for (auto& i : gens) {
     if (gensToDelete.find(i.number) == gensToDelete.end()) {
@@ -176,10 +180,11 @@ void deleteOldGenerations(const Path& profile, bool dryRun) {
   int curGen;
   Generations gens = findGenerations(profile, curGen);
 
-  for (auto& i : gens)
+  for (auto& i : gens) {
     if (i.number != curGen) {
       deleteGeneration2(profile, i.number, dryRun);
     }
+  }
 }
 
 void deleteGenerationsOlderThan(const Path& profile, time_t t, bool dryRun) {
@@ -190,7 +195,7 @@ void deleteGenerationsOlderThan(const Path& profile, time_t t, bool dryRun) {
   Generations gens = findGenerations(profile, curGen);
 
   bool canDelete = false;
-  for (auto i = gens.rbegin(); i != gens.rend(); ++i)
+  for (auto i = gens.rbegin(); i != gens.rend(); ++i) {
     if (canDelete) {
       assert(i->creationTime < t);
       if (i->number != curGen) {
@@ -203,6 +208,7 @@ void deleteGenerationsOlderThan(const Path& profile, time_t t, bool dryRun) {
          time. */
       canDelete = true;
     }
+  }
 }
 
 void deleteGenerationsOlderThan(const Path& profile, const string& timeSpec,
@@ -211,8 +217,9 @@ void deleteGenerationsOlderThan(const Path& profile, const string& timeSpec,
   string strDays = string(timeSpec, 0, timeSpec.size() - 1);
   int days;
 
-  if (!string2Int(strDays, days) || days < 1)
+  if (!string2Int(strDays, days) || days < 1) {
     throw Error(format("invalid number of days specifier '%1%'") % timeSpec);
+  }
 
   time_t oldTime = curTime - days * 24 * 3600;
 

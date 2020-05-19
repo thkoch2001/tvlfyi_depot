@@ -49,8 +49,9 @@ struct XzDecompressionSink : CompressionSink {
 
   XzDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
     lzma_ret ret = lzma_stream_decoder(&strm, UINT64_MAX, LZMA_CONCATENATED);
-    if (ret != LZMA_OK)
+    if (ret != LZMA_OK) {
       throw CompressionError("unable to initialise lzma decoder");
+    }
 
     strm.next_out = outbuf;
     strm.avail_out = sizeof(outbuf);
@@ -71,8 +72,9 @@ struct XzDecompressionSink : CompressionSink {
       checkInterrupt();
 
       lzma_ret ret = lzma_code(&strm, data ? LZMA_RUN : LZMA_FINISH);
-      if (ret != LZMA_OK && ret != LZMA_STREAM_END)
+      if (ret != LZMA_OK && ret != LZMA_STREAM_END) {
         throw CompressionError("error %d while decompressing xz file", ret);
+      }
 
       finished = ret == LZMA_STREAM_END;
 
@@ -93,8 +95,9 @@ struct BzipDecompressionSink : ChunkedCompressionSink {
   BzipDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
     memset(&strm, 0, sizeof(strm));
     int ret = BZ2_bzDecompressInit(&strm, 0, 0);
-    if (ret != BZ_OK)
+    if (ret != BZ_OK) {
       throw CompressionError("unable to initialise bzip2 decoder");
+    }
 
     strm.next_out = (char*)outbuf;
     strm.avail_out = sizeof(outbuf);
@@ -117,8 +120,9 @@ struct BzipDecompressionSink : ChunkedCompressionSink {
       checkInterrupt();
 
       int ret = BZ2_bzDecompress(&strm);
-      if (ret != BZ_OK && ret != BZ_STREAM_END)
+      if (ret != BZ_OK && ret != BZ_STREAM_END) {
         throw CompressionError("error while decompressing bzip2 file");
+      }
 
       finished = ret == BZ_STREAM_END;
 
@@ -160,8 +164,9 @@ struct BrotliDecompressionSink : ChunkedCompressionSink {
       checkInterrupt();
 
       if (!BrotliDecoderDecompressStream(state, &avail_in, &next_in, &avail_out,
-                                         &next_out, nullptr))
+                                         &next_out, nullptr)) {
         throw CompressionError("error while decompressing brotli file");
+      }
 
       if (avail_out < sizeof(outbuf) || avail_in == 0) {
         nextSink(outbuf, sizeof(outbuf) - avail_out);
@@ -184,16 +189,17 @@ ref<std::string> decompress(const std::string& method, const std::string& in) {
 
 ref<CompressionSink> makeDecompressionSink(const std::string& method,
                                            Sink& nextSink) {
-  if (method == "none" || method == "")
+  if (method == "none" || method == "") {
     return make_ref<NoneSink>(nextSink);
-  else if (method == "xz")
+  } else if (method == "xz") {
     return make_ref<XzDecompressionSink>(nextSink);
-  else if (method == "bzip2")
+  } else if (method == "bzip2") {
     return make_ref<BzipDecompressionSink>(nextSink);
-  else if (method == "br")
+  } else if (method == "br") {
     return make_ref<BrotliDecompressionSink>(nextSink);
-  else
+  } else {
     throw UnknownCompressionMethod("unknown compression method '%s'", method);
+  }
 }
 
 struct XzCompressionSink : CompressionSink {
@@ -258,8 +264,9 @@ struct XzCompressionSink : CompressionSink {
       checkInterrupt();
 
       lzma_ret ret = lzma_code(&strm, data ? LZMA_RUN : LZMA_FINISH);
-      if (ret != LZMA_OK && ret != LZMA_STREAM_END)
+      if (ret != LZMA_OK && ret != LZMA_STREAM_END) {
         throw CompressionError("error %d while compressing xz file", ret);
+      }
 
       finished = ret == LZMA_STREAM_END;
 
@@ -280,8 +287,9 @@ struct BzipCompressionSink : ChunkedCompressionSink {
   BzipCompressionSink(Sink& nextSink) : nextSink(nextSink) {
     memset(&strm, 0, sizeof(strm));
     int ret = BZ2_bzCompressInit(&strm, 9, 0, 30);
-    if (ret != BZ_OK)
+    if (ret != BZ_OK) {
       throw CompressionError("unable to initialise bzip2 encoder");
+    }
 
     strm.next_out = (char*)outbuf;
     strm.avail_out = sizeof(outbuf);
@@ -304,8 +312,9 @@ struct BzipCompressionSink : ChunkedCompressionSink {
       checkInterrupt();
 
       int ret = BZ2_bzCompress(&strm, data ? BZ_RUN : BZ_FINISH);
-      if (ret != BZ_RUN_OK && ret != BZ_FINISH_OK && ret != BZ_STREAM_END)
+      if (ret != BZ_RUN_OK && ret != BZ_FINISH_OK && ret != BZ_STREAM_END) {
         throw CompressionError("error %d while compressing bzip2 file", ret);
+      }
 
       finished = ret == BZ_STREAM_END;
 
@@ -349,8 +358,9 @@ struct BrotliCompressionSink : ChunkedCompressionSink {
 
       if (!BrotliEncoderCompressStream(
               state, data ? BROTLI_OPERATION_PROCESS : BROTLI_OPERATION_FINISH,
-              &avail_in, &next_in, &avail_out, &next_out, nullptr))
+              &avail_in, &next_in, &avail_out, &next_out, nullptr)) {
         throw CompressionError("error while compressing brotli compression");
+      }
 
       if (avail_out < sizeof(outbuf) || avail_in == 0) {
         nextSink(outbuf, sizeof(outbuf) - avail_out);
@@ -365,17 +375,18 @@ struct BrotliCompressionSink : ChunkedCompressionSink {
 
 ref<CompressionSink> makeCompressionSink(const std::string& method,
                                          Sink& nextSink, const bool parallel) {
-  if (method == "none")
+  if (method == "none") {
     return make_ref<NoneSink>(nextSink);
-  else if (method == "xz")
+  } else if (method == "xz") {
     return make_ref<XzCompressionSink>(nextSink, parallel);
-  else if (method == "bzip2")
+  } else if (method == "bzip2") {
     return make_ref<BzipCompressionSink>(nextSink);
-  else if (method == "br")
+  } else if (method == "br") {
     return make_ref<BrotliCompressionSink>(nextSink);
-  else
+  } else {
     throw UnknownCompressionMethod(format("unknown compression method '%s'") %
                                    method);
+  }
 }
 
 ref<std::string> compress(const std::string& method, const std::string& in,

@@ -69,12 +69,14 @@ struct LegacySSHStore : public Store {
       conn->to.flush();
 
       unsigned int magic = readInt(conn->from);
-      if (magic != SERVE_MAGIC_2)
+      if (magic != SERVE_MAGIC_2) {
         throw Error("protocol mismatch with 'nix-store --serve' on '%s'", host);
+      }
       conn->remoteVersion = readInt(conn->from);
-      if (GET_PROTOCOL_MAJOR(conn->remoteVersion) != 0x200)
+      if (GET_PROTOCOL_MAJOR(conn->remoteVersion) != 0x200) {
         throw Error("unsupported 'nix-store --serve' protocol version on '%s'",
                     host);
+      }
 
     } catch (EndOfFile& e) {
       throw Error("cannot connect to '%1%'", host);
@@ -160,9 +162,10 @@ struct LegacySSHStore : public Store {
       conn->to.flush();
     }
 
-    if (readInt(conn->from) != 1)
+    if (readInt(conn->from) != 1) {
       throw Error(
           "failed to add path '%s' to remote host '%s', info.path, host");
+    }
   }
 
   void narFromPath(const Path& path, Sink& sink) override {
@@ -194,10 +197,12 @@ struct LegacySSHStore : public Store {
 
     conn->to << cmdBuildDerivation << drvPath << drv << settings.maxSilentTime
              << settings.buildTimeout;
-    if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 2)
+    if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 2) {
       conn->to << settings.maxLogSize;
-    if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 3)
+    }
+    if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 3) {
       conn->to << settings.buildRepeat << settings.enforceDeterminism;
+    }
 
     conn->to.flush();
 
@@ -205,9 +210,10 @@ struct LegacySSHStore : public Store {
     status.status = (BuildResult::Status)readInt(conn->from);
     conn->from >> status.errorMsg;
 
-    if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 3)
+    if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 3) {
       conn->from >> status.timesBuilt >> status.isNonDeterministic >>
           status.startTime >> status.stopTime;
+    }
 
     return status;
   }

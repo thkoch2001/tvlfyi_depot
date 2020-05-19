@@ -49,11 +49,12 @@ Settings::Settings()
   if (caFile == "") {
     for (auto& fn :
          {"/etc/ssl/certs/ca-certificates.crt",
-          "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"})
+          "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"}) {
       if (pathExists(fn)) {
         caFile = fn;
         break;
       }
+    }
   }
 
   /* Backwards compatibility. */
@@ -112,26 +113,28 @@ const string nixVersion = PACKAGE_VERSION;
 
 template <>
 void BaseSetting<SandboxMode>::set(const std::string& str) {
-  if (str == "true")
+  if (str == "true") {
     value = smEnabled;
-  else if (str == "relaxed")
+  } else if (str == "relaxed") {
     value = smRelaxed;
-  else if (str == "false")
+  } else if (str == "false") {
     value = smDisabled;
-  else
+  } else {
     throw UsageError("option '%s' has invalid value '%s'", name, str);
+  }
 }
 
 template <>
 std::string BaseSetting<SandboxMode>::to_string() {
-  if (value == smEnabled)
+  if (value == smEnabled) {
     return "true";
-  else if (value == smRelaxed)
+  } else if (value == smRelaxed) {
     return "relaxed";
-  else if (value == smDisabled)
+  } else if (value == smDisabled) {
     return "false";
-  else
+  } else {
     abort();
+  }
 }
 
 template <>
@@ -160,11 +163,12 @@ void BaseSetting<SandboxMode>::convertToArg(Args& args,
 }
 
 void MaxBuildJobsSetting::set(const std::string& str) {
-  if (str == "auto")
+  if (str == "auto") {
     value = std::max(1U, std::thread::hardware_concurrency());
-  else if (!string2Int(str, value))
+  } else if (!string2Int(str, value)) {
     throw UsageError(
         "configuration setting '%s' should be 'auto' or an integer", name);
+  }
 }
 
 void initPlugins() {
@@ -172,8 +176,9 @@ void initPlugins() {
     Paths pluginFiles;
     try {
       auto ents = readDirectory(pluginFile);
-      for (const auto& ent : ents)
+      for (const auto& ent : ents) {
         pluginFiles.emplace_back(pluginFile + "/" + ent.name);
+      }
     } catch (SysError& e) {
       if (e.errNo != ENOTDIR) {
         throw;
@@ -184,9 +189,10 @@ void initPlugins() {
       /* handle is purposefully leaked as there may be state in the
          DSO needed by the action of the plugin. */
       void* handle = dlopen(file.c_str(), RTLD_LAZY | RTLD_LOCAL);
-      if (!handle)
+      if (!handle) {
         throw Error("could not dynamically open plugin file '%s': %s", file,
                     dlerror());
+      }
     }
   }
 

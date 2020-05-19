@@ -10,13 +10,15 @@ SSHMaster::SSHMaster(const std::string& host, const std::string& keyFile,
       useMaster(useMaster && !fakeSSH),
       compress(compress),
       logFD(logFD) {
-  if (host == "" || hasPrefix(host, "-"))
+  if (host == "" || hasPrefix(host, "-")) {
     throw Error("invalid SSH host name '%s'", host);
+  }
 }
 
 void SSHMaster::addCommonSSHOpts(Strings& args) {
-  for (auto& i : tokenizeString<Strings>(getEnv("NIX_SSHOPTS")))
+  for (auto& i : tokenizeString<Strings>(getEnv("NIX_SSHOPTS"))) {
     args.push_back(i);
+  }
   if (!keyFile.empty()) {
     args.insert(args.end(), {"-i", keyFile});
   }
@@ -44,12 +46,15 @@ std::unique_ptr<SSHMaster::Connection> SSHMaster::startCommand(
         close(in.writeSide.get());
         close(out.readSide.get());
 
-        if (dup2(in.readSide.get(), STDIN_FILENO) == -1)
+        if (dup2(in.readSide.get(), STDIN_FILENO) == -1) {
           throw SysError("duping over stdin");
-        if (dup2(out.writeSide.get(), STDOUT_FILENO) == -1)
+        }
+        if (dup2(out.writeSide.get(), STDOUT_FILENO) == -1) {
           throw SysError("duping over stdout");
-        if (logFD != -1 && dup2(logFD, STDERR_FILENO) == -1)
+        }
+        if (logFD != -1 && dup2(logFD, STDERR_FILENO) == -1) {
           throw SysError("duping over stderr");
+        }
 
         Strings args;
 
@@ -112,8 +117,9 @@ Path SSHMaster::startMaster() {
 
         close(out.readSide.get());
 
-        if (dup2(out.writeSide.get(), STDOUT_FILENO) == -1)
+        if (dup2(out.writeSide.get(), STDOUT_FILENO) == -1) {
           throw SysError("duping over stdout");
+        }
 
         Strings args = {"ssh", host.c_str(),
                         "-M",  "-N",
@@ -136,8 +142,9 @@ Path SSHMaster::startMaster() {
   } catch (EndOfFile& e) {
   }
 
-  if (reply != "started")
+  if (reply != "started") {
     throw Error("failed to start SSH master connection to '%s'", host);
+  }
 
   return state->socketPath;
 }

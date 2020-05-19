@@ -18,32 +18,33 @@ static int _main(int argc, char** argv) {
 
     parseCmdLine(
         argc, argv, [&](Strings::iterator& arg, const Strings::iterator& end) {
-          if (*arg == "--help")
+          if (*arg == "--help") {
             showManPage("nix-copy-closure");
-          else if (*arg == "--version")
+          } else if (*arg == "--version") {
             printVersion("nix-copy-closure");
-          else if (*arg == "--gzip" || *arg == "--bzip2" || *arg == "--xz") {
+          } else if (*arg == "--gzip" || *arg == "--bzip2" || *arg == "--xz") {
             if (*arg != "--gzip") {
               LOG(WARNING) << "'" << *arg
                            << "' is not implemented, falling back to gzip";
             }
             gzip = true;
-          } else if (*arg == "--from")
+          } else if (*arg == "--from") {
             toMode = false;
-          else if (*arg == "--to")
+          } else if (*arg == "--to") {
             toMode = true;
-          else if (*arg == "--include-outputs")
+          } else if (*arg == "--include-outputs") {
             includeOutputs = true;
-          else if (*arg == "--show-progress")
+          } else if (*arg == "--show-progress") {
             LOG(WARNING) << "'--show-progress' is not implemented";
-          else if (*arg == "--dry-run")
+          } else if (*arg == "--dry-run") {
             dryRun = true;
-          else if (*arg == "--use-substitutes" || *arg == "-s")
+          } else if (*arg == "--use-substitutes" || *arg == "-s") {
             useSubstitutes = Substitute;
-          else if (sshHost.empty())
+          } else if (sshHost.empty()) {
             sshHost = *arg;
-          else
+          } else {
             storePaths.insert(*arg);
+          }
           return true;
         });
 
@@ -58,8 +59,9 @@ static int _main(int argc, char** argv) {
     auto from = toMode ? openStore() : openStore(remoteUri);
 
     PathSet storePaths2;
-    for (auto& path : storePaths)
+    for (auto& path : storePaths) {
       storePaths2.insert(from->followLinksToStorePath(path));
+    }
 
     PathSet closure;
     from->computeFSClosure(storePaths2, closure, false, includeOutputs);

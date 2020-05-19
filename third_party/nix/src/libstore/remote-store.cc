@@ -57,9 +57,10 @@ RemoteStore::RemoteStore(const Params& params)
           })) {}
 
 ref<RemoteStore::Connection> RemoteStore::openConnectionWrapper() {
-  if (failed)
+  if (failed) {
     throw Error("opening a connection to remote store '%s' previously failed",
                 getUri());
+  }
   try {
     return openConnection();
   } catch (...) {
@@ -105,12 +106,14 @@ ref<RemoteStore::Connection> UDSRemoteStore::openConnection() {
 
   struct sockaddr_un addr;
   addr.sun_family = AF_UNIX;
-  if (socketPath.size() + 1 >= sizeof(addr.sun_path))
+  if (socketPath.size() + 1 >= sizeof(addr.sun_path)) {
     throw Error(format("socket path '%1%' is too long") % socketPath);
+  }
   strcpy(addr.sun_path, socketPath.c_str());
 
-  if (::connect(conn->fd.get(), (struct sockaddr*)&addr, sizeof(addr)) == -1)
+  if (::connect(conn->fd.get(), (struct sockaddr*)&addr, sizeof(addr)) == -1) {
     throw SysError(format("cannot connect to daemon at '%1%'") % socketPath);
+  }
 
   conn->from.fd = conn->fd.get();
   conn->to.fd = conn->fd.get();
@@ -134,18 +137,21 @@ void RemoteStore::initConnection(Connection& conn) {
 
     conn.from >> conn.daemonVersion;
     if (GET_PROTOCOL_MAJOR(conn.daemonVersion) !=
-        GET_PROTOCOL_MAJOR(PROTOCOL_VERSION))
+        GET_PROTOCOL_MAJOR(PROTOCOL_VERSION)) {
       throw Error("Nix daemon protocol version not supported");
-    if (GET_PROTOCOL_MINOR(conn.daemonVersion) < 10)
+    }
+    if (GET_PROTOCOL_MINOR(conn.daemonVersion) < 10) {
       throw Error("the Nix daemon version is too old");
+    }
     conn.to << PROTOCOL_VERSION;
 
     if (GET_PROTOCOL_MINOR(conn.daemonVersion) >= 14) {
       int cpu = sameMachine() && settings.lockCPU ? lockToCurrentCPU() : -1;
-      if (cpu != -1)
+      if (cpu != -1) {
         conn.to << 1 << cpu;
-      else
+      } else {
         conn.to << 0;
+      }
     }
 
     if (GET_PROTOCOL_MINOR(conn.daemonVersion) >= 11) {
@@ -249,10 +255,11 @@ PathSet RemoteStore::queryValidPaths(const PathSet& paths,
   auto conn(getConnection());
   if (GET_PROTOCOL_MINOR(conn->daemonVersion) < 12) {
     PathSet res;
-    for (auto& i : paths)
+    for (auto& i : paths) {
       if (isValidPath(i)) {
         res.insert(i);
       }
+    }
     return res;
   } else {
     conn->to << wopQueryValidPaths << paths;
@@ -344,8 +351,9 @@ void RemoteStore::queryPathInfoUncached(
         conn.processStderr();
       } catch (Error& e) {
         // Ugly backwards compatibility hack.
-        if (e.msg().find("is not valid") != std::string::npos)
+        if (e.msg().find("is not valid") != std::string::npos) {
           throw InvalidPath(e.what());
+        }
         throw;
       }
       if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 17) {
@@ -456,9 +464,10 @@ void RemoteStore::addToStore(const ValidPathInfo& info, Source& source,
 Path RemoteStore::addToStore(const string& name, const Path& _srcPath,
                              bool recursive, HashType hashAlgo,
                              PathFilter& filter, RepairFlag repair) {
-  if (repair)
+  if (repair) {
     throw Error(
         "repairing is not supported when building through the Nix daemon");
+  }
 
   auto conn(getConnection());
 
@@ -483,10 +492,12 @@ Path RemoteStore::addToStore(const string& name, const Path& _srcPath,
   } catch (SysError& e) {
     /* Daemon closed while we were sending the path. Probably OOM
        or I/O error. */
-    if (e.errNo == EPIPE) try {
+    if (e.errNo == EPIPE) {
+      try {
         conn.processStderr();
       } catch (EndOfFile& e) {
       }
+    }
     throw;
   }
 
@@ -495,9 +506,10 @@ Path RemoteStore::addToStore(const string& name, const Path& _srcPath,
 
 Path RemoteStore::addTextToStore(const string& name, const string& s,
                                  const PathSet& references, RepairFlag repair) {
-  if (repair)
+  if (repair) {
     throw Error(
         "repairing is not supported when building through the Nix daemon");
+  }
 
   auto conn(getConnection());
   conn->to << wopAddTextToStore << name << s << references;
@@ -511,15 +523,16 @@ void RemoteStore::buildPaths(const PathSet& drvPaths, BuildMode buildMode) {
   conn->to << wopBuildPaths;
   if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 13) {
     conn->to << drvPaths;
-    if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 15)
+    if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 15) {
       conn->to << buildMode;
-    else
+    } else
         /* Old daemons did not take a 'buildMode' parameter, so we
            need to validate it here on the client side.  */
-        if (buildMode != bmNormal)
+        if (buildMode != bmNormal) {
       throw Error(
           "repairing or checking is not supported when building through the "
           "Nix daemon");
+    }
   } else {
     /* For backwards compatibility with old daemons, strip output
        identifiers. */

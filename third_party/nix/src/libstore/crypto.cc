@@ -32,8 +32,9 @@ Key::Key(const string& s) {
 
 SecretKey::SecretKey(const string& s) : Key(s) {
 #if HAVE_SODIUM
-  if (key.size() != crypto_sign_SECRETKEYBYTES)
+  if (key.size() != crypto_sign_SECRETKEYBYTES) {
     throw Error("secret key is not valid");
+  }
 #endif
 }
 
@@ -69,8 +70,9 @@ PublicKey SecretKey::toPublicKey() const {
 
 PublicKey::PublicKey(const string& s) : Key(s) {
 #if HAVE_SODIUM
-  if (key.size() != crypto_sign_PUBLICKEYBYTES)
+  if (key.size() != crypto_sign_PUBLICKEYBYTES) {
     throw Error("public key is not valid");
+  }
 #endif
 }
 

@@ -73,8 +73,9 @@ struct CmdToBase : Command {
   }
 
   void run() override {
-    for (auto s : args)
+    for (auto s : args) {
       std::cout << fmt("%s\n", Hash(s, ht).to_string(base, base == SRI));
+    }
   }
 };
 
@@ -94,29 +95,31 @@ static int compatNixHash(int argc, char** argv) {
 
   parseCmdLine(argc, argv,
                [&](Strings::iterator& arg, const Strings::iterator& end) {
-                 if (*arg == "--help")
+                 if (*arg == "--help") {
                    showManPage("nix-hash");
-                 else if (*arg == "--version")
+                 } else if (*arg == "--version") {
                    printVersion("nix-hash");
-                 else if (*arg == "--flat")
+                 } else if (*arg == "--flat") {
                    flat = true;
-                 else if (*arg == "--base32")
+                 } else if (*arg == "--base32") {
                    base32 = true;
-                 else if (*arg == "--truncate")
+                 } else if (*arg == "--truncate") {
                    truncate = true;
-                 else if (*arg == "--type") {
+                 } else if (*arg == "--type") {
                    string s = getArg(*arg, arg, end);
                    ht = parseHashType(s);
-                   if (ht == htUnknown)
+                   if (ht == htUnknown) {
                      throw UsageError(format("unknown hash type '%1%'") % s);
-                 } else if (*arg == "--to-base16")
+                   }
+                 } else if (*arg == "--to-base16") {
                    op = opTo16;
-                 else if (*arg == "--to-base32")
+                 } else if (*arg == "--to-base32") {
                    op = opTo32;
-                 else if (*arg != "" && arg->at(0) == '-')
+                 } else if (*arg != "" && arg->at(0) == '-') {
                    return false;
-                 else
+                 } else {
                    ss.push_back(*arg);
+                 }
                  return true;
                });
 

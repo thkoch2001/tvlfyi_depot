@@ -76,8 +76,9 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
 
     state->db = SQLite(dbPath);
 
-    if (sqlite3_busy_timeout(state->db, 60 * 60 * 1000) != SQLITE_OK)
+    if (sqlite3_busy_timeout(state->db, 60 * 60 * 1000) != SQLITE_OK) {
       throwSQLiteError(state->db, "setting timeout");
+    }
 
     // We can always reproduce the cache.
     state->db.exec("pragma synchronous = off");
@@ -224,12 +225,15 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
           narInfo->fileSize = queryNAR.getInt(5);
           narInfo->narHash = Hash(queryNAR.getStr(6));
           narInfo->narSize = queryNAR.getInt(7);
-          for (auto& r : tokenizeString<Strings>(queryNAR.getStr(8), " "))
+          for (auto& r : tokenizeString<Strings>(queryNAR.getStr(8), " ")) {
             narInfo->references.insert(cache.storeDir + "/" + r);
-          if (!queryNAR.isNull(9))
+          }
+          if (!queryNAR.isNull(9)) {
             narInfo->deriver = cache.storeDir + "/" + queryNAR.getStr(9);
-          for (auto& sig : tokenizeString<Strings>(queryNAR.getStr(10), " "))
+          }
+          for (auto& sig : tokenizeString<Strings>(queryNAR.getStr(10), " ")) {
             narInfo->sigs.insert(sig);
+          }
           narInfo->ca = queryNAR.getStr(11);
 
           return {oValid, narInfo};

@@ -7,28 +7,31 @@ namespace nix {
 
 void toJSON(std::ostream& str, const char* start, const char* end) {
   str << '"';
-  for (auto i = start; i != end; i++)
-    if (*i == '\"' || *i == '\\')
+  for (auto i = start; i != end; i++) {
+    if (*i == '\"' || *i == '\\') {
       str << '\\' << *i;
-    else if (*i == '\n')
+    } else if (*i == '\n') {
       str << "\\n";
-    else if (*i == '\r')
+    } else if (*i == '\r') {
       str << "\\r";
-    else if (*i == '\t')
+    } else if (*i == '\t') {
       str << "\\t";
-    else if (*i >= 0 && *i < 32)
+    } else if (*i >= 0 && *i < 32) {
       str << "\\u" << std::setfill('0') << std::setw(4) << std::hex
           << (uint16_t)*i << std::dec;
-    else
+    } else {
       str << *i;
+    }
+  }
   str << '"';
 }
 
 void toJSON(std::ostream& str, const char* s) {
-  if (!s)
+  if (!s) {
     str << "null";
-  else
+  } else {
     toJSON(str, s, s + strlen(s));
+  }
 }
 
 template <>

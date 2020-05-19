@@ -25,18 +25,20 @@ DrvInfo::DrvInfo(EvalState& state, ref<Store> store,
 
   name = storePathToName(drvPath);
 
-  if (spec.second.size() > 1)
+  if (spec.second.size() > 1) {
     throw Error(
         "building more than one derivation output is not supported, in '%s'",
         drvPathWithOutputs);
+  }
 
   outputName = spec.second.empty() ? get(drv.env, "outputName", "out")
                                    : *spec.second.begin();
 
   auto i = drv.outputs.find(outputName);
-  if (i == drv.outputs.end())
+  if (i == drv.outputs.end()) {
     throw Error("derivation '%s' does not have output '%s'", drvPath,
                 outputName);
+  }
 
   outPath = i->second.path;
 }
@@ -110,8 +112,9 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
         outputs[name] =
             state->coerceToPath(*outPath->pos, *outPath->value, context);
       }
-    } else
+    } else {
       outputs["out"] = queryOutPath();
+    }
   }
   if (!onlyOutputsToInstall || !attrs) {
     return outputs;
@@ -363,10 +366,11 @@ static void getDerivations(EvalState& state, Value& vIn,
   state.autoCallFunction(autoArgs, vIn, v);
 
   /* Process the expression. */
-  if (!getDerivation(state, v, pathPrefix, drvs, done, ignoreAssertionFailures))
+  if (!getDerivation(state, v, pathPrefix, drvs, done,
+                     ignoreAssertionFailures)) {
     ;
 
-  else if (v.type == tAttrs) {
+  } else if (v.type == tAttrs) {
     /* !!! undocumented hackery to support combining channels in
        nix-env.cc. */
     bool combineChannels =
@@ -384,11 +388,11 @@ static void getDerivations(EvalState& state, Value& vIn,
         continue;
       }
       string pathPrefix2 = addToPath(pathPrefix, i->name);
-      if (combineChannels)
+      if (combineChannels) {
         getDerivations(state, *i->value, pathPrefix2, autoArgs, drvs, done,
                        ignoreAssertionFailures);
-      else if (getDerivation(state, *i->value, pathPrefix2, drvs, done,
-                             ignoreAssertionFailures)) {
+      } else if (getDerivation(state, *i->value, pathPrefix2, drvs, done,
+                               ignoreAssertionFailures)) {
         /* If the value of this attribute is itself a set,
            should we recurse into it?  => Only if it has a
            `recurseForDerivations = true' attribute. */
@@ -396,9 +400,10 @@ static void getDerivations(EvalState& state, Value& vIn,
           Bindings::iterator j = i->value->attrs->find(
               state.symbols.create("recurseForDerivations"));
           if (j != i->value->attrs->end() &&
-              state.forceBool(*j->value, *j->pos))
+              state.forceBool(*j->value, *j->pos)) {
             getDerivations(state, *i->value, pathPrefix2, autoArgs, drvs, done,
                            ignoreAssertionFailures);
+          }
         }
       }
     }
@@ -408,9 +413,10 @@ static void getDerivations(EvalState& state, Value& vIn,
     for (unsigned int n = 0; n < v.listSize(); ++n) {
       string pathPrefix2 = addToPath(pathPrefix, (format("%1%") % n).str());
       if (getDerivation(state, *v.listElems()[n], pathPrefix2, drvs, done,
-                        ignoreAssertionFailures))
+                        ignoreAssertionFailures)) {
         getDerivations(state, *v.listElems()[n], pathPrefix2, autoArgs, drvs,
                        done, ignoreAssertionFailures);
+      }
     }
   }
 

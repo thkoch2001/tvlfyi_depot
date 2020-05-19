@@ -25,9 +25,10 @@ DrvName::DrvName(const string& s) : hits(0) {
 
 bool DrvName::matches(DrvName& n) {
   if (name != "*") {
-    if (!regex)
+    if (!regex) {
       regex = std::unique_ptr<std::regex>(
           new std::regex(name, std::regex::extended));
+    }
     if (!std::regex_match(n.name, *regex)) {
       return false;
     }
@@ -41,7 +42,9 @@ bool DrvName::matches(DrvName& n) {
 string nextComponent(string::const_iterator& p,
                      const string::const_iterator end) {
   /* Skip any dots and dashes (component separators). */
-  while (p != end && (*p == '.' || *p == '-')) ++p;
+  while (p != end && (*p == '.' || *p == '-')) {
+    ++p;
+  }
 
   if (p == end) {
     return "";
@@ -51,10 +54,15 @@ string nextComponent(string::const_iterator& p,
      of digits.  Otherwise, consume the longest sequence of
      non-digit, non-separator characters. */
   string s;
-  if (isdigit(*p))
-    while (p != end && isdigit(*p)) s += *p++;
-  else
-    while (p != end && (!isdigit(*p) && *p != '.' && *p != '-')) s += *p++;
+  if (isdigit(*p)) {
+    while (p != end && isdigit(*p)) {
+      s += *p++;
+    }
+  } else {
+    while (p != end && (!isdigit(*p) && *p != '.' && *p != '-')) {
+      s += *p++;
+    }
+  }
 
   return s;
 }
@@ -65,14 +73,14 @@ static bool componentsLT(const string& c1, const string& c2) {
 
   if (c1Num && c2Num) {
     return n1 < n2;
-  } else if (c1 == "" && c2Num)
+  } else if (c1 == "" && c2Num) {
     return true;
-  else if (c1 == "pre" && c2 != "pre")
+  } else if (c1 == "pre" && c2 != "pre") {
     return true;
-  else if (c2 == "pre")
+  } else if (c2 == "pre") {
     return false;
-  /* Assume that `2.3a' < `2.3.1'. */
-  else if (c2Num) {
+    /* Assume that `2.3a' < `2.3.1'. */
+  } else if (c2Num) {
     return true;
   } else if (c1Num) {
     return false;
@@ -88,10 +96,11 @@ int compareVersions(const string& v1, const string& v2) {
   while (p1 != v1.end() || p2 != v2.end()) {
     string c1 = nextComponent(p1, v1.end());
     string c2 = nextComponent(p2, v2.end());
-    if (componentsLT(c1, c2))
+    if (componentsLT(c1, c2)) {
       return -1;
-    else if (componentsLT(c2, c1))
+    } else if (componentsLT(c2, c1)) {
       return 1;
+    }
   }
 
   return 0;

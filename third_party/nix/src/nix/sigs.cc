@@ -31,8 +31,9 @@ struct CmdCopySigs : StorePathsCommand {
   }
 
   void run(ref<Store> store, Paths storePaths) override {
-    if (substituterUris.empty())
+    if (substituterUris.empty()) {
       throw UsageError("you must specify at least one substituter using '-s'");
+    }
 
     // FIXME: factor out commonality with MixVerify.
     std::vector<ref<Store>> substituters;
@@ -65,13 +66,15 @@ struct CmdCopySigs : StorePathsCommand {
              binary. */
           if (info->narHash != info2->narHash ||
               info->narSize != info2->narSize ||
-              info->references != info2->references)
+              info->references != info2->references) {
             continue;
+          }
 
-          for (auto& sig : info2->sigs)
+          for (auto& sig : info2->sigs) {
             if (!info->sigs.count(sig)) {
               newSigs.insert(sig);
             }
+          }
         } catch (InvalidPath&) {
         }
       }
@@ -84,8 +87,9 @@ struct CmdCopySigs : StorePathsCommand {
       // logger->incProgress(doneLabel);
     };
 
-    for (auto& storePath : storePaths)
+    for (auto& storePath : storePaths) {
       pool.enqueue(std::bind(doPath, storePath));
+    }
 
     pool.process();
 
@@ -112,8 +116,9 @@ struct CmdSignPaths : StorePathsCommand {
   std::string description() override { return "sign the specified paths"; }
 
   void run(ref<Store> store, Paths storePaths) override {
-    if (secretKeyFile.empty())
+    if (secretKeyFile.empty()) {
       throw UsageError("you must specify a secret key file using '-k'");
+    }
 
     SecretKey secretKey(readFile(secretKeyFile));
 

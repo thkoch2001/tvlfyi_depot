@@ -39,10 +39,11 @@ static AutoCloseFD openSlotLock(const Machine& m, unsigned long long slot) {
 }
 
 static bool allSupportedLocally(const std::set<std::string>& requiredFeatures) {
-  for (auto& feature : requiredFeatures)
+  for (auto& feature : requiredFeatures) {
     if (!settings.systemFeatures.get().count(feature)) {
       return false;
     }
+  }
   return true;
 }
 
@@ -172,10 +173,11 @@ static int _main(int argc, char** argv) {
         }
 
         if (!bestSlotLock) {
-          if (rightType && !canBuildLocally)
+          if (rightType && !canBuildLocally) {
             std::cerr << "# postpone\n";
-          else
+          } else {
             std::cerr << "# decline\n";
+          }
           break;
         }
 
@@ -194,8 +196,9 @@ static int _main(int argc, char** argv) {
           if (hasPrefix(bestMachine->storeUri, "ssh://")) {
             storeParams["max-connections"] = "1";
             storeParams["log-fd"] = "4";
-            if (bestMachine->sshKey != "")
+            if (bestMachine->sshKey != "") {
               storeParams["ssh-key"] = bestMachine->sshKey;
+            }
           }
 
           sshStore = openStore(bestMachine->storeUri, storeParams);
@@ -254,15 +257,17 @@ static int _main(int argc, char** argv) {
 
     auto result = sshStore->buildDerivation(drvPath, drv);
 
-    if (!result.success())
+    if (!result.success()) {
       throw Error("build of '%s' on '%s' failed: %s", drvPath, storeUri,
                   result.errorMsg);
+    }
 
     PathSet missing;
-    for (auto& path : outputs)
+    for (auto& path : outputs) {
       if (!store->isValidPath(path)) {
         missing.insert(path);
       }
+    }
 
     if (!missing.empty()) {
       DLOG(INFO) << "copying outputs from '" << storeUri << "'";

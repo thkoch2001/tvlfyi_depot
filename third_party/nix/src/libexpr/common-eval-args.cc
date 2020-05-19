@@ -36,11 +36,12 @@ Bindings* MixEvalArgs::getAutoArgs(EvalState& state) {
   Bindings* res = state.allocBindings(autoArgs.size());
   for (auto& i : autoArgs) {
     Value* v = state.allocValue();
-    if (i.second[0] == 'E')
+    if (i.second[0] == 'E') {
       state.mkThunk_(
           *v, state.parseExprFromString(string(i.second, 1), absPath(".")));
-    else
+    } else {
       mkString(*v, string(i.second, 1));
+    }
     res->push_back(Attr(state.symbols.create(i.first), v));
   }
   res->sort();
@@ -55,8 +56,9 @@ Path lookupFileArg(EvalState& state, string s) {
   } else if (s.size() > 2 && s.at(0) == '<' && s.at(s.size() - 1) == '>') {
     Path p = s.substr(1, s.size() - 2);
     return state.findFile(p);
-  } else
+  } else {
     return absPath(s);
+  }
 }
 
 }  // namespace nix

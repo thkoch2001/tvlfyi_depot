@@ -46,9 +46,10 @@ void Store::exportPath(const Path& path, Sink& sink) {
      filesystem corruption from spreading to other machines.
      Don't complain if the stored hash is zero (unknown). */
   Hash hash = hashAndWriteSink.currentHash();
-  if (hash != info->narHash && info->narHash != Hash(info->narHash.type))
+  if (hash != info->narHash && info->narHash != Hash(info->narHash.type)) {
     throw Error(format("hash of path '%1%' has changed from '%2%' to '%3%'!") %
                 path % info->narHash.to_string() % hash.to_string());
+  }
 
   hashAndWriteSink << exportMagic << path << info->references << info->deriver
                    << 0;
@@ -62,17 +63,19 @@ Paths Store::importPaths(Source& source, std::shared_ptr<FSAccessor> accessor,
     if (n == 0) {
       break;
     }
-    if (n != 1)
+    if (n != 1) {
       throw Error(
           "input doesn't look like something created by 'nix-store --export'");
+    }
 
     /* Extract the NAR from the source. */
     TeeSink tee(source);
     parseDump(tee, tee.source);
 
     uint32_t magic = readInt(source);
-    if (magic != exportMagic)
+    if (magic != exportMagic) {
       throw Error("Nix archive cannot be imported; wrong format");
+    }
 
     ValidPathInfo info;
 

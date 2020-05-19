@@ -20,6 +20,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = with pkgs; [
     bison
+    clang-tools
     meson
     ninja
     pkgconfig

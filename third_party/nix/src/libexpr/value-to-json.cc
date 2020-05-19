@@ -58,8 +58,9 @@ void printValueAsJSON(EvalState& state, bool strict, Value& v,
           auto placeholder(obj.placeholder(j));
           printValueAsJSON(state, strict, *a.value, placeholder, context);
         }
-      } else
+      } else {
         printValueAsJSON(state, strict, *i->value, out, context);
+      }
       break;
     }
 

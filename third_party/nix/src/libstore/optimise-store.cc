@@ -17,10 +17,12 @@ namespace nix {
 
 static void makeWritable(const Path& path) {
   struct stat st;
-  if (lstat(path.c_str(), &st))
+  if (lstat(path.c_str(), &st)) {
     throw SysError(format("getting attributes of path '%1%'") % path);
-  if (chmod(path.c_str(), st.st_mode | S_IWUSR) == -1)
+  }
+  if (chmod(path.c_str(), st.st_mode | S_IWUSR) == -1) {
     throw SysError(format("changing writability of '%1%'") % path);
+  }
 }
 
 struct MakeReadOnly {
@@ -98,8 +100,9 @@ void LocalStore::optimisePath_(OptimiseStats& stats, const Path& path,
   checkInterrupt();
 
   struct stat st;
-  if (lstat(path.c_str(), &st))
+  if (lstat(path.c_str(), &st)) {
     throw SysError(format("getting attributes of path '%1%'") % path);
+  }
 
 #if __APPLE__
   /* HFS/macOS has some undocumented security feature disabling hardlinking for
@@ -192,8 +195,9 @@ retry:
   /* Yes!  We've seen a file with the same contents.  Replace the
      current file with a hard link to that file. */
   struct stat stLink;
-  if (lstat(linkPath.c_str(), &stLink))
+  if (lstat(linkPath.c_str(), &stLink)) {
     throw SysError(format("getting attributes of path '%1%'") % linkPath);
+  }
 
   if (st.st_ino == stLink.st_ino) {
     DLOG(INFO) << path << " is already linked to " << linkPath;

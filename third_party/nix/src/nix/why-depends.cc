@@ -92,14 +92,16 @@ struct CmdWhyDepends : SourceExprCommand {
 
     std::map<Path, Node> graph;
 
-    for (auto& path : closure)
+    for (auto& path : closure) {
       graph.emplace(path, Node{path, store->queryPathInfo(path)->references});
+    }
 
     // Transpose the graph.
-    for (auto& node : graph)
+    for (auto& node : graph) {
       for (auto& ref : node.second.refs) {
         graph[ref].rrefs.insert(node.first);
       }
+    }
 
     /* Run Dijkstra's shortest path algorithm to get the distance
        of every path in the closure to 'dependency'. */
@@ -146,8 +148,10 @@ struct CmdWhyDepends : SourceExprCommand {
                        node.visited ? "\e[38;5;244m" : "",
                        firstPad != "" ? "=> " : "", node.path);
 
-      if (node.path == dependencyPath && !all && packagePath != dependencyPath)
+      if (node.path == dependencyPath && !all &&
+          packagePath != dependencyPath) {
         throw BailOut();
+      }
 
       if (node.visited) {
         return;
@@ -216,10 +220,11 @@ struct CmdWhyDepends : SourceExprCommand {
 
           for (auto& hash : hashes) {
             auto pos = target.find(hash);
-            if (pos != std::string::npos)
+            if (pos != std::string::npos) {
               hits[hash].emplace_back(
                   fmt("%s -> %s\n", p2,
                       hilite(target, pos, storePathHashLen, getColour(hash))));
+            }
           }
         }
       };

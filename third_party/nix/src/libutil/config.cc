@@ -21,8 +21,9 @@ bool Config::set(const std::string& name, const std::string& value) {
 
 void Config::addSetting(AbstractSetting* setting) {
   _settings.emplace(setting->name, Config::SettingData(false, setting));
-  for (auto& alias : setting->aliases)
+  for (auto& alias : setting->aliases) {
     _settings.emplace(alias, Config::SettingData(true, setting));
+  }
 
   bool set = false;
 
@@ -68,11 +69,13 @@ void AbstractConfig::reapplyUnknownSettings() {
 
 void Config::getSettings(std::map<std::string, SettingInfo>& res,
                          bool overridenOnly) {
-  for (auto& opt : _settings)
+  for (auto& opt : _settings) {
     if (!opt.second.isAlias &&
-        (!overridenOnly || opt.second.setting->overriden))
+        (!overridenOnly || opt.second.setting->overriden)) {
       res.emplace(opt.first, SettingInfo{opt.second.setting->to_string(),
                                          opt.second.setting->description});
+    }
+  }
 }
 
 void AbstractConfig::applyConfigFile(const Path& path) {
@@ -83,8 +86,9 @@ void AbstractConfig::applyConfigFile(const Path& path) {
 
     while (pos < contents.size()) {
       string line;
-      while (pos < contents.size() && contents[pos] != '\n')
+      while (pos < contents.size() && contents[pos] != '\n') {
         line += contents[pos++];
+      }
       pos++;
 
       string::size_type hash = line.find('#');
@@ -97,23 +101,25 @@ void AbstractConfig::applyConfigFile(const Path& path) {
         continue;
       }
 
-      if (tokens.size() < 2)
+      if (tokens.size() < 2) {
         throw UsageError("illegal configuration line '%1%' in '%2%'", line,
                          path);
+      }
 
       auto include = false;
       auto ignoreMissing = false;
-      if (tokens[0] == "include")
+      if (tokens[0] == "include") {
         include = true;
-      else if (tokens[0] == "!include") {
+      } else if (tokens[0] == "!include") {
         include = true;
         ignoreMissing = true;
       }
 
       if (include) {
-        if (tokens.size() != 2)
+        if (tokens.size() != 2) {
           throw UsageError("illegal configuration line '%1%' in '%2%'", line,
                            path);
+        }
         auto p = absPath(tokens[1], dirOf(path));
         if (pathExists(p)) {
           applyConfigFile(p);
@@ -123,9 +129,10 @@ void AbstractConfig::applyConfigFile(const Path& path) {
         continue;
       }
 
-      if (tokens[1] != "=")
+      if (tokens[1] != "=") {
         throw UsageError("illegal configuration line '%1%' in '%2%'", line,
                          path);
+      }
 
       string name = tokens[0];
 
@@ -146,20 +153,22 @@ void Config::resetOverriden() {
 }
 
 void Config::toJSON(JSONObject& out) {
-  for (auto& s : _settings)
+  for (auto& s : _settings) {
     if (!s.second.isAlias) {
       JSONObject out2(out.object(s.first));
       out2.attr("description", s.second.setting->description);
       JSONPlaceholder out3(out2.placeholder("value"));
       s.second.setting->toJSON(out3);
     }
+  }
 }
 
 void Config::convertToArgs(Args& args, const std::string& category) {
-  for (auto& s : _settings)
+  for (auto& s : _settings) {
     if (!s.second.isAlias) {
       s.second.setting->convertToArg(args, category);
     }
+  }
 }
 
 AbstractSetting::AbstractSetting(const std::string& name,
@@ -202,8 +211,9 @@ std::string BaseSetting<std::string>::to_string() {
 template <typename T>
 void BaseSetting<T>::set(const std::string& str) {
   static_assert(std::is_integral<T>::value, "Integer required.");
-  if (!string2Int(str, value))
+  if (!string2Int(str, value)) {
     throw UsageError("setting '%s' has invalid value '%s'", name, str);
+  }
 }
 
 template <typename T>
@@ -214,12 +224,13 @@ std::string BaseSetting<T>::to_string() {
 
 template <>
 void BaseSetting<bool>::set(const std::string& str) {
-  if (str == "true" || str == "yes" || str == "1")
+  if (str == "true" || str == "yes" || str == "1") {
     value = true;
-  else if (str == "false" || str == "no" || str == "0")
+  } else if (str == "false" || str == "no" || str == "0") {
     value = false;
-  else
+  } else {
     throw UsageError("Boolean setting '%s' has invalid value '%s'", name, str);
+  }
 }
 
 template <>
@@ -290,19 +301,22 @@ template class BaseSetting<StringSet>;
 
 void PathSetting::set(const std::string& str) {
   if (str == "") {
-    if (allowEmpty)
+    if (allowEmpty) {
       value = "";
-    else
+    } else {
       throw UsageError("setting '%s' cannot be empty", name);
-  } else
+    }
+  } else {
     value = canonPath(str);
+  }
 }
 
 bool GlobalConfig::set(const std::string& name, const std::string& value) {
-  for (auto& config : *configRegistrations)
+  for (auto& config : *configRegistrations) {
     if (config->set(name, value)) {
       return true;
     }
+  }
 
   unknownSettings.emplace(name, value);
 
@@ -311,8 +325,9 @@ bool GlobalConfig::set(const std::string& name, const std::string& value) {
 
 void GlobalConfig::getSettings(std::map<std::string, SettingInfo>& res,
                                bool overridenOnly) {
-  for (auto& config : *configRegistrations)
+  for (auto& config : *configRegistrations) {
     config->getSettings(res, overridenOnly);
+  }
 }
 
 void GlobalConfig::resetOverriden() {
@@ -328,8 +343,9 @@ void GlobalConfig::toJSON(JSONObject& out) {
 }
 
 void GlobalConfig::convertToArgs(Args& args, const std::string& category) {
-  for (auto& config : *configRegistrations)
+  for (auto& config : *configRegistrations) {
     config->convertToArgs(args, category);
+  }
 }
 
 GlobalConfig globalConfig;

@@ -94,8 +94,9 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
           if (strict) {
             state.forceValue(*a->value);
           }
-          if (a->value->type == tString)
+          if (a->value->type == tString) {
             xmlAttrs["drvPath"] = drvPath = a->value->string.s;
+          }
         }
 
         a = v.attrs->find(state.sOutPath);
@@ -103,8 +104,9 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
           if (strict) {
             state.forceValue(*a->value);
           }
-          if (a->value->type == tString)
+          if (a->value->type == tString) {
             xmlAttrs["outPath"] = a->value->string.s;
+          }
         }
 
         XMLOpenElement _(doc, "derivation", xmlAttrs);
@@ -112,8 +114,9 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
         if (drvPath != "" && drvsSeen.find(drvPath) == drvsSeen.end()) {
           drvsSeen.insert(drvPath);
           showAttrs(state, strict, location, *v.attrs, doc, context, drvsSeen);
-        } else
+        } else {
           doc.writeEmptyElement("repeated");
+        }
       }
 
       else {

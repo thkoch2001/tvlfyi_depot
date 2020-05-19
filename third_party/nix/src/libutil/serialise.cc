@@ -173,7 +173,7 @@ std::unique_ptr<Source> sinkToSource(std::function<void(Sink&)> fun,
     size_t pos = 0;
 
     size_t read(unsigned char* data, size_t len) override {
-      if (!coro)
+      if (!coro) {
         coro = coro_t::pull_type([&](coro_t::push_type& yield) {
           LambdaSink sink([&](const unsigned char* data, size_t len) {
             if (len) {
@@ -182,6 +182,7 @@ std::unique_ptr<Source> sinkToSource(std::function<void(Sink&)> fun,
           });
           fun(sink);
         });
+      }
 
       if (!*coro) {
         eof();
@@ -189,7 +190,9 @@ std::unique_ptr<Source> sinkToSource(std::function<void(Sink&)> fun,
       }
 
       if (pos == cur.size()) {
-        if (!cur.empty()) (*coro)();
+        if (!cur.empty()) {
+          (*coro)();
+        }
         cur = coro->get();
         pos = 0;
       }
@@ -247,10 +250,11 @@ void readPadding(size_t len, Source& source) {
     unsigned char zero[8];
     size_t n = 8 - (len % 8);
     source(zero, n);
-    for (unsigned int i = 0; i < n; i++)
+    for (unsigned int i = 0; i < n; i++) {
       if (zero[i]) {
         throw SerialisationError("non-zero padding");
       }
+    }
   }
 }
 
@@ -284,7 +288,9 @@ template <class T>
 T readStrings(Source& source) {
   auto count = readNum<size_t>(source);
   T ss;
-  while (count--) ss.insert(ss.end(), readString(source));
+  while (count--) {
+    ss.insert(ss.end(), readString(source));
+  }
   return ss;
 }
 

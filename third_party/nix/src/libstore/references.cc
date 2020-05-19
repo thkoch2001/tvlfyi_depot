@@ -21,20 +21,22 @@ static void search(const unsigned char* s, size_t len, StringSet& hashes,
     for (unsigned int i = 0; i < 256; ++i) {
       isBase32[i] = false;
     }
-    for (unsigned int i = 0; i < base32Chars.size(); ++i)
+    for (unsigned int i = 0; i < base32Chars.size(); ++i) {
       isBase32[(unsigned char)base32Chars[i]] = true;
+    }
     initialised = true;
   }
 
   for (size_t i = 0; i + refLength <= len;) {
     int j;
     bool match = true;
-    for (j = refLength - 1; j >= 0; --j)
+    for (j = refLength - 1; j >= 0; --j) {
       if (!isBase32[(unsigned char)s[i + j]]) {
         i += j + 1;
         match = false;
         break;
       }
+    }
     if (!match) {
       continue;
     }

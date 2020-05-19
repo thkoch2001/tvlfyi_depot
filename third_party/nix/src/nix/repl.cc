@@ -181,8 +181,9 @@ static char* completionCallback(char* s, int* match) {
 static int listPossibleCallback(char* s, char*** avp) {
   auto possible = curRepl->completePrefix(s);
 
-  if (possible.size() > (INT_MAX / sizeof(char*)))
+  if (possible.size() > (INT_MAX / sizeof(char*))) {
     throw Error("too many completions");
+  }
 
   int ac = 0;
   char** vp = nullptr;
@@ -190,7 +191,9 @@ static int listPossibleCallback(char* s, char*** avp) {
   auto check = [&](auto* p) {
     if (!p) {
       if (vp) {
-        while (--ac >= 0) free(vp[ac]);
+        while (--ac >= 0) {
+          free(vp[ac]);
+        }
         free(vp);
       }
       throw Error("allocation failure");
@@ -288,20 +291,24 @@ bool NixRepl::getLine(string& input, const std::string& prompt) {
     act.sa_handler = sigintHandler;
     sigfillset(&act.sa_mask);
     act.sa_flags = 0;
-    if (sigaction(SIGINT, &act, &old))
+    if (sigaction(SIGINT, &act, &old)) {
       throw SysError("installing handler for SIGINT");
+    }
 
     sigemptyset(&set);
     sigaddset(&set, SIGINT);
-    if (sigprocmask(SIG_UNBLOCK, &set, &savedSignalMask))
+    if (sigprocmask(SIG_UNBLOCK, &set, &savedSignalMask)) {
       throw SysError("unblocking SIGINT");
+    }
   };
   auto restoreSignals = [&]() {
-    if (sigprocmask(SIG_SETMASK, &savedSignalMask, nullptr))
+    if (sigprocmask(SIG_SETMASK, &savedSignalMask, nullptr)) {
       throw SysError("restoring signals");
+    }
 
-    if (sigaction(SIGINT, &old, 0))
+    if (sigaction(SIGINT, &old, 0)) {
       throw SysError("restoring handler for SIGINT");
+    }
   };
 
   setupSignals();
@@ -343,8 +350,9 @@ StringSet NixRepl::completePrefix(string prefix) {
       auto dir = std::string(cur, 0, slash);
       auto prefix2 = std::string(cur, slash + 1);
       for (auto& entry : readDirectory(dir == "" ? "/" : dir)) {
-        if (entry.name[0] != '.' && hasPrefix(entry.name, prefix2))
+        if (entry.name[0] != '.' && hasPrefix(entry.name, prefix2)) {
           completions.insert(prev + dir + "/" + entry.name);
+        }
       }
     } catch (Error&) {
     }
@@ -417,21 +425,25 @@ bool isVarName(const string& s) {
   if ((c >= '0' && c <= '9') || c == '-' || c == '\'') {
     return false;
   }
-  for (auto& i : s)
+  for (auto& i : s) {
     if (!((i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z') ||
-          (i >= '0' && i <= '9') || i == '_' || i == '-' || i == '\''))
+          (i >= '0' && i <= '9') || i == '_' || i == '-' || i == '\'')) {
       return false;
+    }
+  }
   return true;
 }
 
 Path NixRepl::getDerivationPath(Value& v) {
   auto drvInfo = getDerivation(state, v, false);
-  if (!drvInfo)
+  if (!drvInfo) {
     throw Error(
         "expression does not evaluate to a derivation, so I can't build it");
+  }
   Path drvPath = drvInfo->queryDrvPath();
-  if (drvPath == "" || !state.store->isValidPath(drvPath))
+  if (drvPath == "" || !state.store->isValidPath(drvPath)) {
     throw Error("expression did not evaluate to a valid derivation");
+  }
   return drvPath;
 }
 
@@ -520,9 +532,10 @@ bool NixRepl::processLine(string line) {
         std::cout << std::endl
                   << "this derivation produced the following outputs:"
                   << std::endl;
-        for (auto& i : drv.outputs)
+        for (auto& i : drv.outputs) {
           std::cout << format("  %1% -> %2%") % i.first % i.second.path
                     << std::endl;
+        }
       }
     } else if (command == ":i") {
       runProgram(settings.nixBinDir + "/nix-env", Strings{"-i", drvPath});
@@ -537,13 +550,13 @@ bool NixRepl::processLine(string line) {
     printValue(std::cout, v, 1000000000) << std::endl;
   }
 
-  else if (command == ":q" || command == ":quit")
+  else if (command == ":q" || command == ":quit") {
     return false;
 
-  else if (command != "")
+  } else if (command != "") {
     throw Error(format("unknown command '%1%'") % command);
 
-  else {
+  } else {
     size_t p = line.find('=');
     string name;
     if (p != string::npos && p < line.size() && line[p + 1] != '=' &&
@@ -612,8 +625,9 @@ void NixRepl::addAttrsToScope(Value& attrs) {
 }
 
 void NixRepl::addVarToScope(const Symbol& name, Value& v) {
-  if (displ >= envSize)
+  if (displ >= envSize) {
     throw Error("environment full; cannot add more variables");
+  }
   staticEnv.vars[name] = displ;
   env->values[displ++] = &v;
   varNames.insert((string)name);
@@ -638,17 +652,19 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
 
 std::ostream& printStringValue(std::ostream& str, const char* string) {
   str << "\"";
-  for (const char* i = string; *i; i++)
-    if (*i == '\"' || *i == '\\')
+  for (const char* i = string; *i; i++) {
+    if (*i == '\"' || *i == '\\') {
       str << "\\" << *i;
-    else if (*i == '\n')
+    } else if (*i == '\n') {
       str << "\\n";
-    else if (*i == '\r')
+    } else if (*i == '\r') {
       str << "\\r";
-    else if (*i == '\t')
+    } else if (*i == '\t') {
       str << "\\t";
-    else
+    } else {
       str << *i;
+    }
+  }
   str << "\"";
   return str;
 }
@@ -709,19 +725,21 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
         }
 
         for (auto& i : sorted) {
-          if (isVarName(i.first))
+          if (isVarName(i.first)) {
             str << i.first;
-          else
+          } else {
             printStringValue(str, i.first.c_str());
+          }
           str << " = ";
-          if (seen.find(i.second) != seen.end())
+          if (seen.find(i.second) != seen.end()) {
             str << "«repeated»";
-          else
+          } else {
             try {
               printValue(str, *i.second, maxDepth - 1, seen);
             } catch (AssertionError& e) {
               str << ESC_RED "«error: " << e.msg() << "»" ESC_END;
             }
+          }
           str << "; ";
         }
 
@@ -741,14 +759,15 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
       str << "[ ";
       if (maxDepth > 0) {
         for (unsigned int n = 0; n < v.listSize(); ++n) {
-          if (seen.find(v.listElems()[n]) != seen.end())
+          if (seen.find(v.listElems()[n]) != seen.end()) {
             str << "«repeated»";
-          else
+          } else {
             try {
               printValue(str, *v.listElems()[n], maxDepth - 1, seen);
             } catch (AssertionError& e) {
               str << ESC_RED "«error: " << e.msg() << "»" ESC_END;
             }
+          }
           str << " ";
         }
       } else {

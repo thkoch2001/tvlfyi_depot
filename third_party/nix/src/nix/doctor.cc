@@ -44,9 +44,11 @@ struct CmdDoctor : StoreCommand {
   bool checkNixInPath() {
     PathSet dirs;
 
-    for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":"))
-      if (pathExists(dir + "/nix-env"))
+    for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":")) {
+      if (pathExists(dir + "/nix-env")) {
         dirs.insert(dirOf(canonPath(dir + "/nix-env", true)));
+      }
+    }
 
     if (dirs.size() != 1) {
       std::cout << "Warning: multiple versions of nix found in PATH."
@@ -73,11 +75,13 @@ struct CmdDoctor : StoreCommand {
         if (store->isStorePath(userEnv) &&
             hasSuffix(userEnv, "user-environment")) {
           while (profileDir.find("/profiles/") == std::string::npos &&
-                 isLink(profileDir))
+                 isLink(profileDir)) {
             profileDir = absPath(readLink(profileDir), dirOf(profileDir));
+          }
 
-          if (profileDir.find("/profiles/") == std::string::npos)
+          if (profileDir.find("/profiles/") == std::string::npos) {
             dirs.insert(dir);
+          }
         }
       } catch (SysError&) {
       }

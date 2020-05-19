@@ -44,8 +44,9 @@ static bool haveInternet() {
       }
     } else if (i->ifa_addr->sa_family == AF_INET6) {
       if (!IN6_IS_ADDR_LOOPBACK(&((sockaddr_in6*)i->ifa_addr)->sin6_addr) &&
-          !IN6_IS_ADDR_LINKLOCAL(&((sockaddr_in6*)i->ifa_addr)->sin6_addr))
+          !IN6_IS_ADDR_LINKLOCAL(&((sockaddr_in6*)i->ifa_addr)->sin6_addr)) {
         return true;
+      }
     }
   }
 
@@ -72,8 +73,9 @@ struct NixArgs : virtual MultiCommand, virtual MixCommonArgs {
           Table2 tbl;
           std::map<std::string, Config::SettingInfo> settings;
           globalConfig.getSettings(settings);
-          for (const auto& s : settings)
+          for (const auto& s : settings) {
             tbl.emplace_back(s.first, s.second.description);
+          }
           printTable(std::cout, tbl);
           throw Exit();
         });
@@ -159,13 +161,15 @@ void mainWrapped(int argc, char** argv) {
     if (!settings.useSubstitutes.overriden) {
       settings.useSubstitutes = false;
     }
-    if (!settings.tarballTtl.overriden)
+    if (!settings.tarballTtl.overriden) {
       settings.tarballTtl = std::numeric_limits<unsigned int>::max();
+    }
     if (!downloadSettings.tries.overriden) {
       downloadSettings.tries = 0;
     }
-    if (!downloadSettings.connectTimeout.overriden)
+    if (!downloadSettings.connectTimeout.overriden) {
       downloadSettings.connectTimeout = 1;
+    }
   }
 
   args.command->prepare();

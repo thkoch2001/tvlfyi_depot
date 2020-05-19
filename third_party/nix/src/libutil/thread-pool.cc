@@ -50,8 +50,9 @@ void ThreadPool::enqueue(const work_t& t) {
   state->pending.push(t);
   /* Note: process() also executes items, so count it as a worker. */
   if (state->pending.size() > state->workers.size() + 1 &&
-      state->workers.size() + 1 < maxThreads)
+      state->workers.size() + 1 < maxThreads) {
     state->workers.emplace_back(&ThreadPool::doWork, this, false);
+  }
   work.notify_one();
 }
 
@@ -111,8 +112,9 @@ void ThreadPool::doWork(bool mainThread) {
               std::rethrow_exception(exc);
             } catch (std::exception& e) {
               if (!dynamic_cast<Interrupted*>(&e) &&
-                  !dynamic_cast<ThreadPoolShutDown*>(&e))
+                  !dynamic_cast<ThreadPoolShutDown*>(&e)) {
                 ignoreException();
+              }
             } catch (...) {
             }
           }

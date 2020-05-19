@@ -18,8 +18,9 @@ AutoCloseFD openLockFile(const Path& path, bool create) {
   AutoCloseFD fd;
 
   fd = open(path.c_str(), O_CLOEXEC | O_RDWR | (create ? O_CREAT : 0), 0600);
-  if (!fd && (create || errno != ENOENT))
+  if (!fd && (create || errno != ENOENT)) {
     throw SysError(format("opening lock file '%1%'") % path);
+  }
 
   return fd;
 }
@@ -37,22 +38,24 @@ void deleteLockFile(const Path& path, int fd) {
 
 bool lockFile(int fd, LockType lockType, bool wait) {
   int type;
-  if (lockType == ltRead)
+  if (lockType == ltRead) {
     type = LOCK_SH;
-  else if (lockType == ltWrite)
+  } else if (lockType == ltWrite) {
     type = LOCK_EX;
-  else if (lockType == ltNone)
+  } else if (lockType == ltNone) {
     type = LOCK_UN;
-  else
+  } else {
     abort();
+  }
 
   if (wait) {
     while (flock(fd, type) != 0) {
       checkInterrupt();
-      if (errno != EINTR)
+      if (errno != EINTR) {
         throw SysError(format("acquiring/releasing lock"));
-      else
+      } else {
         return false;
+      }
     }
   } else {
     while (flock(fd, type | LOCK_NB) != 0) {
@@ -118,16 +121,18 @@ bool PathLocks::lockPaths(const PathSet& paths, const string& waitMsg,
       /* Check that the lock file hasn't become stale (i.e.,
          hasn't been unlinked). */
       struct stat st;
-      if (fstat(fd.get(), &st) == -1)
+      if (fstat(fd.get(), &st) == -1) {
         throw SysError(format("statting lock file '%1%'") % lockPath);
-      if (st.st_size != 0)
+      }
+      if (st.st_size != 0) {
         /* This lock file has been unlinked, so we're holding
            a lock on a deleted file.  This means that other
            processes may create and acquire a lock on
            `lockPath', and proceed.  So we must retry. */
         DLOG(INFO) << "open lock file '" << lockPath << "' has become stale";
-      else
+      } else {
         break;
+      }
     }
 
     /* Use borrow so that the descriptor isn't closed. */

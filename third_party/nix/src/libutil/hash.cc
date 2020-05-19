@@ -132,8 +132,9 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
     sep = s.find('-');
     if (sep != string::npos) {
       isSRI = true;
-    } else if (type == htUnknown)
+    } else if (type == htUnknown) {
       throw BadHash("hash '%s' does not include a type", s);
+    }
   }
 
   if (sep != string::npos) {
@@ -142,8 +143,9 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
     if (this->type == htUnknown) {
       throw BadHash("unknown hash type '%s'", hts);
     }
-    if (type != htUnknown && type != this->type)
+    if (type != htUnknown && type != this->type) {
       throw BadHash("hash '%s' should have type '%s'", s, printHashType(type));
+    }
     pos = sep + 1;
   }
 
@@ -175,10 +177,11 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
     for (unsigned int n = 0; n < size; ++n) {
       char c = s[pos + size - n - 1];
       unsigned char digit;
-      for (digit = 0; digit < base32Chars.size(); ++digit) /* !!! slow */
+      for (digit = 0; digit < base32Chars.size(); ++digit) { /* !!! slow */
         if (base32Chars[digit] == c) {
           break;
         }
+      }
       if (digit >= 32) {
         throw BadHash("invalid base-32 hash '%s'", s);
       }
@@ -199,15 +202,17 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
 
   else if (isSRI || size == base64Len()) {
     auto d = base64Decode(std::string(s, pos));
-    if (d.size() != hashSize)
+    if (d.size() != hashSize) {
       throw BadHash("invalid %s hash '%s'", isSRI ? "SRI" : "base-64", s);
+    }
     assert(hashSize);
     memcpy(hash, d.data(), hashSize);
   }
 
-  else
+  else {
     throw BadHash("hash '%s' has wrong length for hash type '%s'", s,
                   printHashType(type));
+  }
 }
 
 union Ctx {
@@ -218,37 +223,40 @@ union Ctx {
 };
 
 static void start(HashType ht, Ctx& ctx) {
-  if (ht == htMD5)
+  if (ht == htMD5) {
     MD5_Init(&ctx.md5);
-  else if (ht == htSHA1)
+  } else if (ht == htSHA1) {
     SHA1_Init(&ctx.sha1);
-  else if (ht == htSHA256)
+  } else if (ht == htSHA256) {
     SHA256_Init(&ctx.sha256);
-  else if (ht == htSHA512)
+  } else if (ht == htSHA512) {
     SHA512_Init(&ctx.sha512);
+  }
 }
 
 static void update(HashType ht, Ctx& ctx, const unsigned char* bytes,
                    size_t len) {
-  if (ht == htMD5)
+  if (ht == htMD5) {
     MD5_Update(&ctx.md5, bytes, len);
-  else if (ht == htSHA1)
+  } else if (ht == htSHA1) {
     SHA1_Update(&ctx.sha1, bytes, len);
-  else if (ht == htSHA256)
+  } else if (ht == htSHA256) {
     SHA256_Update(&ctx.sha256, bytes, len);
-  else if (ht == htSHA512)
+  } else if (ht == htSHA512) {
     SHA512_Update(&ctx.sha512, bytes, len);
+  }
 }
 
 static void finish(HashType ht, Ctx& ctx, unsigned char* hash) {
-  if (ht == htMD5)
+  if (ht == htMD5) {
     MD5_Final(hash, &ctx.md5);
-  else if (ht == htSHA1)
+  } else if (ht == htSHA1) {
     SHA1_Final(hash, &ctx.sha1);
-  else if (ht == htSHA256)
+  } else if (ht == htSHA256) {
     SHA256_Final(hash, &ctx.sha256);
-  else if (ht == htSHA512)
+  } else if (ht == htSHA512) {
     SHA512_Final(hash, &ctx.sha512);
+  }
 }
 
 Hash hashString(HashType ht, const string& s) {
@@ -331,29 +339,31 @@ Hash compressHash(const Hash& hash, unsigned int newSize) {
 }
 
 HashType parseHashType(const string& s) {
-  if (s == "md5")
+  if (s == "md5") {
     return htMD5;
-  else if (s == "sha1")
+  } else if (s == "sha1") {
     return htSHA1;
-  else if (s == "sha256")
+  } else if (s == "sha256") {
     return htSHA256;
-  else if (s == "sha512")
+  } else if (s == "sha512") {
     return htSHA512;
-  else
+  } else {
     return htUnknown;
+  }
 }
 
 string printHashType(HashType ht) {
-  if (ht == htMD5)
+  if (ht == htMD5) {
     return "md5";
-  else if (ht == htSHA1)
+  } else if (ht == htSHA1) {
     return "sha1";
-  else if (ht == htSHA256)
+  } else if (ht == htSHA256) {
     return "sha256";
-  else if (ht == htSHA512)
+  } else if (ht == htSHA512) {
     return "sha512";
-  else
+  } else {
     abort();
+  }
 }
 
 }  // namespace nix

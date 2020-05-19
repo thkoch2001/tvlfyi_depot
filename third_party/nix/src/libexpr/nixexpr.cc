@@ -16,37 +16,40 @@ std::ostream& operator<<(std::ostream& str, const Expr& e) {
 
 static void showString(std::ostream& str, const string& s) {
   str << '"';
-  for (auto c : (string)s)
-    if (c == '"' || c == '\\' || c == '$')
+  for (auto c : (string)s) {
+    if (c == '"' || c == '\\' || c == '$') {
       str << "\\" << c;
-    else if (c == '\n')
+    } else if (c == '\n') {
       str << "\\n";
-    else if (c == '\r')
+    } else if (c == '\r') {
       str << "\\r";
-    else if (c == '\t')
+    } else if (c == '\t') {
       str << "\\t";
-    else
+    } else {
       str << c;
+    }
+  }
   str << '"';
 }
 
 static void showId(std::ostream& str, const string& s) {
-  if (s.empty())
+  if (s.empty()) {
     str << "\"\"";
-  else if (s == "if")  // FIXME: handle other keywords
+  } else if (s == "if") {  // FIXME: handle other keywords
     str << '"' << s << '"';
-  else {
+  } else {
     char c = s[0];
     if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')) {
       showString(str, s);
       return;
     }
-    for (auto c : s)
+    for (auto c : s) {
       if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
             (c >= '0' && c <= '9') || c == '_' || c == '\'' || c == '-')) {
         showString(str, s);
         return;
       }
+    }
     str << s;
   }
 }
@@ -84,14 +87,17 @@ void ExprAttrs::show(std::ostream& str) const {
     str << "rec ";
   }
   str << "{ ";
-  for (auto& i : attrs)
-    if (i.second.inherited)
+  for (auto& i : attrs) {
+    if (i.second.inherited) {
       str << "inherit " << i.first << " "
           << "; ";
-    else
+    } else {
       str << i.first << " = " << *i.second.e << "; ";
-  for (auto& i : dynamicAttrs)
+    }
+  }
+  for (auto& i : dynamicAttrs) {
     str << "\"${" << *i.nameExpr << "}\" = " << *i.valueExpr << "; ";
+  }
   str << "}";
 }
 
@@ -109,10 +115,11 @@ void ExprLambda::show(std::ostream& str) const {
     str << "{ ";
     bool first = true;
     for (auto& i : formals->formals) {
-      if (first)
+      if (first) {
         first = false;
-      else
+      } else {
         str << ", ";
+      }
       str << i.name;
       if (i.def) {
         str << " ? " << *i.def;
@@ -137,11 +144,13 @@ void ExprLambda::show(std::ostream& str) const {
 
 void ExprLet::show(std::ostream& str) const {
   str << "(let ";
-  for (auto& i : attrs->attrs)
+  for (auto& i : attrs->attrs) {
     if (i.second.inherited) {
       str << "inherit " << i.first << "; ";
-    } else
+    } else {
       str << i.first << " = " << *i.second.e << "; ";
+    }
+  }
   str << "in " << *body << ")";
 }
 
@@ -163,10 +172,11 @@ void ExprConcatStrings::show(std::ostream& str) const {
   bool first = true;
   str << "(";
   for (auto& i : *es) {
-    if (first)
+    if (first) {
       first = false;
-    else
+    } else {
       str << " + ";
+    }
     str << *i;
   }
   str << ")";
@@ -175,12 +185,13 @@ void ExprConcatStrings::show(std::ostream& str) const {
 void ExprPos::show(std::ostream& str) const { str << "__curPos"; }
 
 std::ostream& operator<<(std::ostream& str, const Pos& pos) {
-  if (!pos)
+  if (!pos) {
     str << "undefined position";
-  else
+  } else {
     str << (format(ANSI_BOLD "%1%" ANSI_NORMAL ":%2%:%3%") % (string)pos.file %
             pos.line % pos.column)
                .str();
+  }
   return str;
 }
 
@@ -188,14 +199,16 @@ string showAttrPath(const AttrPath& attrPath) {
   std::ostringstream out;
   bool first = true;
   for (auto& i : attrPath) {
-    if (!first)
+    if (!first) {
       out << '.';
-    else
+    } else {
       first = false;
-    if (i.symbol.set())
+    }
+    if (i.symbol.set()) {
       out << i.symbol;
-    else
+    } else {
       out << "\"${" << *i.expr << "}\"";
+    }
   }
   return out.str();
 }
@@ -239,9 +252,10 @@ void ExprVar::bindVars(const StaticEnv& env) {
   /* Otherwise, the variable must be obtained from the nearest
      enclosing `with'.  If there is no `with', then we can issue an
      "undefined variable" error now. */
-  if (withLevel == -1)
+  if (withLevel == -1) {
     throw UndefinedVarError(format("undefined variable '%1%' at %2%") % name %
                             pos);
+  }
 
   fromWith = true;
   this->level = withLevel;
@@ -252,18 +266,20 @@ void ExprSelect::bindVars(const StaticEnv& env) {
   if (def) {
     def->bindVars(env);
   }
-  for (auto& i : attrPath)
+  for (auto& i : attrPath) {
     if (!i.symbol.set()) {
       i.expr->bindVars(env);
     }
+  }
 }
 
 void ExprOpHasAttr::bindVars(const StaticEnv& env) {
   e->bindVars(env);
-  for (auto& i : attrPath)
+  for (auto& i : attrPath) {
     if (!i.symbol.set()) {
       i.expr->bindVars(env);
     }
+  }
 }
 
 void ExprAttrs::bindVars(const StaticEnv& env) {
@@ -315,10 +331,11 @@ void ExprLambda::bindVars(const StaticEnv& env) {
       newEnv.vars[i.name] = displ++;
     }
 
-    for (auto& i : formals->formals)
+    for (auto& i : formals->formals) {
       if (i.def) {
         i.def->bindVars(newEnv);
       }
+    }
   }
 
   body->bindVars(newEnv);
@@ -332,8 +349,9 @@ void ExprLet::bindVars(const StaticEnv& env) {
     newEnv.vars[i.first] = i.second.displ = displ++;
   }
 
-  for (auto& i : attrs->attrs)
+  for (auto& i : attrs->attrs) {
     i.second.e->bindVars(i.second.inherited ? env : newEnv);
+  }
 
   body->bindVars(newEnv);
 }

@@ -21,29 +21,30 @@ static string parseJSONString(const char*& s) {
     }
     if (*s == '\\') {
       s++;
-      if (*s == '"')
+      if (*s == '"') {
         res += '"';
-      else if (*s == '\\')
+      } else if (*s == '\\') {
         res += '\\';
-      else if (*s == '/')
+      } else if (*s == '/') {
         res += '/';
-      else if (*s == '/')
+      } else if (*s == '/') {
         res += '/';
-      else if (*s == 'b')
+      } else if (*s == 'b') {
         res += '\b';
-      else if (*s == 'f')
+      } else if (*s == 'f') {
         res += '\f';
-      else if (*s == 'n')
+      } else if (*s == 'n') {
         res += '\n';
-      else if (*s == 'r')
+      } else if (*s == 'r') {
         res += '\r';
-      else if (*s == 't')
+      } else if (*s == 't') {
         res += '\t';
-      else if (*s == 'u')
+      } else if (*s == 'u') {
         throw JSONParseError(
             "\\u characters in JSON strings are currently not supported");
-      else
+      } else {
         throw JSONParseError("invalid escaped character in JSON string");
+      }
       s++;
     } else {
       res += *s++;
@@ -76,8 +77,9 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
       if (*s == ']') {
         break;
       }
-      if (*s != ',')
+      if (*s != ',') {
         throw JSONParseError("expected ',' or ']' after JSON array element");
+      }
       s++;
     }
     s++;
@@ -108,8 +110,9 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
       if (*s == '}') {
         break;
       }
-      if (*s != ',')
+      if (*s != ',') {
         throw JSONParseError("expected ',' or '}' after JSON member");
+      }
       s++;
     }
     state.mkAttrs(v, attrs.size());
@@ -137,10 +140,11 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
     }
 
     try {
-      if (number_type == tFloat)
+      if (number_type == tFloat) {
         mkFloat(v, stod(tmp_number));
-      else
+      } else {
         mkInt(v, stol(tmp_number));
+      }
     } catch (std::invalid_argument& e) {
       throw JSONParseError("invalid JSON number");
     } catch (std::out_of_range& e) {
@@ -163,17 +167,19 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
     mkNull(v);
   }
 
-  else
+  else {
     throw JSONParseError("unrecognised JSON value");
+  }
 }
 
 void parseJSON(EvalState& state, const string& s_, Value& v) {
   const char* s = s_.c_str();
   parseJSON(state, s, v);
   skipWhitespace(s);
-  if (*s)
+  if (*s) {
     throw JSONParseError(
         format("expected end-of-string while parsing JSON value: %1%") % s);
+  }
 }
 
 }  // namespace nix
