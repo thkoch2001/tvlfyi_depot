@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <grp.h>
 #include <limits.h>
 #include <pwd.h>
@@ -54,24 +55,10 @@ static ssize_t splice(int fd_in, void* off_in, int fd_out, void* off_out,
 static FdSource from(STDIN_FILENO);
 static FdSink to(STDOUT_FILENO);
 
-Sink& operator<<(Sink& sink, const Logger::Fields& fields) {
-  sink << fields.size();
-  for (auto& f : fields) {
-    sink << f.type;
-    if (f.type == Logger::Field::tInt)
-      sink << f.i;
-    else if (f.type == Logger::Field::tString)
-      sink << f.s;
-    else
-      abort();
-  }
-  return sink;
-}
-
 /* Logger that forwards log messages to the client, *if* we're in a
    state where the protocol allows it (i.e., when canSendStderr is
    true). */
-struct TunnelLogger : public Logger {
+struct TunnelLogger {
   struct State {
     bool canSendStderr = false;
     std::vector<std::string> pendingMsgs;
@@ -101,9 +88,7 @@ struct TunnelLogger : public Logger {
       state->pendingMsgs.push_back(s);
   }
 
-  void log(Verbosity lvl, const FormatOrString& fs) override {
-    if (lvl > verbosity) return;
-
+  void log(const FormatOrString& fs) {
     StringSink buf;
     buf << STDERR_NEXT << (fs.s + "\n");
     enqueueMsg(*buf.s);
@@ -138,30 +123,16 @@ struct TunnelLogger : public Logger {
     }
   }
 
-  void startActivity(ActivityId act, Verbosity lvl, ActivityType type,
-                     const std::string& s, const Fields& fields,
-                     ActivityId parent) override {
+  void startActivity(const std::string& s) {
     if (GET_PROTOCOL_MINOR(clientVersion) < 20) {
-      if (!s.empty()) log(lvl, s + "...");
+      if (!s.empty()) {
+        LOG(INFO) << s;
+      }
       return;
     }
 
     StringSink buf;
-    buf << STDERR_START_ACTIVITY << act << lvl << type << s << fields << parent;
-    enqueueMsg(*buf.s);
-  }
-
-  void stopActivity(ActivityId act) override {
-    if (GET_PROTOCOL_MINOR(clientVersion) < 20) return;
-    StringSink buf;
-    buf << STDERR_STOP_ACTIVITY << act;
-    enqueueMsg(*buf.s);
-  }
-
-  void result(ActivityId act, ResultType type, const Fields& fields) override {
-    if (GET_PROTOCOL_MINOR(clientVersion) < 20) return;
-    StringSink buf;
-    buf << STDERR_RESULT << act << type << fields;
+    buf << STDERR_START_ACTIVITY << s;
     enqueueMsg(*buf.s);
   }
 };
@@ -492,11 +463,11 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       settings.keepFailed = readInt(from);
       settings.keepGoing = readInt(from);
       settings.tryFallback = readInt(from);
-      verbosity = (Verbosity)readInt(from);
+      readInt(from);  // obsolete verbosity
       settings.maxBuildJobs.assign(readInt(from));
       settings.maxSilentTime = readInt(from);
       readInt(from);  // obsolete useBuildHook
-      settings.verboseBuild = lvlError == (Verbosity)readInt(from);
+      settings.verboseBuild = 0 == readInt(from);
       readInt(from);  // obsolete logType
       readInt(from);  // obsolete printBuildTrace
       settings.buildCores = readInt(from);
@@ -528,7 +499,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
             if (trusted.count(s))
               subs.push_back(s);
             else
-              warn("ignoring untrusted substituter '%s'", s);
+              LOG(WARNING) << "ignoring untrusted substituter '" << s << "'";
           res = subs;
           return true;
         };
@@ -545,12 +516,11 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
           else if (setSubstituters(settings.extraSubstituters))
             ;
           else
-            warn(
-                "ignoring the user-specified setting '%s', because it is a "
-                "restricted setting and you are not a trusted user",
-                name);
+            LOG(WARNING) << "ignoring the user-specified setting '" << name
+                         << "', because it is a "
+                         << "restricted setting and you are not a trusted user";
         } catch (UsageError& e) {
-          warn(e.what());
+          LOG(WARNING) << e.what();
         }
       }
 
@@ -724,14 +694,13 @@ static void processConnection(bool trusted, const std::string& userName,
   if (clientVersion < 0x10a) throw Error("the Nix client version is too old");
 
   auto tunnelLogger = new TunnelLogger(clientVersion);
-  auto prevLogger = nix::logger;
-  logger = tunnelLogger;
+  // logger = tunnelLogger;
 
   unsigned int opCount = 0;
 
   Finally finally([&]() {
     _isInterrupted = false;
-    prevLogger->log(lvlDebug, fmt("%d operations", opCount));
+    DLOG(INFO) << opCount << " operations";
   });
 
   if (GET_PROTOCOL_MINOR(clientVersion) >= 14 && readInt(from))
@@ -972,15 +941,16 @@ static void daemonLoop(char** argv) {
       if (matchUser(user, group, trustedUsers)) trusted = true;
 
       if ((!trusted && !matchUser(user, group, allowedUsers)) ||
-          group == settings.buildUsersGroup)
+          group == settings.buildUsersGroup) {
         throw Error(
             format("user '%1%' is not allowed to connect to the Nix daemon") %
             user);
+      }
 
-      printInfo(format((string) "accepted connection from pid %1%, user %2%" +
-                       (trusted ? " (trusted)" : "")) %
-                (peer.pidKnown ? std::to_string(peer.pid) : "<unknown>") %
-                (peer.uidKnown ? user : "<unknown>"));
+      LOG(INFO) << "accepted connection from pid "
+                << (peer.pidKnown ? std::to_string(peer.pid) : "<unknown>")
+                << ", user " << (peer.uidKnown ? user : "<unknown>")
+                << (trusted ? " (trusted)" : "");
 
       /* Fork a child to handle the connection. */
       ProcessOptions options;
@@ -993,8 +963,9 @@ static void daemonLoop(char** argv) {
             fdSocket = -1;
 
             /* Background the daemon. */
-            if (setsid() == -1)
+            if (setsid() == -1) {
               throw SysError(format("creating a new session"));
+            }
 
             /* Restore normal handling of SIGCHLD. */
             setSigChldAction(false);
@@ -1017,7 +988,7 @@ static void daemonLoop(char** argv) {
     } catch (Interrupted& e) {
       return;
     } catch (Error& e) {
-      printError(format("error processing connection: %1%") % e.msg());
+      LOG(ERROR) << "error processing connection: " << e.msg();
     }
   }
 }

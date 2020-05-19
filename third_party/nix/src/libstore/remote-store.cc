@@ -632,31 +632,6 @@ RemoteStore::Connection::~Connection() {
   }
 }
 
-// TODO(tazjin): these logger fields used to be passed to the JSON
-// logger but I don't care about them, whatever sends them should
-// also be fixed.
-static void ignoreFields(Source& from) {
-  size_t size = readInt(from);
-
-  // This ignores the fields simply by reading the data into nowhere.
-  for (size_t n = 0; n < size; n++) {
-    auto type_tag = readInt(from);
-
-    switch (type_tag) {
-      case 0:  // previously: 0 ~ Logger::Field::tInt
-        readNum<uint64_t>(from);
-        break;
-
-      case 1:  // previously: 1 ~ Logger::Field::tString
-        readString(from);
-        break;
-
-      default:
-        throw Error("got unsupported field type %x from Nix daemon", type_tag);
-    }
-  }
-}
-
 std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
                                                           Source* source) {
   to.flush();
@@ -689,38 +664,7 @@ std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
     }
 
     else if (msg == STDERR_START_ACTIVITY) {
-      // Various fields need to be ignored in this case, as the
-      // activity stuff is being removed.
-      readNum<uint64_t>(from);  // used to be ActivityId
-      const auto verbosity = static_cast<compat::Verbosity>(readInt(from));
-      readInt(from);  // activity type
-      const auto msg = readString(from);
-      ignoreFields(from);
-      readNum<uint64_t>(from);  // ActivityId of "parent"
-
-      switch (verbosity) {
-        case compat::kError:
-          LOG(ERROR) << msg;
-          break;
-        case compat::kWarn:
-          LOG(WARNING) << msg;
-          break;
-        case compat::kInfo:
-          LOG(INFO) << msg;
-          break;
-        default:
-          DLOG(INFO) << msg;
-      }
-    }
-
-    else if (msg == STDERR_STOP_ACTIVITY) {
-      readNum<uint64_t>(from);  // used to be ActivityId
-    }
-
-    else if (msg == STDERR_RESULT) {
-      readNum<uint64_t>(from);  // ActivityId
-      readInt(from);            // ResultType
-      ignoreFields(from);
+      LOG(INFO) << readString(from);
     }
 
     else if (msg == STDERR_LAST) {
