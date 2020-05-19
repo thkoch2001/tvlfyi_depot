@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include <sys/time.h>
 #include <nlohmann/json.hpp>
 #include <regex>
@@ -36,7 +37,7 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
       /* This is an unclean working tree. So copy all tracked
          files. */
 
-      printTalkative("copying unclean Mercurial working tree '%s'", uri);
+      DLOG(INFO) << "copying unclean Mercurial working tree '" << uri << "'";
 
       HgInfo hgInfo;
       hgInfo.rev = "0000000000000000000000000000000000000000";
@@ -91,8 +92,7 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
                                        "--template", "1"})
                          .killStderr(true))
                   .second == "1")) {
-      Activity act(*logger, lvlTalkative, actUnknown,
-                   fmt("fetching Mercurial repository '%s'", uri));
+      DLOG(INFO) << "fetching Mercurial repository '" << uri << "'";
 
       if (pathExists(cacheDir)) {
         try {
@@ -141,8 +141,7 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
     hgInfo.storePath = json["storePath"];
 
     if (store->isValidPath(hgInfo.storePath)) {
-      printTalkative("using cached Mercurial store path '%s'",
-                     hgInfo.storePath);
+      DLOG(INFO) << "using cached Mercurial store path '" << hgInfo.storePath << "'";
       return hgInfo;
     }
 

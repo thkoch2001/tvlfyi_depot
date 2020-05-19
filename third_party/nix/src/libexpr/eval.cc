@@ -16,6 +16,7 @@
 #include "json.hh"
 #include "store-api.hh"
 #include "util.hh"
+#include <glog/logging.h>
 
 #if HAVE_BOEHMGC
 
@@ -232,7 +233,7 @@ void initGC() {
     if (pageSize != -1) size = (pageSize * pages) / 4;  // 25% of RAM
     if (size > maxSize) size = maxSize;
 #endif
-    debug(format("setting initial heap size to %1% bytes") % size);
+    DLOG(INFO) << "setting initial heap size to " << size << " bytes";
     GC_expand_hp(size);
   }
 
@@ -375,7 +376,7 @@ Path EvalState::checkSourcePath(const Path& path_) {
         "access to path '%1%' is forbidden in restricted mode", abspath);
 
   /* Resolve symlinks. */
-  debug(format("checking access to '%s'") % abspath);
+  DLOG(INFO) << "checking access to '" << abspath << "'";
   Path path = canonPath(abspath, true);
 
   for (auto& i : *allowedPaths) {
@@ -689,7 +690,7 @@ void EvalState::evalFile(const Path& path_, Value& v) {
     return;
   }
 
-  printTalkative("evaluating file '%1%'", path2);
+  DLOG(INFO) << "evaluating file '" << path2 << "'";
   Expr* e = nullptr;
 
   auto j = fileParseCache.find(path2);
@@ -1530,8 +1531,7 @@ string EvalState::copyPathToStore(PathSet& context, const Path& path) {
             : store->addToStore(baseNameOf(path), checkSourcePath(path), true,
                                 htSHA256, defaultPathFilter, repair);
     srcToStore[path] = dstPath;
-    printMsg(lvlChatty,
-             format("copied source '%1%' -> '%2%'") % path % dstPath);
+    DLOG(INFO) << "copied source '" << path << "' -> '" << dstPath << "'";
   }
 
   context.insert(dstPath);

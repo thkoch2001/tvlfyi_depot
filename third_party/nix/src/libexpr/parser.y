@@ -17,9 +17,9 @@
 #define BISON_HEADER
 
 #include "util.hh"
-
 #include "nixexpr.hh"
 #include "eval.hh"
+#include <glog/logging.h>
 
 namespace nix {
 
@@ -681,24 +681,23 @@ std::pair<bool, std::string> EvalState::resolveSearchPathElem(const SearchPathEl
             request.unpack = true;
             res = { true, getDownloader()->downloadCached(store, request).path };
         } catch (DownloadError & e) {
-            printError(format("warning: Nix search path entry '%1%' cannot be downloaded, ignoring") % elem.second);
-            res = { false, "" };
+          LOG(WARNING) << "Nix search path entry '" << elem.second << "' cannot be downloaded, ignoring";
+          res = { false, "" };
         }
     } else {
         auto path = absPath(elem.second);
-        if (pathExists(path))
+        if (pathExists(path)) {
             res = { true, path };
-        else {
-            printError(format("warning: Nix search path entry '%1%' does not exist, ignoring") % elem.second);
-            res = { false, "" };
+        } else {
+          LOG(WARNING) << "Nix search path entry '" << elem.second << "' does not exist, ignoring";
+          res = { false, "" };
         }
     }
 
-    debug(format("resolved search path element '%s' to '%s'") % elem.second % res.second);
+    DLOG(INFO) << "resolved search path element '" << elem.second << "' to '" << res.second << "'";
 
     searchPathResolved[elem.second] = res;
     return res;
 }
 
-
-}
+}  // namespace nix

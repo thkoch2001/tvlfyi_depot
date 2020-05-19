@@ -19,6 +19,7 @@
 #include "util.hh"
 #include "value-to-json.hh"
 #include "value-to-xml.hh"
+#include <glog/logging.h>
 
 namespace nix {
 
@@ -139,7 +140,7 @@ static void prim_scopedImport(EvalState& state, const Pos& pos, Value** args,
         env->values[displ++] = attr.value;
       }
 
-      printTalkative("evaluating file '%1%'", realPath);
+      DLOG(INFO) << "evaluating file '" << realPath << "'";
       Expr* e = state.parseExprFromFile(resolveExprPath(realPath), staticEnv);
 
       e->eval(state, *env, v);
@@ -504,10 +505,11 @@ static void prim_deepSeq(EvalState& state, const Pos& pos, Value** args,
 static void prim_trace(EvalState& state, const Pos& pos, Value** args,
                        Value& v) {
   state.forceValue(*args[0]);
-  if (args[0]->type == tString)
-    printError(format("trace: %1%") % args[0]->string.s);
-  else
-    printError(format("trace: %1%") % *args[0]);
+  if (args[0]->type == tString) {
+    DLOG(INFO) << "trace: " << args[0]->string.s;
+  } else {
+    DLOG(INFO)<< "trace: " << *args[0];
+  }
   state.forceValue(*args[1]);
   v = *args[1];
 }
@@ -575,7 +577,6 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   for (auto& i : args[0]->attrs->lexicographicOrder()) {
     if (i->name == state.sIgnoreNulls) continue;
     const string& key = i->name;
-    vomit("processing attribute '%1%'", key);
 
     auto handleHashMode = [&](const std::string& s) {
       if (s == "recursive")
@@ -781,8 +782,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   /* Write the resulting term into the Nix store directory. */
   Path drvPath = writeDerivation(state.store, drv, drvName, state.repair);
 
-  printMsg(lvlChatty,
-           format("instantiated '%1%' -> '%2%'") % drvName % drvPath);
+  DLOG(INFO) << "instantiated '" << drvName << "' -> '" << drvPath << "'";
 
   /* Optimisation, but required in read-only mode! because in that
      case we don't actually write store derivations, so we can't

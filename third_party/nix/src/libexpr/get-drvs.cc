@@ -4,6 +4,7 @@
 #include "derivations.hh"
 #include "eval-inline.hh"
 #include "util.hh"
+#include <glog/logging.h>
 
 namespace nix {
 
@@ -301,7 +302,7 @@ static void getDerivations(EvalState& state, Value& vIn,
        bound to the attribute with the "lower" name should take
        precedence). */
     for (auto& i : v.attrs->lexicographicOrder()) {
-      debug("evaluating attribute '%1%'", i->name);
+      DLOG(INFO) << "evaluating attribute '" << i->name << "'";
       if (!std::regex_match(std::string(i->name), attrRegex)) continue;
       string pathPrefix2 = addToPath(pathPrefix, i->name);
       if (combineChannels)

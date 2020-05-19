@@ -7,6 +7,7 @@
 #include "pathlocks.hh"
 #include "primops.hh"
 #include "store-api.hh"
+#include <glog/logging.h>
 
 using namespace std::string_literals;
 
@@ -119,8 +120,7 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
               (uint64_t)st.st_mtime + settings.tarballTtl <= (uint64_t)now;
   }
   if (doFetch) {
-    Activity act(*logger, lvlTalkative, actUnknown,
-                 fmt("fetching Git repository '%s'", uri));
+    DLOG(INFO) << "fetching Git repository '" << uri << "'";
 
     // FIXME: git stderr messes up our progress indicator, so
     // we're using --quiet for now. Should process its stderr.
@@ -142,7 +142,7 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
   gitInfo.rev = rev != "" ? rev : chomp(readFile(localRefFile));
   gitInfo.shortRev = std::string(gitInfo.rev, 0, 7);
 
-  printTalkative("using revision %s of repo '%s'", gitInfo.rev, uri);
+  DLOG(INFO) << "using revision " << gitInfo.rev << " of repo '" << uri << "'";
 
   std::string storeLinkName =
       hashString(htSHA512, name + std::string("\0"s) + gitInfo.rev)
