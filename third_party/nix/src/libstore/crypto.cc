@@ -11,7 +11,9 @@ namespace nix {
 
 static std::pair<std::string, std::string> split(const string& s) {
   size_t colon = s.find(':');
-  if (colon == std::string::npos || colon == 0) return {"", ""};
+  if (colon == std::string::npos || colon == 0) {
+    return {"", ""};
+  }
   return {std::string(s, 0, colon), std::string(s, colon + 1)};
 }
 
@@ -21,7 +23,9 @@ Key::Key(const string& s) {
   name = ss.first;
   key = ss.second;
 
-  if (name == "" || key == "") throw Error("secret key is corrupt");
+  if (name == "" || key == "") {
+    throw Error("secret key is corrupt");
+  }
 
   key = base64Decode(key);
 }
@@ -76,10 +80,14 @@ bool verifyDetached(const std::string& data, const std::string& sig,
   auto ss = split(sig);
 
   auto key = publicKeys.find(ss.first);
-  if (key == publicKeys.end()) return false;
+  if (key == publicKeys.end()) {
+    return false;
+  }
 
   auto sig2 = base64Decode(ss.second);
-  if (sig2.size() != crypto_sign_BYTES) throw Error("signature is not valid");
+  if (sig2.size() != crypto_sign_BYTES) {
+    throw Error("signature is not valid");
+  }
 
   return crypto_sign_verify_detached(
              (unsigned char*)sig2.data(), (unsigned char*)data.data(),

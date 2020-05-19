@@ -100,7 +100,9 @@ bool ParsedDerivation::canBuildLocally() const {
     return false;
 
   for (auto& feature : getRequiredSystemFeatures())
-    if (!settings.systemFeatures.get().count(feature)) return false;
+    if (!settings.systemFeatures.get().count(feature)) {
+      return false;
+    }
 
   return true;
 }

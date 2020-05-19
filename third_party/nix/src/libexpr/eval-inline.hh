@@ -81,7 +81,9 @@ inline void* allocBytes(size_t n) {
 #else
   p = calloc(n, 1);
 #endif
-  if (!p) throw std::bad_alloc();
+  if (!p) {
+    throw std::bad_alloc();
+  }
   return p;
 }
 

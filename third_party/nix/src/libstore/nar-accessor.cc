@@ -133,7 +133,9 @@ struct NarAccessor : public FSAccessor {
     for (auto it = path.begin(); it != end;) {
       // because it != end, the remaining component is non-empty so we need
       // a directory
-      if (current->type != FSAccessor::Type::tDirectory) return nullptr;
+      if (current->type != FSAccessor::Type::tDirectory) {
+        return nullptr;
+      }
 
       // skip slash (canonPath above ensures that this is always a slash)
       assert(*it == '/');
@@ -142,7 +144,9 @@ struct NarAccessor : public FSAccessor {
       // lookup current component
       auto next = std::find(it, end, '/');
       auto child = current->children.find(std::string(it, next));
-      if (child == current->children.end()) return nullptr;
+      if (child == current->children.end()) {
+        return nullptr;
+      }
       current = &child->second;
 
       it = next;
@@ -160,7 +164,9 @@ struct NarAccessor : public FSAccessor {
 
   Stat stat(const Path& path) override {
     auto i = find(path);
-    if (i == nullptr) return {FSAccessor::Type::tMissing, 0, false};
+    if (i == nullptr) {
+      return {FSAccessor::Type::tMissing, 0, false};
+    }
     return {i->type, i->size, i->isExecutable, i->start};
   }
 
@@ -183,7 +189,9 @@ struct NarAccessor : public FSAccessor {
       throw Error(format("path '%1%' inside NAR file is not a regular file") %
                   path);
 
-    if (getNarBytes) return getNarBytes(i.start, i.size);
+    if (getNarBytes) {
+      return getNarBytes(i.start, i.size);
+    }
 
     assert(nar);
     return std::string(*nar, i.start, i.size);
@@ -216,8 +224,12 @@ void listNar(JSONPlaceholder& res, ref<FSAccessor> accessor, const Path& path,
     case FSAccessor::Type::tRegular:
       obj.attr("type", "regular");
       obj.attr("size", st.fileSize);
-      if (st.isExecutable) obj.attr("executable", true);
-      if (st.narOffset) obj.attr("narOffset", st.narOffset);
+      if (st.isExecutable) {
+        obj.attr("executable", true);
+      }
+      if (st.narOffset) {
+        obj.attr("narOffset", st.narOffset);
+      }
       break;
     case FSAccessor::Type::tDirectory:
       obj.attr("type", "directory");

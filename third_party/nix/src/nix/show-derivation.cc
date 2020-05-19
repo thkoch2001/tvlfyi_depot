@@ -50,7 +50,9 @@ struct CmdShowDerivation : InstallablesCommand {
       JSONObject jsonRoot(std::cout, true);
 
       for (auto& drvPath : drvPaths) {
-        if (!isDerivation(drvPath)) continue;
+        if (!isDerivation(drvPath)) {
+          continue;
+        }
 
         auto drvObj(jsonRoot.object(drvPath));
 

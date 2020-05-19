@@ -89,7 +89,7 @@ static void addAttr(ExprAttrs * attrs, AttrPath & attrPath,
             if (j != attrs->attrs.end()) {
                 if (!j->second.inherited) {
                     ExprAttrs * attrs2 = dynamic_cast<ExprAttrs *>(j->second.e);
-                    if (!attrs2) dupAttr(attrPath, pos, j->second.pos);
+                    if (!attrs2) { dupAttr(attrPath, pos, j->second.pos); }
                     attrs = attrs2;
                 } else
                     dupAttr(attrPath, pos, j->second.pos);
@@ -148,7 +148,7 @@ static void addFormal(const Pos & pos, Formals * formals, const Formal & formal)
 
 static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, vector<Expr *> & es)
 {
-    if (es.empty()) return new ExprString(symbols.create(""));
+    if (es.empty()) { return new ExprString(symbols.create("")); }
 
     /* Figure out the minimum indentation.  Note that by design
        whitespace-only final lines are not taken into account.  (So
@@ -162,7 +162,7 @@ static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, vector<Ex
             /* Anti-quotations end the current start-of-line whitespace. */
             if (atStartOfLine) {
                 atStartOfLine = false;
-                if (curIndent < minIndent) minIndent = curIndent;
+                if (curIndent < minIndent) { minIndent = curIndent; }
             }
             continue;
         }
@@ -176,7 +176,7 @@ static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, vector<Ex
                     curIndent = 0;
                 } else {
                     atStartOfLine = false;
-                    if (curIndent < minIndent) minIndent = curIndent;
+                    if (curIndent < minIndent) { minIndent = curIndent; }
                 }
             } else if (e->s[j] == '\n') {
                 atStartOfLine = true;
@@ -216,7 +216,7 @@ static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, vector<Ex
                 }
             } else {
                 s2 += e->s[j];
-                if (e->s[j] == '\n') atStartOfLine = true;
+                if (e->s[j] == '\n') { atStartOfLine = true; }
             }
         }
 
@@ -559,7 +559,7 @@ Expr * EvalState::parse(const char * text,
     int res = yyparse(scanner, &data);
     yylex_destroy(scanner);
 
-    if (res) throw ParseError(data.error);
+    if (res) { throw ParseError(data.error); }
 
     data.result->bindVars(staticEnv);
 
@@ -577,7 +577,7 @@ Path resolveExprPath(Path path)
     while (true) {
         if (lstat(path.c_str(), &st))
             throw SysError(format("getting status of '%1%'") % path);
-        if (!S_ISLNK(st.st_mode)) break;
+        if (!S_ISLNK(st.st_mode)) { break; }
         path = absPath(readLink(path), dirOf(path));
     }
 
@@ -656,9 +656,9 @@ Path EvalState::findFile(SearchPath & searchPath, const string & path, const Pos
             suffix = path.size() == s ? "" : "/" + string(path, s);
         }
         auto r = resolveSearchPathElem(i);
-        if (!r.first) continue;
+        if (!r.first) { continue; }
         Path res = r.second + suffix;
-        if (pathExists(res)) return canonPath(res);
+        if (pathExists(res)) { return canonPath(res); }
     }
     format f = format(
         "file '%1%' was not found in the Nix search path (add it using $NIX_PATH or -I)"
@@ -671,7 +671,7 @@ Path EvalState::findFile(SearchPath & searchPath, const string & path, const Pos
 std::pair<bool, std::string> EvalState::resolveSearchPathElem(const SearchPathElem & elem)
 {
     auto i = searchPathResolved.find(elem.second);
-    if (i != searchPathResolved.end()) return i->second;
+    if (i != searchPathResolved.end()) { return i->second; }
 
     std::pair<bool, std::string> res;
 

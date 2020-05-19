@@ -52,7 +52,9 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
   void run(ref<Store> store) override {
     evalSettings.pureEval = true;
 
-    if (profileDir == "") profileDir = getProfileDir(store);
+    if (profileDir == "") {
+      profileDir = getProfileDir(store);
+    }
 
     LOG(INFO) << "upgrading Nix in profile '" << profileDir << "'";
 

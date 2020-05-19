@@ -35,7 +35,9 @@ class Lazy {
         ex = std::current_exception();
       }
     });
-    if (ex) std::rethrow_exception(ex);
+    if (ex) {
+      std::rethrow_exception(ex);
+    }
     return value;
   }
 };

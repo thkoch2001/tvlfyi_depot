@@ -28,7 +28,9 @@ class MonitorFdHup {
         */
         fds[0].events = POLLHUP;
         auto count = poll(fds, 1, -1);
-        if (count == -1) abort();  // can't happen
+        if (count == -1) {
+          abort();
+        }  // can't happen
         /* This shouldn't happen, but can on macOS due to a bug.
            See rdar://37550628.
 
@@ -36,7 +38,9 @@ class MonitorFdHup {
            coordination with the main thread if spinning proves
            too harmful.
          */
-        if (count == 0) continue;
+        if (count == 0) {
+          continue;
+        }
         assert(fds[0].revents & POLLHUP);
         triggerInterrupt();
         break;

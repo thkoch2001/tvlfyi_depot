@@ -42,10 +42,14 @@ struct CmdLog : InstallableCommand {
     for (auto& sub : subs) {
       auto log = b.drvPath != "" ? sub->getBuildLog(b.drvPath) : nullptr;
       for (auto& output : b.outputs) {
-        if (log) break;
+        if (log) {
+          break;
+        }
         log = sub->getBuildLog(output.second);
       }
-      if (!log) continue;
+      if (!log) {
+        continue;
+      }
       LOG(INFO) << "got build log for '" << installable->what() << "' from '"
                 << sub->getUri() << "'";
       std::cout << *log;

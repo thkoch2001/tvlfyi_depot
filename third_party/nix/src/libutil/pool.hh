@@ -99,10 +99,14 @@ class Pool {
     Handle(const Handle& l) = delete;
 
     ~Handle() {
-      if (!r) return;
+      if (!r) {
+        return;
+      }
       {
         auto state_(pool.state.lock());
-        if (!bad) state_->idle.push_back(ref<R>(r));
+        if (!bad) {
+          state_->idle.push_back(ref<R>(r));
+        }
         assert(state_->inUse);
         state_->inUse--;
       }
@@ -160,7 +164,9 @@ class Pool {
     auto state_(state.lock());
     std::vector<ref<R>> left;
     for (auto& p : state_->idle)
-      if (validator(p)) left.push_back(p);
+      if (validator(p)) {
+        left.push_back(p);
+      }
     std::swap(state_->idle, left);
   }
 };

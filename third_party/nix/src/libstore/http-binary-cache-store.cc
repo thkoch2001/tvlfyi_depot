@@ -23,7 +23,9 @@ class HttpBinaryCacheStore : public BinaryCacheStore {
  public:
   HttpBinaryCacheStore(const Params& params, const Path& _cacheUri)
       : BinaryCacheStore(params), cacheUri(_cacheUri) {
-    if (cacheUri.back() == '/') cacheUri.pop_back();
+    if (cacheUri.back() == '/') {
+      cacheUri.pop_back();
+    }
 
     diskCache = getNarInfoDiskCache();
   }
@@ -57,7 +59,9 @@ class HttpBinaryCacheStore : public BinaryCacheStore {
 
   void checkEnabled() {
     auto state(_state.lock());
-    if (state->enabled) return;
+    if (state->enabled) {
+      return;
+    }
     if (std::chrono::steady_clock::now() > state->disabledUntil) {
       state->enabled = true;
       DLOG(INFO) << "re-enabling binary cache '" << getUri() << "'";

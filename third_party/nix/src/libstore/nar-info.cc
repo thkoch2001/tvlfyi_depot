@@ -22,17 +22,23 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
   size_t pos = 0;
   while (pos < s.size()) {
     size_t colon = s.find(':', pos);
-    if (colon == std::string::npos) corrupt();
+    if (colon == std::string::npos) {
+      corrupt();
+    }
 
     std::string name(s, pos, colon - pos);
 
     size_t eol = s.find('\n', colon + 2);
-    if (eol == std::string::npos) corrupt();
+    if (eol == std::string::npos) {
+      corrupt();
+    }
 
     std::string value(s, colon + 2, eol - colon - 2);
 
     if (name == "StorePath") {
-      if (!store.isStorePath(value)) corrupt();
+      if (!store.isStorePath(value)) {
+        corrupt();
+      }
       path = value;
     } else if (name == "URL")
       url = value;
@@ -41,23 +47,33 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
     else if (name == "FileHash")
       fileHash = parseHashField(value);
     else if (name == "FileSize") {
-      if (!string2Int(value, fileSize)) corrupt();
+      if (!string2Int(value, fileSize)) {
+        corrupt();
+      }
     } else if (name == "NarHash")
       narHash = parseHashField(value);
     else if (name == "NarSize") {
-      if (!string2Int(value, narSize)) corrupt();
+      if (!string2Int(value, narSize)) {
+        corrupt();
+      }
     } else if (name == "References") {
       auto refs = tokenizeString<Strings>(value, " ");
-      if (!references.empty()) corrupt();
+      if (!references.empty()) {
+        corrupt();
+      }
       for (auto& r : refs) {
         auto r2 = store.storeDir + "/" + r;
-        if (!store.isStorePath(r2)) corrupt();
+        if (!store.isStorePath(r2)) {
+          corrupt();
+        }
         references.insert(r2);
       }
     } else if (name == "Deriver") {
       if (value != "unknown-deriver") {
         auto p = store.storeDir + "/" + value;
-        if (!store.isStorePath(p)) corrupt();
+        if (!store.isStorePath(p)) {
+          corrupt();
+        }
         deriver = p;
       }
     } else if (name == "System")
@@ -65,16 +81,22 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
     else if (name == "Sig")
       sigs.insert(value);
     else if (name == "CA") {
-      if (!ca.empty()) corrupt();
+      if (!ca.empty()) {
+        corrupt();
+      }
       ca = value;
     }
 
     pos = eol + 1;
   }
 
-  if (compression == "") compression = "bzip2";
+  if (compression == "") {
+    compression = "bzip2";
+  }
 
-  if (path.empty() || url.empty() || narSize == 0 || !narHash) corrupt();
+  if (path.empty() || url.empty() || narSize == 0 || !narHash) {
+    corrupt();
+  }
 }
 
 std::string NarInfo::to_string() const {
@@ -92,13 +114,19 @@ std::string NarInfo::to_string() const {
 
   res += "References: " + concatStringsSep(" ", shortRefs()) + "\n";
 
-  if (!deriver.empty()) res += "Deriver: " + baseNameOf(deriver) + "\n";
+  if (!deriver.empty()) {
+    res += "Deriver: " + baseNameOf(deriver) + "\n";
+  }
 
-  if (!system.empty()) res += "System: " + system + "\n";
+  if (!system.empty()) {
+    res += "System: " + system + "\n";
+  }
 
   for (auto sig : sigs) res += "Sig: " + sig + "\n";
 
-  if (!ca.empty()) res += "CA: " + ca + "\n";
+  if (!ca.empty()) {
+    res += "CA: " + ca + "\n";
+  }
 
   return res;
 }

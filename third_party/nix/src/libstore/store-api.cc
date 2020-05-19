@@ -342,7 +342,9 @@ void Store::queryPathInfo(const Path& storePath,
         try {
           auto info = fut.get();
 
-          if (diskCache) diskCache->upsertNarInfo(getUri(), hashPart, info);
+          if (diskCache) {
+            diskCache->upsertNarInfo(getUri(), hashPart, info);
+          }
 
           {
             auto state_(state.lock());
@@ -388,7 +390,9 @@ PathSet Store::queryValidPaths(const PathSet& paths,
             state->exc = std::current_exception();
           }
           assert(state->left);
-          if (!--state->left) wakeup.notify_one();
+          if (!--state->left) {
+            wakeup.notify_one();
+          }
         }});
   };
 
@@ -399,7 +403,9 @@ PathSet Store::queryValidPaths(const PathSet& paths,
   while (true) {
     auto state(state_.lock());
     if (!state->left) {
-      if (state->exc) std::rethrow_exception(state->exc);
+      if (state->exc) {
+        std::rethrow_exception(state->exc);
+      }
       return state->valid;
     }
     state.wait(wakeup);
@@ -455,7 +461,9 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
         for (auto& ref : info->references) jsonRefs.elem(ref);
       }
 
-      if (info->ca != "") jsonPath.attr("ca", info->ca);
+      if (info->ca != "") {
+        jsonPath.attr("ca", info->ca);
+      }
 
       std::pair<uint64_t, uint64_t> closureSizes;
 
@@ -465,12 +473,16 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
       }
 
       if (includeImpureInfo) {
-        if (info->deriver != "") jsonPath.attr("deriver", info->deriver);
+        if (info->deriver != "") {
+          jsonPath.attr("deriver", info->deriver);
+        }
 
         if (info->registrationTime)
           jsonPath.attr("registrationTime", info->registrationTime);
 
-        if (info->ultimate) jsonPath.attr("ultimate", info->ultimate);
+        if (info->ultimate) {
+          jsonPath.attr("ultimate", info->ultimate);
+        }
 
         if (!info->sigs.empty()) {
           auto jsonSigs = jsonPath.list("signatures");
@@ -481,7 +493,9 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
             std::shared_ptr<const ValidPathInfo>(info));
 
         if (narInfo) {
-          if (!narInfo->url.empty()) jsonPath.attr("url", narInfo->url);
+          if (!narInfo->url.empty()) {
+            jsonPath.attr("url", narInfo->url);
+          }
           if (narInfo->fileHash)
             jsonPath.attr("downloadHash", narInfo->fileHash.to_string());
           if (narInfo->fileSize)
@@ -506,7 +520,9 @@ std::pair<uint64_t, uint64_t> Store::getClosureSize(const Path& storePath) {
     totalNarSize += info->narSize;
     auto narInfo = std::dynamic_pointer_cast<const NarInfo>(
         std::shared_ptr<const ValidPathInfo>(info));
-    if (narInfo) totalDownloadSize += narInfo->fileSize;
+    if (narInfo) {
+      totalDownloadSize += narInfo->fileSize;
+    }
   }
   return {totalNarSize, totalDownloadSize};
 }
@@ -521,9 +537,13 @@ const Store::Stats& Store::getStats() {
 
 void Store::buildPaths(const PathSet& paths, BuildMode buildMode) {
   for (auto& path : paths)
-    if (isDerivation(path)) unsupported("buildPaths");
+    if (isDerivation(path)) {
+      unsupported("buildPaths");
+    }
 
-  if (queryValidPaths(paths).size() != paths.size()) unsupported("buildPaths");
+  if (queryValidPaths(paths).size() != paths.size()) {
+    unsupported("buildPaths");
+  }
 }
 
 void copyStorePath(ref<Store> srcStore, ref<Store> dstStore,
@@ -552,8 +572,12 @@ void copyStorePath(ref<Store> srcStore, ref<Store> dstStore,
     srcStore->narFromPath({storePath}, sink);
     auto info2 = make_ref<ValidPathInfo>(*info);
     info2->narHash = hashString(htSHA256, *sink.s);
-    if (!info->narSize) info2->narSize = sink.s->size();
-    if (info->ultimate) info2->ultimate = false;
+    if (!info->narSize) {
+      info2->narSize = sink.s->size();
+    }
+    if (info->ultimate) {
+      info2->ultimate = false;
+    }
     info = info2;
 
     StringSource source(*sink.s);
@@ -590,9 +614,13 @@ void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
 
   PathSet missing;
   for (auto& path : storePaths)
-    if (!valid.count(path)) missing.insert(path);
+    if (!valid.count(path)) {
+      missing.insert(path);
+    }
 
-  if (missing.empty()) return;
+  if (missing.empty()) {
+    return;
+  }
 
   LOG(INFO) << "copying " << missing.size() << " paths";
 
@@ -628,7 +656,9 @@ void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
             copyStorePath(srcStore, dstStore, storePath, repair, checkSigs);
           } catch (Error& e) {
             nrFailed++;
-            if (!settings.keepGoing) throw e;
+            if (!settings.keepGoing) {
+              throw e;
+            }
             LOG(ERROR) << "could not copy " << storePath << ": " << e.what();
             return;
           }
@@ -658,25 +688,33 @@ ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven) {
     getline(str, s);
     info.narHash = Hash(s, htSHA256);
     getline(str, s);
-    if (!string2Int(s, info.narSize)) throw Error("number expected");
+    if (!string2Int(s, info.narSize)) {
+      throw Error("number expected");
+    }
   }
   getline(str, info.deriver);
   string s;
   int n;
   getline(str, s);
-  if (!string2Int(s, n)) throw Error("number expected");
+  if (!string2Int(s, n)) {
+    throw Error("number expected");
+  }
   while (n--) {
     getline(str, s);
     info.references.insert(s);
   }
-  if (!str || str.eof()) throw Error("missing input");
+  if (!str || str.eof()) {
+    throw Error("missing input");
+  }
   return info;
 }
 
 string showPaths(const PathSet& paths) {
   string s;
   for (auto& i : paths) {
-    if (s.size() != 0) s += ", ";
+    if (s.size() != 0) {
+      s += ", ";
+    }
     s += "'" + i + "'";
   }
   return s;
@@ -725,11 +763,15 @@ bool ValidPathInfo::isContentAddressed(const Store& store) const {
 
 size_t ValidPathInfo::checkSignatures(const Store& store,
                                       const PublicKeys& publicKeys) const {
-  if (isContentAddressed(store)) return maxSigs;
+  if (isContentAddressed(store)) {
+    return maxSigs;
+  }
 
   size_t good = 0;
   for (auto& sig : sigs)
-    if (checkSignature(publicKeys, sig)) good++;
+    if (checkSignature(publicKeys, sig)) {
+      good++;
+    }
   return good;
 }
 
@@ -848,7 +890,9 @@ static RegisterStoreImplementation regStore([](const std::string& uri,
       return std::shared_ptr<Store>(std::make_shared<UDSRemoteStore>(params));
     case tLocal: {
       Store::Params params2 = params;
-      if (hasPrefix(uri, "/")) params2["root"] = uri;
+      if (hasPrefix(uri, "/")) {
+        params2["root"] = uri;
+      }
       return std::shared_ptr<Store>(std::make_shared<LocalStore>(params2));
     }
     default:
@@ -863,7 +907,9 @@ std::list<ref<Store>> getDefaultSubstituters() {
     StringSet done;
 
     auto addStore = [&](const std::string& uri) {
-      if (done.count(uri)) return;
+      if (done.count(uri)) {
+        return;
+      }
       done.insert(uri);
       try {
         stores.push_back(openStore(uri));

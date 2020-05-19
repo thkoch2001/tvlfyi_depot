@@ -89,7 +89,9 @@ void printDotGraph(ref<Store> store, const PathSet& roots) {
     Path path = *(workList.begin());
     workList.erase(path);
 
-    if (doneSet.find(path) != doneSet.end()) continue;
+    if (doneSet.find(path) != doneSet.end()) {
+      continue;
+    }
     doneSet.insert(path);
 
     cout << makeNode(path, symbolicName(path), "#ff0000");
@@ -118,7 +120,7 @@ void printDotGraph(ref<Store> store, const PathSet& roots) {
             colour = "#00ff00";
             for (StringPairs::iterator i = ne.derivation.env.begin();
                  i != ne.derivation.env.end(); ++i)
-                if (i->first == "name") label = i->second;
+                if (i->first == "name") { label = i->second; }
         }
 
         else if (ne.type == StoreExpr::neClosure) {

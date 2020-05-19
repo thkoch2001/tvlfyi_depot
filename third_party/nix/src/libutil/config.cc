@@ -11,7 +11,9 @@ namespace nix {
 
 bool Config::set(const std::string& name, const std::string& value) {
   auto i = _settings.find(name);
-  if (i == _settings.end()) return false;
+  if (i == _settings.end()) {
+    return false;
+  }
   i->second.setting->set(value);
   i->second.setting->overriden = true;
   return true;
@@ -84,10 +86,14 @@ void AbstractConfig::applyConfigFile(const Path& path) {
       pos++;
 
       string::size_type hash = line.find('#');
-      if (hash != string::npos) line = string(line, 0, hash);
+      if (hash != string::npos) {
+        line = string(line, 0, hash);
+      }
 
       vector<string> tokens = tokenizeString<vector<string> >(line);
-      if (tokens.empty()) continue;
+      if (tokens.empty()) {
+        continue;
+      }
 
       if (tokens.size() < 2)
         throw UsageError("illegal configuration line '%1%' in '%2%'", line,
@@ -147,7 +153,9 @@ void Config::toJSON(JSONObject& out) {
 
 void Config::convertToArgs(Args& args, const std::string& category) {
   for (auto& s : _settings)
-    if (!s.second.isAlias) s.second.setting->convertToArg(args, category);
+    if (!s.second.isAlias) {
+      s.second.setting->convertToArg(args, category);
+    }
 }
 
 AbstractSetting::AbstractSetting(const std::string& name,
@@ -284,7 +292,9 @@ void PathSetting::set(const std::string& str) {
 
 bool GlobalConfig::set(const std::string& name, const std::string& value) {
   for (auto& config : *configRegistrations)
-    if (config->set(name, value)) return true;
+    if (config->set(name, value)) {
+      return true;
+    }
 
   unknownSettings.emplace(name, value);
 
@@ -315,7 +325,9 @@ GlobalConfig globalConfig;
 GlobalConfig::ConfigRegistrations* GlobalConfig::configRegistrations;
 
 GlobalConfig::Register::Register(Config* config) {
-  if (!configRegistrations) configRegistrations = new ConfigRegistrations;
+  if (!configRegistrations) {
+    configRegistrations = new ConfigRegistrations;
+  }
   configRegistrations->emplace_back(config);
 }
 

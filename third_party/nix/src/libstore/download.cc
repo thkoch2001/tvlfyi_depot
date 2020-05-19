@@ -232,7 +232,9 @@ struct CurlDownloader : public Downloader {
 
     size_t readOffset = 0;
     size_t readCallback(char* buffer, size_t size, size_t nitems) {
-      if (readOffset == request.data->length()) return 0;
+      if (readOffset == request.data->length()) {
+        return 0;
+      }
       auto count = std::min(size * nitems, request.data->length() - readOffset);
       assert(count);
       memcpy(buffer, request.data->data() + readOffset, count);
@@ -291,7 +293,9 @@ struct CurlDownloader : public Downloader {
 
       curl_easy_setopt(req, CURLOPT_HTTPHEADER, requestHeaders);
 
-      if (request.head) curl_easy_setopt(req, CURLOPT_NOBODY, 1);
+      if (request.head) {
+        curl_easy_setopt(req, CURLOPT_NOBODY, 1);
+      }
 
       if (request.data) {
         curl_easy_setopt(req, CURLOPT_UPLOAD, 1L);
@@ -336,7 +340,9 @@ struct CurlDownloader : public Downloader {
 
       char* effectiveUriCStr;
       curl_easy_getinfo(req, CURLINFO_EFFECTIVE_URL, &effectiveUriCStr);
-      if (effectiveUriCStr) result.effectiveUri = effectiveUriCStr;
+      if (effectiveUriCStr) {
+        result.effectiveUri = effectiveUriCStr;
+      }
 
       DLOG(INFO) << "finished " << request.verb() << " of " << request.uri
                  << "; curl status = " << code
@@ -664,7 +670,9 @@ struct CurlDownloader : public Downloader {
     auto [path, params] = splitUriAndParams(uri);
 
     auto slash = path.find('/', 5);  // 5 is the length of "s3://" prefix
-    if (slash == std::string::npos) throw nix::Error("bad S3 URI '%s'", path);
+    if (slash == std::string::npos) {
+      throw nix::Error("bad S3 URI '%s'", path);
+    }
 
     std::string bucketName(path, 5, slash - 5);
     std::string key(path, slash + 1);
@@ -766,7 +774,9 @@ void Downloader::download(DownloadRequest&& request, Sink& sink) {
   request.dataCallback = [_state](char* buf, size_t len) {
     auto state(_state->lock());
 
-    if (state->quit) return;
+    if (state->quit) {
+      return;
+    }
 
     /* If the buffer is full, then go to sleep until the calling
        thread wakes us up (i.e. when it has removed data from the
@@ -808,7 +818,9 @@ void Downloader::download(DownloadRequest&& request, Sink& sink) {
 
       while (state->data.empty()) {
         if (state->quit) {
-          if (state->exc) std::rethrow_exception(state->exc);
+          if (state->exc) {
+            std::rethrow_exception(state->exc);
+          }
           return;
         }
 
@@ -835,7 +847,9 @@ CachedDownloadResult Downloader::downloadCached(
   auto name = request.name;
   if (name == "") {
     auto p = url.rfind('/');
-    if (p != string::npos) name = string(url, p + 1);
+    if (p != string::npos) {
+      name = string(url, p + 1);
+    }
   }
 
   Path expectedStorePath;
@@ -919,7 +933,9 @@ CachedDownloadResult Downloader::downloadCached(
       writeFile(dataFile,
                 url + "\n" + res.etag + "\n" + std::to_string(time(0)) + "\n");
     } catch (DownloadError& e) {
-      if (storePath.empty()) throw;
+      if (storePath.empty()) {
+        throw;
+      }
       LOG(WARNING) << e.msg() << "; using cached result";
       result.etag = expectedETag;
     }
@@ -933,7 +949,9 @@ CachedDownloadResult Downloader::downloadCached(
     if (pathExists(unpackedLink)) {
       unpackedStorePath = readLink(unpackedLink);
       store->addTempRoot(unpackedStorePath);
-      if (!store->isValidPath(unpackedStorePath)) unpackedStorePath = "";
+      if (!store->isValidPath(unpackedStorePath)) {
+        unpackedStorePath = "";
+      }
     }
     if (unpackedStorePath.empty()) {
       LOG(INFO) << "unpacking '" << url << "' ...";
@@ -970,9 +988,13 @@ CachedDownloadResult Downloader::downloadCached(
 }
 
 bool isUri(const string& s) {
-  if (s.compare(0, 8, "channel:") == 0) return true;
+  if (s.compare(0, 8, "channel:") == 0) {
+    return true;
+  }
   size_t pos = s.find("://");
-  if (pos == string::npos) return false;
+  if (pos == string::npos) {
+    return false;
+  }
   string scheme(s, 0, pos);
   return scheme == "http" || scheme == "https" || scheme == "file" ||
          scheme == "channel" || scheme == "git" || scheme == "s3" ||

@@ -98,7 +98,9 @@ StringSet Settings::getDefaultSystemFeatures() {
   StringSet features{"nixos-test", "benchmark", "big-parallel"};
 
 #if __linux__
-  if (access("/dev/kvm", R_OK | W_OK) == 0) features.insert("kvm");
+  if (access("/dev/kvm", R_OK | W_OK) == 0) {
+    features.insert("kvm");
+  }
 #endif
 
   return features;
@@ -171,7 +173,9 @@ void initPlugins() {
       for (const auto& ent : ents)
         pluginFiles.emplace_back(pluginFile + "/" + ent.name);
     } catch (SysError& e) {
-      if (e.errNo != ENOTDIR) throw;
+      if (e.errNo != ENOTDIR) {
+        throw;
+      }
       pluginFiles.emplace_back(pluginFile);
     }
     for (const auto& file : pluginFiles) {

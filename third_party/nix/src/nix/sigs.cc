@@ -67,7 +67,9 @@ struct CmdCopySigs : StorePathsCommand {
             continue;
 
           for (auto& sig : info2->sigs)
-            if (!info->sigs.count(sig)) newSigs.insert(sig);
+            if (!info->sigs.count(sig)) {
+              newSigs.insert(sig);
+            }
         } catch (InvalidPath&) {
         }
       }

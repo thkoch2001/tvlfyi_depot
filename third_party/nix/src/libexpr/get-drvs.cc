@@ -44,7 +44,9 @@ DrvInfo::DrvInfo(EvalState& state, ref<Store> store,
 string DrvInfo::queryName() const {
   if (name == "" && attrs) {
     auto i = attrs->find(state->sName);
-    if (i == attrs->end()) throw TypeError("derivation name missing");
+    if (i == attrs->end()) {
+      throw TypeError("derivation name missing");
+    }
     name = state->forceStringNoCtx(*i->value);
   }
   return name;
@@ -122,13 +124,19 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
   }
   const auto errMsg = Error("this derivation has bad 'meta.outputsToInstall'");
   /* ^ this shows during `nix-env -i` right under the bad derivation */
-  if (!outTI->isList()) throw errMsg;
+  if (!outTI->isList()) {
+    throw errMsg;
+  }
   Outputs result;
   for (auto i = outTI->listElems(); i != outTI->listElems() + outTI->listSize();
        ++i) {
-    if ((*i)->type != tString) throw errMsg;
+    if ((*i)->type != tString) {
+      throw errMsg;
+    }
     auto out = outputs.find((*i)->string.s);
-    if (out == outputs.end()) throw errMsg;
+    if (out == outputs.end()) {
+      throw errMsg;
+    }
     result.insert(*out);
   }
   return result;
@@ -206,7 +214,9 @@ Value* DrvInfo::queryMeta(const string& name) {
 
 string DrvInfo::queryMetaString(const string& name) {
   Value* v = queryMeta(name);
-  if (!v || v->type != tString) return "";
+  if (!v || v->type != tString) {
+    return "";
+  }
   return v->string.s;
 }
 
@@ -222,7 +232,9 @@ NixInt DrvInfo::queryMetaInt(const string& name, NixInt def) {
     /* Backwards compatibility with before we had support for
        integer meta fields. */
     NixInt n;
-    if (string2Int(v->string.s, n)) return n;
+    if (string2Int(v->string.s, n)) {
+      return n;
+    }
   }
   return def;
 }
@@ -239,7 +251,9 @@ NixFloat DrvInfo::queryMetaFloat(const string& name, NixFloat def) {
     /* Backwards compatibility with before we had support for
        float meta fields. */
     NixFloat n;
-    if (string2Float(v->string.s, n)) return n;
+    if (string2Float(v->string.s, n)) {
+      return n;
+    }
   }
   return def;
 }
@@ -255,8 +269,12 @@ bool DrvInfo::queryMetaBool(const string& name, bool def) {
   if (v->type == tString) {
     /* Backwards compatibility with before we had support for
        Boolean meta fields. */
-    if (strcmp(v->string.s, "true") == 0) return true;
-    if (strcmp(v->string.s, "false") == 0) return false;
+    if (strcmp(v->string.s, "true") == 0) {
+      return true;
+    }
+    if (strcmp(v->string.s, "false") == 0) {
+      return false;
+    }
   }
   return def;
 }
@@ -268,7 +286,9 @@ void DrvInfo::setMeta(const string& name, Value* v) {
   Symbol sym = state->symbols.create(name);
   if (old) {
     for (auto i : *old) {
-      if (i.name != sym) meta->push_back(i);
+      if (i.name != sym) {
+        meta->push_back(i);
+      }
     }
   }
   if (v) {
@@ -295,7 +315,9 @@ static bool getDerivation(EvalState& state, Value& v, const string& attrPath,
 
     /* Remove spurious duplicates (e.g., a set like `rec { x =
        derivation {...}; y = x;}'. */
-    if (done.find(v.attrs) != done.end()) return false;
+    if (done.find(v.attrs) != done.end()) {
+      return false;
+    }
     done.insert(v.attrs);
 
     DrvInfo drv(state, attrPath, v.attrs);
@@ -319,7 +341,9 @@ std::optional<DrvInfo> getDerivation(EvalState& state, Value& v,
   Done done;
   DrvInfos drvs;
   getDerivation(state, v, "", drvs, done, ignoreAssertionFailures);
-  if (drvs.size() != 1) return {};
+  if (drvs.size() != 1) {
+    return {};
+  }
   return std::move(drvs.front());
 }
 
@@ -354,7 +378,9 @@ static void getDerivations(EvalState& state, Value& vIn,
        precedence). */
     for (auto& i : v.attrs->lexicographicOrder()) {
       DLOG(INFO) << "evaluating attribute '" << i->name << "'";
-      if (!std::regex_match(std::string(i->name), attrRegex)) continue;
+      if (!std::regex_match(std::string(i->name), attrRegex)) {
+        continue;
+      }
       string pathPrefix2 = addToPath(pathPrefix, i->name);
       if (combineChannels)
         getDerivations(state, *i->value, pathPrefix2, autoArgs, drvs, done,

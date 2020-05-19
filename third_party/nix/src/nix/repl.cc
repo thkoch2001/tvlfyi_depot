@@ -123,7 +123,9 @@ void printHelp() {
 string removeWhitespace(string s) {
   s = chomp(s);
   size_t n = s.find_first_not_of(" \n\r\t");
-  if (n != string::npos) s = string(s, n);
+  if (n != string::npos) {
+    s = string(s, n);
+  }
   return s;
 }
 
@@ -143,13 +145,17 @@ static char* completionCallback(char* s, int* match) {
   if (possible.size() == 1) {
     *match = 1;
     auto* res = strdup(possible.begin()->c_str() + strlen(s));
-    if (!res) throw Error("allocation failure");
+    if (!res) {
+      throw Error("allocation failure");
+    }
     return res;
   } else if (possible.size() > 1) {
     auto checkAllHaveSameAt = [&](size_t pos) {
       auto& first = *possible.begin();
       for (auto& p : possible) {
-        if (p.size() <= pos || p[pos] != first[pos]) return false;
+        if (p.size() <= pos || p[pos] != first[pos]) {
+          return false;
+        }
       }
       return true;
     };
@@ -161,7 +167,9 @@ static char* completionCallback(char* s, int* match) {
     if (len > 0) {
       *match = 1;
       auto* res = strdup(std::string(*possible.begin(), start, len).c_str());
-      if (!res) throw Error("allocation failure");
+      if (!res) {
+        throw Error("allocation failure");
+      }
       return res;
     }
   }
@@ -216,7 +224,9 @@ void NixRepl::mainLoop(const std::vector<std::string>& files) {
   for (auto& i : files) loadedFiles.push_back(i);
 
   reloadFiles();
-  if (!loadedFiles.empty()) std::cout << std::endl;
+  if (!loadedFiles.empty()) {
+    std::cout << std::endl;
+  }
 
   // Allow nix-repl specific settings in .inputrc
   rl_readline_name = "nix-repl";
@@ -236,10 +246,14 @@ void NixRepl::mainLoop(const std::vector<std::string>& files) {
   while (true) {
     // When continuing input from previous lines, don't print a prompt, just
     // align to the same number of chars as the prompt.
-    if (!getLine(input, input.empty() ? "nix-repl> " : "          ")) break;
+    if (!getLine(input, input.empty() ? "nix-repl> " : "          ")) {
+      break;
+    }
 
     try {
-      if (!removeWhitespace(input).empty() && !processLine(input)) return;
+      if (!removeWhitespace(input).empty() && !processLine(input)) {
+        return;
+      }
     } catch (ParseError& e) {
       if (e.msg().find("unexpected $end") != std::string::npos) {
         // For parse errors on incomplete input, we continue waiting for the
@@ -334,7 +348,9 @@ StringSet NixRepl::completePrefix(string prefix) {
     /* This is a variable name; look it up in the current scope. */
     StringSet::iterator i = varNames.lower_bound(cur);
     while (i != varNames.end()) {
-      if (string(*i, 0, cur.size()) != cur) break;
+      if (string(*i, 0, cur.size()) != cur) {
+        break;
+      }
       completions.insert(prev + *i);
       i++;
     }
@@ -353,7 +369,9 @@ StringSet NixRepl::completePrefix(string prefix) {
 
       for (auto& i : *v.attrs) {
         string name = i.name;
-        if (string(name, 0, cur2.size()) != cur2) continue;
+        if (string(name, 0, cur2.size()) != cur2) {
+          continue;
+        }
         completions.insert(prev + expr + "." + name);
       }
 
@@ -375,7 +393,9 @@ static int runProgram(const string& program, const Strings& args) {
 
   Pid pid;
   pid = fork();
-  if (pid == -1) throw SysError("forking");
+  if (pid == -1) {
+    throw SysError("forking");
+  }
   if (pid == 0) {
     restoreAffinity();
     execvp(program.c_str(), stringsToCharPtrs(args2).data());
@@ -386,7 +406,9 @@ static int runProgram(const string& program, const Strings& args) {
 }
 
 bool isVarName(const string& s) {
-  if (s.size() == 0) return false;
+  if (s.size() == 0) {
+    return false;
+  }
   char c = s[0];
   if ((c >= '0' && c <= '9') || c == '-' || c == '\'') {
     return false;
@@ -410,14 +432,18 @@ Path NixRepl::getDerivationPath(Value& v) {
 }
 
 bool NixRepl::processLine(string line) {
-  if (line == "") return true;
+  if (line == "") {
+    return true;
+  }
 
   string command, arg;
 
   if (line[0] == ':') {
     size_t p = line.find_first_of(" \n\r\t");
     command = string(line, 0, p);
-    if (p != string::npos) arg = removeWhitespace(string(line, p));
+    if (p != string::npos) {
+      arg = removeWhitespace(string(line, p));
+    }
   } else {
     arg = line;
   }
@@ -561,7 +587,9 @@ void NixRepl::reloadFiles() {
 
   bool first = true;
   for (auto& i : old) {
-    if (!first) std::cout << std::endl;
+    if (!first) {
+      std::cout << std::endl;
+    }
     first = false;
     std::cout << format("Loading '%1%'...") % i << std::endl;
     loadFile(i);

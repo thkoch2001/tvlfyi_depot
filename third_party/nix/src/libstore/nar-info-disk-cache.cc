@@ -143,7 +143,9 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
 
   Cache& getCache(State& state, const std::string& uri) {
     auto i = state.caches.find(uri);
-    if (i == state.caches.end()) abort();
+    if (i == state.caches.end()) {
+      abort();
+    }
     return i->second;
   }
 
@@ -170,7 +172,9 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
       auto i = state->caches.find(uri);
       if (i == state->caches.end()) {
         auto queryCache(state->queryCache.use()(uri));
-        if (!queryCache.next()) return false;
+        if (!queryCache.next()) {
+          return false;
+        }
         state->caches.emplace(
             uri, Cache{(int)queryCache.getInt(0), queryCache.getStr(1),
                        queryCache.getInt(2) != 0, (int)queryCache.getInt(3)});
@@ -199,9 +203,13 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
               now - settings.ttlNegativeNarInfoCache)(
               now - settings.ttlPositiveNarInfoCache));
 
-          if (!queryNAR.next()) return {oUnknown, 0};
+          if (!queryNAR.next()) {
+            return {oUnknown, 0};
+          }
 
-          if (!queryNAR.getInt(0)) return {oInvalid, 0};
+          if (!queryNAR.getInt(0)) {
+            return {oInvalid, 0};
+          }
 
           auto narInfo = make_ref<NarInfo>();
 
@@ -210,7 +218,9 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
                           (namePart.empty() ? "" : "-" + namePart);
           narInfo->url = queryNAR.getStr(2);
           narInfo->compression = queryNAR.getStr(3);
-          if (!queryNAR.isNull(4)) narInfo->fileHash = Hash(queryNAR.getStr(4));
+          if (!queryNAR.isNull(4)) {
+            narInfo->fileHash = Hash(queryNAR.getStr(4));
+          }
           narInfo->fileSize = queryNAR.getInt(5);
           narInfo->narHash = Hash(queryNAR.getStr(6));
           narInfo->narSize = queryNAR.getInt(7);

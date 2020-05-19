@@ -49,7 +49,9 @@ void processExpr(EvalState& state, const Strings& attrPaths, bool parseOnly,
       else if (output == okJSON)
         printValueAsJSON(state, strict, vRes, std::cout, context);
       else {
-        if (strict) state.forceValueDeep(vRes);
+        if (strict) {
+          state.forceValueDeep(vRes);
+        }
         std::cout << vRes << std::endl;
       }
     } else {
@@ -69,7 +71,9 @@ void processExpr(EvalState& state, const Strings& attrPaths, bool parseOnly,
           printGCWarning();
         else {
           Path rootName = indirectRoot ? absPath(gcRoot) : gcRoot;
-          if (++rootNr > 1) rootName += "-" + std::to_string(rootNr);
+          if (++rootNr > 1) {
+            rootName += "-" + std::to_string(rootNr);
+          }
           auto store2 = state.store.dynamic_pointer_cast<LocalFSStore>();
           if (store2)
             drvPath = store2->addPermRoot(drvPath, rootName, indirectRoot);
@@ -158,7 +162,9 @@ static int _main(int argc, char** argv) {
 
     Bindings& autoArgs = *myArgs.getAutoArgs(*state);
 
-    if (attrPaths.empty()) attrPaths = {""};
+    if (attrPaths.empty()) {
+      attrPaths = {""};
+    }
 
     if (findFile) {
       for (auto& i : files) {

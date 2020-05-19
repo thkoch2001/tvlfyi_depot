@@ -73,7 +73,9 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
     }
   }
 
-  if (rev == "") rev = "default";
+  if (rev == "") {
+    rev = "default";
+  }
 
   Path cacheDir = fmt("%s/nix/hg/%s", getCacheDir(),
                       hashString(htSHA256, uri).to_string(Base32, false));
@@ -149,7 +151,9 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
     }
 
   } catch (SysError& e) {
-    if (e.errNo != ENOENT) throw;
+    if (e.errNo != ENOENT) {
+      throw;
+    }
   }
 
   Path tmpDir = createTempDir();

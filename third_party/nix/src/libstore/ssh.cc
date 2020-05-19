@@ -17,8 +17,12 @@ SSHMaster::SSHMaster(const std::string& host, const std::string& keyFile,
 void SSHMaster::addCommonSSHOpts(Strings& args) {
   for (auto& i : tokenizeString<Strings>(getEnv("NIX_SSHOPTS")))
     args.push_back(i);
-  if (!keyFile.empty()) args.insert(args.end(), {"-i", keyFile});
-  if (compress) args.push_back("-C");
+  if (!keyFile.empty()) {
+    args.insert(args.end(), {"-i", keyFile});
+  }
+  if (compress) {
+    args.push_back("-C");
+  }
 }
 
 std::unique_ptr<SSHMaster::Connection> SSHMaster::startCommand(
@@ -81,11 +85,15 @@ std::unique_ptr<SSHMaster::Connection> SSHMaster::startCommand(
 }
 
 Path SSHMaster::startMaster() {
-  if (!useMaster) return "";
+  if (!useMaster) {
+    return "";
+  }
 
   auto state(state_.lock());
 
-  if (state->sshMaster != -1) return state->socketPath;
+  if (state->sshMaster != -1) {
+    return state->socketPath;
+  }
 
   state->tmpDir =
       std::make_unique<AutoDelete>(createTempDir("", "nix", true, true, 0700));
@@ -112,7 +120,7 @@ Path SSHMaster::startMaster() {
                         "-S",  state->socketPath,
                         "-o",  "LocalCommand=echo started",
                         "-o",  "PermitLocalCommand=yes"};
-        // if (verbosity >= lvlChatty) args.push_back("-v");
+        // if (verbosity >= lvlChatty) { args.push_back("-v"); }
         addCommonSSHOpts(args);
         execvp(args.begin()->c_str(), stringsToCharPtrs(args).data());
 

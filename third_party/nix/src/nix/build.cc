@@ -51,8 +51,12 @@ struct CmdBuild : MixDryRun, InstallablesCommand {
         for (auto& output : b.outputs)
           if (auto store2 = store.dynamic_pointer_cast<LocalFSStore>()) {
             std::string symlink = outLink;
-            if (i) symlink += fmt("-%d", i);
-            if (output.first != "out") symlink += fmt("-%s", output.first);
+            if (i) {
+              symlink += fmt("-%d", i);
+            }
+            if (output.first != "out") {
+              symlink += fmt("-%s", output.first);
+            }
             store2->addPermRoot(output.second, absPath(symlink), true);
           }
     }

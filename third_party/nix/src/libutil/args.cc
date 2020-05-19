@@ -9,7 +9,9 @@ Args::FlagMaker Args::mkFlag() { return FlagMaker(*this); }
 Args::FlagMaker::~FlagMaker() {
   assert(flag->longName != "");
   args.longFlags[flag->longName] = flag;
-  if (flag->shortName) args.shortFlags[flag->shortName] = flag;
+  if (flag->shortName) {
+    args.shortFlags[flag->shortName] = flag;
+  }
 }
 
 void Args::parseCmdline(const Strings& _cmdline) {
@@ -46,7 +48,9 @@ void Args::parseCmdline(const Strings& _cmdline) {
         throw UsageError(format("unrecognised flag '%1%'") % arg);
     } else {
       pendingArgs.push_back(*pos++);
-      if (processArgs(pendingArgs, false)) pendingArgs.clear();
+      if (processArgs(pendingArgs, false)) {
+        pendingArgs.clear();
+      }
     }
   }
 
@@ -58,13 +62,19 @@ void Args::printHelp(const string& programName, std::ostream& out) {
   for (auto& exp : expectedArgs) {
     std::cout << renderLabels({exp.label});
     // FIXME: handle arity > 1
-    if (exp.arity == 0) std::cout << "...";
-    if (exp.optional) std::cout << "?";
+    if (exp.arity == 0) {
+      std::cout << "...";
+    }
+    if (exp.optional) {
+      std::cout << "?";
+    }
   }
   std::cout << "\n";
 
   auto s = description();
-  if (s != "") std::cout << "\nSummary: " << s << ".\n";
+  if (s != "") {
+    std::cout << "\nSummary: " << s << ".\n";
+  }
 
   if (longFlags.size()) {
     std::cout << "\n";
@@ -76,7 +86,9 @@ void Args::printHelp(const string& programName, std::ostream& out) {
 void Args::printFlags(std::ostream& out) {
   Table2 table;
   for (auto& flag : longFlags) {
-    if (hiddenCategories.count(flag.second->category)) continue;
+    if (hiddenCategories.count(flag.second->category)) {
+      continue;
+    }
     table.push_back(std::make_pair(
         (flag.second->shortName
              ? std::string("-") + flag.second->shortName + ", "
@@ -95,7 +107,9 @@ bool Args::processFlag(Strings::iterator& pos, Strings::iterator end) {
     std::vector<std::string> args;
     for (size_t n = 0; n < flag.arity; ++n) {
       if (pos == end) {
-        if (flag.arity == ArityAny) break;
+        if (flag.arity == ArityAny) {
+          break;
+        }
         throw UsageError(format("flag '%1%' requires %2% argument(s)") % name %
                          flag.arity);
       }
@@ -107,14 +121,18 @@ bool Args::processFlag(Strings::iterator& pos, Strings::iterator end) {
 
   if (string(*pos, 0, 2) == "--") {
     auto i = longFlags.find(string(*pos, 2));
-    if (i == longFlags.end()) return false;
+    if (i == longFlags.end()) {
+      return false;
+    }
     return process("--" + i->first, *i->second);
   }
 
   if (string(*pos, 0, 1) == "-" && pos->size() == 2) {
     auto c = (*pos)[1];
     auto i = shortFlags.find(c);
-    if (i == shortFlags.end()) return false;
+    if (i == shortFlags.end()) {
+      return false;
+    }
     return process(std::string("-") + c, *i->second);
   }
 
@@ -153,7 +171,9 @@ Args::FlagMaker& Args::FlagMaker::mkHashTypeFlag(HashType* ht) {
   description("hash algorithm ('md5', 'sha1', 'sha256', or 'sha512')");
   handler([ht](std::string s) {
     *ht = parseHashType(s);
-    if (*ht == htUnknown) throw UsageError("unknown hash type '%1%'", s);
+    if (*ht == htUnknown) {
+      throw UsageError("unknown hash type '%1%'", s);
+    }
   });
   return *this;
 }

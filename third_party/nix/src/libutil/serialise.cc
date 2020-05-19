@@ -11,7 +11,9 @@
 namespace nix {
 
 void BufferedSink::operator()(const unsigned char* data, size_t len) {
-  if (!buffer) buffer = decltype(buffer)(new unsigned char[bufSize]);
+  if (!buffer) {
+    buffer = decltype(buffer)(new unsigned char[bufSize]);
+  }
 
   while (len) {
     /* Optimisation: bypass the buffer if the data exceeds the
@@ -28,12 +30,16 @@ void BufferedSink::operator()(const unsigned char* data, size_t len) {
     data += n;
     bufPos += n;
     len -= n;
-    if (bufPos == bufSize) flush();
+    if (bufPos == bufSize) {
+      flush();
+    }
   }
 }
 
 void BufferedSink::flush() {
-  if (bufPos == 0) return;
+  if (bufPos == 0) {
+    return;
+  }
   size_t n = bufPos;
   bufPos = 0;  // don't trigger the assert() in ~BufferedSink()
   write(buffer.get(), n);
@@ -97,15 +103,21 @@ std::string Source::drain() {
 }
 
 size_t BufferedSource::read(unsigned char* data, size_t len) {
-  if (!buffer) buffer = decltype(buffer)(new unsigned char[bufSize]);
+  if (!buffer) {
+    buffer = decltype(buffer)(new unsigned char[bufSize]);
+  }
 
-  if (!bufPosIn) bufPosIn = readUnbuffered(buffer.get(), bufSize);
+  if (!bufPosIn) {
+    bufPosIn = readUnbuffered(buffer.get(), bufSize);
+  }
 
   /* Copy out the data in the buffer. */
   size_t n = len > bufPosIn - bufPosOut ? bufPosIn - bufPosOut : len;
   memcpy(data, buffer.get() + bufPosOut, n);
   bufPosOut += n;
-  if (bufPosIn == bufPosOut) bufPosIn = bufPosOut = 0;
+  if (bufPosIn == bufPosOut) {
+    bufPosIn = bufPosOut = 0;
+  }
   return n;
 }
 
@@ -132,7 +144,9 @@ size_t FdSource::readUnbuffered(unsigned char* data, size_t len) {
 bool FdSource::good() { return _good; }
 
 size_t StringSource::read(unsigned char* data, size_t len) {
-  if (pos == s.size()) throw EndOfFile("end of string reached");
+  if (pos == s.size()) {
+    throw EndOfFile("end of string reached");
+  }
   size_t n = s.copy((char*)data, len, pos);
   pos += n;
   return n;
@@ -162,7 +176,9 @@ std::unique_ptr<Source> sinkToSource(std::function<void(Sink&)> fun,
       if (!coro)
         coro = coro_t::pull_type([&](coro_t::push_type& yield) {
           LambdaSink sink([&](const unsigned char* data, size_t len) {
-            if (len) yield(std::string((const char*)data, len));
+            if (len) {
+              yield(std::string((const char*)data, len));
+            }
           });
           fun(sink);
         });
@@ -232,13 +248,17 @@ void readPadding(size_t len, Source& source) {
     size_t n = 8 - (len % 8);
     source(zero, n);
     for (unsigned int i = 0; i < n; i++)
-      if (zero[i]) throw SerialisationError("non-zero padding");
+      if (zero[i]) {
+        throw SerialisationError("non-zero padding");
+      }
   }
 }
 
 size_t readString(unsigned char* buf, size_t max, Source& source) {
   auto len = readNum<size_t>(source);
-  if (len > max) throw SerialisationError("string is too long");
+  if (len > max) {
+    throw SerialisationError("string is too long");
+  }
   source(buf, len);
   readPadding(len, source);
   return len;
@@ -246,7 +266,9 @@ size_t readString(unsigned char* buf, size_t max, Source& source) {
 
 string readString(Source& source, size_t max) {
   auto len = readNum<size_t>(source);
-  if (len > max) throw SerialisationError("string is too long");
+  if (len > max) {
+    throw SerialisationError("string is too long");
+  }
   std::string res(len, 0);
   source((unsigned char*)res.data(), len);
   readPadding(len, source);

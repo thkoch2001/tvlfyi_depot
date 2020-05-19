@@ -49,7 +49,9 @@ static int _main(int argc, char** argv) {
 
     initPlugins();
 
-    if (sshHost.empty()) throw UsageError("no host name specified");
+    if (sshHost.empty()) {
+      throw UsageError("no host name specified");
+    }
 
     auto remoteUri = "ssh://" + sshHost + (gzip ? "?compress=true" : "");
     auto to = toMode ? openStore(remoteUri) : openStore();

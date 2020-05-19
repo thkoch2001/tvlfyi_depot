@@ -46,7 +46,9 @@ static void dumpContents(const Path& path, size_t size, Sink& sink) {
   sink << "contents" << size;
 
   AutoCloseFD fd = open(path.c_str(), O_RDONLY | O_CLOEXEC);
-  if (!fd) throw SysError(format("opening file '%1%'") % path);
+  if (!fd) {
+    throw SysError(format("opening file '%1%'") % path);
+  }
 
   std::vector<unsigned char> buf(65536);
   size_t left = size;
@@ -162,7 +164,9 @@ static void parseContents(ParseSink& sink, Source& source, const Path& path) {
   while (left) {
     checkInterrupt();
     auto n = buf.size();
-    if ((unsigned long long)n > left) n = left;
+    if ((unsigned long long)n > left) {
+      n = left;
+    }
     source(buf.data(), n);
     sink.receiveContents(buf.data(), n);
     left -= n;
@@ -181,7 +185,9 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
   string s;
 
   s = readString(source);
-  if (s != "(") throw badArchive("expected open tag");
+  if (s != "(") {
+    throw badArchive("expected open tag");
+  }
 
   enum { tpUnknown, tpRegular, tpDirectory, tpSymlink } type = tpUnknown;
 
@@ -197,7 +203,9 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
     }
 
     else if (s == "type") {
-      if (type != tpUnknown) throw badArchive("multiple type fields");
+      if (type != tpUnknown) {
+        throw badArchive("multiple type fields");
+      }
       string t = readString(source);
 
       if (t == "regular") {
@@ -225,7 +233,9 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
 
     else if (s == "executable" && type == tpRegular) {
       auto s = readString(source);
-      if (s != "") throw badArchive("executable marker has non-empty value");
+      if (s != "") {
+        throw badArchive("executable marker has non-empty value");
+      }
       sink.isExecutable();
     }
 
@@ -233,7 +243,9 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
       string name, prevName;
 
       s = readString(source);
-      if (s != "(") throw badArchive("expected open tag");
+      if (s != "(") {
+        throw badArchive("expected open tag");
+      }
 
       while (1) {
         checkInterrupt();
@@ -248,7 +260,9 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
               name.find('/') != string::npos ||
               name.find((char)0) != string::npos)
             throw Error(format("NAR contains invalid file name '%1%'") % name);
-          if (name <= prevName) throw Error("NAR directory is not sorted");
+          if (name <= prevName) {
+            throw Error("NAR directory is not sorted");
+          }
           prevName = name;
           if (archiveSettings.useCaseHack) {
             auto i = names.find(name);
@@ -306,12 +320,16 @@ struct RestoreSink : ParseSink {
   void createRegularFile(const Path& path) {
     Path p = dstPath + path;
     fd = open(p.c_str(), O_CREAT | O_EXCL | O_WRONLY | O_CLOEXEC, 0666);
-    if (!fd) throw SysError(format("creating file '%1%'") % p);
+    if (!fd) {
+      throw SysError(format("creating file '%1%'") % p);
+    }
   }
 
   void isExecutable() {
     struct stat st;
-    if (fstat(fd.get(), &st) == -1) throw SysError("fstat");
+    if (fstat(fd.get(), &st) == -1) {
+      throw SysError("fstat");
+    }
     if (fchmod(fd.get(), st.st_mode | (S_IXUSR | S_IXGRP | S_IXOTH)) == -1)
       throw SysError("fchmod");
   }

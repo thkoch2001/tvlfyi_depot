@@ -26,7 +26,9 @@ static void readChannels() {
   for (const auto& line :
        tokenizeString<std::vector<string>>(channelsFile, "\n")) {
     chomp(line);
-    if (std::regex_search(line, std::regex("^\\s*\\#"))) continue;
+    if (std::regex_search(line, std::regex("^\\s*\\#"))) {
+      continue;
+    }
     auto split = tokenizeString<std::vector<string>>(line, " ");
     auto url = std::regex_replace(split[0], std::regex("/*$"), "");
     auto name = split.size() > 1 ? split[1] : baseNameOf(url);
@@ -80,7 +82,9 @@ static void update(const StringSet& channelNames) {
   for (const auto& channel : channels) {
     auto name = channel.first;
     auto url = channel.second;
-    if (!(channelNames.empty() || channelNames.count(name))) continue;
+    if (!(channelNames.empty() || channelNames.count(name))) {
+      continue;
+    }
 
     // We want to download the url to a file to see if it's a tarball while also
     // checking if we got redirected in the process, so that we can grab the
@@ -225,7 +229,9 @@ static int _main(int argc, char** argv) {
         removeChannel(args[0]);
         break;
       case cList:
-        if (!args.empty()) throw UsageError("'--list' expects no arguments");
+        if (!args.empty()) {
+          throw UsageError("'--list' expects no arguments");
+        }
         readChannels();
         for (const auto& channel : channels)
           std::cout << channel.first << ' ' << channel.second << '\n';

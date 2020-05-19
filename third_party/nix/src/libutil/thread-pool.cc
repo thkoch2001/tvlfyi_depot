@@ -10,7 +10,9 @@ ThreadPool::ThreadPool(size_t _maxThreads) : maxThreads(_maxThreads) {
 
   if (!maxThreads) {
     maxThreads = std::thread::hardware_concurrency();
-    if (!maxThreads) maxThreads = 1;
+    if (!maxThreads) {
+      maxThreads = 1;
+    }
   }
 
   DLOG(INFO) << "starting pool of " << maxThreads - 1 << " threads";
@@ -26,7 +28,9 @@ void ThreadPool::shutdown() {
     std::swap(workers, state->workers);
   }
 
-  if (workers.empty()) return;
+  if (workers.empty()) {
+    return;
+  }
 
   DLOG(INFO) << "reaping " << workers.size() << " worker threads";
 
@@ -62,7 +66,9 @@ void ThreadPool::process() {
 
     assert(quit);
 
-    if (state->exception) std::rethrow_exception(state->exception);
+    if (state->exception) {
+      std::rethrow_exception(state->exception);
+    }
 
   } catch (...) {
     /* In the exceptional case, some workers may still be
@@ -76,7 +82,9 @@ void ThreadPool::process() {
 }
 
 void ThreadPool::doWork(bool mainThread) {
-  if (!mainThread) interruptCheck = [&]() { return (bool)quit; };
+  if (!mainThread) {
+    interruptCheck = [&]() { return (bool)quit; };
+  }
 
   bool didWork = false;
   std::exception_ptr exc;
@@ -114,9 +122,13 @@ void ThreadPool::doWork(bool mainThread) {
       /* Wait until a work item is available or we're asked to
          quit. */
       while (true) {
-        if (quit) return;
+        if (quit) {
+          return;
+        }
 
-        if (!state->pending.empty()) break;
+        if (!state->pending.empty()) {
+          break;
+        }
 
         /* If there are no active or pending items, and the
            main thread is running process(), then no new items

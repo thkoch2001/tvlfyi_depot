@@ -50,7 +50,9 @@ void parseMachines(const std::string& s, Machines& machines) {
   for (auto line : tokenizeString<std::vector<string>>(s, "\n;")) {
     trim(line);
     line.erase(std::find(line.begin(), line.end(), '#'), line.end());
-    if (line.empty()) continue;
+    if (line.empty()) {
+      continue;
+    }
 
     if (line[0] == '@') {
       auto file = trim(std::string(line, 1));

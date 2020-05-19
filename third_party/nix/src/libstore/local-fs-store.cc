@@ -68,7 +68,9 @@ ref<FSAccessor> LocalFSStore::getFSAccessor() {
 }
 
 void LocalFSStore::narFromPath(const Path& path, Sink& sink) {
-  if (!isValidPath(path)) throw Error(format("path '%s' is not valid") % path);
+  if (!isValidPath(path)) {
+    throw Error(format("path '%s' is not valid") % path);
+  }
   dumpPath(getRealStoreDir() + std::string(path, storeDir.size()), sink);
 }
 
@@ -85,7 +87,9 @@ std::shared_ptr<std::string> LocalFSStore::getBuildLog(const Path& path_) {
     } catch (InvalidPath&) {
       return nullptr;
     }
-    if (path == "") return nullptr;
+    if (path == "") {
+      return nullptr;
+    }
   }
 
   string baseName = baseNameOf(path);

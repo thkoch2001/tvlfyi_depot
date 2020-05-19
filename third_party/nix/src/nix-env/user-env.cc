@@ -31,7 +31,9 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
      exist already. */
   PathSet drvsToBuild;
   for (auto& i : elems)
-    if (i.queryDrvPath() != "") drvsToBuild.insert(i.queryDrvPath());
+    if (i.queryDrvPath() != "") {
+      drvsToBuild.insert(i.queryDrvPath());
+    }
 
   DLOG(INFO) << "building user environment dependencies";
   state.store->buildPaths(drvsToBuild, state.repair ? bmRepair : bmNormal);
@@ -54,7 +56,9 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
     mkString(*state.allocAttr(v, state.sType), "derivation");
     mkString(*state.allocAttr(v, state.sName), i.queryName());
     auto system = i.querySystem();
-    if (!system.empty()) mkString(*state.allocAttr(v, state.sSystem), system);
+    if (!system.empty()) {
+      mkString(*state.allocAttr(v, state.sSystem), system);
+    }
     mkString(*state.allocAttr(v, state.sOutPath), i.queryOutPath());
     if (drvPath != "")
       mkString(*state.allocAttr(v, state.sDrvPath), i.queryDrvPath());
@@ -84,13 +88,17 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
     StringSet metaNames = i.queryMetaNames();
     for (auto& j : metaNames) {
       Value* v = i.queryMeta(j);
-      if (!v) continue;
+      if (!v) {
+        continue;
+      }
       vMeta.attrs->push_back(Attr(state.symbols.create(j), v));
     }
     vMeta.attrs->sort();
     v.attrs->sort();
 
-    if (drvPath != "") references.insert(drvPath);
+    if (drvPath != "") {
+      references.insert(drvPath);
+    }
   }
 
   /* Also write a copy of the list of user environment elements to

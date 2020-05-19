@@ -59,7 +59,9 @@ Paths Store::importPaths(Source& source, std::shared_ptr<FSAccessor> accessor,
   Paths res;
   while (true) {
     auto n = readNum<uint64_t>(source);
-    if (n == 0) break;
+    if (n == 0) {
+      break;
+    }
     if (n != 1)
       throw Error(
           "input doesn't look like something created by 'nix-store --export'");
@@ -82,13 +84,17 @@ Paths Store::importPaths(Source& source, std::shared_ptr<FSAccessor> accessor,
     info.references = readStorePaths<PathSet>(*this, source);
 
     info.deriver = readString(source);
-    if (info.deriver != "") assertStorePath(info.deriver);
+    if (info.deriver != "") {
+      assertStorePath(info.deriver);
+    }
 
     info.narHash = hashString(htSHA256, *tee.source.data);
     info.narSize = tee.source.data->size();
 
     // Ignore optional legacy signature.
-    if (readInt(source) == 1) readString(source);
+    if (readInt(source) == 1) {
+      readString(source);
+    }
 
     addToStore(info, tee.source.data, NoRepair, checkSigs, accessor);
 

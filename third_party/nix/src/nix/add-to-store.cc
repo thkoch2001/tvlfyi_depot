@@ -27,7 +27,9 @@ struct CmdAddToStore : MixDryRun, StoreCommand {
   Examples examples() override { return {}; }
 
   void run(ref<Store> store) override {
-    if (!namePart) namePart = baseNameOf(path);
+    if (!namePart) {
+      namePart = baseNameOf(path);
+    }
 
     StringSink sink;
     dumpPath(path, sink);
@@ -38,7 +40,9 @@ struct CmdAddToStore : MixDryRun, StoreCommand {
     info.path = store->makeFixedOutputPath(true, info.narHash, *namePart);
     info.ca = makeFixedOutputCA(true, info.narHash);
 
-    if (!dryRun) store->addToStore(info, sink.s);
+    if (!dryRun) {
+      store->addToStore(info, sink.s);
+    }
 
     std::cout << fmt("%s\n", info.path);
   }

@@ -97,15 +97,23 @@ struct CmdPathInfo : StorePathsCommand, MixJSON {
           std::cout << std::string(
               std::max(0, (int)pathLen - (int)storePath.size()), ' ');
 
-        if (showSize) printSize(info->narSize);
+        if (showSize) {
+          printSize(info->narSize);
+        }
 
-        if (showClosureSize) printSize(store->getClosureSize(storePath).first);
+        if (showClosureSize) {
+          printSize(store->getClosureSize(storePath).first);
+        }
 
         if (showSigs) {
           std::cout << '\t';
           Strings ss;
-          if (info->ultimate) ss.push_back("ultimate");
-          if (info->ca != "") ss.push_back("ca:" + info->ca);
+          if (info->ultimate) {
+            ss.push_back("ultimate");
+          }
+          if (info->ca != "") {
+            ss.push_back("ca:" + info->ca);
+          }
           for (auto& sig : info->sigs) ss.push_back(sig);
           std::cout << concatStringsSep(" ", ss);
         }

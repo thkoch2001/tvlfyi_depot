@@ -29,7 +29,9 @@ struct MakeReadOnly {
   ~MakeReadOnly() {
     try {
       /* This will make the path read-only. */
-      if (path != "") canonicaliseTimestampAndPermissions(path);
+      if (path != "") {
+        canonicaliseTimestampAndPermissions(path);
+      }
     } catch (...) {
       ignoreException();
     }
@@ -79,7 +81,9 @@ Strings LocalStore::readDirectoryIgnoringInodes(const Path& path,
     }
 
     string name = dirent->d_name;
-    if (name == "." || name == "..") continue;
+    if (name == "." || name == "..") {
+      continue;
+    }
     names.push_back(name);
   }
   if (errno) {
@@ -261,7 +265,9 @@ void LocalStore::optimiseStore(OptimiseStats& stats) {
 
   for (auto& i : paths) {
     addTempRoot(i);
-    if (!isValidPath(i)) continue; /* path was GC'ed, probably */
+    if (!isValidPath(i)) {
+      continue;
+    } /* path was GC'ed, probably */
     {
       LOG(INFO) << "optimising path '" << i << "'";
       optimisePath_(stats, realStoreDir + "/" + baseNameOf(i), inodeHash);

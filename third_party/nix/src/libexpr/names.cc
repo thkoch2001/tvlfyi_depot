@@ -28,9 +28,13 @@ bool DrvName::matches(DrvName& n) {
     if (!regex)
       regex = std::unique_ptr<std::regex>(
           new std::regex(name, std::regex::extended));
-    if (!std::regex_match(n.name, *regex)) return false;
+    if (!std::regex_match(n.name, *regex)) {
+      return false;
+    }
   }
-  if (version != "" && version != n.version) return false;
+  if (version != "" && version != n.version) {
+    return false;
+  }
   return true;
 }
 
@@ -39,7 +43,9 @@ string nextComponent(string::const_iterator& p,
   /* Skip any dots and dashes (component separators). */
   while (p != end && (*p == '.' || *p == '-')) ++p;
 
-  if (p == end) return "";
+  if (p == end) {
+    return "";
+  }
 
   /* If the first character is a digit, consume the longest sequence
      of digits.  Otherwise, consume the longest sequence of

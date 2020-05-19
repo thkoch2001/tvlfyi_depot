@@ -163,7 +163,9 @@ struct RegisterCommand {
   static Commands* commands;
 
   RegisterCommand(ref<Command> command) {
-    if (!commands) commands = new Commands;
+    if (!commands) {
+      commands = new Commands;
+    }
     commands->emplace(command->name(), command);
   }
 };

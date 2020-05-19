@@ -11,7 +11,9 @@ namespace nix {
 
 RemoteFSAccessor::RemoteFSAccessor(ref<Store> store, const Path& cacheDir)
     : store(store), cacheDir(cacheDir) {
-  if (cacheDir != "") createDirs(cacheDir);
+  if (cacheDir != "") {
+    createDirs(cacheDir);
+  }
 }
 
 Path RemoteFSAccessor::makeCacheFile(const Path& storePath,
@@ -51,7 +53,9 @@ std::pair<ref<FSAccessor>, Path> RemoteFSAccessor::fetch(const Path& path_) {
                       storePath);
 
   auto i = nars.find(storePath);
-  if (i != nars.end()) return {i->second, restPath};
+  if (i != nars.end()) {
+    return {i->second, restPath};
+  }
 
   StringSink sink;
   std::string listing;
@@ -65,7 +69,9 @@ std::pair<ref<FSAccessor>, Path> RemoteFSAccessor::fetch(const Path& path_) {
       auto narAccessor = makeLazyNarAccessor(
           listing, [cacheFile](uint64_t offset, uint64_t length) {
             AutoCloseFD fd = open(cacheFile.c_str(), O_RDONLY | O_CLOEXEC);
-            if (!fd) throw SysError("opening NAR cache file '%s'", cacheFile);
+            if (!fd) {
+              throw SysError("opening NAR cache file '%s'", cacheFile);
+            }
 
             if (lseek(fd.get(), offset, SEEK_SET) != (off_t)offset)
               throw SysError("seeking in '%s'", cacheFile);

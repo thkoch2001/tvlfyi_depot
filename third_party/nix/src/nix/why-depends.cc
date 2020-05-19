@@ -145,7 +145,9 @@ struct CmdWhyDepends : SourceExprCommand {
       if (node.path == dependencyPath && !all && packagePath != dependencyPath)
         throw BailOut();
 
-      if (node.visited) return;
+      if (node.visited) {
+        return;
+      }
       node.visited = true;
 
       /* Sort the references by distance to `dependency` to
@@ -154,9 +156,13 @@ struct CmdWhyDepends : SourceExprCommand {
       std::set<std::string> hashes;
 
       for (auto& ref : node.refs) {
-        if (ref == node.path && packagePath != dependencyPath) continue;
+        if (ref == node.path && packagePath != dependencyPath) {
+          continue;
+        }
         auto& node2 = graph.at(ref);
-        if (node2.dist == inf) continue;
+        if (node2.dist == inf) {
+          continue;
+        }
         refs.emplace(node2.dist, &node2);
         hashes.insert(storePathToHash(node2.path));
       }
@@ -228,7 +234,9 @@ struct CmdWhyDepends : SourceExprCommand {
                     << (first ? (last ? treeLast : treeConn)
                               : (last ? treeNull : treeLine))
                     << hit;
-          if (!all) break;
+          if (!all) {
+            break;
+          }
         }
 
         printNode(*ref.second, tailPad + (last ? treeNull : treeLine),

@@ -37,7 +37,9 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
       runProgram("git", true,
                  {"-C", uri, "diff-index", "--quiet", "HEAD", "--"});
     } catch (ExecError& e) {
-      if (!WIFEXITED(e.status) || WEXITSTATUS(e.status) != 1) throw;
+      if (!WIFEXITED(e.status) || WEXITSTATUS(e.status) != 1) {
+        throw;
+      }
       clean = false;
     }
 
@@ -78,7 +80,9 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
     ref = "HEAD"s;
   }
 
-  if (!ref) ref = "HEAD"s;
+  if (!ref) {
+    ref = "HEAD"s;
+  }
 
   if (rev != "" && !std::regex_match(rev, revRegex))
     throw Error("invalid Git revision '%s'", rev);
@@ -166,7 +170,9 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
     }
 
   } catch (SysError& e) {
-    if (e.errNo != ENOENT) throw;
+    if (e.errNo != ENOENT) {
+      throw;
+    }
   }
 
   // FIXME: should pipe this, or find some better way to extract a

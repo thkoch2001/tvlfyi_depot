@@ -153,7 +153,9 @@ S3Helper::DownloadResult S3Helper::getObject(const std::string& bucketName,
                    dynamic_cast<std::stringstream&>(result.GetBody()).str());
 
   } catch (S3Error& e) {
-    if (e.err != Aws::S3::S3Errors::NO_SUCH_KEY) throw;
+    if (e.err != Aws::S3::S3Errors::NO_SUCH_KEY) {
+      throw;
+    }
   }
 
   auto now2 = std::chrono::steady_clock::now();
@@ -315,7 +317,9 @@ struct S3BinaryCacheStoreImpl : public S3BinaryCacheStore {
 
       request.SetContentType(mimeType);
 
-      if (contentEncoding != "") request.SetContentEncoding(contentEncoding);
+      if (contentEncoding != "") {
+        request.SetContentEncoding(contentEncoding);
+      }
 
       auto stream = std::make_shared<istringstream_nocopy>(data);
 
@@ -394,7 +398,9 @@ struct S3BinaryCacheStoreImpl : public S3BinaryCacheStore {
 
       for (auto object : contents) {
         auto& key = object.GetKey();
-        if (key.size() != 40 || !hasSuffix(key, ".narinfo")) continue;
+        if (key.size() != 40 || !hasSuffix(key, ".narinfo")) {
+          continue;
+        }
         paths.insert(storeDir + "/" + key.substr(0, key.size() - 8));
       }
 
@@ -408,7 +414,9 @@ struct S3BinaryCacheStoreImpl : public S3BinaryCacheStore {
 static RegisterStoreImplementation regStore(
     [](const std::string& uri,
        const Store::Params& params) -> std::shared_ptr<Store> {
-      if (std::string(uri, 0, 5) != "s3://") return 0;
+      if (std::string(uri, 0, 5) != "s3://") {
+        return 0;
+      }
       auto store =
           std::make_shared<S3BinaryCacheStoreImpl>(params, std::string(uri, 5));
       store->init();

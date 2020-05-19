@@ -244,7 +244,9 @@ struct CmdSearch : SourceExprCommand, MixJSON {
         /* Fun fact: catching std::ios::failure does not work
            due to C++11 ABI shenanigans.
            https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66145 */
-        if (!jsonCacheFile) throw Error("error writing to %s", tmpFile);
+        if (!jsonCacheFile) {
+          throw Error("error writing to %s", tmpFile);
+        }
         throw;
       }
 

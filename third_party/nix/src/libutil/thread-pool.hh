@@ -78,7 +78,9 @@ void processGraph(ThreadPool& pool, const std::set<T>& nodes,
     {
       auto graph(graph_.lock());
       auto i = graph->refs.find(node);
-      if (i == graph->refs.end()) goto getRefs;
+      if (i == graph->refs.end()) {
+        goto getRefs;
+      }
       goto doWork;
     }
 
@@ -93,7 +95,9 @@ void processGraph(ThreadPool& pool, const std::set<T>& nodes,
           graph->refs[node].insert(ref);
           graph->rrefs[ref].insert(node);
         }
-      if (graph->refs[node].empty()) goto doWork;
+      if (graph->refs[node].empty()) {
+        goto doWork;
+      }
     }
   }
 
@@ -111,7 +115,9 @@ void processGraph(ThreadPool& pool, const std::set<T>& nodes,
         auto i = refs.find(node);
         assert(i != refs.end());
         refs.erase(i);
-        if (refs.empty()) pool.enqueue(std::bind(worker, rref));
+        if (refs.empty()) {
+          pool.enqueue(std::bind(worker, rref));
+        }
       }
       graph->left.erase(node);
       graph->refs.erase(node);

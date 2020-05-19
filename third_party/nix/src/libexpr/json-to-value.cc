@@ -12,9 +12,13 @@ static void skipWhitespace(const char*& s) {
 
 static string parseJSONString(const char*& s) {
   string res;
-  if (*s++ != '"') throw JSONParseError("expected JSON string");
+  if (*s++ != '"') {
+    throw JSONParseError("expected JSON string");
+  }
   while (*s != '"') {
-    if (!*s) throw JSONParseError("got end-of-string in JSON string");
+    if (!*s) {
+      throw JSONParseError("got end-of-string in JSON string");
+    }
     if (*s == '\\') {
       s++;
       if (*s == '"')
@@ -52,7 +56,9 @@ static string parseJSONString(const char*& s) {
 static void parseJSON(EvalState& state, const char*& s, Value& v) {
   skipWhitespace(s);
 
-  if (!*s) throw JSONParseError("expected JSON value");
+  if (!*s) {
+    throw JSONParseError("expected JSON value");
+  }
 
   if (*s == '[') {
     s++;
@@ -60,7 +66,9 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
     values.reserve(128);
     skipWhitespace(s);
     while (1) {
-      if (values.empty() && *s == ']') break;
+      if (values.empty() && *s == ']') {
+        break;
+      }
       Value* v2 = state.allocValue();
       parseJSON(state, s, *v2);
       values.push_back(v2);
@@ -82,10 +90,14 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
     ValueMap attrs;
     while (1) {
       skipWhitespace(s);
-      if (attrs.empty() && *s == '}') break;
+      if (attrs.empty() && *s == '}') {
+        break;
+      }
       string name = parseJSONString(s);
       skipWhitespace(s);
-      if (*s != ':') throw JSONParseError("expected ':' in JSON object");
+      if (*s != ':') {
+        throw JSONParseError("expected ':' in JSON object");
+      }
       s++;
       Value* v2 = state.allocValue();
       parseJSON(state, s, *v2);
@@ -114,7 +126,9 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
     ValueType number_type = tInt;
 
     while (isdigit(*s) || *s == '-' || *s == '.' || *s == 'e' || *s == 'E') {
-      if (*s == '.' || *s == 'e' || *s == 'E') number_type = tFloat;
+      if (*s == '.' || *s == 'e' || *s == 'E') {
+        number_type = tFloat;
+      }
       tmp_number += *s++;
     }
 

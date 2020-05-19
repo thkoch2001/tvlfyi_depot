@@ -57,8 +57,12 @@ bool lockFile(int fd, LockType lockType, bool wait) {
   } else {
     while (flock(fd, type | LOCK_NB) != 0) {
       checkInterrupt();
-      if (errno == EWOULDBLOCK) return false;
-      if (errno != EINTR) throw SysError(format("acquiring/releasing lock"));
+      if (errno == EWOULDBLOCK) {
+        return false;
+      }
+      if (errno != EINTR) {
+        throw SysError(format("acquiring/releasing lock"));
+      }
     }
   }
 
@@ -143,7 +147,9 @@ PathLocks::~PathLocks() {
 
 void PathLocks::unlock() {
   for (auto& i : fds) {
-    if (deletePaths) deleteLockFile(i.second, i.first);
+    if (deletePaths) {
+      deleteLockFile(i.second, i.first);
+    }
 
     if (close(i.first) == -1) {
       LOG(WARNING) << "cannot close lock file on '" << i.second << "'";

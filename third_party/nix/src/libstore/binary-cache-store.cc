@@ -38,7 +38,9 @@ void BinaryCacheStore::init() {
   } else {
     for (auto& line : tokenizeString<Strings>(*cacheInfo, "\n")) {
       size_t colon = line.find(':');
-      if (colon == std::string::npos) continue;
+      if (colon == std::string::npos) {
+        continue;
+      }
       auto name = line.substr(0, colon);
       auto value = trim(line.substr(colon + 1, std::string::npos));
       if (name == "StoreDir") {
@@ -115,12 +117,16 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
                                   const ref<std::string>& nar,
                                   RepairFlag repair, CheckSigsFlag checkSigs,
                                   std::shared_ptr<FSAccessor> accessor) {
-  if (!repair && isValidPath(info.path)) return;
+  if (!repair && isValidPath(info.path)) {
+    return;
+  }
 
   /* Verify that all references are valid. This may do some .narinfo
      reads, but typically they'll already be cached. */
   for (auto& ref : info.references) try {
-      if (ref != info.path) queryPathInfo(ref);
+      if (ref != info.path) {
+        queryPathInfo(ref);
+      }
     } catch (InvalidPath&) {
       throw Error(format("cannot add '%s' to the binary cache because the "
                          "reference '%s' is not valid") %
@@ -152,7 +158,9 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
 
       auto narAccessor = makeNarAccessor(nar);
 
-      if (accessor_) accessor_->addToCache(info.path, *nar, narAccessor);
+      if (accessor_) {
+        accessor_->addToCache(info.path, *nar, narAccessor);
+      }
 
       {
         auto res = jsonRoot.placeholder("root");
@@ -165,7 +173,9 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
   }
 
   else {
-    if (accessor_) accessor_->addToCache(info.path, *nar, makeNarAccessor(nar));
+    if (accessor_) {
+      accessor_->addToCache(info.path, *nar, makeNarAccessor(nar));
+    }
   }
 
   /* Compress the NAR. */
@@ -201,7 +211,9 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
   stats.narWriteCompressionTimeMs += duration;
 
   /* Atomically write the NAR info file.*/
-  if (secretKey) narInfo->sign(*secretKey);
+  if (secretKey) {
+    narInfo->sign(*secretKey);
+  }
 
   writeNarInfo(narInfo);
 
@@ -254,7 +266,9 @@ void BinaryCacheStore::queryPathInfoUncached(
             try {
               auto data = fut.get();
 
-              if (!data) return (*callbackPtr)(nullptr);
+              if (!data) {
+                return (*callbackPtr)(nullptr);
+              }
 
               stats.narInfoRead++;
 
@@ -341,7 +355,9 @@ std::shared_ptr<std::string> BinaryCacheStore::getBuildLog(const Path& path) {
     try {
       auto info = queryPathInfo(path);
       // FIXME: add a "Log" field to .narinfo
-      if (info->deriver == "") return nullptr;
+      if (info->deriver == "") {
+        return nullptr;
+      }
       drvPath = info->deriver;
     } catch (InvalidPath&) {
       return nullptr;

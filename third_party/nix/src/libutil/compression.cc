@@ -138,7 +138,9 @@ struct BrotliDecompressionSink : ChunkedCompressionSink {
 
   BrotliDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
     state = BrotliDecoderCreateInstance(nullptr, nullptr, nullptr);
-    if (!state) throw CompressionError("unable to initialize brotli decoder");
+    if (!state) {
+      throw CompressionError("unable to initialize brotli decoder");
+    }
   }
 
   ~BrotliDecompressionSink() { BrotliDecoderDestroyInstance(state); }
@@ -214,7 +216,9 @@ struct XzCompressionSink : CompressionSink {
       mt_options.check = LZMA_CHECK_CRC64;
       mt_options.threads = lzma_cputhreads();
       mt_options.block_size = 0;
-      if (mt_options.threads == 0) mt_options.threads = 1;
+      if (mt_options.threads == 0) {
+        mt_options.threads = 1;
+      }
       // FIXME: maybe use lzma_stream_encoder_mt_memusage() to control the
       // number of threads.
       ret = lzma_stream_encoder_mt(&strm, &mt_options);
@@ -322,7 +326,9 @@ struct BrotliCompressionSink : ChunkedCompressionSink {
 
   BrotliCompressionSink(Sink& nextSink) : nextSink(nextSink) {
     state = BrotliEncoderCreateInstance(nullptr, nullptr, nullptr);
-    if (!state) throw CompressionError("unable to initialise brotli encoder");
+    if (!state) {
+      throw CompressionError("unable to initialise brotli encoder");
+    }
   }
 
   ~BrotliCompressionSink() { BrotliEncoderDestroyInstance(state); }

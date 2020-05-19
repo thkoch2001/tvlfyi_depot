@@ -99,7 +99,9 @@ struct LegacySSHStore : public Store {
 
       auto info = std::make_shared<ValidPathInfo>();
       conn->from >> info->path;
-      if (info->path.empty()) return callback(nullptr);
+      if (info->path.empty()) {
+        return callback(nullptr);
+      }
       assert(path == info->path);
 
       PathSet references;
@@ -253,7 +255,9 @@ struct LegacySSHStore : public Store {
 static RegisterStoreImplementation regStore(
     [](const std::string& uri,
        const Store::Params& params) -> std::shared_ptr<Store> {
-      if (std::string(uri, 0, uriScheme.size()) != uriScheme) return 0;
+      if (std::string(uri, 0, uriScheme.size()) != uriScheme) {
+        return 0;
+      }
       return std::make_shared<LegacySSHStore>(
           std::string(uri, uriScheme.size()), params);
     });

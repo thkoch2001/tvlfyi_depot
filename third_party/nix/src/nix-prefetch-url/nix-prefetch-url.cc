@@ -21,11 +21,15 @@ using namespace nix;
 /* If ‘uri’ starts with ‘mirror://’, then resolve it using the list of
    mirrors defined in Nixpkgs. */
 string resolveMirrorUri(EvalState& state, string uri) {
-  if (string(uri, 0, 9) != "mirror://") return uri;
+  if (string(uri, 0, 9) != "mirror://") {
+    return uri;
+  }
 
   string s(uri, 9);
   auto p = s.find('/');
-  if (p == string::npos) throw Error("invalid mirror URI");
+  if (p == string::npos) {
+    throw Error("invalid mirror URI");
+  }
   string mirrorName(s, 0, p);
 
   Value vMirrors;
@@ -92,7 +96,9 @@ static int _main(int argc, char** argv) {
 
     initPlugins();
 
-    if (args.size() > 2) throw UsageError("too many arguments");
+    if (args.size() > 2) {
+      throw UsageError("too many arguments");
+    }
 
     auto store = openStore();
     auto state = std::make_unique<EvalState>(myArgs.searchPath, store);
@@ -103,7 +109,9 @@ static int _main(int argc, char** argv) {
        expression. */
     string uri;
     if (!fromExpr) {
-      if (args.empty()) throw UsageError("you must specify a URI");
+      if (args.empty()) {
+        throw UsageError("you must specify a URI");
+      }
       uri = args[0];
     } else {
       Path path =
@@ -118,7 +126,9 @@ static int _main(int argc, char** argv) {
       if (attr == v.attrs->end())
         throw Error("attribute set does not contain a 'urls' attribute");
       state->forceList(*attr->value);
-      if (attr->value->listSize() < 1) throw Error("'urls' list is empty");
+      if (attr->value->listSize() < 1) {
+        throw Error("'urls' list is empty");
+      }
       uri = state->forceString(*attr->value->listElems()[0]);
 
       /* Extract the hash mode. */
@@ -131,12 +141,16 @@ static int _main(int argc, char** argv) {
       /* Extract the name. */
       if (name.empty()) {
         attr = v.attrs->find(state->symbols.create("name"));
-        if (attr != v.attrs->end()) name = state->forceString(*attr->value);
+        if (attr != v.attrs->end()) {
+          name = state->forceString(*attr->value);
+        }
       }
     }
 
     /* Figure out a name in the Nix store. */
-    if (name.empty()) name = baseNameOf(uri);
+    if (name.empty()) {
+      name = baseNameOf(uri);
+    }
     if (name.empty())
       throw Error(format("cannot figure out file name for '%1%'") % uri);
 
@@ -163,7 +177,9 @@ static int _main(int argc, char** argv) {
       {
         AutoCloseFD fd =
             open(tmpFile.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600);
-        if (!fd) throw SysError("creating temporary file '%s'", tmpFile);
+        if (!fd) {
+          throw SysError("creating temporary file '%s'", tmpFile);
+        }
 
         FdSink sink(fd.get());
 
@@ -213,7 +229,9 @@ static int _main(int argc, char** argv) {
     }
 
     std::cout << printHash16or32(hash) << std::endl;
-    if (printPath) std::cout << storePath << std::endl;
+    if (printPath) {
+      std::cout << storePath << std::endl;
+    }
 
     return 0;
   }

@@ -30,10 +30,14 @@ std::set<string> readCacheFile(const Path& file) {
 
 std::set<std::string> runResolver(const Path& filename) {
   AutoCloseFD fd = open(filename.c_str(), O_RDONLY);
-  if (!fd) throw SysError("opening '%s'", filename);
+  if (!fd) {
+    throw SysError("opening '%s'", filename);
+  }
 
   struct stat st;
-  if (fstat(fd.get(), &st)) throw SysError("statting '%s'", filename);
+  if (fstat(fd.get(), &st)) {
+    throw SysError("statting '%s'", filename);
+  }
 
   if (!S_ISREG(st.st_mode)) {
     printError("file '%s' is not a regular file", filename);
@@ -46,7 +50,9 @@ std::set<std::string> runResolver(const Path& filename) {
   }
 
   char* obj = (char*)mmap(NULL, st.st_size, PROT_READ, MAP_SHARED, fd.get(), 0);
-  if (!obj) throw SysError("mmapping '%s'", filename);
+  if (!obj) {
+    throw SysError("mmapping '%s'", filename);
+  }
 
   ptrdiff_t mach64_offset = 0;
 
@@ -115,7 +121,9 @@ Path resolveSymlink(const Path& path) {
 
 std::set<string> resolveTree(const Path& path, PathSet& deps) {
   std::set<string> results;
-  if (deps.count(path)) return {};
+  if (deps.count(path)) {
+    return {};
+  }
   deps.insert(path);
   for (auto& lib : runResolver(path)) {
     results.insert(lib);
@@ -127,10 +135,14 @@ std::set<string> resolveTree(const Path& path, PathSet& deps) {
 }
 
 std::set<string> getPath(const Path& path) {
-  if (hasPrefix(path, "/dev")) return {};
+  if (hasPrefix(path, "/dev")) {
+    return {};
+  }
 
   Path cacheFile = resolveCacheFile(path);
-  if (pathExists(cacheFile)) return readCacheFile(cacheFile);
+  if (pathExists(cacheFile)) {
+    return readCacheFile(cacheFile);
+  }
 
   std::set<string> deps, paths;
   paths.insert(path);

@@ -62,8 +62,12 @@ void MultiCommand::printHelp(const string& programName, std::ostream& out) {
 }
 
 bool MultiCommand::processFlag(Strings::iterator& pos, Strings::iterator end) {
-  if (Args::processFlag(pos, end)) return true;
-  if (command && command->processFlag(pos, end)) return true;
+  if (Args::processFlag(pos, end)) {
+    return true;
+  }
+  if (command && command->processFlag(pos, end)) {
+    return true;
+  }
   return false;
 }
 

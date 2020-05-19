@@ -19,14 +19,18 @@ static Strings parseAttrPath(const string& s) {
         if (i == s.end())
           throw Error(format("missing closing quote in selection path '%1%'") %
                       s);
-        if (*i == '"') break;
+        if (*i == '"') {
+          break;
+        }
         cur.push_back(*i++);
       }
     } else
       cur.push_back(*i);
     ++i;
   }
-  if (!cur.empty()) res.push_back(cur);
+  if (!cur.empty()) {
+    res.push_back(cur);
+  }
   return res;
 }
 
@@ -44,7 +48,9 @@ Value* findAlongAttrPath(EvalState& state, const string& attrPath,
     /* Is i an index (integer) or a normal attribute name? */
     enum { apAttr, apIndex } apType = apAttr;
     unsigned int attrIndex;
-    if (string2Int(attr, attrIndex)) apType = apIndex;
+    if (string2Int(attr, attrIndex)) {
+      apType = apIndex;
+    }
 
     /* Evaluate the expression. */
     Value* vNew = state.allocValue();

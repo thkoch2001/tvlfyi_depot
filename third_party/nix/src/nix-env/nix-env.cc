@@ -93,7 +93,9 @@ static void getAllExprs(EvalState& state, const Path& path, StringSet& attrs,
     /* Ignore the manifest.nix used by profiles.  This is
        necessary to prevent it from showing up in channels (which
        are implemented using profiles). */
-    if (i == "manifest.nix") continue;
+    if (i == "manifest.nix") {
+      continue;
+    }
 
     Path path2 = path + "/" + i;
 
@@ -136,7 +138,9 @@ static void loadSourceExpr(EvalState& state, const Path& path, Value& v) {
   if (stat(path.c_str(), &st) == -1)
     throw SysError(format("getting information about '%1%'") % path);
 
-  if (isNixExpr(path, st)) state.evalFile(path, v);
+  if (isNixExpr(path, st)) {
+    state.evalFile(path, v);
+  }
 
   /* The path is a directory.  Put the Nix expressions in the
      directory in a set, with the file name of each expression as
@@ -172,7 +176,9 @@ static void loadDerivations(EvalState& state, Path nixExprPath,
   for (DrvInfos::iterator i = elems.begin(), j; i != elems.end(); i = j) {
     j = i;
     j++;
-    if (systemFilter != "*" && i->querySystem() != systemFilter) elems.erase(i);
+    if (systemFilter != "*" && i->querySystem() != systemFilter) {
+      elems.erase(i);
+    }
   }
 }
 
@@ -188,7 +194,9 @@ static long comparePriorities(EvalState& state, DrvInfo& drv1, DrvInfo& drv2) {
 // at a time.
 static bool isPrebuilt(EvalState& state, DrvInfo& elem) {
   Path path = elem.queryOutPath();
-  if (state.store->isValidPath(path)) return true;
+  if (state.store->isValidPath(path)) {
+    return true;
+  }
   PathSet ps = state.store->querySubstitutablePaths({path});
   return ps.find(path) != ps.end();
 }
@@ -203,7 +211,9 @@ static void checkSelectorUse(DrvNames& selectors) {
 static DrvInfos filterBySelector(EvalState& state, const DrvInfos& allElems,
                                  const Strings& args, bool newestOnly) {
   DrvNames selectors = drvNamesFromArgs(args);
-  if (selectors.empty()) selectors.push_back(DrvName("*"));
+  if (selectors.empty()) {
+    selectors.push_back(DrvName("*"));
+  }
 
   DrvInfos elems;
   set<unsigned int> done;
@@ -248,7 +258,9 @@ static DrvInfos filterBySelector(EvalState& state, const DrvInfos& allElems,
                         : k->second.first.querySystem() == settings.thisSystem
                               ? -1
                               : 0;
-          if (d == 0) d = comparePriorities(state, j.first, k->second.first);
+          if (d == 0) {
+            d = comparePriorities(state, j.first, k->second.first);
+          }
           if (d == 0)
             d = compareVersions(drvName.version,
                                 DrvName(k->second.first.queryName()).version);
@@ -343,7 +355,9 @@ static void queryInstSources(EvalState& state, InstallSourceInfo& instSource,
 
         string name = baseNameOf(path);
         string::size_type dash = name.find('-');
-        if (dash != string::npos) name = string(name, dash + 1);
+        if (dash != string::npos) {
+          name = string(name, dash + 1);
+        }
 
         DrvInfo elem(state, "", nullptr);
         elem.setName(name);
@@ -419,7 +433,9 @@ static void installDerivations(Globals& globals, const Strings& args,
        one-click installs, namely those where the name used in the
        path is not the one we want (e.g., `java-front' versus
        `java-front-0.9pre15899'). */
-    if (globals.forceName != "") i.setName(globals.forceName);
+    if (globals.forceName != "") {
+      i.setName(globals.forceName);
+    }
     newNames.insert(DrvName(i.queryName()).name);
   }
 
@@ -517,7 +533,9 @@ static void upgradeDerivations(Globals& globals, const Strings& args,
         DrvInfos::iterator bestElem = availElems.end();
         string bestVersion;
         for (auto j = availElems.begin(); j != availElems.end(); ++j) {
-          if (comparePriorities(*globals.state, i, *j) > 0) continue;
+          if (comparePriorities(*globals.state, i, *j) > 0) {
+            continue;
+          }
           DrvName newName(j->queryName());
           if (newName.name == drvName.name) {
             int d = compareVersions(drvName.version, newName.version);
@@ -527,7 +545,9 @@ static void upgradeDerivations(Globals& globals, const Strings& args,
               long d2 = -1;
               if (bestElem != availElems.end()) {
                 d2 = comparePriorities(*globals.state, *bestElem, *j);
-                if (d2 == 0) d2 = compareVersions(bestVersion, newName.version);
+                if (d2 == 0) {
+                  d2 = compareVersions(bestVersion, newName.version);
+                }
               }
               if (d2 < 0 &&
                   (!globals.prebuiltOnly || isPrebuilt(*globals.state, *j))) {
@@ -636,7 +656,9 @@ static void opSetFlag(Globals& globals, Strings opFlags, Strings opArgs) {
 
 static void opSet(Globals& globals, Strings opFlags, Strings opArgs) {
   auto store2 = globals.state->store.dynamic_pointer_cast<LocalFSStore>();
-  if (!store2) throw Error("--set is not supported for this Nix store");
+  if (!store2) {
+    throw Error("--set is not supported for this Nix store");
+  }
 
   for (Strings::iterator i = opFlags.begin(); i != opFlags.end();) {
     string arg = *i++;
@@ -649,11 +671,15 @@ static void opSet(Globals& globals, Strings opFlags, Strings opArgs) {
   DrvInfos elems;
   queryInstSources(*globals.state, globals.instSource, opArgs, elems, true);
 
-  if (elems.size() != 1) throw Error("--set requires exactly one derivation");
+  if (elems.size() != 1) {
+    throw Error("--set requires exactly one derivation");
+  }
 
   DrvInfo& drv(elems.front());
 
-  if (globals.forceName != "") drv.setName(globals.forceName);
+  if (globals.forceName != "") {
+    drv.setName(globals.forceName);
+  }
 
   if (drv.queryDrvPath() != "") {
     PathSet paths = {drv.queryDrvPath()};
@@ -699,7 +725,9 @@ static void uninstallDerivations(Globals& globals, Strings& selectors,
           found = true;
           break;
         }
-      if (!found) newElems.push_back(i);
+      if (!found) {
+        newElems.push_back(i);
+      }
     }
 
     if (globals.dryRun) {
@@ -740,7 +768,9 @@ void printTable(Table& table) {
     Strings::iterator j;
     size_t column;
     for (j = i.begin(), column = 0; j != i.end(); ++j, ++column)
-      if (j->size() > widths[column]) widths[column] = j->size();
+      if (j->size() > widths[column]) {
+        widths[column] = j->size();
+      }
   }
 
   for (auto& i : table) {
@@ -939,7 +969,9 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
 
   for (auto& i : elems) {
     try {
-      if (i.hasFailed()) continue;
+      if (i.hasFailed()) {
+        continue;
+      }
 
       // Activity act(*logger, lvlDebug, format("outputting query result '%1%'")
       // % i.attrPath);
@@ -1024,14 +1056,18 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
       }
 
       if (xmlOutput) {
-        if (i.querySystem() != "") attrs["system"] = i.querySystem();
+        if (i.querySystem() != "") {
+          attrs["system"] = i.querySystem();
+        }
       } else if (printSystem)
         columns.push_back(i.querySystem());
 
       if (printDrvPath) {
         string drvPath = i.queryDrvPath();
         if (xmlOutput) {
-          if (drvPath != "") attrs["drvPath"] = drvPath;
+          if (drvPath != "") {
+            attrs["drvPath"] = drvPath;
+          }
         } else
           columns.push_back(drvPath == "" ? "-" : drvPath);
       }
@@ -1040,7 +1076,9 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
         DrvInfo::Outputs outputs = i.queryOutputs();
         string s;
         for (auto& j : outputs) {
-          if (!s.empty()) s += ';';
+          if (!s.empty()) {
+            s += ';';
+          }
           if (j.first != "out") {
             s += j.first;
             s += "=";
@@ -1053,7 +1091,9 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
       if (printDescription) {
         string descr = i.queryMetaString("description");
         if (xmlOutput) {
-          if (descr != "") attrs["description"] = descr;
+          if (descr != "") {
+            attrs["description"] = descr;
+          }
         } else
           columns.push_back(descr);
       }
@@ -1100,7 +1140,9 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
                   attrs2["type"] = "strings";
                   XMLOpenElement m(xml, "meta", attrs2);
                   for (unsigned int j = 0; j < v->listSize(); ++j) {
-                    if (v->listElems()[j]->type != tString) continue;
+                    if (v->listElems()[j]->type != tString) {
+                      continue;
+                    }
                     XMLAttrs attrs3;
                     attrs3["value"] = v->listElems()[j]->string.s;
                     xml.writeEmptyElement("string", attrs3);
@@ -1111,7 +1153,9 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
                   Bindings& attrs = *v->attrs;
                   for (auto& i : attrs) {
                     Attr& a(*attrs.find(i.name));
-                    if (a.value->type != tString) continue;
+                    if (a.value->type != tString) {
+                      continue;
+                    }
                     XMLAttrs attrs3;
                     attrs3["type"] = i.name;
                     attrs3["value"] = a.value->string.s;
@@ -1204,7 +1248,9 @@ static void opSwitchGeneration(Globals& globals, Strings opFlags,
 static void opRollback(Globals& globals, Strings opFlags, Strings opArgs) {
   if (opFlags.size() > 0)
     throw UsageError(format("unknown flag '%1%'") % opFlags.front());
-  if (opArgs.size() != 0) throw UsageError(format("no arguments expected"));
+  if (opArgs.size() != 0) {
+    throw UsageError(format("no arguments expected"));
+  }
 
   switchGeneration(globals, prevGen);
 }
@@ -1213,7 +1259,9 @@ static void opListGenerations(Globals& globals, Strings opFlags,
                               Strings opArgs) {
   if (opFlags.size() > 0)
     throw UsageError(format("unknown flag '%1%'") % opFlags.front());
-  if (opArgs.size() != 0) throw UsageError(format("no arguments expected"));
+  if (opArgs.size() != 0) {
+    throw UsageError(format("no arguments expected"));
+  }
 
   PathLocks lock;
   lockProfile(lock, globals.profile);
@@ -1225,7 +1273,9 @@ static void opListGenerations(Globals& globals, Strings opFlags,
 
   for (auto& i : gens) {
     tm t;
-    if (!localtime_r(&i.creationTime, &t)) throw Error("cannot convert time");
+    if (!localtime_r(&i.creationTime, &t)) {
+      throw Error("cannot convert time");
+    }
     cout << format("%|4|   %|4|-%|02|-%|02| %|02|:%|02|:%|02|   %||\n") %
                 i.number % (t.tm_year + 1900) % (t.tm_mon + 1) % t.tm_mday %
                 t.tm_hour % t.tm_min % t.tm_sec %
@@ -1369,7 +1419,9 @@ static int _main(int argc, char** argv) {
 
     initPlugins();
 
-    if (!op) throw UsageError("no operation specified");
+    if (!op) {
+      throw UsageError("no operation specified");
+    }
 
     auto store = openStore();
 
@@ -1382,7 +1434,9 @@ static int _main(int argc, char** argv) {
 
     globals.instSource.autoArgs = myArgs.getAutoArgs(*globals.state);
 
-    if (globals.profile == "") globals.profile = getEnv("NIX_PROFILE", "");
+    if (globals.profile == "") {
+      globals.profile = getEnv("NIX_PROFILE", "");
+    }
 
     if (globals.profile == "") {
       Path profileLink = getHome() + "/.nix-profile";

@@ -102,7 +102,9 @@ struct CmdVerify : StorePathsCommand {
 
             auto doSigs = [&](StringSet sigs) {
               for (auto sig : sigs) {
-                if (sigsSeen.count(sig)) continue;
+                if (sigsSeen.count(sig)) {
+                  continue;
+                }
                 sigsSeen.insert(sig);
                 if (validSigs < ValidPathInfo::maxSigs &&
                     info->checkSignature(publicKeys, sig))
@@ -116,7 +118,9 @@ struct CmdVerify : StorePathsCommand {
             doSigs(info->sigs);
 
             for (auto& store2 : substituters) {
-              if (validSigs >= actualSigsNeeded) break;
+              if (validSigs >= actualSigsNeeded) {
+                break;
+              }
               try {
                 auto info2 = store2->queryPathInfo(info->path);
                 if (info2->isContentAddressed(*store))
@@ -128,7 +132,9 @@ struct CmdVerify : StorePathsCommand {
               }
             }
 
-            if (validSigs >= actualSigsNeeded) good = true;
+            if (validSigs >= actualSigsNeeded) {
+              good = true;
+            }
           }
 
           if (!good) {

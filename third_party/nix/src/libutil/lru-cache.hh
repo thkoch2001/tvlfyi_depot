@@ -31,7 +31,9 @@ class LRUCache {
 
   /* Insert or upsert an item in the cache. */
   void upsert(const Key& key, const Value& value) {
-    if (capacity == 0) return;
+    if (capacity == 0) {
+      return;
+    }
 
     erase(key);
 
@@ -53,7 +55,9 @@ class LRUCache {
 
   bool erase(const Key& key) {
     auto i = data.find(key);
-    if (i == data.end()) return false;
+    if (i == data.end()) {
+      return false;
+    }
     lru.erase(i->second.first.it);
     data.erase(i);
     return true;
@@ -63,7 +67,9 @@ class LRUCache {
      recently used item. */
   std::optional<Value> get(const Key& key) {
     auto i = data.find(key);
-    if (i == data.end()) return {};
+    if (i == data.end()) {
+      return {};
+    }
 
     /* Move this item to the back of the LRU list. */
     lru.erase(i->second.first.it);

@@ -62,7 +62,9 @@ std::vector<string> shellwords(const string& s) {
     }
   }
   cur.append(begin, it);
-  if (!cur.empty()) res.push_back(cur);
+  if (!cur.empty()) {
+    res.push_back(cur);
+  }
   return res;
 }
 
@@ -172,7 +174,9 @@ static void _main(int argc, char** argv) {
           runEnv = true;
 
         else if (*arg == "--command" || *arg == "--run") {
-          if (*arg == "--run") interactive = false;
+          if (*arg == "--run") {
+            interactive = false;
+          }
           envCommand = getArg(*arg, arg, end) + "\nexit";
         }
 
@@ -261,11 +265,17 @@ static void _main(int argc, char** argv) {
     fromArgs = true;
     left = {joined.str()};
   } else if (!fromArgs) {
-    if (left.empty() && runEnv && pathExists("shell.nix")) left = {"shell.nix"};
-    if (left.empty()) left = {"default.nix"};
+    if (left.empty() && runEnv && pathExists("shell.nix")) {
+      left = {"shell.nix"};
+    }
+    if (left.empty()) {
+      left = {"default.nix"};
+    }
   }
 
-  if (runEnv) setenv("IN_NIX_SHELL", pure ? "pure" : "impure", 1);
+  if (runEnv) {
+    setenv("IN_NIX_SHELL", pure ? "pure" : "impure", 1);
+  }
 
   DrvInfos drvs;
 
@@ -299,7 +309,9 @@ static void _main(int argc, char** argv) {
     }
 
   /* Evaluate them into derivations. */
-  if (attrPaths.empty()) attrPaths = {""};
+  if (attrPaths.empty()) {
+    attrPaths = {""};
+  }
 
   for (auto e : exprs) {
     Value vRoot;
@@ -326,7 +338,9 @@ static void _main(int argc, char** argv) {
       printMissing(ref<Store>(store), willBuild, willSubstitute, unknown,
                    downloadSize, narSize);
 
-    if (!dryRun) store->buildPaths(paths, buildMode);
+    if (!dryRun) {
+      store->buildPaths(paths, buildMode);
+    }
   };
 
   if (runEnv) {
@@ -391,7 +405,9 @@ static void _main(int argc, char** argv) {
     if (pure) {
       decltype(env) newEnv;
       for (auto& i : env)
-        if (keepVars.count(i.first)) newEnv.emplace(i);
+        if (keepVars.count(i.first)) {
+          newEnv.emplace(i);
+        }
       env = newEnv;
       // NixOS hack: prevent /etc/bashrc from sourcing /etc/profile.
       env["__ETC_PROFILE_SOURCED"] = "1";
@@ -490,12 +506,16 @@ static void _main(int argc, char** argv) {
         drvPrefix = i->second;
       else {
         drvPrefix = outLink;
-        if (drvPrefixes.size()) drvPrefix += fmt("-%d", drvPrefixes.size() + 1);
+        if (drvPrefixes.size()) {
+          drvPrefix += fmt("-%d", drvPrefixes.size() + 1);
+        }
         drvPrefixes[drvPath] = drvPrefix;
       }
 
       std::string symlink = drvPrefix;
-      if (outputName != "out") symlink += "-" + outputName;
+      if (outputName != "out") {
+        symlink += "-" + outputName;
+      }
 
       resultSymlinks[symlink] = outPath;
       outPaths.push_back(outPath);

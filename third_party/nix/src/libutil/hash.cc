@@ -139,7 +139,9 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
   if (sep != string::npos) {
     string hts = string(s, 0, sep);
     this->type = parseHashType(hts);
-    if (this->type == htUnknown) throw BadHash("unknown hash type '%s'", hts);
+    if (this->type == htUnknown) {
+      throw BadHash("unknown hash type '%s'", hts);
+    }
     if (type != htUnknown && type != this->type)
       throw BadHash("hash '%s' should have type '%s'", s, printHashType(type));
     pos = sep + 1;
@@ -174,8 +176,12 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
       char c = s[pos + size - n - 1];
       unsigned char digit;
       for (digit = 0; digit < base32Chars.size(); ++digit) /* !!! slow */
-        if (base32Chars[digit] == c) break;
-      if (digit >= 32) throw BadHash("invalid base-32 hash '%s'", s);
+        if (base32Chars[digit] == c) {
+          break;
+        }
+      if (digit >= 32) {
+        throw BadHash("invalid base-32 hash '%s'", s);
+      }
       unsigned int b = n * 5;
       unsigned int i = b / 8;
       unsigned int j = b % 8;
@@ -184,7 +190,9 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
       if (i < hashSize - 1) {
         hash[i + 1] |= digit >> (8 - j);
       } else {
-        if (digit >> (8 - j)) throw BadHash("invalid base-32 hash '%s'", s);
+        if (digit >> (8 - j)) {
+          throw BadHash("invalid base-32 hash '%s'", s);
+        }
       }
     }
   }
@@ -258,13 +266,17 @@ Hash hashFile(HashType ht, const Path& path) {
   start(ht, ctx);
 
   AutoCloseFD fd = open(path.c_str(), O_RDONLY | O_CLOEXEC);
-  if (!fd) throw SysError(format("opening file '%1%'") % path);
+  if (!fd) {
+    throw SysError(format("opening file '%1%'") % path);
+  }
 
   std::vector<unsigned char> buf(8192);
   ssize_t n;
   while ((n = read(fd.get(), buf.data(), buf.size()))) {
     checkInterrupt();
-    if (n == -1) throw SysError(format("reading file '%1%'") % path);
+    if (n == -1) {
+      throw SysError(format("reading file '%1%'") % path);
+    }
     update(ht, ctx, buf.data(), n);
   }
 

@@ -99,7 +99,9 @@ static void createLinks(const Path& srcDir, const Path& dstDir, int priority) {
                 "to change the priority of one of the conflicting packages"
                 " (0 being the highest priority)",
                 srcFile, readLink(dstFile), priority);
-          if (prevPriority < priority) continue;
+          if (prevPriority < priority) {
+            continue;
+          }
           if (unlink(dstFile.c_str()) == -1)
             throw SysError(format("unlinking '%1%'") % dstFile);
         } else if (S_ISDIR(dstSt.st_mode))
@@ -124,7 +126,9 @@ static FileProp postponed = FileProp{};
 static Path out;
 
 static void addPkg(const Path& pkgDir, int priority) {
-  if (done.count(pkgDir)) return;
+  if (done.count(pkgDir)) {
+    return;
+  }
   done.insert(pkgDir);
   createLinks(pkgDir, out, priority);
 
@@ -132,9 +136,13 @@ static void addPkg(const Path& pkgDir, int priority) {
     for (const auto& p : tokenizeString<std::vector<string>>(
              readFile(pkgDir + "/nix-support/propagated-user-env-packages"),
              " \n"))
-      if (!done.count(p)) postponed.insert(p);
+      if (!done.count(p)) {
+        postponed.insert(p);
+      }
   } catch (SysError& e) {
-    if (e.errNo != ENOENT && e.errNo != ENOTDIR) throw;
+    if (e.errNo != ENOENT && e.errNo != ENOTDIR) {
+      throw;
+    }
   }
 }
 
@@ -151,7 +159,9 @@ typedef std::vector<Package> Packages;
 void builtinBuildenv(const BasicDerivation& drv) {
   auto getAttr = [&](const string& name) {
     auto i = drv.env.find(name);
-    if (i == drv.env.end()) throw Error("attribute '%s' missing", name);
+    if (i == drv.env.end()) {
+      throw Error("attribute '%s' missing", name);
+    }
     return i->second;
   };
 
@@ -187,7 +197,9 @@ void builtinBuildenv(const BasicDerivation& drv) {
            (a.priority == b.priority && a.path < b.path);
   });
   for (const auto& pkg : pkgs)
-    if (pkg.active) addPkg(pkg.path, pkg.priority);
+    if (pkg.active) {
+      addPkg(pkg.path, pkg.priority);
+    }
 
   /* Symlink to the packages that have been "propagated" by packages
    * installed by the user (i.e., package X declares that it wants Y

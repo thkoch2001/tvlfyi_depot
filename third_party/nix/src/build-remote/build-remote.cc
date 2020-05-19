@@ -40,7 +40,9 @@ static AutoCloseFD openSlotLock(const Machine& m, unsigned long long slot) {
 
 static bool allSupportedLocally(const std::set<std::string>& requiredFeatures) {
   for (auto& feature : requiredFeatures)
-    if (!settings.systemFeatures.get().count(feature)) return false;
+    if (!settings.systemFeatures.get().count(feature)) {
+      return false;
+    }
   return true;
 }
 
@@ -50,7 +52,9 @@ static int _main(int argc, char** argv) {
     unsetenv("DISPLAY");
     unsetenv("SSH_ASKPASS");
 
-    if (argc != 2) throw UsageError("called without required arguments");
+    if (argc != 2) {
+      throw UsageError("called without required arguments");
+    }
 
     FdSource source(STDIN_FILENO);
 
@@ -88,7 +92,9 @@ static int _main(int argc, char** argv) {
     while (true) {
       try {
         auto s = readString(source);
-        if (s != "try") return 0;
+        if (s != "try") {
+          return 0;
+        }
       } catch (EndOfFile&) {
         return 0;
       }
@@ -254,7 +260,9 @@ static int _main(int argc, char** argv) {
 
     PathSet missing;
     for (auto& path : outputs)
-      if (!store->isValidPath(path)) missing.insert(path);
+      if (!store->isValidPath(path)) {
+        missing.insert(path);
+      }
 
     if (!missing.empty()) {
       DLOG(INFO) << "copying outputs from '" << storeUri << "'";

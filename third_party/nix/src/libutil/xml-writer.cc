@@ -33,7 +33,9 @@ void XMLWriter::openElement(const string& name, const XMLAttrs& attrs) {
   output << "<" << name;
   writeAttrs(attrs);
   output << ">";
-  if (indent) output << std::endl;
+  if (indent) {
+    output << std::endl;
+  }
   pendingElems.push_back(name);
 }
 
@@ -41,9 +43,13 @@ void XMLWriter::closeElement() {
   assert(!pendingElems.empty());
   indent_(pendingElems.size() - 1);
   output << "</" << pendingElems.back() << ">";
-  if (indent) output << std::endl;
+  if (indent) {
+    output << std::endl;
+  }
   pendingElems.pop_back();
-  if (pendingElems.empty()) closed = true;
+  if (pendingElems.empty()) {
+    closed = true;
+  }
 }
 
 void XMLWriter::writeEmptyElement(const string& name, const XMLAttrs& attrs) {
@@ -52,7 +58,9 @@ void XMLWriter::writeEmptyElement(const string& name, const XMLAttrs& attrs) {
   output << "<" << name;
   writeAttrs(attrs);
   output << " />";
-  if (indent) output << std::endl;
+  if (indent) {
+    output << std::endl;
+  }
 }
 
 void XMLWriter::writeAttrs(const XMLAttrs& attrs) {

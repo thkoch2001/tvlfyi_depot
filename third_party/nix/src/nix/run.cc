@@ -94,7 +94,9 @@ struct CmdRun : InstallablesCommand {
       std::map<std::string, std::string> kept;
       for (auto& var : keep) {
         auto s = getenv(var.c_str());
-        if (s) kept[var] = s;
+        if (s) {
+          kept[var] = s;
+        }
       }
 
       clearEnv();
@@ -118,9 +120,13 @@ struct CmdRun : InstallablesCommand {
     while (!todo.empty()) {
       Path path = todo.front();
       todo.pop();
-      if (!done.insert(path).second) continue;
+      if (!done.insert(path).second) {
+        continue;
+      }
 
-      if (true) unixPath.push_front(path + "/bin");
+      if (true) {
+        unixPath.push_front(path + "/bin");
+      }
 
       auto propPath = path + "/nix-support/propagated-user-env-packages";
       if (accessor->stat(propPath).type == FSAccessor::tRegular) {
@@ -206,9 +212,13 @@ void chrootHelper(int argc, char** argv) {
     for (auto entry : readDirectory("/")) {
       auto src = "/" + entry.name;
       auto st = lstat(src);
-      if (!S_ISDIR(st.st_mode)) continue;
+      if (!S_ISDIR(st.st_mode)) {
+        continue;
+      }
       Path dst = tmpDir + "/" + entry.name;
-      if (pathExists(dst)) continue;
+      if (pathExists(dst)) {
+        continue;
+      }
       if (mkdir(dst.c_str(), 0700) == -1)
         throw SysError("creating directory '%s'", dst);
       if (mount(src.c_str(), dst.c_str(), "", MS_BIND | MS_REC, 0) == -1)
@@ -216,7 +226,9 @@ void chrootHelper(int argc, char** argv) {
     }
 
     char* cwd = getcwd(0, 0);
-    if (!cwd) throw SysError("getting current directory");
+    if (!cwd) {
+      throw SysError("getting current directory");
+    }
     Finally freeCwd([&]() { free(cwd); });
 
     if (chroot(tmpDir.c_str()) == -1)

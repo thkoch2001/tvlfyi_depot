@@ -161,7 +161,9 @@ void LocalStore::addTempRoot(const Path& path) {
       struct stat st;
       if (fstat(state->fdTempRoots.get(), &st) == -1)
         throw SysError(format("statting '%1%'") % fnTempRoots);
-      if (st.st_size == 0) break;
+      if (st.st_size == 0) {
+        break;
+      }
 
       /* The garbage collector deleted this file before we could
          get a lock.  (It won't delete the file after we get a
@@ -196,13 +198,15 @@ void LocalStore::findTempRoots(FDs& fds, Roots& tempRoots, bool censor) {
     FDPtr fd(new AutoCloseFD(open(path.c_str(), O_CLOEXEC | O_RDWR, 0666)));
     if (!*fd) {
       /* It's okay if the file has disappeared. */
-      if (errno == ENOENT) continue;
+      if (errno == ENOENT) {
+        continue;
+      }
       throw SysError(format("opening temporary roots file '%1%'") % path);
     }
 
     /* This should work, but doesn't, for some reason. */
     // FDPtr fd(new AutoCloseFD(openLockFile(path, false)));
-    // if (*fd == -1) continue;
+    // if (*fd == -1) { continue; }
 
     /* Try to acquire a write lock without blocking.  This can
        only succeed if the owning process has died.  In that case
@@ -249,7 +253,9 @@ void LocalStore::findRoots(const Path& path, unsigned char type, Roots& roots) {
   };
 
   try {
-    if (type == DT_UNKNOWN) type = getFileType(path);
+    if (type == DT_UNKNOWN) {
+      type = getFileType(path);
+    }
 
     if (type == DT_DIR) {
       for (auto& i : readDirectory(path))
@@ -258,7 +264,9 @@ void LocalStore::findRoots(const Path& path, unsigned char type, Roots& roots) {
 
     else if (type == DT_LNK) {
       Path target = readLink(path);
-      if (isInStore(target)) foundRoot(path, target);
+      if (isInStore(target)) {
+        foundRoot(path, target);
+      }
 
       /* Handle indirect roots. */
       else {
@@ -271,9 +279,13 @@ void LocalStore::findRoots(const Path& path, unsigned char type, Roots& roots) {
           }
         } else {
           struct stat st2 = lstat(target);
-          if (!S_ISLNK(st2.st_mode)) return;
+          if (!S_ISLNK(st2.st_mode)) {
+            return;
+          }
           Path target2 = readLink(target);
-          if (isInStore(target2)) foundRoot(target, target2);
+          if (isInStore(target2)) {
+            foundRoot(target, target2);
+          }
         }
       }
     }
@@ -376,7 +388,9 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
         auto fdStr = fmt("/proc/%s/fd", ent->d_name);
         auto fdDir = AutoCloseDir(opendir(fdStr.c_str()));
         if (!fdDir) {
-          if (errno == ENOENT || errno == EACCES) continue;
+          if (errno == ENOENT || errno == EACCES) {
+            continue;
+          }
           throw SysError(format("opening %1%") % fdStr);
         }
         struct dirent* fd_ent;
@@ -385,7 +399,9 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
             readProcLink(fmt("%s/%s", fdStr, fd_ent->d_name), unchecked);
         }
         if (errno) {
-          if (errno == ESRCH) continue;
+          if (errno == ESRCH) {
+            continue;
+          }
           throw SysError(format("iterating /proc/%1%/fd") % ent->d_name);
         }
         fdDir.reset();
@@ -408,12 +424,16 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
                i != env_end; ++i)
             unchecked[i->str()].emplace(envFile);
         } catch (SysError& e) {
-          if (errno == ENOENT || errno == EACCES || errno == ESRCH) continue;
+          if (errno == ENOENT || errno == EACCES || errno == ESRCH) {
+            continue;
+          }
           throw;
         }
       }
     }
-    if (errno) throw SysError("iterating /proc");
+    if (errno) {
+      throw SysError("iterating /proc");
+    }
   }
 
 #if !defined(__linux__)
@@ -495,7 +515,9 @@ void LocalStore::deletePathRecursive(GCState& state, const Path& path) {
     PathSet referrers;
     queryReferrers(path, referrers);
     for (auto& i : referrers)
-      if (i != path) deletePathRecursive(state, i);
+      if (i != path) {
+        deletePathRecursive(state, i);
+      }
     size = queryPathInfo(path)->narSize;
     invalidatePathChecked(path);
   }
@@ -504,7 +526,9 @@ void LocalStore::deletePathRecursive(GCState& state, const Path& path) {
 
   struct stat st;
   if (lstat(realPath.c_str(), &st)) {
-    if (errno == ENOENT) return;
+    if (errno == ENOENT) {
+      return;
+    }
     throw SysError(format("getting status of %1%") % realPath);
   }
 
@@ -549,11 +573,17 @@ void LocalStore::deletePathRecursive(GCState& state, const Path& path) {
 
 bool LocalStore::canReachRoot(GCState& state, PathSet& visited,
                               const Path& path) {
-  if (visited.count(path)) return false;
+  if (visited.count(path)) {
+    return false;
+  }
 
-  if (state.alive.count(path)) return true;
+  if (state.alive.count(path)) {
+    return true;
+  }
 
-  if (state.dead.count(path)) return false;
+  if (state.dead.count(path)) {
+    return false;
+  }
 
   if (state.roots.count(path)) {
     DLOG(INFO) << "cannot delete '" << path << "' because it's a root";
@@ -563,7 +593,9 @@ bool LocalStore::canReachRoot(GCState& state, PathSet& visited,
 
   visited.insert(path);
 
-  if (!isStorePath(path) || !isValidPath(path)) return false;
+  if (!isStorePath(path) || !isValidPath(path)) {
+    return false;
+  }
 
   PathSet incoming;
 
@@ -600,7 +632,9 @@ void LocalStore::tryToDelete(GCState& state, const Path& path) {
   checkInterrupt();
 
   auto realPath = realStoreDir + "/" + baseNameOf(path);
-  if (realPath == linksDir || realPath == trashDir) return;
+  if (realPath == linksDir || realPath == trashDir) {
+    return;
+  }
 
   // Activity act(*logger, lvlDebug, format("considering whether to delete
   // '%1%'") % path);
@@ -608,16 +642,22 @@ void LocalStore::tryToDelete(GCState& state, const Path& path) {
   if (!isStorePath(path) || !isValidPath(path)) {
     /* A lock file belonging to a path that we're building right
        now isn't garbage. */
-    if (isActiveTempFile(state, path, ".lock")) return;
+    if (isActiveTempFile(state, path, ".lock")) {
+      return;
+    }
 
     /* Don't delete .chroot directories for derivations that are
        currently being built. */
-    if (isActiveTempFile(state, path, ".chroot")) return;
+    if (isActiveTempFile(state, path, ".chroot")) {
+      return;
+    }
 
     /* Don't delete .check directories for derivations that are
        currently being built, because we may need to run
        diff-hook. */
-    if (isActiveTempFile(state, path, ".check")) return;
+    if (isActiveTempFile(state, path, ".check")) {
+      return;
+    }
   }
 
   PathSet visited;
@@ -653,7 +693,9 @@ void LocalStore::removeUnusedLinks(const GCState& state) {
   while (errno = 0, dirent = readdir(dir.get())) {
     checkInterrupt();
     string name = dirent->d_name;
-    if (name == "." || name == "..") continue;
+    if (name == "." || name == "..") {
+      continue;
+    }
     Path path = linksDir + "/" + name;
 
     struct stat st;
@@ -789,7 +831,9 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
       while (errno = 0, dirent = readdir(dir.get())) {
         checkInterrupt();
         string name = dirent->d_name;
-        if (name == "." || name == "..") continue;
+        if (name == "." || name == "..") {
+          continue;
+        }
         Path path = storeDir + "/" + name;
         if (isStorePath(path) && isValidPath(path))
           entries.push_back(path);
@@ -840,7 +884,7 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
   }
 
   /* While we're at it, vacuum the database. */
-  // if (options.action == GCOptions::gcDeleteDead) vacuumDB();
+  // if (options.action == GCOptions::gcDeleteDead) { vacuumDB(); }
 }
 
 void LocalStore::autoGC(bool sync) {
@@ -879,9 +923,13 @@ void LocalStore::autoGC(bool sync) {
 
     state->lastGCCheck = now;
 
-    if (avail >= settings.minFree || avail >= settings.maxFree) return;
+    if (avail >= settings.minFree || avail >= settings.maxFree) {
+      return;
+    }
 
-    if (avail > state->availAfterGC * 0.97) return;
+    if (avail > state->availAfterGC * 0.97) {
+      return;
+    }
 
     state->gcRunning = true;
 
@@ -919,7 +967,9 @@ void LocalStore::autoGC(bool sync) {
 
 sync:
   // Wait for the future outside of the state lock.
-  if (sync) future.get();
+  if (sync) {
+    future.get();
+  }
 }
 
 }  // namespace nix

@@ -60,15 +60,15 @@ static Expr * unescapeStr(SymbolTable & symbols, const char * s, size_t length)
         if (c == '\\') {
             assert(*s);
             c = *s++;
-            if (c == 'n') t += '\n';
-            else if (c == 'r') t += '\r';
-            else if (c == 't') t += '\t';
+            if (c == 'n') { t += '\n'; }
+            else if (c == 'r') { t += '\r'; }
+            else if (c == 't') { t += '\t'; }
             else t += c;
         }
         else if (c == '\r') {
             /* Normalise CR and CR/LF into LF. */
             t += '\n';
-            if (*s == '\n') s++; /* cr/lf */
+            if (*s == '\n') { s++; } /* cr/lf */
         }
         else t += c;
     }

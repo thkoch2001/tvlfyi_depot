@@ -53,7 +53,9 @@ template <class N>
 N getIntArg(const string& opt, Strings::iterator& i,
             const Strings::iterator& end, bool allowUnit) {
   ++i;
-  if (i == end) throw UsageError(format("'%1%' requires an argument") % opt);
+  if (i == end) {
+    throw UsageError(format("'%1%' requires an argument") % opt);
+  }
   string s = *i;
   N multiplier = 1;
   if (allowUnit && !s.empty()) {

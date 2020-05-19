@@ -268,7 +268,9 @@ LocalStore::~LocalStore() {
 
   {
     auto state(_state.lock());
-    if (state->gcRunning) future = state->gcFuture;
+    if (state->gcRunning) {
+      future = state->gcFuture;
+    }
   }
 
   if (future.valid()) {
@@ -375,7 +377,9 @@ void LocalStore::openDB(State& state, bool create) {
    bind mount.  So make the Nix store writable for this process. */
 void LocalStore::makeStoreWritable() {
 #if __linux__
-  if (getuid() != 0) return;
+  if (getuid() != 0) {
+    return;
+  }
   /* Check if /nix/store is on a read-only mount. */
   struct statvfs stat;
   if (statvfs(realStoreDir.c_str(), &stat) != 0)
@@ -469,7 +473,9 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
              std::string(eaBuf.data(), eaSize), std::string("\000", 1))) {
       /* Ignore SELinux security labels since these cannot be
          removed even by root. */
-      if (eaName == "security.selinux") continue;
+      if (eaName == "security.selinux") {
+        continue;
+      }
       if (lremovexattr(path.c_str(), eaName.c_str()) == -1)
         throw SysError("removing extended attribute '%s' from '%s'", eaName,
                        path);
@@ -654,7 +660,9 @@ void LocalStore::queryPathInfoUncached(
       /* Get the path info. */
       auto useQueryPathInfo(state->stmtQueryPathInfo.use()(path));
 
-      if (!useQueryPathInfo.next()) return std::shared_ptr<ValidPathInfo>();
+      if (!useQueryPathInfo.next()) {
+        return std::shared_ptr<ValidPathInfo>();
+      }
 
       info->id = useQueryPathInfo.getInt(0);
 
@@ -667,7 +675,9 @@ void LocalStore::queryPathInfoUncached(
       info->registrationTime = useQueryPathInfo.getInt(2);
 
       auto s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 3);
-      if (s) info->deriver = s;
+      if (s) {
+        info->deriver = s;
+      }
 
       /* Note that narSize = NULL yields 0. */
       info->narSize = useQueryPathInfo.getInt(4);
@@ -675,10 +685,14 @@ void LocalStore::queryPathInfoUncached(
       info->ultimate = useQueryPathInfo.getInt(5) == 1;
 
       s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 6);
-      if (s) info->sigs = tokenizeString<StringSet>(s, " ");
+      if (s) {
+        info->sigs = tokenizeString<StringSet>(s, " ");
+      }
 
       s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 7);
-      if (s) info->ca = s;
+      if (s) {
+        info->ca = s;
+      }
 
       /* Get the references. */
       auto useQueryReferences(state->stmtQueryReferences.use()(info->id));
@@ -706,7 +720,9 @@ void LocalStore::updatePathInfo(State& state, const ValidPathInfo& info) {
 
 uint64_t LocalStore::queryValidPathId(State& state, const Path& path) {
   auto use(state.stmtQueryPathInfo.use()(path));
-  if (!use.next()) throw Error(format("path '%1%' is not valid") % path);
+  if (!use.next()) {
+    throw Error(format("path '%1%' is not valid") % path);
+  }
   return use.getInt(0);
 }
 
@@ -725,7 +741,9 @@ PathSet LocalStore::queryValidPaths(const PathSet& paths,
                                     SubstituteFlag maybeSubstitute) {
   PathSet res;
   for (auto& i : paths)
-    if (isValidPath(i)) res.insert(i);
+    if (isValidPath(i)) {
+      res.insert(i);
+    }
   return res;
 }
 
@@ -802,7 +820,9 @@ StringSet LocalStore::queryDerivationOutputNames(const Path& path) {
 }
 
 Path LocalStore::queryPathFromHashPart(const string& hashPart) {
-  if (hashPart.size() != storePathHashLen) throw Error("invalid hash part");
+  if (hashPart.size() != storePathHashLen) {
+    throw Error("invalid hash part");
+  }
 
   Path prefix = storeDir + "/" + hashPart;
 
@@ -812,7 +832,9 @@ Path LocalStore::queryPathFromHashPart(const string& hashPart) {
     auto useQueryPathFromHashPart(
         state->stmtQueryPathFromHashPart.use()(prefix));
 
-    if (!useQueryPathFromHashPart.next()) return "";
+    if (!useQueryPathFromHashPart.next()) {
+      return "";
+    }
 
     const char* s =
         (const char*)sqlite3_column_text(state->stmtQueryPathFromHashPart, 0);
@@ -822,15 +844,23 @@ Path LocalStore::queryPathFromHashPart(const string& hashPart) {
 }
 
 PathSet LocalStore::querySubstitutablePaths(const PathSet& paths) {
-  if (!settings.useSubstitutes) return PathSet();
+  if (!settings.useSubstitutes) {
+    return PathSet();
+  }
 
   auto remaining = paths;
   PathSet res;
 
   for (auto& sub : getDefaultSubstituters()) {
-    if (remaining.empty()) break;
-    if (sub->storeDir != storeDir) continue;
-    if (!sub->wantMassQuery()) continue;
+    if (remaining.empty()) {
+      break;
+    }
+    if (sub->storeDir != storeDir) {
+      continue;
+    }
+    if (!sub->wantMassQuery()) {
+      continue;
+    }
 
     auto valid = sub->queryValidPaths(remaining);
 
@@ -849,11 +879,17 @@ PathSet LocalStore::querySubstitutablePaths(const PathSet& paths) {
 
 void LocalStore::querySubstitutablePathInfos(const PathSet& paths,
                                              SubstitutablePathInfos& infos) {
-  if (!settings.useSubstitutes) return;
+  if (!settings.useSubstitutes) {
+    return;
+  }
   for (auto& sub : getDefaultSubstituters()) {
-    if (sub->storeDir != storeDir) continue;
+    if (sub->storeDir != storeDir) {
+      continue;
+    }
     for (auto& path : paths) {
-      if (infos.count(path)) continue;
+      if (infos.count(path)) {
+        continue;
+      }
       DLOG(INFO) << "checking substituter '" << sub->getUri() << "' for path '"
                  << path << "'";
       try {
@@ -887,7 +923,9 @@ void LocalStore::registerValidPaths(const ValidPathInfos& infos) {
      be fsync-ed.  So some may want to fsync them before registering
      the validity, at the expense of some speed of the path
      registering operation. */
-  if (settings.syncBeforeRegistering) sync();
+  if (settings.syncBeforeRegistering) {
+    sync();
+  }
 
   return retrySQLite<void>([&]() {
     auto state(_state.lock());
@@ -979,7 +1017,9 @@ void LocalStore::addToStore(const ValidPathInfo& info, Source& source,
     /* Lock the output path.  But don't lock if we're being called
        from a build hook (whose parent process already acquired a
        lock on this path). */
-    if (!locksHeld.count(info.path)) outputLock.lockPaths({realPath});
+    if (!locksHeld.count(info.path)) {
+      outputLock.lockPaths({realPath});
+    }
 
     if (repair || !isValidPath(info.path)) {
       deletePath(realPath);
@@ -1289,7 +1329,9 @@ void LocalStore::verifyPath(const Path& path, const PathSet& store,
     for (auto& i : referrers)
       if (i != path) {
         verifyPath(i, store, done, validPaths, repair, errors);
-        if (validPaths.find(i) != validPaths.end()) canInvalidate = false;
+        if (validPaths.find(i) != validPaths.end()) {
+          canInvalidate = false;
+        }
       }
 
     if (canInvalidate) {
@@ -1328,7 +1370,9 @@ static void makeMutable(const Path& path) {
 
   struct stat st = lstat(path);
 
-  if (!S_ISDIR(st.st_mode) && !S_ISREG(st.st_mode)) return;
+  if (!S_ISDIR(st.st_mode) && !S_ISREG(st.st_mode)) {
+    return;
+  }
 
   if (S_ISDIR(st.st_mode)) {
     for (auto& i : readDirectory(path)) makeMutable(path + "/" + i.name);
@@ -1339,7 +1383,9 @@ static void makeMutable(const Path& path) {
      security hole). */
   AutoCloseFD fd = open(path.c_str(), O_RDONLY | O_NOFOLLOW | O_CLOEXEC);
   if (fd == -1) {
-    if (errno == ELOOP) return;  // it's a symlink
+    if (errno == ELOOP) {
+      return;
+    }  // it's a symlink
     throw SysError(format("opening file '%1%'") % path);
   }
 
@@ -1347,16 +1393,24 @@ static void makeMutable(const Path& path) {
 
   /* Silently ignore errors getting/setting the immutable flag so
      that we work correctly on filesystems that don't support it. */
-  if (ioctl(fd, FS_IOC_GETFLAGS, &flags)) return;
+  if (ioctl(fd, FS_IOC_GETFLAGS, &flags)) {
+    return;
+  }
   old = flags;
   flags &= ~FS_IMMUTABLE_FL;
-  if (old == flags) return;
-  if (ioctl(fd, FS_IOC_SETFLAGS, &flags)) return;
+  if (old == flags) {
+    return;
+  }
+  if (ioctl(fd, FS_IOC_SETFLAGS, &flags)) {
+    return;
+  }
 }
 
 /* Upgrade from schema 6 (Nix 0.15) to schema 7 (Nix >= 1.3). */
 void LocalStore::upgradeStore7() {
-  if (getuid() != 0) return;
+  if (getuid() != 0) {
+    return;
+  }
   printError(
       "removing immutable bits from the Nix store (this may take a while)...");
   makeMutable(realStoreDir);

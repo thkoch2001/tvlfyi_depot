@@ -42,12 +42,16 @@ static ssize_t splice(int fd_in, void* off_in, int fd_out, void* off_out,
    * syscall */
   std::vector<char> buf(8192);
   auto read_count = read(fd_in, buf.data(), buf.size());
-  if (read_count == -1) return read_count;
+  if (read_count == -1) {
+    return read_count;
+  }
   auto write_count = decltype(read_count)(0);
   while (write_count < read_count) {
     auto res =
         write(fd_out, buf.data() + write_count, read_count - write_count);
-    if (res == -1) return res;
+    if (res == -1) {
+      return res;
+    }
     write_count += res;
   }
   return read_count;
@@ -121,7 +125,9 @@ struct TunnelLogger {
       to << STDERR_LAST;
     } else {
       to << STDERR_ERROR << msg;
-      if (status != 0) to << status;
+      if (status != 0) {
+        to << status;
+      }
     }
   }
 
@@ -157,7 +163,9 @@ struct TunnelSource : BufferedSource {
     to << STDERR_READ << len;
     to.flush();
     size_t n = readString(data, len, from);
-    if (n == 0) throw EndOfFile("unexpected end-of-file");
+    if (n == 0) {
+      throw EndOfFile("unexpected end-of-file");
+    }
     return n;
   }
 };
@@ -309,10 +317,14 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       }
 
       logger->startWork();
-      if (!savedRegular.regular) throw Error("regular file expected");
+      if (!savedRegular.regular) {
+        throw Error("regular file expected");
+      }
 
       auto store2 = store.dynamic_pointer_cast<LocalStore>();
-      if (!store2) throw Error("operation is only supported by LocalStore");
+      if (!store2) {
+        throw Error("operation is only supported by LocalStore");
+      }
 
       Path path = store2->addToStoreFromDump(
           recursive ? *savedNAR.data : savedRegular.s, baseName, recursive,
@@ -381,7 +393,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       readDerivation(from, *store, drv);
       BuildMode buildMode = (BuildMode)readInt(from);
       logger->startWork();
-      if (!trusted) throw Error("you are not privileged to build derivations");
+      if (!trusted) {
+        throw Error("you are not privileged to build derivations");
+      }
       auto res = store->buildDerivation(drvPath, drv, buildMode);
       logger->stopWork();
       to << res.status << res.errorMsg;
@@ -493,7 +507,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
         auto& value(i.second);
 
         auto setSubstituters = [&](Setting<Strings>& res) {
-          if (name != res.name && res.aliases.count(name) == 0) return false;
+          if (name != res.name && res.aliases.count(name) == 0) {
+            return false;
+          }
           StringSet trusted = settings.trustedSubstituters;
           for (auto& s : settings.substituters.get()) trusted.insert(s);
           Strings subs;
@@ -582,7 +598,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       }
       logger->stopWork();
       if (info) {
-        if (GET_PROTOCOL_MINOR(clientVersion) >= 17) to << 1;
+        if (GET_PROTOCOL_MINOR(clientVersion) >= 17) {
+          to << 1;
+        }
         to << info->deriver << info->narHash.to_string(Base16, false)
            << info->references << info->registrationTime << info->narSize;
         if (GET_PROTOCOL_MINOR(clientVersion) >= 16) {
@@ -618,7 +636,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       Path path = readStorePath(*store, from);
       StringSet sigs = readStrings<StringSet>(from);
       logger->startWork();
-      if (!trusted) throw Error("you are not privileged to add signatures");
+      if (!trusted) {
+        throw Error("you are not privileged to add signatures");
+      }
       store->addSignatures(path, sigs);
       logger->stopWork();
       to << 1;
@@ -638,7 +658,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       ValidPathInfo info;
       info.path = readStorePath(*store, from);
       from >> info.deriver;
-      if (!info.deriver.empty()) store->assertStorePath(info.deriver);
+      if (!info.deriver.empty()) {
+        store->assertStorePath(info.deriver);
+      }
       info.narHash = Hash(readString(from), htSHA256);
       info.references = readStorePaths<PathSet>(*store, from);
       from >> info.registrationTime >> info.narSize >> info.ultimate;
@@ -695,12 +717,16 @@ static void processConnection(bool trusted, const std::string& userName,
 
   /* Exchange the greeting. */
   unsigned int magic = readInt(from);
-  if (magic != WORKER_MAGIC_1) throw Error("protocol mismatch");
+  if (magic != WORKER_MAGIC_1) {
+    throw Error("protocol mismatch");
+  }
   to << WORKER_MAGIC_2 << PROTOCOL_VERSION;
   to.flush();
   unsigned int clientVersion = readInt(from);
 
-  if (clientVersion < 0x10a) throw Error("the Nix client version is too old");
+  if (clientVersion < 0x10a) {
+    throw Error("the Nix client version is too old");
+  }
 
   auto tunnelLogger = new TunnelLogger(clientVersion);
   // logger = tunnelLogger;
@@ -804,17 +830,27 @@ static void setSigChldAction(bool autoReap) {
 }
 
 bool matchUser(const string& user, const string& group, const Strings& users) {
-  if (find(users.begin(), users.end(), "*") != users.end()) return true;
+  if (find(users.begin(), users.end(), "*") != users.end()) {
+    return true;
+  }
 
-  if (find(users.begin(), users.end(), user) != users.end()) return true;
+  if (find(users.begin(), users.end(), user) != users.end()) {
+    return true;
+  }
 
   for (auto& i : users)
     if (string(i, 0, 1) == "@") {
-      if (group == string(i, 1)) return true;
+      if (group == string(i, 1)) {
+        return true;
+      }
       struct group* gr = getgrnam(i.c_str() + 1);
-      if (!gr) continue;
+      if (!gr) {
+        continue;
+      }
       for (char** mem = gr->gr_mem; *mem; mem++)
-        if (user == string(*mem)) return true;
+        if (user == string(*mem)) {
+          return true;
+        }
     }
 
   return false;
@@ -861,7 +897,9 @@ static PeerInfo getPeerInfo(int remote) {
 #define SD_LISTEN_FDS_START 3
 
 static void daemonLoop(char** argv) {
-  if (chdir("/") == -1) throw SysError("cannot change current directory");
+  if (chdir("/") == -1) {
+    throw SysError("cannot change current directory");
+  }
 
   /* Get rid of children automatically; don't let them become
      zombies. */
@@ -881,7 +919,9 @@ static void daemonLoop(char** argv) {
   else {
     /* Create and bind to a Unix domain socket. */
     fdSocket = socket(PF_UNIX, SOCK_STREAM, 0);
-    if (!fdSocket) throw SysError("cannot create Unix domain socket");
+    if (!fdSocket) {
+      throw SysError("cannot create Unix domain socket");
+    }
 
     string socketPath = settings.nixDaemonSocketFile;
 
@@ -931,7 +971,9 @@ static void daemonLoop(char** argv) {
           accept(fdSocket.get(), (struct sockaddr*)&remoteAddr, &remoteAddrLen);
       checkInterrupt();
       if (!remote) {
-        if (errno == EINTR) continue;
+        if (errno == EINTR) {
+          continue;
+        }
         throw SysError("accepting connection");
       }
 
@@ -949,7 +991,9 @@ static void daemonLoop(char** argv) {
       Strings trustedUsers = settings.trustedUsers;
       Strings allowedUsers = settings.allowedUsers;
 
-      if (matchUser(user, group, trustedUsers)) trusted = true;
+      if (matchUser(user, group, trustedUsers)) {
+        trusted = true;
+      }
 
       if ((!trusted && !matchUser(user, group, allowedUsers)) ||
           group == settings.buildUsersGroup) {
@@ -1030,7 +1074,9 @@ static int _main(int argc, char** argv) {
         /* Forward on this connection to the real daemon */
         auto socketPath = settings.nixDaemonSocketFile;
         auto s = socket(PF_UNIX, SOCK_STREAM, 0);
-        if (s == -1) throw SysError("creating Unix domain socket");
+        if (s == -1) {
+          throw SysError("creating Unix domain socket");
+        }
 
         auto socketDir = dirOf(socketPath);
         if (chdir(socketDir.c_str()) == -1)

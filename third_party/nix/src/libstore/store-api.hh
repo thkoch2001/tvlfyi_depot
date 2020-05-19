@@ -747,7 +747,9 @@ struct RegisterStoreImplementation {
   static Implementations* implementations;
 
   RegisterStoreImplementation(OpenStore fun) {
-    if (!implementations) implementations = new Implementations;
+    if (!implementations) {
+      implementations = new Implementations;
+    }
     implementations->push_back(fun);
   }
 };

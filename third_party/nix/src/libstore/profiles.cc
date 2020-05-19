@@ -19,10 +19,14 @@ static bool cmpGensByNumber(const Generation& a, const Generation& b) {
 /* Parse a generation name of the format
    `<profilename>-<number>-link'. */
 static int parseName(const string& profileName, const string& name) {
-  if (string(name, 0, profileName.size() + 1) != profileName + "-") return -1;
+  if (string(name, 0, profileName.size() + 1) != profileName + "-") {
+    return -1;
+  }
   string s = string(name, profileName.size() + 1);
   string::size_type p = s.find("-link");
-  if (p == string::npos) return -1;
+  if (p == string::npos) {
+    return -1;
+  }
   int n;
   if (string2Int(string(s, 0, p), n) && n >= 0)
     return n;
@@ -135,7 +139,9 @@ void deleteGenerations(const Path& profile,
                 profile);
 
   for (auto& i : gens) {
-    if (gensToDelete.find(i.number) == gensToDelete.end()) continue;
+    if (gensToDelete.find(i.number) == gensToDelete.end()) {
+      continue;
+    }
     deleteGeneration2(profile, i.number, dryRun);
   }
 }
@@ -171,7 +177,9 @@ void deleteOldGenerations(const Path& profile, bool dryRun) {
   Generations gens = findGenerations(profile, curGen);
 
   for (auto& i : gens)
-    if (i.number != curGen) deleteGeneration2(profile, i.number, dryRun);
+    if (i.number != curGen) {
+      deleteGeneration2(profile, i.number, dryRun);
+    }
 }
 
 void deleteGenerationsOlderThan(const Path& profile, time_t t, bool dryRun) {
@@ -185,7 +193,9 @@ void deleteGenerationsOlderThan(const Path& profile, time_t t, bool dryRun) {
   for (auto i = gens.rbegin(); i != gens.rend(); ++i)
     if (canDelete) {
       assert(i->creationTime < t);
-      if (i->number != curGen) deleteGeneration2(profile, i->number, dryRun);
+      if (i->number != curGen) {
+        deleteGeneration2(profile, i->number, dryRun);
+      }
     } else if (i->creationTime < t) {
       /* We may now start deleting generations, but we don't
          delete this generation yet, because this generation was
@@ -211,7 +221,9 @@ void deleteGenerationsOlderThan(const Path& profile, const string& timeSpec,
 
 void switchLink(Path link, Path target) {
   /* Hacky. */
-  if (dirOf(target) == dirOf(link)) target = baseNameOf(target);
+  if (dirOf(target) == dirOf(link)) {
+    target = baseNameOf(target);
+  }
 
   replaceSymlink(target, link);
 }

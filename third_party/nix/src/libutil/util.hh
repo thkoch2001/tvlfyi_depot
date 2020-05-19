@@ -416,7 +416,9 @@ class Callback {
 
   Callback(Callback&& callback) : fun(std::move(callback.fun)) {
     auto prev = callback.done.test_and_set();
-    if (prev) done.test_and_set();
+    if (prev) {
+      done.test_and_set();
+    }
   }
 
   void operator()(T&& t) noexcept {

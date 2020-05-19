@@ -37,7 +37,9 @@ static char* dupString(const char* s) {
 #else
   t = strdup(s);
 #endif
-  if (!t) throw std::bad_alloc();
+  if (!t) {
+    throw std::bad_alloc();
+  }
   return t;
 }
 
@@ -201,7 +203,9 @@ static Symbol getName(const AttrName& name, EvalState& state, Env& env) {
 static bool gcInitialised = false;
 
 void initGC() {
-  if (gcInitialised) return;
+  if (gcInitialised) {
+    return;
+  }
 
 #if HAVE_BOEHMGC
   /* Initialise the Boehm garbage collector. */
@@ -233,8 +237,12 @@ void initGC() {
     size_t maxSize = 384 * 1024 * 1024;
     long pageSize = sysconf(_SC_PAGESIZE);
     long pages = sysconf(_SC_PHYS_PAGES);
-    if (pageSize != -1) size = (pageSize * pages) / 4;  // 25% of RAM
-    if (size > maxSize) size = maxSize;
+    if (pageSize != -1) {
+      size = (pageSize * pages) / 4;
+    }  // 25% of RAM
+    if (size > maxSize) {
+      size = maxSize;
+    }
 #endif
     DLOG(INFO) << "setting initial heap size to " << size << " bytes";
     GC_expand_hp(size);
@@ -257,12 +265,16 @@ static Strings parseNixPath(const string& s) {
     auto start2 = p;
 
     while (p != s.end() && *p != ':') {
-      if (*p == '=') start2 = p + 1;
+      if (*p == '=') {
+        start2 = p + 1;
+      }
       ++p;
     }
 
     if (p == s.end()) {
-      if (p != start) res.push_back(std::string(start, p));
+      if (p != start) {
+        res.push_back(std::string(start, p));
+      }
       break;
     }
 
@@ -272,7 +284,9 @@ static Strings parseNixPath(const string& s) {
         while (p != s.end() && *p != ':') ++p;
       }
       res.push_back(std::string(start, p));
-      if (p == s.end()) break;
+      if (p == s.end()) {
+        break;
+      }
     }
 
     ++p;
@@ -331,7 +345,9 @@ EvalState::EvalState(const Strings& _searchPath, ref<Store> store)
 
     for (auto& i : searchPath) {
       auto r = resolveSearchPathElem(i);
-      if (!r.first) continue;
+      if (!r.first) {
+        continue;
+      }
 
       auto path = r.second;
 
@@ -354,10 +370,14 @@ EvalState::EvalState(const Strings& _searchPath, ref<Store> store)
 EvalState::~EvalState() {}
 
 Path EvalState::checkSourcePath(const Path& path_) {
-  if (!allowedPaths) return path_;
+  if (!allowedPaths) {
+    return path_;
+  }
 
   auto i = resolvedPaths.find(path_);
-  if (i != resolvedPaths.end()) return i->second;
+  if (i != resolvedPaths.end()) {
+    return i->second;
+  }
 
   bool found = false;
 
@@ -394,7 +414,9 @@ Path EvalState::checkSourcePath(const Path& path_) {
 }
 
 void EvalState::checkURI(const std::string& uri) {
-  if (!evalSettings.restrictEval) return;
+  if (!evalSettings.restrictEval) {
+    return;
+  }
 
   /* 'uri' should be equal to a prefix, or in a subdirectory of a
      prefix. Thus, the prefix https://github.co does not permit
@@ -565,7 +587,9 @@ inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
     }
     Bindings::iterator j = env->values[0]->attrs->find(var.name);
     if (j != env->values[0]->attrs->end()) {
-      if (countCalls && j->pos) attrSelects[*j->pos]++;
+      if (countCalls && j->pos) {
+        attrSelects[*j->pos]++;
+      }
       return j->value;
     }
     if (!env->prevWith)
@@ -703,7 +727,9 @@ void EvalState::evalFile(const Path& path_, Value& v) {
   Expr* e = nullptr;
 
   auto j = fileParseCache.find(path2);
-  if (j != fileParseCache.end()) e = j->second;
+  if (j != fileParseCache.end()) {
+    e = j->second;
+  }
 
   if (!e) {
     e = parseExprFromFile(checkSourcePath(path2));
@@ -719,7 +745,9 @@ void EvalState::evalFile(const Path& path_, Value& v) {
   }
 
   fileEvalCache[path2] = v;
-  if (path != path2) fileEvalCache[path] = v;
+  if (path != path2) {
+    fileEvalCache[path] = v;
+  }
 }
 
 void EvalState::resetFileCache() {
@@ -831,7 +859,9 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
     Value nameVal;
     i.nameExpr->eval(state, *dynamicEnv, nameVal);
     state.forceValue(nameVal, i.pos);
-    if (nameVal.type == tNull) continue;
+    if (nameVal.type == tNull) {
+      continue;
+    }
     state.forceStringNoCtx(nameVal);
     Symbol nameSym = state.symbols.create(nameVal.string.s);
     Bindings::iterator j = v.attrs->find(nameSym);
@@ -923,7 +953,9 @@ void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
       }
       vAttrs = j->value;
       pos2 = j->pos;
-      if (state.countCalls && pos2) state.attrSelects[*pos2]++;
+      if (state.countCalls && pos2) {
+        state.attrSelects[*pos2]++;
+      }
     }
 
     state.forceValue(*vAttrs, (pos2 != NULL ? *pos2 : this->pos));
@@ -999,7 +1031,9 @@ void EvalState::callPrimOp(Value& fun, Value& arg, Value& v, const Pos& pos) {
 
     /* And call the primop. */
     nrPrimOpCalls++;
-    if (countCalls) primOpCalls[primOp->primOp->name]++;
+    if (countCalls) {
+      primOpCalls[primOp->primOp->name]++;
+    }
     primOp->primOp->fun(*this, pos, vArgs, v);
   } else {
     Value* fun2 = allocValue();
@@ -1059,7 +1093,9 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
   } else {
     forceAttrs(arg, pos);
 
-    if (!lambda.arg.empty()) env2.values[displ++] = &arg;
+    if (!lambda.arg.empty()) {
+      env2.values[displ++] = &arg;
+    }
 
     /* For each formal argument, get the actual argument.  If
        there is no matching actual argument but the formal
@@ -1283,7 +1319,9 @@ void EvalState::concatLists(Value& v, size_t nrLists, Value** lists,
   auto out = v.listElems();
   for (size_t n = 0, pos = 0; n < nrLists; ++n) {
     auto l = lists[n]->listSize();
-    if (l) memcpy(out + pos, lists[n]->listElems(), l * sizeof(Value*));
+    if (l) {
+      memcpy(out + pos, lists[n]->listElems(), l * sizeof(Value*));
+    }
     pos += l;
   }
 }
@@ -1361,7 +1399,9 @@ void EvalState::forceValueDeep(Value& v) {
   std::function<void(Value & v)> recurse;
 
   recurse = [&](Value& v) {
-    if (seen.find(&v) != seen.end()) return;
+    if (seen.find(&v) != seen.end()) {
+      return;
+    }
     seen.insert(&v);
 
     forceValue(v);
@@ -1526,11 +1566,21 @@ string EvalState::coerceToString(const Pos& pos, Value& v, PathSet& context,
   if (coerceMore) {
     /* Note that `false' is represented as an empty string for
        shell scripting convenience, just like `null'. */
-    if (v.type == tBool && v.boolean) return "1";
-    if (v.type == tBool && !v.boolean) return "";
-    if (v.type == tInt) return std::to_string(v.integer);
-    if (v.type == tFloat) return std::to_string(v.fpoint);
-    if (v.type == tNull) return "";
+    if (v.type == tBool && v.boolean) {
+      return "1";
+    }
+    if (v.type == tBool && !v.boolean) {
+      return "";
+    }
+    if (v.type == tInt) {
+      return std::to_string(v.integer);
+    }
+    if (v.type == tFloat) {
+      return std::to_string(v.fpoint);
+    }
+    if (v.type == tNull) {
+      return "";
+    }
 
     if (v.isList()) {
       string result;
@@ -1654,7 +1704,9 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
       Bindings::iterator i, j;
       for (i = v1.attrs->begin(), j = v2.attrs->begin(); i != v1.attrs->end();
            ++i, ++j) {
-        if (i->name != j->name || !eqValues(*i->value, *j->value)) return false;
+        if (i->name != j->name || !eqValues(*i->value, *j->value)) {
+          return false;
+        }
       }
 
       return true;
@@ -1697,7 +1749,9 @@ void EvalState::printStats() {
   if (showStats) {
     auto outPath = getEnv("NIX_SHOW_STATS_PATH", "-");
     std::fstream fs;
-    if (outPath != "-") fs.open(outPath, std::fstream::out);
+    if (outPath != "-") {
+      fs.open(outPath, std::fstream::out);
+    }
     JSONObject topObj(outPath == "-" ? std::cerr : fs, true);
     topObj.attr("cpuTime", cpuTime);
     {
@@ -1796,7 +1850,9 @@ size_t valueSize(Value& v) {
   std::set<const void*> seen;
 
   auto doString = [&](const char* s) -> size_t {
-    if (seen.find(s) != seen.end()) return 0;
+    if (seen.find(s) != seen.end()) {
+      return 0;
+    }
     seen.insert(s);
     return strlen(s) + 1;
   };
@@ -1805,7 +1861,9 @@ size_t valueSize(Value& v) {
   std::function<size_t(Env & v)> doEnv;
 
   doValue = [&](Value& v) -> size_t {
-    if (seen.find(&v) != seen.end()) return 0;
+    if (seen.find(&v) != seen.end()) {
+      return 0;
+    }
     seen.insert(&v);
 
     size_t sz = sizeof(Value);
@@ -1851,7 +1909,9 @@ size_t valueSize(Value& v) {
         sz += doValue(*v.primOpApp.right);
         break;
       case tExternal:
-        if (seen.find(v.external) != seen.end()) break;
+        if (seen.find(v.external) != seen.end()) {
+          break;
+        }
         seen.insert(v.external);
         sz += v.external->valueSize(seen);
         break;
@@ -1862,16 +1922,22 @@ size_t valueSize(Value& v) {
   };
 
   doEnv = [&](Env& env) -> size_t {
-    if (seen.find(&env) != seen.end()) return 0;
+    if (seen.find(&env) != seen.end()) {
+      return 0;
+    }
     seen.insert(&env);
 
     size_t sz = sizeof(Env) + sizeof(Value*) * env.size;
 
     if (env.type != Env::HasWithExpr)
       for (size_t i = 0; i < env.size; ++i)
-        if (env.values[i]) sz += doValue(*env.values[i]);
+        if (env.values[i]) {
+          sz += doValue(*env.values[i]);
+        }
 
-    if (env.up) sz += doEnv(*env.up);
+    if (env.up) {
+      sz += doEnv(*env.up);
+    }
 
     return sz;
   };

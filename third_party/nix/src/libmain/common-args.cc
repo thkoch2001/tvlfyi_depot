@@ -32,7 +32,9 @@ MixCommonArgs::MixCommonArgs(const string& programName)
   globalConfig.convertToArgs(*this, cat);
 
   // Backward compatibility hack: nix-env already had a --system flag.
-  if (programName == "nix-env") longFlags.erase("system");
+  if (programName == "nix-env") {
+    longFlags.erase("system");
+  }
 
   hiddenCategories.insert(cat);
 }

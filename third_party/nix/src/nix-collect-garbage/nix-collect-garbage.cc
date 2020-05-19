@@ -19,7 +19,9 @@ bool dryRun = false;
  * impossible. */
 
 void removeOldGenerations(std::string dir) {
-  if (access(dir.c_str(), R_OK) != 0) return;
+  if (access(dir.c_str(), R_OK) != 0) {
+    return;
+  }
 
   bool canWrite = access(dir.c_str(), W_OK) == 0;
 
@@ -34,7 +36,9 @@ void removeOldGenerations(std::string dir) {
       try {
         link = readLink(path);
       } catch (SysError& e) {
-        if (e.errNo == ENOENT) continue;
+        if (e.errNo == ENOENT) {
+          continue;
+        }
       }
       if (link.find("link") != string::npos) {
         LOG(INFO) << "removing old generations of profile " << path;
@@ -79,7 +83,9 @@ static int _main(int argc, char** argv) {
     initPlugins();
 
     auto profilesDir = settings.nixStateDir + "/profiles";
-    if (removeOld) removeOldGenerations(profilesDir);
+    if (removeOld) {
+      removeOldGenerations(profilesDir);
+    }
 
     // Run the actual garbage collector.
     if (!dryRun) {

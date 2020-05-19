@@ -96,7 +96,9 @@ ref<RemoteStore::Connection> UDSRemoteStore::openConnection() {
 #endif
                     ,
                     0);
-  if (!conn->fd) throw SysError("cannot create Unix domain socket");
+  if (!conn->fd) {
+    throw SysError("cannot create Unix domain socket");
+  }
   closeOnExec(conn->fd.get());
 
   string socketPath = path ? *path : settings.nixDaemonSocketFile;
@@ -126,7 +128,9 @@ void RemoteStore::initConnection(Connection& conn) {
     conn.to << WORKER_MAGIC_1;
     conn.to.flush();
     unsigned int magic = readInt(conn.from);
-    if (magic != WORKER_MAGIC_2) throw Error("protocol mismatch");
+    if (magic != WORKER_MAGIC_2) {
+      throw Error("protocol mismatch");
+    }
 
     conn.from >> conn.daemonVersion;
     if (GET_PROTOCOL_MAJOR(conn.daemonVersion) !=
@@ -144,10 +148,14 @@ void RemoteStore::initConnection(Connection& conn) {
         conn.to << 0;
     }
 
-    if (GET_PROTOCOL_MINOR(conn.daemonVersion) >= 11) conn.to << false;
+    if (GET_PROTOCOL_MINOR(conn.daemonVersion) >= 11) {
+      conn.to << false;
+    }
 
     auto ex = conn.processStderr();
-    if (ex) std::rethrow_exception(ex);
+    if (ex) {
+      std::rethrow_exception(ex);
+    }
   } catch (Error& e) {
     throw Error("cannot open connection to remote store '%s': %s", getUri(),
                 e.what());
@@ -185,7 +193,9 @@ void RemoteStore::setOptions(Connection& conn) {
   }
 
   auto ex = conn.processStderr();
-  if (ex) std::rethrow_exception(ex);
+  if (ex) {
+    std::rethrow_exception(ex);
+  }
 }
 
 /* A wrapper around Pool<RemoteStore::Connection>::Handle that marks
@@ -238,7 +248,9 @@ PathSet RemoteStore::queryValidPaths(const PathSet& paths,
   if (GET_PROTOCOL_MINOR(conn->daemonVersion) < 12) {
     PathSet res;
     for (auto& i : paths)
-      if (isValidPath(i)) res.insert(i);
+      if (isValidPath(i)) {
+        res.insert(i);
+      }
     return res;
   } else {
     conn->to << wopQueryValidPaths << paths;
@@ -261,7 +273,9 @@ PathSet RemoteStore::querySubstitutablePaths(const PathSet& paths) {
     for (auto& i : paths) {
       conn->to << wopHasSubstitutes << i;
       conn.processStderr();
-      if (readInt(conn->from)) res.insert(i);
+      if (readInt(conn->from)) {
+        res.insert(i);
+      }
     }
     return res;
   } else {
@@ -273,7 +287,9 @@ PathSet RemoteStore::querySubstitutablePaths(const PathSet& paths) {
 
 void RemoteStore::querySubstitutablePathInfos(const PathSet& paths,
                                               SubstitutablePathInfos& infos) {
-  if (paths.empty()) return;
+  if (paths.empty()) {
+    return;
+  }
 
   auto conn(getConnection());
 
@@ -283,9 +299,13 @@ void RemoteStore::querySubstitutablePathInfos(const PathSet& paths,
       conn->to << wopQuerySubstitutablePathInfo << i;
       conn.processStderr();
       unsigned int reply = readInt(conn->from);
-      if (reply == 0) continue;
+      if (reply == 0) {
+        continue;
+      }
       info.deriver = readString(conn->from);
-      if (info.deriver != "") assertStorePath(info.deriver);
+      if (info.deriver != "") {
+        assertStorePath(info.deriver);
+      }
       info.references = readStorePaths<PathSet>(*this, conn->from);
       info.downloadSize = readLongLong(conn->from);
       info.narSize = readLongLong(conn->from);
@@ -300,7 +320,9 @@ void RemoteStore::querySubstitutablePathInfos(const PathSet& paths,
       Path path = readStorePath(*this, conn->from);
       SubstitutablePathInfo& info(infos[path]);
       info.deriver = readString(conn->from);
-      if (info.deriver != "") assertStorePath(info.deriver);
+      if (info.deriver != "") {
+        assertStorePath(info.deriver);
+      }
       info.references = readStorePaths<PathSet>(*this, conn->from);
       info.downloadSize = readLongLong(conn->from);
       info.narSize = readLongLong(conn->from);
@@ -327,12 +349,16 @@ void RemoteStore::queryPathInfoUncached(
       if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 17) {
         bool valid;
         conn->from >> valid;
-        if (!valid) throw InvalidPath(format("path '%s' is not valid") % path);
+        if (!valid) {
+          throw InvalidPath(format("path '%s' is not valid") % path);
+        }
       }
       info = std::make_shared<ValidPathInfo>();
       info->path = path;
       info->deriver = readString(conn->from);
-      if (info->deriver != "") assertStorePath(info->deriver);
+      if (info->deriver != "") {
+        assertStorePath(info->deriver);
+      }
       info->narHash = Hash(readString(conn->from), htSHA256);
       info->references = readStorePaths<PathSet>(*this, conn->from);
       conn->from >> info->registrationTime >> info->narSize;
@@ -382,7 +408,9 @@ Path RemoteStore::queryPathFromHashPart(const string& hashPart) {
   conn->to << wopQueryPathFromHashPart << hashPart;
   conn.processStderr();
   Path path = readString(conn->from);
-  if (!path.empty()) assertStorePath(path);
+  if (!path.empty()) {
+    assertStorePath(path);
+  }
   return path;
 }
 
@@ -416,7 +444,9 @@ void RemoteStore::addToStore(const ValidPathInfo& info, Source& source,
              << info.registrationTime << info.narSize << info.ultimate
              << info.sigs << info.ca << repair << !checkSigs;
     bool tunnel = GET_PROTOCOL_MINOR(conn->daemonVersion) >= 21;
-    if (!tunnel) copyNAR(source, conn->to);
+    if (!tunnel) {
+      copyNAR(source, conn->to);
+    }
     conn.processStderr(0, tunnel ? &source : nullptr);
   }
 }
@@ -647,12 +677,16 @@ std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
 
     if (msg == STDERR_WRITE) {
       string s = readString(from);
-      if (!sink) throw Error("no sink");
+      if (!sink) {
+        throw Error("no sink");
+      }
       (*sink)(s);
     }
 
     else if (msg == STDERR_READ) {
-      if (!source) throw Error("no source");
+      if (!source) {
+        throw Error("no source");
+      }
       size_t len = readNum<size_t>(from);
       auto buf = std::make_unique<unsigned char[]>(len);
       writeString(buf.get(), source->read(buf.get(), len), to);
@@ -690,7 +724,9 @@ static std::string uriScheme = "unix://";
 static RegisterStoreImplementation regStore(
     [](const std::string& uri,
        const Store::Params& params) -> std::shared_ptr<Store> {
-      if (std::string(uri, 0, uriScheme.size()) != uriScheme) return 0;
+      if (std::string(uri, 0, uriScheme.size()) != uriScheme) {
+        return 0;
+      }
       return std::make_shared<UDSRemoteStore>(
           std::string(uri, uriScheme.size()), params);
     });

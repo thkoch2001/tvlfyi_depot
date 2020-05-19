@@ -36,7 +36,9 @@ static void showAttrs(EvalState& state, bool strict, bool location,
 
     XMLAttrs xmlAttrs;
     xmlAttrs["name"] = i;
-    if (location && a.pos != &noPos) posToXML(xmlAttrs, *a.pos);
+    if (location && a.pos != &noPos) {
+      posToXML(xmlAttrs, *a.pos);
+    }
 
     XMLOpenElement _(doc, "attr", xmlAttrs);
     printValueAsXML(state, strict, location, *a.value, doc, context, drvsSeen);
@@ -132,7 +134,9 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
 
     case tLambda: {
       XMLAttrs xmlAttrs;
-      if (location) posToXML(xmlAttrs, v.lambda.fun->pos);
+      if (location) {
+        posToXML(xmlAttrs, v.lambda.fun->pos);
+      }
       XMLOpenElement _(doc, "function", xmlAttrs);
 
       if (v.lambda.fun->matchAttrs) {

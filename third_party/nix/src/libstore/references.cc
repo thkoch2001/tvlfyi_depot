@@ -35,7 +35,9 @@ static void search(const unsigned char* s, size_t len, StringSet& hashes,
         match = false;
         break;
       }
-    if (!match) continue;
+    if (!match) {
+      continue;
+    }
     string ref((const char*)s + i, refLength);
     if (hashes.find(ref) != hashes.end()) {
       DLOG(INFO) << "found reference to '" << ref << "' at offset " << i;
@@ -88,7 +90,9 @@ PathSet scanForReferences(const string& path, const PathSet& refs,
   for (auto& i : refs) {
     string baseName = baseNameOf(i);
     string::size_type pos = baseName.find('-');
-    if (pos == string::npos) throw Error(format("bad reference '%1%'") % i);
+    if (pos == string::npos) {
+      throw Error(format("bad reference '%1%'") % i);
+    }
     string s = string(baseName, 0, pos);
     assert(s.size() == refLength);
     assert(backMap.find(s) == backMap.end());
@@ -104,7 +108,9 @@ PathSet scanForReferences(const string& path, const PathSet& refs,
   PathSet found;
   for (auto& i : sink.seen) {
     std::map<string, Path>::iterator j;
-    if ((j = backMap.find(i)) == backMap.end()) abort();
+    if ((j = backMap.find(i)) == backMap.end()) {
+      abort();
+    }
     found.insert(j->second);
   }
 

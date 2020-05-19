@@ -27,12 +27,16 @@ namespace nix {
 static bool haveInternet() {
   struct ifaddrs* addrs;
 
-  if (getifaddrs(&addrs)) return true;
+  if (getifaddrs(&addrs)) {
+    return true;
+  }
 
   Finally free([&]() { freeifaddrs(addrs); });
 
   for (auto i = addrs; i; i = i->ifa_next) {
-    if (!i->ifa_addr) continue;
+    if (!i->ifa_addr) {
+      continue;
+    }
     if (i->ifa_addr->sa_family == AF_INET) {
       if (ntohl(((sockaddr_in*)i->ifa_addr)->sin_addr.s_addr) !=
           INADDR_LOOPBACK) {
@@ -127,7 +131,9 @@ void mainWrapped(int argc, char** argv) {
 
   {
     auto legacy = (*RegisterLegacyCommand::commands)[programName];
-    if (legacy) return legacy(argc, argv);
+    if (legacy) {
+      return legacy(argc, argv);
+    }
   }
 
   settings.verboseBuild = false;
@@ -138,7 +144,9 @@ void mainWrapped(int argc, char** argv) {
 
   initPlugins();
 
-  if (!args.command) args.showHelpAndExit();
+  if (!args.command) {
+    args.showHelpAndExit();
+  }
 
   if (args.useNet && !haveInternet()) {
     LOG(WARNING) << "you don't have Internet access; "
@@ -148,10 +156,14 @@ void mainWrapped(int argc, char** argv) {
 
   if (!args.useNet) {
     // FIXME: should check for command line overrides only.
-    if (!settings.useSubstitutes.overriden) settings.useSubstitutes = false;
+    if (!settings.useSubstitutes.overriden) {
+      settings.useSubstitutes = false;
+    }
     if (!settings.tarballTtl.overriden)
       settings.tarballTtl = std::numeric_limits<unsigned int>::max();
-    if (!downloadSettings.tries.overriden) downloadSettings.tries = 0;
+    if (!downloadSettings.tries.overriden) {
+      downloadSettings.tries = 0;
+    }
     if (!downloadSettings.connectTimeout.overriden)
       downloadSettings.connectTimeout = 1;
   }

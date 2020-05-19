@@ -45,8 +45,12 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
     std::unordered_set<std::string> seen;
 
     auto addEntry = [&](const std::string& name) {
-      if (name == "") return;
-      if (!seen.insert(name).second) return;
+      if (name == "") {
+        return;
+      }
+      if (!seen.insert(name).second) {
+        return;
+      }
       Value* v1 = state.allocValue();
       mkPrimOpApp(*v1, state.getBuiltin("findFile"),
                   state.getBuiltin("nixPath"));
@@ -189,7 +193,9 @@ static std::vector<std::shared_ptr<Installable>> parseInstallables(
   std::vector<std::shared_ptr<Installable>> result;
 
   if (ss.empty() && useDefaultInstallables) {
-    if (cmd.file == "") cmd.file = ".";
+    if (cmd.file == "") {
+      cmd.file = ".";
+    }
     ss = {""};
   }
 

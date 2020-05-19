@@ -128,11 +128,15 @@ void initNix() {
   sigemptyset(&act.sa_mask);
   act.sa_handler = SIG_DFL;
   act.sa_flags = 0;
-  if (sigaction(SIGCHLD, &act, 0)) throw SysError("resetting SIGCHLD");
+  if (sigaction(SIGCHLD, &act, 0)) {
+    throw SysError("resetting SIGCHLD");
+  }
 
   /* Install a dummy SIGUSR1 handler for use with pthread_kill(). */
   act.sa_handler = sigHandler;
-  if (sigaction(SIGUSR1, &act, 0)) throw SysError("handling SIGUSR1");
+  if (sigaction(SIGUSR1, &act, 0)) {
+    throw SysError("handling SIGUSR1");
+  }
 
 #if __APPLE__
   /* HACK: on darwin, we need can’t use sigprocmask with SIGWINCH.
@@ -140,7 +144,9 @@ void initNix() {
    * can handle the rest. */
   struct sigaction sa;
   sa.sa_handler = sigHandler;
-  if (sigaction(SIGWINCH, &sa, 0)) throw SysError("handling SIGWINCH");
+  if (sigaction(SIGWINCH, &sa, 0)) {
+    throw SysError("handling SIGWINCH");
+  }
 #endif
 
   /* Register a SIGSEGV handler to detect stack overflows. */
@@ -223,14 +229,18 @@ LegacyArgs::LegacyArgs(
 }
 
 bool LegacyArgs::processFlag(Strings::iterator& pos, Strings::iterator end) {
-  if (MixCommonArgs::processFlag(pos, end)) return true;
+  if (MixCommonArgs::processFlag(pos, end)) {
+    return true;
+  }
   bool res = parseArg(pos, end);
   if (res) ++pos;
   return res;
 }
 
 bool LegacyArgs::processArgs(const Strings& args, bool finish) {
-  if (args.empty()) return true;
+  if (args.empty()) {
+    return true;
+  }
   assert(args.size() == 1);
   Strings ss(args);
   auto pos = ss.begin();
@@ -321,10 +331,16 @@ int handleExceptions(const string& programName, std::function<void()> fun) {
 }
 
 RunPager::RunPager() {
-  if (!isatty(STDOUT_FILENO)) return;
+  if (!isatty(STDOUT_FILENO)) {
+    return;
+  }
   char* pager = getenv("NIX_PAGER");
-  if (!pager) pager = getenv("PAGER");
-  if (pager && ((string)pager == "" || (string)pager == "cat")) return;
+  if (!pager) {
+    pager = getenv("PAGER");
+  }
+  if (pager && ((string)pager == "" || (string)pager == "cat")) {
+    return;
+  }
 
   Pipe toPager;
   toPager.create();
@@ -332,9 +348,13 @@ RunPager::RunPager() {
   pid = startProcess([&]() {
     if (dup2(toPager.readSide.get(), STDIN_FILENO) == -1)
       throw SysError("dupping stdin");
-    if (!getenv("LESS")) setenv("LESS", "FRSXMK", 1);
+    if (!getenv("LESS")) {
+      setenv("LESS", "FRSXMK", 1);
+    }
     restoreSignals();
-    if (pager) execl("/bin/sh", "sh", "-c", pager, nullptr);
+    if (pager) {
+      execl("/bin/sh", "sh", "-c", pager, nullptr);
+    }
     execlp("pager", "pager", nullptr);
     execlp("less", "less", nullptr);
     execlp("more", "more", nullptr);

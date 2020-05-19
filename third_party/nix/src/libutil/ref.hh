@@ -17,11 +17,15 @@ class ref {
   ref<T>(const ref<T>& r) : p(r.p) {}
 
   explicit ref<T>(const std::shared_ptr<T>& p) : p(p) {
-    if (!p) throw std::invalid_argument("null pointer cast to ref");
+    if (!p) {
+      throw std::invalid_argument("null pointer cast to ref");
+    }
   }
 
   explicit ref<T>(T* p) : p(p) {
-    if (!p) throw std::invalid_argument("null pointer cast to ref");
+    if (!p) {
+      throw std::invalid_argument("null pointer cast to ref");
+    }
   }
 
   T* operator->() const { return &*p; }

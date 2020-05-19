@@ -70,7 +70,9 @@ void ExprVar::show(std::ostream& str) const { str << name; }
 
 void ExprSelect::show(std::ostream& str) const {
   str << "(" << *e << ")." << showAttrPath(attrPath);
-  if (def) str << " or (" << *def << ")";
+  if (def) {
+    str << " or (" << *def << ")";
+  }
 }
 
 void ExprOpHasAttr::show(std::ostream& str) const {
@@ -78,7 +80,9 @@ void ExprOpHasAttr::show(std::ostream& str) const {
 }
 
 void ExprAttrs::show(std::ostream& str) const {
-  if (recursive) str << "rec ";
+  if (recursive) {
+    str << "rec ";
+  }
   str << "{ ";
   for (auto& i : attrs)
     if (i.second.inherited)
@@ -108,16 +112,24 @@ void ExprLambda::show(std::ostream& str) const {
       else
         str << ", ";
       str << i.name;
-      if (i.def) str << " ? " << *i.def;
+      if (i.def) {
+        str << " ? " << *i.def;
+      }
     }
     if (formals->ellipsis) {
-      if (!first) str << ", ";
+      if (!first) {
+        str << ", ";
+      }
       str << "...";
     }
     str << " }";
-    if (!arg.empty()) str << " @ ";
+    if (!arg.empty()) {
+      str << " @ ";
+    }
   }
-  if (!arg.empty()) str << arg;
+  if (!arg.empty()) {
+    str << arg;
+  }
   str << ": " << *body << ")";
 }
 
@@ -239,13 +251,17 @@ void ExprSelect::bindVars(const StaticEnv& env) {
     def->bindVars(env);
   }
   for (auto& i : attrPath)
-    if (!i.symbol.set()) i.expr->bindVars(env);
+    if (!i.symbol.set()) {
+      i.expr->bindVars(env);
+    }
 }
 
 void ExprOpHasAttr::bindVars(const StaticEnv& env) {
   e->bindVars(env);
   for (auto& i : attrPath)
-    if (!i.symbol.set()) i.expr->bindVars(env);
+    if (!i.symbol.set()) {
+      i.expr->bindVars(env);
+    }
 }
 
 void ExprAttrs::bindVars(const StaticEnv& env) {
@@ -296,7 +312,9 @@ void ExprLambda::bindVars(const StaticEnv& env) {
     }
 
     for (auto& i : formals->formals)
-      if (i.def) i.def->bindVars(newEnv);
+      if (i.def) {
+        i.def->bindVars(newEnv);
+      }
   }
 
   body->bindVars(newEnv);

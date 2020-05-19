@@ -91,7 +91,9 @@ JSONWriter::~JSONWriter() {
   if (state) {
     assertActive();
     state->stack--;
-    if (state->stack == 0) delete state;
+    if (state->stack == 0) {
+      delete state;
+    }
   }
 }
 
@@ -158,7 +160,9 @@ void JSONObject::attr(const std::string& s) {
   comma();
   toJSON(state->str, s);
   state->str << ':';
-  if (state->indent) state->str << ' ';
+  if (state->indent) {
+    state->str << ' ';
+  }
 }
 
 JSONList JSONObject::list(const std::string& name) {
