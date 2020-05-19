@@ -15,6 +15,7 @@
 
 #include <curl/curl.h>
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <unistd.h>
 #include <algorithm>
 #include <cmath>
@@ -50,7 +51,6 @@ struct CurlDownloader : public Downloader {
     CurlDownloader& downloader;
     DownloadRequest request;
     DownloadResult result;
-    Activity act;
     bool done = false;  // whether either the success or failure function has
                         // been called
     Callback<DownloadResult> callback;
@@ -77,10 +77,6 @@ struct CurlDownloader : public Downloader {
                  Callback<DownloadResult>&& callback)
         : downloader(downloader),
           request(request),
-          act(*logger, lvlTalkative, actDownload,
-              fmt(request.data ? "uploading '%s'" : "downloading '%s'",
-                  request.uri),
-              {request.uri}, request.parentAct),
           callback(std::move(callback)),
           finalSink([this](const unsigned char* data, size_t len) {
             if (this->request.dataCallback) {
@@ -97,6 +93,9 @@ struct CurlDownloader : public Downloader {
             } else
               this->result.data->append((char*)data, len);
           }) {
+      LOG(INFO) << (request.data ? "uploading '" : "downloading '")
+                << request.uri << "'";
+
       if (!request.expectedETag.empty())
         requestHeaders = curl_slist_append(
             requestHeaders, ("If-None-Match: " + request.expectedETag).c_str());
@@ -162,8 +161,7 @@ struct CurlDownloader : public Downloader {
     size_t headerCallback(void* contents, size_t size, size_t nmemb) {
       size_t realSize = size * nmemb;
       std::string line((char*)contents, realSize);
-      printMsg(lvlVomit,
-               format("got header for '%s': %s") % request.uri % trim(line));
+      DLOG(INFO) << "got header for '" << request.uri << "': " << trim(line);
       if (line.compare(0, 5, "HTTP/") == 0) {  // new response starts
         result.etag = "";
         auto ss = tokenizeString<vector<string>>(line, " ");
@@ -184,8 +182,8 @@ struct CurlDownloader : public Downloader {
                down the connection because we already have the
                data. */
             if (result.etag == request.expectedETag && status == "200") {
-              debug(format(
-                  "shutting down on 200 HTTP response with expected ETag"));
+              DLOG(INFO)
+                  << "shutting down on 200 HTTP response with expected ETag";
               return 0;
             }
           } else if (name == "content-encoding")
@@ -205,7 +203,7 @@ struct CurlDownloader : public Downloader {
 
     int progressCallback(double dltotal, double dlnow) {
       try {
-        act.progress(dlnow, dltotal);
+        // TODO(tazjin): this had activity nonsense, clean it up
       } catch (nix::Interrupted&) {
         assert(_isInterrupted);
       }
@@ -220,8 +218,9 @@ struct CurlDownloader : public Downloader {
 
     static int debugCallback(CURL* handle, curl_infotype type, char* data,
                              size_t size, void* userptr) {
-      if (type == CURLINFO_TEXT)
-        vomit("curl: %s", chomp(std::string(data, size)));
+      if (type == CURLINFO_TEXT) {
+        DLOG(INFO) << "curl: " << chomp(std::string(data, size));
+      }
       return 0;
     }
 
@@ -245,11 +244,12 @@ struct CurlDownloader : public Downloader {
 
       curl_easy_reset(req);
 
-      if (verbosity >= lvlVomit) {
-        curl_easy_setopt(req, CURLOPT_VERBOSE, 1);
-        curl_easy_setopt(req, CURLOPT_DEBUGFUNCTION,
-                         DownloadItem::debugCallback);
-      }
+      // TODO(tazjin): Add an Abseil flag for this
+      // if (verbosity >= lvlVomit) {
+      //   curl_easy_setopt(req, CURLOPT_VERBOSE, 1);
+      //   curl_easy_setopt(req, CURLOPT_DEBUGFUNCTION,
+      //                    DownloadItem::debugCallback);
+      // }
 
       curl_easy_setopt(req, CURLOPT_URL, request.uri.c_str());
       curl_easy_setopt(req, CURLOPT_FOLLOWLOCATION, 1L);
@@ -329,10 +329,10 @@ struct CurlDownloader : public Downloader {
       curl_easy_getinfo(req, CURLINFO_EFFECTIVE_URL, &effectiveUriCStr);
       if (effectiveUriCStr) result.effectiveUri = effectiveUriCStr;
 
-      debug(
-          "finished %s of '%s'; curl status = %d, HTTP status = %d, body = %d "
-          "bytes",
-          request.verb(), request.uri, code, httpStatus, result.bodySize);
+      DLOG(INFO) << "finished " << request.verb() << " of " << request.uri
+                 << "; curl status = " << code
+                 << ", HTTP status = " << httpStatus
+                 << ", body = " << result.bodySize << " bytes";
 
       if (decompressionSink) {
         try {
@@ -356,7 +356,6 @@ struct CurlDownloader : public Downloader {
                 httpStatus == 226 /* FTP */ ||
                 httpStatus == 0 /* other protocol */)) {
         result.cached = httpStatus == 304;
-        act.progress(result.bodySize, result.bodySize);
         done = true;
         callback(std::move(result));
       }
@@ -441,11 +440,12 @@ struct CurlDownloader : public Downloader {
                    std::pow(2.0f, attempt - 1 +
                                       std::uniform_real_distribution<>(
                                           0.0, 0.5)(downloader.mt19937));
-          if (writtenToSink)
-            warn("%s; retrying from offset %d in %d ms", exc.what(),
-                 writtenToSink, ms);
-          else
-            warn("%s; retrying in %d ms", exc.what(), ms);
+          if (writtenToSink) {
+            LOG(WARNING) << exc.what() << "; retrying from offset "
+                         << writtenToSink << " in " << ms << "ms";
+          } else {
+            LOG(WARNING) << exc.what() << "; retrying in " << ms << "ms";
+          }
           embargo =
               std::chrono::steady_clock::now() + std::chrono::milliseconds(ms);
           downloader.enqueueItem(shared_from_this());
@@ -565,7 +565,7 @@ struct CurlDownloader : public Downloader {
                         nextWakeup - std::chrono::steady_clock::now())
                         .count())
               : maxSleepTimeMs;
-      vomit("download thread waiting for %d ms", sleepTimeMs);
+      DLOG(INFO) << "download thread waiting for " << sleepTimeMs << " ms";
       mc = curl_multi_wait(curlm, extraFDs, 1, sleepTimeMs, &numfds);
       if (mc != CURLM_OK)
         throw nix::Error(format("unexpected error from curl_multi_wait(): %s") %
@@ -604,7 +604,8 @@ struct CurlDownloader : public Downloader {
       }
 
       for (auto& item : incoming) {
-        debug("starting %s of %s", item->request.verb(), item->request.uri);
+        DLOG(INFO) << "starting " << item->request.verb() << " of "
+                   << item->request.uri;
         item->init();
         curl_multi_add_handle(curlm, item->req);
         item->active = true;
@@ -612,7 +613,7 @@ struct CurlDownloader : public Downloader {
       }
     }
 
-    debug("download thread shutting down");
+    DLOG(INFO) << "download thread shutting down";
   }
 
   void workerThreadEntry() {
@@ -620,7 +621,7 @@ struct CurlDownloader : public Downloader {
       workerThreadMain();
     } catch (nix::Interrupted& e) {
     } catch (std::exception& e) {
-      printError("unexpected error in download thread: %s", e.what());
+      LOG(ERROR) << "unexpected error in download thread: " << e.what();
     }
 
     {
@@ -762,7 +763,7 @@ void Downloader::download(DownloadRequest&& request, Sink& sink) {
        download thread. (Hopefully sleeping will throttle the
        sender.) */
     if (state->data.size() > 1024 * 1024) {
-      debug("download buffer is full; going to sleep");
+      DLOG(INFO) << "download buffer is full; going to sleep";
       state.wait_for(state->request, std::chrono::seconds(10));
     }
 
@@ -870,7 +871,7 @@ CachedDownloadResult Downloader::downloadCached(
           result.effectiveUri = request.uri;
           result.etag = ss[1];
         } else if (!ss[1].empty()) {
-          debug(format("verifying previous ETag '%1%'") % ss[1]);
+          DLOG(INFO) << "verifying previous ETag: " << ss[1];
           expectedETag = ss[1];
         }
       }
@@ -908,7 +909,7 @@ CachedDownloadResult Downloader::downloadCached(
                 url + "\n" + res.etag + "\n" + std::to_string(time(0)) + "\n");
     } catch (DownloadError& e) {
       if (storePath.empty()) throw;
-      warn("warning: %s; using cached result", e.msg());
+      LOG(WARNING) << e.msg() << "; using cached result";
       result.etag = expectedETag;
     }
   }
@@ -924,7 +925,7 @@ CachedDownloadResult Downloader::downloadCached(
       if (!store->isValidPath(unpackedStorePath)) unpackedStorePath = "";
     }
     if (unpackedStorePath.empty()) {
-      printInfo(format("unpacking '%1%'...") % url);
+      LOG(INFO) << "unpacking '" << url << "' ...";
       Path tmpDir = createTempDir();
       AutoDelete autoDelete(tmpDir, true);
       // FIXME: this requires GNU tar for decompression.

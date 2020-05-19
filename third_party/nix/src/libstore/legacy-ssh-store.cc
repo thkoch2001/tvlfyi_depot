@@ -1,5 +1,6 @@
 #include "archive.hh"
 #include "derivations.hh"
+#include "glog/logging.h"
 #include "pool.hh"
 #include "remote-store.hh"
 #include "serve-protocol.hh"
@@ -90,7 +91,8 @@ struct LegacySSHStore : public Store {
     try {
       auto conn(connections->get());
 
-      debug("querying remote host '%s' for info on '%s'", host, path);
+      DLOG(INFO) << "querying remote host '" << host << "' for info on '"
+                 << path << "'";
 
       conn->to << cmdQueryPathInfos << PathSet{path};
       conn->to.flush();
@@ -125,7 +127,8 @@ struct LegacySSHStore : public Store {
   void addToStore(const ValidPathInfo& info, Source& source, RepairFlag repair,
                   CheckSigsFlag checkSigs,
                   std::shared_ptr<FSAccessor> accessor) override {
-    debug("adding path '%s' to remote host '%s'", info.path, host);
+    DLOG(INFO) << "adding path '" << info.path << "' to remote host '" << host
+               << "'";
 
     auto conn(connections->get());
 

@@ -54,8 +54,13 @@ std::unique_ptr<SSHMaster::Connection> SSHMaster::startCommand(
         } else {
           args = {"ssh", host.c_str(), "-x", "-a"};
           addCommonSSHOpts(args);
-          if (socketPath != "") args.insert(args.end(), {"-S", socketPath});
-          if (verbosity >= lvlChatty) args.push_back("-v");
+          if (socketPath != "") {
+            args.insert(args.end(), {"-S", socketPath});
+          }
+          // TODO(tazjin): Abseil verbosity flag
+          /*if (verbosity >= lvlChatty) {
+              args.push_back("-v");
+              }*/
         }
 
         args.push_back(command);
@@ -107,7 +112,7 @@ Path SSHMaster::startMaster() {
                         "-S",  state->socketPath,
                         "-o",  "LocalCommand=echo started",
                         "-o",  "PermitLocalCommand=yes"};
-        if (verbosity >= lvlChatty) args.push_back("-v");
+        // if (verbosity >= lvlChatty) args.push_back("-v");
         addCommonSSHOpts(args);
         execvp(args.begin()->c_str(), stringsToCharPtrs(args).data());
 

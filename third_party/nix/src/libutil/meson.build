@@ -11,7 +11,8 @@ libutil_src = files(
     join_paths(meson.source_root(), 'src/libutil/serialise.cc'),
     join_paths(meson.source_root(), 'src/libutil/thread-pool.cc'),
     join_paths(meson.source_root(), 'src/libutil/util.cc'),
-    join_paths(meson.source_root(), 'src/libutil/xml-writer.cc'))
+    join_paths(meson.source_root(), 'src/libutil/xml-writer.cc'),
+)
 
 libutil_headers = files(
     join_paths(meson.source_root(), 'src/libutil/affinity.hh'),
@@ -27,13 +28,14 @@ libutil_headers = files(
     join_paths(meson.source_root(), 'src/libutil/lru-cache.hh'),
     join_paths(meson.source_root(), 'src/libutil/monitor-fd.hh'),
     join_paths(meson.source_root(), 'src/libutil/pool.hh'),
+    join_paths(meson.source_root(), 'src/libutil/prefork-compat.hh'),
     join_paths(meson.source_root(), 'src/libutil/ref.hh'),
     join_paths(meson.source_root(), 'src/libutil/serialise.hh'),
     join_paths(meson.source_root(), 'src/libutil/sync.hh'),
     join_paths(meson.source_root(), 'src/libutil/thread-pool.hh'),
     join_paths(meson.source_root(), 'src/libutil/types.hh'),
     join_paths(meson.source_root(), 'src/libutil/util.hh'),
-    join_paths(meson.source_root(), 'src/libutil/xml-writer.hh')
+    join_paths(meson.source_root(), 'src/libutil/xml-writer.hh'),
 )
 
 libutil_dep_list = [

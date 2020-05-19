@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include "binary-cache-store.hh"
 #include "download.hh"
 #include "globals.hh"
@@ -45,7 +46,8 @@ class HttpBinaryCacheStore : public BinaryCacheStore {
     auto state(_state.lock());
     if (state->enabled && settings.tryFallback) {
       int t = 60;
-      printError("disabling binary cache '%s' for %s seconds", getUri(), t);
+      LOG(WARNING) << "disabling binary cache '" << getUri() << "' for " << t
+                   << " seconds";
       state->enabled = false;
       state->disabledUntil =
           std::chrono::steady_clock::now() + std::chrono::seconds(t);
@@ -57,7 +59,7 @@ class HttpBinaryCacheStore : public BinaryCacheStore {
     if (state->enabled) return;
     if (std::chrono::steady_clock::now() > state->disabledUntil) {
       state->enabled = true;
-      debug("re-enabling binary cache '%s'", getUri());
+      DLOG(INFO) << "re-enabling binary cache '" << getUri() << "'";
       return;
     }
     throw SubstituterDisabled("substituter '%s' is disabled", getUri());

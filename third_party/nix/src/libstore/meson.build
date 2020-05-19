@@ -79,6 +79,7 @@ libstore_data = files(
 #============================================================================
 
 libstore_dep_list = [
+    glog_dep,
     libbz2_dep,
     libcurl_dep,
     libdl_dep,

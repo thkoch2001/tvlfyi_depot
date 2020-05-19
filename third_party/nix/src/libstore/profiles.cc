@@ -1,5 +1,6 @@
 #include "profiles.hh"
 #include <errno.h>
+#include <glog/logging.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -110,10 +111,10 @@ void deleteGeneration(const Path& profile, unsigned int gen) {
 
 static void deleteGeneration2(const Path& profile, unsigned int gen,
                               bool dryRun) {
-  if (dryRun)
-    printInfo(format("would remove generation %1%") % gen);
-  else {
-    printInfo(format("removing generation %1%") % gen);
+  if (dryRun) {
+    LOG(INFO) << "would remove generation " << gen;
+  } else {
+    LOG(INFO) << "removing generation " << gen;
     deleteGeneration(profile, gen);
   }
 }

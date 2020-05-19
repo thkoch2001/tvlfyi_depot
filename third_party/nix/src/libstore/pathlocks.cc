@@ -1,5 +1,6 @@
 #include "pathlocks.hh"
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <sys/file.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -82,7 +83,7 @@ bool PathLocks::lockPaths(const PathSet& paths, const string& waitMsg,
     checkInterrupt();
     Path lockPath = path + ".lock";
 
-    debug(format("locking path '%1%'") % path);
+    DLOG(INFO) << "locking path '" << path << "'";
 
     AutoCloseFD fd;
 
@@ -93,7 +94,9 @@ bool PathLocks::lockPaths(const PathSet& paths, const string& waitMsg,
       /* Acquire an exclusive lock. */
       if (!lockFile(fd.get(), ltWrite, false)) {
         if (wait) {
-          if (waitMsg != "") printError(waitMsg);
+          if (waitMsg != "") {
+            LOG(WARNING) << waitMsg;
+          }
           lockFile(fd.get(), ltWrite, true);
         } else {
           /* Failed to lock this path; release all other
@@ -103,7 +106,7 @@ bool PathLocks::lockPaths(const PathSet& paths, const string& waitMsg,
         }
       }
 
-      debug(format("lock acquired on '%1%'") % lockPath);
+      DLOG(INFO) << "lock acquired on '" << lockPath << "'";
 
       /* Check that the lock file hasn't become stale (i.e.,
          hasn't been unlinked). */
@@ -115,7 +118,7 @@ bool PathLocks::lockPaths(const PathSet& paths, const string& waitMsg,
            a lock on a deleted file.  This means that other
            processes may create and acquire a lock on
            `lockPath', and proceed.  So we must retry. */
-        debug(format("open lock file '%1%' has become stale") % lockPath);
+        DLOG(INFO) << "open lock file '" << lockPath << "' has become stale";
       else
         break;
     }
@@ -139,11 +142,11 @@ void PathLocks::unlock() {
   for (auto& i : fds) {
     if (deletePaths) deleteLockFile(i.second, i.first);
 
-    if (close(i.first) == -1)
-      printError(format("error (ignored): cannot close lock file on '%1%'") %
-                 i.second);
+    if (close(i.first) == -1) {
+      LOG(WARNING) << "cannot close lock file on '" << i.second << "'";
+    }
 
-    debug(format("lock released on '%1%'") % i.second);
+    DLOG(INFO) << "lock released on '" << i.second << "'";
   }
 
   fds.clear();

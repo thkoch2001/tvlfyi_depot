@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include "archive.hh"
 #include "builtins.hh"
 #include "compression.hh"
@@ -66,7 +67,7 @@ void builtinFetchurl(const BasicDerivation& drv, const std::string& netrcData) {
               h.to_string(Base16, false));
         return;
       } catch (Error& e) {
-        debug(e.what());
+        LOG(ERROR) << e.what();
       }
 
   /* Otherwise try the specified URL. */

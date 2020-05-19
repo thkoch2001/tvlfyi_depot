@@ -6,6 +6,7 @@
 #include "derivations.hh"
 #include "fs-accessor.hh"
 #include "globals.hh"
+#include "glog/logging.h"
 #include "json.hh"
 #include "nar-accessor.hh"
 #include "nar-info-disk-cache.hh"
@@ -176,12 +177,10 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
   auto duration =
       std::chrono::duration_cast<std::chrono::milliseconds>(now2 - now1)
           .count();
-  printMsg(lvlTalkative,
-           format("copying path '%1%' (%2% bytes, compressed %3$.1f%% in %4% "
-                  "ms) to binary cache") %
-               narInfo->path % narInfo->narSize %
-               ((1.0 - (double)narCompressed->size() / nar->size()) * 100.0) %
-               duration);
+  DLOG(INFO) << "copying path '" << narInfo->path << "' (" << narInfo->narSize
+             << " bytes, compressed "
+             << ((1.0 - (double)narCompressed->size() / nar->size()) * 100.0)
+             << "% in " << duration << "ms) to binary cache";
 
   /* Atomically write the NAR file. */
   narInfo->url = "nar/" + narInfo->fileHash.to_string(Base32, false) + ".nar" +
@@ -243,35 +242,28 @@ void BinaryCacheStore::queryPathInfoUncached(
     const Path& storePath,
     Callback<std::shared_ptr<ValidPathInfo>> callback) noexcept {
   auto uri = getUri();
-  auto act = std::make_shared<Activity>(
-      *logger, lvlTalkative, actQueryPathInfo,
-      fmt("querying info about '%s' on '%s'", storePath, uri),
-      Logger::Fields{storePath, uri});
-  PushActivity pact(act->id);
+  LOG(INFO) << "querying info about '" << storePath << "' on '" << uri << "'";
 
   auto narInfoFile = narInfoFileFor(storePath);
 
   auto callbackPtr = std::make_shared<decltype(callback)>(std::move(callback));
 
-  getFile(
-      narInfoFile, {[=](std::future<std::shared_ptr<std::string>> fut) {
-        try {
-          auto data = fut.get();
+  getFile(narInfoFile, {[=](std::future<std::shared_ptr<std::string>> fut) {
+            try {
+              auto data = fut.get();
 
-          if (!data) return (*callbackPtr)(nullptr);
+              if (!data) return (*callbackPtr)(nullptr);
 
-          stats.narInfoRead++;
+              stats.narInfoRead++;
 
-          (*callbackPtr)(
-              (std::shared_ptr<ValidPathInfo>)std::make_shared<NarInfo>(
-                  *this, *data, narInfoFile));
+              (*callbackPtr)(
+                  (std::shared_ptr<ValidPathInfo>)std::make_shared<NarInfo>(
+                      *this, *data, narInfoFile));
 
-          (void)
-              act;  // force Activity into this lambda to ensure it stays alive
-        } catch (...) {
-          callbackPtr->rethrow();
-        }
-      }});
+            } catch (...) {
+              callbackPtr->rethrow();
+            }
+          }});
 }
 
 Path BinaryCacheStore::addToStore(const string& name, const Path& srcPath,
@@ -356,7 +348,8 @@ std::shared_ptr<std::string> BinaryCacheStore::getBuildLog(const Path& path) {
 
   auto logPath = "log/" + baseNameOf(drvPath);
 
-  debug("fetching build log from binary cache '%s/%s'", getUri(), logPath);
+  DLOG(INFO) << "fetching build log from binary cache '" << getUri() << "/"
+             << logPath << "'";
 
   return getFile(logPath);
 }

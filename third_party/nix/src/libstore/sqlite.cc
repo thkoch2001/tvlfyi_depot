@@ -1,4 +1,5 @@
 #include "sqlite.hh"
+#include <glog/logging.h>
 #include <sqlite3.h>
 #include <atomic>
 #include "util.hh"
@@ -157,7 +158,7 @@ void handleSQLiteBusy(const SQLiteBusy& e) {
 
   if (now > lastWarned + 10) {
     lastWarned = now;
-    printError("warning: %s", e.what());
+    LOG(ERROR) << e.what();
   }
 
   /* Sleep for a while since retrying the transaction right away

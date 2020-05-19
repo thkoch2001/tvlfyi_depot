@@ -46,14 +46,12 @@ struct DownloadRequest {
   bool head = false;
   size_t tries = downloadSettings.tries;
   unsigned int baseRetryTimeMs = 250;
-  ActivityId parentAct;
   bool decompress = true;
   std::shared_ptr<std::string> data;
   std::string mimeType;
   std::function<void(char*, size_t)> dataCallback;
 
-  DownloadRequest(const std::string& uri)
-      : uri(uri), parentAct(getCurActivity()) {}
+  DownloadRequest(const std::string& uri) : uri(uri) {}
 
   std::string verb() { return data ? "upload" : "download"; }
 };

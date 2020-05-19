@@ -1,4 +1,5 @@
 #include "store-api.hh"
+#include <glog/logging.h>
 #include <future>
 #include "crypto.hh"
 #include "derivations.hh"
@@ -526,15 +527,16 @@ void copyStorePath(ref<Store> srcStore, ref<Store> dstStore,
   auto srcUri = srcStore->getUri();
   auto dstUri = dstStore->getUri();
 
-  Activity act(*logger, lvlInfo, actCopyPath,
-               srcUri == "local" || srcUri == "daemon"
-                   ? fmt("copying path '%s' to '%s'", storePath, dstUri)
-                   : dstUri == "local" || dstUri == "daemon"
-                         ? fmt("copying path '%s' from '%s'", storePath, srcUri)
-                         : fmt("copying path '%s' from '%s' to '%s'", storePath,
-                               srcUri, dstUri),
-               {storePath, srcUri, dstUri});
-  PushActivity pact(act.id);
+  if (srcUri == "local" || srcUri == "daemon") {
+    LOG(INFO) << "copying path '" << storePath << "' to '" << dstUri << "'";
+  } else {
+    if (dstUri == "local" || dstUri == "daemon") {
+      LOG(INFO) << "copying path '" << storePath << "' from '" << srcUri << "'";
+    } else {
+      LOG(INFO) << "copying path '" << storePath << "' from '" << srcUri
+                << "' to '" << dstUri << "'";
+    }
+  }
 
   auto info = srcStore->queryPathInfo(storePath);
 
@@ -565,7 +567,6 @@ void copyStorePath(ref<Store> srcStore, ref<Store> dstStore,
         LambdaSink wrapperSink([&](const unsigned char* data, size_t len) {
           sink(data, len);
           total += len;
-          act.progress(total, info->narSize);
         });
         srcStore->narFromPath({storePath}, wrapperSink);
       },
@@ -588,17 +589,12 @@ void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
 
   if (missing.empty()) return;
 
-  Activity act(*logger, lvlInfo, actCopyPaths,
-               fmt("copying %d paths", missing.size()));
+  LOG(INFO) << "copying " << missing.size() << " paths";
 
   std::atomic<size_t> nrDone{0};
   std::atomic<size_t> nrFailed{0};
   std::atomic<uint64_t> bytesExpected{0};
   std::atomic<uint64_t> nrRunning{0};
-
-  auto showProgress = [&]() {
-    act.progress(nrDone, missing.size(), nrRunning, nrFailed);
-  };
 
   ThreadPool pool;
 
@@ -608,14 +604,12 @@ void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
       [&](const Path& storePath) {
         if (dstStore->isValidPath(storePath)) {
           nrDone++;
-          showProgress();
           return PathSet();
         }
 
         auto info = srcStore->queryPathInfo(storePath);
 
         bytesExpected += info->narSize;
-        act.setExpected(actCopyPath, bytesExpected);
 
         return info->references;
       },
@@ -625,21 +619,17 @@ void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
 
         if (!dstStore->isValidPath(storePath)) {
           MaintainCount<decltype(nrRunning)> mc(nrRunning);
-          showProgress();
           try {
             copyStorePath(srcStore, dstStore, storePath, repair, checkSigs);
           } catch (Error& e) {
             nrFailed++;
             if (!settings.keepGoing) throw e;
-            logger->log(lvlError,
-                        format("could not copy %s: %s") % storePath % e.what());
-            showProgress();
+            LOG(ERROR) << "could not copy " << storePath << ": " << e.what();
             return;
           }
         }
 
         nrDone++;
-        showProgress();
       });
 }
 
@@ -702,9 +692,8 @@ void ValidPathInfo::sign(const SecretKey& secretKey) {
 
 bool ValidPathInfo::isContentAddressed(const Store& store) const {
   auto warn = [&]() {
-    printError(
-        format("warning: path '%s' claims to be content-addressed but isn't") %
-        path);
+    LOG(ERROR) << "warning: path '" << path
+               << "' claims to be content-addressed but isn't";
   };
 
   if (hasPrefix(ca, "text:")) {
@@ -873,7 +862,7 @@ std::list<ref<Store>> getDefaultSubstituters() {
       try {
         stores.push_back(openStore(uri));
       } catch (Error& e) {
-        printError("warning: %s", e.what());
+        LOG(WARNING) << e.what();
       }
     };
 

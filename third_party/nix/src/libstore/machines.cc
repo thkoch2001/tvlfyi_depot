@@ -1,4 +1,5 @@
 #include "machines.hh"
+#include <glog/logging.h>
 #include <algorithm>
 #include "globals.hh"
 #include "util.hh"
@@ -53,15 +54,19 @@ void parseMachines(const std::string& s, Machines& machines) {
       try {
         parseMachines(readFile(file), machines);
       } catch (const SysError& e) {
-        if (e.errNo != ENOENT) throw;
-        debug("cannot find machines file '%s'", file);
+        if (e.errNo != ENOENT) {
+          throw;
+        }
+        DLOG(INFO) << "cannot find machines file: " << file;
       }
       continue;
     }
 
     auto tokens = tokenizeString<std::vector<string>>(line);
     auto sz = tokens.size();
-    if (sz < 1) throw FormatError("bad machine specification '%s'", line);
+    if (sz < 1) {
+      throw FormatError("bad machine specification '%s'", line);
+    }
 
     auto isSet = [&](size_t n) {
       return tokens.size() > n && tokens[n] != "" && tokens[n] != "-";

@@ -1,6 +1,7 @@
 #include "remote-store.hh"
 #include <errno.h>
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -13,6 +14,7 @@
 #include "finally.hh"
 #include "globals.hh"
 #include "pool.hh"
+#include "prefork-compat.hh"
 #include "serialise.hh"
 #include "util.hh"
 #include "worker-protocol.hh"
@@ -150,10 +152,14 @@ void RemoteStore::initConnection(Connection& conn) {
 }
 
 void RemoteStore::setOptions(Connection& conn) {
-  conn.to << wopSetOptions << settings.keepFailed << settings.keepGoing
-          << settings.tryFallback << verbosity << settings.maxBuildJobs
-          << settings.maxSilentTime << true
-          << (settings.verboseBuild ? lvlError : lvlVomit)
+  conn.to << wopSetOptions << settings.keepFailed
+          << settings.keepGoing
+          // TODO(tazjin): Remove the verbosity stuff here.
+          << settings.tryFallback << compat::kInfo << settings.maxBuildJobs
+          << settings.maxSilentTime
+          << true
+          // TODO(tazjin): what behaviour does this toggle remotely?
+          << (settings.verboseBuild ? compat::kError : compat::kVomit)
           << 0  // obsolete log type
           << 0  /* obsolete print build trace */
           << settings.buildCores << settings.useSubstitutes;
@@ -194,7 +200,8 @@ struct ConnectionHandle {
   ~ConnectionHandle() {
     if (!daemonException && std::uncaught_exceptions()) {
       handle.markBad();
-      debug("closing daemon connection because of an exception");
+      // TODO(tazjin): are these types of things supposed to be DEBUG?
+      DLOG(INFO) << "closing daemon connection because of an exception";
     }
   }
 
@@ -625,19 +632,29 @@ RemoteStore::Connection::~Connection() {
   }
 }
 
-static Logger::Fields readFields(Source& from) {
-  Logger::Fields fields;
+// TODO(tazjin): these logger fields used to be passed to the JSON
+// logger but I don't care about them, whatever sends them should
+// also be fixed.
+static void ignoreFields(Source& from) {
   size_t size = readInt(from);
+
+  // This ignores the fields simply by reading the data into nowhere.
   for (size_t n = 0; n < size; n++) {
-    auto type = (decltype(Logger::Field::type))readInt(from);
-    if (type == Logger::Field::tInt)
-      fields.push_back(readNum<uint64_t>(from));
-    else if (type == Logger::Field::tString)
-      fields.push_back(readString(from));
-    else
-      throw Error("got unsupported field type %x from Nix daemon", (int)type);
+    auto type_tag = readInt(from);
+
+    switch (type_tag) {
+      case 0:  // previously: 0 ~ Logger::Field::tInt
+        readNum<uint64_t>(from);
+        break;
+
+      case 1:  // previously: 1 ~ Logger::Field::tString
+        readString(from);
+        break;
+
+      default:
+        throw Error("got unsupported field type %x from Nix daemon", type_tag);
+    }
   }
-  return fields;
 }
 
 std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
@@ -667,36 +684,52 @@ std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
       return std::make_exception_ptr(Error(status, error));
     }
 
-    else if (msg == STDERR_NEXT)
-      printError(chomp(readString(from)));
+    else if (msg == STDERR_NEXT) {
+      LOG(ERROR) << chomp(readString(from));
+    }
 
     else if (msg == STDERR_START_ACTIVITY) {
-      auto act = readNum<ActivityId>(from);
-      auto lvl = (Verbosity)readInt(from);
-      auto type = (ActivityType)readInt(from);
-      auto s = readString(from);
-      auto fields = readFields(from);
-      auto parent = readNum<ActivityId>(from);
-      logger->startActivity(act, lvl, type, s, fields, parent);
+      // Various fields need to be ignored in this case, as the
+      // activity stuff is being removed.
+      readNum<uint64_t>(from);  // used to be ActivityId
+      const auto verbosity = static_cast<compat::Verbosity>(readInt(from));
+      readInt(from);  // activity type
+      const auto msg = readString(from);
+      ignoreFields(from);
+      readNum<uint64_t>(from);  // ActivityId of "parent"
+
+      switch (verbosity) {
+        case compat::kError:
+          LOG(ERROR) << msg;
+          break;
+        case compat::kWarn:
+          LOG(WARNING) << msg;
+          break;
+        case compat::kInfo:
+          LOG(INFO) << msg;
+          break;
+        default:
+          DLOG(INFO) << msg;
+      }
     }
 
     else if (msg == STDERR_STOP_ACTIVITY) {
-      auto act = readNum<ActivityId>(from);
-      logger->stopActivity(act);
+      readNum<uint64_t>(from);  // used to be ActivityId
     }
 
     else if (msg == STDERR_RESULT) {
-      auto act = readNum<ActivityId>(from);
-      auto type = (ResultType)readInt(from);
-      auto fields = readFields(from);
-      logger->result(act, type, fields);
+      readNum<uint64_t>(from);  // ActivityId
+      readInt(from);            // ResultType
+      ignoreFields(from);
     }
 
-    else if (msg == STDERR_LAST)
+    else if (msg == STDERR_LAST) {
       break;
+    }
 
-    else
+    else {
       throw Error("got unknown message type %x from Nix daemon", msg);
+    }
   }
 
   return nullptr;

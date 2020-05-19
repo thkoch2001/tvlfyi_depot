@@ -1,4 +1,5 @@
 #include "references.hh"
+#include <glog/logging.h>
 #include <cstdlib>
 #include <map>
 #include "archive.hh"
@@ -32,7 +33,7 @@ static void search(const unsigned char* s, size_t len, StringSet& hashes,
     if (!match) continue;
     string ref((const char*)s + i, refLength);
     if (hashes.find(ref) != hashes.end()) {
-      debug(format("found reference to '%1%' at offset '%2%'") % ref % i);
+      DLOG(INFO) << "found reference to '" << ref << "' at offset " << i;
       seen.insert(ref);
       hashes.erase(ref);
     }

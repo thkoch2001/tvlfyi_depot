@@ -1,4 +1,5 @@
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <algorithm>
@@ -22,10 +23,8 @@ static void createLinks(const Path& srcDir, const Path& dstDir, int priority) {
     srcFiles = readDirectory(srcDir);
   } catch (SysError& e) {
     if (e.errNo == ENOTDIR) {
-      printError(
-          "warning: not including '%s' in the user environment because it's "
-          "not a directory",
-          srcDir);
+      LOG(ERROR) << "warning: not including '" << srcDir
+                 << "' in the user environment because it's not a directory";
       return;
     }
     throw;
@@ -43,7 +42,7 @@ static void createLinks(const Path& srcDir, const Path& dstDir, int priority) {
         throw SysError("getting status of '%1%'", srcFile);
     } catch (SysError& e) {
       if (e.errNo == ENOENT || e.errNo == ENOTDIR) {
-        printError("warning: skipping dangling symlink '%s'", dstFile);
+        LOG(ERROR) << "warning: skipping dangling symlink '" << dstFile << "'";
         continue;
       }
       throw;
@@ -200,7 +199,7 @@ void builtinBuildenv(const BasicDerivation& drv) {
     for (const auto& pkgDir : pkgDirs) addPkg(pkgDir, priorityCounter++);
   }
 
-  printError("created %d symlinks in user environment", symlinks);
+  LOG(INFO) << "created " << symlinks << " symlinks in user environment";
 
   createSymlink(getAttr("manifest"), out + "/manifest.nix");
 }

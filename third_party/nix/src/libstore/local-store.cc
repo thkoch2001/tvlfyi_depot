@@ -1,6 +1,7 @@
 #include "local-store.hh"
 #include <errno.h>
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <grp.h>
 #include <stdio.h>
 #include <sys/select.h>
@@ -81,11 +82,10 @@ LocalStore::LocalStore(const Params& params)
     mode_t perm = 01775;
 
     struct group* gr = getgrnam(settings.buildUsersGroup.get().c_str());
-    if (!gr)
-      printError(format("warning: the group '%1%' specified in "
-                        "'build-users-group' does not exist") %
-                 settings.buildUsersGroup);
-    else {
+    if (!gr) {
+      LOG(ERROR) << "warning: the group '" << settings.buildUsersGroup
+                 << "' specified in 'build-users-group' does not exist";
+    } else {
       struct stat st;
       if (stat(realStoreDir.c_str(), &st))
         throw SysError(format("getting attributes of path '%1%'") %
@@ -147,7 +147,7 @@ LocalStore::LocalStore(const Params& params)
   globalLock = openLockFile(globalLockPath.c_str(), true);
 
   if (!lockFile(globalLock.get(), ltRead, false)) {
-    printError("waiting for the big Nix store lock...");
+    LOG(INFO) << "waiting for the big Nix store lock...";
     lockFile(globalLock.get(), ltRead, true);
   }
 
@@ -180,7 +180,7 @@ LocalStore::LocalStore(const Params& params)
           "please upgrade Nix to version 1.11 first.");
 
     if (!lockFile(globalLock.get(), ltWrite, false)) {
-      printError("waiting for exclusive access to the Nix store...");
+      LOG(INFO) << "waiting for exclusive access to the Nix store...";
       lockFile(globalLock.get(), ltWrite, true);
     }
 
@@ -272,7 +272,7 @@ LocalStore::~LocalStore() {
   }
 
   if (future.valid()) {
-    printError("waiting for auto-GC to finish on exit...");
+    LOG(INFO) << "waiting for auto-GC to finish on exit...";
     future.get();
   }
 
@@ -850,8 +850,8 @@ void LocalStore::querySubstitutablePathInfos(const PathSet& paths,
     if (sub->storeDir != storeDir) continue;
     for (auto& path : paths) {
       if (infos.count(path)) continue;
-      debug(format("checking substituter '%s' for path '%s'") % sub->getUri() %
-            path);
+      DLOG(INFO) << "checking substituter '" << sub->getUri() << "' for path '"
+                 << path << "'";
       try {
         auto info = sub->queryPathInfo(path);
         auto narInfo = std::dynamic_pointer_cast<const NarInfo>(
@@ -862,10 +862,11 @@ void LocalStore::querySubstitutablePathInfos(const PathSet& paths,
       } catch (InvalidPath&) {
       } catch (SubstituterDisabled&) {
       } catch (Error& e) {
-        if (settings.tryFallback)
-          printError(e.what());
-        else
+        if (settings.tryFallback) {
+          LOG(ERROR) << e.what();
+        } else {
           throw;
+        }
       }
     }
   }
@@ -931,7 +932,7 @@ void LocalStore::registerValidPaths(const ValidPathInfos& infos) {
 /* Invalidate a path.  The caller is responsible for checking that
    there are no referrers. */
 void LocalStore::invalidatePath(State& state, const Path& path) {
-  debug(format("invalidating path '%1%'") % path);
+  LOG(INFO) << "invalidating path '" << path << "'";
 
   state.stmtInvalidatePath.use()(path).exec();
 
@@ -954,12 +955,15 @@ const PublicKeys& LocalStore::getPublicKeys() {
 void LocalStore::addToStore(const ValidPathInfo& info, Source& source,
                             RepairFlag repair, CheckSigsFlag checkSigs,
                             std::shared_ptr<FSAccessor> accessor) {
-  if (!info.narHash)
+  if (!info.narHash) {
     throw Error("cannot add path '%s' because it lacks a hash", info.path);
+  }
 
-  if (requireSigs && checkSigs && !info.checkSignatures(*this, getPublicKeys()))
+  if (requireSigs && checkSigs &&
+      !info.checkSignatures(*this, getPublicKeys())) {
     throw Error("cannot add path '%s' because it lacks a valid signature",
                 info.path);
+  }
 
   addTempRoot(info.path);
 
@@ -1168,7 +1172,7 @@ void LocalStore::invalidatePathChecked(const Path& path) {
 }
 
 bool LocalStore::verifyStore(bool checkContents, RepairFlag repair) {
-  printError(format("reading the Nix store..."));
+  LOG(INFO) << "reading the Nix store...";
 
   bool errors = false;
 
@@ -1180,7 +1184,7 @@ bool LocalStore::verifyStore(bool checkContents, RepairFlag repair) {
   for (auto& i : readDirectory(realStoreDir)) store.insert(i.name);
 
   /* Check whether all valid paths actually exist. */
-  printInfo("checking path existence...");
+  LOG(INFO) << "checking path existence...";
 
   PathSet validPaths2 = queryAllValidPaths(), validPaths, done;
 
@@ -1191,7 +1195,7 @@ bool LocalStore::verifyStore(bool checkContents, RepairFlag repair) {
 
   /* Optionally, check the content hashes (slow). */
   if (checkContents) {
-    printInfo("checking hashes...");
+    LOG(INFO) << "checking hashes...";
 
     Hash nullHash(htSHA256);
 
@@ -1201,31 +1205,32 @@ bool LocalStore::verifyStore(bool checkContents, RepairFlag repair) {
             std::shared_ptr<const ValidPathInfo>(queryPathInfo(i)));
 
         /* Check the content hash (optionally - slow). */
-        printMsg(lvlTalkative, format("checking contents of '%1%'") % i);
+        DLOG(INFO) << "checking contents of '" << i << "'";
         HashResult current = hashPath(info->narHash.type, toRealPath(i));
 
         if (info->narHash != nullHash && info->narHash != current.first) {
-          printError(format("path '%1%' was modified! "
-                            "expected hash '%2%', got '%3%'") %
-                     i % info->narHash.to_string() % current.first.to_string());
-          if (repair)
+          LOG(ERROR) << "path '" << i << "' was modified! expected hash '"
+                     << info->narHash.to_string() << "', got '"
+                     << current.first.to_string() << "'";
+          if (repair) {
             repairPath(i);
-          else
+          } else {
             errors = true;
+          }
         } else {
           bool update = false;
 
           /* Fill in missing hashes. */
           if (info->narHash == nullHash) {
-            printError(format("fixing missing hash on '%1%'") % i);
+            LOG(WARNING) << "fixing missing hash on '" << i << "'";
             info->narHash = current.first;
             update = true;
           }
 
           /* Fill in missing narSize fields (from old stores). */
           if (info->narSize == 0) {
-            printError(format("updating size field on '%1%' to %2%") % i %
-                       current.second);
+            LOG(ERROR) << "updating size field on '" << i << "' to "
+                       << current.second;
             info->narSize = current.second;
             update = true;
           }
@@ -1239,10 +1244,11 @@ bool LocalStore::verifyStore(bool checkContents, RepairFlag repair) {
       } catch (Error& e) {
         /* It's possible that the path got GC'ed, so ignore
            errors on invalid paths. */
-        if (isValidPath(i))
-          printError(format("error: %1%") % e.msg());
-        else
-          printError(format("warning: %1%") % e.msg());
+        if (isValidPath(i)) {
+          LOG(ERROR) << e.msg();
+        } else {
+          LOG(WARNING) << e.msg();
+        }
         errors = true;
       }
     }
@@ -1256,11 +1262,13 @@ void LocalStore::verifyPath(const Path& path, const PathSet& store,
                             RepairFlag repair, bool& errors) {
   checkInterrupt();
 
-  if (done.find(path) != done.end()) return;
+  if (done.find(path) != done.end()) {
+    return;
+  }
   done.insert(path);
 
   if (!isStorePath(path)) {
-    printError(format("path '%1%' is not in the Nix store") % path);
+    LOG(ERROR) << "path '" << path << "' is not in the Nix store";
     auto state(_state.lock());
     invalidatePath(*state, path);
     return;
@@ -1279,18 +1287,17 @@ void LocalStore::verifyPath(const Path& path, const PathSet& store,
       }
 
     if (canInvalidate) {
-      printError(format("path '%1%' disappeared, removing from database...") %
-                 path);
+      LOG(WARNING) << "path '" << path
+                   << "' disappeared, removing from database...";
       auto state(_state.lock());
       invalidatePath(*state, path);
     } else {
-      printError(
-          format("path '%1%' disappeared, but it still has valid referrers!") %
-          path);
+      LOG(ERROR) << "path '" << path
+                 << "' disappeared, but it still has valid referrers!";
       if (repair) try {
           repairPath(path);
         } catch (Error& e) {
-          printError(format("warning: %1%") % e.msg());
+          LOG(WARNING) << e.msg();
           errors = true;
         }
       else

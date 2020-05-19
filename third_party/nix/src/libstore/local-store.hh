@@ -268,7 +268,7 @@ class LocalStore : public LocalFSStore {
   InodeHash loadInodeHash();
   Strings readDirectoryIgnoringInodes(const Path& path,
                                       const InodeHash& inodeHash);
-  void optimisePath_(Activity* act, OptimiseStats& stats, const Path& path,
+  void optimisePath_(OptimiseStats& stats, const Path& path,
                      InodeHash& inodeHash);
 
   // Internal versions that are not wrapped in retry_sqlite.

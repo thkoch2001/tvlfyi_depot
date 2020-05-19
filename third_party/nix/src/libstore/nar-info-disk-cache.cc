@@ -1,4 +1,5 @@
 #include "nar-info-disk-cache.hh"
+#include <glog/logging.h>
 #include <sqlite3.h>
 #include "globals.hh"
 #include "sqlite.hh"
@@ -126,8 +127,8 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
                 now - settings.ttlPositiveNarInfoCache)
             .exec();
 
-        debug("deleted %d entries from the NAR info disk cache",
-              sqlite3_changes(state->db));
+        DLOG(INFO) << "deleted " << sqlite3_changes(state->db)
+                   << " entries from the NAR info disk cache";
 
         SQLiteStmt(
             state->db,

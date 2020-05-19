@@ -31,6 +31,7 @@
 #include "download.hh"
 #include "finally.hh"
 #include "globals.hh"
+#include "glog/logging.h"
 #include "json.hh"
 #include "local-store.hh"
 #include "machines.hh"
@@ -226,10 +227,6 @@ class Worker {
   std::map<Path, bool> pathContentsGoodCache;
 
  public:
-  const Activity act;
-  const Activity actDerivations;
-  const Activity actSubstitutions;
-
   /* Set if at least one derivation had a BuildError (i.e. permanent
      failure). */
   bool permanentFailure;
@@ -327,16 +324,6 @@ class Worker {
   bool pathContentsGood(const Path& path);
 
   void markContentsGood(const Path& path);
-
-  void updateProgress() {
-    actDerivations.progress(doneBuilds, expectedBuilds + doneBuilds,
-                            runningBuilds, failedBuilds);
-    actSubstitutions.progress(doneSubstitutions,
-                              expectedSubstitutions + doneSubstitutions,
-                              runningSubstitutions, failedSubstitutions);
-    act.setExpected(actDownload, expectedDownloadSize + doneDownloadSize);
-    act.setExpected(actCopyPath, expectedNarSize + doneNarSize);
-  }
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -397,7 +384,9 @@ void Goal::amDone(ExitCode result) {
   worker.removeGoal(shared_from_this());
 }
 
-void Goal::trace(const FormatOrString& fs) { debug("%1%: %2%", name, fs.s); }
+void Goal::trace(const FormatOrString& fs) {
+  DLOG(INFO) << name << ": " << fs.s;
+}
 
 //////////////////////////////////////////////////////////////////////
 
@@ -445,9 +434,11 @@ void handleDiffHook(uid_t uid, uid_t gid, Path tryA, Path tryB, Path drvPath,
                         fmt("diff-hook program '%1%' %2%", diffHook,
                             statusToString(diffRes.first)));
 
-      if (diffRes.second != "") printError(chomp(diffRes.second));
+      if (diffRes.second != "") {
+        LOG(ERROR) << chomp(diffRes.second);
+      }
     } catch (Error& error) {
-      printError("diff hook execution failed: %s", error.what());
+      LOG(ERROR) << "diff hook execution failed: " << error.what();
     }
   }
 }
@@ -507,7 +498,7 @@ UserLock::UserLock() {
   /* Copy the result of getgrnam. */
   Strings users;
   for (char** p = gr->gr_mem; *p; ++p) {
-    debug(format("found build user '%1%'") % *p);
+    DLOG(INFO) << "found build user " << *p;
     users.push_back(*p);
   }
 
@@ -518,7 +509,7 @@ UserLock::UserLock() {
   /* Find a user account that isn't currently in use for another
      build. */
   for (auto& i : users) {
-    debug(format("trying user '%1%'") % i);
+    DLOG(INFO) << "trying user " << i;
 
     struct passwd* pw = getpwnam(i.c_str());
     if (!pw)
@@ -607,15 +598,13 @@ struct HookInstance {
 
   FdSink sink;
 
-  std::map<ActivityId, Activity> activities;
-
   HookInstance();
 
   ~HookInstance();
 };
 
 HookInstance::HookInstance() {
-  debug("starting build hook '%s'", settings.buildHook);
+  DLOG(INFO) << "starting build hook " << settings.buildHook;
 
   /* Create a pipe to get the output of the child. */
   fromHook.create();
@@ -630,24 +619,29 @@ HookInstance::HookInstance() {
   pid = startProcess([&]() {
     commonChildInit(fromHook);
 
-    if (chdir("/") == -1) throw SysError("changing into /");
+    if (chdir("/") == -1) {
+      throw SysError("changing into /");
+    }
 
     /* Dup the communication pipes. */
-    if (dup2(toHook.readSide.get(), STDIN_FILENO) == -1)
+    if (dup2(toHook.readSide.get(), STDIN_FILENO) == -1) {
       throw SysError("dupping to-hook read side");
+    }
 
     /* Use fd 4 for the builder's stdout/stderr. */
-    if (dup2(builderOut.writeSide.get(), 4) == -1)
+    if (dup2(builderOut.writeSide.get(), 4) == -1) {
       throw SysError("dupping builder's stdout/stderr");
+    }
 
     /* Hack: pass the read side of that fd to allow build-remote
        to read SSH error messages. */
-    if (dup2(builderOut.readSide.get(), 5) == -1)
+    if (dup2(builderOut.readSide.get(), 5) == -1) {
       throw SysError("dupping builder's stdout/stderr");
+    }
 
     Strings args = {
         baseNameOf(settings.buildHook),
-        std::to_string(verbosity),
+        // std::to_string(verbosity), // TODO(tazjin): what?
     };
 
     execv(settings.buildHook.get().c_str(), stringsToCharPtrs(args).data());
@@ -842,10 +836,6 @@ class DerivationGoal : public Goal {
 
   std::unique_ptr<MaintainCount<uint64_t>> mcExpectedBuilds, mcRunningBuilds;
 
-  std::unique_ptr<Activity> act;
-
-  std::map<ActivityId, Activity> builderActivities;
-
   /* The remote machine on which we're building. */
   std::string machineName;
 
@@ -972,7 +962,6 @@ DerivationGoal::DerivationGoal(const Path& drvPath,
 
   mcExpectedBuilds =
       std::make_unique<MaintainCount<uint64_t>>(worker.expectedBuilds);
-  worker.updateProgress();
 }
 
 DerivationGoal::DerivationGoal(const Path& drvPath, const BasicDerivation& drv,
@@ -988,7 +977,6 @@ DerivationGoal::DerivationGoal(const Path& drvPath, const BasicDerivation& drv,
 
   mcExpectedBuilds =
       std::make_unique<MaintainCount<uint64_t>>(worker.expectedBuilds);
-  worker.updateProgress();
 
   /* Prevent the .chroot directory from being
      garbage-collected. (See isActiveTempFile() in gc.cc.) */
@@ -1089,7 +1077,7 @@ void DerivationGoal::loadDerivation() {
   trace("loading derivation");
 
   if (nrFailed != 0) {
-    printError(format("cannot build missing derivation '%1%'") % drvPath);
+    LOG(ERROR) << "cannot build missing derivation '" << drvPath << "'";
     done(BuildResult::MiscFailure);
     return;
   }
@@ -1241,9 +1229,8 @@ void DerivationGoal::repairClosure() {
   PathSet broken;
   for (auto& i : outputClosure) {
     if (worker.pathContentsGood(i)) continue;
-    printError(format("found corrupted or missing path '%1%' in the output "
-                      "closure of '%2%'") %
-               i % drvPath);
+    LOG(ERROR) << "found corrupted or missing path '" << i
+               << "' in the output closure of '" << drvPath << "'";
     Path drvPath2 = outputsToDrv[i];
     if (drvPath2 == "")
       addWaitee(worker.makeSubstitutionGoal(i, Repair));
@@ -1274,9 +1261,8 @@ void DerivationGoal::inputsRealised() {
   if (nrFailed != 0) {
     if (!useDerivation)
       throw Error(format("some dependencies of '%1%' are missing") % drvPath);
-    printError(format("cannot build derivation '%1%': %2% dependencies "
-                      "couldn't be built") %
-               drvPath % nrFailed);
+    LOG(ERROR) << "cannot build derivation '" << drvPath << "': " << nrFailed
+               << " dependencies couldn't be built";
     done(BuildResult::DependencyFailed);
     return;
   }
@@ -1291,7 +1277,7 @@ void DerivationGoal::inputsRealised() {
 
   /* The outputs are referenceable paths. */
   for (auto& i : drv->outputs) {
-    debug(format("building path '%1%'") % i.second.path);
+    DLOG(INFO) << "building path " << i.second.path;
     allPaths.insert(i.second.path);
   }
 
@@ -1317,7 +1303,7 @@ void DerivationGoal::inputsRealised() {
   /* Second, the input sources. */
   worker.store.computeFSClosure(drv->inputSrcs, inputPaths);
 
-  debug(format("added input paths %1%") % showPaths(inputPaths));
+  DLOG(INFO) << "added input paths " << showPaths(inputPaths);
 
   allPaths.insert(inputPaths.begin(), inputPaths.end());
 
@@ -1363,8 +1349,8 @@ void DerivationGoal::tryToBuild() {
      build this derivation, so no further checks are necessary. */
   validPaths = checkPathValidity(true, buildMode == bmRepair);
   if (buildMode != bmCheck && validPaths.size() == drv->outputs.size()) {
-    debug(format("skipping build of derivation '%1%', someone beat us to it") %
-          drvPath);
+    DLOG(INFO) << "skipping build of derivation '" << drvPath
+               << "', someone beat us to it";
     outputLocks.setDeletion(true);
     done(BuildResult::AlreadyValid);
     return;
@@ -1379,7 +1365,7 @@ void DerivationGoal::tryToBuild() {
   for (auto& i : drv->outputs) {
     Path path = i.second.path;
     if (worker.store.isValidPath(path)) continue;
-    debug(format("removing invalid path '%1%'") % path);
+    DLOG(INFO) << "removing invalid path " << path;
     deletePath(worker.store.toRealPath(path));
   }
 
@@ -1396,14 +1382,13 @@ void DerivationGoal::tryToBuild() {
                              : nrRounds > 1 ? "building '%s' (round %d/%d)"
                                             : "building '%s'",
                    drvPath, curRound, nrRounds);
-    fmt("building '%s'", drvPath);
-    if (hook) msg += fmt(" on '%s'", machineName);
-    act = std::make_unique<Activity>(
-        *logger, lvlInfo, actBuild, msg,
-        Logger::Fields{drvPath, hook ? machineName : "", curRound, nrRounds});
+
+    if (hook) {
+      msg += fmt(" on '%s'", machineName);
+    }
+    LOG(INFO) << msg << "[" << drvPath << "]";
     mcRunningBuilds =
         std::make_unique<MaintainCount<uint64_t>>(worker.runningBuilds);
-    worker.updateProgress();
   };
 
   /* Is the build hook willing to accept this job? */
@@ -1443,7 +1428,7 @@ void DerivationGoal::tryToBuild() {
     startBuilder();
 
   } catch (BuildError& e) {
-    printError(e.msg());
+    LOG(ERROR) << e.msg();
     outputLocks.unlock();
     buildUser.reset();
     worker.permanentFailure = true;
@@ -1487,7 +1472,7 @@ MakeError(NotDeterministic, BuildError)
      kill it. */
   int status = hook ? hook->pid.kill() : pid.kill();
 
-  debug(format("builder process for '%1%' finished") % drvPath);
+  DLOG(INFO) << "builder process for '" << drvPath << "' finished";
 
   result.timesBuilt++;
   result.stopTime = time(0);
@@ -1552,10 +1537,11 @@ MakeError(NotDeterministic, BuildError)
         for (auto& line : logTail) msg += "\n  " + line;
       }
 
-      if (diskFull)
+      if (diskFull) {
         msg +=
             "\nnote: build failure may have been caused by lack of free disk "
             "space";
+      }
 
       throw BuildError(msg);
     }
@@ -1565,10 +1551,8 @@ MakeError(NotDeterministic, BuildError)
     registerOutputs();
 
     if (settings.postBuildHook != "") {
-      Activity act(*logger, lvlInfo, actPostBuildHook,
-                   fmt("running post-build-hook '%s'", settings.postBuildHook),
-                   Logger::Fields{drvPath});
-      PushActivity pact(act.id);
+      LOG(INFO) << "running post-build-hook '" << settings.postBuildHook
+                << "' [" << drvPath << "]";
       auto outputPaths = drv->outputPaths();
       std::map<std::string, std::string> hookEnvironment = getEnv();
 
@@ -1580,10 +1564,7 @@ MakeError(NotDeterministic, BuildError)
       opts.environment = hookEnvironment;
 
       struct LogSink : Sink {
-        Activity& act;
         std::string currentLine;
-
-        LogSink(Activity& act) : act(act) {}
 
         void operator()(const unsigned char* data, size_t len) override {
           for (size_t i = 0; i < len; i++) {
@@ -1599,9 +1580,7 @@ MakeError(NotDeterministic, BuildError)
 
         void flushLine() {
           if (settings.verboseBuild) {
-            printError("post-build-hook: " + currentLine);
-          } else {
-            act.result(resPostBuildLogLine, currentLine);
+            LOG(ERROR) << "post-build-hook: " << currentLine;
           }
           currentLine.clear();
         }
@@ -1613,7 +1592,7 @@ MakeError(NotDeterministic, BuildError)
           }
         }
       };
-      LogSink sink(act);
+      LogSink sink;
 
       opts.standardOut = &sink;
       opts.mergeStderrToStdout = true;
@@ -1649,7 +1628,7 @@ MakeError(NotDeterministic, BuildError)
     outputLocks.unlock();
 
   } catch (BuildError& e) {
-    printError(e.msg());
+    LOG(ERROR) << e.msg();
 
     outputLocks.unlock();
 
@@ -1696,38 +1675,37 @@ HookReply DerivationGoal::tryBuildHook() {
     string reply;
     while (true) {
       string s = readLine(worker.hook->fromHook.readSide.get());
-      if (handleJSONLogMessage(s, worker.act, worker.hook->activities, true))
-        ;
-      else if (string(s, 0, 2) == "# ") {
+      if (string(s, 0, 2) == "# ") {
         reply = string(s, 2);
         break;
       } else {
         s += "\n";
-        writeToStderr(s);
+        std::cerr << s;
       }
     }
 
-    debug(format("hook reply is '%1%'") % reply);
+    DLOG(INFO) << "hook reply is " << reply;
 
-    if (reply == "decline")
+    if (reply == "decline") {
       return rpDecline;
-    else if (reply == "decline-permanently") {
+    } else if (reply == "decline-permanently") {
       worker.tryBuildHook = false;
       worker.hook = 0;
       return rpDecline;
-    } else if (reply == "postpone")
+    } else if (reply == "postpone") {
       return rpPostpone;
-    else if (reply != "accept")
+    } else if (reply != "accept") {
       throw Error(format("bad hook reply '%1%'") % reply);
-
+    }
   } catch (SysError& e) {
     if (e.errNo == EPIPE) {
-      printError("build hook died unexpectedly: %s",
-                 chomp(drainFD(worker.hook->fromHook.readSide.get())));
+      LOG(ERROR) << "build hook died unexpectedly: "
+                 << chomp(drainFD(worker.hook->fromHook.readSide.get()));
       worker.hook = 0;
       return rpDecline;
-    } else
+    } else {
       throw;
+    }
   }
 
   hook = std::move(worker.hook);
@@ -2007,8 +1985,7 @@ void DerivationGoal::startBuilder() {
     /* Clean up the chroot directory automatically. */
     autoDelChroot = std::make_shared<AutoDelete>(chrootRootDir);
 
-    printMsg(lvlChatty,
-             format("setting up chroot environment in '%1%'") % chrootRootDir);
+    DLOG(INFO) << "setting up chroot environment in '" << chrootRootDir << "'";
 
     if (mkdir(chrootRootDir.c_str(), 0750) == -1)
       throw SysError(format("cannot create '%1%'") % chrootRootDir);
@@ -2073,7 +2050,7 @@ void DerivationGoal::startBuilder() {
         dirsInChroot[i] = r;
       else {
         Path p = chrootRootDir + i;
-        debug("linking '%1%' to '%2%'", p, r);
+        DLOG(INFO) << "linking '" << p << "' to '" << r << "'";
         if (link(r.c_str(), p.c_str()) == -1) {
           /* Hard-linking fails if we exceed the maximum
              link count on a file (e.g. 32000 of ext3),
@@ -2132,8 +2109,7 @@ void DerivationGoal::startBuilder() {
 
   if (useChroot && settings.preBuildHook != "" &&
       dynamic_cast<Derivation*>(drv.get())) {
-    printMsg(lvlChatty,
-             format("executing pre-build hook '%1%'") % settings.preBuildHook);
+    DLOG(INFO) << "executing pre-build hook '" << settings.preBuildHook << "'";
     auto args =
         useChroot ? Strings({drvPath, chrootRootDir}) : Strings({drvPath});
     enum BuildHookState { stBegin, stExtraChrootDirs };
@@ -2165,7 +2141,7 @@ void DerivationGoal::startBuilder() {
   }
 
   /* Run the builder. */
-  printMsg(lvlChatty, format("executing builder '%1%'") % drv->builder);
+  DLOG(INFO) << "executing builder '" << drv->builder << "'";
 
   /* Create the log file. */
   Path logFile = openLogFile();
@@ -2364,7 +2340,7 @@ void DerivationGoal::startBuilder() {
       if (msg.size() == 1) break;
       throw Error(string(msg, 1));
     }
-    debug(msg);
+    DLOG(INFO) << msg;
   }
 }
 
@@ -2604,10 +2580,10 @@ void setupSeccomp() {
     throw SysError("unable to add X32 seccomp architecture");
 
   if (nativeSystem == "aarch64-linux" &&
-      seccomp_arch_add(ctx, SCMP_ARCH_ARM) != 0)
-    printError(
-        "unable to add ARM seccomp architecture; this may result in spurious "
-        "build failures if running 32-bit ARM processes");
+      seccomp_arch_add(ctx, SCMP_ARCH_ARM) != 0) {
+    LOG(ERROR) << "unable to add ARM seccomp architecture; this may result in "
+               << "spurious build failures if running 32-bit ARM processes";
+  }
 
   /* Prevent builders from creating setuid/setgid binaries. */
   for (int perm : {S_ISUID, S_ISGID}) {
@@ -2772,7 +2748,7 @@ void DerivationGoal::runChild() {
          environment. */
       auto doBind = [&](const Path& source, const Path& target,
                         bool optional = false) {
-        debug(format("bind mounting '%1%' to '%2%'") % source % target);
+        DLOG(INFO) << "bind mounting '" << source << "' to '" << target << "'";
         struct stat st;
         if (stat(source.c_str(), &st) == -1) {
           if (optional && errno == ENOENT)
@@ -3082,8 +3058,6 @@ void DerivationGoal::runChild() {
     /* Execute the program.  This should not return. */
     if (drv->isBuiltin()) {
       try {
-        logger = makeJSONLogger(*logger);
-
         BasicDerivation drv2(*drv);
         for (auto& e : drv2.env)
           e.second = rewriteStrings(e.second, inputRewrites);
@@ -3215,8 +3189,7 @@ void DerivationGoal::registerOutputs() {
     /* Apply hash rewriting if necessary. */
     bool rewritten = false;
     if (!outputRewrites.empty()) {
-      printError(format("warning: rewriting hashes in '%1%'; cross fingers") %
-                 path);
+      LOG(WARNING) << "rewriting hashes in '" << path << "'; cross fingers";
 
       /* Canonicalise first.  This ensures that the path we're
          rewriting doesn't contain a hard link to /etc/shadow or
@@ -3300,7 +3273,7 @@ void DerivationGoal::registerOutputs() {
        contained in it.  Compute the SHA-256 NAR hash at the same
        time.  The hash is stored in the database so that we can
        verify later on whether nobody has messed with the store. */
-    debug("scanning for references inside '%1%'", path);
+    DLOG(INFO) << "scanning for references inside '" << path << "'";
     HashResult hash;
     PathSet references = scanForReferences(actualPath, allPaths, hash);
 
@@ -3346,9 +3319,9 @@ void DerivationGoal::registerOutputs() {
     for (auto& i : inputPaths) {
       PathSet::iterator j = references.find(i);
       if (j == references.end())
-        debug(format("unreferenced input: '%1%'") % i);
+        DLOG(INFO) << "unreferenced input: '" << i << "'";
       else
-        debug(format("referenced input: '%1%'") % i);
+        DLOG(INFO) << "referenced input: '" << i << "'";
     }
 
     if (curRound == nrRounds) {
@@ -3397,9 +3370,11 @@ void DerivationGoal::registerOutputs() {
                        buildUser ? buildUser->getGID() : getgid(), prev,
                        i->second.path, drvPath, tmpDir);
 
-        if (settings.enforceDeterminism) throw NotDeterministic(msg);
+        if (settings.enforceDeterminism) {
+          throw NotDeterministic(msg);
+        }
 
-        printError(msg);
+        LOG(ERROR) << msg;
         curRound = nrRounds;  // we know enough, bail out early
       }
   }
@@ -3644,8 +3619,7 @@ void DerivationGoal::deleteTmpDir(bool force) {
     /* Don't keep temporary directories for builtins because they
        might have privileged stuff (like a copy of netrc). */
     if (settings.keepFailed && !force && !drv->isBuiltin()) {
-      printError(format("note: keeping build directory '%2%'") % drvPath %
-                 tmpDir);
+      LOG(INFO) << "note: keeping build directory '" << tmpDir << "'";
       chmod(tmpDir.c_str(), 0755);
     } else
       deletePath(tmpDir);
@@ -3658,20 +3632,20 @@ void DerivationGoal::handleChildOutput(int fd, const string& data) {
       (!hook && fd == builderOut.readSide.get())) {
     logSize += data.size();
     if (settings.maxLogSize && logSize > settings.maxLogSize) {
-      printError(
-          format("%1% killed after writing more than %2% bytes of log output") %
-          getName() % settings.maxLogSize);
+      LOG(ERROR) << getName()
+                 << " killed after writing more than %2% bytes of log output"
+                 << settings.maxLogSize;
       killChild();
       done(BuildResult::LogLimitExceeded);
       return;
     }
 
     for (auto c : data)
-      if (c == '\r')
+      if (c == '\r') {
         currentLogLinePos = 0;
-      else if (c == '\n')
+      } else if (c == '\n') {
         flushLine();
-      else {
+      } else {
         if (currentLogLinePos >= currentLogLine.size())
           currentLogLine.resize(currentLogLinePos + 1);
         currentLogLine[currentLogLinePos++] = c;
@@ -3683,11 +3657,10 @@ void DerivationGoal::handleChildOutput(int fd, const string& data) {
   if (hook && fd == hook->fromHook.readSide.get()) {
     for (auto c : data)
       if (c == '\n') {
-        handleJSONLogMessage(currentHookLine, worker.act, hook->activities,
-                             true);
         currentHookLine.clear();
-      } else
+      } else {
         currentHookLine += c;
+      }
   }
 }
 
@@ -3697,19 +3670,11 @@ void DerivationGoal::handleEOF(int fd) {
 }
 
 void DerivationGoal::flushLine() {
-  if (handleJSONLogMessage(currentLogLine, *act, builderActivities, false))
-    ;
-
+  if (settings.verboseBuild && (settings.printRepeatedBuilds || curRound == 1))
+    LOG(INFO) << currentLogLine;
   else {
-    if (settings.verboseBuild &&
-        (settings.printRepeatedBuilds || curRound == 1))
-      printError(currentLogLine);
-    else {
-      logTail.push_back(currentLogLine);
-      if (logTail.size() > settings.logLines) logTail.pop_front();
-    }
-
-    act->result(resBuildLogLine, currentLogLine);
+    logTail.push_back(currentLogLine);
+    if (logTail.size() > settings.logLines) logTail.pop_front();
   }
 
   currentLogLine = "";
@@ -3719,10 +3684,14 @@ void DerivationGoal::flushLine() {
 PathSet DerivationGoal::checkPathValidity(bool returnValid, bool checkHash) {
   PathSet result;
   for (auto& i : drv->outputs) {
-    if (!wantOutput(i.first, wantedOutputs)) continue;
+    if (!wantOutput(i.first, wantedOutputs)) {
+      continue;
+    }
     bool good = worker.store.isValidPath(i.second.path) &&
                 (!checkHash || worker.pathContentsGood(i.second.path));
-    if (good == returnValid) result.insert(i.second.path);
+    if (good == returnValid) {
+      result.insert(i.second.path);
+    }
   }
   return result;
 }
@@ -3758,8 +3727,6 @@ void DerivationGoal::done(BuildResult::Status status, const string& msg) {
   } else {
     if (status != BuildResult::DependencyFailed) worker.failedBuilds++;
   }
-
-  worker.updateProgress();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -3891,9 +3858,9 @@ void SubstitutionGoal::tryNext() {
   if (subs.size() == 0) {
     /* None left.  Terminate this goal and let someone else deal
        with it. */
-    debug(format("path '%1%' is required, but there is no substituter that can "
-                 "build it") %
-          storePath);
+    DLOG(WARNING)
+        << "path '" << storePath
+        << "' is required, but there is no substituter that can build it";
 
     /* Hack: don't indicate failure if there were no substituters.
        In that case the calling derivation should just do a
@@ -3902,7 +3869,6 @@ void SubstitutionGoal::tryNext() {
 
     if (substituterFailed) {
       worker.failedSubstitutions++;
-      worker.updateProgress();
     }
 
     return;
@@ -3930,7 +3896,7 @@ void SubstitutionGoal::tryNext() {
     throw;
   } catch (Error& e) {
     if (settings.tryFallback) {
-      printError(e.what());
+      LOG(ERROR) << e.what();
       tryNext();
       return;
     }
@@ -3949,17 +3915,14 @@ void SubstitutionGoal::tryNext() {
                 worker.expectedDownloadSize, narInfo->fileSize)
           : nullptr;
 
-  worker.updateProgress();
-
   /* Bail out early if this substituter lacks a valid
      signature. LocalStore::addToStore() also checks for this, but
      only after we've downloaded the path. */
   if (worker.store.requireSigs && !sub->isTrusted &&
       !info->checkSignatures(worker.store, worker.store.getPublicKeys())) {
-    printError(
-        "warning: substituter '%s' does not have a valid signature for path "
-        "'%s'",
-        sub->getUri(), storePath);
+    LOG(WARNING) << "substituter '" << sub->getUri()
+                 << "' does not have a valid signature for path '" << storePath
+                 << "'";
     tryNext();
     return;
   }
@@ -3980,8 +3943,8 @@ void SubstitutionGoal::referencesValid() {
   trace("all references realised");
 
   if (nrFailed > 0) {
-    debug(format("some references of path '%1%' could not be realised") %
-          storePath);
+    DLOG(WARNING) << "some references of path '" << storePath
+                  << "' could not be realised";
     amDone(nrNoSubstituters > 0 || nrIncompleteClosure > 0 ? ecIncompleteClosure
                                                            : ecFailed);
     return;
@@ -4010,7 +3973,6 @@ void SubstitutionGoal::tryToRun() {
 
   maintainRunningSubstitutions =
       std::make_unique<MaintainCount<uint64_t>>(worker.runningSubstitutions);
-  worker.updateProgress();
 
   outPipe.create();
 
@@ -4020,10 +3982,6 @@ void SubstitutionGoal::tryToRun() {
     try {
       /* Wake up the worker loop when we're done. */
       Finally updateStats([this]() { outPipe.writeSide = -1; });
-
-      Activity act(*logger, actSubstitute,
-                   Logger::Fields{storePath, sub->getUri()});
-      PushActivity pact(act.id);
 
       copyStorePath(ref<Store>(sub),
                     ref<Store>(worker.store.shared_from_this()), storePath,
@@ -4050,7 +4008,7 @@ void SubstitutionGoal::finished() {
   try {
     promise.get_future().get();
   } catch (std::exception& e) {
-    printError(e.what());
+    LOG(ERROR) << e.what();
 
     /* Cause the parent build to fail unless --fallback is given,
        or the substitute has disappeared. The latter case behaves
@@ -4071,8 +4029,7 @@ void SubstitutionGoal::finished() {
 
   worker.markContentsGood(storePath);
 
-  printMsg(lvlChatty,
-           format("substitution of path '%1%' succeeded") % storePath);
+  DLOG(INFO) << "substitution of path '" << storePath << "' succeeded";
 
   maintainRunningSubstitutions.reset();
 
@@ -4088,8 +4045,6 @@ void SubstitutionGoal::finished() {
   worker.doneNarSize += maintainExpectedNar->delta;
   maintainExpectedNar.reset();
 
-  worker.updateProgress();
-
   amDone(ecSuccess);
 }
 
@@ -4103,11 +4058,7 @@ void SubstitutionGoal::handleEOF(int fd) {
 
 static bool working = false;
 
-Worker::Worker(LocalStore& store)
-    : act(*logger, actRealise),
-      actDerivations(*logger, actBuilds),
-      actSubstitutions(*logger, actCopyPaths),
-      store(store) {
+Worker::Worker(LocalStore& store) : store(store) {
   /* Debugging: prevent recursive workers. */
   if (working) abort();
   working = true;
@@ -4242,7 +4193,7 @@ void Worker::childTerminated(Goal* goal, bool wakeSleepers) {
 }
 
 void Worker::waitForBuildSlot(GoalPtr goal) {
-  debug("wait for build slot");
+  DLOG(INFO) << "wait for build slot";
   if (getNrLocalBuilds() < settings.maxBuildJobs)
     wakeUp(goal); /* we can do it right away */
   else
@@ -4250,19 +4201,19 @@ void Worker::waitForBuildSlot(GoalPtr goal) {
 }
 
 void Worker::waitForAnyGoal(GoalPtr goal) {
-  debug("wait for any goal");
+  DLOG(INFO) << "wait for any goal";
   addToWeakGoals(waitingForAnyGoal, goal);
 }
 
 void Worker::waitForAWhile(GoalPtr goal) {
-  debug("wait for a while");
+  DLOG(INFO) << "wait for a while";
   addToWeakGoals(waitingForAWhile, goal);
 }
 
 void Worker::run(const Goals& _topGoals) {
   for (auto& i : _topGoals) topGoals.insert(i);
 
-  debug("entered goal loop");
+  DLOG(INFO) << "entered goal loop";
 
   while (1) {
     checkInterrupt();
@@ -4308,7 +4259,7 @@ void Worker::run(const Goals& _topGoals) {
 }
 
 void Worker::waitForInput() {
-  printMsg(lvlVomit, "waiting for children");
+  DLOG(INFO) << "waiting for children";
 
   /* Process output from the file descriptors attached to the
      children, namely log output and output path creation commands.
@@ -4350,7 +4301,7 @@ void Worker::waitForInput() {
   if (!waitingForAWhile.empty()) {
     useTimeout = true;
     if (lastWokenUp == steady_time_point::min())
-      printError("waiting for locks or build slots...");
+      DLOG(WARNING) << "waiting for locks or build slots...";
     if (lastWokenUp == steady_time_point::min() || lastWokenUp > before)
       lastWokenUp = before;
     timeout.tv_sec = std::max(
@@ -4361,7 +4312,9 @@ void Worker::waitForInput() {
   } else
     lastWokenUp = steady_time_point::min();
 
-  if (useTimeout) vomit("sleeping %d seconds", timeout.tv_sec);
+  if (useTimeout) {
+    DLOG(INFO) << "sleeping " << timeout.tv_sec << " seconds";
+  }
 
   /* Use select() to wait for the input side of any logger pipe to
      become `available'.  Note that `available' (i.e., non-blocking)
@@ -4403,15 +4356,14 @@ void Worker::waitForInput() {
         // FIXME: is there a cleaner way to handle pt close
         // than EIO? Is this even standard?
         if (rd == 0 || (rd == -1 && errno == EIO)) {
-          debug(format("%1%: got EOF") % goal->getName());
+          DLOG(WARNING) << goal->getName() << ": got EOF";
           goal->handleEOF(k);
           j->fds.erase(k);
         } else if (rd == -1) {
           if (errno != EINTR)
             throw SysError("%s: read failed", goal->getName());
         } else {
-          printMsg(lvlVomit,
-                   format("%1%: read %2% bytes") % goal->getName() % rd);
+          DLOG(INFO) << goal->getName() << ": read " << rd << " bytes";
           string data((char*)buffer.data(), rd);
           j->lastOutput = after;
           goal->handleChildOutput(k, data);
@@ -4422,8 +4374,8 @@ void Worker::waitForInput() {
     if (goal->getExitCode() == Goal::ecBusy && 0 != settings.maxSilentTime &&
         j->respectTimeouts &&
         after - j->lastOutput >= std::chrono::seconds(settings.maxSilentTime)) {
-      printError(format("%1% timed out after %2% seconds of silence") %
-                 goal->getName() % settings.maxSilentTime);
+      LOG(ERROR) << goal->getName() << " timed out after "
+                 << settings.maxSilentTime << " seconds of silence";
       goal->timedOut();
     }
 
@@ -4431,8 +4383,8 @@ void Worker::waitForInput() {
              0 != settings.buildTimeout && j->respectTimeouts &&
              after - j->timeStarted >=
                  std::chrono::seconds(settings.buildTimeout)) {
-      printError(format("%1% timed out after %2% seconds") % goal->getName() %
-                 settings.buildTimeout);
+      LOG(ERROR) << goal->getName() << " timed out after "
+                 << settings.buildTimeout << " seconds";
       goal->timedOut();
     }
   }
@@ -4473,7 +4425,7 @@ unsigned int Worker::exitStatus() {
 bool Worker::pathContentsGood(const Path& path) {
   std::map<Path, bool>::iterator i = pathContentsGoodCache.find(path);
   if (i != pathContentsGoodCache.end()) return i->second;
-  printInfo(format("checking path '%1%'...") % path);
+  LOG(INFO) << "checking path '" << path << "'...";
   auto info = store.queryPathInfo(path);
   bool res;
   if (!pathExists(path))
@@ -4484,7 +4436,9 @@ bool Worker::pathContentsGood(const Path& path) {
     res = info->narHash == nullHash || info->narHash == current.first;
   }
   pathContentsGoodCache[path] = res;
-  if (!res) printError(format("path '%1%' is corrupted or missing!") % path);
+  if (!res) {
+    LOG(ERROR) << "path '" << path << "' is corrupted or missing!";
+  }
   return res;
 }
 
