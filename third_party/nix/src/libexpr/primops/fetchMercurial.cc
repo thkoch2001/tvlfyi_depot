@@ -141,7 +141,8 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
     hgInfo.storePath = json["storePath"];
 
     if (store->isValidPath(hgInfo.storePath)) {
-      DLOG(INFO) << "using cached Mercurial store path '" << hgInfo.storePath << "'";
+      DLOG(INFO) << "using cached Mercurial store path '" << hgInfo.storePath
+                 << "'";
       return hgInfo;
     }
 

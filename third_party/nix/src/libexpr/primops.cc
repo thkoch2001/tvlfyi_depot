@@ -1,5 +1,6 @@
 #include "primops.hh"
 #include <dlfcn.h>
+#include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -19,7 +20,6 @@
 #include "util.hh"
 #include "value-to-json.hh"
 #include "value-to-xml.hh"
-#include <glog/logging.h>
 
 namespace nix {
 
@@ -508,7 +508,7 @@ static void prim_trace(EvalState& state, const Pos& pos, Value** args,
   if (args[0]->type == tString) {
     DLOG(INFO) << "trace: " << args[0]->string.s;
   } else {
-    DLOG(INFO)<< "trace: " << *args[0];
+    DLOG(INFO) << "trace: " << *args[0];
   }
   state.forceValue(*args[1]);
   v = *args[1];

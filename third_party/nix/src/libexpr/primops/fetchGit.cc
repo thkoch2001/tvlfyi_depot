@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include <sys/time.h>
 #include <nlohmann/json.hpp>
 #include <regex>
@@ -7,7 +8,6 @@
 #include "pathlocks.hh"
 #include "primops.hh"
 #include "store-api.hh"
-#include <glog/logging.h>
 
 using namespace std::string_literals;
 

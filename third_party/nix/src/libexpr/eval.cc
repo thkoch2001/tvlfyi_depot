@@ -1,4 +1,5 @@
 #include "eval.hh"
+#include <glog/logging.h>
 #include <sys/resource.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -16,7 +17,6 @@
 #include "json.hh"
 #include "store-api.hh"
 #include "util.hh"
-#include <glog/logging.h>
 
 #if HAVE_BOEHMGC
 

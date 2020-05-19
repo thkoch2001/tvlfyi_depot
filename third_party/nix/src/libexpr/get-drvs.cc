@@ -1,10 +1,10 @@
 #include "get-drvs.hh"
+#include <glog/logging.h>
 #include <cstring>
 #include <regex>
 #include "derivations.hh"
 #include "eval-inline.hh"
 #include "util.hh"
-#include <glog/logging.h>
 
 namespace nix {
 
