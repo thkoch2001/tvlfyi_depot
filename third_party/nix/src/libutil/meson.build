@@ -39,14 +39,15 @@ libutil_headers = files(
 )
 
 libutil_dep_list = [
-    glog_dep,
-    boost_dep,
-    libbz2_dep,
-    liblzma_dep,
-    libbrotli_dep,
-    openssl_dep,
-    pthread_dep,
-    libsodium_dep]
+  glog_dep,
+  boost_dep,
+  libbz2_dep,
+  liblzma_dep,
+  libbrotli_dep,
+  openssl_dep,
+  pthread_dep,
+  libsodium_dep,
+]
 
 libutil_link_list = []
 libutil_link_args = []

@@ -348,6 +348,10 @@ description : 'Whether link() works on symlinks')
 # This will need to change if //third_party/nix is every split out as
 # a subtree.
 absl = cmake.subproject('abseil_cpp')
+absl_base = absl.dependency('base')
+absl_raw_logging = absl.dependency('raw_logging_internal')
+absl_int128 = absl.dependency('int128')
+absl_strings = absl.dependency('strings')
 
 # Look for boost, a required dependency.
 #--------------------------------------------------

@@ -11,8 +11,6 @@ option(
     description : 'path of the Nix store (defaults to /nix/store)')
 
 
-
-
 # compiler args
 #============================================================================
 
