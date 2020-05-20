@@ -107,9 +107,6 @@ config_h.set(
     'SYSTEM', system,
     description : 'platform identifier (`cpu-os`)')
 
-
-
-
 # checking headers
 #============================================================================
 

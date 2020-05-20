@@ -1,12 +1,6 @@
 # Nix lib store build file
 #============================================================================
 
-
-
-
-# src files
-#============================================================================
-
 src_inc += include_directories('.')
 
 libstore_src = files(
@@ -96,9 +90,6 @@ if sys_name.contains('freebsd')
     libstore_dep_list += libdl_dep
 endif
 
-
-
-
 # Link args
 #============================================================================
 
@@ -106,9 +97,6 @@ libstore_link_list = [
     libutil_lib]
 
 libstore_link_args = []
-
-
-
 
 # compiler args
 #============================================================================
@@ -126,9 +114,6 @@ libstore_cxx_args = [
     '-DSANDBOX_SHELL="@0@" '.format(get_option('sandbox_shell')),
     '-DLSOF="@0@" '.format(lsof)]
 
-
-
-
 # targets
 #============================================================================
 
@@ -143,9 +128,6 @@ libstore_src += custom_target(
   output : 'schema.sql.gen.hh',
   input : 'schema.sql',
   command : [bash, '-c', gen_header, 'sh', '@OUTPUT@'])
-
-
-
 
 # build
 #============================================================================

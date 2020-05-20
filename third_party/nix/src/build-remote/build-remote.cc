@@ -47,7 +47,7 @@ static bool allSupportedLocally(const std::set<std::string>& requiredFeatures) {
   return true;
 }
 
-static int _main(int argc, char** argv) {
+static int _main(int argc, char* argv[]) {
   {
     /* Ensure we don't get any SSH passphrase or host key popups. */
     unsetenv("DISPLAY");

@@ -313,8 +313,8 @@ int handleExceptions(const string& programName, std::function<void()> fun) {
     return e.status;
   } catch (UsageError& e) {
     LOG(INFO) << e.what();
-    LOG(INFO) << "Try '"
-              << " --help' for more information." << programName;
+    LOG(INFO) << "Try '" << programName << " "
+              << " --help' for more information.";
     return 1;
   } catch (BaseError& e) {
     LOG(ERROR) << error << (settings.showTrace ? e.prefix() : "") << e.msg();
@@ -323,7 +323,7 @@ int handleExceptions(const string& programName, std::function<void()> fun) {
     }
     return e.status;
   } catch (std::bad_alloc& e) {
-    LOG(ERROR) << error << "out of memory";
+    LOG(ERROR) << error << "failed to allocate: " << e.what();
     return 1;
   } catch (std::exception& e) {
     LOG(ERROR) << error << e.what();

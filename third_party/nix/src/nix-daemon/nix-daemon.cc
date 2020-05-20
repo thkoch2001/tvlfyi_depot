@@ -135,6 +135,7 @@ struct TunnelLogger {
   }
 
   void startActivity(const std::string& s) {
+    DLOG(INFO) << "startActivity(" << s << ")";
     if (GET_PROTOCOL_MINOR(clientVersion) < 20) {
       if (!s.empty()) {
         LOG(INFO) << s;
