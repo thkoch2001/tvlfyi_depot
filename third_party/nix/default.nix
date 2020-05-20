@@ -18,6 +18,11 @@ in stdenv.mkDerivation {
   version = "2.3.4";
   src = ./.;
 
+  # Abseil's sources need to be linked into a subproject.
+  postUnpack = ''
+    ln -fs ${pkgs.abseil_cpp.src} nix/subprojects/abseil_cpp
+  '';
+
   nativeBuildInputs = with pkgs; [
     bison
     clang-tools
@@ -50,6 +55,9 @@ in stdenv.mkDerivation {
   mesonFlags = [
     "-Dsandbox_shell=${pkgs.busybox-sandbox-shell}/bin/busybox"
   ];
+
+  # cmake is only included to build Abseil and its hook should not run
+  dontUseCmakeConfigure = true;
 
   # Install the various symlinks to the Nix binary which users expect
   # to exist.
