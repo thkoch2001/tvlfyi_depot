@@ -8,7 +8,7 @@
 
 namespace nix {
 
-MakeError(UsageError, Error);
+MakeError(UsageError, Error)
 
 enum HashType : char;
 
@@ -118,14 +118,14 @@ class Args {
       flag->arity = 1;
       flag->handler = [=](std::vector<std::string> ss) { *dest = ss[0]; };
       return *this;
-    };
+    }
 
     template <class T>
     FlagMaker& set(T* dest, const T& val) {
       flag->arity = 0;
       flag->handler = [=](std::vector<std::string> ss) { *dest = val; };
       return *this;
-    };
+    }
 
     FlagMaker& mkHashTypeFlag(HashType* ht);
   };

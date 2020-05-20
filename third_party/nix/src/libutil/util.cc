@@ -35,8 +35,6 @@
 #include <sys/prctl.h>
 #endif
 
-__attribute__((weak));
-
 namespace nix {
 
 const std::string nativeSystem = SYSTEM;

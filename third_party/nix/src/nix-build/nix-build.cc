@@ -23,8 +23,6 @@
 using namespace nix;
 using namespace std::string_literals;
 
-__attribute__((weak));
-
 /* Recreate the effect of the perl shellwords function, breaking up a
  * string into arguments like a shell word, including escapes
  */
