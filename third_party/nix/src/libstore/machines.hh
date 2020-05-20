@@ -19,12 +19,12 @@ struct Machine {
 
   bool mandatoryMet(const std::set<string>& features) const;
 
-  Machine(decltype(storeUri) storeUri, decltype(systemTypes) systemTypes,
-          decltype(sshKey) sshKey, decltype(maxJobs) maxJobs,
+  Machine(decltype(storeUri)& storeUri, decltype(systemTypes)& systemTypes,
+          decltype(sshKey)& sshKey, decltype(maxJobs) maxJobs,
           decltype(speedFactor) speedFactor,
-          decltype(supportedFeatures) supportedFeatures,
-          decltype(mandatoryFeatures) mandatoryFeatures,
-          decltype(sshPublicHostKey) sshPublicHostKey);
+          decltype(supportedFeatures)& supportedFeatures,
+          decltype(mandatoryFeatures)& mandatoryFeatures,
+          decltype(sshPublicHostKey)& sshPublicHostKey);
 };
 
 typedef std::vector<Machine> Machines;

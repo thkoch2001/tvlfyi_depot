@@ -108,7 +108,7 @@ struct Downloader {
      and is more recent than ‘tarball-ttl’ seconds. Otherwise,
      use the recorded ETag to verify if the server has a more
      recent version, and if so, download it to the Nix store. */
-  CachedDownloadResult downloadCached(ref<Store> store,
+  CachedDownloadResult downloadCached(const ref<Store>& store,
                                       const CachedDownloadRequest& request);
 
   enum Error { NotFound, Forbidden, Misc, Transient, Interrupted };

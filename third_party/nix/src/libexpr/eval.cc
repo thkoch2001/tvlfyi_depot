@@ -298,7 +298,7 @@ static Strings parseNixPath(const string& s) {
   return res;
 }
 
-EvalState::EvalState(const Strings& _searchPath, ref<Store> store)
+EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
     : sWith(symbols.create("<with>")),
       sOutPath(symbols.create("outPath")),
       sDrvPath(symbols.create("drvPath")),

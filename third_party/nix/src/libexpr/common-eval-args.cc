@@ -29,7 +29,7 @@ MixEvalArgs::MixEvalArgs() {
           "add a path to the list of locations used to look up <...> file "
           "names")
       .label("path")
-      .handler([&](std::string s) { searchPath.push_back(s); });
+      .handler([&](const std::string& s) { searchPath.push_back(s); });
 }
 
 Bindings* MixEvalArgs::getAutoArgs(EvalState& state) {

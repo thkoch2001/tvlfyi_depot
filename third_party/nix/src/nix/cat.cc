@@ -8,7 +8,7 @@ using namespace nix;
 struct MixCat : virtual Args {
   std::string path;
 
-  void cat(ref<FSAccessor> accessor) {
+  void cat(const ref<FSAccessor>& accessor) {
     auto st = accessor->stat(path);
     if (st.type == FSAccessor::Type::tMissing) {
       throw Error(format("path '%1%' does not exist") % path);

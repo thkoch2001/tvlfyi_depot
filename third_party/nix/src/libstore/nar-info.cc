@@ -122,7 +122,7 @@ std::string NarInfo::to_string() const {
     res += "System: " + system + "\n";
   }
 
-  for (auto sig : sigs) {
+  for (const auto& sig : sigs) {
     res += "Sig: " + sig + "\n";
   }
 

@@ -19,11 +19,12 @@ typedef list<Generation> Generations;
 
 /* Returns the list of currently present generations for the specified
    profile, sorted by generation number. */
-Generations findGenerations(Path profile, int& curGen);
+Generations findGenerations(const Path& profile, int& curGen);
 
 class LocalFSStore;
 
-Path createGeneration(ref<LocalFSStore> store, Path profile, Path outPath);
+Path createGeneration(const ref<LocalFSStore>& store, const Path& profile,
+                      const Path& outPath);
 
 void deleteGeneration(const Path& profile, unsigned int gen);
 
@@ -40,7 +41,7 @@ void deleteGenerationsOlderThan(const Path& profile, time_t t, bool dryRun);
 void deleteGenerationsOlderThan(const Path& profile, const string& timeSpec,
                                 bool dryRun);
 
-void switchLink(Path link, Path target);
+void switchLink(const Path& link, Path target);
 
 /* Ensure exclusive access to a profile.  Any command that modifies
    the profile first acquires this lock. */

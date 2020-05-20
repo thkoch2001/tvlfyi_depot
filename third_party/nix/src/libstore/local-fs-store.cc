@@ -12,7 +12,7 @@ LocalFSStore::LocalFSStore(const Params& params) : Store(params) {}
 struct LocalStoreAccessor : public FSAccessor {
   ref<LocalFSStore> store;
 
-  explicit LocalStoreAccessor(ref<LocalFSStore> store) : store(store) {}
+  explicit LocalStoreAccessor(const ref<LocalFSStore>& store) : store(store) {}
 
   Path toRealPath(const Path& path) {
     Path storePath = store->toStorePath(path);

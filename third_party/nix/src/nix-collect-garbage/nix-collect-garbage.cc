@@ -18,7 +18,7 @@ bool dryRun = false;
  * Of course, this makes rollbacks to before this point in time
  * impossible. */
 
-void removeOldGenerations(std::string dir) {
+void removeOldGenerations(const std::string& dir) {
   if (access(dir.c_str(), R_OK) != 0) {
     return;
   }

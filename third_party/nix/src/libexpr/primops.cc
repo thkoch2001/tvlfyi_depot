@@ -34,7 +34,7 @@ namespace nix {
    name>. */
 std::pair<string, string> decodeContext(const string& s) {
   if (s.at(0) == '!') {
-    size_t index = s.find("!", 1);
+    size_t index = s.find('!', 1);
     return std::pair<string, string>(string(s, index + 1),
                                      string(s, 1, index - 1));
   }
@@ -2172,7 +2172,7 @@ static void prim_splitVersion(EvalState& state, const Pos& pos, Value** args,
   unsigned int n = 0;
   for (auto& component : components) {
     auto listElem = v.listElems()[n++] = state.allocValue();
-    mkString(*listElem, std::move(component));
+    mkString(*listElem, component);
   }
 }
 
@@ -2246,7 +2246,8 @@ static void prim_fetchTarball(EvalState& state, const Pos& pos, Value** args,
 
 RegisterPrimOp::PrimOps* RegisterPrimOp::primOps;
 
-RegisterPrimOp::RegisterPrimOp(std::string name, size_t arity, PrimOpFun fun) {
+RegisterPrimOp::RegisterPrimOp(const std::string& name, size_t arity,
+                               PrimOpFun fun) {
   if (primOps == nullptr) {
     primOps = new PrimOps;
   }

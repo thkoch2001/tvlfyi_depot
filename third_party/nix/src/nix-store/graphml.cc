@@ -37,7 +37,7 @@ static string makeNode(const ValidPathInfo& info) {
       (isDerivation(info.path) ? "derivation" : "output-path"));
 }
 
-void printGraphML(ref<Store> store, const PathSet& roots) {
+void printGraphML(const ref<Store>& store, const PathSet& roots) {
   PathSet workList(roots);
   PathSet doneSet;
   std::pair<PathSet::iterator, bool> ret;

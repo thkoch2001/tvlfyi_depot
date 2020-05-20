@@ -30,7 +30,7 @@ struct CmdRun : InstallablesCommand {
         .description("command and arguments to be executed; defaults to 'bash'")
         .labels({"command", "args"})
         .arity(ArityAny)
-        .handler([&](std::vector<std::string> ss) {
+        .handler([&](const std::vector<std::string>& ss) {
           if (ss.empty()) {
             throw UsageError("--command requires at least one argument");
           }
@@ -227,7 +227,7 @@ void chrootHelper(int argc, char** argv) {
       throw SysError("mounting '%s' on '%s'", realStoreDir, storeDir);
     }
 
-    for (auto entry : readDirectory("/")) {
+    for (const auto& entry : readDirectory("/")) {
       auto src = "/" + entry.name;
       auto st = lstat(src);
       if (!S_ISDIR(st.st_mode)) {

@@ -171,8 +171,9 @@ void Store::queryMissing(const PathSet& targets, PathSet& willBuild_,
     }
   };
 
-  auto checkOutput = [&](const Path& drvPath, ref<Derivation> drv,
-                         const Path& outPath, ref<Sync<DrvState>> drvState_) {
+  auto checkOutput = [&](const Path& drvPath, const ref<Derivation>& drv,
+                         const Path& outPath,
+                         const ref<Sync<DrvState>>& drvState_) {
     if (drvState_->lock()->done) {
       return;
     }

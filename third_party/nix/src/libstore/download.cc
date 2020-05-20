@@ -130,7 +130,7 @@ struct CurlDownloader : public Downloader {
       }
     }
 
-    void failEx(std::exception_ptr ex) {
+    void failEx(const std::exception_ptr& ex) {
       assert(!done);
       done = true;
       callback.rethrow(ex);
@@ -663,7 +663,7 @@ struct CurlDownloader : public Downloader {
     }
   }
 
-  void enqueueItem(std::shared_ptr<DownloadItem> item) {
+  void enqueueItem(const std::shared_ptr<DownloadItem>& item) {
     if (item->request.data && !hasPrefix(item->request.uri, "http://") &&
         !hasPrefix(item->request.uri, "https://")) {
       throw nix::Error("uploading to '%s' is not supported", item->request.uri);
@@ -858,7 +858,7 @@ void Downloader::download(DownloadRequest&& request, Sink& sink) {
 }
 
 CachedDownloadResult Downloader::downloadCached(
-    ref<Store> store, const CachedDownloadRequest& request) {
+    const ref<Store>& store, const CachedDownloadRequest& request) {
   auto url = resolveUri(request.uri);
 
   auto name = request.name;

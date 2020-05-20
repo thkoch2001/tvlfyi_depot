@@ -209,7 +209,8 @@ struct LambdaSource : Source {
 /* Convert a function that feeds data into a Sink into a Source. The
    Source executes the function as a coroutine. */
 std::unique_ptr<Source> sinkToSource(
-    std::function<void(Sink&)> fun, std::function<void()> eof = []() {
+    const std::function<void(Sink&)>& fun,
+    const std::function<void()>& eof = []() {
       throw EndOfFile("coroutine has finished");
     });
 

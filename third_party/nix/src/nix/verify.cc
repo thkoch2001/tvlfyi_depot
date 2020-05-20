@@ -102,8 +102,8 @@ struct CmdVerify : StorePathsCommand {
             size_t actualSigsNeeded = std::max(sigsNeeded, (size_t)1);
             size_t validSigs = 0;
 
-            auto doSigs = [&](StringSet sigs) {
-              for (auto sig : sigs) {
+            auto doSigs = [&](const StringSet& sigs) {
+              for (const auto& sig : sigs) {
                 if (sigsSeen.count(sig) != 0u) {
                   continue;
                 }

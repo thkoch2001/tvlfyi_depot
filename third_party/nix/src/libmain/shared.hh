@@ -18,7 +18,8 @@ class Exit : public std::exception {
   virtual ~Exit();
 };
 
-int handleExceptions(const string& programName, std::function<void()> fun);
+int handleExceptions(const string& programName,
+                     const std::function<void()>& fun);
 
 /* Don't forget to call initPlugins() after settings are initialized! */
 void initNix();
@@ -40,9 +41,9 @@ void printGCWarning();
 
 class Store;
 
-void printMissing(ref<Store> store, const PathSet& paths);
+void printMissing(const ref<Store>& store, const PathSet& paths);
 
-void printMissing(ref<Store> store, const PathSet& willBuild,
+void printMissing(const ref<Store>& store, const PathSet& willBuild,
                   const PathSet& willSubstitute, const PathSet& unknown,
                   unsigned long long downloadSize, unsigned long long narSize);
 

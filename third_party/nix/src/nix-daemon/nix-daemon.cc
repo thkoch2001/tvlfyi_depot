@@ -194,9 +194,9 @@ struct RetrieveRegularNARSink : ParseSink {
   }
 };
 
-static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
-                      unsigned int clientVersion, Source& from, Sink& to,
-                      unsigned int op) {
+static void performOp(TunnelLogger* logger, const ref<Store>& store,
+                      bool trusted, unsigned int clientVersion, Source& from,
+                      Sink& to, unsigned int op) {
   switch (op) {
     case wopIsValidPath: {
       /* 'readStorePath' could raise an error leading to the connection

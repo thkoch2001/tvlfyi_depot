@@ -38,7 +38,7 @@ bool BasicDerivation::isBuiltin() const {
   return string(builder, 0, 8) == "builtin:";
 }
 
-Path writeDerivation(ref<Store> store, const Derivation& drv,
+Path writeDerivation(const ref<Store>& store, const Derivation& drv,
                      const string& name, RepairFlag repair) {
   PathSet references;
   references.insert(drv.inputSrcs.begin(), drv.inputSrcs.end());
@@ -355,7 +355,7 @@ Hash hashDerivationModulo(Store& store, Derivation drv) {
 }
 
 DrvPathWithOutputs parseDrvPathWithOutputs(const string& s) {
-  size_t n = s.find("!");
+  size_t n = s.find('!');
   return n == std::string::npos
              ? DrvPathWithOutputs(s, std::set<string>())
              : DrvPathWithOutputs(

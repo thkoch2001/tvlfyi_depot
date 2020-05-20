@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <utility>
 
 #include <glog/logging.h>
 
@@ -58,10 +59,10 @@ struct NixRepl {
 
   const Path historyFile;
 
-  NixRepl(const Strings& searchPath, nix::ref<Store> store);
+  NixRepl(const Strings& searchPath, const nix::ref<Store>& store);
   ~NixRepl();
   void mainLoop(const std::vector<std::string>& files);
-  StringSet completePrefix(string prefix);
+  StringSet completePrefix(const string& prefix);
   static bool getLine(string& input, const std::string& prompt);
   Path getDerivationPath(Value& v);
   bool processLine(string line);
@@ -70,7 +71,7 @@ struct NixRepl {
   void reloadFiles();
   void addAttrsToScope(Value& attrs);
   void addVarToScope(const Symbol& name, Value& v);
-  Expr* parseString(string s);
+  Expr* parseString(const string& s);
   void evalString(string s, Value& v);
 
   using ValuesSeen = set<Value*>;
@@ -129,7 +130,7 @@ string removeWhitespace(string s) {
   return s;
 }
 
-NixRepl::NixRepl(const Strings& searchPath, nix::ref<Store> store)
+NixRepl::NixRepl(const Strings& searchPath, const nix::ref<Store>& store)
     : state(searchPath, store),
       staticEnv(false, &state.staticBaseEnv),
       historyFile(getDataDir() + "/nix/repl-history") {
@@ -332,7 +333,7 @@ bool NixRepl::getLine(string& input, const std::string& prompt) {
   return true;
 }
 
-StringSet NixRepl::completePrefix(string prefix) {
+StringSet NixRepl::completePrefix(const string& prefix) {
   StringSet completions;
 
   size_t start = prefix.find_last_of(" \n\r\t(){}[]");
@@ -641,13 +642,13 @@ void NixRepl::addVarToScope(const Symbol& name, Value& v) {
   varNames.insert((string)name);
 }
 
-Expr* NixRepl::parseString(string s) {
+Expr* NixRepl::parseString(const string& s) {
   Expr* e = state.parseExprFromString(s, curDir, staticEnv);
   return e;
 }
 
 void NixRepl::evalString(string s, Value& v) {
-  Expr* e = parseString(s);
+  Expr* e = parseString(std::move(s));
   e->eval(state, *env, v);
   state.forceValue(v);
 }

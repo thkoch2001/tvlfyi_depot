@@ -171,21 +171,23 @@ struct RegisterCommand {
 };
 
 std::shared_ptr<Installable> parseInstallable(SourceExprCommand& cmd,
-                                              ref<Store> store,
+                                              const ref<Store>& store,
                                               const std::string& installable,
                                               bool useDefaultInstallables);
 
-Buildables build(ref<Store> store, RealiseMode mode,
-                 std::vector<std::shared_ptr<Installable>> installables);
+Buildables build(const ref<Store>& store, RealiseMode mode,
+                 const std::vector<std::shared_ptr<Installable>>& installables);
 
-PathSet toStorePaths(ref<Store> store, RealiseMode mode,
-                     std::vector<std::shared_ptr<Installable>> installables);
+PathSet toStorePaths(
+    const ref<Store>& store, RealiseMode mode,
+    const std::vector<std::shared_ptr<Installable>>& installables);
 
-Path toStorePath(ref<Store> store, RealiseMode mode,
-                 std::shared_ptr<Installable> installable);
+Path toStorePath(const ref<Store>& store, RealiseMode mode,
+                 const std::shared_ptr<Installable>& installable);
 
-PathSet toDerivations(ref<Store> store,
-                      std::vector<std::shared_ptr<Installable>> installables,
-                      bool useDeriver = false);
+PathSet toDerivations(
+    const ref<Store>& store,
+    const std::vector<std::shared_ptr<Installable>>& installables,
+    bool useDeriver = false);
 
 }  // namespace nix

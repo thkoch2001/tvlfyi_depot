@@ -564,7 +564,7 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
      the Nix store. Optionally, the contents of the NARs are
      preloaded into the specified FS accessor to speed up subsequent
      access. */
-  Paths importPaths(Source& source, std::shared_ptr<FSAccessor> accessor,
+  Paths importPaths(Source& source, const std::shared_ptr<FSAccessor>& accessor,
                     CheckSigsFlag checkSigs = CheckSigs);
 
   struct Stats {
@@ -671,7 +671,7 @@ string storePathToHash(const Path& path);
 void checkStoreName(const string& name);
 
 /* Copy a path from one store to another. */
-void copyStorePath(ref<Store> srcStore, ref<Store> dstStore,
+void copyStorePath(ref<Store> srcStore, const ref<Store>& dstStore,
                    const Path& storePath, RepairFlag repair = NoRepair,
                    CheckSigsFlag checkSigs = CheckSigs);
 
@@ -686,7 +686,7 @@ void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
                SubstituteFlag substitute = NoSubstitute);
 
 /* Copy the closure of the specified paths from one store to another. */
-void copyClosure(ref<Store> srcStore, ref<Store> dstStore,
+void copyClosure(const ref<Store>& srcStore, const ref<Store>& dstStore,
                  const PathSet& storePaths, RepairFlag repair = NoRepair,
                  CheckSigsFlag checkSigs = CheckSigs,
                  SubstituteFlag substitute = NoSubstitute);

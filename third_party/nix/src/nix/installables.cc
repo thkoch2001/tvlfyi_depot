@@ -198,8 +198,8 @@ std::string attrRegex = R"([A-Za-z_][A-Za-z0-9-_+]*)";
 static std::regex attrPathRegex(fmt(R"(%1%(\.%1%)*)", attrRegex));
 
 static std::vector<std::shared_ptr<Installable>> parseInstallables(
-    SourceExprCommand& cmd, ref<Store> store, std::vector<std::string> ss,
-    bool useDefaultInstallables) {
+    SourceExprCommand& cmd, const ref<Store>& store,
+    std::vector<std::string> ss, bool useDefaultInstallables) {
   std::vector<std::shared_ptr<Installable>> result;
 
   if (ss.empty() && useDefaultInstallables) {
@@ -213,7 +213,7 @@ static std::vector<std::shared_ptr<Installable>> parseInstallables(
     if (s.compare(0, 1, "(") == 0) {
       result.push_back(std::make_shared<InstallableExpr>(cmd, s));
 
-    } else if (s.find("/") != std::string::npos) {
+    } else if (s.find('/') != std::string::npos) {
       auto path = store->toStorePath(store->followLinksToStore(s));
 
       if (store->isStorePath(path)) {
@@ -233,7 +233,7 @@ static std::vector<std::shared_ptr<Installable>> parseInstallables(
 }
 
 std::shared_ptr<Installable> parseInstallable(SourceExprCommand& cmd,
-                                              ref<Store> store,
+                                              const ref<Store>& store,
                                               const std::string& installable,
                                               bool useDefaultInstallables) {
   auto installables = parseInstallables(cmd, store, {installable}, false);
@@ -241,8 +241,9 @@ std::shared_ptr<Installable> parseInstallable(SourceExprCommand& cmd,
   return installables.front();
 }
 
-Buildables build(ref<Store> store, RealiseMode mode,
-                 std::vector<std::shared_ptr<Installable>> installables) {
+Buildables build(
+    const ref<Store>& store, RealiseMode mode,
+    const std::vector<std::shared_ptr<Installable>>& installables) {
   if (mode != Build) {
     settings.readOnlyMode = true;
   }
@@ -278,8 +279,9 @@ Buildables build(ref<Store> store, RealiseMode mode,
   return buildables;
 }
 
-PathSet toStorePaths(ref<Store> store, RealiseMode mode,
-                     std::vector<std::shared_ptr<Installable>> installables) {
+PathSet toStorePaths(
+    const ref<Store>& store, RealiseMode mode,
+    const std::vector<std::shared_ptr<Installable>>& installables) {
   PathSet outPaths;
 
   for (auto& b : build(store, mode, installables)) {
@@ -291,8 +293,8 @@ PathSet toStorePaths(ref<Store> store, RealiseMode mode,
   return outPaths;
 }
 
-Path toStorePath(ref<Store> store, RealiseMode mode,
-                 std::shared_ptr<Installable> installable) {
+Path toStorePath(const ref<Store>& store, RealiseMode mode,
+                 const std::shared_ptr<Installable>& installable) {
   auto paths = toStorePaths(store, mode, {installable});
 
   if (paths.size() != 1) {
@@ -303,9 +305,10 @@ Path toStorePath(ref<Store> store, RealiseMode mode,
   return *paths.begin();
 }
 
-PathSet toDerivations(ref<Store> store,
-                      std::vector<std::shared_ptr<Installable>> installables,
-                      bool useDeriver) {
+PathSet toDerivations(
+    const ref<Store>& store,
+    const std::vector<std::shared_ptr<Installable>>& installables,
+    bool useDeriver) {
   PathSet drvPaths;
 
   for (auto& i : installables) {

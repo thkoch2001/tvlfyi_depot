@@ -35,7 +35,7 @@ static int parseName(const string& profileName, const string& name) {
   return -1;
 }
 
-Generations findGenerations(Path profile, int& curGen) {
+Generations findGenerations(const Path& profile, int& curGen) {
   Generations gens;
 
   Path profileDir = dirOf(profile);
@@ -68,7 +68,8 @@ static void makeName(const Path& profile, unsigned int num, Path& outLink) {
   outLink = prefix + "-link";
 }
 
-Path createGeneration(ref<LocalFSStore> store, Path profile, Path outPath) {
+Path createGeneration(const ref<LocalFSStore>& store, const Path& profile,
+                      const Path& outPath) {
   /* The new generation number should be higher than old the
      previous ones. */
   int dummy;
@@ -226,7 +227,7 @@ void deleteGenerationsOlderThan(const Path& profile, const string& timeSpec,
   deleteGenerationsOlderThan(profile, oldTime, dryRun);
 }
 
-void switchLink(Path link, Path target) {
+void switchLink(const Path& link, Path target) {
   /* Hacky. */
   if (dirOf(target) == dirOf(link)) {
     target = baseNameOf(target);

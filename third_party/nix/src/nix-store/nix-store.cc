@@ -28,6 +28,9 @@ using namespace nix;
 using std::cin;
 using std::cout;
 
+// TODO(tazjin): clang-tidy's performance lints don't like this, but
+// the automatic fixes fail (it seems that some of the ops want to own
+// the args for whatever reason)
 using Operation = void (*)(Strings, Strings);
 
 static Path gcRoot;

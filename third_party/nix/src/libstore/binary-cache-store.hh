@@ -65,7 +65,7 @@ class BinaryCacheStore : public Store {
 
   std::string narInfoFileFor(const Path& storePath);
 
-  void writeNarInfo(ref<NarInfo> narInfo);
+  void writeNarInfo(const ref<NarInfo>& narInfo);
 
  public:
   bool isValidPathUncached(const Path& path) override;

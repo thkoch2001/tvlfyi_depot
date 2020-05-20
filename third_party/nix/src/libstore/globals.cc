@@ -149,17 +149,18 @@ void BaseSetting<SandboxMode>::convertToArg(Args& args,
   args.mkFlag()
       .longName(name)
       .description("Enable sandboxing.")
-      .handler([=](std::vector<std::string> ss) { override(smEnabled); })
+      .handler([=](const std::vector<std::string>& ss) { override(smEnabled); })
       .category(category);
   args.mkFlag()
       .longName("no-" + name)
       .description("Disable sandboxing.")
-      .handler([=](std::vector<std::string> ss) { override(smDisabled); })
+      .handler(
+          [=](const std::vector<std::string>& ss) { override(smDisabled); })
       .category(category);
   args.mkFlag()
       .longName("relaxed-" + name)
       .description("Enable sandboxing, but allow builds to disable it.")
-      .handler([=](std::vector<std::string> ss) { override(smRelaxed); })
+      .handler([=](const std::vector<std::string>& ss) { override(smRelaxed); })
       .category(category);
 }
 

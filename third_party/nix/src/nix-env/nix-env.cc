@@ -171,8 +171,8 @@ static void loadSourceExpr(EvalState& state, const Path& path, Value& v) {
   }
 }
 
-static void loadDerivations(EvalState& state, Path nixExprPath,
-                            string systemFilter, Bindings& autoArgs,
+static void loadDerivations(EvalState& state, const Path& nixExprPath,
+                            const string& systemFilter, Bindings& autoArgs,
                             const string& pathPrefix, DrvInfos& elems) {
   Value vRoot;
   loadSourceExpr(state, nixExprPath, vRoot);

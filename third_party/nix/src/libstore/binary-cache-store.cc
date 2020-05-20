@@ -98,7 +98,7 @@ Path BinaryCacheStore::narInfoFileFor(const Path& storePath) {
   return storePathToHash(storePath) + ".narinfo";
 }
 
-void BinaryCacheStore::writeNarInfo(ref<NarInfo> narInfo) {
+void BinaryCacheStore::writeNarInfo(const ref<NarInfo>& narInfo) {
   auto narInfoFile = narInfoFileFor(narInfo->path);
 
   upsertFile(narInfoFile, narInfo->to_string(), "text/x-nix-narinfo");

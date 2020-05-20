@@ -175,7 +175,7 @@ Args::FlagMaker& Args::FlagMaker::mkHashTypeFlag(HashType* ht) {
   arity(1);
   label("type");
   description("hash algorithm ('md5', 'sha1', 'sha256', or 'sha512')");
-  handler([ht](std::string s) {
+  handler([ht](const std::string& s) {
     *ht = parseHashType(s);
     if (*ht == htUnknown) {
       throw UsageError("unknown hash type '%1%'", s);

@@ -246,7 +246,7 @@ pid_t startProcess(std::function<void()> fun,
 
 /* Run a program and return its stdout in a string (i.e., like the
    shell backtick operator). */
-string runProgram(Path program, bool searchPath = false,
+string runProgram(const Path& program, bool searchPath = false,
                   const Strings& args = Strings(),
                   const std::optional<std::string>& input = {});
 
@@ -453,7 +453,7 @@ struct InterruptCallback {
 /* Register a function that gets called on SIGINT (in a non-signal
    context). */
 std::unique_ptr<InterruptCallback> createInterruptCallback(
-    std::function<void()> callback);
+    const std::function<void()>& callback);
 
 void triggerInterrupt();
 

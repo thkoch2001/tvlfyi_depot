@@ -299,7 +299,7 @@ static void _main(int argc, char** argv) {
   if (readStdin) {
     exprs = {state->parseStdin()};
   } else {
-    for (auto i : left) {
+    for (const auto& i : left) {
       if (fromArgs) {
         exprs.push_back(state->parseExprFromString(i, absPath(".")));
       } else {

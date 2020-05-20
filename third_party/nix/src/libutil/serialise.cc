@@ -157,8 +157,8 @@ size_t StringSource::read(unsigned char* data, size_t len) {
 #error Coroutines are broken in this version of Boost!
 #endif
 
-std::unique_ptr<Source> sinkToSource(std::function<void(Sink&)> fun,
-                                     std::function<void()> eof) {
+std::unique_ptr<Source> sinkToSource(const std::function<void(Sink&)>& fun,
+                                     const std::function<void()>& eof) {
   struct SinkToSource : Source {
     using coro_t = boost::coroutines2::coroutine<std::string>;
 

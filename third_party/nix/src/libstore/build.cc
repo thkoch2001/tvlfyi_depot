@@ -145,7 +145,7 @@ class Goal : public std::enable_shared_from_this<Goal> {
  public:
   virtual void work() = 0;
 
-  void addWaitee(GoalPtr waitee);
+  void addWaitee(const GoalPtr& waitee);
 
   virtual void waiteeDone(GoalPtr waitee, ExitCode result);
 
@@ -280,10 +280,10 @@ class Worker {
                                RepairFlag repair = NoRepair);
 
   /* Remove a dead goal. */
-  void removeGoal(GoalPtr goal);
+  void removeGoal(const GoalPtr& goal);
 
   /* Wake up a goal (i.e., there is something for it to do). */
-  void wakeUp(GoalPtr goal);
+  void wakeUp(const GoalPtr& goal);
 
   /* Return the number of local build and substitution processes
      currently running (but not remote builds via the build
@@ -292,7 +292,7 @@ class Worker {
 
   /* Registers a running child process.  `inBuildSlot' means that
      the process counts towards the jobs limit. */
-  void childStarted(GoalPtr goal, const set<int>& fds, bool inBuildSlot,
+  void childStarted(const GoalPtr& goal, const set<int>& fds, bool inBuildSlot,
                     bool respectTimeouts);
 
   /* Unregisters a running child process.  `wakeSleepers' should be
@@ -303,7 +303,7 @@ class Worker {
 
   /* Put `goal' to sleep until a build slot becomes available (which
      might be right away). */
-  void waitForBuildSlot(GoalPtr goal);
+  void waitForBuildSlot(const GoalPtr& goal);
 
   /* Wait for any goal to finish.  Pretty indiscriminate way to
      wait for some resource that some other goal is holding. */
@@ -332,7 +332,7 @@ class Worker {
 
 //////////////////////////////////////////////////////////////////////
 
-void addToWeakGoals(WeakGoals& goals, GoalPtr p) {
+void addToWeakGoals(WeakGoals& goals, const GoalPtr& p) {
   // FIXME: necessary?
   // FIXME: O(n)
   for (auto& i : goals) {
@@ -343,7 +343,7 @@ void addToWeakGoals(WeakGoals& goals, GoalPtr p) {
   goals.push_back(p);
 }
 
-void Goal::addWaitee(GoalPtr waitee) {
+void Goal::addWaitee(const GoalPtr& waitee) {
   waitees.insert(waitee);
   addToWeakGoals(waitee->waiters, shared_from_this());
 }
@@ -445,7 +445,9 @@ void handleDiffHook(uid_t uid, uid_t gid, Path tryA, Path tryB, Path drvPath,
   auto diffHook = settings.diffHook;
   if (diffHook != "" && settings.runDiffHook) {
     try {
-      RunOptions diffHookOptions(diffHook, {tryA, tryB, drvPath, tmpDir});
+      RunOptions diffHookOptions(
+          diffHook, {std::move(tryA), std::move(tryB), std::move(drvPath),
+                     std::move(tmpDir)});
       diffHookOptions.searchPath = true;
       diffHookOptions.uid = uid;
       diffHookOptions.gid = gid;
@@ -979,7 +981,7 @@ class DerivationGoal : public Goal {
 
   void done(BuildResult::Status status, const string& msg = "");
 
-  PathSet exportReferences(PathSet storePaths);
+  PathSet exportReferences(const PathSet& storePaths);
 };
 
 const Path DerivationGoal::homeDir = "/homeless-shelter";
@@ -1520,7 +1522,7 @@ void DerivationGoal::tryToBuild() {
   started();
 }
 
-void replaceValidPath(const Path& storePath, const Path tmpPath) {
+void replaceValidPath(const Path& storePath, const Path& tmpPath) {
   /* We can't atomically replace storePath (the original) with
      tmpPath (the replacement), so we have to move it out of the
      way first.  We'd better not be interrupted here, because if
@@ -1840,7 +1842,7 @@ int childEntry(void* arg) {
   return 1;
 }
 
-PathSet DerivationGoal::exportReferences(PathSet storePaths) {
+PathSet DerivationGoal::exportReferences(const PathSet& storePaths) {
   PathSet paths;
 
   for (auto storePath : storePaths) {
@@ -4455,7 +4457,7 @@ GoalPtr Worker::makeSubstitutionGoal(const Path& path, RepairFlag repair) {
   return goal;
 }
 
-static void removeGoal(GoalPtr goal, WeakGoalMap& goalMap) {
+static void removeGoal(const GoalPtr& goal, WeakGoalMap& goalMap) {
   /* !!! inefficient */
   for (auto i = goalMap.begin(); i != goalMap.end();) {
     if (i->second.lock() == goal) {
@@ -4469,7 +4471,7 @@ static void removeGoal(GoalPtr goal, WeakGoalMap& goalMap) {
   }
 }
 
-void Worker::removeGoal(GoalPtr goal) {
+void Worker::removeGoal(const GoalPtr& goal) {
   nix::removeGoal(goal, derivationGoals);
   nix::removeGoal(goal, substitutionGoals);
   if (topGoals.find(goal) != topGoals.end()) {
@@ -4492,15 +4494,15 @@ void Worker::removeGoal(GoalPtr goal) {
   waitingForAnyGoal.clear();
 }
 
-void Worker::wakeUp(GoalPtr goal) {
+void Worker::wakeUp(const GoalPtr& goal) {
   goal->trace("woken up");
   addToWeakGoals(awake, goal);
 }
 
 unsigned Worker::getNrLocalBuilds() { return nrLocalBuilds; }
 
-void Worker::childStarted(GoalPtr goal, const set<int>& fds, bool inBuildSlot,
-                          bool respectTimeouts) {
+void Worker::childStarted(const GoalPtr& goal, const set<int>& fds,
+                          bool inBuildSlot, bool respectTimeouts) {
   Child child;
   child.goal = goal;
   child.goal2 = goal.get();
@@ -4542,7 +4544,7 @@ void Worker::childTerminated(Goal* goal, bool wakeSleepers) {
   }
 }
 
-void Worker::waitForBuildSlot(GoalPtr goal) {
+void Worker::waitForBuildSlot(const GoalPtr& goal) {
   DLOG(INFO) << "wait for build slot";
   if (getNrLocalBuilds() < settings.maxBuildJobs) {
     wakeUp(goal); /* we can do it right away */
@@ -4553,12 +4555,12 @@ void Worker::waitForBuildSlot(GoalPtr goal) {
 
 void Worker::waitForAnyGoal(GoalPtr goal) {
   DLOG(INFO) << "wait for any goal";
-  addToWeakGoals(waitingForAnyGoal, goal);
+  addToWeakGoals(waitingForAnyGoal, std::move(goal));
 }
 
 void Worker::waitForAWhile(GoalPtr goal) {
   DLOG(INFO) << "wait for a while";
-  addToWeakGoals(waitingForAWhile, goal);
+  addToWeakGoals(waitingForAWhile, std::move(goal));
 }
 
 void Worker::run(const Goals& _topGoals) {

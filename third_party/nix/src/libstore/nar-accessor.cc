@@ -94,7 +94,7 @@ struct NarAccessor : public FSAccessor {
     }
   };
 
-  explicit NarAccessor(ref<const std::string> nar) : nar(nar) {
+  explicit NarAccessor(const ref<const std::string>& nar) : nar(nar) {
     NarIndexer indexer(*this, *nar);
     parseDump(indexer, indexer);
   }
@@ -111,7 +111,7 @@ struct NarAccessor : public FSAccessor {
       if (type == "directory") {
         member.type = FSAccessor::Type::tDirectory;
         for (auto i = v["entries"].begin(); i != v["entries"].end(); ++i) {
-          std::string name = i.key();
+          const std::string& name = i.key();
           recurse(member.children[name], i.value());
         }
       } else if (type == "regular") {
@@ -225,8 +225,8 @@ ref<FSAccessor> makeLazyNarAccessor(const std::string& listing,
   return make_ref<NarAccessor>(listing, getNarBytes);
 }
 
-void listNar(JSONPlaceholder& res, ref<FSAccessor> accessor, const Path& path,
-             bool recurse) {
+void listNar(JSONPlaceholder& res, const ref<FSAccessor>& accessor,
+             const Path& path, bool recurse) {
   auto st = accessor->stat(path);
 
   auto obj = res.object();

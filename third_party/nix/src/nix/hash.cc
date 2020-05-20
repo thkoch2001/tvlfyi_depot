@@ -34,7 +34,7 @@ struct CmdHash : Command {
   }
 
   void run() override {
-    for (auto path : paths) {
+    for (const auto& path : paths) {
       Hash h = mode == mFile ? hashFile(ht, path) : hashPath(ht, path).first;
       if (truncate && h.hashSize > 20) {
         h = compressHash(h, 20);
@@ -73,7 +73,7 @@ struct CmdToBase : Command {
   }
 
   void run() override {
-    for (auto s : args) {
+    for (const auto& s : args) {
       std::cout << fmt("%s\n", Hash(s, ht).to_string(base, base == SRI));
     }
   }

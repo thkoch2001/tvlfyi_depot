@@ -16,12 +16,12 @@
 
 using namespace nix;
 
-std::string wrap(std::string prefix, std::string s) {
+std::string wrap(const std::string& prefix, const std::string& s) {
   return prefix + s + ANSI_NORMAL;
 }
 
 std::string hilite(const std::string& s, const std::smatch& m,
-                   std::string postfix) {
+                   const std::string& postfix) {
   return m.empty() ? s
                    : std::string(m.prefix()) + ANSI_RED + std::string(m.str()) +
                          postfix + std::string(m.suffix());
@@ -99,7 +99,7 @@ struct CmdSearch : SourceExprCommand, MixJSON {
 
     std::function<void(Value*, std::string, bool, JSONObject*)> doExpr;
 
-    doExpr = [&](Value* v, std::string attrPath, bool toplevel,
+    doExpr = [&](Value* v, const std::string& attrPath, bool toplevel,
                  JSONObject* cache) {
       DLOG(INFO) << "at attribute '" << attrPath << "'";
 
@@ -262,7 +262,7 @@ struct CmdSearch : SourceExprCommand, MixJSON {
     }
 
     RunPager pager;
-    for (auto el : results) {
+    for (const auto& el : results) {
       std::cout << el.second << "\n";
     }
   }

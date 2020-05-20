@@ -74,7 +74,7 @@ struct MixLs : virtual Args, MixJSON {
            showDirectory);
   }
 
-  void list(ref<FSAccessor> accessor) {
+  void list(const ref<FSAccessor>& accessor) {
     if (path == "/") {
       path = "";
     }

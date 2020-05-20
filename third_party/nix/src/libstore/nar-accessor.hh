@@ -23,7 +23,7 @@ class JSONPlaceholder;
 
 /* Write a JSON representation of the contents of a NAR (except file
    contents). */
-void listNar(JSONPlaceholder& res, ref<FSAccessor> accessor, const Path& path,
-             bool recurse);
+void listNar(JSONPlaceholder& res, const ref<FSAccessor>& accessor,
+             const Path& path, bool recurse);
 
 }  // namespace nix

@@ -9,12 +9,12 @@
 
 namespace nix {
 
-Machine::Machine(decltype(storeUri) storeUri, decltype(systemTypes) systemTypes,
-                 decltype(sshKey) sshKey, decltype(maxJobs) maxJobs,
-                 decltype(speedFactor) speedFactor,
-                 decltype(supportedFeatures) supportedFeatures,
-                 decltype(mandatoryFeatures) mandatoryFeatures,
-                 decltype(sshPublicHostKey) sshPublicHostKey)
+Machine::Machine(decltype(storeUri)& storeUri,
+                 decltype(systemTypes)& systemTypes, decltype(sshKey)& sshKey,
+                 decltype(maxJobs) maxJobs, decltype(speedFactor) speedFactor,
+                 decltype(supportedFeatures)& supportedFeatures,
+                 decltype(mandatoryFeatures)& mandatoryFeatures,
+                 decltype(sshPublicHostKey)& sshPublicHostKey)
     : storeUri(
           // Backwards compatibility: if the URI is a hostname,
           // prepend ssh://.

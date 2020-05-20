@@ -145,7 +145,7 @@ void dumpString(const std::string& s, Sink& sink) {
        << "contents" << s << ")";
 }
 
-static SerialisationError badArchive(string s) {
+static SerialisationError badArchive(const string& s) {
   return SerialisationError("bad archive: " + s);
 }
 

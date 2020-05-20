@@ -36,7 +36,7 @@ void printGCWarning() {
   }
 }
 
-void printMissing(ref<Store> store, const PathSet& paths) {
+void printMissing(const ref<Store>& store, const PathSet& paths) {
   unsigned long long downloadSize;
   unsigned long long narSize;
   PathSet willBuild;
@@ -48,7 +48,7 @@ void printMissing(ref<Store> store, const PathSet& paths) {
                narSize);
 }
 
-void printMissing(ref<Store> store, const PathSet& willBuild,
+void printMissing(const ref<Store>& store, const PathSet& willBuild,
                   const PathSet& willSubstitute, const PathSet& unknown,
                   unsigned long long downloadSize, unsigned long long narSize) {
   if (!willBuild.empty()) {
@@ -260,14 +260,15 @@ void parseCmdLine(
     int argc, char** argv,
     std::function<bool(Strings::iterator& arg, const Strings::iterator& end)>
         parseArg) {
-  parseCmdLine(baseNameOf(argv[0]), argvToStrings(argc, argv), parseArg);
+  parseCmdLine(baseNameOf(argv[0]), argvToStrings(argc, argv),
+               std::move(parseArg));
 }
 
 void parseCmdLine(
     const string& programName, const Strings& args,
     std::function<bool(Strings::iterator& arg, const Strings::iterator& end)>
         parseArg) {
-  LegacyArgs(programName, parseArg).parseCmdline(args);
+  LegacyArgs(programName, std::move(parseArg)).parseCmdline(args);
 }
 
 void printVersion(const string& programName) {
@@ -298,7 +299,8 @@ void showManPage(const string& name) {
   throw SysError(format("command 'man %1%' failed") % name.c_str());
 }
 
-int handleExceptions(const string& programName, std::function<void()> fun) {
+int handleExceptions(const string& programName,
+                     const std::function<void()>& fun) {
   ReceiveInterrupts receiveInterrupts;  // FIXME: need better place for this
 
   string error = ANSI_RED "error:" ANSI_NORMAL " ";

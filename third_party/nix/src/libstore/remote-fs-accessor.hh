@@ -20,10 +20,10 @@ class RemoteFSAccessor : public FSAccessor {
   Path makeCacheFile(const Path& storePath, const std::string& ext);
 
   void addToCache(const Path& storePath, const std::string& nar,
-                  ref<FSAccessor> narAccessor);
+                  const ref<FSAccessor>& narAccessor);
 
  public:
-  RemoteFSAccessor(ref<Store> store,
+  RemoteFSAccessor(const ref<Store>& store,
                    const /* FIXME: use std::optional */ Path& cacheDir = "");
 
   Stat stat(const Path& path) override;

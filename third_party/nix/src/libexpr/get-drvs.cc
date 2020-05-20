@@ -15,7 +15,7 @@ namespace nix {
 DrvInfo::DrvInfo(EvalState& state, string attrPath, Bindings* attrs)
     : state(&state), attrs(attrs), attrPath(std::move(attrPath)) {}
 
-DrvInfo::DrvInfo(EvalState& state, ref<Store> store,
+DrvInfo::DrvInfo(EvalState& state, const ref<Store>& store,
                  const std::string& drvPathWithOutputs)
     : state(&state), attrPath("") {
   auto spec = parseDrvPathWithOutputs(drvPathWithOutputs);

@@ -55,7 +55,8 @@ void Store::exportPath(const Path& path, Sink& sink) {
                    << 0;
 }
 
-Paths Store::importPaths(Source& source, std::shared_ptr<FSAccessor> accessor,
+Paths Store::importPaths(Source& source,
+                         const std::shared_ptr<FSAccessor>& accessor,
                          CheckSigsFlag checkSigs) {
   Paths res;
   while (true) {

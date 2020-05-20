@@ -9,7 +9,8 @@
 
 namespace nix {
 
-RemoteFSAccessor::RemoteFSAccessor(ref<Store> store, const Path& cacheDir)
+RemoteFSAccessor::RemoteFSAccessor(const ref<Store>& store,
+                                   const Path& cacheDir)
     : store(store), cacheDir(cacheDir) {
   if (!cacheDir.empty()) {
     createDirs(cacheDir);
@@ -23,7 +24,7 @@ Path RemoteFSAccessor::makeCacheFile(const Path& storePath,
 }
 
 void RemoteFSAccessor::addToCache(const Path& storePath, const std::string& nar,
-                                  ref<FSAccessor> narAccessor) {
+                                  const ref<FSAccessor>& narAccessor) {
   nars.emplace(storePath, narAccessor);
 
   if (!cacheDir.empty()) {

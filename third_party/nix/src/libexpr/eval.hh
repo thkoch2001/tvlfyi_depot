@@ -105,7 +105,7 @@ class EvalState {
   std::unordered_map<Path, Path> resolvedPaths;
 
  public:
-  EvalState(const Strings& _searchPath, ref<Store> store);
+  EvalState(const Strings& _searchPath, const ref<Store>& store);
   ~EvalState();
 
   void addToSearchPath(const string& s);

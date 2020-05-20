@@ -76,9 +76,9 @@ void clearEnv() {
   }
 }
 
-void replaceEnv(std::map<std::string, std::string> newEnv) {
+void replaceEnv(const std::map<std::string, std::string>& newEnv) {
   clearEnv();
-  for (auto newEnvVar : newEnv) {
+  for (const auto& newEnvVar : newEnv) {
     setenv(newEnvVar.first.c_str(), newEnvVar.second.c_str(), 1);
   }
 }
@@ -888,9 +888,9 @@ void killUser(uid_t uid) {
 
 /* Wrapper around vfork to prevent the child process from clobbering
    the caller's stack frame in the parent. */
-static pid_t doFork(bool allowVfork, std::function<void()> fun)
+static pid_t doFork(bool allowVfork, const std::function<void()>& fun)
     __attribute__((noinline));
-static pid_t doFork(bool allowVfork, std::function<void()> fun) {
+static pid_t doFork(bool allowVfork, const std::function<void()>& fun) {
 #ifdef __linux__
   pid_t pid = allowVfork ? vfork() : fork();
 #else
@@ -944,7 +944,7 @@ std::vector<char*> stringsToCharPtrs(const Strings& ss) {
   return res;
 }
 
-string runProgram(Path program, bool searchPath, const Strings& args,
+string runProgram(const Path& program, bool searchPath, const Strings& args,
                   const std::optional<std::string>& input) {
   RunOptions opts(program, args);
   opts.searchPath = searchPath;
@@ -1425,7 +1425,7 @@ string base64Decode(const string& s) {
 }
 
 void callFailure(const std::function<void(std::exception_ptr exc)>& failure,
-                 std::exception_ptr exc) {
+                 const std::exception_ptr& exc) {
   try {
     failure(exc);
   } catch (std::exception& e) {
@@ -1516,7 +1516,7 @@ struct InterruptCallbackImpl : InterruptCallback {
 };
 
 std::unique_ptr<InterruptCallback> createInterruptCallback(
-    std::function<void()> callback) {
+    const std::function<void()>& callback) {
   auto interruptCallbacks(_interruptCallbacks.lock());
   interruptCallbacks->push_back(callback);
 

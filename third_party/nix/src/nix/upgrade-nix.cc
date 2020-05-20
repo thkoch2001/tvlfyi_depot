@@ -97,7 +97,7 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
   }
 
   /* Return the profile in which Nix is installed. */
-  static Path getProfileDir(ref<Store> store) {
+  static Path getProfileDir(const ref<Store>& store) {
     Path where;
 
     for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":")) {
@@ -143,7 +143,7 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
   }
 
   /* Return the store path of the latest stable Nix. */
-  Path getLatestNix(ref<Store> store) {
+  Path getLatestNix(const ref<Store>& store) {
     // FIXME: use nixos.org?
     auto req = DownloadRequest(storePathsUrl);
     auto res = getDownloader()->download(req);

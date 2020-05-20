@@ -64,7 +64,7 @@ struct CmdDoctor : StoreCommand {
     return true;
   }
 
-  static bool checkProfileRoots(ref<Store> store) {
+  static bool checkProfileRoots(const ref<Store>& store) {
     PathSet dirs;
 
     for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":")) {

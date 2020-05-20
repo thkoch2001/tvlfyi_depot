@@ -246,12 +246,12 @@ void BaseSetting<bool>::convertToArg(Args& args, const std::string& category) {
   args.mkFlag()
       .longName(name)
       .description(description)
-      .handler([=](std::vector<std::string> ss) { override(true); })
+      .handler([=](const std::vector<std::string>& ss) { override(true); })
       .category(category);
   args.mkFlag()
       .longName("no-" + name)
       .description(description)
-      .handler([=](std::vector<std::string> ss) { override(false); })
+      .handler([=](const std::vector<std::string>& ss) { override(false); })
       .category(category);
 }
 

@@ -1,6 +1,7 @@
 #include "store-api.hh"
 
 #include <future>
+#include <utility>
 
 #include <glog/logging.h>
 
@@ -570,7 +571,7 @@ void Store::buildPaths(const PathSet& paths, BuildMode buildMode) {
   }
 }
 
-void copyStorePath(ref<Store> srcStore, ref<Store> dstStore,
+void copyStorePath(ref<Store> srcStore, const ref<Store>& dstStore,
                    const Path& storePath, RepairFlag repair,
                    CheckSigsFlag checkSigs) {
   auto srcUri = srcStore->getUri();
@@ -693,7 +694,7 @@ void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
       });
 }
 
-void copyClosure(ref<Store> srcStore, ref<Store> dstStore,
+void copyClosure(const ref<Store>& srcStore, const ref<Store>& dstStore,
                  const PathSet& storePaths, RepairFlag repair,
                  CheckSigsFlag checkSigs, SubstituteFlag substitute) {
   PathSet closure;
@@ -824,14 +825,14 @@ void Store::addToStore(const ValidPathInfo& info, Source& narSource,
                        RepairFlag repair, CheckSigsFlag checkSigs,
                        std::shared_ptr<FSAccessor> accessor) {
   addToStore(info, make_ref<std::string>(narSource.drain()), repair, checkSigs,
-             accessor);
+             std::move(accessor));
 }
 
 void Store::addToStore(const ValidPathInfo& info, const ref<std::string>& nar,
                        RepairFlag repair, CheckSigsFlag checkSigs,
                        std::shared_ptr<FSAccessor> accessor) {
   StringSource source(*nar);
-  addToStore(info, source, repair, checkSigs, accessor);
+  addToStore(info, source, repair, checkSigs, std::move(accessor));
 }
 
 }  // namespace nix
@@ -851,7 +852,7 @@ std::pair<std::string, Store::Params> splitUriAndParams(
   Store::Params params;
   auto q = uri.find('?');
   if (q != std::string::npos) {
-    for (auto s : tokenizeString<Strings>(uri.substr(q + 1), "&")) {
+    for (const auto& s : tokenizeString<Strings>(uri.substr(q + 1), "&")) {
       auto e = s.find('=');
       if (e != std::string::npos) {
         auto value = s.substr(e + 1);
@@ -885,7 +886,7 @@ ref<Store> openStore(const std::string& uri_,
   auto params = extraParams;
   params.insert(uriParams.begin(), uriParams.end());
 
-  for (auto fun : *RegisterStoreImplementation::implementations) {
+  for (const auto& fun : *RegisterStoreImplementation::implementations) {
     auto store = fun(uri, params);
     if (store) {
       store->warnUnknownSettings();
@@ -952,11 +953,11 @@ std::list<ref<Store>> getDefaultSubstituters() {
       }
     };
 
-    for (auto uri : settings.substituters.get()) {
+    for (const auto& uri : settings.substituters.get()) {
       addStore(uri);
     }
 
-    for (auto uri : settings.extraSubstituters.get()) {
+    for (const auto& uri : settings.extraSubstituters.get()) {
       addStore(uri);
     }
 
