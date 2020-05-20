@@ -57,7 +57,7 @@ struct XzDecompressionSink : CompressionSink {
     strm.avail_out = sizeof(outbuf);
   }
 
-  ~XzDecompressionSink() { lzma_end(&strm); }
+  ~XzDecompressionSink() override { lzma_end(&strm); }
 
   void finish() override {
     CompressionSink::flush();
@@ -103,7 +103,7 @@ struct BzipDecompressionSink : ChunkedCompressionSink {
     strm.avail_out = sizeof(outbuf);
   }
 
-  ~BzipDecompressionSink() { BZ2_bzDecompressEnd(&strm); }
+  ~BzipDecompressionSink() override { BZ2_bzDecompressEnd(&strm); }
 
   void finish() override {
     flush();
@@ -147,7 +147,7 @@ struct BrotliDecompressionSink : ChunkedCompressionSink {
     }
   }
 
-  ~BrotliDecompressionSink() { BrotliDecoderDestroyInstance(state); }
+  ~BrotliDecompressionSink() override { BrotliDecoderDestroyInstance(state); }
 
   void finish() override {
     flush();
@@ -249,7 +249,7 @@ struct XzCompressionSink : CompressionSink {
     strm.avail_out = sizeof(outbuf);
   }
 
-  ~XzCompressionSink() { lzma_end(&strm); }
+  ~XzCompressionSink() override { lzma_end(&strm); }
 
   void finish() override {
     CompressionSink::flush();
@@ -295,7 +295,7 @@ struct BzipCompressionSink : ChunkedCompressionSink {
     strm.avail_out = sizeof(outbuf);
   }
 
-  ~BzipCompressionSink() { BZ2_bzCompressEnd(&strm); }
+  ~BzipCompressionSink() override { BZ2_bzCompressEnd(&strm); }
 
   void finish() override {
     flush();
@@ -340,7 +340,7 @@ struct BrotliCompressionSink : ChunkedCompressionSink {
     }
   }
 
-  ~BrotliCompressionSink() { BrotliEncoderDestroyInstance(state); }
+  ~BrotliCompressionSink() override { BrotliEncoderDestroyInstance(state); }
 
   void finish() override {
     flush();

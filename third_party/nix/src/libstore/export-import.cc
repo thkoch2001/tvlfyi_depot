@@ -11,7 +11,7 @@ struct HashAndWriteSink : Sink {
   HashSink hashSink;
   explicit HashAndWriteSink(Sink& writeSink)
       : writeSink(writeSink), hashSink(htSHA256) {}
-  virtual void operator()(const unsigned char* data, size_t len) {
+  void operator()(const unsigned char* data, size_t len) override {
     writeSink(data, len);
     hashSink(data, len);
   }

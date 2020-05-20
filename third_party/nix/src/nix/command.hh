@@ -149,7 +149,7 @@ class MultiCommand : virtual Args {
 
   std::shared_ptr<Command> command;
 
-  MultiCommand(const Commands& commands);
+  MultiCommand(Commands commands);
 
   void printHelp(const string& programName, std::ostream& out) override;
 

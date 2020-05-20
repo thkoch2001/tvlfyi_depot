@@ -239,7 +239,7 @@ void ExprVar::bindVars(const StaticEnv& env) {
         withLevel = level;
       }
     } else {
-      StaticEnv::Vars::const_iterator i = curEnv->vars.find(name);
+      auto i = curEnv->vars.find(name);
       if (i != curEnv->vars.end()) {
         fromWith = false;
         this->level = level;

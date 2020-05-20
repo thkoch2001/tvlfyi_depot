@@ -28,7 +28,7 @@ using namespace nix;
 using std::cin;
 using std::cout;
 
-typedef void (*Operation)(Strings opFlags, Strings opArgs);
+using Operation = void (*)(Strings, Strings);
 
 static Path gcRoot;
 static int rootNr = 0;
@@ -77,7 +77,7 @@ static PathSet realisePath(Path path, bool build = true) {
 
     PathSet outputs;
     for (auto& j : p.second) {
-      DerivationOutputs::iterator i = drv.outputs.find(j);
+      auto i = drv.outputs.find(j);
       if (i == drv.outputs.end()) {
         throw Error(
             format("derivation '%1%' does not have an output named '%2%'") %
@@ -246,7 +246,7 @@ static void opPrintFixedPath(Strings opFlags, Strings opArgs) {
     throw UsageError(format("'--print-fixed-path' requires three arguments"));
   }
 
-  Strings::iterator i = opArgs.begin();
+  auto i = opArgs.begin();
   HashType hashAlgo = parseHashType(*i++);
   string hash = *i++;
   string name = *i++;
@@ -427,8 +427,7 @@ static void opQuery(Strings opFlags, Strings opArgs) {
         }
       }
       Paths sorted = store->topoSortPaths(paths);
-      for (Paths::reverse_iterator i = sorted.rbegin(); i != sorted.rend();
-           ++i) {
+      for (auto i = sorted.rbegin(); i != sorted.rend(); ++i) {
         cout << format("%s\n") % *i;
       }
       break;
@@ -446,7 +445,7 @@ static void opQuery(Strings opFlags, Strings opArgs) {
       for (auto& i : opArgs) {
         Path path = useDeriver(store->followLinksToStorePath(i));
         Derivation drv = store->derivationFromPath(path);
-        StringPairs::iterator j = drv.env.find(bindingName);
+        auto j = drv.env.find(bindingName);
         if (j == drv.env.end()) {
           throw Error(
               format(
@@ -607,7 +606,7 @@ static void registerValidity(bool reregister, bool hashGiven,
                              bool canonicalise) {
   ValidPathInfos infos;
 
-  while (1) {
+  while (true) {
     ValidPathInfo info = decodeValidPathInfo(cin, hashGiven);
     if (info.path == "") {
       break;
@@ -701,7 +700,7 @@ static void opGC(Strings opFlags, Strings opArgs) {
     } else if (*i == "--delete") {
       options.action = GCOptions::gcDeleteDead;
     } else if (*i == "--max-freed") {
-      long long maxFreed = getIntArg<long long>(*i, i, opFlags.end(), true);
+      auto maxFreed = getIntArg<long long>(*i, i, opFlags.end(), true);
       options.maxFreed = maxFreed >= 0 ? maxFreed : 0;
     } else {
       throw UsageError(format("bad sub-operation '%1%' in GC") % *i);
@@ -966,7 +965,7 @@ static void opServe(Strings opFlags, Strings opArgs) {
       case cmdQueryValidPaths: {
         bool lock = readInt(in);
         bool substitute = readInt(in);
-        PathSet paths = readStorePaths<PathSet>(*store, in);
+        auto paths = readStorePaths<PathSet>(*store, in);
         if (lock && writeAllowed) {
           for (auto& path : paths) {
             store->addTempRoot(path);
@@ -1004,7 +1003,7 @@ static void opServe(Strings opFlags, Strings opArgs) {
       }
 
       case cmdQueryPathInfos: {
-        PathSet paths = readStorePaths<PathSet>(*store, in);
+        auto paths = readStorePaths<PathSet>(*store, in);
         // !!! Maybe we want a queryPathInfos?
         for (auto& i : paths) {
           try {
@@ -1048,7 +1047,7 @@ static void opServe(Strings opFlags, Strings opArgs) {
         if (!writeAllowed) {
           throw Error("building paths is not allowed");
         }
-        PathSet paths = readStorePaths<PathSet>(*store, in);
+        auto paths = readStorePaths<PathSet>(*store, in);
 
         getBuildSettings();
 
@@ -1186,7 +1185,7 @@ static void opVersion(Strings opFlags, Strings opArgs) {
 static int _main(int argc, char** argv) {
   {
     Strings opFlags, opArgs;
-    Operation op = 0;
+    Operation op = nullptr;
 
     parseCmdLine(argc, argv,
                  [&](Strings::iterator& arg, const Strings::iterator& end) {

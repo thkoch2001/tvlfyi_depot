@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "binary-cache-store.hh"
 #include "globals.hh"
 #include "nar-info-disk-cache.hh"
@@ -9,8 +11,8 @@ class LocalBinaryCacheStore : public BinaryCacheStore {
   Path binaryCacheDir;
 
  public:
-  LocalBinaryCacheStore(const Params& params, const Path& binaryCacheDir)
-      : BinaryCacheStore(params), binaryCacheDir(binaryCacheDir) {}
+  LocalBinaryCacheStore(const Params& params, Path binaryCacheDir)
+      : BinaryCacheStore(params), binaryCacheDir(std::move(binaryCacheDir)) {}
 
   void init() override;
 
@@ -78,7 +80,7 @@ static RegisterStoreImplementation regStore(
        const Store::Params& params) -> std::shared_ptr<Store> {
       if (getEnv("_NIX_FORCE_HTTP_BINARY_CACHE_STORE") == "1" ||
           std::string(uri, 0, 7) != "file://") {
-        return 0;
+        return nullptr;
       }
       auto store =
           std::make_shared<LocalBinaryCacheStore>(params, std::string(uri, 7));

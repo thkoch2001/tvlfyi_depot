@@ -1,10 +1,10 @@
 #include <climits>
+#include <csetjmp>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
 
 #include <glog/logging.h>
-#include <setjmp.h>
 
 #ifdef READLINE
 #include <readline/history.h>
@@ -73,7 +73,7 @@ struct NixRepl {
   Expr* parseString(string s);
   void evalString(string s, Value& v);
 
-  typedef set<Value*> ValuesSeen;
+  using ValuesSeen = set<Value*>;
   std::ostream& printValue(std::ostream& str, Value& v, unsigned int maxDepth);
   std::ostream& printValue(std::ostream& str, Value& v, unsigned int maxDepth,
                            ValuesSeen& seen);
@@ -306,7 +306,7 @@ bool NixRepl::getLine(string& input, const std::string& prompt) {
       throw SysError("restoring signals");
     }
 
-    if (sigaction(SIGINT, &old, 0)) {
+    if (sigaction(SIGINT, &old, nullptr)) {
       throw SysError("restoring handler for SIGINT");
     }
   };
@@ -358,7 +358,7 @@ StringSet NixRepl::completePrefix(string prefix) {
     }
   } else if ((dot = cur.rfind('.')) == string::npos) {
     /* This is a variable name; look it up in the current scope. */
-    StringSet::iterator i = varNames.lower_bound(cur);
+    auto i = varNames.lower_bound(cur);
     while (i != varNames.end()) {
       if (string(*i, 0, cur.size()) != cur) {
         break;

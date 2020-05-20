@@ -1,8 +1,8 @@
 #include "remote-store.hh"
 
+#include <cerrno>
 #include <cstring>
 
-#include <errno.h>
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <sys/socket.h>
@@ -230,7 +230,7 @@ struct ConnectionHandle {
 
   RemoteStore::Connection* operator->() { return &*handle; }
 
-  void processStderr(Sink* sink = 0, Source* source = 0) {
+  void processStderr(Sink* sink = nullptr, Source* source = nullptr) {
     auto ex = handle->processStderr(sink, source);
     if (ex) {
       daemonException = true;
@@ -324,7 +324,7 @@ void RemoteStore::querySubstitutablePathInfos(const PathSet& paths,
   } else {
     conn->to << wopQuerySubstitutablePathInfos << paths;
     conn.processStderr();
-    size_t count = readNum<size_t>(conn->from);
+    auto count = readNum<size_t>(conn->from);
     for (size_t n = 0; n < count; n++) {
       Path path = readStorePath(*this, conn->from);
       SubstitutablePathInfo& info(infos[path]);
@@ -388,7 +388,7 @@ void RemoteStore::queryReferrers(const Path& path, PathSet& referrers) {
   auto conn(getConnection());
   conn->to << wopQueryReferrers << path;
   conn.processStderr();
-  PathSet referrers2 = readStorePaths<PathSet>(*this, conn->from);
+  auto referrers2 = readStorePaths<PathSet>(*this, conn->from);
   referrers.insert(referrers2.begin(), referrers2.end());
 }
 
@@ -442,7 +442,7 @@ void RemoteStore::addToStore(const ValidPathInfo& info, Source& source,
           ;
     });
 
-    conn.processStderr(0, source2.get());
+    conn.processStderr(nullptr, source2.get());
 
     auto importedPaths = readStorePaths<PathSet>(*this, conn->from);
     assert(importedPaths.size() <= 1);
@@ -457,7 +457,7 @@ void RemoteStore::addToStore(const ValidPathInfo& info, Source& source,
     if (!tunnel) {
       copyNAR(source, conn->to);
     }
-    conn.processStderr(0, tunnel ? &source : nullptr);
+    conn.processStderr(nullptr, tunnel ? &source : nullptr);
   }
 }
 
@@ -591,7 +591,7 @@ Roots RemoteStore::findRoots(bool censor) {
   auto conn(getConnection());
   conn->to << wopFindRoots;
   conn.processStderr();
-  size_t count = readNum<size_t>(conn->from);
+  auto count = readNum<size_t>(conn->from);
   Roots result;
   while (count--) {
     Path link = readString(conn->from);
@@ -704,7 +704,7 @@ std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
       if (!source) {
         throw Error("no source");
       }
-      size_t len = readNum<size_t>(from);
+      auto len = readNum<size_t>(from);
       auto buf = std::make_unique<unsigned char[]>(len);
       writeString(buf.get(), source->read(buf.get(), len), to);
       to.flush();
@@ -742,7 +742,7 @@ static RegisterStoreImplementation regStore(
     [](const std::string& uri,
        const Store::Params& params) -> std::shared_ptr<Store> {
       if (std::string(uri, 0, uriScheme.size()) != uriScheme) {
-        return 0;
+        return nullptr;
       }
       return std::make_shared<UDSRemoteStore>(
           std::string(uri, uriScheme.size()), params);

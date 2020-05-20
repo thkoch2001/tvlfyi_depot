@@ -1,19 +1,19 @@
 #include "local-store.hh"
 
 #include <algorithm>
+#include <cerrno>
+#include <cstdio>
 #include <cstring>
+#include <ctime>
 #include <iostream>
 
-#include <errno.h>
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <grp.h>
-#include <stdio.h>
 #include <sys/select.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <time.h>
 #include <unistd.h>
 #include <utime.h>
 
@@ -321,7 +321,7 @@ void LocalStore::openDB(State& state, bool create) {
   auto& db(state.db);
   if (sqlite3_open_v2(dbPath.c_str(), &db.db,
                       SQLITE_OPEN_READWRITE | (create ? SQLITE_OPEN_CREATE : 0),
-                      0) != SQLITE_OK) {
+                      nullptr) != SQLITE_OK) {
     throw Error(format("cannot open Nix database '%1%'") % dbPath);
   }
 
@@ -364,16 +364,16 @@ void LocalStore::openDB(State& state, bool create) {
     prevMode = string((const char*)sqlite3_column_text(stmt, 0));
   }
   if (prevMode != mode &&
-      sqlite3_exec(db, ("pragma main.journal_mode = " + mode + ";").c_str(), 0,
-                   0, 0) != SQLITE_OK) {
+      sqlite3_exec(db, ("pragma main.journal_mode = " + mode + ";").c_str(),
+                   nullptr, nullptr, nullptr) != SQLITE_OK) {
     throwSQLiteError(db, "setting journal mode");
   }
 
   /* Increase the auto-checkpoint interval to 40000 pages.  This
      seems enough to ensure that instantiating the NixOS system
      derivation is done in a single fsync(). */
-  if (mode == "wal" && sqlite3_exec(db, "pragma wal_autocheckpoint = 40000;", 0,
-                                    0, 0) != SQLITE_OK) {
+  if (mode == "wal" && sqlite3_exec(db, "pragma wal_autocheckpoint = 40000;",
+                                    nullptr, nullptr, nullptr) != SQLITE_OK) {
     throwSQLiteError(db, "setting autocheckpoint interval");
   }
 
@@ -404,7 +404,8 @@ void LocalStore::makeStoreWritable() {
       throw SysError("setting up a private mount namespace");
     }
 
-    if (mount(0, realStoreDir.c_str(), "none", MS_REMOUNT | MS_BIND, 0) == -1) {
+    if (mount(nullptr, realStoreDir.c_str(), "none", MS_REMOUNT | MS_BIND,
+              nullptr) == -1) {
       throw SysError(format("remounting %1% writable") % realStoreDir);
     }
   }
@@ -585,7 +586,7 @@ void LocalStore::checkDerivationOutputs(const Path& drvPath,
   drvName = string(drvName, 0, drvName.size() - drvExtension.size());
 
   if (drv.isFixedOutput()) {
-    DerivationOutputs::const_iterator out = drv.outputs.find("out");
+    auto out = drv.outputs.find("out");
     if (out == drv.outputs.end()) {
       throw Error(
           format("derivation '%1%' does not have an output named 'out'") %
@@ -597,7 +598,7 @@ void LocalStore::checkDerivationOutputs(const Path& drvPath,
     out->second.parseHashInfo(recursive, h);
     Path outPath = makeFixedOutputPath(recursive, h, drvName);
 
-    StringPairs::const_iterator j = drv.env.find("out");
+    auto j = drv.env.find("out");
     if (out->second.path != outPath || j == drv.env.end() ||
         j->second != outPath) {
       throw Error(
@@ -618,7 +619,7 @@ void LocalStore::checkDerivationOutputs(const Path& drvPath,
 
     for (auto& i : drv.outputs) {
       Path outPath = makeOutputPath(i.first, h, drvName);
-      StringPairs::const_iterator j = drv.env.find(i.first);
+      auto j = drv.env.find(i.first);
       if (i.second.path != outPath || j == drv.env.end() ||
           j->second != outPath) {
         throw Error(format("derivation '%1%' has incorrect output '%2%', "
@@ -640,7 +641,7 @@ uint64_t LocalStore::addValidPath(State& state, const ValidPathInfo& info,
 
   state.stmtRegisterValidPath
       .use()(info.path)(info.narHash.to_string(Base16))(
-          info.registrationTime == 0 ? time(0) : info.registrationTime)(
+          info.registrationTime == 0 ? time(nullptr) : info.registrationTime)(
           info.deriver, info.deriver != "")(info.narSize, info.narSize != 0)(
           info.ultimate ? 1 : 0, info.ultimate)(
           concatStringsSep(" ", info.sigs), !info.sigs.empty())(

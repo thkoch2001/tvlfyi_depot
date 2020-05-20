@@ -18,11 +18,11 @@ static void search(const unsigned char* s, size_t len, StringSet& hashes,
   static bool initialised = false;
   static bool isBase32[256];
   if (!initialised) {
-    for (unsigned int i = 0; i < 256; ++i) {
-      isBase32[i] = false;
+    for (bool& i : isBase32) {
+      i = false;
     }
-    for (unsigned int i = 0; i < base32Chars.size(); ++i) {
-      isBase32[(unsigned char)base32Chars[i]] = true;
+    for (char base32Char : base32Chars) {
+      isBase32[(unsigned char)base32Char] = true;
     }
     initialised = true;
   }
@@ -59,7 +59,7 @@ struct RefScanSink : Sink {
 
   RefScanSink() : hashSink(htSHA256) {}
 
-  void operator()(const unsigned char* data, size_t len);
+  void operator()(const unsigned char* data, size_t len) override;
 };
 
 void RefScanSink::operator()(const unsigned char* data, size_t len) {

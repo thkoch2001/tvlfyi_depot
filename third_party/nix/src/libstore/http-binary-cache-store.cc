@@ -1,3 +1,5 @@
+#include <utility>
+
 #include <glog/logging.h>
 
 #include "binary-cache-store.hh"
@@ -21,8 +23,8 @@ class HttpBinaryCacheStore : public BinaryCacheStore {
   Sync<State> _state;
 
  public:
-  HttpBinaryCacheStore(const Params& params, const Path& _cacheUri)
-      : BinaryCacheStore(params), cacheUri(_cacheUri) {
+  HttpBinaryCacheStore(const Params& params, Path _cacheUri)
+      : BinaryCacheStore(params), cacheUri(std::move(_cacheUri)) {
     if (cacheUri.back() == '/') {
       cacheUri.pop_back();
     }
@@ -157,7 +159,7 @@ static RegisterStoreImplementation regStore(
           std::string(uri, 0, 8) != "https://" &&
           (getEnv("_NIX_FORCE_HTTP_BINARY_CACHE_STORE") != "1" ||
            std::string(uri, 0, 7) != "file://")) {
-        return 0;
+        return nullptr;
       }
       auto store = std::make_shared<HttpBinaryCacheStore>(params, uri);
       store->init();

@@ -60,27 +60,27 @@ static int _main(int argc, char** argv) {
 
     GCOptions options;
 
-    parseCmdLine(
-        argc, argv, [&](Strings::iterator& arg, const Strings::iterator& end) {
-          if (*arg == "--help") {
-            showManPage("nix-collect-garbage");
-          } else if (*arg == "--version") {
-            printVersion("nix-collect-garbage");
-          } else if (*arg == "--delete-old" || *arg == "-d") {
-            removeOld = true;
-          } else if (*arg == "--delete-older-than") {
-            removeOld = true;
-            deleteOlderThan = getArg(*arg, arg, end);
-          } else if (*arg == "--dry-run") {
-            dryRun = true;
-          } else if (*arg == "--max-freed") {
-            long long maxFreed = getIntArg<long long>(*arg, arg, end, true);
-            options.maxFreed = maxFreed >= 0 ? maxFreed : 0;
-          } else {
-            return false;
-          }
-          return true;
-        });
+    parseCmdLine(argc, argv,
+                 [&](Strings::iterator& arg, const Strings::iterator& end) {
+                   if (*arg == "--help") {
+                     showManPage("nix-collect-garbage");
+                   } else if (*arg == "--version") {
+                     printVersion("nix-collect-garbage");
+                   } else if (*arg == "--delete-old" || *arg == "-d") {
+                     removeOld = true;
+                   } else if (*arg == "--delete-older-than") {
+                     removeOld = true;
+                     deleteOlderThan = getArg(*arg, arg, end);
+                   } else if (*arg == "--dry-run") {
+                     dryRun = true;
+                   } else if (*arg == "--max-freed") {
+                     auto maxFreed = getIntArg<long long>(*arg, arg, end, true);
+                     options.maxFreed = maxFreed >= 0 ? maxFreed : 0;
+                   } else {
+                     return false;
+                   }
+                   return true;
+                 });
 
     initPlugins();
 

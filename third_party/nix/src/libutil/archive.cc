@@ -199,7 +199,7 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
 
   std::map<Path, int, CaseInsensitiveCompare> names;
 
-  while (1) {
+  while (true) {
     checkInterrupt();
 
     s = readString(source);
@@ -254,7 +254,7 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
         throw badArchive("expected open tag");
       }
 
-      while (1) {
+      while (true) {
         checkInterrupt();
 
         s = readString(source);
@@ -323,14 +323,14 @@ struct RestoreSink : ParseSink {
   Path dstPath;
   AutoCloseFD fd;
 
-  void createDirectory(const Path& path) {
+  void createDirectory(const Path& path) override {
     Path p = dstPath + path;
     if (mkdir(p.c_str(), 0777) == -1) {
       throw SysError(format("creating directory '%1%'") % p);
     }
   };
 
-  void createRegularFile(const Path& path) {
+  void createRegularFile(const Path& path) override {
     Path p = dstPath + path;
     fd = open(p.c_str(), O_CREAT | O_EXCL | O_WRONLY | O_CLOEXEC, 0666);
     if (!fd) {
@@ -338,7 +338,7 @@ struct RestoreSink : ParseSink {
     }
   }
 
-  void isExecutable() {
+  void isExecutable() override {
     struct stat st;
     if (fstat(fd.get(), &st) == -1) {
       throw SysError("fstat");
@@ -348,7 +348,7 @@ struct RestoreSink : ParseSink {
     }
   }
 
-  void preallocateContents(unsigned long long len) {
+  void preallocateContents(unsigned long long len) override {
 #if HAVE_POSIX_FALLOCATE
     if (len) {
       errno = posix_fallocate(fd.get(), 0, len);
@@ -363,11 +363,11 @@ struct RestoreSink : ParseSink {
 #endif
   }
 
-  void receiveContents(unsigned char* data, unsigned int len) {
+  void receiveContents(unsigned char* data, unsigned int len) override {
     writeFull(fd.get(), data, len);
   }
 
-  void createSymlink(const Path& path, const string& target) {
+  void createSymlink(const Path& path, const string& target) override {
     Path p = dstPath + path;
     nix::createSymlink(target, p);
   }

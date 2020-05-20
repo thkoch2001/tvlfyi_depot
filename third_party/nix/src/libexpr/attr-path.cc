@@ -15,7 +15,7 @@ static Strings parseAttrPath(const string& s) {
       cur.clear();
     } else if (*i == '"') {
       ++i;
-      while (1) {
+      while (true) {
         if (i == s.end()) {
           throw Error(format("missing closing quote in selection path '%1%'") %
                       s);

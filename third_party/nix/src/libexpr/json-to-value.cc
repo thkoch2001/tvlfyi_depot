@@ -66,7 +66,7 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
     ValueVector values;
     values.reserve(128);
     skipWhitespace(s);
-    while (1) {
+    while (true) {
       if (values.empty() && *s == ']') {
         break;
       }
@@ -92,7 +92,7 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
   else if (*s == '{') {
     s++;
     ValueMap attrs;
-    while (1) {
+    while (true) {
       skipWhitespace(s);
       if (attrs.empty() && *s == '}') {
         break;

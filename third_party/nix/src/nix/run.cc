@@ -225,7 +225,7 @@ void chrootHelper(int argc, char** argv) {
     createDirs(tmpDir + storeDir);
 
     if (mount(realStoreDir.c_str(), (tmpDir + storeDir).c_str(), "", MS_BIND,
-              0) == -1) {
+              nullptr) == -1) {
       throw SysError("mounting '%s' on '%s'", realStoreDir, storeDir);
     }
 
@@ -242,12 +242,13 @@ void chrootHelper(int argc, char** argv) {
       if (mkdir(dst.c_str(), 0700) == -1) {
         throw SysError("creating directory '%s'", dst);
       }
-      if (mount(src.c_str(), dst.c_str(), "", MS_BIND | MS_REC, 0) == -1) {
+      if (mount(src.c_str(), dst.c_str(), "", MS_BIND | MS_REC, nullptr) ==
+          -1) {
         throw SysError("mounting '%s' on '%s'", src, dst);
       }
     }
 
-    char* cwd = getcwd(0, 0);
+    char* cwd = getcwd(nullptr, 0);
     if (!cwd) {
       throw SysError("getting current directory");
     }
@@ -260,8 +261,8 @@ void chrootHelper(int argc, char** argv) {
     if (chdir(cwd) == -1) {
       throw SysError(format("chdir to '%s' in chroot") % cwd);
     }
-  } else if (mount(realStoreDir.c_str(), storeDir.c_str(), "", MS_BIND, 0) ==
-             -1) {
+  } else if (mount(realStoreDir.c_str(), storeDir.c_str(), "", MS_BIND,
+                   nullptr) == -1) {
     throw SysError("mounting '%s' on '%s'", realStoreDir, storeDir);
   }
 

@@ -103,8 +103,8 @@ class AbstractSetting {
   bool overriden = false;
 
  protected:
-  AbstractSetting(const std::string& name, const std::string& description,
-                  const std::set<std::string>& aliases);
+  AbstractSetting(std::string name, std::string description,
+                  std::set<std::string> aliases);
 
   virtual ~AbstractSetting() {
     // Check against a gcc miscompilation causing our constructor

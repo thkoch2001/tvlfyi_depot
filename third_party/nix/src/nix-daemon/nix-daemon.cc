@@ -1,13 +1,13 @@
 #include <algorithm>
+#include <cerrno>
+#include <climits>
+#include <csignal>
 #include <cstring>
 
-#include <errno.h>
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <grp.h>
-#include <limits.h>
 #include <pwd.h>
-#include <signal.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -74,7 +74,8 @@ struct TunnelLogger {
 
   unsigned int clientVersion;
 
-  explicit TunnelLogger(unsigned int clientVersion) : clientVersion(clientVersion) {}
+  explicit TunnelLogger(unsigned int clientVersion)
+      : clientVersion(clientVersion) {}
 
   void enqueueMsg(const std::string& s) {
     auto state(state_.lock());
@@ -152,7 +153,7 @@ struct TunnelLogger {
 struct TunnelSink : Sink {
   Sink& to;
   explicit TunnelSink(Sink& to) : to(to) {}
-  virtual void operator()(const unsigned char* data, size_t len) {
+  void operator()(const unsigned char* data, size_t len) override {
     to << STDERR_WRITE;
     writeString(data, len, to);
   }
@@ -177,18 +178,18 @@ struct TunnelSource : BufferedSource {
 /* If the NAR archive contains a single file at top-level, then save
    the contents of the file to `s'.  Otherwise barf. */
 struct RetrieveRegularNARSink : ParseSink {
-  bool regular;
+  bool regular{true};
   string s;
 
-  RetrieveRegularNARSink() : regular(true) {}
+  RetrieveRegularNARSink() {}
 
-  void createDirectory(const Path& path) { regular = false; }
+  void createDirectory(const Path& path) override { regular = false; }
 
-  void receiveContents(unsigned char* data, unsigned int len) {
+  void receiveContents(unsigned char* data, unsigned int len) override {
     s.append((const char*)data, len);
   }
 
-  void createSymlink(const Path& path, const string& target) {
+  void createSymlink(const Path& path, const string& target) override {
     regular = false;
   }
 };
@@ -213,7 +214,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
     }
 
     case wopQueryValidPaths: {
-      PathSet paths = readStorePaths<PathSet>(*store, from);
+      auto paths = readStorePaths<PathSet>(*store, from);
       logger->startWork();
       PathSet res = store->queryValidPaths(paths);
       logger->stopWork();
@@ -231,7 +232,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
     }
 
     case wopQuerySubstitutablePaths: {
-      PathSet paths = readStorePaths<PathSet>(*store, from);
+      auto paths = readStorePaths<PathSet>(*store, from);
       logger->startWork();
       PathSet res = store->querySubstitutablePaths(paths);
       logger->stopWork();
@@ -343,7 +344,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
     case wopAddTextToStore: {
       string suffix = readString(from);
       string s = readString(from);
-      PathSet refs = readStorePaths<PathSet>(*store, from);
+      auto refs = readStorePaths<PathSet>(*store, from);
       logger->startWork();
       Path path = store->addTextToStore(suffix, s, refs, NoRepair);
       logger->stopWork();
@@ -373,7 +374,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
     }
 
     case wopBuildPaths: {
-      PathSet drvs = readStorePaths<PathSet>(*store, from);
+      auto drvs = readStorePaths<PathSet>(*store, from);
       BuildMode mode = bmNormal;
       if (GET_PROTOCOL_MINOR(clientVersion) >= 15) {
         mode = (BuildMode)readInt(from);
@@ -397,7 +398,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       Path drvPath = readStorePath(*store, from);
       BasicDerivation drv;
       readDerivation(from, *store, drv);
-      BuildMode buildMode = (BuildMode)readInt(from);
+      auto buildMode = (BuildMode)readInt(from);
       logger->startWork();
       if (!trusted) {
         throw Error("you are not privileged to build derivations");
@@ -570,7 +571,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       SubstitutablePathInfos infos;
       store->querySubstitutablePathInfos({path}, infos);
       logger->stopWork();
-      SubstitutablePathInfos::iterator i = infos.find(path);
+      auto i = infos.find(path);
       if (i == infos.end()) {
         to << 0;
       } else {
@@ -581,7 +582,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
     }
 
     case wopQuerySubstitutablePathInfos: {
-      PathSet paths = readStorePaths<PathSet>(*store, from);
+      auto paths = readStorePaths<PathSet>(*store, from);
       logger->startWork();
       SubstitutablePathInfos infos;
       store->querySubstitutablePathInfos(paths, infos);
@@ -652,7 +653,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
 
     case wopAddSignatures: {
       Path path = readStorePath(*store, from);
-      StringSet sigs = readStrings<StringSet>(from);
+      auto sigs = readStrings<StringSet>(from);
       logger->startWork();
       if (!trusted) {
         throw Error("you are not privileged to add signatures");
@@ -713,7 +714,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
     }
 
     case wopQueryMissing: {
-      PathSet targets = readStorePaths<PathSet>(*store, from);
+      auto targets = readStorePaths<PathSet>(*store, from);
       logger->startWork();
       PathSet willBuild, willSubstitute, unknown;
       unsigned long long downloadSize, narSize;
@@ -834,7 +835,7 @@ static void sigChldHandler(int sigNo) {
   // Ensure we don't modify errno of whatever we've interrupted
   auto saved_errno = errno;
   /* Reap all dead children. */
-  while (waitpid(-1, 0, WNOHANG) > 0) {
+  while (waitpid(-1, nullptr, WNOHANG) > 0) {
     ;
   }
   errno = saved_errno;
@@ -991,7 +992,7 @@ static void daemonLoop(char** argv) {
   closeOnExec(fdSocket.get());
 
   /* Loop accepting connections. */
-  while (1) {
+  while (true) {
     try {
       /* Accept a connection. */
       struct sockaddr_un remoteAddr;
@@ -1012,10 +1013,10 @@ static void daemonLoop(char** argv) {
       bool trusted = false;
       PeerInfo peer = getPeerInfo(remote.get());
 
-      struct passwd* pw = peer.uidKnown ? getpwuid(peer.uid) : 0;
+      struct passwd* pw = peer.uidKnown ? getpwuid(peer.uid) : nullptr;
       string user = pw ? pw->pw_name : std::to_string(peer.uid);
 
-      struct group* gr = peer.gidKnown ? getgrgid(peer.gid) : 0;
+      struct group* gr = peer.gidKnown ? getgrgid(peer.gid) : nullptr;
       string group = gr ? gr->gr_name : std::to_string(peer.gid);
 
       Strings trustedUsers = settings.trustedUsers;

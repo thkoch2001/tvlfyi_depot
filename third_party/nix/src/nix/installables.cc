@@ -1,4 +1,5 @@
 #include <regex>
+#include <utility>
 
 #include "attr-path.hh"
 #include "command.hh"
@@ -100,7 +101,8 @@ Buildable Installable::toBuildable() {
 struct InstallableStorePath : Installable {
   Path storePath;
 
-  explicit InstallableStorePath(const Path& storePath) : storePath(storePath) {}
+  explicit InstallableStorePath(Path storePath)
+      : storePath(std::move(storePath)) {}
 
   std::string what() override { return storePath; }
 
@@ -160,8 +162,8 @@ struct InstallableValue : Installable {
 struct InstallableExpr : InstallableValue {
   std::string text;
 
-  InstallableExpr(SourceExprCommand& cmd, const std::string& text)
-      : InstallableValue(cmd), text(text) {}
+  InstallableExpr(SourceExprCommand& cmd, std::string text)
+      : InstallableValue(cmd), text(std::move(text)) {}
 
   std::string what() override { return text; }
 
@@ -175,8 +177,8 @@ struct InstallableExpr : InstallableValue {
 struct InstallableAttrPath : InstallableValue {
   std::string attrPath;
 
-  InstallableAttrPath(SourceExprCommand& cmd, const std::string& attrPath)
-      : InstallableValue(cmd), attrPath(attrPath) {}
+  InstallableAttrPath(SourceExprCommand& cmd, std::string attrPath)
+      : InstallableValue(cmd), attrPath(std::move(attrPath)) {}
 
   std::string what() override { return attrPath; }
 

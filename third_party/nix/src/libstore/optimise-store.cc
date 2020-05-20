@@ -1,9 +1,10 @@
+#include <cerrno>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <regex>
+#include <utility>
 
-#include <errno.h>
-#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -27,7 +28,7 @@ static void makeWritable(const Path& path) {
 
 struct MakeReadOnly {
   Path path;
-  explicit MakeReadOnly(const Path& path) : path(path) {}
+  explicit MakeReadOnly(Path path) : path(std::move(path)) {}
   ~MakeReadOnly() {
     try {
       /* This will make the path read-only. */

@@ -33,7 +33,7 @@ struct DrvInfo {
   string attrPath; /* path towards the derivation */
 
   DrvInfo(EvalState& state) : state(&state){};
-  DrvInfo(EvalState& state, const string& attrPath, Bindings* attrs);
+  DrvInfo(EvalState& state, string attrPath, Bindings* attrs);
   DrvInfo(EvalState& state, ref<Store> store,
           const std::string& drvPathWithOutputs);
 

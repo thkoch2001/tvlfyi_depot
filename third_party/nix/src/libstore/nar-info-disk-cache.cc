@@ -116,7 +116,7 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
 
     /* Periodically purge expired entries from the database. */
     retrySQLite<void>([&]() {
-      auto now = time(0);
+      auto now = time(nullptr);
 
       SQLiteStmt queryLastPurge(state->db, "select value from LastPurge");
       auto queryLastPurge_(queryLastPurge.use());
@@ -157,7 +157,8 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
 
       // FIXME: race
 
-      state->insertCache.use()(uri)(time(0))(storeDir)(wantMassQuery)(priority)
+      state->insertCache
+          .use()(uri)(time(nullptr))(storeDir)(wantMassQuery)(priority)
           .exec();
       assert(sqlite3_changes(state->db) == 1);
       state->caches[uri] = Cache{(int)sqlite3_last_insert_rowid(state->db),
@@ -198,18 +199,18 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
 
           auto& cache(getCache(*state, uri));
 
-          auto now = time(0);
+          auto now = time(nullptr);
 
           auto queryNAR(state->queryNAR.use()(cache.id)(hashPart)(
               now - settings.ttlNegativeNarInfoCache)(
               now - settings.ttlPositiveNarInfoCache));
 
           if (!queryNAR.next()) {
-            return {oUnknown, 0};
+            return {oUnknown, nullptr};
           }
 
           if (!queryNAR.getInt(0)) {
-            return {oInvalid, 0};
+            return {oInvalid, nullptr};
           }
 
           auto narInfo = make_ref<NarInfo>();
@@ -254,21 +255,22 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
 
         state->insertNAR
             .use()(cache.id)(hashPart)(storePathToName(info->path))(
-                narInfo ? narInfo->url : "", narInfo != 0)(
-                narInfo ? narInfo->compression : "", narInfo != 0)(
+                narInfo ? narInfo->url : "", narInfo != nullptr)(
+                narInfo ? narInfo->compression : "", narInfo != nullptr)(
                 narInfo && narInfo->fileHash ? narInfo->fileHash.to_string()
                                              : "",
                 narInfo && narInfo->fileHash)(
                 narInfo ? narInfo->fileSize : 0,
-                narInfo != 0 && narInfo->fileSize)(info->narHash.to_string())(
+                narInfo != nullptr &&
+                    narInfo->fileSize)(info->narHash.to_string())(
                 info->narSize)(concatStringsSep(" ", info->shortRefs()))(
                 info->deriver != "" ? baseNameOf(info->deriver) : "",
-                info->deriver !=
-                    "")(concatStringsSep(" ", info->sigs))(info->ca)(time(0))
+                info->deriver != "")(concatStringsSep(" ", info->sigs))(
+                info->ca)(time(nullptr))
             .exec();
 
       } else {
-        state->insertMissingNAR.use()(cache.id)(hashPart)(time(0)).exec();
+        state->insertMissingNAR.use()(cache.id)(hashPart)(time(nullptr)).exec();
       }
     });
   }

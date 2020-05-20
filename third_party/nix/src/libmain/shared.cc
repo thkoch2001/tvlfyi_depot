@@ -2,14 +2,15 @@
 
 #include <algorithm>
 #include <cctype>
+#include <csignal>
 #include <cstdlib>
 #include <exception>
 #include <iostream>
 #include <mutex>
+#include <utility>
 
 #include <glog/logging.h>
 #include <openssl/crypto.h>
-#include <signal.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -128,13 +129,13 @@ void initNix() {
   sigemptyset(&act.sa_mask);
   act.sa_handler = SIG_DFL;
   act.sa_flags = 0;
-  if (sigaction(SIGCHLD, &act, 0)) {
+  if (sigaction(SIGCHLD, &act, nullptr)) {
     throw SysError("resetting SIGCHLD");
   }
 
   /* Install a dummy SIGUSR1 handler for use with pthread_kill(). */
   act.sa_handler = sigHandler;
-  if (sigaction(SIGUSR1, &act, 0)) {
+  if (sigaction(SIGUSR1, &act, nullptr)) {
     throw SysError("handling SIGUSR1");
   }
 
@@ -159,7 +160,7 @@ void initNix() {
 
   /* Initialise the PRNG. */
   struct timeval tv;
-  gettimeofday(&tv, 0);
+  gettimeofday(&tv, nullptr);
   srandom(tv.tv_usec);
 
   /* On macOS, don't use the per-session TMPDIR (as set e.g. by
@@ -175,7 +176,7 @@ LegacyArgs::LegacyArgs(
     const std::string& programName,
     std::function<bool(Strings::iterator& arg, const Strings::iterator& end)>
         parseArg)
-    : MixCommonArgs(programName), parseArg(parseArg) {
+    : MixCommonArgs(programName), parseArg(std::move(parseArg)) {
   mkFlag()
       .longName("no-build-output")
       .shortName('Q')
@@ -395,6 +396,6 @@ PrintFreed::~PrintFreed() {
   }
 }
 
-Exit::~Exit() {}
+Exit::~Exit() = default;
 
 }  // namespace nix

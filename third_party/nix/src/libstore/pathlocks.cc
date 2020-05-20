@@ -97,7 +97,7 @@ bool PathLocks::lockPaths(const PathSet& paths, const string& waitMsg,
 
     AutoCloseFD fd;
 
-    while (1) {
+    while (true) {
       /* Open/create the lock file. */
       fd = openLockFile(lockPath, true);
 
@@ -136,7 +136,7 @@ bool PathLocks::lockPaths(const PathSet& paths, const string& waitMsg,
     }
 
     /* Use borrow so that the descriptor isn't closed. */
-    fds.push_back(FDPair(fd.release(), lockPath));
+    fds.emplace_back(fd.release(), lockPath);
   }
 
   return true;

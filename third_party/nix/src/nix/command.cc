@@ -1,11 +1,13 @@
 #include "command.hh"
 
+#include <utility>
+
 #include "derivations.hh"
 #include "store-api.hh"
 
 namespace nix {
 
-Commands* RegisterCommand::commands = 0;
+Commands* RegisterCommand::commands = nullptr;
 
 void Command::printHelp(const string& programName, std::ostream& out) {
   Args::printHelp(programName, out);
@@ -22,7 +24,8 @@ void Command::printHelp(const string& programName, std::ostream& out) {
   }
 }
 
-MultiCommand::MultiCommand(const Commands& _commands) : commands(_commands) {
+MultiCommand::MultiCommand(Commands _commands)
+    : commands(std::move(_commands)) {
   expectedArgs.push_back(ExpectedArg{
       "command", 1, true, [=](std::vector<std::string> ss) {
         assert(!command);
@@ -82,7 +85,7 @@ bool MultiCommand::processArgs(const Strings& args, bool finish) {
   }
 }
 
-StoreCommand::StoreCommand() {}
+StoreCommand::StoreCommand() = default;
 
 ref<Store> StoreCommand::getStore() {
   if (!_store) {

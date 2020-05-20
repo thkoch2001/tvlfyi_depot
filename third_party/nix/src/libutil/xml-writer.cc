@@ -1,6 +1,6 @@
 #include "xml-writer.hh"
 
-#include <assert.h>
+#include <cassert>
 
 namespace nix {
 
@@ -68,8 +68,7 @@ void XMLWriter::writeEmptyElement(const string& name, const XMLAttrs& attrs) {
 void XMLWriter::writeAttrs(const XMLAttrs& attrs) {
   for (auto& i : attrs) {
     output << " " << i.first << "=\"";
-    for (size_t j = 0; j < i.second.size(); ++j) {
-      char c = i.second[j];
+    for (char c : i.second) {
       if (c == '"') {
         output << "&quot;";
       } else if (c == '<') {

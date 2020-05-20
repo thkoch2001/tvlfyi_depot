@@ -1,18 +1,19 @@
 #include <algorithm>
+#include <cerrno>
 #include <chrono>
+#include <climits>
 #include <cstring>
 #include <future>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <queue>
 #include <regex>
 #include <sstream>
 #include <thread>
 
-#include <errno.h>
 #include <fcntl.h>
 #include <grp.h>
-#include <limits.h>
 #include <netdb.h>
 #include <pwd.h>
 #include <sys/resource.h>
@@ -67,6 +68,7 @@
 #endif
 
 #include <nlohmann/json.hpp>
+#include <utility>
 
 namespace nix {
 
@@ -81,8 +83,8 @@ struct HookInstance;
 /* A pointer to a goal. */
 class Goal;
 class DerivationGoal;
-typedef std::shared_ptr<Goal> GoalPtr;
-typedef std::weak_ptr<Goal> WeakGoalPtr;
+using GoalPtr = std::shared_ptr<Goal>;
+using WeakGoalPtr = std::weak_ptr<Goal>;
 
 struct CompareGoalPtrs {
   bool operator()(const GoalPtr& a, const GoalPtr& b) const;
@@ -90,7 +92,7 @@ struct CompareGoalPtrs {
 
 /* Set of goals. */
 typedef set<GoalPtr, CompareGoalPtrs> Goals;
-typedef list<WeakGoalPtr> WeakGoals;
+using WeakGoals = list<WeakGoalPtr>;
 
 /* A map of paths to goals (and the other way around). */
 typedef map<Path, WeakGoalPtr> WeakGoalMap;
@@ -174,7 +176,7 @@ bool CompareGoalPtrs::operator()(const GoalPtr& a, const GoalPtr& b) const {
   return s1 < s2;
 }
 
-typedef std::chrono::time_point<std::chrono::steady_clock> steady_time_point;
+using steady_time_point = std::chrono::time_point<std::chrono::steady_clock>;
 
 /* A mapping used to remember for each child process to what goal it
    belongs, and file descriptors for receiving log data and output
@@ -816,7 +818,7 @@ class DerivationGoal : public Goal {
   /* Whether to run the build in a private network namespace. */
   bool privateNetwork = false;
 
-  typedef void (DerivationGoal::*GoalState)();
+  using GoalState = void (DerivationGoal::*)();
   GoalState state;
 
   /* Stuff we need to pass to initChild(). */
@@ -824,7 +826,7 @@ class DerivationGoal : public Goal {
     Path source;
     bool optional;
     explicit ChrootPath(Path source = "", bool optional = false)
-        : source(source), optional(optional) {}
+        : source(std::move(source)), optional(optional) {}
   };
   typedef map<Path, ChrootPath>
       DirsInChroot;  // maps target path to source path
@@ -874,11 +876,11 @@ class DerivationGoal : public Goal {
   std::string machineName;
 
  public:
-  DerivationGoal(const Path& drvPath, const StringSet& wantedOutputs,
-                 Worker& worker, BuildMode buildMode = bmNormal);
+  DerivationGoal(const Path& drvPath, StringSet wantedOutputs, Worker& worker,
+                 BuildMode buildMode = bmNormal);
   DerivationGoal(const Path& drvPath, const BasicDerivation& drv,
                  Worker& worker, BuildMode buildMode = bmNormal);
-  ~DerivationGoal();
+  ~DerivationGoal() override;
 
   /* Whether we need to perform hash rewriting if there are valid output paths.
    */
@@ -982,13 +984,12 @@ class DerivationGoal : public Goal {
 
 const Path DerivationGoal::homeDir = "/homeless-shelter";
 
-DerivationGoal::DerivationGoal(const Path& drvPath,
-                               const StringSet& wantedOutputs, Worker& worker,
-                               BuildMode buildMode)
+DerivationGoal::DerivationGoal(const Path& drvPath, StringSet wantedOutputs,
+                               Worker& worker, BuildMode buildMode)
     : Goal(worker),
       useDerivation(true),
       drvPath(drvPath),
-      wantedOutputs(wantedOutputs),
+      wantedOutputs(std::move(wantedOutputs)),
       buildMode(buildMode) {
   state = &DerivationGoal::getDerivation;
   name = (format("building of '%1%'") % drvPath).str();
@@ -1004,7 +1005,7 @@ DerivationGoal::DerivationGoal(const Path& drvPath, const BasicDerivation& drv,
       useDerivation(false),
       drvPath(drvPath),
       buildMode(buildMode) {
-  this->drv = std::unique_ptr<BasicDerivation>(new BasicDerivation(drv));
+  this->drv = std::make_unique<BasicDerivation>(drv);
   state = &DerivationGoal::haveDerivation;
   name = (format("building of %1%") % showPaths(drv.outputPaths())).str();
   trace("created");
@@ -1473,7 +1474,7 @@ void DerivationGoal::tryToBuild() {
       case rpAccept:
         /* Yes, it has started doing so.  Wait until we get
            EOF from the hook. */
-        result.startTime = time(0);  // inexact
+        result.startTime = time(nullptr);  // inexact
         state = &DerivationGoal::buildDone;
         started();
         return;
@@ -1554,7 +1555,7 @@ MakeError(NotDeterministic, BuildError)
   DLOG(INFO) << "builder process for '" << drvPath << "' finished";
 
   result.timesBuilt++;
-  result.stopTime = time(0);
+  result.stopTime = time(nullptr);
 
   /* So the child is gone now. */
   worker.childTerminated(this);
@@ -1674,7 +1675,7 @@ MakeError(NotDeterministic, BuildError)
           currentLine.clear();
         }
 
-        ~LogSink() {
+        ~LogSink() override {
           if (currentLine != "") {
             currentLine += '\n';
             flushLine();
@@ -1785,7 +1786,7 @@ HookReply DerivationGoal::tryBuildHook() {
       return rpDecline;
     } else if (reply == "decline-permanently") {
       worker.tryBuildHook = false;
-      worker.hook = 0;
+      worker.hook = nullptr;
       return rpDecline;
     } else if (reply == "postpone") {
       return rpPostpone;
@@ -1796,7 +1797,7 @@ HookReply DerivationGoal::tryBuildHook() {
     if (e.errNo == EPIPE) {
       LOG(ERROR) << "build hook died unexpectedly: "
                  << chomp(drainFD(worker.hook->fromHook.readSide.get()));
-      worker.hook = 0;
+      worker.hook = nullptr;
       return rpDecline;
     } else {
       throw;
@@ -1892,10 +1893,10 @@ static void preloadNSS() {
      load its lookup libraries in the parent before any child gets a chance to.
    */
   std::call_once(dns_resolve_flag, []() {
-    struct addrinfo* res = NULL;
+    struct addrinfo* res = nullptr;
 
     if (getaddrinfo("this.pre-initializes.the.dns.resolvers.invalid.", "http",
-                    NULL, &res) != 0) {
+                    nullptr, &res) != 0) {
       if (res) {
         freeaddrinfo(res);
       }
@@ -2000,12 +2001,12 @@ void DerivationGoal::startBuilder() {
        by `nix-store --register-validity'.  However, the deriver
        fields are left empty. */
     string s = get(drv->env, "exportReferencesGraph");
-    Strings ss = tokenizeString<Strings>(s);
+    auto ss = tokenizeString<Strings>(s);
     if (ss.size() % 2 != 0) {
       throw BuildError(
           format("odd number of tokens in 'exportReferencesGraph': '%1%'") % s);
     }
-    for (Strings::iterator i = ss.begin(); i != ss.end();) {
+    for (auto i = ss.begin(); i != ss.end();) {
       string fileName = *i++;
       checkStoreName(fileName); /* !!! abuse of this function */
       Path storePath = *i++;
@@ -2331,7 +2332,7 @@ void DerivationGoal::startBuilder() {
     throw SysError("putting pseudoterminal into raw mode");
   }
 
-  result.startTime = time(0);
+  result.startTime = time(nullptr);
 
   /* Fork a child to build the package. */
   ProcessOptions options;
@@ -2390,13 +2391,13 @@ void DerivationGoal::startBuilder() {
              not seem to be a workaround for this. (But who can tell
              from reading user_namespaces(7)?)
              See also https://lwn.net/Articles/621612/. */
-          if (getuid() == 0 && setgroups(0, 0) == -1) {
+          if (getuid() == 0 && setgroups(0, nullptr) == -1) {
             throw SysError("setgroups failed");
           }
 
           size_t stackSize = 1 * 1024 * 1024;
           char* stack =
-              (char*)mmap(0, stackSize, PROT_WRITE | PROT_READ,
+              (char*)mmap(nullptr, stackSize, PROT_WRITE | PROT_READ,
                           MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
           if (stack == MAP_FAILED) {
             throw SysError("allocating stack");
@@ -2519,8 +2520,7 @@ void DerivationGoal::initTmpDir() {
      needed (attributes are not passed through the environment, so
      there is no size constraint). */
   if (!parsedDrv->getStructuredAttrs()) {
-    StringSet passAsFile =
-        tokenizeString<StringSet>(get(drv->env, "passAsFile"));
+    auto passAsFile = tokenizeString<StringSet>(get(drv->env, "passAsFile"));
     int fileNr = 0;
     for (auto& i : drv->env) {
       if (passAsFile.find(i.first) == passAsFile.end()) {
@@ -2893,14 +2893,14 @@ void DerivationGoal::runChild() {
          outside of the namespace.  Making a subtree private is
          local to the namespace, though, so setting MS_PRIVATE
          does not affect the outside world. */
-      if (mount(0, "/", 0, MS_REC | MS_PRIVATE, 0) == -1) {
+      if (mount(nullptr, "/", nullptr, MS_REC | MS_PRIVATE, nullptr) == -1) {
         throw SysError("unable to make '/' private mount");
       }
 
       /* Bind-mount chroot directory to itself, to treat it as a
          different filesystem from /, as needed for pivot_root. */
-      if (mount(chrootRootDir.c_str(), chrootRootDir.c_str(), 0, MS_BIND, 0) ==
-          -1) {
+      if (mount(chrootRootDir.c_str(), chrootRootDir.c_str(), nullptr, MS_BIND,
+                nullptr) == -1) {
         throw SysError(format("unable to bind mount '%1%'") % chrootRootDir);
       }
 
@@ -2970,8 +2970,8 @@ void DerivationGoal::runChild() {
           createDirs(dirOf(target));
           writeFile(target, "");
         }
-        if (mount(source.c_str(), target.c_str(), "", MS_BIND | MS_REC, 0) ==
-            -1) {
+        if (mount(source.c_str(), target.c_str(), "", MS_BIND | MS_REC,
+                  nullptr) == -1) {
           throw SysError("bind mount from '%1%' to '%2%' failed", source,
                          target);
         }
@@ -2986,8 +2986,8 @@ void DerivationGoal::runChild() {
 
       /* Bind a new instance of procfs on /proc. */
       createDirs(chrootRootDir + "/proc");
-      if (mount("none", (chrootRootDir + "/proc").c_str(), "proc", 0, 0) ==
-          -1) {
+      if (mount("none", (chrootRootDir + "/proc").c_str(), "proc", 0,
+                nullptr) == -1) {
         throw SysError("mounting /proc");
       }
 
@@ -3589,7 +3589,7 @@ void DerivationGoal::registerOutputs() {
     /* For debugging, print out the referenced and unreferenced
        paths. */
     for (auto& i : inputPaths) {
-      PathSet::iterator j = references.find(i);
+      auto j = references.find(i);
       if (j == references.end()) {
         DLOG(INFO) << "unreferenced input: '" << i << "'";
       } else {
@@ -3841,14 +3841,14 @@ void DerivationGoal::checkOutputs(
             auto i = output->find(name);
             if (i != output->end()) {
               Strings res;
-              for (auto j = i->begin(); j != i->end(); ++j) {
-                if (!j->is_string()) {
+              for (auto& j : *i) {
+                if (!j.is_string()) {
                   throw Error(
                       "attribute '%s' of derivation '%s' must be a list of "
                       "strings",
                       name, drvPath);
                 }
-                res.push_back(j->get<std::string>());
+                res.push_back(j.get<std::string>());
               }
               checks.disallowedRequisites = res;
               return res;
@@ -3922,7 +3922,7 @@ void DerivationGoal::closeLogFile() {
   if (logFileSink) {
     logFileSink->flush();
   }
-  logSink = logFileSink = 0;
+  logSink = logFileSink = nullptr;
   fdLogFile = -1;
 }
 
@@ -4099,13 +4099,13 @@ class SubstitutionGoal : public Goal {
       maintainRunningSubstitutions, maintainExpectedNar,
       maintainExpectedDownload;
 
-  typedef void (SubstitutionGoal::*GoalState)();
+  using GoalState = void (SubstitutionGoal::*)();
   GoalState state;
 
  public:
   SubstitutionGoal(const Path& storePath, Worker& worker,
                    RepairFlag repair = NoRepair);
-  ~SubstitutionGoal();
+  ~SubstitutionGoal() override;
 
   void timedOut() override { abort(); };
 
@@ -4459,9 +4459,9 @@ GoalPtr Worker::makeSubstitutionGoal(const Path& path, RepairFlag repair) {
 
 static void removeGoal(GoalPtr goal, WeakGoalMap& goalMap) {
   /* !!! inefficient */
-  for (WeakGoalMap::iterator i = goalMap.begin(); i != goalMap.end();) {
+  for (auto i = goalMap.begin(); i != goalMap.end();) {
     if (i->second.lock() == goal) {
-      WeakGoalMap::iterator j = i;
+      auto j = i;
       ++j;
       goalMap.erase(i);
       i = j;
@@ -4570,7 +4570,7 @@ void Worker::run(const Goals& _topGoals) {
 
   DLOG(INFO) << "entered goal loop";
 
-  while (1) {
+  while (true) {
     checkInterrupt();
 
     store.autoGC(false);
@@ -4704,7 +4704,8 @@ void Worker::waitForInput() {
     }
   }
 
-  if (select(fdMax, &fds, 0, 0, useTimeout ? &timeout : 0) == -1) {
+  if (select(fdMax, &fds, nullptr, nullptr, useTimeout ? &timeout : nullptr) ==
+      -1) {
     if (errno == EINTR) {
       return;
     }
@@ -4810,7 +4811,7 @@ unsigned int Worker::exitStatus() {
 }
 
 bool Worker::pathContentsGood(const Path& path) {
-  std::map<Path, bool>::iterator i = pathContentsGoodCache.find(path);
+  auto i = pathContentsGoodCache.find(path);
   if (i != pathContentsGoodCache.end()) {
     return i->second;
   }
@@ -4874,7 +4875,7 @@ void LocalStore::buildPaths(const PathSet& drvPaths, BuildMode buildMode) {
   PathSet failed;
   for (auto& i : goals) {
     if (i->getExitCode() != Goal::ecSuccess) {
-      DerivationGoal* i2 = dynamic_cast<DerivationGoal*>(i.get());
+      auto* i2 = dynamic_cast<DerivationGoal*>(i.get());
       if (i2) {
         failed.insert(i2->getDrvPath());
       } else {

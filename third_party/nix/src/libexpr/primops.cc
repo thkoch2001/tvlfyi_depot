@@ -62,7 +62,7 @@ void EvalState::realiseContext(const PathSet& context) {
          paths. */
       if (allowedPaths) {
         auto drv = store->derivationFromPath(decoded.first);
-        DerivationOutputs::iterator i = drv.outputs.find(decoded.second);
+        auto i = drv.outputs.find(decoded.second);
         if (i == drv.outputs.end()) {
           throw Error("derivation '%s' does not have an output named '%s'",
                       decoded.first, decoded.second);
@@ -160,7 +160,7 @@ static void prim_scopedImport(EvalState& state, const Pos& pos, Value** args,
 
 /* Want reasonable symbol names, so extern C */
 /* !!! Should we pass the Pos or the file name too? */
-extern "C" typedef void (*ValueInitializer)(EvalState& state, Value& v);
+extern "C" using ValueInitializer = void(*)(EvalState&, Value&);
 
 /* Load a ValueInitializer from a DSO and return whatever it initializes */
 void prim_importNative(EvalState& state, const Pos& pos, Value** args,
@@ -186,7 +186,7 @@ void prim_importNative(EvalState& state, const Pos& pos, Value** args,
   }
 
   dlerror();
-  ValueInitializer func = (ValueInitializer)dlsym(handle, sym.c_str());
+  auto func = (ValueInitializer)dlsym(handle, sym.c_str());
   if (!func) {
     char* message = dlerror();
     if (message) {
@@ -2090,7 +2090,7 @@ static void prim_replaceStrings(EvalState& state, const Pos& pos, Value** args,
   for (unsigned int n = 0; n < args[1]->listSize(); ++n) {
     PathSet ctx;
     auto s = state.forceString(*args[1]->listElems()[n], ctx, pos);
-    to.push_back(std::make_pair(std::move(s), std::move(ctx)));
+    to.emplace_back(std::move(s), std::move(ctx));
   }
 
   PathSet context;
@@ -2253,7 +2253,7 @@ RegisterPrimOp::RegisterPrimOp(std::string name, size_t arity, PrimOpFun fun) {
 }
 
 void EvalState::createBaseEnv() {
-  baseEnv.up = 0;
+  baseEnv.up = nullptr;
 
   /* Add global constants such as `true' to the base environment. */
   Value v;
@@ -2281,7 +2281,7 @@ void EvalState::createBaseEnv() {
   };
 
   if (!evalSettings.pureEval) {
-    mkInt(v, time(0));
+    mkInt(v, time(nullptr));
     addConstant("__currentTime", v);
   }
 

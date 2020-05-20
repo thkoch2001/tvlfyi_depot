@@ -2,6 +2,6 @@
 
 namespace nix {
 
-RegisterLegacyCommand::Commands* RegisterLegacyCommand::commands = 0;
+RegisterLegacyCommand::Commands* RegisterLegacyCommand::commands = nullptr;
 
 }

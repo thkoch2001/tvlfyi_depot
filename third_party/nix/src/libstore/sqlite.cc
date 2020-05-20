@@ -31,7 +31,7 @@ namespace nix {
 SQLite::SQLite(const Path& path) {
   if (sqlite3_open_v2(path.c_str(), &db,
                       SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
-                      0) != SQLITE_OK) {
+                      nullptr) != SQLITE_OK) {
     throw Error(format("cannot open SQLite database '%s'") % path);
   }
 }
@@ -48,7 +48,8 @@ SQLite::~SQLite() {
 
 void SQLite::exec(const std::string& stmt) {
   retrySQLite<void>([&]() {
-    if (sqlite3_exec(db, stmt.c_str(), 0, 0, 0) != SQLITE_OK) {
+    if (sqlite3_exec(db, stmt.c_str(), nullptr, nullptr, nullptr) !=
+        SQLITE_OK) {
       throwSQLiteError(db, format("executing SQLite statement '%s'") % stmt);
     }
   });
@@ -57,7 +58,7 @@ void SQLite::exec(const std::string& stmt) {
 void SQLiteStmt::create(sqlite3* db, const string& sql) {
   checkInterrupt();
   assert(!stmt);
-  if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0) != SQLITE_OK) {
+  if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
     throwSQLiteError(db, fmt("creating statement '%s'", sql));
   }
   this->db = db;
@@ -149,14 +150,14 @@ bool SQLiteStmt::Use::isNull(int col) {
 
 SQLiteTxn::SQLiteTxn(sqlite3* db) {
   this->db = db;
-  if (sqlite3_exec(db, "begin;", 0, 0, 0) != SQLITE_OK) {
+  if (sqlite3_exec(db, "begin;", nullptr, nullptr, nullptr) != SQLITE_OK) {
     throwSQLiteError(db, "starting transaction");
   }
   active = true;
 }
 
 void SQLiteTxn::commit() {
-  if (sqlite3_exec(db, "commit;", 0, 0, 0) != SQLITE_OK) {
+  if (sqlite3_exec(db, "commit;", nullptr, nullptr, nullptr) != SQLITE_OK) {
     throwSQLiteError(db, "committing transaction");
   }
   active = false;
@@ -164,7 +165,8 @@ void SQLiteTxn::commit() {
 
 SQLiteTxn::~SQLiteTxn() {
   try {
-    if (active && sqlite3_exec(db, "rollback;", 0, 0, 0) != SQLITE_OK) {
+    if (active &&
+        sqlite3_exec(db, "rollback;", nullptr, nullptr, nullptr) != SQLITE_OK) {
       throwSQLiteError(db, "aborting transaction");
     }
   } catch (...) {
@@ -175,7 +177,7 @@ SQLiteTxn::~SQLiteTxn() {
 void handleSQLiteBusy(const SQLiteBusy& e) {
   static std::atomic<time_t> lastWarned{0};
 
-  time_t now = time(0);
+  time_t now = time(nullptr);
 
   if (now > lastWarned + 10) {
     lastWarned = now;
@@ -188,7 +190,7 @@ void handleSQLiteBusy(const SQLiteBusy& e) {
   struct timespec t;
   t.tv_sec = 0;
   t.tv_nsec = (random() % 100) * 1000 * 1000; /* <= 0.1s */
-  nanosleep(&t, 0);
+  nanosleep(&t, nullptr);
 }
 
 }  // namespace nix

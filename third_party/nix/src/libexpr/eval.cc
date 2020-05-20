@@ -328,7 +328,7 @@ EvalState::EvalState(const Strings& _searchPath, ref<Store> store)
       repair(NoRepair),
       store(store),
       baseEnv(allocEnv(128)),
-      staticBaseEnv(false, 0) {
+      staticBaseEnv(false, nullptr) {
   countCalls = getEnv("NIX_COUNT_CALLS", "0") != "0";
 
   assert(gcInitialised);
@@ -378,7 +378,7 @@ EvalState::EvalState(const Strings& _searchPath, ref<Store> store)
   createBaseEnv();
 }
 
-EvalState::~EvalState() {}
+EvalState::~EvalState() = default;
 
 Path EvalState::checkSourcePath(const Path& path_) {
   if (!allowedPaths) {
@@ -575,7 +575,7 @@ Value& mkString(Value& v, const string& s, const PathSet& context) {
     for (auto& i : context) {
       v.string.context[n++] = dupString(i.c_str());
     }
-    v.string.context[n] = 0;
+    v.string.context[n] = nullptr;
   }
   return v;
 }
@@ -591,10 +591,10 @@ inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
     return env->values[var.displ];
   }
 
-  while (1) {
+  while (true) {
     if (env->type == Env::HasWithExpr) {
       if (noEval) {
-        return 0;
+        return nullptr;
       }
       Value* v = allocValue();
       evalAttrs(*env->up, (Expr*)env->values[0], *v);
@@ -656,7 +656,8 @@ void EvalState::mkList(Value& v, size_t size) {
   } else {
     v.type = tListN;
     v.bigList.size = size;
-    v.bigList.elems = size ? (Value**)allocBytes(size * sizeof(Value*)) : 0;
+    v.bigList.elems =
+        size ? (Value**)allocBytes(size * sizeof(Value*)) : nullptr;
   }
   nrListElems += size;
 }
@@ -822,7 +823,7 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
     env2.up = &env;
     dynamicEnv = &env2;
 
-    AttrDefs::iterator overrides = attrs.find(state.sOverrides);
+    auto overrides = attrs.find(state.sOverrides);
     bool hasOverrides = overrides != attrs.end();
 
     /* The recursive attributes are evaluated in the new
@@ -858,7 +859,7 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
         newBnds->push_back(i);
       }
       for (auto& i : *vOverrides->attrs) {
-        AttrDefs::iterator j = attrs.find(i.name);
+        auto j = attrs.find(i.name);
         if (j != attrs.end()) {
           (*newBnds)[j->second.displ] = i;
           env2.values[j->second.displ] = i.value;
@@ -955,7 +956,7 @@ unsigned long nrLookups = 0;
 
 void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
   Value vTmp;
-  Pos* pos2 = 0;
+  Pos* pos2 = nullptr;
   Value* vAttrs = &vTmp;
 
   e->eval(state, env, vTmp);
@@ -985,7 +986,7 @@ void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
       }
     }
 
-    state.forceValue(*vAttrs, (pos2 != NULL ? *pos2 : this->pos));
+    state.forceValue(*vAttrs, (pos2 != nullptr ? *pos2 : this->pos));
 
   } catch (Error& e) {
     if (pos2 && pos2->file != state.sDerivationNix) {
@@ -1334,7 +1335,7 @@ void EvalState::concatLists(Value& v, size_t nrLists, Value** lists,
                             const Pos& pos) {
   nrListConcats++;
 
-  Value* nonEmpty = 0;
+  Value* nonEmpty = nullptr;
   size_t len = 0;
   for (size_t n = 0; n < nrLists; ++n) {
     forceList(*lists[n], pos);
@@ -1796,7 +1797,7 @@ void EvalState::printStats() {
 
 #if HAVE_BOEHMGC
   GC_word heapSize, totalBytes;
-  GC_get_heap_usage_safe(&heapSize, 0, 0, 0, &totalBytes);
+  GC_get_heap_usage_safe(&heapSize, nullptr, nullptr, nullptr, &totalBytes);
 #endif
   if (showStats) {
     auto outPath = getEnv("NIX_SHOW_STATS_PATH", "-");

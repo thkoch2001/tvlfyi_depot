@@ -2,6 +2,7 @@
 
 #include <cctype>
 #include <cerrno>
+#include <climits>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -9,10 +10,10 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include <utility>
 
 #include <fcntl.h>
 #include <grp.h>
-#include <limits.h>
 #include <pwd.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -122,7 +123,7 @@ Path canonPath(const Path& path, bool resolveSymlinks) {
      arbitrary (but high) limit to prevent infinite loops. */
   unsigned int followCount = 0, maxFollow = 1024;
 
-  while (1) {
+  while (true) {
     /* Skip slashes. */
     while (i != end && *i == '/') {
       i++;
@@ -354,7 +355,7 @@ void writeFile(const Path& path, Source& source, mode_t mode) {
 
 string readLine(int fd) {
   string s;
-  while (1) {
+  while (true) {
     checkInterrupt();
     char ch;
     // FIXME: inefficient
@@ -446,7 +447,7 @@ Path createTempDir(const Path& tmpRoot, const Path& prefix, bool includePid,
   int localCounter = 0;
   int& counter(useGlobalCounter ? globalCounter : localCounter);
 
-  while (1) {
+  while (true) {
     checkInterrupt();
     Path tmpDir = tempName(tmpRoot, prefix, includePid, counter);
     if (mkdir(tmpDir.c_str(), mode) == 0) {
@@ -515,8 +516,7 @@ Path getConfigDir() {
 std::vector<Path> getConfigDirs() {
   Path configHome = getConfigDir();
   string configDirs = getEnv("XDG_CONFIG_DIRS");
-  std::vector<Path> result =
-      tokenizeString<std::vector<string>>(configDirs, ":");
+  auto result = tokenizeString<std::vector<string>>(configDirs, ":");
   result.insert(result.begin(), configHome);
   return result;
 }
@@ -648,7 +648,7 @@ void drainFD(int fd, Sink& sink, bool block) {
   }
 
   std::vector<unsigned char> buf(64 * 1024);
-  while (1) {
+  while (true) {
     checkInterrupt();
     ssize_t rd = read(fd, buf.data(), buf.size());
     if (rd == -1) {
@@ -670,7 +670,7 @@ void drainFD(int fd, Sink& sink, bool block) {
 
 AutoDelete::AutoDelete() : del{false} {}
 
-AutoDelete::AutoDelete(const string& p, bool recursive) : path(p) {
+AutoDelete::AutoDelete(string p, bool recursive) : path(std::move(p)) {
   del = true;
   this->recursive = recursive;
 }
@@ -759,7 +759,7 @@ void Pipe::create() {
 
 //////////////////////////////////////////////////////////////////////
 
-Pid::Pid() {}
+Pid::Pid() = default;
 
 Pid::Pid(pid_t pid) : pid(pid) {}
 
@@ -802,7 +802,7 @@ int Pid::kill() {
 
 int Pid::wait() {
   assert(pid != -1);
-  while (1) {
+  while (true) {
     int status;
     int res = waitpid(pid, &status, 0);
     if (res == pid) {
@@ -939,7 +939,7 @@ std::vector<char*> stringsToCharPtrs(const Strings& ss) {
   for (auto& s : ss) {
     res.push_back((char*)s.c_str());
   }
-  res.push_back(0);
+  res.push_back(nullptr);
   return res;
 }
 
@@ -1031,7 +1031,7 @@ void runProgram2(const RunOptions& options) {
           throw SysError("setgid failed");
         }
         /* Drop all other groups if we're setgid. */
-        if (options.gid && setgroups(0, 0) == -1) {
+        if (options.gid && setgroups(0, nullptr) == -1) {
           throw SysError("setgroups failed");
         }
         if (options.uid && setuid(*options.uid) == -1) {

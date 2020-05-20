@@ -1,8 +1,9 @@
 #include "profiles.hh"
 
-#include <errno.h>
+#include <cerrno>
+#include <cstdio>
+
 #include <glog/logging.h>
-#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -213,7 +214,7 @@ void deleteGenerationsOlderThan(const Path& profile, time_t t, bool dryRun) {
 
 void deleteGenerationsOlderThan(const Path& profile, const string& timeSpec,
                                 bool dryRun) {
-  time_t curTime = time(0);
+  time_t curTime = time(nullptr);
   string strDays = string(timeSpec, 0, timeSpec.size() - 1);
   int days;
 

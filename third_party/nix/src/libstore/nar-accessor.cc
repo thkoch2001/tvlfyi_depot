@@ -4,6 +4,7 @@
 #include <map>
 #include <nlohmann/json.hpp>
 #include <stack>
+#include <utility>
 
 #include "archive.hh"
 #include "json.hh"
@@ -99,7 +100,7 @@ struct NarAccessor : public FSAccessor {
   }
 
   NarAccessor(const std::string& listing, GetNarBytes getNarBytes)
-      : getNarBytes(getNarBytes) {
+      : getNarBytes(std::move(getNarBytes)) {
     using json = nlohmann::json;
 
     std::function<void(NarMember&, json&)> recurse;

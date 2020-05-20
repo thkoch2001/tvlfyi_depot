@@ -45,7 +45,7 @@ std::string resolveUri(const std::string& uri) {
 }
 
 struct CurlDownloader : public Downloader {
-  CURLM* curlm = 0;
+  CURLM* curlm = nullptr;
 
   std::random_device rd;
   std::mt19937 mt19937;
@@ -57,7 +57,7 @@ struct CurlDownloader : public Downloader {
     bool done = false;  // whether either the success or failure function has
                         // been called
     Callback<DownloadResult> callback;
-    CURL* req = 0;
+    CURL* req = nullptr;
     bool active =
         false;  // whether the handle has been added to the multi object
     std::string status;
@@ -68,7 +68,7 @@ struct CurlDownloader : public Downloader {
        has been reached. */
     std::chrono::steady_clock::time_point embargo;
 
-    struct curl_slist* requestHeaders = 0;
+    struct curl_slist* requestHeaders = nullptr;
 
     std::string encoding;
 
@@ -523,7 +523,7 @@ struct CurlDownloader : public Downloader {
     workerThread = std::thread([&]() { workerThreadEntry(); });
   }
 
-  ~CurlDownloader() {
+  ~CurlDownloader() override {
     stopWorkerThread();
 
     workerThread.join();
@@ -909,7 +909,7 @@ CachedDownloadResult Downloader::downloadCached(
       if (ss.size() >= 3 && ss[0] == url) {
         time_t lastChecked;
         if (string2Int(ss[2], lastChecked) &&
-            (uint64_t)lastChecked + request.ttl >= (uint64_t)time(0)) {
+            (uint64_t)lastChecked + request.ttl >= (uint64_t)time(nullptr)) {
           skip = true;
           result.effectiveUri = request.uri;
           result.etag = ss[1];
@@ -949,8 +949,8 @@ CachedDownloadResult Downloader::downloadCached(
       assert(!storePath.empty());
       replaceSymlink(storePath, fileLink);
 
-      writeFile(dataFile,
-                url + "\n" + res.etag + "\n" + std::to_string(time(0)) + "\n");
+      writeFile(dataFile, url + "\n" + res.etag + "\n" +
+                              std::to_string(time(nullptr)) + "\n");
     } catch (DownloadError& e) {
       if (storePath.empty()) {
         throw;

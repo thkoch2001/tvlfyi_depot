@@ -118,7 +118,7 @@ static void _main(int argc, char** argv) {
         lines.pop_front();
         inShebang = true;
         for (int i = 2; i < argc; ++i) {
-          savedArgs.push_back(argv[i]);
+          savedArgs.emplace_back(argv[i]);
         }
         args.clear();
         for (auto line : lines) {

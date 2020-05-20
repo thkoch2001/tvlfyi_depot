@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <future>
+#include <memory>
 
 #include "archive.hh"
 #include "compression.hh"
@@ -20,8 +21,7 @@ namespace nix {
 
 BinaryCacheStore::BinaryCacheStore(const Params& params) : Store(params) {
   if (secretKeyFile != "") {
-    secretKey =
-        std::unique_ptr<SecretKey>(new SecretKey(readFile(secretKeyFile)));
+    secretKey = std::make_unique<SecretKey>(readFile(secretKeyFile));
   }
 
   StringSink sink;

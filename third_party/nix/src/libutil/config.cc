@@ -1,6 +1,8 @@
 #define GOOGLE_STRIP_LOG 0
 #include "config.hh"
 
+#include <utility>
+
 #include <glog/logging.h>
 
 #include "args.hh"
@@ -96,7 +98,7 @@ void AbstractConfig::applyConfigFile(const Path& path) {
         line = string(line, 0, hash);
       }
 
-      vector<string> tokens = tokenizeString<vector<string> >(line);
+      auto tokens = tokenizeString<vector<string> >(line);
       if (tokens.empty()) {
         continue;
       }
@@ -136,7 +138,7 @@ void AbstractConfig::applyConfigFile(const Path& path) {
 
       string name = tokens[0];
 
-      vector<string>::iterator i = tokens.begin();
+      auto i = tokens.begin();
       advance(i, 2);
 
       set(name,
@@ -171,10 +173,11 @@ void Config::convertToArgs(Args& args, const std::string& category) {
   }
 }
 
-AbstractSetting::AbstractSetting(const std::string& name,
-                                 const std::string& description,
-                                 const std::set<std::string>& aliases)
-    : name(name), description(description), aliases(aliases) {}
+AbstractSetting::AbstractSetting(std::string name, std::string description,
+                                 std::set<std::string> aliases)
+    : name(std::move(name)),
+      description(std::move(description)),
+      aliases(std::move(aliases)) {}
 
 void AbstractSetting::toJSON(JSONPlaceholder& out) { out.write(to_string()); }
 

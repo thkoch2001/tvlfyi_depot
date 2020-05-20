@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <regex>
+#include <utility>
 
 #include <glog/logging.h>
 
@@ -11,12 +12,12 @@
 
 namespace nix {
 
-DrvInfo::DrvInfo(EvalState& state, const string& attrPath, Bindings* attrs)
-    : state(&state), attrs(attrs), attrPath(attrPath) {}
+DrvInfo::DrvInfo(EvalState& state, string attrPath, Bindings* attrs)
+    : state(&state), attrs(attrs), attrPath(std::move(attrPath)) {}
 
 DrvInfo::DrvInfo(EvalState& state, ref<Store> store,
                  const std::string& drvPathWithOutputs)
-    : state(&state), attrs(nullptr), attrPath("") {
+    : state(&state), attrPath("") {
   auto spec = parseDrvPathWithOutputs(drvPathWithOutputs);
 
   drvPath = spec.first;
@@ -158,11 +159,11 @@ Bindings* DrvInfo::getMeta() {
     return meta;
   }
   if (!attrs) {
-    return 0;
+    return nullptr;
   }
   Bindings::iterator a = attrs->find(state->sMeta);
   if (a == attrs->end()) {
-    return 0;
+    return nullptr;
   }
   state->forceAttrs(*a->value, *a->pos);
   meta = a->value->attrs;
@@ -208,11 +209,11 @@ bool DrvInfo::checkMeta(Value& v) {
 
 Value* DrvInfo::queryMeta(const string& name) {
   if (!getMeta()) {
-    return 0;
+    return nullptr;
   }
   Bindings::iterator a = meta->find(state->symbols.create(name));
   if (a == meta->end() || !checkMeta(*a->value)) {
-    return 0;
+    return nullptr;
   }
   return a->value;
 }
@@ -303,7 +304,7 @@ void DrvInfo::setMeta(const string& name, Value* v) {
 }
 
 /* Cache for already considered attrsets. */
-typedef set<Bindings*> Done;
+using Done = set<Bindings*>;
 
 /* Evaluate value `v'.  If it evaluates to a set of type `derivation',
    then put information about it in `drvs' (unless it's already in `done').

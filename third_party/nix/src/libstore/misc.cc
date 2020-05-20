@@ -18,7 +18,7 @@ void Store::computeFSClosure(const PathSet& startPaths, PathSet& paths_,
     std::exception_ptr exc;
   };
 
-  Sync<State> state_(State{0, paths_, 0});
+  Sync<State> state_(State{0, paths_, nullptr});
 
   std::function<void(const Path&)> enqueue;
 

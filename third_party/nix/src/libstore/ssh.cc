@@ -1,12 +1,14 @@
 #include "ssh.hh"
 
+#include <utility>
+
 namespace nix {
 
-SSHMaster::SSHMaster(const std::string& host, const std::string& keyFile,
+SSHMaster::SSHMaster(const std::string& host, std::string keyFile,
                      bool useMaster, bool compress, int logFD)
     : host(host),
       fakeSSH(host == "localhost"),
-      keyFile(keyFile),
+      keyFile(std::move(keyFile)),
       useMaster(useMaster && !fakeSSH),
       compress(compress),
       logFD(logFD) {

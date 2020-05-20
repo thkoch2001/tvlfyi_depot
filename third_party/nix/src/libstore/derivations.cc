@@ -331,7 +331,7 @@ DrvHashes drvHashes;
 Hash hashDerivationModulo(Store& store, Derivation drv) {
   /* Return a fixed hash for fixed-output derivations. */
   if (drv.isFixedOutput()) {
-    DerivationOutputs::const_iterator i = drv.outputs.begin();
+    auto i = drv.outputs.begin();
     return hashString(htSHA256, "fixed:out:" + i->second.hashAlgo + ":" +
                                     i->second.hash + ":" + i->second.path);
   }

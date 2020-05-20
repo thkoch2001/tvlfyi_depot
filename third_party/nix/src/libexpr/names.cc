@@ -1,5 +1,7 @@
 #include "names.hh"
 
+#include <memory>
+
 #include "util.hh"
 
 namespace nix {
@@ -26,8 +28,7 @@ DrvName::DrvName(const string& s) : hits(0) {
 bool DrvName::matches(DrvName& n) {
   if (name != "*") {
     if (!regex) {
-      regex = std::unique_ptr<std::regex>(
-          new std::regex(name, std::regex::extended));
+      regex = std::make_unique<std::regex>(name, std::regex::extended);
     }
     if (!std::regex_match(n.name, *regex)) {
       return false;

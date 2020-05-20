@@ -25,7 +25,7 @@ class SSHMaster {
   void addCommonSSHOpts(Strings& args);
 
  public:
-  SSHMaster(const std::string& host, const std::string& keyFile, bool useMaster,
+  SSHMaster(const std::string& host, std::string keyFile, bool useMaster,
             bool compress, int logFD = -1);
 
   struct Connection {

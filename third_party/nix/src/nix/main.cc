@@ -179,7 +179,7 @@ void mainWrapped(int argc, char** argv) {
 }  // namespace nix
 
 int main(int argc, char* argv[]) {
-  FLAGS_logtostderr = 1;
+  FLAGS_logtostderr = true;
   google::InitGoogleLogging(argv[0]);
 
   return nix::handleExceptions(argv[0],

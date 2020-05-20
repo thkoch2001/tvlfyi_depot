@@ -173,7 +173,7 @@ class AutoDelete {
 
  public:
   AutoDelete();
-  AutoDelete(const Path& p, bool recursive = true);
+  AutoDelete(Path p, bool recursive = true);
   ~AutoDelete();
   void cancel();
   void reset(const Path& p, bool recursive = true);

@@ -27,7 +27,7 @@ class SSHStore : public RemoteStore {
 
   std::string getUri() override { return uriScheme + host; }
 
-  bool sameMachine() { return false; }
+  bool sameMachine() override { return false; }
 
   void narFromPath(const Path& path, Sink& sink) override;
 
@@ -78,7 +78,7 @@ static RegisterStoreImplementation regStore([](const std::string& uri,
                                                const Store::Params& params)
                                                 -> std::shared_ptr<Store> {
   if (std::string(uri, 0, uriScheme.size()) != uriScheme) {
-    return 0;
+    return nullptr;
   }
   return std::make_shared<SSHStore>(std::string(uri, uriScheme.size()), params);
 });

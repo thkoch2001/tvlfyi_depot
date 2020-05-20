@@ -74,13 +74,13 @@ std::optional<Strings> ParsedDerivation::getStringsAttr(
             drvPath);
       }
       Strings res;
-      for (auto j = i->begin(); j != i->end(); ++j) {
-        if (!j->is_string()) {
+      for (const auto& j : *i) {
+        if (!j.is_string()) {
           throw Error(
               "attribute '%s' of derivation '%s' must be a list of strings",
               name, drvPath);
         }
-        res.push_back(j->get<std::string>());
+        res.push_back(j.get<std::string>());
       }
       return res;
     }

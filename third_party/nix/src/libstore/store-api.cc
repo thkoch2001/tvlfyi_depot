@@ -251,7 +251,7 @@ bool Store::isValidPath(const Path& storePath) {
     auto res = state_->pathInfoCache.get(hashPart);
     if (res) {
       stats.narInfoReadAverted++;
-      return *res != 0;
+      return *res != nullptr;
     }
   }
 
@@ -261,7 +261,8 @@ bool Store::isValidPath(const Path& storePath) {
       stats.narInfoReadAverted++;
       auto state_(state.lock());
       state_->pathInfoCache.upsert(
-          hashPart, res.first == NarInfoDiskCache::oInvalid ? 0 : res.second);
+          hashPart,
+          res.first == NarInfoDiskCache::oInvalid ? nullptr : res.second);
       return res.first == NarInfoDiskCache::oValid;
     }
   }
@@ -270,7 +271,7 @@ bool Store::isValidPath(const Path& storePath) {
 
   if (diskCache && !valid) {
     // FIXME: handle valid = true case.
-    diskCache->upsertNarInfo(getUri(), hashPart, 0);
+    diskCache->upsertNarInfo(getUri(), hashPart, nullptr);
   }
 
   return valid;
@@ -329,7 +330,7 @@ void Store::queryPathInfo(const Path& storePath,
           auto state_(state.lock());
           state_->pathInfoCache.upsert(
               hashPart,
-              res.first == NarInfoDiskCache::oInvalid ? 0 : res.second);
+              res.first == NarInfoDiskCache::oInvalid ? nullptr : res.second);
           if (res.first == NarInfoDiskCache::oInvalid ||
               (res.second->path != storePath &&
                storePathToName(storePath) != "")) {
@@ -842,7 +843,7 @@ void Store::addToStore(const ValidPathInfo& info, const ref<std::string>& nar,
 namespace nix {
 
 RegisterStoreImplementation::Implementations*
-    RegisterStoreImplementation::implementations = 0;
+    RegisterStoreImplementation::implementations = nullptr;
 
 /* Split URI into protocol+hierarchy part and its parameter set. */
 std::pair<std::string, Store::Params> splitUriAndParams(
@@ -862,7 +863,7 @@ std::pair<std::string, Store::Params> splitUriAndParams(
               throw Error("invalid URI parameter '%s'", value);
             }
             try {
-              decoded += std::stoul(std::string(value, i + 1, 2), 0, 16);
+              decoded += std::stoul(std::string(value, i + 1, 2), nullptr, 16);
               i += 3;
             } catch (...) {
               throw Error("invalid URI parameter '%s'", value);

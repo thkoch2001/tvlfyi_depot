@@ -76,15 +76,14 @@ struct CmdSearch : SourceExprCommand, MixJSON {
     // Use "^" here instead of ".*" due to differences in resulting highlighting
     // (see #1893 -- libc++ claims empty search string is not in POSIX grammar)
     if (res.empty()) {
-      res.push_back("^");
+      res.emplace_back("^");
     }
 
     std::vector<std::regex> regexes;
     regexes.reserve(res.size());
 
     for (auto& re : res) {
-      regexes.push_back(
-          std::regex(re, std::regex::extended | std::regex::icase));
+      regexes.emplace_back(re, std::regex::extended | std::regex::icase);
     }
 
     auto state = getEvalState();

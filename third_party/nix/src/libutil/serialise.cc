@@ -4,6 +4,7 @@
 #include <cerrno>
 #include <cstring>
 #include <memory>
+#include <utility>
 
 #include "glog/logging.h"
 #include "util.hh"
@@ -159,7 +160,7 @@ size_t StringSource::read(unsigned char* data, size_t len) {
 std::unique_ptr<Source> sinkToSource(std::function<void(Sink&)> fun,
                                      std::function<void()> eof) {
   struct SinkToSource : Source {
-    typedef boost::coroutines2::coroutine<std::string> coro_t;
+    using coro_t = boost::coroutines2::coroutine<std::string>;
 
     std::function<void(Sink&)> fun;
     std::function<void()> eof;
@@ -167,7 +168,7 @@ std::unique_ptr<Source> sinkToSource(std::function<void(Sink&)> fun,
     bool started = false;
 
     SinkToSource(std::function<void(Sink&)> fun, std::function<void()> eof)
-        : fun(fun), eof(eof) {}
+        : fun(std::move(fun)), eof(std::move(eof)) {}
 
     std::string cur;
     size_t pos = 0;

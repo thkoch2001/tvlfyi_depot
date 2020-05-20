@@ -184,7 +184,7 @@ static int _main(int argc, char* argv[]) {
 #if __APPLE__
         futimes(bestSlotLock.get(), NULL);
 #else
-        futimens(bestSlotLock.get(), NULL);
+        futimens(bestSlotLock.get(), nullptr);
 #endif
 
         lock = -1;

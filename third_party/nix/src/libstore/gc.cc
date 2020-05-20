@@ -1,11 +1,11 @@
 #include <algorithm>
+#include <cerrno>
 #include <climits>
 #include <functional>
 #include <queue>
 #include <random>
 #include <regex>
 
-#include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/statvfs.h>
@@ -147,7 +147,7 @@ void LocalStore::addTempRoot(const Path& path) {
 
   /* Create the temporary roots file for this process. */
   if (!state->fdTempRoots) {
-    while (1) {
+    while (true) {
       AutoCloseFD fdGCLock = openGCLock(ltRead);
 
       if (pathExists(fnTempRoots)) {
@@ -505,7 +505,8 @@ struct LocalStore::GCState {
   unsigned long long bytesInvalidated;
   bool moveToTrash = true;
   bool shouldDelete;
-  explicit GCState(GCResults& results_) : results(results_), bytesInvalidated(0) {}
+  explicit GCState(GCResults& results_)
+      : results(results_), bytesInvalidated(0) {}
 };
 
 bool LocalStore::isActiveTempFile(const GCState& state, const Path& path,

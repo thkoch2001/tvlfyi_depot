@@ -1,8 +1,8 @@
+#include <csignal>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
 
-#include <signal.h>
 #include <unistd.h>
 
 #include "types.hh"
@@ -14,7 +14,7 @@ static void sigsegvHandler(int signo, siginfo_t* info, void* ctx) {
      the stack pointer.  Unfortunately, getting the stack pointer is
      not portable. */
   bool haveSP = true;
-  char* sp = 0;
+  char* sp = nullptr;
 #if defined(__x86_64__) && defined(REG_RSP)
   sp = (char*)((ucontext_t*)ctx)->uc_mcontext.gregs[REG_RSP];
 #elif defined(REG_ESP)
@@ -40,7 +40,7 @@ static void sigsegvHandler(int signo, siginfo_t* info, void* ctx) {
   sigfillset(&act.sa_mask);
   act.sa_handler = SIG_DFL;
   act.sa_flags = 0;
-  if (sigaction(SIGSEGV, &act, 0)) {
+  if (sigaction(SIGSEGV, &act, nullptr)) {
     abort();
   }
 }
@@ -58,7 +58,7 @@ void detectStackOverflow() {
     throw Error("cannot allocate alternative stack");
   }
   stack.ss_flags = 0;
-  if (sigaltstack(&stack, 0) == -1) {
+  if (sigaltstack(&stack, nullptr) == -1) {
     throw SysError("cannot set alternative stack");
   }
 
@@ -66,7 +66,7 @@ void detectStackOverflow() {
   sigfillset(&act.sa_mask);
   act.sa_sigaction = sigsegvHandler;
   act.sa_flags = SA_SIGINFO | SA_ONSTACK;
-  if (sigaction(SIGSEGV, &act, 0)) {
+  if (sigaction(SIGSEGV, &act, nullptr)) {
     throw SysError("resetting SIGSEGV");
   }
 #endif

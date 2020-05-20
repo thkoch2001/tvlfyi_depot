@@ -57,7 +57,7 @@ struct Globals {
   bool prebuiltOnly;
 };
 
-typedef void (*Operation)(Globals& globals, Strings opFlags, Strings opArgs);
+using Operation = void (*)(Globals&, Strings, Strings);
 
 static string needArg(Strings::iterator& i, Strings& args, const string& arg) {
   if (i == args.end()) {
@@ -234,8 +234,7 @@ static DrvInfos filterBySelector(EvalState& state, const DrvInfos& allElems,
     typedef list<std::pair<DrvInfo, unsigned int> > Matches;
     Matches matches;
     unsigned int n = 0;
-    for (DrvInfos::const_iterator j = allElems.begin(); j != allElems.end();
-         ++j, ++n) {
+    for (auto j = allElems.begin(); j != allElems.end(); ++j, ++n) {
       DrvName drvName(j->queryName());
       if (i.matches(drvName)) {
         i.hits++;
@@ -260,7 +259,7 @@ static DrvInfos filterBySelector(EvalState& state, const DrvInfos& allElems,
         DrvName drvName(j.first.queryName());
         long d = 1;
 
-        Newest::iterator k = newest.find(drvName.name);
+        auto k = newest.find(drvName.name);
 
         if (k != newest.end()) {
           d = j.first.querySystem() == k->second.first.querySystem()
@@ -499,7 +498,7 @@ static void installDerivations(Globals& globals, const Strings& args,
 }
 
 static void opInstall(Globals& globals, Strings opFlags, Strings opArgs) {
-  for (Strings::iterator i = opFlags.begin(); i != opFlags.end();) {
+  for (auto i = opFlags.begin(); i != opFlags.end();) {
     string arg = *i++;
     if (parseInstallSourceOptions(globals, i, opFlags, arg)) {
       ;
@@ -554,7 +553,7 @@ static void upgradeDerivations(Globals& globals, const Strings& args,
            priority.  If there are still multiple matches,
            take the one with the highest version.
            Do not upgrade if it would decrease the priority. */
-        DrvInfos::iterator bestElem = availElems.end();
+        auto bestElem = availElems.end();
         string bestVersion;
         for (auto j = availElems.begin(); j != availElems.end(); ++j) {
           if (comparePriorities(*globals.state, i, *j) > 0) {
@@ -617,7 +616,7 @@ static void upgradeDerivations(Globals& globals, const Strings& args,
 
 static void opUpgrade(Globals& globals, Strings opFlags, Strings opArgs) {
   UpgradeType upgradeType = utLt;
-  for (Strings::iterator i = opFlags.begin(); i != opFlags.end();) {
+  for (auto i = opFlags.begin(); i != opFlags.end();) {
     string arg = *i++;
     if (parseInstallSourceOptions(globals, i, opFlags, arg)) {
       ;
@@ -652,7 +651,7 @@ static void opSetFlag(Globals& globals, Strings opFlags, Strings opArgs) {
     throw UsageError("not enough arguments to '--set-flag'");
   }
 
-  Strings::iterator arg = opArgs.begin();
+  auto arg = opArgs.begin();
   string flagName = *arg++;
   string flagValue = *arg++;
   DrvNames selectors = drvNamesFromArgs(Strings(arg, opArgs.end()));
@@ -691,7 +690,7 @@ static void opSet(Globals& globals, Strings opFlags, Strings opArgs) {
     throw Error("--set is not supported for this Nix store");
   }
 
-  for (Strings::iterator i = opFlags.begin(); i != opFlags.end();) {
+  for (auto i = opFlags.begin(); i != opFlags.end();) {
     string arg = *i++;
     if (parseInstallSourceOptions(globals, i, opFlags, arg)) {
       ;
@@ -790,7 +789,7 @@ static bool cmpElemByName(const DrvInfo& a, const DrvInfo& b) {
                                  b_name.end(), cmpChars);
 }
 
-typedef list<Strings> Table;
+using Table = list<Strings>;
 
 void printTable(Table& table) {
   auto nrColumns = table.size() > 0 ? table.front().size() : 0;
@@ -911,7 +910,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
 
   settings.readOnlyMode = true; /* makes evaluation a bit faster */
 
-  for (Strings::iterator i = opFlags.begin(); i != opFlags.end();) {
+  for (auto i = opFlags.begin(); i != opFlags.end();) {
     string arg = *i++;
     if (arg == "--status" || arg == "-s") {
       printStatus = true;
@@ -1392,7 +1391,7 @@ static void opVersion(Globals& globals, Strings opFlags, Strings opArgs) {
 static int _main(int argc, char** argv) {
   {
     Strings opFlags, opArgs;
-    Operation op = 0;
+    Operation op = nullptr;
     RepairFlag repair = NoRepair;
     string file;
 
