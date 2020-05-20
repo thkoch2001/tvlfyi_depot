@@ -19,6 +19,7 @@ add_project_arguments(get_option('cxxflags'), language : 'cpp')
 add_project_link_arguments(get_option('ldflags'), language: 'cpp')
 
 pkg = import('pkgconfig')
+cmake = import('cmake')
 
 config_h = configuration_data()
 
@@ -343,6 +344,10 @@ endif
 config_h.set('CAN_LINK_SYMLINK', can_link_symlink,
 description : 'Whether link() works on symlinks')
 
+# Import the Abseil cmake project from the (symlinked) depot sources.
+# This will need to change if //third_party/nix is every split out as
+# a subtree.
+absl = cmake.subproject('abseil_cpp')
 
 # Look for boost, a required dependency.
 #--------------------------------------------------
