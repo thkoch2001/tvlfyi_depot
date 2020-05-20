@@ -2,13 +2,13 @@
 
 let
   stdenv = with pkgs; overrideCC clangStdenv clang_9;
-  abseil-cpp = pkgs.abseil-cpp.override { inherit stdenv; };
+  abseil_cpp = pkgs.abseil_cpp.override { inherit stdenv; };
 in stdenv.mkDerivation {
   name = "dt";
   src = ./.;
   nativeBuildInputs = [ pkgs.cmake ];
   buildInputs = with pkgs; [
-    abseil-cpp
+    abseil_cpp
     farmhash
   ];
 }
