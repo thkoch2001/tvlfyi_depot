@@ -52,7 +52,7 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
   void run(ref<Store> store) override {
     evalSettings.pureEval = true;
 
-    if (profileDir == "") {
+    if (profileDir.empty()) {
       profileDir = getProfileDir(store);
     }
 
@@ -97,7 +97,7 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
   }
 
   /* Return the profile in which Nix is installed. */
-  Path getProfileDir(ref<Store> store) {
+  static Path getProfileDir(ref<Store> store) {
     Path where;
 
     for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":")) {
@@ -107,7 +107,7 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
       }
     }
 
-    if (where == "") {
+    if (where.empty()) {
       throw Error(
           "couldn't figure out how Nix is installed, so I can't upgrade it");
     }

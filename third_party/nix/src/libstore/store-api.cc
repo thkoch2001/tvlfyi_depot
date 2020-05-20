@@ -37,9 +37,8 @@ Path Store::toStorePath(const Path& path) const {
   Path::size_type slash = path.find('/', storeDir.size() + 1);
   if (slash == Path::npos) {
     return path;
-  } else {
-    return Path(path, 0, slash);
   }
+  return Path(path, 0, slash);
 }
 
 Path Store::followLinksToStore(const Path& _path) const {
@@ -333,7 +332,7 @@ void Store::queryPathInfo(const Path& storePath,
               res.first == NarInfoDiskCache::oInvalid ? nullptr : res.second);
           if (res.first == NarInfoDiskCache::oInvalid ||
               (res.second->path != storePath &&
-               storePathToName(storePath) != "")) {
+               !storePathToName(storePath).empty())) {
             throw InvalidPath(format("path '%s' is not valid") % storePath);
           }
         }
@@ -362,8 +361,8 @@ void Store::queryPathInfo(const Path& storePath,
             state_->pathInfoCache.upsert(hashPart, info);
           }
 
-          if (!info ||
-              (info->path != storePath && storePathToName(storePath) != "")) {
+          if (!info || (info->path != storePath &&
+                        !storePathToName(storePath).empty())) {
             stats.narInfoMissing++;
             throw InvalidPath("path '%s' is not valid", storePath);
           }
@@ -401,7 +400,7 @@ PathSet Store::queryValidPaths(const PathSet& paths,
             state->exc = std::current_exception();
           }
           assert(state->left);
-          if (!--state->left) {
+          if (--state->left == 0u) {
             wakeup.notify_one();
           }
         }});
@@ -415,7 +414,7 @@ PathSet Store::queryValidPaths(const PathSet& paths,
 
   while (true) {
     auto state(state_.lock());
-    if (!state->left) {
+    if (state->left == 0u) {
       if (state->exc) {
         std::rethrow_exception(state->exc);
       }
@@ -430,7 +429,7 @@ PathSet Store::queryValidPaths(const PathSet& paths,
    responsibility of the caller to provide a closure. */
 string Store::makeValidityRegistration(const PathSet& paths, bool showDerivers,
                                        bool showHash) {
-  string s = "";
+  string s = s;
 
   for (auto& i : paths) {
     s += i + "\n";
@@ -478,7 +477,7 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
         }
       }
 
-      if (info->ca != "") {
+      if (!info->ca.empty()) {
         jsonPath.attr("ca", info->ca);
       }
 
@@ -490,11 +489,11 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
       }
 
       if (includeImpureInfo) {
-        if (info->deriver != "") {
+        if (!info->deriver.empty()) {
           jsonPath.attr("deriver", info->deriver);
         }
 
-        if (info->registrationTime) {
+        if (info->registrationTime != 0) {
           jsonPath.attr("registrationTime", info->registrationTime);
         }
 
@@ -519,7 +518,7 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
           if (narInfo->fileHash) {
             jsonPath.attr("downloadHash", narInfo->fileHash.to_string());
           }
-          if (narInfo->fileSize) {
+          if (narInfo->fileSize != 0u) {
             jsonPath.attr("downloadSize", narInfo->fileSize);
           }
           if (showClosureSize) {
@@ -535,7 +534,8 @@ void Store::pathInfoToJSON(JSONPlaceholder& jsonOut, const PathSet& storePaths,
 }
 
 std::pair<uint64_t, uint64_t> Store::getClosureSize(const Path& storePath) {
-  uint64_t totalNarSize = 0, totalDownloadSize = 0;
+  uint64_t totalNarSize = 0;
+  uint64_t totalDownloadSize = 0;
   PathSet closure;
   computeFSClosure(storePath, closure, false, false);
   for (auto& p : closure) {
@@ -596,7 +596,7 @@ void copyStorePath(ref<Store> srcStore, ref<Store> dstStore,
     srcStore->narFromPath({storePath}, sink);
     auto info2 = make_ref<ValidPathInfo>(*info);
     info2->narHash = hashString(htSHA256, *sink.s);
-    if (!info->narSize) {
+    if (info->narSize == 0u) {
       info2->narSize = sink.s->size();
     }
     if (info->ultimate) {
@@ -638,7 +638,7 @@ void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
 
   PathSet missing;
   for (auto& path : storePaths) {
-    if (!valid.count(path)) {
+    if (valid.count(path) == 0u) {
       missing.insert(path);
     }
   }
@@ -724,7 +724,7 @@ ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven) {
   if (!string2Int(s, n)) {
     throw Error("number expected");
   }
-  while (n--) {
+  while ((n--) != 0) {
     getline(str, s);
     info.references.insert(s);
   }
@@ -737,7 +737,7 @@ ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven) {
 string showPaths(const PathSet& paths) {
   string s;
   for (auto& i : paths) {
-    if (s.size() != 0) {
+    if (!s.empty()) {
       s += ", ";
     }
     s += "'" + i + "'";
@@ -769,9 +769,9 @@ bool ValidPathInfo::isContentAddressed(const Store& store) const {
     Hash hash(std::string(ca, 5));
     if (store.makeTextPath(storePathToName(path), hash, references) == path) {
       return true;
-    } else {
-      warn();
     }
+    warn();
+
   }
 
   else if (hasPrefix(ca, "fixed:")) {
@@ -781,9 +781,8 @@ bool ValidPathInfo::isContentAddressed(const Store& store) const {
         store.makeFixedOutputPath(recursive, hash, storePathToName(path)) ==
             path) {
       return true;
-    } else {
-      warn();
     }
+    warn();
   }
 
   return false;
@@ -900,12 +899,14 @@ ref<Store> openStore(const std::string& uri_,
 StoreType getStoreType(const std::string& uri, const std::string& stateDir) {
   if (uri == "daemon") {
     return tDaemon;
-  } else if (uri == "local" || hasPrefix(uri, "/")) {
+  }
+  if (uri == "local" || hasPrefix(uri, "/")) {
     return tLocal;
-  } else if (uri == "" || uri == "auto") {
+  } else if (uri.empty() || uri == "auto") {
     if (access(stateDir.c_str(), R_OK | W_OK) == 0) {
       return tLocal;
-    } else if (pathExists(settings.nixDaemonSocketFile)) {
+    }
+    if (pathExists(settings.nixDaemonSocketFile)) {
       return tDaemon;
     } else {
       return tLocal;
@@ -940,7 +941,7 @@ std::list<ref<Store>> getDefaultSubstituters() {
     StringSet done;
 
     auto addStore = [&](const std::string& uri) {
-      if (done.count(uri)) {
+      if (done.count(uri) != 0u) {
         return;
       }
       done.insert(uri);

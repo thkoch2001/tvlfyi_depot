@@ -57,7 +57,7 @@ static int _main(int argc, char** argv) {
   {
     HashType ht = htSHA256;
     std::vector<string> args;
-    bool printPath = getEnv("PRINT_PATH") != "";
+    bool printPath = !getEnv("PRINT_PATH").empty();
     bool fromExpr = false;
     string attrPath;
     bool unpack = false;
@@ -163,7 +163,8 @@ static int _main(int argc, char** argv) {
 
     /* If an expected hash is given, the file may already exist in
        the store. */
-    Hash hash, expectedHash(ht);
+    Hash hash;
+    Hash expectedHash(ht);
     Path storePath;
     if (args.size() == 2) {
       expectedHash = Hash(args[1], ht);

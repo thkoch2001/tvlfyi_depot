@@ -31,9 +31,8 @@ static int parseName(const string& profileName, const string& name) {
   int n;
   if (string2Int(string(s, 0, p), n) && n >= 0) {
     return n;
-  } else {
-    return -1;
   }
+  return -1;
 }
 
 Generations findGenerations(Path profile, int& curGen) {
@@ -76,7 +75,7 @@ Path createGeneration(ref<LocalFSStore> store, Path profile, Path outPath) {
   Generations gens = findGenerations(profile, dummy);
 
   unsigned int num;
-  if (gens.size() > 0) {
+  if (!gens.empty()) {
     Generation last = gens.back();
 
     if (readLink(last.path) == outPath) {
@@ -165,7 +164,7 @@ void deleteGenerationsGreaterThan(const Path& profile, int max, bool dryRun) {
       continue;
     }
     if (fromCurGen) {
-      if (max) {
+      if (max != 0) {
         max--;
         continue;
       }

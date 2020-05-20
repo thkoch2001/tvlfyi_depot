@@ -303,7 +303,7 @@ template class BaseSetting<Strings>;
 template class BaseSetting<StringSet>;
 
 void PathSetting::set(const std::string& str) {
-  if (str == "") {
+  if (str.empty()) {
     if (allowEmpty) {
       value = "";
     } else {
@@ -356,7 +356,7 @@ GlobalConfig globalConfig;
 GlobalConfig::ConfigRegistrations* GlobalConfig::configRegistrations;
 
 GlobalConfig::Register::Register(Config* config) {
-  if (!configRegistrations) {
+  if (configRegistrations == nullptr) {
     configRegistrations = new ConfigRegistrations;
   }
   configRegistrations->emplace_back(config);

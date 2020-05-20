@@ -71,7 +71,7 @@ struct CmdCopySigs : StorePathsCommand {
           }
 
           for (auto& sig : info2->sigs) {
-            if (!info->sigs.count(sig)) {
+            if (info->sigs.count(sig) == 0u) {
               newSigs.insert(sig);
             }
           }
@@ -132,7 +132,7 @@ struct CmdSignPaths : StorePathsCommand {
       info2.sign(secretKey);
       assert(!info2.sigs.empty());
 
-      if (!info->sigs.count(*info2.sigs.begin())) {
+      if (info->sigs.count(*info2.sigs.begin()) == 0u) {
         store->addSignatures(storePath, info2.sigs);
         added++;
       }

@@ -257,9 +257,9 @@ class EvalState {
 
   Value* allocAttr(Value& vAttrs, const Symbol& name);
 
-  Bindings* allocBindings(size_t capacity);
+  static Bindings* allocBindings(size_t capacity);
 
-  void mkList(Value& v, size_t length);
+  void mkList(Value& v, size_t size);
   void mkAttrs(Value& v, size_t capacity);
   void mkThunk_(Value& v, Expr* expr);
   void mkPos(Value& v, Pos* pos);

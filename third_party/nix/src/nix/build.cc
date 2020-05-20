@@ -47,11 +47,11 @@ struct CmdBuild : MixDryRun, InstallablesCommand {
     for (size_t i = 0; i < buildables.size(); ++i) {
       auto& b(buildables[i]);
 
-      if (outLink != "") {
+      if (!outLink.empty()) {
         for (auto& output : b.outputs) {
           if (auto store2 = store.dynamic_pointer_cast<LocalFSStore>()) {
             std::string symlink = outLink;
-            if (i) {
+            if (i != 0u) {
               symlink += fmt("-%d", i);
             }
             if (output.first != "out") {

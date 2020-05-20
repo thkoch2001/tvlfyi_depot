@@ -31,13 +31,14 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
      exist already. */
   PathSet drvsToBuild;
   for (auto& i : elems) {
-    if (i.queryDrvPath() != "") {
+    if (!i.queryDrvPath().empty()) {
       drvsToBuild.insert(i.queryDrvPath());
     }
   }
 
   DLOG(INFO) << "building user environment dependencies";
-  state.store->buildPaths(drvsToBuild, state.repair ? bmRepair : bmNormal);
+  state.store->buildPaths(drvsToBuild,
+                          state.repair != 0u ? bmRepair : bmNormal);
 
   /* Construct the whole top level derivation. */
   PathSet references;
@@ -61,7 +62,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
       mkString(*state.allocAttr(v, state.sSystem), system);
     }
     mkString(*state.allocAttr(v, state.sOutPath), i.queryOutPath());
-    if (drvPath != "") {
+    if (!drvPath.empty()) {
       mkString(*state.allocAttr(v, state.sDrvPath), i.queryDrvPath());
     }
 
@@ -90,7 +91,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
     StringSet metaNames = i.queryMetaNames();
     for (auto& j : metaNames) {
       Value* v = i.queryMeta(j);
-      if (!v) {
+      if (v == nullptr) {
         continue;
       }
       vMeta.attrs->push_back(Attr(state.symbols.create(j), v));
@@ -98,7 +99,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
     vMeta.attrs->sort();
     v.attrs->sort();
 
-    if (drvPath != "") {
+    if (!drvPath.empty()) {
       references.insert(drvPath);
     }
   }
@@ -115,7 +116,8 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
 
   /* Construct a Nix expression that calls the user environment
      builder with the manifest as argument. */
-  Value args, topLevel;
+  Value args;
+  Value topLevel;
   state.mkAttrs(args, 3);
   mkString(*state.allocAttr(args, state.symbols.create("manifest")),
            manifestFile, {manifestFile});
@@ -128,15 +130,18 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
   state.forceValue(topLevel);
   PathSet context;
   Attr& aDrvPath(*topLevel.attrs->find(state.sDrvPath));
-  Path topLevelDrv = state.coerceToPath(aDrvPath.pos ? *(aDrvPath.pos) : noPos,
-                                        *(aDrvPath.value), context);
+  Path topLevelDrv =
+      state.coerceToPath(aDrvPath.pos != nullptr ? *(aDrvPath.pos) : noPos,
+                         *(aDrvPath.value), context);
   Attr& aOutPath(*topLevel.attrs->find(state.sOutPath));
-  Path topLevelOut = state.coerceToPath(aOutPath.pos ? *(aOutPath.pos) : noPos,
-                                        *(aOutPath.value), context);
+  Path topLevelOut =
+      state.coerceToPath(aOutPath.pos != nullptr ? *(aOutPath.pos) : noPos,
+                         *(aOutPath.value), context);
 
   /* Realise the resulting store expression. */
   DLOG(INFO) << "building user environment";
-  state.store->buildPaths({topLevelDrv}, state.repair ? bmRepair : bmNormal);
+  state.store->buildPaths({topLevelDrv},
+                          state.repair != 0u ? bmRepair : bmNormal);
 
   /* Switch the current user environment to the output path. */
   auto store2 = state.store.dynamic_pointer_cast<LocalFSStore>();

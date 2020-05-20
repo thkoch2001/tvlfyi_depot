@@ -37,8 +37,11 @@ void printGCWarning() {
 }
 
 void printMissing(ref<Store> store, const PathSet& paths) {
-  unsigned long long downloadSize, narSize;
-  PathSet willBuild, willSubstitute, unknown;
+  unsigned long long downloadSize;
+  unsigned long long narSize;
+  PathSet willBuild;
+  PathSet willSubstitute;
+  PathSet unknown;
   store->queryMissing(paths, willBuild, willSubstitute, unknown, downloadSize,
                       narSize);
   printMissing(store, willBuild, willSubstitute, unknown, downloadSize,
@@ -129,13 +132,13 @@ void initNix() {
   sigemptyset(&act.sa_mask);
   act.sa_handler = SIG_DFL;
   act.sa_flags = 0;
-  if (sigaction(SIGCHLD, &act, nullptr)) {
+  if (sigaction(SIGCHLD, &act, nullptr) != 0) {
     throw SysError("resetting SIGCHLD");
   }
 
   /* Install a dummy SIGUSR1 handler for use with pthread_kill(). */
   act.sa_handler = sigHandler;
-  if (sigaction(SIGUSR1, &act, nullptr)) {
+  if (sigaction(SIGUSR1, &act, nullptr) != 0) {
     throw SysError("handling SIGUSR1");
   }
 
@@ -319,7 +322,7 @@ int handleExceptions(const string& programName, std::function<void()> fun) {
     return 1;
   } catch (BaseError& e) {
     LOG(ERROR) << error << (settings.showTrace ? e.prefix() : "") << e.msg();
-    if (e.prefix() != "" && !settings.showTrace) {
+    if (!e.prefix().empty() && !settings.showTrace) {
       LOG(INFO) << "(use '--show-trace' to show detailed location information)";
     }
     return e.status;
@@ -335,11 +338,11 @@ int handleExceptions(const string& programName, std::function<void()> fun) {
 }
 
 RunPager::RunPager() {
-  if (!isatty(STDOUT_FILENO)) {
+  if (isatty(STDOUT_FILENO) == 0) {
     return;
   }
   char* pager = getenv("NIX_PAGER");
-  if (!pager) {
+  if (pager == nullptr) {
     pager = getenv("PAGER");
   }
   if (pager && ((string)pager == "" || (string)pager == "cat")) {
@@ -353,11 +356,11 @@ RunPager::RunPager() {
     if (dup2(toPager.readSide.get(), STDIN_FILENO) == -1) {
       throw SysError("dupping stdin");
     }
-    if (!getenv("LESS")) {
+    if (getenv("LESS") == nullptr) {
       setenv("LESS", "FRSXMK", 1);
     }
     restoreSignals();
-    if (pager) {
+    if (pager != nullptr) {
       execl("/bin/sh", "sh", "-c", pager, nullptr);
     }
     execlp("pager", "pager", nullptr);

@@ -120,7 +120,7 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
                                   const ref<std::string>& nar,
                                   RepairFlag repair, CheckSigsFlag checkSigs,
                                   std::shared_ptr<FSAccessor> accessor) {
-  if (!repair && isValidPath(info.path)) {
+  if ((repair == 0u) && isValidPath(info.path)) {
     return;
   }
 
@@ -206,7 +206,7 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
                                       : compression == "bzip2"
                                             ? ".bz2"
                                             : compression == "br" ? ".br" : "");
-  if (repair || !fileExists(narInfo->url)) {
+  if ((repair != 0u) || !fileExists(narInfo->url)) {
     stats.narWrite++;
     upsertFile(narInfo->url, *narCompressed, "application/x-nix-nar");
   } else {
@@ -323,7 +323,7 @@ Path BinaryCacheStore::addTextToStore(const string& name, const string& s,
   info.path = computeStorePathForText(name, s, references);
   info.references = references;
 
-  if (repair || !isValidPath(info.path)) {
+  if ((repair != 0u) || !isValidPath(info.path)) {
     StringSink sink;
     dumpString(s, sink);
     addToStore(info, sink.s, repair, CheckSigs, nullptr);
@@ -362,7 +362,7 @@ std::shared_ptr<std::string> BinaryCacheStore::getBuildLog(const Path& path) {
     try {
       auto info = queryPathInfo(path);
       // FIXME: add a "Log" field to .narinfo
-      if (info->deriver == "") {
+      if (info->deriver.empty()) {
         return nullptr;
       }
       drvPath = info->deriver;

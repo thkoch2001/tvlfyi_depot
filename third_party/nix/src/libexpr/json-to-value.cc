@@ -16,7 +16,7 @@ static string parseJSONString(const char*& s) {
     throw JSONParseError("expected JSON string");
   }
   while (*s != '"') {
-    if (!*s) {
+    if (*s == 0) {
       throw JSONParseError("got end-of-string in JSON string");
     }
     if (*s == '\\') {
@@ -57,7 +57,7 @@ static string parseJSONString(const char*& s) {
 static void parseJSON(EvalState& state, const char*& s, Value& v) {
   skipWhitespace(s);
 
-  if (!*s) {
+  if (*s == 0) {
     throw JSONParseError("expected JSON value");
   }
 
@@ -127,12 +127,13 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
     mkString(v, parseJSONString(s));
   }
 
-  else if (isdigit(*s) || *s == '-' || *s == '.') {
+  else if ((isdigit(*s) != 0) || *s == '-' || *s == '.') {
     // Buffer into a string first, then use built-in C++ conversions
     std::string tmp_number;
     ValueType number_type = tInt;
 
-    while (isdigit(*s) || *s == '-' || *s == '.' || *s == 'e' || *s == 'E') {
+    while ((isdigit(*s) != 0) || *s == '-' || *s == '.' || *s == 'e' ||
+           *s == 'E') {
       if (*s == '.' || *s == 'e' || *s == 'E') {
         number_type = tFloat;
       }
@@ -176,7 +177,7 @@ void parseJSON(EvalState& state, const string& s_, Value& v) {
   const char* s = s_.c_str();
   parseJSON(state, s, v);
   skipWhitespace(s);
-  if (*s) {
+  if (*s != 0) {
     throw JSONParseError(
         format("expected end-of-string while parsing JSON value: %1%") % s);
   }

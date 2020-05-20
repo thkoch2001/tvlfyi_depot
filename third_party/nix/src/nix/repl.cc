@@ -62,7 +62,7 @@ struct NixRepl {
   ~NixRepl();
   void mainLoop(const std::vector<std::string>& files);
   StringSet completePrefix(string prefix);
-  bool getLine(string& input, const std::string& prompt);
+  static bool getLine(string& input, const std::string& prompt);
   Path getDerivationPath(Value& v);
   bool processLine(string line);
   void loadFile(const Path& path);
@@ -145,11 +145,12 @@ static char* completionCallback(char* s, int* match) {
   if (possible.size() == 1) {
     *match = 1;
     auto* res = strdup(possible.begin()->c_str() + strlen(s));
-    if (!res) {
+    if (res == nullptr) {
       throw Error("allocation failure");
     }
     return res;
-  } else if (possible.size() > 1) {
+  }
+  if (possible.size() > 1) {
     auto checkAllHaveSameAt = [&](size_t pos) {
       auto& first = *possible.begin();
       for (auto& p : possible) {
@@ -167,7 +168,7 @@ static char* completionCallback(char* s, int* match) {
     if (len > 0) {
       *match = 1;
       auto* res = strdup(std::string(*possible.begin(), start, len).c_str());
-      if (!res) {
+      if (res == nullptr) {
         throw Error("allocation failure");
       }
       return res;
@@ -266,10 +267,9 @@ void NixRepl::mainLoop(const std::vector<std::string>& files) {
         // For parse errors on incomplete input, we continue waiting for the
         // next line of input without clearing the input so far.
         continue;
-      } else {
-        LOG(ERROR) << error << (settings.showTrace ? e.prefix() : "")
-                   << e.msg();
       }
+      LOG(ERROR) << error << (settings.showTrace ? e.prefix() : "") << e.msg();
+
     } catch (Error& e) {
       LOG(ERROR) << error << (settings.showTrace ? e.prefix() : "") << e.msg();
     } catch (Interrupted& e) {
@@ -284,29 +284,31 @@ void NixRepl::mainLoop(const std::vector<std::string>& files) {
 }
 
 bool NixRepl::getLine(string& input, const std::string& prompt) {
-  struct sigaction act, old;
-  sigset_t savedSignalMask, set;
+  struct sigaction act;
+  struct sigaction old;
+  sigset_t savedSignalMask;
+  sigset_t set;
 
   auto setupSignals = [&]() {
     act.sa_handler = sigintHandler;
     sigfillset(&act.sa_mask);
     act.sa_flags = 0;
-    if (sigaction(SIGINT, &act, &old)) {
+    if (sigaction(SIGINT, &act, &old) != 0) {
       throw SysError("installing handler for SIGINT");
     }
 
     sigemptyset(&set);
     sigaddset(&set, SIGINT);
-    if (sigprocmask(SIG_UNBLOCK, &set, &savedSignalMask)) {
+    if (sigprocmask(SIG_UNBLOCK, &set, &savedSignalMask) != 0) {
       throw SysError("unblocking SIGINT");
     }
   };
   auto restoreSignals = [&]() {
-    if (sigprocmask(SIG_SETMASK, &savedSignalMask, nullptr)) {
+    if (sigprocmask(SIG_SETMASK, &savedSignalMask, nullptr) != 0) {
       throw SysError("restoring signals");
     }
 
-    if (sigaction(SIGINT, &old, nullptr)) {
+    if (sigaction(SIGINT, &old, nullptr) != 0) {
       throw SysError("restoring handler for SIGINT");
     }
   };
@@ -316,13 +318,13 @@ bool NixRepl::getLine(string& input, const std::string& prompt) {
   Finally doFree([&]() { free(s); });
   restoreSignals();
 
-  if (g_signal_received) {
+  if (g_signal_received != 0) {
     g_signal_received = 0;
     input.clear();
     return true;
   }
 
-  if (!s) {
+  if (s == nullptr) {
     return false;
   }
   input += s;
@@ -334,7 +336,8 @@ StringSet NixRepl::completePrefix(string prefix) {
   StringSet completions;
 
   size_t start = prefix.find_last_of(" \n\r\t(){}[]");
-  std::string prev, cur;
+  std::string prev;
+  std::string cur;
   if (start == std::string::npos) {
     prev = "";
     cur = prefix;
@@ -343,13 +346,14 @@ StringSet NixRepl::completePrefix(string prefix) {
     cur = std::string(prefix, start + 1);
   }
 
-  size_t slash, dot;
+  size_t slash;
+  size_t dot;
 
   if ((slash = cur.rfind('/')) != string::npos) {
     try {
       auto dir = std::string(cur, 0, slash);
       auto prefix2 = std::string(cur, slash + 1);
-      for (auto& entry : readDirectory(dir == "" ? "/" : dir)) {
+      for (auto& entry : readDirectory(dir.empty() ? "/" : dir)) {
         if (entry.name[0] != '.' && hasPrefix(entry.name, prefix2)) {
           completions.insert(prev + dir + "/" + entry.name);
         }
@@ -418,7 +422,7 @@ static int runProgram(const string& program, const Strings& args) {
 }
 
 bool isVarName(const string& s) {
-  if (s.size() == 0) {
+  if (s.empty()) {
     return false;
   }
   char c = s[0];
@@ -441,18 +445,19 @@ Path NixRepl::getDerivationPath(Value& v) {
         "expression does not evaluate to a derivation, so I can't build it");
   }
   Path drvPath = drvInfo->queryDrvPath();
-  if (drvPath == "" || !state.store->isValidPath(drvPath)) {
+  if (drvPath.empty() || !state.store->isValidPath(drvPath)) {
     throw Error("expression did not evaluate to a valid derivation");
   }
   return drvPath;
 }
 
 bool NixRepl::processLine(string line) {
-  if (line == "") {
+  if (line.empty()) {
     return true;
   }
 
-  string command, arg;
+  string command;
+  string arg;
 
   if (line[0] == ':') {
     size_t p = line.find_first_of(" \n\r\t");
@@ -505,7 +510,9 @@ bool NixRepl::processLine(string line) {
     std::cout << showType(v) << std::endl;
 
   } else if (command == ":u") {
-    Value v, f, result;
+    Value v;
+    Value f;
+    Value result;
     evalString(arg, v);
     evalString(
         "drv: (import <nixpkgs> {}).runCommand \"shell\" { buildInputs = [ drv "
@@ -553,7 +560,7 @@ bool NixRepl::processLine(string line) {
   else if (command == ":q" || command == ":quit") {
     return false;
 
-  } else if (command != "") {
+  } else if (!command.empty()) {
     throw Error(format("unknown command '%1%'") % command);
 
   } else {
@@ -580,7 +587,8 @@ bool NixRepl::processLine(string line) {
 void NixRepl::loadFile(const Path& path) {
   loadedFiles.remove(path);
   loadedFiles.push_back(path);
-  Value v, v2;
+  Value v;
+  Value v2;
   state.evalFile(lookupFileArg(state, path), v);
   state.autoCallFunction(*autoArgs, v, v2);
   addAttrsToScope(v2);
@@ -652,7 +660,7 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
 
 std::ostream& printStringValue(std::ostream& str, const char* string) {
   str << "\"";
-  for (const char* i = string; *i; i++) {
+  for (const char* i = string; *i != 0; i++) {
     if (*i == '\"' || *i == '\\') {
       str << "\\" << *i;
     } else if (*i == '\n') {

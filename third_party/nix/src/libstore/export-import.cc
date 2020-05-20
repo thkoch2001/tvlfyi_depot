@@ -87,7 +87,7 @@ Paths Store::importPaths(Source& source, std::shared_ptr<FSAccessor> accessor,
     info.references = readStorePaths<PathSet>(*this, source);
 
     info.deriver = readString(source);
-    if (info.deriver != "") {
+    if (!info.deriver.empty()) {
       assertStorePath(info.deriver);
     }
 

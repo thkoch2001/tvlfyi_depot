@@ -14,7 +14,7 @@ namespace nix {
   int exterr = sqlite3_extended_errcode(db);
 
   auto path = sqlite3_db_filename(db, nullptr);
-  if (!path) {
+  if (path == nullptr) {
     path = "(in-memory)";
   }
 
@@ -23,9 +23,8 @@ namespace nix {
         err == SQLITE_PROTOCOL
             ? fmt("SQLite database '%s' is busy (SQLITE_PROTOCOL)", path)
             : fmt("SQLite database '%s' is busy", path));
-  } else {
-    throw SQLiteError("%s: %s (in '%s')", fs.s, sqlite3_errstr(exterr), path);
   }
+  throw SQLiteError("%s: %s (in '%s')", fs.s, sqlite3_errstr(exterr), path);
 }
 
 SQLite::SQLite(const Path& path) {
@@ -38,7 +37,7 @@ SQLite::SQLite(const Path& path) {
 
 SQLite::~SQLite() {
   try {
-    if (db && sqlite3_close(db) != SQLITE_OK) {
+    if ((db != nullptr) && sqlite3_close(db) != SQLITE_OK) {
       throwSQLiteError(db, "closing database");
     }
   } catch (...) {
@@ -67,7 +66,7 @@ void SQLiteStmt::create(sqlite3* db, const string& sql) {
 
 SQLiteStmt::~SQLiteStmt() {
   try {
-    if (stmt && sqlite3_finalize(stmt) != SQLITE_OK) {
+    if ((stmt != nullptr) && sqlite3_finalize(stmt) != SQLITE_OK) {
       throwSQLiteError(db, fmt("finalizing statement '%s'", sql));
     }
   } catch (...) {

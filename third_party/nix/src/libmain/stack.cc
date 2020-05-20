@@ -40,7 +40,7 @@ static void sigsegvHandler(int signo, siginfo_t* info, void* ctx) {
   sigfillset(&act.sa_mask);
   act.sa_handler = SIG_DFL;
   act.sa_flags = 0;
-  if (sigaction(SIGSEGV, &act, nullptr)) {
+  if (sigaction(SIGSEGV, &act, nullptr) != 0) {
     abort();
   }
 }
@@ -54,7 +54,7 @@ void detectStackOverflow() {
   stack.ss_size = 4096 * 4 + MINSIGSTKSZ;
   static auto stackBuf = std::make_unique<std::vector<char>>(stack.ss_size);
   stack.ss_sp = stackBuf->data();
-  if (!stack.ss_sp) {
+  if (stack.ss_sp == nullptr) {
     throw Error("cannot allocate alternative stack");
   }
   stack.ss_flags = 0;
@@ -66,7 +66,7 @@ void detectStackOverflow() {
   sigfillset(&act.sa_mask);
   act.sa_sigaction = sigsegvHandler;
   act.sa_flags = SA_SIGINFO | SA_ONSTACK;
-  if (sigaction(SIGSEGV, &act, nullptr)) {
+  if (sigaction(SIGSEGV, &act, nullptr) != 0) {
     throw SysError("resetting SIGSEGV");
   }
 #endif

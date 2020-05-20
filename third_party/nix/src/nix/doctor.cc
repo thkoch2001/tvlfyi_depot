@@ -7,7 +7,7 @@
 using namespace nix;
 
 std::string formatProtocol(unsigned int proto) {
-  if (proto) {
+  if (proto != 0u) {
     auto major = GET_PROTOCOL_MAJOR(proto) >> 8;
     auto minor = GET_PROTOCOL_MINOR(proto);
     return (format("%1%.%2%") % major % minor).str();
@@ -41,7 +41,7 @@ struct CmdDoctor : StoreCommand {
     }
   }
 
-  bool checkNixInPath() {
+  static bool checkNixInPath() {
     PathSet dirs;
 
     for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":")) {
@@ -64,7 +64,7 @@ struct CmdDoctor : StoreCommand {
     return true;
   }
 
-  bool checkProfileRoots(ref<Store> store) {
+  static bool checkProfileRoots(ref<Store> store) {
     PathSet dirs;
 
     for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":")) {
@@ -106,7 +106,7 @@ struct CmdDoctor : StoreCommand {
     return true;
   }
 
-  bool checkStoreProtocol(unsigned int storeProto) {
+  static bool checkStoreProtocol(unsigned int storeProto) {
     unsigned int clientProto = GET_PROTOCOL_MAJOR(SERVE_PROTOCOL_VERSION) ==
                                        GET_PROTOCOL_MAJOR(storeProto)
                                    ? SERVE_PROTOCOL_VERSION

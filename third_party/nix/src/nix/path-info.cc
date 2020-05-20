@@ -113,7 +113,7 @@ struct CmdPathInfo : StorePathsCommand, MixJSON {
           if (info->ultimate) {
             ss.push_back("ultimate");
           }
-          if (info->ca != "") {
+          if (!info->ca.empty()) {
             ss.push_back("ca:" + info->ca);
           }
           for (auto& sig : info->sigs) {

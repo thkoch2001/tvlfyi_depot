@@ -96,7 +96,7 @@ struct CmdRun : InstallablesCommand {
       std::map<std::string, std::string> kept;
       for (auto& var : keep) {
         auto s = getenv(var.c_str());
-        if (s) {
+        if (s != nullptr) {
           kept[var] = s;
         }
       }
@@ -133,9 +133,7 @@ struct CmdRun : InstallablesCommand {
         continue;
       }
 
-      if (true) {
-        unixPath.push_front(path + "/bin");
-      }
+      { unixPath.push_front(path + "/bin"); }
 
       auto propPath = path + "/nix-support/propagated-user-env-packages";
       if (accessor->stat(propPath).type == FSAccessor::tRegular) {
@@ -249,7 +247,7 @@ void chrootHelper(int argc, char** argv) {
     }
 
     char* cwd = getcwd(nullptr, 0);
-    if (!cwd) {
+    if (cwd == nullptr) {
       throw SysError("getting current directory");
     }
     Finally freeCwd([&]() { free(cwd); });

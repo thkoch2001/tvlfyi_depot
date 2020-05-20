@@ -319,7 +319,7 @@ static void queryInstSources(EvalState& state, InstallSourceInfo& instSource,
                              const Strings& args, DrvInfos& elems,
                              bool newestOnly) {
   InstallSourceType type = instSource.type;
-  if (type == srcUnknown && args.size() > 0 && isPath(args.front())) {
+  if (type == srcUnknown && !args.empty() && isPath(args.front())) {
     type = srcStorePaths;
   }
 
@@ -352,7 +352,8 @@ static void queryInstSources(EvalState& state, InstallSourceInfo& instSource,
 
       for (auto& i : args) {
         Expr* eFun = state.parseExprFromString(i, absPath("."));
-        Value vFun, vTmp;
+        Value vFun;
+        Value vTmp;
         state.eval(eFun, vFun);
         mkApp(vTmp, vFun, vArg);
         getDerivations(state, vTmp, "", *instSource.autoArgs, elems, true);
@@ -420,7 +421,7 @@ static void printMissing(EvalState& state, DrvInfos& elems) {
   PathSet targets;
   for (auto& i : elems) {
     Path drvPath = i.queryDrvPath();
-    if (drvPath != "") {
+    if (!drvPath.empty()) {
       targets.insert(drvPath);
     } else {
       targets.insert(i.queryOutPath());
@@ -437,7 +438,8 @@ static void installDerivations(Globals& globals, const Strings& args,
   DLOG(INFO) << "installing derivations";
 
   /* Get the set of user environment elements to be installed. */
-  DrvInfos newElems, newElemsTmp;
+  DrvInfos newElems;
+  DrvInfos newElemsTmp;
   queryInstSources(*globals.state, globals.instSource, args, newElemsTmp, true);
 
   /* If --prebuilt-only is given, filter out source-only packages. */
@@ -453,7 +455,7 @@ static void installDerivations(Globals& globals, const Strings& args,
        one-click installs, namely those where the name used in the
        path is not the one we want (e.g., `java-front' versus
        `java-front-0.9pre15899'). */
-    if (globals.forceName != "") {
+    if (!globals.forceName.empty()) {
       i.setName(globals.forceName);
     }
     newNames.insert(DrvName(i.queryName()).name);
@@ -644,7 +646,7 @@ static void setMetaFlag(EvalState& state, DrvInfo& drv, const string& name,
 }
 
 static void opSetFlag(Globals& globals, Strings opFlags, Strings opArgs) {
-  if (opFlags.size() > 0) {
+  if (!opFlags.empty()) {
     throw UsageError(format("unknown flag '%1%'") % opFlags.front());
   }
   if (opArgs.size() < 2) {
@@ -708,18 +710,18 @@ static void opSet(Globals& globals, Strings opFlags, Strings opArgs) {
 
   DrvInfo& drv(elems.front());
 
-  if (globals.forceName != "") {
+  if (!globals.forceName.empty()) {
     drv.setName(globals.forceName);
   }
 
-  if (drv.queryDrvPath() != "") {
+  if (!drv.queryDrvPath().empty()) {
     PathSet paths = {drv.queryDrvPath()};
     printMissing(globals.state->store, paths);
     if (globals.dryRun) {
       return;
     }
     globals.state->store->buildPaths(
-        paths, globals.state->repair ? bmRepair : bmNormal);
+        paths, globals.state->repair != 0u ? bmRepair : bmNormal);
   } else {
     printMissing(globals.state->store, {drv.queryOutPath()});
     if (globals.dryRun) {
@@ -774,7 +776,7 @@ static void uninstallDerivations(Globals& globals, Strings& selectors,
 }
 
 static void opUninstall(Globals& globals, Strings opFlags, Strings opArgs) {
-  if (opFlags.size() > 0) {
+  if (!opFlags.empty()) {
     throw UsageError(format("unknown flag '%1%'") % opFlags.front());
   }
   uninstallDerivations(globals, opArgs, globals.profile);
@@ -792,7 +794,7 @@ static bool cmpElemByName(const DrvInfo& a, const DrvInfo& b) {
 using Table = list<Strings>;
 
 void printTable(Table& table) {
-  auto nrColumns = table.size() > 0 ? table.front().size() : 0;
+  auto nrColumns = !table.empty() ? table.front().size() : 0;
 
   vector<size_t> widths;
   widths.resize(nrColumns);
@@ -852,7 +854,7 @@ static VersionDiff compareVersionAgainstSet(const DrvInfo& elem,
         version = name2.version;
       } else if (diff != cvGreater && diff != cvEqual && d > 0) {
         diff = cvLess;
-        if (version == "" || compareVersions(version, name2.version) < 0) {
+        if (version.empty() || compareVersions(version, name2.version) < 0) {
           version = name2.version;
         }
       }
@@ -878,7 +880,7 @@ static void queryJSON(Globals& globals, vector<DrvInfo>& elems) {
     for (auto& j : metaNames) {
       auto placeholder = metaObj.placeholder(j);
       Value* v = i.queryMeta(j);
-      if (!v) {
+      if (v == nullptr) {
         LOG(ERROR) << "derivation '" << i.queryName()
                    << "' has invalid meta attribute '" << j << "'";
         placeholder.write(nullptr);
@@ -946,7 +948,8 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
   }
 
   /* Obtain derivation information from the specified source. */
-  DrvInfos availElems, installedElems;
+  DrvInfos availElems;
+  DrvInfos installedElems;
 
   if (source == sInstalled || compareVersions || printStatus) {
     installedElems = queryInstalled(*globals.state, globals.profile);
@@ -983,7 +986,8 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
   }
 
   /* Query which paths have substitutes. */
-  PathSet validPaths, substitutablePaths;
+  PathSet validPaths;
+  PathSet substitutablePaths;
   if (printStatus || globals.prebuiltOnly) {
     PathSet paths;
     for (auto& i : elems) {
@@ -1005,7 +1009,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
     return;
   }
 
-  bool tty = isatty(STDOUT_FILENO);
+  bool tty = isatty(STDOUT_FILENO) != 0;
   RunPager pager;
 
   Table table;
@@ -1107,7 +1111,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
       }
 
       if (xmlOutput) {
-        if (i.querySystem() != "") {
+        if (!i.querySystem().empty()) {
           attrs["system"] = i.querySystem();
         }
       } else if (printSystem) {
@@ -1117,11 +1121,11 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
       if (printDrvPath) {
         string drvPath = i.queryDrvPath();
         if (xmlOutput) {
-          if (drvPath != "") {
+          if (!drvPath.empty()) {
             attrs["drvPath"] = drvPath;
           }
         } else {
-          columns.push_back(drvPath == "" ? "-" : drvPath);
+          columns.push_back(drvPath.empty() ? "-" : drvPath);
         }
       }
 
@@ -1144,7 +1148,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
       if (printDescription) {
         string descr = i.queryMetaString("description");
         if (xmlOutput) {
-          if (descr != "") {
+          if (!descr.empty()) {
             attrs["description"] = descr;
           }
         } else {
@@ -1170,7 +1174,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
               XMLAttrs attrs2;
               attrs2["name"] = j;
               Value* v = i.queryMeta(j);
-              if (!v) {
+              if (v == nullptr) {
                 LOG(ERROR) << "derivation '" << i.queryName()
                            << "' has invalid meta attribute '" << j << "'";
               } else {
@@ -1244,7 +1248,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
 }
 
 static void opSwitchProfile(Globals& globals, Strings opFlags, Strings opArgs) {
-  if (opFlags.size() > 0) {
+  if (!opFlags.empty()) {
     throw UsageError(format("unknown flag '%1%'") % opFlags.front());
   }
   if (opArgs.size() != 1) {
@@ -1278,9 +1282,8 @@ static void switchGeneration(Globals& globals, int dstGen) {
     if (dstGen == prevGen) {
       throw Error(format("no generation older than the current (%1%) exists") %
                   curGen);
-    } else {
-      throw Error(format("generation %1% does not exist") % dstGen);
     }
+    throw Error(format("generation %1% does not exist") % dstGen);
   }
 
   LOG(INFO) << "switching from generation " << curGen << " to " << dst.number;
@@ -1294,7 +1297,7 @@ static void switchGeneration(Globals& globals, int dstGen) {
 
 static void opSwitchGeneration(Globals& globals, Strings opFlags,
                                Strings opArgs) {
-  if (opFlags.size() > 0) {
+  if (!opFlags.empty()) {
     throw UsageError(format("unknown flag '%1%'") % opFlags.front());
   }
   if (opArgs.size() != 1) {
@@ -1310,10 +1313,10 @@ static void opSwitchGeneration(Globals& globals, Strings opFlags,
 }
 
 static void opRollback(Globals& globals, Strings opFlags, Strings opArgs) {
-  if (opFlags.size() > 0) {
+  if (!opFlags.empty()) {
     throw UsageError(format("unknown flag '%1%'") % opFlags.front());
   }
-  if (opArgs.size() != 0) {
+  if (!opArgs.empty()) {
     throw UsageError(format("no arguments expected"));
   }
 
@@ -1322,10 +1325,10 @@ static void opRollback(Globals& globals, Strings opFlags, Strings opArgs) {
 
 static void opListGenerations(Globals& globals, Strings opFlags,
                               Strings opArgs) {
-  if (opFlags.size() > 0) {
+  if (!opFlags.empty()) {
     throw UsageError(format("unknown flag '%1%'") % opFlags.front());
   }
-  if (opArgs.size() != 0) {
+  if (!opArgs.empty()) {
     throw UsageError(format("no arguments expected"));
   }
 
@@ -1339,7 +1342,7 @@ static void opListGenerations(Globals& globals, Strings opFlags,
 
   for (auto& i : gens) {
     tm t;
-    if (!localtime_r(&i.creationTime, &t)) {
+    if (localtime_r(&i.creationTime, &t) == nullptr) {
       throw Error("cannot convert time");
     }
     cout << format("%|4|   %|4|-%|02|-%|02| %|02|:%|02|:%|02|   %||\n") %
@@ -1351,7 +1354,7 @@ static void opListGenerations(Globals& globals, Strings opFlags,
 
 static void opDeleteGenerations(Globals& globals, Strings opFlags,
                                 Strings opArgs) {
-  if (opFlags.size() > 0) {
+  if (!opFlags.empty()) {
     throw UsageError(format("unknown flag '%1%'") % opFlags.front());
   }
 
@@ -1390,7 +1393,8 @@ static void opVersion(Globals& globals, Strings opFlags, Strings opArgs) {
 
 static int _main(int argc, char** argv) {
   {
-    Strings opFlags, opArgs;
+    Strings opFlags;
+    Strings opArgs;
     Operation op = nullptr;
     RepairFlag repair = NoRepair;
     string file;
@@ -1482,7 +1486,7 @@ static int _main(int argc, char** argv) {
         opArgs.push_back(*arg);
       }
 
-      if (oldOp && oldOp != op) {
+      if ((oldOp != nullptr) && oldOp != op) {
         throw UsageError("only one operation may be specified");
       }
 
@@ -1493,7 +1497,7 @@ static int _main(int argc, char** argv) {
 
     initPlugins();
 
-    if (!op) {
+    if (op == nullptr) {
       throw UsageError("no operation specified");
     }
 
@@ -1503,17 +1507,17 @@ static int _main(int argc, char** argv) {
         std::shared_ptr<EvalState>(new EvalState(myArgs.searchPath, store));
     globals.state->repair = repair;
 
-    if (file != "") {
+    if (!file.empty()) {
       globals.instSource.nixExprPath = lookupFileArg(*globals.state, file);
     }
 
     globals.instSource.autoArgs = myArgs.getAutoArgs(*globals.state);
 
-    if (globals.profile == "") {
+    if (globals.profile.empty()) {
       globals.profile = getEnv("NIX_PROFILE", "");
     }
 
-    if (globals.profile == "") {
+    if (globals.profile.empty()) {
       Path profileLink = getHome() + "/.nix-profile";
       try {
         if (!pathExists(profileLink)) {

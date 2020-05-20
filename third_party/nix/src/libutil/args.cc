@@ -7,9 +7,9 @@ namespace nix {
 Args::FlagMaker Args::mkFlag() { return FlagMaker(*this); }
 
 Args::FlagMaker::~FlagMaker() {
-  assert(flag->longName != "");
+  assert(!flag->longName.empty());
   args.longFlags[flag->longName] = flag;
-  if (flag->shortName) {
+  if (flag->shortName != 0) {
     args.shortFlags[flag->shortName] = flag;
   }
 }
@@ -26,12 +26,12 @@ void Args::parseCmdline(const Strings& _cmdline) {
     /* Expand compound dash options (i.e., `-qlf' -> `-q -l -f',
        `-j3` -> `-j 3`). */
     if (!dashDash && arg.length() > 2 && arg[0] == '-' && arg[1] != '-' &&
-        isalpha(arg[1])) {
+        (isalpha(arg[1]) != 0)) {
       *pos = (string) "-" + arg[1];
       auto next = pos;
       ++next;
       for (unsigned int j = 2; j < arg.length(); j++) {
-        if (isalpha(arg[j])) {
+        if (isalpha(arg[j]) != 0) {
           cmdline.insert(next, (string) "-" + arg[j]);
         } else {
           cmdline.insert(next, string(arg, j));
@@ -74,11 +74,11 @@ void Args::printHelp(const string& programName, std::ostream& out) {
   std::cout << "\n";
 
   auto s = description();
-  if (s != "") {
+  if (!s.empty()) {
     std::cout << "\nSummary: " << s << ".\n";
   }
 
-  if (longFlags.size()) {
+  if (!longFlags.empty() != 0u) {
     std::cout << "\n";
     std::cout << "Flags:\n";
     printFlags(out);
@@ -88,11 +88,11 @@ void Args::printHelp(const string& programName, std::ostream& out) {
 void Args::printFlags(std::ostream& out) {
   Table2 table;
   for (auto& flag : longFlags) {
-    if (hiddenCategories.count(flag.second->category)) {
+    if (hiddenCategories.count(flag.second->category) != 0u) {
       continue;
     }
     table.push_back(std::make_pair(
-        (flag.second->shortName
+        (flag.second->shortName != 0
              ? std::string("-") + flag.second->shortName + ", "
              : "    ") +
             "--" + flag.first + renderLabels(flag.second->labels),
@@ -188,7 +188,7 @@ Strings argvToStrings(int argc, char** argv) {
   Strings args;
   argc--;
   argv++;
-  while (argc--) {
+  while ((argc--) != 0) {
     args.push_back(*argv++);
   }
   return args;

@@ -111,7 +111,7 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
 
         XMLOpenElement _(doc, "derivation", xmlAttrs);
 
-        if (drvPath != "" && drvsSeen.find(drvPath) == drvsSeen.end()) {
+        if (!drvPath.empty() && drvsSeen.find(drvPath) == drvsSeen.end()) {
           drvsSeen.insert(drvPath);
           showAttrs(state, strict, location, *v.attrs, doc, context, drvsSeen);
         } else {

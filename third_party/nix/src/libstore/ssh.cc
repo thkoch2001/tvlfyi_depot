@@ -12,7 +12,7 @@ SSHMaster::SSHMaster(const std::string& host, std::string keyFile,
       useMaster(useMaster && !fakeSSH),
       compress(compress),
       logFD(logFD) {
-  if (host == "" || hasPrefix(host, "-")) {
+  if (host.empty() || hasPrefix(host, "-")) {
     throw Error("invalid SSH host name '%s'", host);
   }
 }
@@ -33,7 +33,8 @@ std::unique_ptr<SSHMaster::Connection> SSHMaster::startCommand(
     const std::string& command) {
   Path socketPath = startMaster();
 
-  Pipe in, out;
+  Pipe in;
+  Pipe out;
   in.create();
   out.create();
 
@@ -63,9 +64,9 @@ std::unique_ptr<SSHMaster::Connection> SSHMaster::startCommand(
         if (fakeSSH) {
           args = {"bash", "-c"};
         } else {
-          args = {"ssh", host.c_str(), "-x", "-a"};
+          args = {"ssh", host, "-x", "-a"};
           addCommonSSHOpts(args);
-          if (socketPath != "") {
+          if (!socketPath.empty()) {
             args.insert(args.end(), {"-S", socketPath});
           }
           // TODO(tazjin): Abseil verbosity flag
@@ -123,7 +124,7 @@ Path SSHMaster::startMaster() {
           throw SysError("duping over stdout");
         }
 
-        Strings args = {"ssh", host.c_str(),
+        Strings args = {"ssh", host,
                         "-M",  "-N",
                         "-S",  state->socketPath,
                         "-o",  "LocalCommand=echo started",

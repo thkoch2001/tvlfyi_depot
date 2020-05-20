@@ -8,9 +8,9 @@ namespace nix {
 ThreadPool::ThreadPool(size_t _maxThreads) : maxThreads(_maxThreads) {
   restoreAffinity();  // FIXME
 
-  if (!maxThreads) {
+  if (maxThreads == 0u) {
     maxThreads = std::thread::hardware_concurrency();
-    if (!maxThreads) {
+    if (maxThreads == 0u) {
       maxThreads = 1;
     }
   }
@@ -111,8 +111,8 @@ void ThreadPool::doWork(bool mainThread) {
             try {
               std::rethrow_exception(exc);
             } catch (std::exception& e) {
-              if (!dynamic_cast<Interrupted*>(&e) &&
-                  !dynamic_cast<ThreadPoolShutDown*>(&e)) {
+              if ((dynamic_cast<Interrupted*>(&e) == nullptr) &&
+                  (dynamic_cast<ThreadPoolShutDown*>(&e) == nullptr)) {
                 ignoreException();
               }
             } catch (...) {
@@ -135,7 +135,7 @@ void ThreadPool::doWork(bool mainThread) {
         /* If there are no active or pending items, and the
            main thread is running process(), then no new items
            can be added. So exit. */
-        if (!state->active && state->draining) {
+        if ((state->active == 0u) && state->draining) {
           quit = true;
           work.notify_all();
           return;

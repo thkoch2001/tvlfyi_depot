@@ -49,7 +49,7 @@ static Path useDeriver(Path path) {
     return path;
   }
   Path drvPath = store->queryPathInfo(path)->deriver;
-  if (drvPath == "") {
+  if (drvPath.empty()) {
     throw Error(format("deriver of path '%1%' is not known") % path);
   }
   return drvPath;
@@ -85,7 +85,7 @@ static PathSet realisePath(Path path, bool build = true) {
       }
       Path outPath = i->second.path;
       if (store2) {
-        if (gcRoot == "") {
+        if (gcRoot.empty()) {
           printGCWarning();
         } else {
           Path rootName = gcRoot;
@@ -103,27 +103,25 @@ static PathSet realisePath(Path path, bool build = true) {
     return outputs;
   }
 
-  else {
-    if (build) {
-      store->ensurePath(path);
-    } else if (!store->isValidPath(path)) {
-      throw Error(format("path '%1%' does not exist and cannot be created") %
-                  path);
-    }
-    if (store2) {
-      if (gcRoot == "") {
-        printGCWarning();
-      } else {
-        Path rootName = gcRoot;
-        rootNr++;
-        if (rootNr > 1) {
-          rootName += "-" + std::to_string(rootNr);
-        }
-        path = store2->addPermRoot(path, rootName, indirectRoot);
-      }
-    }
-    return {path};
+  if (build) {
+    store->ensurePath(path);
+  } else if (!store->isValidPath(path)) {
+    throw Error(format("path '%1%' does not exist and cannot be created") %
+                path);
   }
+  if (store2) {
+    if (gcRoot.empty()) {
+      printGCWarning();
+    } else {
+      Path rootName = gcRoot;
+      rootNr++;
+      if (rootNr > 1) {
+        rootName += "-" + std::to_string(rootNr);
+      }
+      path = store2->addPermRoot(path, rootName, indirectRoot);
+    }
+  }
+  return {path};
 }
 
 /* Realise the given paths. */
@@ -153,8 +151,11 @@ static void opRealise(Strings opFlags, Strings opArgs) {
         store->followLinksToStorePath(p.first), p.second));
   }
 
-  unsigned long long downloadSize, narSize;
-  PathSet willBuild, willSubstitute, unknown;
+  unsigned long long downloadSize;
+  unsigned long long narSize;
+  PathSet willBuild;
+  PathSet willSubstitute;
+  PathSet unknown;
   store->queryMissing(PathSet(paths.begin(), paths.end()), willBuild,
                       willSubstitute, unknown, downloadSize, narSize);
 
@@ -267,9 +268,8 @@ static PathSet maybeUseOutputs(const Path& storePath, bool useOutput,
       outputs.insert(i.second.path);
     }
     return outputs;
-  } else {
-    return {storePath};
   }
+  return {storePath};
 }
 
 /* Some code to print a tree representation of a derivation dependency
@@ -348,7 +348,7 @@ static void opQuery(Strings opFlags, Strings opArgs) {
     } else if (i == "--deriver" || i == "-d") {
       query = qDeriver;
     } else if (i == "--binding" || i == "-b") {
-      if (opArgs.size() == 0) {
+      if (opArgs.empty()) {
         throw UsageError("expected binding name");
       }
       bindingName = opArgs.front();
@@ -437,7 +437,8 @@ static void opQuery(Strings opFlags, Strings opArgs) {
       for (auto& i : opArgs) {
         Path deriver =
             store->queryPathInfo(store->followLinksToStorePath(i))->deriver;
-        cout << format("%1%\n") % (deriver == "" ? "unknown-deriver" : deriver);
+        cout << format("%1%\n") %
+                    (deriver.empty() ? "unknown-deriver" : deriver);
       }
       break;
 
@@ -608,7 +609,7 @@ static void registerValidity(bool reregister, bool hashGiven,
 
   while (true) {
     ValidPathInfo info = decodeValidPathInfo(cin, hashGiven);
-    if (info.path == "") {
+    if (info.path.empty()) {
       break;
     }
     if (!store->isValidPath(info.path) || reregister) {
@@ -947,7 +948,7 @@ static void opServe(Strings opFlags, Strings opArgs) {
     }
     if (GET_PROTOCOL_MINOR(clientVersion) >= 3) {
       settings.buildRepeat = readInt(in);
-      settings.enforceDeterminism = readInt(in);
+      settings.enforceDeterminism = readInt(in) != 0u;
       settings.runDiffHook = true;
     }
     settings.printRepeatedBuilds = false;
@@ -963,8 +964,8 @@ static void opServe(Strings opFlags, Strings opArgs) {
 
     switch (cmd) {
       case cmdQueryValidPaths: {
-        bool lock = readInt(in);
-        bool substitute = readInt(in);
+        bool lock = readInt(in) != 0u;
+        bool substitute = readInt(in) != 0u;
         auto paths = readStorePaths<PathSet>(*store, in);
         if (lock && writeAllowed) {
           for (auto& path : paths) {
@@ -983,8 +984,11 @@ static void opServe(Strings opFlags, Strings opArgs) {
               paths2.insert(path);
             }
           }
-          unsigned long long downloadSize, narSize;
-          PathSet willBuild, willSubstitute, unknown;
+          unsigned long long downloadSize;
+          unsigned long long narSize;
+          PathSet willBuild;
+          PathSet willSubstitute;
+          PathSet unknown;
           store->queryMissing(PathSet(paths2.begin(), paths2.end()), willBuild,
                               willSubstitute, unknown, downloadSize, narSize);
           /* FIXME: should use ensurePath(), but it only
@@ -1080,7 +1084,8 @@ static void opServe(Strings opFlags, Strings opArgs) {
         out << status.status << status.errorMsg;
 
         if (GET_PROTOCOL_MINOR(clientVersion) >= 3) {
-          out << status.timesBuilt << status.isNonDeterministic
+          out << status.timesBuilt
+              << static_cast<uint64_t>(status.isNonDeterministic)
               << status.startTime << status.stopTime;
         }
 
@@ -1088,7 +1093,7 @@ static void opServe(Strings opFlags, Strings opArgs) {
       }
 
       case cmdQueryClosure: {
-        bool includeOutputs = readInt(in);
+        bool includeOutputs = readInt(in) != 0u;
         PathSet closure;
         store->computeFSClosure(readStorePaths<PathSet>(*store, in), closure,
                                 false, includeOutputs);
@@ -1184,7 +1189,8 @@ static void opVersion(Strings opFlags, Strings opArgs) {
    list. */
 static int _main(int argc, char** argv) {
   {
-    Strings opFlags, opArgs;
+    Strings opFlags;
+    Strings opArgs;
     Operation op = nullptr;
 
     parseCmdLine(argc, argv,
@@ -1260,7 +1266,7 @@ static int _main(int argc, char** argv) {
                      opArgs.push_back(*arg);
                    }
 
-                   if (oldOp && oldOp != op) {
+                   if ((oldOp != nullptr) && oldOp != op) {
                      throw UsageError("only one operation may be specified");
                    }
 
@@ -1269,7 +1275,7 @@ static int _main(int argc, char** argv) {
 
     initPlugins();
 
-    if (!op) {
+    if (op == nullptr) {
       throw UsageError("no operation specified");
     }
 

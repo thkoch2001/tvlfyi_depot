@@ -59,7 +59,7 @@ static void atomicWrite(const Path& path, const std::string& s) {
   Path tmp = path + ".tmp." + std::to_string(getpid());
   AutoDelete del(tmp, false);
   writeFile(tmp, s);
-  if (rename(tmp.c_str(), path.c_str())) {
+  if (rename(tmp.c_str(), path.c_str()) != 0) {
     throw SysError(format("renaming '%1%' to '%2%'") % tmp % path);
   }
   del.cancel();

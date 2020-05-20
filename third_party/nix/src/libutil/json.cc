@@ -27,7 +27,7 @@ void toJSON(std::ostream& str, const char* start, const char* end) {
 }
 
 void toJSON(std::ostream& str, const char* s) {
-  if (!s) {
+  if (s == nullptr) {
     str << "null";
   } else {
     toJSON(str, s, s + strlen(s));
@@ -91,7 +91,7 @@ JSONWriter::JSONWriter(std::ostream& str, bool indent)
 JSONWriter::JSONWriter(JSONState* state) : state(state) { state->stack++; }
 
 JSONWriter::~JSONWriter() {
-  if (state) {
+  if (state != nullptr) {
     assertActive();
     state->stack--;
     if (state->stack == 0) {
@@ -150,7 +150,7 @@ void JSONObject::open() {
 }
 
 JSONObject::~JSONObject() {
-  if (state) {
+  if (state != nullptr) {
     state->depth--;
     if (state->indent && !first) {
       indent();

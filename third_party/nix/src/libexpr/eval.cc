@@ -37,7 +37,7 @@ static char* dupString(const char* s) {
 #else
   t = strdup(s);
 #endif
-  if (!t) {
+  if (t == nullptr) {
     throw std::bad_alloc();
   }
   return t;
@@ -62,7 +62,7 @@ static void printValue(std::ostream& str, std::set<const Value*>& active,
       break;
     case tString:
       str << "\"";
-      for (const char* i = v.string.s; *i; i++) {
+      for (const char* i = v.string.s; *i != 0; i++) {
         if (*i == '\"' || *i == '\\') {
           str << "\\" << *i;
         } else if (*i == '\n') {
@@ -151,7 +151,7 @@ string showType(const Value& v) {
     case tBool:
       return "a boolean";
     case tString:
-      return v.string.context ? "a string with context" : "a string";
+      return v.string.context != nullptr ? "a string with context" : "a string";
     case tPath:
       return "a path";
     case tNull:
@@ -194,12 +194,11 @@ static void* oomHandler(size_t requested) {
 static Symbol getName(const AttrName& name, EvalState& state, Env& env) {
   if (name.symbol.set()) {
     return name.symbol;
-  } else {
-    Value nameValue;
-    name.expr->eval(state, env, nameValue);
-    state.forceStringNoCtx(nameValue);
-    return state.symbols.create(nameValue.string.s);
   }
+  Value nameValue;
+  name.expr->eval(state, env, nameValue);
+  state.forceStringNoCtx(nameValue);
+  return state.symbols.create(nameValue.string.s);
 }
 
 static bool gcInitialised = false;
@@ -233,7 +232,7 @@ void initGC() {
      that GC_expand_hp() causes a lot of virtual, but not physical
      (resident) memory to be allocated.  This might be a problem on
      systems that don't overcommit. */
-  if (!getenv("GC_INITIAL_HEAP_SIZE")) {
+  if (getenv("GC_INITIAL_HEAP_SIZE") == nullptr) {
     size_t size = 32 * 1024 * 1024;
 #if HAVE_SYSCONF && defined(_SC_PAGESIZE) && defined(_SC_PHYS_PAGES)
     size_t maxSize = 384 * 1024 * 1024;
@@ -436,7 +435,7 @@ void EvalState::checkURI(const std::string& uri) {
      'https://' as prefixes for any http/https URI. */
   for (auto& prefix : evalSettings.allowedUris.get()) {
     if (uri == prefix ||
-        (uri.size() > prefix.size() && prefix.size() > 0 &&
+        (uri.size() > prefix.size() && !prefix.empty() &&
          hasPrefix(uri, prefix) &&
          (prefix[prefix.size() - 1] == '/' || uri[prefix.size()] == '/'))) {
       return;
@@ -583,7 +582,7 @@ Value& mkString(Value& v, const string& s, const PathSet& context) {
 void mkPath(Value& v, const char* s) { mkPathNoCopy(v, dupString(s)); }
 
 inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
-  for (size_t l = var.level; l; --l, env = env->up) {
+  for (size_t l = var.level; l != 0u; --l, env = env->up) {
     ;
   }
 
@@ -603,16 +602,16 @@ inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
     }
     Bindings::iterator j = env->values[0]->attrs->find(var.name);
     if (j != env->values[0]->attrs->end()) {
-      if (countCalls && j->pos) {
+      if (countCalls && (j->pos != nullptr)) {
         attrSelects[*j->pos]++;
       }
       return j->value;
     }
-    if (!env->prevWith) {
+    if (env->prevWith == 0u) {
       throwUndefinedVarError("undefined variable '%1%' at %2%", var.name,
                              var.pos);
     }
-    for (size_t l = env->prevWith; l; --l, env = env->up) {
+    for (size_t l = env->prevWith; l != 0u; --l, env = env->up) {
       ;
     }
   }
@@ -657,7 +656,7 @@ void EvalState::mkList(Value& v, size_t size) {
     v.type = tListN;
     v.bigList.size = size;
     v.bigList.elems =
-        size ? (Value**)allocBytes(size * sizeof(Value*)) : nullptr;
+        size != 0u ? (Value**)allocBytes(size * sizeof(Value*)) : nullptr;
   }
   nrListElems += size;
 }
@@ -674,7 +673,7 @@ static inline void mkThunk(Value& v, Env& env, Expr* expr) {
 void EvalState::mkThunk_(Value& v, Expr* expr) { mkThunk(v, baseEnv, expr); }
 
 void EvalState::mkPos(Value& v, Pos* pos) {
-  if (pos && pos->file.set()) {
+  if ((pos != nullptr) && pos->file.set()) {
     mkAttrs(v, 3);
     mkString(*allocAttr(v, sFile), pos->file);
     mkInt(*allocAttr(v, sLine), pos->line);
@@ -701,7 +700,7 @@ Value* ExprVar::maybeThunk(EvalState& state, Env& env) {
   Value* v = state.lookupVar(&env, *this, true);
   /* The value might not be initialised in the environment yet.
      In that case, ignore it. */
-  if (v) {
+  if (v != nullptr) {
     nrAvoided++;
     return v;
   }
@@ -751,7 +750,7 @@ void EvalState::evalFile(const Path& path_, Value& v) {
     e = j->second;
   }
 
-  if (!e) {
+  if (e == nullptr) {
     e = parseExprFromFile(checkSourcePath(path2));
   }
 
@@ -966,7 +965,7 @@ void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
       nrLookups++;
       Bindings::iterator j;
       Symbol name = getName(i, state, env);
-      if (def) {
+      if (def != nullptr) {
         state.forceValue(*vAttrs, pos);
         if (vAttrs->type != tAttrs ||
             (j = vAttrs->attrs->find(name)) == vAttrs->attrs->end()) {
@@ -981,7 +980,7 @@ void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
       }
       vAttrs = j->value;
       pos2 = j->pos;
-      if (state.countCalls && pos2) {
+      if (state.countCalls && (pos2 != nullptr)) {
         state.attrSelects[*pos2]++;
       }
     }
@@ -989,7 +988,7 @@ void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
     state.forceValue(*vAttrs, (pos2 != nullptr ? *pos2 : this->pos));
 
   } catch (Error& e) {
-    if (pos2 && pos2->file != state.sDerivationNix) {
+    if ((pos2 != nullptr) && pos2->file != state.sDerivationNix) {
       addErrorPrefix(e, "while evaluating the attribute '%1%' at %2%:\n",
                      showAttrPath(state, env, attrPath), *pos2);
     }
@@ -1013,9 +1012,8 @@ void ExprOpHasAttr::eval(EvalState& state, Env& env, Value& v) {
         (j = vAttrs->attrs->find(name)) == vAttrs->attrs->end()) {
       mkBool(v, false);
       return;
-    } else {
-      vAttrs = j->value;
     }
+    vAttrs = j->value;
   }
 
   mkBool(v, true);
@@ -1133,7 +1131,7 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
     for (auto& i : lambda.formals->formals) {
       Bindings::iterator j = arg.attrs->find(i.name);
       if (j == arg.attrs->end()) {
-        if (!i.def) {
+        if (i.def == nullptr) {
           throwTypeError("%1% called without required argument '%2%', at %3%",
                          lambda, i.name, pos);
         }
@@ -1209,7 +1207,7 @@ void EvalState::autoCallFunction(Bindings& args, Value& fun, Value& res) {
     Bindings::iterator j = args.find(i.name);
     if (j != args.end()) {
       actualArgs->attrs->push_back(*j);
-    } else if (!i.def) {
+    } else if (i.def == nullptr) {
       throwTypeError(
           "cannot auto-call a function that has an argument without a default "
           "value ('%1%')",
@@ -1278,17 +1276,18 @@ void ExprOpImpl::eval(EvalState& state, Env& env, Value& v) {
 }
 
 void ExprOpUpdate::eval(EvalState& state, Env& env, Value& v) {
-  Value v1, v2;
+  Value v1;
+  Value v2;
   state.evalAttrs(env, e1, v1);
   state.evalAttrs(env, e2, v2);
 
   state.nrOpUpdates++;
 
-  if (v1.attrs->size() == 0) {
+  if (v1.attrs->empty()) {
     v = v2;
     return;
   }
-  if (v2.attrs->size() == 0) {
+  if (v2.attrs->empty()) {
     v = v1;
     return;
   }
@@ -1341,12 +1340,12 @@ void EvalState::concatLists(Value& v, size_t nrLists, Value** lists,
     forceList(*lists[n], pos);
     auto l = lists[n]->listSize();
     len += l;
-    if (l) {
+    if (l != 0u) {
       nonEmpty = lists[n];
     }
   }
 
-  if (nonEmpty && len == nonEmpty->listSize()) {
+  if ((nonEmpty != nullptr) && len == nonEmpty->listSize()) {
     v = *nonEmpty;
     return;
   }
@@ -1355,7 +1354,7 @@ void EvalState::concatLists(Value& v, size_t nrLists, Value** lists,
   auto out = v.listElems();
   for (size_t n = 0, pos = 0; n < nrLists; ++n) {
     auto l = lists[n]->listSize();
-    if (l) {
+    if (l != 0u) {
       memcpy(out + pos, lists[n]->listElems(), l * sizeof(Value*));
     }
     pos += l;
@@ -1479,7 +1478,8 @@ NixFloat EvalState::forceFloat(Value& v, const Pos& pos) {
   forceValue(v, pos);
   if (v.type == tInt) {
     return v.integer;
-  } else if (v.type != tFloat) {
+  }
+  if (v.type != tFloat) {
     throwTypeError("value is %1% while a float was expected, at %2%", v, pos);
   }
   return v.fpoint;
@@ -1520,8 +1520,8 @@ string EvalState::forceString(Value& v, const Pos& pos) {
 }
 
 void copyContext(const Value& v, PathSet& context) {
-  if (v.string.context) {
-    for (const char** p = v.string.context; *p; ++p) {
+  if (v.string.context != nullptr) {
+    for (const char** p = v.string.context; *p != nullptr; ++p) {
       context.insert(*p);
     }
   }
@@ -1535,7 +1535,7 @@ string EvalState::forceString(Value& v, PathSet& context, const Pos& pos) {
 
 string EvalState::forceStringNoCtx(Value& v, const Pos& pos) {
   string s = forceString(v, pos);
-  if (v.string.context) {
+  if (v.string.context != nullptr) {
     if (pos) {
       throwEvalError(
           "the string '%1%' is not allowed to refer to a store path (such as "
@@ -1657,7 +1657,7 @@ string EvalState::copyPathToStore(PathSet& context, const Path& path) {
   }
 
   Path dstPath;
-  if (srcToStore[path] != "") {
+  if (!srcToStore[path].empty()) {
     dstPath = srcToStore[path];
   } else {
     dstPath =
@@ -1678,7 +1678,7 @@ string EvalState::copyPathToStore(PathSet& context, const Path& path) {
 
 Path EvalState::coerceToPath(const Pos& pos, Value& v, PathSet& context) {
   string path = coerceToString(pos, v, context, false, false);
-  if (path == "" || path[0] != '/') {
+  if (path.empty() || path[0] != '/') {
     throwEvalError("string '%1%' doesn't represent an absolute path, at %2%",
                    path, pos);
   }
@@ -1754,7 +1754,8 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
       }
 
       /* Otherwise, compare the attributes one by one. */
-      Bindings::iterator i, j;
+      Bindings::iterator i;
+      Bindings::iterator j;
       for (i = v1.attrs->begin(), j = v2.attrs->begin(); i != v1.attrs->end();
            ++i, ++j) {
         if (i->name != j->name || !eqValues(*i->value, *j->value)) {
@@ -1796,7 +1797,8 @@ void EvalState::printStats() {
       nrAttrsets * sizeof(Bindings) + nrAttrsInAttrsets * sizeof(Attr);
 
 #if HAVE_BOEHMGC
-  GC_word heapSize, totalBytes;
+  GC_word heapSize;
+  GC_word totalBytes;
   GC_get_heap_usage_safe(&heapSize, nullptr, nullptr, nullptr, &totalBytes);
 #endif
   if (showStats) {
@@ -1927,8 +1929,8 @@ size_t valueSize(Value& v) {
     switch (v.type) {
       case tString:
         sz += doString(v.string.s);
-        if (v.string.context) {
-          for (const char** p = v.string.context; *p; ++p) {
+        if (v.string.context != nullptr) {
+          for (const char** p = v.string.context; *p != nullptr; ++p) {
             sz += doString(*p);
           }
         }
@@ -1993,13 +1995,13 @@ size_t valueSize(Value& v) {
 
     if (env.type != Env::HasWithExpr) {
       for (size_t i = 0; i < env.size; ++i) {
-        if (env.values[i]) {
+        if (env.values[i] != nullptr) {
           sz += doValue(*env.values[i]);
         }
       }
     }
 
-    if (env.up) {
+    if (env.up != nullptr) {
       sz += doEnv(*env.up);
     }
 

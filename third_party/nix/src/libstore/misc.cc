@@ -30,7 +30,7 @@ void Store::computeFSClosure(const PathSet& startPaths, PathSet& paths_,
       if (state->exc) {
         return;
       }
-      if (state->paths.count(path)) {
+      if (state->paths.count(path) != 0u) {
         return;
       }
       state->paths.insert(path);
@@ -90,7 +90,7 @@ void Store::computeFSClosure(const PathSet& startPaths, PathSet& paths_,
             {
               auto state(state_.lock());
               assert(state->pending);
-              if (!--state->pending) {
+              if (--state->pending == 0u) {
                 done.notify_one();
               }
             }
@@ -101,7 +101,7 @@ void Store::computeFSClosure(const PathSet& startPaths, PathSet& paths_,
               state->exc = std::current_exception();
             }
             assert(state->pending);
-            if (!--state->pending) {
+            if (--state->pending == 0u) {
               done.notify_one();
             }
           };
@@ -114,7 +114,7 @@ void Store::computeFSClosure(const PathSet& startPaths, PathSet& paths_,
 
   {
     auto state(state_.lock());
-    while (state->pending) {
+    while (state->pending != 0u) {
       state.wait(done);
     }
     if (state->exc) {
@@ -192,7 +192,7 @@ void Store::queryMissing(const PathSet& targets, PathSet& willBuild_,
         assert(drvState->left);
         drvState->left--;
         drvState->outPaths.insert(outPath);
-        if (!drvState->left) {
+        if (drvState->left == 0u) {
           for (auto& path : drvState->outPaths) {
             pool.enqueue(std::bind(doPath, path));
           }
@@ -204,7 +204,7 @@ void Store::queryMissing(const PathSet& targets, PathSet& willBuild_,
   doPath = [&](const Path& path) {
     {
       auto state(state_.lock());
-      if (state->done.count(path)) {
+      if (state->done.count(path) != 0u) {
         return;
       }
       state->done.insert(path);
@@ -282,7 +282,8 @@ void Store::queryMissing(const PathSet& targets, PathSet& willBuild_,
 
 Paths Store::topoSortPaths(const PathSet& paths) {
   Paths sorted;
-  PathSet visited, parents;
+  PathSet visited;
+  PathSet parents;
 
   std::function<void(const Path& path, const Path* parent)> dfsVisit;
 

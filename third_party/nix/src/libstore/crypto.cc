@@ -23,7 +23,7 @@ Key::Key(const string& s) {
   name = ss.first;
   key = ss.second;
 
-  if (name == "" || key == "") {
+  if (name.empty() || key.empty()) {
     throw Error("secret key is corrupt");
   }
 

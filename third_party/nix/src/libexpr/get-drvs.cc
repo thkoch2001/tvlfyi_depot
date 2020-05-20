@@ -45,7 +45,7 @@ DrvInfo::DrvInfo(EvalState& state, ref<Store> store,
 }
 
 string DrvInfo::queryName() const {
-  if (name == "" && attrs) {
+  if (name.empty() && (attrs != nullptr)) {
     auto i = attrs->find(state->sName);
     if (i == attrs->end()) {
       throw TypeError("derivation name missing");
@@ -56,7 +56,7 @@ string DrvInfo::queryName() const {
 }
 
 string DrvInfo::querySystem() const {
-  if (system == "" && attrs) {
+  if (system.empty() && (attrs != nullptr)) {
     auto i = attrs->find(state->sSystem);
     system = i == attrs->end() ? "unknown"
                                : state->forceStringNoCtx(*i->value, *i->pos);
@@ -65,7 +65,7 @@ string DrvInfo::querySystem() const {
 }
 
 string DrvInfo::queryDrvPath() const {
-  if (drvPath == "" && attrs) {
+  if (drvPath.empty() && (attrs != nullptr)) {
     Bindings::iterator i = attrs->find(state->sDrvPath);
     PathSet context;
     drvPath = i != attrs->end()
@@ -76,7 +76,7 @@ string DrvInfo::queryDrvPath() const {
 }
 
 string DrvInfo::queryOutPath() const {
-  if (outPath == "" && attrs) {
+  if (outPath.empty() && (attrs != nullptr)) {
     Bindings::iterator i = attrs->find(state->sOutPath);
     PathSet context;
     outPath = i != attrs->end()
@@ -90,7 +90,8 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
   if (outputs.empty()) {
     /* Get the ‘outputs’ list. */
     Bindings::iterator i;
-    if (attrs && (i = attrs->find(state->sOutputs)) != attrs->end()) {
+    if ((attrs != nullptr) &&
+        (i = attrs->find(state->sOutputs)) != attrs->end()) {
       state->forceList(*i->value, *i->pos);
 
       /* For each output... */
@@ -117,13 +118,13 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
       outputs["out"] = queryOutPath();
     }
   }
-  if (!onlyOutputsToInstall || !attrs) {
+  if (!onlyOutputsToInstall || (attrs == nullptr)) {
     return outputs;
   }
 
   /* Check for `meta.outputsToInstall` and return `outputs` reduced to that. */
   const Value* outTI = queryMeta("outputsToInstall");
-  if (!outTI) {
+  if (outTI == nullptr) {
     return outputs;
   }
   const auto errMsg = Error("this derivation has bad 'meta.outputsToInstall'");
@@ -147,7 +148,7 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
 }
 
 string DrvInfo::queryOutputName() const {
-  if (outputName == "" && attrs) {
+  if (outputName.empty() && (attrs != nullptr)) {
     Bindings::iterator i = attrs->find(state->sOutputName);
     outputName = i != attrs->end() ? state->forceStringNoCtx(*i->value) : "";
   }
@@ -155,10 +156,10 @@ string DrvInfo::queryOutputName() const {
 }
 
 Bindings* DrvInfo::getMeta() {
-  if (meta) {
+  if (meta != nullptr) {
     return meta;
   }
-  if (!attrs) {
+  if (attrs == nullptr) {
     return nullptr;
   }
   Bindings::iterator a = attrs->find(state->sMeta);
@@ -172,7 +173,7 @@ Bindings* DrvInfo::getMeta() {
 
 StringSet DrvInfo::queryMetaNames() {
   StringSet res;
-  if (!getMeta()) {
+  if (getMeta() == nullptr) {
     return res;
   }
   for (auto& i : *meta) {
@@ -190,7 +191,8 @@ bool DrvInfo::checkMeta(Value& v) {
       }
     }
     return true;
-  } else if (v.type == tAttrs) {
+  }
+  if (v.type == tAttrs) {
     Bindings::iterator i = v.attrs->find(state->sOutPath);
     if (i != v.attrs->end()) {
       return false;
@@ -208,7 +210,7 @@ bool DrvInfo::checkMeta(Value& v) {
 }
 
 Value* DrvInfo::queryMeta(const string& name) {
-  if (!getMeta()) {
+  if (getMeta() == nullptr) {
     return nullptr;
   }
   Bindings::iterator a = meta->find(state->symbols.create(name));
@@ -220,7 +222,7 @@ Value* DrvInfo::queryMeta(const string& name) {
 
 string DrvInfo::queryMetaString(const string& name) {
   Value* v = queryMeta(name);
-  if (!v || v->type != tString) {
+  if ((v == nullptr) || v->type != tString) {
     return "";
   }
   return v->string.s;
@@ -228,7 +230,7 @@ string DrvInfo::queryMetaString(const string& name) {
 
 NixInt DrvInfo::queryMetaInt(const string& name, NixInt def) {
   Value* v = queryMeta(name);
-  if (!v) {
+  if (v == nullptr) {
     return def;
   }
   if (v->type == tInt) {
@@ -247,7 +249,7 @@ NixInt DrvInfo::queryMetaInt(const string& name, NixInt def) {
 
 NixFloat DrvInfo::queryMetaFloat(const string& name, NixFloat def) {
   Value* v = queryMeta(name);
-  if (!v) {
+  if (v == nullptr) {
     return def;
   }
   if (v->type == tFloat) {
@@ -266,7 +268,7 @@ NixFloat DrvInfo::queryMetaFloat(const string& name, NixFloat def) {
 
 bool DrvInfo::queryMetaBool(const string& name, bool def) {
   Value* v = queryMeta(name);
-  if (!v) {
+  if (v == nullptr) {
     return def;
   }
   if (v->type == tBool) {
@@ -288,16 +290,16 @@ bool DrvInfo::queryMetaBool(const string& name, bool def) {
 void DrvInfo::setMeta(const string& name, Value* v) {
   getMeta();
   Bindings* old = meta;
-  meta = state->allocBindings(1 + (old ? old->size() : 0));
+  meta = state->allocBindings(1 + (old != nullptr ? old->size() : 0));
   Symbol sym = state->symbols.create(name);
-  if (old) {
+  if (old != nullptr) {
     for (auto i : *old) {
       if (i.name != sym) {
         meta->push_back(i);
       }
     }
   }
-  if (v) {
+  if (v != nullptr) {
     meta->push_back(Attr(sym, v));
   }
   meta->sort();

@@ -533,12 +533,12 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
      `storePath' is returned; that is, the closures under the
      `referrers' relation instead of the `references' relation is
      returned. */
-  virtual void computeFSClosure(const PathSet& paths, PathSet& out,
+  virtual void computeFSClosure(const PathSet& paths, PathSet& paths_,
                                 bool flipDirection = false,
                                 bool includeOutputs = false,
                                 bool includeDerivers = false);
 
-  void computeFSClosure(const Path& path, PathSet& out,
+  void computeFSClosure(const Path& path, PathSet& paths_,
                         bool flipDirection = false, bool includeOutputs = false,
                         bool includeDerivers = false);
 

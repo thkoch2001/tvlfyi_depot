@@ -73,7 +73,7 @@ void ExprVar::show(std::ostream& str) const { str << name; }
 
 void ExprSelect::show(std::ostream& str) const {
   str << "(" << *e << ")." << showAttrPath(attrPath);
-  if (def) {
+  if (def != nullptr) {
     str << " or (" << *def << ")";
   }
 }
@@ -121,7 +121,7 @@ void ExprLambda::show(std::ostream& str) const {
         str << ", ";
       }
       str << i.name;
-      if (i.def) {
+      if (i.def != nullptr) {
         str << " ? " << *i.def;
       }
     }
@@ -233,7 +233,8 @@ void ExprVar::bindVars(const StaticEnv& env) {
   const StaticEnv* curEnv;
   unsigned int level;
   int withLevel = -1;
-  for (curEnv = &env, level = 0; curEnv; curEnv = curEnv->up, level++) {
+  for (curEnv = &env, level = 0; curEnv != nullptr;
+       curEnv = curEnv->up, level++) {
     if (curEnv->isWith) {
       if (withLevel == -1) {
         withLevel = level;
@@ -263,7 +264,7 @@ void ExprVar::bindVars(const StaticEnv& env) {
 
 void ExprSelect::bindVars(const StaticEnv& env) {
   e->bindVars(env);
-  if (def) {
+  if (def != nullptr) {
     def->bindVars(env);
   }
   for (auto& i : attrPath) {
@@ -332,7 +333,7 @@ void ExprLambda::bindVars(const StaticEnv& env) {
     }
 
     for (auto& i : formals->formals) {
-      if (i.def) {
+      if (i.def != nullptr) {
         i.def->bindVars(newEnv);
       }
     }
@@ -363,7 +364,8 @@ void ExprWith::bindVars(const StaticEnv& env) {
   const StaticEnv* curEnv;
   unsigned int level;
   prevWith = 0;
-  for (curEnv = &env, level = 1; curEnv; curEnv = curEnv->up, level++) {
+  for (curEnv = &env, level = 1; curEnv != nullptr;
+       curEnv = curEnv->up, level++) {
     if (curEnv->isWith) {
       prevWith = level;
       break;

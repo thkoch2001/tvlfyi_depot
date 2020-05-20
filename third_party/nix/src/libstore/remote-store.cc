@@ -81,9 +81,8 @@ UDSRemoteStore::UDSRemoteStore(std::string socket_path, const Params& params)
 std::string UDSRemoteStore::getUri() {
   if (path) {
     return std::string("unix://") + *path;
-  } else {
-    return "daemon";
   }
+  return "daemon";
 }
 
 ref<RemoteStore::Connection> UDSRemoteStore::openConnection() {
@@ -155,7 +154,7 @@ void RemoteStore::initConnection(Connection& conn) {
     }
 
     if (GET_PROTOCOL_MINOR(conn.daemonVersion) >= 11) {
-      conn.to << false;
+      conn.to << 0u;
     }
 
     auto ex = conn.processStderr();
@@ -171,17 +170,18 @@ void RemoteStore::initConnection(Connection& conn) {
 }
 
 void RemoteStore::setOptions(Connection& conn) {
-  conn.to << wopSetOptions << settings.keepFailed
-          << settings.keepGoing
+  conn.to << wopSetOptions << static_cast<uint64_t>(settings.keepFailed)
+          << static_cast<uint64_t>(settings.keepGoing)
           // TODO(tazjin): Remove the verbosity stuff here.
-          << settings.tryFallback << compat::kInfo << settings.maxBuildJobs
-          << settings.maxSilentTime
-          << true
+          << static_cast<uint64_t>(settings.tryFallback) << compat::kInfo
+          << settings.maxBuildJobs << settings.maxSilentTime
+          << 1u
           // TODO(tazjin): what behaviour does this toggle remotely?
           << (settings.verboseBuild ? compat::kError : compat::kVomit)
           << 0  // obsolete log type
           << 0  /* obsolete print build trace */
-          << settings.buildCores << settings.useSubstitutes;
+          << settings.buildCores
+          << static_cast<uint64_t>(settings.useSubstitutes);
 
   if (GET_PROTOCOL_MINOR(conn.daemonVersion) >= 12) {
     std::map<std::string, Config::SettingInfo> overrides;
@@ -221,7 +221,7 @@ struct ConnectionHandle {
   ConnectionHandle(ConnectionHandle&& h) : handle(std::move(h.handle)) {}
 
   ~ConnectionHandle() {
-    if (!daemonException && std::uncaught_exceptions()) {
+    if (!daemonException && (std::uncaught_exceptions() != 0)) {
       handle.markBad();
       // TODO(tazjin): are these types of things supposed to be DEBUG?
       DLOG(INFO) << "closing daemon connection because of an exception";
@@ -247,7 +247,7 @@ bool RemoteStore::isValidPathUncached(const Path& path) {
   auto conn(getConnection());
   conn->to << wopIsValidPath << path;
   conn.processStderr();
-  return readInt(conn->from);
+  return readInt(conn->from) != 0u;
 }
 
 PathSet RemoteStore::queryValidPaths(const PathSet& paths,
@@ -261,11 +261,10 @@ PathSet RemoteStore::queryValidPaths(const PathSet& paths,
       }
     }
     return res;
-  } else {
-    conn->to << wopQueryValidPaths << paths;
-    conn.processStderr();
-    return readStorePaths<PathSet>(*this, conn->from);
   }
+  conn->to << wopQueryValidPaths << paths;
+  conn.processStderr();
+  return readStorePaths<PathSet>(*this, conn->from);
 }
 
 PathSet RemoteStore::queryAllValidPaths() {
@@ -282,16 +281,15 @@ PathSet RemoteStore::querySubstitutablePaths(const PathSet& paths) {
     for (auto& i : paths) {
       conn->to << wopHasSubstitutes << i;
       conn.processStderr();
-      if (readInt(conn->from)) {
+      if (readInt(conn->from) != 0u) {
         res.insert(i);
       }
     }
     return res;
-  } else {
-    conn->to << wopQuerySubstitutablePaths << paths;
-    conn.processStderr();
-    return readStorePaths<PathSet>(*this, conn->from);
   }
+  conn->to << wopQuerySubstitutablePaths << paths;
+  conn.processStderr();
+  return readStorePaths<PathSet>(*this, conn->from);
 }
 
 void RemoteStore::querySubstitutablePathInfos(const PathSet& paths,
@@ -312,7 +310,7 @@ void RemoteStore::querySubstitutablePathInfos(const PathSet& paths,
         continue;
       }
       info.deriver = readString(conn->from);
-      if (info.deriver != "") {
+      if (!info.deriver.empty()) {
         assertStorePath(info.deriver);
       }
       info.references = readStorePaths<PathSet>(*this, conn->from);
@@ -329,7 +327,7 @@ void RemoteStore::querySubstitutablePathInfos(const PathSet& paths,
       Path path = readStorePath(*this, conn->from);
       SubstitutablePathInfo& info(infos[path]);
       info.deriver = readString(conn->from);
-      if (info.deriver != "") {
+      if (!info.deriver.empty()) {
         assertStorePath(info.deriver);
       }
       info.references = readStorePaths<PathSet>(*this, conn->from);
@@ -366,7 +364,7 @@ void RemoteStore::queryPathInfoUncached(
       info = std::make_shared<ValidPathInfo>();
       info->path = path;
       info->deriver = readString(conn->from);
-      if (info->deriver != "") {
+      if (!info->deriver.empty()) {
         assertStorePath(info->deriver);
       }
       info->narHash = Hash(readString(conn->from), htSHA256);
@@ -464,7 +462,7 @@ void RemoteStore::addToStore(const ValidPathInfo& info, Source& source,
 Path RemoteStore::addToStore(const string& name, const Path& _srcPath,
                              bool recursive, HashType hashAlgo,
                              PathFilter& filter, RepairFlag repair) {
-  if (repair) {
+  if (repair != 0u) {
     throw Error(
         "repairing is not supported when building through the Nix daemon");
   }
@@ -506,7 +504,7 @@ Path RemoteStore::addToStore(const string& name, const Path& _srcPath,
 
 Path RemoteStore::addTextToStore(const string& name, const string& s,
                                  const PathSet& references, RepairFlag repair) {
-  if (repair) {
+  if (repair != 0u) {
     throw Error(
         "repairing is not supported when building through the Nix daemon");
   }
@@ -593,7 +591,7 @@ Roots RemoteStore::findRoots(bool censor) {
   conn.processStderr();
   auto count = readNum<size_t>(conn->from);
   Roots result;
-  while (count--) {
+  while ((count--) != 0u) {
     Path link = readString(conn->from);
     Path target = readStorePath(*this, conn->from);
     result[target].emplace(link);
@@ -605,7 +603,7 @@ void RemoteStore::collectGarbage(const GCOptions& options, GCResults& results) {
   auto conn(getConnection());
 
   conn->to << wopCollectGarbage << options.action << options.pathsToDelete
-           << options.ignoreLiveness
+           << static_cast<uint64_t>(options.ignoreLiveness)
            << options.maxFreed
            /* removed options */
            << 0 << 0 << 0;
@@ -631,9 +629,9 @@ void RemoteStore::optimiseStore() {
 
 bool RemoteStore::verifyStore(bool checkContents, RepairFlag repair) {
   auto conn(getConnection());
-  conn->to << wopVerifyStore << checkContents << repair;
+  conn->to << wopVerifyStore << static_cast<uint64_t>(checkContents) << repair;
   conn.processStderr();
-  return readInt(conn->from);
+  return readInt(conn->from) != 0u;
 }
 
 void RemoteStore::addSignatures(const Path& storePath, const StringSet& sigs) {
@@ -694,14 +692,14 @@ std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
 
     if (msg == STDERR_WRITE) {
       string s = readString(from);
-      if (!sink) {
+      if (sink == nullptr) {
         throw Error("no sink");
       }
       (*sink)(s);
     }
 
     else if (msg == STDERR_READ) {
-      if (!source) {
+      if (source == nullptr) {
         throw Error("no source");
       }
       auto len = readNum<size_t>(from);

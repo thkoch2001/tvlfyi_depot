@@ -18,7 +18,7 @@ static std::string hilite(const std::string& s, size_t pos, size_t len,
 static std::string filterPrintable(const std::string& s) {
   std::string res;
   for (char c : s) {
-    res += isprint(c) ? c : '.';
+    res += isprint(c) != 0 ? c : '.';
   }
   return res;
 }
@@ -70,7 +70,7 @@ struct CmdWhyDepends : SourceExprCommand {
     PathSet closure;
     store->computeFSClosure({packagePath}, closure, false, false);
 
-    if (!closure.count(dependencyPath)) {
+    if (closure.count(dependencyPath) == 0u) {
       LOG(WARNING) << "'" << package->what() << "' does not depend on '"
                    << dependency->what() << "'";
       return;
@@ -146,7 +146,7 @@ struct CmdWhyDepends : SourceExprCommand {
       assert(node.dist != inf);
       std::cout << fmt("%s%s%s%s" ANSI_NORMAL "\n", firstPad,
                        node.visited ? "\e[38;5;244m" : "",
-                       firstPad != "" ? "=> " : "", node.path);
+                       !firstPad.empty() ? "=> " : "", node.path);
 
       if (node.path == dependencyPath && !all &&
           packagePath != dependencyPath) {

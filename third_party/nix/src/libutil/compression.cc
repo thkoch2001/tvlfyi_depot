@@ -21,7 +21,7 @@ struct ChunkedCompressionSink : CompressionSink {
 
   void write(const unsigned char* data, size_t len) override {
     const size_t CHUNK_SIZE = sizeof(outbuf) << 2;
-    while (len) {
+    while (len != 0u) {
       size_t n = std::min(CHUNK_SIZE, len);
       writeInternal(data, n);
       data += n;
@@ -68,10 +68,10 @@ struct XzDecompressionSink : CompressionSink {
     strm.next_in = data;
     strm.avail_in = len;
 
-    while (!finished && (!data || strm.avail_in)) {
+    while (!finished && ((data == nullptr) || (strm.avail_in != 0u))) {
       checkInterrupt();
 
-      lzma_ret ret = lzma_code(&strm, data ? LZMA_RUN : LZMA_FINISH);
+      lzma_ret ret = lzma_code(&strm, data != nullptr ? LZMA_RUN : LZMA_FINISH);
       if (ret != LZMA_OK && ret != LZMA_STREAM_END) {
         throw CompressionError("error %d while decompressing xz file", ret);
       }
@@ -116,7 +116,7 @@ struct BzipDecompressionSink : ChunkedCompressionSink {
     strm.next_in = (char*)data;
     strm.avail_in = len;
 
-    while (strm.avail_in) {
+    while (strm.avail_in != 0u) {
       checkInterrupt();
 
       int ret = BZ2_bzDecompress(&strm);
@@ -142,7 +142,7 @@ struct BrotliDecompressionSink : ChunkedCompressionSink {
 
   explicit BrotliDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
     state = BrotliDecoderCreateInstance(nullptr, nullptr, nullptr);
-    if (!state) {
+    if (state == nullptr) {
       throw CompressionError("unable to initialize brotli decoder");
     }
   }
@@ -160,11 +160,11 @@ struct BrotliDecompressionSink : ChunkedCompressionSink {
     uint8_t* next_out = outbuf;
     size_t avail_out = sizeof(outbuf);
 
-    while (!finished && (!data || avail_in)) {
+    while (!finished && ((data == nullptr) || (avail_in != 0u))) {
       checkInterrupt();
 
-      if (!BrotliDecoderDecompressStream(state, &avail_in, &next_in, &avail_out,
-                                         &next_out, nullptr)) {
+      if (BrotliDecoderDecompressStream(state, &avail_in, &next_in, &avail_out,
+                                        &next_out, nullptr) == 0u) {
         throw CompressionError("error while decompressing brotli file");
       }
 
@@ -174,7 +174,7 @@ struct BrotliDecompressionSink : ChunkedCompressionSink {
         avail_out = sizeof(outbuf);
       }
 
-      finished = BrotliDecoderIsFinished(state);
+      finished = (BrotliDecoderIsFinished(state) != 0);
     }
   }
 };
@@ -189,9 +189,10 @@ ref<std::string> decompress(const std::string& method, const std::string& in) {
 
 ref<CompressionSink> makeDecompressionSink(const std::string& method,
                                            Sink& nextSink) {
-  if (method == "none" || method == "") {
+  if (method == "none" || method.empty()) {
     return make_ref<NoneSink>(nextSink);
-  } else if (method == "xz") {
+  }
+  if (method == "xz") {
     return make_ref<XzDecompressionSink>(nextSink);
   } else if (method == "bzip2") {
     return make_ref<BzipDecompressionSink>(nextSink);
@@ -260,10 +261,10 @@ struct XzCompressionSink : CompressionSink {
     strm.next_in = data;
     strm.avail_in = len;
 
-    while (!finished && (!data || strm.avail_in)) {
+    while (!finished && ((data == nullptr) || (strm.avail_in != 0u))) {
       checkInterrupt();
 
-      lzma_ret ret = lzma_code(&strm, data ? LZMA_RUN : LZMA_FINISH);
+      lzma_ret ret = lzma_code(&strm, data != nullptr ? LZMA_RUN : LZMA_FINISH);
       if (ret != LZMA_OK && ret != LZMA_STREAM_END) {
         throw CompressionError("error %d while compressing xz file", ret);
       }
@@ -308,10 +309,10 @@ struct BzipCompressionSink : ChunkedCompressionSink {
     strm.next_in = (char*)data;
     strm.avail_in = len;
 
-    while (!finished && (!data || strm.avail_in)) {
+    while (!finished && ((data == nullptr) || (strm.avail_in != 0u))) {
       checkInterrupt();
 
-      int ret = BZ2_bzCompress(&strm, data ? BZ_RUN : BZ_FINISH);
+      int ret = BZ2_bzCompress(&strm, data != nullptr ? BZ_RUN : BZ_FINISH);
       if (ret != BZ_RUN_OK && ret != BZ_FINISH_OK && ret != BZ_STREAM_END) {
         throw CompressionError("error %d while compressing bzip2 file", ret);
       }
@@ -335,7 +336,7 @@ struct BrotliCompressionSink : ChunkedCompressionSink {
 
   explicit BrotliCompressionSink(Sink& nextSink) : nextSink(nextSink) {
     state = BrotliEncoderCreateInstance(nullptr, nullptr, nullptr);
-    if (!state) {
+    if (state == nullptr) {
       throw CompressionError("unable to initialise brotli encoder");
     }
   }
@@ -353,12 +354,14 @@ struct BrotliCompressionSink : ChunkedCompressionSink {
     uint8_t* next_out = outbuf;
     size_t avail_out = sizeof(outbuf);
 
-    while (!finished && (!data || avail_in)) {
+    while (!finished && ((data == nullptr) || (avail_in != 0u))) {
       checkInterrupt();
 
-      if (!BrotliEncoderCompressStream(
-              state, data ? BROTLI_OPERATION_PROCESS : BROTLI_OPERATION_FINISH,
-              &avail_in, &next_in, &avail_out, &next_out, nullptr)) {
+      if (BrotliEncoderCompressStream(state,
+                                      data != nullptr ? BROTLI_OPERATION_PROCESS
+                                                      : BROTLI_OPERATION_FINISH,
+                                      &avail_in, &next_in, &avail_out,
+                                      &next_out, nullptr) == 0) {
         throw CompressionError("error while compressing brotli compression");
       }
 
@@ -368,7 +371,7 @@ struct BrotliCompressionSink : ChunkedCompressionSink {
         avail_out = sizeof(outbuf);
       }
 
-      finished = BrotliEncoderIsFinished(state);
+      finished = (BrotliEncoderIsFinished(state) != 0);
     }
   }
 };
@@ -377,7 +380,8 @@ ref<CompressionSink> makeCompressionSink(const std::string& method,
                                          Sink& nextSink, const bool parallel) {
   if (method == "none") {
     return make_ref<NoneSink>(nextSink);
-  } else if (method == "xz") {
+  }
+  if (method == "xz") {
     return make_ref<XzCompressionSink>(nextSink, parallel);
   } else if (method == "bzip2") {
     return make_ref<BzipCompressionSink>(nextSink);

@@ -35,7 +35,7 @@
 #include <sys/prctl.h>
 #endif
 
-extern char** environ __attribute__((weak));
+__attribute__((weak));
 
 namespace nix {
 
@@ -53,15 +53,15 @@ std::string SysError::addErrno(const std::string& s) {
 
 string getEnv(const string& key, const string& def) {
   char* value = getenv(key.c_str());
-  return value ? string(value) : def;
+  return value != nullptr ? string(value) : def;
 }
 
 std::map<std::string, std::string> getEnv() {
   std::map<std::string, std::string> env;
-  for (size_t i = 0; environ[i]; ++i) {
+  for (size_t i = 0; environ[i] != nullptr; ++i) {
     auto s = environ[i];
     auto eq = strchr(s, '=');
-    if (!eq) {
+    if (eq == nullptr) {
       // invalid env, just keep going
       continue;
     }
@@ -85,7 +85,7 @@ void replaceEnv(std::map<std::string, std::string> newEnv) {
 
 Path absPath(Path path, Path dir) {
   if (path[0] != '/') {
-    if (dir == "") {
+    if (dir.empty()) {
 #ifdef __GNU__
       /* GNU (aka. GNU/Hurd) doesn't have any limitation on path
          lengths and doesn't define `PATH_MAX'.  */
@@ -93,7 +93,7 @@ Path absPath(Path path, Path dir) {
       if (buf == NULL)
 #else
       char buf[PATH_MAX];
-      if (!getcwd(buf, sizeof(buf))) {
+      if (getcwd(buf, sizeof(buf)) == nullptr) {
 #endif
         throw SysError("cannot get cwd");
     }
@@ -108,7 +108,7 @@ return canonPath(path);
 }  // namespace nix
 
 Path canonPath(const Path& path, bool resolveSymlinks) {
-  assert(path != "");
+  assert(!path.empty());
 
   string s;
 
@@ -116,12 +116,14 @@ Path canonPath(const Path& path, bool resolveSymlinks) {
     throw Error(format("not an absolute path: '%1%'") % path);
   }
 
-  string::const_iterator i = path.begin(), end = path.end();
+  string::const_iterator i = path.begin();
+  string::const_iterator end = path.end();
   string temp;
 
   /* Count the number of times we follow a symlink and stop at some
      arbitrary (but high) limit to prevent infinite loops. */
-  unsigned int followCount = 0, maxFollow = 1024;
+  unsigned int followCount = 0;
+  unsigned int maxFollow = 1024;
 
   while (true) {
     /* Skip slashes. */
@@ -210,7 +212,7 @@ bool isDirOrInDir(const Path& path, const Path& dir) {
 
 struct stat lstat(const Path& path) {
   struct stat st;
-  if (lstat(path.c_str(), &st)) {
+  if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting status of '%1%'") % path);
   }
   return st;
@@ -220,7 +222,7 @@ bool pathExists(const Path& path) {
   int res;
   struct stat st;
   res = lstat(path.c_str(), &st);
-  if (!res) {
+  if (res == 0) {
     return true;
   }
   if (errno != ENOENT && errno != ENOTDIR) {
@@ -238,9 +240,9 @@ Path readLink(const Path& path) {
     if (rlSize == -1) {
       if (errno == EINVAL) {
         throw Error("'%1%' is not a symlink", path);
-      } else {
-        throw SysError("reading symbolic link '%1%'", path);
       }
+      throw SysError("reading symbolic link '%1%'", path);
+
     } else if (rlSize < bufSize) {
       return string(buf.data(), rlSize);
     }
@@ -436,9 +438,8 @@ static Path tempName(Path tmpRoot, const Path& prefix, bool includePid,
   if (includePid) {
     return (format("%1%/%2%-%3%-%4%") % tmpRoot % prefix % getpid() % counter++)
         .str();
-  } else {
-    return (format("%1%/%2%-%3%") % tmpRoot % prefix % counter++).str();
   }
+  return (format("%1%/%2%-%3%") % tmpRoot % prefix % counter++).str();
 }
 
 Path createTempDir(const Path& tmpRoot, const Path& prefix, bool includePid,
@@ -473,7 +474,7 @@ Path createTempDir(const Path& tmpRoot, const Path& prefix, bool includePid,
 
 std::string getUserName() {
   auto pw = getpwuid(geteuid());
-  std::string name = pw ? pw->pw_name : getEnv("USER", "");
+  std::string name = pw != nullptr ? pw->pw_name : getEnv("USER", "");
   if (name.empty()) {
     throw Error("cannot figure out user name");
   }
@@ -487,7 +488,7 @@ static Lazy<Path> getHome2([]() {
     struct passwd pwbuf;
     struct passwd* pw;
     if (getpwuid_r(geteuid(), &pwbuf, buf.data(), buf.size(), &pw) != 0 ||
-        !pw || !pw->pw_dir || !pw->pw_dir[0]) {
+        (pw == nullptr) || (pw->pw_dir == nullptr) || (pw->pw_dir[0] == 0)) {
       throw Error("cannot determine user's home directory");
     }
     homeDir = pw->pw_dir;
@@ -557,7 +558,7 @@ Paths createDirs(const Path& path) {
 }
 
 void createSymlink(const Path& target, const Path& link) {
-  if (symlink(target.c_str(), link.c_str())) {
+  if (symlink(target.c_str(), link.c_str()) != 0) {
     throw SysError(format("creating symlink from '%1%' to '%2%'") % link %
                    target);
   }
@@ -585,7 +586,7 @@ void replaceSymlink(const Path& target, const Path& link) {
 }
 
 void readFull(int fd, unsigned char* buf, size_t count) {
-  while (count) {
+  while (count != 0u) {
     checkInterrupt();
     ssize_t res = read(fd, (char*)buf, count);
     if (res == -1) {
@@ -604,7 +605,7 @@ void readFull(int fd, unsigned char* buf, size_t count) {
 
 void writeFull(int fd, const unsigned char* buf, size_t count,
                bool allowInterrupts) {
-  while (count) {
+  while (count != 0u) {
     if (allowInterrupts) {
       checkInterrupt();
     }
@@ -989,11 +990,12 @@ void runProgram2(const RunOptions& options) {
   }
 
   /* Create a pipe. */
-  Pipe out, in;
-  if (options.standardOut) {
+  Pipe out;
+  Pipe in;
+  if (options.standardOut != nullptr) {
     out.create();
   }
-  if (source) {
+  if (source != nullptr) {
     in.create();
   }
 
@@ -1011,7 +1013,7 @@ void runProgram2(const RunOptions& options) {
         if (options.environment) {
           replaceEnv(*options.environment);
         }
-        if (options.standardOut &&
+        if ((options.standardOut != nullptr) &&
             dup2(out.writeSide.get(), STDOUT_FILENO) == -1) {
           throw SysError("dupping stdout");
         }
@@ -1020,7 +1022,8 @@ void runProgram2(const RunOptions& options) {
             throw SysError("cannot dup stdout into stderr");
           }
         }
-        if (source && dup2(in.readSide.get(), STDIN_FILENO) == -1) {
+        if ((source != nullptr) &&
+            dup2(in.readSide.get(), STDIN_FILENO) == -1) {
           throw SysError("dupping stdin");
         }
 
@@ -1065,7 +1068,7 @@ void runProgram2(const RunOptions& options) {
     }
   });
 
-  if (source) {
+  if (source != nullptr) {
     in.readSide = -1;
     writerThread = std::thread([&]() {
       try {
@@ -1087,7 +1090,7 @@ void runProgram2(const RunOptions& options) {
     });
   }
 
-  if (options.standardOut) {
+  if (options.standardOut != nullptr) {
     drainFD(out.readSide.get(), *options.standardOut);
   }
 
@@ -1095,11 +1098,11 @@ void runProgram2(const RunOptions& options) {
   int status = pid.wait();
 
   /* Wait for the writer thread to finish. */
-  if (source) {
+  if (source != nullptr) {
     promise.get_future().get();
   }
 
-  if (status) {
+  if (status != 0) {
     throw ExecError(status, fmt("program '%1%' %2%", options.program,
                                 statusToString(status)));
   }
@@ -1110,7 +1113,7 @@ void closeMostFDs(const set<int>& exceptions) {
   try {
     for (auto& s : readDirectory("/proc/self/fd")) {
       auto fd = std::stoi(s.name);
-      if (!exceptions.count(fd)) {
+      if (exceptions.count(fd) == 0u) {
         DLOG(INFO) << "closing leaked FD " << fd;
         close(fd);
       }
@@ -1123,7 +1126,7 @@ void closeMostFDs(const set<int>& exceptions) {
   int maxFD = 0;
   maxFD = sysconf(_SC_OPEN_MAX);
   for (int fd = 0; fd < maxFD; ++fd) {
-    if (!exceptions.count(fd)) {
+    if (exceptions.count(fd) == 0u) {
       close(fd);
     } /* ignore result */
   }
@@ -1150,7 +1153,7 @@ void _interrupted() {
   /* Block user interrupts while an exception is being handled.
      Throwing an exception while another exception is being handled
      kills the program! */
-  if (!interruptThrown && !std::uncaught_exceptions()) {
+  if (!interruptThrown && (std::uncaught_exceptions() == 0)) {
     interruptThrown = true;
     throw Interrupted("interrupted by the user");
   }
@@ -1182,7 +1185,7 @@ template vector<string> tokenizeString(const string& s,
 string concatStringsSep(const string& sep, const Strings& ss) {
   string s;
   for (auto& i : ss) {
-    if (s.size() != 0) {
+    if (!s.empty()) {
       s += sep;
     }
     s += i;
@@ -1193,7 +1196,7 @@ string concatStringsSep(const string& sep, const Strings& ss) {
 string concatStringsSep(const string& sep, const StringSet& ss) {
   string s;
   for (auto& i : ss) {
-    if (s.size() != 0) {
+    if (!s.empty()) {
       s += sep;
     }
     s += i;
@@ -1233,7 +1236,8 @@ string statusToString(int status) {
   if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
     if (WIFEXITED(status)) {
       return (format("failed with exit code %1%") % WEXITSTATUS(status)).str();
-    } else if (WIFSIGNALED(status)) {
+    }
+    if (WIFSIGNALED(status)) {
       int sig = WTERMSIG(status);
 #if HAVE_STRSIGNAL
       const char* description = strsignal(sig);
@@ -1294,7 +1298,8 @@ void ignoreException() {
 
 std::string filterANSIEscapes(const std::string& s, bool filterAll,
                               unsigned int width) {
-  std::string t, e;
+  std::string t;
+  std::string e;
   size_t w = 0;
   auto i = s.begin();
 
@@ -1333,7 +1338,7 @@ std::string filterANSIEscapes(const std::string& s, bool filterAll,
       i++;
       t += ' ';
       w++;
-      while (w < (size_t)width && w % 8) {
+      while (w < (size_t)width && ((w % 8) != 0u)) {
         t += ' ';
         w++;
       }
@@ -1357,7 +1362,8 @@ static char base64Chars[] =
 
 string base64Encode(const string& s) {
   string res;
-  int data = 0, nbits = 0;
+  int data = 0;
+  int nbits = 0;
 
   for (char c : s) {
     data = data << 8 | (unsigned char)c;
@@ -1368,10 +1374,10 @@ string base64Encode(const string& s) {
     }
   }
 
-  if (nbits) {
+  if (nbits != 0) {
     res.push_back(base64Chars[data << (6 - nbits) & 0x3f]);
   }
-  while (res.size() % 4) {
+  while ((res.size() % 4) != 0u) {
     res.push_back('=');
   }
 
@@ -1391,7 +1397,8 @@ string base64Decode(const string& s) {
   }
 
   string res;
-  unsigned int d = 0, bits = 0;
+  unsigned int d = 0;
+  unsigned int bits = 0;
 
   for (char c : s) {
     if (c == '=') {
@@ -1478,7 +1485,7 @@ static sigset_t savedSignalMask;
 void startSignalHandlerThread() {
   updateWindowSize();
 
-  if (sigprocmask(SIG_BLOCK, nullptr, &savedSignalMask)) {
+  if (sigprocmask(SIG_BLOCK, nullptr, &savedSignalMask) != 0) {
     throw SysError("quering signal mask");
   }
 
@@ -1489,7 +1496,7 @@ void startSignalHandlerThread() {
   sigaddset(&set, SIGHUP);
   sigaddset(&set, SIGPIPE);
   sigaddset(&set, SIGWINCH);
-  if (pthread_sigmask(SIG_BLOCK, &set, nullptr)) {
+  if (pthread_sigmask(SIG_BLOCK, &set, nullptr) != 0) {
     throw SysError("blocking signals");
   }
 
@@ -1497,7 +1504,7 @@ void startSignalHandlerThread() {
 }
 
 void restoreSignals() {
-  if (sigprocmask(SIG_SETMASK, &savedSignalMask, nullptr)) {
+  if (sigprocmask(SIG_SETMASK, &savedSignalMask, nullptr) != 0) {
     throw SysError("restoring signals");
   }
 }

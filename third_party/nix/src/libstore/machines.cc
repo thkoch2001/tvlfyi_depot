@@ -35,8 +35,8 @@ Machine::Machine(decltype(storeUri) storeUri, decltype(systemTypes) systemTypes,
 bool Machine::allSupported(const std::set<string>& features) const {
   return std::all_of(features.begin(), features.end(),
                      [&](const string& feature) {
-                       return supportedFeatures.count(feature) ||
-                              mandatoryFeatures.count(feature);
+                       return (supportedFeatures.count(feature) != 0u) ||
+                              (mandatoryFeatures.count(feature) != 0u);
                      });
 }
 
@@ -74,7 +74,7 @@ void parseMachines(const std::string& s, Machines& machines) {
     }
 
     auto isSet = [&](size_t n) {
-      return tokens.size() > n && tokens[n] != "" && tokens[n] != "-";
+      return tokens.size() > n && !tokens[n].empty() && tokens[n] != "-";
     };
 
     machines.emplace_back(

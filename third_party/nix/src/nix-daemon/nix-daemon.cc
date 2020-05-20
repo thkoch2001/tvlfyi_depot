@@ -209,7 +209,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       store->assertStorePath(path);
       bool result = store->isValidPath(path);
       logger->stopWork();
-      to << result;
+      to << static_cast<uint64_t>(result);
       break;
     }
 
@@ -227,7 +227,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       logger->startWork();
       PathSet res = store->querySubstitutablePaths({path});
       logger->stopWork();
-      to << (res.find(path) != res.end());
+      to << static_cast<uint64_t>(res.find(path) != res.end());
       break;
     }
 
@@ -299,8 +299,10 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
     }
 
     case wopAddToStore: {
-      bool fixed, recursive;
-      std::string s, baseName;
+      bool fixed;
+      bool recursive;
+      std::string s;
+      std::string baseName;
       from >> baseName >> fixed /* obsolete */ >> recursive >> s;
       /* Compatibility hack. */
       if (!fixed) {
@@ -490,9 +492,9 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
     }
 
     case wopSetOptions: {
-      settings.keepFailed = readInt(from);
-      settings.keepGoing = readInt(from);
-      settings.tryFallback = readInt(from);
+      settings.keepFailed = readInt(from) != 0u;
+      settings.keepGoing = readInt(from) != 0u;
+      settings.tryFallback = readInt(from) != 0u;
       readInt(from);  // obsolete verbosity
       settings.maxBuildJobs.assign(readInt(from));
       settings.maxSilentTime = readInt(from);
@@ -501,7 +503,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       readInt(from);  // obsolete logType
       readInt(from);  // obsolete printBuildTrace
       settings.buildCores = readInt(from);
-      settings.useSubstitutes = readInt(from);
+      settings.useSubstitutes = readInt(from) != 0u;
 
       StringMap overrides;
       if (GET_PROTOCOL_MINOR(clientVersion) >= 12) {
@@ -530,7 +532,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
           Strings subs;
           auto ss = tokenizeString<Strings>(value);
           for (auto& s : ss) {
-            if (trusted.count(s)) {
+            if (trusted.count(s) != 0u) {
               subs.push_back(s);
             } else {
               LOG(WARNING) << "ignoring untrusted substituter '" << s << "'";
@@ -545,7 +547,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
             ;
           } else if (trusted || name == settings.buildTimeout.name ||
                      name == "connect-timeout" ||
-                     (name == "builders" && value == "")) {
+                     (name == "builders" && value.empty())) {
             settings.set(name, value);
           } else if (setSubstituters(settings.substituters)) {
             ;
@@ -622,7 +624,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
         to << info->deriver << info->narHash.to_string(Base16, false)
            << info->references << info->registrationTime << info->narSize;
         if (GET_PROTOCOL_MINOR(clientVersion) >= 16) {
-          to << info->ultimate << info->sigs << info->ca;
+          to << static_cast<uint64_t>(info->ultimate) << info->sigs << info->ca;
         }
       } else {
         assert(GET_PROTOCOL_MINOR(clientVersion) >= 17);
@@ -639,7 +641,8 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       break;
 
     case wopVerifyStore: {
-      bool checkContents, repair;
+      bool checkContents;
+      bool repair;
       from >> checkContents >> repair;
       logger->startWork();
       if (repair && !trusted) {
@@ -647,7 +650,7 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
       }
       bool errors = store->verifyStore(checkContents, (RepairFlag)repair);
       logger->stopWork();
-      to << errors;
+      to << static_cast<uint64_t>(errors);
       break;
     }
 
@@ -673,7 +676,8 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
     }
 
     case wopAddToStoreNar: {
-      bool repair, dontCheckSigs;
+      bool repair;
+      bool dontCheckSigs;
       ValidPathInfo info;
       info.path = readStorePath(*store, from);
       from >> info.deriver;
@@ -716,8 +720,11 @@ static void performOp(TunnelLogger* logger, ref<Store> store, bool trusted,
     case wopQueryMissing: {
       auto targets = readStorePaths<PathSet>(*store, from);
       logger->startWork();
-      PathSet willBuild, willSubstitute, unknown;
-      unsigned long long downloadSize, narSize;
+      PathSet willBuild;
+      PathSet willSubstitute;
+      PathSet unknown;
+      unsigned long long downloadSize;
+      unsigned long long narSize;
       store->queryMissing(targets, willBuild, willSubstitute, unknown,
                           downloadSize, narSize);
       logger->stopWork();
@@ -757,7 +764,7 @@ static void processConnection(bool trusted, const std::string& userName,
     DLOG(INFO) << opCount << " operations";
   });
 
-  if (GET_PROTOCOL_MINOR(clientVersion) >= 14 && readInt(from)) {
+  if (GET_PROTOCOL_MINOR(clientVersion) >= 14 && (readInt(from) != 0u)) {
     setAffinityTo(readInt(from));
   }
 
@@ -842,11 +849,12 @@ static void sigChldHandler(int sigNo) {
 }
 
 static void setSigChldAction(bool autoReap) {
-  struct sigaction act, oact;
+  struct sigaction act;
+  struct sigaction oact;
   act.sa_handler = autoReap ? sigChldHandler : SIG_DFL;
   sigfillset(&act.sa_mask);
   act.sa_flags = 0;
-  if (sigaction(SIGCHLD, &act, &oact)) {
+  if (sigaction(SIGCHLD, &act, &oact) != 0) {
     throw SysError("setting SIGCHLD handler");
   }
 }
@@ -866,10 +874,10 @@ bool matchUser(const string& user, const string& group, const Strings& users) {
         return true;
       }
       struct group* gr = getgrnam(i.c_str() + 1);
-      if (!gr) {
+      if (gr == nullptr) {
         continue;
       }
-      for (char** mem = gr->gr_mem; *mem; mem++) {
+      for (char** mem = gr->gr_mem; *mem != nullptr; mem++) {
         if (user == string(*mem)) {
           return true;
         }
@@ -933,7 +941,7 @@ static void daemonLoop(char** argv) {
   AutoCloseFD fdSocket;
 
   /* Handle socket-based activation by systemd. */
-  if (getEnv("LISTEN_FDS") != "") {
+  if (!getEnv("LISTEN_FDS").empty()) {
     if (getEnv("LISTEN_PID") != std::to_string(getpid()) ||
         getEnv("LISTEN_FDS") != "1") {
       throw Error("unexpected systemd environment variables");
@@ -1014,10 +1022,10 @@ static void daemonLoop(char** argv) {
       PeerInfo peer = getPeerInfo(remote.get());
 
       struct passwd* pw = peer.uidKnown ? getpwuid(peer.uid) : nullptr;
-      string user = pw ? pw->pw_name : std::to_string(peer.uid);
+      string user = pw != nullptr ? pw->pw_name : std::to_string(peer.uid);
 
       struct group* gr = peer.gidKnown ? getgrgid(peer.gid) : nullptr;
-      string group = gr ? gr->gr_name : std::to_string(peer.gid);
+      string group = gr != nullptr ? gr->gr_name : std::to_string(peer.gid);
 
       Strings trustedUsers = settings.trustedUsers;
       Strings allowedUsers = settings.allowedUsers;
@@ -1057,7 +1065,7 @@ static void daemonLoop(char** argv) {
             setSigChldAction(false);
 
             /* For debugging, stuff the pid into argv[1]. */
-            if (peer.pidKnown && argv[1]) {
+            if (peer.pidKnown && (argv[1] != nullptr)) {
               string processName = std::to_string(peer.pid);
               strncpy(argv[1], processName.c_str(), strlen(argv[1]));
             }
@@ -1143,7 +1151,8 @@ static int _main(int argc, char** argv) {
                               SPLICE_F_MOVE);
             if (res == -1) {
               throw SysError("splicing data from daemon socket to stdout");
-            } else if (res == 0) {
+            }
+            if (res == 0) {
               throw EndOfFile("unexpected EOF from daemon socket");
             }
           }
@@ -1152,7 +1161,8 @@ static int _main(int argc, char** argv) {
                               SPLICE_F_MOVE);
             if (res == -1) {
               throw SysError("splicing data from stdin to daemon socket");
-            } else if (res == 0) {
+            }
+            if (res == 0) {
               return 0;
             }
           }

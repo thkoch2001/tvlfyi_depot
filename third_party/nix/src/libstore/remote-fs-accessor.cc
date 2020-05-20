@@ -11,14 +11,14 @@ namespace nix {
 
 RemoteFSAccessor::RemoteFSAccessor(ref<Store> store, const Path& cacheDir)
     : store(store), cacheDir(cacheDir) {
-  if (cacheDir != "") {
+  if (!cacheDir.empty()) {
     createDirs(cacheDir);
   }
 }
 
 Path RemoteFSAccessor::makeCacheFile(const Path& storePath,
                                      const std::string& ext) {
-  assert(cacheDir != "");
+  assert(!cacheDir.empty());
   return fmt("%s/%s.%s", cacheDir, storePathToHash(storePath), ext);
 }
 
@@ -26,7 +26,7 @@ void RemoteFSAccessor::addToCache(const Path& storePath, const std::string& nar,
                                   ref<FSAccessor> narAccessor) {
   nars.emplace(storePath, narAccessor);
 
-  if (cacheDir != "") {
+  if (!cacheDir.empty()) {
     try {
       std::ostringstream str;
       JSONPlaceholder jsonRoot(str);
@@ -62,7 +62,7 @@ std::pair<ref<FSAccessor>, Path> RemoteFSAccessor::fetch(const Path& path_) {
   std::string listing;
   Path cacheFile;
 
-  if (cacheDir != "" &&
+  if (!cacheDir.empty() &&
       pathExists(cacheFile = makeCacheFile(storePath, "nar"))) {
     try {
       listing = nix::readFile(makeCacheFile(storePath, "ls"));

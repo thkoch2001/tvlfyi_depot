@@ -86,12 +86,12 @@ LocalStore::LocalStore(const Params& params)
     mode_t perm = 01775;
 
     struct group* gr = getgrnam(settings.buildUsersGroup.get().c_str());
-    if (!gr) {
+    if (gr == nullptr) {
       LOG(ERROR) << "warning: the group '" << settings.buildUsersGroup
                  << "' specified in 'build-users-group' does not exist";
     } else {
       struct stat st;
-      if (stat(realStoreDir.c_str(), &st)) {
+      if (stat(realStoreDir.c_str(), &st) != 0) {
         throw SysError(format("getting attributes of path '%1%'") %
                        realStoreDir);
       }
@@ -115,7 +115,7 @@ LocalStore::LocalStore(const Params& params)
     Path path = realStoreDir;
     struct stat st;
     while (path != "/") {
-      if (lstat(path.c_str(), &st)) {
+      if (lstat(path.c_str(), &st) != 0) {
         throw SysError(format("getting status of '%1%'") % path);
       }
       if (S_ISLNK(st.st_mode)) {
@@ -153,7 +153,7 @@ LocalStore::LocalStore(const Params& params)
   /* Acquire the big fat lock in shared mode to make sure that no
      schema upgrade is in progress. */
   Path globalLockPath = dbDir + "/big-lock";
-  globalLock = openLockFile(globalLockPath.c_str(), true);
+  globalLock = openLockFile(globalLockPath, true);
 
   if (!lockFile(globalLock.get(), ltRead, false)) {
     LOG(INFO) << "waiting for the big Nix store lock...";
@@ -168,8 +168,8 @@ LocalStore::LocalStore(const Params& params)
         format(
             "current Nix store schema is version %1%, but I only support %2%") %
         curSchema % nixSchemaVersion);
-
-  } else if (curSchema == 0) { /* new store */
+  }
+  if (curSchema == 0) { /* new store */
     curSchema = nixSchemaVersion;
     openDB(*state, true);
     writeFile(schemaPath, (format("%1%") % nixSchemaVersion).str());
@@ -311,7 +311,7 @@ int LocalStore::getSchema() {
 }
 
 void LocalStore::openDB(State& state, bool create) {
-  if (access(dbDir.c_str(), R_OK | W_OK)) {
+  if (access(dbDir.c_str(), R_OK | W_OK) != 0) {
     throw SysError(format("Nix database directory '%1%' is not writable") %
                    dbDir);
   }
@@ -399,7 +399,7 @@ void LocalStore::makeStoreWritable() {
     throw SysError("getting info about the Nix store mount point");
   }
 
-  if (stat.f_flag & ST_RDONLY) {
+  if ((stat.f_flag & ST_RDONLY) != 0u) {
     if (unshare(CLONE_NEWNS) == -1) {
       throw SysError("setting up a private mount namespace");
     }
@@ -421,7 +421,8 @@ static void canonicaliseTimestampAndPermissions(const Path& path,
     mode_t mode = st.st_mode & ~S_IFMT;
 
     if (mode != 0444 && mode != 0555) {
-      mode = (st.st_mode & S_IFMT) | 0444 | (st.st_mode & S_IXUSR ? 0111 : 0);
+      mode = (st.st_mode & S_IFMT) | 0444 |
+             ((st.st_mode & S_IXUSR) != 0u ? 0111 : 0);
       if (chmod(path.c_str(), mode) == -1) {
         throw SysError(format("changing mode of '%1%' to %2$o") % path % mode);
       }
@@ -449,7 +450,7 @@ static void canonicaliseTimestampAndPermissions(const Path& path,
 
 void canonicaliseTimestampAndPermissions(const Path& path) {
   struct stat st;
-  if (lstat(path.c_str(), &st)) {
+  if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
   canonicaliseTimestampAndPermissions(path, st);
@@ -470,7 +471,7 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
 #endif
 
   struct stat st;
-  if (lstat(path.c_str(), &st)) {
+  if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
 
@@ -564,7 +565,7 @@ void canonicalisePathMetaData(const Path& path, uid_t fromUid,
   /* On platforms that don't have lchown(), the top-level path can't
      be a symlink, since we can't change its ownership. */
   struct stat st;
-  if (lstat(path.c_str(), &st)) {
+  if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
 
@@ -632,7 +633,7 @@ void LocalStore::checkDerivationOutputs(const Path& drvPath,
 
 uint64_t LocalStore::addValidPath(State& state, const ValidPathInfo& info,
                                   bool checkOutputs) {
-  if (info.ca != "" && !info.isContentAddressed(*this)) {
+  if (!info.ca.empty() && !info.isContentAddressed(*this)) {
     throw Error(
         "cannot add path '%s' to the Nix store because it claims to be "
         "content-addressed but isn't",
@@ -642,7 +643,7 @@ uint64_t LocalStore::addValidPath(State& state, const ValidPathInfo& info,
   state.stmtRegisterValidPath
       .use()(info.path)(info.narHash.to_string(Base16))(
           info.registrationTime == 0 ? time(nullptr) : info.registrationTime)(
-          info.deriver, info.deriver != "")(info.narSize, info.narSize != 0)(
+          info.deriver, !info.deriver.empty())(info.narSize, info.narSize != 0)(
           info.ultimate ? 1 : 0, info.ultimate)(
           concatStringsSep(" ", info.sigs), !info.sigs.empty())(
           info.ca, !info.ca.empty())
@@ -709,7 +710,7 @@ void LocalStore::queryPathInfoUncached(
       info->registrationTime = useQueryPathInfo.getInt(2);
 
       auto s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 3);
-      if (s) {
+      if (s != nullptr) {
         info->deriver = s;
       }
 
@@ -719,12 +720,12 @@ void LocalStore::queryPathInfoUncached(
       info->ultimate = useQueryPathInfo.getInt(5) == 1;
 
       s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 6);
-      if (s) {
+      if (s != nullptr) {
         info->sigs = tokenizeString<StringSet>(s, " ");
       }
 
       s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 7);
-      if (s) {
+      if (s != nullptr) {
         info->ca = s;
       }
 
@@ -880,8 +881,10 @@ Path LocalStore::queryPathFromHashPart(const string& hashPart) {
 
     const char* s =
         (const char*)sqlite3_column_text(state->stmtQueryPathFromHashPart, 0);
-    return s && prefix.compare(0, prefix.size(), s, prefix.size()) == 0 ? s
-                                                                        : "";
+    return (s != nullptr) &&
+                   prefix.compare(0, prefix.size(), s, prefix.size()) == 0
+               ? s
+               : "";
   });
 }
 
@@ -908,7 +911,7 @@ PathSet LocalStore::querySubstitutablePaths(const PathSet& paths) {
 
     PathSet remaining2;
     for (auto& path : remaining) {
-      if (valid.count(path)) {
+      if (valid.count(path) != 0u) {
         res.insert(path);
       } else {
         remaining2.insert(path);
@@ -931,7 +934,7 @@ void LocalStore::querySubstitutablePathInfos(const PathSet& paths,
       continue;
     }
     for (auto& path : paths) {
-      if (infos.count(path)) {
+      if (infos.count(path) != 0u) {
         continue;
       }
       DLOG(INFO) << "checking substituter '" << sub->getUri() << "' for path '"
@@ -1049,15 +1052,15 @@ void LocalStore::addToStore(const ValidPathInfo& info, Source& source,
     throw Error("cannot add path '%s' because it lacks a hash", info.path);
   }
 
-  if (requireSigs && checkSigs &&
-      !info.checkSignatures(*this, getPublicKeys())) {
+  if (requireSigs && (checkSigs != 0u) &&
+      (info.checkSignatures(*this, getPublicKeys()) == 0u)) {
     throw Error("cannot add path '%s' because it lacks a valid signature",
                 info.path);
   }
 
   addTempRoot(info.path);
 
-  if (repair || !isValidPath(info.path)) {
+  if ((repair != 0u) || !isValidPath(info.path)) {
     PathLocks outputLock;
 
     Path realPath = realStoreDir + "/" + baseNameOf(info.path);
@@ -1065,11 +1068,11 @@ void LocalStore::addToStore(const ValidPathInfo& info, Source& source,
     /* Lock the output path.  But don't lock if we're being called
        from a build hook (whose parent process already acquired a
        lock on this path). */
-    if (!locksHeld.count(info.path)) {
+    if (locksHeld.count(info.path) == 0u) {
       outputLock.lockPaths({realPath});
     }
 
-    if (repair || !isValidPath(info.path)) {
+    if ((repair != 0u) || !isValidPath(info.path)) {
       deletePath(realPath);
 
       /* While restoring the path from the NAR, compute the hash
@@ -1121,7 +1124,7 @@ Path LocalStore::addToStoreFromDump(const string& dump, const string& name,
 
   addTempRoot(dstPath);
 
-  if (repair || !isValidPath(dstPath)) {
+  if ((repair != 0u) || !isValidPath(dstPath)) {
     /* The first check above is an optimisation to prevent
        unnecessary lock acquisition. */
 
@@ -1129,7 +1132,7 @@ Path LocalStore::addToStoreFromDump(const string& dump, const string& name,
 
     PathLocks outputLock({realPath});
 
-    if (repair || !isValidPath(dstPath)) {
+    if ((repair != 0u) || !isValidPath(dstPath)) {
       deletePath(realPath);
 
       autoGC();
@@ -1196,12 +1199,12 @@ Path LocalStore::addTextToStore(const string& name, const string& s,
 
   addTempRoot(dstPath);
 
-  if (repair || !isValidPath(dstPath)) {
+  if ((repair != 0u) || !isValidPath(dstPath)) {
     Path realPath = realStoreDir + "/" + baseNameOf(dstPath);
 
     PathLocks outputLock({realPath});
 
-    if (repair || !isValidPath(dstPath)) {
+    if ((repair != 0u) || !isValidPath(dstPath)) {
       deletePath(realPath);
 
       autoGC();
@@ -1286,7 +1289,9 @@ bool LocalStore::verifyStore(bool checkContents, RepairFlag repair) {
   /* Check whether all valid paths actually exist. */
   LOG(INFO) << "checking path existence...";
 
-  PathSet validPaths2 = queryAllValidPaths(), validPaths, done;
+  PathSet validPaths2 = queryAllValidPaths();
+  PathSet validPaths;
+  PathSet done;
 
   fdGCLock = -1;
 
@@ -1313,7 +1318,7 @@ bool LocalStore::verifyStore(bool checkContents, RepairFlag repair) {
           LOG(ERROR) << "path '" << i << "' was modified! expected hash '"
                      << info->narHash.to_string() << "', got '"
                      << current.first.to_string() << "'";
-          if (repair) {
+          if (repair != 0u) {
             repairPath(i);
           } else {
             errors = true;
@@ -1398,7 +1403,7 @@ void LocalStore::verifyPath(const Path& path, const PathSet& store,
     } else {
       LOG(ERROR) << "path '" << path
                  << "' disappeared, but it still has valid referrers!";
-      if (repair) {
+      if (repair != 0u) {
         try {
           repairPath(path);
         } catch (Error& e) {

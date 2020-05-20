@@ -17,7 +17,7 @@ DrvName::DrvName(const string& s) : hits(0) {
   name = fullName = s;
   for (unsigned int i = 0; i < s.size(); ++i) {
     /* !!! isalpha/isdigit are affected by the locale. */
-    if (s[i] == '-' && i + 1 < s.size() && !isalpha(s[i + 1])) {
+    if (s[i] == '-' && i + 1 < s.size() && (isalpha(s[i + 1]) == 0)) {
       name = string(s, 0, i);
       version = string(s, i + 1);
       break;
@@ -34,10 +34,7 @@ bool DrvName::matches(DrvName& n) {
       return false;
     }
   }
-  if (version != "" && version != n.version) {
-    return false;
-  }
-  return true;
+  return !(!version.empty() && version != n.version);
 }
 
 string nextComponent(string::const_iterator& p,
@@ -55,12 +52,12 @@ string nextComponent(string::const_iterator& p,
      of digits.  Otherwise, consume the longest sequence of
      non-digit, non-separator characters. */
   string s;
-  if (isdigit(*p)) {
-    while (p != end && isdigit(*p)) {
+  if (isdigit(*p) != 0) {
+    while (p != end && (isdigit(*p) != 0)) {
       s += *p++;
     }
   } else {
-    while (p != end && (!isdigit(*p) && *p != '.' && *p != '-')) {
+    while (p != end && ((isdigit(*p) == 0) && *p != '.' && *p != '-')) {
       s += *p++;
     }
   }
@@ -69,12 +66,15 @@ string nextComponent(string::const_iterator& p,
 }
 
 static bool componentsLT(const string& c1, const string& c2) {
-  int n1, n2;
-  bool c1Num = string2Int(c1, n1), c2Num = string2Int(c2, n2);
+  int n1;
+  int n2;
+  bool c1Num = string2Int(c1, n1);
+  bool c2Num = string2Int(c2, n2);
 
   if (c1Num && c2Num) {
     return n1 < n2;
-  } else if (c1 == "" && c2Num) {
+  }
+  if (c1.empty() && c2Num) {
     return true;
   } else if (c1 == "pre" && c2 != "pre") {
     return true;
@@ -99,7 +99,8 @@ int compareVersions(const string& v1, const string& v2) {
     string c2 = nextComponent(p2, v2.end());
     if (componentsLT(c1, c2)) {
       return -1;
-    } else if (componentsLT(c2, c1)) {
+    }
+    if (componentsLT(c2, c1)) {
       return 1;
     }
   }

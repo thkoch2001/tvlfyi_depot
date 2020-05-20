@@ -40,7 +40,7 @@ const std::string narVersionMagic1 = "nix-archive-1";
 
 static string caseHackSuffix = "~nix~case~hack~";
 
-PathFilter defaultPathFilter = [](const Path&) { return true; };
+PathFilter defaultPathFilter = [](const Path& /*unused*/) { return true; };
 
 static void dumpContents(const Path& path, size_t size, Sink& sink) {
   sink << "contents" << size;
@@ -67,7 +67,7 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
   checkInterrupt();
 
   struct stat st;
-  if (lstat(path.c_str(), &st)) {
+  if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
 
@@ -76,7 +76,7 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
   if (S_ISREG(st.st_mode)) {
     sink << "type"
          << "regular";
-    if (st.st_mode & S_IXUSR) {
+    if ((st.st_mode & S_IXUSR) != 0u) {
       sink << "executable"
            << "";
     }
@@ -167,7 +167,7 @@ static void parseContents(ParseSink& sink, Source& source, const Path& path) {
   unsigned long long left = size;
   std::vector<unsigned char> buf(65536);
 
-  while (left) {
+  while (left != 0u) {
     checkInterrupt();
     auto n = buf.size();
     if ((unsigned long long)n > left) {
@@ -208,7 +208,7 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
       break;
     }
 
-    else if (s == "type") {
+    if (s == "type") {
       if (type != tpUnknown) {
         throw badArchive("multiple type fields");
       }
@@ -240,14 +240,15 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
 
     else if (s == "executable" && type == tpRegular) {
       auto s = readString(source);
-      if (s != "") {
+      if (!s.empty()) {
         throw badArchive("executable marker has non-empty value");
       }
       sink.isExecutable();
     }
 
     else if (s == "entry" && type == tpDirectory) {
-      string name, prevName;
+      string name;
+      string prevName;
 
       s = readString(source);
       if (s != "(") {
@@ -261,7 +262,8 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
 
         if (s == ")") {
           break;
-        } else if (s == "name") {
+        }
+        if (s == "name") {
           name = readString(source);
           if (name.empty() || name == "." || name == ".." ||
               name.find('/') != string::npos ||
@@ -350,7 +352,7 @@ struct RestoreSink : ParseSink {
 
   void preallocateContents(unsigned long long len) override {
 #if HAVE_POSIX_FALLOCATE
-    if (len) {
+    if (len != 0u) {
       errno = posix_fallocate(fd.get(), 0, len);
       /* Note that EINVAL may indicate that the underlying
          filesystem doesn't support preallocation (e.g. on

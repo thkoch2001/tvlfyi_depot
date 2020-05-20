@@ -40,7 +40,7 @@ static AutoCloseFD openSlotLock(const Machine& m, unsigned long long slot) {
 
 static bool allSupportedLocally(const std::set<std::string>& requiredFeatures) {
   for (auto& feature : requiredFeatures) {
-    if (!settings.systemFeatures.get().count(feature)) {
+    if (settings.systemFeatures.get().count(feature) == 0u) {
       return false;
     }
   }
@@ -60,7 +60,7 @@ static int _main(int argc, char* argv[]) {
     FdSource source(STDIN_FILENO);
 
     /* Read the parent's settings. */
-    while (readInt(source)) {
+    while (readInt(source) != 0u) {
       auto name = readString(source);
       auto value = readString(source);
       settings.set(name, value);
@@ -106,7 +106,7 @@ static int _main(int argc, char* argv[]) {
       auto requiredFeatures = readStrings<std::set<std::string>>(source);
 
       auto canBuildLocally =
-          amWilling &&
+          (amWilling != 0u) &&
           (neededSystem == settings.thisSystem ||
            settings.extraPlatforms.get().count(neededSystem) > 0) &&
           allSupportedLocally(requiredFeatures);
@@ -196,7 +196,7 @@ static int _main(int argc, char* argv[]) {
           if (hasPrefix(bestMachine->storeUri, "ssh://")) {
             storeParams["max-connections"] = "1";
             storeParams["log-fd"] = "4";
-            if (bestMachine->sshKey != "") {
+            if (!bestMachine->sshKey.empty()) {
               storeParams["ssh-key"] = bestMachine->sshKey;
             }
           }

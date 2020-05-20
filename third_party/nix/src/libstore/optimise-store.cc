@@ -18,7 +18,7 @@ namespace nix {
 
 static void makeWritable(const Path& path) {
   struct stat st;
-  if (lstat(path.c_str(), &st)) {
+  if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
   if (chmod(path.c_str(), st.st_mode | S_IWUSR) == -1) {
@@ -32,7 +32,7 @@ struct MakeReadOnly {
   ~MakeReadOnly() {
     try {
       /* This will make the path read-only. */
-      if (path != "") {
+      if (!path.empty()) {
         canonicaliseTimestampAndPermissions(path);
       }
     } catch (...) {
@@ -78,7 +78,7 @@ Strings LocalStore::readDirectoryIgnoringInodes(const Path& path,
   while (errno = 0, dirent = readdir(dir.get())) { /* sic */
     checkInterrupt();
 
-    if (inodeHash.count(dirent->d_ino)) {
+    if (inodeHash.count(dirent->d_ino) != 0u) {
       DLOG(WARNING) << dirent->d_name << " is already linked";
       continue;
     }
@@ -101,7 +101,7 @@ void LocalStore::optimisePath_(OptimiseStats& stats, const Path& path,
   checkInterrupt();
 
   struct stat st;
-  if (lstat(path.c_str(), &st)) {
+  if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
 
@@ -137,13 +137,13 @@ void LocalStore::optimisePath_(OptimiseStats& stats, const Path& path,
      modified, in particular when running programs as root under
      NixOS (example: $fontconfig/var/cache being modified).  Skip
      those files.  FIXME: check the modification time. */
-  if (S_ISREG(st.st_mode) && (st.st_mode & S_IWUSR)) {
+  if (S_ISREG(st.st_mode) && ((st.st_mode & S_IWUSR) != 0u)) {
     LOG(WARNING) << "skipping suspicious writable file '" << path << "'";
     return;
   }
 
   /* This can still happen on top-level files. */
-  if (st.st_nlink > 1 && inodeHash.count(st.st_ino)) {
+  if (st.st_nlink > 1 && (inodeHash.count(st.st_ino) != 0u)) {
     DLOG(INFO) << path << " is already linked, with " << (st.st_nlink - 2)
                << " other file(s)";
     return;
@@ -196,7 +196,7 @@ retry:
   /* Yes!  We've seen a file with the same contents.  Replace the
      current file with a hard link to that file. */
   struct stat stLink;
-  if (lstat(linkPath.c_str(), &stLink)) {
+  if (lstat(linkPath.c_str(), &stLink) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % linkPath);
   }
 
@@ -234,7 +234,7 @@ retry:
       /* Too many links to the same file (>= 32000 on most file
          systems).  This is likely to happen with empty files.
          Just shrug and ignore. */
-      if (st.st_size) {
+      if (st.st_size != 0) {
         LOG(WARNING) << linkPath << " has maximum number of links";
       }
       return;

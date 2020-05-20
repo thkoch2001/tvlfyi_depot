@@ -94,7 +94,7 @@ struct CmdVerify : StorePathsCommand {
         if (!noTrust) {
           bool good = false;
 
-          if (info->ultimate && !sigsNeeded) {
+          if (info->ultimate && (sigsNeeded == 0u)) {
             good = true;
 
           } else {
@@ -104,7 +104,7 @@ struct CmdVerify : StorePathsCommand {
 
             auto doSigs = [&](StringSet sigs) {
               for (auto sig : sigs) {
-                if (sigsSeen.count(sig)) {
+                if (sigsSeen.count(sig) != 0u) {
                   continue;
                 }
                 sigsSeen.insert(sig);
@@ -162,7 +162,8 @@ struct CmdVerify : StorePathsCommand {
 
     pool.process();
 
-    throw Exit((corrupted ? 1 : 0) | (untrusted ? 2 : 0) | (failed ? 4 : 0));
+    throw Exit((corrupted != 0u ? 1 : 0) | (untrusted != 0u ? 2 : 0) |
+               (failed != 0u ? 4 : 0));
   }
 };
 

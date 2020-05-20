@@ -25,9 +25,9 @@ struct MaxBuildJobsSetting : public BaseSetting<unsigned int> {
 };
 
 class Settings : public Config {
-  unsigned int getDefaultCores();
+  static unsigned int getDefaultCores();
 
-  StringSet getDefaultSystemFeatures();
+  static StringSet getDefaultSystemFeatures();
 
  public:
   Settings();

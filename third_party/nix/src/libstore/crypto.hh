@@ -24,13 +24,13 @@ struct SecretKey : Key {
   SecretKey(const std::string& s);
 
   /* Return a detached signature of the given string. */
-  std::string signDetached(const std::string& s) const;
+  std::string signDetached(const std::string& data) const;
 
   PublicKey toPublicKey() const;
 };
 
 struct PublicKey : Key {
-  PublicKey(const std::string& data);
+  PublicKey(const std::string& s);
 
  private:
   PublicKey(const std::string& name, const std::string& key) : Key(name, key) {}

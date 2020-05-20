@@ -27,14 +27,14 @@ namespace nix {
 static bool haveInternet() {
   struct ifaddrs* addrs;
 
-  if (getifaddrs(&addrs)) {
+  if (getifaddrs(&addrs) != 0) {
     return true;
   }
 
   Finally free([&]() { freeifaddrs(addrs); });
 
-  for (auto i = addrs; i; i = i->ifa_next) {
-    if (!i->ifa_addr) {
+  for (auto i = addrs; i != nullptr; i = i->ifa_next) {
+    if (i->ifa_addr == nullptr) {
       continue;
     }
     if (i->ifa_addr->sa_family == AF_INET) {

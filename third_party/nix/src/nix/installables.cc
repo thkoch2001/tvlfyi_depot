@@ -23,7 +23,7 @@ SourceExprCommand::SourceExprCommand() {
 }
 
 Value* SourceExprCommand::getSourceExpr(EvalState& state) {
-  if (vSourceExpr) {
+  if (vSourceExpr != nullptr) {
     return vSourceExpr;
   }
 
@@ -31,7 +31,7 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
 
   vSourceExpr = state.allocValue();
 
-  if (file != "") {
+  if (!file.empty()) {
     state.evalFile(lookupFileArg(state, file), *vSourceExpr);
 
   } else {
@@ -46,7 +46,7 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
     std::unordered_set<std::string> seen;
 
     auto addEntry = [&](const std::string& name) {
-      if (name == "") {
+      if (name.empty()) {
         return;
       }
       if (!seen.insert(name).second) {
@@ -135,7 +135,7 @@ struct InstallableValue : Installable {
       drvPaths.insert(b.drvPath);
 
       auto outputName = drv.queryOutputName();
-      if (outputName == "") {
+      if (outputName.empty()) {
         throw Error("derivation '%s' lacks an 'outputName' attribute",
                     b.drvPath);
       }
@@ -153,9 +153,8 @@ struct InstallableValue : Installable {
         b.outputs.insert(b2.outputs.begin(), b2.outputs.end());
       }
       return {b};
-    } else {
-      return res;
     }
+    return res;
   }
 };
 
@@ -204,7 +203,7 @@ static std::vector<std::shared_ptr<Installable>> parseInstallables(
   std::vector<std::shared_ptr<Installable>> result;
 
   if (ss.empty() && useDefaultInstallables) {
-    if (cmd.file == "") {
+    if (cmd.file.empty()) {
       cmd.file = ".";
     }
     ss = {""};
@@ -222,7 +221,7 @@ static std::vector<std::shared_ptr<Installable>> parseInstallables(
       }
     }
 
-    else if (s == "" || std::regex_match(s, attrPathRegex)) {
+    else if (s.empty() || std::regex_match(s, attrPathRegex)) {
       result.push_back(std::make_shared<InstallableAttrPath>(cmd, s));
 
     } else {
@@ -254,7 +253,7 @@ Buildables build(ref<Store> store, RealiseMode mode,
 
   for (auto& i : installables) {
     for (auto& b : i->toBuildables()) {
-      if (b.drvPath != "") {
+      if (!b.drvPath.empty()) {
         StringSet outputNames;
         for (auto& output : b.outputs) {
           outputNames.insert(output.first);

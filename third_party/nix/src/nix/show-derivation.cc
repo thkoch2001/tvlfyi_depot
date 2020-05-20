@@ -63,7 +63,7 @@ struct CmdShowDerivation : InstallablesCommand {
           for (auto& output : drv.outputs) {
             auto outputObj(outputsObj.object(output.first));
             outputObj.attr("path", output.second.path);
-            if (output.second.hash != "") {
+            if (!output.second.hash.empty()) {
               outputObj.attr("hashAlgo", output.second.hashAlgo);
               outputObj.attr("hash", output.second.hash);
             }

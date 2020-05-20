@@ -23,7 +23,7 @@
 using namespace nix;
 using namespace std::string_literals;
 
-extern char** environ __attribute__((weak));
+__attribute__((weak));
 
 /* Recreate the effect of the perl shellwords function, breaking up a
  * string into arguments like a shell word, including escapes
@@ -75,7 +75,8 @@ static void _main(int argc, char** argv) {
   auto fromArgs = false;
   auto packages = false;
   // Same condition as bash uses for interactive shells
-  auto interactive = isatty(STDIN_FILENO) && isatty(STDERR_FILENO);
+  auto interactive =
+      (isatty(STDIN_FILENO) != 0) && (isatty(STDERR_FILENO) != 0);
   Strings attrPaths;
   Strings left;
   RepairFlag repair = NoRepair;
@@ -344,8 +345,11 @@ static void _main(int argc, char** argv) {
   auto buildPaths = [&](const PathSet& paths) {
     /* Note: we do this even when !printMissing to efficiently
        fetch binary cache data. */
-    unsigned long long downloadSize, narSize;
-    PathSet willBuild, willSubstitute, unknown;
+    unsigned long long downloadSize;
+    unsigned long long narSize;
+    PathSet willBuild;
+    PathSet willSubstitute;
+    PathSet unknown;
     store->queryMissing(paths, willBuild, willSubstitute, unknown, downloadSize,
                         narSize);
 
@@ -374,7 +378,7 @@ static void _main(int argc, char** argv) {
        <nixpkgs>. */
     auto shell = getEnv("NIX_BUILD_SHELL", "");
 
-    if (shell == "") {
+    if (shell.empty()) {
       try {
         auto expr = state->parseExprFromString(
             "(import <nixpkgs> {}).bashInteractive", absPath("."));
@@ -427,7 +431,7 @@ static void _main(int argc, char** argv) {
     if (pure) {
       decltype(env) newEnv;
       for (auto& i : env) {
-        if (keepVars.count(i.first)) {
+        if (keepVars.count(i.first) != 0u) {
           newEnv.emplace(i);
         }
       }
@@ -447,7 +451,7 @@ static void _main(int argc, char** argv) {
     int fileNr = 0;
 
     for (auto& var : drv.env) {
-      if (passAsFile.count(var.first)) {
+      if (passAsFile.count(var.first) != 0u) {
         keepTmp = true;
         string fn = ".attr-" + std::to_string(fileNr++);
         Path p = (Path)tmpDir + "/" + fn;
@@ -485,8 +489,9 @@ static void _main(int argc, char** argv) {
                 "%7%",
             (Path)tmpDir, (pure ? "" : "p=$PATH; "),
             (pure ? "" : "PATH=$PATH:$p; unset p; "), dirOf(shell), shell,
-            (getenv("TZ") ? (string("export TZ='") + getenv("TZ") + "'; ")
-                          : ""),
+            (getenv("TZ") != nullptr
+                 ? (string("export TZ='") + getenv("TZ") + "'; ")
+                 : ""),
             envCommand));
 
     Strings envStrs;
@@ -510,60 +515,58 @@ static void _main(int argc, char** argv) {
     throw SysError("executing shell '%s'", shell);
   }
 
-  else {
-    PathSet pathsToBuild;
+  PathSet pathsToBuild;
 
-    std::map<Path, Path> drvPrefixes;
-    std::map<Path, Path> resultSymlinks;
-    std::vector<Path> outPaths;
+  std::map<Path, Path> drvPrefixes;
+  std::map<Path, Path> resultSymlinks;
+  std::vector<Path> outPaths;
 
-    for (auto& drvInfo : drvs) {
-      auto drvPath = drvInfo.queryDrvPath();
-      auto outPath = drvInfo.queryOutPath();
+  for (auto& drvInfo : drvs) {
+    auto drvPath = drvInfo.queryDrvPath();
+    auto outPath = drvInfo.queryOutPath();
 
-      auto outputName = drvInfo.queryOutputName();
-      if (outputName == "") {
-        throw Error("derivation '%s' lacks an 'outputName' attribute", drvPath);
-      }
-
-      pathsToBuild.insert(drvPath + "!" + outputName);
-
-      std::string drvPrefix;
-      auto i = drvPrefixes.find(drvPath);
-      if (i != drvPrefixes.end()) {
-        drvPrefix = i->second;
-      } else {
-        drvPrefix = outLink;
-        if (drvPrefixes.size()) {
-          drvPrefix += fmt("-%d", drvPrefixes.size() + 1);
-        }
-        drvPrefixes[drvPath] = drvPrefix;
-      }
-
-      std::string symlink = drvPrefix;
-      if (outputName != "out") {
-        symlink += "-" + outputName;
-      }
-
-      resultSymlinks[symlink] = outPath;
-      outPaths.push_back(outPath);
+    auto outputName = drvInfo.queryOutputName();
+    if (outputName.empty()) {
+      throw Error("derivation '%s' lacks an 'outputName' attribute", drvPath);
     }
 
-    buildPaths(pathsToBuild);
+    pathsToBuild.insert(drvPath + "!" + outputName);
 
-    if (dryRun) {
-      return;
-    }
-
-    for (auto& symlink : resultSymlinks) {
-      if (auto store2 = store.dynamic_pointer_cast<LocalFSStore>()) {
-        store2->addPermRoot(symlink.second, absPath(symlink.first), true);
+    std::string drvPrefix;
+    auto i = drvPrefixes.find(drvPath);
+    if (i != drvPrefixes.end()) {
+      drvPrefix = i->second;
+    } else {
+      drvPrefix = outLink;
+      if (!drvPrefixes.empty() != 0u) {
+        drvPrefix += fmt("-%d", drvPrefixes.size() + 1);
       }
+      drvPrefixes[drvPath] = drvPrefix;
     }
 
-    for (auto& path : outPaths) {
-      std::cout << path << '\n';
+    std::string symlink = drvPrefix;
+    if (outputName != "out") {
+      symlink += "-" + outputName;
     }
+
+    resultSymlinks[symlink] = outPath;
+    outPaths.push_back(outPath);
+  }
+
+  buildPaths(pathsToBuild);
+
+  if (dryRun) {
+    return;
+  }
+
+  for (auto& symlink : resultSymlinks) {
+    if (auto store2 = store.dynamic_pointer_cast<LocalFSStore>()) {
+      store2->addPermRoot(symlink.second, absPath(symlink.first), true);
+    }
+  }
+
+  for (auto& path : outPaths) {
+    std::cout << path << '\n';
   }
 }
 

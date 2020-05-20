@@ -37,9 +37,8 @@ std::pair<string, string> decodeContext(const string& s) {
     size_t index = s.find("!", 1);
     return std::pair<string, string>(string(s, index + 1),
                                      string(s, 1, index - 1));
-  } else {
-    return std::pair<string, string>(s.at(0) == '/' ? s : string(s, 1), "");
   }
+  return std::pair<string, string>(s.at(0) == '/' ? s : string(s, 1), "");
 }
 
 InvalidPathError::InvalidPathError(const Path& path)
@@ -83,8 +82,11 @@ void EvalState::realiseContext(const PathSet& context) {
   }
 
   /* For performance, prefetch all substitute info. */
-  PathSet willBuild, willSubstitute, unknown;
-  unsigned long long downloadSize, narSize;
+  PathSet willBuild;
+  PathSet willSubstitute;
+  PathSet unknown;
+  unsigned long long downloadSize;
+  unsigned long long narSize;
   store->queryMissing(drvs, willBuild, willSubstitute, unknown, downloadSize,
                       narSize);
   store->buildPaths(drvs);
@@ -181,22 +183,21 @@ void prim_importNative(EvalState& state, const Pos& pos, Value** args,
   string sym = state.forceStringNoCtx(*args[1], pos);
 
   void* handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_LOCAL);
-  if (!handle) {
+  if (handle == nullptr) {
     throw EvalError(format("could not open '%1%': %2%") % path % dlerror());
   }
 
   dlerror();
   auto func = (ValueInitializer)dlsym(handle, sym.c_str());
-  if (!func) {
+  if (func == nullptr) {
     char* message = dlerror();
-    if (message) {
+    if (message != nullptr) {
       throw EvalError(format("could not load symbol '%1%' from '%2%': %3%") %
                       sym % path % message);
-    } else {
-      throw EvalError(format("symbol '%1%' from '%2%' resolved to NULL when a "
-                             "function pointer was expected") %
-                      sym % path);
     }
+    throw EvalError(format("symbol '%1%' from '%2%' resolved to NULL when a "
+                           "function pointer was expected") %
+                    sym % path);
   }
 
   (func)(state, v);
@@ -765,11 +766,11 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   }
 
   /* Do we have all required attributes? */
-  if (drv.builder == "") {
+  if (drv.builder.empty()) {
     throw EvalError(format("required attribute 'builder' missing, at %1%") %
                     posDrvName);
   }
-  if (drv.platform == "") {
+  if (drv.platform.empty()) {
     throw EvalError(format("required attribute 'system' missing, at %1%") %
                     posDrvName);
   }
@@ -822,7 +823,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
     Hash h = hashDerivationModulo(*state.store, drv);
 
     for (auto& i : drv.outputs) {
-      if (i.second.path == "") {
+      if (i.second.path.empty()) {
         Path outPath = state.store->makeOutputPath(i.first, h, drvName);
         if (!jsonObject) {
           drv.env[i.first] = outPath;
@@ -1134,7 +1135,7 @@ static void addPath(EvalState& state, const Pos& pos, const string& name,
   const auto path = evalSettings.pureEval && expectedHash
                         ? path_
                         : state.checkSourcePath(path_);
-  PathFilter filter = filterFun ? ([&](const Path& path) {
+  PathFilter filter = filterFun != nullptr ? ([&](const Path& path) {
     auto st = lstat(path);
 
     /* Call the filter function.  The first argument is the path,
@@ -1159,7 +1160,7 @@ static void addPath(EvalState& state, const Pos& pos, const string& name,
 
     return state.forceBool(res, pos);
   })
-                                : defaultPathFilter;
+                                           : defaultPathFilter;
 
   Path expectedStorePath;
   if (expectedHash) {
@@ -1305,7 +1306,7 @@ void prim_getAttr(EvalState& state, const Pos& pos, Value** args, Value& v) {
     throw EvalError(format("attribute '%1%' missing, at %2%") % attr % pos);
   }
   // !!! add to stack trace?
-  if (state.countCalls && i->pos) {
+  if (state.countCalls && (i->pos != nullptr)) {
     state.attrSelects[*i->pos]++;
   }
   state.forceValue(*i->value);
@@ -1485,7 +1486,7 @@ static void prim_functionArgs(EvalState& state, const Pos& pos, Value** args,
   state.mkAttrs(v, args[0]->lambda.fun->formals->formals.size());
   for (auto& i : args[0]->lambda.fun->formals->formals) {
     // !!! should optimise booleans (allocate only once)
-    mkBool(*state.allocAttr(v, i.name), i.def);
+    mkBool(*state.allocAttr(v, i.name), i.def != nullptr);
   }
   v.attrs->sort();
 }
@@ -1634,7 +1635,7 @@ static void prim_foldlStrict(EvalState& state, const Pos& pos, Value** args,
   state.forceFunction(*args[0], pos);
   state.forceList(*args[2], pos);
 
-  if (args[2]->listSize()) {
+  if (args[2]->listSize() != 0u) {
     Value* vCur = args[1];
 
     for (unsigned int n = 0; n < args[2]->listSize(); ++n) {
@@ -1716,7 +1717,8 @@ static void prim_sort(EvalState& state, const Pos& pos, Value** args,
       return CompareValues()(a, b);
     }
 
-    Value vTmp1, vTmp2;
+    Value vTmp1;
+    Value vTmp2;
     state.callFunction(*args[0], *a, vTmp1, pos);
     state.callFunction(vTmp1, *b, vTmp2, pos);
     return state.forceBool(vTmp2, pos);
@@ -1735,7 +1737,8 @@ static void prim_partition(EvalState& state, const Pos& pos, Value** args,
 
   auto len = args[1]->listSize();
 
-  ValueVector right, wrong;
+  ValueVector right;
+  ValueVector wrong;
 
   for (unsigned int n = 0; n < len; ++n) {
     auto vElem = args[1]->listElems()[n];
@@ -1754,14 +1757,14 @@ static void prim_partition(EvalState& state, const Pos& pos, Value** args,
   Value* vRight = state.allocAttr(v, state.sRight);
   auto rsize = right.size();
   state.mkList(*vRight, rsize);
-  if (rsize) {
+  if (rsize != 0u) {
     memcpy(vRight->listElems(), right.data(), sizeof(Value*) * rsize);
   }
 
   Value* vWrong = state.allocAttr(v, state.sWrong);
   auto wsize = wrong.size();
   state.mkList(*vWrong, wsize);
-  if (wsize) {
+  if (wsize != 0u) {
     memcpy(vWrong->listElems(), wrong.data(), sizeof(Value*) * wsize);
   }
 
@@ -1790,7 +1793,7 @@ static void prim_concatMap(EvalState& state, const Pos& pos, Value** args,
   auto out = v.listElems();
   for (unsigned int n = 0, pos = 0; n < nrLists; ++n) {
     auto l = lists[n].listSize();
-    if (l) {
+    if (l != 0u) {
       memcpy(out + pos, lists[n].listElems(), l * sizeof(Value*));
     }
     pos += l;
@@ -1971,9 +1974,8 @@ static void prim_match(EvalState& state, const Pos& pos, Value** args,
       // limit is _GLIBCXX_REGEX_STATE_LIMIT for libstdc++
       throw EvalError("memory limit exceeded by regular expression '%s', at %s",
                       re, pos);
-    } else {
-      throw EvalError("invalid regular expression '%s', at %s", re, pos);
     }
+    throw EvalError("invalid regular expression '%s', at %s", re, pos);
   }
 }
 
@@ -2039,9 +2041,8 @@ static void prim_split(EvalState& state, const Pos& pos, Value** args,
       // limit is _GLIBCXX_REGEX_STATE_LIMIT for libstdc++
       throw EvalError("memory limit exceeded by regular expression '%s', at %s",
                       re, pos);
-    } else {
-      throw EvalError("invalid regular expression '%s', at %s", re, pos);
     }
+    throw EvalError("invalid regular expression '%s', at %s", re, pos);
   }
 }
 
@@ -2246,7 +2247,7 @@ static void prim_fetchTarball(EvalState& state, const Pos& pos, Value** args,
 RegisterPrimOp::PrimOps* RegisterPrimOp::primOps;
 
 RegisterPrimOp::RegisterPrimOp(std::string name, size_t arity, PrimOpFun fun) {
-  if (!primOps) {
+  if (primOps == nullptr) {
     primOps = new PrimOps;
   }
   primOps->emplace_back(name, arity, fun);
@@ -2444,7 +2445,7 @@ void EvalState::createBaseEnv() {
   }
   addConstant("__nixPath", v);
 
-  if (RegisterPrimOp::primOps) {
+  if (RegisterPrimOp::primOps != nullptr) {
     for (auto& primOp : *RegisterPrimOp::primOps) {
       addPrimOp(std::get<0>(primOp), std::get<1>(primOp), std::get<2>(primOp));
     }

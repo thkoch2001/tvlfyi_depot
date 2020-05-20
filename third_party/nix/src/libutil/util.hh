@@ -188,10 +188,10 @@ class AutoCloseFD {
   AutoCloseFD();
   AutoCloseFD(int fd);
   AutoCloseFD(const AutoCloseFD& fd) = delete;
-  AutoCloseFD(AutoCloseFD&& fd);
+  AutoCloseFD(AutoCloseFD&& that);
   ~AutoCloseFD();
   AutoCloseFD& operator=(const AutoCloseFD& fd) = delete;
-  AutoCloseFD& operator=(AutoCloseFD&& fd);
+  AutoCloseFD& operator=(AutoCloseFD&& that);
   int get() const;
   explicit operator bool() const;
   int release();

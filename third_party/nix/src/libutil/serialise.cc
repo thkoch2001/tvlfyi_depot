@@ -16,7 +16,7 @@ void BufferedSink::operator()(const unsigned char* data, size_t len) {
     buffer = decltype(buffer)(new unsigned char[bufSize]);
   }
 
-  while (len) {
+  while (len != 0u) {
     /* Optimisation: bypass the buffer if the data exceeds the
        buffer size. */
     if (bufPos + len >= bufSize) {
@@ -81,7 +81,7 @@ void FdSink::write(const unsigned char* data, size_t len) {
 bool FdSink::good() { return _good; }
 
 void Source::operator()(unsigned char* data, size_t len) {
-  while (len) {
+  while (len != 0u) {
     size_t n = read(data, len);
     data += n;
     len -= n;
@@ -108,7 +108,7 @@ size_t BufferedSource::read(unsigned char* data, size_t len) {
     buffer = decltype(buffer)(new unsigned char[bufSize]);
   }
 
-  if (!bufPosIn) {
+  if (bufPosIn == 0u) {
     bufPosIn = readUnbuffered(buffer.get(), bufSize);
   }
 
@@ -177,7 +177,7 @@ std::unique_ptr<Source> sinkToSource(std::function<void(Sink&)> fun,
       if (!coro) {
         coro = coro_t::pull_type([&](coro_t::push_type& yield) {
           LambdaSink sink([&](const unsigned char* data, size_t len) {
-            if (len) {
+            if (len != 0u) {
               yield(std::string((const char*)data, len));
             }
           });
@@ -210,7 +210,7 @@ std::unique_ptr<Source> sinkToSource(std::function<void(Sink&)> fun,
 }
 
 void writePadding(size_t len, Sink& sink) {
-  if (len % 8) {
+  if ((len % 8) != 0u) {
     unsigned char zero[8];
     memset(zero, 0, sizeof(zero));
     sink(zero, 8 - (len % 8));
@@ -247,12 +247,12 @@ Sink& operator<<(Sink& sink, const StringSet& s) {
 }
 
 void readPadding(size_t len, Source& source) {
-  if (len % 8) {
+  if ((len % 8) != 0u) {
     unsigned char zero[8];
     size_t n = 8 - (len % 8);
     source(zero, n);
     for (unsigned int i = 0; i < n; i++) {
-      if (zero[i]) {
+      if (zero[i] != 0u) {
         throw SerialisationError("non-zero padding");
       }
     }

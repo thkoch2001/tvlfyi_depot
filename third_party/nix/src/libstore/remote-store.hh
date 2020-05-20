@@ -59,7 +59,7 @@ class RemoteStore : public virtual Store {
   void querySubstitutablePathInfos(const PathSet& paths,
                                    SubstitutablePathInfos& infos) override;
 
-  void addToStore(const ValidPathInfo& info, Source& nar, RepairFlag repair,
+  void addToStore(const ValidPathInfo& info, Source& source, RepairFlag repair,
                   CheckSigsFlag checkSigs,
                   std::shared_ptr<FSAccessor> accessor) override;
 

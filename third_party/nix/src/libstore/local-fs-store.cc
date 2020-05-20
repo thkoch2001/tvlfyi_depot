@@ -27,7 +27,7 @@ struct LocalStoreAccessor : public FSAccessor {
     auto realPath = toRealPath(path);
 
     struct stat st;
-    if (lstat(realPath.c_str(), &st)) {
+    if (lstat(realPath.c_str(), &st) != 0) {
       if (errno == ENOENT || errno == ENOTDIR) {
         return {Type::tMissing, 0, false};
       }
@@ -42,7 +42,7 @@ struct LocalStoreAccessor : public FSAccessor {
                 ? Type::tRegular
                 : S_ISLNK(st.st_mode) ? Type::tSymlink : Type::tDirectory,
             S_ISREG(st.st_mode) ? (uint64_t)st.st_size : 0,
-            S_ISREG(st.st_mode) && st.st_mode & S_IXUSR};
+            S_ISREG(st.st_mode) && ((st.st_mode & S_IXUSR) != 0u)};
   }
 
   StringSet readDirectory(const Path& path) override {
@@ -92,7 +92,7 @@ std::shared_ptr<std::string> LocalFSStore::getBuildLog(const Path& path_) {
     } catch (InvalidPath&) {
       return nullptr;
     }
-    if (path == "") {
+    if (path.empty()) {
       return nullptr;
     }
   }
@@ -107,8 +107,8 @@ std::shared_ptr<std::string> LocalFSStore::getBuildLog(const Path& path_) {
 
     if (pathExists(logPath)) {
       return std::make_shared<std::string>(readFile(logPath));
-
-    } else if (pathExists(logBz2Path)) {
+    }
+    if (pathExists(logBz2Path)) {
       try {
         return decompress("bzip2", readFile(logBz2Path));
       } catch (Error&) {

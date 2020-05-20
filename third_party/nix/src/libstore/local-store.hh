@@ -217,7 +217,7 @@ class LocalStore : public LocalFSStore {
 
   void makeStoreWritable();
 
-  uint64_t queryValidPathId(State& state, const Path& path);
+  static uint64_t queryValidPathId(State& state, const Path& path);
 
   uint64_t addValidPath(State& state, const ValidPathInfo& info,
                         bool checkOutputs = true);
@@ -230,7 +230,7 @@ class LocalStore : public LocalFSStore {
   void verifyPath(const Path& path, const PathSet& store, PathSet& done,
                   PathSet& validPaths, RepairFlag repair, bool& errors);
 
-  void updatePathInfo(State& state, const ValidPathInfo& info);
+  static void updatePathInfo(State& state, const ValidPathInfo& info);
 
   void upgradeStore6();
   void upgradeStore7();
@@ -239,7 +239,7 @@ class LocalStore : public LocalFSStore {
 
   struct GCState;
 
-  void deleteGarbage(GCState& state, const Path& path);
+  static void deleteGarbage(GCState& state, const Path& path);
 
   void tryToDelete(GCState& state, const Path& path);
 
@@ -247,8 +247,8 @@ class LocalStore : public LocalFSStore {
 
   void deletePathRecursive(GCState& state, const Path& path);
 
-  bool isActiveTempFile(const GCState& state, const Path& path,
-                        const string& suffix);
+  static bool isActiveTempFile(const GCState& state, const Path& path,
+                               const string& suffix);
 
   AutoCloseFD openGCLock(LockType lockType);
 
@@ -267,18 +267,19 @@ class LocalStore : public LocalFSStore {
   typedef std::unordered_set<ino_t> InodeHash;
 
   InodeHash loadInodeHash();
-  Strings readDirectoryIgnoringInodes(const Path& path,
-                                      const InodeHash& inodeHash);
+  static Strings readDirectoryIgnoringInodes(const Path& path,
+                                             const InodeHash& inodeHash);
   void optimisePath_(OptimiseStats& stats, const Path& path,
                      InodeHash& inodeHash);
 
   // Internal versions that are not wrapped in retry_sqlite.
-  bool isValidPath_(State& state, const Path& path);
-  void queryReferrers(State& state, const Path& path, PathSet& referrers);
+  static bool isValidPath_(State& state, const Path& path);
+  static void queryReferrers(State& state, const Path& path,
+                             PathSet& referrers);
 
   /* Add signatures to a ValidPathInfo using the secret keys
      specified by the ‘secret-key-files’ option. */
-  void signPathInfo(ValidPathInfo& info);
+  static void signPathInfo(ValidPathInfo& info);
 
   Path getRealStoreDir() override { return realStoreDir; }
 

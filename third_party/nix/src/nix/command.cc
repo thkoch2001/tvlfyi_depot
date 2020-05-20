@@ -80,9 +80,8 @@ bool MultiCommand::processFlag(Strings::iterator& pos, Strings::iterator end) {
 bool MultiCommand::processArgs(const Strings& args, bool finish) {
   if (command) {
     return command->processArgs(args, finish);
-  } else {
-    return Args::processArgs(args, finish);
   }
+  return Args::processArgs(args, finish);
 }
 
 StoreCommand::StoreCommand() = default;
@@ -119,7 +118,7 @@ void StorePathsCommand::run(ref<Store> store) {
   Paths storePaths;
 
   if (all) {
-    if (installables.size()) {
+    if (!installables.empty() != 0u) {
       throw UsageError("'--all' does not expect arguments");
     }
     for (auto& p : store->queryAllValidPaths()) {

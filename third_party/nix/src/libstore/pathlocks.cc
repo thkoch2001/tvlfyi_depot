@@ -53,9 +53,8 @@ bool lockFile(int fd, LockType lockType, bool wait) {
       checkInterrupt();
       if (errno != EINTR) {
         throw SysError(format("acquiring/releasing lock"));
-      } else {
-        return false;
       }
+      return false;
     }
   } else {
     while (flock(fd, type | LOCK_NB) != 0) {
@@ -104,7 +103,7 @@ bool PathLocks::lockPaths(const PathSet& paths, const string& waitMsg,
       /* Acquire an exclusive lock. */
       if (!lockFile(fd.get(), ltWrite, false)) {
         if (wait) {
-          if (waitMsg != "") {
+          if (!waitMsg.empty()) {
             LOG(WARNING) << waitMsg;
           }
           lockFile(fd.get(), ltWrite, true);

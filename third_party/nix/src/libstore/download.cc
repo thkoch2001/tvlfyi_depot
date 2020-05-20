@@ -39,9 +39,8 @@ std::string resolveUri(const std::string& uri) {
   if (uri.compare(0, 8, "channel:") == 0) {
     return "https://nixos.org/channels/" + std::string(uri, 8) +
            "/nixexprs.tar.xz";
-  } else {
-    return uri;
   }
+  return uri;
 }
 
 struct CurlDownloader : public Downloader {
@@ -111,13 +110,13 @@ struct CurlDownloader : public Downloader {
     }
 
     ~DownloadItem() {
-      if (req) {
+      if (req != nullptr) {
         if (active) {
           curl_multi_remove_handle(downloader.curlm, req);
         }
         curl_easy_cleanup(req);
       }
-      if (requestHeaders) {
+      if (requestHeaders != nullptr) {
         curl_slist_free_all(requestHeaders);
       }
       try {
@@ -214,13 +213,13 @@ struct CurlDownloader : public Downloader {
       return ((DownloadItem*)userp)->headerCallback(contents, size, nmemb);
     }
 
-    int progressCallback(double dltotal, double dlnow) {
+    static int progressCallback(double dltotal, double dlnow) {
       try {
         // TODO(tazjin): this had activity nonsense, clean it up
       } catch (nix::Interrupted&) {
         assert(_isInterrupted);
       }
-      return _isInterrupted;
+      return static_cast<int>(_isInterrupted);
     }
 
     static int progressCallbackWrapper(void* userp, double dltotal,
@@ -255,7 +254,7 @@ struct CurlDownloader : public Downloader {
     }
 
     void init() {
-      if (!req) {
+      if (req == nullptr) {
         req = curl_easy_init();
       }
 
@@ -314,7 +313,7 @@ struct CurlDownloader : public Downloader {
       }
 
       if (request.verifyTLS) {
-        if (settings.caFile != "") {
+        if (!settings.caFile.empty()) {
           curl_easy_setopt(req, CURLOPT_CAINFO, settings.caFile.c_str());
         }
       } else {
@@ -335,7 +334,7 @@ struct CurlDownloader : public Downloader {
                        settings.netrcFile.get().c_str());
       curl_easy_setopt(req, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
 
-      if (writtenToSink) {
+      if (writtenToSink != 0) {
         curl_easy_setopt(req, CURLOPT_RESUME_FROM_LARGE, writtenToSink);
       }
 
@@ -349,7 +348,7 @@ struct CurlDownloader : public Downloader {
 
       char* effectiveUriCStr;
       curl_easy_getinfo(req, CURLINFO_EFFECTIVE_URL, &effectiveUriCStr);
-      if (effectiveUriCStr) {
+      if (effectiveUriCStr != nullptr) {
         result.effectiveUri = effectiveUriCStr;
       }
 
@@ -461,10 +460,10 @@ struct CurlDownloader : public Downloader {
             (!this->request.dataCallback || writtenToSink == 0 ||
              (acceptRanges && encoding.empty()))) {
           int ms = request.baseRetryTimeMs *
-                   std::pow(2.0f, attempt - 1 +
+                   std::pow(2.0F, attempt - 1 +
                                       std::uniform_real_distribution<>(
                                           0.0, 0.5)(downloader.mt19937));
-          if (writtenToSink) {
+          if (writtenToSink != 0) {
             LOG(WARNING) << exc.what() << "; retrying from offset "
                          << writtenToSink << " in " << ms << "ms";
           } else {
@@ -528,7 +527,7 @@ struct CurlDownloader : public Downloader {
 
     workerThread.join();
 
-    if (curlm) {
+    if (curlm != nullptr) {
       curl_multi_cleanup(curlm);
     }
   }
@@ -567,7 +566,7 @@ struct CurlDownloader : public Downloader {
       /* Set the promises of any finished requests. */
       CURLMsg* msg;
       int left;
-      while ((msg = curl_multi_info_read(curlm, &left))) {
+      while ((msg = curl_multi_info_read(curlm, &left)) != nullptr) {
         if (msg->msg == CURLMSG_DONE) {
           auto i = items.find(msg->easy_handle);
           assert(i != items.end());
@@ -605,7 +604,7 @@ struct CurlDownloader : public Downloader {
       /* Add new curl requests from the incoming requests queue,
          except for requests that are embargoed (waiting for a
          retry timeout to expire). */
-      if (extraFDs[0].revents & CURL_WAIT_POLLIN) {
+      if ((extraFDs[0].revents & CURL_WAIT_POLLIN) != 0) {
         char buf[1024];
         auto res = read(extraFDs[0].fd, buf, sizeof(buf));
         if (res == -1 && errno != EINTR) {
@@ -863,7 +862,7 @@ CachedDownloadResult Downloader::downloadCached(
   auto url = resolveUri(request.uri);
 
   auto name = request.name;
-  if (name == "") {
+  if (name.empty()) {
     auto p = url.rfind('/');
     if (p != string::npos) {
       name = string(url, p + 1);
@@ -987,7 +986,7 @@ CachedDownloadResult Downloader::downloadCached(
     storePath = unpackedStorePath;
   }
 
-  if (expectedStorePath != "" && storePath != expectedStorePath) {
+  if (!expectedStorePath.empty() && storePath != expectedStorePath) {
     unsigned int statusCode = 102;
     Hash gotHash =
         request.unpack

@@ -132,7 +132,7 @@ struct NarAccessor : public FSAccessor {
   }
 
   NarMember* find(const Path& path) {
-    Path canon = path == "" ? "" : canonPath(path);
+    Path canon = path.empty() ? "" : canonPath(path);
     NarMember* current = &root;
     auto end = path.end();
     for (auto it = path.begin(); it != end;) {
@@ -238,7 +238,7 @@ void listNar(JSONPlaceholder& res, ref<FSAccessor> accessor, const Path& path,
       if (st.isExecutable) {
         obj.attr("executable", true);
       }
-      if (st.narOffset) {
+      if (st.narOffset != 0u) {
         obj.attr("narOffset", st.narOffset);
       }
       break;

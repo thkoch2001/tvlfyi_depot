@@ -142,7 +142,7 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
     });
   }
 
-  Cache& getCache(State& state, const std::string& uri) {
+  static Cache& getCache(State& state, const std::string& uri) {
     auto i = state.caches.find(uri);
     if (i == state.caches.end()) {
       abort();
@@ -158,7 +158,8 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
       // FIXME: race
 
       state->insertCache
-          .use()(uri)(time(nullptr))(storeDir)(wantMassQuery)(priority)
+          .use()(uri)(time(nullptr))(storeDir)(
+              static_cast<int64_t>(wantMassQuery))(priority)
           .exec();
       assert(sqlite3_changes(state->db) == 1);
       state->caches[uri] = Cache{(int)sqlite3_last_insert_rowid(state->db),
@@ -209,7 +210,7 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
             return {oUnknown, nullptr};
           }
 
-          if (!queryNAR.getInt(0)) {
+          if (queryNAR.getInt(0) == 0) {
             return {oInvalid, nullptr};
           }
 
@@ -262,10 +263,10 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
                 narInfo && narInfo->fileHash)(
                 narInfo ? narInfo->fileSize : 0,
                 narInfo != nullptr &&
-                    narInfo->fileSize)(info->narHash.to_string())(
+                    (narInfo->fileSize != 0u))(info->narHash.to_string())(
                 info->narSize)(concatStringsSep(" ", info->shortRefs()))(
-                info->deriver != "" ? baseNameOf(info->deriver) : "",
-                info->deriver != "")(concatStringsSep(" ", info->sigs))(
+                !info->deriver.empty() ? baseNameOf(info->deriver) : "",
+                !info->deriver.empty())(concatStringsSep(" ", info->sigs))(
                 info->ca)(time(nullptr))
             .exec();
 

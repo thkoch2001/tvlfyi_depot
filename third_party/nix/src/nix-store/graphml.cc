@@ -58,7 +58,7 @@ void printGraphML(ref<Store> store, const PathSet& roots) {
     workList.erase(path);
 
     ret = doneSet.insert(path);
-    if (ret.second == false) {
+    if (!ret.second) {
       continue;
     }
 

@@ -46,7 +46,7 @@ Settings::Settings()
   lockCPU = getEnv("NIX_AFFINITY_HACK", "1") == "1";
 
   caFile = getEnv("NIX_SSL_CERT_FILE", getEnv("SSL_CERT_FILE", ""));
-  if (caFile == "") {
+  if (caFile.empty()) {
     for (auto& fn :
          {"/etc/ssl/certs/ca-certificates.crt",
           "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"}) {
@@ -59,7 +59,7 @@ Settings::Settings()
 
   /* Backwards compatibility. */
   auto s = getEnv("NIX_REMOTE_SYSTEMS");
-  if (s != "") {
+  if (!s.empty()) {
     Strings ss;
     for (auto& p : tokenizeString<Strings>(s, ":")) {
       ss.push_back("@" + p);
@@ -128,7 +128,8 @@ template <>
 std::string BaseSetting<SandboxMode>::to_string() {
   if (value == smEnabled) {
     return "true";
-  } else if (value == smRelaxed) {
+  }
+  if (value == smRelaxed) {
     return "relaxed";
   } else if (value == smDisabled) {
     return "false";
@@ -189,7 +190,7 @@ void initPlugins() {
       /* handle is purposefully leaked as there may be state in the
          DSO needed by the action of the plugin. */
       void* handle = dlopen(file.c_str(), RTLD_LAZY | RTLD_LOCAL);
-      if (!handle) {
+      if (handle == nullptr) {
         throw Error("could not dynamically open plugin file '%s': %s", file,
                     dlerror());
       }

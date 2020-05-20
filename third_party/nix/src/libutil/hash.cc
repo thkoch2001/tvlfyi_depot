@@ -193,7 +193,7 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
       if (i < hashSize - 1) {
         hash[i + 1] |= digit >> (8 - j);
       } else {
-        if (digit >> (8 - j)) {
+        if ((digit >> (8 - j)) != 0) {
           throw BadHash("invalid base-32 hash '%s'", s);
         }
       }
@@ -280,7 +280,7 @@ Hash hashFile(HashType ht, const Path& path) {
 
   std::vector<unsigned char> buf(8192);
   ssize_t n;
-  while ((n = read(fd.get(), buf.data(), buf.size()))) {
+  while ((n = read(fd.get(), buf.data(), buf.size())) != 0) {
     checkInterrupt();
     if (n == -1) {
       throw SysError(format("reading file '%1%'") % path);
@@ -341,7 +341,8 @@ Hash compressHash(const Hash& hash, unsigned int newSize) {
 HashType parseHashType(const string& s) {
   if (s == "md5") {
     return htMD5;
-  } else if (s == "sha1") {
+  }
+  if (s == "sha1") {
     return htSHA1;
   } else if (s == "sha256") {
     return htSHA256;
@@ -355,7 +356,8 @@ HashType parseHashType(const string& s) {
 string printHashType(HashType ht) {
   if (ht == htMD5) {
     return "md5";
-  } else if (ht == htSHA1) {
+  }
+  if (ht == htSHA1) {
     return "sha1";
   } else if (ht == htSHA256) {
     return "sha256";

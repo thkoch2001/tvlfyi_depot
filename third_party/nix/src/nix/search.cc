@@ -160,11 +160,11 @@ struct CmdSearch : SourceExprCommand, MixJSON {
             }
           }
 
-          if (cache) {
+          if (cache != nullptr) {
             cache->attr("type", "derivation");
             cache->attr("name", drv.queryName());
             cache->attr("system", drv.querySystem());
-            if (description != "") {
+            if (!description.empty()) {
               auto meta(cache->object("meta"));
               meta.attr("description", description);
             }
@@ -190,11 +190,12 @@ struct CmdSearch : SourceExprCommand, MixJSON {
 
           for (auto& i : *v->attrs) {
             auto cache2 =
-                cache ? std::make_unique<JSONObject>(cache->object(i.name))
-                      : nullptr;
+                cache != nullptr
+                    ? std::make_unique<JSONObject>(cache->object(i.name))
+                    : nullptr;
             doExpr(i.value,
-                   attrPath == "" ? (std::string)i.name
-                                  : attrPath + "." + (std::string)i.name,
+                   attrPath.empty() ? (std::string)i.name
+                                    : attrPath + "." + (std::string)i.name,
                    toplevel2 || fromCache, cache2 ? cache2.get() : nullptr);
           }
         }
@@ -256,7 +257,7 @@ struct CmdSearch : SourceExprCommand, MixJSON {
       }
     }
 
-    if (results.size() == 0) {
+    if (results.empty()) {
       throw Error("no results for the given search term(s)!");
     }
 

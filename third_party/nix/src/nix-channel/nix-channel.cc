@@ -86,7 +86,7 @@ static void update(const StringSet& channelNames) {
   for (const auto& channel : channels) {
     auto name = channel.first;
     auto url = channel.second;
-    if (!(channelNames.empty() || channelNames.count(name))) {
+    if (!(channelNames.empty() || (channelNames.count(name) != 0u))) {
       continue;
     }
 
@@ -216,7 +216,7 @@ static int _main(int argc, char** argv) {
       case cNone:
         throw UsageError("no command specified");
       case cAdd:
-        if (args.size() < 1 || args.size() > 2) {
+        if (args.empty() || args.size() > 2) {
           throw UsageError("'--add' requires one or two arguments");
         }
         {

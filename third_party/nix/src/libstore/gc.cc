@@ -236,7 +236,8 @@ void LocalStore::findTempRoots(FDs& fds, Roots& tempRoots, bool censor) {
     string contents = readFile(fd->get());
 
     /* Extract the roots. */
-    string::size_type pos = 0, end;
+    string::size_type pos = 0;
+    string::size_type end;
 
     while ((end = contents.find((char)0, pos)) != string::npos) {
       Path root(contents, pos, end - pos);
@@ -542,7 +543,7 @@ void LocalStore::deletePathRecursive(GCState& state, const Path& path) {
   Path realPath = realStoreDir + "/" + baseNameOf(path);
 
   struct stat st;
-  if (lstat(realPath.c_str(), &st)) {
+  if (lstat(realPath.c_str(), &st) != 0) {
     if (errno == ENOENT) {
       return;
     }
@@ -567,7 +568,7 @@ void LocalStore::deletePathRecursive(GCState& state, const Path& path) {
         throw SysError(format("making '%1%' writable") % realPath);
       }
       Path tmp = trashDir + "/" + baseNameOf(path);
-      if (rename(realPath.c_str(), tmp.c_str())) {
+      if (rename(realPath.c_str(), tmp.c_str()) != 0) {
         throw SysError(format("unable to rename '%1%' to '%2%'") % realPath %
                        tmp);
       }
@@ -593,19 +594,19 @@ void LocalStore::deletePathRecursive(GCState& state, const Path& path) {
 
 bool LocalStore::canReachRoot(GCState& state, PathSet& visited,
                               const Path& path) {
-  if (visited.count(path)) {
+  if (visited.count(path) != 0u) {
     return false;
   }
 
-  if (state.alive.count(path)) {
+  if (state.alive.count(path) != 0u) {
     return true;
   }
 
-  if (state.dead.count(path)) {
+  if (state.dead.count(path) != 0u) {
     return false;
   }
 
-  if (state.roots.count(path)) {
+  if (state.roots.count(path) != 0u) {
     DLOG(INFO) << "cannot delete '" << path << "' because it's a root";
     state.alive.insert(path);
     return true;
@@ -713,7 +714,8 @@ void LocalStore::removeUnusedLinks(const GCState& state) {
     throw SysError(format("opening directory '%1%'") % linksDir);
   }
 
-  long long actualSize = 0, unsharedSize = 0;
+  long long actualSize = 0;
+  long long unsharedSize = 0;
 
   struct dirent* dirent;
   while (errno = 0, dirent = readdir(dir.get())) {
@@ -930,7 +932,7 @@ void LocalStore::autoGC(bool sync) {
     }
 
     struct statvfs st;
-    if (statvfs(realStoreDir.c_str(), &st)) {
+    if (statvfs(realStoreDir.c_str(), &st) != 0) {
       throw SysError("getting filesystem info about '%s'", realStoreDir);
     }
 

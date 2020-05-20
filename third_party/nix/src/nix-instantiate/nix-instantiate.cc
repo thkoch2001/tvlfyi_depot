@@ -63,13 +63,13 @@ void processExpr(EvalState& state, const Strings& attrPaths, bool parseOnly,
 
         /* What output do we want? */
         string outputName = i.queryOutputName();
-        if (outputName == "") {
+        if (outputName.empty()) {
           throw Error(
               format("derivation '%1%' lacks an 'outputName' attribute ") %
               drvPath);
         }
 
-        if (gcRoot == "") {
+        if (gcRoot.empty()) {
           printGCWarning();
         } else {
           Path rootName = indirectRoot ? absPath(gcRoot) : gcRoot;
@@ -173,7 +173,7 @@ static int _main(int argc, char** argv) {
     if (findFile) {
       for (auto& i : files) {
         Path p = state->findFile(i);
-        if (p == "") {
+        if (p.empty()) {
           throw Error(format("unable to find '%1%'") % i);
         }
         std::cout << p << std::endl;

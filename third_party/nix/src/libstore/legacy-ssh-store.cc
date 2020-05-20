@@ -58,7 +58,7 @@ struct LegacySSHStore : public Store {
     auto conn = make_ref<Connection>();
     conn->sshConn = master.startCommand(
         fmt("%s --serve --write", remoteProgram) +
-        (remoteStore.get() == ""
+        (remoteStore.get().empty()
              ? ""
              : " --store " + shellEscape(remoteStore.get())));
     conn->to = FdSink(conn->sshConn->in.get());
@@ -120,7 +120,7 @@ struct LegacySSHStore : public Store {
       }
 
       auto s = readString(conn->from);
-      assert(s == "");
+      assert(s.empty());
 
       callback(std::move(info));
     } catch (...) {
@@ -139,8 +139,8 @@ struct LegacySSHStore : public Store {
     if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 5) {
       conn->to << cmdAddToStoreNar << info.path << info.deriver
                << info.narHash.to_string(Base16, false) << info.references
-               << info.registrationTime << info.narSize << info.ultimate
-               << info.sigs << info.ca;
+               << info.registrationTime << info.narSize
+               << static_cast<uint64_t>(info.ultimate) << info.sigs << info.ca;
       try {
         copyNAR(source, conn->to);
       } catch (...) {
@@ -201,7 +201,8 @@ struct LegacySSHStore : public Store {
       conn->to << settings.maxLogSize;
     }
     if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 3) {
-      conn->to << settings.buildRepeat << settings.enforceDeterminism;
+      conn->to << settings.buildRepeat
+               << static_cast<uint64_t>(settings.enforceDeterminism);
     }
 
     conn->to.flush();
@@ -231,7 +232,8 @@ struct LegacySSHStore : public Store {
 
     auto conn(connections->get());
 
-    conn->to << cmdQueryClosure << includeOutputs << paths;
+    conn->to << cmdQueryClosure << static_cast<uint64_t>(includeOutputs)
+             << paths;
     conn->to.flush();
 
     auto res = readStorePaths<PathSet>(*this, conn->from);
@@ -243,7 +245,7 @@ struct LegacySSHStore : public Store {
                                                     NoSubstitute) override {
     auto conn(connections->get());
 
-    conn->to << cmdQueryValidPaths << false  // lock
+    conn->to << cmdQueryValidPaths << 0u  // lock
              << maybeSubstitute << paths;
     conn->to.flush();
 

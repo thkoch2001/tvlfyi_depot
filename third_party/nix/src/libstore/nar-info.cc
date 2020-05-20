@@ -90,7 +90,7 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
     pos = eol + 1;
   }
 
-  if (compression == "") {
+  if (compression.empty()) {
     compression = "bzip2";
   }
 
@@ -103,7 +103,7 @@ std::string NarInfo::to_string() const {
   std::string res;
   res += "StorePath: " + path + "\n";
   res += "URL: " + url + "\n";
-  assert(compression != "");
+  assert(!compression.empty());
   res += "Compression: " + compression + "\n";
   assert(fileHash.type == htSHA256);
   res += "FileHash: " + fileHash.to_string(Base32) + "\n";

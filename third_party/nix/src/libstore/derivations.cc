@@ -90,7 +90,7 @@ static string parseString(std::istream& str) {
 
 static Path parsePath(std::istream& str) {
   string s = parseString(str);
-  if (s.size() == 0 || s[0] != '/') {
+  if (s.empty() || s[0] != '/') {
     throw FormatError(format("bad path '%1%' in derivation") % s);
   }
   return s;
@@ -197,7 +197,7 @@ Derivation Store::derivationFromPath(const Path& drvPath) {
 
 static void printString(string& res, const string& s) {
   res += '"';
-  for (const char* i = s.c_str(); *i; i++) {
+  for (const char* i = s.c_str(); *i != 0; i++) {
     if (*i == '\"' || *i == '\\') {
       res += "\\";
       res += *i;
@@ -303,7 +303,7 @@ bool isDerivation(const string& fileName) {
 
 bool BasicDerivation::isFixedOutput() const {
   return outputs.size() == 1 && outputs.begin()->first == "out" &&
-         outputs.begin()->second.hash != "";
+         !outputs.begin()->second.hash.empty();
 }
 
 DrvHashes drvHashes;
@@ -356,10 +356,11 @@ Hash hashDerivationModulo(Store& store, Derivation drv) {
 
 DrvPathWithOutputs parseDrvPathWithOutputs(const string& s) {
   size_t n = s.find("!");
-  return n == s.npos ? DrvPathWithOutputs(s, std::set<string>())
-                     : DrvPathWithOutputs(string(s, 0, n),
-                                          tokenizeString<std::set<string> >(
-                                              string(s, n + 1), ","));
+  return n == std::string::npos
+             ? DrvPathWithOutputs(s, std::set<string>())
+             : DrvPathWithOutputs(
+                   string(s, 0, n),
+                   tokenizeString<std::set<string> >(string(s, n + 1), ","));
 }
 
 Path makeDrvPathWithOutputs(const Path& drvPath,
