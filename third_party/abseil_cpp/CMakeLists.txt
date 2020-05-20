@@ -51,6 +51,9 @@ list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/absl/copts
 )
 
+# Linking Abseil to shared libraries (such as Nix) requires PIC.
+set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+
 include(AbseilInstallDirs)
 include(CMakePackageConfigHelpers)
 include(AbseilDll)
