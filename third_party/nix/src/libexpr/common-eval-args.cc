@@ -48,7 +48,7 @@ Bindings* MixEvalArgs::getAutoArgs(EvalState& state) {
   return res;
 }
 
-Path lookupFileArg(EvalState& state, string s) {
+Path lookupFileArg(EvalState& state, std::string s) {
   if (isUri(s)) {
     CachedDownloadRequest request(s);
     request.unpack = true;

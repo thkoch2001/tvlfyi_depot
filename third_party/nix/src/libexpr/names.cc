@@ -13,7 +13,7 @@ DrvName::DrvName() { name = ""; }
    a letter.  The `version' part is the rest (excluding the separating
    dash).  E.g., `apache-httpd-2.0.48' is parsed to (`apache-httpd',
    '2.0.48'). */
-DrvName::DrvName(const string& s) : hits(0) {
+DrvName::DrvName(const std::string& s) : hits(0) {
   name = fullName = s;
   for (unsigned int i = 0; i < s.size(); ++i) {
     /* !!! isalpha/isdigit are affected by the locale. */
@@ -51,7 +51,7 @@ string nextComponent(string::const_iterator& p,
   /* If the first character is a digit, consume the longest sequence
      of digits.  Otherwise, consume the longest sequence of
      non-digit, non-separator characters. */
-  string s;
+  std::string s;
   if (isdigit(*p) != 0) {
     while (p != end && (isdigit(*p) != 0)) {
       s += *p++;
@@ -65,7 +65,7 @@ string nextComponent(string::const_iterator& p,
   return s;
 }
 
-static bool componentsLT(const string& c1, const string& c2) {
+static bool componentsLT(const std::string& c1, const std::string& c2) {
   int n1;
   int n2;
   bool c1Num = string2Int(c1, n1);
@@ -90,13 +90,13 @@ static bool componentsLT(const string& c1, const string& c2) {
   }
 }
 
-int compareVersions(const string& v1, const string& v2) {
+int compareVersions(const std::string& v1, const std::string& v2) {
   string::const_iterator p1 = v1.begin();
   string::const_iterator p2 = v2.begin();
 
   while (p1 != v1.end() || p2 != v2.end()) {
-    string c1 = nextComponent(p1, v1.end());
-    string c2 = nextComponent(p2, v2.end());
+    std::string c1 = nextComponent(p1, v1.end());
+    std::string c2 = nextComponent(p2, v2.end());
     if (componentsLT(c1, c2)) {
       return -1;
     }

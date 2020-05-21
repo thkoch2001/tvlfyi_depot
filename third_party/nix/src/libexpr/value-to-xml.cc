@@ -8,7 +8,8 @@
 
 namespace nix {
 
-static XMLAttrs singletonAttrs(const string& name, const string& value) {
+static XMLAttrs singletonAttrs(const std::string& name,
+                               const std::string& value) {
   XMLAttrs attrs;
   attrs[name] = value;
   return attrs;

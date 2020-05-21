@@ -12,7 +12,7 @@
 
 namespace nix {
 
-DrvInfo::DrvInfo(EvalState& state, string attrPath, Bindings* attrs)
+DrvInfo::DrvInfo(EvalState& state, std::string attrPath, Bindings* attrs)
     : state(&state), attrs(attrs), attrPath(std::move(attrPath)) {}
 
 DrvInfo::DrvInfo(EvalState& state, const ref<Store>& store,
@@ -97,7 +97,7 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
       /* For each output... */
       for (unsigned int j = 0; j < i->value->listSize(); ++j) {
         /* Evaluate the corresponding set. */
-        string name =
+        std::string name =
             state->forceStringNoCtx(*i->value->listElems()[j], *i->pos);
         Bindings::iterator out = attrs->find(state->symbols.Create(name));
         if (out == attrs->end()) {
@@ -209,7 +209,7 @@ bool DrvInfo::checkMeta(Value& v) {
   }
 }
 
-Value* DrvInfo::queryMeta(const string& name) {
+Value* DrvInfo::queryMeta(const std::string& name) {
   if (getMeta() == nullptr) {
     return nullptr;
   }
@@ -220,7 +220,7 @@ Value* DrvInfo::queryMeta(const string& name) {
   return a->value;
 }
 
-string DrvInfo::queryMetaString(const string& name) {
+string DrvInfo::queryMetaString(const std::string& name) {
   Value* v = queryMeta(name);
   if ((v == nullptr) || v->type != tString) {
     return "";
@@ -228,7 +228,7 @@ string DrvInfo::queryMetaString(const string& name) {
   return v->string.s;
 }
 
-NixInt DrvInfo::queryMetaInt(const string& name, NixInt def) {
+NixInt DrvInfo::queryMetaInt(const std::string& name, NixInt def) {
   Value* v = queryMeta(name);
   if (v == nullptr) {
     return def;
@@ -247,7 +247,7 @@ NixInt DrvInfo::queryMetaInt(const string& name, NixInt def) {
   return def;
 }
 
-NixFloat DrvInfo::queryMetaFloat(const string& name, NixFloat def) {
+NixFloat DrvInfo::queryMetaFloat(const std::string& name, NixFloat def) {
   Value* v = queryMeta(name);
   if (v == nullptr) {
     return def;
@@ -266,7 +266,7 @@ NixFloat DrvInfo::queryMetaFloat(const string& name, NixFloat def) {
   return def;
 }
 
-bool DrvInfo::queryMetaBool(const string& name, bool def) {
+bool DrvInfo::queryMetaBool(const std::string& name, bool def) {
   Value* v = queryMeta(name);
   if (v == nullptr) {
     return def;
@@ -287,7 +287,7 @@ bool DrvInfo::queryMetaBool(const string& name, bool def) {
   return def;
 }
 
-void DrvInfo::setMeta(const string& name, Value* v) {
+void DrvInfo::setMeta(const std::string& name, Value* v) {
   getMeta();
   Bindings* old = meta;
   meta = state->allocBindings(1 + (old != nullptr ? old->size() : 0));
@@ -312,9 +312,9 @@ using Done = set<Bindings*>;
    then put information about it in `drvs' (unless it's already in `done').
    The result boolean indicates whether it makes sense
    for the caller to recursively search for derivations in `v'. */
-static bool getDerivation(EvalState& state, Value& v, const string& attrPath,
-                          DrvInfos& drvs, Done& done,
-                          bool ignoreAssertionFailures) {
+static bool getDerivation(EvalState& state, Value& v,
+                          const std::string& attrPath, DrvInfos& drvs,
+                          Done& done, bool ignoreAssertionFailures) {
   try {
     state.forceValue(v);
     if (!state.isDerivation(v)) {
@@ -355,14 +355,14 @@ std::optional<DrvInfo> getDerivation(EvalState& state, Value& v,
   return std::move(drvs.front());
 }
 
-static string addToPath(const string& s1, const string& s2) {
+static std::string addToPath(const std::string& s1, const std::string& s2) {
   return s1.empty() ? s2 : s1 + "." + s2;
 }
 
 static std::regex attrRegex("[A-Za-z_][A-Za-z0-9-_+]*");
 
 static void getDerivations(EvalState& state, Value& vIn,
-                           const string& pathPrefix, Bindings& autoArgs,
+                           const std::string& pathPrefix, Bindings& autoArgs,
                            DrvInfos& drvs, Done& done,
                            bool ignoreAssertionFailures) {
   Value v;
@@ -390,7 +390,7 @@ static void getDerivations(EvalState& state, Value& vIn,
       if (!std::regex_match(std::string(i->name), attrRegex)) {
         continue;
       }
-      string pathPrefix2 = addToPath(pathPrefix, i->name);
+      std::string pathPrefix2 = addToPath(pathPrefix, i->name);
       if (combineChannels) {
         getDerivations(state, *i->value, pathPrefix2, autoArgs, drvs, done,
                        ignoreAssertionFailures);
@@ -414,7 +414,8 @@ static void getDerivations(EvalState& state, Value& vIn,
 
   else if (v.isList()) {
     for (unsigned int n = 0; n < v.listSize(); ++n) {
-      string pathPrefix2 = addToPath(pathPrefix, (format("%1%") % n).str());
+      std::string pathPrefix2 =
+          addToPath(pathPrefix, (format("%1%") % n).str());
       if (getDerivation(state, *v.listElems()[n], pathPrefix2, drvs, done,
                         ignoreAssertionFailures)) {
         getDerivations(state, *v.listElems()[n], pathPrefix2, autoArgs, drvs,
@@ -430,7 +431,7 @@ static void getDerivations(EvalState& state, Value& vIn,
   }
 }
 
-void getDerivations(EvalState& state, Value& v, const string& pathPrefix,
+void getDerivations(EvalState& state, Value& v, const std::string& pathPrefix,
                     Bindings& autoArgs, DrvInfos& drvs,
                     bool ignoreAssertionFailures) {
   Done done;

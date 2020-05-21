@@ -7,7 +7,7 @@ namespace nix {
 static void prim_unsafeDiscardStringContext(EvalState& state, const Pos& pos,
                                             Value** args, Value& v) {
   PathSet context;
-  string s = state.coerceToString(pos, *args[0], context);
+  std::string s = state.coerceToString(pos, *args[0], context);
   mkString(v, s, PathSet());
 }
 
@@ -32,7 +32,7 @@ static RegisterPrimOp r2("__hasContext", 1, prim_hasContext);
 static void prim_unsafeDiscardOutputDependency(EvalState& state, const Pos& pos,
                                                Value** args, Value& v) {
   PathSet context;
-  string s = state.coerceToString(pos, *args[0], context);
+  std::string s = state.coerceToString(pos, *args[0], context);
 
   PathSet context2;
   for (auto& p : context) {
@@ -76,7 +76,7 @@ static void prim_getContext(EvalState& state, const Pos& pos, Value** args,
   auto contextInfos = std::map<Path, ContextInfo>();
   for (const auto& p : context) {
     Path drv;
-    string output;
+    std::string output;
     const Path* path = &p;
     if (p.at(0) == '=') {
       drv = string(p, 1);

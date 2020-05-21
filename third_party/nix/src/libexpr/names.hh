@@ -8,13 +8,13 @@
 namespace nix {
 
 struct DrvName {
-  string fullName;
-  string name;
-  string version;
+  std::string fullName;
+  std::string name;
+  std::string version;
   unsigned int hits;
 
   DrvName();
-  DrvName(const string& s);
+  DrvName(const std::string& s);
   bool matches(DrvName& n);
 
  private:
@@ -25,7 +25,7 @@ typedef list<DrvName> DrvNames;
 
 string nextComponent(string::const_iterator& p,
                      const string::const_iterator end);
-int compareVersions(const string& v1, const string& v2);
+int compareVersions(const std::string& v1, const std::string& v2);
 DrvNames drvNamesFromArgs(const Strings& opArgs);
 
 }  // namespace nix

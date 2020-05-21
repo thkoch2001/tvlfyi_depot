@@ -3,11 +3,9 @@
 #include <absl/container/node_hash_set.h>
 #include <absl/strings/string_view.h>
 
-#include "types.hh"
-
 namespace nix {  // TODO(tazjin): ::expr
 
- // TODO(tazjin): Replace with a simpler struct, or get rid of.
+// TODO(tazjin): Replace with a simpler struct, or get rid of.
 class Symbol {
  private:
   const std::string* s;  // pointer into SymbolTable

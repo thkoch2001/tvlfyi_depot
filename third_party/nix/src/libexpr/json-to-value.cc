@@ -10,8 +10,8 @@ static void skipWhitespace(const char*& s) {
   }
 }
 
-static string parseJSONString(const char*& s) {
-  string res;
+static std::string parseJSONString(const char*& s) {
+  std::string res;
   if (*s++ != '"') {
     throw JSONParseError("expected JSON string");
   }
@@ -97,7 +97,7 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
       if (attrs.empty() && *s == '}') {
         break;
       }
-      string name = parseJSONString(s);
+      std::string name = parseJSONString(s);
       skipWhitespace(s);
       if (*s != ':') {
         throw JSONParseError("expected ':' in JSON object");
@@ -128,7 +128,7 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
   }
 
   else if ((isdigit(*s) != 0) || *s == '-' || *s == '.') {
-    // Buffer into a string first, then use built-in C++ conversions
+    // Buffer into a std::string first, then use built-in C++ conversions
     std::string tmp_number;
     ValueType number_type = tInt;
 
@@ -173,7 +173,7 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
   }
 }
 
-void parseJSON(EvalState& state, const string& s_, Value& v) {
+void parseJSON(EvalState& state, const std::string& s_, Value& v) {
   const char* s = s_.c_str();
   parseJSON(state, s, v);
   skipWhitespace(s);

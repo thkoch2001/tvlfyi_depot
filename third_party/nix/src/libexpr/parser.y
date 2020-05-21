@@ -30,7 +30,7 @@ namespace nix {
         Expr * result;
         Path basePath;
         Symbol path;
-        string error;
+        std::string error;
         Symbol sLetBody;
         ParseData(EvalState & state)
             : state(state)
@@ -199,7 +199,7 @@ static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, vector<Ex
             continue;
         }
 
-        string s2;
+        std::string s2;
         for (size_t j = 0; j < e->s.size(); ++j) {
             if (atStartOfLine) {
                 if (e->s[j] == ' ') {
@@ -396,7 +396,7 @@ expr_simple
   | PATH { $$ = new ExprPath(absPath($1, data->basePath)); }
   | HPATH { $$ = new ExprPath(getHome() + string{$1 + 1}); }
   | SPATH {
-      string path($1 + 1, strlen($1) - 2);
+      std::string path($1 + 1, strlen($1) - 2);
       $$ = new ExprApp(CUR_POS,
           new ExprApp(new ExprVar(data->symbols.Create("__findFile")),
               new ExprVar(data->symbols.Create("__nixPath"))),
@@ -601,13 +601,13 @@ Expr * EvalState::parseExprFromFile(const Path & path, StaticEnv & staticEnv)
 }
 
 
-Expr * EvalState::parseExprFromString(const string & s, const Path & basePath, StaticEnv & staticEnv)
+Expr * EvalState::parseExprFromString(const std::string & s, const Path & basePath, StaticEnv & staticEnv)
 {
     return parse(s.c_str(), "(string)", basePath, staticEnv);
 }
 
 
-Expr * EvalState::parseExprFromString(const string & s, const Path & basePath)
+Expr * EvalState::parseExprFromString(const std::string & s, const Path & basePath)
 {
     return parseExprFromString(s, basePath, staticBaseEnv);
 }
@@ -620,10 +620,10 @@ Expr * EvalState::parseStdin()
 }
 
 
-void EvalState::addToSearchPath(const string & s)
+void EvalState::addToSearchPath(const std::string & s)
 {
     size_t pos = s.find('=');
-    string prefix;
+    std::string prefix;
     Path path;
     if (pos == string::npos) {
         path = s;
@@ -636,13 +636,13 @@ void EvalState::addToSearchPath(const string & s)
 }
 
 
-Path EvalState::findFile(const string & path)
+Path EvalState::findFile(const std::string & path)
 {
     return findFile(searchPath, path);
 }
 
 
-Path EvalState::findFile(SearchPath & searchPath, const string & path, const Pos & pos)
+Path EvalState::findFile(SearchPath & searchPath, const std::string & path, const Pos & pos)
 {
     for (auto & i : searchPath) {
         std::string suffix;

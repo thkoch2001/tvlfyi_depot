@@ -14,7 +14,7 @@ std::ostream& operator<<(std::ostream& str, const Expr& e) {
   return str;
 }
 
-static void showString(std::ostream& str, const string& s) {
+static void showString(std::ostream& str, const std::string& s) {
   str << '"';
   for (auto c : (string)s) {
     if (c == '"' || c == '\\' || c == '$') {
@@ -32,7 +32,7 @@ static void showString(std::ostream& str, const string& s) {
   str << '"';
 }
 
-static void showId(std::ostream& str, const string& s) {
+static void showId(std::ostream& str, const std::string& s) {
   if (s.empty()) {
     str << "\"\"";
   } else if (s == "if") {  // FIXME: handle other keywords

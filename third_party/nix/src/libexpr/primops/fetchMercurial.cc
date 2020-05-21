@@ -102,7 +102,7 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
         try {
           runProgram("hg", true, {"pull", "-R", cacheDir, "--", uri});
         } catch (ExecError& e) {
-          string transJournal = cacheDir + "/.hg/store/journal";
+          std::string transJournal = cacheDir + "/.hg/store/journal";
           /* hg throws "abandoned transaction" error only if this file exists */
           if (pathExists(transJournal)) {
             runProgram("hg", true, {"recover", "-R", cacheDir});
@@ -191,7 +191,7 @@ static void prim_fetchMercurial(EvalState& state, const Pos& pos, Value** args,
     state.forceAttrs(*args[0], pos);
 
     for (auto& attr : *args[0]->attrs) {
-      string n(attr.name);
+      std::string n(attr.name);
       if (n == "url")
         url =
             state.coerceToString(*attr.pos, *attr.value, context, false, false);

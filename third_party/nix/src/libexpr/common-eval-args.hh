@@ -19,6 +19,6 @@ struct MixEvalArgs : virtual Args {
   std::map<std::string, std::string> autoArgs;
 };
 
-Path lookupFileArg(EvalState& state, string s);
+Path lookupFileArg(EvalState& state, std::string s);
 
 }  // namespace nix

@@ -256,7 +256,7 @@ void initGC() {
 
 /* Very hacky way to parse $NIX_PATH, which is colon-separated, but
    can contain URLs (e.g. "nixpkgs=https://bla...:foo=https://"). */
-static Strings parseNixPath(const string& s) {
+static Strings parseNixPath(const std::string& s) {
   Strings res;
 
   auto p = s.begin();
@@ -464,17 +464,17 @@ Path EvalState::toRealPath(const Path& path, const PathSet& context) {
                                                     : path;
 };
 
-Value* EvalState::addConstant(const string& name, Value& v) {
+Value* EvalState::addConstant(const std::string& name, Value& v) {
   Value* v2 = allocValue();
   *v2 = v;
   staticBaseEnv.vars[symbols.Create(name)] = baseEnvDispl;
   baseEnv.values[baseEnvDispl++] = v2;
-  string name2 = string(name, 0, 2) == "__" ? string(name, 2) : name;
+  std::string name2 = string(name, 0, 2) == "__" ? string(name, 2) : name;
   baseEnv.values[0]->attrs->push_back(Attr(symbols.Create(name2), v2));
   return v2;
 }
 
-Value* EvalState::addPrimOp(const string& name, size_t arity,
+Value* EvalState::addPrimOp(const std::string& name, size_t arity,
                             PrimOpFun primOp) {
   if (arity == 0) {
     Value v;
@@ -482,7 +482,7 @@ Value* EvalState::addPrimOp(const string& name, size_t arity,
     return addConstant(name, v);
   }
   Value* v = allocValue();
-  string name2 = string(name, 0, 2) == "__" ? string(name, 2) : name;
+  std::string name2 = string(name, 0, 2) == "__" ? string(name, 2) : name;
   Symbol sym = symbols.Create(name2);
   v->type = tPrimOp;
   v->primOp = new PrimOp(primOp, arity, sym);
@@ -492,7 +492,7 @@ Value* EvalState::addPrimOp(const string& name, size_t arity,
   return v;
 }
 
-Value& EvalState::getBuiltin(const string& name) {
+Value& EvalState::getBuiltin(const std::string& name) {
   return *baseEnv.values[0]->attrs->find(symbols.Create(name))->value;
 }
 
@@ -501,22 +501,24 @@ Value& EvalState::getBuiltin(const string& name) {
    evaluator.  So here are some helper functions for throwing
    exceptions. */
 
-LocalNoInlineNoReturn(void throwEvalError(const char* s, const string& s2)) {
+LocalNoInlineNoReturn(void throwEvalError(const char* s,
+                                          const std::string& s2)) {
   throw EvalError(format(s) % s2);
 }
 
-LocalNoInlineNoReturn(void throwEvalError(const char* s, const string& s2,
+LocalNoInlineNoReturn(void throwEvalError(const char* s, const std::string& s2,
                                           const Pos& pos)) {
   throw EvalError(format(s) % s2 % pos);
 }
 
-LocalNoInlineNoReturn(void throwEvalError(const char* s, const string& s2,
-                                          const string& s3)) {
+LocalNoInlineNoReturn(void throwEvalError(const char* s, const std::string& s2,
+                                          const std::string& s3)) {
   throw EvalError(format(s) % s2 % s3);
 }
 
-LocalNoInlineNoReturn(void throwEvalError(const char* s, const string& s2,
-                                          const string& s3, const Pos& pos)) {
+LocalNoInlineNoReturn(void throwEvalError(const char* s, const std::string& s2,
+                                          const std::string& s3,
+                                          const Pos& pos)) {
   throw EvalError(format(s) % s2 % s3 % pos);
 }
 
@@ -529,7 +531,8 @@ LocalNoInlineNoReturn(void throwTypeError(const char* s, const Pos& pos)) {
   throw TypeError(format(s) % pos);
 }
 
-LocalNoInlineNoReturn(void throwTypeError(const char* s, const string& s1)) {
+LocalNoInlineNoReturn(void throwTypeError(const char* s,
+                                          const std::string& s1)) {
   throw TypeError(format(s) % s1);
 }
 
@@ -538,18 +541,20 @@ LocalNoInlineNoReturn(void throwTypeError(const char* s, const ExprLambda& fun,
   throw TypeError(format(s) % fun.showNamePos() % s2 % pos);
 }
 
-LocalNoInlineNoReturn(void throwAssertionError(const char* s, const string& s1,
+LocalNoInlineNoReturn(void throwAssertionError(const char* s,
+                                               const std::string& s1,
                                                const Pos& pos)) {
   throw AssertionError(format(s) % s1 % pos);
 }
 
 LocalNoInlineNoReturn(void throwUndefinedVarError(const char* s,
-                                                  const string& s1,
+                                                  const std::string& s1,
                                                   const Pos& pos)) {
   throw UndefinedVarError(format(s) % s1 % pos);
 }
 
-LocalNoInline(void addErrorPrefix(Error& e, const char* s, const string& s2)) {
+LocalNoInline(void addErrorPrefix(Error& e, const char* s,
+                                  const std::string& s2)) {
   e.addPrefix(format(s) % s2);
 }
 
@@ -558,14 +563,14 @@ LocalNoInline(void addErrorPrefix(Error& e, const char* s,
   e.addPrefix(format(s) % fun.showNamePos() % pos);
 }
 
-LocalNoInline(void addErrorPrefix(Error& e, const char* s, const string& s2,
-                                  const Pos& pos)) {
+LocalNoInline(void addErrorPrefix(Error& e, const char* s,
+                                  const std::string& s2, const Pos& pos)) {
   e.addPrefix(format(s) % s2 % pos);
 }
 
 void mkString(Value& v, const char* s) { mkStringNoCopy(v, dupString(s)); }
 
-Value& mkString(Value& v, const string& s, const PathSet& context) {
+Value& mkString(Value& v, const std::string& s, const PathSet& context) {
   mkString(v, s.c_str());
   if (!context.empty()) {
     size_t n = 0;
@@ -931,8 +936,8 @@ void ExprVar::eval(EvalState& state, Env& env, Value& v) {
   v = *v2;
 }
 
-static string showAttrPath(EvalState& state, Env& env,
-                           const AttrPath& attrPath) {
+static std::string showAttrPath(EvalState& state, Env& env,
+                                const AttrPath& attrPath) {
   std::ostringstream out;
   bool first = true;
   for (auto& i : attrPath) {
@@ -1528,13 +1533,13 @@ void copyContext(const Value& v, PathSet& context) {
 }
 
 string EvalState::forceString(Value& v, PathSet& context, const Pos& pos) {
-  string s = forceString(v, pos);
+  std::string s = forceString(v, pos);
   copyContext(v, context);
   return s;
 }
 
 string EvalState::forceStringNoCtx(Value& v, const Pos& pos) {
-  string s = forceString(v, pos);
+  std::string s = forceString(v, pos);
   if (v.string.context != nullptr) {
     if (pos) {
       throwEvalError(
@@ -1584,7 +1589,7 @@ string EvalState::coerceToString(const Pos& pos, Value& v, PathSet& context,
                                  bool coerceMore, bool copyToStore) {
   forceValue(v);
 
-  string s;
+  std::string s;
 
   if (v.type == tString) {
     copyContext(v, context);
@@ -1633,7 +1638,7 @@ string EvalState::coerceToString(const Pos& pos, Value& v, PathSet& context,
     }
 
     if (v.isList()) {
-      string result;
+      std::string result;
       for (size_t n = 0; n < v.listSize(); ++n) {
         result += coerceToString(pos, *v.listElems()[n], context, coerceMore,
                                  copyToStore);
@@ -1677,7 +1682,7 @@ string EvalState::copyPathToStore(PathSet& context, const Path& path) {
 }
 
 Path EvalState::coerceToPath(const Pos& pos, Value& v, PathSet& context) {
-  string path = coerceToString(pos, v, context, false, false);
+  std::string path = coerceToString(pos, v, context, false, false);
   if (path.empty() || path[0] != '/') {
     throwEvalError("string '%1%' doesn't represent an absolute path, at %2%",
                    path, pos);
@@ -1871,12 +1876,12 @@ void EvalState::printStats() {
         for (auto& i : functionCalls) {
           auto obj = list.object();
           if (i.first->name.set()) {
-            obj.attr("name", (const string&)i.first->name);
+            obj.attr("name", (const std::string&)i.first->name);
           } else {
             obj.attr("name", nullptr);
           }
           if (i.first->pos) {
-            obj.attr("file", (const string&)i.first->pos.file);
+            obj.attr("file", (const std::string&)i.first->pos.file);
             obj.attr("line", i.first->pos.line);
             obj.attr("column", i.first->pos.column);
           }
@@ -1888,7 +1893,7 @@ void EvalState::printStats() {
         for (auto& i : attrSelects) {
           auto obj = list.object();
           if (i.first) {
-            obj.attr("file", (const string&)i.first.file);
+            obj.attr("file", (const std::string&)i.first.file);
             obj.attr("line", i.first.line);
             obj.attr("column", i.first.column);
           }

@@ -5,9 +5,9 @@
 
 namespace nix {
 
-static Strings parseAttrPath(const string& s) {
+static Strings parseAttrPath(const std::string& s) {
   Strings res;
-  string cur;
+  std::string cur;
   string::const_iterator i = s.begin();
   while (i != s.end()) {
     if (*i == '.') {
@@ -36,7 +36,7 @@ static Strings parseAttrPath(const string& s) {
   return res;
 }
 
-Value* findAlongAttrPath(EvalState& state, const string& attrPath,
+Value* findAlongAttrPath(EvalState& state, const std::string& attrPath,
                          Bindings& autoArgs, Value& vIn) {
   Strings tokens = parseAttrPath(attrPath);
 

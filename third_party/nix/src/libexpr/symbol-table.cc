@@ -7,7 +7,7 @@ namespace nix {
 
 Symbol SymbolTable::Create(absl::string_view sym) {
   auto it = symbols_.emplace(sym);
-  const string* ptr = &(*it.first);
+  const std::string* ptr = &(*it.first);
   return Symbol(ptr);
 }
 

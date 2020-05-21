@@ -3,6 +3,7 @@
 #include <map>
 
 #include "symbol-table.hh"
+#include "types.hh"  // TODO(tazjin): audit this include
 #include "value.hh"
 
 namespace nix {
@@ -111,14 +112,14 @@ struct ExprString : Expr {
 
 /* Temporary class used during parsing of indented strings. */
 struct ExprIndStr : Expr {
-  string s;
-  ExprIndStr(const string& s) : s(s){};
+  std::string s;
+  ExprIndStr(const std::string& s) : s(s){};
 };
 
 struct ExprPath : Expr {
-  string s;
+  std::string s;
   Value v;
-  ExprPath(const string& s) : s(s) { mkPathNoCopy(v, this->s.c_str()); };
+  ExprPath(const std::string& s) : s(s) { mkPathNoCopy(v, this->s.c_str()); };
   COMMON_METHODS
   Value* maybeThunk(EvalState& state, Env& env);
 };
@@ -231,7 +232,7 @@ struct ExprLambda : Expr {
           pos);
   };
   void setName(Symbol& name);
-  string showNamePos() const;
+  std::string showNamePos() const;
   COMMON_METHODS
 };
 

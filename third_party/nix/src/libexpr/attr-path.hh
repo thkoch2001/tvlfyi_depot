@@ -7,7 +7,7 @@
 
 namespace nix {
 
-Value* findAlongAttrPath(EvalState& state, const string& attrPath,
+Value* findAlongAttrPath(EvalState& state, const std::string& attrPath,
                          Bindings& autoArgs, Value& vIn);
 
 }

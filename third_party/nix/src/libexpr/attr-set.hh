@@ -4,6 +4,7 @@
 
 #include "nixexpr.hh"
 #include "symbol-table.hh"
+#include "types.hh"  // TODO(tazjin): audit this include
 
 namespace nix {
 
@@ -13,8 +14,8 @@ struct Value;
 /* Map one attribute name to its value. */
 struct Attr {
   Symbol name;
-  Value* value;
-  Pos* pos;
+  Value* value;  // TODO(tazjin): Who owns this?
+  Pos* pos;      // TODO(tazjin): Who owns this?
   Attr(Symbol name, Value* value, Pos* pos = &noPos)
       : name(name), value(value), pos(pos){};
   Attr() : pos(&noPos){};
@@ -74,7 +75,7 @@ class Bindings {
       res.emplace_back(&attrs[n]);
     }
     std::sort(res.begin(), res.end(), [](const Attr* a, const Attr* b) {
-      return (const string&)a->name < (const string&)b->name;
+      return (const std::string&)a->name < (const std::string&)b->name;
     });
     return res;
   }

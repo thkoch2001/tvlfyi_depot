@@ -53,7 +53,7 @@ static void adjustLoc(YYLTYPE * loc, const char * s, size_t len)
 
 static Expr * unescapeStr(SymbolTable & symbols, const char * s, size_t length)
 {
-    string t;
+    std::string t;
     t.reserve(length);
     char c;
     while ((c = *s++)) {

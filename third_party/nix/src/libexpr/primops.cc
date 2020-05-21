@@ -32,7 +32,7 @@ namespace nix {
 
 /* Decode a context string ‘!<name>!<path>’ into a pair <path,
    name>. */
-std::pair<string, string> decodeContext(const string& s) {
+std::pair<string, string> decodeContext(const std::string& s) {
   if (s.at(0) == '!') {
     size_t index = s.find('!', 1);
     return std::pair<string, string>(string(s, index + 1),
@@ -180,7 +180,7 @@ void prim_importNative(EvalState& state, const Pos& pos, Value** args,
 
   path = state.checkSourcePath(path);
 
-  string sym = state.forceStringNoCtx(*args[1], pos);
+  std::string sym = state.forceStringNoCtx(*args[1], pos);
 
   void* handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_LOCAL);
   if (handle == nullptr) {
@@ -252,7 +252,7 @@ void prim_exec(EvalState& state, const Pos& pos, Value** args, Value& v) {
 static void prim_typeOf(EvalState& state, const Pos& pos, Value** args,
                         Value& v) {
   state.forceValue(*args[0]);
-  string t;
+  std::string t;
   switch (args[0]->type) {
     case tInt:
       t = "int";
@@ -461,7 +461,7 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
 static void prim_abort(EvalState& state, const Pos& pos, Value** args,
                        Value& v) {
   PathSet context;
-  string s = state.coerceToString(pos, *args[0], context);
+  std::string s = state.coerceToString(pos, *args[0], context);
   throw Abort(
       format("evaluation aborted with the following error message: '%1%'") % s);
 }
@@ -469,7 +469,7 @@ static void prim_abort(EvalState& state, const Pos& pos, Value** args,
 static void prim_throw(EvalState& state, const Pos& pos, Value** args,
                        Value& v) {
   PathSet context;
-  string s = state.coerceToString(pos, *args[0], context);
+  std::string s = state.coerceToString(pos, *args[0], context);
   throw ThrownError(s);
 }
 
@@ -504,7 +504,7 @@ static void prim_tryEval(EvalState& state, const Pos& pos, Value** args,
 /* Return an environment variable.  Use with care. */
 static void prim_getEnv(EvalState& state, const Pos& pos, Value** args,
                         Value& v) {
-  string name = state.forceStringNoCtx(*args[0], pos);
+  std::string name = state.forceStringNoCtx(*args[0], pos);
   mkString(v, evalSettings.restrictEval || evalSettings.pureEval
                   ? ""
                   : getEnv(name));
@@ -565,7 +565,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   if (attr == args[0]->attrs->end()) {
     throw EvalError(format("required attribute 'name' missing, at %1%") % pos);
   }
-  string drvName;
+  std::string drvName;
   Pos& posDrvName(*attr->pos);
   try {
     drvName = state.forceStringNoCtx(*attr->value, pos);
@@ -607,7 +607,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
     if (i->name == state.sIgnoreNulls) {
       continue;
     }
-    const string& key = i->name;
+    const std::string& key = i->name;
 
     auto handleHashMode = [&](const std::string& s) {
       if (s == "recursive") {
@@ -660,8 +660,8 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
       if (i->name == state.sArgs) {
         state.forceList(*i->value, pos);
         for (unsigned int n = 0; n < i->value->listSize(); ++n) {
-          string s = state.coerceToString(posDrvName, *i->value->listElems()[n],
-                                          context, true);
+          std::string s = state.coerceToString(
+              posDrvName, *i->value->listElems()[n], context, true);
           drv.args.push_back(s);
         }
       }
@@ -965,7 +965,8 @@ static void prim_readFile(EvalState& state, const Pos& pos, Value** args,
         format("cannot read '%1%', since path '%2%' is not valid, at %3%") %
         path % e.path % pos);
   }
-  string s = readFile(state.checkSourcePath(state.toRealPath(path, context)));
+  std::string s =
+      readFile(state.checkSourcePath(state.toRealPath(path, context)));
   if (s.find((char)0) != string::npos) {
     throw Error(format("the contents of the file '%1%' cannot be represented "
                        "as a Nix string") %
@@ -986,7 +987,7 @@ static void prim_findFile(EvalState& state, const Pos& pos, Value** args,
     Value& v2(*args[0]->listElems()[n]);
     state.forceAttrs(v2, pos);
 
-    string prefix;
+    std::string prefix;
     Bindings::iterator i = v2.attrs->find(state.symbols.Create("prefix"));
     if (i != v2.attrs->end()) {
       prefix = state.forceStringNoCtx(*i->value, pos);
@@ -998,7 +999,8 @@ static void prim_findFile(EvalState& state, const Pos& pos, Value** args,
     }
 
     PathSet context;
-    string path = state.coerceToString(pos, *i->value, context, false, false);
+    std::string path =
+        state.coerceToString(pos, *i->value, context, false, false);
 
     try {
       state.realiseContext(context);
@@ -1011,7 +1013,7 @@ static void prim_findFile(EvalState& state, const Pos& pos, Value** args,
     searchPath.emplace_back(prefix, path);
   }
 
-  string path = state.forceStringNoCtx(*args[1], pos);
+  std::string path = state.forceStringNoCtx(*args[1], pos);
 
   mkPath(v,
          state.checkSourcePath(state.findFile(searchPath, path, pos)).c_str());
@@ -1020,7 +1022,7 @@ static void prim_findFile(EvalState& state, const Pos& pos, Value** args,
 /* Return the cryptographic hash of a file in base-16. */
 static void prim_hashFile(EvalState& state, const Pos& pos, Value** args,
                           Value& v) {
-  string type = state.forceStringNoCtx(*args[0], pos);
+  std::string type = state.forceStringNoCtx(*args[0], pos);
   HashType ht = parseHashType(type);
   if (ht == htUnknown) {
     throw Error(format("unknown hash type '%1%', at %2%") % type % pos);
@@ -1094,7 +1096,7 @@ static void prim_toJSON(EvalState& state, const Pos& pos, Value** args,
 /* Parse a JSON string to a value. */
 static void prim_fromJSON(EvalState& state, const Pos& pos, Value** args,
                           Value& v) {
-  string s = state.forceStringNoCtx(*args[0], pos);
+  std::string s = state.forceStringNoCtx(*args[0], pos);
   parseJSON(state, s, v);
 }
 
@@ -1103,8 +1105,8 @@ static void prim_fromJSON(EvalState& state, const Pos& pos, Value** args,
 static void prim_toFile(EvalState& state, const Pos& pos, Value** args,
                         Value& v) {
   PathSet context;
-  string name = state.forceStringNoCtx(*args[0], pos);
-  string contents = state.forceString(*args[1], context, pos);
+  std::string name = state.forceStringNoCtx(*args[0], pos);
+  std::string contents = state.forceString(*args[1], context, pos);
 
   PathSet refs;
 
@@ -1129,7 +1131,7 @@ static void prim_toFile(EvalState& state, const Pos& pos, Value** args,
   mkString(v, storePath, {storePath});
 }
 
-static void addPath(EvalState& state, const Pos& pos, const string& name,
+static void addPath(EvalState& state, const Pos& pos, const std::string& name,
                     const Path& path_, Value* filterFun, bool recursive,
                     const Hash& expectedHash, Value& v) {
   const auto path = evalSettings.pureEval && expectedHash
@@ -1211,13 +1213,13 @@ static void prim_path(EvalState& state, const Pos& pos, Value** args,
                       Value& v) {
   state.forceAttrs(*args[0], pos);
   Path path;
-  string name;
+  std::string name;
   Value* filterFun = nullptr;
   auto recursive = true;
   Hash expectedHash;
 
   for (auto& attr : *args[0]->attrs) {
-    const string& n(attr.name);
+    const std::string& n(attr.name);
     if (n == "path") {
       PathSet context;
       path = state.coerceToPath(*attr.pos, *attr.value, context);
@@ -1298,7 +1300,7 @@ static void prim_attrValues(EvalState& state, const Pos& pos, Value** args,
 
 /* Dynamic version of the `.' operator. */
 void prim_getAttr(EvalState& state, const Pos& pos, Value** args, Value& v) {
-  string attr = state.forceStringNoCtx(*args[0], pos);
+  std::string attr = state.forceStringNoCtx(*args[0], pos);
   state.forceAttrs(*args[1], pos);
   // !!! Should we create a symbol here or just do a lookup?
   Bindings::iterator i = args[1]->attrs->find(state.symbols.Create(attr));
@@ -1316,7 +1318,7 @@ void prim_getAttr(EvalState& state, const Pos& pos, Value** args, Value& v) {
 /* Return position information of the specified attribute. */
 void prim_unsafeGetAttrPos(EvalState& state, const Pos& pos, Value** args,
                            Value& v) {
-  string attr = state.forceStringNoCtx(*args[0], pos);
+  std::string attr = state.forceStringNoCtx(*args[0], pos);
   state.forceAttrs(*args[1], pos);
   Bindings::iterator i = args[1]->attrs->find(state.symbols.Create(attr));
   if (i == args[1]->attrs->end()) {
@@ -1329,7 +1331,7 @@ void prim_unsafeGetAttrPos(EvalState& state, const Pos& pos, Value** args,
 /* Dynamic version of the `?' operator. */
 static void prim_hasAttr(EvalState& state, const Pos& pos, Value** args,
                          Value& v) {
-  string attr = state.forceStringNoCtx(*args[0], pos);
+  std::string attr = state.forceStringNoCtx(*args[0], pos);
   state.forceAttrs(*args[1], pos);
   mkBool(v, args[1]->attrs->find(state.symbols.Create(attr)) !=
                 args[1]->attrs->end());
@@ -1389,7 +1391,7 @@ static void prim_listToAttrs(EvalState& state, const Pos& pos, Value** args,
               "'name' attribute missing in a call to 'listToAttrs', at %1%") %
           pos);
     }
-    string name = state.forceStringNoCtx(*j->value, pos);
+    std::string name = state.forceStringNoCtx(*j->value, pos);
 
     Symbol sym = state.symbols.Create(name);
     if (seen.find(sym) == seen.end()) {
@@ -1896,7 +1898,7 @@ static void prim_lessThan(EvalState& state, const Pos& pos, Value** args,
 static void prim_toString(EvalState& state, const Pos& pos, Value** args,
                           Value& v) {
   PathSet context;
-  string s = state.coerceToString(pos, *args[0], context, true, false);
+  std::string s = state.coerceToString(pos, *args[0], context, true, false);
   mkString(v, s, context);
 }
 
@@ -1909,7 +1911,7 @@ static void prim_substring(EvalState& state, const Pos& pos, Value** args,
   int start = state.forceInt(*args[0], pos);
   int len = state.forceInt(*args[1], pos);
   PathSet context;
-  string s = state.coerceToString(pos, *args[2], context);
+  std::string s = state.coerceToString(pos, *args[2], context);
 
   if (start < 0) {
     throw EvalError(format("negative start position in 'substring', at %1%") %
@@ -1923,21 +1925,21 @@ static void prim_substring(EvalState& state, const Pos& pos, Value** args,
 static void prim_stringLength(EvalState& state, const Pos& pos, Value** args,
                               Value& v) {
   PathSet context;
-  string s = state.coerceToString(pos, *args[0], context);
+  std::string s = state.coerceToString(pos, *args[0], context);
   mkInt(v, s.size());
 }
 
 /* Return the cryptographic hash of a string in base-16. */
 static void prim_hashString(EvalState& state, const Pos& pos, Value** args,
                             Value& v) {
-  string type = state.forceStringNoCtx(*args[0], pos);
+  std::string type = state.forceStringNoCtx(*args[0], pos);
   HashType ht = parseHashType(type);
   if (ht == htUnknown) {
     throw Error(format("unknown hash type '%1%', at %2%") % type % pos);
   }
 
   PathSet context;  // discarded
-  string s = state.forceString(*args[1], context, pos);
+  std::string s = state.forceString(*args[1], context, pos);
 
   mkString(v, hashString(ht, s).to_string(Base16, false), context);
 }
@@ -1982,7 +1984,7 @@ static void prim_match(EvalState& state, const Pos& pos, Value** args,
   }
 }
 
-/* Split a string with a regular expression, and return a list of the
+/* Split a std::string with a regular expression, and return a list of the
    non-matching parts interleaved by the lists of the matching groups. */
 static void prim_split(EvalState& state, const Pos& pos, Value** args,
                        Value& v) {
@@ -2056,7 +2058,7 @@ static void prim_concatStringSep(EvalState& state, const Pos& pos, Value** args,
   auto sep = state.forceString(*args[0], context, pos);
   state.forceList(*args[1], pos);
 
-  string res;
+  std::string res;
   res.reserve((args[1]->listSize() + 32) * sep.size());
   bool first = true;
 
@@ -2100,7 +2102,7 @@ static void prim_replaceStrings(EvalState& state, const Pos& pos, Value** args,
   PathSet context;
   auto s = state.forceString(*args[2], context, pos);
 
-  string res;
+  std::string res;
   // Loops one past last character to handle the case where 'from' contains an
   // empty string.
   for (size_t p = 0; p <= s.size();) {
@@ -2143,7 +2145,7 @@ static void prim_replaceStrings(EvalState& state, const Pos& pos, Value** args,
 
 static void prim_parseDrvName(EvalState& state, const Pos& pos, Value** args,
                               Value& v) {
-  string name = state.forceStringNoCtx(*args[0], pos);
+  std::string name = state.forceStringNoCtx(*args[0], pos);
   DrvName parsed(name);
   state.mkAttrs(v, 2);
   mkString(*state.allocAttr(v, state.sName), parsed.name);
@@ -2154,14 +2156,14 @@ static void prim_parseDrvName(EvalState& state, const Pos& pos, Value** args,
 
 static void prim_compareVersions(EvalState& state, const Pos& pos, Value** args,
                                  Value& v) {
-  string version1 = state.forceStringNoCtx(*args[0], pos);
-  string version2 = state.forceStringNoCtx(*args[1], pos);
+  std::string version1 = state.forceStringNoCtx(*args[0], pos);
+  std::string version2 = state.forceStringNoCtx(*args[1], pos);
   mkInt(v, compareVersions(version1, version2));
 }
 
 static void prim_splitVersion(EvalState& state, const Pos& pos, Value** args,
                               Value& v) {
-  string version = state.forceStringNoCtx(*args[0], pos);
+  std::string version = state.forceStringNoCtx(*args[0], pos);
   auto iter = version.cbegin();
   Strings components;
   while (iter != version.cend()) {
@@ -2184,7 +2186,8 @@ static void prim_splitVersion(EvalState& state, const Pos& pos, Value** args,
  *************************************************************/
 
 void fetch(EvalState& state, const Pos& pos, Value** args, Value& v,
-           const string& who, bool unpack, const std::string& defaultName) {
+           const std::string& who, bool unpack,
+           const std::string& defaultName) {
   CachedDownloadRequest request("");
   request.unpack = unpack;
   request.name = defaultName;
@@ -2195,7 +2198,7 @@ void fetch(EvalState& state, const Pos& pos, Value** args, Value& v,
     state.forceAttrs(*args[0], pos);
 
     for (auto& attr : *args[0]->attrs) {
-      string n(attr.name);
+      std::string n(attr.name);
       if (n == "url") {
         request.uri = state.forceStringNoCtx(*attr.value, *attr.pos);
       } else if (n == "sha256") {
@@ -2431,7 +2434,7 @@ void EvalState::createBaseEnv() {
 
   /* Add a wrapper around the derivation primop that computes the
      `drvPath' and `outPath' attributes lazily. */
-  string path =
+  std::string path =
       canonPath(settings.nixDataDir + "/nix/corepkgs/derivation.nix", true);
   sDerivationNix = symbols.Create(path);
   evalFile(path, v);

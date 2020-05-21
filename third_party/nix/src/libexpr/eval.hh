@@ -36,7 +36,8 @@ struct Env {
   Value* values[0];
 };
 
-Value& mkString(Value& v, const string& s, const PathSet& context = PathSet());
+Value& mkString(Value& v, const std::string& s,
+                const PathSet& context = PathSet());
 
 void copyContext(const Value& v, PathSet& context);
 
@@ -108,7 +109,7 @@ class EvalState {
   EvalState(const Strings& _searchPath, const ref<Store>& store);
   ~EvalState();
 
-  void addToSearchPath(const string& s);
+  void addToSearchPath(const std::string& s);
 
   SearchPath getSearchPath() { return searchPath; }
 
@@ -130,9 +131,9 @@ class EvalState {
   Expr* parseExprFromFile(const Path& path, StaticEnv& staticEnv);
 
   /* Parse a Nix expression from the specified string. */
-  Expr* parseExprFromString(const string& s, const Path& basePath,
+  Expr* parseExprFromString(const std::string& s, const Path& basePath,
                             StaticEnv& staticEnv);
-  Expr* parseExprFromString(const string& s, const Path& basePath);
+  Expr* parseExprFromString(const std::string& s, const Path& basePath);
 
   Expr* parseStdin();
 
@@ -143,8 +144,8 @@ class EvalState {
   void resetFileCache();
 
   /* Look up a file in the search path. */
-  Path findFile(const string& path);
-  Path findFile(SearchPath& searchPath, const string& path,
+  Path findFile(const std::string& path);
+  Path findFile(SearchPath& searchPath, const std::string& path,
                 const Pos& pos = noPos);
 
   /* If the specified search path element is a URI, download it. */
@@ -180,9 +181,9 @@ class EvalState {
   inline void forceList(Value& v);
   inline void forceList(Value& v, const Pos& pos);
   void forceFunction(Value& v, const Pos& pos);  // either lambda or primop
-  string forceString(Value& v, const Pos& pos = noPos);
-  string forceString(Value& v, PathSet& context, const Pos& pos = noPos);
-  string forceStringNoCtx(Value& v, const Pos& pos = noPos);
+  std::string forceString(Value& v, const Pos& pos = noPos);
+  std::string forceString(Value& v, PathSet& context, const Pos& pos = noPos);
+  std::string forceStringNoCtx(Value& v, const Pos& pos = noPos);
 
   /* Return true iff the value `v' denotes a derivation (i.e. a
      set with attribute `type = "derivation"'). */
@@ -197,10 +198,10 @@ class EvalState {
      string.  If `coerceMore' is set, also converts nulls, integers,
      booleans and lists to a string.  If `copyToStore' is set,
      referenced paths are copied to the Nix store as a side effect. */
-  string coerceToString(const Pos& pos, Value& v, PathSet& context,
-                        bool coerceMore = false, bool copyToStore = true);
+  std::string coerceToString(const Pos& pos, Value& v, PathSet& context,
+                             bool coerceMore = false, bool copyToStore = true);
 
-  string copyPathToStore(PathSet& context, const Path& path);
+  std::string copyPathToStore(PathSet& context, const Path& path);
 
   /* Path coercion.  Converts strings, paths and derivations to a
      path.  The result is guaranteed to be a canonicalised, absolute
@@ -220,12 +221,12 @@ class EvalState {
 
   void createBaseEnv();
 
-  Value* addConstant(const string& name, Value& v);
+  Value* addConstant(const std::string& name, Value& v);
 
-  Value* addPrimOp(const string& name, size_t arity, PrimOpFun primOp);
+  Value* addPrimOp(const std::string& name, size_t arity, PrimOpFun primOp);
 
  public:
-  Value& getBuiltin(const string& name);
+  Value& getBuiltin(const std::string& name);
 
  private:
   inline Value* lookupVar(Env* env, const ExprVar& var, bool noEval);
@@ -309,7 +310,7 @@ string showType(const Value& v);
 
 /* Decode a context string ‘!<name>!<path>’ into a pair <path,
    name>. */
-std::pair<string, string> decodeContext(const string& s);
+std::pair<string, string> decodeContext(const std::string& s);
 
 /* If `path' refers to a directory, then append "/default.nix". */
 Path resolveExprPath(Path path);

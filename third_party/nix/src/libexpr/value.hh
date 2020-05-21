@@ -1,6 +1,7 @@
 #pragma once
 
 #include "symbol-table.hh"
+#include "types.hh"
 
 #if HAVE_BOEHMGC
 #include <gc/gc_allocator.h>
@@ -56,10 +57,10 @@ class ExternalValueBase {
 
  public:
   /* Return a simple string describing the type */
-  virtual string showType() const = 0;
+  virtual std::string showType() const = 0;
 
   /* Return a string to be used in builtins.typeOf */
-  virtual string typeOf() const = 0;
+  virtual std::string typeOf() const = 0;
 
   /* How much space does this value take up */
   virtual size_t valueSize(std::set<const void*>& seen) const = 0;
@@ -67,8 +68,8 @@ class ExternalValueBase {
   /* Coerce the value to a string. Defaults to uncoercable, i.e. throws an
    * error
    */
-  virtual string coerceToString(const Pos& pos, PathSet& context, bool copyMore,
-                                bool copyToStore) const;
+  virtual std::string coerceToString(const Pos& pos, PathSet& context,
+                                     bool copyMore, bool copyToStore) const;
 
   /* Compare to another value of the same type. Defaults to uncomparable,
    * i.e. always false.
@@ -225,7 +226,7 @@ static inline void mkStringNoCopy(Value& v, const char* s) {
 }
 
 static inline void mkString(Value& v, const Symbol& s) {
-  mkStringNoCopy(v, ((const string&)s).c_str());
+  mkStringNoCopy(v, ((const std::string&)s).c_str());
 }
 
 void mkString(Value& v, const char* s);
