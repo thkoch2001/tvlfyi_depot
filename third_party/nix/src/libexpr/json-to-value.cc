@@ -105,7 +105,7 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
       s++;
       Value* v2 = state.allocValue();
       parseJSON(state, s, *v2);
-      attrs[state.symbols.create(name)] = v2;
+      attrs[state.symbols.Create(name)] = v2;
       skipWhitespace(s);
       if (*s == '}') {
         break;

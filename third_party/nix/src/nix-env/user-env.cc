@@ -73,7 +73,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
     unsigned int m = 0;
     for (auto& j : outputs) {
       mkString(*(vOutputs.listElems()[m++] = state.allocValue()), j.first);
-      Value& vOutputs = *state.allocAttr(v, state.symbols.create(j.first));
+      Value& vOutputs = *state.allocAttr(v, state.symbols.Create(j.first));
       state.mkAttrs(vOutputs, 2);
       mkString(*state.allocAttr(vOutputs, state.sOutPath), j.second);
 
@@ -94,7 +94,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
       if (v == nullptr) {
         continue;
       }
-      vMeta.attrs->push_back(Attr(state.symbols.create(j), v));
+      vMeta.attrs->push_back(Attr(state.symbols.Create(j), v));
     }
     vMeta.attrs->sort();
     v.attrs->sort();
@@ -119,9 +119,9 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
   Value args;
   Value topLevel;
   state.mkAttrs(args, 3);
-  mkString(*state.allocAttr(args, state.symbols.create("manifest")),
+  mkString(*state.allocAttr(args, state.symbols.Create("manifest")),
            manifestFile, {manifestFile});
-  args.attrs->push_back(Attr(state.symbols.create("derivations"), &manifest));
+  args.attrs->push_back(Attr(state.symbols.Create("derivations"), &manifest));
   args.attrs->sort();
   mkApp(topLevel, envBuilder, args);
 

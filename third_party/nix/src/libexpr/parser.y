@@ -35,7 +35,7 @@ namespace nix {
         ParseData(EvalState & state)
             : state(state)
             , symbols(state.symbols)
-            , sLetBody(symbols.create("<let-body>"))
+            , sLetBody(symbols.Create("<let-body>"))
             { };
     };
 
@@ -148,7 +148,7 @@ static void addFormal(const Pos & pos, Formals * formals, const Formal & formal)
 
 static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, vector<Expr *> & es)
 {
-    if (es.empty()) { return new ExprString(symbols.create("")); }
+    if (es.empty()) { return new ExprString(symbols.Create("")); }
 
     /* Figure out the minimum indentation.  Note that by design
        whitespace-only final lines are not taken into account.  (So
@@ -228,7 +228,7 @@ static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, vector<Ex
                 s2 = string(s2, 0, p + 1);
         }
 
-        es2->push_back(new ExprString(symbols.create(s2)));
+        es2->push_back(new ExprString(symbols.Create(s2)));
     }
 
     /* If this is a single string, then don't do a concatenation. */
@@ -314,13 +314,13 @@ expr: expr_function;
 
 expr_function
   : ID ':' expr_function
-    { $$ = new ExprLambda(CUR_POS, data->symbols.create($1), false, 0, $3); }
+    { $$ = new ExprLambda(CUR_POS, data->symbols.Create($1), false, 0, $3); }
   | '{' formals '}' ':' expr_function
-    { $$ = new ExprLambda(CUR_POS, data->symbols.create(""), true, $2, $5); }
+    { $$ = new ExprLambda(CUR_POS, data->symbols.Create(""), true, $2, $5); }
   | '{' formals '}' '@' ID ':' expr_function
-    { $$ = new ExprLambda(CUR_POS, data->symbols.create($5), true, $2, $7); }
+    { $$ = new ExprLambda(CUR_POS, data->symbols.Create($5), true, $2, $7); }
   | ID '@' '{' formals '}' ':' expr_function
-    { $$ = new ExprLambda(CUR_POS, data->symbols.create($1), true, $4, $7); }
+    { $$ = new ExprLambda(CUR_POS, data->symbols.Create($1), true, $4, $7); }
   | ASSERT expr ';' expr_function
     { $$ = new ExprAssert(CUR_POS, $2, $4); }
   | WITH expr ';' expr_function
@@ -341,13 +341,13 @@ expr_if
 
 expr_op
   : '!' expr_op %prec NOT { $$ = new ExprOpNot($2); }
-  | '-' expr_op %prec NEGATE { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.create("__sub")), new ExprInt(0)), $2); }
+  | '-' expr_op %prec NEGATE { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__sub")), new ExprInt(0)), $2); }
   | expr_op EQ expr_op { $$ = new ExprOpEq($1, $3); }
   | expr_op NEQ expr_op { $$ = new ExprOpNEq($1, $3); }
-  | expr_op '<' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.create("__lessThan")), $1), $3); }
-  | expr_op LEQ expr_op { $$ = new ExprOpNot(new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.create("__lessThan")), $3), $1)); }
-  | expr_op '>' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.create("__lessThan")), $3), $1); }
-  | expr_op GEQ expr_op { $$ = new ExprOpNot(new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.create("__lessThan")), $1), $3)); }
+  | expr_op '<' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__lessThan")), $1), $3); }
+  | expr_op LEQ expr_op { $$ = new ExprOpNot(new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__lessThan")), $3), $1)); }
+  | expr_op '>' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__lessThan")), $3), $1); }
+  | expr_op GEQ expr_op { $$ = new ExprOpNot(new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__lessThan")), $1), $3)); }
   | expr_op AND expr_op { $$ = new ExprOpAnd(CUR_POS, $1, $3); }
   | expr_op OR expr_op { $$ = new ExprOpOr(CUR_POS, $1, $3); }
   | expr_op IMPL expr_op { $$ = new ExprOpImpl(CUR_POS, $1, $3); }
@@ -355,9 +355,9 @@ expr_op
   | expr_op '?' attrpath { $$ = new ExprOpHasAttr($1, *$3); }
   | expr_op '+' expr_op
     { $$ = new ExprConcatStrings(CUR_POS, false, new vector<Expr *>({$1, $3})); }
-  | expr_op '-' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.create("__sub")), $1), $3); }
-  | expr_op '*' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.create("__mul")), $1), $3); }
-  | expr_op '/' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.create("__div")), $1), $3); }
+  | expr_op '-' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__sub")), $1), $3); }
+  | expr_op '*' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__mul")), $1), $3); }
+  | expr_op '/' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__div")), $1), $3); }
   | expr_op CONCAT expr_op { $$ = new ExprOpConcatLists(CUR_POS, $1, $3); }
   | expr_app
   ;
@@ -376,7 +376,7 @@ expr_select
   | /* Backwards compatibility: because Nixpkgs has a rarely used
        function named ‘or’, allow stuff like ‘map or [...]’. */
     expr_simple OR_KW
-    { $$ = new ExprApp(CUR_POS, $1, new ExprVar(CUR_POS, data->symbols.create("or"))); }
+    { $$ = new ExprApp(CUR_POS, $1, new ExprVar(CUR_POS, data->symbols.Create("or"))); }
   | expr_simple { $$ = $1; }
   ;
 
@@ -385,7 +385,7 @@ expr_simple
       if (strcmp($1, "__curPos") == 0)
           $$ = new ExprPos(CUR_POS);
       else
-          $$ = new ExprVar(CUR_POS, data->symbols.create($1));
+          $$ = new ExprVar(CUR_POS, data->symbols.Create($1));
   }
   | INT { $$ = new ExprInt($1); }
   | FLOAT { $$ = new ExprFloat($1); }
@@ -398,16 +398,16 @@ expr_simple
   | SPATH {
       string path($1 + 1, strlen($1) - 2);
       $$ = new ExprApp(CUR_POS,
-          new ExprApp(new ExprVar(data->symbols.create("__findFile")),
-              new ExprVar(data->symbols.create("__nixPath"))),
-          new ExprString(data->symbols.create(path)));
+          new ExprApp(new ExprVar(data->symbols.Create("__findFile")),
+              new ExprVar(data->symbols.Create("__nixPath"))),
+          new ExprString(data->symbols.Create(path)));
   }
-  | URI { $$ = new ExprString(data->symbols.create($1)); }
+  | URI { $$ = new ExprString(data->symbols.Create($1)); }
   | '(' expr ')' { $$ = $2; }
   /* Let expressions `let {..., body = ...}' are just desugared
      into `(rec {..., body = ...}).body'. */
   | LET '{' binds '}'
-    { $3->recursive = true; $$ = new ExprSelect(noPos, $3, data->symbols.create("body")); }
+    { $3->recursive = true; $$ = new ExprSelect(noPos, $3, data->symbols.Create("body")); }
   | REC '{' binds '}'
     { $3->recursive = true; $$ = $3; }
   | '{' binds '}'
@@ -418,7 +418,7 @@ expr_simple
 string_parts
   : STR
   | string_parts_interpolated { $$ = new ExprConcatStrings(CUR_POS, true, $1); }
-  | { $$ = new ExprString(data->symbols.create("")); }
+  | { $$ = new ExprString(data->symbols.Create("")); }
   ;
 
 string_parts_interpolated
@@ -462,7 +462,7 @@ binds
   ;
 
 attrs
-  : attrs attr { $$ = $1; $1->push_back(AttrName(data->symbols.create($2))); }
+  : attrs attr { $$ = $1; $1->push_back(AttrName(data->symbols.Create($2))); }
   | attrs string_attr
     { $$ = $1;
       ExprString * str = dynamic_cast<ExprString *>($2);
@@ -477,7 +477,7 @@ attrs
   ;
 
 attrpath
-  : attrpath '.' attr { $$ = $1; $1->push_back(AttrName(data->symbols.create($3))); }
+  : attrpath '.' attr { $$ = $1; $1->push_back(AttrName(data->symbols.Create($3))); }
   | attrpath '.' string_attr
     { $$ = $1;
       ExprString * str = dynamic_cast<ExprString *>($3);
@@ -487,7 +487,7 @@ attrpath
       } else
           $$->push_back(AttrName($3));
     }
-  | attr { $$ = new vector<AttrName>; $$->push_back(AttrName(data->symbols.create($1))); }
+  | attr { $$ = new vector<AttrName>; $$->push_back(AttrName(data->symbols.Create($1))); }
   | string_attr
     { $$ = new vector<AttrName>;
       ExprString *str = dynamic_cast<ExprString *>($1);
@@ -526,8 +526,8 @@ formals
   ;
 
 formal
-  : ID { $$ = new Formal(data->symbols.create($1), 0); }
-  | ID '?' expr { $$ = new Formal(data->symbols.create($1), $3); }
+  : ID { $$ = new Formal(data->symbols.Create($1), 0); }
+  | ID '?' expr { $$ = new Formal(data->symbols.Create($1), $3); }
   ;
 
 %%
@@ -552,7 +552,7 @@ Expr * EvalState::parse(const char * text,
     yyscan_t scanner;
     ParseData data(*this);
     data.basePath = basePath;
-    data.path = data.symbols.create(path);
+    data.path = data.symbols.Create(path);
 
     yylex_init(&scanner);
     yy_scan_string(text, scanner);

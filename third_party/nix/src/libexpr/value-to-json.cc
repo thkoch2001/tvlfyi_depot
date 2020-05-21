@@ -54,7 +54,7 @@ void printValueAsJSON(EvalState& state, bool strict, Value& v,
           names.insert(j.name);
         }
         for (auto& j : names) {
-          Attr& a(*v.attrs->find(state.symbols.create(j)));
+          Attr& a(*v.attrs->find(state.symbols.Create(j)));
           auto placeholder(obj.placeholder(j));
           printValueAsJSON(state, strict, *a.value, placeholder, context);
         }

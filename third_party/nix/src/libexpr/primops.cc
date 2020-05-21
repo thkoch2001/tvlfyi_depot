@@ -118,12 +118,12 @@ static void prim_scopedImport(EvalState& state, const Pos& pos, Value** args,
     mkString(*v2, path, {"=" + path});
     v2 = state.allocAttr(w, state.sName);
     mkString(*v2, drv.env["name"]);
-    Value* outputsVal = state.allocAttr(w, state.symbols.create("outputs"));
+    Value* outputsVal = state.allocAttr(w, state.symbols.Create("outputs"));
     state.mkList(*outputsVal, drv.outputs.size());
     unsigned int outputs_index = 0;
 
     for (const auto& o : drv.outputs) {
-      v2 = state.allocAttr(w, state.symbols.create(o.first));
+      v2 = state.allocAttr(w, state.symbols.Create(o.first));
       mkString(*v2, o.second.path, {"!" + o.first + "!" + path});
       outputsVal->listElems()[outputs_index] = state.allocValue();
       mkString(*(outputsVal->listElems()[outputs_index++]), o.first);
@@ -291,7 +291,7 @@ static void prim_typeOf(EvalState& state, const Pos& pos, Value** args,
     default:
       abort();
   }
-  mkString(v, state.symbols.create(t));
+  mkString(v, state.symbols.Create(t));
 }
 
 /* Determine whether the argument is the null value. */
@@ -394,7 +394,7 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
 
   /* Get the start set. */
   Bindings::iterator startSet =
-      args[0]->attrs->find(state.symbols.create("startSet"));
+      args[0]->attrs->find(state.symbols.Create("startSet"));
   if (startSet == args[0]->attrs->end()) {
     throw EvalError(format("attribute 'startSet' required, at %1%") % pos);
   }
@@ -407,7 +407,7 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
 
   /* Get the operator. */
   Bindings::iterator op =
-      args[0]->attrs->find(state.symbols.create("operator"));
+      args[0]->attrs->find(state.symbols.Create("operator"));
   if (op == args[0]->attrs->end()) {
     throw EvalError(format("attribute 'operator' required, at %1%") % pos);
   }
@@ -426,7 +426,7 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
 
     state.forceAttrs(*e, pos);
 
-    Bindings::iterator key = e->attrs->find(state.symbols.create("key"));
+    Bindings::iterator key = e->attrs->find(state.symbols.Create("key"));
     if (key == e->attrs->end()) {
       throw EvalError(format("attribute 'key' required, at %1%") % pos);
     }
@@ -493,10 +493,10 @@ static void prim_tryEval(EvalState& state, const Pos& pos, Value** args,
   try {
     state.forceValue(*args[0]);
     v.attrs->push_back(Attr(state.sValue, args[0]));
-    mkBool(*state.allocAttr(v, state.symbols.create("success")), true);
+    mkBool(*state.allocAttr(v, state.symbols.Create("success")), true);
   } catch (AssertionError& e) {
     mkBool(*state.allocAttr(v, state.sValue), false);
-    mkBool(*state.allocAttr(v, state.symbols.create("success")), false);
+    mkBool(*state.allocAttr(v, state.symbols.Create("success")), false);
   }
   v.attrs->sort();
 }
@@ -846,7 +846,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   state.mkAttrs(v, 1 + drv.outputs.size());
   mkString(*state.allocAttr(v, state.sDrvPath), drvPath, {"=" + drvPath});
   for (auto& i : drv.outputs) {
-    mkString(*state.allocAttr(v, state.symbols.create(i.first)), i.second.path,
+    mkString(*state.allocAttr(v, state.symbols.Create(i.first)), i.second.path,
              {"!" + i.first + "!" + drvPath});
   }
   v.attrs->sort();
@@ -987,12 +987,12 @@ static void prim_findFile(EvalState& state, const Pos& pos, Value** args,
     state.forceAttrs(v2, pos);
 
     string prefix;
-    Bindings::iterator i = v2.attrs->find(state.symbols.create("prefix"));
+    Bindings::iterator i = v2.attrs->find(state.symbols.Create("prefix"));
     if (i != v2.attrs->end()) {
       prefix = state.forceStringNoCtx(*i->value, pos);
     }
 
-    i = v2.attrs->find(state.symbols.create("path"));
+    i = v2.attrs->find(state.symbols.Create("path"));
     if (i == v2.attrs->end()) {
       throw EvalError(format("attribute 'path' missing, at %1%") % pos);
     }
@@ -1050,7 +1050,7 @@ static void prim_readDir(EvalState& state, const Pos& pos, Value** args,
   state.mkAttrs(v, entries.size());
 
   for (auto& ent : entries) {
-    Value* ent_val = state.allocAttr(v, state.symbols.create(ent.name));
+    Value* ent_val = state.allocAttr(v, state.symbols.Create(ent.name));
     if (ent.type == DT_UNKNOWN) {
       ent.type = getFileType(path + "/" + ent.name);
     }
@@ -1301,7 +1301,7 @@ void prim_getAttr(EvalState& state, const Pos& pos, Value** args, Value& v) {
   string attr = state.forceStringNoCtx(*args[0], pos);
   state.forceAttrs(*args[1], pos);
   // !!! Should we create a symbol here or just do a lookup?
-  Bindings::iterator i = args[1]->attrs->find(state.symbols.create(attr));
+  Bindings::iterator i = args[1]->attrs->find(state.symbols.Create(attr));
   if (i == args[1]->attrs->end()) {
     throw EvalError(format("attribute '%1%' missing, at %2%") % attr % pos);
   }
@@ -1318,7 +1318,7 @@ void prim_unsafeGetAttrPos(EvalState& state, const Pos& pos, Value** args,
                            Value& v) {
   string attr = state.forceStringNoCtx(*args[0], pos);
   state.forceAttrs(*args[1], pos);
-  Bindings::iterator i = args[1]->attrs->find(state.symbols.create(attr));
+  Bindings::iterator i = args[1]->attrs->find(state.symbols.Create(attr));
   if (i == args[1]->attrs->end()) {
     mkNull(v);
   } else {
@@ -1331,7 +1331,7 @@ static void prim_hasAttr(EvalState& state, const Pos& pos, Value** args,
                          Value& v) {
   string attr = state.forceStringNoCtx(*args[0], pos);
   state.forceAttrs(*args[1], pos);
-  mkBool(v, args[1]->attrs->find(state.symbols.create(attr)) !=
+  mkBool(v, args[1]->attrs->find(state.symbols.Create(attr)) !=
                 args[1]->attrs->end());
 }
 
@@ -1351,7 +1351,7 @@ static void prim_removeAttrs(EvalState& state, const Pos& pos, Value** args,
   std::set<Symbol> names;
   for (unsigned int i = 0; i < args[1]->listSize(); ++i) {
     state.forceStringNoCtx(*args[1]->listElems()[i], pos);
-    names.insert(state.symbols.create(args[1]->listElems()[i]->string.s));
+    names.insert(state.symbols.Create(args[1]->listElems()[i]->string.s));
   }
 
   /* Copy all attributes not in that set.  Note that we don't need
@@ -1391,10 +1391,13 @@ static void prim_listToAttrs(EvalState& state, const Pos& pos, Value** args,
     }
     string name = state.forceStringNoCtx(*j->value, pos);
 
-    Symbol sym = state.symbols.create(name);
+    Symbol sym = state.symbols.Create(name);
     if (seen.find(sym) == seen.end()) {
       Bindings::iterator j2 =
-          v2.attrs->find(state.symbols.create(state.sValue));
+          // TODO(tazjin): this line used to construct the symbol again:
+          // state.symbols.Create(state.sValue));
+          // Why?
+          v2.attrs->find(state.sValue);
       if (j2 == v2.attrs->end()) {
         throw TypeError(format("'value' attribute missing in a call to "
                                "'listToAttrs', at %1%") %
@@ -1436,7 +1439,7 @@ static void prim_intersectAttrs(EvalState& state, const Pos& pos, Value** args,
 */
 static void prim_catAttrs(EvalState& state, const Pos& pos, Value** args,
                           Value& v) {
-  Symbol attrName = state.symbols.create(state.forceStringNoCtx(*args[0], pos));
+  Symbol attrName = state.symbols.Create(state.forceStringNoCtx(*args[0], pos));
   state.forceList(*args[1], pos);
 
   Value* res[args[1]->listSize()];
@@ -2144,7 +2147,7 @@ static void prim_parseDrvName(EvalState& state, const Pos& pos, Value** args,
   DrvName parsed(name);
   state.mkAttrs(v, 2);
   mkString(*state.allocAttr(v, state.sName), parsed.name);
-  mkString(*state.allocAttr(v, state.symbols.create("version")),
+  mkString(*state.allocAttr(v, state.symbols.Create("version")),
            parsed.version);
   v.attrs->sort();
 }
@@ -2430,7 +2433,7 @@ void EvalState::createBaseEnv() {
      `drvPath' and `outPath' attributes lazily. */
   string path =
       canonPath(settings.nixDataDir + "/nix/corepkgs/derivation.nix", true);
-  sDerivationNix = symbols.create(path);
+  sDerivationNix = symbols.Create(path);
   evalFile(path, v);
   addConstant("derivation", v);
 
@@ -2440,8 +2443,8 @@ void EvalState::createBaseEnv() {
   for (auto& i : searchPath) {
     v2 = v.listElems()[n++] = allocValue();
     mkAttrs(*v2, 2);
-    mkString(*allocAttr(*v2, symbols.create("path")), i.second);
-    mkString(*allocAttr(*v2, symbols.create("prefix")), i.first);
+    mkString(*allocAttr(*v2, symbols.Create("path")), i.second);
+    mkString(*allocAttr(*v2, symbols.Create("prefix")), i.first);
     v2->attrs->sort();
   }
   addConstant("__nixPath", v);

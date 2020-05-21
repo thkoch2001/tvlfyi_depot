@@ -27,7 +27,7 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
     return vSourceExpr;
   }
 
-  auto sToplevel = state.symbols.create("_toplevel");
+  auto sToplevel = state.symbols.Create("_toplevel");
 
   vSourceExpr = state.allocValue();
 
@@ -57,7 +57,7 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
                   state.getBuiltin("nixPath"));
       Value* v2 = state.allocValue();
       mkApp(*v2, *v1, mkString(*state.allocValue(), name));
-      mkApp(*state.allocAttr(*vSourceExpr, state.symbols.create(name)),
+      mkApp(*state.allocAttr(*vSourceExpr, state.symbols.Create(name)),
             state.getBuiltin("import"), *v2);
     };
 

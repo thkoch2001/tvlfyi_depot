@@ -42,7 +42,7 @@ Bindings* MixEvalArgs::getAutoArgs(EvalState& state) {
     } else {
       mkString(*v, string(i.second, 1));
     }
-    res->push_back(Attr(state.symbols.create(i.first), v));
+    res->push_back(Attr(state.symbols.Create(i.first), v));
   }
   res->sort();
   return res;

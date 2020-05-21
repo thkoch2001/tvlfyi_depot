@@ -99,7 +99,7 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
         /* Evaluate the corresponding set. */
         string name =
             state->forceStringNoCtx(*i->value->listElems()[j], *i->pos);
-        Bindings::iterator out = attrs->find(state->symbols.create(name));
+        Bindings::iterator out = attrs->find(state->symbols.Create(name));
         if (out == attrs->end()) {
           continue;  // FIXME: throw error?
         }
@@ -213,7 +213,7 @@ Value* DrvInfo::queryMeta(const string& name) {
   if (getMeta() == nullptr) {
     return nullptr;
   }
-  Bindings::iterator a = meta->find(state->symbols.create(name));
+  Bindings::iterator a = meta->find(state->symbols.Create(name));
   if (a == meta->end() || !checkMeta(*a->value)) {
     return nullptr;
   }
@@ -291,7 +291,7 @@ void DrvInfo::setMeta(const string& name, Value* v) {
   getMeta();
   Bindings* old = meta;
   meta = state->allocBindings(1 + (old != nullptr ? old->size() : 0));
-  Symbol sym = state->symbols.create(name);
+  Symbol sym = state->symbols.Create(name);
   if (old != nullptr) {
     for (auto i : *old) {
       if (i.name != sym) {
@@ -377,7 +377,7 @@ static void getDerivations(EvalState& state, Value& vIn,
     /* !!! undocumented hackery to support combining channels in
        nix-env.cc. */
     bool combineChannels =
-        v.attrs->find(state.symbols.create("_combineChannels")) !=
+        v.attrs->find(state.symbols.Create("_combineChannels")) !=
         v.attrs->end();
 
     /* Consider the attributes in sorted order to get more
@@ -401,7 +401,7 @@ static void getDerivations(EvalState& state, Value& vIn,
            `recurseForDerivations = true' attribute. */
         if (i->value->type == tAttrs) {
           Bindings::iterator j = i->value->attrs->find(
-              state.symbols.create("recurseForDerivations"));
+              state.symbols.Create("recurseForDerivations"));
           if (j != i->value->attrs->end() &&
               state.forceBool(*j->value, *j->pos)) {
             getDerivations(state, *i->value, pathPrefix2, autoArgs, drvs, done,

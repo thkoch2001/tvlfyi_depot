@@ -25,7 +25,7 @@ static void prim_fromTOML(EvalState& state, const Pos& pos, Value** args,
       state.mkAttrs(v, size);
 
       for (auto& i : *t2) {
-        auto& v2 = *state.allocAttr(v, state.symbols.create(i.first));
+        auto& v2 = *state.allocAttr(v, state.symbols.Create(i.first));
 
         if (auto i2 = i.second->as_table_array()) {
           size_t size2 = i2->get().size();

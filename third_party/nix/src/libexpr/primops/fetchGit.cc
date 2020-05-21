@@ -246,10 +246,10 @@ static void prim_fetchGit(EvalState& state, const Pos& pos, Value** args,
   state.mkAttrs(v, 8);
   mkString(*state.allocAttr(v, state.sOutPath), gitInfo.storePath,
            PathSet({gitInfo.storePath}));
-  mkString(*state.allocAttr(v, state.symbols.create("rev")), gitInfo.rev);
-  mkString(*state.allocAttr(v, state.symbols.create("shortRev")),
+  mkString(*state.allocAttr(v, state.symbols.Create("rev")), gitInfo.rev);
+  mkString(*state.allocAttr(v, state.symbols.Create("shortRev")),
            gitInfo.shortRev);
-  mkInt(*state.allocAttr(v, state.symbols.create("revCount")),
+  mkInt(*state.allocAttr(v, state.symbols.Create("revCount")),
         gitInfo.revCount);
   v.attrs->sort();
 

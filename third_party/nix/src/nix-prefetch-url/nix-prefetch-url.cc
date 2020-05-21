@@ -39,7 +39,7 @@ string resolveMirrorUri(EvalState& state, string uri) {
       vMirrors);
   state.forceAttrs(vMirrors);
 
-  auto mirrorList = vMirrors.attrs->find(state.symbols.create(mirrorName));
+  auto mirrorList = vMirrors.attrs->find(state.symbols.Create(mirrorName));
   if (mirrorList == vMirrors.attrs->end()) {
     throw Error(format("unknown mirror name '%1%'") % mirrorName);
   }
@@ -126,7 +126,7 @@ static int _main(int argc, char** argv) {
       state->forceAttrs(v);
 
       /* Extract the URI. */
-      auto attr = v.attrs->find(state->symbols.create("urls"));
+      auto attr = v.attrs->find(state->symbols.Create("urls"));
       if (attr == v.attrs->end()) {
         throw Error("attribute set does not contain a 'urls' attribute");
       }
@@ -137,7 +137,7 @@ static int _main(int argc, char** argv) {
       uri = state->forceString(*attr->value->listElems()[0]);
 
       /* Extract the hash mode. */
-      attr = v.attrs->find(state->symbols.create("outputHashMode"));
+      attr = v.attrs->find(state->symbols.Create("outputHashMode"));
       if (attr == v.attrs->end()) {
         LOG(WARNING) << "this does not look like a fetchurl call";
       } else {
@@ -146,7 +146,7 @@ static int _main(int argc, char** argv) {
 
       /* Extract the name. */
       if (name.empty()) {
-        attr = v.attrs->find(state->symbols.create("name"));
+        attr = v.attrs->find(state->symbols.Create("name"));
         if (attr != v.attrs->end()) {
           name = state->forceString(*attr->value);
         }

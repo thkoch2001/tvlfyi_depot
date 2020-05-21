@@ -34,7 +34,7 @@ static void showAttrs(EvalState& state, bool strict, bool location,
   }
 
   for (auto& i : names) {
-    Attr& a(*attrs.find(state.symbols.create(i)));
+    Attr& a(*attrs.find(state.symbols.Create(i)));
 
     XMLAttrs xmlAttrs;
     xmlAttrs["name"] = i;
@@ -86,7 +86,7 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
         XMLAttrs xmlAttrs;
 
         Bindings::iterator a =
-            v.attrs->find(state.symbols.create("derivation"));
+            v.attrs->find(state.symbols.Create("derivation"));
 
         Path drvPath;
         a = v.attrs->find(state.sDrvPath);

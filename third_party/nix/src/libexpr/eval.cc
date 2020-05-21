@@ -198,7 +198,7 @@ static Symbol getName(const AttrName& name, EvalState& state, Env& env) {
   Value nameValue;
   name.expr->eval(state, env, nameValue);
   state.forceStringNoCtx(nameValue);
-  return state.symbols.create(nameValue.string.s);
+  return state.symbols.Create(nameValue.string.s);
 }
 
 static bool gcInitialised = false;
@@ -299,31 +299,31 @@ static Strings parseNixPath(const string& s) {
 }
 
 EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
-    : sWith(symbols.create("<with>")),
-      sOutPath(symbols.create("outPath")),
-      sDrvPath(symbols.create("drvPath")),
-      sType(symbols.create("type")),
-      sMeta(symbols.create("meta")),
-      sName(symbols.create("name")),
-      sValue(symbols.create("value")),
-      sSystem(symbols.create("system")),
-      sOverrides(symbols.create("__overrides")),
-      sOutputs(symbols.create("outputs")),
-      sOutputName(symbols.create("outputName")),
-      sIgnoreNulls(symbols.create("__ignoreNulls")),
-      sFile(symbols.create("file")),
-      sLine(symbols.create("line")),
-      sColumn(symbols.create("column")),
-      sFunctor(symbols.create("__functor")),
-      sToString(symbols.create("__toString")),
-      sRight(symbols.create("right")),
-      sWrong(symbols.create("wrong")),
-      sStructuredAttrs(symbols.create("__structuredAttrs")),
-      sBuilder(symbols.create("builder")),
-      sArgs(symbols.create("args")),
-      sOutputHash(symbols.create("outputHash")),
-      sOutputHashAlgo(symbols.create("outputHashAlgo")),
-      sOutputHashMode(symbols.create("outputHashMode")),
+    : sWith(symbols.Create("<with>")),
+      sOutPath(symbols.Create("outPath")),
+      sDrvPath(symbols.Create("drvPath")),
+      sType(symbols.Create("type")),
+      sMeta(symbols.Create("meta")),
+      sName(symbols.Create("name")),
+      sValue(symbols.Create("value")),
+      sSystem(symbols.Create("system")),
+      sOverrides(symbols.Create("__overrides")),
+      sOutputs(symbols.Create("outputs")),
+      sOutputName(symbols.Create("outputName")),
+      sIgnoreNulls(symbols.Create("__ignoreNulls")),
+      sFile(symbols.Create("file")),
+      sLine(symbols.Create("line")),
+      sColumn(symbols.Create("column")),
+      sFunctor(symbols.Create("__functor")),
+      sToString(symbols.Create("__toString")),
+      sRight(symbols.Create("right")),
+      sWrong(symbols.Create("wrong")),
+      sStructuredAttrs(symbols.Create("__structuredAttrs")),
+      sBuilder(symbols.Create("builder")),
+      sArgs(symbols.Create("args")),
+      sOutputHash(symbols.Create("outputHash")),
+      sOutputHashAlgo(symbols.Create("outputHashAlgo")),
+      sOutputHashMode(symbols.Create("outputHashMode")),
       repair(NoRepair),
       store(store),
       baseEnv(allocEnv(128)),
@@ -467,10 +467,10 @@ Path EvalState::toRealPath(const Path& path, const PathSet& context) {
 Value* EvalState::addConstant(const string& name, Value& v) {
   Value* v2 = allocValue();
   *v2 = v;
-  staticBaseEnv.vars[symbols.create(name)] = baseEnvDispl;
+  staticBaseEnv.vars[symbols.Create(name)] = baseEnvDispl;
   baseEnv.values[baseEnvDispl++] = v2;
   string name2 = string(name, 0, 2) == "__" ? string(name, 2) : name;
-  baseEnv.values[0]->attrs->push_back(Attr(symbols.create(name2), v2));
+  baseEnv.values[0]->attrs->push_back(Attr(symbols.Create(name2), v2));
   return v2;
 }
 
@@ -483,17 +483,17 @@ Value* EvalState::addPrimOp(const string& name, size_t arity,
   }
   Value* v = allocValue();
   string name2 = string(name, 0, 2) == "__" ? string(name, 2) : name;
-  Symbol sym = symbols.create(name2);
+  Symbol sym = symbols.Create(name2);
   v->type = tPrimOp;
   v->primOp = new PrimOp(primOp, arity, sym);
-  staticBaseEnv.vars[symbols.create(name)] = baseEnvDispl;
+  staticBaseEnv.vars[symbols.Create(name)] = baseEnvDispl;
   baseEnv.values[baseEnvDispl++] = v;
   baseEnv.values[0]->attrs->push_back(Attr(sym, v));
   return v;
 }
 
 Value& EvalState::getBuiltin(const string& name) {
-  return *baseEnv.values[0]->attrs->find(symbols.create(name))->value;
+  return *baseEnv.values[0]->attrs->find(symbols.Create(name))->value;
 }
 
 /* Every "format" object (even temporary) takes up a few hundred bytes
@@ -885,7 +885,7 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
       continue;
     }
     state.forceStringNoCtx(nameVal);
-    Symbol nameSym = state.symbols.create(nameVal.string.s);
+    Symbol nameSym = state.symbols.Create(nameVal.string.s);
     Bindings::iterator j = v.attrs->find(nameSym);
     if (j != v.attrs->end()) {
       throwEvalError("dynamic attribute '%1%' at %2% already defined at %3%",
@@ -1828,8 +1828,8 @@ void EvalState::printStats() {
     }
     {
       auto syms = topObj.object("symbols");
-      syms.attr("number", symbols.size());
-      syms.attr("bytes", symbols.totalSize());
+      syms.attr("number", symbols.Size());
+      syms.attr("bytes", symbols.TotalSize());
     }
     {
       auto sets = topObj.object("sets");
@@ -1897,10 +1897,11 @@ void EvalState::printStats() {
       }
     }
 
-    if (getEnv("NIX_SHOW_SYMBOLS", "0") != "0") {
-      auto list = topObj.list("symbols");
-      symbols.dump([&](const std::string& s) { list.elem(s); });
-    }
+    // TODO(tazjin): what is this? commented out because .dump() is gone.
+    // if (getEnv("NIX_SHOW_SYMBOLS", "0") != "0") {
+    //   auto list = topObj.list("symbols");
+    //   symbols.dump([&](const std::string& s) { list.elem(s); });
+    // }
   }
 }
 

@@ -75,7 +75,7 @@ Value* findAlongAttrPath(EvalState& state, const string& attrPath,
                     attrPath);
       }
 
-      Bindings::iterator a = v->attrs->find(state.symbols.create(attr));
+      Bindings::iterator a = v->attrs->find(state.symbols.Create(attr));
       if (a == v->attrs->end()) {
         throw Error(
             format("attribute '%1%' in selection path '%2%' not found") % attr %

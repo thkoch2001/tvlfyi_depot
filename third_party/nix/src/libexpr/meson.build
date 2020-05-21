@@ -16,6 +16,7 @@ libexpr_src = files(
     join_paths(meson.source_root(), 'src/libexpr/names.cc'),
     join_paths(meson.source_root(), 'src/libexpr/nixexpr.cc'),
     join_paths(meson.source_root(), 'src/libexpr/primops.cc'),
+    join_paths(meson.source_root(), 'src/libexpr/symbol-table.cc'),
     join_paths(meson.source_root(), 'src/libexpr/value-to-json.cc'),
     join_paths(meson.source_root(), 'src/libexpr/value-to-xml.cc'),
 )
@@ -42,18 +43,17 @@ libexpr_dep_list = [
     glog_dep,
     libdl_dep,
     libsodium_dep,
-]
-
-if sys_name == 'freebsd'
-    libexpr_dep_list += libdl_dep
-endif
+] + absl_deps
 
 libexpr_link_list = [
     libutil_lib,
     libstore_lib,
-    libmain_lib]
+    libmain_lib,
+]
 
-libexpr_link_args = []
+libexpr_link_args = [
+  '-lpthread',
+]
 
 libexpr_cxx_args = []
 

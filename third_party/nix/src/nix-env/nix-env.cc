@@ -132,7 +132,7 @@ static void getAllExprs(EvalState& state, const Path& path, StringSet& attrs,
         throw Error(format("too many Nix expressions in directory '%1%'") %
                     path);
       }
-      mkApp(*state.allocAttr(v, state.symbols.create(attrName)), vFun, vArg);
+      mkApp(*state.allocAttr(v, state.symbols.Create(attrName)), vFun, vArg);
     } else if (S_ISDIR(st.st_mode)) {
       /* `path2' is a directory (with no default.nix in it);
          recurse into it. */
@@ -159,7 +159,7 @@ static void loadSourceExpr(EvalState& state, const Path& path, Value& v) {
      directory). */
   else if (S_ISDIR(st.st_mode)) {
     state.mkAttrs(v, 1024);
-    state.mkList(*state.allocAttr(v, state.symbols.create("_combineChannels")),
+    state.mkList(*state.allocAttr(v, state.symbols.Create("_combineChannels")),
                  0);
     StringSet attrs;
     getAllExprs(state, path, attrs, v);

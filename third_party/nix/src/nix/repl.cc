@@ -574,7 +574,7 @@ bool NixRepl::processLine(string line) {
       v.type = tThunk;
       v.thunk.env = env;
       v.thunk.expr = e;
-      addVarToScope(state.symbols.create(name), v);
+      addVarToScope(state.symbols.Create(name), v);
     } else {
       Value v;
       evalString(line, v);

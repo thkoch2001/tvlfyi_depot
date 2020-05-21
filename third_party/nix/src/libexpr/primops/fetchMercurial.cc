@@ -220,11 +220,11 @@ static void prim_fetchMercurial(EvalState& state, const Pos& pos, Value** args,
   state.mkAttrs(v, 8);
   mkString(*state.allocAttr(v, state.sOutPath), hgInfo.storePath,
            PathSet({hgInfo.storePath}));
-  mkString(*state.allocAttr(v, state.symbols.create("branch")), hgInfo.branch);
-  mkString(*state.allocAttr(v, state.symbols.create("rev")), hgInfo.rev);
-  mkString(*state.allocAttr(v, state.symbols.create("shortRev")),
+  mkString(*state.allocAttr(v, state.symbols.Create("branch")), hgInfo.branch);
+  mkString(*state.allocAttr(v, state.symbols.Create("rev")), hgInfo.rev);
+  mkString(*state.allocAttr(v, state.symbols.Create("shortRev")),
            std::string(hgInfo.rev, 0, 12));
-  mkInt(*state.allocAttr(v, state.symbols.create("revCount")), hgInfo.revCount);
+  mkInt(*state.allocAttr(v, state.symbols.Create("revCount")), hgInfo.revCount);
   v.attrs->sort();
 
   if (state.allowedPaths)

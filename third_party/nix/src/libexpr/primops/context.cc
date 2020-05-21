@@ -108,10 +108,10 @@ static void prim_getContext(EvalState& state, const Pos& pos, Value** args,
 
   state.mkAttrs(v, contextInfos.size());
 
-  auto sPath = state.symbols.create("path");
-  auto sAllOutputs = state.symbols.create("allOutputs");
+  auto sPath = state.symbols.Create("path");
+  auto sAllOutputs = state.symbols.Create("allOutputs");
   for (const auto& info : contextInfos) {
-    auto& infoVal = *state.allocAttr(v, state.symbols.create(info.first));
+    auto& infoVal = *state.allocAttr(v, state.symbols.Create(info.first));
     state.mkAttrs(infoVal, 3);
     if (info.second.path) {
       mkBool(*state.allocAttr(infoVal, sPath), true);
@@ -145,8 +145,8 @@ static void prim_appendContext(EvalState& state, const Pos& pos, Value** args,
 
   state.forceAttrs(*args[1], pos);
 
-  auto sPath = state.symbols.create("path");
-  auto sAllOutputs = state.symbols.create("allOutputs");
+  auto sPath = state.symbols.Create("path");
+  auto sAllOutputs = state.symbols.Create("allOutputs");
   for (auto& i : *args[1]->attrs) {
     if (!state.store->isStorePath(i.name))
       throw EvalError("Context key '%s' is not a store path, at %s", i.name,
