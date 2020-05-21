@@ -345,13 +345,50 @@ config_h.set('CAN_LINK_SYMLINK', can_link_symlink,
 description : 'Whether link() works on symlinks')
 
 # Import the Abseil cmake project from the (symlinked) depot sources.
-# This will need to change if //third_party/nix is every split out as
-# a subtree.
 absl = cmake.subproject('abseil_cpp')
-absl_base = absl.dependency('base')
-absl_raw_logging = absl.dependency('raw_logging_internal')
-absl_int128 = absl.dependency('int128')
-absl_strings = absl.dependency('strings')
+
+# Bundle all relevant Abseil libraries. Meson is not able to resolve
+# the internal dependencies of Abseil, and reconstructing them is more
+# work than I am willing to invest at the moment.
+absl_deps = [
+  absl.dependency('algorithm_container'),
+  absl.dependency('base'),
+  absl.dependency('bits'),
+  absl.dependency('city'),
+  absl.dependency('config'),
+  absl.dependency('container_common'),
+  absl.dependency('container_memory'),
+  absl.dependency('core_headers'),
+  absl.dependency('debugging_internal'),
+  absl.dependency('demangle_internal'),
+  absl.dependency('dynamic_annotations'),
+  absl.dependency('endian'),
+  absl.dependency('fixed_array'),
+  absl.dependency('graphcycles_internal'),
+  absl.dependency('hash'),
+  absl.dependency('hash_function_defaults'),
+  absl.dependency('hashtablez_sampler'),
+  absl.dependency('int128'),
+  absl.dependency('malloc_internal'),
+  absl.dependency('memory'),
+  absl.dependency('meta'),
+  absl.dependency('node_hash_policy'),
+  absl.dependency('node_hash_set'),
+  absl.dependency('optional'),
+  absl.dependency('raw_hash_set'),
+  absl.dependency('raw_logging_internal'),
+  absl.dependency('spinlock_wait'),
+  absl.dependency('stacktrace'),
+  absl.dependency('strings'),
+  absl.dependency('symbolize'),
+  absl.dependency('synchronization'),
+  absl.dependency('throw_delegate'),
+  absl.dependency('time'),
+  absl.dependency('time_zone'),
+  absl.dependency('type_traits'),
+  absl.dependency('utility'),
+  absl.dependency('variant'),
+]
 
 # Look for boost, a required dependency.
 #--------------------------------------------------
@@ -449,11 +486,6 @@ if not (
     warning('Nix requires libeditline; However, required functions do not work. Maybe ' +\
     'it is too old? >= 1.14 is required.')
 endif
-
-
-# Optional dependancies
-#============================================================================
-
 
 # Look for libsodium, an optional dependency.
 #--------------------------------------------------

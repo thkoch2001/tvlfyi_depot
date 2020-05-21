@@ -36,6 +36,8 @@ in stdenv.mkDerivation {
 
  # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = with pkgs; [
+    # TODO(tazjin): Figure out why meson can't make the Abseil headers visible
+    abseil_cpp
     aws-s3-cpp
     boost
     brotli
