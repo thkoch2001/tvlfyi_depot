@@ -354,6 +354,7 @@ absl_deps = [
   absl.dependency('algorithm_container'),
   absl.dependency('base'),
   absl.dependency('bits'),
+  absl.dependency('btree'),
   absl.dependency('city'),
   absl.dependency('config'),
   absl.dependency('container_common'),

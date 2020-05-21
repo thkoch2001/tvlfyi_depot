@@ -827,7 +827,8 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
     env2.up = &env;
     dynamicEnv = &env2;
 
-    auto overrides = attrs.find(state.sOverrides);
+    // TODO(tazjin): contains?
+    AttrDefs::iterator overrides = attrs.find(state.sOverrides);
     bool hasOverrides = overrides != attrs.end();
 
     /* The recursive attributes are evaluated in the new
@@ -855,17 +856,19 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
        been substituted into the bodies of the other attributes.
        Hence we need __overrides.) */
     if (hasOverrides) {
-      Value* vOverrides = (*v.attrs)[overrides->second.displ].value;
+      Value* vOverrides =
+          v.attrs->find(overrides->first)
+              ->value;  //(*v.attrs)[overrides->second.displ].value;
       state.forceAttrs(*vOverrides);
-      Bindings* newBnds =
-          state.allocBindings(v.attrs->capacity() + vOverrides->attrs->size());
-      for (auto& i : *v.attrs) {
+      Bindings* newBnds = state.allocBindings(/* capacity = */ 0);
+      for (auto& i : *v.attrs) {  // TODO(tazjin): copy constructor?
         newBnds->push_back(i);
       }
       for (auto& i : *vOverrides->attrs) {
         auto j = attrs.find(i.name);
         if (j != attrs.end()) {
-          (*newBnds)[j->second.displ] = i;
+          newBnds->push_back(i);
+          // (*newBnds)[j->second.displ] = i;
           env2.values[j->second.displ] = i.value;
         } else {
           newBnds->push_back(i);
@@ -875,6 +878,7 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
       v.attrs = newBnds;
     }
   } else {
+    // TODO(tazjin): insert range
     for (auto& i : attrs) {
       v.attrs->push_back(
           Attr(i.first, i.second.e->maybeThunk(state, env), &i.second.pos));

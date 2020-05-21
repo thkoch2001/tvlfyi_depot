@@ -285,7 +285,7 @@ void ExprOpHasAttr::bindVars(const StaticEnv& env) {
 
 void ExprAttrs::bindVars(const StaticEnv& env) {
   const StaticEnv* dynamicEnv = &env;
-  StaticEnv newEnv(false, &env);
+  StaticEnv newEnv(/* isWith = */ false, &env);
 
   if (recursive) {
     dynamicEnv = &newEnv;
