@@ -254,6 +254,9 @@ in depot.lib.fix(self: {
     # Use Tailscale \o/
     services.tailscale.enable = true;
 
+    # nugget has an SSD
+    services.fstrim.enable = true;
+
     # ... and other nonsense.
     system.stateVersion = "19.09";
 })
