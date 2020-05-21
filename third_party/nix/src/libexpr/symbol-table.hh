@@ -1,11 +1,11 @@
 #pragma once
 
-#include <map>
-#include <unordered_set>
+#include <absl/container/node_hash_set.h>
+#include <absl/strings/string_view.h>
 
 #include "types.hh"
 
-namespace nix {
+namespace nix {  // TODO(tazjin): ::expr
 
 /* Symbol table used by the parser and evaluator to represent and look
    up identifiers and attributes efficiently.  SymbolTable::create()
@@ -15,8 +15,8 @@ namespace nix {
 
 class Symbol {
  private:
-  const string* s;  // pointer into SymbolTable
-  Symbol(const string* s) : s(s){};
+  const std::string* s;  // pointer into SymbolTable
+  Symbol(const std::string* s) : s(s){};
   friend class SymbolTable;
 
  public:
@@ -28,7 +28,7 @@ class Symbol {
 
   bool operator<(const Symbol& s2) const { return s < s2.s; }
 
-  operator const string&() const { return *s; }
+  operator const std::string&() const { return *s; }
 
   bool set() const { return s; }
 
@@ -38,26 +38,19 @@ class Symbol {
 };
 
 class SymbolTable {
- private:
-  typedef std::unordered_set<string> Symbols;
-  Symbols symbols;
-
  public:
-  Symbol create(const string& s) {
-    std::pair<Symbols::iterator, bool> res = symbols.insert(s);
-    return Symbol(&*res.first);
-  }
+  Symbol Create(absl::string_view sym);
 
-  size_t size() const { return symbols.size(); }
+  // TODO(tazjin): two of these?
+  size_t Size() const;
 
-  size_t totalSize() const;
+  // Return the total size (in bytes)
+  size_t TotalSize() const;
 
-  template <typename T>
-  void dump(T callback) {
-    for (auto& s : symbols) {
-      callback(s);
-    }
-  }
+ private:
+  // flat_hash_set does not retain pointer stability on rehashing,
+  // hence "interned" strings/symbols are stored on the heap.
+  absl::node_hash_set<std::string> symbols_;
 };
 
 }  // namespace nix

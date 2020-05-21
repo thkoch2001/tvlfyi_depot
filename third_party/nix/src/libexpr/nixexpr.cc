@@ -413,14 +413,4 @@ string ExprLambda::showNamePos() const {
       .str();
 }
 
-/* Symbol table. */
-
-size_t SymbolTable::totalSize() const {
-  size_t n = 0;
-  for (auto& i : symbols) {
-    n += i.size();
-  }
-  return n;
-}
-
 }  // namespace nix
