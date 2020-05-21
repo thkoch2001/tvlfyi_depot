@@ -7,12 +7,7 @@
 
 namespace nix {  // TODO(tazjin): ::expr
 
-/* Symbol table used by the parser and evaluator to represent and look
-   up identifiers and attributes efficiently.  SymbolTable::create()
-   converts a string into a symbol.  Symbols have the property that
-   they can be compared efficiently (using a pointer equality test),
-   because the symbol table stores only one copy of each string. */
-
+ // TODO(tazjin): Replace with a simpler struct, or get rid of.
 class Symbol {
  private:
   const std::string* s;  // pointer into SymbolTable
@@ -37,11 +32,28 @@ class Symbol {
   friend std::ostream& operator<<(std::ostream& str, const Symbol& sym);
 };
 
+// SymbolTable is a hash-set based symbol-interning mechanism.
+//
+// TODO(tazjin): Figure out which things use this. AttrSets, ...?
+// Is it possible this only exists because AttrSet wasn't a map?
+//
+// Original comment:
+//
+// Symbol table used by the parser and evaluator to represent and look
+// up identifiers and attributes efficiently. SymbolTable::create()
+// converts a string into a symbol. Symbols have the property that
+// they can be compared efficiently (using a pointer equality test),
+// because the symbol table stores only one copy of each string.
 class SymbolTable {
  public:
+  // Create a new symbol in this table by emplacing the provided
+  // string into it.
+  //
+  // The symbol will reference an existing symbol if the symbol is
+  // already interned.
   Symbol Create(absl::string_view sym);
 
-  // TODO(tazjin): two of these?
+  // Return the number of symbols interned.
   size_t Size() const;
 
   // Return the total size (in bytes)
