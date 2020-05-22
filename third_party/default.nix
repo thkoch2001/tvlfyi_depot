@@ -16,8 +16,16 @@ let
     config.allowBroken = true;
   };
 
+  # Tracking nixos-20.03 as of 2020-05-22
+  stableCommit = "48723f48ab92381f0afd50143f38e45cf3080405";
+  stableNixpkgsSrc = fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs-channels/archive/${commit}.tar.gz";
+    sha256 = "0nkk492aa7pr0d30vv1aw192wc16wpa1j02925pldc09s9m9i0r3";
+  };
+  stableNixpkgs = import stableNixpkgsSrc {};
+
   exposed = {
-    # Inherit the packages from nixpkgs that should be available inside
+    # Inherit the packages from nixos-usntable that should be available inside
     # of the repo. They become available under `pkgs.third_party.<name>`
     inherit (nixpkgs)
       age
@@ -41,10 +49,6 @@ let
       cudatoolkit
       darwin
       dockerTools
-      emacs26
-      emacs26-nox
-      emacsPackages
-      emacsPackagesGen
       fetchFromGitHub
       fetchurl
       fetchzip
@@ -119,6 +123,13 @@ let
       zlib
       zstd;
 
+    # Inherit packages that should come from a stable channel
+    inherit (stableNixpkgs)
+      emacs26
+      emacs26-nox
+      emacsPackages
+      emacsPackagesGen;
+
     # Required by //third_party/nix
     inherit (nixpkgs)
       aws-sdk-cpp
@@ -147,7 +158,7 @@ in exposed // {
 
   # Provide the source code of nixpkgs, but do not provide an imported
   # version of it.
-  inherit nixpkgsSrc;
+  inherit nixpkgsSrc stableNixpkgsSrc;
 
   # Packages to be overridden
   originals = {
