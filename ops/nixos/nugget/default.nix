@@ -2,7 +2,7 @@
 { depot, lib, ... }:
 
 config: let
-  nixpkgs = import depot.third_party.nixpkgsSrc {
+  nixpkgs = import depot.third_party.stableNixpkgsSrc {
     config.allowUnfree = true;
   };
 

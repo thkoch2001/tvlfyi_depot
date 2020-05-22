@@ -19,8 +19,8 @@ let
   # Tracking nixos-20.03 as of 2020-05-22
   stableCommit = "48723f48ab92381f0afd50143f38e45cf3080405";
   stableNixpkgsSrc = fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs-channels/archive/${commit}.tar.gz";
-    sha256 = "0nkk492aa7pr0d30vv1aw192wc16wpa1j02925pldc09s9m9i0r3";
+    url = "https://github.com/NixOS/nixpkgs-channels/archive/${stableCommit}.tar.gz";
+    sha256 = "0h3b3l867j3ybdgimfn76lw7w6yjhszd5x02pq5827l659ihcf53";
   };
   stableNixpkgs = import stableNixpkgsSrc {};
 
@@ -167,5 +167,5 @@ in exposed // {
   };
 
   # Make NixOS available
-  nixos = import "${nixpkgsSrc}/nixos";
+  nixos = import "${stableNixpkgsSrc}/nixos";
 }
