@@ -4,15 +4,29 @@
 
 #include <absl/container/btree_map.h>
 #include <gc/gc_cpp.h>
+#include <glog/logging.h>
 
 #include "eval-inline.hh"
 
 namespace nix {
 
-// TODO: using insert_or_assign might break existing Nix code because
-// of the weird ordering situation. Need to investigate.
+// This function inherits its name from previous implementations, in
+// which Bindings was backed by an array of elements which was scanned
+// linearly.
+//
+// In that setup, inserting duplicate elements would always yield the
+// first element (until the next sort, which wasn't stable, after
+// which things are more or less undefined).
+//
+// This behaviour is mimicked by using .insert(), which will *not*
+// override existing values.
 void Bindings::push_back(const Attr& attr) {
-  attributes_.insert_or_assign(attr.name, attr);
+  auto [_, inserted] = attributes_.insert_or_assign(attr.name, attr);
+
+  if (!inserted) {
+    DLOG(WARNING) << "attempted to insert duplicate attribute for key '"
+                  << attr.name << "'";
+  }
 }
 
 size_t Bindings::size() { return attributes_.size(); }
