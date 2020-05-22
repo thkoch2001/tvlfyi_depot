@@ -33,6 +33,10 @@ class Bindings {
  public:
   typedef absl::btree_map<Symbol, Attr>::iterator iterator;
 
+  // Allocate a new attribute set that is visible to the garbage
+  // collector.
+  static Bindings* NewGC();
+
   // Return the number of contained elements.
   size_t size();
 

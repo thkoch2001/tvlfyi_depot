@@ -49,10 +49,7 @@ void Bindings::merge(Bindings* other) {
   attributes_.swap(other->attributes_);
 }
 
-// Allocate a new attribute set, making it visible to the garbage collector.
-Bindings* EvalState::allocBindings(size_t _capacity) {
-  return new (GC) Bindings;
-}
+Bindings* Bindings::NewGC() { return new (GC) Bindings; }
 
 void EvalState::mkAttrs(Value& v, size_t capacity) {
   if (capacity == 0) {
@@ -61,7 +58,7 @@ void EvalState::mkAttrs(Value& v, size_t capacity) {
   }
   clearValue(v);
   v.type = tAttrs;
-  v.attrs = new (GC) Bindings;
+  v.attrs = Bindings::NewGC();
   nrAttrsets++;
   nrAttrsInAttrsets += capacity;
 }

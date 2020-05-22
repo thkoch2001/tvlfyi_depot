@@ -293,7 +293,7 @@ bool DrvInfo::queryMetaBool(const std::string& name, bool def) {
 void DrvInfo::setMeta(const std::string& name, Value* v) {
   getMeta();
   Bindings* old = meta;
-  meta = state->allocBindings(1 + (old != nullptr ? old->size() : 0));
+  meta = Bindings::NewGC();
   Symbol sym = state->symbols.Create(name);
   if (old != nullptr) {
     for (auto i : *old) {

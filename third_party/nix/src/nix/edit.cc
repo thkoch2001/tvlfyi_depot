@@ -29,7 +29,7 @@ struct CmdEdit : InstallableCommand {
 
     Value* v2;
     try {
-      auto dummyArgs = state->allocBindings(0);
+      auto dummyArgs = Bindings::NewGC();
       v2 = findAlongAttrPath(*state, "meta.position", *dummyArgs, *v);
     } catch (Error&) {
       throw Error("package '%s' has no source location information",

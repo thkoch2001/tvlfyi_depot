@@ -19,7 +19,7 @@ DrvInfos queryInstalled(EvalState& state, const Path& userEnv) {
   if (pathExists(manifestFile)) {
     Value v;
     state.evalFile(manifestFile, v);
-    Bindings& bindings(*state.allocBindings(0));
+    Bindings& bindings(*Bindings::NewGC());
     getDerivations(state, v, "", bindings, elems, false);
   }
   return elems;

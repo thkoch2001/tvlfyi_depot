@@ -372,7 +372,7 @@ EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
 
   clearValue(vEmptySet);
   vEmptySet.type = tAttrs;
-  vEmptySet.attrs = allocBindings(0);
+  vEmptySet.attrs = Bindings::NewGC();
 
   createBaseEnv();
 }
@@ -857,7 +857,7 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
     if (hasOverrides) {
       Value* vOverrides = v.attrs->find(overrides->first)->second.value;
       state.forceAttrs(*vOverrides);
-      Bindings* newBnds = state.allocBindings(/* capacity = */ 0);
+      Bindings* newBnds = Bindings::NewGC();
       for (auto& i : *v.attrs) {  // TODO(tazjin): copy constructor?
         newBnds->push_back(i.second);
       }

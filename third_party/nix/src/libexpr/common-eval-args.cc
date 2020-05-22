@@ -33,7 +33,7 @@ MixEvalArgs::MixEvalArgs() {
 }
 
 Bindings* MixEvalArgs::getAutoArgs(EvalState& state) {
-  Bindings* res = state.allocBindings(autoArgs.size());
+  Bindings* res = Bindings::NewGC();
   for (auto& i : autoArgs) {
     Value* v = state.allocValue();
     if (i.second[0] == 'E') {
