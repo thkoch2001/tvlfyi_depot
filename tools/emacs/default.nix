@@ -7,13 +7,11 @@
 # Forcing Emacs to link against Imagemagick currently causes libvterm
 # to segfault, which is a lot less desirable than not having telega
 # render images correctly.
-{ depot, ... }:
-
-with depot;
-with third_party.emacsPackages;
-with third_party.emacs;
+{ depot, lib, ... }:
 
 let
+  inherit (depot) third_party;
+
   emacsWithPackages = (third_party.emacsPackagesGen third_party.emacs26).emacsWithPackages;
 
   # $PATH for binaries that need to be available to Emacs
@@ -26,9 +24,11 @@ let
   (with epkgs.elpaPackages; [
     ace-window
     avy
+    flymake
     pinentry
     rainbow-mode
     undo-tree
+    xelb
   ]) ++
 
   # MELPA packages:
@@ -47,7 +47,6 @@ let
     elixir-mode
     elm-mode
     erlang
-    flymake
     geiser
     go-mode
     gruber-darker-theme
@@ -97,14 +96,12 @@ let
     web-mode
     websocket
     which-key
-    xelb
     yaml-mode
     yasnippet
   ]) ++
 
   # Custom packages
   (with depot.tools.emacs-pkgs; [
-    carp-mode
     dottime
     nix-util
     term-switcher
