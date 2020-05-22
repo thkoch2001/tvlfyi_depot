@@ -31,12 +31,17 @@ std::vector<const Attr*> Bindings::lexicographicOrder() {
 }
 
 Bindings::iterator Bindings::find(const Symbol& name) {
-  return &attributes_[name];
+  return attributes_.find(name);
 }
 
-Bindings::iterator Bindings::begin() { return &(attributes_.begin()->second); }
+Bindings::iterator Bindings::begin() {
+  return attributes_.begin();
+}
 
-Bindings::iterator Bindings::end() { return &(attributes_.end()->second); }
+Bindings::iterator Bindings::end() {
+  return attributes_.end();
+}
+
 void Bindings::merge(Bindings* other) {
   // We want the values from the other attribute set to take
   // precedence, but .merge() works the other way around.

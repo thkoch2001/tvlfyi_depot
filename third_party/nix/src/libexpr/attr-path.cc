@@ -81,7 +81,7 @@ Value* findAlongAttrPath(EvalState& state, const std::string& attrPath,
             format("attribute '%1%' in selection path '%2%' not found") % attr %
             attrPath);
       }
-      v = &*a->value;
+      v = &*(a->second).value;
     }
 
     else if (apType == apIndex) {

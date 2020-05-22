@@ -31,7 +31,7 @@ inline bool operator==(const Attr& lhs, const Attr& rhs) {
 
 class Bindings {
  public:
-  typedef Attr* iterator;  // TODO: type, and also 'using'?
+  typedef absl::btree_map<Symbol, Attr>::iterator iterator;
 
   // Return the number of contained elements.
   size_t size();
@@ -71,4 +71,5 @@ class Bindings {
  private:
   absl::btree_map<Symbol, Attr> attributes_;
 };
+
 }  // namespace nix
