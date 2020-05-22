@@ -214,7 +214,8 @@ static void prim_fetchGit(EvalState& state, const Pos& pos, Value** args,
   if (args[0]->type == tAttrs) {
     state.forceAttrs(*args[0], pos);
 
-    for (auto& attr : *args[0]->attrs) {
+    for (auto& attr_iter : *args[0]->attrs) {
+      auto& attr = attr_iter.second;
       std::string n(attr.name);
       if (n == "url")
         url =

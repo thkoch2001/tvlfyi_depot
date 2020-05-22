@@ -51,15 +51,15 @@ void printValueAsJSON(EvalState& state, bool strict, Value& v,
         auto obj(out.object());
         StringSet names;
         for (auto& j : *v.attrs) {
-          names.insert(j.name);
+          names.insert(j.second.name);
         }
         for (auto& j : names) {
-          Attr& a(*v.attrs->find(state.symbols.Create(j)));
+          auto [_, a] = *v.attrs->find(state.symbols.Create(j));
           auto placeholder(obj.placeholder(j));
           printValueAsJSON(state, strict, *a.value, placeholder, context);
         }
       } else {
-        printValueAsJSON(state, strict, *i->value, out, context);
+        printValueAsJSON(state, strict, *i->second.value, out, context);
       }
       break;
     }

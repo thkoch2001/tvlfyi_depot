@@ -148,8 +148,8 @@ static void prim_scopedImport(EvalState& state, const Pos& pos, Value** args,
 
       unsigned int displ = 0;
       for (auto& attr : *args[0]->attrs) {
-        staticEnv.vars[attr.name] = displ;
-        env->values[displ++] = attr.value;
+        staticEnv.vars[attr.second.name] = displ;
+        env->values[displ++] = attr.second.value;
       }
 
       DLOG(INFO) << "evaluating file '" << realPath << "'";
@@ -398,11 +398,11 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
   if (startSet == args[0]->attrs->end()) {
     throw EvalError(format("attribute 'startSet' required, at %1%") % pos);
   }
-  state.forceList(*startSet->value, pos);
+  state.forceList(*startSet->second.value, pos);
 
   ValueList workSet;
-  for (unsigned int n = 0; n < startSet->value->listSize(); ++n) {
-    workSet.push_back(startSet->value->listElems()[n]);
+  for (unsigned int n = 0; n < startSet->second.value->listSize(); ++n) {
+    workSet.push_back(startSet->second.value->listElems()[n]);
   }
 
   /* Get the operator. */
@@ -411,7 +411,7 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
   if (op == args[0]->attrs->end()) {
     throw EvalError(format("attribute 'operator' required, at %1%") % pos);
   }
-  state.forceValue(*op->value);
+  state.forceValue(*op->second.value);
 
   /* Construct the closure by applying the operator to element of
      `workSet', adding the result to `workSet', continuing until
@@ -430,17 +430,17 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
     if (key == e->attrs->end()) {
       throw EvalError(format("attribute 'key' required, at %1%") % pos);
     }
-    state.forceValue(*key->value);
+    state.forceValue(*key->second.value);
 
-    if (doneKeys.find(key->value) != doneKeys.end()) {
+    if (doneKeys.find(key->second.value) != doneKeys.end()) {
       continue;
     }
-    doneKeys.insert(key->value);
+    doneKeys.insert(key->second.value);
     res.push_back(e);
 
     /* Call the `operator' function with `e' as argument. */
     Value call;
-    mkApp(call, *op->value, *e);
+    mkApp(call, *op->second.value, *e);
     state.forceList(call, pos);
 
     /* Add the values returned by the operator to the work set. */
@@ -566,9 +566,9 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
     throw EvalError(format("required attribute 'name' missing, at %1%") % pos);
   }
   std::string drvName;
-  Pos& posDrvName(*attr->pos);
+  Pos& posDrvName(*attr->second.pos);
   try {
-    drvName = state.forceStringNoCtx(*attr->value, pos);
+    drvName = state.forceStringNoCtx(*attr->second.value, pos);
   } catch (Error& e) {
     e.addPrefix(
         format("while evaluating the derivation attribute 'name' at %1%:\n") %
@@ -580,7 +580,8 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   std::ostringstream jsonBuf;
   std::unique_ptr<JSONObject> jsonObject;
   attr = args[0]->attrs->find(state.sStructuredAttrs);
-  if (attr != args[0]->attrs->end() && state.forceBool(*attr->value, pos)) {
+  if (attr != args[0]->attrs->end() &&
+      state.forceBool(*attr->second.value, pos)) {
     jsonObject = std::make_unique<JSONObject>(jsonBuf);
   }
 
@@ -588,7 +589,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   bool ignoreNulls = false;
   attr = args[0]->attrs->find(state.sIgnoreNulls);
   if (attr != args[0]->attrs->end()) {
-    ignoreNulls = state.forceBool(*attr->value, pos);
+    ignoreNulls = state.forceBool(*attr->second.value, pos);
   }
 
   /* Build the derivation expression by processing the attributes. */
@@ -990,7 +991,7 @@ static void prim_findFile(EvalState& state, const Pos& pos, Value** args,
     std::string prefix;
     Bindings::iterator i = v2.attrs->find(state.symbols.Create("prefix"));
     if (i != v2.attrs->end()) {
-      prefix = state.forceStringNoCtx(*i->value, pos);
+      prefix = state.forceStringNoCtx(*i->second.value, pos);
     }
 
     i = v2.attrs->find(state.symbols.Create("path"));
@@ -1000,7 +1001,7 @@ static void prim_findFile(EvalState& state, const Pos& pos, Value** args,
 
     PathSet context;
     std::string path =
-        state.coerceToString(pos, *i->value, context, false, false);
+        state.coerceToString(pos, *i->second.value, context, false, false);
 
     try {
       state.realiseContext(context);
@@ -1219,29 +1220,30 @@ static void prim_path(EvalState& state, const Pos& pos, Value** args,
   Hash expectedHash;
 
   for (auto& attr : *args[0]->attrs) {
-    const std::string& n(attr.name);
+    const std::string& n(attr.second.name);
     if (n == "path") {
       PathSet context;
-      path = state.coerceToPath(*attr.pos, *attr.value, context);
+      path = state.coerceToPath(*attr.second.pos, *attr.second.value, context);
       if (!context.empty()) {
         throw EvalError(
             format("string '%1%' cannot refer to other paths, at %2%") % path %
-            *attr.pos);
+            *attr.second.pos);
       }
-    } else if (attr.name == state.sName) {
-      name = state.forceStringNoCtx(*attr.value, *attr.pos);
+    } else if (attr.second.name == state.sName) {
+      name = state.forceStringNoCtx(*attr.second.value, *attr.second.pos);
     } else if (n == "filter") {
-      state.forceValue(*attr.value);
-      filterFun = attr.value;
+      state.forceValue(*attr.second.value);
+      filterFun = attr.second.value;
     } else if (n == "recursive") {
-      recursive = state.forceBool(*attr.value, *attr.pos);
+      recursive = state.forceBool(*attr.second.value, *attr.second.pos);
     } else if (n == "sha256") {
       expectedHash =
-          Hash(state.forceStringNoCtx(*attr.value, *attr.pos), htSHA256);
+          Hash(state.forceStringNoCtx(*attr.second.value, *attr.second.pos),
+               htSHA256);
     } else {
       throw EvalError(
           format("unsupported argument '%1%' to 'addPath', at %2%") %
-          attr.name % *attr.pos);
+          attr.second.name % *attr.second.pos);
     }
   }
   if (path.empty()) {
@@ -1268,7 +1270,7 @@ static void prim_attrNames(EvalState& state, const Pos& pos, Value** args,
 
   size_t n = 0;
   for (auto& i : *args[0]->attrs) {
-    mkString(*(v.listElems()[n++] = state.allocValue()), i.name);
+    mkString(*(v.listElems()[n++] = state.allocValue()), i.second.name);
   }
 
   std::sort(v.listElems(), v.listElems() + n, [](Value* v1, Value* v2) {
@@ -1308,11 +1310,11 @@ void prim_getAttr(EvalState& state, const Pos& pos, Value** args, Value& v) {
     throw EvalError(format("attribute '%1%' missing, at %2%") % attr % pos);
   }
   // !!! add to stack trace?
-  if (state.countCalls && (i->pos != nullptr)) {
-    state.attrSelects[*i->pos]++;
+  if (state.countCalls && (i->second.pos != nullptr)) {
+    state.attrSelects[*i->second.pos]++;
   }
-  state.forceValue(*i->value);
-  v = *i->value;
+  state.forceValue(*i->second.value);
+  v = *i->second.value;
 }
 
 /* Return position information of the specified attribute. */
@@ -1324,7 +1326,7 @@ void prim_unsafeGetAttrPos(EvalState& state, const Pos& pos, Value** args,
   if (i == args[1]->attrs->end()) {
     mkNull(v);
   } else {
-    state.mkPos(v, i->pos);
+    state.mkPos(v, i->second.pos);
   }
 }
 
@@ -1361,8 +1363,8 @@ static void prim_removeAttrs(EvalState& state, const Pos& pos, Value** args,
      vector. */
   state.mkAttrs(v, args[0]->attrs->size());
   for (auto& i : *args[0]->attrs) {
-    if (names.find(i.name) == names.end()) {
-      v.attrs->push_back(i);
+    if (names.find(i.second.name) == names.end()) {
+      v.attrs->push_back(i.second);
     }
   }
 }
@@ -1391,7 +1393,7 @@ static void prim_listToAttrs(EvalState& state, const Pos& pos, Value** args,
               "'name' attribute missing in a call to 'listToAttrs', at %1%") %
           pos);
     }
-    std::string name = state.forceStringNoCtx(*j->value, pos);
+    std::string name = state.forceStringNoCtx(*j->second.value, pos);
 
     Symbol sym = state.symbols.Create(name);
     if (seen.find(sym) == seen.end()) {
@@ -1406,7 +1408,7 @@ static void prim_listToAttrs(EvalState& state, const Pos& pos, Value** args,
                         pos);
       }
 
-      v.attrs->push_back(Attr(sym, j2->value, j2->pos));
+      v.attrs->push_back(Attr(sym, j2->second.value, j2->second.pos));
       seen.insert(sym);
     }
   }
@@ -1425,9 +1427,9 @@ static void prim_intersectAttrs(EvalState& state, const Pos& pos, Value** args,
   state.mkAttrs(v, std::min(args[0]->attrs->size(), args[1]->attrs->size()));
 
   for (auto& i : *args[0]->attrs) {
-    Bindings::iterator j = args[1]->attrs->find(i.name);
+    Bindings::iterator j = args[1]->attrs->find(i.second.name);
     if (j != args[1]->attrs->end()) {
-      v.attrs->push_back(*j);
+      v.attrs->push_back(j->second);
     }
   }
 }
@@ -1452,7 +1454,7 @@ static void prim_catAttrs(EvalState& state, const Pos& pos, Value** args,
     state.forceAttrs(v2, pos);
     Bindings::iterator i = v2.attrs->find(attrName);
     if (i != v2.attrs->end()) {
-      res[found++] = i->value;
+      res[found++] = i->second.value;
     }
   }
 
@@ -1506,9 +1508,9 @@ static void prim_mapAttrs(EvalState& state, const Pos& pos, Value** args,
   for (auto& i : *args[1]->attrs) {
     Value* vName = state.allocValue();
     Value* vFun2 = state.allocValue();
-    mkString(*vName, i.name);
+    mkString(*vName, i.second.name);
     mkApp(*vFun2, *args[0], *vName);
-    mkApp(*state.allocAttr(v, i.name), *vFun2, *i.value);
+    mkApp(*state.allocAttr(v, i.second.name), *vFun2, *i.second.value);
   }
 }
 
@@ -2198,17 +2200,20 @@ void fetch(EvalState& state, const Pos& pos, Value** args, Value& v,
     state.forceAttrs(*args[0], pos);
 
     for (auto& attr : *args[0]->attrs) {
-      std::string n(attr.name);
+      std::string n(attr.second.name);
       if (n == "url") {
-        request.uri = state.forceStringNoCtx(*attr.value, *attr.pos);
+        request.uri =
+            state.forceStringNoCtx(*attr.second.value, *attr.second.pos);
       } else if (n == "sha256") {
         request.expectedHash =
-            Hash(state.forceStringNoCtx(*attr.value, *attr.pos), htSHA256);
+            Hash(state.forceStringNoCtx(*attr.second.value, *attr.second.pos),
+                 htSHA256);
       } else if (n == "name") {
-        request.name = state.forceStringNoCtx(*attr.value, *attr.pos);
+        request.name =
+            state.forceStringNoCtx(*attr.second.value, *attr.second.pos);
       } else {
         throw EvalError(format("unsupported argument '%1%' to '%2%', at %3%") %
-                        attr.name % who % attr.pos);
+                        attr.second.name % who % attr.second.pos);
       }
     }
 

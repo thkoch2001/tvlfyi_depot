@@ -175,7 +175,8 @@ struct CmdSearch : SourceExprCommand, MixJSON {
           if (!toplevel) {
             auto attrs = v->attrs;
             Bindings::iterator j = attrs->find(sRecurse);
-            if (j == attrs->end() || !state->forceBool(*j->value, *j->pos)) {
+            if (j == attrs->end() ||
+                !state->forceBool(*j->second.value, *j->second.pos)) {
               DLOG(INFO) << "skip attribute '" << attrPath << "'";
               return;
             }
@@ -184,18 +185,19 @@ struct CmdSearch : SourceExprCommand, MixJSON {
           bool toplevel2 = false;
           if (!fromCache) {
             Bindings::iterator j = v->attrs->find(sToplevel);
-            toplevel2 =
-                j != v->attrs->end() && state->forceBool(*j->value, *j->pos);
+            toplevel2 = j != v->attrs->end() &&
+                        state->forceBool(*j->second.value, *j->second.pos);
           }
 
           for (auto& i : *v->attrs) {
             auto cache2 =
                 cache != nullptr
-                    ? std::make_unique<JSONObject>(cache->object(i.name))
+                    ? std::make_unique<JSONObject>(cache->object(i.second.name))
                     : nullptr;
-            doExpr(i.value,
-                   attrPath.empty() ? (std::string)i.name
-                                    : attrPath + "." + (std::string)i.name,
+            doExpr(i.second.value,
+                   attrPath.empty()
+                       ? (std::string)i.second.name
+                       : attrPath + "." + (std::string)i.second.name,
                    toplevel2 || fromCache, cache2 ? cache2.get() : nullptr);
           }
         }

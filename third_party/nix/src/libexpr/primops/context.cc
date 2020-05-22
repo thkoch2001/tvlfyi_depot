@@ -147,47 +147,48 @@ static void prim_appendContext(EvalState& state, const Pos& pos, Value** args,
 
   auto sPath = state.symbols.Create("path");
   auto sAllOutputs = state.symbols.Create("allOutputs");
-  for (auto& i : *args[1]->attrs) {
-    if (!state.store->isStorePath(i.name))
-      throw EvalError("Context key '%s' is not a store path, at %s", i.name,
-                      i.pos);
+  for (const auto& attr_iter : *args[1]->attrs) {
+    const Attr* i = &attr_iter.second;  // TODO(tazjin): get rid of this
+    if (!state.store->isStorePath(i->name))
+      throw EvalError("Context key '%s' is not a store path, at %s", i->name,
+                      i->pos);
     if (!settings.readOnlyMode) {
-      state.store->ensurePath(i.name);
+      state.store->ensurePath(i->name);
     }
-    state.forceAttrs(*i.value, *i.pos);
-    auto iter = i.value->attrs->find(sPath);
-    if (iter != i.value->attrs->end()) {
-      if (state.forceBool(*iter->value, *iter->pos)) {
-        context.insert(i.name);
+    state.forceAttrs(*i->value, *i->pos);
+    auto iter = i->value->attrs->find(sPath);
+    if (iter != i->value->attrs->end()) {
+      if (state.forceBool(*iter->second.value, *iter->second.pos)) {
+        context.insert(i->name);
       }
     }
 
-    iter = i.value->attrs->find(sAllOutputs);
-    if (iter != i.value->attrs->end()) {
-      if (state.forceBool(*iter->value, *iter->pos)) {
-        if (!isDerivation(i.name)) {
+    iter = i->value->attrs->find(sAllOutputs);
+    if (iter != i->value->attrs->end()) {
+      if (state.forceBool(*iter->second.value, *iter->second.pos)) {
+        if (!isDerivation(i->name)) {
           throw EvalError(
               "Tried to add all-outputs context of %s, which is not a "
               "derivation, to a string, at %s",
-              i.name, i.pos);
+              i->name, i->pos);
         }
-        context.insert("=" + string(i.name));
+        context.insert("=" + string(i->name));
       }
     }
 
-    iter = i.value->attrs->find(state.sOutputs);
-    if (iter != i.value->attrs->end()) {
-      state.forceList(*iter->value, *iter->pos);
-      if (iter->value->listSize() && !isDerivation(i.name)) {
+    iter = i->value->attrs->find(state.sOutputs);
+    if (iter != i->value->attrs->end()) {
+      state.forceList(*iter->second.value, *iter->second.pos);
+      if (iter->second.value->listSize() && !isDerivation(i->name)) {
         throw EvalError(
             "Tried to add derivation output context of %s, which is not a "
             "derivation, to a string, at %s",
-            i.name, i.pos);
+            i->name, i->pos);
       }
-      for (unsigned int n = 0; n < iter->value->listSize(); ++n) {
-        auto name =
-            state.forceStringNoCtx(*iter->value->listElems()[n], *iter->pos);
-        context.insert("!" + name + "!" + string(i.name));
+      for (unsigned int n = 0; n < iter->second.value->listSize(); ++n) {
+        auto name = state.forceStringNoCtx(*iter->second.value->listElems()[n],
+                                           *iter->second.pos);
+        context.insert("!" + name + "!" + string(i->name));
       }
     }
   }
