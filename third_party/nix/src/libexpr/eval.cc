@@ -5,7 +5,10 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <new>
 
+#include <gc/gc.h>
+#include <gc/gc_cpp.h>
 #include <glog/logging.h>
 #include <sys/resource.h>
 #include <sys/time.h>
@@ -21,22 +24,11 @@
 #include "store-api.hh"
 #include "util.hh"
 
-#if HAVE_BOEHMGC
-
-#include <gc/gc.h>
-#include <gc/gc_cpp.h>
-
-#endif
-
 namespace nix {
 
 static char* dupString(const char* s) {
   char* t;
-#if HAVE_BOEHMGC
   t = GC_STRDUP(s);
-#else
-  t = strdup(s);
-#endif
   if (t == nullptr) {
     throw std::bad_alloc();
   }
@@ -617,21 +609,13 @@ inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
                              var.pos);
     }
     for (size_t l = env->prevWith; l != 0u; --l, env = env->up) {
-      ;
     }
   }
 }
 
-std::atomic<uint64_t> nrValuesFreed{0};
-
-void finalizeValue(void* obj, void* data) { nrValuesFreed++; }
-
 Value* EvalState::allocValue() {
   nrValues++;
-  auto v = (Value*)allocBytes(sizeof(Value));
-  // GC_register_finalizer_no_order(v, finalizeValue, nullptr, nullptr,
-  // nullptr);
-  return v;
+  return new (GC) Value;
 }
 
 Env& EvalState::allocEnv(size_t size) {
