@@ -73,7 +73,6 @@ let
       kontemplate
       lib
       libredirect
-      llvmPackages
       luajit
       luatex
       makeFontsConf
@@ -165,6 +164,9 @@ in exposed // {
     inherit (nixpkgs) abseil-cpp git glog notmuch;
     ffmpeg = nixpkgs.ffmpeg-full;
   };
+
+  # Use LLVM 10
+  llvmPackages = nixpkgs.llvmPackages_10;
 
   # Make NixOS available
   nixos = import "${stableNixpkgsSrc}/nixos";
