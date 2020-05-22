@@ -27,6 +27,7 @@
 #include "object-store.h"
 #include "protocol.h"
 #include "commit-reach.h"
+#include "worktree.h"
 
 static const char * const receive_pack_usage[] = {
 	N_("git receive-pack <git-dir>"),
@@ -417,24 +418,22 @@ static int copy_to_sideband(int in, int out, void *arg)
 	return 0;
 }
 
-#define HMAC_BLOCK_SIZE 64
-
-static void hmac_sha1(unsigned char *out,
+static void hmac(unsigned char *out,
 		      const char *key_in, size_t key_len,
 		      const char *text, size_t text_len)
 {
-	unsigned char key[HMAC_BLOCK_SIZE];
-	unsigned char k_ipad[HMAC_BLOCK_SIZE];
-	unsigned char k_opad[HMAC_BLOCK_SIZE];
+	unsigned char key[GIT_MAX_BLKSZ];
+	unsigned char k_ipad[GIT_MAX_BLKSZ];
+	unsigned char k_opad[GIT_MAX_BLKSZ];
 	int i;
-	git_SHA_CTX ctx;
+	git_hash_ctx ctx;
 
 	/* RFC 2104 2. (1) */
-	memset(key, '\0', HMAC_BLOCK_SIZE);
-	if (HMAC_BLOCK_SIZE < key_len) {
-		git_SHA1_Init(&ctx);
-		git_SHA1_Update(&ctx, key_in, key_len);
-		git_SHA1_Final(key, &ctx);
+	memset(key, '\0', GIT_MAX_BLKSZ);
+	if (the_hash_algo->blksz < key_len) {
+		the_hash_algo->init_fn(&ctx);
+		the_hash_algo->update_fn(&ctx, key_in, key_len);
+		the_hash_algo->final_fn(key, &ctx);
 	} else {
 		memcpy(key, key_in, key_len);
 	}
@@ -446,29 +445,29 @@ static void hmac_sha1(unsigned char *out,
 	}
 
 	/* RFC 2104 2. (3) & (4) */
-	git_SHA1_Init(&ctx);
-	git_SHA1_Update(&ctx, k_ipad, sizeof(k_ipad));
-	git_SHA1_Update(&ctx, text, text_len);
-	git_SHA1_Final(out, &ctx);
+	the_hash_algo->init_fn(&ctx);
+	the_hash_algo->update_fn(&ctx, k_ipad, sizeof(k_ipad));
+	the_hash_algo->update_fn(&ctx, text, text_len);
+	the_hash_algo->final_fn(out, &ctx);
 
 	/* RFC 2104 2. (6) & (7) */
-	git_SHA1_Init(&ctx);
-	git_SHA1_Update(&ctx, k_opad, sizeof(k_opad));
-	git_SHA1_Update(&ctx, out, GIT_SHA1_RAWSZ);
-	git_SHA1_Final(out, &ctx);
+	the_hash_algo->init_fn(&ctx);
+	the_hash_algo->update_fn(&ctx, k_opad, sizeof(k_opad));
+	the_hash_algo->update_fn(&ctx, out, the_hash_algo->rawsz);
+	the_hash_algo->final_fn(out, &ctx);
 }
 
 static char *prepare_push_cert_nonce(const char *path, timestamp_t stamp)
 {
 	struct strbuf buf = STRBUF_INIT;
-	unsigned char sha1[GIT_SHA1_RAWSZ];
+	unsigned char hash[GIT_MAX_RAWSZ];
 
 	strbuf_addf(&buf, "%s:%"PRItime, path, stamp);
-	hmac_sha1(sha1, buf.buf, buf.len, cert_nonce_seed, strlen(cert_nonce_seed));
+	hmac(hash, buf.buf, buf.len, cert_nonce_seed, strlen(cert_nonce_seed));
 	strbuf_release(&buf);
 
 	/* RFC 2104 5. HMAC-SHA1-80 */
-	strbuf_addf(&buf, "%"PRItime"-%.*s", stamp, GIT_SHA1_HEXSZ, sha1_to_hex(sha1));
+	strbuf_addf(&buf, "%"PRItime"-%.*s", stamp, (int)the_hash_algo->hexsz, hash_to_hex(hash));
 	return strbuf_detach(&buf, NULL);
 }
 
@@ -818,16 +817,6 @@ static int run_update_hook(struct command *cmd)
 	return finish_command(&proc);
 }
 
-static int is_ref_checked_out(const char *ref)
-{
-	if (is_bare_repository())
-		return 0;
-
-	if (!head_name)
-		return 0;
-	return !strcmp(head_name, ref);
-}
-
 static char *refuse_unconfigured_deny_msg =
 	N_("By default, updating the current branch in a non-bare repository\n"
 	   "is denied, because it will make the index and work tree inconsistent\n"
@@ -970,7 +959,7 @@ static const char *push_to_deploy(unsigned char *sha1,
 	if (run_command(&child))
 		return "Working directory has staged changes";
 
-	read_tree[3] = sha1_to_hex(sha1);
+	read_tree[3] = hash_to_hex(sha1);
 	child_process_init(&child);
 	child.argv = read_tree;
 	child.env = env->argv;
@@ -987,28 +976,38 @@ static const char *push_to_deploy(unsigned char *sha1,
 
 static const char *push_to_checkout_hook = "push-to-checkout";
 
-static const char *push_to_checkout(unsigned char *sha1,
+static const char *push_to_checkout(unsigned char *hash,
 				    struct argv_array *env,
 				    const char *work_tree)
 {
 	argv_array_pushf(env, "GIT_WORK_TREE=%s", absolute_path(work_tree));
 	if (run_hook_le(env->argv, push_to_checkout_hook,
-			sha1_to_hex(sha1), NULL))
+			hash_to_hex(hash), NULL))
 		return "push-to-checkout hook declined";
 	else
 		return NULL;
 }
 
-static const char *update_worktree(unsigned char *sha1)
+static const char *update_worktree(unsigned char *sha1, const struct worktree *worktree)
 {
-	const char *retval;
-	const char *work_tree = git_work_tree_cfg ? git_work_tree_cfg : "..";
+	const char *retval, *work_tree, *git_dir = NULL;
 	struct argv_array env = ARGV_ARRAY_INIT;
+
+	if (worktree && worktree->path)
+		work_tree = worktree->path;
+	else if (git_work_tree_cfg)
+		work_tree = git_work_tree_cfg;
+	else
+		work_tree = "..";
 
 	if (is_bare_repository())
 		return "denyCurrentBranch = updateInstead needs a worktree";
+	if (worktree)
+		git_dir = get_worktree_git_dir(worktree);
+	if (!git_dir)
+		git_dir = get_git_dir();
 
-	argv_array_pushf(&env, "GIT_DIR=%s", absolute_path(get_git_dir()));
+	argv_array_pushf(&env, "GIT_DIR=%s", absolute_path(git_dir));
 
 	if (!find_hook(push_to_checkout_hook))
 		retval = push_to_deploy(sha1, &env, work_tree);
@@ -1028,6 +1027,7 @@ static const char *update(struct command *cmd, struct shallow_info *si)
 	struct object_id *old_oid = &cmd->old_oid;
 	struct object_id *new_oid = &cmd->new_oid;
 	int do_update_worktree = 0;
+	const struct worktree *worktree = is_bare_repository() ? NULL : find_shared_symref("HEAD", name);
 
 	/* only refs/... are allowed */
 	if (!starts_with(name, "refs/") || check_refname_format(name + 5, 0)) {
@@ -1039,7 +1039,7 @@ static const char *update(struct command *cmd, struct shallow_info *si)
 	free(namespaced_name);
 	namespaced_name = strbuf_detach(&namespaced_name_buf, NULL);
 
-	if (is_ref_checked_out(namespaced_name)) {
+	if (worktree) {
 		switch (deny_current_branch) {
 		case DENY_IGNORE:
 			break;
@@ -1071,7 +1071,7 @@ static const char *update(struct command *cmd, struct shallow_info *si)
 			return "deletion prohibited";
 		}
 
-		if (head_name && !strcmp(namespaced_name, head_name)) {
+		if (worktree || (head_name && !strcmp(namespaced_name, head_name))) {
 			switch (deny_delete_current) {
 			case DENY_IGNORE:
 				break;
@@ -1120,7 +1120,7 @@ static const char *update(struct command *cmd, struct shallow_info *si)
 	}
 
 	if (do_update_worktree) {
-		ret = update_worktree(new_oid->hash);
+		ret = update_worktree(new_oid->hash, find_shared_symref("HEAD", name));
 		if (ret)
 			return ret;
 	}

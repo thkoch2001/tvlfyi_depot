@@ -225,49 +225,50 @@ test_expect_success 'ls-remote --symref' '
 	EOF
 	# Protocol v2 supports sending symrefs for refs other than HEAD, so use
 	# protocol v0 here.
-	GIT_TEST_PROTOCOL_VERSION= git ls-remote --symref >actual &&
+	GIT_TEST_PROTOCOL_VERSION=0 git ls-remote --symref >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'ls-remote with filtered symref (refname)' '
-	cat >expect <<-\EOF &&
+	rev=$(git rev-parse HEAD) &&
+	cat >expect <<-EOF &&
 	ref: refs/heads/master	HEAD
-	1bd44cb9d13204b0fe1958db0082f5028a16eb3a	HEAD
+	$rev	HEAD
 	EOF
 	# Protocol v2 supports sending symrefs for refs other than HEAD, so use
 	# protocol v0 here.
-	GIT_TEST_PROTOCOL_VERSION= git ls-remote --symref . HEAD >actual &&
+	GIT_TEST_PROTOCOL_VERSION=0 git ls-remote --symref . HEAD >actual &&
 	test_cmp expect actual
 '
 
 test_expect_failure 'ls-remote with filtered symref (--heads)' '
 	git symbolic-ref refs/heads/foo refs/tags/mark &&
-	cat >expect <<-\EOF &&
+	cat >expect <<-EOF &&
 	ref: refs/tags/mark	refs/heads/foo
-	1bd44cb9d13204b0fe1958db0082f5028a16eb3a	refs/heads/foo
-	1bd44cb9d13204b0fe1958db0082f5028a16eb3a	refs/heads/master
+	$rev	refs/heads/foo
+	$rev	refs/heads/master
 	EOF
 	# Protocol v2 supports sending symrefs for refs other than HEAD, so use
 	# protocol v0 here.
-	GIT_TEST_PROTOCOL_VERSION= git ls-remote --symref --heads . >actual &&
+	GIT_TEST_PROTOCOL_VERSION=0 git ls-remote --symref --heads . >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'ls-remote --symref omits filtered-out matches' '
-	cat >expect <<-\EOF &&
-	1bd44cb9d13204b0fe1958db0082f5028a16eb3a	refs/heads/foo
-	1bd44cb9d13204b0fe1958db0082f5028a16eb3a	refs/heads/master
+	cat >expect <<-EOF &&
+	$rev	refs/heads/foo
+	$rev	refs/heads/master
 	EOF
 	# Protocol v2 supports sending symrefs for refs other than HEAD, so use
 	# protocol v0 here.
-	GIT_TEST_PROTOCOL_VERSION= git ls-remote --symref --heads . >actual &&
+	GIT_TEST_PROTOCOL_VERSION=0 git ls-remote --symref --heads . >actual &&
 	test_cmp expect actual &&
-	GIT_TEST_PROTOCOL_VERSION= git ls-remote --symref . "refs/heads/*" >actual &&
+	GIT_TEST_PROTOCOL_VERSION=0 git ls-remote --symref . "refs/heads/*" >actual &&
 	test_cmp expect actual
 '
 
 test_lazy_prereq GIT_DAEMON '
-	git env--helper --type=bool --default=true --exit-code GIT_TEST_GIT_DAEMON
+	test_bool_env GIT_TEST_GIT_DAEMON true
 '
 
 # This test spawns a daemon, so run it only if the user would be OK with

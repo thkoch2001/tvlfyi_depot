@@ -41,7 +41,7 @@ then
 	test_done
 fi
 
-if ! git env--helper --type=bool --default=true --exit-code GIT_TEST_HTTPD
+if ! test_bool_env GIT_TEST_HTTPD true
 then
 	skip_all="Network testing disabled (unset GIT_TEST_HTTPD to enable)"
 	test_done
@@ -132,7 +132,7 @@ prepare_httpd() {
 	install_script broken-smart-http.sh
 	install_script error-smart-http.sh
 	install_script error.sh
-	install_script apply-one-time-sed.sh
+	install_script apply-one-time-perl.sh
 
 	ln -s "$LIB_HTTPD_MODULE_PATH" "$HTTPD_ROOT_PATH/modules"
 

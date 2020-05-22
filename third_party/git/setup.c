@@ -4,6 +4,7 @@
 #include "dir.h"
 #include "string-list.h"
 #include "chdir-notify.h"
+#include "promisor-remote.h"
 
 static int inside_git_dir = -1;
 static int inside_work_tree = -1;
@@ -119,8 +120,13 @@ char *prefix_path_gently(const char *prefix, int len,
 char *prefix_path(const char *prefix, int len, const char *path)
 {
 	char *r = prefix_path_gently(prefix, len, NULL, path);
-	if (!r)
-		die(_("'%s' is outside repository"), path);
+	if (!r) {
+		const char *hint_path = get_git_work_tree();
+		if (!hint_path)
+			hint_path = get_git_dir();
+		die(_("'%s' is outside repository at '%s'"), path,
+		    absolute_path(hint_path));
+	}
 	return r;
 }
 
@@ -196,9 +202,26 @@ static void NORETURN die_verify_filename(struct repository *r,
  */
 static int looks_like_pathspec(const char *arg)
 {
-	/* anything with a wildcard character */
-	if (!no_wildcard(arg))
-		return 1;
+	const char *p;
+	int escaped = 0;
+
+	/*
+	 * Wildcard characters imply the user is looking to match pathspecs
+	 * that aren't in the filesystem. Note that this doesn't include
+	 * backslash even though it's a glob special; by itself it doesn't
+	 * cause any increase in the match. Likewise ignore backslash-escaped
+	 * wildcard characters.
+	 */
+	for (p = arg; *p; p++) {
+		if (escaped) {
+			escaped = 0;
+		} else if (is_glob_special(*p)) {
+			if (*p == '\\')
+				escaped = 1;
+			else
+				return 1;
+		}
+	}
 
 	/* long-form pathspec magic */
 	if (starts_with(arg, ":("))
@@ -478,7 +501,7 @@ static int check_repository_format_gently(const char *gitdir, struct repository_
 	}
 
 	repository_format_precious_objects = candidate->precious_objects;
-	repository_format_partial_clone = xstrdup_or_null(candidate->partial_clone);
+	set_repository_format_partial_clone(candidate->partial_clone);
 	repository_format_worktree_config = candidate->worktree_config;
 	string_list_clear(&candidate->unknown_extensions, 0);
 
@@ -797,7 +820,7 @@ static const char *setup_discovered_git_dir(const char *gitdir,
 		set_git_dir(gitdir);
 	inside_git_dir = 0;
 	inside_work_tree = 1;
-	if (offset == cwd->len)
+	if (offset >= cwd->len)
 		return NULL;
 
 	/* Make "offset" point past the '/' (already the case for root dirs) */
@@ -919,7 +942,7 @@ static enum discovery_result setup_git_directory_gently_1(struct strbuf *dir,
 	const char *env_ceiling_dirs = getenv(CEILING_DIRECTORIES_ENVIRONMENT);
 	struct string_list ceiling_dirs = STRING_LIST_INIT_DUP;
 	const char *gitdirenv;
-	int ceil_offset = -1, min_offset = has_dos_drive_prefix(dir->buf) ? 3 : 1;
+	int ceil_offset = -1, min_offset = offset_1st_component(dir->buf);
 	dev_t current_device = 0;
 	int one_filesystem = 1;
 
@@ -946,6 +969,12 @@ static enum discovery_result setup_git_directory_gently_1(struct strbuf *dir,
 
 	if (ceil_offset < 0)
 		ceil_offset = min_offset - 2;
+
+	if (min_offset && min_offset == dir->len &&
+	    !is_dir_sep(dir->buf[min_offset - 1])) {
+		strbuf_addch(dir, '/');
+		min_offset++;
+	}
 
 	/*
 	 * Test in the following order (relative to the dir):
