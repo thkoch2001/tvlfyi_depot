@@ -32,6 +32,7 @@ in stdenv.mkDerivation {
     pkgconfig
     libxml2
     libxslt
+    (import ./clangd.nix pkgs)
   ];
 
  # TODO(tazjin): Some of these might only be required for native inputs
@@ -80,7 +81,6 @@ in stdenv.mkDerivation {
     ln -s $out/bin/nix $out/libexec/nix/build-remote
   '';
 
-  # TODO(tazjin): equivalent of --enable-gc
   # TODO(tazjin): integration test setup?
   # TODO(tazjin): docs generation?
 }
