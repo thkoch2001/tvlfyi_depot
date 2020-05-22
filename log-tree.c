@@ -77,6 +77,7 @@ void add_name_decoration(enum decoration_type type, const char *name, struct obj
 
 const struct name_decoration *get_name_decoration(const struct object *obj)
 {
+	load_ref_decorations(NULL, DECORATE_SHORT_REFS);
 	return lookup_decoration(&name_decoration, obj);
 }
 
@@ -499,7 +500,8 @@ static int show_one_mergetag(struct commit *commit,
 	int status, nth;
 	size_t payload_size, gpg_message_offset;
 
-	hash_object_file(extra->value, extra->len, type_name(OBJ_TAG), &oid);
+	hash_object_file(the_hash_algo, extra->value, extra->len,
+			 type_name(OBJ_TAG), &oid);
 	tag = lookup_tag(the_repository, &oid);
 	if (!tag)
 		return -1; /* error message already given */
@@ -514,7 +516,7 @@ static int show_one_mergetag(struct commit *commit,
 			    "merged tag '%s'\n", tag->tag);
 	else if ((nth = which_parent(&tag->tagged->oid, commit)) < 0)
 		strbuf_addf(&verify_message, "tag %s names a non-parent %s\n",
-				    tag->tag, tag->tagged->oid.hash);
+				    tag->tag, oid_to_hex(&tag->tagged->oid));
 	else
 		strbuf_addf(&verify_message,
 			    "parent #%d, tagged '%s'\n", nth + 1, tag->tag);
@@ -677,9 +679,7 @@ void show_log(struct rev_info *opt)
 		raw = (opt->commit_format == CMIT_FMT_USERFORMAT);
 		format_display_notes(&commit->object.oid, &notebuf,
 				     get_log_output_encoding(), raw);
-		ctx.notes_message = notebuf.len
-			? strbuf_detach(&notebuf, NULL)
-			: xcalloc(1, 1);
+		ctx.notes_message = strbuf_detach(&notebuf, NULL);
 	}
 
 	/*
@@ -771,7 +771,7 @@ void show_log(struct rev_info *opt)
 		opts.use_color = opt->diffopt.use_color;
 		diff_setup_done(&opts);
 		show_range_diff(opt->rdiff1, opt->rdiff2,
-				opt->creation_factor, 1, &opts);
+				opt->creation_factor, 1, &opts, NULL);
 
 		memcpy(&diff_queued_diff, &dq, sizeof(diff_queued_diff));
 	}
