@@ -1301,31 +1301,12 @@ void ExprOpUpdate::eval(EvalState& state, Env& env, Value& v) {
     return;
   }
 
-  state.mkAttrs(v, v1.attrs->size() + v2.attrs->size());
+  state.mkAttrs(v, /* capacity = */ 0);
 
   /* Merge the sets, preferring values from the second set.  Make
      sure to keep the resulting vector in sorted order. */
-  Bindings::iterator i = v1.attrs->begin();
-  Bindings::iterator j = v2.attrs->begin();
-
-  while (i != v1.attrs->end() && j != v2.attrs->end()) {
-    if (i->name == j->name) {
-      v.attrs->push_back(*j);
-      ++i;
-      ++j;
-    } else if (i->name < j->name) {
-      v.attrs->push_back(*i++);
-    } else {
-      v.attrs->push_back(*j++);
-    }
-  }
-
-  while (i != v1.attrs->end()) {
-    v.attrs->push_back(*i++);
-  }
-  while (j != v2.attrs->end()) {
-    v.attrs->push_back(*j++);
-  }
+  v.attrs->merge(v1.attrs);
+  v.attrs->merge(v2.attrs);
 
   state.nrOpUpdateValuesCopied += v.attrs->size();
 }

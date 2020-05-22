@@ -50,6 +50,9 @@ class Bindings {
   iterator begin();
   iterator end();
 
+  // Merge values from other into the current attribute
+  void merge(Bindings* other);
+
   // ???
   [[deprecated]] void sort();
 

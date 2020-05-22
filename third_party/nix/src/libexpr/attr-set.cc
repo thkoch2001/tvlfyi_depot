@@ -37,6 +37,14 @@ Bindings::iterator Bindings::find(const Symbol& name) {
 Bindings::iterator Bindings::begin() { return &(attributes_.begin()->second); }
 
 Bindings::iterator Bindings::end() { return &(attributes_.end()->second); }
+void Bindings::merge(Bindings* other) {
+  // We want the values from the other attribute set to take
+  // precedence, but .merge() works the other way around.
+  //
+  // To work around that, we merge and then swap.
+  other->attributes_.merge(attributes_);
+  attributes_.swap(other->attributes_);
+}
 
 // /* Allocate a new array of attributes for an attribute set with a specific
 //    capacity. The space is implicitly reserved after the Bindings structure.
