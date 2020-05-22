@@ -1,7 +1,7 @@
 { depot, pkgs, ... }:
 
 let
-  stdenv = with pkgs; overrideCC clangStdenv clang_9;
+  stdenv = with pkgs; overrideCC clangStdenv clang_10;
   abseil_cpp = pkgs.abseil_cpp.override { inherit stdenv; };
 in stdenv.mkDerivation {
   name = "dt";

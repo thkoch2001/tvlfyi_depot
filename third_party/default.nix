@@ -35,7 +35,7 @@ let
       cgit
       clang-tools
       clangStdenv
-      clang_9
+      clang_10
       cmake
       coreutils
       cudatoolkit

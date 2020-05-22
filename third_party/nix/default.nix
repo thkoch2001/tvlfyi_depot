@@ -1,7 +1,7 @@
 { pkgs ? (import <nixpkgs> {}).third_party, ... }:
 
 let
-  stdenv = with pkgs; overrideCC clangStdenv clang_9;
+  stdenv = with pkgs; overrideCC clangStdenv clang_10;
 
   aws-s3-cpp = pkgs.aws-sdk-cpp.override {
     apis = ["s3" "transfer"];
