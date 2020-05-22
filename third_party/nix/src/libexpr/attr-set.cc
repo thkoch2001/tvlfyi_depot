@@ -21,12 +21,17 @@ namespace nix {
 // This behaviour is mimicked by using .insert(), which will *not*
 // override existing values.
 void Bindings::push_back(const Attr& attr) {
-  auto [_, inserted] = attributes_.insert_or_assign(attr.name, attr);
+  auto [_, inserted] = attributes_.insert({attr.name, attr});
 
   if (!inserted) {
     DLOG(WARNING) << "attempted to insert duplicate attribute for key '"
                   << attr.name << "'";
   }
+}
+
+// Insert or assign (i.e. replace) a value in the attribute set.
+void Bindings::insert_or_assign(const Attr& attr) {
+  attributes_.insert_or_assign(attr.name, attr);
 }
 
 size_t Bindings::size() { return attributes_.size(); }

@@ -50,9 +50,11 @@ class Bindings {
   // Is this attribute set empty?
   bool empty();
 
-  // TODO(tazjin): rename
-  // TODO(tazjin): does this need to copy?
+  // Insert, but do not replace, values in the attribute set.
   void push_back(const Attr& attr);
+
+  // Insert a value, or replace an existing one.
+  void insert_or_assign(const Attr& attr);
 
   // Look up a specific element of the attribute set.
   iterator find(const Symbol& name);
