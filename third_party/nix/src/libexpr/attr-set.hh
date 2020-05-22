@@ -2,10 +2,11 @@
 #pragma once
 
 #include <absl/container/btree_map.h>
+#include <gc/gc_allocator.h>
 
 #include "nixexpr.hh"
 #include "symbol-table.hh"
-#include "types.hh"  // TODO(tazjin): audit this include
+#include "types.hh"
 
 namespace nix {  // TODO(tazjin): ::expr
 
@@ -28,6 +29,12 @@ struct Attr {
 inline bool operator==(const Attr& lhs, const Attr& rhs) {
   return lhs.name == rhs.name;
 }
+
+// Convenience alias for the backing map, with the garbage-collecting
+// allocator explicitly specified.
+using AttributeMap =
+    absl::btree_map<Symbol, Attr, std::less<Symbol>,
+                    gc_allocator<std::pair<const Symbol, Attr>>>;
 
 class Bindings {
  public:
