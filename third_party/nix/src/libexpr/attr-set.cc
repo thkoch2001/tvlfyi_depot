@@ -1,6 +1,9 @@
 #include "attr-set.hh"
 
+#include <new>
+
 #include <absl/container/btree_map.h>
+#include <gc/gc_cpp.h>
 
 #include "eval-inline.hh"
 
@@ -46,12 +49,11 @@ void Bindings::merge(Bindings* other) {
   attributes_.swap(other->attributes_);
 }
 
-// /* Allocate a new array of attributes for an attribute set with a specific
-//    capacity. The space is implicitly reserved after the Bindings structure.
-//    */
-Bindings* EvalState::allocBindings(size_t _capacity) { return new Bindings; }
+// Allocate a new attribute set, making it visible to the garbage collector.
+Bindings* EvalState::allocBindings(size_t _capacity) {
+  return new (GC) Bindings;
+}
 
-// TODO(tazjin): What's Value? What's going on here?
 void EvalState::mkAttrs(Value& v, size_t capacity) {
   if (capacity == 0) {
     v = vEmptySet;
@@ -59,7 +61,7 @@ void EvalState::mkAttrs(Value& v, size_t capacity) {
   }
   clearValue(v);
   v.type = tAttrs;
-  v.attrs = new Bindings;
+  v.attrs = new (GC) Bindings;
   nrAttrsets++;
   nrAttrsInAttrsets += capacity;
 }

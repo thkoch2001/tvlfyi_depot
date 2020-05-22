@@ -53,6 +53,7 @@ libexpr_link_list = [
 
 libexpr_link_args = [
   '-lpthread',
+  '-lgccpp',
 ]
 
 libexpr_cxx_args = []
