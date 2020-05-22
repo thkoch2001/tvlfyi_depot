@@ -257,6 +257,11 @@ in depot.lib.fix(self: {
     # nugget has an SSD
     services.fstrim.enable = true;
 
+    # clangd needs more than ~2GB in the runtime directory to start up
+    services.logind.extraConfig = ''
+      RuntimeDirectorySize=4G
+    '';
+
     # ... and other nonsense.
     system.stateVersion = "19.09";
 })
