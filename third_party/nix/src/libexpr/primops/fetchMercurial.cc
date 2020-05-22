@@ -226,10 +226,10 @@ static void prim_fetchMercurial(EvalState& state, const Pos& pos, Value** args,
   mkString(*state.allocAttr(v, state.symbols.Create("shortRev")),
            std::string(hgInfo.rev, 0, 12));
   mkInt(*state.allocAttr(v, state.symbols.Create("revCount")), hgInfo.revCount);
-  v.attrs->sort();
 
-  if (state.allowedPaths)
+  if (state.allowedPaths) {
     state.allowedPaths->insert(state.store->toRealPath(hgInfo.storePath));
+  }
 }
 
 static RegisterPrimOp r("fetchMercurial", 1, prim_fetchMercurial);

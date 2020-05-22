@@ -126,9 +126,7 @@ static void prim_getContext(EvalState& state, const Pos& pos, Value** args,
         mkString(*(outputsVal.listElems()[i++] = state.allocValue()), output);
       }
     }
-    infoVal.attrs->sort();
   }
-  v.attrs->sort();
 }
 
 static RegisterPrimOp r4("__getContext", 1, prim_getContext);

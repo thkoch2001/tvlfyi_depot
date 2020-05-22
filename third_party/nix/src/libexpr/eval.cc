@@ -683,7 +683,6 @@ void EvalState::mkPos(Value& v, Pos* pos) {
     mkString(*allocAttr(v, sFile), pos->file);
     mkInt(*allocAttr(v, sLine), pos->line);
     mkInt(*allocAttr(v, sColumn), pos->column);
-    v.attrs->sort();
   } else {
     mkNull(v);
   }
@@ -856,9 +855,7 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
        been substituted into the bodies of the other attributes.
        Hence we need __overrides.) */
     if (hasOverrides) {
-      Value* vOverrides =
-          //(*v.attrs)[overrides->second.displ].value;
-          v.attrs->find(overrides->first)->second.value;
+      Value* vOverrides = v.attrs->find(overrides->first)->second.value;
       state.forceAttrs(*vOverrides);
       Bindings* newBnds = state.allocBindings(/* capacity = */ 0);
       for (auto& i : *v.attrs) {  // TODO(tazjin): copy constructor?
@@ -868,13 +865,11 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
         auto j = attrs.find(i.second.name);
         if (j != attrs.end()) {
           newBnds->push_back(i.second);
-          // (*newBnds)[j->second.displ] = i;
           env2.values[j->second.displ] = i.second.value;
         } else {
           newBnds->push_back(i.second);
         }
       }
-      newBnds->sort();
       v.attrs = newBnds;
     }
   } else {
@@ -902,10 +897,8 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
     }
 
     i.valueExpr->setName(nameSym);
-    /* Keep sorted order so find can catch duplicates */
     v.attrs->push_back(
         Attr(nameSym, i.valueExpr->maybeThunk(state, *dynamicEnv), &i.pos));
-    v.attrs->sort();  // FIXME: inefficient
   }
 }
 
@@ -1223,8 +1216,6 @@ void EvalState::autoCallFunction(Bindings& args, Value& fun, Value& res) {
           i.name);
     }
   }
-
-  actualArgs->attrs->sort();
 
   callFunction(fun, *actualArgs, res, noPos);
 }

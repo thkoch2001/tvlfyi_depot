@@ -35,8 +35,6 @@ static void prim_fromTOML(EvalState& state, const Pos& pos, Value** args,
         } else
           visit(v2, i.second);
       }
-
-      v.attrs->sort();
     }
 
     else if (auto t2 = t->as_array()) {

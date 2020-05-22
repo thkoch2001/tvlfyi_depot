@@ -44,7 +44,6 @@ Bindings* MixEvalArgs::getAutoArgs(EvalState& state) {
     }
     res->push_back(Attr(state.symbols.Create(i.first), v));
   }
-  res->sort();
   return res;
 }
 

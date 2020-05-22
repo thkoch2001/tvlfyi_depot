@@ -305,7 +305,6 @@ void DrvInfo::setMeta(const std::string& name, Value* v) {
   if (v != nullptr) {
     meta->push_back(Attr(sym, v));
   }
-  meta->sort();
 }
 
 /* Cache for already considered attrsets. */

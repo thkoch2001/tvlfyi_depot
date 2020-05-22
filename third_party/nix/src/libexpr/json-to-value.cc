@@ -119,7 +119,6 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
     for (auto& i : attrs) {
       v.attrs->push_back(Attr(i.first, i.second));
     }
-    v.attrs->sort();
     s++;
   }
 

@@ -128,7 +128,6 @@ static void prim_scopedImport(EvalState& state, const Pos& pos, Value** args,
       outputsVal->listElems()[outputs_index] = state.allocValue();
       mkString(*(outputsVal->listElems()[outputs_index++]), o.first);
     }
-    w.attrs->sort();
     Value fun;
     state.evalFile(
         settings.nixDataDir + "/nix/corepkgs/imported-drv-to-derivation.nix",
@@ -498,7 +497,6 @@ static void prim_tryEval(EvalState& state, const Pos& pos, Value** args,
     mkBool(*state.allocAttr(v, state.sValue), false);
     mkBool(*state.allocAttr(v, state.symbols.Create("success")), false);
   }
-  v.attrs->sort();
 }
 
 /* Return an environment variable.  Use with care. */
@@ -850,7 +848,6 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
     mkString(*state.allocAttr(v, state.symbols.Create(i.first)), i.second.path,
              {"!" + i.first + "!" + drvPath});
   }
-  v.attrs->sort();
 }
 
 /* Return a placeholder string for the specified output that will be
@@ -1064,8 +1061,6 @@ static void prim_readDir(EvalState& state, const Pos& pos, Value** args,
                              ? "directory"
                              : ent.type == DT_LNK ? "symlink" : "unknown");
   }
-
-  v.attrs->sort();
 }
 
 /*************************************************************
@@ -1412,8 +1407,6 @@ static void prim_listToAttrs(EvalState& state, const Pos& pos, Value** args,
       seen.insert(sym);
     }
   }
-
-  v.attrs->sort();
 }
 
 /* Return the right-biased intersection of two sets as1 and as2,
@@ -1493,9 +1486,9 @@ static void prim_functionArgs(EvalState& state, const Pos& pos, Value** args,
   state.mkAttrs(v, args[0]->lambda.fun->formals->formals.size());
   for (auto& i : args[0]->lambda.fun->formals->formals) {
     // !!! should optimise booleans (allocate only once)
+    // TODO(tazjin): figure out what the above comment means
     mkBool(*state.allocAttr(v, i.name), i.def != nullptr);
   }
-  v.attrs->sort();
 }
 
 /* Apply a function to every element of an attribute set. */
@@ -1774,8 +1767,6 @@ static void prim_partition(EvalState& state, const Pos& pos, Value** args,
   if (wsize != 0u) {
     memcpy(vWrong->listElems(), wrong.data(), sizeof(Value*) * wsize);
   }
-
-  v.attrs->sort();
 }
 
 /* concatMap = f: list: concatLists (map f list); */
@@ -2153,7 +2144,6 @@ static void prim_parseDrvName(EvalState& state, const Pos& pos, Value** args,
   mkString(*state.allocAttr(v, state.sName), parsed.name);
   mkString(*state.allocAttr(v, state.symbols.Create("version")),
            parsed.version);
-  v.attrs->sort();
 }
 
 static void prim_compareVersions(EvalState& state, const Pos& pos, Value** args,
@@ -2453,7 +2443,6 @@ void EvalState::createBaseEnv() {
     mkAttrs(*v2, 2);
     mkString(*allocAttr(*v2, symbols.Create("path")), i.second);
     mkString(*allocAttr(*v2, symbols.Create("prefix")), i.first);
-    v2->attrs->sort();
   }
   addConstant("__nixPath", v);
 
@@ -2462,10 +2451,6 @@ void EvalState::createBaseEnv() {
       addPrimOp(std::get<0>(primOp), std::get<1>(primOp), std::get<2>(primOp));
     }
   }
-
-  /* Now that we've added all primops, sort the `builtins' set,
-     because attribute lookups expect it to be sorted. */
-  baseEnv.values[0]->attrs->sort();
 }
 
 }  // namespace nix

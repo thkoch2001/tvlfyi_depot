@@ -96,8 +96,6 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
       }
       vMeta.attrs->push_back(Attr(state.symbols.Create(j), v));
     }
-    vMeta.attrs->sort();
-    v.attrs->sort();
 
     if (!drvPath.empty()) {
       references.insert(drvPath);
@@ -122,7 +120,6 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
   mkString(*state.allocAttr(args, state.symbols.Create("manifest")),
            manifestFile, {manifestFile});
   args.attrs->push_back(Attr(state.symbols.Create("derivations"), &manifest));
-  args.attrs->sort();
   mkApp(topLevel, envBuilder, args);
 
   /* Evaluate it. */

@@ -33,7 +33,6 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
 
   if (!file.empty()) {
     state.evalFile(lookupFileArg(state, file), *vSourceExpr);
-
   } else {
     /* Construct the installation source from $NIX_PATH. */
 
@@ -73,8 +72,6 @@ Value* SourceExprCommand::getSourceExpr(EvalState& state) {
         addEntry(i.first);
       }
     }
-
-    vSourceExpr->attrs->sort();
   }
 
   return vSourceExpr;

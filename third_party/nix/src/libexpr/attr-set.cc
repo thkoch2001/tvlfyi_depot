@@ -14,7 +14,6 @@ void Bindings::push_back(const Attr& attr) {
 
 size_t Bindings::size() { return attributes_.size(); }
 
-void Bindings::sort() {}
 size_t Bindings::capacity() { return 0; }
 
 bool Bindings::empty() { return attributes_.empty(); }
@@ -73,7 +72,5 @@ Value* EvalState::allocAttr(Value& vAttrs, const Symbol& name) {
   vAttrs.attrs->push_back(Attr(name, v));
   return v;
 }
-
-// void Bindings::sort() { std::sort(begin(), end()); }
 
 }  // namespace nix

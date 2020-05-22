@@ -128,10 +128,6 @@ static void getAllExprs(EvalState& state, const Path& path, StringSet& attrs,
       Value& vFun = state.getBuiltin("import");
       Value& vArg(*state.allocValue());
       mkString(vArg, path2);
-      if (v.attrs->size() == v.attrs->capacity()) {
-        throw Error(format("too many Nix expressions in directory '%1%'") %
-                    path);
-      }
       mkApp(*state.allocAttr(v, state.symbols.Create(attrName)), vFun, vArg);
     } else if (S_ISDIR(st.st_mode)) {
       /* `path2' is a directory (with no default.nix in it);
@@ -163,7 +159,6 @@ static void loadSourceExpr(EvalState& state, const Path& path, Value& v) {
                  0);
     StringSet attrs;
     getAllExprs(state, path, attrs, v);
-    v.attrs->sort();
   }
 
   else {

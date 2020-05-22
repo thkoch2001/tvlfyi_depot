@@ -54,9 +54,6 @@ class Bindings {
   void merge(Bindings* other);
 
   // ???
-  [[deprecated]] void sort();
-
-  // ???
   [[deprecated]] size_t capacity();
 
   // oh no

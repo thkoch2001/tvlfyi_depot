@@ -252,10 +252,10 @@ static void prim_fetchGit(EvalState& state, const Pos& pos, Value** args,
            gitInfo.shortRev);
   mkInt(*state.allocAttr(v, state.symbols.Create("revCount")),
         gitInfo.revCount);
-  v.attrs->sort();
 
-  if (state.allowedPaths)
+  if (state.allowedPaths) {
     state.allowedPaths->insert(state.store->toRealPath(gitInfo.storePath));
+  }
 }
 
 static RegisterPrimOp r("fetchGit", 1, prim_fetchGit);
