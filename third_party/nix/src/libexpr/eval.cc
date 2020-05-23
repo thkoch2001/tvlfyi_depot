@@ -815,8 +815,8 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& value) {
     size_t displ = 0;
     for (auto& attr : attrs) {
       Value* vAttr;
-      vAttr = attr.second.e->maybeThunk(state,
-                                          attr.second.inherited ? env : env2);
+      vAttr =
+          attr.second.e->maybeThunk(state, attr.second.inherited ? env : env2);
       env2.values[displ++] = vAttr;
       value.attrs->push_back(Attr(attr.first, vAttr, &attr.second.pos));
     }

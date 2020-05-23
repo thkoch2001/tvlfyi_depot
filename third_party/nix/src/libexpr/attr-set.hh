@@ -21,7 +21,7 @@ struct Attr {
   Attr(Symbol name, Value* value, Pos* pos = &noPos)
       : name(name), value(value), pos(pos){};
   Attr() : pos(&noPos){};
-  bool operator<(const Attr& a) const { return name < a.name; }
+  bool operator<(const Attr& other) const { return name < other.name; }
 };
 
 // TODO: remove this, it only exists briefly while I get rid of the

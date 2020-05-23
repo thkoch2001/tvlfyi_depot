@@ -53,6 +53,10 @@ typedef std::list<SearchPathElem> SearchPath;
 /* Initialise the Boehm GC, if applicable. */
 void initGC();
 
+typedef std::map<Path, Expr*, std::less<Path>,
+                 traceable_allocator<std::pair<const Path, Expr*>>>
+    FileParseCache;
+
 class EvalState {
  public:
   SymbolTable symbols;
@@ -79,23 +83,12 @@ class EvalState {
   SrcToStore srcToStore;
 
   /* A cache from path names to parse trees. */
-#if HAVE_BOEHMGC
-  typedef std::map<Path, Expr*, std::less<Path>,
-                   traceable_allocator<std::pair<const Path, Expr*>>>
-      FileParseCache;
-#else
-  typedef std::map<Path, Expr*> FileParseCache;
-#endif
   FileParseCache fileParseCache;
 
   /* A cache from path names to values. */
-#if HAVE_BOEHMGC
   typedef std::map<Path, Value, std::less<Path>,
                    traceable_allocator<std::pair<const Path, Value>>>
       FileEvalCache;
-#else
-  typedef std::map<Path, Value> FileEvalCache;
-#endif
   FileEvalCache fileEvalCache;
 
   SearchPath searchPath;
