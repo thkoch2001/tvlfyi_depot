@@ -118,6 +118,7 @@ in depot.lib.fix(self: {
       google-cloud-sdk
       guile
       htop
+      hyperfine
       i3lock
       imagemagick
       jq
@@ -136,6 +137,7 @@ in depot.lib.fix(self: {
       pinentry-emacs
       pwgen
       ripgrep
+      rr
       rustup
       sbcl
       scrot
