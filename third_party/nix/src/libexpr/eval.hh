@@ -75,8 +75,6 @@ class EvalState {
      mode. */
   std::optional<PathSet> allowedPaths;
 
-  Value vEmptySet;
-
   const ref<Store> store;
 
  private:

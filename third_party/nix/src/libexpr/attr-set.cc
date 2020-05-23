@@ -71,10 +71,6 @@ void Bindings::merge(Bindings* other) {
 Bindings* Bindings::NewGC() { return new (GC) Bindings; }
 
 void EvalState::mkAttrs(Value& v, size_t capacity) {
-  if (capacity == 0) {
-    v = vEmptySet;
-    return;
-  }
   clearValue(v);
   v.type = tAttrs;
   v.attrs = Bindings::NewGC();

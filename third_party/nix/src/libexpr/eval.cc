@@ -361,10 +361,6 @@ EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
     }
   }
 
-  clearValue(vEmptySet);
-  vEmptySet.type = tAttrs;
-  vEmptySet.attrs = Bindings::NewGC();
-
   createBaseEnv();
 }
 
