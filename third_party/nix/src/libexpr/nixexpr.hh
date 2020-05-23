@@ -200,10 +200,11 @@ struct ExprList : Expr {
 
 struct Formal {
   Symbol name;
-  Expr* def;
+  Expr* def; // def = default, not definition
   Formal(const Symbol& name, Expr* def) : name(name), def(def){};
 };
 
+// Describes structured function arguments (e.g. `{ a }: ...`)
 struct Formals {
   typedef std::list<Formal> Formals_;
   Formals_ formals;

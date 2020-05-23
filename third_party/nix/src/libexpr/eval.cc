@@ -1029,17 +1029,21 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
     return;
   }
 
+  // If the value to be called is an attribute set, check whether it
+  // contains an appropriate function in the '__functor' element and
+  // use that.
   if (fun.type == tAttrs) {
     auto found = fun.attrs->find(sFunctor);
     if (found != fun.attrs->end()) {
-      /* fun may be allocated on the stack of the calling function,
-       * but for functors we may keep a reference, so heap-allocate
-       * a copy and use that instead.
-       */
+      // fun may be allocated on the stack of the calling function,
+      // but for functors we may keep a reference, so heap-allocate a
+      // copy and use that instead
       auto& fun2 = *allocValue();
       fun2 = fun;
       /* !!! Should we use the attr pos here? */
       Value v2;
+      // functors are called with the element itself as the first
+      // parameter, which is partially applied here
       callFunction(*found->second.value, fun2, v2, pos);
       return callFunction(v2, arg, v, pos);
     }
