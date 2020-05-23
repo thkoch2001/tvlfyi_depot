@@ -1223,7 +1223,7 @@ void ExprOpImpl::eval(EvalState& state, Env& env, Value& v) {
   mkBool(v, !state.evalBool(env, e1, pos) || state.evalBool(env, e2, pos));
 }
 
-void ExprOpUpdate::eval(EvalState& state, Env& env, Value& v) {
+void ExprOpUpdate::eval(EvalState& state, Env& env, Value& dest) {
   Value v1;
   Value v2;
   state.evalAttrs(env, e1, v1);
@@ -1231,23 +1231,11 @@ void ExprOpUpdate::eval(EvalState& state, Env& env, Value& v) {
 
   state.nrOpUpdates++;
 
-  if (v1.attrs->empty()) {
-    v = v2;
-    return;
-  }
-  if (v2.attrs->empty()) {
-    v = v1;
-    return;
-  }
+  state.mkAttrs(dest, /* capacity = */ 0);
 
-  state.mkAttrs(v, /* capacity = */ 0);
-
-  /* Merge the sets, preferring values from the second set.  Make
-     sure to keep the resulting vector in sorted order. */
-  v.attrs->merge(v1.attrs);
-  v.attrs->merge(v2.attrs);
-
-  state.nrOpUpdateValuesCopied += v.attrs->size();
+  /* Merge the sets, preferring values from the second set. */
+  dest.attrs->merge(*v1.attrs);
+  dest.attrs->merge(*v2.attrs);
 }
 
 void ExprOpConcatLists::eval(EvalState& state, Env& env, Value& v) {
