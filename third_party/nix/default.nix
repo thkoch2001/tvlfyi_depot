@@ -55,6 +55,8 @@ in stdenv.mkDerivation {
     xz
   ];
 
+  mesonBuildType = "release";
+
   mesonFlags = [
     "-Dsandbox_shell=${pkgs.busybox-sandbox-shell}/bin/busybox"
   ];
