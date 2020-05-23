@@ -38,7 +38,7 @@ using AttributeMap =
 
 class Bindings {
  public:
-  typedef absl::btree_map<Symbol, Attr>::iterator iterator;
+  typedef AttributeMap::iterator iterator;
 
   // Allocate a new attribute set that is visible to the garbage
   // collector.
@@ -79,7 +79,7 @@ class Bindings {
   friend class EvalState;
 
  private:
-  absl::btree_map<Symbol, Attr> attributes_;
+  AttributeMap attributes_;
 };
 
 }  // namespace nix
