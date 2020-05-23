@@ -59,13 +59,10 @@ Bindings::iterator Bindings::begin() { return attributes_.begin(); }
 
 Bindings::iterator Bindings::end() { return attributes_.end(); }
 
-void Bindings::merge(Bindings* other) {
-  // We want the values from the other attribute set to take
-  // precedence, but .merge() works the other way around.
-  //
-  // To work around that, we merge and then swap.
-  other->attributes_.merge(attributes_);
-  attributes_.swap(other->attributes_);
+void Bindings::merge(const Bindings& other) {
+  for (auto& [key, value] : other.attributes_) {
+    this->attributes_[key] = value;
+  }
 }
 
 Bindings* Bindings::NewGC() { return new (GC) Bindings; }

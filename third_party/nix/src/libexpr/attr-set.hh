@@ -64,7 +64,7 @@ class Bindings {
   iterator end();
 
   // Merge values from other into the current attribute
-  void merge(Bindings* other);
+  void merge(const Bindings& other);
 
   // ???
   [[deprecated]] size_t capacity();
