@@ -147,6 +147,13 @@ struct ExprVar : Expr {
   Value* maybeThunk(EvalState& state, Env& env);
 };
 
+// [tazjin] I *think* that this struct describes the syntactic
+// construct for "selecting" something out of an attribute set, e.g.
+// `a.b.c` => ExprSelect{"b", "c"}.
+//
+// Each path element has got a pointer to an expression, which seems
+// to be the thing preceding its period, but afaict that is only set
+// for the first one in a path.
 struct ExprSelect : Expr {
   Pos pos;
   Expr *e, *def;
@@ -200,7 +207,7 @@ struct ExprList : Expr {
 
 struct Formal {
   Symbol name;
-  Expr* def; // def = default, not definition
+  Expr* def;  // def = default, not definition
   Formal(const Symbol& name, Expr* def) : name(name), def(def){};
 };
 
