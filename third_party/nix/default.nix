@@ -14,7 +14,7 @@ let
     enableLargeConfig = true;
   };
 in stdenv.mkDerivation {
-  pname = "nix";
+  pname = "tazjix";
   version = "2.3.4";
   src = ./.;
 
