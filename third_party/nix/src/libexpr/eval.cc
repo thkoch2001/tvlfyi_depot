@@ -299,7 +299,6 @@ EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
       sName(symbols.Create("name")),
       sValue(symbols.Create("value")),
       sSystem(symbols.Create("system")),
-      sOverrides(symbols.Create("__overrides")),
       sOutputs(symbols.Create("outputs")),
       sOutputName(symbols.Create("outputName")),
       sIgnoreNulls(symbols.Create("__ignoreNulls")),
@@ -799,8 +798,8 @@ void ExprString::eval(EvalState& state, Env& env, Value& v) { v = this->v; }
 
 void ExprPath::eval(EvalState& state, Env& env, Value& v) { v = this->v; }
 
-void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
-  state.mkAttrs(v, attrs.size() + dynamicAttrs.size());
+void ExprAttrs::eval(EvalState& state, Env& env, Value& value) {
+  state.mkAttrs(value, attrs.size() + dynamicAttrs.size());
   Env* dynamicEnv = &env;
 
   if (recursive) {
@@ -810,61 +809,26 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
     env2.up = &env;
     dynamicEnv = &env2;
 
-    // TODO(tazjin): contains?
-    AttrDefs::iterator overrides = attrs.find(state.sOverrides);
-    bool hasOverrides = overrides != attrs.end();
-
     /* The recursive attributes are evaluated in the new
        environment, while the inherited attributes are evaluated
        in the original environment. */
     size_t displ = 0;
-    for (auto& i : attrs) {
+    for (auto& attr : attrs) {
       Value* vAttr;
-      if (hasOverrides && !i.second.inherited) {
-        vAttr = state.allocValue();
-        mkThunk(*vAttr, env2, i.second.e);
-      } else {
-        vAttr = i.second.e->maybeThunk(state, i.second.inherited ? env : env2);
-      }
+      vAttr = attr.second.e->maybeThunk(state,
+                                          attr.second.inherited ? env : env2);
       env2.values[displ++] = vAttr;
-      v.attrs->push_back(Attr(i.first, vAttr, &i.second.pos));
-    }
-
-    /* If the rec contains an attribute called `__overrides', then
-       evaluate it, and add the attributes in that set to the rec.
-       This allows overriding of recursive attributes, which is
-       otherwise not possible.  (You can use the // operator to
-       replace an attribute, but other attributes in the rec will
-       still reference the original value, because that value has
-       been substituted into the bodies of the other attributes.
-       Hence we need __overrides.) */
-    if (hasOverrides) {
-      Value* vOverrides = v.attrs->find(overrides->first)->second.value;
-      state.forceAttrs(*vOverrides);
-      Bindings* newBnds = Bindings::NewGC();
-      for (auto& i : *v.attrs) {  // TODO(tazjin): copy constructor?
-        newBnds->push_back(i.second);
-      }
-      for (auto& i : *vOverrides->attrs) {
-        auto j = attrs.find(i.second.name);
-        if (j != attrs.end()) {
-          newBnds->push_back(i.second);
-          env2.values[j->second.displ] = i.second.value;
-        } else {
-          newBnds->push_back(i.second);
-        }
-      }
-      v.attrs = newBnds;
+      value.attrs->push_back(Attr(attr.first, vAttr, &attr.second.pos));
     }
   } else {
     // TODO(tazjin): insert range
     for (auto& i : attrs) {
-      v.attrs->push_back(
+      value.attrs->push_back(
           Attr(i.first, i.second.e->maybeThunk(state, env), &i.second.pos));
     }
   }
 
-  /* Dynamic attrs apply *after* rec and __overrides. */
+  /* Dynamic attrs apply *after* rec. */
   for (auto& i : dynamicAttrs) {
     Value nameVal;
     i.nameExpr->eval(state, *dynamicEnv, nameVal);
@@ -874,14 +838,14 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& v) {
     }
     state.forceStringNoCtx(nameVal);
     Symbol nameSym = state.symbols.Create(nameVal.string.s);
-    Bindings::iterator j = v.attrs->find(nameSym);
-    if (j != v.attrs->end()) {
+    Bindings::iterator j = value.attrs->find(nameSym);
+    if (j != value.attrs->end()) {
       throwEvalError("dynamic attribute '%1%' at %2% already defined at %3%",
                      nameSym, i.pos, *j->second.pos);
     }
 
     i.valueExpr->setName(nameSym);
-    v.attrs->push_back(
+    value.attrs->push_back(
         Attr(nameSym, i.valueExpr->maybeThunk(state, *dynamicEnv), &i.pos));
   }
 }
