@@ -1263,35 +1263,23 @@ static void prim_attrNames(EvalState& state, const Pos& pos, Value** args,
 
   state.mkList(v, args[0]->attrs->size());
 
-  size_t n = 0;
-  for (auto& i : *args[0]->attrs) {
-    mkString(*(v.listElems()[n++] = state.allocValue()), i.second.name);
+  unsigned int n = 0;
+  for (auto& [key, value] : *args[0]->attrs) {
+    mkString(*(v.listElems()[n++] = state.allocValue()), key);
   }
-
-  std::sort(v.listElems(), v.listElems() + n, [](Value* v1, Value* v2) {
-    return strcmp(v1->string.s, v2->string.s) < 0;
-  });
 }
 
 /* Return the values of the attributes in a set as a list, in the same
    order as attrNames. */
-static void prim_attrValues(EvalState& state, const Pos& pos, Value** args,
-                            Value& v) {
-  state.forceAttrs(*args[0], pos);
+static void prim_attrValues(EvalState& state, const Pos& pos, Value** input,
+                            Value& output) {
+  state.forceAttrs(*input[0], pos);
 
-  state.mkList(v, args[0]->attrs->size());
+  state.mkList(output, input[0]->attrs->size());
 
   unsigned int n = 0;
-  for (auto& i : *args[0]->attrs) {
-    v.listElems()[n++] = (Value*)&i;
-  }
-
-  std::sort(v.listElems(), v.listElems() + n, [](Value* v1, Value* v2) {
-    return (string)((Attr*)v1)->name < (string)((Attr*)v2)->name;
-  });
-
-  for (unsigned int i = 0; i < n; ++i) {
-    v.listElems()[i] = ((Attr*)v.listElems()[i])->value;
+  for (auto& [key, value] : *input[0]->attrs) {
+    output.listElems()[n++] = value.value;
   }
 }
 
