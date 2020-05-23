@@ -24,18 +24,11 @@
 #include "pathlocks.hh"
 #include "worker-protocol.hh"
 
-#if __linux__
 #include <sched.h>
 #include <sys/ioctl.h>
 #include <sys/mount.h>
 #include <sys/statvfs.h>
 #include <sys/xattr.h>
-#endif
-
-#ifdef __CYGWIN__
-#include <windows.h>
-#endif
-
 #include <sqlite3.h>
 
 namespace nix {
@@ -460,16 +453,6 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
                                       InodesSeen& inodesSeen) {
   checkInterrupt();
 
-#if __APPLE__
-  /* Remove flags, in particular UF_IMMUTABLE which would prevent
-     the file from being garbage-collected. FIXME: Use
-     setattrlist() to remove other attributes as well. */
-  if (lchflags(path.c_str(), 0)) {
-    if (errno != ENOTSUP)
-      throw SysError(format("clearing flags of path '%1%'") % path);
-  }
-#endif
-
   struct stat st;
   if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
@@ -480,7 +463,6 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
     throw Error(format("file '%1%' has an unsupported type") % path);
   }
 
-#if __linux__
   /* Remove extended attributes / ACLs. */
   ssize_t eaSize = llistxattr(path.c_str(), nullptr, 0);
 
@@ -508,7 +490,6 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
       }
     }
   }
-#endif
 
   /* Fail if the file is not owned by the build user.  This prevents
      us from messing up the ownership/permissions of files

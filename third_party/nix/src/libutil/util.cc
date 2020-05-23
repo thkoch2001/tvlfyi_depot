@@ -16,6 +16,7 @@
 #include <grp.h>
 #include <pwd.h>
 #include <sys/ioctl.h>
+#include <sys/prctl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -26,14 +27,6 @@
 #include "lazy.hh"
 #include "serialise.hh"
 #include "sync.hh"
-
-#ifdef __APPLE__
-#include <sys/syscall.h>
-#endif
-
-#ifdef __linux__
-#include <sys/prctl.h>
-#endif
 
 namespace nix {
 
@@ -819,12 +812,6 @@ int Pid::kill() {
      process group, send the signal to every process in the child
      process group (which hopefully includes *all* its children). */
   if (::kill(separatePG ? -pid : pid, killSignal) != 0) {
-    /* On BSDs, killing a process group will return EPERM if all
-       processes in the group are zombies (or something like
-       that). So try to detect and ignore that situation. */
-#if __FreeBSD__ || __APPLE__
-    if (errno != EPERM || ::kill(pid, 0) != 0)
-#endif
       LOG(ERROR) << SysError("killing process %d", pid).msg();
   }
 
@@ -876,20 +863,9 @@ void killUser(uid_t uid) {
         }
 
         while (true) {
-#ifdef __APPLE__
-          /* OSX's kill syscall takes a third parameter that, among
-             other things, determines if kill(-1, signo) affects the
-             calling process. In the OSX libc, it's set to true,
-             which means "follow POSIX", which we don't want here
-               */
-          if (syscall(SYS_kill, -1, SIGKILL, false) == 0) {
-            break;
-          }
-#else
           if (kill(-1, SIGKILL) == 0) {
             break;
           }
-#endif
           if (errno == ESRCH) {
             break;
           } /* no more processes */

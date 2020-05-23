@@ -19,12 +19,8 @@ namespace nix {
    must be deleted and recreated on startup.) */
 #define DEFAULT_SOCKET_PATH "/daemon-socket/socket"
 
-/* chroot-like behavior from Apple's sandbox */
-#if __APPLE__
-#define DEFAULT_ALLOWED_IMPURE_PREFIXES "/System/Library /usr/lib /dev /bin/sh"
-#else
+// TODO(tazjin): this was __APPLE__ specific, still needed?
 #define DEFAULT_ALLOWED_IMPURE_PREFIXES ""
-#endif
 
 Settings settings;
 

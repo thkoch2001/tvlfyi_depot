@@ -837,11 +837,6 @@ class DerivationGoal : public Goal {
   typedef map<string, string> Environment;
   Environment env;
 
-#if __APPLE__
-  typedef string SandboxProfile;
-  SandboxProfile additionalSandboxProfile;
-#endif
-
   /* Hash rewriting. */
   StringRewrites inputRewrites, outputRewrites;
   typedef map<Path, Path> RedirectedOutputs;
@@ -1041,12 +1036,7 @@ DerivationGoal::~DerivationGoal() {
 }
 
 inline bool DerivationGoal::needsHashRewrite() {
-#if __linux__
   return !useChroot;
-#else
-  /* Darwin requires hash rewriting even when sandboxing is enabled. */
-  return true;
-#endif
 }
 
 void DerivationGoal::killChild() {
@@ -1920,11 +1910,6 @@ void DerivationGoal::startBuilder() {
     preloadNSS();
   }
 
-#if __APPLE__
-  additionalSandboxProfile =
-      parsedDrv->getStringAttr("__sandboxProfile").value_or("");
-#endif
-
   /* Are we doing a chroot build? */
   {
     auto noChroot = parsedDrv->getBoolAttr("__noChroot");
@@ -1934,13 +1919,6 @@ void DerivationGoal::startBuilder() {
                            "but that's not allowed when 'sandbox' is 'true'") %
                     drvPath);
       }
-#if __APPLE__
-      if (additionalSandboxProfile != "")
-        throw Error(
-            format("derivation '%1%' specifies a sandbox profile, "
-                   "but this is only allowed when 'sandbox' is 'relaxed'") %
-            drvPath);
-#endif
       useChroot = true;
     } else if (settings.sandboxMode == smDisabled) {
       useChroot = false;
@@ -1950,29 +1928,17 @@ void DerivationGoal::startBuilder() {
   }
 
   if (worker.store.storeDir != worker.store.realStoreDir) {
-#if __linux__
     useChroot = true;
-#else
-    throw Error(
-        "building using a diverted store is not supported on this platform");
-#endif
   }
 
   /* If `build-users-group' is not empty, then we have to build as
      one of the members of that group. */
   if (settings.buildUsersGroup != "" && getuid() == 0) {
-#if defined(__linux__) || defined(__APPLE__)
     buildUser = std::make_unique<UserLock>();
 
     /* Make sure that no other processes are executing under this
        uid. */
     buildUser->kill();
-#else
-    /* Don't know how to block the creation of setuid/setgid
-       binaries on this platform. */
-    throw Error(
-        "build users are not supported on this platform for security reasons");
-#endif
   }
 
   /* Create a temporary directory where the build will take
@@ -2093,7 +2059,6 @@ void DerivationGoal::startBuilder() {
       dirsInChroot[i] = ChrootPath(i);
     }
 
-#if __linux__
     /* Create a temporary directory in which we set up the chroot
        environment using bind-mounts.  We put it in the Nix store
        to ensure that we can create hard-links to non-directory
@@ -2200,13 +2165,6 @@ void DerivationGoal::startBuilder() {
     for (auto& i : drv->outputs) {
       dirsInChroot.erase(i.second.path);
     }
-
-#elif __APPLE__
-    /* We don't really have any parent prep work to do (yet?)
-       All work happens in the child, instead. */
-#else
-    throw Error("sandboxing builds is not supported on this platform");
-#endif
   }
 
   if (needsHashRewrite()) {
@@ -3147,148 +3105,7 @@ void DerivationGoal::runChild() {
 
     const char* builder = "invalid";
 
-    if (drv->isBuiltin()) {
-      ;
-    }
-#if __APPLE__
-    else if (getEnv("_NIX_TEST_NO_SANDBOX") == "") {
-      /* This has to appear before import statements. */
-      std::string sandboxProfile = "(version 1)\n";
-
-      if (useChroot) {
-        /* Lots and lots and lots of file functions freak out if they can't stat
-         * their full ancestry */
-        PathSet ancestry;
-
-        /* We build the ancestry before adding all inputPaths to the store
-           because we know they'll all have the same parents (the store), and
-           there might be lots of inputs. This isn't
-           particularly efficient... I doubt it'll be a bottleneck in practice
-         */
-        for (auto& i : dirsInChroot) {
-          Path cur = i.first;
-          while (cur.compare("/") != 0) {
-            cur = dirOf(cur);
-            ancestry.insert(cur);
-          }
-        }
-
-        /* And we want the store in there regardless of how empty dirsInChroot.
-           We include the innermost path component this time, since it's
-           typically /nix/store and we care about that. */
-        Path cur = worker.store.storeDir;
-        while (cur.compare("/") != 0) {
-          ancestry.insert(cur);
-          cur = dirOf(cur);
-        }
-
-        /* Add all our input paths to the chroot */
-        for (auto& i : inputPaths) {
-          dirsInChroot[i] = i;
-        }
-
-        /* Violations will go to the syslog if you set this. Unfortunately the
-         * destination does not appear to be configurable */
-        if (settings.darwinLogSandboxViolations) {
-          sandboxProfile += "(deny default)\n";
-        } else {
-          sandboxProfile += "(deny default (with no-log))\n";
-        }
-
-        sandboxProfile += "(import \"sandbox-defaults.sb\")\n";
-
-        if (fixedOutput) {
-          sandboxProfile += "(import \"sandbox-network.sb\")\n";
-        }
-
-        /* Our rwx outputs */
-        sandboxProfile += "(allow file-read* file-write* process-exec\n";
-        for (auto& i : missingPaths) {
-          sandboxProfile += (format("\t(subpath \"%1%\")\n") % i.c_str()).str();
-        }
-        /* Also add redirected outputs to the chroot */
-        for (auto& i : redirectedOutputs) {
-          sandboxProfile +=
-              (format("\t(subpath \"%1%\")\n") % i.second.c_str()).str();
-        }
-        sandboxProfile += ")\n";
-
-        /* Our inputs (transitive dependencies and any impurities computed
-           above)
-
-           without file-write* allowed, access() incorrectly returns EPERM
-         */
-        sandboxProfile += "(allow file-read* file-write* process-exec\n";
-        for (auto& i : dirsInChroot) {
-          if (i.first != i.second.source)
-            throw Error(format("can't map '%1%' to '%2%': mismatched impure "
-                               "paths not supported on Darwin") %
-                        i.first % i.second.source);
-
-          string path = i.first;
-          struct stat st;
-          if (lstat(path.c_str(), &st)) {
-            if (i.second.optional && errno == ENOENT) {
-              continue;
-            }
-            throw SysError(format("getting attributes of path '%1%'") % path);
-          }
-          if (S_ISDIR(st.st_mode))
-            sandboxProfile += (format("\t(subpath \"%1%\")\n") % path).str();
-          else
-            sandboxProfile += (format("\t(literal \"%1%\")\n") % path).str();
-        }
-        sandboxProfile += ")\n";
-
-        /* Allow file-read* on full directory hierarchy to self. Allows
-         * realpath() */
-        sandboxProfile += "(allow file-read*\n";
-        for (auto& i : ancestry) {
-          sandboxProfile += (format("\t(literal \"%1%\")\n") % i.c_str()).str();
-        }
-        sandboxProfile += ")\n";
-
-        sandboxProfile += additionalSandboxProfile;
-      } else
-        sandboxProfile += "(import \"sandbox-minimal.sb\")\n";
-
-      debug("Generated sandbox profile:");
-      debug(sandboxProfile);
-
-      Path sandboxFile = tmpDir + "/.sandbox.sb";
-
-      writeFile(sandboxFile, sandboxProfile);
-
-      bool allowLocalNetworking =
-          parsedDrv->getBoolAttr("__darwinAllowLocalNetworking");
-
-      /* The tmpDir in scope points at the temporary build directory for our
-         derivation. Some packages try different mechanisms to find temporary
-         directories, so we want to open up a broader place for them to dump
-         their files, if needed. */
-      Path globalTmpDir = canonPath(getEnv("TMPDIR", "/tmp"), true);
-
-      /* They don't like trailing slashes on subpath directives */
-      if (globalTmpDir.back() == '/') {
-        globalTmpDir.pop_back();
-      }
-
-      builder = "/usr/bin/sandbox-exec";
-      args.push_back("sandbox-exec");
-      args.push_back("-f");
-      args.push_back(sandboxFile);
-      args.push_back("-D");
-      args.push_back("_GLOBAL_TMP_DIR=" + globalTmpDir);
-      args.push_back("-D");
-      args.push_back("IMPORT_DIR=" + settings.nixDataDir + "/nix/sandbox/");
-      if (allowLocalNetworking) {
-        args.push_back("-D");
-        args.push_back(string("_ALLOW_LOCAL_NETWORKING=1"));
-      }
-      args.push_back(drv->builder);
-    }
-#endif
-    else {
+    if (!drv->isBuiltin()) {
       builder = drv->builder.c_str();
       string builderBasename = baseNameOf(drv->builder);
       args.push_back(builderBasename);

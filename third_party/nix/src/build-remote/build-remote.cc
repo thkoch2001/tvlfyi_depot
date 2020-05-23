@@ -7,9 +7,6 @@
 #include <tuple>
 
 #include <glog/logging.h>
-#if __APPLE__
-#include <sys/time.h>
-#endif
 
 #include "derivations.hh"
 #include "globals.hh"
@@ -181,11 +178,7 @@ static int _main(int argc, char* argv[]) {
           break;
         }
 
-#if __APPLE__
-        futimes(bestSlotLock.get(), NULL);
-#else
         futimens(bestSlotLock.get(), nullptr);
-#endif
 
         lock = -1;
 

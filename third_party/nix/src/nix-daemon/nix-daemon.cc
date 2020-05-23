@@ -28,10 +28,6 @@
 #include "util.hh"
 #include "worker-protocol.hh"
 
-#if __APPLE__ || __FreeBSD__
-#include <sys/ucred.h>
-#endif
-
 using namespace nix;
 
 #ifndef __linux__

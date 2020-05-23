@@ -299,12 +299,6 @@ class Settings : public Config {
       "Which prefixes to allow derivations to ask for access to (primarily for "
       "Darwin)."};
 
-#if __APPLE__
-  Setting<bool> darwinLogSandboxViolations{
-      this, false, "darwin-log-sandbox-violations",
-      "Whether to log Darwin sandbox access violations to the system log."};
-#endif
-
   Setting<bool> runDiffHook{
       this, false, "run-diff-hook",
       "Whether to run the program specified by the diff-hook setting "
