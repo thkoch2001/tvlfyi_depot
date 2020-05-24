@@ -215,21 +215,6 @@ struct CurlDownloader : public Downloader {
       return ((DownloadItem*)userp)->headerCallback(contents, size, nmemb);
     }
 
-    static int progressCallback(double dltotal, double dlnow) {
-      try {
-        // TODO(tazjin): this had activity nonsense, clean it up
-      } catch (nix::Interrupted&) {
-        assert(_isInterrupted);
-      }
-      return static_cast<int>(_isInterrupted);
-    }
-
-    static int progressCallbackWrapper(void* userp, double dltotal,
-                                       double dlnow, double ultotal,
-                                       double ulnow) {
-      return ((DownloadItem*)userp)->progressCallback(dltotal, dlnow);
-    }
-
     static int debugCallback(CURL* handle, curl_infotype type, char* data,
                              size_t size, void* userptr) {
       if (type == CURLINFO_TEXT) {
@@ -297,10 +282,6 @@ struct CurlDownloader : public Downloader {
       curl_easy_setopt(req, CURLOPT_HEADERFUNCTION,
                        DownloadItem::headerCallbackWrapper);
       curl_easy_setopt(req, CURLOPT_HEADERDATA, this);
-
-      curl_easy_setopt(req, CURLOPT_PROGRESSFUNCTION, progressCallbackWrapper);
-      curl_easy_setopt(req, CURLOPT_PROGRESSDATA, this);
-      curl_easy_setopt(req, CURLOPT_NOPROGRESS, 0);
 
       curl_easy_setopt(req, CURLOPT_HTTPHEADER, requestHeaders);
 
