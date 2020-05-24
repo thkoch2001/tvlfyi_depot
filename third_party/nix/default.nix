@@ -1,4 +1,5 @@
-{ pkgs ? (import <nixpkgs> {}).third_party, ... }:
+{ pkgs ? (import <nixpkgs> {}).third_party
+, buildType ? "release", ... }:
 
 let
   stdenv = with pkgs; overrideCC clangStdenv clang_10;
@@ -55,8 +56,7 @@ in stdenv.mkDerivation {
     xz
   ];
 
-  mesonBuildType = "release";
-
+  mesonBuildType = buildType;
   mesonFlags = [
     "-Dsandbox_shell=${pkgs.busybox-sandbox-shell}/bin/busybox"
   ];
