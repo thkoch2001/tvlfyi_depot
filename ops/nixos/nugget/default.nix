@@ -39,6 +39,10 @@ in depot.lib.fix(self: {
       availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
       kernelModules = [ "dm-snapshot" ];
     };
+
+    kernel.sysctl = {
+      "kernel.perf_event_paranoid" = 1;
+    };
   };
 
   nix = {
