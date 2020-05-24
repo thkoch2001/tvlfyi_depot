@@ -26,5 +26,5 @@ pkgs.writeShellScriptBin "nix-clangd" ''
   export CPLUS_INCLUDE_PATH=${pkgs.llvmPackages.libcxx}/include/c++/v1:''${CPATH}
 
   # TODO(tazjin): Configurable commands directory?
-  exec -a clangd ${pkgs.llvmPackages.clang-unwrapped}/bin/clangd $@
+  exec -a clangd ${pkgs.llvmPackages.clang-unwrapped}/bin/clangd -cross-file-rename $@
 ''
