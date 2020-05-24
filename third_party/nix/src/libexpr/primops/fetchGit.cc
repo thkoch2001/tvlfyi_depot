@@ -1,6 +1,7 @@
 #include <nlohmann/json.hpp>
 #include <regex>
 
+#include <absl/strings/ascii.h>
 #include <glog/logging.h>
 #include <sys/time.h>
 
@@ -76,7 +77,8 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
     }
 
     // clean working tree, but no ref or rev specified.  Use 'HEAD'.
-    rev = chomp(runProgram("git", true, {"-C", uri, "rev-parse", "HEAD"}));
+    rev = absl::StripTrailingAsciiWhitespace(
+        runProgram("git", true, {"-C", uri, "rev-parse", "HEAD"}));
     ref = "HEAD"s;
   }
 
@@ -145,7 +147,9 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
 
   // FIXME: check whether rev is an ancestor of ref.
   GitInfo gitInfo;
-  gitInfo.rev = rev != "" ? rev : chomp(readFile(localRefFile));
+  gitInfo.rev =
+      rev != "" ? rev
+                : absl::StripTrailingAsciiWhitespace(readFile(localRefFile));
   gitInfo.shortRev = std::string(gitInfo.rev, 0, 7);
 
   DLOG(INFO) << "using revision " << gitInfo.rev << " of repo '" << uri << "'";

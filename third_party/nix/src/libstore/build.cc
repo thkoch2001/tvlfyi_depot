@@ -12,6 +12,7 @@
 #include <sstream>
 #include <thread>
 
+#include <absl/strings/ascii.h>
 #include <fcntl.h>
 #include <grp.h>
 #include <netdb.h>
@@ -461,7 +462,7 @@ void handleDiffHook(uid_t uid, uid_t gid, Path tryA, Path tryB, Path drvPath,
       }
 
       if (!diffRes.second.empty()) {
-        LOG(ERROR) << chomp(diffRes.second);
+        LOG(ERROR) << absl::StripTrailingAsciiWhitespace(diffRes.second);
       }
     } catch (Error& error) {
       LOG(ERROR) << "diff hook execution failed: " << error.what();
@@ -1640,7 +1641,8 @@ MakeError(NotDeterministic, BuildError)
 
       hookEnvironment.emplace("DRV_PATH", drvPath);
       hookEnvironment.emplace("OUT_PATHS",
-                              chomp(concatStringsSep(" ", outputPaths)));
+                              absl::StripTrailingAsciiWhitespace(
+                                  concatStringsSep(" ", outputPaths)));
 
       RunOptions opts(settings.postBuildHook, {});
       opts.environment = hookEnvironment;
@@ -1788,7 +1790,8 @@ HookReply DerivationGoal::tryBuildHook() {
   } catch (SysError& e) {
     if (e.errNo == EPIPE) {
       LOG(ERROR) << "build hook died unexpectedly: "
-                 << chomp(drainFD(worker.hook->fromHook.readSide.get()));
+                 << absl::StripTrailingAsciiWhitespace(
+                        drainFD(worker.hook->fromHook.readSide.get()));
       worker.hook = nullptr;
       return rpDecline;
     }

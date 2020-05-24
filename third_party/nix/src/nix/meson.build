@@ -58,7 +58,7 @@ nix_dep_list = [
   libdl_dep,
   libsodium_dep,
   pthread_dep,
-]
+] + absl_deps
 
 nix_link_list = [
   libutil_lib,

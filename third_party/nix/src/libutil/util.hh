@@ -324,9 +324,6 @@ MakeError(Interrupted, BaseError)
 string concatStringsSep(const string& sep, const Strings& ss);
 string concatStringsSep(const string& sep, const StringSet& ss);
 
-/* Remove trailing whitespace from a string. */
-string chomp(const string& s);
-
 /* Remove whitespace from the start and end of a string. */
 string trim(const string& s, const string& whitespace = " \n\r\t");
 

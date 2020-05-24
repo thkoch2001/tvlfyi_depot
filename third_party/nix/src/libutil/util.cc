@@ -1210,11 +1210,6 @@ string concatStringsSep(const string& sep, const StringSet& ss) {
   return s;
 }
 
-string chomp(const string& s) {
-  size_t i = s.find_last_not_of(" \n\r\t");
-  return i == string::npos ? "" : string(s, 0, i + 1);
-}
-
 string trim(const string& s, const string& whitespace) {
   auto i = s.find_first_not_of(whitespace);
   if (i == string::npos) {

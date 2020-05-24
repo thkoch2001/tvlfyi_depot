@@ -3,6 +3,7 @@
 #include <cerrno>
 #include <cstring>
 
+#include <absl/strings/ascii.h>
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <sys/socket.h>
@@ -715,7 +716,7 @@ std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
     }
 
     else if (msg == STDERR_NEXT) {
-      LOG(ERROR) << chomp(readString(from));
+      LOG(ERROR) << absl::StripTrailingAsciiWhitespace(readString(from));
     }
 
     else if (msg == STDERR_START_ACTIVITY) {

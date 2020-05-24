@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 
+#include <absl/strings/ascii.h>
 #include <glog/logging.h>
 
 #include "affinity.hh"
@@ -121,7 +122,7 @@ static void _main(int argc, char** argv) {
         }
         args.clear();
         for (auto line : lines) {
-          line = chomp(line);
+          line = absl::StripTrailingAsciiWhitespace(line);
           std::smatch match;
           if (std::regex_match(line, match,
                                std::regex("^#!\\s*nix-shell (.*)$"))) {

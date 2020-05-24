@@ -1,5 +1,7 @@
 #include "download.hh"
 
+#include <absl/strings/ascii.h>
+
 #include "archive.hh"
 #include "compression.hh"
 #include "finally.hh"
@@ -231,7 +233,9 @@ struct CurlDownloader : public Downloader {
     static int debugCallback(CURL* handle, curl_infotype type, char* data,
                              size_t size, void* userptr) {
       if (type == CURLINFO_TEXT) {
-        DLOG(INFO) << "curl: " << chomp(std::string(data, size));
+        DLOG(INFO) << "curl: "
+                   << absl::StripTrailingAsciiWhitespace(
+                          std::string(data, size));
       }
       return 0;
     }

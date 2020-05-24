@@ -381,6 +381,7 @@ absl_deps = [
   absl.dependency('spinlock_wait'),
   absl.dependency('stacktrace'),
   absl.dependency('strings'),
+  absl.dependency('strings_internal'),
   absl.dependency('symbolize'),
   absl.dependency('synchronization'),
   absl.dependency('throw_delegate'),

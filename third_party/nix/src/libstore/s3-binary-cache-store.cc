@@ -2,6 +2,7 @@
 
 #include "s3-binary-cache-store.hh"
 
+#include <absl/strings/ascii.h>
 #include <aws/core/Aws.h>
 #include <aws/core/VersionConfig.h>
 #include <aws/core/auth/AWSCredentialsProvider.h>
@@ -50,7 +51,7 @@ class AwsLogger : public Aws::Utils::Logging::FormattedLogSystem {
   using Aws::Utils::Logging::FormattedLogSystem::FormattedLogSystem;
 
   void ProcessFormattedStatement(Aws::String&& statement) override {
-    debug("AWS: %s", chomp(statement));
+    debug("AWS: %s", absl::StripTrailingAsciiWhitespace(statement));
   }
 };
 

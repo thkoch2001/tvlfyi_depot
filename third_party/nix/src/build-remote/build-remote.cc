@@ -6,6 +6,8 @@
 #include <set>
 #include <tuple>
 
+#include <absl/strings/ascii.h>
+#include <absl/strings/str_cat.h>
 #include <glog/logging.h>
 
 #include "derivations.hh"
@@ -199,9 +201,10 @@ static int _main(int argc, char* argv[]) {
           storeUri = bestMachine->storeUri;
 
         } catch (std::exception& e) {
-          auto msg = chomp(drainFD(5, false));
+          auto msg = absl::StripTrailingAsciiWhitespace(drainFD(5, false));
           LOG(ERROR) << "cannot build on '" << bestMachine->storeUri
-                     << "': " << e.what() << (msg.empty() ? "" : ": " + msg);
+                     << "': " << e.what()
+                     << (msg.empty() ? "" : absl::StrCat(": ", msg));
           bestMachine->enabled = false;
           continue;
         }

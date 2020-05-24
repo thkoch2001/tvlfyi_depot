@@ -1,6 +1,7 @@
 #include <nlohmann/json.hpp>
 #include <regex>
 
+#include <absl/strings/ascii.h>
 #include <glog/logging.h>
 #include <sys/time.h>
 
@@ -43,7 +44,8 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
 
       HgInfo hgInfo;
       hgInfo.rev = "0000000000000000000000000000000000000000";
-      hgInfo.branch = chomp(runProgram("hg", true, {"branch", "-R", uri}));
+      hgInfo.branch = absl::StripTrailingAsciiWhitespace(
+          runProgram("hg", true, {"branch", "-R", uri}));
 
       auto files = tokenizeString<std::set<std::string>>(
           runProgram("hg", true,

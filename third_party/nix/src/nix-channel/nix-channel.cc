@@ -1,5 +1,6 @@
 #include <regex>
 
+#include <absl/strings/ascii.h>
 #include <fcntl.h>
 #include <pwd.h>
 
@@ -25,7 +26,7 @@ static void readChannels() {
 
   for (const auto& line :
        tokenizeString<std::vector<string>>(channelsFile, "\n")) {
-    chomp(line);
+    absl::StripTrailingAsciiWhitespace(line);
     if (std::regex_search(line, std::regex("^\\s*\\#"))) {
       continue;
     }
@@ -99,7 +100,7 @@ static void update(const StringSet& channelNames) {
     auto dl = getDownloader();
     auto result = dl->downloadCached(store, request);
     auto filename = result.path;
-    url = chomp(result.effectiveUri);
+    url = absl::StripTrailingAsciiWhitespace(result.effectiveUri);
 
     // If the URL contains a version number, append it to the name
     // attribute (so that "nix-env -q" on the channels profile
@@ -136,7 +137,7 @@ static void update(const StringSet& channelNames) {
                                CachedDownloadRequest(url + "/nixexprs.tar.bz2"))
                 .path;
       }
-      chomp(filename);
+      absl::StripTrailingAsciiWhitespace(filename);
     }
 
     // Regardless of where it came from, add the expression representing this

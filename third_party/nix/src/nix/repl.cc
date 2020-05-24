@@ -5,6 +5,7 @@
 #include <iostream>
 #include <utility>
 
+#include <absl/strings/ascii.h>
 #include <glog/logging.h>
 
 #ifdef READLINE
@@ -122,7 +123,7 @@ void printHelp() {
 }
 
 string removeWhitespace(string s) {
-  s = chomp(s);
+  s = absl::StripTrailingAsciiWhitespace(s);
   size_t n = s.find_first_not_of(" \n\r\t");
   if (n != string::npos) {
     s = string(s, n);

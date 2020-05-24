@@ -80,7 +80,7 @@ libstore_dep_list = [
     pthread_dep,
     sqlite3_dep,
     libsodium_dep
-]
+] + absl_deps
 
 if sys_name.contains('linux')
     libstore_dep_list += libseccomp_dep
