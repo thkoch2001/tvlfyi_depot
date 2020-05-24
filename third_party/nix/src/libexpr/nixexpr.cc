@@ -16,7 +16,7 @@ std::ostream& operator<<(std::ostream& str, const Expr& e) {
 
 static void showString(std::ostream& str, const std::string& s) {
   str << '"';
-  for (auto c : (string)s) {
+  for (auto c : (std::string)s) {
     if (c == '"' || c == '\\' || c == '$') {
       str << "\\" << c;
     } else if (c == '\n') {
@@ -188,14 +188,14 @@ std::ostream& operator<<(std::ostream& str, const Pos& pos) {
   if (!pos) {
     str << "undefined position";
   } else {
-    str << (format(ANSI_BOLD "%1%" ANSI_NORMAL ":%2%:%3%") % (string)pos.file %
-            pos.line % pos.column)
+    str << (format(ANSI_BOLD "%1%" ANSI_NORMAL ":%2%:%3%") %
+            (std::string)pos.file % pos.line % pos.column)
                .str();
   }
   return str;
 }
 
-string showAttrPath(const AttrPath& attrPath) {
+std::string showAttrPath(const AttrPath& attrPath) {
   std::ostringstream out;
   bool first = true;
   for (auto& i : attrPath) {
@@ -407,9 +407,10 @@ void ExprLambda::setName(Symbol& name) {
   body->setName(name);
 }
 
-string ExprLambda::showNamePos() const {
+std::string ExprLambda::showNamePos() const {
   return (format("%1% at %2%") %
-          (name.set() ? "'" + (string)name + "'" : "anonymous function") % pos)
+          (name.set() ? "'" + (std::string)name + "'" : "anonymous function") %
+          pos)
       .str();
 }
 

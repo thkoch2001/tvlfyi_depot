@@ -177,7 +177,7 @@ struct CurlDownloader : public Downloader {
       DLOG(INFO) << "got header for '" << request.uri << "': " << trim(line);
       if (line.compare(0, 5, "HTTP/") == 0) {  // new response starts
         result.etag = "";
-        auto ss = tokenizeString<vector<string>>(line, " ");
+        auto ss = tokenizeString<std::vector<std::string>>(line, " ");
         status = ss.size() >= 2 ? ss[1] : "";
         result.data = std::make_shared<std::string>();
         result.bodySize = 0;
@@ -185,10 +185,10 @@ struct CurlDownloader : public Downloader {
         encoding = "";
       } else {
         auto i = line.find(':');
-        if (i != string::npos) {
-          string name = toLower(trim(string(line, 0, i)));
+        if (i != std::string::npos) {
+          std::string name = toLower(trim(std::string(line, 0, i)));
           if (name == "etag") {
-            result.etag = trim(string(line, i + 1));
+            result.etag = trim(std::string(line, i + 1));
             /* Hack to work around a GitHub bug: it sends
                ETags, but ignores If-None-Match. So if we get
                the expected ETag on a 200 response, then shut
@@ -200,7 +200,7 @@ struct CurlDownloader : public Downloader {
               return 0;
             }
           } else if (name == "content-encoding") {
-            encoding = trim(string(line, i + 1));
+            encoding = trim(std::string(line, i + 1));
           } else if (name == "accept-ranges" &&
                      toLower(trim(std::string(line, i + 1))) == "bytes") {
             acceptRanges = true;
@@ -868,8 +868,8 @@ CachedDownloadResult Downloader::downloadCached(
   auto name = request.name;
   if (name.empty()) {
     auto p = url.rfind('/');
-    if (p != string::npos) {
-      name = string(url, p + 1);
+    if (p != std::string::npos) {
+      name = std::string(url, p + 1);
     }
   }
 
@@ -888,8 +888,8 @@ CachedDownloadResult Downloader::downloadCached(
   Path cacheDir = getCacheDir() + "/nix/tarballs";
   createDirs(cacheDir);
 
-  string urlHash = hashString(htSHA256, name + std::string("\0"s) + url)
-                       .to_string(Base32, false);
+  std::string urlHash = hashString(htSHA256, name + std::string("\0"s) + url)
+                            .to_string(Base32, false);
 
   Path dataFile = cacheDir + "/" + urlHash + ".info";
   Path fileLink = cacheDir + "/" + urlHash + "-file";
@@ -898,7 +898,7 @@ CachedDownloadResult Downloader::downloadCached(
 
   Path storePath;
 
-  string expectedETag;
+  std::string expectedETag;
 
   bool skip = false;
 
@@ -908,7 +908,8 @@ CachedDownloadResult Downloader::downloadCached(
     storePath = readLink(fileLink);
     store->addTempRoot(storePath);
     if (store->isValidPath(storePath)) {
-      auto ss = tokenizeString<vector<string>>(readFile(dataFile), "\n");
+      auto ss =
+          tokenizeString<std::vector<std::string>>(readFile(dataFile), "\n");
       if (ss.size() >= 3 && ss[0] == url) {
         time_t lastChecked;
         if (string2Int(ss[2], lastChecked) &&
@@ -1009,15 +1010,15 @@ CachedDownloadResult Downloader::downloadCached(
   return result;
 }
 
-bool isUri(const string& s) {
+bool isUri(const std::string& s) {
   if (s.compare(0, 8, "channel:") == 0) {
     return true;
   }
   size_t pos = s.find("://");
-  if (pos == string::npos) {
+  if (pos == std::string::npos) {
     return false;
   }
-  string scheme(s, 0, pos);
+  std::string scheme(s, 0, pos);
   return scheme == "http" || scheme == "https" || scheme == "file" ||
          scheme == "channel" || scheme == "git" || scheme == "s3" ||
          scheme == "ssh";

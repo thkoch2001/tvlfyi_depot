@@ -18,7 +18,7 @@ class Args {
      wrong. */
   void parseCmdline(const Strings& cmdline);
 
-  virtual void printHelp(const string& programName, std::ostream& out);
+  virtual void printHelp(const std::string& programName, std::ostream& out);
 
   virtual std::string description() { return ""; }
 
@@ -187,7 +187,7 @@ class Args {
   }
 
   /* Expect a string argument. */
-  void expectArg(const std::string& label, string* dest,
+  void expectArg(const std::string& label, std::string* dest,
                  bool optional = false) {
     expectedArgs.push_back(
         ExpectedArg{label, 1, optional,

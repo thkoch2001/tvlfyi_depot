@@ -36,7 +36,7 @@ static void prim_unsafeDiscardOutputDependency(EvalState& state, const Pos& pos,
 
   PathSet context2;
   for (auto& p : context) {
-    context2.insert(p.at(0) == '=' ? string(p, 1) : p);
+    context2.insert(p.at(0) == '=' ? std::string(p, 1) : p);
   }
 
   mkString(v, s, context2);
@@ -79,10 +79,10 @@ static void prim_getContext(EvalState& state, const Pos& pos, Value** args,
     std::string output;
     const Path* path = &p;
     if (p.at(0) == '=') {
-      drv = string(p, 1);
+      drv = std::string(p, 1);
       path = &drv;
     } else if (p.at(0) == '!') {
-      std::pair<string, string> ctx = decodeContext(p);
+      std::pair<std::string, std::string> ctx = decodeContext(p);
       drv = ctx.first;
       output = ctx.second;
       path = &drv;
@@ -170,7 +170,7 @@ static void prim_appendContext(EvalState& state, const Pos& pos, Value** args,
               "derivation, to a string, at %s",
               i->name, i->pos);
         }
-        context.insert("=" + string(i->name));
+        context.insert("=" + std::string(i->name));
       }
     }
 
@@ -186,7 +186,7 @@ static void prim_appendContext(EvalState& state, const Pos& pos, Value** args,
       for (unsigned int n = 0; n < iter->second.value->listSize(); ++n) {
         auto name = state.forceStringNoCtx(*iter->second.value->listElems()[n],
                                            *iter->second.pos);
-        context.insert("!" + name + "!" + string(i->name));
+        context.insert("!" + name + "!" + std::string(i->name));
       }
     }
   }

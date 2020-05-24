@@ -102,7 +102,7 @@ ref<RemoteStore::Connection> UDSRemoteStore::openConnection() {
   }
   closeOnExec(conn->fd.get());
 
-  string socketPath = path ? *path : settings.nixDaemonSocketFile;
+  std::string socketPath = path ? *path : settings.nixDaemonSocketFile;
 
   struct sockaddr_un addr;
   addr.sun_family = AF_UNIX;
@@ -412,7 +412,7 @@ PathSet RemoteStore::queryDerivationOutputNames(const Path& path) {
   return readStrings<PathSet>(conn->from);
 }
 
-Path RemoteStore::queryPathFromHashPart(const string& hashPart) {
+Path RemoteStore::queryPathFromHashPart(const std::string& hashPart) {
   auto conn(getConnection());
   conn->to << wopQueryPathFromHashPart << hashPart;
   conn.processStderr();
@@ -460,7 +460,7 @@ void RemoteStore::addToStore(const ValidPathInfo& info, Source& source,
   }
 }
 
-Path RemoteStore::addToStore(const string& name, const Path& _srcPath,
+Path RemoteStore::addToStore(const std::string& name, const Path& _srcPath,
                              bool recursive, HashType hashAlgo,
                              PathFilter& filter, RepairFlag repair) {
   if (repair != 0u) {
@@ -503,7 +503,7 @@ Path RemoteStore::addToStore(const string& name, const Path& _srcPath,
   return readStorePath(*this, conn->from);
 }
 
-Path RemoteStore::addTextToStore(const string& name, const string& s,
+Path RemoteStore::addTextToStore(const std::string& name, const std::string& s,
                                  const PathSet& references, RepairFlag repair) {
   if (repair != 0u) {
     throw Error(
@@ -537,7 +537,7 @@ void RemoteStore::buildPaths(const PathSet& drvPaths, BuildMode buildMode) {
        identifiers. */
     PathSet drvPaths2;
     for (auto& i : drvPaths) {
-      drvPaths2.insert(string(i, 0, i.find('!')));
+      drvPaths2.insert(std::string(i, 0, i.find('!')));
     }
     conn->to << drvPaths2;
   }
@@ -692,7 +692,7 @@ std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
     auto msg = readNum<uint64_t>(from);
 
     if (msg == STDERR_WRITE) {
-      string s = readString(from);
+      std::string s = readString(from);
       if (sink == nullptr) {
         throw Error("no sink");
       }
@@ -710,7 +710,7 @@ std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
     }
 
     else if (msg == STDERR_ERROR) {
-      string error = readString(from);
+      std::string error = readString(from);
       unsigned int status = readInt(from);
       return std::make_exception_ptr(Error(status, error));
     }

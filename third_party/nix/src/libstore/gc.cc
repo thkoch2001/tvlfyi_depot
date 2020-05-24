@@ -20,8 +20,8 @@
 
 namespace nix {
 
-static string gcLockName = "gc.lock";
-static string gcRootsDir = "gcroots";
+static std::string gcLockName = "gc.lock";
+static std::string gcRootsDir = "gcroots";
 
 /* Acquire the global GC lock.  This is used to prevent new Nix
    processes from starting after the temporary root files have been
@@ -69,7 +69,7 @@ static void makeSymlink(const Path& link, const Path& target) {
 void LocalStore::syncWithGC() { AutoCloseFD fdGCLock = openGCLock(ltRead); }
 
 void LocalStore::addIndirectRoot(const Path& path) {
-  string hash = hashString(htSHA1, path).to_string(Base32, false);
+  std::string hash = hashString(htSHA1, path).to_string(Base32, false);
   Path realRoot = canonPath(
       (format("%1%/%2%/auto/%3%") % stateDir % gcRootsDir % hash).str());
   makeSymlink(realRoot, path);
@@ -105,7 +105,7 @@ Path LocalFSStore::addPermRoot(const Path& _storePath, const Path& _gcRoot,
       Path rootsDir =
           canonPath((format("%1%/%2%") % stateDir % gcRootsDir).str());
 
-      if (string(gcRoot, 0, rootsDir.size() + 1) != rootsDir + "/") {
+      if (std::string(gcRoot, 0, rootsDir.size() + 1) != rootsDir + "/") {
         throw Error(format("path '%1%' is not a valid garbage collector root; "
                            "it's not in the directory '%2%'") %
                     gcRoot % rootsDir);
@@ -184,7 +184,7 @@ void LocalStore::addTempRoot(const Path& path) {
   DLOG(INFO) << "acquiring write lock on " << fnTempRoots;
   lockFile(state->fdTempRoots.get(), ltWrite, true);
 
-  string s = path + '\0';
+  std::string s = path + '\0';
   writeFull(state->fdTempRoots.get(), s);
 
   /* Downgrade to a read lock. */
@@ -233,13 +233,13 @@ void LocalStore::findTempRoots(FDs& fds, Roots& tempRoots, bool censor) {
     lockFile(fd->get(), ltRead, true);
 
     /* Read the entire file. */
-    string contents = readFile(fd->get());
+    std::string contents = readFile(fd->get());
 
     /* Extract the roots. */
-    string::size_type pos = 0;
-    string::size_type end;
+    std::string::size_type pos = 0;
+    std::string::size_type end;
 
-    while ((end = contents.find((char)0, pos)) != string::npos) {
+    while ((end = contents.find((char)0, pos)) != std::string::npos) {
       Path root(contents, pos, end - pos);
       DLOG(INFO) << "got temporary root " << root;
       assertStorePath(root);
@@ -341,7 +341,7 @@ Roots LocalStore::findRoots(bool censor) {
   return roots;
 }
 
-static void readProcLink(const string& file, Roots& roots) {
+static void readProcLink(const std::string& file, Roots& roots) {
   /* 64 is the starting buffer size gnu readlink uses... */
   auto bufsiz = ssize_t{64};
 try_again:
@@ -365,7 +365,7 @@ try_again:
   }
 }
 
-static string quoteRegexChars(const string& raw) {
+static std::string quoteRegexChars(const std::string& raw) {
   static auto specialRegex = std::regex(R"([.^$\\*+?()\[\]{}|])");
   return std::regex_replace(raw, specialRegex, R"(\$&)");
 }
@@ -421,7 +421,7 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
 
         try {
           auto mapFile = fmt("/proc/%s/maps", ent->d_name);
-          auto mapLines = tokenizeString<std::vector<string>>(
+          auto mapLines = tokenizeString<std::vector<std::string>>(
               readFile(mapFile, true), "\n");
           for (const auto& line : mapLines) {
             auto match = std::smatch{};
@@ -458,7 +458,7 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
   if (getEnv("_NIX_TEST_NO_LSOF") == "") {
     try {
       std::regex lsofRegex(R"(^n(/.*)$)");
-      auto lsofLines = tokenizeString<std::vector<string>>(
+      auto lsofLines = tokenizeString<std::vector<std::string>>(
           runProgram(LSOF, true, {"-n", "-w", "-F", "n"}), "\n");
       for (const auto& line : lsofLines) {
         std::smatch match;
@@ -511,10 +511,10 @@ struct LocalStore::GCState {
 };
 
 bool LocalStore::isActiveTempFile(const GCState& state, const Path& path,
-                                  const string& suffix) {
+                                  const std::string& suffix) {
   return hasSuffix(path, suffix) &&
-         state.tempRoots.find(string(path, 0, path.size() - suffix.size())) !=
-             state.tempRoots.end();
+         state.tempRoots.find(std::string(
+             path, 0, path.size() - suffix.size())) != state.tempRoots.end();
 }
 
 void LocalStore::deleteGarbage(GCState& state, const Path& path) {
@@ -720,7 +720,7 @@ void LocalStore::removeUnusedLinks(const GCState& state) {
   struct dirent* dirent;
   while (errno = 0, dirent = readdir(dir.get())) {
     checkInterrupt();
-    string name = dirent->d_name;
+    std::string name = dirent->d_name;
     if (name == "." || name == "..") {
       continue;
     }
@@ -863,7 +863,7 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
       struct dirent* dirent;
       while (errno = 0, dirent = readdir(dir.get())) {
         checkInterrupt();
-        string name = dirent->d_name;
+        std::string name = dirent->d_name;
         if (name == "." || name == "..") {
           continue;
         }
@@ -882,7 +882,7 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
          less biased towards deleting paths that come
          alphabetically first (e.g. /nix/store/000...).  This
          matters when using --max-freed etc. */
-      vector<Path> entries_(entries.begin(), entries.end());
+      std::vector<Path> entries_(entries.begin(), entries.end());
       std::mt19937 gen(1);
       std::shuffle(entries_.begin(), entries_.end(), gen);
 

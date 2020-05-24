@@ -83,7 +83,7 @@ Strings LocalStore::readDirectoryIgnoringInodes(const Path& path,
       continue;
     }
 
-    string name = dirent->d_name;
+    std::string name = dirent->d_name;
     if (name == "." || name == "..") {
       continue;
     }
@@ -271,7 +271,7 @@ void LocalStore::optimiseStore(OptimiseStats& stats) {
   }
 }
 
-static string showBytes(unsigned long long bytes) {
+static std::string showBytes(unsigned long long bytes) {
   return (format("%.2f MiB") % (bytes / (1024.0 * 1024.0))).str();
 }
 

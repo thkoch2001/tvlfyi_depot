@@ -82,23 +82,23 @@ void Config::getSettings(std::map<std::string, SettingInfo>& res,
 
 void AbstractConfig::applyConfigFile(const Path& path) {
   try {
-    string contents = readFile(path);
+    std::string contents = readFile(path);
 
     unsigned int pos = 0;
 
     while (pos < contents.size()) {
-      string line;
+      std::string line;
       while (pos < contents.size() && contents[pos] != '\n') {
         line += contents[pos++];
       }
       pos++;
 
-      string::size_type hash = line.find('#');
-      if (hash != string::npos) {
-        line = string(line, 0, hash);
+      std::string::size_type hash = line.find('#');
+      if (hash != std::string::npos) {
+        line = std::string(line, 0, hash);
       }
 
-      auto tokens = tokenizeString<vector<string> >(line);
+      auto tokens = tokenizeString<std::vector<std::string> >(line);
       if (tokens.empty()) {
         continue;
       }
@@ -136,7 +136,7 @@ void AbstractConfig::applyConfigFile(const Path& path) {
                          path);
       }
 
-      string name = tokens[0];
+      std::string name = tokens[0];
 
       auto i = tokens.begin();
       advance(i, 2);

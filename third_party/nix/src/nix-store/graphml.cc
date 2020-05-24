@@ -10,23 +10,23 @@ using std::cout;
 
 namespace nix {
 
-static inline const string& xmlQuote(const string& s) {
+static inline const std::string& xmlQuote(const std::string& s) {
   // Luckily, store paths shouldn't contain any character that needs to be
   // quoted.
   return s;
 }
 
-static string symbolicName(const string& path) {
-  string p = baseNameOf(path);
-  return string(p, p.find('-') + 1);
+static std::string symbolicName(const std::string& path) {
+  std::string p = baseNameOf(path);
+  return std::string(p, p.find('-') + 1);
 }
 
-static string makeEdge(const string& src, const string& dst) {
+static std::string makeEdge(const std::string& src, const std::string& dst) {
   return fmt("  <edge source=\"%1%\" target=\"%2%\"/>\n", xmlQuote(src),
              xmlQuote(dst));
 }
 
-static string makeNode(const ValidPathInfo& info) {
+static std::string makeNode(const ValidPathInfo& info) {
   return fmt(
       "  <node id=\"%1%\">\n"
       "    <data key=\"narSize\">%2%</data>\n"

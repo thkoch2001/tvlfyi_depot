@@ -56,7 +56,7 @@ struct ParseSink {
   virtual void preallocateContents(unsigned long long size){};
   virtual void receiveContents(unsigned char* data, unsigned int len){};
 
-  virtual void createSymlink(const Path& path, const string& target){};
+  virtual void createSymlink(const Path& path, const std::string& target){};
 };
 
 struct TeeSink : ParseSink {

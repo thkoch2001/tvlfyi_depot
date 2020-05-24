@@ -14,7 +14,7 @@ const int sha1HashSize = 20;
 const int sha256HashSize = 32;
 const int sha512HashSize = 64;
 
-extern const string base32Chars;
+extern const std::string base32Chars;
 
 enum Base : int { Base64, Base32, Base16, SRI };
 
@@ -68,10 +68,10 @@ struct Hash {
 };
 
 /* Print a hash in base-16 if it's MD5, or base-32 otherwise. */
-string printHash16or32(const Hash& hash);
+std::string printHash16or32(const Hash& hash);
 
 /* Compute the hash of the given string. */
-Hash hashString(HashType ht, const string& s);
+Hash hashString(HashType ht, const std::string& s);
 
 /* Compute the hash of the given file. */
 Hash hashFile(HashType ht, const Path& path);
@@ -87,10 +87,10 @@ HashResult hashPath(HashType ht, const Path& path,
 Hash compressHash(const Hash& hash, unsigned int newSize);
 
 /* Parse a string representing a hash type. */
-HashType parseHashType(const string& s);
+HashType parseHashType(const std::string& s);
 
 /* And the reverse. */
-string printHashType(HashType ht);
+std::string printHashType(HashType ht);
 
 union Ctx;
 

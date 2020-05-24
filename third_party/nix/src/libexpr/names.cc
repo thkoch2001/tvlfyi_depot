@@ -18,8 +18,8 @@ DrvName::DrvName(const std::string& s) : hits(0) {
   for (unsigned int i = 0; i < s.size(); ++i) {
     /* !!! isalpha/isdigit are affected by the locale. */
     if (s[i] == '-' && i + 1 < s.size() && (isalpha(s[i + 1]) == 0)) {
-      name = string(s, 0, i);
-      version = string(s, i + 1);
+      name = std::string(s, 0, i);
+      version = std::string(s, i + 1);
       break;
     }
   }
@@ -37,8 +37,8 @@ bool DrvName::matches(DrvName& n) {
   return !(!version.empty() && version != n.version);
 }
 
-string nextComponent(string::const_iterator& p,
-                     const string::const_iterator end) {
+std::string nextComponent(std::string::const_iterator& p,
+                          const std::string::const_iterator end) {
   /* Skip any dots and dashes (component separators). */
   while (p != end && (*p == '.' || *p == '-')) {
     ++p;
@@ -91,8 +91,8 @@ static bool componentsLT(const std::string& c1, const std::string& c2) {
 }
 
 int compareVersions(const std::string& v1, const std::string& v2) {
-  string::const_iterator p1 = v1.begin();
-  string::const_iterator p2 = v2.begin();
+  std::string::const_iterator p1 = v1.begin();
+  std::string::const_iterator p2 = v2.begin();
 
   while (p1 != v1.end() || p2 != v2.end()) {
     std::string c1 = nextComponent(p1, v1.end());

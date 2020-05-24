@@ -115,7 +115,7 @@ struct TunnelLogger {
 
   /* stopWork() means that we're done; stop sending stderr to the
      client. */
-  void stopWork(bool success = true, const string& msg = "",
+  void stopWork(bool success = true, const std::string& msg = "",
                 unsigned int status = 0) {
     auto state(state_.lock());
 
@@ -175,7 +175,7 @@ struct TunnelSource : BufferedSource {
    the contents of the file to `s'.  Otherwise barf. */
 struct RetrieveRegularNARSink : ParseSink {
   bool regular{true};
-  string s;
+  std::string s;
 
   RetrieveRegularNARSink() {}
 
@@ -185,7 +185,7 @@ struct RetrieveRegularNARSink : ParseSink {
     s.append((const char*)data, len);
   }
 
-  void createSymlink(const Path& path, const string& target) override {
+  void createSymlink(const Path& path, const std::string& target) override {
     regular = false;
   }
 };
@@ -286,7 +286,7 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
     }
 
     case wopQueryPathFromHashPart: {
-      string hashPart = readString(from);
+      std::string hashPart = readString(from);
       logger->startWork();
       Path path = store->queryPathFromHashPart(hashPart);
       logger->stopWork();
@@ -340,8 +340,8 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
     }
 
     case wopAddTextToStore: {
-      string suffix = readString(from);
-      string s = readString(from);
+      std::string suffix = readString(from);
+      std::string s = readString(from);
       auto refs = readStorePaths<PathSet>(*store, from);
       logger->startWork();
       Path path = store->addTextToStore(suffix, s, refs, NoRepair);
@@ -505,8 +505,8 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
       if (GET_PROTOCOL_MINOR(clientVersion) >= 12) {
         unsigned int n = readInt(from);
         for (unsigned int i = 0; i < n; i++) {
-          string name = readString(from);
-          string value = readString(from);
+          std::string name = readString(from);
+          std::string value = readString(from);
           overrides.emplace(name, value);
         }
       }
@@ -855,7 +855,8 @@ static void setSigChldAction(bool autoReap) {
   }
 }
 
-bool matchUser(const string& user, const string& group, const Strings& users) {
+bool matchUser(const std::string& user, const std::string& group,
+               const Strings& users) {
   if (find(users.begin(), users.end(), "*") != users.end()) {
     return true;
   }
@@ -865,8 +866,8 @@ bool matchUser(const string& user, const string& group, const Strings& users) {
   }
 
   for (auto& i : users) {
-    if (string(i, 0, 1) == "@") {
-      if (group == string(i, 1)) {
+    if (std::string(i, 0, 1) == "@") {
+      if (group == std::string(i, 1)) {
         return true;
       }
       struct group* gr = getgrnam(i.c_str() + 1);
@@ -874,7 +875,7 @@ bool matchUser(const string& user, const string& group, const Strings& users) {
         continue;
       }
       for (char** mem = gr->gr_mem; *mem != nullptr; mem++) {
-        if (user == string(*mem)) {
+        if (user == std::string(*mem)) {
           return true;
         }
       }
@@ -953,7 +954,7 @@ static void daemonLoop(char** argv) {
       throw SysError("cannot create Unix domain socket");
     }
 
-    string socketPath = settings.nixDaemonSocketFile;
+    std::string socketPath = settings.nixDaemonSocketFile;
 
     createDirs(dirOf(socketPath));
 
@@ -1018,10 +1019,11 @@ static void daemonLoop(char** argv) {
       PeerInfo peer = getPeerInfo(remote.get());
 
       struct passwd* pw = peer.uidKnown ? getpwuid(peer.uid) : nullptr;
-      string user = pw != nullptr ? pw->pw_name : std::to_string(peer.uid);
+      std::string user = pw != nullptr ? pw->pw_name : std::to_string(peer.uid);
 
       struct group* gr = peer.gidKnown ? getgrgid(peer.gid) : nullptr;
-      string group = gr != nullptr ? gr->gr_name : std::to_string(peer.gid);
+      std::string group =
+          gr != nullptr ? gr->gr_name : std::to_string(peer.gid);
 
       Strings trustedUsers = settings.trustedUsers;
       Strings allowedUsers = settings.allowedUsers;
@@ -1062,7 +1064,7 @@ static void daemonLoop(char** argv) {
 
             /* For debugging, stuff the pid into argv[1]. */
             if (peer.pidKnown && (argv[1] != nullptr)) {
-              string processName = std::to_string(peer.pid);
+              std::string processName = std::to_string(peer.pid);
               strncpy(argv[1], processName.c_str(), strlen(argv[1]));
             }
 

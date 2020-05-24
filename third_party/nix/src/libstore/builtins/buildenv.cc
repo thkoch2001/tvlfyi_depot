@@ -133,7 +133,7 @@ static void addPkg(const Path& pkgDir, int priority) {
   createLinks(pkgDir, out, priority);
 
   try {
-    for (const auto& p : tokenizeString<std::vector<string>>(
+    for (const auto& p : tokenizeString<std::vector<std::string>>(
              readFile(pkgDir + "/nix-support/propagated-user-env-packages"),
              " \n"))
       if (!done.count(p)) {
@@ -157,7 +157,7 @@ struct Package {
 typedef std::vector<Package> Packages;
 
 void builtinBuildenv(const BasicDerivation& drv) {
-  auto getAttr = [&](const string& name) {
+  auto getAttr = [&](const std::string& name) {
     auto i = drv.env.find(name);
     if (i == drv.env.end()) {
       throw Error("attribute '%s' missing", name);

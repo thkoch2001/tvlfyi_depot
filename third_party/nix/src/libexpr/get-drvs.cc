@@ -44,7 +44,7 @@ DrvInfo::DrvInfo(EvalState& state, const ref<Store>& store,
   outPath = i->second.path;
 }
 
-string DrvInfo::queryName() const {
+std::string DrvInfo::queryName() const {
   if (name.empty() && (attrs != nullptr)) {
     auto i = attrs->find(state->sName);
     if (i == attrs->end()) {
@@ -55,7 +55,7 @@ string DrvInfo::queryName() const {
   return name;
 }
 
-string DrvInfo::querySystem() const {
+std::string DrvInfo::querySystem() const {
   if (system.empty() && (attrs != nullptr)) {
     auto i = attrs->find(state->sSystem);
     system = i == attrs->end()
@@ -65,7 +65,7 @@ string DrvInfo::querySystem() const {
   return system;
 }
 
-string DrvInfo::queryDrvPath() const {
+std::string DrvInfo::queryDrvPath() const {
   if (drvPath.empty() && (attrs != nullptr)) {
     Bindings::iterator i = attrs->find(state->sDrvPath);
     PathSet context;
@@ -76,7 +76,7 @@ string DrvInfo::queryDrvPath() const {
   return drvPath;
 }
 
-string DrvInfo::queryOutPath() const {
+std::string DrvInfo::queryOutPath() const {
   if (outPath.empty() && (attrs != nullptr)) {
     Bindings::iterator i = attrs->find(state->sOutPath);
     PathSet context;
@@ -149,7 +149,7 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
   return result;
 }
 
-string DrvInfo::queryOutputName() const {
+std::string DrvInfo::queryOutputName() const {
   if (outputName.empty() && (attrs != nullptr)) {
     Bindings::iterator i = attrs->find(state->sOutputName);
     outputName =
@@ -223,7 +223,7 @@ Value* DrvInfo::queryMeta(const std::string& name) {
   return a->second.value;
 }
 
-string DrvInfo::queryMetaString(const std::string& name) {
+std::string DrvInfo::queryMetaString(const std::string& name) {
   Value* v = queryMeta(name);
   if ((v == nullptr) || v->type != tString) {
     return "";
@@ -308,7 +308,7 @@ void DrvInfo::setMeta(const std::string& name, Value* v) {
 }
 
 /* Cache for already considered attrsets. */
-using Done = set<Bindings*>;
+using Done = std::set<Bindings*>;
 
 /* Evaluate value `v'.  If it evaluates to a set of type `derivation',
    then put information about it in `drvs' (unless it's already in `done').

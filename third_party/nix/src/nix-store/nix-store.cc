@@ -252,8 +252,8 @@ static void opPrintFixedPath(Strings opFlags, Strings opArgs) {
 
   auto i = opArgs.begin();
   HashType hashAlgo = parseHashType(*i++);
-  string hash = *i++;
-  string name = *i++;
+  std::string hash = *i++;
+  std::string name = *i++;
 
   cout << format("%1%\n") %
               store->makeFixedOutputPath(recursive, Hash(hash, hashAlgo), name);
@@ -279,12 +279,12 @@ static PathSet maybeUseOutputs(const Path& storePath, bool useOutput,
    graph.  Topological sorting is used to keep the tree relatively
    flat. */
 
-const string treeConn = "+---";
-const string treeLine = "|   ";
-const string treeNull = "    ";
+const std::string treeConn = "+---";
+const std::string treeLine = "|   ";
+const std::string treeNull = "    ";
 
-static void printTree(const Path& path, const string& firstPad,
-                      const string& tailPad, PathSet& done) {
+static void printTree(const Path& path, const std::string& firstPad,
+                      const std::string& tailPad, PathSet& done) {
   if (done.find(path) != done.end()) {
     cout << format("%1%%2% [...]\n") % firstPad % path;
     return;
@@ -334,7 +334,7 @@ static void opQuery(Strings opFlags, Strings opArgs) {
   bool useOutput = false;
   bool includeOutputs = false;
   bool forceRealise = false;
-  string bindingName;
+  std::string bindingName;
 
   for (auto& i : opFlags) {
     QueryType prev = query;
@@ -776,7 +776,7 @@ static void opDump(Strings opFlags, Strings opArgs) {
   }
 
   FdSink sink(STDOUT_FILENO);
-  string path = *opArgs.begin();
+  std::string path = *opArgs.begin();
   dumpPath(path, sink);
   sink.flush();
 }
@@ -1154,9 +1154,9 @@ static void opGenerateBinaryCacheKey(Strings opFlags, Strings opArgs) {
     throw UsageError("three arguments expected");
   }
   auto i = opArgs.begin();
-  string keyName = *i++;
-  string secretKeyFile = *i++;
-  string publicKeyFile = *i++;
+  std::string keyName = *i++;
+  std::string secretKeyFile = *i++;
+  std::string publicKeyFile = *i++;
 
 #if HAVE_SODIUM
   if (sodium_init() == -1) {
@@ -1169,13 +1169,13 @@ static void opGenerateBinaryCacheKey(Strings opFlags, Strings opArgs) {
     throw Error("key generation failed");
   }
 
-  writeFile(publicKeyFile,
-            keyName + ":" +
-                base64Encode(string((char*)pk, crypto_sign_PUBLICKEYBYTES)));
+  writeFile(publicKeyFile, keyName + ":" +
+                               base64Encode(std::string(
+                                   (char*)pk, crypto_sign_PUBLICKEYBYTES)));
   umask(0077);
-  writeFile(secretKeyFile,
-            keyName + ":" +
-                base64Encode(string((char*)sk, crypto_sign_SECRETKEYBYTES)));
+  writeFile(secretKeyFile, keyName + ":" +
+                               base64Encode(std::string(
+                                   (char*)sk, crypto_sign_SECRETKEYBYTES)));
 #else
   throw Error(
       "Nix was not compiled with libsodium, required for signed binary cache "

@@ -37,10 +37,10 @@ Bindings* MixEvalArgs::getAutoArgs(EvalState& state) {
   for (auto& i : autoArgs) {
     Value* v = state.allocValue();
     if (i.second[0] == 'E') {
-      state.mkThunk_(
-          *v, state.parseExprFromString(string(i.second, 1), absPath(".")));
+      state.mkThunk_(*v, state.parseExprFromString(std::string(i.second, 1),
+                                                   absPath(".")));
     } else {
-      mkString(*v, string(i.second, 1));
+      mkString(*v, std::string(i.second, 1));
     }
     res->push_back(Attr(state.symbols.Create(i.first), v));
   }

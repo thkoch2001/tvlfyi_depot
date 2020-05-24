@@ -21,10 +21,10 @@ struct DrvName {
   std::unique_ptr<std::regex> regex;
 };
 
-typedef list<DrvName> DrvNames;
+typedef std::list<DrvName> DrvNames;
 
-string nextComponent(string::const_iterator& p,
-                     const string::const_iterator end);
+std::string nextComponent(std::string::const_iterator& p,
+                          const std::string::const_iterator end);
 int compareVersions(const std::string& v1, const std::string& v2);
 DrvNames drvNamesFromArgs(const Strings& opArgs);
 

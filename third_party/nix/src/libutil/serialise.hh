@@ -135,9 +135,9 @@ struct StringSink : Sink {
 
 /* A source that reads data from a string. */
 struct StringSource : Source {
-  const string& s;
+  const std::string& s;
   size_t pos;
-  StringSource(const string& _s) : s(_s), pos(0) {}
+  StringSource(const std::string& _s) : s(_s), pos(0) {}
   size_t read(unsigned char* data, size_t len) override;
 };
 
@@ -231,7 +231,7 @@ inline Sink& operator<<(Sink& sink, uint64_t n) {
   return sink;
 }
 
-Sink& operator<<(Sink& sink, const string& s);
+Sink& operator<<(Sink& sink, const std::string& s);
 Sink& operator<<(Sink& sink, const Strings& s);
 Sink& operator<<(Sink& sink, const StringSet& s);
 
@@ -265,12 +265,12 @@ inline uint64_t readLongLong(Source& source) {
 
 void readPadding(size_t len, Source& source);
 size_t readString(unsigned char* buf, size_t max, Source& source);
-string readString(Source& source,
-                  size_t max = std::numeric_limits<size_t>::max());
+std::string readString(Source& source,
+                       size_t max = std::numeric_limits<size_t>::max());
 template <class T>
 T readStrings(Source& source);
 
-Source& operator>>(Source& in, string& s);
+Source& operator>>(Source& in, std::string& s);
 
 template <typename T>
 Source& operator>>(Source& in, T& n) {

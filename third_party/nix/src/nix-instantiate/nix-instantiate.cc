@@ -62,7 +62,7 @@ void processExpr(EvalState& state, const Strings& attrPaths, bool parseOnly,
         Path drvPath = i.queryDrvPath();
 
         /* What output do we want? */
-        string outputName = i.queryOutputName();
+        std::string outputName = i.queryOutputName();
         if (outputName.empty()) {
           throw Error(
               format("derivation '%1%' lacks an 'outputName' attribute ") %

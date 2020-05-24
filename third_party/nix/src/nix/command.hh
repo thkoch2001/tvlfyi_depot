@@ -27,7 +27,7 @@ struct Command : virtual Args {
 
   virtual Examples examples() { return Examples(); }
 
-  void printHelp(const string& programName, std::ostream& out) override;
+  void printHelp(const std::string& programName, std::ostream& out) override;
 };
 
 class Store;
@@ -151,7 +151,7 @@ class MultiCommand : virtual Args {
 
   MultiCommand(Commands commands);
 
-  void printHelp(const string& programName, std::ostream& out) override;
+  void printHelp(const std::string& programName, std::ostream& out) override;
 
   bool processFlag(Strings::iterator& pos, Strings::iterator end) override;
 

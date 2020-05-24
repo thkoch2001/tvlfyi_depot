@@ -180,10 +180,10 @@ class EvalState {
      set with attribute `type = "derivation"'). */
   bool isDerivation(Value& v);
 
-  std::optional<string> tryAttrsToString(const Pos& pos, Value& v,
-                                         PathSet& context,
-                                         bool coerceMore = false,
-                                         bool copyToStore = true);
+  std::optional<std::string> tryAttrsToString(const Pos& pos, Value& v,
+                                              PathSet& context,
+                                              bool coerceMore = false,
+                                              bool copyToStore = true);
 
   /* String coercion.  Converts strings, paths and derivations to a
      string.  If `coerceMore' is set, also converts nulls, integers,
@@ -295,11 +295,11 @@ class EvalState {
 };
 
 /* Return a string representing the type of the value `v'. */
-string showType(const Value& v);
+std::string showType(const Value& v);
 
 /* Decode a context string ‘!<name>!<path>’ into a pair <path,
    name>. */
-std::pair<string, string> decodeContext(const std::string& s);
+std::pair<std::string, std::string> decodeContext(const std::string& s);
 
 /* If `path' refers to a directory, then append "/default.nix". */
 Path resolveExprPath(Path path);

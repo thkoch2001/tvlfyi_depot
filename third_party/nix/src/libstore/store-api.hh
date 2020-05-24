@@ -18,12 +18,14 @@
 
 namespace nix {
 
-MakeError(SubstError, Error)
-    MakeError(BuildError, Error) /* denotes a permanent build failure */
-    MakeError(InvalidPath, Error) MakeError(Unsupported, Error)
-        MakeError(SubstituteGone, Error) MakeError(SubstituterDisabled, Error)
+MakeError(SubstError, Error);
+MakeError(BuildError, Error); /* denotes a permanent build failure */
+MakeError(InvalidPath, Error);
+MakeError(Unsupported, Error);
+MakeError(SubstituteGone, Error);
+MakeError(SubstituterDisabled, Error);
 
-            struct BasicDerivation;
+struct BasicDerivation;
 struct Derivation;
 class FSAccessor;
 class NarInfoDiskCache;
@@ -175,7 +177,7 @@ struct ValidPathInfo {
   virtual ~ValidPathInfo() {}
 };
 
-typedef list<ValidPathInfo> ValidPathInfos;
+typedef std::list<ValidPathInfo> ValidPathInfos;
 
 enum BuildMode { bmNormal, bmRepair, bmCheck };
 
@@ -274,23 +276,23 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
   Path followLinksToStorePath(const Path& path) const;
 
   /* Constructs a unique store path name. */
-  Path makeStorePath(const string& type, const Hash& hash,
-                     const string& name) const;
+  Path makeStorePath(const std::string& type, const Hash& hash,
+                     const std::string& name) const;
 
-  Path makeOutputPath(const string& id, const Hash& hash,
-                      const string& name) const;
+  Path makeOutputPath(const std::string& id, const Hash& hash,
+                      const std::string& name) const;
 
   Path makeFixedOutputPath(bool recursive, const Hash& hash,
-                           const string& name) const;
+                           const std::string& name) const;
 
-  Path makeTextPath(const string& name, const Hash& hash,
+  Path makeTextPath(const std::string& name, const Hash& hash,
                     const PathSet& references) const;
 
   /* This is the preparatory part of addToStore(); it computes the
      store path to which srcPath is to be copied.  Returns the store
      path and the cryptographic hash of the contents of srcPath. */
   std::pair<Path, Hash> computeStorePathForPath(
-      const string& name, const Path& srcPath, bool recursive = true,
+      const std::string& name, const Path& srcPath, bool recursive = true,
       HashType hashAlgo = htSHA256,
       PathFilter& filter = defaultPathFilter) const;
 
@@ -308,7 +310,7 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
      simply yield a different store path, so other users wouldn't be
      affected), but it has some backwards compatibility issues (the
      hashing scheme changes), so I'm not doing that for now. */
-  Path computeStorePathForText(const string& name, const string& s,
+  Path computeStorePathForText(const std::string& name, const std::string& s,
                                const PathSet& references) const;
 
   /* Check whether a path is valid. */
@@ -368,7 +370,7 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
 
   /* Query the full store path given the hash part of a valid store
      path, or "" if the path doesn't exist. */
-  virtual Path queryPathFromHashPart(const string& hashPart) = 0;
+  virtual Path queryPathFromHashPart(const std::string& hashPart) = 0;
 
   /* Query which of the given paths have substitutes. */
   virtual PathSet querySubstitutablePaths(const PathSet& paths) { return {}; };
@@ -400,14 +402,14 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
      validity the resulting path.  The resulting path is returned.
      The function object `filter' can be used to exclude files (see
      libutil/archive.hh). */
-  virtual Path addToStore(const string& name, const Path& srcPath,
+  virtual Path addToStore(const std::string& name, const Path& srcPath,
                           bool recursive = true, HashType hashAlgo = htSHA256,
                           PathFilter& filter = defaultPathFilter,
                           RepairFlag repair = NoRepair) = 0;
 
   /* Like addToStore, but the contents written to the output path is
      a regular file containing the given string. */
-  virtual Path addTextToStore(const string& name, const string& s,
+  virtual Path addTextToStore(const std::string& name, const std::string& s,
                               const PathSet& references,
                               RepairFlag repair = NoRepair) = 0;
 
@@ -484,8 +486,8 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
   /* Return a string representing information about the path that
      can be loaded into the database using `nix-store --load-db' or
      `nix-store --register-validity'. */
-  string makeValidityRegistration(const PathSet& paths, bool showDerivers,
-                                  bool showHash);
+  std::string makeValidityRegistration(const PathSet& paths, bool showDerivers,
+                                       bool showHash);
 
   /* Write a JSON representation of store path metadata, such as the
      hash and the references. If ‘includeImpureInfo’ is true,
@@ -637,7 +639,7 @@ class LocalFSStore : public virtual Store {
       rootDir != "" ? rootDir + "/nix/var/log/nix" : settings.nixLogDir, "log",
       "directory where Nix will store state"};
 
-  const static string drvsLogDir;
+  const static std::string drvsLogDir;
 
   LocalFSStore(const Params& params);
 
@@ -660,15 +662,15 @@ class LocalFSStore : public virtual Store {
 };
 
 /* Extract the name part of the given store path. */
-string storePathToName(const Path& path);
+std::string storePathToName(const Path& path);
 
 /* Extract the hash part of the given store path. */
-string storePathToHash(const Path& path);
+std::string storePathToHash(const Path& path);
 
 /* Check whether ‘name’ is a valid store path name part, i.e. contains
    only the characters [a-zA-Z0-9\+\-\.\_\?\=] and doesn't start with
    a dot. */
-void checkStoreName(const string& name);
+void checkStoreName(const std::string& name);
 
 /* Copy a path from one store to another. */
 void copyStorePath(ref<Store> srcStore, const ref<Store>& dstStore,
@@ -756,7 +758,7 @@ struct RegisterStoreImplementation {
 
 /* Display a set of paths in human-readable form (i.e., between quotes
    and separated by commas). */
-string showPaths(const PathSet& paths);
+std::string showPaths(const PathSet& paths);
 
 ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven = false);
 

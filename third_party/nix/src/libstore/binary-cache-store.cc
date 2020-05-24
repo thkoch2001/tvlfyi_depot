@@ -289,7 +289,7 @@ void BinaryCacheStore::queryPathInfoUncached(
           }});
 }
 
-Path BinaryCacheStore::addToStore(const string& name, const Path& srcPath,
+Path BinaryCacheStore::addToStore(const std::string& name, const Path& srcPath,
                                   bool recursive, HashType hashAlgo,
                                   PathFilter& filter, RepairFlag repair) {
   // FIXME: some cut&paste from LocalStore::addToStore().
@@ -316,7 +316,8 @@ Path BinaryCacheStore::addToStore(const string& name, const Path& srcPath,
   return info.path;
 }
 
-Path BinaryCacheStore::addTextToStore(const string& name, const string& s,
+Path BinaryCacheStore::addTextToStore(const std::string& name,
+                                      const std::string& s,
                                       const PathSet& references,
                                       RepairFlag repair) {
   ValidPathInfo info;

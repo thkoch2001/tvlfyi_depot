@@ -19,17 +19,17 @@ static bool cmpGensByNumber(const Generation& a, const Generation& b) {
 
 /* Parse a generation name of the format
    `<profilename>-<number>-link'. */
-static int parseName(const string& profileName, const string& name) {
-  if (string(name, 0, profileName.size() + 1) != profileName + "-") {
+static int parseName(const std::string& profileName, const std::string& name) {
+  if (std::string(name, 0, profileName.size() + 1) != profileName + "-") {
     return -1;
   }
-  string s = string(name, profileName.size() + 1);
-  string::size_type p = s.find("-link");
-  if (p == string::npos) {
+  std::string s = std::string(name, profileName.size() + 1);
+  std::string::size_type p = s.find("-link");
+  if (p == std::string::npos) {
     return -1;
   }
   int n;
-  if (string2Int(string(s, 0, p), n) && n >= 0) {
+  if (string2Int(std::string(s, 0, p), n) && n >= 0) {
     return n;
   }
   return -1;
@@ -39,7 +39,7 @@ Generations findGenerations(const Path& profile, int& curGen) {
   Generations gens;
 
   Path profileDir = dirOf(profile);
-  string profileName = baseNameOf(profile);
+  std::string profileName = baseNameOf(profile);
 
   for (auto& i : readDirectory(profileDir)) {
     int n;
@@ -212,10 +212,10 @@ void deleteGenerationsOlderThan(const Path& profile, time_t t, bool dryRun) {
   }
 }
 
-void deleteGenerationsOlderThan(const Path& profile, const string& timeSpec,
-                                bool dryRun) {
+void deleteGenerationsOlderThan(const Path& profile,
+                                const std::string& timeSpec, bool dryRun) {
   time_t curTime = time(nullptr);
-  string strDays = string(timeSpec, 0, timeSpec.size() - 1);
+  std::string strDays = std::string(timeSpec, 0, timeSpec.size() - 1);
   int days;
 
   if (!string2Int(strDays, days) || days < 1) {
@@ -242,7 +242,7 @@ void lockProfile(PathLocks& lock, const Path& profile) {
   lock.setDeletion(true);
 }
 
-string optimisticLockProfile(const Path& profile) {
+std::string optimisticLockProfile(const Path& profile) {
   return pathExists(profile) ? readLink(profile) : "";
 }
 

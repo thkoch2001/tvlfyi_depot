@@ -42,9 +42,9 @@ std::string SysError::addErrno(const std::string& s) {
   return s + ": " + strerror(errNo);
 }
 
-string getEnv(const string& key, const string& def) {
+std::string getEnv(const std::string& key, const std::string& def) {
   char* value = getenv(key.c_str());
-  return value != nullptr ? string(value) : def;
+  return value != nullptr ? std::string(value) : def;
 }
 
 std::map<std::string, std::string> getEnv() {
@@ -101,15 +101,15 @@ return canonPath(path);
 Path canonPath(const Path& path, bool resolveSymlinks) {
   assert(!path.empty());
 
-  string s;
+  std::string s;
 
   if (path[0] != '/') {
     throw Error(format("not an absolute path: '%1%'") % path);
   }
 
-  string::const_iterator i = path.begin();
-  string::const_iterator end = path.end();
-  string temp;
+  std::string::const_iterator i = path.begin();
+  std::string::const_iterator end = path.end();
+  std::string temp;
 
   /* Count the number of times we follow a symlink and stop at some
      arbitrary (but high) limit to prevent infinite loops. */
@@ -153,7 +153,7 @@ Path canonPath(const Path& path, bool resolveSymlinks) {
           throw Error(format("infinite symlink recursion in path '%1%'") %
                       path);
         }
-        temp = absPath(readLink(s), dirOf(s)) + string(i, end);
+        temp = absPath(readLink(s), dirOf(s)) + std::string(i, end);
         i = temp.begin(); /* restart */
         end = temp.end();
         s = "";
@@ -166,13 +166,13 @@ Path canonPath(const Path& path, bool resolveSymlinks) {
 
 Path dirOf(const Path& path) {
   Path::size_type pos = path.rfind('/');
-  if (pos == string::npos) {
+  if (pos == std::string::npos) {
     return ".";
   }
   return pos == 0 ? "/" : Path(path, 0, pos);
 }
 
-string baseNameOf(const Path& path) {
+std::string baseNameOf(const Path& path) {
   if (path.empty()) {
     return "";
   }
@@ -183,17 +183,17 @@ string baseNameOf(const Path& path) {
   }
 
   Path::size_type pos = path.rfind('/', last);
-  if (pos == string::npos) {
+  if (pos == std::string::npos) {
     pos = 0;
   } else {
     pos += 1;
   }
 
-  return string(path, pos, last - pos + 1);
+  return std::string(path, pos, last - pos + 1);
 }
 
 bool isInDir(const Path& path, const Path& dir) {
-  return path[0] == '/' && string(path, 0, dir.size()) == dir &&
+  return path[0] == '/' && std::string(path, 0, dir.size()) == dir &&
          path.size() >= dir.size() + 2 && path[dir.size()] == '/';
 }
 
@@ -235,7 +235,7 @@ Path readLink(const Path& path) {
       throw SysError("reading symbolic link '%1%'", path);
 
     } else if (rlSize < bufSize) {
-      return string(buf.data(), rlSize);
+      return std::string(buf.data(), rlSize);
     }
   }
 }
@@ -252,7 +252,7 @@ DirEntries readDirectory(DIR* dir, const Path& path) {
   struct dirent* dirent;
   while (errno = 0, dirent = readdir(dir)) { /* sic */
     checkInterrupt();
-    string name = dirent->d_name;
+    std::string name = dirent->d_name;
     if (name == "." || name == "..") {
       continue;
     }
@@ -294,7 +294,7 @@ unsigned char getFileType(const Path& path) {
   return DT_UNKNOWN;
 }
 
-string readFile(int fd) {
+std::string readFile(int fd) {
   struct stat st;
   if (fstat(fd, &st) == -1) {
     throw SysError("statting file");
@@ -303,10 +303,10 @@ string readFile(int fd) {
   std::vector<unsigned char> buf(st.st_size);
   readFull(fd, buf.data(), st.st_size);
 
-  return string((char*)buf.data(), st.st_size);
+  return std::string((char*)buf.data(), st.st_size);
 }
 
-string readFile(const Path& path, bool drain) {
+std::string readFile(const Path& path, bool drain) {
   AutoCloseFD fd = open(path.c_str(), O_RDONLY | O_CLOEXEC);
   if (!fd) {
     throw SysError(format("opening file '%1%'") % path);
@@ -322,7 +322,7 @@ void readFile(const Path& path, Sink& sink) {
   drainFD(fd.get(), sink);
 }
 
-void writeFile(const Path& path, const string& s, mode_t mode) {
+void writeFile(const Path& path, const std::string& s, mode_t mode) {
   AutoCloseFD fd =
       open(path.c_str(), O_WRONLY | O_TRUNC | O_CREAT | O_CLOEXEC, mode);
   if (!fd) {
@@ -350,8 +350,8 @@ void writeFile(const Path& path, Source& source, mode_t mode) {
   }
 }
 
-string readLine(int fd) {
-  string s;
+std::string readLine(int fd) {
+  std::string s;
   while (true) {
     checkInterrupt();
     char ch;
@@ -372,7 +372,7 @@ string readLine(int fd) {
   }
 }
 
-void writeLine(int fd, string s) {
+void writeLine(int fd, std::string s) {
   s += '\n';
   writeFull(fd, s);
 }
@@ -381,7 +381,7 @@ static void _deletePath(int parentfd, const Path& path,
                         unsigned long long& bytesFreed) {
   checkInterrupt();
 
-  string name(baseNameOf(path));
+  std::string name(baseNameOf(path));
 
   struct stat st;
   if (fstatat(parentfd, name.c_str(), &st, AT_SYMLINK_NOFOLLOW) == -1) {
@@ -539,8 +539,8 @@ Path getConfigDir() {
 
 std::vector<Path> getConfigDirs() {
   Path configHome = getConfigDir();
-  string configDirs = getEnv("XDG_CONFIG_DIRS");
-  auto result = tokenizeString<std::vector<string>>(configDirs, ":");
+  std::string configDirs = getEnv("XDG_CONFIG_DIRS");
+  auto result = tokenizeString<std::vector<std::string>>(configDirs, ":");
   result.insert(result.begin(), configHome);
   return result;
 }
@@ -643,11 +643,11 @@ void writeFull(int fd, const unsigned char* buf, size_t count,
   }
 }
 
-void writeFull(int fd, const string& s, bool allowInterrupts) {
+void writeFull(int fd, const std::string& s, bool allowInterrupts) {
   writeFull(fd, (const unsigned char*)s.data(), s.size(), allowInterrupts);
 }
 
-string drainFD(int fd, bool block) {
+std::string drainFD(int fd, bool block) {
   StringSink sink;
   drainFD(fd, sink, block);
   return std::move(*sink.s);
@@ -694,7 +694,7 @@ void drainFD(int fd, Sink& sink, bool block) {
 
 AutoDelete::AutoDelete() : del{false} {}
 
-AutoDelete::AutoDelete(string p, bool recursive) : path(std::move(p)) {
+AutoDelete::AutoDelete(std::string p, bool recursive) : path(std::move(p)) {
   del = true;
   this->recursive = recursive;
 }
@@ -812,7 +812,7 @@ int Pid::kill() {
      process group, send the signal to every process in the child
      process group (which hopefully includes *all* its children). */
   if (::kill(separatePG ? -pid : pid, killSignal) != 0) {
-      LOG(ERROR) << SysError("killing process %d", pid).msg();
+    LOG(ERROR) << SysError("killing process %d", pid).msg();
   }
 
   return wait();
@@ -950,8 +950,9 @@ std::vector<char*> stringsToCharPtrs(const Strings& ss) {
   return res;
 }
 
-string runProgram(const Path& program, bool searchPath, const Strings& args,
-                  const std::optional<std::string>& input) {
+std::string runProgram(const Path& program, bool searchPath,
+                       const Strings& args,
+                       const std::optional<std::string>& input) {
   RunOptions opts(program, args);
   opts.searchPath = searchPath;
   opts.input = input;
@@ -1114,7 +1115,7 @@ void runProgram2(const RunOptions& options) {
   }
 }
 
-void closeMostFDs(const set<int>& exceptions) {
+void closeMostFDs(const std::set<int>& exceptions) {
 #if __linux__
   try {
     for (auto& s : readDirectory("/proc/self/fd")) {
@@ -1168,28 +1169,30 @@ void _interrupted() {
 //////////////////////////////////////////////////////////////////////
 
 template <class C>
-C tokenizeString(const string& s, const string& separators) {
+C tokenizeString(const std::string& s, const std::string& separators) {
   C result;
-  string::size_type pos = s.find_first_not_of(separators, 0);
-  while (pos != string::npos) {
-    string::size_type end = s.find_first_of(separators, pos + 1);
-    if (end == string::npos) {
+  std::string::size_type pos = s.find_first_not_of(separators, 0);
+  while (pos != std::string::npos) {
+    std::string::size_type end = s.find_first_of(separators, pos + 1);
+    if (end == std::string::npos) {
       end = s.size();
     }
-    string token(s, pos, end - pos);
+    std::string token(s, pos, end - pos);
     result.insert(result.end(), token);
     pos = s.find_first_not_of(separators, end);
   }
   return result;
 }
 
-template Strings tokenizeString(const string& s, const string& separators);
-template StringSet tokenizeString(const string& s, const string& separators);
-template vector<string> tokenizeString(const string& s,
-                                       const string& separators);
+template Strings tokenizeString(const std::string& s,
+                                const std::string& separators);
+template StringSet tokenizeString(const std::string& s,
+                                  const std::string& separators);
+template std::vector<std::string> tokenizeString(const std::string& s,
+                                                 const std::string& separators);
 
-string concatStringsSep(const string& sep, const Strings& ss) {
-  string s;
+std::string concatStringsSep(const std::string& sep, const Strings& ss) {
+  std::string s;
   for (auto& i : ss) {
     if (!s.empty()) {
       s += sep;
@@ -1199,8 +1202,8 @@ string concatStringsSep(const string& sep, const Strings& ss) {
   return s;
 }
 
-string concatStringsSep(const string& sep, const StringSet& ss) {
-  string s;
+std::string concatStringsSep(const std::string& sep, const StringSet& ss) {
+  std::string s;
   for (auto& i : ss) {
     if (!s.empty()) {
       s += sep;
@@ -1210,21 +1213,21 @@ string concatStringsSep(const string& sep, const StringSet& ss) {
   return s;
 }
 
-string trim(const string& s, const string& whitespace) {
+std::string trim(const std::string& s, const std::string& whitespace) {
   auto i = s.find_first_not_of(whitespace);
-  if (i == string::npos) {
+  if (i == std::string::npos) {
     return "";
   }
   auto j = s.find_last_not_of(whitespace);
-  return string(s, i, j == string::npos ? j : j - i + 1);
+  return std::string(s, i, j == std::string::npos ? j : j - i + 1);
 }
 
-string replaceStrings(const std::string& s, const std::string& from,
-                      const std::string& to) {
+std::string replaceStrings(const std::string& s, const std::string& from,
+                           const std::string& to) {
   if (from.empty()) {
     return s;
   }
-  string res = s;
+  std::string res = s;
   size_t pos = 0;
   while ((pos = res.find(from, pos)) != std::string::npos) {
     res.replace(pos, from.size(), to);
@@ -1233,7 +1236,7 @@ string replaceStrings(const std::string& s, const std::string& from,
   return res;
 }
 
-string statusToString(int status) {
+std::string statusToString(int status) {
   if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
     if (WIFEXITED(status)) {
       return (format("failed with exit code %1%") % WEXITSTATUS(status)).str();
@@ -1259,13 +1262,13 @@ bool statusOk(int status) {
   return WIFEXITED(status) && WEXITSTATUS(status) == 0;
 }
 
-bool hasPrefix(const string& s, const string& prefix) {
+bool hasPrefix(const std::string& s, const std::string& prefix) {
   return s.compare(0, prefix.size(), prefix) == 0;
 }
 
-bool hasSuffix(const string& s, const string& suffix) {
+bool hasSuffix(const std::string& s, const std::string& suffix) {
   return s.size() >= suffix.size() &&
-         string(s, s.size() - suffix.size()) == suffix;
+         std::string(s, s.size() - suffix.size()) == suffix;
 }
 
 std::string toLower(const std::string& s) {
@@ -1361,8 +1364,8 @@ std::string filterANSIEscapes(const std::string& s, bool filterAll,
 static char base64Chars[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-string base64Encode(const string& s) {
-  string res;
+std::string base64Encode(const std::string& s) {
+  std::string res;
   int data = 0;
   int nbits = 0;
 
@@ -1385,7 +1388,7 @@ string base64Encode(const string& s) {
   return res;
 }
 
-string base64Decode(const string& s) {
+std::string base64Decode(const std::string& s) {
   bool init = false;
   char decode[256];
   if (!init) {
@@ -1397,7 +1400,7 @@ string base64Decode(const string& s) {
     init = true;
   }
 
-  string res;
+  std::string res;
   unsigned int d = 0;
   unsigned int bits = 0;
 

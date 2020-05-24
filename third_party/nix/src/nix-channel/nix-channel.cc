@@ -12,7 +12,7 @@
 
 using namespace nix;
 
-typedef std::map<string, string> Channels;
+typedef std::map<std::string, std::string> Channels;
 
 static Channels channels;
 static Path channelsList;
@@ -25,12 +25,12 @@ static void readChannels() {
   auto channelsFile = readFile(channelsList);
 
   for (const auto& line :
-       tokenizeString<std::vector<string>>(channelsFile, "\n")) {
+       tokenizeString<std::vector<std::string>>(channelsFile, "\n")) {
     absl::StripTrailingAsciiWhitespace(line);
     if (std::regex_search(line, std::regex("^\\s*\\#"))) {
       continue;
     }
-    auto split = tokenizeString<std::vector<string>>(line, " ");
+    auto split = tokenizeString<std::vector<std::string>>(line, " ");
     auto url = std::regex_replace(split[0], std::regex("/*$"), "");
     auto name = split.size() > 1 ? split[1] : baseNameOf(url);
     channels[name] = url;
@@ -50,7 +50,7 @@ static void writeChannels() {
 }
 
 // Adds a channel.
-static void addChannel(const string& url, const string& name) {
+static void addChannel(const std::string& url, const std::string& name) {
   if (!regex_search(url, std::regex("^(file|http|https)://"))) {
     throw Error(format("invalid channel URL '%1%'") % url);
   }
@@ -65,7 +65,7 @@ static void addChannel(const string& url, const string& name) {
 static Path profile;
 
 // Remove a channel.
-static void removeChannel(const string& name) {
+static void removeChannel(const std::string& name) {
   readChannels();
   channels.erase(name);
   writeChannels();
@@ -109,7 +109,7 @@ static void update(const StringSet& channelNames) {
     std::smatch match;
     auto urlBase = baseNameOf(url);
     if (std::regex_search(urlBase, match, std::regex("(-\\d.*)$"))) {
-      cname = cname + (string)match[1];
+      cname = cname + (std::string)match[1];
     }
 
     std::string extraAttrs;
@@ -188,7 +188,7 @@ static int _main(int argc, char** argv) {
                   getUserName());
 
     enum { cNone, cAdd, cRemove, cList, cUpdate, cRollback } cmd = cNone;
-    std::vector<string> args;
+    std::vector<std::string> args;
     parseCmdLine(argc, argv,
                  [&](Strings::iterator& arg, const Strings::iterator& end) {
                    if (*arg == "--help") {

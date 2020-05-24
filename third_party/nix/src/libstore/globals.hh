@@ -468,6 +468,6 @@ void initPlugins();
 
 void loadConfFile();
 
-extern const string nixVersion;
+extern const std::string nixVersion;
 
 }  // namespace nix

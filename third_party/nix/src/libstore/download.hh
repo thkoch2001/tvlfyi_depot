@@ -128,6 +128,6 @@ class DownloadError : public Error {
       : Error(fs), error(error) {}
 };
 
-bool isUri(const string& s);
+bool isUri(const std::string& s);
 
 }  // namespace nix

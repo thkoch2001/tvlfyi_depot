@@ -48,7 +48,7 @@ Path Store::followLinksToStore(const Path& _path) const {
     if (!isLink(path)) {
       break;
     }
-    string target = readLink(path);
+    std::string target = readLink(path);
     path = absPath(target, dirOf(path));
   }
   if (!isInStore(path)) {
@@ -61,22 +61,23 @@ Path Store::followLinksToStorePath(const Path& path) const {
   return toStorePath(followLinksToStore(path));
 }
 
-string storePathToName(const Path& path) {
+std::string storePathToName(const Path& path) {
   auto base = baseNameOf(path);
   assert(base.size() == storePathHashLen ||
          (base.size() > storePathHashLen && base[storePathHashLen] == '-'));
-  return base.size() == storePathHashLen ? ""
-                                         : string(base, storePathHashLen + 1);
+  return base.size() == storePathHashLen
+             ? ""
+             : std::string(base, storePathHashLen + 1);
 }
 
-string storePathToHash(const Path& path) {
+std::string storePathToHash(const Path& path) {
   auto base = baseNameOf(path);
   assert(base.size() >= storePathHashLen);
-  return string(base, 0, storePathHashLen);
+  return std::string(base, 0, storePathHashLen);
 }
 
-void checkStoreName(const string& name) {
-  string validChars = "+-._?=";
+void checkStoreName(const std::string& name) {
+  std::string validChars = "+-._?=";
 
   auto baseError =
       format(
@@ -90,7 +91,7 @@ void checkStoreName(const string& name) {
 
   /* Disallow names starting with a dot for possible security
      reasons (e.g., "." and ".."). */
-  if (string(name, 0, 1) == ".") {
+  if (std::string(name, 0, 1) == ".") {
     throw Error(baseError % "it is illegal to start the name with a period");
   }
   /* Disallow names longer than 211 characters. ext4’s max is 256,
@@ -100,7 +101,7 @@ void checkStoreName(const string& name) {
   }
   for (auto& i : name) {
     if (!((i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z') ||
-          (i >= '0' && i <= '9') || validChars.find(i) != string::npos)) {
+          (i >= '0' && i <= '9') || validChars.find(i) != std::string::npos)) {
       throw Error(baseError % (format("the '%1%' character is invalid") % i));
     }
   }
@@ -176,10 +177,11 @@ void checkStoreName(const string& name) {
    "source:".
 */
 
-Path Store::makeStorePath(const string& type, const Hash& hash,
-                          const string& name) const {
+Path Store::makeStorePath(const std::string& type, const Hash& hash,
+                          const std::string& name) const {
   /* e.g., "source:sha256:1abc...:/nix/store:foo.tar.gz" */
-  string s = type + ":" + hash.to_string(Base16) + ":" + storeDir + ":" + name;
+  std::string s =
+      type + ":" + hash.to_string(Base16) + ":" + storeDir + ":" + name;
 
   checkStoreName(name);
 
@@ -188,31 +190,32 @@ Path Store::makeStorePath(const string& type, const Hash& hash,
          "-" + name;
 }
 
-Path Store::makeOutputPath(const string& id, const Hash& hash,
-                           const string& name) const {
+Path Store::makeOutputPath(const std::string& id, const Hash& hash,
+                           const std::string& name) const {
   return makeStorePath("output:" + id, hash,
                        name + (id == "out" ? "" : "-" + id));
 }
 
 Path Store::makeFixedOutputPath(bool recursive, const Hash& hash,
-                                const string& name) const {
+                                const std::string& name) const {
   return hash.type == htSHA256 && recursive
              ? makeStorePath("source", hash, name)
              : makeStorePath(
                    "output:out",
-                   hashString(htSHA256,
-                              "fixed:out:" + (recursive ? (string) "r:" : "") +
-                                  hash.to_string(Base16) + ":"),
+                   hashString(
+                       htSHA256,
+                       "fixed:out:" + (recursive ? (std::string) "r:" : "") +
+                           hash.to_string(Base16) + ":"),
                    name);
 }
 
-Path Store::makeTextPath(const string& name, const Hash& hash,
+Path Store::makeTextPath(const std::string& name, const Hash& hash,
                          const PathSet& references) const {
   assert(hash.type == htSHA256);
   /* Stuff the references (if any) into the type.  This is a bit
      hacky, but we can't put them in `s' since that would be
      ambiguous. */
-  string type = "text";
+  std::string type = "text";
   for (auto& i : references) {
     type += ":";
     type += i;
@@ -220,7 +223,7 @@ Path Store::makeTextPath(const string& name, const Hash& hash,
   return makeStorePath(type, hash, name);
 }
 
-std::pair<Path, Hash> Store::computeStorePathForPath(const string& name,
+std::pair<Path, Hash> Store::computeStorePathForPath(const std::string& name,
                                                      const Path& srcPath,
                                                      bool recursive,
                                                      HashType hashAlgo,
@@ -231,7 +234,8 @@ std::pair<Path, Hash> Store::computeStorePathForPath(const string& name,
   return std::pair<Path, Hash>(dstPath, h);
 }
 
-Path Store::computeStorePathForText(const string& name, const string& s,
+Path Store::computeStorePathForText(const std::string& name,
+                                    const std::string& s,
                                     const PathSet& references) const {
   return makeTextPath(name, hashString(htSHA256, s), references);
 }
@@ -428,9 +432,9 @@ PathSet Store::queryValidPaths(const PathSet& paths,
 /* Return a string accepted by decodeValidPathInfo() that
    registers the specified paths as valid.  Note: it's the
    responsibility of the caller to provide a closure. */
-string Store::makeValidityRegistration(const PathSet& paths, bool showDerivers,
-                                       bool showHash) {
-  string s = s;
+std::string Store::makeValidityRegistration(const PathSet& paths,
+                                            bool showDerivers, bool showHash) {
+  std::string s = s;
 
   for (auto& i : paths) {
     s += i + "\n";
@@ -710,7 +714,7 @@ ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven) {
     return info;
   }
   if (hashGiven) {
-    string s;
+    std::string s;
     getline(str, s);
     info.narHash = Hash(s, htSHA256);
     getline(str, s);
@@ -719,7 +723,7 @@ ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven) {
     }
   }
   getline(str, info.deriver);
-  string s;
+  std::string s;
   int n;
   getline(str, s);
   if (!string2Int(s, n)) {
@@ -735,8 +739,8 @@ ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven) {
   return info;
 }
 
-string showPaths(const PathSet& paths) {
-  string s;
+std::string showPaths(const PathSet& paths) {
+  std::string s;
   for (auto& i : paths) {
     if (!s.empty()) {
       s += ", ";

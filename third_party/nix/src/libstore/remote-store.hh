@@ -52,7 +52,7 @@ class RemoteStore : public virtual Store {
 
   StringSet queryDerivationOutputNames(const Path& path) override;
 
-  Path queryPathFromHashPart(const string& hashPart) override;
+  Path queryPathFromHashPart(const std::string& hashPart) override;
 
   PathSet querySubstitutablePaths(const PathSet& paths) override;
 
@@ -63,12 +63,12 @@ class RemoteStore : public virtual Store {
                   CheckSigsFlag checkSigs,
                   std::shared_ptr<FSAccessor> accessor) override;
 
-  Path addToStore(const string& name, const Path& srcPath,
+  Path addToStore(const std::string& name, const Path& srcPath,
                   bool recursive = true, HashType hashAlgo = htSHA256,
                   PathFilter& filter = defaultPathFilter,
                   RepairFlag repair = NoRepair) override;
 
-  Path addTextToStore(const string& name, const string& s,
+  Path addTextToStore(const std::string& name, const std::string& s,
                       const PathSet& references, RepairFlag repair) override;
 
   void buildPaths(const PathSet& paths, BuildMode buildMode) override;

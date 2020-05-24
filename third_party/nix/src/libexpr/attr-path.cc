@@ -8,7 +8,7 @@ namespace nix {
 static Strings parseAttrPath(const std::string& s) {
   Strings res;
   std::string cur;
-  string::const_iterator i = s.begin();
+  std::string::const_iterator i = s.begin();
   while (i != s.end()) {
     if (*i == '.') {
       res.push_back(cur);

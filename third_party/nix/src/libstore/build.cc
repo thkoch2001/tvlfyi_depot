@@ -73,9 +73,7 @@
 
 namespace nix {
 
-using std::map;
-
-static string pathNullDevice = "/dev/null";
+static std::string pathNullDevice = "/dev/null";
 
 /* Forward definition. */
 class Worker;
@@ -92,11 +90,11 @@ struct CompareGoalPtrs {
 };
 
 /* Set of goals. */
-typedef set<GoalPtr, CompareGoalPtrs> Goals;
-using WeakGoals = list<WeakGoalPtr>;
+typedef std::set<GoalPtr, CompareGoalPtrs> Goals;
+using WeakGoals = std::list<WeakGoalPtr>;
 
 /* A map of paths to goals (and the other way around). */
-typedef map<Path, WeakGoalPtr> WeakGoalMap;
+typedef std::map<Path, WeakGoalPtr> WeakGoalMap;
 
 class Goal : public std::enable_shared_from_this<Goal> {
  public:
@@ -131,7 +129,7 @@ class Goal : public std::enable_shared_from_this<Goal> {
   unsigned int nrIncompleteClosure;
 
   /* Name of this goal for debugging purposes. */
-  string name;
+  std::string name;
 
   /* Whether the goal is finished. */
   ExitCode exitCode;
@@ -150,13 +148,13 @@ class Goal : public std::enable_shared_from_this<Goal> {
 
   virtual void waiteeDone(GoalPtr waitee, ExitCode result);
 
-  virtual void handleChildOutput(int fd, const string& data) { abort(); }
+  virtual void handleChildOutput(int fd, const std::string& data) { abort(); }
 
   virtual void handleEOF(int fd) { abort(); }
 
   void trace(const FormatOrString& fs);
 
-  string getName() { return name; }
+  std::string getName() { return name; }
 
   ExitCode getExitCode() { return exitCode; }
 
@@ -165,15 +163,15 @@ class Goal : public std::enable_shared_from_this<Goal> {
      by the worker (important!), etc. */
   virtual void timedOut() = 0;
 
-  virtual string key() = 0;
+  virtual std::string key() = 0;
 
  protected:
   virtual void amDone(ExitCode result);
 };
 
 bool CompareGoalPtrs::operator()(const GoalPtr& a, const GoalPtr& b) const {
-  string s1 = a->key();
-  string s2 = b->key();
+  std::string s1 = a->key();
+  std::string s2 = b->key();
   return s1 < s2;
 }
 
@@ -185,7 +183,7 @@ using steady_time_point = std::chrono::time_point<std::chrono::steady_clock>;
 struct Child {
   WeakGoalPtr goal;
   Goal* goal2;  // ugly hackery
-  set<int> fds;
+  std::set<int> fds;
   bool respectTimeouts;
   bool inBuildSlot;
   steady_time_point lastOutput; /* time we last got output on stdout/stderr */
@@ -293,8 +291,8 @@ class Worker {
 
   /* Registers a running child process.  `inBuildSlot' means that
      the process counts towards the jobs limit. */
-  void childStarted(const GoalPtr& goal, const set<int>& fds, bool inBuildSlot,
-                    bool respectTimeouts);
+  void childStarted(const GoalPtr& goal, const std::set<int>& fds,
+                    bool inBuildSlot, bool respectTimeouts);
 
   /* Unregisters a running child process.  `wakeSleepers' should be
      false if there is no sense in waking up goals that are sleeping
@@ -483,7 +481,7 @@ class UserLock {
   Path fnUserLock;
   AutoCloseFD fdUserLock;
 
-  string user;
+  std::string user;
   uid_t uid;
   gid_t gid;
   std::vector<gid_t> supplementaryGIDs;
@@ -494,7 +492,7 @@ class UserLock {
 
   void kill();
 
-  string getUser() { return user; }
+  std::string getUser() { return user; }
   uid_t getUID() {
     assert(uid);
     return uid;
@@ -710,12 +708,12 @@ HookInstance::~HookInstance() {
 
 //////////////////////////////////////////////////////////////////////
 
-typedef map<std::string, std::string> StringRewrites;
+typedef std::map<std::string, std::string> StringRewrites;
 
 std::string rewriteStrings(std::string s, const StringRewrites& rewrites) {
   for (auto& i : rewrites) {
     size_t j = 0;
-    while ((j = s.find(i.first, j)) != string::npos) {
+    while ((j = s.find(i.first, j)) != std::string::npos) {
       s.replace(j, i.first.size(), i.second);
     }
   }
@@ -831,16 +829,16 @@ class DerivationGoal : public Goal {
     explicit ChrootPath(Path source = "", bool optional = false)
         : source(std::move(source)), optional(optional) {}
   };
-  typedef map<Path, ChrootPath>
+  typedef std::map<Path, ChrootPath>
       DirsInChroot;  // maps target path to source path
   DirsInChroot dirsInChroot;
 
-  typedef map<string, string> Environment;
+  typedef std::map<std::string, std::string> Environment;
   Environment env;
 
   /* Hash rewriting. */
   StringRewrites inputRewrites, outputRewrites;
-  typedef map<Path, Path> RedirectedOutputs;
+  typedef std::map<Path, Path> RedirectedOutputs;
   RedirectedOutputs redirectedOutputs;
 
   BuildMode buildMode;
@@ -886,7 +884,7 @@ class DerivationGoal : public Goal {
 
   void timedOut() override;
 
-  string key() override {
+  std::string key() override {
     /* Ensure that derivations get built in order of their name,
        i.e. a derivation named "aardvark" always comes before
        "baboon". And substitution goals always happen before
@@ -956,7 +954,7 @@ class DerivationGoal : public Goal {
   void deleteTmpDir(bool force);
 
   /* Callback used by the worker to write to the log. */
-  void handleChildOutput(int fd, const string& data) override;
+  void handleChildOutput(int fd, const std::string& data) override;
   void handleEOF(int fd) override;
   void flushLine();
 
@@ -975,7 +973,7 @@ class DerivationGoal : public Goal {
 
   void amDone(ExitCode result) override { Goal::amDone(result); }
 
-  void done(BuildResult::Status status, const string& msg = "");
+  void done(BuildResult::Status status, const std::string& msg = "");
 
   PathSet exportReferences(const PathSet& storePaths);
 };
@@ -1036,9 +1034,7 @@ DerivationGoal::~DerivationGoal() {
   }
 }
 
-inline bool DerivationGoal::needsHashRewrite() {
-  return !useChroot;
-}
+inline bool DerivationGoal::needsHashRewrite() { return !useChroot; }
 
 void DerivationGoal::killChild() {
   if (pid != -1) {
@@ -1762,11 +1758,11 @@ HookReply DerivationGoal::tryBuildHook() {
 
     /* Read the first line of input, which should be a word indicating
        whether the hook wishes to perform the build. */
-    string reply;
+    std::string reply;
     while (true) {
-      string s = readLine(worker.hook->fromHook.readSide.get());
-      if (string(s, 0, 2) == "# ") {
-        reply = string(s, 2);
+      std::string s = readLine(worker.hook->fromHook.readSide.get());
+      if (std::string(s, 0, 2) == "# ") {
+        reply = std::string(s, 2);
         break;
       }
       s += "\n";
@@ -1816,7 +1812,7 @@ HookReply DerivationGoal::tryBuildHook() {
   /* Create the log file and pipe. */
   Path logFile = openLogFile();
 
-  set<int> fds;
+  std::set<int> fds;
   fds.insert(hook->fromHook.readSide.get());
   fds.insert(hook->builderOut.readSide.get());
   worker.childStarted(shared_from_this(), fds, false, false);
@@ -1970,14 +1966,14 @@ void DerivationGoal::startBuilder() {
        temporary build directory.  The text files have the format used
        by `nix-store --register-validity'.  However, the deriver
        fields are left empty. */
-    string s = get(drv->env, "exportReferencesGraph");
+    std::string s = get(drv->env, "exportReferencesGraph");
     auto ss = tokenizeString<Strings>(s);
     if (ss.size() % 2 != 0) {
       throw BuildError(
           format("odd number of tokens in 'exportReferencesGraph': '%1%'") % s);
     }
     for (auto i = ss.begin(); i != ss.end();) {
-      string fileName = *i++;
+      std::string fileName = *i++;
       checkStoreName(fileName); /* !!! abuse of this function */
       Path storePath = *i++;
 
@@ -2007,10 +2003,11 @@ void DerivationGoal::startBuilder() {
         i.pop_back();
       }
       size_t p = i.find('=');
-      if (p == string::npos) {
+      if (p == std::string::npos) {
         dirsInChroot[i] = ChrootPath(i, optional);
       } else {
-        dirsInChroot[string(i, 0, p)] = ChrootPath(string(i, p + 1), optional);
+        dirsInChroot[std::string(i, 0, p)] =
+            ChrootPath(std::string(i, p + 1), optional);
       }
     }
     dirsInChroot[tmpDirInSandbox] = ChrootPath(tmpDir);
@@ -2211,7 +2208,7 @@ void DerivationGoal::startBuilder() {
     auto state = stBegin;
     auto lines = runProgram(settings.preBuildHook, false, args);
     auto lastPos = std::string::size_type{0};
-    for (auto nlPos = lines.find('\n'); nlPos != string::npos;
+    for (auto nlPos = lines.find('\n'); nlPos != std::string::npos;
          nlPos = lines.find('\n', lastPos)) {
       auto line = std::string{lines, lastPos, nlPos - lastPos};
       lastPos = nlPos + 1;
@@ -2226,10 +2223,11 @@ void DerivationGoal::startBuilder() {
           state = stBegin;
         } else {
           auto p = line.find('=');
-          if (p == string::npos) {
+          if (p == std::string::npos) {
             dirsInChroot[line] = ChrootPath(line);
           } else {
-            dirsInChroot[string(line, 0, p)] = ChrootPath(string(line, p + 1));
+            dirsInChroot[std::string(line, 0, p)] =
+                ChrootPath(std::string(line, p + 1));
           }
         }
       }
@@ -2454,12 +2452,12 @@ void DerivationGoal::startBuilder() {
 
   /* Check if setting up the build environment failed. */
   while (true) {
-    string msg = readLine(builderOut.readSide.get());
-    if (string(msg, 0, 1) == "\1") {
+    std::string msg = readLine(builderOut.readSide.get());
+    if (std::string(msg, 0, 1) == "\1") {
       if (msg.size() == 1) {
         break;
       }
-      throw Error(string(msg, 1));
+      throw Error(std::string(msg, 1));
     }
     DLOG(INFO) << msg;
   }
@@ -2488,7 +2486,7 @@ void DerivationGoal::initTmpDir() {
       if (passAsFile.find(i.first) == passAsFile.end()) {
         env[i.first] = i.second;
       } else {
-        string fn = ".attr-" + std::to_string(fileNr++);
+        std::string fn = ".attr-" + std::to_string(fileNr++);
         Path p = tmpDir + "/" + fn;
         writeFile(p, rewriteStrings(i.second, inputRewrites));
         chownToBuilder(p);
@@ -3110,7 +3108,7 @@ void DerivationGoal::runChild() {
 
     if (!drv->isBuiltin()) {
       builder = drv->builder.c_str();
-      string builderBasename = baseNameOf(drv->builder);
+      std::string builderBasename = baseNameOf(drv->builder);
       args.push_back(builderBasename);
     }
 
@@ -3119,7 +3117,7 @@ void DerivationGoal::runChild() {
     }
 
     /* Indicate that we managed to set up the build environment. */
-    writeFull(STDERR_FILENO, string("\1\n"));
+    writeFull(STDERR_FILENO, std::string("\1\n"));
 
     /* Execute the program.  This should not return. */
     if (drv->isBuiltin()) {
@@ -3135,11 +3133,11 @@ void DerivationGoal::runChild() {
           builtinBuildenv(drv2);
         } else {
           throw Error(format("unsupported builtin function '%1%'") %
-                      string(drv->builder, 8));
+                      std::string(drv->builder, 8));
         }
         _exit(0);
       } catch (std::exception& e) {
-        writeFull(STDERR_FILENO, "error: " + string(e.what()) + "\n");
+        writeFull(STDERR_FILENO, "error: " + std::string(e.what()) + "\n");
         _exit(1);
       }
     }
@@ -3151,7 +3149,7 @@ void DerivationGoal::runChild() {
 
   } catch (std::exception& e) {
     writeFull(STDERR_FILENO, "\1while setting up the build environment: " +
-                                 string(e.what()) + "\n");
+                                 std::string(e.what()) + "\n");
     _exit(1);
   }
 }
@@ -3621,7 +3619,7 @@ void DerivationGoal::checkOutputs(
         }
 
         if (!badPaths.empty()) {
-          string badPathsStr;
+          std::string badPathsStr;
           for (auto& i : badPaths) {
             badPathsStr += "\n  ";
             badPathsStr += i;
@@ -3705,14 +3703,14 @@ Path DerivationGoal::openLogFile() {
     return "";
   }
 
-  string baseName = baseNameOf(drvPath);
+  std::string baseName = baseNameOf(drvPath);
 
   /* Create a log file. */
   Path dir = fmt("%s/%s/%s/", worker.store.logDir, nix::LocalStore::drvsLogDir,
-                 string(baseName, 0, 2));
+                 std::string(baseName, 0, 2));
   createDirs(dir);
 
-  Path logFileName = fmt("%s/%s%s", dir, string(baseName, 2),
+  Path logFileName = fmt("%s/%s%s", dir, std::string(baseName, 2),
                          settings.compressLog ? ".bz2" : "");
 
   fdLogFile =
@@ -3759,7 +3757,7 @@ void DerivationGoal::deleteTmpDir(bool force) {
   }
 }
 
-void DerivationGoal::handleChildOutput(int fd, const string& data) {
+void DerivationGoal::handleChildOutput(int fd, const std::string& data) {
   if ((hook && fd == hook->builderOut.readSide.get()) ||
       (!hook && fd == builderOut.readSide.get())) {
     logSize += data.size();
@@ -3839,12 +3837,13 @@ PathSet DerivationGoal::checkPathValidity(bool returnValid, bool checkHash) {
 }
 
 Path DerivationGoal::addHashRewrite(const Path& path) {
-  string h1 = string(path, worker.store.storeDir.size() + 1, 32);
-  string h2 = string(hashString(htSHA256, "rewrite:" + drvPath + ":" + path)
-                         .to_string(Base32, false),
-                     0, 32);
+  std::string h1 = std::string(path, worker.store.storeDir.size() + 1, 32);
+  std::string h2 =
+      std::string(hashString(htSHA256, "rewrite:" + drvPath + ":" + path)
+                      .to_string(Base32, false),
+                  0, 32);
   Path p = worker.store.storeDir + "/" + h2 +
-           string(path, worker.store.storeDir.size() + 33);
+           std::string(path, worker.store.storeDir.size() + 33);
   deletePath(p);
   assert(path.size() == p.size());
   inputRewrites[h1] = h2;
@@ -3853,7 +3852,7 @@ Path DerivationGoal::addHashRewrite(const Path& path) {
   return p;
 }
 
-void DerivationGoal::done(BuildResult::Status status, const string& msg) {
+void DerivationGoal::done(BuildResult::Status status, const std::string& msg) {
   result.status = status;
   result.errorMsg = msg;
   amDone(result.success() ? ecSuccess : ecFailed);
@@ -3928,7 +3927,7 @@ class SubstitutionGoal : public Goal {
 
   void timedOut() override { abort(); };
 
-  string key() override {
+  std::string key() override {
     /* "a$" ensures substitution goals happen before derivation
        goals. */
     return "a$" + storePathToName(storePath) + "$" + storePath;
@@ -3945,7 +3944,7 @@ class SubstitutionGoal : public Goal {
   void finished();
 
   /* Callback used by the worker to write to the log. */
-  void handleChildOutput(int fd, const string& data) override;
+  void handleChildOutput(int fd, const std::string& data) override;
   void handleEOF(int fd) override;
 
   Path getStorePath() { return storePath; }
@@ -4204,7 +4203,7 @@ void SubstitutionGoal::finished() {
   amDone(ecSuccess);
 }
 
-void SubstitutionGoal::handleChildOutput(int fd, const string& data) {}
+void SubstitutionGoal::handleChildOutput(int fd, const std::string& data) {}
 
 void SubstitutionGoal::handleEOF(int fd) {
   if (fd == outPipe.readSide.get()) {
@@ -4321,7 +4320,7 @@ void Worker::wakeUp(const GoalPtr& goal) {
 
 unsigned Worker::getNrLocalBuilds() { return nrLocalBuilds; }
 
-void Worker::childStarted(const GoalPtr& goal, const set<int>& fds,
+void Worker::childStarted(const GoalPtr& goal, const std::set<int>& fds,
                           bool inBuildSlot, bool respectTimeouts) {
   Child child;
   child.goal = goal;
@@ -4545,7 +4544,7 @@ void Worker::waitForInput() {
     GoalPtr goal = j->goal.lock();
     assert(goal);
 
-    set<int> fds2(j->fds);
+    std::set<int> fds2(j->fds);
     std::vector<unsigned char> buffer(4096);
     for (auto& k : fds2) {
       if (FD_ISSET(k, &fds)) {
@@ -4562,7 +4561,7 @@ void Worker::waitForInput() {
           }
         } else {
           DLOG(INFO) << goal->getName() << ": read " << rd << " bytes";
-          string data((char*)buffer.data(), rd);
+          std::string data((char*)buffer.data(), rd);
           j->lastOutput = after;
           goal->handleChildOutput(k, data);
         }

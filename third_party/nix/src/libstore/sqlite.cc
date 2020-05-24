@@ -54,7 +54,7 @@ void SQLite::exec(const std::string& stmt) {
   });
 }
 
-void SQLiteStmt::create(sqlite3* db, const string& sql) {
+void SQLiteStmt::create(sqlite3* db, const std::string& sql) {
   checkInterrupt();
   assert(!stmt);
   if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {

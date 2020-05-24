@@ -32,7 +32,7 @@ struct Source;
 extern const std::string nativeSystem;
 
 /* Return an environment variable. */
-string getEnv(const string& key, const string& def = "");
+std::string getEnv(const std::string& key, const std::string& def = "");
 
 /* Get the entire environment. */
 std::map<std::string, std::string> getEnv();
@@ -59,7 +59,7 @@ Path dirOf(const Path& path);
 
 /* Return the base name of the given canonical path, i.e., everything
    following the final `/'. */
-string baseNameOf(const Path& path);
+std::string baseNameOf(const Path& path);
 
 /* Check whether 'path' is a descendant of 'dir'. */
 bool isInDir(const Path& path, const Path& dir);
@@ -82,34 +82,34 @@ bool isLink(const Path& path);
 /* Read the contents of a directory.  The entries `.' and `..' are
    removed. */
 struct DirEntry {
-  string name;
+  std::string name;
   ino_t ino;
   unsigned char type;  // one of DT_*
-  DirEntry(const string& name, ino_t ino, unsigned char type)
+  DirEntry(const std::string& name, ino_t ino, unsigned char type)
       : name(name), ino(ino), type(type) {}
 };
 
-typedef vector<DirEntry> DirEntries;
+typedef std::vector<DirEntry> DirEntries;
 
 DirEntries readDirectory(const Path& path);
 
 unsigned char getFileType(const Path& path);
 
 /* Read the contents of a file into a string. */
-string readFile(int fd);
-string readFile(const Path& path, bool drain = false);
+std::string readFile(int fd);
+std::string readFile(const Path& path, bool drain = false);
 void readFile(const Path& path, Sink& sink);
 
 /* Write a string to a file. */
-void writeFile(const Path& path, const string& s, mode_t mode = 0666);
+void writeFile(const Path& path, const std::string& s, mode_t mode = 0666);
 
 void writeFile(const Path& path, Source& source, mode_t mode = 0666);
 
 /* Read a line from a file descriptor. */
-string readLine(int fd);
+std::string readLine(int fd);
 
 /* Write a line to a file descriptor. */
-void writeLine(int fd, string s);
+void writeLine(int fd, std::string s);
 
 /* Delete a path; i.e., in the case of a directory, it is deleted
    recursively. It's not an error if the path does not exist. The
@@ -155,12 +155,12 @@ void replaceSymlink(const Path& target, const Path& link);
 void readFull(int fd, unsigned char* buf, size_t count);
 void writeFull(int fd, const unsigned char* buf, size_t count,
                bool allowInterrupts = true);
-void writeFull(int fd, const string& s, bool allowInterrupts = true);
+void writeFull(int fd, const std::string& s, bool allowInterrupts = true);
 
-MakeError(EndOfFile, Error)
+MakeError(EndOfFile, Error);
 
-    /* Read a file descriptor until EOF occurs. */
-    string drainFD(int fd, bool block = true);
+/* Read a file descriptor until EOF occurs. */
+std::string drainFD(int fd, bool block = true);
 
 void drainFD(int fd, Sink& sink, bool block = true);
 
@@ -235,7 +235,7 @@ void killUser(uid_t uid);
 /* Fork a process that runs the given function, and return the child
    pid to the caller. */
 struct ProcessOptions {
-  string errorPrefix = "error: ";
+  std::string errorPrefix = "error: ";
   bool dieWithParent = true;
   bool runExitHandlers = false;
   bool allowVfork = true;
@@ -246,9 +246,9 @@ pid_t startProcess(std::function<void()> fun,
 
 /* Run a program and return its stdout in a string (i.e., like the
    shell backtick operator). */
-string runProgram(const Path& program, bool searchPath = false,
-                  const Strings& args = Strings(),
-                  const std::optional<std::string>& input = {});
+std::string runProgram(const Path& program, bool searchPath = false,
+                       const Strings& args = Strings(),
+                       const std::optional<std::string>& input = {});
 
 struct RunOptions {
   std::optional<uid_t> uid;
@@ -292,7 +292,7 @@ std::vector<char*> stringsToCharPtrs(const Strings& ss);
 
 /* Close all file descriptors except those listed in the given set.
    Good practice in child processes. */
-void closeMostFDs(const set<int>& exceptions);
+void closeMostFDs(const std::set<int>& exceptions);
 
 /* Set the close-on-exec flag for the given file descriptor. */
 void closeOnExec(int fd);
@@ -311,36 +311,38 @@ void inline checkInterrupt() {
   if (_isInterrupted || (interruptCheck && interruptCheck())) _interrupted();
 }
 
-MakeError(Interrupted, BaseError)
+MakeError(Interrupted, BaseError);
 
-    MakeError(FormatError, Error)
+MakeError(FormatError, Error);
 
-    /* String tokenizer. */
-    template <class C>
-    C tokenizeString(const string& s, const string& separators = " \t\n\r");
+/* String tokenizer. */
+template <class C>
+C tokenizeString(const std::string& s,
+                 const std::string& separators = " \t\n\r");
 
 /* Concatenate the given strings with a separator between the
    elements. */
-string concatStringsSep(const string& sep, const Strings& ss);
-string concatStringsSep(const string& sep, const StringSet& ss);
+std::string concatStringsSep(const std::string& sep, const Strings& ss);
+std::string concatStringsSep(const std::string& sep, const StringSet& ss);
 
 /* Remove whitespace from the start and end of a string. */
-string trim(const string& s, const string& whitespace = " \n\r\t");
+std::string trim(const std::string& s,
+                 const std::string& whitespace = " \n\r\t");
 
 /* Replace all occurrences of a string inside another string. */
-string replaceStrings(const std::string& s, const std::string& from,
-                      const std::string& to);
+std::string replaceStrings(const std::string& s, const std::string& from,
+                           const std::string& to);
 
 /* Convert the exit status of a child as returned by wait() into an
    error string. */
-string statusToString(int status);
+std::string statusToString(int status);
 
 bool statusOk(int status);
 
 /* Parse a string into an integer. */
 template <class N>
-bool string2Int(const string& s, N& n) {
-  if (string(s, 0, 1) == "-" && !std::numeric_limits<N>::is_signed)
+bool string2Int(const std::string& s, N& n) {
+  if (std::string(s, 0, 1) == "-" && !std::numeric_limits<N>::is_signed)
     return false;
   std::istringstream str(s);
   str >> n;
@@ -349,17 +351,17 @@ bool string2Int(const string& s, N& n) {
 
 /* Parse a string into a float. */
 template <class N>
-bool string2Float(const string& s, N& n) {
+bool string2Float(const std::string& s, N& n) {
   std::istringstream str(s);
   str >> n;
   return str && str.get() == EOF;
 }
 
 /* Return true iff `s' starts with `prefix'. */
-bool hasPrefix(const string& s, const string& prefix);
+bool hasPrefix(const std::string& s, const std::string& prefix);
 
 /* Return true iff `s' ends in `suffix'. */
-bool hasSuffix(const string& s, const string& suffix);
+bool hasSuffix(const std::string& s, const std::string& suffix);
 
 /* Convert a string to lower case. */
 std::string toLower(const std::string& s);
@@ -389,13 +391,14 @@ std::string filterANSIEscapes(
     unsigned int width = std::numeric_limits<unsigned int>::max());
 
 /* Base64 encoding/decoding. */
-string base64Encode(const string& s);
-string base64Decode(const string& s);
+std::string base64Encode(const std::string& s);
+std::string base64Decode(const std::string& s);
 
 /* Get a value for the specified key from an associate container, or a
    default value if the key doesn't exist. */
 template <class T>
-string get(const T& map, const string& key, const string& def = "") {
+std::string get(const T& map, const std::string& key,
+                const std::string& def = "") {
   auto i = map.find(key);
   return i == map.end() ? def : i->second;
 }

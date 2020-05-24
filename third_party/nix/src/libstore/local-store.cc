@@ -10,10 +10,16 @@
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <grp.h>
+#include <sched.h>
+#include <sqlite3.h>
+#include <sys/ioctl.h>
+#include <sys/mount.h>
 #include <sys/select.h>
 #include <sys/stat.h>
+#include <sys/statvfs.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sys/xattr.h>
 #include <unistd.h>
 #include <utime.h>
 
@@ -23,13 +29,6 @@
 #include "nar-info.hh"
 #include "pathlocks.hh"
 #include "worker-protocol.hh"
-
-#include <sched.h>
-#include <sys/ioctl.h>
-#include <sys/mount.h>
-#include <sys/statvfs.h>
-#include <sys/xattr.h>
-#include <sqlite3.h>
 
 namespace nix {
 
@@ -136,7 +135,7 @@ LocalStore::LocalStore(const Params& params)
       res = posix_fallocate(fd.get(), 0, settings.reservedSize);
 #endif
       if (res == -1) {
-        writeFull(fd.get(), string(settings.reservedSize, 'X'));
+        writeFull(fd.get(), std::string(settings.reservedSize, 'X'));
         [[gnu::unused]] auto res2 = ftruncate(fd.get(), settings.reservedSize);
       }
     }
@@ -295,7 +294,7 @@ std::string LocalStore::getUri() { return "local"; }
 int LocalStore::getSchema() {
   int curSchema = 0;
   if (pathExists(schemaPath)) {
-    string s = readFile(schemaPath);
+    std::string s = readFile(schemaPath);
     if (!string2Int(s, curSchema)) {
       throw Error(format("'%1%' is corrupt") % schemaPath);
     }
@@ -310,7 +309,7 @@ void LocalStore::openDB(State& state, bool create) {
   }
 
   /* Open the Nix database. */
-  string dbPath = dbDir + "/db.sqlite";
+  std::string dbPath = dbDir + "/db.sqlite";
   auto& db(state.db);
   if (sqlite3_open_v2(dbPath.c_str(), &db.db,
                       SQLITE_OPEN_READWRITE | (create ? SQLITE_OPEN_CREATE : 0),
@@ -341,20 +340,20 @@ void LocalStore::openDB(State& state, bool create) {
      should be safe enough.  If the user asks for it, don't sync at
      all.  This can cause database corruption if the system
      crashes. */
-  string syncMode = settings.fsyncMetadata ? "normal" : "off";
+  std::string syncMode = settings.fsyncMetadata ? "normal" : "off";
   db.exec("pragma synchronous = " + syncMode);
 
   /* Set the SQLite journal mode.  WAL mode is fastest, so it's the
      default. */
-  string mode = settings.useSQLiteWAL ? "wal" : "truncate";
-  string prevMode;
+  std::string mode = settings.useSQLiteWAL ? "wal" : "truncate";
+  std::string prevMode;
   {
     SQLiteStmt stmt;
     stmt.create(db, "pragma main.journal_mode;");
     if (sqlite3_step(stmt) != SQLITE_ROW) {
       throwSQLiteError(db, "querying journal mode");
     }
-    prevMode = string((const char*)sqlite3_column_text(stmt, 0));
+    prevMode = std::string((const char*)sqlite3_column_text(stmt, 0));
   }
   if (prevMode != mode &&
       sqlite3_exec(db, ("pragma main.journal_mode = " + mode + ";").c_str(),
@@ -563,9 +562,9 @@ void canonicalisePathMetaData(const Path& path, uid_t fromUid) {
 
 void LocalStore::checkDerivationOutputs(const Path& drvPath,
                                         const Derivation& drv) {
-  string drvName = storePathToName(drvPath);
+  std::string drvName = storePathToName(drvPath);
   assert(isDerivation(drvName));
-  drvName = string(drvName, 0, drvName.size() - drvExtension.size());
+  drvName = std::string(drvName, 0, drvName.size() - drvExtension.size());
 
   if (drv.isFixedOutput()) {
     auto out = drv.outputs.find("out");
@@ -843,7 +842,7 @@ StringSet LocalStore::queryDerivationOutputNames(const Path& path) {
   });
 }
 
-Path LocalStore::queryPathFromHashPart(const string& hashPart) {
+Path LocalStore::queryPathFromHashPart(const std::string& hashPart) {
   if (hashPart.size() != storePathHashLen) {
     throw Error("invalid hash part");
   }
@@ -1096,9 +1095,9 @@ void LocalStore::addToStore(const ValidPathInfo& info, Source& source,
   }
 }
 
-Path LocalStore::addToStoreFromDump(const string& dump, const string& name,
-                                    bool recursive, HashType hashAlgo,
-                                    RepairFlag repair) {
+Path LocalStore::addToStoreFromDump(const std::string& dump,
+                                    const std::string& name, bool recursive,
+                                    HashType hashAlgo, RepairFlag repair) {
   Hash h = hashString(hashAlgo, dump);
 
   Path dstPath = makeFixedOutputPath(recursive, h, name);
@@ -1155,7 +1154,7 @@ Path LocalStore::addToStoreFromDump(const string& dump, const string& name,
   return dstPath;
 }
 
-Path LocalStore::addToStore(const string& name, const Path& _srcPath,
+Path LocalStore::addToStore(const std::string& name, const Path& _srcPath,
                             bool recursive, HashType hashAlgo,
                             PathFilter& filter, RepairFlag repair) {
   Path srcPath(absPath(_srcPath));
@@ -1173,7 +1172,7 @@ Path LocalStore::addToStore(const string& name, const Path& _srcPath,
   return addToStoreFromDump(*sink.s, name, recursive, hashAlgo, repair);
 }
 
-Path LocalStore::addTextToStore(const string& name, const string& s,
+Path LocalStore::addTextToStore(const std::string& name, const std::string& s,
                                 const PathSet& references, RepairFlag repair) {
   auto hash = hashString(htSHA256, s);
   auto dstPath = makeTextPath(name, hash, references);

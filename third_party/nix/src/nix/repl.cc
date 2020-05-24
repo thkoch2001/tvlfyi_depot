@@ -46,7 +46,7 @@ namespace nix {
 #define ESC_END "\033[0m"
 
 struct NixRepl {
-  string curDir;
+  std::string curDir;
   EvalState state;
   Bindings* autoArgs;
 
@@ -63,19 +63,19 @@ struct NixRepl {
   NixRepl(const Strings& searchPath, const nix::ref<Store>& store);
   ~NixRepl();
   void mainLoop(const std::vector<std::string>& files);
-  StringSet completePrefix(const string& prefix);
-  static bool getLine(string& input, const std::string& prompt);
+  StringSet completePrefix(const std::string& prefix);
+  static bool getLine(std::string& input, const std::string& prompt);
   Path getDerivationPath(Value& v);
-  bool processLine(string line);
+  bool processLine(std::string line);
   void loadFile(const Path& path);
   void initEnv();
   void reloadFiles();
   void addAttrsToScope(Value& attrs);
   void addVarToScope(const Symbol& name, Value& v);
-  Expr* parseString(const string& s);
-  void evalString(string s, Value& v);
+  Expr* parseString(const std::string& s);
+  void evalString(std::string s, Value& v);
 
-  using ValuesSeen = set<Value*>;
+  using ValuesSeen = std::set<Value*>;
   std::ostream& printValue(std::ostream& str, Value& v, unsigned int maxDepth);
   std::ostream& printValue(std::ostream& str, Value& v, unsigned int maxDepth,
                            ValuesSeen& seen);
@@ -122,11 +122,11 @@ void printHelp() {
             << "        at least a file named default.nix.\n";
 }
 
-string removeWhitespace(string s) {
+std::string removeWhitespace(std::string s) {
   s = absl::StripTrailingAsciiWhitespace(s);
   size_t n = s.find_first_not_of(" \n\r\t");
-  if (n != string::npos) {
-    s = string(s, n);
+  if (n != std::string::npos) {
+    s = std::string(s, n);
   }
   return s;
 }
@@ -224,7 +224,7 @@ void sigintHandler(int signo) { g_signal_received = signo; }
 }  // namespace
 
 void NixRepl::mainLoop(const std::vector<std::string>& files) {
-  string error = ANSI_RED "error:" ANSI_NORMAL " ";
+  std::string error = ANSI_RED "error:" ANSI_NORMAL " ";
   std::cout << "Welcome to Nix version " << nixVersion << ". Type :? for help."
             << std::endl
             << std::endl;
@@ -285,7 +285,7 @@ void NixRepl::mainLoop(const std::vector<std::string>& files) {
   }
 }
 
-bool NixRepl::getLine(string& input, const std::string& prompt) {
+bool NixRepl::getLine(std::string& input, const std::string& prompt) {
   struct sigaction act;
   struct sigaction old;
   sigset_t savedSignalMask;
@@ -334,7 +334,7 @@ bool NixRepl::getLine(string& input, const std::string& prompt) {
   return true;
 }
 
-StringSet NixRepl::completePrefix(const string& prefix) {
+StringSet NixRepl::completePrefix(const std::string& prefix) {
   StringSet completions;
 
   size_t start = prefix.find_last_of(" \n\r\t(){}[]");
@@ -351,7 +351,7 @@ StringSet NixRepl::completePrefix(const string& prefix) {
   size_t slash;
   size_t dot;
 
-  if ((slash = cur.rfind('/')) != string::npos) {
+  if ((slash = cur.rfind('/')) != std::string::npos) {
     try {
       auto dir = std::string(cur, 0, slash);
       auto prefix2 = std::string(cur, slash + 1);
@@ -362,11 +362,11 @@ StringSet NixRepl::completePrefix(const string& prefix) {
       }
     } catch (Error&) {
     }
-  } else if ((dot = cur.rfind('.')) == string::npos) {
+  } else if ((dot = cur.rfind('.')) == std::string::npos) {
     /* This is a variable name; look it up in the current scope. */
     auto i = varNames.lower_bound(cur);
     while (i != varNames.end()) {
-      if (string(*i, 0, cur.size()) != cur) {
+      if (std::string(*i, 0, cur.size()) != cur) {
         break;
       }
       completions.insert(prev + *i);
@@ -377,8 +377,8 @@ StringSet NixRepl::completePrefix(const string& prefix) {
       /* This is an expression that should evaluate to an
          attribute set.  Evaluate it to get the names of the
          attributes. */
-      string expr(cur, 0, dot);
-      string cur2 = string(cur, dot + 1);
+      std::string expr(cur, 0, dot);
+      std::string cur2 = std::string(cur, dot + 1);
 
       Expr* e = parseString(expr);
       Value v;
@@ -386,8 +386,8 @@ StringSet NixRepl::completePrefix(const string& prefix) {
       state.forceAttrs(v);
 
       for (auto& i : *v.attrs) {
-        string name = i.second.name;
-        if (string(name, 0, cur2.size()) != cur2) {
+        std::string name = i.second.name;
+        if (std::string(name, 0, cur2.size()) != cur2) {
           continue;
         }
         completions.insert(prev + expr + "." + name);
@@ -405,7 +405,7 @@ StringSet NixRepl::completePrefix(const string& prefix) {
   return completions;
 }
 
-static int runProgram(const string& program, const Strings& args) {
+static int runProgram(const std::string& program, const Strings& args) {
   Strings args2(args);
   args2.push_front(program);
 
@@ -423,7 +423,7 @@ static int runProgram(const string& program, const Strings& args) {
   return pid.wait();
 }
 
-bool isVarName(const string& s) {
+bool isVarName(const std::string& s) {
   if (s.empty()) {
     return false;
   }
@@ -453,19 +453,19 @@ Path NixRepl::getDerivationPath(Value& v) {
   return drvPath;
 }
 
-bool NixRepl::processLine(string line) {
+bool NixRepl::processLine(std::string line) {
   if (line.empty()) {
     return true;
   }
 
-  string command;
-  string arg;
+  std::string command;
+  std::string arg;
 
   if (line[0] == ':') {
     size_t p = line.find_first_of(" \n\r\t");
-    command = string(line, 0, p);
-    if (p != string::npos) {
-      arg = removeWhitespace(string(line, p));
+    command = std::string(line, 0, p);
+    if (p != std::string::npos) {
+      arg = removeWhitespace(std::string(line, p));
     }
   } else {
     arg = line;
@@ -567,10 +567,10 @@ bool NixRepl::processLine(string line) {
 
   } else {
     size_t p = line.find('=');
-    string name;
-    if (p != string::npos && p < line.size() && line[p + 1] != '=' &&
-        isVarName(name = removeWhitespace(string(line, 0, p)))) {
-      Expr* e = parseString(string(line, p + 1));
+    std::string name;
+    if (p != std::string::npos && p < line.size() && line[p + 1] != '=' &&
+        isVarName(name = removeWhitespace(std::string(line, 0, p)))) {
+      Expr* e = parseString(std::string(line, p + 1));
       Value& v(*state.allocValue());
       v.type = tThunk;
       v.thunk.env = env;
@@ -640,15 +640,15 @@ void NixRepl::addVarToScope(const Symbol& name, Value& v) {
   }
   staticEnv.vars[name] = displ;
   env->values[displ++] = &v;
-  varNames.insert((string)name);
+  varNames.insert((std::string)name);
 }
 
-Expr* NixRepl::parseString(const string& s) {
+Expr* NixRepl::parseString(const std::string& s) {
   Expr* e = state.parseExprFromString(s, curDir, staticEnv);
   return e;
 }
 
-void NixRepl::evalString(string s, Value& v) {
+void NixRepl::evalString(std::string s, Value& v) {
   Expr* e = parseString(std::move(s));
   e->eval(state, *env, v);
   state.forceValue(v);
@@ -729,7 +729,7 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
       else if (maxDepth > 0) {
         str << "{ ";
 
-        typedef std::map<string, Value*> Sorted;
+        typedef std::map<std::string, Value*> Sorted;
         Sorted sorted;
         for (auto& i : *v.attrs) {
           sorted[i.second.name] = i.second.value;

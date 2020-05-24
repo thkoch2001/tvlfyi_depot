@@ -9,7 +9,7 @@
 
 namespace nix {
 
-static std::pair<std::string, std::string> split(const string& s) {
+static std::pair<std::string, std::string> split(const std::string& s) {
   size_t colon = s.find(':');
   if (colon == std::string::npos || colon == 0) {
     return {"", ""};
@@ -17,7 +17,7 @@ static std::pair<std::string, std::string> split(const string& s) {
   return {std::string(s, 0, colon), std::string(s, colon + 1)};
 }
 
-Key::Key(const string& s) {
+Key::Key(const std::string& s) {
   auto ss = split(s);
 
   name = ss.first;
@@ -30,7 +30,7 @@ Key::Key(const string& s) {
   key = base64Decode(key);
 }
 
-SecretKey::SecretKey(const string& s) : Key(s) {
+SecretKey::SecretKey(const std::string& s) : Key(s) {
 #if HAVE_SODIUM
   if (key.size() != crypto_sign_SECRETKEYBYTES) {
     throw Error("secret key is not valid");
@@ -68,7 +68,7 @@ PublicKey SecretKey::toPublicKey() const {
 #endif
 }
 
-PublicKey::PublicKey(const string& s) : Key(s) {
+PublicKey::PublicKey(const std::string& s) : Key(s) {
 #if HAVE_SODIUM
   if (key.size() != crypto_sign_PUBLICKEYBYTES) {
     throw Error("public key is not valid");

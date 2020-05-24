@@ -26,7 +26,7 @@ DrvInfos queryInstalled(EvalState& state, const Path& userEnv) {
 }
 
 bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
-                   bool keepDerivations, const string& lockToken) {
+                   bool keepDerivations, const std::string& lockToken) {
   /* Build the components in the user environment, if they don't
      exist already. */
   PathSet drvsToBuild;

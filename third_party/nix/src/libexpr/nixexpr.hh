@@ -8,15 +8,18 @@
 
 namespace nix {
 
-MakeError(EvalError, Error) MakeError(ParseError, Error)
-    MakeError(AssertionError, EvalError) MakeError(ThrownError, AssertionError)
-        MakeError(Abort, EvalError) MakeError(TypeError, EvalError)
-            MakeError(UndefinedVarError, Error)
-                MakeError(RestrictedPathError, Error)
+MakeError(EvalError, Error);
+MakeError(ParseError, Error);
+MakeError(AssertionError, EvalError);
+MakeError(ThrownError, AssertionError);
+MakeError(Abort, EvalError);
+MakeError(TypeError, EvalError);
+MakeError(UndefinedVarError, Error);
+MakeError(RestrictedPathError, Error);
 
-    /* Position objects. */
+/* Position objects. */
 
-    struct Pos {
+struct Pos {
   Symbol file;
   unsigned int line, column;
   Pos() : line(0), column(0){};
@@ -30,7 +33,7 @@ MakeError(EvalError, Error) MakeError(ParseError, Error)
     if (!p2.line) {
       return false;
     }
-    int d = ((string)file).compare((string)p2.file);
+    int d = ((std::string)file).compare((std::string)p2.file);
     if (d < 0) {
       return true;
     }
@@ -66,7 +69,7 @@ struct AttrName {
 
 typedef std::vector<AttrName> AttrPath;
 
-string showAttrPath(const AttrPath& attrPath);
+std::string showAttrPath(const AttrPath& attrPath);
 
 /* Abstract syntax of Nix expressions. */
 
@@ -297,16 +300,20 @@ struct ExprOpNot : Expr {
     void eval(EvalState& state, Env& env, Value& v);                       \
   };
 
-MakeBinOp(ExprApp, "") MakeBinOp(ExprOpEq, "==") MakeBinOp(ExprOpNEq, "!=")
-    MakeBinOp(ExprOpAnd, "&&") MakeBinOp(ExprOpOr, "||")
-        MakeBinOp(ExprOpImpl, "->") MakeBinOp(ExprOpUpdate, "//")
-            MakeBinOp(ExprOpConcatLists, "++")
+MakeBinOp(ExprApp, "");
+MakeBinOp(ExprOpEq, "==");
+MakeBinOp(ExprOpNEq, "!=");
+MakeBinOp(ExprOpAnd, "&&");
+MakeBinOp(ExprOpOr, "||");
+MakeBinOp(ExprOpImpl, "->");
+MakeBinOp(ExprOpUpdate, "//");
+MakeBinOp(ExprOpConcatLists, "++");
 
-                struct ExprConcatStrings : Expr {
+struct ExprConcatStrings : Expr {
   Pos pos;
   bool forceString;
-  vector<Expr*>* es;
-  ExprConcatStrings(const Pos& pos, bool forceString, vector<Expr*>* es)
+  std::vector<Expr*>* es;
+  ExprConcatStrings(const Pos& pos, bool forceString, std::vector<Expr*>* es)
       : pos(pos), forceString(forceString), es(es){};
   COMMON_METHODS
 };

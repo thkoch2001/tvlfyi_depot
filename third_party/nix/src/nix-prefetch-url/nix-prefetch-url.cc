@@ -20,17 +20,17 @@ using namespace nix;
 
 /* If ‘uri’ starts with ‘mirror://’, then resolve it using the list of
    mirrors defined in Nixpkgs. */
-string resolveMirrorUri(EvalState& state, string uri) {
-  if (string(uri, 0, 9) != "mirror://") {
+std::string resolveMirrorUri(EvalState& state, std::string uri) {
+  if (std::string(uri, 0, 9) != "mirror://") {
     return uri;
   }
 
-  string s(uri, 9);
+  std::string s(uri, 9);
   auto p = s.find('/');
-  if (p == string::npos) {
+  if (p == std::string::npos) {
     throw Error("invalid mirror URI");
   }
-  string mirrorName(s, 0, p);
+  std::string mirrorName(s, 0, p);
 
   Value vMirrors;
   state.eval(
@@ -49,19 +49,20 @@ string resolveMirrorUri(EvalState& state, string uri) {
     throw Error(format("mirror URI '%1%' did not expand to anything") % uri);
   }
 
-  string mirror = state.forceString(*mirrorList->second.value->listElems()[0]);
-  return mirror + (hasSuffix(mirror, "/") ? "" : "/") + string(s, p + 1);
+  std::string mirror =
+      state.forceString(*mirrorList->second.value->listElems()[0]);
+  return mirror + (hasSuffix(mirror, "/") ? "" : "/") + std::string(s, p + 1);
 }
 
 static int _main(int argc, char** argv) {
   {
     HashType ht = htSHA256;
-    std::vector<string> args;
+    std::vector<std::string> args;
     bool printPath = !getEnv("PRINT_PATH").empty();
     bool fromExpr = false;
-    string attrPath;
+    std::string attrPath;
     bool unpack = false;
-    string name;
+    std::string name;
 
     struct MyArgs : LegacyArgs, MixEvalArgs {
       using LegacyArgs::LegacyArgs;
@@ -74,7 +75,7 @@ static int _main(int argc, char** argv) {
                     } else if (*arg == "--version") {
                       printVersion("nix-prefetch-url");
                     } else if (*arg == "--type") {
-                      string s = getArg(*arg, arg, end);
+                      std::string s = getArg(*arg, arg, end);
                       ht = parseHashType(s);
                       if (ht == htUnknown) {
                         throw UsageError(format("unknown hash type '%1%'") % s);
@@ -111,7 +112,7 @@ static int _main(int argc, char** argv) {
 
     /* If -A is given, get the URI from the specified Nix
        expression. */
-    string uri;
+    std::string uri;
     if (!fromExpr) {
       if (args.empty()) {
         throw UsageError("you must specify a URI");

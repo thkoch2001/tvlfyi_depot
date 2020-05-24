@@ -11,11 +11,11 @@ namespace nix {
 
 void DerivationOutput::parseHashInfo(bool& recursive, Hash& hash) const {
   recursive = false;
-  string algo = hashAlgo;
+  std::string algo = hashAlgo;
 
-  if (string(algo, 0, 2) == "r:") {
+  if (std::string(algo, 0, 2) == "r:") {
     recursive = true;
-    algo = string(algo, 2);
+    algo = std::string(algo, 2);
   }
 
   HashType hashType = parseHashType(algo);
@@ -26,7 +26,7 @@ void DerivationOutput::parseHashInfo(bool& recursive, Hash& hash) const {
   hash = Hash(this->hash, hashType);
 }
 
-Path BasicDerivation::findOutput(const string& id) const {
+Path BasicDerivation::findOutput(const std::string& id) const {
   auto i = outputs.find(id);
   if (i == outputs.end()) {
     throw Error(format("derivation has no output '%1%'") % id);
@@ -35,11 +35,11 @@ Path BasicDerivation::findOutput(const string& id) const {
 }
 
 bool BasicDerivation::isBuiltin() const {
-  return string(builder, 0, 8) == "builtin:";
+  return std::string(builder, 0, 8) == "builtin:";
 }
 
 Path writeDerivation(const ref<Store>& store, const Derivation& drv,
-                     const string& name, RepairFlag repair) {
+                     const std::string& name, RepairFlag repair) {
   PathSet references;
   references.insert(drv.inputSrcs.begin(), drv.inputSrcs.end());
   for (auto& i : drv.inputDrvs) {
@@ -48,25 +48,25 @@ Path writeDerivation(const ref<Store>& store, const Derivation& drv,
   /* Note that the outputs of a derivation are *not* references
      (that can be missing (of course) and should not necessarily be
      held during a garbage collection). */
-  string suffix = name + drvExtension;
-  string contents = drv.unparse();
+  std::string suffix = name + drvExtension;
+  std::string contents = drv.unparse();
   return settings.readOnlyMode
              ? store->computeStorePathForText(suffix, contents, references)
              : store->addTextToStore(suffix, contents, references, repair);
 }
 
 /* Read string `s' from stream `str'. */
-static void expect(std::istream& str, const string& s) {
+static void expect(std::istream& str, const std::string& s) {
   char s2[s.size()];
   str.read(s2, s.size());
-  if (string(s2, s.size()) != s) {
+  if (std::string(s2, s.size()) != s) {
     throw FormatError(format("expected string '%1%'") % s);
   }
 }
 
 /* Read a C-style string from stream `str'. */
-static string parseString(std::istream& str) {
-  string res;
+static std::string parseString(std::istream& str) {
+  std::string res;
   expect(str, "\"");
   int c;
   while ((c = str.get()) != '"') {
@@ -89,7 +89,7 @@ static string parseString(std::istream& str) {
 }
 
 static Path parsePath(std::istream& str) {
-  string s = parseString(str);
+  std::string s = parseString(str);
   if (s.empty() || s[0] != '/') {
     throw FormatError(format("bad path '%1%' in derivation") % s);
   }
@@ -116,7 +116,7 @@ static StringSet parseStrings(std::istream& str, bool arePaths) {
   return res;
 }
 
-static Derivation parseDerivation(const string& s) {
+static Derivation parseDerivation(const std::string& s) {
   Derivation drv;
   istringstream_nocopy str(s);
   expect(str, "Derive([");
@@ -125,7 +125,7 @@ static Derivation parseDerivation(const string& s) {
   while (!endOfList(str)) {
     DerivationOutput out;
     expect(str, "(");
-    string id = parseString(str);
+    std::string id = parseString(str);
     expect(str, ",");
     out.path = parsePath(str);
     expect(str, ",");
@@ -163,9 +163,9 @@ static Derivation parseDerivation(const string& s) {
   expect(str, ",[");
   while (!endOfList(str)) {
     expect(str, "(");
-    string name = parseString(str);
+    std::string name = parseString(str);
     expect(str, ",");
-    string value = parseString(str);
+    std::string value = parseString(str);
     expect(str, ")");
     drv.env[name] = value;
   }
@@ -195,7 +195,7 @@ Derivation Store::derivationFromPath(const Path& drvPath) {
   }
 }
 
-static void printString(string& res, const string& s) {
+static void printString(std::string& res, const std::string& s) {
   res += '"';
   for (const char* i = s.c_str(); *i != 0; i++) {
     if (*i == '\"' || *i == '\\') {
@@ -215,7 +215,8 @@ static void printString(string& res, const string& s) {
 }
 
 template <class ForwardIterator>
-static void printStrings(string& res, ForwardIterator i, ForwardIterator j) {
+static void printStrings(std::string& res, ForwardIterator i,
+                         ForwardIterator j) {
   res += '[';
   bool first = true;
   for (; i != j; ++i) {
@@ -229,8 +230,8 @@ static void printStrings(string& res, ForwardIterator i, ForwardIterator j) {
   res += ']';
 }
 
-string Derivation::unparse() const {
-  string s;
+std::string Derivation::unparse() const {
+  std::string s;
   s.reserve(65536);
   s += "Derive([";
 
@@ -297,7 +298,7 @@ string Derivation::unparse() const {
   return s;
 }
 
-bool isDerivation(const string& fileName) {
+bool isDerivation(const std::string& fileName) {
   return hasSuffix(fileName, drvExtension);
 }
 
@@ -354,22 +355,23 @@ Hash hashDerivationModulo(Store& store, Derivation drv) {
   return hashString(htSHA256, drv.unparse());
 }
 
-DrvPathWithOutputs parseDrvPathWithOutputs(const string& s) {
+DrvPathWithOutputs parseDrvPathWithOutputs(const std::string& s) {
   size_t n = s.find('!');
   return n == std::string::npos
-             ? DrvPathWithOutputs(s, std::set<string>())
-             : DrvPathWithOutputs(
-                   string(s, 0, n),
-                   tokenizeString<std::set<string> >(string(s, n + 1), ","));
+             ? DrvPathWithOutputs(s, std::set<std::string>())
+             : DrvPathWithOutputs(std::string(s, 0, n),
+                                  tokenizeString<std::set<std::string> >(
+                                      std::string(s, n + 1), ","));
 }
 
 Path makeDrvPathWithOutputs(const Path& drvPath,
-                            const std::set<string>& outputs) {
+                            const std::set<std::string>& outputs) {
   return outputs.empty() ? drvPath
                          : drvPath + "!" + concatStringsSep(",", outputs);
 }
 
-bool wantOutput(const string& output, const std::set<string>& wanted) {
+bool wantOutput(const std::string& output,
+                const std::set<std::string>& wanted) {
   return wanted.empty() || wanted.find(output) != wanted.end();
 }
 

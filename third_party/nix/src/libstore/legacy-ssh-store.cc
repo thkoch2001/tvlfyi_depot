@@ -43,7 +43,7 @@ struct LegacySSHStore : public Store {
 
   SSHMaster master;
 
-  LegacySSHStore(const string& host, const Params& params)
+  LegacySSHStore(const std::string& host, const Params& params)
       : Store(params),
         host(host),
         connections(make_ref<Pool<Connection>>(
@@ -85,7 +85,7 @@ struct LegacySSHStore : public Store {
     return conn;
   };
 
-  string getUri() override { return uriScheme + host; }
+  std::string getUri() override { return uriScheme + host; }
 
   void queryPathInfoUncached(
       const Path& path,
@@ -176,17 +176,17 @@ struct LegacySSHStore : public Store {
     copyNAR(conn->from, sink);
   }
 
-  Path queryPathFromHashPart(const string& hashPart) override {
+  Path queryPathFromHashPart(const std::string& hashPart) override {
     unsupported("queryPathFromHashPart");
   }
 
-  Path addToStore(const string& name, const Path& srcPath, bool recursive,
+  Path addToStore(const std::string& name, const Path& srcPath, bool recursive,
                   HashType hashAlgo, PathFilter& filter,
                   RepairFlag repair) override {
     unsupported("addToStore");
   }
 
-  Path addTextToStore(const string& name, const string& s,
+  Path addTextToStore(const std::string& name, const std::string& s,
                       const PathSet& references, RepairFlag repair) override {
     unsupported("addTextToStore");
   }

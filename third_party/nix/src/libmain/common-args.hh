@@ -5,8 +5,8 @@
 namespace nix {
 
 struct MixCommonArgs : virtual Args {
-  string programName;
-  MixCommonArgs(const string& programName);
+  std::string programName;
+  MixCommonArgs(const std::string& programName);
 };
 
 struct MixDryRun : virtual Args {

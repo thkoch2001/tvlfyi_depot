@@ -79,7 +79,7 @@ void LocalFSStore::narFromPath(const Path& path, Sink& sink) {
   dumpPath(getRealStoreDir() + std::string(path, storeDir.size()), sink);
 }
 
-const string LocalFSStore::drvsLogDir = "drvs";
+const std::string LocalFSStore::drvsLogDir = "drvs";
 
 std::shared_ptr<std::string> LocalFSStore::getBuildLog(const Path& path_) {
   auto path(path_);
@@ -97,12 +97,13 @@ std::shared_ptr<std::string> LocalFSStore::getBuildLog(const Path& path_) {
     }
   }
 
-  string baseName = baseNameOf(path);
+  std::string baseName = baseNameOf(path);
 
   for (int j = 0; j < 2; j++) {
-    Path logPath = j == 0 ? fmt("%s/%s/%s/%s", logDir, drvsLogDir,
-                                string(baseName, 0, 2), string(baseName, 2))
-                          : fmt("%s/%s/%s", logDir, drvsLogDir, baseName);
+    Path logPath =
+        j == 0 ? fmt("%s/%s/%s/%s", logDir, drvsLogDir,
+                     std::string(baseName, 0, 2), std::string(baseName, 2))
+               : fmt("%s/%s/%s", logDir, drvsLogDir, baseName);
     Path logBz2Path = logPath + ".bz2";
 
     if (pathExists(logPath)) {

@@ -10,7 +10,7 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
     throw Error(format("NAR info file '%1%' is corrupt") % whence);
   };
 
-  auto parseHashField = [&](const string& s) {
+  auto parseHashField = [&](const std::string& s) {
     try {
       return Hash(s);
     } catch (BadHash&) {

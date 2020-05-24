@@ -15,7 +15,7 @@ struct Generation {
   operator bool() const { return number != -1; }
 };
 
-typedef list<Generation> Generations;
+typedef std::list<Generation> Generations;
 
 /* Returns the list of currently present generations for the specified
    profile, sorted by generation number. */
@@ -38,8 +38,8 @@ void deleteOldGenerations(const Path& profile, bool dryRun);
 
 void deleteGenerationsOlderThan(const Path& profile, time_t t, bool dryRun);
 
-void deleteGenerationsOlderThan(const Path& profile, const string& timeSpec,
-                                bool dryRun);
+void deleteGenerationsOlderThan(const Path& profile,
+                                const std::string& timeSpec, bool dryRun);
 
 void switchLink(const Path& link, Path target);
 
@@ -56,6 +56,6 @@ void lockProfile(PathLocks& lock, const Path& profile);
    generally cheap, since the build results are still in the Nix
    store.  Most of the time, only the user environment has to be
    rebuilt. */
-string optimisticLockProfile(const Path& profile);
+std::string optimisticLockProfile(const Path& profile);
 
 }  // namespace nix

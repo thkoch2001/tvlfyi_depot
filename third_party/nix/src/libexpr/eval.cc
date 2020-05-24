@@ -136,7 +136,7 @@ const Value* getPrimOp(const Value& v) {
   return primOp;
 }
 
-string showType(const Value& v) {
+std::string showType(const Value& v) {
   switch (v.type) {
     case tInt:
       return "an integer";
@@ -163,10 +163,10 @@ string showType(const Value& v) {
     case tBlackhole:
       return "a black hole";
     case tPrimOp:
-      return fmt("the built-in function '%s'", string(v.primOp->name));
+      return fmt("the built-in function '%s'", std::string(v.primOp->name));
     case tPrimOpApp:
       return fmt("the partially applied built-in function '%s'",
-                 string(getPrimOp(v)->primOp->name));
+                 std::string(getPrimOp(v)->primOp->name));
     case tExternal:
       return v.external->showType();
     case tFloat:
@@ -456,7 +456,8 @@ Value* EvalState::addConstant(const std::string& name, Value& v) {
   *v2 = v;
   staticBaseEnv.vars[symbols.Create(name)] = baseEnvDispl;
   baseEnv.values[baseEnvDispl++] = v2;
-  std::string name2 = string(name, 0, 2) == "__" ? string(name, 2) : name;
+  std::string name2 =
+      std::string(name, 0, 2) == "__" ? std::string(name, 2) : name;
   baseEnv.values[0]->attrs->push_back(Attr(symbols.Create(name2), v2));
   return v2;
 }
@@ -469,7 +470,8 @@ Value* EvalState::addPrimOp(const std::string& name, size_t arity,
     return addConstant(name, v);
   }
   Value* v = allocValue();
-  std::string name2 = string(name, 0, 2) == "__" ? string(name, 2) : name;
+  std::string name2 =
+      std::string(name, 0, 2) == "__" ? std::string(name, 2) : name;
   Symbol sym = symbols.Create(name2);
   v->type = tPrimOp;
   v->primOp = new PrimOp(primOp, arity, sym);
@@ -1423,7 +1425,7 @@ void EvalState::forceFunction(Value& v, const Pos& pos) {
   }
 }
 
-string EvalState::forceString(Value& v, const Pos& pos) {
+std::string EvalState::forceString(Value& v, const Pos& pos) {
   forceValue(v, pos);
   if (v.type != tString) {
     if (pos) {
@@ -1433,7 +1435,7 @@ string EvalState::forceString(Value& v, const Pos& pos) {
       throwTypeError("value is %1% while a string was expected", v);
     }
   }
-  return string(v.string.s);
+  return std::string(v.string.s);
 }
 
 void copyContext(const Value& v, PathSet& context) {
@@ -1444,13 +1446,13 @@ void copyContext(const Value& v, PathSet& context) {
   }
 }
 
-string EvalState::forceString(Value& v, PathSet& context, const Pos& pos) {
+std::string EvalState::forceString(Value& v, PathSet& context, const Pos& pos) {
   std::string s = forceString(v, pos);
   copyContext(v, context);
   return s;
 }
 
-string EvalState::forceStringNoCtx(Value& v, const Pos& pos) {
+std::string EvalState::forceStringNoCtx(Value& v, const Pos& pos) {
   std::string s = forceString(v, pos);
   if (v.string.context != nullptr) {
     if (pos) {
@@ -1483,10 +1485,10 @@ bool EvalState::isDerivation(Value& v) {
   return strcmp(i->second.value->string.s, "derivation") == 0;
 }
 
-std::optional<string> EvalState::tryAttrsToString(const Pos& pos, Value& v,
-                                                  PathSet& context,
-                                                  bool coerceMore,
-                                                  bool copyToStore) {
+std::optional<std::string> EvalState::tryAttrsToString(const Pos& pos, Value& v,
+                                                       PathSet& context,
+                                                       bool coerceMore,
+                                                       bool copyToStore) {
   auto i = v.attrs->find(sToString);
   if (i != v.attrs->end()) {
     Value v1;
@@ -1497,8 +1499,9 @@ std::optional<string> EvalState::tryAttrsToString(const Pos& pos, Value& v,
   return {};
 }
 
-string EvalState::coerceToString(const Pos& pos, Value& v, PathSet& context,
-                                 bool coerceMore, bool copyToStore) {
+std::string EvalState::coerceToString(const Pos& pos, Value& v,
+                                      PathSet& context, bool coerceMore,
+                                      bool copyToStore) {
   forceValue(v);
 
   std::string s;
@@ -1569,7 +1572,7 @@ string EvalState::coerceToString(const Pos& pos, Value& v, PathSet& context,
   throwTypeError("cannot coerce %1% to a string, at %2%", v, pos);
 }
 
-string EvalState::copyPathToStore(PathSet& context, const Path& path) {
+std::string EvalState::copyPathToStore(PathSet& context, const Path& path) {
   if (nix::isDerivation(path)) {
     throwEvalError("file names are not allowed to end in '%1%'", drvExtension);
   }
@@ -1931,9 +1934,9 @@ size_t valueSize(Value& v) {
   return doValue(v);
 }
 
-string ExternalValueBase::coerceToString(const Pos& pos, PathSet& context,
-                                         bool copyMore,
-                                         bool copyToStore) const {
+std::string ExternalValueBase::coerceToString(const Pos& pos, PathSet& context,
+                                              bool copyMore,
+                                              bool copyToStore) const {
   throw TypeError(format("cannot coerce %1% to a string, at %2%") % showType() %
                   pos);
 }

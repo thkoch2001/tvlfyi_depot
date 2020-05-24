@@ -17,7 +17,7 @@ void builtinFetchurl(const BasicDerivation& drv, const std::string& netrcData) {
     writeFile(settings.netrcFile, netrcData, 0600);
   }
 
-  auto getAttr = [&](const string& name) {
+  auto getAttr = [&](const std::string& name) {
     auto i = drv.env.find(name);
     if (i == drv.env.end())
       throw Error(format("attribute '%s' missing") % name);

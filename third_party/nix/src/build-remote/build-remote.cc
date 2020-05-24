@@ -30,7 +30,7 @@ std::string escapeUri(std::string uri) {
   return uri;
 }
 
-static string currentLoad;
+static std::string currentLoad;
 
 static AutoCloseFD openSlotLock(const Machine& m, unsigned long long slot) {
   return openLockFile(fmt("%s/%s-%d", currentLoad, escapeUri(m.storeUri), slot),
@@ -86,8 +86,8 @@ static int _main(int argc, char* argv[]) {
       return 0;
     }
 
-    string drvPath;
-    string storeUri;
+    std::string drvPath;
+    std::string storeUri;
 
     while (true) {
       try {

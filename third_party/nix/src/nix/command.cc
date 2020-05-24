@@ -9,7 +9,7 @@ namespace nix {
 
 Commands* RegisterCommand::commands = nullptr;
 
-void Command::printHelp(const string& programName, std::ostream& out) {
+void Command::printHelp(const std::string& programName, std::ostream& out) {
   Args::printHelp(programName, out);
 
   auto exs = examples();
@@ -37,7 +37,8 @@ MultiCommand::MultiCommand(Commands _commands)
       }});
 }
 
-void MultiCommand::printHelp(const string& programName, std::ostream& out) {
+void MultiCommand::printHelp(const std::string& programName,
+                             std::ostream& out) {
   if (command) {
     command->printHelp(programName + " " + command->name(), out);
     return;

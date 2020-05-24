@@ -63,26 +63,26 @@ bool Hash::operator<(const Hash& h) const {
   return false;
 }
 
-const string base16Chars = "0123456789abcdef";
+const std::string base16Chars = "0123456789abcdef";
 
-static string printHash16(const Hash& hash) {
+static std::string printHash16(const Hash& hash) {
   char buf[hash.hashSize * 2];
   for (unsigned int i = 0; i < hash.hashSize; i++) {
     buf[i * 2] = base16Chars[hash.hash[i] >> 4];
     buf[i * 2 + 1] = base16Chars[hash.hash[i] & 0x0f];
   }
-  return string(buf, hash.hashSize * 2);
+  return std::string(buf, hash.hashSize * 2);
 }
 
 // omitted: E O U T
-const string base32Chars = "0123456789abcdfghijklmnpqrsvwxyz";
+const std::string base32Chars = "0123456789abcdfghijklmnpqrsvwxyz";
 
-static string printHash32(const Hash& hash) {
+static std::string printHash32(const Hash& hash) {
   assert(hash.hashSize);
   size_t len = hash.base32Len();
   assert(len);
 
-  string s;
+  std::string s;
   s.reserve(len);
 
   for (int n = (int)len - 1; n >= 0; n--) {
@@ -98,7 +98,7 @@ static string printHash32(const Hash& hash) {
   return s;
 }
 
-string printHash16or32(const Hash& hash) {
+std::string printHash16or32(const Hash& hash) {
   return hash.to_string(hash.type == htMD5 ? Base16 : Base32, false);
 }
 
@@ -128,17 +128,17 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
   bool isSRI = false;
 
   auto sep = s.find(':');
-  if (sep == string::npos) {
+  if (sep == std::string::npos) {
     sep = s.find('-');
-    if (sep != string::npos) {
+    if (sep != std::string::npos) {
       isSRI = true;
     } else if (type == htUnknown) {
       throw BadHash("hash '%s' does not include a type", s);
     }
   }
 
-  if (sep != string::npos) {
-    string hts = string(s, 0, sep);
+  if (sep != std::string::npos) {
+    std::string hts = std::string(s, 0, sep);
     this->type = parseHashType(hts);
     if (this->type == htUnknown) {
       throw BadHash("unknown hash type '%s'", hts);
@@ -259,7 +259,7 @@ static void finish(HashType ht, Ctx& ctx, unsigned char* hash) {
   }
 }
 
-Hash hashString(HashType ht, const string& s) {
+Hash hashString(HashType ht, const std::string& s) {
   Ctx ctx;
   Hash hash(ht);
   start(ht, ctx);
@@ -338,7 +338,7 @@ Hash compressHash(const Hash& hash, unsigned int newSize) {
   return h;
 }
 
-HashType parseHashType(const string& s) {
+HashType parseHashType(const std::string& s) {
   if (s == "md5") {
     return htMD5;
   }
@@ -353,7 +353,7 @@ HashType parseHashType(const string& s) {
   }
 }
 
-string printHashType(HashType ht) {
+std::string printHashType(HashType ht) {
   if (ht == htMD5) {
     return "md5";
   }

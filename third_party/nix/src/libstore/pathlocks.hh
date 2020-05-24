@@ -19,13 +19,13 @@ bool lockFile(int fd, LockType lockType, bool wait);
 class PathLocks {
  private:
   typedef std::pair<int, Path> FDPair;
-  list<FDPair> fds;
+  std::list<FDPair> fds;
   bool deletePaths;
 
  public:
   PathLocks();
-  PathLocks(const PathSet& paths, const string& waitMsg = "");
-  bool lockPaths(const PathSet& _paths, const string& waitMsg = "",
+  PathLocks(const PathSet& paths, const std::string& waitMsg = "");
+  bool lockPaths(const PathSet& _paths, const std::string& waitMsg = "",
                  bool wait = true);
   ~PathLocks();
   void unlock();

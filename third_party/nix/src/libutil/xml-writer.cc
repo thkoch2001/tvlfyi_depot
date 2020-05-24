@@ -26,10 +26,10 @@ void XMLWriter::indent_(size_t depth) {
   if (!indent) {
     return;
   }
-  output << string(depth * 2, ' ');
+  output << std::string(depth * 2, ' ');
 }
 
-void XMLWriter::openElement(const string& name, const XMLAttrs& attrs) {
+void XMLWriter::openElement(const std::string& name, const XMLAttrs& attrs) {
   assert(!closed);
   indent_(pendingElems.size());
   output << "<" << name;
@@ -54,7 +54,8 @@ void XMLWriter::closeElement() {
   }
 }
 
-void XMLWriter::writeEmptyElement(const string& name, const XMLAttrs& attrs) {
+void XMLWriter::writeEmptyElement(const std::string& name,
+                                  const XMLAttrs& attrs) {
   assert(!closed);
   indent_(pendingElems.size());
   output << "<" << name;

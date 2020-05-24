@@ -106,7 +106,7 @@ static int compatNixHash(int argc, char** argv) {
                  } else if (*arg == "--truncate") {
                    truncate = true;
                  } else if (*arg == "--type") {
-                   string s = getArg(*arg, arg, end);
+                   std::string s = getArg(*arg, arg, end);
                    ht = parseHashType(s);
                    if (ht == htUnknown) {
                      throw UsageError(format("unknown hash type '%1%'") % s);

@@ -852,7 +852,7 @@ class array : public base
     }
 
     /**
-     * Obtains a option<vector<T>>. The option will be empty if the array
+     * Obtains a option<std::vector<T>>. The option will be empty if the array
      * contains values that are not of type T.
      */
     template <class T>
@@ -1041,7 +1041,7 @@ inline std::shared_ptr<array> make_element<array>()
 } // namespace detail
 
 /**
- * Obtains a option<vector<T>>. The option will be empty if the array
+ * Obtains a option<std::vector<T>>. The option will be empty if the array
  * contains values that are not of type T.
  */
 template <>

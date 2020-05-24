@@ -146,7 +146,7 @@ static void addFormal(const Pos & pos, Formals * formals, const Formal & formal)
 }
 
 
-static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, vector<Expr *> & es)
+static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, std::vector<Expr *> & es)
 {
     if (es.empty()) { return new ExprString(symbols.Create("")); }
 
@@ -186,11 +186,11 @@ static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, vector<Ex
     }
 
     /* Strip spaces from each line. */
-    vector<Expr *> * es2 = new vector<Expr *>;
+    std::vector<Expr *> * es2 = new std::vector<Expr *>;
     atStartOfLine = true;
     size_t curDropped = 0;
     size_t n = es.size();
-    for (vector<Expr *>::iterator i = es.begin(); i != es.end(); ++i, --n) {
+    for (std::vector<Expr *>::iterator i = es.begin(); i != es.end(); ++i, --n) {
         ExprIndStr * e = dynamic_cast<ExprIndStr *>(*i);
         if (!e) {
             atStartOfLine = false;
@@ -223,9 +223,10 @@ static Expr * stripIndentation(const Pos & pos, SymbolTable & symbols, vector<Ex
         /* Remove the last line if it is empty and consists only of
            spaces. */
         if (n == 1) {
-            string::size_type p = s2.find_last_of('\n');
-            if (p != string::npos && s2.find_first_not_of(' ', p + 1) == string::npos)
-                s2 = string(s2, 0, p + 1);
+            std::string::size_type p = s2.find_last_of('\n');
+            if (p != std::string::npos && s2.find_first_not_of(' ', p + 1) == std::string::npos) {
+                s2 = std::string(s2, 0, p + 1);
+            }
         }
 
         es2->push_back(new ExprString(symbols.Create(s2)));
@@ -354,7 +355,7 @@ expr_op
   | expr_op UPDATE expr_op { $$ = new ExprOpUpdate(CUR_POS, $1, $3); }
   | expr_op '?' attrpath { $$ = new ExprOpHasAttr($1, *$3); }
   | expr_op '+' expr_op
-    { $$ = new ExprConcatStrings(CUR_POS, false, new vector<Expr *>({$1, $3})); }
+    { $$ = new ExprConcatStrings(CUR_POS, false, new std::vector<Expr *>({$1, $3})); }
   | expr_op '-' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__sub")), $1), $3); }
   | expr_op '*' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__mul")), $1), $3); }
   | expr_op '/' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__div")), $1), $3); }
@@ -394,7 +395,7 @@ expr_simple
       $$ = stripIndentation(CUR_POS, data->symbols, *$2);
   }
   | PATH { $$ = new ExprPath(absPath($1, data->basePath)); }
-  | HPATH { $$ = new ExprPath(getHome() + string{$1 + 1}); }
+  | HPATH { $$ = new ExprPath(getHome() + std::string{$1 + 1}); }
   | SPATH {
       std::string path($1 + 1, strlen($1) - 2);
       $$ = new ExprApp(CUR_POS,
@@ -424,9 +425,9 @@ string_parts
 string_parts_interpolated
   : string_parts_interpolated STR { $$ = $1; $1->push_back($2); }
   | string_parts_interpolated DOLLAR_CURLY expr '}' { $$ = $1; $1->push_back($3); }
-  | DOLLAR_CURLY expr '}' { $$ = new vector<Expr *>; $$->push_back($2); }
+  | DOLLAR_CURLY expr '}' { $$ = new std::vector<Expr *>; $$->push_back($2); }
   | STR DOLLAR_CURLY expr '}' {
-      $$ = new vector<Expr *>;
+      $$ = new std::vector<Expr *>;
       $$->push_back($1);
       $$->push_back($3);
     }
@@ -435,7 +436,7 @@ string_parts_interpolated
 ind_string_parts
   : ind_string_parts IND_STR { $$ = $1; $1->push_back($2); }
   | ind_string_parts DOLLAR_CURLY expr '}' { $$ = $1; $1->push_back($3); }
-  | { $$ = new vector<Expr *>; }
+  | { $$ = new std::vector<Expr *>; }
   ;
 
 binds
@@ -487,9 +488,9 @@ attrpath
       } else
           $$->push_back(AttrName($3));
     }
-  | attr { $$ = new vector<AttrName>; $$->push_back(AttrName(data->symbols.Create($1))); }
+  | attr { $$ = new std::vector<AttrName>; $$->push_back(AttrName(data->symbols.Create($1))); }
   | string_attr
-    { $$ = new vector<AttrName>;
+    { $$ = new std::vector<AttrName>;
       ExprString *str = dynamic_cast<ExprString *>($1);
       if (str) {
           $$->push_back(AttrName(str->s));
@@ -603,7 +604,7 @@ Expr * EvalState::parseExprFromFile(const Path & path, StaticEnv & staticEnv)
 
 Expr * EvalState::parseExprFromString(const std::string & s, const Path & basePath, StaticEnv & staticEnv)
 {
-    return parse(s.c_str(), "(string)", basePath, staticEnv);
+    return parse(s.c_str(), "(std::string)", basePath, staticEnv);
 }
 
 
@@ -625,11 +626,11 @@ void EvalState::addToSearchPath(const std::string & s)
     size_t pos = s.find('=');
     std::string prefix;
     Path path;
-    if (pos == string::npos) {
+    if (pos == std::string::npos) {
         path = s;
     } else {
-        prefix = string(s, 0, pos);
-        path = string(s, pos + 1);
+        prefix = std::string(s, 0, pos);
+        path = std::string(s, pos + 1);
     }
 
     searchPath.emplace_back(prefix, path);
@@ -653,7 +654,7 @@ Path EvalState::findFile(SearchPath & searchPath, const std::string & path, cons
             if (path.compare(0, s, i.first) != 0 ||
                 (path.size() > s && path[s] != '/'))
                 continue;
-            suffix = path.size() == s ? "" : "/" + string(path, s);
+            suffix = path.size() == s ? "" : "/" + std::string(path, s);
         }
         auto r = resolveSearchPathElem(i);
         if (!r.first) { continue; }
@@ -662,7 +663,7 @@ Path EvalState::findFile(SearchPath & searchPath, const std::string & path, cons
     }
     format f = format(
         "file '%1%' was not found in the Nix search path (add it using $NIX_PATH or -I)"
-        + string(pos ? ", at %2%" : ""));
+        + std::string(pos ? ", at %2%" : ""));
     f.exceptions(boost::io::all_error_bits ^ boost::io::too_many_args_bit);
     throw ThrownError(f % path % pos);
 }

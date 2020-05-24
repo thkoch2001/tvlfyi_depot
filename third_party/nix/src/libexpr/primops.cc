@@ -32,13 +32,14 @@ namespace nix {
 
 /* Decode a context string ‘!<name>!<path>’ into a pair <path,
    name>. */
-std::pair<string, string> decodeContext(const std::string& s) {
+std::pair<std::string, std::string> decodeContext(const std::string& s) {
   if (s.at(0) == '!') {
     size_t index = s.find('!', 1);
-    return std::pair<string, string>(string(s, index + 1),
-                                     string(s, 1, index - 1));
+    return std::pair<std::string, std::string>(std::string(s, index + 1),
+                                               std::string(s, 1, index - 1));
   }
-  return std::pair<string, string>(s.at(0) == '/' ? s : string(s, 1), "");
+  return std::pair<std::string, std::string>(
+      s.at(0) == '/' ? s : std::string(s, 1), "");
 }
 
 InvalidPathError::InvalidPathError(const Path& path)
@@ -48,7 +49,7 @@ void EvalState::realiseContext(const PathSet& context) {
   PathSet drvs;
 
   for (auto& i : context) {
-    std::pair<string, string> decoded = decodeContext(i);
+    std::pair<std::string, std::string> decoded = decodeContext(i);
     Path ctx = decoded.first;
     assert(store->isStorePath(ctx));
     if (!store->isValidPath(ctx)) {
@@ -382,9 +383,9 @@ struct CompareValues {
 };
 
 #if HAVE_BOEHMGC
-typedef list<Value*, gc_allocator<Value*>> ValueList;
+typedef std::list<Value*, gc_allocator<Value*>> ValueList;
 #else
-typedef list<Value*> ValueList;
+typedef std::list<Value*> ValueList;
 #endif
 
 static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
@@ -418,7 +419,7 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
   ValueList res;
   // `doneKeys' doesn't need to be a GC root, because its values are
   // reachable from res.
-  set<Value*, CompareValues> doneKeys;
+  std::set<Value*, CompareValues> doneKeys;
   while (!workSet.empty()) {
     Value* e = *(workSet.begin());
     workSet.pop_front();
@@ -743,7 +744,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
     if (path.at(0) == '=') {
       /* !!! This doesn't work if readOnlyMode is set. */
       PathSet refs;
-      state.store->computeFSClosure(string(path, 1), refs);
+      state.store->computeFSClosure(std::string(path, 1), refs);
       for (auto& j : refs) {
         drv.inputSrcs.insert(j);
         if (isDerivation(j)) {
@@ -754,7 +755,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
 
     /* Handle derivation outputs of the form ‘!<name>!<path>’. */
     else if (path.at(0) == '!') {
-      std::pair<string, string> ctx = decodeContext(path);
+      std::pair<std::string, std::string> ctx = decodeContext(path);
       drv.inputDrvs[ctx.first].insert(ctx.second);
     }
 
@@ -965,7 +966,7 @@ static void prim_readFile(EvalState& state, const Pos& pos, Value** args,
   }
   std::string s =
       readFile(state.checkSourcePath(state.toRealPath(path, context)));
-  if (s.find((char)0) != string::npos) {
+  if (s.find((char)0) != std::string::npos) {
     throw Error(format("the contents of the file '%1%' cannot be represented "
                        "as a Nix string") %
                 path);
@@ -1899,7 +1900,7 @@ static void prim_substring(EvalState& state, const Pos& pos, Value** args,
                     pos);
   }
 
-  mkString(v, (unsigned int)start >= s.size() ? "" : string(s, start, len),
+  mkString(v, (unsigned int)start >= s.size() ? "" : std::string(s, start, len),
            context);
 }
 
@@ -2066,13 +2067,13 @@ static void prim_replaceStrings(EvalState& state, const Pos& pos, Value** args,
                     pos);
   }
 
-  vector<string> from;
+  std::vector<std::string> from;
   from.reserve(args[0]->listSize());
   for (unsigned int n = 0; n < args[0]->listSize(); ++n) {
     from.push_back(state.forceString(*args[0]->listElems()[n], pos));
   }
 
-  vector<std::pair<string, PathSet>> to;
+  std::vector<std::pair<std::string, PathSet>> to;
   to.reserve(args[1]->listSize());
   for (unsigned int n = 0; n < args[1]->listSize(); ++n) {
     PathSet ctx;

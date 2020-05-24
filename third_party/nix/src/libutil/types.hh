@@ -22,10 +22,6 @@ namespace nix {
 
 /* Inherit some names from other namespaces for convenience. */
 using boost::format;
-using std::list;
-using std::set;
-using std::string;
-using std::vector;
 
 /* A variadic template that does nothing. Useful to call a function
    for all variadic arguments but ignoring the result. */
@@ -35,8 +31,8 @@ struct nop {
 };
 
 struct FormatOrString {
-  string s;
-  FormatOrString(const string& s) : s(s){};
+  std::string s;
+  FormatOrString(const std::string& s) : s(s){};
   FormatOrString(const format& f) : s(f.str()){};
   FormatOrString(const char* s) : s(s){};
 };
@@ -64,8 +60,8 @@ inline std::string fmt(const std::string& fs, Args... args) {
    a subclass. Catch Error instead. */
 class BaseError : public std::exception {
  protected:
-  string prefix_;  // used for location traces etc.
-  string err;
+  std::string prefix_;  // used for location traces etc.
+  std::string err;
 
  public:
   unsigned int status = 1;  // exit status
@@ -84,8 +80,8 @@ class BaseError : public std::exception {
   const char* what() const noexcept { return err.c_str(); }
 #endif
 
-  const string& msg() const { return err; }
-  const string& prefix() const { return prefix_; }
+  const std::string& msg() const { return err; }
+  const std::string& prefix() const { return prefix_; }
   BaseError& addPrefix(const FormatOrString& fs);
 };
 
@@ -108,13 +104,13 @@ MakeError(Error, BaseError)
   std::string addErrno(const std::string& s);
 };
 
-typedef list<string> Strings;
-typedef set<string> StringSet;
+typedef std::list<std::string> Strings;
+typedef std::set<std::string> StringSet;
 typedef std::map<std::string, std::string> StringMap;
 
 /* Paths are just strings. */
-typedef string Path;
-typedef list<Path> Paths;
-typedef set<Path> PathSet;
+typedef std::string Path;
+typedef std::list<Path> Paths;
+typedef std::set<Path> PathSet;
 
 }  // namespace nix

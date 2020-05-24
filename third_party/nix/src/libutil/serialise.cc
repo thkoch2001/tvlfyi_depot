@@ -223,7 +223,7 @@ void writeString(const unsigned char* buf, size_t len, Sink& sink) {
   writePadding(len, sink);
 }
 
-Sink& operator<<(Sink& sink, const string& s) {
+Sink& operator<<(Sink& sink, const std::string& s) {
   writeString((const unsigned char*)s.data(), s.size(), sink);
   return sink;
 }
@@ -269,7 +269,7 @@ size_t readString(unsigned char* buf, size_t max, Source& source) {
   return len;
 }
 
-string readString(Source& source, size_t max) {
+std::string readString(Source& source, size_t max) {
   auto len = readNum<size_t>(source);
   if (len > max) {
     throw SerialisationError("string is too long");
@@ -280,7 +280,7 @@ string readString(Source& source, size_t max) {
   return res;
 }
 
-Source& operator>>(Source& in, string& s) {
+Source& operator>>(Source& in, std::string& s) {
   s = readString(in);
   return in;
 }

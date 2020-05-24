@@ -40,7 +40,7 @@ static void search(const unsigned char* s, size_t len, StringSet& hashes,
     if (!match) {
       continue;
     }
-    string ref((const char*)s + i, refLength);
+    std::string ref((const char*)s + i, refLength);
     if (hashes.find(ref) != hashes.end()) {
       DLOG(INFO) << "found reference to '" << ref << "' at offset " << i;
       seen.insert(ref);
@@ -55,7 +55,7 @@ struct RefScanSink : Sink {
   StringSet hashes;
   StringSet seen;
 
-  string tail;
+  std::string tail;
 
   RefScanSink() : hashSink(htSHA256) {}
 
@@ -68,34 +68,34 @@ void RefScanSink::operator()(const unsigned char* data, size_t len) {
   /* It's possible that a reference spans the previous and current
      fragment, so search in the concatenation of the tail of the
      previous fragment and the start of the current fragment. */
-  string s =
-      tail + string((const char*)data, len > refLength ? refLength : len);
+  std::string s =
+      tail + std::string((const char*)data, len > refLength ? refLength : len);
   search((const unsigned char*)s.data(), s.size(), hashes, seen);
 
   search(data, len, hashes, seen);
 
   size_t tailLen = len <= refLength ? len : refLength;
-  tail = string(tail, tail.size() < refLength - tailLen
-                          ? 0
-                          : tail.size() - (refLength - tailLen)) +
-         string((const char*)data + len - tailLen, tailLen);
+  tail = std::string(tail, tail.size() < refLength - tailLen
+                               ? 0
+                               : tail.size() - (refLength - tailLen)) +
+         std::string((const char*)data + len - tailLen, tailLen);
 }
 
-PathSet scanForReferences(const string& path, const PathSet& refs,
+PathSet scanForReferences(const std::string& path, const PathSet& refs,
                           HashResult& hash) {
   RefScanSink sink;
-  std::map<string, Path> backMap;
+  std::map<std::string, Path> backMap;
 
   /* For efficiency (and a higher hit rate), just search for the
      hash part of the file name.  (This assumes that all references
      have the form `HASH-bla'). */
   for (auto& i : refs) {
-    string baseName = baseNameOf(i);
-    string::size_type pos = baseName.find('-');
-    if (pos == string::npos) {
+    std::string baseName = baseNameOf(i);
+    std::string::size_type pos = baseName.find('-');
+    if (pos == std::string::npos) {
       throw Error(format("bad reference '%1%'") % i);
     }
-    string s = string(baseName, 0, pos);
+    std::string s = std::string(baseName, 0, pos);
     assert(s.size() == refLength);
     assert(backMap.find(s) == backMap.end());
     // parseHash(htSHA256, s);
@@ -109,7 +109,7 @@ PathSet scanForReferences(const string& path, const PathSet& refs,
   /* Map the hashes found back to their store paths. */
   PathSet found;
   for (auto& i : sink.seen) {
-    std::map<string, Path>::iterator j;
+    std::map<std::string, Path>::iterator j;
     if ((j = backMap.find(i)) == backMap.end()) {
       abort();
     }

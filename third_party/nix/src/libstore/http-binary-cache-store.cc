@@ -94,7 +94,7 @@ class HttpBinaryCacheStore : public BinaryCacheStore {
   void upsertFile(const std::string& path, const std::string& data,
                   const std::string& mimeType) override {
     auto req = DownloadRequest(cacheUri + "/" + path);
-    req.data = std::make_shared<string>(data);  // FIXME: inefficient
+    req.data = std::make_shared<std::string>(data);  // FIXME: inefficient
     req.mimeType = mimeType;
     try {
       getDownloader()->download(req);

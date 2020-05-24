@@ -105,7 +105,7 @@ StringSet Settings::getDefaultSystemFeatures() {
   return features;
 }
 
-const string nixVersion = PACKAGE_VERSION;
+const std::string nixVersion = PACKAGE_VERSION;
 
 template <>
 void BaseSetting<SandboxMode>::set(const std::string& str) {

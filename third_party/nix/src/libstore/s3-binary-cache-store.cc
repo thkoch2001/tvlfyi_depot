@@ -77,8 +77,8 @@ static void initAWS() {
   });
 }
 
-S3Helper::S3Helper(const string& profile, const string& region,
-                   const string& scheme, const string& endpoint)
+S3Helper::S3Helper(const std::string& profile, const std::string& region,
+                   const std::string& scheme, const std::string& endpoint)
     : config(makeConfig(region, scheme, endpoint)),
       client(make_ref<Aws::S3::S3Client>(
           profile == ""
@@ -114,7 +114,8 @@ class RetryStrategy : public Aws::Client::DefaultRetryStrategy {
 };
 
 ref<Aws::Client::ClientConfiguration> S3Helper::makeConfig(
-    const string& region, const string& scheme, const string& endpoint) {
+    const std::string& region, const std::string& scheme,
+    const std::string& endpoint) {
   initAWS();
   auto res = make_ref<Aws::Client::ClientConfiguration>();
   res->region = region;

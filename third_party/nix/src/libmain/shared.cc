@@ -83,8 +83,8 @@ void printMissing(const ref<Store>& store, const PathSet& willBuild,
   }
 }
 
-string getArg(const string& opt, Strings::iterator& i,
-              const Strings::iterator& end) {
+std::string getArg(const std::string& opt, Strings::iterator& i,
+                   const Strings::iterator& end) {
   ++i;
   if (i == end) {
     throw UsageError(format("'%1%' requires an argument") % opt);
@@ -246,13 +246,13 @@ void parseCmdLine(
 }
 
 void parseCmdLine(
-    const string& programName, const Strings& args,
+    const std::string& programName, const Strings& args,
     std::function<bool(Strings::iterator& arg, const Strings::iterator& end)>
         parseArg) {
   LegacyArgs(programName, std::move(parseArg)).parseCmdline(args);
 }
 
-void printVersion(const string& programName) {
+void printVersion(const std::string& programName) {
   std::cout << format("%1% (Nix) %2%") % programName % nixVersion << std::endl;
 
   // TODO(tazjin): figure out what the fuck this is
@@ -273,18 +273,18 @@ void printVersion(const string& programName) {
   throw Exit();
 }
 
-void showManPage(const string& name) {
+void showManPage(const std::string& name) {
   restoreSignals();
   setenv("MANPATH", settings.nixManDir.c_str(), 1);
   execlp("man", "man", name.c_str(), nullptr);
   throw SysError(format("command 'man %1%' failed") % name.c_str());
 }
 
-int handleExceptions(const string& programName,
+int handleExceptions(const std::string& programName,
                      const std::function<void()>& fun) {
   ReceiveInterrupts receiveInterrupts;  // FIXME: need better place for this
 
-  string error = ANSI_RED "error:" ANSI_NORMAL " ";
+  std::string error = ANSI_RED "error:" ANSI_NORMAL " ";
   try {
     try {
       fun();
@@ -328,7 +328,7 @@ RunPager::RunPager() {
   if (pager == nullptr) {
     pager = getenv("PAGER");
   }
-  if (pager && ((string)pager == "" || (string)pager == "cat")) {
+  if (pager && ((std::string)pager == "" || (std::string)pager == "cat")) {
     return;
   }
 
@@ -371,7 +371,7 @@ RunPager::~RunPager() {
   }
 }
 
-string showBytes(unsigned long long bytes) {
+std::string showBytes(unsigned long long bytes) {
   return (format("%.2f MiB") % (bytes / (1024.0 * 1024.0))).str();
 }
 

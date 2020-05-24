@@ -125,7 +125,7 @@ class LocalStore : public LocalFSStore {
 
   StringSet queryDerivationOutputNames(const Path& path) override;
 
-  Path queryPathFromHashPart(const string& hashPart) override;
+  Path queryPathFromHashPart(const std::string& hashPart) override;
 
   PathSet querySubstitutablePaths(const PathSet& paths) override;
 
@@ -136,7 +136,7 @@ class LocalStore : public LocalFSStore {
                   CheckSigsFlag checkSigs,
                   std::shared_ptr<FSAccessor> accessor) override;
 
-  Path addToStore(const string& name, const Path& srcPath, bool recursive,
+  Path addToStore(const std::string& name, const Path& srcPath, bool recursive,
                   HashType hashAlgo, PathFilter& filter,
                   RepairFlag repair) override;
 
@@ -144,11 +144,11 @@ class LocalStore : public LocalFSStore {
      in `dump', which is either a NAR serialisation (if recursive ==
      true) or simply the contents of a regular file (if recursive ==
      false). */
-  Path addToStoreFromDump(const string& dump, const string& name,
+  Path addToStoreFromDump(const std::string& dump, const std::string& name,
                           bool recursive = true, HashType hashAlgo = htSHA256,
                           RepairFlag repair = NoRepair);
 
-  Path addTextToStore(const string& name, const string& s,
+  Path addTextToStore(const std::string& name, const std::string& s,
                       const PathSet& references, RepairFlag repair) override;
 
   void buildPaths(const PathSet& paths, BuildMode buildMode) override;
@@ -166,7 +166,7 @@ class LocalStore : public LocalFSStore {
 
  private:
   typedef std::shared_ptr<AutoCloseFD> FDPtr;
-  typedef list<FDPtr> FDs;
+  typedef std::list<FDPtr> FDs;
 
   void findTempRoots(FDs& fds, Roots& roots, bool censor);
 
@@ -248,7 +248,7 @@ class LocalStore : public LocalFSStore {
   void deletePathRecursive(GCState& state, const Path& path);
 
   static bool isActiveTempFile(const GCState& state, const Path& path,
-                               const string& suffix);
+                               const std::string& suffix);
 
   AutoCloseFD openGCLock(LockType lockType);
 
@@ -290,7 +290,7 @@ class LocalStore : public LocalFSStore {
 };
 
 typedef std::pair<dev_t, ino_t> Inode;
-typedef set<Inode> InodesSeen;
+typedef std::set<Inode> InodesSeen;
 
 /* "Fix", or canonicalise, the meta-data of the files in a store path
    after it has been built.  In particular:

@@ -9,23 +9,23 @@ using std::cout;
 
 namespace nix {
 
-static string dotQuote(const string& s) { return "\"" + s + "\""; }
+static std::string dotQuote(const std::string& s) { return "\"" + s + "\""; }
 
-static string nextColour() {
+static std::string nextColour() {
   static int n = 0;
-  static string colours[] = {"black", "red",     "green",
-                             "blue",  "magenta", "burlywood"};
-  return colours[n++ % (sizeof(colours) / sizeof(string))];
+  static std::string colours[] = {"black", "red",     "green",
+                                  "blue",  "magenta", "burlywood"};
+  return colours[n++ % (sizeof(colours) / sizeof(std::string))];
 }
 
-static string makeEdge(const string& src, const string& dst) {
+static std::string makeEdge(const std::string& src, const std::string& dst) {
   format f = format("%1% -> %2% [color = %3%];\n") % dotQuote(src) %
              dotQuote(dst) % dotQuote(nextColour());
   return f.str();
 }
 
-static string makeNode(const string& id, const string& label,
-                       const string& colour) {
+static std::string makeNode(const std::string& id, const std::string& label,
+                            const std::string& colour) {
   format f = format(
                  "%1% [label = %2%, shape = box, "
                  "style = filled, fillcolor = %3%];\n") %
@@ -33,15 +33,15 @@ static string makeNode(const string& id, const string& label,
   return f.str();
 }
 
-static string symbolicName(const string& path) {
-  string p = baseNameOf(path);
-  return string(p, p.find('-') + 1);
+static std::string symbolicName(const std::string& path) {
+  std::string p = baseNameOf(path);
+  return std::string(p, p.find('-') + 1);
 }
 
 #if 0
-string pathLabel(const Path & nePath, const string & elemPath)
+std::string pathLabel(const Path & nePath, const std::string & elemPath)
 {
-    return (string) nePath + "-" + elemPath;
+    return (std::string) nePath + "-" + elemPath;
 }
 
 

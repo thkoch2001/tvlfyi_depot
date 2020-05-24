@@ -74,7 +74,7 @@ class BinaryCacheStore : public Store {
       const Path& path,
       Callback<std::shared_ptr<ValidPathInfo>> callback) noexcept override;
 
-  Path queryPathFromHashPart(const string& hashPart) override {
+  Path queryPathFromHashPart(const std::string& hashPart) override {
     unsupported("queryPathFromHashPart");
   }
 
@@ -84,11 +84,11 @@ class BinaryCacheStore : public Store {
                   RepairFlag repair, CheckSigsFlag checkSigs,
                   std::shared_ptr<FSAccessor> accessor) override;
 
-  Path addToStore(const string& name, const Path& srcPath, bool recursive,
+  Path addToStore(const std::string& name, const Path& srcPath, bool recursive,
                   HashType hashAlgo, PathFilter& filter,
                   RepairFlag repair) override;
 
-  Path addTextToStore(const string& name, const string& s,
+  Path addTextToStore(const std::string& name, const std::string& s,
                       const PathSet& references, RepairFlag repair) override;
 
   void narFromPath(const Path& path, Sink& sink) override;

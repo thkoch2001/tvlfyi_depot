@@ -18,7 +18,7 @@ class Exit : public std::exception {
   virtual ~Exit();
 };
 
-int handleExceptions(const string& programName,
+int handleExceptions(const std::string& programName,
                      const std::function<void()>& fun);
 
 /* Don't forget to call initPlugins() after settings are initialized! */
@@ -30,11 +30,11 @@ void parseCmdLine(
         parseArg);
 
 void parseCmdLine(
-    const string& programName, const Strings& args,
+    const std::string& programName, const Strings& args,
     std::function<bool(Strings::iterator& arg, const Strings::iterator& end)>
         parseArg);
 
-void printVersion(const string& programName);
+void printVersion(const std::string& programName);
 
 /* Ugh.  No better place to put this. */
 void printGCWarning();
@@ -47,17 +47,17 @@ void printMissing(const ref<Store>& store, const PathSet& willBuild,
                   const PathSet& willSubstitute, const PathSet& unknown,
                   unsigned long long downloadSize, unsigned long long narSize);
 
-string getArg(const string& opt, Strings::iterator& i,
-              const Strings::iterator& end);
+std::string getArg(const std::string& opt, Strings::iterator& i,
+                   const Strings::iterator& end);
 
 template <class N>
-N getIntArg(const string& opt, Strings::iterator& i,
+N getIntArg(const std::string& opt, Strings::iterator& i,
             const Strings::iterator& end, bool allowUnit) {
   ++i;
   if (i == end) {
     throw UsageError(format("'%1%' requires an argument") % opt);
   }
-  string s = *i;
+  std::string s = *i;
   N multiplier = 1;
   if (allowUnit && !s.empty()) {
     char u = std::toupper(*s.rbegin());
@@ -98,7 +98,7 @@ struct LegacyArgs : public MixCommonArgs {
 };
 
 /* Show the manual page for the specified program. */
-void showManPage(const string& name);
+void showManPage(const std::string& name);
 
 /* The constructor of this class starts a pager if stdout is a
    terminal and $PAGER is set. Stdout is redirected to the pager. */
@@ -115,7 +115,7 @@ extern volatile ::sig_atomic_t blockInt;
 
 /* GC helpers. */
 
-string showBytes(unsigned long long bytes);
+std::string showBytes(unsigned long long bytes);
 
 struct GCResults;
 

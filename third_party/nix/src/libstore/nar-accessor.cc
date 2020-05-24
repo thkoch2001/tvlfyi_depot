@@ -74,7 +74,7 @@ struct NarAccessor : public FSAccessor {
     void isExecutable() override { parents.top()->isExecutable = true; }
 
     void preallocateContents(unsigned long long size) override {
-      currentStart = string(s, pos, 16);
+      currentStart = std::string(s, pos, 16);
       assert(size <= std::numeric_limits<size_t>::max());
       parents.top()->size = (size_t)size;
       parents.top()->start = pos;
@@ -83,12 +83,12 @@ struct NarAccessor : public FSAccessor {
     void receiveContents(unsigned char* data, unsigned int len) override {
       // Sanity check
       if (!currentStart.empty()) {
-        assert(len < 16 || currentStart == string((char*)data, 16));
+        assert(len < 16 || currentStart == std::string((char*)data, 16));
         currentStart.clear();
       }
     }
 
-    void createSymlink(const Path& path, const string& target) override {
+    void createSymlink(const Path& path, const std::string& target) override {
       createMember(path,
                    NarMember{FSAccessor::Type::tSymlink, false, 0, 0, target});
     }

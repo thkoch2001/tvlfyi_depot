@@ -6,7 +6,7 @@
 
 namespace nix {
 
-MixCommonArgs::MixCommonArgs(const string& programName)
+MixCommonArgs::MixCommonArgs(const std::string& programName)
     : programName(programName) {
   mkFlag()
       .longName("option")

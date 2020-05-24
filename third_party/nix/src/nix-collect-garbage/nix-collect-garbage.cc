@@ -40,7 +40,7 @@ void removeOldGenerations(const std::string& dir) {
           continue;
         }
       }
-      if (link.find("link") != string::npos) {
+      if (link.find("link") != std::string::npos) {
         LOG(INFO) << "removing old generations of profile " << path;
         if (!deleteOlderThan.empty()) {
           deleteGenerationsOlderThan(path, deleteOlderThan, dryRun);
