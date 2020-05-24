@@ -133,6 +133,7 @@ in depot.lib.fix(self: {
       openssl
       pass
       pavucontrol
+      linuxPackages.perf
       pinentry
       pinentry-emacs
       pwgen
