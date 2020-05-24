@@ -247,7 +247,7 @@ static DrvInfos filterBySelector(EvalState& state, const DrvInfos& allElems,
        arbitrarily pick the first one. */
     if (newestOnly) {
       /* Map from package names to derivations. */
-      typedef map<std::string, std::pair<DrvInfo, unsigned int> > Newest;
+      typedef std::map<std::string, std::pair<DrvInfo, unsigned int> > Newest;
       Newest newest;
       StringSet multiple;
 
@@ -1367,7 +1367,7 @@ static void opDeleteGenerations(Globals& globals, Strings opFlags,
       throw Error(format("invalid number of generations ‘%1%’") %
                   opArgs.front());
     }
-    string str_max = std::string(opArgs.front(), 1, opArgs.front().size());
+    std::string str_max = std::string(opArgs.front(), 1, opArgs.front().size());
     int max;
     if (!string2Int(str_max, max) || max == 0) {
       throw Error(format("invalid number of generations to keep ‘%1%’") %

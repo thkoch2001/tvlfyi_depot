@@ -7,11 +7,7 @@
 
 namespace nix {
 
-using std::list;
-using std::map;
-using std::string;
-
-typedef map<std::string, std::string> XMLAttrs;
+typedef std::map<std::string, std::string> XMLAttrs;
 
 class XMLWriter {
  private:
