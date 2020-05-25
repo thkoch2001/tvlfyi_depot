@@ -3,6 +3,7 @@
 #include <utility>
 
 #include <absl/strings/match.h>
+#include <absl/strings/str_split.h>
 
 namespace nix {
 
@@ -20,8 +21,9 @@ SSHMaster::SSHMaster(const std::string& host, std::string keyFile,
 }
 
 void SSHMaster::addCommonSSHOpts(Strings& args) {
-  for (auto& i : tokenizeString<Strings>(getEnv("NIX_SSHOPTS"))) {
-    args.push_back(i);
+  for (auto& i :
+       absl::StrSplit(getEnv("NIX_SSHOPTS"), absl::ByAnyChar(" \t\n\r"))) {
+    args.push_back(std::string(i));
   }
   if (!keyFile.empty()) {
     args.insert(args.end(), {"-i", keyFile});

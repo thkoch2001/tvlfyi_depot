@@ -3,6 +3,7 @@
 #include <absl/strings/ascii.h>
 #include <absl/strings/match.h>
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_split.h>
 
 #include "archive.hh"
 #include "compression.hh"
@@ -180,7 +181,7 @@ struct CurlDownloader : public Downloader {
                  << "': " << absl::StripAsciiWhitespace(line);
       if (line.compare(0, 5, "HTTP/") == 0) {  // new response starts
         result.etag = "";
-        auto ss = tokenizeString<std::vector<std::string>>(line, " ");
+        std::vector<std::string> ss = absl::StrSplit(line, absl::ByChar(' '));
         status = ss.size() >= 2 ? ss[1] : "";
         result.data = std::make_shared<std::string>();
         result.bodySize = 0;
@@ -894,8 +895,8 @@ CachedDownloadResult Downloader::downloadCached(
     storePath = readLink(fileLink);
     store->addTempRoot(storePath);
     if (store->isValidPath(storePath)) {
-      auto ss =
-          tokenizeString<std::vector<std::string>>(readFile(dataFile), "\n");
+      std::vector<std::string> ss =
+          absl::StrSplit(readFile(dataFile), absl::ByChar('\n'));
       if (ss.size() >= 3 && ss[0] == url) {
         time_t lastChecked;
         if (absl::SimpleAtoi(ss[2], &lastChecked) &&

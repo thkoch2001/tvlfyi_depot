@@ -12,6 +12,7 @@
 #include <thread>
 #include <utility>
 
+#include <absl/strings/str_split.h>
 #include <absl/strings/string_view.h>
 #include <fcntl.h>
 #include <grp.h>
@@ -165,7 +166,7 @@ Path canonPath(const Path& path, bool resolveSymlinks) {
   return s.empty() ? "/" : s;
 }
 
-Path dirOf(const Path& path) {
+Path dirOf(absl::string_view path) {
   Path::size_type pos = path.rfind('/');
   if (pos == std::string::npos) {
     return ".";
@@ -542,7 +543,8 @@ Path getConfigDir() {
 std::vector<Path> getConfigDirs() {
   Path configHome = getConfigDir();
   std::string configDirs = getEnv("XDG_CONFIG_DIRS");
-  auto result = tokenizeString<std::vector<std::string>>(configDirs, ":");
+  std::vector<std::string> result =
+      absl::StrSplit(configDirs, absl::ByChar(':'));
   result.insert(result.begin(), configHome);
   return result;
 }
@@ -1169,29 +1171,6 @@ void _interrupted() {
 }
 
 //////////////////////////////////////////////////////////////////////
-
-template <class C>
-C tokenizeString(const std::string& s, const std::string& separators) {
-  C result;
-  std::string::size_type pos = s.find_first_not_of(separators, 0);
-  while (pos != std::string::npos) {
-    std::string::size_type end = s.find_first_of(separators, pos + 1);
-    if (end == std::string::npos) {
-      end = s.size();
-    }
-    std::string token(s, pos, end - pos);
-    result.insert(result.end(), token);
-    pos = s.find_first_not_of(separators, end);
-  }
-  return result;
-}
-
-template Strings tokenizeString(const std::string& s,
-                                const std::string& separators);
-template StringSet tokenizeString(const std::string& s,
-                                  const std::string& separators);
-template std::vector<std::string> tokenizeString(const std::string& s,
-                                                 const std::string& separators);
 
 std::string concatStringsSep(const std::string& sep, const Strings& ss) {
   std::string s;

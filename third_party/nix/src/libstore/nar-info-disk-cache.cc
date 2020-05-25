@@ -1,5 +1,7 @@
 #include "nar-info-disk-cache.hh"
 
+#include <absl/strings/str_cat.h>
+#include <absl/strings/str_split.h>
 #include <glog/logging.h>
 #include <sqlite3.h>
 
@@ -227,14 +229,15 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
           narInfo->fileSize = queryNAR.getInt(5);
           narInfo->narHash = Hash(queryNAR.getStr(6));
           narInfo->narSize = queryNAR.getInt(7);
-          for (auto& r : tokenizeString<Strings>(queryNAR.getStr(8), " ")) {
-            narInfo->references.insert(cache.storeDir + "/" + r);
+          for (auto r : absl::StrSplit(queryNAR.getStr(8), absl::ByChar(' '))) {
+            narInfo->references.insert(absl::StrCat(cache.storeDir, "/", r));
           }
           if (!queryNAR.isNull(9)) {
             narInfo->deriver = cache.storeDir + "/" + queryNAR.getStr(9);
           }
-          for (auto& sig : tokenizeString<Strings>(queryNAR.getStr(10), " ")) {
-            narInfo->sigs.insert(sig);
+          for (auto& sig :
+               absl::StrSplit(queryNAR.getStr(10), absl::ByChar(' '))) {
+            narInfo->sigs.insert(std::string(sig));
           }
           narInfo->ca = queryNAR.getStr(11);
 

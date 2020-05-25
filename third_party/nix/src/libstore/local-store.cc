@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_split.h>
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <grp.h>
@@ -477,14 +478,15 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
       throw SysError("querying extended attributes of '%s'", path);
     }
 
-    for (auto& eaName : tokenizeString<Strings>(
-             std::string(eaBuf.data(), eaSize), std::string("\000", 1))) {
+    for (auto& eaName :
+         absl::StrSplit(std::string(eaBuf.data(), eaSize),
+                        absl::ByString(std::string("\000", 1)))) {
       /* Ignore SELinux security labels since these cannot be
          removed even by root. */
       if (eaName == "security.selinux") {
         continue;
       }
-      if (lremovexattr(path.c_str(), eaName.c_str()) == -1) {
+      if (lremovexattr(path.c_str(), std::string(eaName).c_str()) == -1) {
         throw SysError("removing extended attribute '%s' from '%s'", eaName,
                        path);
       }
@@ -702,7 +704,7 @@ void LocalStore::queryPathInfoUncached(
 
       s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 6);
       if (s != nullptr) {
-        info->sigs = tokenizeString<StringSet>(s, " ");
+        info->sigs = absl::StrSplit(s, absl::ByChar(' '));
       }
 
       s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 7);

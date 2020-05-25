@@ -7,6 +7,7 @@
 #include <regex>
 
 #include <absl/strings/match.h>
+#include <absl/strings/str_split.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/statvfs.h>
@@ -422,8 +423,8 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
 
         try {
           auto mapFile = fmt("/proc/%s/maps", ent->d_name);
-          auto mapLines = tokenizeString<std::vector<std::string>>(
-              readFile(mapFile, true), "\n");
+          std::vector<std::string> mapLines =
+              absl::StrSplit(readFile(mapFile, true), absl::ByChar('\n'));
           for (const auto& line : mapLines) {
             auto match = std::smatch{};
             if (std::regex_match(line, match, mapRegex)) {
@@ -452,31 +453,9 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
     }
   }
 
-#if !defined(__linux__)
-  // lsof is really slow on OS X. This actually causes the gc-concurrent.sh test
-  // to fail. See: https://github.com/NixOS/nix/issues/3011 Because of this we
-  // disable lsof when running the tests.
-  if (getEnv("_NIX_TEST_NO_LSOF") == "") {
-    try {
-      std::regex lsofRegex(R"(^n(/.*)$)");
-      auto lsofLines = tokenizeString<std::vector<std::string>>(
-          runProgram(LSOF, true, {"-n", "-w", "-F", "n"}), "\n");
-      for (const auto& line : lsofLines) {
-        std::smatch match;
-        if (std::regex_match(line, match, lsofRegex))
-          unchecked[match[1]].emplace("{lsof}");
-      }
-    } catch (ExecError& e) {
-      /* lsof not installed, lsof failed */
-    }
-  }
-#endif
-
-#if defined(__linux__)
   readFileRoots("/proc/sys/kernel/modprobe", unchecked);
   readFileRoots("/proc/sys/kernel/fbsplash", unchecked);
   readFileRoots("/proc/sys/kernel/poweroff_cmd", unchecked);
-#endif
 
   for (auto& [target, links] : unchecked) {
     if (isInStore(target)) {

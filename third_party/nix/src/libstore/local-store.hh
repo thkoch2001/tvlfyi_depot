@@ -5,6 +5,8 @@
 #include <string>
 #include <unordered_set>
 
+#include <absl/strings/str_split.h>
+
 #include "pathlocks.hh"
 #include "sqlite.hh"
 #include "store-api.hh"
@@ -94,7 +96,9 @@ class LocalStore : public LocalFSStore {
 
  public:
   // Hack for build-remote.cc.
-  PathSet locksHeld = tokenizeString<PathSet>(getEnv("NIX_HELD_LOCKS"));
+  // TODO(tazjin): remove this when we've got gRPC
+  PathSet locksHeld =
+      absl::StrSplit(getEnv("NIX_HELD_LOCKS"), absl::ByAnyChar(" \t\n\r"));
 
   /* Initialise the local store, upgrading the schema if
      necessary. */

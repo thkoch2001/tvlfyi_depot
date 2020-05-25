@@ -88,7 +88,7 @@ extern DrvHashes drvHashes;  // FIXME: global, not thread-safe
    (/nix/store/hash-foo!out1,out2,...) into the derivation path and
    the outputs. */
 typedef std::pair<std::string, std::set<std::string> > DrvPathWithOutputs;
-DrvPathWithOutputs parseDrvPathWithOutputs(const std::string& s);
+DrvPathWithOutputs parseDrvPathWithOutputs(absl::string_view path);
 
 Path makeDrvPathWithOutputs(const Path& drvPath,
                             const std::set<std::string>& outputs);

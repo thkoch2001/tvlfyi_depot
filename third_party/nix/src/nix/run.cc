@@ -1,3 +1,8 @@
+#include <queue>
+
+#include <absl/strings/str_split.h>
+#include <sys/mount.h>
+
 #include "affinity.hh"
 #include "command.hh"
 #include "common-args.hh"
@@ -7,12 +12,6 @@
 #include "local-store.hh"
 #include "shared.hh"
 #include "store-api.hh"
-
-#if __linux__
-#include <sys/mount.h>
-#endif
-
-#include <queue>
 
 using namespace nix;
 
@@ -124,7 +123,7 @@ struct CmdRun : InstallablesCommand {
       todo.push(path);
     }
 
-    auto unixPath = tokenizeString<Strings>(getEnv("PATH"), ":");
+    Strings unixPath = absl::StrSplit(getEnv("PATH"), absl::ByChar(':'));
 
     while (!todo.empty()) {
       Path path = todo.front();
@@ -137,8 +136,9 @@ struct CmdRun : InstallablesCommand {
 
       auto propPath = path + "/nix-support/propagated-user-env-packages";
       if (accessor->stat(propPath).type == FSAccessor::tRegular) {
-        for (auto& p : tokenizeString<Paths>(readFile(propPath))) {
-          todo.push(p);
+        for (auto p :
+             absl::StrSplit(readFile(propPath), absl::ByAnyChar(" \t\n\r"))) {
+          todo.push(std::string(p));
         }
       }
     }

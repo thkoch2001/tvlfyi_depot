@@ -1,6 +1,7 @@
 #include <regex>
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/str_split.h>
 #include <fcntl.h>
 #include <pwd.h>
 
@@ -24,13 +25,15 @@ static void readChannels() {
   }
   auto channelsFile = readFile(channelsList);
 
-  for (const auto& line :
-       tokenizeString<std::vector<std::string>>(channelsFile, "\n")) {
-    absl::StripTrailingAsciiWhitespace(line);
+  std::vector<std::string> lines =
+      absl::StrSplit(channelsFile, absl::ByChar('\n'));
+
+  for (auto& line : lines) {
+    line = absl::StripTrailingAsciiWhitespace(line);
     if (std::regex_search(line, std::regex("^\\s*\\#"))) {
       continue;
     }
-    auto split = tokenizeString<std::vector<std::string>>(line, " ");
+    std::vector<std::string> split = absl::StrSplit(line, absl::ByChar(' '));
     auto url = std::regex_replace(split[0], std::regex("/*$"), "");
     auto name = split.size() > 1 ? split[1] : baseNameOf(url);
     channels[name] = url;

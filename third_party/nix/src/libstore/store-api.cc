@@ -5,6 +5,7 @@
 
 #include <absl/strings/match.h>
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_split.h>
 #include <glog/logging.h>
 
 #include "crypto.hh"
@@ -858,7 +859,8 @@ std::pair<std::string, Store::Params> splitUriAndParams(
   Store::Params params;
   auto q = uri.find('?');
   if (q != std::string::npos) {
-    for (const auto& s : tokenizeString<Strings>(uri.substr(q + 1), "&")) {
+    Strings parts = absl::StrSplit(uri.substr(q + 1), absl::ByChar('&'));
+    for (const auto& s : parts) {
       auto e = s.find('=');
       if (e != std::string::npos) {
         auto value = s.substr(e + 1);

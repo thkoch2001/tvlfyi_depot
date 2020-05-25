@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/str_split.h>
 #include <glog/logging.h>
 
 #include "affinity.hh"
@@ -113,7 +114,7 @@ static void _main(int argc, char** argv) {
       !std::regex_search(argv[1], std::regex("nix-shell"))) {
     script = argv[1];
     try {
-      auto lines = tokenizeString<Strings>(readFile(script), "\n");
+      Strings lines = absl::StrSplit(readFile(script), absl::ByChar('\n'));
       if (std::regex_search(lines.front(), std::regex("^#!"))) {
         lines.pop_front();
         inShebang = true;
@@ -444,7 +445,8 @@ static void _main(int argc, char** argv) {
     env["NIX_STORE"] = store->storeDir;
     env["NIX_BUILD_CORES"] = std::to_string(settings.buildCores);
 
-    auto passAsFile = tokenizeString<StringSet>(get(drv.env, "passAsFile", ""));
+    StringSet passAsFile = absl::StrSplit(get(drv.env, "passAsFile", ""),
+                                          absl::ByAnyChar(" \t\n\r"));
 
     bool keepTmp = false;
     int fileNr = 0;

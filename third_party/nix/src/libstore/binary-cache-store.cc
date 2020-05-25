@@ -6,6 +6,7 @@
 
 #include <absl/strings/ascii.h>
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_split.h>
 
 #include "archive.hh"
 #include "compression.hh"
@@ -41,7 +42,7 @@ void BinaryCacheStore::init() {
     upsertFile(cacheInfoFile, "StoreDir: " + storeDir + "\n",
                "text/x-nix-cache-info");
   } else {
-    for (auto& line : tokenizeString<Strings>(*cacheInfo, "\n")) {
+    for (auto& line : absl::StrSplit(*cacheInfo, absl::ByChar('\n'))) {
       size_t colon = line.find(':');
       if (colon == std::string::npos) {
         continue;

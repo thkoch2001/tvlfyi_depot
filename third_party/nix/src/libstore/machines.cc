@@ -4,6 +4,7 @@
 
 #include <absl/strings/ascii.h>
 #include <absl/strings/match.h>
+#include <absl/strings/str_split.h>
 #include <absl/strings/string_view.h>
 #include <glog/logging.h>
 
@@ -51,14 +52,15 @@ bool Machine::mandatoryMet(const std::set<std::string>& features) const {
 }
 
 void parseMachines(const std::string& s, Machines& machines) {
-  for (auto line : tokenizeString<std::vector<std::string>>(s, "\n;")) {
-    line.erase(std::find(line.begin(), line.end(), '#'), line.end());
-    if (line.empty()) {
+  for (auto line : absl::StrSplit(s, absl::ByAnyChar("\n;"))) {
+    // Skip empty lines & comments
+    line = absl::StripAsciiWhitespace(line);
+    if (line.empty() || line[line.find_first_not_of(" \t")] == '#') {
       continue;
     }
 
     if (line[0] == '@') {
-      auto file = absl::StripAsciiWhitespace(std::string(line, 1));
+      auto file = absl::StripAsciiWhitespace(line.substr(1));
       try {
         parseMachines(readFile(file), machines);
       } catch (const SysError& e) {
@@ -70,7 +72,8 @@ void parseMachines(const std::string& s, Machines& machines) {
       continue;
     }
 
-    auto tokens = tokenizeString<std::vector<std::string>>(line);
+    std::vector<std::string> tokens =
+        absl::StrSplit(line, absl::ByAnyChar(" \t\n\r"));
     auto sz = tokens.size();
     if (sz < 1) {
       throw FormatError("bad machine specification '%s'", line);
@@ -80,15 +83,16 @@ void parseMachines(const std::string& s, Machines& machines) {
       return tokens.size() > n && !tokens[n].empty() && tokens[n] != "-";
     };
 
+    // TODO(tazjin): what???
     machines.emplace_back(
         tokens[0],
-        isSet(1) ? tokenizeString<std::vector<std::string>>(tokens[1], ",")
+        isSet(1) ? absl::StrSplit(tokens[1], absl::ByChar(','))
                  : std::vector<std::string>{settings.thisSystem},
         isSet(2) ? tokens[2] : "", isSet(3) ? std::stoull(tokens[3]) : 1LL,
         isSet(4) ? std::stoull(tokens[4]) : 1LL,
-        isSet(5) ? tokenizeString<std::set<std::string>>(tokens[5], ",")
+        isSet(5) ? absl::StrSplit(tokens[5], absl::ByChar(','))
                  : std::set<std::string>{},
-        isSet(6) ? tokenizeString<std::set<std::string>>(tokens[6], ",")
+        isSet(6) ? absl::StrSplit(tokens[6], absl::ByChar(','))
                  : std::set<std::string>{},
         isSet(7) ? tokens[7] : "");
   }

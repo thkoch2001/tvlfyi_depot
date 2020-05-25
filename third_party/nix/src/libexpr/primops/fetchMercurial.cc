@@ -3,6 +3,7 @@
 
 #include <absl/strings/ascii.h>
 #include <absl/strings/match.h>
+#include <absl/strings/str_split.h>
 #include <glog/logging.h>
 #include <sys/time.h>
 
@@ -48,11 +49,11 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
       hgInfo.branch = absl::StripTrailingAsciiWhitespace(
           runProgram("hg", true, {"branch", "-R", uri}));
 
-      auto files = tokenizeString<std::set<std::string>>(
+      std::set<std::string> files = absl::StrSplit(
           runProgram("hg", true,
                      {"status", "-R", uri, "--clean", "--modified", "--added",
                       "--no-status", "--print0"}),
-          "\0"s);
+          absl::ByChar('\0'));
 
       PathFilter filter = [&](const Path& p) -> bool {
         assert(absl::StartsWith(p, uri));
@@ -124,10 +125,11 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
     writeFile(stampFile, "");
   }
 
-  auto tokens = tokenizeString<std::vector<std::string>>(
-      runProgram("hg", true,
-                 {"log", "-R", cacheDir, "-r", rev, "--template",
-                  "{node} {rev} {branch}"}));
+  std::vector<std::string> tokens =
+      absl::StrSplit(runProgram("hg", true,
+                                {"log", "-R", cacheDir, "-r", rev, "--template",
+                                 "{node} {rev} {branch}"}),
+                     absl::ByAnyChar(" \t\n\r"));
   assert(tokens.size() == 3);
 
   HgInfo hgInfo;

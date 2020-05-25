@@ -1,5 +1,7 @@
 #include "parsed-derivations.hh"
 
+#include <absl/strings/str_split.h>
+
 namespace nix {
 
 ParsedDerivation::ParsedDerivation(const Path& drvPath, BasicDerivation& drv)
@@ -86,7 +88,7 @@ std::optional<Strings> ParsedDerivation::getStringsAttr(
     if (i == drv.env.end()) {
       return {};
     }
-    return tokenizeString<Strings>(i->second);
+    return absl::StrSplit(i->second, absl::ByAnyChar(" \t\n\r"));
   }
 }
 

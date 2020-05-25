@@ -1,14 +1,16 @@
-#define GOOGLE_STRIP_LOG 0
 #include "config.hh"
 
+#include <string>
 #include <utility>
+#include <vector>
 
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_split.h>
+#include <absl/strings/string_view.h>
 #include <glog/logging.h>
 
 #include "args.hh"
 #include "json.hh"
-// #include <glog/log_severity.h>
 
 namespace nix {
 
@@ -99,7 +101,9 @@ void AbstractConfig::applyConfigFile(const Path& path) {
         line = std::string(line, 0, hash);
       }
 
-      auto tokens = tokenizeString<std::vector<std::string> >(line);
+      // TODO(tazjin): absl::string_view after path functions are fixed.
+      std::vector<std::string> tokens =
+          absl::StrSplit(line, absl::ByAnyChar(" \t\n\r"));
       if (tokens.empty()) {
         continue;
       }
@@ -258,7 +262,7 @@ void BaseSetting<bool>::convertToArg(Args& args, const std::string& category) {
 
 template <>
 void BaseSetting<Strings>::set(const std::string& str) {
-  value = tokenizeString<Strings>(str);
+  value = absl::StrSplit(str, absl::ByAnyChar(" \t\n\r"));
 }
 
 template <>
@@ -276,7 +280,7 @@ void BaseSetting<Strings>::toJSON(JSONPlaceholder& out) {
 
 template <>
 void BaseSetting<StringSet>::set(const std::string& str) {
-  value = tokenizeString<StringSet>(str);
+  value = absl::StrSplit(str, absl::ByAnyChar(" \t\n\r"));
 }
 
 template <>

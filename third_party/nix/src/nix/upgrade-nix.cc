@@ -1,4 +1,6 @@
 #include <absl/strings/match.h>
+#include <absl/strings/str_cat.h>
+#include <absl/strings/str_split.h>
 #include <glog/logging.h>
 
 #include "attr-path.hh"
@@ -101,8 +103,8 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
   static Path getProfileDir(const ref<Store>& store) {
     Path where;
 
-    for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":")) {
-      if (pathExists(dir + "/nix-env")) {
+    for (auto& dir : absl::StrSplit(getEnv("PATH"), absl::ByChar(':'))) {
+      if (pathExists(absl::StrCat(dir, "/nix-env"))) {
         where = dir;
         break;
       }

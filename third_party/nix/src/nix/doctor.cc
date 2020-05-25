@@ -1,4 +1,6 @@
 #include <absl/strings/match.h>
+#include <absl/strings/str_cat.h>
+#include <absl/strings/str_split.h>
 
 #include "command.hh"
 #include "serve-protocol.hh"
@@ -46,9 +48,9 @@ struct CmdDoctor : StoreCommand {
   static bool checkNixInPath() {
     PathSet dirs;
 
-    for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":")) {
-      if (pathExists(dir + "/nix-env")) {
-        dirs.insert(dirOf(canonPath(dir + "/nix-env", true)));
+    for (auto& dir : absl::StrSplit(getEnv("PATH"), absl::ByChar(':'))) {
+      if (pathExists(absl::StrCat(dir, "/nix-env"))) {
+        dirs.insert(dirOf(canonPath(absl::StrCat(dir, "/nix-env"), true)));
       }
     }
 
@@ -69,7 +71,7 @@ struct CmdDoctor : StoreCommand {
   static bool checkProfileRoots(const ref<Store>& store) {
     PathSet dirs;
 
-    for (auto& dir : tokenizeString<Strings>(getEnv("PATH"), ":")) {
+    for (auto dir : absl::StrSplit(getEnv("PATH"), absl::ByChar(':'))) {
       Path profileDir = dirOf(dir);
       try {
         Path userEnv = canonPath(profileDir, true);
@@ -82,7 +84,7 @@ struct CmdDoctor : StoreCommand {
           }
 
           if (profileDir.find("/profiles/") == std::string::npos) {
-            dirs.insert(dir);
+            dirs.insert(std::string(dir));
           }
         }
       } catch (SysError&) {

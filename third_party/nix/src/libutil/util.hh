@@ -56,7 +56,7 @@ Path canonPath(const Path& path, bool resolveSymlinks = false);
    everything before the final `/'.  If the path is the root or an
    immediate child thereof (e.g., `/foo'), this means an empty string
    is returned. */
-Path dirOf(const Path& path);
+Path dirOf(absl::string_view path);
 
 /* Return the base name of the given canonical path, i.e., everything
    following the final `/'. */
@@ -315,11 +315,6 @@ void inline checkInterrupt() {
 MakeError(Interrupted, BaseError);
 
 MakeError(FormatError, Error);
-
-/* String tokenizer. */
-template <class C>
-C tokenizeString(const std::string& s,
-                 const std::string& separators = " \t\n\r");
 
 /* Concatenate the given strings with a separator between the
    elements. */

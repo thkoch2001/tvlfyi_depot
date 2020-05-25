@@ -4,6 +4,7 @@
 #include <cstring>
 #include <regex>
 
+#include <absl/strings/str_split.h>
 #include <dlfcn.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
@@ -712,7 +713,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
           } else if (i->name == state.sOutputHashMode) {
             handleHashMode(s);
           } else if (i->name == state.sOutputs) {
-            handleOutputs(tokenizeString<Strings>(s));
+            handleOutputs(absl::StrSplit(s, absl::ByAnyChar(" \t\n\r")));
           }
         }
       }

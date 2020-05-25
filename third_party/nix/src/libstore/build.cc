@@ -10,10 +10,12 @@
 #include <queue>
 #include <regex>
 #include <sstream>
+#include <string>
 #include <thread>
 
 #include <absl/strings/ascii.h>
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_split.h>
 #include <fcntl.h>
 #include <grp.h>
 #include <netdb.h>
@@ -1968,7 +1970,7 @@ void DerivationGoal::startBuilder() {
        by `nix-store --register-validity'.  However, the deriver
        fields are left empty. */
     std::string s = get(drv->env, "exportReferencesGraph");
-    auto ss = tokenizeString<Strings>(s);
+    std::vector<std::string> ss = absl::StrSplit(s, absl::ByAnyChar(" \t\n\r"));
     if (ss.size() % 2 != 0) {
       throw BuildError(
           format("odd number of tokens in 'exportReferencesGraph': '%1%'") % s);
@@ -2481,7 +2483,8 @@ void DerivationGoal::initTmpDir() {
      needed (attributes are not passed through the environment, so
      there is no size constraint). */
   if (!parsedDrv->getStructuredAttrs()) {
-    auto passAsFile = tokenizeString<StringSet>(get(drv->env, "passAsFile"));
+    std::set<std::string> passAsFile =
+        absl::StrSplit(get(drv->env, "passAsFile"), absl::ByAnyChar(" \t\n\r"));
     int fileNr = 0;
     for (auto& i : drv->env) {
       if (passAsFile.find(i.first) == passAsFile.end()) {

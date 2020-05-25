@@ -526,7 +526,7 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
             trusted.insert(s);
           }
           Strings subs;
-          auto ss = tokenizeString<Strings>(value);
+          Strings ss = absl::StrSplit(value, absl::ByAnyChar(" \t\n\r"));
           for (auto& s : ss) {
             if (trusted.count(s) != 0u) {
               subs.push_back(s);

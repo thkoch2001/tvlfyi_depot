@@ -3,6 +3,7 @@
 
 #include <absl/strings/ascii.h>
 #include <absl/strings/match.h>
+#include <absl/strings/str_split.h>
 #include <glog/logging.h>
 #include <sys/time.h>
 
@@ -54,8 +55,9 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
       gitInfo.rev = "0000000000000000000000000000000000000000";
       gitInfo.shortRev = std::string(gitInfo.rev, 0, 7);
 
-      auto files = tokenizeString<std::set<std::string>>(
-          runProgram("git", true, {"-C", uri, "ls-files", "-z"}), "\0"s);
+      std::set<std::string> files =
+          absl::StrSplit(runProgram("git", true, {"-C", uri, "ls-files", "-z"}),
+                         absl::ByChar('\0'));
 
       PathFilter filter = [&](const Path& p) -> bool {
         assert(absl::StartsWith(p, uri));

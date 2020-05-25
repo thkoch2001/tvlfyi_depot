@@ -1,6 +1,8 @@
 #include "derivations.hh"
 
 #include <absl/strings/match.h>
+#include <absl/strings/str_split.h>
+#include <absl/strings/string_view.h>
 
 #include "fs-accessor.hh"
 #include "globals.hh"
@@ -357,13 +359,15 @@ Hash hashDerivationModulo(Store& store, Derivation drv) {
   return hashString(htSHA256, drv.unparse());
 }
 
-DrvPathWithOutputs parseDrvPathWithOutputs(const std::string& s) {
-  size_t n = s.find('!');
-  return n == std::string::npos
-             ? DrvPathWithOutputs(s, std::set<std::string>())
-             : DrvPathWithOutputs(std::string(s, 0, n),
-                                  tokenizeString<std::set<std::string> >(
-                                      std::string(s, n + 1), ","));
+// TODO(tazjin): doc comment?
+DrvPathWithOutputs parseDrvPathWithOutputs(absl::string_view path) {
+  auto pos = path.find('!');
+  if (pos == absl::string_view::npos) {
+    return DrvPathWithOutputs(path, std::set<std::string>());
+  }
+
+  return DrvPathWithOutputs(path.substr(pos + 1),
+                            absl::StrSplit(path, absl::ByChar(',')));
 }
 
 Path makeDrvPathWithOutputs(const Path& drvPath,

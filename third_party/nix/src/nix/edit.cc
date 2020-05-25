@@ -1,3 +1,4 @@
+#include <absl/strings/str_split.h>
 #include <glog/logging.h>
 #include <unistd.h>
 
@@ -54,7 +55,7 @@ struct CmdEdit : InstallableCommand {
 
     auto editor = getEnv("EDITOR", "cat");
 
-    auto args = tokenizeString<Strings>(editor);
+    Strings args = absl::StrSplit(editor, absl::ByAnyChar(" \t\n\r"));
 
     if (editor.find("emacs") != std::string::npos ||
         editor.find("nano") != std::string::npos ||

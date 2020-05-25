@@ -1,6 +1,7 @@
 #include <algorithm>
 
 #include <absl/strings/match.h>
+#include <absl/strings/str_split.h>
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
@@ -134,12 +135,14 @@ static void addPkg(const Path& pkgDir, int priority) {
   createLinks(pkgDir, out, priority);
 
   try {
-    for (const auto& p : tokenizeString<std::vector<std::string>>(
+    for (auto p : absl::StrSplit(
              readFile(pkgDir + "/nix-support/propagated-user-env-packages"),
-             " \n"))
-      if (!done.count(p)) {
-        postponed.insert(p);
+             absl::ByAnyChar(" \n"))) {
+      auto pkg = std::string(p);
+      if (!done.count(pkg)) {
+        postponed.insert(pkg);
       }
+    }
   } catch (SysError& e) {
     if (e.errNo != ENOENT && e.errNo != ENOTDIR) {
       throw;
@@ -172,7 +175,8 @@ void builtinBuildenv(const BasicDerivation& drv) {
   /* Convert the stuff we get from the environment back into a
    * coherent data type. */
   Packages pkgs;
-  auto derivations = tokenizeString<Strings>(getAttr("derivations"));
+  Strings derivations =
+      absl::StrSplit(getAttr("derivations"), absl::ByAnyChar(" \t\n\r"));
   while (!derivations.empty()) {
     /* !!! We're trusting the caller to structure derivations env var correctly
      */

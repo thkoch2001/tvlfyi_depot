@@ -5,6 +5,8 @@
 #include <thread>
 
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_cat.h>
+#include <absl/strings/str_split.h>
 #include <dlfcn.h>
 
 #include "archive.hh"
@@ -19,9 +21,6 @@ namespace nix {
    appropriately.  (This wouldn't work on the socket itself since it
    must be deleted and recreated on startup.) */
 #define DEFAULT_SOCKET_PATH "/daemon-socket/socket"
-
-// TODO(tazjin): this was __APPLE__ specific, still needed?
-#define DEFAULT_ALLOWED_IMPURE_PREFIXES ""
 
 Settings settings;
 
@@ -55,21 +54,18 @@ Settings::Settings()
   }
 
   /* Backwards compatibility. */
+  // TODO(tazjin): still?
   auto s = getEnv("NIX_REMOTE_SYSTEMS");
   if (!s.empty()) {
     Strings ss;
-    for (auto& p : tokenizeString<Strings>(s, ":")) {
-      ss.push_back("@" + p);
+    for (auto p : absl::StrSplit(s, absl::ByChar(':'))) {
+      ss.push_back(absl::StrCat("@", p));
     }
     builders = concatStringsSep(" ", ss);
   }
 
-#if defined(__linux__) && defined(SANDBOX_SHELL)
-  sandboxPaths = tokenizeString<StringSet>("/bin/sh=" SANDBOX_SHELL);
-#endif
-
-  allowedImpureHostPrefixes =
-      tokenizeString<StringSet>(DEFAULT_ALLOWED_IMPURE_PREFIXES);
+  sandboxPaths =
+      absl::StrSplit("/bin/sh=" SANDBOX_SHELL, absl::ByAnyChar(" \t\n\r"));
 }
 
 void loadConfFile() {

@@ -1,6 +1,7 @@
 #include "nar-info.hh"
 
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_split.h>
 
 #include "globals.hh"
 
@@ -59,7 +60,7 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
         corrupt();
       }
     } else if (name == "References") {
-      auto refs = tokenizeString<Strings>(value, " ");
+      std::vector<std::string> refs = absl::StrSplit(value, absl::ByChar(' '));
       if (!references.empty()) {
         corrupt();
       }
