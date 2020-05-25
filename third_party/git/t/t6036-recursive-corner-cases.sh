@@ -60,9 +60,9 @@ test_expect_success 'merge simple rename+criss-cross with no modifications' '
 		test_must_fail git merge -s recursive R2^0 &&
 
 		git ls-files -s >out &&
-		test_line_count = 5 out &&
+		test_line_count = 2 out &&
 		git ls-files -u >out &&
-		test_line_count = 3 out &&
+		test_line_count = 2 out &&
 		git ls-files -o >out &&
 		test_line_count = 1 out &&
 
@@ -133,9 +133,9 @@ test_expect_success 'merge criss-cross + rename merges with basic modification' 
 		test_must_fail git merge -s recursive R2^0 &&
 
 		git ls-files -s >out &&
-		test_line_count = 5 out &&
+		test_line_count = 2 out &&
 		git ls-files -u >out &&
-		test_line_count = 3 out &&
+		test_line_count = 2 out &&
 		git ls-files -o >out &&
 		test_line_count = 1 out &&
 
@@ -218,18 +218,8 @@ test_expect_success 'git detects differently handled merges conflict' '
 		git ls-files -o >out &&
 		test_line_count = 1 out &&
 
-		git cat-file -p C:new_a >ours &&
-		git cat-file -p C:a >theirs &&
-		>empty &&
-		test_must_fail git merge-file \
-			-L "Temporary merge branch 1" \
-			-L "" \
-			-L "Temporary merge branch 2" \
-			ours empty theirs &&
-		sed -e "s/^\([<=>]\)/\1\1\1/" ours >ours-tweaked &&
-		git hash-object ours-tweaked >expect &&
-		git rev-parse >>expect      \
-				  D:new_a  E:new_a &&
+		git rev-parse >expect       \
+			C:new_a  D:new_a  E:new_a &&
 		git rev-parse   >actual     \
 			:1:new_a :2:new_a :3:new_a &&
 		test_cmp expect actual &&
@@ -267,8 +257,7 @@ test_expect_success 'git detects differently handled merges conflict, swapped' '
 		ctime=$(git log --no-walk --date=raw --format=%cd C | awk "{print \$1}") &&
 		newctime=$(($btime+1)) &&
 		git fast-export --no-data --all | sed -e s/$ctime/$newctime/ | git fast-import --force --quiet &&
-		# End of most differences; rest is copy-paste of last test,
-		# other than swapping C:a and C:new_a due to order switch
+		# End of differences; rest is copy-paste of last test
 
 		git checkout D^0 &&
 		test_must_fail git merge -s recursive E^0 &&
@@ -280,18 +269,8 @@ test_expect_success 'git detects differently handled merges conflict, swapped' '
 		git ls-files -o >out &&
 		test_line_count = 1 out &&
 
-		git cat-file -p C:a >ours &&
-		git cat-file -p C:new_a >theirs &&
-		>empty &&
-		test_must_fail git merge-file \
-			-L "Temporary merge branch 1" \
-			-L "" \
-			-L "Temporary merge branch 2" \
-			ours empty theirs &&
-		sed -e "s/^\([<=>]\)/\1\1\1/" ours >ours-tweaked &&
-		git hash-object ours-tweaked >expect &&
-		git rev-parse >>expect      \
-				  D:new_a  E:new_a &&
+		git rev-parse >expect       \
+			C:new_a  D:new_a  E:new_a &&
 		git rev-parse   >actual     \
 			:1:new_a :2:new_a :3:new_a &&
 		test_cmp expect actual &&
@@ -1553,7 +1532,7 @@ test_expect_success 'setup nested conflicts' '
 		mv -f b_R1 b &&
 		mv -f a_R1 a &&
 		git add b a &&
-		test_tick && git commit -m "version R1 of files" &&
+		test_tick && git commit -m "verson R1 of files" &&
 		git tag R1 &&
 
 		# Create first merge on left side
@@ -1583,7 +1562,6 @@ test_expect_success 'check nested conflicts' '
 		cd nested_conflicts &&
 
 		git clean -f &&
-		MASTER=$(git rev-parse --short master) &&
 		git checkout L2^0 &&
 
 		# Merge must fail; there is a conflict
@@ -1604,7 +1582,7 @@ test_expect_success 'check nested conflicts' '
 		git cat-file -p R1:a >theirs &&
 		test_must_fail git merge-file --diff3 \
 			-L "Temporary merge branch 1" \
-			-L "$MASTER"  \
+			-L "merged common ancestors"  \
 			-L "Temporary merge branch 2" \
 			ours  \
 			base  \
@@ -1616,7 +1594,7 @@ test_expect_success 'check nested conflicts' '
 		git cat-file -p R1:b >theirs &&
 		test_must_fail git merge-file --diff3 \
 			-L "Temporary merge branch 1" \
-			-L "$MASTER"  \
+			-L "merged common ancestors"  \
 			-L "Temporary merge branch 2" \
 			ours  \
 			base  \
@@ -1717,7 +1695,7 @@ test_expect_success 'setup virtual merge base with nested conflicts' '
 		git checkout R &&
 		echo right >>content &&
 		git add content &&
-		test_tick && git commit -m "version R1 of content" &&
+		test_tick && git commit -m "verson R1 of content" &&
 		git tag R1 &&
 
 		# Create L2
@@ -1754,7 +1732,6 @@ test_expect_success 'check virtual merge base with nested conflicts' '
 	(
 		cd virtual_merge_base_has_nested_conflicts &&
 
-		MASTER=$(git rev-parse --short master) &&
 		git checkout L3^0 &&
 
 		# Merge must fail; there is a conflict
@@ -1783,7 +1760,7 @@ test_expect_success 'check virtual merge base with nested conflicts' '
 		cp left merged-once &&
 		test_must_fail git merge-file --diff3 \
 			-L "Temporary merge branch 1" \
-			-L "$MASTER"  \
+			-L "merged common ancestors"  \
 			-L "Temporary merge branch 2" \
 			merged-once \
 			base        \

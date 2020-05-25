@@ -15,6 +15,7 @@
 #include "argv-array.h"
 #include "run-command.h"
 #include "object-store.h"
+#include "revision.h"
 #include "list-objects.h"
 #include "commit-slab.h"
 
@@ -63,22 +64,19 @@ static const char *prio_names[] = {
 };
 
 static int commit_name_neq(const void *unused_cmp_data,
-			   const struct hashmap_entry *eptr,
-			   const struct hashmap_entry *entry_or_key,
+			   const void *entry,
+			   const void *entry_or_key,
 			   const void *peeled)
 {
-	const struct commit_name *cn1, *cn2;
-
-	cn1 = container_of(eptr, const struct commit_name, entry);
-	cn2 = container_of(entry_or_key, const struct commit_name, entry);
+	const struct commit_name *cn1 = entry;
+	const struct commit_name *cn2 = entry_or_key;
 
 	return !oideq(&cn1->peeled, peeled ? peeled : &cn2->peeled);
 }
 
 static inline struct commit_name *find_commit_name(const struct object_id *peeled)
 {
-	return hashmap_get_entry_from_hash(&names, oidhash(peeled), peeled,
-						struct commit_name, entry);
+	return hashmap_get_from_hash(&names, oidhash(peeled), peeled);
 }
 
 static int replace_name(struct commit_name *e,
@@ -125,8 +123,8 @@ static void add_to_known_names(const char *path,
 		if (!e) {
 			e = xmalloc(sizeof(struct commit_name));
 			oidcpy(&e->peeled, peeled);
-			hashmap_entry_init(&e->entry, oidhash(peeled));
-			hashmap_add(&names, &e->entry);
+			hashmap_entry_init(e, oidhash(peeled));
+			hashmap_add(&names, e);
 			e->path = NULL;
 		}
 		e->tag = tag;
@@ -315,7 +313,7 @@ static void describe_commit(struct object_id *oid, struct strbuf *dst)
 		 */
 		append_name(n, dst);
 		if (longformat)
-			append_suffix(0, n->tag ? get_tagged_oid(n->tag) : oid, dst);
+			append_suffix(0, n->tag ? &n->tag->tagged->oid : oid, dst);
 		if (suffix)
 			strbuf_addstr(dst, suffix);
 		return;
@@ -332,8 +330,8 @@ static void describe_commit(struct object_id *oid, struct strbuf *dst)
 		struct commit_name *n;
 
 		init_commit_names(&commit_names);
-		hashmap_for_each_entry(&names, &iter, n,
-					entry /* member name */) {
+		n = hashmap_iter_first(&names, &iter);
+		for (; n; n = hashmap_iter_next(&iter)) {
 			c = lookup_commit_reference_gently(the_repository,
 							   &n->peeled, 1);
 			if (c)
@@ -376,25 +374,11 @@ static void describe_commit(struct object_id *oid, struct strbuf *dst)
 			if (!(c->object.flags & t->flag_within))
 				t->depth++;
 		}
-		/* Stop if last remaining path already covered by best candidate(s) */
 		if (annotated_cnt && !list) {
-			int best_depth = INT_MAX;
-			unsigned best_within = 0;
-			for (cur_match = 0; cur_match < match_cnt; cur_match++) {
-				struct possible_tag *t = &all_matches[cur_match];
-				if (t->depth < best_depth) {
-					best_depth = t->depth;
-					best_within = t->flag_within;
-				} else if (t->depth == best_depth) {
-					best_within |= t->flag_within;
-				}
-			}
-			if ((c->object.flags & best_within) == best_within) {
-				if (debug)
-					fprintf(stderr, _("finished search at %s\n"),
-						oid_to_hex(&c->object.oid));
-				break;
-			}
+			if (debug)
+				fprintf(stderr, _("finished search at %s\n"),
+					oid_to_hex(&c->object.oid));
+			break;
 		}
 		while (parents) {
 			struct commit *p = parents->item;

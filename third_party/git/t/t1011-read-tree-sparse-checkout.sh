@@ -215,6 +215,7 @@ test_expect_success 'read-tree adds to worktree, dirty case' '
 '
 
 test_expect_success 'index removal and worktree narrowing at the same time' '
+	>empty &&
 	echo init.t >.git/info/sparse-checkout &&
 	echo sub/added >>.git/info/sparse-checkout &&
 	git checkout -f top &&
@@ -222,7 +223,7 @@ test_expect_success 'index removal and worktree narrowing at the same time' '
 	git checkout removed &&
 	git ls-files sub/added >result &&
 	test ! -f sub/added &&
-	test_must_be_empty result
+	test_cmp empty result
 '
 
 test_expect_success 'read-tree --reset removes outside worktree' '

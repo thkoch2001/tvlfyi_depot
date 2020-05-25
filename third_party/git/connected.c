@@ -5,7 +5,6 @@
 #include "connected.h"
 #include "transport.h"
 #include "packfile.h"
-#include "promisor-remote.h"
 
 /*
  * If we feed all the commits we want to verify to this command
@@ -29,7 +28,6 @@ int check_connected(oid_iterate_fn fn, void *cb_data,
 	struct packed_git *new_pack = NULL;
 	struct transport *transport;
 	size_t base_len;
-	const unsigned hexsz = the_hash_algo->hexsz;
 
 	if (!opt)
 		opt = &defaults;
@@ -52,28 +50,18 @@ int check_connected(oid_iterate_fn fn, void *cb_data,
 		strbuf_release(&idx_file);
 	}
 
-	if (opt->check_refs_are_promisor_objects_only) {
+	if (opt->check_refs_only) {
 		/*
 		 * For partial clones, we don't want to have to do a regular
 		 * connectivity check because we have to enumerate and exclude
 		 * all promisor objects (slow), and then the connectivity check
 		 * itself becomes a no-op because in a partial clone every
 		 * object is a promisor object. Instead, just make sure we
-		 * received, in a promisor packfile, the objects pointed to by
-		 * each wanted ref.
+		 * received the objects pointed to by each wanted ref.
 		 */
 		do {
-			struct packed_git *p;
-
-			for (p = get_all_packs(the_repository); p; p = p->next) {
-				if (!p->pack_promisor)
-					continue;
-				if (find_pack_entry_one(oid.hash, p))
-					goto promisor_pack_found;
-			}
-			return 1;
-promisor_pack_found:
-			;
+			if (!repo_has_object_file(the_repository, &oid))
+				return 1;
 		} while (!fn(cb_data, &oid));
 		return 0;
 	}
@@ -85,7 +73,7 @@ promisor_pack_found:
 	argv_array_push(&rev_list.args,"rev-list");
 	argv_array_push(&rev_list.args, "--objects");
 	argv_array_push(&rev_list.args, "--stdin");
-	if (has_promisor_remote())
+	if (repository_format_partial_clone)
 		argv_array_push(&rev_list.args, "--exclude-promisor-objects");
 	if (!opt->is_deepening_fetch) {
 		argv_array_push(&rev_list.args, "--not");
@@ -111,7 +99,7 @@ promisor_pack_found:
 
 	sigchain_push(SIGPIPE, SIG_IGN);
 
-	commit[hexsz] = '\n';
+	commit[GIT_SHA1_HEXSZ] = '\n';
 	do {
 		/*
 		 * If index-pack already checked that:
@@ -124,8 +112,8 @@ promisor_pack_found:
 		if (new_pack && find_pack_entry_one(oid.hash, new_pack))
 			continue;
 
-		memcpy(commit, oid_to_hex(&oid), hexsz);
-		if (write_in_full(rev_list.in, commit, hexsz + 1) < 0) {
+		memcpy(commit, oid_to_hex(&oid), GIT_SHA1_HEXSZ);
+		if (write_in_full(rev_list.in, commit, GIT_SHA1_HEXSZ + 1) < 0) {
 			if (errno != EPIPE && errno != EINVAL)
 				error_errno(_("failed write to rev-list"));
 			err = -1;

@@ -341,9 +341,9 @@ method _readtree {} {
 	global HEAD
 
 	set readtree_d {}
-	set status_bar_operation [$::main_status start \
+	$::main_status start \
 		[mc "Updating working directory to '%s'..." [_name $this]] \
-		[mc "files checked out"]]
+		[mc "files checked out"]
 
 	set fd [git_read --stderr read-tree \
 		-m \
@@ -354,27 +354,26 @@ method _readtree {} {
 		$new_hash \
 		]
 	fconfigure $fd -blocking 0 -translation binary
-	fileevent $fd readable [cb _readtree_wait $fd $status_bar_operation]
+	fileevent $fd readable [cb _readtree_wait $fd]
 }
 
-method _readtree_wait {fd status_bar_operation} {
+method _readtree_wait {fd} {
 	global current_branch
 
 	set buf [read $fd]
-	$status_bar_operation update_meter $buf
+	$::main_status update_meter $buf
 	append readtree_d $buf
 
 	fconfigure $fd -blocking 1
 	if {![eof $fd]} {
 		fconfigure $fd -blocking 0
-		$status_bar_operation stop
 		return
 	}
 
 	if {[catch {close $fd}]} {
 		set err $readtree_d
 		regsub {^fatal: } $err {} err
-		$status_bar_operation stop [mc "Aborted checkout of '%s' (file level merging is required)." [_name $this]]
+		$::main_status stop [mc "Aborted checkout of '%s' (file level merging is required)." [_name $this]]
 		warn_popup [strcat [mc "File level merge required."] "
 
 $err
@@ -385,12 +384,12 @@ $err
 		return
 	}
 
-	$status_bar_operation stop
+	$::main_status stop
 	_after_readtree $this
 }
 
 method _after_readtree {} {
-	global commit_type HEAD MERGE_HEAD PARENT
+	global selected_commit_type commit_type HEAD MERGE_HEAD PARENT
 	global current_branch is_detached
 	global ui_comm
 
@@ -491,12 +490,12 @@ method _update_repo_state {} {
 	#    amend mode our file lists are accurate and we can avoid
 	#    the rescan.
 	#
-	global commit_type_is_amend commit_type HEAD MERGE_HEAD PARENT
+	global selected_commit_type commit_type HEAD MERGE_HEAD PARENT
 	global ui_comm
 
 	unlock_index
 	set name [_name $this]
-	set commit_type_is_amend 0
+	set selected_commit_type new
 	if {[string match amend* $commit_type]} {
 		$ui_comm delete 0.0 end
 		$ui_comm edit reset

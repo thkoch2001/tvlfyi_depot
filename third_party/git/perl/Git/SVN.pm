@@ -1491,10 +1491,6 @@ sub call_authors_prog {
 
 sub check_author {
 	my ($author) = @_;
-	if (defined $author) {
-		$author =~ s/^\s+//g;
-		$author =~ s/\s+$//g;
-	}
 	if (!defined $author || length $author == 0) {
 		$author = '(no author)';
 	}

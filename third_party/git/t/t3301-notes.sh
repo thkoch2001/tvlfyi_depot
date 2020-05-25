@@ -54,9 +54,7 @@ test_expect_success 'create notes' '
 	test_path_is_missing .git/NOTES_EDITMSG &&
 	git ls-tree -r refs/notes/commits >actual &&
 	test_line_count = 1 actual &&
-	echo b4 >expect &&
-	git notes show >actual &&
-	test_cmp expect actual &&
+	test "b4" = "$(git notes show)" &&
 	git show HEAD^ &&
 	test_must_fail git notes show HEAD^
 '
@@ -68,9 +66,8 @@ test_expect_success 'show notes entry with %N' '
 '
 
 test_expect_success 'create reflog entry' '
-	ref=$(git rev-parse --short refs/notes/commits) &&
 	cat <<-EOF >expect &&
-		$ref refs/notes/commits@{0}: notes: Notes added by '\''git notes add'\''
+		a1d8fa6 refs/notes/commits@{0}: notes: Notes added by '\''git notes add'\''
 	EOF
 	git reflog show refs/notes/commits >actual &&
 	test_cmp expect actual
@@ -81,21 +78,14 @@ test_expect_success 'edit existing notes' '
 	test_path_is_missing .git/NOTES_EDITMSG &&
 	git ls-tree -r refs/notes/commits >actual &&
 	test_line_count = 1 actual &&
-	echo b3 >expect &&
-	git notes show >actual &&
-	test_cmp expect actual &&
+	test "b3" = "$(git notes show)" &&
 	git show HEAD^ &&
 	test_must_fail git notes show HEAD^
 '
 
 test_expect_success 'show notes from treeish' '
-	echo b3 >expect &&
-	git notes --ref commits^{tree} show >actual &&
-	test_cmp expect actual &&
-
-	echo b4 >expect &&
-	git notes --ref commits@{1} show >actual &&
-	test_cmp expect actual
+	test "b3" = "$(git notes --ref commits^{tree} show)" &&
+	test "b4" = "$(git notes --ref commits@{1} show)"
 '
 
 test_expect_success 'cannot edit notes from non-ref' '
@@ -108,9 +98,7 @@ test_expect_success 'cannot "git notes add -m" where notes already exists' '
 	test_path_is_missing .git/NOTES_EDITMSG &&
 	git ls-tree -r refs/notes/commits >actual &&
 	test_line_count = 1 actual &&
-	echo b3 >expect &&
-	git notes show >actual &&
-	test_cmp expect actual &&
+	test "b3" = "$(git notes show)" &&
 	git show HEAD^ &&
 	test_must_fail git notes show HEAD^
 '
@@ -120,9 +108,7 @@ test_expect_success 'can overwrite existing note with "git notes add -f -m"' '
 	test_path_is_missing .git/NOTES_EDITMSG &&
 	git ls-tree -r refs/notes/commits >actual &&
 	test_line_count = 1 actual &&
-	echo b1 >expect &&
-	git notes show >actual &&
-	test_cmp expect actual &&
+	test "b1" = "$(git notes show)" &&
 	git show HEAD^ &&
 	test_must_fail git notes show HEAD^
 '
@@ -132,9 +118,7 @@ test_expect_success 'add w/no options on existing note morphs into edit' '
 	test_path_is_missing .git/NOTES_EDITMSG &&
 	git ls-tree -r refs/notes/commits >actual &&
 	test_line_count = 1 actual &&
-	echo b2 >expect &&
-	git notes show >actual &&
-	test_cmp expect actual &&
+	test "b2" = "$(git notes show)" &&
 	git show HEAD^ &&
 	test_must_fail git notes show HEAD^
 '
@@ -144,17 +128,14 @@ test_expect_success 'can overwrite existing note with "git notes add -f"' '
 	test_path_is_missing .git/NOTES_EDITMSG &&
 	git ls-tree -r refs/notes/commits >actual &&
 	test_line_count = 1 actual &&
-	echo b1 >expect &&
-	git notes show >actual &&
-	test_cmp expect actual &&
+	test "b1" = "$(git notes show)" &&
 	git show HEAD^ &&
 	test_must_fail git notes show HEAD^
 '
 
 test_expect_success 'show notes' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 7a4ca6ee52a974a66cbaa78e33214535dff1d691
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:14:13 2005 -0700
 
@@ -163,8 +144,7 @@ test_expect_success 'show notes' '
 		Notes:
 		${indent}b1
 	EOF
-	git cat-file commit HEAD >commits &&
-	! grep b1 commits &&
+	! (git cat-file commit HEAD | grep b1) &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
@@ -172,9 +152,8 @@ test_expect_success 'show notes' '
 test_expect_success 'show multi-line notes' '
 	test_commit 3rd &&
 	MSG="b3${LF}c3c3c3c3${LF}d3d3d3" git notes add &&
-	commit=$(git rev-parse HEAD) &&
 	cat >expect-multiline <<-EOF &&
-		commit $commit
+		commit d07d62e5208f22eb5695e7eb47667dc8b9860290
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:15:13 2005 -0700
 
@@ -195,9 +174,8 @@ test_expect_success 'show -F notes' '
 	test_commit 4th &&
 	echo "xyzzy" >note5 &&
 	git notes add -F note5 &&
-	commit=$(git rev-parse HEAD) &&
 	cat >expect-F <<-EOF &&
-		commit $commit
+		commit 0f7aa3ec6325aeb88b910453bb3eb37c49d75c11
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:16:13 2005 -0700
 
@@ -220,13 +198,10 @@ test_expect_success 'Re-adding -F notes without -f fails' '
 '
 
 test_expect_success 'git log --pretty=raw does not show notes' '
-	commit=$(git rev-parse HEAD) &&
-	tree=$(git rev-parse HEAD^{tree}) &&
-	parent=$(git rev-parse HEAD^) &&
 	cat >expect <<-EOF &&
-		commit $commit
-		tree $tree
-		parent $parent
+		commit 0f7aa3ec6325aeb88b910453bb3eb37c49d75c11
+		tree 05ac65288c4c4b3b709a020ae94b2ece2f2201ae
+		parent d07d62e5208f22eb5695e7eb47667dc8b9860290
 		author A U Thor <author@example.com> 1112912173 -0700
 		committer C O Mitter <committer@example.com> 1112912173 -0700
 
@@ -316,9 +291,8 @@ test_expect_success 'git log --no-notes resets ref list' '
 test_expect_success 'show -m notes' '
 	test_commit 5th &&
 	git notes add -m spam -m "foo${LF}bar${LF}baz" &&
-	commit=$(git rev-parse HEAD) &&
 	cat >expect-m <<-EOF &&
-		commit $commit
+		commit 7f9ad8836c775acb134c0a055fc55fb4cd1ba361
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:17:13 2005 -0700
 
@@ -339,9 +313,8 @@ test_expect_success 'show -m notes' '
 
 test_expect_success 'remove note with add -f -F /dev/null' '
 	git notes add -f -F /dev/null &&
-	commit=$(git rev-parse HEAD) &&
 	cat >expect-rm-F <<-EOF &&
-		commit $commit
+		commit 7f9ad8836c775acb134c0a055fc55fb4cd1ba361
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:17:13 2005 -0700
 
@@ -383,16 +356,14 @@ test_expect_success 'create note with combination of -m and -F' '
 test_expect_success 'remove note with "git notes remove"' '
 	git notes remove HEAD^ &&
 	git notes remove &&
-	commit=$(git rev-parse HEAD) &&
-	parent=$(git rev-parse HEAD^) &&
 	cat >expect-rm-remove <<-EOF &&
-		commit $commit
+		commit 7f9ad8836c775acb134c0a055fc55fb4cd1ba361
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:17:13 2005 -0700
 
 		${indent}5th
 
-		commit $parent
+		commit 0f7aa3ec6325aeb88b910453bb3eb37c49d75c11
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:16:13 2005 -0700
 
@@ -488,13 +459,9 @@ test_expect_success 'removing with --stdin --ignore-missing' '
 '
 
 test_expect_success 'list notes with "git notes list"' '
-	commit_2=$(git rev-parse 2nd) &&
-	commit_3=$(git rev-parse 3rd) &&
-	note_2=$(git rev-parse refs/notes/commits:$commit_2) &&
-	note_3=$(git rev-parse refs/notes/commits:$commit_3) &&
-	sort -t" " -k2 >expect <<-EOF &&
-		$note_2 $commit_2
-		$note_3 $commit_3
+	cat >expect <<-EOF &&
+		c9c6af7f78bc47490dbf3e822cf2f3c24d4b9061 7a4ca6ee52a974a66cbaa78e33214535dff1d691
+		c18dc024e14f08d18d14eea0d747ff692d66d6a3 d07d62e5208f22eb5695e7eb47667dc8b9860290
 	EOF
 	git notes list >actual &&
 	test_cmp expect actual
@@ -506,7 +473,9 @@ test_expect_success 'list notes with "git notes"' '
 '
 
 test_expect_success 'list specific note with "git notes list <object>"' '
-	git rev-parse refs/notes/commits:$commit_3 >expect &&
+	cat >expect <<-EOF &&
+		c18dc024e14f08d18d14eea0d747ff692d66d6a3
+	EOF
 	git notes list HEAD^^ >actual &&
 	test_cmp expect actual
 '
@@ -529,12 +498,10 @@ test_expect_success 'append to existing note with "git notes append"' '
 '
 
 test_expect_success '"git notes list" does not expand to "git notes list HEAD"' '
-	commit_5=$(git rev-parse 5th) &&
-	note_5=$(git rev-parse refs/notes/commits:$commit_5) &&
-	sort -t" " -k2 >expect_list <<-EOF &&
-		$note_2 $commit_2
-		$note_3 $commit_3
-		$note_5 $commit_5
+	cat >expect_list <<-EOF &&
+		c9c6af7f78bc47490dbf3e822cf2f3c24d4b9061 7a4ca6ee52a974a66cbaa78e33214535dff1d691
+		4b6ad22357cc8a1296720574b8d2fbc22fab0671 7f9ad8836c775acb134c0a055fc55fb4cd1ba361
+		c18dc024e14f08d18d14eea0d747ff692d66d6a3 d07d62e5208f22eb5695e7eb47667dc8b9860290
 	EOF
 	git notes list >actual &&
 	test_cmp expect_list actual
@@ -564,9 +531,8 @@ test_expect_success 'appending empty string to non-existing note does not create
 test_expect_success 'create other note on a different notes ref (setup)' '
 	test_commit 6th &&
 	GIT_NOTES_REF="refs/notes/other" git notes add -m "other note" &&
-	commit=$(git rev-parse HEAD) &&
 	cat >expect-not-other <<-EOF &&
-		commit $commit
+		commit 2c125331118caba0ff8238b7f4958ac6e93fe39c
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:18:13 2005 -0700
 
@@ -603,10 +569,8 @@ test_expect_success 'Do not show note when core.notesRef is overridden' '
 '
 
 test_expect_success 'Show all notes when notes.displayRef=refs/notes/*' '
-	commit=$(git rev-parse HEAD) &&
-	parent=$(git rev-parse HEAD^) &&
 	cat >expect-both <<-EOF &&
-		commit $commit
+		commit 2c125331118caba0ff8238b7f4958ac6e93fe39c
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:18:13 2005 -0700
 
@@ -618,7 +582,7 @@ test_expect_success 'Show all notes when notes.displayRef=refs/notes/*' '
 		Notes (other):
 		${indent}other note
 
-		commit $parent
+		commit 7f9ad8836c775acb134c0a055fc55fb4cd1ba361
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:17:13 2005 -0700
 
@@ -652,9 +616,8 @@ test_expect_success 'notes.displayRef can be given more than once' '
 '
 
 test_expect_success 'notes.displayRef respects order' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect-both-reversed <<-EOF &&
-		commit $commit
+		commit 2c125331118caba0ff8238b7f4958ac6e93fe39c
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:18:13 2005 -0700
 
@@ -679,16 +642,14 @@ test_expect_success 'GIT_NOTES_DISPLAY_REF works' '
 '
 
 test_expect_success 'GIT_NOTES_DISPLAY_REF overrides config' '
-	commit=$(git rev-parse HEAD) &&
-	parent=$(git rev-parse HEAD^) &&
 	cat >expect-none <<-EOF &&
-		commit $commit
+		commit 2c125331118caba0ff8238b7f4958ac6e93fe39c
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:18:13 2005 -0700
 
 		${indent}6th
 
-		commit $parent
+		commit 7f9ad8836c775acb134c0a055fc55fb4cd1ba361
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:17:13 2005 -0700
 
@@ -705,9 +666,8 @@ test_expect_success '--show-notes=* adds to GIT_NOTES_DISPLAY_REF' '
 '
 
 test_expect_success '--no-standard-notes' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect-commits <<-EOF &&
-		commit $commit
+		commit 2c125331118caba0ff8238b7f4958ac6e93fe39c
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:18:13 2005 -0700
 
@@ -740,8 +700,7 @@ test_expect_success 'Allow notes on non-commits (trees, blobs, tags)' '
 	git notes show HEAD: >actual &&
 	test_cmp expect actual &&
 	echo "Note on a blob" >expect &&
-	git ls-tree --name-only HEAD >files &&
-	filename=$(head -n1 files) &&
+	filename=$(git ls-tree --name-only HEAD | head -n1) &&
 	git notes add -m "Note on a blob" HEAD:$filename &&
 	git notes show HEAD:$filename >actual &&
 	test_cmp expect actual &&
@@ -753,10 +712,8 @@ test_expect_success 'Allow notes on non-commits (trees, blobs, tags)' '
 '
 
 test_expect_success 'create note from other note with "git notes add -C"' '
-	test_commit 7th &&
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit fb01e0ca8c33b6cc0c6451dde747f97df567cb5c
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:19:13 2005 -0700
 
@@ -765,13 +722,11 @@ test_expect_success 'create note from other note with "git notes add -C"' '
 		Notes:
 		${indent}order test
 	EOF
-	note=$(git notes list HEAD^) &&
-	git notes add -C $note &&
+	test_commit 7th &&
+	git notes add -C $(git notes list HEAD^) &&
 	git log -1 >actual &&
 	test_cmp expect actual &&
-	git notes list HEAD^ >expect &&
-	git notes list HEAD >actual &&
-	test_cmp expect actual
+	test "$(git notes list HEAD)" = "$(git notes list HEAD^)"
 '
 
 test_expect_success 'create note from non-existing note with "git notes add -C" fails' '
@@ -789,9 +744,8 @@ test_expect_success 'create note from non-blob with "git notes add -C" fails' '
 '
 
 test_expect_success 'create note from blob with "git notes add -C" reuses blob id' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 9a4c31c7f722b5d517e92c64e932dd751e1413bf
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:20:13 2005 -0700
 
@@ -800,19 +754,16 @@ test_expect_success 'create note from blob with "git notes add -C" reuses blob i
 		Notes:
 		${indent}This is a blob object
 	EOF
-	echo "This is a blob object" | git hash-object -w --stdin >blob &&
-	git notes add -C $(cat blob) &&
+	blob=$(echo "This is a blob object" | git hash-object -w --stdin) &&
+	git notes add -C $blob &&
 	git log -1 >actual &&
 	test_cmp expect actual &&
-	git notes list HEAD >actual &&
-	test_cmp blob actual
+	test "$(git notes list HEAD)" = "$blob"
 '
 
 test_expect_success 'create note from other note with "git notes add -c"' '
-	test_commit 9th &&
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 2e0db4bc649e174d667a1cde19e725cf897a5bd2
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:21:13 2005 -0700
 
@@ -821,8 +772,8 @@ test_expect_success 'create note from other note with "git notes add -c"' '
 		Notes:
 		${indent}yet another note
 	EOF
-	note=$(git notes list HEAD^^) &&
-	MSG="yet another note" git notes add -c $note &&
+	test_commit 9th &&
+	MSG="yet another note" git notes add -c $(git notes list HEAD^^) &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
@@ -834,9 +785,8 @@ test_expect_success 'create note from non-existing note with "git notes add -c" 
 '
 
 test_expect_success 'append to note from other note with "git notes append -C"' '
-	commit=$(git rev-parse HEAD^) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 2e0db4bc649e174d667a1cde19e725cf897a5bd2
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:21:13 2005 -0700
 
@@ -847,16 +797,14 @@ test_expect_success 'append to note from other note with "git notes append -C"' 
 		${indent}
 		${indent}yet another note
 	EOF
-	note=$(git notes list HEAD^) &&
-	git notes append -C $note HEAD^ &&
+	git notes append -C $(git notes list HEAD^) HEAD^ &&
 	git log -1 HEAD^ >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'create note from other note with "git notes append -c"' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 7c3b87ab368f81e11b1ea87b2ab99a71ccd25406
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:22:13 2005 -0700
 
@@ -865,16 +813,14 @@ test_expect_success 'create note from other note with "git notes append -c"' '
 		Notes:
 		${indent}other note
 	EOF
-	note=$(git notes list HEAD^) &&
-	MSG="other note" git notes append -c $note &&
+	MSG="other note" git notes append -c $(git notes list HEAD^) &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'append to note from other note with "git notes append -c"' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 7c3b87ab368f81e11b1ea87b2ab99a71ccd25406
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:22:13 2005 -0700
 
@@ -885,37 +831,14 @@ test_expect_success 'append to note from other note with "git notes append -c"' 
 		${indent}
 		${indent}yet another note
 	EOF
-	note=$(git notes list HEAD) &&
-	MSG="yet another note" git notes append -c $note &&
+	MSG="yet another note" git notes append -c $(git notes list HEAD) &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'copy note with "git notes copy"' '
-	commit=$(git rev-parse 4th) &&
 	cat >expect <<-EOF &&
-		commit $commit
-		Author: A U Thor <author@example.com>
-		Date:   Thu Apr 7 15:16:13 2005 -0700
-
-		${indent}4th
-
-		Notes:
-		${indent}This is a blob object
-	EOF
-	git notes copy 8th 4th &&
-	git log 3rd..4th >actual &&
-	test_cmp expect actual &&
-	git notes list 4th >expect &&
-	git notes list 8th >actual &&
-	test_cmp expect actual
-'
-
-test_expect_success 'copy note with "git notes copy" with default' '
-	test_commit 11th &&
-	commit=$(git rev-parse HEAD) &&
-	cat >expect <<-EOF &&
-		commit $commit
+		commit a446fff8777efdc6eb8f4b7c8a5ff699484df0d5
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:23:13 2005 -0700
 
@@ -926,59 +849,23 @@ test_expect_success 'copy note with "git notes copy" with default' '
 		${indent}
 		${indent}yet another note
 	EOF
-	git notes copy HEAD^ &&
+	test_commit 11th &&
+	git notes copy HEAD^ HEAD &&
 	git log -1 >actual &&
 	test_cmp expect actual &&
-	git notes list HEAD^ >expect &&
-	git notes list HEAD >actual &&
-	test_cmp expect actual
+	test "$(git notes list HEAD)" = "$(git notes list HEAD^)"
 '
 
 test_expect_success 'prevent overwrite with "git notes copy"' '
 	test_must_fail git notes copy HEAD~2 HEAD &&
-	cat >expect <<-EOF &&
-		commit $commit
-		Author: A U Thor <author@example.com>
-		Date:   Thu Apr 7 15:23:13 2005 -0700
-
-		${indent}11th
-
-		Notes:
-		${indent}other note
-		${indent}
-		${indent}yet another note
-	EOF
 	git log -1 >actual &&
 	test_cmp expect actual &&
-	git notes list HEAD^ >expect &&
-	git notes list HEAD >actual &&
-	test_cmp expect actual
+	test "$(git notes list HEAD)" = "$(git notes list HEAD^)"
 '
 
 test_expect_success 'allow overwrite with "git notes copy -f"' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
-		Author: A U Thor <author@example.com>
-		Date:   Thu Apr 7 15:23:13 2005 -0700
-
-		${indent}11th
-
-		Notes:
-		${indent}This is a blob object
-	EOF
-	git notes copy -f HEAD~3 HEAD &&
-	git log -1 >actual &&
-	test_cmp expect actual &&
-	git notes list HEAD~3 >expect &&
-	git notes list HEAD >actual &&
-	test_cmp expect actual
-'
-
-test_expect_success 'allow overwrite with "git notes copy -f" with default' '
-	commit=$(git rev-parse HEAD) &&
-	cat >expect <<-EOF &&
-		commit $commit
+		commit a446fff8777efdc6eb8f4b7c8a5ff699484df0d5
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:23:13 2005 -0700
 
@@ -989,12 +876,10 @@ test_expect_success 'allow overwrite with "git notes copy -f" with default' '
 		${indent}
 		${indent}yet another note
 	EOF
-	git notes copy -f HEAD~2 &&
+	git notes copy -f HEAD~2 HEAD &&
 	git log -1 >actual &&
 	test_cmp expect actual &&
-	git notes list HEAD~2 >expect &&
-	git notes list HEAD >actual &&
-	test_cmp expect actual
+	test "$(git notes list HEAD)" = "$(git notes list HEAD~2)"
 '
 
 test_expect_success 'cannot copy note from object without notes' '
@@ -1004,10 +889,8 @@ test_expect_success 'cannot copy note from object without notes' '
 '
 
 test_expect_success 'git notes copy --stdin' '
-	commit=$(git rev-parse HEAD) &&
-	parent=$(git rev-parse HEAD^) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit e871aa61182b1d95d0a6fb75445d891722863b6b
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:25:13 2005 -0700
 
@@ -1018,7 +901,7 @@ test_expect_success 'git notes copy --stdin' '
 		${indent}
 		${indent}yet another note
 
-		commit $parent
+		commit 65e263ded02ae4e8839bc151095113737579dc12
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:24:13 2005 -0700
 
@@ -1029,57 +912,41 @@ test_expect_success 'git notes copy --stdin' '
 		${indent}
 		${indent}yet another note
 	EOF
-	from=$(git rev-parse HEAD~3) &&
-	to=$(git rev-parse HEAD^) &&
-	echo "$from" "$to" >copy &&
-	from=$(git rev-parse HEAD~2) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >>copy &&
-	git notes copy --stdin <copy &&
+	(echo $(git rev-parse HEAD~3) $(git rev-parse HEAD^) &&
+	echo $(git rev-parse HEAD~2) $(git rev-parse HEAD)) |
+	git notes copy --stdin &&
 	git log -2 >actual &&
 	test_cmp expect actual &&
-	git notes list HEAD~2 >expect &&
-	git notes list HEAD >actual &&
-	test_cmp expect actual &&
-	git notes list HEAD~3 >expect &&
-	git notes list HEAD^ >actual &&
-	test_cmp expect actual
+	test "$(git notes list HEAD)" = "$(git notes list HEAD~2)" &&
+	test "$(git notes list HEAD^)" = "$(git notes list HEAD~3)"
 '
 
 test_expect_success 'git notes copy --for-rewrite (unconfigured)' '
-	test_commit 14th &&
-	test_commit 15th &&
-	commit=$(git rev-parse HEAD) &&
-	parent=$(git rev-parse HEAD^) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 4acf42e847e7fffbbf89ee365c20ac7caf40de89
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:27:13 2005 -0700
 
 		${indent}15th
 
-		commit $parent
+		commit 07c85d77059393ed0154b8c96906547a59dfcddd
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:26:13 2005 -0700
 
 		${indent}14th
 	EOF
-	from=$(git rev-parse HEAD~3) &&
-	to=$(git rev-parse HEAD^) &&
-	echo "$from" "$to" >copy &&
-	from=$(git rev-parse HEAD~2) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >>copy &&
-	git notes copy --for-rewrite=foo <copy &&
+	test_commit 14th &&
+	test_commit 15th &&
+	(echo $(git rev-parse HEAD~3) $(git rev-parse HEAD^) &&
+	echo $(git rev-parse HEAD~2) $(git rev-parse HEAD)) |
+	git notes copy --for-rewrite=foo &&
 	git log -2 >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'git notes copy --for-rewrite (enabled)' '
-	commit=$(git rev-parse HEAD) &&
-	parent=$(git rev-parse HEAD^) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 4acf42e847e7fffbbf89ee365c20ac7caf40de89
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:27:13 2005 -0700
 
@@ -1090,7 +957,7 @@ test_expect_success 'git notes copy --for-rewrite (enabled)' '
 		${indent}
 		${indent}yet another note
 
-		commit $parent
+		commit 07c85d77059393ed0154b8c96906547a59dfcddd
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:26:13 2005 -0700
 
@@ -1103,31 +970,24 @@ test_expect_success 'git notes copy --for-rewrite (enabled)' '
 	EOF
 	test_config notes.rewriteMode overwrite &&
 	test_config notes.rewriteRef "refs/notes/*" &&
-	from=$(git rev-parse HEAD~3) &&
-	to=$(git rev-parse HEAD^) &&
-	echo "$from" "$to" >copy &&
-	from=$(git rev-parse HEAD~2) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >>copy &&
-	git notes copy --for-rewrite=foo <copy &&
+	(echo $(git rev-parse HEAD~3) $(git rev-parse HEAD^) &&
+	echo $(git rev-parse HEAD~2) $(git rev-parse HEAD)) |
+	git notes copy --for-rewrite=foo &&
 	git log -2 >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'git notes copy --for-rewrite (disabled)' '
 	test_config notes.rewrite.bar false &&
-	from=$(git rev-parse HEAD~3) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >copy &&
-	git notes copy --for-rewrite=bar <copy &&
+	echo $(git rev-parse HEAD~3) $(git rev-parse HEAD) |
+	git notes copy --for-rewrite=bar &&
 	git log -2 >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'git notes copy --for-rewrite (overwrite)' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 4acf42e847e7fffbbf89ee365c20ac7caf40de89
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:27:13 2005 -0700
 
@@ -1139,10 +999,8 @@ test_expect_success 'git notes copy --for-rewrite (overwrite)' '
 	git notes add -f -m"a fresh note" HEAD^ &&
 	test_config notes.rewriteMode overwrite &&
 	test_config notes.rewriteRef "refs/notes/*" &&
-	from=$(git rev-parse HEAD^) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >copy &&
-	git notes copy --for-rewrite=foo <copy &&
+	echo $(git rev-parse HEAD^) $(git rev-parse HEAD) |
+	git notes copy --for-rewrite=foo &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
@@ -1150,18 +1008,15 @@ test_expect_success 'git notes copy --for-rewrite (overwrite)' '
 test_expect_success 'git notes copy --for-rewrite (ignore)' '
 	test_config notes.rewriteMode ignore &&
 	test_config notes.rewriteRef "refs/notes/*" &&
-	from=$(git rev-parse HEAD^) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >copy &&
-	git notes copy --for-rewrite=foo <copy &&
+	echo $(git rev-parse HEAD^) $(git rev-parse HEAD) |
+	git notes copy --for-rewrite=foo &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'git notes copy --for-rewrite (append)' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 4acf42e847e7fffbbf89ee365c20ac7caf40de89
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:27:13 2005 -0700
 
@@ -1175,18 +1030,15 @@ test_expect_success 'git notes copy --for-rewrite (append)' '
 	git notes add -f -m"another fresh note" HEAD^ &&
 	test_config notes.rewriteMode concatenate &&
 	test_config notes.rewriteRef "refs/notes/*" &&
-	from=$(git rev-parse HEAD^) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >copy &&
-	git notes copy --for-rewrite=foo <copy &&
+	echo $(git rev-parse HEAD^) $(git rev-parse HEAD) |
+	git notes copy --for-rewrite=foo &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'git notes copy --for-rewrite (append two to one)' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 4acf42e847e7fffbbf89ee365c20ac7caf40de89
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:27:13 2005 -0700
 
@@ -1205,13 +1057,9 @@ test_expect_success 'git notes copy --for-rewrite (append two to one)' '
 	git notes add -f -m"append 2" HEAD^^ &&
 	test_config notes.rewriteMode concatenate &&
 	test_config notes.rewriteRef "refs/notes/*" &&
-	from=$(git rev-parse HEAD^) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >copy &&
-	from=$(git rev-parse HEAD^^) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >>copy &&
-	git notes copy --for-rewrite=foo <copy &&
+	(echo $(git rev-parse HEAD^) $(git rev-parse HEAD) &&
+	echo $(git rev-parse HEAD^^) $(git rev-parse HEAD)) |
+	git notes copy --for-rewrite=foo &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
@@ -1220,18 +1068,15 @@ test_expect_success 'git notes copy --for-rewrite (append empty)' '
 	git notes remove HEAD^ &&
 	test_config notes.rewriteMode concatenate &&
 	test_config notes.rewriteRef "refs/notes/*" &&
-	from=$(git rev-parse HEAD^) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >copy &&
-	git notes copy --for-rewrite=foo <copy &&
+	echo $(git rev-parse HEAD^) $(git rev-parse HEAD) |
+	git notes copy --for-rewrite=foo &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'GIT_NOTES_REWRITE_MODE works' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 4acf42e847e7fffbbf89ee365c20ac7caf40de89
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:27:13 2005 -0700
 
@@ -1243,18 +1088,15 @@ test_expect_success 'GIT_NOTES_REWRITE_MODE works' '
 	test_config notes.rewriteMode concatenate &&
 	test_config notes.rewriteRef "refs/notes/*" &&
 	git notes add -f -m"replacement note 1" HEAD^ &&
-	from=$(git rev-parse HEAD^) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >copy &&
-	GIT_NOTES_REWRITE_MODE=overwrite git notes copy --for-rewrite=foo <copy &&
+	echo $(git rev-parse HEAD^) $(git rev-parse HEAD) |
+	GIT_NOTES_REWRITE_MODE=overwrite git notes copy --for-rewrite=foo &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
 
 test_expect_success 'GIT_NOTES_REWRITE_REF works' '
-	commit=$(git rev-parse HEAD) &&
 	cat >expect <<-EOF &&
-		commit $commit
+		commit 4acf42e847e7fffbbf89ee365c20ac7caf40de89
 		Author: A U Thor <author@example.com>
 		Date:   Thu Apr 7 15:27:13 2005 -0700
 
@@ -1266,11 +1108,9 @@ test_expect_success 'GIT_NOTES_REWRITE_REF works' '
 	git notes add -f -m"replacement note 2" HEAD^ &&
 	test_config notes.rewriteMode overwrite &&
 	test_unconfig notes.rewriteRef &&
-	from=$(git rev-parse HEAD^) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >copy &&
+	echo $(git rev-parse HEAD^) $(git rev-parse HEAD) |
 	GIT_NOTES_REWRITE_REF=refs/notes/commits:refs/notes/other \
-		git notes copy --for-rewrite=foo <copy &&
+		git notes copy --for-rewrite=foo &&
 	git log -1 >actual &&
 	test_cmp expect actual
 '
@@ -1279,55 +1119,41 @@ test_expect_success 'GIT_NOTES_REWRITE_REF overrides config' '
 	git notes add -f -m"replacement note 3" HEAD^ &&
 	test_config notes.rewriteMode overwrite &&
 	test_config notes.rewriteRef refs/notes/other &&
-	from=$(git rev-parse HEAD^) &&
-	to=$(git rev-parse HEAD) &&
-	echo "$from" "$to" >copy &&
+	echo $(git rev-parse HEAD^) $(git rev-parse HEAD) |
 	GIT_NOTES_REWRITE_REF=refs/notes/commits \
-		git notes copy --for-rewrite=foo <copy &&
+		git notes copy --for-rewrite=foo &&
 	git log -1 >actual &&
 	grep "replacement note 3" actual
 '
 
 test_expect_success 'git notes copy diagnoses too many or too few parameters' '
-	test_must_fail git notes copy 2>error &&
-	test_i18ngrep "too few parameters" error &&
-	test_must_fail git notes copy one two three 2>error &&
-	test_i18ngrep "too many parameters" error
+	test_must_fail git notes copy &&
+	test_must_fail git notes copy one two three
 '
 
 test_expect_success 'git notes get-ref expands refs/heads/master to refs/notes/refs/heads/master' '
 	test_unconfig core.notesRef &&
 	sane_unset GIT_NOTES_REF &&
-	echo refs/notes/refs/heads/master >expect &&
-	git notes --ref=refs/heads/master get-ref >actual &&
-	test_cmp expect actual
+	test "$(git notes --ref=refs/heads/master get-ref)" = "refs/notes/refs/heads/master"
 '
 
 test_expect_success 'git notes get-ref (no overrides)' '
 	test_unconfig core.notesRef &&
 	sane_unset GIT_NOTES_REF &&
-	echo refs/notes/commits >expect &&
-	git notes get-ref >actual &&
-	test_cmp expect actual
+	test "$(git notes get-ref)" = "refs/notes/commits"
 '
 
 test_expect_success 'git notes get-ref (core.notesRef)' '
 	test_config core.notesRef refs/notes/foo &&
-	echo refs/notes/foo >expect &&
-	git notes get-ref >actual &&
-	test_cmp expect actual
+	test "$(git notes get-ref)" = "refs/notes/foo"
 '
 
 test_expect_success 'git notes get-ref (GIT_NOTES_REF)' '
-	echo refs/notes/bar >expect &&
-	GIT_NOTES_REF=refs/notes/bar git notes get-ref >actual &&
-	test_cmp expect actual
+	test "$(GIT_NOTES_REF=refs/notes/bar git notes get-ref)" = "refs/notes/bar"
 '
 
 test_expect_success 'git notes get-ref (--ref)' '
-	echo refs/notes/baz >expect &&
-	GIT_NOTES_REF=refs/notes/bar git notes --ref=baz get-ref >actual &&
-	test_cmp expect actual
+	test "$(GIT_NOTES_REF=refs/notes/bar git notes --ref=baz get-ref)" = "refs/notes/baz"
 '
 
 test_expect_success 'setup testing of empty notes' '

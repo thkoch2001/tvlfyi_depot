@@ -14,8 +14,7 @@ test_expect_success 'setup' '
 		cd sub &&
 		git init &&
 		test_commit subcommit1 &&
-		git tag sub_when_added_to_super &&
-		git branch other
+		git tag sub_when_added_to_super
 	) &&
 	git submodule add "file://$pwd/sub" sub &&
 	git commit -m "add submodule" &&
@@ -49,16 +48,6 @@ test_expect_success 'check the default is --no-remote-submodules' '
 	(
 		cd super_clone/sub &&
 		git diff --exit-code sub_when_added_to_super
-	)
-'
-
-test_expect_success 'clone with --single-branch' '
-	test_when_finished "rm -rf super_clone" &&
-	git clone --recurse-submodules --single-branch "file://$pwd/." super_clone &&
-	(
-		cd super_clone/sub &&
-		git rev-parse --verify origin/master &&
-		test_must_fail git rev-parse --verify origin/other
 	)
 '
 

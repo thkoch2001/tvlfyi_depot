@@ -7,6 +7,7 @@
 #include "commit.h"
 #include "tag.h"
 #include "alloc.h"
+#include "object-store.h"
 #include "packfile.h"
 #include "commit-graph.h"
 
@@ -262,7 +263,7 @@ struct object *parse_object(struct repository *r, const struct object_id *oid)
 	if ((obj && obj->type == OBJ_BLOB && repo_has_object_file(r, oid)) ||
 	    (!obj && repo_has_object_file(r, oid) &&
 	     oid_object_info(r, oid, NULL) == OBJ_BLOB)) {
-		if (check_object_signature(r, repl, NULL, 0, NULL) < 0) {
+		if (check_object_signature(repl, NULL, 0, NULL) < 0) {
 			error(_("hash mismatch %s"), oid_to_hex(oid));
 			return NULL;
 		}
@@ -272,8 +273,7 @@ struct object *parse_object(struct repository *r, const struct object_id *oid)
 
 	buffer = repo_read_object_file(r, oid, &type, &size);
 	if (buffer) {
-		if (check_object_signature(r, repl, buffer, size,
-					   type_name(type)) < 0) {
+		if (check_object_signature(repl, buffer, size, type_name(type)) < 0) {
 			free(buffer);
 			error(_("hash mismatch %s"), oid_to_hex(repl));
 			return NULL;
@@ -306,15 +306,6 @@ int object_list_contains(struct object_list *list, struct object *obj)
 		list = list->next;
 	}
 	return 0;
-}
-
-void object_list_free(struct object_list **list)
-{
-	while (*list) {
-		struct object_list *p = *list;
-		*list = p->next;
-		free(p);
-	}
 }
 
 /*
@@ -489,8 +480,6 @@ struct raw_object_store *raw_object_store_new(void)
 
 	memset(o, 0, sizeof(*o));
 	INIT_LIST_HEAD(&o->packed_git_mru);
-	hashmap_init(&o->pack_map, pack_map_entry_cmp, NULL, 0);
-	pthread_mutex_init(&o->replace_mutex, NULL);
 	return o;
 }
 
@@ -518,7 +507,6 @@ void raw_object_store_clear(struct raw_object_store *o)
 
 	oidmap_free(o->replace_map, 1);
 	FREE_AND_NULL(o->replace_map);
-	pthread_mutex_destroy(&o->replace_mutex);
 
 	free_commit_graph(o->commit_graph);
 	o->commit_graph = NULL;
@@ -531,8 +519,6 @@ void raw_object_store_clear(struct raw_object_store *o)
 	INIT_LIST_HEAD(&o->packed_git_mru);
 	close_object_store(o);
 	o->packed_git = NULL;
-
-	hashmap_free(&o->pack_map);
 }
 
 void parsed_object_pool_clear(struct parsed_object_pool *o)

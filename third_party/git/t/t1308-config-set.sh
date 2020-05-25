@@ -166,14 +166,14 @@ test_expect_success 'find value with highest priority from a configset' '
 '
 
 test_expect_success 'find value_list for a key from a configset' '
-	cat >expect <<-\EOF &&
-	lama
-	ball
+	cat >except <<-\EOF &&
 	sam
 	bat
 	hask
+	lama
+	ball
 	EOF
-	test-tool config configset_get_value_multi case.baz config2 .git/config >actual &&
+	test-tool config configset_get_value case.baz config2 .git/config >actual &&
 	test_cmp expect actual
 '
 
@@ -238,8 +238,8 @@ test_expect_success 'error on modifying repo config without repo' '
 
 cmdline_config="'foo.bar=from-cmdline'"
 test_expect_success 'iteration shows correct origins' '
-	printf "[ignore]\n\tthis = please\n[foo]bar = from-repo\n" >.git/config &&
-	printf "[foo]\n\tbar = from-home\n" >.gitconfig &&
+	echo "[foo]bar = from-repo" >.git/config &&
+	echo "[foo]bar = from-home" >.gitconfig &&
 	if test_have_prereq MINGW
 	then
 		# Use Windows path (i.e. *not* $HOME)
@@ -253,29 +253,19 @@ test_expect_success 'iteration shows correct origins' '
 	value=from-home
 	origin=file
 	name=$HOME_GITCONFIG
-	lno=2
 	scope=global
-
-	key=ignore.this
-	value=please
-	origin=file
-	name=.git/config
-	lno=2
-	scope=local
 
 	key=foo.bar
 	value=from-repo
 	origin=file
 	name=.git/config
-	lno=3
-	scope=local
+	scope=repo
 
 	key=foo.bar
 	value=from-cmdline
 	origin=command line
 	name=
-	lno=-1
-	scope=command
+	scope=cmdline
 	EOF
 	GIT_CONFIG_PARAMETERS=$cmdline_config test-tool config iterate >actual &&
 	test_cmp expect actual

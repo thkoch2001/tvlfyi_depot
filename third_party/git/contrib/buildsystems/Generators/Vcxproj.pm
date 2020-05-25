@@ -79,8 +79,7 @@ sub createProject {
     if (!$static_library) {
       $libs_release = join(";", sort(grep /^(?!libgit\.lib|xdiff\/lib\.lib|vcs-svn\/lib\.lib)/, @{$$build_structure{"$prefix${name}_LIBS"}}));
       $libs_debug = $libs_release;
-      $libs_debug =~ s/zlib\.lib/zlibd\.lib/g;
-      $libs_debug =~ s/libcurl\.lib/libcurl-d\.lib/g;
+      $libs_debug =~ s/zlib\.lib/zlibd\.lib/;
     }
 
     $defines =~ s/-D//g;
@@ -120,13 +119,13 @@ sub createProject {
     <VCPKGArch Condition="'\$(Platform)'=='Win32'">x86-windows</VCPKGArch>
     <VCPKGArch Condition="'\$(Platform)'!='Win32'">x64-windows</VCPKGArch>
     <VCPKGArchDirectory>$cdup\\compat\\vcbuild\\vcpkg\\installed\\\$(VCPKGArch)</VCPKGArchDirectory>
-    <VCPKGBinDirectory Condition="'\$(Configuration)'=='Debug'">\$(VCPKGArchDirectory)\\debug\\bin</VCPKGBinDirectory>
-    <VCPKGLibDirectory Condition="'\$(Configuration)'=='Debug'">\$(VCPKGArchDirectory)\\debug\\lib</VCPKGLibDirectory>
-    <VCPKGBinDirectory Condition="'\$(Configuration)'!='Debug'">\$(VCPKGArchDirectory)\\bin</VCPKGBinDirectory>
-    <VCPKGLibDirectory Condition="'\$(Configuration)'!='Debug'">\$(VCPKGArchDirectory)\\lib</VCPKGLibDirectory>
+    <VCPKGBinDirectory Condition="'\(Configuration)'=='Debug'">\$(VCPKGArchDirectory)\\debug\\bin</VCPKGBinDirectory>
+    <VCPKGLibDirectory Condition="'\(Configuration)'=='Debug'">\$(VCPKGArchDirectory)\\debug\\lib</VCPKGLibDirectory>
+    <VCPKGBinDirectory Condition="'\(Configuration)'!='Debug'">\$(VCPKGArchDirectory)\\bin</VCPKGBinDirectory>
+    <VCPKGLibDirectory Condition="'\(Configuration)'!='Debug'">\$(VCPKGArchDirectory)\\lib</VCPKGLibDirectory>
     <VCPKGIncludeDirectory>\$(VCPKGArchDirectory)\\include</VCPKGIncludeDirectory>
-    <VCPKGLibs Condition="'\$(Configuration)'=='Debug'">$libs_debug</VCPKGLibs>
-    <VCPKGLibs Condition="'\$(Configuration)'!='Debug'">$libs_release</VCPKGLibs>
+    <VCPKGLibs Condition="'\(Configuration)'=='Debug'">$libs_debug</VCPKGLibs>
+    <VCPKGLibs Condition="'\(Configuration)'!='Debug'">$libs_release</VCPKGLibs>
   </PropertyGroup>
   <Import Project="\$(VCTargetsPath)\\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'\$(Configuration)'=='Debug'" Label="Configuration">
@@ -277,9 +276,6 @@ EOM
     }
     if ($target eq 'git') {
       print F "  <Import Project=\"LinkOrCopyBuiltins.targets\" />\n";
-    }
-    if ($target eq 'git-remote-http') {
-      print F "  <Import Project=\"LinkOrCopyRemoteHttp.targets\" />\n";
     }
     print F << "EOM";
 </Project>

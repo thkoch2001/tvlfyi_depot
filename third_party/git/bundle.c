@@ -249,16 +249,15 @@ out:
 
 
 /* Write the pack data to bundle_fd */
-static int write_pack_data(int bundle_fd, struct rev_info *revs, struct argv_array *pack_options)
+static int write_pack_data(int bundle_fd, struct rev_info *revs)
 {
 	struct child_process pack_objects = CHILD_PROCESS_INIT;
 	int i;
 
 	argv_array_pushl(&pack_objects.args,
-			 "pack-objects",
+			 "pack-objects", "--all-progress-implied",
 			 "--stdout", "--thin", "--delta-base-offset",
 			 NULL);
-	argv_array_pushv(&pack_objects.args, pack_options->argv);
 	pack_objects.in = -1;
 	pack_objects.out = bundle_fd;
 	pack_objects.git_cmd = 1;
@@ -283,7 +282,7 @@ static int write_pack_data(int bundle_fd, struct rev_info *revs, struct argv_arr
 		struct object *object = revs->pending.objects[i].item;
 		if (object->flags & UNINTERESTING)
 			write_or_die(pack_objects.in, "^", 1);
-		write_or_die(pack_objects.in, oid_to_hex(&object->oid), the_hash_algo->hexsz);
+		write_or_die(pack_objects.in, oid_to_hex(&object->oid), GIT_SHA1_HEXSZ);
 		write_or_die(pack_objects.in, "\n", 1);
 	}
 	close(pack_objects.in);
@@ -415,7 +414,7 @@ static int write_bundle_refs(int bundle_fd, struct rev_info *revs)
 		}
 
 		ref_count++;
-		write_or_die(bundle_fd, oid_to_hex(&e->item->oid), the_hash_algo->hexsz);
+		write_or_die(bundle_fd, oid_to_hex(&e->item->oid), 40);
 		write_or_die(bundle_fd, " ", 1);
 		write_or_die(bundle_fd, display_ref, strlen(display_ref));
 		write_or_die(bundle_fd, "\n", 1);
@@ -429,7 +428,7 @@ static int write_bundle_refs(int bundle_fd, struct rev_info *revs)
 }
 
 int create_bundle(struct repository *r, const char *path,
-		  int argc, const char **argv, struct argv_array *pack_options)
+		  int argc, const char **argv)
 {
 	struct lock_file lock = LOCK_INIT;
 	int bundle_fd = -1;
@@ -471,7 +470,7 @@ int create_bundle(struct repository *r, const char *path,
 		goto err;
 
 	/* write pack */
-	if (write_pack_data(bundle_fd, &revs, pack_options))
+	if (write_pack_data(bundle_fd, &revs))
 		goto err;
 
 	if (!bundle_to_stdout) {

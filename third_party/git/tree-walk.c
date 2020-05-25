@@ -1,5 +1,6 @@
 #include "cache.h"
 #include "tree-walk.h"
+#include "unpack-trees.h"
 #include "dir.h"
 #include "object-store.h"
 #include "tree.h"
@@ -169,59 +170,38 @@ int tree_entry_gently(struct tree_desc *desc, struct name_entry *entry)
 
 void setup_traverse_info(struct traverse_info *info, const char *base)
 {
-	size_t pathlen = strlen(base);
+	int pathlen = strlen(base);
 	static struct traverse_info dummy;
 
 	memset(info, 0, sizeof(*info));
 	if (pathlen && base[pathlen-1] == '/')
 		pathlen--;
 	info->pathlen = pathlen ? pathlen + 1 : 0;
-	info->name = base;
-	info->namelen = pathlen;
-	if (pathlen)
+	info->name.path = base;
+	info->name.pathlen = pathlen;
+	if (pathlen) {
+		hashcpy(info->name.oid.hash, (const unsigned char *)base + pathlen + 1);
 		info->prev = &dummy;
+	}
 }
 
-char *make_traverse_path(char *path, size_t pathlen,
-			 const struct traverse_info *info,
-			 const char *name, size_t namelen)
+char *make_traverse_path(char *path, const struct traverse_info *info, const struct name_entry *n)
 {
-	/* Always points to the end of the name we're about to add */
-	size_t pos = st_add(info->pathlen, namelen);
+	int len = tree_entry_len(n);
+	int pathlen = info->pathlen;
 
-	if (pos >= pathlen)
-		BUG("too small buffer passed to make_traverse_path");
-
-	path[pos] = 0;
+	path[pathlen + len] = 0;
 	for (;;) {
-		if (pos < namelen)
-			BUG("traverse_info pathlen does not match strings");
-		pos -= namelen;
-		memcpy(path + pos, name, namelen);
-
-		if (!pos)
+		memcpy(path + pathlen, n->path, len);
+		if (!pathlen)
 			break;
-		path[--pos] = '/';
-
-		if (!info)
-			BUG("traverse_info ran out of list items");
-		name = info->name;
-		namelen = info->namelen;
+		path[--pathlen] = '/';
+		n = &info->name;
+		len = tree_entry_len(n);
 		info = info->prev;
+		pathlen -= len;
 	}
 	return path;
-}
-
-void strbuf_make_traverse_path(struct strbuf *out,
-			       const struct traverse_info *info,
-			       const char *name, size_t namelen)
-{
-	size_t len = traverse_path_len(info, namelen);
-
-	strbuf_grow(out, len);
-	make_traverse_path(out->buf + out->len, out->alloc - out->len,
-			   info, name, namelen);
-	strbuf_setlen(out, out->len + len);
 }
 
 struct tree_desc_skip {
@@ -409,28 +389,24 @@ int traverse_trees(struct index_state *istate,
 		   struct traverse_info *info)
 {
 	int error = 0;
-	struct name_entry entry[MAX_TRAVERSE_TREES];
+	struct name_entry *entry = xmalloc(n*sizeof(*entry));
 	int i;
-	struct tree_desc_x tx[ARRAY_SIZE(entry)];
+	struct tree_desc_x *tx = xcalloc(n, sizeof(*tx));
 	struct strbuf base = STRBUF_INIT;
 	int interesting = 1;
 	char *traverse_path;
 
-	if (n >= ARRAY_SIZE(entry))
-		BUG("traverse_trees() called with too many trees (%d)", n);
-
-	for (i = 0; i < n; i++) {
+	for (i = 0; i < n; i++)
 		tx[i].d = t[i];
-		tx[i].skip = NULL;
-	}
 
 	if (info->prev) {
-		strbuf_make_traverse_path(&base, info->prev,
-					  info->name, info->namelen);
-		strbuf_addch(&base, '/');
-		traverse_path = xstrndup(base.buf, base.len);
+		strbuf_grow(&base, info->pathlen);
+		make_traverse_path(base.buf, info->prev, &info->name);
+		base.buf[info->pathlen-1] = '/';
+		strbuf_setlen(&base, info->pathlen);
+		traverse_path = xstrndup(base.buf, info->pathlen);
 	} else {
-		traverse_path = xstrndup(info->name, info->pathlen);
+		traverse_path = xstrndup(info->name.path, info->pathlen);
 	}
 	info->traverse_path = traverse_path;
 	for (;;) {
@@ -510,8 +486,10 @@ int traverse_trees(struct index_state *istate,
 			if (mask & (1ul << i))
 				update_extended_entry(tx + i, entry + i);
 	}
+	free(entry);
 	for (i = 0; i < n; i++)
 		free_extended_entry(tx + i);
+	free(tx);
 	free(traverse_path);
 	info->traverse_path = NULL;
 	strbuf_release(&base);
@@ -1126,7 +1104,7 @@ match_wildcards:
 		 * later on.
 		 * max_depth is ignored but we may consider support it
 		 * in future, see
-		 * https://lore.kernel.org/git/7vmxo5l2g4.fsf@alter.siamese.dyndns.org/
+		 * https://public-inbox.org/git/7vmxo5l2g4.fsf@alter.siamese.dyndns.org/
 		 */
 		if (ps->recursive && S_ISDIR(entry->mode))
 			return entry_interesting;

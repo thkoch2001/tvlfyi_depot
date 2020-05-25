@@ -92,8 +92,7 @@ test_expect_success 'multiple dcommit from git svn will not clobber svn' "
 
 
 test_expect_success 'check that rebase really failed' '
-	git status >output &&
-	grep currently.rebasing output
+	test -d .git/rebase-apply
 '
 
 test_expect_success 'resolve, continue the rebase and dcommit' "

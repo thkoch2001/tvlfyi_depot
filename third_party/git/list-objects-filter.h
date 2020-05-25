@@ -60,36 +60,30 @@ enum list_objects_filter_situation {
 	LOFS_BLOB
 };
 
-struct filter;
-
-/*
- * Constructor for the set of defined list-objects filters.
- * The `omitted` set is optional. It is populated with objects that the
- * filter excludes. This set should not be considered finalized until
- * after list_objects_filter__free is called on the returned `struct
- * filter *`.
- */
-struct filter *list_objects_filter__init(
-	struct oidset *omitted,
-	struct list_objects_filter_options *filter_options);
-
-/*
- * Lets `filter` decide how to handle the `obj`. If `filter` is NULL, this
- * function behaves as expected if no filter is configured: all objects are
- * included.
- */
-enum list_objects_filter_result list_objects_filter__filter_object(
+typedef enum list_objects_filter_result (*filter_object_fn)(
 	struct repository *r,
 	enum list_objects_filter_situation filter_situation,
 	struct object *obj,
 	const char *pathname,
 	const char *filename,
-	struct filter *filter);
+	void *filter_data);
+
+typedef void (*filter_free_fn)(void *filter_data);
 
 /*
- * Destroys `filter` and finalizes the `omitted` set, if present. Does
- * nothing if `filter` is null.
+ * Constructor for the set of defined list-objects filters.
+ * Returns a generic "void *filter_data".
+ *
+ * The returned "filter_fn" will be used by traverse_commit_list()
+ * to filter the results.
+ *
+ * The returned "filter_free_fn" is a destructor for the
+ * filter_data.
  */
-void list_objects_filter__free(struct filter *filter);
+void *list_objects_filter__init(
+	struct oidset *omitted,
+	struct list_objects_filter_options *filter_options,
+	filter_object_fn *filter_fn,
+	filter_free_fn *filter_free_fn);
 
 #endif /* LIST_OBJECTS_FILTER_H */

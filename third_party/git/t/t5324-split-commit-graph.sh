@@ -8,17 +8,9 @@ GIT_TEST_COMMIT_GRAPH=0
 test_expect_success 'setup repo' '
 	git init &&
 	git config core.commitGraph true &&
-	git config gc.writeCommitGraph false &&
 	infodir=".git/objects/info" &&
 	graphdir="$infodir/commit-graphs" &&
-	test_oid_init &&
-	test_oid_cache <<-EOM
-	shallow sha1:1760
-	shallow sha256:2064
-
-	base sha1:1376
-	base sha256:1496
-	EOM
+	test_oid_init
 '
 
 graph_read_expect() {
@@ -32,7 +24,7 @@ graph_read_expect() {
 	num_commits: $1
 	chunks: oid_fanout oid_lookup commit_metadata
 	EOF
-	test-tool read-graph >output &&
+	git commit-graph read >output &&
 	test_cmp expect output
 }
 
@@ -255,7 +247,7 @@ test_expect_success 'verify hashes along chain, even in shallow' '
 		cd verify &&
 		git commit-graph verify &&
 		base_file=$graphdir/graph-$(head -n 1 $graphdir/commit-graph-chain).graph &&
-		corrupt_file "$base_file" $(test_oid shallow) "\01" &&
+		corrupt_file "$base_file" 1760 "\01" &&
 		test_must_fail git commit-graph verify --shallow 2>test_err &&
 		grep -v "^+" test_err >err &&
 		test_i18ngrep "incorrect checksum" err
@@ -282,7 +274,7 @@ test_expect_success 'warn on base graph chunk incorrect' '
 		cd base-chunk &&
 		git commit-graph verify &&
 		base_file=$graphdir/graph-$(tail -n 1 $graphdir/commit-graph-chain).graph &&
-		corrupt_file "$base_file" $(test_oid base) "\01" &&
+		corrupt_file "$base_file" 1376 "\01" &&
 		git commit-graph verify --shallow 2>test_err &&
 		grep -v "^+" test_err >err &&
 		test_i18ngrep "commit-graph chain does not match" err
@@ -327,7 +319,7 @@ test_expect_success 'add octopus merge' '
 	git merge commits/3 commits/4 &&
 	git branch merge/octopus &&
 	git commit-graph write --reachable --split &&
-	git commit-graph verify --progress 2>err &&
+	git commit-graph verify 2>err &&
 	test_line_count = 3 err &&
 	test_i18ngrep ! warning err &&
 	test_line_count = 3 $graphdir/commit-graph-chain
@@ -342,7 +334,6 @@ test_expect_success 'split across alternate where alternate is not split' '
 	git clone --no-hardlinks . alt-split &&
 	(
 		cd alt-split &&
-		rm -f .git/objects/info/commit-graph &&
 		echo "$(pwd)"/../.git/objects >.git/objects/info/alternates &&
 		test_commit 18 &&
 		git commit-graph write --reachable --split &&

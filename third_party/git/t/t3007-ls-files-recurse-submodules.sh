@@ -130,6 +130,7 @@ test_expect_success '--recurse-submodules and pathspecs setup' '
 
 	git ls-files --recurse-submodules >actual &&
 	test_cmp expect actual &&
+	cat actual &&
 	git ls-files --recurse-submodules "*" >actual &&
 	test_cmp expect actual
 '

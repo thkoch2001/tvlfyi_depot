@@ -326,8 +326,6 @@ create_delta(const struct delta_index *index,
 	const unsigned char *ref_data, *ref_top, *data, *top;
 	unsigned char *out;
 
-	*delta_size = 0;
-
 	if (!trg_buf || !trg_size)
 		return NULL;
 

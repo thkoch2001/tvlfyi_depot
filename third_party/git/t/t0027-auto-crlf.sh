@@ -215,7 +215,7 @@ stats_ascii () {
 }
 
 
-# construct the attr/ returned by git ls-files --eol
+# contruct the attr/ returned by git ls-files --eol
 # Take none (=empty), one or two args
 # convert.c: eol=XX overrides text=auto
 attr_ascii () {

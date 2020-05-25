@@ -15,7 +15,7 @@
 #
 #	test_done
 
-if ! test_bool_env GIT_TEST_GIT_DAEMON true
+if ! git env--helper --type=bool --default=true --exit-code GIT_TEST_GIT_DAEMON
 then
 	skip_all="git-daemon testing disabled (unset GIT_TEST_GIT_DAEMON to enable)"
 	test_done

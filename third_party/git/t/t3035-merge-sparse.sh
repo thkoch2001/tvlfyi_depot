@@ -28,7 +28,7 @@ test_expect_success 'setup' '
 	git config core.sparseCheckout true &&
 	echo "/checked-out" >.git/info/sparse-checkout &&
 	git reset --hard &&
-	test_must_fail git merge theirs
+	! git merge theirs
 '
 
 test_expect_success 'reset --hard works after the conflict' '
@@ -42,7 +42,7 @@ test_expect_success 'is reset properly' '
 '
 
 test_expect_success 'setup: conflict back' '
-	test_must_fail git merge theirs
+	! git merge theirs
 '
 
 test_expect_success 'Merge abort works after the conflict' '

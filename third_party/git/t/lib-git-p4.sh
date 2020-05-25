@@ -175,7 +175,7 @@ stop_and_cleanup_p4d () {
 
 cleanup_git () {
 	retry_until_success rm -r "$git"
-	test_path_is_missing "$git" &&
+	test_must_fail test -d "$git" &&
 	retry_until_success mkdir "$git"
 }
 

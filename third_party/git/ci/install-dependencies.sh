@@ -40,30 +40,20 @@ osx-clang|osx-gcc)
 	test -z "$BREW_INSTALL_PACKAGES" ||
 	brew install $BREW_INSTALL_PACKAGES
 	brew link --force gettext
-	brew cask install --no-quarantine perforce || {
-		# Update the definitions and try again
-		cask_repo="$(brew --repository)"/Library/Taps/homebrew/homebrew-cask &&
-		git -C "$cask_repo" pull --no-stat &&
-		brew cask install --no-quarantine perforce
-	} ||
 	brew install caskroom/cask/perforce
 	case "$jobname" in
 	osx-gcc)
-		brew install gcc@9
-		# Just in case the image is updated to contain gcc@9
-		# pre-installed but not linked.
-		brew link gcc@9
+		brew link gcc@8
 		;;
 	esac
 	;;
 StaticAnalysis)
 	sudo apt-get -q update
-	sudo apt-get -q -y install coccinelle libcurl4-openssl-dev libssl-dev \
-		libexpat-dev gettext
+	sudo apt-get -q -y install coccinelle
 	;;
 Documentation)
 	sudo apt-get -q update
-	sudo apt-get -q -y install asciidoc xmlto docbook-xsl-ns
+	sudo apt-get -q -y install asciidoc xmlto
 
 	test -n "$ALREADY_HAVE_ASCIIDOCTOR" ||
 	gem install --version 1.5.8 asciidoctor

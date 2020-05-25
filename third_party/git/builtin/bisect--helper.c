@@ -52,8 +52,8 @@ static void set_terms(struct bisect_terms *terms, const char *bad,
 	terms->term_bad = xstrdup(bad);
 }
 
-static const char vocab_bad[] = "bad|new";
-static const char vocab_good[] = "good|old";
+static const char *vocab_bad = "bad|new";
+static const char *vocab_good = "good|old";
 
 /*
  * Check whether the string `term` belongs to the set of strings
@@ -169,12 +169,11 @@ static int bisect_reset(const char *commit)
 
 		argv_array_pushl(&argv, "checkout", branch.buf, "--", NULL);
 		if (run_command_v_opt(argv.argv, RUN_GIT_CMD)) {
-			error(_("could not check out original"
-				" HEAD '%s'. Try 'git bisect"
-				" reset <commit>'."), branch.buf);
 			strbuf_release(&branch);
 			argv_array_clear(&argv);
-			return -1;
+			return error(_("could not check out original"
+				       " HEAD '%s'. Try 'git bisect"
+				       " reset <commit>'."), branch.buf);
 		}
 		argv_array_clear(&argv);
 	}
@@ -206,31 +205,31 @@ static int bisect_write(const char *state, const char *rev,
 	struct object_id oid;
 	struct commit *commit;
 	FILE *fp = NULL;
-	int res = 0;
+	int retval = 0;
 
 	if (!strcmp(state, terms->term_bad)) {
 		strbuf_addf(&tag, "refs/bisect/%s", state);
 	} else if (one_of(state, terms->term_good, "skip", NULL)) {
 		strbuf_addf(&tag, "refs/bisect/%s-%s", state, rev);
 	} else {
-		res = error(_("Bad bisect_write argument: %s"), state);
+		retval = error(_("Bad bisect_write argument: %s"), state);
 		goto finish;
 	}
 
 	if (get_oid(rev, &oid)) {
-		res = error(_("couldn't get the oid of the rev '%s'"), rev);
+		retval = error(_("couldn't get the oid of the rev '%s'"), rev);
 		goto finish;
 	}
 
 	if (update_ref(NULL, tag.buf, &oid, NULL, 0,
 		       UPDATE_REFS_MSG_ON_ERR)) {
-		res = -1;
+		retval = -1;
 		goto finish;
 	}
 
 	fp = fopen(git_path_bisect_log(), "a");
 	if (!fp) {
-		res = error_errno(_("couldn't open the file '%s'"), git_path_bisect_log());
+		retval = error_errno(_("couldn't open the file '%s'"), git_path_bisect_log());
 		goto finish;
 	}
 
@@ -244,7 +243,7 @@ finish:
 	if (fp)
 		fclose(fp);
 	strbuf_release(&tag);
-	return res;
+	return retval;
 }
 
 static int check_and_set_terms(struct bisect_terms *terms, const char *cmd)
@@ -282,23 +281,35 @@ static int mark_good(const char *refname, const struct object_id *oid,
 	return 1;
 }
 
-static const char need_bad_and_good_revision_warning[] =
+static const char *need_bad_and_good_revision_warning =
 	N_("You need to give me at least one %s and %s revision.\n"
 	   "You can use \"git bisect %s\" and \"git bisect %s\" for that.");
 
-static const char need_bisect_start_warning[] =
+static const char *need_bisect_start_warning =
 	N_("You need to start by \"git bisect start\".\n"
 	   "You then need to give me at least one %s and %s revision.\n"
 	   "You can use \"git bisect %s\" and \"git bisect %s\" for that.");
 
-static int decide_next(const struct bisect_terms *terms,
-		       const char *current_term, int missing_good,
-		       int missing_bad)
+static int bisect_next_check(const struct bisect_terms *terms,
+			     const char *current_term)
 {
+	int missing_good = 1, missing_bad = 1, retval = 0;
+	const char *bad_ref = xstrfmt("refs/bisect/%s", terms->term_bad);
+	const char *good_glob = xstrfmt("%s-*", terms->term_good);
+
+	if (ref_exists(bad_ref))
+		missing_bad = 0;
+
+	for_each_glob_ref_in(mark_good, good_glob, "refs/bisect/",
+			     (void *) &missing_good);
+
 	if (!missing_good && !missing_bad)
-		return 0;
-	if (!current_term)
-		return -1;
+		goto finish;
+
+	if (!current_term) {
+		retval = -1;
+		goto finish;
+	}
 
 	if (missing_good && !missing_bad &&
 	    !strcmp(current_term, terms->term_good)) {
@@ -309,7 +320,7 @@ static int decide_next(const struct bisect_terms *terms,
 		 */
 		warning(_("bisecting only with a %s commit"), terms->term_bad);
 		if (!isatty(0))
-			return 0;
+			goto finish;
 		/*
 		 * TRANSLATORS: Make sure to include [Y] and [n] in your
 		 * translation. The program will only accept English input
@@ -317,35 +328,21 @@ static int decide_next(const struct bisect_terms *terms,
 		 */
 		yesno = git_prompt(_("Are you sure [Y/n]? "), PROMPT_ECHO);
 		if (starts_with(yesno, "N") || starts_with(yesno, "n"))
-			return -1;
-		return 0;
+			retval = -1;
+		goto finish;
+	}
+	if (!is_empty_or_missing_file(git_path_bisect_start())) {
+		retval = error(_(need_bad_and_good_revision_warning),
+			       vocab_bad, vocab_good, vocab_bad, vocab_good);
+	} else {
+		retval = error(_(need_bisect_start_warning),
+			       vocab_good, vocab_bad, vocab_good, vocab_bad);
 	}
 
-	if (!is_empty_or_missing_file(git_path_bisect_start()))
-		return error(_(need_bad_and_good_revision_warning),
-			     vocab_bad, vocab_good, vocab_bad, vocab_good);
-	else
-		return error(_(need_bisect_start_warning),
-			     vocab_good, vocab_bad, vocab_good, vocab_bad);
-}
-
-static int bisect_next_check(const struct bisect_terms *terms,
-			     const char *current_term)
-{
-	int missing_good = 1, missing_bad = 1;
-	char *bad_ref = xstrfmt("refs/bisect/%s", terms->term_bad);
-	char *good_glob = xstrfmt("%s-*", terms->term_good);
-
-	if (ref_exists(bad_ref))
-		missing_bad = 0;
-
-	for_each_glob_ref_in(mark_good, good_glob, "refs/bisect/",
-			     (void *) &missing_good);
-
-	free(good_glob);
-	free(bad_ref);
-
-	return decide_next(terms, current_term, missing_good, missing_bad);
+finish:
+	free((void *) good_glob);
+	free((void *) bad_ref);
+	return retval;
 }
 
 static int get_terms(struct bisect_terms *terms)
@@ -399,7 +396,7 @@ static int bisect_terms(struct bisect_terms *terms, const char *option)
 
 static int bisect_append_log_quoted(const char **argv)
 {
-	int res = 0;
+	int retval = 0;
 	FILE *fp = fopen(git_path_bisect_log(), "a");
 	struct strbuf orig_args = STRBUF_INIT;
 
@@ -407,25 +404,25 @@ static int bisect_append_log_quoted(const char **argv)
 		return -1;
 
 	if (fprintf(fp, "git bisect start") < 1) {
-		res = -1;
+		retval = -1;
 		goto finish;
 	}
 
 	sq_quote_argv(&orig_args, argv);
 	if (fprintf(fp, "%s\n", orig_args.buf) < 1)
-		res = -1;
+		retval = -1;
 
 finish:
 	fclose(fp);
 	strbuf_release(&orig_args);
-	return res;
+	return retval;
 }
 
 static int bisect_start(struct bisect_terms *terms, int no_checkout,
 			const char **argv, int argc)
 {
 	int i, has_double_dash = 0, must_write_terms = 0, bad_seen = 0;
-	int flags, pathspec_pos, res = 0;
+	int flags, pathspec_pos, retval = 0;
 	struct string_list revs = STRING_LIST_INIT_DUP;
 	struct string_list states = STRING_LIST_INIT_DUP;
 	struct strbuf start_head = STRBUF_INIT;
@@ -526,7 +523,7 @@ static int bisect_start(struct bisect_terms *terms, int no_checkout,
 			argv_array_pushl(&argv, "checkout", start_head.buf,
 					 "--", NULL);
 			if (run_command_v_opt(argv.argv, RUN_GIT_CMD)) {
-				res = error(_("checking out '%s' failed."
+				retval = error(_("checking out '%s' failed."
 						 " Try 'git bisect start "
 						 "<valid-branch>'."),
 					       start_head.buf);
@@ -574,12 +571,12 @@ static int bisect_start(struct bisect_terms *terms, int no_checkout,
 
 	if (no_checkout) {
 		if (get_oid(start_head.buf, &oid) < 0) {
-			res = error(_("invalid ref: '%s'"), start_head.buf);
+			retval = error(_("invalid ref: '%s'"), start_head.buf);
 			goto finish;
 		}
 		if (update_ref(NULL, "BISECT_HEAD", &oid, NULL, 0,
 			       UPDATE_REFS_MSG_ON_ERR)) {
-			res = -1;
+			retval = -1;
 			goto finish;
 		}
 	}
@@ -591,26 +588,26 @@ static int bisect_start(struct bisect_terms *terms, int no_checkout,
 	for (i = 0; i < states.nr; i++)
 		if (bisect_write(states.items[i].string,
 				 revs.items[i].string, terms, 1)) {
-			res = -1;
+			retval = -1;
 			goto finish;
 		}
 
 	if (must_write_terms && write_terms(terms->term_bad,
 					    terms->term_good)) {
-		res = -1;
+		retval = -1;
 		goto finish;
 	}
 
-	res = bisect_append_log_quoted(argv);
-	if (res)
-		res = -1;
+	retval = bisect_append_log_quoted(argv);
+	if (retval)
+		retval = -1;
 
 finish:
 	string_list_clear(&revs, 0);
 	string_list_clear(&states, 0);
 	strbuf_release(&start_head);
 	strbuf_release(&bisect_names);
-	return res;
+	return retval;
 }
 
 int cmd_bisect__helper(int argc, const char **argv, const char *prefix)
@@ -666,8 +663,7 @@ int cmd_bisect__helper(int argc, const char **argv, const char *prefix)
 
 	switch (cmdmode) {
 	case NEXT_ALL:
-		res = bisect_next_all(the_repository, prefix, no_checkout);
-		break;
+		return bisect_next_all(the_repository, prefix, no_checkout);
 	case WRITE_TERMS:
 		if (argc != 2)
 			return error(_("--write-terms requires two arguments"));
@@ -714,13 +710,5 @@ int cmd_bisect__helper(int argc, const char **argv, const char *prefix)
 		return error("BUG: unknown subcommand '%d'", cmdmode);
 	}
 	free_terms(&terms);
-
-	/*
-	 * Handle early success
-	 * From check_merge_bases > check_good_are_ancestors_of_bad > bisect_next_all
-	 */
-	if (res == BISECT_INTERNAL_SUCCESS_MERGE_BASE)
-		res = BISECT_OK;
-
-	return abs(res);
+	return !!res;
 }

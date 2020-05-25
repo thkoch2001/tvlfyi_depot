@@ -188,8 +188,8 @@ test_expect_success 'forks: project_index lists all projects (incl. forks)' '
 '
 
 xss() {
-	echo >&2 "Checking $*..." &&
-	gitweb_run "$@" &&
+	echo >&2 "Checking $1..." &&
+	gitweb_run "$1" &&
 	if grep "$TAG" gitweb.body; then
 		echo >&2 "xss: $TAG should have been quoted in output"
 		return 1
@@ -200,8 +200,7 @@ xss() {
 test_expect_success 'xss checks' '
 	TAG="<magic-xss-tag>" &&
 	xss "a=rss&p=$TAG" &&
-	xss "a=rss&p=foo.git&f=$TAG" &&
-	xss "" "$TAG+"
+	xss "a=rss&p=foo.git&f=$TAG"
 '
 
 test_done

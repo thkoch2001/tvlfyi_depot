@@ -125,14 +125,15 @@ test_expect_success 'difftool stops on error with --trust-exit-code' '
 	test_when_finished "rm -f for-diff .git/fail-right-file" &&
 	test_when_finished "git reset -- for-diff" &&
 	write_script .git/fail-right-file <<-\EOF &&
-	echo failed
+	echo "$2"
 	exit 1
 	EOF
 	>for-diff &&
 	git add for-diff &&
+	echo file >expect &&
 	test_must_fail git difftool -y --trust-exit-code \
 		--extcmd .git/fail-right-file branch >actual &&
-	test_line_count = 1 actual
+	test_cmp expect actual
 '
 
 test_expect_success 'difftool honors exit status if command not found' '

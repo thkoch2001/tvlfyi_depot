@@ -19,7 +19,6 @@
 #include "advice.h"
 #include "refs.h"
 #include "commit-reach.h"
-#include "run-command.h"
 
 static struct commit_extra_header *read_commit_extra_header_lines(const char *buf, size_t len, const char **);
 
@@ -359,15 +358,14 @@ struct tree *repo_get_commit_tree(struct repository *r,
 
 struct object_id *get_commit_tree_oid(const struct commit *commit)
 {
-	struct tree *tree = get_commit_tree(commit);
-	return tree ? &tree->object.oid : NULL;
+	return &get_commit_tree(commit)->object.oid;
 }
 
 void release_commit_memory(struct parsed_object_pool *pool, struct commit *c)
 {
 	set_commit_tree(c, NULL);
-	free_commit_buffer(pool, c);
 	c->index = 0;
+	free_commit_buffer(pool, c);
 	free_commit_list(c->parents);
 
 	c->object.parsed = 0;
@@ -402,22 +400,10 @@ int parse_commit_buffer(struct repository *r, struct commit *item, const void *b
 	struct commit_graft *graft;
 	const int tree_entry_len = the_hash_algo->hexsz + 5;
 	const int parent_entry_len = the_hash_algo->hexsz + 7;
-	struct tree *tree;
 
 	if (item->object.parsed)
 		return 0;
-
-	if (item->parents) {
-		/*
-		 * Presumably this is leftover from an earlier failed parse;
-		 * clear it out in preparation for us re-parsing (we'll hit the
-		 * same error, but that's good, since it lets our caller know
-		 * the result cannot be trusted.
-		 */
-		free_commit_list(item->parents);
-		item->parents = NULL;
-	}
-
+	item->object.parsed = 1;
 	tail += size;
 	if (tail <= bufptr + tree_entry_len + 1 || memcmp(bufptr, "tree ", 5) ||
 			bufptr[tree_entry_len] != '\n')
@@ -425,12 +411,7 @@ int parse_commit_buffer(struct repository *r, struct commit *item, const void *b
 	if (get_oid_hex(bufptr + 5, &parent) < 0)
 		return error("bad tree pointer in commit %s",
 			     oid_to_hex(&item->object.oid));
-	tree = lookup_tree(r, &parent);
-	if (!tree)
-		return error("bad tree pointer %s in commit %s",
-			     oid_to_hex(&parent),
-			     oid_to_hex(&item->object.oid));
-	set_commit_tree(item, tree);
+	set_commit_tree(item, lookup_tree(r, &parent));
 	bufptr += tree_entry_len + 1; /* "tree " + "hex sha1" + "\n" */
 	pptr = &item->parents;
 
@@ -450,11 +431,8 @@ int parse_commit_buffer(struct repository *r, struct commit *item, const void *b
 		if (graft && (graft->nr_parent < 0 || grafts_replace_parents))
 			continue;
 		new_parent = lookup_commit(r, &parent);
-		if (!new_parent)
-			return error("bad parent %s in commit %s",
-				     oid_to_hex(&parent),
-				     oid_to_hex(&item->object.oid));
-		pptr = &commit_list_insert(new_parent, pptr)->next;
+		if (new_parent)
+			pptr = &commit_list_insert(new_parent, pptr)->next;
 	}
 	if (graft) {
 		int i;
@@ -463,9 +441,7 @@ int parse_commit_buffer(struct repository *r, struct commit *item, const void *b
 			new_parent = lookup_commit(r,
 						   &graft->parent[i]);
 			if (!new_parent)
-				return error("bad graft parent %s in commit %s",
-					     oid_to_hex(&graft->parent[i]),
-					     oid_to_hex(&item->object.oid));
+				continue;
 			pptr = &commit_list_insert(new_parent, pptr)->next;
 		}
 	}
@@ -474,7 +450,6 @@ int parse_commit_buffer(struct repository *r, struct commit *item, const void *b
 	if (check_graph)
 		load_commit_graph_info(r, item);
 
-	item->object.parsed = 1;
 	return 0;
 }
 
@@ -993,7 +968,7 @@ static int do_sign_commit(struct strbuf *buf, const char *keyid)
 			strbuf_insert(buf, inspos, gpg_sig_header, gpg_sig_header_len);
 			inspos += gpg_sig_header_len;
 		}
-		strbuf_insertstr(buf, inspos++, " ");
+		strbuf_insert(buf, inspos++, " ", 1);
 		strbuf_insert(buf, inspos, bol, len);
 		inspos += len;
 		copypos += len;
@@ -1136,23 +1111,21 @@ int check_commit_signature(const struct commit *commit, struct signature_check *
 	return ret;
 }
 
-void verify_merge_signature(struct commit *commit, int verbosity,
-			    int check_trust)
+void verify_merge_signature(struct commit *commit, int verbosity)
 {
 	char hex[GIT_MAX_HEXSZ + 1];
 	struct signature_check signature_check;
-	int ret;
 	memset(&signature_check, 0, sizeof(signature_check));
 
-	ret = check_commit_signature(commit, &signature_check);
+	check_commit_signature(commit, &signature_check);
 
 	find_unique_abbrev_r(hex, &commit->object.oid, DEFAULT_ABBREV);
 	switch (signature_check.result) {
 	case 'G':
-		if (ret || (check_trust && signature_check.trust_level < TRUST_MARGINAL))
-			die(_("Commit %s has an untrusted GPG signature, "
-			      "allegedly by %s."), hex, signature_check.signer);
 		break;
+	case 'U':
+		die(_("Commit %s has an untrusted GPG signature, "
+		      "allegedly by %s."), hex, signature_check.signer);
 	case 'B':
 		die(_("Commit %s has a bad GPG signature "
 		      "allegedly by %s."), hex, signature_check.signer);
@@ -1606,27 +1579,4 @@ size_t ignore_non_trailer(const char *buf, size_t len)
 		bol = next_line - buf;
 	}
 	return boc ? len - boc : len - cutoff;
-}
-
-int run_commit_hook(int editor_is_used, const char *index_file,
-		    const char *name, ...)
-{
-	struct argv_array hook_env = ARGV_ARRAY_INIT;
-	va_list args;
-	int ret;
-
-	argv_array_pushf(&hook_env, "GIT_INDEX_FILE=%s", index_file);
-
-	/*
-	 * Let the hook know that no editor will be launched.
-	 */
-	if (!editor_is_used)
-		argv_array_push(&hook_env, "GIT_EDITOR=:");
-
-	va_start(args, name);
-	ret = run_hook_ve(hook_env.argv,name, args);
-	va_end(args);
-	argv_array_clear(&hook_env);
-
-	return ret;
 }

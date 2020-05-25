@@ -20,7 +20,6 @@ static struct cmt_fmt_map {
 	int is_tformat;
 	int expand_tabs_in_log;
 	int is_alias;
-	enum date_mode_type default_date_mode_type;
 	const char *user_format;
 } *commit_formats;
 static size_t builtin_formats_len;
@@ -98,9 +97,7 @@ static void setup_commit_formats(void)
 		{ "mboxrd",	CMIT_FMT_MBOXRD,	0,	0 },
 		{ "fuller",	CMIT_FMT_FULLER,	0,	8 },
 		{ "full",	CMIT_FMT_FULL,		0,	8 },
-		{ "oneline",	CMIT_FMT_ONELINE,	1,	0 },
-		{ "reference",	CMIT_FMT_USERFORMAT,	1,	0,
-			0, DATE_SHORT, "%C(auto)%h (%s, %ad)" },
+		{ "oneline",	CMIT_FMT_ONELINE,	1,	0 }
 		/*
 		 * Please update $__git_log_pretty_formats in
 		 * git-completion.bash when you add new formats.
@@ -184,8 +181,6 @@ void get_commit_format(const char *arg, struct rev_info *rev)
 	rev->commit_format = commit_format->format;
 	rev->use_terminator = commit_format->is_tformat;
 	rev->expand_tabs_in_log_default = commit_format->expand_tabs_in_log;
-	if (!rev->date_mode_explicit && commit_format->default_date_mode_type)
-		rev->date_mode.type = commit_format->default_date_mode_type;
 	if (commit_format->format == CMIT_FMT_USERFORMAT) {
 		save_user_format(rev, commit_format->user_format,
 				 commit_format->is_tformat);
@@ -701,20 +696,13 @@ static size_t format_person_part(struct strbuf *sb, char part,
 	mail = s.mail_begin;
 	maillen = s.mail_end - s.mail_begin;
 
-	if (part == 'N' || part == 'E' || part == 'L') /* mailmap lookup */
+	if (part == 'N' || part == 'E') /* mailmap lookup */
 		mailmap_name(&mail, &maillen, &name, &namelen);
 	if (part == 'n' || part == 'N') {	/* name */
 		strbuf_add(sb, name, namelen);
 		return placeholder_len;
 	}
 	if (part == 'e' || part == 'E') {	/* email */
-		strbuf_add(sb, mail, maillen);
-		return placeholder_len;
-	}
-	if (part == 'l' || part == 'L') {	/* local-part */
-		const char *at = memchr(mail, '@', maillen);
-		if (at)
-			maillen = at - mail;
 		strbuf_add(sb, mail, maillen);
 		return placeholder_len;
 	}
@@ -742,9 +730,6 @@ static size_t format_person_part(struct strbuf *sb, char part,
 		return placeholder_len;
 	case 'I':	/* date, ISO 8601 strict */
 		strbuf_addstr(sb, show_ident_date(&s, DATE_MODE(ISO8601_STRICT)));
-		return placeholder_len;
-	case 's':
-		strbuf_addstr(sb, show_ident_date(&s, DATE_MODE(SHORT)));
 		return placeholder_len;
 	}
 
@@ -1254,9 +1239,11 @@ static size_t format_commit_one(struct strbuf *sb, /* in UTF-8 */
 		strbuf_addstr(sb, get_revision_mark(NULL, commit));
 		return 1;
 	case 'd':
+		load_ref_decorations(NULL, DECORATE_SHORT_REFS);
 		format_decorations(sb, commit, c->auto_color);
 		return 1;
 	case 'D':
+		load_ref_decorations(NULL, DECORATE_SHORT_REFS);
 		format_decorations_extended(sb, commit, c->auto_color, "", ", ", "");
 		return 1;
 	case 'S':		/* tag/branch like --source */
@@ -1311,18 +1298,9 @@ static size_t format_commit_one(struct strbuf *sb, /* in UTF-8 */
 		case '?':
 			switch (c->signature_check.result) {
 			case 'G':
-				switch (c->signature_check.trust_level) {
-				case TRUST_UNDEFINED:
-				case TRUST_NEVER:
-					strbuf_addch(sb, 'U');
-					break;
-				default:
-					strbuf_addch(sb, 'G');
-					break;
-				}
-				break;
 			case 'B':
 			case 'E':
+			case 'U':
 			case 'N':
 			case 'X':
 			case 'Y':
@@ -1345,25 +1323,6 @@ static size_t format_commit_one(struct strbuf *sb, /* in UTF-8 */
 		case 'P':
 			if (c->signature_check.primary_key_fingerprint)
 				strbuf_addstr(sb, c->signature_check.primary_key_fingerprint);
-			break;
-		case 'T':
-			switch (c->signature_check.trust_level) {
-			case TRUST_UNDEFINED:
-				strbuf_addstr(sb, "undefined");
-				break;
-			case TRUST_NEVER:
-				strbuf_addstr(sb, "never");
-				break;
-			case TRUST_MARGINAL:
-				strbuf_addstr(sb, "marginal");
-				break;
-			case TRUST_FULLY:
-				strbuf_addstr(sb, "fully");
-				break;
-			case TRUST_ULTIMATE:
-				strbuf_addstr(sb, "ultimate");
-				break;
-			}
 			break;
 		default:
 			return 0;
@@ -1609,9 +1568,9 @@ static size_t format_commit_item(struct strbuf *sb, /* in UTF-8 */
 			strbuf_setlen(sb, sb->len - 1);
 	} else if (orig_len != sb->len) {
 		if (magic == ADD_LF_BEFORE_NON_EMPTY)
-			strbuf_insertstr(sb, orig_len, "\n");
+			strbuf_insert(sb, orig_len, "\n", 1);
 		else if (magic == ADD_SP_BEFORE_NON_EMPTY)
-			strbuf_insertstr(sb, orig_len, " ");
+			strbuf_insert(sb, orig_len, " ", 1);
 	}
 	return consumed + 1;
 }
@@ -1653,14 +1612,14 @@ void repo_format_commit_message(struct repository *r,
 				const char *format, struct strbuf *sb,
 				const struct pretty_print_context *pretty_ctx)
 {
-	struct format_commit_context context = {
-		.commit = commit,
-		.pretty_ctx = pretty_ctx,
-		.wrap_start = sb->len
-	};
+	struct format_commit_context context;
 	const char *output_enc = pretty_ctx->output_encoding;
 	const char *utf8 = "UTF-8";
 
+	memset(&context, 0, sizeof(context));
+	context.commit = commit;
+	context.pretty_ctx = pretty_ctx;
+	context.wrap_start = sb->len;
 	/*
 	 * convert a commit message to UTF-8 first
 	 * as far as 'format_commit_item' assumes it in UTF-8

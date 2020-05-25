@@ -23,7 +23,6 @@ check_verify_failure () {
 # first create a commit, so we have a valid object/type
 # for the tag.
 test_expect_success 'setup' '
-	test_oid_init &&
 	echo Hello >A &&
 	git update-index --add A &&
 	git commit -m "Initial commit" &&
@@ -70,28 +69,28 @@ check_verify_failure '"object" line SHA1 check' '^error: char7: .*SHA1 hash$'
 #  4. type line label check
 
 cat >tag.sig <<EOF
-object $head
+object 779e9b33986b1c2670fff52c5067603117b3e895
 xxxx tag
 tag mytag
 tagger . <> 0 +0000
 
 EOF
 
-check_verify_failure '"type" line label check' '^error: char.*: .*"\\ntype "$'
+check_verify_failure '"type" line label check' '^error: char47: .*"\\ntype "$'
 
 ############################################################
 #  5. type line eol check
 
-echo "object $head" >tag.sig
+echo "object 779e9b33986b1c2670fff52c5067603117b3e895" >tag.sig
 printf "type tagsssssssssssssssssssssssssssssss" >>tag.sig
 
-check_verify_failure '"type" line eol check' '^error: char.*: .*"\\n"$'
+check_verify_failure '"type" line eol check' '^error: char48: .*"\\n"$'
 
 ############################################################
 #  6. tag line label check #1
 
 cat >tag.sig <<EOF
-object $head
+object 779e9b33986b1c2670fff52c5067603117b3e895
 type tag
 xxx mytag
 tagger . <> 0 +0000
@@ -99,37 +98,37 @@ tagger . <> 0 +0000
 EOF
 
 check_verify_failure '"tag" line label check #1' \
-	'^error: char.*: no "tag " found$'
+	'^error: char57: no "tag " found$'
 
 ############################################################
 #  7. tag line label check #2
 
 cat >tag.sig <<EOF
-object $head
+object 779e9b33986b1c2670fff52c5067603117b3e895
 type taggggggggggggggggggggggggggggggg
 tag
 EOF
 
 check_verify_failure '"tag" line label check #2' \
-	'^error: char.*: no "tag " found$'
+	'^error: char87: no "tag " found$'
 
 ############################################################
 #  8. type line type-name length check
 
 cat >tag.sig <<EOF
-object $head
+object 779e9b33986b1c2670fff52c5067603117b3e895
 type taggggggggggggggggggggggggggggggg
 tag mytag
 EOF
 
 check_verify_failure '"type" line type-name length check' \
-	'^error: char.*: type too long$'
+	'^error: char53: type too long$'
 
 ############################################################
 #  9. verify object (SHA1/type) check
 
 cat >tag.sig <<EOF
-object $(test_oid deadbeef)
+object 779e9b33986b1c2670fff52c5067603117b3e895
 type tagggg
 tag mytag
 tagger . <> 0 +0000
@@ -151,7 +150,7 @@ tagger . <> 0 +0000
 EOF
 
 check_verify_failure 'verify tag-name check' \
-	'^error: char.*: could not verify tag name$'
+	'^error: char67: could not verify tag name$'
 
 ############################################################
 # 11. tagger line label check #1
@@ -165,7 +164,7 @@ This is filler
 EOF
 
 check_verify_failure '"tagger" line label check #1' \
-	'^error: char.*: could not find "tagger "$'
+	'^error: char70: could not find "tagger "$'
 
 ############################################################
 # 12. tagger line label check #2
@@ -180,7 +179,7 @@ This is filler
 EOF
 
 check_verify_failure '"tagger" line label check #2' \
-	'^error: char.*: could not find "tagger "$'
+	'^error: char70: could not find "tagger "$'
 
 ############################################################
 # 13. disallow missing tag author name
@@ -195,7 +194,7 @@ This is filler
 EOF
 
 check_verify_failure 'disallow missing tag author name' \
-	'^error: char.*: missing tagger name$'
+	'^error: char77: missing tagger name$'
 
 ############################################################
 # 14. disallow missing tag author name
@@ -210,7 +209,7 @@ tagger T A Gger <
 EOF
 
 check_verify_failure 'disallow malformed tagger' \
-	'^error: char.*: malformed tagger field$'
+	'^error: char77: malformed tagger field$'
 
 ############################################################
 # 15. allow empty tag email
@@ -239,7 +238,7 @@ tagger T A Gger <tag ger@example.com> 0 +0000
 EOF
 
 check_verify_failure 'disallow spaces in tag email' \
-	'^error: char.*: malformed tagger field$'
+	'^error: char77: malformed tagger field$'
 
 ############################################################
 # 17. disallow missing tag timestamp
@@ -253,7 +252,7 @@ tagger T A Gger <tagger@example.com>__
 EOF
 
 check_verify_failure 'disallow missing tag timestamp' \
-	'^error: char.*: missing tag timestamp$'
+	'^error: char107: missing tag timestamp$'
 
 ############################################################
 # 18. detect invalid tag timestamp1
@@ -267,7 +266,7 @@ tagger T A Gger <tagger@example.com> Tue Mar 25 15:47:44 2008
 EOF
 
 check_verify_failure 'detect invalid tag timestamp1' \
-	'^error: char.*: missing tag timestamp$'
+	'^error: char107: missing tag timestamp$'
 
 ############################################################
 # 19. detect invalid tag timestamp2
@@ -281,7 +280,7 @@ tagger T A Gger <tagger@example.com> 2008-03-31T12:20:15-0500
 EOF
 
 check_verify_failure 'detect invalid tag timestamp2' \
-	'^error: char.*: malformed tag timestamp$'
+	'^error: char111: malformed tag timestamp$'
 
 ############################################################
 # 20. detect invalid tag timezone1
@@ -295,7 +294,7 @@ tagger T A Gger <tagger@example.com> 1206478233 GMT
 EOF
 
 check_verify_failure 'detect invalid tag timezone1' \
-	'^error: char.*: malformed tag timezone$'
+	'^error: char118: malformed tag timezone$'
 
 ############################################################
 # 21. detect invalid tag timezone2
@@ -309,7 +308,7 @@ tagger T A Gger <tagger@example.com> 1206478233 +  30
 EOF
 
 check_verify_failure 'detect invalid tag timezone2' \
-	'^error: char.*: malformed tag timezone$'
+	'^error: char118: malformed tag timezone$'
 
 ############################################################
 # 22. detect invalid tag timezone3
@@ -323,7 +322,7 @@ tagger T A Gger <tagger@example.com> 1206478233 -1430
 EOF
 
 check_verify_failure 'detect invalid tag timezone3' \
-	'^error: char.*: malformed tag timezone$'
+	'^error: char118: malformed tag timezone$'
 
 ############################################################
 # 23. detect invalid header entry
@@ -338,7 +337,7 @@ this line should not be here
 EOF
 
 check_verify_failure 'detect invalid header entry' \
-	'^error: char.*: trailing garbage in tag header$'
+	'^error: char124: trailing garbage in tag header$'
 
 ############################################################
 # 24. create valid tag

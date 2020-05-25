@@ -11,7 +11,6 @@
 #include "midx.h"
 #include "packfile.h"
 #include "object-store.h"
-#include "promisor-remote.h"
 
 static int delta_base_offset = 1;
 static int pack_kept_objects = -1;
@@ -191,7 +190,7 @@ static int write_oid(const struct object_id *oid, struct packed_git *pack,
 			die(_("could not start pack-objects to repack promisor objects"));
 	}
 
-	xwrite(cmd->in, oid_to_hex(oid), the_hash_algo->hexsz);
+	xwrite(cmd->in, oid_to_hex(oid), GIT_SHA1_HEXSZ);
 	xwrite(cmd->in, "\n", 1);
 	return 0;
 }
@@ -233,13 +232,6 @@ static void repack_promisor_objects(const struct pack_objects_args *args,
 		/*
 		 * pack-objects creates the .pack and .idx files, but not the
 		 * .promisor file. Create the .promisor file, which is empty.
-		 *
-		 * NEEDSWORK: fetch-pack sometimes generates non-empty
-		 * .promisor files containing the ref names and associated
-		 * hashes at the point of generation of the corresponding
-		 * packfile, but this would not preserve their contents. Maybe
-		 * concatenate the contents of all .promisor files instead of
-		 * just creating a new empty file.
 		 */
 		promisor_name = mkpathdup("%s-%s.promisor", packtmp,
 					  line.buf);
@@ -369,7 +361,7 @@ int cmd_repack(int argc, const char **argv, const char *prefix)
 	argv_array_push(&cmd.args, "--all");
 	argv_array_push(&cmd.args, "--reflog");
 	argv_array_push(&cmd.args, "--indexed-objects");
-	if (has_promisor_remote())
+	if (repository_format_partial_clone)
 		argv_array_push(&cmd.args, "--exclude-promisor-objects");
 	if (write_bitmaps > 0)
 		argv_array_push(&cmd.args, "--write-bitmap-index");
@@ -569,7 +561,7 @@ int cmd_repack(int argc, const char **argv, const char *prefix)
 	remove_temporary_files();
 
 	if (git_env_bool(GIT_TEST_MULTI_PACK_INDEX, 0))
-		write_midx_file(get_object_directory(), 0);
+		write_midx_file(get_object_directory());
 
 	string_list_clear(&names, 0);
 	string_list_clear(&rollback, 0);

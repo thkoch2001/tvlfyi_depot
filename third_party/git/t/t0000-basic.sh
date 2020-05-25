@@ -20,9 +20,9 @@ modification *should* take notice and update the test vectors here.
 
 . ./test-lib.sh
 
-try_local_xy () {
-	local x="local" y="alsolocal" &&
-	echo "$x $y"
+try_local_x () {
+	local x="local" &&
+	echo "$x"
 }
 
 # Check whether the shell supports the "local" keyword. "local" is not
@@ -35,12 +35,11 @@ try_local_xy () {
 # relying on "local".
 test_expect_success 'verify that the running shell supports "local"' '
 	x="notlocal" &&
-	y="alsonotlocal" &&
-	echo "local alsolocal" >expected1 &&
-	try_local_xy >actual1 &&
+	echo "local" >expected1 &&
+	try_local_x >actual1 &&
 	test_cmp expected1 actual1 &&
-	echo "notlocal alsonotlocal" >expected2 &&
-	echo "$x $y" >actual2 &&
+	echo "notlocal" >expected2 &&
+	echo "$x" >actual2 &&
 	test_cmp expected2 actual2
 '
 
@@ -127,7 +126,7 @@ check_sub_test_lib_test () {
 
 check_sub_test_lib_test_err () {
 	name="$1" # stdin is the expected output from the test
-	# expected error output is in descriptor 3
+	# expected error output is in descriptior 3
 	(
 		cd "$name" &&
 		sed -e 's/^> //' -e 's/Z$//' >expect.out &&
@@ -155,7 +154,7 @@ test_expect_success 'pretend we have a fully passing test suite' "
 "
 
 test_expect_success 'pretend we have a partially passing test suite' "
-	run_sub_test_lib_test_err \
+	test_must_fail run_sub_test_lib_test \
 		partial-pass '2/3 tests passing' <<-\\EOF &&
 	test_expect_success 'passing test #1' 'true'
 	test_expect_success 'failing test #2' 'false'
@@ -219,7 +218,7 @@ test_expect_success 'pretend we have fixed one of two known breakages (run in su
 "
 
 test_expect_success 'pretend we have a pass, fail, and known breakage' "
-	run_sub_test_lib_test_err \
+	test_must_fail run_sub_test_lib_test \
 		mixed-results1 'mixed results #1' <<-\\EOF &&
 	test_expect_success 'passing test' 'true'
 	test_expect_success 'failing test' 'false'
@@ -238,7 +237,7 @@ test_expect_success 'pretend we have a pass, fail, and known breakage' "
 "
 
 test_expect_success 'pretend we have a mix of all possible results' "
-	run_sub_test_lib_test_err \
+	test_must_fail run_sub_test_lib_test \
 		mixed-results2 'mixed results #2' <<-\\EOF &&
 	test_expect_success 'passing test' 'true'
 	test_expect_success 'passing test' 'true'
@@ -274,24 +273,24 @@ test_expect_success 'pretend we have a mix of all possible results' "
 "
 
 test_expect_success C_LOCALE_OUTPUT 'test --verbose' '
-	run_sub_test_lib_test_err \
-		t1234-verbose "test verbose" --verbose <<-\EOF &&
+	test_must_fail run_sub_test_lib_test \
+		test-verbose "test verbose" --verbose <<-\EOF &&
 	test_expect_success "passing test" true
 	test_expect_success "test with output" "echo foo"
 	test_expect_success "failing test" false
 	test_done
 	EOF
-	mv t1234-verbose/out t1234-verbose/out+ &&
-	grep -v "^Initialized empty" t1234-verbose/out+ >t1234-verbose/out &&
-	check_sub_test_lib_test t1234-verbose <<-\EOF
-	> expecting success of 1234.1 '\''passing test'\'': true
+	mv test-verbose/out test-verbose/out+ &&
+	grep -v "^Initialized empty" test-verbose/out+ >test-verbose/out &&
+	check_sub_test_lib_test test-verbose <<-\EOF
+	> expecting success: true
 	> ok 1 - passing test
 	> Z
-	> expecting success of 1234.2 '\''test with output'\'': echo foo
+	> expecting success: echo foo
 	> foo
 	> ok 2 - test with output
 	> Z
-	> expecting success of 1234.3 '\''failing test'\'': false
+	> expecting success: false
 	> not ok 3 - failing test
 	> #	false
 	> Z
@@ -301,18 +300,18 @@ test_expect_success C_LOCALE_OUTPUT 'test --verbose' '
 '
 
 test_expect_success 'test --verbose-only' '
-	run_sub_test_lib_test_err \
-		t2345-verbose-only-2 "test verbose-only=2" \
+	test_must_fail run_sub_test_lib_test \
+		test-verbose-only-2 "test verbose-only=2" \
 		--verbose-only=2 <<-\EOF &&
 	test_expect_success "passing test" true
 	test_expect_success "test with output" "echo foo"
 	test_expect_success "failing test" false
 	test_done
 	EOF
-	check_sub_test_lib_test t2345-verbose-only-2 <<-\EOF
+	check_sub_test_lib_test test-verbose-only-2 <<-\EOF
 	> ok 1 - passing test
 	> Z
-	> expecting success of 2345.2 '\''test with output'\'': echo foo
+	> expecting success: echo foo
 	> foo
 	> ok 2 - test with output
 	> Z
@@ -388,44 +387,6 @@ test_expect_success 'GIT_SKIP_TESTS sh pattern' "
 		> ok 6 - passing test #6
 		> # passed all 6 test(s)
 		> 1..6
-		EOF
-	)
-"
-
-test_expect_success 'GIT_SKIP_TESTS entire suite' "
-	(
-		GIT_SKIP_TESTS='git' && export GIT_SKIP_TESTS &&
-		run_sub_test_lib_test git-skip-tests-entire-suite \
-			'GIT_SKIP_TESTS entire suite' <<-\\EOF &&
-		for i in 1 2 3
-		do
-			test_expect_success \"passing test #\$i\" 'true'
-		done
-		test_done
-		EOF
-		check_sub_test_lib_test git-skip-tests-entire-suite <<-\\EOF
-		> 1..0 # SKIP skip all tests in git
-		EOF
-	)
-"
-
-test_expect_success 'GIT_SKIP_TESTS does not skip unmatched suite' "
-	(
-		GIT_SKIP_TESTS='notgit' && export GIT_SKIP_TESTS &&
-		run_sub_test_lib_test git-skip-tests-unmatched-suite \
-			'GIT_SKIP_TESTS does not skip unmatched suite' <<-\\EOF &&
-		for i in 1 2 3
-		do
-			test_expect_success \"passing test #\$i\" 'true'
-		done
-		test_done
-		EOF
-		check_sub_test_lib_test git-skip-tests-unmatched-suite <<-\\EOF
-		> ok 1 - passing test #1
-		> ok 2 - passing test #2
-		> ok 3 - passing test #3
-		> # passed all 3 test(s)
-		> 1..3
 		EOF
 	)
 "
@@ -834,7 +795,7 @@ then
 fi
 
 test_expect_success 'tests clean up even on failures' "
-	run_sub_test_lib_test_err \
+	test_must_fail run_sub_test_lib_test \
 		failing-cleanup 'Failing tests with cleanup commands' <<-\\EOF &&
 	test_expect_success 'tests clean up even after a failure' '
 		touch clean-after-failure &&
@@ -863,7 +824,7 @@ test_expect_success 'tests clean up even on failures' "
 "
 
 test_expect_success 'test_atexit is run' "
-	run_sub_test_lib_test_err \
+	test_must_fail run_sub_test_lib_test \
 		atexit-cleanup 'Run atexit commands' -i <<-\\EOF &&
 	test_expect_success 'tests clean up even after a failure' '
 		> ../../clean-atexit &&
@@ -915,40 +876,6 @@ test_expect_success 'test_oid can look up data for SHA-256' '
 	test $(wc -c <actual) -eq 64 &&
 	test "$rawsz" -eq 32 &&
 	test "$hexsz" -eq 64
-'
-
-test_expect_success 'test_bool_env' '
-	(
-		sane_unset envvar &&
-
-		test_bool_env envvar true &&
-		! test_bool_env envvar false &&
-
-		envvar= &&
-		export envvar &&
-		! test_bool_env envvar true &&
-		! test_bool_env envvar false &&
-
-		envvar=true &&
-		test_bool_env envvar true &&
-		test_bool_env envvar false &&
-
-		envvar=false &&
-		! test_bool_env envvar true &&
-		! test_bool_env envvar false &&
-
-		envvar=invalid &&
-		# When encountering an invalid bool value, test_bool_env
-		# prints its error message to the original stderr of the
-		# test script, hence the redirection of fd 7, and aborts
-		# with "exit 1", hence the subshell.
-		! ( test_bool_env envvar true ) 7>err &&
-		grep "error: test_bool_env requires bool values" err &&
-
-		envvar=true &&
-		! ( test_bool_env envvar invalid ) 7>err &&
-		grep "error: test_bool_env requires bool values" err
-	)
 '
 
 ################################################################

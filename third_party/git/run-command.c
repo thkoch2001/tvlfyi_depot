@@ -213,9 +213,8 @@ static char *locate_in_PATH(const char *file)
 static int exists_in_PATH(const char *file)
 {
 	char *r = locate_in_PATH(file);
-	int found = r != NULL;
 	free(r);
-	return found;
+	return r != NULL;
 }
 
 int sane_execvp(const char *file, char * const argv[])
@@ -413,7 +412,8 @@ static int prepare_cmd(struct argv_array *out, const struct child_process *cmd)
 	argv_array_push(out, SHELL_PATH);
 
 	if (cmd->git_cmd) {
-		prepare_git_cmd(out, cmd->argv);
+		argv_array_push(out, "git");
+		argv_array_pushv(out, cmd->argv);
 	} else if (cmd->use_shell) {
 		prepare_shell_cmd(out, cmd->argv);
 	} else {

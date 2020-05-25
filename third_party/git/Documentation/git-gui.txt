@@ -112,9 +112,15 @@ Other
 versions are distributed as part of the Git suite for the convenience
 of end users.
 
-The official repository of the 'git gui' project can be found at:
+A 'git gui' development repository can be obtained from:
 
-  https://github.com/prati0100/git-gui.git/
+  git clone git://repo.or.cz/git-gui.git
+
+or
+
+  git clone http://repo.or.cz/r/git-gui.git
+
+or browsed online at http://repo.or.cz/w/git-gui.git/[].
 
 GIT
 ---

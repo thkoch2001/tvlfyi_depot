@@ -7,18 +7,6 @@ test_description='Test git stash'
 
 . ./test-lib.sh
 
-diff_cmp () {
-	for i in "$1" "$2"
-	do
-		sed -e 's/^index 0000000\.\.[0-9a-f]*/index 0000000..1234567/' \
-		-e 's/^index [0-9a-f]*\.\.[0-9a-f]*/index 1234567..89abcde/' \
-		-e 's/^index [0-9a-f]*,[0-9a-f]*\.\.[0-9a-f]*/index 1234567,7654321..89abcde/' \
-		"$i" >"$i.compare" || return 1
-	done &&
-	test_cmp "$1.compare" "$2.compare" &&
-	rm -f "$1.compare" "$2.compare"
-}
-
 test_expect_success 'stash some dirty working directory' '
 	echo 1 >file &&
 	git add file &&
@@ -48,7 +36,7 @@ EOF
 test_expect_success 'parents of stash' '
 	test $(git rev-parse stash^) = $(git rev-parse HEAD) &&
 	git diff stash^2..stash >output &&
-	diff_cmp expect output
+	test_cmp expect output
 '
 
 test_expect_success 'applying bogus stash does nothing' '
@@ -222,13 +210,13 @@ test_expect_success 'stash branch' '
 	test refs/heads/stashbranch = $(git symbolic-ref HEAD) &&
 	test $(git rev-parse HEAD) = $(git rev-parse master^) &&
 	git diff --cached >output &&
-	diff_cmp expect output &&
+	test_cmp expect output &&
 	git diff >output &&
-	diff_cmp expect1 output &&
+	test_cmp expect1 output &&
 	git add file &&
 	git commit -m alternate\ second &&
 	git diff master..stashbranch >output &&
-	diff_cmp output expect2 &&
+	test_cmp output expect2 &&
 	test 0 = $(git stash list | wc -l)
 '
 
@@ -244,11 +232,8 @@ test_expect_success 'save -q is quiet' '
 	test_must_be_empty output.out
 '
 
-test_expect_success 'pop -q works and is quiet' '
+test_expect_success 'pop -q is quiet' '
 	git stash pop -q >output.out 2>&1 &&
-	echo bar >expect &&
-	git show :file >actual &&
-	test_cmp expect actual &&
 	test_must_be_empty output.out
 '
 
@@ -257,8 +242,6 @@ test_expect_success 'pop -q --index works and is quiet' '
 	git add file &&
 	git stash save --quiet &&
 	git stash pop -q --index >output.out 2>&1 &&
-	git diff-files file2 >file2.diff &&
-	test_must_be_empty file2.diff &&
 	test foo = "$(git show :file)" &&
 	test_must_be_empty output.out
 '
@@ -283,11 +266,6 @@ test_expect_success 'stash --no-keep-index' '
 	git add file2 &&
 	git stash --no-keep-index &&
 	test bar,bar2 = $(cat file),$(cat file2)
-'
-
-test_expect_success 'dont assume push with non-option args' '
-	test_must_fail git stash -q drop 2>err &&
-	test_i18ngrep -e "subcommand wasn'\''t specified; '\''push'\'' can'\''t be assumed due to unexpected token '\''drop'\''" err
 '
 
 test_expect_success 'stash --invalid-option' '
@@ -599,7 +577,7 @@ test_expect_success 'stash show -p - stashes on stack, stash-like argument' '
 	+bar
 	EOF
 	git stash show -p ${STASH_ID} >actual &&
-	diff_cmp expected actual
+	test_cmp expected actual
 '
 
 test_expect_success 'stash show - no stashes on stack, stash-like argument' '
@@ -631,7 +609,7 @@ test_expect_success 'stash show -p - no stashes on stack, stash-like argument' '
 	+foo
 	EOF
 	git stash show -p ${STASH_ID} >actual &&
-	diff_cmp expected actual
+	test_cmp expected actual
 '
 
 test_expect_success 'stash show --patience shows diff' '
@@ -649,7 +627,7 @@ test_expect_success 'stash show --patience shows diff' '
 	+foo
 	EOF
 	git stash show --patience ${STASH_ID} >actual &&
-	diff_cmp expected actual
+	test_cmp expected actual
 '
 
 test_expect_success 'drop: fail early if specified stash is not a stash ref' '
@@ -813,7 +791,7 @@ test_expect_success 'stash where working directory contains "HEAD" file' '
 	git diff-index --cached --quiet HEAD &&
 	test "$(git rev-parse stash^)" = "$(git rev-parse HEAD)" &&
 	git diff stash^..stash >output &&
-	diff_cmp expect output
+	test_cmp expect output
 '
 
 test_expect_success 'store called with invalid commit' '
@@ -869,7 +847,7 @@ test_expect_success 'stash list implies --first-parent -m' '
 	+working
 	EOF
 	git stash list --format=%gd -p >actual &&
-	diff_cmp expect actual
+	test_cmp expect actual
 '
 
 test_expect_success 'stash list --cc shows combined diff' '
@@ -886,7 +864,7 @@ test_expect_success 'stash list --cc shows combined diff' '
 	++working
 	EOF
 	git stash list --format=%gd -p --cc >actual &&
-	diff_cmp expect actual
+	test_cmp expect actual
 '
 
 test_expect_success 'stash is not confused by partial renames' '
@@ -1261,33 +1239,6 @@ test_expect_success 'stash --keep-index with file deleted in index does not resu
 	git rm to-remove &&
 	git stash --keep-index &&
 	test_path_is_missing to-remove
-'
-
-test_expect_success 'stash apply should succeed with unmodified file' '
-	echo base >file &&
-	git add file &&
-	git commit -m base &&
-
-	# now stash a modification
-	echo modified >file &&
-	git stash &&
-
-	# make the file stat dirty
-	cp file other &&
-	mv other file &&
-
-	git stash apply
-'
-
-test_expect_success 'stash handles skip-worktree entries nicely' '
-	test_commit A &&
-	echo changed >A.t &&
-	git add A.t &&
-	git update-index --skip-worktree A.t &&
-	rm A.t &&
-	git stash &&
-
-	git rev-parse --verify refs/stash:A.t
 '
 
 test_done

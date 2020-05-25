@@ -204,7 +204,7 @@ static int prepare_include_condition_pattern(struct strbuf *pat)
 		strbuf_splice(pat, 0, 1, path.buf, slash - path.buf);
 		prefix = slash - path.buf + 1 /* slash */;
 	} else if (!is_absolute_path(pat->buf))
-		strbuf_insertstr(pat, 0, "**/");
+		strbuf_insert(pat, 0, "**/", 3);
 
 	add_trailing_starstar_for_dir(pat);
 
@@ -275,7 +275,7 @@ static int include_by_branch(const char *cond, size_t cond_len)
 	int flags;
 	int ret;
 	struct strbuf pattern = STRBUF_INIT;
-	const char *refname = !the_repository->gitdir ?
+	const char *refname = !the_repository || !the_repository->gitdir ?
 		NULL : resolve_ref_unsafe("HEAD", 0, NULL, &flags);
 	const char *shortname;
 
@@ -1204,7 +1204,7 @@ static int git_default_core_config(const char *var, const char *value, void *cb)
 			default_abbrev = -1;
 		else {
 			int abbrev = git_config_int(var, value);
-			if (abbrev < minimum_abbrev || abbrev > the_hash_algo->hexsz)
+			if (abbrev < minimum_abbrev || abbrev > 40)
 				return error(_("abbrev length out of range: %d"), abbrev);
 			default_abbrev = abbrev;
 		}
@@ -1364,11 +1364,6 @@ static int git_default_core_config(const char *var, const char *value, void *cb)
 		return 0;
 	}
 
-	if (!strcmp(var, "core.sparsecheckoutcone")) {
-		core_sparse_checkout_cone = git_config_bool(var, value);
-		return 0;
-	}
-
 	if (!strcmp(var, "core.precomposeunicode")) {
 		precomposed_unicode = git_config_bool(var, value);
 		return 0;
@@ -1382,6 +1377,11 @@ static int git_default_core_config(const char *var, const char *value, void *cb)
 	if (!strcmp(var, "core.protectntfs")) {
 		protect_ntfs = git_config_bool(var, value);
 		return 0;
+	}
+
+	if (!strcmp(var, "core.partialclonefilter")) {
+		return git_config_string(&core_partial_clone_filter_default,
+					 var, value);
 	}
 
 	if (!strcmp(var, "core.usereplacerefs")) {
@@ -1702,7 +1702,6 @@ static int do_git_config_sequence(const struct config_options *opts,
 	char *xdg_config = xdg_config_home("config");
 	char *user_config = expand_user_path("~/.gitconfig", 0);
 	char *repo_config;
-	enum config_scope prev_parsing_scope = current_parsing_scope;
 
 	if (opts->commondir)
 		repo_config = mkpathdup("%s/config", opts->commondir);
@@ -1725,12 +1724,15 @@ static int do_git_config_sequence(const struct config_options *opts,
 	if (user_config && !access_or_die(user_config, R_OK, ACCESS_EACCES_OK))
 		ret += git_config_from_file(fn, user_config, data);
 
-	current_parsing_scope = CONFIG_SCOPE_LOCAL;
+	current_parsing_scope = CONFIG_SCOPE_REPO;
 	if (!opts->ignore_repo && repo_config &&
 	    !access_or_die(repo_config, R_OK, 0))
 		ret += git_config_from_file(fn, repo_config, data);
 
-	current_parsing_scope = CONFIG_SCOPE_WORKTREE;
+	/*
+	 * Note: this should have a new scope, CONFIG_SCOPE_WORKTREE.
+	 * But let's not complicate things before it's actually needed.
+	 */
 	if (!opts->ignore_worktree && repository_format_worktree_config) {
 		char *path = git_pathdup("config.worktree");
 		if (!access_or_die(path, R_OK, 0))
@@ -1738,11 +1740,11 @@ static int do_git_config_sequence(const struct config_options *opts,
 		free(path);
 	}
 
-	current_parsing_scope = CONFIG_SCOPE_COMMAND;
+	current_parsing_scope = CONFIG_SCOPE_CMDLINE;
 	if (!opts->ignore_cmdline && git_config_from_parameters(fn, data) < 0)
 		die(_("unable to parse command-line config"));
 
-	current_parsing_scope = prev_parsing_scope;
+	current_parsing_scope = CONFIG_SCOPE_UNKNOWN;
 	free(xdg_config);
 	free(user_config);
 	free(repo_config);
@@ -1762,9 +1764,6 @@ int config_with_options(config_fn_t fn, void *data,
 		fn = git_config_include;
 		data = &inc;
 	}
-
-	if (config_source)
-		current_parsing_scope = config_source->scope;
 
 	/*
 	 * If we have a specific filename, use it. Otherwise, follow the
@@ -1862,9 +1861,9 @@ static struct config_set_element *configset_find_element(struct config_set *cs, 
 	if (git_config_parse_key(key, &normalized_key, NULL))
 		return NULL;
 
-	hashmap_entry_init(&k.ent, strhash(normalized_key));
+	hashmap_entry_init(&k, strhash(normalized_key));
 	k.key = normalized_key;
-	found_entry = hashmap_get_entry(&cs->config_hash, &k, ent, NULL);
+	found_entry = hashmap_get(&cs->config_hash, &k, NULL);
 	free(normalized_key);
 	return found_entry;
 }
@@ -1883,10 +1882,10 @@ static int configset_add_value(struct config_set *cs, const char *key, const cha
 	 */
 	if (!e) {
 		e = xmalloc(sizeof(*e));
-		hashmap_entry_init(&e->ent, strhash(key));
+		hashmap_entry_init(e, strhash(key));
 		e->key = xstrdup(key);
 		string_list_init(&e->value_list, 1);
-		hashmap_add(&cs->config_hash, &e->ent);
+		hashmap_add(&cs->config_hash, e);
 	}
 	si = string_list_append_nodup(&e->value_list, xstrdup_or_null(value));
 
@@ -1914,14 +1913,12 @@ static int configset_add_value(struct config_set *cs, const char *key, const cha
 }
 
 static int config_set_element_cmp(const void *unused_cmp_data,
-				  const struct hashmap_entry *eptr,
-				  const struct hashmap_entry *entry_or_key,
+				  const void *entry,
+				  const void *entry_or_key,
 				  const void *unused_keydata)
 {
-	const struct config_set_element *e1, *e2;
-
-	e1 = container_of(eptr, const struct config_set_element, ent);
-	e2 = container_of(entry_or_key, const struct config_set_element, ent);
+	const struct config_set_element *e1 = entry;
+	const struct config_set_element *e2 = entry_or_key;
 
 	return strcmp(e1->key, e2->key);
 }
@@ -1942,12 +1939,12 @@ void git_configset_clear(struct config_set *cs)
 	if (!cs->hash_initialized)
 		return;
 
-	hashmap_for_each_entry(&cs->config_hash, &iter, entry,
-				ent /* member name */) {
+	hashmap_iter_init(&cs->config_hash, &iter);
+	while ((entry = hashmap_iter_next(&iter))) {
 		free(entry->key);
 		string_list_clear(&entry->value_list, 1);
 	}
-	hashmap_free_entries(&cs->config_hash, struct config_set_element, ent);
+	hashmap_free(&cs->config_hash, 1);
 	cs->hash_initialized = 0;
 	free(cs->list.items);
 	cs->list.nr = 0;
@@ -2289,6 +2286,30 @@ int git_config_get_expiry_in_days(const char *key, timestamp_t *expiry, timestam
 		return 0;
 	}
 	return -1; /* thing exists but cannot be parsed */
+}
+
+int git_config_get_untracked_cache(void)
+{
+	int val = -1;
+	const char *v;
+
+	/* Hack for test programs like test-dump-untracked-cache */
+	if (ignore_untracked_cache_config)
+		return -1;
+
+	if (!git_config_get_maybe_bool("core.untrackedcache", &val))
+		return val;
+
+	if (!git_config_get_value("core.untrackedcache", &v)) {
+		if (!strcasecmp(v, "keep"))
+			return -1;
+
+		error(_("unknown core.untrackedCache value '%s'; "
+			"using 'keep' default value"), v);
+		return -1;
+	}
+
+	return -1; /* default value */
 }
 
 int git_config_get_split_index(void)
@@ -3298,26 +3319,6 @@ const char *current_config_origin_type(void)
 	}
 }
 
-const char *config_scope_name(enum config_scope scope)
-{
-	switch (scope) {
-	case CONFIG_SCOPE_SYSTEM:
-		return "system";
-	case CONFIG_SCOPE_GLOBAL:
-		return "global";
-	case CONFIG_SCOPE_LOCAL:
-		return "local";
-	case CONFIG_SCOPE_WORKTREE:
-		return "worktree";
-	case CONFIG_SCOPE_COMMAND:
-		return "command";
-	case CONFIG_SCOPE_SUBMODULE:
-		return "submodule";
-	default:
-		return "unknown";
-	}
-}
-
 const char *current_config_name(void)
 {
 	const char *name;
@@ -3336,14 +3337,6 @@ enum config_scope current_config_scope(void)
 		return current_config_kvi->scope;
 	else
 		return current_parsing_scope;
-}
-
-int current_config_line(void)
-{
-	if (current_config_kvi)
-		return current_config_kvi->linenr;
-	else
-		return cf->linenr;
 }
 
 int lookup_config(const char **mapping, int nr_mapping, const char *var)

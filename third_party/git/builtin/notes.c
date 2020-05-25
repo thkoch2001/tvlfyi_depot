@@ -513,7 +513,7 @@ static int copy(int argc, const char **argv, const char *prefix)
 		}
 	}
 
-	if (argc < 1) {
+	if (argc < 2) {
 		error(_("too few parameters"));
 		usage_with_options(git_notes_copy_usage, options);
 	}
@@ -622,7 +622,7 @@ static int append_edit(int argc, const char **argv, const char *prefix)
 
 		strbuf_grow(&d.buf, size + 1);
 		if (d.buf.len && prev_buf && size)
-			strbuf_insertstr(&d.buf, 0, "\n");
+			strbuf_insert(&d.buf, 0, "\n", 1);
 		if (prev_buf && size)
 			strbuf_insert(&d.buf, 0, prev_buf, size);
 		free(prev_buf);
@@ -745,7 +745,7 @@ static int merge_commit(struct notes_merge_options *o)
 	memset(&pretty_ctx, 0, sizeof(pretty_ctx));
 	format_commit_message(partial, "%s", &msg, &pretty_ctx);
 	strbuf_trim(&msg);
-	strbuf_insertstr(&msg, 0, "notes: ");
+	strbuf_insert(&msg, 0, "notes: ", 7);
 	update_ref(msg.buf, o->local_ref, &oid,
 		   is_null_oid(&parent_oid) ? NULL : &parent_oid,
 		   0, UPDATE_REFS_DIE_ON_ERR);

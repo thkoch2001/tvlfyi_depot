@@ -4,6 +4,7 @@ use lib '../../perl/build/lib';
 use strict;
 use warnings;
 use Getopt::Long;
+use Git;
 use Cwd qw(realpath);
 
 sub get_times {
@@ -84,11 +85,6 @@ sub format_size {
 	return $out;
 }
 
-sub sane_backticks {
-	open(my $fh, '-|', @_);
-	return <$fh>;
-}
-
 my (@dirs, %dirnames, %dirabbrevs, %prefixes, @tests,
     $codespeed, $sortby, $subsection, $reponame);
 
@@ -106,8 +102,7 @@ while (scalar @ARGV) {
 	my $prefix = '';
 	last if -f $arg or $arg eq "--";
 	if (! -d $arg) {
-		my $rev = sane_backticks(qw(git rev-parse --verify), $arg);
-		chomp $rev;
+		my $rev = Git::command_oneline(qw(rev-parse --verify), $arg);
 		$dir = "build/".$rev;
 	} elsif ($arg eq '.') {
 		$dir = '.';
@@ -224,7 +219,13 @@ sub print_default_results {
 		for my $i (0..$#dirs) {
 			my $d = $dirs[$i];
 			my $base = "$resultsdir/$prefixes{$d}$t";
-			$times{$prefixes{$d}.$t} = [get_times("$base.result")];
+			$times{$prefixes{$d}.$t} = [];
+			foreach my $type (qw(times size)) {
+				if (-e "$base.$type") {
+					$times{$prefixes{$d}.$t} = [get_times("$base.$type")];
+					last;
+				}
+			}
 			my ($r,$u,$s) = @{$times{$prefixes{$d}.$t}};
 			my $w = length format_times($r,$u,$s,$firstr);
 			$colwidth[$i] = $w if $w > $colwidth[$i];
@@ -266,7 +267,7 @@ sub print_sorted_results {
 		my ($prevr, $prevu, $prevs, $prevrev);
 		for my $i (0..$#dirs) {
 			my $d = $dirs[$i];
-			my ($r, $u, $s) = get_times("$resultsdir/$prefixes{$d}$t.result");
+			my ($r, $u, $s) = get_times("$resultsdir/$prefixes{$d}$t.times");
 			if ($i > 0 and defined $r and defined $prevr and $prevr > 0) {
 				my $percent = 100.0 * ($r - $prevr) / $prevr;
 				push @evolutions, { "percent"  => $percent,
@@ -326,7 +327,7 @@ sub print_codespeed_results {
 			my $commitid = $prefixes{$d};
 			$commitid =~ s/^build_//;
 			$commitid =~ s/\.$//;
-			my ($result_value, $u, $s) = get_times("$resultsdir/$prefixes{$d}$t.result");
+			my ($result_value, $u, $s) = get_times("$resultsdir/$prefixes{$d}$t.times");
 
 			my %vals = (
 				"commitid" => $commitid,

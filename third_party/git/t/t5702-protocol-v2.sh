@@ -32,7 +32,7 @@ test_expect_success 'list refs with git:// using protocol v2' '
 	test_cmp expect actual
 '
 
-test_expect_success 'ref advertisement is filtered with ls-remote using protocol v2' '
+test_expect_success 'ref advertisment is filtered with ls-remote using protocol v2' '
 	test_when_finished "rm -f log" &&
 
 	GIT_TRACE_PACKET="$(pwd)/log" git -c protocol.version=2 \
@@ -154,7 +154,7 @@ test_expect_success 'list refs with file:// using protocol v2' '
 	test_cmp expect actual
 '
 
-test_expect_success 'ref advertisement is filtered with ls-remote using protocol v2' '
+test_expect_success 'ref advertisment is filtered with ls-remote using protocol v2' '
 	test_when_finished "rm -f log" &&
 
 	GIT_TRACE_PACKET="$(pwd)/log" git -c protocol.version=2 \
@@ -225,7 +225,7 @@ test_expect_success 'fetch with file:// using protocol v2' '
 	grep "fetch< version 2" log
 '
 
-test_expect_success 'ref advertisement is filtered during fetch using protocol v2' '
+test_expect_success 'ref advertisment is filtered during fetch using protocol v2' '
 	test_when_finished "rm -f log" &&
 
 	test_commit -C file_parent three &&
@@ -631,19 +631,6 @@ test_expect_success 'fetch with http:// using protocol v2' '
 	grep "git< version 2" log
 '
 
-test_expect_success 'fetch with http:// by hash without tag following with protocol v2 does not list refs' '
-	test_when_finished "rm -f log" &&
-
-	test_commit -C "$HTTPD_DOCUMENT_ROOT_PATH/http_parent" two_a &&
-	git -C "$HTTPD_DOCUMENT_ROOT_PATH/http_parent" rev-parse two_a >two_a_hash &&
-
-	GIT_TRACE_PACKET="$(pwd)/log" git -C http_child -c protocol.version=2 \
-		fetch --no-tags origin $(cat two_a_hash) &&
-
-	grep "fetch< version 2" log &&
-	! grep "fetch> command=ls-refs" log
-'
-
 test_expect_success 'fetch from namespaced repo respects namespaces' '
 	test_when_finished "rm -f log" &&
 
@@ -665,18 +652,6 @@ test_expect_success 'fetch from namespaced repo respects namespaces' '
 	test_cmp expect actual
 '
 
-test_expect_success 'ls-remote with v2 http sends only one POST' '
-	test_when_finished "rm -f log" &&
-
-	git ls-remote "$HTTPD_DOCUMENT_ROOT_PATH/http_parent" >expect &&
-	GIT_TRACE_CURL="$(pwd)/log" git -c protocol.version=2 \
-		ls-remote "$HTTPD_URL/smart/http_parent" >actual &&
-	test_cmp expect actual &&
-
-	grep "Send header: POST" log >posts &&
-	test_line_count = 1 posts
-'
-
 test_expect_success 'push with http:// and a config of v2 does not request v2' '
 	test_when_finished "rm -f log" &&
 	# Till v2 for push is designed, make sure that if a client has
@@ -694,9 +669,9 @@ test_expect_success 'push with http:// and a config of v2 does not request v2' '
 	git -C "$HTTPD_DOCUMENT_ROOT_PATH/http_parent" log -1 --format=%s client_branch >expect &&
 	test_cmp expect actual &&
 
-	# Client did not request to use protocol v2
+	# Client didnt request to use protocol v2
 	! grep "Git-Protocol: version=2" log &&
-	# Server did not respond using protocol v2
+	# Server didnt respond using protocol v2
 	! grep "git< version 2" log
 '
 
@@ -712,11 +687,11 @@ test_expect_success 'when server sends "ready", expect DELIM' '
 
 	# After "ready" in the acknowledgments section, pretend that a FLUSH
 	# (0000) was sent instead of a DELIM (0001).
-	printf "\$ready = 1 if /ready/; \$ready && s/0001/0000/" \
-		>"$HTTPD_ROOT_PATH/one-time-perl" &&
+	printf "/ready/,$ s/0001/0000/" \
+		>"$HTTPD_ROOT_PATH/one-time-sed" &&
 
 	test_must_fail git -C http_child -c protocol.version=2 \
-		fetch "$HTTPD_URL/one_time_perl/http_parent" 2> err &&
+		fetch "$HTTPD_URL/one_time_sed/http_parent" 2> err &&
 	test_i18ngrep "expected packfile to be sent after .ready." err
 '
 
@@ -737,18 +712,15 @@ test_expect_success 'when server does not send "ready", expect FLUSH' '
 
 	# After the acknowledgments section, pretend that a DELIM
 	# (0001) was sent instead of a FLUSH (0000).
-	printf "\$ack = 1 if /acknowledgments/; \$ack && s/0000/0001/" \
-		>"$HTTPD_ROOT_PATH/one-time-perl" &&
+	printf "/acknowledgments/,$ s/0000/0001/" \
+		>"$HTTPD_ROOT_PATH/one-time-sed" &&
 
 	test_must_fail env GIT_TRACE_PACKET="$(pwd)/log" git -C http_child \
 		-c protocol.version=2 \
-		fetch "$HTTPD_URL/one_time_perl/http_parent" 2> err &&
+		fetch "$HTTPD_URL/one_time_sed/http_parent" 2> err &&
 	grep "fetch< .*acknowledgments" log &&
 	! grep "fetch< .*ready" log &&
 	test_i18ngrep "expected no other sections to be sent after no .ready." err
 '
-
-# DO NOT add non-httpd-specific tests here, because the last part of this
-# test script is only executed when httpd is available and enabled.
 
 test_done

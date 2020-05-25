@@ -96,14 +96,14 @@ testrebase() {
 	'
 }
 
-testrebase " --apply" .git/rebase-apply
+testrebase "" .git/rebase-apply
 testrebase " --merge" .git/rebase-merge
 
-test_expect_success 'rebase --apply --quit' '
+test_expect_success 'rebase --quit' '
 	cd "$work_dir" &&
 	# Clean up the state from the previous one
 	git reset --hard pre-rebase &&
-	test_must_fail git rebase --apply master &&
+	test_must_fail git rebase master &&
 	test_path_is_dir .git/rebase-apply &&
 	head_before=$(git rev-parse HEAD) &&
 	git rebase --quit &&

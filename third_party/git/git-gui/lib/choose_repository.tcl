@@ -9,18 +9,6 @@ field w_body      ; # Widget holding the center content
 field w_next      ; # Next button
 field w_quit      ; # Quit button
 field o_cons      ; # Console object (if active)
-
-# Status mega-widget instance during _do_clone2 (used by _copy_files and
-# _link_files). Widget is destroyed before _do_clone2 calls
-# _do_clone_checkout
-field o_status
-
-# Operation displayed by status mega-widget during _do_clone_checkout =>
-# _readtree_wait => _postcheckout_wait => _do_clone_submodules =>
-# _do_validate_submodule_cloning. The status mega-widget is a different
-# instance than that stored in $o_status in earlier operations.
-field o_status_op
-
 field w_types     ; # List of type buttons in clone
 field w_recentlist ; # Listbox containing recent repositories
 field w_localpath  ; # Entry widget bound to local_path
@@ -671,12 +659,12 @@ method _do_clone2 {} {
 
 	switch -exact -- $clone_type {
 	hardlink {
-		set o_status [status_bar::two_line $w_body]
+		set o_cons [status_bar::two_line $w_body]
 		pack $w_body -fill x -padx 10 -pady 10
 
-		set status_op [$o_status start \
+		$o_cons start \
 			[mc "Counting objects"] \
-			[mc "buckets"]]
+			[mc "buckets"]
 		update
 
 		if {[file exists [file join $objdir info alternates]]} {
@@ -701,7 +689,6 @@ method _do_clone2 {} {
 			} err]} {
 				catch {cd $pwd}
 				_clone_failed $this [mc "Unable to copy objects/info/alternates: %s" $err]
-				$status_op stop
 				return
 			}
 		}
@@ -713,7 +700,7 @@ method _do_clone2 {} {
 			-directory [file join $objdir] ??]
 		set bcnt [expr {[llength $buckets] + 2}]
 		set bcur 1
-		$status_op update $bcur $bcnt
+		$o_cons update $bcur $bcnt
 		update
 
 		file mkdir [file join .git objects pack]
@@ -721,7 +708,7 @@ method _do_clone2 {} {
 			-directory [file join $objdir pack] *] {
 			lappend tolink [file join pack $i]
 		}
-		$status_op update [incr bcur] $bcnt
+		$o_cons update [incr bcur] $bcnt
 		update
 
 		foreach i $buckets {
@@ -730,10 +717,10 @@ method _do_clone2 {} {
 				-directory [file join $objdir $i] *] {
 				lappend tolink [file join $i $j]
 			}
-			$status_op update [incr bcur] $bcnt
+			$o_cons update [incr bcur] $bcnt
 			update
 		}
-		$status_op stop
+		$o_cons stop
 
 		if {$tolink eq {}} {
 			info_popup [strcat \
@@ -760,8 +747,6 @@ method _do_clone2 {} {
 		if {!$i} return
 
 		destroy $w_body
-
-		set o_status {}
 	}
 	full {
 		set o_cons [console::embed \
@@ -796,9 +781,9 @@ method _do_clone2 {} {
 }
 
 method _copy_files {objdir tocopy} {
-	set status_op [$o_status start \
+	$o_cons start \
 		[mc "Copying objects"] \
-		[mc "KiB"]]
+		[mc "KiB"]
 	set tot 0
 	set cmp 0
 	foreach p $tocopy {
@@ -813,7 +798,7 @@ method _copy_files {objdir tocopy} {
 
 				while {![eof $f_in]} {
 					incr cmp [fcopy $f_in $f_cp -size 16384]
-					$status_op update \
+					$o_cons update \
 						[expr {$cmp / 1024}] \
 						[expr {$tot / 1024}]
 					update
@@ -823,19 +808,17 @@ method _copy_files {objdir tocopy} {
 				close $f_cp
 			} err]} {
 			_clone_failed $this [mc "Unable to copy object: %s" $err]
-			$status_op stop
 			return 0
 		}
 	}
-	$status_op stop
 	return 1
 }
 
 method _link_files {objdir tolink} {
 	set total [llength $tolink]
-	set status_op [$o_status start \
+	$o_cons start \
 		[mc "Linking objects"] \
-		[mc "objects"]]
+		[mc "objects"]
 	for {set i 0} {$i < $total} {} {
 		set p [lindex $tolink $i]
 		if {[catch {
@@ -844,17 +827,15 @@ method _link_files {objdir tolink} {
 					[file join $objdir $p]
 			} err]} {
 			_clone_failed $this [mc "Unable to hardlink object: %s" $err]
-			$status_op stop
 			return 0
 		}
 
 		incr i
 		if {$i % 5 == 0} {
-			$status_op update $i $total
+			$o_cons update $i $total
 			update
 		}
 	}
-	$status_op stop
 	return 1
 }
 
@@ -977,26 +958,11 @@ method _do_clone_checkout {HEAD} {
 		return
 	}
 
-	set status [status_bar::two_line $w_body]
+	set o_cons [status_bar::two_line $w_body]
 	pack $w_body -fill x -padx 10 -pady 10
-
-	# We start the status operation here.
-	#
-	# This function calls _readtree_wait as a callback.
-	#
-	# _readtree_wait in turn either calls _do_clone_submodules directly,
-	# or calls _postcheckout_wait as a callback which then calls
-	# _do_clone_submodules.
-	#
-	# _do_clone_submodules calls _do_validate_submodule_cloning.
-	#
-	# _do_validate_submodule_cloning stops the status operation.
-	#
-	# There are no other calls into this chain from other code.
-
-	set o_status_op [$status start \
+	$o_cons start \
 		[mc "Creating working directory"] \
-		[mc "files"]]
+		[mc "files"]
 
 	set readtree_err {}
 	set fd [git_read --stderr read-tree \
@@ -1010,9 +976,33 @@ method _do_clone_checkout {HEAD} {
 	fileevent $fd readable [cb _readtree_wait $fd]
 }
 
+method _do_validate_submodule_cloning {ok} {
+	if {$ok} {
+		$o_cons done $ok
+		set done 1
+	} else {
+		_clone_failed $this [mc "Cannot clone submodules."]
+	}
+}
+
+method _do_clone_submodules {} {
+	if {$recursive eq {true}} {
+		destroy $w_body
+		set o_cons [console::embed \
+			$w_body \
+			[mc "Cloning submodules"]]
+		pack $w_body -fill both -expand 1 -padx 10
+		$o_cons exec \
+			[list git submodule update --init --recursive] \
+			[cb _do_validate_submodule_cloning]
+	} else {
+		set done 1
+	}
+}
+
 method _readtree_wait {fd} {
 	set buf [read $fd]
-	$o_status_op update_meter $buf
+	$o_cons update_meter $buf
 	append readtree_err $buf
 
 	fconfigure $fd -blocking 1
@@ -1058,34 +1048,6 @@ method _postcheckout_wait {fd_ph} {
 		return
 	}
 	fconfigure $fd_ph -blocking 0
-}
-
-method _do_clone_submodules {} {
-	if {$recursive eq {true}} {
-		$o_status_op stop
-		set o_status_op {}
-
-		destroy $w_body
-
-		set o_cons [console::embed \
-			$w_body \
-			[mc "Cloning submodules"]]
-		pack $w_body -fill both -expand 1 -padx 10
-		$o_cons exec \
-			[list git submodule update --init --recursive] \
-			[cb _do_validate_submodule_cloning]
-	} else {
-		set done 1
-	}
-}
-
-method _do_validate_submodule_cloning {ok} {
-	if {$ok} {
-		$o_cons done $ok
-		set done 1
-	} else {
-		_clone_failed $this [mc "Cannot clone submodules."]
-	}
 }
 
 ######################################################################

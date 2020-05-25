@@ -5,14 +5,13 @@
 #include "repository.h"
 #include "string-list.h"
 #include "cache.h"
-#include "object-store.h"
 
 #define GIT_TEST_COMMIT_GRAPH "GIT_TEST_COMMIT_GRAPH"
 #define GIT_TEST_COMMIT_GRAPH_DIE_ON_LOAD "GIT_TEST_COMMIT_GRAPH_DIE_ON_LOAD"
 
 struct commit;
 
-char *get_commit_graph_filename(struct object_directory *odb);
+char *get_commit_graph_filename(const char *obj_dir);
 int open_commit_graph(const char *graph_file, int *fd, struct stat *st);
 
 /*
@@ -49,7 +48,7 @@ struct commit_graph {
 	uint32_t num_commits;
 	struct object_id oid;
 	char *filename;
-	struct object_directory *odb;
+	const char *obj_dir;
 
 	uint32_t num_commits_in_base;
 	struct commit_graph *base_graph;
@@ -61,10 +60,8 @@ struct commit_graph {
 	const unsigned char *chunk_base_graphs;
 };
 
-struct commit_graph *load_commit_graph_one_fd_st(int fd, struct stat *st,
-						 struct object_directory *odb);
-struct commit_graph *read_commit_graph_one(struct repository *r,
-					   struct object_directory *odb);
+struct commit_graph *load_commit_graph_one_fd_st(int fd, struct stat *st);
+struct commit_graph *read_commit_graph_one(struct repository *r, const char *obj_dir);
 struct commit_graph *parse_commit_graph(void *graph_map, int fd,
 					size_t graph_size);
 
@@ -74,13 +71,9 @@ struct commit_graph *parse_commit_graph(void *graph_map, int fd,
  */
 int generation_numbers_enabled(struct repository *r);
 
-enum commit_graph_write_flags {
-	COMMIT_GRAPH_WRITE_APPEND     = (1 << 0),
-	COMMIT_GRAPH_WRITE_PROGRESS   = (1 << 1),
-	COMMIT_GRAPH_WRITE_SPLIT      = (1 << 2),
-	/* Make sure that each OID in the input is a valid commit OID. */
-	COMMIT_GRAPH_WRITE_CHECK_OIDS = (1 << 3)
-};
+#define COMMIT_GRAPH_APPEND     (1 << 0)
+#define COMMIT_GRAPH_PROGRESS   (1 << 1)
+#define COMMIT_GRAPH_SPLIT      (1 << 2)
 
 struct split_commit_graph_opts {
 	int size_multiple;
@@ -94,13 +87,12 @@ struct split_commit_graph_opts {
  * is not compatible with the commit-graph feature, then the
  * methods will return 0 without writing a commit-graph.
  */
-int write_commit_graph_reachable(struct object_directory *odb,
-				 enum commit_graph_write_flags flags,
+int write_commit_graph_reachable(const char *obj_dir, unsigned int flags,
 				 const struct split_commit_graph_opts *split_opts);
-int write_commit_graph(struct object_directory *odb,
+int write_commit_graph(const char *obj_dir,
 		       struct string_list *pack_indexes,
 		       struct string_list *commit_hex,
-		       enum commit_graph_write_flags flags,
+		       unsigned int flags,
 		       const struct split_commit_graph_opts *split_opts);
 
 #define COMMIT_GRAPH_VERIFY_SHALLOW	(1 << 0)
@@ -109,11 +101,5 @@ int verify_commit_graph(struct repository *r, struct commit_graph *g, int flags)
 
 void close_commit_graph(struct raw_object_store *);
 void free_commit_graph(struct commit_graph *);
-
-/*
- * Disable further use of the commit graph in this process when parsing a
- * "struct commit".
- */
-void disable_commit_graph(struct repository *r);
 
 #endif

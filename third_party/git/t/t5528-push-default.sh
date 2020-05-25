@@ -163,7 +163,7 @@ test_pushdefault_workflow success current master
 # update parent1's foo (which is our upstream)
 test_pushdefault_workflow success upstream foo
 
-# upstream is foo which is not the name of the current branch
+# upsream is foo which is not the name of the current branch
 test_pushdefault_workflow failure simple master
 
 # master and foo are updated

@@ -9,8 +9,9 @@ git-commit-graph - Write and verify Git commit-graph files
 SYNOPSIS
 --------
 [verse]
-'git commit-graph verify' [--object-dir <dir>] [--shallow] [--[no-]progress]
-'git commit-graph write' <options> [--object-dir <dir>] [--[no-]progress]
+'git commit-graph read' [--object-dir <dir>]
+'git commit-graph verify' [--object-dir <dir>] [--shallow]
+'git commit-graph write' <options> [--object-dir <dir>]
 
 
 DESCRIPTION
@@ -26,14 +27,8 @@ OPTIONS
 	file. This parameter exists to specify the location of an alternate
 	that only has the objects directory, not a full `.git` directory. The
 	commit-graph file is expected to be in the `<dir>/info` directory and
-	the packfiles are expected to be in `<dir>/pack`. If the directory
-	could not be made into an absolute path, or does not match any known
-	object directory, `git commit-graph ...` will exit with non-zero
-	status.
+	the packfiles are expected to be in `<dir>/pack`.
 
---[no-]progress::
-	Turn progress on/off explicitly. If neither is specified, progress is
-	shown if standard error is connected to a terminal.
 
 COMMANDS
 --------
@@ -76,6 +71,11 @@ Finally, if `--expire-time=<datetime>` is not specified, let `datetime`
 be the current time. After writing the split commit-graph, delete all
 unused commit-graph whose modified times are older than `datetime`.
 
+'read'::
+
+Read the commit-graph file and output basic details about it.
+Used for debugging purposes.
+
 'verify'::
 
 Read the commit-graph file and verify its contents against the object
@@ -113,6 +113,12 @@ $ git show-ref -s | git commit-graph write --stdin-commits
 +
 ------------------------------------------------
 $ git rev-parse HEAD | git commit-graph write --stdin-commits --append
+------------------------------------------------
+
+* Read basic information from the commit-graph file.
++
+------------------------------------------------
+$ git commit-graph read
 ------------------------------------------------
 
 

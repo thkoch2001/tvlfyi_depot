@@ -79,20 +79,17 @@ static struct expand_data {
 } oi, oi_deref;
 
 struct ref_to_worktree_entry {
-	struct hashmap_entry ent;
+	struct hashmap_entry ent; /* must be the first member! */
 	struct worktree *wt; /* key is wt->head_ref */
 };
 
 static int ref_to_worktree_map_cmpfnc(const void *unused_lookupdata,
-				      const struct hashmap_entry *eptr,
-				      const struct hashmap_entry *kptr,
+				      const void *existing_hashmap_entry_to_test,
+				      const void *key,
 				      const void *keydata_aka_refname)
 {
-	const struct ref_to_worktree_entry *e, *k;
-
-	e = container_of(eptr, const struct ref_to_worktree_entry, ent);
-	k = container_of(kptr, const struct ref_to_worktree_entry, ent);
-
+	const struct ref_to_worktree_entry *e = existing_hashmap_entry_to_test;
+	const struct ref_to_worktree_entry *k = key;
 	return strcmp(e->wt->head_ref,
 		keydata_aka_refname ? keydata_aka_refname : k->wt->head_ref);
 }
@@ -279,9 +276,9 @@ static int deltabase_atom_parser(const struct ref_format *format, struct used_at
 	if (arg)
 		return strbuf_addf_ret(err, -1, _("%%(deltabase) does not take arguments"));
 	if (*atom->name == '*')
-		oi_deref.info.delta_base_oid = &oi_deref.delta_base_oid;
+		oi_deref.info.delta_base_sha1 = oi_deref.delta_base_oid.hash;
 	else
-		oi.info.delta_base_oid = &oi.delta_base_oid;
+		oi.info.delta_base_sha1 = oi.delta_base_oid.hash;
 	return 0;
 }
 
@@ -1031,7 +1028,7 @@ static const char *copy_name(const char *buf)
 		if (!strncmp(cp, " <", 2))
 			return xmemdupz(buf, cp - buf);
 	}
-	return xstrdup("");
+	return "";
 }
 
 static const char *copy_email(const char *buf)
@@ -1039,10 +1036,10 @@ static const char *copy_email(const char *buf)
 	const char *email = strchr(buf, '<');
 	const char *eoemail;
 	if (!email)
-		return xstrdup("");
+		return "";
 	eoemail = strchr(email, '>');
 	if (!eoemail)
-		return xstrdup("");
+		return "";
 	return xmemdupz(email, eoemail + 1 - email);
 }
 
@@ -1459,10 +1456,12 @@ static void fill_remote_ref_details(struct used_atom *atom, const char *refname,
 			remote_for_branch(branch, &explicit);
 		*s = xstrdup(explicit ? remote : "");
 	} else if (atom->u.remote_ref.option == RR_REMOTE_REF) {
+		int explicit;
 		const char *merge;
 
-		merge = remote_ref_for_branch(branch, atom->u.remote_ref.push);
-		*s = xstrdup(merge ? merge : "");
+		merge = remote_ref_for_branch(branch, atom->u.remote_ref.push,
+					      &explicit);
+		*s = xstrdup(explicit ? merge : "");
 	} else
 		BUG("unhandled RR_* enum");
 }
@@ -1566,10 +1565,9 @@ static void populate_worktree_map(struct hashmap *map, struct worktree **worktre
 			struct ref_to_worktree_entry *entry;
 			entry = xmalloc(sizeof(*entry));
 			entry->wt = worktrees[i];
-			hashmap_entry_init(&entry->ent,
-					strhash(worktrees[i]->head_ref));
+			hashmap_entry_init(entry, strhash(worktrees[i]->head_ref));
 
-			hashmap_add(map, &entry->ent);
+			hashmap_add(map, entry);
 		}
 	}
 }
@@ -1586,20 +1584,18 @@ static void lazy_init_worktree_map(void)
 
 static char *get_worktree_path(const struct used_atom *atom, const struct ref_array_item *ref)
 {
-	struct hashmap_entry entry, *e;
+	struct hashmap_entry entry;
 	struct ref_to_worktree_entry *lookup_result;
 
 	lazy_init_worktree_map();
 
 	hashmap_entry_init(&entry, strhash(ref->refname));
-	e = hashmap_get(&(ref_to_worktree_map.map), &entry, ref->refname);
+	lookup_result = hashmap_get(&(ref_to_worktree_map.map), &entry, ref->refname);
 
-	if (!e)
+	if (lookup_result)
+		return xstrdup(lookup_result->wt->path);
+	else
 		return xstrdup("");
-
-	lookup_result = container_of(e, struct ref_to_worktree_entry, ent);
-
-	return xstrdup(lookup_result->wt->path);
 }
 
 /*
@@ -1770,7 +1766,7 @@ static int populate_value(struct ref_array_item *ref, struct strbuf *err)
 	 * If it is a tag object, see if we use a value that derefs
 	 * the object, and if we do grab the object it refers to.
 	 */
-	oi_deref.oid = *get_tagged_oid((struct tag *)obj);
+	oi_deref.oid = ((struct tag *)obj)->tagged->oid;
 
 	/*
 	 * NEEDSWORK: This derefs tag only once, which
@@ -2001,7 +1997,7 @@ static const struct object_id *match_points_at(struct oid_array *points_at,
 	if (!obj)
 		die(_("malformed object at '%s'"), refname);
 	if (obj->type == OBJ_TAG)
-		tagged_oid = get_tagged_oid((struct tag *)obj);
+		tagged_oid = &((struct tag *)obj)->tagged->oid;
 	if (tagged_oid && oid_array_lookup(points_at, tagged_oid) >= 0)
 		return tagged_oid;
 	return NULL;
@@ -2170,8 +2166,7 @@ void ref_array_clear(struct ref_array *array)
 	used_atom_cnt = 0;
 
 	if (ref_to_worktree_map.worktrees) {
-		hashmap_free_entries(&(ref_to_worktree_map.map),
-					struct ref_to_worktree_entry, ent);
+		hashmap_free(&(ref_to_worktree_map.map), 1);
 		free_worktrees(ref_to_worktree_map.worktrees);
 		ref_to_worktree_map.worktrees = NULL;
 	}

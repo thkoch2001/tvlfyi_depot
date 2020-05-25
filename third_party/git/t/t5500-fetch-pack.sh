@@ -440,12 +440,11 @@ test_expect_success 'setup tests for the --stdin parameter' '
 '
 
 test_expect_success 'setup fetch refs from cmdline v[12]' '
-	cp -r client client0 &&
 	cp -r client client1 &&
 	cp -r client client2
 '
 
-for version in '' 0 1 2
+for version in '' 1 2
 do
 	test_expect_success "protocol.version=$version fetch refs from cmdline" "
 		(
@@ -639,7 +638,7 @@ test_expect_success 'fetch-pack cannot fetch a raw sha1 that is not advertised a
 	git init client &&
 	# Some protocol versions (e.g. 2) support fetching
 	# unadvertised objects, so restrict this test to v0.
-	test_must_fail env GIT_TEST_PROTOCOL_VERSION=0 git -C client fetch-pack ../server \
+	test_must_fail env GIT_TEST_PROTOCOL_VERSION= git -C client fetch-pack ../server \
 		$(git -C server rev-parse refs/heads/master^) 2>err &&
 	test_i18ngrep "Server does not allow request for unadvertised object" err
 '
@@ -709,21 +708,12 @@ do
 	# file with scheme
 	for p in file
 	do
-		test_expect_success !MINGW "fetch-pack --diag-url $p://$h/$r" '
+		test_expect_success "fetch-pack --diag-url $p://$h/$r" '
 			check_prot_path $p://$h/$r $p "/$r"
 		'
-		test_expect_success MINGW "fetch-pack --diag-url $p://$h/$r" '
-			check_prot_path $p://$h/$r $p "//$h/$r"
-		'
-		test_expect_success MINGW "fetch-pack --diag-url $p:///$r" '
-			check_prot_path $p:///$r $p "/$r"
-		'
 		# No "/~" -> "~" conversion for file
-		test_expect_success !MINGW "fetch-pack --diag-url $p://$h/~$r" '
+		test_expect_success "fetch-pack --diag-url $p://$h/~$r" '
 			check_prot_path $p://$h/~$r $p "/~$r"
-		'
-		test_expect_success MINGW "fetch-pack --diag-url $p://$h/~$r" '
-			check_prot_path $p://$h/~$r $p "//$h/~$r"
 		'
 	done
 	# file without scheme
@@ -790,44 +780,6 @@ test_expect_success 'clone shallow since selects no commits' '
 	GIT_COMMITTER_DATE="200000000 +0700" git commit --allow-empty -m two &&
 	GIT_COMMITTER_DATE="300000000 +0700" git commit --allow-empty -m three &&
 	test_must_fail git clone --shallow-since "900000000 +0700" "file://$(pwd)/." ../shallow111
-	)
-'
-
-# A few subtle things about the request in this test:
-#
-#  - the server must have commit-graphs present and enabled
-#
-#  - the history is such that our want/have share a common ancestor ("base"
-#    here)
-#
-#  - we send only a single have, which is fewer than a normal client would
-#    send. This ensures that we don't parse "base" up front with
-#    parse_object(), but rather traverse to it as a parent while deciding if we
-#    can stop the "have" negotiation, and call parse_commit(). The former
-#    sees the actual object data and so always loads the three oid, whereas the
-#    latter will try to load it lazily.
-#
-#  - we must use protocol v2, because it handles the "have" negotiation before
-#    processing the shallow directives
-#
-test_expect_success 'shallow since with commit graph and already-seen commit' '
-	test_create_repo shallow-since-graph &&
-	(
-	cd shallow-since-graph &&
-	test_commit base &&
-	test_commit master &&
-	git checkout -b other HEAD^ &&
-	test_commit other &&
-	git commit-graph write --reachable &&
-	git config core.commitGraph true &&
-
-	GIT_PROTOCOL=version=2 git upload-pack . <<-EOF >/dev/null
-	0012command=fetch
-	00010013deepen-since 1
-	0032want $(git rev-parse other)
-	0032have $(git rev-parse master)
-	0000
-	EOF
 	)
 '
 
@@ -918,10 +870,7 @@ test_expect_success 'filtering by size' '
 	git -C client fetch-pack --filter=blob:limit=0 ../server HEAD &&
 
 	# Ensure that object is not inadvertently fetched
-	commit=$(git -C server rev-parse HEAD) &&
-	blob=$(git hash-object server/one.t) &&
-	git -C client rev-list --objects --missing=allow-any "$commit" >oids &&
-	! grep "$blob" oids
+	test_must_fail git -C client cat-file -e $(git hash-object server/one.t)
 '
 
 test_expect_success 'filtering by size has no effect if support for it is not advertised' '
@@ -933,10 +882,7 @@ test_expect_success 'filtering by size has no effect if support for it is not ad
 	git -C client fetch-pack --filter=blob:limit=0 ../server HEAD 2> err &&
 
 	# Ensure that object is fetched
-	commit=$(git -C server rev-parse HEAD) &&
-	blob=$(git hash-object server/one.t) &&
-	git -C client rev-list --objects --missing=allow-any "$commit" >oids &&
-	grep "$blob" oids &&
+	git -C client cat-file -e $(git hash-object server/one.t) &&
 
 	test_i18ngrep "filtering not recognized by server" err
 '
@@ -958,11 +904,9 @@ fetch_filter_blob_limit_zero () {
 	git -C client fetch --filter=blob:limit=0 origin HEAD:somewhere &&
 
 	# Ensure that commit is fetched, but blob is not
-	commit=$(git -C "$SERVER" rev-parse two) &&
-	blob=$(git hash-object server/two.t) &&
-	git -C client rev-list --objects --missing=allow-any "$commit" >oids &&
-	grep "$commit" oids &&
-	! grep "$blob" oids
+	test_config -C client extensions.partialclone "arbitrary string" &&
+	git -C client cat-file -e $(git -C "$SERVER" rev-parse two) &&
+	test_must_fail git -C client cat-file -e $(git hash-object "$SERVER/two.t")
 }
 
 test_expect_success 'fetch with --filter=blob:limit=0' '
@@ -975,8 +919,5 @@ start_httpd
 test_expect_success 'fetch with --filter=blob:limit=0 and HTTP' '
 	fetch_filter_blob_limit_zero "$HTTPD_DOCUMENT_ROOT_PATH/server" "$HTTPD_URL/smart/server"
 '
-
-# DO NOT add non-httpd-specific tests here, because the last part of this
-# test script is only executed when httpd is available and enabled.
 
 test_done

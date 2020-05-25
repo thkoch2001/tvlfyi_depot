@@ -68,8 +68,7 @@ struct object_array {
  * bisect.c:                                        16
  * bundle.c:                                        16
  * http-push.c:                                     16-----19
- * commit-graph.c:                                15
- * commit-reach.c:                                  16-----19
+ * commit-reach.c:                                15-------19
  * sha1-name.c:                                              20
  * list-objects-filter.c:                                      21
  * builtin/fsck.c:           0--3
@@ -150,8 +149,6 @@ struct object_list *object_list_insert(struct object *item,
 				       struct object_list **list_p);
 
 int object_list_contains(struct object_list *list, struct object *obj);
-
-void object_list_free(struct object_list **list);
 
 /* Object array handling .. */
 void add_object_array(struct object *obj, const char *name, struct object_array *array);

@@ -6,14 +6,12 @@
 #include "pkt-line.h"
 
 int cmd2process_cmp(const void *unused_cmp_data,
-		    const struct hashmap_entry *eptr,
-		    const struct hashmap_entry *entry_or_key,
+		    const void *entry,
+		    const void *entry_or_key,
 		    const void *unused_keydata)
 {
-	const struct subprocess_entry *e1, *e2;
-
-	e1 = container_of(eptr, const struct subprocess_entry, ent);
-	e2 = container_of(entry_or_key, const struct subprocess_entry, ent);
+	const struct subprocess_entry *e1 = entry;
+	const struct subprocess_entry *e2 = entry_or_key;
 
 	return strcmp(e1->cmd, e2->cmd);
 }
@@ -22,9 +20,9 @@ struct subprocess_entry *subprocess_find_entry(struct hashmap *hashmap, const ch
 {
 	struct subprocess_entry key;
 
-	hashmap_entry_init(&key.ent, strhash(cmd));
+	hashmap_entry_init(&key, strhash(cmd));
 	key.cmd = cmd;
-	return hashmap_get_entry(hashmap, &key, ent, NULL);
+	return hashmap_get(hashmap, &key, NULL);
 }
 
 int subprocess_read_status(int fd, struct strbuf *status)
@@ -60,7 +58,7 @@ void subprocess_stop(struct hashmap *hashmap, struct subprocess_entry *entry)
 	kill(entry->process.pid, SIGTERM);
 	finish_command(&entry->process);
 
-	hashmap_remove(hashmap, &entry->ent, NULL);
+	hashmap_remove(hashmap, entry, NULL);
 }
 
 static void subprocess_exit_handler(struct child_process *process)
@@ -98,7 +96,7 @@ int subprocess_start(struct hashmap *hashmap, struct subprocess_entry *entry, co
 		return err;
 	}
 
-	hashmap_entry_init(&entry->ent, strhash(cmd));
+	hashmap_entry_init(entry, strhash(cmd));
 
 	err = startfn(entry);
 	if (err) {
@@ -107,7 +105,7 @@ int subprocess_start(struct hashmap *hashmap, struct subprocess_entry *entry, co
 		return err;
 	}
 
-	hashmap_add(hashmap, &entry->ent);
+	hashmap_add(hashmap, entry);
 	return 0;
 }
 

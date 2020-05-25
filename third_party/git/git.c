@@ -369,7 +369,8 @@ static int handle_alias(int *argcp, const char ***argv)
 			die(_("alias '%s' changes environment variables.\n"
 			      "You can use '!git' in the alias to do this"),
 			    alias_command);
-		MOVE_ARRAY(new_argv - option_count, new_argv, count);
+		memmove(new_argv - option_count, new_argv,
+				count * sizeof(char *));
 		new_argv -= option_count;
 
 		if (count < 1)
@@ -384,7 +385,7 @@ static int handle_alias(int *argcp, const char ***argv)
 
 		REALLOC_ARRAY(new_argv, count + *argcp);
 		/* insert after command name */
-		COPY_ARRAY(new_argv + count, *argv + 1, *argcp);
+		memcpy(new_argv + count, *argv + 1, sizeof(char *) * *argcp);
 
 		trace2_cmd_alias(alias_command, new_argv);
 		trace2_cmd_list_config();
@@ -572,7 +573,6 @@ static struct cmd_struct commands[] = {
 	{ "show-branch", cmd_show_branch, RUN_SETUP },
 	{ "show-index", cmd_show_index },
 	{ "show-ref", cmd_show_ref, RUN_SETUP },
-	{ "sparse-checkout", cmd_sparse_checkout, RUN_SETUP | NEED_WORK_TREE },
 	{ "stage", cmd_add, RUN_SETUP | NEED_WORK_TREE },
 	/*
 	 * NEEDSWORK: Until the builtin stash is thoroughly robust and no

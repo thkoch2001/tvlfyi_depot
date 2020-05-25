@@ -6,11 +6,11 @@
 #include "string-list.h"
 #include "tree-walk.h"
 
-#define MAX_UNPACK_TREES MAX_TRAVERSE_TREES
+#define MAX_UNPACK_TREES 8
 
 struct cache_entry;
 struct unpack_trees_options;
-struct pattern_list;
+struct exclude_list;
 
 typedef int (*merge_fn_t)(const struct cache_entry * const *src,
 		struct unpack_trees_options *options);
@@ -59,8 +59,7 @@ struct unpack_trees_options {
 		     quiet,
 		     exiting_early,
 		     show_all_errors,
-		     dry_run,
-		     keep_pattern_list;
+		     dry_run;
 	const char *prefix;
 	int cache_bottom;
 	struct dir_struct *dir;
@@ -84,7 +83,7 @@ struct unpack_trees_options {
 	struct index_state *src_index;
 	struct index_state result;
 
-	struct pattern_list *pl; /* for internal use */
+	struct exclude_list *el; /* for internal use */
 };
 
 int unpack_trees(unsigned n, struct tree_desc *t,

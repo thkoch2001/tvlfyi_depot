@@ -53,8 +53,7 @@ test_expect_success 'add a large file or two' '
 	for p in .git/objects/pack/pack-*.pack
 	do
 		count=$(( $count + 1 ))
-		if test_path_is_file "$p" &&
-		   idx=${p%.pack}.idx && test_path_is_file "$idx"
+		if test -f "$p" && idx=${p%.pack}.idx && test -f "$idx"
 		then
 			continue
 		fi
@@ -66,7 +65,7 @@ test_expect_success 'add a large file or two' '
 	test $cnt = 2 &&
 	for l in .git/objects/??/??????????????????????????????????????
 	do
-		test_path_is_file "$l" || continue
+		test -f "$l" || continue
 		bad=t
 	done &&
 	test -z "$bad" &&
@@ -77,8 +76,7 @@ test_expect_success 'add a large file or two' '
 	for p in .git/objects/pack/pack-*.pack
 	do
 		count=$(( $count + 1 ))
-		if test_path_is_file "$p" &&
-		   idx=${p%.pack}.idx && test_path_is_file "$idx"
+		if test -f "$p" && idx=${p%.pack}.idx && test -f "$idx"
 		then
 			continue
 		fi
@@ -113,7 +111,7 @@ test_expect_success 'packsize limit' '
 		count=0 &&
 		for pi in .git/objects/pack/pack-*.idx
 		do
-			test_path_is_file "$pi" && count=$(( $count + 1 ))
+			test -f "$pi" && count=$(( $count + 1 ))
 		done &&
 		test $count = 2 &&
 
@@ -196,15 +194,15 @@ test_expect_success 'pack-objects with large loose object' '
 	test_cmp huge actual
 '
 
-test_expect_success 'tar archiving' '
+test_expect_success 'tar achiving' '
 	git archive --format=tar HEAD >/dev/null
 '
 
-test_expect_success 'zip archiving, store only' '
+test_expect_success 'zip achiving, store only' '
 	git archive --format=zip -0 HEAD >/dev/null
 '
 
-test_expect_success 'zip archiving, deflate' '
+test_expect_success 'zip achiving, deflate' '
 	git archive --format=zip HEAD >/dev/null
 '
 

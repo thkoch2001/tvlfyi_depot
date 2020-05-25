@@ -113,6 +113,7 @@ test_expect_success 'modified file' '
 	subdir/grep.c
 	unrelated
 	EOF
+	>empty &&
 
 	echo "enum grep_pat_token" >unrelated &&
 	test_when_finished "git checkout HEAD unrelated" &&

@@ -24,7 +24,6 @@
 #include "submodule.h"
 #include "submodule-config.h"
 #include "object-store.h"
-#include "packfile.h"
 
 static char const * const grep_usage[] = {
 	N_("git grep [<options>] [-e] <pattern> [<rev>...] [[--] <path>...]"),
@@ -33,6 +32,7 @@ static char const * const grep_usage[] = {
 
 static int recurse_submodules;
 
+#define GREP_NUM_THREADS_DEFAULT 8
 static int num_threads;
 
 static pthread_t *threads;
@@ -91,11 +91,8 @@ static pthread_cond_t cond_result;
 
 static int skip_first_line;
 
-static void add_work(struct grep_opt *opt, struct grep_source *gs)
+static void add_work(struct grep_opt *opt, const struct grep_source *gs)
 {
-	if (opt->binary != GREP_BINARY_TEXT)
-		grep_source_load_driver(gs, opt->repo->index);
-
 	grep_lock();
 
 	while ((todo_end+1) % ARRAY_SIZE(todo) == todo_done) {
@@ -103,6 +100,9 @@ static void add_work(struct grep_opt *opt, struct grep_source *gs)
 	}
 
 	todo[todo_end].source = *gs;
+	if (opt->binary != GREP_BINARY_TEXT)
+		grep_source_load_driver(&todo[todo_end].source,
+					opt->repo->index);
 	todo[todo_end].done = 0;
 	strbuf_reset(&todo[todo_end].out);
 	todo_end = (todo_end + 1) % ARRAY_SIZE(todo);
@@ -200,12 +200,12 @@ static void start_threads(struct grep_opt *opt)
 	int i;
 
 	pthread_mutex_init(&grep_mutex, NULL);
+	pthread_mutex_init(&grep_read_mutex, NULL);
 	pthread_mutex_init(&grep_attr_mutex, NULL);
 	pthread_cond_init(&cond_add, NULL);
 	pthread_cond_init(&cond_write, NULL);
 	pthread_cond_init(&cond_result, NULL);
 	grep_use_locks = 1;
-	enable_obj_read_lock();
 
 	for (i = 0; i < ARRAY_SIZE(todo); i++) {
 		strbuf_init(&todo[i].out, 0);
@@ -257,12 +257,12 @@ static int wait_all(void)
 	free(threads);
 
 	pthread_mutex_destroy(&grep_mutex);
+	pthread_mutex_destroy(&grep_read_mutex);
 	pthread_mutex_destroy(&grep_attr_mutex);
 	pthread_cond_destroy(&cond_add);
 	pthread_cond_destroy(&cond_write);
 	pthread_cond_destroy(&cond_result);
 	grep_use_locks = 0;
-	disable_obj_read_lock();
 
 	return hit;
 }
@@ -293,6 +293,16 @@ static int grep_cmd_config(const char *var, const char *value, void *cb)
 		recurse_submodules = git_config_bool(var, value);
 
 	return st;
+}
+
+static void *lock_and_read_oid_file(const struct object_id *oid, enum object_type *type, unsigned long *size)
+{
+	void *data;
+
+	grep_read_lock();
+	data = read_object_file(oid, type, size);
+	grep_read_unlock();
+	return data;
 }
 
 static int grep_oid(struct grep_opt *opt, const struct object_id *oid,
@@ -393,32 +403,34 @@ static int grep_tree(struct grep_opt *opt, const struct pathspec *pathspec,
 static int grep_submodule(struct grep_opt *opt,
 			  const struct pathspec *pathspec,
 			  const struct object_id *oid,
-			  const char *filename, const char *path, int cached)
+			  const char *filename, const char *path)
 {
 	struct repository subrepo;
 	struct repository *superproject = opt->repo;
-	const struct submodule *sub;
+	const struct submodule *sub = submodule_from_path(superproject,
+							  &null_oid, path);
 	struct grep_opt subopt;
 	int hit;
 
-	sub = submodule_from_path(superproject, &null_oid, path);
-
-	if (!is_submodule_active(superproject, path))
-		return 0;
-
-	if (repo_submodule_init(&subrepo, superproject, sub))
-		return 0;
-
 	/*
-	 * NEEDSWORK: repo_read_gitmodules() might call
-	 * add_to_alternates_memory() via config_from_gitmodules(). This
-	 * operation causes a race condition with concurrent object readings
-	 * performed by the worker threads. That's why we need obj_read_lock()
-	 * here. It should be removed once it's no longer necessary to add the
-	 * subrepo's odbs to the in-memory alternates list.
+	 * NEEDSWORK: submodules functions need to be protected because they
+	 * access the object store via config_from_gitmodules(): the latter
+	 * uses get_oid() which, for now, relies on the global the_repository
+	 * object.
 	 */
-	obj_read_lock();
-	repo_read_gitmodules(&subrepo, 0);
+	grep_read_lock();
+
+	if (!is_submodule_active(superproject, path)) {
+		grep_read_unlock();
+		return 0;
+	}
+
+	if (repo_submodule_init(&subrepo, superproject, sub)) {
+		grep_read_unlock();
+		return 0;
+	}
+
+	repo_read_gitmodules(&subrepo);
 
 	/*
 	 * NEEDSWORK: This adds the submodule's object directory to the list of
@@ -431,7 +443,7 @@ static int grep_submodule(struct grep_opt *opt,
 	 * object.
 	 */
 	add_to_alternates_memory(subrepo.objects->odb->path);
-	obj_read_unlock();
+	grep_read_unlock();
 
 	memcpy(&subopt, opt, sizeof(subopt));
 	subopt.repo = &subrepo;
@@ -443,12 +455,14 @@ static int grep_submodule(struct grep_opt *opt,
 		unsigned long size;
 		struct strbuf base = STRBUF_INIT;
 
-		obj_read_lock();
 		object = parse_object_or_die(oid, oid_to_hex(oid));
-		obj_read_unlock();
+
+		grep_read_lock();
 		data = read_object_with_reference(&subrepo,
 						  &object->oid, tree_type,
 						  &size, NULL);
+		grep_read_unlock();
+
 		if (!data)
 			die(_("unable to read tree (%s)"), oid_to_hex(&object->oid));
 
@@ -461,7 +475,7 @@ static int grep_submodule(struct grep_opt *opt,
 		strbuf_release(&base);
 		free(data);
 	} else {
-		hit = grep_cache(&subopt, pathspec, cached);
+		hit = grep_cache(&subopt, pathspec, 1);
 	}
 
 	repo_clear(&subrepo);
@@ -509,8 +523,7 @@ static int grep_cache(struct grep_opt *opt,
 			}
 		} else if (recurse_submodules && S_ISGITLINK(ce->ce_mode) &&
 			   submodule_path_match(repo->index, pathspec, name.buf, NULL)) {
-			hit |= grep_submodule(opt, pathspec, NULL, ce->name,
-					      ce->name, cached);
+			hit |= grep_submodule(opt, pathspec, NULL, ce->name, ce->name);
 		} else {
 			continue;
 		}
@@ -573,7 +586,7 @@ static int grep_tree(struct grep_opt *opt, const struct pathspec *pathspec,
 			void *data;
 			unsigned long size;
 
-			data = read_object_file(&entry.oid, &type, &size);
+			data = lock_and_read_oid_file(&entry.oid, &type, &size);
 			if (!data)
 				die(_("unable to read tree (%s)"),
 				    oid_to_hex(&entry.oid));
@@ -585,8 +598,7 @@ static int grep_tree(struct grep_opt *opt, const struct pathspec *pathspec,
 			free(data);
 		} else if (recurse_submodules && S_ISGITLINK(entry.mode)) {
 			hit |= grep_submodule(opt, pathspec, &entry.oid,
-					      base->buf, base->buf + tn_len,
-					      1); /* ignored */
+					      base->buf, base->buf + tn_len);
 		}
 
 		strbuf_setlen(base, old_baselen);
@@ -611,9 +623,12 @@ static int grep_object(struct grep_opt *opt, const struct pathspec *pathspec,
 		struct strbuf base;
 		int hit, len;
 
+		grep_read_lock();
 		data = read_object_with_reference(opt->repo,
 						  &obj->oid, tree_type,
 						  &size, NULL);
+		grep_read_unlock();
+
 		if (!data)
 			die(_("unable to read tree (%s)"), oid_to_hex(&obj->oid));
 
@@ -642,18 +657,13 @@ static int grep_objects(struct grep_opt *opt, const struct pathspec *pathspec,
 
 	for (i = 0; i < nr; i++) {
 		struct object *real_obj;
-
-		obj_read_lock();
 		real_obj = deref_tag(opt->repo, list->objects[i].item,
 				     NULL, 0);
-		obj_read_unlock();
 
 		/* load the gitmodules file for this rev */
 		if (recurse_submodules) {
 			submodule_free(opt->repo);
-			obj_read_lock();
 			gitmodules_config_oid(&real_obj->oid);
-			obj_read_unlock();
 		}
 		if (grep_object(opt, pathspec, real_obj, list->objects[i].name,
 				list->objects[i].path)) {
@@ -946,9 +956,6 @@ int cmd_grep(int argc, const char **argv, const char *prefix)
 			/* die the same way as if we did it at the beginning */
 			setup_git_directory();
 	}
-	/* Ignore --recurse-submodules if --no-index is given or implied */
-	if (!use_index)
-		recurse_submodules = 0;
 
 	/*
 	 * skip a -- separator; we know it cannot be
@@ -1053,10 +1060,7 @@ int cmd_grep(int argc, const char **argv, const char *prefix)
 	pathspec.recursive = 1;
 	pathspec.recurse_submodules = !!recurse_submodules;
 
-	if (recurse_submodules && untracked)
-		die(_("--untracked not supported with --recurse-submodules"));
-
-	if (show_in_pager) {
+	if (list.nr || cached || show_in_pager) {
 		if (num_threads > 1)
 			warning(_("invalid option combination, ignoring --threads"));
 		num_threads = 1;
@@ -1066,7 +1070,7 @@ int cmd_grep(int argc, const char **argv, const char *prefix)
 	} else if (num_threads < 0)
 		die(_("invalid number of threads specified (%d)"), num_threads);
 	else if (num_threads == 0)
-		num_threads = HAVE_THREADS ? online_cpus() : 1;
+		num_threads = HAVE_THREADS ? GREP_NUM_THREADS_DEFAULT : 1;
 
 	if (num_threads > 1) {
 		if (!HAVE_THREADS)
@@ -1075,17 +1079,6 @@ int cmd_grep(int argc, const char **argv, const char *prefix)
 		    && (opt.pre_context || opt.post_context ||
 			opt.file_break || opt.funcbody))
 			skip_first_line = 1;
-
-		/*
-		 * Pre-read gitmodules (if not read already) and force eager
-		 * initialization of packed_git to prevent racy lazy
-		 * reading/initialization once worker threads are started.
-		 */
-		if (recurse_submodules)
-			repo_read_gitmodules(the_repository, 1);
-		if (startup_info->have_repository)
-			(void)get_packed_git(the_repository);
-
 		start_threads(&opt);
 	} else {
 		/*
@@ -1115,10 +1108,13 @@ int cmd_grep(int argc, const char **argv, const char *prefix)
 			strbuf_addf(&buf, "+/%s%s",
 					strcmp("less", pager) ? "" : "*",
 					opt.pattern_list->pattern);
-			string_list_append(&path_list,
-					   strbuf_detach(&buf, NULL));
+			string_list_append(&path_list, buf.buf);
+			strbuf_detach(&buf, NULL);
 		}
 	}
+
+	if (recurse_submodules && (!use_index || untracked))
+		die(_("option not supported with --recurse-submodules"));
 
 	if (!show_in_pager && !opt.status_only)
 		setup_pager();
@@ -1149,6 +1145,5 @@ int cmd_grep(int argc, const char **argv, const char *prefix)
 		run_pager(&opt, prefix);
 	clear_pathspec(&pathspec);
 	free_grep_patterns(&opt);
-	grep_destroy();
 	return !hit;
 }

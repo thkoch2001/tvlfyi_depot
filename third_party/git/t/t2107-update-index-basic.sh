@@ -9,6 +9,7 @@ Tests for command-line parsing and basic operation.
 
 test_expect_success 'update-index --nonsense fails' '
 	test_must_fail git update-index --nonsense 2>msg &&
+	cat msg &&
 	test -s msg
 '
 

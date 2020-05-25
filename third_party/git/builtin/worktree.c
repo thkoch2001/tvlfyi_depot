@@ -10,6 +10,7 @@
 #include "run-command.h"
 #include "sigchain.h"
 #include "submodule.h"
+#include "refs.h"
 #include "utf8.h"
 #include "worktree.h"
 
@@ -234,7 +235,14 @@ static void validate_worktree_add(const char *path, const struct add_opts *opts)
 		die(_("'%s' already exists"), path);
 
 	worktrees = get_worktrees(0);
-	wt = find_worktree_by_path(worktrees, path);
+	/*
+	 * find_worktree()'s suffix matching may undesirably find the main
+	 * rather than a linked worktree (for instance, when the basenames
+	 * of the main worktree and the one being created are the same).
+	 * We're only interested in linked worktrees, so skip the main
+	 * worktree with +1.
+	 */
+	wt = find_worktree(worktrees + 1, NULL, path);
 	if (!wt)
 		goto done;
 
@@ -342,7 +350,7 @@ static int add_worktree(const char *path, const char *refname,
 	 */
 	strbuf_reset(&sb);
 	strbuf_addf(&sb, "%s/HEAD", sb_repo.buf);
-	write_file(sb.buf, "%s", oid_to_hex(&null_oid));
+	write_file(sb.buf, "%s", sha1_to_hex(null_sha1));
 	strbuf_reset(&sb);
 	strbuf_addf(&sb, "%s/commondir", sb_repo.buf);
 	write_file(sb.buf, "../..");
@@ -369,7 +377,7 @@ static int add_worktree(const char *path, const char *refname,
 	if (opts->checkout) {
 		cp.argv = NULL;
 		argv_array_clear(&cp.args);
-		argv_array_pushl(&cp.args, "reset", "--hard", "--no-recurse-submodules", NULL);
+		argv_array_pushl(&cp.args, "reset", "--hard", NULL);
 		if (opts->quiet)
 			argv_array_push(&cp.args, "--quiet");
 		cp.env = child_env.argv;
@@ -872,7 +880,7 @@ static void check_clean_worktree(struct worktree *wt,
 			  original_path);
 	ret = xread(cp.out, buf, sizeof(buf));
 	if (ret)
-		die(_("'%s' contains modified or untracked files, use --force to delete it"),
+		die(_("'%s' is dirty, use --force to delete it"),
 		    original_path);
 	close(cp.out);
 	ret = finish_command(&cp);

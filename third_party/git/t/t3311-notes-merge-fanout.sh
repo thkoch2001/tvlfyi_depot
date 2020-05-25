@@ -29,10 +29,15 @@ verify_fanout () {
 	git ls-tree -r --name-only "refs/notes/$notes_ref" |
 	while read path
 	do
-		echo "$path" | grep "^../[0-9a-f]*$" || {
+		case "$path" in
+		??/??????????????????????????????????????)
+			: true
+			;;
+		*)
 			echo "Invalid path \"$path\"" &&
-			return 1;
-		}
+			return 1
+			;;
+		esac
 	done
 }
 
@@ -43,10 +48,15 @@ verify_no_fanout () {
 	git ls-tree -r --name-only "refs/notes/$notes_ref" |
 	while read path
 	do
-		echo "$path" | grep -v "^../.*" || {
+		case "$path" in
+		????????????????????????????????????????)
+			: true
+			;;
+		*)
 			echo "Invalid path \"$path\"" &&
-			return 1;
-		}
+			return 1
+			;;
+		esac
 	done
 }
 
@@ -57,27 +67,7 @@ test_expect_success 'setup a few initial commits with notes (notes ref: x)' '
 	do
 		test_commit "commit$i" >/dev/null &&
 		git notes add -m "notes for commit$i" || return 1
-	done &&
-
-	git log --format=oneline &&
-
-	test_oid_cache <<-EOF
-	hash05a sha1:aed91155c7a72c2188e781fdf40e0f3761b299db
-	hash04a sha1:99fab268f9d7ee7b011e091a436c78def8eeee69
-	hash03a sha1:953c20ae26c7aa0b428c20693fe38bc687f9d1a9
-	hash02a sha1:6358796131b8916eaa2dde6902642942a1cb37e1
-	hash01a sha1:b02d459c32f0e68f2fe0981033bb34f38776ba47
-	hash03b sha1:9f506ee70e20379d7f78204c77b334f43d77410d
-	hash02b sha1:23a47d6ea7d589895faf800752054818e1e7627b
-
-	hash05a sha256:3aae5d26619d96dba93795f66325716e4cbc486884f95a6adee8fb0615a76d12
-	hash04a sha256:07e43dd3d89fe634d3252e253b426aacc7285a995dcdbcf94ac284060a1122cf
-	hash03a sha256:26fb52eaa7f4866bf735254587be7b31209ec10e525912ffd8e8ba549ba892ff
-	hash02a sha256:b57ebdf23634e750dcbc4b9a37991d70f90830d568a0e4529ce9de0a3f8d605c
-	hash01a sha256:377903b1572bd5117087a5518fcb1011b5053cccbc59e3c7c823a8615204173b
-	hash03b sha256:04e7b392fda7c185bfa17c9179b56db732edc2dc2b3bf887308dcaabb717270d
-	hash02b sha256:66099aaaec49a485ed990acadd9a9b81232ea592079964113d8f581ff69ef50b
-	EOF
+	done
 '
 
 commit_sha1=$(git rev-parse commit1^{commit})
@@ -87,11 +77,11 @@ commit_sha4=$(git rev-parse commit4^{commit})
 commit_sha5=$(git rev-parse commit5^{commit})
 
 cat <<EOF | sort >expect_notes_x
-$(test_oid hash05a) $commit_sha5
-$(test_oid hash04a) $commit_sha4
-$(test_oid hash03a) $commit_sha3
-$(test_oid hash02a) $commit_sha2
-$(test_oid hash01a) $commit_sha1
+aed91155c7a72c2188e781fdf40e0f3761b299db $commit_sha5
+99fab268f9d7ee7b011e091a436c78def8eeee69 $commit_sha4
+953c20ae26c7aa0b428c20693fe38bc687f9d1a9 $commit_sha3
+6358796131b8916eaa2dde6902642942a1cb37e1 $commit_sha2
+b02d459c32f0e68f2fe0981033bb34f38776ba47 $commit_sha1
 EOF
 
 cat >expect_log_x <<EOF
@@ -155,9 +145,9 @@ test_expect_success 'Fast-forward merge (y => x)' '
 '
 
 cat <<EOF | sort >expect_notes_z
-$(test_oid hash03b) $commit_sha3
-$(test_oid hash02b) $commit_sha2
-$(test_oid hash01a) $commit_sha1
+9f506ee70e20379d7f78204c77b334f43d77410d $commit_sha3
+23a47d6ea7d589895faf800752054818e1e7627b $commit_sha2
+b02d459c32f0e68f2fe0981033bb34f38776ba47 $commit_sha1
 EOF
 
 cat >expect_log_z <<EOF

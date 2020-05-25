@@ -1,6 +1,3 @@
-#ifndef TAR_H
-#define TAR_H
-
 #define TYPEFLAG_AUTO		'\0'
 #define TYPEFLAG_REG		'0'
 #define TYPEFLAG_LNK		'2'
@@ -26,5 +23,3 @@ struct ustar_header {
 	char devminor[8];	/* 337 */
 	char prefix[155];	/* 345 */
 };
-
-#endif /* TAR_H */

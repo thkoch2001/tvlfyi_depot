@@ -80,8 +80,7 @@ do_tests () {
 		git commit -q -m "change big file again" &&
 		git checkout -q other^{} &&
 		git rebase master &&
-		git rev-list master...HEAD~ >revs &&
-		test_must_be_empty revs
+		test_must_fail test -n "$(git rev-list master...HEAD~)"
 	'
 
 	test_expect_success $pr 'do not drop patch' '
@@ -91,7 +90,7 @@ do_tests () {
 		git commit -q -m squashed &&
 		git checkout -q other^{} &&
 		test_must_fail git rebase squashed &&
-		git rebase --quit
+		rm -rf .git/rebase-apply
 	'
 }
 

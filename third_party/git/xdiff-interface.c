@@ -84,8 +84,8 @@ static void trim_common_tail(mmfile_t *a, mmfile_t *b)
 {
 	const int blk = 1024;
 	long trimmed = 0, recovered = 0;
-	char *ap = a->size ? a->ptr + a->size : a->ptr;
-	char *bp = b->size ? b->ptr + b->size : b->ptr;
+	char *ap = a->ptr + a->size;
+	char *bp = b->ptr + b->size;
 	long smaller = (a->size < b->size) ? a->size : b->size;
 
 	while (blk + trimmed <= smaller && !memcmp(ap - blk, bp - blk, blk)) {
@@ -250,12 +250,8 @@ void xdiff_set_find_func(xdemitconf_t *xecfg, const char *value, int cflags)
 	ALLOC_ARRAY(regs->array, regs->nr);
 	for (i = 0; i < regs->nr; i++) {
 		struct ff_reg *reg = regs->array + i;
-		const char *ep, *expression;
+		const char *ep = strchr(value, '\n'), *expression;
 		char *buffer = NULL;
-
-		if (!value)
-			BUG("mismatch between line count and parsing");
-		ep = strchr(value, '\n');
 
 		reg->negate = (*value == '!');
 		if (reg->negate && i == regs->nr - 1)
@@ -269,7 +265,7 @@ void xdiff_set_find_func(xdemitconf_t *xecfg, const char *value, int cflags)
 		if (regcomp(&reg->re, expression, cflags))
 			die("Invalid regexp to look for hunk header: %s", expression);
 		free(buffer);
-		value = ep ? ep + 1 : NULL;
+		value = ep + 1;
 	}
 }
 

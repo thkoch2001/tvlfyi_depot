@@ -62,7 +62,6 @@ static int show_diffstat = 1, shortlog_len = -1, squash;
 static int option_commit = -1;
 static int option_edit = -1;
 static int allow_trivial = 1, have_message, verify_signatures;
-static int check_trust_level = 1;
 static int overwrite_ignore = 1;
 static struct strbuf merge_msg = STRBUF_INIT;
 static struct strategy **use_strategies;
@@ -82,7 +81,7 @@ static int show_progress = -1;
 static int default_to_upstream = 1;
 static int signoff;
 static const char *sign_commit;
-static int no_verify;
+static int verify_msg = 1;
 
 static struct strategy all_strategy[] = {
 	{ "recursive",  DEFAULT_TWOHEAD | NO_TRIVIAL },
@@ -288,7 +287,7 @@ static struct option builtin_merge_options[] = {
 	  N_("GPG sign commit"), PARSE_OPT_OPTARG, NULL, (intptr_t) "" },
 	OPT_BOOL(0, "overwrite-ignore", &overwrite_ignore, N_("update ignored files (default)")),
 	OPT_BOOL(0, "signoff", &signoff, N_("add Signed-off-by:")),
-	OPT_BOOL(0, "no-verify", &no_verify, N_("bypass pre-merge-commit and commit-msg hooks")),
+	OPT_BOOL(0, "verify", &verify_msg, N_("verify commit-msg hook")),
 	OPT_END()
 };
 
@@ -632,8 +631,6 @@ static int git_merge_config(const char *k, const char *v, void *cb)
 	} else if (!strcmp(k, "commit.gpgsign")) {
 		sign_commit = git_config_bool(k, v) ? "" : NULL;
 		return 0;
-	} else if (!strcmp(k, "gpg.mintrustlevel")) {
-		check_trust_level = 0;
 	}
 
 	status = fmt_merge_msg_config(k, v, cb);
@@ -691,13 +688,16 @@ static int try_merge_strategy(const char *strategy, struct commit_list *common,
 			      struct commit_list *remoteheads,
 			      struct commit *head)
 {
+	struct lock_file lock = LOCK_INIT;
 	const char *head_arg = "HEAD";
 
-	if (refresh_and_write_cache(REFRESH_QUIET, SKIP_IF_UNCHANGED, 0) < 0)
+	hold_locked_index(&lock, LOCK_DIE_ON_ERROR);
+	refresh_cache(REFRESH_QUIET);
+	if (write_locked_index(&the_index, &lock,
+			       COMMIT_LOCK | SKIP_IF_UNCHANGED))
 		return error(_("Unable to write index."));
 
 	if (!strcmp(strategy, "recursive") || !strcmp(strategy, "subtree")) {
-		struct lock_file lock = LOCK_INIT;
 		int clean, x;
 		struct commit *result;
 		struct commit_list *reversed = NULL;
@@ -816,18 +816,6 @@ static void write_merge_heads(struct commit_list *);
 static void prepare_to_commit(struct commit_list *remoteheads)
 {
 	struct strbuf msg = STRBUF_INIT;
-	const char *index_file = get_index_file();
-
-	if (!no_verify && run_commit_hook(0 < option_edit, index_file, "pre-merge-commit", NULL))
-		abort_commit(remoteheads, NULL);
-	/*
-	 * Re-read the index as pre-merge-commit hook could have updated it,
-	 * and write it out as a tree.  We must do this before we invoke
-	 * the editor and after we invoke run_status above.
-	 */
-	if (find_hook("pre-merge-commit"))
-		discard_cache();
-	read_cache_from(index_file);
 	strbuf_addbuf(&msg, &merge_msg);
 	if (squash)
 		BUG("the control must not reach here under --squash");
@@ -854,7 +842,7 @@ static void prepare_to_commit(struct commit_list *remoteheads)
 			abort_commit(remoteheads, NULL);
 	}
 
-	if (!no_verify && run_commit_hook(0 < option_edit, get_index_file(),
+	if (verify_msg && run_commit_hook(0 < option_edit, get_index_file(),
 					  "commit-msg",
 					  git_path_merge_msg(the_repository), NULL))
 		abort_commit(remoteheads, NULL);
@@ -872,8 +860,12 @@ static int merge_trivial(struct commit *head, struct commit_list *remoteheads)
 {
 	struct object_id result_tree, result_commit;
 	struct commit_list *parents, **pptr = &parents;
+	struct lock_file lock = LOCK_INIT;
 
-	if (refresh_and_write_cache(REFRESH_QUIET, SKIP_IF_UNCHANGED, 0) < 0)
+	hold_locked_index(&lock, LOCK_DIE_ON_ERROR);
+	refresh_cache(REFRESH_QUIET);
+	if (write_locked_index(&the_index, &lock,
+			       COMMIT_LOCK | SKIP_IF_UNCHANGED))
 		return error(_("Unable to write index."));
 
 	write_tree_trivial(&result_tree);
@@ -1400,8 +1392,7 @@ int cmd_merge(int argc, const char **argv, const char *prefix)
 			die(_("Can merge only exactly one commit into empty head"));
 
 		if (verify_signatures)
-			verify_merge_signature(remoteheads->item, verbosity,
-					       check_trust_level);
+			verify_merge_signature(remoteheads->item, verbosity);
 
 		remote_head_oid = &remoteheads->item->object.oid;
 		read_empty(remote_head_oid, 0);
@@ -1424,8 +1415,7 @@ int cmd_merge(int argc, const char **argv, const char *prefix)
 
 	if (verify_signatures) {
 		for (p = remoteheads; p; p = p->next) {
-			verify_merge_signature(p->item, verbosity,
-					       check_trust_level);
+			verify_merge_signature(p->item, verbosity);
 		}
 	}
 

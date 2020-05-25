@@ -228,11 +228,9 @@ test_commit () {
 # can be a tag pointing to the commit-to-merge.
 
 test_merge () {
-	label="$1" &&
-	shift &&
 	test_tick &&
-	git merge -m "$label" "$@" &&
-	git tag "$label"
+	git merge -m "$1" "$2" &&
+	git tag "$1"
 }
 
 # Efficiently create <nr> commits, each with a unique number (from 1 to <nr>
@@ -308,7 +306,7 @@ test_commit_bulk () {
 	total=$1
 
 	add_from=
-	if git -C "$indir" rev-parse --quiet --verify "$ref"
+	if git -C "$indir" rev-parse --verify "$ref"
 	then
 		add_from=t
 	fi
@@ -582,7 +580,7 @@ test_expect_failure () {
 	export test_prereq
 	if ! test_skip "$@"
 	then
-		say >&3 "checking known breakage of $TEST_NUMBER.$test_count '$1': $2"
+		say >&3 "checking known breakage: $2"
 		if test_run_ "$2" expecting_failure
 		then
 			test_known_broken_ok_ "$1"
@@ -602,7 +600,7 @@ test_expect_success () {
 	export test_prereq
 	if ! test_skip "$@"
 	then
-		say >&3 "expecting success of $TEST_NUMBER.$test_count '$1': $2"
+		say >&3 "expecting success: $2"
 		if test_run_ "$2"
 		then
 			test_ok_ "$1"
@@ -1012,30 +1010,19 @@ test_must_be_empty () {
 	fi
 }
 
-# Tests that its two parameters refer to the same revision, or if '!' is
-# provided first, that its other two parameters refer to different
-# revisions.
+# Tests that its two parameters refer to the same revision
 test_cmp_rev () {
-	local op='=' wrong_result=different
-
-	if test $# -ge 1 && test "x$1" = 'x!'
-	then
-	    op='!='
-	    wrong_result='the same'
-	    shift
-	fi
 	if test $# != 2
 	then
 		error "bug in the test script: test_cmp_rev requires two revisions, but got $#"
 	else
 		local r1 r2
 		r1=$(git rev-parse --verify "$1") &&
-		r2=$(git rev-parse --verify "$2") || return 1
-
-		if ! test "$r1" "$op" "$r2"
+		r2=$(git rev-parse --verify "$2") &&
+		if test "$r1" != "$r2"
 		then
 			cat >&4 <<-EOF
-			error: two revisions point to $wrong_result objects:
+			error: two revisions point to different objects:
 			  '$1': $r1
 			  '$2': $r2
 			EOF
@@ -1186,34 +1173,6 @@ perl () {
 	command "$PERL_PATH" "$@" 2>&7
 } 7>&2 2>&4
 
-# Given the name of an environment variable with a bool value, normalize
-# its value to a 0 (true) or 1 (false or empty string) return code.
-#
-#   test_bool_env GIT_TEST_HTTPD <default-value>
-#
-# Return with code corresponding to the given default value if the variable
-# is unset.
-# Abort the test script if either the value of the variable or the default
-# are not valid bool values.
-
-test_bool_env () {
-	if test $# != 2
-	then
-		BUG "test_bool_env requires two parameters (variable name and default value)"
-	fi
-
-	git env--helper --type=bool --default="$2" --exit-code "$1"
-	ret=$?
-	case $ret in
-	0|1)	# unset or valid bool value
-		;;
-	*)	# invalid bool value or something unexpected
-		error >&7 "test_bool_env requires bool values both for \$$1 and for the default fallback"
-		;;
-	esac
-	return $ret
-}
-
 # Exit the test suite, either by skipping all remaining tests or by
 # exiting with an error. If our prerequisite variable $1 falls back
 # on a default assume we were opportunistically trying to set up some
@@ -1222,7 +1181,7 @@ test_bool_env () {
 # The error/skip message should be given by $2.
 #
 test_skip_or_die () {
-	if ! test_bool_env "$1" false
+	if ! git env--helper --type=bool --default=false --exit-code $1
 	then
 		skip_all=$2
 		test_done
@@ -1515,31 +1474,4 @@ test_set_port () {
 	# ports.
 	port=$(($port + ${GIT_TEST_STRESS_JOB_NR:-0}))
 	eval $var=$port
-}
-
-# Compare a file containing rev-list bitmap traversal output to its non-bitmap
-# counterpart. You can't just use test_cmp for this, because the two produce
-# subtly different output:
-#
-#   - regular output is in traversal order, whereas bitmap is split by type,
-#     with non-packed objects at the end
-#
-#   - regular output has a space and the pathname appended to non-commit
-#     objects; bitmap output omits this
-#
-# This function normalizes and compares the two. The second file should
-# always be the bitmap output.
-test_bitmap_traversal () {
-	if test "$1" = "--no-confirm-bitmaps"
-	then
-		shift
-	elif cmp "$1" "$2"
-	then
-		echo >&2 "identical raw outputs; are you sure bitmaps were used?"
-		return 1
-	fi &&
-	cut -d' ' -f1 "$1" | sort >"$1.normalized" &&
-	sort "$2" >"$2.normalized" &&
-	test_cmp "$1.normalized" "$2.normalized" &&
-	rm -f "$1.normalized" "$2.normalized"
 }

@@ -28,7 +28,6 @@
 #include "commit-graph.h"
 #include "prio-queue.h"
 #include "hashmap.h"
-#include "utf8.h"
 
 volatile show_early_output_fn_t show_early_output;
 
@@ -108,34 +107,30 @@ struct path_and_oids_entry {
 };
 
 static int path_and_oids_cmp(const void *hashmap_cmp_fn_data,
-			     const struct hashmap_entry *eptr,
-			     const struct hashmap_entry *entry_or_key,
+			     const struct path_and_oids_entry *e1,
+			     const struct path_and_oids_entry *e2,
 			     const void *keydata)
 {
-	const struct path_and_oids_entry *e1, *e2;
-
-	e1 = container_of(eptr, const struct path_and_oids_entry, ent);
-	e2 = container_of(entry_or_key, const struct path_and_oids_entry, ent);
-
 	return strcmp(e1->path, e2->path);
 }
 
 static void paths_and_oids_init(struct hashmap *map)
 {
-	hashmap_init(map, path_and_oids_cmp, NULL, 0);
+	hashmap_init(map, (hashmap_cmp_fn) path_and_oids_cmp, NULL, 0);
 }
 
 static void paths_and_oids_clear(struct hashmap *map)
 {
 	struct hashmap_iter iter;
 	struct path_and_oids_entry *entry;
+	hashmap_iter_init(map, &iter);
 
-	hashmap_for_each_entry(map, &iter, entry, ent /* member name */) {
+	while ((entry = (struct path_and_oids_entry *)hashmap_iter_next(&iter))) {
 		oidset_clear(&entry->trees);
 		free(entry->path);
 	}
 
-	hashmap_free_entries(map, struct path_and_oids_entry, ent);
+	hashmap_free(map, 1);
 }
 
 static void paths_and_oids_insert(struct hashmap *map,
@@ -146,19 +141,18 @@ static void paths_and_oids_insert(struct hashmap *map,
 	struct path_and_oids_entry key;
 	struct path_and_oids_entry *entry;
 
-	hashmap_entry_init(&key.ent, hash);
+	hashmap_entry_init(&key, hash);
 
 	/* use a shallow copy for the lookup */
 	key.path = (char *)path;
 	oidset_init(&key.trees, 0);
 
-	entry = hashmap_get_entry(map, &key, ent, NULL);
-	if (!entry) {
+	if (!(entry = (struct path_and_oids_entry *)hashmap_get(map, &key, NULL))) {
 		entry = xcalloc(1, sizeof(struct path_and_oids_entry));
-		hashmap_entry_init(&entry->ent, hash);
+		hashmap_entry_init(entry, hash);
 		entry->path = xstrdup(key.path);
 		oidset_init(&entry->trees, 16);
-		hashmap_put(map, &entry->ent);
+		hashmap_put(map, entry);
 	}
 
 	oidset_insert(&entry->trees, oid);
@@ -241,7 +235,8 @@ void mark_trees_uninteresting_sparse(struct repository *r,
 		add_children_by_path(r, tree, &map);
 	}
 
-	hashmap_for_each_entry(&map, &map_iter, entry, ent /* member name */)
+	hashmap_iter_init(&map, &map_iter);
+	while ((entry = hashmap_iter_next(&map_iter)))
 		mark_trees_uninteresting_sparse(r, &entry->trees);
 
 	paths_and_oids_clear(&map);
@@ -409,7 +404,9 @@ static struct commit *handle_commit(struct rev_info *revs,
 		struct tag *tag = (struct tag *) object;
 		if (revs->tag_objects && !(flags & UNINTERESTING))
 			add_pending_object(revs, object, tag->tag);
-		object = parse_object(revs->repo, get_tagged_oid(tag));
+		if (!tag->tagged)
+			die("bad tag");
+		object = parse_object(revs->repo, &tag->tagged->oid);
 		if (!object) {
 			if (revs->ignore_missing_links || (flags & UNINTERESTING))
 				return NULL;
@@ -1668,7 +1665,7 @@ void repo_init_revisions(struct repository *r,
 		revs->diffopt.prefix_length = strlen(prefix);
 	}
 
-	init_display_notes(&revs->notes_opt);
+	revs->notes_opt.use_default_notes = -1;
 }
 
 static void add_pending_commit_list(struct rev_info *revs,
@@ -2066,6 +2063,7 @@ static int handle_revision_opt(struct rev_info *revs, int argc, const char **arg
 		revs->simplify_by_decoration = 1;
 		revs->limited = 1;
 		revs->prune = 1;
+		load_ref_decorations(NULL, DECORATE_SHORT_REFS);
 	} else if (!strcmp(arg, "--date-order")) {
 		revs->sort_order = REV_SORT_BY_COMMIT_DATE;
 		revs->topo_order = 1;
@@ -2203,8 +2201,9 @@ static int handle_revision_opt(struct rev_info *revs, int argc, const char **arg
 			die("'%s': not a non-negative integer", arg);
 		revs->expand_tabs_in_log = val;
 	} else if (!strcmp(arg, "--show-notes") || !strcmp(arg, "--notes")) {
-		enable_default_display_notes(&revs->notes_opt, &revs->show_notes);
+		revs->show_notes = 1;
 		revs->show_notes_given = 1;
+		revs->notes_opt.use_default_notes = 1;
 	} else if (!strcmp(arg, "--show-signature")) {
 		revs->show_signature = 1;
 	} else if (!strcmp(arg, "--no-show-signature")) {
@@ -2219,14 +2218,25 @@ static int handle_revision_opt(struct rev_info *revs, int argc, const char **arg
 		revs->track_first_time = 1;
 	} else if (skip_prefix(arg, "--show-notes=", &optarg) ||
 		   skip_prefix(arg, "--notes=", &optarg)) {
+		struct strbuf buf = STRBUF_INIT;
+		revs->show_notes = 1;
+		revs->show_notes_given = 1;
 		if (starts_with(arg, "--show-notes=") &&
 		    revs->notes_opt.use_default_notes < 0)
 			revs->notes_opt.use_default_notes = 1;
-		enable_ref_display_notes(&revs->notes_opt, &revs->show_notes, optarg);
-		revs->show_notes_given = 1;
+		strbuf_addstr(&buf, optarg);
+		expand_notes_ref(&buf);
+		string_list_append(&revs->notes_opt.extra_notes_refs,
+				   strbuf_detach(&buf, NULL));
 	} else if (!strcmp(arg, "--no-notes")) {
-		disable_display_notes(&revs->notes_opt, &revs->show_notes);
+		revs->show_notes = 0;
 		revs->show_notes_given = 1;
+		revs->notes_opt.use_default_notes = -1;
+		/* we have been strdup'ing ourselves, so trick
+		 * string_list into free()ing strings */
+		revs->notes_opt.extra_notes_refs.strdup_strings = 1;
+		string_list_clear(&revs->notes_opt.extra_notes_refs, 0);
+		revs->notes_opt.extra_notes_refs.strdup_strings = 0;
 	} else if (!strcmp(arg, "--standard-notes")) {
 		revs->show_notes_given = 1;
 		revs->notes_opt.use_default_notes = 1;
@@ -2513,7 +2523,6 @@ int setup_revisions(int argc, const char **argv, struct rev_info *revs, struct s
 	int i, flags, left, seen_dashdash, got_rev_arg = 0, revarg_opt;
 	struct argv_array prune_data = ARGV_ARRAY_INIT;
 	const char *submodule = NULL;
-	int seen_end_of_options = 0;
 
 	if (opt)
 		submodule = opt->submodule;
@@ -2543,7 +2552,7 @@ int setup_revisions(int argc, const char **argv, struct rev_info *revs, struct s
 		revarg_opt |= REVARG_CANNOT_BE_FILENAME;
 	for (left = i = 1; i < argc; i++) {
 		const char *arg = argv[i];
-		if (!seen_end_of_options && *arg == '-') {
+		if (*arg == '-') {
 			int opts;
 
 			opts = handle_revision_pseudo_opt(submodule,
@@ -2562,11 +2571,6 @@ int setup_revisions(int argc, const char **argv, struct rev_info *revs, struct s
 				if (revs->read_from_stdin++)
 					die("--stdin given twice?");
 				read_revisions_from_stdin(revs, &prune_data);
-				continue;
-			}
-
-			if (!strcmp(arg, "--end-of-options")) {
-				seen_end_of_options = 1;
 				continue;
 			}
 
@@ -2680,8 +2684,6 @@ int setup_revisions(int argc, const char **argv, struct rev_info *revs, struct s
 
 	grep_commit_pattern_type(GREP_PATTERN_TYPE_UNSPECIFIED,
 				 &revs->grep_filter);
-	if (!is_encoding_utf8(get_log_output_encoding()))
-		revs->grep_filter.ignore_locale = 1;
 	compile_grep_patterns(&revs->grep_filter);
 
 	if (revs->reverse && revs->reflog_info)
@@ -3086,7 +3088,7 @@ static void set_children(struct rev_info *revs)
 
 void reset_revision_walk(void)
 {
-	clear_object_flags(SEEN | ADDED | SHOWN | TOPO_WALK_EXPLORED | TOPO_WALK_INDEGREE);
+	clear_object_flags(SEEN | ADDED | SHOWN);
 }
 
 static int mark_uninteresting(const struct object_id *oid,
@@ -3199,26 +3201,10 @@ static void compute_indegrees_to_depth(struct rev_info *revs,
 		indegree_walk_step(revs);
 }
 
-static void reset_topo_walk(struct rev_info *revs)
-{
-	struct topo_walk_info *info = revs->topo_walk_info;
-
-	clear_prio_queue(&info->explore_queue);
-	clear_prio_queue(&info->indegree_queue);
-	clear_prio_queue(&info->topo_queue);
-	clear_indegree_slab(&info->indegree);
-	clear_author_date_slab(&info->author_date);
-
-	FREE_AND_NULL(revs->topo_walk_info);
-}
-
 static void init_topo_walk(struct rev_info *revs)
 {
 	struct topo_walk_info *info;
 	struct commit_list *list;
-	if (revs->topo_walk_info)
-		reset_topo_walk(revs);
-
 	revs->topo_walk_info = xmalloc(sizeof(struct topo_walk_info));
 	info = revs->topo_walk_info;
 	memset(info, 0, sizeof(struct topo_walk_info));
@@ -3948,7 +3934,7 @@ struct commit *get_revision(struct rev_info *revs)
 	return c;
 }
 
-const char *get_revision_mark(const struct rev_info *revs, const struct commit *commit)
+char *get_revision_mark(const struct rev_info *revs, const struct commit *commit)
 {
 	if (commit->object.flags & BOUNDARY)
 		return "-";
@@ -3970,7 +3956,7 @@ const char *get_revision_mark(const struct rev_info *revs, const struct commit *
 
 void put_revision_mark(const struct rev_info *revs, const struct commit *commit)
 {
-	const char *mark = get_revision_mark(revs, commit);
+	char *mark = get_revision_mark(revs, commit);
 	if (!strlen(mark))
 		return;
 	fputs(mark, stdout);

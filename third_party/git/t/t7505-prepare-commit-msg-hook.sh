@@ -241,7 +241,13 @@ test_rebase () {
 			git add b &&
 			git rebase --continue
 		) &&
-		git log --pretty=%s -g -n18 HEAD@{1} >actual &&
+		if test "$mode" = -p # reword amended after pick
+		then
+			n=18
+		else
+			n=17
+		fi &&
+		git log --pretty=%s -g -n$n HEAD@{1} >actual &&
 		test_cmp "$TEST_DIRECTORY/t7505/expected-rebase${mode:--i}" actual
 	'
 }

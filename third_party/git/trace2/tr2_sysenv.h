@@ -24,8 +24,6 @@ enum tr2_sysenv_variable {
 	TR2_SYSENV_PERF,
 	TR2_SYSENV_PERF_BRIEF,
 
-	TR2_SYSENV_MAX_FILES,
-
 	TR2_SYSENV_MUST_BE_LAST
 };
 

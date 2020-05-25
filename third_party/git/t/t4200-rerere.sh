@@ -25,7 +25,6 @@ test_description='git rerere
 . ./test-lib.sh
 
 test_expect_success 'setup' '
-	test_oid_init &&
 	cat >a1 <<-\EOF &&
 	Some title
 	==========
@@ -211,7 +210,7 @@ test_expect_success 'set up for garbage collection tests' '
 	echo Hello >$rr/preimage &&
 	echo World >$rr/postimage &&
 
-	sha2=$(test_oid deadbeef) &&
+	sha2=4000000000000000000000000000000000000000 &&
 	rr2=.git/rr-cache/$sha2 &&
 	mkdir $rr2 &&
 	echo Hello >$rr2/preimage &&

@@ -32,19 +32,19 @@ static const struct option check_ignore_options[] = {
 	OPT_END()
 };
 
-static void output_pattern(const char *path, struct path_pattern *pattern)
+static void output_exclude(const char *path, struct exclude *exclude)
 {
-	char *bang  = (pattern && pattern->flags & PATTERN_FLAG_NEGATIVE)  ? "!" : "";
-	char *slash = (pattern && pattern->flags & PATTERN_FLAG_MUSTBEDIR) ? "/" : "";
+	char *bang  = (exclude && exclude->flags & EXC_FLAG_NEGATIVE)  ? "!" : "";
+	char *slash = (exclude && exclude->flags & EXC_FLAG_MUSTBEDIR) ? "/" : "";
 	if (!nul_term_line) {
 		if (!verbose) {
 			write_name_quoted(path, stdout, '\n');
 		} else {
-			if (pattern) {
-				quote_c_style(pattern->pl->src, NULL, stdout, 0);
+			if (exclude) {
+				quote_c_style(exclude->el->src, NULL, stdout, 0);
 				printf(":%d:%s%s%s\t",
-				       pattern->srcpos,
-				       bang, pattern->pattern, slash);
+				       exclude->srcpos,
+				       bang, exclude->pattern, slash);
 			}
 			else {
 				printf("::\t");
@@ -56,11 +56,11 @@ static void output_pattern(const char *path, struct path_pattern *pattern)
 		if (!verbose) {
 			printf("%s%c", path, '\0');
 		} else {
-			if (pattern)
+			if (exclude)
 				printf("%s%c%d%c%s%s%s%c%s%c",
-				       pattern->pl->src, '\0',
-				       pattern->srcpos, '\0',
-				       bang, pattern->pattern, slash, '\0',
+				       exclude->el->src, '\0',
+				       exclude->srcpos, '\0',
+				       bang, exclude->pattern, slash, '\0',
 				       path, '\0');
 			else
 				printf("%c%c%c%s%c", '\0', '\0', '\0', path, '\0');
@@ -74,7 +74,7 @@ static int check_ignore(struct dir_struct *dir,
 	const char *full_path;
 	char *seen;
 	int num_ignored = 0, i;
-	struct path_pattern *pattern;
+	struct exclude *exclude;
 	struct pathspec pathspec;
 
 	if (!argc) {
@@ -103,18 +103,15 @@ static int check_ignore(struct dir_struct *dir,
 	seen = find_pathspecs_matching_against_index(&pathspec, &the_index);
 	for (i = 0; i < pathspec.nr; i++) {
 		full_path = pathspec.items[i].match;
-		pattern = NULL;
+		exclude = NULL;
 		if (!seen[i]) {
 			int dtype = DT_UNKNOWN;
-			pattern = last_matching_pattern(dir, &the_index,
+			exclude = last_exclude_matching(dir, &the_index,
 							full_path, &dtype);
-			if (!verbose && pattern &&
-			    pattern->flags & PATTERN_FLAG_NEGATIVE)
-				pattern = NULL;
 		}
-		if (!quiet && (pattern || show_non_matching))
-			output_pattern(pathspec.items[i].original, pattern);
-		if (pattern)
+		if (!quiet && (exclude || show_non_matching))
+			output_exclude(pathspec.items[i].original, exclude);
+		if (exclude)
 			num_ignored++;
 	}
 	free(seen);

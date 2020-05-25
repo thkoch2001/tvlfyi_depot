@@ -111,15 +111,13 @@ struct remotes_hash_key {
 };
 
 static int remotes_hash_cmp(const void *unused_cmp_data,
-			    const struct hashmap_entry *eptr,
-			    const struct hashmap_entry *entry_or_key,
+			    const void *entry,
+			    const void *entry_or_key,
 			    const void *keydata)
 {
-	const struct remote *a, *b;
+	const struct remote *a = entry;
+	const struct remote *b = entry_or_key;
 	const struct remotes_hash_key *key = keydata;
-
-	a = container_of(eptr, const struct remote, ent);
-	b = container_of(entry_or_key, const struct remote, ent);
 
 	if (key)
 		return strncmp(a->name, key->str, key->len) || a->name[key->len];
@@ -137,7 +135,7 @@ static struct remote *make_remote(const char *name, int len)
 {
 	struct remote *ret, *replaced;
 	struct remotes_hash_key lookup;
-	struct hashmap_entry lookup_entry, *e;
+	struct hashmap_entry lookup_entry;
 
 	if (!len)
 		len = strlen(name);
@@ -147,9 +145,8 @@ static struct remote *make_remote(const char *name, int len)
 	lookup.len = len;
 	hashmap_entry_init(&lookup_entry, memhash(name, len));
 
-	e = hashmap_get(&remotes_hash, &lookup_entry, &lookup);
-	if (e)
-		return container_of(e, struct remote, ent);
+	if ((ret = hashmap_get(&remotes_hash, &lookup_entry, &lookup)) != NULL)
+		return ret;
 
 	ret = xcalloc(1, sizeof(struct remote));
 	ret->prune = -1;  /* unspecified */
@@ -161,8 +158,8 @@ static struct remote *make_remote(const char *name, int len)
 	ALLOC_GROW(remotes, remotes_nr + 1, remotes_alloc);
 	remotes[remotes_nr++] = ret;
 
-	hashmap_entry_init(&ret->ent, lookup_entry.hash);
-	replaced = hashmap_put_entry(&remotes_hash, ret, ent);
+	hashmap_entry_init(ret, lookup_entry.hash);
+	replaced = hashmap_put(&remotes_hash, ret);
 	assert(replaced == NULL);  /* no previous entry overwritten */
 	return ret;
 }
@@ -369,8 +366,7 @@ static int handle_config(const char *key, const char *value, void *cb)
 	}
 	remote = make_remote(name, namelen);
 	remote->origin = REMOTE_CONFIG;
-	if (current_config_scope() == CONFIG_SCOPE_LOCAL ||
-	current_config_scope() == CONFIG_SCOPE_WORKTREE)
+	if (current_config_scope() == CONFIG_SCOPE_REPO)
 		remote->configured_in_repo = 1;
 	if (!strcmp(subkey, "mirror"))
 		remote->mirror = git_config_bool(key, value);
@@ -516,11 +512,14 @@ const char *pushremote_for_branch(struct branch *branch, int *explicit)
 	return remote_for_branch(branch, explicit);
 }
 
-const char *remote_ref_for_branch(struct branch *branch, int for_push)
+const char *remote_ref_for_branch(struct branch *branch, int for_push,
+				  int *explicit)
 {
 	if (branch) {
 		if (!for_push) {
 			if (branch->merge_nr) {
+				if (explicit)
+					*explicit = 1;
 				return branch->merge_name[0];
 			}
 		} else {
@@ -531,11 +530,15 @@ const char *remote_ref_for_branch(struct branch *branch, int for_push)
 			if (remote && remote->push.nr &&
 			    (dst = apply_refspecs(&remote->push,
 						  branch->refname))) {
+				if (explicit)
+					*explicit = 1;
 				return dst;
 			}
 		}
 	}
-	return NULL;
+	if (explicit)
+		*explicit = 0;
+	return "";
 }
 
 static struct remote *remote_get_1(const char *name,

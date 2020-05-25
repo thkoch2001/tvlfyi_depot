@@ -24,7 +24,7 @@ $url = 'http://localhost:'.$port.'/wiki/mw-config/index.php';
 $db_dir = urlencode($tmp);
 $tmp_cookie = tempnam($tmp, "COOKIE_");
 /*
- * Fetches a page with cURL.
+ * Fetchs a page with cURL.
  */
 function get($page_name = "") {
 	$curl = curl_init();

@@ -343,9 +343,9 @@ sub handleLinkLine
         } elsif ("$part" eq "-lz") {
             push(@libs, "zlib.lib");
         } elsif ("$part" eq "-lcrypto") {
-            push(@libs, "libcrypto.lib");
+            push(@libs, "libeay32.lib");
         } elsif ("$part" eq "-lssl") {
-            push(@libs, "libssl.lib");
+            push(@libs, "ssleay32.lib");
         } elsif ("$part" eq "-lcurl") {
             push(@libs, "libcurl.lib");
         } elsif ("$part" eq "-lexpat") {

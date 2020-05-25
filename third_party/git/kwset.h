@@ -1,6 +1,3 @@
-#ifndef KWSET_H
-#define KWSET_H
-
 /* This file has been copied from commit e7ac713d^ in the GNU grep git
  * repository. A few small changes have been made to adapt the code to
  * Git.
@@ -62,4 +59,3 @@ size_t kwsexec(kwset_t, char const *, size_t, struct kwsmatch *);
 /* Deallocate the given keyword set and all its associated storage. */
 void kwsfree(kwset_t);
 
-#endif /* KWSET_H */
