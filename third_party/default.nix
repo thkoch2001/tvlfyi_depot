@@ -118,6 +118,7 @@ let
       writeShellScriptBin
       writeText
       writeTextFile
+      xorg
       xz
       zlib
       zstd;
