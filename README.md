@@ -33,6 +33,7 @@ Twitter][].
   the services in this repository are deployed!)
 * `ops/besadii` contains a tool that runs as the git
   `post-receive`-hook on my git server to trigger builds on sourcehut.
+* `third_party/nix` contains my fork of the Nix package manager
 
 ## Packages / Libraries
 
