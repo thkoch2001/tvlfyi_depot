@@ -15,6 +15,6 @@ naersk.buildPackage {
 
     # LLVM packages (why are they even required?) are not found
     # automatically if added to buildInputs, hence this ...
-    LIBCLANG_PATH = "${llvmPackages.libclang}/lib/libclang.so.7";
+    LIBCLANG_PATH = "${llvmPackages.libclang}/lib/libclang.so.10";
   };
 }
