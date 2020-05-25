@@ -3,6 +3,7 @@
 
 #include <utility>
 
+#include <absl/strings/numbers.h>
 #include <glog/logging.h>
 
 #include "args.hh"
@@ -214,7 +215,7 @@ std::string BaseSetting<std::string>::to_string() {
 template <typename T>
 void BaseSetting<T>::set(const std::string& str) {
   static_assert(std::is_integral<T>::value, "Integer required.");
-  if (!string2Int(str, value)) {
+  if (!absl::SimpleAtoi(str, &value)) {
     throw UsageError("setting '%s' has invalid value '%s'", name, str);
   }
 }

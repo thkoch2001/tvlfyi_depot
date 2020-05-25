@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include <absl/strings/ascii.h>
+#include <absl/strings/string_view.h>
 #include <glog/logging.h>
 
 #include "globals.hh"
@@ -48,14 +50,13 @@ bool Machine::mandatoryMet(const std::set<std::string>& features) const {
 
 void parseMachines(const std::string& s, Machines& machines) {
   for (auto line : tokenizeString<std::vector<std::string>>(s, "\n;")) {
-    trim(line);
     line.erase(std::find(line.begin(), line.end(), '#'), line.end());
     if (line.empty()) {
       continue;
     }
 
     if (line[0] == '@') {
-      auto file = trim(std::string(line, 1));
+      auto file = absl::StripAsciiWhitespace(std::string(line, 1));
       try {
         parseMachines(readFile(file), machines);
       } catch (const SysError& e) {

@@ -4,6 +4,7 @@
 #include <map>
 #include <thread>
 
+#include <absl/strings/numbers.h>
 #include <dlfcn.h>
 
 #include "archive.hh"
@@ -163,7 +164,7 @@ void BaseSetting<SandboxMode>::convertToArg(Args& args,
 void MaxBuildJobsSetting::set(const std::string& str) {
   if (str == "auto") {
     value = std::max(1U, std::thread::hardware_concurrency());
-  } else if (!string2Int(str, value)) {
+  } else if (!absl::SimpleAtoi(str, &value)) {
     throw UsageError(
         "configuration setting '%s' should be 'auto' or an integer", name);
   }

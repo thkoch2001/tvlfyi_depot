@@ -8,6 +8,7 @@
 #include <optional>
 #include <sstream>
 
+#include <absl/strings/string_view.h>
 #include <dirent.h>
 #include <signal.h>
 #include <sys/stat.h>
@@ -97,8 +98,8 @@ unsigned char getFileType(const Path& path);
 
 /* Read the contents of a file into a string. */
 std::string readFile(int fd);
-std::string readFile(const Path& path, bool drain = false);
-void readFile(const Path& path, Sink& sink);
+std::string readFile(absl::string_view path, bool drain = false);
+void readFile(absl::string_view path, Sink& sink);
 
 /* Write a string to a file. */
 void writeFile(const Path& path, const std::string& s, mode_t mode = 0666);
@@ -325,10 +326,6 @@ C tokenizeString(const std::string& s,
 std::string concatStringsSep(const std::string& sep, const Strings& ss);
 std::string concatStringsSep(const std::string& sep, const StringSet& ss);
 
-/* Remove whitespace from the start and end of a string. */
-std::string trim(const std::string& s,
-                 const std::string& whitespace = " \n\r\t");
-
 /* Replace all occurrences of a string inside another string. */
 std::string replaceStrings(const std::string& s, const std::string& from,
                            const std::string& to);
@@ -338,16 +335,6 @@ std::string replaceStrings(const std::string& s, const std::string& from,
 std::string statusToString(int status);
 
 bool statusOk(int status);
-
-/* Parse a string into an integer. */
-template <class N>
-bool string2Int(const std::string& s, N& n) {
-  if (std::string(s, 0, 1) == "-" && !std::numeric_limits<N>::is_signed)
-    return false;
-  std::istringstream str(s);
-  str >> n;
-  return str && str.get() == EOF;
-}
 
 /* Parse a string into a float. */
 template <class N>

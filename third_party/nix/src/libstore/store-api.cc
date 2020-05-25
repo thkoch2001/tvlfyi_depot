@@ -3,6 +3,7 @@
 #include <future>
 #include <utility>
 
+#include <absl/strings/numbers.h>
 #include <glog/logging.h>
 
 #include "crypto.hh"
@@ -718,7 +719,7 @@ ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven) {
     getline(str, s);
     info.narHash = Hash(s, htSHA256);
     getline(str, s);
-    if (!string2Int(s, info.narSize)) {
+    if (!absl::SimpleAtoi(s, &info.narSize)) {
       throw Error("number expected");
     }
   }
@@ -726,7 +727,7 @@ ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven) {
   std::string s;
   int n;
   getline(str, s);
-  if (!string2Int(s, n)) {
+  if (!absl::SimpleAtoi(s, &n)) {
     throw Error("number expected");
   }
   while ((n--) != 0) {

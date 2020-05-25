@@ -13,6 +13,7 @@
 #include <thread>
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/numbers.h>
 #include <fcntl.h>
 #include <grp.h>
 #include <netdb.h>
@@ -2412,7 +2413,7 @@ void DerivationGoal::startBuilder() {
     userNamespaceSync.readSide = -1;
 
     pid_t tmp;
-    if (!string2Int<pid_t>(readLine(builderOut.readSide.get()), tmp)) {
+    if (!absl::SimpleAtoi(readLine(builderOut.readSide.get()), &tmp)) {
       abort();
     }
     pid = tmp;
@@ -2805,7 +2806,8 @@ void DerivationGoal::runChild() {
     std::string netrcData;
     try {
       if (drv->isBuiltin() && drv->builder == "builtin:fetchurl") {
-        netrcData = readFile(settings.netrcFile);
+        const std::string& netrc_file = settings.netrcFile;
+        netrcData = readFile(netrc_file);
       }
     } catch (SysError&) {
     }

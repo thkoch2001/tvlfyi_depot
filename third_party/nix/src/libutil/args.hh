@@ -4,6 +4,8 @@
 #include <map>
 #include <memory>
 
+#include <absl/strings/numbers.h>
+
 #include "util.hh"
 
 namespace nix {
@@ -179,7 +181,7 @@ class Args {
         .arity(1)
         .handler([=](std::vector<std::string> ss) {
           I n;
-          if (!string2Int(ss[0], n))
+          if (!absl::SimpleAtoi(ss[0], &n))
             throw UsageError("flag '--%s' requires a integer argument",
                              longName);
           fun(n);

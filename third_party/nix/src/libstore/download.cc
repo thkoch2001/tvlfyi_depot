@@ -1,6 +1,7 @@
 #include "download.hh"
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/numbers.h>
 
 #include "archive.hh"
 #include "compression.hh"
@@ -174,7 +175,8 @@ struct CurlDownloader : public Downloader {
     size_t headerCallback(void* contents, size_t size, size_t nmemb) {
       size_t realSize = size * nmemb;
       std::string line((char*)contents, realSize);
-      DLOG(INFO) << "got header for '" << request.uri << "': " << trim(line);
+      DLOG(INFO) << "got header for '" << request.uri
+                 << "': " << absl::StripAsciiWhitespace(line);
       if (line.compare(0, 5, "HTTP/") == 0) {  // new response starts
         result.etag = "";
         auto ss = tokenizeString<std::vector<std::string>>(line, " ");
@@ -186,9 +188,10 @@ struct CurlDownloader : public Downloader {
       } else {
         auto i = line.find(':');
         if (i != std::string::npos) {
-          std::string name = toLower(trim(std::string(line, 0, i)));
+          std::string name = absl::AsciiStrToLower(
+              absl::StripAsciiWhitespace(std::string(line, 0, i)));
           if (name == "etag") {
-            result.etag = trim(std::string(line, i + 1));
+            result.etag = absl::StripAsciiWhitespace(std::string(line, i + 1));
             /* Hack to work around a GitHub bug: it sends
                ETags, but ignores If-None-Match. So if we get
                the expected ETag on a 200 response, then shut
@@ -200,9 +203,10 @@ struct CurlDownloader : public Downloader {
               return 0;
             }
           } else if (name == "content-encoding") {
-            encoding = trim(std::string(line, i + 1));
+            encoding = absl::StripAsciiWhitespace(std::string(line, i + 1));
           } else if (name == "accept-ranges" &&
-                     toLower(trim(std::string(line, i + 1))) == "bytes") {
+                     absl::AsciiStrToLower(absl::StripAsciiWhitespace(
+                         std::string(line, i + 1))) == "bytes") {
             acceptRanges = true;
           }
         }
@@ -893,7 +897,7 @@ CachedDownloadResult Downloader::downloadCached(
           tokenizeString<std::vector<std::string>>(readFile(dataFile), "\n");
       if (ss.size() >= 3 && ss[0] == url) {
         time_t lastChecked;
-        if (string2Int(ss[2], lastChecked) &&
+        if (absl::SimpleAtoi(ss[2], &lastChecked) &&
             (uint64_t)lastChecked + request.ttl >= (uint64_t)time(nullptr)) {
           skip = true;
           result.effectiveUri = request.uri;

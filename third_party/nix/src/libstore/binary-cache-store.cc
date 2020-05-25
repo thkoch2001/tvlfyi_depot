@@ -4,6 +4,9 @@
 #include <future>
 #include <memory>
 
+#include <absl/strings/ascii.h>
+#include <absl/strings/numbers.h>
+
 #include "archive.hh"
 #include "compression.hh"
 #include "derivations.hh"
@@ -21,7 +24,8 @@ namespace nix {
 
 BinaryCacheStore::BinaryCacheStore(const Params& params) : Store(params) {
   if (secretKeyFile != "") {
-    secretKey = std::make_unique<SecretKey>(readFile(secretKeyFile));
+    const std::string& secret_key_file = secretKeyFile;
+    secretKey = std::make_unique<SecretKey>(readFile(secret_key_file));
   }
 
   StringSink sink;
@@ -43,7 +47,8 @@ void BinaryCacheStore::init() {
         continue;
       }
       auto name = line.substr(0, colon);
-      auto value = trim(line.substr(colon + 1, std::string::npos));
+      auto value =
+          absl::StripAsciiWhitespace(line.substr(colon + 1, std::string::npos));
       if (name == "StoreDir") {
         if (value != storeDir) {
           throw Error(format("binary cache '%s' is for Nix stores with prefix "
@@ -53,7 +58,9 @@ void BinaryCacheStore::init() {
       } else if (name == "WantMassQuery") {
         wantMassQuery_ = value == "1";
       } else if (name == "Priority") {
-        string2Int(value, priority);
+        if (!absl::SimpleAtoi(value, &priority)) {
+          LOG(WARNING) << "Invalid 'Priority' value: " << value;
+        }
       }
     }
   }

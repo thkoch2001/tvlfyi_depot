@@ -4,6 +4,7 @@
 #include <regex>
 #include <utility>
 
+#include <absl/strings/numbers.h>
 #include <glog/logging.h>
 
 #include "derivations.hh"
@@ -243,7 +244,7 @@ NixInt DrvInfo::queryMetaInt(const std::string& name, NixInt def) {
     /* Backwards compatibility with before we had support for
        integer meta fields. */
     NixInt n;
-    if (string2Int(v->string.s, n)) {
+    if (absl::SimpleAtoi(v->string.s, &n)) {
       return n;
     }
   }

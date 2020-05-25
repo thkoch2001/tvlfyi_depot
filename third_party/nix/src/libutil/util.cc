@@ -12,6 +12,7 @@
 #include <thread>
 #include <utility>
 
+#include <absl/strings/string_view.h>
 #include <fcntl.h>
 #include <grp.h>
 #include <pwd.h>
@@ -306,16 +307,17 @@ std::string readFile(int fd) {
   return std::string((char*)buf.data(), st.st_size);
 }
 
-std::string readFile(const Path& path, bool drain) {
-  AutoCloseFD fd = open(path.c_str(), O_RDONLY | O_CLOEXEC);
+std::string readFile(absl::string_view path, bool drain) {
+  AutoCloseFD fd = open(std::string(path).c_str(), O_RDONLY | O_CLOEXEC);
   if (!fd) {
     throw SysError(format("opening file '%1%'") % path);
   }
   return drain ? drainFD(fd.get()) : readFile(fd.get());
 }
 
-void readFile(const Path& path, Sink& sink) {
-  AutoCloseFD fd = open(path.c_str(), O_RDONLY | O_CLOEXEC);
+void readFile(absl::string_view path, Sink& sink) {
+  // TODO(tazjin): use stdlib functions for this stuff
+  AutoCloseFD fd = open(std::string(path).c_str(), O_RDONLY | O_CLOEXEC);
   if (!fd) {
     throw SysError("opening file '%s'", path);
   }
@@ -1211,15 +1213,6 @@ std::string concatStringsSep(const std::string& sep, const StringSet& ss) {
     s += i;
   }
   return s;
-}
-
-std::string trim(const std::string& s, const std::string& whitespace) {
-  auto i = s.find_first_not_of(whitespace);
-  if (i == std::string::npos) {
-    return "";
-  }
-  auto j = s.find_last_not_of(whitespace);
-  return std::string(s, i, j == std::string::npos ? j : j - i + 1);
 }
 
 std::string replaceStrings(const std::string& s, const std::string& from,

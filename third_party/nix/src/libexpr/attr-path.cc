@@ -1,5 +1,7 @@
 #include "attr-path.hh"
 
+#include <absl/strings/numbers.h>
+
 #include "eval-inline.hh"
 #include "util.hh"
 
@@ -50,7 +52,7 @@ Value* findAlongAttrPath(EvalState& state, const std::string& attrPath,
     /* Is i an index (integer) or a normal attribute name? */
     enum { apAttr, apIndex } apType = apAttr;
     unsigned int attrIndex;
-    if (string2Int(attr, attrIndex)) {
+    if (absl::SimpleAtoi(attr, &attrIndex)) {
       apType = apIndex;
     }
 

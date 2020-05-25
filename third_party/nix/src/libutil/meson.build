@@ -47,7 +47,7 @@ libutil_dep_list = [
   openssl_dep,
   pthread_dep,
   libsodium_dep,
-]
+] + absl_deps
 
 libutil_link_list = []
 libutil_link_args = []

@@ -2,6 +2,7 @@
 
 #include <locale>
 
+#include <absl/strings/numbers.h>
 #include <signal.h>
 
 #include "args.hh"
@@ -78,7 +79,7 @@ N getIntArg(const std::string& opt, Strings::iterator& i,
     }
   }
   N n;
-  if (!string2Int(s, n))
+  if (!absl::SimpleAtoi(s, &n))
     throw UsageError(format("'%1%' requires an integer argument") % opt);
   return n * multiplier;
 }

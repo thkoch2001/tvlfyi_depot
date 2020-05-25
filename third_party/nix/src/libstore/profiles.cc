@@ -3,6 +3,9 @@
 #include <cerrno>
 #include <cstdio>
 
+#include <absl/strings/numbers.h>
+#include <absl/strings/string_view.h>
+#include <absl/strings/strip.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -17,22 +20,22 @@ static bool cmpGensByNumber(const Generation& a, const Generation& b) {
   return a.number < b.number;
 }
 
-/* Parse a generation name of the format
-   `<profilename>-<number>-link'. */
-static int parseName(const std::string& profileName, const std::string& name) {
-  if (std::string(name, 0, profileName.size() + 1) != profileName + "-") {
+// Parse a generation out of the format
+// `<profilename>-<generation>-link'.
+static int parseName(absl::string_view profileName, absl::string_view name) {
+  // Consume the `<profilename>-' prefix and and `-link' suffix.
+  if (!(absl::ConsumePrefix(&name, profileName) &&
+        absl::ConsumePrefix(&name, "-") &&
+        absl::ConsumeSuffix(&name, "-link"))) {
     return -1;
   }
-  std::string s = std::string(name, profileName.size() + 1);
-  std::string::size_type p = s.find("-link");
-  if (p == std::string::npos) {
-    return -1;
-  }
+
   int n;
-  if (string2Int(std::string(s, 0, p), n) && n >= 0) {
-    return n;
+  if (!absl::SimpleAtoi(name, &n) && n < 0) {
+    return -1;
   }
-  return -1;
+
+  return n;
 }
 
 Generations findGenerations(const Path& profile, int& curGen) {
@@ -218,7 +221,7 @@ void deleteGenerationsOlderThan(const Path& profile,
   std::string strDays = std::string(timeSpec, 0, timeSpec.size() - 1);
   int days;
 
-  if (!string2Int(strDays, days) || days < 1) {
+  if (!absl::SimpleAtoi(strDays, &days) || days < 1) {
     throw Error(format("invalid number of days specifier '%1%'") % timeSpec);
   }
 

@@ -7,6 +7,7 @@
 #include <ctime>
 #include <iostream>
 
+#include <absl/strings/numbers.h>
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <grp.h>
@@ -295,7 +296,7 @@ int LocalStore::getSchema() {
   int curSchema = 0;
   if (pathExists(schemaPath)) {
     std::string s = readFile(schemaPath);
-    if (!string2Int(s, curSchema)) {
+    if (!absl::SimpleAtoi(s, &curSchema)) {
       throw Error(format("'%1%' is corrupt") % schemaPath);
     }
   }

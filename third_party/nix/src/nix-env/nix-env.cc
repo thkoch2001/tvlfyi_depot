@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 
+#include <absl/strings/numbers.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -1303,7 +1304,7 @@ static void opSwitchGeneration(Globals& globals, Strings opFlags,
   }
 
   int dstGen;
-  if (!string2Int(opArgs.front(), dstGen)) {
+  if (!absl::SimpleAtoi(opArgs.front(), &dstGen)) {
     throw UsageError(format("expected a generation number"));
   }
 
@@ -1369,7 +1370,7 @@ static void opDeleteGenerations(Globals& globals, Strings opFlags,
     }
     std::string str_max = std::string(opArgs.front(), 1, opArgs.front().size());
     int max;
-    if (!string2Int(str_max, max) || max == 0) {
+    if (!absl::SimpleAtoi(str_max, &max) || max == 0) {
       throw Error(format("invalid number of generations to keep ‘%1%’") %
                   opArgs.front());
     }
@@ -1378,7 +1379,7 @@ static void opDeleteGenerations(Globals& globals, Strings opFlags,
     std::set<unsigned int> gens;
     for (auto& i : opArgs) {
       unsigned int n;
-      if (!string2Int(i, n)) {
+      if (!absl::SimpleAtoi(i, &n)) {
         throw UsageError(format("invalid generation number '%1%'") % i);
       }
       gens.insert(n);

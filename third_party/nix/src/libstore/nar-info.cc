@@ -1,5 +1,7 @@
 #include "nar-info.hh"
 
+#include <absl/strings/numbers.h>
+
 #include "globals.hh"
 
 namespace nix {
@@ -47,13 +49,13 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
     } else if (name == "FileHash") {
       fileHash = parseHashField(value);
     } else if (name == "FileSize") {
-      if (!string2Int(value, fileSize)) {
+      if (!absl::SimpleAtoi(value, &fileSize)) {
         corrupt();
       }
     } else if (name == "NarHash") {
       narHash = parseHashField(value);
     } else if (name == "NarSize") {
-      if (!string2Int(value, narSize)) {
+      if (!absl::SimpleAtoi(value, &narSize)) {
         corrupt();
       }
     } else if (name == "References") {
