@@ -1,3 +1,5 @@
+#include <absl/strings/match.h>
+
 #include "command.hh"
 #include "serve-protocol.hh"
 #include "shared.hh"
@@ -73,7 +75,7 @@ struct CmdDoctor : StoreCommand {
         Path userEnv = canonPath(profileDir, true);
 
         if (store->isStorePath(userEnv) &&
-            hasSuffix(userEnv, "user-environment")) {
+            absl::EndsWith(userEnv, "user-environment")) {
           while (profileDir.find("/profiles/") == std::string::npos &&
                  isLink(profileDir)) {
             profileDir = absPath(readLink(profileDir), dirOf(profileDir));

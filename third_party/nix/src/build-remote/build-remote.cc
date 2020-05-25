@@ -7,6 +7,7 @@
 #include <tuple>
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/match.h>
 #include <absl/strings/str_cat.h>
 #include <glog/logging.h>
 
@@ -188,7 +189,7 @@ static int _main(int argc, char* argv[]) {
           DLOG(INFO) << "connecting to '" << bestMachine->storeUri << "'";
 
           Store::Params storeParams;
-          if (hasPrefix(bestMachine->storeUri, "ssh://")) {
+          if (absl::StartsWith(bestMachine->storeUri, "ssh://")) {
             storeParams["max-connections"] = "1";
             storeParams["log-fd"] = "4";
             if (!bestMachine->sshKey.empty()) {

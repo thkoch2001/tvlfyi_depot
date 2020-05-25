@@ -2,6 +2,7 @@
 #include <regex>
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/match.h>
 #include <glog/logging.h>
 #include <sys/time.h>
 
@@ -31,7 +32,8 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
   if (evalSettings.pureEval && rev == "")
     throw Error("in pure evaluation mode, 'fetchGit' requires a Git revision");
 
-  if (!ref && rev == "" && hasPrefix(uri, "/") && pathExists(uri + "/.git")) {
+  if (!ref && rev == "" && absl::StartsWith(uri, "/") &&
+      pathExists(uri + "/.git")) {
     bool clean = true;
 
     try {
@@ -56,7 +58,7 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
           runProgram("git", true, {"-C", uri, "ls-files", "-z"}), "\0"s);
 
       PathFilter filter = [&](const Path& p) -> bool {
-        assert(hasPrefix(p, uri));
+        assert(absl::StartsWith(p, uri));
         std::string file(p, uri.size() + 1);
 
         auto st = lstat(p);
@@ -64,7 +66,7 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
         if (S_ISDIR(st.st_mode)) {
           auto prefix = file + "/";
           auto i = files.lower_bound(prefix);
-          return i != files.end() && hasPrefix(*i, prefix);
+          return i != files.end() && absl::StartsWith(*i, prefix);
         }
 
         return files.count(file);

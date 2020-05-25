@@ -1,5 +1,6 @@
 #include <algorithm>
 
+#include <absl/strings/match.h>
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
@@ -56,10 +57,10 @@ static void createLinks(const Path& srcDir, const Path& dstDir, int priority) {
      * Python package brings its own
      * `$out/lib/pythonX.Y/site-packages/easy-install.pth'.)
      */
-    if (hasSuffix(srcFile, "/propagated-build-inputs") ||
-        hasSuffix(srcFile, "/nix-support") ||
-        hasSuffix(srcFile, "/perllocal.pod") ||
-        hasSuffix(srcFile, "/info/dir") || hasSuffix(srcFile, "/log"))
+    if (absl::EndsWith(srcFile, "/propagated-build-inputs") ||
+        absl::EndsWith(srcFile, "/nix-support") ||
+        absl::EndsWith(srcFile, "/perllocal.pod") ||
+        absl::EndsWith(srcFile, "/info/dir") || absl::EndsWith(srcFile, "/log"))
       continue;
 
     else if (S_ISDIR(srcSt.st_mode)) {

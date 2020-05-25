@@ -1,6 +1,7 @@
 #include "download.hh"
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/match.h>
 #include <absl/strings/numbers.h>
 
 #include "archive.hh"
@@ -653,8 +654,8 @@ struct CurlDownloader : public Downloader {
   }
 
   void enqueueItem(const std::shared_ptr<DownloadItem>& item) {
-    if (item->request.data && !hasPrefix(item->request.uri, "http://") &&
-        !hasPrefix(item->request.uri, "https://")) {
+    if (item->request.data && !absl::StartsWith(item->request.uri, "http://") &&
+        !absl::StartsWith(item->request.uri, "https://")) {
       throw nix::Error("uploading to '%s' is not supported", item->request.uri);
     }
 
@@ -690,7 +691,7 @@ struct CurlDownloader : public Downloader {
   void enqueueDownload(const DownloadRequest& request,
                        Callback<DownloadResult> callback) override {
     /* Ugly hack to support s3:// URIs. */
-    if (hasPrefix(request.uri, "s3://")) {
+    if (absl::StartsWith(request.uri, "s3://")) {
       // FIXME: do this on a worker thread
       try {
 #ifdef ENABLE_S3

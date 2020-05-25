@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include <absl/strings/match.h>
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
@@ -51,7 +52,8 @@ std::string resolveMirrorUri(EvalState& state, std::string uri) {
 
   std::string mirror =
       state.forceString(*mirrorList->second.value->listElems()[0]);
-  return mirror + (hasSuffix(mirror, "/") ? "" : "/") + std::string(s, p + 1);
+  return mirror + (absl::EndsWith(mirror, "/") ? "" : "/") +
+         std::string(s, p + 1);
 }
 
 static int _main(int argc, char** argv) {
@@ -203,7 +205,7 @@ static int _main(int argc, char** argv) {
         LOG(INFO) << "unpacking...";
         Path unpacked = (Path)tmpDir + "/unpacked";
         createDirs(unpacked);
-        if (hasSuffix(baseNameOf(uri), ".zip")) {
+        if (absl::EndsWith(baseNameOf(uri), ".zip")) {
           runProgram("unzip", true, {"-qq", tmpFile, "-d", unpacked});
         } else {
           // FIXME: this requires GNU tar for decompression.

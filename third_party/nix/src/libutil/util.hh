@@ -344,12 +344,6 @@ bool string2Float(const std::string& s, N& n) {
   return str && str.get() == EOF;
 }
 
-/* Return true iff `s' starts with `prefix'. */
-bool hasPrefix(const std::string& s, const std::string& prefix);
-
-/* Return true iff `s' ends in `suffix'. */
-bool hasSuffix(const std::string& s, const std::string& suffix);
-
 /* Convert a string to lower case. */
 std::string toLower(const std::string& s);
 

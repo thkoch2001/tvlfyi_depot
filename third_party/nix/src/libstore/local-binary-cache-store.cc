@@ -1,5 +1,7 @@
 #include <utility>
 
+#include <absl/strings/match.h>
+
 #include "binary-cache-store.hh"
 #include "globals.hh"
 #include "nar-info-disk-cache.hh"
@@ -39,7 +41,7 @@ class LocalBinaryCacheStore : public BinaryCacheStore {
     PathSet paths;
 
     for (auto& entry : readDirectory(binaryCacheDir)) {
-      if (entry.name.size() != 40 || !hasSuffix(entry.name, ".narinfo")) {
+      if (entry.name.size() != 40 || !absl::EndsWith(entry.name, ".narinfo")) {
         continue;
       }
       paths.insert(storeDir + "/" +

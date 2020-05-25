@@ -6,6 +6,7 @@
 #include <utility>
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/match.h>
 #include <glog/logging.h>
 
 #ifdef READLINE
@@ -356,7 +357,7 @@ StringSet NixRepl::completePrefix(const std::string& prefix) {
       auto dir = std::string(cur, 0, slash);
       auto prefix2 = std::string(cur, slash + 1);
       for (auto& entry : readDirectory(dir.empty() ? "/" : dir)) {
-        if (entry.name[0] != '.' && hasPrefix(entry.name, prefix2)) {
+        if (entry.name[0] != '.' && absl::StartsWith(entry.name, prefix2)) {
           completions.insert(prev + dir + "/" + entry.name);
         }
       }

@@ -2,6 +2,8 @@
 
 #include <utility>
 
+#include <absl/strings/match.h>
+
 namespace nix {
 
 SSHMaster::SSHMaster(const std::string& host, std::string keyFile,
@@ -12,7 +14,7 @@ SSHMaster::SSHMaster(const std::string& host, std::string keyFile,
       useMaster(useMaster && !fakeSSH),
       compress(compress),
       logFD(logFD) {
-  if (host.empty() || hasPrefix(host, "-")) {
+  if (host.empty() || absl::StartsWith(host, "-")) {
     throw Error("invalid SSH host name '%s'", host);
   }
 }

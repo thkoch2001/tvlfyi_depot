@@ -1,3 +1,4 @@
+#include <absl/strings/match.h>
 #include <glog/logging.h>
 
 #include "attr-path.hh"
@@ -114,7 +115,7 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
 
     LOG(INFO) << "found Nix in '" << where << "'";
 
-    if (hasPrefix(where, "/run/current-system")) {
+    if (absl::StartsWith(where, "/run/current-system")) {
       throw Error("Nix on NixOS must be upgraded via 'nixos-rebuild'");
     }
 
@@ -130,7 +131,8 @@ struct CmdUpgradeNix : MixDryRun, StoreCommand {
 
     Path userEnv = canonPath(profileDir, true);
 
-    if (baseNameOf(where) != "bin" || !hasSuffix(userEnv, "user-environment")) {
+    if (baseNameOf(where) != "bin" ||
+        !absl::EndsWith(userEnv, "user-environment")) {
       throw Error("directory '%s' does not appear to be part of a Nix profile",
                   where);
     }

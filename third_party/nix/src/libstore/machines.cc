@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/match.h>
 #include <absl/strings/string_view.h>
 #include <glog/logging.h>
 
@@ -21,9 +22,10 @@ Machine::Machine(decltype(storeUri)& storeUri,
           // Backwards compatibility: if the URI is a hostname,
           // prepend ssh://.
           storeUri.find("://") != std::string::npos ||
-                  hasPrefix(storeUri, "local") ||
-                  hasPrefix(storeUri, "remote") ||
-                  hasPrefix(storeUri, "auto") || hasPrefix(storeUri, "/")
+                  absl::StartsWith(storeUri, "local") ||
+                  absl::StartsWith(storeUri, "remote") ||
+                  absl::StartsWith(storeUri, "auto") ||
+                  absl::StartsWith(storeUri, "/")
               ? storeUri
               : "ssh://" + storeUri),
       systemTypes(systemTypes),

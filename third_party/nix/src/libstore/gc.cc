@@ -6,6 +6,7 @@
 #include <random>
 #include <regex>
 
+#include <absl/strings/match.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/statvfs.h>
@@ -512,7 +513,7 @@ struct LocalStore::GCState {
 
 bool LocalStore::isActiveTempFile(const GCState& state, const Path& path,
                                   const std::string& suffix) {
-  return hasSuffix(path, suffix) &&
+  return absl::EndsWith(path, suffix) &&
          state.tempRoots.find(std::string(
              path, 0, path.size() - suffix.size())) != state.tempRoots.end();
 }

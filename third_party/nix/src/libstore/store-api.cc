@@ -3,6 +3,7 @@
 #include <future>
 #include <utility>
 
+#include <absl/strings/match.h>
 #include <absl/strings/numbers.h>
 #include <glog/logging.h>
 
@@ -771,7 +772,7 @@ bool ValidPathInfo::isContentAddressed(const Store& store) const {
                << "' claims to be content-addressed but isn't";
   };
 
-  if (hasPrefix(ca, "text:")) {
+  if (absl::StartsWith(ca, "text:")) {
     Hash hash(std::string(ca, 5));
     if (store.makeTextPath(storePathToName(path), hash, references) == path) {
       return true;
@@ -780,7 +781,7 @@ bool ValidPathInfo::isContentAddressed(const Store& store) const {
 
   }
 
-  else if (hasPrefix(ca, "fixed:")) {
+  else if (absl::StartsWith(ca, "fixed:")) {
     bool recursive = ca.compare(6, 2, "r:") == 0;
     Hash hash(std::string(ca, recursive ? 8 : 6));
     if (references.empty() &&
@@ -906,7 +907,7 @@ StoreType getStoreType(const std::string& uri, const std::string& stateDir) {
   if (uri == "daemon") {
     return tDaemon;
   }
-  if (uri == "local" || hasPrefix(uri, "/")) {
+  if (uri == "local" || absl::StartsWith(uri, "/")) {
     return tLocal;
   } else if (uri.empty() || uri == "auto") {
     if (access(stateDir.c_str(), R_OK | W_OK) == 0) {
@@ -930,7 +931,7 @@ static RegisterStoreImplementation regStore([](const std::string& uri,
       return std::shared_ptr<Store>(std::make_shared<UDSRemoteStore>(params));
     case tLocal: {
       Store::Params params2 = params;
-      if (hasPrefix(uri, "/")) {
+      if (absl::StartsWith(uri, "/")) {
         params2["root"] = uri;
       }
       return std::shared_ptr<Store>(std::make_shared<LocalStore>(params2));

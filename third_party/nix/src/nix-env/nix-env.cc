@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 
+#include <absl/strings/match.h>
 #include <absl/strings/numbers.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
@@ -111,13 +112,13 @@ static void getAllExprs(EvalState& state, const Path& path, StringSet& attrs,
     }
 
     if (isNixExpr(path2, st) &&
-        (!S_ISREG(st.st_mode) || hasSuffix(path2, ".nix"))) {
+        (!S_ISREG(st.st_mode) || absl::EndsWith(path2, ".nix"))) {
       /* Strip off the `.nix' filename suffix (if applicable),
          otherwise the attribute cannot be selected with the
          `-A' option.  Useful if you want to stick a Nix
          expression directly in ~/.nix-defexpr. */
       std::string attrName = i;
-      if (hasSuffix(attrName, ".nix")) {
+      if (absl::EndsWith(attrName, ".nix")) {
         attrName = std::string(attrName, 0, attrName.size() - 4);
       }
       if (attrs.find(attrName) != attrs.end()) {

@@ -3,6 +3,7 @@
 #include "s3-binary-cache-store.hh"
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/match.h>
 #include <aws/core/Aws.h>
 #include <aws/core/VersionConfig.h>
 #include <aws/core/auth/AWSCredentialsProvider.h>
@@ -347,12 +348,12 @@ struct S3BinaryCacheStoreImpl : public S3BinaryCacheStore {
 
   void upsertFile(const std::string& path, const std::string& data,
                   const std::string& mimeType) override {
-    if (narinfoCompression != "" && hasSuffix(path, ".narinfo"))
+    if (narinfoCompression != "" && absl::EndsWith(path, ".narinfo"))
       uploadFile(path, *compress(narinfoCompression, data), mimeType,
                  narinfoCompression);
-    else if (lsCompression != "" && hasSuffix(path, ".ls"))
+    else if (lsCompression != "" && absl::EndsWith(path, ".ls"))
       uploadFile(path, *compress(lsCompression, data), mimeType, lsCompression);
-    else if (logCompression != "" && hasPrefix(path, "log/"))
+    else if (logCompression != "" && absl::StartsWith(path, "log/"))
       uploadFile(path, *compress(logCompression, data), mimeType,
                  logCompression);
     else
@@ -400,7 +401,7 @@ struct S3BinaryCacheStoreImpl : public S3BinaryCacheStore {
 
       for (auto object : contents) {
         auto& key = object.GetKey();
-        if (key.size() != 40 || !hasSuffix(key, ".narinfo")) {
+        if (key.size() != 40 || !absl::EndsWith(key, ".narinfo")) {
           continue;
         }
         paths.insert(storeDir + "/" + key.substr(0, key.size() - 8));

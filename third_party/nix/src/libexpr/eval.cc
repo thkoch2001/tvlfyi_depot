@@ -7,6 +7,7 @@
 #include <iostream>
 #include <new>
 
+#include <absl/strings/match.h>
 #include <gc/gc.h>
 #include <gc/gc_cpp.h>
 #include <glog/logging.h>
@@ -423,7 +424,7 @@ void EvalState::checkURI(const std::string& uri) {
   for (auto& prefix : evalSettings.allowedUris.get()) {
     if (uri == prefix ||
         (uri.size() > prefix.size() && !prefix.empty() &&
-         hasPrefix(uri, prefix) &&
+         absl::StartsWith(uri, prefix) &&
          (prefix[prefix.size() - 1] == '/' || uri[prefix.size()] == '/'))) {
       return;
     }
@@ -431,12 +432,12 @@ void EvalState::checkURI(const std::string& uri) {
 
   /* If the URI is a path, then check it against allowedPaths as
      well. */
-  if (hasPrefix(uri, "/")) {
+  if (absl::StartsWith(uri, "/")) {
     checkSourcePath(uri);
     return;
   }
 
-  if (hasPrefix(uri, "file://")) {
+  if (absl::StartsWith(uri, "file://")) {
     checkSourcePath(std::string(uri, 7));
     return;
   }

@@ -2,6 +2,7 @@
 #include <regex>
 
 #include <absl/strings/ascii.h>
+#include <absl/strings/match.h>
 #include <glog/logging.h>
 #include <sys/time.h>
 
@@ -31,7 +32,7 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
         "in pure evaluation mode, 'fetchMercurial' requires a Mercurial "
         "revision");
 
-  if (rev == "" && hasPrefix(uri, "/") && pathExists(uri + "/.hg")) {
+  if (rev == "" && absl::StartsWith(uri, "/") && pathExists(uri + "/.hg")) {
     bool clean = runProgram("hg", true,
                             {"status", "-R", uri, "--modified", "--added",
                              "--removed"}) == "";
@@ -54,7 +55,7 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
           "\0"s);
 
       PathFilter filter = [&](const Path& p) -> bool {
-        assert(hasPrefix(p, uri));
+        assert(absl::StartsWith(p, uri));
         std::string file(p, uri.size() + 1);
 
         auto st = lstat(p);
@@ -62,7 +63,7 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
         if (S_ISDIR(st.st_mode)) {
           auto prefix = file + "/";
           auto i = files.lower_bound(prefix);
-          return i != files.end() && hasPrefix(*i, prefix);
+          return i != files.end() && absl::StartsWith(*i, prefix);
         }
 
         return files.count(file);

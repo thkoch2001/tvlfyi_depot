@@ -1,3 +1,4 @@
+#include <absl/strings/match.h>
 #include <glog/logging.h>
 
 #include "archive.hh"
@@ -41,7 +42,7 @@ void builtinFetchurl(const BasicDerivation& drv, const std::string& netrcData) {
       request.decompress = false;
 
       auto decompressor = makeDecompressionSink(
-          unpack && hasSuffix(mainUrl, ".xz") ? "xz" : "none", sink);
+          unpack && absl::EndsWith(mainUrl, ".xz") ? "xz" : "none", sink);
       downloader->download(std::move(request), *decompressor);
       decompressor->finish();
     });
@@ -61,7 +62,7 @@ void builtinFetchurl(const BasicDerivation& drv, const std::string& netrcData) {
   /* Try the hashed mirrors first. */
   if (getAttr("outputHashMode") == "flat")
     for (auto hashedMirror : settings.hashedMirrors.get()) try {
-        if (!hasSuffix(hashedMirror, "/")) {
+        if (!absl::EndsWith(hashedMirror, "/")) {
           hashedMirror += '/';
         }
         auto ht = parseHashType(getAttr("outputHashAlgo"));

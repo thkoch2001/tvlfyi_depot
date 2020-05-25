@@ -1,5 +1,7 @@
 #include "derivations.hh"
 
+#include <absl/strings/match.h>
+
 #include "fs-accessor.hh"
 #include "globals.hh"
 #include "istringstream_nocopy.hh"
@@ -299,7 +301,7 @@ std::string Derivation::unparse() const {
 }
 
 bool isDerivation(const std::string& fileName) {
-  return hasSuffix(fileName, drvExtension);
+  return absl::EndsWith(fileName, drvExtension);
 }
 
 bool BasicDerivation::isFixedOutput() const {

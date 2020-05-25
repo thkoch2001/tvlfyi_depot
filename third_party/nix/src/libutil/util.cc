@@ -1255,15 +1255,6 @@ bool statusOk(int status) {
   return WIFEXITED(status) && WEXITSTATUS(status) == 0;
 }
 
-bool hasPrefix(const std::string& s, const std::string& prefix) {
-  return s.compare(0, prefix.size(), prefix) == 0;
-}
-
-bool hasSuffix(const std::string& s, const std::string& suffix) {
-  return s.size() >= suffix.size() &&
-         std::string(s, s.size() - suffix.size()) == suffix;
-}
-
 std::string toLower(const std::string& s) {
   std::string r(s);
   for (auto& c : r) {
