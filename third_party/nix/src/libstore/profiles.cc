@@ -31,7 +31,7 @@ static int parseName(absl::string_view profileName, absl::string_view name) {
   }
 
   int n;
-  if (!absl::SimpleAtoi(name, &n) && n < 0) {
+  if (!absl::SimpleAtoi(name, &n) || n < 0) {
     return -1;
   }
 
