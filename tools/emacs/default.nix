@@ -51,6 +51,7 @@ let
     go-mode
     gruber-darker-theme
     haskell-mode
+    hound
     ht
     hydra
     idle-highlight-mode

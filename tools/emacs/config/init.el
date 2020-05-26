@@ -57,6 +57,12 @@
   (eglot-send-changes-idle-time 0.3))
 
 (use-package ht)
+
+(use-package hound
+  :custom
+  (hound-host "https://cs.tazj.in")
+  (hound-api-port "443"))
+
 (use-package hydra)
 (use-package idle-highlight-mode :hook ((prog-mode . idle-highlight-mode)))
 
