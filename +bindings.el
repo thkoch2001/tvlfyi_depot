@@ -1228,7 +1228,10 @@ If invoked with a prefix ARG eval the expression after inserting it"
                  (s-replace "\"" "")
                  (s-replace "\\n" "\n")))))
        nil nil nil)))
-    ('clj  (cider-test-run-ns-tests))))
+    ('clj
+     (funcall-interactively
+      #'cider-test-run-ns-tests
+      nil))))
 
 (defun cider-copy-last-result ()
   (interactive)
