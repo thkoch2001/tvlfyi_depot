@@ -6,6 +6,11 @@ config: let
     config.allowUnfree = true;
   };
 in lib.fix(self: {
+  imports = [
+    ../modules/depot.nix
+  ];
+  depot = depot;
+
   # camden is intended to boot unattended, despite having an encrypted
   # root partition.
   #
