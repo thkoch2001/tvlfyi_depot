@@ -1,4 +1,4 @@
-{ pkgs ? (import <nixpkgs> {}).third_party
+{ pkgs ? (import ../.. {}).third_party
 , buildType ? "release", ... }:
 
 let
