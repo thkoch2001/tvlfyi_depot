@@ -6,9 +6,9 @@
 
 let
   # Tracking nixos-unstable as of 2020-05-21.
-  commit = "0f5ce2fac0c726036ca69a5524c59a49e2973dd4";
+  nixpkgsCommit = "0f5ce2fac0c726036ca69a5524c59a49e2973dd4";
   nixpkgsSrc = fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs-channels/archive/${commit}.tar.gz";
+    url = "https://github.com/NixOS/nixpkgs-channels/archive/${nixpkgsCommit}.tar.gz";
     sha256 = "0nkk492aa7pr0d30vv1aw192wc16wpa1j02925pldc09s9m9i0r3";
   };
   nixpkgs = import nixpkgsSrc {
@@ -158,7 +158,7 @@ in exposed // {
 
   # Provide the source code of nixpkgs, but do not provide an imported
   # version of it.
-  inherit nixpkgsSrc stableNixpkgsSrc;
+  inherit nixpkgsCommit nixpkgsSrc stableNixpkgsSrc;
 
   # Packages to be overridden
   originals = {
