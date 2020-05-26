@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with pkgs;
+with lib;
 
 let
 
@@ -42,13 +43,16 @@ let
     chmod +x $out/bin/dwarf-fortress
   '';
 
-in {
-  imports = [
-    ./obs.nix
-  ];
+in mkMerge [
+  {
+    home.packages = [
+      crawl
+    ];
+  }
+  (mkIf stdenv.isLinux {
+    home.packages = [
+      df
+    ];
+  })
+]
 
-  home.packages = [
-    crawl
-    df
-  ];
-}

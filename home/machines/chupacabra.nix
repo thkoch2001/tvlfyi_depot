@@ -2,6 +2,13 @@
 let
   laptopKeyboardId = "25";
 in {
+  imports = [
+    ../platforms/linux.nix
+
+    ../modules/common.nix
+    ../modules/games.nix
+  ];
+
   system.machine = {
     wirelessInterface = "wlp59s0";
     i3FontSize = 9;
