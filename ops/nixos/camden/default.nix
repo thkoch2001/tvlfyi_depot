@@ -253,6 +253,14 @@ in lib.fix(self: {
         anchor = "#n{line}";
       };
     };
+    repos.nixpkgs = {
+      url = "file:///var/git/nixpkgs";
+      vcs = "git";
+      url-pattern = {
+        base-url = "https://github.com/NixOS/nixpkgs/blob/${pkgs.nixpkgsCommit}/{path}{anchor}";
+        anchor = "#L{line}";
+      };
+    };
   };
 
   # serve my website(s)
