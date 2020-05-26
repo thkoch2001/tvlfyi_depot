@@ -207,7 +207,14 @@ in {
       autoload -U promptinit; promptinit
       prompt pure
 
-      [[ ! $IN_NIX_SHELL ]] && alsi -l
+      if [[ "$TERM" == "dumb" ]]; then
+        unsetopt zle
+        unsetopt prompt_cr
+        unsetopt prompt_subst
+        unfunction precmd
+        unfunction preexec
+        export PS1='$ '
+      fi
     '';
   };
 
