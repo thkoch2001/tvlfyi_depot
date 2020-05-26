@@ -8,6 +8,7 @@ config: let
 in lib.fix(self: {
   imports = [
     ../modules/depot.nix
+    ../modules/hound.nix
   ];
   depot = depot;
 
@@ -107,7 +108,6 @@ in lib.fix(self: {
     (with depot; [
       fun.idual.script
       fun.idual.setAlarm
-      third_party.git
       third_party.honk
       third_party.pounce
     ]) ++
@@ -119,6 +119,7 @@ in lib.fix(self: {
       direnv
       emacs26-nox
       gnupg
+      git
       htop
       jq
       pass
@@ -213,6 +214,7 @@ in lib.fix(self: {
       group = "nginx";
       webroot = "/var/lib/acme/acme-challenge";
       extraDomains = {
+        "cs.tazj.in" = null;
         "git.tazj.in" = null;
         "www.tazj.in" = null;
 
@@ -239,7 +241,21 @@ in lib.fix(self: {
     applicationCredentials = "/etc/gcp/key.json";
   };
 
-  # serve my website
+  # Serve a code search (hound) instance
+  services.depot.hound = {
+    enable = true;
+    title = "tazjin's depot";
+    repos.depot = {
+      url = "file:///var/git/depot";
+      vcs = "git";
+      url-pattern = {
+        base-url = "https://git.tazj.in/tree/{path}{anchor}";
+        anchor = "#n{line}";
+      };
+    };
+  };
+
+  # serve my website(s)
   services.nginx = {
     enable = true;
     enableReload = true;
@@ -354,6 +370,18 @@ in lib.fix(self: {
         # Everything else hits the depot directly.
         location / {
             proxy_pass http://localhost:2448/cgit.cgi/depot/;
+        }
+      '';
+    };
+
+    virtualHosts.hound = {
+      serverName = "cs.tazj.in";
+      useACMEHost = "tazj.in";
+      forceSSL = true;
+
+      extraConfig = ''
+        location / {
+          proxy_pass http://localhost:6080;
         }
       '';
     };
