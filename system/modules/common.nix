@@ -7,6 +7,7 @@
       ./fonts.nix
       ./sound.nix
       ./kernel.nix
+      ./rtlsdr.nix
       /home/grfn/code/urb/urbos/system
     ];
 

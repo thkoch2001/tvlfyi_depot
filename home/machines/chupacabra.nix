@@ -7,6 +7,7 @@ in {
 
     ../modules/common.nix
     ../modules/games.nix
+    ../modules/rtlsdr.nix
   ];
 
   system.machine = {
