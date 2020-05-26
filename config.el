@@ -25,6 +25,7 @@
 ;; (load! "nix-yapf-mode")
 (load! "show-matching-paren")
 (load! "irc")
+(load! "github-org")
 
 (require 's)
 
@@ -1079,73 +1080,6 @@
 ;;   (capf))
 
 (cl-defstruct pull-request url number title author repository)
-
-(defun grfn/alist->plist (alist)
-  (->> alist
-       (-mapcat (lambda (pair)
-                  (list (intern (concat ":" (symbol-name (car pair))))
-                        (cdr pair))))))
-
-(defun grfn/review-requests ()
-  (let ((resp (ghub-graphql "query reviewRequests {
-    reviewRequests: search(
-      type:ISSUE,
-      query: \"is:open is:pr review-requested:glittershark archived:false\",
-      first: 100
-    ) {
-      issueCount
-      nodes {
-        ... on PullRequest {
-          url
-          number
-          title
-          author {
-            login
-            ... on User { name }
-          }
-          repository {
-            name
-            owner { login }
-          }
-        }
-      }
-    }
-  }")))
-    (->> resp
-         (alist-get 'data)
-         (alist-get 'reviewRequests)
-         (alist-get 'nodes)
-         (-map
-          (lambda (pr)
-            (apply
-             #'make-pull-request
-             (grfn/alist->plist pr)))))))
-
-(defun grfn/pr->org-headline (level pr)
-  (check-type level integer)
-  (check-type pr pull-request)
-  (format "%s TODO Review %s's PR on %s/%s: %s :pr:
-SCHEDULED: <%s>"
-          (make-string level ?*)
-          (->> pr (pull-request-author) (alist-get 'name))
-          (->> pr (pull-request-repository)
-               (alist-get 'owner)
-               (alist-get 'login))
-          (->> pr (pull-request-repository) (alist-get 'name))
-          (org-make-link-string
-           (pull-request-url pr)
-           (pull-request-title pr))
-          (format-time-string "%Y-%m-%d %a")))
-
-(require 'ghub)
-(defun grfn/org-headlines-from-review-requests (level)
-  "Create org-mode headlines at LEVEL from all review-requested PRs on Github"
-  (interactive "*nLevel: ")
-  (let* ((prs (grfn/review-requests))
-         (text (mapconcat (apply-partially #'grfn/pr->org-headline level) prs "\n")))
-    (save-mark-and-excursion
-      (insert text))
-    (org-align-tags 't)))
 
 (defun grfn/num-inbox-items ()
   (length (org-elements-agenda-match "inbox" t)))
