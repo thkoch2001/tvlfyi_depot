@@ -300,4 +300,9 @@
                       (= (map-elt (notmuch-show-get-message-properties) :depth) current-depth)))))
   (force-window-update))
 
+(defun vterm-send-ctrl-x ()
+  "Sends `C-x' to the libvterm."
+  (interactive)
+  (vterm-send-key "x" nil nil t))
+
 (provide 'functions)
