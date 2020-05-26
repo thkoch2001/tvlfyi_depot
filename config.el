@@ -22,7 +22,6 @@
 (load! "utils")
 (load! "company-sql")
 (load! "org-query")
-;; (load! "nix-yapf-mode")
 (load! "show-matching-paren")
 (load! "irc")
 (load! "github-org")
