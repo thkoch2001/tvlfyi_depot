@@ -14,10 +14,6 @@
     ../modules/shell.nix
     ../modules/tarsnap.nix
     ../modules/vim.nix
-
-    ~/code/urb/urbos/home
-
-    machine
   ];
 
   xsession.enable = true;
@@ -61,23 +57,12 @@
     playerctl
   ];
 
-  nixpkgs.config.allowUnfree = true;
-
-  programs.password-store.enable = true;
-
   services.redshift = {
     enable = true;
     provider = "geoclue2";
   };
 
   services.pasystray.enable = true;
-
-  impure.clonedRepos.passwordStore = {
-    github = "glittershark/pass";
-    path = ".local/share/password-store";
-  };
-
-  urbint.projectPath = "code/urb";
 
   services.gpg-agent = {
     enable = true;

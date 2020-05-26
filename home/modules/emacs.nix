@@ -52,7 +52,7 @@ in {
         package = pkgs.emacsUnstable;
       };
 
-      impure.clonedRepos = {
+      grfn.impure.clonedRepos = {
         orgClubhouse = {
           github = "glittershark/org-clubhouse";
           path = "code/org-clubhouse";

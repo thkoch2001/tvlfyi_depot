@@ -4,11 +4,15 @@ let
 in {
   imports = [
     ../platforms/linux.nix
-
     ../modules/common.nix
     ../modules/games.nix
     ../modules/rtlsdr.nix
+
+    ~/code/urb/urbos/home
   ];
+
+  # for when hacking
+  programs.home-manager.path = "/home/grfn/code/home-manager";
 
   system.machine = {
     wirelessInterface = "wlp59s0";
@@ -36,4 +40,6 @@ in {
       );
     };
   };
+
+  urbint.projectPath = "code/urb";
 }

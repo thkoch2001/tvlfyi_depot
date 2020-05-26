@@ -2,7 +2,7 @@
 with lib;
 {
   options = {
-    impure.clonedRepos = mkOption {
+    grfn.impure.clonedRepos = mkOption {
       description = "Repositories to clone";
       default = {};
       type = with types; loaOf (
@@ -62,6 +62,6 @@ with lib;
             popd
           fi
         '')
-      config.impure.clonedRepos;
+      config.grfn.impure.clonedRepos;
   };
 }
