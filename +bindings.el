@@ -1253,7 +1253,11 @@ If invoked with a prefix ARG eval the expression after inserting it"
          (src-block-head (save-excursion
                            (goto-char (org-element-property
                                        :begin current-src-block))
-                           (thing-at-point 'line t)))
+                           (let ((line (thing-at-point 'line t)))
+                             (if (not (s-starts-with? "#+NAME:" (s-trim line)))
+                                 line
+                               (forward-line)
+                               (thing-at-point 'line t)))))
          (point-to-insert
           (if-let (results-loc (org-babel-where-is-src-block-result))
               (save-excursion
