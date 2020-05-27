@@ -38,6 +38,13 @@ in
   };
 
   programs.git = {
+    extraConfig.filter.black100to80 =
+      let inherit (pkgs.python36Packages) black; in {
+        clean = "${black}/bin/black --target-version py36 -l 100 -";
+        smudge = "${black}/bin/black --target-version py36 -l 80 -";
+      };
+
+
     includes = [{
       condition = "gitdir:~/code/urb/";
       contents = {
