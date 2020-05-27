@@ -2,8 +2,6 @@
 , buildType ? "release", ... }:
 
 let
-  stdenv = with pkgs; overrideCC clangStdenv clang_10;
-
   aws-s3-cpp = pkgs.aws-sdk-cpp.override {
     apis = ["s3" "transfer"];
     customMemoryManagement = false;
@@ -14,22 +12,20 @@ let
   largeBoehm = pkgs.boehmgc.override {
     enableLargeConfig = true;
   };
-in stdenv.mkDerivation {
+in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   pname = "tazjix";
   version = "2.3.4";
   src = ./.;
 
-  # Abseil's sources need to be linked into a subproject.
+  # Abseil's sources need to be symlinked into Nix' sources.
   postUnpack = ''
-    ln -fs ${pkgs.abseil_cpp.src} nix/subprojects/abseil_cpp
+    ln -fs ${pkgs.abseil_cpp.src} nix/abseil_cpp
   '';
 
   nativeBuildInputs = with pkgs; [
     bison
     clang-tools
     cmake
-    meson
-    ninja
     pkgconfig
     libxml2
     libxslt
@@ -55,14 +51,6 @@ in stdenv.mkDerivation {
     sqlite
     xz
   ];
-
-  mesonBuildType = buildType;
-  mesonFlags = [
-    "-Dsandbox_shell=${pkgs.busybox-sandbox-shell}/bin/busybox"
-  ];
-
-  # cmake is only included to build Abseil and its hook should not run
-  dontUseCmakeConfigure = true;
 
   # Install the various symlinks to the Nix binary which users expect
   # to exist.

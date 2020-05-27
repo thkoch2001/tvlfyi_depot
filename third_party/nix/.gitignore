@@ -4,7 +4,6 @@ perl/Makefile.config
 # /
 /aclocal.m4
 /autom4te.cache
-/config.*
 /configure
 /nix.spec
 /stamp-h1

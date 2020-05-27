@@ -1,0 +1,128 @@
+// This file configures various build-time settings in Nix. In
+// previous iterations it was mostly responsible for configuring
+// OS-dependent settings, which are still preserved below but should
+// be removed.
+
+#ifndef NIX_CONFIG_H
+#define NIX_CONFIG_H
+
+/* Define to the version of this package. */
+#define PACKAGE_VERSION "2.3.4"
+
+/* Platform identifier (`cpu-os`) */
+// TODO(tazjin): generate
+#define SYSTEM "x86_64-linux"
+
+ // TODO(tazjin): some of these values are nonsensical for Nix
+#define NIX_PREFIX "/usr/local"
+#define NIX_STORE_DIR "/nix/store"
+#define NIX_DATA_DIR "/usr/local/share"
+#define NIX_LOG_DIR "/nix/var/log/nix"
+#define NIX_STATE_DIR "/nix/var/nix"
+#define NIX_CONF_DIR "/usr/local/etc/nix"
+#define NIX_LIBEXEC_DIR "/usr/local/libexec"
+#define NIX_BIN_DIR "/usr/local/bin"
+#define NIX_MAN_DIR "/usr/local/share/man"
+#define SANDBOX_SHELL "/nix/store/zq8biwi5mj2lrn68kx0lk0fkpbqypyxd-busybox-1.31.1-x86_64-unknown-linux-musl/bin/busybox"
+
+
+// These are hardcoded either because support for non-Linux is being
+// dropped, or because a decision was made to make inclusion of these
+// libraries mandatory.
+
+#define HAVE_STRUCT_DIRENT_D_TYPE 1
+
+#define HAVE_LUTIMES 1
+
+// Whether link() works on symlinks
+#define CAN_LINK_SYMLINK 1
+
+/* Whether to use the Boehm garbage collector. */
+#define HAVE_BOEHMGC 1
+
+/* Define if the Boost library is available. */
+#define HAVE_BOOST 1
+
+/* Define to 1 if you have the <bzlib.h> header file. */
+#define HAVE_BZLIB_H 1
+
+/* Define if the compiler supports basic C++17 syntax */
+#define HAVE_CXX17 1
+
+/* Define to 1 if you have the <dirent.h> header file, and it defines `DIR` */
+#define HAVE_DIRENT_H 1
+
+/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR` */
+#define HAVE_DIR_H 1
+
+/* Define to 1 if you have the <editline.h> header file. */
+#define HAVE_EDITLINE_H 1
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#define HAVE_INTTYPES_H 1
+
+/* Define to 1 if you have the `lchown` function. */
+#define HAVE_LCHOWN 1
+
+/* Define to 1 if you have the <locale.h> header file. */
+#define HAVE_LOCALE 1
+
+/* Define to 1 if you have the `lutimes` function. */
+#define HAVE_LUTIMES 1
+
+/* Define to 1 if you have the <memory.h> header file. */
+#define HAVE_MEMORY_H 1
+
+/* Define to 1 if you have the `pipe2` function. */
+#define HAVE_PIPE2 1
+
+/* Define to 1 if you have the `posix_fallocate` function. */
+#define HAVE_POSIX_FALLOCATE 1
+
+/* Define to 1 if you have the `pubsetbuf` function. */
+#define HAVE_PUBSETBUF 1
+
+/* Whether seccomp is available and should be used for sandboxing. */
+#define HAVE_SECCOMP 1
+
+/* Define to 1 if you have the `setresuid` function. */
+#define HAVE_SETRESUID 1
+
+/* Define to 1 if you have the `setreuid` function. */
+#define HAVE_SETREUID 1
+
+/* Whether to use libsodium for cryptography. */
+#define HAVE_SODIUM 1
+
+/* Define to 1 if you have the `statvfs` function. */
+#define HAVE_STATVFS 1
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#define HAVE_STDINT_H 1
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#define HAVE_STDLIB_H 1
+
+/* Define to 1 if you have the <strings.h> header file. */
+#define HAVE_STRINGS_H 1
+
+/* Define to 1 if you have the <strings.h> header file. */
+#define HAVE_STRING_H 1
+
+/* Define to 1 if you have the `strsignal` function. */
+#define HAVE_STRSIGNAL 1
+
+/* Define to 1 if you have the `sysconf` function. */
+#define HAVE_SYSCONF 1
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#define HAVE_SYS_STAT_H 1
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#define HAVE_SYS_TYPES_H 1
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#define HAVE_UNISTD_H 1
+
+
+#endif

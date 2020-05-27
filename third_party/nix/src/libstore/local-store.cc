@@ -374,10 +374,7 @@ void LocalStore::openDB(State& state, bool create) {
 
   /* Initialise the database schema, if necessary. */
   if (create) {
-    const char* schema =
-#include "schema.sql.gen.hh"
-        ;
-    db.exec(schema);
+    db.exec(kNixSqlSchema);
   }
 }
 
@@ -435,13 +432,13 @@ static void canonicaliseTimestampAndPermissions(const Path& path,
       if (errno != ENOSYS ||
           (!S_ISLNK(st.st_mode) && utimes(path.c_str(), times) == -1)) {
 #else
-    if (!S_ISLNK(st.st_mode) && utimes(path.c_str(), times) == -1)
+    if (!S_ISLNK(st.st_mode) && utimes(path.c_str(), times) == -1) {
 #endif
         throw SysError(format("changing modification time of '%1%'") % path);
       }
     }
   }  // namespace nix
-}
+}  // namespace nix
 
 void canonicaliseTimestampAndPermissions(const Path& path) {
   struct stat st;
