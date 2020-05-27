@@ -162,7 +162,7 @@ in exposed // {
 
   # Packages to be overridden
   originals = {
-    inherit (nixpkgs) abseil-cpp glog notmuch;
+    inherit (nixpkgs) abseil-cpp notmuch;
     inherit (stableNixpkgs) git;
     ffmpeg = nixpkgs.ffmpeg-full;
   };
