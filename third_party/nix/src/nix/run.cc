@@ -3,15 +3,15 @@
 #include <absl/strings/str_split.h>
 #include <sys/mount.h>
 
-#include "affinity.hh"
-#include "command.hh"
-#include "common-args.hh"
-#include "derivations.hh"
-#include "finally.hh"
-#include "fs-accessor.hh"
-#include "local-store.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libmain/common-args.hh"
+#include "libmain/shared.hh"
+#include "libstore/derivations.hh"
+#include "libstore/fs-accessor.hh"
+#include "libstore/local-store.hh"
+#include "libstore/store-api.hh"
+#include "libutil/affinity.hh"
+#include "libutil/finally.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

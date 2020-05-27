@@ -1,4 +1,4 @@
-#include "config.hh"
+#include "libutil/config.hh"
 #include "primops.hh"
 
 using namespace nix;

@@ -3,13 +3,13 @@
 #include <absl/strings/str_split.h>
 #include <glog/logging.h>
 
-#include "attr-path.hh"
-#include "command.hh"
-#include "common-args.hh"
-#include "download.hh"
-#include "eval.hh"
-#include "names.hh"
-#include "store-api.hh"
+#include "libexpr/attr-path.hh"
+#include "libexpr/eval.hh"
+#include "libexpr/names.hh"
+#include "libmain/common-args.hh"
+#include "libstore/download.hh"
+#include "libstore/store-api.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

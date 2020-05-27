@@ -1,4 +1,4 @@
-#include "util.hh"
+#include "libutil/util.hh"
 
 #include <cctype>
 #include <cerrno>
@@ -15,6 +15,7 @@
 #include <absl/strings/str_split.h>
 #include <absl/strings/string_view.h>
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <grp.h>
 #include <pwd.h>
 #include <sys/ioctl.h>
@@ -23,12 +24,12 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "affinity.hh"
-#include "finally.hh"
-#include "glog/logging.h"
-#include "lazy.hh"
-#include "serialise.hh"
-#include "sync.hh"
+#include "libutil/affinity.hh"
+#include "libutil/finally.hh"
+#include "libutil/lazy.hh"
+#include "libutil/serialise.hh"
+#include "libutil/sync.hh"
+#include "nix_config.h"
 
 namespace nix {
 

@@ -6,7 +6,7 @@
 
 #include <absl/strings/numbers.h>
 
-#include "util.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

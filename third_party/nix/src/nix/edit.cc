@@ -2,10 +2,10 @@
 #include <glog/logging.h>
 #include <unistd.h>
 
-#include "attr-path.hh"
-#include "command.hh"
-#include "eval.hh"
-#include "shared.hh"
+#include "libexpr/attr-path.hh"
+#include "libexpr/eval.hh"
+#include "libmain/shared.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

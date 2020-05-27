@@ -1,7 +1,7 @@
 #pragma once
 
-#include "hash.hh"
-#include "types.hh"
+#include "libutil/hash.hh"
+#include "libutil/types.hh"
 
 namespace nix {
 

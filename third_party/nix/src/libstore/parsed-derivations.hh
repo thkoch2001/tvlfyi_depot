@@ -1,6 +1,6 @@
 #include <nlohmann/json.hpp>
 
-#include "derivations.hh"
+#include "libstore/derivations.hh"
 
 namespace nix {
 

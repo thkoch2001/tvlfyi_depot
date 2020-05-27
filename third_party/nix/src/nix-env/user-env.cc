@@ -1,15 +1,15 @@
-#include "user-env.hh"
+#include "nix-env/user-env.hh"
 
 #include <glog/logging.h>
 
-#include "derivations.hh"
-#include "eval-inline.hh"
-#include "eval.hh"
-#include "globals.hh"
-#include "profiles.hh"
-#include "shared.hh"
-#include "store-api.hh"
-#include "util.hh"
+#include "libexpr/eval-inline.hh"
+#include "libexpr/eval.hh"
+#include "libmain/shared.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/profiles.hh"
+#include "libstore/store-api.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

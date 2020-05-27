@@ -5,14 +5,14 @@
 #include <regex>
 #include <utility>
 
+#include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "globals.hh"
-#include "glog/logging.h"
-#include "local-store.hh"
-#include "util.hh"
+#include "libstore/globals.hh"
+#include "libstore/local-store.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

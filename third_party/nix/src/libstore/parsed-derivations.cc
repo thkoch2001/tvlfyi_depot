@@ -1,4 +1,4 @@
-#include "parsed-derivations.hh"
+#include "libstore/parsed-derivations.hh"
 
 #include <absl/strings/str_split.h>
 

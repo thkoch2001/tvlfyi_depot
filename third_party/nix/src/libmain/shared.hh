@@ -5,9 +5,9 @@
 #include <absl/strings/numbers.h>
 #include <signal.h>
 
-#include "args.hh"
-#include "common-args.hh"
-#include "util.hh"
+#include "libmain/common-args.hh"
+#include "libutil/args.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

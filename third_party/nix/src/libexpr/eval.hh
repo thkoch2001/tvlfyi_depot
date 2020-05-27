@@ -4,12 +4,12 @@
 #include <optional>
 #include <unordered_map>
 
-#include "attr-set.hh"
-#include "config.hh"
-#include "hash.hh"
-#include "nixexpr.hh"
-#include "symbol-table.hh"
-#include "value.hh"
+#include "libexpr/attr-set.hh"
+#include "libexpr/nixexpr.hh"
+#include "libexpr/symbol-table.hh"
+#include "libexpr/value.hh"
+#include "libutil/config.hh"
+#include "libutil/hash.hh"
 
 namespace nix {
 

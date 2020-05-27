@@ -7,7 +7,7 @@
 #include <set>
 #include <string>
 
-#include "ref.hh"
+#include "libutil/ref.hh"
 
 /* Before 4.7, gcc's std::exception uses empty throw() specifiers for
  * its (virtual) destructor and what() in c++11 mode, in violation of spec

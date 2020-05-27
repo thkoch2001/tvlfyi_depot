@@ -1,4 +1,4 @@
-#include "eval.hh"
+#include "libexpr/eval.hh"
 
 #include <algorithm>
 #include <chrono>
@@ -15,15 +15,15 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#include "derivations.hh"
-#include "download.hh"
-#include "eval-inline.hh"
-#include "function-trace.hh"
-#include "globals.hh"
-#include "hash.hh"
-#include "json.hh"
-#include "store-api.hh"
-#include "util.hh"
+#include "libexpr/eval-inline.hh"
+#include "libexpr/function-trace.hh"
+#include "libstore/derivations.hh"
+#include "libstore/download.hh"
+#include "libstore/globals.hh"
+#include "libstore/store-api.hh"
+#include "libutil/hash.hh"
+#include "libutil/json.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

@@ -1,9 +1,9 @@
-#include "attr-path.hh"
+#include "libexpr/attr-path.hh"
 
 #include <absl/strings/numbers.h>
 
-#include "eval-inline.hh"
-#include "util.hh"
+#include "libexpr/eval-inline.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

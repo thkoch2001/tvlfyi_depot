@@ -3,8 +3,8 @@
 #include <map>
 #include <string>
 
-#include "eval.hh"
-#include "nixexpr.hh"
+#include "libexpr/eval.hh"
+#include "libexpr/nixexpr.hh"
 
 namespace nix {
 

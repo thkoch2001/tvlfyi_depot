@@ -1,4 +1,4 @@
-#include "attr-set.hh"
+#include "libexpr/attr-set.hh"
 
 #include <new>
 
@@ -6,7 +6,7 @@
 #include <gc/gc_cpp.h>
 #include <glog/logging.h>
 
-#include "eval-inline.hh"
+#include "libexpr/eval-inline.hh"
 
 namespace nix {
 

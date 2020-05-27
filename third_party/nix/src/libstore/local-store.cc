@@ -1,4 +1,4 @@
-#include "local-store.hh"
+#include "libstore/local-store.hh"
 
 #include <algorithm>
 #include <cerrno>
@@ -25,12 +25,13 @@
 #include <unistd.h>
 #include <utime.h>
 
-#include "archive.hh"
-#include "derivations.hh"
-#include "globals.hh"
-#include "nar-info.hh"
-#include "pathlocks.hh"
-#include "worker-protocol.hh"
+#include "generated/schema.sql.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/nar-info.hh"
+#include "libstore/pathlocks.hh"
+#include "libstore/worker-protocol.hh"
+#include "libutil/archive.hh"
 
 namespace nix {
 

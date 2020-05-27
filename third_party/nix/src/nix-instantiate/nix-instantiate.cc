@@ -1,18 +1,18 @@
 #include <iostream>
 #include <map>
 
-#include "attr-path.hh"
-#include "common-eval-args.hh"
-#include "eval-inline.hh"
-#include "eval.hh"
-#include "get-drvs.hh"
-#include "globals.hh"
-#include "legacy.hh"
-#include "shared.hh"
-#include "store-api.hh"
-#include "util.hh"
-#include "value-to-json.hh"
-#include "value-to-xml.hh"
+#include "libexpr/attr-path.hh"
+#include "libexpr/common-eval-args.hh"
+#include "libexpr/eval-inline.hh"
+#include "libexpr/eval.hh"
+#include "libexpr/get-drvs.hh"
+#include "libexpr/value-to-json.hh"
+#include "libexpr/value-to-xml.hh"
+#include "libmain/shared.hh"
+#include "libstore/globals.hh"
+#include "libstore/store-api.hh"
+#include "libutil/util.hh"
+#include "nix/legacy.hh"
 
 using namespace nix;
 

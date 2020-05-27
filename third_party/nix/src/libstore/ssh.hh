@@ -1,7 +1,7 @@
 #pragma once
 
-#include "sync.hh"
-#include "util.hh"
+#include "libutil/sync.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

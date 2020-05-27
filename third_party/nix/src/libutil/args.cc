@@ -1,6 +1,6 @@
-#include "args.hh"
+#include "libutil/args.hh"
 
-#include "hash.hh"
+#include "libutil/hash.hh"
 
 namespace nix {
 

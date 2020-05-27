@@ -1,7 +1,7 @@
-#include "command.hh"
-#include "common-args.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libmain/common-args.hh"
+#include "libmain/shared.hh"
+#include "libstore/store-api.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

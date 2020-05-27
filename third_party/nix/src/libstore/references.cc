@@ -1,13 +1,13 @@
-#include "references.hh"
+#include "libstore/references.hh"
 
 #include <cstdlib>
 #include <map>
 
 #include <glog/logging.h>
 
-#include "archive.hh"
-#include "hash.hh"
-#include "util.hh"
+#include "libutil/archive.hh"
+#include "libutil/hash.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

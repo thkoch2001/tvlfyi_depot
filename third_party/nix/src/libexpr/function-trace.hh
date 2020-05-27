@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-#include "eval.hh"
+#include "libexpr/eval.hh"
 
 namespace nix {
 

@@ -1,10 +1,10 @@
-#include "names.hh"
+#include "libexpr/names.hh"
 
 #include <memory>
 
 #include <absl/strings/numbers.h>
 
-#include "util.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

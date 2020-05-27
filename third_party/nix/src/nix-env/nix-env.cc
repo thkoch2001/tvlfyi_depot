@@ -11,22 +11,22 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "attr-path.hh"
-#include "common-eval-args.hh"
-#include "derivations.hh"
-#include "eval.hh"
-#include "get-drvs.hh"
-#include "globals.hh"
-#include "json.hh"
-#include "legacy.hh"
-#include "names.hh"
-#include "profiles.hh"
-#include "shared.hh"
-#include "store-api.hh"
-#include "user-env.hh"
-#include "util.hh"
-#include "value-to-json.hh"
-#include "xml-writer.hh"
+#include "libexpr/attr-path.hh"
+#include "libexpr/common-eval-args.hh"
+#include "libexpr/eval.hh"
+#include "libexpr/get-drvs.hh"
+#include "libexpr/names.hh"
+#include "libexpr/value-to-json.hh"
+#include "libmain/shared.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/profiles.hh"
+#include "libstore/store-api.hh"
+#include "libutil/json.hh"
+#include "libutil/util.hh"
+#include "libutil/xml-writer.hh"
+#include "nix-env/user-env.hh"
+#include "nix/legacy.hh"
 
 using namespace nix;
 using std::cout;

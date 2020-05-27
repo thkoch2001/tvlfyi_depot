@@ -1,19 +1,19 @@
-#include "download.hh"
+#include "libstore/download.hh"
 
 #include <absl/strings/ascii.h>
 #include <absl/strings/match.h>
 #include <absl/strings/numbers.h>
 #include <absl/strings/str_split.h>
 
-#include "archive.hh"
-#include "compression.hh"
-#include "finally.hh"
-#include "globals.hh"
-#include "hash.hh"
-#include "pathlocks.hh"
-#include "s3.hh"
-#include "store-api.hh"
-#include "util.hh"
+#include "libstore/globals.hh"
+#include "libstore/pathlocks.hh"
+#include "libstore/s3.hh"
+#include "libstore/store-api.hh"
+#include "libutil/archive.hh"
+#include "libutil/compression.hh"
+#include "libutil/finally.hh"
+#include "libutil/hash.hh"
+#include "libutil/util.hh"
 
 #ifdef ENABLE_S3
 #include <aws/core/client/ClientConfiguration.h>

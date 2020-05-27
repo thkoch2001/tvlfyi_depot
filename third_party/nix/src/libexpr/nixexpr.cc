@@ -1,9 +1,9 @@
-#include "nixexpr.hh"
+#include "libexpr/nixexpr.hh"
 
 #include <cstdlib>
 
-#include "derivations.hh"
-#include "util.hh"
+#include "libstore/derivations.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

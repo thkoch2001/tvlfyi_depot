@@ -1,9 +1,9 @@
-#include "command.hh"
-#include "common-args.hh"
-#include "fs-accessor.hh"
-#include "json.hh"
-#include "nar-accessor.hh"
-#include "store-api.hh"
+#include "libmain/common-args.hh"
+#include "libstore/fs-accessor.hh"
+#include "libstore/nar-accessor.hh"
+#include "libstore/store-api.hh"
+#include "libutil/json.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

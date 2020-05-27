@@ -2,7 +2,7 @@
 
 #include <atomic>
 
-#include "binary-cache-store.hh"
+#include "libstore/binary-cache-store.hh"
 
 namespace nix {
 

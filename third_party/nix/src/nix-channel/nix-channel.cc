@@ -5,11 +5,11 @@
 #include <fcntl.h>
 #include <pwd.h>
 
-#include "download.hh"
-#include "globals.hh"
-#include "legacy.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libmain/shared.hh"
+#include "libstore/download.hh"
+#include "libstore/globals.hh"
+#include "libstore/store-api.hh"
+#include "nix/legacy.hh"
 
 using namespace nix;
 

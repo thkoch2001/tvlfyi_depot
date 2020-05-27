@@ -1,4 +1,4 @@
-#include "config.hh"
+#include "libutil/config.hh"
 
 #include <string>
 #include <utility>
@@ -9,8 +9,8 @@
 #include <absl/strings/string_view.h>
 #include <glog/logging.h>
 
-#include "args.hh"
-#include "json.hh"
+#include "libutil/args.hh"
+#include "libutil/json.hh"
 
 namespace nix {
 

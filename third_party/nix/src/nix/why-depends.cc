@@ -2,10 +2,10 @@
 
 #include <glog/logging.h>
 
-#include "command.hh"
-#include "fs-accessor.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libmain/shared.hh"
+#include "libstore/fs-accessor.hh"
+#include "libstore/store-api.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

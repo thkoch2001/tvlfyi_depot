@@ -1,11 +1,11 @@
-#include "eval.hh"
+#include "libexpr/eval.hh"
 
-#include "command.hh"
-#include "common-args.hh"
-#include "json.hh"
-#include "shared.hh"
-#include "store-api.hh"
-#include "value-to-json.hh"
+#include "libexpr/value-to-json.hh"
+#include "libmain/common-args.hh"
+#include "libmain/shared.hh"
+#include "libstore/store-api.hh"
+#include "libutil/json.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

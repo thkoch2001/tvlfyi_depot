@@ -16,9 +16,9 @@
 #ifndef BISON_HEADER
 #define BISON_HEADER
 
-#include "util.hh"
-#include "nixexpr.hh"
-#include "eval.hh"
+#include "libutil/util.hh"
+#include "libexpr/nixexpr.hh"
+#include "libexpr/eval.hh"
 #include <glog/logging.h>
 
 namespace nix {
@@ -50,8 +50,8 @@ namespace nix {
 
 %{
 
-#include "parser-tab.hh"
-#include "lexer-tab.hh"
+#include "generated/parser-tab.hh"
+#include "generated/lexer-tab.hh"
 
 YY_DECL;
 
@@ -539,9 +539,9 @@ formal
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "eval.hh"
-#include "download.hh"
-#include "store-api.hh"
+#include "libexpr/eval.hh"
+#include "libstore/download.hh"
+#include "libstore/store-api.hh"
 
 
 namespace nix {

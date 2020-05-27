@@ -6,8 +6,8 @@
 #include <list>
 #include <memory>
 
-#include "ref.hh"
-#include "sync.hh"
+#include "libutil/ref.hh"
+#include "libutil/sync.hh"
 
 namespace nix {
 

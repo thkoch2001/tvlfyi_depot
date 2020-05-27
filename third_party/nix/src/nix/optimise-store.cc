@@ -1,8 +1,8 @@
 #include <atomic>
 
-#include "command.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libmain/shared.hh"
+#include "libstore/store-api.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

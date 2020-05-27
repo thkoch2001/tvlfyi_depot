@@ -3,7 +3,7 @@
 #include <functional>
 #include <string>
 
-#include "types.hh"
+#include "libutil/types.hh"
 
 class sqlite3;
 class sqlite3_stmt;

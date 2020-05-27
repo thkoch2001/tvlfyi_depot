@@ -1,9 +1,9 @@
-#include "archive.hh"
-#include "compression.hh"
-#include "derivations.hh"
-#include "fs-accessor.hh"
-#include "globals.hh"
-#include "store-api.hh"
+#include "libstore/derivations.hh"
+#include "libstore/fs-accessor.hh"
+#include "libstore/globals.hh"
+#include "libstore/store-api.hh"
+#include "libutil/archive.hh"
+#include "libutil/compression.hh"
 
 namespace nix {
 

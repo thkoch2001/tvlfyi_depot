@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "builtins.hh"
+#include "libstore/builtins.hh"
 
 namespace nix {
 

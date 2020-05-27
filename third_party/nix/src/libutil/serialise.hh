@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "types.hh"
-#include "util.hh"
+#include "libutil/types.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

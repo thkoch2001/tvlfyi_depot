@@ -1,4 +1,4 @@
-#include "symbol-table.hh"
+#include "libexpr/symbol-table.hh"
 
 #include <absl/container/node_hash_set.h>
 #include <absl/strings/string_view.h>

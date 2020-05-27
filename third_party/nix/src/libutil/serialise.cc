@@ -1,4 +1,4 @@
-#include "serialise.hh"
+#include "libutil/serialise.hh"
 
 #include <boost/coroutine2/coroutine.hpp>
 #include <cerrno>
@@ -6,8 +6,9 @@
 #include <memory>
 #include <utility>
 
-#include "glog/logging.h"
-#include "util.hh"
+#include <glog/logging.h>
+
+#include "libutil/util.hh"
 
 namespace nix {
 

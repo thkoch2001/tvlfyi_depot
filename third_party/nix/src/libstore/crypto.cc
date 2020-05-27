@@ -1,7 +1,7 @@
-#include "crypto.hh"
+#include "libstore/crypto.hh"
 
-#include "globals.hh"
-#include "util.hh"
+#include "libstore/globals.hh"
+#include "libutil/util.hh"
 
 #if HAVE_SODIUM
 #include <sodium.h>

@@ -2,10 +2,10 @@
 
 #include <glog/logging.h>
 
-#include "command.hh"
-#include "shared.hh"
-#include "store-api.hh"
-#include "thread-pool.hh"
+#include "libmain/shared.hh"
+#include "libstore/store-api.hh"
+#include "libutil/thread-pool.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

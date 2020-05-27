@@ -1,4 +1,4 @@
-#include "archive.hh"
+#include "libutil/archive.hh"
 
 #include <algorithm>
 #include <cerrno>
@@ -7,14 +7,14 @@
 
 #include <dirent.h>
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <strings.h>  // for strcasecmp
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "config.hh"
-#include "glog/logging.h"
-#include "util.hh"
+#include "libutil/config.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

@@ -14,8 +14,8 @@
 %{
 #include <boost/lexical_cast.hpp>
 
-#include "nixexpr.hh"
-#include "parser-tab.hh"
+#include "libexpr/nixexpr.hh"
+#include "generated/parser-tab.hh"
 
 using namespace nix;
 

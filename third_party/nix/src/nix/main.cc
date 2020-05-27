@@ -1,21 +1,21 @@
 #include <algorithm>
 
+#include <glog/logging.h>
 #include <ifaddrs.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 
-#include "command.hh"
-#include "common-args.hh"
-#include "download.hh"
-#include "eval.hh"
-#include "finally.hh"
-#include "globals.hh"
-#include "glog/logging.h"
-#include "legacy.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libexpr/eval.hh"
+#include "libmain/common-args.hh"
+#include "libmain/shared.hh"
+#include "libstore/download.hh"
+#include "libstore/globals.hh"
+#include "libstore/store-api.hh"
+#include "libutil/finally.hh"
+#include "nix/command.hh"
+#include "nix/legacy.hh"
 
 extern std::string chrootHelperName;
 

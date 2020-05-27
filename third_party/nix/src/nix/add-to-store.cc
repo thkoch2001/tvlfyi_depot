@@ -1,7 +1,7 @@
-#include "archive.hh"
-#include "command.hh"
-#include "common-args.hh"
-#include "store-api.hh"
+#include "libmain/common-args.hh"
+#include "libstore/store-api.hh"
+#include "libutil/archive.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

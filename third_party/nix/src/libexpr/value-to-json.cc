@@ -1,11 +1,11 @@
-#include "value-to-json.hh"
+#include "libexpr/value-to-json.hh"
 
 #include <cstdlib>
 #include <iomanip>
 
-#include "eval-inline.hh"
-#include "json.hh"
-#include "util.hh"
+#include "libexpr/eval-inline.hh"
+#include "libutil/json.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

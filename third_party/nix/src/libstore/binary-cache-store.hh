@@ -2,9 +2,9 @@
 
 #include <atomic>
 
-#include "crypto.hh"
-#include "pool.hh"
-#include "store-api.hh"
+#include "libstore/crypto.hh"
+#include "libstore/store-api.hh"
+#include "libutil/pool.hh"
 
 namespace nix {
 

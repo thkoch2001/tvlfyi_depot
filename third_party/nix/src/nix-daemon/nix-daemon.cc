@@ -15,18 +15,18 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "affinity.hh"
-#include "archive.hh"
-#include "derivations.hh"
-#include "finally.hh"
-#include "globals.hh"
-#include "legacy.hh"
-#include "local-store.hh"
-#include "monitor-fd.hh"
-#include "serialise.hh"
-#include "shared.hh"
-#include "util.hh"
-#include "worker-protocol.hh"
+#include "libmain/shared.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/local-store.hh"
+#include "libstore/worker-protocol.hh"
+#include "libutil/affinity.hh"
+#include "libutil/archive.hh"
+#include "libutil/finally.hh"
+#include "libutil/monitor-fd.hh"
+#include "libutil/serialise.hh"
+#include "libutil/util.hh"
+#include "nix/legacy.hh"
 
 using namespace nix;
 

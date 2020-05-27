@@ -1,8 +1,8 @@
-#include "common-args.hh"
+#include "libmain/common-args.hh"
 
 #include <glog/logging.h>
 
-#include "globals.hh"
+#include "libstore/globals.hh"
 
 namespace nix {
 

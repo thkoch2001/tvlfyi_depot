@@ -2,9 +2,9 @@
 
 #include <absl/strings/match.h>
 
-#include "binary-cache-store.hh"
-#include "globals.hh"
-#include "nar-info-disk-cache.hh"
+#include "libstore/binary-cache-store.hh"
+#include "libstore/globals.hh"
+#include "libstore/nar-info-disk-cache.hh"
 
 namespace nix {
 

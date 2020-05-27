@@ -1,7 +1,7 @@
 #pragma once
 
-#include "nar-info.hh"
-#include "ref.hh"
+#include "libstore/nar-info.hh"
+#include "libutil/ref.hh"
 
 namespace nix {
 

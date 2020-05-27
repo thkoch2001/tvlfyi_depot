@@ -1,4 +1,4 @@
-#include "remote-store.hh"
+#include "libstore/remote-store.hh"
 
 #include <cerrno>
 #include <cstring>
@@ -12,16 +12,16 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-#include "affinity.hh"
-#include "archive.hh"
-#include "derivations.hh"
-#include "finally.hh"
-#include "globals.hh"
-#include "pool.hh"
-#include "prefork-compat.hh"
-#include "serialise.hh"
-#include "util.hh"
-#include "worker-protocol.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/worker-protocol.hh"
+#include "libutil/affinity.hh"
+#include "libutil/archive.hh"
+#include "libutil/finally.hh"
+#include "libutil/pool.hh"
+#include "libutil/prefork-compat.hh"
+#include "libutil/serialise.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

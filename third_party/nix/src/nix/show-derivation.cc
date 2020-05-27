@@ -1,11 +1,11 @@
 // FIXME: integrate this with nix path-info?
 
-#include "archive.hh"
-#include "command.hh"
-#include "common-args.hh"
-#include "derivations.hh"
-#include "json.hh"
-#include "store-api.hh"
+#include "libmain/common-args.hh"
+#include "libstore/derivations.hh"
+#include "libstore/store-api.hh"
+#include "libutil/archive.hh"
+#include "libutil/json.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

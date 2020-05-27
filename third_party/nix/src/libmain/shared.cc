@@ -1,4 +1,4 @@
-#include "shared.hh"
+#include "libmain/shared.hh"
 
 #include <algorithm>
 #include <cctype>
@@ -15,9 +15,9 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#include "globals.hh"
-#include "store-api.hh"
-#include "util.hh"
+#include "libstore/globals.hh"
+#include "libstore/store-api.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

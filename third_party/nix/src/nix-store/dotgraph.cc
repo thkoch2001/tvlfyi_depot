@@ -1,9 +1,9 @@
-#include "dotgraph.hh"
+#include "nix-store/dotgraph.hh"
 
 #include <iostream>
 
-#include "store-api.hh"
-#include "util.hh"
+#include "libstore/store-api.hh"
+#include "libutil/util.hh"
 
 using std::cout;
 

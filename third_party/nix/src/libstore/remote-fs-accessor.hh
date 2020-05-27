@@ -1,8 +1,8 @@
 #pragma once
 
-#include "fs-accessor.hh"
-#include "ref.hh"
-#include "store-api.hh"
+#include "libstore/fs-accessor.hh"
+#include "libstore/store-api.hh"
+#include "libutil/ref.hh"
 
 namespace nix {
 

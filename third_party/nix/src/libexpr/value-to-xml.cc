@@ -1,10 +1,10 @@
-#include "value-to-xml.hh"
+#include "libexpr/value-to-xml.hh"
 
 #include <cstdlib>
 
-#include "eval-inline.hh"
-#include "util.hh"
-#include "xml-writer.hh"
+#include "libexpr/eval-inline.hh"
+#include "libutil/util.hh"
+#include "libutil/xml-writer.hh"
 
 namespace nix {
 

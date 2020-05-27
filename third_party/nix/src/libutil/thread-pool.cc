@@ -1,7 +1,8 @@
-#include "thread-pool.hh"
+#include "libutil/thread-pool.hh"
 
-#include "affinity.hh"
-#include "glog/logging.h"
+#include <glog/logging.h>
+
+#include "libutil/affinity.hh"
 
 namespace nix {
 

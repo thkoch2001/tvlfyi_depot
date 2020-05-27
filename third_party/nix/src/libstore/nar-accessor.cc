@@ -1,4 +1,4 @@
-#include "nar-accessor.hh"
+#include "libstore/nar-accessor.hh"
 
 #include <algorithm>
 #include <map>
@@ -6,8 +6,8 @@
 #include <stack>
 #include <utility>
 
-#include "archive.hh"
-#include "json.hh"
+#include "libutil/archive.hh"
+#include "libutil/json.hh"
 
 namespace nix {
 

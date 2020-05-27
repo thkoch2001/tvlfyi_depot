@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "fs-accessor.hh"
+#include "libstore/fs-accessor.hh"
 
 namespace nix {
 

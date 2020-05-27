@@ -7,11 +7,11 @@
 
 #include <absl/strings/str_split.h>
 
-#include "pathlocks.hh"
-#include "sqlite.hh"
-#include "store-api.hh"
-#include "sync.hh"
-#include "util.hh"
+#include "libstore/pathlocks.hh"
+#include "libstore/sqlite.hh"
+#include "libstore/store-api.hh"
+#include "libutil/sync.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

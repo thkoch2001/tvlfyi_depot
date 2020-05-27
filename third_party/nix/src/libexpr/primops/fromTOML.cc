@@ -1,6 +1,6 @@
 #include "cpptoml/cpptoml.h"
-#include "eval-inline.hh"
-#include "primops.hh"
+#include "libexpr/eval-inline.hh"
+#include "libexpr/primops.hh"
 
 namespace nix {
 

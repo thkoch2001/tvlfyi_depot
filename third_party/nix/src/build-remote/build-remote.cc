@@ -11,15 +11,15 @@
 #include <absl/strings/str_cat.h>
 #include <glog/logging.h>
 
-#include "derivations.hh"
-#include "globals.hh"
-#include "legacy.hh"
-#include "local-store.hh"
-#include "machines.hh"
-#include "pathlocks.hh"
-#include "serialise.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libmain/shared.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/local-store.hh"
+#include "libstore/machines.hh"
+#include "libstore/pathlocks.hh"
+#include "libstore/store-api.hh"
+#include "libutil/serialise.hh"
+#include "nix/legacy.hh"
 
 using namespace nix;
 using std::cin;

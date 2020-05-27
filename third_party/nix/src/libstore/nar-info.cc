@@ -1,9 +1,9 @@
-#include "nar-info.hh"
+#include "libstore/nar-info.hh"
 
 #include <absl/strings/numbers.h>
 #include <absl/strings/str_split.h>
 
-#include "globals.hh"
+#include "libstore/globals.hh"
 
 namespace nix {
 

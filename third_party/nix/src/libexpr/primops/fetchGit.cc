@@ -7,12 +7,12 @@
 #include <glog/logging.h>
 #include <sys/time.h>
 
-#include "download.hh"
-#include "eval-inline.hh"
-#include "hash.hh"
-#include "pathlocks.hh"
-#include "primops.hh"
-#include "store-api.hh"
+#include "libexpr/eval-inline.hh"
+#include "libexpr/primops.hh"
+#include "libstore/download.hh"
+#include "libstore/pathlocks.hh"
+#include "libstore/store-api.hh"
+#include "libutil/hash.hh"
 
 using namespace std::string_literals;
 

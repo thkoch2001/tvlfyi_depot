@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.hh"
+#include "libutil/types.hh"
 
 namespace nix {
 

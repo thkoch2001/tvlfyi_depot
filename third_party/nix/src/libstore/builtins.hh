@@ -1,6 +1,6 @@
 #pragma once
 
-#include "derivations.hh"
+#include "libstore/derivations.hh"
 
 namespace nix {
 

@@ -1,4 +1,4 @@
-#include "get-drvs.hh"
+#include "libexpr/get-drvs.hh"
 
 #include <cstring>
 #include <regex>
@@ -7,9 +7,9 @@
 #include <absl/strings/numbers.h>
 #include <glog/logging.h>
 
-#include "derivations.hh"
-#include "eval-inline.hh"
-#include "util.hh"
+#include "libexpr/eval-inline.hh"
+#include "libstore/derivations.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

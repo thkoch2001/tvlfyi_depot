@@ -1,8 +1,8 @@
 #include <algorithm>
 
-#include "archive.hh"
-#include "store-api.hh"
-#include "worker-protocol.hh"
+#include "libstore/store-api.hh"
+#include "libstore/worker-protocol.hh"
+#include "libutil/archive.hh"
 
 namespace nix {
 

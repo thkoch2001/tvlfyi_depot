@@ -1,11 +1,11 @@
-#include "remote-fs-accessor.hh"
+#include "libstore/remote-fs-accessor.hh"
 
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "json.hh"
-#include "nar-accessor.hh"
+#include "libstore/nar-accessor.hh"
+#include "libutil/json.hh"
 
 namespace nix {
 

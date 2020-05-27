@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eval.hh"
+#include "libexpr/eval.hh"
 
 #define LocalNoInline(f)              \
   static f __attribute__((noinline)); \

@@ -1,8 +1,8 @@
-#include "hash.hh"
+#include "libutil/hash.hh"
 
-#include "command.hh"
-#include "legacy.hh"
-#include "shared.hh"
+#include "libmain/shared.hh"
+#include "nix/command.hh"
+#include "nix/legacy.hh"
 
 using namespace nix;
 

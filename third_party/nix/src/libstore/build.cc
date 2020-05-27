@@ -17,6 +17,7 @@
 #include <absl/strings/numbers.h>
 #include <absl/strings/str_split.h>
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <grp.h>
 #include <netdb.h>
 #include <pwd.h>
@@ -31,22 +32,21 @@
 #include <termios.h>
 #include <unistd.h>
 
-#include "affinity.hh"
-#include "archive.hh"
-#include "builtins.hh"
-#include "compression.hh"
-#include "download.hh"
-#include "finally.hh"
-#include "globals.hh"
-#include "glog/logging.h"
-#include "json.hh"
-#include "local-store.hh"
-#include "machines.hh"
-#include "nar-info.hh"
-#include "parsed-derivations.hh"
-#include "pathlocks.hh"
-#include "references.hh"
-#include "util.hh"
+#include "libstore/builtins.hh"
+#include "libstore/download.hh"
+#include "libstore/globals.hh"
+#include "libstore/local-store.hh"
+#include "libstore/machines.hh"
+#include "libstore/nar-info.hh"
+#include "libstore/parsed-derivations.hh"
+#include "libstore/pathlocks.hh"
+#include "libstore/references.hh"
+#include "libutil/affinity.hh"
+#include "libutil/archive.hh"
+#include "libutil/compression.hh"
+#include "libutil/finally.hh"
+#include "libutil/json.hh"
+#include "libutil/util.hh"
 
 /* Includes required for chroot support. */
 #if __linux__

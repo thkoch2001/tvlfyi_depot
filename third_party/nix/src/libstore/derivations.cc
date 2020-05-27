@@ -1,15 +1,15 @@
-#include "derivations.hh"
+#include "libstore/derivations.hh"
 
 #include <absl/strings/match.h>
 #include <absl/strings/str_split.h>
 #include <absl/strings/string_view.h>
 
-#include "fs-accessor.hh"
-#include "globals.hh"
-#include "istringstream_nocopy.hh"
-#include "store-api.hh"
-#include "util.hh"
-#include "worker-protocol.hh"
+#include "libstore/fs-accessor.hh"
+#include "libstore/globals.hh"
+#include "libstore/store-api.hh"
+#include "libstore/worker-protocol.hh"
+#include "libutil/istringstream_nocopy.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

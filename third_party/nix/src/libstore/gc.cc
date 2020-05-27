@@ -9,16 +9,16 @@
 #include <absl/strings/match.h>
 #include <absl/strings/str_split.h>
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/statvfs.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "derivations.hh"
-#include "finally.hh"
-#include "globals.hh"
-#include "glog/logging.h"
-#include "local-store.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/local-store.hh"
+#include "libutil/finally.hh"
 
 namespace nix {
 

@@ -1,11 +1,11 @@
 #include <algorithm>
 #include <array>
 
-#include "command.hh"
-#include "common-args.hh"
-#include "json.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libmain/common-args.hh"
+#include "libmain/shared.hh"
+#include "libstore/store-api.hh"
+#include "libutil/json.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

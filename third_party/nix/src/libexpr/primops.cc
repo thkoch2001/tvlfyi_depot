@@ -1,4 +1,4 @@
-#include "primops.hh"
+#include "libexpr/primops.hh"
 
 #include <algorithm>
 #include <cstring>
@@ -11,19 +11,19 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "archive.hh"
-#include "derivations.hh"
-#include "download.hh"
-#include "eval-inline.hh"
-#include "eval.hh"
-#include "globals.hh"
-#include "json-to-value.hh"
-#include "json.hh"
-#include "names.hh"
-#include "store-api.hh"
-#include "util.hh"
-#include "value-to-json.hh"
-#include "value-to-xml.hh"
+#include "libexpr/eval-inline.hh"
+#include "libexpr/eval.hh"
+#include "libexpr/json-to-value.hh"
+#include "libexpr/names.hh"
+#include "libexpr/value-to-json.hh"
+#include "libexpr/value-to-xml.hh"
+#include "libstore/derivations.hh"
+#include "libstore/download.hh"
+#include "libstore/globals.hh"
+#include "libstore/store-api.hh"
+#include "libutil/archive.hh"
+#include "libutil/json.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

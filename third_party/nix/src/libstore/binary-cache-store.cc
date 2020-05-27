@@ -1,4 +1,4 @@
-#include "binary-cache-store.hh"
+#include "libstore/binary-cache-store.hh"
 
 #include <chrono>
 #include <future>
@@ -7,19 +7,19 @@
 #include <absl/strings/ascii.h>
 #include <absl/strings/numbers.h>
 #include <absl/strings/str_split.h>
+#include <glog/logging.h>
 
-#include "archive.hh"
-#include "compression.hh"
-#include "derivations.hh"
-#include "fs-accessor.hh"
-#include "globals.hh"
-#include "glog/logging.h"
-#include "json.hh"
-#include "nar-accessor.hh"
-#include "nar-info-disk-cache.hh"
-#include "nar-info.hh"
-#include "remote-fs-accessor.hh"
-#include "sync.hh"
+#include "libstore/derivations.hh"
+#include "libstore/fs-accessor.hh"
+#include "libstore/globals.hh"
+#include "libstore/nar-accessor.hh"
+#include "libstore/nar-info-disk-cache.hh"
+#include "libstore/nar-info.hh"
+#include "libstore/remote-fs-accessor.hh"
+#include "libutil/archive.hh"
+#include "libutil/compression.hh"
+#include "libutil/json.hh"
+#include "libutil/sync.hh"
 
 namespace nix {
 

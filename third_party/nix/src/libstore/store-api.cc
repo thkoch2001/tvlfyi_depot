@@ -1,4 +1,4 @@
-#include "store-api.hh"
+#include "libstore/store-api.hh"
 
 #include <future>
 #include <utility>
@@ -8,13 +8,13 @@
 #include <absl/strings/str_split.h>
 #include <glog/logging.h>
 
-#include "crypto.hh"
-#include "derivations.hh"
-#include "globals.hh"
-#include "json.hh"
-#include "nar-info-disk-cache.hh"
-#include "thread-pool.hh"
-#include "util.hh"
+#include "libstore/crypto.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/nar-info-disk-cache.hh"
+#include "libutil/json.hh"
+#include "libutil/thread-pool.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 
@@ -844,8 +844,8 @@ void Store::addToStore(const ValidPathInfo& info, const ref<std::string>& nar,
 
 }  // namespace nix
 
-#include "local-store.hh"
-#include "remote-store.hh"
+#include "libstore/local-store.hh"
+#include "libstore/remote-store.hh"
 
 namespace nix {
 

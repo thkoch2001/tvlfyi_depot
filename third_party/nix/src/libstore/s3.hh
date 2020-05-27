@@ -2,7 +2,7 @@
 
 #if ENABLE_S3
 
-#include "ref.hh"
+#include "libutil/ref.hh"
 
 namespace Aws {
 namespace Client {

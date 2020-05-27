@@ -3,7 +3,7 @@
 #include <limits>
 #include <string>
 
-#include "store-api.hh"
+#include "libstore/store-api.hh"
 
 namespace nix {
 

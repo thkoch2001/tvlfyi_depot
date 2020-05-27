@@ -6,16 +6,16 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "attr-path.hh"
-#include "common-eval-args.hh"
-#include "download.hh"
-#include "eval-inline.hh"
-#include "eval.hh"
-#include "finally.hh"
-#include "hash.hh"
-#include "legacy.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libexpr/attr-path.hh"
+#include "libexpr/common-eval-args.hh"
+#include "libexpr/eval-inline.hh"
+#include "libexpr/eval.hh"
+#include "libmain/shared.hh"
+#include "libstore/download.hh"
+#include "libstore/store-api.hh"
+#include "libutil/finally.hh"
+#include "libutil/hash.hh"
+#include "nix/legacy.hh"
 
 using namespace nix;
 

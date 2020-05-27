@@ -1,4 +1,4 @@
-#include "profiles.hh"
+#include "libstore/profiles.hh"
 
 #include <cerrno>
 #include <cstdio>
@@ -11,8 +11,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "store-api.hh"
-#include "util.hh"
+#include "libstore/store-api.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

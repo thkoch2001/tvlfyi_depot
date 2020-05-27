@@ -1,11 +1,11 @@
-#include "sqlite.hh"
+#include "libstore/sqlite.hh"
 
 #include <atomic>
 
 #include <glog/logging.h>
 #include <sqlite3.h>
 
-#include "util.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

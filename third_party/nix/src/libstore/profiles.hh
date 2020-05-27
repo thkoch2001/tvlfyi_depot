@@ -2,8 +2,8 @@
 
 #include <time.h>
 
-#include "pathlocks.hh"
-#include "types.hh"
+#include "libstore/pathlocks.hh"
+#include "libutil/types.hh"
 
 namespace nix {
 

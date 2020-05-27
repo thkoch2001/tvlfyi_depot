@@ -1,11 +1,9 @@
 #pragma once
 
-#include "symbol-table.hh"
-#include "types.hh"
-
-#if HAVE_BOEHMGC
 #include <gc/gc_allocator.h>
-#endif
+
+#include "libexpr/symbol-table.hh"
+#include "libutil/types.hh"
 
 namespace nix {
 

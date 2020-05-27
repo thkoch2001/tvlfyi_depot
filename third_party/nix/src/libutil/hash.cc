@@ -1,4 +1,4 @@
-#include "hash.hh"
+#include "libutil/hash.hh"
 
 #include <cstring>
 #include <iostream>
@@ -9,9 +9,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "archive.hh"
-#include "istringstream_nocopy.hh"
-#include "util.hh"
+#include "libutil/archive.hh"
+#include "libutil/istringstream_nocopy.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

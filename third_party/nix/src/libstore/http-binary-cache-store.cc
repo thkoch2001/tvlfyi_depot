@@ -2,10 +2,10 @@
 
 #include <glog/logging.h>
 
-#include "binary-cache-store.hh"
-#include "download.hh"
-#include "globals.hh"
-#include "nar-info-disk-cache.hh"
+#include "libstore/binary-cache-store.hh"
+#include "libstore/download.hh"
+#include "libstore/globals.hh"
+#include "libstore/nar-info-disk-cache.hh"
 
 namespace nix {
 

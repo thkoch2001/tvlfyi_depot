@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "ref.hh"
-#include "serialise.hh"
-#include "types.hh"
+#include "libutil/ref.hh"
+#include "libutil/serialise.hh"
+#include "libutil/types.hh"
 
 namespace nix {
 

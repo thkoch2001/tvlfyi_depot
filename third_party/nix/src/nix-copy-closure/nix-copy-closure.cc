@@ -1,8 +1,8 @@
 #include <glog/logging.h>
 
-#include "legacy.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libmain/shared.hh"
+#include "libstore/store-api.hh"
+#include "nix/legacy.hh"
 
 using namespace nix;
 

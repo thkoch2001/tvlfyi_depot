@@ -3,7 +3,7 @@
 #include <memory>
 #include <regex>
 
-#include "types.hh"
+#include "libutil/types.hh"
 
 namespace nix {
 

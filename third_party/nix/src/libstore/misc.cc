@@ -1,11 +1,11 @@
 #include <glog/logging.h>
 
-#include "derivations.hh"
-#include "globals.hh"
-#include "local-store.hh"
-#include "parsed-derivations.hh"
-#include "store-api.hh"
-#include "thread-pool.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/local-store.hh"
+#include "libstore/parsed-derivations.hh"
+#include "libstore/store-api.hh"
+#include "libutil/thread-pool.hh"
 
 namespace nix {
 

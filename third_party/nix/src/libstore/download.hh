@@ -3,9 +3,9 @@
 #include <future>
 #include <string>
 
-#include "globals.hh"
-#include "hash.hh"
-#include "types.hh"
+#include "libstore/globals.hh"
+#include "libutil/hash.hh"
+#include "libutil/types.hh"
 
 namespace nix {
 

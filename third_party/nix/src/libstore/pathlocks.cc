@@ -1,4 +1,4 @@
-#include "pathlocks.hh"
+#include "libstore/pathlocks.hh"
 
 #include <cerrno>
 #include <cstdlib>
@@ -9,8 +9,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "sync.hh"
-#include "util.hh"
+#include "libutil/sync.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

@@ -1,11 +1,11 @@
 #include <absl/strings/match.h>
 #include <glog/logging.h>
 
-#include "archive.hh"
-#include "builtins.hh"
-#include "compression.hh"
-#include "download.hh"
-#include "store-api.hh"
+#include "libstore/builtins.hh"
+#include "libstore/download.hh"
+#include "libstore/store-api.hh"
+#include "libutil/archive.hh"
+#include "libutil/compression.hh"
 
 namespace nix {
 

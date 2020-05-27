@@ -5,9 +5,10 @@
 
 #include <sys/types.h>
 
-#include "config.hh"
-#include "types.hh"
-#include "util.hh"
+#include "libutil/config.hh"
+#include "libutil/types.hh"
+#include "libutil/util.hh"
+#include "nix_config.h"
 
 namespace nix {
 

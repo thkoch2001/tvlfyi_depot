@@ -1,7 +1,7 @@
 #include <tuple>
 #include <vector>
 
-#include "eval.hh"
+#include "libexpr/eval.hh"
 
 namespace nix {
 

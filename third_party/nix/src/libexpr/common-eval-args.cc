@@ -1,9 +1,9 @@
-#include "common-eval-args.hh"
+#include "libexpr/common-eval-args.hh"
 
-#include "download.hh"
-#include "eval.hh"
-#include "shared.hh"
-#include "util.hh"
+#include "libexpr/eval.hh"
+#include "libmain/shared.hh"
+#include "libstore/download.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

@@ -1,6 +1,6 @@
 #if ENABLE_S3
 
-#include "s3-binary-cache-store.hh"
+#include "libstore/s3-binary-cache-store.hh"
 
 #include <absl/strings/ascii.h>
 #include <absl/strings/match.h>
@@ -20,13 +20,13 @@
 #include <aws/s3/model/PutObjectRequest.h>
 #include <aws/transfer/TransferManager.h>
 
-#include "compression.hh"
-#include "download.hh"
-#include "globals.hh"
-#include "istringstream_nocopy.hh"
-#include "nar-info-disk-cache.hh"
-#include "nar-info.hh"
-#include "s3.hh"
+#include "libstore/download.hh"
+#include "libstore/globals.hh"
+#include "libstore/nar-info-disk-cache.hh"
+#include "libstore/nar-info.hh"
+#include "libstore/s3.hh"
+#include "libutil/compression.hh"
+#include "libutil/istringstream_nocopy.hh"
 
 using namespace Aws::Transfer;
 

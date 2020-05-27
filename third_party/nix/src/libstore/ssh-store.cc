@@ -1,10 +1,10 @@
-#include "archive.hh"
-#include "pool.hh"
-#include "remote-fs-accessor.hh"
-#include "remote-store.hh"
-#include "ssh.hh"
-#include "store-api.hh"
-#include "worker-protocol.hh"
+#include "libstore/remote-fs-accessor.hh"
+#include "libstore/remote-store.hh"
+#include "libstore/ssh.hh"
+#include "libstore/store-api.hh"
+#include "libstore/worker-protocol.hh"
+#include "libutil/archive.hh"
+#include "libutil/pool.hh"
 
 namespace nix {
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "args.hh"
-#include "common-eval-args.hh"
+#include "libexpr/common-eval-args.hh"
+#include "libutil/args.hh"
 
 namespace nix {
 

@@ -1,9 +1,9 @@
-#include "command.hh"
+#include "nix/command.hh"
 
 #include <utility>
 
-#include "derivations.hh"
-#include "store-api.hh"
+#include "libstore/derivations.hh"
+#include "libstore/store-api.hh"
 
 namespace nix {
 

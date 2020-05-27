@@ -1,9 +1,9 @@
-#include "affinity.hh"
+#include "libutil/affinity.hh"
 
 #include <glog/logging.h>
 
-#include "types.hh"
-#include "util.hh"
+#include "libutil/types.hh"
+#include "libutil/util.hh"
 
 #if __linux__
 #include <sched.h>

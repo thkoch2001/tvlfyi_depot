@@ -2,11 +2,11 @@
 #include <absl/strings/str_cat.h>
 #include <absl/strings/str_split.h>
 
-#include "command.hh"
-#include "serve-protocol.hh"
-#include "shared.hh"
-#include "store-api.hh"
-#include "worker-protocol.hh"
+#include "libmain/shared.hh"
+#include "libstore/serve-protocol.hh"
+#include "libstore/store-api.hh"
+#include "libstore/worker-protocol.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

@@ -3,16 +3,16 @@
 
 #include <glog/logging.h>
 
-#include "command.hh"
-#include "common-args.hh"
-#include "eval-inline.hh"
-#include "eval.hh"
-#include "get-drvs.hh"
-#include "globals.hh"
-#include "json-to-value.hh"
-#include "json.hh"
-#include "names.hh"
-#include "shared.hh"
+#include "libexpr/eval-inline.hh"
+#include "libexpr/eval.hh"
+#include "libexpr/get-drvs.hh"
+#include "libexpr/json-to-value.hh"
+#include "libexpr/names.hh"
+#include "libmain/common-args.hh"
+#include "libmain/shared.hh"
+#include "libstore/globals.hh"
+#include "libutil/json.hh"
+#include "nix/command.hh"
 
 using namespace nix;
 

@@ -2,9 +2,9 @@
 
 #include <map>
 
-#include "hash.hh"
-#include "store-api.hh"
-#include "types.hh"
+#include "libstore/store-api.hh"
+#include "libutil/hash.hh"
+#include "libutil/types.hh"
 
 namespace nix {
 

@@ -1,13 +1,13 @@
-#include "nar-info-disk-cache.hh"
+#include "libstore/nar-info-disk-cache.hh"
 
 #include <absl/strings/str_cat.h>
 #include <absl/strings/str_split.h>
 #include <glog/logging.h>
 #include <sqlite3.h>
 
-#include "globals.hh"
-#include "sqlite.hh"
-#include "sync.hh"
+#include "libstore/globals.hh"
+#include "libstore/sqlite.hh"
+#include "libutil/sync.hh"
 
 namespace nix {
 

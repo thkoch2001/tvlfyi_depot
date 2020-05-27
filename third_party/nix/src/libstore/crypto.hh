@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "types.hh"
+#include "libutil/types.hh"
 
 namespace nix {
 

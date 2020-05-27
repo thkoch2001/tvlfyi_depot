@@ -1,12 +1,13 @@
-#include "archive.hh"
-#include "derivations.hh"
-#include "glog/logging.h"
-#include "pool.hh"
-#include "remote-store.hh"
-#include "serve-protocol.hh"
-#include "ssh.hh"
-#include "store-api.hh"
-#include "worker-protocol.hh"
+#include <glog/logging.h>
+
+#include "libstore/derivations.hh"
+#include "libstore/remote-store.hh"
+#include "libstore/serve-protocol.hh"
+#include "libstore/ssh.hh"
+#include "libstore/store-api.hh"
+#include "libstore/worker-protocol.hh"
+#include "libutil/archive.hh"
+#include "libutil/pool.hh"
 
 namespace nix {
 

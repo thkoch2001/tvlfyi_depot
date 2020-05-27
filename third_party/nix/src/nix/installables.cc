@@ -1,15 +1,15 @@
 #include <regex>
 #include <utility>
 
-#include "attr-path.hh"
-#include "command.hh"
-#include "common-eval-args.hh"
-#include "derivations.hh"
-#include "eval-inline.hh"
-#include "eval.hh"
-#include "get-drvs.hh"
-#include "shared.hh"
-#include "store-api.hh"
+#include "libexpr/attr-path.hh"
+#include "libexpr/common-eval-args.hh"
+#include "libexpr/eval-inline.hh"
+#include "libexpr/eval.hh"
+#include "libexpr/get-drvs.hh"
+#include "libmain/shared.hh"
+#include "libstore/derivations.hh"
+#include "libstore/store-api.hh"
+#include "nix/command.hh"
 
 namespace nix {
 

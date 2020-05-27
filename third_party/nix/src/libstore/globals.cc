@@ -1,4 +1,4 @@
-#include "globals.hh"
+#include "libstore/globals.hh"
 
 #include <algorithm>
 #include <map>
@@ -9,9 +9,10 @@
 #include <absl/strings/str_split.h>
 #include <dlfcn.h>
 
-#include "archive.hh"
-#include "args.hh"
-#include "util.hh"
+#include "libutil/archive.hh"
+#include "libutil/args.hh"
+#include "libutil/util.hh"
+#include "nix_config.h"
 
 namespace nix {
 

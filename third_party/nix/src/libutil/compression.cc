@@ -1,4 +1,4 @@
-#include "compression.hh"
+#include "libutil/compression.hh"
 
 #include <cstdio>
 #include <cstring>
@@ -7,11 +7,11 @@
 #include <brotli/decode.h>
 #include <brotli/encode.h>
 #include <bzlib.h>
+#include <glog/logging.h>
 #include <lzma.h>
 
-#include "finally.hh"
-#include "glog/logging.h"
-#include "util.hh"
+#include "libutil/finally.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

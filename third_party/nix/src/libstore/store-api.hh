@@ -8,13 +8,13 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "config.hh"
-#include "crypto.hh"
-#include "globals.hh"
-#include "hash.hh"
-#include "lru-cache.hh"
-#include "serialise.hh"
-#include "sync.hh"
+#include "libstore/crypto.hh"
+#include "libstore/globals.hh"
+#include "libutil/config.hh"
+#include "libutil/hash.hh"
+#include "libutil/lru-cache.hh"
+#include "libutil/serialise.hh"
+#include "libutil/sync.hh"
 
 namespace nix {
 

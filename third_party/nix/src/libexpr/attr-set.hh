@@ -4,9 +4,9 @@
 #include <absl/container/btree_map.h>
 #include <gc/gc_allocator.h>
 
-#include "nixexpr.hh"
-#include "symbol-table.hh"
-#include "types.hh"
+#include "libexpr/nixexpr.hh"
+#include "libexpr/symbol-table.hh"
+#include "libutil/types.hh"
 
 namespace nix {  // TODO(tazjin): ::expr
 

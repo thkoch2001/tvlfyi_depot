@@ -2,9 +2,9 @@
 
 #include <map>
 
-#include "symbol-table.hh"
-#include "types.hh"  // TODO(tazjin): audit this include
-#include "value.hh"
+#include "libexpr/symbol-table.hh"
+#include "libexpr/value.hh"
+#include "libutil/types.hh"  // TODO(tazjin): audit this include
 
 namespace nix {
 

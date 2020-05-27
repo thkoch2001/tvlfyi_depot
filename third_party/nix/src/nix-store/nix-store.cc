@@ -7,18 +7,18 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "archive.hh"
-#include "derivations.hh"
-#include "dotgraph.hh"
-#include "globals.hh"
-#include "graphml.hh"
-#include "legacy.hh"
-#include "local-store.hh"
-#include "monitor-fd.hh"
-#include "serve-protocol.hh"
-#include "shared.hh"
-#include "util.hh"
-#include "worker-protocol.hh"
+#include "libmain/shared.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/local-store.hh"
+#include "libstore/serve-protocol.hh"
+#include "libstore/worker-protocol.hh"
+#include "libutil/archive.hh"
+#include "libutil/monitor-fd.hh"
+#include "libutil/util.hh"
+#include "nix-store/dotgraph.hh"
+#include "nix-store/graphml.hh"
+#include "nix/legacy.hh"
 
 #if HAVE_SODIUM
 #include <sodium.h>

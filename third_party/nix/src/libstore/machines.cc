@@ -1,4 +1,4 @@
-#include "machines.hh"
+#include "libstore/machines.hh"
 
 #include <algorithm>
 
@@ -8,8 +8,8 @@
 #include <absl/strings/string_view.h>
 #include <glog/logging.h>
 
-#include "globals.hh"
-#include "util.hh"
+#include "libstore/globals.hh"
+#include "libutil/util.hh"
 
 namespace nix {
 

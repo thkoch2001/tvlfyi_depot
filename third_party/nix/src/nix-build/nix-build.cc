@@ -9,18 +9,18 @@
 #include <absl/strings/str_split.h>
 #include <glog/logging.h>
 
-#include "affinity.hh"
-#include "attr-path.hh"
-#include "common-eval-args.hh"
-#include "derivations.hh"
-#include "eval-inline.hh"
-#include "eval.hh"
-#include "get-drvs.hh"
-#include "globals.hh"
-#include "legacy.hh"
-#include "shared.hh"
-#include "store-api.hh"
-#include "util.hh"
+#include "libexpr/attr-path.hh"
+#include "libexpr/common-eval-args.hh"
+#include "libexpr/eval-inline.hh"
+#include "libexpr/eval.hh"
+#include "libexpr/get-drvs.hh"
+#include "libmain/shared.hh"
+#include "libstore/derivations.hh"
+#include "libstore/globals.hh"
+#include "libstore/store-api.hh"
+#include "libutil/affinity.hh"
+#include "libutil/util.hh"
+#include "nix/legacy.hh"
 
 using namespace nix;
 using namespace std::string_literals;
