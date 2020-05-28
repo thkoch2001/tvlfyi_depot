@@ -9,16 +9,26 @@ let
     filter
     hasAttr
     head
+    isAttrs
     length
     listToAttrs
     map
     match
-    isAttrs
-    readDir;
+    substring;
 
   argsWithPath = parts: args // {
     locatedAt = parts;
   };
+
+  readDir = path:
+    let
+      children = builtins.readDir path;
+      isVisible = f: f == ".skip-subtree" || (substring 0 1 f) != ".";
+      names = filter isVisible (attrNames children);
+    in listToAttrs (map (name: {
+      inherit name;
+      value = children.${name};
+    }) names);
 
   # The marker is added to every set that was imported directly by
   # readTree.
