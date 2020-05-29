@@ -11,7 +11,6 @@ find_package(Boost COMPONENTS context) # probably coroutine + ::headers, lets fi
 find_package(CURL)
 find_package(SQLite3)
 find_package(Threads)
-find_package(glog)
 find_package(LibLZMA)
 
 # Abseil really doesn't like being precompiled. It is included here as
@@ -23,6 +22,12 @@ find_package(LibLZMA)
 # builds this symlink is automatically replaced with an appropriate
 # link to the Abseil sources in the Nix store.
 add_subdirectory(abseil_cpp)
+
+# Linking precompiled glog binaries (linked against libstdc++) leads
+# to working binaries that do not output log messages. It seems that
+# in order to use glog with LLVM & libc++, one needs to make glog a
+# part of the local project build.
+add_subdirectory(glog)
 
 # generate a configuration file (autoheader-style) to configure
 # certain symbols that Nix depends on.

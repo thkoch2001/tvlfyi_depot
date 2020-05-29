@@ -19,7 +19,8 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   # Abseil's sources need to be symlinked into Nix' sources.
   postUnpack = ''
-    ln -fs ${pkgs.abseil_cpp.src} nix/abseil_cpp
+    ln -fs ${pkgs.abseil_cpp.drvAttrs.src} nix/abseil_cpp
+    ln -fs ${pkgs.glog.drvAttrs.src} nix/glog
   '';
 
   nativeBuildInputs = with pkgs; [
@@ -34,8 +35,6 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
  # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = with pkgs; [
-    # TODO(tazjin): Figure out why meson can't make the Abseil headers visible
-    abseil_cpp
     aws-s3-cpp
     boost
     brotli
@@ -43,7 +42,6 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     curl
     editline
     flex
-    glog
     largeBoehm
     libseccomp
     libsodium
