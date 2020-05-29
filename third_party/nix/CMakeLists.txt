@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.16)
 project(nix CXX)
 set(CMAKE_CXX_STANDARD 17)
 
+# Export compile_commands.json which can be used by tools such as
+# clangd and clang-tidy.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # The following lines import CMake-native dependencies which may
 # contain useful definitions. Other dependencies are not treated
 # specially by CMake and are only linked into the resulting binary.
