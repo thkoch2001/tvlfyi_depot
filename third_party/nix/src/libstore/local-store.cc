@@ -320,16 +320,6 @@ void LocalStore::openDB(State& state, bool create) {
     throw Error(format("cannot open Nix database '%1%'") % dbPath);
   }
 
-#ifdef __CYGWIN__
-  /* The cygwin version of sqlite3 has a patch which calls
-     SetDllDirectory("/usr/bin") on init. It was intended to fix extension
-     loading, which we don't use, and the effect of SetDllDirectory is
-     inherited by child processes, and causes libraries to be loaded from
-     /usr/bin instead of $PATH. This breaks quite a few things (e.g.
-     checkPhase on openssh), so we set it back to default behaviour. */
-  SetDllDirectoryW(L"");
-#endif
-
   if (sqlite3_busy_timeout(db, 60 * 60 * 1000) != SQLITE_OK) {
     throwSQLiteError(db, "setting timeout");
   }
@@ -381,7 +371,6 @@ void LocalStore::openDB(State& state, bool create) {
 /* To improve purity, users may want to make the Nix store a read-only
    bind mount.  So make the Nix store writable for this process. */
 void LocalStore::makeStoreWritable() {
-#if __linux__
   if (getuid() != 0) {
     return;
   }
@@ -401,7 +390,6 @@ void LocalStore::makeStoreWritable() {
       throw SysError(format("remounting %1% writable") % realStoreDir);
     }
   }
-#endif
 }
 
 const time_t mtimeStore = 1; /* 1 second into the epoch */

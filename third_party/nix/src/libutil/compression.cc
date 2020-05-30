@@ -214,7 +214,6 @@ struct XzCompressionSink : CompressionSink {
     bool done = false;
 
     if (parallel) {
-#ifdef HAVE_LZMA_MT
       lzma_mt mt_options = {};
       mt_options.flags = 0;
       mt_options.timeout = 300;  // Using the same setting as the xz cmd line
@@ -230,10 +229,6 @@ struct XzCompressionSink : CompressionSink {
       // number of threads.
       ret = lzma_stream_encoder_mt(&strm, &mt_options);
       done = true;
-#else
-      LOG(ERROR) << "parallel XZ compression requested but not supported, "
-                 << "falling back to single-threaded compression";
-#endif
     }
 
     if (!done) {
