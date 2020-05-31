@@ -6,6 +6,7 @@ config: let
     config.allowUnfree = true;
   };
 
+  unstable = import depot.third_party.nixpkgsSrc {};
   lieer = (depot.third_party.lieer {});
 
   # google-c-style is installed only on nugget because other
@@ -128,6 +129,7 @@ in depot.lib.fix(self: {
       jq
       keybase-gui
       kubectl
+      linuxPackages.perf
       meson
       miller
       msmtp
@@ -137,7 +139,6 @@ in depot.lib.fix(self: {
       openssl
       pass
       pavucontrol
-      linuxPackages.perf
       pinentry
       pinentry-emacs
       pwgen
@@ -155,6 +156,11 @@ in depot.lib.fix(self: {
       xclip
       yubico-piv-tool
       yubikey-personalization
+    ]) ++
+
+    # programs from unstable nixpkgs
+    (with unstable; [
+      zoxide
     ]);
 
     fileSystems = {
