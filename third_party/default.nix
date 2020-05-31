@@ -30,10 +30,12 @@ let
     inherit (nixpkgs)
       age
       autoconf
+      autoreconfHook
       bashInteractive
       bat
       buildGoModule
       buildGoPackage
+      buildPackages
       bzip2
       c-ares
       cacert
@@ -42,7 +44,6 @@ let
       cargo
       cgit
       clang-tools
-      clangStdenv
       clang_10
       cmake
       coreutils
@@ -59,6 +60,7 @@ let
       freetype
       gettext
       glibc
+      gmock
       gnutar
       go
       google-cloud-sdk
@@ -92,7 +94,6 @@ let
       parallel
       pkgconfig
       pounce
-      protobuf
       python3
       python3Packages
       remarshal
@@ -105,7 +106,6 @@ let
       rustc
       sbcl
       sqlite
-      stdenv
       stern
       symlinkJoin
       systemd
@@ -153,8 +153,8 @@ let
       utillinuxMinimal;
   };
 
-in exposed // {
-  callPackage = nixpkgs.lib.callPackageWith exposed;
+in exposed.lib.fix(self: exposed // {
+  callPackage = nixpkgs.lib.callPackageWith self;
 
   # Provide the source code of nixpkgs, but do not provide an imported
   # version of it.
@@ -169,7 +169,9 @@ in exposed // {
 
   # Use LLVM 10
   llvmPackages = nixpkgs.llvmPackages_10;
+  clangStdenv = nixpkgs.llvmPackages_10.stdenv;
+  stdenv = nixpkgs.llvmPackages_10.stdenv;
 
   # Make NixOS available
   nixos = import "${stableNixpkgsSrc}/nixos";
-}
+})
