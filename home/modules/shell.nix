@@ -7,7 +7,7 @@ let
     nrs = nor;
     nrb = "sudo nixos-rebuild boot";
     ncg = "nix-collect-garbage";
-    vihome = "vim ~/code/system/home/home.nix && home-manager switch";
+    vihome = "vim ~/.config/nixpkgs/home.nix && home-manager switch";
     virc = "vim ~/code/system/home/modules/shell.nix && home-manager switch && source ~/.zshrc";
     visystem = "sudo vim /etc/nixos/configuration.nix && sudo nixos-rebuild switch";
 
