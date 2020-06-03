@@ -9,6 +9,7 @@
     ../modules/emacs.nix
     ../modules/vim.nix
     ../modules/tarsnap.nix
+    ../modules/twitter.nix
     ../modules/lib/cloneRepo.nix
   ];
 
