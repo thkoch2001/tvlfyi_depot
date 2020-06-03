@@ -112,6 +112,12 @@
       sshKey = "/home/grfn/.ssh/id_rsa";
       system = "x86_64-darwin";
       maxJobs = 4;
+    } {
+      hostName = "172.16.0.4";
+      sshUser = "griffin";
+      sshKey = "/home/grfn/.ssh/id_rsa";
+      system = "x86_64-darwin";
+      maxJobs = 8; # 16 cpus
     }];
 
     distributedBuilds = true;
