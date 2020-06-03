@@ -3,7 +3,7 @@ digraph tvl {
   overlap = false;
   splines = polyline;
 
-  TVL [style="bold"];
+  TVL [style="bold" href="http://tvl.fyi"];
   tazjin -> TVL [style="bold"];
 
   // people
