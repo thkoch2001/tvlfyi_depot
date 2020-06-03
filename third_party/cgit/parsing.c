@@ -72,7 +72,7 @@ static void parse_user(const char *t, char **name, char **email, unsigned long *
 	struct ident_split ident;
 	unsigned email_len;
 
-	if (!split_ident_line(&ident, t, strchrnul(t, '\n') - t)) {
+	if (!split_ident_line(&ident, t, (uintptr_t)strchrnul(t, '\n') - (uintptr_t)t)) {
 		*name = substr(ident.name_begin, ident.name_end);
 
 		email_len = ident.mail_end - ident.mail_begin;

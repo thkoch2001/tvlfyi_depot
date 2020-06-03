@@ -385,7 +385,7 @@ int cgit_close_filter(struct cgit_filter *filter)
 
 void cgit_fprintf_filter(struct cgit_filter *filter, FILE *f, const char *prefix)
 {
-	filter->fprintf(filter, f, prefix);
+	(filter->fprintf)(filter, f, prefix);
 }
 
 
