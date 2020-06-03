@@ -88,4 +88,7 @@
    ("n" . "Next...")
    ("np" "Next Sprint" tags-todo "next_sprint|sprint_planning"))
 
+ org-agenda-dim-blocked-tasks nil
+ org-enforce-todo-dependencies nil
+
  org-babel-clojure-backend 'cider)
