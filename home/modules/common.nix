@@ -33,6 +33,7 @@
     zip unzip
     tree
     ncat
+    bc
 
     # Security
     gnupg
