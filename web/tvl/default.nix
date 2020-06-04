@@ -14,10 +14,10 @@ let
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="description" content="The Virus Lounge">
+      <meta name="description" content="tazjin's Virus Lounge">
       <link rel="stylesheet" type="text/css" href="/static/tazjin.css" media="all">
       <link rel="icon" type="image/webp" href="/static/favicon.webp">
-      <title>The Virus Lounge</title>
+      <title>tazjin's Virus Lounge</title>
       <style>
         svg {
           max-width: inherit;
@@ -27,16 +27,16 @@ let
     </head>
     <body class="light">
       <header>
-        <h1><a class="blog-title" href="/">The Virus Lounge</a> </h1>
+        <h1><a class="blog-title" href="/">tazjin's Virus Lounge</a> </h1>
         <hr>
       </header>
 
       <main>
-        <img alt="The Virus Lounge" src="/static/virus_lounge.webp">
+        <img alt="tazjin's Virus Lounge" src="/static/virus_lounge.webp">
       </main>
 
       <p>
-        Welcome to <b>The Virus Lounge</b>. We're a random group of
+        Welcome to <b>tazjin's Virus Lounge</b>. We're a random group of
         people who feel undersocialised in these trying times, and
         we've decided that there isn't enough spontaneous socialising
         on the internet.
