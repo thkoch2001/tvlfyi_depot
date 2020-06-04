@@ -28,52 +28,6 @@ let
     "dockercleanimages" = "docker images -a --no-trunc | grep none | awk '{print \$$3}' | xargs -L 1 -r docker rmi";
     "dockercleancontainers" = "docker ps -a --no-trunc| grep 'Exit' | awk '{print \$$1}' | xargs -L 1 -r docker rm";
 
-    # Git
-    "gwip" = "git add . && git commit -am wip";
-    "gpr" = "g pull-request";
-    "gcl" = "git clone";
-    "grs" = "gr --soft";
-    "grhh" = "grh HEAD";
-    "grh" = "gr --hard";
-    "gr" = "git reset";
-    "gcb" = "gc -b";
-    "gco" = "gc";
-    "gcd" = "gc development";
-    "gcm" = "gc master";
-    "gc" = "git checkout";
-    "gbg" = "git branch | grep";
-    "gba" = "git branch -a";
-    "gb" = "git branch";
-    "gcv" = "git commit --verbose";
-    "gci" = "git commit";
-    "gm" = "git merge";
-    "gdc" = "gd --cached";
-    "gd" = "git diff";
-    "gsl" = "git stash list";
-    "gss" = "git show stash";
-    "gsad" = "git stash drop";
-    "gsa" = "git stash";
-    "gst" = "gs";
-    "gs" = "git status";
-    "gg" = "gl --decorate --oneline --graph --date-order --all";
-    "gl" = "git log";
-    "gf" = "git fetch";
-    "gur" = "gu --rebase";
-    "gu" = "git pull";
-    "gpf" = "gp -f";
-    "gpa" = "gp --all";
-    "gpu" = "git push -u origin \"$(git symbolic-ref --short HEAD)\"";
-    "gp" = "git push";
-    "ganw" = "git diff -w --no-color | git apply --cached --ignore-whitespace";
-    "ga" = "git add";
-    "gnp" = "git --no-pager";
-    "g" = "git";
-    "git" = "hub";
-    "grim" = "git fetch && git rebase -i origin/master";
-    "grc" = "git rebase --continue";
-    "gcan" = "git commit --amend --no-edit";
-    "grl" = "git reflog";
-
     # Directories
     stck = "dirs -v";
     b= "cd ~1";
