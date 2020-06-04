@@ -8,21 +8,17 @@ digraph tvl {
 
   // people
   subgraph {
-    Q [href="https://magicalcodewit.ch/"];
     ac [href="https://the-alex.github.io/about/"];
     andi [label="andi-" href="https://andreas.rammhold.de/"];
     anon1 [color="grey" fontcolor="grey"];
     aranea;
     artemist [href="https://artem.ist/"];
     aurora [href="https://nonegenderleftfox.aventine.se/"];
-    ave [href="https://ave.zone/"];
     benjojo [href="https://benjojo.co.uk/"];
     borb [href="https://twitter.com/FR31H31T"];
     cynthia [href="https://cynthia.re/"];
-    drathier;
     edef [href="https://edef.eu/files/edef.hs"];
     ericvolp [href="https://ericv.me"];
-    erin [href="https://e2.pm/"];
     espes;
     eta [href="https://theta.eu.org/"];
     firefly [href="http://firefly.nu/"];
@@ -30,14 +26,12 @@ digraph tvl {
     ghuntley [href="https://ghuntley.com/"];
     glittershark [href="http://gws.fyi"];
     grahamc [href="https://grahamc.com/"];
-    hexchen [href="https://hxchn.de"];
     hyperfekt [href="https://hyperfekt.net"];
     isomer [href="https://www.lorier.net/"];
     jooiiee [href="https://jooiiee.se/"];
     jusrin [href="https://jusrin.dev/"];
     kanepyork [href="https://social.wxcafe.net/@riking"];
     leah2 [href="https://leahneukirchen.org/"];
-    linuxgemini [href="https://linuxgemini.space"];
     lukegb [href="https://lukegb.com/"];
     marcusr [href="http://marcus.nordaaker.com/"];
     maskerad [href="https://femalelegends.com/"];
@@ -53,7 +47,6 @@ digraph tvl {
     tazjin [href="https://tazj.in/"];
     tehhobbit;
     wpcarro [href="https://wpcarro.dev/"];
-    yuuko;
   }
 
   // companies (blue)
@@ -119,29 +112,22 @@ digraph tvl {
     wpcarro -> google;
 
     // random primary
-    Q -> cynthia;
     ac -> wpcarro;
     anon1 -> google;
     aranea -> multi;
     artemist -> cynthia;
     aurora -> eve;
-    ave -> hexchen;
     borb -> unspecific;
     cynthia -> benjojo;
-    drathier -> maskerad;
-    erin -> linuxgemini;
     eta -> anon1;
     ericvolp -> lukegb;
     glittershark -> wpcarro;
-    hexchen -> cynthia;
     jooiiee -> unspecific;
     kanepyork -> lukegb;
-    linuxgemini -> hexchen;
     marcusr -> unspecific;
     maskerad -> unspecific;
     poigon -> eve;
     q3k -> unspecific;
-    yuuko -> ncl;
     hyperfekt -> espes;
   }
 
@@ -162,11 +148,9 @@ digraph tvl {
 
     // µccc
     leah2 -> muccc;
-    hexchen -> muccc;
     q3k -> muccc;
 
     // hswaw
-    implr -> hswaw;
     q3k -> hswaw;
 
     // random
@@ -189,11 +173,6 @@ digraph tvl {
     aranea -> profpatsch;
     artemist -> nix;
     hyperfekt -> edef;
-    ave -> cynthia;
-    linuxgemini -> ave;
-    linuxgemini -> cynthia;
-    erin -> ave;
-    erin -> cynthia;
   }
 
   // baby
@@ -201,7 +180,5 @@ digraph tvl {
     edge [weight=0 style="dotted" color="pink" arrowhead="none"];
     cynthia -> baby;
     eta -> baby;
-    linuxgemini -> baby;
-    Q -> baby;
   }
 }
