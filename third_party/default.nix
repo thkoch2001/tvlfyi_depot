@@ -65,7 +65,6 @@ let
       go
       google-cloud-sdk
       graphviz
-      grpc
       gzip
       haskell
       iana-etc
@@ -163,7 +162,7 @@ in exposed.lib.fix(self: exposed // {
 
   # Packages to be overridden
   originals = {
-    inherit (nixpkgs) notmuch;
+    inherit (nixpkgs) grpc notmuch;
     inherit (stableNixpkgs) git;
     ffmpeg = nixpkgs.ffmpeg-full;
   };
