@@ -9,6 +9,8 @@ in lib.fix(self: {
   imports = [
     ../modules/depot.nix
     ../modules/hound.nix
+    ../modules/monorepo-gerrit.nix
+    "${pkgs.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
   ];
   depot = depot;
 
@@ -108,7 +110,6 @@ in lib.fix(self: {
     (with depot; [
       fun.idual.script
       fun.idual.setAlarm
-      third_party.honk
       third_party.pounce
     ]) ++
 
@@ -230,6 +231,11 @@ in lib.fix(self: {
       group = "nginx";
       webroot = "/var/lib/acme/acme-challenge";
       postRun = "systemctl reload nginx";
+      extraDomains = {
+        "cl.tvl.fyi" = null;
+        "code.tvl.fyi" = null;
+        "cs.tvl.fyi" = null;
+      };
     };
   };
 
@@ -392,6 +398,18 @@ in lib.fix(self: {
       extraConfig = ''
         location / {
           proxy_pass http://localhost:6080;
+        }
+      '';
+    };
+
+    virtualHosts.gerrit = {
+      serverName = "cl.tvl.fyi";
+      useACMEHost = "tvl.fyi";
+      forceSSL = true;
+
+      extraConfig = ''
+        location / {
+          proxy_pass http://localhost:4778;
         }
       '';
     };

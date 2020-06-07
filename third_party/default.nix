@@ -58,6 +58,7 @@ let
       fira-mono
       fontconfig
       freetype
+      gerrit
       gettext
       glibc
       gmock
