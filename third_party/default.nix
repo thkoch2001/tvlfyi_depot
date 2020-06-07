@@ -173,5 +173,5 @@ in exposed.lib.fix(self: exposed // {
   stdenv = nixpkgs.llvmPackages_10.stdenv;
 
   # Make NixOS available
-  nixos = import "${stableNixpkgsSrc}/nixos";
+  nixos = import "${nixpkgsSrc}/nixos";
 })
