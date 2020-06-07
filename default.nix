@@ -34,9 +34,10 @@ let
 
   localPkgs = readTree: {
     fun           = readTree ./fun;
+    lisp          = readTree ./lisp;
+    net           = readTree ./net;
     nix           = readTree ./nix;
     ops           = readTree ./ops;
-    lisp          = readTree ./lisp;
     presentations = readTree ./presentations;
     third_party   = readTree ./third_party;
     tools         = readTree ./tools;
