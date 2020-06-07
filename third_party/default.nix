@@ -25,7 +25,7 @@ let
   stableNixpkgs = import stableNixpkgsSrc {};
 
   exposed = {
-    # Inherit the packages from nixos-usntable that should be available inside
+    # Inherit the packages from nixos-unstable that should be available inside
     # of the repo. They become available under `pkgs.third_party.<name>`
     inherit (nixpkgs)
       age
@@ -114,6 +114,7 @@ let
       texlive
       thttpd
       tree
+      which
       writeShellScript
       writeShellScriptBin
       writeText
