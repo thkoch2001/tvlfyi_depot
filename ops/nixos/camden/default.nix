@@ -357,6 +357,8 @@ in lib.fix(self: {
 
         rewrite ^/meet/?$ https://meet.google.com/mng-biyw-xbb last;
 
+        rewrite ^/monorepo-doc/?$ https://docs.google.com/document/d/1nnyByXcH0F6GOmEezNOUa2RFelpeRpDToBLYD_CtjWE/edit?usp=sharing last;
+
         location ~* \.(webp|woff2)$ {
           add_header Cache-Control "public, max-age=31536000";
         }
