@@ -25,16 +25,10 @@ in
       amerge = "alembic merge heads";
     };
 
-    initExtra = ''
-      # Alembic {{{
-      function aup() {
-        alembic upgrade ''${1:-head}
-      }
-
-      function adown() {
-        alembic downgrade ''${1:--1}
-      }
-    '';
+    functions = {
+      aup = "alembic upgrade \${1:-head}";
+      adown = "alembic downgrade \${1:--1}";
+    };
   };
 
   programs.git = {
