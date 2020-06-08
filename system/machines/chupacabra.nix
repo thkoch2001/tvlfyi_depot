@@ -11,7 +11,6 @@
   powerManagement = {
     enable = true;
     powertop.enable = true;
-    cpuFreqGovernor = "performance";
   };
 
   laptop.onLowBattery = {
