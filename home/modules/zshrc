@@ -187,43 +187,6 @@ fi
 function vconflicts() {
 $EDITOR $(git status --porcelain | awk '/^UU/ { print $2 }')
 }
-
-function fetchall() {
-for repo in ~/code/nomi/gems/* ~/code/nomi/services/svc-users ~/code/nomi/services/svc-entities ~/code/go/src/github.com/getnomi/svc-gateway; do
-  echo -e "\x1b[34;1m=======> \x1b[37;1m$repo\x1b[0m"
-  git -C $repo fetch
-done
-}
-# }}}
-
-# Wifi {{{
-# }}}
-
-# adb {{{
-# }}}
-
-# Golang {{{
-# }}}
-
-# Tail logs {{{
-# }}}
-
-# Running stuff {{{
-# }}}
-
-# Directories {{{
-
-
-
-# }}}
-
-# SSH shortcuts {{{
-# }}}
-
-# Editing config files {{{
-# }}}
-
-# XRandR {{{
 # }}}
 
 # fzf {{{
@@ -318,25 +281,6 @@ unset GREP_OPTIONS
 export GREP_OPTIONS=
 # }}}
 
-# Keyboard backlight {{{
-
-KEYBOARD_BRIGHTNESS_FILE='/sys/devices/platform/applesmc.768/leds/smc::kbd_backlight/brightness'
-
-setkbd() {
-  echo $1 | sudo tee $KEYBOARD_BRIGHTNESS_FILE
-}
-
-kbdup() {
-  curr=$(< $KEYBOARD_BRIGHTNESS_FILE)
-  echo $(( $curr + 15 )) | sudo tee $KEYBOARD_BRIGHTNESS_FILE
-}
-
-kbdup() {
-  curr=$(< $KEYBOARD_BRIGHTNESS_FILE)
-  echo $(( $curr - 15 )) | sudo tee $KEYBOARD_BRIGHTNESS_FILE
-}
-
-# }}}
 
 # Run docker containers {{{
     # -d \
@@ -357,16 +301,6 @@ kbdup() {
     # --name firefox \
     # --rm -it \
     # glittershark/firefox
-# }}}
-
-# Alembic {{{
-function aup() {
-  alembic upgrade ${1:-head}
-}
-
-function adown() {
-  alembic downgrade ${1:--1}
-}
 # }}}
 
 [ -f ./.localrc ] && source ./.localrc
