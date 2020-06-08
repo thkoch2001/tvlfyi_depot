@@ -29,6 +29,7 @@ with lib;
     entr
     gnumake
     inetutils
+    loc
 
     clj2nix
 
