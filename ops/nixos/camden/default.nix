@@ -10,6 +10,7 @@ in lib.fix(self: {
     ../modules/depot.nix
     ../modules/hound.nix
     ../modules/monorepo-gerrit.nix
+    ../modules/tvl-slapd/default.nix
     "${pkgs.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
   ];
   depot = depot;

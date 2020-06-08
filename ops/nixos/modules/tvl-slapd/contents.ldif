@@ -1,0 +1,29 @@
+dn: dc=tvl,dc=fyi
+dc: tvl
+o: TVL LDAP server
+description: Root entry for tvl.fyi
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+
+dn: ou=users,dc=tvl,dc=fyi
+ou: users
+description: All users in TVL
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=groups,dc=tvl,dc=fyi
+ou: groups
+description: All groups in TVL
+objectClass: top
+objectClass: organizationalUnit
+
+# Users in tvl.fyi
+dn: cn=tazjin,ou=users,dc=tvl,dc=fyi
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: tazjin
+sn: tazjin
+title: tazjin
+mail: mail@tazj.in
+userPassword: {SSHA}67H341jRfAFBDz/R9+T3fHQiPfjwTbpQ
