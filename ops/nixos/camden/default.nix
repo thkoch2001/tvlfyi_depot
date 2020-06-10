@@ -190,7 +190,7 @@ in lib.fix(self: {
   # anymore, all solution attempts have failed, so here's a
   # brute-force fix.
   systemd.services.fix-nginx = {
-    script = "${nixpkgs.coreutils}/bin/chown -R nginx: /var/spool/nginx";
+    script = "${nixpkgs.coreutils}/bin/chown -R nginx: /var/spool/nginx /var/cache/nginx";
 
     serviceConfig = {
       User = "root";
