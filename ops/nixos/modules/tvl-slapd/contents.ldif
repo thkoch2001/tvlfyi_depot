@@ -19,14 +19,14 @@ objectClass: top
 objectClass: organizationalUnit
 
 # Users in tvl.fyi
-dn: cn=tazjin,ou=users,dc=tvl,dc=fyi
+dn: cn=isomer,ou=users,dc=tvl,dc=fyi
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
-cn: tazjin
-sn: tazjin
-title: tazjin
-mail: mail@tazj.in
-userPassword: {SSHA}67H341jRfAFBDz/R9+T3fHQiPfjwTbpQ
+cn: isomer
+sn: isomer
+title: isomer
+mail: isomer@tvl.in
+userPassword: {SSHA}OhWQkPJgH1rRJqYIaMUbbKC4iLEzvCev
 
 dn: cn=riking,ou=users,dc=tvl,dc=fyi
 objectClass: organizationalPerson
@@ -36,3 +36,12 @@ sn: riking
 title: riking
 mail: rikingcoding@gmail.com
 userPassword: {SSHA}6rPxMOofHMGNTEYdyBOYbza7NT/RmiGz
+
+dn: cn=tazjin,ou=users,dc=tvl,dc=fyi
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: tazjin
+sn: tazjin
+title: tazjin
+mail: mail@tazj.in
+userPassword: {SSHA}67H341jRfAFBDz/R9+T3fHQiPfjwTbpQ
