@@ -37,6 +37,15 @@ title: riking
 mail: rikingcoding@gmail.com
 userPassword: {SSHA}6rPxMOofHMGNTEYdyBOYbza7NT/RmiGz
 
+dn: cn=lukegb,ou=users,dc=tvl,dc=fyi
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: lukegb
+sn: lukegb
+title: lukegb
+mail: lukegb@tvl.fyi
+userPassword: {SSHA}7a85VNhpFElFw+N5xcjgGmt4HnBsaGp4
+
 dn: cn=tazjin,ou=users,dc=tvl,dc=fyi
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
