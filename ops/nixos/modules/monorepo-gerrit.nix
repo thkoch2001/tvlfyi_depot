@@ -25,6 +25,7 @@ in {
         accountPattern = "(&(objectClass=organizationalPerson)(cn=\${username}))";
         accountFullName = "cn";
         accountEmailAddress = "mail";
+        accountSshUserName = "cn";
         groupBase = "ou=groups,dc=tvl,dc=fyi";
 
         # TODO(tazjin): Assuming this is what we'll be doing ...

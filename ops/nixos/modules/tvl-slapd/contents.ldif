@@ -31,8 +31,8 @@ userPassword: {SSHA}OhWQkPJgH1rRJqYIaMUbbKC4iLEzvCev
 dn: cn=riking,ou=users,dc=tvl,dc=fyi
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
-cn: Kane York
-sn: riking
+cn: riking
+sn: Kane York
 title: riking
 mail: rikingcoding@gmail.com
 userPassword: {SSHA}6rPxMOofHMGNTEYdyBOYbza7NT/RmiGz
