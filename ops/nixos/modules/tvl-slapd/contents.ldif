@@ -27,3 +27,12 @@ sn: tazjin
 title: tazjin
 mail: mail@tazj.in
 userPassword: {SSHA}67H341jRfAFBDz/R9+T3fHQiPfjwTbpQ
+
+dn: cn=riking,ou=users,dc=tvl,dc=fyi
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Kane York
+sn: riking
+title: riking
+mail: rikingcoding@gmail.com
+userPassword: {SSHA}6rPxMOofHMGNTEYdyBOYbza7NT/RmiGz
