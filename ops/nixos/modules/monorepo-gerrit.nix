@@ -1,7 +1,8 @@
 # Gerrit configuration for the TVL monorepo
 { pkgs, config, lib, ... }:
 
-{
+let cfg = config.services.gerrit;
+in {
   services.gerrit = {
     enable = true;
     listenAddress = "[::]:4778"; # 4778 - grrt
@@ -10,7 +11,11 @@
       core.packedGitLimit = "100m";
       log.jsonLogging = true;
       log.textLogging = false;
-      # TODO: gitweb config
+
+      # Configures gerrit for being reverse-proxied by nginx as per
+      # https://gerrit-review.googlesource.com/Documentation/config-reverseproxy.html
+      gerrit.canonicalWebUrl = "https://cl.tvl.fyi";
+      httpd.listenUrl = "proxy-https://${cfg.listenAddress}";
 
       # Configures integration with the locally running OpenLDAP
       auth.type = "LDAP";
@@ -21,7 +26,6 @@
         accountFullName = "cn";
         accountEmailAddress = "mail";
         groupBase = "ou=groups,dc=tvl,dc=fyi";
-        gerrit.canonicalWebUrl = "https://cl.tvl.fyi";
 
         # TODO(tazjin): Assuming this is what we'll be doing ...
         groupMemberPattern = "(&(objectClass=group)(member=\${dn}))";
