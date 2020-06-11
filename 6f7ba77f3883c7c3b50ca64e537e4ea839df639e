@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6739cd6_de12b4cd",
+        "filename": "ops/nixos/modules/monorepo-gerrit.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-11T22:19:45Z",
+      "side": 1,
+      "message": "I think this might need to be `*:29418` (the docs say that this, including the asterisk, is the default value).",
+      "range": {
+        "startLine": 19,
+        "startChar": 29,
+        "endLine": 19,
+        "endChar": 37
+      },
+      "revId": "6f7ba77f3883c7c3b50ca64e537e4ea839df639e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
