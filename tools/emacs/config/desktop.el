@@ -216,23 +216,23 @@
   (shell-command "xrandr --output HDMI1 --right-of eDP1 --auto --primary")
   (exwm-randr-refresh))
 
-;; Layouts for nugget (desktop)
+;; Layouts for frog (desktop)
 
-(defun randr-nugget-layout-right-only ()
-  "Use only the right screen on nugget."
+(defun randr-frog-layout-right-only ()
+  "Use only the right screen on frog."
   (interactive)
-  (set-randr-config `(("DP-2" ,(number-sequence 0 9))))
-  (shell-command "xrandr --output DP-0 --off")
-  (shell-command "xrandr --output DP-2 --auto --primary"))
+  (set-randr-config `(("DP-1" ,(number-sequence 0 9))))
+  (shell-command "xrandr --output DP-2 --off")
+  (shell-command "xrandr --output DP-1 --auto --primary"))
 
-(defun randr-nugget-layout-both ()
-  "Use the left and right screen on nugget."
+(defun randr-frog-layout-both ()
+  "Use the left and right screen on frog."
   (interactive)
-  (set-randr-config `(("DP-0" 1 2 3 4 5)
-                      ("DP-2" 6 7 8 9 0)))
+  (set-randr-config `(("DP-2" 1 2 3 4 5)
+                      ("DP-1" 6 7 8 9 0)))
 
-  (shell-command "xrandr --output DP-0 --auto --primary --left-of DP-2")
-  (shell-command "xrandr --output DP-2 --auto --right-of DP-0"))
+  (shell-command "xrandr --output DP-2 --auto --primary --left-of DP-1")
+  (shell-command "xrandr --output DP-1 --auto --right-of DP-2"))
 
 (pcase (s-trim (shell-command-to-string "hostname"))
   ("vauxhall"
@@ -240,9 +240,9 @@
    (exwm-input-set-key (kbd "s-m a") #'randr-vauxhall-layout-all)
    (exwm-input-set-key (kbd "s-m w") #'randr-vauxhall-layout-wide-only))
 
-  ("nugget"
-   (exwm-input-set-key (kbd "s-m b") #'randr-nugget-layout-both)
-   (exwm-input-set-key (kbd "s-m r") #'randr-nugget-layout-right-only)))
+  ("frog"
+   (exwm-input-set-key (kbd "s-m b") #'randr-frog-layout-both)
+   (exwm-input-set-key (kbd "s-m r") #'randr-frog-layout-right-only)))
 
 (exwm-randr-enable)
 
