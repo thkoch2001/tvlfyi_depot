@@ -17,6 +17,12 @@ in {
       gerrit.canonicalWebUrl = "https://cl.tvl.fyi";
       httpd.listenUrl = "proxy-https://${cfg.listenAddress}";
 
+      # Configure for cgit.
+      gitweb = {
+        type = "cgit";
+        url = "https://git.tazj.in/";
+      };
+
       # Configures integration with the locally running OpenLDAP
       auth.type = "LDAP";
       ldap = {
