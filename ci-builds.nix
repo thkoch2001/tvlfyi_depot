@@ -20,6 +20,7 @@ with (import ./default.nix {}); [
   ops.kontemplate
   ops.mq_cli
   ops.nixos.camdenSystem
+  ops.nixos.frogSystem
   third_party.cgit
   third_party.git
   third_party.lisp # will build all third-party libraries
