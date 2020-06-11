@@ -46,6 +46,15 @@ title: lukegb
 mail: lukegb@tvl.fyi
 userPassword: {SSHA}7a85VNhpFElFw+N5xcjgGmt4HnBsaGp4
 
+dn: cn=q3k,ou=users,dc=tvl,dc=fyi
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: q3k
+sn: q3k
+title: q3k
+mail: q3k@q3k.org
+userPassword: {SSHA}BEccJdtnhVLDzOn+pxNfayNi3QFcEABE
+
 dn: cn=tazjin,ou=users,dc=tvl,dc=fyi
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
