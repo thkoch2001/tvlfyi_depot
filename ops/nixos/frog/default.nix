@@ -26,7 +26,7 @@ in depot.lib.fix(self: {
     };
 
     initrd = {
-      luks.devices.frog-crypt.device = "/dev/disk-by-label/frog-crypt";
+      luks.devices.frog-crypt.device = "/dev/disk/by-label/frog-crypt";
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
       kernelModules = [ "dm-snapshot" ];
     };
