@@ -253,7 +253,7 @@ in lib.fix(self: {
     enable = true;
     title = "tazjin's depot";
     repos.depot = {
-      url = "file:///var/git/depot";
+      url = "file:///var/lib/gerrit/git/depot.git";
       vcs = "git";
       url-pattern = {
         base-url = "https://git.tazj.in/tree/{path}{anchor}";
