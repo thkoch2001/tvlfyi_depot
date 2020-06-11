@@ -33,4 +33,17 @@ in {
       };
     };
   };
+
+  systemd.services.gerrit = {
+    serviceConfig = {
+      # There seems to be no easy way to get `DynamicUser` to play
+      # well with other services (e.g. by using SupplementaryGroups,
+      # which seem to have no effect) so we force the DynamicUser
+      # setting for the Gerrit service to be disabled and reuse the
+      # existing 'git' user.
+      DynamicUser = lib.mkForce false;
+      User = "git";
+      Group = "git";
+    };
+  };
 }
