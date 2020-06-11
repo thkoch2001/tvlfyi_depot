@@ -167,6 +167,26 @@ in depot.lib.fix(self: {
     RuntimeDirectorySize=16G
   '';
 
+  # Configure email setup
+  systemd.user.services.lieer-tazjin = {
+    description = "Synchronise mail@tazj.in via lieer";
+    script = "${lieer}/bin/gmi sync";
+
+    serviceConfig = {
+      WorkingDirectory = "%h/mail/account.tazjin";
+      Type = "oneshot";
+    };
+  };
+
+  systemd.user.timers.lieer-tazjin = {
+    wantedBy = [ "timers.target" ];
+
+    timerConfig = {
+      OnActiveSec = "1";
+      OnUnitActiveSec = "180";
+    };
+  };
+
   environment.systemPackages =
     # programs from the depot
     (with depot; [
