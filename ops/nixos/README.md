@@ -15,5 +15,6 @@ hostname.
 
 ## Configured hosts:
 
+* `frog` - weapon of mass computation at home
 * `nugget` - desktop computer at home
 * ~~`urdhva` - T470s~~ (currently with edef)

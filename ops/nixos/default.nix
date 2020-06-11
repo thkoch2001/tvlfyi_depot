@@ -25,6 +25,10 @@ let
       echo "Rebuilding NixOS for //ops/nixos/camden"
       system=$(nix-build -E '(import <depot> {}).ops.nixos.camdenSystem' --no-out-link)
       ;;
+    frog)
+      echo "Rebuilding NixOS for //ops/nixos/frog"
+      system=$(nix-build -E '(import <depot> {}).ops.nixos.frogSystem' --no-out-link)
+      ;;
     *)
       echo "$HOSTNAME is not a known NixOS host!" >&2
       exit 1
@@ -39,4 +43,5 @@ in {
 
   nuggetSystem = systemFor [ depot.ops.nixos.nugget ];
   camdenSystem = systemFor [ depot.ops.nixos.camden ];
+  frogSystem = systemFor [ depot.ops.nixos.frog ];
 }
