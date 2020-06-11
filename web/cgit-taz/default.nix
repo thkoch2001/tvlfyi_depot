@@ -1,8 +1,5 @@
 # This derivation configures a 'cgit' instance to serve repositories
 # from a different source.
-#
-# In the first round this will just serve my GitHub repositories until
-# I'm happy with the display.
 
 { depot, ... }:
 
@@ -28,8 +25,8 @@ let
 
     # Repository configuration
     repo.url=depot
-    repo.path=/var/git/depot/
-    repo.desc=tazjin's personal monorepo
+    repo.path=/var/lib/gerrit/git/depot.git/
+    repo.desc=monorepo for tazjin's virus lounge
     repo.owner=tazjin <mail@tazj.in>
     repo.clone-url=https://git.tazj.in
   '';
