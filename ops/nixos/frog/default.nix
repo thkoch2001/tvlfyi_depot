@@ -1,12 +1,11 @@
 { depot, lib, ... }:
 
 config: let
-  nixpkgs = import depot.third_party.stableNixpkgsSrc {
+  nixpkgs = import depot.third_party.nixpkgsSrc {
     config.allowUnfree = true;
   };
 
-  unstable = import depot.third_party.nixpkgsSrc {};
-  lieer = (depot.third_party.lieer {});
+  lieer = depot.third_party.lieer {};
 
   # add google-c-style here because other machines get it from, eh,
   # elsewhere.
@@ -247,10 +246,6 @@ in depot.lib.fix(self: {
       xclip
       yubico-piv-tool
       yubikey-personalization
-    ]) ++
-
-    # programs from unstable nixpkgs
-    (with unstable; [
       zoxide
     ]);
 
