@@ -31,14 +31,21 @@ in depot.lib.fix(self: {
       kernelModules = [ "dm-snapshot" ];
     };
 
+    kernelPackages = nixpkgs.linuxPackages_latest;
     kernel.sysctl = {
       "kernel.perf_event_paranoid" = 1;
     };
   };
 
   hardware = {
+    cpu.amd.updateMicrocode = true;
+    enableRedistributableFirmware = true;
     pulseaudio.enable = true;
     u2f.enable = true;
+    opengl = {
+      enable = true;
+      driSupport = true;
+    };
   };
 
   nix = {
@@ -138,8 +145,6 @@ in depot.lib.fix(self: {
     layout = "us";
     xkbOptions = "caps:super";
     exportConfiguration = true;
-    videoDrivers = [ "amdgpu" "amdgpu-pro" ];
-
     displayManager = {
       # Give EXWM permission to control the session.
       sessionCommands = "${nixpkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
