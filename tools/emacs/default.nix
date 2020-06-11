@@ -111,7 +111,7 @@ let
     depot.third_party.emacs.exwm
     depot.third_party.emacs.rcirc
     depot.third_party.emacs.vterm
-    depot.third_party.explain-pause-mode
+    depot.third_party.emacs.explain-pause-mode
   ]))));
 in lib.fix(self: l: f: third_party.writeShellScriptBin "tazjins-emacs" ''
   export PATH="${emacsBinPath}:$PATH"
