@@ -247,6 +247,13 @@
 (use-package web-mode)
 (use-package yaml-mode)
 
+(defgroup tazjin nil
+  "Settings related to my configuration")
+
+(defcustom depot-path "/depot"
+  "Local path to the depot checkout"
+  :group 'tazjin)
+
 ;; Configuration changes in `customize` can not actually be persisted
 ;; to the customise file that Emacs is currently using (since it comes
 ;; from the Nix store).
