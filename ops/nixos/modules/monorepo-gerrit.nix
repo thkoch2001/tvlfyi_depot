@@ -16,6 +16,7 @@ in {
       # https://gerrit-review.googlesource.com/Documentation/config-reverseproxy.html
       gerrit.canonicalWebUrl = "https://cl.tvl.fyi";
       httpd.listenUrl = "proxy-https://${cfg.listenAddress}";
+      sshd.listenAddress = [ "*:29418" "[::]:29418" ];
 
       # Configure for cgit.
       gitweb = {
