@@ -256,7 +256,7 @@ in lib.fix(self: {
       url = "file:///var/lib/gerrit/git/depot.git";
       vcs = "git";
       url-pattern = {
-        base-url = "https://git.tazj.in/tree/{path}{anchor}";
+        base-url = "https://code.tvl.fyi/tree/{path}{anchor}";
         anchor = "#n{line}";
       };
     };
@@ -373,9 +373,8 @@ in lib.fix(self: {
     };
 
     virtualHosts.cgit = {
-      serverName = "git.tazj.in";
-      serverAliases = [ "git.camden.tazj.in" ];
-      useACMEHost = "tazj.in";
+      serverName = "code.tvl.fyi";
+      useACMEHost = "tvl.fyi";
       addSSL = true;
 
       extraConfig = ''
@@ -388,6 +387,16 @@ in lib.fix(self: {
         location / {
             proxy_pass http://localhost:2448/cgit.cgi/depot/;
         }
+      '';
+    };
+
+    virtualHosts.cgit-old = {
+      serverName = "git.tazj.in";
+      useACMEHost = "tazj.in";
+      addSSL = true;
+
+      extraConfig = ''
+        return 301 https://code.tvl.fyi$request_uri;
       '';
     };
 

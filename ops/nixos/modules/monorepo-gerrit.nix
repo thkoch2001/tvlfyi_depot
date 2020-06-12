@@ -20,7 +20,7 @@ in {
       # Configure for cgit.
       gitweb = {
         type = "custom";
-        url = "https://git.tazj.in";
+        url = "https://code.tvl.fyi";
         project = "/";
         revision = "/commit/?id=\${commit}";
         branch = "/log/?h=\${branch}";
