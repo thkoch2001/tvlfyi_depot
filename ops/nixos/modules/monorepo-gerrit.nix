@@ -45,6 +45,25 @@ in {
         # TODO(tazjin): Assuming this is what we'll be doing ...
         groupMemberPattern = "(&(objectClass=group)(member=\${dn}))";
       };
+
+      # Email sending (emails are relayed via the tazj.in domain's
+      # GSuite currently).
+      #
+      # Note that sendemail.smtpPass is stored in
+      # $site_path/etc/secure.config and is *not* controlled by Nix.
+      #
+      # Receiving email is not currently supported.
+      sendemail = {
+        enable = true;
+        html = false;
+        connectTimeout = "30sec";
+        from = "TVL Code Review <tvlbot@tazj.in>";
+        includeDiff = true;
+        smtpEncryption = "tls";
+        smtpServer = "smtp.gmail.com";
+        smtpServerPort = 587;
+        smtpUser = "tvlbot@tazj.in";
+      };
     };
   };
 
