@@ -22,6 +22,30 @@
       "revId": "7303e598c9c2ba2c6c71c5d753dafef43f2dcf1f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ee81fdc_c22ecdeb",
+        "filename": "ops/nixos/camden/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-12T01:07:41Z",
+      "side": 1,
+      "message": "Nope, dropping it intentionally.",
+      "parentUuid": "11b7c99c_f0f3775d",
+      "range": {
+        "startLine": 393,
+        "startChar": 29,
+        "endLine": 396,
+        "endChar": 20
+      },
+      "revId": "7303e598c9c2ba2c6c71c5d753dafef43f2dcf1f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
