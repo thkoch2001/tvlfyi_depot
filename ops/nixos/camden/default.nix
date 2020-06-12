@@ -5,6 +5,14 @@ config: let
   nixpkgs = import depot.third_party.nixpkgsSrc {
     config.allowUnfree = true;
   };
+
+  nginxRedirect = { from, to, acmeHost }: {
+    serverName = from;
+    useACMEHost = acmeHost;
+    forceSSL = true;
+
+    extraConfig = "return 301 https://${to}$request_uri;";
+  };
 in lib.fix(self: {
   imports = [
     ../modules/depot.nix
@@ -222,7 +230,6 @@ in lib.fix(self: {
 
         # Local domains (for this machine only)
         "camden.tazj.in" = null;
-        "git.camden.tazj.in" = null;
       };
       postRun = "systemctl reload nginx";
     };
@@ -392,19 +399,9 @@ in lib.fix(self: {
       '';
     };
 
-    virtualHosts.cgit-old = {
-      serverName = "git.tazj.in";
-      useACMEHost = "tazj.in";
-      forceSSL = true;
-
-      extraConfig = ''
-        return 301 https://code.tvl.fyi$request_uri;
-      '';
-    };
-
     virtualHosts.hound = {
-      serverName = "cs.tazj.in";
-      useACMEHost = "tazj.in";
+      serverName = "cs.tvl.fyi";
+      useACMEHost = "tvl.fyi";
       forceSSL = true;
 
       extraConfig = ''
@@ -426,6 +423,18 @@ in lib.fix(self: {
           proxy_set_header  Host $host;
         }
       '';
+    };
+
+    virtualHosts.cgit-old = nginxRedirect {
+      from = "git.tazj.in";
+      to = "code.tvl.fyi";
+      acmeHost = "tazj.in";
+    };
+
+    virtualHosts.cs-old = nginxRedirect {
+      from = "cs.tazj.in";
+      to = "cs.tvl.fyi";
+      acmeHost = "tazj.in";
     };
   };
 
