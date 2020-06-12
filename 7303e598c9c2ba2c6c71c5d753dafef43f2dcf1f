@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11b7c99c_f0f3775d",
+        "filename": "ops/nixos/camden/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-12T01:06:07Z",
+      "side": 1,
+      "message": "You\u0027re going to lose the git.camden.tazj.in alias; are you using this?",
+      "range": {
+        "startLine": 393,
+        "startChar": 29,
+        "endLine": 396,
+        "endChar": 20
+      },
+      "revId": "7303e598c9c2ba2c6c71c5d753dafef43f2dcf1f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
