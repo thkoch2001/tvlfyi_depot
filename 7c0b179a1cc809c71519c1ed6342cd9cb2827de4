@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac41a140_eaec6393",
+        "filename": "ops/nixos/camden/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-12T16:29:29Z",
+      "side": 1,
+      "message": "This should be `https://builds.sr.ht/~tazjin/depot` (I might have unrelated builds in that account)",
+      "range": {
+        "startLine": 365,
+        "startChar": 28,
+        "endLine": 365,
+        "endChar": 56
+      },
+      "revId": "7c0b179a1cc809c71519c1ed6342cd9cb2827de4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
