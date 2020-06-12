@@ -22,6 +22,30 @@
       "revId": "20ccc46b3d36fd377b728971b29acdabb60c20dd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a9c4f64_9201aa71",
+        "filename": "docs/CONTRIBUTING.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-12T02:26:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54da7a40_a4bab10e",
+      "range": {
+        "startLine": 119,
+        "startChar": 75,
+        "endLine": 119,
+        "endChar": 78
+      },
+      "revId": "20ccc46b3d36fd377b728971b29acdabb60c20dd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
