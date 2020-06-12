@@ -326,7 +326,7 @@ in lib.fix(self: {
       default = true;
       useACMEHost = "tazj.in";
       root = depot.web.homepage;
-      addSSL = true;
+      forceSSL = true;
 
       extraConfig = ''
         ${depot.web.blog.oldRedirects}
@@ -357,7 +357,7 @@ in lib.fix(self: {
       serverName = "tvl.fyi";
       useACMEHost = "tvl.fyi";
       root = depot.web.tvl;
-      addSSL = true;
+      forceSSL = true;
 
       extraConfig = ''
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
@@ -377,7 +377,7 @@ in lib.fix(self: {
     virtualHosts.cgit = {
       serverName = "code.tvl.fyi";
       useACMEHost = "tvl.fyi";
-      addSSL = true;
+      forceSSL = true;
 
       extraConfig = ''
         # Static assets must always hit the root.
@@ -395,7 +395,7 @@ in lib.fix(self: {
     virtualHosts.cgit-old = {
       serverName = "git.tazj.in";
       useACMEHost = "tazj.in";
-      addSSL = true;
+      forceSSL = true;
 
       extraConfig = ''
         return 301 https://code.tvl.fyi$request_uri;
