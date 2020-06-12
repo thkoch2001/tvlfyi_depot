@@ -3,14 +3,9 @@ depot
 
 [![builds.sr.ht status](https://builds.sr.ht/~tazjin/depot/master.svg)](https://builds.sr.ht/~tazjin/depot/master?)
 
-This repository is the [monorepo][] for my personal tools and infrastructure.
-Everything in here is built using [Nix][] with an automatic attribute-set layout
-that mirrors the filesystem layout of the repository (this might feel familiar
-to users of Bazel).
-
-This repository used to be hosted on GitHub, but for a variety of reasons I have
-decided to take over the management of personal infrastructure - of which this
-repository is a core component.
+This repository is the [monorepo][] for the community around [tazjin's virus
+lounge][tvl], containing our personal tools and infrastructure. Everything in
+here is built using [Nix][].
 
 If you've ended up here and have no idea who I am, feel free to follow me [on
 Twitter][].
@@ -77,6 +72,7 @@ If you'd like to contribute to any of the tools in here, please check out the
 [contribution guidelines](/tree/docs/CONTRIBUTING.md).
 
 [monorepo]: https://en.wikipedia.org/wiki/Monorepo
+[tvl]: https://tvl.fyi
 [Nix]: https://nixos.org/nix
 [on Twitter]: https://twitter.com/tazjin
 [Nixery]: https://github.com/google/nixery
