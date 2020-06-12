@@ -1,4 +1,5 @@
-# UUID                 	Group Name
+# UUID                                  	Group Name
 #
-global:Change-Owner    	Change Owner
-global:Registered-Users	Registered Users
+c730a3327db819d1672189ea5c5cd56a8083f852	depot-reviewers
+global:Change-Owner                     	Change Owner
+global:Registered-Users                 	Registered Users
