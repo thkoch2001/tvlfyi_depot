@@ -13,8 +13,8 @@ Contribution Guidelines
 
 <!-- markdown-toc end -->
 
-This is a loose set of "guidelines" for contributing to my depot. Please note
-that I will not accept any patches that don't follow these guidelines.
+This is a loose set of "guidelines" for contributing to the depot. Please note
+that we will not accept any patches that don't follow these guidelines.
 
 Also consider the [code of conduct](/tree/docs/CODE_OF_CONDUCT.md). No really,
 you should.
@@ -28,8 +28,8 @@ When adding a feature you should consider whether it is only useful for your
 particular use-case or whether it is generally applicable for other users of the
 project.
 
-When in doubt - just ask! You can reach out to me via
-[mail](mailto:mail@tazj.in) or on Twitter / IRC / etc.
+When in doubt - just ask! You can reach out to us at
+[depot@tazj.in](mailto:depot@tazj.in) or on Twitter, IRC, etc.
 
 ## Commit messages
 
@@ -56,6 +56,10 @@ Where `type` can be one of:
 * `chore`: Maintenance work
 
 And `scope` should refer to some kind of logical grouping inside of the project.
+
+It does not make sense to include the full path unless it aids in
+disambiguating. For example, when changing the configuration of the host
+`camden` at `//ops/nixos/camden` it is enough to write `feat(camden): ...`.
 
 Please take a look at the existing commit log for examples.
 
@@ -91,28 +95,31 @@ while squinting and keeping some distance from your screen ;-)
 
 ## Builds & tests
 
-My projects are built using [Nix][] to avoid "build pollution" via the user's
+All projects are built using [Nix][] to avoid "build pollution" via the user's
 environment.
 
 If you have Nix installed and are contributing to a project tracked in this
 repository, you can usually build the project by calling `nix-build -A
 path.to.project`.
 
-For example, to build a project located at `tools/foo` you would call `nix-build
--A tools.foo`
+For example, to build a project located at `//tools/foo` you would call
+`nix-build -A tools.foo`
 
 If the project has tests, check that they still work before submitting your
 change.
 
-## Submitting patches
+## Submitting changes
 
-When making a change, please create an appropriate commit locally and send it to
-me using either `git send-email` or `git format-patch`. The email address to use
-for depot reviews is `depot@tazj.in`, which is a [public group][].
+Development is primarily tracked at [cl.tvl.fyi](https://cl.tvl.fyi) using
+Gerrit. If you have an account, use the standard Gerrit workflows to submit a
+change.
 
-I recognise that most people are used to a GitHub-style workflow. If you run
-into issues with the above but would still like to contribute, feel free to
-reach out to me.
+If you do not have an account, you can alternatively submit a patch via email.
+Create an appropriate commit locally and send it to `depot@tazj.in` using either
+`git send-email` or `git format-patch`. The email address is `depot@tazj.in` a
+[public group][].
+
+Patches submitted via email will be added to Gerrit by a contributor.
 
 [magit]: https://magit.vc/
 [Nix]: https://nixos.org/nix/
