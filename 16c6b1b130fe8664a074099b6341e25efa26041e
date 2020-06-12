@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87c456cf_179ee251",
+        "filename": "ops/nixos/camden/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-12T01:09:06Z",
+      "side": 1,
+      "message": "Semicolon?",
+      "range": {
+        "startLine": 369,
+        "startChar": 52,
+        "endLine": 369,
+        "endChar": 53
+      },
+      "revId": "16c6b1b130fe8664a074099b6341e25efa26041e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
