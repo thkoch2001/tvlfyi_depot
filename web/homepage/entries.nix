@@ -9,7 +9,7 @@
   {
     class = "project";
     title = "depot";
-    url = "https://git.tazj.in/about";
+    url = "https://code.tvl.fyi/about";
     date = 1576800000;
     description = "Merging all of my projects into a single, Nix-based monorepo";
   }
@@ -23,7 +23,7 @@
   {
     class = "project";
     title = "kontemplate";
-    url = "https://git.tazj.in/about/ops/kontemplate";
+    url = "https://code.tvl.fyi/about/ops/kontemplate";
     date = 1486550940;
     description = "Simple file templating tool built for Kubernetes resources";
   }
@@ -37,7 +37,7 @@
   {
     class = "project";
     title = "journaldriver";
-    url = "https://git.tazj.in/about/ops/journaldriver";
+    url = "https://code.tvl.fyi/about/ops/journaldriver";
     date = 1527375600;
     description = "Small daemon to forward logs from journald to Stackdriver Logging";
   }
