@@ -366,6 +366,8 @@ in lib.fix(self: {
 
         rewrite ^/monorepo-doc/?$ https://docs.google.com/document/d/1nnyByXcH0F6GOmEezNOUa2RFelpeRpDToBLYD_CtjWE/edit?usp=sharing last;
 
+	rewrite ^/cl/(.*)$ https://cl.tvl.fyi/c/depot/+/$1/ last;
+
         location ~* \.(webp|woff2)$ {
           add_header Cache-Control "public, max-age=31536000";
         }
