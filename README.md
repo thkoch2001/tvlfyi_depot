@@ -49,7 +49,7 @@ Twitter][].
 ## Services
 
 Services in this repository are deployed on a Google Kubernetes Engine cluster
-using [Nixery]().
+using [Nixery][].
 
 * `web/blog` and `web/homepage` contain my blog and website setup
   (serving at [tazj.in][])
