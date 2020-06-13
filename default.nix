@@ -41,6 +41,7 @@ let
     presentations = readTree ./presentations;
     third_party   = readTree ./third_party;
     tools         = readTree ./tools;
+    users         = readTree ./users;
     web           = readTree ./web;
   };
 in fix(self: {

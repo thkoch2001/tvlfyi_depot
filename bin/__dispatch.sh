@@ -36,7 +36,7 @@ case "${TARGET_TOOL}" in
     attr="third_party.age"
     ;;
   rebuilder)
-    attr="ops.nixos.rebuilder"
+    attr="users.tazjin.nixos.rebuilder"
     ;;
   meson)
     attr="third_party.meson"
