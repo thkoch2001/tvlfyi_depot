@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6acc1765_0439ab48",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-13T02:49:03Z",
+      "side": 1,
+      "message": "I\u0027d prefer if we imported readDir as normal, and instead named this function `readDirNoDotfiles` or similar for clarity.",
+      "range": {
+        "startLine": 25,
+        "startChar": 17,
+        "endLine": 25,
+        "endChar": 33
+      },
+      "revId": "ab1135e6078ca1eb06f89eb6a69bd3ca89147268",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
