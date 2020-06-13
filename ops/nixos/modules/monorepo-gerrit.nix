@@ -56,13 +56,12 @@ in {
       sendemail = {
         enable = true;
         html = false;
-        connectTimeout = "30sec";
+        connectTimeout = "10sec";
         from = "TVL Code Review <tvlbot@tazj.in>";
         includeDiff = true;
-        smtpEncryption = "tls";
-        smtpServer = "smtp.gmail.com";
-        smtpServerPort = 587;
-        smtpUser = "tvlbot@tazj.in";
+        smtpEncryption = "none";
+        smtpServer = "localhost";
+        smtpServerPort = 2525;
       };
     };
   };
