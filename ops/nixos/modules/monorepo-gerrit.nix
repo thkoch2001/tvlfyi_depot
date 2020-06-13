@@ -17,6 +17,11 @@ in {
       "hooks"
     ];
 
+    plugins = with config.depot.third_party.gerrit_plugins; [
+      owners
+      owners-autoassign
+    ];
+
     settings = {
       core.packedGitLimit = "100m";
       log.jsonLogging = true;
