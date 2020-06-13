@@ -4,7 +4,7 @@
 # It needs to be included and configured in each system like this:
 #
 # {
-#   imports = [ ../modules/depot.nix ];
+#   imports = [ "${depot.depotPath}/ops/nixos/depot.nix" ];
 #   inherit depot;
 # }
 { lib, ... }:
