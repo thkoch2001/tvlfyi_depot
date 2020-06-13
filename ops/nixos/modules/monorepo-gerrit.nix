@@ -4,8 +4,8 @@
 let
   cfg = config.services.gerrit;
   gerritHooks = pkgs.runCommandNoCC "gerrit-hooks" {} ''
-    mkdir -p $out/bin
-    ln -s ${config.depot.ops.besadii}/bin/besadii $out/bin/ref-updated
+    mkdir -p $out
+    ln -s ${config.depot.ops.besadii}/bin/besadii $out/ref-updated
   '';
 in {
   services.gerrit = {
