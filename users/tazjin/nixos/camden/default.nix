@@ -15,11 +15,11 @@ config: let
   };
 in lib.fix(self: {
   imports = [
-    ../modules/depot.nix
-    ../modules/hound.nix
-    ../modules/monorepo-gerrit.nix
-    ../modules/smtprelay.nix
-    ../modules/tvl-slapd/default.nix
+    "${depot.depotPath}/ops/nixos/depot.nix"
+    "${depot.depotPath}/ops/nixos/hound.nix"
+    "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
+    "${depot.depotPath}/ops/nixos/smtprelay.nix"
+    "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
     "${pkgs.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
   ];
   depot = depot;
