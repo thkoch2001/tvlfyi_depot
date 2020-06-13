@@ -19,6 +19,15 @@ objectClass: top
 objectClass: organizationalUnit
 
 # Users in tvl.fyi
+dn: cn=cynthia,ou=users,dc=tvl,dc=fyi
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: cynthia
+sn: Cynthia
+title: cynthia
+mail: cynthia@tvl.fyi
+userPassword: {SSHA}aHx2keEnXv6u6oiV2xxqfXdxjom/K8CP
+
 dn: cn=edef,ou=users,dc=tvl,dc=fyi
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
