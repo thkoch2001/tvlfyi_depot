@@ -28,6 +28,15 @@ title: edef
 mail: edef@edef.eu
 userPassword: {SSHA}7w2XC6xxuhlUX2KvBpK4fD/X7ZCpfN/E
 
+dn: cn=eta,ou=users,dc=tvl,dc=fyi
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: eta
+sn: eta
+title: eta
+mail: eta@theta.eu.org
+userPassword: {SSHA}sOR5xzi7Lfv376XGQA8Hf6jyhTvo0XYc
+
 dn: cn=isomer,ou=users,dc=tvl,dc=fyi
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
