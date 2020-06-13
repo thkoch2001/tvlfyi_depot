@@ -18,6 +18,7 @@ in lib.fix(self: {
     ../modules/depot.nix
     ../modules/hound.nix
     ../modules/monorepo-gerrit.nix
+    ../modules/smtprelay.nix
     ../modules/tvl-slapd/default.nix
     "${pkgs.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
   ];
@@ -274,6 +275,17 @@ in lib.fix(self: {
         base-url = "https://github.com/NixOS/nixpkgs/blob/${pkgs.nixpkgsCommit}/{path}{anchor}";
         anchor = "#L{line}";
       };
+    };
+  };
+
+  # Start a local SMTP relay to Gmail (used by gerrit)
+  services.depot.smtprelay = {
+    enable = true;
+    args = {
+      listen = ":2525";
+      remote_host = "smtp.gmail.com:587";
+      remote_auth = "plain";
+      remote_user = "tvlbot@tazj.in";
     };
   };
 
