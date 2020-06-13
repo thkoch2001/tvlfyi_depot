@@ -1,19 +1,28 @@
 # Gerrit configuration for the TVL monorepo
 { pkgs, config, lib, ... }:
 
-let cfg = config.services.gerrit;
+let
+  cfg = config.services.gerrit;
+  gerritHooks = pkgs.runCommandNoCC "gerrit-hooks" {} ''
+    mkdir -p $out/bin
+    ln -s ${config.depot.ops.besadii}/bin/besadii $out/bin/ref-updated
+  '';
 in {
   services.gerrit = {
     enable = true;
     listenAddress = "[::]:4778"; # 4778 - grrt
     serverId = "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36";
-    builtinPlugins = [ "download-commands" ];
+    builtinPlugins = [
+      "download-commands"
+      "hooks"
+    ];
 
     settings = {
       core.packedGitLimit = "100m";
       log.jsonLogging = true;
       log.textLogging = false;
       sshd.advertisedAddress = "code.tvl.fyi:29418";
+      hooks.path = "${gerritHooks}";
 
       # Configures gerrit for being reverse-proxied by nginx as per
       # https://gerrit-review.googlesource.com/Documentation/config-reverseproxy.html
