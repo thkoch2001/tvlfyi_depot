@@ -7,6 +7,8 @@ in {
     enable = true;
     listenAddress = "[::]:4778"; # 4778 - grrt
     serverId = "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36";
+    builtinPlugins = [ "download-commands" ];
+
     settings = {
       core.packedGitLimit = "100m";
       log.jsonLogging = true;
@@ -17,6 +19,13 @@ in {
       # https://gerrit-review.googlesource.com/Documentation/config-reverseproxy.html
       gerrit.canonicalWebUrl = "https://cl.tvl.fyi";
       httpd.listenUrl = "proxy-https://${cfg.listenAddress}";
+
+      download.command = [
+        "checkout"
+        "cherry_pick"
+        "format_patch"
+        "pull"
+      ];
 
       # Configure for cgit.
       gitweb = {
