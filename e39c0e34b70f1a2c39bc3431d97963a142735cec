@@ -22,6 +22,30 @@
       "revId": "e39c0e34b70f1a2c39bc3431d97963a142735cec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfeadab2_70e823ff",
+        "filename": "third_party/gerrit_plugins/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-13T18:44:16Z",
+      "side": 1,
+      "message": "That changes the name of the derivation /and/ the file, but we need the file to still be named `*.jar` while the derivation name is used by the module for config purposes.",
+      "parentUuid": "78c62e8e_30ba45a5",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 28
+      },
+      "revId": "e39c0e34b70f1a2c39bc3431d97963a142735cec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
