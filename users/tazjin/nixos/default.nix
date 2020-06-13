@@ -1,3 +1,4 @@
+# TODO(tazjin): Generalise this and move to //ops/nixos
 { depot, lib, ... }:
 
 let
@@ -9,6 +10,13 @@ let
     );
   }).system;
 
+  caseFor = hostname: ''
+    ${hostname})
+      echo "Rebuilding NixOS for //users/tazjin/nixos/${hostname}"
+      system=$(nix-build -E '(import <depot> {}).users.tazjin.nixos.${hostname}System' --no-out-link)
+      ;;
+  '';
+
   rebuilder = depot.third_party.writeShellScriptBin "rebuilder" ''
     set -ue
     if [[ $EUID -ne 0 ]]; then
@@ -17,18 +25,9 @@ let
     fi
 
     case $HOSTNAME in
-    nugget)
-      echo "Rebuilding NixOS for //ops/nixos/nugget"
-      system=$(nix-build -E '(import <depot> {}).ops.nixos.nuggetSystem' --no-out-link)
-      ;;
-    camden)
-      echo "Rebuilding NixOS for //ops/nixos/camden"
-      system=$(nix-build -E '(import <depot> {}).ops.nixos.camdenSystem' --no-out-link)
-      ;;
-    frog)
-      echo "Rebuilding NixOS for //ops/nixos/frog"
-      system=$(nix-build -E '(import <depot> {}).ops.nixos.frogSystem' --no-out-link)
-      ;;
+    ${caseFor "nugget"}
+    ${caseFor "camden"}
+    ${caseFor "frog"}
     *)
       echo "$HOSTNAME is not a known NixOS host!" >&2
       exit 1
@@ -41,7 +40,7 @@ let
 in {
   inherit rebuilder;
 
-  nuggetSystem = systemFor [ depot.ops.nixos.nugget ];
-  camdenSystem = systemFor [ depot.ops.nixos.camden ];
-  frogSystem = systemFor [ depot.ops.nixos.frog ];
+  nuggetSystem = systemFor [ depot.users.tazjin.nixos.nugget ];
+  camdenSystem = systemFor [ depot.users.tazjin.nixos.camden ];
+  frogSystem = systemFor [ depot.users.tazjin.nixos.frog ];
 }
