@@ -54,6 +54,10 @@ in fix(self: {
     __functor = x: (readTree' x.config);
     config = self.config;
   };
+
+  # Make the path to the depot available for things that might need it
+  # (e.g. NixOS module inclusions)
+  depotPath = ./.;
 }
 
 # Add local packages as structured by readTree
