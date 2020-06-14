@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bda13a20_afc85b7d",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T22:51:11Z",
+      "side": 1,
+      "message": "is there a reason for no \u0027i\u0027?",
+      "range": {
+        "startLine": 71,
+        "startChar": 92,
+        "endLine": 71,
+        "endChar": 97
+      },
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcb39890_5162dd06",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T22:51:11Z",
+      "side": 1,
+      "message": "Is this actually possible? I assume there\u0027s always at least an email address, since that comes from the commit? (I\u0027m thinking this is a QCHECK-type event)",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 22
+      },
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cff53ef3_f5638bef",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T22:51:11Z",
+      "side": 1,
+      "message": "I actually think we might care about config, too. The problematic thing is that changes created there from the web UI have useless names before being edited, but it\u0027s still good to notify about them.",
+      "range": {
+        "startLine": 190,
+        "startChar": 37,
+        "endLine": 190,
+        "endChar": 66
+      },
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
