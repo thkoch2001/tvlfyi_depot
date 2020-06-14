@@ -1,0 +1,32 @@
+diff --git a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
+index 1a0bbd9f50..d8d2fa643b 100644
+--- a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
++++ b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
+@@ -102,6 +102,10 @@ const LANGUAGE_MAP = {
+ };
+ const ASYNC_DELAY = 10;
+ 
++const FILENAME_OVERRIDES = {
++  'rules.pl': 'prolog',
++};
++
+ const CLASS_WHITELIST = {
+   'gr-diff gr-syntax gr-syntax-attr': true,
+   'gr-diff gr-syntax gr-syntax-attribute': true,
+@@ -233,10 +237,16 @@ class GrSyntaxLayer extends GestureEventListeners(
+     }
+   }
+ 
++  _basename(filename) {
++    const pieces = filename.split(/\//);
++    return pieces[pieces.length-1];
++  }
++
+   _getLanguage(diffFileMetaInfo) {
+     // The Gerrit API provides only content-type, but for other users of
+     // gr-diff it may be more convenient to specify the language directly.
+     return diffFileMetaInfo.language ||
++        FILENAME_OVERRIDES[this._basename(diffFileMetaInfo.name)] ||
+         LANGUAGE_MAP[diffFileMetaInfo.content_type];
+   }
+ 
