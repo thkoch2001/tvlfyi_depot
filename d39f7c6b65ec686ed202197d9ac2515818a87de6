@@ -22,6 +22,30 @@
       "revId": "d39f7c6b65ec686ed202197d9ac2515818a87de6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7364e1c1_1d1cc3ab",
+        "filename": "overrides/gerrit/syntax_highlight_nix.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-14T16:24:52Z",
+      "side": 1,
+      "message": "Probably? But I\u0027m not going to do that for the moment, since the involves delving into the Java.",
+      "parentUuid": "e63c4a9e_2725d0b5",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 30
+      },
+      "revId": "d39f7c6b65ec686ed202197d9ac2515818a87de6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
