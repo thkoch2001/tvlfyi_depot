@@ -72,6 +72,7 @@ let
       haskell
       iana-etc
       imagemagickBig
+      installShellFiles
       jdk
       jetbrains-mono
       jq
