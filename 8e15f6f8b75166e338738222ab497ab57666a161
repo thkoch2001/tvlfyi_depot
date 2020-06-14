@@ -22,6 +22,30 @@
       "revId": "8e15f6f8b75166e338738222ab497ab57666a161",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5062c1db_c32c31ff",
+        "filename": "project.config",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T16:01:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24f57214_71e540e9",
+      "range": {
+        "startLine": 25,
+        "startChar": 25,
+        "endLine": 25,
+        "endChar": 27
+      },
+      "revId": "8e15f6f8b75166e338738222ab497ab57666a161",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
