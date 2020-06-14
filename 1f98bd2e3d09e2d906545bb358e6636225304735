@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb26b082_35a1254c",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T00:52:11Z",
+      "side": 1,
+      "message": "I\u0027d rename this to `gerritSSHHostKey` or something similar for clarity.",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 13
+      },
+      "revId": "1f98bd2e3d09e2d906545bb358e6636225304735",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8320e1a6_295291bb",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T00:52:11Z",
+      "side": 1,
+      "message": "?",
+      "revId": "1f98bd2e3d09e2d906545bb358e6636225304735",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cefbd91_73418340",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T00:52:11Z",
+      "side": 1,
+      "message": "I think you could replace this with just a `mustHaveFlag(*flag.FlagSet)` and it would still be shorter.",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 1
+      },
+      "revId": "1f98bd2e3d09e2d906545bb358e6636225304735",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "823ed8d3_ac008596",
+        "filename": "fun/clbot/deps.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T00:52:11Z",
+      "side": 1,
+      "message": "these should go in `//third_party/gopkgs`.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 15
+      },
+      "revId": "1f98bd2e3d09e2d906545bb358e6636225304735",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30c6e6e4_3f988adf",
+        "filename": "fun/clbot/gerrit/gerritevents/types.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T00:52:11Z",
+      "side": 1,
+      "message": "I assume these types match something that\u0027s documented in the Gerrit API - can you add a link to that documentation at the top here?\n\n(same for events.go)",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 20
+      },
+      "revId": "1f98bd2e3d09e2d906545bb358e6636225304735",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
