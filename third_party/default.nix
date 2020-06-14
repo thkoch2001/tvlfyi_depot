@@ -33,6 +33,8 @@ let
       autoreconfHook
       bashInteractive
       bat
+      buildBazelPackage
+      buildFHSUserEnv
       buildGoModule
       buildGoPackage
       buildPackages
@@ -51,6 +53,7 @@ let
       darwin
       dockerTools
       fetchFromGitHub
+      fetchgit
       fetchurl
       fetchzip
       fira
@@ -58,7 +61,6 @@ let
       fira-mono
       fontconfig
       freetype
-      gerrit
       gettext
       glibc
       gmock
@@ -70,6 +72,7 @@ let
       haskell
       iana-etc
       imagemagickBig
+      jdk
       jetbrains-mono
       jq
       kontemplate
