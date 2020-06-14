@@ -14,5 +14,6 @@ depot.nix.buildGo.program {
     gopkgs."github.com".davecgh.go-spew.spew.gopkg
     gopkgs."github.com".golang.glog.gopkg
     gopkgs."golang.org".x.crypto.ssh.gopkg
+    gopkgs."gopkg.in"."irc.v3".gopkg
   ];
 }
