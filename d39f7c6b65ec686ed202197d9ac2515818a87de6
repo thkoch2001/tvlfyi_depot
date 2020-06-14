@@ -46,6 +46,30 @@
       "revId": "d39f7c6b65ec686ed202197d9ac2515818a87de6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b154f822_ff85cc76",
+        "filename": "overrides/gerrit/syntax_highlight_nix.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2020-06-14T16:50:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7364e1c1_1d1cc3ab",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 30
+      },
+      "revId": "d39f7c6b65ec686ed202197d9ac2515818a87de6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
