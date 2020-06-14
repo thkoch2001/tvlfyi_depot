@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cc2aca7_3d2a2f93",
+        "filename": "rules.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2020-06-14T12:40:19Z",
+      "side": 1,
+      "message": "aren\u0027t CommentsCheck and CommitCheck lists?  Won\u0027t this end up with a list of lists?\n\nWHERE\u0027S THE TYPE CHECKER?!",
+      "range": {
+        "startLine": 53,
+        "startChar": 30,
+        "endLine": 53,
+        "endChar": 56
+      },
+      "revId": "f17a88448ef9446f95290a3dfd8bc121f6d6cea9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
