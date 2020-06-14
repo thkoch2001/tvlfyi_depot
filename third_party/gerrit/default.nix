@@ -39,7 +39,10 @@ pkgs.buildBazelPackage {
     sha256 = "1xrckiqc2l07dib22rn6iicgvph8iyxjrzr15bs5x6jdg9cic1s8";
     fetchSubmodules = true;
   };
-  patches = [ ./use_detzip.patch ];
+  patches = [
+    ./use_detzip.patch
+    ./syntax_highlight_nix.patch
+  ];
 
   bazelTarget = "release";
   bazel = bazel;
