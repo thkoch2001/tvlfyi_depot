@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f4ad9a9_28e9cf87",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2020-06-14T22:04:04Z",
+      "side": 1,
+      "message": "I have no idea either. Let\u0027s find out!",
+      "range": {
+        "startLine": 16,
+        "startChar": 44,
+        "endLine": 16,
+        "endChar": 134
+      },
+      "revId": "ecd774f9707e0ffa868367c0fd2d7594038b519e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
