@@ -44,6 +44,9 @@ case "${TARGET_TOOL}" in
   ninja)
     attr="third_party.ninja"
     ;;
+  git-bug)
+    attr="third_party.git-bug"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1
