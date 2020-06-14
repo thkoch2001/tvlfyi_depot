@@ -1,7 +1,5 @@
-# UUID                                  	Group Name
+# UUID                 	Group Name
 #
-c484414b5354700167d5a9ae2bbf082b9f1bedf5	Administrators
-global:Anonymous-Users                  	Anonymous Users
-global:Change-Owner                     	Change Owner
-global:Project-Owners                   	Project Owners
-global:Registered-Users                 	Registered Users
+global:Anonymous-Users 	Anonymous Users
+global:Change-Owner    	Change Owner
+global:Registered-Users	Registered Users
