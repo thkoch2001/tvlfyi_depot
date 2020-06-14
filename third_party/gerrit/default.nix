@@ -42,6 +42,7 @@ pkgs.buildBazelPackage {
   patches = [
     ./use_detzip.patch
     ./syntax_highlight_nix.patch
+    ./syntax_highlight_rules_pl.patch
   ];
 
   bazelTarget = "release";
