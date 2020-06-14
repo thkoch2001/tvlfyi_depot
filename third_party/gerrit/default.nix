@@ -43,6 +43,7 @@ pkgs.buildBazelPackage {
     ./use_detzip.patch
     ./syntax_highlight_nix.patch
     ./syntax_highlight_rules_pl.patch
+    ./add_titles_to_cls.patch
   ];
 
   bazelTarget = "release";
