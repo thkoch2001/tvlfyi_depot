@@ -22,6 +22,30 @@
       "revId": "8c72ee07b2e0573f162e6d1a60afcf79fde9015b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54d5f753_fc084171",
+        "filename": "users/tazjin/dotfiles/msmtprc",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T03:48:57Z",
+      "side": 1,
+      "message": "Yes, it\u0027s right.",
+      "parentUuid": "c840ab06_7b3a3ace",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 8
+      },
+      "revId": "8c72ee07b2e0573f162e6d1a60afcf79fde9015b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
