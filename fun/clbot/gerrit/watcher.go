@@ -9,34 +9,11 @@ import (
 	"strings"
 	"time"
 
+	"code.tvl.fyi/fun/clbot/backoffutil"
 	"code.tvl.fyi/fun/clbot/gerrit/gerritevents"
-	"github.com/cenkalti/backoff/v4"
 	log "github.com/golang/glog"
 	"golang.org/x/crypto/ssh"
 )
-
-// zeroStartingBackOff is a backoff.BackOff that returns "0" as the first Duration after a reset.
-// This is useful for constructing loops and just enforcing a backoff duration on every loop, rather than incorporating this logic into the loop directly.
-type zeroStartingBackOff struct {
-	bo      backoff.BackOff
-	initial bool
-}
-
-// NextBackOff returns the next back off duration to use.
-// For the first call after a call to Reset(), this is 0. For each subsequent duration, the underlying BackOff is consulted.
-func (bo *zeroStartingBackOff) NextBackOff() time.Duration {
-	if bo.initial == true {
-		bo.initial = false
-		return 0
-	}
-	return bo.bo.NextBackOff()
-}
-
-// Reset resets to the initial state, and also passes a Reset through to the underlying BackOff.
-func (bo *zeroStartingBackOff) Reset() {
-	bo.initial = true
-	bo.bo.Reset()
-}
 
 // closer provides an embeddable implementation of Close which awaits a main loop acknowledging it has stopped.
 type closer struct {
@@ -174,9 +151,7 @@ func (c *restartingClient) runOnce() error {
 
 func (c *restartingClient) run() {
 	defer close(c.stopped)
-	ebo := backoff.NewExponentialBackOff()
-	ebo.MaxElapsedTime = 0
-	bo := &zeroStartingBackOff{bo: ebo, initial: true}
+	bo := backoffutil.NewDefaultBackOff()
 	for {
 		timer := time.NewTimer(bo.NextBackOff())
 		select {
