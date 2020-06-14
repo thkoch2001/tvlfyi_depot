@@ -1,0 +1,1 @@
+{"version":1,"ops":[{"type":1,"author":{"id":"759b17fb50d57daeb298cc52628aba569ad2c9f3"},"timestamp":1592173778,"title":"Highlight rules.pl as Prolog in cheddar","message":"Similar to Gerrit itself (https://cl.tvl.fyi/c/depot/+/254), cheddar currently picks up the rules.pl file as Perl. It should be highlighted as Prolog instead.","files":null}]}
