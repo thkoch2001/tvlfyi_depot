@@ -11,7 +11,7 @@ depot.nix.buildGo.package {
   ];
   deps = [
     clbot.gerrit.gerritevents
-    gopkgs."github.com".cenkalti.backoff.gopkg
+    clbot.backoffutil
     gopkgs."github.com".golang.glog.gopkg
     gopkgs."golang.org".x.crypto.ssh.gopkg
   ];
