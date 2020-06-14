@@ -1,0 +1,12 @@
+diff --git a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
+index 1a0bbd9f50..0f2786a911 100644
+--- a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
++++ b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
+@@ -99,6 +99,7 @@ const LANGUAGE_MAP = {
+   'text/x-vhdl': 'vhdl',
+   'text/x-yaml': 'yaml',
+   'text/vbscript': 'vbscript',
++  'application/x-mix-transfer': 'nix',
+ };
+ const ASYNC_DELAY = 10;
+ 
