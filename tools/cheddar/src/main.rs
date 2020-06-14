@@ -3,6 +3,7 @@ use comrak::nodes::{Ast, AstNode, NodeValue, NodeCodeBlock, NodeHtmlBlock};
 use comrak::{Arena, parse_document, format_html, ComrakOptions};
 use lazy_static::lazy_static;
 use std::cell::RefCell;
+use std::collections::HashMap;
 use std::env;
 use std::ffi::OsStr;
 use std::io::BufRead;
@@ -42,12 +43,23 @@ lazy_static! {
         unsafe_: true, // required for tagfilter
         ..ComrakOptions::default()
     };
+
+    // Configures a map of specific filenames to languages, for cases
+    // where the detection by extension or other heuristics fails.
+    static ref FILENAME_OVERRIDES: HashMap<&'static str, &'static str> = {
+        let mut map = HashMap::new();
+        // rules.pl is the canonical name of the submit rule file in
+        // Gerrit, which is written in Prolog.
+        map.insert("rules.pl", "Prolog");
+        map
+    };
 }
 
 // HTML fragment used when rendering inline blocks in Markdown documents.
 // Emulates the GitHub style (subtle background hue and padding).
 const BLOCK_PRE: &str = "<pre style=\"background-color:#f6f8fa;padding:16px;\">\n";
 
+#[derive(Debug, Default)]
 struct Args {
     /// Should Cheddar run as an about filter? (i.e. give special
     /// rendering treatment to Markdown documents)
@@ -55,16 +67,16 @@ struct Args {
 
     /// What file extension has been supplied (if any)?
     extension: Option<String>,
+
+    /// Which language to override the detection to (if any)?
+    lang_override: Option<&'static str>,
 }
 
 /// Parse the command-line flags passed to cheddar to determine
 /// whether it is running in about-filter mode (`--about-filter`) and
 /// what file extension has been supplied.
 fn parse_args() -> Args {
-    let mut args = Args {
-        about_filter: false,
-        extension: None,
-    };
+    let mut args = Args::default();
 
     for (i, arg) in env::args().enumerate() {
         if i == 0 {
@@ -74,6 +86,10 @@ fn parse_args() -> Args {
         if arg == "--about-filter" {
             args.about_filter = true;
             continue;
+        }
+
+        if let Some(lang) = (*FILENAME_OVERRIDES).get(arg.as_str()) {
+            args.lang_override = Some(lang);
         }
 
         args.extension = Path::new(&arg)
@@ -244,7 +260,7 @@ fn format_markdown() {
         .expect("Markdown rendering failed");
 }
 
-fn format_code(extension: Option<&str>) {
+fn format_code(args: &Args) {
     let stdin = io::stdin();
     let mut stdin = stdin.lock();
     let mut linebuf = String::new();
@@ -255,8 +271,12 @@ fn format_code(extension: Option<&str>) {
     // Set up the highlighter
     let theme = &THEMES.themes["InspiredGitHub"];
 
-    let syntax = extension
-        .and_then(|e| SYNTAXES.find_syntax_by_extension(e))
+    let syntax = args.lang_override
+        .and_then(|l| SYNTAXES.find_syntax_by_name(l))
+        .or_else(|| match args.extension {
+            Some(ref ext) => SYNTAXES.find_syntax_by_extension(ext),
+            None => None,
+        })
         .or_else(|| SYNTAXES.find_syntax_by_first_line(&linebuf))
         .unwrap_or_else(|| SYNTAXES.find_syntax_plain_text());
 
@@ -296,6 +316,6 @@ fn main() {
 
     match args.extension.as_ref().map(String::as_str) {
         Some("md") if args.about_filter => format_markdown(),
-        extension  => format_code(extension),
+        _  => format_code(&args),
     }
 }
