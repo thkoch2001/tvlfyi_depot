@@ -31,7 +31,7 @@ let
   version = "3.2.1";
 in
 pkgs.buildBazelPackage {
-  name = "gerrit";
+  name = "gerrit-3.2.1";
 
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";

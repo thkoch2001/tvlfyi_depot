@@ -22,6 +22,8 @@ in {
       owners-autoassign
     ];
 
+    package = config.depot.third_party.gerrit;
+
     settings = {
       core.packedGitLimit = "100m";
       log.jsonLogging = true;
