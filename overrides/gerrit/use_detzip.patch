@@ -1,0 +1,13 @@
+diff --git a/tools/js/download_bower.py b/tools/js/download_bower.py
+index 1df4b826bc..65bda74082 100755
+--- a/tools/js/download_bower.py
++++ b/tools/js/download_bower.py
+@@ -106,7 +106,7 @@ def main():
+                 args.b, '--quiet', 'install', '%s#%s' % (args.p, args.v)))
+         bc = os.path.join(cwd, 'bower_components')
+         subprocess.check_call(
+-            ['zip', '-q', '--exclude', '.bower.json', '-r', cached, args.n],
++            ['detzip', '--exclude', '.bower.json', cached, args.n],
+             cwd=bc)
+ 
+         if args.s:
