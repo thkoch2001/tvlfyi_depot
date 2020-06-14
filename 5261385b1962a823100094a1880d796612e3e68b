@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5a86555_54d78f91",
+        "filename": "overrides/gerrit/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T13:30:38Z",
+      "side": 1,
+      "message": "Should this go in the other CL?",
+      "range": {
+        "startLine": 4,
+        "startChar": 2,
+        "endLine": 4,
+        "endChar": 36
+      },
+      "revId": "5261385b1962a823100094a1880d796612e3e68b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9063100_5de3d1b1",
+        "filename": "overrides/gerrit/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T13:30:38Z",
+      "side": 1,
+      "message": "inherit?",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 45,
+        "endChar": 15
+      },
+      "revId": "5261385b1962a823100094a1880d796612e3e68b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f19dd5f7_c9c80af1",
+        "filename": "third_party/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T13:30:38Z",
+      "side": 1,
+      "message": "Do we care about which one?",
+      "range": {
+        "startLine": 76,
+        "startChar": 6,
+        "endLine": 76,
+        "endChar": 9
+      },
+      "revId": "5261385b1962a823100094a1880d796612e3e68b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
