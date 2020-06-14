@@ -22,6 +22,30 @@
       "revId": "f17a88448ef9446f95290a3dfd8bc121f6d6cea9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7268ce02_f2b73230",
+        "filename": "rules.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-14T12:54:07Z",
+      "side": 1,
+      "message": "I wish this had a type checker!\n\nCommentsCheck and CommitCheck each are one of the terms that Gerrit looks for as elements of the list, i.e. something like `label(\u0027Conformant-Commit-Message\u0027, need(_))` - indicating that the commit message need is not fulfilled.\n\n(I tested all of these interactively using Gerrit\u0027s `test-submit rule` feature)",
+      "parentUuid": "9cc2aca7_3d2a2f93",
+      "range": {
+        "startLine": 53,
+        "startChar": 30,
+        "endLine": 53,
+        "endChar": 56
+      },
+      "revId": "f17a88448ef9446f95290a3dfd8bc121f6d6cea9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
