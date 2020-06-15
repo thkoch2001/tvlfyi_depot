@@ -31,12 +31,26 @@ let
       value = children.${name};
     }) names);
 
+  isDerivation = x: isAttrs x && x ? "type" && x.type == "derivation";
+
+  # Merges rhs into lhs. If lhs is a derivation that supports
+  # passthru, then values will be added to the passthru set to avoid
+  # unnecessary cache-busts.
+  mergeWithPassthru = lhs: rhs:
+    if (isDerivation lhs && hasAttr "passthru" lhs)
+    then lhs.overrideAttrs(old: {
+      passthru = if hasAttr "passthru" old
+                 then old.passthru // rhs
+                 else rhs;
+    })
+    else lhs // rhs;
+
   # The marker is added to every set that was imported directly by
   # readTree.
   importWithMark = path: parts:
     let imported = import path (argsWithPath parts);
     in if (isAttrs imported)
-      then imported // { __readTree = true; }
+      then mergeWithPassthru imported { __readTree = true; }
       else imported;
 
   nixFileName = file:
@@ -69,6 +83,7 @@ let
         value = importWithMark p (parts ++ [ c ]);
       }) nixFiles;
     in if dir ? "default.nix"
-      then (if isAttrs self then self // (listToAttrs children) else self)
+      then (if isAttrs self then mergeWithPassthru self (listToAttrs children)
+                            else self)
       else listToAttrs (nixChildren ++ children);
 in readTree initPath [ (baseNameOf initPath) ]
