@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d309c6d7_5d3de716",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T18:13:04Z",
+      "side": 1,
+      "message": "Turns out it did. Latest patchset makes that more clear!",
+      "parentUuid": "3d554194_ee652a45",
+      "range": {
+        "startLine": 66,
+        "startChar": 5,
+        "endLine": 66,
+        "endChar": 36
+      },
+      "revId": "7e1f37046136ee181481d0b9f2696cc9be9f6eae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e3aed29_bc49bbdd",
         "filename": "fun/clbot/clbot.go",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "906dae3f_4a409c61",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T18:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e3aed29_bc49bbdd",
+      "range": {
+        "startLine": 135,
+        "startChar": 5,
+        "endLine": 135,
+        "endChar": 11
+      },
+      "revId": "7e1f37046136ee181481d0b9f2696cc9be9f6eae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "594efde4_2e373af9",
         "filename": "fun/clbot/clbot.go",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "7e1f37046136ee181481d0b9f2696cc9be9f6eae",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d7cf776_7b52792f",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T18:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "594efde4_2e373af9",
+      "range": {
+        "startLine": 136,
+        "startChar": 20,
+        "endLine": 136,
+        "endChar": 27
+      },
+      "revId": "7e1f37046136ee181481d0b9f2696cc9be9f6eae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
