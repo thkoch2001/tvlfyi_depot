@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "46c5edb4_f7ced214",
+        "filename": "fun/tvldb/.dockerignore",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T20:18:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4345193c_431395ab",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 10
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02dd8fed_2ae67232",
         "filename": "fun/tvldb/Cargo.toml",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "de2b20914246623da49dad19a449881e119a2cc8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef9a5be2_b361782c",
+        "filename": "fun/tvldb/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T20:18:29Z",
+      "side": 1,
+      "message": "No idea. Maybe my git config is cursed on the machine I originally wrote this on...",
+      "parentUuid": "02dd8fed_2ae67232",
+      "range": {
+        "startLine": 2,
+        "startChar": 29,
+        "endLine": 2,
+        "endChar": 53
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "981fbedf_c86face6",
+        "filename": "fun/tvldb/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T20:18:29Z",
+      "side": 1,
+      "message": "Nope. (man, naersk is a LOT better than this crap...)",
+      "parentUuid": "f056023c_d3bab955",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 47
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ba71ec6_2d564a93",
         "filename": "fun/tvldb/LICENSE",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "de2b20914246623da49dad19a449881e119a2cc8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8815270_e19400d8",
+        "filename": "fun/tvldb/LICENSE",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T20:18:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4ba71ec6_2d564a93",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 20
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "eb049da4_878df577",
+        "filename": "fun/tvldb/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T20:18:29Z",
+      "side": 1,
+      "message": "M-q\u0027d the heck out of this file.\n(I think I wrote this in vim originally...*shudder*)",
+      "parentUuid": "657ffb88_5c3947d2",
+      "range": {
+        "startLine": 5,
+        "startChar": 46,
+        "endLine": 6,
+        "endChar": 3
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16a7737f_014f414a",
         "filename": "fun/tvldb/default.nix",
         "patchSetId": 1
@@ -137,6 +257,30 @@
       "revId": "de2b20914246623da49dad19a449881e119a2cc8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4cc7111_2a46b44b",
+        "filename": "fun/tvldb/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T20:18:29Z",
+      "side": 1,
+      "message": "Nifty!",
+      "parentUuid": "16a7737f_014f414a",
+      "range": {
+        "startLine": 4,
+        "startChar": 11,
+        "endLine": 4,
+        "endChar": 28
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
