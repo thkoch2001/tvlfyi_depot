@@ -307,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "fd3594a7_fe6e8fd0",
+        "filename": "fun/tvldb/src/keyword.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "It isn\u0027t; the quote indexes are never zero-indexed.\n\nI think.",
+      "parentUuid": "a47e1025_16000bfc",
+      "range": {
+        "startLine": 28,
+        "startChar": 11,
+        "endLine": 28,
+        "endChar": 29
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23bc3cb2_fe635158",
         "filename": "fun/tvldb/src/keyword.rs",
         "patchSetId": 1
@@ -330,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "f0899920_4a83fdf4",
+        "filename": "fun/tvldb/src/keyword.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "23bc3cb2_fe635158",
+      "range": {
+        "startLine": 148,
+        "startChar": 24,
+        "endLine": 148,
+        "endChar": 26
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5762f340_192b2b1e",
         "filename": "fun/tvldb/src/main.rs",
         "patchSetId": 1
@@ -341,6 +389,30 @@
       "writtenOn": "2020-06-15T20:32:28Z",
       "side": 1,
       "message": "Wow, this is still a thing? I remember putting this pragma in *years* ago.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 89
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6d0381a9_e3e5b33b",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "This code is *from* years ago, you realise...",
+      "parentUuid": "5762f340_192b2b1e",
       "range": {
         "startLine": 1,
         "startChar": 0,
@@ -373,6 +445,30 @@
       "revId": "de2b20914246623da49dad19a449881e119a2cc8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51b7f6f9_5b5cac91",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "what!\n(yeah, alright)",
+      "parentUuid": "fd2ec877_e98d9586",
+      "range": {
+        "startLine": 52,
+        "startChar": 8,
+        "endLine": 53,
+        "endChar": 14
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -422,6 +518,30 @@
     },
     {
       "key": {
+        "uuid": "162e2723_688813f1",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "Reasonable, although it\u0027s not as if it gets logged anywhere...\nTell you what, I\u0027ll fix it and also make these errors get logged.",
+      "parentUuid": "9aac304e_8796e3e9",
+      "range": {
+        "startLine": 75,
+        "startChar": 61,
+        "endLine": 75,
+        "endChar": 75
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28558572_960b2d2c",
         "filename": "fun/tvldb/src/main.rs",
         "patchSetId": 1
@@ -442,6 +562,30 @@
       "revId": "de2b20914246623da49dad19a449881e119a2cc8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f2d4353_9ffdfe96",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28558572_960b2d2c",
+      "range": {
+        "startLine": 76,
+        "startChar": 12,
+        "endLine": 76,
+        "endChar": 15
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -468,6 +612,30 @@
     },
     {
       "key": {
+        "uuid": "23cfc2f4_8edde561",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "Huh. Good question.",
+      "parentUuid": "9cc257cf_de281aec",
+      "range": {
+        "startLine": 96,
+        "startChar": 16,
+        "endLine": 96,
+        "endChar": 33
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "804d9c33_151b5bf6",
         "filename": "fun/tvldb/src/main.rs",
         "patchSetId": 1
@@ -491,6 +659,30 @@
     },
     {
       "key": {
+        "uuid": "246a7bd1_52817a0f",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "Well /that/ one isn\u0027t that obscure, surely (??)",
+      "parentUuid": "804d9c33_151b5bf6",
+      "range": {
+        "startLine": 176,
+        "startChar": 23,
+        "endLine": 180,
+        "endChar": 29
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e30014ef_e2059069",
         "filename": "fun/tvldb/src/main.rs",
         "patchSetId": 1
@@ -502,6 +694,30 @@
       "writtenOn": "2020-06-15T20:32:28Z",
       "side": 1,
       "message": "makes you miss CL\u0027s loop ;)",
+      "range": {
+        "startLine": 185,
+        "startChar": 36,
+        "endLine": 185,
+        "endChar": 75
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "efa58a74_f805642f",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure this code was written prior to my enlightenment; I wouldn\u0027t have known any better ;P",
+      "parentUuid": "e30014ef_e2059069",
       "range": {
         "startLine": 185,
         "startChar": 36,
@@ -537,6 +753,30 @@
     },
     {
       "key": {
+        "uuid": "ac4e59f6_8dd6ddde",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "aha! this should probably go in a comment, but self.rng.gen_range does the whole exclusive range thing, such that gen_range(1, 1) includes nothing and causes a panic (i.e. it\u0027s equivalent to 1..\u003d0)",
+      "parentUuid": "0b8490a2_600289e2",
+      "range": {
+        "startLine": 197,
+        "startChar": 27,
+        "endLine": 197,
+        "endChar": 29
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a3cf1d7_684756db",
         "filename": "fun/tvldb/src/main.rs",
         "patchSetId": 1
@@ -560,6 +800,30 @@
     },
     {
       "key": {
+        "uuid": "2c76bbb3_9de404d7",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "agh, I\u0027ll just run rustfmt",
+      "parentUuid": "8a3cf1d7_684756db",
+      "range": {
+        "startLine": 220,
+        "startChar": 3,
+        "endLine": 221,
+        "endChar": 4
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e60cd012_c63d8de5",
         "filename": "fun/tvldb/src/main.rs",
         "patchSetId": 1
@@ -580,6 +844,30 @@
       "revId": "de2b20914246623da49dad19a449881e119a2cc8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72575537_660163b6",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T21:22:21Z",
+      "side": 1,
+      "message": "Yeah, alright.",
+      "parentUuid": "e60cd012_c63d8de5",
+      "range": {
+        "startLine": 234,
+        "startChar": 20,
+        "endLine": 234,
+        "endChar": 25
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
