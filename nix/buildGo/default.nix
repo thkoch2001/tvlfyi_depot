@@ -14,6 +14,7 @@ let
     dirOf
     elemAt
     filter
+    hasAttr
     listToAttrs
     map
     match
@@ -41,6 +42,12 @@ let
   xFlags = x_defs: spaceOut (map (k: "-X ${k}=${x_defs."${k}"}") (attrNames x_defs));
 
   pathToName = p: replaceStrings ["/"] ["_"] (toString p);
+
+  addPassthru = values: old: {
+    passthru = if hasAttr "passthru" old
+      then old.passthru // values
+      else values;
+  };
 
   # Add an `overrideGo` attribute to a function result that works
   # similar to `overrideAttrs`, but is used specifically for the
@@ -88,7 +95,10 @@ let
     ${asmBuild}
     ${go}/bin/go tool compile -pack ${asmLink} -o $out/${path}.a -trimpath=$PWD -trimpath=${go} -p ${path} ${includeSources uniqueDeps} ${spaceOut srcs}
     ${asmPack}
-  '') // { goDeps = uniqueDeps; goImportPath = path; };
+  '').overrideAttrs(addPassthru {
+    goDeps = uniqueDeps;
+    goImportPath = path;
+  });
 
   # Build a tree of Go libraries out of an external Go source
   # directory that follows the standard Go layout and was not built
