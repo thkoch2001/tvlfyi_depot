@@ -19,7 +19,6 @@ in {
 
     plugins = with config.depot.third_party.gerrit_plugins; [
       owners
-      owners-autoassign
     ];
 
     package = config.depot.third_party.gerrit;
