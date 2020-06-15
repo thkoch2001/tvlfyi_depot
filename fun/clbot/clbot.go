@@ -63,7 +63,9 @@ func callOnShutdown(f func()) {
 	shutdownFuncs = append(shutdownFuncs, f)
 }
 
-const ignoreBotChar = "\xe2\x80\x8b"
+// Unicode U+200B zero-width-space, to avoid triggering other bots
+// or highlighting people on IRC.
+const zeroWidthSpace = "\u200b"
 
 func runIRC(ctx context.Context, ircCfg irc.ClientConfig, sendMsg <-chan string) {
 	bo := backoffutil.NewDefaultBackOff()
@@ -100,7 +102,7 @@ func runIRC(ctx context.Context, ircCfg irc.ClientConfig, sendMsg <-chan string)
 						return
 					case msg := <-sendMsg:
 						log.Infof("sending message %q to %v", msg, *ircChannel)
-						ircClient.Writef("PRIVMSG %s :%s%s", *ircChannel, ignoreBotChar, msg)
+						ircClient.Writef("PRIVMSG %s :%s%s", *ircChannel, zeroWidthSpace, msg)
 					}
 				}
 			}()
@@ -130,6 +132,16 @@ func username(p gerritevents.PatchSet) string {
 		}
 	}
 	return "UNKNOWN USER"
+}
+
+// noping inserts a Unicode zero-width space between the first and rest characters of `user`
+// in an effort to avoid pinging that user on IRC.
+func noping(user string) string {
+	return fmt.Sprintf("%s%s%s", user[0], zeroWidthSpace, user[1:])
+}
+
+func nopingUsername(p gerritevents.PatchSet) string {
+	return noping(username(p))
 }
 
 func patchSetURL(c gerritevents.Change, p gerritevents.PatchSet) string {
@@ -190,12 +202,12 @@ func main() {
 				if e.Change.Project != "depot" || e.Change.Branch != "master" || e.PatchSet.Number != 1 {
 					continue
 				}
-				parsedMsg = fmt.Sprintf("CL/%d: %q proposed by %s - %s", e.Change.Number, e.Change.Subject, username(e.PatchSet), patchSetURL(e.Change, e.PatchSet))
+				parsedMsg = fmt.Sprintf("CL/%d: %q proposed by %s - %s", e.Change.Number, e.Change.Subject, nopingUsername(e.PatchSet), patchSetURL(e.Change, e.PatchSet))
 			case *gerritevents.ChangeMerged:
 				if e.Change.Project != "depot" || e.Change.Branch != "master" {
 					continue
 				}
-				parsedMsg = fmt.Sprintf("CL/%d: %q submitted by %s - %s", e.Change.Number, e.Change.Subject, username(e.PatchSet), patchSetURL(e.Change, e.PatchSet))
+				parsedMsg = fmt.Sprintf("CL/%d: %q submitted by %s - %s", e.Change.Number, e.Change.Subject, nopingUsername(e.PatchSet), patchSetURL(e.Change, e.PatchSet))
 			}
 			if parsedMsg != "" {
 				sendMsgChan <- parsedMsg
