@@ -24,6 +24,8 @@ in
     "kew" = "kubectl get events -w";
     "kdel" = "kubectl delete";
     "knw" = "kubectl get nodes -w";
+    "kev" = "kubectl get events --sort-by='.metadata.creationTimestamp'";
+
     "arsy" = "argocd app sync --prune";
   };
 
