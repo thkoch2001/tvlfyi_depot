@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "89ba7053_6e17c2b8",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-15T19:21:28Z",
+      "side": 1,
+      "message": "Don\u0027t care. Use a bouncer with a server password.\n\n(I got half-way through implementing SASL then got bored and gave up)",
+      "parentUuid": "150676f1_4f759657",
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bda13a20_afc85b7d",
         "filename": "fun/clbot/clbot.go",
         "patchSetId": 1
@@ -59,6 +77,72 @@
     },
     {
       "key": {
+        "uuid": "e7f8a8bc_a6c8425c",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-15T19:21:28Z",
+      "side": 1,
+      "message": "Not really, other than trying to avoid cases where things say Identified vs identified.",
+      "parentUuid": "bda13a20_afc85b7d",
+      "range": {
+        "startLine": 71,
+        "startChar": 92,
+        "endLine": 71,
+        "endChar": 97
+      },
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6face7e5_8cb92909",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-15T19:21:28Z",
+      "side": 1,
+      "message": "NickServ is letting us know we\u0027ve got teeth now. We\u0027ve been dent-ified.",
+      "parentUuid": "bda13a20_afc85b7d",
+      "range": {
+        "startLine": 71,
+        "startChar": 92,
+        "endLine": 71,
+        "endChar": 97
+      },
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2587dbbe_a5d7e7ac",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-15T19:21:28Z",
+      "side": 1,
+      "message": "Freenode didn\u0027t seem to send this when I checked (possibly because I\u0027m not requesting the SASL cap). For reliability, use a bouncer.",
+      "parentUuid": "43940eb8_34744765",
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dcb39890_5162dd06",
         "filename": "fun/clbot/clbot.go",
         "patchSetId": 1
@@ -79,6 +163,54 @@
       "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a54c557_4b7b1488",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-15T19:21:28Z",
+      "side": 1,
+      "message": "This is mostly taken from gerritbot; in theory this should never happen since _someone_ has to have uploaded the commit.",
+      "parentUuid": "dcb39890_5162dd06",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 22
+      },
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "05f6673f_e73cf804",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-15T19:21:28Z",
+      "side": 1,
+      "message": "Yup, this should never get hit, especially since we try all of the other things first.",
+      "parentUuid": "dcb39890_5162dd06",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 22
+      },
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
