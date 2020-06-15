@@ -163,6 +163,30 @@
       "revId": "7e1f37046136ee181481d0b9f2696cc9be9f6eae",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b63bcb63_db0181bf",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T20:09:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "815ad175_c887ad64",
+      "range": {
+        "startLine": 137,
+        "startChar": 1,
+        "endLine": 141,
+        "endChar": 1
+      },
+      "revId": "7e1f37046136ee181481d0b9f2696cc9be9f6eae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
