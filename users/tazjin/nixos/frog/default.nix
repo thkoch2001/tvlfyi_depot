@@ -189,9 +189,10 @@ in depot.lib.fix(self: {
   environment.systemPackages =
     # programs from the depot
     (with depot; [
-      fun.idual.script
-      lieer
       frogEmacs
+      fun.idual.script
+      fun.uggc
+      lieer
       ops.kontemplate
       third_party.ffmpeg
       third_party.git
