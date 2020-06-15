@@ -22,6 +22,52 @@
       "revId": "7e1f37046136ee181481d0b9f2696cc9be9f6eae",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e3aed29_bc49bbdd",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2020-06-15T17:11:10Z",
+      "side": 1,
+      "message": "Please add a comment (eg. `// noping inserts an Unicode zero-width space in a string to break highlights on IRC`)",
+      "range": {
+        "startLine": 135,
+        "startChar": 5,
+        "endLine": 135,
+        "endChar": 11
+      },
+      "revId": "7e1f37046136ee181481d0b9f2696cc9be9f6eae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "594efde4_2e373af9",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2020-06-15T17:11:10Z",
+      "side": 1,
+      "message": "Please add the ZWS as an escape code so that it\u0027s always visible.",
+      "range": {
+        "startLine": 136,
+        "startChar": 20,
+        "endLine": 136,
+        "endChar": 27
+      },
+      "revId": "7e1f37046136ee181481d0b9f2696cc9be9f6eae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
