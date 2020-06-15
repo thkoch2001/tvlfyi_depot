@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "150676f1_4f759657",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T09:02:53Z",
+      "side": 1,
+      "message": "I\u0027m assuming it uses the (server) password to auth to nickserv, but that\u0027s a freenode non-standard extension (afaik). What about non-freenode networks?",
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bda13a20_afc85b7d",
         "filename": "fun/clbot/clbot.go",
         "patchSetId": 1
@@ -19,6 +36,23 @@
         "endLine": 71,
         "endChar": 97
       },
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43940eb8_34744765",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-15T09:02:53Z",
+      "side": 1,
+      "message": "Could you not make this use RPL_LOGGEDIN (numeric 900) instead? cf. https://ircv3.net/specs/extensions/sasl-3.1#numerics-used-by-this-extension\n\nAlso, what happens if NickServ is down / we fail auth for some reason? Shouldn\u0027t there be a retry mechanism / way of detecting this within a timeout?",
       "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
