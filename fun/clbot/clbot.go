@@ -132,6 +132,14 @@ func username(p gerritevents.PatchSet) string {
 	return "UNKNOWN USER"
 }
 
+func noping(user string) string {
+	return fmt.Sprintf("%s​%s", user[0], user[1:])
+}
+
+func nopingUsername(p gerritevents.PatchSet) string {
+	return noping(username(p))
+}
+
 func patchSetURL(c gerritevents.Change, p gerritevents.PatchSet) string {
 	return fmt.Sprintf("https://cl.tvl.fyi/%d", c.Number)
 }
@@ -190,12 +198,12 @@ func main() {
 				if e.Change.Project != "depot" || e.Change.Branch != "master" || e.PatchSet.Number != 1 {
 					continue
 				}
-				parsedMsg = fmt.Sprintf("CL/%d: %q proposed by %s - %s", e.Change.Number, e.Change.Subject, username(e.PatchSet), patchSetURL(e.Change, e.PatchSet))
+				parsedMsg = fmt.Sprintf("CL/%d: %q proposed by %s - %s", e.Change.Number, e.Change.Subject, nopingUsername(e.PatchSet), patchSetURL(e.Change, e.PatchSet))
 			case *gerritevents.ChangeMerged:
 				if e.Change.Project != "depot" || e.Change.Branch != "master" {
 					continue
 				}
-				parsedMsg = fmt.Sprintf("CL/%d: %q submitted by %s - %s", e.Change.Number, e.Change.Subject, username(e.PatchSet), patchSetURL(e.Change, e.PatchSet))
+				parsedMsg = fmt.Sprintf("CL/%d: %q submitted by %s - %s", e.Change.Number, e.Change.Subject, nopingUsername(e.PatchSet), patchSetURL(e.Change, e.PatchSet))
 			}
 			if parsedMsg != "" {
 				sendMsgChan <- parsedMsg
