@@ -21,8 +21,6 @@ in {
   config = mkMerge [
     {
       home.packages = with pkgs; [
-        haskellPackages.Agda 
-
         # LaTeX (for org export)
         (pkgs.texlive.combine {
           inherit (pkgs.texlive)

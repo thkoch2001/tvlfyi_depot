@@ -32,6 +32,7 @@ with lib;
     ./lib/zshFunctions.nix
     ./development/kube.nix
     ./development/urbint.nix
+    ./development/agda.nix
   ];
 
   home.packages = with pkgs; [
@@ -48,8 +49,6 @@ with lib;
 
     clj2nix
 
-    haskellPackages.Agda
-    AgdaStdlib
     pg-dump-upsert
 
     (import ../pkgs/clang-tools { inherit pkgs; })
