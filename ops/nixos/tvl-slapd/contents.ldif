@@ -46,6 +46,15 @@ title: eta
 mail: eta@theta.eu.org
 userPassword: {SSHA}sOR5xzi7Lfv376XGQA8Hf6jyhTvo0XYc
 
+dn: cn=glittershark,ou=users,dc=tvl,dc=fyi
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: glittershark
+sn: glittershark
+title: glittershark
+mail: grfn@gws.fyi
+userPassword: {SSHA}i7PSAsXwJT3jjmmvU77aar/tU/YPDCEO
+
 dn: cn=isomer,ou=users,dc=tvl,dc=fyi
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
@@ -99,12 +108,3 @@ sn: tazjin
 title: tazjin
 mail: mail@tazj.in
 userPassword: {SSHA}67H341jRfAFBDz/R9+T3fHQiPfjwTbpQ
-
-dn: cn=tazjin,ou=users,dc=tvl,dc=fyi
-objectClass: organizationalPerson
-objectClass: inetOrgPerson
-cn: glittershark
-sn: glittershark
-title: glittershark
-mail: grfn@gws.fyi
-userPassword: {SSHA}i7PSAsXwJT3jjmmvU77aar/tU/YPDCEO
