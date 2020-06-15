@@ -56,6 +56,7 @@
 (package! request)
 (package! predd
   :recipe (:host github :repo "skeeto/predd"))
+(package! aio)
 
 ;; Haskell
 (package! lsp-haskell)

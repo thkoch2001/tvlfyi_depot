@@ -25,6 +25,7 @@
 (load! "show-matching-paren")
 (load! "irc")
 (load! "github-org")
+(load! "org-gcal")
 
 (require 's)
 
