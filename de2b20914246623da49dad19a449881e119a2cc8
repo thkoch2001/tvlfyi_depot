@@ -281,6 +281,328 @@
       "revId": "de2b20914246623da49dad19a449881e119a2cc8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5762f340_192b2b1e",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "Wow, this is still a thing? I remember putting this pragma in *years* ago.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 89
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd2ec877_e98d9586",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "I\u0027m personally not a fan of this type of formatting. The rustfmt defaults are mostly sane, IMO, and it makes sense to have something that normalises formatting.",
+      "range": {
+        "startLine": 52,
+        "startChar": 8,
+        "endLine": 53,
+        "endChar": 14
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "116a81f9_9caa1bea",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "This function is quite long. Have you considered splitting the various match arms into separate functions?\n\nThat would make it easier to read the code, and introduce additional information via the function names.",
+      "range": {
+        "startLine": 66,
+        "startChar": 11,
+        "endLine": 66,
+        "endChar": 25
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9aac304e_8796e3e9",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "This isn\u0027t a descriptive message. Think of an ops person looking at your thing while it\u0027s on fire, they might not be aware of this specific error message and would have to go dig through the code to get to the next debugging step.",
+      "range": {
+        "startLine": 75,
+        "startChar": 61,
+        "endLine": 75,
+        "endChar": 75
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28558572_960b2d2c",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "Prefer to use longer variable names for uncommon abbreviations, \"target\" is only a few bytes more and we have plenty of space! :)",
+      "range": {
+        "startLine": 76,
+        "startChar": 12,
+        "endLine": 76,
+        "endChar": 15
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cc257cf_de281aec",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "Why are some errors reported here, and others bubbled back up? The wrapping function does `report_error` anyways, no?",
+      "range": {
+        "startLine": 96,
+        "startChar": 16,
+        "endLine": 96,
+        "endChar": 33
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "804d9c33_151b5bf6",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "It would help if there were some descriptions of what some of these index operations are doing (it might be enough to just pull the arms out into separate functions with descriptive names, as mentioned above)",
+      "range": {
+        "startLine": 176,
+        "startChar": 23,
+        "endLine": 180,
+        "endChar": 29
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e30014ef_e2059069",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "makes you miss CL\u0027s loop ;)",
+      "range": {
+        "startLine": 185,
+        "startChar": 36,
+        "endLine": 185,
+        "endChar": 75
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b8490a2_600289e2",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "why special case this?",
+      "range": {
+        "startLine": 197,
+        "startChar": 27,
+        "endLine": 197,
+        "endChar": 29
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a3cf1d7_684756db",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "\\n (also the others)",
+      "range": {
+        "startLine": 220,
+        "startChar": 3,
+        "endLine": 221,
+        "endChar": 4
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e60cd012_c63d8de5",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "Should this be `info!`?",
+      "range": {
+        "startLine": 234,
+        "startChar": 20,
+        "endLine": 234,
+        "endChar": 25
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "724f4a57_203ba312",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "It\u0027s useful when log messages like these contain relevant information (makes it easier to spot trivial mistakes in error cases), e.g. `info!(\"connecting to database at \u0027{}\u0027\", \u0026cfg.database_url);`",
+      "range": {
+        "startLine": 252,
+        "startChar": 25,
+        "endLine": 252,
+        "endChar": 36
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05c22dc5_4403dc65",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 254,
+        "startChar": 25,
+        "endLine": 254,
+        "endChar": 28
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a060dbfe_dc013b13",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:32:28Z",
+      "side": 1,
+      "message": "\"CLI\" is a commonly known abbrevation which means \"Command-Line Interface\" to most people. It\u0027s recommended to disambiguate such abbreviations to avoid confusing readers, see also https://google.github.io/styleguide/cppguide.html#General_Naming_Rules (yes, that\u0027s for C++ but the general rules still make sense).",
+      "range": {
+        "startLine": 257,
+        "startChar": 13,
+        "endLine": 257,
+        "endChar": 16
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
