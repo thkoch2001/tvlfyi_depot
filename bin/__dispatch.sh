@@ -47,6 +47,9 @@ case "${TARGET_TOOL}" in
   git-bug)
     attr="third_party.git-bug"
     ;;
+  depot-build)
+    attr="tools.depot-build"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1
