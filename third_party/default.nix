@@ -97,6 +97,7 @@ let
       pandoc
       parallel
       pkgconfig
+      postgresql
       pounce
       python3
       python3Packages
