@@ -26,6 +26,7 @@
 (load! "irc")
 (load! "github-org")
 (load! "org-gcal")
+(load! "grid")
 
 (require 's)
 
