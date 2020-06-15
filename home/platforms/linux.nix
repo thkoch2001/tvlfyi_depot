@@ -46,6 +46,7 @@
     lsof
     tree
     ncat
+    iftop
 
     # Security
     gnupg
