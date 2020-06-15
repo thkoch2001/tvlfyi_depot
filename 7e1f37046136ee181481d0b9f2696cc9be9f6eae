@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d554194_ee652a45",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T17:10:18Z",
+      "side": 1,
+      "message": "Doesn\u0027t this already do that? (I\u0027m assuming this sequence is a ZWS)",
+      "range": {
+        "startLine": 66,
+        "startChar": 5,
+        "endLine": 66,
+        "endChar": 36
+      },
+      "revId": "7e1f37046136ee181481d0b9f2696cc9be9f6eae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
