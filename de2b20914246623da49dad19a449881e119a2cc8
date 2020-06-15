@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4345193c_431395ab",
+        "filename": "fun/tvldb/.dockerignore",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:09:27Z",
+      "side": 1,
+      "message": "You don\u0027t need this file.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 10
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02dd8fed_2ae67232",
+        "filename": "fun/tvldb/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:09:27Z",
+      "side": 1,
+      "message": "huh?",
+      "range": {
+        "startLine": 2,
+        "startChar": 29,
+        "endLine": 2,
+        "endChar": 53
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f056023c_d3bab955",
+        "filename": "fun/tvldb/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:09:27Z",
+      "side": 1,
+      "message": "Dockerfile? Do you still need this?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 47
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ba71ec6_2d564a93",
+        "filename": "fun/tvldb/LICENSE",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:09:27Z",
+      "side": 1,
+      "message": "We have one at the root, you don\u0027t need one here. Rather put SPDX headers on your files.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 20
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "657ffb88_5c3947d2",
+        "filename": "fun/tvldb/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:09:27Z",
+      "side": 1,
+      "message": "Protip: `M-q` in Emacs",
+      "range": {
+        "startLine": 5,
+        "startChar": 46,
+        "endLine": 6,
+        "endChar": 3
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16a7737f_014f414a",
+        "filename": "fun/tvldb/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-15T20:09:27Z",
+      "side": 1,
+      "message": "pkgs is depot.third_party, so you can remove the depot import and just use pkgs",
+      "range": {
+        "startLine": 4,
+        "startChar": 11,
+        "endLine": 4,
+        "endChar": 28
+      },
+      "revId": "de2b20914246623da49dad19a449881e119a2cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
