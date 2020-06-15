@@ -9,6 +9,20 @@ let
     sha256 = "1lry026mlpxp1j563qs13nhxf37i2zpl7lh0lgfdwc44afybqka6";
   }) {};
 
+  pg-dump-upsert = pkgs.buildGoModule rec {
+    pname = "pg-dump-upsert";
+    version = "165258deaebded5e9b88f7a0acf3a4b7350e7bf4";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "tomyl";
+      repo = "pg-dump-upsert";
+      rev = version;
+      sha256 = "1an4h8jjbj3r618ykjwk9brii4h9cxjqy47c4c8rivnvhimgf4wm";
+    };
+
+    modSha256 = "07ci2726nrn8qjvwcypk6nf8zqmfnmvch8l28bmgj7hpfrbyb424";
+  };
+
 in
 
 with lib;
@@ -36,6 +50,7 @@ with lib;
 
     haskellPackages.Agda
     AgdaStdlib
+    pg-dump-upsert
 
     (import ../pkgs/clang-tools { inherit pkgs; })
   ] ++ optional (stdenv.isLinux) julia;
