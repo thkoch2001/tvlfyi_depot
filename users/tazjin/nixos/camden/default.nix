@@ -258,27 +258,6 @@ in lib.fix(self: {
     applicationCredentials = "/etc/gcp/key.json";
   };
 
-  # Serve a code search (hound) instance
-  services.depot.hound = {
-    enable = true;
-    title = "tazjin's depot";
-    repos.depot = {
-      url = "file:///var/lib/gerrit/git/depot.git";
-      vcs = "git";
-      url-pattern = {
-        base-url = "https://code.tvl.fyi/tree/{path}{anchor}";
-        anchor = "#n{line}";
-      };
-    };
-    repos.nixpkgs = {
-      url = "file:///var/git/nixpkgs";
-      vcs = "git";
-      url-pattern = {
-        base-url = "https://github.com/NixOS/nixpkgs/blob/${pkgs.nixpkgsCommit}/{path}{anchor}";
-        anchor = "#L{line}";
-      };
-    };
-  };
 
   # Start a local SMTP relay to Gmail (used by gerrit)
   services.depot.smtprelay = {
