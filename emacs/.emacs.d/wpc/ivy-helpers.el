@@ -55,7 +55,7 @@ NixOS wrappers."
   "Prompts the user with a list of all installed applications and
 lets them select one to launch."
   (interactive)
-  (let ((external-commands-list (list-external-commands)))
+  (let ((external-commands-list (ivy-helpers/list-external-commands)))
     (ivy-read "Command:" external-commands-list
               :require-match t
               :action #'ivy-helpers/do-run-external-command)))
