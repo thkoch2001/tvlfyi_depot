@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "49f80fa5_321b5916",
+        "filename": "third_party/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-16T22:12:08Z",
+      "side": 1,
+      "message": "Nack",
+      "parentUuid": "15c20b14_0e912099",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 15
+      },
+      "revId": "bb84b54718d9220c584a9983126a2cb5acb13cba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55e5d1e3_412c6dbf",
         "filename": "third_party/default.nix",
         "patchSetId": 2
@@ -66,6 +90,40 @@
         "endLine": 184,
         "endChar": 22
       },
+      "revId": "bb84b54718d9220c584a9983126a2cb5acb13cba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c19ec910_f8f4f226",
+        "filename": "third_party/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-16T22:12:08Z",
+      "side": 1,
+      "message": "Rude.",
+      "revId": "bb84b54718d9220c584a9983126a2cb5acb13cba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "110350c1_91503556",
+        "filename": "third_party/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-06-16T22:12:08Z",
+      "side": 1,
+      "message": "But what\u0027s to say there aren\u0027t other hashes that give this result????",
       "revId": "bb84b54718d9220c584a9983126a2cb5acb13cba",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
