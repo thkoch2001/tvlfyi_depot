@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93399402_242ff4d1",
+        "filename": "users/tazjin/nixos/camden/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-16T12:13:38Z",
+      "side": 1,
+      "message": "I should note that this doesn\u0027t actually help, unless someone follows a direct link here, because JavaScript.",
+      "range": {
+        "startLine": 410,
+        "startChar": 8,
+        "endLine": 410,
+        "endChar": 42
+      },
+      "revId": "f92cf694737b6e4068ca87fa83870c2285b9dbcb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
