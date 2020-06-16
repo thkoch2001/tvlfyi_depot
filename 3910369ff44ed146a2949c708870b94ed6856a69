@@ -94,6 +94,30 @@
       "revId": "3910369ff44ed146a2949c708870b94ed6856a69",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc71dcb2_78abacc5",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-16T22:32:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f7606c9_76086866",
+      "range": {
+        "startLine": 42,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 26
+      },
+      "revId": "3910369ff44ed146a2949c708870b94ed6856a69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
