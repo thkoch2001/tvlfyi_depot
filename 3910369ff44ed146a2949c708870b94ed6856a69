@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77d320df_9b7ba5b8",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-16T17:56:56Z",
+      "side": 1,
+      "message": "perhaps `(old.passthru or {}) // rhs`?\n\n```\nnix-repl\u003e {}.x or {}\n{ }\n```",
+      "range": {
+        "startLine": 42,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 26
+      },
+      "revId": "3910369ff44ed146a2949c708870b94ed6856a69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
