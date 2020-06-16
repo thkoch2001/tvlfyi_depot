@@ -173,7 +173,7 @@
   (laptop-battery/display))
 
 ;; Load a theme
-(themes/set "Gruvbox")
+(themes/set "Solarized Light")
 
 ;; Use the Doom modeline
 (use-package 'doom-modeline)
