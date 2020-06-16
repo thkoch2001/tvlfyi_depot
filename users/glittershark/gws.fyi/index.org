@@ -1,0 +1,15 @@
+my name is griffin ward smith (aka grfn, glittershark, gws) and i'm a software
+engineer and musician
+
+- [[https://github.com/glittershark/][github]]
+- music
+  - https://sacrosanct.bandcamp.com/, a post-rock project with a [[https://bandcamp.com/h34rken][friend of mine]]
+  - [[https://soundcloud.com/missingggg][my current soundcloud]], releasing instrumental hip-hop under the name missing
+
+contact
+
+- [[mailto:web@gws.fyi][web@gws.fyi]]
+- [[https://twitter.com/glittershark1][twitter]]
+- https://keybase.io/glittershark
+- glittershark on freenode
+- [[http://keys.gnupg.net/pks/lookup?op=get&search=0x44EF5B5E861C09A7][gpg key: 0F11A989879E8BBBFDC1E23644EF5B5E861C09A7]]
