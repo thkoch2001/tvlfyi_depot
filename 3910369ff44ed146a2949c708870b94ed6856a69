@@ -22,6 +22,30 @@
       "revId": "3910369ff44ed146a2949c708870b94ed6856a69",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "211ffc23_4bded3b0",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-16T20:33:27Z",
+      "side": 1,
+      "message": "That\u0027s honestly terrifying. How does this even work? Is this specified? Oh dear. I need to add this to nix-1p",
+      "parentUuid": "77d320df_9b7ba5b8",
+      "range": {
+        "startLine": 42,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 26
+      },
+      "revId": "3910369ff44ed146a2949c708870b94ed6856a69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
