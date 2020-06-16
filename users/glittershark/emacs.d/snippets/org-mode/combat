@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: combat
+# uuid:
+# key: combat
+# condition: t
+# --
+|             | initiative | max hp | current hp | status |      |
+|-------------+------------+--------+------------+--------+------|
+| Barty Barty |            |        |            |        | <--- |
+| Hectoroth   |            |        |            |        |      |
+| Xanadu      |            |        |            |        |      |
+| Aurora      |            |        |            |        |      |
+| EFB         |            |        |            |        |      |

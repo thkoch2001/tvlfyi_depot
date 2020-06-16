@@ -1,0 +1,4 @@
+# key: i
+# name: import-i
+# --
+import           ${1:Prelude}

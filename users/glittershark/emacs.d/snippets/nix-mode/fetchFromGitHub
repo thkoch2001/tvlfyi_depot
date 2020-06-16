@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: fetchFromGitHub
+# uuid:
+# key: fetchFromGitHub
+# condition: t
+# --
+fetchFromGitHub {
+                owner = "$1";
+                repo = "$2";
+                rev = "$3";
+                sha256 = "0000000000000000000000000000000000000000000000000000";
+}
