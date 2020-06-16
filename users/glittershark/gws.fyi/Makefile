@@ -1,7 +1,7 @@
 .PHONY: deploy
 
 deploy:
-	@`nix-build --no-out-link`
+	@$(shell nix-build `git rev-parse --show-toplevel` -A 'users.glittershark."gws.fyi"' --no-out-link)
 
 renew:
 	@echo Renewing...
