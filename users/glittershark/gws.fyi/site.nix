@@ -1,7 +1,9 @@
-args@{ pkgs, depot, ... }:
+args@{ pkgs ? import <nixpkgs> {}, ... }:
 
 let
+
   orgExportHTML = import ./orgExportHTML.nix args;
+
 in
 
 {

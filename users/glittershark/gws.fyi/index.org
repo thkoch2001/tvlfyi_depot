@@ -1,3 +1,6 @@
+#+OPTIONS: title:nil
+#+HTML_HEAD: <title>griffin smith</title>
+
 my name is griffin ward smith (aka grfn, glittershark, gws) and i'm a software
 engineer and musician
 
