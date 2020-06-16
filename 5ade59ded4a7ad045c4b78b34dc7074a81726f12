@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3bd7630_b218ae8c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-16T01:15:36Z",
+      "side": 1,
+      "message": "the scope of this isn\u0027t really `bin/gerrit`, it\u0027s `gerrit-cli`",
+      "range": {
+        "startLine": 7,
+        "startChar": 5,
+        "endLine": 7,
+        "endChar": 15
+      },
+      "revId": "5ade59ded4a7ad045c4b78b34dc7074a81726f12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6b65135_f0cf41d8",
+        "filename": "tools/gerrit-cli.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-16T01:15:36Z",
+      "side": 1,
+      "message": "This will actually break on some people\u0027s machines (I know this because it will break on one of mine). I\u0027d prefer if you checked for an existing ssh binary before falling back to this one (like the username).",
+      "range": {
+        "startLine": 7,
+        "startChar": 2,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "5ade59ded4a7ad045c4b78b34dc7074a81726f12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
