@@ -1,7 +1,7 @@
 .PHONY: deploy
 
 deploy:
-	@`nix-build --no-out-link`
+	@`nix-build ../../.. -A 'users.glittershark."gws.fyi"' --no-out-link`
 
 renew:
 	@echo Renewing...
