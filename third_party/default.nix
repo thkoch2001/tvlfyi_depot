@@ -179,6 +179,34 @@ in exposed.lib.fix(self: exposed // {
   clangStdenv = nixpkgs.llvmPackages_10.stdenv;
   stdenv = nixpkgs.llvmPackages_10.stdenv;
 
+  # The Go authors have released a version of Go (in alpha) that has a
+  # type system. This makes it available, specifically for use with
+  # //nix/buildTypedGo.
+  typedGo = nixpkgs.go.overrideAttrs(old: {
+    version = "dev-go2go";
+    doCheck = false;
+    patches = []; # they all don't apply and are mostly about Darwin crap
+
+    nativeBuildInputs = [
+      nixpkgs.git
+    ];
+
+    src = nixpkgs.fetchgit {
+      url = "https://go.googlesource.com/go";
+      leaveDotGit = true;
+      # You might think these hashes are trivial to update. It's just
+      # a branch in a git repository, right?
+      #
+      # Well, think again. Somehow I managed to get no fewer than 3
+      # (!) different commit hashes for the same branch by cloning
+      # this repository thrice. Only the third one (which you, the
+      # reader, can find below for your reading pleasure) actually
+      # gave me `go tool go2go`.
+      rev = "ad307489d41133f32c779cfa1b0db4a852ace047";
+      sha256 = "1rxr53cklnhmps7vrx1v43a16fr689h4v3ngdppzbdv4f23mq9pg";
+    };
+  });
+
   # Make NixOS available
   nixos = import "${nixpkgsSrc}/nixos";
 })
