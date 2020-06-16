@@ -22,6 +22,30 @@
       "revId": "fd96cf9a536f8338527ea2623e0a0cc77a962a68",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c59b9dd4_fa7e7b35",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-16T20:32:14Z",
+      "side": 1,
+      "message": "See the \"Code Search\" section in the monorepo doc.",
+      "parentUuid": "d6eca32f_b4b9aafe",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 45
+      },
+      "revId": "fd96cf9a536f8338527ea2623e0a0cc77a962a68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
