@@ -16,7 +16,6 @@ config: let
 in lib.fix(self: {
   imports = [
     "${depot.depotPath}/ops/nixos/depot.nix"
-    "${depot.depotPath}/ops/nixos/hound.nix"
     "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
     "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
