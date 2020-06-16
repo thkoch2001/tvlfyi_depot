@@ -66,8 +66,17 @@ Path Store::followLinksToStorePath(const Path& path) const {
 
 std::string storePathToName(const Path& path) {
   auto base = baseNameOf(path);
-  assert(base.size() == storePathHashLen ||
-         (base.size() > storePathHashLen && base[storePathHashLen] == '-'));
+
+  // The base name of the store path must be `storePathHashLen` characters long,
+  // if it is not `storePathHashLen` long then the next character, following
+  // the hash part, MUST be a dash (`-`).
+  const bool hasLengthMismatch = base.size() != storePathHashLen;
+  const bool hasInvalidSuffix =
+      base.size() > storePathHashLen && base[storePathHashLen] != '-';
+  if (hasLengthMismatch && hasInvalidSuffix) {
+    throw Error(format("path '%1%' is not a valid store path") % path);
+  }
+
   return base.size() == storePathHashLen
              ? ""
              : std::string(base, storePathHashLen + 1);
