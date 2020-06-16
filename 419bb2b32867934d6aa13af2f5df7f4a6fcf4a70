@@ -234,6 +234,30 @@
       "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c0d28a7_e00b6da1",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-16T12:10:51Z",
+      "side": 1,
+      "message": "I\u0027ll deal with that in a followup CL, I think, to avoid leaving this one hanging for too long.",
+      "parentUuid": "cff53ef3_f5638bef",
+      "range": {
+        "startLine": 190,
+        "startChar": 37,
+        "endLine": 190,
+        "endChar": 66
+      },
+      "revId": "419bb2b32867934d6aa13af2f5df7f4a6fcf4a70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
