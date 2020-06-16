@@ -129,12 +129,14 @@ in lib.fix(self: {
       curl
       direnv
       emacs26-nox
-      gnupg
       git
+      gnupg
+      google-cloud-sdk
       htop
       jq
       pass
       pciutils
+      restic
       ripgrep
     ]);
 
@@ -458,6 +460,30 @@ in lib.fix(self: {
     serviceConfig = {
       Type = "oneshot";
     };
+  };
+
+  # Regularly back up Gerrit to Google Cloud Storage.
+  systemd.user.services.restic-gerrit = {
+    description = "Gerrit backups to Google Cloud Storage";
+    script = "${nixpkgs.restic}/bin/restic backup /var/lib/gerrit";
+    environment = {
+      RESTIC_REPOSITORY = "gs:tvl-fyi-backups:/camden";
+      RESTIC_PASSWORD_FILE = "%h/.config/restic/secret";
+      RESTIC_EXCLUDE_FILE = builtins.toFile "exclude-files" ''
+        /var/lib/gerrit/etc/secure.config
+        /var/lib/gerrit/etc/ssh_host_*_key
+        /var/lib/gerrit/etc/ssh_host_*_key
+        /var/lib/gerrit/etc/ssh_host_*_key
+        /var/lib/gerrit/etc/ssh_host_*_key
+        /var/lib/gerrit/etc/ssh_host_*_key
+        /var/lib/gerrit/tmp
+      '';
+    };
+  };
+
+  systemd.user.timers.restic-gerrit = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "hourly";
   };
 
   system.stateVersion = "19.09";
