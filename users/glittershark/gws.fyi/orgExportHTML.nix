@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs ? import <nixpkgs> {}, ... }:
 
 with pkgs;
 with lib;
@@ -20,14 +20,29 @@ let
 
 in
 
-src:
+opts:
 
 let
+  src = if isAttrs opts then opts.src else opts;
+  headline = if isAttrs opts then opts.headline else null;
+
+  bn = builtins.baseNameOf src;
+  filename = elemAt (splitString "." bn) 0;
 
   outName =
-    let bn = builtins.baseNameOf src;
-        filename = elemAt (splitString "." bn) 0;
-    in filename + ".html";
+    if isNull headline
+    then
+      let bn = builtins.baseNameOf src;
+          filename = elemAt (splitString "." bn) 0;
+      in filename + ".html"
+    else "${filename}-${replaceStrings [" "] ["-"] filename}.html";
+
+  escapeDoubleQuotes = replaceStrings ["\""] ["\\\""];
+
+  navToHeadline = optionalString (! isNull headline) ''
+    (search-forward "${escapeDoubleQuotes headline}")
+    (org-narrow-to-subtree)
+  '';
 
 in
 
@@ -38,8 +53,9 @@ runCommand outName {} ''
     --load ${./config.el} \
     --visit file.org \
     --eval "(progn
-      (require 'org)
+      ${escapeDoubleQuotes navToHeadline}
       (org-html-export-to-html))" \
     --kill
-  cp file.html $out
+  substitute file.html $out \
+    --replace '<title>&lrm;</title>' ""
 ''
