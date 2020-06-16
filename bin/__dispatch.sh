@@ -50,6 +50,9 @@ case "${TARGET_TOOL}" in
   depot-build)
     attr="tools.depot-build"
     ;;
+  gerrit)
+    attr="tools.gerrit-cli"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1
