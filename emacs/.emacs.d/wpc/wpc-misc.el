@@ -6,10 +6,18 @@
 
 ;;; Code:
 
-;; Display time in the modeline
-;; TODO: Save preferred date format strings and cycle through them since I waver
-;; about which is my favorite.
-(setq display-time-format "%R %a %d %b [%U of 52 weeks]")
+;; I'm borrowing from the dot-time format (i.e. https://dotti.me) to encode the
+;; timestamp. This displays the UTC time and an offset to show the number of
+;; hours East or West of UTC my current timezone is using `current-time-zone'.
+;;
+;; Reminder to me:
+;; LON: +00 (UTC) or +01 (BST)
+;; NYC: -05
+;; SF:  -07
+(setq display-time-format
+      (concat "%H·%M"
+              (format "%0+3d" (/ (car (current-time-zone)) 3600))
+              " %a %d %b [%U of 52 weeks]"))
 (display-time-mode 1)
 
 ;; disable custom variable entries from being written to ~/.emacs.d/init.el
