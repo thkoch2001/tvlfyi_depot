@@ -137,7 +137,8 @@ func username(p gerritevents.PatchSet) string {
 // noping inserts a Unicode zero-width space between the first and rest characters of `user`
 // in an effort to avoid pinging that user on IRC.
 func noping(user string) string {
-	return fmt.Sprintf("%s%s%s", user[0], zeroWidthSpace, user[1:])
+	un := []rune(user)
+	return string(un[0:1]) + zeroWidthSpace + string(un[1:])
 }
 
 func patchSetURL(c gerritevents.Change, p gerritevents.PatchSet) string {
