@@ -93,6 +93,30 @@
       "revId": "5ade59ded4a7ad045c4b78b34dc7074a81726f12",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fccda8b0_5f5bb73c",
+        "filename": "tools/gerrit-cli.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-16T01:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e33e3b06_5adb950e",
+      "range": {
+        "startLine": 7,
+        "startChar": 2,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "5ade59ded4a7ad045c4b78b34dc7074a81726f12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
