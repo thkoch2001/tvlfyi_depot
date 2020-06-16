@@ -22,6 +22,30 @@
       "revId": "7324429de50b19994a123ba4d7fa356228134a6e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3f600c1_6db0bce3",
+        "filename": "users/glittershark/gws.fyi/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-16T02:33:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08bbc557_b48e3f50",
+      "range": {
+        "startLine": 4,
+        "startChar": 13,
+        "endLine": 4,
+        "endChar": 21
+      },
+      "revId": "7324429de50b19994a123ba4d7fa356228134a6e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
