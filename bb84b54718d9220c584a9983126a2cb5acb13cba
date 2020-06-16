@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "15c20b14_0e912099",
+        "filename": "third_party/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-16T22:09:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d85d22f0_9eec3e06",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 15
+      },
+      "revId": "bb84b54718d9220c584a9983126a2cb5acb13cba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55e5d1e3_412c6dbf",
         "filename": "third_party/default.nix",
         "patchSetId": 2
