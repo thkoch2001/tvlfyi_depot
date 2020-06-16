@@ -31,6 +31,7 @@ let
       age
       autoconf
       autoreconfHook
+      awscli
       bashInteractive
       bat
       buildBazelPackage
