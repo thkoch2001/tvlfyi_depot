@@ -70,6 +70,30 @@
       "revId": "3910369ff44ed146a2949c708870b94ed6856a69",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f7606c9_76086866",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-16T20:38:45Z",
+      "side": 1,
+      "message": "keep in mind that this is not the `||` operator, which is actually a proper infix operator - `or` is syntax.",
+      "parentUuid": "09c7e39f_965cd339",
+      "range": {
+        "startLine": 42,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 26
+      },
+      "revId": "3910369ff44ed146a2949c708870b94ed6856a69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
