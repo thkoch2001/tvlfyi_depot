@@ -18,6 +18,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/hound.nix"
     "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
+    "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
     "${pkgs.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
@@ -258,6 +259,8 @@ in lib.fix(self: {
     applicationCredentials = "/etc/gcp/key.json";
   };
 
+  # Run a SourceGraph code search instance
+  services.depot.sourcegraph.enable = true;
 
   # Start a local SMTP relay to Gmail (used by gerrit)
   services.depot.smtprelay = {
@@ -393,14 +396,19 @@ in lib.fix(self: {
       '';
     };
 
-    virtualHosts.hound = {
+    virtualHosts.sourcegraph = {
       serverName = "cs.tvl.fyi";
       useACMEHost = "tvl.fyi";
       forceSSL = true;
 
       extraConfig = ''
         location / {
-          proxy_pass http://localhost:6080;
+          proxy_set_header X-Sg-Auth "Anonymous";
+          proxy_pass http://localhost:3463;
+        }
+
+        location /users/Anonymous/settings {
+          return 301 https://cs.tvl.fyi;
         }
       '';
     };
