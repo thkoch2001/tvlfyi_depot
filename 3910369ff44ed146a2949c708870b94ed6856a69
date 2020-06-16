@@ -46,6 +46,30 @@
       "revId": "3910369ff44ed146a2949c708870b94ed6856a69",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09c7e39f_965cd339",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-16T20:36:43Z",
+      "side": 1,
+      "message": "`EXPR\".\"IDENT \"or\" EXPR` is a separate parse tree token than `EXPR\".\"IDENT`, iirc.\n\nIt is part of the nix language spec - I figured it out originally from reading the docs",
+      "parentUuid": "211ffc23_4bded3b0",
+      "range": {
+        "startLine": 42,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 26
+      },
+      "revId": "3910369ff44ed146a2949c708870b94ed6856a69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
