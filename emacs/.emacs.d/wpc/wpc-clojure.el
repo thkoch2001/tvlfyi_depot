@@ -74,6 +74,14 @@
     "<down>" #'cider-repl-next-input
     ;; "C-c 'j" #'wpc/find-or-create-clojure-or-clojurescript-repl
     )
+  (general-define-key
+   :keymaps 'clojure-mode-map
+   :states '(normal)
+   :prefix "<SPC>"
+   "x" #'cider-eval-defun-at-point
+   "X" #'cider-eval-buffer
+   "d" #'cider-symbol-at-point)
+  (setq cider-prompt-for-symbol nil)
   ;; (setq cider-cljs-lein-repl
   ;;       "(do (require 'figwheel-sidecar.repl-api)
   ;;            (figwheel-sidecar.repl-api/start-figwheel!)
