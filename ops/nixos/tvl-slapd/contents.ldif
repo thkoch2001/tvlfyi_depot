@@ -91,6 +91,15 @@ title: q3k
 mail: q3k@q3k.org
 userPassword: {SSHA}BEccJdtnhVLDzOn+pxNfayNi3QFcEABE
 
+dn: cn=ericvolp12,ou=users,dc=tvl,dc=fyi
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: ericvolp12
+sn: ericvolp12
+title: ericvolp12
+mail: ericvolp12@gmail.com
+userPassword: {SSHA}pSepaQ+/5KBLfJtRR5rfxGU8goAsXgvk
+
 dn: cn=riking,ou=users,dc=tvl,dc=fyi
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
