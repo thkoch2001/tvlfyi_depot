@@ -1,0 +1,361 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 0486cac7957fae1f9badffdd082f0c5eb5910eb8c066569123b0f57bc6fa0d8b
+
+name:           xanthous
+version:        0.1.0.0
+synopsis:       A WIP TUI RPG
+description:    Please see the README on GitHub at <https://github.com/glittershark/xanthous>
+category:       Game
+homepage:       https://github.com/glittershark/xanthous#readme
+bug-reports:    https://github.com/glittershark/xanthous/issues
+author:         Griffin Smith
+maintainer:     root@gws.fyi
+copyright:      2019 Griffin Smith
+license:        GPL-3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.org
+
+source-repository head
+  type: git
+  location: https://github.com/glittershark/xanthous
+
+library
+  exposed-modules:
+      Data.Aeson.Generic.DerivingVia
+      Main
+      Xanthous.AI.Gormlak
+      Xanthous.App
+      Xanthous.App.Autocommands
+      Xanthous.App.Common
+      Xanthous.App.Prompt
+      Xanthous.App.Time
+      Xanthous.Command
+      Xanthous.Data
+      Xanthous.Data.App
+      Xanthous.Data.Entities
+      Xanthous.Data.EntityChar
+      Xanthous.Data.EntityMap
+      Xanthous.Data.EntityMap.Graphics
+      Xanthous.Data.Levels
+      Xanthous.Data.NestedMap
+      Xanthous.Data.VectorBag
+      Xanthous.Entities.Character
+      Xanthous.Entities.Creature
+      Xanthous.Entities.Creature.Hippocampus
+      Xanthous.Entities.Draw.Util
+      Xanthous.Entities.Entities
+      Xanthous.Entities.Environment
+      Xanthous.Entities.Item
+      Xanthous.Entities.Raws
+      Xanthous.Entities.RawTypes
+      Xanthous.Game
+      Xanthous.Game.Arbitrary
+      Xanthous.Game.Draw
+      Xanthous.Game.Env
+      Xanthous.Game.Lenses
+      Xanthous.Game.Prompt
+      Xanthous.Game.State
+      Xanthous.Generators
+      Xanthous.Generators.CaveAutomata
+      Xanthous.Generators.Dungeon
+      Xanthous.Generators.LevelContents
+      Xanthous.Generators.Util
+      Xanthous.Messages
+      Xanthous.Messages.Template
+      Xanthous.Monad
+      Xanthous.Orphans
+      Xanthous.Prelude
+      Xanthous.Random
+      Xanthous.Util
+      Xanthous.Util.Comonad
+      Xanthous.Util.Graph
+      Xanthous.Util.Graphics
+      Xanthous.Util.Inflection
+      Xanthous.Util.JSON
+      Xanthous.Util.Optparse
+      Xanthous.Util.QuickCheck
+  other-modules:
+      Paths_xanthous
+  hs-source-dirs:
+      src
+  default-extensions: BlockArguments ConstraintKinds DataKinds DeriveAnyClass DeriveGeneric DerivingStrategies DerivingVia FlexibleContexts FlexibleInstances FunctionalDependencies GADTSyntax GeneralizedNewtypeDeriving KindSignatures LambdaCase MultiWayIf NoImplicitPrelude NoStarIsType OverloadedStrings PolyKinds RankNTypes ScopedTypeVariables TupleSections TypeApplications TypeFamilies TypeOperators ViewPatterns
+  ghc-options: -Wall
+  build-depends:
+      JuicyPixels
+    , MonadRandom
+    , QuickCheck
+    , Rasterific
+    , aeson
+    , array
+    , async
+    , base
+    , bifunctors
+    , brick
+    , checkers
+    , classy-prelude
+    , comonad
+    , comonad-extras
+    , constraints
+    , containers
+    , data-default
+    , deepseq
+    , directory
+    , fgl
+    , fgl-arbitrary
+    , file-embed
+    , filepath
+    , generic-arbitrary
+    , generic-lens
+    , generic-monoid
+    , groups
+    , hgeometry
+    , hgeometry-combinatorial
+    , lens
+    , lifted-async
+    , linear
+    , megaparsec
+    , mmorph
+    , monad-control
+    , mtl
+    , optparse-applicative
+    , parser-combinators
+    , pointed
+    , quickcheck-instances
+    , quickcheck-text
+    , random
+    , random-extras
+    , random-fu
+    , random-source
+    , raw-strings-qq
+    , reflection
+    , semigroupoids
+    , stache
+    , streams
+    , text
+    , text-zipper
+    , tomland
+    , vector
+    , vty
+    , yaml
+    , zlib
+  default-language: Haskell2010
+
+executable xanthous
+  main-is: Main.hs
+  other-modules:
+      Data.Aeson.Generic.DerivingVia
+      Xanthous.AI.Gormlak
+      Xanthous.App
+      Xanthous.App.Autocommands
+      Xanthous.App.Common
+      Xanthous.App.Prompt
+      Xanthous.App.Time
+      Xanthous.Command
+      Xanthous.Data
+      Xanthous.Data.App
+      Xanthous.Data.Entities
+      Xanthous.Data.EntityChar
+      Xanthous.Data.EntityMap
+      Xanthous.Data.EntityMap.Graphics
+      Xanthous.Data.Levels
+      Xanthous.Data.NestedMap
+      Xanthous.Data.VectorBag
+      Xanthous.Entities.Character
+      Xanthous.Entities.Creature
+      Xanthous.Entities.Creature.Hippocampus
+      Xanthous.Entities.Draw.Util
+      Xanthous.Entities.Entities
+      Xanthous.Entities.Environment
+      Xanthous.Entities.Item
+      Xanthous.Entities.Raws
+      Xanthous.Entities.RawTypes
+      Xanthous.Game
+      Xanthous.Game.Arbitrary
+      Xanthous.Game.Draw
+      Xanthous.Game.Env
+      Xanthous.Game.Lenses
+      Xanthous.Game.Prompt
+      Xanthous.Game.State
+      Xanthous.Generators
+      Xanthous.Generators.CaveAutomata
+      Xanthous.Generators.Dungeon
+      Xanthous.Generators.LevelContents
+      Xanthous.Generators.Util
+      Xanthous.Messages
+      Xanthous.Messages.Template
+      Xanthous.Monad
+      Xanthous.Orphans
+      Xanthous.Prelude
+      Xanthous.Random
+      Xanthous.Util
+      Xanthous.Util.Comonad
+      Xanthous.Util.Graph
+      Xanthous.Util.Graphics
+      Xanthous.Util.Inflection
+      Xanthous.Util.JSON
+      Xanthous.Util.Optparse
+      Xanthous.Util.QuickCheck
+      Paths_xanthous
+  hs-source-dirs:
+      src
+  default-extensions: BlockArguments ConstraintKinds DataKinds DeriveAnyClass DeriveGeneric DerivingStrategies DerivingVia FlexibleContexts FlexibleInstances FunctionalDependencies GADTSyntax GeneralizedNewtypeDeriving KindSignatures LambdaCase MultiWayIf NoImplicitPrelude NoStarIsType OverloadedStrings PolyKinds RankNTypes ScopedTypeVariables TupleSections TypeApplications TypeFamilies TypeOperators ViewPatterns
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N -O2
+  build-depends:
+      JuicyPixels
+    , MonadRandom
+    , QuickCheck
+    , Rasterific
+    , aeson
+    , array
+    , async
+    , base
+    , bifunctors
+    , brick
+    , checkers
+    , classy-prelude
+    , comonad
+    , comonad-extras
+    , constraints
+    , containers
+    , data-default
+    , deepseq
+    , directory
+    , fgl
+    , fgl-arbitrary
+    , file-embed
+    , filepath
+    , generic-arbitrary
+    , generic-lens
+    , generic-monoid
+    , groups
+    , hgeometry
+    , hgeometry-combinatorial
+    , lens
+    , lifted-async
+    , linear
+    , megaparsec
+    , mmorph
+    , monad-control
+    , mtl
+    , optparse-applicative
+    , parser-combinators
+    , pointed
+    , quickcheck-instances
+    , quickcheck-text
+    , random
+    , random-extras
+    , random-fu
+    , random-source
+    , raw-strings-qq
+    , reflection
+    , semigroupoids
+    , stache
+    , streams
+    , text
+    , text-zipper
+    , tomland
+    , vector
+    , vty
+    , xanthous
+    , yaml
+    , zlib
+  default-language: Haskell2010
+
+test-suite test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Test.Prelude
+      Xanthous.Data.EntitiesSpec
+      Xanthous.Data.EntityCharSpec
+      Xanthous.Data.EntityMap.GraphicsSpec
+      Xanthous.Data.EntityMapSpec
+      Xanthous.Data.LevelsSpec
+      Xanthous.Data.NestedMapSpec
+      Xanthous.DataSpec
+      Xanthous.Entities.RawsSpec
+      Xanthous.GameSpec
+      Xanthous.Generators.UtilSpec
+      Xanthous.Messages.TemplateSpec
+      Xanthous.MessageSpec
+      Xanthous.OrphansSpec
+      Xanthous.Util.GraphicsSpec
+      Xanthous.Util.GraphSpec
+      Xanthous.Util.InflectionSpec
+      Xanthous.UtilSpec
+      Paths_xanthous
+  hs-source-dirs:
+      test
+  default-extensions: BlockArguments ConstraintKinds DataKinds DeriveAnyClass DeriveGeneric DerivingStrategies DerivingVia FlexibleContexts FlexibleInstances FunctionalDependencies GADTSyntax GeneralizedNewtypeDeriving KindSignatures LambdaCase MultiWayIf NoImplicitPrelude NoStarIsType OverloadedStrings PolyKinds RankNTypes ScopedTypeVariables TupleSections TypeApplications TypeFamilies TypeOperators ViewPatterns
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N -O0
+  build-depends:
+      JuicyPixels
+    , MonadRandom
+    , QuickCheck
+    , Rasterific
+    , aeson
+    , array
+    , async
+    , base
+    , bifunctors
+    , brick
+    , checkers
+    , classy-prelude
+    , comonad
+    , comonad-extras
+    , constraints
+    , containers
+    , data-default
+    , deepseq
+    , directory
+    , fgl
+    , fgl-arbitrary
+    , file-embed
+    , filepath
+    , generic-arbitrary
+    , generic-lens
+    , generic-monoid
+    , groups
+    , hgeometry
+    , hgeometry-combinatorial
+    , lens
+    , lens-properties
+    , lifted-async
+    , linear
+    , megaparsec
+    , mmorph
+    , monad-control
+    , mtl
+    , optparse-applicative
+    , parser-combinators
+    , pointed
+    , quickcheck-instances
+    , quickcheck-text
+    , random
+    , random-extras
+    , random-fu
+    , random-source
+    , raw-strings-qq
+    , reflection
+    , semigroupoids
+    , stache
+    , streams
+    , tasty
+    , tasty-hunit
+    , tasty-quickcheck
+    , text
+    , text-zipper
+    , tomland
+    , vector
+    , vty
+    , xanthous
+    , yaml
+    , zlib
+  default-language: Haskell2010
