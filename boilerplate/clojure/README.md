@@ -16,7 +16,7 @@ placeholder values:
 - `README.md`: Change the title; change the description; drop "Files to change";
   keep "Getting started"
 - `project.clj`: Change title
-- `src/project.clj`: Change `:doc`; drop `main/foo`
+- `src/main.clj`: Change `:doc`; drop `main/foo`
 
 ## Getting started
 
