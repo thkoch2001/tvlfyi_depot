@@ -63,7 +63,7 @@ in {
         server = "ldap://localhost";
         accountBase = "ou=users,dc=tvl,dc=fyi";
         accountPattern = "(&(objectClass=organizationalPerson)(cn=\${username}))";
-        accountFullName = "cn";
+        accountFullName = "displayName";
         accountEmailAddress = "mail";
         accountSshUserName = "cn";
         groupBase = "ou=groups,dc=tvl,dc=fyi";
