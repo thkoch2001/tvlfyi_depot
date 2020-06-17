@@ -98,9 +98,9 @@ instructions:
 
 1. Be a member of `##tvl`.
 2. Clone the depot locally.
-3. Create a user entry in our LDAP server, in [`contents.ldif`][]. You create
-   your password hash by using `slappasswd`, which ships in the `openldap`
-   package on most distributions.
+3. Create a user entry in our LDAP server in [tvl-slapd/default.nix][tvl-slapd].
+   You can create your password hash by using `slappasswd`, which ships in the
+   `openldap` package on most distributions.
 
    On systems with Nix systems you can use `nix-shell -p openldap` to get access
    to the command.
@@ -125,5 +125,5 @@ The email address is a [public group][].
 [Gerrit walkthrough]: https://gerrit-review.googlesource.com/Documentation/intro-gerrit-walkthrough.html
 [OWNERS]: https://cl.tvl.fyi/plugins/owners/Documentation/config.md
 [guidelines]: ./CONTRIBUTING.md#commit-messages
-[`contents.ldif`]: https://code.tvl.fyi/tree/ops/nixos/tvl-slapd/contents.ldif
+[tvl-slapd]: https://code.tvl.fyi/tree/ops/nixos/tvl-slapd/default.nix
 [public group]: https://groups.google.com/a/tazj.in/forum/?hl=en#!forum/depot
