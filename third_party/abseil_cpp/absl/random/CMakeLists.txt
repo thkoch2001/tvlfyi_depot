@@ -45,7 +45,6 @@ absl_cc_library(
     absl::core_headers
     absl::random_internal_distribution_caller
     absl::random_internal_fast_uniform_bits
-    absl::random_internal_mocking_bit_gen_base
     absl::type_traits
 )
 
@@ -62,6 +61,7 @@ absl_cc_test(
     absl::random_bit_gen_ref
     absl::random_random
     absl::random_internal_sequence_urbg
+    absl::fast_type_id
     gmock
     gtest_main
 )
@@ -69,16 +69,16 @@ absl_cc_test(
 # Internal-only target, do not depend on directly.
 absl_cc_library(
   NAME
-    random_internal_mocking_bit_gen_base
+    random_internal_mock_helpers
   HDRS
-    "internal/mocking_bit_gen_base.h"
+    "internal/mock_helpers.h"
   COPTS
     ${ABSL_DEFAULT_COPTS}
   LINKOPTS
     ${ABSL_DEFAULT_LINKOPTS}
   DEPS
-    absl::random_random
-    absl::strings
+    absl::fast_type_id
+    absl::optional
 )
 
 # Internal-only target, do not depend on directly.
@@ -93,6 +93,7 @@ absl_cc_library(
     ${ABSL_DEFAULT_LINKOPTS}
   DEPS
     absl::random_mocking_bit_gen
+    absl::random_internal_mock_helpers
   TESTONLY
 )
 
@@ -111,8 +112,8 @@ absl_cc_library(
     absl::raw_logging_internal
     absl::random_distributions
     absl::random_internal_distribution_caller
-    absl::random_internal_mocking_bit_gen_base
     absl::random_internal_mock_overload_set
+    absl::random_random
     absl::strings
     absl::span
     absl::type_traits
@@ -183,7 +184,7 @@ absl_cc_library(
     absl::config
     absl::core_headers
     absl::random_internal_generate_real
-    absl::random_internal_distributions
+    absl::random_internal_distribution_caller
     absl::random_internal_fast_uniform_bits
     absl::random_internal_fastmath
     absl::random_internal_iostream_state_saver
@@ -191,7 +192,6 @@ absl_cc_library(
     absl::random_internal_uniform_helper
     absl::random_internal_wide_multiply
     absl::strings
-    absl::span
     absl::type_traits
 )
 
@@ -534,27 +534,8 @@ absl_cc_library(
     ${ABSL_DEFAULT_LINKOPTS}
   DEPS
     absl::config
-)
-
-# Internal-only target, do not depend on directly.
-absl_cc_library(
-  NAME
-    random_internal_distributions
-  HDRS
-    "internal/distributions.h"
-  COPTS
-    ${ABSL_DEFAULT_COPTS}
-  LINKOPTS
-    ${ABSL_DEFAULT_LINKOPTS}
-  DEPS
-    absl::random_internal_distribution_caller
-    absl::random_internal_fast_uniform_bits
-    absl::random_internal_fastmath
-    absl::random_internal_traits
-    absl::random_internal_uniform_helper
-    absl::span
-    absl::strings
-    absl::type_traits
+    absl::utility
+    absl::fast_type_id
 )
 
 # Internal-only target, do not depend on directly.
@@ -745,7 +726,6 @@ absl_cc_library(
     absl::random_internal_salted_seed_seq
     absl::random_internal_seed_material
     absl::span
-    absl::strings
     absl::type_traits
 )
 
@@ -1174,9 +1154,7 @@ absl_cc_library(
   LINKOPTS
     ${ABSL_DEFAULT_LINKOPTS}
   DEPS
-    absl::core_headers
-    absl::random_internal_fast_uniform_bits
-    absl::random_internal_iostream_state_saver
+    absl::config
     absl::random_internal_traits
     absl::type_traits
 )
