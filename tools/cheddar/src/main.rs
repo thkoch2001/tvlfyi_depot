@@ -1,3 +1,4 @@
+use clap::{Arg, App};
 use comrak::arena_tree::Node;
 use comrak::nodes::{Ast, AstNode, NodeValue, NodeCodeBlock, NodeHtmlBlock};
 use comrak::{Arena, parse_document, format_html, ComrakOptions};
@@ -70,35 +71,6 @@ struct Args {
 
     /// Which language to override the detection to (if any)?
     lang_override: Option<&'static str>,
-}
-
-/// Parse the command-line flags passed to cheddar to determine
-/// whether it is running in about-filter mode (`--about-filter`) and
-/// what file extension has been supplied.
-fn parse_args() -> Args {
-    let mut args = Args::default();
-
-    for (i, arg) in env::args().enumerate() {
-        if i == 0 {
-            continue;
-        }
-
-        if arg == "--about-filter" {
-            args.about_filter = true;
-            continue;
-        }
-
-        if let Some(lang) = (*FILENAME_OVERRIDES).get(arg.as_str()) {
-            args.lang_override = Some(lang);
-        }
-
-        args.extension = Path::new(&arg)
-            .extension()
-            .and_then(OsStr::to_str)
-            .map(|s| s.to_string());
-    }
-
-    return args
 }
 
 fn should_continue(res: &io::Result<usize>) -> bool {
@@ -312,7 +284,32 @@ fn format_code(args: &Args) {
 }
 
 fn main() {
-    let args = parse_args();
+    // Parse the command-line flags passed to cheddar to determine
+    // whether it is running in about-filter mode (`--about-filter`)
+    // and what file extension has been supplied.
+    let matches = App::new("cheddar")
+        .about("TVL's syntax highlighter")
+        .arg(Arg::with_name("about-filter")
+             .help("Run as a cgit about-filter (renders Markdown)")
+             .long("about-filter")
+             .takes_value(false))
+        .arg(Arg::with_name("filename")
+             .help("File to render")
+             .index(1))
+        .get_matches();
+
+    let mut args = Args::default();
+    args.about_filter = matches.is_present("about-filter");
+
+    let filename = matches.value_of("filename").expect("filename is required");
+    if let Some(lang) = (*FILENAME_OVERRIDES).get(filename) {
+        args.lang_override = Some(lang);
+    }
+
+    args.extension = Path::new(&filename)
+        .extension()
+        .and_then(OsStr::to_str)
+        .map(|s| s.to_string());
 
     match args.extension.as_ref().map(String::as_str) {
         Some("md") if args.about_filter => format_markdown(),
