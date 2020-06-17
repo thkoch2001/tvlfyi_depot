@@ -22,6 +22,30 @@
       "revId": "543379ce4572a4015c62812f93acb02938caece1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4773bed_7e0034de",
+        "filename": "third_party/abseil_cpp/CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-17T20:53:04Z",
+      "side": 1,
+      "message": "I agree, but when I originally did this the Nix build was still using Meson which non-natively imported CMake and didn\u0027t support passing these flags through.\n\nSince the Nix build is now CMake native we can get rid of this though, but it\u0027ll have to be in a separate CL (I really don\u0027t wanna mess with this merge commit, it\u0027s got subtree metadata and such)",
+      "parentUuid": "6aab2e97_b79cc9a8",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 41
+      },
+      "revId": "543379ce4572a4015c62812f93acb02938caece1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
