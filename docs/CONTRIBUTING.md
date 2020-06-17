@@ -10,6 +10,7 @@ Contribution Guidelines
     - [Commit content](#commit-content)
     - [Code quality](#code-quality)
     - [Builds & tests](#builds--tests)
+    - [Submitting changes](#submitting-changes)
 
 <!-- markdown-toc end -->
 
@@ -110,17 +111,10 @@ change.
 
 ## Submitting changes
 
-Development is primarily tracked at [cl.tvl.fyi](https://cl.tvl.fyi) using
-Gerrit. If you have an account, use the standard Gerrit workflows to submit a
-change.
-
-If you do not have an account, you can alternatively submit a patch
-via email. Create an appropriate commit locally and send it to
-`depot@tazj.in` using either `git send-email` or `git format-patch`.
-The email address is a [public group][].
-
-Patches submitted via email will be added to Gerrit by a contributor.
+The code review & change submission process is described in the [code
+review][] documentation.
 
 [magit]: https://magit.vc/
 [Nix]: https://nixos.org/nix/
+[code review]: ./REVIEWS.md
 [public group]: https://groups.google.com/a/tazj.in/forum/?hl=en#!forum/depot
