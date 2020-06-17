@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6aab2e97_b79cc9a8",
+        "filename": "third_party/abseil_cpp/CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-17T14:41:51Z",
+      "side": 1,
+      "message": "IMO this should be set in the derivation instead (by invoking cmake with -DCMAKE_POSITION_INDEPENDENT_CODE\u003dON) to avoid making changes to upstream unless necessary\n\nBut whatever",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 41
+      },
+      "revId": "543379ce4572a4015c62812f93acb02938caece1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
