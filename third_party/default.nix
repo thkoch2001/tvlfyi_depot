@@ -66,7 +66,6 @@ let
       glibc
       gmock
       gnutar
-      go
       google-cloud-sdk
       graphviz
       gzip
@@ -169,7 +168,7 @@ in exposed.lib.fix(self: exposed // {
 
   # Packages to be overridden
   originals = {
-    inherit (nixpkgs) grpc notmuch;
+    inherit (nixpkgs) go grpc notmuch;
     inherit (stableNixpkgs) git;
     ffmpeg = nixpkgs.ffmpeg-full;
   };
@@ -182,7 +181,7 @@ in exposed.lib.fix(self: exposed // {
   # The Go authors have released a version of Go (in alpha) that has a
   # type system. This makes it available, specifically for use with
   # //nix/buildTypedGo.
-  typedGo = nixpkgs.go.overrideAttrs(old: {
+  go = nixpkgs.go.overrideAttrs(old: {
     version = "dev-go2go";
     doCheck = false;
     patches = []; # they all don't apply and are mostly about Darwin crap
