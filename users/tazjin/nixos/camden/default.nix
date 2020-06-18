@@ -402,6 +402,10 @@ in lib.fix(self: {
       forceSSL = true;
 
       extraConfig = ''
+        location = / {
+          return 301 https://cs.tvl.fyi/depot;
+        }
+
         location / {
           proxy_set_header X-Sg-Auth "Anonymous";
           proxy_pass http://localhost:3463;
