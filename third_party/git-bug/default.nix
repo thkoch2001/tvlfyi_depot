@@ -10,8 +10,8 @@ pkgs.buildGoModule {
   src = pkgs.fetchFromGitHub {
     owner = "lukegb";
     repo = "git-bug";
-    rev = "d27761e09e2b3d3091c8fa06d2030b1e75471054";
-    sha256 = "0ijm033p51xmrvrrbvszpmf55jmq8xlzfx3idqgfq3kvrnkpayq2";
+    rev = "8243cc989f9dff1546978ba70dc93ab14c232033";
+    sha256 = "0y30bm8imhn2rcrg1s0bswdd60bwdzym60mwrk7fnmgjgscnrss3";
   };
 
   # git-bug builds 3 binaries (git-bug itself, misc and doc). The two
