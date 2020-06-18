@@ -24,12 +24,12 @@ with (import ./default.nix {}); [
   third_party.lisp # will build all third-party libraries
   third_party.nix
   tools.cheddar
-  tools.emacs
   web.blog
   web.cgit-taz
   web.tvl
 
   # tazjin's personal things
+  users.tazjin.emacs
   users.tazjin.nixos.camdenSystem
   users.tazjin.nixos.frogSystem
 ]

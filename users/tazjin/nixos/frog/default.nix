@@ -9,7 +9,7 @@ config: let
 
   # add google-c-style here because other machines get it from, eh,
   # elsewhere.
-  frogEmacs = (depot.tools.emacs.overrideEmacs(epkgs: epkgs ++ [
+  frogEmacs = (depot.users.tazjin.emacs.overrideEmacs(epkgs: epkgs ++ [
     depot.third_party.emacsPackages.google-c-style
   ]));
 in depot.lib.fix(self: {
