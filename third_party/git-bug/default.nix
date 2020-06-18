@@ -3,15 +3,15 @@
 pkgs.buildGoModule {
   pname = "git-bug";
   version = "unstable-20200614";
-  vendorSha256 = "1b8m9b05jbwx336fyv8sxcki00vpinyl95nyhygi7yj0as7x978x";
+  vendorSha256 = "1lmcs1b0rr2xfajmz205pjp94v8ih1qpj69za06wbp24r5nc2cjg";
 
   nativeBuildInputs = [ pkgs.installShellFiles ];
 
   src = pkgs.fetchFromGitHub {
-    owner = "MichaelMure";
+    owner = "lukegb";
     repo = "git-bug";
-    rev = "6352d6aa2338f47cd8b60631dec5f4161d9d92ec";
-    sha256 = "1cwsl3n6w8gfzx4j9sb5f7vdnxpnyhsq1lbf4f90ivmshjc2i8fw";
+    rev = "d27761e09e2b3d3091c8fa06d2030b1e75471054";
+    sha256 = "0ijm033p51xmrvrrbvszpmf55jmq8xlzfx3idqgfq3kvrnkpayq2";
   };
 
   # git-bug builds 3 binaries (git-bug itself, misc and doc). The two
