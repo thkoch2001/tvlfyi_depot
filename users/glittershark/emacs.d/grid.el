@@ -78,6 +78,22 @@ The bound variable is \"filename\"."
        (`(,app ,model)
         (s-lex-format "python/urbint_lib/${app}/models/${model}.py"))))))
 
+(defun projectile-grid-find-repository ()
+  "Find a repository."
+  (interactive)
+  (projectile-grid-find-resource
+   "repository: "
+   '(("python/urbint_lib/repositories/"
+      "\\(.+\\)\\.py$")
+     ("python/urbint_lib/"
+      "\\(.+\\)/repositories/\\(.+\\).py$"))
+   (lambda (filename)
+     (pcase (s-split "/" filename)
+       (`(,repository)
+        (s-lex-format "python/urbint_lib/repositories/${repository}.py"))
+       (`(,app ,repository)
+        (s-lex-format "python/urbint_lib/${app}/repositories/${repository}.py"))))))
+
 (defun projectile-grid-find-controller ()
   "Find a controller."
   (interactive)
@@ -94,14 +110,16 @@ The bound variable is \"filename\"."
        (`(,app ,controller)
         (s-lex-format "backend/src/grid/api/apps/${app}/controllers/${controller}.py"))))))
 
-(defvar projectile-grid-mode-map
+(setq projectile-grid-mode-map
   (let ((map (make-keymap)))
     (map!
      (:map map
       (:leader
        (:desc "Edit..." :prefix "e"
         :desc "Model"      :n "m" #'projectile-grid-find-model
-        :desc "Controller" :n "c" #'projectile-grid-find-controller))))))
+        :desc "Controller" :n "c" #'projectile-grid-find-controller
+        :desc "Repository" :n "r" #'projectile-grid-find-repository))))
+    map))
 
 (define-minor-mode projectile-grid-mode
   "Minor mode for finding files in GRID"
