@@ -1,1 +1,1 @@
-{"version":1,"ops":[{"type":1,"author":{"id":"759b17fb50d57daeb298cc52628aba569ad2c9f3"},"timestamp":1592265399,"title":"Webhook support in CLBot","message":"It would be useful if CLBot could call out to arbitrary configured\nwebhooks. This would allow users to configure webhooks for their\n*personal* CI infrastructure.","files":null}]}
+{"version":1,"ops":[{"type":3,"author":{"id":"11781f0add992fd00d40ee5a1d2c81050d40acd7"},"timestamp":1592440984,"message":"I think you were planning on adding this to besadii?","files":null}]}
