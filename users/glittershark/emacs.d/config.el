@@ -633,7 +633,19 @@
     #'magit-branch
     ["c"]
     (list "C" "Checkout Clubhouse branch" #'magit-checkout-org-clubhouse-branch))
-  )
+
+  (define-suffix-command magit-push-and-submit ()
+    (interactive)
+    (magit-push-refspecs
+     "origin" "HEAD:refs/for/master%l=Code-Review+2,publish-comments,submit"
+     nil))
+
+  (transient-append-suffix
+    #'magit-push
+    ["r"]
+
+    (list "P" "Push and submit to gerrit"
+          #'magit-push-and-submit)))
 
 ;; (defun grfn/split-window-more-sensibly (&optional window)
 ;;   (let ((window (or window (selected-window))))
