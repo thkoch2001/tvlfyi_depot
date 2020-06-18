@@ -1,0 +1,1 @@
+{"version":1,"ops":[{"type":1,"author":{"id":"42862a9927ffb1ec8ee12db5a912a386a5361ff1"},"timestamp":1592499933,"title":"Consider an opt-out list of directories for CL bot","message":"In case people get annoyed by every change to my emacs.d getting posted in `##tvl`, for example.","files":null}]}
