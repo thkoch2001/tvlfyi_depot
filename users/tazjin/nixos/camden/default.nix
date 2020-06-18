@@ -243,6 +243,7 @@ in lib.fix(self: {
       webroot = "/var/lib/acme/acme-challenge";
       postRun = "systemctl reload nginx";
       extraDomains = {
+        "b.tvl.fyi" = null;
         "cl.tvl.fyi" = null;
         "code.tvl.fyi" = null;
         "cs.tvl.fyi" = null;
