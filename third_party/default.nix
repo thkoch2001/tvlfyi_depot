@@ -198,11 +198,11 @@ in exposed.lib.fix(self: exposed // {
       # gave me `go tool go2go`.
       rev = "ad307489d41133f32c779cfa1b0db4a852ace047";
       leaveDotGit = true;
-      sha256 = "0wxa1zawvmf0hflrb42qi1ggrj28nwr8vjmmygnxny8f00xi8198";
+      sha256 = "1nxmqdlyfx7w3g5vhjfq24yrc9hwpsa2mjv58xrmhh8vvy50ziqq";
 
       postFetch = ''
         cd $out
-        ${nixpkgs.git}/bin/git log -n 1 "--format=format: +%h %cd" HEAD > VERSION
+        ${nixpkgs.git}/bin/git log -n 1 "--format=format:devel +%H %cd" HEAD > VERSION
         rm -rf .git
       '';
     };
