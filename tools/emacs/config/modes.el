@@ -31,6 +31,7 @@
 ;; Transparently open compressed files
 (auto-compression-mode t)
 
-;; Show available key chord completions
+;; Configure go-mode for Go2 Alpha
+(add-to-list 'auto-mode-alist '("\\.go2$" . go-mode))
 
 (provide 'modes)
