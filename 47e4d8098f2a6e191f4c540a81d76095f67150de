@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "add1cb2c_cafac988",
+        "filename": "tools/syncgroups/googlegroups/googlegroups.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-19T22:42:44Z",
+      "side": 1,
+      "message": "Could you add a package comment to explain what this will be doing?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 20
+      },
+      "revId": "47e4d8098f2a6e191f4c540a81d76095f67150de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
