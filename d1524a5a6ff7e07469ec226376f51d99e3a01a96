@@ -1,0 +1,238 @@
+{
+  "comments": [
+    {
+      "robotId": "rust-clippy",
+      "robotRunId": "clippy::string_lit_as_bytes",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "eba34c28_9a2811db",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T03:10:04Z",
+      "side": 1,
+      "message": "calling `as_bytes()` on a string literal",
+      "range": {
+        "startLine": 153,
+        "startChar": 37,
+        "endLine": 153,
+        "endChar": 54
+      },
+      "revId": "d1524a5a6ff7e07469ec226376f51d99e3a01a96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rust-clippy",
+      "robotRunId": "clippy::string_lit_as_bytes",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "931c6397_225ebbb0",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T03:10:04Z",
+      "side": 1,
+      "message": "calling `as_bytes()` on a string literal",
+      "range": {
+        "startLine": 155,
+        "startChar": 44,
+        "endLine": 155,
+        "endChar": 64
+      },
+      "revId": "d1524a5a6ff7e07469ec226376f51d99e3a01a96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rust-clippy",
+      "robotRunId": "clippy::string_lit_as_bytes",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "127849d9_752d5fce",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T03:10:04Z",
+      "side": 1,
+      "message": "calling `as_bytes()` on a string literal",
+      "range": {
+        "startLine": 157,
+        "startChar": 44,
+        "endLine": 157,
+        "endChar": 65
+      },
+      "revId": "d1524a5a6ff7e07469ec226376f51d99e3a01a96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rust-clippy",
+      "robotRunId": "clippy::string_lit_as_bytes",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "0aea8712_a4c6ac69",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T03:10:04Z",
+      "side": 1,
+      "message": "calling `as_bytes()` on a string literal",
+      "range": {
+        "startLine": 159,
+        "startChar": 44,
+        "endLine": 159,
+        "endChar": 60
+      },
+      "revId": "d1524a5a6ff7e07469ec226376f51d99e3a01a96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rust-clippy",
+      "robotRunId": "clippy::needless_return",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c6f2d597_32b0a5af",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T03:10:04Z",
+      "side": 1,
+      "message": "unneeded `return` statement",
+      "range": {
+        "startLine": 163,
+        "startChar": 17,
+        "endLine": 163,
+        "endChar": 28
+      },
+      "revId": "d1524a5a6ff7e07469ec226376f51d99e3a01a96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rust-clippy",
+      "robotRunId": "clippy::needless_return",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "9bb960a9_ab86e8af",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T03:10:04Z",
+      "side": 1,
+      "message": "unneeded `return` statement",
+      "range": {
+        "startLine": 165,
+        "startChar": 18,
+        "endLine": 165,
+        "endChar": 29
+      },
+      "revId": "d1524a5a6ff7e07469ec226376f51d99e3a01a96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rust-clippy",
+      "robotRunId": "clippy::needless_return",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c10f765a_c1006091",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T03:10:04Z",
+      "side": 1,
+      "message": "unneeded `return` statement",
+      "range": {
+        "startLine": 167,
+        "startChar": 14,
+        "endLine": 167,
+        "endChar": 25
+      },
+      "revId": "d1524a5a6ff7e07469ec226376f51d99e3a01a96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rust-clippy",
+      "robotRunId": "clippy::string_lit_as_bytes",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "b29cff1a_263b443c",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T03:10:04Z",
+      "side": 1,
+      "message": "calling `as_bytes()` on a string literal",
+      "range": {
+        "startLine": 207,
+        "startChar": 22,
+        "endLine": 207,
+        "endChar": 39
+      },
+      "revId": "d1524a5a6ff7e07469ec226376f51d99e3a01a96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rust-clippy",
+      "robotRunId": "clippy::option_as_ref_deref",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "0b83f7b0_85f776e6",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T03:10:04Z",
+      "side": 1,
+      "message": "called `.as_ref().map(String::as_str)` on an Option value. This can be done more directly by calling `args.extension.as_deref()` instead",
+      "range": {
+        "startLine": 314,
+        "startChar": 11,
+        "endLine": 314,
+        "endChar": 54
+      },
+      "revId": "d1524a5a6ff7e07469ec226376f51d99e3a01a96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
