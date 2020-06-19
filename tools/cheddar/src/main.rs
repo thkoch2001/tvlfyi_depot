@@ -1,26 +1,24 @@
-use clap::{Arg, App};
+use clap::{App, Arg};
 use comrak::arena_tree::Node;
-use comrak::nodes::{Ast, AstNode, NodeValue, NodeCodeBlock, NodeHtmlBlock};
-use comrak::{Arena, parse_document, format_html, ComrakOptions};
+use comrak::nodes::{Ast, AstNode, NodeCodeBlock, NodeHtmlBlock, NodeValue};
+use comrak::{format_html, parse_document, Arena, ComrakOptions};
 use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::env;
 use std::ffi::OsStr;
+use std::io;
 use std::io::BufRead;
 use std::io::Write;
-use std::io;
 use std::path::Path;
 use syntect::dumps::from_binary;
 use syntect::easy::HighlightLines;
 use syntect::highlighting::ThemeSet;
-use syntect::parsing::{SyntaxSet, SyntaxReference};
+use syntect::parsing::{SyntaxReference, SyntaxSet};
 use syntect::util::LinesWithEndings;
 
 use syntect::html::{
-    IncludeBackground,
-    append_highlighted_html_for_styled_line,
-    start_highlighted_html_snippet,
+    append_highlighted_html_for_styled_line, start_highlighted_html_snippet, IncludeBackground,
 };
 
 lazy_static! {
@@ -81,7 +79,10 @@ fn should_continue(res: &io::Result<usize>) -> bool {
 }
 
 // This function is taken from the Comrak documentation.
-fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F) where F : Fn(&'a AstNode<'a>) {
+fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F)
+where
+    F: Fn(&'a AstNode<'a>),
+{
     f(node);
     for c in node.children() {
         iter_nodes(c, f);
@@ -95,7 +96,11 @@ fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F) where F : Fn(&'a AstNode<'a>)
 // ASCII characters, anyways).
 fn find_syntax_case_insensitive(info: &str) -> Option<&'static SyntaxReference> {
     // TODO(tazjin): memoize this lookup
-    SYNTAXES.syntaxes().iter().rev().find(|&s| info.eq_ignore_ascii_case(&s.name))
+    SYNTAXES
+        .syntaxes()
+        .iter()
+        .rev()
+        .find(|&s| info.eq_ignore_ascii_case(&s.name))
 }
 
 // Replaces code-block inside of a Markdown AST with HTML blocks rendered by
@@ -119,9 +124,7 @@ fn highlight_code_block(code_block: &NodeCodeBlock) -> NodeValue {
 
         for line in LinesWithEndings::from(&code) {
             let regions = hl.highlight(line, &SYNTAXES);
-            append_highlighted_html_for_styled_line(
-                &regions[..], IncludeBackground::No, &mut buf,
-            );
+            append_highlighted_html_for_styled_line(&regions[..], IncludeBackground::No, &mut buf);
         }
 
         buf.push_str("</pre>");
@@ -151,17 +154,17 @@ fn has_callout<'a>(node: &Node<'a, RefCell<Ast>>) -> Option<Callout> {
         Some(child) => match &child.value {
             NodeValue::Text(text) => {
                 if text.starts_with("TODO".as_bytes()) {
-                    return Some(Callout::Todo)
+                    return Some(Callout::Todo);
                 } else if text.starts_with("WARNING".as_bytes()) {
-                    return Some(Callout::Warning)
+                    return Some(Callout::Warning);
                 } else if text.starts_with("QUESTION".as_bytes()) {
-                    return Some(Callout::Question)
+                    return Some(Callout::Question);
                 } else if text.starts_with("TIP".as_bytes()) {
-                    return Some(Callout::Tip)
+                    return Some(Callout::Tip);
                 }
 
-                return None
-            },
+                return None;
+            }
             _ => return None,
         },
         _ => return None,
@@ -185,7 +188,9 @@ fn format_callout_paragraph(callout: Callout) -> NodeValue {
 fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     let document = {
         let mut buffer = String::new();
-        reader.read_to_string(&mut buffer).expect("reading should work");
+        reader
+            .read_to_string(&mut buffer)
+            .expect("reading should work");
         drop(reader);
         buffer
     };
@@ -213,12 +218,14 @@ fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
         let mut ast = node.data.borrow_mut();
         let new = match &ast.value {
             NodeValue::CodeBlock(code) => Some(highlight_code_block(code)),
-            NodeValue::Paragraph => if let Some(callout) = has_callout(node) {
-                node.insert_after(&p_close);
-                Some(format_callout_paragraph(callout))
-            } else {
-                None
-            },
+            NodeValue::Paragraph => {
+                if let Some(callout) = has_callout(node) {
+                    node.insert_after(&p_close);
+                    Some(format_callout_paragraph(callout))
+                } else {
+                    None
+                }
+            }
             _ => None,
         };
 
@@ -227,8 +234,7 @@ fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
         }
     });
 
-    format_html(root, &MD_OPTS, writer)
-        .expect("Markdown rendering failed");
+    format_html(root, &MD_OPTS, writer).expect("Markdown rendering failed");
 }
 
 fn format_code<R: BufRead, W: Write>(reader: &mut R, writer: &mut W, args: &Args) {
@@ -240,7 +246,8 @@ fn format_code<R: BufRead, W: Write>(reader: &mut R, writer: &mut W, args: &Args
     // Set up the highlighter
     let theme = &THEMES.themes["InspiredGitHub"];
 
-    let syntax = args.lang_override
+    let syntax = args
+        .lang_override
         .and_then(|l| SYNTAXES.find_syntax_by_name(l))
         .or_else(|| match args.extension {
             Some(ref ext) => SYNTAXES.find_syntax_by_extension(ext),
@@ -286,13 +293,13 @@ fn main() {
     // and what file extension has been supplied.
     let matches = App::new("cheddar")
         .about("TVL's syntax highlighter")
-        .arg(Arg::with_name("about-filter")
-             .help("Run as a cgit about-filter (renders Markdown)")
-             .long("about-filter")
-             .takes_value(false))
-        .arg(Arg::with_name("filename")
-             .help("File to render")
-             .index(1))
+        .arg(
+            Arg::with_name("about-filter")
+                .help("Run as a cgit about-filter (renders Markdown)")
+                .long("about-filter")
+                .takes_value(false),
+        )
+        .arg(Arg::with_name("filename").help("File to render").index(1))
         .get_matches();
 
     let mut args = Args::default();
@@ -316,6 +323,6 @@ fn main() {
 
     match args.extension.as_ref().map(String::as_str) {
         Some("md") if args.about_filter => format_markdown(&mut in_handle, &mut out_handle),
-        _  => format_code(&mut in_handle, &mut out_handle, &args),
+        _ => format_code(&mut in_handle, &mut out_handle, &args),
     }
 }
