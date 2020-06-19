@@ -1,0 +1,82 @@
+{
+  "comments": [
+    {
+      "robotId": "/home/lukegb/go/bin/gopls:go mod tidy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "1894c59f_d9d9f4fb",
+        "filename": "ops/adventure_time/adventure_time.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T16:17:04Z",
+      "side": 1,
+      "message": "go.lsp.dev/uri is not in your go.mod file.",
+      "range": {
+        "startLine": 18,
+        "startChar": 1,
+        "endLine": 18,
+        "endChar": 17
+      },
+      "revId": "f5fe3541bccc191e4cc9ec780628351033a38bac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "/home/lukegb/go/bin/gopls:go mod tidy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "05d0f968_6123981f",
+        "filename": "ops/adventure_time/go.mod",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T16:17:04Z",
+      "side": 1,
+      "message": "github.com/davecgh/go-spew is not used in this module.",
+      "range": {
+        "startLine": 6,
+        "startChar": 1,
+        "endLine": 6,
+        "endChar": 34
+      },
+      "revId": "f5fe3541bccc191e4cc9ec780628351033a38bac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "/home/lukegb/go/bin/gopls:go mod tidy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "82f32819_b882a525",
+        "filename": "ops/adventure_time/go.mod",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T16:17:04Z",
+      "side": 1,
+      "message": "github.com/golang/gddo is not used in this module.",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 58
+      },
+      "revId": "f5fe3541bccc191e4cc9ec780628351033a38bac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
