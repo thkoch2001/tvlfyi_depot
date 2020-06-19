@@ -14,6 +14,11 @@ let
   nixpkgs = import nixpkgsSrc {
     config.allowUnfree = true;
     config.allowBroken = true;
+
+    # Lutris depends on p7zip, which is considered insecure.
+    config.permittedInsecurePackages = [
+      "p7zip-16.02"
+    ];
   };
 
   # Tracking nixos-20.03 as of 2020-05-22
@@ -81,6 +86,7 @@ let
       libredirect
       luajit
       luatex
+      lutris
       makeFontsConf
       makeWrapper
       mdbook
