@@ -6,5 +6,5 @@ trivialBuild rec {
   pname = "tvl";
   version = "1.0";
   src = ./tvl.el;
-  packageRequires = [ magit ];
+  packageRequires = [ magit s ];
 }
