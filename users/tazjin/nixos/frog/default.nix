@@ -197,6 +197,7 @@ in depot.lib.fix(self: {
       ops.kontemplate
       third_party.ffmpeg
       third_party.git
+      third_party.lutris
     ]) ++
 
     # programs from nixpkgs
