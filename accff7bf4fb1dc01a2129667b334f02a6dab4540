@@ -17,6 +17,24 @@
       "revId": "accff7bf4fb1dc01a2129667b334f02a6dab4540",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17cc6b3a_3060d4f4",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-19T02:45:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "93ca4971_74ea4f61",
+      "revId": "accff7bf4fb1dc01a2129667b334f02a6dab4540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
