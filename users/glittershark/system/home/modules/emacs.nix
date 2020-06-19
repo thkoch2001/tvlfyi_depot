@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 with lib;
 
@@ -9,8 +9,14 @@ let
  #   doomPrivateDir = ./doom.d;  # Directory containing your config.el init.el
  #                               # and packages.el files
  # };
+
+
+  depot = config.lib.depot;
 in {
-  imports = [ ./lib/cloneRepo.nix ];
+  imports = [
+    ./lib/cloneRepo.nix
+    ./lib/depot.nix
+  ];
 
   # home.packages = [ doom-emacs ];
   # home.file.".emacs.d/init.el".text = ''
@@ -48,6 +54,9 @@ in {
       programs.emacs = {
         enable = true;
         package = pkgs.emacsUnstable;
+        extraPackages = (epkgs: [
+          depot.tools.emacs-pkgs.dottime
+        ]);
       };
 
       grfn.impure.clonedRepos = {
