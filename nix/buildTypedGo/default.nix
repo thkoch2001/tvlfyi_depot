@@ -26,8 +26,8 @@ in rec {
     srcs = map go2go srcs;
   };
 
-  package = { name, srcs, deps ? [], x_defs ? {}, sfiles ? [] }: depot.nix.buildGo.package {
-    inherit name deps x_defs sfiles;
+  package = { name, srcs, deps ? [], path ? name, sfiles ? [] }: depot.nix.buildGo.package {
+    inherit name deps path sfiles;
     srcs = map go2go srcs;
   };
 }
