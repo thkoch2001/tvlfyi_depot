@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e841ee6_fe4938ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-19T01:02:09Z",
+      "side": 1,
+      "message": "Commit message doesn\u0027t match the style guide.",
+      "revId": "d2887813a79be764cb9f90afa77e97d25e511a5e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36097cf2_adbb7ccf",
+        "filename": "web/tvl/tvl.dot",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-19T01:02:09Z",
+      "side": 1,
+      "message": "You shouldn\u0027t have two primary edges, move either one of the two down to the secondary edges. The one that got you into TVL (probably via riking?) should be the primary.",
+      "range": {
+        "startLine": 113,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 24
+      },
+      "revId": "d2887813a79be764cb9f90afa77e97d25e511a5e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
