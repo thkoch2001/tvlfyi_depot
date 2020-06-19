@@ -1,0 +1,186 @@
+{
+  "comments": [
+    {
+      "robotId": "go:copylocks",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "b9264e94_98949851",
+        "filename": "ops/adventure_time/adventure_time.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T18:50:08Z",
+      "side": 1,
+      "message": "Cancel passes lock by value: code.tvl.fyi/ops/adventure_time.progressHandler contains sync.Mutex",
+      "range": {
+        "startLine": 127,
+        "startChar": 6,
+        "endLine": 127,
+        "endChar": 21
+      },
+      "revId": "59973d4c58e8c4eae0c052121f228368aaa4137b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "go:copylocks",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "3acb8cbe_95b48c76",
+        "filename": "ops/adventure_time/adventure_time.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T18:50:08Z",
+      "side": 1,
+      "message": "Request passes lock by value: code.tvl.fyi/ops/adventure_time.progressHandler contains sync.Mutex",
+      "range": {
+        "startLine": 130,
+        "startChar": 6,
+        "endLine": 130,
+        "endChar": 21
+      },
+      "revId": "59973d4c58e8c4eae0c052121f228368aaa4137b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "go:copylocks",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "34c58bc4_2cd9bc89",
+        "filename": "ops/adventure_time/adventure_time.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T18:50:08Z",
+      "side": 1,
+      "message": "Response passes lock by value: code.tvl.fyi/ops/adventure_time.progressHandler contains sync.Mutex",
+      "range": {
+        "startLine": 133,
+        "startChar": 6,
+        "endLine": 133,
+        "endChar": 21
+      },
+      "revId": "59973d4c58e8c4eae0c052121f228368aaa4137b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "go:copylocks",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "af1b8012_c3dcb08b",
+        "filename": "ops/adventure_time/adventure_time.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T18:50:08Z",
+      "side": 1,
+      "message": "Done passes lock by value: code.tvl.fyi/ops/adventure_time.progressHandler contains sync.Mutex",
+      "range": {
+        "startLine": 136,
+        "startChar": 6,
+        "endLine": 136,
+        "endChar": 21
+      },
+      "revId": "59973d4c58e8c4eae0c052121f228368aaa4137b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "go:copylocks",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "419f8e62_b27c1e1b",
+        "filename": "ops/adventure_time/adventure_time.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T18:50:08Z",
+      "side": 1,
+      "message": "Read passes lock by value: code.tvl.fyi/ops/adventure_time.progressHandler contains sync.Mutex",
+      "range": {
+        "startLine": 137,
+        "startChar": 6,
+        "endLine": 137,
+        "endChar": 21
+      },
+      "revId": "59973d4c58e8c4eae0c052121f228368aaa4137b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "go:copylocks",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "62003d53_4bb43ac2",
+        "filename": "ops/adventure_time/adventure_time.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T18:50:08Z",
+      "side": 1,
+      "message": "Write passes lock by value: code.tvl.fyi/ops/adventure_time.progressHandler contains sync.Mutex",
+      "range": {
+        "startLine": 138,
+        "startChar": 6,
+        "endLine": 138,
+        "endChar": 21
+      },
+      "revId": "59973d4c58e8c4eae0c052121f228368aaa4137b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "go:copylocks",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "2cec6d45_91e65832",
+        "filename": "ops/adventure_time/adventure_time.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T18:50:08Z",
+      "side": 1,
+      "message": "Error passes lock by value: code.tvl.fyi/ops/adventure_time.progressHandler contains sync.Mutex",
+      "range": {
+        "startLine": 139,
+        "startChar": 6,
+        "endLine": 139,
+        "endChar": 21
+      },
+      "revId": "59973d4c58e8c4eae0c052121f228368aaa4137b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
