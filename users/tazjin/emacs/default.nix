@@ -105,6 +105,7 @@ let
     dottime
     nix-util
     term-switcher
+    tvl
 
     # patched / overridden versions of packages
     depot.third_party.emacs.exwm
