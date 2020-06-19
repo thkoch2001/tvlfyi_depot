@@ -64,6 +64,8 @@ struct Args {
     /// rendering treatment to Markdown documents)
     about_filter: bool,
 
+    // This is a trivial and pointless change, to test reporting things from rls.
+
     /// What file extension has been supplied (if any)?
     extension: Option<String>,
 
