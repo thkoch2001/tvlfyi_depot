@@ -37,6 +37,7 @@ digraph tvl {
     maskerad [href="https://femalelegends.com/"];
     multi [href="https://1.0.168.192.in-addr.xyz/"];
     ncl;
+    nyanotech [href="https://twitter.com/nyanotech"];
     poigon;
     profpatsch [href="http://profpatsch.de/"];
     puck [href="https://puckipedia.com/"];
@@ -126,6 +127,7 @@ digraph tvl {
     kanepyork -> lukegb;
     marcusr -> unspecific;
     maskerad -> unspecific;
+    nyanotech -> kanepyork;
     poigon -> eve;
     q3k -> unspecific;
     hyperfekt -> espes;
@@ -161,6 +163,7 @@ digraph tvl {
     cynthia -> firefly;
     cynthia -> lukegb;
     kanepyork -> google;
+    nyanotech -> google;
     lukegb -> benjojo;
     multi -> benjojo;
     espes -> benjojo;
