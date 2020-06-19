@@ -24,6 +24,9 @@
 (defcustom tvl-gerrit-remote "origin"
   "Name of the git remote for gerrit")
 
+(defcustom tvl-depot-path "/depot"
+  "Location at which the TVL depot is checked out.")
+
 (defun tvl--gerrit-ref (target-branch &rest flags)
   (let ((flag-suffix (if flags (format "%%l=%s" (s-join "," flags))
                        "")))
@@ -65,6 +68,11 @@ rubberstamp operation is dangerous and should only be used in
 (transient-append-suffix
   #'magit-push ["r"]
   (list "P" "push, rubberstamp & submit to Gerrit" #'magit-gerrit-rubberstamp))
+
+(defun tvl-depot-status ()
+  "Open the TVL monorepo in magit."
+  (interactive)
+  (magit-status tvl-depot-path))
 
 (provide 'tvl)
 ;;; tvl.el ends here

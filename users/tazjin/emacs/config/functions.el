@@ -41,9 +41,6 @@
   (man "configuration.nix"))
 
 ;; Open my monorepo in magit
-(defun depot-status ()
-  (interactive)
-  (magit-status depot-path))
 
 ;; Get the nix store path for a given derivation.
 ;; If the derivation has not been built before, this will trigger a build.
