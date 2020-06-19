@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use std::env;
 use std::ffi::OsStr;
 use std::io::BufRead;
-use std::io::Read;
+use std::io::Write;
 use std::io;
 use std::path::Path;
 use syntect::dumps::from_binary;
@@ -182,12 +182,11 @@ fn format_callout_paragraph(callout: Callout) -> NodeValue {
     })
 }
 
-fn format_markdown() {
+fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     let document = {
         let mut buffer = String::new();
-        let stdin = io::stdin();
-        let mut stdin = stdin.lock();
-        stdin.read_to_string(&mut buffer).expect("failed to read stdin");
+        reader.read_to_string(&mut buffer).expect("reading should work");
+        drop(reader);
         buffer
     };
 
@@ -228,17 +227,15 @@ fn format_markdown() {
         }
     });
 
-    format_html(root, &MD_OPTS, &mut io::stdout())
+    format_html(root, &MD_OPTS, writer)
         .expect("Markdown rendering failed");
 }
 
-fn format_code(args: &Args) {
-    let stdin = io::stdin();
-    let mut stdin = stdin.lock();
+fn format_code<R: BufRead, W: Write>(reader: &mut R, writer: &mut W, args: &Args) {
     let mut linebuf = String::new();
 
     // Get the first line, we might need it for syntax identification.
-    let mut read_result = stdin.read_line(&mut linebuf);
+    let mut read_result = reader.read_line(&mut linebuf);
 
     // Set up the highlighter
     let theme = &THEMES.themes["InspiredGitHub"];
@@ -272,15 +269,15 @@ fn format_code(args: &Args) {
 
         // immediately output the current state to avoid keeping
         // things in memory
-        print!("{}", outbuf);
+        write!(writer, "{}", outbuf).expect("write should not fail");
 
         // merry go round again
         linebuf.clear();
         outbuf.clear();
-        read_result = stdin.read_line(&mut linebuf);
+        read_result = reader.read_line(&mut linebuf);
     }
 
-    println!("</pre>");
+    writeln!(writer, "</pre>").expect("write should not fail");
 }
 
 fn main() {
@@ -311,8 +308,14 @@ fn main() {
         .and_then(OsStr::to_str)
         .map(|s| s.to_string());
 
+    let stdin = io::stdin();
+    let mut in_handle = stdin.lock();
+
+    let stdout = io::stdout();
+    let mut out_handle = stdout.lock();
+
     match args.extension.as_ref().map(String::as_str) {
-        Some("md") if args.about_filter => format_markdown(),
-        _  => format_code(&args),
+        Some("md") if args.about_filter => format_markdown(&mut in_handle, &mut out_handle),
+        _  => format_code(&mut in_handle, &mut out_handle, &args),
     }
 }
