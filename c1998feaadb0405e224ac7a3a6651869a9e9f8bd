@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23b848c5_faf3d2ab",
+        "filename": "tools/emacs-pkgs/tvl/tvl.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-19T03:28:49Z",
+      "side": 1,
+      "message": "Should master be hardcoded here, or should the branch be derived from the current branch? Maybe it would prompt (\"Which branch would you like to submit for?\") and default to master?",
+      "range": {
+        "startLine": 22,
+        "startChar": 27,
+        "endLine": 22,
+        "endChar": 33
+      },
+      "revId": "c1998feaadb0405e224ac7a3a6651869a9e9f8bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
