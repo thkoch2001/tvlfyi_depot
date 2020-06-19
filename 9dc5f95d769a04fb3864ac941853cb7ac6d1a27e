@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99c759b2_61e9fb62",
+        "filename": "tools/emacs-pkgs/tvl/tvl.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-19T16:03:39Z",
+      "side": 1,
+      "message": "probably should actually go in the `tvl` group",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 38
+      },
+      "revId": "9dc5f95d769a04fb3864ac941853cb7ac6d1a27e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54771abe_a45b966b",
+        "filename": "tools/emacs-pkgs/tvl/tvl.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-19T16:03:39Z",
+      "side": 1,
+      "message": "reading the invocation of this kinda confused me with the `\u0026rest` - could we just pass that as a list directly instead?",
+      "range": {
+        "startLine": 27,
+        "startChar": 23,
+        "endLine": 27,
+        "endChar": 50
+      },
+      "revId": "9dc5f95d769a04fb3864ac941853cb7ac6d1a27e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43d36b7d_c5d2f09f",
+        "filename": "tools/emacs-pkgs/tvl/tvl.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-19T16:03:39Z",
+      "side": 1,
+      "message": "magit-gerrit-push-for-review, perhaps?",
+      "range": {
+        "startLine": 32,
+        "startChar": 22,
+        "endLine": 32,
+        "endChar": 46
+      },
+      "revId": "9dc5f95d769a04fb3864ac941853cb7ac6d1a27e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
