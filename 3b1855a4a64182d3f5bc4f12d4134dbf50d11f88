@@ -1,0 +1,264 @@
+{
+  "comments": [
+    {
+      "robotId": "rls:clippy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c09bdbcf_6e5cdca0",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T15:58:19Z",
+      "side": 1,
+      "message": "calling `as_bytes()` on a string literal\n\nnote: `#[warn(clippy::string_lit_as_bytes)]` on by default\nhelp: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#string_lit_as_bytes\nhelp: consider using a byte string literal instead: `b\"TODO\"`",
+      "range": {
+        "startLine": 158,
+        "startChar": 36,
+        "endLine": 158,
+        "endChar": 53
+      },
+      "revId": "3b1855a4a64182d3f5bc4f12d4134dbf50d11f88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rls:clippy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "08e17695_6182174f",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T15:58:19Z",
+      "side": 1,
+      "message": "calling `as_bytes()` on a string literal\n\nhelp: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#string_lit_as_bytes\nhelp: consider using a byte string literal instead: `b\"WARNING\"`",
+      "range": {
+        "startLine": 160,
+        "startChar": 43,
+        "endLine": 160,
+        "endChar": 63
+      },
+      "revId": "3b1855a4a64182d3f5bc4f12d4134dbf50d11f88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rls:clippy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "9c5079b2_495fb63e",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T15:58:19Z",
+      "side": 1,
+      "message": "calling `as_bytes()` on a string literal\n\nhelp: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#string_lit_as_bytes\nhelp: consider using a byte string literal instead: `b\"QUESTION\"`",
+      "range": {
+        "startLine": 162,
+        "startChar": 43,
+        "endLine": 162,
+        "endChar": 64
+      },
+      "revId": "3b1855a4a64182d3f5bc4f12d4134dbf50d11f88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rls:clippy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "abf3080e_167fb29e",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T15:58:19Z",
+      "side": 1,
+      "message": "calling `as_bytes()` on a string literal\n\nhelp: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#string_lit_as_bytes\nhelp: consider using a byte string literal instead: `b\"TIP\"`",
+      "range": {
+        "startLine": 164,
+        "startChar": 43,
+        "endLine": 164,
+        "endChar": 59
+      },
+      "revId": "3b1855a4a64182d3f5bc4f12d4134dbf50d11f88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rls:clippy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "3b097891_f4df5ca8",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T15:58:19Z",
+      "side": 1,
+      "message": "unneeded `return` statement\n\nnote: `#[warn(clippy::needless_return)]` on by default\nhelp: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_return\nhelp: remove `return`: `None`",
+      "range": {
+        "startLine": 168,
+        "startChar": 16,
+        "endLine": 168,
+        "endChar": 28
+      },
+      "revId": "3b1855a4a64182d3f5bc4f12d4134dbf50d11f88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rls:clippy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "e3929e30_847d0186",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T15:58:19Z",
+      "side": 1,
+      "message": "unneeded `return` statement\n\nhelp: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_return\nhelp: remove `return`: `None`",
+      "range": {
+        "startLine": 170,
+        "startChar": 17,
+        "endLine": 170,
+        "endChar": 28
+      },
+      "revId": "3b1855a4a64182d3f5bc4f12d4134dbf50d11f88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rls:clippy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "224478f5_e6d0e339",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T15:58:19Z",
+      "side": 1,
+      "message": "unneeded `return` statement\n\nhelp: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_return\nhelp: remove `return`: `None`",
+      "range": {
+        "startLine": 172,
+        "startChar": 13,
+        "endLine": 172,
+        "endChar": 24
+      },
+      "revId": "3b1855a4a64182d3f5bc4f12d4134dbf50d11f88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rls:clippy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "0b37d4c7_13a431e9",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T15:58:19Z",
+      "side": 1,
+      "message": "calls to `std::mem::drop` with a reference instead of an owned value. Dropping a reference does nothing.\n\nnote: `#[deny(clippy::drop_ref)]` on by default\nnote: argument has type `\u0026mut R`\nhelp: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#drop_ref",
+      "range": {
+        "startLine": 196,
+        "startChar": 8,
+        "endLine": 196,
+        "endChar": 20
+      },
+      "revId": "3b1855a4a64182d3f5bc4f12d4134dbf50d11f88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rls:clippy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "3e4f481c_703831d5",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T15:58:19Z",
+      "side": 1,
+      "message": "calling `as_bytes()` on a string literal\n\nhelp: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#string_lit_as_bytes\nhelp: consider using a byte string literal instead: `b\"\u003c/p\u003e\"`",
+      "range": {
+        "startLine": 213,
+        "startChar": 21,
+        "endLine": 213,
+        "endChar": 38
+      },
+      "revId": "3b1855a4a64182d3f5bc4f12d4134dbf50d11f88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "robotId": "rls:clippy",
+      "robotRunId": "",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "7e11d26d_440b9dd1",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-19T15:58:19Z",
+      "side": 1,
+      "message": "called `.as_ref().map(String::as_str)` on an Option value. This can be done more directly by calling `args.extension.as_deref()` instead\n\nnote: `#[warn(clippy::option_as_ref_deref)]` on by default\nhelp: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#option_as_ref_deref\nhelp: try using as_deref instead: `args.extension.as_deref()`",
+      "range": {
+        "startLine": 326,
+        "startChar": 10,
+        "endLine": 326,
+        "endChar": 53
+      },
+      "revId": "3b1855a4a64182d3f5bc4f12d4134dbf50d11f88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
