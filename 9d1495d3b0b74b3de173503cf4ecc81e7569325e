@@ -16,6 +16,24 @@
       "revId": "9d1495d3b0b74b3de173503cf4ecc81e7569325e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78f1c282_293d2207",
+        "filename": "users/glittershark/emacs.d/init.el",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-19T03:17:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "deace319_f3b58882",
+      "revId": "9d1495d3b0b74b3de173503cf4ecc81e7569325e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
