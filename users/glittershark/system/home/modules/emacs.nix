@@ -54,8 +54,9 @@ in {
       programs.emacs = {
         enable = true;
         package = pkgs.emacsUnstable;
-        extraPackages = (epkgs: [
-          depot.tools.emacs-pkgs.dottime
+        extraPackages = (epkgs: with depot.tools.emacs-pkgs; [
+          dottime
+          tvl
         ]);
       };
 
