@@ -179,24 +179,6 @@ in lib.fix(self: {
     };
   };
 
-  # Run honk as the ActivityPub server, using all the fancy systemd
-  # magic.
-  systemd.services.honk = {
-    wantedBy = [ "multi-user.target" ];
-    script = lib.concatStringsSep " " [
-      "${depot.third_party.honk}/bin/honk"
-      "-datadir /var/lib/honk"
-      "-viewdir ${depot.third_party.honk.src}"
-    ];
-
-    serviceConfig = {
-      Restart = "always";
-      DynamicUser = true;
-      StateDirectory = "honk";
-      WorkingDirectory = "/var/lib/honk";
-    };
-  };
-
   # NixOS 20.03 broke nginx and I can't be bothered to debug it
   # anymore, all solution attempts have failed, so here's a
   # brute-force fix.
