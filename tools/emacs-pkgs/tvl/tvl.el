@@ -1,10 +1,11 @@
 ;;; tvl.el --- description -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2020 Griffin Smith
+;; Copyright (C) 2020 The TVL Contributors
 ;;
 ;; Author: Griffin Smith <grfn@gws.fyi>
 ;; Version: 0.0.1
-;; Package-Requires: (cl-lib magit)
+;; Package-Requires: (s magit)
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -15,18 +16,56 @@
 ;;; Code:
 
 (require 'magit)
+(require 's)
 
-(define-suffix-command magit-push-and-submit ()
+(defgroup tvl nil
+  "Customisation options for TVL functionality.")
+
+(defcustom tvl-gerrit-remote "origin"
+  "Name of the git remote for gerrit"
+  :group 'tvl)
+
+(defun tvl--gerrit-ref (target-branch &optional flags)
+  (let ((flag-suffix (if flags (format "%%l=%s" (s-join "," flags))
+                       "")))
+    (format "HEAD:refs/for/%s%s" target-branch flag-suffix)))
+
+(define-suffix-command magit-gerrit-push-for-review ()
+  "Push to Gerrit for review."
   (interactive)
-  (magit-push-refspecs
-   "origin" "HEAD:refs/for/master%l=Code-Review+2,publish-comments,submit"
-   nil))
+  (magit-push-refspecs tvl-gerrit-remote
+                       (tvl--gerrit-ref "master")
+                       nil))
 
 (transient-append-suffix
-  #'magit-push
-  ["r"]
+  #'magit-push ["r"]
+  (list "R" "push to Gerrit for review" #'magit-gerrit-push-for-review))
 
-  (list "P" "Push and submit to gerrit" #'magit-push-and-submit))
+(define-suffix-command magit-gerrit-submit ()
+  "Push to Gerrit for review."
+  (interactive)
+  (magit-push-refspecs tvl-gerrit-remote
+                       (tvl--gerrit-ref "master" '("submit"))
+                       nil))
+
+(transient-append-suffix
+  #'magit-push ["r"]
+  (list "S" "push to Gerrit to submit" #'magit-gerrit-submit))
+
+
+(define-suffix-command magit-gerrit-rubberstamp ()
+  "Push, automatically approve and submit to Gerrit. This
+rubberstamp operation is dangerous and should only be used in
+`//users'."
+  (interactive)
+  (magit-push-refspecs tvl-gerrit-remote
+                       (tvl--gerrit-ref "master"
+                                        '("Code-Review+2" "publish-comments" "submit"))
+                       nil))
+
+(transient-append-suffix
+  #'magit-push ["r"]
+  (list "P" "push, rubberstamp & submit to Gerrit" #'magit-gerrit-rubberstamp))
 
 (provide 'tvl)
 ;;; tvl.el ends here
