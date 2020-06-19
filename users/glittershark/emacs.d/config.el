@@ -29,6 +29,7 @@
 (load! "grid")
 
 (require 's)
+(require 'tvl)
 
 ;; (add-to-list 'load-path
 ;;              (concat
