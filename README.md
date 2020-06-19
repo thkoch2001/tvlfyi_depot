@@ -69,7 +69,7 @@ README. Check out my [list of the best tools][best-tools] for example.
 # Contributing
 
 If you'd like to contribute to any of the tools in here, please check out the
-[contribution guidelines](/tree/docs/CONTRIBUTING.md).
+[contribution guidelines](./docs/CONTRIBUTING.md).
 
 [monorepo]: https://en.wikipedia.org/wiki/Monorepo
 [tvl]: https://tvl.fyi
