@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "552399b3_a7b2771a",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-19T02:40:31Z",
+      "side": 1,
+      "message": "maybe worth keeping this sorted, and perhaps factoring in to `use std::io::{BufRead, Write};`",
+      "revId": "a2264c3b7329cca1133b33a4d9599f206a92af7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ae8fb37_043a5e9c",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-19T02:40:31Z",
+      "side": 1,
+      "message": "is this necessary?",
+      "revId": "a2264c3b7329cca1133b33a4d9599f206a92af7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5694c5d4_f1dd05ab",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-06-19T02:40:31Z",
+      "side": 1,
+      "message": "since this is all happening in the same place, maybe just use `?`",
+      "revId": "a2264c3b7329cca1133b33a4d9599f206a92af7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
