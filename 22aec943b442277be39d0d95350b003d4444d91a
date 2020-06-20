@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9609a87a_5d978f8c",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-20T02:11:15Z",
+      "side": 1,
+      "message": "IPv6?",
+      "range": {
+        "startLine": 298,
+        "startChar": 27,
+        "endLine": 298,
+        "endChar": 34
+      },
+      "revId": "22aec943b442277be39d0d95350b003d4444d91a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2ccb8dd_0fc0888a",
+        "filename": "tools/cheddar/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-20T02:11:15Z",
+      "side": 1,
+      "message": "Also what port does this even listen on and can you change it",
+      "range": {
+        "startLine": 298,
+        "startChar": 34,
+        "endLine": 298,
+        "endChar": 35
+      },
+      "revId": "22aec943b442277be39d0d95350b003d4444d91a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
