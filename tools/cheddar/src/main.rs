@@ -3,6 +3,9 @@ use comrak::arena_tree::Node;
 use comrak::nodes::{Ast, AstNode, NodeCodeBlock, NodeHtmlBlock, NodeValue};
 use comrak::{format_html, parse_document, Arena, ComrakOptions};
 use lazy_static::lazy_static;
+use rouille::try_or_400;
+use rouille::Response;
+use serde::Deserialize;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::env;
@@ -13,7 +16,7 @@ use std::io::Write;
 use std::path::Path;
 use syntect::dumps::from_binary;
 use syntect::easy::HighlightLines;
-use syntect::highlighting::ThemeSet;
+use syntect::highlighting::{Theme, ThemeSet};
 use syntect::parsing::{SyntaxReference, SyntaxSet};
 use syntect::util::LinesWithEndings;
 
@@ -57,19 +60,6 @@ lazy_static! {
 // HTML fragment used when rendering inline blocks in Markdown documents.
 // Emulates the GitHub style (subtle background hue and padding).
 const BLOCK_PRE: &str = "<pre style=\"background-color:#f6f8fa;padding:16px;\">\n";
-
-#[derive(Debug, Default)]
-struct Args {
-    /// Should Cheddar run as an about filter? (i.e. give special
-    /// rendering treatment to Markdown documents)
-    about_filter: bool,
-
-    /// What file extension has been supplied (if any)?
-    extension: Option<String>,
-
-    /// Which language to override the detection to (if any)?
-    lang_override: Option<&'static str>,
-}
 
 fn should_continue(res: &io::Result<usize>) -> bool {
     match *res {
@@ -237,24 +227,30 @@ fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     format_html(root, &MD_OPTS, writer).expect("Markdown rendering failed");
 }
 
-fn format_code<R: BufRead, W: Write>(reader: &mut R, writer: &mut W, args: &Args) {
+fn find_syntax_for_file(filename: &str) -> &'static SyntaxReference {
+    return (*FILENAME_OVERRIDES)
+        .get(filename)
+        .and_then(|name| SYNTAXES.find_syntax_by_name(name))
+        .or_else(|| {
+            Path::new(filename)
+                .extension()
+                .and_then(OsStr::to_str)
+                .and_then(|s| SYNTAXES.find_syntax_by_extension(s))
+        })
+        .unwrap_or_else(|| SYNTAXES.find_syntax_plain_text());
+}
+
+fn format_code<R: BufRead, W: Write>(
+    theme: &Theme,
+    reader: &mut R,
+    writer: &mut W,
+    filename: &str,
+) {
     let mut linebuf = String::new();
 
     // Get the first line, we might need it for syntax identification.
     let mut read_result = reader.read_line(&mut linebuf);
-
-    // Set up the highlighter
-    let theme = &THEMES.themes["InspiredGitHub"];
-
-    let syntax = args
-        .lang_override
-        .and_then(|l| SYNTAXES.find_syntax_by_name(l))
-        .or_else(|| match args.extension {
-            Some(ref ext) => SYNTAXES.find_syntax_by_extension(ext),
-            None => None,
-        })
-        .or_else(|| SYNTAXES.find_syntax_by_first_line(&linebuf))
-        .unwrap_or_else(|| SYNTAXES.find_syntax_plain_text());
+    let syntax = find_syntax_for_file(filename);
 
     let mut hl = HighlightLines::new(syntax, theme);
     let (mut outbuf, bg) = start_highlighted_html_snippet(theme);
@@ -287,6 +283,33 @@ fn format_code<R: BufRead, W: Write>(reader: &mut R, writer: &mut W, args: &Args
     writeln!(writer, "</pre>").expect("write should not fail");
 }
 
+// Starts a Sourcegraph-compatible syntax highlighting server. This
+// replaces the 'syntect_server' component of Sourcegraph.
+fn highlighting_server() {
+    #[derive(Deserialize)]
+    struct SourcegraphQuery {
+        filepath: String,
+        theme: String,
+        code: String,
+    }
+
+    // Sourcegraph only uses a single endpoint, so we don't attempt to
+    // deal with routing here for now.
+    rouille::start_server("0.0.0.0", move |request| {
+        let query: SourcegraphQuery = try_or_400!(rouille::input::json_input(request));
+        let mut buf: Vec<u8> = Vec::new();
+
+        format_code(
+            &THEMES.themes[&query.theme],
+            &mut query.code.as_bytes(),
+            &mut buf,
+            &query.filepath,
+        );
+
+        Response::from_data("text/html", buf)
+    });
+}
+
 fn main() {
     // Parse the command-line flags passed to cheddar to determine
     // whether it is running in about-filter mode (`--about-filter`)
@@ -299,21 +322,21 @@ fn main() {
                 .long("about-filter")
                 .takes_value(false),
         )
+        .arg(
+            Arg::with_name("sourcegraph-server")
+                .help("Run as a Sourcegraph compatible web-server")
+                .long("sourcegraph-server")
+                .takes_value(false),
+        )
         .arg(Arg::with_name("filename").help("File to render").index(1))
         .get_matches();
 
-    let mut args = Args::default();
-    args.about_filter = matches.is_present("about-filter");
-
-    let filename = matches.value_of("filename").expect("filename is required");
-    if let Some(lang) = (*FILENAME_OVERRIDES).get(filename) {
-        args.lang_override = Some(lang);
+    if matches.is_present("sourcegraph-server") {
+        highlighting_server();
+        return;
     }
 
-    args.extension = Path::new(&filename)
-        .extension()
-        .and_then(OsStr::to_str)
-        .map(|s| s.to_string());
+    let filename = matches.value_of("filename").expect("filename is required");
 
     let stdin = io::stdin();
     let mut in_handle = stdin.lock();
@@ -321,8 +344,14 @@ fn main() {
     let stdout = io::stdout();
     let mut out_handle = stdout.lock();
 
-    match args.extension.as_ref().map(String::as_str) {
-        Some("md") if args.about_filter => format_markdown(&mut in_handle, &mut out_handle),
-        _ => format_code(&mut in_handle, &mut out_handle, &args),
+    if matches.is_present("about-filter") && filename.ends_with(".md") {
+        format_markdown(&mut in_handle, &mut out_handle);
+    } else {
+        format_code(
+            &THEMES.themes["InspiredGitHub"],
+            &mut in_handle,
+            &mut out_handle,
+            filename,
+        );
     }
 }
