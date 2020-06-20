@@ -43,18 +43,18 @@ in {
         "pull"
       ];
 
-      # Configure for cgit.
+      # Configure for Sourcegraph.
       gitweb = {
         type = "custom";
-        url = "https://code.tvl.fyi";
-        project = "/";
-        revision = "/commit/?id=\${commit}";
-        branch = "/log/?h=\${branch}";
-        tag = "/tag/?h=\${tag}";
-        roottree = "/tree/?h=\${commit}";
-        file = "/tree/\${file}?h=\${commit}";
-        filehistory = "/log/\${file}?h=\${branch}";
-        linkname = "cgit";
+        url = "https://cs.tvl.fyi";
+        linkname = "Sourcegraph";
+        project = "/depot";
+        revision = "/depot/-/commit/\${commit}";
+        branch = "/depot@\${branch}";
+        tag = "/depot@\${tag}";
+        roottree = "/depot@\${commit}";
+        file = "/depot@\${commit}/-/blob/\${file}";
+        filehistory = "/depot@\${commit}/-/blob/\${file}#&tab=history";
       };
 
       # Configures integration with the locally running OpenLDAP
