@@ -34,6 +34,10 @@ in depot.lib.fix(self: {
     kernel.sysctl = {
       "kernel.perf_event_paranoid" = 1;
     };
+
+    kernelPatches = [
+      depot.third_party.kernelPatches.trx40_usb_audio
+    ];
   };
 
   hardware = {
@@ -233,6 +237,7 @@ in depot.lib.fix(self: {
       openssl
       pass
       pavucontrol
+      pciutils
       pinentry
       pinentry-emacs
       pwgen
@@ -245,6 +250,7 @@ in depot.lib.fix(self: {
       tokei
       tree
       unzip
+      usbutils
       vlc
       xclip
       yubico-piv-tool
