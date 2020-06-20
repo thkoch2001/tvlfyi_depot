@@ -21,6 +21,8 @@ in {
         "/var/lib/sourcegraph/etc:/etc/sourcegraph"
         "/var/lib/sourcegraph/data:/var/opt/sourcegraph"
       ];
+
+      environment.SRC_SYNTECT_SERVER = "http://172.17.0.1:4238";
     };
   };
 }
