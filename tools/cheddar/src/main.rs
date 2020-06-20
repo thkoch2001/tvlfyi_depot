@@ -144,21 +144,21 @@ fn has_callout<'a>(node: &Node<'a, RefCell<Ast>>) -> Option<Callout> {
     match node.first_child().map(|c| c.data.borrow()) {
         Some(child) => match &child.value {
             NodeValue::Text(text) => {
-                if text.starts_with("TODO".as_bytes()) {
+                if text.starts_with(b"TODO") {
                     return Some(Callout::Todo);
-                } else if text.starts_with("WARNING".as_bytes()) {
+                } else if text.starts_with(b"WARNING") {
                     return Some(Callout::Warning);
-                } else if text.starts_with("QUESTION".as_bytes()) {
+                } else if text.starts_with(b"QUESTION") {
                     return Some(Callout::Question);
-                } else if text.starts_with("TIP".as_bytes()) {
+                } else if text.starts_with(b"TIP") {
                     return Some(Callout::Tip);
                 }
 
-                return None;
+                None
             }
-            _ => return None,
+            _ => None,
         },
-        _ => return None,
+        _ => None,
     }
 }
 
@@ -182,7 +182,6 @@ fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
         reader
             .read_to_string(&mut buffer)
             .expect("reading should work");
-        drop(reader);
         buffer
     };
 
@@ -199,7 +198,7 @@ fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
         last_line_blank: false,
         value: NodeValue::HtmlBlock(NodeHtmlBlock {
             block_type: 1,
-            literal: "</p>".as_bytes().to_vec(),
+            literal: b"</p>".to_vec(),
         }),
     }));
 
@@ -229,7 +228,7 @@ fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
 }
 
 fn find_syntax_for_file(filename: &str) -> &'static SyntaxReference {
-    return (*FILENAME_OVERRIDES)
+    (*FILENAME_OVERRIDES)
         .get(filename)
         .and_then(|name| SYNTAXES.find_syntax_by_name(name))
         .or_else(|| {
@@ -238,7 +237,7 @@ fn find_syntax_for_file(filename: &str) -> &'static SyntaxReference {
                 .and_then(OsStr::to_str)
                 .and_then(|s| SYNTAXES.find_syntax_by_extension(s))
         })
-        .unwrap_or_else(|| SYNTAXES.find_syntax_plain_text());
+        .unwrap_or_else(|| SYNTAXES.find_syntax_plain_text())
 }
 
 fn format_code<R: BufRead, W: Write>(
