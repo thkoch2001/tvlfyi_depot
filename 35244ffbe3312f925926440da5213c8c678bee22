@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2965038_3e678873",
+        "filename": "users/tazjin/nixos/camden/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-20T02:59:18Z",
+      "side": 1,
+      "message": "Not socket-activated yet?",
+      "range": {
+        "startLine": 248,
+        "startChar": 19,
+        "endLine": 248,
+        "endChar": 33
+      },
+      "revId": "35244ffbe3312f925926440da5213c8c678bee22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
