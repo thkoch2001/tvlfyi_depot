@@ -4,10 +4,10 @@
 
 pkgs.writeShellScriptBin "gerrit" ''
   TVL_USERNAME=''${TVL_USERNAME:-$(whoami)}
-  if which ssh 2>/dev/null; then
+  if which ssh &>/dev/null; then
     ssh=ssh
   else
     ssh="${pkgs.openssh}/bin/ssh"
   fi
-  $ssh $TVL_USERNAME@code.tvl.fyi -p 29418 -- gerrit $@
+  exec $ssh $TVL_USERNAME@code.tvl.fyi -p 29418 -- gerrit $@
 ''
