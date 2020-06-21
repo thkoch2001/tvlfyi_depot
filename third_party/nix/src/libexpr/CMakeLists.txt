@@ -76,5 +76,8 @@ target_link_libraries(nixexpr
   gccpp
 )
 
+configure_file("nix-expr.pc.in" "${PROJECT_BINARY_DIR}/nix-expr.pc" @ONLY)
+INSTALL(FILES "${PROJECT_BINARY_DIR}/nix-expr.pc" DESTINATION "${PKGCONFIG_INSTALL_DIR}")
+
 INSTALL(FILES ${HEADER_FILES} DESTINATION include/nix/libexpr)
 INSTALL(TARGETS nixexpr DESTINATION ${CMAKE_INSTALL_LIBDIR})

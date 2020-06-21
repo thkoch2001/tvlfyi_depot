@@ -103,5 +103,8 @@ target_link_libraries(nixstore
   sodium
 )
 
+configure_file("nix-store.pc.in" "${PROJECT_BINARY_DIR}/nix-store.pc" @ONLY)
+INSTALL(FILES "${PROJECT_BINARY_DIR}/nix-store.pc" DESTINATION "${PKGCONFIG_INSTALL_DIR}")
+
 INSTALL(FILES ${HEADER_FILES} DESTINATION include/nix/libstore)
 INSTALL(TARGETS nixstore DESTINATION ${CMAKE_INSTALL_LIBDIR})
