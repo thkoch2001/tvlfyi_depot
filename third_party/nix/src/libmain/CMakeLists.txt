@@ -26,5 +26,8 @@ target_link_libraries(nixmain
   glog
 )
 
+configure_file("nix-main.pc.in" "${PROJECT_BINARY_DIR}/libnix-main.pc" @ONLY)
+INSTALL(FILES "${PROJECT_BINARY_DIR}/libnix-main.pc" DESTINATION "${PKGCONFIG_INSTALL_DIR}")
+
 INSTALL(FILES ${HEADER_FILES} DESTINATION include/nix/libmain)
 INSTALL(TARGETS nixmain DESTINATION ${CMAKE_INSTALL_LIBDIR})
