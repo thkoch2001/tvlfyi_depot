@@ -19,8 +19,7 @@ string(CONFIGURE
 
 file(WRITE ${PROJECT_BINARY_DIR}/generated/schema.sql.hh ${NIX_SCHEMA_GEN})
 
-target_sources(nixstore
-  PUBLIC
+set(HEADER_FILES
     binary-cache-store.hh
     builtins.hh
     crypto.hh
@@ -46,6 +45,11 @@ target_sources(nixstore
     ssh.hh
     store-api.hh
     worker-protocol.hh
+)
+
+target_sources(nixstore
+  PUBLIC
+    ${HEADER_FILES}
 
   PRIVATE
     ${PROJECT_BINARY_DIR}/generated/schema.sql.hh
@@ -99,4 +103,5 @@ target_link_libraries(nixstore
   sodium
 )
 
+INSTALL(FILES ${HEADER_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/nix/libstore)
 INSTALL(TARGETS nixstore DESTINATION lib)

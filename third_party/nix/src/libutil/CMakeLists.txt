@@ -4,8 +4,7 @@ set_property(TARGET nixutil PROPERTY CXX_STANDARD 17)
 include_directories(${PROJECT_BINARY_DIR}) # for config.h
 target_compile_features(nixutil PUBLIC cxx_std_17)
 
-target_sources(nixutil
-  PUBLIC
+set(HEADER_FILES
     affinity.hh
     archive.hh
     args.hh
@@ -27,6 +26,11 @@ target_sources(nixutil
     types.hh
     util.hh
     xml-writer.hh
+)
+
+target_sources(nixutil
+  PUBLIC
+    ${HEADER_FILES}
 
   PRIVATE
     affinity.cc
@@ -50,4 +54,5 @@ target_link_libraries(nixutil
 # Install header files to include/libutil and mark them for automatic
 # inclusion in targets that link to this one.
 target_include_directories(nixutil PUBLIC "${nix_SOURCE_DIR}/src")
+INSTALL(FILES ${HEADER_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/nix/libutil)
 INSTALL(TARGETS nixutil DESTINATION lib)
