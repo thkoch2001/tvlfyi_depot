@@ -92,6 +92,7 @@ let
       mdbook
       meson
       mime-types
+      mkShell
       moreutils
       nano
       nginx

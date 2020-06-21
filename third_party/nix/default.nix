@@ -36,18 +36,21 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
  # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = with pkgs; [
     aws-s3-cpp
-    boost
     brotli
     bzip2
     curl
     editline
     flex
-    largeBoehm
     libseccomp
     libsodium
     openssl
     sqlite
     xz
+  ];
+
+  propagatedBuildInputs = with pkgs; [
+    boost
+    largeBoehm
   ];
 
   # Install the various symlinks to the Nix binary which users expect
