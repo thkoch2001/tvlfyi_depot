@@ -9,6 +9,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Provide an output path for pkgconfig.
 include(GNUInstallDirs)
+set(PKGCONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # The following lines import CMake-native dependencies which may
 # contain useful definitions. Other dependencies are not treated
