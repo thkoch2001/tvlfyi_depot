@@ -30,6 +30,14 @@ find_package(LibLZMA)
 # builds this symlink is automatically replaced with an appropriate
 # link to the Abseil sources in the Nix store.
 add_subdirectory(abseil_cpp)
+install(DIRECTORY abseil_cpp/absl
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  FILES_MATCHING
+    PATTERN "*.inc"
+    PATTERN "*.h"
+    PATTERN "copts" EXCLUDE
+    PATTERN "testdata" EXCLUDE
+  )
 
 # Linking precompiled glog binaries (linked against libstdc++) leads
 # to working binaries that do not output log messages. It seems that
