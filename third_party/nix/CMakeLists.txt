@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD 17)
 # clangd and clang-tidy.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Provide an output path for pkgconfig.
+include(GNUInstallDirs)
+
 # The following lines import CMake-native dependencies which may
 # contain useful definitions. Other dependencies are not treated
 # specially by CMake and are only linked into the resulting binary.
