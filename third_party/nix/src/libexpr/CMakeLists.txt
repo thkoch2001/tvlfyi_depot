@@ -77,4 +77,4 @@ target_link_libraries(nixexpr
 )
 
 INSTALL(FILES ${HEADER_FILES} DESTINATION include/nix/libexpr)
-INSTALL(TARGETS nixexpr DESTINATION lib)
+INSTALL(TARGETS nixexpr DESTINATION ${CMAKE_INSTALL_LIBDIR})

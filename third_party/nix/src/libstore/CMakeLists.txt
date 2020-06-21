@@ -104,4 +104,4 @@ target_link_libraries(nixstore
 )
 
 INSTALL(FILES ${HEADER_FILES} DESTINATION include/nix/libstore)
-INSTALL(TARGETS nixstore DESTINATION lib)
+INSTALL(TARGETS nixstore DESTINATION ${CMAKE_INSTALL_LIBDIR})

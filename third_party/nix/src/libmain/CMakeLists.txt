@@ -27,4 +27,4 @@ target_link_libraries(nixmain
 )
 
 INSTALL(FILES ${HEADER_FILES} DESTINATION include/nix/libmain)
-INSTALL(TARGETS nixmain DESTINATION lib)
+INSTALL(TARGETS nixmain DESTINATION ${CMAKE_INSTALL_LIBDIR})
