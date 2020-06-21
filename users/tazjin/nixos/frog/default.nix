@@ -13,7 +13,9 @@ config: let
     depot.third_party.emacsPackages.google-c-style
   ]));
 in depot.lib.fix(self: {
-  # TODO(tazjin): v4l2loopback
+  imports = [
+    "${depot.depotPath}/ops/nixos/v4l2loopback.nix"
+  ];
 
   boot = {
     tmpOnTmpfs = true;
