@@ -55,4 +55,4 @@ target_link_libraries(nixutil
 # inclusion in targets that link to this one.
 target_include_directories(nixutil PUBLIC "${nix_SOURCE_DIR}/src")
 INSTALL(FILES ${HEADER_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/nix/libutil)
-INSTALL(TARGETS nixutil DESTINATION lib)
+INSTALL(TARGETS nixutil DESTINATION ${CMAKE_INSTALL_LIBDIR})
