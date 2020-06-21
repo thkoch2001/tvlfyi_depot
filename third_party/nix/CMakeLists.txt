@@ -40,5 +40,14 @@ add_subdirectory(glog)
 # generate a configuration file (autoheader-style) to configure
 # certain symbols that Nix depends on.
 configure_file(config.h.in nix_config.h @ONLY)
+INSTALL(FILES "${PROJECT_BINARY_DIR}/nix_config.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/nix")
+
+# install corepkgs
+configure_file(corepkgs/config.nix.in config.nix @ONLY)
+INSTALL(DIRECTORY corepkgs
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/nix
+  FILES_MATCHING
+    PATTERN "*.nix")
+INSTALL(FILES "${PROJECT_BINARY_DIR}/config.nix" DESTINATION "${CMAKE_INSTALL_DATADIR}/nix/corepkgs")
 
 add_subdirectory(src)
