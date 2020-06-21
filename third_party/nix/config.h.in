@@ -14,15 +14,15 @@
 #define SYSTEM "x86_64-linux"
 
  // TODO(tazjin): some of these values are nonsensical for Nix
-#define NIX_PREFIX "/usr/local"
+#define NIX_PREFIX "@CMAKE_INSTALL_PREFIX@"
 #define NIX_STORE_DIR "/nix/store"
-#define NIX_DATA_DIR "/usr/local/share"
+#define NIX_DATA_DIR "@CMAKE_INSTALL_FULL_DATADIR@"
 #define NIX_LOG_DIR "/nix/var/log/nix"
 #define NIX_STATE_DIR "/nix/var/nix"
-#define NIX_CONF_DIR "/usr/local/etc/nix"
-#define NIX_LIBEXEC_DIR "/usr/local/libexec"
-#define NIX_BIN_DIR "/usr/local/bin"
-#define NIX_MAN_DIR "/usr/local/share/man"
+#define NIX_CONF_DIR "/etc/nix"
+#define NIX_LIBEXEC_DIR "@CMAKE_INSTALL_FULL_LIBEXECDIR@"
+#define NIX_BIN_DIR "@CMAKE_INSTALL_FULL_BINDIR@"
+#define NIX_MAN_DIR "@CMAKE_INSTALL_FULL_MANDIR@"
 #define SANDBOX_SHELL "/nix/store/zq8biwi5mj2lrn68kx0lk0fkpbqypyxd-busybox-1.31.1-x86_64-unknown-linux-musl/bin/busybox"
 
 
