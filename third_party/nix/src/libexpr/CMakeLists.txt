@@ -18,8 +18,7 @@ FLEX_TARGET(NixLexer lexer.l
 
 ADD_FLEX_BISON_DEPENDENCY(NixLexer NixParser)
 
-target_sources(nixexpr
-  PUBLIC
+set(HEADER_FILES
     attr-path.hh
     attr-set.hh
     common-eval-args.hh
@@ -35,6 +34,11 @@ target_sources(nixexpr
     value.hh
     value-to-json.hh
     value-to-xml.hh
+)
+
+target_sources(nixexpr
+  PUBLIC
+    ${HEADER_FILES}
 
   PRIVATE
     ${PROJECT_BINARY_DIR}/generated/parser-tab.hh
@@ -72,4 +76,5 @@ target_link_libraries(nixexpr
   gccpp
 )
 
+INSTALL(FILES ${HEADER_FILES} DESTINATION include/nix/libexpr)
 INSTALL(TARGETS nixexpr DESTINATION lib)

@@ -77,4 +77,4 @@ target_link_libraries(nix
   glog
 )
 
-INSTALL(TARGETS nix DESTINATION bin)
+INSTALL(TARGETS nix DESTINATION bin PUBLIC_HEADER DESTINATION include)
