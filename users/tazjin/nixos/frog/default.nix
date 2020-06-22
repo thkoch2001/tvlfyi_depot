@@ -235,6 +235,8 @@ in depot.lib.fix(self: {
       msmtp
       nix-prefetch-github
       notmuch
+      obs
+      obs-v4l2sink
       openssh
       openssl
       pass
