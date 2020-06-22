@@ -220,6 +220,7 @@ in depot.lib.fix(self: {
       emacs26 # mostly for emacsclient
       exa
       fd
+      file
       gnupg
       go
       google-chrome
@@ -227,6 +228,7 @@ in depot.lib.fix(self: {
       htop
       hyperfine
       i3lock
+      iftop
       imagemagick
       jq
       kubectl
@@ -235,7 +237,7 @@ in depot.lib.fix(self: {
       msmtp
       nix-prefetch-github
       notmuch
-      obs
+      obs-studio
       obs-v4l2sink
       openssh
       openssl
@@ -244,6 +246,7 @@ in depot.lib.fix(self: {
       pciutils
       pinentry
       pinentry-emacs
+      pmutils
       pwgen
       ripgrep
       rr
@@ -252,9 +255,11 @@ in depot.lib.fix(self: {
       spotify
       steam
       tokei
+      transmission
       tree
       unzip
       usbutils
+      v4l-utils
       vlc
       xclip
       yubico-piv-tool
