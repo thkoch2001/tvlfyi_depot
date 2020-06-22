@@ -68,32 +68,40 @@
 
 (defun event->org-headline (event level)
   (cl-flet ((make-time
-                (key)
-                (when-let ((raw-time (->> event (alist-get key) (alist-get 'dateTime))))
-                  (format-time-string
-                   (org-time-stamp-format t)
-                   (parse-iso8601-time-string raw-time)))))
-       (if-let ((start-time (make-time 'start))
-                (end-time (make-time 'end)))
-           (s-format
-            "${headline} [[${htmlLink}][${summary}]] :event:
+             (key)
+             (when-let ((raw-time (->> event (alist-get key) (alist-get 'dateTime))))
+               (format-time-string
+                (org-time-stamp-format t)
+                (parse-iso8601-time-string raw-time)))))
+    (if-let ((start-time (make-time 'start))
+             (end-time (make-time 'end)))
+        (s-format
+         "${headline} [[${htmlLink}][${summary}]] :event:
 ${startTime}--${endTime}
 :PROPERTIES:
-:LOCATION: ${location}
+${location-prop}
 :EVENT: ${htmlLink}
 :END:
 
 ${description}"
-            (function
-             (lambda (k m)
-               (or (alist-get (intern k) m)
-                   (format "key not found: %s" k))))
-            (append
-             event
-             `((headline . ,(make-string level ?*))
-               (startTime . ,start-time)
-               (endTime . ,end-time))))
-         "")))
+         (function
+          (lambda (k m)
+            (or (alist-get (intern k) m)
+                (format "key not found: %s" k))))
+         (append
+          event
+          `((headline . ,(make-string level ?*))
+            (startTime . ,start-time)
+            (endTime . ,end-time)
+            (location-prop
+             . ,(if-let ((location (alist-get 'location event)))
+                    (s-lex-format ":LOCATION: ${location}")
+                  "")))))
+      "")))
+
+(comment
+ (alist-get 'foo nil)
+ )
 
 (defun write-events (events)
   (with-current-buffer (find-file-noselect events-file)
