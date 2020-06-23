@@ -90,3 +90,16 @@ Returns nil if the regex did not match, non-nil otherwise"
         ,@body
         (evil-indent beg (+ (line-end-position) 1))))
      (goto-line-char orig-line-char)))
+
+(pcase-defmacro s-starts-with (prefix)
+  `(pred (s-starts-with-p ,prefix)))
+
+(pcase-defmacro s-contains (needle &optional ignore-case)
+  `(pred (s-contains-p ,needle
+                       ,@(when ignore-case (list ignore-case)))))
+
+(comment
+ (pcase "foo"
+   ((s-contains "bar") 1)
+   ((s-contains "o") 2))
+ )
