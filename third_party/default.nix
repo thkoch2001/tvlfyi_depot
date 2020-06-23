@@ -126,7 +126,6 @@ let
       texlive
       thttpd
       tree
-      utillinux
       which
       writeShellScript
       writeShellScriptBin
