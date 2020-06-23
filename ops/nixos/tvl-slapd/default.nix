@@ -26,6 +26,11 @@ let
 
   users = [
     {
+      username = "camsbury";
+      email = "camsbury7@gmail.com";
+      password = "{SSHA}dfKezz6+rwakUcyG/agO1QKsZei0WuX/";
+    }
+    {
       username = "cynthia";
       email = "cynthia@tvl.fyi";
       password = "{SSHA}aHx2keEnXv6u6oiV2xxqfXdxjom/K8CP";
