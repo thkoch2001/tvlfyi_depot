@@ -92,3 +92,25 @@
  org-enforce-todo-dependencies nil
 
  org-babel-clojure-backend 'cider)
+
+(defun +grfn/insert-work-template ()
+  (interactive)
+  (goto-char (point-min))
+  (forward-line)
+  (insert "#+TODO: TODO(t) NEXT(n) ACTIVE(a) | DONE(d) PR(p) RUNNING(r) TESTING(D)
+#+TODO: BLOCKED(b) BACKLOG(l) PROPOSED(o) | CANCELLED(c)
+#+FILETAGS: @work
+#+FILETAGS: @work
+#+PROPERTY: Effort_ALL 0 4:00 8:00 12:00 20:00 32:00
+#+PROPERTY: ESTIMATE_ALL 0 1 2 3 5 8
+#+PROPERTY: STORY-TYPE_ALL Feature Bug Chore
+#+PROPERTY: NOBLOCKING t
+#+COLUMNS: %TODO %40ITEM(Task) %17EFFORT(Estimated){:} %CLOCKSUM(Time Spent) %17STORY-TYPE(Type) %TAGS"))
+
+(defun +grfn/insert-org-template ()
+  (interactive)
+  (pcase (buffer-file-name)
+    ((s-contains "/work/") (+grfn/insert-work-template))))
+
+;;; TODO: this doesn't work?
+(define-auto-insert "\\.org?$" #'grfn/insert-org-template t)
