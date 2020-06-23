@@ -46,6 +46,7 @@ with lib;
     gnumake
     inetutils
     loc
+    jsonnet
 
     clj2nix
 
