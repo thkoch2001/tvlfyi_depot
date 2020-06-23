@@ -48,10 +48,23 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     xz
   ];
 
+  installCheckInputs = with pkgs; [
+    utillinux
+  ];
+
   propagatedBuildInputs = with pkgs; [
     boost
     largeBoehm
   ];
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    export PATH=$out/bin:$PATH
+    cd ../tests/
+    substituteAll common.sh.in common.sh
+    bash lang.sh
+  '';
 
   # Install the various symlinks to the Nix binary which users expect
   # to exist.
