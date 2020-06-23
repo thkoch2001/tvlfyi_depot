@@ -1210,3 +1210,7 @@
   (setq znc-servers
         '(("znc.gws.fyi" 5000 t
            ((freenode "glittershark" "Ompquy"))))))
+
+(use-package! jsonnet-mode
+  :bind (:map jsonnet-mode-map
+         ("g SPC" . jsonnet-eval-buffer)))

@@ -149,6 +149,8 @@
 (package! terraform-mode)
 (package! company-terraform)
 
+(package! jsonnet-mode)
+
 ;;;
 (package! znc
   :recipe (:host github
