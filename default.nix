@@ -50,6 +50,9 @@ let
 in fix(self: {
   config = config self;
 
+  # Load CI builds in a way that can be injected into programs like besadii.
+  ciBuilds = import ./ci-builds.nix self.config;
+
   # Elevate 'lib' from nixpkgs
   lib = import (self.third_party.nixpkgsSrc + "/lib");
 
@@ -62,9 +65,6 @@ in fix(self: {
   # Make the path to the depot available for things that might need it
   # (e.g. NixOS module inclusions)
   depotPath = ./.;
-
-  # Load CI builds in a way that can be injected into programs like besadii.
-  ciBuilds = import ./ci-builds.nix self.config;
 }
 
 # Add local packages as structured by readTree
