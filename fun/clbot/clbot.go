@@ -35,7 +35,31 @@ var (
 	ircPassword  = flag.String("irc_pass", "", "Password to use for IRC")
 	ircSendLimit = flag.Duration("irc_send_limit", 100*time.Millisecond, "Delay between messages")
 	ircSendBurst = flag.Int("irc_send_burst", 10, "Number of messages which can be sent in a burst")
+
+	notifyRepo     = flag.String("notify_repo", "depot", "Repo name to notify about")
+	notifyBranches = stringSetFlag{}
 )
+
+func init() {
+	flag.Var(&notifyBranches, "notify_branches", "Branch names (comma-separated, or repeated flags, or both) to notify users about")
+}
+
+type stringSetFlag map[string]bool
+
+func (f stringSetFlag) String() string {
+	return fmt.Sprintf("%q", map[string]bool(f))
+}
+func (f stringSetFlag) Set(s string) error {
+	if s == "" {
+		return nil
+	}
+	for _, k := range strings.Split(s, ",") {
+		if k != "" {
+			f[k] = true
+		}
+	}
+	return nil
+}
 
 func mustFixedHostKey(f string) ssh.HostKeyCallback {
 	pk, _, _, _, err := ssh.ParseAuthorizedKey([]byte(f))
@@ -196,12 +220,12 @@ func main() {
 			var parsedMsg string
 			switch e := e.(type) {
 			case *gerritevents.PatchSetCreated:
-				if e.Change.Project != "depot" || e.Change.Branch != "master" || e.PatchSet.Number != 1 {
+				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] || e.PatchSet.Number != 1 {
 					continue
 				}
 				parsedMsg = fmt.Sprintf("CL/%d: %q proposed by %s - %s", e.Change.Number, e.Change.Subject, noping(username(e.PatchSet)), patchSetURL(e.Change, e.PatchSet))
 			case *gerritevents.ChangeMerged:
-				if e.Change.Project != "depot" || e.Change.Branch != "master" {
+				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] {
 					continue
 				}
 				parsedMsg = fmt.Sprintf("CL/%d: %q submitted by %s - %s", e.Change.Number, e.Change.Subject, noping(username(e.PatchSet)), patchSetURL(e.Change, e.PatchSet))
