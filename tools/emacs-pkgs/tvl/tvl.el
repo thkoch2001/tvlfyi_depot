@@ -38,7 +38,7 @@
   "Push to Gerrit for review."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
-                       (tvl--gerrit-ref "master")
+                       (tvl--gerrit-ref "canon")
                        nil))
 
 (transient-append-suffix
@@ -49,7 +49,7 @@
   "Push to Gerrit for review."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
-                       (tvl--gerrit-ref "master" '("submit"))
+                       (tvl--gerrit-ref "canon" '("submit"))
                        nil))
 
 (transient-append-suffix
@@ -63,7 +63,7 @@ rubberstamp operation is dangerous and should only be used in
 `//users'."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
-                       (tvl--gerrit-ref "master"
+                       (tvl--gerrit-ref "canon"
                                         '("Code-Review+2" "publish-comments" "submit"))
                        nil))
 
