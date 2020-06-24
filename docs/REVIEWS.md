@@ -49,13 +49,13 @@ and all development happens at `HEAD`.
 Every time you create a new commit the change hook will insert a unique
 `Change-Id` tag into the commit message. Once you are satisfied with the state
 of your commit and want to submit it for review, you push it to a git ref called
-`refs/for/master`. This designates the commits as changelists (CLs) targeted for
-the `master` branch.
+`refs/for/canon`. This designates the commits as changelists (CLs) targeted for
+the `canon` branch.
 
 ```
 Example:
 git commit -m 'docs(REVIEWS): Fixed all the errors in the reviews docs'
-git push origin HEAD:refs/for/master
+git push origin HEAD:refs/for/canon
 ```
 
 TIP: Every individual commit will become a separate change. We do not merge

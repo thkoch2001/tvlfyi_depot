@@ -14,7 +14,7 @@
 
 with depot.third_party; buildGoPackage rec {
   name = "kontemplate-${version}";
-  version = "master";
+  version = "canon";
   src = ./.;
   goPackagePath = "github.com/tazjin/kontemplate";
   goDeps = ./deps.nix;

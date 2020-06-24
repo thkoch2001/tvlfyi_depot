@@ -18,7 +18,7 @@ let pkgs = import ((import <nixpkgs> {}).fetchFromGitHub {
 }) {};
 in with pkgs; buildGoPackage rec {
   name = "kontemplate-${version}";
-  version = "master";
+  version = "canon";
   src = ./.;
   goPackagePath = "github.com/tazjin/kontemplate";
   goDeps = ./deps.nix;
