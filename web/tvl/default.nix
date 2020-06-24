@@ -55,7 +55,7 @@ let
         <p class="footer">
           <a class="uncoloured-link" href="https://tazj.in">homepage</a>
           |
-          <a class="uncoloured-link" href="https://code.tvl.fyi/about">code</a>
+          <a class="uncoloured-link" href="https://cs.tvl.fyi/depot/-/blob/README.md">code</a>
           |
           <a class="uncoloured-link" href="https://twitter.com/tazjin">twitter</a>
         </p>
