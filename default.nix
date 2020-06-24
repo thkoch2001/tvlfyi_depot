@@ -18,6 +18,9 @@ let
   config = depot: {
     inherit depot;
 
+    # Expose lib & ciBuilds attributes to packages.
+    inherit (depot) lib ciBuilds;
+
     # Pass third_party as 'pkgs' (for compatibility with external
     # imports for certain subdirectories)
     pkgs = depot.third_party;
@@ -59,10 +62,13 @@ in fix(self: {
   # Make the path to the depot available for things that might need it
   # (e.g. NixOS module inclusions)
   depotPath = ./.;
+
+  # Load CI builds in a way that can be injected into programs like besadii.
+  ciBuilds = import ./ci-builds.nix self.config;
 }
 
 # Add local packages as structured by readTree
-// (localPkgs (readTree' (self.config // { inherit (self) lib; })))
+// (localPkgs (readTree' self.config))
 
 # Load overrides into the top-level.
 #

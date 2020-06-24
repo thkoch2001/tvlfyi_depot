@@ -1,35 +1,70 @@
 # This file defines the derivations that should be built by CI.
 #
-# The plan is still to implement recursive tree traversal
-# automatically and detect all derivations that have `meta.enableCI =
-# true`, but this is currently more effort than it would save me.
+# The "categories" (i.e. attributes) below exist because we run out of
+# space on Sourcehut otherwise.
+{ depot, lib, ... }:
 
-with (import ./default.nix {}); [
-  fun.amsterdump
-  fun.gemma
-  fun.quinistry
-  fun.watchblob
-  fun.wcl
-  lisp.dns
-  nix.buildLisp.example
-  nix.yants.tests
-  ops."posix_mq.rs"
-  ops.besadii
-  ops.journaldriver
-  ops.kms_pass
-  ops.kontemplate
-  ops.mq_cli
-  third_party.cgit
-  third_party.git
-  third_party.lisp # will build all third-party libraries
-  third_party.nix
-  tools.cheddar
-  web.blog
-  web.cgit-taz
-  web.tvl
+let
+  inherit (builtins) attrNames filter foldl' getAttr substring;
 
-  # tazjin's personal things
-  users.tazjin.emacs
-  users.tazjin.nixos.camdenSystem
-  users.tazjin.nixos.frogSystem
-]
+in lib.fix(self: {
+  __apprehendEvaluators = throw ''
+    Do not evaluate this attribute set directly. It exists only to group builds
+    for CI runs of different "project groups".
+
+    To use the depot, always start from the top-level attribute tree instead.
+  '';
+
+  # Names of all evaluatable attributes in here. This list will be
+  # used to trigger builds for each key.
+  __evaluatable = filter (key: (substring 0 2 key) != "__") (attrNames self);
+
+  # List of non-public targets, these are only used in local builds
+  # and not in CI.
+  __nonpublic = with depot; [
+    users.tazjin.emacs
+    users.tazjin.nixos.camdenSystem
+    users.tazjin.nixos.frogSystem
+  ];
+
+  # Combined list of all the targets, used for building everything locally.
+  __allTargets = foldl' (x: y: x ++ y) self.__nonpublic
+    (map (k: getAttr k self) self.__evaluatable);
+
+  fun = with depot.fun; [
+    amsterdump
+    gemma
+    quinistry
+    watchblob
+    wcl
+  ];
+
+  gitAndFriends = with depot; [
+    third_party.cgit
+    third_party.git
+    web.cgit-taz
+  ];
+
+  nix = [ depot.third_party.nix ];
+
+  ops = with depot.ops; [
+    depot.ops."posix_mq.rs"
+    besadii
+    journaldriver
+    kms_pass
+    kontemplate
+    mq_cli
+  ];
+
+  various = with depot; [
+    tools.cheddar
+    lisp.dns
+    nix.buildLisp.example
+    nix.yants.tests
+  ];
+
+  web = with depot.web; [
+    blog
+    tvl
+  ];
+})
