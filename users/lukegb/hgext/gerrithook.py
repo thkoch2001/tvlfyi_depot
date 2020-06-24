@@ -48,11 +48,11 @@ def gerritobsolete(ui, repo, **opts):
     if not drafts:
         return
     publicparent = next(repo.set(
-        b'ancestor((public() and bookmark("master")), %s)' % (
+        b'ancestor((public() and bookmark("canon")), %s)' % (
             b', '.join(x.hex() for x in drafts))))
     megare = b're:(?ms)^Change-Id: (%s)$' % (b'|'.join(changesets.keys()),)
     markers = []
-    for public in repo.set('(%s..(public() and master)) and desc(%s)', publicparent, megare):
+    for public in repo.set('(%s..(public() and canon)) and desc(%s)', publicparent, megare):
         match = _changeid_regex.search(public.description())
         if not match:
             continue
