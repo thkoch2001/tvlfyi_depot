@@ -151,6 +151,7 @@ in depot.lib.fix(self: {
     layout = "us";
     xkbOptions = "caps:super";
     exportConfiguration = true;
+    videoDrivers = [ "amdgpu" ];
     displayManager = {
       # Give EXWM permission to control the session.
       sessionCommands = "${nixpkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
