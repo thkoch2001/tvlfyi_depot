@@ -45,6 +45,17 @@
   #'magit-push ["r"]
   (list "R" "push to Gerrit for review" #'magit-gerrit-push-for-review))
 
+(define-suffix-command magit-gerrit-push-wip ()
+  "Push to Gerrit as a work-in-progress."
+  (interactive)
+  (magit-push-refspecs tvl-gerrit-remote
+                       (concat (tvl--gerrit-ref "canon") "%wip")
+                       nil))
+
+(transient-append-suffix
+  #'magit-push ["r"]
+  (list "W" "push to Gerrit as a work-in-progress" #'magit-gerrit-push-wip))
+
 (define-suffix-command magit-gerrit-submit ()
   "Push to Gerrit for review."
   (interactive)
