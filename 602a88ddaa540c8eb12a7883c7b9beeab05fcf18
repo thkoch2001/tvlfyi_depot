@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a87c8e12_75404849",
+        "filename": "tools/emacs-pkgs/tvl/tvl.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-25T03:10:25Z",
+      "side": 1,
+      "message": "Weird that this one is different from the others?",
+      "range": {
+        "startLine": 52,
+        "startChar": 57,
+        "endLine": 52,
+        "endChar": 63
+      },
+      "revId": "602a88ddaa540c8eb12a7883c7b9beeab05fcf18",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
