@@ -106,6 +106,7 @@ let
       pkgconfig
       postgresql
       pounce
+      pulseaudio
       python3
       python3Packages
       remarshal
