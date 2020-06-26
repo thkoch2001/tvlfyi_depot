@@ -1,5 +1,11 @@
 { config, pkgs, ... }:
 
+let
+
+  depot = config.lib.depot;
+
+in
+
 {
   imports = [
     ../modules/alacritty.nix
@@ -14,6 +20,7 @@
     ../modules/shell.nix
     ../modules/tarsnap.nix
     ../modules/vim.nix
+    ../modules/lib/depot.nix
   ];
 
   xsession.enable = true;
@@ -37,6 +44,7 @@
     gnutls
     pandoc
     barrier
+    depot.tools.nsfv-setup
 
     # System utilities
     powertop
