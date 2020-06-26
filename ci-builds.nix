@@ -22,7 +22,6 @@ in lib.fix(self: {
   # List of non-public targets, these are only used in local builds
   # and not in CI.
   __nonpublic = with depot; [
-    users.tazjin.emacs
     users.tazjin.nixos.camdenSystem
     users.tazjin.nixos.frogSystem
   ];
@@ -57,14 +56,18 @@ in lib.fix(self: {
   ];
 
   various = with depot; [
-    tools.cheddar
+    depot.web.tvl
     lisp.dns
     nix.buildLisp.example
     nix.yants.tests
+    tools.cheddar
+    tools.nsfv-setup
   ];
 
-  web = with depot.web; [
+  # User-specific build targets
+  tazjin = with depot.users.tazjin; [
     blog
-    tvl
+    emacs
+    homepage
   ];
 })
