@@ -46,7 +46,7 @@ with lib;
     gnumake
     inetutils
     loc
-    jsonnet
+    (import <nixpkgs-unstable> {}).jsonnet
 
     clj2nix
 
