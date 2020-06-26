@@ -235,6 +235,7 @@ in depot.lib.fix(self: {
       jq
       kubectl
       linuxPackages.perf
+      manpages
       miller
       msmtp
       nix-prefetch-github
