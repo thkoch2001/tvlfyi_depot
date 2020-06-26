@@ -68,7 +68,7 @@ in runCommandNoCC "website" {} ''
   cp ${homepage} $out/index.html
   cp -r ${./static}/* $out/static
 
-  # Some assets are stolen from the blog
-  cp ${depot.web.homepage}/static/jetbrains-* $out/static
-  cp ${depot.web.homepage}/static/tazjin.css $out/static
+  # Some assets are stolen from tazjin's blog
+  cp ${depot.users.tazjin.homepage}/static/jetbrains-* $out/static
+  cp ${depot.users.tazjin.homepage}/static/tazjin.css $out/static
 ''
