@@ -205,6 +205,7 @@ in depot.lib.fix(self: {
       third_party.ffmpeg
       third_party.git
       third_party.lutris
+      tools.nsfv-setup
     ]) ++
 
     # programs from nixpkgs
