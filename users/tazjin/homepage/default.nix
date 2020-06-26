@@ -4,7 +4,7 @@
 # The website is made up of a simple header&footer and content
 # elements for things such as blog posts and projects.
 #
-# Content for the blog is in //web/blog instead of here.
+# Content for the blog is in //users/tazjin/blog instead of here.
 { depot, lib, ... }:
 
 with depot;
@@ -28,7 +28,7 @@ let
 
   escape = replaceStrings [ "<" ">" "&" "'" ] [ "&lt;" "&gt;" "&amp;" "&#39;" ];
 
-  postToEntry = defun [ web.blog.post entry ] (post: {
+  postToEntry = defun [ users.tazjin.blog.post entry ] (post: {
     class = "blog";
     title = post.title;
     url = "/blog/${post.key}";
@@ -64,7 +64,7 @@ let
     ++ [ (builtins.readFile ./footer.html) ]
   ));
 
-  homepage = index ((map postToEntry web.blog.posts) ++ (import ./entries.nix));
+  homepage = index ((map postToEntry users.tazjin.blog.posts) ++ (import ./entries.nix));
 in runCommandNoCC "website" {} ''
   mkdir $out
   cp ${homepage} $out/index.html

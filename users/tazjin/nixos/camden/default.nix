@@ -321,11 +321,11 @@ in lib.fix(self: {
       serverAliases = [ "camden.tazj.in" ];
       default = true;
       useACMEHost = "tazj.in";
-      root = depot.web.homepage;
+      root = depot.users.tazjin.homepage;
       forceSSL = true;
 
       extraConfig = ''
-        ${depot.web.blog.oldRedirects}
+        ${depot.users.tazjin.blog.oldRedirects}
 
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 
@@ -334,7 +334,7 @@ in lib.fix(self: {
         }
 
         location /blog/ {
-          alias ${depot.web.blog.rendered}/;
+          alias ${depot.users.tazjin.blog.rendered}/;
 
           if ($request_uri ~ ^/(.*)\.html$) {
             return 302 /$1;
