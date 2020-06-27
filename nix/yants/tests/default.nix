@@ -9,6 +9,7 @@ with depot.nix.yants;
 deepSeq rec {
   # Test that all primitive types match
   primitives = [
+    (unit {})
     (int 15)
     (bool false)
     (float 13.37)
