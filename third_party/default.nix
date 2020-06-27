@@ -115,6 +115,7 @@ let
       rsync
       runCommand
       runCommandNoCC
+      runCommandLocal
       rustPlatform
       rustc
       sbcl
