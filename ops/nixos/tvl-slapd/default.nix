@@ -71,6 +71,11 @@ let
       password = "{SSHA}NIJ2RCRb1+Q4Bs63cyE91VZyiN47DG6y";
     }
     {
+      username = "Profpatsch";
+      email = "mail@profpatsch.de";
+      password = "{SSHA}jcFXxRplMFxH4gpa0X5VdUzW64T95TwQ";
+    }
+    {
       username = "q3k";
       email = "q3k@q3k.org";
       password = "{SSHA}BEccJdtnhVLDzOn+pxNfayNi3QFcEABE";
