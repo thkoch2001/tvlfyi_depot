@@ -58,6 +58,7 @@ let
       cudatoolkit
       darwin
       dockerTools
+      execline
       fetchFromGitHub
       fetchgit
       fetchurl
@@ -128,6 +129,7 @@ let
       thttpd
       tree
       which
+      writeScript
       writeShellScript
       writeShellScriptBin
       writeText
