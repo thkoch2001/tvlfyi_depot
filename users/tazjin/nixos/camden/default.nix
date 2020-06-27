@@ -358,8 +358,7 @@ in lib.fix(self: {
       extraConfig = ''
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 
-        rewrite ^/builds/?$ https://builds.sr.ht/~tazjin/depot last;
-        rewrite ^/meet/?$ https://meet.google.com/mng-biyw-xbb last;
+        rewrite ^/builds/?$ https://buildkite.com/tvl/depot/ last;
 
         rewrite ^/monorepo-doc/?$ https://docs.google.com/document/d/1nnyByXcH0F6GOmEezNOUa2RFelpeRpDToBLYD_CtjWE/edit?usp=sharing last;
 
