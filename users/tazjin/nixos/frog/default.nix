@@ -194,6 +194,12 @@ in depot.lib.fix(self: {
     };
   };
 
+  # Run a Buildkite agent for depot builds
+  services.buildkite-agents.frog = {
+    enable = true;
+    tokenPath = "/etc/secrets/buildkite-token";
+  };
+
   environment.systemPackages =
     # programs from the depot
     (with depot; [
