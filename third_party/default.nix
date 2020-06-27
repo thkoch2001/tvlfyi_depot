@@ -44,6 +44,7 @@ let
       buildGoModule
       buildGoPackage
       buildPackages
+      buildkite-agent
       bzip2
       c-ares
       cacert
