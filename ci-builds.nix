@@ -62,6 +62,7 @@ in lib.fix(self: {
     nix.yants.tests
     tools.cheddar
     tools.nsfv-setup
+    depot.nix.getBins.tests
   ];
 
   # User-specific build targets
