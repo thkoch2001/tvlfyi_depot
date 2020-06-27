@@ -44,7 +44,16 @@ in lib.fix(self: {
     web.cgit-taz
   ];
 
-  nix = [ depot.third_party.nix ];
+  nix = [
+    # tazjix
+    depot.third_party.nix
+
+    # nix expression libraries
+    depot.nix.yants.tests
+
+    # builders
+    depot.nix.buildLisp.example
+  ];
 
   ops = with depot.ops; [
     depot.ops."posix_mq.rs"
@@ -58,8 +67,6 @@ in lib.fix(self: {
   various = with depot; [
     depot.web.tvl
     lisp.dns
-    nix.buildLisp.example
-    nix.yants.tests
     tools.cheddar
     tools.nsfv-setup
   ];
