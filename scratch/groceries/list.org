@@ -1,0 +1,62 @@
+* Beer
+- 1x beer (6x)
+* Produce
+- 1x brocoli
+- 0x green beans
+- 1x spagel (10x)
+- 1x green asparagus
+- 1x lettuce
+- 1x tomatoes
+- 0x zucchini
+- 3x lemons (3x)
+- 0x shallots (10x)
+- 0x garlic
+- 0x avocado
+- 0x basil plant
+* Pasta
+- 0x linguini pasta
+- 4x tortellini / ravioli
+- 0x tomato sauce
+- 0x pesto
+* Oil
+- 0x olive oil
+- 0x coconut oil
+* Condiments
+- 0x Tabasco
+- 0x senf
+- 0x ketchup
+* Nuts
+- 2x almonds
+- 0x walnuts
+* Bread
+- 0x GF bread
+- 0x flour
+* Sugar
+- 1x Lindt chocolate
+* Dairy
+- 0x butter
+- 0x coconut milk
+- 1x egg cartons (10x each)
+- 1x parmesan
+- 1x sour cream
+- 2x gouda
+- 1x mystery cheese
+* Meat
+- 0x ham for asparagus
+- 1x fleischwurst
+- 1x bacon bits
+- 0x jar Weiner Wurstel
+- 1x bratwurst (4x)
+* Wine
+- 0x red wine
+- 2x white wine
+* Miscellaneous
+- 0x hollandaise sauce
+- 0x coffee
+- 0x coffee filters
+- 1x bug spray
+- 1x 30 SPF sun screen
+- 1x tiki torch
+- 1x dish soap
+- 1x paper towels (6x)
+- 1x Brita
