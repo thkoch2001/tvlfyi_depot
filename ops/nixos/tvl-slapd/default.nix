@@ -46,6 +46,11 @@ let
       password = "{SSHA}7w2XC6xxuhlUX2KvBpK4fD/X7ZCpfN/E";
     }
     {
+      username = "ericvolp12";
+      email = "ericvolp12@gmail.com";
+      password = "{SSHA}pSepaQ+/5KBLfJtRR5rfxGU8goAsXgvk";
+    }
+    {
       username = "eta";
       email = "eta@theta.eu.org";
       password = "{SSHA}sOR5xzi7Lfv376XGQA8Hf6jyhTvo0XYc";
@@ -79,11 +84,6 @@ let
       username = "q3k";
       email = "q3k@q3k.org";
       password = "{SSHA}BEccJdtnhVLDzOn+pxNfayNi3QFcEABE";
-    }
-    {
-      username = "ericvolp12";
-      email = "ericvolp12@gmail.com";
-      password = "{SSHA}pSepaQ+/5KBLfJtRR5rfxGU8goAsXgvk";
     }
     {
       username = "riking";
