@@ -53,6 +53,9 @@ in lib.fix(self: {
 
     # builders
     depot.nix.buildLisp.example
+
+    # helpers for writing derivations
+    depot.nix.getBins.tests
   ];
 
   ops = with depot.ops; [
