@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12abd02e_2f5619c1",
+        "filename": "nix/emptyDerivation/emptyDerivation.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-28T01:25:54Z",
+      "side": 1,
+      "message": "what do you mean?",
+      "range": {
+        "startLine": 19,
+        "startChar": 24,
+        "endLine": 19,
+        "endChar": 50
+      },
+      "revId": "b55ce2ec484ce0efa02e23f2dbc738ab91421401",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
