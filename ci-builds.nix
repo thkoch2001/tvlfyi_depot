@@ -7,7 +7,16 @@
 let
   inherit (builtins) attrNames filter foldl' getAttr substring;
 
-in lib.fix(self: {
+  # attach a nix expression to a drv so we can “build” it
+  # TODO(Profpatsch): instead of failing evaluation if a test fails,
+  # we can put the expression of the test failure into $out
+  # and continue with the other CI derivations.
+  drvify = name: exp: depot.nix.emptyDerivation {
+    inherit name;
+    owo = lib.generators.toPretty {} exp;
+  };
+
+in lib.fix (self: {
   __apprehendEvaluators = throw ''
     Do not evaluate this attribute set directly. It exists only to group builds
     for CI runs of different "project groups".
@@ -27,8 +36,10 @@ in lib.fix(self: {
   ];
 
   # Combined list of all the targets, used for building everything locally.
-  __allTargets = foldl' (x: y: x ++ y) self.__nonpublic
-    (map (k: getAttr k self) self.__evaluatable);
+  __allTargets =
+    ((with depot.nix.yants; list drv)
+      (foldl' (x: y: x ++ y) self.__nonpublic
+        (map (k: getAttr k self) self.__evaluatable)));
 
   fun = with depot.fun; [
     amsterdump
@@ -62,12 +73,12 @@ in lib.fix(self: {
     nix.yants.tests
     tools.cheddar
     tools.nsfv-setup
-    depot.nix.getBins.tests
+    (drvify "getBins-tests" nix.getBins.tests)
   ];
 
   # User-specific build targets
   tazjin = with depot.users.tazjin; [
-    blog
+    blog.rendered
     emacs
     homepage
   ];
