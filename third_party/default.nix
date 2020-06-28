@@ -120,6 +120,7 @@ let
       runCommandLocal
       rustPlatform
       rustc
+      s6-portable-utils
       sbcl
       sqlite
       stern
@@ -131,8 +132,6 @@ let
       thttpd
       tree
       which
-      writeScript
-      writeScriptBin
       writeShellScript
       writeShellScriptBin
       writeText
