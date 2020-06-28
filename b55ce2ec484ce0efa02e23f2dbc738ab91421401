@@ -22,6 +22,30 @@
       "revId": "b55ce2ec484ce0efa02e23f2dbc738ab91421401",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d852668_240d4929",
+        "filename": "nix/emptyDerivation/emptyDerivation.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-28T03:57:05Z",
+      "side": 1,
+      "message": "The system variable, really `localSystem` in nixpkgs: https://github.com/Profpatsch/nixpkgs/blob/f93bf823f27b7ce3371044c951c7d14e37cfb25f/pkgs/top-level/default.nix#L20-L29\n\nWe should probably define the same variables in the tvl input and pass them on to nixpkgs.",
+      "parentUuid": "12abd02e_2f5619c1",
+      "range": {
+        "startLine": 19,
+        "startChar": 24,
+        "endLine": 19,
+        "endChar": 50
+      },
+      "revId": "b55ce2ec484ce0efa02e23f2dbc738ab91421401",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
