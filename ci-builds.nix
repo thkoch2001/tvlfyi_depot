@@ -63,7 +63,9 @@ in lib.fix(self: {
     tools.cheddar
     tools.nsfv-setup
     depot.nix.getBins.tests
-  ];
+  ]
+  ++ nix.runExecline.tests
+  ;
 
   # User-specific build targets
   tazjin = with depot.users.tazjin; [
