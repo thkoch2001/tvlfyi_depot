@@ -119,6 +119,7 @@ with lib;
       "gco" = "gc";
       "gcd" = "gc development";
       "gcm" = "gc master";
+      "gcc" = "gc canon";
       "gc" = "git checkout";
       "gbg" = "git branch | grep";
       "gba" = "git branch -a";
