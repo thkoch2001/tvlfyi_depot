@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c7e1ba8_16989c62",
+        "filename": "nix/getBins/getBins.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-28T03:04:01Z",
+      "side": 1,
+      "message": "Similar to yesterday\u0027s CL, is there a reason not to just inline this (tiny) function in default.nix?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 8
+      },
+      "revId": "51100987ce9af8dfb14253db7ab2702b49dd630d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
