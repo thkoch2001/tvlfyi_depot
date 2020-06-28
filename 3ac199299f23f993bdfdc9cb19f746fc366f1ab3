@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af8ef88b_d8ed115a",
+        "filename": "nix/runTestsuite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-28T01:06:29Z",
+      "side": 1,
+      "message": "good ass",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 15
+      },
+      "revId": "3ac199299f23f993bdfdc9cb19f746fc366f1ab3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
