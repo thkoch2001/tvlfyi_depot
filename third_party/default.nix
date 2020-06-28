@@ -120,6 +120,7 @@ let
       runCommandLocal
       rustPlatform
       rustc
+      s6-portable-utils
       sbcl
       sqlite
       stern
