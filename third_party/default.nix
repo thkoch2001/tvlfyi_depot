@@ -134,7 +134,6 @@ let
       writeShellScript
       writeShellScriptBin
       writeText
-      writeTextFile
       xorg
       xz
       zlib
