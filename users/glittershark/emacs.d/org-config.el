@@ -51,26 +51,12 @@
     :kill-buffer t
     :unnarrowed t)
 
-   ;; ("d" "Tech debt" entry
-   ;;  (file+headline ,(concat org-directory "/work.org")
-   ;;                 "Inbox")
-   ;;  "* TODO %? :debt:\nContext: %a\nIn task: %K"
-   ;;  :prepend t
-   ;;  :kill-buffer t)
-
    ("p" "Projects")
    ("px" "Xanthous" entry
     (file+headline ,(notes-file "xanthous.org") "Backlog")
     "* TODO %?\nContext %a\nIn task: %K")
 
    ("d" "Data recording")
-   ;; ("dr" "Reflux data" table-line
-   ;;  (file+olp ,(notes-file "personal.org")
-   ;;            "Data" "Reflux")
-   ;;  "| %U | %^{reflux|0|1|2|3|4|5} | %^{ate 1hr before bed?|Y|N} | %^{ate spicy food yesterday?|Y|N} |"
-   ;;  :unnarrowed t
-   ;;  :immediate-finish t
-   ;;  )
    )
 
  org-capture-templates-contexts
