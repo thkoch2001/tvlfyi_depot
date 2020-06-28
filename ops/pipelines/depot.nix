@@ -15,7 +15,7 @@ let
   pipeline.steps = [
     {
       command = "nix-build -A ciBuilds.__allTargets";
-      label = "all-targets";
+      label = ":duck:";
     }
   ];
 in writeText "depot.yaml" (toJSON pipeline)
