@@ -6,7 +6,7 @@ let
 
   tests = import ./tests.nix {
     inherit getBins;
-    inherit (pkgs) writeScriptBin;
+    inherit (depot.nix) writeScriptBin;
     inherit (depot.nix.runTestsuite) assertEq it runTestsuite;
   };
 

@@ -60,8 +60,7 @@ let
     else abort ''"${toString argMode}" is not a valid argMode, use one of "var", "var-full", "env", "none", "env-no-push".'';
 
 in
-  # TODO(Profpatsch): rewrite `writeScript` with `runExecline`
-  pkgs.writeScript name ''
+  depot.nix.writeScript name ''
     #!${pkgs.execline}/bin/execlineb -W${env}
     ${escapeExecline argList}
   ''

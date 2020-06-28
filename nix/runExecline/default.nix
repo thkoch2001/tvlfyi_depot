@@ -8,7 +8,7 @@ let
 
   tests = import ./tests.nix {
     inherit runExecline;
-    inherit (depot.nix) getBins;
+    inherit (depot.nix) getBins writeScript;
     inherit (pkgs) stdenv coreutils;
     inherit pkgs;
   };

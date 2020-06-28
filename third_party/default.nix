@@ -131,8 +131,6 @@ let
       thttpd
       tree
       which
-      writeScript
-      writeScriptBin
       writeShellScript
       writeShellScriptBin
       writeText
