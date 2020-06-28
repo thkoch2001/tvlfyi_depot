@@ -1,3 +1,4 @@
+% -*- mode: prolog -*-
 % This file implements the depot submit rule, containing the following
 % checks:
 %
@@ -6,10 +7,6 @@
 %   of the owners or be proposed by one of them.
 % - No unresolved comments exist.
 % - The commit message conforms to our guidelines.
-
-append([],L,L).
-append([H|T],L2,[H|L3]) :-
-    append(T,L2,L3).
 
 unresolved_comments(Check) :-
     gerrit:unresolved_comments_count(0),
@@ -32,15 +29,9 @@ commit_message(Check) :-
     Check = label('Conformant-Commit-Message', need(_)).
 
 submit_rule(S) :-
-    gerrit:default_submit(D),
-    D =.. [submit | DefaultChecks],
-
-    % Retrieve all `Code-Review: +2` approvers, as well as the
-    % uploader, and run the owners check against these.
-    findall(U, gerrit:commit_label(label('Code-Review', 2), U), Approvers),
-    gerrit:uploader(Uploader),
-    gerrit_owners:add_owner_approval([Uploader | Approvers],
-                                     DefaultChecks, ChecksWithOwners),
+    % Implementation of Gerrit's default code-review policy (+2
+    % required for submit, -2 blocks submit).
+    gerrit:max_with_block(-2, 2, 'Code-Review', ReviewCheck),
 
     % Check for unresolved comments (this is necessary because it's
     % easy to miss them in previous patch sets)
@@ -50,5 +41,12 @@ submit_rule(S) :-
     % CONTRIBUTING.md
     commit_message(CommitCheck),
 
-    append(ChecksWithOwners, [CommentsCheck, CommitCheck], AllChecks),
+    % Retrieve all `Code-Review: +2` approvers, as well as the
+    % uploader, and run the owners check against these.
+    findall(U, gerrit:commit_label(label('Code-Review', 2), U), Approvers),
+    gerrit:uploader(Uploader),
+    gerrit_owners:add_owner_approval([Uploader | Approvers],
+                                     [ReviewCheck, CommentsCheck, CommitCheck],
+                                     AllChecks),
+
     S =.. [submit | AllChecks].
