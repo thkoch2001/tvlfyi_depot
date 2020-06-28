@@ -73,7 +73,9 @@ in lib.fix (self: {
     tools.cheddar
     tools.nsfv-setup
     (drvify "getBins-tests" nix.getBins.tests)
-  ];
+  ]
+  ++ nix.runExecline.tests
+  ;
 
   # Haskell packages we've patched locally
   haskellPackages = with depot.third_party.haskellPackages; [
