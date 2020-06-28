@@ -46,6 +46,30 @@
       "revId": "b55ce2ec484ce0efa02e23f2dbc738ab91421401",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c1596fe_3f82b0df",
+        "filename": "nix/emptyDerivation/emptyDerivation.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-28T04:14:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6d852668_240d4929",
+      "range": {
+        "startLine": 19,
+        "startChar": 24,
+        "endLine": 19,
+        "endChar": 50
+      },
+      "revId": "b55ce2ec484ce0efa02e23f2dbc738ab91421401",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
