@@ -22,6 +22,30 @@
       "revId": "51100987ce9af8dfb14253db7ab2702b49dd630d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30d3120e_87980af0",
+        "filename": "nix/getBins/getBins.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-28T03:49:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c7e1ba8_16989c62",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 8
+      },
+      "revId": "51100987ce9af8dfb14253db7ab2702b49dd630d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
