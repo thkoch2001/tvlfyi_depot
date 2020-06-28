@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cda5b79b_645e70f7",
+        "filename": "ops/besadii/main.go2",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2020-06-28T03:03:37Z",
+      "side": 1,
+      "message": "This bit had me a little confused but Tazjin explained the regex will always have 3 members if it matches properly so it should be fine.",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 0
+      },
+      "revId": "9e95446bdc007dbc4af4e2dd5bf00c1e19239869",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
