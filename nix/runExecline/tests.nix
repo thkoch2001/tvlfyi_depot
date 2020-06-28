@@ -1,4 +1,4 @@
-{ stdenv, pkgs, runExecline, getBins
+{ stdenv, pkgs, runExecline, getBins, writeScript
 # https://www.mail-archive.com/skaware@list.skarnet.org/msg01256.html
 , coreutils }:
 
@@ -18,23 +18,6 @@ let
            "s6-cat"
            "s6-test"
          ];
-
-  # lol
-  writeScript = name: script: runExecline name {
-    derivationArgs = {
-      inherit script;
-      passAsFile = [ "script" ];
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-    };
-  } [
-      "importas" "-ui" "s" "scriptPath"
-      "importas" "-ui" "out" "out"
-      "foreground" [
-        bins.mv "$s" "$out"
-      ]
-      bins.s6-chmod "0755" "$out"
-  ];
 
   # execline block of depth 1
   block = args: builtins.map (arg: " ${arg}") args ++ [ "" ];
