@@ -91,4 +91,8 @@ in lib.fix (self: {
     emacs
     homepage
   ];
+
+  glittershark = with depot.users.glittershark; [
+    xanthous
+  ];
 })
