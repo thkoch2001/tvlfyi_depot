@@ -77,7 +77,6 @@ let
       graphviz
       gzip
       haskell
-      haskellPackages
       iana-etc
       imagemagickBig
       installShellFiles
@@ -172,6 +171,10 @@ let
       perl
       perlPackages
       utillinuxMinimal;
+
+    haskellPackages = (nixpkgs.haskellPackages.override {
+      overrides = (import ./haskell_overlay { pkgs = nixpkgs; });
+    });
   };
 
 in exposed.lib.fix(self: exposed // {
