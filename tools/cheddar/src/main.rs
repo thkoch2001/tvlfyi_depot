@@ -1,3 +1,5 @@
+mod html;
+
 use clap::{App, Arg};
 use comrak::arena_tree::Node;
 use comrak::nodes::{Ast, AstNode, NodeCodeBlock, NodeHtmlBlock, NodeValue};
@@ -6,6 +8,7 @@ use lazy_static::lazy_static;
 use rouille::try_or_400;
 use rouille::Response;
 use serde::Deserialize;
+use serde_json::json;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::env;
@@ -19,9 +22,8 @@ use syntect::easy::HighlightLines;
 use syntect::highlighting::{Theme, ThemeSet};
 use syntect::parsing::{SyntaxReference, SyntaxSet};
 use syntect::util::LinesWithEndings;
-use serde_json::json;
 
-use syntect::html::{
+use html::{
     append_highlighted_html_for_styled_line, start_highlighted_html_snippet, IncludeBackground,
 };
 
@@ -309,12 +311,7 @@ fn highlighting_server(listen: &str) {
             _ => "Solarized (dark)",
         }];
 
-        format_code(
-            theme,
-            &mut query.code.as_bytes(),
-            &mut buf,
-            &query.filepath,
-        );
+        format_code(theme, &mut query.code.as_bytes(), &mut buf, &query.filepath);
 
         Response::json(&json!({
             "is_plaintext": false,
