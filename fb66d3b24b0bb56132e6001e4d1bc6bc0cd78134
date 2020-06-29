@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26af0f37_c8778e58",
+        "filename": "nix/runExecline/runExecline.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-29T15:23:55Z",
+      "side": 1,
+      "message": "I don\u0027t find this a particularly explanatory comment :p",
+      "range": {
+        "startLine": 3,
+        "startChar": 14,
+        "endLine": 3,
+        "endChar": 53
+      },
+      "revId": "fb66d3b24b0bb56132e6001e4d1bc6bc0cd78134",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3f7cfff_208d4af9",
+        "filename": "nix/runExecline/runExecline.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-29T15:23:55Z",
+      "side": 1,
+      "message": "write //nix/writeExecLine - we will make these paths clickable in comments in Sourcegraph",
+      "range": {
+        "startLine": 14,
+        "startChar": 13,
+        "endLine": 14,
+        "endChar": 28
+      },
+      "revId": "fb66d3b24b0bb56132e6001e4d1bc6bc0cd78134",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "743548a5_6fe48538",
+        "filename": "nix/runExecline/runExecline.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-29T15:23:55Z",
+      "side": 1,
+      "message": "Is this attribute set ever something that users would want to use? Should it be provided somewhere (with all the execline tools) as a default thing, or is the intention that everyone always \"imports\" these locally?",
+      "range": {
+        "startLine": 35,
+        "startChar": 2,
+        "endLine": 35,
+        "endChar": 6
+      },
+      "revId": "fb66d3b24b0bb56132e6001e4d1bc6bc0cd78134",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
