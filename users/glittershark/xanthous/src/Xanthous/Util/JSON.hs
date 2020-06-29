@@ -6,6 +6,7 @@ module Xanthous.Util.JSON
 import Xanthous.Prelude
 --------------------------------------------------------------------------------
 import Data.Aeson
+import Control.Monad.Fail (fail)
 --------------------------------------------------------------------------------
 
 newtype ReadShowJSON a = ReadShowJSON a
