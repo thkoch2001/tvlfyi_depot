@@ -1,0 +1,154 @@
+diff --git a/.travis.yml b/.travis.yml
+index 1a9ac7a..81c69e9 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -1,43 +1,4 @@
+-env:
+- - GHCVER=7.0.1 CABALVER=1.16
+- - GHCVER=7.0.4 CABALVER=1.16
+- - GHCVER=7.2.2 CABALVER=1.16
+- - GHCVER=7.4.2 CABALVER=1.16
+- - GHCVER=7.6.3 CABALVER=1.16
+- - GHCVER=7.8.4 CABALVER=1.18
+- - GHCVER=7.10.1 CABALVER=1.22
+- - GHCVER=head CABALVER=1.22
+-
+-matrix:
+-  allow_failures:
+-   - env: GHCVER=7.0.1 CABALVER=1.16
+-   - env: GHCVER=7.0.4 CABALVER=1.16
+-   - env: GHCVER=7.2.2 CABALVER=1.16
+-   - env: GHCVER=head CABALVER=1.22
+-
+-before_install:
+- - travis_retry sudo add-apt-repository -y ppa:hvr/ghc
+- - travis_retry sudo apt-get update
+- - travis_retry sudo apt-get install cabal-install-$CABALVER ghc-$GHCVER
+- - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
+- - cabal --version
+-
+-install:
+- - travis_retry cabal update
+- - cabal install --enable-tests --only-dependencies
+-
+-script:
+- - cabal configure -v2 --enable-tests
+- - cabal build
+- - cabal sdist
+- - export SRC_TGZ=$(cabal info . | awk '{print $2 ".tar.gz";exit}') ;
+-   cd dist/;
+-   if [ -f "$SRC_TGZ" ]; then
+-      cabal install "$SRC_TGZ";
+-   else
+-      echo "expected '$SRC_TGZ' not found";
+-      exit 1;
+-   fi
++language: haskell
+ 
+ notifications:
+   irc:
+diff --git a/comonad-extras.cabal b/comonad-extras.cabal
+index 2e449c1..77a2f0d 100644
+--- a/comonad-extras.cabal
++++ b/comonad-extras.cabal
+@@ -1,6 +1,6 @@
+-name:          comonad-extras
+ category:      Control, Comonads
+-version:       4.0.1
++name:          comonad-extras
++version:       5.0
+ license:       BSD3
+ cabal-version: >= 1.6
+ license-file:  LICENSE
+@@ -34,11 +34,11 @@ library
+   build-depends:
+     array                >= 0.3   && < 0.6,
+     base                 >= 4     && < 5,
+-    containers           >= 0.4   && < 0.7,
+-    comonad              >= 4     && < 6,
++    containers           >= 0.6   && < 0.7,
++    comonad              >= 5     && < 6,
+     distributive         >= 0.3.2 && < 1,
+-    semigroupoids        >= 4     && < 6,
+-    transformers         >= 0.2   && < 0.6
++    semigroupoids        >= 5     && < 6,
++    transformers         >= 0.5   && < 0.6
+ 
+   exposed-modules:
+     Control.Comonad.Store.Zipper
+diff --git a/src/Control/Comonad/Store/Pointer.hs b/src/Control/Comonad/Store/Pointer.hs
+index 5e41f4e..d99b50f 100644
+--- a/src/Control/Comonad/Store/Pointer.hs
++++ b/src/Control/Comonad/Store/Pointer.hs
+@@ -44,9 +44,6 @@ module Control.Comonad.Store.Pointer
+   , module Control.Comonad.Store.Class
+   ) where
+ 
+-#if !defined(__GLASGOW_HASKELL__) || __GLASGOW_HASKELL__ < 710
+-import Control.Applicative
+-#endif
+ import Control.Comonad
+ import Control.Comonad.Hoist.Class
+ import Control.Comonad.Trans.Class
+@@ -56,32 +53,10 @@ import Control.Comonad.Env.Class
+ import Data.Functor.Identity
+ import Data.Functor.Extend
+ import Data.Array
+-
+-#if __GLASGOW_HASKELL__
++#ifdef __GLASGOW_HASKELL__
+ import Data.Typeable
+ #endif
+ 
+-#if defined(__GLASGOW_HASKELL__) && __GLASGOW_HASKELL__ < 708
+-instance (Typeable i, Typeable1 w) => Typeable1 (PointerT i w) where
+-  typeOf1 diwa = mkTyConApp storeTTyCon [typeOf (i diwa), typeOf1 (w diwa)]
+-    where
+-      i :: PointerT i w a -> i
+-      i = undefined
+-      w :: PointerT i w a -> w a
+-      w = undefined
+-
+-instance (Typeable i, Typeable1 w, Typeable a) => Typeable (PointerT i w a) where
+-  typeOf = typeOfDefault
+-
+-storeTTyCon :: TyCon
+-#if __GLASGOW_HASKELL__ < 704
+-storeTTyCon = mkTyCon "Control.Comonad.Trans.Store.Pointer.PointerT"
+-#else
+-storeTTyCon = mkTyCon3 "comonad-extras" "Control.Comonad.Trans.Store.Pointer" "PointerT"
+-#endif
+-{-# NOINLINE storeTTyCon #-}
+-#endif
+-
+ type Pointer i = PointerT i Identity
+ 
+ pointer :: Array i a -> i -> Pointer i a
+@@ -91,7 +66,7 @@ runPointer :: Pointer i a -> (Array i a, i)
+ runPointer (PointerT (Identity f) i) = (f, i)
+ 
+ data PointerT i w a = PointerT (w (Array i a)) i
+-#if __GLASGOW_HASKELL__ >= 708
++#ifdef __GLASGOW_HASKELL__
+   deriving Typeable
+ #endif
+ 
+@@ -133,4 +108,3 @@ instance (ComonadTraced m w, Ix i) => ComonadTraced m (PointerT i w) where
+ 
+ instance (ComonadEnv m w, Ix i)  => ComonadEnv m (PointerT i w) where
+   ask = ask . lower
+-
+diff --git a/src/Control/Comonad/Store/Zipper.hs b/src/Control/Comonad/Store/Zipper.hs
+index 6dab6fd..decc378 100644
+--- a/src/Control/Comonad/Store/Zipper.hs
++++ b/src/Control/Comonad/Store/Zipper.hs
+@@ -15,9 +15,6 @@
+ module Control.Comonad.Store.Zipper
+   ( Zipper, zipper, zipper1, unzipper, size) where
+ 
+-#if !defined(__GLASGOW_HASKELL__) || __GLASGOW_HASKELL__ < 710
+-import Control.Applicative
+-#endif
+ import Control.Comonad (Comonad(..))
+ import Data.Functor.Extend
+ import Data.Foldable
