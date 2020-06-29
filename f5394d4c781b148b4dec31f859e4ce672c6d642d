@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7fde895_3f746539",
+        "filename": "nix/yants/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-29T00:46:25Z",
+      "side": 1,
+      "message": "Can you remove this whitespace-only change until we\u0027ve agreed on formatting questins?",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 0
+      },
+      "revId": "f5394d4c781b148b4dec31f859e4ce672c6d642d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
