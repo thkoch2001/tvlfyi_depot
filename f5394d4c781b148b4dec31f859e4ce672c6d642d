@@ -22,6 +22,30 @@
       "revId": "f5394d4c781b148b4dec31f859e4ce672c6d642d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f56fbfd9_36460a19",
+        "filename": "nix/yants/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-29T02:00:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7fde895_3f746539",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 0
+      },
+      "revId": "f5394d4c781b148b4dec31f859e4ce672c6d642d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
