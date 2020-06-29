@@ -16,6 +16,7 @@ import           Xanthous.Prelude hiding ((.=))
 import qualified Graphics.Vty.Attributes as Vty
 import           Test.QuickCheck
 import           Data.Aeson
+import           Control.Monad.Fail (fail)
 --------------------------------------------------------------------------------
 import           Xanthous.Orphans ()
 import           Xanthous.Util.QuickCheck (GenericArbitrary(..))
