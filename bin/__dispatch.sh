@@ -19,10 +19,6 @@ case "${TARGET_TOOL}" in
   stern)
     attr="third_party.stern"
     ;;
-  kms_pass)
-    attr="ops.kms_pass"
-    TARGET_TOOL="pass"
-    ;;
   aoc2019)
     attr="fun.aoc2019.${1}"
     ;;

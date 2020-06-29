@@ -24,13 +24,6 @@ let
     # Pass third_party as 'pkgs' (for compatibility with external
     # imports for certain subdirectories)
     pkgs = depot.third_party;
-
-    kms = {
-      project = "tazjins-infrastructure";
-      region = "europe-north1";
-      keyring = "tazjins-keys";
-      key = "kontemplate-key";
-    };
   };
 
   readTree' = import ./nix/readTree {};
