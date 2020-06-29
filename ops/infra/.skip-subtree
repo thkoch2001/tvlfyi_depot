@@ -1,2 +1,0 @@
-Code under //ops/infra is mostly configuration for other tools, not
-Nix derivations to be built.

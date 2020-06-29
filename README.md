@@ -22,8 +22,6 @@ Twitter][].
 * `tools/cheddar` contains a source code and Markdown rendering tool
   that is integrated with my cgit instance to render files in various
   views
-* `ops/kms_pass.nix` is a tiny tool that emulates the user-interface of `pass`,
-  but actually uses Google Cloud KMS for secret decryption
 * `ops/kontemplate` contains my Kubernetes resource templating tool (with which
   the services in this repository are deployed!)
 * `ops/besadii` contains a tool that runs as the git

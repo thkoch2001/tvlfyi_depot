@@ -61,7 +61,6 @@ in lib.fix (self: {
     depot.ops."posix_mq.rs"
     besadii
     journaldriver
-    kms_pass
     kontemplate
     mq_cli
   ];
