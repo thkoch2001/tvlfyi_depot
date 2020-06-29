@@ -77,6 +77,7 @@ let
       graphviz
       gzip
       haskell
+      haskellPackages
       iana-etc
       imagemagickBig
       installShellFiles
