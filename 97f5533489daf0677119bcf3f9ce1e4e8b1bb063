@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "526b4283_f81f8f62",
+        "filename": "ops/besadii/main.go2",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-06-29T04:35:30Z",
+      "side": 1,
+      "message": "We should likely introduce a library that intercepts all /etc/secrets/ reads before the pattern of \"just read the file\" gets too out of hand.",
+      "range": {
+        "startLine": 247,
+        "startChar": 24,
+        "endLine": 247,
+        "endChar": 72
+      },
+      "revId": "97f5533489daf0677119bcf3f9ce1e4e8b1bb063",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
