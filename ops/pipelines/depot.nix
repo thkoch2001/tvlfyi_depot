@@ -14,7 +14,7 @@ let
   # documented on https://buildkite.com/docs/pipelines/defining-steps
   pipeline.steps = [
     {
-      command = "nix-build -A ciBuilds.__allTargets";
+      command = "nix-build -A ciBuilds.__allTargets --show-trace";
       label = ":duck:";
     }
   ];
