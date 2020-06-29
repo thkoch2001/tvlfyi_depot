@@ -65,6 +65,16 @@ in lib.fix(self: {
     depot.nix.getBins.tests
   ];
 
+  # Haskell packages we've patched locally
+  haskellPackages = with depot.third_party.haskellPackages; [
+    generic-arbitrary
+    hgeometry
+    hgeometry-combinatorial
+    vinyl
+    comonad-extras
+    ghc-prof-flamegraph
+  ];
+
   # User-specific build targets
   tazjin = with depot.users.tazjin; [
     blog
