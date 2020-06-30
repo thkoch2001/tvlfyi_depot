@@ -33,7 +33,7 @@ let
     {
       username = "camsbury";
       email = "camsbury7@gmail.com";
-      password = "{SSHA}dfKezz6+rwakUcyG/agO1QKsZei0WuX/";
+      password = "{SSHA}r6/I/zefrAb1jWTdhuqWik0CXT8E+/E5";
     }
     {
       username = "cynthia";
