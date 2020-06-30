@@ -22,6 +22,30 @@
       "revId": "5c0153e21135945c9f2dd53d9249643d9f9a0bfd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1508814_c07f0b39",
+        "filename": "ops/nixos/clbot.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-06-30T23:38:34Z",
+      "side": 1,
+      "message": "There might be, lets see",
+      "parentUuid": "38f6efda_71c98cc9",
+      "range": {
+        "startLine": 17,
+        "startChar": 54,
+        "endLine": 17,
+        "endChar": 62
+      },
+      "revId": "5c0153e21135945c9f2dd53d9249643d9f9a0bfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
