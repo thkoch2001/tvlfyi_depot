@@ -90,6 +90,7 @@ in lib.fix (self: {
   tazjin = with depot.users.tazjin; [
     blog.rendered
     emacs
+    finito
     homepage
   ];
 })
