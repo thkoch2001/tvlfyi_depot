@@ -79,6 +79,14 @@ in {
   # Services
   ##############################################################################
 
+  nixpkgs.config.bitlbee.enableLibPurple = true;
+  services.bitlbee = {
+    enable = true;
+    libpurple_plugins = [
+      pkgs.telegram-purple
+    ];
+  };
+
   services.openssh.enable = true;
 
   services.gitea = {
