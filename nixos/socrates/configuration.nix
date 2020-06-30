@@ -27,7 +27,7 @@ in {
     networkmanager.enable = true;
     interfaces.enp2s0f1.useDHCP = true;
     interfaces.wlp3s0.useDHCP = true;
-    firewall.allowedTCPPorts = [ 9418 80 443 6667 ];
+    firewall.allowedTCPPorts = [ 9418 80 443 6697 ];
   };
 
   time.timeZone = "UTC";
@@ -78,6 +78,24 @@ in {
   ##############################################################################
   # Services
   ##############################################################################
+
+  systemd.services.bitlbee-stunnel = {
+    description = "Provides TLS termination for Bitlbee.";
+    wantedBy = [ "multi-user.target" ];
+    unitConfig = {
+      Restart = "always";
+      User = "nginx"; # This is a hack to easily get certificate access.
+    };
+    script = let configFile = builtins.toFile "stunnel.conf" ''
+      foreground = yes
+      debug = 7
+
+      [ircs]
+      accept = 0.0.0.0:6697
+      connect = 6667
+      cert = /var/lib/acme/wpcarro.dev/full.pem
+    ''; in "${pkgs.stunnel}/bin/stunnel ${configFile}";
+  };
 
   nixpkgs.config.bitlbee.enableLibPurple = true;
   services.bitlbee = {
