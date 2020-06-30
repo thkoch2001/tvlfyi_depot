@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38f6efda_71c98cc9",
+        "filename": "ops/nixos/clbot.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-06-30T23:36:35Z",
+      "side": 1,
+      "message": "Is there no builtin for shell escaping?",
+      "range": {
+        "startLine": 17,
+        "startChar": 54,
+        "endLine": 17,
+        "endChar": 62
+      },
+      "revId": "5c0153e21135945c9f2dd53d9249643d9f9a0bfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
