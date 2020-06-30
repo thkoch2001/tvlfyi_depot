@@ -6,6 +6,7 @@ let
   inherit (lib)
     concatStringsSep
     mkEnableOption
+    mkIf
     mkOption
     types
 ;
@@ -36,7 +37,7 @@ in {
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     systemd.services.smtprelay = {
       inherit description;
       script = "${config.depot.third_party.smtprelay}/bin/smtprelay ${prepareArgs cfg.args}";
