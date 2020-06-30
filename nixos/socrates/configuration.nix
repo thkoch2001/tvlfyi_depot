@@ -100,7 +100,6 @@ in {
   nixpkgs.config.bitlbee.enableLibPurple = true;
   services.bitlbee = {
     interface = "0.0.0.0";
-    authBackend = "pam";
     authMode = "Registered";
     enable = true;
     libpurple_plugins = [
