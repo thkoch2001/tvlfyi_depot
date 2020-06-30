@@ -389,10 +389,7 @@ private/hlissner/snippets."
        :desc "Send project to Launchbar" :n "L" #'+macos/send-project-to-launchbar))
 
    (:desc "Email" :prefix "M"
-     :desc "Compose" :n "m" #'mu4e-compose-new
-     :desc "Update"  :n "u" #'mu4e-update-mail-and-index
-     :desc "Sync"    :n "s" #'mu4e-update-mail-and-index
-     :desc "Open"    :n "o" #'mu4e)
+     :desc "Compose" :n "m" #'+notmuch/compose)
 
    (:desc "project" :prefix "p"
      :desc "Browse project"          :n  "." (find-file-in! (doom-project-root))
