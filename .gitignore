@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (038084 fix(besadii): Don't log errors for /meta refs)
 # Ignore the garbage folder, in which I slowly assemble a bunch of
 # trash locally that might be valuable in the future.
 garbage/
@@ -5,3 +6,9 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+=======
+.envrc
+/target/
+**/*.rs.bk
+Cargo.lock
+>>>>>>> BRANCH (b74811 feat(postgres): Introduce database connection pool)
