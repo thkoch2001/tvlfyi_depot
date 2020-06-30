@@ -27,7 +27,7 @@ in {
     networkmanager.enable = true;
     interfaces.enp2s0f1.useDHCP = true;
     interfaces.wlp3s0.useDHCP = true;
-    firewall.allowedTCPPorts = [ 9418 80 443 ];
+    firewall.allowedTCPPorts = [ 9418 80 443 6667 ];
   };
 
   time.timeZone = "UTC";
@@ -81,6 +81,7 @@ in {
 
   nixpkgs.config.bitlbee.enableLibPurple = true;
   services.bitlbee = {
+    interface = "0.0.0.0";
     enable = true;
     libpurple_plugins = [
       pkgs.telegram-purple
