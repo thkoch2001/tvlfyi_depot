@@ -113,7 +113,7 @@ pub struct FinitoPostgres<S> {
 }
 
 impl <S> FinitoPostgres<S> {
-    pub fn new(state: S, db_pool: DBPool, pool_size: usize) -> Self {
+    pub fn new(state: S, db_pool: DBPool, _pool_size: usize) -> Self {
         FinitoPostgres {
             state, db_pool,
         }
