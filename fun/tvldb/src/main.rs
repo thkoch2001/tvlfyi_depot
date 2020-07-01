@@ -52,6 +52,7 @@ impl App {
             .send_notice(nick, format!("[{}] \x0304Error:\x0f {}", chan, msg))?;
         Ok(())
     }
+
     pub fn keyword_from_captures(
         &mut self,
         learn: &::regex::Captures,
@@ -78,6 +79,7 @@ impl App {
         }
         Ok(kwd)
     }
+
     pub fn handle_move(
         &mut self,
         target: &str,
@@ -114,6 +116,7 @@ impl App {
         }
         Ok(())
     }
+
     pub fn handle_learn(
         &mut self,
         target: &str,
@@ -129,6 +132,7 @@ impl App {
             .send_notice(target, kwd.format_entry(idx).unwrap())?;
         Ok(())
     }
+
     pub fn handle_insert_last_quote(
         &mut self,
         target: &str,
@@ -152,6 +156,7 @@ impl App {
             .send_notice(target, kwd.format_entry(idx).unwrap())?;
         Ok(())
     }
+
     pub fn handle_increment(
         &mut self,
         target: &str,
@@ -183,6 +188,7 @@ impl App {
         }
         Ok(())
     }
+
     pub fn handle_query(
         &mut self,
         target: &str,
@@ -258,6 +264,7 @@ impl App {
         }
         Ok(())
     }
+
     pub fn handle_privmsg(&mut self, from: &str, chan: &str, msg: &str) -> Result<(), Error> {
         lazy_static! {
             static ref LEARN_RE: Regex =
@@ -297,6 +304,7 @@ impl App {
         }
         Ok(())
     }
+
     pub fn handle_msg(&mut self, m: Message) -> Result<(), Error> {
         match m.command {
             Command::PRIVMSG(channel, message) => {
@@ -320,6 +328,7 @@ impl App {
         Ok(())
     }
 }
+
 fn main() -> Result<(), Error> {
     println!("[+] loading configuration");
     let default_log_filter = "paroxysm=info".to_string();

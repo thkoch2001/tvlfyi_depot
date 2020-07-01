@@ -7,6 +7,7 @@ pub struct Keyword {
     pub name: String,
     pub chan: String,
 }
+
 #[derive(Queryable)]
 pub struct Entry {
     pub id: i32,
@@ -16,12 +17,14 @@ pub struct Entry {
     pub creation_ts: NaiveDateTime,
     pub created_by: String,
 }
+
 #[derive(Insertable)]
 #[table_name = "keywords"]
 pub struct NewKeyword<'a> {
     pub name: &'a str,
     pub chan: &'a str,
 }
+
 #[derive(Insertable)]
 #[table_name = "entries"]
 pub struct NewEntry<'a> {
