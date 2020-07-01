@@ -49,6 +49,9 @@ case "${TARGET_TOOL}" in
   gerrit)
     attr="tools.gerrit-cli"
     ;;
+  hash-password)
+    attr="tools.hash-password"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1
