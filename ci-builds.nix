@@ -63,6 +63,7 @@ in lib.fix (self: {
     cgit
     git
     nix
+    openldap
   ];
 
   various = with depot; [
