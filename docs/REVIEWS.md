@@ -99,11 +99,19 @@ instructions:
 1. Be a member of `##tvl`.
 2. Clone the depot locally.
 3. Create a user entry in our LDAP server in [tvl-slapd/default.nix][tvl-slapd].
-   You can create your password hash by using `slappasswd`, which ships in the
-   `openldap` package on most distributions.
 
-   On systems with Nix systems you can use `nix-shell -p openldap` to get access
-   to the command.
+   We recommend using ARGON2 password hashes, which can be created
+   with the `slappasswd` tool if OpenLDAP was compiled with ARGON2
+   support.
+
+   For convenience, we provide a wrapper script for this that you can
+   build with `nix-build -A tools.hash-password` in a depot checkout.
+   Alternatively, if you have `direnv` installed, you can add the
+   depot to your allowlist and just run `hash-password` which should
+   be added to your `$PATH` by `direnv`.
+
+   You can probably create ARGON2 hashes with other tools, but that is
+   your job to figure out.
 4. Create a commit adding yourself (see e.g.
    [CL/223](https://cl.tvl.fyi/c/depot/+/223)).
 5. Submit the commit via email (see below).
