@@ -43,8 +43,10 @@ in lib.fix (self: {
 
   fun = with depot.fun; [
     amsterdump
+    clbot
     gemma
     quinistry
+    tvldb
     watchblob
     wcl
   ];
