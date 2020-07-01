@@ -87,7 +87,6 @@ let
       lib
       libredirect
       luajit
-      luatex
       lutris
       makeFontsConf
       makeWrapper
