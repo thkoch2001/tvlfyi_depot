@@ -54,8 +54,9 @@
   (check-type level integer)
   (check-type pr pull-request)
   (s-format (concat (make-string level ?*) " " format-string)
-            #'aget
-            `((author . ,(->> pr (pull-request-author) (alist-get 'name)))
+            'aget
+            `((author . ,(or (->> pr (pull-request-author) (alist-get 'name))
+                             "no author"))
               (owner . ,(->> pr (pull-request-repository)
                              (alist-get 'owner)
                              (alist-get 'login)))
