@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bc220a5_c3c4c19b",
+        "filename": "fun/tvldb/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-01T17:06:18Z",
+      "side": 1,
+      "message": "You know, I actually don\u0027t like these. My personal style guide doesn\u0027t include empty lines between fn declarations that are part of a block \u003e_\u003e\n(they should be inserted everywhere elsewhere though)",
+      "revId": "566dbc5ef4ba43397c4b9d03efd5a9edf18e2617",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
