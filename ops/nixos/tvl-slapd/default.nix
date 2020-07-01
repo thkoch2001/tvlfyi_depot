@@ -94,7 +94,7 @@ let
     {
       username = "tazjin";
       email = "mail@tazj.in";
-      password = "{SSHA}67H341jRfAFBDz/R9+T3fHQiPfjwTbpQ";
+      password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$wOPEl9D3kSke//oLtbvqrg$j0npwwXgaXQ/emefKUwL59tH8hdmtzbgH2rQzWSmE2Y";
     }
   ];
 in {
@@ -114,7 +114,7 @@ in {
     dataDir = "/var/lib/openldap";
     suffix = "dc=tvl,dc=fyi";
     rootdn = "cn=admin,dc=tvl,dc=fyi";
-    rootpw = "{SSHA}yEEO6Ol2W3ritdiJzPSsjOtyPGxWF2JW";
+    rootpw = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$OfcgkOQ96VQ3aJj7NfA9vQ$oS6HQOkYl/bUYg4SejpltQYy7kvqx/RUxvoR4zo1vXU";
 
     # ACL configuration
     extraDatabaseConfig = ''
