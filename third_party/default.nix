@@ -182,7 +182,7 @@ in exposed.lib.fix(self: exposed // {
 
   # Packages to be overridden
   originals = {
-    inherit (nixpkgs) go grpc notmuch;
+    inherit (nixpkgs) openldap go grpc notmuch;
     inherit (stableNixpkgs) git;
     ffmpeg = nixpkgs.ffmpeg-full;
   };
