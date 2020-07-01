@@ -1,40 +1,19 @@
 import time
 import random
-from collections import deque
-
-
-class BoundedQueue(object):
-    def __init__(self, size=0):
-        """
-        Returns a queue of elements that will never exceed `size`
-        members. BoundedQueue evicts the oldest elements from itself before
-        adding new elements.
-        """
-        self.xs = deque([None] * size)
-
-    def add(self, x):
-        """
-        Add element `x` to the end of the queue. Evict the oldest element from
-        the queue.
-        """
-        evicted = None
-        if self.xs:
-            evicted = self.xs.popleft()
-            self.xs.append(x)
-        return evicted
+from heapq import heappush, heappop
 
 
 class Memo(object):
     def __init__(self, size=1):
         """
         Create a key-value data-structure that will never exceed `size`
-        members. Memo evicts the oldest elements from itself before adding
-        inserting new key-value pairs.
+        members. Memo evicts the least-recently-accessed elements from itself
+        before adding inserting new key-value pairs.
         """
         if size <= 0:
             raise Exception("We do not support an empty memo")
         self.xs = {}
-        self.q = BoundedQueue(size=size)
+        self.heap = [(0, None)] * size
 
     def contains(self, k):
         """
@@ -46,19 +25,21 @@ class Memo(object):
         """
         Return the memoized item at key `k`.
         """
+        # "touch" the element in the heap
         return self.xs[k]
 
     def set(self, k, v):
         """
         Memoize value `v` at key `k`.
         """
-        evicted = self.q.add(k)
-        if evicted != None:
-            del self.xs[evicted]
+        _, to_evict = heappop(self.heap)
+        if to_evict != None:
+            del self.xs[to_evict]
+        heappush(self.heap, (time.time(), k))
         self.xs[k] = v
 
 
-memo = Memo(size=3)
+memo = Memo(size=10)
 
 
 def f(x):
