@@ -161,7 +161,7 @@ func refUpdatedFromFlags() (*refUpdated, error) {
 
 	if branchRegexp.MatchString(update.ref) || metaRegexp.MatchString(update.ref) {
 		// these refs don't need special handling, just move on
-		return &update, nil
+		return nil, nil
 	}
 
 	if matches := patchsetRegexp.FindStringSubmatch(update.ref); matches != nil {
