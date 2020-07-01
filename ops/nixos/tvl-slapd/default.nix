@@ -98,6 +98,17 @@ let
     }
   ];
 in {
+  # Use our patched OpenLDAP derivation which enables stronger password hashing.
+  #
+  # Unfortunately the module for OpenLDAP has no package option, so we
+  # need to override it system-wide. Be aware that this triggers a
+  # *large* number of rebuilds of packages such as GPG and Python.
+  nixpkgs.overlays = [
+    (_: _: {
+      inherit (config.depot.third_party) openldap;
+    })
+  ];
+
   services.openldap = {
     enable = true;
     dataDir = "/var/lib/openldap";
@@ -115,6 +126,10 @@ in {
 
       # Allow default read access to other directory elements
       access to * by * read
+    '';
+
+    extraConfig = ''
+      moduleload pw-argon2
     '';
 
     # Contents are immutable at runtime, and adding user accounts etc.
