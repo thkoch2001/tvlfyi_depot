@@ -51,14 +51,6 @@ in lib.fix (self: {
     wcl
   ];
 
-  gitAndFriends = with depot; [
-    third_party.cgit
-    third_party.git
-    web.cgit-taz
-  ];
-
-  nix = [ depot.third_party.nix ];
-
   ops = with depot.ops; [
     depot.ops."posix_mq.rs"
     besadii
@@ -67,13 +59,20 @@ in lib.fix (self: {
     mq_cli
   ];
 
+  third_party = with depot.third_party; [
+    cgit
+    git
+    nix
+  ];
+
   various = with depot; [
-    depot.web.tvl
     lisp.dns
     nix.buildLisp.example
     nix.yants.tests
     tools.cheddar
     tools.nsfv-setup
+    web.cgit-taz
+    web.tvl
     (drvify "getBins-tests" nix.getBins.tests)
   ]
   ++ nix.runExecline.tests
