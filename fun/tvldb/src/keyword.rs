@@ -8,6 +8,7 @@ pub struct KeywordDetails {
     pub keyword: Keyword,
     pub entries: Vec<Entry>,
 }
+
 impl KeywordDetails {
     pub fn learn(&mut self, nick: &str, text: &str, dbc: &PgConnection) -> Result<usize, Error> {
         let now = ::chrono::Utc::now().naive_utc();
@@ -27,6 +28,7 @@ impl KeywordDetails {
         self.entries.push(new);
         Ok(self.entries.len())
     }
+
     pub fn process_moves(&mut self, moves: &[(i32, i32)], dbc: &PgConnection) -> Result<(), Error> {
         for (oid, new_idx) in moves {
             {
@@ -39,6 +41,7 @@ impl KeywordDetails {
         self.entries = Self::get_entries(self.keyword.id, dbc)?;
         Ok(())
     }
+
     pub fn swap(&mut self, idx_a: usize, idx_b: usize, dbc: &PgConnection) -> Result<(), Error> {
         let mut moves = vec![];
         for ent in self.entries.iter() {
@@ -55,6 +58,7 @@ impl KeywordDetails {
         self.process_moves(&moves, dbc)?;
         Ok(())
     }
+
     pub fn update(&mut self, idx: usize, val: &str, dbc: &PgConnection) -> Result<(), Error> {
         let ent = self
             .entries
@@ -69,6 +73,7 @@ impl KeywordDetails {
         ent.text = val.to_string();
         Ok(())
     }
+
     pub fn delete(&mut self, idx: usize, dbc: &PgConnection) -> Result<(), Error> {
         // step 1: delete the element
         {
@@ -91,11 +96,13 @@ impl KeywordDetails {
         self.process_moves(&moves, dbc)?;
         Ok(())
     }
+
     pub fn add_zwsp_to_name(name: &str) -> Option<String> {
         let second_index = name.char_indices().nth(1).map(|(i, _)| i)?;
         let (start, end) = name.split_at(second_index);
         Some(format!("{}​{}", start, end))
     }
+
     pub fn format_entry(&self, idx: usize) -> Option<String> {
         if let Some(ent) = self.entries.get(idx.saturating_sub(1)) {
             let gen_clr = if self.keyword.chan == "*" {
@@ -118,6 +125,7 @@ impl KeywordDetails {
             None
         }
     }
+
     pub fn get_or_create(word: &str, c: &str, dbc: &PgConnection) -> Result<Self, Error> {
         if let Some(ret) = Self::get(word, c, dbc)? {
             Ok(ret)
@@ -125,6 +133,7 @@ impl KeywordDetails {
             Ok(Self::create(word, c, dbc)?)
         }
     }
+
     pub fn create(word: &str, c: &str, dbc: &PgConnection) -> Result<Self, Error> {
         let val = NewKeyword {
             name: word,
@@ -141,6 +150,7 @@ impl KeywordDetails {
             entries: vec![],
         })
     }
+
     fn get_entries(kid: i32, dbc: &PgConnection) -> Result<Vec<Entry>, Error> {
         let entries: Vec<Entry> = {
             use crate::schema::entries::dsl::*;
@@ -151,6 +161,7 @@ impl KeywordDetails {
         };
         Ok(entries)
     }
+
     pub fn get<'a, T: Into<Cow<'a, str>>>(
         word: T,
         c: &str,
