@@ -16,5 +16,5 @@ hostname.
 ## Configured hosts:
 
 * `frog` - weapon of mass computation at home
-* `nugget` - desktop computer at home
+* `camden` - NUC serving tazj.in, tvl.fyi & co
 * ~~`urdhva` - T470s~~ (currently with edef)
