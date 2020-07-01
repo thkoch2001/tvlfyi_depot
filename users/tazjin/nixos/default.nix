@@ -25,7 +25,6 @@ let
     fi
 
     case $HOSTNAME in
-    ${caseFor "nugget"}
     ${caseFor "camden"}
     ${caseFor "frog"}
     *)
@@ -40,7 +39,6 @@ let
 in {
   inherit rebuilder;
 
-  nuggetSystem = systemFor [ depot.users.tazjin.nixos.nugget ];
   camdenSystem = systemFor [ depot.users.tazjin.nixos.camden ];
   frogSystem = systemFor [ depot.users.tazjin.nixos.frog ];
 }
