@@ -179,6 +179,10 @@ impl KeywordDetails {
             let entries = Self::get_entries(k.id, dbc)?;
             if let Some(e0) = entries.get(0) {
                 if e0.text.starts_with("see: ") {
+                    let new_word = e0.text.replace("see: ", "");
+                    if new_word == k.name {
+                        Err(format_err!("I hope you're proud of yourself"))?
+                    }
                     return Self::get(e0.text.replace("see: ", ""), c, dbc);
                 }
             }
