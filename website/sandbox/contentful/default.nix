@@ -2,7 +2,7 @@ let
   pkgs = import <nixpkgs> {};
 in pkgs.stdenv.mkDerivation {
   name = "ideal-website";
-  srcs = ./.;
+  src = builtins.path { path = ./.; name = "contentful"; };
   buildInputs = with pkgs; [
     nodejs
     # Exposes lscpu for parcel.js

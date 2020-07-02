@@ -12,9 +12,7 @@ let
   # This is the systemd service unit
   service = pkgs.stdenv.mkDerivation {
     name = "url-blocker";
-    src = ./.;
-    buildInputs = with pkgs; [
-    ];
+    src = builtins.path { path = ./.; name = "url-blocker"; };
     buildPhase = ''
     ${ghc}/bin/ghc Main.hs
   '';

@@ -3,7 +3,7 @@
 pkgs.stdenv.mkDerivation {
   name = "covid-uk";
   buildInputs = [];
-  src = ./.;
+  src = builtins.path { path = ./.; name = "covid-uk"; };
   # TODO(wpcarro): Need to run `yarn install` somehow.
   # TODO(wpcarro): Need to run `npx tailwindcss build styles.css -o output.css`.
   buildPhase = ''

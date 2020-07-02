@@ -43,7 +43,7 @@ let
   mainDotElm = mkDerivation {
     name = "elm-app-0.1.0";
     srcs = ./elm-srcs.nix;
-    src = ./.;
+    src = builtins.path { path = ./.; name = "learnpianochords"; };
     targets = ["Main"];
     srcdir = "./src";
     outputJavaScript = true;
@@ -51,7 +51,7 @@ let
 in stdenv.mkDerivation {
   name = "learn-piano-chords";
   buildInputs = [];
-  src = ./.;
+  src = builtins.path { path = ./.; name = "learnpianochords"; };
   buildPhase = ''
     mkdir -p $out
     cp index.html output.css ${mainDotElm}/Main.min.js $out

@@ -3,7 +3,7 @@
 pkgs.stdenv.mkDerivation {
   name = "covid-uk";
   buildInputs = [];
-  src = ./.;
+  src = builtins.path { path = ./.; name = "sandbox"; };
   buildPhase = ''
     mkdir -p $out
     cp $src/index.html $out
