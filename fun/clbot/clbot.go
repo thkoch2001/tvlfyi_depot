@@ -228,7 +228,7 @@ func main() {
 				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] {
 					continue
 				}
-				parsedMsg = fmt.Sprintf("CL/%d: %q submitted by %s - %s", e.Change.Number, e.Change.Subject, noping(username(e.PatchSet)), patchSetURL(e.Change, e.PatchSet))
+				parsedMsg = fmt.Sprintf("CL/%d: %q applied by %s - %s", e.Change.Number, e.Change.Subject, noping(username(e.PatchSet)), patchSetURL(e.Change, e.PatchSet))
 			}
 			if parsedMsg != "" {
 				sendMsgChan <- parsedMsg
