@@ -16,6 +16,24 @@
       "revId": "4db296d20f95d7051a0b21a137e76e14dd5ace8b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f42a6c69_361df4ae",
+        "filename": "users/glittershark/keys.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-02T19:21:32Z",
+      "side": 1,
+      "message": "that\u0027s the hostname of my laptop!",
+      "parentUuid": "cfaad35c_ca977ddc",
+      "revId": "4db296d20f95d7051a0b21a137e76e14dd5ace8b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
