@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61275c7c_50963ea7",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-02T18:43:37Z",
+      "side": 1,
+      "message": "😭",
+      "range": {
+        "startLine": 231,
+        "startChar": 39,
+        "endLine": 231,
+        "endChar": 47
+      },
+      "revId": "d11eb2d1c18ef8a10998ca1d90af78fecbb3737b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
