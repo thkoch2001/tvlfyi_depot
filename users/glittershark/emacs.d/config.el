@@ -27,6 +27,7 @@
 (load! "github-org")
 (load! "org-gcal")
 (load! "grid")
+(load! "nix")
 
 (require 's)
 (require 'tvl)
