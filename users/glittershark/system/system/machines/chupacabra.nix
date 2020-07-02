@@ -4,6 +4,7 @@
     ../modules/common.nix
     ../modules/reusable/battery.nix
     ../modules/tvl.nix
+    ../modules/urbint.nix
   ];
 
   hardware.enableRedistributableFirmware = true;
