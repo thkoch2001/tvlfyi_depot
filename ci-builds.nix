@@ -96,4 +96,8 @@ in lib.fix (self: {
     finito
     homepage
   ];
+
+  glittershark = with depot.users.glittershark; [
+    system.system.chupacabra
+  ];
 })
