@@ -22,6 +22,30 @@
       "revId": "bd7d0c7ed3deef93caeb900187902301e9f84644",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d34c9f63_ae177866",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-02T19:19:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53d9c5b0_0bd5ae55",
+      "range": {
+        "startLine": 145,
+        "startChar": 4,
+        "endLine": 145,
+        "endChar": 5
+      },
+      "revId": "bd7d0c7ed3deef93caeb900187902301e9f84644",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
