@@ -45,6 +45,30 @@
       "revId": "125209666439235fc3e289b824e573bf7e4f1d4b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d72fc9dd_35d17741",
+        "filename": "users/glittershark/system/system/modules/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-02T23:19:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d04b0ab2_2de5d1b5",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 5
+      },
+      "revId": "125209666439235fc3e289b824e573bf7e4f1d4b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
