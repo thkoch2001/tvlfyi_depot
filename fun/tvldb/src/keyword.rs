@@ -4,6 +4,9 @@ use diesel::prelude::*;
 use failure::Error;
 use std::borrow::Cow;
 
+/// Maximum number of times we'll follow a `see: ` pointer.
+const RECURSION_LIMIT: usize = 5;
+
 pub struct KeywordDetails {
     pub keyword: Keyword,
     pub entries: Vec<Entry>,
@@ -162,10 +165,11 @@ impl KeywordDetails {
         Ok(entries)
     }
 
-    pub fn get<'a, T: Into<Cow<'a, str>>>(
+    fn get_inner<'a, T: Into<Cow<'a, str>>>(
         word: T,
         c: &str,
         dbc: &PgConnection,
+        recursion_count: usize,
     ) -> Result<Option<Self>, Error> {
         let word = word.into();
         let keyword: Option<Keyword> = {
@@ -179,7 +183,12 @@ impl KeywordDetails {
             let entries = Self::get_entries(k.id, dbc)?;
             if let Some(e0) = entries.get(0) {
                 if e0.text.starts_with("see: ") {
-                    return Self::get(e0.text.replace("see: ", ""), c, dbc);
+                    if recursion_count > RECURSION_LIMIT {
+                        // Oh dear.
+                        Err(format_err!("Halt. You're having a bit too much fun."))?
+                    }
+                    let new_word = e0.text.replace("see: ", "");
+                    return Self::get_inner(new_word, c, dbc, recursion_count + 1);
                 }
             }
             Ok(Some(KeywordDetails {
@@ -189,5 +198,13 @@ impl KeywordDetails {
         } else {
             Ok(None)
         }
+    }
+
+    pub fn get<'a, T: Into<Cow<'a, str>>>(
+        word: T,
+        c: &str,
+        dbc: &PgConnection,
+    ) -> Result<Option<Self>, Error> {
+        Self::get_inner(word, c, dbc, 0)
     }
 }
