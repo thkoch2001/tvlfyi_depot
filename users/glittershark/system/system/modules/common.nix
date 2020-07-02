@@ -8,7 +8,6 @@
       ./sound.nix
       ./kernel.nix
       ./rtlsdr.nix
-      /home/grfn/code/urb/urbos/system
     ];
 
   boot.loader.systemd-boot.enable = true;
