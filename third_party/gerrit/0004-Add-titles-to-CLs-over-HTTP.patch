@@ -1,4 +1,4 @@
-From ead56bd63491ba4fd3c24fb1e9af36a3fa2141bf Mon Sep 17 00:00:00 2001
+From a908a0e96a74300784416b5e3ff4cb2493b521ee Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:03:02 +0100
 Subject: [PATCH 4/4] Add titles to CLs over HTTP
@@ -13,7 +13,7 @@ Subject: [PATCH 4/4] Add titles to CLs over HTTP
  create mode 100644 java/com/google/gerrit/httpd/raw/TitleComputer.java
 
 diff --git a/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java b/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java
-index 41d2f83975..323567b4a4 100644
+index cddaea4aaf..d5f43de025 100644
 --- a/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java
 +++ b/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java
 @@ -42,6 +42,7 @@ import java.util.Arrays;
@@ -54,7 +54,7 @@ index 41d2f83975..323567b4a4 100644
        throws RestApiException {
      ImmutableMap.Builder<String, Object> data = ImmutableMap.builder();
      Map<String, SanitizedContent> initialData = new HashMap<>();
-@@ -159,6 +163,10 @@ public class IndexHtmlUtil {
+@@ -158,6 +162,10 @@ public class IndexHtmlUtil {
      }
  
      data.put("gerritInitialData", initialData);
