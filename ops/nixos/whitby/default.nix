@@ -156,6 +156,13 @@ in systemForConfig {
     zfstools
   ];
 
+  security.sudo.extraRules = [
+    {
+      groups = ["wheel"];
+      commands = [{ command = "ALL"; options = ["NOPASSWD"]; }];
+    }
+  ];
+
   users = {
     users.root.openssh.authorizedKeys.keys = [
       depot.users.tazjin.keys.frog
