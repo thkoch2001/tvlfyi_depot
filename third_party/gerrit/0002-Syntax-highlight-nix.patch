@@ -1,8 +1,17 @@
+From f14cba31f2a9a75d06e58fd6313cc60d0cf5e690 Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Thu, 2 Jul 2020 23:02:32 +0100
+Subject: [PATCH 2/4] Syntax highlight nix
+
+---
+ .../app/elements/diff/gr-syntax-layer/gr-syntax-layer.js         | 1 +
+ 1 file changed, 1 insertion(+)
+
 diff --git a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
-index 1a0bbd9f50..0f2786a911 100644
+index f1e930f177..cc937cff67 100644
 --- a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
 +++ b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
-@@ -99,6 +99,7 @@ const LANGUAGE_MAP = {
+@@ -101,6 +101,7 @@ const LANGUAGE_MAP = {
    'text/x-vhdl': 'vhdl',
    'text/x-yaml': 'yaml',
    'text/vbscript': 'vbscript',
@@ -10,3 +19,6 @@ index 1a0bbd9f50..0f2786a911 100644
  };
  const ASYNC_DELAY = 10;
  
+-- 
+2.25.1
+

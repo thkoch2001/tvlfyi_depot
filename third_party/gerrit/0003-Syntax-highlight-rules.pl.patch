@@ -1,8 +1,17 @@
+From c3603950e5ae377514febbebf9aa26c31e07cd5d Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Thu, 2 Jul 2020 23:02:43 +0100
+Subject: [PATCH 3/4] Syntax highlight rules.pl
+
+---
+ .../elements/diff/gr-syntax-layer/gr-syntax-layer.js   | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
 diff --git a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
-index 1a0bbd9f50..d8d2fa643b 100644
+index cc937cff67..2145bc169b 100644
 --- a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
 +++ b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.js
-@@ -102,6 +102,10 @@ const LANGUAGE_MAP = {
+@@ -105,6 +105,10 @@ const LANGUAGE_MAP = {
  };
  const ASYNC_DELAY = 10;
  
@@ -13,7 +22,7 @@ index 1a0bbd9f50..d8d2fa643b 100644
  const CLASS_WHITELIST = {
    'gr-diff gr-syntax gr-syntax-attr': true,
    'gr-diff gr-syntax gr-syntax-attribute': true,
-@@ -233,10 +237,16 @@ class GrSyntaxLayer extends GestureEventListeners(
+@@ -236,10 +240,16 @@ class GrSyntaxLayer extends GestureEventListeners(
      }
    }
  
@@ -30,3 +39,6 @@ index 1a0bbd9f50..d8d2fa643b 100644
          LANGUAGE_MAP[diffFileMetaInfo.content_type];
    }
  
+-- 
+2.25.1
+

@@ -40,10 +40,10 @@ pkgs.buildBazelPackage {
     fetchSubmodules = true;
   };
   patches = [
-    ./use_detzip.patch
-    ./syntax_highlight_nix.patch
-    ./syntax_highlight_rules_pl.patch
-    ./add_titles_to_cls.patch
+    ./0001-Use-detzip-in-download_bower.py.patch
+    ./0002-Syntax-highlight-nix.patch
+    ./0003-Syntax-highlight-rules.pl.patch
+    ./0004-Add-titles-to-CLs-over-HTTP.patch
   ];
 
   bazelTarget = "release";
