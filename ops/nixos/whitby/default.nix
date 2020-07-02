@@ -90,6 +90,7 @@ in systemForConfig {
     hostName = "whitby";
     hostId = "b38ca543";
     useDHCP = false;
+    defaultGateway6 = "fe80::1";
 
     firewall.allowedTCPPorts = [ 22 80 443 ];
 
