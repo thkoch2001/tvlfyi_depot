@@ -111,6 +111,9 @@ in systemForConfig {
 
   nix = {
     maxJobs = lib.mkDefault 64;
+    extraOptions = ''
+      secret-key-files = /etc/secrets/nix-cache-privkey
+    '';
   };
 
   programs.mtr.enable = true;
