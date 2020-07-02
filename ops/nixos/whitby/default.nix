@@ -143,6 +143,14 @@ in systemForConfig {
       openssh.authorizedKeys.keys = depot.users.lukegb.keys.all;
     };
 
+    users.grfn = {
+      isNormalUser = true;
+      extraGroups = [ "git" "wheel" ];
+      openssh.authorizedKeys.keys = [
+        depot.users.glittershark.keys.whitby
+      ];
+    };
+
     # Set up a user & group for git shenanigans
     groups.git = {};
     users.git = {
