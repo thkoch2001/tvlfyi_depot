@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db5c9364_21789206",
+        "filename": "users/glittershark/system/system/modules/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-02T22:50:38Z",
+      "side": 1,
+      "message": "biggest of parallels",
+      "range": {
+        "startLine": 10,
+        "startChar": 26,
+        "endLine": 10,
+        "endChar": 37
+      },
+      "revId": "125209666439235fc3e289b824e573bf7e4f1d4b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d04b0ab2_2de5d1b5",
+        "filename": "users/glittershark/system/system/modules/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-02T22:50:38Z",
+      "side": 1,
+      "message": "Indent this slightly more maybe?",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 5
+      },
+      "revId": "125209666439235fc3e289b824e573bf7e4f1d4b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
