@@ -4,8 +4,6 @@
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ../modules/common.nix
     ../modules/reusable/battery.nix
-    <nixos-hardware/common/cpu/intel>
-    <nixos-hardware/common/pc/laptop>
     ../modules/tvl.nix
   ];
 
@@ -78,4 +76,17 @@
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   # High-DPI console
   console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+
+  # from nixos-hardware TODO sort this around
+  services.tlp.enable = true;
+  boot.kernel.sysctl."vm.swappiness" = 1;
+  services.fstrim.enable = lib.mkDefault true;
+
+  # Intel cpu stuff
+  hardware.opengl.extraPackages = with pkgs; [
+    vaapiIntel
+    vaapiVdpau
+    libvdpau-va-gl
+    intel-media-driver
+  ];
 }
