@@ -1,7 +1,17 @@
 { depot, lib, ... }:
 
 let
+  inherit (builtins) listToAttrs;
+  inherit (lib) range;
+
   nixpkgs = import depot.third_party.nixpkgsSrc {};
+
+  # All Buildkite hooks are actually besadii, but it's being invoked
+  # with different names.
+  buildkiteHooks = depot.third_party.runCommandNoCC "buildkite-hooks" {} ''
+    mkdir -p $out/bin
+    ln -s ${depot.ops.besadii}/bin/besadii $out/bin/post-command
+  '';
 
   systemForConfig = configuration: (depot.third_party.nixos {
     inherit configuration;
@@ -118,6 +128,17 @@ in systemForConfig {
 
   programs.mtr.enable = true;
   services.openssh.enable = true;
+
+  # Run a handful of Buildkite agents to support parallel builds.
+  services.buildkite-agents = listToAttrs (map (n: rec {
+    name = "whitby-${toString n}";
+    value = {
+      inherit name;
+      enable = true;
+      tokenPath = "/etc/secrets/buildkite-agent-token";
+      hooks.post-command = "${buildkiteHooks}/bin/post-command";
+    };
+  }) (range 1 8));
 
   environment.systemPackages = with nixpkgs; [
     bb
