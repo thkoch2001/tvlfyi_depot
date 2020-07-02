@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d6a2adb2_30caf4d3",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-02T18:31:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b317bfcd_41840f85",
+      "revId": "e84782f1c3ea1bd4170e2d02b709a27daad8a4c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18552437_8137ed66",
         "filename": "ops/nixos/whitby/default.nix",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "63017121_f90f3577",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-02T18:31:21Z",
+      "side": 1,
+      "message": "hahaha",
+      "parentUuid": "18552437_8137ed66",
+      "range": {
+        "startLine": 66,
+        "startChar": 2,
+        "endLine": 66,
+        "endChar": 17
+      },
+      "revId": "e84782f1c3ea1bd4170e2d02b709a27daad8a4c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f30d101_22680211",
         "filename": "ops/nixos/whitby/default.nix",
         "patchSetId": 1
@@ -62,6 +104,30 @@
       "revId": "e84782f1c3ea1bd4170e2d02b709a27daad8a4c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec602330_9e7ddd1b",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-02T18:31:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2f30d101_22680211",
+      "range": {
+        "startLine": 100,
+        "startChar": 40,
+        "endLine": 100,
+        "endChar": 54
+      },
+      "revId": "e84782f1c3ea1bd4170e2d02b709a27daad8a4c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +194,30 @@
     },
     {
       "key": {
+        "uuid": "53964c55_83ddb847",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-02T18:31:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "35608805_67bc69ba",
+      "range": {
+        "startLine": 109,
+        "startChar": 28,
+        "endLine": 109,
+        "endChar": 30
+      },
+      "revId": "e84782f1c3ea1bd4170e2d02b709a27daad8a4c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48066ad2_f02e940e",
         "filename": "ops/nixos/whitby/default.nix",
         "patchSetId": 1
@@ -151,6 +241,30 @@
     },
     {
       "key": {
+        "uuid": "ddd53967_9ab9e424",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-02T18:31:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48066ad2_f02e940e",
+      "range": {
+        "startLine": 116,
+        "startChar": 3,
+        "endLine": 116,
+        "endChar": 52
+      },
+      "revId": "e84782f1c3ea1bd4170e2d02b709a27daad8a4c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c61bf4c_a5b32101",
         "filename": "ops/nixos/whitby/default.nix",
         "patchSetId": 1
@@ -171,6 +285,30 @@
       "revId": "e84782f1c3ea1bd4170e2d02b709a27daad8a4c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "447a3079_dedd32ad",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-02T18:31:21Z",
+      "side": 1,
+      "message": "This isn\u0027t for regular use, this is for \"oops we accidentally deployed a config that deleted my user\".",
+      "parentUuid": "8c61bf4c_a5b32101",
+      "range": {
+        "startLine": 120,
+        "startChar": 2,
+        "endLine": 122,
+        "endChar": 6
+      },
+      "revId": "e84782f1c3ea1bd4170e2d02b709a27daad8a4c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
