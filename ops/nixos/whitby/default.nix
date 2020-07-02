@@ -124,6 +124,10 @@ in systemForConfig {
     extraOptions = ''
       secret-key-files = /etc/secrets/nix-cache-privkey
     '';
+
+    trustedUsers = [
+      "grfn"
+    ];
   };
 
   programs.mtr.enable = true;
