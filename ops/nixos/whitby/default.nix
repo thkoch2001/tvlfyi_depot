@@ -137,6 +137,12 @@ in systemForConfig {
       ];
     };
 
+    users.lukegb = {
+      isNormalUser = true;
+      extraGroups = [ "git" "wheel" ];
+      openssh.authorizedKeys.keys = depot.users.lukegb.keys.all;
+    };
+
     # Set up a user & group for git shenanigans
     groups.git = {};
     users.git = {
