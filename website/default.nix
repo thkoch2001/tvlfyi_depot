@@ -2,7 +2,7 @@
 
 pkgs.stdenv.mkDerivation {
   name = "wpcarro.dev";
-  src = ./.;
+  src = builtins.path { path = ./.; name = "website"; };
   installPhase = ''
     mkdir -p $out
     cp $src/index.html $out
