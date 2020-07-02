@@ -28,7 +28,7 @@ let
     runScript = "/bin/bazel-run";
   };
   bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.2.1";
+  version = "3.2.2";
 in
 pkgs.buildBazelPackage {
   name = "gerrit-${version}";
@@ -36,7 +36,7 @@ pkgs.buildBazelPackage {
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
     rev = "v${version}";
-    sha256 = "1xrckiqc2l07dib22rn6iicgvph8iyxjrzr15bs5x6jdg9cic1s8";
+    sha256 = "1kyzf1bzl0mws774pjk56wlfp9v8bdh5x0irm7n7ifab3s1ccdkw";
     fetchSubmodules = true;
   };
   patches = [

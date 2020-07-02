@@ -1,4 +1,4 @@
-From f14cba31f2a9a75d06e58fd6313cc60d0cf5e690 Mon Sep 17 00:00:00 2001
+From 1b869d045cbb557ed5475be1131282fa8e4afc76 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:32 +0100
 Subject: [PATCH 2/4] Syntax highlight nix
