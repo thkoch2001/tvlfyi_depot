@@ -8,7 +8,6 @@
       ./sound.nix
       ./kernel.nix
       ./rtlsdr.nix
-      /home/grfn/code/urb/urbos/system
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -128,9 +127,6 @@
       options = "--delete-older-than 30d";
     };
   };
-
-  urbos.enable = true;
-  urbos.username = "grfn";
 
   services.udev.extraRules = ''
     # UDEV rules for Teensy USB devices
