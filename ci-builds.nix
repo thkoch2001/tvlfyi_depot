@@ -57,6 +57,7 @@ in lib.fix (self: {
     journaldriver
     kontemplate
     mq_cli
+    nixos.whitby
   ];
 
   third_party = with depot.third_party; [
