@@ -22,6 +22,30 @@
       "revId": "3fcadd327fd94055003d69e6d38f96ab18a20d19",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4501a05f_4ac1cf56",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-02T20:54:07Z",
+      "side": 1,
+      "message": "The private key is not published anywhere, no.",
+      "parentUuid": "fc6c4032_c0ab62fc",
+      "range": {
+        "startLine": 115,
+        "startChar": 25,
+        "endLine": 115,
+        "endChar": 55
+      },
+      "revId": "3fcadd327fd94055003d69e6d38f96ab18a20d19",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
