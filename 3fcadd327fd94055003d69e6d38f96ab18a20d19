@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc6c4032_c0ab62fc",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-02T19:31:07Z",
+      "side": 1,
+      "message": "is this published somewhere so I can sign it locally?",
+      "range": {
+        "startLine": 115,
+        "startChar": 25,
+        "endLine": 115,
+        "endChar": 55
+      },
+      "revId": "3fcadd327fd94055003d69e6d38f96ab18a20d19",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
