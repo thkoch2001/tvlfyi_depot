@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ccb964e_7af4e029",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2020-07-02T18:25:31Z",
+      "side": 1,
+      "message": "I approve of this timezone.",
+      "range": {
+        "startLine": 106,
+        "startChar": 19,
+        "endLine": 106,
+        "endChar": 22
+      },
+      "revId": "e84782f1c3ea1bd4170e2d02b709a27daad8a4c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
