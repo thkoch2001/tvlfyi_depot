@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dee81ca9_3083c6a6",
+        "filename": "third_party/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-03T22:21:52Z",
+      "side": 1,
+      "message": "//third_party is read by readTree and this should not be necessary. It looks like this file is not included in the CL anyways, so this code (and hte other change in this file) are probably an error?",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 70
+      },
+      "revId": "e4cea48a0b73213ed55db9d62ec0108e071aec74",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
