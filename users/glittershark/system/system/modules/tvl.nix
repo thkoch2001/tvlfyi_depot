@@ -3,6 +3,7 @@
 {
   nix = {
     binaryCaches = ["ssh://nix-ssh@whitby.tvl.fyi"];
+    trustedBinaryCaches = ["ssh://nix-ssh@whitby.tvl.fyi"];
     binaryCachePublicKeys = ["cache.tvl.fyi:fd+9d1ceCPvDX/xVhcfv8nAa6njEhAGAEe+oGJDEeoc="];
   };
 
