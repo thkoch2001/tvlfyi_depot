@@ -128,6 +128,14 @@ in systemForConfig {
     trustedUsers = [
       "grfn"
     ];
+
+    sshServe = {
+      enable = true;
+      keys = with depot.users;
+        tazjin.keys.all
+        ++ lukegb.keys.all
+        ++ [ glittershark.keys.whitby ];
+    };
   };
 
   programs.mtr.enable = true;
@@ -171,9 +179,7 @@ in systemForConfig {
     users.tazjin = {
       isNormalUser = true;
       extraGroups = [ "git" "wheel" ];
-      openssh.authorizedKeys.keys = [
-        depot.users.tazjin.keys.frog
-      ];
+      openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
     };
 
     users.lukegb = {
