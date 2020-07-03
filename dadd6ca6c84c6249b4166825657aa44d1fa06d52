@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "1d52282c_e2245712",
+        "filename": "ops/nixos/all-systems.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-03T22:59:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8153bfe1_df0113a7",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 8
+      },
+      "revId": "dadd6ca6c84c6249b4166825657aa44d1fa06d52",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3411dbe5_cc8e6dd2",
         "filename": "ops/nixos/all-systems.nix",
         "patchSetId": 3
@@ -164,6 +188,30 @@
       "revId": "dadd6ca6c84c6249b4166825657aa44d1fa06d52",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92b1f745_0326fc23",
+        "filename": "ops/nixos/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-03T22:59:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d6bd5d8_cd47cca4",
+      "range": {
+        "startLine": 40,
+        "startChar": 47,
+        "endLine": 40,
+        "endChar": 52
+      },
+      "revId": "dadd6ca6c84c6249b4166825657aa44d1fa06d52",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
