@@ -52,6 +52,9 @@ case "${TARGET_TOOL}" in
   hash-password)
     attr="tools.hash-password"
     ;;
+  install-system)
+    attr="ops.nixos.install-system"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1
