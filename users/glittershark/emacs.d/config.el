@@ -689,12 +689,6 @@
   (add-to-list #'company-backends #'company-lsp)
   (setq company-lsp-async t))
 
-(use-package! lsp-treemacs
-  :config
-  (map! :map lsp-mode-map
-        (:leader
-          "c X" #'lsp-treemacs-errors-list)))
-
 (use-package! dap-mode)
 
 (defun +grfn/haskell-mode-setup ()
@@ -728,11 +722,10 @@
   ;; :hook
   ;; (haskell-mode . lsp-haskell-enable)
   :config
-  (add-hook 'haskell-mode-hook #'+grfn/haskell-mode-setup 't)
-  (setq
-   ;; lsp-haskell-process-path-hie "/home/griffin/.nix-profile/bin/hie-8.6.5"
-   lsp-haskell-process-args-hie
-   '("-d" "-l" "/tmp/hie.log" "+RTS" "-M4G" "-H1G" "-K4G" "-A16M" "-RTS")))
+  (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper"
+        lsp-haskell-process-args-hie
+        '("-d" "-l" "/tmp/hie.log" "+RTS" "-M4G" "-H1G" "-K4G" "-A16M" "-RTS"))
+  (add-hook 'haskell-mode-hook #'+grfn/haskell-mode-setup 't))
 
 (use-package! lsp-imenu
   :after (lsp-mode lsp-ui)
