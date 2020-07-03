@@ -16,6 +16,10 @@ let
     owo = lib.generators.toPretty {} exp;
   };
 
+  systemFor = configuration: (depot.third_party.nixos {
+    inherit configuration;
+  }).system;
+
 in lib.fix (self: {
   __apprehendEvaluators = throw ''
     Do not evaluate this attribute set directly. It exists only to group builds
@@ -57,7 +61,7 @@ in lib.fix (self: {
     journaldriver
     kontemplate
     mq_cli
-    nixos.whitby
+    (systemFor nixos.whitby)
   ];
 
   third_party = with depot.third_party; [
@@ -98,7 +102,7 @@ in lib.fix (self: {
   ];
 
   glittershark = with depot.users.glittershark; [
-    system.system.chupacabra
+    system.system.chupacabraSystem
     xanthous
   ];
 })
