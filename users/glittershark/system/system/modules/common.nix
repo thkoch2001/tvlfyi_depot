@@ -1,5 +1,11 @@
 { config, lib, pkgs, ... }:
 
+let
+
+  depot = import ../../../../.. {};
+
+in
+
 {
   imports =
     [
@@ -35,6 +41,7 @@
     libnotify
     file
     lm_sensors
+    depot.users.glittershark.system.system.rebuilder
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
