@@ -1,14 +1,18 @@
 { config, lib, pkgs, ... }:
 
 {
-  nix.buildMachines = [{
-    hostName = "whitby.tvl.fyi";
-    sshUser = "grfn";
-    sshKey = "/root/.ssh/id_rsa.whitby";
-    system = "x86_64-linux";
-    maxJobs = 64;
-    supportedFeatures = ["big-parallel"];
-  }];
+  nix = {
+    buildMachines = [{
+      hostName = "whitby.tvl.fyi";
+      sshUser = "grfn";
+      sshKey = "/root/.ssh/id_rsa.whitby";
+      system = "x86_64-linux";
+      maxJobs = 64;
+      supportedFeatures = ["big-parallel"];
+    }];
+
+    binaryCaches = ["ssh://grfn@whitby.tvl.fyi"];
+  };
 
   programs.ssh.knownHosts.whitby = {
     hostNames = [ "whitby" "whitby.tvl.fyi" "49.12.129.211"];
