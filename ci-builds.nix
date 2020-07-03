@@ -16,6 +16,10 @@ let
     owo = lib.generators.toPretty {} exp;
   };
 
+  systemFor = configuration: (depot.third_party.nixos {
+    inherit configuration;
+  }).system;
+
 in lib.fix (self: {
   __apprehendEvaluators = throw ''
     Do not evaluate this attribute set directly. It exists only to group builds
@@ -28,18 +32,10 @@ in lib.fix (self: {
   # used to trigger builds for each key.
   __evaluatable = filter (key: (substring 0 2 key) != "__") (attrNames self);
 
-  # List of non-public targets, these are only used in local builds
-  # and not in CI.
-  __nonpublic = with depot; [
-    users.tazjin.nixos.camdenSystem
-    users.tazjin.nixos.frogSystem
-  ];
-
   # Combined list of all the targets, used for building everything locally.
   __allTargets =
     (with depot.nix.yants; list drv)
-      (foldl' (x: y: x ++ y) self.__nonpublic
-        (map (k: getAttr k self) self.__evaluatable));
+    (foldl' (x: y: x ++ y) [] (map (k: getAttr k self) self.__evaluatable));
 
   fun = with depot.fun; [
     amsterdump
@@ -57,7 +53,7 @@ in lib.fix (self: {
     journaldriver
     kontemplate
     mq_cli
-    nixos.whitby
+    (systemFor nixos.whitby)
   ];
 
   third_party = with depot.third_party; [
@@ -98,10 +94,12 @@ in lib.fix (self: {
     emacs
     finito
     homepage
+    (systemFor nixos.camden)
+    (systemFor nixos.frog)
   ];
 
   glittershark = with depot.users.glittershark; [
-    system.system.chupacabra
+    (systemFor system.system.chupacabra)
     xanthous
   ];
 })
