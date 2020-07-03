@@ -22,6 +22,29 @@
       "revId": "a70edf58ca0522ee5e8c5cb154024648555560c8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a51b7791_e6d0801e",
+        "filename": "ci-builds.nix",
+        "patchSetId": 10
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-03T23:24:33Z",
+      "side": 1,
+      "message": "should this also be done with systemFor maybe? (also my machines)",
+      "range": {
+        "startLine": 105,
+        "startChar": 18,
+        "endLine": 105,
+        "endChar": 34
+      },
+      "revId": "a70edf58ca0522ee5e8c5cb154024648555560c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
