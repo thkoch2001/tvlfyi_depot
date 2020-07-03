@@ -141,6 +141,29 @@
       "revId": "dadd6ca6c84c6249b4166825657aa44d1fa06d52",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7d6bd5d8_cd47cca4",
+        "filename": "ops/nixos/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-03T22:30:21Z",
+      "side": 1,
+      "message": "take the passed in `depotPath` instead, this way - if we change this to a saner mechanism of passing the path - it\u0027ll be easier to update",
+      "range": {
+        "startLine": 40,
+        "startChar": 47,
+        "endLine": 40,
+        "endChar": 52
+      },
+      "revId": "dadd6ca6c84c6249b4166825657aa44d1fa06d52",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
