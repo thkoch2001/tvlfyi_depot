@@ -702,16 +702,18 @@
   (flymake-mode -1)
   ;; If there’s a 'hie.sh' defined locally by a project
   ;; (e.g. to run HIE in a nix-shell), use it…
-  (let ((hie-directory (locate-dominating-file default-directory "hie.sh")))
-    (when hie-directory
-      (setq-local lsp-haskell-process-path-hie (expand-file-name "hie.sh" hie-directory))
+  (when-let ((project-dir (locate-dominating-file default-directory "hie.sh")))
+    (cl-flet
+        ((which (cmd)
+                (s-trim
+                 (shell-command-to-string
+                  (concat
+                   "nix-shell "
+                   (expand-file-name "shell.nix" project-dir)
+                   " --run \"which " cmd "\" 2>/dev/null")))))
       (setq-local
-       haskell-hoogle-command
-       (s-trim
-        (shell-command-to-string
-         (concat
-          "nix-shell " (expand-file-name "shell.nix" hie-directory)
-          " --run \"which hoogle\" 2>/dev/null"))))))
+       lsp-haskell-process-path-hie (expand-file-name "hie.sh" project-dir)
+       haskell-hoogle-command (which "hoogle"))))
   ;; … and only then setup the LSP.
   (lsp))
 
@@ -727,9 +729,10 @@
   ;; (haskell-mode . lsp-haskell-enable)
   :config
   (add-hook 'haskell-mode-hook #'+grfn/haskell-mode-setup 't)
-  (setq lsp-haskell-process-path-hie "/home/griffin/.nix-profile/bin/hie-8.6.5"
-        lsp-haskell-process-args-hie
-        '("-d" "-l" "/tmp/hie.log" "+RTS" "-M4G" "-H1G" "-K4G" "-A16M" "-RTS")))
+  (setq
+   ;; lsp-haskell-process-path-hie "/home/griffin/.nix-profile/bin/hie-8.6.5"
+   lsp-haskell-process-args-hie
+   '("-d" "-l" "/tmp/hie.log" "+RTS" "-M4G" "-H1G" "-K4G" "-A16M" "-RTS")))
 
 (use-package! lsp-imenu
   :after (lsp-mode lsp-ui)
