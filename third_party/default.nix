@@ -2,7 +2,7 @@
 # third-party code) into my package tree.
 #
 # This includes *all packages needed from nixpkgs*.
-{ ... }:
+args@{ ... }:
 
 let
   # Tracking nixos-unstable as of 2020-06-10.
@@ -224,4 +224,6 @@ in exposed.lib.fix(self: exposed // {
 
   # Make NixOS available
   nixos = import "${nixpkgsSrc}/nixos";
+
+  haskell-language-server = import ./haskell-language-server.nix args;
 })
