@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "506e3dcb_945c30aa",
+        "filename": "ops/nixos/all-systems.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-03T15:38:23Z",
+      "side": 1,
+      "message": "yeah, whitby is a little more tightly coupled to returning a system rather than a nixos configuration, so I wanted to get a round of bikeshedding in before I refactored that to support this. I\u0027ll make sure to add it before submitting.",
+      "parentUuid": "ba3a8c0d_7338db6c",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 8
+      },
+      "revId": "dadd6ca6c84c6249b4166825657aa44d1fa06d52",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3411dbe5_cc8e6dd2",
         "filename": "ops/nixos/all-systems.nix",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2020-07-03T14:54:50Z",
       "side": 1,
       "message": "Is this right? (camden vs. camdenSystem etc.)",
+      "range": {
+        "startLine": 4,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 6
+      },
+      "revId": "dadd6ca6c84c6249b4166825657aa44d1fa06d52",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49f46e5d_102578d4",
+        "filename": "ops/nixos/all-systems.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-03T15:38:23Z",
+      "side": 1,
+      "message": "yes - in order to look into the hostname we need the full nixos configuration set (to then call `.config.networking.hostName` on) - the build itself then calls `.system` on these.",
+      "parentUuid": "3411dbe5_cc8e6dd2",
       "range": {
         "startLine": 4,
         "startChar": 2,
