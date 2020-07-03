@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8153bfe1_df0113a7",
+        "filename": "ops/nixos/all-systems.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-03T22:25:56Z",
+      "side": 1,
+      "message": "lets not bikeshed, and rather just change whitby to support it :-)",
+      "parentUuid": "506e3dcb_945c30aa",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 8
+      },
+      "revId": "dadd6ca6c84c6249b4166825657aa44d1fa06d52",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3411dbe5_cc8e6dd2",
         "filename": "ops/nixos/all-systems.nix",
         "patchSetId": 3
@@ -93,6 +117,30 @@
       "revId": "dadd6ca6c84c6249b4166825657aa44d1fa06d52",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17530e34_1952e687",
+        "filename": "ops/nixos/all-systems.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-03T22:25:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "49f46e5d_102578d4",
+      "range": {
+        "startLine": 4,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 6
+      },
+      "revId": "dadd6ca6c84c6249b4166825657aa44d1fa06d52",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
