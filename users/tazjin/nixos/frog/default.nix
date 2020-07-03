@@ -12,13 +12,6 @@ config: let
   frogEmacs = (depot.users.tazjin.emacs.overrideEmacs(epkgs: epkgs ++ [
     depot.third_party.emacsPackages.google-c-style
   ]));
-
-  # All Buildkite hooks are actually besadii, but it's being invoked
-  # with different names.
-  buildkiteHooks = depot.third_party.runCommandNoCC "buildkite-hooks" {} ''
-    mkdir -p $out/bin
-    ln -s ${depot.ops.besadii}/bin/besadii $out/bin/post-command
-  '';
 in depot.lib.fix(self: {
   imports = [
     "${depot.depotPath}/ops/nixos/v4l2loopback.nix"
@@ -202,13 +195,6 @@ in depot.lib.fix(self: {
       OnActiveSec = "1";
       OnUnitActiveSec = "180";
     };
-  };
-
-  # Run a Buildkite agent for depot builds
-  services.buildkite-agents.frog = {
-    enable = true;
-    tokenPath = "/etc/secrets/buildkite-token";
-    hooks.post-command = "${buildkiteHooks}/bin/post-command";
   };
 
   environment.systemPackages =
