@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3459ada8_b6673626",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-03T23:34:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21fb6f72_0a9e829f",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 71
+      },
+      "revId": "a70edf58ca0522ee5e8c5cb154024648555560c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a51b7791_e6d0801e",
         "filename": "ci-builds.nix",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "a70edf58ca0522ee5e8c5cb154024648555560c8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8a25d51_3ea2f7b7",
+        "filename": "ci-builds.nix",
+        "patchSetId": 10
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-03T23:34:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a51b7791_e6d0801e",
+      "range": {
+        "startLine": 105,
+        "startChar": 18,
+        "endLine": 105,
+        "endChar": 34
+      },
+      "revId": "a70edf58ca0522ee5e8c5cb154024648555560c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
