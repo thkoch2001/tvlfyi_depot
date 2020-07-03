@@ -52,6 +52,9 @@ case "${TARGET_TOOL}" in
   hash-password)
     attr="tools.hash-password"
     ;;
+  rebuild-system)
+    attr="ops.nixos.rebuild-system"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1

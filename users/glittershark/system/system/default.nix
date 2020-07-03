@@ -1,9 +1,7 @@
 { depot, ... }:
 
 rec {
-  chupacabra = (depot.third_party.nixos {
-    configuration = import ./machines/chupacabra.nix;
-  }).system;
+  chupacabra = import ./machines/chupacabra.nix;
 
   rebuilder =
     let
