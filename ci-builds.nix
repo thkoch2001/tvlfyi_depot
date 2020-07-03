@@ -87,6 +87,7 @@ in lib.fix (self: {
     hgeometry-combinatorial
     vinyl
     comonad-extras
+    depot.third_party.haskell-language-server.ghc883
   ];
 
   # User-specific build targets
