@@ -1213,5 +1213,7 @@
            ((freenode "glittershark" "Ompquy"))))))
 
 (use-package! jsonnet-mode
-  :bind (:map jsonnet-mode-map
-         ("g SPC" . jsonnet-eval-buffer)))
+  :config
+  (map!
+   (:map jsonnet-mode-map
+    (:n "g SPC" #'jsonnet-eval-buffer))))
