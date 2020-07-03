@@ -717,6 +717,26 @@
     (message "disabled flymake-mode")))
 (advice-add #'flymake-mode :around #'never-flymake-mode)
 
+(defun +grfn/wrap-lsp-haskell-process (argv)
+  (let* ((project-dir (locate-dominating-file
+                       (buffer-file-name)
+                       "hie.yaml"))
+         (shell-dot-nix (expand-file-name "shell.nix" project-dir)))
+    ;; (when (string-equal default-directory "/home/grfn/code/depot")
+    ;;   (debug))
+    (message "%s %s %s %s"
+             (buffer-file-name)
+             default-directory
+             project-dir
+             shell-dot-nix)
+    (if (file-exists-p shell-dot-nix)
+        `("bash" "-c"
+          ,(format "cd %s && nix-shell %s --run '%s'"
+                   project-dir
+                   shell-dot-nix
+                   (s-join " " argv)))
+      argv)))
+
 (use-package! lsp-haskell
   :after (lsp-mode lsp-ui haskell-mode)
   ;; :hook
@@ -724,7 +744,9 @@
   :config
   (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper"
         lsp-haskell-process-args-hie
-        '("-d" "-l" "/tmp/hie.log" "+RTS" "-M4G" "-H1G" "-K4G" "-A16M" "-RTS"))
+        '("-d" "-l" "/tmp/hie.log" "+RTS" "-M4G" "-H1G" "-K4G" "-A16M" "-RTS")
+        lsp-haskell-process-wrapper-function
+        #'+grfn/wrap-lsp-haskell-process)
   (add-hook 'haskell-mode-hook #'+grfn/haskell-mode-setup 't))
 
 (use-package! lsp-imenu
