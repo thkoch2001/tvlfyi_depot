@@ -12,11 +12,7 @@ let
     mkdir -p $out/bin
     ln -s ${depot.ops.besadii}/bin/besadii $out/bin/post-command
   '';
-
-  systemForConfig = configuration: (depot.third_party.nixos {
-    inherit configuration;
-  }).system;
-in systemForConfig {
+in {
   inherit depot;
   imports = [
     "${depot.depotPath}/ops/nixos/depot.nix"
