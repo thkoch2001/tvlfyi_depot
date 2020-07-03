@@ -98,6 +98,6 @@ in lib.fix (self: {
   ];
 
   glittershark = with depot.users.glittershark; [
-    system.system.chupacabra
+    system.system.chupacabraSystem
   ];
 })
