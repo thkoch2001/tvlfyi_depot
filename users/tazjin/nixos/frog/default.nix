@@ -67,6 +67,9 @@ in depot.lib.fix(self: {
       "depot=/depot"
       "nixpkgs=${depot.third_party.nixpkgsSrc}"
     ];
+
+    binaryCaches = ["ssh://nix-ssh@whitby.tvl.fyi"];
+    binaryCachePublicKeys = ["cache.tvl.fyi:fd+9d1ceCPvDX/xVhcfv8nAa6njEhAGAEe+oGJDEeoc="];
   };
 
   nixpkgs.pkgs = nixpkgs;
