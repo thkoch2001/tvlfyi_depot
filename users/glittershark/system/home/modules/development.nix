@@ -150,6 +150,7 @@ with lib;
       "g" = "git";
       "git" = "hub";
       "grim" = "git fetch && git rebase -i origin/master";
+      "groc" = "git fetch && git rebase origin/canon";
       "grc" = "git rebase --continue";
       "gcan" = "git commit --amend --no-edit";
       "grl" = "git reflog";
