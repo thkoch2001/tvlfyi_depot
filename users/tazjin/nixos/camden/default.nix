@@ -180,6 +180,17 @@ in lib.fix(self: {
     };
   };
 
+  systemd.services.anongit = {
+    wantedBy = [ "multi-user.target" ];
+    script = "${depot.third_party.git}/bin/git daemon --enable=upload-archive --reuseaddr --export-all --strict-paths --base-path=/var/lib/gerrit/git /var/lib/gerrit/git/depot.git";
+
+    serviceConfig = {
+      Restart = "on-failure";
+      User = "git";
+      Group = "git";
+    };
+  };
+
   # NixOS 20.03 broke nginx and I can't be bothered to debug it
   # anymore, all solution attempts have failed, so here's a
   # brute-force fix.

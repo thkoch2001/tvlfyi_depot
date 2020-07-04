@@ -34,6 +34,7 @@ in {
       # Configures gerrit for being reverse-proxied by nginx as per
       # https://gerrit-review.googlesource.com/Documentation/config-reverseproxy.html
       gerrit.canonicalWebUrl = "https://cl.tvl.fyi";
+      gerrit.canonicalGitUrl = "git://code.tvl.fyi";
       httpd.listenUrl = "proxy-https://${cfg.listenAddress}";
 
       download.command = [
@@ -41,6 +42,13 @@ in {
         "cherry_pick"
         "format_patch"
         "pull"
+      ];
+
+      download.scheme = [
+        "http"
+        "ssh"
+        "anon_http"
+        "anon_git"
       ];
 
       # Configure for Sourcegraph.
