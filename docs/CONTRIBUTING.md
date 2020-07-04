@@ -109,6 +109,15 @@ For example, to build a project located at `//tools/foo` you would call
 If the project has tests, check that they still work before submitting your
 change.
 
+## Related Topic: Downloading just part of the monorepo
+
+If you are a user and only need to a checkout of part of the depot, you can do
+this with `git archive`.
+
+```bash
+git archive --remote=git://code.tvl.fyi/depot.git canon [depot paths...] | tar xv
+```
+
 ## Submitting changes
 
 The code review & change submission process is described in the [code
