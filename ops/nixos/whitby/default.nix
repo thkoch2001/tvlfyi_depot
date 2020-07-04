@@ -127,6 +127,7 @@ in systemForConfig {
 
     trustedUsers = [
       "grfn"
+      "lukegb"
     ];
 
     sshServe = {
