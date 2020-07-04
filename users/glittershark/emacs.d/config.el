@@ -694,6 +694,11 @@
 (defun +grfn/haskell-mode-setup ()
   (interactive)
   (flymake-mode -1)
+  (add-to-list 'flycheck-disabled-checkers 'haskell-ghc)
+
+  (flycheck-remove-next-checker 'lsp 'haskell-ghc)
+  (flycheck-add-next-checker 'lsp '(warning . haskell-hlint))
+
   ;; If there’s a 'hie.sh' defined locally by a project
   ;; (e.g. to run HIE in a nix-shell), use it…
   (when-let ((project-dir (locate-dominating-file default-directory "hie.sh")))
