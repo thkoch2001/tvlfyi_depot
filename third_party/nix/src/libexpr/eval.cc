@@ -1865,7 +1865,7 @@ size_t valueSize(Value& v) {
       case tAttrs:
         if (seen.find(v.attrs) == seen.end()) {
           seen.insert(v.attrs);
-          sz += sizeof(Bindings) + sizeof(Attr) * v.attrs->capacity();
+          sz += sizeof(Bindings);
           for (auto& i : *v.attrs) {
             sz += doValue(*i.second.value);
           }
