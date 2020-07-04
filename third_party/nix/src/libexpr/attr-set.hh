@@ -21,14 +21,7 @@ struct Attr {
   Attr(Symbol name, Value* value, Pos* pos = &noPos)
       : name(name), value(value), pos(pos){};
   Attr() : pos(&noPos){};
-  bool operator<(const Attr& other) const { return name < other.name; }
 };
-
-// TODO: remove this, it only exists briefly while I get rid of the
-// current Attr struct
-inline bool operator==(const Attr& lhs, const Attr& rhs) {
-  return lhs.name == rhs.name;
-}
 
 // Convenience alias for the backing map, with the garbage-collecting
 // allocator explicitly specified.
@@ -63,14 +56,8 @@ class Bindings {
   iterator begin();
   iterator end();
 
-  // Merge values from other into the current attribute
+  // Merge values from other into this attribute set.
   void merge(const Bindings& other);
-
-  // ???
-  [[deprecated]] size_t capacity();
-
-  // oh no
-  // Attr& operator[](size_t pos); //  { return attrs[pos]; }
 
   // TODO: can callers just iterate?
   [[deprecated]] std::vector<const Attr*> lexicographicOrder();

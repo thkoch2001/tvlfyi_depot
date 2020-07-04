@@ -36,8 +36,6 @@ void Bindings::insert_or_assign(const Attr& attr) {
 
 size_t Bindings::size() { return attributes_.size(); }
 
-size_t Bindings::capacity() { return 0; }
-
 bool Bindings::empty() { return attributes_.empty(); }
 
 std::vector<const Attr*> Bindings::lexicographicOrder() {
