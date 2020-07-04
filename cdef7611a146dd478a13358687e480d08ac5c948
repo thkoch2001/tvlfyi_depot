@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23cb8fed_b780f724",
+        "filename": "docs/CONTRIBUTING.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-07-04T22:56:31Z",
+      "side": 1,
+      "message": "So do I need to be a user? Or is anongit public?",
+      "revId": "cdef7611a146dd478a13358687e480d08ac5c948",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
