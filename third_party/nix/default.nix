@@ -19,7 +19,6 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   # Abseil's sources need to be symlinked into Nix' sources.
   postUnpack = ''
-    ln -fs ${pkgs.abseil_cpp.drvAttrs.src} nix/abseil_cpp
     ln -fs ${pkgs.glog.drvAttrs.src} nix/glog
   '';
 
@@ -35,6 +34,7 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
  # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = with pkgs; [
+    abseil_cpp
     aws-s3-cpp
     brotli
     bzip2
