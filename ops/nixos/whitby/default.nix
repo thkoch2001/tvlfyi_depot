@@ -20,6 +20,7 @@ in systemForConfig {
   inherit depot;
   imports = [
     "${depot.depotPath}/ops/nixos/depot.nix"
+    "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
   ];
 
   hardware = {
