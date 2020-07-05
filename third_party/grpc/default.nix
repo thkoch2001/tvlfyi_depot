@@ -1,14 +1,12 @@
 { pkgs, ... }:
 
 (pkgs.originals.grpc.override {
+  abseil-cpp = pkgs.abseil_cpp;
   protobuf = pkgs.protobuf;
   stdenv = pkgs.llvmPackages.libcxxStdenv;
 }).overrideAttrs(orig: {
-  buildInputs = orig.buildInputs ++ [
-    pkgs.abseil_cpp
-  ];
-
   cmakeFlags = orig.cmakeFlags ++ [
-    "-DgRPC_ABSL_PROVIDER=package"
+    "-DCMAKE_CXX_STANDARD=17"
+    "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
   ];
 })

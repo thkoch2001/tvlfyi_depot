@@ -63,6 +63,7 @@ in lib.fix (self: {
   third_party = with depot.third_party; [
     cgit
     git
+    grpc
     nix
     openldap
   ];
