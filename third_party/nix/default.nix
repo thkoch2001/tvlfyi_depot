@@ -17,11 +17,6 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   version = "2.3.4";
   src = ./.;
 
-  # Abseil's sources need to be symlinked into Nix' sources.
-  postUnpack = ''
-    ln -fs ${pkgs.glog.drvAttrs.src} nix/glog
-  '';
-
   nativeBuildInputs = with pkgs; [
     bison
     clang-tools
@@ -41,6 +36,7 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     curl
     editline
     flex
+    glog
     libseccomp
     libsodium
     openssl

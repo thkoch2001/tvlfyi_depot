@@ -17,16 +17,11 @@ set(PKGCONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 find_package(BZip2)
 find_package(Boost COMPONENTS context) # probably coroutine + ::headers, lets find out
 find_package(CURL)
+find_package(LibLZMA)
 find_package(SQLite3)
 find_package(Threads)
-find_package(LibLZMA)
 find_package(absl REQUIRED)
-
-# Linking precompiled glog binaries (linked against libstdc++) leads
-# to working binaries that do not output log messages. It seems that
-# in order to use glog with LLVM & libc++, one needs to make glog a
-# part of the local project build.
-add_subdirectory(glog)
+find_package(glog REQUIRED)
 
 # generate a configuration file (autoheader-style) to configure
 # certain symbols that Nix depends on.

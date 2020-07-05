@@ -7,7 +7,10 @@ in llvmPackages.libcxxStdenv.mkDerivation {
   src = ./.;
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ "-WITH_GFLAGS=OFF" ];
+  cmakeFlags = [
+    "-DCMAKE_CXX_STANDARD=17"
+    "-WITH_GFLAGS=OFF"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/google/glog";
