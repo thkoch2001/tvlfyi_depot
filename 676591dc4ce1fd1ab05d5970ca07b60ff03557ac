@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "01d08537_ed371480",
+        "filename": "third_party/apereo-cas/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-05T19:58:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2717e1e5_b7a4c3be",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 14
+      },
+      "revId": "676591dc4ce1fd1ab05d5970ca07b60ff03557ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "665b8754_5e74f82d",
         "filename": "third_party/apereo-cas/default.nix",
         "patchSetId": 2
@@ -68,6 +92,30 @@
       "revId": "676591dc4ce1fd1ab05d5970ca07b60ff03557ac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "030456dd_9297b0c6",
+        "filename": "third_party/apereo-cas/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-05T19:58:22Z",
+      "side": 1,
+      "message": "Removed. This was just cargoculted, there aren\u0027t any ELFs here.",
+      "parentUuid": "46557ac7_24e235e5",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 13
+      },
+      "revId": "676591dc4ce1fd1ab05d5970ca07b60ff03557ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
