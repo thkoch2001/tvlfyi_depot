@@ -16,6 +16,29 @@
       "revId": "cdef7611a146dd478a13358687e480d08ac5c948",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b98afc41_9112ef4a",
+        "filename": "ops/nixos/monorepo-gerrit.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-05T03:44:44Z",
+      "side": 1,
+      "message": "the git protocol is always unencrypted, right?",
+      "range": {
+        "startLine": 37,
+        "startChar": 32,
+        "endLine": 37,
+        "endChar": 38
+      },
+      "revId": "cdef7611a146dd478a13358687e480d08ac5c948",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
