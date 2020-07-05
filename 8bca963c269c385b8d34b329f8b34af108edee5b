@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11d55729_22f967f7",
+        "filename": "bin/__dispatch.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-05T15:43:24Z",
+      "side": 1,
+      "message": "I think I would still name this `rebuild-system`. Other than that it LGTM",
+      "range": {
+        "startLine": 55,
+        "startChar": 2,
+        "endLine": 55,
+        "endChar": 9
+      },
+      "revId": "8bca963c269c385b8d34b329f8b34af108edee5b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
