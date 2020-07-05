@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (f54a48 chore(whitby): add lukegb to trusted-users for remote builds)
 # Ignore the garbage folder, in which I slowly assemble a bunch of
 # trash locally that might be valuable in the future.
 garbage/
@@ -5,3 +6,27 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+=======
+.classpath
+!/.project
+.project
+.settings
+.history
+.vscode
+target/
+.idea/
+.DS_Store
+.idea
+overlays/
+.gradle/
+build/
+log/
+bin/
+*.war
+*.iml
+*.log
+tmp/
+./apache-tomcat
+apache-tomcat.zip
+config-metadata.properties
+>>>>>>> BRANCH (2e185f Squashed 'third_party/apereo-cas/overlay/' content from comm)
