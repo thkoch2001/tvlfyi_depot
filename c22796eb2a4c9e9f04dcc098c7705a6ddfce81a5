@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22bd5cd7_96a815f7",
+        "filename": "third_party/apereo-cas/overlay/lombok.config",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-05T19:21:02Z",
+      "side": 1,
+      "message": "luv2lombok",
+      "range": {
+        "startLine": 1,
+        "startChar": 45,
+        "endLine": 1,
+        "endChar": 51
+      },
+      "revId": "c22796eb2a4c9e9f04dcc098c7705a6ddfce81a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
