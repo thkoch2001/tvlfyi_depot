@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75821ec7_7cdbe338",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-05T20:36:58Z",
+      "side": 1,
+      "message": "wondering if we should start moving these to the modules instead?",
+      "range": {
+        "startLine": 268,
+        "startChar": 4,
+        "endLine": 268,
+        "endChar": 22
+      },
+      "revId": "797400990be2656384060f0df099cd121fe919ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
