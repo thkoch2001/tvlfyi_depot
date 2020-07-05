@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package nix.proto;
+
+// Service representing a worker used for building and interfacing
+// with the Nix store.
+service Worker {
+  // Validates whether the supplied path is a valid store path.
+  rpc IsValidPath (IsValidPathRequest) returns (IsValidPathResponse);
+
+  // Checks whether any substitutes exist for the given path.
+  rpc HasSubstitutes (HasSubstitutesRequest) returns (HasSubstitutesResponse);
+
+  // Query referrers for a given path.
+  rpc QueryReferrers (QueryReferrersRequest) returns (QueryReferrersResponse);
+
+  // Add a NAR (I think?) to the store. The first stream request
+  // should be a message indicating metadata, the rest should be file
+  // chunks.
+  rpc AddToStore (stream AddToStoreRequest) returns (AddToStoreResponse);
+
+  // Adds the supplied string to the store, as a text file.
+  rpc AddTextToStore (AddTextToStoreRequest) returns (AddTextToStoreResponse);
+}
+
+enum HashType {
+  MD5 = 0; // TODO(tazjin): still needed?
+  SHA1 = 1;
+  SHA256 = 2;
+  SHA512 = 3;
+}
+
+message IsValidPathRequest {
+  string path = 1;
+}
+
+message IsValidPathResponse {
+  bool is_valid = 1;
+}
+
+message HasSubstitutesRequest {
+  string path = 1;
+}
+
+message HasSubstitutesResponse {
+  bool has_substitutes = 1;
+}
+
+message QueryReferrersRequest {
+  string path = 1;
+}
+
+message QueryReferrersResponse {
+  repeated string paths = 1;
+}
+
+message AddToStoreRequest {
+  message Metadata {
+    bool fixed = 1;
+    bool recursive = 2; // TODO(tazjin): what is this? "obsolete" comment?
+    HashType hash_type = 3;
+    string base_name = 4;
+  }
+
+  message Chunk {
+    bytes content = 1;
+    bool final = 2;
+  }
+
+  oneof add_oneof {
+    Metadata meta = 1;
+    Chunk chunk = 2;
+  }
+}
+
+message AddToStoreResponse {
+  string path = 1;
+}
+
+message AddTextToStoreRequest {
+  string name = 1;
+  string content = 2;
+  repeated string references = 3;
+}
+
+message AddTextToStoreResponse {
+  string path = 1;
+}
