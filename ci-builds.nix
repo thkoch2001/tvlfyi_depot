@@ -66,6 +66,7 @@ in lib.fix (self: {
     grpc
     nix
     openldap
+    apereo-cas
   ];
 
   various = with depot; [
