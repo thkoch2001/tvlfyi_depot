@@ -88,6 +88,7 @@ target_sources(nixstore
 )
 
 target_link_libraries(nixstore
+  nixproto
   nixutil
 
   BZip2::BZip2
