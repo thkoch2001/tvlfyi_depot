@@ -21,6 +21,7 @@ in systemForConfig {
   imports = [
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
+    "${depot.depotPath}/ops/nixos/tvl-sso/default.nix"
   ];
 
   hardware = {
@@ -203,6 +204,79 @@ in systemForConfig {
     users.git = {
       group = "git";
       isNormalUser = false;
+    };
+  };
+
+  security.acme = {
+    acceptTerms = true;
+    email = "mail@tazj.in";
+
+    certs."tvl.fyi" = {
+      user = "nginx";
+      group = "nginx";
+      webroot = "/var/lib/acme/acme-challenge";
+      postRun = "systemctl reload nginx";
+      extraDomains = {
+        "login.tvl.fyi" = null;
+      };
+    };
+  };
+
+  services.nginx = {
+    enable = true;
+    enableReload = true;
+
+    recommendedTlsSettings = true;
+    recommendedGzipSettings = true;
+    recommendedProxySettings = true;
+
+    extraConfig = ''
+      add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+
+      rewrite ^/builds/?$ https://buildkite.com/tvl/depot/ last;
+
+      rewrite ^/monorepo-doc/?$ https://docs.google.com/document/d/1nnyByXcH0F6GOmEezNOUa2RFelpeRpDToBLYD_CtjWE/edit?usp=sharing last;
+
+      rewrite ^/irc/?$ ircs://chat.freenode.net:6697/##tvl last;
+
+      location ~* \.(webp|woff2)$ {
+        add_header Cache-Control "public, max-age=31536000";
+      }
+    '';
+
+    virtualHosts.tvl = {
+      serverName = "tvl.fyi";
+      useACMEHost = "tvl.fyi";
+      root = depot.web.tvl;
+      forceSSL = true;
+
+      extraConfig = ''
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+
+        rewrite ^/builds/?$ https://buildkite.com/tvl/depot/ last;
+
+        rewrite ^/monorepo-doc/?$ https://docs.google.com/document/d/1nnyByXcH0F6GOmEezNOUa2RFelpeRpDToBLYD_CtjWE/edit?usp=sharing last;
+
+        rewrite ^/irc/?$ ircs://chat.freenode.net:6697/##tvl last;
+
+        location ~* \.(webp|woff2)$ {
+          add_header Cache-Control "public, max-age=31536000";
+        }
+      '';
+    };
+
+    virtualHosts.login = {
+      serverName = "login.tvl.fyi";
+      useACMEHost = "tvl.fyi";
+      forceSSL = true;
+
+      extraConfig = ''
+        location / {
+          proxy_pass http://localhost:8443;
+          proxy_set_header X-Forwarded-For $remote_addr;
+          proxy_set_header Host $host;
+        }
+      '';
     };
   };
 
