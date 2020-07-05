@@ -20,24 +20,7 @@ find_package(CURL)
 find_package(SQLite3)
 find_package(Threads)
 find_package(LibLZMA)
-
-# Abseil really doesn't like being precompiled. It is included here as
-# an imported CMake project (i.e. it will be built /with/ this
-# project).
-#
-# In development mode, the 'abseil_cpp' folder is symlinked to
-# ../abseil_cpp (the relative location in the depot). In derivation
-# builds this symlink is automatically replaced with an appropriate
-# link to the Abseil sources in the Nix store.
-add_subdirectory(abseil_cpp)
-install(DIRECTORY abseil_cpp/absl
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  FILES_MATCHING
-    PATTERN "*.inc"
-    PATTERN "*.h"
-    PATTERN "copts" EXCLUDE
-    PATTERN "testdata" EXCLUDE
-  )
+find_package(absl REQUIRED)
 
 # Linking precompiled glog binaries (linked against libstdc++) leads
 # to working binaries that do not output log messages. It seems that
