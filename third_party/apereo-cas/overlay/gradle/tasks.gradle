@@ -10,12 +10,17 @@ import static org.gradle.internal.logging.text.StyledTextOutput.Style
 
 buildscript {
     repositories {
-        mavenLocal()
-        mavenCentral()
-        jcenter()
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-            mavenContent { snapshotsOnly() }
+        if (rootProject.hasProperty("cacheLocation")) {
+            mavenLocal()
+            maven { url cacheLocation }
+        } else {
+            mavenLocal()
+            mavenCentral()
+            jcenter()
+            maven {
+                url "https://oss.sonatype.org/content/repositories/snapshots"
+                mavenContent { snapshotsOnly() }
+            }
         }
     }
     

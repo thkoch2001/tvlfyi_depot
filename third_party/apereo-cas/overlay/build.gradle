@@ -1,20 +1,25 @@
 buildscript {
     repositories {
-        mavenLocal()
-        gradlePluginPortal()
-        mavenCentral()
-        jcenter()
-        maven { 
-            url "https://repo.spring.io/libs-milestone" 
-            mavenContent { releasesOnly() }
-        }
-        maven { 
-            url "https://repo.spring.io/libs-snapshot" 
-            mavenContent { snapshotsOnly() }
-        }
-        maven { 
-            url "https://plugins.gradle.org/m2/" 
-            mavenContent { releasesOnly() }
+        if (rootProject.hasProperty("cacheLocation")) {
+            mavenLocal()
+            maven { url cacheLocation }
+        } else {
+            mavenLocal()
+            gradlePluginPortal()
+            mavenCentral()
+            jcenter()
+            maven {
+                url "https://repo.spring.io/libs-milestone"
+                mavenContent { releasesOnly() }
+            }
+            maven {
+                url "https://repo.spring.io/libs-snapshot"
+                mavenContent { snapshotsOnly() }
+            }
+            maven {
+                url "https://plugins.gradle.org/m2/"
+                mavenContent { releasesOnly() }
+            }
         }
     }
     dependencies {
@@ -27,28 +32,33 @@ buildscript {
 }
 
 repositories {
-    mavenLocal()
-    mavenCentral()
-    jcenter()
-    maven { 
-        url "https://oss.sonatype.org/content/repositories/snapshots" 
-        mavenContent { snapshotsOnly() }
-    }
-    maven { 
-        mavenContent { releasesOnly() }
-        url "https://build.shibboleth.net/nexus/content/repositories/releases/" 
-    }
-    maven { 
-        mavenContent { releasesOnly() }
-        url "https://repo.spring.io/milestone/" 
-    }
-    maven { 
-        url "https://repo.spring.io/snapshot/" 
-        mavenContent { snapshotsOnly() }
-    }
-    maven { 
-        mavenContent { snapshotsOnly() }
-        url "https://oss.jfrog.org/artifactory/oss-snapshot-local" 
+    if (rootProject.hasProperty("cacheLocation")) {
+        mavenLocal()
+        maven { url cacheLocation }
+    } else {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+            mavenContent { snapshotsOnly() }
+        }
+        maven {
+            mavenContent { releasesOnly() }
+            url "https://build.shibboleth.net/nexus/content/repositories/releases/"
+        }
+        maven {
+            mavenContent { releasesOnly() }
+            url "https://repo.spring.io/milestone/"
+        }
+        maven {
+            url "https://repo.spring.io/snapshot/"
+            mavenContent { snapshotsOnly() }
+        }
+        maven {
+            mavenContent { snapshotsOnly() }
+            url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+        }
     }
 }
 
