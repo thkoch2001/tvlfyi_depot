@@ -18,6 +18,7 @@ in {
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
     "${depot.depotPath}/ops/nixos/www/login.tvl.fyi.nix"
+    "${depot.depotPath}/ops/nixos/tvl-sso/default.nix"
   ];
 
   hardware = {
