@@ -5,6 +5,7 @@
 # this location and this setup mimics that (with the exception of the
 # various Nix libraries).
 
+add_subdirectory(proto)
 add_subdirectory(libutil)
 add_subdirectory(libstore)
 add_subdirectory(libmain)

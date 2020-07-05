@@ -12,10 +12,23 @@ let
   largeBoehm = pkgs.boehmgc.override {
     enableLargeConfig = true;
   };
+
+  src = ./.;
+
+  # Proto generation in CMake is theoretically possible, but that is
+  # very theoretical - this does it in Nix instead.
+  protoSrcs = pkgs.runCommand "nix-proto-srcs" {} ''
+    export PROTO_SRCS=${src}/src/proto
+    mkdir -p $out/libproto
+    ${pkgs.protobuf}/bin/protoc -I=$PROTO_SRCS \
+      --cpp_out=$out/libproto \
+      --plugin=protoc-gen-grpc=${pkgs.grpc}/bin/grpc_cpp_plugin --grpc_out=$out/libproto \
+      $PROTO_SRCS/*.proto
+  '';
 in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   pname = "tazjix";
   version = "2.3.4";
-  src = ./.;
+  inherit src;
 
   nativeBuildInputs = with pkgs; [
     bison
@@ -33,13 +46,16 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     aws-s3-cpp
     brotli
     bzip2
+    c-ares
     curl
     editline
     flex
     glog
+    grpc
     libseccomp
     libsodium
     openssl
+    protobuf
     sqlite
     xz
   ];
@@ -48,6 +64,10 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     boost
     largeBoehm
   ];
+
+  # Forward the location of the generated Protobuf / gRPC files so
+  # that they can be included by CMake.
+  NIX_PROTO_SRCS = protoSrcs;
 
   # Install the various symlinks to the Nix binary which users expect
   # to exist.

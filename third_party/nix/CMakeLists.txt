@@ -15,12 +15,14 @@ set(PKGCONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 # contain useful definitions. Other dependencies are not treated
 # specially by CMake and are only linked into the resulting binary.
 find_package(BZip2)
-find_package(Boost COMPONENTS context) # probably coroutine + ::headers, lets find out
+find_package(Boost COMPONENTS context)
 find_package(CURL)
 find_package(LibLZMA)
+find_package(Protobuf REQUIRED)
 find_package(SQLite3)
 find_package(Threads)
 find_package(absl REQUIRED)
+find_package(gRPC REQUIRED)
 find_package(glog REQUIRED)
 
 # generate a configuration file (autoheader-style) to configure
