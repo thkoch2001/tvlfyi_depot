@@ -39,6 +39,30 @@
       "revId": "cdef7611a146dd478a13358687e480d08ac5c948",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "333c4e01_486be840",
+        "filename": "ops/nixos/monorepo-gerrit.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-05T04:53:40Z",
+      "side": 1,
+      "message": "Hmm, yes - it might be better to enable anonymous SSH instead.",
+      "parentUuid": "b98afc41_9112ef4a",
+      "range": {
+        "startLine": 37,
+        "startChar": 32,
+        "endLine": 37,
+        "endChar": 38
+      },
+      "revId": "cdef7611a146dd478a13358687e480d08ac5c948",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
