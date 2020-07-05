@@ -1,14 +1,22 @@
 { pkgs, ... }:
 
 (pkgs.originals.grpc.override {
+  abseil-cpp = pkgs.abseil_cpp;
   protobuf = pkgs.protobuf;
   stdenv = pkgs.llvmPackages.libcxxStdenv;
-}).overrideAttrs(orig: {
-  buildInputs = orig.buildInputs ++ [
-    pkgs.abseil_cpp
-  ];
+}).overrideAttrs(orig: rec {
+  version = "1.30.0";
+
+  src = pkgs.fetchFromGitHub {
+    owner = "grpc";
+    repo = "grpc";
+    rev = "v${version}";
+    sha256 = "01w5jdp318i7ncxbkfv75q0mf0rd3qwfr1ycdd3850nv6mprv7n0";
+    fetchSubmodules = true;
+  };
 
   cmakeFlags = orig.cmakeFlags ++ [
-    "-DgRPC_ABSL_PROVIDER=package"
+    "-DCMAKE_CXX_STANDARD=17"
+    "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
   ];
 })
