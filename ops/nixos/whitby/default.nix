@@ -21,6 +21,7 @@ in systemForConfig {
   imports = [
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
+    "${depot.depotPath}/ops/nixos/www/login.tvl.fyi.nix"
   ];
 
   hardware = {
@@ -204,6 +205,22 @@ in systemForConfig {
       group = "git";
       isNormalUser = false;
     };
+  };
+
+  security.acme = {
+    acceptTerms = true;
+    email = "mail@tazj.in";
+
+    certs."login.tvl.fyi" = {
+      user = "nginx";
+      group = "nginx";
+      webroot = "/var/lib/acme/acme-challenge";
+      postRun = "systemctl reload nginx";
+    };
+  };
+
+  services.nginx = {
+    virtualHosts."login.tvl.fyi".useACMEHost = "login.tvl.fyi";
   };
 
   system.stateVersion = "20.03";
