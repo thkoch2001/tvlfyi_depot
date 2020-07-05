@@ -81,6 +81,7 @@ let
       imagemagickBig
       installShellFiles
       jdk
+      jdk11
       jetbrains-mono
       jq
       kontemplate
@@ -122,6 +123,7 @@ let
       s6-portable-utils
       sbcl
       sqlite
+      stdenvNoCC
       stern
       symlinkJoin
       systemd
@@ -171,6 +173,19 @@ let
     haskellPackages = (nixpkgs.haskellPackages.override {
       overrides = (import ./haskell_overlay { pkgs = nixpkgs; });
     });
+
+    gradle_6 = (nixpkgs.gradleGen.override {
+      java = nixpkgs.jdk11;
+      jdk = nixpkgs.jdk11;
+    }).gradleGen rec {
+      name = "gradle-6.5.1";
+      nativeVersion = "0.22-milestone-3";
+
+      src = builtins.fetchurl {
+        url = "https://services.gradle.org/distributions/${name}-bin.zip";
+        sha256 = "0jmmipjh4fbsn92zpifa5cqg5ws2a4ha0s4jzqhrg4zs542x79sh";
+      };
+    };
   };
 
 in exposed.lib.fix(self: exposed // {
