@@ -27,6 +27,7 @@
 #include "libutil/serialise.hh"
 #include "libutil/util.hh"
 #include "nix/legacy.hh"
+#include "libproto/worker.pb.h"
 
 using namespace nix;
 
