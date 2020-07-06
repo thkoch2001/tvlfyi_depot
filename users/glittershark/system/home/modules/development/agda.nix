@@ -1,10 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-
-  nixpkgs-unstable = import <nixpkgs-unstable> {};
-
-  agda-categories = with nixpkgs-unstable.agdaPackages; mkDerivation rec {
+  agda-categories = with pkgs.agdaPackages; mkDerivation rec {
     pname = "agda-categories";
     version = "2128fab";
     src = pkgs.fetchFromGitHub {
@@ -25,7 +22,7 @@ in
   ];
 
   home.packages = with pkgs; [
-    (nixpkgs-unstable.agda.withPackages
+    (pkgs.agda.withPackages
       (p: with p; [
         p.standard-library
 

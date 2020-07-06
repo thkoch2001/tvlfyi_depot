@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }:
-let alsi = pkgs.callPackage ~/code/system/pkgs/alsi {};
+let alsi = pkgs.callPackage ../../pkgs/alsi {};
 in
 {
   home.packages = [ alsi ];
