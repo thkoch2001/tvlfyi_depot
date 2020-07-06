@@ -75,12 +75,12 @@ rubberstamp operation is dangerous and should only be used in
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
                        (tvl--gerrit-ref "canon"
-                                        '("Code-Review+2" "publish-comments" "submit"))
+                                        '("Code-Review+2" "publish-comments"))
                        nil))
 
 (transient-append-suffix
   #'magit-push ["r"]
-  (list "P" "push, rubberstamp & submit to Gerrit" #'magit-gerrit-rubberstamp))
+  (list "P" "push & rubberstamp to Gerrit" #'magit-gerrit-rubberstamp))
 
 (defun tvl-depot-status ()
   "Open the TVL monorepo in magit."
