@@ -32,7 +32,7 @@ let
       (let ((outfile (make-pathname :type "fasl"
                                     :directory (or (sb-posix:getenv "NIX_BUILD_TOP")
                                                    (error "not running in a Nix build"))
-                                    :defaults srcfile)))
+                                    :name (substitute #\- #\/ srcfile))))
         (multiple-value-bind (_outfile _warnings-p failure-p)
             (compile-file srcfile :output-file outfile)
           (if failure-p (sb-posix:exit 1)
