@@ -101,7 +101,9 @@ in lib.fix (self: {
   ];
 
   glittershark = with depot.users.glittershark; [
-    system.system.chupacabra
     xanthous
+
+    system.system.chupacabra
+    system.home.chupacabra.activationPackage
   ];
 })
