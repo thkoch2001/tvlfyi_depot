@@ -16,6 +16,7 @@ digraph tvl {
     aurora [href="https://nonegenderleftfox.aventine.se/"];
     benjojo [href="https://benjojo.co.uk/"];
     borb [href="https://twitter.com/FR31H31T"];
+    camsbury;
     cynthia [href="https://cynthia.re/"];
     edef [href="https://edef.eu/files/edef.hs"];
     ericvolp [href="https://ericv.me"];
@@ -55,6 +56,7 @@ digraph tvl {
     node [color="#4285f4" fontcolor="#4285f4"];
     spotify [href="https://www.spotify.com/"];
     google [href="https://www.google.com/"];
+    urbint [href="https://www.urbint.com/"];
   }
 
   // communities? (red)
@@ -112,8 +114,12 @@ digraph tvl {
     isomer -> google;
     wpcarro -> google;
 
+    // via urbint
+    ac -> urbint;
+    glittershark -> urbint;
+
     // random primary
-    ac -> wpcarro;
+    camsbury -> wpcarro;
     anon1 -> google;
     aranea -> multi;
     artemist -> cynthia;
@@ -122,7 +128,6 @@ digraph tvl {
     cynthia -> benjojo;
     eta -> anon1;
     ericvolp -> lukegb;
-    glittershark -> wpcarro;
     jooiiee -> unspecific;
     kanepyork -> lukegb;
     marcusr -> unspecific;
@@ -176,6 +181,7 @@ digraph tvl {
     aranea -> profpatsch;
     artemist -> nix;
     hyperfekt -> edef;
+    camsbury -> urbint;
   }
 
   // baby
