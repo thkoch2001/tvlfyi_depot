@@ -5,14 +5,16 @@ let
     url = "https://cl.tvl.fyi/depot";
     rev = "a2e86152401c7c531801c79347c3f15e1806aabc";
   }) {};
-  readTree = depot.readTree {
+  readTree = depot.nix.readTree {
     pkgs = import (builtins.fetchGit {
-      url = "https://github.com/NixOS/nixpkgs";
-      rev = "f1a79c86358c5464c64b4fad00fca07a10e62a74";
+      url = "https://github.com/NixOS/nixpkgs-channels";
+      ref = "nixos-20.03";
+      rev = "afa9ca61924f05aacfe495a7ad0fd84709d236cc";
     }) {};
     unstable = import (builtins.fetchGit {
-      url = "https://github.com/NixOS/nixpkgs";
-      rev = "b3251e04ee470c20f81e75d5a6080ba92dc7ed3f";
+      url = "https://github.com/NixOS/nixpkgs-channels";
+      ref = "nixos-unstable";
+      rev = "dc80d7bc4a244120b3d766746c41c0d9c5f81dfa";
     }) {};
     briefcase = import (builtins.path {
       path = ./.;
