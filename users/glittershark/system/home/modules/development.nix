@@ -46,14 +46,14 @@ with lib;
     gnumake
     inetutils
     loc
-    (import <nixpkgs-unstable> {}).jsonnet
+    jsonnet
 
     clj2nix
 
     pg-dump-upsert
 
-    (import ../pkgs/clang-tools { inherit pkgs; })
-  ] ++ optional (stdenv.isLinux) julia;
+    # (import ../pkgs/clang-tools { inherit pkgs; })
+  ]; #++ optional (stdenv.isLinux) julia;
 
   programs.git = {
     enable = true;
