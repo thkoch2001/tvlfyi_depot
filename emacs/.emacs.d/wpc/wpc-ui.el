@@ -15,6 +15,7 @@
 (require 'themes)
 (require 'device)
 (require 'laptop-battery)
+(require 'modeline)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -175,9 +176,7 @@
 ;; Load a theme
 (themes/set "Solarized Light")
 
-;; Use the Doom modeline
-(use-package 'doom-modeline)
-(doom-modeline-mode 1)
+(modeline/setup)
 
 (provide 'wpc-ui)
 ;;; wpc-ui.el ends here
