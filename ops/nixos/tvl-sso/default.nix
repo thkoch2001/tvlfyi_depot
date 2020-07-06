@@ -13,7 +13,7 @@ in {
       serviceConfig = {
         User = "apereo-cas";
         Group = "apereo-cas";
-        ExecStart = "${apereo-cas}";
+        ExecStart = "${apereo-cas}/bin/cas";
         Restart = "always";
       };
     };
