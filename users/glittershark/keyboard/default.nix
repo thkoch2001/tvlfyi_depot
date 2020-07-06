@@ -1,7 +1,8 @@
-{ nixpkgs ? import <nixpkgs> {}
-}:
+{ pkgs, ... }:
 
-with nixpkgs;
+with pkgs;
+
+let avrlibc = pkgsCross.avr.libcCross; in
 
 rec {
   qmkSource = fetchgit {
@@ -11,18 +12,29 @@ rec {
     fetchSubmodules = true;
   };
 
-  qmk = import "${qmkSource}/shell.nix" {
-    avr = true;
-    teensy = true;
-    arm = false;
-  };
-
-  layout = stdenv.mkDerivation {
+  layout = stdenv.mkDerivation rec {
     name = "ergodox_ez_grfn.hex";
 
     src = qmkSource;
 
-    inherit (qmk) buildInputs AVR_CFLAGS AVR_ASFLAGS;
+    buildInputs = [
+      dfu-programmer
+      dfu-util
+      diffutils
+      git
+      python3
+      pkgsCross.avr.buildPackages.binutils
+      pkgsCross.avr.buildPackages.gcc8
+      avrlibc
+      avrdude
+    ];
+
+    AVR_CFLAGS = [
+      "-isystem ${avrlibc}/avr/include"
+      "-L${avrlibc}/avr/lib/avr5"
+    ];
+
+    AVR_ASFLAGS = AVR_CFLAGS;
 
     patches = [ ./increase-tapping-delay.patch ];
 
