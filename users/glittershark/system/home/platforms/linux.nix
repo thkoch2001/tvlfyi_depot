@@ -84,12 +84,12 @@ in
     ];
   };
 
-  programs.tarsnap = {
-    enable = true;
-    keyfile = "/home/grfn/.private/tarsnap.key";
-    printStats = true;
-    humanizeNumbers = true;
-  };
+  # programs.tarsnap = {
+  #   enable = true;
+  #   keyfile = "/home/grfn/.private/tarsnap.key";
+  #   printStats = true;
+  #   humanizeNumbers = true;
+  # };
 
   programs.zsh.initExtra = ''
     [[ ! $IN_NIX_SHELL ]] && alsi -l
