@@ -6,7 +6,7 @@ engineer and musician
 
 code
 - [[https://github.com/glittershark/][github]]
-- [[https://code.tvl.fyi/tree/users/glittershark][my directory in the tvl monorepo]]
+- [[https://cs.tvl.fyi/depot/-/tree/users/glittershark][my directory in the tvl monorepo]]
 
 music
 - https://sacrosanct.bandcamp.com/, a post-rock project with a [[https://bandcamp.com/h34rken][friend of mine]]
