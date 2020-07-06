@@ -20,6 +20,9 @@
               " %a %d %b [%U of 52 weeks]"))
 (display-time-mode 1)
 
+;; Remove the boilerplate in the *scratch* buffer
+(setq initial-scratch-message "")
+
 ;; disable custom variable entries from being written to ~/.emacs.d/init.el
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)

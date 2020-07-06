@@ -24,6 +24,9 @@
 ;; increase line height
 (setq-default line-spacing 4)
 
+(when window-system
+  (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
+
 ;; Ensure that buffers update when their contents change on disk.
 (global-auto-revert-mode t)
 
