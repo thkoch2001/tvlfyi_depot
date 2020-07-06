@@ -36,6 +36,8 @@ let
       age
       autoconf
       autoreconfHook
+      avrlibc
+      avrdude
       awscli
       bashInteractive
       bat
@@ -58,6 +60,9 @@ let
       coreutils
       cudatoolkit
       darwin
+      dfu-programmer
+      dfu-util
+      diffutils
       dockerTools
       execline
       fetchFromGitHub
@@ -106,6 +111,7 @@ let
       pandoc
       parallel
       pkgconfig
+      pkgsCross
       postgresql
       pounce
       pulseaudio
@@ -128,6 +134,7 @@ let
       symlinkJoin
       systemd
       tdlib
+      teensy-loader-cli
       terraform_0_12
       texlive
       thttpd
