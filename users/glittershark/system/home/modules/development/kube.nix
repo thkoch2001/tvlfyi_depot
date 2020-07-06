@@ -1,13 +1,10 @@
 { config, lib, pkgs, ... }:
-let
-  pkgs-unstable = import <nixpkgs-unstable> {};
-in
 {
   home.packages = with pkgs; [
     kubectl
     kubetail
     sops
-    pkgs-unstable.kubie
+    kubie
     # pkgs-unstable.argocd # provided by urbos
   ];
 

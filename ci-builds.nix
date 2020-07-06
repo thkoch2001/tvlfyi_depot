@@ -99,8 +99,10 @@ in lib.fix (self: {
   ];
 
   glittershark = with depot.users.glittershark; [
-    (systemFor system.system.chupacabra)
     xanthous
     keyboard.layout
+
+    (systemFor system.system.chupacabra)
+    system.home.chupacabra.activationPackage
   ];
 })
