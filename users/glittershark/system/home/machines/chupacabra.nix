@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, lib, config, ... }:
+
+with lib;
+
 let
   laptopKeyboardId = "25";
 in {
@@ -7,12 +10,13 @@ in {
     ../modules/common.nix
     ../modules/games.nix
     ../modules/rtlsdr.nix
-
-    ~/code/urb/urbos/home
+    ../modules/urbint.nix
   ];
 
   # for when hacking
   programs.home-manager.path = "/home/grfn/code/home-manager";
+  programs.home-manager.enable = true;
+  home.stateVersion = "19.09";
 
   system.machine = {
     wirelessInterface = "wlp59s0";
@@ -40,6 +44,4 @@ in {
       );
     };
   };
-
-  urbint.projectPath = "code/urb";
 }
