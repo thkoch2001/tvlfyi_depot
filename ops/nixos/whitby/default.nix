@@ -17,6 +17,7 @@ in {
   imports = [
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
+    "${depot.depotPath}/ops/nixos/www/login.tvl.fyi.nix"
   ];
 
   hardware = {
@@ -200,6 +201,11 @@ in {
       group = "git";
       isNormalUser = false;
     };
+  };
+
+  security.acme = {
+    acceptTerms = true;
+    email = "mail@tazj.in";
   };
 
   system.stateVersion = "20.03";
