@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6ac3cca_d59321e2",
+        "filename": "ops/nixos/tvl-sso/default.nix",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-06T22:51:48Z",
+      "side": 1,
+      "message": "is there a reason why you\u0027re setting the name explicitly? it defaults to `\u003cname\u003e`, so you can `users.groups.apereo-cas \u003d {};` (same with name in the users block above)\n\nfeel free to ack this comment if you can\u0027t be bothered",
+      "range": {
+        "startLine": 25,
+        "startChar": 6,
+        "endLine": 25,
+        "endChar": 26
+      },
+      "revId": "5c3f4777e99130282e81a09bddd827815a34c6f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
