@@ -9,7 +9,8 @@
  +org-dir (expand-file-name "~/notes")
  org-default-notes-file (concat org-directory "/inbox.org")
  +org-default-todo-file (concat org-directory "/inbox.org")
- org-agenda-files (list org-directory)
+ org-agenda-files (directory-files-recursively
+                   "~/notes" "\\.org$")
  org-refile-targets '((org-agenda-files :maxlevel . 3))
  org-outline-path-complete-in-steps nil
  org-refile-use-outline-path t
