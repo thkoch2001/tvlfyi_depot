@@ -1,0 +1,15 @@
+diff --git a/lieer/remote.py b/lieer/remote.py
+index 6e3973a..2b0b59e 100644
+--- a/lieer/remote.py
++++ b/lieer/remote.py
+@@ -386,7 +386,9 @@ class Remote:
+     if timeout == 0: timeout = None
+ 
+     self.http = self.credentials.authorize (httplib2.Http(timeout = timeout))
+-    self.service = discovery.build ('gmail', 'v1', http = self.http)
++    with open('${DISCOVERY_DOC}', 'r') as file:
++      discovery_doc = file.read()
++      self.service = discovery.build_from_document(discovery_doc, http = self.http)
+     self.authorized = True
+ 
+   def __get_credentials__ (self):
