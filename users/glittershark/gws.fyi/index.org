@@ -10,7 +10,7 @@ code
 
 music
 - https://sacrosanct.bandcamp.com/, a post-rock project with a [[https://bandcamp.com/h34rken][friend of mine]]
-- [[https://soundcloud.com/missingggg][my current soundcloud]], releasing instrumental hip-hop under the name missing
+- [[https://soundcloud.com/missingggg][my current soundcloud]], releasing instrumental hip-hop under the name *missing*
 - you can also find a log of all the music I listen to [[https://www.last.fm/user/wildgriffin45][on last.fm]]
 
 contact
@@ -18,5 +18,5 @@ contact
 - [[mailto:web@gws.fyi][web@gws.fyi]]
 - [[https://twitter.com/glittershark1][twitter]]
 - https://keybase.io/glittershark
-- glittershark on freenode
+- grfn on freenode
 - [[http://keys.gnupg.net/pks/lookup?op=get&search=0x44EF5B5E861C09A7][gpg key: 0F11A989879E8BBBFDC1E23644EF5B5E861C09A7]]
