@@ -22,7 +22,7 @@
     path = ".local/share/password-store";
   };
 
-  urbint.projectPath = "code/urb";
+  # urbint.projectPath = "code/urb";
 
   home.packages = with pkgs; [
     # System utilities

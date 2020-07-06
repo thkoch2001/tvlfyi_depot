@@ -52,7 +52,7 @@ with lib;
 
     pg-dump-upsert
 
-    (import ../pkgs/clang-tools { inherit pkgs; })
+    # (import ../pkgs/clang-tools { inherit pkgs; })
   ] ++ optional (stdenv.isLinux) julia;
 
   programs.git = {
