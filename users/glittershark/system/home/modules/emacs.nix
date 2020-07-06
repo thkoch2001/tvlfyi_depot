@@ -10,12 +10,11 @@ let
  #                               # and packages.el files
  # };
 
-
   depot = config.lib.depot;
+
 in {
   imports = [
     ./lib/cloneRepo.nix
-    ./lib/depot.nix
   ];
 
   # home.packages = [ doom-emacs ];
