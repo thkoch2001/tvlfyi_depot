@@ -14,6 +14,7 @@ in {
         User = "apereo-cas";
         Group = "apereo-cas";
         ExecStart = "${apereo-cas}/bin/cas";
+        EnvironmentFile = "/etc/cas/secrets";
         Restart = "always";
       };
     };
