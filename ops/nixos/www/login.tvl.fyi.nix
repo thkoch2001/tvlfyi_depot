@@ -15,6 +15,7 @@
         location / {
           proxy_pass http://localhost:8443;
           proxy_set_header X-Forwarded-For $remote_addr;
+          proxy_set_header X-Forwarded-Proto https;
           proxy_set_header Host $host;
         }
       '';
