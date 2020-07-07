@@ -26,10 +26,6 @@ let
     export PROJECT_ID='${project}'
     cat ${./api_client.patch} | ${gettext}/bin/envsubst > $out
   '';
-  discoveryPatch = runCommand "discovery_doc.patch" {} ''
-    export DISCOVERY_DOC='${./gmail-api.json}'
-    cat ${./discovery_doc.patch} | ${gettext}/bin/envsubst > $out
-  '';
 in python3Packages.buildPythonApplication rec {
   name = "lieer-${version}";
   version = "1.0";
@@ -43,7 +39,6 @@ in python3Packages.buildPythonApplication rec {
 
   patches = [
     authPatch
-    discoveryPatch
     ./send_scope.patch
   ];
 
