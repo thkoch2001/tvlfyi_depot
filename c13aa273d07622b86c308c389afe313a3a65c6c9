@@ -22,6 +22,30 @@
       "revId": "c13aa273d07622b86c308c389afe313a3a65c6c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f689face_9a0bfc96",
+        "filename": "ops/nixos/quassel.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-08T22:10:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "556b1193_bd21be95",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 14
+      },
+      "revId": "c13aa273d07622b86c308c389afe313a3a65c6c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
