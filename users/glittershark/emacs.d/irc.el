@@ -5,16 +5,15 @@
 
 (defun irc-connect ()
   (interactive)
-  (let ((pw (let* ((irc-pw (first
-                            (auth-source-search :host "znc.gws.fyi"
-                                                      :max 1)))
-                   (secret (plist-get irc-pw :secret)))
-              (if (functionp secret) (funcall secret))))
+  (let ((pw (s-trim (shell-command-to-string "pass irccloud/freenode")))
         (gnutls-verify-error nil))
-    (erc-tls :server "znc.gws.fyi"
-             :port 5000
-             :nick "glittershark"
-             :password (concat "glittershark/freenode:" pw))))
+    (erc-tls :server "bnc.irccloud.com"
+             :port 6697
+             :nick "grfn"
+             :password (concat "bnc@"
+                               (s-trim (shell-command-to-string "hostname"))
+                               ":"
+                               pw))))
 
 
 (defgroup erc-alert nil
@@ -30,7 +29,6 @@
 (setq tvl-enabled? t)
 
 (defun erc-alert-important-p (info)
-  (setq last-info info)
   (let ((message (plist-get info :message))
         (erc-message (-> info (plist-get :data) (plist-get :message)))
         (erc-channel (-> info (plist-get :data) (plist-get :channel))))
