@@ -175,6 +175,7 @@ let
       mercurial
       perl
       perlPackages
+      quassel
       utillinuxMinimal;
 
     haskellPackages = (nixpkgs.haskellPackages.override {
