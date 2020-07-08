@@ -178,6 +178,7 @@ in {
               order += "battery 0"
               # order += "volume master"
               order += "time"
+              order += "tztime utc"
 
               mpd {
                   format = "%artist - %album - %title"
@@ -233,6 +234,10 @@ in {
                   color = "#93a1a1"
               }
 
+              tztime utc {
+                  timezone = "UTC"
+                  format = "    %H·%M    "
+              }
 
               # volume master {
               #     format = "☊ %volume"
