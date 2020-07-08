@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "556b1193_bd21be95",
+        "filename": "ops/nixos/quassel.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-08T14:24:56Z",
+      "side": 1,
+      "message": "interfaces feels like the wrong word here.. usually I\u0027d call these bind addresses or something similar",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 14
+      },
+      "revId": "c13aa273d07622b86c308c389afe313a3a65c6c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
