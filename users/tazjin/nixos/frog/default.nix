@@ -12,6 +12,12 @@ config: let
   frogEmacs = (depot.users.tazjin.emacs.overrideEmacs(epkgs: epkgs ++ [
     depot.third_party.emacsPackages.google-c-style
   ]));
+
+  quasselClient = depot.third_party.quassel.override {
+    client = true;
+    enableDaemon = false;
+    monolithic = false;
+  };
 in depot.lib.fix(self: {
   imports = [
     "${depot.depotPath}/ops/nixos/v4l2loopback.nix"
@@ -205,6 +211,7 @@ in depot.lib.fix(self: {
       fun.uggc
       lieer
       ops.kontemplate
+      quasselClient
       third_party.ffmpeg
       third_party.git
       third_party.lutris
