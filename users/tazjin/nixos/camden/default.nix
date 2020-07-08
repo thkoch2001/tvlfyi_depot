@@ -18,6 +18,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/clbot.nix"
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
+    "${depot.depotPath}/ops/nixos/quassel.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
     "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
@@ -220,6 +221,13 @@ in lib.fix(self: {
       postRun = "systemctl reload nginx";
     };
 
+    certs."quassel.tazj.in" = {
+      webroot = "/var/lib/acme/challenge-quassel";
+      user = "nginx"; # required because of a bug in the ACME module
+      group = "quassel";
+      allowKeysForGroup = true;
+    };
+
     certs."tvl.fyi" = {
       user = "nginx";
       group = "nginx";
@@ -286,6 +294,14 @@ in lib.fix(self: {
       # populated from /etc/secrets/clbot
       irc_pass = "$CLBOT_PASS";
     };
+  };
+
+  services.depot.quassel = {
+    enable = true;
+    acmeHost = "quassel.tazj.in";
+    bindAddresses = [
+      "0.0.0.0"
+    ];
   };
 
   # serve my website(s)
