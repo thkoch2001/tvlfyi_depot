@@ -16,6 +16,24 @@
       "revId": "b73fd73444127609386cf08edfbe3448387311ba",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7df27f4_af6cd932",
+        "filename": "ops/nixos/www/login.tvl.fyi.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-08T17:49:15Z",
+      "side": 1,
+      "message": "Have you _seen_ the nginx incantation required for that? I\u0027d rather just rely on forceSSL (and tvl.fyi\u0027s HSTS policy)",
+      "parentUuid": "13a3ff26_a5983962",
+      "revId": "b73fd73444127609386cf08edfbe3448387311ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
