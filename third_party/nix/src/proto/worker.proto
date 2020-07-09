@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 package nix.proto;
 
 // Service representing a worker used for building and interfacing
@@ -21,13 +23,62 @@ service Worker {
 
   // Adds the supplied string to the store, as a text file.
   rpc AddTextToStore (AddTextToStoreRequest) returns (AddTextToStoreResponse);
+
+  // Build the specified derivations in one of the specified build
+  // modes, defaulting to a normal build.
+  rpc BuildPaths (BuildPathsRequest) returns (google.protobuf.Empty);
+
+  // TODO: What does this do?
+  rpc EnsurePath (EnsurePathRequest) returns (google.protobuf.Empty);
+
+  // TODO: What does this do?
+  rpc AddTempRoot (AddTempRootRequest) returns (google.protobuf.Empty);
+
+  // TODO: What does this do?
+  rpc AddIndirectRoot (AddIndirectRootRequest) returns (google.protobuf.Empty);
+
+  // TODO: What does this do?
+  rpc SyncWithGC (google.protobuf.Empty) returns (google.protobuf.Empty);
+
+  // TODO: What does this do?
+  rpc FindRoots(google.protobuf.Empty) returns (FindRootsResponse);
+
+  // TODO: What does this do?
+  rpc SetOptions(SetOptionsRequest) returns (google.protobuf.Empty);
+
+  // Ask the store to perform a garbage collection, based on the
+  // specified parameters. See `GCAction` for the possible actions.
+  rpc CollectGarbage(CollectGarbageRequest) returns (CollectGarbageResponse);
 }
 
 enum HashType {
-  MD5 = 0; // TODO(tazjin): still needed?
-  SHA1 = 1;
-  SHA256 = 2;
-  SHA512 = 3;
+  UNKNOWN = 0;
+  MD5 = 1; // TODO(tazjin): still needed?
+  SHA1 = 2;
+  SHA256 = 3;
+  SHA512 = 4;
+}
+
+enum BuildMode {
+  Normal = 0;
+  Repair = 1;
+  Check = 2;
+}
+
+enum GCAction {
+  // Return the set of paths reachable from (i.e. in the closure of)
+  // the roots.
+  ReturnLive = 0;
+
+  // Return the set of paths not reachable from the roots.
+  ReturnDead = 1;
+
+  // Actually delete the latter set.
+  DeleteDead = 2;
+
+  // Delete the paths listed in `pathsToDelete', insofar as they are
+  // not reachable.
+  DeleteSpecific = 3;
 }
 
 message IsValidPathRequest {
@@ -85,4 +136,63 @@ message AddTextToStoreRequest {
 
 message AddTextToStoreResponse {
   string path = 1;
+}
+
+message BuildPathsRequest {
+  repeated string drvs = 1;
+  BuildMode mode = 2;
+}
+
+message EnsurePathRequest {
+  string path = 1;
+}
+
+message AddTempRootRequest {
+  string path = 1;
+}
+
+message AddIndirectRootRequest {
+  string path = 1;
+}
+
+message FindRootsResponse {
+  map<string, string> roots = 1;
+}
+
+message SetOptionsRequest {
+  bool keep_failed = 1;
+  bool keep_going = 2;
+  bool try_fallback = 3;
+  uint32 max_build_jobs = 4;
+  uint32 verbose_build = 5; // TODO(tazjin): Maybe this should be bool, unclear.
+  uint32 build_cores = 6; // TODO(tazjin): Difference from max_build_jobs?
+  bool use_substitutes = 7;
+  map<string, string> overrides = 8; // TODO(tazjin): better name?
+}
+
+message CollectGarbageRequest {
+  // GC action that should be performed.
+  GCAction action = 1;
+
+  // For `DeleteSpecific', the paths to delete.
+  repeated string paths_to_delete = 2;
+
+  // If `ignore_liveness' is set, then reachability from the roots is
+  // ignored (dangerous!). However, the paths must still be
+  // unreferenced *within* the store (i.e., there can be no other
+  // store paths that depend on them).
+  bool ignore_liveness = 3;
+
+  // Stop after at least `max_freed' bytes have been freed.
+  uint64 max_freed = 4;
+}
+
+message CollectGarbageResponse {
+  // Depending on the action, the GC roots, or the paths that would be
+  // or have been deleted.
+  repeated string deleted_paths = 1;
+
+  // For `ReturnDead', `DeleteDead' and `DeleteSpecific', the number
+  // of bytes that would be or was freed.
+  uint64 bytes_freed = 2;
 }
