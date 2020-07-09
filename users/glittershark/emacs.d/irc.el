@@ -106,6 +106,8 @@ If the buffer is currently not visible, makes it sticky."
 
 (add-hook 'erc-connect-pre-hook 'my-erc-define-alerts)
 
+(advice-add #'erc-user-input :filter-return #'s-trim)
+
 (comment
  (my-erc-define-alerts)
  )
