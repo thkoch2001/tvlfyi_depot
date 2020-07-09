@@ -1,5 +1,5 @@
-Nix, or rather tazjin's fork thereof
-------------------------------------
+Nix, or rather TVL's fork thereof
+---------------------------------
 
 Nix is a new take on package management that is fairly unique. Because
 of its purity aspects, a lot of issues found in traditional package
@@ -9,7 +9,7 @@ To find out more about the tool, usage and installation instructions,
 please read the manual, which is available on the Nix website at
 <http://nixos.org/nix/manual>.
 
-This repository is [tazjin](https://tazj.in)'s fork of Nix.
+This repository is [TVL's](https://tvl.fyi)'s fork of Nix.
 
 ## Fork background
 
@@ -37,7 +37,7 @@ In addition, the upstream Nix project is diverging from the opinions
 of some community members via the introduction of concepts such as Nix
 flakes.
 
-To counteract these things I have decided to fork Nix.
+To counteract these things we have decided to fork Nix.
 
 ## Fork goals
 
@@ -111,8 +111,8 @@ To set expectations, there are some explicit non-goals, too.
   not even feasible. The core work has not even started yet and just
   basic cleanup has already created a diff of over 40 000 lines.
 
-  This would likely also turn into a political effort, which I have no
-  interest in.
+  This would likely also turn into a political effort, which we have
+  no interest in.
 
 * Improved performance is not an (initial) goal. Nix performance is
   very unevenly distributed across the codebase (some things have seen
@@ -136,7 +136,7 @@ To set expectations, there are some explicit non-goals, too.
 
 ## Contributing to the fork
 
-My repository's default [contribution guidelines][contributing] apply.
+The TVL depot's default [contribution guidelines][contributing] apply.
 
 In addition, please make sure that submitted code builds and is
 formatted with `clang-format`, using the configuration found in this
@@ -156,4 +156,4 @@ use in the [OpenSSL Toolkit](http://www.OpenSSL.org/).
 [oci]: https://www.opencontainers.org/
 [gVisor]: https://gvisor.dev/
 [systemd-nspawn]: https://www.freedesktop.org/software/systemd/man/systemd-nspawn.html
-[contributing]: https://git.tazj.in/about/docs/CONTRIBUTING.md
+[contributing]: https://cs.tvl.fyi/depot/-/blob/docs/CONTRIBUTING.md
