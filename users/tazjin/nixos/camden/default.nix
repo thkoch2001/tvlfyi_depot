@@ -381,6 +381,10 @@ in lib.fix(self: {
           try_files $uri $uri.html $uri/ =404;
         }
 
+        location = /tazjin {
+          return 200 "tazjin";
+        }
+
         location /blobs/ {
           alias /var/www/blobs/;
         }
