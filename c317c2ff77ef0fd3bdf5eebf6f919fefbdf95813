@@ -46,6 +46,30 @@
       "revId": "c317c2ff77ef0fd3bdf5eebf6f919fefbdf95813",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "081477d3_cd72bea6",
+        "filename": "third_party/nix/src/libstore/store-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-10T17:06:21Z",
+      "side": 1,
+      "message": "I\u0027m not sure if that\u0027s useful, editing them to have a valid suffix or whatever is unlikely to create a valid store path because they\u0027re not intended to be created by humans in the first place.",
+      "parentUuid": "3e04d6f7_647181f3",
+      "range": {
+        "startLine": 73,
+        "startChar": 13,
+        "endLine": 74,
+        "endChar": 30
+      },
+      "revId": "c317c2ff77ef0fd3bdf5eebf6f919fefbdf95813",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
