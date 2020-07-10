@@ -34,6 +34,7 @@ in {
       # Configures gerrit for being reverse-proxied by nginx as per
       # https://gerrit-review.googlesource.com/Documentation/config-reverseproxy.html
       gerrit.canonicalWebUrl = "https://cl.tvl.fyi";
+      gerrit.docUrl = "/Documentation";
       httpd.listenUrl = "proxy-https://${cfg.listenAddress}";
 
       download.command = [
