@@ -26,6 +26,11 @@ let
 
   users = [
     {
+      username = "andi";
+      email = "andi@notmuch.email";
+      password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$8lefg7+8UPAEh9Ott8zH0A$7YuLRraTC1IgxTNTxFJF03AWmqBS3GX2+vfD4XVTrb0";
+    }
+    {
       username = "artemist";
       email = "me@artem.ist";
       password = "{SSHA}N6Tl/txGQwlmVa7xVJCXpGcD1U4bJaI+";
