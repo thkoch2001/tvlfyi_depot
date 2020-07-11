@@ -35,8 +35,15 @@ in {
 
       # Configures gerrit for being reverse-proxied by nginx as per
       # https://gerrit-review.googlesource.com/Documentation/config-reverseproxy.html
-      gerrit.canonicalWebUrl = "https://cl.tvl.fyi";
-      gerrit.docUrl = "/Documentation";
+      gerrit = {
+        canonicalWebUrl = "https://cl.tvl.fyi";
+        docUrl = "/Documentation";
+
+        # This needs to be kept in lockstep with the Polygerrit UI
+        # version we use.
+        cdnPath = "https://cdn.googlesource.com/polygerrit_ui/768.0";
+      };
+
       httpd.listenUrl = "proxy-https://${cfg.listenAddress}";
 
       download.command = [
