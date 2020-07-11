@@ -15,7 +15,6 @@ config: let
   };
 in lib.fix(self: {
   imports = [
-    "${depot.depotPath}/ops/nixos/clbot.nix"
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
     "${depot.depotPath}/ops/nixos/quassel.nix"
@@ -272,27 +271,6 @@ in lib.fix(self: {
       remote_host = "smtp.gmail.com:587";
       remote_auth = "plain";
       remote_user = "tvlbot@tazj.in";
-    };
-  };
-
-  # Start the Gerrit->IRC bot
-  services.depot.clbot = {
-    enable = true;
-
-    # Almost all configuration values are already correct (well, duh),
-    # see //fun/clbot for details.
-    flags = {
-      gerrit_host = "localhost:29418";
-      gerrit_ssh_auth_username = "clbot";
-      gerrit_ssh_auth_key = "/etc/secrets/clbot-key";
-      irc_server = "qwerty.zxcvbnm.ninja:6697";
-
-      notify_branches = "canon,refs/meta/config";
-      notify_repo = "depot";
-
-      # This secret is read from an environment variable, which is
-      # populated from /etc/secrets/clbot
-      irc_pass = "$CLBOT_PASS";
     };
   };
 
