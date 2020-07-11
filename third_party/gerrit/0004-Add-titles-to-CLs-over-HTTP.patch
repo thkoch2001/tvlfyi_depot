@@ -1,7 +1,7 @@
-From a908a0e96a74300784416b5e3ff4cb2493b521ee Mon Sep 17 00:00:00 2001
+From ec764594563ede6d8bfffca0c9593f29ae80fc88 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:03:02 +0100
-Subject: [PATCH 4/4] Add titles to CLs over HTTP
+Subject: [PATCH 4/6] Add titles to CLs over HTTP
 
 ---
  .../gerrit/httpd/raw/IndexHtmlUtil.java       | 14 +++-
@@ -213,5 +213,5 @@ index d162714399..0ba228ad00 100644
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">{\n}
  
 -- 
-2.25.1
+2.27.0
 

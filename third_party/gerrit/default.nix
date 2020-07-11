@@ -44,6 +44,8 @@ pkgs.buildBazelPackage {
     ./0002-Syntax-highlight-nix.patch
     ./0003-Syntax-highlight-rules.pl.patch
     ./0004-Add-titles-to-CLs-over-HTTP.patch
+    ./0005-When-using-local-fonts-always-assume-Gerrit-is-mount.patch
+    ./0006-Always-use-Google-Fonts.patch
   ];
 
   bazelTarget = "release";
