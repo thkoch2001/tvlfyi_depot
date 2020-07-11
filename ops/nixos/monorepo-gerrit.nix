@@ -23,6 +23,8 @@ in {
 
     package = config.depot.third_party.gerrit;
 
+    jvmHeapLimit = "4g";
+
     settings = {
       core.packedGitLimit = "100m";
       log.jsonLogging = true;
