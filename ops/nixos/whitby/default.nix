@@ -16,9 +16,10 @@ in {
   inherit depot;
   imports = [
     "${depot.depotPath}/ops/nixos/depot.nix"
+    "${depot.depotPath}/ops/nixos/smtprelay.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
-    "${depot.depotPath}/ops/nixos/www/login.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/tvl-sso/default.nix"
+    "${depot.depotPath}/ops/nixos/www/login.tvl.fyi.nix"
   ];
 
   hardware = {
@@ -151,6 +152,17 @@ in {
       hooks.post-command = "${buildkiteHooks}/bin/post-command";
     };
   }) (range 1 8));
+
+  # Start a local SMTP relay to Gmail (used by gerrit)
+  services.depot.smtprelay = {
+    enable = true;
+    args = {
+      listen = ":2525";
+      remote_host = "smtp.gmail.com:587";
+      remote_auth = "plain";
+      remote_user = "tvlbot@tazj.in";
+    };
+  };
 
   environment.systemPackages = with nixpkgs; [
     bb
