@@ -1,7 +1,7 @@
-From 1b869d045cbb557ed5475be1131282fa8e4afc76 Mon Sep 17 00:00:00 2001
+From 0da464ae9982b279fe3ca4c4ec6a361ae9fded24 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:32 +0100
-Subject: [PATCH 2/4] Syntax highlight nix
+Subject: [PATCH 2/6] Syntax highlight nix
 
 ---
  .../app/elements/diff/gr-syntax-layer/gr-syntax-layer.js         | 1 +
@@ -20,5 +20,5 @@ index f1e930f177..cc937cff67 100644
  const ASYNC_DELAY = 10;
  
 -- 
-2.25.1
+2.27.0
 
