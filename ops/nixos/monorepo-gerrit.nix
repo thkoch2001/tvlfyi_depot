@@ -30,6 +30,7 @@ in {
       sshd.advertisedAddress = "code.tvl.fyi:29418";
       hooks.path = "${gerritHooks}";
       cache.web_sessions.maxAge = "3 months";
+      container.heapLimit = "4g";
 
       # Configures gerrit for being reverse-proxied by nginx as per
       # https://gerrit-review.googlesource.com/Documentation/config-reverseproxy.html
