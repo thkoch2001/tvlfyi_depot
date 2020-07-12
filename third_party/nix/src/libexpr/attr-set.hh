@@ -67,13 +67,9 @@ class Bindings {
  public:
   typedef BindingsIterator iterator;
 
-  // Allocate a new attribute set that is visible to the garbage
-  // collector.
-  static Bindings* NewGC();
-
   // Allocate a new attribute set with a static capacity that is visible to the
   // garbage collector.
-  // static Bindings* NewGC(size_t capacity);
+  static Bindings* NewGC(size_t capacity = 0);
 
   // Return the number of contained elements.
   virtual size_t size() = 0;
