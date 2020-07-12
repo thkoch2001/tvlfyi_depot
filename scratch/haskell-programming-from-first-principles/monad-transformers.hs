@@ -1,5 +1,9 @@
 module MonadTransformersScratch where
 
+import Control.Monad
+import qualified Control.Monad.Trans.Maybe as M
+import qualified Control.Monad.Trans.Reader as R
+import qualified Control.Monad.Trans.State as S
 import Data.Function ((&))
 --------------------------------------------------------------------------------
 
@@ -71,9 +75,109 @@ instance (Applicative m) => Applicative (ReaderT r m) where
   pure x = x & pure & pure & ReaderT
   ReaderT f <*> ReaderT x = ReaderT $ fmap (<*>) f <*> x
 
-instance (Monad m) => Monad (ReaderT r m) where
-  return = pure
-  ReaderT rma >>= f =
-    ReaderT $ \r -> do
-      a <- rma r
-      runReaderT (f a) r
+-- instance (Monad m) => Monad (ReaderT r m) where
+--   return = pure
+--   ReaderT rma >>= f =
+--     ReaderT $ \r -> do
+--       a <- rma r
+--       runReaderT (f a) r
+-- --------------------------------------------------------------------------------
+
+rDec :: Num a => R.Reader a a
+rDec = R.ReaderT $ \x -> pure $ x + 1
+
+rShow :: Show a => R.Reader a String
+rShow = R.ReaderT $ \x -> pure $ show x
+
+rPrintAndInc :: (Num a, Show a) => R.ReaderT a IO a
+rPrintAndInc = R.ReaderT $ \x ->
+  putStrLn ("Hi: " ++ show x) >> pure (x + 1)
+
+sPrintIncAccum :: (Num a, Show a) => S.StateT a IO String
+sPrintIncAccum = S.StateT $ \x -> do
+  putStrLn ("Hi: " ++ show x)
+  pure (show x, x + 1)
+
+--------------------------------------------------------------------------------
+
+isValid :: String -> Bool
+isValid v = '!' `elem` v
+
+maybeExcite :: M.MaybeT IO String
+maybeExcite = M.MaybeT $ do
+  x <- getLine
+  putStrLn ""
+  case isValid x of
+    False -> pure Nothing
+    True -> pure $ Just x
+
+doExcite :: IO ()
+doExcite = do
+  putStr "Say something *exciting*: "
+  excite <- M.runMaybeT maybeExcite
+  case excite of
+    Nothing -> putStrLn "Gonna need some more excitement..."
+    Just x  -> putStrLn "Now THAT'S exciting...nice!"
+
+--------------------------------------------------------------------------------
+
+data Participant
+  = Man
+  | Machine
+  deriving (Show, Eq)
+
+newtype Hand = Hand (Integer, Integer) deriving (Show, Eq)
+
+newtype Score = Score (Integer, Integer) deriving (Show, Eq)
+
+getLineLn :: String -> IO String
+getLineLn prompt = do
+  putStr prompt
+  x <- getLine
+  putStrLn ""
+  pure x
+
+promptGuess :: IO Hand
+promptGuess = do
+  fingers <- getLineLn "How many fingers (0-5): "
+  guess <- getLineLn "Guess: "
+  pure $ Hand (read guess, read fingers)
+
+aiGuess :: IO Hand
+aiGuess = pure $ Hand (2, 3)
+
+whoWon :: Hand -> Hand -> Maybe Participant
+whoWon (Hand (guessA, fingersA)) (Hand (guessB, fingersB))
+  | guessA == guessB && guessA == (fingersA + fingersB) = Nothing
+  | guessA == (fingersA + fingersB) = Just Man
+  | guessB == (fingersA + fingersB) = Just Machine
+  | otherwise = Nothing
+
+initScore :: Score
+initScore = Score (0, 0)
+
+printScore :: Score -> IO ()
+printScore (Score (man, machine)) =
+  putStrLn $ "Man: " ++ show man ++ " Machine: " ++ show machine
+
+startMorra :: S.StateT Score IO ()
+startMorra = S.StateT $ \(Score (man, machine)) -> do
+  Hand (guessA, fingersA) <- promptGuess
+  Hand (guessB, fingersB) <- aiGuess
+  putStrLn $ "P: " ++ show fingersA ++ "," ++ show guessA
+  putStrLn $ "C: " ++ show fingersB ++ "," ++ show guessB
+  case whoWon (Hand (guessA, fingersA)) (Hand (guessB, fingersB)) of
+    Nothing -> do
+      putStrLn "Nobody won..."
+      printScore (Score (man, machine))
+      pure ((), Score (man, machine))
+    Just Man -> do
+      putStrLn "Man won!"
+      printScore (Score (man + 1, machine))
+      pure ((), Score (man + 1, machine))
+    Just Machine -> do
+      putStrLn "Oh no... Machine won..."
+      printScore (Score (man, machine + 1))
+      pure ((), Score (man, machine + 1))
+
+playMorra = S.runStateT (forever startMorra) initScore
