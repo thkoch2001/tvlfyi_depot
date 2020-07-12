@@ -70,6 +70,7 @@ target_link_libraries(nixexpr
   nixutil
 
   absl::btree
+  absl::flags
   absl::node_hash_set
   absl::strings
   gc

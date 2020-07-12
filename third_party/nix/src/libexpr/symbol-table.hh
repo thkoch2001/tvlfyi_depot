@@ -13,7 +13,7 @@ class Symbol {
   friend class SymbolTable;
 
  public:
-  Symbol() : s(0){};
+  Symbol() = delete;
 
   bool operator==(const Symbol& s2) const { return s == s2.s; }
 
