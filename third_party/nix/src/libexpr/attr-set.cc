@@ -10,6 +10,42 @@
 
 namespace nix {
 
+BindingsIterator& BindingsIterator::operator++() {
+  _iterator++;
+  return *this;
+}
+BindingsIterator BindingsIterator::operator++(int) {
+  ++_iterator;
+  return *this;
+}
+bool BindingsIterator::operator==(const BindingsIterator& other) const {
+  return _iterator == other._iterator;
+}
+bool BindingsIterator::operator!=(const BindingsIterator& other) const {
+  return _iterator != other._iterator;
+}
+BindingsIterator::reference BindingsIterator::operator*() const {
+  return *_iterator;
+}
+
+class BTreeBindings : public Bindings {
+ public:
+  size_t size() override;
+  bool empty() override;
+  void push_back(const Attr& attr) override;
+  void insert_or_assign(const Attr& attr) override;
+  Bindings::iterator find(const Symbol& name) override;
+  Bindings::iterator begin() override;
+  Bindings::iterator end() override;
+  void merge(Bindings& other) override;
+  [[deprecated]] virtual std::vector<const Attr*> lexicographicOrder() override;
+
+ private:
+  AttributeMap attributes_;
+};
+
+Bindings* Bindings::NewGC() { return new (GC) BTreeBindings; }
+
 // This function inherits its name from previous implementations, in
 // which Bindings was backed by an array of elements which was scanned
 // linearly.
@@ -20,7 +56,7 @@ namespace nix {
 //
 // This behaviour is mimicked by using .insert(), which will *not*
 // override existing values.
-void Bindings::push_back(const Attr& attr) {
+void BTreeBindings::push_back(const Attr& attr) {
   auto [_, inserted] = attributes_.insert({attr.name, attr});
 
   if (!inserted) {
@@ -30,15 +66,15 @@ void Bindings::push_back(const Attr& attr) {
 }
 
 // Insert or assign (i.e. replace) a value in the attribute set.
-void Bindings::insert_or_assign(const Attr& attr) {
+void BTreeBindings::insert_or_assign(const Attr& attr) {
   attributes_.insert_or_assign(attr.name, attr);
 }
 
-size_t Bindings::size() { return attributes_.size(); }
+size_t BTreeBindings::size() { return attributes_.size(); }
 
-bool Bindings::empty() { return attributes_.empty(); }
+bool BTreeBindings::empty() { return attributes_.empty(); }
 
-std::vector<const Attr*> Bindings::lexicographicOrder() {
+std::vector<const Attr*> BTreeBindings::lexicographicOrder() {
   std::vector<const Attr*> res;
   res.reserve(attributes_.size());
 
@@ -49,26 +85,28 @@ std::vector<const Attr*> Bindings::lexicographicOrder() {
   return res;
 }
 
-Bindings::iterator Bindings::find(const Symbol& name) {
-  return attributes_.find(name);
+Bindings::iterator BTreeBindings::find(const Symbol& name) {
+  return BindingsIterator{attributes_.find(name)};
 }
 
-Bindings::iterator Bindings::begin() { return attributes_.begin(); }
+Bindings::iterator BTreeBindings::begin() {
+  return BindingsIterator{attributes_.begin()};
+}
 
-Bindings::iterator Bindings::end() { return attributes_.end(); }
+Bindings::iterator BTreeBindings::end() {
+  return BindingsIterator{attributes_.end()};
+}
 
-void Bindings::merge(const Bindings& other) {
-  for (auto& [key, value] : other.attributes_) {
+void BTreeBindings::merge(Bindings& other) {
+  for (auto& [key, value] : other) {
     this->attributes_[key] = value;
   }
 }
 
-Bindings* Bindings::NewGC() { return new (GC) Bindings; }
-
 void EvalState::mkAttrs(Value& v, size_t capacity) {
   clearValue(v);
   v.type = tAttrs;
-  v.attrs = Bindings::NewGC();
+  v.attrs = BTreeBindings::NewGC();
   nrAttrsets++;
   nrAttrsInAttrsets += capacity;
 }
@@ -81,5 +119,12 @@ Value* EvalState::allocAttr(Value& vAttrs, const Symbol& name) {
   vAttrs.attrs->push_back(Attr(name, v));
   return v;
 }
+
+// class ArrayBindings : Bindings {
+// public:
+//   static ArrayBindings* NewGC();
+
+//   size_t size()
+// }
 
 }  // namespace nix
