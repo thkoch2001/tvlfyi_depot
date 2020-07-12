@@ -16,12 +16,10 @@ config: let
 in lib.fix(self: {
   imports = [
     "${depot.depotPath}/ops/nixos/depot.nix"
-    "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
     "${depot.depotPath}/ops/nixos/quassel.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
     "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
-    "${pkgs.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
   ];
   depot = depot;
 
@@ -168,18 +166,6 @@ in lib.fix(self: {
   # Allow sudo-ing via the forwarded SSH agent.
   security.pam.enableSSHAgentAuth = true;
 
-  # Run cgit for the depot. The onion here is nginx(thttpd(cgit)).
-  systemd.services.cgit = {
-    wantedBy = [ "multi-user.target" ];
-    script = "${depot.web.cgit-taz}/bin/cgit-launch";
-
-    serviceConfig = {
-      Restart = "on-failure";
-      User = "git";
-      Group = "git";
-    };
-  };
-
   # NixOS 20.03 broke nginx and I can't be bothered to debug it
   # anymore, all solution attempts have failed, so here's a
   # brute-force fix.
@@ -247,17 +233,6 @@ in lib.fix(self: {
     logStream              = "home";
     googleCloudProject     = "tazjins-infrastructure";
     applicationCredentials = "/etc/gcp/key.json";
-  };
-
-  # Start a local SMTP relay to Gmail (used by gerrit)
-  services.depot.smtprelay = {
-    enable = true;
-    args = {
-      listen = ":2525";
-      remote_host = "smtp.gmail.com:587";
-      remote_auth = "plain";
-      remote_user = "tvlbot@tazj.in";
-    };
   };
 
   services.depot.quassel = {
@@ -351,38 +326,6 @@ in lib.fix(self: {
 
         location /blobs/ {
           alias /var/www/blobs/;
-        }
-      '';
-    };
-
-    virtualHosts.cgit = {
-      serverName = "code.tvl.fyi";
-      useACMEHost = "tvl.fyi";
-      forceSSL = true;
-
-      extraConfig = ''
-        # Static assets must always hit the root.
-        location ~ ^/(favicon\.ico|cgit\.(css|png))$ {
-           proxy_pass http://localhost:2448;
-        }
-
-        # Everything else hits the depot directly.
-        location / {
-            proxy_pass http://localhost:2448/cgit.cgi/depot/;
-        }
-      '';
-    };
-
-    virtualHosts.gerrit = {
-      serverName = "cl.tvl.fyi";
-      useACMEHost = "tvl.fyi";
-      forceSSL = true;
-
-      extraConfig = ''
-        location / {
-          proxy_pass http://localhost:4778;
-          proxy_set_header  X-Forwarded-For $remote_addr;
-          proxy_set_header  Host $host;
         }
       '';
     };
