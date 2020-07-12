@@ -22,6 +22,30 @@
       "revId": "cae5298aa8cf0e35eba0b5ca2bff0513313047ce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "830a8787_68832c9b",
+        "filename": "ops/nixos/sourcegraph.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-12T13:36:19Z",
+      "side": 1,
+      "message": "Because it\u0027s used from inside the Docker container, connecting to the host bridge.",
+      "parentUuid": "9d193ba0_1cbd6a1a",
+      "range": {
+        "startLine": 29,
+        "startChar": 60,
+        "endLine": 29,
+        "endChar": 67
+      },
+      "revId": "cae5298aa8cf0e35eba0b5ca2bff0513313047ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
