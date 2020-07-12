@@ -11,6 +11,8 @@
 
 namespace nix {
 
+constexpr size_t ATTRS_CAPACITY_PIVOT = 32;
+
 BindingsIterator& BindingsIterator::operator++() {
   std::visit(util::overloaded{
                  [](AttributeMap::iterator& iter) { ++iter; },
@@ -132,27 +134,13 @@ void BTreeBindings::merge(Bindings& other) {
   }
 }
 
-void EvalState::mkAttrs(Value& v, size_t capacity) {
-  clearValue(v);
-  v.type = tAttrs;
-  v.attrs = Bindings::NewGC();
-  assert(v.attrs->begin() == v.attrs->begin());
-  assert(v.attrs->end() == v.attrs->end());
-  nrAttrsets++;
-  nrAttrsInAttrsets += capacity;
-}
-
-/* Create a new attribute named 'name' on an existing attribute set stored
-   in 'vAttrs' and return the newly allocated Value which is associated with
-   this attribute. */
-Value* EvalState::allocAttr(Value& vAttrs, const Symbol& name) {
-  Value* v = allocValue();
-  vAttrs.attrs->push_back(Attr(name, v));
-  return v;
-}
-
 class VectorBindings : public Bindings {
  public:
+  VectorBindings() {};
+  VectorBindings(size_t capacity) : attributes_() {
+    attributes_.reserve(capacity);
+  };
+
   size_t size() override;
   bool empty() override;
   void push_back(const Attr& attr) override;
@@ -246,8 +234,32 @@ Bindings::iterator VectorBindings::end() {
   return BindingsIterator{attributes_.end()};
 }
 
-// TODO pick what to do based on size
-Bindings* Bindings::NewGC() { return new (GC) BTreeBindings; }
-// Bindings* Bindings::NewGC() { return new (GC) VectorBindings; }
+Bindings* Bindings::NewGC(size_t capacity) {
+  if (capacity > ATTRS_CAPACITY_PIVOT) {
+    return new (GC) BTreeBindings;
+  } else {
+    return new (GC) VectorBindings;
+  }
+}
+
+void EvalState::mkAttrs(Value& v, size_t capacity) {
+  clearValue(v);
+  v.type = tAttrs;
+  v.attrs = Bindings::NewGC(capacity);
+  assert(v.attrs->begin() == v.attrs->begin());
+  assert(v.attrs->end() == v.attrs->end());
+  nrAttrsets++;
+  nrAttrsInAttrsets += capacity;
+}
+
+/* Create a new attribute named 'name' on an existing attribute set stored
+   in 'vAttrs' and return the newly allocated Value which is associated with
+   this attribute. */
+Value* EvalState::allocAttr(Value& vAttrs, const Symbol& name) {
+  Value* v = allocValue();
+  vAttrs.attrs->push_back(Attr(name, v));
+  return v;
+}
+
 
 }  // namespace nix
