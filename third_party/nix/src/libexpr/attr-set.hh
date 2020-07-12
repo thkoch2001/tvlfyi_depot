@@ -27,14 +27,17 @@ struct Attr {
 
 // Convenience alias for the backing map, with the garbage-collecting
 // allocator explicitly specified.
-using AttributeMap =
-    absl::btree_map<Symbol, Attr, std::less<Symbol>,
-                    gc_allocator<std::pair<const Symbol, Attr>>>;
+using AttributeMap = absl::btree_map<Symbol, Attr, std::less<Symbol>,
+                                     gc_allocator<std::pair<Symbol, Attr>>>;
+
+using AttributeVector =
+    std::vector<std::pair<Symbol, Attr>, gc_allocator<std::pair<Symbol, Attr>>>;
 
 class BindingsIterator : public std::iterator<std::forward_iterator_tag,
                                               std::pair<const Symbol, Attr>> {
   friend class Bindings;
   friend class BTreeBindings;
+  friend class VectorBindings;
 
  public:
   BindingsIterator() : _iterator(){};
@@ -44,6 +47,7 @@ class BindingsIterator : public std::iterator<std::forward_iterator_tag,
   bool operator!=(const BindingsIterator& other) const;
   reference operator*() const;
   pointer operator->() const { return &operator*(); }
+
   BindingsIterator& operator=(const BindingsIterator& other) {
     _iterator = other._iterator;
     return *this;
@@ -53,8 +57,11 @@ class BindingsIterator : public std::iterator<std::forward_iterator_tag,
   explicit BindingsIterator(AttributeMap::iterator&& iterator)
       : _iterator(iterator){};
 
+  explicit BindingsIterator(AttributeVector::iterator&& iterator)
+      : _iterator(iterator){};
+
  private:
-  AttributeMap::iterator _iterator;
+  std::variant<AttributeMap::iterator, AttributeVector::iterator> _iterator;
 };
 
 class Bindings {
@@ -79,7 +86,7 @@ class Bindings {
   virtual void push_back(const Attr& attr) = 0;
 
   // Insert a value, or replace an existing one.
-  virtual void insert_or_assign(const Attr& attr) = 0;
+  virtual void insert_or_assign(Attr& attr) = 0;
 
   // Look up a specific element of the attribute set.
   virtual iterator find(const Symbol& name) = 0;
@@ -96,9 +103,6 @@ class Bindings {
 
   // oh no
   friend class EvalState;
-
- private:
-  AttributeMap attributes_;
 };
 
 }  // namespace nix
