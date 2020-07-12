@@ -1234,9 +1234,9 @@ void ExprOpUpdate::eval(EvalState& state, Env& env, Value& dest) {
 
   state.nrOpUpdates++;
 
-  state.mkAttrs(dest, /* capacity = */ 0);
+  state.mkAttrs(dest, v1.attrs->size() + v2.attrs->size());
 
-  /* Merge the sets, preferring values from the second set. */
+  // Merge the sets, preferring values from the second set.
   dest.attrs->merge(*v1.attrs);
   dest.attrs->merge(*v2.attrs);
 }
