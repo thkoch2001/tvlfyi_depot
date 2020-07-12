@@ -41,6 +41,7 @@ let
       awscli
       bashInteractive
       bat
+      bc
       buildBazelPackage
       buildFHSUserEnv
       buildGoModule
@@ -69,6 +70,7 @@ let
       fetchgit
       fetchurl
       fetchzip
+      ffmpeg_3_4
       fira
       fira-code
       fira-mono
@@ -87,11 +89,14 @@ let
       installShellFiles
       jdk
       jdk11
+      jemalloc
       jetbrains-mono
       jq
       kontemplate
       lib
+      libopus
       libredirect
+      libvpx
       luajit
       lutris
       makeFontsConf
@@ -128,6 +133,8 @@ let
       rustc
       s6-portable-utils
       sbcl
+      srt
+      srtp
       sqlite
       stdenvNoCC
       stern
