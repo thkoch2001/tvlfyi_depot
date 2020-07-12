@@ -74,6 +74,7 @@ target_link_libraries(nix
   nixutil
 
   absl::strings
+  absl::flags_parse
   editline
   glog
 )
