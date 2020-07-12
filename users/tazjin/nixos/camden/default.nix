@@ -252,17 +252,6 @@ in lib.fix(self: {
   # Run a SourceGraph code search instance
   services.depot.sourcegraph.enable = true;
 
-  # Run a cheddar syntax highlighting server for SourceGraph
-  systemd.services.cheddar-server = {
-    wantedBy = [ "multi-user.target" ];
-    script = "${depot.tools.cheddar}/bin/cheddar --listen 0.0.0.0:4238 --sourcegraph-server";
-
-    serviceConfig = {
-      DynamicUser = true;
-      Restart = "always";
-    };
-  };
-
   # Start a local SMTP relay to Gmail (used by gerrit)
   services.depot.smtprelay = {
     enable = true;
