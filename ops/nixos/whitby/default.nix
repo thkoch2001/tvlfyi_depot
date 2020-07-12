@@ -257,6 +257,8 @@ in {
     users.git = {
       group = "git";
       isNormalUser = false;
+      createHome = true;
+      home = "/var/lib/git";
     };
   };
 
