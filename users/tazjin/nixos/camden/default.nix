@@ -249,9 +249,6 @@ in lib.fix(self: {
     applicationCredentials = "/etc/gcp/key.json";
   };
 
-  # Run a SourceGraph code search instance
-  services.depot.sourcegraph.enable = true;
-
   # Start a local SMTP relay to Gmail (used by gerrit)
   services.depot.smtprelay = {
     enable = true;
@@ -358,27 +355,6 @@ in lib.fix(self: {
       '';
     };
 
-    virtualHosts.tvl = {
-      serverName = "tvl.fyi";
-      useACMEHost = "tvl.fyi";
-      root = depot.web.tvl;
-      forceSSL = true;
-
-      extraConfig = ''
-        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
-
-        rewrite ^/builds/?$ https://buildkite.com/tvl/depot/ last;
-
-        rewrite ^/monorepo-doc/?$ https://docs.google.com/document/d/1nnyByXcH0F6GOmEezNOUa2RFelpeRpDToBLYD_CtjWE/edit?usp=sharing last;
-
-        rewrite ^/irc/?$ ircs://chat.freenode.net:6697/##tvl last;
-
-        location ~* \.(webp|woff2)$ {
-          add_header Cache-Control "public, max-age=31536000";
-        }
-      '';
-    };
-
     virtualHosts.cgit = {
       serverName = "code.tvl.fyi";
       useACMEHost = "tvl.fyi";
@@ -393,27 +369,6 @@ in lib.fix(self: {
         # Everything else hits the depot directly.
         location / {
             proxy_pass http://localhost:2448/cgit.cgi/depot/;
-        }
-      '';
-    };
-
-    virtualHosts.sourcegraph = {
-      serverName = "cs.tvl.fyi";
-      useACMEHost = "tvl.fyi";
-      forceSSL = true;
-
-      extraConfig = ''
-        location = / {
-          return 301 https://cs.tvl.fyi/depot;
-        }
-
-        location / {
-          proxy_set_header X-Sg-Auth "Anonymous";
-          proxy_pass http://localhost:3463;
-        }
-
-        location /users/Anonymous/settings {
-          return 301 https://cs.tvl.fyi;
         }
       '';
     };
