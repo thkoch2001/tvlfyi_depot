@@ -220,6 +220,26 @@ in {
     };
   };
 
+  # Regularly back up Gerrit to Google Cloud Storage.
+  systemd.services.restic-gerrit = {
+    description = "Gerrit backups to Google Cloud Storage";
+    script = "${nixpkgs.restic}/bin/restic backup /var/lib/gerrit";
+    serviceConfig.User = "git";
+
+    environment = {
+      RESTIC_REPOSITORY = "gs:tvl-fyi-backups:/whitby";
+      RESTIC_PASSWORD_FILE = "%h/restic/secret";
+      RESTIC_EXCLUDE_FILE = builtins.toFile "exclude-files" ''
+        /var/lib/gerrit/tmp
+      '';
+    };
+  };
+
+  systemd.timers.restic-gerrit = {
+    wantedBy = [ "multi-user.target" ];
+    timerConfig.OnCalendar = "hourly";
+  };
+
   security.sudo.extraRules = [
     {
       groups = ["wheel"];
