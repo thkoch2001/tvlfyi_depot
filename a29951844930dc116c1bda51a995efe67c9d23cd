@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55cfdbf6_6605748e",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-12T20:56:09Z",
+      "side": 1,
+      "message": "you should actually explain what\u0027s going on here",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 78
+      },
+      "revId": "a29951844930dc116c1bda51a995efe67c9d23cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57553c85_ea2f5b30",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-12T20:56:09Z",
+      "side": 1,
+      "message": "not a helpful comment",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 13
+      },
+      "revId": "a29951844930dc116c1bda51a995efe67c9d23cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
