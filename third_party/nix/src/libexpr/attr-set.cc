@@ -7,25 +7,50 @@
 #include <glog/logging.h>
 
 #include "libexpr/eval-inline.hh"
+#include "libutil/visitor.hh"
 
 namespace nix {
 
 BindingsIterator& BindingsIterator::operator++() {
-  _iterator++;
+  std::visit(overloaded{
+                 [](AttributeMap::iterator& iter) { ++iter; },
+                 [](AttributeVector::iterator& iter) { ++iter; },
+             },
+             _iterator);
   return *this;
 }
+
 BindingsIterator BindingsIterator::operator++(int) {
-  ++_iterator;
+  std::visit(overloaded{
+                 [](AttributeMap::iterator& iter) { iter++; },
+                 [](AttributeVector::iterator& iter) { iter++; },
+             },
+             _iterator);
   return *this;
 }
+
 bool BindingsIterator::operator==(const BindingsIterator& other) const {
   return _iterator == other._iterator;
 }
+
 bool BindingsIterator::operator!=(const BindingsIterator& other) const {
   return _iterator != other._iterator;
 }
+
 BindingsIterator::reference BindingsIterator::operator*() const {
-  return *_iterator;
+  return std::visit(
+      overloaded{
+          [](AttributeMap::iterator iter) -> std::pair<const Symbol, Attr>& {
+            return *iter;
+          },
+          [](AttributeVector::iterator iter) -> std::pair<const Symbol, Attr>& {
+            // blood for the blood god, pointer casts for the pointer cast god
+            static_assert(
+                std::is_standard_layout<std::pair<const Symbol, Attr>>::value);
+            return *reinterpret_cast<std::pair<const Symbol, Attr>*>(&*iter);
+          },
+      },
+      _iterator);
 }
 
 class BTreeBindings : public Bindings {
@@ -33,7 +58,7 @@ class BTreeBindings : public Bindings {
   size_t size() override;
   bool empty() override;
   void push_back(const Attr& attr) override;
-  void insert_or_assign(const Attr& attr) override;
+  void insert_or_assign(Attr& attr) override;
   Bindings::iterator find(const Symbol& name) override;
   Bindings::iterator begin() override;
   Bindings::iterator end() override;
@@ -43,8 +68,6 @@ class BTreeBindings : public Bindings {
  private:
   AttributeMap attributes_;
 };
-
-Bindings* Bindings::NewGC() { return new (GC) BTreeBindings; }
 
 // This function inherits its name from previous implementations, in
 // which Bindings was backed by an array of elements which was scanned
@@ -66,7 +89,7 @@ void BTreeBindings::push_back(const Attr& attr) {
 }
 
 // Insert or assign (i.e. replace) a value in the attribute set.
-void BTreeBindings::insert_or_assign(const Attr& attr) {
+void BTreeBindings::insert_or_assign(Attr& attr) {
   attributes_.insert_or_assign(attr.name, attr);
 }
 
@@ -106,7 +129,9 @@ void BTreeBindings::merge(Bindings& other) {
 void EvalState::mkAttrs(Value& v, size_t capacity) {
   clearValue(v);
   v.type = tAttrs;
-  v.attrs = BTreeBindings::NewGC();
+  v.attrs = Bindings::NewGC();
+  assert(v.attrs->begin() == v.attrs->begin());
+  assert(v.attrs->end() == v.attrs->end());
   nrAttrsets++;
   nrAttrsInAttrsets += capacity;
 }
@@ -119,5 +144,104 @@ Value* EvalState::allocAttr(Value& vAttrs, const Symbol& name) {
   vAttrs.attrs->push_back(Attr(name, v));
   return v;
 }
+
+class VectorBindings : public Bindings {
+ public:
+  size_t size() override;
+  bool empty() override;
+  void push_back(const Attr& attr) override;
+  void insert_or_assign(Attr& attr) override;
+  Bindings::iterator find(const Symbol& name) override;
+  Bindings::iterator begin() override;
+  Bindings::iterator end() override;
+  void merge(Bindings& other) override;
+  [[deprecated]] virtual std::vector<const Attr*> lexicographicOrder() override;
+
+ private:
+  AttributeVector attributes_;
+};
+
+size_t VectorBindings::size() { return attributes_.size(); }
+
+bool VectorBindings::empty() { return attributes_.empty(); }
+
+// Insert or assign (i.e. replace) a value in the attribute set.
+void VectorBindings::insert_or_assign(Attr& attr) {
+  for (auto it = attributes_.begin(); it != attributes_.end(); ++it) {
+    if (it->first == attr.name) {
+      it->second = attr;
+      return;
+    } else if (attr.name < it->first) {
+      // TODO convert to BTreeMap if we get big enough
+      attributes_.emplace(it, attr.name, attr);
+      return;
+    }
+  }
+
+  attributes_.emplace_back(attr.name, attr);
+}
+
+void VectorBindings::merge(Bindings& other) {
+  AttributeVector new_attributes(size() + other.size());
+
+  auto m_it = attributes_.begin();
+  auto other_it = other.begin();
+
+  while (other_it != other.end() && m_it != attributes_.end()) {
+    if (other_it->first < m_it->first) {
+      new_attributes.push_back(*(m_it++));
+    } else {
+      if (m_it->first == other_it->first) {
+        ++m_it;
+      }
+      new_attributes.push_back(*(other_it++));
+    }
+  }
+
+  if (m_it != attributes_.end()) {
+    std::copy(m_it, attributes_.end(), std::back_inserter(new_attributes));
+  }
+
+  if (other_it != other.end()) {
+    std::copy(other_it, other.end(), std::back_inserter(new_attributes));
+  }
+
+  new_attributes.shrink_to_fit();
+
+  attributes_ = new_attributes;
+}
+
+void VectorBindings::push_back(const Attr& attr) {
+  attributes_.emplace_back(attr.name, attr);
+}
+
+std::vector<const Attr*> VectorBindings::lexicographicOrder() {
+  std::vector<const Attr*> result(attributes_.size());
+
+  // ughhhhhh
+  for (auto& [_, attr] : attributes_) {
+    result.push_back(&attr);
+  }
+
+  return result;
+}
+
+Bindings::iterator VectorBindings::find(const Symbol& name) {
+  return BindingsIterator{
+      std::find_if(attributes_.begin(), attributes_.end(),
+                   [&name](const auto& pair) { return pair.first == name; })};
+}
+
+Bindings::iterator VectorBindings::begin() {
+  return BindingsIterator{attributes_.begin()};
+}
+
+Bindings::iterator VectorBindings::end() {
+  return BindingsIterator{attributes_.end()};
+}
+
+// TODO pick what to do based on size
+Bindings* Bindings::NewGC() { return new (GC) BTreeBindings; }
+// Bindings* Bindings::NewGC() { return new (GC) VectorBindings; }
 
 }  // namespace nix
