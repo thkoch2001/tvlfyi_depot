@@ -1,6 +1,8 @@
 // This file implements the underlying structure of Nix attribute sets.
 #pragma once
 
+#include <cstddef>
+
 #include <absl/container/btree_map.h>
 #include <gc/gc_allocator.h>
 
@@ -28,38 +30,68 @@ using AttributeMap =
     absl::btree_map<Symbol, Attr, std::less<Symbol>,
                     gc_allocator<std::pair<const Symbol, Attr>>>;
 
+class BindingsIterator : public std::iterator<std::forward_iterator_tag,
+                                              std::pair<const Symbol, Attr>> {
+  friend class Bindings;
+  friend class BTreeBindings;
+
+ public:
+  BindingsIterator() : _iterator(){};
+  BindingsIterator& operator++();
+  BindingsIterator operator++(int);
+  bool operator==(const BindingsIterator& other) const;
+  bool operator!=(const BindingsIterator& other) const;
+  reference operator*() const;
+  pointer operator->() const { return &operator*(); }
+  BindingsIterator& operator=(const BindingsIterator& other) {
+    _iterator = other._iterator;
+    return *this;
+  }
+
+ protected:
+  explicit BindingsIterator(AttributeMap::iterator&& iterator)
+      : _iterator(iterator){};
+
+ private:
+  AttributeMap::iterator _iterator;
+};
+
 class Bindings {
  public:
-  typedef AttributeMap::iterator iterator;
+  typedef BindingsIterator iterator;
 
   // Allocate a new attribute set that is visible to the garbage
   // collector.
   static Bindings* NewGC();
 
+  // Allocate a new attribute set with a static capacity that is visible to the
+  // garbage collector.
+  // static Bindings* NewGC(size_t capacity);
+
   // Return the number of contained elements.
-  size_t size();
+  virtual size_t size() = 0;
 
   // Is this attribute set empty?
-  bool empty();
+  virtual bool empty() = 0;
 
   // Insert, but do not replace, values in the attribute set.
-  void push_back(const Attr& attr);
+  virtual void push_back(const Attr& attr) = 0;
 
   // Insert a value, or replace an existing one.
-  void insert_or_assign(const Attr& attr);
+  virtual void insert_or_assign(const Attr& attr) = 0;
 
   // Look up a specific element of the attribute set.
-  iterator find(const Symbol& name);
+  virtual iterator find(const Symbol& name) = 0;
 
   // TODO
-  iterator begin();
-  iterator end();
+  virtual iterator begin() = 0;
+  virtual iterator end() = 0;
 
   // Merge values from other into this attribute set.
-  void merge(const Bindings& other);
+  virtual void merge(Bindings& other) = 0;
 
   // TODO: can callers just iterate?
-  [[deprecated]] std::vector<const Attr*> lexicographicOrder();
+  [[deprecated]] virtual std::vector<const Attr*> lexicographicOrder() = 0;
 
   // oh no
   friend class EvalState;
