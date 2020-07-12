@@ -18,8 +18,10 @@ in {
     "${depot.depotPath}/ops/nixos/clbot.nix"
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
+    "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
     "${depot.depotPath}/ops/nixos/tvl-sso/default.nix"
+    "${depot.depotPath}/ops/nixos/www/cs.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/login.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/tvl.fyi.nix"
   ];
@@ -186,6 +188,9 @@ in {
       irc_pass = "$CLBOT_PASS";
     };
   };
+
+  # Run a SourceGraph code search instance
+  services.depot.sourcegraph.enable = true;
 
   environment.systemPackages = with nixpkgs; [
     bb
