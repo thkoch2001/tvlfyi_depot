@@ -102,5 +102,6 @@ in lib.fix (self: {
     (systemFor system.system.chupacabra)
     xanthous
     keyboard.layout
+    owothia
   ];
 })
