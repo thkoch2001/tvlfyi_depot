@@ -81,9 +81,6 @@ class Bindings {
   // Insert, but do not replace, values in the attribute set.
   virtual void push_back(const Attr& attr) = 0;
 
-  // Insert a value, or replace an existing one.
-  virtual void insert_or_assign(Attr& attr) = 0;
-
   // Look up a specific element of the attribute set.
   virtual iterator find(const Symbol& name) = 0;
 
