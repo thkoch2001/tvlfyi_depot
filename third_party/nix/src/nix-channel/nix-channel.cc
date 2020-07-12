@@ -140,7 +140,7 @@ static void update(const StringSet& channelNames) {
                                CachedDownloadRequest(url + "/nixexprs.tar.bz2"))
                 .path;
       }
-      absl::StripTrailingAsciiWhitespace(filename);
+      filename = absl::StripTrailingAsciiWhitespace(filename);
     }
 
     // Regardless of where it came from, add the expression representing this
