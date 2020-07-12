@@ -1107,7 +1107,7 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
                          lambda, i.second.name, pos);
         }
       }
-      abort();  // can't happen
+      abort();  // shouldn't happen
     }
   }
 
