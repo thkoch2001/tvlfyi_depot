@@ -66,7 +66,6 @@ class BTreeBindings : public Bindings {
   size_t size() override;
   bool empty() override;
   void push_back(const Attr& attr) override;
-  void insert_or_assign(Attr& attr) override;
   Bindings::iterator find(const Symbol& name) override;
   Bindings::iterator begin() override;
   Bindings::iterator end() override;
@@ -94,11 +93,6 @@ void BTreeBindings::push_back(const Attr& attr) {
     DLOG(WARNING) << "attempted to insert duplicate attribute for key '"
                   << attr.name << "'";
   }
-}
-
-// Insert or assign (i.e. replace) a value in the attribute set.
-void BTreeBindings::insert_or_assign(Attr& attr) {
-  attributes_.insert_or_assign(attr.name, attr);
 }
 
 size_t BTreeBindings::size() { return attributes_.size(); }
@@ -143,7 +137,6 @@ class VectorBindings : public Bindings {
   size_t size() override;
   bool empty() override;
   void push_back(const Attr& attr) override;
-  void insert_or_assign(Attr& attr) override;
   Bindings::iterator find(const Symbol& name) override;
   Bindings::iterator begin() override;
   Bindings::iterator end() override;
@@ -157,22 +150,6 @@ class VectorBindings : public Bindings {
 size_t VectorBindings::size() { return attributes_.size(); }
 
 bool VectorBindings::empty() { return attributes_.empty(); }
-
-// Insert or assign (i.e. replace) a value in the attribute set.
-void VectorBindings::insert_or_assign(Attr& attr) {
-  for (auto it = attributes_.begin(); it != attributes_.end(); ++it) {
-    if (it->first == attr.name) {
-      it->second = attr;
-      return;
-    } else if (attr.name < it->first) {
-      // TODO convert to BTreeMap if we get big enough
-      attributes_.emplace(it, attr.name, attr);
-      return;
-    }
-  }
-
-  attributes_.emplace_back(attr.name, attr);
-}
 
 void VectorBindings::merge(Bindings& other) {
   AttributeVector new_attributes(size() + other.size());
