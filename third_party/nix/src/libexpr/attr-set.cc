@@ -3,15 +3,17 @@
 #include <new>
 
 #include <absl/container/btree_map.h>
+#include <absl/flags/flag.h>
 #include <gc/gc_cpp.h>
 #include <glog/logging.h>
 
 #include "libexpr/eval-inline.hh"
 #include "libutil/visitor.hh"
 
-namespace nix {
+ABSL_FLAG(size_t, attrs_capacity_pivot, 69,
+  "Size at which to switch from vector-backed attribute sets to btree-backed ones");
 
-constexpr size_t ATTRS_CAPACITY_PIVOT = 32;
+namespace nix {
 
 BindingsIterator& BindingsIterator::operator++() {
   std::visit(overloaded{
@@ -210,7 +212,7 @@ Bindings::iterator VectorBindings::end() {
 }
 
 Bindings* Bindings::NewGC(size_t capacity) {
-  if (capacity > ATTRS_CAPACITY_PIVOT) {
+  if (capacity > absl::GetFlag(FLAGS_attrs_capacity_pivot)) {
     return new (GC) BTreeBindings;
   } else {
     return new (GC) VectorBindings;
@@ -235,6 +237,5 @@ Value* EvalState::allocAttr(Value& vAttrs, const Symbol& name) {
   vAttrs.attrs->push_back(Attr(name, v));
   return v;
 }
-
 
 }  // namespace nix
