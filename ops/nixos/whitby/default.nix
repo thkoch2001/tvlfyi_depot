@@ -17,13 +17,17 @@ in {
   imports = [
     "${depot.depotPath}/ops/nixos/clbot.nix"
     "${depot.depotPath}/ops/nixos/depot.nix"
+    "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
     "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
     "${depot.depotPath}/ops/nixos/tvl-sso/default.nix"
+    "${depot.depotPath}/ops/nixos/www/cl.tvl.fyi.nix"
+    "${depot.depotPath}/ops/nixos/www/code.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/cs.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/login.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/tvl.fyi.nix"
+    "${depot.third_party.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
   ];
 
   hardware = {
@@ -110,7 +114,7 @@ in {
       interface = "enp196s0";
     };
 
-    firewall.allowedTCPPorts = [ 22 80 443 4238 ];
+    firewall.allowedTCPPorts = [ 22 80 443 4238 29418 ];
 
     interfaces.enp196s0.useDHCP = true;
     interfaces.enp196s0.ipv6.addresses = [
