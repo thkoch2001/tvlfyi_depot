@@ -16,6 +16,7 @@
 #include <unistd.h>
 
 #include "libmain/shared.hh"
+#include "libproto/worker.pb.h"
 #include "libstore/derivations.hh"
 #include "libstore/globals.hh"
 #include "libstore/local-store.hh"
@@ -27,7 +28,6 @@
 #include "libutil/serialise.hh"
 #include "libutil/util.hh"
 #include "nix/legacy.hh"
-#include "libproto/worker.pb.h"
 
 using namespace nix;
 

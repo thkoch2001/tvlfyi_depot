@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <new>
+#include <variant>
 
 #include <absl/strings/match.h>
 #include <gc/gc.h>
@@ -24,6 +25,7 @@
 #include "libutil/hash.hh"
 #include "libutil/json.hh"
 #include "libutil/util.hh"
+#include "libutil/visitor.hh"
 
 namespace nix {
 
@@ -185,13 +187,15 @@ static void* oomHandler(size_t requested) {
 #endif
 
 static Symbol getName(const AttrName& name, EvalState& state, Env& env) {
-  if (name.symbol.set()) {
-    return name.symbol;
-  }
-  Value nameValue;
-  name.expr->eval(state, env, nameValue);
-  state.forceStringNoCtx(nameValue);
-  return state.symbols.Create(nameValue.string.s);
+  return std::visit(
+      util::overloaded{[&](const Symbol& name) -> Symbol { return name; },
+                       [&](Expr* expr) -> Symbol {
+                         Value nameValue;
+                         expr->eval(state, env, nameValue);
+                         state.forceStringNoCtx(nameValue);
+                         return state.symbols.Create(nameValue.string.s);
+                       }},
+      name);
 }
 
 static bool gcInitialised = false;
@@ -890,12 +894,7 @@ static std::string showAttrPath(EvalState& state, Env& env,
     } else {
       first = false;
     }
-    try {
-      out << getName(i, state, env);
-    } catch (Error& e) {
-      assert(!i.symbol.set());
-      out << "\"${" << *i.expr << "}\"";
-    }
+    out << getName(i, state, env);
   }
   return out.str();
 }
