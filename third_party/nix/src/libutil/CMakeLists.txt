@@ -25,6 +25,7 @@ set(HEADER_FILES
     thread-pool.hh
     types.hh
     util.hh
+    visitor.hh
     xml-writer.hh
 )
 
