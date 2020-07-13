@@ -102,8 +102,8 @@ void AbstractConfig::applyConfigFile(const Path& path) {
       }
 
       // TODO(tazjin): absl::string_view after path functions are fixed.
-      std::vector<std::string> tokens =
-          absl::StrSplit(line, absl::ByAnyChar(" \t\n\r"), absl::SkipWhitespace());
+      std::vector<std::string> tokens = absl::StrSplit(
+          line, absl::ByAnyChar(" \t\n\r"), absl::SkipWhitespace());
       if (tokens.empty()) {
         continue;
       }

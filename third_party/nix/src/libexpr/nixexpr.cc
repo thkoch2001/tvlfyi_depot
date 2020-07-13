@@ -1,9 +1,11 @@
 #include "libexpr/nixexpr.hh"
 
 #include <cstdlib>
+#include <variant>
 
 #include "libstore/derivations.hh"
 #include "libutil/util.hh"
+#include "libutil/visitor.hh"
 
 namespace nix {
 
@@ -198,17 +200,17 @@ std::ostream& operator<<(std::ostream& str, const Pos& pos) {
 std::string showAttrPath(const AttrPath& attrPath) {
   std::ostringstream out;
   bool first = true;
-  for (auto& i : attrPath) {
+  for (auto& attr : attrPath) {
     if (!first) {
       out << '.';
     } else {
       first = false;
     }
-    if (i.symbol.set()) {
-      out << i.symbol;
-    } else {
-      out << "\"${" << *i.expr << "}\"";
-    }
+
+    std::visit(util::overloaded{
+                   [&](const Symbol& sym) { out << sym; },
+                   [&](const Expr* expr) { out << "\"${" << *expr << "}\""; }},
+               attr);
   }
   return out.str();
 }
@@ -268,8 +270,8 @@ void ExprSelect::bindVars(const StaticEnv& env) {
     def->bindVars(env);
   }
   for (auto& i : attrPath) {
-    if (!i.symbol.set()) {
-      i.expr->bindVars(env);
+    if (auto* expr = std::get_if<Expr*>(&i)) {
+      (*expr)->bindVars(env);
     }
   }
 }
@@ -277,8 +279,8 @@ void ExprSelect::bindVars(const StaticEnv& env) {
 void ExprOpHasAttr::bindVars(const StaticEnv& env) {
   e->bindVars(env);
   for (auto& i : attrPath) {
-    if (!i.symbol.set()) {
-      i.expr->bindVars(env);
+    if (auto* expr = std::get_if<Expr*>(&i)) {
+      (*expr)->bindVars(env);
     }
   }
 }
