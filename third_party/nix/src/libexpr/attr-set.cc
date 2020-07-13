@@ -158,39 +158,51 @@ void VectorBindings::merge(Bindings& other) {
   AttributeVector new_attributes;
   new_attributes.reserve(size() + other.size());
 
-  auto m_it = attributes_.begin();
-  auto other_it = other.begin();
+  auto lhs = attributes_.begin();
+  auto rhs = other.begin();
 
-  while (other_it != other.end() && m_it != attributes_.end()) {
-    if (other_it->first < m_it->first) {
-      new_attributes.push_back(*(m_it++));
+  while (lhs != attributes_.end() && rhs != other.end()) {
+    if (lhs->first == rhs->first) {
+      new_attributes.push_back(*rhs);
+      ++lhs;
+      ++rhs;
+    } else if (lhs->first < rhs->first) {
+      new_attributes.push_back(*lhs++);
     } else {
-      if (m_it->first == other_it->first) {
-        ++m_it;
-      }
-      new_attributes.push_back(*(other_it++));
+      new_attributes.push_back(*rhs++);
     }
   }
 
-  if (m_it != attributes_.end()) {
-    std::copy(m_it, attributes_.end(), std::back_inserter(new_attributes));
+  while (lhs != attributes_.end()) {
+    new_attributes.push_back(*lhs++);
   }
 
-  if (other_it != other.end()) {
-    std::copy(other_it, other.end(), std::back_inserter(new_attributes));
+  while (rhs != other.end()) {
+    new_attributes.push_back(*rhs++);
   }
 
   new_attributes.shrink_to_fit();
-
   attributes_ = new_attributes;
 }
 
+// Insert or assign (i.e. replace) a value in the attribute set.
 void VectorBindings::push_back(const Attr& attr) {
+  for (auto it = attributes_.begin(); it != attributes_.end(); ++it) {
+    if (it->first == attr.name) {
+      it->second = attr;
+      return;
+    } else if (attr.name < it->first) {
+      attributes_.emplace(it, attr.name, attr);
+      return;
+    }
+  }
+
   attributes_.emplace_back(attr.name, attr);
 }
 
 std::vector<const Attr*> VectorBindings::lexicographicOrder() {
-  std::vector<const Attr*> result(attributes_.size());
+  std::vector<const Attr*> result;
+  result.reserve(attributes_.size());
 
   for (auto& [_, attr] : attributes_) {
     result.push_back(&attr);
@@ -239,6 +251,5 @@ Value* EvalState::allocAttr(Value& vAttrs, const Symbol& name) {
   vAttrs.attrs->push_back(Attr(name, v));
   return v;
 }
-
 
 }  // namespace nix
