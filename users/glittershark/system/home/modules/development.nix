@@ -48,6 +48,11 @@ with lib;
     loc
     jsonnet
 
+    gdb
+    lldb
+    valgrind
+    rr
+
     clj2nix
 
     pg-dump-upsert
