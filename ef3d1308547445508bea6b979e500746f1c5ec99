@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "41f6261a_b97eaddd",
+        "filename": "third_party/nix/src/libexpr/parser.y",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-13T20:12:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d95fb4bd_8ccc4bb8",
+      "range": {
+        "startLine": 145,
+        "startChar": 10,
+        "endLine": 145,
+        "endChar": 51
+      },
+      "revId": "ef3d1308547445508bea6b979e500746f1c5ec99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af14e2ea_cec391f2",
         "filename": "third_party/nix/src/libexpr/parser.y",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-07-13T20:07:57Z",
       "side": 1,
       "message": "this should probably have the comment too",
+      "range": {
+        "startLine": 460,
+        "startChar": 10,
+        "endLine": 460,
+        "endChar": 41
+      },
+      "revId": "ef3d1308547445508bea6b979e500746f1c5ec99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2b89a11_6e91bfe6",
+        "filename": "third_party/nix/src/libexpr/parser.y",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-13T20:12:20Z",
+      "side": 1,
+      "message": "No, it\u0027s not the same condition. This part of the parser is evoked only if there are no dynamic attributes ... this whole thing is just based around \"yeah, we should be in the right code path\".",
+      "parentUuid": "af14e2ea_cec391f2",
       "range": {
         "startLine": 460,
         "startChar": 10,
