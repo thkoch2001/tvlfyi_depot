@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <optional>
 #include <variant>
 
 #include "libexpr/symbol-table.hh"
@@ -21,20 +22,28 @@ MakeError(RestrictedPathError, Error);
 /* Position objects. */
 
 struct Pos {
-  Symbol file;
+  std::optional<Symbol> file;
   unsigned int line, column;
-  Pos() : line(0), column(0){};
-  Pos(const Symbol& file, unsigned int line, unsigned int column)
+  Pos(const std::optional<Symbol>& file, unsigned int line, unsigned int column)
       : file(file), line(line), column(column){};
+
+  // TODO(tazjin): remove this - empty pos is never useful
+  Pos() : file(std::nullopt), line(0), column(0){};
+
   operator bool() const { return line != 0; }
+
   bool operator<(const Pos& p2) const {
+    if (!file.has_value()) {
+      return true;
+    }
+
     if (!line) {
       return p2.line;
     }
     if (!p2.line) {
       return false;
     }
-    int d = ((std::string)file).compare((std::string)p2.file);
+    int d = ((std::string)file.value()).compare((std::string)p2.file.value());
     if (d < 0) {
       return true;
     }
@@ -75,7 +84,6 @@ struct Expr {
   virtual void bindVars(const StaticEnv& env);
   virtual void eval(EvalState& state, Env& env, Value& v);
   virtual Value* maybeThunk(EvalState& state, Env& env);
-  virtual void setName(Symbol& name);
 };
 
 std::ostream& operator<<(std::ostream& str, const Expr& e);
@@ -219,8 +227,9 @@ struct Formals {
 };
 
 struct ExprLambda : Expr {
+ public:
   Pos pos;
-  Symbol name;
+  std::optional<Symbol> name;
   Symbol arg;
   bool matchAttrs;
   Formals* formals;
@@ -233,10 +242,11 @@ struct ExprLambda : Expr {
         formals(formals),
         body(body) {
     if (!arg.empty() && formals &&
-        formals->argNames.find(arg) != formals->argNames.end())
+        formals->argNames.find(arg) != formals->argNames.end()) {
       throw ParseError(
           format("duplicate formal function argument '%1%' at %2%") % arg %
           pos);
+    }
   };
   void setName(Symbol& name);
   std::string showNamePos() const;

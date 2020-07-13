@@ -187,11 +187,11 @@ void ExprConcatStrings::show(std::ostream& str) const {
 void ExprPos::show(std::ostream& str) const { str << "__curPos"; }
 
 std::ostream& operator<<(std::ostream& str, const Pos& pos) {
-  if (!pos) {
+  if (!pos || !pos.file.has_value()) {
     str << "undefined position";
   } else {
     str << (format(ANSI_BOLD "%1%" ANSI_NORMAL ":%2%:%3%") %
-            (std::string)pos.file % pos.line % pos.column)
+            (std::string)pos.file.value() % pos.line % pos.column)
                .str();
   }
   return str;
@@ -401,17 +401,12 @@ void ExprConcatStrings::bindVars(const StaticEnv& env) {
 void ExprPos::bindVars(const StaticEnv& env) {}
 
 /* Storing function names. */
-
-void Expr::setName(Symbol& name) {}
-
-void ExprLambda::setName(Symbol& name) {
-  this->name = name;
-  body->setName(name);
-}
+void ExprLambda::setName(Symbol& name) { this->name = name; }
 
 std::string ExprLambda::showNamePos() const {
   return (format("%1% at %2%") %
-          (name.set() ? "'" + (std::string)name + "'" : "anonymous function") %
+          (name.has_value() ? "'" + (std::string)name.value() + "'"
+                            : "anonymous function") %
           pos)
       .str();
 }

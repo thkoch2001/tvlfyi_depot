@@ -62,10 +62,13 @@ class EvalState {
   SymbolTable symbols;
 
   const Symbol sWith, sOutPath, sDrvPath, sType, sMeta, sName, sValue, sSystem,
-      sOverrides, sOutputs, sOutputName, sIgnoreNulls, sFile, sLine, sColumn,
-      sFunctor, sToString, sRight, sWrong, sStructuredAttrs, sBuilder, sArgs,
-      sOutputHash, sOutputHashAlgo, sOutputHashMode;
-  Symbol sDerivationNix;
+      sOutputs, sOutputName, sIgnoreNulls, sFile, sLine, sColumn, sFunctor,
+      sToString, sRight, sWrong, sStructuredAttrs, sBuilder, sArgs, sOutputHash,
+      sOutputHashAlgo, sOutputHashMode;
+
+  // Symbol representing the path to the built-in 'derivation.nix'
+  // file, set during primops initialisation.
+  std::optional<Symbol> sDerivationNix;
 
   /* If set, force copying files to the Nix store even if they
      already exist there. */
