@@ -23,12 +23,13 @@ BindingsIterator& BindingsIterator::operator++() {
 }
 
 BindingsIterator BindingsIterator::operator++(int) {
+  auto old = *this;
   std::visit(util::overloaded{
                  [](AttributeMap::iterator& iter) { iter++; },
                  [](AttributeVector::iterator& iter) { iter++; },
              },
              _iterator);
-  return *this;
+  return old;
 }
 
 bool BindingsIterator::operator==(const BindingsIterator& other) const {
