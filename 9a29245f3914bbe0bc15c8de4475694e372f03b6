@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58d57b26_65184d23",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T20:07:57Z",
+      "side": 0,
+      "message": "this kinda feels like it shouldn\u0027t have gone away",
+      "range": {
+        "startLine": 193,
+        "startChar": 2,
+        "endLine": 193,
+        "endChar": 36
+      },
+      "revId": "9a29245f3914bbe0bc15c8de4475694e372f03b6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}

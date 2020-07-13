@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d95fb4bd_8ccc4bb8",
+        "filename": "third_party/nix/src/libexpr/parser.y",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T20:07:57Z",
+      "side": 1,
+      "message": "just a thought, but I usually like to have some sorta unique header similar to ghc\u0027s Notes system for these kinds of thing to make it easy to track and hard for things to go stale",
+      "range": {
+        "startLine": 145,
+        "startChar": 10,
+        "endLine": 145,
+        "endChar": 51
+      },
+      "revId": "ef3d1308547445508bea6b979e500746f1c5ec99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af14e2ea_cec391f2",
+        "filename": "third_party/nix/src/libexpr/parser.y",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T20:07:57Z",
+      "side": 1,
+      "message": "this should probably have the comment too",
+      "range": {
+        "startLine": 460,
+        "startChar": 10,
+        "endLine": 460,
+        "endChar": 41
+      },
+      "revId": "ef3d1308547445508bea6b979e500746f1c5ec99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
