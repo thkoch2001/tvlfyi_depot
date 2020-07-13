@@ -16,6 +16,7 @@
 #ifndef BISON_HEADER
 #define BISON_HEADER
 
+#include <variant>
 #include "libutil/util.hh"
 #include "libexpr/nixexpr.hh"
 #include "libexpr/eval.hh"
@@ -84,30 +85,39 @@ static void addAttr(ExprAttrs * attrs, AttrPath & attrPath,
     // Checking attrPath validity.
     // ===========================
     for (i = attrPath.begin(); i + 1 < attrPath.end(); i++) {
-        if (i->symbol.set()) {
-            ExprAttrs::AttrDefs::iterator j = attrs->attrs.find(i->symbol);
+        if (const auto* sym = std::get_if<Symbol>(&(*i)); sym && sym->set()) {
+            ExprAttrs::AttrDefs::iterator j = attrs->attrs.find(*sym);
             if (j != attrs->attrs.end()) {
                 if (!j->second.inherited) {
                     ExprAttrs * attrs2 = dynamic_cast<ExprAttrs *>(j->second.e);
                     if (!attrs2) { dupAttr(attrPath, pos, j->second.pos); }
                     attrs = attrs2;
-                } else
+                } else {
                     dupAttr(attrPath, pos, j->second.pos);
+                }
             } else {
-                ExprAttrs * nested = new ExprAttrs;
-                attrs->attrs[i->symbol] = ExprAttrs::AttrDef(nested, pos);
+                ExprAttrs* nested = new ExprAttrs;
+                attrs->attrs[*sym] = ExprAttrs::AttrDef(nested, pos);
                 attrs = nested;
             }
         } else {
-            ExprAttrs *nested = new ExprAttrs;
-            attrs->dynamicAttrs.push_back(ExprAttrs::DynamicAttrDef(i->expr, nested, pos));
-            attrs = nested;
+          // Yes, this code does not handle all conditions
+          // exhaustively. We use std::get to throw if the condition
+          // that isn't covered happens, which is potentially a
+          // behaviour change from the previous default constructed
+          // Symbol. It should alert us about anything untoward going
+          // on here.
+          auto* expr = std::get<Expr*>(*i);
+
+          ExprAttrs *nested = new ExprAttrs;
+          attrs->dynamicAttrs.push_back(ExprAttrs::DynamicAttrDef(expr, nested, pos));
+          attrs = nested;
         }
     }
     // Expr insertion.
     // ==========================
-    if (i->symbol.set()) {
-        ExprAttrs::AttrDefs::iterator j = attrs->attrs.find(i->symbol);
+    if (auto* sym = std::get_if<Symbol>(&(*i)); sym && sym->set()) {
+        ExprAttrs::AttrDefs::iterator j = attrs->attrs.find(*sym);
         if (j != attrs->attrs.end()) {
             // This attr path is already defined. However, if both
             // e and the expr pointed by the attr path are two attribute sets,
@@ -118,8 +128,9 @@ static void addAttr(ExprAttrs * attrs, AttrPath & attrPath,
             if (jAttrs && ae) {
                 for (auto & ad : ae->attrs) {
                     auto j2 = jAttrs->attrs.find(ad.first);
-                    if (j2 != jAttrs->attrs.end()) // Attr already defined in iAttrs, error.
+                    if (j2 != jAttrs->attrs.end()) {// Attr already defined in iAttrs, error.
                         dupAttr(ad.first, j2->second.pos, ad.second.pos);
+                    }
                     jAttrs->attrs[ad.first] = ad.second;
                 }
             } else {
@@ -127,11 +138,13 @@ static void addAttr(ExprAttrs * attrs, AttrPath & attrPath,
             }
         } else {
             // This attr path is not defined. Let's create it.
-            attrs->attrs[i->symbol] = ExprAttrs::AttrDef(e, pos);
-            e->setName(i->symbol);
+            attrs->attrs[*sym] = ExprAttrs::AttrDef(e, pos);
+            e->setName(*sym);
         }
     } else {
-        attrs->dynamicAttrs.push_back(ExprAttrs::DynamicAttrDef(i->expr, e, pos));
+        // Same caveat as the identical line above.
+        auto* expr = std::get<Expr*>(*i);
+        attrs->dynamicAttrs.push_back(ExprAttrs::DynamicAttrDef(expr, e, pos));
     }
 }
 
@@ -444,19 +457,23 @@ binds
   | binds INHERIT attrs ';'
     { $$ = $1;
       for (auto & i : *$3) {
-          if ($$->attrs.find(i.symbol) != $$->attrs.end())
-              dupAttr(i.symbol, makeCurPos(@3, data), $$->attrs[i.symbol].pos);
+          auto sym = std::get<Symbol>(i);
+          if ($$->attrs.find(sym) != $$->attrs.end()) {
+              dupAttr(sym, makeCurPos(@3, data), $$->attrs[sym].pos);
+          }
           Pos pos = makeCurPos(@3, data);
-          $$->attrs[i.symbol] = ExprAttrs::AttrDef(new ExprVar(CUR_POS, i.symbol), pos, true);
+          $$->attrs[sym] = ExprAttrs::AttrDef(new ExprVar(CUR_POS, sym), pos, true);
       }
     }
   | binds INHERIT '(' expr ')' attrs ';'
     { $$ = $1;
       /* !!! Should ensure sharing of the expression in $4. */
       for (auto & i : *$6) {
-          if ($$->attrs.find(i.symbol) != $$->attrs.end())
-              dupAttr(i.symbol, makeCurPos(@6, data), $$->attrs[i.symbol].pos);
-          $$->attrs[i.symbol] = ExprAttrs::AttrDef(new ExprSelect(CUR_POS, $4, i.symbol), makeCurPos(@6, data));
+          auto sym = std::get<Symbol>(i);
+          if ($$->attrs.find(sym) != $$->attrs.end()) {
+            dupAttr(sym, makeCurPos(@6, data), $$->attrs[sym].pos);
+          }
+          $$->attrs[sym] = ExprAttrs::AttrDef(new ExprSelect(CUR_POS, $4, sym), makeCurPos(@6, data));
       }
     }
   | { $$ = new ExprAttrs; }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <variant>
 
 #include "libexpr/symbol-table.hh"
 #include "libexpr/value.hh"
@@ -60,12 +61,7 @@ class EvalState;
 struct StaticEnv;
 
 /* An attribute path is a sequence of attribute names. */
-struct AttrName {
-  Symbol symbol;
-  Expr* expr;
-  AttrName(const Symbol& s) : symbol(s){};
-  AttrName(Expr* e) : expr(e){};
-};
+using AttrName = std::variant<Symbol, Expr*>;
 
 typedef std::vector<AttrName> AttrPath;
 
