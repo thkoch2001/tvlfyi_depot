@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ed919269_669cfb5b",
+        "filename": "users/glittershark/system/home/modules/development.nix",
+        "patchSetId": 14
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T23:40:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5fe8a853_4f01a9f6",
+      "range": {
+        "startLine": 56,
+        "startChar": 5,
+        "endLine": 56,
+        "endChar": 42
+      },
+      "revId": "ab6789db6b064a72c11709a235bf99da630641d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd42187d_e394e354",
         "filename": "users/glittershark/system/home/platforms/linux.nix",
         "patchSetId": 14
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "777c4bc2_7cdf3308",
+        "filename": "users/glittershark/system/home/platforms/linux.nix",
+        "patchSetId": 14
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T23:40:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cd42187d_e394e354",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 0
+      },
+      "revId": "ab6789db6b064a72c11709a235bf99da630641d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "494cec10_7bb28fcf",
         "filename": "users/glittershark/system/system/modules/xserver.nix",
         "patchSetId": 14
@@ -68,6 +116,30 @@
       "revId": "ab6789db6b064a72c11709a235bf99da630641d9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae64669f_7943fef5",
+        "filename": "users/glittershark/system/system/modules/xserver.nix",
+        "patchSetId": 14
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T23:40:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "494cec10_7bb28fcf",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 8
+      },
+      "revId": "ab6789db6b064a72c11709a235bf99da630641d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
