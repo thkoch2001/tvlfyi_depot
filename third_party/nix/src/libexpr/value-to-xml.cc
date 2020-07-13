@@ -20,7 +20,7 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
                             PathSet& drvsSeen);
 
 static void posToXML(XMLAttrs& xmlAttrs, const Pos& pos) {
-  xmlAttrs["path"] = pos.file;
+  xmlAttrs["path"] = pos.file.value();
   xmlAttrs["line"] = (format("%1%") % pos.line).str();
   xmlAttrs["column"] = (format("%1%") % pos.column).str();
 }

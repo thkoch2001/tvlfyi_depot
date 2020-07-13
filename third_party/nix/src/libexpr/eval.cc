@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <new>
+#include <optional>
 #include <variant>
 
 #include <absl/strings/match.h>
@@ -320,6 +321,7 @@ EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
       sOutputHash(symbols.Create("outputHash")),
       sOutputHashAlgo(symbols.Create("outputHashAlgo")),
       sOutputHashMode(symbols.Create("outputHashMode")),
+      sDerivationNix(std::nullopt),
       repair(NoRepair),
       store(store),
       baseEnv(allocEnv(128)),
@@ -664,9 +666,9 @@ static inline void mkThunk(Value& v, Env& env, Expr* expr) {
 void EvalState::mkThunk_(Value& v, Expr* expr) { mkThunk(v, baseEnv, expr); }
 
 void EvalState::mkPos(Value& v, Pos* pos) {
-  if ((pos != nullptr) && pos->file.set()) {
+  if ((pos != nullptr) && pos->file.has_value() && pos->file.value().set()) {
     mkAttrs(v, 3);
-    mkString(*allocAttr(v, sFile), pos->file);
+    mkString(*allocAttr(v, sFile), pos->file.value());
     mkInt(*allocAttr(v, sLine), pos->line);
     mkInt(*allocAttr(v, sColumn), pos->column);
   } else {
@@ -847,7 +849,6 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& value) {
                      nameSym, i.pos, *j->second.pos);
     }
 
-    i.valueExpr->setName(nameSym);
     value.attrs->push_back(
         Attr(nameSym, i.valueExpr->maybeThunk(state, *dynamicEnv), &i.pos));
   }
@@ -936,7 +937,13 @@ void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
     state.forceValue(*vAttrs, (pos2 != nullptr ? *pos2 : this->pos));
 
   } catch (Error& e) {
-    if ((pos2 != nullptr) && pos2->file != state.sDerivationNix) {
+    // This code relies on 'sDerivationNix' being correcty mutated at
+    // some prior point (it would previously otherwise have been a
+    // nullptr).
+    //
+    // We haven't seen this fail, so for now the contained value is
+    // just accessed at the risk of potentially crashing.
+    if ((pos2 != nullptr) && pos2->file != state.sDerivationNix.value()) {
       addErrorPrefix(e, "while evaluating the attribute '%1%' at %2%:\n",
                      showAttrPath(state, env, attrPath), *pos2);
     }
@@ -1792,8 +1799,8 @@ void EvalState::printStats() {
         auto list = topObj.list("functions");
         for (auto& i : functionCalls) {
           auto obj = list.object();
-          if (i.first->name.set()) {
-            obj.attr("name", (const std::string&)i.first->name);
+          if (i.first->name.has_value()) {
+            obj.attr("name", (const std::string&)i.first->name.value());
           } else {
             obj.attr("name", nullptr);
           }

@@ -234,7 +234,7 @@ void prim_exec(EvalState& state, const Pos& pos, Value** args, Value& v) {
   auto output = runProgram(program, true, commandArgs);
   Expr* parsed;
   try {
-    parsed = state.parseExprFromString(output, pos.file);
+    parsed = state.parseExprFromString(output, pos.file.value());
   } catch (Error& e) {
     e.addPrefix(format("While parsing the output from '%1%', at %2%\n") %
                 program % pos);

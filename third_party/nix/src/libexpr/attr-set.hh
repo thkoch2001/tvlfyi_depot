@@ -20,7 +20,6 @@ struct Attr {
   Pos* pos;      // TODO(tazjin): Who owns this?
   Attr(Symbol name, Value* value, Pos* pos = &noPos)
       : name(name), value(value), pos(pos){};
-  Attr() : pos(&noPos){};
 };
 
 // Convenience alias for the backing map, with the garbage-collecting

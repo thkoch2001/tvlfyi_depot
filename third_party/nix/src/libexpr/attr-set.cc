@@ -59,7 +59,7 @@ Bindings::iterator Bindings::end() { return attributes_.end(); }
 
 void Bindings::merge(const Bindings& other) {
   for (auto& [key, value] : other.attributes_) {
-    this->attributes_[key] = value;
+    this->attributes_.insert_or_assign(key, value);
   }
 }
 

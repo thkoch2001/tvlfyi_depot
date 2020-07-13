@@ -16,6 +16,7 @@
 #ifndef BISON_HEADER
 #define BISON_HEADER
 
+#include <optional>
 #include <variant>
 #include "libutil/util.hh"
 #include "libexpr/nixexpr.hh"
@@ -28,9 +29,9 @@ namespace nix {
     {
         EvalState & state;
         SymbolTable & symbols;
-        Expr * result;
+        Expr* result;
         Path basePath;
-        Symbol path;
+        std::optional<Symbol> path;
         std::string error;
         Symbol sLetBody;
         ParseData(EvalState & state)
@@ -139,7 +140,6 @@ static void addAttr(ExprAttrs * attrs, AttrPath & attrPath,
         } else {
             // This attr path is not defined. Let's create it.
             attrs->attrs[*sym] = ExprAttrs::AttrDef(e, pos);
-            e->setName(*sym);
         }
     } else {
         // Same caveat as the identical line above.
@@ -502,8 +502,9 @@ attrpath
       if (str) {
           $$->push_back(AttrName(str->s));
           delete str;
-      } else
+      } else {
           $$->push_back(AttrName($3));
+      }
     }
   | attr { $$ = new std::vector<AttrName>; $$->push_back(AttrName(data->symbols.Create($1))); }
   | string_attr
