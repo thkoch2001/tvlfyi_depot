@@ -21,8 +21,21 @@ data Config = Config
   deriving anyclass (FromEnv)
 makeLenses ''Config
 
+stopWord :: Text -> Bool
+stopWord "'s"   = True
+stopWord "is"   = True
+stopWord "are"  = True
+stopWord "am"   = True
+stopWord "were" = True
+stopWord "was"  = True
+stopWord "be"   = True
+stopWord _      = False
+
 verbs :: POSTagger Tag -> Text -> [Text]
-verbs tagger s = mapMaybe pickVerb $ tag tagger s >>= \(TaggedSent ps) -> ps
+verbs tagger s
+  = filter (not . stopWord)
+  . mapMaybe pickVerb
+  $ tag tagger s >>= \(TaggedSent ps) -> ps
   where
     pickVerb (POS Conll.VB (Token verb)) = Just verb
     pickVerb (POS Conll.VBD (Token verb)) = Just verb
