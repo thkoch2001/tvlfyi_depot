@@ -131,7 +131,6 @@ void BTreeBindings::merge(Bindings& other) {
 
 class VectorBindings : public Bindings {
  public:
-  VectorBindings() {};
   VectorBindings(size_t capacity) : attributes_() {
     attributes_.reserve(capacity);
   };
@@ -144,6 +143,8 @@ class VectorBindings : public Bindings {
   Bindings::iterator end() override;
   void merge(Bindings& other) override;
   [[deprecated]] virtual std::vector<const Attr*> lexicographicOrder() override;
+
+  VectorBindings(VectorBindings&) = delete;
 
  private:
   AttributeVector attributes_;
