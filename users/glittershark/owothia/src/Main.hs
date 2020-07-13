@@ -95,6 +95,7 @@ run host port = do
   state <- newIORef False
   let conn =
         plainConnection host port
+          & realname .~ "Owothia Revströwö"
           & logfunc .~ stdoutLogger
       cfg =
         defaultInstanceConfig myNick
