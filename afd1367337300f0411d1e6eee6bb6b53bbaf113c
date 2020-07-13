@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9099b8d5_3060071d",
+        "filename": "third_party/nix/src/nix-channel/nix-channel.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T20:28:17Z",
+      "side": 1,
+      "message": "you mean ignoring this warning was a *bad* idea?",
+      "range": {
+        "startLine": 143,
+        "startChar": 6,
+        "endLine": 143,
+        "endChar": 18
+      },
+      "revId": "afd1367337300f0411d1e6eee6bb6b53bbaf113c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
