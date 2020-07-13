@@ -22,6 +22,30 @@
       "revId": "9a29245f3914bbe0bc15c8de4475694e372f03b6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6010b8f6_f75d6c51",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-13T20:11:13Z",
+      "side": 0,
+      "message": "We\u0027ve been discussing this on the Meet and have decided to add it back. It does let users implement unsafeDiscardStringContext in terms of attribute sets though, which is a bit spooky.",
+      "parentUuid": "58d57b26_65184d23",
+      "range": {
+        "startLine": 193,
+        "startChar": 2,
+        "endLine": 193,
+        "endChar": 36
+      },
+      "revId": "9a29245f3914bbe0bc15c8de4475694e372f03b6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
