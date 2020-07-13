@@ -146,8 +146,16 @@ impl App {
             .last_msgs
             .entry(chan.to_string())
             .or_insert(HashMap::new());
-        let val = if let Some(last) = chan_lastmsgs.get(&kwd.keyword.name.to_ascii_lowercase()) {
-            format!("<{}> {}", &kwd.keyword.name, last)
+        // Use `nick` here, so things like "grfn: see glittershark" work.
+        let val = if let Some(last) = chan_lastmsgs.get(&nick.to_ascii_lowercase()) {
+            if last.starts_with("\x01ACTION ") {
+                // Yes, this is inefficient, but it's better than writing some hacky CTCP parsing code
+                // I guess (also, characters are hard, so just blindly slicing seems like a bad idea)
+                format!("* {} {}", nick, last.replace("\x01ACTION ", "").replace("\x01", ""))
+            }
+            else {
+                format!("<{}> {}", nick, last)
+            }
         } else {
             Err(format_err!("I dunno what {} said...", kwd.keyword.name))?
         };
