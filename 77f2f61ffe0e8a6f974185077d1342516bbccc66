@@ -22,6 +22,30 @@
       "revId": "77f2f61ffe0e8a6f974185077d1342516bbccc66",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5a9f727_05d77b14",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T23:48:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ca47fbc_d36adb13",
+      "range": {
+        "startLine": 24,
+        "startChar": 13,
+        "endLine": 24,
+        "endChar": 23
+      },
+      "revId": "77f2f61ffe0e8a6f974185077d1342516bbccc66",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
