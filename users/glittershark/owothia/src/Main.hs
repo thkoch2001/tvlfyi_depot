@@ -6,17 +6,16 @@ import           Control.Lens
 import           NLP.POS
 import           NLP.Types (POSTagger)
 import           NLP.Types.Tree
-import qualified NLP.Types.Tree
 import qualified NLP.Corpora.Conll as Conll
 import           NLP.Corpora.Conll (Tag)
 import qualified Data.ByteString as BS
-import qualified Data.Text as T
 import           System.Random
 import           System.Envy
 --------------------------------------------------------------------------------
 
 data Config = Config
   { _nickservPassword :: Text
+  , _owoChance :: Int
   }
   deriving stock (Show, Eq, Generic)
   deriving anyclass (FromEnv)
@@ -41,11 +40,9 @@ randomVerb tagger txt = do
 owo :: Text -> Text
 owo = (<> " me owo")
 
-owoChance = 10
-
-doOwo :: MonadIO m => m Bool
-doOwo = do
-  n <- liftIO (randomRIO @Int (0, owoChance))
+doOwo :: MonadIO m => Config -> m Bool
+doOwo conf = do
+  n <- liftIO (randomRIO @Int (0, conf ^. owoChance))
   liftIO $ putStrLn $ "rolled " <> show n
   pure $ n == 0
 
@@ -62,7 +59,7 @@ owothiaHandler conf state tagger = EventHandler Just $ \src ev -> do
 
   case (src, ev ^. message) of
     (Channel "##tvl" nick, Privmsg _ (Right m)) -> do
-      willOwo <- doOwo
+      willOwo <- doOwo conf
       when willOwo $ owoMessage m
     _ -> pure ()
 
@@ -93,5 +90,4 @@ run host port = do
   runClient conn cfg ()
 
 main :: IO ()
-main = do
-  run "irc.freenode.net" 6667
+main = run "irc.freenode.net" 6667
