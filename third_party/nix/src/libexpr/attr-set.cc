@@ -3,15 +3,17 @@
 #include <new>
 
 #include <absl/container/btree_map.h>
+#include <absl/flags/flag.h>
 #include <gc/gc_cpp.h>
 #include <glog/logging.h>
 
 #include "libexpr/eval-inline.hh"
 #include "libutil/visitor.hh"
 
-namespace nix {
+ABSL_FLAG(size_t, attrs_capacity_pivot, 69,
+  "Size at which to switch from vector-backed attribute sets to btree-backed ones");
 
-constexpr size_t ATTRS_CAPACITY_PIVOT = 32;
+namespace nix {
 
 BindingsIterator& BindingsIterator::operator++() {
   std::visit(overloaded{
@@ -131,8 +133,9 @@ void BTreeBindings::merge(Bindings& other) {
 class VectorBindings : public Bindings {
  public:
   VectorBindings() {};
-  VectorBindings(size_t capacity)
-    : attributes_(capacity) {};
+  VectorBindings(size_t capacity) : attributes_() {
+    // attributes_.reserve(capacity);
+  };
 
   size_t size() override;
   bool empty() override;
@@ -152,12 +155,18 @@ size_t VectorBindings::size() { return attributes_.size(); }
 bool VectorBindings::empty() { return attributes_.empty(); }
 
 void VectorBindings::merge(Bindings& other) {
-  AttributeVector new_attributes(size() + other.size());
+  AttributeVector new_attributes;
+  // new_attributes.reserve(size() + other.size());
+
+  DLOG(INFO) << "MY SIZE " << size();
+  DLOG(INFO) << "OTHER SIZE " << other.size();
 
   auto m_it = attributes_.begin();
   auto other_it = other.begin();
 
   while (other_it != other.end() && m_it != attributes_.end()) {
+    DLOG(INFO) << "OTHER " << &other_it->first << " " << (other_it == other.end());
+    DLOG(INFO) << "M " << &m_it->first << " " << (m_it == attributes_.end());
     if (other_it->first < m_it->first) {
       new_attributes.push_back(*(m_it++));
     } else {
@@ -210,10 +219,10 @@ Bindings::iterator VectorBindings::end() {
 }
 
 Bindings* Bindings::NewGC(size_t capacity) {
-  if (capacity > ATTRS_CAPACITY_PIVOT) {
+  if (capacity > absl::GetFlag(FLAGS_attrs_capacity_pivot)) {
     return new (GC) BTreeBindings;
   } else {
-    return new (GC) VectorBindings;
+    return new (GC) VectorBindings(capacity);
   }
 }
 
@@ -235,6 +244,5 @@ Value* EvalState::allocAttr(Value& vAttrs, const Symbol& name) {
   vAttrs.attrs->push_back(Attr(name, v));
   return v;
 }
-
 
 }  // namespace nix

@@ -1387,4 +1387,7 @@ If invoked with a prefix ARG eval the expression after inserting it"
    :n "K"   #'lsp-describe-thing-at-point
    :n "g r" #'lsp-rename
    (:localleader
-     :n "a" #'lsp-execute-code-action)))
+    :n "a" #'lsp-execute-code-action))
+
+ (:map eglot-mode-map
+  :n "g d" #'eglot-find-implementation))

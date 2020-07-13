@@ -68,6 +68,7 @@
 (package! company-lsp)
 (package! lsp-treemacs)
 (package! dap-mode)
+(package! eglot)
 
 ;; Rust
 (package! rustic :disable t)
@@ -155,3 +156,6 @@
 (package! znc
   :recipe (:host github
                  :repo "sshirokov/ZNC.el"))
+
+;;; C++
+(package! google-c-style)

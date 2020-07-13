@@ -1,0 +1,36 @@
+cabal-version: >=1.6
+name:          regex-tdfa-text
+version:       1.0.0.3
+license:       BSD3
+license-file:  LICENSE
+maintainer:    shelarcy <shelarcy@gmail.com>
+author:        Chris Kuklewicz 2007-2009, shelarcy 2012
+synopsis:      Text interface for regex-tdfa
+description:
+    This provides text interface for regex-tdfa.
+    .
+    This should be part of regex-tdfa package. But my patches are not accepted yet.
+    So, I made a separate package. If you are interested in my patches, see
+    <http://hub.darcs.net/shelarcy/regex-base> and <http://hub.darcs.net/shelarcy/regex-tdfa>.
+
+category:      Text
+x-revision:    1
+build-type:    Simple
+
+source-repository head
+    type:     darcs
+    location: http://hub.darcs.net/shelarcy/regex-tdfa-text
+
+library
+    exposed-modules:
+        Text.Regex.TDFA.Text
+        Text.Regex.TDFA.Text.Lazy
+
+    extensions:      MultiParamTypeClasses
+    ghc-options:     -O2
+    build-depends:
+        base -any,
+        array -any,
+        text -any,
+        regex-base -any,
+        regex-tdfa -any

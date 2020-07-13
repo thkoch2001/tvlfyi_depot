@@ -52,7 +52,8 @@ with lib;
 
     pg-dump-upsert
 
-    (import ../pkgs/clang-tools { inherit pkgs; })
+    # (import ../pkgs/clang-tools { inherit pkgs; })
+    lldb
   ] ++ optional (stdenv.isLinux) julia;
 
   programs.git = {

@@ -1,4 +1,4 @@
-source common.sh
+# source common.sh
 
 export TEST_VAR=foo # for eval-okay-getenv.nix
 

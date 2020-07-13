@@ -1,5 +1,6 @@
 #include <algorithm>
 
+#include <absl/flags/parse.h>
 #include <glog/logging.h>
 #include <ifaddrs.h>
 #include <netdb.h>
@@ -181,7 +182,9 @@ void mainWrapped(int argc, char** argv) {
 int main(int argc, char* argv[]) {
   FLAGS_logtostderr = true;
   google::InitGoogleLogging(argv[0]);
+  auto nix_args = absl::ParseCommandLine(argc, argv);
 
-  return nix::handleExceptions(argv[0],
-                               [&]() { nix::mainWrapped(argc, argv); });
+  return nix::handleExceptions(nix_args[0], [&]() {
+    nix::mainWrapped(nix_args.size(), nix_args.data());
+  });
 }
