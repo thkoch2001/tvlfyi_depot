@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "734fd910_66ca38a0",
+        "filename": "third_party/nix/src/libexpr/attr-set.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T21:09:00Z",
+      "side": 0,
+      "message": "do we need to explicitly delete this?",
+      "range": {
+        "startLine": 23,
+        "startChar": 1,
+        "endLine": 23,
+        "endChar": 25
+      },
+      "revId": "afd1367337300f0411d1e6eee6bb6b53bbaf113c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0d207d4_fc22c991",
+        "filename": "third_party/nix/src/libexpr/parser.y",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T21:09:00Z",
+      "side": 0,
+      "message": "why was this removed?",
+      "range": {
+        "startLine": 142,
+        "startChar": 12,
+        "endLine": 142,
+        "endChar": 29
+      },
+      "revId": "afd1367337300f0411d1e6eee6bb6b53bbaf113c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbd0c0ed_f018447f",
+        "filename": "third_party/nix/src/libexpr/symbol-table.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T21:09:00Z",
+      "side": 0,
+      "message": "does this also need to be explicitly deleted?",
+      "range": {
+        "startLine": 16,
+        "startChar": 2,
+        "endLine": 16,
+        "endChar": 20
+      },
+      "revId": "afd1367337300f0411d1e6eee6bb6b53bbaf113c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}

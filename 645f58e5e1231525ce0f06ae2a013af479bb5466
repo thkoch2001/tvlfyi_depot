@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7855120_bb746d4b",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-13T21:09:00Z",
+      "side": 1,
+      "message": "nice",
+      "range": {
+        "startLine": 62,
+        "startChar": 3,
+        "endLine": 62,
+        "endChar": 51
+      },
+      "revId": "645f58e5e1231525ce0f06ae2a013af479bb5466",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
