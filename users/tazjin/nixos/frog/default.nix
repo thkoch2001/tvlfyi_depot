@@ -215,6 +215,7 @@ in depot.lib.fix(self: {
       third_party.ffmpeg
       third_party.git
       third_party.lutris
+      third_party.rr
       tools.nsfv-setup
     ]) ++
 
@@ -233,6 +234,7 @@ in depot.lib.fix(self: {
       exa
       fd
       file
+      gdb
       gnupg
       go
       google-chrome
@@ -262,7 +264,6 @@ in depot.lib.fix(self: {
       pmutils
       pwgen
       ripgrep
-      rr
       rustup
       scrot
       spotify
