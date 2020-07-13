@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c18e3df7_62c2a1f1",
+        "filename": "users/glittershark/owothia/owothia.cabal",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-13T17:24:49Z",
+      "side": 1,
+      "message": "I hate this",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 0
+      },
+      "revId": "b128fac5f98f6ba801e2f842fdd190677ce1353a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f1fa709_4a2f0d9c",
+        "filename": "users/glittershark/owothia/packageSet.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-13T17:24:49Z",
+      "side": 1,
+      "message": "I hate this too",
+      "range": {
+        "startLine": 18,
+        "startChar": 12,
+        "endLine": 19,
+        "endChar": 19
+      },
+      "revId": "b128fac5f98f6ba801e2f842fdd190677ce1353a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0506768c_558e57ec",
+        "filename": "users/glittershark/owothia/src/Main.hs",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-13T17:24:49Z",
+      "side": 1,
+      "message": "This needs more SSL, because we need secure owothia.",
+      "range": {
+        "startLine": 97,
+        "startChar": 25,
+        "endLine": 97,
+        "endChar": 29
+      },
+      "revId": "b128fac5f98f6ba801e2f842fdd190677ce1353a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
