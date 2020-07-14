@@ -2,6 +2,19 @@
 
 {
   nix = {
+    buildMachines = [{
+      hostName = "whitby.tvl.fyi";
+      sshUser = "grfn";
+      sshKey = "/root/.ssh/id_rsa";
+      system = "x86_64-linux";
+      maxJobs = 64;
+      supportedFeatures = ["big-parallel" "kvm" "nixos-test" "benchmark"];
+    }];
+
+    extraOptions = ''
+      builders-use-substitutes = true
+    '';
+
     binaryCaches = [
       "ssh://nix-ssh@whitby.tvl.fyi"
       "https://cache.nixos.org"
