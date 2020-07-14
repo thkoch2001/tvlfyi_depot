@@ -173,6 +173,7 @@ in {
               order += "external_script current_task"
               order += "external_script inbox"
               order += "spotify"
+              order += "volume_status"
               order += "wireless ${config.system.machine.wirelessInterface}"
               # order += "ethernet enp3s0f0"
               order += "cpu_usage"
@@ -240,12 +241,12 @@ in {
                   format = "    %H·%M    "
               }
 
-              # volume master {
-              #     format = "☊ %volume"
-              #     format_muted = "☊ X"
-              #     device = "default"
-              #     mixer_idx = 0
-              # }
+              volume_status {
+                  format = "☊ {percentage}"
+                  format_muted = "☊ X"
+                  # device = "default"
+                  # mixer_idx = 0
+              }
             '';
               in "py3status -c ${i3status-conf}";
             fonts = [ decorationFont ];
