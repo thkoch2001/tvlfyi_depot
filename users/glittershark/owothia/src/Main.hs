@@ -11,15 +11,28 @@ import           NLP.Corpora.Conll (Tag)
 import qualified Data.ByteString as BS
 import           System.Random
 import           System.Envy
+import           Data.Maybe
 --------------------------------------------------------------------------------
 
 data Config = Config
-  { _nickservPassword :: Text
-  , _owoChance :: Int
+  { _owoChance :: Int
+  , _ircServer :: ByteString
+  , _ircPort :: Int
+  , _ircServerPassword :: Maybe Text
+  , _nickservPassword :: Maybe Text
+  , _ircNick :: Maybe Text
   }
   deriving stock (Show, Eq, Generic)
-  deriving anyclass (FromEnv)
 makeLenses ''Config
+
+instance FromEnv Config where
+  fromEnv _ =
+    Config <$> envMaybe "OWO_CHANCE" .!= (error "define OWO_CHANCE")
+       <*> envMaybe "IRC_SERVER" .!= (error "define IRC_SERVER")
+       <*> envMaybe "IRC_PORT" .!= (error "define IRC_PORT")
+       <*> envMaybe "IRC_SERVER_PASSWORD" .!= Nothing
+       <*> envMaybe "NICKSERV_PASSWORD" .!= Nothing
+       <*> envMaybe "IRC_NICK" .!= Nothing
 
 stopWord :: Text -> Bool
 stopWord "'s"   = True
@@ -59,8 +72,8 @@ doOwo conf = do
   liftIO $ putStrLn $ "rolled " <> show n
   pure $ n == 0
 
-owothiaHandler :: Config -> IORef Bool -> POSTagger Tag -> EventHandler s
-owothiaHandler conf state tagger = EventHandler Just $ \src ev -> do
+owothiaHandler :: Config -> Text -> IORef Bool -> POSTagger Tag -> EventHandler s
+owothiaHandler conf nick state tagger = EventHandler Just $ \src ev -> do
   hasIdentified <- readIORef state
   when (not hasIdentified) $ do
     nickservAuth
@@ -82,26 +95,22 @@ owothiaHandler conf state tagger = EventHandler Just $ \src ev -> do
     owoMessage m = do
       mVerb <- liftIO $ randomVerb tagger m
       for_ mVerb $ \verb -> send $ Privmsg "##tvl" $ Right $ owo verb
-    nickservAuthMsg = "IDENTIFY " <> myNick <> " " <> conf ^. nickservPassword
+    nickservAuthMsg = "IDENTIFY " <> nick <> " " <> fromJust (conf ^. nickservPassword)
     nickservAuth = send $ Privmsg "NickServ" $ Right nickservAuthMsg
 
-myNick :: Text
-myNick = "owothia"
-
-run :: ByteString -> Int -> IO ()
-run host port = do
+main :: IO ()
+main = do
   Right conf <- decodeEnv
   tagger <- defaultTagger
-  state <- newIORef False
-  let conn =
-        plainConnection host port
+  state <- newIORef $ not . isJust $ (conf ^. nickservPassword)
+  let nick = fromMaybe "owothia" (conf ^. ircNick) 
+      conn =
+        plainConnection (conf ^. ircServer) (conf ^. ircPort)
           & realname .~ "Owothia Revströwö"
+          & password .~ (conf ^. ircServerPassword)
           & logfunc .~ stdoutLogger
       cfg =
-        defaultInstanceConfig myNick
+        defaultInstanceConfig nick
           & channels .~ ["##tvl"]
-          & handlers %~ (owothiaHandler conf state tagger : )
+          & handlers %~ (owothiaHandler conf nick state tagger : )
   runClient conn cfg ()
-
-main :: IO ()
-main = run "irc.freenode.net" 6667
