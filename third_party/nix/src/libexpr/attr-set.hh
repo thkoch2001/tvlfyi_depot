@@ -4,6 +4,7 @@
 #include <cstddef>
 
 #include <absl/container/btree_map.h>
+#include <absl/container/flat_hash_map.h>
 #include <gc/gc_allocator.h>
 
 #include "libexpr/nixexpr.hh"
@@ -11,6 +12,8 @@
 #include "libutil/types.hh"
 
 namespace nix {  // TODO(tazjin): ::expr
+
+void load_capacity_pivot();
 
 class EvalState;
 struct Value;
@@ -26,8 +29,11 @@ struct Attr {
 
 // Convenience alias for the backing map, with the garbage-collecting
 // allocator explicitly specified.
-using AttributeMap = absl::btree_map<Symbol, Attr, std::less<Symbol>,
-                                     gc_allocator<std::pair<Symbol, Attr>>>;
+using AttributeMap = absl::flat_hash_map<
+  Symbol, Attr,
+  absl::container_internal::hash_default_hash<Symbol>,
+  absl::container_internal::hash_default_eq<Symbol>,
+  gc_allocator<std::pair<Symbol, Attr>>>;
 
 using AttributeVector =
     std::vector<std::pair<Symbol, Attr>, gc_allocator<std::pair<Symbol, Attr>>>;

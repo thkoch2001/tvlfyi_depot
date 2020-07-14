@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
+#include "libexpr/attr-set.hh"
 #include "libexpr/eval.hh"
 #include "libmain/common-args.hh"
 #include "libmain/shared.hh"
@@ -181,6 +182,7 @@ void mainWrapped(int argc, char** argv) {
 int main(int argc, char* argv[]) {
   FLAGS_logtostderr = true;
   google::InitGoogleLogging(argv[0]);
+  nix::load_capacity_pivot();
 
   return nix::handleExceptions(argv[0],
                                [&]() { nix::mainWrapped(argc, argv); });

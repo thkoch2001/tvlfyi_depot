@@ -2,6 +2,7 @@
 
 #include <absl/container/node_hash_set.h>
 #include <absl/strings/string_view.h>
+#include <absl/hash/hash.h>
 
 namespace nix {  // TODO(tazjin): ::expr
 
@@ -17,7 +18,7 @@ class Symbol {
 
   bool operator!=(const Symbol& s2) const { return s != s2.s; }
 
-  bool operator<(const Symbol& s2) const { return *s < *s2.s; }
+  bool operator<(const Symbol& s2) const { return s < s2.s; }
 
   operator const std::string &() const { return *s; }
 
@@ -26,6 +27,11 @@ class Symbol {
   bool empty() const { return s->empty(); }
 
   friend std::ostream& operator<<(std::ostream& str, const Symbol& sym);
+
+  template <typename H>
+  friend H AbslHashValue(H h, const Symbol& c) {
+    return H::combine(std::move(h), c.s);
+  }
 };
 
 // SymbolTable is a hash-set based symbol-interning mechanism.
