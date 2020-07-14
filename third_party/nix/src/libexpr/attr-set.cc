@@ -3,15 +3,21 @@
 #include <new>
 
 #include <absl/container/btree_map.h>
+#include <absl/strings/numbers.h>
 #include <gc/gc_cpp.h>
 #include <glog/logging.h>
+#include <cstdlib>
 
 #include "libexpr/eval-inline.hh"
 #include "libutil/visitor.hh"
 
 namespace nix {
 
-constexpr size_t ATTRS_CAPACITY_PIVOT = 32;
+static size_t ATTRS_CAPACITY_PIVOT = 32;
+
+void load_capacity_pivot() {
+  ATTRS_CAPACITY_PIVOT = absl::SimpleAtoi(std::getenv("CAPACITY_PIVOT"));
+}
 
 BindingsIterator& BindingsIterator::operator++() {
   std::visit(util::overloaded{

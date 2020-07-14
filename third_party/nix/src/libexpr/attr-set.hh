@@ -12,6 +12,8 @@
 
 namespace nix {  // TODO(tazjin): ::expr
 
+void load_capacity_pivot();
+
 class EvalState;
 struct Value;
 
