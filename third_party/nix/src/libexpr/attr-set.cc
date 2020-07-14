@@ -108,6 +108,8 @@ std::vector<const Attr*> BTreeBindings::lexicographicOrder() {
     res.emplace_back(&value);
   }
 
+  std::sort(res.begin(), res.end());
+
   return res;
 }
 

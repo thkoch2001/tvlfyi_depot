@@ -26,6 +26,13 @@ class Symbol {
   bool empty() const { return s->empty(); }
 
   friend std::ostream& operator<<(std::ostream& str, const Symbol& sym);
+
+  class PointerComparator : public std::less<Symbol> {
+   public:
+    bool operator()(const Symbol& lhs, const Symbol& rhs) const {
+      return lhs.s < rhs.s;
+    }
+  };
 };
 
 // SymbolTable is a hash-set based symbol-interning mechanism.

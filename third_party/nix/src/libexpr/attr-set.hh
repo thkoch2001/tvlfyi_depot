@@ -26,7 +26,7 @@ struct Attr {
 
 // Convenience alias for the backing map, with the garbage-collecting
 // allocator explicitly specified.
-using AttributeMap = absl::btree_map<Symbol, Attr, std::less<Symbol>,
+using AttributeMap = absl::btree_map<Symbol, Attr, Symbol::PointerComparator,
                                      gc_allocator<std::pair<Symbol, Attr>>>;
 
 using AttributeVector =
