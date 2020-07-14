@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "934535ab_1091daf5",
+        "filename": "users/glittershark/owothia/src/Main.hs",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-14T17:46:19Z",
+      "side": 1,
+      "message": "these should really just use `env` - error in haskell is generally considered poor style over passing around eithers or something",
+      "range": {
+        "startLine": 30,
+        "startChar": 15,
+        "endLine": 32,
+        "endChar": 60
+      },
+      "revId": "5d57c052db13fa65fe461661bf6bb0e125eb9e2a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "143fe8d4_f70c94c8",
+        "filename": "users/glittershark/owothia/src/Main.hs",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-14T17:46:19Z",
+      "side": 1,
+      "message": "these might work without the `.!\u003d Nothing` ?",
+      "range": {
+        "startLine": 33,
+        "startChar": 11,
+        "endLine": 35,
+        "endChar": 42
+      },
+      "revId": "5d57c052db13fa65fe461661bf6bb0e125eb9e2a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f51edb25_989de5ab",
+        "filename": "users/glittershark/owothia/src/Main.hs",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-14T17:46:19Z",
+      "side": 1,
+      "message": "isn\u0027t this just in the config?",
+      "range": {
+        "startLine": 76,
+        "startChar": 20,
+        "endLine": 76,
+        "endChar": 24
+      },
+      "revId": "5d57c052db13fa65fe461661bf6bb0e125eb9e2a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddd08498_8717bac2",
+        "filename": "users/glittershark/owothia/src/Main.hs",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-14T17:46:19Z",
+      "side": 1,
+      "message": "we could get real error messages here by doing something like\n```\nconf \u003c- either throwIO pure \u003d\u003c\u003c decodeEnv\n```",
+      "range": {
+        "startLine": 103,
+        "startChar": 2,
+        "endLine": 103,
+        "endChar": 24
+      },
+      "revId": "5d57c052db13fa65fe461661bf6bb0e125eb9e2a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
