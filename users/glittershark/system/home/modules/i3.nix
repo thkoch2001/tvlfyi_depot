@@ -89,10 +89,10 @@ in {
             "${mod}+q" = "exec \"maim | xclip -selection clipboard -t image/png\"";
             "${mod}+Shift+q" = "exec \"maim -s | xclip -selection clipboard -t image/png\"";
             "${mod}+Ctrl+q" = "exec ${pkgs.writeShellScript "peek.sh" ''
-            picom &
-            picom_pid=$!
-            peek || true
-            kill -SIGINT $picom_pid
+              ${pkgs.picom}/bin/picom &
+              picom_pid=$!
+              ${pkgs.peek}/bin/peek || true
+              kill -SIGINT $picom_pid
             ''}";
 
             # Launching applications
