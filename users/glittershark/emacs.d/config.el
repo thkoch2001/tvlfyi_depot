@@ -29,6 +29,7 @@
 (load! "grid")
 (load! "nix")
 (load! "email")
+(load! "cpp")
 
 (require 's)
 (require 'tvl)
