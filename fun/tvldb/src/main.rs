@@ -141,20 +141,21 @@ impl App {
         qlast: Captures,
     ) -> Result<(), Error> {
         let db = self.pg.get()?;
+        let nick_to_grab = &qlast["subj"].to_ascii_lowercase();
         let mut kwd = self.keyword_from_captures(&qlast, nick, chan)?;
         let chan_lastmsgs = self
             .last_msgs
             .entry(chan.to_string())
             .or_insert(HashMap::new());
         // Use `nick` here, so things like "grfn: see glittershark" work.
-        let val = if let Some(last) = chan_lastmsgs.get(&nick.to_ascii_lowercase()) {
+        let val = if let Some(last) = chan_lastmsgs.get(nick_to_grab) {
             if last.starts_with("\x01ACTION ") {
                 // Yes, this is inefficient, but it's better than writing some hacky CTCP parsing code
                 // I guess (also, characters are hard, so just blindly slicing seems like a bad idea)
-                format!("* {} {}", nick, last.replace("\x01ACTION ", "").replace("\x01", ""))
+                format!("* {} {}", nick_to_grab, last.replace("\x01ACTION ", "").replace("\x01", ""))
             }
             else {
-                format!("<{}> {}", nick, last)
+                format!("<{}> {}", nick_to_grab, last)
             }
         } else {
             Err(format_err!("I dunno what {} said...", kwd.keyword.name))?
