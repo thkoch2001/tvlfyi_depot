@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (139082 refactor(3p/nix): Revert VectorBindings implementation)
 # This file sets up the top-level package set by traversing the package tree
 # (see read-tree.nix for details) and constructing a matching attribute set
 # tree.
@@ -69,3 +70,19 @@ in fix(self: {
 # as `lib`).
 // (readTree' { depot = self; pkgs = self.third_party; }) ./overrides
 )
+=======
+with import <nixpkgs> {};
+
+stdenv.mkDerivation rec {
+  name = "immer-git";
+  version = "git";
+  src = fetchGit ./.;
+  nativeBuildInputs = [ cmake ];
+  dontBuild = true;
+  meta = with stdenv.lib; {
+    homepage    = "https://github.com/arximboldi/immer";
+    description = "Postmodern immutable data structures for C++";
+    license     = licenses.boost;
+  };
+}
+>>>>>>> BRANCH (7f19d6 Squashed 'third_party/immer/' content from commit ad3e3556d)

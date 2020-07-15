@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (139082 refactor(3p/nix): Revert VectorBindings implementation)
 # Ignore the garbage folder, in which I slowly assemble a bunch of
 # trash locally that might be valuable in the future.
 garbage/
@@ -5,3 +6,29 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+=======
+bazel-*
+build/
+build-*/
+reports/
+doc/_build
+doc/_doxygen
+bazel-*
+
+tools/travis/ssh-key
+tools/clojure/target/
+tools/scala/target/
+tools/scala/project/target/
+
+extra/js/out
+extra/js/boost
+
+__pycache__
+
+.gdb_history
+
+.cache
+tools/clojure/.lein*
+
+*.pyc
+>>>>>>> BRANCH (7f19d6 Squashed 'third_party/immer/' content from commit ad3e3556d)
