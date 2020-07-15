@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc68a8b3_a2c151c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-15T23:29:58Z",
+      "side": 1,
+      "message": "why?",
+      "revId": "1f6025ef4a4e8442ca957c8b4313859b36e99be1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
