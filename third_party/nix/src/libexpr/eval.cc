@@ -1667,6 +1667,12 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
       return true;
 
     case tAttrs: {
+      // As an optimisation if both values are pointing towards the
+      // same attribute set, we can skip all this extra work.
+      if (v1.attrs == v2.attrs) {
+        return true;
+      }
+
       /* If both sets denote a derivation (type = "derivation"),
          then compare their outPaths. */
       if (isDerivation(v1) && isDerivation(v2)) {
