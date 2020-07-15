@@ -10,6 +10,8 @@
 
 namespace nix {
 
+static Bindings ZERO_BINDINGS;
+
 // This function inherits its name from previous implementations, in
 // which Bindings was backed by an array of elements which was scanned
 // linearly.
@@ -21,6 +23,8 @@ namespace nix {
 // This behaviour is mimicked by using .insert(), which will *not*
 // override existing values.
 void Bindings::push_back(const Attr& attr) {
+  assert(this != &ZERO_BINDINGS);
+
   auto [_, inserted] = attributes_.insert({attr.name, attr});
 
   if (!inserted) {
@@ -53,19 +57,24 @@ Bindings::iterator Bindings::begin() { return attributes_.begin(); }
 Bindings::iterator Bindings::end() { return attributes_.end(); }
 
 void Bindings::merge(const Bindings& other) {
+  assert(this != &ZERO_BINDINGS);
   for (auto& [key, value] : other.attributes_) {
     this->attributes_.insert_or_assign(key, value);
   }
 }
 
-Bindings* Bindings::NewGC(size_t _capacity) {
+Bindings* Bindings::NewGC(size_t capacity) {
+  if (capacity == 0) {
+    return &ZERO_BINDINGS;
+  }
+
   return new (GC) Bindings;
 }
 
 void EvalState::mkAttrs(Value& v, size_t capacity) {
   clearValue(v);
   v.type = tAttrs;
-  v.attrs = Bindings::NewGC();
+  v.attrs = Bindings::NewGC(capacity);
   nrAttrsets++;
   nrAttrsInAttrsets += capacity;
 }
