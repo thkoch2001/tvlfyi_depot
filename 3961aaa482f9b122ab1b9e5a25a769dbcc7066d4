@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b4234d2_1175c5e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-15T23:29:31Z",
+      "side": 1,
+      "message": "might be nice to include a bench as part of the commit message",
+      "revId": "3961aaa482f9b122ab1b9e5a25a769dbcc7066d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
