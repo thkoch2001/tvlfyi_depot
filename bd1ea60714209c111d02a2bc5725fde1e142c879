@@ -16,6 +16,24 @@
       "revId": "bd1ea60714209c111d02a2bc5725fde1e142c879",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9af8480e_5d7c394e",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-15T22:57:23Z",
+      "side": 1,
+      "message": "Done, there are now asserts in push_back \u0026 merge.",
+      "parentUuid": "176907a4_70760860",
+      "revId": "bd1ea60714209c111d02a2bc5725fde1e142c879",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
