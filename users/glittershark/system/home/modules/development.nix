@@ -52,6 +52,7 @@ with lib;
     lldb
     valgrind
     rr
+    hyperfine
 
     clj2nix
 
