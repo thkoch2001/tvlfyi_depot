@@ -40,6 +40,9 @@ case "${TARGET_TOOL}" in
   ninja)
     attr="third_party.ninja"
     ;;
+  perf-flamegraph)
+    attr="tools.perf-flamegraph"
+    ;;
   rebuild-system)
     attr="ops.nixos.rebuild-system"
     ;;
