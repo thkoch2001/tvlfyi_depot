@@ -10,6 +10,8 @@
 
 namespace nix {
 
+static Bindings ZERO_BINDINGS;
+
 // This function inherits its name from previous implementations, in
 // which Bindings was backed by an array of elements which was scanned
 // linearly.
@@ -58,14 +60,18 @@ void Bindings::merge(const Bindings& other) {
   }
 }
 
-Bindings* Bindings::NewGC(size_t _capacity) {
+Bindings* Bindings::NewGC(size_t capacity) {
+  if (capacity == 0) {
+    return &ZERO_BINDINGS;
+  }
+
   return new (GC) Bindings;
 }
 
 void EvalState::mkAttrs(Value& v, size_t capacity) {
   clearValue(v);
   v.type = tAttrs;
-  v.attrs = Bindings::NewGC();
+  v.attrs = Bindings::NewGC(capacity);
   nrAttrsets++;
   nrAttrsInAttrsets += capacity;
 }
