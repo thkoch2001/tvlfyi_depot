@@ -199,22 +199,47 @@ Derivation Store::derivationFromPath(const Path& drvPath) {
   }
 }
 
+const char* findChunk(const char* begin) {
+  while (*begin != 0 && *begin != '\"' && *begin != '\\' && *begin != '\n' &&
+         *begin != '\r' && *begin != '\t') {
+    begin++;
+  }
+
+  return begin;
+}
+
 static void printString(std::string& res, const std::string& s) {
   res += '"';
-  for (const char* i = s.c_str(); *i != 0; i++) {
-    if (*i == '\"' || *i == '\\') {
-      res += "\\";
-      res += *i;
-    } else if (*i == '\n') {
-      res += "\\n";
-    } else if (*i == '\r') {
-      res += "\\r";
-    } else if (*i == '\t') {
-      res += "\\t";
-    } else {
-      res += *i;
+
+  const char* it = s.c_str();
+  while (*it != 0) {
+    const char* end = findChunk(it);
+    std::copy(it, end, std::back_inserter(res));
+
+    it = end;
+
+    switch (*it) {
+      case '"':
+      case '\\':
+        res += "\\";
+        res += *it;
+        break;
+      case '\n':
+        res += "\\n";
+        break;
+      case '\r':
+        res += "\\r";
+        break;
+      case '\t':
+        res += "\\t";
+        break;
+      default:
+        continue;
     }
+
+    it++;
   }
+
   res += '"';
 }
 
