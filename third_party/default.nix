@@ -72,6 +72,7 @@ let
       fira
       fira-code
       fira-mono
+      flamegraph
       fontconfig
       freetype
       gettext
@@ -92,6 +93,7 @@ let
       kontemplate
       lib
       libredirect
+      linuxPackages
       luajit
       lutris
       makeFontsConf
