@@ -5,6 +5,15 @@
 { ... }:
 
 let
+  # Overlay to disable stripping of debug symbols in some libraries
+  debugOverlay = self: super: {
+    llvmPackages_10 = (super.llvmPackages_10) // {
+      libcxx = super.llvmPackages_10.libcxx.overrideAttrs(_: {
+        dontStrip = true;
+      });
+    };
+  };
+
   # Tracking nixos-unstable as of 2020-06-10.
   nixpkgsCommit = "467ce5a9f45aaf96110b41eb863a56866e1c2c3c";
   nixpkgsSrc = fetchTarball {
@@ -19,6 +28,8 @@ let
     config.permittedInsecurePackages = [
       "p7zip-16.02"
     ];
+
+    overlays = [ debugOverlay ];
   };
 
   # Tracking nixos-20.03 as of 2020-05-22
