@@ -10,41 +10,20 @@ readonly REPO_ROOT=$(dirname "$0")/..
 TARGET_TOOL=$(basename "$0")
 
 case "${TARGET_TOOL}" in
-  terraform)
-    attr="third_party.terraform-gcp"
-    ;;
-  kontemplate)
-    attr="kontemplate"
-    ;;
-  stern)
-    attr="third_party.stern"
-    ;;
-  aoc2019)
-    attr="fun.aoc2019.${1}"
-    ;;
-  rink)
-    attr="third_party.rink"
-    ;;
   age)
     attr="third_party.age"
     ;;
   age-keygen)
     attr="third_party.age"
     ;;
-  rebuilder)
-    attr="users.tazjin.nixos.rebuilder"
-    ;;
-  meson)
-    attr="third_party.meson"
-    ;;
-  ninja)
-    attr="third_party.ninja"
-    ;;
-  git-bug)
-    attr="third_party.git-bug"
+  aoc2019)
+    attr="fun.aoc2019.${1}"
     ;;
   depot-build)
     attr="tools.depot-build"
+    ;;
+  git-bug)
+    attr="third_party.git-bug"
     ;;
   gerrit)
     attr="tools.gerrit-cli"
@@ -52,8 +31,29 @@ case "${TARGET_TOOL}" in
   hash-password)
     attr="tools.hash-password"
     ;;
+  kontemplate)
+    attr="kontemplate"
+    ;;
+  meson)
+    attr="third_party.meson"
+    ;;
+  ninja)
+    attr="third_party.ninja"
+    ;;
   rebuild-system)
     attr="ops.nixos.rebuild-system"
+    ;;
+  rebuilder)
+    attr="users.tazjin.nixos.rebuilder"
+    ;;
+  rink)
+    attr="third_party.rink"
+    ;;
+  stern)
+    attr="third_party.stern"
+    ;;
+  terraform)
+    attr="third_party.terraform-gcp"
     ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
