@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "176907a4_70760860",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-15T20:20:31Z",
+      "side": 1,
+      "message": "without Bindings actually being immutable, I feel like I want some kind of checking (even if via assert()) in place to make sure callers don\u0027t then try to *insert* into the empty bindings value. even if it doesn\u0027t happen now, it feels like it\u0027d be easy to make it happen in the future.",
+      "revId": "bd1ea60714209c111d02a2bc5725fde1e142c879",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
