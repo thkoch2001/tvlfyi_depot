@@ -40,7 +40,7 @@ in depot.lib.fix(self: {
 
     kernelPackages = nixpkgs.linuxPackages_latest;
     kernel.sysctl = {
-      "kernel.perf_event_paranoid" = 1;
+      "kernel.perf_event_paranoid" = -1;
     };
 
     kernelPatches = [
