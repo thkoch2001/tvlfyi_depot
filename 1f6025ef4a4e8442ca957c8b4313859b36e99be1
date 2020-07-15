@@ -16,6 +16,24 @@
       "revId": "1f6025ef4a4e8442ca957c8b4313859b36e99be1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3af395a_d2467588",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-15T23:40:12Z",
+      "side": 1,
+      "message": "we got tired of `[unknown]`",
+      "parentUuid": "fc68a8b3_a2c151c0",
+      "revId": "1f6025ef4a4e8442ca957c8b4313859b36e99be1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
