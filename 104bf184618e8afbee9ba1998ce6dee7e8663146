@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c1e7554_c0db1628",
+        "filename": "third_party/nix/tests/lang.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-15T00:15:36Z",
+      "side": 0,
+      "message": "you sneaky motherfucker",
+      "revId": "104bf184618e8afbee9ba1998ce6dee7e8663146",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
