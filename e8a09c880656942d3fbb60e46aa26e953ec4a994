@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e60cd044_43072a7a",
+        "filename": "third_party/nix/src/libstore/derivations.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-07-15T23:57:47Z",
+      "side": 1,
+      "message": "this feels like it\u0027d be better off as\n\n    do {\n        switch (*begin) {\n        case \u0027\"\u0027:\n            return begin;\n        }\n    } while(*++begin);\n\nor similar, rather than one big condition",
+      "range": {
+        "startLine": 203,
+        "startChar": 9,
+        "endLine": 204,
+        "endChar": 41
+      },
+      "revId": "e8a09c880656942d3fbb60e46aa26e953ec4a994",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36376563_b576891e",
+        "filename": "third_party/nix/src/libstore/derivations.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-07-15T23:57:47Z",
+      "side": 1,
+      "message": "this, again, feels like it\u0027d be better off as some switch cases",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 1
+      },
+      "revId": "e8a09c880656942d3fbb60e46aa26e953ec4a994",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
