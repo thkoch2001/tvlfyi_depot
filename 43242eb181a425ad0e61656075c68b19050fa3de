@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9306a3d7_f9c80f4d",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-16T09:14:04Z",
+      "side": 1,
+      "message": "I\u0027m not sure if this is a useful change - it just makes the generated type a little more annoying to work with, but without really reducing any definition overhead.",
+      "range": {
+        "startLine": 262,
+        "startChar": 2,
+        "endLine": 262,
+        "endChar": 17
+      },
+      "revId": "43242eb181a425ad0e61656075c68b19050fa3de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
