@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38da8fa1_222385ec",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-16T02:45:12Z",
+      "side": 1,
+      "message": "\"insecureSkipVerify\" ?",
+      "range": {
+        "startLine": 249,
+        "startChar": 7,
+        "endLine": 249,
+        "endChar": 20
+      },
+      "revId": "66fb5321063af315608a0c8a7663ef4c90d7d7fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
