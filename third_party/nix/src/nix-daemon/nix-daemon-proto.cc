@@ -22,6 +22,17 @@ class WorkerServiceImpl final : public Worker::Service {
     return Status::OK;
   }
 
+  Status HasSubstitutes(grpc::ServerContext* context,
+                        const ::nix::proto::StorePath* request,
+                        nix::proto::HasSubstitutesResponse* response) {
+    const auto& path = request->path();
+    store_->assertStorePath(path);
+    PathSet res = store_->querySubstitutablePaths({path});
+    response->set_has_substitutes(res.find(path) != res.end());
+
+    return Status::OK;
+  }
+
  private:
   // TODO(tazjin): Who owns the store?
   nix::Store* store_;
