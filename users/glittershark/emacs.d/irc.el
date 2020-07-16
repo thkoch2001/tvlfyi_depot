@@ -106,7 +106,11 @@ If the buffer is currently not visible, makes it sticky."
 
 (add-hook 'erc-connect-pre-hook 'my-erc-define-alerts)
 
-(advice-add #'erc-user-input :filter-return #'s-trim)
+(defun fix-irc-message (msg)
+  (let ((msg (s-trim msg)))
+    (if (string-equal msg ":q") "" msg)))
+
+(advice-add #'erc-user-input :filter-return #'fix-irc-message)
 
 (comment
  (my-erc-define-alerts)
