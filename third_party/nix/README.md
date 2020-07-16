@@ -1,5 +1,5 @@
-Nix, or rather TVL's fork thereof
----------------------------------
+Tvix, also known as TVL's fork of Nix
+-------------------------------------
 
 Nix is a new take on package management that is fairly unique. Because
 of its purity aspects, a lot of issues found in traditional package
@@ -9,7 +9,8 @@ To find out more about the tool, usage and installation instructions,
 please read the manual, which is available on the Nix website at
 <http://nixos.org/nix/manual>.
 
-This repository is [TVL's](https://tvl.fyi)'s fork of Nix.
+This repository is [TVL's](https://tvl.fyi)'s fork of Nix, which we lovingly
+refer to as Tvix.
 
 ## Fork background
 
