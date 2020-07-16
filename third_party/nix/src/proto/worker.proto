@@ -8,37 +8,37 @@ package nix.proto;
 // with the Nix store.
 service Worker {
   // Validates whether the supplied path is a valid store path.
-  rpc IsValidPath (IsValidPathRequest) returns (IsValidPathResponse);
+  rpc IsValidPath(StorePath) returns (IsValidPathResponse);
 
   // Checks whether any substitutes exist for the given path.
-  rpc HasSubstitutes (HasSubstitutesRequest) returns (HasSubstitutesResponse);
+  rpc HasSubstitutes(StorePath) returns (HasSubstitutesResponse);
 
   // Query referrers for a given path.
-  rpc QueryReferrers (QueryReferrersRequest) returns (QueryReferrersResponse);
+  rpc QueryReferrers(StorePath) returns (StorePaths);
 
   // Add a NAR (I think?) to the store. The first stream request
   // should be a message indicating metadata, the rest should be file
   // chunks.
-  rpc AddToStore (stream AddToStoreRequest) returns (AddToStoreResponse);
+  rpc AddToStore(stream AddToStoreRequest) returns (StorePath);
 
   // Adds the supplied string to the store, as a text file.
-  rpc AddTextToStore (AddTextToStoreRequest) returns (AddTextToStoreResponse);
+  rpc AddTextToStore(AddTextToStoreRequest) returns (StorePath);
 
   // Build the specified derivations in one of the specified build
   // modes, defaulting to a normal build.
-  rpc BuildPaths (BuildPathsRequest) returns (google.protobuf.Empty);
+  rpc BuildPaths(BuildPathsRequest) returns (google.protobuf.Empty);
 
   // TODO: What does this do?
-  rpc EnsurePath (EnsurePathRequest) returns (google.protobuf.Empty);
+  rpc EnsurePath(StorePath) returns (google.protobuf.Empty);
 
   // TODO: What does this do?
-  rpc AddTempRoot (AddTempRootRequest) returns (google.protobuf.Empty);
+  rpc AddTempRoot(StorePath) returns (google.protobuf.Empty);
 
   // TODO: What does this do?
-  rpc AddIndirectRoot (AddIndirectRootRequest) returns (google.protobuf.Empty);
+  rpc AddIndirectRoot(StorePath) returns (google.protobuf.Empty);
 
   // TODO: What does this do?
-  rpc SyncWithGC (google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc SyncWithGC(google.protobuf.Empty) returns (google.protobuf.Empty);
 
   // TODO: What does this do?
   rpc FindRoots(google.protobuf.Empty) returns (FindRootsResponse);
@@ -49,11 +49,17 @@ service Worker {
   // Ask the store to perform a garbage collection, based on the
   // specified parameters. See `GCAction` for the possible actions.
   rpc CollectGarbage(CollectGarbageRequest) returns (CollectGarbageResponse);
+
+  // TODO: What does this do?
+  rpc QuerySubstitutablePathInfos(StorePaths) returns (SubstitutablePathInfos);
+
+  // TODO: What does this do?
+  rpc QueryDerivationOutputs(StorePath) returns (StorePaths);
 }
 
 enum HashType {
   UNKNOWN = 0;
-  MD5 = 1; // TODO(tazjin): still needed?
+  MD5 = 1;  // TODO(tazjin): still needed?
   SHA1 = 2;
   SHA256 = 3;
   SHA512 = 4;
@@ -81,34 +87,30 @@ enum GCAction {
   DeleteSpecific = 3;
 }
 
-message IsValidPathRequest {
+// Generic type for any RPC call that just reads or returns a single
+// store path.
+message StorePath {
   string path = 1;
+}
+
+// Generic type for any RPC call that just reads or returns a list of
+// store paths.
+message StorePaths {
+  repeated string paths = 1;
 }
 
 message IsValidPathResponse {
   bool is_valid = 1;
 }
 
-message HasSubstitutesRequest {
-  string path = 1;
-}
-
 message HasSubstitutesResponse {
   bool has_substitutes = 1;
-}
-
-message QueryReferrersRequest {
-  string path = 1;
-}
-
-message QueryReferrersResponse {
-  repeated string paths = 1;
 }
 
 message AddToStoreRequest {
   message Metadata {
     bool fixed = 1;
-    bool recursive = 2; // TODO(tazjin): what is this? "obsolete" comment?
+    bool recursive = 2;  // TODO(tazjin): what is this? "obsolete" comment?
     HashType hash_type = 3;
     string base_name = 4;
   }
@@ -124,35 +126,15 @@ message AddToStoreRequest {
   }
 }
 
-message AddToStoreResponse {
-  string path = 1;
-}
-
 message AddTextToStoreRequest {
   string name = 1;
   string content = 2;
   repeated string references = 3;
 }
 
-message AddTextToStoreResponse {
-  string path = 1;
-}
-
 message BuildPathsRequest {
   repeated string drvs = 1;
   BuildMode mode = 2;
-}
-
-message EnsurePathRequest {
-  string path = 1;
-}
-
-message AddTempRootRequest {
-  string path = 1;
-}
-
-message AddIndirectRootRequest {
-  string path = 1;
 }
 
 message FindRootsResponse {
@@ -164,10 +146,11 @@ message SetOptionsRequest {
   bool keep_going = 2;
   bool try_fallback = 3;
   uint32 max_build_jobs = 4;
-  uint32 verbose_build = 5; // TODO(tazjin): Maybe this should be bool, unclear.
-  uint32 build_cores = 6; // TODO(tazjin): Difference from max_build_jobs?
+  uint32 verbose_build =
+      5;                   // TODO(tazjin): Maybe this should be bool, unclear.
+  uint32 build_cores = 6;  // TODO(tazjin): Difference from max_build_jobs?
   bool use_substitutes = 7;
-  map<string, string> overrides = 8; // TODO(tazjin): better name?
+  map<string, string> overrides = 8;  // TODO(tazjin): better name?
 }
 
 message CollectGarbageRequest {
@@ -195,4 +178,16 @@ message CollectGarbageResponse {
   // For `ReturnDead', `DeleteDead' and `DeleteSpecific', the number
   // of bytes that would be or was freed.
   uint64 bytes_freed = 2;
+}
+
+message SubstitutablePathInfos {
+  message PathInfo {
+    string path = 1;
+    string deriver = 2;
+    uint64 download_size = 3;
+    uint64 nar_size = 4;
+    repeated string references = 5;
+  }
+
+  repeated PathInfo path_infos = 1;
 }
