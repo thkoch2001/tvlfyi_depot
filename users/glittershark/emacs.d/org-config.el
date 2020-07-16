@@ -40,6 +40,10 @@
     "* TODO %?\n%i"
     :kill-buffer t)
 
+   ("m" "Email" entry
+    (file +org-default-todo-file)
+    "* TODO [[%l][%:subject]] :email:\n%i")
+
    ("n" "Notes" entry
     (file +org-default-todo-file)
     "* %U %?\n%i"
