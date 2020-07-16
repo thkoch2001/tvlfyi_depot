@@ -197,7 +197,7 @@
      ("DP2" 6 7 8 9)))
 
   (shell-command "xrandr --output HDMI1 --right-of eDP1 --auto --primary")
-  (shell-command "xrandr --output DP2 --right-of HDMI1 --auto")
+  (shell-command "xrandr --output DP2 --right-of HDMI1 --auto --rotate left")
   (exwm-randr-refresh))
 
 (defun randr-vauxhall-layout-wide-only ()
@@ -227,7 +227,7 @@
                       ("DisplayPort-0" 6 7 8 9 0)))
 
   (shell-command "xrandr --output DisplayPort-1 --auto --primary --left-of DisplayPort-0")
-  (shell-command "xrandr --output DisplayPort-0 --auto --right-of DisplayPort-1"))
+  (shell-command "xrandr --output DisplayPort-0 --auto --right-of DisplayPort-1 --rotate left"))
 
 (pcase (s-trim (shell-command-to-string "hostname"))
   ("vauxhall"
