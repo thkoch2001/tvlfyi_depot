@@ -55,6 +55,9 @@ service Worker {
 
   // TODO: What does this do?
   rpc QueryDerivationOutputs(StorePath) returns (StorePaths);
+
+  // Query all valid paths in the store
+  rpc QueryAllValidPaths(google.protobuf.Empty) returns (StorePaths);
 }
 
 enum HashType {
