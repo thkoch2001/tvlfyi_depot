@@ -3,6 +3,7 @@
 #include <map>
 #include <optional>
 #include <variant>
+#include <absl/container/flat_hash_map.h>
 
 #include "libexpr/symbol-table.hh"
 #include "libexpr/value.hh"
@@ -183,6 +184,7 @@ struct ExprOpHasAttr : Expr {
 
 struct ExprAttrs : Expr {
   bool recursive;
+
   struct AttrDef {
     bool inherited;
     Expr* e;
@@ -192,16 +194,20 @@ struct ExprAttrs : Expr {
         : inherited(inherited), e(e), pos(pos){};
     AttrDef(){};
   };
-  typedef std::map<Symbol, AttrDef> AttrDefs;
+
+  typedef absl::flat_hash_map<Symbol, AttrDef> AttrDefs;
   AttrDefs attrs;
+
   struct DynamicAttrDef {
     Expr *nameExpr, *valueExpr;
     Pos pos;
     DynamicAttrDef(Expr* nameExpr, Expr* valueExpr, const Pos& pos)
         : nameExpr(nameExpr), valueExpr(valueExpr), pos(pos){};
   };
+
   typedef std::vector<DynamicAttrDef> DynamicAttrDefs;
   DynamicAttrDefs dynamicAttrs;
+
   ExprAttrs() : recursive(false){};
   COMMON_METHODS
 };
@@ -336,7 +342,7 @@ struct ExprPos : Expr {
 struct StaticEnv {
   bool isWith;
   const StaticEnv* up;
-  typedef std::map<Symbol, unsigned int> Vars;
+  typedef absl::flat_hash_map<Symbol, unsigned int> Vars;
   Vars vars;
   StaticEnv(bool isWith, const StaticEnv* up) : isWith(isWith), up(up){};
 };
