@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "56a0cd80_663273c8",
+        "filename": "third_party/nix/src/libstore/derivations.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-16T00:36:18Z",
+      "side": 1,
+      "message": "For this one I actually find the current solution more obvious.",
+      "parentUuid": "e60cd044_43072a7a",
+      "range": {
+        "startLine": 203,
+        "startChar": 9,
+        "endLine": 204,
+        "endChar": 41
+      },
+      "revId": "e8a09c880656942d3fbb60e46aa26e953ec4a994",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36376563_b576891e",
         "filename": "third_party/nix/src/libstore/derivations.cc",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "e8a09c880656942d3fbb60e46aa26e953ec4a994",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a136c6f9_a0f11873",
+        "filename": "third_party/nix/src/libstore/derivations.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-16T00:36:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36376563_b576891e",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 1
+      },
+      "revId": "e8a09c880656942d3fbb60e46aa26e953ec4a994",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
