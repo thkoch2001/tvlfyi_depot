@@ -61,7 +61,7 @@ service Worker {
   rpc QueryAllValidPaths(google.protobuf.Empty) returns (StorePaths);
 
   // TODO: What does this do?
-  rpc QueryPathInfo(StorePath) returns (QueryPathInfoResponse);
+  rpc QueryPathInfo(StorePath) returns (PathInfo);
 
   // Query the output names of the given derivation
   rpc QueryDerivationOutputNames(StorePath) returns (DerivationOutputNames);
@@ -96,6 +96,10 @@ service Worker {
 
   // TODO: What does this do?
   rpc NarFromPath(StorePath) returns (StorePath);
+
+  // Upload & add a NAR to the daemon's Nix store.
+  rpc AddToStoreNar(stream AddToStoreNarRequest)
+      returns (google.protobuf.Empty);
 }
 
 enum HashType {
@@ -241,19 +245,7 @@ message CollectGarbageResponse {
   uint64 bytes_freed = 2;
 }
 
-message SubstitutablePathInfos {
-  message PathInfo {
-    string path = 1;
-    string deriver = 2;
-    uint64 download_size = 3;
-    uint64 nar_size = 4;
-    repeated string references = 5;
-  }
-
-  repeated PathInfo path_infos = 1;
-}
-
-message QueryPathInfoResponse {
+message PathInfo {
   StorePath deriver = 1;
   string nar_hash = 2;
   repeated string references = 3;
@@ -265,7 +257,11 @@ message QueryPathInfoResponse {
   repeated string sigs = 7;
   // If non-empty, an assertion that the path is content-addressed
   string ca = 8;
-};
+}
+
+message SubstitutablePathInfos {
+  repeated PathInfo path_infos = 1;
+}
 
 message DerivationOutputNames {
   repeated string names = 1;
@@ -295,4 +291,11 @@ message BuildDerivationRequest {
 message BuildDerivationResponse {
   BuildStatus status = 1;
   string errorMessage = 2;
+}
+
+message AddToStoreNarRequest {
+  oneof add_oneoff {
+    PathInfo path_info = 1;
+    bytes chunk = 2;
+  }
 }
