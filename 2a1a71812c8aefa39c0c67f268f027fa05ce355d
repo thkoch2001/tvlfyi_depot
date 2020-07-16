@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6385e7d0_d2886bb1",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-16T09:13:00Z",
+      "side": 1,
+      "message": "clang-format?",
+      "range": {
+        "startLine": 131,
+        "startChar": 25,
+        "endLine": 131,
+        "endChar": 28
+      },
+      "revId": "2a1a71812c8aefa39c0c67f268f027fa05ce355d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
