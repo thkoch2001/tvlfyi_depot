@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "48688278_9502c1fd",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-16T22:42:58Z",
+      "side": 1,
+      "message": "there\u0027s a using for this",
+      "range": {
+        "startLine": 16,
+        "startChar": 27,
+        "endLine": 16,
+        "endChar": 56
+      },
+      "revId": "8bcfbc48eb9c4d8c8817e73083653aa9cc71ddfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c211dfb2_7e356eb3",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 1
