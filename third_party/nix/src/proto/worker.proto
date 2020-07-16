@@ -65,6 +65,9 @@ service Worker {
 
   // Query the output names of the given derivation
   rpc QueryDerivationOutputNames(StorePath) returns (DerivationOutputNames);
+
+  // TODO: What is a HashPart?
+  rpc QueryPathFromHashPart(HashPart) returns (StorePath);
 }
 
 enum HashType {
@@ -203,19 +206,23 @@ message SubstitutablePathInfos {
 }
 
 message QueryPathInfoResponse {
-    StorePath deriver = 1;
-    string nar_hash = 2;
-    repeated string references = 3;
-    google.protobuf.Timestamp registration_time = 4;
-    uint64 nar_size = 5;
-    // Whether the path is ultimately trusted, that is, it's a derivation
-    // output that was built locally.
-    bool ultimate = 6;
-    repeated string sigs = 7;
-    // If non-empty, an assertion that the path is content-addressed
-    string ca = 8;
+  StorePath deriver = 1;
+  string nar_hash = 2;
+  repeated string references = 3;
+  google.protobuf.Timestamp registration_time = 4;
+  uint64 nar_size = 5;
+  // Whether the path is ultimately trusted, that is, it's a derivation
+  // output that was built locally.
+  bool ultimate = 6;
+  repeated string sigs = 7;
+  // If non-empty, an assertion that the path is content-addressed
+  string ca = 8;
 };
 
 message DerivationOutputNames {
-    repeated string names = 1;
+  repeated string names = 1;
+}
+
+message HashPart {
+  string hash_part = 1;
 }
