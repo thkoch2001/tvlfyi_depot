@@ -5,14 +5,22 @@ deploy:
 
 renew:
 	@echo Renewing...
-	@certbot renew \
+	@certbot certonly \
 		--manual \
+		--domain gws.fyi \
 		--preferred-challenges dns \
 		--server https://acme-v02.api.letsencrypt.org/directory \
 		--agree-tos \
 		--work-dir $(shell pwd)/letsencrypt/work \
 		--logs-dir $(shell pwd)/letsencrypt/logs \
 		--config-dir $(shell pwd)/letsencrypt/config
+	@echo "Reimporting certificate"
+	@aws acm import-certificate \
+	    --certificate file://letsencrypt/config/live/gws.fyi/cert.pem \
+	    --certificate-chain file://letsencrypt/config/live/gws.fyi/fullchain.pem \
+	    --private-key file://letsencrypt/config/live/gws.fyi/privkey.pem \
+	    --certificate-arn arn:aws:acm:us-east-1:797089351721:certificate/628e54f3-55f9-49c0-811a-eba516b68e30 \
+		--region us-east-1
 
 backup:
 	@tarsnap -cf $(shell uname -n)-letsencrypt-$(shell date +%Y-%m-%d_%H-%M-%S) \
