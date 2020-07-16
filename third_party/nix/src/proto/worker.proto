@@ -74,6 +74,9 @@ service Worker {
 
   // Query which of the given paths have substitutes.
   rpc QuerySubstitutablePaths(StorePaths) returns (StorePaths);
+
+  // Return all currently valid derivations that have `path' as an output.
+  rpc QueryValidDerivers(StorePath) returns (StorePaths);
 }
 
 enum HashType {
