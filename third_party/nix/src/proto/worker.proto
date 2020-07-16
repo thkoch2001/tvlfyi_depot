@@ -65,6 +65,9 @@ service Worker {
 
   // Query the output names of the given derivation
   rpc QueryDerivationOutputNames(StorePath) returns (DerivationOutputNames);
+
+  // TODO: What is a HashPart?
+  rpc QueryPathFromHashPart(HashPart) returns (StorePath);
 }
 
 enum HashType {
@@ -218,4 +221,8 @@ message QueryPathInfoResponse {
 
 message DerivationOutputNames {
     repeated string names = 1;
+}
+
+message HashPart {
+    string hash_part = 1;
 }
