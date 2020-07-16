@@ -62,6 +62,9 @@ service Worker {
 
   // TODO: What does this do?
   rpc QueryPathInfo(StorePath) returns (QueryPathInfoResponse);
+
+  // Query the output names of the given derivation
+  rpc QueryDerivationOutputNames(StorePath) returns (DerivationOutputNames);
 }
 
 enum HashType {
@@ -212,3 +215,7 @@ message QueryPathInfoResponse {
     // If non-empty, an assertion that the path is content-addressed
     string ca = 8;
 };
+
+message DerivationOutputNames {
+    repeated string names = 1;
+}
