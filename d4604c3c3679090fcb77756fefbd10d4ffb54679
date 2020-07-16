@@ -22,6 +22,30 @@
       "revId": "d4604c3c3679090fcb77756fefbd10d4ffb54679",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4072883_f80c6386",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-16T01:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cd18b93_58bfe783",
+      "range": {
+        "startLine": 53,
+        "startChar": 2,
+        "endLine": 56,
+        "endChar": 1
+      },
+      "revId": "d4604c3c3679090fcb77756fefbd10d4ffb54679",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
