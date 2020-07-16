@@ -26,6 +26,11 @@ class Symbol {
   bool empty() const { return s->empty(); }
 
   friend std::ostream& operator<<(std::ostream& str, const Symbol& sym);
+
+  template <typename H>
+  friend H AbslHashValue(H h, const Symbol& c) {
+    return H::combine(std::move(h), c.s);
+  }
 };
 
 // SymbolTable is a hash-set based symbol-interning mechanism.
