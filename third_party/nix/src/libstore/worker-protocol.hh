@@ -30,7 +30,7 @@ typedef enum {
   wopQuerySubstitutablePathInfo = 21,
   wopQueryDerivationOutputs = 22,
   wopQueryAllValidPaths = 23,
-  wopQueryFailedPaths = 24,
+  wopQueryFailedPaths = 24, // obsolete
   wopClearFailedPaths = 25,
   wopQueryPathInfo = 26,
   wopImportPaths = 27,  // obsolete
