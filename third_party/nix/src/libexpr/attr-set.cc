@@ -33,7 +33,7 @@ void Bindings::push_back(const Attr& attr) {
   }
 }
 
-size_t Bindings::size() { return attributes_.size(); }
+size_t Bindings::size() const { return attributes_.size(); }
 
 bool Bindings::empty() { return attributes_.empty(); }
 
@@ -56,19 +56,27 @@ Bindings::iterator Bindings::begin() { return attributes_.begin(); }
 
 Bindings::iterator Bindings::end() { return attributes_.end(); }
 
-void Bindings::merge(const Bindings& other) {
-  assert(this != &ZERO_BINDINGS);
-  for (auto& [key, value] : other.attributes_) {
-    this->attributes_.insert_or_assign(key, value);
-  }
-}
-
 Bindings* Bindings::NewGC(size_t capacity) {
   if (capacity == 0) {
     return &ZERO_BINDINGS;
   }
 
   return new (GC) Bindings;
+}
+
+Bindings* Bindings::Merge(const Bindings& lhs, const Bindings& rhs) {
+  auto bindings = NewGC(lhs.size() + rhs.size());
+
+  // Values are merged by inserting the entire iterator range of both
+  // input sets. The right-hand set (the values of which take
+  // precedence) is inserted *first* because the range insertion
+  // method does not override values.
+  bindings->attributes_.insert(rhs.attributes_.cbegin(),
+                               rhs.attributes_.cend());
+  bindings->attributes_.insert(lhs.attributes_.cbegin(),
+                               lhs.attributes_.cend());
+
+  return bindings;
 }
 
 void EvalState::mkAttrs(Value& v, size_t capacity) {

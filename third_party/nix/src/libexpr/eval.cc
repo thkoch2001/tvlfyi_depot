@@ -19,6 +19,7 @@
 
 #include "libexpr/eval-inline.hh"
 #include "libexpr/function-trace.hh"
+#include "libexpr/value.hh"
 #include "libstore/derivations.hh"
 #include "libstore/download.hh"
 #include "libstore/globals.hh"
@@ -1240,11 +1241,9 @@ void ExprOpUpdate::eval(EvalState& state, Env& env, Value& dest) {
 
   state.nrOpUpdates++;
 
-  state.mkAttrs(dest, v1.attrs->size() + v2.attrs->size());
-
-  // Merge the sets, preferring values from the second set.
-  dest.attrs->merge(*v1.attrs);
-  dest.attrs->merge(*v2.attrs);
+  clearValue(dest);
+  dest.type = tAttrs;
+  dest.attrs = Bindings::Merge(*v1.attrs, *v2.attrs);
 }
 
 void ExprOpConcatLists::eval(EvalState& state, Env& env, Value& v) {
