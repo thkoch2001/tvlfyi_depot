@@ -34,6 +34,24 @@
       "revId": "1f6025ef4a4e8442ca957c8b4313859b36e99be1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3227a167_ef63e1b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-16T00:01:43Z",
+      "side": 1,
+      "message": "I feel like we probably want to have some other derivation of nix that builds with unstripped libcxx and also doesn\u0027t strip itself, rather than imposing this change on every downstream derivation (including my operating system). But I\u0027m glad the [unknown] is gone!",
+      "parentUuid": "a3af395a_d2467588",
+      "revId": "1f6025ef4a4e8442ca957c8b4313859b36e99be1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
