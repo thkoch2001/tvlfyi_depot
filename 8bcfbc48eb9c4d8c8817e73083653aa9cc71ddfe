@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c211dfb2_7e356eb3",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-16T22:37:13Z",
+      "side": 1,
+      "message": "This formatting is bizarre but ok",
+      "range": {
+        "startLine": 15,
+        "startChar": 50,
+        "endLine": 17,
+        "endChar": 71
+      },
+      "revId": "8bcfbc48eb9c4d8c8817e73083653aa9cc71ddfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5295193_69826c7c",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-16T22:37:13Z",
+      "side": 1,
+      "message": "we do",
+      "range": {
+        "startLine": 26,
+        "startChar": 19,
+        "endLine": 26,
+        "endChar": 38
+      },
+      "revId": "8bcfbc48eb9c4d8c8817e73083653aa9cc71ddfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
