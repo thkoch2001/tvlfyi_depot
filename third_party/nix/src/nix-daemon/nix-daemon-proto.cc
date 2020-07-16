@@ -48,7 +48,8 @@ class WorkerServiceImpl final : public Worker::Service {
   }
 
   Status QueryValidDerivers(grpc::ServerContext* context,
-                            const StorePath* request, StorePaths* response) {
+                            const StorePath* request,
+                            StorePaths* response) override {
     const auto& path = request->path();
     store_->assertStorePath(path);
 
@@ -69,6 +70,17 @@ class WorkerServiceImpl final : public Worker::Service {
 
     PathSet paths = store_->queryDerivationOutputs(path);
 
+    for (const auto& path : paths) {
+      response->add_paths(path);
+    }
+
+    return Status::OK;
+  }
+
+  Status QueryAllValidPaths(grpc::ServerContext* context,
+                            const google::protobuf::Empty* request,
+                            StorePaths* response) override {
+    const auto paths = store_->queryAllValidPaths();
     for (const auto& path : paths) {
       response->add_paths(path);
     }
