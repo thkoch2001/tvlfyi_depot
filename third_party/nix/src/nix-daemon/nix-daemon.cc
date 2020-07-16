@@ -630,12 +630,13 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
       break;
     }
 
-    case wopOptimiseStore:
+    case wopOptimiseStore: {
       logger->startWork();
       store->optimiseStore();
       logger->stopWork();
       to << 1;
       break;
+    }
 
     case wopVerifyStore: {
       bool checkContents;

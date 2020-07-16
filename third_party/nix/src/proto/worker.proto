@@ -77,6 +77,10 @@ service Worker {
 
   // Return all currently valid derivations that have `path' as an output.
   rpc QueryValidDerivers(StorePath) returns (StorePaths);
+
+  // Optimise the disk space usage of the Nix store by hard-linking files
+  // with the same contents.
+  rpc OptimiseStore(google.protobuf.Empty) returns (google.Protobuf.Empty)
 }
 
 enum HashType {
