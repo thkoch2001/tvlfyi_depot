@@ -29,6 +29,7 @@ set(HEADER_FILES
     json-to-value.hh
     names.hh
     nixexpr.hh
+    parser.hh
     primops.hh
     symbol-table.hh
     value.hh
