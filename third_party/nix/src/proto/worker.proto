@@ -84,6 +84,10 @@ service Worker {
 
   // Check the integrity of the Nix store
   rpc VerifyStore(VerifyStoreRequest) returns (VerifyStoreResponse);
+
+  // Build a single non-materialized derivation (i.e. not from an
+  // on-disk .drv file).
+  rpc BuildDerivation(BuildDerivationRequest) returns (BuildDerivationResponse);
 }
 
 enum HashType {
@@ -115,6 +119,22 @@ enum GCAction {
   // not reachable.
   DeleteSpecific = 3;
 }
+
+enum BuildStatatus {
+  Built = 0;
+  Substituted = 1;
+  AlreadyValid = 2;
+  PermanentFailure = 3;
+  InputRejected = 4;
+  OutputRejected = 5;
+  TransientFailure = 6; // possibly transient
+  CachedFailure = 7;     // no longer used
+  TimedOut = 8;
+  MiscFailure = 9;
+  DependencyFailed = 10;
+  LogLimitExceeded = 11;
+  NotDeterministic = 12;
+};
 
 // Generic type for any RPC call that just reads or returns a single
 // store path.
@@ -252,4 +272,15 @@ message VerifyStoreRequest {
 message VerifyStoreResponse {
   // True if errors remain (???)
   bool errors = 1;
+}
+
+message BuildDerivationRequest {
+  // Only used for informational purposes.
+  StorePath drvPath = 1;
+  BuildMode buildMode = 2;
+}
+
+message BuildDerivationResponse {
+  BuildStatus status = 1;
+  string errorMessage = 2;
 }
