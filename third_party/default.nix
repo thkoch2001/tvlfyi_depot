@@ -36,8 +36,8 @@ let
       age
       autoconf
       autoreconfHook
-      avrlibc
       avrdude
+      avrlibc
       awscli
       bashInteractive
       bat
@@ -207,7 +207,7 @@ in exposed.lib.fix(self: exposed // {
 
   # Packages to be overridden
   originals = {
-    inherit (nixpkgs) openldap go grpc notmuch rr;
+    inherit (nixpkgs) gtest openldap go grpc notmuch rr;
     inherit (stableNixpkgs) git;
     ffmpeg = nixpkgs.ffmpeg-full;
   };
