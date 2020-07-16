@@ -81,6 +81,9 @@ service Worker {
   // Optimise the disk space usage of the Nix store by hard-linking files
   // with the same contents.
   rpc OptimiseStore(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+  // Check the integrity of the Nix store
+  rpc VerifyStore(VerifyStoreRequest) returns (VerifyStoreResponse);
 }
 
 enum HashType {
@@ -238,4 +241,15 @@ message DerivationOutputNames {
 
 message HashPart {
     string hash_part = 1;
+}
+
+message VerifyStoreRequest {
+    bool repair = 1;
+    // TODO(grfn): Remove double-negative
+    bool dontCheckSigs = 2;
+}
+
+message VerifyStoreResponse {
+    // True if errors remain (???)
+    bool errors = 1;
 }
