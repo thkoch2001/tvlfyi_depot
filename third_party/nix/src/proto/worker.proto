@@ -100,6 +100,11 @@ service Worker {
   // Upload & add a NAR to the daemon's Nix store.
   rpc AddToStoreNar(stream AddToStoreNarRequest)
       returns (google.protobuf.Empty);
+
+  // Given a set of paths that are to be built, return the set of
+  // derivations that will be built, and the set of output paths that
+  // will be substituted.
+  rpc QueryMissing(StorePaths) returns (QueryMissingResponse);
 }
 
 enum HashType {
@@ -298,4 +303,12 @@ message AddToStoreNarRequest {
     PathInfo path_info = 1;
     bytes chunk = 2;
   }
+}
+
+message QueryMissingResponse {
+  repeated string will_build = 1;
+  repeated string will_substitute = 2;
+  repeated string unknown = 3;
+  uint64 download_size = 4;
+  uint64 nar_size = 5;
 }
