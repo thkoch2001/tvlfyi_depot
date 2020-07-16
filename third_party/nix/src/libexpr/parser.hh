@@ -53,5 +53,6 @@ void addFormal(const Pos& pos, Formals* formals, const Formal& formal);
 Expr* stripIndentation(const Pos& pos, SymbolTable& symbols,
                        std::vector<Expr*>& es);
 
+Path resolveExprPath(Path path);
 
 }  // namespace nix
