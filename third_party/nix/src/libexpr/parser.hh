@@ -15,6 +15,8 @@
   int yylex(YYSTYPE* yylval_param, YYLTYPE* yylloc_param, yyscan_t yyscanner, \
             nix::ParseData* data)
 
+#define CUR_POS makeCurPos(*yylocp, data)
+
 namespace nix {
 
 struct ParseData {
@@ -43,5 +45,13 @@ static void dupAttr(Symbol attr, const Pos& pos, const Pos& prevPos) {
   throw ParseError(format("attribute '%1%' at %2% already defined at %3%") %
                    attr % pos % prevPos);
 }
+
+void addAttr(ExprAttrs* attrs, AttrPath& attrPath, Expr* e, const Pos& pos);
+
+void addFormal(const Pos& pos, Formals* formals, const Formal& formal);
+
+Expr* stripIndentation(const Pos& pos, SymbolTable& symbols,
+                       std::vector<Expr*>& es);
+
 
 }  // namespace nix
