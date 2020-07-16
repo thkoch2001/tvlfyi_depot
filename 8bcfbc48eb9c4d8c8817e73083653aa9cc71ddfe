@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7ac425e6_234d6825",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-16T22:45:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48688278_9502c1fd",
+      "range": {
+        "startLine": 16,
+        "startChar": 27,
+        "endLine": 16,
+        "endChar": 56
+      },
+      "revId": "8bcfbc48eb9c4d8c8817e73083653aa9cc71ddfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c211dfb2_7e356eb3",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-07-16T22:37:13Z",
       "side": 1,
       "message": "This formatting is bizarre but ok",
+      "range": {
+        "startLine": 15,
+        "startChar": 50,
+        "endLine": 17,
+        "endChar": 71
+      },
+      "revId": "8bcfbc48eb9c4d8c8817e73083653aa9cc71ddfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "17c5d2d6_42fe01b1",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-16T22:45:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c211dfb2_7e356eb3",
       "range": {
         "startLine": 15,
         "startChar": 50,
