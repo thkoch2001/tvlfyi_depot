@@ -26,7 +26,7 @@ let
       $PROTO_SRCS/*.proto
   '';
 in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
-  pname = "tazjix";
+  pname = "tvix";
   version = "2.3.4";
   inherit src;
 
