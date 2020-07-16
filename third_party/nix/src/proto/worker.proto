@@ -89,6 +89,10 @@ service Worker {
   // Build a single non-materialized derivation (i.e. not from an
   // on-disk .drv file).
   rpc BuildDerivation(BuildDerivationRequest) returns (BuildDerivationResponse);
+
+  // Add signatures to the specified store path. The signatures are not
+  // verified.
+  rpc AddSignatures(Signatures) returns (google.protobuf.Empty);
 }
 
 enum HashType {
@@ -147,6 +151,10 @@ message StorePath {
 // store paths.
 message StorePaths {
   repeated string paths = 1;
+}
+
+message Signatures {
+  repeated string sigs = 1;
 }
 
 message IsValidPathResponse {
