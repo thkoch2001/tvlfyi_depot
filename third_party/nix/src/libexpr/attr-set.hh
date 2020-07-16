@@ -36,8 +36,12 @@ class Bindings {
   // collector.
   static Bindings* NewGC(size_t capacity = 0);
 
+  // Create a new attribute set by merging two others. This is used to
+  // implement the `//` operator in Nix.
+  static Bindings* Merge(const Bindings& lhs, const Bindings& rhs);
+
   // Return the number of contained elements.
-  size_t size();
+  size_t size() const;
 
   // Is this attribute set empty?
   bool empty();
@@ -48,12 +52,8 @@ class Bindings {
   // Look up a specific element of the attribute set.
   iterator find(const Symbol& name);
 
-  // TODO
   iterator begin();
   iterator end();
-
-  // Merge values from other into this attribute set.
-  void merge(const Bindings& other);
 
   // TODO: can callers just iterate?
   [[deprecated]] std::vector<const Attr*> lexicographicOrder();
