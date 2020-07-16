@@ -22,6 +22,30 @@
       "revId": "66fb5321063af315608a0c8a7663ef4c90d7d7fd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8b68f18_d91c488b",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-16T21:32:02Z",
+      "side": 1,
+      "message": "probably eventually, but for now we\u0027re maintaining backwards compat",
+      "parentUuid": "38da8fa1_222385ec",
+      "range": {
+        "startLine": 249,
+        "startChar": 7,
+        "endLine": 249,
+        "endChar": 20
+      },
+      "revId": "66fb5321063af315608a0c8a7663ef4c90d7d7fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
