@@ -1,5 +1,8 @@
 #pragma once
 
+#include "libstore/store-api.hh"
+#include "libutil/types.hh"
+
 namespace nix {
 
 #define WORKER_MAGIC_1 0x6e697863
