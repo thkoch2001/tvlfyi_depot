@@ -92,6 +92,9 @@ service Worker {
   // Add signatures to the specified store path. The signatures are not
   // verified.
   rpc AddSignatures(Signatures) returns (google.protobuf.Empty);
+
+  // TODO: What does this do?
+  rpc NarFromPath(StorePath) returns (StorePath);
 }
 
 enum HashType {
