@@ -6,6 +6,7 @@ namespace nix::daemon {
 
 using ::grpc::Status;
 using ::nix::proto::StorePath;
+using ::nix::proto::StorePaths;
 using ::nix::proto::Worker;
 
 class WorkerServiceImpl final : public Worker::Service {
@@ -30,6 +31,36 @@ class WorkerServiceImpl final : public Worker::Service {
 
     return Status::OK;
   }
+
+  Status QueryMissing(grpc::ServerContext* context, const StorePaths* request,
+                      nix::proto::QueryMissingResponse* response) override {
+    std::set<Path> targets;
+    for (auto& path : request->paths()) {
+      targets.insert(path);
+    }
+    PathSet will_build;
+    PathSet will_substitute;
+    PathSet unknown;
+    // TODO(grfn): Switch to concrete size type
+    unsigned long long download_size;
+    unsigned long long nar_size;
+
+    store_->queryMissing(targets, will_build, will_substitute, unknown,
+                         download_size, nar_size);
+    for (auto& path : will_build) {
+      response->add_will_build(path);
+    }
+    for (auto& path : will_substitute) {
+      response->add_will_substitute(path);
+    }
+    for (auto& path : unknown) {
+      response->add_unknown(path);
+    }
+    response->set_download_size(download_size);
+    response->set_nar_size(nar_size);
+
+    return Status::OK;
+  };
 
  private:
   // TODO(tazjin): Who owns the store?
