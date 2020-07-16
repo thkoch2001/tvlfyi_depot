@@ -155,3 +155,6 @@
 (package! znc
   :recipe (:host github
                  :repo "sshirokov/ZNC.el"))
+
+;;; cpp
+(package! protobuf-mode)

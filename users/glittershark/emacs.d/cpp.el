@@ -18,6 +18,8 @@
 
 (add-hook 'c++-mode-hook #'+grfn/cpp-setup)
 
+(use-package! protobuf-mode)
+
 (comment
  (setq
   lsp-clients-clangd-executable
