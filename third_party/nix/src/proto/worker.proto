@@ -68,6 +68,9 @@ service Worker {
 
   // TODO: What is a HashPart?
   rpc QueryPathFromHashPart(HashPart) returns (StorePath);
+
+  // Query which of the given paths is valid.
+  rpc QueryValidPaths(StorePaths) returns (StorePaths);
 }
 
 enum HashType {
