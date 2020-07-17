@@ -193,6 +193,17 @@ class WorkerServiceImpl final : public WorkerService::Service {
     return Status::OK;
   }
 
+  Status VerifyStore(grpc::ServerContext* context,
+                     const nix::proto::VerifyStoreRequest* request,
+                     nix::proto::VerifyStoreResponse* response) override {
+    auto errors = store_->verifyStore(
+        request->check_contents(), static_cast<RepairFlag>(request->repair()));
+
+    response->set_errors(errors);
+
+    return Status::OK;
+  }
+
   Status QueryMissing(grpc::ServerContext* context, const StorePaths* request,
                       nix::proto::QueryMissingResponse* response) override {
     std::set<Path> targets;
