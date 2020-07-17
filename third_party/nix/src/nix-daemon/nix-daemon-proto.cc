@@ -1,3 +1,6 @@
+#include <google/protobuf/util/time_util.h>
+#include <grpcpp/impl/codegen/status_code_enum.h>
+
 #include "libproto/worker.grpc.pb.h"
 #include "libproto/worker.pb.h"
 #include "libstore/store-api.hh"
@@ -5,9 +8,13 @@
 namespace nix::daemon {
 
 using ::grpc::Status;
+using ::nix::proto::PathInfo;
 using ::nix::proto::StorePath;
 using ::nix::proto::StorePaths;
 using ::nix::proto::Worker;
+
+static Status INVALID_STORE_PATH =
+    Status(grpc::StatusCode::INVALID_ARGUMENT, "Invalid store path");
 
 class WorkerServiceImpl final : public Worker::Service {
  public:
@@ -86,6 +93,39 @@ class WorkerServiceImpl final : public Worker::Service {
     }
 
     return Status::OK;
+  }
+
+  Status QueryPathInfo(grpc::ServerContext* context, const StorePath* request,
+                       PathInfo* response) override {
+    auto path = request->path();
+    try {
+      auto info = store_->queryPathInfo(path);
+      response->mutable_deriver()->set_path(info->deriver);
+      response->set_nar_hash(
+          reinterpret_cast<const char*>(&info->narHash.hash[0]),
+          info->narHash.hashSize);
+
+      for (const auto& reference : info->references) {
+        response->add_references(reference);
+      }
+
+      *response->mutable_registration_time() =
+          google::protobuf::util::TimeUtil::TimeTToTimestamp(
+              info->registrationTime);
+
+      response->set_nar_size(info->narSize);
+      response->set_ultimate(info->ultimate);
+
+      for (const auto& sig : info->sigs) {
+        response->add_sigs(sig);
+      }
+
+      response->set_ca(info->ca);
+
+      return Status::OK;
+    } catch (InvalidPath&) {
+      return Status(grpc::StatusCode::INVALID_ARGUMENT, "Invalid store path");
+    }
   }
 
   Status QueryMissing(grpc::ServerContext* context, const StorePaths* request,
