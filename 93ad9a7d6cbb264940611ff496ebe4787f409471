@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8900c91e_7b7bed81",
+        "filename": "third_party/nix/src/libexpr/primops.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1300,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-17T22:50:10Z",
+      "side": 1,
+      "message": "The removal is to create a copy without the removed things",
+      "range": {
+        "startLine": 1300,
+        "startChar": 4,
+        "endLine": 1300,
+        "endChar": 38
+      },
+      "revId": "93ad9a7d6cbb264940611ff496ebe4787f409471",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df6ce8a9_7832d5ab",
+        "filename": "third_party/nix/src/nix-env/user-env.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-17T22:50:10Z",
+      "side": 1,
+      "message": "this is a crash risk right?",
+      "range": {
+        "startLine": 129,
+        "startChar": 2,
+        "endLine": 129,
+        "endChar": 60
+      },
+      "revId": "93ad9a7d6cbb264940611ff496ebe4787f409471",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
