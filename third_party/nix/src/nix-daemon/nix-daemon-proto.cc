@@ -1,4 +1,6 @@
+#include <google/protobuf/empty.pb.h>
 #include <google/protobuf/util/time_util.h>
+#include <grpcpp/impl/codegen/server_context.h>
 #include <grpcpp/impl/codegen/status.h>
 #include <grpcpp/impl/codegen/status_code_enum.h>
 
@@ -181,6 +183,13 @@ class WorkerServiceImpl final : public WorkerService::Service {
       response->add_paths(path);
     }
 
+    return Status::OK;
+  }
+
+  Status OptimiseStore(grpc::ServerContext* context,
+                       const google::protobuf::Empty* request,
+                       google::protobuf::Empty* response) override {
+    store_->optimiseStore();
     return Status::OK;
   }
 
