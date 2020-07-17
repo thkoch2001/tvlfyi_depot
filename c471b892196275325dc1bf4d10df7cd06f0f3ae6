@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13a36d8d_21791a5c",
+        "filename": "third_party/nix/src/tests/CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-17T02:55:58Z",
+      "side": 1,
+      "message": "`/build/nix/build/src/tests/value-to-json: error while loading shared libraries: libnixexpr.so: cannot open shared object file: No such file or directory`",
+      "range": {
+        "startLine": 6,
+        "startChar": 2,
+        "endLine": 6,
+        "endChar": 9
+      },
+      "revId": "c471b892196275325dc1bf4d10df7cd06f0f3ae6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
