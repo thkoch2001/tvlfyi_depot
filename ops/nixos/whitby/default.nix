@@ -282,6 +282,12 @@ in {
       ];
     };
 
+    users.riking = {
+      isNormalUser = true;
+      extraGroups = [ "git" ];
+      openssh.authorizedKeys.keys = depot.users.riking.keys.u2f ++ depot.users.riking.keys.passworded;
+    };
+
     # Set up a user & group for git shenanigans
     groups.git = {};
     users.git = {
