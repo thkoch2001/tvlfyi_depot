@@ -5,7 +5,7 @@
 
 (after! flycheck
   (add-to-list 'flycheck-disabled-checkers 'c/c++-gcc)
-  (add-to-list 'flycheck-disabled-checkers 'c/c++-clangd))
+  (add-to-list 'flycheck-disabled-checkers 'c/c++-clang))
 
 (defun +grfn/cpp-setup ()
   (when (s-starts-with?
@@ -14,7 +14,9 @@
     (setq lsp-clients-clangd-executable "/home/grfn/code/depot/users/glittershark/emacs.d/nix-clangd.sh"
           lsp-clients-clangd-args nil)
     (google-set-c-style)
-    (lsp)))
+    (lsp)
+    (add-to-list 'flycheck-disabled-checkers 'c/c++-gcc)
+    (add-to-list 'flycheck-disabled-checkers 'c/c++-clang)))
 
 (add-hook 'c++-mode-hook #'+grfn/cpp-setup)
 
