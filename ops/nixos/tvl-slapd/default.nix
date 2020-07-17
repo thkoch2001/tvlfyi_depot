@@ -97,7 +97,7 @@ let
     }
     {
       username = "riking";
-      displayName = "Kane York";
+      displayName = "kanepyork";
       email = "rikingcoding@gmail.com";
       password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$o2OcfhfKOry+UrcmODyQCw$qloaQgoIRDESwaA3yqPxxy8sgLk3mrjYFBbF41elVrM";
     }
