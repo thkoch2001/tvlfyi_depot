@@ -17,5 +17,9 @@ let
       command = "nix-build -A ciBuilds.__allTargets --show-trace";
       label = ":duck:";
     }
+    {
+      command = "${depot.nix.bufCheck}/bin/ci-buf-check";
+      label = ":water_buffalo:";
+    }
   ];
 in writeText "depot.yaml" (toJSON pipeline)
