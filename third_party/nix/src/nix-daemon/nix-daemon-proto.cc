@@ -6,11 +6,13 @@
 
 #include "libproto/worker.grpc.pb.h"
 #include "libproto/worker.pb.h"
+#include "libstore/derivations.hh"
 #include "libstore/store-api.hh"
 
 namespace nix::daemon {
 
 using ::grpc::Status;
+using ::nix::proto::BuildStatus;
 using ::nix::proto::PathInfo;
 using ::nix::proto::StorePath;
 using ::nix::proto::StorePaths;
@@ -200,6 +202,26 @@ class WorkerServiceImpl final : public WorkerService::Service {
         request->check_contents(), static_cast<RepairFlag>(request->repair()));
 
     response->set_errors(errors);
+
+    return Status::OK;
+  }
+
+  Status BuildDerivation(
+      grpc::ServerContext* context,
+      const nix::proto::BuildDerivationRequest* request,
+      nix::proto::BuildDerivationResponse* response) override {
+    auto drv_path = request->drv_path().path();
+    BasicDerivation drv(&request->derivation());
+
+    auto build_mode = nix::build_mode_from(request->build_mode());
+    if (!build_mode) {
+      return Status(grpc::StatusCode::INTERNAL, "Invalid build mode");
+    }
+
+    auto res = store_->buildDerivation(drv_path, drv, *build_mode);
+
+    response->set_status(res.status_to_proto());
+    response->set_error_message(res.errorMsg);
 
     return Status::OK;
   }

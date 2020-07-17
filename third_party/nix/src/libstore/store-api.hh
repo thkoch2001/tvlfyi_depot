@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "libproto/worker.pb.h"
 #include "libstore/crypto.hh"
 #include "libstore/globals.hh"
 #include "libutil/config.hh"
@@ -181,6 +182,8 @@ typedef std::list<ValidPathInfo> ValidPathInfos;
 
 enum BuildMode { bmNormal, bmRepair, bmCheck };
 
+std::optional<BuildMode> build_mode_from(nix::proto::BuildMode mode);
+
 struct BuildResult {
   /* Note: don't remove status codes, and only add new status codes
      at the end of the list, to prevent client/server
@@ -218,6 +221,8 @@ struct BuildResult {
   bool success() {
     return status == Built || status == Substituted || status == AlreadyValid;
   }
+
+  nix::proto::BuildStatus status_to_proto();
 };
 
 class Store : public std::enable_shared_from_this<Store>, public Config {

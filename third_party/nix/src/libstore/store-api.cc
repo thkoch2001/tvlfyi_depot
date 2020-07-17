@@ -18,6 +18,54 @@
 
 namespace nix {
 
+// Convert the proto version of a `nix::proto::BuildMode` to its corresponding
+// nix `BuildMode`
+std::optional<BuildMode> build_mode_from(nix::proto::BuildMode mode) {
+  switch (mode) {
+    case nix::proto::BuildMode::Normal:
+      return BuildMode::bmNormal;
+    case nix::proto::BuildMode::Repair:
+      return BuildMode::bmRepair;
+    case nix::proto::BuildMode::Check:
+      return BuildMode::bmCheck;
+    default:
+      return {};
+  }
+}
+
+// Convert the status of this `BuildResult` to its corresponding
+// `nix::proto::BuildStatus`
+nix::proto::BuildStatus BuildResult::status_to_proto() {
+  switch (status) {
+    case BuildResult::Status::Built:
+      return proto::BuildStatus::Built;
+    case BuildResult::Status::Substituted:
+      return proto::BuildStatus::Substituted;
+    case BuildResult::Status::AlreadyValid:
+      return proto::BuildStatus::AlreadyValid;
+    case BuildResult::Status::PermanentFailure:
+      return proto::BuildStatus::PermanentFailure;
+    case BuildResult::Status::InputRejected:
+      return proto::BuildStatus::InputRejected;
+    case BuildResult::Status::OutputRejected:
+      return proto::BuildStatus::OutputRejected;
+    case BuildResult::Status::TransientFailure:
+      return proto::BuildStatus::TransientFailure;
+    case BuildResult::Status::CachedFailure:
+      return proto::BuildStatus::CachedFailure;
+    case BuildResult::Status::TimedOut:
+      return proto::BuildStatus::TimedOut;
+    case BuildResult::Status::MiscFailure:
+      return proto::BuildStatus::MiscFailure;
+    case BuildResult::Status::DependencyFailed:
+      return proto::BuildStatus::DependencyFailed;
+    case BuildResult::Status::LogLimitExceeded:
+      return proto::BuildStatus::LogLimitExceeded;
+    case BuildResult::Status::NotDeterministic:
+      return proto::BuildStatus::NotDeterministic;
+  }
+}
+
 bool Store::isInStore(const Path& path) const {
   return isInDir(path, storeDir);
 }
