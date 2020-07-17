@@ -57,12 +57,13 @@ in lib.fix (self: {
   ];
 
   third_party = with depot.third_party; [
+    apereo-cas
+    bufbuild
     cgit
     git
     grpc
     nix
     openldap
-    apereo-cas
   ];
 
   various = with depot; [
