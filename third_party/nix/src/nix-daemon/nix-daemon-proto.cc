@@ -1,4 +1,5 @@
 #include <google/protobuf/util/time_util.h>
+#include <grpcpp/impl/codegen/status.h>
 #include <grpcpp/impl/codegen/status_code_enum.h>
 
 #include "libproto/worker.grpc.pb.h"
@@ -126,6 +127,18 @@ class WorkerServiceImpl final : public Worker::Service {
     } catch (InvalidPath&) {
       return Status(grpc::StatusCode::INVALID_ARGUMENT, "Invalid store path");
     }
+  }
+
+  Status QueryDerivationOutputNames(
+      grpc::ServerContext* context, const StorePath* request,
+      nix::proto::DerivationOutputNames* response) override {
+    auto path = request->path();
+    auto names = store_->queryDerivationOutputNames(path);
+    for (const auto& name : names) {
+      response->add_names(name);
+    }
+
+    return Status::OK;
   }
 
   Status QueryMissing(grpc::ServerContext* context, const StorePaths* request,
