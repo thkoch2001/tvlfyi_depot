@@ -70,6 +70,30 @@
       "revId": "c7b976a2380233925dcbbc2557615b1c43c401b5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5fb2d0_740d3061",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-17T20:36:18Z",
+      "side": 1,
+      "message": "Note that in several protobuf serializations (json), name changes are breaking.",
+      "parentUuid": "c533ca76_ea5929fa",
+      "range": {
+        "startLine": 283,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 27
+      },
+      "revId": "c7b976a2380233925dcbbc2557615b1c43c401b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
