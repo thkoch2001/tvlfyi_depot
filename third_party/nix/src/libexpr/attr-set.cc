@@ -1,5 +1,7 @@
 #include "libexpr/attr-set.hh"
 
+#include <algorithm>
+#include <immer/map.hpp>
 #include <new>
 
 #include <absl/container/btree_map.h>
@@ -20,17 +22,11 @@ static Bindings ZERO_BINDINGS;
 // first element (until the next sort, which wasn't stable, after
 // which things are more or less undefined).
 //
-// This behaviour is mimicked by using .insert(), which will *not*
-// override existing values.
+// Currently the parser will throw errors if users attempt to use the
+// same key twice, so no special handling is performed here.
 void Bindings::push_back(const Attr& attr) {
   assert(this != &ZERO_BINDINGS);
-
-  auto [_, inserted] = attributes_.insert({attr.name, attr});
-
-  if (!inserted) {
-    DLOG(WARNING) << "attempted to insert duplicate attribute for key '"
-                  << attr.name << "'";
-  }
+  attributes_ = attributes_.set(attr.name, attr);
 }
 
 size_t Bindings::size() const { return attributes_.size(); }
@@ -45,10 +41,12 @@ std::vector<const Attr*> Bindings::lexicographicOrder() {
     res.emplace_back(&value);
   }
 
+  std::stable_sort(res.begin(), res.end());
+
   return res;
 }
 
-Bindings::iterator Bindings::find(const Symbol& name) {
+const Attr* Bindings::find(const Symbol& name) {
   return attributes_.find(name);
 }
 
@@ -66,15 +64,11 @@ Bindings* Bindings::NewGC(size_t capacity) {
 
 Bindings* Bindings::Merge(const Bindings& lhs, const Bindings& rhs) {
   auto bindings = NewGC(lhs.size() + rhs.size());
+  bindings->attributes_ = lhs.attributes_;
 
-  // Values are merged by inserting the entire iterator range of both
-  // input sets. The right-hand set (the values of which take
-  // precedence) is inserted *first* because the range insertion
-  // method does not override values.
-  bindings->attributes_.insert(rhs.attributes_.cbegin(),
-                               rhs.attributes_.cend());
-  bindings->attributes_.insert(lhs.attributes_.cbegin(),
-                               lhs.attributes_.cend());
+  for (const auto& [k, v] : rhs.attributes_) {
+    bindings->attributes_ = bindings->attributes_.set(k, v);
+  }
 
   return bindings;
 }

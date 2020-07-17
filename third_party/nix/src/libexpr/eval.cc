@@ -17,6 +17,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#include "libexpr/attr-set.hh"
 #include "libexpr/eval-inline.hh"
 #include "libexpr/function-trace.hh"
 #include "libexpr/value.hh"
@@ -490,7 +491,7 @@ Value* EvalState::addPrimOp(const std::string& name, size_t arity,
 }
 
 Value& EvalState::getBuiltin(const std::string& name) {
-  return *baseEnv.values[0]->attrs->find(symbols.Create(name))->second.value;
+  return *baseEnv.values[0]->attrs->find(symbols.Create(name))->value;
 }
 
 /* Every "format" object (even temporary) takes up a few hundred bytes
@@ -602,12 +603,12 @@ inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
       env->values[0] = v;
       env->type = Env::HasWithAttrs;
     }
-    Bindings::iterator j = env->values[0]->attrs->find(var.name);
-    if (j != env->values[0]->attrs->end()) {
-      if (countCalls && (j->second.pos != nullptr)) {
-        attrSelects[*j->second.pos]++;
+    const Attr* j = env->values[0]->attrs->find(var.name);
+    if (j != nullptr) {
+      if (countCalls && (j->pos != nullptr)) {
+        attrSelects[*j->pos]++;
       }
-      return j->second.value;
+      return j->value;
     }
     if (env->prevWith == 0u) {
       throwUndefinedVarError("undefined variable '%1%' at %2%", var.name,
@@ -844,10 +845,10 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& value) {
     }
     state.forceStringNoCtx(nameVal);
     Symbol nameSym = state.symbols.Create(nameVal.string.s);
-    Bindings::iterator j = value.attrs->find(nameSym);
-    if (j != value.attrs->end()) {
+    const Attr* j = value.attrs->find(nameSym);
+    if (j != nullptr) {
       throwEvalError("dynamic attribute '%1%' at %2% already defined at %3%",
-                     nameSym, i.pos, *j->second.pos);
+                     nameSym, i.pos, *j->pos);
     }
 
     value.attrs->push_back(
@@ -913,23 +914,23 @@ void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
   try {
     for (auto& i : attrPath) {
       nrLookups++;
-      Bindings::iterator j;
+      const Attr* j;
       Symbol name = getName(i, state, env);
       if (def != nullptr) {
         state.forceValue(*vAttrs, pos);
         if (vAttrs->type != tAttrs ||
-            (j = vAttrs->attrs->find(name)) == vAttrs->attrs->end()) {
+            (j = vAttrs->attrs->find(name)) == nullptr) {
           def->eval(state, env, v);
           return;
         }
       } else {
         state.forceAttrs(*vAttrs, pos);
-        if ((j = vAttrs->attrs->find(name)) == vAttrs->attrs->end()) {
+        if ((j = vAttrs->attrs->find(name)) == nullptr) {
           throwEvalError("attribute '%1%' missing, at %2%", name, pos);
         }
       }
-      vAttrs = j->second.value;
-      pos2 = j->second.pos;
+      vAttrs = j->value;
+      pos2 = j->pos;
       if (state.countCalls && (pos2 != nullptr)) {
         state.attrSelects[*pos2]++;
       }
@@ -962,14 +963,13 @@ void ExprOpHasAttr::eval(EvalState& state, Env& env, Value& v) {
 
   for (auto& i : attrPath) {
     state.forceValue(*vAttrs);
-    Bindings::iterator j;
+    const Attr* j;
     Symbol name = getName(i, state, env);
-    if (vAttrs->type != tAttrs ||
-        (j = vAttrs->attrs->find(name)) == vAttrs->attrs->end()) {
+    if (vAttrs->type != tAttrs || (j = vAttrs->attrs->find(name)) == nullptr) {
       mkBool(v, false);
       return;
     }
-    vAttrs = j->second.value;
+    vAttrs = j->value;
   }
 
   mkBool(v, true);
@@ -1044,7 +1044,7 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
   // use that.
   if (fun.type == tAttrs) {
     auto found = fun.attrs->find(sFunctor);
-    if (found != fun.attrs->end()) {
+    if (found != nullptr) {
       // fun may be allocated on the stack of the calling function,
       // but for functors we may keep a reference, so heap-allocate a
       // copy and use that instead
@@ -1054,7 +1054,7 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
       Value v2;
       // functors are called with the element itself as the first
       // parameter, which is partially applied here
-      callFunction(*found->second.value, fun2, v2, pos);
+      callFunction(*found->value, fun2, v2, pos);
       return callFunction(v2, arg, v, pos);
     }
   }
@@ -1089,8 +1089,8 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
        argument has a default, use the default. */
     size_t attrsUsed = 0;
     for (auto& i : lambda.formals->formals) {
-      Bindings::iterator j = arg.attrs->find(i.name);
-      if (j == arg.attrs->end()) {
+      const Attr* j = arg.attrs->find(i.name);
+      if (j == nullptr) {
         if (i.def == nullptr) {
           throwTypeError("%1% called without required argument '%2%', at %3%",
                          lambda, i.name, pos);
@@ -1098,7 +1098,7 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
         env2.values[displ++] = i.def->maybeThunk(*this, env2);
       } else {
         attrsUsed++;
-        env2.values[displ++] = j->second.value;
+        env2.values[displ++] = j->value;
       }
     }
 
@@ -1147,9 +1147,9 @@ void EvalState::autoCallFunction(Bindings& args, Value& fun, Value& res) {
 
   if (fun.type == tAttrs) {
     auto found = fun.attrs->find(sFunctor);
-    if (found != fun.attrs->end()) {
+    if (found != nullptr) {
       Value* v = allocValue();
-      callFunction(*found->second.value, fun, *v, noPos);
+      callFunction(*found->value, fun, *v, noPos);
       forceValue(*v);
       return autoCallFunction(args, *v, res);
     }
@@ -1164,9 +1164,9 @@ void EvalState::autoCallFunction(Bindings& args, Value& fun, Value& res) {
   mkAttrs(*actualArgs, fun.lambda.fun->formals->formals.size());
 
   for (auto& i : fun.lambda.fun->formals->formals) {
-    Bindings::iterator j = args.find(i.name);
-    if (j != args.end()) {
-      actualArgs->attrs->push_back(j->second);
+    const Attr* j = args.find(i.name);
+    if (j != nullptr) {
+      actualArgs->attrs->push_back(*j);
     } else if (i.def == nullptr) {
       throwTypeError(
           "cannot auto-call a function that has an argument without a default "
@@ -1419,7 +1419,7 @@ bool EvalState::forceBool(Value& v, const Pos& pos) {
 }
 
 bool EvalState::isFunctor(Value& fun) {
-  return fun.type == tAttrs && fun.attrs->find(sFunctor) != fun.attrs->end();
+  return fun.type == tAttrs && fun.attrs->find(sFunctor) != nullptr;
 }
 
 void EvalState::forceFunction(Value& v, const Pos& pos) {
@@ -1480,15 +1480,15 @@ bool EvalState::isDerivation(Value& v) {
   if (v.type != tAttrs) {
     return false;
   }
-  Bindings::iterator i = v.attrs->find(sType);
-  if (i == v.attrs->end()) {
+  const Attr* i = v.attrs->find(sType);
+  if (i == nullptr) {
     return false;
   }
-  forceValue(*i->second.value);
-  if (i->second.value->type != tString) {
+  forceValue(*i->value);
+  if (i->value->type != tString) {
     return false;
   }
-  return strcmp(i->second.value->string.s, "derivation") == 0;
+  return strcmp(i->value->string.s, "derivation") == 0;
 }
 
 std::optional<std::string> EvalState::tryAttrsToString(const Pos& pos, Value& v,
@@ -1496,9 +1496,9 @@ std::optional<std::string> EvalState::tryAttrsToString(const Pos& pos, Value& v,
                                                        bool coerceMore,
                                                        bool copyToStore) {
   auto i = v.attrs->find(sToString);
-  if (i != v.attrs->end()) {
+  if (i != nullptr) {
     Value v1;
-    callFunction(*i->second.value, v, v1, pos);
+    callFunction(*i->value, v, v1, pos);
     return coerceToString(pos, v1, context, coerceMore, copyToStore);
   }
 
@@ -1529,11 +1529,10 @@ std::string EvalState::coerceToString(const Pos& pos, Value& v,
       return *maybeString;
     }
     auto i = v.attrs->find(sOutPath);
-    if (i == v.attrs->end()) {
+    if (i == nullptr) {
       throwTypeError("cannot coerce a set to a string, at %1%", pos);
     }
-    return coerceToString(pos, *i->second.value, context, coerceMore,
-                          copyToStore);
+    return coerceToString(pos, *i->value, context, coerceMore, copyToStore);
   }
 
   if (v.type == tExternal) {
@@ -1675,13 +1674,14 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
       /* If both sets denote a derivation (type = "derivation"),
          then compare their outPaths. */
       if (isDerivation(v1) && isDerivation(v2)) {
-        Bindings::iterator i = v1.attrs->find(sOutPath);
-        Bindings::iterator j = v2.attrs->find(sOutPath);
-        if (i != v1.attrs->end() && j != v2.attrs->end()) {
-          return eqValues(*i->second.value, *j->second.value);
+        const Attr* i = v1.attrs->find(sOutPath);
+        const Attr* j = v2.attrs->find(sOutPath);
+        if (i != nullptr && j != nullptr) {
+          return eqValues(*i->value, *j->value);
         }
       }
 
+      // TODO(tazjin): should this happen before the derivation check?
       if (v1.attrs->size() != v2.attrs->size()) {
         return false;
       }

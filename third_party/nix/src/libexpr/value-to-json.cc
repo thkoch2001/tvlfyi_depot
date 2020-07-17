@@ -47,19 +47,19 @@ void printValueAsJSON(EvalState& state, bool strict, Value& v,
         break;
       }
       auto i = v.attrs->find(state.sOutPath);
-      if (i == v.attrs->end()) {
+      if (i == nullptr) {
         auto obj(out.object());
         StringSet names;
         for (auto& j : *v.attrs) {
           names.insert(j.second.name);
         }
         for (auto& j : names) {
-          auto [_, a] = *v.attrs->find(state.symbols.Create(j));
+          auto a = v.attrs->find(state.symbols.Create(j));
           auto placeholder(obj.placeholder(j));
-          printValueAsJSON(state, strict, *a.value, placeholder, context);
+          printValueAsJSON(state, strict, *a->value, placeholder, context);
         }
       } else {
-        printValueAsJSON(state, strict, *i->second.value, out, context);
+        printValueAsJSON(state, strict, *i->value, out, context);
       }
       break;
     }

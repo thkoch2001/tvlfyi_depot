@@ -174,9 +174,8 @@ struct CmdSearch : SourceExprCommand, MixJSON {
         else if (v->type == tAttrs) {
           if (!toplevel) {
             auto attrs = v->attrs;
-            Bindings::iterator j = attrs->find(sRecurse);
-            if (j == attrs->end() ||
-                !state->forceBool(*j->second.value, *j->second.pos)) {
+            auto j = attrs->find(sRecurse);
+            if (j == nullptr || !state->forceBool(*j->value, *j->pos)) {
               DLOG(INFO) << "skip attribute '" << attrPath << "'";
               return;
             }
@@ -184,9 +183,8 @@ struct CmdSearch : SourceExprCommand, MixJSON {
 
           bool toplevel2 = false;
           if (!fromCache) {
-            Bindings::iterator j = v->attrs->find(sToplevel);
-            toplevel2 = j != v->attrs->end() &&
-                        state->forceBool(*j->second.value, *j->second.pos);
+            auto j = v->attrs->find(sToplevel);
+            toplevel2 = j != nullptr && state->forceBool(*j->value, *j->pos);
           }
 
           for (auto& i : *v->attrs) {

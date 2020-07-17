@@ -41,17 +41,16 @@ std::string resolveMirrorUri(EvalState& state, std::string uri) {
   state.forceAttrs(vMirrors);
 
   auto mirrorList = vMirrors.attrs->find(state.symbols.Create(mirrorName));
-  if (mirrorList == vMirrors.attrs->end()) {
+  if (mirrorList == nullptr) {
     throw Error(format("unknown mirror name '%1%'") % mirrorName);
   }
-  state.forceList(*mirrorList->second.value);
+  state.forceList(*mirrorList->value);
 
-  if (mirrorList->second.value->listSize() < 1) {
+  if (mirrorList->value->listSize() < 1) {
     throw Error(format("mirror URI '%1%' did not expand to anything") % uri);
   }
 
-  std::string mirror =
-      state.forceString(*mirrorList->second.value->listElems()[0]);
+  std::string mirror = state.forceString(*mirrorList->value->listElems()[0]);
   return mirror + (absl::EndsWith(mirror, "/") ? "" : "/") +
          std::string(s, p + 1);
 }
@@ -130,28 +129,28 @@ static int _main(int argc, char** argv) {
 
       /* Extract the URI. */
       auto attr = v.attrs->find(state->symbols.Create("urls"));
-      if (attr == v.attrs->end()) {
+      if (attr == nullptr) {
         throw Error("attribute set does not contain a 'urls' attribute");
       }
-      state->forceList(*attr->second.value);
-      if (attr->second.value->listSize() < 1) {
+      state->forceList(*attr->value);
+      if (attr->value->listSize() < 1) {
         throw Error("'urls' list is empty");
       }
-      uri = state->forceString(*attr->second.value->listElems()[0]);
+      uri = state->forceString(*attr->value->listElems()[0]);
 
       /* Extract the hash mode. */
       attr = v.attrs->find(state->symbols.Create("outputHashMode"));
-      if (attr == v.attrs->end()) {
+      if (attr == nullptr) {
         LOG(WARNING) << "this does not look like a fetchurl call";
       } else {
-        unpack = state->forceString(*attr->second.value) == "recursive";
+        unpack = state->forceString(*attr->value) == "recursive";
       }
 
       /* Extract the name. */
       if (name.empty()) {
         attr = v.attrs->find(state->symbols.Create("name"));
-        if (attr != v.attrs->end()) {
-          name = state->forceString(*attr->second.value);
+        if (attr != nullptr) {
+          name = state->forceString(*attr->value);
         }
       }
     }

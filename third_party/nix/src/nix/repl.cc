@@ -703,12 +703,11 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
 
       if (isDrv) {
         str << "«derivation ";
-        Bindings::iterator i = v.attrs->find(state.sDrvPath);
+        auto i = v.attrs->find(state.sDrvPath);
         PathSet context;
-        Path drvPath =
-            i != v.attrs->end()
-                ? state.coerceToPath(*i->second.pos, *i->second.value, context)
-                : "???";
+        Path drvPath = i != nullptr
+                           ? state.coerceToPath(*i->pos, *i->value, context)
+                           : "???";
         str << drvPath << "»";
       }
 

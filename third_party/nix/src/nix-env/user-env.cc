@@ -126,11 +126,11 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
   DLOG(INFO) << "evaluating user environment builder";
   state.forceValue(topLevel);
   PathSet context;
-  Attr& aDrvPath(topLevel.attrs->find(state.sDrvPath)->second);
+  const Attr& aDrvPath(*topLevel.attrs->find(state.sDrvPath));
   Path topLevelDrv =
       state.coerceToPath(aDrvPath.pos != nullptr ? *(aDrvPath.pos) : noPos,
                          *(aDrvPath.value), context);
-  Attr& aOutPath(topLevel.attrs->find(state.sOutPath)->second);
+  const Attr& aOutPath(*topLevel.attrs->find(state.sOutPath));
   Path topLevelOut =
       state.coerceToPath(aOutPath.pos != nullptr ? *(aOutPath.pos) : noPos,
                          *(aOutPath.value), context);
