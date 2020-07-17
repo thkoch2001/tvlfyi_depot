@@ -27,8 +27,10 @@ Gerrit uses the concept of change IDs to track commits across rebases and other
 operations that might change their hashes, and link them to unique changes in
 Gerrit.
 
-To make this process smooth for users, the repository should be cloned and a
-commit hook should be installed as follows:
+First, [tell Gerrit][Gerrit SSH] about your SSH keys.
+
+Then, to make using Gerrit smooth for users, the repository should be cloned and
+a commit hook should be installed as follows:
 
 ```
 git clone "ssh://$USER@code.tvl.fyi:29418/depot"
@@ -130,6 +132,7 @@ Create an appropriate commit locally and send it us using either of these option
 
 The email address is a [public group][].
 
+[Gerrit SSH]: https://cl.tvl.fyi/settings/#SSHKeys
 [Gerrit walkthrough]: https://gerrit-review.googlesource.com/Documentation/intro-gerrit-walkthrough.html
 [OWNERS]: https://cl.tvl.fyi/plugins/owners/Documentation/config.md
 [guidelines]: ./CONTRIBUTING.md#commit-messages
