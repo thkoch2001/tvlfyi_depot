@@ -1,0 +1,11 @@
+# -*- mode: cmake; -*-
+include_directories(${PROJECT_BINARY_DIR}) # for 'generated/'
+
+add_executable(value-to-json value-to-json.cc)
+target_link_libraries(value-to-json
+  nixexpr
+  nixstore
+  GTest::gtest_main
+)
+
+gtest_discover_tests(value-to-json)

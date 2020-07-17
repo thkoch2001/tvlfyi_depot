@@ -446,7 +446,7 @@ PathSet Store::queryValidPaths(const PathSet& paths,
    responsibility of the caller to provide a closure. */
 std::string Store::makeValidityRegistration(const PathSet& paths,
                                             bool showDerivers, bool showHash) {
-  std::string s = s;
+  std::string s;
 
   for (auto& i : paths) {
     s += i + "\n";
