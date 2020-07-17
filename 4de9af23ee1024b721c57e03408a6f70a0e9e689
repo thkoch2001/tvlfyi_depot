@@ -16,6 +16,24 @@
       "revId": "4de9af23ee1024b721c57e03408a6f70a0e9e689",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eccb9fcd_2db4a9ba",
+        "filename": "nix/bufCheck/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-17T20:34:57Z",
+      "side": 1,
+      "message": "Done - non-enforcing",
+      "parentUuid": "29dc90b1_4f295ad7",
+      "revId": "4de9af23ee1024b721c57e03408a6f70a0e9e689",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
