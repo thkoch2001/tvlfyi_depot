@@ -52,6 +52,7 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     flex
     glog
     grpc
+    gtest
     libseccomp
     libsodium
     openssl
@@ -60,10 +61,36 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     xz
   ];
 
+  doCheck = false;
+  doInstallCheck = true;
+
   propagatedBuildInputs = with pkgs; [
     boost
     largeBoehm
   ];
+
+  configurePhase = ''
+    mkdir build
+    cd build
+    cmake .. \
+      -DCMAKE_INSTALL_PREFIX=$out \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF \
+      -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF \
+      -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
+  '';
+
+  installCheckPhase = ''
+    export NIX_DATA_DIR=$out/share
+    make test
+  '';
+
+  preBuild = ''
+    if [ -n "$NIX_BUILD_CORES" ]; then
+      makeFlags+="-j$NIX_BUILD_CORES "
+      makeFlags+="-l$NIX_BUILD_CORES "
+    fi
+  '';
 
   # Forward the location of the generated Protobuf / gRPC files so
   # that they can be included by CMake.
