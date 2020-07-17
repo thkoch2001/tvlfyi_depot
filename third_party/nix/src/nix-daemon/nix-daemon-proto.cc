@@ -7,6 +7,7 @@
 #include "libproto/worker.grpc.pb.h"
 #include "libproto/worker.pb.h"
 #include "libstore/store-api.hh"
+#include "libstore/derivations.hh"
 
 namespace nix::daemon {
 
@@ -15,6 +16,7 @@ using ::nix::proto::PathInfo;
 using ::nix::proto::StorePath;
 using ::nix::proto::StorePaths;
 using ::nix::proto::WorkerService;
+using ::nix::proto::BuildStatus;
 
 static Status INVALID_STORE_PATH =
     Status(grpc::StatusCode::INVALID_ARGUMENT, "Invalid store path");
@@ -200,6 +202,75 @@ class WorkerServiceImpl final : public WorkerService::Service {
         request->check_contents(), static_cast<RepairFlag>(request->repair()));
 
     response->set_errors(errors);
+
+    return Status::OK;
+  }
+
+  Status BuildDerivation(grpc::ServerContext* context,
+                         const nix::proto::BuildDerivationRequest* request,
+                         nix::proto::BuildDerivationResponse* response) override {
+    auto drv_path = request->drv_path().path();
+    BasicDerivation drv(&request->derivation());
+    BuildMode build_mode;
+    switch (request->build_mode()) {
+      case nix::proto::BuildMode::Normal:
+        build_mode = BuildMode::bmNormal;
+        break;
+      case nix::proto::BuildMode::Repair:
+        build_mode = BuildMode::bmRepair;
+        break;
+      case nix::proto::BuildMode::Check:
+        build_mode = BuildMode::bmCheck;
+        break;
+      default:
+        return Status(grpc::StatusCode::INVALID_ARGUMENT, "Invalid BuildMode");
+    }
+
+    auto res = store_->buildDerivation(drv_path, drv, build_mode);
+
+    switch(res.status) {
+      case BuildResult::Status::Built:
+        response->set_status(BuildStatus::Built);
+        break;
+      case BuildResult::Status::Substituted:
+        response->set_status(BuildStatus::Substituted);
+        break;
+      case BuildResult::Status::AlreadyValid:
+        response->set_status(BuildStatus::AlreadyValid);
+        break;
+      case BuildResult::Status::PermanentFailure:
+        response->set_status(BuildStatus::PermanentFailure);
+        break;
+      case BuildResult::Status::InputRejected:
+        response->set_status(BuildStatus::InputRejected);
+        break;
+      case BuildResult::Status::OutputRejected:
+        response->set_status(BuildStatus::OutputRejected);
+        break;
+      case BuildResult::Status::TransientFailure:
+        response->set_status(BuildStatus::TransientFailure);
+        break;
+      case BuildResult::Status::CachedFailure:
+        response->set_status(BuildStatus::CachedFailure);
+        break;
+      case BuildResult::Status::TimedOut:
+        response->set_status(BuildStatus::TimedOut);
+        break;
+      case BuildResult::Status::MiscFailure:
+        response->set_status(BuildStatus::MiscFailure);
+        break;
+      case BuildResult::Status::DependencyFailed:
+        response->set_status(BuildStatus::DependencyFailed);
+        break;
+      case BuildResult::Status::LogLimitExceeded:
+        response->set_status(BuildStatus::LogLimitExceeded);
+        break;
+      case BuildResult::Status::NotDeterministic:
+        response->set_status(BuildStatus::NotDeterministic);
+        break;
+    }
+
+    response->set_error_message(res.errorMsg);
 
     return Status::OK;
   }
