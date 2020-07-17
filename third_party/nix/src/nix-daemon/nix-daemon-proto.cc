@@ -141,6 +141,15 @@ class WorkerServiceImpl final : public WorkerService::Service {
     return Status::OK;
   }
 
+  Status QueryPathFromHashPart(grpc::ServerContext* context,
+                               const nix::proto::HashPart* request,
+                               StorePath* response) override {
+    auto hash_part = request->hash_part();
+    auto path = store_->queryPathFromHashPart(hash_part);
+    response->set_path(path);
+    return Status::OK;
+  }
+
   Status QueryMissing(grpc::ServerContext* context, const StorePaths* request,
                       nix::proto::QueryMissingResponse* response) override {
     std::set<Path> targets;
