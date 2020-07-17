@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "252e828e_68618073",
+        "filename": "third_party/bufbuild/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-17T11:51:43Z",
+      "side": 1,
+      "message": "there\u0027s a Nix shell function for this, but I\u0027m happy with doing it in a followup CL",
+      "range": {
+        "startLine": 17,
+        "startChar": 18,
+        "endLine": 17,
+        "endChar": 75
+      },
+      "revId": "48b873f459dd809c4acfcf3f9f9da8e3ff561bb6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
