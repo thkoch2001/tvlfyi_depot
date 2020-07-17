@@ -288,10 +288,25 @@ message VerifyStoreResponse {
   bool errors = 1;
 }
 
+message Derivation {
+  message DerivationOutput {
+    StorePath path = 1;
+    string hash_algo = 2;
+    bytes hash = 3;
+  }
+  map<string, DerivationOutput> outputs = 1;
+  StorePaths input_sources = 2;
+  string platform = 3;
+  StorePath builder = 4;
+  repeated string args = 5;
+  map<string, string> env = 6;
+}
+
 message BuildDerivationRequest {
   // Only used for informational purposes.
   StorePath drv_path = 1;
-  BuildMode build_mode = 2;
+  Derivation derivation = 2;
+  BuildMode build_mode = 3;
 }
 
 message BuildDerivationResponse {
