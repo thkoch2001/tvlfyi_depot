@@ -133,5 +133,5 @@ The email address is a [public group][].
 [Gerrit walkthrough]: https://gerrit-review.googlesource.com/Documentation/intro-gerrit-walkthrough.html
 [OWNERS]: https://cl.tvl.fyi/plugins/owners/Documentation/config.md
 [guidelines]: ./CONTRIBUTING.md#commit-messages
-[tvl-slapd]: https://code.tvl.fyi/tree/ops/nixos/tvl-slapd/default.nix
+[tvl-slapd]: ../ops/nixos/tvl-slapd/default.nix
 [public group]: https://groups.google.com/a/tazj.in/forum/?hl=en#!forum/depot
