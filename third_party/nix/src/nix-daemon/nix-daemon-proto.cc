@@ -7,9 +7,9 @@ namespace nix::daemon {
 using ::grpc::Status;
 using ::nix::proto::StorePath;
 using ::nix::proto::StorePaths;
-using ::nix::proto::Worker;
+using ::nix::proto::WorkerService;
 
-class WorkerServiceImpl final : public Worker::Service {
+class WorkerServiceImpl final : public WorkerService::Service {
  public:
   WorkerServiceImpl(nix::Store* store) : store_(store) {}
 

@@ -7,7 +7,7 @@ package nix.proto;
 
 // Service representing a worker used for building and interfacing
 // with the Nix store.
-service Worker {
+service WorkerService {
   // Validates whether the supplied path is a valid store path.
   rpc IsValidPath(StorePath) returns (IsValidPathResponse);
 
@@ -279,7 +279,7 @@ message HashPart {
 message VerifyStoreRequest {
   bool repair = 1;
   // TODO(grfn): Remove double-negative
-  bool dontCheckSigs = 2;
+  bool insecure_skip_verify = 2;
 }
 
 message VerifyStoreResponse {
@@ -289,13 +289,13 @@ message VerifyStoreResponse {
 
 message BuildDerivationRequest {
   // Only used for informational purposes.
-  StorePath drvPath = 1;
-  BuildMode buildMode = 2;
+  StorePath drv_path = 1;
+  BuildMode build_mode = 2;
 }
 
 message BuildDerivationResponse {
   BuildStatus status = 1;
-  string errorMessage = 2;
+  string error_message = 2;
 }
 
 message AddToStoreNarRequest {
