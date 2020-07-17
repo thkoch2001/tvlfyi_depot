@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81c43c51_e71b6a36",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 7
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2020-07-17T20:29:02Z",
+      "side": 1,
+      "message": "If you\u0027re going to flip the sense of this, I\u0027d suggest doing it now ;)",
+      "range": {
+        "startLine": 283,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 27
+      },
+      "revId": "c7b976a2380233925dcbbc2557615b1c43c401b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
