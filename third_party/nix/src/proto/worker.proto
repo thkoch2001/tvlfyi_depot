@@ -252,7 +252,7 @@ message CollectGarbageResponse {
 
 message PathInfo {
   StorePath deriver = 1;
-  string nar_hash = 2;
+  bytes nar_hash = 2;
   repeated string references = 3;
   google.protobuf.Timestamp registration_time = 4;
   uint64 nar_size = 5;
