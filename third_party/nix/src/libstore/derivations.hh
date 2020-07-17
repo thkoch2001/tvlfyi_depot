@@ -2,6 +2,7 @@
 
 #include <map>
 
+#include "libproto/worker.pb.h"
 #include "libstore/store-api.hh"
 #include "libutil/hash.hh"
 #include "libutil/types.hh"
@@ -35,6 +36,7 @@ typedef std::map<Path, StringSet> DerivationInputs;
 typedef std::map<std::string, std::string> StringPairs;
 
 struct BasicDerivation {
+  explicit BasicDerivation(const nix::proto::Derivation& proto_derivation);
   DerivationOutputs outputs; /* keyed on symbolic IDs */
   PathSet inputSrcs;         /* inputs that are sources */
   std::string platform;
