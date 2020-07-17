@@ -17,7 +17,7 @@
 (setq display-time-format
       (concat "%H·%M"
               (format "%0+3d" (/ (car (current-time-zone)) 3600))
-              " %a %d %b [%U of 52 weeks]"))
+              " %a %d %b"))
 (display-time-mode 1)
 
 ;; Remove the boilerplate in the *scratch* buffer
