@@ -352,25 +352,23 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
   state.forceAttrs(*args[0], pos);
 
   /* Get the start set. */
-  Bindings::iterator startSet =
-      args[0]->attrs->find(state.symbols.Create("startSet"));
-  if (startSet == args[0]->attrs->end()) {
+  const Attr* startSet = args[0]->attrs->find(state.symbols.Create("startSet"));
+  if (startSet == nullptr) {
     throw EvalError(format("attribute 'startSet' required, at %1%") % pos);
   }
-  state.forceList(*startSet->second.value, pos);
+  state.forceList(*startSet->value, pos);
 
   ValueList workSet;
-  for (unsigned int n = 0; n < startSet->second.value->listSize(); ++n) {
-    workSet.push_back(startSet->second.value->listElems()[n]);
+  for (unsigned int n = 0; n < startSet->value->listSize(); ++n) {
+    workSet.push_back(startSet->value->listElems()[n]);
   }
 
   /* Get the operator. */
-  Bindings::iterator op =
-      args[0]->attrs->find(state.symbols.Create("operator"));
-  if (op == args[0]->attrs->end()) {
+  const Attr* op = args[0]->attrs->find(state.symbols.Create("operator"));
+  if (op == nullptr) {
     throw EvalError(format("attribute 'operator' required, at %1%") % pos);
   }
-  state.forceValue(*op->second.value);
+  state.forceValue(*op->value);
 
   /* Construct the closure by applying the operator to element of
      `workSet', adding the result to `workSet', continuing until
@@ -385,21 +383,21 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
 
     state.forceAttrs(*e, pos);
 
-    Bindings::iterator key = e->attrs->find(state.symbols.Create("key"));
-    if (key == e->attrs->end()) {
+    const Attr* key = e->attrs->find(state.symbols.Create("key"));
+    if (key == nullptr) {
       throw EvalError(format("attribute 'key' required, at %1%") % pos);
     }
-    state.forceValue(*key->second.value);
+    state.forceValue(*key->value);
 
-    if (doneKeys.find(key->second.value) != doneKeys.end()) {
+    if (doneKeys.find(key->value) != doneKeys.end()) {
       continue;
     }
-    doneKeys.insert(key->second.value);
+    doneKeys.insert(key->value);
     res.push_back(e);
 
     /* Call the `operator' function with `e' as argument. */
     Value call;
-    mkApp(call, *op->second.value, *e);
+    mkApp(call, *op->value, *e);
     state.forceList(call, pos);
 
     /* Add the values returned by the operator to the work set. */
@@ -519,14 +517,14 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   state.forceAttrs(*args[0], pos);
 
   /* Figure out the name first (for stack backtraces). */
-  Bindings::iterator attr = args[0]->attrs->find(state.sName);
-  if (attr == args[0]->attrs->end()) {
+  const Attr* attr = args[0]->attrs->find(state.sName);
+  if (attr == nullptr) {
     throw EvalError(format("required attribute 'name' missing, at %1%") % pos);
   }
   std::string drvName;
-  Pos& posDrvName(*attr->second.pos);
+  Pos& posDrvName(*attr->pos);
   try {
-    drvName = state.forceStringNoCtx(*attr->second.value, pos);
+    drvName = state.forceStringNoCtx(*attr->value, pos);
   } catch (Error& e) {
     e.addPrefix(
         format("while evaluating the derivation attribute 'name' at %1%:\n") %
@@ -538,16 +536,15 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   std::ostringstream jsonBuf;
   std::unique_ptr<JSONObject> jsonObject;
   attr = args[0]->attrs->find(state.sStructuredAttrs);
-  if (attr != args[0]->attrs->end() &&
-      state.forceBool(*attr->second.value, pos)) {
+  if (attr != nullptr && state.forceBool(*attr->value, pos)) {
     jsonObject = std::make_unique<JSONObject>(jsonBuf);
   }
 
   /* Check whether null attributes should be ignored. */
   bool ignoreNulls = false;
   attr = args[0]->attrs->find(state.sIgnoreNulls);
-  if (attr != args[0]->attrs->end()) {
-    ignoreNulls = state.forceBool(*attr->second.value, pos);
+  if (attr != nullptr) {
+    ignoreNulls = state.forceBool(*attr->value, pos);
   }
 
   /* Build the derivation expression by processing the attributes. */
@@ -946,19 +943,19 @@ static void prim_findFile(EvalState& state, const Pos& pos, Value** args,
     state.forceAttrs(v2, pos);
 
     std::string prefix;
-    Bindings::iterator i = v2.attrs->find(state.symbols.Create("prefix"));
-    if (i != v2.attrs->end()) {
-      prefix = state.forceStringNoCtx(*i->second.value, pos);
+    auto i = v2.attrs->find(state.symbols.Create("prefix"));
+    if (i != nullptr) {
+      prefix = state.forceStringNoCtx(*i->value, pos);
     }
 
     i = v2.attrs->find(state.symbols.Create("path"));
-    if (i == v2.attrs->end()) {
+    if (i == nullptr) {
       throw EvalError(format("attribute 'path' missing, at %1%") % pos);
     }
 
     PathSet context;
     std::string path =
-        state.coerceToString(pos, *i->second.value, context, false, false);
+        state.coerceToString(pos, *i->value, context, false, false);
 
     try {
       state.realiseContext(context);
@@ -1248,16 +1245,16 @@ void prim_getAttr(EvalState& state, const Pos& pos, Value** args, Value& v) {
   std::string attr = state.forceStringNoCtx(*args[0], pos);
   state.forceAttrs(*args[1], pos);
   // !!! Should we create a symbol here or just do a lookup?
-  Bindings::iterator i = args[1]->attrs->find(state.symbols.Create(attr));
-  if (i == args[1]->attrs->end()) {
+  auto i = args[1]->attrs->find(state.symbols.Create(attr));
+  if (i == nullptr) {
     throw EvalError(format("attribute '%1%' missing, at %2%") % attr % pos);
   }
   // !!! add to stack trace?
-  if (state.countCalls && (i->second.pos != nullptr)) {
-    state.attrSelects[*i->second.pos]++;
+  if (state.countCalls && (i->pos != nullptr)) {
+    state.attrSelects[*i->pos]++;
   }
-  state.forceValue(*i->second.value);
-  v = *i->second.value;
+  state.forceValue(*i->value);
+  v = *i->value;
 }
 
 /* Return position information of the specified attribute. */
@@ -1265,11 +1262,11 @@ void prim_unsafeGetAttrPos(EvalState& state, const Pos& pos, Value** args,
                            Value& v) {
   std::string attr = state.forceStringNoCtx(*args[0], pos);
   state.forceAttrs(*args[1], pos);
-  Bindings::iterator i = args[1]->attrs->find(state.symbols.Create(attr));
-  if (i == args[1]->attrs->end()) {
+  auto i = args[1]->attrs->find(state.symbols.Create(attr));
+  if (i == nullptr) {
     mkNull(v);
   } else {
-    state.mkPos(v, i->second.pos);
+    state.mkPos(v, i->pos);
   }
 }
 
@@ -1278,8 +1275,7 @@ static void prim_hasAttr(EvalState& state, const Pos& pos, Value** args,
                          Value& v) {
   std::string attr = state.forceStringNoCtx(*args[0], pos);
   state.forceAttrs(*args[1], pos);
-  mkBool(v, args[1]->attrs->find(state.symbols.Create(attr)) !=
-                args[1]->attrs->end());
+  mkBool(v, args[1]->attrs->find(state.symbols.Create(attr)) != nullptr);
 }
 
 /* Determine whether the argument is a set. */
@@ -1300,6 +1296,8 @@ static void prim_removeAttrs(EvalState& state, const Pos& pos, Value** args,
     state.forceStringNoCtx(*args[1]->listElems()[i], pos);
     names.insert(state.symbols.Create(args[1]->listElems()[i]->string.s));
   }
+
+  // TODO(tazjin): Actually *remove*!?
 
   /* Copy all attributes not in that set.  Note that we don't need
      to sort v.attrs because it's a subset of an already sorted
@@ -1329,29 +1327,29 @@ static void prim_listToAttrs(EvalState& state, const Pos& pos, Value** args,
     Value& v2(*args[0]->listElems()[i]);
     state.forceAttrs(v2, pos);
 
-    Bindings::iterator j = v2.attrs->find(state.sName);
-    if (j == v2.attrs->end()) {
+    auto j = v2.attrs->find(state.sName);
+    if (j == nullptr) {
       throw TypeError(
           format(
               "'name' attribute missing in a call to 'listToAttrs', at %1%") %
           pos);
     }
-    std::string name = state.forceStringNoCtx(*j->second.value, pos);
+    std::string name = state.forceStringNoCtx(*j->value, pos);
 
     Symbol sym = state.symbols.Create(name);
     if (seen.find(sym) == seen.end()) {
-      Bindings::iterator j2 =
+      auto j2 =
           // TODO(tazjin): this line used to construct the symbol again:
           // state.symbols.Create(state.sValue));
           // Why?
           v2.attrs->find(state.sValue);
-      if (j2 == v2.attrs->end()) {
+      if (j2 == nullptr) {
         throw TypeError(format("'value' attribute missing in a call to "
                                "'listToAttrs', at %1%") %
                         pos);
       }
 
-      v.attrs->push_back(Attr(sym, j2->second.value, j2->second.pos));
+      v.attrs->push_back(Attr(sym, j2->value, j2->pos));
       seen.insert(sym);
     }
   }
@@ -1368,9 +1366,9 @@ static void prim_intersectAttrs(EvalState& state, const Pos& pos, Value** args,
   state.mkAttrs(v, std::min(args[0]->attrs->size(), args[1]->attrs->size()));
 
   for (auto& i : *args[0]->attrs) {
-    Bindings::iterator j = args[1]->attrs->find(i.second.name);
-    if (j != args[1]->attrs->end()) {
-      v.attrs->push_back(j->second);
+    auto j = args[1]->attrs->find(i.second.name);
+    if (j != nullptr) {
+      v.attrs->push_back(*j);
     }
   }
 }
@@ -1393,9 +1391,9 @@ static void prim_catAttrs(EvalState& state, const Pos& pos, Value** args,
   for (unsigned int n = 0; n < args[1]->listSize(); ++n) {
     Value& v2(*args[1]->listElems()[n]);
     state.forceAttrs(v2, pos);
-    Bindings::iterator i = v2.attrs->find(attrName);
-    if (i != v2.attrs->end()) {
-      res[found++] = i->second.value;
+    auto i = v2.attrs->find(attrName);
+    if (i != nullptr) {
+      res[found++] = i->value;
     }
   }
 

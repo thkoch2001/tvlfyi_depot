@@ -1,7 +1,18 @@
 // This file implements the underlying structure of Nix attribute sets.
 #pragma once
 
+#include <functional>
+#define IMMER_HAS_LIBGC 1
+
+#include <immer/heap/gc_heap.hpp>
+#include <immer/heap/heap_policy.hpp>
+#include <immer/map.hpp>
+#include <immer/memory_policy.hpp>
+#include <immer/refcount/no_refcount_policy.hpp>
+#include <immer/transience/gc_transience_policy.hpp>
+
 #include <absl/container/btree_map.h>
+#include <absl/hash/hash.h>
 #include <gc/gc_allocator.h>
 
 #include "libexpr/nixexpr.hh"
@@ -16,21 +27,23 @@ struct Value;
 /* Map one attribute name to its value. */
 struct Attr {
   Symbol name;
-  Value* value;  // TODO(tazjin): Who owns this?
-  Pos* pos;      // TODO(tazjin): Who owns this?
+  Value* value;
+  Pos* pos;
   Attr(Symbol name, Value* value, Pos* pos = &noPos)
       : name(name), value(value), pos(pos){};
 };
 
-// Convenience alias for the backing map, with the garbage-collecting
-// allocator explicitly specified.
-using AttributeMap =
-    absl::btree_map<Symbol, Attr, std::less<Symbol>,
-                    gc_allocator<std::pair<const Symbol, Attr>>>;
+// Immer memory policy for using Boehm GC.
+using GcPolicy = immer::memory_policy<immer::heap_policy<immer::gc_heap>,
+                                      immer::no_refcount_policy,
+                                      immer::gc_transience_policy, false>;
+
+using AttributeMap = immer::map<Symbol, Attr, absl::Hash<Symbol>,
+                                std::equal_to<Symbol>, GcPolicy>;
 
 class Bindings {
  public:
-  typedef AttributeMap::iterator iterator;
+  typedef AttributeMap::const_iterator iterator;
 
   // Allocate a new attribute set that is visible to the garbage
   // collector.
@@ -50,7 +63,7 @@ class Bindings {
   void push_back(const Attr& attr);
 
   // Look up a specific element of the attribute set.
-  iterator find(const Symbol& name);
+  const Attr* find(const Symbol& name);
 
   iterator begin();
   iterator end();

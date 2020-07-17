@@ -48,10 +48,10 @@ DrvInfo::DrvInfo(EvalState& state, const ref<Store>& store,
 std::string DrvInfo::queryName() const {
   if (name.empty() && (attrs != nullptr)) {
     auto i = attrs->find(state->sName);
-    if (i == attrs->end()) {
+    if (i == nullptr) {
       throw TypeError("derivation name missing");
     }
-    name = state->forceStringNoCtx(*i->second.value);
+    name = state->forceStringNoCtx(*i->value);
   }
   return name;
 }
@@ -59,31 +59,28 @@ std::string DrvInfo::queryName() const {
 std::string DrvInfo::querySystem() const {
   if (system.empty() && (attrs != nullptr)) {
     auto i = attrs->find(state->sSystem);
-    system = i == attrs->end()
-                 ? "unknown"
-                 : state->forceStringNoCtx(*i->second.value, *i->second.pos);
+    system =
+        i == nullptr ? "unknown" : state->forceStringNoCtx(*i->value, *i->pos);
   }
   return system;
 }
 
 std::string DrvInfo::queryDrvPath() const {
   if (drvPath.empty() && (attrs != nullptr)) {
-    Bindings::iterator i = attrs->find(state->sDrvPath);
+    auto i = attrs->find(state->sDrvPath);
     PathSet context;
-    drvPath = i != attrs->end() ? state->coerceToPath(*i->second.pos,
-                                                      *i->second.value, context)
-                                : "";
+    drvPath =
+        i != nullptr ? state->coerceToPath(*i->pos, *i->value, context) : "";
   }
   return drvPath;
 }
 
 std::string DrvInfo::queryOutPath() const {
   if (outPath.empty() && (attrs != nullptr)) {
-    Bindings::iterator i = attrs->find(state->sOutPath);
+    const Attr* i = attrs->find(state->sOutPath);
     PathSet context;
-    outPath = i != attrs->end() ? state->coerceToPath(*i->second.pos,
-                                                      *i->second.value, context)
-                                : "";
+    outPath =
+        i != nullptr ? state->coerceToPath(*i->pos, *i->value, context) : "";
   }
   return outPath;
 }
@@ -91,31 +88,29 @@ std::string DrvInfo::queryOutPath() const {
 DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
   if (outputs.empty()) {
     /* Get the ‘outputs’ list. */
-    Bindings::iterator i;
-    if ((attrs != nullptr) &&
-        (i = attrs->find(state->sOutputs)) != attrs->end()) {
-      state->forceList(*i->second.value, *i->second.pos);
+    const Attr* i;
+    if ((attrs != nullptr) && (i = attrs->find(state->sOutputs)) != nullptr) {
+      state->forceList(*i->value, *i->pos);
 
       /* For each output... */
-      for (unsigned int j = 0; j < i->second.value->listSize(); ++j) {
+      for (unsigned int j = 0; j < i->value->listSize(); ++j) {
         /* Evaluate the corresponding set. */
-        std::string name = state->forceStringNoCtx(
-            *i->second.value->listElems()[j], *i->second.pos);
-        Bindings::iterator out = attrs->find(state->symbols.Create(name));
-        if (out == attrs->end()) {
+        std::string name =
+            state->forceStringNoCtx(*i->value->listElems()[j], *i->pos);
+        const Attr* out = attrs->find(state->symbols.Create(name));
+        if (out == nullptr) {
           continue;  // FIXME: throw error?
         }
-        state->forceAttrs(*out->second.value);
+        state->forceAttrs(*out->value);
 
         /* And evaluate its ‘outPath’ attribute. */
-        Bindings::iterator outPath =
-            out->second.value->attrs->find(state->sOutPath);
-        if (outPath == out->second.value->attrs->end()) {
+        const Attr* outPath = out->value->attrs->find(state->sOutPath);
+        if (outPath == nullptr) {
           continue;  // FIXME: throw error?
         }
         PathSet context;
-        outputs[name] = state->coerceToPath(*outPath->second.pos,
-                                            *outPath->second.value, context);
+        outputs[name] =
+            state->coerceToPath(*outPath->pos, *outPath->value, context);
       }
     } else {
       outputs["out"] = queryOutPath();
@@ -152,9 +147,8 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
 
 std::string DrvInfo::queryOutputName() const {
   if (outputName.empty() && (attrs != nullptr)) {
-    Bindings::iterator i = attrs->find(state->sOutputName);
-    outputName =
-        i != attrs->end() ? state->forceStringNoCtx(*i->second.value) : "";
+    const Attr* i = attrs->find(state->sOutputName);
+    outputName = i != nullptr ? state->forceStringNoCtx(*i->value) : "";
   }
   return outputName;
 }
@@ -166,12 +160,12 @@ Bindings* DrvInfo::getMeta() {
   if (attrs == nullptr) {
     return nullptr;
   }
-  Bindings::iterator a = attrs->find(state->sMeta);
-  if (a == attrs->end()) {
+  const Attr* a = attrs->find(state->sMeta);
+  if (a == nullptr) {
     return nullptr;
   }
-  state->forceAttrs(*a->second.value, *a->second.pos);
-  meta = a->second.value->attrs;
+  state->forceAttrs(*a->value, *a->pos);
+  meta = a->value->attrs;
   return meta;
 }
 
@@ -197,8 +191,8 @@ bool DrvInfo::checkMeta(Value& v) {
     return true;
   }
   if (v.type == tAttrs) {
-    Bindings::iterator i = v.attrs->find(state->sOutPath);
-    if (i != v.attrs->end()) {
+    const Attr* i = v.attrs->find(state->sOutPath);
+    if (i != nullptr) {
       return false;
     }
     for (auto& i : *v.attrs) {
@@ -217,11 +211,11 @@ Value* DrvInfo::queryMeta(const std::string& name) {
   if (getMeta() == nullptr) {
     return nullptr;
   }
-  Bindings::iterator a = meta->find(state->symbols.Create(name));
-  if (a == meta->end() || !checkMeta(*a->second.value)) {
+  const Attr* a = meta->find(state->symbols.Create(name));
+  if (a == nullptr || !checkMeta(*a->value)) {
     return nullptr;
   }
-  return a->second.value;
+  return a->value;
 }
 
 std::string DrvInfo::queryMetaString(const std::string& name) {
@@ -379,8 +373,7 @@ static void getDerivations(EvalState& state, Value& vIn,
     /* !!! undocumented hackery to support combining channels in
        nix-env.cc. */
     bool combineChannels =
-        v.attrs->find(state.symbols.Create("_combineChannels")) !=
-        v.attrs->end();
+        v.attrs->find(state.symbols.Create("_combineChannels")) != nullptr;
 
     /* Consider the attributes in sorted order to get more
        deterministic behaviour in nix-env operations (e.g. when
@@ -402,10 +395,9 @@ static void getDerivations(EvalState& state, Value& vIn,
            should we recurse into it?  => Only if it has a
            `recurseForDerivations = true' attribute. */
         if (i->value->type == tAttrs) {
-          Bindings::iterator j = i->value->attrs->find(
+          const Attr* j = i->value->attrs->find(
               state.symbols.Create("recurseForDerivations"));
-          if (j != i->value->attrs->end() &&
-              state.forceBool(*j->second.value, *j->second.pos)) {
+          if (j != nullptr && state.forceBool(*j->value, *j->pos)) {
             getDerivations(state, *i->value, pathPrefix2, autoArgs, drvs, done,
                            ignoreAssertionFailures);
           }

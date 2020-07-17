@@ -77,13 +77,13 @@ Value* findAlongAttrPath(EvalState& state, const std::string& attrPath,
                     attrPath);
       }
 
-      Bindings::iterator a = v->attrs->find(state.symbols.Create(attr));
-      if (a == v->attrs->end()) {
+      const Attr* a = v->attrs->find(state.symbols.Create(attr));
+      if (a == nullptr) {
         throw Error(
             format("attribute '%1%' in selection path '%2%' not found") % attr %
             attrPath);
       }
-      v = &*(a->second).value;
+      v = a->value;
     }
 
     else if (apType == apIndex) {

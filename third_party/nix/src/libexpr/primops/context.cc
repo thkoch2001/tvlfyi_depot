@@ -155,15 +155,15 @@ static void prim_appendContext(EvalState& state, const Pos& pos, Value** args,
     }
     state.forceAttrs(*i->value, *i->pos);
     auto iter = i->value->attrs->find(sPath);
-    if (iter != i->value->attrs->end()) {
-      if (state.forceBool(*iter->second.value, *iter->second.pos)) {
+    if (iter != nullptr) {
+      if (state.forceBool(*iter->value, *iter->pos)) {
         context.insert(i->name);
       }
     }
 
     iter = i->value->attrs->find(sAllOutputs);
-    if (iter != i->value->attrs->end()) {
-      if (state.forceBool(*iter->second.value, *iter->second.pos)) {
+    if (iter != nullptr) {
+      if (state.forceBool(*iter->value, *iter->pos)) {
         if (!isDerivation(i->name)) {
           throw EvalError(
               "Tried to add all-outputs context of %s, which is not a "
@@ -175,17 +175,18 @@ static void prim_appendContext(EvalState& state, const Pos& pos, Value** args,
     }
 
     iter = i->value->attrs->find(state.sOutputs);
-    if (iter != i->value->attrs->end()) {
-      state.forceList(*iter->second.value, *iter->second.pos);
-      if (iter->second.value->listSize() && !isDerivation(i->name)) {
+    if (iter != nullptr) {
+      state.forceList(*iter->value, *iter->pos);
+      if (iter->value->listSize() && !isDerivation(i->name)) {
         throw EvalError(
             "Tried to add derivation output context of %s, which is not a "
             "derivation, to a string, at %s",
             i->name, i->pos);
       }
-      for (unsigned int n = 0; n < iter->second.value->listSize(); ++n) {
-        auto name = state.forceStringNoCtx(*iter->second.value->listElems()[n],
-                                           *iter->second.pos);
+
+      for (unsigned int n = 0; n < iter->value->listSize(); ++n) {
+        auto name =
+            state.forceStringNoCtx(*iter->value->listElems()[n], *iter->pos);
         context.insert("!" + name + "!" + std::string(i->name));
       }
     }

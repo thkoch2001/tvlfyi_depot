@@ -52,6 +52,7 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     flex
     glog
     grpc
+    immer
     libseccomp
     libsodium
     openssl
