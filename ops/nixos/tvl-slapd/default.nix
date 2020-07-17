@@ -91,6 +91,11 @@ let
       password = "{SSHA}BEccJdtnhVLDzOn+pxNfayNi3QFcEABE";
     }
     {
+      username = "qyliss";
+      email = "hi@alyssa.is";
+      password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$+uTpAKrN452D8wa7OFqPnw$GYi9/zns5iJCXDp1VuTPPsa35M5vkD6+rC8riT8cEHI";
+    }
+    {
       username = "riking";
       displayName = "Kane York";
       email = "rikingcoding@gmail.com";
