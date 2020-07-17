@@ -1,5 +1,8 @@
 { pkgs ? (import ../.. {}).third_party
-, buildType ? "release", ... }:
+, buildType ? "release"
+, depotPath ? ../..
+, ...
+}:
 
 let
   aws-s3-cpp = pkgs.aws-sdk-cpp.override {
@@ -86,6 +89,10 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
     mkdir -p $out/libexec/nix
     ln -s $out/bin/nix $out/libexec/nix/build-remote
+  '';
+
+  shellHook = ''
+  export NIX_DATA_DIR="${toString depotPath}/third_party"
   '';
 
   # TODO(tazjin): integration test setup?
