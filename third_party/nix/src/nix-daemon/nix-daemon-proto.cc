@@ -150,6 +150,23 @@ class WorkerServiceImpl final : public WorkerService::Service {
     return Status::OK;
   }
 
+  Status QueryValidPaths(grpc::ServerContext* context,
+                         const StorePaths* request,
+                         StorePaths* response) override {
+    std::set<Path> paths;
+    for (const auto& path : request->paths()) {
+      paths.insert(path);
+    }
+
+    auto res = store_->queryValidPaths(paths);
+
+    for (const auto& path : res) {
+      response->add_paths(path);
+    }
+
+    return Status::OK;
+  }
+
   Status QueryMissing(grpc::ServerContext* context, const StorePaths* request,
                       nix::proto::QueryMissingResponse* response) override {
     std::set<Path> targets;
