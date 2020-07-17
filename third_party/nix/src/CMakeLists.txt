@@ -11,6 +11,10 @@ add_subdirectory(libstore)
 add_subdirectory(libmain)
 add_subdirectory(libexpr)
 
+if (PACKAGE_TESTS)
+  add_subdirectory(tests)
+endif()
+
 add_executable(nix)
 set_property(TARGET nix PROPERTY CXX_STANDARD 17)
 include_directories(${PROJECT_BINARY_DIR})
