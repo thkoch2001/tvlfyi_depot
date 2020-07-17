@@ -38,4 +38,12 @@ INSTALL(DIRECTORY corepkgs
     PATTERN "*.nix")
 INSTALL(FILES "${PROJECT_BINARY_DIR}/config.nix" DESTINATION "${CMAKE_INSTALL_DATADIR}/nix/corepkgs")
 
+# Conditionally run tests
+option(PACKAGE_TESTS "Build the tests" ON)
+if (PACKAGE_TESTS)
+  enable_testing()
+  find_package(GTest)
+  include(GoogleTest)
+endif()
+
 add_subdirectory(src)
