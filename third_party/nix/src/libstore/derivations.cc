@@ -30,6 +30,28 @@ void DerivationOutput::parseHashInfo(bool& recursive, Hash& hash) const {
   hash = Hash(this->hash, hashType);
 }
 
+BasicDerivation BasicDerivation::from_proto(
+    const nix::proto::Derivation* proto_derivation, const nix::Store* store) {
+  BasicDerivation result;
+  result.platform = proto_derivation->platform();
+  result.builder = proto_derivation->builder().path();
+  store->assertStorePath(result.builder);
+
+  result.outputs.insert(proto_derivation->outputs().begin(),
+                        proto_derivation->outputs().end());
+
+  result.inputSrcs.insert(proto_derivation->input_sources().paths().begin(),
+                          proto_derivation->input_sources().paths().end());
+
+  result.args.insert(result.args.end(), proto_derivation->args().begin(),
+                     proto_derivation->args().end());
+
+  result.env.insert(proto_derivation->env().begin(),
+                    proto_derivation->env().end());
+
+  return result;
+}
+
 Path BasicDerivation::findOutput(const std::string& id) const {
   auto i = outputs.find(id);
   if (i == outputs.end()) {

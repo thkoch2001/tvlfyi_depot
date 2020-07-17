@@ -2,6 +2,7 @@
 
 #include <map>
 
+#include "libproto/worker.pb.h"
 #include "libstore/store-api.hh"
 #include "libutil/hash.hh"
 #include "libutil/types.hh"
@@ -18,20 +19,31 @@ struct DerivationOutput {
   std::string hashAlgo; /* hash used for expected hash computation */
   std::string hash;     /* expected hash, may be null */
   DerivationOutput() {}
+  // TODO(grfn): Make explicit
   DerivationOutput(Path path, std::string hashAlgo, std::string hash) {
     this->path = path;
     this->hashAlgo = hashAlgo;
     this->hash = hash;
   }
+
+  explicit DerivationOutput(
+      const nix::proto::Derivation_DerivationOutput& proto_derivation_output)
+      : path(proto_derivation_output.path().path()),
+        hashAlgo(proto_derivation_output.hash_algo()),
+        hash(proto_derivation_output.hash()) {}
+
   void parseHashInfo(bool& recursive, Hash& hash) const;
 };
 
+// TODO(grfn): change to absl::flat_hash_map
 typedef std::map<std::string, DerivationOutput> DerivationOutputs;
 
 /* For inputs that are sub-derivations, we specify exactly which
    output IDs we are interested in. */
+// TODO(grfn): change to absl::flat_hash_map
 typedef std::map<Path, StringSet> DerivationInputs;
 
+// TODO(grfn): change to absl::flat_hash_map
 typedef std::map<std::string, std::string> StringPairs;
 
 struct BasicDerivation {
@@ -41,6 +53,13 @@ struct BasicDerivation {
   Path builder;
   Strings args;
   StringPairs env;
+
+  BasicDerivation(){};
+
+  // Convert the given proto derivation to a BasicDerivation in the given
+  // nix::Store.
+  static BasicDerivation from_proto(
+      const nix::proto::Derivation* proto_derivation, const nix::Store* store);
 
   virtual ~BasicDerivation(){};
 
