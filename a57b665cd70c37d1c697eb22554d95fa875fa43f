@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3b4915b_2f084bbf",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-17T02:57:23Z",
+      "side": 1,
+      "message": "Don\u0027t renumber proto fields without a justification in the commit message.\n\n(Here, \"OK because proto is not deployed yet\")",
+      "range": {
+        "startLine": 280,
+        "startChar": 2,
+        "endLine": 281,
+        "endChar": 18
+      },
+      "revId": "a57b665cd70c37d1c697eb22554d95fa875fa43f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
