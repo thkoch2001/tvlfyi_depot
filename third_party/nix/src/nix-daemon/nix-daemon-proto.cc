@@ -204,6 +204,12 @@ class WorkerServiceImpl final : public Worker::Service {
     return Status::OK;
   }
 
+  Status BuildDerivation(grpc::ServerContext* context,
+                         const nix::proto::BuildDerivationRequest* request,
+                         nix::proto::BuildDerivationResponse* response) override {
+    auto drv_path = request->drv_path().path();
+  }
+
   Status QueryMissing(grpc::ServerContext* context, const StorePaths* request,
                       nix::proto::QueryMissingResponse* response) override {
     std::set<Path> targets;

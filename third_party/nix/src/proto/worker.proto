@@ -290,13 +290,13 @@ message VerifyStoreResponse {
 
 message BuildDerivationRequest {
   // Only used for informational purposes.
-  StorePath drvPath = 1;
-  BuildMode buildMode = 2;
+  StorePath drv_path = 1;
+  BuildMode build_mode = 2;
 }
 
 message BuildDerivationResponse {
   BuildStatus status = 1;
-  string errorMessage = 2;
+  string error_message = 2;
 }
 
 message AddToStoreNarRequest {
