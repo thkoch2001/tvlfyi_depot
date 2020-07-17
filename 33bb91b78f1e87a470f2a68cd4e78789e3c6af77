@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "904f86de_ba866253",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-17T13:07:22Z",
+      "side": 1,
+      "message": "I would rather keep this the same as upstream for now to avoid any confusion until we have a chance to refactor it more widely. changing to snake case is fine though",
+      "revId": "33bb91b78f1e87a470f2a68cd4e78789e3c6af77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
