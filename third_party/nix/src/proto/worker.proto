@@ -277,9 +277,10 @@ message HashPart {
 }
 
 message VerifyStoreRequest {
-  bool repair = 1;
+  bool check_contents = 1;
+  bool repair = 2;
   // TODO(grfn): Remove double-negative
-  bool dontCheckSigs = 2;
+  bool dontCheckSigs = 3;
 }
 
 message VerifyStoreResponse {
