@@ -106,8 +106,15 @@ in {
     # Glass is boring, but Luke doesn't like Wapping - the Prospect of
     # Whitby, however, is quite a pleasant establishment.
     hostName = "whitby";
+    domain = "tvl.fyi";
     hostId = "b38ca543";
     useDHCP = false;
+
+    # Don't use Hetzner's DNS servers.
+    nameservers = [
+      "8.8.8.8"
+      "8.8.4.4"
+    ];
 
     defaultGateway6 = {
       address = "fe80::1";
@@ -123,6 +130,15 @@ in {
         prefixLength = 64;
       }
     ];
+  };
+
+  # Generate an immutable /etc/resolv.conf from the nameserver settings
+  # above (otherwise DHCP overwrites it):
+  environment.etc."resolv.conf" = with lib; {
+    source = depot.third_party.writeText "resolv.conf" ''
+      ${concatStringsSep "\n" (map (ns: "nameserver ${ns}") self.networking.nameservers)}
+      options edns0
+    '';
   };
 
   time.timeZone = "UTC";
