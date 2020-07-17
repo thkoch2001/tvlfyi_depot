@@ -1,53 +1,72 @@
 * Beer
 - 1x beer (6x)
 * Produce
-- 1x brocoli
-- 1x green beans
-- 1x green asparagus
+- 3x brocoli
+- 2x green beans
+- 0x green asparagus
 - 1x lettuce
 - 1x tomatoes
 - 1x zucchini
 - 3x lemons (3x)
+- 2x ginger
 - 0x shallots (10x)
-- 0x garlic
-- 0x avocado
+- 1x garlic
+- 1x avocado
 - 0x basil plant
 * Pasta
+- 1x box of quinoa
+- 1x box of rice
 - 0x linguini pasta
 - 3x tortellini / ravioli
-- 1x tomato sauce
+- 0x tomato sauce
 - 0x pesto
 * Oil
-- 0x olive oil
+- 1x olive oil
+- 1x avocado oil
 - 1x coconut oil
 * Condiments
-- 1x Tabasco
+- 0x Red Tabasco
+- 1x Green Tabasco
+- 1x Habanero Tabasco
 - 0x senf
 - 0x ketchup
 * Nuts
 - 2x almonds
+- 1x mixed nuts
 - 0x walnuts
 * Bread
 - 1x GF bread
 - 0x flour
+- 1x GF flour
 * Sugar
 - 1x Lindt chocolate
 * Dairy
-- 0x butter
-- 0x coconut milk
-- 1x egg cartons (10x each)
+- 2x butter
+- 1x coconut milk
+- 2x egg cartons (10x each)
 - 1x parmesan
 - 1x sour cream
 - 2x gouda
 - 1x mystery cheese
 * Meat
 - 0x fleischwurst
-- 0x bacon bits
+- 1x bacon bits
 - 0x jar Weiner Wurstel
 - 1x bratwurst (4x)
+- 1x steak
+- 1x chicken
+- 4x spiedini
+* Asian
+- 2x red curry
+- 0x green curry
+- 3x coconut cream
+* Frozen
+- 2x Salmon
+- 2x white fish
+- 1x shrimp
 * Wine
 - 0x red wine
-- 2x white wine
+- 1x white wine
 * Miscellaneous
 - 0x coffee
 - 0x coffee filters
@@ -57,3 +76,4 @@
 - 0x dish soap
 - 0x paper towels (6x)
 - 0x Brita
+- 1x Listerine
