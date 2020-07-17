@@ -36,6 +36,7 @@ instance FromEnv Config where
 
 stopWord :: Text -> Bool
 stopWord "'s"   = True
+stopWord "\""   = True
 stopWord "is"   = True
 stopWord "are"  = True
 stopWord "am"   = True
@@ -103,7 +104,7 @@ main = do
   conf <- either fail pure =<< decodeEnv
   tagger <- defaultTagger
   state <- newIORef $ not . isJust $ (conf ^. nickservPassword)
-  let nick = fromMaybe "owothia" (conf ^. ircNick) 
+  let nick = fromMaybe "owothia" (conf ^. ircNick)
       conn =
         plainConnection (conf ^. ircServer) (conf ^. ircPort)
           & realname .~ "Owothia Revströwö"
