@@ -22,6 +22,30 @@
       "revId": "c99c167d34eda688e71bf915cffbd7c2ea1110ed",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69e2144f_541242a8",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-17T20:09:36Z",
+      "side": 1,
+      "message": "🐃",
+      "parentUuid": "a4afda54_04253c36",
+      "range": {
+        "startLine": 22,
+        "startChar": 16,
+        "endLine": 22,
+        "endChar": 19
+      },
+      "revId": "c99c167d34eda688e71bf915cffbd7c2ea1110ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
