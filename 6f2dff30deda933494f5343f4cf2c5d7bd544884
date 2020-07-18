@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9917273_94179496",
+        "filename": "third_party/nix/src/tests/lang/parse-fail-dup-attrs-1.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-18T23:44:23Z",
+      "side": 1,
+      "message": "review note: reformat ok",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 10
+      },
+      "revId": "6f2dff30deda933494f5343f4cf2c5d7bd544884",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
