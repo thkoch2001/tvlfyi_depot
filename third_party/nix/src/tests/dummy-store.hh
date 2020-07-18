@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+
 #include "libstore/store-api.hh"
 
 namespace nix::tests {
