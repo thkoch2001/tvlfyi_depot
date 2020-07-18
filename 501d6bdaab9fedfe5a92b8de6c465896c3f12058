@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17f8c265_76c73d48",
+        "filename": "third_party/nix/src/libexpr/eval.hh",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2020-07-18T17:13:21Z",
+      "side": 0,
+      "message": "This pattern tends to lead to memory fragmentation for long running processes.\n\nHowever, the replacement tends to have a higher baseline memory.\n\nWhich is probably fine.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 19
+      },
+      "revId": "501d6bdaab9fedfe5a92b8de6c465896c3f12058",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
