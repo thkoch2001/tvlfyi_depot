@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "0c82dbbc_0770911b",
+        "filename": "third_party/nix/src/libstore/derivations.hh",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-18T19:22:32Z",
+      "side": 1,
+      "message": "technically we don\u0027t (yet) know if there\u0027s a reason this uses an ordered map, should be double-checked before blindly moving to a different type\n\neven so, absl::btree_map is still better than std::map :p",
+      "range": {
+        "startLine": 43,
+        "startChar": 25,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "7b1208015916dbd7ddb86b4d9149a96ca6aad906",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62782b31_3da2ad82",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 5

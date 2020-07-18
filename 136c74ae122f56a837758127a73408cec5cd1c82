@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33c10e43_c65ce89f",
+        "filename": "third_party/nix/src/libstore/derivations.hh",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-18T19:22:32Z",
+      "side": 1,
+      "message": "On further thought, I think I\u0027d prefer if this was a static method rather than a constructor.\n\nThe readDerivation function in the original implementation also calls things like assertStorePath, so you may instead want a factory function that takes Store\u0026 and does the same.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 74
+      },
+      "revId": "136c74ae122f56a837758127a73408cec5cd1c82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0039d460_42facc78",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-18T19:22:32Z",
+      "side": 1,
+      "message": "this is missing assertStorePath (which implicitly happens in readStorePath in the old versions)\n\nin fact I didn\u0027t check all the previous ones, so this might be missing in more places",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 47
+      },
+      "revId": "136c74ae122f56a837758127a73408cec5cd1c82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
