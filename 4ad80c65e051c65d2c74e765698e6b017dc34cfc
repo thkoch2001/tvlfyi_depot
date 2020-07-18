@@ -22,6 +22,30 @@
       "revId": "4ad80c65e051c65d2c74e765698e6b017dc34cfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d1ed425_c75f3931",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-18T00:28:37Z",
+      "side": 1,
+      "message": "I think this makes it so that nix treats the protoSrcs deriv as depending on the ./src/proto directory instead of the entire directory?\n\nHow about this instead:\n\n```\nprotoSrc \u003d ./src/proto;\n...\nexport PROTO_SRCS\u003d${protoSrc}\n```",
+      "parentUuid": "0c6b1771_048f3bd2",
+      "range": {
+        "startLine": 21,
+        "startChar": 24,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "4ad80c65e051c65d2c74e765698e6b017dc34cfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
