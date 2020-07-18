@@ -196,9 +196,9 @@ static void _main(int argc, char** argv) {
         } else if (*arg == "--expr" || *arg == "-E") {
           fromArgs = true;
 
-        } else if (*arg == "--pure") {
+        } else if (runEnv && *arg == "--pure") {
           pure = true;
-        } else if (*arg == "--impure") {
+        } else if (runEnv && *arg == "--impure") {
           pure = false;
 
         } else if (*arg == "--packages" || *arg == "-p") {
