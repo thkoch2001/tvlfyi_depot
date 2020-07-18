@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fa6a5101_e5d24df0",
+        "filename": "third_party/nix/src/libexpr/primops.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-18T17:59:04Z",
+      "side": 1,
+      "message": "There may be a way, but I\u0027m not sure.",
+      "parentUuid": "0a2b2785_68ca4c5e",
+      "range": {
+        "startLine": 1656,
+        "startChar": 16,
+        "endLine": 1656,
+        "endChar": 60
+      },
+      "revId": "6f8e21602ce4fba26b020fff40d06c6ed317a09c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49b3b03b_ea987939",
         "filename": "third_party/nix/src/libexpr/value.hh",
         "patchSetId": 1
@@ -92,6 +116,30 @@
       "revId": "6f8e21602ce4fba26b020fff40d06c6ed317a09c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c941bbe0_5b549a6e",
+        "filename": "third_party/nix/src/libexpr/value.hh",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-18T17:59:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49b3b03b_ea987939",
+      "range": {
+        "startLine": 147,
+        "startChar": 1,
+        "endLine": 147,
+        "endChar": 26
+      },
+      "revId": "6f8e21602ce4fba26b020fff40d06c6ed317a09c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
