@@ -227,6 +227,19 @@ class WorkerServiceImpl final : public WorkerService::Service {
     return Status::OK;
   }
 
+  Status AddSignatures(grpc::ServerContext* context,
+                       const nix::proto::AddSignaturesRequest* request,
+                       google::protobuf::Empty* response) override {
+    auto path = request->path().path();
+
+    StringSet sigs;
+    sigs.insert(request->sigs().sigs().begin(), request->sigs().sigs().end());
+
+    store_->addSignatures(path, sigs);
+
+    return Status::OK;
+  }
+
   Status QueryMissing(grpc::ServerContext* context, const StorePaths* request,
                       nix::proto::QueryMissingResponse* response) override {
     std::set<Path> targets;
