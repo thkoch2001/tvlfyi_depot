@@ -116,7 +116,7 @@ TEST_F(JSONValueTest, Path) {
   Value v;
   PathSet ps;
 
-  mkPath(v, "test");
+  mkPathNoCopy(v, "/dev/null");
   printValueAsJSON(s, true, v, ss, ps);
   ASSERT_EQ(ss.str(), "\"/nix/store/g1w7hy3qg1w7hy3qg1w7hy3qg1w7hy3q-x\"");
 }
@@ -128,7 +128,7 @@ TEST_F(JSONValueTest, PathNoCopy) {
   Value v;
   PathSet ps;
 
-  mkPathNoCopy(v, "test");
+  mkPathNoCopy(v, "/dev/null");
   printValueAsJSON(s, true, v, ss, ps);
   ASSERT_EQ(ss.str(), "\"/nix/store/g1w7hy3qg1w7hy3qg1w7hy3qg1w7hy3q-x\"");
 }
