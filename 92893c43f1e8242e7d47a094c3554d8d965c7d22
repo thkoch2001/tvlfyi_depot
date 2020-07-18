@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b458a25e_e299e139",
+        "filename": "third_party/nix/config.h.in",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-18T23:58:57Z",
+      "side": 1,
+      "message": "I\u0027m a little worried that this will make the runtime closure of nix depend on its source, which would be less than ideal - is there a way we could only have this be defined in the test executables themselves?",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 40
+      },
+      "revId": "92893c43f1e8242e7d47a094c3554d8d965c7d22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d595d503_9b88745c",
+        "filename": "third_party/nix/src/tests/language-tests.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-18T23:58:57Z",
+      "side": 1,
+      "message": "maybe slightly less spooky to put these in directories to control the semantics instead? Just an idea",
+      "range": {
+        "startLine": 11,
+        "startChar": 6,
+        "endLine": 11,
+        "endChar": 23
+      },
+      "revId": "92893c43f1e8242e7d47a094c3554d8d965c7d22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "17b53efd_28778835",
+        "filename": "third_party/nix/src/tests/language-tests.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-18T23:58:57Z",
+      "side": 1,
+      "message": "does C++ implicitly concatenate strings like this? ick.",
+      "range": {
+        "startLine": 55,
+        "startChar": 52,
+        "endLine": 55,
+        "endChar": 56
+      },
+      "revId": "92893c43f1e8242e7d47a094c3554d8d965c7d22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
