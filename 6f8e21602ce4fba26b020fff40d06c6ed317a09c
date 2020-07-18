@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bd21f67_6b8fdcc6",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2020-07-18T17:33:17Z",
+      "side": 1,
+      "message": "isn\u0027t this the wrong order of parameters?",
+      "range": {
+        "startLine": 1258,
+        "startChar": 13,
+        "endLine": 1258,
+        "endChar": 76
+      },
+      "revId": "6f8e21602ce4fba26b020fff40d06c6ed317a09c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
