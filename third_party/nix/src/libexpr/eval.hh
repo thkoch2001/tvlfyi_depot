@@ -3,6 +3,10 @@
 #include <map>
 #include <optional>
 #include <unordered_map>
+#include <vector>
+
+#include <gc/gc_allocator.h>
+#include <gc/gc_cpp.h>
 
 #include "libexpr/attr-set.hh"
 #include "libexpr/nixexpr.hh"
@@ -28,12 +32,16 @@ struct PrimOp {
       : fun(fun), arity(arity), name(name) {}
 };
 
-struct Env {
+struct Env : public gc {
+  Env(unsigned short size) : size(size) {
+    values = std::vector<Value*, traceable_allocator<Value*>>(size);
+  }
+
   Env* up;
   unsigned short size;           // used by ‘valueSize’
   unsigned short prevWith : 14;  // nr of levels up to next `with' environment
   enum { Plain = 0, HasWithExpr, HasWithAttrs } type : 2;
-  Value* values[0];
+  std::vector<Value*, traceable_allocator<Value*>> values;
 };
 
 Value& mkString(Value& v, const std::string& s,
