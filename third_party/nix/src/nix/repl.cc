@@ -748,19 +748,17 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
       break;
     }
 
-    case tList1:
-    case tList2:
-    case tListN:
+    case tList:
       seen.insert(&v);
 
       str << "[ ";
       if (maxDepth > 0) {
         for (unsigned int n = 0; n < v.listSize(); ++n) {
-          if (seen.find(v.listElems()[n]) != seen.end()) {
+          if (seen.find((*v.list)[n]) != seen.end()) {
             str << "«repeated»";
           } else {
             try {
-              printValue(str, *v.listElems()[n], maxDepth - 1, seen);
+              printValue(str, *(*v.list)[n], maxDepth - 1, seen);
             } catch (AssertionError& e) {
               str << ESC_RED "«error: " << e.msg() << "»" ESC_END;
             }

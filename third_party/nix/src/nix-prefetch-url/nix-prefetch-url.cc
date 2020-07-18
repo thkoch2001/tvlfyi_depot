@@ -50,8 +50,7 @@ std::string resolveMirrorUri(EvalState& state, std::string uri) {
     throw Error(format("mirror URI '%1%' did not expand to anything") % uri);
   }
 
-  std::string mirror =
-      state.forceString(*mirrorList->second.value->listElems()[0]);
+  std::string mirror = state.forceString(*(*mirrorList->second.value->list)[0]);
   return mirror + (absl::EndsWith(mirror, "/") ? "" : "/") +
          std::string(s, p + 1);
 }
@@ -137,7 +136,7 @@ static int _main(int argc, char** argv) {
       if (attr->second.value->listSize() < 1) {
         throw Error("'urls' list is empty");
       }
-      uri = state->forceString(*attr->second.value->listElems()[0]);
+      uri = state->forceString(*(*attr->second.value->list)[0]);
 
       /* Extract the hash mode. */
       attr = v.attrs->find(state->symbols.Create("outputHashMode"));

@@ -97,12 +97,10 @@ static void printValue(std::ostream& str, std::set<const Value*>& active,
       str << "}";
       break;
     }
-    case tList1:
-    case tList2:
-    case tListN:
+    case tList:
       str << "[ ";
       for (unsigned int n = 0; n < v.listSize(); ++n) {
-        printValue(str, active, *v.listElems()[n]);
+        printValue(str, active, *(*v.list)[n]);
         str << " ";
       }
       str << "]";
@@ -162,9 +160,7 @@ std::string showType(const Value& v) {
       return "null";
     case tAttrs:
       return "a set";
-    case tList1:
-    case tList2:
-    case tListN:
+    case tList:
       return "a list";
     case tThunk:
       return "a thunk";
@@ -641,19 +637,15 @@ Env& EvalState::allocEnv(size_t size) {
   return *env;
 }
 
-void EvalState::mkList(Value& v, size_t size) {
+void EvalState::mkList(Value& v, NixList* list) {
   clearValue(v);
-  if (size == 1) {
-    v.type = tList1;
-  } else if (size == 2) {
-    v.type = tList2;
-  } else {
-    v.type = tListN;
-    v.bigList.size = size;
-    v.bigList.elems =
-        size != 0u ? (Value**)allocBytes(size * sizeof(Value*)) : nullptr;
-  }
-  nrListElems += size;
+  v.type = tList;
+  v.list = list;
+  nrListElems += list->size();
+}
+
+void EvalState::mkList(Value& v, size_t size) {
+  EvalState::mkList(v, new (GC) NixList(size));
 }
 
 unsigned long nrThunks = 0;
@@ -877,7 +869,7 @@ void ExprLet::eval(EvalState& state, Env& env, Value& v) {
 void ExprList::eval(EvalState& state, Env& env, Value& v) {
   state.mkList(v, elems.size());
   for (size_t n = 0; n < elems.size(); ++n) {
-    v.listElems()[n] = elems[n]->maybeThunk(state, env);
+    (*v.list)[n] = elems[n]->maybeThunk(state, env);
   }
 }
 
@@ -1252,39 +1244,21 @@ void ExprOpConcatLists::eval(EvalState& state, Env& env, Value& v) {
   e1->eval(state, env, v1);
   Value v2;
   e2->eval(state, env, v2);
-  Value* lists[2] = {&v1, &v2};
-  state.concatLists(v, 2, lists, pos);
+  state.concatLists(v, {&v1, &v2}, pos);
 }
 
-void EvalState::concatLists(Value& v, size_t nrLists, Value** lists,
-                            const Pos& pos) {
+void EvalState::concatLists(Value& v, const NixList& lists, const Pos& pos) {
   nrListConcats++;
 
-  Value* nonEmpty = nullptr;
+  auto outlist = new (GC) NixList();
+
   size_t len = 0;
-  for (size_t n = 0; n < nrLists; ++n) {
-    forceList(*lists[n], pos);
-    auto l = lists[n]->listSize();
-    len += l;
-    if (l != 0u) {
-      nonEmpty = lists[n];
-    }
+  for (Value* list : lists) {
+    forceList(*list, pos);
+    outlist->insert(outlist->end(), list->list->begin(), list->list->end());
   }
 
-  if ((nonEmpty != nullptr) && len == nonEmpty->listSize()) {
-    v = *nonEmpty;
-    return;
-  }
-
-  mkList(v, len);
-  auto out = v.listElems();
-  for (size_t n = 0, pos = 0; n < nrLists; ++n) {
-    auto l = lists[n]->listSize();
-    if (l != 0u) {
-      memcpy(out + pos, lists[n]->listElems(), l * sizeof(Value*));
-    }
-    pos += l;
-  }
+  mkList(v, outlist);
 }
 
 void ExprConcatStrings::eval(EvalState& state, Env& env, Value& v) {
@@ -1383,7 +1357,7 @@ void EvalState::forceValueDeep(Value& v) {
       }
     } else if (v.isList()) {
       for (size_t n = 0; n < v.listSize(); ++n) {
-        recurse(*v.listElems()[n]);
+        recurse(*(*v.list)[n]);
       }
     }
   };
@@ -1563,12 +1537,11 @@ std::string EvalState::coerceToString(const Pos& pos, Value& v,
     if (v.isList()) {
       std::string result;
       for (size_t n = 0; n < v.listSize(); ++n) {
-        result += coerceToString(pos, *v.listElems()[n], context, coerceMore,
+        result += coerceToString(pos, *(*v.list)[n], context, coerceMore,
                                  copyToStore);
         if (n < v.listSize() - 1
             /* !!! not quite correct */
-            && (!v.listElems()[n]->isList() ||
-                v.listElems()[n]->listSize() != 0)) {
+            && (!(*v.list)[n]->isList() || (*v.list)[n]->listSize() != 0)) {
           result += " ";
         }
       }
@@ -1653,14 +1626,12 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
     case tNull:
       return true;
 
-    case tList1:
-    case tList2:
-    case tListN:
+    case tList:
       if (v1.listSize() != v2.listSize()) {
         return false;
       }
       for (size_t n = 0; n < v1.listSize(); ++n) {
-        if (!eqValues(*v1.listElems()[n], *v2.listElems()[n])) {
+        if (!eqValues(*(*v1.list)[n], *(*v2.list)[n])) {
           return false;
         }
       }
@@ -1883,14 +1854,12 @@ size_t valueSize(Value& v) {
           }
         }
         break;
-      case tList1:
-      case tList2:
-      case tListN:
-        if (seen.find(v.listElems()) == seen.end()) {
-          seen.insert(v.listElems());
+      case tList:
+        if (seen.find(v.list) == seen.end()) {
+          seen.insert(v.list);
           sz += v.listSize() * sizeof(Value*);
           for (size_t n = 0; n < v.listSize(); ++n) {
-            sz += doValue(*v.listElems()[n]);
+            sz += doValue(*(*v.list)[n]);
           }
         }
         break;
