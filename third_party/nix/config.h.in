@@ -13,7 +13,7 @@
 // TODO(tazjin): generate
 #define SYSTEM "x86_64-linux"
 
- // TODO(tazjin): some of these values are nonsensical for Nix
+// TODO(tazjin): some of these values are nonsensical for Nix
 #define NIX_PREFIX "@CMAKE_INSTALL_PREFIX@"
 #define NIX_STORE_DIR "/nix/store"
 #define NIX_DATA_DIR "@CMAKE_INSTALL_FULL_DATADIR@"
@@ -25,6 +25,8 @@
 #define NIX_MAN_DIR "@CMAKE_INSTALL_FULL_MANDIR@"
 #define SANDBOX_SHELL "/nix/store/zq8biwi5mj2lrn68kx0lk0fkpbqypyxd-busybox-1.31.1-x86_64-unknown-linux-musl/bin/busybox"
 
+// Defines used only in tests (e.g. to access data)
+#define NIX_SRC_DIR "@CMAKE_SOURCE_DIR@"
 
 // These are hardcoded either because support for non-Linux is being
 // dropped, or because a decision was made to make inclusion of these
