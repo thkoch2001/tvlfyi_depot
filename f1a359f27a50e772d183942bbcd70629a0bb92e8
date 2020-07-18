@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83150b28_d296acc4",
+        "filename": "third_party/abseil_cpp/absl/status/statusor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-18T23:36:11Z",
+      "side": 1,
+      "message": "These seem to be TensorFlow specific names.",
+      "revId": "f1a359f27a50e772d183942bbcd70629a0bb92e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
