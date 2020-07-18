@@ -94,6 +94,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                             StorePaths* response) override {
     const auto paths = store_->queryAllValidPaths();
     for (const auto& path : paths) {
+      store_->assertStorePath(path);
       response->add_paths(path);
     }
 
@@ -103,6 +104,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
   Status QueryPathInfo(grpc::ServerContext* context, const StorePath* request,
                        PathInfo* response) override {
     auto path = request->path();
+    store_->assertStorePath(path);
     try {
       auto info = store_->queryPathInfo(path);
       response->mutable_deriver()->set_path(info->deriver);
@@ -137,6 +139,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
       grpc::ServerContext* context, const StorePath* request,
       nix::proto::DerivationOutputNames* response) override {
     auto path = request->path();
+    store_->assertStorePath(path);
     auto names = store_->queryDerivationOutputNames(path);
     for (const auto& name : names) {
       response->add_names(name);
@@ -150,6 +153,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                                StorePath* response) override {
     auto hash_part = request->hash_part();
     auto path = store_->queryPathFromHashPart(hash_part);
+    store_->assertStorePath(path);
     response->set_path(path);
     return Status::OK;
   }
@@ -159,6 +163,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                          StorePaths* response) override {
     std::set<Path> paths;
     for (const auto& path : request->paths()) {
+      store_->assertStorePath(path);
       paths.insert(path);
     }
 
@@ -176,6 +181,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                                  StorePaths* response) override {
     std::set<Path> paths;
     for (const auto& path : request->paths()) {
+      store_->assertStorePath(path);
       paths.insert(path);
     }
 
@@ -231,6 +237,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                        const nix::proto::AddSignaturesRequest* request,
                        google::protobuf::Empty* response) override {
     auto path = request->path().path();
+    store_->assertStorePath(path);
 
     StringSet sigs;
     sigs.insert(request->sigs().sigs().begin(), request->sigs().sigs().end());
@@ -244,6 +251,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                       nix::proto::QueryMissingResponse* response) override {
     std::set<Path> targets;
     for (auto& path : request->paths()) {
+      store_->assertStorePath(path);
       targets.insert(path);
     }
     PathSet will_build;
