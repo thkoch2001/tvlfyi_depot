@@ -64,14 +64,11 @@ void printValueAsJSON(EvalState& state, bool strict, Value& v,
       break;
     }
 
-    case tList1:
-    case tList2:
-    case tListN: {
+    case tList: {
       auto list(out.list());
       for (unsigned int n = 0; n < v.listSize(); ++n) {
         auto placeholder(list.placeholder());
-        printValueAsJSON(state, strict, *v.listElems()[n], placeholder,
-                         context);
+        printValueAsJSON(state, strict, *(*v.list)[n], placeholder, context);
       }
       break;
     }

@@ -63,7 +63,7 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
 
   if (*s == '[') {
     s++;
-    ValueVector values;
+    NixList values;
     values.reserve(128);
     skipWhitespace(s);
     while (true) {
@@ -85,7 +85,7 @@ static void parseJSON(EvalState& state, const char*& s, Value& v) {
     s++;
     state.mkList(v, values.size());
     for (size_t n = 0; n < values.size(); ++n) {
-      v.listElems()[n] = values[n];
+      (*v.list)[n] = values[n];
     }
   }
 

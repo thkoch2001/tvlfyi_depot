@@ -158,8 +158,7 @@ static void loadSourceExpr(EvalState& state, const Path& path, Value& v) {
      directory). */
   else if (S_ISDIR(st.st_mode)) {
     state.mkAttrs(v, 1024);
-    state.mkList(*state.allocAttr(v, state.symbols.Create("_combineChannels")),
-                 0);
+    state.mkList(*state.allocAttr(v, state.symbols.Create("_combineChannels")));
     StringSet attrs;
     getAllExprs(state, path, attrs, v);
   }
@@ -1199,11 +1198,11 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
                   attrs2["type"] = "strings";
                   XMLOpenElement m(xml, "meta", attrs2);
                   for (unsigned int j = 0; j < v->listSize(); ++j) {
-                    if (v->listElems()[j]->type != tString) {
+                    if ((*v->list)[j]->type != tString) {
                       continue;
                     }
                     XMLAttrs attrs3;
-                    attrs3["value"] = v->listElems()[j]->string.s;
+                    attrs3["value"] = (*v->list)[j]->string.s;
                     xml.writeEmptyElement("string", attrs3);
                   }
                 } else if (v->type == tAttrs) {

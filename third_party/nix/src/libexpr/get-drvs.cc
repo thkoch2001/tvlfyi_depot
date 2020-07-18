@@ -99,8 +99,8 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
       /* For each output... */
       for (unsigned int j = 0; j < i->second.value->listSize(); ++j) {
         /* Evaluate the corresponding set. */
-        std::string name = state->forceStringNoCtx(
-            *i->second.value->listElems()[j], *i->second.pos);
+        std::string name = state->forceStringNoCtx(*(*i->second.value->list)[j],
+                                                   *i->second.pos);
         Bindings::iterator out = attrs->find(state->symbols.Create(name));
         if (out == attrs->end()) {
           continue;  // FIXME: throw error?
@@ -136,12 +136,12 @@ DrvInfo::Outputs DrvInfo::queryOutputs(bool onlyOutputsToInstall) {
     throw errMsg;
   }
   Outputs result;
-  for (auto i = outTI->listElems(); i != outTI->listElems() + outTI->listSize();
-       ++i) {
-    if ((*i)->type != tString) {
+
+  for (Value* i : *outTI->list) {
+    if (i->type != tString) {
       throw errMsg;
     }
-    auto out = outputs.find((*i)->string.s);
+    auto out = outputs.find(i->string.s);
     if (out == outputs.end()) {
       throw errMsg;
     }
@@ -190,7 +190,7 @@ bool DrvInfo::checkMeta(Value& v) {
   state->forceValue(v);
   if (v.isList()) {
     for (unsigned int n = 0; n < v.listSize(); ++n) {
-      if (!checkMeta(*v.listElems()[n])) {
+      if (!checkMeta(*(*v.list)[n])) {
         return false;
       }
     }
@@ -418,10 +418,10 @@ static void getDerivations(EvalState& state, Value& vIn,
     for (unsigned int n = 0; n < v.listSize(); ++n) {
       std::string pathPrefix2 =
           addToPath(pathPrefix, (format("%1%") % n).str());
-      if (getDerivation(state, *v.listElems()[n], pathPrefix2, drvs, done,
+      if (getDerivation(state, *(*v.list)[n], pathPrefix2, drvs, done,
                         ignoreAssertionFailures)) {
-        getDerivations(state, *v.listElems()[n], pathPrefix2, autoArgs, drvs,
-                       done, ignoreAssertionFailures);
+        getDerivations(state, *(*v.list)[n], pathPrefix2, autoArgs, drvs, done,
+                       ignoreAssertionFailures);
       }
     }
   }

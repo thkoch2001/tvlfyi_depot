@@ -123,7 +123,7 @@ static void prim_getContext(EvalState& state, const Pos& pos, Value** args,
       state.mkList(outputsVal, info.second.outputs.size());
       size_t i = 0;
       for (const auto& output : info.second.outputs) {
-        mkString(*(outputsVal.listElems()[i++] = state.allocValue()), output);
+        mkString(*((*outputsVal.list)[i++] = state.allocValue()), output);
       }
     }
   }
@@ -184,7 +184,7 @@ static void prim_appendContext(EvalState& state, const Pos& pos, Value** args,
             i->name, i->pos);
       }
       for (unsigned int n = 0; n < iter->second.value->listSize(); ++n) {
-        auto name = state.forceStringNoCtx(*iter->second.value->listElems()[n],
+        auto name = state.forceStringNoCtx(*(*iter->second.value->list)[n],
                                            *iter->second.pos);
         context.insert("!" + name + "!" + std::string(i->name));
       }

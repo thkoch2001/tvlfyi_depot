@@ -99,7 +99,7 @@ Value* findAlongAttrPath(EvalState& state, const std::string& attrPath,
             attrIndex % attrPath);
       }
 
-      v = v->listElems()[attrIndex];
+      v = (*v->list)[attrIndex];
     }
   }
 
