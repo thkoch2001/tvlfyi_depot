@@ -46,6 +46,30 @@
       "revId": "4ad80c65e051c65d2c74e765698e6b017dc34cfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd347235_d666e51d",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2020-07-18T02:14:27Z",
+      "side": 1,
+      "message": "Then we\u0027d have protoSrc, which would be a path, immediately followed by protoSrcs, which is a derivation.  How about we rename src to srcPath, and call this protoSrcPath?",
+      "parentUuid": "5d1ed425_c75f3931",
+      "range": {
+        "startLine": 21,
+        "startChar": 24,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "4ad80c65e051c65d2c74e765698e6b017dc34cfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
