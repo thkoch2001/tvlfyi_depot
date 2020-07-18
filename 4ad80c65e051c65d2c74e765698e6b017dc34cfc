@@ -142,6 +142,30 @@
       "revId": "4ad80c65e051c65d2c74e765698e6b017dc34cfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6dbaede_5a49bb84",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2020-07-18T18:19:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a625211b_dc0d6c7a",
+      "range": {
+        "startLine": 21,
+        "startChar": 24,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "4ad80c65e051c65d2c74e765698e6b017dc34cfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
