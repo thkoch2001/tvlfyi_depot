@@ -65,7 +65,7 @@ typedef std::map<Path, Expr*, std::less<Path>,
                  traceable_allocator<std::pair<const Path, Expr*>>>
     FileParseCache;
 
-class EvalState {
+class EvalState : public gc {
  public:
   SymbolTable symbols;
 
