@@ -46,6 +46,30 @@
       "revId": "9e180647406aa632fc98639c3c4efb5f4b5ee386",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "36dd9b91_0bf86d1f",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-18T19:52:11Z",
+      "side": 1,
+      "message": "it is *not* handled properly here - tazjin and I were just talking about this actually. We\u0027re going to do a path that refactors this throughout the file to use StatusOr instead of exceptions later.",
+      "parentUuid": "ef273225_54384b1f",
+      "range": {
+        "startLine": 107,
+        "startChar": 12,
+        "endLine": 107,
+        "endChar": 27
+      },
+      "revId": "9e180647406aa632fc98639c3c4efb5f4b5ee386",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
