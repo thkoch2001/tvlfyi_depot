@@ -22,6 +22,30 @@
       "revId": "501d6bdaab9fedfe5a92b8de6c465896c3f12058",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8cdd4cea_00397bee",
+        "filename": "third_party/nix/src/libexpr/eval.hh",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-18T17:43:05Z",
+      "side": 0,
+      "message": "I think we probably care less about memory usage than runtime perf, which is not to say we care *zero* about memory usage",
+      "parentUuid": "17f8c265_76c73d48",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 19
+      },
+      "revId": "501d6bdaab9fedfe5a92b8de6c465896c3f12058",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }

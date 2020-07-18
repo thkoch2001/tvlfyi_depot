@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93cce906_b8ed0004",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-18T17:43:05Z",
+      "side": 1,
+      "message": "should this be in the gc?",
+      "revId": "3b94c6bbd47fc8ae51c07eca9d8a41ed6706c5b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
