@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63ac2888_620ad1ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-18T18:14:33Z",
+      "side": 1,
+      "message": "Yes, this is the Correct thing to do - you need either an enum translation layer, or to have the proto control the numerics.",
+      "range": {
+        "startLine": 25,
+        "startChar": 2,
+        "endLine": 25,
+        "endChar": 42
+      },
+      "revId": "7b1208015916dbd7ddb86b4d9149a96ca6aad906",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62782b31_3da2ad82",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-18T18:14:33Z",
+      "side": 1,
+      "message": "Move this switch to a function. Assume other code will want to map between the two.\n\nif possible, have the function live next to the c++ enum.\n\nabsl::StatusOr\u003cBuildMode\u003e build_mode \u003d BuildMode::from(request-\u003ebuild_mode());",
+      "range": {
+        "startLine": 215,
+        "startChar": 12,
+        "endLine": 215,
+        "endChar": 36
+      },
+      "revId": "7b1208015916dbd7ddb86b4d9149a96ca6aad906",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75474f76_398e74af",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-18T18:14:33Z",
+      "side": 1,
+      "message": "Same mapping pattern here. Map failure should cause a grpc::StatusCode::INTERNAL",
+      "range": {
+        "startLine": 232,
+        "startChar": 11,
+        "endLine": 232,
+        "endChar": 22
+      },
+      "revId": "7b1208015916dbd7ddb86b4d9149a96ca6aad906",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
