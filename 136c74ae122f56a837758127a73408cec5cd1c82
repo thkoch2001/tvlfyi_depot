@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f2065c0b_da32748b",
+        "filename": "third_party/nix/src/libstore/derivations.hh",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-18T19:42:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33c10e43_c65ce89f",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 74
+      },
+      "revId": "136c74ae122f56a837758127a73408cec5cd1c82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0039d460_42facc78",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "136c74ae122f56a837758127a73408cec5cd1c82",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8baa0e89_26bb7d75",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-18T19:42:25Z",
+      "side": 1,
+      "message": "Done, and created https://cl.tvl.fyi/c/depot/+/1272 to add it to all the other ones where it was in fact missing.",
+      "parentUuid": "0039d460_42facc78",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 47
+      },
+      "revId": "136c74ae122f56a837758127a73408cec5cd1c82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
