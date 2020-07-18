@@ -21,7 +21,7 @@ let
   # Proto generation in CMake is theoretically possible, but that is
   # very theoretical - this does it in Nix instead.
   protoSrcs = pkgs.runCommand "nix-proto-srcs" {} ''
-    export PROTO_SRCS=${src}/src/proto
+    export PROTO_SRCS=${src + "/src/proto"}
     mkdir -p $out/libproto
     ${pkgs.protobuf}/bin/protoc -I=$PROTO_SRCS \
       --cpp_out=$out/libproto \
