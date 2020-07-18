@@ -338,8 +338,6 @@ EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
 
   assert(gcInitialised);
 
-  static_assert(sizeof(Env) <= 16, "environment must be <= 16 bytes");
-
   /* Initialise the Nix expression search path. */
   if (!evalSettings.pureEval) {
     Strings paths = parseNixPath(getEnv("NIX_PATH", ""));
@@ -637,12 +635,8 @@ Env& EvalState::allocEnv(size_t size) {
 
   nrEnvs++;
   nrValuesInEnvs += size;
-  Env* env = (Env*)allocBytes(sizeof(Env) + size * sizeof(Value*));
-  env->size = (decltype(Env::size))size;
+  Env* env = new Env(size);
   env->type = Env::Plain;
-
-  /* We assume that env->values has been cleared by the allocator; maybeThunk()
-   * and lookupVar fromWith expect this. */
 
   return *env;
 }
