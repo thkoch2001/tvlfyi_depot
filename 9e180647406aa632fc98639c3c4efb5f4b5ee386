@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef273225_54384b1f",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-18T19:49:30Z",
+      "side": 1,
+      "message": "is the exception handled properly here?\ndo we need a special assert version that returns grpc::Status::NOT_FOUND ?",
+      "range": {
+        "startLine": 107,
+        "startChar": 12,
+        "endLine": 107,
+        "endChar": 27
+      },
+      "revId": "9e180647406aa632fc98639c3c4efb5f4b5ee386",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
