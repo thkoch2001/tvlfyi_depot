@@ -143,7 +143,7 @@ class UDSRemoteStore : public LocalFSStore, public RemoteStore {
 
   std::string getUri() override;
 
-  bool sameMachine() { return true; }
+  bool sameMachine() override { return true; }
 
  private:
   ref<RemoteStore::Connection> openConnection() override;
