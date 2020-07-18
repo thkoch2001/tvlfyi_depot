@@ -22,6 +22,10 @@
 
 (use-package! protobuf-mode)
 
+(use-package! clang-format+
+  :config
+  (add-hook 'c-mode-common-hook #'clang-format+-mode))
+
 (comment
  (setq
   lsp-clients-clangd-executable

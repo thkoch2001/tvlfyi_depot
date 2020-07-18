@@ -158,3 +158,4 @@
 
 ;;; cpp
 (package! protobuf-mode)
+(package! clang-format+)
