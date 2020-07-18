@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include "libstore/store-api.hh"
 
 namespace nix::tests {
@@ -20,7 +21,11 @@ class DummyStore final : public Store {
                   bool recursive = true, HashType hashAlgo = htSHA256,
                   PathFilter& filter = defaultPathFilter,
                   RepairFlag repair = NoRepair) {
-    return "/nix/store/g1w7hy3qg1w7hy3qg1w7hy3qg1w7hy3q-x";
+    if (srcPath == "/exists-for-tests") {
+      return "/nix/store/g1w7hy3qg1w7hy3qg1w7hy3qg1w7hy3q-x";
+    }
+
+    throw SysError("file does not exist");
   }
 
   Path addTextToStore(const std::string& name, const std::string& s,
