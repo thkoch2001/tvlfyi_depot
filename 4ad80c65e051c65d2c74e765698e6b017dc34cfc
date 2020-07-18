@@ -94,6 +94,30 @@
       "revId": "4ad80c65e051c65d2c74e765698e6b017dc34cfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d50bec3_b1801fa5",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-18T02:48:22Z",
+      "side": 1,
+      "message": "I don\u0027t get why we can\u0027t just inline it, since that saves the confusion. but if we don\u0027t change this, I\u0027d at least like it to be talked about in the commit",
+      "parentUuid": "f34e1dba_a61c066f",
+      "range": {
+        "startLine": 21,
+        "startChar": 24,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "4ad80c65e051c65d2c74e765698e6b017dc34cfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
