@@ -39,6 +39,24 @@ absl_cc_library(
   PUBLIC
 )
 
+absl_cc_library(
+  NAME
+    statusor
+  HDRS
+    "statusor.h"
+  SRCS
+    "statusor.cc"
+    "statusor_internals.h"
+  COPTS
+    ${ABSL_DEFAULT_COPTS}
+  DEPS
+    absl::status
+    absl::atomic_hook
+    absl::raw_logging_internal
+    absl::strings
+  PUBLIC
+)
+
 absl_cc_test(
   NAME
     status_test
@@ -48,6 +66,20 @@ absl_cc_test(
     ${ABSL_TEST_COPTS}
   DEPS
     absl::status
+    absl::strings
+    gmock_main
+)
+
+absl_cc_test(
+  NAME
+    statusor_test
+  SRCS
+   "statusor_test.cc"
+  COPTS
+    ${ABSL_TEST_COPTS}
+  DEPS
+    absl::status
+    absl::statusor
     absl::strings
     gmock_main
 )
