@@ -31,7 +31,7 @@ static void prim_fromTOML(EvalState& state, const Pos& pos, Value** args,
           size_t size2 = i2->get().size();
           state.mkList(v2, size2);
           for (size_t j = 0; j < size2; ++j)
-            visit(*(v2.listElems()[j] = state.allocValue()), i2->get()[j]);
+            visit(*((*v2.list)[j] = state.allocValue()), i2->get()[j]);
         } else
           visit(v2, i.second);
       }
@@ -43,7 +43,7 @@ static void prim_fromTOML(EvalState& state, const Pos& pos, Value** args,
       state.mkList(v, size);
 
       for (size_t i = 0; i < size; ++i)
-        visit(*(v.listElems()[i] = state.allocValue()), t2->get()[i]);
+        visit(*((*v.list)[i] = state.allocValue()), t2->get()[i]);
     }
 
     // Handle cases like 'a = [[{ a = true }]]', which IMHO should be
@@ -56,7 +56,7 @@ static void prim_fromTOML(EvalState& state, const Pos& pos, Value** args,
       state.mkList(v, size);
 
       for (size_t j = 0; j < size; ++j)
-        visit(*(v.listElems()[j] = state.allocValue()), t2->get()[j]);
+        visit(*((*v.list)[j] = state.allocValue()), t2->get()[j]);
     }
 
     else if (t->is_value()) {

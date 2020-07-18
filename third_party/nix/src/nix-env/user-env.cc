@@ -51,29 +51,29 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
        as the meta attributes. */
     Path drvPath = keepDerivations ? i.queryDrvPath() : "";
 
-    Value& v(*state.allocValue());
-    manifest.listElems()[n++] = &v;
-    state.mkAttrs(v, 16);
+    Value* v = state.allocValue();
+    (*manifest.list)[n++] = v;
+    state.mkAttrs(*v, 16);
 
-    mkString(*state.allocAttr(v, state.sType), "derivation");
-    mkString(*state.allocAttr(v, state.sName), i.queryName());
+    mkString(*state.allocAttr(*v, state.sType), "derivation");
+    mkString(*state.allocAttr(*v, state.sName), i.queryName());
     auto system = i.querySystem();
     if (!system.empty()) {
-      mkString(*state.allocAttr(v, state.sSystem), system);
+      mkString(*state.allocAttr(*v, state.sSystem), system);
     }
-    mkString(*state.allocAttr(v, state.sOutPath), i.queryOutPath());
+    mkString(*state.allocAttr(*v, state.sOutPath), i.queryOutPath());
     if (!drvPath.empty()) {
-      mkString(*state.allocAttr(v, state.sDrvPath), i.queryDrvPath());
+      mkString(*state.allocAttr(*v, state.sDrvPath), i.queryDrvPath());
     }
 
     // Copy each output meant for installation.
     DrvInfo::Outputs outputs = i.queryOutputs(true);
-    Value& vOutputs = *state.allocAttr(v, state.sOutputs);
+    Value& vOutputs = *state.allocAttr(*v, state.sOutputs);
     state.mkList(vOutputs, outputs.size());
     unsigned int m = 0;
     for (auto& j : outputs) {
-      mkString(*(vOutputs.listElems()[m++] = state.allocValue()), j.first);
-      Value& vOutputs = *state.allocAttr(v, state.symbols.Create(j.first));
+      mkString(*((*vOutputs.list)[m++] = state.allocValue()), j.first);
+      Value& vOutputs = *state.allocAttr(*v, state.symbols.Create(j.first));
       state.mkAttrs(vOutputs, 2);
       mkString(*state.allocAttr(vOutputs, state.sOutPath), j.second);
 
@@ -86,7 +86,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
     }
 
     // Copy the meta attributes.
-    Value& vMeta = *state.allocAttr(v, state.sMeta);
+    Value& vMeta = *state.allocAttr(*v, state.sMeta);
     state.mkAttrs(vMeta, 16);
     StringSet metaNames = i.queryMetaNames();
     for (auto& j : metaNames) {

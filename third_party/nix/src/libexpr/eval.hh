@@ -260,12 +260,19 @@ class EvalState {
 
   Value* allocAttr(Value& vAttrs, const Symbol& name);
 
-  void mkList(Value& v, size_t size);
+  // Create a list value from the specified vector.
+  void mkList(Value& v, NixList* list);
+
+  // Create a list value, allocating as many elements as specified in
+  // size. This is used for the many cases in this codebase where
+  // assignment happens into the preallocated list.
+  void mkList(Value& v, size_t size = 0);
+
   void mkAttrs(Value& v, size_t capacity);
   void mkThunk_(Value& v, Expr* expr);
   void mkPos(Value& v, Pos* pos);
 
-  void concatLists(Value& v, size_t nrLists, Value** lists, const Pos& pos);
+  void concatLists(Value& v, const NixList& lists, const Pos& pos);
 
   /* Print statistics. */
   void printStats();

@@ -1,6 +1,10 @@
 #pragma once
 
+#include <tuple>
+#include <vector>
+
 #include <gc/gc_allocator.h>
+#include <gc/gc_cpp.h>
 
 #include "libexpr/symbol-table.hh"
 #include "libutil/types.hh"
@@ -14,9 +18,7 @@ typedef enum {
   tPath,
   tNull,
   tAttrs,
-  tList1,
-  tList2,
-  tListN,
+  tList,
   tThunk,
   tApp,
   tLambda,
@@ -119,11 +121,6 @@ struct NixString {
   const char** context;  // must be in sorted order
 };
 
-struct NixBigList {
-  size_t size;
-  Value** elems;
-};
-
 struct NixThunk {
   Env* env;
   Expr* expr;
@@ -142,7 +139,9 @@ struct NixPrimOpApp {
   Value *left, *right;
 };
 
-struct Value {
+using NixList = std::vector<Value*, traceable_allocator<Value*>>;
+
+struct Value : public gc {
   ValueType type;
   union {  // TODO(tazjin): std::variant
     NixInt integer;
@@ -150,8 +149,7 @@ struct Value {
     NixString string;
     const char* path;
     Bindings* attrs;
-    NixBigList bigList;
-    Value* smallList[2];
+    NixList* list;
     NixThunk thunk;
     NixApp app;  // TODO(tazjin): "app"?
     NixLambda lambda;
@@ -161,21 +159,9 @@ struct Value {
     NixFloat fpoint;
   };
 
-  bool isList() const {
-    return type == tList1 || type == tList2 || type == tListN;
-  }
+  bool isList() const { return type == tList; }
 
-  Value** listElems() {
-    return type == tList1 || type == tList2 ? smallList : bigList.elems;
-  }
-
-  const Value* const* listElems() const {
-    return type == tList1 || type == tList2 ? smallList : bigList.elems;
-  }
-
-  size_t listSize() const {
-    return type == tList1 ? 1 : type == tList2 ? 2 : bigList.size;
-  }
+  size_t listSize() const { return list->size(); }
 };
 
 /* After overwriting an app node, be sure to clear pointers in the
@@ -242,7 +228,6 @@ void mkPath(Value& v, const char* s);
    not included. */
 size_t valueSize(Value& v);
 
-typedef std::vector<Value*, traceable_allocator<Value*>> ValueVector;
 typedef std::map<Symbol, Value*, std::less<Symbol>,
                  traceable_allocator<std::pair<const Symbol, Value*>>>
     ValueMap;
