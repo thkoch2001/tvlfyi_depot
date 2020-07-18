@@ -70,6 +70,30 @@
       "revId": "4ad80c65e051c65d2c74e765698e6b017dc34cfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f34e1dba_a61c066f",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-18T02:38:56Z",
+      "side": 1,
+      "message": "Is renaming `src` actually an option in stdenv? FWIW, I think the current approach is fine but expanding upon it in the commit message would help for anyone looking up the blame history of this line.",
+      "parentUuid": "cd347235_d666e51d",
+      "range": {
+        "startLine": 21,
+        "startChar": 24,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "4ad80c65e051c65d2c74e765698e6b017dc34cfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
