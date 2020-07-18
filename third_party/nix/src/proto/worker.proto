@@ -92,7 +92,7 @@ service WorkerService {
 
   // Add signatures to the specified store path. The signatures are not
   // verified.
-  rpc AddSignatures(Signatures) returns (google.protobuf.Empty);
+  rpc AddSignatures(AddSignaturesRequest) returns (google.protobuf.Empty);
 
   // TODO: What does this do?
   rpc NarFromPath(StorePath) returns (StorePath);
@@ -312,6 +312,11 @@ message BuildDerivationRequest {
 message BuildDerivationResponse {
   BuildStatus status = 1;
   string error_message = 2;
+}
+
+message AddSignaturesRequest {
+  StorePath path = 1;
+  Signatures sigs = 2;
 }
 
 message AddToStoreNarRequest {
