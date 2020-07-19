@@ -85,6 +85,7 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   installCheckPhase = ''
     export NIX_DATA_DIR=$out/share
+    export TEST_VAR=foo # this is required by a language test
     make test
   '';
 
