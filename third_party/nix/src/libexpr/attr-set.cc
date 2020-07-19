@@ -37,7 +37,7 @@ size_t Bindings::size() const { return attributes_.size(); }
 
 bool Bindings::empty() { return attributes_.empty(); }
 
-std::vector<const Attr*> Bindings::lexicographicOrder() {
+std::vector<const Attr*> Bindings::SortedByKeys() {
   std::vector<const Attr*> res;
   res.reserve(attributes_.size());
 

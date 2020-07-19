@@ -561,7 +561,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   StringSet outputs;
   outputs.insert("out");
 
-  for (auto& i : args[0]->attrs->lexicographicOrder()) {
+  for (auto& i : args[0]->attrs->SortedByKeys()) {
     if (i->name == state.sIgnoreNulls) {
       continue;
     }
