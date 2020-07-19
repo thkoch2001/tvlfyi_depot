@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1736ca76_8845bc17",
+        "filename": "third_party/nix/doc/manual/command-ref/conf-file.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2020-07-19T18:51:24Z",
+      "side": 0,
+      "message": "nit: this blank line shouldn\u0027t be removed, as the convention in the file seems to be two blank lines between varlistentry-s.",
+      "revId": "02066a4bab3f534569c61f571c25d519a1a569ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
