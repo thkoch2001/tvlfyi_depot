@@ -18,7 +18,6 @@ set(HEADER_FILES
     lru-cache.hh
     monitor-fd.hh
     pool.hh
-    prefork-compat.hh
     ref.hh
     serialise.hh
     sync.hh
