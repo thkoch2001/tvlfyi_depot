@@ -390,6 +390,11 @@ class Callback {
     }
   }
 
+  // The unused-variable assert is disabled in this block because the
+  // `prev` variables are only used in debug mode (in the asserts).
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wunused-variable"
+
   void operator()(T&& t) noexcept {
     auto prev = done.test_and_set();
     assert(!prev);
@@ -406,6 +411,8 @@ class Callback {
     promise.set_exception(exc);
     fun(promise.get_future());
   }
+
+  #pragma clang diagnostic pop
 };
 
 /* Start a thread that handles various signals. Also block those signals

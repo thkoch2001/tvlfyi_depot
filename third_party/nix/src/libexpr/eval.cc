@@ -1252,7 +1252,6 @@ void EvalState::concatLists(Value& v, const NixList& lists, const Pos& pos) {
 
   auto outlist = new (GC) NixList();
 
-  size_t len = 0;
   for (Value* list : lists) {
     forceList(*list, pos);
     outlist->insert(outlist->end(), list->list->begin(), list->list->end());

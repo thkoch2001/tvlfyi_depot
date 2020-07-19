@@ -9,7 +9,7 @@
 
 using namespace nix;
 
-struct CmdEval : MixJSON, InstallableCommand {
+struct CmdEval final : MixJSON, InstallableCommand {
   bool raw = false;
 
   CmdEval() { mkFlag(0, "raw", "print strings unquoted", &raw); }

@@ -7,7 +7,7 @@
 
 using namespace nix;
 
-struct CmdLog : InstallableCommand {
+struct CmdLog final : InstallableCommand {
   CmdLog() = default;
 
   std::string name() override { return "log"; }

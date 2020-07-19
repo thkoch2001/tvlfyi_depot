@@ -10,7 +10,7 @@
 
 using namespace nix;
 
-struct CmdVerify : StorePathsCommand {
+struct CmdVerify final : StorePathsCommand {
   bool noContents = false;
   bool noTrust = false;
   Strings substituterUris;

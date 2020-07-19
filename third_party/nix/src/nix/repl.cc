@@ -799,7 +799,7 @@ std::ostream& NixRepl::printValue(std::ostream& str, Value& v,
   return str;
 }
 
-struct CmdRepl : StoreCommand, MixEvalArgs {
+struct CmdRepl final : StoreCommand, MixEvalArgs {
   std::vector<std::string> files;
 
   CmdRepl() { expectArgs("files", &files); }

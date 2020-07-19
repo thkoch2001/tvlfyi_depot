@@ -174,7 +174,7 @@ TEST_P(EvalFailureTest, Fails) {
   EvalState state({}, ref<Store>(store));
   auto path = GetParam();
 
-  Expr* expr;
+  Expr* expr = nullptr;
   EXPECT_NO_THROW(expr = state.parseExprFromFile(GetParam().string()))
       << path.stem().string() << ": should parse successfully";
 

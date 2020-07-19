@@ -98,7 +98,7 @@ Buildable Installable::toBuildable() {
   return std::move(buildables[0]);
 }
 
-struct InstallableStorePath : Installable {
+struct InstallableStorePath final : Installable {
   Path storePath;
 
   explicit InstallableStorePath(Path storePath)
@@ -158,7 +158,7 @@ struct InstallableValue : Installable {
   }
 };
 
-struct InstallableExpr : InstallableValue {
+struct InstallableExpr final : InstallableValue {
   std::string text;
 
   InstallableExpr(SourceExprCommand& cmd, std::string text)
@@ -173,7 +173,7 @@ struct InstallableExpr : InstallableValue {
   }
 };
 
-struct InstallableAttrPath : InstallableValue {
+struct InstallableAttrPath final : InstallableValue {
   std::string attrPath;
 
   InstallableAttrPath(SourceExprCommand& cmd, std::string attrPath)
