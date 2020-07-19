@@ -22,6 +22,30 @@
       "revId": "4ba9682b51e5d3dd24d860f42d890863d7238396",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dee8404e_824e1328",
+        "filename": "third_party/nix/src/tests/language-tests.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-19T16:32:09Z",
+      "side": 1,
+      "message": "AFAICT, just trailing. I don\u0027t know where leading whitespace would come from, and I think if there was any that would probably be a bug.",
+      "parentUuid": "75d02b7f_c5b6b4ac",
+      "range": {
+        "startLine": 103,
+        "startChar": 32,
+        "endLine": 103,
+        "endChar": 40
+      },
+      "revId": "4ba9682b51e5d3dd24d860f42d890863d7238396",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
