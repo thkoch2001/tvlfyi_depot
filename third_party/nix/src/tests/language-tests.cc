@@ -23,9 +23,12 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
+#include <iterator>
 #include <memory>
 #include <optional>
+#include <sstream>
 #include <string>
 
 #include <absl/strings/ascii.h>
@@ -84,6 +87,20 @@ std::string TestNameFor(
   }
 
   return name;
+}
+
+// Load the expected output of a given test as a string.
+std::string ExpectedOutputFor(absl::string_view stem) {
+  std::filesystem::path path(
+      absl::StrCat(NIX_SRC_DIR, "/src/tests/lang/", stem, ".exp"));
+
+  EXPECT_TRUE(std::filesystem::exists(path))
+      << stem << ": expected output file should exist";
+
+  std::ifstream input(path);
+  std::stringstream buffer;
+  buffer << input.rdbuf();
+  return std::string(absl::StripTrailingAsciiWhitespace(buffer.str()));
 }
 
 }  // namespace
@@ -189,7 +206,7 @@ INSTANTIATE_TEST_SUITE_P(Eval, EvalFailureTest,
 
 class EvalSuccessTest : public testing::TestWithParam<std::filesystem::path> {};
 
-// Test pattern for files that should fail to evaluate.
+// Test pattern for files that should evaluate successfully.
 TEST_P(EvalSuccessTest, Fails) {
   std::shared_ptr<Store> store = std::make_shared<DummyStore>();
   EvalState state({}, ref<Store>(store));
@@ -200,8 +217,18 @@ TEST_P(EvalSuccessTest, Fails) {
       << path.stem().string() << ": should parse successfully";
 
   Value result;
-  state.eval(expr, result);
-  state.forceValue(result);
+
+  EXPECT_NO_THROW({
+    state.eval(expr, result);
+    state.forceValueDeep(result);
+  }) << path.stem().string()
+     << ": should evaluate successfully";
+
+  auto expected = ExpectedOutputFor(path.stem().string());
+  std::ostringstream value_str;
+  value_str << result;
+
+  EXPECT_EQ(expected, value_str.str()) << "evaluator output should match";
 }
 
 INSTANTIATE_TEST_SUITE_P(Eval, EvalSuccessTest,
