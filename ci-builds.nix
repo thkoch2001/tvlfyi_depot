@@ -64,6 +64,7 @@ in lib.fix (self: {
     grpc
     nix
     openldap
+    rapidcheck
   ];
 
   various = with depot; [
