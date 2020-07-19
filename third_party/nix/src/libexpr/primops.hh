@@ -14,9 +14,7 @@ struct RegisterPrimOp {
   RegisterPrimOp(const std::string& name, size_t arity, PrimOpFun fun);
 };
 
-/* These primops are disabled without enableNativeCode, but plugins
-   may wish to use them in limited contexts without globally enabling
-   them. */
+/* These primops are disabled without enableNativeCode */
 /* Load a ValueInitializer from a DSO and return whatever it initializes */
 void prim_importNative(EvalState& state, const Pos& pos, Value** args,
                        Value& v);

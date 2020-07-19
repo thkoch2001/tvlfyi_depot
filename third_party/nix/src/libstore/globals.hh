@@ -452,20 +452,10 @@ class Settings : public Config {
   Setting<uint64_t> minFreeCheckInterval{
       this, 5, "min-free-check-interval",
       "Number of seconds between checking free disk space."};
-
-  Setting<Paths> pluginFiles{
-      this,
-      {},
-      "plugin-files",
-      "Plugins to dynamically load at nix initialization time."};
 };
 
 // FIXME: don't use a global variable.
 extern Settings settings;
-
-/* This should be called after settings are initialized, but before
-   anything else */
-void initPlugins();
 
 void loadConfFile();
 
