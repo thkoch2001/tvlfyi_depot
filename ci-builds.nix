@@ -74,6 +74,7 @@ in lib.fix (self: {
     tools.cheddar
     tools.nsfv-setup
     web.cgit-taz
+    web.todolist
     web.tvl
     (drvify "getBins-tests" nix.getBins.tests)
   ]
