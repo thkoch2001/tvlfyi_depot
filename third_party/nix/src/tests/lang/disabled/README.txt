@@ -1,4 +1,4 @@
-These tests are disabeld primarily because the DummyStore used for
+These tests are disabled primarily because the DummyStore used for
 tests does not interact with real files on disk at the moment, but the
 tests expect it to.
 

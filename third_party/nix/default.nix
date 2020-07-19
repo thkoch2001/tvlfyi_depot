@@ -85,6 +85,7 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   installCheckPhase = ''
     export NIX_DATA_DIR=$out/share
+    export NIX_TEST_VAR=foo # this is required by a language test
     make test
   '';
 
@@ -120,6 +121,7 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   shellHook = ''
     export NIX_DATA_DIR="${toString depotPath}/third_party"
+    export NIX_TEST_VAR=foo
   '';
 
   # TODO(tazjin): integration test setup?
