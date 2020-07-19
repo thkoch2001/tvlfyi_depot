@@ -387,7 +387,7 @@ static void getDerivations(EvalState& state, Value& vIn,
        there are names clashes between derivations, the derivation
        bound to the attribute with the "lower" name should take
        precedence). */
-    for (auto& i : v.attrs->lexicographicOrder()) {
+    for (auto& i : v.attrs->SortedByKeys()) {
       DLOG(INFO) << "evaluating attribute '" << i->name << "'";
       if (!std::regex_match(std::string(i->name), attrRegex)) {
         continue;
