@@ -8,7 +8,6 @@
 #include "libexpr/value-to-xml.hh"
 #include "libexpr/value.hh"
 #include "libstore/store-api.hh"
-
 #include "tests/dummy-store.hh"
 
 class ValueTest : public ::testing::Test {
