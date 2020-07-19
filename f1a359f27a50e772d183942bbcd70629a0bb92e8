@@ -16,6 +16,29 @@
       "revId": "f1a359f27a50e772d183942bbcd70629a0bb92e8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1dda992_9fd4d69c",
+        "filename": "third_party/abseil_cpp/absl/status/statusor_test.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-19T00:01:53Z",
+      "side": 1,
+      "message": "abseil\u0027s test suite does not appear to be running in CI - we should probably fix that before submitting this.\n\nit\u0027s likely as easy as adding `doCheck \u003d true;` to the derivation.",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 4
+      },
+      "revId": "f1a359f27a50e772d183942bbcd70629a0bb92e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
