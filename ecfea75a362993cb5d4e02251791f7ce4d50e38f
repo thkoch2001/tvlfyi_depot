@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cf32038e_8a49bb28",
+        "filename": "third_party/nix/src/tests/lang/disabled/README.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-19T16:30:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2e4a41a_256b32fb",
+      "range": {
+        "startLine": 1,
+        "startChar": 16,
+        "endLine": 1,
+        "endChar": 24
+      },
+      "revId": "ecfea75a362993cb5d4e02251791f7ce4d50e38f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56edcc19_42e3e4fb",
         "filename": "third_party/nix/src/tests/language-tests.cc",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "2a5cc7c9_7b9725bc",
+        "filename": "third_party/nix/src/tests/language-tests.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-19T16:30:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56edcc19_42e3e4fb",
+      "range": {
+        "startLine": 192,
+        "startChar": 31,
+        "endLine": 192,
+        "endChar": 55
+      },
+      "revId": "ecfea75a362993cb5d4e02251791f7ce4d50e38f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfad6fba_59ef446b",
         "filename": "third_party/nix/src/tests/language-tests.cc",
         "patchSetId": 2
@@ -62,6 +110,24 @@
       "revId": "ecfea75a362993cb5d4e02251791f7ce4d50e38f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a76dfffd_bd018419",
+        "filename": "third_party/nix/src/tests/language-tests.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-19T16:30:58Z",
+      "side": 1,
+      "message": "It only changes the presentation of the error message, but that might be useful so I\u0027ve wrapped the evaluation in an EXPECT_NO_THROW block now.",
+      "parentUuid": "dfad6fba_59ef446b",
+      "revId": "ecfea75a362993cb5d4e02251791f7ce4d50e38f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
