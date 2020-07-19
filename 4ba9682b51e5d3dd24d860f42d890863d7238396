@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75d02b7f_c5b6b4ac",
+        "filename": "third_party/nix/src/tests/language-tests.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-19T16:26:29Z",
+      "side": 1,
+      "message": "just trailing, or do we want to do leading as well?",
+      "range": {
+        "startLine": 103,
+        "startChar": 32,
+        "endLine": 103,
+        "endChar": 40
+      },
+      "revId": "4ba9682b51e5d3dd24d860f42d890863d7238396",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
