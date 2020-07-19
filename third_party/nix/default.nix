@@ -37,9 +37,10 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     bison
     clang-tools
     cmake
-    pkgconfig
+    fd
     libxml2
     libxslt
+    pkgconfig
     (import ./clangd.nix pkgs)
   ];
 
@@ -91,6 +92,10 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     export NIX_DATA_DIR=$out/share
     export NIX_TEST_VAR=foo # this is required by a language test
     make test
+
+    # Ensure formatting is coherent, but do this after the rest of the
+    # tests run so that developers get all the useful feedback
+    ${pkgs.fd}/bin/fd $src -e hh -e cc | xargs clang-format --dry-run --Werror
   '';
 
   preBuild = ''
