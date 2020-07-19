@@ -214,7 +214,6 @@ static int _main(int argc, char** argv) {
                    return true;
                  });
 
-    initPlugins();
 
     switch (cmd) {
       case cNone:

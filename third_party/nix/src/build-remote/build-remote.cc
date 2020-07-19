@@ -68,7 +68,6 @@ static int _main(int argc, char* argv[]) {
 
     settings.maxBuildJobs.set("1");  // hack to make tests with local?root= work
 
-    initPlugins();
 
     auto store = openStore().cast<LocalStore>();
 
