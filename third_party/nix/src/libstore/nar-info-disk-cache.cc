@@ -49,7 +49,7 @@ create table if not exists LastPurge (
 
 )sql";
 
-class NarInfoDiskCacheImpl : public NarInfoDiskCache {
+class NarInfoDiskCacheImpl final : public NarInfoDiskCache {
  public:
   /* How often to purge expired entries from the cache. */
   const int purgeInterval = 24 * 3600;
@@ -280,8 +280,9 @@ class NarInfoDiskCacheImpl : public NarInfoDiskCache {
   }
 };
 
-ref<NarInfoDiskCache> getNarInfoDiskCache() {
-  static ref<NarInfoDiskCache> cache = make_ref<NarInfoDiskCacheImpl>();
+std::shared_ptr<NarInfoDiskCache> getNarInfoDiskCache() {
+  static std::shared_ptr<NarInfoDiskCache> cache =
+      std::make_shared<NarInfoDiskCacheImpl>();
   return cache;
 }
 

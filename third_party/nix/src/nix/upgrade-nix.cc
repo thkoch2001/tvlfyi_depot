@@ -13,7 +13,7 @@
 
 using namespace nix;
 
-struct CmdUpgradeNix : MixDryRun, StoreCommand {
+struct CmdUpgradeNix final : MixDryRun, StoreCommand {
   Path profileDir;
   std::string storePathsUrl =
       "https://github.com/NixOS/nixpkgs/raw/master/nixos/modules/installer/"

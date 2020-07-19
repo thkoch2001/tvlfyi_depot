@@ -25,6 +25,6 @@ class NarInfoDiskCache {
 
 /* Return a singleton cache object that can be used concurrently by
    multiple threads. */
-ref<NarInfoDiskCache> getNarInfoDiskCache();
+std::shared_ptr<NarInfoDiskCache> getNarInfoDiskCache();
 
 }  // namespace nix

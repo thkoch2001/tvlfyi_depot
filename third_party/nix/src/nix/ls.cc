@@ -88,7 +88,7 @@ struct MixLs : virtual Args, MixJSON {
   }
 };
 
-struct CmdLsStore : StoreCommand, MixLs {
+struct CmdLsStore final : StoreCommand, MixLs {
   CmdLsStore() { expectArg("path", &path); }
 
   Examples examples() override {
@@ -108,7 +108,7 @@ struct CmdLsStore : StoreCommand, MixLs {
   void run(ref<Store> store) override { list(store->getFSAccessor()); }
 };
 
-struct CmdLsNar : Command, MixLs {
+struct CmdLsNar final : Command, MixLs {
   Path narPath;
 
   CmdLsNar() {
