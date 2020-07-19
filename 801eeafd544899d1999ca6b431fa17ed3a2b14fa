@@ -16,6 +16,23 @@
       "revId": "801eeafd544899d1999ca6b431fa17ed3a2b14fa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41525235_637e9c52",
+        "filename": "third_party/nix/src/tests/attr-set.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2020-07-19T11:42:24Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be using eqValues to compare these?\n\nBecause might have complicated structures....",
+      "revId": "801eeafd544899d1999ca6b431fa17ed3a2b14fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
