@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7df8d00_269bbd11",
+        "filename": "third_party/nix/src/libexpr/symbol-table.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-19T05:06:55Z",
+      "side": 1,
+      "message": "this was never actually used",
+      "revId": "801eeafd544899d1999ca6b431fa17ed3a2b14fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
