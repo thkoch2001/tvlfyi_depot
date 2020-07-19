@@ -255,7 +255,6 @@ static void _main(int argc, char** argv) {
 
   myArgs.parseCmdline(args);
 
-  initPlugins();
 
   if (packages && fromArgs) {
     throw UsageError("'-p' and '-E' are mutually exclusive");

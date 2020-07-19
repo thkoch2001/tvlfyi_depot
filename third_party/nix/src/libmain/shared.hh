@@ -22,7 +22,6 @@ class Exit : public std::exception {
 int handleExceptions(const std::string& programName,
                      const std::function<void()>& fun);
 
-/* Don't forget to call initPlugins() after settings are initialized! */
 void initNix();
 
 void parseCmdLine(
