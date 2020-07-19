@@ -55,7 +55,6 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     flex
     glog
     grpc
-    gtest
     libseccomp
     libsodium
     openssl
@@ -66,6 +65,11 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   doCheck = false;
   doInstallCheck = true;
+
+  installCheckInputs = with pkgs; [
+    gtest
+    rapidcheck
+  ];
 
   propagatedBuildInputs = with pkgs; [
     boost
