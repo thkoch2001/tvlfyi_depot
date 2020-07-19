@@ -187,4 +187,25 @@ INSTANTIATE_TEST_SUITE_P(Eval, EvalFailureTest,
                          testing::ValuesIn(TestFilesFor("eval-fail-")),
                          TestNameFor);
 
+class EvalSuccessTest : public testing::TestWithParam<std::filesystem::path> {};
+
+// Test pattern for files that should fail to evaluate.
+TEST_P(EvalSuccessTest, Fails) {
+  std::shared_ptr<Store> store = std::make_shared<DummyStore>();
+  EvalState state({}, ref<Store>(store));
+  auto path = GetParam();
+
+  Expr* expr;
+  EXPECT_NO_THROW(expr = state.parseExprFromFile(GetParam().string()))
+      << path.stem().string() << ": should parse successfully";
+
+  Value result;
+  state.eval(expr, result);
+  state.forceValue(result);
+}
+
+INSTANTIATE_TEST_SUITE_P(Eval, EvalSuccessTest,
+                         testing::ValuesIn(TestFilesFor("eval-okay-")),
+                         TestNameFor);
+
 }  // namespace nix::tests
