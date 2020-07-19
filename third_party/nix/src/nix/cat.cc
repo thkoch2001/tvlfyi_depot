@@ -21,7 +21,7 @@ struct MixCat : virtual Args {
   }
 };
 
-struct CmdCatStore : StoreCommand, MixCat {
+struct CmdCatStore final : StoreCommand, MixCat {
   CmdCatStore() { expectArg("path", &path); }
 
   std::string name() override { return "cat-store"; }
@@ -33,7 +33,7 @@ struct CmdCatStore : StoreCommand, MixCat {
   void run(ref<Store> store) override { cat(store->getFSAccessor()); }
 };
 
-struct CmdCatNar : StoreCommand, MixCat {
+struct CmdCatNar final : StoreCommand, MixCat {
   Path narPath;
 
   CmdCatNar() {

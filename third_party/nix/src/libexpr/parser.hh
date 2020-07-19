@@ -34,6 +34,15 @@ struct ParseData : public gc {
         sLetBody(symbols.Create("<let-body>")){};
 };
 
+// Clang fails to identify these functions as used, probably because
+// of some interaction between the lexer/parser codegen and something
+// else.
+//
+// To avoid warnings for that we disable -Wunused-function in this block.
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-function"
+
 // TODO(tazjin): move dupAttr to anonymous namespace
 static void dupAttr(const AttrPath& attrPath, const Pos& pos,
                     const Pos& prevPos) {
@@ -84,5 +93,7 @@ static Expr* unescapeStr(SymbolTable& symbols, const char* s, size_t length) {
   }
   return new ExprString(symbols.Create(t));
 }
+
+#pragma clang diagnostic pop  // re-enable -Wunused-function
 
 }  // namespace nix

@@ -27,7 +27,7 @@ std::string hilite(const std::string& s, const std::smatch& m,
                          postfix + std::string(m.suffix());
 }
 
-struct CmdSearch : SourceExprCommand, MixJSON {
+struct CmdSearch final : SourceExprCommand, MixJSON {
   std::vector<std::string> res;
 
   bool writeCache = true;
