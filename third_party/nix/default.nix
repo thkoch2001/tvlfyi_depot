@@ -81,6 +81,7 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     mkdir build
     cd build
     cmake .. \
+      -DCMAKE_CXX_FLAGS='-Wall -Werror' \
       -DCMAKE_INSTALL_PREFIX=$out \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF \
