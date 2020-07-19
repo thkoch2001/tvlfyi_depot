@@ -65,6 +65,7 @@ let
       diffutils
       dockerTools
       execline
+      fd
       fetchFromGitHub
       fetchgit
       fetchurl
