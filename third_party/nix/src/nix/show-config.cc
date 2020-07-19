@@ -6,7 +6,7 @@
 
 using namespace nix;
 
-struct CmdShowConfig : Command, MixJSON {
+struct CmdShowConfig final : Command, MixJSON {
   CmdShowConfig() = default;
 
   std::string name() override { return "show-config"; }

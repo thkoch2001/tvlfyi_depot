@@ -11,7 +11,10 @@
 %expect 1
 %expect-rr 1
 
-%code requires { #include "libexpr/parser.hh" }
+%code requires {
+#define YY_NO_INPUT 1 // disable unused yyinput features
+#include "libexpr/parser.hh"
+}
 
 %{
 

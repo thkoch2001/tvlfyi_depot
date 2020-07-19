@@ -19,7 +19,7 @@ std::string formatProtocol(unsigned int proto) {
   return "unknown";
 }
 
-struct CmdDoctor : StoreCommand {
+struct CmdDoctor final : StoreCommand {
   bool success = true;
 
   std::string name() override { return "doctor"; }

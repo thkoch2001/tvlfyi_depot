@@ -6,7 +6,7 @@
 
 using namespace nix;
 
-struct CmdOptimiseStore : StoreCommand {
+struct CmdOptimiseStore final : StoreCommand {
   CmdOptimiseStore() = default;
 
   std::string name() override { return "optimise-store"; }

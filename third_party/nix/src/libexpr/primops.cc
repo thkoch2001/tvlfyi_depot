@@ -1680,8 +1680,6 @@ static void prim_partition(EvalState& state, const Pos& pos, Value** args,
   state.forceFunction(*args[0], pos);
   state.forceList(*args[1], pos);
 
-  auto len = args[1]->listSize();
-
   NixList* right = new (GC) NixList();
   NixList* wrong = new (GC) NixList();
 
