@@ -33,6 +33,24 @@
       "revId": "801eeafd544899d1999ca6b431fa17ed3a2b14fa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6102d84b_951c9af7",
+        "filename": "third_party/nix/src/tests/attr-set.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-19T13:41:11Z",
+      "side": 1,
+      "message": "Currently in these test cases there doesn\u0027t seem to be anything that requires evaluation, but I agree - eqValues is the \"correct\" way to compare nix::Value.\n\nFWIW this complicates things quite a bit: Evaluation needs a store to exist etc. etc. - the DummyStore class can be used in tests, but doesn\u0027t fully support the store interface yet so some evaluations fail.",
+      "parentUuid": "41525235_637e9c52",
+      "revId": "801eeafd544899d1999ca6b431fa17ed3a2b14fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
