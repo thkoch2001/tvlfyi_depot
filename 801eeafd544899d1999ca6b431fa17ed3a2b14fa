@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9d005a4c_4ec16926",
+        "filename": "third_party/nix/src/libexpr/symbol-table.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-19T16:21:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7df8d00_269bbd11",
+      "revId": "801eeafd544899d1999ca6b431fa17ed3a2b14fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41525235_637e9c52",
         "filename": "third_party/nix/src/tests/attr-set.cc",
         "patchSetId": 2
