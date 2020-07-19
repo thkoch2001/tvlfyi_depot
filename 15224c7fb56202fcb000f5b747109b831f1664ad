@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "62b6fb72_f8d143d8",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-19T16:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbf01e3f_c12adc24",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 6
+      },
+      "revId": "15224c7fb56202fcb000f5b747109b831f1664ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4645622f_79a47ad9",
         "filename": "third_party/nix/default.nix",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "15224c7fb56202fcb000f5b747109b831f1664ad",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19ce706f_259d6d55",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-19T16:52:47Z",
+      "side": 1,
+      "message": "Outdated patchset ;)",
+      "parentUuid": "4645622f_79a47ad9",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "15224c7fb56202fcb000f5b747109b831f1664ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
