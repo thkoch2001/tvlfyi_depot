@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "78f1eb02_a8ac8983",
+        "filename": "third_party/nix/config.h.in",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-19T00:01:00Z",
+      "side": 1,
+      "message": "This is a source only thing, it doesn\u0027t define a symbol that gets included in the build artefacts (unless someone starts including it in statics outside of tests ;-)).",
+      "parentUuid": "b458a25e_e299e139",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 40
+      },
+      "revId": "92893c43f1e8242e7d47a094c3554d8d965c7d22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d595d503_9b88745c",
         "filename": "third_party/nix/src/tests/language-tests.cc",
         "patchSetId": 5
