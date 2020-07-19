@@ -7,7 +7,7 @@
 
 namespace nix {
 
-struct DrvInfo {
+struct DrvInfo : public gc {
  public:
   typedef std::map<std::string, Path> Outputs;
 
