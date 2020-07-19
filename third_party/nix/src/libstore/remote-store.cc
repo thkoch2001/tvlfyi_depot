@@ -19,7 +19,6 @@
 #include "libutil/archive.hh"
 #include "libutil/finally.hh"
 #include "libutil/pool.hh"
-#include "libutil/prefork-compat.hh"
 #include "libutil/serialise.hh"
 #include "libutil/util.hh"
 
@@ -167,12 +166,11 @@ void RemoteStore::initConnection(Connection& conn) {
 void RemoteStore::setOptions(Connection& conn) {
   conn.to << wopSetOptions << static_cast<uint64_t>(settings.keepFailed)
           << static_cast<uint64_t>(settings.keepGoing)
-          // TODO(tazjin): Remove the verbosity stuff here.
-          << static_cast<uint64_t>(settings.tryFallback) << compat::kInfo
+          << static_cast<uint64_t>(settings.tryFallback)
+          << /* previously: verbosity = */ 0
           << settings.maxBuildJobs << settings.maxSilentTime
           << 1u
-          // TODO(tazjin): what behaviour does this toggle remotely?
-          << (settings.verboseBuild ? compat::kError : compat::kVomit)
+          << /* previously: remote verbosity = */ 0
           << 0  // obsolete log type
           << 0  /* obsolete print build trace */
           << settings.buildCores
