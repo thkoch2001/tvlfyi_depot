@@ -14,67 +14,38 @@
 %{
 #include <boost/lexical_cast.hpp>
 
-#include "libexpr/nixexpr.hh"
 #include "generated/parser-tab.hh"
+#include "libexpr/nixexpr.hh"
+#include "libexpr/parser.hh"
 
 using namespace nix;
 
 namespace nix {
 
-
-static void initLoc(YYLTYPE * loc)
-{
-    loc->first_line = loc->last_line = 1;
-    loc->first_column = loc->last_column = 1;
+static void initLoc(YYLTYPE* loc) {
+  loc->first_line = loc->last_line = 1;
+  loc->first_column = loc->last_column = 1;
 }
 
+static void adjustLoc(YYLTYPE* loc, const char* s, size_t len) {
+  loc->first_line = loc->last_line;
+  loc->first_column = loc->last_column;
 
-static void adjustLoc(YYLTYPE * loc, const char * s, size_t len)
-{
-    loc->first_line = loc->last_line;
-    loc->first_column = loc->last_column;
-
-    while (len--) {
-       switch (*s++) {
-       case '\r':
-           if (*s == '\n') /* cr/lf */
-               s++;
-           /* fall through */
-       case '\n':
-           ++loc->last_line;
-           loc->last_column = 1;
-           break;
-       default:
-           ++loc->last_column;
-       }
+  while (len--) {
+    switch (*s++) {
+      case '\r':
+        if (*s == '\n') /* cr/lf */
+          s++;
+        /* fall through */
+      case '\n':
+        ++loc->last_line;
+        loc->last_column = 1;
+        break;
+      default:
+        ++loc->last_column;
     }
+  }
 }
-
-
-static Expr * unescapeStr(SymbolTable & symbols, const char * s, size_t length)
-{
-    std::string t;
-    t.reserve(length);
-    char c;
-    while ((c = *s++)) {
-        if (c == '\\') {
-            assert(*s);
-            c = *s++;
-            if (c == 'n') { t += '\n'; }
-            else if (c == 'r') { t += '\r'; }
-            else if (c == 't') { t += '\t'; }
-            else t += c;
-        }
-        else if (c == '\r') {
-            /* Normalise CR and CR/LF into LF. */
-            t += '\n';
-            if (*s == '\n') { s++; } /* cr/lf */
-        }
-        else t += c;
-    }
-    return new ExprString(symbols.Create(t));
-}
-
 
 }
 

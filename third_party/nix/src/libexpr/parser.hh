@@ -19,7 +19,7 @@
 
 namespace nix {
 
-struct ParseData {
+struct ParseData : public gc {
   EvalState& state;
   SymbolTable& symbols;
   Expr* result;
@@ -54,5 +54,35 @@ Expr* stripIndentation(const Pos& pos, SymbolTable& symbols,
                        std::vector<Expr*>& es);
 
 Path resolveExprPath(Path path);
+
+// implementations originally from lexer.l
+
+static Expr* unescapeStr(SymbolTable& symbols, const char* s, size_t length) {
+  std::string t;
+  t.reserve(length);
+  char c;
+  while ((c = *s++)) {
+    if (c == '\\') {
+      assert(*s);
+      c = *s++;
+      if (c == 'n') {
+        t += '\n';
+      } else if (c == 'r') {
+        t += '\r';
+      } else if (c == 't') {
+        t += '\t';
+      } else
+        t += c;
+    } else if (c == '\r') {
+      /* Normalise CR and CR/LF into LF. */
+      t += '\n';
+      if (*s == '\n') {
+        s++;
+      } /* cr/lf */
+    } else
+      t += c;
+  }
+  return new ExprString(symbols.Create(t));
+}
 
 }  // namespace nix
