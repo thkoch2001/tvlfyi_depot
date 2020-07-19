@@ -51,6 +51,24 @@
       "revId": "801eeafd544899d1999ca6b431fa17ed3a2b14fa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84ab1ef4_de218cca",
+        "filename": "third_party/nix/src/tests/attr-set.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-19T16:19:17Z",
+      "side": 1,
+      "message": "I had actually taken a crack at this originally since I felt the same way, but was unable to get it working for (it turns out) unrelated reasons. Took another shot at it thanks to this comment and was able to get it working, and it works beautifully.",
+      "parentUuid": "6102d84b_951c9af7",
+      "revId": "801eeafd544899d1999ca6b431fa17ed3a2b14fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
