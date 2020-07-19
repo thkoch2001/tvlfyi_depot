@@ -1,9 +1,12 @@
+#include "nix-daemon-proto.hh"
+
 #include <google/protobuf/empty.pb.h>
 #include <google/protobuf/util/time_util.h>
 #include <grpcpp/impl/codegen/server_context.h>
 #include <grpcpp/impl/codegen/status.h>
 #include <grpcpp/impl/codegen/status_code_enum.h>
 
+#include "libmain/shared.hh"
 #include "libproto/worker.grpc.pb.h"
 #include "libproto/worker.pb.h"
 #include "libstore/derivations.hh"
@@ -282,5 +285,9 @@ class WorkerServiceImpl final : public WorkerService::Service {
   // TODO(tazjin): Who owns the store?
   nix::Store* store_;
 };
+
+std::unique_ptr<WorkerService::Service> NewWorkerService(nix::Store* store) {
+  return std::make_unique<WorkerServiceImpl>(store);
+}
 
 }  // namespace nix::daemon
