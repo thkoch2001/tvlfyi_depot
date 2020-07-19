@@ -1276,8 +1276,6 @@ static int _main(int argc, char** argv) {
                    return true;
                  });
 
-    initPlugins();
-
     if (op == nullptr) {
       throw UsageError("no operation specified");
     }

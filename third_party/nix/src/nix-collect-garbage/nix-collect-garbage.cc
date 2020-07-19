@@ -82,8 +82,6 @@ static int _main(int argc, char** argv) {
                    return true;
                  });
 
-    initPlugins();
-
     auto profilesDir = settings.nixStateDir + "/profiles";
     if (removeOld) {
       removeOldGenerations(profilesDir);

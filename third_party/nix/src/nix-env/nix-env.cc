@@ -1496,8 +1496,6 @@ static int _main(int argc, char** argv) {
 
     myArgs.parseCmdline(argvToStrings(argc, argv));
 
-    initPlugins();
-
     if (op == nullptr) {
       throw UsageError("no operation specified");
     }

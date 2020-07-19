@@ -167,35 +167,4 @@ void MaxBuildJobsSetting::set(const std::string& str) {
   }
 }
 
-void initPlugins() {
-  for (const auto& pluginFile : settings.pluginFiles.get()) {
-    Paths pluginFiles;
-    try {
-      auto ents = readDirectory(pluginFile);
-      for (const auto& ent : ents) {
-        pluginFiles.emplace_back(pluginFile + "/" + ent.name);
-      }
-    } catch (SysError& e) {
-      if (e.errNo != ENOTDIR) {
-        throw;
-      }
-      pluginFiles.emplace_back(pluginFile);
-    }
-    for (const auto& file : pluginFiles) {
-      /* handle is purposefully leaked as there may be state in the
-         DSO needed by the action of the plugin. */
-      void* handle = dlopen(file.c_str(), RTLD_LAZY | RTLD_LOCAL);
-      if (handle == nullptr) {
-        throw Error("could not dynamically open plugin file '%s': %s", file,
-                    dlerror());
-      }
-    }
-  }
-
-  /* Since plugins can add settings, try to re-apply previously
-     unknown settings. */
-  globalConfig.reapplyUnknownSettings();
-  globalConfig.warnUnknownSettings();
-}
-
 }  // namespace nix
