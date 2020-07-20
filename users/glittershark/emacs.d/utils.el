@@ -10,6 +10,15 @@
 (defun inc (x) "Returns x + 1" (+ 1 x))
 (defun dec (x) "Returns x - 1" (- x 1))
 
+(defun average (ns)
+  "Arithmetic mean of xs"
+  (if (null ns) nil
+    (/ (apply #'+ ns)
+       (length ns))))
+
+(comment
+ (average (list 1 2 3 4))
+ )
 
 ;;
 ;; Text editing utils
