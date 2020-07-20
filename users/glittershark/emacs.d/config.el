@@ -1208,3 +1208,6 @@
   (map!
    (:map jsonnet-mode-map
     (:n "g SPC" #'jsonnet-eval-buffer))))
+
+(add-to-list 'safe-local-variable-values
+             '(truncate-lines . t))
