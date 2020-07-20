@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef8dddc3_468cef1e",
+        "filename": "web/todolist/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2020-07-20T00:00:24Z",
+      "side": 1,
+      "message": "Should we maybe keep the underline so it\u0027s obvious these are links?",
+      "revId": "a5ff6addc137581f8fb529b4c264fbc72d422b13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ddef5be_9dcae4ff",
+        "filename": "web/todolist/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2020-07-20T00:00:24Z",
+      "side": 1,
+      "message": "\u003ca\u003e\u003ch3\u003e…\u003c/h3\u003e\u003c/a\u003e makes the whole line clickable, rather than just the text ­— is that what we want?",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 2
+      },
+      "revId": "a5ff6addc137581f8fb529b4c264fbc72d422b13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
