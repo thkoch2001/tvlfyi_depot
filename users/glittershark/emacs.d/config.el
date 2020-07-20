@@ -34,24 +34,6 @@
 (require 's)
 (require 'tvl)
 
-;; (add-to-list 'load-path
-;;              (concat
-;;               (s-trim
-;;                (shell-command-to-string
-;;                 "nix-build --no-link '<nixpkgs>' -A mu"))
-;;               "/share/emacs/site-lisp/mu4e"))
-
-; (defconst rust-src-path
-;   (-> "/Users/griffin/.cargo/bin/rustc --print sysroot"
-;       shell-command-to-string
-;       string-trim
-;       (concat "/lib/rustlib/src/rust/src")))
-;
-; (setenv "RUST_SRC_PATH" rust-src-path)
-;
-; (after! racer
-;   (setq racer-rust-src-path rust-src-path))
-;
 (add-hook! rust-mode
   (flycheck-rust-setup)
   (flycheck-mode)
