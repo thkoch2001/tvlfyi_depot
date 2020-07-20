@@ -39,6 +39,48 @@
       "revId": "a5ff6addc137581f8fb529b4c264fbc72d422b13",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78e2f787_aaaeea09",
+        "filename": "web/todolist/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-20T00:05:43Z",
+      "side": 1,
+      "message": "I\u0027ve flipped these now (\u003ca\u003e in the \u003ch3\u003e), that\u0027s better I guess?",
+      "parentUuid": "7ddef5be_9dcae4ff",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 2
+      },
+      "revId": "a5ff6addc137581f8fb529b4c264fbc72d422b13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5e535912_116f8615",
+        "filename": "web/todolist/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-20T00:05:43Z",
+      "side": 1,
+      "message": "Hrm, I think it looks visually noisy with the underlines enabled. Not having them underlined is similar to other pages where headings are implicitly self-links.",
+      "parentUuid": "ef8dddc3_468cef1e",
+      "revId": "a5ff6addc137581f8fb529b4c264fbc72d422b13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
