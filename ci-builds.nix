@@ -65,6 +65,7 @@ in lib.fix (self: {
     nix
     openldap
     rapidcheck
+    noisetorch
   ] ++ builtins.attrValues lisp;
 
   various = with depot; [
