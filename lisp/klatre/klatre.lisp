@@ -73,7 +73,7 @@ separated by SEP."
 ;;; String handling
 ;;;
 
-(defconstant +dottime-format+
+(defparameter dottime-format
   '((:year 4) #\- (:month 2) #\- (:day 2)
     #\T
     (:hour 2) #\· (:min 2) "+00") ; TODO(grfn): Allow passing offset
@@ -83,7 +83,7 @@ separated by SEP."
   "Return TIMESTAMP formatted as dottime, using a +00 offset"
   (check-type timestamp local-time:timestamp)
   (local-time:format-timestring nil timestamp
-                                :format +dottime-format+
+                                :format dottime-format
                                 :timezone local-time:+utc-zone+))
 
 (comment
