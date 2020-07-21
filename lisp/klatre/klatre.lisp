@@ -68,3 +68,13 @@ separated by SEP."
                     (vector-push-extend (char sep (the fixnum k)) vs))))
                 lst)
     vs))
+
+;;;
+;;; String handling
+;;;
+
+(defun try-parse-integer (str)
+  "Attempt to parse STR as an integer, returning nil if it is invalid."
+  (check-type str (simple-array character (*)))
+  (handler-case (parse-integer str)
+    (sb-int:simple-parse-error (_) nil)))
