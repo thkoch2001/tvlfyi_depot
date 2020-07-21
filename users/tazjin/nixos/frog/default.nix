@@ -51,12 +51,20 @@ in depot.lib.fix(self: {
   hardware = {
     cpu.amd.updateMicrocode = true;
     enableRedistributableFirmware = true;
-    pulseaudio.enable = true;
     u2f.enable = true;
     opengl = {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
+    };
+
+    pulseaudio = {
+      enable = true;
+      package = nixpkgs.pulseaudioFull;
+    };
+
+    bluetooth = {
+      enable = true;
     };
   };
 
@@ -75,8 +83,7 @@ in depot.lib.fix(self: {
 
   networking = {
     hostName = "frog";
-    useDHCP = false;
-    interfaces.enp67s0.useDHCP = true;
+    useDHCP = true;
 
     # Don't use ISP's DNS servers:
     nameservers = [
@@ -148,6 +155,7 @@ in depot.lib.fix(self: {
   services.redshift.enable = true;
   services.openssh.enable = true;
   services.fstrim.enable = true;
+  services.blueman.enable = true;
 
   # Required for Yubikey usage as smartcard
   services.pcscd.enable = true;
