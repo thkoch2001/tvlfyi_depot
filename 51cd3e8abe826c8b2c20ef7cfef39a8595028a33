@@ -22,6 +22,29 @@
       "revId": "51cd3e8abe826c8b2c20ef7cfef39a8595028a33",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a4ad52b_15e8df1a",
+        "filename": "default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-21T23:34:17Z",
+      "side": 1,
+      "message": "amazing idea: start to use \u003cops/nixos/tvl-slapd\u003e syntax instead of //ops/nixos/tvl-slapd everywhere, starting with this error message.",
+      "range": {
+        "startLine": 68,
+        "startChar": 51,
+        "endLine": 68,
+        "endChar": 63
+      },
+      "revId": "51cd3e8abe826c8b2c20ef7cfef39a8595028a33",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
