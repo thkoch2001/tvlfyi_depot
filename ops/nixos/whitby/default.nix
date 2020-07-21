@@ -18,6 +18,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/clbot.nix"
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
+    "${depot.depotPath}/ops/nixos/panettone.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
     "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
@@ -28,6 +29,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/www/login.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/todo.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/tvl.fyi.nix"
+    "${depot.depotPath}/ops/nixos/www/b.tvl.fyi.nix"
     "${depot.third_party.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
   ];
 
@@ -210,8 +212,13 @@ in lib.fix(self: {
     };
   };
 
-  # Run a SourceGraph code search instance
-  services.depot.sourcegraph.enable = true;
+  services.depot = {
+    # Run a SourceGraph code search instance
+    sourcegraph.enable = true;
+
+    # Run the Panettone issue tracker
+    panettone.enable = true;
+  };
 
   environment.systemPackages = with nixpkgs; [
     bb
