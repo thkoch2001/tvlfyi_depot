@@ -6,4 +6,7 @@
    #:comment #:posp
 
    ;; Sequence functions
-   #:chunk-list #:mapconcat))
+   #:chunk-list #:mapconcat
+
+   ;; String handling
+   #:try-parse-integer))
