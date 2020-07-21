@@ -18,6 +18,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/clbot.nix"
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
+    "${depot.depotPath}/ops/nixos/pannetone.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
     "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
@@ -28,6 +29,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/www/login.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/todo.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/tvl.fyi.nix"
+    "${depot.depotPath}/ops/nixos/www/b.tvl.fyi.nix"
     "${depot.third_party.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
   ];
 
