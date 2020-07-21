@@ -67,8 +67,12 @@ in lib.fix (self: {
     rapidcheck
   ] ++ builtins.attrValues lisp;
 
+  lisp = with depot.lisp; [
+    dns
+    klatre
+  ];
+
   various = with depot; [
-    lisp.dns
     nix.buildLisp.example
     nix.yants.tests
     tools.cheddar
@@ -76,6 +80,7 @@ in lib.fix (self: {
     web.cgit-taz
     web.todolist
     web.tvl
+    web.pannetone
     (drvify "getBins-tests" nix.getBins.tests)
   ]
   ++ nix.runExecline.tests
