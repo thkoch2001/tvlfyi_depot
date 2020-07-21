@@ -21,6 +21,9 @@ let
     # Expose lib & ciBuilds attributes to packages.
     inherit (depot) ciBuilds lib;
 
+    # Expose the dark magic
+    inherit (depot) __findFile;
+
     # Pass third_party as 'pkgs' (for compatibility with external
     # imports for certain subdirectories)
     pkgs = depot.third_party;
@@ -58,6 +61,11 @@ in fix(self: {
 
   # Load CI builds in a way that can be injected into programs like besadii.
   ciBuilds = import ./ci-builds.nix self.config;
+
+  # Expose the most terrifying mechanism ever created
+  __findFile = _: rawKeys:
+    let keys = with builtins; filter isString (split "/"rawKeys);
+    in self.lib.attrByPath keys (error "nothing at //${rawKeys}") self;
 }
 
 # Add local packages as structured by readTree
