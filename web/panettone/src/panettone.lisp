@@ -2,6 +2,7 @@
   (:use :cl :klatre :easy-routes)
   (:import-from :defclass-std :defclass/std)
   (:import-from :alexandria :if-let)
+  (:shadowing-import-from :alexandria :when-let)
   (:export :start-panettone :main))
 (in-package :panettone)
 
@@ -32,10 +33,10 @@
 (defvar *ldap* nil
   "The ldap connection")
 
-(defun connect-ldap ()
-  ;; TODO(grfn): make this configurable
-  (setq *ldap* (ldap:new-ldap :host "localhost"
-                              :port 3899)))
+(defun connect-ldap (&key
+                       (host "localhost")
+                       (port 389))
+  (setq *ldap* (ldap:new-ldap :host host :port port)))
 
 (defun ldap-entry->user (entry)
   (apply
@@ -269,20 +270,30 @@ updated issue"
 (defvar *acceptor* nil
   "Hunchentoot acceptor for Panettone's web server.")
 
-(defun start-panettone (&key port data-dir)
-  (connect-ldap)
+(defun start-panettone (&key port data-dir
+                          (ldap-host "localhost")
+                          (ldap-port 389))
+  (connect-ldap :host ldap-host
+                :port ldap-port)
   (initialize-persistence data-dir)
 
   (setq *acceptor*
         (make-instance 'easy-routes:routes-acceptor :port port))
   (hunchentoot:start *acceptor*))
 
+(defun integer-env (var &key default)
+  (or
+   (when-let ((str (uiop:getenvp var)))
+     (try-parse-integer str))
+   default))
+
 (defun main ()
-  ;; TODO(grfn): Read config from env
-  (let ((port 6161)
-        (data-dir "/tmp/panettone"))
+  (let ((port (integer-env "PANETTONE_PORT" :default 6161))
+        (ldap-port (integer-env "LDAP_PORT" :default 389))
+        (data-dir (or (uiop:getenvp "PANETTONE_DATA_DIR") "/tmp/panettone")))
     (start-panettone :port port
-                     :data-dir data-dir)
+                     :data-dir data-dir
+                     :ldap-port ldap-port)
     (sb-thread:join-thread
      (find-if (lambda (th)
                 (string= (sb-thread:thread-name th)
@@ -291,5 +302,6 @@ updated issue"
 
 (comment
  (start-panettone :port 6161
-                  :data-dir "/tmp/panettone")
+                  :data-dir "/tmp/panettone"
+                  :ldap-port 3899)
  )
