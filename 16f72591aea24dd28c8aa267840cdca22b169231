@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b43f0c21_de5230d8",
+        "filename": "third_party/noisetorch/no-git-version.patch",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-21T14:52:29Z",
+      "side": 1,
+      "message": "This will probably end up out-of-date, no? Are you submitting this package upstream, too, or do we need to worry about it?",
+      "range": {
+        "startLine": 21,
+        "startChar": 14,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "16f72591aea24dd28c8aa267840cdca22b169231",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
