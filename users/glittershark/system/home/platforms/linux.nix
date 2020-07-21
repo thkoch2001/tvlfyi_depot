@@ -44,6 +44,7 @@ in
     pandoc
     barrier
     depot.tools.nsfv-setup
+    noisetorch
 
     # System utilities
     powertop
