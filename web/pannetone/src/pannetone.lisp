@@ -278,9 +278,13 @@ updated issue"
   (hunchentoot:start *acceptor*))
 
 (defun main ()
-  ;; TODO(grfn): Read config from env
-  (let ((port 6161)
-        (data-dir "/tmp/pannetone"))
+  (let ((port (or
+               (let ((port-str (uiop:getenvp "PANNETONE_PORT")))
+                 (when port-str
+                   (handler-case (parse-integer port-str)
+                     (sb-int:simple-parse-error (_) nil))))
+               6161))
+        (data-dir (or (uiop:getenvp "PANNETONE_DATA_DIR") "/tmp/pannetone")))
     (start-pannetone :port port
                      :data-dir data-dir)
     (sb-thread:join-thread
