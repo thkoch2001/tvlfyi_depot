@@ -67,8 +67,12 @@ in lib.fix (self: {
     rapidcheck
   ] ++ builtins.attrValues lisp;
 
+  lisp = with depot.lisp; [
+    dns
+    klatre
+  ];
+
   various = with depot; [
-    lisp.dns
     nix.buildLisp.example
     nix.yants.tests
     tools.cheddar
