@@ -65,7 +65,7 @@ in lib.fix (self: {
     nix
     openldap
     rapidcheck
-  ];
+  ] ++ attrValues lisp;
 
   various = with depot; [
     lisp.dns
