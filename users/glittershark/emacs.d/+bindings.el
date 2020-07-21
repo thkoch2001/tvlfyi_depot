@@ -1188,6 +1188,24 @@ If invoked with a prefix ARG eval the expression after inserting it"
               "c" 'cider-eval-last-sexp-and-replace)
         "y" 'cider-copy-last-result))
 
+(nmap :keymaps 'sly-mode-map
+  "c" (general-key-dispatch 'evil-change
+        "p" (general-key-dispatch 'sly-eval
+              ;; "p" 'eval-sexp-at-point
+              "c" 'sly-pprint-eval-last-expression
+              "d" 'sly-eval-defun
+              ;; "r" 'cider-test-run-test
+              )
+        ;; "x" (general-key-dispatch 'fireplace-eval-context
+        ;;       "x" 'cider-eval-sexp-at-point-in-context
+        ;;       "c" 'cider-eval-last-sexp-in-context
+        ;;       )
+        ;; "!" (general-key-dispatch 'fireplace-replace
+        ;;       "!" 'cider-eval-current-sexp-and-replace
+        ;;       "c" 'cider-eval-last-sexp-and-replace)
+        ;; "y" 'cider-copy-last-result
+        ))
+
 
 ;; >) ; slurp forward
 ;; <) ; barf forward
@@ -1387,4 +1405,10 @@ If invoked with a prefix ARG eval the expression after inserting it"
    :n "K"   #'lsp-describe-thing-at-point
    :n "g r" #'lsp-rename
    (:localleader
-     :n "a" #'lsp-execute-code-action)))
+    :n "a" #'lsp-execute-code-action))
+
+ (:map sly-mode-map
+  :n "g \\" #'sly-mrepl
+  :n "g d" #'sly-edit-definition
+  :n "K" #'sly-documentation
+  :n "g SPC" #'sly-eval-buffer))
