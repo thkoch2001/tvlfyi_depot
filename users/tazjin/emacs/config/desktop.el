@@ -217,17 +217,17 @@
   "Use only the right screen on frog."
   (interactive)
   (set-randr-config `(("DisplayPort-0" ,(number-sequence 0 9))))
-  (shell-command "xrandr --output DisplayPort-1 --off")
-  (shell-command "xrandr --output DisplayPort-0 --auto --primary"))
+  (shell-command "xrandr --output DisplayPort-0 --off")
+  (shell-command "xrandr --output DisplayPort-1 --auto --primary"))
 
 (defun randr-frog-layout-both ()
   "Use the left and right screen on frog."
   (interactive)
-  (set-randr-config `(("DisplayPort-1" 1 2 3 4 5)
-                      ("DisplayPort-0" 6 7 8 9 0)))
+  (set-randr-config `(("DisplayPort-0" 1 2 3 4 5)
+                      ("DisplayPort-1" 6 7 8 9 0)))
 
-  (shell-command "xrandr --output DisplayPort-1 --auto --primary --left-of DisplayPort-0")
-  (shell-command "xrandr --output DisplayPort-0 --auto --right-of DisplayPort-1 --rotate left"))
+  (shell-command "xrandr --output DisplayPort-0 --auto --primary --left-of DisplayPort-1")
+  (shell-command "xrandr --output DisplayPort-1 --auto --right-of DisplayPort-0 --rotate left"))
 
 (pcase (s-trim (shell-command-to-string "hostname"))
   ("vauxhall"
