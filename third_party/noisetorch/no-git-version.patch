@@ -1,0 +1,24 @@
+diff --git a/scripts/embedversion.go b/scripts/embedversion.go
+index ce0a756..1724e93 100644
+--- a/scripts/embedversion.go
++++ b/scripts/embedversion.go
+@@ -2,18 +2,10 @@ package main
+ 
+ import (
+ 	"os"
+-	"os/exec"
+-	"strings"
+ )
+ 
+ func main() {
+-	cmd := exec.Command("git", "describe", "--tags")
+-	ret, err := cmd.Output()
+-
+-	if err != nil {
+-		panic("Couldn't read git tags to embed version number")
+-	}
+-	version := strings.TrimSpace(string(ret))
++	version := "0.5.2-beta"
+ 
+ 	out, _ := os.Create("version.go")
+ 	defer out.Close()
