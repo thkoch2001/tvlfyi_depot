@@ -5,7 +5,6 @@
 #include <regex>
 
 #include <absl/strings/str_split.h>
-#include <dlfcn.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -160,52 +159,6 @@ static void prim_scopedImport(EvalState& state, const Pos& pos, Value** args,
       e->eval(state, *env, v);
     }
   }
-}
-
-/* Want reasonable symbol names, so extern C */
-/* !!! Should we pass the Pos or the file name too? */
-extern "C" using ValueInitializer = void(*)(EvalState&, Value&);
-
-/* Load a ValueInitializer from a DSO and return whatever it initializes */
-void prim_importNative(EvalState& state, const Pos& pos, Value** args,
-                       Value& v) {
-  PathSet context;
-  Path path = state.coerceToPath(pos, *args[0], context);
-
-  try {
-    state.realiseContext(context);
-  } catch (InvalidPathError& e) {
-    throw EvalError(
-        format("cannot import '%1%', since path '%2%' is not valid, at %3%") %
-        path % e.path % pos);
-  }
-
-  path = state.checkSourcePath(path);
-
-  std::string sym = state.forceStringNoCtx(*args[1], pos);
-
-  void* handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_LOCAL);
-  if (handle == nullptr) {
-    throw EvalError(format("could not open '%1%': %2%") % path % dlerror());
-  }
-
-  dlerror();
-  auto func = (ValueInitializer)dlsym(handle, sym.c_str());
-  if (func == nullptr) {
-    char* message = dlerror();
-    if (message != nullptr) {
-      throw EvalError(format("could not load symbol '%1%' from '%2%': %3%") %
-                      sym % path % message);
-    }
-    throw EvalError(format("symbol '%1%' from '%2%' resolved to NULL when a "
-                           "function pointer was expected") %
-                    sym % path);
-  }
-
-  (func)(state, v);
-
-  /* We don't dlclose because v may be a primop referencing a function in the
-   * shared object file */
 }
 
 /* Return a string representing the type of the expression. */
@@ -2239,9 +2192,6 @@ void EvalState::createBaseEnv() {
   mkApp(v, *vScopedImport, *v2);
   forceValue(v);
   addConstant("import", v);
-  if (evalSettings.enableNativeCode) {
-    addPrimOp("__importNative", 2, prim_importNative);
-  }
   addPrimOp("__typeOf", 1, prim_typeOf);
   addPrimOp("isNull", 1, prim_isNull);
   addPrimOp("__isFunction", 1, prim_isFunction);
