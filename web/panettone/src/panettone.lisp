@@ -9,19 +9,24 @@
 (declaim (optimize (safety 3)))
 
 ;;;
+;;; Utils
+;;;
+
+;;;
 ;;; Data model
 ;;;
 
 (defclass/std issue-comment ()
   ((body :type string)
-   (author-dn :type string)))
+   (author-dn :type string)
+   (created-at :type local-time:timestamp)))
 
 (defclass/std issue (cl-prevalence:object-with-id)
   ((subject body :type string :std "")
    (author-dn :type string)
    (comments :std nil :type list :with-prefix)
-   (created-at :type integer
-               :std (get-universal-time))))
+   (created-at :type local-time:timestamp
+               :std (local-time:now))))
 
 (defclass/std user ()
   ((cn dn mail displayname :type string)))
@@ -55,15 +60,28 @@
   (ldap:search
    *ldap*
    `(and (= objectClass organizationalPerson)
-         (= cn ,username))
+         (or
+          (= cn ,username)
+          (= dn ,username)))
    ;; TODO(grfn): make this configurable
    :base "ou=users,dc=tvl,dc=fyi")
   (ldap:next-search-result *ldap*))
 
 (defun find-user (username)
   (declare (type (simple-array character (*)) username))
-  (ldap-entry->user
-   (find-user/ldap username)))
+  (when-let ((ldap-entry (find-user/ldap username)))
+    (ldap-entry->user ldap-entry)))
+
+(defun find-user-by-dn (dn)
+  (ldap:search *ldap* `(= objectClass organizationalPerson)
+               :base dn
+               :scope 'ldap:base)
+  (when-let ((ldap-entry (ldap:next-search-result *ldap*)))
+    (ldap-entry->user ldap-entry)))
+
+(comment
+ (user-by-dn "cn=glittershark,ou=users,dc=tvl,dc=fyi")
+ )
 
 (defun authenticate-user (user-or-username password)
   "Checks the given USER-OR-USERNAME has the given PASSWORD, by making a bind
@@ -80,6 +98,9 @@ successful, `nil' otherwise"
                         :pass password))
       (when (equalp code-sym 'trivial-ldap:success)
         user))))
+
+(defun author (object)
+  (find-user-by-dn (author-dn object)))
 
 ;;;
 ;;; Persistence
@@ -137,6 +158,7 @@ updated issue"
   "Initialize the Panettone persistence system, storing data in DATA-DIR"
   (ensure-directories-exist data-dir)
   (setq *p-system* (cl-prevalence:make-prevalence-system data-dir))
+
 
   (when (null (list-issues *p-system*))
     (cl-prevalence:tx-create-id-counter *p-system*)))
@@ -208,11 +230,22 @@ updated issue"
      (:input :type :submit
              :value "Create Issue"))))
 
+(defun created-by-at (issue)
+  (format nil "Opened by ~A at ~A"
+          (when-let ((author (author issue)))
+            (displayname author))
+          (format-dottime (created-at issue))))
+
+(comment
+ (format nil "foo: ~A" "foo")
+ )
+
 (defun render/issue (issue)
   (declare (type issue issue))
   (render
     (:h1 (who:esc (subject issue)))
-    (:div (who:esc (body issue)))))
+    (:p (who:esc (created-by-at issue)))
+    (:p (who:esc (body issue)))))
 
 (defun render/not-found (entity-type)
   (render
@@ -300,6 +333,7 @@ updated issue"
               (sb-thread:list-all-threads)))))
 
 (comment
+ (setq hunchentoot:*catch-errors-p* nil)
  (start-panettone :port 6161
                   :data-dir "/tmp/panettone"
                   :ldap-port 3899)
