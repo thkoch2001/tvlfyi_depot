@@ -13,11 +13,11 @@ file(READ "schema.sql" NIX_SCHEMA)
 string(CONFIGURE
   "#pragma once
    namespace nix {
-   constexpr char kNixSqlSchema[] = R\"(${NIX_SCHEMA})\"\;
+   constexpr char kNixSqlSchema[] = R\"(${NIX_SCHEMA})\";
    }"
   NIX_SCHEMA_GEN)
 
-file(WRITE ${PROJECT_BINARY_DIR}/generated/schema.sql.hh ${NIX_SCHEMA_GEN})
+file(WRITE ${PROJECT_BINARY_DIR}/generated/schema.sql.hh "${NIX_SCHEMA_GEN}")
 
 set(HEADER_FILES
     binary-cache-store.hh
