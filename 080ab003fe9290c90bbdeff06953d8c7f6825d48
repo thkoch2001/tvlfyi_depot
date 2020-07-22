@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7a77e746_7e57c67e",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-22T23:56:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30be74a0_e74e3507",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 0
+      },
+      "revId": "080ab003fe9290c90bbdeff06953d8c7f6825d48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad7d3544_acd2d764",
         "filename": "lisp/klatre/klatre.lisp",
         "patchSetId": 2
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "cbe5c0f6_61b69594",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-22T23:56:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "008b39d6_24241bb5",
+      "range": {
+        "startLine": 54,
+        "startChar": 3,
+        "endLine": 54,
+        "endChar": 16
+      },
+      "revId": "080ab003fe9290c90bbdeff06953d8c7f6825d48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85d797ca_6f0063bc",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-22T23:56:33Z",
+      "side": 1,
+      "message": "yeah... plus it\u0027s not actually what we want, since FUNC may change the type.",
+      "parentUuid": "ad7d3544_acd2d764",
+      "range": {
+        "startLine": 54,
+        "startChar": 18,
+        "endLine": 54,
+        "endChar": 46
+      },
+      "revId": "080ab003fe9290c90bbdeff06953d8c7f6825d48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b4a6d0e_a1496086",
         "filename": "lisp/klatre/klatre.lisp",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "080ab003fe9290c90bbdeff06953d8c7f6825d48",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c85e8244_c610a6d3",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-22T23:56:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b4a6d0e_a1496086",
+      "range": {
+        "startLine": 65,
+        "startChar": 21,
+        "endLine": 65,
+        "endChar": 30
+      },
+      "revId": "080ab003fe9290c90bbdeff06953d8c7f6825d48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
