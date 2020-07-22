@@ -65,3 +65,21 @@
                     (vector-push-extend (char sep k) vs))))
                 lst)
     vs))
+
+;;;
+;;; String handling
+;;;
+
+(defparameter +dottime-format+
+  '((:year 4) #\- (:month 2) #\- (:day 2)
+    #\T
+    (:hour 2) #\· (:min 2) "+00"))
+
+(defun format-dottime (timestamp)
+  (declare (type local-time:timestamp timestamp))
+  (local-time:format-timestring nil timestamp
+                                :format +dottime-format+
+                                :timezone local-time:+utc-zone+))
+
+(comment
+ (format-dottime (local-time:now)))
