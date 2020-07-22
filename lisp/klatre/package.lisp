@@ -9,4 +9,5 @@
    #:chunk-list #:mapconcat
 
    ;; String handling
+   #:+dottime-format+ #:format-dottime
    #:try-parse-integer))
