@@ -6,4 +6,7 @@
    #:comment #:posp
 
    ;; Sequence functions
-   #:chunk-list #:mapconcat))
+   #:chunk-list #:mapconcat
+
+   ;; String handling
+   #:+dottime-format+ #:format-dottime))
