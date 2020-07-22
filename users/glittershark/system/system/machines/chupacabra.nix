@@ -1,10 +1,12 @@
 { config, lib, pkgs, ... }:
+
 {
   imports = [
     ../modules/common.nix
     ../modules/reusable/battery.nix
     ../modules/tvl.nix
     ../modules/urbint.nix
+    ../../../../../ops/nixos/v4l2loopback.nix
   ];
 
   hardware.enableRedistributableFirmware = true;
