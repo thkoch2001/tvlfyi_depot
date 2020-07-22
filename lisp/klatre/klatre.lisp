@@ -69,3 +69,23 @@ separated by SEP."
                     (vector-push-extend (char sep k) vs))))
                 lst)
     vs))
+
+;;;
+;;; String handling
+;;;
+
+(defparameter +dottime-format+
+  '((:year 4) #\- (:month 2) #\- (:day 2)
+    #\T
+    (:hour 2) #\· (:min 2) "+00") ; TODO(grfn): Allow passing offset
+  "`:LOCAL-TIME' format specifier for dottime")
+
+(defun format-dottime (timestamp)
+  "Return TIMESTAMP formatted as dottime, using a +00 offset"
+  (declare (type local-time:timestamp timestamp))
+  (local-time:format-timestring nil timestamp
+                                :format +dottime-format+
+                                :timezone local-time:+utc-zone+))
+
+(comment
+ (format-dottime (local-time:now)))
