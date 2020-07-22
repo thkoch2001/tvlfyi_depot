@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ef59d73_77fd79bb",
+        "filename": "third_party/lisp/parse-float.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T21:34:51Z",
+      "side": 1,
+      "message": "it\u0027s good that we have parse-number and parse-float now, just in case :p",
+      "range": {
+        "startLine": 12,
+        "startChar": 10,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "c671f7acfec4820f04e0ebc4595acb09e8d54fb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
