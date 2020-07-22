@@ -7,8 +7,9 @@ depot.nix.buildLisp.program {
     cl-prevalence
     cl-who
     defclass-std
-    hunchentoot
     easy-routes
+    hunchentoot
+    local-time
     trivial-ldap
 
     depot.lisp.klatre
