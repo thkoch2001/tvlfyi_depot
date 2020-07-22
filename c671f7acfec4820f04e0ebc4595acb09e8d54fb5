@@ -22,6 +22,30 @@
       "revId": "c671f7acfec4820f04e0ebc4595acb09e8d54fb5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea7bbdd4_43c73b8c",
+        "filename": "third_party/lisp/parse-float.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-22T23:24:11Z",
+      "side": 1,
+      "message": "time to add parse-integer and parse-decimal as well, just for good measure",
+      "parentUuid": "3ef59d73_77fd79bb",
+      "range": {
+        "startLine": 12,
+        "startChar": 10,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "c671f7acfec4820f04e0ebc4595acb09e8d54fb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
