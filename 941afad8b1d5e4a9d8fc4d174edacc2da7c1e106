@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3e1104_f15f28f8",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T02:15:00Z",
+      "side": 1,
+      "message": "we depend on iterate, but use loop - is this intentional? in that case, we could probably drop the iterate dependency for now (though iterate generally is nicer)",
+      "range": {
+        "startLine": 17,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 7
+      },
+      "revId": "941afad8b1d5e4a9d8fc4d174edacc2da7c1e106",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67618533_36175de7",
+        "filename": "lisp/klatre/package.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T02:15:00Z",
+      "side": 1,
+      "message": "should this be its own commit?",
+      "range": {
+        "startLine": 1,
+        "startChar": 14,
+        "endLine": 1,
+        "endChar": 20
+      },
+      "revId": "941afad8b1d5e4a9d8fc4d174edacc2da7c1e106",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76dce1c4_53c40051",
+        "filename": "lisp/klatre/package.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T02:15:00Z",
+      "side": 1,
+      "message": "the definitions of the exported ones should have docstrings",
+      "range": {
+        "startLine": 6,
+        "startChar": 5,
+        "endLine": 6,
+        "endChar": 19
+      },
+      "revId": "941afad8b1d5e4a9d8fc4d174edacc2da7c1e106",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddab57d1_a79f9ec6",
+        "filename": "web/pannetone/src/pannetone.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T02:15:00Z",
+      "side": 1,
+      "message": "fancy",
+      "range": {
+        "startLine": 14,
+        "startChar": 1,
+        "endLine": 14,
+        "endChar": 13
+      },
+      "revId": "941afad8b1d5e4a9d8fc4d174edacc2da7c1e106",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
