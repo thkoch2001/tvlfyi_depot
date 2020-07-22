@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30be74a0_e74e3507",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T21:32:28Z",
+      "side": 1,
+      "message": "Missing a safety declaim",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 0
+      },
+      "revId": "080ab003fe9290c90bbdeff06953d8c7f6825d48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad7d3544_acd2d764",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T21:32:28Z",
+      "side": 1,
+      "message": "won\u0027t this only check the first list element?",
+      "range": {
+        "startLine": 54,
+        "startChar": 18,
+        "endLine": 54,
+        "endChar": 46
+      },
+      "revId": "080ab003fe9290c90bbdeff06953d8c7f6825d48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "008b39d6_24241bb5",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T21:32:28Z",
+      "side": 1,
+      "message": "(declare (type ...)) is the \"least desirable\" type-checking mechanism: https://google.github.io/styleguide/lispguide.xml#Type_Checking\n\nIt essentially causes coercion to happen in some circumstances, which is probably the opposite of what you want 😊\n\ncheck-type should be used instead",
+      "range": {
+        "startLine": 54,
+        "startChar": 3,
+        "endLine": 54,
+        "endChar": 16
+      },
+      "revId": "080ab003fe9290c90bbdeff06953d8c7f6825d48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b4a6d0e_a1496086",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T21:32:28Z",
+      "side": 1,
+      "message": "I find this inline declares to be quite noisy. Maybe use the `(the ...)` form instead?",
+      "range": {
+        "startLine": 65,
+        "startChar": 21,
+        "endLine": 65,
+        "endChar": 30
+      },
+      "revId": "080ab003fe9290c90bbdeff06953d8c7f6825d48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
