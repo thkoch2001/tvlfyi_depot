@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "6e55f858_001c884a",
+        "filename": "third_party/lisp/sb-cltl2.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-22T02:18:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57d72f42_f6289f43",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 18
+      },
+      "revId": "cc70a7c4b8202953824062f7c6169db9b394d740",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c4ba3f7_46442e51",
         "filename": "third_party/lisp/sb-rotate-byte.nix",
         "patchSetId": 2
@@ -91,6 +115,30 @@
       "revId": "cc70a7c4b8202953824062f7c6169db9b394d740",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4fa727a_3e8d4653",
+        "filename": "third_party/lisp/sb-rotate-byte.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-22T02:18:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c4ba3f7_46442e51",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 24
+      },
+      "revId": "cc70a7c4b8202953824062f7c6169db9b394d740",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
