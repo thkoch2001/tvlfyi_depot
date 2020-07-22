@@ -5,6 +5,7 @@ depot.nix.buildLisp.library {
 
   deps = with depot.third_party.lisp; [
     iterate
+    local-time
   ];
 
   srcs = [
