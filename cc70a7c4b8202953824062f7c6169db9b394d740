@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9457a7ff_754fd61f",
+        "filename": "third_party/lisp/cl-yacc.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T01:30:59Z",
+      "side": 1,
+      "message": "wat",
+      "range": {
+        "startLine": 5,
+        "startChar": 12,
+        "endLine": 5,
+        "endChar": 19
+      },
+      "revId": "cc70a7c4b8202953824062f7c6169db9b394d740",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b934de1a_743cb3d8",
+        "filename": "third_party/lisp/parse-number.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T01:30:59Z",
+      "side": 1,
+      "message": "/wat/",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "cc70a7c4b8202953824062f7c6169db9b394d740",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "57d72f42_f6289f43",
+        "filename": "third_party/lisp/sb-cltl2.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T01:30:59Z",
+      "side": 1,
+      "message": "You should use buildLisp.bundled for this library.",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 18
+      },
+      "revId": "cc70a7c4b8202953824062f7c6169db9b394d740",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c4ba3f7_46442e51",
+        "filename": "third_party/lisp/sb-rotate-byte.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-22T01:30:59Z",
+      "side": 1,
+      "message": "same as above, buildLisp.bundled",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 24
+      },
+      "revId": "cc70a7c4b8202953824062f7c6169db9b394d740",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
