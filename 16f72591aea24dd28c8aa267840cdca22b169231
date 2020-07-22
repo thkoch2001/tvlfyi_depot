@@ -22,6 +22,30 @@
       "revId": "16f72591aea24dd28c8aa267840cdca22b169231",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1a686f2_08e8544e",
+        "filename": "third_party/noisetorch/no-git-version.patch",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-22T01:03:51Z",
+      "side": 1,
+      "message": "I intend to submit this to nixpkgs, yeah. Probably the way to do this is with a substitute.\n\nUnless you meant to say \"patch\", in which case no, this is nix-only (it\u0027s necesary when compiling without a .git directory)",
+      "parentUuid": "b43f0c21_de5230d8",
+      "range": {
+        "startLine": 21,
+        "startChar": 14,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "16f72591aea24dd28c8aa267840cdca22b169231",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
