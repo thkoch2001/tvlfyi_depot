@@ -9,6 +9,7 @@ depot.nix.buildLisp.program {
     defclass-std
     easy-routes
     hunchentoot
+    lass
     local-time
     trivial-ldap
 
@@ -16,6 +17,9 @@ depot.nix.buildLisp.program {
   ];
 
   srcs = [
+    ./panettone.asd
+    ./src/packages.lisp
+    ./src/css.lisp
     ./src/panettone.lisp
   ];
 }
