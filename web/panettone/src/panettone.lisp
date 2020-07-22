@@ -1,11 +1,4 @@
-(defpackage panettone
-  (:use :cl :klatre :easy-routes)
-  (:import-from :defclass-std :defclass/std)
-  (:import-from :alexandria :if-let)
-  (:shadowing-import-from :alexandria :when-let)
-  (:export :start-panettone :main))
 (in-package :panettone)
-
 (declaim (optimize (safety 3)))
 
 ;;;
@@ -170,67 +163,100 @@ updated issue"
 (defmacro render (&body body)
   `(who:with-html-output-to-string (*standard-output* nil :prologue t)
      (:head
-      (:title (who:esc *title*)))
-     (:body ,@body)))
+      (:title (who:esc *title*))
+      (:link :rel "stylesheet" :type "text/css" :href "/main.css"))
+     (:body
+      (:div :class "content"
+            ,@body))))
 
 (defun render/login (&optional message)
   (render
-    (:h1 "Login")
-    (when message
-      (who:htm (:div.alert (who:esc message))))
-    (:form
-     :method :post :action "/login"
-     (:div
-      (:label :for "username"
-              "Username")
-      (:input :type "text"
-              :name "username"
-              :id "username"
-              :placeholder "username"))
-     (:div
-      (:label :for "password"
-              "Password")
-      (:input :type "password"
-              :name "password"
-              :id "password"
-              :placeholder "password"))
-     (:input :type "submit"
-             :value "Submit"))))
+    (:div
+     :class "login-form"
+     (:header
+      (:h1 "Login"))
+     (:main
+      :class "login-form"
+      (when message
+        (who:htm (:div :class "alert" (who:esc message))))
+      (:form
+       :method :post :action "/login"
+       (:div
+        (:label :for "username"
+                "Username")
+        (:input :type "text"
+                :name "username"
+                :id "username"
+                :placeholder "username"))
+       (:div
+        (:label :for "password"
+                "Password")
+        (:input :type "password"
+                :name "password"
+                :id "password"
+                :placeholder "password"))
+       (:input :type "submit"
+               :value "Submit"))))))
+
+(defun created-by-at (issue)
+  (who:with-html-output (*standard-output*)
+    (:span :class "created-by-at"
+           "Opened by "
+           (:span :class "username"
+                  (who:esc
+                   (or
+                    (when-let ((author (author issue)))
+                      (displayname author))
+                    "someone")))
+           " at "
+           (:span :class "timestamp"
+                  (who:esc
+                   (format-dottime (created-at issue)))))))
 
 (defun render/index (&key issues)
   (render
-    (:h1 "Issues")
-    (:a :href "/issues/new" "New Issue")
-    (:ul
-     (loop for issue in issues
-           do (who:htm
-               (:li
-                (:a :href (format nil "/issues/~A" (cl-prevalence:get-id issue))
-                    (who:esc (subject issue)))))))))
+    (:header
+     (:h1 "Issues")
+     (:a
+      :class "new-issue"
+      :href "/issues/new" "New Issue"))
+    (:main
+     (:ol
+      :class "issue-list"
+      (dolist (issue issues)
+        (let ((issue-id (get-id issue)))
+          (who:htm
+           (:li
+            (:a :href (format nil "/issues/~A" issue-id)
+                (:p
+                 (:span :class "issue-subject"
+                        (who:esc (subject issue))))
+                (:span :class "issue-number"
+                       (who:esc (format nil "#~A" issue-id)))
+                " - "
+                (created-by-at issue))))))))))
 
 (defun render/new-issue ()
   (render
-    (:h1 "New Issue")
-    (:form
-     :method :post :action "/issues"
-     (:div
-      (:label :for "subject" "Subject")
-      (:input :type :text
-              :id "subject"
-              :name "subject"
-              :placeholder "Subject"))
+    (:header
+     (:h1 "New Issue"))
+    (:main
+     (:form :method "post"
+            :action "/issues"
+            :class "issue-form"
+            (:div
+             (:input :type "text"
+                     :id "subject"
+                     :name "subject"
+                     :placeholder "Subject"))
 
-     (:div
-      (:textarea :name "body"))
+            (:div
+             (:textarea :name "body"
+                        :placeholder "Description"
+                        :rows 10))
 
-     (:input :type :submit
-             :value "Create Issue"))))
-
-(defun created-by-at (issue)
-  (format nil "Opened by ~A at ~A"
-          (when-let ((author (author issue)))
-            (displayname author))
-          (format-dottime (created-at issue))))
+            (:input :type "submit"
+                    :value "Create Issue")))))
 
 (comment
  (format nil "foo: ~A" "foo")
@@ -239,9 +265,13 @@ updated issue"
 (defun render/issue (issue)
   (check-type issue issue)
   (render
-    (:h1 (who:esc (subject issue)))
-    (:p (who:esc (created-by-at issue)))
-    (:p (who:esc (body issue)))))
+    (:header
+     (:h1 (who:esc (subject issue)))
+     (:div :class "issue-number"
+           (who:esc (format nil "#~A" (get-id issue)))))
+    (:main
+     (:p (created-by-at issue))
+     (:p (who:esc (body issue))))))
 
 (defun render/not-found (entity-type)
   (render
@@ -295,6 +325,10 @@ updated issue"
       (render/issue (get-issue *p-system* id))
     (issue-not-found (_)
       (render/not-found "Issue"))))
+
+(defroute styles ("/main.css") ()
+  (setf (hunchentoot:content-type*) "text/css")
+  (apply #'lass:compile-and-write panettone.css:styles))
 
 (defvar *acceptor* nil
   "Hunchentoot acceptor for Panettone's web server.")
