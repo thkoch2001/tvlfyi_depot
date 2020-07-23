@@ -300,8 +300,7 @@ int handleExceptions(const std::string& programName,
     return e.status;
   } catch (UsageError& e) {
     LOG(INFO) << e.what();
-    LOG(INFO) << "Try '" << programName << " "
-              << " --help' for more information.";
+    LOG(INFO) << "Try '" << programName << " --help' for more information.";
     return 1;
   } catch (BaseError& e) {
     LOG(ERROR) << error << (settings.showTrace ? e.prefix() : "") << e.msg();
