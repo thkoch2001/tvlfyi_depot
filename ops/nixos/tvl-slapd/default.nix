@@ -107,6 +107,11 @@ let
       email = "mail@tazj.in";
       password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$wOPEl9D3kSke//oLtbvqrg$j0npwwXgaXQ/emefKUwL59tH8hdmtzbgH2rQzWSmE2Y";
     }
+    {
+      username = "implr";
+      email = "implr@hackerspace.pl";
+      password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$SHRFps5sVgyUXYdmqGPw9g$tEx9DwKK1RjWlw52GLwOZ/iHep+QJboaZE83f1pXSwQ";
+    }
   ];
 in {
   # Use our patched OpenLDAP derivation which enables stronger password hashing.
