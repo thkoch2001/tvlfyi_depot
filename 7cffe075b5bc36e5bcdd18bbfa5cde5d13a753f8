@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2f5eb04c_51618c76",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 14
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-23T00:06:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c641089b_951a22e8",
+      "range": {
+        "startLine": 77,
+        "startChar": 1,
+        "endLine": 77,
+        "endChar": 13
+      },
+      "revId": "7cffe075b5bc36e5bcdd18bbfa5cde5d13a753f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52a344a2_ce79e186",
         "filename": "lisp/klatre/klatre.lisp",
         "patchSetId": 14
