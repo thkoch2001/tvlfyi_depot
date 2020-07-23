@@ -67,7 +67,7 @@ ref<FSAccessor> SSHStore::getFSAccessor() {
 
 ref<RemoteStore::Connection> SSHStore::openConnection() {
   auto conn = make_ref<Connection>();
-  conn->sshConn = master.startCommand("nix-daemon --stdio");
+  conn->sshConn = master.startCommand("nix-daemon --pipe");
   conn->to = FdSink(conn->sshConn->in.get());
   conn->from = FdSource(conn->sshConn->out.get());
   initConnection(*conn);
