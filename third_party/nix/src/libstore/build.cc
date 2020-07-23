@@ -2833,7 +2833,7 @@ void DerivationGoal::runChild() {
         }
 
         struct ifreq ifr;
-        strcpy(ifr.ifr_name, "lo");
+        strncpy(ifr.ifr_name, "lo", sizeof("lo"));
         ifr.ifr_flags = IFF_UP | IFF_LOOPBACK | IFF_RUNNING;
         if (ioctl(fd.get(), SIOCSIFFLAGS, &ifr) == -1) {
           throw SysError("cannot set loopback interface flags");
