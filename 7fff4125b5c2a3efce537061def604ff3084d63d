@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8d5aa771_d367c0e5",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 24
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-23T21:49:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0697a87_67389cbe",
+      "revId": "7fff4125b5c2a3efce537061def604ff3084d63d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a1c321bb_186feee5",
         "filename": "lisp/klatre/klatre.lisp",
         "patchSetId": 24
@@ -33,6 +51,24 @@
       "revId": "7fff4125b5c2a3efce537061def604ff3084d63d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d677da02_4bbd64a8",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 24
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-23T21:49:47Z",
+      "side": 1,
+      "message": "- I consciously don\u0027t care about portability here, since this is only really for TVL rright now (though that may change)\n- I don\u0027t know what errors will arise, which is kinda the point.",
+      "parentUuid": "a1c321bb_186feee5",
+      "revId": "7fff4125b5c2a3efce537061def604ff3084d63d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
