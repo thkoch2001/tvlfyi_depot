@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56efbc93_53888dbe",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 23
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-23T19:15:26Z",
+      "side": 1,
+      "message": "don\u0027t we literally have a library called `parse-number` in our deps? Is this not in there? :/",
+      "range": {
+        "startLine": 92,
+        "startChar": 10,
+        "endLine": 92,
+        "endChar": 24
+      },
+      "revId": "e4b18971663230fbaafbdebec8fcc44701ba17ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
