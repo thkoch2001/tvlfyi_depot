@@ -185,6 +185,13 @@ updated issue"
       (:div :class "content"
             ,@body))))
 
+(defun render/alert (message)
+  "Render an alert box for MESSAGE, if non-null"
+  (check-type message (or null string))
+  (who:with-html-output (*standard-output*)
+    (when message
+      (who:htm (:div :class "alert" (who:esc message))))))
+
 (defun render/login (&optional message)
   (render
     (:div
@@ -193,8 +200,7 @@ updated issue"
       (:h1 "Login"))
      (:main
       :class "login-form"
-      (when message
-        (who:htm (:div :class "alert" (who:esc message))))
+      (render/alert message)
       (:form
        :method :post :action "/login"
        (:div
@@ -276,11 +282,12 @@ updated issue"
       (:a :href "/" "View open isues"))
      (render/issue-list :issues issues))))
 
-(defun render/new-issue ()
+(defun render/new-issue (&optional message)
   (render
     (:header
      (:h1 "New Issue"))
     (:main
+     (render/alert message)
      (:form :method "post"
             :action "/issues"
             :class "issue-form"
@@ -400,13 +407,16 @@ updated issue"
 (defroute handle-create-issue
     ("/issues" :method :post :decorators (@auth))
     (&post subject body)
-  (cl-prevalence:execute-transaction
-   (create-issue *p-system*
-                 'subject subject
-                 'body body
-                 'author-dn (dn *user*)))
-  (cl-prevalence:snapshot *p-system*)
-  (hunchentoot:redirect "/"))
+  (if (string= subject "")
+      (render/new-issue "Subject is required")
+      (progn
+        (cl-prevalence:execute-transaction
+         (create-issue *p-system*
+                       'subject subject
+                       'body body
+                       'author-dn (dn *user*)))
+        (cl-prevalence:snapshot *p-system*)
+        (hunchentoot:redirect "/"))))
 
 (defroute show-issue ("/issues/:id" :decorators (@auth))
     (&path (id 'integer))

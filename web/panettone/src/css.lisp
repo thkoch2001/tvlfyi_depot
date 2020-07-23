@@ -146,6 +146,11 @@
 
     ,@(button '.new-issue)
 
+    (.alert
+     :padding "0.5rem"
+     :margin-bottom "1rem"
+     :background-color ,color/failure)
+
     (.login-form
      :width "300px"
      :margin "0 auto")
