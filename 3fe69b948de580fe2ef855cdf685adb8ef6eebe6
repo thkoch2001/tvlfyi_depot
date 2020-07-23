@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fc1f851_0d74b526",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-23T20:56:47Z",
+      "side": 0,
+      "message": "latent bug alert",
+      "range": {
+        "startLine": 973,
+        "startChar": 8,
+        "endLine": 973,
+        "endChar": 38
+      },
+      "revId": "3fe69b948de580fe2ef855cdf685adb8ef6eebe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
