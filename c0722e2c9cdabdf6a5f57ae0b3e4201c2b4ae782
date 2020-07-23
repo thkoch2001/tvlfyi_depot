@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "794c985a_8525654b",
+        "filename": "third_party/nix/src/build-remote/build-remote.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-23T16:43:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05cf0819_11c9d39c",
+      "range": {
+        "startLine": 243,
+        "startChar": 23,
+        "endLine": 243,
+        "endChar": 55
+      },
+      "revId": "c0722e2c9cdabdf6a5f57ae0b3e4201c2b4ae782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40744448_86d6bdf4",
         "filename": "third_party/nix/src/build-remote/build-remote.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "c0722e2c9cdabdf6a5f57ae0b3e4201c2b4ae782",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6577fb18_022fc3fa",
+        "filename": "third_party/nix/src/build-remote/build-remote.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-23T16:43:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40744448_86d6bdf4",
+      "range": {
+        "startLine": 270,
+        "startChar": 21,
+        "endLine": 270,
+        "endChar": 47
+      },
+      "revId": "c0722e2c9cdabdf6a5f57ae0b3e4201c2b4ae782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
