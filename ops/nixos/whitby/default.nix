@@ -274,6 +274,7 @@ in lib.fix(self: {
     users.tazjin = {
       isNormalUser = true;
       extraGroups = [ "git" "wheel" ];
+      shell = nixpkgs.fish;
       openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
     };
 
