@@ -421,7 +421,10 @@ updated issue"
 (defroute show-issue ("/issues/:id" :decorators (@auth))
     (&path (id 'integer))
   (handler-case
-      (render/issue (get-issue *p-system* id))
+      (let* ((issue (get-issue *p-system* id))
+             (*title* (format nil "~A | Panettone"
+                              (subject issue))))
+        (render/issue issue))
     (issue-not-found (_)
       (render/not-found "Issue"))))
 
