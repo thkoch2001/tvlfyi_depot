@@ -429,16 +429,20 @@ updated issue"
     ("/issues/:id/comments" :decorators (@auth)
                             :method :post)
     (&path (id 'integer) &post body)
-  (handler-case
-      (progn
-        (cl-prevalence:execute-transaction
-         (add-comment *p-system* id
-                      :body body
-                      :author-dn (dn *user*)))
-        (cl-prevalence:snapshot *p-system*)
-        (hunchentoot:redirect (format nil "/issues/~A" id)))
-    (issue-not-found (_)
-      (render/not-found "Issue"))))
+  (flet ((redirect-to-issue ()
+           (hunchentoot:redirect (format nil "/issues/~A" id))))
+    (if (string= body "")
+        (redirect-to-issue)
+        (handler-case
+            (progn
+              (cl-prevalence:execute-transaction
+               (add-comment *p-system* id
+                            :body body
+                            :author-dn (dn *user*)))
+              (cl-prevalence:snapshot *p-system*)
+              (redirect-to-issue))
+          (issue-not-found (_)
+            (render/not-found "Issue"))))))
 
 (defroute close-issue
     ("/issues/:id/close" :decorators (@auth)
