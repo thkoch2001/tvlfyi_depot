@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8d5a18ae_9e9cb258",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-23T22:00:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "250c8572_21188c6b",
+      "revId": "c659c1a317314c52df171763f878b0d41eceed3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb1f9da2_d7396dbf",
         "filename": "web/panettone/src/panettone.lisp",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "c659c1a317314c52df171763f878b0d41eceed3b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0707918c_16f39ea9",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-23T22:00:02Z",
+      "side": 1,
+      "message": "I\u0027d rather not tbh - that\u0027s a premature optimization that depends on an assumption about how list-issues is implemented, which there are no guarantees about. Would much rather be hypothetically slightly slower in favor of having less mutation.",
+      "parentUuid": "cb1f9da2_d7396dbf",
+      "revId": "c659c1a317314c52df171763f878b0d41eceed3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
