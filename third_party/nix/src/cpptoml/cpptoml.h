@@ -16,6 +16,7 @@
 #include <iomanip>
 #include <map>
 #include <memory>
+#include <optional>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -54,48 +55,6 @@ using string_to_base_map
 // if defined, `base` will retain type information in form of an enum class
 // such that static_cast can be used instead of dynamic_cast
 // #define CPPTOML_NO_RTTI
-
-template <class T>
-class option
-{
-  public:
-    option() : empty_{true}
-    {
-        // nothing
-    }
-
-    option(T value) : empty_{false}, value_(std::move(value))
-    {
-        // nothing
-    }
-
-    explicit operator bool() const
-    {
-        return !empty_;
-    }
-
-    const T& operator*() const
-    {
-        return value_;
-    }
-
-    const T* operator->() const
-    {
-        return &value_;
-    }
-
-    template <class U>
-    T value_or(U&& alternative) const
-    {
-        if (!empty_)
-            return value_;
-        return static_cast<T>(std::forward<U>(alternative));
-    }
-
-  private:
-    bool empty_;
-    T value_;
-};
 
 struct local_date
 {
@@ -381,13 +340,13 @@ class table_array;
 template <class T>
 struct array_of_trait
 {
-    using return_type = option<std::vector<T>>;
+    using return_type = std::optional<std::vector<T>>;
 };
 
 template <>
 struct array_of_trait<array>
 {
-    using return_type = option<std::vector<std::shared_ptr<array>>>;
+    using return_type = std::optional<std::vector<std::shared_ptr<array>>>;
 };
 
 template <class T>
@@ -852,8 +811,8 @@ class array : public base
     }
 
     /**
-     * Obtains a option<std::vector<T>>. The option will be empty if the array
-     * contains values that are not of type T.
+     * Obtains a optional<std::vector<T>>. The optional will be empty if the
+     * array contains values that are not of type T.
      */
     template <class T>
     inline typename array_of_trait<T>::return_type get_array_of() const
@@ -866,10 +825,10 @@ class array : public base
             if (auto v = val->as<T>())
                 result.push_back(v->get());
             else
-                return {};
+                return std::nullopt;
         }
 
-        return {std::move(result)};
+        return result;
     }
 
     /**
@@ -1041,7 +1000,7 @@ inline std::shared_ptr<array> make_element<array>()
 } // namespace detail
 
 /**
- * Obtains a option<std::vector<T>>. The option will be empty if the array
+ * Obtains a optional<std::vector<T>>. The optional will be empty if the array
  * contains values that are not of type T.
  */
 template <>
@@ -1056,10 +1015,10 @@ array::get_array_of<array>() const
         if (auto v = val->as_array())
             result.push_back(v);
         else
-            return {};
+            return std::nullopt;
     }
 
-    return {std::move(result)};
+    return result;
 }
 
 class table;
@@ -1218,7 +1177,7 @@ inline std::shared_ptr<table_array> make_element<table_array>()
 template <class T>
 typename std::enable_if<!std::is_floating_point<T>::value
                             && std::is_signed<T>::value,
-                        option<T>>::type
+                        std::optional<T>>::type
 get_impl(const std::shared_ptr<base>& elem)
 {
     if (auto v = elem->as<int64_t>())
@@ -1231,18 +1190,18 @@ get_impl(const std::shared_ptr<base>& elem)
             throw std::overflow_error{
                 "T cannot represent the value requested in get"};
 
-        return {static_cast<T>(v->get())};
+        return static_cast<T>(v->get());
     }
     else
     {
-        return {};
+        return std::nullopt;
     }
 }
 
 template <class T>
 typename std::enable_if<!std::is_same<T, bool>::value
                             && std::is_unsigned<T>::value,
-                        option<T>>::type
+                        std::optional<T>>::type
 get_impl(const std::shared_ptr<base>& elem)
 {
     if (auto v = elem->as<int64_t>())
@@ -1254,27 +1213,27 @@ get_impl(const std::shared_ptr<base>& elem)
             throw std::overflow_error{
                 "T cannot represent the value requested in get"};
 
-        return {static_cast<T>(v->get())};
+        return static_cast<T>(v->get());
     }
     else
     {
-        return {};
+        return std::nullopt;
     }
 }
 
 template <class T>
 typename std::enable_if<!std::is_integral<T>::value
                             || std::is_same<T, bool>::value,
-                        option<T>>::type
+                        std::optional<T>>::type
 get_impl(const std::shared_ptr<base>& elem)
 {
     if (auto v = elem->as<T>())
     {
-        return {v->get()};
+        return v->get();
     }
     else
     {
-        return {};
+        return std::nullopt;
     }
 }
 
@@ -1438,7 +1397,7 @@ class table : public base
      * to the template parameter from a given key.
      */
     template <class T>
-    option<T> get_as(const std::string& key) const
+    std::optional<T> get_as(const std::string& key) const
     {
         try
         {
@@ -1446,7 +1405,7 @@ class table : public base
         }
         catch (const std::out_of_range&)
         {
-            return {};
+            return std::nullopt;
         }
     }
 
@@ -1456,7 +1415,7 @@ class table : public base
      * keys".
      */
     template <class T>
-    option<T> get_qualified_as(const std::string& key) const
+    std::optional<T> get_qualified_as(const std::string& key) const
     {
         try
         {
@@ -1464,7 +1423,7 @@ class table : public base
         }
         catch (const std::out_of_range&)
         {
-            return {};
+            return std::nullopt;
         }
     }
 
@@ -1472,10 +1431,10 @@ class table : public base
      * Helper function that attempts to get an array of values of a given
      * type corresponding to the template parameter for a given key.
      *
-     * If the key doesn't exist, doesn't exist as an array type, or one or
-     * more keys inside the array type are not of type T, an empty option
-     * is returned. Otherwise, an option containing a vector of the values
-     * is returned.
+     * If the key doesn't exist, doesn't exist as an array type, or one or more
+     * keys inside the array type are not of type T, an empty optional is
+     * returned. Otherwise, an optional containing a vector of the values is
+     * returned.
      */
     template <class T>
     inline typename array_of_trait<T>::return_type
@@ -1491,12 +1450,12 @@ class table : public base
                 if (auto val = b->as<T>())
                     result.push_back(val->get());
                 else
-                    return {};
+                    return std::nullopt;
             }
-            return {std::move(result)};
+            return result;
         }
 
-        return {};
+        return std::nullopt;
     }
 
     /**
@@ -1504,10 +1463,10 @@ class table : public base
      * type corresponding to the template parameter for a given key. Will
      * resolve "qualified keys".
      *
-     * If the key doesn't exist, doesn't exist as an array type, or one or
-     * more keys inside the array type are not of type T, an empty option
-     * is returned. Otherwise, an option containing a vector of the values
-     * is returned.
+     * If the key doesn't exist, doesn't exist as an array type, or one or more
+     * keys inside the array type are not of type T, an empty optional is
+     * returned. Otherwise, an optional containing a vector of the values is
+     * returned.
      */
     template <class T>
     inline typename array_of_trait<T>::return_type
@@ -1523,12 +1482,12 @@ class table : public base
                 if (auto val = b->as<T>())
                     result.push_back(val->get());
                 else
-                    return {};
+                    return std::nullopt;
             }
-            return {std::move(result)};
+            return result;
         }
 
-        return {};
+        return std::nullopt;
     }
 
     /**
@@ -1628,10 +1587,9 @@ class table : public base
  * Helper function that attempts to get an array of arrays for a given
  * key.
  *
- * If the key doesn't exist, doesn't exist as an array type, or one or
- * more keys inside the array type are not of type T, an empty option
- * is returned. Otherwise, an option containing a vector of the values
- * is returned.
+ * If the key doesn't exist, doesn't exist as an array type, or one or more
+ * keys inside the array type are not of type T, an empty optional is returned.
+ * Otherwise, an optional containing a vector of the values is returned.
  */
 template <>
 inline typename array_of_trait<array>::return_type
@@ -1647,23 +1605,22 @@ table::get_array_of<array>(const std::string& key) const
             if (auto val = b->as_array())
                 result.push_back(val);
             else
-                return {};
+                return std::nullopt;
         }
 
-        return {std::move(result)};
+        return result;
     }
 
-    return {};
+    return std::nullopt;
 }
 
 /**
  * Helper function that attempts to get an array of arrays for a given
  * key. Will resolve "qualified keys".
  *
- * If the key doesn't exist, doesn't exist as an array type, or one or
- * more keys inside the array type are not of type T, an empty option
- * is returned. Otherwise, an option containing a vector of the values
- * is returned.
+ * If the key doesn't exist, doesn't exist as an array type, or one or more
+ * keys inside the array type are not of type T, an empty optional is returned.
+ * Otherwise, an optional containing a vector of the values is returned.
  */
 template <>
 inline typename array_of_trait<array>::return_type
@@ -1679,13 +1636,13 @@ table::get_qualified_array_of<array>(const std::string& key) const
             if (auto val = b->as_array())
                 result.push_back(val);
             else
-                return {};
+                return std::nullopt;
         }
 
-        return {std::move(result)};
+        return result;
     }
 
-    return {};
+    return std::nullopt;
 }
 
 std::shared_ptr<table> make_table()
@@ -3176,17 +3133,17 @@ class parser
         return true;
     }
 
-    option<parse_type> date_type(const std::string::iterator& it,
+    std::optional<parse_type> date_type(const std::string::iterator& it,
                                  const std::string::iterator& end)
     {
         auto date_end = find_end_of_date(it, end);
         auto len = std::distance(it, date_end);
 
         if (len < 10)
-            return {};
+            return std::nullopt;
 
         if (it[4] != '-' || it[7] != '-')
-            return {};
+            return std::nullopt;
 
         if (len >= 19 && (it[10] == 'T' || it[10] == ' ')
             && is_time(it + 11, date_end))
@@ -3194,17 +3151,17 @@ class parser
             // datetime type
             auto time_end = find_end_of_time(it + 11, date_end);
             if (time_end == date_end)
-                return {parse_type::LOCAL_DATETIME};
+                return parse_type::LOCAL_DATETIME;
             else
-                return {parse_type::OFFSET_DATETIME};
+                return parse_type::OFFSET_DATETIME;
         }
         else if (len == 10)
         {
             // just a regular date
-            return {parse_type::LOCAL_DATE};
+            return parse_type::LOCAL_DATE;
         }
 
-        return {};
+        return std::nullopt;
     }
 
     std::istream& input_;
