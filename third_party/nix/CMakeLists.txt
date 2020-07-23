@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD 17)
 # clangd and clang-tidy.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Enable warnings
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
+
 # Provide an output path for pkgconfig.
 include(GNUInstallDirs)
 set(PKGCONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
@@ -24,6 +27,17 @@ find_package(Threads)
 find_package(absl REQUIRED)
 find_package(gRPC REQUIRED)
 find_package(glog REQUIRED)
+
+find_program(CLANG_TIDY_PATH clang-tidy)
+if (CLANG_TIDY_PATH)
+  list(JOIN CLANG_TIDY_OPTIONS ";" CLANG_TIDY_OPTIONS_STR)
+  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_PATH};${CLANG_TIDY_OPTIONS_STR}")
+
+  # nix's toolchain has a problem with system header includes, so clang-tidy requires a manual -isystem
+  if (DEFINED ENV{LIBCXX_INCLUDE})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem $ENV{LIBCXX_INCLUDE}")
+  endif()
+endif()
 
 # generate a configuration file (autoheader-style) to configure
 # certain symbols that Nix depends on.
