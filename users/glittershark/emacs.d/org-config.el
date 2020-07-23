@@ -60,6 +60,9 @@
    ("px" "Xanthous" entry
     (file+headline ,(notes-file "xanthous.org") "Backlog")
     "* TODO %?\nContext %a\nIn task: %K")
+   ("pt" "Tvix" entry
+    (file+headline ,(notes-file "tvix.org") "Tvix TODO")
+    "* TODO %?\nContext %a\nIn task: %K")
 
    ("d" "Data recording")
    )
