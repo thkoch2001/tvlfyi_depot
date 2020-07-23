@@ -30,6 +30,7 @@ find_package(glog REQUIRED)
 
 find_program(CLANG_TIDY_PATH clang-tidy)
 if (CLANG_TIDY_PATH)
+  message("Found clang-tidy: ${CLANG_TIDY_PATH}")
   set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_PATH}")
 
   # nix's toolchain has a problem with system header includes, so clang-tidy requires a manual -isystem
