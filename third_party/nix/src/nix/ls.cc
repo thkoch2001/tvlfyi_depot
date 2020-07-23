@@ -105,7 +105,9 @@ struct CmdLsStore final : StoreCommand, MixLs {
     return "show information about a store path";
   }
 
-  void run(ref<Store> store) override { list(store->getFSAccessor()); }
+  void run(std::shared_ptr<Store> store) override {
+    list(store->getFSAccessor());
+  }
 };
 
 struct CmdLsNar final : Command, MixLs {

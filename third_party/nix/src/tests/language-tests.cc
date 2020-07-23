@@ -124,7 +124,7 @@ class ParserFailureTest : public testing::TestWithParam<std::filesystem::path> {
 // Test pattern for files that should fail to parse.
 TEST_P(ParserFailureTest, Fails) {
   std::shared_ptr<Store> store = std::make_shared<DummyStore>();
-  EvalState state({}, ref<Store>(store));
+  EvalState state({}, std::shared_ptr<Store>(store));
   auto path = GetParam();
 
   // There are multiple types of exceptions that the parser can throw,
@@ -153,7 +153,7 @@ class ParserSuccessTest : public testing::TestWithParam<std::filesystem::path> {
 // Test pattern for files that should parse successfully.
 TEST_P(ParserSuccessTest, Parses) {
   std::shared_ptr<Store> store = std::make_shared<DummyStore>();
-  EvalState state({}, ref<Store>(store));
+  EvalState state({}, std::shared_ptr<Store>(store));
   auto path = GetParam();
 
   EXPECT_NO_THROW(state.parseExprFromFile(GetParam().string()))
@@ -171,7 +171,7 @@ class EvalFailureTest : public testing::TestWithParam<std::filesystem::path> {};
 // Test pattern for files that should fail to evaluate.
 TEST_P(EvalFailureTest, Fails) {
   std::shared_ptr<Store> store = std::make_shared<DummyStore>();
-  EvalState state({}, ref<Store>(store));
+  EvalState state({}, std::shared_ptr<Store>(store));
   auto path = GetParam();
 
   Expr* expr = nullptr;
@@ -209,7 +209,7 @@ class EvalSuccessTest : public testing::TestWithParam<std::filesystem::path> {};
 // Test pattern for files that should evaluate successfully.
 TEST_P(EvalSuccessTest, Fails) {
   std::shared_ptr<Store> store = std::make_shared<DummyStore>();
-  EvalState state({}, ref<Store>(store));
+  EvalState state({}, std::shared_ptr<Store>(store));
   auto path = GetParam();
 
   Expr* expr;

@@ -87,14 +87,14 @@ bool MultiCommand::processArgs(const Strings& args, bool finish) {
 
 StoreCommand::StoreCommand() = default;
 
-ref<Store> StoreCommand::getStore() {
+std::shared_ptr<Store> StoreCommand::getStore() {
   if (!_store) {
     _store = createStore();
   }
-  return ref<Store>(_store);
+  return std::shared_ptr<Store>(_store);
 }
 
-ref<Store> StoreCommand::createStore() { return openStore(); }
+std::shared_ptr<Store> StoreCommand::createStore() { return openStore(); }
 
 void StoreCommand::run() { run(getStore()); }
 
@@ -115,7 +115,7 @@ StorePathsCommand::StorePathsCommand(bool recursive) : recursive(recursive) {
   mkFlag(0, "all", "apply operation to the entire store", &all);
 }
 
-void StorePathsCommand::run(ref<Store> store) {
+void StorePathsCommand::run(std::shared_ptr<Store> store) {
   Paths storePaths;
 
   if (all) {
@@ -143,7 +143,7 @@ void StorePathsCommand::run(ref<Store> store) {
   run(store, storePaths);
 }
 
-void StorePathCommand::run(ref<Store> store) {
+void StorePathCommand::run(std::shared_ptr<Store> store) {
   auto storePaths = toStorePaths(store, NoBuild, installables);
 
   if (storePaths.size() != 1) {

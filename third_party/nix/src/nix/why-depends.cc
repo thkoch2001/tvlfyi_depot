@@ -60,7 +60,7 @@ struct CmdWhyDepends final : SourceExprCommand {
     };
   }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     auto package = parseInstallable(*this, store, _package, false);
     auto packagePath = toStorePath(store, Build, package);
     auto dependency = parseInstallable(*this, store, _dependency, false);

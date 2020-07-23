@@ -50,7 +50,7 @@ struct NixRepl : gc {
 
   const Path historyFile;
 
-  NixRepl(const Strings& searchPath, const nix::ref<Store>& store);
+  NixRepl(const Strings& searchPath, const std::shared_ptr<Store>& store);
   ~NixRepl();
   void mainLoop(const std::vector<std::string>& files);
   StringSet completePrefix(const std::string& prefix);
@@ -121,7 +121,7 @@ std::string removeWhitespace(std::string s) {
   return s;
 }
 
-NixRepl::NixRepl(const Strings& searchPath, const nix::ref<Store>& store)
+NixRepl::NixRepl(const Strings& searchPath, const std::shared_ptr<Store>& store)
     : state(searchPath, store),
       staticEnv(false, &state.staticBaseEnv),
       historyFile(getDataDir() + "/nix/repl-history") {
@@ -810,7 +810,7 @@ struct CmdRepl final : StoreCommand, MixEvalArgs {
     return "start an interactive environment for evaluating Nix expressions";
   }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     auto repl = std::make_unique<NixRepl>(searchPath, openStore());
     repl->autoArgs = getAutoArgs(repl->state);
     repl->mainLoop(files);

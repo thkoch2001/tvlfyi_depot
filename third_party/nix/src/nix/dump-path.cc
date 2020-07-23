@@ -18,7 +18,7 @@ struct CmdDumpPath final : StorePathCommand {
     };
   }
 
-  void run(ref<Store> store, const Path& storePath) override {
+  void run(std::shared_ptr<Store> store, const Path& storePath) override {
     FdSink sink(STDOUT_FILENO);
     store->narFromPath(storePath, sink);
     sink.flush();

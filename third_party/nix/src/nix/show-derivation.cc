@@ -37,7 +37,7 @@ struct CmdShowDerivation final : InstallablesCommand {
     };
   }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     auto drvPaths = toDerivations(store, installables, true);
 
     if (recursive) {

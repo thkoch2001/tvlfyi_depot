@@ -300,7 +300,8 @@ static Strings parseNixPath(const std::string& s) {
   return res;
 }
 
-EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
+EvalState::EvalState(const Strings& _searchPath,
+                     const std::shared_ptr<Store>& store)
     : sWith(symbols.Create("<with>")),
       sOutPath(symbols.Create("outPath")),
       sDrvPath(symbols.Create("drvPath")),

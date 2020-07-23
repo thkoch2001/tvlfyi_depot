@@ -191,7 +191,7 @@ struct RetrieveRegularNARSink : ParseSink {
   }
 };
 
-static void performOp(TunnelLogger* logger, const ref<Store>& store,
+static void performOp(TunnelLogger* logger, const std::shared_ptr<Store>& store,
                       bool trusted, unsigned int clientVersion, Source& from,
                       Sink& to, unsigned int op) {
   switch (op) {
@@ -326,7 +326,7 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
         throw Error("regular file expected");
       }
 
-      auto store2 = store.dynamic_pointer_cast<LocalStore>();
+      auto store2 = std::dynamic_pointer_cast<LocalStore>(store);
       if (!store2) {
         throw Error("operation is only supported by LocalStore");
       }

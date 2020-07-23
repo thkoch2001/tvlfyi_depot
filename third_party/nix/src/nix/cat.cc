@@ -30,7 +30,9 @@ struct CmdCatStore final : StoreCommand, MixCat {
     return "print the contents of a store file on stdout";
   }
 
-  void run(ref<Store> store) override { cat(store->getFSAccessor()); }
+  void run(std::shared_ptr<Store> store) override {
+    cat(store->getFSAccessor());
+  }
 };
 
 struct CmdCatNar final : StoreCommand, MixCat {
@@ -47,7 +49,7 @@ struct CmdCatNar final : StoreCommand, MixCat {
     return "print the contents of a file inside a NAR file";
   }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     cat(makeNarAccessor(make_ref<std::string>(readFile(narPath))));
   }
 };

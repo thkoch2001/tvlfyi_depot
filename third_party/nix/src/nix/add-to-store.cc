@@ -26,7 +26,7 @@ struct CmdAddToStore final : MixDryRun, StoreCommand {
 
   Examples examples() override { return {}; }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     if (!namePart) {
       namePart = baseNameOf(path);
     }
