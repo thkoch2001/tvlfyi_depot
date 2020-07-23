@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "250c8572_21188c6b",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-23T20:53:04Z",
+      "side": 1,
+      "message": "These should be keywords: :OPEN, :CLOSED. (same applies for the whole file.)\nIt\u0027s generally considered a bad idea to not here, because :OPEN is always :OPEN no matter what package you\u0027re in (OPEN gets interned in the KEYWORD package), but \u0027OPEN is actually \u0027PANETTONE::OPEN (which gets confusing: imagine trying to call a function that takes one of these types from the CL-USER package at the REPL)",
+      "revId": "c659c1a317314c52df171763f878b0d41eceed3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb1f9da2_d7396dbf",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-23T20:53:04Z",
+      "side": 1,
+      "message": "So if a new, fresh sequence is always returned here for every call, you can actually optimize the REMOVE-IF-NOT below to a DELETE-IF-NOT (but that\u0027s a super small optimization :p)\n(it\u0027s not safe to do so if not, since DELETE-IF-NOT modifies its argument)",
+      "revId": "c659c1a317314c52df171763f878b0d41eceed3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f78556a_e6c43a71",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-23T20:53:04Z",
+      "side": 1,
+      "message": "haha FP go brrrrr",
+      "revId": "c659c1a317314c52df171763f878b0d41eceed3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
