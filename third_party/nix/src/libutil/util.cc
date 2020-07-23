@@ -1349,15 +1349,11 @@ std::string base64Encode(const std::string& s) {
 }
 
 std::string base64Decode(const std::string& s) {
-  bool init = false;
   char decode[256];
-  if (!init) {
-    // FIXME: not thread-safe.
-    memset(decode, -1, sizeof(decode));
-    for (int i = 0; i < 64; i++) {
-      decode[(int)base64Chars[i]] = i;
-    }
-    init = true;
+  // FIXME: not thread-safe.
+  memset(decode, -1, sizeof(decode));
+  for (int i = 0; i < 64; i++) {
+    decode[(int)base64Chars[i]] = i;
   }
 
   std::string res;
