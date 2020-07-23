@@ -170,7 +170,7 @@ LocalStore::LocalStore(const Params& params)
   if (curSchema == 0) { /* new store */
     curSchema = nixSchemaVersion;
     openDB(*state, true);
-    writeFile(schemaPath, (format("%1%") % nixSchemaVersion).str());
+    writeFile(schemaPath, (format("%1%") % curSchema).str());
   } else if (curSchema < nixSchemaVersion) {
     if (curSchema < 5) {
       throw Error(
@@ -489,21 +489,20 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
      ensure that we don't fail on hard links within the same build
      (i.e. "touch $out/foo; ln $out/foo $out/bar"). */
   if (fromUid != (uid_t)-1 && st.st_uid != fromUid) {
-    assert(!S_ISDIR(st.st_mode));
+    if (S_ISDIR(st.st_mode)) {
+      throw BuildError(format("invalid file '%1%': is a directory") % path);
+    }
     if (inodesSeen.find(Inode(st.st_dev, st.st_ino)) == inodesSeen.end()) {
       throw BuildError(format("invalid ownership on file '%1%'") % path);
     }
-
-// `mode` variable is only used in debug builds
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-variable"
-
-    mode_t mode = st.st_mode & ~S_IFMT;
-    assert(S_ISLNK(st.st_mode) ||
-           (st.st_uid == geteuid() && (mode == 0444 || mode == 0555) &&
-            st.st_mtime == mtimeStore));
-
-#pragma clang diagnostic pop
+    if (!(S_ISLNK(st.st_mode) ||
+          (st.st_uid == geteuid() &&
+           ((st.st_mode & ~S_IFMT) == 0444 || (st.st_mode & ~S_IFMT) == 0555) &&
+           st.st_mtime == mtimeStore))) {
+      throw BuildError(
+          format("invalid permissions on file '%1%', should be 0444/0555") %
+          path);
+    }
 
     return;
   }
