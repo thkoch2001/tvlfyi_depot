@@ -61,8 +61,8 @@ target_sources(nix
     nix-channel/nix-channel.cc
     nix-collect-garbage/nix-collect-garbage.cc
     nix-copy-closure/nix-copy-closure.cc
-    nix-daemon/nix-daemon.cc
     nix-daemon/nix-daemon-proto.cc
+    nix-daemon/nix-daemon-main.cc
     nix-env/nix-env.cc
     nix-env/user-env.cc
     nix-instantiate/nix-instantiate.cc

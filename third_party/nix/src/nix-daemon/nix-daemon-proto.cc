@@ -26,7 +26,7 @@ static Status INVALID_STORE_PATH =
 
 class WorkerServiceImpl final : public WorkerService::Service {
  public:
-  WorkerServiceImpl(nix::Store* store) : store_(store) {}
+  WorkerServiceImpl(nix::Store& store) : store_(store) {}
 
   Status IsValidPath(grpc::ServerContext* context, const StorePath* request,
                      nix::proto::IsValidPathResponse* response) override {
@@ -221,7 +221,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
       nix::proto::BuildDerivationResponse* response) override {
     auto drv_path = request->drv_path().path();
     store_->assertStorePath(drv_path);
-    auto drv = BasicDerivation::from_proto(&request->derivation(), store_);
+    auto drv = BasicDerivation::from_proto(&request->derivation(), *store_);
 
     auto build_mode = nix::build_mode_from(request->build_mode());
     if (!build_mode) {
@@ -282,12 +282,11 @@ class WorkerServiceImpl final : public WorkerService::Service {
   };
 
  private:
-  // TODO(tazjin): Who owns the store?
-  nix::Store* store_;
+  ref<nix::Store> store_;
 };
 
-std::unique_ptr<WorkerService::Service> NewWorkerService(nix::Store* store) {
-  return std::make_unique<WorkerServiceImpl>(store);
+WorkerService::Service* NewWorkerService(std::shared_ptr<nix::Store> store) {
+  return new WorkerServiceImpl(store);
 }
 
 }  // namespace nix::daemon
