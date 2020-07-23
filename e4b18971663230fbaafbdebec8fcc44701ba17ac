@@ -22,6 +22,29 @@
       "revId": "e4b18971663230fbaafbdebec8fcc44701ba17ac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70b7e653_862167bf",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 23
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-23T19:35:55Z",
+      "side": 1,
+      "message": "I think it should default to /var/lib/panettone (since you also have the explicit dev mode start form below)",
+      "range": {
+        "startLine": 293,
+        "startChar": 60,
+        "endLine": 293,
+        "endChar": 73
+      },
+      "revId": "e4b18971663230fbaafbdebec8fcc44701ba17ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
