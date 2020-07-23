@@ -6,6 +6,6 @@ namespace nix {
 
 class Store;
 
-void printDotGraph(const ref<Store>& store, const PathSet& roots);
+void printDotGraph(const std::shared_ptr<Store>& store, const PathSet& roots);
 
 }  // namespace nix

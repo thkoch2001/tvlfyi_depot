@@ -631,7 +631,8 @@ void Store::buildPaths(const PathSet& paths, BuildMode buildMode) {
   }
 }
 
-void copyStorePath(ref<Store> srcStore, const ref<Store>& dstStore,
+void copyStorePath(std::shared_ptr<Store> srcStore,
+                   const std::shared_ptr<Store>& dstStore,
                    const Path& storePath, RepairFlag repair,
                    CheckSigsFlag checkSigs) {
   auto srcUri = srcStore->getUri();
@@ -692,7 +693,7 @@ void copyStorePath(ref<Store> srcStore, const ref<Store>& dstStore,
   dstStore->addToStore(*info, *source, repair, checkSigs);
 }
 
-void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
+void copyPaths(std::shared_ptr<Store> srcStore, std::shared_ptr<Store> dstStore,
                const PathSet& storePaths, RepairFlag repair,
                CheckSigsFlag checkSigs, SubstituteFlag substitute) {
   PathSet valid = dstStore->queryValidPaths(storePaths, substitute);
@@ -754,7 +755,8 @@ void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
       });
 }
 
-void copyClosure(const ref<Store>& srcStore, const ref<Store>& dstStore,
+void copyClosure(const std::shared_ptr<Store>& srcStore,
+                 const std::shared_ptr<Store>& dstStore,
                  const PathSet& storePaths, RepairFlag repair,
                  CheckSigsFlag checkSigs, SubstituteFlag substitute) {
   PathSet closure;
@@ -941,8 +943,8 @@ std::pair<std::string, Store::Params> splitUriAndParams(
   return {uri, params};
 }
 
-ref<Store> openStore(const std::string& uri_,
-                     const Store::Params& extraParams) {
+std::shared_ptr<Store> openStore(const std::string& uri_,
+                                 const Store::Params& extraParams) {
   auto [uri, uriParams] = splitUriAndParams(uri_);
   auto params = extraParams;
   params.insert(uriParams.begin(), uriParams.end());
@@ -951,7 +953,7 @@ ref<Store> openStore(const std::string& uri_,
     auto store = fun(uri, params);
     if (store) {
       store->warnUnknownSettings();
-      return ref<Store>(store);
+      return store;
     }
   }
 
@@ -996,9 +998,9 @@ static RegisterStoreImplementation regStore([](const std::string& uri,
   }
 });
 
-std::list<ref<Store>> getDefaultSubstituters() {
+std::list<std::shared_ptr<Store>> getDefaultSubstituters() {
   static auto stores([]() {
-    std::list<ref<Store>> stores;
+    std::list<std::shared_ptr<Store>> stores;
 
     StringSet done;
 
@@ -1022,9 +1024,8 @@ std::list<ref<Store>> getDefaultSubstituters() {
       addStore(uri);
     }
 
-    stores.sort([](ref<Store>& a, ref<Store>& b) {
-      return a->getPriority() < b->getPriority();
-    });
+    stores.sort(
+        [](auto& a, auto& b) { return a->getPriority() < b->getPriority(); });
 
     return stores;
   }());

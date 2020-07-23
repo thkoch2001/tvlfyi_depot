@@ -76,7 +76,7 @@ void processExpr(EvalState& state, const Strings& attrPaths, bool parseOnly,
           if (++rootNr > 1) {
             rootName += "-" + std::to_string(rootNr);
           }
-          auto store2 = state.store.dynamic_pointer_cast<LocalFSStore>();
+          auto store2 = std::dynamic_pointer_cast<LocalFSStore>(state.store);
           if (store2) {
             drvPath = store2->addPermRoot(drvPath, rootName, indirectRoot);
           }

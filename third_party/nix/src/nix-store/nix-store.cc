@@ -174,7 +174,7 @@ static void opRealise(Strings opFlags, Strings opArgs) {
   }
 
   if (settings.printMissing) {
-    printMissing(ref<Store>(store), willBuild, willSubstitute, unknown,
+    printMissing(std::shared_ptr<Store>(store), willBuild, willSubstitute, unknown,
                  downloadSize, narSize);
   }
 
@@ -492,7 +492,7 @@ static void opQuery(Strings opFlags, Strings opArgs) {
                                         useOutput, forceRealise);
         roots.insert(paths.begin(), paths.end());
       }
-      printDotGraph(ref<Store>(store), roots);
+      printDotGraph(std::shared_ptr<Store>(store), roots);
       break;
     }
 
@@ -503,7 +503,7 @@ static void opQuery(Strings opFlags, Strings opArgs) {
                                         useOutput, forceRealise);
         roots.insert(paths.begin(), paths.end());
       }
-      printGraphML(ref<Store>(store), roots);
+      printGraphML(std::shared_ptr<Store>(store), roots);
       break;
     }
 

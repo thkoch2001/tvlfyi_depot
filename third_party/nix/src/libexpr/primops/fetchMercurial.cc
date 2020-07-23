@@ -26,7 +26,7 @@ struct HgInfo {
 
 std::regex commitHashRegex("^[0-9a-fA-F]{40}$");
 
-HgInfo exportMercurial(ref<Store> store, const std::string& uri,
+HgInfo exportMercurial(std::shared_ptr<Store> store, const std::string& uri,
                        std::string rev, const std::string& name) {
   if (evalSettings.pureEval && rev == "")
     throw Error(

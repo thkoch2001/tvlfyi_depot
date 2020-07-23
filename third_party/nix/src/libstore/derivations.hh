@@ -86,7 +86,7 @@ struct Derivation : BasicDerivation {
 class Store;
 
 /* Write a derivation to the Nix store, and return its path. */
-Path writeDerivation(const ref<Store>& store, const Derivation& drv,
+Path writeDerivation(const std::shared_ptr<Store>& store, const Derivation& drv,
                      const std::string& name, RepairFlag repair = NoRepair);
 
 /* Read a derivation from a file. */

@@ -682,7 +682,7 @@ std::string storePathToHash(const Path& path);
 void checkStoreName(const std::string& name);
 
 /* Copy a path from one store to another. */
-void copyStorePath(ref<Store> srcStore, const ref<Store>& dstStore,
+void copyStorePath(std::shared_ptr<Store> srcStore, const std::shared_ptr<Store>& dstStore,
                    const Path& storePath, RepairFlag repair = NoRepair,
                    CheckSigsFlag checkSigs = CheckSigs);
 
@@ -691,13 +691,13 @@ void copyStorePath(ref<Store> srcStore, const ref<Store>& dstStore,
    (i.e. if A is a reference of B, then A is copied before B), but
    the set of store paths is not automatically closed; use
    copyClosure() for that. */
-void copyPaths(ref<Store> srcStore, ref<Store> dstStore,
+void copyPaths(std::shared_ptr<Store> srcStore, std::shared_ptr<Store> dstStore,
                const PathSet& storePaths, RepairFlag repair = NoRepair,
                CheckSigsFlag checkSigs = CheckSigs,
                SubstituteFlag substitute = NoSubstitute);
 
 /* Copy the closure of the specified paths from one store to another. */
-void copyClosure(const ref<Store>& srcStore, const ref<Store>& dstStore,
+void copyClosure(const std::shared_ptr<Store>& srcStore, const std::shared_ptr<Store>& dstStore,
                  const PathSet& storePaths, RepairFlag repair = NoRepair,
                  CheckSigsFlag checkSigs = CheckSigs,
                  SubstituteFlag substitute = NoSubstitute);
@@ -736,8 +736,9 @@ void removeTempRoots();
    You can pass parameters to the store implementation by appending
    ‘?key=value&key=value&...’ to the URI.
 */
-ref<Store> openStore(const std::string& uri = settings.storeUri.get(),
-                     const Store::Params& extraParams = Store::Params());
+std::shared_ptr<Store> openStore(
+    const std::string& uri = settings.storeUri.get(),
+    const Store::Params& extraParams = Store::Params());
 
 enum StoreType { tDaemon, tLocal, tOther };
 
@@ -746,7 +747,7 @@ StoreType getStoreType(const std::string& uri = settings.storeUri.get(),
 
 /* Return the default substituter stores, defined by the
    ‘substituters’ option and various legacy options. */
-std::list<ref<Store>> getDefaultSubstituters();
+std::list<std::shared_ptr<Store>> getDefaultSubstituters();
 
 /* Store implementation registration. */
 typedef std::function<std::shared_ptr<Store>(const std::string& uri,
