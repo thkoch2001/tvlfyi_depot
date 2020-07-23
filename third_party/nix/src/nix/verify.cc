@@ -50,8 +50,8 @@ struct CmdVerify final : StorePathsCommand {
     };
   }
 
-  void run(ref<Store> store, Paths storePaths) override {
-    std::vector<ref<Store>> substituters;
+  void run(std::shared_ptr<Store> store, Paths storePaths) override {
+    std::vector<std::shared_ptr<Store>> substituters;
     for (auto& s : substituterUris) {
       substituters.push_back(openStore(s));
     }

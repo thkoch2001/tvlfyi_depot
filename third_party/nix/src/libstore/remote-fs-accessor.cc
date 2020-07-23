@@ -9,7 +9,7 @@
 
 namespace nix {
 
-RemoteFSAccessor::RemoteFSAccessor(const ref<Store>& store,
+RemoteFSAccessor::RemoteFSAccessor(const std::shared_ptr<Store>& store,
                                    const Path& cacheDir)
     : store(store), cacheDir(cacheDir) {
   if (!cacheDir.empty()) {

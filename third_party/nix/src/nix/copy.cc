@@ -67,16 +67,16 @@ struct CmdCopy final : StorePathsCommand {
     };
   }
 
-  ref<Store> createStore() override {
+  std::shared_ptr<Store> createStore() override {
     return srcUri.empty() ? StoreCommand::createStore() : openStore(srcUri);
   }
 
-  void run(ref<Store> srcStore, Paths storePaths) override {
+  void run(std::shared_ptr<Store> srcStore, Paths storePaths) override {
     if (srcUri.empty() && dstUri.empty()) {
       throw UsageError("you must pass '--from' and/or '--to'");
     }
 
-    ref<Store> dstStore = dstUri.empty() ? openStore() : openStore(dstUri);
+    auto dstStore = dstUri.empty() ? openStore() : openStore(dstUri);
 
     copyPaths(srcStore, dstStore, PathSet(storePaths.begin(), storePaths.end()),
               NoRepair, checkSigs, substitute);

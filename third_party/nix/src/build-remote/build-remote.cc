@@ -68,7 +68,7 @@ static int _main(int argc, char* argv[]) {
 
     settings.maxBuildJobs.set("1");  // hack to make tests with local?root= work
 
-    auto store = openStore().cast<LocalStore>();
+    auto store = std::dynamic_pointer_cast<LocalStore>(openStore());
 
     /* It would be more appropriate to use $XDG_RUNTIME_DIR, since
        that gets cleared on reboot, but it wouldn't work on macOS. */
@@ -240,8 +240,7 @@ static int _main(int argc, char* argv[]) {
 
     {
       DLOG(INFO) << "copying dependencies to '" << storeUri << "'";
-      copyPaths(store, ref<Store>(sshStore), inputs, NoRepair, NoCheckSigs,
-                substitute);
+      copyPaths(store, sshStore, inputs, NoRepair, NoCheckSigs, substitute);
     }
 
     uploadLock = -1;
@@ -267,8 +266,7 @@ static int _main(int argc, char* argv[]) {
     if (!missing.empty()) {
       DLOG(INFO) << "copying outputs from '" << storeUri << "'";
       store->locksHeld.insert(missing.begin(), missing.end()); /* FIXME: ugly */
-      copyPaths(ref<Store>(sshStore), store, missing, NoRepair, NoCheckSigs,
-                NoSubstitute);
+      copyPaths(sshStore, store, missing, NoRepair, NoCheckSigs, NoSubstitute);
     }
 
     return 0;

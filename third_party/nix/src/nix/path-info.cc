@@ -73,7 +73,7 @@ struct CmdPathInfo final : StorePathsCommand, MixJSON {
     std::cout << fmt("\t%6.1f%c", res, idents.at(power));
   }
 
-  void run(ref<Store> store, Paths storePaths) override {
+  void run(std::shared_ptr<Store> store, Paths storePaths) override {
     size_t pathLen = 0;
     for (auto& storePath : storePaths) {
       pathLen = std::max(pathLen, storePath.size());

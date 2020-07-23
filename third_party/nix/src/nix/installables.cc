@@ -198,7 +198,7 @@ std::string attrRegex = R"([A-Za-z_][A-Za-z0-9-_+]*)";
 static std::regex attrPathRegex(fmt(R"(%1%(\.%1%)*)", attrRegex));
 
 static std::vector<std::shared_ptr<Installable>> parseInstallables(
-    SourceExprCommand& cmd, const ref<Store>& store,
+    SourceExprCommand& cmd, const std::shared_ptr<Store>& store,
     std::vector<std::string> ss, bool useDefaultInstallables) {
   std::vector<std::shared_ptr<Installable>> result;
 
@@ -232,17 +232,16 @@ static std::vector<std::shared_ptr<Installable>> parseInstallables(
   return result;
 }
 
-std::shared_ptr<Installable> parseInstallable(SourceExprCommand& cmd,
-                                              const ref<Store>& store,
-                                              const std::string& installable,
-                                              bool useDefaultInstallables) {
+std::shared_ptr<Installable> parseInstallable(
+    SourceExprCommand& cmd, const std::shared_ptr<Store>& store,
+    const std::string& installable, bool useDefaultInstallables) {
   auto installables = parseInstallables(cmd, store, {installable}, false);
   assert(installables.size() == 1);
   return installables.front();
 }
 
 Buildables build(
-    const ref<Store>& store, RealiseMode mode,
+    const std::shared_ptr<Store>& store, RealiseMode mode,
     const std::vector<std::shared_ptr<Installable>>& installables) {
   if (mode != Build) {
     settings.readOnlyMode = true;
@@ -280,7 +279,7 @@ Buildables build(
 }
 
 PathSet toStorePaths(
-    const ref<Store>& store, RealiseMode mode,
+    const std::shared_ptr<Store>& store, RealiseMode mode,
     const std::vector<std::shared_ptr<Installable>>& installables) {
   PathSet outPaths;
 
@@ -293,7 +292,7 @@ PathSet toStorePaths(
   return outPaths;
 }
 
-Path toStorePath(const ref<Store>& store, RealiseMode mode,
+Path toStorePath(const std::shared_ptr<Store>& store, RealiseMode mode,
                  const std::shared_ptr<Installable>& installable) {
   auto paths = toStorePaths(store, mode, {installable});
 
@@ -306,7 +305,7 @@ Path toStorePath(const ref<Store>& store, RealiseMode mode,
 }
 
 PathSet toDerivations(
-    const ref<Store>& store,
+    const std::shared_ptr<Store>& store,
     const std::vector<std::shared_ptr<Installable>>& installables,
     bool useDeriver) {
   PathSet drvPaths;

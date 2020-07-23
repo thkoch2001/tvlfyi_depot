@@ -69,7 +69,7 @@ struct CmdSearch final : SourceExprCommand, MixJSON {
                     "nix search git 'frontend|gui'"}};
   }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     settings.readOnlyMode = true;
 
     // Empty search string should match all packages

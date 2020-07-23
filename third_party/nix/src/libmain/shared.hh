@@ -41,9 +41,9 @@ void printGCWarning();
 
 class Store;
 
-void printMissing(const ref<Store>& store, const PathSet& paths);
+void printMissing(const std::shared_ptr<Store>& store, const PathSet& paths);
 
-void printMissing(const ref<Store>& store, const PathSet& willBuild,
+void printMissing(const std::shared_ptr<Store>& store, const PathSet& willBuild,
                   const PathSet& willSubstitute, const PathSet& unknown,
                   unsigned long long downloadSize, unsigned long long narSize);
 
