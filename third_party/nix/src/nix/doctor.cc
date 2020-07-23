@@ -28,7 +28,7 @@ struct CmdDoctor final : StoreCommand {
     return "check your system for potential problems";
   }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     std::cout << "Store uri: " << store->getUri() << std::endl;
     std::cout << std::endl;
 
@@ -68,7 +68,7 @@ struct CmdDoctor final : StoreCommand {
     return true;
   }
 
-  static bool checkProfileRoots(const ref<Store>& store) {
+  static bool checkProfileRoots(const std::shared_ptr<Store>& store) {
     PathSet dirs;
 
     for (auto dir : absl::StrSplit(getEnv("PATH"), absl::ByChar(':'))) {
