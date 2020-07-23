@@ -142,4 +142,7 @@ in
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789ABCD]?", MODE:="0666"
     KERNEL=="ttyACM*", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", MODE:="0666"
   '';
+
+  # Necessary to get steam working
+  hardware.opengl.driSupport32Bit = true;
 }

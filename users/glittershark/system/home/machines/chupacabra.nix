@@ -44,4 +44,9 @@ in {
       );
     };
   };
+
+  home.packages = with pkgs; [
+    steam
+    xorg.libxcb
+  ];
 }
