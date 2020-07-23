@@ -192,7 +192,7 @@ struct ExprAttrs : Expr {
     Pos pos;
     unsigned int displ;  // displacement
     AttrDef(Expr* e, const Pos& pos, bool inherited = false)
-        : inherited(inherited), e(e), pos(pos){};
+        : inherited(inherited), e(e), pos(pos), displ(0){};
     AttrDef(){};
   };
 
