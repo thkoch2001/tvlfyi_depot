@@ -135,6 +135,22 @@ To set expectations, there are some explicit non-goals, too.
   Once we have OCI-compatible sandboxes and a store protocol it will
   be possible to reintroduce these with less friction.
 
+## Building
+
+To build the project, set up an out-of-tree cmake directory and run cmake in
+nix-shell.
+
+```
+mkdir ~/build/tvix
+cd ~/build/tvix
+
+nix-shell $DEPOT_PATH -A third_party.nix
+
+# Disable clang-tidy for quicker builds
+cmake $DEPOT_PATH -DCLANG_TIDY_PATH=""
+make -j16 -l12
+```
+
 ## Contributing to the fork
 
 The TVL depot's default [contribution guidelines][contributing] apply.
