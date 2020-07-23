@@ -135,7 +135,11 @@ updated issue"
 (defun initialize-persistence (data-dir)
   "Initialize the Panettone persistence system, storing data in DATA-DIR"
   (ensure-directories-exist data-dir)
-  (setq *p-system* (cl-prevalence:make-prevalence-system data-dir))
+  (setq *p-system*
+        (cl-prevalence:make-prevalence-system
+         (concatenate 'string
+                      data-dir
+                      "/snapshot.xml")))
 
   (when (null (list-issues *p-system*))
     (cl-prevalence:tx-create-id-counter *p-system*)))
