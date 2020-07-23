@@ -81,7 +81,8 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     mkdir build
     cd build
     cmake .. \
-      -DCMAKE_CXX_FLAGS='-Wall -Werror' \
+      -DCMAKE_CXX_FLAGS='-Wall -Werror -isystem ${pkgs.llvmPackages.libcxx}/include/c++/v1' \
+      -DCMAKE_CXX_CLANG_TIDY="${pkgs.clang-tools}/bin/clang-tidy" \
       -DCMAKE_INSTALL_PREFIX=$out \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF \
