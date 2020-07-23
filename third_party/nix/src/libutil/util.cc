@@ -167,6 +167,7 @@ Path canonPath(const Path& path, bool resolveSymlinks) {
   return s.empty() ? "/" : s;
 }
 
+// TODO(grfn) remove in favor of std::filesystem::path::parent_path()
 Path dirOf(absl::string_view path) {
   Path::size_type pos = path.rfind('/');
   if (pos == std::string::npos) {
@@ -175,6 +176,7 @@ Path dirOf(absl::string_view path) {
   return pos == 0 ? "/" : Path(path, 0, pos);
 }
 
+// TODO(grfn) remove in favor of std::filesystem::path::root_name()
 std::string baseNameOf(const Path& path) {
   if (path.empty()) {
     return "";
@@ -558,6 +560,7 @@ Path getDataDir() {
   return dataDir;
 }
 
+// TODO(grfn): Remove in favor of std::filesystem::create_directories
 Paths createDirs(const Path& path) {
   Paths created;
   if (path == "/") {
