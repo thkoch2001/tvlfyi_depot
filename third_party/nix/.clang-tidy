@@ -1,0 +1,3 @@
+---
+WarningsAsErrors: 'abseil-*,clang-analyzer-unix.Vfork'
+...
