@@ -81,7 +81,6 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     mkdir build
     cd build
     cmake .. \
-      -DCMAKE_CXX_FLAGS='-Wall -Werror' \
       -DCMAKE_INSTALL_PREFIX=$out \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF \
@@ -109,6 +108,9 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   # Forward the location of the generated Protobuf / gRPC files so
   # that they can be included by CMake.
   NIX_PROTO_SRCS = protoSrcs;
+
+  # Work around broken system header include flags in the cxx toolchain.
+  LIBCXX_INCLUDE = "${pkgs.llvmPackages.libcxx}/include/c++/v1";
 
   # Install the various symlinks to the Nix binary which users expect
   # to exist.
