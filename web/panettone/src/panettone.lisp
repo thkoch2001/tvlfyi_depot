@@ -192,7 +192,7 @@ updated issue"
     (when message
       (who:htm (:div :class "alert" (who:esc message))))))
 
-(defun render/login (&optional message)
+(defun render/login (&key message (original-uri "/"))
   (render
     (:div
      :class "login-form"
@@ -203,6 +203,8 @@ updated issue"
       (render/alert message)
       (:form
        :method :post :action "/login"
+       (:input :type "hidden" :name "original-uri"
+               :value original-uri)
        (:div
         (:label :for "username"
                 "Username")
@@ -378,20 +380,25 @@ updated issue"
 (defun @auth (next)
   (if-let ((*user* (hunchentoot:session-value 'user)))
     (funcall next)
-    (hunchentoot:redirect "/login")))
+    (hunchentoot:redirect
+     (format nil "/login?original-uri=~A"
+             (drakma:url-encode
+              (hunchentoot:request-uri*)
+              :utf-8)))))
 
-(defroute login-form ("/login" :method :get) ()
+(defroute login-form ("/login" :method :get)
+    (original-uri)
   (if (hunchentoot:session-value 'user)
-      (hunchentoot:redirect "/")
-      (render/login)))
+      (hunchentoot:redirect (or original-uri "/"))
+      (render/login :original-uri original-uri)))
 
 (defroute submit-login ("/login" :method :post)
-    (&post username password)
+    (&post original-uri username password)
   (if-let ((user (authenticate-user username password)))
     (progn
       (setf (hunchentoot:session-value 'user) user)
-      (hunchentoot:redirect "/"))
-    (render/login "Invalid credentials")))
+      (hunchentoot:redirect (or original-uri "/")))
+    (render/login :message "Invalid credentials")))
 
 (defroute index ("/" :decorators (@auth)) ()
   (let ((issues (open-issues *p-system*)))
