@@ -57,7 +57,28 @@
       :outline "none"
 
       (.issue-subject
-       :color ,color/primary)))))
+       :color ,color/primary)))
+
+    (.comment-count
+     :color ,color/gray)))
+
+(defparameter comment-styles
+  `((.issue-comments
+     :border-top "1px" "solid" ,color/gray
+     :padding-top "1rem"
+     :padding-left "2rem"
+
+     (.comment-info
+      :color ,color/gray
+      :margin 0
+      :padding-top "1rem")
+
+     (.comment
+      :padding-top "1rem"
+      :padding-bottom "1rem"
+      :border-bottom "1px" "solid" ,color/gray
+
+      (p :margin 0)))))
 
 (defparameter form-styles
   `(((:or (:and input (:or (:= type "text")
@@ -85,6 +106,7 @@
 (defparameter styles
   `(,@form-styles
     ,@issue-list-styles
+    ,@comment-styles
 
     (body
      :font-family "sans-serif"

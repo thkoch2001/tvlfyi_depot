@@ -8,7 +8,8 @@
 (defclass/std issue-comment ()
   ((body :type string)
    (author-dn :type string)
-   (created-at :type local-time:timestamp)))
+   (created-at :type local-time:timestamp
+               :std (local-time:now))))
 
 (defclass/std issue (cl-prevalence:object-with-id)
   ((subject body :type string :std "")
@@ -234,7 +235,14 @@ updated issue"
                 (:span :class "issue-number"
                        (who:esc (format nil "#~A" issue-id)))
                 " - "
-                (created-by-at issue))))))))))
+                (created-by-at issue)
+                (let ((num-comments (length (issue-comments issue))))
+                  (unless (zerop num-comments)
+                    (who:htm
+                     (:span :class "comment-count"
+                            " - "
+                            (who:esc
+                             (format nil "~A comment~:p" num-comments)))))))))))))))
 
 (defun render/new-issue ()
   (render
@@ -258,9 +266,18 @@ updated issue"
             (:input :type "submit"
                     :value "Create Issue")))))
 
-(comment
- (format nil "foo: ~A" "foo")
- )
+(defun render/new-comment (issue-id)
+  (who:with-html-output (*standard-output*)
+    (:form
+     :class "new-comment"
+     :method "post"
+     :action (format nil "/issues/~A/comments" issue-id)
+     (:div
+      (:textarea :name "body"
+                 :placeholder "Leave a comment"
+                 :rows 5))
+     (:input :type "submit"
+             :value "Comment"))))
 
 (defun render/issue (issue)
   (check-type issue issue)
@@ -271,7 +288,24 @@ updated issue"
            (who:esc (format nil "#~A" (get-id issue)))))
     (:main
      (:p (created-by-at issue))
-     (:p (who:esc (body issue))))))
+     (:p (who:esc (body issue)))
+     (let ((comments (issue-comments issue)))
+       (who:htm
+        (:div
+         :class "issue-comments"
+         (dolist (comment comments)
+           (let ((author (author comment)))
+             (who:htm
+              (:div
+               :class "comment"
+               (:p (who:esc (body comment)))
+               (:p
+                :class "comment-info"
+                (:span :class "username"
+                       (who:esc (displayname author))
+                       " at "
+                       (who:esc (format-dottime (created-at comment)))))))))
+         (render/new-comment (get-id issue))))))))
 
 (defun render/not-found (entity-type)
   (render
@@ -323,6 +357,21 @@ updated issue"
     (&path (id 'integer))
   (handler-case
       (render/issue (get-issue *p-system* id))
+    (issue-not-found (_)
+      (render/not-found "Issue"))))
+
+(defroute handle-create-comment
+    ("/issues/:id/comments" :decorators (@auth)
+                            :method :post)
+    (&path (id 'integer) &post body)
+  (handler-case
+      (progn
+        (cl-prevalence:execute-transaction
+         (add-comment *p-system* id
+                      :body body
+                      :author-dn (dn *user*)))
+        (cl-prevalence:snapshot *p-system*)
+        (hunchentoot:redirect (format nil "/issues/~A" id)))
     (issue-not-found (_)
       (render/not-found "Issue"))))
 
