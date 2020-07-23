@@ -6,6 +6,7 @@ depot.nix.buildLisp.program {
   deps = with depot.third_party.lisp; [
     cl-prevalence
     cl-who
+    drakma
     defclass-std
     easy-routes
     hunchentoot
