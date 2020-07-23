@@ -29,7 +29,7 @@ TEST_F(JSONValueTest, null) {
   Value v;
   PathSet ps;
   std::shared_ptr<Store> store = std::make_shared<DummyStore>();
-  EvalState s({}, ref<Store>(store));
+  EvalState s({}, std::shared_ptr<Store>(store));
 
   mkNull(v);
   printValueAsJSON(s, true, v, ss, ps);
@@ -39,7 +39,7 @@ TEST_F(JSONValueTest, null) {
 TEST_F(JSONValueTest, BoolFalse) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -51,7 +51,7 @@ TEST_F(JSONValueTest, BoolFalse) {
 TEST_F(JSONValueTest, BoolTrue) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -63,7 +63,7 @@ TEST_F(JSONValueTest, BoolTrue) {
 TEST_F(JSONValueTest, IntPositive) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -75,7 +75,7 @@ TEST_F(JSONValueTest, IntPositive) {
 TEST_F(JSONValueTest, IntNegative) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -87,7 +87,7 @@ TEST_F(JSONValueTest, IntNegative) {
 TEST_F(JSONValueTest, String) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -99,7 +99,7 @@ TEST_F(JSONValueTest, String) {
 TEST_F(JSONValueTest, StringQuotes) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -111,7 +111,7 @@ TEST_F(JSONValueTest, StringQuotes) {
 TEST_F(JSONValueTest, Path) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -123,7 +123,7 @@ TEST_F(JSONValueTest, Path) {
 TEST_F(JSONValueTest, PathNoCopy) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -144,7 +144,7 @@ TEST_F(XMLValueTest, null) {
   Value v;
   PathSet ps;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({}, ref<Store>(store));
+  EvalState s({}, std::shared_ptr<Store>(store));
 
   mkNull(v);
   printValueAsXML(s, true, true, v, ss, ps);
@@ -154,7 +154,7 @@ TEST_F(XMLValueTest, null) {
 TEST_F(XMLValueTest, BoolFalse) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -166,7 +166,7 @@ TEST_F(XMLValueTest, BoolFalse) {
 TEST_F(XMLValueTest, BoolTrue) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -178,7 +178,7 @@ TEST_F(XMLValueTest, BoolTrue) {
 TEST_F(XMLValueTest, IntPositive) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -190,7 +190,7 @@ TEST_F(XMLValueTest, IntPositive) {
 TEST_F(XMLValueTest, IntNegative) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -202,7 +202,7 @@ TEST_F(XMLValueTest, IntNegative) {
 TEST_F(XMLValueTest, String) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -214,7 +214,7 @@ TEST_F(XMLValueTest, String) {
 TEST_F(XMLValueTest, StringQuotes) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -230,7 +230,7 @@ TEST_F(XMLValueTest, StringQuotes) {
 TEST_F(XMLValueTest, Path) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 
@@ -246,7 +246,7 @@ TEST_F(XMLValueTest, Path) {
 TEST_F(XMLValueTest, PathNoCopy) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
-  EvalState s({"."}, ref<Store>(store));
+  EvalState s({"."}, std::shared_ptr<Store>(store));
   Value v;
   PathSet ps;
 

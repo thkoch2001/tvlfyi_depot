@@ -21,7 +21,7 @@ struct CmdOptimiseStore final : StoreCommand {
     };
   }
 
-  void run(ref<Store> store) override { store->optimiseStore(); }
+  void run(std::shared_ptr<Store> store) override { store->optimiseStore(); }
 };
 
 static RegisterCommand r1(make_ref<CmdOptimiseStore>());

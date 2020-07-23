@@ -34,7 +34,7 @@ struct DrvInfo : public gc {
 
   DrvInfo(EvalState& state) : state(&state){};
   DrvInfo(EvalState& state, std::string attrPath, Bindings* attrs);
-  DrvInfo(EvalState& state, const ref<Store>& store,
+  DrvInfo(EvalState& state, const std::shared_ptr<Store>& store,
           const std::string& drvPathWithOutputs);
 
   std::string queryName() const;

@@ -7,7 +7,7 @@
 namespace nix {
 
 class RemoteFSAccessor : public FSAccessor {
-  ref<Store> store;
+  std::shared_ptr<Store> store;
 
   std::map<Path, ref<FSAccessor>> nars;
 
@@ -23,7 +23,7 @@ class RemoteFSAccessor : public FSAccessor {
                   const ref<FSAccessor>& narAccessor);
 
  public:
-  RemoteFSAccessor(const ref<Store>& store,
+  RemoteFSAccessor(const std::shared_ptr<Store>& store,
                    const /* FIXME: use std::optional */ Path& cacheDir = "");
 
   Stat stat(const Path& path) override;
