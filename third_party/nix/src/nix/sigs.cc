@@ -30,13 +30,13 @@ struct CmdCopySigs final : StorePathsCommand {
     return "copy path signatures from substituters (like binary caches)";
   }
 
-  void run(ref<Store> store, Paths storePaths) override {
+  void run(std::shared_ptr<Store> store, Paths storePaths) override {
     if (substituterUris.empty()) {
       throw UsageError("you must specify at least one substituter using '-s'");
     }
 
     // FIXME: factor out commonality with MixVerify.
-    std::vector<ref<Store>> substituters;
+    std::vector<std::shared_ptr<Store>> substituters;
     for (auto& s : substituterUris) {
       substituters.push_back(openStore(s));
     }
@@ -115,7 +115,7 @@ struct CmdSignPaths final : StorePathsCommand {
 
   std::string description() override { return "sign the specified paths"; }
 
-  void run(ref<Store> store, Paths storePaths) override {
+  void run(std::shared_ptr<Store> store, Paths storePaths) override {
     if (secretKeyFile.empty()) {
       throw UsageError("you must specify a secret key file using '-k'");
     }

@@ -1,3 +1,4 @@
+#include <memory>
 #include <queue>
 
 #include <absl/strings/str_split.h>
@@ -81,7 +82,7 @@ struct CmdRun final : InstallablesCommand {
     };
   }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     auto outPaths = toStorePaths(store, Build, installables);
 
     auto accessor = store->getFSAccessor();
@@ -163,7 +164,7 @@ struct CmdRun final : InstallablesCommand {
        unshare(CLONE_NEWUSER) doesn't work in a multithreaded
        program (which "nix" is), so we exec() a single-threaded
        helper program (chrootHelper() below) to do the work. */
-    auto store2 = store.dynamic_pointer_cast<LocalStore>();
+    auto store2 = std::dynamic_pointer_cast<LocalStore>(store);
 
     if (store2 && store->storeDir != store2->realStoreDir) {
       Strings helperArgs = {chrootHelperName, store->storeDir,

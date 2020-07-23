@@ -31,7 +31,7 @@ struct CmdEval final : MixJSON, InstallableCommand {
     };
   }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     if (raw && json) {
       throw UsageError("--raw and --json are mutually exclusive");
     }

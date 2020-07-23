@@ -117,7 +117,7 @@ class AttrSetTest : public ::testing::Test {
   void SetUp() override {
     nix::initGC();
     auto store = std::make_shared<DummyStore>();
-    eval_state_ = new EvalState({"."}, ref<Store>(store));
+    eval_state_ = new EvalState({"."}, std::shared_ptr<Store>(store));
     symbol_table = &eval_state_->symbols;
   }
 

@@ -27,7 +27,7 @@ struct GitInfo {
 
 std::regex revRegex("^[0-9a-fA-F]{40}$");
 
-GitInfo exportGit(ref<Store> store, const std::string& uri,
+GitInfo exportGit(std::shared_ptr<Store> store, const std::string& uri,
                   std::optional<std::string> ref, std::string rev,
                   const std::string& name) {
   if (evalSettings.pureEval && rev == "")
