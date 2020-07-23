@@ -191,7 +191,7 @@ struct RetrieveRegularNARSink : ParseSink {
   }
 };
 
-static void performOp(TunnelLogger* logger, const ref<Store>& store,
+static void performOp(TunnelLogger* logger, const std::shared_ptr<Store>& store,
                       bool trusted, unsigned int clientVersion, Source& from,
                       Sink& to, unsigned int op) {
   switch (op) {
@@ -326,7 +326,7 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
         throw Error("regular file expected");
       }
 
-      auto store2 = store.dynamic_pointer_cast<LocalStore>();
+      auto store2 = std::dynamic_pointer_cast<LocalStore>(store);
       if (!store2) {
         throw Error("operation is only supported by LocalStore");
       }
@@ -970,10 +970,10 @@ static void daemonLoop(char** argv) {
 
     struct sockaddr_un addr;
     addr.sun_family = AF_UNIX;
-    strncpy(addr.sun_path, socketPathRel.c_str(), sizeof(addr.sun_path));
-    if (addr.sun_path[sizeof(addr.sun_path) - 1] != '\0') {
+    if (socketPathRel.size() >= sizeof(addr.sun_path)) {
       throw Error(format("socket path '%1%' is too long") % socketPathRel);
     }
+    strcpy(addr.sun_path, socketPathRel.c_str());
 
     unlink(socketPath.c_str());
 
@@ -1051,6 +1051,7 @@ static void daemonLoop(char** argv) {
       options.errorPrefix = "unexpected Nix daemon error: ";
       options.dieWithParent = false;
       options.runExitHandlers = true;
+      options.allowVfork = false;
       startProcess(
           [&]() {
             fdSocket = -1;
@@ -1124,10 +1125,10 @@ static int _main(int argc, char** argv) {
         auto socketName = baseNameOf(socketPath);
         auto addr = sockaddr_un{};
         addr.sun_family = AF_UNIX;
-        strncpy(addr.sun_path, socketName.c_str(), sizeof(addr.sun_path));
-        if (addr.sun_path[sizeof(addr.sun_path) - 1] != '\0') {
+        if (socketName.size() + 1 >= sizeof(addr.sun_path)) {
           throw Error(format("socket name %1% is too long") % socketName);
         }
+        strcpy(addr.sun_path, socketName.c_str());
 
         if (connect(s, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
           throw SysError(format("cannot connect to daemon at %1%") %
@@ -1175,4 +1176,4 @@ static int _main(int argc, char** argv) {
   }
 }
 
-static RegisterLegacyCommand s1("nix-daemon", _main);
+// static RegisterLegacyCommand s1("nix-daemon", _main);
