@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <iostream>
 
+#include <absl/strings/escaping.h>
 #include <fcntl.h>
 #include <glog/logging.h>
 #include <sys/stat.h>
@@ -1170,11 +1171,11 @@ static void opGenerateBinaryCacheKey(Strings opFlags, Strings opArgs) {
   }
 
   writeFile(publicKeyFile, keyName + ":" +
-                               base64Encode(std::string(
+                               absl::Base64Escape(std::string(
                                    (char*)pk, crypto_sign_PUBLICKEYBYTES)));
   umask(0077);
   writeFile(secretKeyFile, keyName + ":" +
-                               base64Encode(std::string(
+                               absl::Base64Escape(std::string(
                                    (char*)sk, crypto_sign_SECRETKEYBYTES)));
 #else
   throw Error(
