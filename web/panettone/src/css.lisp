@@ -19,6 +19,9 @@
 (defparameter color/success-2
   "rgb(168, 249, 166)")
 
+(defparameter color/failure
+  "rgb(247, 167, 167)")
+
 (defun button (selector)
   `((,selector
      :background-color ,color/success
@@ -32,8 +35,7 @@
     ((:and ,selector (:or :active :focus))
      :box-shadow "0.1rem" "0.1rem" "0" "0" "rgba(0,0,0,0.05)"
      :outline "none"
-     :border "none"
-     :background-color ,color/success-2)))
+     :border "none")))
 
 (defparameter issue-list-styles
   `((.issue-list
@@ -103,9 +105,19 @@
 
     ,@(button '(:and input (:= type "submit")))))
 
+(defparameter issue-styles
+  `((.issue-info
+     :display "flex"
+     :justify-content "space-between"
+     :align-items "center"
+
+     (.close-issue
+      :background-color ,color/failure))))
+
 (defparameter styles
   `(,@form-styles
     ,@issue-list-styles
+    ,@issue-styles
     ,@comment-styles
 
     (body
