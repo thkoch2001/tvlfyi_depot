@@ -1,3 +1,5 @@
 ---
-WarningsAsErrors: 'abseil-*,clang-analyzer-security.insecureAPI.strcpy'
+WarningsAsErrors: 'abseil-*,clang-analyzer-security.insecureAPI.strcpy,clang-analyzer-optin.cplusplus.UninitializedObject'
+LineFilter:
+  - {name: "src/cpptoml/cpptoml.h"}
 ...
