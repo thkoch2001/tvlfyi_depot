@@ -32,4 +32,20 @@ of unprivileged users.</para>
 
 </refsection>
 
+<refsection><title>Options</title>
+
+  <variablelist>
+
+  <varlistentry><term><option>--pipe</option></term>
+
+    <listitem><para>Causes the nix daemon to forward stdin and stdout to and
+    from the actual daemon socket. This is used when communicating with a remote
+    store over SSH</para></listitem>
+
+  </varlistentry>
+
+  </variablelist>
+
+</refsection>
+
 </refentry>
