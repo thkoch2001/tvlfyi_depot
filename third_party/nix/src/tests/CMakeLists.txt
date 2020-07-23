@@ -11,6 +11,14 @@ target_link_libraries(attr-set
 
 gtest_discover_tests(attr-set)
 
+add_executable(hash_test hash_test.cc)
+target_link_libraries(hash_test
+  nixutil
+  GTest::gtest_main
+)
+
+gtest_discover_tests(hash_test)
+
 add_executable(value-to-json value-to-json.cc)
 target_link_libraries(value-to-json
   nixexpr

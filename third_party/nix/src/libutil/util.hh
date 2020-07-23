@@ -359,10 +359,6 @@ std::string filterANSIEscapes(
     const std::string& s, bool filterAll = false,
     unsigned int width = std::numeric_limits<unsigned int>::max());
 
-/* Base64 encoding/decoding. */
-std::string base64Encode(const std::string& s);
-std::string base64Decode(const std::string& s);
-
 /* Get a value for the specified key from an associate container, or a
    default value if the key doesn't exist. */
 template <class T>
