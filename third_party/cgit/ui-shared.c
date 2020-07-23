@@ -899,7 +899,7 @@ static int print_this_commit_option(void)
 	struct object_id oid;
 	if (get_oid(ctx.qry.head, &oid))
 		return 1;
-	html_option("this commit", oid_to_hex(&oid), ctx.qry.head);
+	html_option(oid_to_hex(&oid), "this commit", ctx.qry.head);
 	return 0;
 }
 
