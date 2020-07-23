@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc58933b_40daf0f3",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 4
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-23T20:43:41Z",
+      "side": 1,
+      "message": "Errrm, why is this going to *STANDARD-OUTPUT*?",
+      "revId": "db3c79750c6445a479bdaaf32ee28ab216559b7b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
