@@ -54,10 +54,23 @@ of your commit and want to submit it for review, you push it to a git ref called
 `refs/for/canon`. This designates the commits as changelists (CLs) targeted for
 the `canon` branch.
 
+Sending a change for review is done by pushing to a special target. You can set
+this to be the default push target through your git configuration:
+
+```
+git config remote.origin.url "ssh://$USER@code.tvl.fyi:29418/depot"
+git config remote.origin.push HEAD:refs/for/canon
+```
+
+Then, after making your change, push to the default, or to a special target:
+
 ```
 Example:
 git commit -m 'docs(REVIEWS): Fixed all the errors in the reviews docs'
-git push origin HEAD:refs/for/canon
+git push origin
+
+# Uploading a work-in-progress CL:
+git push origin HEAD:refs/for/canon%wip
 ```
 
 TIP: Every individual commit will become a separate change. We do not merge
