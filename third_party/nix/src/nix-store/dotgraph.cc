@@ -79,7 +79,7 @@ void printClosure(const Path & nePath, const StoreExpr & fs)
 }
 #endif
 
-void printDotGraph(const ref<Store>& store, const PathSet& roots) {
+void printDotGraph(const std::shared_ptr<Store>& store, const PathSet& roots) {
   PathSet workList(roots);
   PathSet doneSet;
 

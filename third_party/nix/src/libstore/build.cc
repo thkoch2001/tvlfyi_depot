@@ -3892,7 +3892,7 @@ class SubstitutionGoal : public Goal {
   Path storePath;
 
   /* The remaining substituters. */
-  std::list<ref<Store>> subs;
+  std::list<std::shared_ptr<Store>> subs;
 
   /* The current substituter. */
   std::shared_ptr<Store> sub;
@@ -4001,7 +4001,7 @@ void SubstitutionGoal::init() {
   }
 
   subs = settings.useSubstitutes ? getDefaultSubstituters()
-                                 : std::list<ref<Store>>();
+                                 : std::list<std::shared_ptr<Store>>();
 
   tryNext();
 }
@@ -4143,9 +4143,10 @@ void SubstitutionGoal::tryToRun() {
       /* Wake up the worker loop when we're done. */
       Finally updateStats([this]() { outPipe.writeSide = -1; });
 
-      copyStorePath(ref<Store>(sub),
-                    ref<Store>(worker.store.shared_from_this()), storePath,
-                    repair, sub->isTrusted ? NoCheckSigs : CheckSigs);
+      copyStorePath(std::shared_ptr<Store>(sub),
+                    std::shared_ptr<Store>(worker.store.shared_from_this()),
+                    storePath, repair,
+                    sub->isTrusted ? NoCheckSigs : CheckSigs);
 
       promise.set_value();
     } catch (...) {

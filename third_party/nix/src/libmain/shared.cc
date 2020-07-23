@@ -36,7 +36,7 @@ void printGCWarning() {
   }
 }
 
-void printMissing(const ref<Store>& store, const PathSet& paths) {
+void printMissing(const std::shared_ptr<Store>& store, const PathSet& paths) {
   unsigned long long downloadSize;
   unsigned long long narSize;
   PathSet willBuild;
@@ -48,7 +48,7 @@ void printMissing(const ref<Store>& store, const PathSet& paths) {
                narSize);
 }
 
-void printMissing(const ref<Store>& store, const PathSet& willBuild,
+void printMissing(const std::shared_ptr<Store>& store, const PathSet& willBuild,
                   const PathSet& willSubstitute, const PathSet& unknown,
                   unsigned long long downloadSize, unsigned long long narSize) {
   if (!willBuild.empty()) {
