@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed52745f_d4722a0a",
+        "filename": "third_party/nix/.clang-tidy",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-23T19:48:29Z",
+      "side": 1,
+      "message": "expecting build failure; will upload new patch set with this removed if so.",
+      "range": {
+        "startLine": 2,
+        "startChar": 28,
+        "endLine": 2,
+        "endChar": 53
+      },
+      "revId": "84e5055513e0e654d364ed10490ce1acd3911c1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
