@@ -970,10 +970,10 @@ static void daemonLoop(char** argv) {
 
     struct sockaddr_un addr;
     addr.sun_family = AF_UNIX;
-    if (socketPathRel.size() >= sizeof(addr.sun_path)) {
+    strncpy(addr.sun_path, socketPathRel.c_str(), sizeof(addr.sun_path));
+    if (addr.sun_path[sizeof(addr.sun_path) - 1] != '\0') {
       throw Error(format("socket path '%1%' is too long") % socketPathRel);
     }
-    strcpy(addr.sun_path, socketPathRel.c_str());
 
     unlink(socketPath.c_str());
 
@@ -1125,10 +1125,10 @@ static int _main(int argc, char** argv) {
         auto socketName = baseNameOf(socketPath);
         auto addr = sockaddr_un{};
         addr.sun_family = AF_UNIX;
-        if (socketName.size() + 1 >= sizeof(addr.sun_path)) {
+        strncpy(addr.sun_path, socketName.c_str(), sizeof(addr.sun_path));
+        if (addr.sun_path[sizeof(addr.sun_path) - 1] != '\0') {
           throw Error(format("socket name %1% is too long") % socketName);
         }
-        strcpy(addr.sun_path, socketName.c_str());
 
         if (connect(s, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
           throw SysError(format("cannot connect to daemon at %1%") %
