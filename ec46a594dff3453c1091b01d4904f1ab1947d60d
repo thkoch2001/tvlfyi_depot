@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0fd89525_18661b4c",
+        "filename": "third_party/nix/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-23T22:00:11Z",
+      "side": 1,
+      "message": "Why these numbers specifically? Most people probably just want -j without specifying the actual thread count.",
+      "range": {
+        "startLine": 151,
+        "startChar": 6,
+        "endLine": 151,
+        "endChar": 9
+      },
+      "revId": "ec46a594dff3453c1091b01d4904f1ab1947d60d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
