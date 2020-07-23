@@ -5,6 +5,9 @@
 ;;; Data model
 ;;;
 
+(deftype issue-status ()
+  '(member :open :closed))
+
 (defclass/std issue-comment ()
   ((body :type string)
    (author-dn :type string)
@@ -15,6 +18,7 @@
   ((subject body :type string :std "")
    (author-dn :type string)
    (comments :std nil :type list :with-prefix)
+   (status :std 'open :type issue-status)
    (created-at :type local-time:timestamp
                :std (local-time:now))))
 
@@ -123,6 +127,13 @@ successful, `nil' otherwise"
 (defun list-issues (system)
   (cl-prevalence:find-all-objects system 'issue))
 
+(defun issues-with-status (system status)
+  (remove-if-not (lambda (issue) (eq (status issue) status))
+                 (list-issues system)))
+
+(defun open-issues (system) (issues-with-status system :open))
+(defun closed-issues (system) (issues-with-status system :closed))
+
 (defun create-issue (system &rest attrs)
   (cl-prevalence:tx-create-object
    system
@@ -214,6 +225,30 @@ updated issue"
                   (who:esc
                    (format-dottime (created-at issue)))))))
 
+(defun render/issue-list (&key issues)
+  (who:with-html-output (*standard-output*)
+    (:ol
+     :class "issue-list"
+     (dolist (issue issues)
+       (let ((issue-id (get-id issue)))
+         (who:htm
+          (:li
+           (:a :href (format nil "/issues/~A" issue-id)
+               (:p
+                (:span :class "issue-subject"
+                       (who:esc (subject issue))))
+               (:span :class "issue-number"
+                      (who:esc (format nil "#~A" issue-id)))
+               " - "
+               (created-by-at issue)
+               (let ((num-comments (length (issue-comments issue))))
+                 (unless (zerop num-comments)
+                   (who:htm
+                    (:span :class "comment-count"
+                           " - "
+                           (who:esc
+                            (format nil "~A comment~:p" num-comments))))))))))))))
+
 (defun render/index (&key issues)
   (render
     (:header
@@ -222,27 +257,20 @@ updated issue"
       :class "new-issue"
       :href "/issues/new" "New Issue"))
     (:main
-     (:ol
-      :class "issue-list"
-      (dolist (issue issues)
-        (let ((issue-id (get-id issue)))
-          (who:htm
-           (:li
-            (:a :href (format nil "/issues/~A" issue-id)
-                (:p
-                 (:span :class "issue-subject"
-                        (who:esc (subject issue))))
-                (:span :class "issue-number"
-                       (who:esc (format nil "#~A" issue-id)))
-                " - "
-                (created-by-at issue)
-                (let ((num-comments (length (issue-comments issue))))
-                  (unless (zerop num-comments)
-                    (who:htm
-                     (:span :class "comment-count"
-                            " - "
-                            (who:esc
-                             (format nil "~A comment~:p" num-comments)))))))))))))))
+     (:div
+      :class "issue-links"
+      (:a :href "/issues/closed" "View closed issues"))
+     (render/issue-list :issues issues))))
+
+(defun render/closed-issues (&key issues)
+  (render
+    (:header
+     (:h1 "Closed issues"))
+    (:main
+     (:div
+      :class "issue-links"
+      (:a :href "/" "View open isues"))
+     (render/issue-list :issues issues))))
 
 (defun render/new-issue ()
   (render
@@ -281,31 +309,50 @@ updated issue"
 
 (defun render/issue (issue)
   (check-type issue issue)
-  (render
-    (:header
-     (:h1 (who:esc (subject issue)))
-     (:div :class "issue-number"
-           (who:esc (format nil "#~A" (get-id issue)))))
-    (:main
-     (:p (created-by-at issue))
-     (:p (who:esc (body issue)))
-     (let ((comments (issue-comments issue)))
-       (who:htm
-        (:div
-         :class "issue-comments"
-         (dolist (comment comments)
-           (let ((author (author comment)))
-             (who:htm
-              (:div
-               :class "comment"
-               (:p (who:esc (body comment)))
-               (:p
-                :class "comment-info"
-                (:span :class "username"
-                       (who:esc (displayname author))
-                       " at "
-                       (who:esc (format-dottime (created-at comment)))))))))
-         (render/new-comment (get-id issue))))))))
+  (let ((issue-id (get-id issue))
+        (issue-status (status issue)))
+    (render
+      (:header
+       (:h1 (who:esc (subject issue)))
+       (:div :class "issue-number"
+             (who:esc (format nil "#~A" issue-id))))
+      (:main
+       (:div
+        :class "issue-info"
+        (created-by-at issue)
+
+        (:form :class "set-issue-status"
+               :method "post"
+               :action (format nil "/issues/~A/~A"
+                               issue-id
+                               (case issue-status
+                                 (:open "close")
+                                 (:closed "open")))
+               (:input :type "submit"
+                       :class (case issue-status
+                                (:open "close-issue")
+                                (:closed "open-issue"))
+                       :value (case issue-status
+                                (:open "Close")
+                                (:closed "Reopen")))))
+       (:p (who:esc (body issue)))
+       (let ((comments (issue-comments issue)))
+         (who:htm
+          (:div
+           :class "issue-comments"
+           (dolist (comment comments)
+             (let ((author (author comment)))
+               (who:htm
+                (:div
+                 :class "comment"
+                 (:p (who:esc (body comment)))
+                 (:p
+                  :class "comment-info"
+                  (:span :class "username"
+                         (who:esc (displayname author))
+                         " at "
+                         (who:esc (format-dottime (created-at comment)))))))))
+           (render/new-comment (get-id issue)))))))))
 
 (defun render/not-found (entity-type)
   (render
@@ -336,8 +383,12 @@ updated issue"
     (render/login "Invalid credentials")))
 
 (defroute index ("/" :decorators (@auth)) ()
-  (let ((issues (list-issues *p-system*)))
+  (let ((issues (open-issues *p-system*)))
     (render/index :issues issues)))
+
+(defroute handle-closed-issues ("/issues/closed" :decorators (@auth)) ()
+  (let ((issues (closed-issues *p-system*)))
+    (render/closed-issues :issues issues)))
 
 (defroute new-issue ("/issues/new" :decorators (@auth)) ()
   (render/new-issue))
@@ -374,6 +425,32 @@ updated issue"
         (hunchentoot:redirect (format nil "/issues/~A" id)))
     (issue-not-found (_)
       (render/not-found "Issue"))))
+
+(defroute close-issue
+    ("/issues/:id/close" :decorators (@auth)
+                         :method :post)
+    (&path (id 'integer))
+  (cl-prevalence:execute-transaction
+   (cl-prevalence:tx-change-object-slots
+    *p-system*
+    'issue
+    id
+    '((status :closed))))
+  (cl-prevalence:snapshot *p-system*)
+  (hunchentoot:redirect (format nil "/issues/~A" id)))
+
+(defroute open-issue
+    ("/issues/:id/open" :decorators (@auth)
+                         :method :put)
+    (&path (id 'integer))
+  (cl-prevalence:execute-transaction
+   (cl-prevalence:tx-change-object-slots
+    *p-system*
+    'issue
+    id
+    '((status open))))
+  (cl-prevalence:snapshot *p-system*)
+  (hunchentoot:redirect (format nil "/issues/~A" id)))
 
 (defroute styles ("/main.css") ()
   (setf (hunchentoot:content-type*) "text/css")
