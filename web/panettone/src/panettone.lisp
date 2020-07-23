@@ -81,17 +81,17 @@
   "Checks the given USER-OR-USERNAME has the given PASSWORD, by making a bind
 request against the ldap server at *ldap*. Returns the user if authentication is
 successful, `nil' otherwise"
-  (let* ((user (if (typep user-or-username 'user) user-or-username
-                   (find-user user-or-username)))
-         (dn (dn user)))
-    (multiple-value-bind (_r code-sym _msg)
-        (ldap:bind
-         (ldap:new-ldap :host (ldap:host *ldap*)
-                        :port (ldap:port *ldap*)
-                        :user dn
-                        :pass password))
-      (when (equalp code-sym 'trivial-ldap:success)
-        user))))
+  (when-let ((user (if (typep user-or-username 'user) user-or-username
+                       (find-user user-or-username))))
+    (let ((dn (dn user)))
+      (multiple-value-bind (_r code-sym _msg)
+          (ldap:bind
+           (ldap:new-ldap :host (ldap:host *ldap*)
+                          :port (ldap:port *ldap*)
+                          :user dn
+                          :pass password))
+        (when (equalp code-sym 'trivial-ldap:success)
+          user)))))
 
 (defun author (object)
   (find-user-by-dn (author-dn object)))
