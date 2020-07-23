@@ -99,12 +99,12 @@ ref<RemoteStore::Connection> UDSRemoteStore::openConnection() {
 
   struct sockaddr_un addr;
   addr.sun_family = AF_UNIX;
-  if (socketPath.size() + 1 >= sizeof(addr.sun_path)) {
+  size_t res = strlcpy(addr.sun_path, socketPath.c_str(), sizeof(addr.sun_path))
+  if (res < socketPath.size()) {
     throw Error(format("socket path '%1%' is too long") % socketPath);
   }
-  strcpy(addr.sun_path, socketPath.c_str());
 
-  if (::connect(conn->fd.get(), (struct sockaddr*)&addr, sizeof(addr)) == -1) {
+  if (::connect(conn->fd.get(), static_cast<struct sockaddr*>(&addr), sizeof(addr)) == -1) {
     throw SysError(format("cannot connect to daemon at '%1%'") % socketPath);
   }
 
