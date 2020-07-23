@@ -59,7 +59,7 @@ struct BasicDerivation {
   // Convert the given proto derivation to a BasicDerivation in the given
   // nix::Store.
   static BasicDerivation from_proto(
-      const nix::proto::Derivation* proto_derivation, const nix::Store* store);
+      const nix::proto::Derivation* proto_derivation, const nix::Store& store);
 
   virtual ~BasicDerivation(){};
 
