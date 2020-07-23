@@ -31,11 +31,11 @@ void DerivationOutput::parseHashInfo(bool& recursive, Hash& hash) const {
 }
 
 BasicDerivation BasicDerivation::from_proto(
-    const nix::proto::Derivation* proto_derivation, const nix::Store* store) {
+    const nix::proto::Derivation* proto_derivation, const nix::Store& store) {
   BasicDerivation result;
   result.platform = proto_derivation->platform();
   result.builder = proto_derivation->builder().path();
-  store->assertStorePath(result.builder);
+  store.assertStorePath(result.builder);
 
   result.outputs.insert(proto_derivation->outputs().begin(),
                         proto_derivation->outputs().end());
