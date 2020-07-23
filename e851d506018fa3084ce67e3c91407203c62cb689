@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fbe227a_d84248b9",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-23T19:09:01Z",
+      "side": 1,
+      "message": "oh no, this is such a hack :-(",
+      "range": {
+        "startLine": 84,
+        "startChar": 40,
+        "endLine": 84,
+        "endChar": 90
+      },
+      "revId": "e851d506018fa3084ce67e3c91407203c62cb689",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85b810ac_64fc2e6c",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-23T19:09:01Z",
+      "side": 1,
+      "message": "I think I might prefer having this in the CMakeLists.txt (to integrate it with the dev workflow), but that raises the question of how to elegantly do the above hack.\n\nOne idea: Add an additional key (LIBCXX_SRCS \u003d ...) in the derivation, and configure CMakeLists.txt to populate the CXX_FLAGS from that.\n\nI\u0027m not sure if the CMake envvars are concatenated ...",
+      "range": {
+        "startLine": 85,
+        "startChar": 7,
+        "endLine": 85,
+        "endChar": 28
+      },
+      "revId": "e851d506018fa3084ce67e3c91407203c62cb689",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
