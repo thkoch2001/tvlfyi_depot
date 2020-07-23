@@ -7,7 +7,6 @@
 
 namespace nix::daemon {
 
-std::unique_ptr<nix::proto::WorkerService::Service> NewWorkerService(
-    nix::Store*);
+nix::proto::WorkerService::Service* NewWorkerService(nix::Store&);
 
 }  // namespace nix::daemon
