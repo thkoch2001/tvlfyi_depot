@@ -352,8 +352,8 @@ static void _main(int argc, char** argv) {
                         narSize);
 
     if (settings.printMissing) {
-      printMissing(ref<Store>(store), willBuild, willSubstitute, unknown,
-                   downloadSize, narSize);
+      printMissing(std::shared_ptr<Store>(store), willBuild, willSubstitute,
+                   unknown, downloadSize, narSize);
     }
 
     if (!dryRun) {
@@ -559,7 +559,7 @@ static void _main(int argc, char** argv) {
   }
 
   for (auto& symlink : resultSymlinks) {
-    if (auto store2 = store.dynamic_pointer_cast<LocalFSStore>()) {
+    if (auto store2 = std::dynamic_pointer_cast<LocalFSStore>(store)) {
       store2->addPermRoot(symlink.second, absPath(symlink.first), true);
     }
   }

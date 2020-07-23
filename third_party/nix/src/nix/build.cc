@@ -37,7 +37,7 @@ struct CmdBuild final : MixDryRun, InstallablesCommand {
     };
   }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     auto buildables = build(store, dryRun ? DryRun : Build, installables);
 
     if (dryRun) {
@@ -49,7 +49,7 @@ struct CmdBuild final : MixDryRun, InstallablesCommand {
 
       if (!outLink.empty()) {
         for (auto& output : b.outputs) {
-          if (auto store2 = store.dynamic_pointer_cast<LocalFSStore>()) {
+          if (auto store2 = std::dynamic_pointer_cast<LocalFSStore>(store)) {
             std::string symlink = outLink;
             if (i != 0u) {
               symlink += fmt("-%d", i);

@@ -86,7 +86,7 @@ class EvalState : public gc {
      mode. */
   std::optional<PathSet> allowedPaths;
 
-  const ref<Store> store;
+  const std::shared_ptr<Store> store;
 
  private:
   SrcToStore srcToStore;
@@ -108,7 +108,7 @@ class EvalState : public gc {
   std::unordered_map<Path, Path> resolvedPaths;
 
  public:
-  EvalState(const Strings& _searchPath, const ref<Store>& store);
+  EvalState(const Strings& _searchPath, const std::shared_ptr<Store>& store);
   ~EvalState();
 
   void addToSearchPath(const std::string& s);

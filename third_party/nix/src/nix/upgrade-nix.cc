@@ -52,7 +52,7 @@ struct CmdUpgradeNix final : MixDryRun, StoreCommand {
     };
   }
 
-  void run(ref<Store> store) override {
+  void run(std::shared_ptr<Store> store) override {
     evalSettings.pureEval = true;
 
     if (profileDir.empty()) {
@@ -100,7 +100,7 @@ struct CmdUpgradeNix final : MixDryRun, StoreCommand {
   }
 
   /* Return the profile in which Nix is installed. */
-  static Path getProfileDir(const ref<Store>& store) {
+  static Path getProfileDir(const std::shared_ptr<Store>& store) {
     Path where;
 
     for (auto& dir : absl::StrSplit(getEnv("PATH"), absl::ByChar(':'))) {
@@ -147,7 +147,7 @@ struct CmdUpgradeNix final : MixDryRun, StoreCommand {
   }
 
   /* Return the store path of the latest stable Nix. */
-  Path getLatestNix(const ref<Store>& store) {
+  Path getLatestNix(const std::shared_ptr<Store>& store) {
     // FIXME: use nixos.org?
     auto req = DownloadRequest(storePathsUrl);
     auto res = getDownloader()->download(req);

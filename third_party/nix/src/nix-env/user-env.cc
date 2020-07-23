@@ -141,7 +141,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
                           state.repair != 0u ? bmRepair : bmNormal);
 
   /* Switch the current user environment to the output path. */
-  auto store2 = state.store.dynamic_pointer_cast<LocalFSStore>();
+  auto store2 = std::dynamic_pointer_cast<LocalFSStore>(state.store);
 
   if (store2) {
     PathLocks lock;

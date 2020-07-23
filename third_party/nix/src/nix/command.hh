@@ -38,9 +38,9 @@ class Store;
 struct StoreCommand : virtual Command {
   StoreCommand();
   void run() override;
-  ref<Store> getStore();
-  virtual ref<Store> createStore();
-  virtual void run(ref<Store>) = 0;
+  std::shared_ptr<Store> getStore();
+  virtual std::shared_ptr<Store> createStore();
+  virtual void run(std::shared_ptr<Store>) = 0;
 
  private:
   std::shared_ptr<Store> _store;
@@ -124,9 +124,9 @@ struct StorePathsCommand : public InstallablesCommand {
 
   using StoreCommand::run;
 
-  virtual void run(ref<Store> store, Paths storePaths) = 0;
+  virtual void run(std::shared_ptr<Store> store, Paths storePaths) = 0;
 
-  void run(ref<Store> store) override;
+  void run(std::shared_ptr<Store> store) override;
 
   bool useDefaultInstallables() override { return !all; }
 };
@@ -135,9 +135,9 @@ struct StorePathsCommand : public InstallablesCommand {
 struct StorePathCommand : public InstallablesCommand {
   using StoreCommand::run;
 
-  virtual void run(ref<Store> store, const Path& storePath) = 0;
+  virtual void run(std::shared_ptr<Store> store, const Path& storePath) = 0;
 
-  void run(ref<Store> store) override;
+  void run(std::shared_ptr<Store> store) override;
 };
 
 typedef std::map<std::string, ref<Command>> Commands;
@@ -171,23 +171,22 @@ struct RegisterCommand {
   }
 };
 
-std::shared_ptr<Installable> parseInstallable(SourceExprCommand& cmd,
-                                              const ref<Store>& store,
-                                              const std::string& installable,
-                                              bool useDefaultInstallables);
+std::shared_ptr<Installable> parseInstallable(
+    SourceExprCommand& cmd, const std::shared_ptr<Store>& store,
+    const std::string& installable, bool useDefaultInstallables);
 
-Buildables build(const ref<Store>& store, RealiseMode mode,
+Buildables build(const std::shared_ptr<Store>& store, RealiseMode mode,
                  const std::vector<std::shared_ptr<Installable>>& installables);
 
 PathSet toStorePaths(
-    const ref<Store>& store, RealiseMode mode,
+    const std::shared_ptr<Store>& store, RealiseMode mode,
     const std::vector<std::shared_ptr<Installable>>& installables);
 
-Path toStorePath(const ref<Store>& store, RealiseMode mode,
+Path toStorePath(const std::shared_ptr<Store>& store, RealiseMode mode,
                  const std::shared_ptr<Installable>& installable);
 
 PathSet toDerivations(
-    const ref<Store>& store,
+    const std::shared_ptr<Store>& store,
     const std::vector<std::shared_ptr<Installable>>& installables,
     bool useDeriver = false);
 

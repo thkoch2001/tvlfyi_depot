@@ -849,7 +849,7 @@ void Downloader::download(DownloadRequest&& request, Sink& sink) {
 }
 
 CachedDownloadResult Downloader::downloadCached(
-    const ref<Store>& store, const CachedDownloadRequest& request) {
+    const std::shared_ptr<Store>& store, const CachedDownloadRequest& request) {
   auto url = resolveUri(request.uri);
 
   auto name = request.name;

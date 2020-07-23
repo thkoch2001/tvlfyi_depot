@@ -64,7 +64,7 @@ bool BasicDerivation::isBuiltin() const {
   return std::string(builder, 0, 8) == "builtin:";
 }
 
-Path writeDerivation(const ref<Store>& store, const Derivation& drv,
+Path writeDerivation(const std::shared_ptr<Store>& store, const Derivation& drv,
                      const std::string& name, RepairFlag repair) {
   PathSet references;
   references.insert(drv.inputSrcs.begin(), drv.inputSrcs.end());
