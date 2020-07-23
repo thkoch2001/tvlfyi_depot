@@ -3,6 +3,7 @@
 #include <cstring>
 #include <iostream>
 
+#include <absl/strings/escaping.h>
 #include <fcntl.h>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
@@ -117,7 +118,9 @@ std::string Hash::to_string(Base base, bool includeType) const {
       break;
     case Base64:
     case SRI:
-      s += base64Encode(std::string((const char*)hash, hashSize));
+      std::string b64;
+      absl::Base64Escape(std::string((const char*)hash, hashSize), &b64);
+      s += b64;
       break;
   }
   return s;
@@ -201,7 +204,8 @@ Hash::Hash(const std::string& s, HashType type) : type(type) {
   }
 
   else if (isSRI || size == base64Len()) {
-    auto d = base64Decode(std::string(s, pos));
+    std::string d;
+    absl::Base64Unescape(std::string(s, pos), &d);
     if (d.size() != hashSize) {
       throw BadHash("invalid %s hash '%s'", isSRI ? "SRI" : "base-64", s);
     }
