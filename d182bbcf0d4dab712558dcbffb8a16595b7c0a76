@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b69c859_f24df085",
+        "filename": "third_party/nix/src/libstore/crypto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-23T21:56:53Z",
+      "side": 1,
+      "message": "You need to check for failure in the return code and throw if necessary.",
+      "range": {
+        "startLine": 32,
+        "startChar": 2,
+        "endLine": 32,
+        "endChar": 34
+      },
+      "revId": "d182bbcf0d4dab712558dcbffb8a16595b7c0a76",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
