@@ -1,5 +1,7 @@
 #include "libstore/crypto.hh"
 
+#include <absl/strings/escaping.h>
+
 #include "libstore/globals.hh"
 #include "libutil/util.hh"
 
@@ -27,7 +29,10 @@ Key::Key(const std::string& s) {
     throw Error("secret key is corrupt");
   }
 
-  key = base64Decode(key);
+  if (!absl::Base64Unescape(key, &key)) {
+    // TODO(grfn): replace this with StatusOr
+    throw Error("Invalid Base64");
+  }
 }
 
 SecretKey::SecretKey(const std::string& s) : Key(s) {
@@ -52,7 +57,7 @@ std::string SecretKey::signDetached(const std::string& data) const {
   unsigned long long sigLen;
   crypto_sign_detached(sig, &sigLen, (unsigned char*)data.data(), data.size(),
                        (unsigned char*)key.data());
-  return name + ":" + base64Encode(std::string((char*)sig, sigLen));
+  return name + ":" + absl::Base64Escape(std::string((char*)sig, sigLen));
 #else
   noSodium();
 #endif
@@ -86,7 +91,11 @@ bool verifyDetached(const std::string& data, const std::string& sig,
     return false;
   }
 
-  auto sig2 = base64Decode(ss.second);
+  std::string sig2;
+  if (!absl::Base64Unescape(ss.second, &sig2)) {
+    // TODO(grfn): replace this with StatusOr
+    throw Error("Invalid Base64");
+  }
   if (sig2.size() != crypto_sign_BYTES) {
     throw Error("signature is not valid");
   }
