@@ -91,14 +91,9 @@ target_link_libraries(nixstore
   nixproto
   nixutil
 
-  BZip2::BZip2
-  Boost::context
   CURL::libcurl
-  LibLZMA::LibLZMA
   SQLite::SQLite3
   absl::strings
-  brotlidec
-  brotlienc
   glog
   seccomp
   sodium
