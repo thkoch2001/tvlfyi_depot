@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6291eab1_2b00afd5",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 22
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-23T20:35:07Z",
+      "side": 1,
+      "message": "oooh I may have to steal this for use in my own projects...",
+      "revId": "3bd61715a3a91a3e605f790336fb9fb658c96ed4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c7fbb5f0_33a5e191",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 22
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-23T20:35:07Z",
+      "side": 1,
+      "message": "So if you can\u0027t get the author out, you get \"Opened by NIL\"?",
+      "revId": "3bd61715a3a91a3e605f790336fb9fb658c96ed4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
