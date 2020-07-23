@@ -49,6 +49,12 @@ target_sources(nixutil
 target_link_libraries(nixutil
   absl::strings
   glog
+  BZip2::BZip2
+  LibLZMA::LibLZMA
+  Boost::context
+  brotlienc
+  brotlidec
+  ssl
 )
 
 # Install header files to include/libutil and mark them for automatic
