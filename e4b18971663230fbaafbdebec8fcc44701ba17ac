@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f8665a4_092e1297",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 23
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-23T19:47:10Z",
+      "side": 1,
+      "message": "that signals an error if it fails to parse just like the stdlib `parse-integer` which this depends on - the only point of this function is that it returns `nil` if it fails to parse instead.",
+      "parentUuid": "56efbc93_53888dbe",
+      "range": {
+        "startLine": 92,
+        "startChar": 10,
+        "endLine": 92,
+        "endChar": 24
+      },
+      "revId": "e4b18971663230fbaafbdebec8fcc44701ba17ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70b7e653_862167bf",
         "filename": "web/panettone/src/panettone.lisp",
         "patchSetId": 23
@@ -45,6 +69,30 @@
       "revId": "e4b18971663230fbaafbdebec8fcc44701ba17ac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f2c46de_28072873",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 23
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-23T19:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70b7e653_862167bf",
+      "range": {
+        "startLine": 293,
+        "startChar": 60,
+        "endLine": 293,
+        "endChar": 73
+      },
+      "revId": "e4b18971663230fbaafbdebec8fcc44701ba17ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
