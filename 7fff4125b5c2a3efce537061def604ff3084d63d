@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0697a87_67389cbe",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 24
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-23T20:28:08Z",
+      "side": 1,
+      "message": "STRING is a nice easy way to say (SIMPLE-ARRAY CHARACTER (*)) :)",
+      "revId": "7fff4125b5c2a3efce537061def604ff3084d63d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1c321bb_186feee5",
+        "filename": "lisp/klatre/klatre.lisp",
+        "patchSetId": 24
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-23T20:28:08Z",
+      "side": 1,
+      "message": "This isn\u0027t portable to CL implementations that aren\u0027t SBCL - it\u0027ll fail to compile at all on these!\npersonally I think it\u0027s safe to just replace this HANDLER-CASE with an IGNORE-ERRORS, which will return NIL if an error is signaled. (what errors are going to arise that aren\u0027t an integer failing to parse?)",
+      "revId": "7fff4125b5c2a3efce537061def604ff3084d63d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69e6f458_0f9ce3dc",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 24
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-23T20:28:08Z",
+      "side": 1,
+      "message": "huh, TIL",
+      "revId": "7fff4125b5c2a3efce537061def604ff3084d63d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4dbd832b_eb715790",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 24
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-23T20:28:08Z",
+      "side": 1,
+      "message": "Heh, if you were really enterprising you\u0027d do (\u0026rest args) here, and then (setf *ldap* (funcall #\u0027ldap:new-ldap args) ;P\nThat wouldn\u0027t let you modify any of the args, though (and would be shit from a docs POV)",
+      "revId": "7fff4125b5c2a3efce537061def604ff3084d63d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
