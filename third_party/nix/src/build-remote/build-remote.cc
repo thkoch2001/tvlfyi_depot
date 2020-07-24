@@ -147,7 +147,7 @@ static int _main(int argc, char* argv[]) {
               continue;
             }
             bool best = false;
-            if (!bestSlotLock) {
+            if (!bestMachine || !bestSlotLock) {
               best = true;
             } else if (load / m.speedFactor <
                        bestLoad / bestMachine->speedFactor) {
@@ -170,7 +170,7 @@ static int _main(int argc, char* argv[]) {
           }
         }
 
-        if (!bestSlotLock) {
+        if (!bestSlotLock || !bestMachine) {
           if (rightType && !canBuildLocally) {
             std::cerr << "# postpone\n";
           } else {
