@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0568a2a9_24dcbdba",
+        "filename": "third_party/nix/src/libutil/util.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2020-07-24T02:17:44Z",
+      "side": 1,
+      "message": "This is only called in one place — shouldn\u0027t we just drop the argument?",
+      "revId": "207ca031c915502fc34fae26fb3ea67ac7966ce6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
