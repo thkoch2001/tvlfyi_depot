@@ -144,6 +144,16 @@
       :color ,color/gray
       :font-size "1.5rem"))
 
+    (nav
+     :display :flex
+     :color ,color/gray)
+
+    (footer
+     :border-top "1px" "solid" ,color/gray
+     :padding-top "1rem"
+     :margin-top "2rem"
+     :color ,color/gray)
+
     ,@(button '.new-issue)
 
     (.alert
