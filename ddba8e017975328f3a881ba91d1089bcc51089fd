@@ -94,6 +94,30 @@
       "revId": "ddba8e017975328f3a881ba91d1089bcc51089fd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "664b232c_4262ccf4",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-24T18:34:40Z",
+      "side": 1,
+      "message": "Usually when I double-tap on a website like this it\u0027s an accident.\n\nBut I\u0027d rather move forward, so I\u0027m removing this.",
+      "parentUuid": "b657ca24_c62b8109",
+      "range": {
+        "startLine": 205,
+        "startChar": 58,
+        "endLine": 205,
+        "endChar": 74
+      },
+      "revId": "ddba8e017975328f3a881ba91d1089bcc51089fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
