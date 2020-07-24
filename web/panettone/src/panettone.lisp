@@ -200,7 +200,9 @@ updated issue"
   `(who:with-html-output-to-string (*standard-output* nil :prologue t)
      (:head
       (:title (who:esc *title*))
-      (:link :rel "stylesheet" :type "text/css" :href "/main.css"))
+      (:link :rel "stylesheet" :type "text/css" :href "/main.css")
+      (:meta :name "viewport"
+             :content "width=device-width,initial-scale=1,user-scalable=no"))
      (:body
       (:div
        :class "content"
