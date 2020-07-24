@@ -20,7 +20,7 @@ import Network.Wai.Handler.Warp as Warp
 import Servant
 
 import API
-import Types
+import qualified Types as T
 --------------------------------------------------------------------------------
 
 server :: ConnectionPool -> Server API
@@ -30,17 +30,22 @@ server pool =
     userAddH newUser = liftIO $ userAdd newUser
     userGetH name    = liftIO $ userGet name
 
-    userAdd :: User -> IO (Maybe (Key User))
+    userAdd :: T.User -> IO (Maybe T.Session)
     userAdd newUser = flip runSqlPersistMPool pool $ do
-      exists <- selectFirst [UserName ==. (userName newUser)] []
+      exists <- selectFirst [T.UserName ==. (T.userName newUser)] []
       case exists of
-        Nothing -> Just <$> insert newUser
-        Just _ -> return Nothing
+        Nothing -> do
+          insert newUser
+          pure $ Just (T.Session { T.username = T.Username "wpcarro"
+                                 , T.password = T.Password "testing"
+                                 , T.role = T.RegularUser
+                                 })
+        Just _ -> pure Nothing
 
-    userGet :: Text -> IO (Maybe User)
+    userGet :: Text -> IO (Maybe T.User)
     userGet name = flip runSqlPersistMPool pool $ do
-      mUser <- selectFirst [UserName ==. name] []
-      return $ entityVal <$> mUser
+      mUser <- selectFirst [T.UserName ==. name] []
+      pure $ entityVal <$> mUser
 
 app :: ConnectionPool -> Application
 app pool = serve (Proxy @ API) $ server pool
@@ -50,8 +55,8 @@ mkApp sqliteFile = do
   pool <- runStderrLoggingT $ do
     createSqlitePool (cs sqliteFile) 5
 
-  runSqlPool (runMigration migrateAll) pool
-  return $ app pool
+  runSqlPool (runMigration T.migrateAll) pool
+  pure $ app pool
 
 run :: FilePath -> IO ()
 run sqliteFile =
