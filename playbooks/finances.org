@@ -1,4 +1,4 @@
-# Let's pretend it's April 1st; all amount go in the March (not April) column.
+# Let's pretend it's April 1st; all amounts go in the March (not April) column.
 * Finance Chain (25th of each month)
 ** Open "finances_2020" Google Sheet
 ** Settle up with Mimi on TransferWise
