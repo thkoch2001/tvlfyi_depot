@@ -859,7 +859,6 @@ void killUser(uid_t uid) {
      fork a process, switch to uid, and send a mass kill. */
 
   ProcessOptions options;
-  options.allowVfork = false;
 
   Pid pid = startProcess(
       [&]() {
@@ -897,16 +896,20 @@ void killUser(uid_t uid) {
 
 //////////////////////////////////////////////////////////////////////
 
-/* Wrapper around vfork to prevent the child process from clobbering
-   the caller's stack frame in the parent. */
-static pid_t doFork(bool allowVfork, const std::function<void()>& fun)
+/*
+ * Please note that it is not legal for this function to call vfork().  If the
+ * process created by vfork() returns from the function in which vfork() was
+ * called, or calls any other function before successfully calling _exit() or
+ * one of the exec*() family of functions, the behavior is undefined.
+ */
+static pid_t doFork(const std::function<void()>& fun)
     __attribute__((noinline));
-static pid_t doFork(bool allowVfork, const std::function<void()>& fun) {
+static pid_t doFork(const std::function<void()>& fun) {
 #ifdef __linux__
-  pid_t pid = allowVfork ? vfork() : fork();
-#else
-  pid_t pid = fork();
+  // TODO(kanepyork): call clone() instead for faster forking
 #endif
+
+  pid_t pid = fork();
   if (pid != 0) {
     return pid;
   }
@@ -938,7 +941,7 @@ pid_t startProcess(std::function<void()> fun, const ProcessOptions& options) {
     }
   };
 
-  pid_t pid = doFork(options.allowVfork, wrapper);
+  pid_t pid = doFork(wrapper);
   if (pid == -1) {
     throw SysError("unable to fork");
   }
@@ -1012,12 +1015,6 @@ void runProgram2(const RunOptions& options) {
   }
 
   ProcessOptions processOptions;
-  // vfork implies that the environment of the main process and the fork will
-  // be shared (technically this is undefined, but in practice that's the
-  // case), so we can't use it if we alter the environment
-  if (options.environment) {
-    processOptions.allowVfork = false;
-  }
 
   /* Fork. */
   Pid pid = startProcess(

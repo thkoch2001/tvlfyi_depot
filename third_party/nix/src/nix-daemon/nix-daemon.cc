@@ -1051,7 +1051,6 @@ static void daemonLoop(char** argv) {
       options.errorPrefix = "unexpected Nix daemon error: ";
       options.dieWithParent = false;
       options.runExitHandlers = true;
-      options.allowVfork = false;
       startProcess(
           [&]() {
             fdSocket = -1;
