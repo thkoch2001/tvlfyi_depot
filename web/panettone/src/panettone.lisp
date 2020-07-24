@@ -202,7 +202,9 @@ updated issue"
       :lang "en"
       (:head
        (:title (who:esc *title*))
-       (:link :rel "stylesheet" :type "text/css" :href "/main.css"))
+       (:link :rel "stylesheet" :type "text/css" :href "/main.css")
+       (:meta :name "viewport"
+              :content "width=device-width,initial-scale=1"))
       (:body
        (:div
         :class "content"
