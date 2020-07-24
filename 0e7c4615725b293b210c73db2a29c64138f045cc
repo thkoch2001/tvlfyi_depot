@@ -22,6 +22,30 @@
       "revId": "0e7c4615725b293b210c73db2a29c64138f045cc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95c5ead8_1c3e95d0",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-24T00:01:30Z",
+      "side": 1,
+      "message": "this is slightly different - flash is stored in the session and displayed on the *next* request (eg after a redirect) and this is passed to the view and displayed on the *same* request.\n\nWe will likely want generic flash handling soon, though.",
+      "parentUuid": "f67bd774_b3aced20",
+      "range": {
+        "startLine": 188,
+        "startChar": 21,
+        "endLine": 188,
+        "endChar": 28
+      },
+      "revId": "0e7c4615725b293b210c73db2a29c64138f045cc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
