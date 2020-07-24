@@ -286,9 +286,11 @@ updated issue"
   (render ()
     (:header
      (:h1 "Issues")
-     (:a
-      :class "new-issue"
-      :href "/issues/new" "New Issue"))
+     (when *user*
+       (who:htm
+        (:a
+         :class "new-issue"
+         :href "/issues/new" "New Issue"))))
     (:main
      (:div
       :class "issue-links"
@@ -355,20 +357,22 @@ updated issue"
         :class "issue-info"
         (created-by-at issue)
 
-        (:form :class "set-issue-status"
-               :method "post"
-               :action (format nil "/issues/~A/~A"
-                               issue-id
-                               (case issue-status
-                                 (:open "close")
-                                 (:closed "open")))
-               (:input :type "submit"
-                       :class (case issue-status
-                                (:open "close-issue")
-                                (:closed "open-issue"))
-                       :value (case issue-status
-                                (:open "Close")
-                                (:closed "Reopen")))))
+        (when *user*
+          (who:htm
+           (:form :class "set-issue-status"
+                  :method "post"
+                  :action (format nil "/issues/~A/~A"
+                                  issue-id
+                                  (case issue-status
+                                    (:open "close")
+                                    (:closed "open")))
+                  (:input :type "submit"
+                          :class (case issue-status
+                                   (:open "close-issue")
+                                   (:closed "open-issue"))
+                          :value (case issue-status
+                                   (:open "Close")
+                                   (:closed "Reopen")))))))
        (:p (who:esc (body issue)))
        (let ((comments (issue-comments issue)))
          (who:htm
@@ -386,7 +390,8 @@ updated issue"
                          (who:esc (displayname author))
                          " at "
                          (who:esc (format-dottime (created-at comment)))))))))
-           (render/new-comment (get-id issue)))))))))
+           (when *user*
+             (render/new-comment (get-id issue))))))))))
 
 (defun render/not-found (entity-type)
   (render ()
@@ -397,6 +402,10 @@ updated issue"
 ;;;
 
 (defvar *user* nil)
+
+(defun @auth-optional (next)
+  (let ((*user* (hunchentoot:session-value 'user)))
+    (funcall next)))
 
 (defun @auth (next)
   (if-let ((*user* (hunchentoot:session-value 'user)))
@@ -425,11 +434,12 @@ updated issue"
   (hunchentoot:delete-session-value 'user)
   (hunchentoot:redirect "/"))
 
-(defroute index ("/" :decorators (@auth)) ()
+(defroute index ("/" :decorators (@auth-optional)) ()
   (let ((issues (open-issues *p-system*)))
     (render/index :issues issues)))
 
-(defroute handle-closed-issues ("/issues/closed" :decorators (@auth)) ()
+(defroute handle-closed-issues
+    ("/issues/closed" :decorators (@auth-optional)) ()
   (let ((issues (closed-issues *p-system*)))
     (render/closed-issues :issues issues)))
 
@@ -450,7 +460,7 @@ updated issue"
         (cl-prevalence:snapshot *p-system*)
         (hunchentoot:redirect "/"))))
 
-(defroute show-issue ("/issues/:id" :decorators (@auth))
+(defroute show-issue ("/issues/:id" :decorators (@auth-optional))
     (&path (id 'integer))
   (handler-case
       (let* ((issue (get-issue *p-system* id))
