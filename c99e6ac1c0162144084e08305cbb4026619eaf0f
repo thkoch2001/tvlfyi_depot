@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42058fa9_cc407d19",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-main.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-24T00:16:18Z",
+      "side": 1,
+      "message": "/build/nix/src/nix-daemon/nix-daemon-main.cc:45:3: error: Call to function \u0027strcpy\u0027 is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as \u0027strlcpy\u0027. CWE-119 [clang-analyzer-security.insecureAPI.strcpy,-warnings-as-errors]\n\nPlease fix.",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 45,
+        "endChar": 8
+      },
+      "revId": "c99e6ac1c0162144084e08305cbb4026619eaf0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
