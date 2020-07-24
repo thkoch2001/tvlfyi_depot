@@ -70,6 +70,30 @@
       "revId": "ddba8e017975328f3a881ba91d1089bcc51089fd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b657ca24_c62b8109",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-24T16:57:57Z",
+      "side": 1,
+      "message": "What should double-tapping things do if not zoom? Personally I\u0027ve almost always found this setting to be annoying, especially if I want to do something like zoom in on an embedded asset.",
+      "parentUuid": "4801050d_ba3cbf51",
+      "range": {
+        "startLine": 205,
+        "startChar": 58,
+        "endLine": 205,
+        "endChar": 74
+      },
+      "revId": "ddba8e017975328f3a881ba91d1089bcc51089fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
