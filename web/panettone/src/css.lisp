@@ -138,7 +138,7 @@
     (a :color "inherit")
 
     (.content
-     :width "800px"
+     :max-width "800px"
      :margin "0 auto")
 
     (header
@@ -174,7 +174,7 @@
      :background-color ,color/failure)
 
     (.login-form
-     :width "300px"
+     :max-width "300px"
      :margin "0 auto")
 
     (.created-by-at
