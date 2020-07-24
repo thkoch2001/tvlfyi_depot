@@ -103,7 +103,18 @@
      :border "none"
      :cursor "pointer")
 
-    ,@(button '(:and input (:= type "submit")))))
+    ,@(button '(:and input (:= type "submit")))
+
+    (.form-link
+     ((:and input (:= type "submit"))
+      :background-color "initial"
+      :color "inherit"
+      :padding 0
+      :text-decoration "underline")
+
+     ((:and input (:= type "submit")
+            (:or :hover :active :focus))
+      :box-shadow 0 0 0 0))))
 
 (defparameter issue-styles
   `((.issue-info
@@ -145,13 +156,14 @@
       :font-size "1.5rem"))
 
     (nav
-     :display :flex
-     :color ,color/gray)
+     :display "flex"
+     :color ,color/gray
+     :justify-content "space-between")
 
     (footer
      :border-top "1px" "solid" ,color/gray
      :padding-top "1rem"
-     :margin-top "2rem"
+     :margin-top "1rem"
      :color ,color/gray)
 
     ,@(button '.new-issue)
