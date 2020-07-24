@@ -365,7 +365,9 @@ updated issue"
                          (who:esc (displayname author))
                          " at "
                          (who:esc (format-dottime (created-at comment)))))))))
-           (render/new-comment (get-id issue)))))))))
+           (render/new-comment (get-id issue))))))
+      (:footer
+       (:nav (:a :href "/" "All Issues"))))))
 
 (defun render/not-found (entity-type)
   (render
