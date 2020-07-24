@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1de7fda1_e8aa0c25",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-24T22:17:51Z",
+      "side": 1,
+      "message": "I decided to sprint to \"everything fixed\" so we can just .* warnings-as-errors.",
+      "parentUuid": "0a9e5fc1_366ec958",
+      "revId": "37e495c6bfeba81f6ef51b3151d1a6b23033305d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0269c2c_db47df89",
         "filename": "third_party/nix/src/libexpr/nixexpr.hh",
         "patchSetId": 7
