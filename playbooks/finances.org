@@ -1,5 +1,6 @@
 # Let's pretend it's April 1st; all amounts go in the March (not April) column.
 * Finance Chain (25th of each month)
+** Ensure Emergency fund is has a balance of $1000
 ** Open "finances_2020" Google Sheet
 ** Settle up with Mimi on TransferWise
 ** Adjust "Stocks (after tax)" to reflect amount Google sent
@@ -7,3 +8,4 @@
 ** Adjust "Paycheck" to reflect amount Google sent
 ** In the "International Xfer" table, send "Xfer amount" from Monzo to USAA
 ** Go to an ATM and extract the amount in "ATM withdrawal"
+** Await the TransferWise transaction to complete and pay MyFedLoan in USD
