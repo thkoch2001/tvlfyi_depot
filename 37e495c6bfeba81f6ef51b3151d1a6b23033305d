@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a9e5fc1_366ec958",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-24T15:19:51Z",
+      "side": 1,
+      "message": "should this be added to warnings-as-errors now then?",
+      "revId": "37e495c6bfeba81f6ef51b3151d1a6b23033305d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0269c2c_db47df89",
+        "filename": "third_party/nix/src/libexpr/nixexpr.hh",
+        "patchSetId": 7
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-24T15:19:51Z",
+      "side": 1,
+      "message": "what on earth even is this lol",
+      "revId": "37e495c6bfeba81f6ef51b3151d1a6b23033305d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
