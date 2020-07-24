@@ -212,13 +212,13 @@ TEST_P(EvalSuccessTest, Fails) {
   EvalState state({}, ref<Store>(store));
   auto path = GetParam();
 
-  Expr* expr;
-  EXPECT_NO_THROW(expr = state.parseExprFromFile(GetParam().string()))
+  Expr* expr = nullptr;
+  ASSERT_NO_THROW(expr = state.parseExprFromFile(GetParam().string()))
       << path.stem().string() << ": should parse successfully";
 
   Value result;
 
-  EXPECT_NO_THROW({
+  ASSERT_NO_THROW({
     state.eval(expr, result);
     state.forceValueDeep(result);
   }) << path.stem().string()
