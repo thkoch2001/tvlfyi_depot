@@ -232,7 +232,6 @@ struct ProcessOptions {
   std::string errorPrefix = "error: ";
   bool dieWithParent = true;
   bool runExitHandlers = false;
-  bool allowVfork = true;
 };
 
 pid_t startProcess(std::function<void()> fun,

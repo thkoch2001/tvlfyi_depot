@@ -2342,8 +2342,6 @@ void DerivationGoal::startBuilder() {
 
     userNamespaceSync.create();
 
-    options.allowVfork = false;
-
     Pid helper = startProcess(
         [&]() {
           /* Drop additional groups here because we can't do it
@@ -2443,7 +2441,6 @@ void DerivationGoal::startBuilder() {
 #endif
   {
   fallback:
-    options.allowVfork = !buildUser && !drv->isBuiltin();
     pid = startProcess([&]() { runChild(); }, options);
   }
 
