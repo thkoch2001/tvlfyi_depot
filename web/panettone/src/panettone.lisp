@@ -176,7 +176,7 @@ updated issue"
 
 (defvar *user* nil)
 
-(setf (who:html-mode) :HTML5)
+(setf (who:html-mode) :html5)
 
 (defun render/footer-nav (&rest extra)
   (who:with-html-output (*standard-output*)
@@ -198,15 +198,17 @@ updated issue"
 
 (defmacro render ((&key (footer t)) &body body)
   `(who:with-html-output-to-string (*standard-output* nil :prologue t)
-     (:head
-      (:title (who:esc *title*))
-      (:link :rel "stylesheet" :type "text/css" :href "/main.css"))
-     (:body
-      (:div
-       :class "content"
-       ,@body
-       (when ,footer
-         (render/footer-nav))))))
+     (:html
+      :lang "en"
+      (:head
+       (:title (who:esc *title*))
+       (:link :rel "stylesheet" :type "text/css" :href "/main.css"))
+      (:body
+       (:div
+        :class "content"
+        ,@body
+        (when ,footer
+          (render/footer-nav)))))))
 
 (defun render/alert (message)
   "Render an alert box for MESSAGE, if non-null"
