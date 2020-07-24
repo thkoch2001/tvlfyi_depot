@@ -46,6 +46,30 @@
       "revId": "0e7c4615725b293b210c73db2a29c64138f045cc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de693026_8d2fa5f9",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-24T00:21:25Z",
+      "side": 1,
+      "message": "Sounds fine.",
+      "parentUuid": "95c5ead8_1c3e95d0",
+      "range": {
+        "startLine": 188,
+        "startChar": 21,
+        "endLine": 188,
+        "endChar": 28
+      },
+      "revId": "0e7c4615725b293b210c73db2a29c64138f045cc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
