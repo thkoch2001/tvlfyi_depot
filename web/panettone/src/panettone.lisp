@@ -174,16 +174,39 @@ updated issue"
 
 (defvar *title* "Panettone")
 
+(defvar *user* nil)
+
 (setf (who:html-mode) :HTML5)
 
-(defmacro render (&body body)
+(defun render/footer-nav (&rest extra)
+  (who:with-html-output (*standard-output*)
+    (:footer
+     (:nav
+      (if (find (hunchentoot:request-uri*)
+                (list "/" "/issues/closed")
+                :test #'string=)
+          (who:htm (:span :class "placeholder"))
+          (who:htm (:a :href "/" "All Issues")))
+      (if *user*
+          (who:htm
+           (:form :class "form-link log-out"
+                  :method "post"
+                  :action "/logout"
+                  (:input :type "submit" :value "Log Out")))
+          (who:htm
+           (:a :href "/login" "Log In")))))))
+
+(defmacro render ((&key (footer t)) &body body)
   `(who:with-html-output-to-string (*standard-output* nil :prologue t)
      (:head
       (:title (who:esc *title*))
       (:link :rel "stylesheet" :type "text/css" :href "/main.css"))
      (:body
-      (:div :class "content"
-            ,@body))))
+      (:div
+       :class "content"
+       ,@body
+       (when ,footer
+         (render/footer-nav))))))
 
 (defun render/alert (message)
   "Render an alert box for MESSAGE, if non-null"
@@ -193,7 +216,7 @@ updated issue"
       (who:htm (:div :class "alert" (who:esc message))))))
 
 (defun render/login (&key message (original-uri "/"))
-  (render
+  (render (:footer nil)
     (:div
      :class "login-form"
      (:header
@@ -262,7 +285,7 @@ updated issue"
                             (format nil "~A comment~:p" num-comments))))))))))))))
 
 (defun render/index (&key issues)
-  (render
+  (render ()
     (:header
      (:h1 "Issues")
      (:a
@@ -275,7 +298,7 @@ updated issue"
      (render/issue-list :issues issues))))
 
 (defun render/closed-issues (&key issues)
-  (render
+  (render ()
     (:header
      (:h1 "Closed issues"))
     (:main
@@ -285,7 +308,7 @@ updated issue"
      (render/issue-list :issues issues))))
 
 (defun render/new-issue (&optional message)
-  (render
+  (render ()
     (:header
      (:h1 "New Issue"))
     (:main
@@ -324,7 +347,7 @@ updated issue"
   (check-type issue issue)
   (let ((issue-id (get-id issue))
         (issue-status (status issue)))
-    (render
+    (render ()
       (:header
        (:h1 (who:esc (subject issue)))
        (:div :class "issue-number"
@@ -365,19 +388,15 @@ updated issue"
                          (who:esc (displayname author))
                          " at "
                          (who:esc (format-dottime (created-at comment)))))))))
-           (render/new-comment (get-id issue))))))
-      (:footer
-       (:nav (:a :href "/" "All Issues"))))))
+           (render/new-comment (get-id issue)))))))))
 
 (defun render/not-found (entity-type)
-  (render
+  (render ()
     (:h1 (who:esc entity-type) "Not Found")))
 
 ;;;
 ;;; HTTP handlers
 ;;;
-
-(defvar *user* nil)
 
 (defun @auth (next)
   (if-let ((*user* (hunchentoot:session-value 'user)))
@@ -401,6 +420,10 @@ updated issue"
       (setf (hunchentoot:session-value 'user) user)
       (hunchentoot:redirect (or original-uri "/")))
     (render/login :message "Invalid credentials")))
+
+(defroute logout ("/logout" :method :post) ()
+  (hunchentoot:delete-session-value 'user)
+  (hunchentoot:redirect "/"))
 
 (defroute index ("/" :decorators (@auth)) ()
   (let ((issues (open-issues *p-system*)))
