@@ -73,6 +73,8 @@ LocalStore::LocalStore(const Params& params)
     }
   }
 
+  // TODO(kanepyork): migrate to external constructor, this bypasses virtual dispatch
+  //NOLINTNEXTLINE clang-analyzer-optin.cplusplus.VirtualCall
   createUser(getUserName(), getuid());
 
   /* Optionally, create directories and set permissions for a
