@@ -1,5 +1,7 @@
 #include "nix-daemon-proto.hh"
 
+#include <sstream>
+
 #include <google/protobuf/empty.pb.h>
 #include <google/protobuf/util/time_util.h>
 #include <grpcpp/impl/codegen/server_context.h>
@@ -10,7 +12,11 @@
 #include "libproto/worker.grpc.pb.h"
 #include "libproto/worker.pb.h"
 #include "libstore/derivations.hh"
+#include "libstore/local-store.hh"
 #include "libstore/store-api.hh"
+#include "libutil/archive.hh"
+#include "libutil/hash.hh"
+#include "libutil/serialise.hh"
 
 namespace nix::daemon {
 
@@ -22,6 +28,51 @@ using ::nix::proto::WorkerService;
 
 static Status INVALID_STORE_PATH =
     Status(grpc::StatusCode::INVALID_ARGUMENT, "Invalid store path");
+
+class AddToStoreRequestSource final : public Source {
+  using Reader = grpc::ServerReader<nix::proto::AddToStoreRequest>;
+
+ public:
+  AddToStoreRequestSource(Reader* reader) : reader_(reader) {}
+
+  virtual size_t read(unsigned char* data, size_t len) {
+    auto got = buffer_.sgetn(reinterpret_cast<char*>(data), len);
+    if (got < len) {
+      proto::AddToStoreRequest msg;
+      if (!reader_->Read(&msg)) {
+        return got;
+      }
+      buffer_.sputn(msg.data().data(), msg.data().length());
+      return got + read(data + got, len - got);
+    }
+    return got;
+  };
+
+ private:
+  std::stringbuf buffer_;
+  Reader* reader_;
+};
+
+// TODO(grfn): Make this some sort of pipe so we don't have to store data in
+// memory
+/* If the NAR archive contains a single file at top-level, then save
+   the contents of the file to `s'.  Otherwise barf. */
+struct RetrieveRegularNARSink : ParseSink {
+  bool regular{true};
+  std::string s;
+
+  RetrieveRegularNARSink() {}
+
+  void createDirectory(const Path& path) override { regular = false; }
+
+  void receiveContents(unsigned char* data, unsigned int len) override {
+    s.append((const char*)data, len);
+  }
+
+  void createSymlink(const Path& path, const std::string& target) override {
+    regular = false;
+  }
+};
 
 class WorkerServiceImpl final : public WorkerService::Service {
  public:
@@ -57,6 +108,57 @@ class WorkerServiceImpl final : public WorkerService::Service {
     for (const auto& path : paths) {
       response->add_paths(path);
     }
+
+    return Status::OK;
+  }
+
+  Status AddToStore(grpc::ServerContext* context,
+                    grpc::ServerReader<nix::proto::AddToStoreRequest>* reader,
+                    nix::proto::StorePath* response) override {
+    proto::AddToStoreRequest metadata_request;
+    auto has_metadata = reader->Read(&metadata_request);
+
+    if (!has_metadata || metadata_request.has_meta()) {
+      return Status(grpc::StatusCode::INVALID_ARGUMENT,
+                    "Metadata must be set before sending file content");
+    }
+
+    auto meta = metadata_request.meta();
+    AddToStoreRequestSource source(reader);
+    auto opt_hash_type = hash_type_from(meta.hash_type());
+    if (!opt_hash_type) {
+      return Status(grpc::StatusCode::INTERNAL, "Invalid hash type");
+    }
+
+    std::string* data;
+    RetrieveRegularNARSink nar;
+    TeeSource saved_nar(source);
+
+    if (meta.recursive()) {
+      // TODO(grfn): Don't store the full data in memory, instead just make
+      // addToStoreFromDump take a Source
+      ParseSink sink;
+      parseDump(sink, saved_nar);
+      data = &(*saved_nar.data);
+    } else {
+      parseDump(nar, source);
+      if (!nar.regular) {
+        return Status(grpc::StatusCode::INVALID_ARGUMENT,
+                      "Regular file expected");
+      }
+      data = &nar.s;
+    }
+
+    auto local_store = store_.dynamic_pointer_cast<LocalStore>();
+    if (!local_store) {
+      return Status(grpc::StatusCode::FAILED_PRECONDITION,
+                    "operation is only supported by LocalStore");
+    }
+
+    auto path = local_store->addToStoreFromDump(
+        *data, meta.base_name(), meta.recursive(), opt_hash_type.value());
+
+    response->set_path(path);
 
     return Status::OK;
   }
