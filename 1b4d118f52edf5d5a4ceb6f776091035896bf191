@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "802147c7_903daf36",
+        "filename": "third_party/nix/src/libstore/rpc_store.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-25T18:44:52Z",
+      "side": 1,
+      "message": "try \"the entire codebase\". As someone who has done one of these refactors in the past, it\u0027s nicer if you start from main() and work down.",
+      "range": {
+        "startLine": 27,
+        "startChar": 22,
+        "endLine": 27,
+        "endChar": 54
+      },
+      "revId": "1b4d118f52edf5d5a4ceb6f776091035896bf191",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "009e21c4_f230f7b6",
+        "filename": "third_party/nix/src/libstore/rpc_store.hh",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-25T18:44:52Z",
+      "side": 1,
+      "message": "maybe a small comment explaining why a remote store is inheriting from LocalFSStore",
+      "range": {
+        "startLine": 8,
+        "startChar": 24,
+        "endLine": 8,
+        "endChar": 36
+      },
+      "revId": "1b4d118f52edf5d5a4ceb6f776091035896bf191",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
