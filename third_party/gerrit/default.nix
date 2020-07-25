@@ -28,17 +28,19 @@ let
     runScript = "/bin/bazel-run";
   };
   bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.2.2";
+  version = "3.2.2-1002-gea26b5ee7a";
 in
 pkgs.buildBazelPackage {
   name = "gerrit-${version}";
 
-  src = pkgs.fetchgit {
+  src = (pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "v${version}";
-    sha256 = "1kyzf1bzl0mws774pjk56wlfp9v8bdh5x0irm7n7ifab3s1ccdkw";
+    rev = "ea26b5ee7a1c1e4042525d308678570101d4d4d6";
+    sha256 = "1bndmk7namb81zkscmpvf8ygwrj0wh842xbj0irgbm5w2xwdzkch";
     fetchSubmodules = true;
-  };
+    deepClone = true;
+    leaveDotGit = true;
+  });
   patches = [
     ./0001-Use-detzip-in-download_bower.py.patch
     ./0002-Syntax-highlight-nix.patch
@@ -58,7 +60,7 @@ pkgs.buildBazelPackage {
   removeRulesCC = false;
 
   fetchAttrs = {
-    sha256 = "18cglkmfi1nwcs8n0j62bkh8l9bcgp1g52ackbzs57v70cg93nq7";
+    sha256 = "0jhvcpzkpcanxm99grgk6giv8yf2j0zix5z91wbnz6hb0isps5hs";
     preBuild = ''
       rm .bazelversion
     '';

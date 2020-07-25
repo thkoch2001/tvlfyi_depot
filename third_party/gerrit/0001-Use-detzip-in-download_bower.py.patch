@@ -1,4 +1,4 @@
-From 6884c9e2aacc33fb12db926c6d6b3737b9aa67b1 Mon Sep 17 00:00:00 2001
+From c88d8c133d2f50451c7fb73592db4a000b87f15f Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:09 +0100
 Subject: [PATCH 1/6] Use detzip in download_bower.py
