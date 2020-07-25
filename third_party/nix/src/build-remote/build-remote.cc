@@ -22,7 +22,6 @@
 #include "nix/legacy.hh"
 
 using namespace nix;
-using std::cin;
 
 static void handleAlarm(int sig) {}
 

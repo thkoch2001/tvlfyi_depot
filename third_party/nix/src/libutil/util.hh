@@ -163,7 +163,7 @@ void drainFD(int fd, Sink& sink, bool block = true);
 class AutoDelete {
   Path path;
   bool del;
-  bool recursive;
+  bool recursive{};
 
  public:
   AutoDelete();
