@@ -16,6 +16,24 @@
       "revId": "bbbb97e1422de0cc365d1884eb2604d07ffb3321",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea87422b_8fd46e51",
+        "filename": "third_party/nix/.clang-tidy",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-25T23:39:17Z",
+      "side": 0,
+      "message": "I\u0027m working on this in https://cl.tvl.fyi/c/depot/+/1430, which is the \"sed over compile-commands.json\" approach that everybody else apparently uses.",
+      "parentUuid": "87054470_d48ed144",
+      "revId": "bbbb97e1422de0cc365d1884eb2604d07ffb3321",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
