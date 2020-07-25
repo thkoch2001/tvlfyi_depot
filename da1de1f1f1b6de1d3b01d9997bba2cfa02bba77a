@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbaec97a_1f93612d",
+        "filename": "third_party/nix/.clang-tidy",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-25T03:09:30Z",
+      "side": 0,
+      "message": "somehow, LineFilter is not a valid configuration directive.",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 10
+      },
+      "revId": "da1de1f1f1b6de1d3b01d9997bba2cfa02bba77a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
