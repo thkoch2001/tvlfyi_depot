@@ -185,14 +185,9 @@ message AddToStoreRequest {
     string base_name = 4;
   }
 
-  message Chunk {
-    bytes content = 1;
-    bool final = 2;
-  }
-
   oneof add_oneof {
     Metadata meta = 1;
-    Chunk chunk = 2;
+    bytes data = 3;
   }
 }
 

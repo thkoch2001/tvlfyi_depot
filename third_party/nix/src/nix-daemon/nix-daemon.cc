@@ -298,15 +298,15 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
     case wopAddToStore: {
       bool fixed;
       bool recursive;
-      std::string s;
+      std::string hashType;
       std::string baseName;
-      from >> baseName >> fixed /* obsolete */ >> recursive >> s;
+      from >> baseName >> fixed /* obsolete */ >> recursive >> hashType;
       /* Compatibility hack. */
       if (!fixed) {
-        s = "sha256";
+        hashType = "sha256";
         recursive = true;
       }
-      HashType hashAlgo = parseHashType(s);
+      HashType hashAlgo = parseHashType(hashType);
 
       TeeSource savedNAR(from);
       RetrieveRegularNARSink savedRegular;
