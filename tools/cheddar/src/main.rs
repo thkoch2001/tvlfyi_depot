@@ -3,7 +3,7 @@ use comrak::arena_tree::Node;
 use comrak::nodes::{Ast, AstNode, NodeCodeBlock, NodeHtmlBlock, NodeValue};
 use comrak::{format_html, parse_document, Arena, ComrakOptions};
 use lazy_static::lazy_static;
-use rouille::try_or_400;
+use rouille::{router, try_or_400};
 use rouille::Response;
 use serde::Deserialize;
 use std::cell::RefCell;
@@ -283,10 +283,9 @@ fn format_code<R: BufRead, W: Write>(
     writeln!(writer, "</pre>").expect("write should not fail");
 }
 
-// Starts a Sourcegraph-compatible syntax highlighting server. This
+// Server endpoint for rendering the syntax of source code. This
 // replaces the 'syntect_server' component of Sourcegraph.
-fn highlighting_server(listen: &str) {
-    println!("Starting syntax highlighting server on '{}'", listen);
+fn code_endpoint(request: &rouille::Request) -> rouille::Response {
     #[derive(Deserialize)]
     struct SourcegraphQuery {
         filepath: String,
@@ -294,32 +293,63 @@ fn highlighting_server(listen: &str) {
         code: String,
     }
 
-    // Sourcegraph only uses a single endpoint, so we don't attempt to
-    // deal with routing here for now.
-    rouille::start_server(listen, move |request| {
-        let query: SourcegraphQuery = try_or_400!(rouille::input::json_input(request));
-        println!("Handling highlighting request for '{}'", query.filepath);
+    let query: SourcegraphQuery = try_or_400!(rouille::input::json_input(request));
+    let mut buf: Vec<u8> = Vec::new();
+
+    // We don't use syntect with the sourcegraph themes bundled
+    // currently, so let's fall back to something that is kind of
+    // similar (tm).
+    let theme = &THEMES.themes[match query.theme.as_str() {
+        "Sourcegraph (light)" => "Solarized (light)",
+        _ => "Solarized (dark)",
+    }];
+
+    format_code(
+        theme,
+        &mut query.code.as_bytes(),
+        &mut buf,
+        &query.filepath,
+    );
+
+    Response::json(&json!({
+        "is_plaintext": false,
+        "data": String::from_utf8_lossy(&buf)
+    }))
+}
+
+// Server endpoint for rendering a Markdown file.
+fn markdown_endpoint(request: &rouille::Request) -> rouille::Response {
+    let mut texts: HashMap<String, String> =
+        try_or_400!(rouille::input::json_input(request));
+
+    for text in texts.values_mut() {
         let mut buf: Vec<u8> = Vec::new();
+        format_markdown(&mut text.as_bytes(), &mut buf);
+        *text = String::from_utf8_lossy(&buf).to_string();
+    }
 
-        // We don't use syntect with the sourcegraph themes bundled
-        // currently, so let's fall back to something that is kind of
-        // similar (tm).
-        let theme = &THEMES.themes[match query.theme.as_str() {
-            "Sourcegraph (light)" => "Solarized (light)",
-            _ => "Solarized (dark)",
-        }];
+    Response::json(&texts)
+}
 
-        format_code(
-            theme,
-            &mut query.code.as_bytes(),
-            &mut buf,
-            &query.filepath,
-        );
+fn highlighting_server(listen: &str) {
+    println!("Starting syntax highlighting server on '{}'", listen);
 
-        Response::json(&json!({
-            "is_plaintext": false,
-            "data": String::from_utf8_lossy(&buf)
-        }))
+    rouille::start_server(listen, move |request| {
+        router!(request,
+                // Markdown rendering route
+                (POST) (/markdown) => {
+                    markdown_endpoint(request)
+                },
+
+                // Code rendering route
+                (POST) (/) => {
+                    code_endpoint(request)
+                },
+
+                _ => {
+                    rouille::Response::empty_404()
+                },
+        )
     });
 }
 
