@@ -1,5 +1,6 @@
 #pragma once
 
+#include "libproto/worker.grpc.pb.h"
 #include "libutil/serialise.hh"
 #include "libutil/types.hh"
 
@@ -8,6 +9,8 @@ namespace nix {
 MakeError(BadHash, Error);
 
 enum HashType : char { htUnknown, htMD5, htSHA1, htSHA256, htSHA512 };
+
+std::optional<HashType> hash_type_from(nix::proto::HashType hash_type);
 
 const int md5HashSize = 16;
 const int sha1HashSize = 20;

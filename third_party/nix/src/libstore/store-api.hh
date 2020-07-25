@@ -408,9 +408,10 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
                           std::shared_ptr<FSAccessor> accessor = 0);
 
   /* Copy the contents of a path to the store and register the
-     validity the resulting path.  The resulting path is returned.
+     validity of the resulting path.  The resulting path is returned.
      The function object `filter' can be used to exclude files (see
-     libutil/archive.hh). */
+     libutil/archive.hh). If recursive is set to true, the path will be treated
+     as a directory (eg cp -r vs cp) */
   virtual Path addToStore(const std::string& name, const Path& srcPath,
                           bool recursive = true, HashType hashAlgo = htSHA256,
                           PathFilter& filter = defaultPathFilter,
