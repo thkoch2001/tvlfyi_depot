@@ -196,8 +196,8 @@ struct CmdSearch final : SourceExprCommand, MixJSON {
                     : nullptr;
             doExpr(i.second.value,
                    attrPath.empty()
-                       ? (std::string)i.second.name
-                       : attrPath + "." + (std::string)i.second.name,
+                       ? std::string(i.second.name)
+                       : attrPath + "." + std::string(i.second.name),
                    toplevel2 || fromCache, cache2 ? cache2.get() : nullptr);
           }
         }
@@ -216,7 +216,7 @@ struct CmdSearch final : SourceExprCommand, MixJSON {
     if (useCache && pathExists(jsonCacheFileName)) {
       LOG(WARNING) << "using cached results; pass '-u' to update the cache";
 
-      Value vRoot;
+      Value vRoot{};
       parseJSON(*state, readFile(jsonCacheFileName), vRoot);
 
       fromCache = true;

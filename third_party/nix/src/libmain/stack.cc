@@ -9,14 +9,14 @@
 
 namespace nix {
 
-static void sigsegvHandler(int signo, siginfo_t* info, void* ctx) {
+static void sigsegvHandler(int _signo, siginfo_t* info, void* ctx) {
   /* Detect stack overflows by comparing the faulting address with
      the stack pointer.  Unfortunately, getting the stack pointer is
      not portable. */
   bool haveSP = true;
   char* sp = nullptr;
 #if defined(__x86_64__) && defined(REG_RSP)
-  sp = (char*)((ucontext_t*)ctx)->uc_mcontext.gregs[REG_RSP];
+  sp = (char*)(static_cast<ucontext_t*>(ctx))->uc_mcontext.gregs[REG_RSP];
 #elif defined(REG_ESP)
   sp = (char*)((ucontext_t*)ctx)->uc_mcontext.gregs[REG_ESP];
 #else
@@ -24,7 +24,7 @@ static void sigsegvHandler(int signo, siginfo_t* info, void* ctx) {
 #endif
 
   if (haveSP) {
-    ptrdiff_t diff = (char*)info->si_addr - sp;
+    ptrdiff_t diff = static_cast<char*>(info->si_addr) - sp;
     if (diff < 0) {
       diff = -diff;
     }
@@ -36,7 +36,7 @@ static void sigsegvHandler(int signo, siginfo_t* info, void* ctx) {
   }
 
   /* Restore default behaviour (i.e. segfault and dump core). */
-  struct sigaction act;
+  struct sigaction act {};
   sigfillset(&act.sa_mask);
   act.sa_handler = SIG_DFL;
   act.sa_flags = 0;
@@ -62,7 +62,7 @@ void detectStackOverflow() {
     throw SysError("cannot set alternative stack");
   }
 
-  struct sigaction act;
+  struct sigaction act {};
   sigfillset(&act.sa_mask);
   act.sa_sigaction = sigsegvHandler;
   act.sa_flags = SA_SIGINFO | SA_ONSTACK;

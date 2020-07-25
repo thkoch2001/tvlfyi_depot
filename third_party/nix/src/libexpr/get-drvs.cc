@@ -6,6 +6,7 @@
 
 #include <absl/strings/numbers.h>
 #include <glog/logging.h>
+#include <math.h>
 
 #include "libexpr/eval-inline.hh"
 #include "libstore/derivations.hh"
@@ -243,7 +244,7 @@ NixInt DrvInfo::queryMetaInt(const std::string& name, NixInt def) {
   if (v->type == tString) {
     /* Backwards compatibility with before we had support for
        integer meta fields. */
-    NixInt n;
+    NixInt n = 0;
     if (absl::SimpleAtoi(v->string.s, &n)) {
       return n;
     }
@@ -262,7 +263,7 @@ NixFloat DrvInfo::queryMetaFloat(const std::string& name, NixFloat def) {
   if (v->type == tString) {
     /* Backwards compatibility with before we had support for
        float meta fields. */
-    NixFloat n;
+    NixFloat n = NAN;
     if (string2Float(v->string.s, n)) {
       return n;
     }
@@ -367,7 +368,7 @@ static void getDerivations(EvalState& state, Value& vIn,
                            const std::string& pathPrefix, Bindings& autoArgs,
                            DrvInfos& drvs, Done& done,
                            bool ignoreAssertionFailures) {
-  Value v;
+  Value v{};
   state.autoCallFunction(autoArgs, vIn, v);
 
   /* Process the expression. */
