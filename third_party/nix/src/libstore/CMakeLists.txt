@@ -38,6 +38,7 @@ set(HEADER_FILES
     references.hh
     remote-fs-accessor.hh
     remote-store.hh
+    rpc-store.hh
     s3-binary-cache-store.hh
     s3.hh
     serve-protocol.hh
@@ -78,6 +79,7 @@ target_sources(nixstore
     references.cc
     remote-fs-accessor.cc
     remote-store.cc
+    rpc-store.cc
     s3-binary-cache-store.cc
     sqlite.cc
     ssh.cc

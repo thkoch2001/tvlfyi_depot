@@ -7,11 +7,13 @@
 #include <absl/strings/numbers.h>
 #include <absl/strings/str_split.h>
 #include <glog/logging.h>
+#include <grpcpp/create_channel.h>
 
 #include "libstore/crypto.hh"
 #include "libstore/derivations.hh"
 #include "libstore/globals.hh"
 #include "libstore/nar-info-disk-cache.hh"
+#include "libstore/rpc-store.hh"
 #include "libutil/json.hh"
 #include "libutil/thread-pool.hh"
 #include "libutil/util.hh"
@@ -978,23 +980,28 @@ StoreType getStoreType(const std::string& uri, const std::string& stateDir) {
   }
 }
 
-static RegisterStoreImplementation regStore([](const std::string& uri,
-                                               const Store::Params& params)
-                                                -> std::shared_ptr<Store> {
-  switch (getStoreType(uri, get(params, "state", settings.nixStateDir))) {
-    case tDaemon:
-      return std::shared_ptr<Store>(std::make_shared<UDSRemoteStore>(params));
-    case tLocal: {
-      Store::Params params2 = params;
-      if (absl::StartsWith(uri, "/")) {
-        params2["root"] = uri;
+static RegisterStoreImplementation regStore(
+    [](const std::string& uri,
+       const Store::Params& params) -> std::shared_ptr<Store> {
+      switch (getStoreType(uri, get(params, "state", settings.nixStateDir))) {
+        case tDaemon: {
+          auto daemon_socket_uri = settings.nixDaemonSocketFile;
+          auto channel = grpc::CreateChannel(
+              daemon_socket_uri, grpc::InsecureChannelCredentials());
+          return std::shared_ptr<Store>(std::make_shared<nix::store::RpcStore>(
+              params, proto::WorkerService::NewStub(channel)));
+        }
+        case tLocal: {
+          Store::Params params2 = params;
+          if (absl::StartsWith(uri, "/")) {
+            params2["root"] = uri;
+          }
+          return std::shared_ptr<Store>(std::make_shared<LocalStore>(params2));
+        }
+        default:
+          return nullptr;
       }
-      return std::shared_ptr<Store>(std::make_shared<LocalStore>(params2));
-    }
-    default:
-      return nullptr;
-  }
-});
+    });
 
 std::list<ref<Store>> getDefaultSubstituters() {
   static auto stores([]() {
