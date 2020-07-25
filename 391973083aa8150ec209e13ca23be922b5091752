@@ -16,6 +16,24 @@
       "revId": "391973083aa8150ec209e13ca23be922b5091752",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1be1aa1f_8e2cb81b",
+        "filename": "third_party/nix/test-vm.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-25T01:36:32Z",
+      "side": 1,
+      "message": "1. we get nixpkgs from an IFD anyway, so it\u0027s in the store regardless\n2. this is something that\u0027s done all over the codebase using the exact directory, so it\u0027d be in the store already anyway",
+      "parentUuid": "36dca0a2_b12e5b72",
+      "revId": "391973083aa8150ec209e13ca23be922b5091752",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
