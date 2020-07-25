@@ -30,7 +30,7 @@ let
       --plugin=protoc-gen-grpc=${pkgs.grpc}/bin/grpc_cpp_plugin --grpc_out=$out/libproto \
       $PROTO_SRCS/*.proto
   '';
-in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
+in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   pname = "tvix";
   version = "2.3.4";
   inherit src;
@@ -133,13 +133,16 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     ln -s $out/bin/nix $out/libexec/nix/build-remote
   '';
 
-  shellHook = ''
-    export NIX_DATA_DIR="${toString depotPath}/third_party"
-    export NIX_TEST_VAR=foo
-  '';
-
   # TODO(tazjin): integration test setup?
   # TODO(tazjin): docs generation?
 
-  passthru = { test-vm = import ./test-vm.nix args; };
-}
+  passthru = {
+    build-shell = self.overrideAttrs (_: {
+      shellHook = ''
+        export NIX_DATA_DIR="${toString depotPath}/third_party"
+        export NIX_TEST_VAR=foo
+      '';
+    });
+    test-vm = import ./test-vm.nix args;
+  };
+})
