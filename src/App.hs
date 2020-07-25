@@ -32,7 +32,7 @@ server pool =
 
     userAdd :: T.Account -> IO (Maybe T.Session)
     userAdd newUser = flip runSqlPersistMPool pool $ do
-      exists <- selectFirst [T.AccountName ==. (T.accountName newUser)] []
+      exists <- selectFirst [T.AccountUsername ==. (T.accountUsername newUser)] []
       case exists of
         Nothing -> do
           insert newUser
@@ -44,7 +44,7 @@ server pool =
 
     userGet :: Text -> IO (Maybe T.Account)
     userGet name = flip runSqlPersistMPool pool $ do
-      mUser <- selectFirst [T.AccountName ==. name] []
+      mUser <- selectFirst [T.AccountUsername ==. name] []
       pure $ entityVal <$> mUser
 
 app :: ConnectionPool -> Application

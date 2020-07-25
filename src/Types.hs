@@ -7,6 +7,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE NamedFieldPuns #-}
 --------------------------------------------------------------------------------
 module Types where
 --------------------------------------------------------------------------------
@@ -17,21 +18,31 @@ import Database.Persist.TH
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Account
-  name Text
-  age  Int
-  UniqueName name
+  username Text
+  password Text
+  email Text
+  role Text
+  UniqueUsername username
+  UniqueEmail email
   deriving Eq Read Show
 |]
 
 instance FromJSON Account where
-  parseJSON = withObject "User" $ \ v ->
-    Account <$> v .: "name"
-            <*> v .: "age"
+  parseJSON = withObject "Account" $ \ v ->
+    Account <$> v .: "username"
+            <*> v .: "password"
+            <*> v .: "email"
+            <*> v .: "role"
 
 instance ToJSON Account where
-  toJSON (Account name age) =
-    object [ "name" .= name
-           , "age"  .= age
+  toJSON (Account{ accountUsername
+                 , accountPassword
+                 , accountEmail
+                 , accountRole }) =
+    object [ "username" .= accountUsername
+           , "password" .= accountPassword
+           , "email" .= accountEmail
+           , "role" .= accountRole
            ]
 
 newtype Username = Username Text
