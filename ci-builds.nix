@@ -63,6 +63,7 @@ in lib.fix (self: {
     git
     grpc
     nix
+    nix.test-vm
     openldap
     rapidcheck
   ] ++ builtins.attrValues lisp;

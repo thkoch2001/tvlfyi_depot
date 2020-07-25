@@ -1,4 +1,6 @@
-{ pkgs ? (import ../.. {}).third_party
+args@{
+  pkgs ? (import ../.. {}).third_party
+, lib
 , buildType ? "release"
 , depotPath ? ../..
 , ...
@@ -16,7 +18,9 @@ let
     enableLargeConfig = true;
   };
 
-  src = ./.;
+  src = builtins.filterSource
+    (path: type: type == "directory" || ! (lib.hasSuffix ".nix" path))
+    ./.;
 
   # Proto generation in CMake is theoretically possible, but that is
   # very theoretical - this does it in Nix instead.
@@ -138,4 +142,6 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   # TODO(tazjin): integration test setup?
   # TODO(tazjin): docs generation?
+
+  passthru = { test-vm = import ./test-vm.nix args; };
 }
