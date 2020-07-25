@@ -45,18 +45,18 @@ struct InstallSourceInfo {
   Path nixExprPath;         /* for srcNixExprDrvs, srcNixExprs */
   Path profile;             /* for srcProfile */
   std::string systemFilter; /* for srcNixExprDrvs */
-  Bindings* autoArgs;
+  Bindings* autoArgs{};
 };
 
 struct Globals : public gc {
   InstallSourceInfo instSource;
   Path profile;
   std::shared_ptr<EvalState> state;
-  bool dryRun;
-  bool preserveInstalled;
-  bool removeAll;
+  bool dryRun{};
+  bool preserveInstalled{};
+  bool removeAll{};
   std::string forceName;
-  bool prebuiltOnly;
+  bool prebuiltOnly{};
 };
 
 using Operation = void (*)(Globals&, Strings, Strings);
@@ -106,7 +106,7 @@ static void getAllExprs(EvalState& state, const Path& path, StringSet& attrs,
 
     Path path2 = path + "/" + i;
 
-    struct stat st;
+    struct stat st {};
     if (stat(path2.c_str(), &st) == -1) {
       continue;  // ignore dangling symlinks in ~/.nix-defexpr
     }
@@ -141,7 +141,7 @@ static void getAllExprs(EvalState& state, const Path& path, StringSet& attrs,
 }
 
 static void loadSourceExpr(EvalState& state, const Path& path, Value& v) {
-  struct stat st;
+  struct stat st {};
   if (stat(path.c_str(), &st) == -1) {
     throw SysError(format("getting information about '%1%'") % path);
   }
@@ -171,7 +171,7 @@ static void loadSourceExpr(EvalState& state, const Path& path, Value& v) {
 static void loadDerivations(EvalState& state, const Path& nixExprPath,
                             const std::string& systemFilter, Bindings& autoArgs,
                             const std::string& pathPrefix, DrvInfos& elems) {
-  Value vRoot;
+  Value vRoot{};
   loadSourceExpr(state, nixExprPath, vRoot);
 
   Value& v(*findAlongAttrPath(state, pathPrefix, autoArgs, vRoot));
@@ -189,12 +189,12 @@ static void loadDerivations(EvalState& state, const Path& nixExprPath,
   }
 }
 
-static long getPriority(EvalState& state, DrvInfo& drv) {
+static long getPriority(DrvInfo& drv) {
   return drv.queryMetaInt("priority", 0);
 }
 
 static long comparePriorities(EvalState& state, DrvInfo& drv1, DrvInfo& drv2) {
-  return getPriority(state, drv2) - getPriority(state, drv1);
+  return getPriority(drv2) - getPriority(drv1);
 }
 
 // FIXME: this function is rather slow since it checks a single path
@@ -346,13 +346,13 @@ static void queryInstSources(EvalState& state, InstallSourceInfo& instSource,
        argument `x: x.bar' is equivalent to `(x: x.bar)
        (import ./foo.nix)' = `(import ./foo.nix).bar'. */
     case srcNixExprs: {
-      Value vArg;
+      Value vArg{};
       loadSourceExpr(state, instSource.nixExprPath, vArg);
 
       for (auto& i : args) {
         Expr* eFun = state.parseExprFromString(i, absPath("."));
-        Value vFun;
-        Value vTmp;
+        Value vFun{};
+        Value vTmp{};
         state.eval(eFun, vFun);
         mkApp(vTmp, vFun, vArg);
         getDerivations(state, vTmp, "", *instSource.autoArgs, elems, true);
@@ -406,7 +406,7 @@ static void queryInstSources(EvalState& state, InstallSourceInfo& instSource,
     }
 
     case srcAttrPath: {
-      Value vRoot;
+      Value vRoot{};
       loadSourceExpr(state, instSource.nixExprPath, vRoot);
       for (auto& i : args) {
         Value& v(*findAlongAttrPath(state, i, *instSource.autoArgs, vRoot));
@@ -802,7 +802,7 @@ void printTable(Table& table) {
   for (auto& i : table) {
     assert(i.size() == nrColumns);
     Strings::iterator j;
-    size_t column;
+    size_t column = 0;
     for (j = i.begin(), column = 0; j != i.end(); ++j, ++column) {
       if (j->size() > widths[column]) {
         widths[column] = j->size();
@@ -812,7 +812,7 @@ void printTable(Table& table) {
 
   for (auto& i : table) {
     Strings::iterator j;
-    size_t column;
+    size_t column = 0;
     for (j = i.begin(), column = 0; j != i.end(); ++j, ++column) {
       std::string s = *j;
       replace(s.begin(), s.end(), '\n', ' ');
@@ -1050,7 +1050,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
           attrs["valid"] = isValid ? "1" : "0";
           attrs["substitutable"] = hasSubs ? "1" : "0";
         } else {
-          columns.push_back((std::string)(isInstalled ? "I" : "-") +
+          columns.push_back(std::string(isInstalled ? "I" : "-") +
                             (isValid ? "P" : "-") + (hasSubs ? "S" : "-"));
         }
       }
@@ -1078,7 +1078,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
         std::string version;
         VersionDiff diff = compareVersionAgainstSet(i, otherElems, version);
 
-        char ch;
+        char ch = 0;
         switch (diff) {
           case cvLess:
             ch = '>';
@@ -1102,7 +1102,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
             attrs["maxComparedVersion"] = version;
           }
         } else {
-          std::string column = (std::string) "" + ch + " " + version;
+          std::string column = std::string("") + ch + " " + version;
           if (diff == cvGreater && tty) {
             column = ANSI_RED + column + ANSI_NORMAL;
           }
@@ -1266,7 +1266,7 @@ static void switchGeneration(Globals& globals, int dstGen) {
   PathLocks lock;
   lockProfile(lock, globals.profile);
 
-  int curGen;
+  int curGen = 0;
   Generations gens = findGenerations(globals.profile, curGen);
 
   Generation dst;
@@ -1303,7 +1303,7 @@ static void opSwitchGeneration(Globals& globals, Strings opFlags,
     throw UsageError(format("exactly one argument expected"));
   }
 
-  int dstGen;
+  int dstGen = 0;
   if (!absl::SimpleAtoi(opArgs.front(), &dstGen)) {
     throw UsageError(format("expected a generation number"));
   }
@@ -1334,13 +1334,13 @@ static void opListGenerations(Globals& globals, Strings opFlags,
   PathLocks lock;
   lockProfile(lock, globals.profile);
 
-  int curGen;
+  int curGen = 0;
   Generations gens = findGenerations(globals.profile, curGen);
 
   RunPager pager;
 
   for (auto& i : gens) {
-    tm t;
+    tm t{};
     if (localtime_r(&i.creationTime, &t) == nullptr) {
       throw Error("cannot convert time");
     }
@@ -1369,7 +1369,7 @@ static void opDeleteGenerations(Globals& globals, Strings opFlags,
                   opArgs.front());
     }
     std::string str_max = std::string(opArgs.front(), 1, opArgs.front().size());
-    int max;
+    int max = 0;
     if (!absl::SimpleAtoi(str_max, &max) || max == 0) {
       throw Error(format("invalid number of generations to keep ‘%1%’") %
                   opArgs.front());
@@ -1378,7 +1378,7 @@ static void opDeleteGenerations(Globals& globals, Strings opFlags,
   } else {
     std::set<unsigned int> gens;
     for (auto& i : opArgs) {
-      unsigned int n;
+      unsigned int n = 0;
       if (!absl::SimpleAtoi(i, &n)) {
         throw UsageError(format("invalid generation number '%1%'") % i);
       }

@@ -87,7 +87,7 @@ void BinaryCacheStore::getFile(const std::string& path, Sink& sink) {
             }
           }});
   auto data = promise.get_future().get();
-  sink((unsigned char*)data->data(), data->size());
+  sink(reinterpret_cast<unsigned char*>(data->data()), data->size());
 }
 
 std::shared_ptr<std::string> BinaryCacheStore::getFile(
@@ -205,7 +205,9 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
           .count();
   DLOG(INFO) << "copying path '" << narInfo->path << "' (" << narInfo->narSize
              << " bytes, compressed "
-             << ((1.0 - (double)narCompressed->size() / nar->size()) * 100.0)
+             << ((1.0 -
+                  static_cast<double>(narCompressed->size()) / nar->size()) *
+                 100.0)
              << "% in " << duration << "ms) to binary cache";
 
   /* Atomically write the NAR file. */
@@ -287,9 +289,8 @@ void BinaryCacheStore::queryPathInfoUncached(
 
               stats.narInfoRead++;
 
-              (*callbackPtr)(
-                  (std::shared_ptr<ValidPathInfo>)std::make_shared<NarInfo>(
-                      *this, *data, narInfoFile));
+              (*callbackPtr)(std::shared_ptr<ValidPathInfo>(
+                  std::make_shared<NarInfo>(*this, *data, narInfoFile)));
 
             } catch (...) {
               callbackPtr->rethrow();
@@ -353,7 +354,8 @@ void BinaryCacheStore::addSignatures(const Path& storePath,
      when addSignatures() is called sequentially on a path, because
      S3 might return an outdated cached version. */
 
-  auto narInfo = make_ref<NarInfo>((NarInfo&)*queryPathInfo(storePath));
+  auto narInfo = make_ref<NarInfo>(const_cast<NarInfo&>(
+      dynamic_cast<const NarInfo&>(*queryPathInfo(storePath))));
 
   narInfo->sigs.insert(sigs.begin(), sigs.end());
 

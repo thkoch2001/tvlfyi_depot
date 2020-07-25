@@ -37,7 +37,7 @@ void deleteLockFile(const Path& path, int fd) {
 }
 
 bool lockFile(int fd, LockType lockType, bool wait) {
-  int type;
+  int type = 0;
   if (lockType == ltRead) {
     type = LOCK_SH;
   } else if (lockType == ltWrite) {
@@ -119,7 +119,7 @@ bool PathLocks::lockPaths(const PathSet& paths, const std::string& waitMsg,
 
       /* Check that the lock file hasn't become stale (i.e.,
          hasn't been unlinked). */
-      struct stat st;
+      struct stat st {};
       if (fstat(fd.get(), &st) == -1) {
         throw SysError(format("statting lock file '%1%'") % lockPath);
       }
