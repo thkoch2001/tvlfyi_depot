@@ -131,6 +131,19 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
     mkdir -p $out/libexec/nix
     ln -s $out/bin/nix $out/libexec/nix/build-remote
+
+    # configuration variables for templated files
+    export storedir=/nix/store
+    export localstatedir=/nix/var/nix
+    export bindir=$out/bin
+
+    mkdir -p $out/lib/systemd/system
+    substituteAll \
+      ${src}/misc/systemd/nix-daemon.service.in \
+      $out/lib/systemd/system/nix-daemon.service
+    substituteAll \
+      ${src}/misc/systemd/nix-daemon.socket.in \
+      $out/lib/systemd/system/nix-daemon.socket
   '';
 
   # TODO(tazjin): integration test setup?
