@@ -18,7 +18,7 @@ std::ostream& operator<<(std::ostream& str, const Expr& e) {
 
 static void showString(std::ostream& str, const std::string& s) {
   str << '"';
-  for (auto c : (std::string)s) {
+  for (auto c : std::string(s)) {
     if (c == '"' || c == '\\' || c == '$') {
       str << "\\" << c;
     } else if (c == '\n') {
@@ -191,7 +191,7 @@ std::ostream& operator<<(std::ostream& str, const Pos& pos) {
     str << "undefined position";
   } else {
     str << (format(ANSI_BOLD "%1%" ANSI_NORMAL ":%2%:%3%") %
-            (std::string)pos.file.value() % pos.line % pos.column)
+            std::string(pos.file.value()) % pos.line % pos.column)
                .str();
   }
   return str;
@@ -232,8 +232,8 @@ void ExprPath::bindVars(const StaticEnv& env) {}
 void ExprVar::bindVars(const StaticEnv& env) {
   /* Check whether the variable appears in the environment.  If so,
      set its level and displacement. */
-  const StaticEnv* curEnv;
-  unsigned int level;
+  const StaticEnv* curEnv = nullptr;
+  unsigned int level = 0;
   int withLevel = -1;
   for (curEnv = &env, level = 0; curEnv != nullptr;
        curEnv = curEnv->up, level++) {
@@ -363,8 +363,8 @@ void ExprWith::bindVars(const StaticEnv& env) {
   /* Does this `with' have an enclosing `with'?  If so, record its
      level so that `lookupVar' can look up variables in the previous
      `with' if this one doesn't contain the desired attribute. */
-  const StaticEnv* curEnv;
-  unsigned int level;
+  const StaticEnv* curEnv = nullptr;
+  unsigned int level = 0;
   prevWith = 0;
   for (curEnv = &env, level = 1; curEnv != nullptr;
        curEnv = curEnv->up, level++) {
@@ -405,7 +405,7 @@ void ExprLambda::setName(Symbol& name) { this->name = name; }
 
 std::string ExprLambda::showNamePos() const {
   return (format("%1% at %2%") %
-          (name.has_value() ? "'" + (std::string)name.value() + "'"
+          (name.has_value() ? "'" + std::string(name.value()) + "'"
                             : "anonymous function") %
           pos)
       .str();

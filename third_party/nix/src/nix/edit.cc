@@ -28,7 +28,7 @@ struct CmdEdit final : InstallableCommand {
 
     auto v = installable->toValue(*state);
 
-    Value* v2;
+    Value* v2 = nullptr;
     try {
       auto dummyArgs = Bindings::NewGC();
       v2 = findAlongAttrPath(*state, "meta.position", *dummyArgs, *v);
@@ -46,7 +46,7 @@ struct CmdEdit final : InstallableCommand {
     }
 
     std::string filename(pos, 0, colon);
-    int lineno;
+    int lineno = 0;
     try {
       lineno = std::stoi(std::string(pos, colon + 1));
     } catch (std::invalid_argument& e) {

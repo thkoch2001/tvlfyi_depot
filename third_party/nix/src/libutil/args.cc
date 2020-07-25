@@ -27,12 +27,12 @@ void Args::parseCmdline(const Strings& _cmdline) {
        `-j3` -> `-j 3`). */
     if (!dashDash && arg.length() > 2 && arg[0] == '-' && arg[1] != '-' &&
         (isalpha(arg[1]) != 0)) {
-      *pos = (std::string) "-" + arg[1];
+      *pos = std::string("-") + arg[1];
       auto next = pos;
       ++next;
       for (unsigned int j = 2; j < arg.length(); j++) {
         if (isalpha(arg[j]) != 0) {
-          cmdline.insert(next, (std::string) "-" + arg[j]);
+          cmdline.insert(next, std::string("-") + arg[j]);
         } else {
           cmdline.insert(next, std::string(arg, j));
           break;

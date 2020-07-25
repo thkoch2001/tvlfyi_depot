@@ -207,7 +207,7 @@ bool isDirOrInDir(const Path& path, const Path& dir) {
 }
 
 struct stat lstat(const Path& path) {
-  struct stat st;
+  struct stat st {};
   if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting status of '%1%'") % path);
   }
@@ -215,8 +215,8 @@ struct stat lstat(const Path& path) {
 }
 
 bool pathExists(const Path& path) {
-  int res;
-  struct stat st;
+  int res = 0;
+  struct stat st {};
   res = lstat(path.c_str(), &st);
   if (res == 0) {
     return true;
@@ -254,7 +254,7 @@ DirEntries readDirectory(DIR* dir, const Path& path) {
   DirEntries entries;
   entries.reserve(64);
 
-  struct dirent* dirent;
+  struct dirent* dirent = nullptr;
   while (errno = 0, dirent = readdir(dir)) { /* sic */
     checkInterrupt();
     std::string name = dirent->d_name;
@@ -300,7 +300,7 @@ unsigned char getFileType(const Path& path) {
 }
 
 std::string readFile(int fd) {
-  struct stat st;
+  struct stat st {};
   if (fstat(fd, &st) == -1) {
     throw SysError("statting file");
   }
@@ -308,7 +308,7 @@ std::string readFile(int fd) {
   std::vector<unsigned char> buf(st.st_size);
   readFull(fd, buf.data(), st.st_size);
 
-  return std::string((char*)buf.data(), st.st_size);
+  return std::string(reinterpret_cast<char*>(buf.data()), st.st_size);
 }
 
 std::string readFile(absl::string_view path, bool drain) {
@@ -349,7 +349,7 @@ void writeFile(const Path& path, Source& source, mode_t mode) {
   while (true) {
     try {
       auto n = source.read(buf.data(), buf.size());
-      writeFull(fd.get(), (unsigned char*)buf.data(), n);
+      writeFull(fd.get(), static_cast<unsigned char*>(buf.data()), n);
     } catch (EndOfFile&) {
       break;
     }
@@ -360,7 +360,7 @@ std::string readLine(int fd) {
   std::string s;
   while (true) {
     checkInterrupt();
-    char ch;
+    char ch = 0;
     // FIXME: inefficient
     ssize_t rd = read(fd, &ch, 1);
     if (rd == -1) {
@@ -389,7 +389,7 @@ static void _deletePath(int parentfd, const Path& path,
 
   std::string name(baseNameOf(path));
 
-  struct stat st;
+  struct stat st {};
   if (fstatat(parentfd, name.c_str(), &st, AT_SYMLINK_NOFOLLOW) == -1) {
     if (errno == ENOENT) {
       return;
@@ -449,7 +449,7 @@ static void _deletePath(const Path& path, unsigned long long& bytesFreed) {
 }
 
 void deletePath(const Path& path) {
-  unsigned long long dummy;
+  unsigned long long dummy = 0;
   deletePath(path, dummy);
 }
 
@@ -514,8 +514,8 @@ static Lazy<Path> getHome2([]() {
   Path homeDir = getEnv("HOME");
   if (homeDir.empty()) {
     std::vector<char> buf(16384);
-    struct passwd pwbuf;
-    struct passwd* pw;
+    struct passwd pwbuf {};
+    struct passwd* pw = nullptr;
     if (getpwuid_r(geteuid(), &pwbuf, buf.data(), buf.size(), &pw) != 0 ||
         (pw == nullptr) || (pw->pw_dir == nullptr) || (pw->pw_dir[0] == 0)) {
       throw Error("cannot determine user's home directory");
@@ -567,7 +567,7 @@ Paths createDirs(const Path& path) {
     return created;
   }
 
-  struct stat st;
+  struct stat st {};
   if (lstat(path.c_str(), &st) == -1) {
     created = createDirs(dirOf(path));
     if (mkdir(path.c_str(), 0777) == -1 && errno != EEXIST) {
@@ -619,7 +619,7 @@ void replaceSymlink(const Path& target, const Path& link) {
 void readFull(int fd, unsigned char* buf, size_t count) {
   while (count != 0u) {
     checkInterrupt();
-    ssize_t res = read(fd, (char*)buf, count);
+    ssize_t res = read(fd, reinterpret_cast<char*>(buf), count);
     if (res == -1) {
       if (errno == EINTR) {
         continue;
@@ -652,7 +652,8 @@ void writeFull(int fd, const unsigned char* buf, size_t count,
 }
 
 void writeFull(int fd, const std::string& s, bool allowInterrupts) {
-  writeFull(fd, (const unsigned char*)s.data(), s.size(), allowInterrupts);
+  writeFull(fd, reinterpret_cast<const unsigned char*>(s.data()), s.size(),
+            allowInterrupts);
 }
 
 std::string drainFD(int fd, bool block) {
@@ -662,7 +663,7 @@ std::string drainFD(int fd, bool block) {
 }
 
 void drainFD(int fd, Sink& sink, bool block) {
-  int saved;
+  int saved = 0;
 
   Finally finally([&]() {
     if (!block) {
@@ -829,7 +830,7 @@ int Pid::kill() {
 int Pid::wait() {
   assert(pid != -1);
   while (true) {
-    int status;
+    int status = 0;
     int res = waitpid(pid, &status, 0);
     if (res == pid) {
       pid = -1;
@@ -954,7 +955,7 @@ pid_t startProcess(std::function<void()> fun, const ProcessOptions& options) {
 std::vector<char*> stringsToCharPtrs(const Strings& ss) {
   std::vector<char*> res;
   for (auto& s : ss) {
-    res.push_back((char*)s.c_str());
+    res.push_back(const_cast<char*>(s.c_str()));
   }
   res.push_back(nullptr);
   return res;
@@ -1085,7 +1086,7 @@ void runProgram2(const RunOptions& options) {
       try {
         std::vector<unsigned char> buf(8 * 1024);
         while (true) {
-          size_t n;
+          size_t n = 0;
           try {
             n = source->read(buf.data(), buf.size());
           } catch (EndOfFile&) {
@@ -1144,7 +1145,7 @@ void closeMostFDs(const std::set<int>& exceptions) {
 }
 
 void closeOnExec(int fd) {
-  int prev;
+  int prev = 0;
   if ((prev = fcntl(fd, F_GETFD, 0)) == -1 ||
       fcntl(fd, F_SETFD, prev | FD_CLOEXEC) == -1) {
     throw SysError("setting close-on-exec flag");
@@ -1270,7 +1271,7 @@ std::string filterANSIEscapes(const std::string& s, bool filterAll,
   size_t w = 0;
   auto i = s.begin();
 
-  while (w < (size_t)width && i != s.end()) {
+  while (w < static_cast<size_t>(width) && i != s.end()) {
     if (*i == '\e') {
       std::string e;
       e += *i++;
@@ -1305,7 +1306,7 @@ std::string filterANSIEscapes(const std::string& s, bool filterAll,
       i++;
       t += ' ';
       w++;
-      while (w < (size_t)width && ((w % 8) != 0u)) {
+      while (w < static_cast<size_t>(width) && ((w % 8) != 0u)) {
         t += ' ';
         w++;
       }
@@ -1337,7 +1338,7 @@ void callFailure(const std::function<void(std::exception_ptr exc)>& failure,
 static Sync<std::pair<unsigned short, unsigned short>> windowSize{{0, 0}};
 
 static void updateWindowSize() {
-  struct winsize ws;
+  struct winsize ws {};
   if (ioctl(2, TIOCGWINSZ, &ws) == 0) {
     auto windowSize_(windowSize.lock());
     windowSize_->first = ws.ws_row;

@@ -15,7 +15,6 @@
 namespace nix::daemon {
 
 using ::grpc::Status;
-using ::nix::proto::BuildStatus;
 using ::nix::proto::PathInfo;
 using ::nix::proto::StorePath;
 using ::nix::proto::StorePaths;
@@ -26,7 +25,7 @@ static Status INVALID_STORE_PATH =
 
 class WorkerServiceImpl final : public WorkerService::Service {
  public:
-  WorkerServiceImpl(nix::Store& store) : store_(&store) {}
+  explicit WorkerServiceImpl(nix::Store& store) : store_(&store) {}
 
   Status IsValidPath(grpc::ServerContext* context, const StorePath* request,
                      nix::proto::IsValidPathResponse* response) override {
@@ -261,8 +260,8 @@ class WorkerServiceImpl final : public WorkerService::Service {
     PathSet will_substitute;
     PathSet unknown;
     // TODO(grfn): Switch to concrete size type
-    unsigned long long download_size;
-    unsigned long long nar_size;
+    unsigned long long download_size = 0;
+    unsigned long long nar_size = 0;
 
     store_->queryMissing(targets, will_build, will_substitute, unknown,
                          download_size, nar_size);

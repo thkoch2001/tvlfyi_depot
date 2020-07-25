@@ -262,7 +262,7 @@ Path Store::makeFixedOutputPath(bool recursive, const Hash& hash,
                    "output:out",
                    hashString(
                        htSHA256,
-                       "fixed:out:" + (recursive ? (std::string) "r:" : "") +
+                       "fixed:out:" + (recursive ? std::string("r:") : "") +
                            hash.to_string(Base16) + ":"),
                    name);
 }
@@ -782,7 +782,7 @@ ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven) {
   }
   getline(str, info.deriver);
   std::string s;
-  int n;
+  int n = 0;
   getline(str, s);
   if (!absl::SimpleAtoi(s, &n)) {
     throw Error("number expected");
@@ -880,7 +880,7 @@ Strings ValidPathInfo::shortRefs() const {
 }
 
 std::string makeFixedOutputCA(bool recursive, const Hash& hash) {
-  return "fixed:" + (recursive ? (std::string) "r:" : "") + hash.to_string();
+  return "fixed:" + (recursive ? std::string("r:") : "") + hash.to_string();
 }
 
 void Store::addToStore(const ValidPathInfo& info, Source& narSource,
@@ -926,7 +926,8 @@ std::pair<std::string, Store::Params> splitUriAndParams(
               throw Error("invalid URI parameter '%s'", value);
             }
             try {
-              decoded += std::stoul(std::string(value, i + 1, 2), nullptr, 16);
+              decoded += std::to_string(
+                  std::stoul(std::string(value, i + 1, 2), nullptr, 16));
               i += 3;
             } catch (...) {
               throw Error("invalid URI parameter '%s'", value);

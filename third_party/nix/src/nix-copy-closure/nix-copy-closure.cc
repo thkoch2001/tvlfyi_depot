@@ -17,7 +17,7 @@ static int _main(int argc, char** argv) {
     PathSet storePaths;
 
     parseCmdLine(
-        argc, argv, [&](Strings::iterator& arg, const Strings::iterator& end) {
+        argc, argv, [&](Strings::iterator& arg, const Strings::iterator& _end) {
           if (*arg == "--help") {
             showManPage("nix-copy-closure");
           } else if (*arg == "--version") {
