@@ -37,8 +37,8 @@ void printGCWarning() {
 }
 
 void printMissing(const ref<Store>& store, const PathSet& paths) {
-  unsigned long long downloadSize;
-  unsigned long long narSize;
+  unsigned long long downloadSize = 0;
+  unsigned long long narSize = 0;
   PathSet willBuild;
   PathSet willSubstitute;
   PathSet unknown;
@@ -128,7 +128,7 @@ void initNix() {
   startSignalHandlerThread();
 
   /* Reset SIGCHLD to its default. */
-  struct sigaction act;
+  struct sigaction act {};
   sigemptyset(&act.sa_mask);
   act.sa_handler = SIG_DFL;
   act.sa_flags = 0;
@@ -151,7 +151,7 @@ void initNix() {
   umask(0022);
 
   /* Initialise the PRNG. */
-  struct timeval tv;
+  struct timeval tv {};
   gettimeofday(&tv, nullptr);
   srandom(tv.tv_usec);
 }
@@ -327,7 +327,7 @@ RunPager::RunPager() {
   if (pager == nullptr) {
     pager = getenv("PAGER");
   }
-  if (pager && ((std::string)pager == "" || (std::string)pager == "cat")) {
+  if (pager && (std::string(pager) == "" || std::string(pager) == "cat")) {
     return;
   }
 

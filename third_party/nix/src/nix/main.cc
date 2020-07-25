@@ -25,7 +25,7 @@ namespace nix {
 
 /* Check if we have a non-loopback/link-local network interface. */
 static bool haveInternet() {
-  struct ifaddrs* addrs;
+  struct ifaddrs* addrs = nullptr;
 
   if (getifaddrs(&addrs) != 0) {
     return true;
@@ -38,7 +38,8 @@ static bool haveInternet() {
       continue;
     }
     if (i->ifa_addr->sa_family == AF_INET) {
-      if (ntohl(((sockaddr_in*)i->ifa_addr)->sin_addr.s_addr) !=
+      if (ntohl(
+              (reinterpret_cast<sockaddr_in*>(i->ifa_addr))->sin_addr.s_addr) !=
           INADDR_LOOPBACK) {
         return true;
       }

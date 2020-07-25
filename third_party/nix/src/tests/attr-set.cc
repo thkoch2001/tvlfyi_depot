@@ -113,7 +113,7 @@ using nix::tests::DummyStore;
 
 class AttrSetTest : public ::testing::Test {
  protected:
-  EvalState* eval_state_;
+  EvalState* eval_state_{};
   void SetUp() override {
     nix::initGC();
     auto store = std::make_shared<DummyStore>();
@@ -122,8 +122,8 @@ class AttrSetTest : public ::testing::Test {
   }
 
   void assert_bindings_equal(nix::Bindings& lhs, nix::Bindings& rhs) {
-    Value lhs_val;
-    Value rhs_val;
+    Value lhs_val{};
+    Value rhs_val{};
     lhs_val.type = rhs_val.type = ValueType::tAttrs;
     lhs_val.attrs = &lhs;
     rhs_val.attrs = &lhs;

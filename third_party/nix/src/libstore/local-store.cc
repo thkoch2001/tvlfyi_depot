@@ -88,7 +88,7 @@ LocalStore::LocalStore(const Params& params)
       LOG(ERROR) << "warning: the group '" << settings.buildUsersGroup
                  << "' specified in 'build-users-group' does not exist";
     } else {
-      struct stat st;
+      struct stat st {};
       if (stat(realStoreDir.c_str(), &st) != 0) {
         throw SysError(format("getting attributes of path '%1%'") %
                        realStoreDir);
@@ -111,7 +111,7 @@ LocalStore::LocalStore(const Params& params)
   /* Ensure that the store and its parents are not symlinks. */
   if (getEnv("NIX_IGNORE_SYMLINK_STORE") != "1") {
     Path path = realStoreDir;
-    struct stat st;
+    struct stat st {};
     while (path != "/") {
       if (lstat(path.c_str(), &st) != 0) {
         throw SysError(format("getting status of '%1%'") % path);
@@ -131,7 +131,7 @@ LocalStore::LocalStore(const Params& params)
      needed, we reserve some dummy space that we can free just
      before doing a garbage collection. */
   try {
-    struct stat st;
+    struct stat st {};
     if (stat(reservedPath.c_str(), &st) == -1 ||
         st.st_size != settings.reservedSize) {
       AutoCloseFD fd =
@@ -349,7 +349,8 @@ void LocalStore::openDB(State& state, bool create) {
     if (sqlite3_step(stmt) != SQLITE_ROW) {
       throwSQLiteError(db, "querying journal mode");
     }
-    prevMode = std::string((const char*)sqlite3_column_text(stmt, 0));
+    prevMode = std::string(
+        reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
   }
   if (prevMode != mode &&
       sqlite3_exec(db, ("pragma main.journal_mode = " + mode + ";").c_str(),
@@ -378,7 +379,7 @@ void LocalStore::makeStoreWritable() {
     return;
   }
   /* Check if /nix/store is on a read-only mount. */
-  struct statvfs stat;
+  struct statvfs stat {};
   if (statvfs(realStoreDir.c_str(), &stat) != 0) {
     throw SysError("getting info about the Nix store mount point");
   }
@@ -432,7 +433,7 @@ static void canonicaliseTimestampAndPermissions(const Path& path,
 }  // namespace nix
 
 void canonicaliseTimestampAndPermissions(const Path& path) {
-  struct stat st;
+  struct stat st {};
   if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
@@ -443,7 +444,7 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
                                       InodesSeen& inodesSeen) {
   checkInterrupt();
 
-  struct stat st;
+  struct stat st {};
   if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
@@ -488,7 +489,7 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
      However, ignore files that we chown'ed ourselves previously to
      ensure that we don't fail on hard links within the same build
      (i.e. "touch $out/foo; ln $out/foo $out/bar"). */
-  if (fromUid != (uid_t)-1 && st.st_uid != fromUid) {
+  if (fromUid != static_cast<uid_t>(-1) && st.st_uid != fromUid) {
     assert(!S_ISDIR(st.st_mode));
     if (inodesSeen.find(Inode(st.st_dev, st.st_ino)) == inodesSeen.end()) {
       throw BuildError(format("invalid ownership on file '%1%'") % path);
@@ -544,7 +545,7 @@ void canonicalisePathMetaData(const Path& path, uid_t fromUid,
 
   /* On platforms that don't have lchown(), the top-level path can't
      be a symlink, since we can't change its ownership. */
-  struct stat st;
+  struct stat st {};
   if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
@@ -574,7 +575,7 @@ void LocalStore::checkDerivationOutputs(const Path& drvPath,
           drvPath);
     }
 
-    bool recursive;
+    bool recursive = 0;
     Hash h;
     out->second.parseHashInfo(recursive, h);
     Path outPath = makeFixedOutputPath(recursive, h, drvName);
@@ -689,7 +690,8 @@ void LocalStore::queryPathInfoUncached(
 
       info->registrationTime = useQueryPathInfo.getInt(2);
 
-      auto s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 3);
+      auto s = reinterpret_cast<const char*>(
+          sqlite3_column_text(state->stmtQueryPathInfo, 3));
       if (s != nullptr) {
         info->deriver = s;
       }
@@ -699,12 +701,14 @@ void LocalStore::queryPathInfoUncached(
 
       info->ultimate = useQueryPathInfo.getInt(5) == 1;
 
-      s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 6);
+      s = reinterpret_cast<const char*>(
+          sqlite3_column_text(state->stmtQueryPathInfo, 6));
       if (s != nullptr) {
         info->sigs = absl::StrSplit(s, absl::ByChar(' '));
       }
 
-      s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 7);
+      s = reinterpret_cast<const char*>(
+          sqlite3_column_text(state->stmtQueryPathInfo, 7));
       if (s != nullptr) {
         info->ca = s;
       }
@@ -859,8 +863,8 @@ Path LocalStore::queryPathFromHashPart(const std::string& hashPart) {
       return "";
     }
 
-    const char* s =
-        (const char*)sqlite3_column_text(state->stmtQueryPathFromHashPart, 0);
+    const char* s = reinterpret_cast<const char*>(
+        sqlite3_column_text(state->stmtQueryPathFromHashPart, 0));
     return (s != nullptr) &&
                    prefix.compare(0, prefix.size(), s, prefix.size()) == 0
                ? s
