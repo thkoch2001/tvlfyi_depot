@@ -113,7 +113,7 @@ in depot.lib.fix(self: {
 
   # Configure user account
   users.extraUsers.tazjin = {
-    extraGroups = [ "wheel" "audio" ];
+    extraGroups = [ "wheel" "audio" "docker" ];
     isNormalUser = true;
     uid = 1000;
     shell = nixpkgs.fish;
@@ -162,6 +162,12 @@ in depot.lib.fix(self: {
   services.udev.packages = [
     nixpkgs.yubikey-personalization
   ];
+
+  # Enable Docker for Nixery testing
+  virtualisation.docker = {
+    enable = true;
+    autoPrune.enable = true;
+  };
 
   services.xserver = {
     enable = true;
