@@ -167,7 +167,7 @@ void LocalStore::addTempRoot(const Path& path) {
 
       /* Check whether the garbage collector didn't get in our
          way. */
-      struct stat st;
+      struct stat st {};
       if (fstat(state->fdTempRoots.get(), &st) == -1) {
         throw SysError(format("statting '%1%'") % fnTempRoots);
       }
@@ -239,9 +239,10 @@ void LocalStore::findTempRoots(FDs& fds, Roots& tempRoots, bool censor) {
 
     /* Extract the roots. */
     std::string::size_type pos = 0;
-    std::string::size_type end;
+    std::string::size_type end = 0;
 
-    while ((end = contents.find((char)0, pos)) != std::string::npos) {
+    while ((end = contents.find(static_cast<char>(0), pos)) !=
+           std::string::npos) {
       Path root(contents, pos, end - pos);
       DLOG(INFO) << "got temporary root " << root;
       assertStorePath(root);
@@ -387,7 +388,7 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
 
   auto procDir = AutoCloseDir{opendir("/proc")};
   if (procDir) {
-    struct dirent* ent;
+    struct dirent* ent = nullptr;
     auto digitsRegex = std::regex(R"(^\d+$)");
     auto mapRegex =
         std::regex(R"(^\s*\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+(/\S+)\s*$)");
@@ -407,7 +408,7 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
           }
           throw SysError(format("opening %1%") % fdStr);
         }
-        struct dirent* fd_ent;
+        struct dirent* fd_ent = nullptr;
         while (errno = 0, fd_ent = readdir(fdDir.get())) {
           if (fd_ent->d_name[0] != '.') {
             readProcLink(fmt("%s/%s", fdStr, fd_ent->d_name), unchecked);
@@ -481,11 +482,11 @@ struct LocalStore::GCState {
   PathSet tempRoots;
   PathSet dead;
   PathSet alive;
-  bool gcKeepOutputs;
-  bool gcKeepDerivations;
+  bool gcKeepOutputs{};
+  bool gcKeepDerivations{};
   unsigned long long bytesInvalidated;
   bool moveToTrash = true;
-  bool shouldDelete;
+  bool shouldDelete{};
   explicit GCState(GCResults& results_)
       : results(results_), bytesInvalidated(0) {}
 };
@@ -498,7 +499,7 @@ bool LocalStore::isActiveTempFile(const GCState& state, const Path& path,
 }
 
 void LocalStore::deleteGarbage(GCState& state, const Path& path) {
-  unsigned long long bytesFreed;
+  unsigned long long bytesFreed = 0;
   deletePath(path, bytesFreed);
   state.results.bytesFreed += bytesFreed;
 }
@@ -522,7 +523,7 @@ void LocalStore::deletePathRecursive(GCState& state, const Path& path) {
 
   Path realPath = realStoreDir + "/" + baseNameOf(path);
 
-  struct stat st;
+  struct stat st {};
   if (lstat(realPath.c_str(), &st) != 0) {
     if (errno == ENOENT) {
       return;
@@ -697,7 +698,7 @@ void LocalStore::removeUnusedLinks(const GCState& state) {
   long long actualSize = 0;
   long long unsharedSize = 0;
 
-  struct dirent* dirent;
+  struct dirent* dirent = nullptr;
   while (errno = 0, dirent = readdir(dir.get())) {
     checkInterrupt();
     std::string name = dirent->d_name;
@@ -706,7 +707,7 @@ void LocalStore::removeUnusedLinks(const GCState& state) {
     }
     Path path = linksDir + "/" + name;
 
-    struct stat st;
+    struct stat st {};
     if (lstat(path.c_str(), &st) == -1) {
       throw SysError(format("statting '%1%'") % path);
     }
@@ -726,7 +727,7 @@ void LocalStore::removeUnusedLinks(const GCState& state) {
     state.results.bytesFreed += st.st_size;
   }
 
-  struct stat st;
+  struct stat st {};
   if (stat(linksDir.c_str(), &st) == -1) {
     throw SysError(format("statting '%1%'") % linksDir);
   }
@@ -840,7 +841,7 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
          again.  We don't use readDirectory() here so that GCing
          can start faster. */
       Paths entries;
-      struct dirent* dirent;
+      struct dirent* dirent = nullptr;
       while (errno = 0, dirent = readdir(dir.get())) {
         checkInterrupt();
         std::string name = dirent->d_name;
@@ -911,12 +912,12 @@ void LocalStore::autoGC(bool sync) {
       return std::stoll(readFile(fakeFreeSpaceFile));
     }
 
-    struct statvfs st;
+    struct statvfs st {};
     if (statvfs(realStoreDir.c_str(), &st) != 0) {
       throw SysError("getting filesystem info about '%s'", realStoreDir);
     }
 
-    return (uint64_t)st.f_bavail * st.f_bsize;
+    return static_cast<uint64_t>(st.f_bavail) * st.f_bsize;
   };
 
   std::shared_future<void> future;

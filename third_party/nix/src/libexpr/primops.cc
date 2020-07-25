@@ -86,8 +86,8 @@ void EvalState::realiseContext(const PathSet& context) {
   PathSet willBuild;
   PathSet willSubstitute;
   PathSet unknown;
-  unsigned long long downloadSize;
-  unsigned long long narSize;
+  unsigned long long downloadSize = 0;
+  unsigned long long narSize = 0;
   store->queryMissing(drvs, willBuild, willSubstitute, unknown, downloadSize,
                       narSize);
   store->buildPaths(drvs);
@@ -130,7 +130,7 @@ static void prim_scopedImport(EvalState& state, const Pos& pos, Value** args,
       mkString(*((*outputsVal->list)[outputs_index++]), o.first);
     }
 
-    Value fun;
+    Value fun{};
     state.evalFile(
         settings.nixDataDir + "/nix/corepkgs/imported-drv-to-derivation.nix",
         fun);
@@ -216,7 +216,7 @@ static void prim_isNull(EvalState& state, const Pos& pos, Value** args,
 static void prim_isFunction(EvalState& state, const Pos& pos, Value** args,
                             Value& v) {
   state.forceValue(*args[0]);
-  bool res;
+  bool res = 0;
   switch (args[0]->type) {
     case tLambda:
     case tPrimOp:
@@ -350,7 +350,7 @@ static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
     res.push_back(e);
 
     /* Call the `operator' function with `e' as argument. */
-    Value call;
+    Value call{};
     mkApp(call, *op->second.value, *e);
     state.forceList(call, pos);
 
@@ -877,7 +877,7 @@ static void prim_readFile(EvalState& state, const Pos& pos, Value** args,
   }
   std::string s =
       readFile(state.checkSourcePath(state.toRealPath(path, context)));
-  if (s.find((char)0) != std::string::npos) {
+  if (s.find('\0') != std::string::npos) {
     throw Error(format("the contents of the file '%1%' cannot be represented "
                        "as a Nix string") %
                 path);
@@ -1050,13 +1050,13 @@ static void addPath(EvalState& state, const Pos& pos, const std::string& name,
 
     /* Call the filter function.  The first argument is the path,
        the second is a string indicating the type of the file. */
-    Value arg1;
+    Value arg1{};
     mkString(arg1, path);
 
-    Value fun2;
+    Value fun2{};
     state.callFunction(*filterFun, arg1, fun2, noPos);
 
-    Value arg2;
+    Value arg2{};
     mkString(arg2, S_ISREG(st.st_mode)
                        ? "regular"
                        : S_ISDIR(st.st_mode)
@@ -1065,7 +1065,7 @@ static void addPath(EvalState& state, const Pos& pos, const std::string& name,
                                    ? "symlink"
                                    : "unknown" /* not supported, will fail! */);
 
-    Value res;
+    Value res{};
     state.callFunction(fun2, arg2, res, noPos);
 
     return state.forceBool(res, pos);
@@ -1421,7 +1421,7 @@ static void prim_isList(EvalState& state, const Pos& pos, Value** args,
 static void elemAt(EvalState& state, const Pos& pos, Value& list, int n,
                    Value& v) {
   state.forceList(list, pos);
-  if (n < 0 || (unsigned int)n >= list.listSize()) {
+  if (n < 0 || static_cast<unsigned int>(n) >= list.listSize()) {
     throw Error(format("list index %1% is out of bounds, at %2%") % n % pos);
   }
   state.forceValue(*(*list.list)[n]);
@@ -1480,7 +1480,7 @@ static void prim_filter(EvalState& state, const Pos& pos, Value** args,
 
   bool same = true;
   for (unsigned int n = 0; n < args[1]->listSize(); ++n) {
-    Value res;
+    Value res{};
     state.callFunction(*args[0], *(*args[1]->list)[n], res, noPos);
     if (state.forceBool(res, pos)) {
       vs[k++] = (*args[1]->list)[n];
@@ -1538,7 +1538,7 @@ static void prim_foldlStrict(EvalState& state, const Pos& pos, Value** args,
     Value* vCur = args[1];
 
     for (unsigned int n = 0; n < args[2]->listSize(); ++n) {
-      Value vTmp;
+      Value vTmp{};
       state.callFunction(*args[0], *vCur, vTmp, pos);
       vCur = n == args[2]->listSize() - 1 ? &v : state.allocValue();
       state.callFunction(vTmp, *(*args[2]->list)[n], *vCur, pos);
@@ -1555,7 +1555,7 @@ static void anyOrAll(bool any, EvalState& state, const Pos& pos, Value** args,
   state.forceFunction(*args[0], pos);
   state.forceList(*args[1], pos);
 
-  Value vTmp;
+  Value vTmp{};
   for (unsigned int n = 0; n < args[1]->listSize(); ++n) {
     state.callFunction(*args[0], *(*args[1]->list)[n], vTmp, pos);
     bool res = state.forceBool(vTmp, pos);
@@ -1587,7 +1587,7 @@ static void prim_genList(EvalState& state, const Pos& pos, Value** args,
 
   state.mkList(v, len);
 
-  for (unsigned int n = 0; n < (unsigned int)len; ++n) {
+  for (unsigned int n = 0; n < static_cast<unsigned int>(len); ++n) {
     Value* arg = state.allocValue();
     mkInt(*arg, n);
     mkApp(*((*v.list)[n] = state.allocValue()), *args[0], *arg);
@@ -1615,8 +1615,8 @@ static void prim_sort(EvalState& state, const Pos& pos, Value** args,
       return CompareValues()(a, b);
     }
 
-    Value vTmp1;
-    Value vTmp2;
+    Value vTmp1{};
+    Value vTmp2{};
     state.callFunction(*args[0], *a, vTmp1, pos);
     state.callFunction(vTmp1, *b, vTmp2, pos);
     return state.forceBool(vTmp2, pos);
@@ -1639,7 +1639,7 @@ static void prim_partition(EvalState& state, const Pos& pos, Value** args,
   for (Value* elem : *args[1]->list) {
     state.forceValue(*elem, pos);
 
-    Value res;
+    Value res{};
     state.callFunction(*args[0], *elem, res, pos);
     if (state.forceBool(res, pos)) {
       right->push_back(elem);
@@ -1790,7 +1790,10 @@ static void prim_substring(EvalState& state, const Pos& pos, Value** args,
                     pos);
   }
 
-  mkString(v, (unsigned int)start >= s.size() ? "" : std::string(s, start, len),
+  mkString(v,
+           static_cast<unsigned int>(start) >= s.size()
+               ? ""
+               : std::string(s, start, len),
            context);
 }
 
@@ -1875,7 +1878,7 @@ static void prim_split(EvalState& state, const Pos& pos, Value** args,
     const size_t len = std::distance(begin, end);
     state.mkList(v, 2 * len + 1);
     size_t idx = 0;
-    Value* elem;
+    Value* elem = nullptr;
 
     if (len == 0) {
       (*v.list)[idx++] = args[1];
@@ -2138,7 +2141,7 @@ void EvalState::createBaseEnv() {
   baseEnv.up = nullptr;
 
   /* Add global constants such as `true' to the base environment. */
-  Value v;
+  Value v{};
 
   /* `builtins' must be first! */
   mkAttrs(v, 128);

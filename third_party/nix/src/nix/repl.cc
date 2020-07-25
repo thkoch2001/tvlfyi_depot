@@ -38,14 +38,14 @@ namespace nix {
 struct NixRepl : gc {
   std::string curDir;
   EvalState state;
-  Bindings* autoArgs;
+  Bindings* autoArgs{};
 
   Strings loadedFiles;
 
   const static int envSize = 32768;
   StaticEnv staticEnv;
-  Env* env;
-  int displ;
+  Env* env{};
+  int displ{};
   StringSet varNames;
 
   const Path historyFile;
@@ -194,7 +194,7 @@ static int listPossibleCallback(char* s, char*** avp) {
     return p;
   };
 
-  vp = check((char**)malloc(possible.size() * sizeof(char*)));
+  vp = check(static_cast<char**>(malloc(possible.size() * sizeof(char*))));
 
   for (auto& p : possible) {
     vp[ac++] = check(strdup(p.c_str()));
@@ -272,8 +272,8 @@ void NixRepl::mainLoop(const std::vector<std::string>& files) {
 }
 
 bool NixRepl::getLine(std::string& input, const std::string& prompt) {
-  struct sigaction act;
-  struct sigaction old;
+  struct sigaction act {};
+  struct sigaction old {};
   sigset_t savedSignalMask;
   sigset_t set;
 
@@ -334,8 +334,8 @@ StringSet NixRepl::completePrefix(const std::string& prefix) {
     cur = std::string(prefix, start + 1);
   }
 
-  size_t slash;
-  size_t dot;
+  size_t slash = 0;
+  size_t dot = 0;
 
   if ((slash = cur.rfind('/')) != std::string::npos) {
     try {
@@ -367,7 +367,7 @@ StringSet NixRepl::completePrefix(const std::string& prefix) {
       std::string cur2 = std::string(cur, dot + 1);
 
       Expr* e = parseString(expr);
-      Value v;
+      Value v{};
       e->eval(state, *env, v);
       state.forceAttrs(v);
 
@@ -477,7 +477,7 @@ bool NixRepl::processLine(std::string line) {
   }
 
   else if (command == ":a" || command == ":add") {
-    Value v;
+    Value v{};
     evalString(arg, v);
     addAttrsToScope(v);
   }
@@ -493,14 +493,14 @@ bool NixRepl::processLine(std::string line) {
   }
 
   else if (command == ":t") {
-    Value v;
+    Value v{};
     evalString(arg, v);
     std::cout << showType(v) << std::endl;
 
   } else if (command == ":u") {
-    Value v;
-    Value f;
-    Value result;
+    Value v{};
+    Value f{};
+    Value result{};
     evalString(arg, v);
     evalString(
         "drv: (import <nixpkgs> {}).runCommand \"shell\" { buildInputs = [ drv "
@@ -513,7 +513,7 @@ bool NixRepl::processLine(std::string line) {
   }
 
   else if (command == ":b" || command == ":i" || command == ":s") {
-    Value v;
+    Value v{};
     evalString(arg, v);
     Path drvPath = getDerivationPath(v);
 
@@ -540,7 +540,7 @@ bool NixRepl::processLine(std::string line) {
   }
 
   else if (command == ":p" || command == ":print") {
-    Value v;
+    Value v{};
     evalString(arg, v);
     printValue(std::cout, v, 1000000000) << std::endl;
   }
@@ -563,7 +563,7 @@ bool NixRepl::processLine(std::string line) {
       v.thunk.expr = e;
       addVarToScope(state.symbols.Create(name), v);
     } else {
-      Value v;
+      Value v{};
       evalString(line, v);
       printValue(std::cout, v, 1) << std::endl;
     }
@@ -575,8 +575,8 @@ bool NixRepl::processLine(std::string line) {
 void NixRepl::loadFile(const Path& path) {
   loadedFiles.remove(path);
   loadedFiles.push_back(path);
-  Value v;
-  Value v2;
+  Value v{};
+  Value v2{};
   state.evalFile(lookupFileArg(state, path), v);
   state.autoCallFunction(*autoArgs, v, v2);
   addAttrsToScope(v2);
@@ -626,7 +626,7 @@ void NixRepl::addVarToScope(const Symbol& name, Value& v) {
   }
   staticEnv.vars[name] = displ;
   env->values[displ++] = &v;
-  varNames.insert((std::string)name);
+  varNames.insert(std::string(name));
 }
 
 Expr* NixRepl::parseString(const std::string& s) {
