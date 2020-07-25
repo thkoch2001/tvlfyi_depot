@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "df954c04_a5b0a129",
+        "filename": "third_party/nix/src/libstore/binary-cache-store.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-25T05:01:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4991e147_d2890c3b",
+      "range": {
+        "startLine": 357,
+        "startChar": 17,
+        "endLine": 358,
+        "endChar": 64
+      },
+      "revId": "c0716785d138626c01a17ced173faf8e9f120647",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c80037e_b672df59",
         "filename": "third_party/nix/src/libutil/compression.cc",
         "patchSetId": 4
