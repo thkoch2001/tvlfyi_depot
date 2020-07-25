@@ -70,7 +70,10 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   installCheckInputs = with pkgs; [
     fd
+    git
     gtest
+    jq
+    parallel
     rapidcheck
   ];
 
@@ -94,6 +97,9 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     export NIX_DATA_DIR=$out/share
     export NIX_TEST_VAR=foo # this is required by a language test
     make test
+
+    # Clang-tidy checks
+    jq < $out/compile-commands.json -r 'map(.file)|.[]' | grep -v '/generated/' | parallel ${pkgs.clang-tools}/bin/clang-tidy -p $out/compile-commands.json
 
     # Ensure formatting is coherent, but do this after the rest of the
     # tests run so that developers get all the useful feedback

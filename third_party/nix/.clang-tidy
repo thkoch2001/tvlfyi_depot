@@ -1,8 +1,4 @@
 ---
-Checks: 'abseil-c*,clang-analyzer-security-*,bugprone-*,google-*,modernize-*,cppcoreguidelines-*,misc-*'
-WarningsAsErrors: 'abseil-*,clang-analyzer-security.insecureAPI.strcpy'
-LineFilter:
-  - {name: "src/cpptoml/cpptoml.h"}
-  - {name: "include/google/protobuf/metadata_lite.h"}
-  - {name: "generated/lexer-tab.cc"}
+Checks: 'abseil-c*,clang-analyzer-security-*,clang-analyzer*,bugprone-*,google-*,modernize-*,cppcoreguidelines-*,misc-*,-modernize-use-trailing-return-type'
+WarningsAsErrors: 'abseil-*,clang-analyzer-security*'
 ...
