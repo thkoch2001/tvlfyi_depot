@@ -227,6 +227,7 @@ in lib.fix(self: {
     git
     htop
     nano
+    rxvt_unicode.terminfo
     vim
     zfs
     zfstools
