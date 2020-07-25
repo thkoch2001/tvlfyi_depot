@@ -16,20 +16,20 @@ import Database.Persist.TH
 --------------------------------------------------------------------------------
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
-User
+Account
   name Text
   age  Int
   UniqueName name
   deriving Eq Read Show
 |]
 
-instance FromJSON User where
+instance FromJSON Account where
   parseJSON = withObject "User" $ \ v ->
-    User <$> v .: "name"
-         <*> v .: "age"
+    Account <$> v .: "name"
+            <*> v .: "age"
 
-instance ToJSON User where
-  toJSON (User name age) =
+instance ToJSON Account where
+  toJSON (Account name age) =
     object [ "name" .= name
            , "age"  .= age
            ]

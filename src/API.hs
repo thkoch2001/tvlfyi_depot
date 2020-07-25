@@ -15,8 +15,8 @@ import qualified Types as T
 --------------------------------------------------------------------------------
 
 type API = "user"
-           :> ReqBody '[JSON] T.User
+           :> ReqBody '[JSON] T.Account
            :> Post '[JSON] (Maybe T.Session)
       :<|> "user"
            :> Capture "name" Text
-           :> Get  '[JSON] (Maybe T.User)
+           :> Get  '[JSON] (Maybe T.Account)
