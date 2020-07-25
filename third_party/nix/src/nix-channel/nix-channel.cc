@@ -112,7 +112,7 @@ static void update(const StringSet& channelNames) {
     std::smatch match;
     auto urlBase = baseNameOf(url);
     if (std::regex_search(urlBase, match, std::regex("(-\\d.*)$"))) {
-      cname = cname + (std::string)match[1];
+      cname = cname + std::string(match[1]);
     }
 
     std::string extraAttrs;
@@ -163,7 +163,7 @@ static void update(const StringSet& channelNames) {
   runProgram(settings.nixBinDir + "/nix-env", false, envArgs);
 
   // Make the channels appear in nix-env.
-  struct stat st;
+  struct stat st {};
   if (lstat(nixDefExpr.c_str(), &st) == 0) {
     if (S_ISLNK(st.st_mode)) {
       // old-skool ~/.nix-defexpr
@@ -192,27 +192,26 @@ static int _main(int argc, char** argv) {
 
     enum { cNone, cAdd, cRemove, cList, cUpdate, cRollback } cmd = cNone;
     std::vector<std::string> args;
-    parseCmdLine(argc, argv,
-                 [&](Strings::iterator& arg, const Strings::iterator& end) {
-                   if (*arg == "--help") {
-                     showManPage("nix-channel");
-                   } else if (*arg == "--version") {
-                     printVersion("nix-channel");
-                   } else if (*arg == "--add") {
-                     cmd = cAdd;
-                   } else if (*arg == "--remove") {
-                     cmd = cRemove;
-                   } else if (*arg == "--list") {
-                     cmd = cList;
-                   } else if (*arg == "--update") {
-                     cmd = cUpdate;
-                   } else if (*arg == "--rollback") {
-                     cmd = cRollback;
-                   } else {
-                     args.push_back(std::move(*arg));
-                   }
-                   return true;
-                 });
+    parseCmdLine(argc, argv, [&](Strings::iterator& arg, const Strings::iterator& _end) {
+      if (*arg == "--help") {
+        showManPage("nix-channel");
+      } else if (*arg == "--version") {
+        printVersion("nix-channel");
+      } else if (*arg == "--add") {
+        cmd = cAdd;
+      } else if (*arg == "--remove") {
+        cmd = cRemove;
+      } else if (*arg == "--list") {
+        cmd = cList;
+      } else if (*arg == "--update") {
+        cmd = cUpdate;
+      } else if (*arg == "--rollback") {
+        cmd = cRollback;
+      } else {
+        args.push_back(std::move(*arg));
+      }
+      return true;
+    });
 
     switch (cmd) {
       case cNone:

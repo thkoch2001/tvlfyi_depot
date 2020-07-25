@@ -94,7 +94,7 @@ static void expect(std::istream& str, const std::string& s) {
 static std::string parseString(std::istream& str) {
   std::string res;
   expect(str, "\"");
-  int c;
+  int c = 0;
   while ((c = str.get()) != '"') {
     if (c == '\\') {
       c = str.get();
@@ -105,10 +105,10 @@ static std::string parseString(std::istream& str) {
       } else if (c == 't') {
         res += '\t';
       } else {
-        res += c;
+        res += std::to_string(c);
       }
     } else {
-      res += c;
+      res += std::to_string(c);
     }
   }
   return res;

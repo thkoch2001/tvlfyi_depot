@@ -17,7 +17,7 @@
 namespace nix {
 
 static void makeWritable(const Path& path) {
-  struct stat st;
+  struct stat st {};
   if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
@@ -50,7 +50,7 @@ LocalStore::InodeHash LocalStore::loadInodeHash() {
     throw SysError(format("opening directory '%1%'") % linksDir);
   }
 
-  struct dirent* dirent;
+  struct dirent* dirent = nullptr;
   while (errno = 0, dirent = readdir(dir.get())) { /* sic */
     checkInterrupt();
     // We don't care if we hit non-hash files, anything goes
@@ -74,7 +74,7 @@ Strings LocalStore::readDirectoryIgnoringInodes(const Path& path,
     throw SysError(format("opening directory '%1%'") % path);
   }
 
-  struct dirent* dirent;
+  struct dirent* dirent = nullptr;
   while (errno = 0, dirent = readdir(dir.get())) { /* sic */
     checkInterrupt();
 
@@ -100,7 +100,7 @@ void LocalStore::optimisePath_(OptimiseStats& stats, const Path& path,
                                InodeHash& inodeHash) {
   checkInterrupt();
 
-  struct stat st;
+  struct stat st {};
   if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
@@ -183,7 +183,7 @@ retry:
 
   /* Yes!  We've seen a file with the same contents.  Replace the
      current file with a hard link to that file. */
-  struct stat stLink;
+  struct stat stLink {};
   if (lstat(linkPath.c_str(), &stLink) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % linkPath);
   }

@@ -183,7 +183,7 @@ struct RetrieveRegularNARSink : ParseSink {
   void createDirectory(const Path& path) override { regular = false; }
 
   void receiveContents(unsigned char* data, unsigned int len) override {
-    s.append((const char*)data, len);
+    s.append(reinterpret_cast<const char*>(data), len);
   }
 
   void createSymlink(const Path& path, const std::string& target) override {
@@ -296,8 +296,8 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
     }
 
     case wopAddToStore: {
-      bool fixed;
-      bool recursive;
+      bool fixed = 0;
+      bool recursive = 0;
       std::string s;
       std::string baseName;
       from >> baseName >> fixed /* obsolete */ >> recursive >> s;
@@ -376,7 +376,7 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
       auto drvs = readStorePaths<PathSet>(*store, from);
       BuildMode mode = bmNormal;
       if (GET_PROTOCOL_MINOR(clientVersion) >= 15) {
-        mode = (BuildMode)readInt(from);
+        mode = static_cast<BuildMode>(readInt(from));
 
         /* Repairing is not atomic, so disallowed for "untrusted"
            clients.  */
@@ -397,7 +397,7 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
       Path drvPath = readStorePath(*store, from);
       BasicDerivation drv;
       readDerivation(from, *store, drv);
-      auto buildMode = (BuildMode)readInt(from);
+      auto buildMode = static_cast<BuildMode>(readInt(from));
       logger->startWork();
       if (!trusted) {
         throw Error("you are not privileged to build derivations");
@@ -466,7 +466,7 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
 
     case wopCollectGarbage: {
       GCOptions options;
-      options.action = (GCOptions::GCAction)readInt(from);
+      options.action = static_cast<GCOptions::GCAction>(readInt(from));
       options.pathsToDelete = readStorePaths<PathSet>(*store, from);
       from >> options.ignoreLiveness >> options.maxFreed;
       // obsolete fields
@@ -639,14 +639,15 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
     }
 
     case wopVerifyStore: {
-      bool checkContents;
-      bool repair;
+      bool checkContents = 0;
+      bool repair = 0;
       from >> checkContents >> repair;
       logger->startWork();
       if (repair && !trusted) {
         throw Error("you are not privileged to repair paths");
       }
-      bool errors = store->verifyStore(checkContents, (RepairFlag)repair);
+      bool errors =
+          store->verifyStore(checkContents, static_cast<RepairFlag>(repair));
       logger->stopWork();
       to << static_cast<uint64_t>(errors);
       break;
@@ -674,8 +675,8 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
     }
 
     case wopAddToStoreNar: {
-      bool repair;
-      bool dontCheckSigs;
+      bool repair = 0;
+      bool dontCheckSigs = 0;
       ValidPathInfo info;
       info.path = readStorePath(*store, from);
       from >> info.deriver;
@@ -708,7 +709,7 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
       logger->startWork();
 
       // FIXME: race if addToStore doesn't read source?
-      store->addToStore(info, *source, (RepairFlag)repair,
+      store->addToStore(info, *source, static_cast<RepairFlag>(repair),
                         dontCheckSigs ? NoCheckSigs : CheckSigs, nullptr);
 
       logger->stopWork();
@@ -721,8 +722,8 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
       PathSet willBuild;
       PathSet willSubstitute;
       PathSet unknown;
-      unsigned long long downloadSize;
-      unsigned long long narSize;
+      unsigned long long downloadSize = 0;
+      unsigned long long narSize = 0;
       store->queryMissing(targets, willBuild, willSubstitute, unknown,
                           downloadSize, narSize);
       logger->stopWork();
@@ -795,9 +796,9 @@ static void processConnection(bool trusted, const std::string& userName,
 
     /* Process client requests. */
     while (true) {
-      WorkerOp op;
+      WorkerOp op{};
       try {
-        op = (WorkerOp)readInt(from);
+        op = static_cast<WorkerOp>(readInt(from));
       } catch (Interrupted& e) {
         break;
       } catch (EndOfFile& e) {
@@ -847,8 +848,8 @@ static void sigChldHandler(int sigNo) {
 }
 
 static void setSigChldAction(bool autoReap) {
-  struct sigaction act;
-  struct sigaction oact;
+  struct sigaction act {};
+  struct sigaction oact {};
   act.sa_handler = autoReap ? sigChldHandler : SIG_DFL;
   sigfillset(&act.sa_mask);
   act.sa_flags = 0;
@@ -902,7 +903,7 @@ static PeerInfo getPeerInfo(int remote) {
 
 #if defined(SO_PEERCRED)
 
-  ucred cred;
+  ucred cred{};
   socklen_t credLen = sizeof(cred);
   if (getsockopt(remote, SOL_SOCKET, SO_PEERCRED, &cred, &credLen) == -1) {
     throw SysError("getting peer credentials");
@@ -968,7 +969,7 @@ static void daemonLoop(char** argv) {
     }
     Path socketPathRel = "./" + baseNameOf(socketPath);
 
-    struct sockaddr_un addr;
+    struct sockaddr_un addr {};
     addr.sun_family = AF_UNIX;
     strncpy(addr.sun_path, socketPathRel.c_str(), sizeof(addr.sun_path));
     if (addr.sun_path[sizeof(addr.sun_path) - 1] != '\0') {
@@ -981,7 +982,8 @@ static void daemonLoop(char** argv) {
        (everybody can connect --- provided they have access to the
        directory containing the socket). */
     mode_t oldMode = umask(0111);
-    int res = bind(fdSocket.get(), (struct sockaddr*)&addr, sizeof(addr));
+    int res = bind(fdSocket.get(), reinterpret_cast<struct sockaddr*>(&addr),
+                   sizeof(addr));
     umask(oldMode);
     if (res == -1) {
       throw SysError(format("cannot bind to socket '%1%'") % socketPath);
@@ -1002,11 +1004,12 @@ static void daemonLoop(char** argv) {
   while (true) {
     try {
       /* Accept a connection. */
-      struct sockaddr_un remoteAddr;
+      struct sockaddr_un remoteAddr {};
       socklen_t remoteAddrLen = sizeof(remoteAddr);
 
-      AutoCloseFD remote =
-          accept(fdSocket.get(), (struct sockaddr*)&remoteAddr, &remoteAddrLen);
+      AutoCloseFD remote = accept(
+          fdSocket.get(), reinterpret_cast<struct sockaddr*>(&remoteAddr),
+          &remoteAddrLen);
       checkInterrupt();
       if (!remote) {
         if (errno == EINTR) {
@@ -1090,21 +1093,20 @@ static int _main(int argc, char** argv) {
   {
     auto stdio = false;
 
-    parseCmdLine(argc, argv,
-                 [&](Strings::iterator& arg, const Strings::iterator& end) {
-                   if (*arg == "--daemon") {
-                     ; /* ignored for backwards compatibility */
-                   } else if (*arg == "--help") {
-                     showManPage("nix-daemon");
-                   } else if (*arg == "--version") {
-                     printVersion("nix-daemon");
-                   } else if (*arg == "--stdio") {
-                     stdio = true;
-                   } else {
-                     return false;
-                   }
-                   return true;
-                 });
+    parseCmdLine(argc, argv, [&](Strings::iterator& arg, const Strings::iterator& _end) {
+      if (*arg == "--daemon") {
+        ; /* ignored for backwards compatibility */
+      } else if (*arg == "--help") {
+        showManPage("nix-daemon");
+      } else if (*arg == "--version") {
+        printVersion("nix-daemon");
+      } else if (*arg == "--stdio") {
+        stdio = true;
+      } else {
+        return false;
+      }
+      return true;
+    });
 
     if (stdio) {
       if (getStoreType() == tDaemon) {
@@ -1129,7 +1131,8 @@ static int _main(int argc, char** argv) {
           throw Error(format("socket name %1% is too long") % socketName);
         }
 
-        if (connect(s, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
+        if (connect(s, reinterpret_cast<struct sockaddr*>(&addr),
+                    sizeof(addr)) == -1) {
           throw SysError(format("cannot connect to daemon at %1%") %
                          socketPath);
         }
