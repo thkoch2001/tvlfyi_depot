@@ -66,7 +66,7 @@ static void dumpContents(const Path& path, size_t size, Sink& sink) {
 static void dump(const Path& path, Sink& sink, PathFilter& filter) {
   checkInterrupt();
 
-  struct stat st;
+  struct stat st {};
   if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
@@ -80,7 +80,7 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
       sink << "executable"
            << "";
     }
-    dumpContents(path, (size_t)st.st_size, sink);
+    dumpContents(path, static_cast<size_t>(st.st_size), sink);
   }
 
   else if (S_ISDIR(st.st_mode)) {
@@ -159,7 +159,7 @@ static void skipGeneric(Source & source)
 }
 #endif
 
-static void parseContents(ParseSink& sink, Source& source, const Path& path) {
+static void parseContents(ParseSink& sink, Source& source) {
   unsigned long long size = readLongLong(source);
 
   sink.preallocateContents(size);
@@ -170,7 +170,7 @@ static void parseContents(ParseSink& sink, Source& source, const Path& path) {
   while (left != 0u) {
     checkInterrupt();
     auto n = buf.size();
-    if ((unsigned long long)n > left) {
+    if (static_cast<unsigned long long>(n) > left) {
       n = left;
     }
     source(buf.data(), n);
@@ -235,7 +235,7 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
     }
 
     else if (s == "contents" && type == tpRegular) {
-      parseContents(sink, source, path);
+      parseContents(sink, source);
     }
 
     else if (s == "executable" && type == tpRegular) {
@@ -341,7 +341,7 @@ struct RestoreSink : ParseSink {
   }
 
   void isExecutable() override {
-    struct stat st;
+    struct stat st {};
     if (fstat(fd.get(), &st) == -1) {
       throw SysError("fstat");
     }

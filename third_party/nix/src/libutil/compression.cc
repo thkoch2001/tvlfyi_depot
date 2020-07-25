@@ -17,7 +17,7 @@ namespace nix {
 
 // Don't feed brotli too much at once.
 struct ChunkedCompressionSink : CompressionSink {
-  uint8_t outbuf[32 * 1024];
+  uint8_t outbuf[32 * 1024]{};
 
   void write(const unsigned char* data, size_t len) override {
     const size_t CHUNK_SIZE = sizeof(outbuf) << 2;
@@ -43,7 +43,7 @@ struct NoneSink : CompressionSink {
 
 struct XzDecompressionSink : CompressionSink {
   Sink& nextSink;
-  uint8_t outbuf[BUFSIZ];
+  uint8_t outbuf[BUFSIZ]{};
   lzma_stream strm = LZMA_STREAM_INIT;
   bool finished = false;
 
@@ -89,7 +89,7 @@ struct XzDecompressionSink : CompressionSink {
 
 struct BzipDecompressionSink : ChunkedCompressionSink {
   Sink& nextSink;
-  bz_stream strm;
+  bz_stream strm{};
   bool finished = false;
 
   explicit BzipDecompressionSink(Sink& nextSink) : nextSink(nextSink) {
@@ -99,7 +99,7 @@ struct BzipDecompressionSink : ChunkedCompressionSink {
       throw CompressionError("unable to initialise bzip2 decoder");
     }
 
-    strm.next_out = (char*)outbuf;
+    strm.next_out = reinterpret_cast<char*>(outbuf);
     strm.avail_out = sizeof(outbuf);
   }
 
@@ -128,7 +128,7 @@ struct BzipDecompressionSink : ChunkedCompressionSink {
 
       if (strm.avail_out < sizeof(outbuf) || strm.avail_in == 0) {
         nextSink(outbuf, sizeof(outbuf) - strm.avail_out);
-        strm.next_out = (char*)outbuf;
+        strm.next_out = reinterpret_cast<char*>(outbuf);
         strm.avail_out = sizeof(outbuf);
       }
     }
@@ -205,12 +205,12 @@ ref<CompressionSink> makeDecompressionSink(const std::string& method,
 
 struct XzCompressionSink : CompressionSink {
   Sink& nextSink;
-  uint8_t outbuf[BUFSIZ];
+  uint8_t outbuf[BUFSIZ]{};
   lzma_stream strm = LZMA_STREAM_INIT;
   bool finished = false;
 
   XzCompressionSink(Sink& nextSink, bool parallel) : nextSink(nextSink) {
-    lzma_ret ret;
+    lzma_ret ret = 0;
     bool done = false;
 
     if (parallel) {
@@ -277,7 +277,7 @@ struct XzCompressionSink : CompressionSink {
 
 struct BzipCompressionSink : ChunkedCompressionSink {
   Sink& nextSink;
-  bz_stream strm;
+  bz_stream strm{};
   bool finished = false;
 
   explicit BzipCompressionSink(Sink& nextSink) : nextSink(nextSink) {
@@ -287,7 +287,7 @@ struct BzipCompressionSink : ChunkedCompressionSink {
       throw CompressionError("unable to initialise bzip2 encoder");
     }
 
-    strm.next_out = (char*)outbuf;
+    strm.next_out = reinterpret_cast<char*>(outbuf);
     strm.avail_out = sizeof(outbuf);
   }
 
@@ -316,7 +316,7 @@ struct BzipCompressionSink : ChunkedCompressionSink {
 
       if (strm.avail_out < sizeof(outbuf) || strm.avail_in == 0) {
         nextSink(outbuf, sizeof(outbuf) - strm.avail_out);
-        strm.next_out = (char*)outbuf;
+        strm.next_out = reinterpret_cast<char*>(outbuf);
         strm.avail_out = sizeof(outbuf);
       }
     }
@@ -325,7 +325,7 @@ struct BzipCompressionSink : ChunkedCompressionSink {
 
 struct BrotliCompressionSink : ChunkedCompressionSink {
   Sink& nextSink;
-  uint8_t outbuf[BUFSIZ];
+  uint8_t outbuf[BUFSIZ]{};
   BrotliEncoderState* state;
   bool finished = false;
 
