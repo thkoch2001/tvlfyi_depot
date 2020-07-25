@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87054470_d48ed144",
+        "filename": "third_party/nix/.clang-tidy",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-25T23:16:03Z",
+      "side": 0,
+      "message": "Is there some way to replicate this? Or upgrade clang-tidy so we can use it?",
+      "revId": "bbbb97e1422de0cc365d1884eb2604d07ffb3321",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
