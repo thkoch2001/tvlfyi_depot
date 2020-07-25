@@ -93,6 +93,30 @@
       "revId": "9318919b96f5c080ee31251938f714f4a06a2451",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b8b44bd_ccbade2f",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-25T17:54:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd1b78af_7e3cbe48",
+      "range": {
+        "startLine": 29,
+        "startChar": 20,
+        "endLine": 29,
+        "endChar": 35
+      },
+      "revId": "9318919b96f5c080ee31251938f714f4a06a2451",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
