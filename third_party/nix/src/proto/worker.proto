@@ -251,6 +251,7 @@ message CollectGarbageResponse {
 }
 
 message PathInfo {
+  bool is_valid = 9;
   StorePath deriver = 1;
   bytes nar_hash = 2;
   repeated string references = 3;
