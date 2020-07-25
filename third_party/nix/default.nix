@@ -16,7 +16,10 @@ let
     enableLargeConfig = true;
   };
 
-  src = ./.;
+  src = builtins.path {
+    name = "tvix-source";
+    path = ./.;
+  };
 
   # Proto generation in CMake is theoretically possible, but that is
   # very theoretical - this does it in Nix instead.
