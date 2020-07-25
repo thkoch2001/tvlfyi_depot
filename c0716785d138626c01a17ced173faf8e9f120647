@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4991e147_d2890c3b",
+        "filename": "third_party/nix/src/libstore/binary-cache-store.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-25T04:56:22Z",
+      "side": 1,
+      "message": "What is going on here.",
+      "range": {
+        "startLine": 357,
+        "startChar": 17,
+        "endLine": 358,
+        "endChar": 64
+      },
+      "revId": "c0716785d138626c01a17ced173faf8e9f120647",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c80037e_b672df59",
+        "filename": "third_party/nix/src/libutil/compression.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-25T04:56:22Z",
+      "side": 1,
+      "message": "suspicious fix, same below",
+      "range": {
+        "startLine": 20,
+        "startChar": 25,
+        "endLine": 20,
+        "endChar": 29
+      },
+      "revId": "c0716785d138626c01a17ced173faf8e9f120647",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
