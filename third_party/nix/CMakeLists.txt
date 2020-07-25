@@ -30,8 +30,9 @@ find_package(glog REQUIRED)
 
 find_program(CLANG_TIDY_PATH clang-tidy)
 if (CLANG_TIDY_PATH)
-  message("Found clang-tidy: ${CLANG_TIDY_PATH}")
-  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_PATH}")
+  # TODO(kanepyork): figure out how to reenable
+  #message("Found clang-tidy: ${CLANG_TIDY_PATH}")
+  #set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_PATH};--line-filter=[{\"name\":\"src/cpptoml/cpptoml.h\"},{\"name\":\"google/protobuf/metadata_lite.h\"}]")
 
   # nix's toolchain has a problem with system header includes, so clang-tidy requires a manual -isystem
   if (DEFINED ENV{LIBCXX_INCLUDE})
