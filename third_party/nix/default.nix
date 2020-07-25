@@ -1,4 +1,6 @@
-{ pkgs ? (import ../.. {}).third_party
+args@{
+  pkgs ? (import ../.. {}).third_party
+, lib
 , buildType ? "release"
 , depotPath ? ../..
 , ...
@@ -138,4 +140,6 @@ in pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   # TODO(tazjin): integration test setup?
   # TODO(tazjin): docs generation?
+
+  passthru = { test-vm = import ./test-vm.nix args; };
 }
