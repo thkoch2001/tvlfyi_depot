@@ -22,6 +22,30 @@
       "revId": "2f85dfe50c1eb9622a1b409de95629bcced0992f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35e6f0c1_5d61f624",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-25T15:19:26Z",
+      "side": 0,
+      "message": "ServerBuilder::RegisterService takes a *Service - passing it a unique_ptr didn\u0027t typecheck. Leaking the service for the duration of the daemon felt fine, too, since the service *is* the daemon. If there\u0027s a better way to do this that typechecks I\u0027m happy to do that instead though.",
+      "parentUuid": "16f0c2c5_7152505b",
+      "range": {
+        "startLine": 290,
+        "startChar": 9,
+        "endLine": 290,
+        "endChar": 25
+      },
+      "revId": "2f85dfe50c1eb9622a1b409de95629bcced0992f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }

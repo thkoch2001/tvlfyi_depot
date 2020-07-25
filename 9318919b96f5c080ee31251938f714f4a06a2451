@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dd833ec5_d8742cd5",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-main.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-25T15:19:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7a51a88_fe7fc076",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 76
+      },
+      "revId": "9318919b96f5c080ee31251938f714f4a06a2451",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97ae2d5a_83912a55",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 13
@@ -36,6 +60,30 @@
       "writtenOn": "2020-07-25T03:01:18Z",
       "side": 1,
       "message": "calling this increments the refcount, but it does not actually store the shared_ptr - is that intentional?",
+      "range": {
+        "startLine": 29,
+        "startChar": 20,
+        "endLine": 29,
+        "endChar": 35
+      },
+      "revId": "9318919b96f5c080ee31251938f714f4a06a2451",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd1b78af_7e3cbe48",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-25T15:19:26Z",
+      "side": 1,
+      "message": "It stores it as a member",
+      "parentUuid": "97ae2d5a_83912a55",
       "range": {
         "startLine": 29,
         "startChar": 20,
