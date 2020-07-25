@@ -17,7 +17,7 @@ service WorkerService {
   // Query referrers for a given path.
   rpc QueryReferrers(StorePath) returns (StorePaths);
 
-  // Add a NAR (I think?) to the store. The first stream request
+  // Add a path to the store. The first stream request
   // should be a message indicating metadata, the rest should be file
   // chunks.
   rpc AddToStore(stream AddToStoreRequest) returns (StorePath);
@@ -185,14 +185,9 @@ message AddToStoreRequest {
     string base_name = 4;
   }
 
-  message Chunk {
-    bytes content = 1;
-    bool final = 2;
-  }
-
   oneof add_oneof {
     Metadata meta = 1;
-    Chunk chunk = 2;
+    bytes data = 3;
   }
 }
 

@@ -47,6 +47,7 @@ target_sources(nixutil
 )
 
 target_link_libraries(nixutil
+  nixproto
   absl::strings
   absl::statusor
   glog

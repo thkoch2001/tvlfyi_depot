@@ -18,6 +18,23 @@
 
 namespace nix {
 
+std::optional<HashType> hash_type_from(nix::proto::HashType hash_type) {
+  switch (hash_type) {
+    case nix::proto::HashType::UNKNOWN:
+      return HashType::htUnknown;
+    case nix::proto::HashType::MD5:
+      return HashType::htMD5;
+    case nix::proto::HashType::SHA1:
+      return HashType::htSHA1;
+    case nix::proto::HashType::SHA256:
+      return HashType::htSHA256;
+    case nix::proto::HashType::SHA512:
+      return HashType::htSHA512;
+    default:
+      return {};
+  }
+}
+
 void Hash::init() {
   if (type == htMD5) {
     hashSize = md5HashSize;
