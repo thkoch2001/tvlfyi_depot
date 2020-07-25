@@ -144,7 +144,7 @@ nix-shell.
 mkdir ~/build/tvix
 cd ~/build/tvix
 
-nix-shell $DEPOT_PATH -A third_party.nix
+nix-shell $DEPOT_PATH -A third_party.nix.build-shell
 
 # Disable clang-tidy for quicker builds
 cmake $DEPOT_PATH -DCLANG_TIDY_PATH=""
