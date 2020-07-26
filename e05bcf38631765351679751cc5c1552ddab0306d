@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccd58d0f_ef2b8470",
+        "filename": "web/panettone/src/packages.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:34:23Z",
+      "side": 1,
+      "message": "was it just me, or were you using #: in some places elsewhere\n(#: is supposed to be \"better\" because it doesn\u0027t intern a symbol, but I think it looks ugly :p)",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f05994b_96582a5a",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:34:23Z",
+      "side": 1,
+      "message": "nit: \"insteaad\"",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61226c2f_90bff3aa",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:34:23Z",
+      "side": 1,
+      "message": "If you only want one value, use NTH-VALUE: http://www.lispworks.com/documentation/HyperSpec/Body/m_nth_va.htm",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "034154f6_261c165d",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:34:23Z",
+      "side": 1,
+      "message": "protip: you can s/postmodern:/pomo:/ to avoid typing (because it has a package nickname)",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "984a74b1_c6b66db3",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:34:23Z",
+      "side": 1,
+      "message": "(why?)",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
