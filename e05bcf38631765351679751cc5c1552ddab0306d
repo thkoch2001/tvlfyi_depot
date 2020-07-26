@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "39b33211_f3f5575e",
+        "filename": "web/panettone/src/packages.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T23:39:48Z",
+      "side": 1,
+      "message": "I\u0027m gonna leave this, as I don\u0027t care about perf / memory usage and I think this is more readable.",
+      "parentUuid": "212e09f5_ee624290",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f05994b_96582a5a",
         "filename": "web/panettone/src/panettone.lisp",
         "patchSetId": 1
@@ -51,6 +69,24 @@
       "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8269ebea_d554c497",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T23:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f05994b_96582a5a",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -89,6 +125,42 @@
     },
     {
       "key": {
+        "uuid": "4d222f01_86630c32",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T23:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51c92ae6_a45df570",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2c8112cd_7259eacb",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T23:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51c92ae6_a45df570",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "034154f6_261c165d",
         "filename": "web/panettone/src/panettone.lisp",
         "patchSetId": 1
@@ -121,6 +193,42 @@
       "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07ff0978_01349814",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T23:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8836463_1e448ea7",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5af58f5a_c9f26a01",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T23:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8836463_1e448ea7",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {

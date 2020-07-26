@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "092757be_89fd4a2d",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T23:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0340f68_4ef29886",
+      "revId": "901d271ada749dc811be549c837e8b4efab313bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb457088_9daf85bd",
         "filename": "web/panettone/src/model.lisp",
         "patchSetId": 6
