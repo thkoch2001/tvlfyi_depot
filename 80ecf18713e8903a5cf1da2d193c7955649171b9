@@ -22,6 +22,30 @@
       "revId": "80ecf18713e8903a5cf1da2d193c7955649171b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "574f62b9_e7869c8a",
+        "filename": "ci-builds.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-26T21:31:29Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "d5969a94_84840a06",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 10
+      },
+      "revId": "80ecf18713e8903a5cf1da2d193c7955649171b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
