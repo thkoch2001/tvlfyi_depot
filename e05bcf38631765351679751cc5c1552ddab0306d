@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "212e09f5_ee624290",
+        "filename": "web/panettone/src/packages.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T21:38:50Z",
+      "side": 1,
+      "message": "yeah I wasn\u0027t quite sure what the difference is.",
+      "parentUuid": "ccd58d0f_ef2b8470",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f05994b_96582a5a",
         "filename": "web/panettone/src/panettone.lisp",
         "patchSetId": 1
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "51c92ae6_a45df570",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T21:38:50Z",
+      "side": 1,
+      "message": "cool!",
+      "parentUuid": "61226c2f_90bff3aa",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "034154f6_261c165d",
         "filename": "web/panettone/src/panettone.lisp",
         "patchSetId": 1
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "a8836463_1e448ea7",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T21:38:50Z",
+      "side": 1,
+      "message": "cool",
+      "parentUuid": "034154f6_261c165d",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "984a74b1_c6b66db3",
         "filename": "web/panettone/src/panettone.lisp",
         "patchSetId": 1
@@ -81,6 +135,24 @@
       "writtenOn": "2020-07-26T21:34:23Z",
       "side": 1,
       "message": "(why?)",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "810b4209_3bcd1e04",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T21:38:50Z",
+      "side": 1,
+      "message": "oh I should comment this - I noticed that if there\u0027s an error when checking auth with the ldap server the backtrace includes the password (!!). I checked and this hasn\u0027t happened on whitby yet, but yikes.",
+      "parentUuid": "984a74b1_c6b66db3",
       "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
