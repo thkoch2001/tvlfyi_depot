@@ -48,6 +48,7 @@ pkgs.buildBazelPackage {
     ./0004-Add-titles-to-CLs-over-HTTP.patch
     ./0005-When-using-local-fonts-always-assume-Gerrit-is-mount.patch
     ./0006-Always-use-Google-Fonts.patch
+    ./0007-Fix-gr-hovercard-behavior-under-Firefox.patch
   ];
 
   bazelTarget = "release";
