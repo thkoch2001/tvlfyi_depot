@@ -30,17 +30,17 @@ let
   bazel = bazelTop // { override = x: bazelTop; };
   version = "3.2.2-1002-gea26b5ee7a";
 in
-pkgs.buildBazelPackage {
+pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   name = "gerrit-${version}";
 
-  src = (pkgs.fetchgit {
+  src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
     rev = "ea26b5ee7a1c1e4042525d308678570101d4d4d6";
     sha256 = "1bndmk7namb81zkscmpvf8ygwrj0wh842xbj0irgbm5w2xwdzkch";
     fetchSubmodules = true;
     deepClone = true;
     leaveDotGit = true;
-  });
+  };
   patches = [
     ./0001-Use-detzip-in-download_bower.py.patch
     ./0002-Syntax-highlight-nix.patch

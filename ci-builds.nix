@@ -66,7 +66,10 @@ in lib.fix (self: {
     nix.test-vm
     openldap
     rapidcheck
-  ] ++ builtins.attrValues lisp;
+  ]
+  ++ builtins.attrValues lisp
+  ++ builtins.attrValues depot.third_party.gerrit_plugins
+  ;
 
   lisp = with depot.lisp; [
     dns
