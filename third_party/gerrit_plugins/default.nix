@@ -1,10 +1,25 @@
-{ pkgs, ... }:
+{ depot, pkgs, ... }@args:
 
-let inherit (pkgs) fetchurl;
-in {
+let
+  inherit (import ./builder.nix args) buildGerritBazelPlugin;
+in
+{
   # https://gerrit.googlesource.com/plugins/owners
-  owners = fetchurl {
-    url = "https://storage.googleapis.com/tazjins-data/tvl/owners_3.2.jar";
-    sha256 = "1xw1q3g0353aw5jqxp69n85f8y57l2p51np37n8r34kzbn5r4iz7";
-  } // { name = "owners"; };
+  owners = buildGerritBazelPlugin rec {
+    name = "owners";
+    depsOutputHash = "0j60yn65kn27s7cjkj3z6irymq7j7rj3q5h3n6xfrs5inm4md2ad";
+    src = pkgs.fetchgit {
+      url = "https://gerrit.googlesource.com/plugins/owners";
+      rev = "17817c9e319073c03513f9d5177b6142b8fd567b";
+      sha256 = "1p089shybp50svckcq51d0hfisjvbggndmvmhh8pvzvi6w8n9d89";
+      deepClone = true;
+      leaveDotGit = true;
+    };
+    overlayPluginCmd = ''
+      chmod +w "$out" "$out/plugins/external_plugin_deps.bzl"
+      cp -R "${src}/owners" "$out/plugins/owners"
+      cp "${src}/external_plugin_deps.bzl" "$out/plugins/external_plugin_deps.bzl"
+      cp -R "${src}/owners-common" "$out/owners-common"
+    '';
+  };
 }
