@@ -146,6 +146,7 @@ let
   in runCommandNoCC "${name}" {
     nativeBuildInputs = [ makeWrapper ];
     LD_LIBRARY_PATH = libPath;
+    LANG = "C.UTF-8";
   } ''
     mkdir -p $out/bin
 
