@@ -12,6 +12,7 @@ depot.nix.buildLisp.program {
     hunchentoot
     lass
     local-time
+    postmodern
     trivial-ldap
 
     depot.lisp.klatre
@@ -21,6 +22,7 @@ depot.nix.buildLisp.program {
     ./panettone.asd
     ./src/packages.lisp
     ./src/css.lisp
+    ./src/model.lisp
     ./src/panettone.lisp
   ];
 }
