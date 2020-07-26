@@ -5,14 +5,15 @@
 ;;; Data model
 ;;;
 
-(deftype issue-status ()
-  '(member :open :closed))
+(deftype issue-status () '(member :open :closed))
 
 (defclass/std issue-comment ()
   ((body :type string)
    (author-dn :type string)
    (created-at :type local-time:timestamp
-               :std (local-time:now))))
+               :std (local-time:now)))
+  (:documentation
+   "DEPRECATED: use `PANETTONE.MODEL::ISSUE-COMMENT' insteaad"))
 
 (defclass/std issue (cl-prevalence:object-with-id)
   ((subject body :type string :std "")
@@ -20,7 +21,9 @@
    (comments :std nil :type list :with-prefix)
    (status :std :open :type issue-status)
    (created-at :type local-time:timestamp
-               :std (local-time:now))))
+               :std (local-time:now)))
+  (:documentation
+   "DEPRECATED: use `PANETTONE.MODEL::ISSUE' insteaad"))
 
 (defclass/std user ()
   ((cn dn mail displayname :type string)))
@@ -90,6 +93,7 @@ successful, `nil' otherwise"
                           :port (ldap:port *ldap*)
                           :user dn
                           :pass password))
+        (declare (ignore _r _msg))
         (when (equalp code-sym 'trivial-ldap:success)
           user)))))
 
@@ -103,58 +107,6 @@ successful, `nil' otherwise"
 (defvar *p-system* nil
   "The persistence system for this instance of Panettone")
 
-(define-condition issue-not-found (error)
-  ((id :type integer
-       :initarg :id
-       :reader not-found-id
-       :documentation "ID of the issue that was not found"))
-  (:documentation
-   "Error condition for when an issue requested by ID is not
-  found"))
-
-(defun get-issue (system id)
-  (restart-case
-      (or
-       (cl-prevalence:find-object-with-id system 'issue id)
-       (error 'issue-not-found :id id))
-    (different-id (new-id)
-      :report "Use a different issue ID"
-      :interactive (lambda ()
-                     (format t "Enter a new ID: ")
-                     (multiple-value-list (eval (read))))
-      (get-issue system new-id))))
-
-(defun list-issues (system)
-  (cl-prevalence:find-all-objects system 'issue))
-
-(defun issues-with-status (system status)
-  (remove-if-not (lambda (issue) (eq (status issue) status))
-                 (list-issues system)))
-
-(defun open-issues (system) (issues-with-status system :open))
-(defun closed-issues (system) (issues-with-status system :closed))
-
-(defun create-issue (system &rest attrs)
-  (cl-prevalence:tx-create-object
-   system
-   'issue
-   (chunk-list 2 attrs)))
-
-(defun add-comment (system issue-id &rest attrs)
-  "Add a comment with the given ATTRS to the issue ISSUE-ID, and return the
-updated issue"
-  (let* ((comment (apply #'make-instance 'issue-comment attrs))
-         (issue (get-issue system issue-id))
-         (comments (append (issue-comments issue)
-                           (list comment))))
-    (cl-prevalence:tx-change-object-slots
-     system
-     'issue
-     issue-id
-     `((comments ,comments)))
-    (setf (slot-value issue 'comments) comments)
-    comments))
-
 (defun initialize-persistence (data-dir)
   "Initialize the Panettone persistence system, storing data in DATA-DIR"
   (ensure-directories-exist data-dir)
@@ -165,8 +117,66 @@ updated issue"
                       "/snapshot.xml")))
 
 
-  (when (null (list-issues *p-system*))
+  (when (null (cl-prevalence:find-all-objects *p-system* 'issue))
     (cl-prevalence:tx-create-id-counter *p-system*)))
+
+(defun prevalence->postgresql (system &key force)
+  "Idempotently migrate all data from the cl-prevalence system SYSTEM into the
+global postgresql connection (eg as initialized by
+`panettone.model:connect-postgres'). With FORCE=t, will clear the database first"
+  (postmodern:with-transaction (prevalence->postgresql)
+    (when force
+      (postmodern:query (:delete-from 'issues)))
+    (iter
+      (for issue in (cl-prevalence:find-all-objects system 'issue))
+      (counting
+       (unless (panettone.model:issue-exists-p (get-id issue))
+         (panettone.model:create-issue
+          :id (get-id issue)
+          :subject (subject issue)
+          :body (or (body issue) "")
+          :status (status issue)
+          :author-dn (author-dn issue)
+          :created-at (created-at issue)))
+       into num-issues)
+      (sum
+       (iter
+         (for comment in (issue-comments issue))
+         (counting
+          (unless (postmodern:query
+                   (:select
+                    (:exists
+                     (:select 1
+                      :from 'issue_comments
+                      :where (:and
+                              (:= 'issue_id (get-id issue))
+                              (:= 'body (body comment))
+                              (:= 'author_dn (author-dn comment))))))
+                   :single)
+            (panettone.model:create-issue-comment
+             :body (body comment)
+             :author-dn (author-dn comment)
+             :issue-id (get-id issue)
+             :created-at (created-at comment)))))
+       into num-comments)
+      (finally
+       (let ((next-id (postmodern:query
+                       (:select (:+ 1 (:max 'id))
+                        :from 'issues)
+                       :single)))
+         (postmodern:query
+          (postmodern:sql-compile
+           `(:alter-sequence issues_id_seq :restart ,next-id))))
+       (format t "Created ~A issues and ~A comments~&"
+               num-issues num-comments)
+       (return (values num-issues num-comments))))))
+
+(comment
+ (initialize-persistence "/home/grfn/code/depot/web/panettone/")
+ (panettone.model:connect-postgres)
+ (panettone.model:ddl/init)
+ (prevalence->postgresql *p-system* :force t)
+ )
 
 ;;;
 ;;; Views
@@ -178,7 +188,7 @@ updated issue"
 
 (setf (who:html-mode) :html5)
 
-(defun render/footer-nav (&rest extra)
+(defun render/footer-nav ()
   (who:with-html-output (*standard-output*)
     (:footer
      (:nav
@@ -420,6 +430,16 @@ updated issue"
               (hunchentoot:request-uri*)
               :utf-8)))))
 
+(defun @txn (next)
+  (postmodern:with-transaction ()
+    (funcall next)))
+
+(defun @handle-issue-not-found (next)
+  (handler-case (funcall next)
+    (issue-not-found (err)
+      (render/not-found
+       (format nil "Issue #~A" (panettone.model:id err))))))
+
 (defroute login-form ("/login" :method :get)
     (original-uri)
   (if (hunchentoot:session-value 'user)
@@ -439,84 +459,69 @@ updated issue"
   (hunchentoot:redirect "/"))
 
 (defroute index ("/" :decorators (@auth-optional)) ()
-  (let ((issues (open-issues *p-system*)))
+  (let ((issues (panettone.model:list-issues :status :open)))
     (render/index :issues issues)))
 
 (defroute handle-closed-issues
     ("/issues/closed" :decorators (@auth-optional)) ()
-  (let ((issues (closed-issues *p-system*)))
+  (let ((issues (panettone.model:list-issues :status :closed)))
     (render/closed-issues :issues issues)))
 
 (defroute new-issue ("/issues/new" :decorators (@auth)) ()
   (render/new-issue))
 
 (defroute handle-create-issue
-    ("/issues" :method :post :decorators (@auth))
+    ("/issues" :method :post :decorators (@auth @txn))
     (&post subject body)
   (if (string= subject "")
       (render/new-issue "Subject is required")
       (progn
-        (cl-prevalence:execute-transaction
-         (create-issue *p-system*
-                       'subject subject
-                       'body body
-                       'author-dn (dn *user*)))
-        (cl-prevalence:snapshot *p-system*)
+        (panettone.model:create-issue :subject subject
+                                      :body body
+                                      :author-dn (dn *user*))
         (hunchentoot:redirect "/"))))
 
-(defroute show-issue ("/issues/:id" :decorators (@auth-optional))
+(defroute show-issue
+    ("/issues/:id" :decorators (@auth-optional @handle/issue-not-found))
     (&path (id 'integer))
   (handler-case
-      (let* ((issue (get-issue *p-system* id))
+      (let* ((issue (panettone.model:get-issue id))
              (*title* (format nil "~A | Panettone"
                               (subject issue))))
         (render/issue issue))
     (issue-not-found (_)
+      (declare (ignore _))
       (render/not-found "Issue"))))
 
 (defroute handle-create-comment
-    ("/issues/:id/comments" :decorators (@auth)
-                            :method :post)
+    ("/issues/:id/comments"
+     :decorators (@auth @handle-issue-not-found @txn)
+     :method :post)
     (&path (id 'integer) &post body)
   (flet ((redirect-to-issue ()
            (hunchentoot:redirect (format nil "/issues/~A" id))))
-    (if (string= body "")
-        (redirect-to-issue)
-        (handler-case
-            (progn
-              (cl-prevalence:execute-transaction
-               (add-comment *p-system* id
-                            :body body
-                            :author-dn (dn *user*)))
-              (cl-prevalence:snapshot *p-system*)
-              (redirect-to-issue))
-          (issue-not-found (_)
-            (render/not-found "Issue"))))))
+    (cond
+      ((string= body "")
+       (redirect-to-issue))
+      (:else
+       (panettone.model:create-issue-comment
+        :issue-id id
+        :body body
+        :author-dn (dn *user*))
+       (redirect-to-issue)))))
 
 (defroute close-issue
-    ("/issues/:id/close" :decorators (@auth)
+    ("/issues/:id/close" :decorators (@auth @handle-issue-not-found @txn)
                          :method :post)
     (&path (id 'integer))
-  (cl-prevalence:execute-transaction
-   (cl-prevalence:tx-change-object-slots
-    *p-system*
-    'issue
-    id
-    '((status :closed))))
-  (cl-prevalence:snapshot *p-system*)
+  (panettone.model:set-issue-status id :closed)
   (hunchentoot:redirect (format nil "/issues/~A" id)))
 
 (defroute open-issue
     ("/issues/:id/open" :decorators (@auth)
                          :method :put)
     (&path (id 'integer))
-  (cl-prevalence:execute-transaction
-   (cl-prevalence:tx-change-object-slots
-    *p-system*
-    'issue
-    id
-    '((status open))))
-  (cl-prevalence:snapshot *p-system*)
+  (panettone.model:set-issue-status id :open)
   (hunchentoot:redirect (format nil "/issues/~A" id)))
 
 (defroute styles ("/main.css") ()
@@ -526,12 +531,25 @@ updated issue"
 (defvar *acceptor* nil
   "Hunchentoot acceptor for Panettone's web server.")
 
+(defun migrate-db ()
+  "Migrate the database to the latest version of the schema
+
+In this iteration, intiialize the DDL and move all data from the prevalence
+snapshot to the DB. In future iterations, this will do things like adding new
+tables and columns"
+  (panettone.model:ddl/init)
+  (prevalence->postgresql *p-system*))
+
 (defun start-panettone (&key port data-dir
                           (ldap-host "localhost")
-                          (ldap-port 389))
+                          (ldap-port 389)
+                          postgres-params)
   (connect-ldap :host ldap-host
                 :port ldap-port)
+
   (initialize-persistence data-dir)
+  (apply #'panettone.model:connect-postgres postgres-params)
+  (migrate-db)
 
   (setq *acceptor*
         (make-instance 'easy-routes:routes-acceptor :port port))
@@ -547,6 +565,7 @@ updated issue"
   (let ((port (integer-env "PANETTONE_PORT" :default 6161))
         (ldap-port (integer-env "LDAP_PORT" :default 389))
         (data-dir (or (uiop:getenvp "PANETTONE_DATA_DIR") "/var/lib/panettone")))
+    (setq hunchentoot:*show-lisp-backtraces-p* nil)
     (start-panettone :port port
                      :data-dir data-dir
                      :ldap-port ldap-port)

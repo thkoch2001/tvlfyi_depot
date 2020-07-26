@@ -12,6 +12,7 @@ depot.nix.buildLisp.program {
     hunchentoot
     lass
     local-time
+    postmodern
     trivial-ldap
 
     depot.lisp.klatre
