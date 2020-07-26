@@ -73,6 +73,7 @@ in lib.fix (self: {
 
   gerrit = with depot.third_party.gerrit_plugins; [
     depot.third_party.gerrit
+    checks
     owners
   ];
 
