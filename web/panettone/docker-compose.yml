@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  postgres:
+    image: postgres:11
+    restart: always
+    environment:
+      POSTGRES_USER: panettone
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: panettone
+    ports:
+      - 127.0.0.1:5432:5432
