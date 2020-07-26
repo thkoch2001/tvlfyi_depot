@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85433d2c_5c0115f8",
+        "filename": "web/panettone/docker-compose.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T20:03:30Z",
+      "side": 1,
+      "message": "Security(tm) ;P\n(yes I know it\u0027s just for local dev)",
+      "revId": "314ba25721bc90125bdc040e5d80ca887f7fcc94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
