@@ -547,6 +547,8 @@ updated issue"
   (let ((port (integer-env "PANETTONE_PORT" :default 6161))
         (ldap-port (integer-env "LDAP_PORT" :default 389))
         (data-dir (or (uiop:getenvp "PANETTONE_DATA_DIR") "/var/lib/panettone")))
+    (setq hunchentoot:*show-lisp-backtraces-p* nil)
+    (setq hunchentoot:*log-lisp-backtraces-p* nil)
     (start-panettone :port port
                      :data-dir data-dir
                      :ldap-port ldap-port)
