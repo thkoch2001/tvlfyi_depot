@@ -85,8 +85,8 @@
 ** TODO Sunset Blvd.
 ** DONE Green Book
 ** DONE The Hunt
-** TODO Jodaeiye Nader az Simin
-** TODO Incendies
+** DONE Jodaeiye Nader az Simin
+** DONE Incendies
 ** DONE Toy Story 3
 ** DONE Inglourious Basterds
 ** DONE Eternal Sunshine of the Spotless Mind
