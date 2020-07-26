@@ -156,6 +156,24 @@
       "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef53d5b2_5a86b417",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T21:58:48Z",
+      "side": 1,
+      "message": "submitted and applied on its own as CL/1471",
+      "parentUuid": "810b4209_3bcd1e04",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
