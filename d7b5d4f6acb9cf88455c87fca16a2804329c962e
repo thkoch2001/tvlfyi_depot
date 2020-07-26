@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31cab6e6_44d00bea",
+        "filename": "third_party/gerrit_plugins/default.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T19:52:51Z",
+      "side": 1,
+      "message": "this feels like it could go in its own file in `nix/` perhaps. But maybe that\u0027s too much indirection.",
+      "range": {
+        "startLine": 6,
+        "startChar": 2,
+        "endLine": 6,
+        "endChar": 25
+      },
+      "revId": "d7b5d4f6acb9cf88455c87fca16a2804329c962e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c88a1da_c7e592fc",
+        "filename": "third_party/gerrit_plugins/default.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T19:52:51Z",
+      "side": 1,
+      "message": "I feel like it\u0027s probably more readable (and self-documenting) to destructure this out of attrs",
+      "range": {
+        "startLine": 22,
+        "startChar": 19,
+        "endLine": 22,
+        "endChar": 39
+      },
+      "revId": "d7b5d4f6acb9cf88455c87fca16a2804329c962e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
