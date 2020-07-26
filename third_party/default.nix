@@ -64,6 +64,7 @@ let
       dfu-util
       diffutils
       dockerTools
+      docker-compose
       execline
       fd
       fetchFromGitHub
