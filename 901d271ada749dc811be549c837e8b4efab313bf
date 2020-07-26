@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de511b91_f72acfae",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:59:45Z",
+      "side": 1,
+      "message": "This sounds like something that could be very easily macro\u0027d, i.e. so you could just write (env-or \"PGHOST\" \"localhost\")",
+      "revId": "901d271ada749dc811be549c837e8b4efab313bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0340f68_4ef29886",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:59:45Z",
+      "side": 1,
+      "message": "Why use LIST when you can use \u0027 (i.e. QUOTE)",
+      "revId": "901d271ada749dc811be549c837e8b4efab313bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb457088_9daf85bd",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:59:45Z",
+      "side": 1,
+      "message": "can you not just, uh, CREATE TABLE IF NOT EXISTS or something",
+      "revId": "901d271ada749dc811be549c837e8b4efab313bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4471e8e_e334b0f9",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:59:45Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "901d271ada749dc811be549c837e8b4efab313bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73dfed16_6f98509d",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:59:45Z",
+      "side": 1,
+      "message": "ooh, an actual restart!!",
+      "revId": "901d271ada749dc811be549c837e8b4efab313bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}

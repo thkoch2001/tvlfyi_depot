@@ -174,6 +174,24 @@
       "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4481f670_fe97c2f7",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-26T21:59:45Z",
+      "side": 1,
+      "message": "What you could do is wrap the password in a CLOS class (because they aren\u0027t printed with their slots shown)?",
+      "parentUuid": "810b4209_3bcd1e04",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
