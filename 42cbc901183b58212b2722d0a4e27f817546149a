@@ -22,6 +22,30 @@
       "revId": "42cbc901183b58212b2722d0a4e27f817546149a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0569daaf_5f3098df",
+        "filename": "third_party/nix/src/libstore/local-store.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-26T20:12:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6984c5c6_61eb8f01",
+      "range": {
+        "startLine": 497,
+        "startChar": 3,
+        "endLine": 497,
+        "endChar": 11
+      },
+      "revId": "42cbc901183b58212b2722d0a4e27f817546149a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
