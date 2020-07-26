@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "23bb2f4d_4ecc69f7",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T22:14:28Z",
+      "side": 1,
+      "message": "eh, fairbairn threshold",
+      "parentUuid": "de511b91_f72acfae",
+      "revId": "901d271ada749dc811be549c837e8b4efab313bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0340f68_4ef29886",
         "filename": "web/panettone/src/model.lisp",
         "patchSetId": 6
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "7236ee2b_9e04d73e",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T22:14:28Z",
+      "side": 1,
+      "message": "this is a type, so no - no CREATE TYPE IF NOT EXISTS in pg: https://www.postgresql.org/docs/11/sql-createtype.html",
+      "parentUuid": "cb457088_9daf85bd",
+      "revId": "901d271ada749dc811be549c837e8b4efab313bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4471e8e_e334b0f9",
         "filename": "web/panettone/src/model.lisp",
         "patchSetId": 6
@@ -81,6 +117,24 @@
       "writtenOn": "2020-07-26T21:59:45Z",
       "side": 1,
       "message": "ooh, an actual restart!!",
+      "revId": "901d271ada749dc811be549c837e8b4efab313bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d1f6c6f2_8377417c",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T22:14:28Z",
+      "side": 1,
+      "message": "...mostly because I wanted an excuse to make one, haha\n\nI\u0027ve used it in SLY a few times though!",
+      "parentUuid": "73dfed16_6f98509d",
       "revId": "901d271ada749dc811be549c837e8b4efab313bf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false

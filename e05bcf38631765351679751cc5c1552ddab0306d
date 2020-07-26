@@ -192,6 +192,24 @@
       "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4740cba_fc2299ba",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T22:14:28Z",
+      "side": 1,
+      "message": "explained in IRC:\n\n\u003c+grfn\u003e eta: I\u0027m not sure that\u0027d work\n\u003c+grfn\u003e because before it gets wrapped in a class it\u0027s still a local variable\n\u003c+grfn\u003e like you can just go higher up the stacktrace\n\u003c+grfn\u003e to when it\u0027s a string\n\u003ceta\u003e grfn: well where do you call the function though \n\u003c+grfn\u003e eta: `make-instance`? I\u0027d assume in the hunchentoot handler\n\u003c+grfn\u003e it\u0027s still a local variable at some point in the stack, is the problem\n\u003c+grfn\u003e because it\u0027s passed to us as a parameter\n\u003c+grfn\u003e from the route handler\n\u003c+grfn\u003e and in general I\u0027d like to forbid accidentally logging secret stuff\n        holistically\n\u003c+grfn\u003e rather than having to opt-in to scrubbing\n\u003c+grfn\u003e eg I would *not* like to have to be like \"everyone in tvl has to\n        rotate their ldap password now\"\n\u003c+grfn\u003e that would be... embarrassing",
+      "parentUuid": "4481f670_fe97c2f7",
+      "revId": "e05bcf38631765351679751cc5c1552ddab0306d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
