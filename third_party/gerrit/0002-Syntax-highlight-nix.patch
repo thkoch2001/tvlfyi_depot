@@ -1,7 +1,7 @@
 From 1310ad5e56248bf216774cd13e828ba76e0c6f65 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:32 +0100
-Subject: [PATCH 2/6] Syntax highlight nix
+Subject: [PATCH 2/7] Syntax highlight nix
 
 ---
  .../app/elements/diff/gr-syntax-layer/gr-syntax-layer.js         | 1 +
