@@ -45,6 +45,30 @@
       "revId": "d7b5d4f6acb9cf88455c87fca16a2804329c962e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3fc9bb7_e3b4be10",
+        "filename": "third_party/gerrit_plugins/default.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-26T21:40:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c88a1da_c7e592fc",
+      "range": {
+        "startLine": 22,
+        "startChar": 19,
+        "endLine": 22,
+        "endChar": 39
+      },
+      "revId": "d7b5d4f6acb9cf88455c87fca16a2804329c962e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
