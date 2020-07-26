@@ -1,0 +1,5 @@
+# -*- mode: yaml; -*-
+inherited: true
+owners:
+  - eta
+  - glittershark
