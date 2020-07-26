@@ -48,3 +48,18 @@ WHERE isCartoon = true;
 SELECT *
 FROM Movies
 WHERE isCartoon = true AND requiresSubtitles = false;
+
+-- show the movies from the directors that show up on the list more than once.
+SELECT *
+FROM Movies
+WHERE director in (
+  SELECT director
+  FROM (
+    SELECT director, COUNT(*) as num
+    FROM Movies
+    GROUP BY director
+    HAVING num > 1
+    ORDER BY num DESC
+  )
+)
+ORDER BY director, rating DESC, year DESC;
