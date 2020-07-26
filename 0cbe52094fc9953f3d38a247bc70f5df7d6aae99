@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "094485b1_90599567",
+        "filename": "third_party/gerrit_plugins/builder.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T22:05:41Z",
+      "side": 1,
+      "message": "this wouldn\u0027t need to exist if you just made the formals to buildGerritBazelPlugin look like\n\n    { name\n    , src\n    , overlayPluginCmd ? \u0027\u0027\n        cp -r \"${src}\" \"$out/plugins/${name}\"\n      \u0027\u0027\n    }:\n\nand then I don\u0027t think you\u0027d need `attrs` at all",
+      "revId": "0cbe52094fc9953f3d38a247bc70f5df7d6aae99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
