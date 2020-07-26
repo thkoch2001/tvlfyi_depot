@@ -44,4 +44,17 @@ in {
       cp -R "${src}/owners-common" "$out/owners-common"
     '';
   };
+
+  # https://gerrit.googlesource.com/plugins/checks
+  checks = buildGerritBazelPlugin {
+    name = "checks";
+    depsOutputHash = "1nk63ahlynqn5my7lzy7vsax07n585ndmvbnz2xbwkppl1m7j56l";
+    src = pkgs.fetchgit {
+      url = "https://gerrit.googlesource.com/plugins/checks";
+      rev = "36d9e5c61b95ade98883ded5eb1e168c28ef99bf";
+      sha256 = "03abn4m9x8cinx86c41hrazg0kgwvjfak3w155sca1ikq4605pma";
+      deepClone = true;
+      leaveDotGit = true;
+    };
+  };
 }
