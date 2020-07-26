@@ -217,8 +217,34 @@ in lib.fix(self: {
     sourcegraph.enable = true;
 
     # Run the Panettone issue tracker
-    panettone.enable = true;
+    panettone = {
+      enable = true;
+      dbUser = "panettone";
+      dbName = "panettone";
+    };
   };
+
+  services.postgresql = {
+    enable = true;
+    enableTCPIP = true;
+
+    authentication = lib.mkOverride 10 ''
+      local all all trust
+      host all all ::1/128 trust
+    '';
+
+    ensureDatabases = [
+      "panettone"
+    ];
+
+    ensureUsers = [{
+      name = "panettone";
+      ensurePermissions = {
+        "DATABASE panettone" = "ALL PRIVILEGES";
+      };
+    }];
+  };
+
 
   environment.systemPackages = with nixpkgs; [
     bb
