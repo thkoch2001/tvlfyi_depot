@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f629cae7_18e8fe26",
+        "filename": "ops/nixos/panettone.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-26T21:23:13Z",
+      "side": 1,
+      "message": "I don\u0027t think this should be *in* the Panettone module tbh, it should rather take connection settings with the database configured per host.\n\nOne of the ideas of using Postgres was that we could point multiple local services at it (e.g. tvldb if we migrate that to whitby).",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 23
+      },
+      "revId": "b69a2baa8fc0fd3a3fd620ce5e9e5e4539bb2259",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
