@@ -22,6 +22,30 @@
       "revId": "f2c285dc662865a41166aea77062f20e9b08532a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1e26a40_a0c23cb5",
+        "filename": "ops/nixos/monorepo-gerrit.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-26T22:02:48Z",
+      "side": 1,
+      "message": "Yeah, TBD.",
+      "parentUuid": "446bcacd_718cad51",
+      "range": {
+        "startLine": 21,
+        "startChar": 6,
+        "endLine": 21,
+        "endChar": 12
+      },
+      "revId": "f2c285dc662865a41166aea77062f20e9b08532a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
