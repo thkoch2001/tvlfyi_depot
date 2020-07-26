@@ -22,6 +22,30 @@
       "revId": "514beb5decac2220455740cbc1ba77f5d76a22c7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8710a1a1_cb9ca925",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-26T21:30:55Z",
+      "side": 1,
+      "message": "This is just \"discourage C-style casts\", no?",
+      "parentUuid": "9549dd0e_0adf8c08",
+      "range": {
+        "startLine": 1179,
+        "startChar": 19,
+        "endLine": 1179,
+        "endChar": 51
+      },
+      "revId": "514beb5decac2220455740cbc1ba77f5d76a22c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
