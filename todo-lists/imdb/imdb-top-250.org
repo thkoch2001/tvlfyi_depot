@@ -179,7 +179,7 @@
 ** TODO Relatos salvajes
 ** DONE The Grand Budapest Hotel
 ** DONE Gone Girl
-** TODO Hacksaw Ridge
+** DONE Hacksaw Ridge
 ** TODO 12 Years a Slave
 ** DONE Guardians of the Galaxy
 ** DONE Rush
