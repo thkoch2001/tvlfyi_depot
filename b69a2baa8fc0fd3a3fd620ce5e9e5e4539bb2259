@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "34649a7d_ecb2990f",
+        "filename": "ops/nixos/panettone.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T21:55:04Z",
+      "side": 1,
+      "message": "that\u0027s one of the nice things about nixos modules though - multiple modules like this can say that they depend on postgres (services.postgres.enable \u003d true) and require the existense of a user and a db (ensureDatabase and ensureUsers) and it\u0027ll all get merged together and in the overall system configuration you only have one postgres service running (whose settings you can further override with `mkOverride` or `mkForce`). I\u0027d feel weird about removing this here, since then there\u0027s a panettone module that you can enable but doesn\u0027t actually *work* unless you enable a postgres server elsewhere.",
+      "parentUuid": "f629cae7_18e8fe26",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 23
+      },
+      "revId": "b69a2baa8fc0fd3a3fd620ce5e9e5e4539bb2259",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f2d80e5_caecef85",
         "filename": "ops/nixos/panettone.nix",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-07-26T21:30:29Z",
       "side": 1,
       "message": "This makes me sad, but I guess we trust everyone on localhost and this doesn\u0027t have any credentials so whatever.",
+      "range": {
+        "startLine": 35,
+        "startChar": 22,
+        "endLine": 35,
+        "endChar": 27
+      },
+      "revId": "b69a2baa8fc0fd3a3fd620ce5e9e5e4539bb2259",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acbda380_7d393dc0",
+        "filename": "ops/nixos/panettone.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T21:55:04Z",
+      "side": 1,
+      "message": "oh I forgot to mention this in the commit message, but I\u0027d like to update this to use password authentication after it\u0027s deployed",
+      "parentUuid": "9f2d80e5_caecef85",
       "range": {
         "startLine": 35,
         "startChar": 22,
