@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2becbf19_b61146ab",
+        "filename": "third_party/gerrit_plugins/default.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-07-26T21:40:59Z",
+      "side": 1,
+      "message": "Done. I put it in builder.nix instead, because it feels more logical to just plonk it here.",
+      "parentUuid": "31cab6e6_44d00bea",
+      "range": {
+        "startLine": 6,
+        "startChar": 2,
+        "endLine": 6,
+        "endChar": 25
+      },
+      "revId": "d7b5d4f6acb9cf88455c87fca16a2804329c962e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c88a1da_c7e592fc",
         "filename": "third_party/gerrit_plugins/default.nix",
         "patchSetId": 6
