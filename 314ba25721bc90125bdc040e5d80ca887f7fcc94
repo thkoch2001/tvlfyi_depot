@@ -16,6 +16,24 @@
       "revId": "314ba25721bc90125bdc040e5d80ca887f7fcc94",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "908392a6_7c3a3efb",
+        "filename": "web/panettone/docker-compose.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-26T20:14:20Z",
+      "side": 1,
+      "message": "the only thing worse than no security is no security with the *illusion* of security.",
+      "parentUuid": "85433d2c_5c0115f8",
+      "revId": "314ba25721bc90125bdc040e5d80ca887f7fcc94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
