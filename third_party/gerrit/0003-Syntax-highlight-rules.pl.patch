@@ -1,7 +1,7 @@
 From a8dad8e63a1be32f473e96c6c7530a70d368369f Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:43 +0100
-Subject: [PATCH 3/6] Syntax highlight rules.pl
+Subject: [PATCH 3/7] Syntax highlight rules.pl
 
 ---
  .../elements/diff/gr-syntax-layer/gr-syntax-layer.js   | 10 ++++++++++
