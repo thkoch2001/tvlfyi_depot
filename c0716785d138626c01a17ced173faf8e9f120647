@@ -69,6 +69,30 @@
       "revId": "c0716785d138626c01a17ced173faf8e9f120647",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9dc4033_6b757a53",
+        "filename": "third_party/nix/src/libutil/compression.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-26T20:45:54Z",
+      "side": 1,
+      "message": "Ignoring for now until we see an actual perf impact.",
+      "parentUuid": "0c80037e_b672df59",
+      "range": {
+        "startLine": 20,
+        "startChar": 25,
+        "endLine": 20,
+        "endChar": 29
+      },
+      "revId": "c0716785d138626c01a17ced173faf8e9f120647",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
