@@ -16,8 +16,6 @@ Nix-based ecosystem. This offers several advantages over ASDF:
 The project is still in its early stages and some important
 restrictions should be highlighted:
 
-* There is no separate abstraction for tests at the moment (i.e. they
-  are built and run as programs)
 * Only SBCL is supported (though the plan is to add support for at
   least ABCL and Clozure CL, and maybe make it extensible)
 
@@ -33,6 +31,7 @@ restrictions should be highlighted:
   | `srcs`    | `list<path>` | List of paths to source files | yes       |
   | `deps`    | `list<drv>`  | List of dependencies          | no        |
   | `native`  | `list<drv>`  | List of native dependencies   | no        |
+  | `test`    | see "Tests"  | Specification for test suite  | no        |
 
   The output of invoking this is a directory containing a FASL file
   that is the concatenated result of all compiled sources.
@@ -46,6 +45,7 @@ restrictions should be highlighted:
   | `deps`    | `list<drv>`  | List of dependencies          | no        |
   | `native`  | `list<drv>`  | List of native dependencies   | no        |
   | `main`    | `string`     | Entrypoint function           | no        |
+  | `test`    | see "Tests"  | Specification for test suite  | no        |
 
   The `main` parameter should be the name of a function and defaults
   to `${name}:main` (i.e. the *exported* `main` function of the
@@ -71,6 +71,22 @@ restrictions should be highlighted:
   pre-loaded with all of that Lisp code and can be used as the host
   for e.g. Sly or SLIME.
 
+## Tests
+
+Both `buildLisp.library` and `buildLisp.program` take an optional argument
+`tests`, which has the following supported fields:
+
+  | parameter    | type         | use                           | required? |
+  |--------------|--------------|-------------------------------|-----------|
+  | `name`       | `string`     | Name of the test suite        | no        |
+  | `expression` | `string`     | Lisp expression to run tests  | yes       |
+  | `srcs`       | `list<path>` | List of paths to source files | no        |
+  | `native`     | `list<drv>`  | List of native dependencies   | no        |
+
+the `expression` parameter should be a Lisp expression and will be evaluated
+after loading all sources and dependencies (including library/program
+dependencies). It must return a non-`NIL` value if the test suite has passed.
+
 ## Example
 
 Using buildLisp could look like this:
@@ -92,5 +108,10 @@ in buildLisp.program {
     name = "example";
     deps = [ libExample ];
     srcs = [ ./main.lisp ];
+    tests = {
+      deps = [ lispPkgs.fiveam ];
+      srcs = [ ./tests.lisp ];
+      expression = "(fiveam:run!)";
+    };
 }
 ```
