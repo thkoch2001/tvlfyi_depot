@@ -4,4 +4,4 @@ import qualified App
 --------------------------------------------------------------------------------
 
 main :: IO ()
-main = App.run "sqlite.db"
+main = App.run "../db.sqlite3"
