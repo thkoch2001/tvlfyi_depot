@@ -1,0 +1,31 @@
+-- Run `.read init.sql` from within a SQLite3 REPL to initialize the tables we
+-- need for this application. This will erase all current entries, so use with
+-- caution.
+-- Make sure to set `PRAGMA foreign_keys = on;` when transacting with the
+-- database.
+
+BEGIN TRANSACTION;
+
+DROP TABLE IF EXISTS Accounts;
+DROP TABLE IF EXISTS Trips;
+
+CREATE TABLE Accounts (
+  username TEXT NOT NULL,
+  password TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  role TEXT NOT NULL,
+  profilePicture BLOB,
+  PRIMARY KEY (username)
+);
+
+CREATE TABLE Trips (
+  username TEXT NOT NULL,
+  destination TEXT NOT NULL,
+  startDate TEXT NOT NULL, -- YYYY-MM-DD
+  endDate TEXT NOT NULL, -- YYYY-MM-DD
+  comment TEXT NOT NULL,
+  PRIMARY KEY (username, destination, startDate),
+  FOREIGN KEY (username) REFERENCES Accounts ON DELETE CASCADE
+);
+
+COMMIT;
