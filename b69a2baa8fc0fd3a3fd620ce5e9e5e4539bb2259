@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "59fbd742_b9f2655e",
+        "filename": "ops/nixos/panettone.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-27T01:02:03Z",
+      "side": 1,
+      "message": "I disagree with this and think that the general widespread use of \"magic service enabling at a distance\" is an antipattern. For example, this module also configures authentication settings for Postgres which might be completely inappropriate for other services.\n\nThe way I think stuff like this should work (if you want to prevent the \"enabling it doesn\u0027t work\" situation) is to have an assert for checking that either the Postgres module is enabled (if there\u0027s a default connection string value), or that the user has specified an alternative connection string.",
+      "parentUuid": "34649a7d_ecb2990f",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 23
+      },
+      "revId": "b69a2baa8fc0fd3a3fd620ce5e9e5e4539bb2259",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f2d80e5_caecef85",
         "filename": "ops/nixos/panettone.nix",
         "patchSetId": 2
