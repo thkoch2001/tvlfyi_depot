@@ -22,6 +22,30 @@
       "revId": "b6402e8d0c7f5757396eac55a9dfd5a828485f03",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "862df118_8b3e0c13",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 8
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-27T01:20:31Z",
+      "side": 1,
+      "message": "yeah, doesn\u0027t seem like it :/",
+      "parentUuid": "857f5dd1_4073955a",
+      "range": {
+        "startLine": 33,
+        "startChar": 1,
+        "endLine": 33,
+        "endChar": 9
+      },
+      "revId": "b6402e8d0c7f5757396eac55a9dfd5a828485f03",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
