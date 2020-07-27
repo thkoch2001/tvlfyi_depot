@@ -41,8 +41,9 @@ in lib.fix (self: {
     amsterdump
     clbot
     gemma
+    paroxysm
+    paroxysm.docker
     quinistry
-    tvldb
     watchblob
     wcl
   ];
