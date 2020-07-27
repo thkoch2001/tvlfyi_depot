@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "9bbba217_1875e936",
+        "filename": "ops/nixos/panettone.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-27T01:21:41Z",
+      "side": 1,
+      "message": "I don\u0027t see this as \"magic\" or \"at a distance\" at all. Running a postgres database is a hard requirement of running panettone, the same way that installing dependencies of a package is a hard requirement to use that package. If I asked a system to install emacs and then when I tried to run emacs it failed because I had to *also* install glibc, I would be very confused. \n\nWould you feel differently about this if we removed the authentication bits?",
+      "parentUuid": "59fbd742_b9f2655e",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 23
+      },
+      "revId": "b69a2baa8fc0fd3a3fd620ce5e9e5e4539bb2259",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f2d80e5_caecef85",
         "filename": "ops/nixos/panettone.nix",
         "patchSetId": 2
