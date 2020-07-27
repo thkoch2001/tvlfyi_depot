@@ -21,4 +21,23 @@ TEST(HASH_TEST, SHA256) {
             "sha256:LCa0a2j/xo/5m0U8HTBBNBNCLXBkg7+g+YpeiGJm564=");
 }
 
+TEST(HashTest, SHA256Decode) {
+  auto hash = hashString(HashType::htSHA256, "foo");
+
+  std::unique_ptr<Hash> base16 = std::make_unique<Hash>(
+      "sha256:"
+      "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+      HashType::htSHA256);
+  std::unique_ptr<Hash> base32 = std::make_unique<Hash>(
+      "sha256:1bp7cri8hplaz6hbz0v4f0nl44rl84q1sg25kgwqzipzd1mv89ic",
+      HashType::htSHA256);
+  std::unique_ptr<Hash> base64 = std::make_unique<Hash>(
+      "sha256:LCa0a2j/xo/5m0U8HTBBNBNCLXBkg7+g+YpeiGJm564=",
+      HashType::htSHA256);
+
+  ASSERT_EQ(hash, *base16);
+  ASSERT_EQ(hash, *base32);
+  ASSERT_EQ(hash, *base64);
+}
+
 }  // namespace nix
