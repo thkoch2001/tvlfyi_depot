@@ -60,6 +60,20 @@ let
         ))
   '';
 
+  # 'genTestLisp' generates a Lisp file that loads all sources and deps and
+  # executes expression
+  genTestLisp = name: srcs: deps: expression: writeText "${name}.lisp" ''
+    ;; Dependencies
+    ${genLoadLisp deps}
+
+    ;; Sources
+    ${lib.concatStringsSep "\n" (map (src: "(load \"${src}\")") srcs)}
+
+    ;; Test expression
+    (unless ${expression}
+      (exit :code 1))
+  '';
+
   # 'dependsOn' determines whether Lisp library 'b' depends on 'a'.
   dependsOn = a: b: builtins.elem a b.lispDeps;
 
@@ -103,64 +117,121 @@ let
     overrideLisp = new: makeOverridable f (orig // (new orig));
   };
 
+  # 'testSuite' builds a Common Lisp test suite that loads all of srcs and deps,
+  # and then executes expression to check its result
+  testSuite = { name, expression, srcs, deps ? [], native ? [] }:
+    let
+      lispNativeDeps = allNative native deps;
+      lispDeps = allDeps deps;
+    in runCommandNoCC name {
+      LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
+      LANG = "C.UTF-8";
+    } ''
+      echo "Running test suite ${name}"
+
+      ${sbcl}/bin/sbcl --script ${genTestLisp name srcs deps expression} \
+        | tee $out
+
+      echo "Test suite ${name} succeeded"
+    '';
+
   #
   # Public API functions
   #
 
   # 'library' builds a list of Common Lisp files into a single FASL
   # which can then be loaded into SBCL.
-  library = { name, srcs, deps ? [], native ? [] }:
-  let
-    lispNativeDeps = (allNative native deps);
-    lispDeps = allDeps deps;
-  in runCommandNoCC "${name}-cllib" {
-    LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
-    LANG = "C.UTF-8";
-  } ''
-    ${sbcl}/bin/sbcl --script ${genCompileLisp srcs lispDeps}
+  library =
+    { name
+    , srcs
+    , deps ? []
+    , native ? []
+    , tests ? null
+    }:
+    let
+      lispNativeDeps = (allNative native deps);
+      lispDeps = allDeps deps;
+      testDrv = if ! isNull tests
+        then testSuite {
+          name = tests.name or "${name}-test";
+          srcs = srcs ++ (tests.srcs or []);
+          deps = deps ++ (tests.deps or []);
+          expression = tests.expression;
+        }
+        else null;
+    in runCommandNoCC "${name}-cllib" {
+      LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
+      LANG = "C.UTF-8";
+    } ''
+      ${if ! isNull testDrv
+        then "echo 'Test ${testDrv} succeeded'"
+        else "echo 'No tests run'"}
+      ${sbcl}/bin/sbcl --script ${genCompileLisp srcs lispDeps}
 
-    echo "Compilation finished, assembling FASL files"
+      echo "Compilation finished, assembling FASL files"
 
-    # FASL files can be combined by simply concatenating them
-    # together, but it needs to be in the compilation order.
-    mkdir $out
+      # FASL files can be combined by simply concatenating them
+      # together, but it needs to be in the compilation order.
+      mkdir $out
 
-    chmod +x cat_fasls
-    ./cat_fasls > $out/${name}.fasl
-  '' // {
-    inherit lispNativeDeps lispDeps;
-    lispName = name;
-    lispBinary = false;
-  };
+      chmod +x cat_fasls
+      ./cat_fasls > $out/${name}.fasl
+    '' // {
+      inherit lispNativeDeps lispDeps;
+      lispName = name;
+      lispBinary = false;
+      tests = testDrv;
+    };
 
   # 'program' creates an executable containing a dumped image of the
   # specified sources and dependencies.
-  program = { name, main ? "${name}:main", srcs, deps ? [], native ? [] }:
-  let
-    lispDeps = allDeps deps;
-    libPath = lib.makeLibraryPath (allNative native lispDeps);
-    selfLib = library {
-      inherit name srcs native;
-      deps = lispDeps;
+  program =
+    { name
+    , main ? "${name}:main"
+    , srcs
+    , deps ? []
+    , native ? []
+    , tests ? null
+    }:
+    let
+      lispDeps = allDeps deps;
+      libPath = lib.makeLibraryPath (allNative native lispDeps);
+      selfLib = library {
+        inherit name srcs native;
+        deps = lispDeps;
+      };
+      testDrv = if ! isNull tests
+        then testSuite {
+          name = tests.name or "${name}-test";
+          srcs =
+            (
+              srcs ++ (tests.srcs or []));
+          deps = deps ++ (tests.deps or []);
+          expression = tests.expression;
+        }
+        else null;
+    in runCommandNoCC "${name}" {
+      nativeBuildInputs = [ makeWrapper ];
+      LD_LIBRARY_PATH = libPath;
+      LANG = "C.UTF-8";
+    } ''
+      ${if ! isNull testDrv
+        then "echo 'Test ${testDrv} succeeded'"
+        else ""}
+      mkdir -p $out/bin
+
+      ${sbcl}/bin/sbcl --script ${
+        genDumpLisp name main ([ selfLib ] ++ lispDeps)
+      }
+
+      wrapProgram $out/bin/${name} --prefix LD_LIBRARY_PATH : "${libPath}"
+    '' // {
+      lispName = name;
+      lispDeps = [ selfLib ] ++ (tests.deps or []);
+      lispNativeDeps = native;
+      lispBinary = true;
+      tests = testDrv;
     };
-  in runCommandNoCC "${name}" {
-    nativeBuildInputs = [ makeWrapper ];
-    LD_LIBRARY_PATH = libPath;
-    LANG = "C.UTF-8";
-  } ''
-    mkdir -p $out/bin
-
-    ${sbcl}/bin/sbcl --script ${
-      genDumpLisp name main ([ selfLib ] ++ lispDeps)
-    }
-
-    wrapProgram $out/bin/${name} --prefix LD_LIBRARY_PATH : "${libPath}"
-  '' // {
-    lispName = name;
-    lispDeps = [ selfLib ];
-    lispNativeDeps = native;
-    lispBinary = true;
-  };
 
   # 'bundled' creates a "library" that calls 'require' on a built-in
   # package, such as any of SBCL's sb-* packages.
