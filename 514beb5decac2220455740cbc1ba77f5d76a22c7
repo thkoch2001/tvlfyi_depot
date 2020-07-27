@@ -46,6 +46,30 @@
       "revId": "514beb5decac2220455740cbc1ba77f5d76a22c7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a123a24c_097a59ea",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-27T20:56:54Z",
+      "side": 1,
+      "message": "I mean in the Nix code. The attrs variable isn\u0027t layout-compatible with a Value, because Value has a union tag in it.",
+      "parentUuid": "8710a1a1_cb9ca925",
+      "range": {
+        "startLine": 1179,
+        "startChar": 19,
+        "endLine": 1179,
+        "endChar": 51
+      },
+      "revId": "514beb5decac2220455740cbc1ba77f5d76a22c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
