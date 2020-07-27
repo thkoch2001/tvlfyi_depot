@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "857f5dd1_4073955a",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 8
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-27T01:11:28Z",
+      "side": 1,
+      "message": "curious - why is this not using the fancy defclass macro? is the other one not extensible with MOP classes?",
+      "range": {
+        "startLine": 33,
+        "startChar": 1,
+        "endLine": 33,
+        "endChar": 9
+      },
+      "revId": "b6402e8d0c7f5757396eac55a9dfd5a828485f03",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
