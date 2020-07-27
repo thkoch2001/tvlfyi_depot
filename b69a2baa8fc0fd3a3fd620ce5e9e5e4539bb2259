@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "f3b63dc5_1512cd41",
+        "filename": "ops/nixos/panettone.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-27T14:17:05Z",
+      "side": 1,
+      "message": "Done. I still think this is a regression in terms of clarity and usability, but whatever.",
+      "parentUuid": "b13ce48a_7f32b1fe",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 23
+      },
+      "revId": "b69a2baa8fc0fd3a3fd620ce5e9e5e4539bb2259",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f2d80e5_caecef85",
         "filename": "ops/nixos/panettone.nix",
         "patchSetId": 2
