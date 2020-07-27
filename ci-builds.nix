@@ -41,8 +41,8 @@ in lib.fix (self: {
     amsterdump
     clbot
     gemma
+    paroxysm
     quinistry
-    tvldb
     watchblob
     wcl
   ];
