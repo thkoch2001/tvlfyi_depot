@@ -1,5 +1,7 @@
 #pragma once
 
+#include <absl/status/statusor.h>
+
 #include "libutil/serialise.hh"
 #include "libutil/types.hh"
 
@@ -36,6 +38,10 @@ struct Hash {
      string. */
   Hash(const std::string& s, HashType type = htUnknown);
 
+  /* Status-returning version of above constructor */
+  static absl::StatusOr<Hash> deserialize(const std::string& s,
+                                          HashType type = htUnknown);
+
   void init();
 
   /* Check whether a hash is set. */
@@ -63,6 +69,10 @@ struct Hash {
      or base-64. By default, this is prefixed by the hash type
      (e.g. "sha256:"). */
   std::string to_string(Base base = Base32, bool includeType = true) const;
+
+  /* Returns whether the passed string contains entirely valid base16
+     characters. */
+  static bool IsValidBase16(absl::string_view s);
 
   /* Returns whether the passed string contains entirely valid base32
      characters. */
