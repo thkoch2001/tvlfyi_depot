@@ -15,35 +15,16 @@ static unsigned int refLength = 32; /* characters */
 
 static void search(const unsigned char* s, size_t len, StringSet& hashes,
                    StringSet& seen) {
-  static bool initialised = false;
-  static bool isBase32[256];
-  if (!initialised) {
-    for (bool& i : isBase32) {
-      i = false;
-    }
-    for (char base32Char : base32Chars) {
-      isBase32[static_cast<unsigned char>(base32Char)] = true;
-    }
-    initialised = true;
-  }
-
   for (size_t i = 0; i + refLength <= len;) {
     int j = 0;
-    bool match = true;
-    for (j = refLength - 1; j >= 0; --j) {
-      if (!isBase32[s[i + j]]) {
-        i += j + 1;
-        match = false;
-        break;
-      }
-    }
+    absl::string_view ref(s + i, s + i + refLength);
+    bool match = Hash::IsValidBase32(ref);
     if (!match) {
       continue;
     }
-    std::string ref(reinterpret_cast<const char*>(s) + i, refLength);
     if (hashes.find(ref) != hashes.end()) {
       DLOG(INFO) << "found reference to '" << ref << "' at offset " << i;
-      seen.insert(ref);
+      seen.insert(std::string(ref));
       hashes.erase(ref);
     }
     ++i;
