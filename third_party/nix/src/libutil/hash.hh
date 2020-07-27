@@ -1,5 +1,7 @@
 #pragma once
 
+#include <absl/status/statusor.h>
+
 #include "libutil/serialise.hh"
 #include "libutil/types.hh"
 
@@ -35,6 +37,10 @@ struct Hash {
      is htUnknown, then the hash type must be specified in the
      string. */
   Hash(const std::string& s, HashType type = htUnknown);
+
+  /* Status-returning version of above constructor */
+  static absl::StatusOr<Hash> deserialize(const std::string& s,
+                                          HashType type = htUnknown);
 
   void init();
 
