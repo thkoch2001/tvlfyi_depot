@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "b13ce48a_7f32b1fe",
+        "filename": "ops/nixos/panettone.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-27T02:11:25Z",
+      "side": 1,
+      "message": "This assumption only holds until the next Postgres-using service is introduced.\n\nOne of my goals for the depot is to slowly move towards a saner module system, once we have an idea of what that looks like. I have some thoughts about what it *doesn\u0027t* look like, and that\u0027s encapsulated dependencies - IMO services you depend on should be \"dependency-injected\" the same way it is done for code.\n\nTL;DR: I\u0027d like the Postgres setup to be whitby config, with Panettone receiving the configuration details it needs via an option (and asserting that this is in fact the case).",
+      "parentUuid": "cf389223_2b6a454b",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 23
+      },
+      "revId": "b69a2baa8fc0fd3a3fd620ce5e9e5e4539bb2259",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f2d80e5_caecef85",
         "filename": "ops/nixos/panettone.nix",
         "patchSetId": 2
