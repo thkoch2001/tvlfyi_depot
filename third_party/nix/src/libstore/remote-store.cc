@@ -471,13 +471,11 @@ Path RemoteStore::addToStore(const std::string& name, const Path& _srcPath,
 
   try {
     conn->to.written = 0;
-    conn->to.warn = true;
     connections->incCapacity();
     {
       Finally cleanup([&]() { connections->decCapacity(); });
       dumpPath(srcPath, conn->to, filter);
     }
-    conn->to.warn = false;
     conn.processStderr();
   } catch (SysError& e) {
     /* Daemon closed while we were sending the path. Probably OOM

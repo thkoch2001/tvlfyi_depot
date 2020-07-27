@@ -74,7 +74,6 @@ struct BufferedSource : Source {
 /* A sink that writes data to a file descriptor. */
 struct FdSink : BufferedSink {
   int fd;
-  bool warn = false;
   size_t written = 0;
 
   FdSink() : fd(-1) {}
@@ -85,7 +84,6 @@ struct FdSink : BufferedSink {
     flush();
     fd = s.fd;
     s.fd = -1;
-    warn = s.warn;
     written = s.written;
     return *this;
   }
