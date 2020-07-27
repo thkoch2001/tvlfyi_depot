@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "42b0facf_8c330476",
+        "filename": "third_party/nix/src/libutil/hash.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-27T01:09:52Z",
+      "side": 1,
+      "message": "can we add a TODO either here, or on the (legacy) enum to just use the proto enum type instead so that we don\u0027t have to juggle two different ones?",
+      "range": {
+        "startLine": 19,
+        "startChar": 14,
+        "endLine": 19,
+        "endChar": 22
+      },
+      "revId": "f8f38492f240702f9f94071b384f0b831f01bace",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c490f71e_366e90d8",
         "filename": "third_party/nix/src/libutil/hash.hh",
         "patchSetId": 2
