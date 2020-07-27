@@ -10,19 +10,20 @@ DROP TABLE IF EXISTS Accounts;
 DROP TABLE IF EXISTS Trips;
 
 CREATE TABLE Accounts (
-  username TEXT NOT NULL,
-  password TEXT NOT NULL,
-  email TEXT NOT NULL UNIQUE,
-  role TEXT NOT NULL,
+-- TODO(wpcarro): Add CHECK(..) constraint
+  username TEXT CHECK(LENGTH(username) > 0) NOT NULL,
+  password TEXT CHECK(LENGTH(password) > 0) NOT NULL,
+  email TEXT CHECK(LENGTH(email) > 0) NOT NULL UNIQUE,
+  role TEXT CHECK(role IN ('user', 'manager', 'admin')) NOT NULL,
   profilePicture BLOB,
   PRIMARY KEY (username)
 );
 
 CREATE TABLE Trips (
   username TEXT NOT NULL,
-  destination TEXT NOT NULL,
-  startDate TEXT NOT NULL, -- YYYY-MM-DD
-  endDate TEXT NOT NULL, -- YYYY-MM-DD
+  destination TEXT CHECK(LENGTH(destination) > 0) NOT NULL,
+  startDate TEXT CHECK(LENGTH(startDate) == 10) NOT NULL, -- YYYY-MM-DD
+  endDate TEXT CHECK(LENGTH(endDate) == 10) NOT NULL, -- YYYY-MM-DD
   comment TEXT NOT NULL,
   PRIMARY KEY (username, destination, startDate),
   FOREIGN KEY (username) REFERENCES Accounts ON DELETE CASCADE
