@@ -1,0 +1,10 @@
+{
+  "checks": {
+    "buildkite:build": {
+      "state": "SUCCESSFUL",
+      "url": "https://buildkite.com/tvl/depot/builds/1973",
+      "created": "2020-07-27T00:23:28Z",
+      "updated": "2020-07-27T00:23:28Z"
+    }
+  }
+}
