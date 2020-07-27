@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c0f9229_c7669143",
+        "filename": "fun/paroxysm/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-27T20:08:36Z",
+      "side": 1,
+      "message": "This needs changing...",
+      "revId": "17bf4f35eb4256082471eb2ce08fdd290f583809",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03401e00_28c1c752",
+        "filename": "fun/paroxysm/docker/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-07-27T20:08:36Z",
+      "side": 1,
+      "message": "This file also needs a s/tvldb/paroxysm/",
+      "revId": "17bf4f35eb4256082471eb2ce08fdd290f583809",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
