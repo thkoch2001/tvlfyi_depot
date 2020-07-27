@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9581412_3b4d33f1",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-27T11:03:46Z",
+      "side": 1,
+      "message": "from this comment it\u0027s not clear to me what needs figuring out, could you expand on it?",
+      "range": {
+        "startLine": 1179,
+        "startChar": 0,
+        "endLine": 1179,
+        "endChar": 54
+      },
+      "revId": "d629628a3488cf635da82025e555c5abf4a6ea69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6d09011_74fe4536",
+        "filename": "third_party/nix/src/libstore/derivations.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-27T11:03:46Z",
+      "side": 1,
+      "message": "😞",
+      "range": {
+        "startLine": 111,
+        "startChar": 6,
+        "endLine": 111,
+        "endChar": 31
+      },
+      "revId": "d629628a3488cf635da82025e555c5abf4a6ea69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "16f2fe94_9c47470c",
+        "filename": "third_party/nix/src/tests/value-to-json.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-07-27T11:03:46Z",
+      "side": 1,
+      "message": "huh.",
+      "range": {
+        "startLine": 15,
+        "startChar": 14,
+        "endLine": 15,
+        "endChar": 28
+      },
+      "revId": "d629628a3488cf635da82025e555c5abf4a6ea69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
