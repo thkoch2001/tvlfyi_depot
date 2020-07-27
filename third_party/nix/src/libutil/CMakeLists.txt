@@ -48,6 +48,7 @@ target_sources(nixutil
 
 target_link_libraries(nixutil
   absl::strings
+  absl::statusor
   glog
   BZip2::BZip2
   LibLZMA::LibLZMA
