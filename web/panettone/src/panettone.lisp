@@ -189,6 +189,36 @@
      (:input :type "submit"
              :value "Comment"))))
 
+(defgeneric render/issue-history-item (item))
+
+(defmethod render/issue-history-item ((comment model:issue-comment))
+  (who:with-html-output (*standard-output*)
+    (who:htm
+     (:li
+      :class "comment"
+      (:p (who:esc (body comment)))
+      (:p
+       :class "comment-info"
+       (:span :class "username"
+              (who:esc (displayname (author comment)))
+              " at "
+              (who:esc (format-dottime (created-at comment)))))))))
+
+(defmethod render/issue-history-item ((event model:issue-event))
+  (when (string= (field event) "STATUS")
+    (who:with-html-output (*standard-output*)
+      (let ((user (find-user-by-dn (acting-user-dn event))))
+        (who:htm
+         (:li
+          :class "event"
+          (who:esc (displayname user))
+          (who:esc
+           (switch ((new-value event) :test #'string=)
+             ("OPEN" " reopened ")
+             ("CLOSED" " closed ")))
+          " this issue at "
+          (who:esc (format-dottime (created-at event)))))))))
+
 (defun render/issue (issue)
   (check-type issue model:issue)
   (let ((issue-id (id issue))
@@ -220,22 +250,18 @@
                                    (:open "Close")
                                    (:closed "Reopen")))))))
        (:p (who:esc (body issue)))
-       (let ((comments (issue-comments issue)))
+       (let* ((comments (issue-comments issue))
+              (events (issue-events issue))
+              (history (merge 'list
+                              comments
+                              events
+                              #'local-time:timestamp<
+                              :key #'created-at)))
          (who:htm
-          (:div
-           :class "issue-comments"
-           (dolist (comment comments)
-             (let ((author (author comment)))
-               (who:htm
-                (:div
-                 :class "comment"
-                 (:p (who:esc (body comment)))
-                 (:p
-                  :class "comment-info"
-                  (:span :class "username"
-                         (who:esc (displayname author))
-                         " at "
-                         (who:esc (format-dottime (created-at comment)))))))))
+          (:ol
+           :class "issue-history"
+           (dolist (item history)
+             (render/issue-history-item item))
            (when *user*
              (render/new-comment (id issue))))))))))
 
@@ -321,14 +347,10 @@
 (defroute show-issue
     ("/issues/:id" :decorators (@auth-optional @handle-issue-not-found))
     (&path (id 'integer))
-  (handler-case
-      (let* ((issue (model:get-issue id))
-             (*title* (format nil "~A | Panettone"
-                              (subject issue))))
-        (render/issue issue))
-    (issue-not-found (_)
-      (declare (ignore _))
-      (render/not-found "Issue"))))
+  (let* ((issue (model:get-issue id))
+         (*title* (format nil "~A | Panettone"
+                          (subject issue))))
+    (render/issue issue)))
 
 (defroute handle-create-comment
     ("/issues/:id/comments"
@@ -356,7 +378,7 @@
 
 (defroute open-issue
     ("/issues/:id/open" :decorators (@auth)
-                         :method :put)
+                         :method :post)
     (&path (id 'integer))
   (model:set-issue-status id :open)
   (hunchentoot:redirect (format nil "/issues/~A" id)))

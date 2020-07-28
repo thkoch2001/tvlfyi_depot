@@ -64,8 +64,9 @@
     (.comment-count
      :color ,color/gray)))
 
-(defparameter comment-styles
-  `((.issue-comments
+(defparameter issue-history-styles
+  `((.issue-history
+     :list-style "none"
      :border-top "1px" "solid" ,color/gray
      :padding-top "1rem"
      :padding-left "2rem"
@@ -75,12 +76,15 @@
       :margin 0
       :padding-top "1rem")
 
-     (.comment
+     ((:or .comment .event)
       :padding-top "1rem"
       :padding-bottom "1rem"
       :border-bottom "1px" "solid" ,color/gray
 
-      (p :margin 0)))))
+      (p :margin 0))
+
+     (.event
+      :color ,color/gray))))
 
 (defparameter form-styles
   `(((:or (:and input (:or (:= type "text")
@@ -129,7 +133,7 @@
   `(,@form-styles
     ,@issue-list-styles
     ,@issue-styles
-    ,@comment-styles
+    ,@issue-history-styles
 
     (body
      :font-family "sans-serif"

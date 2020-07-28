@@ -55,6 +55,7 @@
    (body :col-type string :initarg :body :accessor body :col-default "")
    (author-dn :col-type string :initarg :author-dn :accessor author-dn)
    (comments :type list :accessor issue-comments)
+   (events :type list :accessor issue-events)
    (num-comments :type integer :accessor num-comments)
    (status :col-type issue_status
            :initarg :status
@@ -220,6 +221,22 @@ NOTE: This makes a database query, so be wary of N+1 queries"
      :from 'issue-comments
      :where (:= 'issue-id issue-id))
     (:asc 'created-at))))
+
+(defmethod slot-unbound (cls (issue issue) (slot (eql 'events)))
+  (declare (ignore cls) (ignore slot))
+  (setf (issue-events issue) (issue-events (id issue))))
+
+(defmethod issue-events ((issue-id integer))
+  "Return a list of all events with the given ISSUE-ID, sorted oldest first.
+NOTE: This makes a database query, so be wary of N+1 queries"
+  (query-dao
+   'issue-event
+   (:order-by
+    (:select '*
+     :from 'issue-events
+     :where (:= 'issue-id issue-id))
+    (:asc 'created-at))))
+
 
 ;;;
 ;;; Writing
