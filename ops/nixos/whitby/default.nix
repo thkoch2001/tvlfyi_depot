@@ -231,6 +231,7 @@ in lib.fix(self: {
     authentication = lib.mkOverride 10 ''
       local all all trust
       host all all ::1/128 trust
+      hostnossl all all ::1/128 trust
     '';
 
     ensureDatabases = [
