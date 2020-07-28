@@ -2,7 +2,6 @@
 --------------------------------------------------------------------------------
 module Accounts where
 --------------------------------------------------------------------------------
-import Data.Function ((&))
 import Database.SQLite.Simple
 
 import qualified Types as T

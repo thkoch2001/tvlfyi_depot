@@ -6,7 +6,7 @@
 module Types where
 --------------------------------------------------------------------------------
 import Data.Aeson
-import Data.Function ((&))
+import Utils
 import Data.Text
 import Data.Typeable
 import Database.SQLite.Simple
@@ -52,7 +52,7 @@ instance ToField HashedPassword where
 instance FromField HashedPassword where
   fromField field =
     case fieldData field of
-      (SQLText x) -> x & TE.encodeUtf8 & HashedPassword & Ok
+      (SQLText x) -> x |> TE.encodeUtf8 |> HashedPassword |> Ok
       _ -> returnError ConversionFailed field ""
 
 newtype ClearTextPassword = ClearTextPassword Text
@@ -314,10 +314,10 @@ instance FromJSON AccountCredentials where
                            }
 
 
--- -- | Hash password `x`.
+-- | Hash password `x`.
 hashPassword :: (MonadRandom m) => ClearTextPassword -> m HashedPassword
 hashPassword (ClearTextPassword x) = do
-  hashed <- BC.hashPassword 12 (x & unpack & B.pack)
+  hashed <- BC.hashPassword 12 (x |> unpack |> B.pack)
   pure $ HashedPassword hashed
 
 data CreateAccountRequest = CreateAccountRequest

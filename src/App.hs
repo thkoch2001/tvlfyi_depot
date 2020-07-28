@@ -7,12 +7,12 @@ module App where
 --------------------------------------------------------------------------------
 import Control.Exception (throwIO)
 import Control.Monad.IO.Class (liftIO)
-import Data.Function ((&))
 import Data.String.Conversions (cs)
 import Data.Text (Text)
 import Network.Wai.Handler.Warp as Warp
 import Servant
 import API
+import Utils
 
 import qualified Crypto.KDF.BCrypt as BC
 import qualified Data.Text.Encoding as TE

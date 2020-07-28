@@ -3,7 +3,6 @@
 --------------------------------------------------------------------------------
 module Sessions where
 --------------------------------------------------------------------------------
-import Data.Function ((&))
 import Database.SQLite.Simple
 
 import qualified Data.Time.Clock as Clock
