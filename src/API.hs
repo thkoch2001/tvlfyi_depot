@@ -18,3 +18,6 @@ type API = "user"
       :<|> "trip"
            :> ReqBody '[JSON] T.Trip
            :> Post '[JSON] NoContent
+      -- Read
+      :<|> "trips"
+           :> Get '[JSON] [T.Trip]

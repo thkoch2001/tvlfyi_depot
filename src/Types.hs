@@ -192,6 +192,13 @@ data Trip = Trip
   , tripComment :: Comment
   } deriving (Eq, Show, Generic)
 
+instance FromRow Trip where
+  fromRow = Trip <$> field
+                 <*> field
+                 <*> field
+                 <*> field
+                 <*> field
+
 -- | Return the tuple representation of a Trip record for SQL.
 tripFields :: Trip -> (Username, Destination, Date, Date, Comment)
 tripFields (Trip{ tripUsername

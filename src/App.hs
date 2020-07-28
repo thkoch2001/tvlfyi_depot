@@ -20,10 +20,12 @@ server :: FilePath -> Server API
 server dbFile = userAddH
            :<|> userGetH
            :<|> createTripH
+           :<|> listTripsH
   where
     userAddH newUser = liftIO $ userAdd newUser
     userGetH name    = liftIO $ userGet name
     createTripH trip = liftIO $ createTrip trip
+    listTripsH         = liftIO $ listTrips
 
     -- TODO(wpcarro): Handle failed CONSTRAINTs instead of sending 500s
     userAdd :: T.Account -> IO (Maybe T.Session)
@@ -48,6 +50,9 @@ server dbFile = userAddH
         (trip & T.tripFields)
       pure NoContent
 
+    listTrips :: IO [T.Trip]
+    listTrips = withConnection dbFile $ \conn -> do
+      query_ conn "SELECT * FROM Trips"
 mkApp :: FilePath -> IO Application
 mkApp dbFile = do
   pure $ serve (Proxy @ API) $ server dbFile
