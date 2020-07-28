@@ -15,20 +15,28 @@ in {
 
     dbHost = mkOption {
       description = "Postgresql host to connect to for Panettone";
-      type = types.string;
+      type = types.str;
       default = "localhost";
     };
 
     dbName = mkOption {
       description = "Name of the database for Panettone";
-      type = types.string;
+      type = types.str;
       default = "panettone";
     };
 
     dbUser = mkOption {
       description = "Name of the database user for Panettone";
-      type = types.string;
+      type = types.str;
       default = "panettone";
+    };
+
+    secretsFile = mkOption {
+      description = ''
+        Path to a file containing secrets, in the format accepted
+        by systemd's EnvironmentFile
+      '';
+      type = types.str;
     };
   };
 
@@ -63,6 +71,7 @@ in {
         DynamicUser = true;
         Restart = "always";
         StateDirectory = "panettone";
+        EnvironmentFile = cfg.secretsFile;
       };
 
       environment = {
