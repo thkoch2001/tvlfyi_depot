@@ -774,7 +774,8 @@ ValidPathInfo decodeValidPathInfo(std::istream& str, bool hashGiven) {
   if (hashGiven) {
     std::string s;
     getline(str, s);
-    info.narHash = Hash(s, htSHA256);
+    auto hash_ = Hash::deserialize(s, htSHA256);
+    info.narHash = Hash::unwrap_throw(hash_);
     getline(str, s);
     if (!absl::SimpleAtoi(s, &info.narSize)) {
       throw Error("number expected");
@@ -829,7 +830,8 @@ bool ValidPathInfo::isContentAddressed(const Store& store) const {
   };
 
   if (absl::StartsWith(ca, "text:")) {
-    Hash hash(std::string(ca, 5));
+    auto hash_ = Hash::deserialize(std::string_view(ca).substr(5));
+    Hash hash = Hash::unwrap_throw(hash_);
     if (store.makeTextPath(storePathToName(path), hash, references) == path) {
       return true;
     }
@@ -839,7 +841,9 @@ bool ValidPathInfo::isContentAddressed(const Store& store) const {
 
   else if (absl::StartsWith(ca, "fixed:")) {
     bool recursive = ca.compare(6, 2, "r:") == 0;
-    Hash hash(std::string(ca, recursive ? 8 : 6));
+    auto hash_ =
+        Hash::deserialize(std::string_view(ca).substr(recursive ? 8 : 6));
+    Hash hash = Hash::unwrap_throw(hash_);
     if (references.empty() &&
         store.makeFixedOutputPath(recursive, hash, storePathToName(path)) ==
             path) {

@@ -13,6 +13,7 @@
 
 namespace nix {
 
+// TODO(#statusor): looks like easy absl::Status conversion
 void DerivationOutput::parseHashInfo(bool& recursive, Hash& hash) const {
   recursive = false;
   std::string algo = hashAlgo;
@@ -27,7 +28,8 @@ void DerivationOutput::parseHashInfo(bool& recursive, Hash& hash) const {
     throw Error(format("unknown hash algorithm '%1%'") % algo);
   }
 
-  hash = Hash(this->hash, hashType);
+  auto hash_ = Hash::deserialize(this->hash, hashType);
+  hash = Hash::unwrap_throw(hash_);
 }
 
 BasicDerivation BasicDerivation::from_proto(

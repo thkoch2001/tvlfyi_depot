@@ -74,7 +74,14 @@ struct CmdToBase final : Command {
 
   void run() override {
     for (const auto& s : args) {
-      std::cout << fmt("%s\n", Hash(s, ht).to_string(base, base == SRI));
+      auto hash_ = Hash::deserialize(s, ht);
+      if (hash_.ok()) {
+        std::cout << hash_->to_string(base, base == SRI) << "\n";
+      } else {
+        std::cerr << "failed to parse: " << hash_.status().ToString() << "\n";
+        // create a matching blank line, for scripting
+        std::cout << "\n";
+      }
     }
   }
 };
