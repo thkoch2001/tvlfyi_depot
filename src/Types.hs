@@ -43,17 +43,17 @@ instance ToField Username where
 instance FromField Username where
   fromField = forNewtype Username
 
-newtype Password = Password Text
+newtype ClearTextPassword = ClearTextPassword Text
   deriving (Eq, Show, Generic)
 
-instance ToJSON Password
-instance FromJSON Password
+instance ToJSON ClearTextPassword
+instance FromJSON ClearTextPassword
 
-instance ToField Password where
-  toField (Password x) = SQLText x
+instance ToField ClearTextPassword where
+  toField (ClearTextPassword x) = SQLText x
 
-instance FromField Password where
-  fromField = forNewtype Password
+instance FromField ClearTextPassword where
+  fromField = forNewtype ClearTextPassword
 
 newtype Email = Email Text
   deriving (Eq, Show, Generic)
@@ -101,7 +101,7 @@ instance FromField ProfilePicture where
 
 data Account = Account
   { accountUsername :: Username
-  , accountPassword :: Password
+  , accountPassword :: ClearTextPassword
   , accountEmail :: Email
   , accountRole :: Role
   , accountProfilePicture :: ProfilePicture
@@ -112,7 +112,7 @@ instance ToJSON Account
 instance FromJSON Account
 
 -- | Return a tuple with all of the fields for an Account record to use for SQL.
-accountFields :: Account -> (Username, Password, Email, Role, ProfilePicture)
+accountFields :: Account -> (Username, ClearTextPassword, Email, Role, ProfilePicture)
 accountFields (Account { accountUsername
                        , accountPassword
                        , accountEmail
@@ -135,7 +135,7 @@ instance FromRow Account where
 
 data Session = Session
   { username :: Username
-  , password :: Password
+  , password :: ClearTextPassword
   , role :: Role
   } deriving (Eq, Show)
 
