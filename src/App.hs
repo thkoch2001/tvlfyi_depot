@@ -21,11 +21,13 @@ server dbFile = userAddH
            :<|> userGetH
            :<|> createTripH
            :<|> listTripsH
+           :<|> deleteTripH
   where
-    userAddH newUser = liftIO $ userAdd newUser
-    userGetH name    = liftIO $ userGet name
-    createTripH trip = liftIO $ createTrip trip
+    userAddH newUser   = liftIO $ userAdd newUser
+    userGetH name      = liftIO $ userGet name
+    createTripH trip   = liftIO $ createTrip trip
     listTripsH         = liftIO $ listTrips
+    deleteTripH tripPK = liftIO $ deleteTrip tripPK
 
     -- TODO(wpcarro): Handle failed CONSTRAINTs instead of sending 500s
     userAdd :: T.Account -> IO (Maybe T.Session)
@@ -53,6 +55,15 @@ server dbFile = userAddH
     listTrips :: IO [T.Trip]
     listTrips = withConnection dbFile $ \conn -> do
       query_ conn "SELECT * FROM Trips"
+
+    -- TODO(wpcarro): Validate incoming data like startDate.
+    deleteTrip :: T.TripPK -> IO NoContent
+    deleteTrip tripPK =
+      withConnection dbFile $ \conn -> do
+        execute conn "DELETE FROM Trips WHERE username = ? AND destination = ? and startDate = ?"
+          (tripPK & T.tripPKFields)
+        pure NoContent
+
 mkApp :: FilePath -> IO Application
 mkApp dbFile = do
   pure $ serve (Proxy @ API) $ server dbFile

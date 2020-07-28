@@ -199,6 +199,24 @@ instance FromRow Trip where
                  <*> field
                  <*> field
 
+-- | The fields used as the Primary Key for a Trip entry.
+data TripPK = TripPK
+  { tripPKUsername :: Username
+  , tripPKDestination :: Destination
+  , tripPKStartDate :: Date
+  } deriving (Eq, Show, Generic)
+
+tripPKFields :: TripPK -> (Username, Destination, Date)
+tripPKFields (TripPK{ tripPKUsername
+                    , tripPKDestination
+                    , tripPKStartDate
+                    })
+  = (tripPKUsername, tripPKDestination, tripPKStartDate)
+
+-- TODO(wpcarro): Prefer shorter JSON fields like username instead of
+-- tripPKUsername.
+instance FromJSON TripPK
+
 -- | Return the tuple representation of a Trip record for SQL.
 tripFields :: Trip -> (Username, Destination, Date, Date, Comment)
 tripFields (Trip{ tripUsername

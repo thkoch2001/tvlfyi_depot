@@ -14,10 +14,15 @@ type API = "user"
            :> Post '[JSON] (Maybe T.Session)
       :<|> "user"
            :> Capture "name" Text
-           :> Get  '[JSON] (Maybe T.Account)
-      :<|> "trip"
+           :> Get '[JSON] (Maybe T.Account)
+      -- Create
+      :<|> "trips"
            :> ReqBody '[JSON] T.Trip
            :> Post '[JSON] NoContent
       -- Read
       :<|> "trips"
            :> Get '[JSON] [T.Trip]
+      -- Delete
+      :<|> "trips"
+           :> ReqBody '[JSON] T.TripPK
+           :> Delete '[JSON] NoContent
