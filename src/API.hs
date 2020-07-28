@@ -17,4 +17,4 @@ type API = "user"
            :> Get  '[JSON] (Maybe T.Account)
       :<|> "trip"
            :> ReqBody '[JSON] T.Trip
-           :> Post '[JSON] Bool
+           :> Post '[JSON] NoContent

@@ -42,11 +42,11 @@ server dbFile = userAddH
         [x] -> pure (Just x)
         _   -> pure Nothing
 
-    createTrip :: T.Trip -> IO Bool
+    createTrip :: T.Trip -> IO NoContent
     createTrip trip = withConnection dbFile $ \conn -> do
       execute conn "INSERT INTO Trips (username,destination,startDate,endDate,comment) VALUES (?,?,?,?,?)"
         (trip & T.tripFields)
-      pure True
+      pure NoContent
 
 mkApp :: FilePath -> IO Application
 mkApp dbFile = do
