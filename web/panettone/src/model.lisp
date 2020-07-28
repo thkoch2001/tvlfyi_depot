@@ -30,7 +30,26 @@
     (query (sql-compile
             `(:create-enum issue-status ,+issue-statuses+)))))
 
-(defclass issue ()
+(defclass has-created-at ()
+  ((created-at :col-type timestamp
+               :col-default (local-time:now)
+               :initarg :created-at
+               :accessor created-at))
+  (:metaclass dao-class))
+
+(defun created-at->timestamp (object)
+  (assert (slot-exists-p object 'created-at))
+  (unless (or (not (slot-boundp object 'created-at))
+              (typep (slot-value object 'created-at) 'local-time:timestamp))
+    (setf (slot-value object 'created-at)
+          (local-time:universal-to-timestamp (created-at object)))))
+
+(defmethod initialize-instance :after
+    ((obj has-created-at) &rest initargs &key &allow-other-keys)
+  (declare (ignore initargs))
+  (created-at->timestamp obj))
+
+(defclass issue (has-created-at)
   ((id :col-type serial :initarg :id :accessor id)
    (subject :col-type string :initarg :subject :accessor subject)
    (body :col-type string :initarg :body :accessor body :col-default "")
@@ -41,10 +60,7 @@
            :initarg :status
            :accessor status
            :initform :open
-           :col-default "open")
-   (created-at :col-type timestamp
-               :col-default (local-time:now)
-               :accessor created-at))
+           :col-default "open"))
   (:metaclass dao-class)
   (:keys id)
   (:table-name issues)
@@ -58,32 +74,21 @@
 (defmethod cl-postgres:to-sql-string ((kw (eql :closed)))
   (cl-postgres:to-sql-string "closed"))
 
-(defun created-at->timestamp (object)
-  (assert (slot-exists-p object 'created-at))
-  (unless (or (not (slot-boundp object 'created-at))
-              (typep (slot-value object 'created-at) 'local-time:timestamp))
-    (setf (slot-value object 'created-at)
-          (local-time:universal-to-timestamp (created-at object)))))
-
 (defmethod initialize-instance :after
     ((issue issue) &rest initargs &key &allow-other-keys)
   (declare (ignore initargs))
   (unless (symbolp (status issue))
     (setf (status issue)
           (intern (string-upcase (status issue))
-                  "KEYWORD")))
-  (created-at->timestamp issue))
+                  "KEYWORD"))))
 
 (deftable issue (!dao-def))
 
-(defclass issue-comment ()
+(defclass issue-comment (has-created-at)
   ((id :col-type integer :col-identity t :initarg :id :accessor id)
    (body :col-type string :initarg :body :accessor body)
    (author-dn :col-type string :initarg :author-dn :accessor author-dn)
-   (issue-id :col-type integer :initarg :issue-id :accessor :user-id)
-   (created-at :col-type timestamp
-               :col-default (local-time:now)
-               :accessor created-at))
+   (issue-id :col-type integer :initarg :issue-id :accessor :user-id))
   (:metaclass dao-class)
   (:keys id)
   (:table-name issue_comments)
@@ -92,19 +97,50 @@
   (!dao-def)
   (!foreign 'issues 'issue-id 'id :on-delete :cascade :on-update :cascade))
 
-(defmethod initialize-instance :after
-    ((issue-comment issue-comment) &rest initargs &key &allow-other-keys)
-  (declare (ignore initargs))
-  (created-at->timestamp issue-comment))
+(defclass issue-event (has-created-at)
+  ((id :col-type integer :col-identity t :initarg :id :accessor id)
+   (issue-id :col-type integer
+             :initarg :issue-id
+             :accessor issue-id)
+   (acting-user-dn :col-type string
+                   :initarg :acting-user-dn
+                   :accessor acting-user-dn)
+   (field :col-type (or string db-null)
+          :initarg :field
+          :accessor field)
+   (previous-value :col-type (or string db-null)
+                   :initarg :previous-value
+                   :accessor previous-value)
+   (new-value :col-type (or string db-null)
+              :initarg :new-value
+              :accessor new-value))
+  (:metaclass dao-class)
+  (:keys id)
+  (:table-name issue_events)
+  (:documentation "Events that have occurred for an issue.
+
+If a field has been changed on an issue, the SYMBOL-NAME of that slot will be in
+FIELD, its previous value will be formatted using ~A into PREVIOUS-VALUE, and
+its new value will be formatted using ~A into NEW-VALUE"))
+
+(deftable (issue-event "issue_events")
+  (!dao-def)
+  (!foreign 'issues 'issue-id 'id :on-delete :cascade :on-update :cascade))
+
+(define-constant +all-tables+
+    '(issue
+      issue-comment
+      issue-event)
+  :test #'equal)
 
 (defun ddl/create-tables ()
   "Issue DDL to create all tables, if they don't already exist."
-  (dolist (table '(issue issue-comment))
+  (dolist (table +all-tables+)
     (unless (table-exists-p (dao-table-name table))
       (create-table table))))
 
 (defun ddl/init ()
-  "Idempotently nitialize the full database schema for Panettone"
+  "Idempotently initialize the full database schema for Panettone"
   (ddl/create-issue-status)
   (ddl/create-tables))
 
@@ -189,6 +225,28 @@ NOTE: This makes a database query, so be wary of N+1 queries"
 ;;; Writing
 ;;;
 
+(defun record-issue-event
+    (issue-id &key
+                field
+                previous-value
+                new-value)
+  "Record in the database that the user identified by `AUTHN:*USER*' updated
+ISSUE-ID, and return the resulting `ISSUE-EVENT'. If no user is currently
+authenticated, warn and no-op"
+  (check-type issue-id (integer))
+  (check-type field (or null symbol))
+  (if authn:*user*
+      (insert-dao
+       (make-instance 'issue-event
+                      :issue-id issue-id
+                      :acting-user-dn (authn:dn authn:*user*)
+                      :field (symbol-name field)
+                      :previous-value (when previous-value
+                                        (format nil "~A" previous-value))
+                      :new-value (when new-value
+                                   (format nil "~A" new-value))))
+      (warn "Performing operation as unauthenticated user")))
+
 (defun create-issue (&rest attrs)
   "Insert a new issue into the database with the given ATTRS, which should be
 a plist of initforms, and return an instance of `issue'"
@@ -202,10 +260,20 @@ a plist of initforms, and return an instance of `issue'"
 the issue doesn't exist, signals `issue-not-found'"
   (check-type issue-id integer)
   (check-type status issue-status)
-  (when (zerop (execute (:update 'issues
-                         :set 'status (cl-postgres:to-sql-string status)
-                         :where (:= 'id issue-id))))
-    (error 'issue-not-found :id issue-id)))
+  (let ((original-status (query (:select 'status
+                                 :from 'issues
+                                 :where (:= 'id issue-id))
+                                :single)))
+    (when (zerop (execute (:update 'issues
+                           :set 'status (cl-postgres:to-sql-string status)
+                           :where (:= 'id issue-id))))
+      (error 'issue-not-found :id issue-id))
+    (record-issue-event
+     issue-id
+     :field 'status
+     :previous-value (string-upcase original-status)
+     :new-value status)
+    (values)))
 
 (defun create-issue-comment (&rest attrs &key issue-id &allow-other-keys)
   "Insert a new issue comment into the database with the given ATTRS and
