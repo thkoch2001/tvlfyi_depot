@@ -1,6 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TypeApplications #-}
 --------------------------------------------------------------------------------
 module App where
@@ -20,6 +21,7 @@ import qualified Types as T
 import qualified Accounts as Accounts
 import qualified Trips as Trips
 import qualified Sessions as Sessions
+import qualified LoginAttempts as LoginAttempts
 --------------------------------------------------------------------------------
 
 server :: FilePath -> Server API
@@ -76,14 +78,29 @@ server dbFile = createAccountH
     login (T.AccountCredentials username password) = do
       mAccount <- Accounts.lookup dbFile username
       case mAccount of
-        Just account ->
-          if T.passwordsMatch password (T.accountPassword account) then do
-            session <- Sessions.findOrCreate dbFile account
-            -- set cookie
-            pure NoContent
-          else
-            -- TODO(wpcarro): Catch and return errors over HTTP
-            throwIO $ err401 { errBody = "Your credentials are invalid" }
+        Just account@T.Account{..} -> do
+          mAttempts <- LoginAttempts.forUsername dbFile accountUsername
+          case mAttempts of
+            Nothing ->
+              if T.passwordsMatch password accountPassword then do
+                session <- Sessions.findOrCreate dbFile account
+                -- set cookie
+                pure NoContent
+              else do
+                LoginAttempts.increment dbFile username
+                throwIO $ err401 { errBody = "Your credentials are invalid" }
+            Just attempts ->
+              if attempts > 3 then
+                -- TODO(wpcarro): Prefer 429 error code
+                throwIO $ err401 { errBody = "Too many failed login attempts" }
+              else if T.passwordsMatch password accountPassword then do
+                session <- Sessions.findOrCreate dbFile account
+                -- set cookie
+                pure NoContent
+              else do
+                LoginAttempts.increment dbFile username
+                -- TODO(wpcarro): Catch and return errors over HTTP
+                throwIO $ err401 { errBody = "Your credentials are invalid" }
 
         -- In this branch, the user didn't supply a known username.
         Nothing -> throwIO $ err401 { errBody = "Your credentials are invalid" }

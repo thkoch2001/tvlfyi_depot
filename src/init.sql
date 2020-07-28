@@ -9,6 +9,7 @@ BEGIN TRANSACTION;
 DROP TABLE IF EXISTS Accounts;
 DROP TABLE IF EXISTS Trips;
 DROP TABLE IF EXISTS Sessions;
+DROP TABLE IF EXISTS LoginAttempts;
 
 CREATE TABLE Accounts (
 -- TODO(wpcarro): Add CHECK(..) constraint
@@ -35,6 +36,13 @@ CREATE TABLE Sessions (
   username TEXT NOT NULL UNIQUE,
   tsCreated TEXT CHECK(LENGTH(tsCreated) == 33) NOT NULL, -- 'YYYY-MM-DD HH:MM:SS'
   PRIMARY KEY (uuid),
+  FOREIGN KEY (username) REFERENCES Accounts ON DELETE CASCADE
+);
+
+CREATE TABLE LoginAttempts (
+  username TEXT NOT NULL UNIQUE,
+  numAttempts INTEGER NOT NULL,
+  PRIMARY KEY (username),
   FOREIGN KEY (username) REFERENCES Accounts ON DELETE CASCADE
 );
 

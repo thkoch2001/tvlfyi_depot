@@ -374,3 +374,11 @@ instance FromRow StoredSession where
   fromRow = StoredSession <$> field
                           <*> field
                           <*> field
+
+data LoginAttempt = LoginAttempt
+  { loginAttemptUsername :: Username
+  , loginAttemptNumAttempts :: Integer
+  } deriving (Eq, Show)
+
+instance FromRow LoginAttempt where
+  fromRow = LoginAttempt <$> field <*> field
