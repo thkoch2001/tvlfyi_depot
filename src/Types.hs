@@ -17,9 +17,11 @@ import GHC.Generics
 import Crypto.Random.Types (MonadRandom)
 
 import qualified Crypto.KDF.BCrypt as BC
+import qualified Data.Time.Clock as Clock
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BS
 import qualified Data.Text.Encoding as TE
+import qualified Data.UUID as UUID
 --------------------------------------------------------------------------------
 
 -- TODO(wpcarro): Properly handle NULL for columns like profilePicture.
@@ -340,3 +342,30 @@ createAccountRequestFields request =
   , createAccountRequestEmail request
   , createAccountRequestRole request
   )
+
+newtype SessionUUID = SessionUUID UUID.UUID
+  deriving (Eq, Show, Generic)
+
+instance FromField SessionUUID where
+  fromField field =
+    case fieldData field of
+      (SQLText x) ->
+        case UUID.fromText x of
+          Nothing -> returnError ConversionFailed field ""
+          Just x -> Ok $ SessionUUID x
+      _ -> returnError ConversionFailed field ""
+
+instance ToField SessionUUID where
+  toField (SessionUUID uuid) =
+    uuid |> UUID.toText |> SQLText
+
+data StoredSession = StoredSession
+  { storedSessionUUID :: SessionUUID
+  , storedSessionUsername :: Username
+  , storedSessionTsCreated :: Clock.UTCTime
+  } deriving (Eq, Show, Generic)
+
+instance FromRow StoredSession where
+  fromRow = StoredSession <$> field
+                          <*> field
+                          <*> field

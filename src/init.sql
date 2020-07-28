@@ -8,6 +8,7 @@ BEGIN TRANSACTION;
 
 DROP TABLE IF EXISTS Accounts;
 DROP TABLE IF EXISTS Trips;
+DROP TABLE IF EXISTS Sessions;
 
 CREATE TABLE Accounts (
 -- TODO(wpcarro): Add CHECK(..) constraint
@@ -22,10 +23,18 @@ CREATE TABLE Accounts (
 CREATE TABLE Trips (
   username TEXT NOT NULL,
   destination TEXT CHECK(LENGTH(destination) > 0) NOT NULL,
-  startDate TEXT CHECK(LENGTH(startDate) == 10) NOT NULL, -- YYYY-MM-DD
-  endDate TEXT CHECK(LENGTH(endDate) == 10) NOT NULL, -- YYYY-MM-DD
+  startDate TEXT CHECK(LENGTH(startDate) == 10) NOT NULL, -- 'YYYY-MM-DD'
+  endDate TEXT CHECK(LENGTH(endDate) == 10) NOT NULL, -- 'YYYY-MM-DD'
   comment TEXT NOT NULL,
   PRIMARY KEY (username, destination, startDate),
+  FOREIGN KEY (username) REFERENCES Accounts ON DELETE CASCADE
+);
+
+CREATE TABLE Sessions (
+  uuid TEXT CHECK(LENGTH(uuid) == 36) NOT NULL,
+  username TEXT NOT NULL UNIQUE,
+  tsCreated TEXT CHECK(LENGTH(tsCreated) == 33) NOT NULL, -- 'YYYY-MM-DD HH:MM:SS'
+  PRIMARY KEY (uuid),
   FOREIGN KEY (username) REFERENCES Accounts ON DELETE CASCADE
 );
 

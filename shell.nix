@@ -9,6 +9,7 @@ in pkgs.mkShell {
       hpkgs.sqlite-simple
       hpkgs.warp
       hpkgs.cryptonite
+      hpkgs.uuid
     ]))
   ];
 }
