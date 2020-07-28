@@ -5,26 +5,6 @@
 ;;; Data model
 ;;;
 
-(deftype issue-status () '(member :open :closed))
-
-(defclass/std issue-comment ()
-  ((body :type string)
-   (author-dn :type string)
-   (created-at :type local-time:timestamp
-               :std (local-time:now)))
-  (:documentation
-   "DEPRECATED: use `PANETTONE.MODEL::ISSUE-COMMENT' instead"))
-
-(defclass/std issue (cl-prevalence:object-with-id)
-  ((subject body :type string :std "")
-   (author-dn :type string)
-   (comments :std nil :type list :with-prefix)
-   (status :std :open :type issue-status)
-   (created-at :type local-time:timestamp
-               :std (local-time:now)))
-  (:documentation
-   "DEPRECATED: use `PANETTONE.MODEL::ISSUE' instead"))
-
 (defclass/std user ()
   ((cn dn mail displayname :type string)))
 
@@ -98,84 +78,6 @@ successful, `nil' otherwise"
 
 (defun author (object)
   (find-user-by-dn (author-dn object)))
-
-;;;
-;;; Persistence
-;;;
-
-(defvar *p-system* nil
-  "The persistence system for this instance of Panettone")
-
-(defun initialize-persistence (data-dir)
-  "Initialize the Panettone persistence system, storing data in DATA-DIR"
-  (ensure-directories-exist data-dir)
-  (setq *p-system*
-        (cl-prevalence:make-prevalence-system
-         (concatenate 'string
-                      data-dir
-                      "/snapshot.xml")))
-
-
-  (when (null (cl-prevalence:find-all-objects *p-system* 'issue))
-    (cl-prevalence:tx-create-id-counter *p-system*)))
-
-(defun prevalence->postgresql (system &key force)
-  "Idempotently migrate all data from the cl-prevalence system SYSTEM into the
-global postgresql connection (eg as initialized by
-`model:connect-postgres'). With FORCE=t, will clear the database first"
-  (pomo:with-transaction (prevalence->postgresql)
-    (when force
-      (pomo:query (:delete-from 'issues)))
-    (iter
-      (for issue in (cl-prevalence:find-all-objects system 'issue))
-      (counting
-       (unless (model:issue-exists-p (get-id issue))
-         (model:create-issue
-          :id (get-id issue)
-          :subject (subject issue)
-          :body (or (body issue) "")
-          :status (status issue)
-          :author-dn (author-dn issue)
-          :created-at (created-at issue)))
-       into num-issues)
-      (sum
-       (iter
-         (for comment in (issue-comments issue))
-         (counting
-          (unless (pomo:query
-                   (:select
-                    (:exists
-                     (:select 1
-                      :from 'issue_comments
-                      :where (:and
-                              (:= 'issue_id (get-id issue))
-                              (:= 'body (body comment))
-                              (:= 'author_dn (author-dn comment))))))
-                   :single)
-            (model:create-issue-comment
-             :body (body comment)
-             :author-dn (author-dn comment)
-             :issue-id (get-id issue)
-             :created-at (created-at comment)))))
-       into num-comments)
-      (finally
-       (let ((next-id (pomo:query
-                       (:select (:+ 1 (:max 'id))
-                        :from 'issues)
-                       :single)))
-         (pomo:query
-          (pomo:sql-compile
-           `(:alter-sequence issues_id_seq :restart ,next-id))))
-       (format t "Created ~A issues and ~A comments~&"
-               num-issues num-comments)
-       (return (values num-issues num-comments))))))
-
-(comment
- (initialize-persistence "/home/grfn/code/depot/web/panettone/")
- (model:connect-postgres)
- (model:ddl/init)
- (prevalence->postgresql *p-system* :force t)
- )
 
 ;;;
 ;;; Views
@@ -538,22 +440,16 @@ global postgresql connection (eg as initialized by
   "Hunchentoot acceptor for Panettone's web server.")
 
 (defun migrate-db ()
-  "Migrate the database to the latest version of the schema
+  "Migrate the database to the latest version of the schema"
+  (model:ddl/init))
 
-In this iteration, intiialize the DDL and move all data from the prevalence
-snapshot to the DB. In future iterations, this will do things like adding new
-tables and columns"
-  (model:ddl/init)
-  (prevalence->postgresql *p-system*))
-
-(defun start-panettone (&key port data-dir
+(defun start-panettone (&key port
                           (ldap-host "localhost")
                           (ldap-port 389)
                           postgres-params)
   (connect-ldap :host ldap-host
                 :port ldap-port)
 
-  (initialize-persistence data-dir)
   (apply #'model:connect-postgres postgres-params)
   (migrate-db)
 
@@ -563,12 +459,10 @@ tables and columns"
 
 (defun main ()
   (let ((port (integer-env "PANETTONE_PORT" :default 6161))
-        (ldap-port (integer-env "LDAP_PORT" :default 389))
-        (data-dir (or (uiop:getenvp "PANETTONE_DATA_DIR") "/var/lib/panettone")))
+        (ldap-port (integer-env "LDAP_PORT" :default 389)))
     (setq hunchentoot:*show-lisp-backtraces-p* nil)
     (setq hunchentoot:*log-lisp-backtraces-p* nil)
     (start-panettone :port port
-                     :data-dir data-dir
                      :ldap-port ldap-port)
     (sb-thread:join-thread
      (find-if (lambda (th)
@@ -579,6 +473,5 @@ tables and columns"
 (comment
  (setq hunchentoot:*catch-errors-p* nil)
  (start-panettone :port 6161
-                  :data-dir "/tmp/panettone"
                   :ldap-port 3899)
  )

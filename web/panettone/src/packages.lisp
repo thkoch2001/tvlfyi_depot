@@ -25,7 +25,6 @@
 
 (defpackage panettone
   (:use :cl :panettone.util :klatre :easy-routes :iterate)
-  (:import-from :cl-prevalence :get-id)
   (:import-from :defclass-std :defclass/std)
   (:import-from :alexandria :if-let :when-let)
   (:import-from

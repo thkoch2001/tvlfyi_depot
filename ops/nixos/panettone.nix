@@ -70,13 +70,11 @@ in {
       serviceConfig = {
         DynamicUser = true;
         Restart = "always";
-        StateDirectory = "panettone";
         EnvironmentFile = cfg.secretsFile;
       };
 
       environment = {
         PANETTONE_PORT = toString cfg.port;
-        PANETTONE_DATA_DIR = "/var/lib/panettone";
         PGHOST = "localhost";
         PGUSER = cfg.dbUser;
         PGDATABASE = cfg.dbName;
