@@ -94,3 +94,13 @@ separated by SEP."
   (check-type str string)
   (handler-case (parse-integer str)
     (sb-int:simple-parse-error (_) nil)))
+
+;;;
+;;; Function utilities
+;;;
+
+(defun partial (f &rest args)
+  "Return a function that calls F with ARGS prepended to any remaining
+  arguments"
+  (lambda (&rest more-args)
+    (apply f (append args more-args))))
