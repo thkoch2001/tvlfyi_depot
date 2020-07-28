@@ -7,6 +7,16 @@
   (:use :cl :lass)
   (:export :styles))
 
+(defpackage :panettone.authentication
+  (:nicknames :authn)
+  (:use :cl :panettone.util :klatre)
+  (:import-from :defclass-std :defclass/std)
+  (:import-from :alexandria :when-let)
+  (:export
+   :*user* :*ldap*
+   :user :cn :dn :mail :displayname
+   :connect-ldap :find-user :find-user-by-dn :authenticate-user))
+
 (defpackage panettone.model
   (:nicknames :model)
   (:use :cl :panettone.util :klatre :postmodern)
@@ -19,12 +29,14 @@
    :id :subject :body :author-dn :issue-id :status :created-at
 
    :get-issue :issue-exists-p :list-issues :create-issue :set-issue-status
-   :delete-issue
+   :delete-issue :issue-not-found
 
    :issue-comments :num-comments :create-issue-comment))
 
 (defpackage panettone
-  (:use :cl :panettone.util :klatre :easy-routes :iterate)
+  (:use :cl :klatre :easy-routes :iterate
+        :panettone.util
+        :panettone.authentication)
   (:import-from :defclass-std :defclass/std)
   (:import-from :alexandria :if-let :when-let)
   (:import-from
