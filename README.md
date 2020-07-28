@@ -34,34 +34,17 @@ Create a new database named `db.sqlite3` with:
 $ sqlite3 db.sqlite3
 ```
 
-Initialize the schema with:
+Populate the database with:
 
 ```
-sqlite> .read src/init.sql
+sqlite3> .read populate.sqlite3
 ```
 
-You can verify that you successfully initialized the database by running:
+You can verify that everything is setup with:
 
 ```
-sqlite> .tables
-sqlite> .schema Accounts
-sqlite> .schema Trips
-```
-
-Populate the database with some dummy values using the following:
-
-```
-sqlite> PRAGMA foreign_keys = on;
-sqlite> .mode csv
-sqlite> .import data/accounts.csv Accounts
-sqlite> .import data/trips.csv Trips
-```
-
-You can verify you successfully populated the tables with:
-
-```
-sqlite> .mode columns
-sqlite> .headers on
-sqlite> SELECT * FROM Accounts;
-sqlite> SELECT * FROM Trips;
+sqlite3> .tables
+sqlite3> .schema
+sqlite3> SELECT * FROM Accounts;
+sqlite3> SELECT * FROM Trips;
 ```

@@ -1,4 +1,5 @@
 *.db
 *.sqlite3
+!populate.sqlite3
 *.db-shm
 *.db-wal
