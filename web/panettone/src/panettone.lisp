@@ -365,7 +365,8 @@ successful, `nil' otherwise"
     (progn
       (setf (hunchentoot:session-value 'user) user)
       (hunchentoot:redirect (or original-uri "/")))
-    (render/login :message "Invalid credentials")))
+    (render/login :message "Invalid credentials"
+                  :original-uri original-uri)))
 
 (defroute logout ("/logout" :method :post) ()
   (hunchentoot:delete-session-value 'user)
