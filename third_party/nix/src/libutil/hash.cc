@@ -280,6 +280,8 @@ absl::StatusOr<Hash> Hash::deserialize(const std::string& s, HashType type) {
   return dest;
 }
 
+namespace hash {
+
 union Ctx {
   MD5_CTX md5;
   SHA_CTX sha1;
@@ -324,8 +326,10 @@ static void finish(HashType ht, Ctx& ctx, unsigned char* hash) {
   }
 }
 
+}  // namespace hash
+
 Hash hashString(HashType ht, const std::string& s) {
-  Ctx ctx{};
+  hash::Ctx ctx{};
   Hash hash(ht);
   start(ht, ctx);
   update(ht, ctx, reinterpret_cast<const unsigned char*>(s.data()), s.length());
@@ -334,7 +338,7 @@ Hash hashString(HashType ht, const std::string& s) {
 }
 
 Hash hashFile(HashType ht, const Path& path) {
-  Ctx ctx{};
+  hash::Ctx ctx{};
   Hash hash(ht);
   start(ht, ctx);
 
@@ -357,34 +361,27 @@ Hash hashFile(HashType ht, const Path& path) {
   return hash;
 }
 
-HashSink::HashSink(HashType ht) : ht(ht) {
-  ctx = new Ctx;
-  bytes = 0;
-  start(ht, *ctx);
-}
+HashSink::HashSink(HashType ht) : ht(ht), ctx(), bytes(0) { start(ht, *ctx); }
 
-HashSink::~HashSink() {
-  bufPos = 0;
-  delete ctx;
-}
+HashSink::~HashSink() { bufPos = 0; }
 
 void HashSink::write(const unsigned char* data, size_t len) {
   bytes += len;
-  update(ht, *ctx, data, len);
+  nix::hash::update(ht, *ctx, data, len);
 }
 
 HashResult HashSink::finish() {
   flush();
   Hash hash(ht);
-  nix::finish(ht, *ctx, hash.hash);
+  nix::hash::finish(ht, *ctx, hash.hash);
   return HashResult(hash, bytes);
 }
 
 HashResult HashSink::currentHash() {
   flush();
-  Ctx ctx2 = *ctx;
+  nix::hash::Ctx ctx2 = *ctx;
   Hash hash(ht);
-  nix::finish(ht, ctx2, hash.hash);
+  nix::hash::finish(ht, ctx2, hash.hash);
   return HashResult(hash, bytes);
 }
 

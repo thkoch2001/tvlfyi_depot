@@ -88,9 +88,11 @@ Hash hashString(HashType ht, const std::string& s);
 /* Compute the hash of the given file. */
 Hash hashFile(HashType ht, const Path& path);
 
+/* A pair of the Hash, and the number of bytes consumed. */
+typedef std::pair<Hash, unsigned long long> HashResult;
+
 /* Compute the hash of the given path.  The hash is defined as
    (essentially) hashString(ht, dumpPath(path)). */
-typedef std::pair<Hash, unsigned long long> HashResult;
 HashResult hashPath(HashType ht, const Path& path,
                     PathFilter& filter = defaultPathFilter);
 
@@ -104,12 +106,14 @@ HashType parseHashType(const std::string& s);
 /* And the reverse. */
 std::string printHashType(HashType ht);
 
+namespace hash {
 union Ctx;
+}
 
 class HashSink : public BufferedSink {
  private:
   HashType ht;
-  Ctx* ctx;
+  std::unique_ptr<hash::Ctx> ctx;
   unsigned long long bytes;
 
  public:
