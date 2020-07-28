@@ -37,3 +37,8 @@ type API =
       -- trips: List
       :<|> "trips"
            :> Get '[JSON] [T.Trip]
+
+      -- Miscellaneous
+      :<|> "login"
+           :> ReqBody '[JSON] T.AccountCredentials
+           :> Post '[JSON] (Maybe T.Session)
