@@ -86,6 +86,7 @@ let
       gzip
       haskell
       iana-etc
+      ii
       imagemagickBig
       installShellFiles
       jdk

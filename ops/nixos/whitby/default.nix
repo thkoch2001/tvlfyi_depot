@@ -23,6 +23,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
     "${depot.depotPath}/ops/nixos/tvl-sso/default.nix"
+    "${depot.depotPath}/ops/nixos/tvlbot.nix"
     "${depot.depotPath}/ops/nixos/www/cl.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/code.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/cs.tvl.fyi.nix"
@@ -222,6 +223,10 @@ in lib.fix(self: {
       dbUser = "panettone";
       dbName = "panettone";
     };
+
+    # Run the tvlbot ii instance. Credentials for this have been
+    # provisioned in /etc/secrets
+    tvlbot.enable = true;
   };
 
   services.postgresql = {
