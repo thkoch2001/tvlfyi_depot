@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_cat.h>
 #include <absl/strings/str_split.h>
 #include <fcntl.h>
 #include <glog/logging.h>
@@ -681,11 +682,12 @@ void LocalStore::queryPathInfoUncached(
 
       info->id = useQueryPathInfo.getInt(0);
 
-      try {
-        info->narHash = Hash(useQueryPathInfo.getStr(1));
-      } catch (BadHash& e) {
-        throw Error("in valid-path entry for '%s': %s", path, e.what());
+      auto hash_ = Hash::deserialize(useQueryPathInfo.getStr(1));
+      if (!hash_.ok()) {
+        throw Error(absl::StrCat("in valid-path entry for '", path,
+                                 "': ", hash_.status().ToString()));
       }
+      info->narHash = *hash_;
 
       info->registrationTime = useQueryPathInfo.getInt(2);
 

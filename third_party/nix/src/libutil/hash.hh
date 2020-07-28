@@ -36,11 +36,14 @@ struct Hash {
      Subresource Integrity hash expression). If the 'type' argument
      is htUnknown, then the hash type must be specified in the
      string. */
-  Hash(const std::string& s, HashType type = htUnknown);
+  Hash(std::string_view s, HashType type = htUnknown);
 
   /* Status-returning version of above constructor */
-  static absl::StatusOr<Hash> deserialize(const std::string& s,
+  static absl::StatusOr<Hash> deserialize(std::string_view s,
                                           HashType type = htUnknown);
+
+  // Legacy unwrapper for StatusOr. Throws BadHash.
+  static Hash unwrap_throw(absl::StatusOr<Hash> hash) noexcept(false);
 
   void init();
 

@@ -359,7 +359,8 @@ void RemoteStore::queryPathInfoUncached(
       if (!info->deriver.empty()) {
         assertStorePath(info->deriver);
       }
-      info->narHash = Hash(readString(conn->from), htSHA256);
+      auto hash_ = Hash::deserialize(readString(conn->from), htSHA256);
+      info->narHash = Hash::unwrap_throw(hash_);
       info->references = readStorePaths<PathSet>(*this, conn->from);
       conn->from >> info->registrationTime >> info->narSize;
       if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 16) {

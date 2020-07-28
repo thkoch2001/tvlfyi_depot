@@ -115,7 +115,15 @@ struct LegacySSHStore : public Store {
 
       if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 4) {
         auto s = readString(conn->from);
-        info->narHash = s.empty() ? Hash() : Hash(s);
+        if (s.empty()) {
+          info->narHash = Hash();
+        } else {
+          auto hash_ = Hash::deserialize(s);
+          if (!hash_.ok()) {
+            throw BadHash("will be caught locally");
+          }
+          info->narHash = *hash_;
+        }
         conn->from >> info->ca;
         info->sigs = readStrings<StringSet>(conn->from);
       }

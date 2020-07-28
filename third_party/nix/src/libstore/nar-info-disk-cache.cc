@@ -226,10 +226,13 @@ class NarInfoDiskCacheImpl final : public NarInfoDiskCache {
           narInfo->url = queryNAR.getStr(2);
           narInfo->compression = queryNAR.getStr(3);
           if (!queryNAR.isNull(4)) {
-            narInfo->fileHash = Hash(queryNAR.getStr(4));
+            auto hash_ = Hash::deserialize(queryNAR.getStr(4));
+            // TODO(#statusor): does this throw mess with retrySQLite?
+            narInfo->fileHash = Hash::unwrap_throw(hash_);
           }
           narInfo->fileSize = queryNAR.getInt(5);
-          narInfo->narHash = Hash(queryNAR.getStr(6));
+          auto hash_ = Hash::deserialize(queryNAR.getStr(6));
+          narInfo->narHash = Hash::unwrap_throw(hash_);
           narInfo->narSize = queryNAR.getInt(7);
           for (auto r : absl::StrSplit(queryNAR.getStr(8), absl::ByChar(' '))) {
             narInfo->references.insert(absl::StrCat(cache.storeDir, "/", r));
