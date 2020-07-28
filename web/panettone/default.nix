@@ -4,7 +4,6 @@ depot.nix.buildLisp.program {
   name = "panettone";
 
   deps = with depot.third_party.lisp; [
-    cl-prevalence
     cl-who
     drakma
     defclass-std
