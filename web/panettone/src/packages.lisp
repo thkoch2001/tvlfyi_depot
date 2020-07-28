@@ -24,12 +24,14 @@
   (:export
    :connect-postgres :ddl/init
 
-   :issue
-   :issue-comment
-   :id :subject :body :author-dn :issue-id :status :created-at
+   :issue :issue-comment :issue-event
+   :id :subject :body :author-dn :issue-id :status :created-at :acting-user-dn
+   :field :previous-value :new-value
 
    :get-issue :issue-exists-p :list-issues :create-issue :set-issue-status
    :delete-issue :issue-not-found
+
+   :issue-events
 
    :issue-comments :num-comments :create-issue-comment))
 
@@ -38,10 +40,11 @@
         :panettone.util
         :panettone.authentication)
   (:import-from :defclass-std :defclass/std)
-  (:import-from :alexandria :if-let :when-let)
+  (:import-from :alexandria :if-let :when-let :switch)
   (:import-from
    :panettone.model
    :id :subject :body :author-dn :issue-id :status :created-at
-   :issue-comments :num-comments)
+   :field :previous-value :new-value :acting-user-dn
+   :issue-comments :num-comments :issue-events)
   (:shadow :next)
   (:export :start-pannetone :config :main))
