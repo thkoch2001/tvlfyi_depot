@@ -24,6 +24,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
     "${depot.depotPath}/ops/nixos/tvl-sso/default.nix"
+    "${depot.depotPath}/ops/nixos/tvlbot.nix"
     "${depot.depotPath}/ops/nixos/www/cl.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/code.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/cs.tvl.fyi.nix"
@@ -227,6 +228,9 @@ in lib.fix(self: {
 
     # Run the first cursed bot (quote bot)
     paroxysm.enable = true;
+
+    # Run the second cursed bot (tvlbot)
+    tvlbot.enable = true;
   };
 
   services.postgresql = {
