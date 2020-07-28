@@ -203,7 +203,12 @@ global postgresql connection (eg as initialized by
                   :action "/logout"
                   (:input :type "submit" :value "Log Out")))
           (who:htm
-           (:a :href "/login" "Log In")))))))
+           (:a :href
+               (format nil
+                       "/login?original-uri=~A"
+                       (drakma:url-encode (hunchentoot:request-uri*)
+                                          :utf-8))
+               "Log In")))))))
 
 (defmacro render ((&key (footer t)) &body body)
   `(who:with-html-output-to-string (*standard-output* nil :prologue t)
