@@ -21,6 +21,7 @@ depot.nix.buildLisp.program {
   srcs = [
     ./panettone.asd
     ./src/packages.lisp
+    ./src/util.lisp
     ./src/css.lisp
     ./src/model.lisp
     ./src/panettone.lisp
