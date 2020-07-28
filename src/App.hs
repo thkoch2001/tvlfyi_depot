@@ -17,21 +17,24 @@ import qualified Types as T
 --------------------------------------------------------------------------------
 
 server :: FilePath -> Server API
-server dbFile = userAddH
-           :<|> userGetH
+server dbFile = createAccountH
+           :<|> deleteAccountH
+           :<|> listAccountsH
            :<|> createTripH
-           :<|> listTripsH
            :<|> deleteTripH
+           :<|> listTripsH
   where
-    userAddH newUser   = liftIO $ userAdd newUser
-    userGetH name      = liftIO $ userGet name
-    createTripH trip   = liftIO $ createTrip trip
-    listTripsH         = liftIO $ listTrips
-    deleteTripH tripPK = liftIO $ deleteTrip tripPK
+    createAccountH newUser  = liftIO $ createAccount newUser
+    deleteAccountH username = liftIO $ deleteAccount username
+    listAccountsH           = liftIO $ listAccounts
+
+    createTripH trip        = liftIO $ createTrip trip
+    deleteTripH tripPK      = liftIO $ deleteTrip tripPK
+    listTripsH              = liftIO $ listTrips
 
     -- TODO(wpcarro): Handle failed CONSTRAINTs instead of sending 500s
-    userAdd :: T.Account -> IO (Maybe T.Session)
-    userAdd account = withConnection dbFile $ \conn -> do
+    createAccount :: T.Account -> IO (Maybe T.Session)
+    createAccount account = withConnection dbFile $ \conn -> do
       execute conn "INSERT INTO Accounts (username,password,email,role,profilePicture) VALUES (?,?,?,?,?)"
         (account & T.accountFields)
       T.Session{ T.username = T.accountUsername account
@@ -39,12 +42,16 @@ server dbFile = userAddH
                , T.role = T.accountRole account
                } & Just & pure
 
-    userGet :: Text -> IO (Maybe T.Account)
-    userGet name = withConnection dbFile $ \conn -> do
-      res <- query conn "SELECT * FROM Accounts WHERE username = ?" (Only name)
-      case res of
-        [x] -> pure (Just x)
-        _   -> pure Nothing
+    deleteAccount :: Text -> IO NoContent
+    deleteAccount username = withConnection dbFile $ \conn -> do
+      execute conn "DELETE FROM Accounts WHERE username = ?"
+        (Only (T.Username username))
+      pure NoContent
+
+    listAccounts :: IO [T.User]
+    listAccounts = withConnection dbFile $ \conn -> do
+      accounts <- query_ conn "SELECT * FROM Accounts"
+      pure $ T.userFromAccount <$> accounts
 
     createTrip :: T.Trip -> IO NoContent
     createTrip trip = withConnection dbFile $ \conn -> do
@@ -53,7 +60,7 @@ server dbFile = userAddH
       pure NoContent
 
     listTrips :: IO [T.Trip]
-    listTrips = withConnection dbFile $ \conn -> do
+    listTrips = withConnection dbFile $ \conn ->
       query_ conn "SELECT * FROM Trips"
 
     -- TODO(wpcarro): Validate incoming data like startDate.

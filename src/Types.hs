@@ -234,3 +234,22 @@ tripFields (Trip{ tripUsername
 
 instance ToJSON Trip
 instance FromJSON Trip
+
+-- | Users and Accounts both refer to the same underlying entities; however,
+-- Users model the user-facing Account details, hiding sensitive details like
+-- passwords and emails.
+data User = User
+  { userUsername :: Username
+  , userProfilePicture :: ProfilePicture
+  , userRole :: Role
+  } deriving (Eq, Show, Generic)
+
+instance ToJSON User
+instance FromJSON User
+
+userFromAccount :: Account -> User
+userFromAccount account =
+  User { userUsername = accountUsername account
+       , userProfilePicture = accountProfilePicture account
+       , userRole = accountRole account
+       }

@@ -9,20 +9,31 @@ import Servant.API
 import qualified Types as T
 --------------------------------------------------------------------------------
 
-type API = "user"
+type API =
+      -- accounts: Create
+           "accounts"
            :> ReqBody '[JSON] T.Account
            :> Post '[JSON] (Maybe T.Session)
-      :<|> "user"
-           :> Capture "name" Text
-           :> Get '[JSON] (Maybe T.Account)
-      -- Create
+      -- accounts: Read
+      -- accounts: Update
+      -- accounts: Delete
+      :<|> "accounts"
+           :> QueryParam' '[Required] "username" Text
+           :> Delete '[JSON] NoContent
+      -- accounts: List
+      :<|> "accounts"
+           :> Get '[JSON] [T.User]
+
+      -- trips: Create
       :<|> "trips"
            :> ReqBody '[JSON] T.Trip
            :> Post '[JSON] NoContent
-      -- Read
-      :<|> "trips"
-           :> Get '[JSON] [T.Trip]
-      -- Delete
+      -- trips: Read
+      -- trips: Update
+      -- trips: Delete
       :<|> "trips"
            :> ReqBody '[JSON] T.TripPK
            :> Delete '[JSON] NoContent
+      -- trips: List
+      :<|> "trips"
+           :> Get '[JSON] [T.Trip]
