@@ -41,4 +41,4 @@ type API =
       -- Miscellaneous
       :<|> "login"
            :> ReqBody '[JSON] T.AccountCredentials
-           :> Post '[JSON] (Maybe T.Session)
+           :> Post '[JSON] NoContent

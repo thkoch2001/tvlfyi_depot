@@ -19,6 +19,7 @@ import qualified Data.Text.Encoding as TE
 import qualified Types as T
 import qualified Accounts as Accounts
 import qualified Trips as Trips
+import qualified Sessions as Sessions
 --------------------------------------------------------------------------------
 
 server :: FilePath -> Server API
@@ -71,21 +72,21 @@ server dbFile = createAccountH
       pure NoContent
 
     -- TODO(wpcarro): Create and store a session token
-    login :: T.AccountCredentials -> IO (Maybe T.Session)
-    login (T.AccountCredentials username password) =
-      withConnection dbFile $ \conn -> do
-        res <- query conn "SELECT * FROM Accounts WHERE username = ?"
-          (Only username)
-        case res of
-          [T.Account{T.accountUsername,T.accountPassword,T.accountRole}] ->
-            if T.passwordsMatch password accountPassword then
-              pure $ Just (T.Session accountUsername accountRole)
-            else
-              -- TODO(wpcarro): Catch and return errors over HTTP
-              throwIO $ err401 { errBody = "Your credentials are invalid" }
+    login :: T.AccountCredentials -> IO NoContent
+    login (T.AccountCredentials username password) = do
+      mAccount <- Accounts.lookup dbFile username
+      case mAccount of
+        Just account ->
+          if T.passwordsMatch password (T.accountPassword account) then do
+            session <- Sessions.findOrCreate dbFile account
+            -- set cookie
+            pure NoContent
+          else
+            -- TODO(wpcarro): Catch and return errors over HTTP
+            throwIO $ err401 { errBody = "Your credentials are invalid" }
 
-          -- In this branch, the user didn't supply a known username.
-          _ -> throwIO $ err401 { errBody = "Your credentials are invalid" }
+        -- In this branch, the user didn't supply a known username.
+        Nothing -> throwIO $ err401 { errBody = "Your credentials are invalid" }
 
 mkApp :: FilePath -> IO Application
 mkApp dbFile = do

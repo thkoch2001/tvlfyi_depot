@@ -320,6 +320,11 @@ hashPassword (ClearTextPassword x) = do
   hashed <- BC.hashPassword 12 (x |> unpack |> B.pack)
   pure $ HashedPassword hashed
 
+-- | Return True if the cleartext password matches the hashed password.
+passwordsMatch :: ClearTextPassword -> HashedPassword -> Bool
+passwordsMatch (ClearTextPassword clear) (HashedPassword hashed) =
+  BC.validatePassword (clear |> unpack |> B.pack) hashed
+
 data CreateAccountRequest = CreateAccountRequest
   { createAccountRequestUsername :: Username
   , createAccountRequestPassword :: ClearTextPassword
