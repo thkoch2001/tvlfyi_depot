@@ -14,8 +14,6 @@ const int sha1HashSize = 20;
 const int sha256HashSize = 32;
 const int sha512HashSize = 64;
 
-extern const std::string base32Chars;
-
 enum Base : int { Base64, Base32, Base16, SRI };
 
 struct Hash {
@@ -65,6 +63,10 @@ struct Hash {
      or base-64. By default, this is prefixed by the hash type
      (e.g. "sha256:"). */
   std::string to_string(Base base = Base32, bool includeType = true) const;
+
+  /* Returns whether the passed string contains entirely valid base32
+     characters. */
+  static bool IsValidBase32(absl::string_view s);
 };
 
 /* Print a hash in base-16 if it's MD5, or base-32 otherwise. */

@@ -13,38 +13,21 @@ namespace nix {
 
 static unsigned int refLength = 32; /* characters */
 
-static void search(const unsigned char* s, size_t len, StringSet& hashes,
+static void search(const char* s, size_t len, StringSet& hashes,
                    StringSet& seen) {
-  static bool initialised = false;
-  static bool isBase32[256];
-  if (!initialised) {
-    for (bool& i : isBase32) {
-      i = false;
-    }
-    for (char base32Char : base32Chars) {
-      isBase32[static_cast<unsigned char>(base32Char)] = true;
-    }
-    initialised = true;
-  }
-
   for (size_t i = 0; i + refLength <= len;) {
-    int j = 0;
-    bool match = true;
-    for (j = refLength - 1; j >= 0; --j) {
-      if (!isBase32[s[i + j]]) {
-        i += j + 1;
-        match = false;
-        break;
-      }
-    }
+    absl::string_view ref(s + i, refLength);
+    bool match = Hash::IsValidBase32(ref);
     if (!match) {
       continue;
     }
-    std::string ref(reinterpret_cast<const char*>(s) + i, refLength);
-    if (hashes.find(ref) != hashes.end()) {
+    // TODO(kanepyork): convert StringSet to flat_hash_set, delay owned string
+    // conversion into the 'if'
+    std::string sref(ref);
+    if (hashes.find(sref) != hashes.end()) {
       DLOG(INFO) << "found reference to '" << ref << "' at offset " << i;
-      seen.insert(ref);
-      hashes.erase(ref);
+      seen.insert(sref);
+      hashes.erase(sref);
     }
     ++i;
   }
@@ -65,22 +48,21 @@ struct RefScanSink : Sink {
 void RefScanSink::operator()(const unsigned char* data, size_t len) {
   hashSink(data, len);
 
+  const char* data_ = reinterpret_cast<const char*>(data);
+
   /* It's possible that a reference spans the previous and current
      fragment, so search in the concatenation of the tail of the
      previous fragment and the start of the current fragment. */
-  std::string s = tail + std::string(reinterpret_cast<const char*>(data),
-                                     len > refLength ? refLength : len);
-  search(reinterpret_cast<const unsigned char*>(s.data()), s.size(), hashes,
-         seen);
+  std::string s = tail + std::string(data_, len > refLength ? refLength : len);
+  search(s.data(), s.size(), hashes, seen);
 
-  search(data, len, hashes, seen);
+  search(data_, len, hashes, seen);
 
   size_t tailLen = len <= refLength ? len : refLength;
-  tail =
-      std::string(tail, tail.size() < refLength - tailLen
-                            ? 0
-                            : tail.size() - (refLength - tailLen)) +
-      std::string(reinterpret_cast<const char*>(data) + len - tailLen, tailLen);
+  tail = std::string(tail, tail.size() < refLength - tailLen
+                               ? 0
+                               : tail.size() - (refLength - tailLen)) +
+         std::string(data_ + len - tailLen, tailLen);
 }
 
 PathSet scanForReferences(const std::string& path, const PathSet& refs,
