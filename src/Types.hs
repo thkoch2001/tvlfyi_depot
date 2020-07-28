@@ -107,9 +107,28 @@ data Account = Account
   , accountProfilePicture :: ProfilePicture
   } deriving (Eq, Show, Generic)
 
--- TODO(wpcarro): Prefer username to accountUsername for JSON
-instance ToJSON Account
-instance FromJSON Account
+instance ToJSON Account where
+  toJSON (Account username password email role profilePicture) =
+    object [ "username" .= username
+           , "password" .= password
+           , "email" .= email
+           , "role" .= role
+           , "profilePicture" .= profilePicture
+           ]
+
+instance FromJSON Account where
+  parseJSON = withObject "Account" $ \x -> do
+    username <- x .: "username"
+    password <- x .: "password"
+    email <- x .: "email"
+    role <- x .: "role"
+    profilePicture <- x .: "profilePicture"
+    pure Account{ accountUsername = username
+                , accountPassword = password
+                , accountEmail = email
+                , accountRole = role
+                , accountProfilePicture = profilePicture
+                }
 
 -- | Return a tuple with all of the fields for an Account record to use for SQL.
 accountFields :: Account -> (Username, ClearTextPassword, Email, Role, ProfilePicture)
@@ -174,7 +193,6 @@ instance FromField Date where
 newtype Destination = Destination Text
   deriving (Eq, Show, Generic)
 
--- TODO(wpcarro): Prefer username to tripUsername for JSON
 instance ToJSON Destination
 instance FromJSON Destination
 
@@ -213,9 +231,15 @@ tripPKFields (TripPK{ tripPKUsername
                     })
   = (tripPKUsername, tripPKDestination, tripPKStartDate)
 
--- TODO(wpcarro): Prefer shorter JSON fields like username instead of
--- tripPKUsername.
-instance FromJSON TripPK
+instance FromJSON TripPK where
+  parseJSON = withObject "TripPK" $ \x -> do
+    username <- x .: "username"
+    destination <- x .: "destination"
+    startDate <- x .: "startDate"
+    pure TripPK{ tripPKUsername = username
+               , tripPKDestination = destination
+               , tripPKStartDate = startDate
+               }
 
 -- | Return the tuple representation of a Trip record for SQL.
 tripFields :: Trip -> (Username, Destination, Date, Date, Comment)
@@ -232,8 +256,28 @@ tripFields (Trip{ tripUsername
     , tripComment
     )
 
-instance ToJSON Trip
-instance FromJSON Trip
+instance ToJSON Trip where
+  toJSON (Trip username destination startDate endDate comment) =
+    object [ "username" .= username
+           , "destination" .= destination
+           , "startDate" .= startDate
+           , "endDate" .= endDate
+           , "comment" .= comment
+           ]
+
+instance FromJSON Trip where
+  parseJSON = withObject "Trip" $ \x -> do
+    username <- x .: "username"
+    destination <- x .: "destination"
+    startDate <- x .: "startDate"
+    endDate <- x .: "endDate"
+    comment <- x .: "comment"
+    pure Trip{ tripUsername = username
+             , tripDestination = destination
+             , tripStartDate = startDate
+             , tripEndDate = endDate
+             , tripComment = comment
+             }
 
 -- | Users and Accounts both refer to the same underlying entities; however,
 -- Users model the user-facing Account details, hiding sensitive details like
@@ -244,8 +288,12 @@ data User = User
   , userRole :: Role
   } deriving (Eq, Show, Generic)
 
-instance ToJSON User
-instance FromJSON User
+instance ToJSON User where
+  toJSON (User username profilePicture role) =
+    object [ "username" .= username
+           , "profilePicture" .= profilePicture
+           , "role" .= role
+           ]
 
 userFromAccount :: Account -> User
 userFromAccount account =
@@ -253,3 +301,18 @@ userFromAccount account =
        , userProfilePicture = accountProfilePicture account
        , userRole = accountRole account
        }
+
+-- | This is the data that a user needs to supply to authenticate with the
+-- application.
+data AccountCredentials = AccountCredentials
+  { accountCredentialsUsername :: Username
+  , accountCredentialsPassword :: ClearTextPassword
+  } deriving (Eq, Show, Generic)
+
+instance FromJSON AccountCredentials where
+  parseJSON = withObject "AccountCredentials" $ \x -> do
+    username <- x.: "username"
+    password <- x.: "password"
+    pure AccountCredentials{ accountCredentialsUsername = username
+                           , accountCredentialsPassword = password
+                           }
