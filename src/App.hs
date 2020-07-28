@@ -17,11 +17,13 @@ import qualified Types as T
 --------------------------------------------------------------------------------
 
 server :: FilePath -> Server API
-server dbFile =
-  userAddH :<|> userGetH
+server dbFile = userAddH
+           :<|> userGetH
+           :<|> createTripH
   where
     userAddH newUser = liftIO $ userAdd newUser
     userGetH name    = liftIO $ userGet name
+    createTripH trip = liftIO $ createTrip trip
 
     -- TODO(wpcarro): Handle failed CONSTRAINTs instead of sending 500s
     userAdd :: T.Account -> IO (Maybe T.Session)
@@ -39,6 +41,12 @@ server dbFile =
       case res of
         [x] -> pure (Just x)
         _   -> pure Nothing
+
+    createTrip :: T.Trip -> IO Bool
+    createTrip trip = withConnection dbFile $ \conn -> do
+      execute conn "INSERT INTO Trips (username,destination,startDate,endDate,comment) VALUES (?,?,?,?,?)"
+        (trip & T.tripFields)
+      pure True
 
 mkApp :: FilePath -> IO Application
 mkApp dbFile = do

@@ -107,8 +107,9 @@ data Account = Account
   , accountProfilePicture :: ProfilePicture
   } deriving (Eq, Show, Generic)
 
-instance FromJSON Account
+-- TODO(wpcarro): Prefer username to accountUsername for JSON
 instance ToJSON Account
+instance FromJSON Account
 
 -- | Return a tuple with all of the fields for an Account record to use for SQL.
 accountFields :: Account -> (Username, Password, Email, Role, ProfilePicture)
@@ -144,3 +145,67 @@ instance ToJSON Session where
            , "password" .= password
            , "role" .= role
            ]
+
+newtype Comment = Comment Text
+  deriving (Eq, Show, Generic)
+
+instance ToJSON Comment
+instance FromJSON Comment
+
+instance ToField Comment where
+  toField (Comment x) = SQLText x
+
+instance FromField Comment where
+  fromField = forNewtype Comment
+
+-- TODO(wpcarro): Replace this with a different type.
+newtype Date = Date Text
+  deriving (Eq, Show, Generic)
+
+instance ToJSON Date
+instance FromJSON Date
+
+instance ToField Date where
+  toField (Date x) = SQLText x
+
+instance FromField Date where
+  fromField = forNewtype Date
+
+newtype Destination = Destination Text
+  deriving (Eq, Show, Generic)
+
+-- TODO(wpcarro): Prefer username to tripUsername for JSON
+instance ToJSON Destination
+instance FromJSON Destination
+
+instance ToField Destination where
+  toField (Destination x) = SQLText x
+
+instance FromField Destination where
+  fromField = forNewtype Destination
+
+data Trip = Trip
+  { tripUsername :: Username
+  , tripDestination :: Destination
+  , tripStartDate :: Date
+  , tripEndDate :: Date
+  , tripComment :: Comment
+  } deriving (Eq, Show, Generic)
+
+-- | Return the tuple representation of a Trip record for SQL.
+tripFields :: Trip -> (Username, Destination, Date, Date, Comment)
+tripFields (Trip{ tripUsername
+                , tripDestination
+                , tripStartDate
+                , tripEndDate
+                , tripComment
+                })
+  = ( tripUsername
+    , tripDestination
+    , tripStartDate
+    , tripEndDate
+    , tripComment
+    )
+
+instance ToJSON Trip
+instance FromJSON Trip

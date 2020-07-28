@@ -15,3 +15,6 @@ type API = "user"
       :<|> "user"
            :> Capture "name" Text
            :> Get  '[JSON] (Maybe T.Account)
+      :<|> "trip"
+           :> ReqBody '[JSON] T.Trip
+           :> Post '[JSON] Bool
