@@ -10,7 +10,6 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Function ((&))
 import Data.String.Conversions (cs)
 import Data.Text (Text)
-import Database.SQLite.Simple
 import Network.Wai.Handler.Warp as Warp
 import Servant
 import API
@@ -18,6 +17,8 @@ import API
 import qualified Crypto.KDF.BCrypt as BC
 import qualified Data.Text.Encoding as TE
 import qualified Types as T
+import qualified Accounts as Accounts
+import qualified Trips as Trips
 --------------------------------------------------------------------------------
 
 server :: FilePath -> Server API
@@ -39,44 +40,35 @@ server dbFile = createAccountH
 
     -- TODO(wpcarro): Handle failed CONSTRAINTs instead of sending 500s
     createAccount :: T.CreateAccountRequest -> IO NoContent
-    createAccount request = withConnection dbFile $ \conn -> do
-      hashed <- T.hashPassword (T.createAccountRequestPassword request)
-      execute conn "INSERT INTO Accounts (username,password,email,role) VALUES (?,?,?,?)"
-        ( T.createAccountRequestUsername request
-        , hashed
-        , T.createAccountRequestEmail request
-        , T.createAccountRequestRole request
-        )
+    createAccount request = do
+      Accounts.create dbFile
+        (T.createAccountRequestUsername request)
+        (T.createAccountRequestPassword request)
+        (T.createAccountRequestEmail request)
+        (T.createAccountRequestRole request)
       pure NoContent
 
     deleteAccount :: Text -> IO NoContent
-    deleteAccount username = withConnection dbFile $ \conn -> do
-      execute conn "DELETE FROM Accounts WHERE username = ?"
-        (Only (T.Username username))
+    deleteAccount username = do
+      Accounts.delete dbFile (T.Username username)
       pure NoContent
 
     listAccounts :: IO [T.User]
-    listAccounts = withConnection dbFile $ \conn -> do
-      accounts <- query_ conn "SELECT * FROM Accounts"
-      pure $ T.userFromAccount <$> accounts
+    listAccounts = Accounts.list dbFile
 
     createTrip :: T.Trip -> IO NoContent
-    createTrip trip = withConnection dbFile $ \conn -> do
-      execute conn "INSERT INTO Trips (username,destination,startDate,endDate,comment) VALUES (?,?,?,?,?)"
-        (trip & T.tripFields)
+    createTrip trip = do
+      Trips.create dbFile trip
       pure NoContent
 
     listTrips :: IO [T.Trip]
-    listTrips = withConnection dbFile $ \conn ->
-      query_ conn "SELECT * FROM Trips"
+    listTrips = Trips.list dbFile
 
     -- TODO(wpcarro): Validate incoming data like startDate.
     deleteTrip :: T.TripPK -> IO NoContent
-    deleteTrip tripPK =
-      withConnection dbFile $ \conn -> do
-        execute conn "DELETE FROM Trips WHERE username = ? AND destination = ? and startDate = ?"
-          (tripPK & T.tripPKFields)
-        pure NoContent
+    deleteTrip tripPK = do
+      Trips.delete dbFile tripPK
+      pure NoContent
 
     -- TODO(wpcarro): Create and store a session token
     login :: T.AccountCredentials -> IO (Maybe T.Session)
