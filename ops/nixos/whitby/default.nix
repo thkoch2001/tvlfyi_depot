@@ -221,6 +221,7 @@ in lib.fix(self: {
       enable = true;
       dbUser = "panettone";
       dbName = "panettone";
+      secretsFile = "/etc/secrets/panettone";
     };
   };
 
@@ -228,10 +229,12 @@ in lib.fix(self: {
     enable = true;
     enableTCPIP = true;
 
-    authentication = lib.mkOverride 10 ''
+    authentication = lib.mkForce ''
       local all all trust
-      host all all ::1/128 trust
-      hostnossl all all ::1/128 trust
+      host all all 127.0.0.1/32 password
+      host all all ::1/128 password
+      hostnossl all all 127.0.0.1/32 password
+      hostnossl all all ::1/128  password
     '';
 
     ensureDatabases = [
