@@ -8,9 +8,7 @@ in pkgs.mkShell {
       hpkgs.resource-pool
       hpkgs.sqlite-simple
       hpkgs.warp
-      hpkgs.persistent
-      hpkgs.persistent-sqlite
-      hpkgs.persistent-template
+      hpkgs.cryptonite
     ]))
   ];
 }

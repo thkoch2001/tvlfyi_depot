@@ -12,8 +12,8 @@ import qualified Types as T
 type API =
       -- accounts: Create
            "accounts"
-           :> ReqBody '[JSON] T.Account
-           :> Post '[JSON] (Maybe T.Session)
+           :> ReqBody '[JSON] T.CreateAccountRequest
+           :> Post '[JSON] NoContent
       -- accounts: Read
       -- accounts: Update
       -- accounts: Delete

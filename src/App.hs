@@ -33,14 +33,16 @@ server dbFile = createAccountH
     listTripsH              = liftIO $ listTrips
 
     -- TODO(wpcarro): Handle failed CONSTRAINTs instead of sending 500s
-    createAccount :: T.Account -> IO (Maybe T.Session)
-    createAccount account = withConnection dbFile $ \conn -> do
-      execute conn "INSERT INTO Accounts (username,password,email,role,profilePicture) VALUES (?,?,?,?,?)"
-        (account & T.accountFields)
-      T.Session{ T.username = T.accountUsername account
-               , T.password = T.accountPassword account
-               , T.role = T.accountRole account
-               } & Just & pure
+    createAccount :: T.CreateAccountRequest -> IO NoContent
+    createAccount request = withConnection dbFile $ \conn -> do
+      hashed <- T.hashPassword (T.createAccountRequestPassword request)
+      execute conn "INSERT INTO Accounts (username,password,email,role) VALUES (?,?,?,?)"
+        ( T.createAccountRequestUsername request
+        , hashed
+        , T.createAccountRequestEmail request
+        , T.createAccountRequestRole request
+        )
+      pure NoContent
 
     deleteAccount :: Text -> IO NoContent
     deleteAccount username = withConnection dbFile $ \conn -> do

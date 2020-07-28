@@ -1,11 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE NamedFieldPuns #-}
 --------------------------------------------------------------------------------
 module Types where
@@ -14,14 +9,17 @@ import Data.Aeson
 import Data.Function ((&))
 import Data.Text
 import Data.Typeable
-import Database.Persist.TH
 import Database.SQLite.Simple
 import Database.SQLite.Simple.Ok
 import Database.SQLite.Simple.FromField
 import Database.SQLite.Simple.ToField
 import GHC.Generics
+import Crypto.Random.Types (MonadRandom)
 
+import qualified Crypto.KDF.BCrypt as BC
+import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BS
+import qualified Data.Text.Encoding as TE
 --------------------------------------------------------------------------------
 
 -- TODO(wpcarro): Properly handle NULL for columns like profilePicture.
@@ -42,6 +40,18 @@ instance ToField Username where
 
 instance FromField Username where
   fromField = forNewtype Username
+
+newtype HashedPassword = HashedPassword BS.ByteString
+  deriving (Eq, Show, Generic)
+
+instance ToField HashedPassword where
+  toField (HashedPassword x) = SQLText (TE.decodeUtf8 x)
+
+instance FromField HashedPassword where
+  fromField field =
+    case fieldData field of
+      (SQLText x) -> x & TE.encodeUtf8 & HashedPassword & Ok
+      _ -> returnError ConversionFailed field ""
 
 newtype ClearTextPassword = ClearTextPassword Text
   deriving (Eq, Show, Generic)
@@ -70,8 +80,17 @@ instance FromField Email where
 data Role = RegularUser | Manager | Admin
   deriving (Eq, Show, Generic)
 
-instance ToJSON Role
-instance FromJSON Role
+instance ToJSON Role where
+  toJSON RegularUser = "user"
+  toJSON Manager = "manager"
+  toJSON Admin = "admin"
+
+instance FromJSON Role where
+  parseJSON = withText "Role" $ \x ->
+    case x of
+      "user" -> pure RegularUser
+      "manager" -> pure Manager
+      "admin" -> pure Admin
 
 instance ToField Role where
   toField RegularUser = SQLText "user"
@@ -101,37 +120,14 @@ instance FromField ProfilePicture where
 
 data Account = Account
   { accountUsername :: Username
-  , accountPassword :: ClearTextPassword
+  , accountPassword :: HashedPassword
   , accountEmail :: Email
   , accountRole :: Role
-  , accountProfilePicture :: ProfilePicture
+  , accountProfilePicture :: Maybe ProfilePicture
   } deriving (Eq, Show, Generic)
 
-instance ToJSON Account where
-  toJSON (Account username password email role profilePicture) =
-    object [ "username" .= username
-           , "password" .= password
-           , "email" .= email
-           , "role" .= role
-           , "profilePicture" .= profilePicture
-           ]
-
-instance FromJSON Account where
-  parseJSON = withObject "Account" $ \x -> do
-    username <- x .: "username"
-    password <- x .: "password"
-    email <- x .: "email"
-    role <- x .: "role"
-    profilePicture <- x .: "profilePicture"
-    pure Account{ accountUsername = username
-                , accountPassword = password
-                , accountEmail = email
-                , accountRole = role
-                , accountProfilePicture = profilePicture
-                }
-
 -- | Return a tuple with all of the fields for an Account record to use for SQL.
-accountFields :: Account -> (Username, ClearTextPassword, Email, Role, ProfilePicture)
+accountFields :: Account -> (Username, HashedPassword, Email, Role, Maybe ProfilePicture)
 accountFields (Account { accountUsername
                        , accountPassword
                        , accountEmail
@@ -154,14 +150,12 @@ instance FromRow Account where
 
 data Session = Session
   { username :: Username
-  , password :: ClearTextPassword
   , role :: Role
   } deriving (Eq, Show)
 
 instance ToJSON Session where
-  toJSON (Session username password role) =
+  toJSON (Session username role) =
     object [ "username" .= username
-           , "password" .= password
            , "role" .= role
            ]
 
@@ -284,7 +278,7 @@ instance FromJSON Trip where
 -- passwords and emails.
 data User = User
   { userUsername :: Username
-  , userProfilePicture :: ProfilePicture
+  , userProfilePicture :: Maybe ProfilePicture
   , userRole :: Role
   } deriving (Eq, Show, Generic)
 
@@ -316,3 +310,33 @@ instance FromJSON AccountCredentials where
     pure AccountCredentials{ accountCredentialsUsername = username
                            , accountCredentialsPassword = password
                            }
+
+
+-- -- | Hash password `x`.
+hashPassword :: (MonadRandom m) => ClearTextPassword -> m HashedPassword
+hashPassword (ClearTextPassword x) = do
+  hashed <- BC.hashPassword 12 (x & unpack & B.pack)
+  pure $ HashedPassword hashed
+
+data CreateAccountRequest = CreateAccountRequest
+  { createAccountRequestUsername :: Username
+  , createAccountRequestPassword :: ClearTextPassword
+  , createAccountRequestEmail :: Email
+  , createAccountRequestRole :: Role
+  } deriving (Eq, Show)
+
+instance FromJSON CreateAccountRequest where
+  parseJSON = withObject "CreateAccountRequest" $ \x -> do
+    username <- x .: "username"
+    password <- x .: "password"
+    email <- x .: "email"
+    role <- x .: "role"
+    pure $ CreateAccountRequest username password email role
+
+createAccountRequestFields :: CreateAccountRequest -> (Username, ClearTextPassword, Email, Role)
+createAccountRequestFields request =
+  ( createAccountRequestUsername request
+  , createAccountRequestPassword request
+  , createAccountRequestEmail request
+  , createAccountRequestRole request
+  )
