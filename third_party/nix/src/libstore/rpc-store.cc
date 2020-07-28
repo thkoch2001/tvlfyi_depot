@@ -100,7 +100,8 @@ void RpcStore::queryPathInfoUncached(
     if (!info->deriver.empty()) {
       assertStorePath(info->deriver);
     }
-    info->narHash = Hash(path_info.nar_hash(), htSHA256);
+    auto hash_ = Hash::deserialize(path_info.nar_hash(), htSHA256);
+    info->narHash = Hash::unwrap_throw(hash_);
     info->references.insert(path_info.references().begin(),
                             path_info.references().end());
     info->registrationTime =

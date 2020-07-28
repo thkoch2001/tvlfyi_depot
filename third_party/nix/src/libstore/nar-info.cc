@@ -14,11 +14,13 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
   };
 
   auto parseHashField = [&](const std::string& s) {
-    try {
-      return Hash(s);
-    } catch (BadHash&) {
+    auto hash_ = Hash::deserialize(s);
+    if (hash_.ok()) {
+      return *hash_;
+    } else {
+      // TODO(#statusor): return an actual error
       corrupt();
-      return Hash();  // never reached
+      return Hash();
     }
   };
 

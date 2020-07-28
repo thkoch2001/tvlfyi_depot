@@ -64,19 +64,25 @@ void builtinFetchurl(const BasicDerivation& drv, const std::string& netrcData) {
 
   /* Try the hashed mirrors first. */
   if (getAttr("outputHashMode") == "flat") {
-    for (auto hashedMirror : settings.hashedMirrors.get()) {
-      try {
-        if (!absl::EndsWith(hashedMirror, "/")) {
-          hashedMirror += '/';
+    auto hash_ = Hash::deserialize(getAttr("outputHash"),
+                                   parseHashType(getAttr("outputHashAlgo")));
+    if (hash_.ok()) {
+      auto h = *hash_;
+      for (auto hashedMirror : settings.hashedMirrors.get()) {
+        try {
+          if (!absl::EndsWith(hashedMirror, "/")) {
+            hashedMirror += '/';
+          }
+          fetch(hashedMirror + printHashType(h.type) + "/" +
+                h.to_string(Base16, false));
+          return;
+        } catch (Error& e) {
+          LOG(ERROR) << e.what();
         }
-        auto ht = parseHashType(getAttr("outputHashAlgo"));
-        auto h = Hash(getAttr("outputHash"), ht);
-        fetch(hashedMirror + printHashType(h.type) + "/" +
-              h.to_string(Base16, false));
-        return;
-      } catch (Error& e) {
-        LOG(ERROR) << e.what();
       }
+    } else {
+      LOG(ERROR) << "checking mirrors for '" << mainUrl
+                 << "': " << hash_.status().ToString();
     }
   }
 

@@ -704,7 +704,8 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
 
     HashType ht =
         outputHashAlgo.empty() ? htUnknown : parseHashType(outputHashAlgo);
-    Hash h(*outputHash, ht);
+    auto hash_ = Hash::deserialize(*outputHash, ht);
+    auto h = Hash::unwrap_throw(hash_);
 
     Path outPath =
         state.store->makeFixedOutputPath(outputHashRecursive, h, drvName);
@@ -1144,9 +1145,10 @@ static void prim_path(EvalState& state, const Pos& pos, Value** args,
     } else if (n == "recursive") {
       recursive = state.forceBool(*attr.second.value, *attr.second.pos);
     } else if (n == "sha256") {
-      expectedHash =
-          Hash(state.forceStringNoCtx(*attr.second.value, *attr.second.pos),
-               htSHA256);
+      auto hash_ = Hash::deserialize(
+          state.forceStringNoCtx(*attr.second.value, *attr.second.pos),
+          htSHA256);
+      expectedHash = Hash::unwrap_throw(hash_);
     } else {
       throw EvalError(
           format("unsupported argument '%1%' to 'addPath', at %2%") %
@@ -2077,9 +2079,10 @@ void fetch(EvalState& state, const Pos& pos, Value** args, Value& v,
         request.uri =
             state.forceStringNoCtx(*attr.second.value, *attr.second.pos);
       } else if (n == "sha256") {
-        request.expectedHash =
-            Hash(state.forceStringNoCtx(*attr.second.value, *attr.second.pos),
-                 htSHA256);
+        auto hash_ = Hash::deserialize(
+            state.forceStringNoCtx(*attr.second.value, *attr.second.pos),
+            htSHA256);
+        request.expectedHash = Hash::unwrap_throw(hash_);
       } else if (n == "name") {
         request.name =
             state.forceStringNoCtx(*attr.second.value, *attr.second.pos);

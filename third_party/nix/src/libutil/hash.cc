@@ -177,16 +177,12 @@ std::string Hash::to_string(Base base, bool includeType) const {
   return s;
 }
 
-Hash::Hash(const std::string& s, HashType type) : type(type) {
+Hash::Hash(std::string_view s, HashType type) : type(type) {
   absl::StatusOr<Hash> result = deserialize(s, type);
-  if (result.ok()) {
-    *this = *result;
-  } else {
-    throw BadHash(result.status().message());
-  }
+  *this = unwrap_throw(result);
 }
 
-absl::StatusOr<Hash> Hash::deserialize(const std::string& s, HashType type) {
+absl::StatusOr<Hash> Hash::deserialize(std::string_view s, HashType type) {
   size_t pos = 0;
   bool isSRI = false;
 
@@ -278,6 +274,14 @@ absl::StatusOr<Hash> Hash::deserialize(const std::string& s, HashType type) {
   }
 
   return dest;
+}
+
+Hash Hash::unwrap_throw(absl::StatusOr<Hash> hash) {
+  if (hash.ok()) {
+    return *hash;
+  } else {
+    throw BadHash(hash.status().message());
+  }
 }
 
 namespace hash {
