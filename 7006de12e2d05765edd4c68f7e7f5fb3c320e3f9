@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "177d434e_c8cd9d0f",
+        "filename": "ops/nixos/tvlbot.nix",
+        "patchSetId": 12
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-28T21:21:16Z",
+      "side": 1,
+      "message": "could we poll for the existence of the file instead?",
+      "revId": "7006de12e2d05765edd4c68f7e7f5fb3c320e3f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b25d278e_befbf997",
+        "filename": "ops/nixos/tvlbot.nix",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-07-28T21:21:16Z",
+      "side": 1,
+      "message": "could we grep nickserv/out for \"you are now identified as...\" instead?",
+      "revId": "7006de12e2d05765edd4c68f7e7f5fb3c320e3f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
