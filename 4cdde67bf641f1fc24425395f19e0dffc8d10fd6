@@ -22,6 +22,30 @@
       "revId": "4cdde67bf641f1fc24425395f19e0dffc8d10fd6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b8b0c23_b62cdb0c",
+        "filename": "third_party/nix/src/libutil/hash.hh",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-07-28T01:02:24Z",
+      "side": 1,
+      "message": "Discussed on voice, this is deferred to happen alongside caller conversion.",
+      "parentUuid": "2bf297d0_ba5a2b45",
+      "range": {
+        "startLine": 69,
+        "startChar": 2,
+        "endLine": 69,
+        "endChar": 49
+      },
+      "revId": "4cdde67bf641f1fc24425395f19e0dffc8d10fd6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
