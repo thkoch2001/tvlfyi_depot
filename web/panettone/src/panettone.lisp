@@ -488,7 +488,7 @@ global postgresql connection (eg as initialized by
         (hunchentoot:redirect "/"))))
 
 (defroute show-issue
-    ("/issues/:id" :decorators (@auth-optional @handle/issue-not-found))
+    ("/issues/:id" :decorators (@auth-optional @handle-issue-not-found))
     (&path (id 'integer))
   (handler-case
       (let* ((issue (model:get-issue id))
