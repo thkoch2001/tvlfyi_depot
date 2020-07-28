@@ -256,8 +256,11 @@ static void opPrintFixedPath(Strings opFlags, Strings opArgs) {
   std::string hash = *i++;
   std::string name = *i++;
 
-  cout << format("%1%\n") %
-              store->makeFixedOutputPath(recursive, Hash(hash, hashAlgo), name);
+  auto hash_ = Hash::deserialize(hash, hashAlgo);
+  Hash::unwrap_throw(hash_);
+
+  cout << absl::StrCat(store->makeFixedOutputPath(recursive, *hash_, name),
+                       "\n");
 }
 
 static PathSet maybeUseOutputs(const Path& storePath, bool useOutput,
@@ -1116,7 +1119,8 @@ static void opServe(Strings opFlags, Strings opArgs) {
         if (!info.deriver.empty()) {
           store->assertStorePath(info.deriver);
         }
-        info.narHash = Hash(readString(in), htSHA256);
+        auto hash_ = Hash::deserialize(readString(in), htSHA256);
+        info.narHash = Hash::unwrap_throw(hash_);
         info.references = readStorePaths<PathSet>(*store, in);
         in >> info.registrationTime >> info.narSize >> info.ultimate;
         info.sigs = readStrings<StringSet>(in);

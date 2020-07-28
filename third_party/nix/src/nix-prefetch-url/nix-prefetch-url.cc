@@ -167,7 +167,8 @@ static int _main(int argc, char** argv) {
     Hash expectedHash(ht);
     Path storePath;
     if (args.size() == 2) {
-      expectedHash = Hash(args[1], ht);
+      auto expectedHash_ = Hash::deserialize(args[1], ht);
+      expectedHash = Hash::unwrap_throw(expectedHash);
       storePath = store->makeFixedOutputPath(unpack, expectedHash, name);
       if (store->isValidPath(storePath)) {
         hash = expectedHash;
