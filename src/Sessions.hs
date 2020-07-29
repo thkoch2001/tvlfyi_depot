@@ -43,9 +43,9 @@ refresh dbFile uuid = withConnection dbFile $ \conn -> do
   pure ()
 
 -- | Delete the session under `username` from `dbFile`.
-delete :: FilePath -> T.Username -> IO ()
-delete dbFile username = withConnection dbFile $ \conn ->
-  execute conn "DELETE FROM Sessions WHERE username = ?" (Only username)
+delete :: FilePath -> T.SessionUUID -> IO ()
+delete dbFile uuid = withConnection dbFile $ \conn ->
+  execute conn "DELETE FROM Sessions WHERE uuid = ?" (Only uuid)
 
 -- | Find or create a session in the Sessions table. If a session exists,
 -- refresh the token's validity.
