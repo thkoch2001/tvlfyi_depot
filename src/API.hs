@@ -11,7 +11,7 @@ import qualified Types as T
 --------------------------------------------------------------------------------
 
 -- | Once authenticated, users receive a SessionCookie.
-type SessionCookie = Header' '[Required] "Set-Cookie" T.SessionCookie
+type SessionCookie = Header' '[Required] "Cookie" T.SessionCookie
 
 type API =
       -- accounts: Create
