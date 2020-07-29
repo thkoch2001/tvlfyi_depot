@@ -2,13 +2,31 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="google-signin-client_id" content="580018768696-4beppspj6cu7rhjnfgok8lbmh9a4n3ok.apps.googleusercontent.com">
     <title>Elm SPA</title>
     <link rel="stylesheet" href="./output.css" />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="./Main.min.js"></script>
   </head>
   <body class="font-serif">
     <div id="mount"></div>
     <script>
+     function onSignIn(googleUser) {
+       var profile = googleUser.getBasicProfile();
+       console.log('ID: ' + profile.getId());
+       console.log('Name: ' + profile.getName());
+       console.log('Image URL: ' + profile.getImageUrl());
+       console.log('Email: ' + profile.getEmail());
+     }
+
+     function signOut() {
+       console.log('Signing out!');
+       var auth2 = gapi.auth2.getAuthInstance();
+       auth2.signOut().then(function() {
+         console.log('User signed out.');
+       });
+     }
+
      Elm.Main.init({node: document.getElementById("mount")});
     </script>
   </body>

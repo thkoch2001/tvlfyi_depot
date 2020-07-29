@@ -22,7 +22,7 @@ type alias Model =
 init : Model
 init =
     { isLoading = False
-    , view = Landing
+    , view = Login
     }
 
 
