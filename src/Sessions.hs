@@ -17,6 +17,14 @@ isValid session = do
   let t0 = T.storedSessionTsCreated session in
     pure $ Clock.diffUTCTime t1 t0 <= 3 * 60 * 60
 
+-- | Lookup the session by UUID.
+get :: FilePath -> T.SessionUUID -> IO (Maybe T.StoredSession)
+get dbFile uuid = withConnection dbFile $ \conn -> do
+  res <- query conn "SELECT * FROM Session WHERE uuid = ?" (Only uuid)
+  case res of
+    [x] -> pure (Just x)
+    _ -> pure Nothing
+
 -- | Lookup the session stored under `username` in `dbFile`.
 find :: FilePath -> T.Username -> IO (Maybe T.StoredSession)
 find dbFile username = withConnection dbFile $ \conn -> do
