@@ -1,3 +1,4 @@
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE NamedFieldPuns #-}
@@ -14,6 +15,7 @@ import Network.Wai.Handler.Warp as Warp
 import Servant
 import API
 import Utils
+import Web.Cookie
 
 import qualified Crypto.KDF.BCrypt as BC
 import qualified Data.Text.Encoding as TE
@@ -32,14 +34,16 @@ server dbFile = createAccountH
            :<|> deleteTripH
            :<|> listTripsH
            :<|> loginH
+           :<|> logoutH
   where
-    createAccountH newUser  = liftIO $ createAccount newUser
-    deleteAccountH username = liftIO $ deleteAccount username
-    listAccountsH           = liftIO $ listAccounts
-    createTripH trip        = liftIO $ createTrip trip
-    deleteTripH tripPK      = liftIO $ deleteTrip tripPK
-    listTripsH              = liftIO $ listTrips
-    loginH creds            = liftIO $ login creds
+    createAccountH newUser         = liftIO $ createAccount newUser
+    deleteAccountH cookie username = liftIO $ deleteAccount cookie username
+    listAccountsH cookie           = liftIO $ listAccounts cookie
+    createTripH cookie trip        = liftIO $ createTrip cookie trip
+    deleteTripH cookie tripPK      = liftIO $ deleteTrip cookie tripPK
+    listTripsH                     = liftIO $ listTrips
+    loginH creds                   = liftIO $ login creds
+    logoutH cookie                 = liftIO $ logout cookie
 
     -- TODO(wpcarro): Handle failed CONSTRAINTs instead of sending 500s
     createAccount :: T.CreateAccountRequest -> IO NoContent
@@ -51,30 +55,30 @@ server dbFile = createAccountH
         (T.createAccountRequestRole request)
       pure NoContent
 
-    deleteAccount :: Text -> IO NoContent
-    deleteAccount username = do
+    deleteAccount :: T.SessionCookie -> Text -> IO NoContent
+    deleteAccount cookie username = do
       Accounts.delete dbFile (T.Username username)
       pure NoContent
 
-    listAccounts :: IO [T.User]
-    listAccounts = Accounts.list dbFile
+    listAccounts :: T.SessionCookie -> IO [T.User]
+    listAccounts cookie = Accounts.list dbFile
 
-    createTrip :: T.Trip -> IO NoContent
-    createTrip trip = do
+    createTrip :: T.SessionCookie -> T.Trip -> IO NoContent
+    createTrip cookie trip = do
       Trips.create dbFile trip
+      pure NoContent
+
+    -- TODO(wpcarro): Validate incoming data like startDate.
+    deleteTrip :: T.SessionCookie -> T.TripPK -> IO NoContent
+    deleteTrip cookie tripPK = do
+      Trips.delete dbFile tripPK
       pure NoContent
 
     listTrips :: IO [T.Trip]
     listTrips = Trips.list dbFile
 
-    -- TODO(wpcarro): Validate incoming data like startDate.
-    deleteTrip :: T.TripPK -> IO NoContent
-    deleteTrip tripPK = do
-      Trips.delete dbFile tripPK
-      pure NoContent
-
-    -- TODO(wpcarro): Create and store a session token
-    login :: T.AccountCredentials -> IO NoContent
+    login :: T.AccountCredentials
+          -> IO (Headers '[Header "Set-Cookie" SetCookie] NoContent)
     login (T.AccountCredentials username password) = do
       mAccount <- Accounts.lookup dbFile username
       case mAccount of
@@ -85,25 +89,31 @@ server dbFile = createAccountH
               if T.passwordsMatch password accountPassword then do
                 session <- Sessions.findOrCreate dbFile account
                 -- set cookie
-                pure NoContent
+                undefined
               else do
                 LoginAttempts.increment dbFile username
-                throwIO $ err401 { errBody = "Your credentials are invalid" }
+                throwIO err401 { errBody = "Your credentials are invalid" }
             Just attempts ->
               if attempts > 3 then
                 -- TODO(wpcarro): Prefer 429 error code
-                throwIO $ err401 { errBody = "Too many failed login attempts" }
+                throwIO err401 { errBody = "Too many failed login attempts" }
               else if T.passwordsMatch password accountPassword then do
                 session <- Sessions.findOrCreate dbFile account
                 -- set cookie
-                pure NoContent
+                undefined
               else do
                 LoginAttempts.increment dbFile username
                 -- TODO(wpcarro): Catch and return errors over HTTP
-                throwIO $ err401 { errBody = "Your credentials are invalid" }
+                throwIO err401 { errBody = "Your credentials are invalid" }
 
         -- In this branch, the user didn't supply a known username.
-        Nothing -> throwIO $ err401 { errBody = "Your credentials are invalid" }
+        Nothing -> throwIO err401 { errBody = "Your credentials are invalid" }
+
+    logout :: T.SessionCookie
+           -> IO (Headers '[Header "Set-Cookie" SetCookie] NoContent)
+    logout cookie = undefined
+      -- pull off SessionUUID from the request headers
+      -- delete the SessionUUID from the Sessions table.
 
 mkApp :: FilePath -> IO Application
 mkApp dbFile = do

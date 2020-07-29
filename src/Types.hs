@@ -14,6 +14,8 @@ import Database.SQLite.Simple.Ok
 import Database.SQLite.Simple.FromField
 import Database.SQLite.Simple.ToField
 import GHC.Generics
+import Web.Cookie
+import Servant.API
 import Crypto.Random.Types (MonadRandom)
 
 import qualified Crypto.KDF.BCrypt as BC
@@ -382,3 +384,11 @@ data LoginAttempt = LoginAttempt
 
 instance FromRow LoginAttempt where
   fromRow = LoginAttempt <$> field <*> field
+
+newtype SessionCookie = SessionCookie Cookies
+
+instance FromHttpApiData SessionCookie where
+  parseHeader x =
+    x |> parseCookies |> SessionCookie |> pure
+  parseQueryParam x =
+    x |> TE.encodeUtf8 |> parseCookies |> SessionCookie |> pure
