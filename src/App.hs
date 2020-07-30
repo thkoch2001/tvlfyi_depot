@@ -145,7 +145,7 @@ server T.Config{..} = createAccount
                 liftIO $ LoginAttempts.increment dbFile username
                 throwError err401 { errBody = "Your credentials are invalid" }
             Just attempts ->
-              if attempts > 3 then
+              if attempts >= 3 then
                 throwError err429
               else if T.passwordsMatch password accountPassword then do
                 uuid <- liftIO $ Sessions.findOrCreate dbFile account
