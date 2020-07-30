@@ -22,7 +22,7 @@ create dbFile secret username password role email = withConnection dbFile $ \con
 
 get :: FilePath -> T.Username -> IO (Maybe T.PendingAccount)
 get dbFile username = withConnection dbFile $ \conn -> do
-  res <- query conn "SELECT * FROM PendingAccounts WHERE username = ?" (Only username)
+  res <- query conn "SELECT (secret,username,password,role,email) FROM PendingAccounts WHERE username = ?" (Only username)
   case res of
     [x] -> pure (Just x)
     _ -> pure Nothing

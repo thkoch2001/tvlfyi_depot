@@ -20,7 +20,7 @@ isValid session = do
 -- | Lookup the session by UUID.
 get :: FilePath -> T.SessionUUID -> IO (Maybe T.StoredSession)
 get dbFile uuid = withConnection dbFile $ \conn -> do
-  res <- query conn "SELECT * FROM Sessions WHERE uuid = ?" (Only uuid)
+  res <- query conn "SELECT (uuid,username,tsCreated) FROM Sessions WHERE uuid = ?" (Only uuid)
   case res of
     [x] -> pure (Just x)
     _ -> pure Nothing
@@ -28,7 +28,7 @@ get dbFile uuid = withConnection dbFile $ \conn -> do
 -- | Lookup the session stored under `username` in `dbFile`.
 find :: FilePath -> T.Username -> IO (Maybe T.StoredSession)
 find dbFile username = withConnection dbFile $ \conn -> do
-  res <- query conn "SELECT * FROM Sessions WHERE username = ?" (Only username)
+  res <- query conn "SELECT (uuid,username,tsCreated) FROM Sessions WHERE username = ?" (Only username)
   case res of
     [x] -> pure (Just x)
     _ -> pure Nothing
@@ -71,4 +71,4 @@ findOrCreate dbFile account = withConnection dbFile $ \conn ->
 -- | Return a list of all sessions in the Sessions table.
 list :: FilePath -> IO [T.StoredSession]
 list dbFile = withConnection dbFile $ \conn ->
-  query_ conn "SELECT * FROM Sessions"
+  query_ conn "SELECT (uuid,username,tsCreated) FROM Sessions"

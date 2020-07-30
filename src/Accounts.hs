@@ -37,7 +37,7 @@ delete dbFile username = withConnection dbFile $ \conn -> do
 -- | Attempt to find `username` in the Account table of `dbFile`.
 lookup :: FilePath -> T.Username -> IO (Maybe T.Account)
 lookup dbFile username = withConnection dbFile $ \conn -> do
-  res <- query conn "SELECT * FROM Accounts WHERE username = ?" (Only username)
+  res <- query conn "SELECT (username,password,email,role,profilePicture) FROM Accounts WHERE username = ?" (Only username)
   case res of
     [x] -> pure (Just x)
     _ -> pure Nothing
@@ -45,5 +45,5 @@ lookup dbFile username = withConnection dbFile $ \conn -> do
 -- | Return a list of accounts with the sensitive data removed.
 list :: FilePath -> IO [T.User]
 list dbFile = withConnection dbFile $ \conn -> do
-  accounts <- query_ conn "SELECT * FROM Accounts"
+  accounts <- query_ conn "SELECT (username,password,email,role,profilePicture) FROM Accounts"
   pure $ T.userFromAccount <$> accounts
