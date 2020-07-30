@@ -23,7 +23,8 @@ forUsername dbFile username = withConnection dbFile $ \conn -> do
     [T.LoginAttempt{..}] -> pure (Just loginAttemptNumAttempts)
     _  -> pure Nothing
 
+-- | INSERT a failed login attempt for `username` or UPDATE an existing entry.
 increment :: FilePath -> T.Username -> IO ()
 increment dbFile username = withConnection dbFile $ \conn ->
-  execute conn "UPDATE LoginAttempts SET numAttempts = numAttempts + 1 WHERE username = ?"
-    (Only username)
+  execute conn "INSERT INTO LoginAttempts (username,numAttempts) VALUES (?,?) ON CONFLICT (username) DO UPDATE SET numAttempts = numAttempts + 1"
+    (username, 1 :: Integer)
