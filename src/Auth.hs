@@ -3,9 +3,13 @@
 --------------------------------------------------------------------------------
 module Auth where
 --------------------------------------------------------------------------------
+import Control.Monad.IO.Class (liftIO)
+import Data.String.Conversions (cs)
 import Database.SQLite.Simple
 import Utils
 import Web.Cookie
+import Servant
+import Servant.Server.Internal.ServerError
 
 import qualified Data.UUID as UUID
 import qualified Web.Cookie as WC
@@ -22,9 +26,9 @@ uuidFromCookie (T.SessionCookie cookies) = do
   uuid <- UUID.fromASCIIBytes auth
   pure $ T.SessionUUID uuid
 
--- | Attempt to return the user role associated with the `cookie`.
-roleFromCookie :: FilePath -> T.SessionCookie -> IO (Maybe T.Role)
-roleFromCookie dbFile cookie = withConnection dbFile $ \conn -> do
+-- | Attempt to return the account associated with `cookie`.
+accountFromCookie :: FilePath -> T.SessionCookie -> IO (Maybe T.Account)
+accountFromCookie dbFile cookie = withConnection dbFile $ \conn -> do
   case uuidFromCookie cookie of
     Nothing -> pure Nothing
     Just uuid -> do
@@ -35,7 +39,7 @@ roleFromCookie dbFile cookie = withConnection dbFile $ \conn -> do
           mAccount <- Accounts.lookup dbFile storedSessionUsername
           case mAccount of
             Nothing -> pure Nothing
-            Just T.Account{..} -> pure (Just accountRole)
+            Just x -> pure (Just x)
 
 -- | Create a new session cookie.
 mkCookie :: T.SessionUUID -> SetCookie
@@ -52,3 +56,15 @@ emptyCookie =
     { setCookieName = "auth"
     , setCookieValue = ""
     }
+
+-- | Throw a 401 error if the `predicate` fails.
+assert :: FilePath -> T.SessionCookie -> (T.Account -> Bool) -> Handler a -> Handler a
+assert dbFile cookie predicate handler = do
+  mRole <- liftIO $ accountFromCookie dbFile cookie
+  case mRole of
+    Nothing -> throwError err401 { errBody = "Missing valid session cookie" }
+    Just account ->
+      if predicate account then
+        handler
+      else
+        throwError err401 { errBody = "You are not authorized to access this resource" }

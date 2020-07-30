@@ -47,6 +47,11 @@ server dbFile = createAccount
            :<|> login
            :<|> logout
   where
+    -- Admit Admins + whatever the predicate `p` passes.
+    adminsAnd cookie p = Auth.assert dbFile cookie (\acct@T.Account{..} -> accountRole == T.Admin || p acct)
+    -- Admit Admins only.
+    adminsOnly cookie = adminsAnd cookie (const True)
+
     -- TODO(wpcarro): Handle failed CONSTRAINTs instead of sending 500s
     createAccount :: T.CreateAccountRequest -> Handler NoContent
     createAccount request = do
@@ -58,26 +63,23 @@ server dbFile = createAccount
       pure NoContent
 
     deleteAccount :: T.SessionCookie -> Text -> Handler NoContent
-    deleteAccount cookie username = do
-      mRole <- liftIO $ Auth.roleFromCookie dbFile cookie
-      case mRole of
-        Just T.Admin -> do
-          liftIO $ Accounts.delete dbFile (T.Username username)
-          pure NoContent
-        -- cannot delete an account if you're not an Admin
-        _ -> throwError err401 { errBody = "Only admins can delete accounts." }
-
-    listAccounts :: T.SessionCookie -> Handler [T.User]
-    listAccounts (T.SessionCookie cookie) = liftIO $ Accounts.list dbFile
-
-    createTrip :: T.SessionCookie -> T.Trip -> Handler NoContent
-    createTrip cookie trip = do
-      liftIO $ Trips.create dbFile trip
+    deleteAccount cookie username = adminsOnly cookie $ do
+      liftIO $ Accounts.delete dbFile (T.Username username)
       pure NoContent
 
-    -- TODO(wpcarro): Validate incoming data like startDate.
+    listAccounts :: T.SessionCookie -> Handler [T.User]
+    listAccounts cookie = adminsOnly cookie $ do
+      liftIO $ Accounts.list dbFile
+
+    createTrip :: T.SessionCookie -> T.Trip -> Handler NoContent
+    createTrip cookie trip@T.Trip{..} =
+      adminsAnd cookie (\T.Account{..} -> accountUsername == tripUsername) $ do
+        liftIO $ Trips.create dbFile trip
+        pure NoContent
+
     deleteTrip :: T.SessionCookie -> T.TripPK -> Handler NoContent
-    deleteTrip cookie tripPK = do
+    deleteTrip cookie tripPK@T.TripPK{..} =
+      adminsAnd cookie (\T.Account{..} -> accountUsername == tripPKUsername) $ do
       liftIO $ Trips.delete dbFile tripPK
       pure NoContent
 
