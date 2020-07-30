@@ -24,4 +24,4 @@ delete dbFile tripPK =
 -- | Return a list of all of the trips in `dbFile`.
 list :: FilePath -> IO [T.Trip]
 list dbFile = withConnection dbFile $ \conn ->
-  query_ conn "SELECT (username,destination,startDate,endDate,comment) FROM Trips"
+  query_ conn "SELECT username,destination,startDate,endDate,comment FROM Trips"

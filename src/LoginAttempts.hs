@@ -17,7 +17,7 @@ reset dbFile username = withConnection dbFile $ \conn ->
 -- `username`. Returns a Maybe in case `username` doesn't exist.
 forUsername :: FilePath -> T.Username -> IO (Maybe Integer)
 forUsername dbFile username = withConnection dbFile $ \conn -> do
-  res <- query conn "SELECT (numAttempts) FROM LoginAttempts WHERE username = ?"
+  res <- query conn "SELECT username,numAttempts FROM LoginAttempts WHERE username = ?"
     (Only username)
   case res of
     [T.LoginAttempt{..}] -> pure (Just loginAttemptNumAttempts)
