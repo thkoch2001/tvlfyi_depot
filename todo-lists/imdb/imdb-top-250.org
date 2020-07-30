@@ -36,7 +36,7 @@
 ** TODO Star Wars: Episode IV - A New Hope
 ** DONE It's a Wonderful Life
 ** DONE Andhadhun
-** TODO Dangal
+** DONE Dangal
 ** DONE Spider-Man: Into the Spider-Verse
 ** TODO Avengers: Infinity War
 ** DONE Whiplash
