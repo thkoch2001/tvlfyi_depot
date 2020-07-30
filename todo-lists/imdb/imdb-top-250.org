@@ -115,7 +115,7 @@
 ** TODO Yojimbo
 ** DONE The Apartment
 ** TODO North by Northwest
-** TODO Vertigo
+** DONE Vertigo
 ** TODO Singin' in the Rain
 ** TODO Ikiru
 ** TODO Rashomon
