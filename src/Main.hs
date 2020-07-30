@@ -1,7 +1,13 @@
+--------------------------------------------------------------------------------
 module Main where
 --------------------------------------------------------------------------------
 import qualified App
+import qualified System.Envy as Envy
 --------------------------------------------------------------------------------
 
 main :: IO ()
-main = App.run "../db.sqlite3"
+main = do
+  mEnv <- Envy.decodeEnv
+  case mEnv of
+    Left err -> putStrLn err
+    Right env -> App.run env

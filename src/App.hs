@@ -37,15 +37,15 @@ err429 = ServerError
   , errHeaders = []
   }
 
-server :: FilePath -> Server API
-server dbFile = createAccount
-           :<|> deleteAccount
-           :<|> listAccounts
-           :<|> createTrip
-           :<|> deleteTrip
-           :<|> listTrips
-           :<|> login
-           :<|> logout
+server :: T.Config -> Server API
+server T.Config{..} = createAccount
+                 :<|> deleteAccount
+                 :<|> listAccounts
+                 :<|> createTrip
+                 :<|> deleteTrip
+                 :<|> listTrips
+                 :<|> login
+                 :<|> logout
   where
     -- Admit Admins + whatever the predicate `p` passes.
     adminsAnd cookie p = Auth.assert dbFile cookie (\acct@T.Account{..} -> accountRole == T.Admin || p acct)
@@ -124,6 +124,6 @@ server dbFile = createAccount
           liftIO $ Sessions.delete dbFile uuid
           pure $ addHeader Auth.emptyCookie NoContent
 
-run :: FilePath -> IO ()
-run dbFile =
-  Warp.run 3000 (serve (Proxy @ API) $ server dbFile)
+run :: T.Config -> IO ()
+run config =
+  Warp.run 3000 (serve (Proxy @ API) $ server config)

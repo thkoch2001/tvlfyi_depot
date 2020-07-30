@@ -16,6 +16,7 @@ import Database.SQLite.Simple.ToField
 import GHC.Generics
 import Web.Cookie
 import Servant.API
+import System.Envy (FromEnv, fromEnv, env)
 import Crypto.Random.Types (MonadRandom)
 
 import qualified Crypto.KDF.BCrypt as BC
@@ -25,6 +26,17 @@ import qualified Data.ByteString as BS
 import qualified Data.Text.Encoding as TE
 import qualified Data.UUID as UUID
 --------------------------------------------------------------------------------
+
+-- | Top-level application configuration.
+data Config = Config
+  { mailgunAPIKey :: Text
+  , dbFile :: FilePath
+  } deriving (Eq, Show)
+
+instance FromEnv Config where
+  fromEnv _ =
+    Config <$> env "MAILGUN_API_KEY"
+           <*> env "DB_FILE"
 
 -- TODO(wpcarro): Properly handle NULL for columns like profilePicture.
 forNewtype :: (Typeable b) => (Text -> b) -> FieldParser b

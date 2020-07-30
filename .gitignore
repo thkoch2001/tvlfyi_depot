@@ -1,3 +1,4 @@
+.envrc
 *.db
 *.sqlite3
 !populate.sqlite3

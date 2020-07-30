@@ -10,6 +10,7 @@ in pkgs.mkShell {
       hpkgs.warp
       hpkgs.cryptonite
       hpkgs.uuid
+      hpkgs.envy
     ]))
   ];
 }
