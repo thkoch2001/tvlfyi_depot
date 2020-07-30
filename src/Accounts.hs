@@ -1,11 +1,25 @@
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE OverloadedStrings #-}
 --------------------------------------------------------------------------------
 module Accounts where
 --------------------------------------------------------------------------------
 import Database.SQLite.Simple
 
+import qualified PendingAccounts
 import qualified Types as T
 --------------------------------------------------------------------------------
+
+-- | Delete the account in PendingAccounts and create on in Accounts.
+transferFromPending :: FilePath -> T.PendingAccount -> IO ()
+transferFromPending dbFile T.PendingAccount{..} = withConnection dbFile $
+  \conn -> withTransaction conn $ do
+    PendingAccounts.delete dbFile pendingAccountUsername
+    execute conn "INSERT INTO Accounts (username,password,email,role) VALUES (?,?,?,?)"
+      ( pendingAccountUsername
+      , pendingAccountPassword
+      , pendingAccountEmail
+      , pendingAccountRole
+      )
 
 -- | Create a new account in the Accounts table.
 create :: FilePath -> T.Username -> T.ClearTextPassword -> T.Email -> T.Role -> IO ()

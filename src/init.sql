@@ -10,9 +10,9 @@ DROP TABLE IF EXISTS Accounts;
 DROP TABLE IF EXISTS Trips;
 DROP TABLE IF EXISTS Sessions;
 DROP TABLE IF EXISTS LoginAttempts;
+DROP TABLE IF EXISTS PendingAccounts;
 
 CREATE TABLE Accounts (
--- TODO(wpcarro): Add CHECK(..) constraint
   username TEXT CHECK(LENGTH(username) > 0) NOT NULL,
   password TEXT CHECK(LENGTH(password) > 0) NOT NULL,
   email TEXT CHECK(LENGTH(email) > 0) NOT NULL UNIQUE,
@@ -34,7 +34,8 @@ CREATE TABLE Trips (
 CREATE TABLE Sessions (
   uuid TEXT CHECK(LENGTH(uuid) == 36) NOT NULL,
   username TEXT NOT NULL UNIQUE,
-  tsCreated TEXT CHECK(LENGTH(tsCreated) == 33) NOT NULL, -- 'YYYY-MM-DD HH:MM:SS'
+  -- TODO(wpcarro): Add a LENGTH CHECK here
+  tsCreated TEXT NOT NULL, -- 'YYYY-MM-DD HH:MM:SS'
   PRIMARY KEY (uuid),
   FOREIGN KEY (username) REFERENCES Accounts ON DELETE CASCADE
 );
@@ -44,6 +45,15 @@ CREATE TABLE LoginAttempts (
   numAttempts INTEGER NOT NULL,
   PRIMARY KEY (username),
   FOREIGN KEY (username) REFERENCES Accounts ON DELETE CASCADE
+);
+
+CREATE TABLE PendingAccounts (
+  secret TEXT CHECK(LENGTH(secret) == 36) NOT NULL,
+  username TEXT CHECK(LENGTH(username) > 0) NOT NULL,
+  password TEXT CHECK(LENGTH(password) > 0) NOT NULL,
+  role TEXT CHECK(role IN ('user', 'manager', 'admin')) NOT NULL,
+  email TEXT CHECK(LENGTH(email) > 0) NOT NULL UNIQUE,
+  PRIMARY KEY (username)
 );
 
 COMMIT;

@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE NamedFieldPuns #-}
 --------------------------------------------------------------------------------
 module Types where
@@ -24,6 +25,7 @@ import qualified Data.Time.Clock as Clock
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BS
 import qualified Data.Text.Encoding as TE
+import qualified Data.Maybe as M
 import qualified Data.UUID as UUID
 --------------------------------------------------------------------------------
 
@@ -34,16 +36,17 @@ data Config = Config
   } deriving (Eq, Show)
 
 instance FromEnv Config where
-  fromEnv _ =
-    Config <$> env "MAILGUN_API_KEY"
-           <*> env "DB_FILE"
+  fromEnv _ = do
+    mailgunAPIKey <- env "MAILGUN_API_KEY"
+    dbFile <- env "DB_FILE"
+    pure Config {..}
 
 -- TODO(wpcarro): Properly handle NULL for columns like profilePicture.
 forNewtype :: (Typeable b) => (Text -> b) -> FieldParser b
 forNewtype wrapper field =
   case fieldData field of
     (SQLText x) -> Ok (wrapper x)
-    _ -> returnError ConversionFailed field ""
+    x -> returnError ConversionFailed field ("We expected SQLText, but we received: " ++ show x)
 
 newtype Username = Username Text
   deriving (Eq, Show, Generic)
@@ -67,7 +70,7 @@ instance FromField HashedPassword where
   fromField field =
     case fieldData field of
       (SQLText x) -> x |> TE.encodeUtf8 |> HashedPassword |> Ok
-      _ -> returnError ConversionFailed field ""
+      x -> returnError ConversionFailed field ("We expected SQLText, but we received: " ++ show x)
 
 newtype ClearTextPassword = ClearTextPassword Text
   deriving (Eq, Show, Generic)
@@ -119,7 +122,7 @@ instance FromField Role where
       (SQLText "user") -> Ok RegularUser
       (SQLText "manager") -> Ok Manager
       (SQLText "admin") -> Ok Admin
-      _ -> returnError ConversionFailed field ""
+      x -> returnError ConversionFailed field ("We expected user, manager, admin, but we received: " ++ show x)
 
 -- TODO(wpcarro): Prefer Data.ByteString instead of Text
 newtype ProfilePicture = ProfilePicture Text
@@ -158,11 +161,13 @@ accountFields (Account { accountUsername
     )
 
 instance FromRow Account where
-  fromRow = Account <$> field
-                    <*> field
-                    <*> field
-                    <*> field
-                    <*> field
+  fromRow = do
+    accountUsername <- field
+    accountPassword <- field
+    accountEmail <- field
+    accountRole <- field
+    accountProfilePicture <- field
+    pure Account{..}
 
 data Session = Session
   { username :: Username
@@ -221,11 +226,13 @@ data Trip = Trip
   } deriving (Eq, Show, Generic)
 
 instance FromRow Trip where
-  fromRow = Trip <$> field
-                 <*> field
-                 <*> field
-                 <*> field
-                 <*> field
+  fromRow = do
+    tripUsername <- field
+    tripDestination <- field
+    tripStartDate <- field
+    tripEndDate <- field
+    tripComment <- field
+    pure Trip{..}
 
 -- | The fields used as the Primary Key for a Trip entry.
 data TripPK = TripPK
@@ -370,9 +377,9 @@ instance FromField SessionUUID where
     case fieldData field of
       (SQLText x) ->
         case UUID.fromText x of
-          Nothing -> returnError ConversionFailed field ""
+          Nothing -> returnError ConversionFailed field ("Could not convert to UUID: " ++ show x)
           Just x -> Ok $ SessionUUID x
-      _ -> returnError ConversionFailed field ""
+      _ -> returnError ConversionFailed field "Expected SQLText for SessionUUID, but we received"
 
 instance ToField SessionUUID where
   toField (SessionUUID uuid) =
@@ -385,9 +392,11 @@ data StoredSession = StoredSession
   } deriving (Eq, Show, Generic)
 
 instance FromRow StoredSession where
-  fromRow = StoredSession <$> field
-                          <*> field
-                          <*> field
+  fromRow = do
+    storedSessionUUID <- field
+    storedSessionUsername <- field
+    storedSessionTsCreated <- field
+    pure StoredSession {..}
 
 data LoginAttempt = LoginAttempt
   { loginAttemptUsername :: Username
@@ -395,7 +404,10 @@ data LoginAttempt = LoginAttempt
   } deriving (Eq, Show)
 
 instance FromRow LoginAttempt where
-  fromRow = LoginAttempt <$> field <*> field
+  fromRow = do
+    loginAttemptUsername <- field
+    loginAttemptNumAttempts <- field
+    pure LoginAttempt {..}
 
 newtype SessionCookie = SessionCookie Cookies
 
@@ -404,3 +416,36 @@ instance FromHttpApiData SessionCookie where
     x |> parseCookies |> SessionCookie |> pure
   parseQueryParam x =
     x |> TE.encodeUtf8 |> parseCookies |> SessionCookie |> pure
+
+newtype RegistrationSecret = RegistrationSecret UUID.UUID
+  deriving (Eq, Show)
+
+instance FromField RegistrationSecret where
+  fromField field =
+    case fieldData field of
+      (SQLText x) ->
+        case UUID.fromText x of
+          Nothing -> returnError ConversionFailed field ("Could not convert text to UUID: " ++ show x)
+          Just x -> Ok $ RegistrationSecret x
+      _ -> returnError ConversionFailed field "Field data is not SQLText, which is what we expect"
+
+instance ToField RegistrationSecret where
+  toField (RegistrationSecret secretUUID) =
+    secretUUID |> UUID.toText |> SQLText
+
+data PendingAccount = PendingAccount
+  { pendingAccountSecret :: RegistrationSecret
+  , pendingAccountUsername :: Username
+  , pendingAccountPassword :: HashedPassword
+  , pendingAccountRole :: Role
+  , pendingAccountEmail :: Email
+  } deriving (Eq, Show)
+
+instance FromRow PendingAccount where
+  fromRow = do
+    pendingAccountSecret <- field
+    pendingAccountUsername <- field
+    pendingAccountPassword <- field
+    pendingAccountRole <- field
+    pendingAccountEmail <- field
+    pure PendingAccount {..}

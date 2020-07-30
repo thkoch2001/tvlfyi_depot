@@ -18,6 +18,10 @@ type API =
            "accounts"
            :> ReqBody '[JSON] T.CreateAccountRequest
            :> Post '[JSON] NoContent
+      :<|> "verify"
+           :> QueryParam' '[Required] "username" Text
+           :> QueryParam' '[Required] "secret" Text
+           :> Get '[JSON] NoContent
       -- accounts: Read
       -- accounts: Update
       -- accounts: Delete

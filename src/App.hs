@@ -17,6 +17,8 @@ import API
 import Utils
 import Web.Cookie
 
+import qualified System.Random as Random
+import qualified Email as Email
 import qualified Crypto.KDF.BCrypt as BC
 import qualified Data.Text.Encoding as TE
 import qualified Data.UUID as UUID
@@ -27,6 +29,7 @@ import qualified Auth as Auth
 import qualified Trips as Trips
 import qualified Sessions as Sessions
 import qualified LoginAttempts as LoginAttempts
+import qualified PendingAccounts as PendingAccounts
 --------------------------------------------------------------------------------
 
 err429 :: ServerError
@@ -37,8 +40,25 @@ err429 = ServerError
   , errHeaders = []
   }
 
+-- | Send an email to recipient, `to`, with a secret code.
+sendVerifyEmail :: Text
+             -> T.Username
+             -> T.Email
+             -> T.RegistrationSecret
+             -> IO (Either Email.SendError Email.SendSuccess)
+sendVerifyEmail apiKey (T.Username username) email@(T.Email to) (T.RegistrationSecret secretUUID) = do
+  Email.send apiKey subject (cs body) email
+  where
+    subject = "Please confirm your account"
+    -- TODO(wpcarro): Use a URL encoder
+    -- TODO(wpcarro): Use a dynamic domain and port number
+    body =
+      let secret = secretUUID |> UUID.toString in
+        "http://localhost:3000/verify?username=" ++ cs username ++ "&secret=" ++ secret
+
 server :: T.Config -> Server API
 server T.Config{..} = createAccount
+                 :<|> verifyAccount
                  :<|> deleteAccount
                  :<|> listAccounts
                  :<|> createTrip
@@ -54,13 +74,36 @@ server T.Config{..} = createAccount
 
     -- TODO(wpcarro): Handle failed CONSTRAINTs instead of sending 500s
     createAccount :: T.CreateAccountRequest -> Handler NoContent
-    createAccount request = do
-      liftIO $ Accounts.create dbFile
-        (T.createAccountRequestUsername request)
-        (T.createAccountRequestPassword request)
-        (T.createAccountRequestEmail request)
-        (T.createAccountRequestRole request)
+    createAccount T.CreateAccountRequest{..} = do
+      secretUUID <- liftIO $ T.RegistrationSecret <$> Random.randomIO
+      liftIO $ PendingAccounts.create dbFile
+        secretUUID
+        createAccountRequestUsername
+        createAccountRequestPassword
+        createAccountRequestRole
+        createAccountRequestEmail
+      liftIO $ sendVerifyEmail mailgunAPIKey
+        createAccountRequestUsername
+        createAccountRequestEmail
+        secretUUID
       pure NoContent
+
+    verifyAccount :: Text -> Text -> Handler NoContent
+    verifyAccount username secret = do
+      let mSecretUUID = T.RegistrationSecret <$> UUID.fromText secret in do
+        case mSecretUUID of
+          Nothing -> throwError err401 { errBody = "Invalid secret format" }
+          Just secretUUID -> do
+            mPendingAccount <- liftIO $ PendingAccounts.get dbFile (T.Username username)
+            case mPendingAccount of
+              Nothing ->
+                throwError err401 { errBody = "Either your secret or your username (or both) is invalid" }
+              Just pendingAccount@T.PendingAccount{..} ->
+                if pendingAccountSecret == secretUUID then do
+                  liftIO $ Accounts.transferFromPending dbFile pendingAccount
+                  pure NoContent
+                else
+                  throwError err401 { errBody = "The secret you provided is invalid" }
 
     deleteAccount :: T.SessionCookie -> Text -> Handler NoContent
     deleteAccount cookie username = adminsOnly cookie $ do
