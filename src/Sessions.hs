@@ -20,7 +20,7 @@ isValid session = do
 -- | Lookup the session by UUID.
 get :: FilePath -> T.SessionUUID -> IO (Maybe T.StoredSession)
 get dbFile uuid = withConnection dbFile $ \conn -> do
-  res <- query conn "SELECT * FROM Session WHERE uuid = ?" (Only uuid)
+  res <- query conn "SELECT * FROM Sessions WHERE uuid = ?" (Only uuid)
   case res of
     [x] -> pure (Just x)
     _ -> pure Nothing
