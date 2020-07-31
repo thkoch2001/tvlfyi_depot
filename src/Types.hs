@@ -174,8 +174,8 @@ instance FromRow Account where
     pure Account{..}
 
 data Session = Session
-  { username :: Username
-  , role :: Role
+  { sessionUsername :: Username
+  , sessionRole :: Role
   } deriving (Eq, Show)
 
 instance ToJSON Session where

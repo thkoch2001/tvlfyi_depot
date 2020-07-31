@@ -153,7 +153,7 @@ server config@T.Config{..} = createAccount
             _ -> liftIO $ Trips.list dbFile accountUsername
 
     login :: T.AccountCredentials
-          -> Handler (Headers '[Header "Set-Cookie" SetCookie] NoContent)
+          -> Handler (Headers '[Header "Set-Cookie" SetCookie] T.Session)
     login (T.AccountCredentials username password) = do
       mAccount <- liftIO $ Accounts.lookup dbFile username
       case mAccount of
@@ -163,7 +163,10 @@ server config@T.Config{..} = createAccount
             Nothing ->
               if T.passwordsMatch password accountPassword then do
                 uuid <- liftIO $ Sessions.findOrCreate dbFile account
-                pure $ addHeader (Auth.mkCookie uuid) NoContent
+                pure $ addHeader (Auth.mkCookie uuid)
+                  T.Session{ sessionUsername = accountUsername
+                           , sessionRole = accountRole
+                           }
               else do
                 liftIO $ LoginAttempts.increment dbFile username
                 throwError err401 { errBody = "Your credentials are invalid" }
@@ -172,7 +175,10 @@ server config@T.Config{..} = createAccount
                 throwError err429
               else if T.passwordsMatch password accountPassword then do
                 uuid <- liftIO $ Sessions.findOrCreate dbFile account
-                pure $ addHeader (Auth.mkCookie uuid) NoContent
+                pure $ addHeader (Auth.mkCookie uuid)
+                  T.Session{ sessionUsername = accountUsername
+                           , sessionRole = accountRole
+                           }
               else do
                 liftIO $ LoginAttempts.increment dbFile username
                 throwError err401 { errBody = "Your credentials are invalid" }

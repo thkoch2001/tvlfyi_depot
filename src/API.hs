@@ -58,7 +58,7 @@ type API =
       -- Miscellaneous
       :<|> "login"
            :> ReqBody '[JSON] T.AccountCredentials
-           :> Post '[JSON] (Headers '[Header "Set-Cookie" SetCookie] NoContent)
+           :> Post '[JSON] (Headers '[Header "Set-Cookie" SetCookie] T.Session)
       :<|> "logout"
            :> SessionCookie
            :> Get '[JSON] (Headers '[Header "Set-Cookie" SetCookie] NoContent)
