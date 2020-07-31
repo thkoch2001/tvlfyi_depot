@@ -5,6 +5,7 @@ import           Network.IRC.Client
 import           Control.Lens
 import           NLP.POS
 import           NLP.Types (POSTagger)
+import qualified NLP.Types.Tags as Tags
 import           NLP.Types.Tree
 import qualified NLP.Corpora.Conll as Conll
 import           NLP.Corpora.Conll (Tag)
@@ -45,33 +46,54 @@ stopWord "was"  = True
 stopWord "be"   = True
 stopWord _      = False
 
-verbs :: POSTagger Tag -> Text -> [Text]
-verbs tagger s
-  = filter (not . stopWord)
-  . mapMaybe pickVerb
-  $ tag tagger s >>= \(TaggedSent ps) -> ps
-  where
-    pickVerb (POS Conll.VB (Token verb)) = Just verb
-    pickVerb (POS Conll.VBD (Token verb)) = Just verb
-    pickVerb (POS Conll.VBG (Token verb)) = Just verb
-    pickVerb (POS Conll.VBN (Token verb)) = Just verb
-    pickVerb (POS Conll.VBZ (Token verb)) = Just verb
-    pickVerb _ = Nothing
+pickVerb :: POS Tag -> Maybe Text
+pickVerb (POS Conll.VB (Token verb)) = Just verb
+pickVerb (POS Conll.VBD (Token verb)) = Just verb
+pickVerb (POS Conll.VBG (Token verb)) = Just verb
+pickVerb (POS Conll.VBN (Token verb)) = Just verb
+pickVerb (POS Conll.VBZ (Token verb)) = Just verb
+pickVerb _ = Nothing
 
-randomVerb :: POSTagger Tag -> Text -> IO (Maybe Text)
-randomVerb tagger txt = do
-  let vs = verbs tagger txt
-  i <- randomRIO (0, length vs - 1)
-  pure $ vs ^? ix i
+pickNoun :: POS Tag -> Maybe Text
+pickNoun (POS Conll.NN (Token noun)) = Just noun
+pickNoun _ = Nothing
 
-owo :: Text -> Text
-owo = (<> " me owo")
+randomPOS
+  :: Tags.Tag tag
+  => (POS tag -> Maybe Text)
+  -> POSTagger tag
+  -> Text
+  -> IO (Maybe Text)
+randomPOS pickPOS tagger s = do
+  let candidates
+        = filter (not . stopWord)
+        . mapMaybe pickPOS
+        $ tag tagger s >>= \(TaggedSent ps) -> ps
+  i <- randomRIO (0, length candidates - 1)
+  pure $ candidates ^? ix i
 
 doOwo :: MonadIO m => Config -> m Bool
 doOwo conf = do
   n <- liftIO (randomRIO @Int (0, conf ^. owoChance))
-  liftIO $ putStrLn $ "rolled " <> show n
   pure $ n == 0
+
+data OwoType = Noun | Verb
+  deriving stock (Show, Eq)
+
+instance Random OwoType where
+  random = over _1 (bool Noun Verb) . random
+  randomR = const random
+
+owo :: OwoType -> Text -> Text
+owo Noun n = "I'm a " <> n <> " owo"
+owo Verb v = v <> " me owo"
+
+pickOwo :: OwoType -> POS Tag -> Maybe Text
+pickOwo Verb = pickVerb
+pickOwo Noun = pickNoun
+
+randomOwo :: OwoType -> POSTagger Tag -> Text -> IO (Maybe Text)
+randomOwo = randomPOS . pickOwo
 
 owothiaHandler :: Config -> Text -> IORef Bool -> POSTagger Tag -> EventHandler s
 owothiaHandler conf nick state tagger = EventHandler Just $ \src ev -> do
@@ -94,8 +116,9 @@ owothiaHandler conf nick state tagger = EventHandler Just $ \src ev -> do
 
   where
     owoMessage m = do
-      mVerb <- liftIO $ randomVerb tagger m
-      for_ mVerb $ \verb -> send $ Privmsg "##tvl" $ Right $ owo verb
+      owoType <- liftIO randomIO
+      mWord <- liftIO $ randomOwo owoType tagger m
+      for_ mWord $ \word -> send $ Privmsg "##tvl" $ Right $ owo owoType word
     nickservAuthMsg = "IDENTIFY " <> nick <> " " <> fromJust (conf ^. nickservPassword)
     nickservAuth = send $ Privmsg "NickServ" $ Right nickservAuthMsg
 
