@@ -175,7 +175,7 @@ void mkPath(Value& v, const char* s);
 /* Compute the size in bytes of the given value, including all values
    and environments reachable from it. Static expressions (Exprs) are
    not included. */
-size_t valueSize(Value& v);
+size_t valueSize(const Value& v);
 
 typedef std::map<Symbol, Value*, std::less<Symbol>,
                  traceable_allocator<std::pair<const Symbol, Value*>>>
