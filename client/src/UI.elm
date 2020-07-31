@@ -124,6 +124,18 @@ simpleButton { label, handleClick } =
         }
 
 
+disabledButton :
+    { label : String }
+    -> Html State.Msg
+disabledButton { label } =
+    baseButton
+        { label = label
+        , enabled = False
+        , handleClick = State.DoNothing
+        , extraClasses = []
+        }
+
+
 textButton :
     { label : String
     , handleClick : msg
