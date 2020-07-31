@@ -1,31 +1,62 @@
 module Main exposing (main)
 
+import Admin
 import Browser
 import Html exposing (..)
-import Landing
 import Login
+import Manager
 import State
+import Url
+import User
 
 
-subscriptions : State.Model -> Sub State.Msg
-subscriptions model =
-    Sub.none
-
-
-view : State.Model -> Html State.Msg
-view model =
-    case model.view of
-        State.Landing ->
-            Landing.render model
-
+viewForRoute : State.Route -> (State.Model -> Html State.Msg)
+viewForRoute route =
+    case route of
         State.Login ->
-            Login.render model
+            Login.render
+
+        State.UserHome ->
+            User.render
+
+        State.ManagerHome ->
+            Manager.render
+
+        State.AdminHome ->
+            Admin.render
+
+
+view : State.Model -> Browser.Document State.Msg
+view model =
+    { title = "TripPlanner"
+    , body =
+        [ case ( model.session, model.route ) of
+            -- Redirect to /login when someone is not authenticated.
+            -- TODO(wpcarro): We should ensure that /login shows in the URL
+            -- bar.
+            ( Nothing, _ ) ->
+                Login.render model
+
+            ( Just session, Nothing ) ->
+                Login.render model
+
+            -- Authenticated
+            ( Just session, Just route ) ->
+                if State.isAuthorized session.role route then
+                    viewForRoute route model
+
+                else
+                    text "Access denied. You are not authorized to be here. Evacuate the area immediately"
+        ]
+    }
 
 
 main =
-    Browser.element
-        { init = \() -> ( State.init, Cmd.none )
-        , subscriptions = subscriptions
+    Browser.application
+        { init = State.init
+        , onUrlChange = State.UrlChanged
+        , onUrlRequest = State.LinkClicked
+        , subscriptions = \_ -> Sub.none
         , update = State.update
         , view = view
         }
