@@ -126,8 +126,15 @@ server T.Config{..} = createAccount
       liftIO $ Trips.delete dbFile tripPK
       pure NoContent
 
-    listTrips :: Handler [T.Trip]
-    listTrips = liftIO $ Trips.list dbFile
+    listTrips :: T.SessionCookie -> Handler [T.Trip]
+    listTrips cookie = do
+      mAccount <- liftIO $ Auth.accountFromCookie dbFile cookie
+      case mAccount of
+        Nothing -> throwError err401 { errBody = "Your session cookie is invalid. Try logging out and logging back in." }
+        Just T.Account{..} ->
+          case accountRole of
+            T.Admin -> liftIO $ Trips.listAll dbFile
+            _ -> liftIO $ Trips.list dbFile accountUsername
 
     login :: T.AccountCredentials
           -> Handler (Headers '[Header "Set-Cookie" SetCookie] NoContent)

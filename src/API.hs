@@ -48,6 +48,7 @@ type API =
            :> Delete '[JSON] NoContent
       -- trips: List
       :<|> "trips"
+           :> SessionCookie
            :> Get '[JSON] [T.Trip]
 
       -- Miscellaneous
