@@ -33,12 +33,16 @@ import qualified Data.UUID as UUID
 data Config = Config
   { mailgunAPIKey :: Text
   , dbFile :: FilePath
+  , configClient :: Text
+  , configServer :: Text
   } deriving (Eq, Show)
 
 instance FromEnv Config where
   fromEnv _ = do
     mailgunAPIKey <- env "MAILGUN_API_KEY"
     dbFile <- env "DB_FILE"
+    configClient <- env "CLIENT"
+    configServer <- env "SERVER"
     pure Config {..}
 
 -- TODO(wpcarro): Properly handle NULL for columns like profilePicture.

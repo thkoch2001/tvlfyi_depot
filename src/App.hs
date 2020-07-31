@@ -41,12 +41,13 @@ err429 = ServerError
   }
 
 -- | Send an email to recipient, `to`, with a secret code.
-sendVerifyEmail :: Text
-             -> T.Username
-             -> T.Email
-             -> T.RegistrationSecret
-             -> IO (Either Email.SendError Email.SendSuccess)
-sendVerifyEmail apiKey (T.Username username) email@(T.Email to) (T.RegistrationSecret secretUUID) = do
+sendVerifyEmail :: T.Config
+                -> Text
+                -> T.Username
+                -> T.Email
+                -> T.RegistrationSecret
+                -> IO (Either Email.SendError Email.SendSuccess)
+sendVerifyEmail T.Config{..} apiKey (T.Username username) email@(T.Email to) (T.RegistrationSecret secretUUID) = do
   Email.send apiKey subject (cs body) email
   where
     subject = "Please confirm your account"
@@ -54,20 +55,20 @@ sendVerifyEmail apiKey (T.Username username) email@(T.Email to) (T.RegistrationS
     -- TODO(wpcarro): Use a dynamic domain and port number
     body =
       let secret = secretUUID |> UUID.toString in
-        "http://localhost:3000/verify?username=" ++ cs username ++ "&secret=" ++ secret
+        cs configServer ++ cs username ++ "&secret=" ++ secret
 
 server :: T.Config -> Server API
-server T.Config{..} = createAccount
-                 :<|> verifyAccount
-                 :<|> deleteAccount
-                 :<|> listAccounts
-                 :<|> createTrip
-                 :<|> updateTrip
-                 :<|> deleteTrip
-                 :<|> listTrips
-                 :<|> login
-                 :<|> logout
-                 :<|> unfreezeAccount
+server config@T.Config{..} = createAccount
+                        :<|> verifyAccount
+                        :<|> deleteAccount
+                        :<|> listAccounts
+                        :<|> createTrip
+                        :<|> updateTrip
+                        :<|> deleteTrip
+                        :<|> listTrips
+                        :<|> login
+                        :<|> logout
+                        :<|> unfreezeAccount
   where
     -- Admit Admins + whatever the predicate `p` passes.
     adminsAnd cookie p = Auth.assert dbFile cookie (\acct@T.Account{..} -> accountRole == T.Admin || p acct)
@@ -84,7 +85,7 @@ server T.Config{..} = createAccount
         createAccountRequestPassword
         createAccountRequestRole
         createAccountRequestEmail
-      liftIO $ sendVerifyEmail mailgunAPIKey
+      liftIO $ sendVerifyEmail config mailgunAPIKey
         createAccountRequestUsername
         createAccountRequestEmail
         secretUUID
