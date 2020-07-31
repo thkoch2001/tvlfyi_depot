@@ -32,7 +32,19 @@ loginForm model =
                 |> Tailwind.use
                 |> class
             ]
-            [ div
+            [ div [ [ "text-center", "pb-6" ] |> Tailwind.use |> class ]
+                [ UI.textButton
+                    { handleClick = State.ToggleLoginForm
+                    , label =
+                        case model.loginTab of
+                            State.LoginForm ->
+                                "Switch to sign up"
+
+                            State.SignUpForm ->
+                                "Switch to login"
+                    }
+                ]
+            , div
                 [ [ "mb-4" ] |> Tailwind.use |> class ]
                 [ UI.label_ { for_ = "username", text_ = "Username" }
                 , UI.textField
@@ -42,28 +54,35 @@ loginForm model =
                     , inputValue = model.username
                     }
                 ]
-            , div []
-                [ UI.label_ { for_ = "role", text_ = "Role" }
-                , select
-                    [ [ "mb-4"
-                      , "w-full"
-                      , "py-2"
-                      , "px-2"
-                      , "rounded"
-                      , "shadow"
-                      , "border"
-                      ]
-                        |> Tailwind.use
-                        |> class
-                    , id "role"
-                    , onInput State.UpdateRole
-                    ]
-                    [ option [] [ text "" ]
-                    , option [ value "user" ] [ text "User" ]
-                    , option [ value "manager" ] [ text "Manager" ]
-                    , option [ value "admin" ] [ text "Admin" ]
-                    ]
-                ]
+            , case model.loginTab of
+                State.LoginForm ->
+                    text ""
+
+                State.SignUpForm ->
+                    div
+                        [ [ "mb-4" ] |> Tailwind.use |> class ]
+                        [ UI.label_ { for_ = "email", text_ = "Email" }
+                        , input
+                            [ [ "shadow"
+                              , "appearance-none"
+                              , "border"
+                              , "rounded"
+                              , "w-full"
+                              , "py-2"
+                              , "px-3"
+                              , "text-gray-700"
+                              , "leading-tight"
+                              , "focus:outline-none"
+                              , "focus:shadow-outline"
+                              ]
+                                |> Tailwind.use
+                                |> class
+                            , id "email"
+                            , placeholder "who@domain.tld"
+                            , onInput State.UpdateEmail
+                            ]
+                            []
+                        ]
             , div
                 [ [ "mb-4" ] |> Tailwind.use |> class ]
                 [ UI.label_ { for_ = "password", text_ = "Password" }
@@ -89,56 +108,16 @@ loginForm model =
                     ]
                     []
                 ]
-            , div
-                []
-                [ UI.baseButton
-                    { label = "Sign In"
-                    , handleClick = State.AttemptLogin
-                    , extraClasses = []
-                    , enabled =
-                        case ( model.username, model.password ) of
-                            ( "", "" ) ->
-                                False
+            , case model.loginTab of
+                State.LoginForm ->
+                    UI.simpleButton { handleClick = State.AttemptLogin, label = "Login" }
 
-                            ( "", _ ) ->
-                                False
+                State.SignUpForm ->
+                    if String.length model.username > 0 && String.length model.email > 0 && String.length model.password > 0 then
+                        UI.simpleButton { handleClick = State.AttemptSignUp, label = "Sign up" }
 
-                            ( _, "" ) ->
-                                False
-
-                            _ ->
-                                True
-                    }
-                , div [ [ "inline", "pl-2" ] |> Tailwind.use |> class ]
-                    [ UI.baseButton
-                        { label = "Sign Up"
-                        , extraClasses = []
-                        , enabled =
-                            case ( model.username, model.password, model.role ) of
-                                ( "", "", _ ) ->
-                                    False
-
-                                ( _, "", _ ) ->
-                                    False
-
-                                ( "", _, _ ) ->
-                                    False
-
-                                ( _, _, Nothing ) ->
-                                    False
-
-                                _ ->
-                                    True
-                        , handleClick =
-                            case model.role of
-                                Just role ->
-                                    State.AttemptSignUp role
-
-                                Nothing ->
-                                    State.DoNothing
-                        }
-                    ]
-                ]
+                    else
+                        UI.disabledButton { label = "Sign up" }
             ]
         ]
 

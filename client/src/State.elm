@@ -27,16 +27,18 @@ import Utils
 type Msg
     = DoNothing
     | UpdateUsername String
+    | UpdateEmail String
     | UpdatePassword String
     | UpdateRole String
     | UpdateAdminTab AdminTab
     | ClearErrors
+    | ToggleLoginForm
       -- SPA
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
       -- Outbound network
     | AttemptGetUsers
-    | AttemptSignUp Role
+    | AttemptSignUp
     | AttemptLogin
     | AttemptLogout
     | AttemptDeleteUser String
@@ -94,16 +96,23 @@ type AdminTab
     = Users
 
 
+type LoginTab
+    = LoginForm
+    | SignUpForm
+
+
 type alias Model =
     { route : Maybe Route
     , url : Url.Url
     , key : Nav.Key
     , session : Maybe Session
     , username : String
+    , email : String
     , password : String
     , role : Maybe Role
     , users : WebData AllUsers
     , adminTab : AdminTab
+    , loginTab : LoginTab
     , loginError : Maybe Http.Error
     , logoutError : Maybe Http.Error
     , signUpError : Maybe Http.Error
@@ -191,29 +200,20 @@ logout =
 
 signUp :
     { username : String
+    , email : String
     , password : String
-    , role : Role
     }
     -> Cmd Msg
-signUp { username, password, role } =
+signUp { username, email, password } =
     Utils.postWithCredentials
-        { url = endpoint [ "create-account" ] []
+        { url = endpoint [ "accounts" ] []
         , body =
             Http.jsonBody
                 (JE.object
                     [ ( "username", JE.string username )
+                    , ( "email", JE.string username )
                     , ( "password", JE.string password )
-                    , ( "role"
-                      , case role of
-                            User ->
-                                JE.string "user"
-
-                            Manager ->
-                                JE.string "manager"
-
-                            Admin ->
-                                JE.string "admin"
-                      )
+                    , ( "role", JE.string "user" )
                     ]
                 )
         , expect = Http.expectJson GotSignUp decodeSession
@@ -306,10 +306,12 @@ init _ url key =
       , key = key
       , session = Nothing
       , username = ""
+      , email = ""
       , password = ""
       , role = Nothing
       , users = RemoteData.NotAsked
       , adminTab = Users
+      , loginTab = LoginForm
       , loginError = Nothing
       , logoutError = Nothing
       , signUpError = Nothing
@@ -333,6 +335,9 @@ update msg model =
         UpdatePassword x ->
             ( { model | password = x }, Cmd.none )
 
+        UpdateEmail x ->
+            ( { model | email = x }, Cmd.none )
+
         UpdateAdminTab x ->
             ( { model | adminTab = x }, Cmd.none )
 
@@ -343,7 +348,7 @@ update msg model =
                         "user" ->
                             Just User
 
-                        "owner" ->
+                        "manager" ->
                             Just Manager
 
                         "admin" ->
@@ -360,6 +365,19 @@ update msg model =
                 , logoutError = Nothing
                 , signUpError = Nothing
                 , deleteUserError = Nothing
+              }
+            , Cmd.none
+            )
+
+        ToggleLoginForm ->
+            ( { model
+                | loginTab =
+                    case model.loginTab of
+                        LoginForm ->
+                            SignUpForm
+
+                        SignUpForm ->
+                            LoginForm
               }
             , Cmd.none
             )
@@ -443,12 +461,12 @@ update msg model =
                     )
 
         -- /create-account
-        AttemptSignUp role ->
+        AttemptSignUp ->
             ( model
             , signUp
                 { username = model.username
+                , email = model.email
                 , password = model.password
-                , role = role
                 }
             )
 
