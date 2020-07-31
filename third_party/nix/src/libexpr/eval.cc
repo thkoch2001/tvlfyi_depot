@@ -119,14 +119,11 @@ static void printValue(std::ostream& str, std::set<const Value*>& active,
     case tPrimOpApp:
       str << "<PRIMOP-APP>";
       break;
-    case tExternal:
-      str << *v.external;
-      break;
     case tFloat:
       str << v.fpoint;
       break;
     default:
-      throw Error("invalid value");
+      throw Error(absl::StrCat("invalid value of type ", static_cast<int>(v.type)));
   }
 
   active.erase(&v);
@@ -176,11 +173,13 @@ std::string showType(const Value& v) {
     case tPrimOpApp:
       return fmt("the partially applied built-in function '%s'",
                  std::string(getPrimOp(v)->primOp->name));
-    case tExternal:
-      return v.external->showType();
+    case _reserved1:
+      LOG(FATAL) << "attempted to show the type string of the deprecated tExternal value";
+      break;
     case tFloat:
       return "a float";
   }
+  LOG(FATAL) << "attempted to determine the type string of an unknown type number (" << static_cast<int>(v.type) << ")";
   abort();
 }
 
@@ -1524,10 +1523,6 @@ std::string EvalState::coerceToString(const Pos& pos, Value& v,
                           copyToStore);
   }
 
-  if (v.type == tExternal) {
-    return v.external->coerceToString(pos, context, coerceMore, copyToStore);
-  }
-
   if (coerceMore) {
     /* Note that `false' is represented as an empty string for
        shell scripting convenience, just like `null'. */
@@ -1690,9 +1685,6 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
     case tPrimOp:
     case tPrimOpApp:
       return false;
-
-    case tExternal:
-      return *v1.external == *v2.external;
 
     case tFloat:
       return v1.fpoint == v2.fpoint;
@@ -1894,14 +1886,6 @@ size_t valueSize(Value& v) {
         sz += doValue(*v.primOpApp.left);
         sz += doValue(*v.primOpApp.right);
         break;
-      case tExternal:
-        if (seen.find(v.external) != seen.end()) {
-          break;
-        }
-        seen.insert(v.external);
-        // note: this is a plugin call
-        sz += v.external->valueSize(seen);
-        break;
       default:;
     }
 
@@ -1932,21 +1916,6 @@ size_t valueSize(Value& v) {
   };
 
   return doValue(v);
-}
-
-std::string ExternalValueBase::coerceToString(const Pos& pos, PathSet& context,
-                                              bool copyMore,
-                                              bool copyToStore) const {
-  throw TypeError(format("cannot coerce %1% to a string, at %2%") % showType() %
-                  pos);
-}
-
-bool ExternalValueBase::operator==(const ExternalValueBase& b) const {
-  return false;
-}
-
-std::ostream& operator<<(std::ostream& str, const ExternalValueBase& v) {
-  return v.print(str);
 }
 
 EvalSettings evalSettings;

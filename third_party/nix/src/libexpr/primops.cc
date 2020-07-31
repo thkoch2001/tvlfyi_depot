@@ -193,9 +193,6 @@ static void prim_typeOf(EvalState& state, const Pos& pos, Value** args,
     case tPrimOpApp:
       t = "lambda";
       break;
-    case tExternal:
-      t = args[0]->external->typeOf();
-      break;
     case tFloat:
       t = "float";
       break;
