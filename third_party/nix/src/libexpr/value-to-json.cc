@@ -73,10 +73,6 @@ void printValueAsJSON(EvalState& state, bool strict, Value& v,
       break;
     }
 
-    case tExternal:
-      v.external->printValueAsJSON(state, strict, out, context);
-      break;
-
     case tFloat:
       out.write(v.fpoint);
       break;
@@ -90,12 +86,6 @@ void printValueAsJSON(EvalState& state, bool strict, Value& v,
                       std::ostream& str, PathSet& context) {
   JSONPlaceholder out(str);
   printValueAsJSON(state, strict, v, out, context);
-}
-
-void ExternalValueBase::printValueAsJSON(EvalState& state, bool strict,
-                                         JSONPlaceholder& out,
-                                         PathSet& context) const {
-  throw TypeError(format("cannot convert %1% to JSON") % showType());
 }
 
 }  // namespace nix
