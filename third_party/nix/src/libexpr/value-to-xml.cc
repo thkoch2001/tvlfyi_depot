@@ -163,11 +163,6 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
       break;
     }
 
-    case tExternal:
-      v.external->printValueAsXML(state, strict, location, doc, context,
-                                  drvsSeen);
-      break;
-
     case tFloat:
       doc.writeEmptyElement(
           "float", singletonAttrs("value", (format("%1%") % v.fpoint).str()));
@@ -176,13 +171,6 @@ static void printValueAsXML(EvalState& state, bool strict, bool location,
     default:
       doc.writeEmptyElement("unevaluated");
   }
-}
-
-void ExternalValueBase::printValueAsXML(EvalState& state, bool strict,
-                                        bool location, XMLWriter& doc,
-                                        PathSet& context,
-                                        PathSet& drvsSeen) const {
-  doc.writeEmptyElement("unevaluated");
 }
 
 void printValueAsXML(EvalState& state, bool strict, bool location, Value& v,
