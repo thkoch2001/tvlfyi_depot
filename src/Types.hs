@@ -250,13 +250,10 @@ tripPKFields (TripPK{ tripPKUsername
 
 instance FromJSON TripPK where
   parseJSON = withObject "TripPK" $ \x -> do
-    username <- x .: "username"
-    destination <- x .: "destination"
-    startDate <- x .: "startDate"
-    pure TripPK{ tripPKUsername = username
-               , tripPKDestination = destination
-               , tripPKStartDate = startDate
-               }
+    tripPKUsername    <- x .: "username"
+    tripPKDestination <- x .: "destination"
+    tripPKStartDate   <- x .: "startDate"
+    pure TripPK{..}
 
 -- | Return the tuple representation of a Trip record for SQL.
 tripFields :: Trip -> (Username, Destination, Date, Date, Comment)
@@ -284,17 +281,12 @@ instance ToJSON Trip where
 
 instance FromJSON Trip where
   parseJSON = withObject "Trip" $ \x -> do
-    username <- x .: "username"
-    destination <- x .: "destination"
-    startDate <- x .: "startDate"
-    endDate <- x .: "endDate"
-    comment <- x .: "comment"
-    pure Trip{ tripUsername = username
-             , tripDestination = destination
-             , tripStartDate = startDate
-             , tripEndDate = endDate
-             , tripComment = comment
-             }
+    tripUsername    <- x .: "username"
+    tripDestination <- x .: "destination"
+    tripStartDate   <- x .: "startDate"
+    tripEndDate     <- x .: "endDate"
+    tripComment     <- x .: "comment"
+    pure Trip{..}
 
 -- | Users and Accounts both refer to the same underlying entities; however,
 -- Users model the user-facing Account details, hiding sensitive details like
@@ -328,11 +320,9 @@ data AccountCredentials = AccountCredentials
 
 instance FromJSON AccountCredentials where
   parseJSON = withObject "AccountCredentials" $ \x -> do
-    username <- x.: "username"
-    password <- x.: "password"
-    pure AccountCredentials{ accountCredentialsUsername = username
-                           , accountCredentialsPassword = password
-                           }
+    accountCredentialsUsername <- x.: "username"
+    accountCredentialsPassword <- x.: "password"
+    pure AccountCredentials{..}
 
 
 -- | Hash password `x`.
@@ -355,11 +345,11 @@ data CreateAccountRequest = CreateAccountRequest
 
 instance FromJSON CreateAccountRequest where
   parseJSON = withObject "CreateAccountRequest" $ \x -> do
-    username <- x .: "username"
-    password <- x .: "password"
-    email <- x .: "email"
-    role <- x .: "role"
-    pure $ CreateAccountRequest username password email role
+    createAccountRequestUsername <- x .: "username"
+    createAccountRequestPassword <- x .: "password"
+    createAccountRequestEmail <- x .: "email"
+    createAccountRequestRole <- x .: "role"
+    pure $ CreateAccountRequest{..}
 
 createAccountRequestFields :: CreateAccountRequest -> (Username, ClearTextPassword, Email, Role)
 createAccountRequestFields request =
