@@ -1821,28 +1821,29 @@ void EvalState::printStats() {
   }
 }
 
-size_t valueSize(Value& v) {
-  // Can't convert to flat_hash_set because of tExternal
-  // Can't set the allocator because of tExternal
-  // The GC is likely crying over this
-  std::set<const void*> seen;
+size_t valueSize(const Value& v) {
+  traceable_flat_hash_set<const Bindings*> seenBindings;
+  traceable_flat_hash_set<const Env*> seenEnvs;
+  traceable_flat_hash_set<const NixList*> seenLists;
+  traceable_flat_hash_set<const char*> seenStrings;
+  traceable_flat_hash_set<const Value*> seenValues;
 
   auto doString = [&](const char* s) -> size_t {
-    if (seen.find(s) != seen.end()) {
+    if (seenStrings.find(s) != seenStrings.end()) {
       return 0;
     }
-    seen.insert(s);
+    seenStrings.insert(s);
     return strlen(s) + 1;
   };
 
-  std::function<size_t(Value & v)> doValue;
-  std::function<size_t(Env & v)> doEnv;
+  std::function<size_t(const Value& v)> doValue;
+  std::function<size_t(const Env& v)> doEnv;
 
-  doValue = [&](Value& v) -> size_t {
-    if (seen.find(&v) != seen.end()) {
+  doValue = [&](const Value& v) -> size_t {
+    if (seenValues.find(&v) != seenValues.end()) {
       return 0;
     }
-    seen.insert(&v);
+    seenValues.insert(&v);
 
     size_t sz = sizeof(Value);
 
@@ -1859,20 +1860,20 @@ size_t valueSize(Value& v) {
         sz += doString(v.path);
         break;
       case tAttrs:
-        if (seen.find(v.attrs) == seen.end()) {
-          seen.insert(v.attrs);
+        if (seenBindings.find(v.attrs) == seenBindings.end()) {
+          seenBindings.insert(v.attrs);
           sz += sizeof(Bindings);
-          for (auto& i : *v.attrs) {
+          for (const auto& i : *v.attrs) {
             sz += doValue(*i.second.value);
           }
         }
         break;
       case tList:
-        if (seen.find(v.list) == seen.end()) {
-          seen.insert(v.list);
+        if (seenLists.find(v.list) == seenLists.end()) {
+          seenLists.insert(v.list);
           sz += v.listSize() * sizeof(Value*);
-          for (size_t n = 0; n < v.listSize(); ++n) {
-            sz += doValue(*(*v.list)[n]);
+          for (const Value* v : *v.list) {
+            sz += doValue(*v);
           }
         }
         break;
@@ -1896,20 +1897,22 @@ size_t valueSize(Value& v) {
     return sz;
   };
 
-  doEnv = [&](Env& env) -> size_t {
-    if (seen.find(&env) != seen.end()) {
+  doEnv = [&](const Env& env) -> size_t {
+    if (seenEnvs.find(&env) != seenEnvs.end()) {
       return 0;
     }
-    seen.insert(&env);
+    seenEnvs.insert(&env);
 
     size_t sz = sizeof(Env) + sizeof(Value*) * env.size;
 
     if (env.type != Env::HasWithExpr) {
-      for (size_t i = 0; i < env.size; ++i) {
-        if (env.values[i] != nullptr) {
-          sz += doValue(*env.values[i]);
+      for (const Value* v : env.values) {
+        if (v != nullptr) {
+          sz += doValue(*v);
         }
       }
+    } else {
+      // TODO(kanepyork): trace ExprWith? how important is this accounting?
     }
 
     if (env.up != nullptr) {
