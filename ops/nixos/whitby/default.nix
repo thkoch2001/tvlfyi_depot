@@ -19,6 +19,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
     "${depot.depotPath}/ops/nixos/panettone.nix"
+    "${depot.depotPath}/ops/nixos/paroxysm.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
     "${depot.depotPath}/ops/nixos/sourcegraph.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
@@ -223,6 +224,9 @@ in lib.fix(self: {
       dbName = "panettone";
       secretsFile = "/etc/secrets/panettone";
     };
+
+    # Run the first cursed bot (quote bot)
+    paroxysm.enable = true;
   };
 
   services.postgresql = {
