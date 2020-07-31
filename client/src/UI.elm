@@ -124,6 +124,26 @@ simpleButton { label, handleClick } =
         }
 
 
+textButton :
+    { label : String
+    , handleClick : msg
+    }
+    -> Html msg
+textButton { label, handleClick } =
+    button
+        [ [ "text-blue-600"
+          , "hover:text-blue-500"
+          , "font-bold"
+          , "hover:underline"
+          , "focus:outline-none"
+          ]
+            |> Tailwind.use
+            |> class
+        , onClick handleClick
+        ]
+        [ text label ]
+
+
 textField :
     { pholder : String
     , inputId : String
