@@ -12,6 +12,7 @@ in pkgs.mkShell {
       hpkgs.aeson
       hpkgs.resource-pool
       hpkgs.sqlite-simple
+      hpkgs.wai-cors
       hpkgs.warp
       hpkgs.cryptonite
       hpkgs.uuid

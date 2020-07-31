@@ -10,13 +10,14 @@ module App where
 import Control.Monad.IO.Class (liftIO)
 import Data.String.Conversions (cs)
 import Data.Text (Text)
-import Network.Wai.Handler.Warp as Warp
 import Servant
 import Servant.Server.Internal.ServerError
 import API
 import Utils
 import Web.Cookie
 
+import qualified Network.Wai.Handler.Warp as Warp
+import qualified Network.Wai.Middleware.Cors as Cors
 import qualified System.Random as Random
 import qualified Email as Email
 import qualified Crypto.KDF.BCrypt as BC
@@ -205,5 +206,14 @@ server config@T.Config{..} = createAccount
         pure NoContent
 
 run :: T.Config -> IO ()
-run config =
-  Warp.run 3000 (serve (Proxy @ API) $ server config)
+run config@T.Config{..} =
+  Warp.run 3000 (enforceCors $ serve (Proxy @ API) $ server config)
+  where
+    enforceCors = Cors.cors (const $ Just corsPolicy)
+    corsPolicy :: Cors.CorsResourcePolicy
+    corsPolicy =
+      Cors.simpleCorsResourcePolicy
+        { Cors.corsOrigins = Just ([cs configClient], True)
+        , Cors.corsMethods = Cors.simpleMethods ++ ["PUT", "PATCH", "DELETE", "OPTIONS"]
+        , Cors.corsRequestHeaders = Cors.simpleHeaders ++ ["Content-Type", "Authorization"]
+        }
