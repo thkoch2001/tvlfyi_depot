@@ -467,3 +467,12 @@ updateTrip UpdateTripRequest{..} Trip{..} = Trip
   , tripEndDate     = M.fromMaybe tripEndDate updateTripRequestEndDate
   , tripComment     = M.fromMaybe tripComment updateTripRequestComment
   }
+
+data UnfreezeAccountRequest = UnfreezeAccountRequest
+  { unfreezeAccountRequestUsername :: Username
+  } deriving (Eq, Show)
+
+instance FromJSON UnfreezeAccountRequest where
+  parseJSON = withObject "UnfreezeAccountRequest" $ \x -> do
+    unfreezeAccountRequestUsername <- x .: "username"
+    pure UnfreezeAccountRequest{..}

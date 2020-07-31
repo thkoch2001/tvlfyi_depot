@@ -62,3 +62,7 @@ type API =
       :<|> "logout"
            :> SessionCookie
            :> Get '[JSON] (Headers '[Header "Set-Cookie" SetCookie] NoContent)
+      :<|> "unfreeze"
+           :> SessionCookie
+           :> ReqBody '[JSON] T.UnfreezeAccountRequest
+           :> Post '[JSON] NoContent

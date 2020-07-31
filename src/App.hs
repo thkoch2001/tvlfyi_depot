@@ -67,6 +67,7 @@ server T.Config{..} = createAccount
                  :<|> listTrips
                  :<|> login
                  :<|> logout
+                 :<|> unfreezeAccount
   where
     -- Admit Admins + whatever the predicate `p` passes.
     adminsAnd cookie p = Auth.assert dbFile cookie (\acct@T.Account{..} -> accountRole == T.Admin || p acct)
@@ -187,6 +188,14 @@ server T.Config{..} = createAccount
         Just uuid -> do
           liftIO $ Sessions.delete dbFile uuid
           pure $ addHeader Auth.emptyCookie NoContent
+
+    unfreezeAccount :: T.SessionCookie
+                    -> T.UnfreezeAccountRequest
+                    -> Handler NoContent
+    unfreezeAccount cookie T.UnfreezeAccountRequest{..} =
+      adminsAnd cookie (\T.Account{..} -> accountRole == T.Manager) $ do
+        liftIO $ LoginAttempts.reset dbFile unfreezeAccountRequestUsername
+        pure NoContent
 
 run :: T.Config -> IO ()
 run config =
