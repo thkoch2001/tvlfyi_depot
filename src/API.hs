@@ -41,6 +41,10 @@ type API =
            :> Post '[JSON] NoContent
       -- trips: Read
       -- trips: Update
+      :<|> "trips"
+           :> SessionCookie
+           :> ReqBody '[JSON] T.UpdateTripRequest
+           :> Patch '[JSON] NoContent
       -- trips: Delete
       :<|> "trips"
            :> SessionCookie

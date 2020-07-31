@@ -14,12 +14,21 @@ create dbFile trip = withConnection dbFile $ \conn ->
   execute conn "INSERT INTO Trips (username,destination,startDate,endDate,comment) VALUES (?,?,?,?,?)"
     (trip |> T.tripFields)
 
--- | Delete a trip from `dbFile` using its `tripPK` Primary Key.
+-- | Attempt to get the trip record from `dbFile` under `tripKey`.
+get :: FilePath -> T.TripPK -> IO (Maybe T.Trip)
+get dbFile tripKey = withConnection dbFile $ \conn -> do
+  res <- query conn "SELECT username,destination,startDate,endDate,comment FROM Trips WHERE username = ? AND destination = ? AND startDate = ? LIMIT 1"
+    (T.tripPKFields tripKey)
+  case res of
+    [x] -> pure (Just x)
+    _ -> pure Nothing
+
+-- | Delete a trip from `dbFile` using its `tripKey` Primary Key.
 delete :: FilePath -> T.TripPK -> IO ()
-delete dbFile tripPK =
+delete dbFile tripKey =
   withConnection dbFile $ \conn -> do
     execute conn "DELETE FROM Trips WHERE username = ? AND destination = ? and startDate = ?"
-      (tripPK |> T.tripPKFields)
+      (T.tripPKFields tripKey)
 
 -- | Return a list of all of the trips in `dbFile`.
 listAll :: FilePath -> IO [T.Trip]

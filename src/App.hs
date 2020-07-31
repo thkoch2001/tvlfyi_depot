@@ -62,6 +62,7 @@ server T.Config{..} = createAccount
                  :<|> deleteAccount
                  :<|> listAccounts
                  :<|> createTrip
+                 :<|> updateTrip
                  :<|> deleteTrip
                  :<|> listTrips
                  :<|> login
@@ -119,6 +120,19 @@ server T.Config{..} = createAccount
       adminsAnd cookie (\T.Account{..} -> accountUsername == tripUsername) $ do
         liftIO $ Trips.create dbFile trip
         pure NoContent
+
+    updateTrip :: T.SessionCookie -> T.UpdateTripRequest -> Handler NoContent
+    updateTrip cookie updates@T.UpdateTripRequest{..} =
+      adminsAnd cookie (\T.Account{..} -> accountUsername == T.tripPKUsername updateTripRequestTripPK) $ do
+        mTrip <- liftIO $ Trips.get dbFile updateTripRequestTripPK
+        case mTrip of
+          Nothing -> throwError err400 { errBody = "tripKey is invalid" }
+          Just trip@T.Trip{..} -> do
+            -- TODO(wpcarro): Prefer function in Trips module that does this in a
+            -- DB transaction.
+            liftIO $ Trips.delete dbFile updateTripRequestTripPK
+            liftIO $ Trips.create dbFile (T.updateTrip updates trip)
+            pure NoContent
 
     deleteTrip :: T.SessionCookie -> T.TripPK -> Handler NoContent
     deleteTrip cookie tripPK@T.TripPK{..} =

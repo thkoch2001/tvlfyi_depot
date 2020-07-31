@@ -449,3 +449,31 @@ instance FromRow PendingAccount where
     pendingAccountRole <- field
     pendingAccountEmail <- field
     pure PendingAccount {..}
+
+data UpdateTripRequest = UpdateTripRequest
+  { updateTripRequestTripPK :: TripPK
+  , updateTripRequestDestination :: Maybe Destination
+  , updateTripRequestStartDate :: Maybe Date
+  , updateTripRequestEndDate :: Maybe Date
+  , updateTripRequestComment :: Maybe Comment
+  } deriving (Eq, Show)
+
+instance FromJSON UpdateTripRequest where
+  parseJSON = withObject "UpdateTripRequest" $ \x -> do
+    updateTripRequestTripPK <- x .: "tripKey"
+    -- the following four fields might not be present
+    updateTripRequestDestination <- x .:? "destination"
+    updateTripRequestStartDate   <- x .:? "startDate"
+    updateTripRequestEndDate     <- x .:? "endDate"
+    updateTripRequestComment     <- x .:? "comment"
+    pure UpdateTripRequest{..}
+
+-- | Apply the updates in the UpdateTripRequest to Trip.
+updateTrip :: UpdateTripRequest -> Trip -> Trip
+updateTrip UpdateTripRequest{..} Trip{..} = Trip
+  { tripUsername    = tripUsername
+  , tripDestination = M.fromMaybe tripDestination updateTripRequestDestination
+  , tripStartDate   = M.fromMaybe tripStartDate updateTripRequestStartDate
+  , tripEndDate     = M.fromMaybe tripEndDate updateTripRequestEndDate
+  , tripComment     = M.fromMaybe tripComment updateTripRequestComment
+  }
