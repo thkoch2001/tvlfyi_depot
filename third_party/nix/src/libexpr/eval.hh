@@ -42,6 +42,7 @@ struct Env : public gc {
   unsigned short prevWith : 14;  // nr of levels up to next `with' environment
   enum { Plain = 0, HasWithExpr, HasWithAttrs } type : 2;
   std::vector<Value*, traceable_allocator<Value*>> values;
+  Expr* withAttrs = nullptr;
 };
 
 Value& mkString(Value& v, const std::string& s,

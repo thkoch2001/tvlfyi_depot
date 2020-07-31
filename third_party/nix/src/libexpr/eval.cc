@@ -601,8 +601,7 @@ inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
         return nullptr;
       }
       Value* v = allocValue();
-      // TODO(kanepyork): Here's the other end of the cast smuggle.
-      evalAttrs(*env->up, reinterpret_cast<Expr*>(env->values[0]), *v);
+      evalAttrs(*env->up, env->withAttrs, *v);
       env->values[0] = v;
       env->type = Env::HasWithAttrs;
     }
@@ -1179,9 +1178,9 @@ void ExprWith::eval(EvalState& state, Env& env, Value& v) {
   env2.up = &env;
   env2.prevWith = prevWith;
   env2.type = Env::HasWithExpr;
-  // TODO(kanepyork): Figure out what's going on here. `Expr* attrs` is not
-  // layout-compatible with Value*.
-  env2.values[0] = reinterpret_cast<Value*>(attrs);
+  /* placeholder for result of attrs */
+  env2.values[0] = nullptr;
+  env2.withAttrs = attrs;
 
   body->eval(state, env2, v);
 }
