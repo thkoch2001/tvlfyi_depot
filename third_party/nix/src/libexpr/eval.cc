@@ -12,6 +12,7 @@
 
 #define GC_INCLUDE_NEW
 
+#include <absl/container/flat_hash_set.h>
 #include <absl/strings/match.h>
 #include <gc/gc.h>
 #include <gc/gc_cpp.h>
@@ -482,8 +483,9 @@ Value* EvalState::addPrimOp(const std::string& name, size_t arity,
   std::string name2 =
       std::string(name, 0, 2) == "__" ? std::string(name, 2) : name;
   Symbol sym = symbols.Create(name2);
+  // Even though PrimOp doesn't need tracing, it needs to be collected.
   v->type = tPrimOp;
-  v->primOp = new PrimOp(primOp, arity, sym);
+  v->primOp = new (GC) PrimOp(primOp, arity, sym);
   staticBaseEnv.vars[symbols.Create(name)] = baseEnvDispl;
   baseEnv.values[baseEnvDispl++] = v;
   baseEnv.values[0]->attrs->push_back(Attr(sym, v));
@@ -599,6 +601,7 @@ inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
         return nullptr;
       }
       Value* v = allocValue();
+      // TODO(kanepyork): Here's the other end of the cast smuggle.
       evalAttrs(*env->up, reinterpret_cast<Expr*>(env->values[0]), *v);
       env->values[0] = v;
       env->type = Env::HasWithAttrs;
@@ -631,7 +634,7 @@ Env& EvalState::allocEnv(size_t size) {
 
   nrEnvs++;
   nrValuesInEnvs += size;
-  Env* env = new Env(size);
+  Env* env = new (GC) Env(size);
   env->type = Env::Plain;
 
   return *env;
@@ -1333,8 +1336,14 @@ void ExprPos::eval(EvalState& state, Env& env, Value& v) {
   state.mkPos(v, &pos);
 }
 
+template <typename T>
+using traceable_flat_hash_set =
+    absl::flat_hash_set<T, absl::container_internal::hash_default_hash<T>,
+                        absl::container_internal::hash_default_eq<T>,
+                        traceable_allocator<T>>;
+
 void EvalState::forceValueDeep(Value& v) {
-  std::set<const Value*> seen;
+  traceable_flat_hash_set<const Value*> seen;
 
   std::function<void(Value & v)> recurse;
 
@@ -1378,7 +1387,7 @@ NixInt EvalState::forceInt(Value& v, const Pos& pos) {
 NixFloat EvalState::forceFloat(Value& v, const Pos& pos) {
   forceValue(v, pos);
   if (v.type == tInt) {
-    return v.integer;
+    return static_cast<NixFloat>(v.integer);
   }
   if (v.type != tFloat) {
     throwTypeError("value is %1% while a float was expected, at %2%", v, pos);
@@ -1814,6 +1823,9 @@ void EvalState::printStats() {
 }
 
 size_t valueSize(Value& v) {
+  // Can't convert to flat_hash_set because of tExternal
+  // Can't set the allocator because of tExternal
+  // The GC is likely crying over this
   std::set<const void*> seen;
 
   auto doString = [&](const char* s) -> size_t {
@@ -1884,6 +1896,7 @@ size_t valueSize(Value& v) {
           break;
         }
         seen.insert(v.external);
+        // note: this is a plugin call
         sz += v.external->valueSize(seen);
         break;
       default:;
