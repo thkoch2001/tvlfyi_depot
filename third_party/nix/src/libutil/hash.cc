@@ -361,7 +361,10 @@ Hash hashFile(HashType ht, const Path& path) {
   return hash;
 }
 
-HashSink::HashSink(HashType ht) : ht(ht), ctx(), bytes(0) { start(ht, *ctx); }
+HashSink::HashSink(HashType ht)
+    : ht(ht), ctx(std::make_unique<hash::Ctx>()), bytes(0) {
+  start(ht, *ctx);
+}
 
 HashSink::~HashSink() { bufPos = 0; }
 

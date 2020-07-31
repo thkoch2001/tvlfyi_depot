@@ -80,4 +80,22 @@ TEST(HashTest, SHA256DecodeFail) {
       HasSubstr("invalid base-16"));
 }
 
+TEST(HashSink, SHA256) {
+  HashSink sink(htSHA256);
+
+  sink.write(reinterpret_cast<const unsigned char*>("fo"), 2);
+  HashResult partial = sink.currentHash();
+  EXPECT_EQ(partial.first.to_string(Base16),
+            "sha256:"
+            "9c3aee7110b787f0fb5f81633a36392bd277ea945d44c874a9a23601aefe20cf");
+  EXPECT_EQ(partial.second, 2);
+
+  sink.write(reinterpret_cast<const unsigned char*>("o"), 1);
+  HashResult end = sink.finish();
+  EXPECT_EQ(end.first.to_string(Base16),
+            "sha256:"
+            "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae");
+  EXPECT_EQ(end.second, 3);
+}
+
 }  // namespace nix
