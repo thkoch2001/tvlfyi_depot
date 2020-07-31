@@ -1,6 +1,62 @@
 (in-package :panettone)
 (declaim (optimize (safety 3)))
 
+(defvar *cheddar-url* "http://localhost:4238")
+
+(defgeneric render-markdown (markdown)
+  (:documentation
+   "Render the argument, or the elements of the argument, as markdown, and return
+   the same structure"))
+
+(defmethod render-markdown ((markdown string))
+  (cdr
+   (assoc :markdown
+          (cl-json:decode-json
+           (drakma:http-request
+            (concatenate 'string
+                         *cheddar-url*
+                         "/markdown")
+            :accept "application/json"
+            :method :post
+            :content-type "application/json"
+            :external-format-out :utf-8
+            :external-format-in :utf-8
+            :content (json:encode-json-to-string
+                      `((markdown . ,markdown)))
+            :want-stream t)))))
+
+(defmethod render-markdown ((markdown hash-table))
+  (alist-hash-table
+   (cl-json:decode-json
+    (drakma:http-request
+     (concatenate 'string
+                  *cheddar-url*
+                  "/markdown")
+     :accept "application/json"
+     :method :post
+     :content-type "application/json"
+     :external-format-out :utf-8
+     :external-format-in :utf-8
+     :content (json:encode-json-to-string markdown)
+     :want-stream t))))
+
+(defun markdownify-comment-bodies (comments)
+  "Convert the bodies of the given list of comments to markdown in-place using
+  Cheddar, and return nothing"
+  (let ((in (make-hash-table))
+        (comment-table (make-hash-table)))
+    (dolist (comment comments)
+      (check-type comment model:issue-comment)
+      (setf (gethash (id comment) in) (body comment))
+      (setf (gethash (id comment) comment-table) comment))
+    (let ((res (render-markdown in)))
+      (iter (for (comment-id markdown-body) in-hashtable res)
+        (let ((comment-id (parse-integer (symbol-name comment-id))))
+          (setf (slot-value (gethash comment-id comment-table)
+                            'model:body)
+                markdown-body)))))
+  (values))
+
 ;;;
 ;;; Views
 ;;;
@@ -196,7 +252,7 @@
     (who:htm
      (:li
       :class "comment"
-      (:p (who:esc (body comment)))
+      (:p (who:str (body comment)))
       (:p
        :class "comment-info"
        (:span :class "username"
@@ -249,7 +305,7 @@
                           :value (case issue-status
                                    (:open "Close")
                                    (:closed "Reopen")))))))
-       (:p (who:esc (body issue)))
+       (:p (who:str (render-markdown (body issue))))
        (let* ((comments (issue-comments issue))
               (events (issue-events issue))
               (history (merge 'list
@@ -257,6 +313,7 @@
                               events
                               #'local-time:timestamp<
                               :key #'created-at)))
+         (markdownify-comment-bodies comments)
          (who:htm
           (:ol
            :class "issue-history"
@@ -410,7 +467,9 @@
 
 (defun main ()
   (let ((port (integer-env "PANETTONE_PORT" :default 6161))
-        (ldap-port (integer-env "LDAP_PORT" :default 389)))
+        (ldap-port (integer-env "LDAP_PORT" :default 389))
+        (cheddar-url (uiop:getenvp "CHEDDAR_URL")))
+    (when cheddar-url (setq *cheddar-url* cheddar-url))
     (setq hunchentoot:*show-lisp-backtraces-p* nil)
     (setq hunchentoot:*log-lisp-backtraces-p* nil)
     (start-panettone :port port
