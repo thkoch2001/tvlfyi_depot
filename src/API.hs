@@ -44,7 +44,7 @@ type API =
       :<|> "trips"
            :> SessionCookie
            :> ReqBody '[JSON] T.UpdateTripRequest
-           :> Patch '[JSON] NoContent
+           :> Put '[JSON] NoContent
       -- trips: Delete
       :<|> "trips"
            :> SessionCookie
