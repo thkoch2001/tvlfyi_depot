@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa8bfa11_0be060d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-01T14:10:32Z",
+      "side": 1,
+      "message": "mind adding a quick note as to why? would be nice to know in case we ever blame the _reserved member stuff.",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 44
+      },
+      "revId": "4adce66a6261c659a9e6ad1eaf18335dce0ea669",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5e93637_626fd28f",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-01T14:10:32Z",
+      "side": 1,
+      "message": "can we add a comment or a LOG(FATAL) here in case something changes such that we hit this on accident?",
+      "revId": "4adce66a6261c659a9e6ad1eaf18335dce0ea669",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
