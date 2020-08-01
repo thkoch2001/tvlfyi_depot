@@ -16,6 +16,7 @@ type SessionCookie = Header' '[Required] "Cookie" T.SessionCookie
 type API =
       -- accounts: Create
            "accounts"
+           :> Header "Cookie" T.SessionCookie
            :> ReqBody '[JSON] T.CreateAccountRequest
            :> Post '[JSON] NoContent
       :<|> "verify"

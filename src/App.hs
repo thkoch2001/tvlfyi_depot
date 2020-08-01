@@ -77,20 +77,34 @@ server config@T.Config{..} = createAccount
     adminsOnly cookie = adminsAnd cookie (const True)
 
     -- TODO(wpcarro): Handle failed CONSTRAINTs instead of sending 500s
-    createAccount :: T.CreateAccountRequest -> Handler NoContent
-    createAccount T.CreateAccountRequest{..} = do
-      secretUUID <- liftIO $ T.RegistrationSecret <$> Random.randomIO
-      liftIO $ PendingAccounts.create dbFile
-        secretUUID
-        createAccountRequestUsername
-        createAccountRequestPassword
-        createAccountRequestRole
-        createAccountRequestEmail
-      liftIO $ sendVerifyEmail config mailgunAPIKey
-        createAccountRequestUsername
-        createAccountRequestEmail
-        secretUUID
-      pure NoContent
+    createAccount :: Maybe T.SessionCookie
+                  -> T.CreateAccountRequest
+                  -> Handler NoContent
+    createAccount mCookie T.CreateAccountRequest{..} =
+      case (mCookie, createAccountRequestRole) of
+        (_, T.RegularUser) ->
+          doCreateAccount
+        (Nothing, T.Manager) ->
+          throwError err401 { errBody = "Only admins can create Manager accounts" }
+        (Nothing, T.Admin) ->
+          throwError err401 { errBody = "Only admins can create Admin accounts" }
+        (Just cookie, _) ->
+          adminsOnly cookie doCreateAccount
+      where
+        doCreateAccount :: Handler NoContent
+        doCreateAccount = do
+          secretUUID <- liftIO $ T.RegistrationSecret <$> Random.randomIO
+          liftIO $ PendingAccounts.create dbFile
+            secretUUID
+            createAccountRequestUsername
+            createAccountRequestPassword
+            createAccountRequestRole
+            createAccountRequestEmail
+          liftIO $ sendVerifyEmail config mailgunAPIKey
+            createAccountRequestUsername
+            createAccountRequestEmail
+            secretUUID
+          pure NoContent
 
     verifyAccount :: Text -> Text -> Handler NoContent
     verifyAccount username secret = do
