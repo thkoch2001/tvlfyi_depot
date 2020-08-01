@@ -33,7 +33,7 @@ std::string resolveMirrorUri(EvalState& state, std::string uri) {
   }
   std::string mirrorName(s, 0, p);
 
-  Value vMirrors{};
+  Value vMirrors;
   state.eval(
       state.parseExprFromString(
           "import <nixpkgs/pkgs/build-support/fetchurl/mirrors.nix>", "."),
@@ -120,7 +120,7 @@ static int _main(int argc, char** argv) {
     } else {
       Path path =
           resolveExprPath(lookupFileArg(*state, args.empty() ? "." : args[0]));
-      Value vRoot{};
+      Value vRoot;
       state->evalFile(path, vRoot);
       Value& v(*findAlongAttrPath(*state, attrPath, autoArgs, vRoot));
       state->forceAttrs(v);
@@ -181,7 +181,7 @@ static int _main(int argc, char** argv) {
       auto actualUri = resolveMirrorUri(*state, uri);
 
       AutoDelete tmpDir(createTempDir(), true);
-      Path tmpFile = Path(tmpDir) + "/tmp";
+      Path tmpFile = (Path)tmpDir + "/tmp";
 
       /* Download the file. */
       {
@@ -201,7 +201,7 @@ static int _main(int argc, char** argv) {
       /* Optionally unpack the file. */
       if (unpack) {
         LOG(INFO) << "unpacking...";
-        Path unpacked = Path(tmpDir) + "/unpacked";
+        Path unpacked = (Path)tmpDir + "/unpacked";
         createDirs(unpacked);
         if (absl::EndsWith(baseNameOf(uri), ".zip")) {
           runProgram("unzip", true, {"-qq", tmpFile, "-d", unpacked});

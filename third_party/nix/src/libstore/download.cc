@@ -160,7 +160,7 @@ struct CurlDownloader : public Downloader {
           decompressionSink = makeDecompressionSink(encoding, finalSink);
         }
 
-        (*decompressionSink)(static_cast<unsigned char*>(contents), realSize);
+        (*decompressionSink)((unsigned char*)contents, realSize);
 
         return realSize;
       } catch (...) {
@@ -171,13 +171,12 @@ struct CurlDownloader : public Downloader {
 
     static size_t writeCallbackWrapper(void* contents, size_t size,
                                        size_t nmemb, void* userp) {
-      return (static_cast<DownloadItem*>(userp))
-          ->writeCallback(contents, size, nmemb);
+      return ((DownloadItem*)userp)->writeCallback(contents, size, nmemb);
     }
 
     size_t headerCallback(void* contents, size_t size, size_t nmemb) {
       size_t realSize = size * nmemb;
-      std::string line(static_cast<char*>(contents), realSize);
+      std::string line((char*)contents, realSize);
       DLOG(INFO) << "got header for '" << request.uri
                  << "': " << absl::StripAsciiWhitespace(line);
       if (line.compare(0, 5, "HTTP/") == 0) {  // new response starts
@@ -219,8 +218,7 @@ struct CurlDownloader : public Downloader {
 
     static size_t headerCallbackWrapper(void* contents, size_t size,
                                         size_t nmemb, void* userp) {
-      return (static_cast<DownloadItem*>(userp))
-          ->headerCallback(contents, size, nmemb);
+      return ((DownloadItem*)userp)->headerCallback(contents, size, nmemb);
     }
 
     static int debugCallback(CURL* handle, curl_infotype type, char* data,
@@ -247,8 +245,7 @@ struct CurlDownloader : public Downloader {
 
     static size_t readCallbackWrapper(char* buffer, size_t size, size_t nitems,
                                       void* userp) {
-      return (static_cast<DownloadItem*>(userp))
-          ->readCallback(buffer, size, nitems);
+      return ((DownloadItem*)userp)->readCallback(buffer, size, nitems);
     }
 
     void init() {
@@ -340,7 +337,7 @@ struct CurlDownloader : public Downloader {
       long httpStatus = 0;
       curl_easy_getinfo(req, CURLINFO_RESPONSE_CODE, &httpStatus);
 
-      char* effectiveUriCStr = nullptr;
+      char* effectiveUriCStr;
       curl_easy_getinfo(req, CURLINFO_EFFECTIVE_URL, &effectiveUriCStr);
       if (effectiveUriCStr != nullptr) {
         result.effectiveUri = effectiveUriCStr;
@@ -549,7 +546,7 @@ struct CurlDownloader : public Downloader {
       checkInterrupt();
 
       /* Let curl do its thing. */
-      int running = 0;
+      int running;
       CURLMcode mc = curl_multi_perform(curlm, &running);
       if (mc != CURLM_OK) {
         throw nix::Error(
@@ -558,8 +555,8 @@ struct CurlDownloader : public Downloader {
       }
 
       /* Set the promises of any finished requests. */
-      CURLMsg* msg = nullptr;
-      int left = 0;
+      CURLMsg* msg;
+      int left;
       while ((msg = curl_multi_info_read(curlm, &left)) != nullptr) {
         if (msg->msg == CURLMSG_DONE) {
           auto i = items.find(msg->easy_handle);
@@ -582,10 +579,9 @@ struct CurlDownloader : public Downloader {
           nextWakeup != std::chrono::steady_clock::time_point()
               ? std::max(
                     0,
-                    static_cast<int>(
-                        std::chrono::duration_cast<std::chrono::milliseconds>(
-                            nextWakeup - std::chrono::steady_clock::now())
-                            .count()))
+                    (int)std::chrono::duration_cast<std::chrono::milliseconds>(
+                        nextWakeup - std::chrono::steady_clock::now())
+                        .count())
               : maxSleepTimeMs;
       DLOG(INFO) << "download thread waiting for " << sleepTimeMs << " ms";
       mc = curl_multi_wait(curlm, extraFDs, 1, sleepTimeMs, &numfds);
@@ -848,7 +844,7 @@ void Downloader::download(DownloadRequest&& request, Sink& sink) {
        if it's blocked on a full buffer. We don't hold the state
        lock while doing this to prevent blocking the download
        thread if sink() takes a long time. */
-    sink(reinterpret_cast<unsigned char*>(chunk.data()), chunk.size());
+    sink((unsigned char*)chunk.data(), chunk.size());
   }
 }
 
@@ -902,10 +898,9 @@ CachedDownloadResult Downloader::downloadCached(
       std::vector<std::string> ss =
           absl::StrSplit(readFile(dataFile), absl::ByChar('\n'));
       if (ss.size() >= 3 && ss[0] == url) {
-        time_t lastChecked = 0;
+        time_t lastChecked;
         if (absl::SimpleAtoi(ss[2], &lastChecked) &&
-            static_cast<uint64_t>(lastChecked) + request.ttl >=
-                static_cast<uint64_t>(time(nullptr))) {
+            (uint64_t)lastChecked + request.ttl >= (uint64_t)time(nullptr)) {
           skip = true;
           result.effectiveUri = request.uri;
           result.etag = ss[1];

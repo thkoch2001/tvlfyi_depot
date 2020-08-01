@@ -181,7 +181,7 @@ TEST_P(EvalFailureTest, Fails) {
   // Again, there are multiple expected exception types and the tests
   // don't specify which ones they are looking for.
   try {
-    Value result{};
+    Value result;
     state.eval(expr, result);
     state.forceValue(result);
     std::cout << result;
@@ -216,7 +216,7 @@ TEST_P(EvalSuccessTest, Fails) {
   ASSERT_NO_THROW(expr = state.parseExprFromFile(GetParam().string()))
       << path.stem().string() << ": should parse successfully";
 
-  Value result{};
+  Value result;
 
   ASSERT_NO_THROW({
     state.eval(expr, result);
