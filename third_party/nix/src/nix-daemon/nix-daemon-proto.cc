@@ -22,6 +22,7 @@
 namespace nix::daemon {
 
 using ::grpc::Status;
+using ::nix::proto::BuildStatus;
 using ::nix::proto::PathInfo;
 using ::nix::proto::StorePath;
 using ::nix::proto::StorePaths;
@@ -84,7 +85,7 @@ struct RetrieveRegularNARSink : ParseSink {
 
 class WorkerServiceImpl final : public WorkerService::Service {
  public:
-  explicit WorkerServiceImpl(nix::Store& store) : store_(&store) {}
+  WorkerServiceImpl(nix::Store& store) : store_(&store) {}
 
   Status IsValidPath(grpc::ServerContext* context, const StorePath* request,
                      nix::proto::IsValidPathResponse* response) override {
@@ -394,8 +395,8 @@ class WorkerServiceImpl final : public WorkerService::Service {
     PathSet will_substitute;
     PathSet unknown;
     // TODO(grfn): Switch to concrete size type
-    unsigned long long download_size = 0;
-    unsigned long long nar_size = 0;
+    unsigned long long download_size;
+    unsigned long long nar_size;
 
     store_->queryMissing(targets, will_build, will_substitute, unknown,
                          download_size, nar_size);

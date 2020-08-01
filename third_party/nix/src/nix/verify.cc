@@ -99,8 +99,7 @@ struct CmdVerify final : StorePathsCommand {
 
           } else {
             StringSet sigsSeen;
-            size_t actualSigsNeeded =
-                std::max(sigsNeeded, static_cast<size_t>(1));
+            size_t actualSigsNeeded = std::max(sigsNeeded, (size_t)1);
             size_t validSigs = 0;
 
             auto doSigs = [&](const StringSet& sigs) {

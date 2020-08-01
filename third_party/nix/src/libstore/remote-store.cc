@@ -97,7 +97,7 @@ ref<RemoteStore::Connection> UDSRemoteStore::openConnection() {
 
   std::string socketPath = path ? *path : settings.nixDaemonSocketFile;
 
-  struct sockaddr_un addr {};
+  struct sockaddr_un addr;
   addr.sun_family = AF_UNIX;
   strncpy(addr.sun_path, socketPath.c_str(), sizeof(addr.sun_path));
   if (addr.sun_path[sizeof(addr.sun_path) - 1] != '\0') {
@@ -347,7 +347,7 @@ void RemoteStore::queryPathInfoUncached(
         throw;
       }
       if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 17) {
-        bool valid = 0;
+        bool valid;
         conn->from >> valid;
         if (!valid) {
           throw InvalidPath(format("path '%s' is not valid") % path);
@@ -544,9 +544,9 @@ BuildResult RemoteStore::buildDerivation(const Path& drvPath,
   conn->to << wopBuildDerivation << drvPath << drv << buildMode;
   conn.processStderr();
   BuildResult res;
-  unsigned int status = 0;
+  unsigned int status;
   conn->from >> status >> res.errorMsg;
-  res.status = static_cast<BuildResult::Status>(status);
+  res.status = (BuildResult::Status)status;
   return res;
 }
 

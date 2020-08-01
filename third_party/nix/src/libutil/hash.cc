@@ -154,7 +154,7 @@ static std::string printHash32(const Hash& hash) {
   std::string s;
   s.reserve(len);
 
-  for (int n = static_cast<int>(len) - 1; n >= 0; n--) {
+  for (int n = (int)len - 1; n >= 0; n--) {
     unsigned int b = n * 5;
     unsigned int i = b / 8;
     unsigned int j = b % 8;
@@ -187,8 +187,7 @@ std::string Hash::to_string(Base base, bool includeType) const {
     case Base64:
     case SRI:
       std::string b64;
-      absl::Base64Escape(
-          std::string(reinterpret_cast<const char*>(hash), hashSize), &b64);
+      absl::Base64Escape(std::string((const char*)hash, hashSize), &b64);
       s += b64;
       break;
   }
@@ -355,7 +354,7 @@ Hash hashString(HashType ht, const std::string& s) {
   hash::Ctx ctx{};
   Hash hash(ht);
   start(ht, ctx);
-  update(ht, ctx, reinterpret_cast<const unsigned char*>(s.data()), s.length());
+  update(ht, ctx, (const unsigned char*)s.data(), s.length());
   finish(ht, ctx, hash.hash);
   return hash;
 }
@@ -371,7 +370,7 @@ Hash hashFile(HashType ht, const Path& path) {
   }
 
   std::vector<unsigned char> buf(8192);
-  ssize_t n = 0;
+  ssize_t n;
   while ((n = read(fd.get(), buf.data(), buf.size())) != 0) {
     checkInterrupt();
     if (n == -1) {

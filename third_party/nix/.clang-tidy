@@ -1,4 +1,4 @@
 ---
-Checks: 'abseil-c*,clang-analyzer-security-*,bugprone-*,google-*,modernize-*,cppcoreguidelines-*,misc-*,-modernize-use-trailing-return-type'
+Checks: 'abseil-c*,clang-analyzer-security-*,bugprone-*,google-*,modernize-*,cppcoreguidelines-*,misc-*'
 WarningsAsErrors: 'abseil-*,clang-analyzer-security*'
 ...
