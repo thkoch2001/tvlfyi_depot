@@ -253,6 +253,13 @@ in lib.fix(self: {
     }];
   };
 
+  services.postgresqlBackup = {
+    enable = true;
+    databases = [
+      "tvldb"
+      "panettone"
+    ];
+  };
 
   environment.systemPackages = with nixpkgs; [
     bb
