@@ -6,6 +6,7 @@
 #include <absl/strings/escaping.h>
 #include <absl/strings/str_format.h>
 #include <fcntl.h>
+#include <glog/logging.h>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
 #include <sys/stat.h>
@@ -182,6 +183,7 @@ Hash::Hash(std::string_view s, HashType type) : type(type) {
   *this = unwrap_throw(result);
 }
 
+// TODO(riking): change ht to an optional
 absl::StatusOr<Hash> Hash::deserialize(std::string_view s, HashType type) {
   size_t pos = 0;
   bool isSRI = false;
@@ -201,7 +203,7 @@ absl::StatusOr<Hash> Hash::deserialize(std::string_view s, HashType type) {
   if (sep != std::string::npos) {
     std::string hts = std::string(s, 0, sep);
     parsedType = parseHashType(hts);
-    if (parsedType != type) {
+    if (type != htUnknown && parsedType != type) {
       return absl::InvalidArgumentError(
           absl::StrCat("hash '", s, "' should have type '", printHashType(type),
                        "', found '", printHashType(parsedType), "'"));
@@ -432,7 +434,10 @@ std::string printHashType(HashType ht) {
     return "sha256";
   } else if (ht == htSHA512) {
     return "sha512";
+  } else if (ht == htUnknown) {
+    return "<unknown>";
   } else {
+    LOG(FATAL) << "Unrecognized hash type: " << static_cast<int>(ht);
     abort();
   }
 }
