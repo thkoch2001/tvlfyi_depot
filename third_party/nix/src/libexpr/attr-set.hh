@@ -14,7 +14,7 @@ class EvalState;
 struct Value;
 
 /* Map one attribute name to its value. */
-struct Attr {
+struct Attr : public gc {
   Symbol name;
   Value* value;  // TODO(tazjin): Who owns this?
   Pos* pos;      // TODO(tazjin): Who owns this?
@@ -26,9 +26,9 @@ struct Attr {
 // allocator explicitly specified.
 using AttributeMap =
     absl::btree_map<Symbol, Attr, std::less<Symbol>,
-                    gc_allocator<std::pair<const Symbol, Attr>>>;
+                    traceable_allocator<std::pair<const Symbol, Attr>>>;
 
-class Bindings {
+class Bindings : public gc {
  public:
   typedef AttributeMap::iterator iterator;
 
