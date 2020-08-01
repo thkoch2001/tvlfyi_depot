@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3d88fd38_d899f42e",
+        "filename": "third_party/nix/src/libutil/hash.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-01T14:06:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42b0facf_8c330476",
+      "range": {
+        "startLine": 19,
+        "startChar": 14,
+        "endLine": 19,
+        "endChar": 22
+      },
+      "revId": "f8f38492f240702f9f94071b384f0b831f01bace",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c490f71e_366e90d8",
         "filename": "third_party/nix/src/libutil/hash.hh",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "f8f38492f240702f9f94071b384f0b831f01bace",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3d3d4ac_fac5bc94",
+        "filename": "third_party/nix/src/libutil/hash.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-01T14:06:42Z",
+      "side": 1,
+      "message": "I could hypothetically see this being overloaded to support other argument types - plus we already have build_mode_from and I\u0027d rather not spread the change around if not necessary.",
+      "parentUuid": "c490f71e_366e90d8",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 13,
+        "endChar": 38
+      },
+      "revId": "f8f38492f240702f9f94071b384f0b831f01bace",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9f15ab58_cfd6c816",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-01T14:06:42Z",
+      "side": 1,
+      "message": "huh, I thought msg.data() would throw if we didn\u0027t have it, but I guess not. Dang, need to throw an exception here :/",
+      "parentUuid": "a890ede6_5d32b2dc",
+      "range": {
+        "startLine": 42,
+        "startChar": 31,
+        "endLine": 42,
+        "endChar": 34
+      },
+      "revId": "f8f38492f240702f9f94071b384f0b831f01bace",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67eaeadf_80da69dd",
         "filename": "third_party/nix/src/proto/worker.proto",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "be3951a6_4c6c287c",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-01T14:06:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67eaeadf_80da69dd",
+      "range": {
+        "startLine": 20,
+        "startChar": 15,
+        "endLine": 20,
+        "endChar": 25
+      },
+      "revId": "f8f38492f240702f9f94071b384f0b831f01bace",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da791823_25b7873c",
         "filename": "third_party/nix/src/proto/worker.proto",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "f8f38492f240702f9f94071b384f0b831f01bace",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a115f963_198661e7",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-01T14:06:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da791823_25b7873c",
+      "range": {
+        "startLine": 100,
+        "startChar": 2,
+        "endLine": 100,
+        "endChar": 50
+      },
+      "revId": "f8f38492f240702f9f94071b384f0b831f01bace",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
