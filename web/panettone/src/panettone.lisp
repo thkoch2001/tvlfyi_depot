@@ -107,6 +107,20 @@
         (when ,footer
           (render/footer-nav)))))))
 
+(defun form-button (&key
+                      class
+                      input-class
+                      href
+                      label
+                      (method "post"))
+  (who:with-html-output (*standard-output*)
+    (:form :class class
+           :method method
+           :action href
+           (:input :type "submit"
+                   :class input-class
+                   :value label))))
+
 (defun render/alert (message)
   "Render an alert box for MESSAGE, if non-null"
   (check-type message (or null string))
@@ -209,28 +223,38 @@
       (:a :href "/" "View open isues"))
      (render/issue-list :issues issues))))
 
-(defun render/new-issue (&optional message)
+(defun render/issue-form (&optional issue message)
   (render ()
     (:header
-     (:h1 "New Issue"))
+     (:h1
+      (who:esc
+       (if (id issue) "Edit Issue" "New Issue"))))
     (:main
      (render/alert message)
      (:form :method "post"
-            :action "/issues"
+            :action (if (id issue)
+                        (format nil "/issues/~A"
+                                (id issue))
+                        "/issues")
             :class "issue-form"
             (:div
              (:input :type "text"
                      :id "subject"
                      :name "subject"
-                     :placeholder "Subject"))
+                     :placeholder "Subject"
+                     :value (subject issue)))
 
             (:div
              (:textarea :name "body"
                         :placeholder "Description"
-                        :rows 10))
+                        :rows 10
+                        (who:esc (body issue))))
 
             (:input :type "submit"
-                    :value "Create Issue")))))
+                    :value
+                    (if (id issue)
+                        "Save Issue"
+                        "Create Issue"))))))
 
 (defun render/new-comment (issue-id)
   (who:with-html-output (*standard-output*)
@@ -261,19 +285,28 @@
               (who:esc (format-dottime (created-at comment)))))))))
 
 (defmethod render/issue-history-item ((event model:issue-event))
-  (when (string= (field event) "STATUS")
+  (let ((user (find-user-by-dn (acting-user-dn event))))
     (who:with-html-output (*standard-output*)
-      (let ((user (find-user-by-dn (acting-user-dn event))))
-        (who:htm
-         (:li
-          :class "event"
-          (who:esc (displayname user))
-          (who:esc
-           (switch ((new-value event) :test #'string=)
-             ("OPEN" " reopened ")
-             ("CLOSED" " closed ")))
-          " this issue at "
-          (who:esc (format-dottime (created-at event)))))))))
+      (:li
+       :class "event"
+       (who:esc (displayname user))
+       (if (string= (field event) "STATUS")
+           (who:htm
+            (who:esc
+             (switch ((new-value event) :test #'string=)
+               ("OPEN" " reopened ")
+               ("CLOSED" " closed ")))
+            " this issue ")
+           (who:htm
+            " changed the "
+            (who:esc (string-downcase (field event)))
+            " of this issue from \""
+            (who:esc (previous-value event))
+            "\" to \""
+            (who:esc (new-value event))
+            "\""))
+       " at "
+       (who:esc (format-dottime (created-at event)))))))
 
 (defun render/issue (issue)
   (check-type issue model:issue)
@@ -291,20 +324,26 @@
 
         (when *user*
           (who:htm
-           (:form :class "set-issue-status"
-                  :method "post"
-                  :action (format nil "/issues/~A/~A"
-                                  issue-id
-                                  (case issue-status
-                                    (:open "close")
-                                    (:closed "open")))
-                  (:input :type "submit"
-                          :class (case issue-status
-                                   (:open "close-issue")
-                                   (:closed "open-issue"))
-                          :value (case issue-status
-                                   (:open "Close")
-                                   (:closed "Reopen")))))))
+           (when (string= (author-dn issue)
+                          (dn *user*))
+             (who:htm
+              (:a :class "edit-issue"
+                  :href (format nil "/issues/~A/edit"
+                                issue-id)
+                  "Edit")))
+           (form-button
+            :class "set-issue-status"
+            :href (format nil "/issues/~A/~A"
+                          issue-id
+                          (case issue-status
+                            (:open "close")
+                            (:closed "open")))
+            :input-class (case issue-status
+                           (:open "close-issue")
+                           (:closed "open-issue"))
+            :label (case issue-status
+                     (:open "Close")
+                     (:closed "Reopen"))))))
        (:p (who:str (render-markdown (body issue))))
        (let* ((comments (issue-comments issue))
               (events (issue-events issue))
@@ -388,17 +427,19 @@
     (render/closed-issues :issues issues)))
 
 (defroute new-issue ("/issues/new" :decorators (@auth)) ()
-  (render/new-issue))
+  (render/issue-form))
 
 (defroute handle-create-issue
     ("/issues" :method :post :decorators (@auth @txn))
     (&post subject body)
   (if (string= subject "")
-      (render/new-issue "Subject is required")
+      (render/issue-form
+       (make-instance 'model:issue :subject subject :body body)
+       "Subject is required")
       (progn
         (model:create-issue :subject subject
-                                      :body body
-                                      :author-dn (dn *user*))
+                            :body body
+                            :author-dn (dn *user*))
         (hunchentoot:redirect "/"))))
 
 (defroute show-issue
@@ -408,6 +449,30 @@
          (*title* (format nil "~A | Panettone"
                           (subject issue))))
     (render/issue issue)))
+
+(defroute edit-issue
+    ("/issues/:id/edit" :decorators (@auth @handle-issue-not-found))
+    (&path (id 'integer))
+  (let* ((issue (model:get-issue id))
+         (*title* "Edit Issue | Panettone"))
+    (render/issue-form issue)))
+
+(defroute update-issue
+    ("/issues/:id" :decorators (@auth @handle-issue-not-found @txn)
+                   ;; NOTE: this should be a put, but we're all HTML forms
+                   ;; right now and those don't support PUT
+                   :method :post)
+    (&path (id 'integer) &post subject body)
+  (let ((issue (model:get-issue id)))
+    ;; only the original author can edit an issue
+    (if (string-equal (author-dn issue)
+                      (dn *user*))
+        (progn
+          (model:update-issue issue
+                              'model:subject subject
+                              'model:body body)
+          (hunchentoot:redirect (format nil "/issues/~A" id)))
+        (render/not-found "Issue"))))
 
 (defroute handle-create-comment
     ("/issues/:id/comments"
@@ -435,7 +500,7 @@
 
 (defroute open-issue
     ("/issues/:id/open" :decorators (@auth)
-                         :method :post)
+                        :method :post)
     (&path (id 'integer))
   (model:set-issue-status id :open)
   (hunchentoot:redirect (format nil "/issues/~A" id)))
