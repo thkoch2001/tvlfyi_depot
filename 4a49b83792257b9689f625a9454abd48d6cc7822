@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f32f23c9_b446664b",
+        "filename": "ops/besadii/main.go2",
+        "patchSetId": 6
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-01T16:20:55Z",
+      "side": 1,
+      "message": "This is the Boolean opposite of what I would assume - that is, ignore rules if we\u0027re saying everything is fine.",
+      "range": {
+        "startLine": 275,
+        "startChar": 34,
+        "endLine": 275,
+        "endChar": 46
+      },
+      "revId": "4a49b83792257b9689f625a9454abd48d6cc7822",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
