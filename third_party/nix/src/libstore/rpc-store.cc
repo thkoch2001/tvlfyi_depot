@@ -38,6 +38,14 @@ proto::StorePath StorePath(const Path& path) {
   return store_path;
 }
 
+proto::StorePaths StorePaths(const PathSet& paths) {
+  proto::StorePaths result;
+  for (const auto& path : paths) {
+    result.add_paths(path);
+  }
+  return result;
+}
+
 template <typename T, typename U>
 T FillFrom(const U& src) {
   T result;
@@ -143,16 +151,37 @@ StringSet RpcStore::queryDerivationOutputNames(const Path& path) {
 }
 
 Path RpcStore::queryPathFromHashPart(const std::string& hashPart) {
-  throw absl::StrCat("Not implemented ", __func__);
+  proto::StorePath path;
+  proto::HashPart proto_hash_part;
+  proto_hash_part.set_hash_part(hashPart);
+  SuccessOrThrow(stub_->QueryPathFromHashPart(&ctx, proto_hash_part, &path));
+  return path.path();
 }
 
 PathSet RpcStore::querySubstitutablePaths(const PathSet& paths) {
-  throw absl::StrCat("Not implemented ", __func__);
+  proto::StorePaths result;
+  SuccessOrThrow(
+      stub_->QuerySubstitutablePaths(&ctx, StorePaths(paths), &result));
+  return FillFrom<PathSet>(result.paths());
 }
 
 void RpcStore::querySubstitutablePathInfos(const PathSet& paths,
                                            SubstitutablePathInfos& infos) {
-  throw absl::StrCat("Not implemented ", __func__);
+  proto::SubstitutablePathInfos result;
+  SuccessOrThrow(
+      stub_->QuerySubstitutablePathInfos(&ctx, StorePaths(paths), &result));
+
+  for (const auto& path_info : result.path_infos()) {
+    auto path = path_info.path().path();
+    SubstitutablePathInfo& info(infos[path]);
+    info.deriver = path_info.deriver().path();
+    if (!info.deriver.empty()) {
+      assertStorePath(info.deriver);
+    }
+    info.references = FillFrom<PathSet>(path_info.references());
+    info.downloadSize = path_info.download_size();
+    info.narSize = path_info.nar_size();
+  }
 }
 
 void RpcStore::addToStore(const ValidPathInfo& info, Source& narSource,
