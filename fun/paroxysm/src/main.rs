@@ -1,27 +1,16 @@
-extern crate irc;
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-#[macro_use]
-extern crate diesel;
-extern crate chrono;
-extern crate config;
-extern crate env_logger;
-#[macro_use]
-extern crate log;
-#[macro_use]
-extern crate failure;
-extern crate regex;
-#[macro_use]
-extern crate lazy_static;
-extern crate rand;
+// TODO(tazjin): Upgrade to a Diesel version with public derive
+// macros.
+#[macro_use] extern crate diesel;
 
 use crate::cfg::Config;
 use crate::keyword::KeywordDetails;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
 use failure::Error;
+use failure::format_err;
 use irc::client::prelude::*;
+use lazy_static::lazy_static;
+use log::{debug, info, warn};
 use rand::rngs::ThreadRng;
 use rand::{thread_rng, Rng};
 use regex::{Captures, Regex};
@@ -275,6 +264,7 @@ impl App {
     }
 
     pub fn handle_privmsg(&mut self, from: &str, chan: &str, msg: &str) -> Result<(), Error> {
+        // TODO(tazjin): Move these to the top.
         lazy_static! {
             static ref LEARN_RE: Regex =
                 Regex::new(r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*):\s*(?P<val>.*)"#).unwrap();

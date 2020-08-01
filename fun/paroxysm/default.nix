@@ -7,5 +7,10 @@ pkgs.naersk.buildPackage {
   name = "paroxysm";
   version = "0.0.1";
   src = ./.;
-  buildInputs = [pkgs.openssl pkgs.pkgconfig pkgs.postgresql.lib];
+
+  buildInputs = with pkgs; [
+    openssl
+    pkgconfig
+    postgresql.lib
+  ];
 }
