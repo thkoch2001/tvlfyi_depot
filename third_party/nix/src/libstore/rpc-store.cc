@@ -56,9 +56,10 @@ T FillFrom(const U& src) {
 // TODO(grfn): Obviously this should go away and be replaced by StatusOr... but
 // that would require refactoring the entire store api, which we don't feel like
 // doing right now. We should at some point though
-void SuccessOrThrow(const grpc::Status& status) {
+void const RpcStore::SuccessOrThrow(const grpc::Status& status) const {
   if (!status.ok()) {
-    throw Error(absl::StrFormat("Rpc call failed (%d): %s ",
+    throw Error(absl::StrFormat("Rpc call to %s failed (%d): %s ",
+                                uri_.value_or("unknown URI"),
                                 status.error_code(), status.error_message()));
   }
 }

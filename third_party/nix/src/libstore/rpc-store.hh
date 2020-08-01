@@ -137,6 +137,8 @@ class RpcStore : public LocalFSStore, public virtual Store {
  private:
   std::optional<std::string> uri_;
   std::unique_ptr<nix::proto::WorkerService::Stub> stub_;
+
+  void const SuccessOrThrow(const grpc::Status& status) const;
 };
 
 }  // namespace nix::store
