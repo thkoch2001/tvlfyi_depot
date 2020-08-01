@@ -302,7 +302,7 @@ in lib.fix(self: {
     };
   };
 
-  systemd.timers.restic-gerrit = {
+  systemd.timers.restic = {
     wantedBy = [ "multi-user.target" ];
     timerConfig.OnCalendar = "hourly";
   };
