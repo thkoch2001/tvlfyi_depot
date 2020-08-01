@@ -246,11 +246,13 @@ message CollectGarbageResponse {
 }
 
 message PathInfo {
+  StorePath path = 10;
   bool is_valid = 9;
   StorePath deriver = 1;
   bytes nar_hash = 2;
   repeated string references = 3;
   google.protobuf.Timestamp registration_time = 4;
+  uint64 download_size = 11;
   uint64 nar_size = 5;
   // Whether the path is ultimately trusted, that is, it's a derivation
   // output that was built locally.
