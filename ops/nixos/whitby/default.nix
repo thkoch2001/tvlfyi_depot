@@ -296,6 +296,7 @@ in lib.fix(self: {
       GOOGLE_APPLICATION_CREDENTIALS = "/var/backup/restic/gcp-key.json";
       RESTIC_REPOSITORY = "gs:tvl-fyi-backups:/whitby";
       RESTIC_PASSWORD_FILE = "/var/backup/restic/secret";
+      RESTIC_CACHE_DIR = "/var/backup/restic/cache";
       RESTIC_EXCLUDE_FILE = builtins.toFile "exclude-files" ''
         /var/lib/gerrit/tmp
       '';
