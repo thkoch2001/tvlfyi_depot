@@ -19,8 +19,8 @@
 
 (defpackage panettone.model
   (:nicknames :model)
-  (:use :cl :panettone.util :klatre :postmodern)
-  (:import-from :alexandria :if-let :define-constant)
+  (:use :cl :panettone.util :klatre :postmodern :iterate)
+  (:import-from :alexandria :if-let :when-let :define-constant)
   (:export
    :connect-postgres :ddl/init
 
@@ -29,7 +29,7 @@
    :field :previous-value :new-value
 
    :get-issue :issue-exists-p :list-issues :create-issue :set-issue-status
-   :delete-issue :issue-not-found
+   :update-issue :delete-issue :issue-not-found
 
    :issue-events
 
