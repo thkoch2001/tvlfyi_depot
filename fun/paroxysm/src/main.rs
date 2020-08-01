@@ -22,6 +22,24 @@ mod keyword;
 mod models;
 mod schema;
 
+lazy_static! {
+    static ref LEARN_RE: Regex =
+        Regex::new(r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*):\s*(?P<val>.*)"#).unwrap();
+
+    static ref QUERY_RE: Regex =
+        Regex::new(r#"^\?\?\s*(?P<subj>[^\[:]*)(?P<idx>\[[^\]]+\])?"#).unwrap();
+
+    static ref QLAST_RE: Regex = Regex::new(r#"^\?\?\s*(?P<subj>[^\[:]*)!"#).unwrap();
+
+    static ref INCREMENT_RE: Regex =
+        Regex::new(r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*)(?P<incrdecr>\+\+|\-\-)"#)
+        .unwrap();
+
+    static ref MOVE_RE: Regex = Regex::new(
+        r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*)(?P<idx>\[[^\]]+\])->(?P<new_idx>.*)"#
+    ).unwrap();
+}
+
 pub struct App {
     client: IrcClient,
     pg: Pool<ConnectionManager<PgConnection>>,
@@ -264,21 +282,6 @@ impl App {
     }
 
     pub fn handle_privmsg(&mut self, from: &str, chan: &str, msg: &str) -> Result<(), Error> {
-        // TODO(tazjin): Move these to the top.
-        lazy_static! {
-            static ref LEARN_RE: Regex =
-                Regex::new(r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*):\s*(?P<val>.*)"#).unwrap();
-            static ref QUERY_RE: Regex =
-                Regex::new(r#"^\?\?\s*(?P<subj>[^\[:]*)(?P<idx>\[[^\]]+\])?"#).unwrap();
-            static ref QLAST_RE: Regex = Regex::new(r#"^\?\?\s*(?P<subj>[^\[:]*)!"#).unwrap();
-            static ref INCREMENT_RE: Regex =
-                Regex::new(r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*)(?P<incrdecr>\+\+|\-\-)"#)
-                    .unwrap();
-            static ref MOVE_RE: Regex = Regex::new(
-                r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*)(?P<idx>\[[^\]]+\])->(?P<new_idx>.*)"#
-            )
-            .unwrap();
-        }
         let nick = from.split("!").next().ok_or(format_err!(
             "Received PRIVMSG from a source without nickname (failed to split n!u@h)"
         ))?;
