@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "803d9962_fcf2dfec",
+        "filename": "third_party/nix/src/libstore/legacy-ssh-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-01T00:43:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41e42174_5c463111",
+      "revId": "f746f285585fb5ba1ea71d66af12120ef648be59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b0a65b3_8d821e16",
         "filename": "third_party/nix/src/libstore/local-store.cc",
         "patchSetId": 2
@@ -59,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "5764ba8c_b1c3a331",
+        "filename": "third_party/nix/src/libstore/local-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-01T00:43:08Z",
+      "side": 1,
+      "message": "StrCat is actually faster for very simple format strings like this.",
+      "parentUuid": "6b0a65b3_8d821e16",
+      "revId": "f746f285585fb5ba1ea71d66af12120ef648be59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68328c8d_0ef9d0d0",
         "filename": "third_party/nix/src/nix/hash.cc",
         "patchSetId": 2
@@ -73,6 +109,24 @@
       "revId": "f746f285585fb5ba1ea71d66af12120ef648be59",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "007c7317_ecad9d3e",
+        "filename": "third_party/nix/src/nix/hash.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-01T00:43:08Z",
+      "side": 1,
+      "message": "This is scriptable cout, can\u0027t have log prefixes here.",
+      "parentUuid": "68328c8d_0ef9d0d0",
+      "revId": "f746f285585fb5ba1ea71d66af12120ef648be59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
