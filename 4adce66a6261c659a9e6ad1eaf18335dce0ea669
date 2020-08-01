@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "19367ec8_1e920370",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-01T17:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa8bfa11_0be060d0",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 44
+      },
+      "revId": "4adce66a6261c659a9e6ad1eaf18335dce0ea669",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5e93637_626fd28f",
         "filename": "third_party/nix/src/libexpr/eval.cc",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "4adce66a6261c659a9e6ad1eaf18335dce0ea669",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a38c2e9e_5871b4d8",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-01T17:13:29Z",
+      "side": 1,
+      "message": "Done.\nAlso added the numeric enum value to the default case of the other switch.",
+      "parentUuid": "b5e93637_626fd28f",
+      "revId": "4adce66a6261c659a9e6ad1eaf18335dce0ea669",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
