@@ -286,17 +286,16 @@ in lib.fix(self: {
     };
   };
 
-  # Regularly back up Gerrit to Google Cloud Storage.
-  systemd.services.restic-gerrit = {
-    description = "Gerrit backups to Google Cloud Storage";
-    script = "${nixpkgs.restic}/bin/restic backup /var/lib/gerrit";
-    serviceConfig.User = "git";
+  # Regularly back up whitby to Google Cloud Storage.
+  systemd.services.restic = {
+    description = "Backups to Google Cloud Storage";
+    script = "${nixpkgs.restic}/bin/restic backup /var/lib/gerrit /var/backup/postgresql";
 
     environment = {
       GOOGLE_PROJECT_ID = "tazjins-infrastructure";
-      GOOGLE_APPLICATION_CREDENTIALS = "/var/lib/git/restic/gcp-key.json";
+      GOOGLE_APPLICATION_CREDENTIALS = "/var/backup/restic/gcp-key.json";
       RESTIC_REPOSITORY = "gs:tvl-fyi-backups:/whitby";
-      RESTIC_PASSWORD_FILE = "/var/lib/git/restic/secret";
+      RESTIC_PASSWORD_FILE = "/var/backup/restic/secret";
       RESTIC_EXCLUDE_FILE = builtins.toFile "exclude-files" ''
         /var/lib/gerrit/tmp
       '';
