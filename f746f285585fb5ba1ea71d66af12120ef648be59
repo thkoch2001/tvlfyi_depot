@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fd8de5b_1ba87983",
+        "filename": "third_party/nix/src/libexpr/primops.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-01T00:25:32Z",
+      "side": 1,
+      "message": "Q: Why are you creating so many extra local variables?\nA: unwrap_throw is intended to be a temporary construct, replaced by ASSIGN_OR_RETURN and friends, so I made sure to always place it on its own line.",
+      "range": {
+        "startLine": 708,
+        "startChar": 12,
+        "endLine": 708,
+        "endChar": 39
+      },
+      "revId": "f746f285585fb5ba1ea71d66af12120ef648be59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
