@@ -30,7 +30,7 @@ void processExpr(EvalState& state, const Strings& attrPaths, bool parseOnly,
     return;
   }
 
-  Value vRoot{};
+  Value vRoot;
   state.eval(e, vRoot);
 
   for (auto& i : attrPaths) {
@@ -39,7 +39,7 @@ void processExpr(EvalState& state, const Strings& attrPaths, bool parseOnly,
 
     PathSet context;
     if (evalOnly) {
-      Value vRes{};
+      Value vRes;
       if (autoArgs.empty()) {
         vRes = v;
       } else {

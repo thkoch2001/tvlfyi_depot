@@ -34,7 +34,7 @@ struct LegacySSHStore : public Store {
     std::unique_ptr<SSHMaster::Connection> sshConn;
     FdSink to;
     FdSource from;
-    int remoteVersion{};
+    int remoteVersion;
     bool good = true;
   };
 
@@ -214,7 +214,7 @@ struct LegacySSHStore : public Store {
     conn->to.flush();
 
     BuildResult status;
-    status.status = static_cast<BuildResult::Status>(readInt(conn->from));
+    status.status = (BuildResult::Status)readInt(conn->from);
     conn->from >> status.errorMsg;
 
     if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 3) {

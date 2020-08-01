@@ -12,9 +12,9 @@
 
 class ValueTest : public ::testing::Test {
  protected:
-  static void SetUpTestSuite() { nix::initGC(); }
+  static void SetUpTestCase() { nix::initGC(); }
 
-  static void TearDownTestSuite() {}
+  static void TearDownTestCase() {}
 };
 
 class JSONValueTest : public ValueTest {};
@@ -26,7 +26,7 @@ using nix::tests::DummyStore;
 
 TEST_F(JSONValueTest, null) {
   std::stringstream ss;
-  Value v{};
+  Value v;
   PathSet ps;
   std::shared_ptr<Store> store = std::make_shared<DummyStore>();
   EvalState s({}, ref<Store>(store));
@@ -40,7 +40,7 @@ TEST_F(JSONValueTest, BoolFalse) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkBool(v, false);
@@ -52,7 +52,7 @@ TEST_F(JSONValueTest, BoolTrue) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkBool(v, true);
@@ -64,7 +64,7 @@ TEST_F(JSONValueTest, IntPositive) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkInt(v, 100);
@@ -76,7 +76,7 @@ TEST_F(JSONValueTest, IntNegative) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkInt(v, -100);
@@ -88,7 +88,7 @@ TEST_F(JSONValueTest, String) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkString(v, "test");
@@ -100,7 +100,7 @@ TEST_F(JSONValueTest, StringQuotes) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkString(v, "test\"");
@@ -112,7 +112,7 @@ TEST_F(JSONValueTest, Path) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkPathNoCopy(v, "/exists-for-tests");
@@ -124,7 +124,7 @@ TEST_F(JSONValueTest, PathNoCopy) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkPathNoCopy(v, "/exists-for-tests");
@@ -141,7 +141,7 @@ TEST_F(JSONValueTest, PathNoCopy) {
 
 TEST_F(XMLValueTest, null) {
   std::stringstream ss;
-  Value v{};
+  Value v;
   PathSet ps;
   auto store = std::make_shared<DummyStore>();
   EvalState s({}, ref<Store>(store));
@@ -155,7 +155,7 @@ TEST_F(XMLValueTest, BoolFalse) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkBool(v, false);
@@ -167,7 +167,7 @@ TEST_F(XMLValueTest, BoolTrue) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkBool(v, true);
@@ -179,7 +179,7 @@ TEST_F(XMLValueTest, IntPositive) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkInt(v, 100);
@@ -191,7 +191,7 @@ TEST_F(XMLValueTest, IntNegative) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkInt(v, -100);
@@ -203,7 +203,7 @@ TEST_F(XMLValueTest, String) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkString(v, "test-value");
@@ -215,7 +215,7 @@ TEST_F(XMLValueTest, StringQuotes) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkString(v, "test-value\"");
@@ -231,7 +231,7 @@ TEST_F(XMLValueTest, Path) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkPath(v, "some-path");
@@ -247,7 +247,7 @@ TEST_F(XMLValueTest, PathNoCopy) {
   std::stringstream ss;
   auto store = std::make_shared<DummyStore>();
   EvalState s({"."}, ref<Store>(store));
-  Value v{};
+  Value v;
   PathSet ps;
 
   mkPathNoCopy(v, "some-other-path");

@@ -76,7 +76,7 @@ struct NarAccessor : public FSAccessor {
     void preallocateContents(unsigned long long size) override {
       currentStart = std::string(s, pos, 16);
       assert(size <= std::numeric_limits<size_t>::max());
-      parents.top()->size = static_cast<size_t>(size);
+      parents.top()->size = (size_t)size;
       parents.top()->start = pos;
     }
 

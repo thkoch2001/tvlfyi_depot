@@ -51,7 +51,7 @@ Value* findAlongAttrPath(EvalState& state, const std::string& attrPath,
   for (auto& attr : tokens) {
     /* Is i an index (integer) or a normal attribute name? */
     enum { apAttr, apIndex } apType = apAttr;
-    unsigned int attrIndex = 0;
+    unsigned int attrIndex;
     if (absl::SimpleAtoi(attr, &attrIndex)) {
       apType = apIndex;
     }

@@ -68,8 +68,8 @@ std::string nextComponent(std::string::const_iterator& p,
 }
 
 static bool componentsLT(const std::string& c1, const std::string& c2) {
-  int n1 = 0;
-  int n2 = 0;
+  int n1;
+  int n2;
   bool c1Num = absl::SimpleAtoi(c1, &n1);
   bool c2Num = absl::SimpleAtoi(c2, &n2);
 
