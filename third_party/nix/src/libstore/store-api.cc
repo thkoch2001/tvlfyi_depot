@@ -5,6 +5,7 @@
 
 #include <absl/strings/match.h>
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_cat.h>
 #include <absl/strings/str_split.h>
 #include <glog/logging.h>
 #include <grpcpp/create_channel.h>
@@ -984,28 +985,29 @@ StoreType getStoreType(const std::string& uri, const std::string& stateDir) {
   }
 }
 
-static RegisterStoreImplementation regStore(
-    [](const std::string& uri,
-       const Store::Params& params) -> std::shared_ptr<Store> {
-      switch (getStoreType(uri, get(params, "state", settings.nixStateDir))) {
-        case tDaemon: {
-          auto daemon_socket_uri = settings.nixDaemonSocketFile;
-          auto channel = grpc::CreateChannel(
-              daemon_socket_uri, grpc::InsecureChannelCredentials());
-          return std::shared_ptr<Store>(std::make_shared<nix::store::RpcStore>(
-              params, proto::WorkerService::NewStub(channel)));
-        }
-        case tLocal: {
-          Store::Params params2 = params;
-          if (absl::StartsWith(uri, "/")) {
-            params2["root"] = uri;
-          }
-          return std::shared_ptr<Store>(std::make_shared<LocalStore>(params2));
-        }
-        default:
-          return nullptr;
+static RegisterStoreImplementation regStore([](const std::string& uri,
+                                               const Store::Params& params)
+                                                -> std::shared_ptr<Store> {
+  switch (getStoreType(uri, get(params, "state", settings.nixStateDir))) {
+    case tDaemon: {
+      auto daemon_socket_uri =
+          absl::StrCat("unix://", settings.nixDaemonSocketFile);
+      auto channel = grpc::CreateChannel(daemon_socket_uri,
+                                         grpc::InsecureChannelCredentials());
+      return std::shared_ptr<Store>(std::make_shared<nix::store::RpcStore>(
+          daemon_socket_uri, params, proto::WorkerService::NewStub(channel)));
+    }
+    case tLocal: {
+      Store::Params params2 = params;
+      if (absl::StartsWith(uri, "/")) {
+        params2["root"] = uri;
       }
-    });
+      return std::shared_ptr<Store>(std::make_shared<LocalStore>(params2));
+    }
+    default:
+      return nullptr;
+  }
+});
 
 std::list<ref<Store>> getDefaultSubstituters() {
   static auto stores([]() {
