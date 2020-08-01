@@ -10,6 +10,7 @@ in {
     systemd.services.paroxysm = {
       inherit description;
       script = "${config.depot.fun.paroxysm}/bin/paroxysm";
+      wantedBy = [ "multi-user.target" ];
 
       environment = {
         PARX_DATABASE_URL = "postgresql://tvldb:tvldb@localhost/tvldb";
