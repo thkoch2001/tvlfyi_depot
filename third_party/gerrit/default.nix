@@ -28,15 +28,15 @@ let
     runScript = "/bin/bazel-run";
   };
   bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.2.2-1002-gea26b5ee7a";
+  version = "3.2.3-951-gd888625eb5";
 in
 pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   name = "gerrit-${version}";
 
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "ea26b5ee7a1c1e4042525d308678570101d4d4d6";
-    sha256 = "0w74sk61fc98ia1lqkqn97vhvyqr226x5bjxkw3251208mf173dd";
+    rev = "d888625eb5e1c91b257c9501924efdd9ae498422";
+    sha256 = "15dgjn5xqhvgwnc4klmh2m8f205x1fhchbs8x312lm2g2apdhdcc";
     fetchSubmodules = true;
   };
   patches = [
@@ -46,7 +46,6 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
     ./0004-Add-titles-to-CLs-over-HTTP.patch
     ./0005-When-using-local-fonts-always-assume-Gerrit-is-mount.patch
     ./0006-Always-use-Google-Fonts.patch
-    ./0007-Fix-gr-hovercard-behavior-under-Firefox.patch
   ];
 
   bazelTarget = "release";
@@ -59,7 +58,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   removeRulesCC = false;
 
   fetchAttrs = {
-    sha256 = "0q0ia0h9iiggpb67v00vp80inn2gzi5ksf42a3m3nxfnvckw8zpa";
+    sha256 = "1f624gb1whmadf7qyv5l2yqw7pgbjlbfyk1gzkrcykhlwsxz9z0f";
     preBuild = ''
       rm .bazelversion
     '';
