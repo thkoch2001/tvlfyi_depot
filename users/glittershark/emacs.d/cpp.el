@@ -26,6 +26,11 @@
   :config
   (add-hook 'c-mode-common-hook #'clang-format+-mode))
 
+(map!
+ (:map c++-mode-map
+  :leader
+  (:n "/ i" #'counsel-semantic-or-imenu)))
+
 (comment
  (setq
   lsp-clients-clangd-executable
