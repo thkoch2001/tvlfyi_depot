@@ -26,7 +26,7 @@ struct LocalStoreAccessor : public FSAccessor {
   FSAccessor::Stat stat(const Path& path) override {
     auto realPath = toRealPath(path);
 
-    struct stat st {};
+    struct stat st;
     if (lstat(realPath.c_str(), &st) != 0) {
       if (errno == ENOENT || errno == ENOTDIR) {
         return {Type::tMissing, 0, false};
@@ -41,7 +41,7 @@ struct LocalStoreAccessor : public FSAccessor {
     return {S_ISREG(st.st_mode)
                 ? Type::tRegular
                 : S_ISLNK(st.st_mode) ? Type::tSymlink : Type::tDirectory,
-            S_ISREG(st.st_mode) ? static_cast<uint64_t>(st.st_size) : 0,
+            S_ISREG(st.st_mode) ? (uint64_t)st.st_size : 0,
             S_ISREG(st.st_mode) && ((st.st_mode & S_IXUSR) != 0u)};
   }
 

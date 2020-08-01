@@ -18,7 +18,7 @@ void toJSON(std::ostream& str, const char* start, const char* end) {
       str << "\\t";
     } else if (*i >= 0 && *i < 32) {
       str << "\\u" << std::setfill('0') << std::setw(4) << std::hex
-          << static_cast<uint16_t>(*i) << std::dec;
+          << (uint16_t)*i << std::dec;
     } else {
       str << *i;
     }

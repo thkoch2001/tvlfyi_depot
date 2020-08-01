@@ -36,7 +36,7 @@
 namespace nix {
 
 static char* dupString(const char* s) {
-  char* t = nullptr;
+  char* t;
   t = GC_STRDUP(s);
   if (t == nullptr) {
     throw std::bad_alloc();
@@ -199,7 +199,7 @@ static Symbol getName(const AttrName& name, EvalState& state, Env& env) {
   return std::visit(
       util::overloaded{[&](const Symbol& name) -> Symbol { return name; },
                        [&](Expr* expr) -> Symbol {
-                         Value nameValue{};
+                         Value nameValue;
                          expr->eval(state, env, nameValue);
                          state.forceStringNoCtx(nameValue);
                          return state.symbols.Create(nameValue.string.s);
@@ -478,7 +478,7 @@ Value* EvalState::addConstant(const std::string& name, Value& v) {
 Value* EvalState::addPrimOp(const std::string& name, size_t arity,
                             PrimOpFun primOp) {
   if (arity == 0) {
-    Value v{};
+    Value v;
     primOp(*this, noPos, nullptr, v);
     return addConstant(name, v);
   }
@@ -577,8 +577,8 @@ Value& mkString(Value& v, const std::string& s, const PathSet& context) {
   mkString(v, s.c_str());
   if (!context.empty()) {
     size_t n = 0;
-    v.string.context = static_cast<const char**>(
-        allocBytes((context.size() + 1) * sizeof(char*)));
+    v.string.context =
+        (const char**)allocBytes((context.size() + 1) * sizeof(char*));
     for (auto& i : context) {
       v.string.context[n++] = dupString(i.c_str());
     }
@@ -772,7 +772,7 @@ void EvalState::resetFileCache() {
 void EvalState::eval(Expr* e, Value& v) { e->eval(*this, baseEnv, v); }
 
 inline bool EvalState::evalBool(Env& env, Expr* e) {
-  Value v{};
+  Value v;
   e->eval(*this, env, v);
   if (v.type != tBool) {
     throwTypeError("value is %1% while a Boolean was expected", v);
@@ -781,7 +781,7 @@ inline bool EvalState::evalBool(Env& env, Expr* e) {
 }
 
 inline bool EvalState::evalBool(Env& env, Expr* e, const Pos& pos) {
-  Value v{};
+  Value v;
   e->eval(*this, env, v);
   if (v.type != tBool) {
     throwTypeError("value is %1% while a Boolean was expected, at %2%", v, pos);
@@ -822,7 +822,7 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& value) {
        in the original environment. */
     size_t displ = 0;
     for (auto& attr : attrs) {
-      Value* vAttr = nullptr;
+      Value* vAttr;
       vAttr =
           attr.second.e->maybeThunk(state, attr.second.inherited ? env : env2);
       env2.values[displ++] = vAttr;
@@ -838,7 +838,7 @@ void ExprAttrs::eval(EvalState& state, Env& env, Value& value) {
 
   /* Dynamic attrs apply *after* rec. */
   for (auto& i : dynamicAttrs) {
-    Value nameVal{};
+    Value nameVal;
     i.nameExpr->eval(state, *dynamicEnv, nameVal);
     state.forceValue(nameVal, i.pos);
     if (nameVal.type == tNull) {
@@ -906,7 +906,7 @@ static std::string showAttrPath(EvalState& state, Env& env,
 unsigned long nrLookups = 0;
 
 void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
-  Value vTmp{};
+  Value vTmp;
   Pos* pos2 = nullptr;
   Value* vAttrs = &vTmp;
 
@@ -957,7 +957,7 @@ void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
 }
 
 void ExprOpHasAttr::eval(EvalState& state, Env& env, Value& v) {
-  Value vTmp{};
+  Value vTmp;
   Value* vAttrs = &vTmp;
 
   e->eval(state, env, vTmp);
@@ -985,7 +985,7 @@ void ExprLambda::eval(EvalState& state, Env& env, Value& v) {
 
 void ExprApp::eval(EvalState& state, Env& env, Value& v) {
   /* FIXME: vFun prevents GCC from doing tail call optimisation. */
-  Value vFun{};
+  Value vFun;
   e1->eval(state, env, vFun);
   state.callFunction(vFun, *(e2->maybeThunk(state, env)), v, pos);
 }
@@ -1053,7 +1053,7 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
       auto& fun2 = *allocValue();
       fun2 = fun;
       /* !!! Should we use the attr pos here? */
-      Value v2{};
+      Value v2;
       // functors are called with the element itself as the first
       // parameter, which is partially applied here
       callFunction(*found->second.value, fun2, v2, pos);
@@ -1185,9 +1185,13 @@ void ExprWith::eval(EvalState& state, Env& env, Value& v) {
   env2.up = &env;
   env2.prevWith = prevWith;
   env2.type = Env::HasWithExpr;
+<<<<<<< HEAD
   /* placeholder for result of attrs */
   env2.values[0] = nullptr;
   env2.withAttrsExpr = this->attrs;
+=======
+  env2.values[0] = (Value*)attrs;
+>>>>>>> parent of ef54f5da9... fix(3p/nix): apply all clang-tidy fixes
 
   body->eval(state, env2, v);
 }
@@ -1210,17 +1214,17 @@ void ExprOpNot::eval(EvalState& state, Env& env, Value& v) {
 }
 
 void ExprOpEq::eval(EvalState& state, Env& env, Value& v) {
-  Value v1{};
+  Value v1;
   e1->eval(state, env, v1);
-  Value v2{};
+  Value v2;
   e2->eval(state, env, v2);
   mkBool(v, state.eqValues(v1, v2));
 }
 
 void ExprOpNEq::eval(EvalState& state, Env& env, Value& v) {
-  Value v1{};
+  Value v1;
   e1->eval(state, env, v1);
-  Value v2{};
+  Value v2;
   e2->eval(state, env, v2);
   mkBool(v, !state.eqValues(v1, v2));
 }
@@ -1238,8 +1242,8 @@ void ExprOpImpl::eval(EvalState& state, Env& env, Value& v) {
 }
 
 void ExprOpUpdate::eval(EvalState& state, Env& env, Value& dest) {
-  Value v1{};
-  Value v2{};
+  Value v1;
+  Value v2;
   state.evalAttrs(env, e1, v1);
   state.evalAttrs(env, e2, v2);
 
@@ -1251,9 +1255,9 @@ void ExprOpUpdate::eval(EvalState& state, Env& env, Value& dest) {
 }
 
 void ExprOpConcatLists::eval(EvalState& state, Env& env, Value& v) {
-  Value v1{};
+  Value v1;
   e1->eval(state, env, v1);
-  Value v2{};
+  Value v2;
   e2->eval(state, env, v2);
   state.concatLists(v, {&v1, &v2}, pos);
 }
@@ -1281,7 +1285,7 @@ void ExprConcatStrings::eval(EvalState& state, Env& env, Value& v) {
   ValueType firstType = tString;
 
   for (auto& i : *es) {
-    Value vTmp{};
+    Value vTmp;
     i->eval(state, env, vTmp);
 
     /* If the first element is a path, then the result will also
@@ -1488,7 +1492,7 @@ std::optional<std::string> EvalState::tryAttrsToString(const Pos& pos, Value& v,
                                                        bool copyToStore) {
   auto i = v.attrs->find(sToString);
   if (i != v.attrs->end()) {
-    Value v1{};
+    Value v1;
     callFunction(*i->second.value, v, v1, pos);
     return coerceToString(pos, v1, context, coerceMore, copyToStore);
   }
@@ -1701,10 +1705,9 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
 void EvalState::printStats() {
   bool showStats = getEnv("NIX_SHOW_STATS", "0") != "0";
 
-  struct rusage buf {};
+  struct rusage buf;
   getrusage(RUSAGE_SELF, &buf);
-  float cpuTime = buf.ru_utime.tv_sec +
-                  (static_cast<float>(buf.ru_utime.tv_usec) / 1000000);
+  float cpuTime = buf.ru_utime.tv_sec + ((float)buf.ru_utime.tv_usec / 1000000);
 
   uint64_t bEnvs = nrEnvs * sizeof(Env) + nrValuesInEnvs * sizeof(Value*);
   uint64_t bLists = nrListElems * sizeof(Value*);
@@ -1713,8 +1716,8 @@ void EvalState::printStats() {
       nrAttrsets * sizeof(Bindings) + nrAttrsInAttrsets * sizeof(Attr);
 
 #if HAVE_BOEHMGC
-  GC_word heapSize = 0;
-  GC_word totalBytes = 0;
+  GC_word heapSize;
+  GC_word totalBytes;
   GC_get_heap_usage_safe(&heapSize, nullptr, nullptr, nullptr, &totalBytes);
 #endif
   if (showStats) {

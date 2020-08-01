@@ -17,7 +17,7 @@ DrvInfos queryInstalled(EvalState& state, const Path& userEnv) {
   DrvInfos elems;
   Path manifestFile = userEnv + "/manifest.nix";
   if (pathExists(manifestFile)) {
-    Value v{};
+    Value v;
     state.evalFile(manifestFile, v);
     Bindings& bindings(*Bindings::NewGC());
     getDerivations(state, v, "", bindings, elems, false);
@@ -42,7 +42,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
 
   /* Construct the whole top level derivation. */
   PathSet references;
-  Value manifest{};
+  Value manifest;
   state.mkList(manifest, elems.size());
   unsigned int n = 0;
   for (auto& i : elems) {
@@ -109,13 +109,13 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
       "env-manifest.nix", (format("%1%") % manifest).str(), references);
 
   /* Get the environment builder expression. */
-  Value envBuilder{};
+  Value envBuilder;
   state.evalFile(state.findFile("nix/buildenv.nix"), envBuilder);
 
   /* Construct a Nix expression that calls the user environment
      builder with the manifest as argument. */
-  Value args{};
-  Value topLevel{};
+  Value args;
+  Value topLevel;
   state.mkAttrs(args, 3);
   mkString(*state.allocAttr(args, state.symbols.Create("manifest")),
            manifestFile, {manifestFile});

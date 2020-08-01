@@ -53,8 +53,14 @@ void RefScanSink::operator()(const unsigned char* data, size_t len) {
   /* It's possible that a reference spans the previous and current
      fragment, so search in the concatenation of the tail of the
      previous fragment and the start of the current fragment. */
+<<<<<<< HEAD
   std::string s = tail + std::string(data_, len > refLength ? refLength : len);
   search(s.data(), s.size(), hashes, seen);
+=======
+  std::string s =
+      tail + std::string((const char*)data, len > refLength ? refLength : len);
+  search((const unsigned char*)s.data(), s.size(), hashes, seen);
+>>>>>>> parent of ef54f5da9... fix(3p/nix): apply all clang-tidy fixes
 
   search(data_, len, hashes, seen);
 
@@ -62,7 +68,11 @@ void RefScanSink::operator()(const unsigned char* data, size_t len) {
   tail = std::string(tail, tail.size() < refLength - tailLen
                                ? 0
                                : tail.size() - (refLength - tailLen)) +
+<<<<<<< HEAD
          std::string(data_ + len - tailLen, tailLen);
+=======
+         std::string((const char*)data + len - tailLen, tailLen);
+>>>>>>> parent of ef54f5da9... fix(3p/nix): apply all clang-tidy fixes
 }
 
 PathSet scanForReferences(const std::string& path, const PathSet& refs,

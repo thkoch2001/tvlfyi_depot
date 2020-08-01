@@ -110,7 +110,7 @@ Path SSHMaster::startMaster() {
   state->tmpDir =
       std::make_unique<AutoDelete>(createTempDir("", "nix", true, true, 0700));
 
-  state->socketPath = Path(*state->tmpDir) + "/ssh.sock";
+  state->socketPath = (Path)*state->tmpDir + "/ssh.sock";
 
   Pipe out;
   out.create();

@@ -66,7 +66,7 @@ static void dumpContents(const Path& path, size_t size, Sink& sink) {
 static void dump(const Path& path, Sink& sink, PathFilter& filter) {
   checkInterrupt();
 
-  struct stat st {};
+  struct stat st;
   if (lstat(path.c_str(), &st) != 0) {
     throw SysError(format("getting attributes of path '%1%'") % path);
   }
@@ -80,7 +80,7 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
       sink << "executable"
            << "";
     }
-    dumpContents(path, static_cast<size_t>(st.st_size), sink);
+    dumpContents(path, (size_t)st.st_size, sink);
   }
 
   else if (S_ISDIR(st.st_mode)) {
@@ -159,7 +159,7 @@ static void skipGeneric(Source & source)
 }
 #endif
 
-static void parseContents(ParseSink& sink, Source& source) {
+static void parseContents(ParseSink& sink, Source& source, const Path& path) {
   unsigned long long size = readLongLong(source);
 
   sink.preallocateContents(size);
@@ -170,7 +170,7 @@ static void parseContents(ParseSink& sink, Source& source) {
   while (left != 0u) {
     checkInterrupt();
     auto n = buf.size();
-    if (static_cast<unsigned long long>(n) > left) {
+    if ((unsigned long long)n > left) {
       n = left;
     }
     source(buf.data(), n);
@@ -235,7 +235,7 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
     }
 
     else if (s == "contents" && type == tpRegular) {
-      parseContents(sink, source);
+      parseContents(sink, source, path);
     }
 
     else if (s == "executable" && type == tpRegular) {
@@ -267,7 +267,7 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
           name = readString(source);
           if (name.empty() || name == "." || name == ".." ||
               name.find('/') != std::string::npos ||
-              name.find('\0') != std::string::npos) {
+              name.find((char)0) != std::string::npos) {
             throw Error(format("NAR contains invalid file name '%1%'") % name);
           }
           if (name <= prevName) {
@@ -341,7 +341,7 @@ struct RestoreSink : ParseSink {
   }
 
   void isExecutable() override {
-    struct stat st {};
+    struct stat st;
     if (fstat(fd.get(), &st) == -1) {
       throw SysError("fstat");
     }

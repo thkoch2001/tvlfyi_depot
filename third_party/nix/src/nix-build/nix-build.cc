@@ -155,7 +155,7 @@ static void _main(int argc, char** argv) {
           ;  // obsolete
 
         } else if (*arg == "--no-out-link" || *arg == "--no-link") {
-          outLink = Path(tmpDir) + "/result";
+          outLink = (Path)tmpDir + "/result";
 
         } else if (*arg == "--attr" || *arg == "-A") {
           attrPaths.push_back(getArg(*arg, arg, end));
@@ -328,7 +328,7 @@ static void _main(int argc, char** argv) {
   }
 
   for (auto e : exprs) {
-    Value vRoot{};
+    Value vRoot;
     state->eval(e, vRoot);
 
     for (auto& i : attrPaths) {
@@ -343,8 +343,8 @@ static void _main(int argc, char** argv) {
   auto buildPaths = [&](const PathSet& paths) {
     /* Note: we do this even when !printMissing to efficiently
        fetch binary cache data. */
-    unsigned long long downloadSize = 0;
-    unsigned long long narSize = 0;
+    unsigned long long downloadSize;
+    unsigned long long narSize;
     PathSet willBuild;
     PathSet willSubstitute;
     PathSet unknown;
@@ -381,7 +381,7 @@ static void _main(int argc, char** argv) {
         auto expr = state->parseExprFromString(
             "(import <nixpkgs> {}).bashInteractive", absPath("."));
 
-        Value v{};
+        Value v;
         state->eval(expr, v);
 
         auto drv = getDerivation(*state, v, false);
@@ -453,7 +453,7 @@ static void _main(int argc, char** argv) {
       if (passAsFile.count(var.first) != 0u) {
         keepTmp = true;
         std::string fn = ".attr-" + std::to_string(fileNr++);
-        Path p = Path(tmpDir) + "/" + fn;
+        Path p = (Path)tmpDir + "/" + fn;
         writeFile(p, var.second);
         env[var.first + "Path"] = p;
       } else {
@@ -467,7 +467,7 @@ static void _main(int argc, char** argv) {
        convenience, source $stdenv/setup to setup additional
        environment variables and shell functions.  Also don't
        lose the current $PATH directories. */
-    auto rcfile = Path(tmpDir) + "/rc";
+    auto rcfile = (Path)tmpDir + "/rc";
     writeFile(
         rcfile,
         fmt((keepTmp ? "" : "rm -rf '%1%'; "s) +
@@ -486,7 +486,7 @@ static void _main(int argc, char** argv) {
                 "shopt -u nullglob; "
                 "unset TZ; %6%"
                 "%7%",
-            Path(tmpDir), (pure ? "" : "p=$PATH; "),
+            (Path)tmpDir, (pure ? "" : "p=$PATH; "),
             (pure ? "" : "PATH=$PATH:$p; unset p; "), dirOf(shell), shell,
             (getenv("TZ") != nullptr
                  ? (std::string("export TZ='") + getenv("TZ") + "'; ")

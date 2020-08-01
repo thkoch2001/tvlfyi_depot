@@ -30,7 +30,7 @@ static int parseName(absl::string_view profileName, absl::string_view name) {
     return -1;
   }
 
-  int n = 0;
+  int n;
   if (!absl::SimpleAtoi(name, &n) || n < 0) {
     return -1;
   }
@@ -45,12 +45,12 @@ Generations findGenerations(const Path& profile, int& curGen) {
   std::string profileName = baseNameOf(profile);
 
   for (auto& i : readDirectory(profileDir)) {
-    int n = 0;
+    int n;
     if ((n = parseName(profileName, i.name)) != -1) {
       Generation gen;
       gen.path = profileDir + "/" + i.name;
       gen.number = n;
-      struct stat st {};
+      struct stat st;
       if (lstat(gen.path.c_str(), &st) != 0) {
         throw SysError(format("statting '%1%'") % gen.path);
       }
@@ -75,10 +75,10 @@ Path createGeneration(const ref<LocalFSStore>& store, const Path& profile,
                       const Path& outPath) {
   /* The new generation number should be higher than old the
      previous ones. */
-  int dummy = 0;
+  int dummy;
   Generations gens = findGenerations(profile, dummy);
 
-  unsigned int num = 0;
+  unsigned int num;
   if (!gens.empty()) {
     Generation last = gens.back();
 
@@ -138,7 +138,7 @@ void deleteGenerations(const Path& profile,
   PathLocks lock;
   lockProfile(lock, profile);
 
-  int curGen = 0;
+  int curGen;
   Generations gens = findGenerations(profile, curGen);
 
   if (gensToDelete.find(curGen) != gensToDelete.end()) {
@@ -158,7 +158,7 @@ void deleteGenerationsGreaterThan(const Path& profile, int max, bool dryRun) {
   PathLocks lock;
   lockProfile(lock, profile);
 
-  int curGen = 0;
+  int curGen;
   bool fromCurGen = false;
   Generations gens = findGenerations(profile, curGen);
   for (auto i = gens.rbegin(); i != gens.rend(); ++i) {
@@ -181,7 +181,7 @@ void deleteOldGenerations(const Path& profile, bool dryRun) {
   PathLocks lock;
   lockProfile(lock, profile);
 
-  int curGen = 0;
+  int curGen;
   Generations gens = findGenerations(profile, curGen);
 
   for (auto& i : gens) {
@@ -195,7 +195,7 @@ void deleteGenerationsOlderThan(const Path& profile, time_t t, bool dryRun) {
   PathLocks lock;
   lockProfile(lock, profile);
 
-  int curGen = 0;
+  int curGen;
   Generations gens = findGenerations(profile, curGen);
 
   bool canDelete = false;
@@ -219,7 +219,7 @@ void deleteGenerationsOlderThan(const Path& profile,
                                 const std::string& timeSpec, bool dryRun) {
   time_t curTime = time(nullptr);
   std::string strDays = std::string(timeSpec, 0, timeSpec.size() - 1);
-  int days = 0;
+  int days;
 
   if (!absl::SimpleAtoi(strDays, &days) || days < 1) {
     throw Error(format("invalid number of days specifier '%1%'") % timeSpec);

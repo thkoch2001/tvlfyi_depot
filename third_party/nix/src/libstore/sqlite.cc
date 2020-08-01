@@ -133,7 +133,7 @@ bool SQLiteStmt::Use::next() {
 }
 
 std::string SQLiteStmt::Use::getStr(int col) {
-  auto s = reinterpret_cast<const char*>(sqlite3_column_text(stmt, col));
+  auto s = (const char*)sqlite3_column_text(stmt, col);
   assert(s);
   return s;
 }
@@ -186,7 +186,7 @@ void handleSQLiteBusy(const SQLiteBusy& e) {
   /* Sleep for a while since retrying the transaction right away
      is likely to fail again. */
   checkInterrupt();
-  struct timespec t {};
+  struct timespec t;
   t.tv_sec = 0;
   t.tv_nsec = (random() % 100) * 1000 * 1000; /* <= 0.1s */
   nanosleep(&t, nullptr);

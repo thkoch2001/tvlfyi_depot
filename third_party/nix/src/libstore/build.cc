@@ -185,10 +185,10 @@ using steady_time_point = std::chrono::time_point<std::chrono::steady_clock>;
    path creation commands. */
 struct Child {
   WeakGoalPtr goal;
-  Goal* goal2{};  // ugly hackery
+  Goal* goal2;  // ugly hackery
   std::set<int> fds;
-  bool respectTimeouts = false;
-  bool inBuildSlot = false;
+  bool respectTimeouts;
+  bool inBuildSlot;
   steady_time_point lastOutput; /* time we last got output on stdout/stderr */
   steady_time_point timeStarted;
 };
@@ -732,7 +732,7 @@ class SubstitutionGoal;
 class DerivationGoal : public Goal {
  private:
   /* Whether to use an on-disk .drv file. */
-  bool useDerivation = false;
+  bool useDerivation;
 
   /* The path of the derivation. */
   Path drvPath;
@@ -746,7 +746,7 @@ class DerivationGoal : public Goal {
 
   /* Whether to retry substituting the outputs after building the
      inputs. */
-  bool retrySubstitution = false;
+  bool retrySubstitution;
 
   /* The derivation stored at drvPath. */
   std::unique_ptr<BasicDerivation> drv;
@@ -789,7 +789,7 @@ class DerivationGoal : public Goal {
   std::shared_ptr<BufferedSink> logFileSink, logSink;
 
   /* Number of bytes received from the builder's stdout/stderr. */
-  unsigned long logSize = 0;
+  unsigned long logSize;
 
   /* The most recent log lines. */
   std::list<std::string> logTail;
@@ -817,7 +817,7 @@ class DerivationGoal : public Goal {
   std::shared_ptr<AutoDelete> autoDelChroot;
 
   /* Whether this is a fixed-output derivation. */
-  bool fixedOutput = false;
+  bool fixedOutput;
 
   /* Whether to run the build in a private network namespace. */
   bool privateNetwork = false;
@@ -856,7 +856,7 @@ class DerivationGoal : public Goal {
   /* The current round, if we're building multiple times. */
   size_t curRound = 1;
 
-  size_t nrRounds = 0;
+  size_t nrRounds;
 
   /* Path registration info from the previous round, if we're
      building multiple times. Since this contains the hash, it
@@ -1585,15 +1585,13 @@ MakeError(NotDeterministic, BuildError)
 #if HAVE_STATVFS
       unsigned long long required =
           8ULL * 1024 * 1024;  // FIXME: make configurable
-      struct statvfs st {};
+      struct statvfs st;
       if (statvfs(worker.store.realStoreDir.c_str(), &st) == 0 &&
-          static_cast<unsigned long long>(st.f_bavail) * st.f_bsize <
-              required) {
+          (unsigned long long)st.f_bavail * st.f_bsize < required) {
         diskFull = true;
       }
       if (statvfs(tmpDir.c_str(), &st) == 0 &&
-          static_cast<unsigned long long>(st.f_bavail) * st.f_bsize <
-              required) {
+          (unsigned long long)st.f_bavail * st.f_bsize < required) {
         diskFull = true;
       }
 #endif
@@ -1832,7 +1830,7 @@ void chmod_(const Path& path, mode_t mode) {
 }
 
 int childEntry(void* arg) {
-  (static_cast<DerivationGoal*>(arg))->runChild();
+  ((DerivationGoal*)arg)->runChild();
   return 1;
 }
 
@@ -2137,7 +2135,7 @@ void DerivationGoal::startBuilder() {
 
     for (auto& i : inputPaths) {
       Path r = worker.store.toRealPath(i);
-      struct stat st {};
+      struct stat st;
       if (lstat(r.c_str(), &st) != 0) {
         throw SysError(format("getting attributes of path '%1%'") % i);
       }
@@ -2286,7 +2284,7 @@ void DerivationGoal::startBuilder() {
   }
 
   // Put the pt into raw mode to prevent \n -> \r\n translation.
-  struct termios term {};
+  struct termios term;
   if (tcgetattr(builderOut.writeSide.get(), &term) != 0) {
     throw SysError("getting pseudoterminal attributes");
   }
@@ -2359,9 +2357,9 @@ void DerivationGoal::startBuilder() {
           }
 
           size_t stackSize = 1 * 1024 * 1024;
-          char* stack = static_cast<char*>(
-              mmap(nullptr, stackSize, PROT_WRITE | PROT_READ,
-                   MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0));
+          char* stack =
+              (char*)mmap(nullptr, stackSize, PROT_WRITE | PROT_READ,
+                          MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
           if (stack == MAP_FAILED) {
             throw SysError("allocating stack");
           }
@@ -2414,7 +2412,7 @@ void DerivationGoal::startBuilder() {
 
     userNamespaceSync.readSide = -1;
 
-    pid_t tmp = 0;
+    pid_t tmp;
     if (!absl::SimpleAtoi(readLine(builderOut.readSide.get()), &tmp)) {
       abort();
     }
@@ -2711,7 +2709,7 @@ void setupSeccomp() {
     return;
   }
 #if HAVE_SECCOMP
-  scmp_filter_ctx ctx = nullptr;
+  scmp_filter_ctx ctx;
 
   if ((ctx = seccomp_init(SCMP_ACT_ALLOW)) == nullptr) {
     throw SysError("unable to initialize seccomp mode 2");
@@ -2831,7 +2829,7 @@ void DerivationGoal::runChild() {
           throw SysError("cannot open IP socket");
         }
 
-        struct ifreq ifr {};
+        struct ifreq ifr;
         strncpy(ifr.ifr_name, "lo", sizeof("lo"));
         ifr.ifr_flags = IFF_UP | IFF_LOOPBACK | IFF_RUNNING;
         if (ioctl(fd.get(), SIOCSIFFLAGS, &ifr) == -1) {
@@ -2920,7 +2918,7 @@ void DerivationGoal::runChild() {
       auto doBind = [&](const Path& source, const Path& target,
                         bool optional = false) {
         DLOG(INFO) << "bind mounting '" << source << "' to '" << target << "'";
-        struct stat st {};
+        struct stat st;
         if (stat(source.c_str(), &st) == -1) {
           if (optional && errno == ENOENT) {
             return;
@@ -3037,7 +3035,7 @@ void DerivationGoal::runChild() {
 #if __linux__
     /* Change the personality to 32-bit if we're doing an
        i686-linux build on an x86_64-linux machine. */
-    struct utsname utsbuf {};
+    struct utsname utsbuf;
     uname(&utsbuf);
     if (drv->platform == "i686-linux" &&
         (settings.thisSystem == "x86_64-linux" ||
@@ -3249,7 +3247,7 @@ void DerivationGoal::registerOutputs() {
       }
     }
 
-    struct stat st {};
+    struct stat st;
     if (lstat(actualPath.c_str(), &st) == -1) {
       if (errno == ENOENT) {
         throw BuildError(
@@ -3298,7 +3296,7 @@ void DerivationGoal::registerOutputs() {
        outputs (i.e., the content hash should match the specified
        hash). */
     if (fixedOutput) {
-      bool recursive = 0;
+      bool recursive;
       Hash h;
       i.second.parseHashInfo(recursive, h);
 
@@ -4453,7 +4451,7 @@ void Worker::waitForInput() {
      terminated. */
 
   bool useTimeout = false;
-  struct timeval timeout {};
+  struct timeval timeout;
   timeout.tv_usec = 0;
   auto before = steady_time_point::clock::now();
 
@@ -4480,9 +4478,9 @@ void Worker::waitForInput() {
   }
   if (nearest != steady_time_point::max()) {
     timeout.tv_sec = std::max(
-        1L, static_cast<long>(std::chrono::duration_cast<std::chrono::seconds>(
-                                  nearest - before)
-                                  .count()));
+        1L,
+        (long)std::chrono::duration_cast<std::chrono::seconds>(nearest - before)
+            .count());
     useTimeout = true;
   }
 
@@ -4497,11 +4495,10 @@ void Worker::waitForInput() {
       lastWokenUp = before;
     }
     timeout.tv_sec = std::max(
-        1L, static_cast<long>(std::chrono::duration_cast<std::chrono::seconds>(
-                                  lastWokenUp +
-                                  std::chrono::seconds(settings.pollInterval) -
-                                  before)
-                                  .count()));
+        1L,
+        (long)std::chrono::duration_cast<std::chrono::seconds>(
+            lastWokenUp + std::chrono::seconds(settings.pollInterval) - before)
+            .count());
   } else {
     lastWokenUp = steady_time_point::min();
   }
@@ -4566,7 +4563,7 @@ void Worker::waitForInput() {
           }
         } else {
           DLOG(INFO) << goal->getName() << ": read " << rd << " bytes";
-          std::string data(reinterpret_cast<char*>(buffer.data()), rd);
+          std::string data((char*)buffer.data(), rd);
           j->lastOutput = after;
           goal->handleChildOutput(k, data);
         }
@@ -4641,7 +4638,7 @@ bool Worker::pathContentsGood(const Path& path) {
   }
   LOG(INFO) << "checking path '" << path << "'...";
   auto info = store.queryPathInfo(path);
-  bool res = 0;
+  bool res;
   if (!pathExists(path)) {
     res = false;
   } else {
@@ -4666,8 +4663,8 @@ static void primeCache(Store& store, const PathSet& paths) {
   PathSet willBuild;
   PathSet willSubstitute;
   PathSet unknown;
-  unsigned long long downloadSize = 0;
-  unsigned long long narSize = 0;
+  unsigned long long downloadSize;
+  unsigned long long narSize;
   store.queryMissing(paths, willBuild, willSubstitute, unknown, downloadSize,
                      narSize);
 
