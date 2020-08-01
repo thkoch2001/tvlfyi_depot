@@ -36,10 +36,8 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
     rev = "ea26b5ee7a1c1e4042525d308678570101d4d4d6";
-    sha256 = "1bndmk7namb81zkscmpvf8ygwrj0wh842xbj0irgbm5w2xwdzkch";
+    sha256 = "0w74sk61fc98ia1lqkqn97vhvyqr226x5bjxkw3251208mf173dd";
     fetchSubmodules = true;
-    deepClone = true;
-    leaveDotGit = true;
   };
   patches = [
     ./0001-Use-detzip-in-download_bower.py.patch
@@ -61,7 +59,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   removeRulesCC = false;
 
   fetchAttrs = {
-    sha256 = "0jhvcpzkpcanxm99grgk6giv8yf2j0zix5z91wbnz6hb0isps5hs";
+    sha256 = "0q0ia0h9iiggpb67v00vp80inn2gzi5ksf42a3m3nxfnvckw8zpa";
     preBuild = ''
       rm .bazelversion
     '';
