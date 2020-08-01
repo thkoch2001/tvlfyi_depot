@@ -74,6 +74,9 @@
   (cl-postgres:to-sql-string "open"))
 (defmethod cl-postgres:to-sql-string ((kw (eql :closed)))
   (cl-postgres:to-sql-string "closed"))
+(defmethod cl-postgres:to-sql-string ((ts local-time:timestamp))
+  (cl-postgres:to-sql-string
+   (local-time:timestamp-to-unix ts)))
 
 (defmethod initialize-instance :after
     ((issue issue) &rest initargs &key &allow-other-keys)
@@ -291,6 +294,29 @@ the issue doesn't exist, signals `issue-not-found'"
      :previous-value (string-upcase original-status)
      :new-value status)
     (values)))
+
+(defun update-issue (issue &rest attrs)
+  "Update the fields of ISSUE with the given ATTRS, which is a plist of slot and
+value, and record events for the updates"
+  (let ((set-fields
+          (iter (for slot in '(subject body))
+            (for new-value = (getf attrs slot))
+            (appending
+             (let ((previous-value (slot-value issue slot)))
+               (when (and new-value (not (equalp
+                                          new-value
+                                          previous-value)))
+                 (record-issue-event (id issue)
+                                     :field slot
+                                     :previous-value previous-value
+                                     :new-value new-value)
+                 (setf (slot-value issue slot) new-value)
+                 (list slot new-value)))))))
+    (execute
+     (sql-compile
+      `(:update issues
+        :set ,@set-fields
+        :where (:= id ,(id issue)))))))
 
 (defun create-issue-comment (&rest attrs &key issue-id &allow-other-keys)
   "Insert a new issue comment into the database with the given ATTRS and

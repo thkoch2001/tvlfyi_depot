@@ -4,6 +4,9 @@
 (defparameter color/black
   "rgb(24, 24, 24)")
 
+(defparameter color/light-gray
+  "#EEE")
+
 (defparameter color/gray
   "#8D8D8D")
 
@@ -105,7 +108,8 @@
     ((:and input (:= type "submit"))
      :-webkit-appearance "none"
      :border "none"
-     :cursor "pointer")
+     :cursor "pointer"
+     :font-size "1rem")
 
     ,@(button '(:and input (:= type "submit")))
 
@@ -125,6 +129,16 @@
      :display "flex"
      :justify-content "space-between"
      :align-items "center"
+
+     ,@(button '.edit-issue)
+
+     (.created-by-at
+      :flex 1)
+
+     (.edit-issue
+      :background-color ,color/light-gray
+      :flex 0
+      :margin-right "0.5rem")
 
      (.close-issue
       :background-color ,color/failure))))
