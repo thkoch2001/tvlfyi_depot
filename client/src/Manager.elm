@@ -1,6 +1,7 @@
 module Manager exposing (render)
 
 import Array
+import Common
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -33,14 +34,6 @@ render model =
                         { label = "Logout"
                         , handleClick = State.AttemptLogout
                         }
-                    , case model.logoutError of
-                        Nothing ->
-                            text ""
-
-                        Just e ->
-                            UI.errorBanner
-                                { title = "Error logging out"
-                                , body = Utils.explainHttpError e
-                                }
+                    , Common.allErrors model
                     ]
                 ]

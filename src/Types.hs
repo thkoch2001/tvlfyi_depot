@@ -10,6 +10,7 @@ import Data.Aeson
 import Utils
 import Data.Text
 import Data.Typeable
+import Data.String.Conversions (cs)
 import Database.SQLite.Simple
 import Database.SQLite.Simple.Ok
 import Database.SQLite.Simple.FromField
@@ -20,6 +21,8 @@ import Servant.API
 import System.Envy (FromEnv, fromEnv, env)
 import Crypto.Random.Types (MonadRandom)
 
+import qualified Data.Time.Calendar as Calendar
+import qualified Data.Time.Format as TF
 import qualified Crypto.KDF.BCrypt as BC
 import qualified Data.Time.Clock as Clock
 import qualified Data.ByteString.Char8 as B
@@ -192,19 +195,6 @@ instance ToField Comment where
 instance FromField Comment where
   fromField = forNewtype Comment
 
--- TODO(wpcarro): Replace this with a different type.
-newtype Date = Date Text
-  deriving (Eq, Show, Generic)
-
-instance ToJSON Date
-instance FromJSON Date
-
-instance ToField Date where
-  toField (Date x) = SQLText x
-
-instance FromField Date where
-  fromField = forNewtype Date
-
 newtype Destination = Destination Text
   deriving (Eq, Show, Generic)
 
@@ -217,11 +207,20 @@ instance ToField Destination where
 instance FromField Destination where
   fromField = forNewtype Destination
 
+newtype Year = Year Integer deriving (Eq, Show)
+newtype Month = Month Integer deriving (Eq, Show)
+newtype Day = Day Integer deriving (Eq, Show)
+data Date = Date
+  { dateYear :: Year
+  , dateMonth :: Month
+  , dateDay :: Day
+  } deriving (Eq, Show)
+
 data Trip = Trip
   { tripUsername :: Username
   , tripDestination :: Destination
-  , tripStartDate :: Date
-  , tripEndDate :: Date
+  , tripStartDate :: Calendar.Day
+  , tripEndDate :: Calendar.Day
   , tripComment :: Comment
   } deriving (Eq, Show, Generic)
 
@@ -238,10 +237,10 @@ instance FromRow Trip where
 data TripPK = TripPK
   { tripPKUsername :: Username
   , tripPKDestination :: Destination
-  , tripPKStartDate :: Date
+  , tripPKStartDate :: Clock.UTCTime
   } deriving (Eq, Show, Generic)
 
-tripPKFields :: TripPK -> (Username, Destination, Date)
+tripPKFields :: TripPK -> (Username, Destination, Clock.UTCTime)
 tripPKFields (TripPK{..})
   = (tripPKUsername, tripPKDestination, tripPKStartDate)
 
@@ -253,7 +252,8 @@ instance FromJSON TripPK where
     pure TripPK{..}
 
 -- | Return the tuple representation of a Trip record for SQL.
-tripFields :: Trip -> (Username, Destination, Date, Date, Comment)
+tripFields :: Trip
+           -> (Username, Destination, Calendar.Day, Calendar.Day, Comment)
 tripFields (Trip{..})
   = ( tripUsername
     , tripDestination
@@ -436,8 +436,8 @@ instance FromRow PendingAccount where
 data UpdateTripRequest = UpdateTripRequest
   { updateTripRequestTripPK :: TripPK
   , updateTripRequestDestination :: Maybe Destination
-  , updateTripRequestStartDate :: Maybe Date
-  , updateTripRequestEndDate :: Maybe Date
+  , updateTripRequestStartDate :: Maybe Calendar.Day
+  , updateTripRequestEndDate :: Maybe Calendar.Day
   , updateTripRequestComment :: Maybe Comment
   } deriving (Eq, Show)
 

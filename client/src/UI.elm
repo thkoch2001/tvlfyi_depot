@@ -1,5 +1,7 @@
 module UI exposing (..)
 
+import Date
+import DatePicker exposing (defaultSettings)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -284,3 +286,26 @@ absentData { handleFetch } =
                 }
             ]
         ]
+
+
+datePicker :
+    { mDate : Maybe Date.Date
+    , prompt : String
+    , prefix : String
+    , picker : DatePicker.DatePicker
+    , onUpdate : DatePicker.Msg -> State.Msg
+    }
+    -> Html State.Msg
+datePicker { mDate, prompt, prefix, picker, onUpdate } =
+    let
+        settings =
+            { defaultSettings
+                | placeholder = prompt
+                , inputClassList =
+                    [ ( "text-center", True )
+                    , ( "py-2", True )
+                    ]
+            }
+    in
+    div [ [ "w-1/2", "py-4", "mx-auto" ] |> Tailwind.use |> class ]
+        [ DatePicker.view mDate settings picker |> Html.map onUpdate ]

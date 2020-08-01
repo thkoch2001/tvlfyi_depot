@@ -3,6 +3,8 @@ module State exposing (..)
 import Array exposing (Array)
 import Browser
 import Browser.Navigation as Nav
+import Date
+import DatePicker
 import Http
 import Json.Decode as JD
 import Json.Decode.Extra as JDE
@@ -31,6 +33,10 @@ type Msg
     | UpdatePassword String
     | UpdateRole String
     | UpdateAdminTab AdminTab
+    | UpdateTripDestination String
+    | UpdateTripStartDate DatePicker.Msg
+    | UpdateTripEndDate DatePicker.Msg
+    | UpdateTripComment String
     | ClearErrors
     | ToggleLoginForm
       -- SPA
@@ -42,12 +48,15 @@ type Msg
     | AttemptLogin
     | AttemptLogout
     | AttemptDeleteUser String
+    | AttemptCreateTrip Date.Date Date.Date
       -- Inbound network
     | GotUsers (WebData AllUsers)
+    | GotTrips (WebData (List Trip))
     | GotSignUp (Result Http.Error Session)
     | GotLogin (Result Http.Error Session)
     | GotLogout (Result Http.Error String)
     | GotDeleteUser (Result Http.Error String)
+    | CreatedTrip (Result Http.Error ())
 
 
 type Route
@@ -85,13 +94,6 @@ type alias Review =
     }
 
 
-type alias Reviews =
-    { hi : Maybe Review
-    , lo : Maybe Review
-    , all : List Review
-    }
-
-
 type AdminTab
     = Users
 
@@ -99,6 +101,14 @@ type AdminTab
 type LoginTab
     = LoginForm
     | SignUpForm
+
+
+type alias Trip =
+    { destination : String
+    , startDate : Date.Date
+    , endDate : Date.Date
+    , comment : String
+    }
 
 
 type alias Model =
@@ -111,13 +121,31 @@ type alias Model =
     , password : String
     , role : Maybe Role
     , users : WebData AllUsers
+    , startDatePicker : DatePicker.DatePicker
+    , endDatePicker : DatePicker.DatePicker
+    , tripDestination : String
+    , tripStartDate : Maybe Date.Date
+    , tripEndDate : Maybe Date.Date
+    , tripComment : String
+    , trips : WebData (List Trip)
     , adminTab : AdminTab
     , loginTab : LoginTab
     , loginError : Maybe Http.Error
     , logoutError : Maybe Http.Error
     , signUpError : Maybe Http.Error
     , deleteUserError : Maybe Http.Error
+    , createTripError : Maybe Http.Error
     }
+
+
+allErrors : Model -> List ( Maybe Http.Error, String )
+allErrors model =
+    [ ( model.loginError, "Error attempting to authenticate" )
+    , ( model.logoutError, "Error attempting to log out" )
+    , ( model.signUpError, "Error attempting to create your account" )
+    , ( model.deleteUserError, "Error attempting to delete a user" )
+    , ( model.createTripError, "Error attempting to create a trip" )
+    ]
 
 
 
@@ -220,6 +248,31 @@ signUp { username, email, password } =
         }
 
 
+createTrip :
+    { username : String
+    , destination : String
+    , startDate : Date.Date
+    , endDate : Date.Date
+    , comment : String
+    }
+    -> Cmd Msg
+createTrip { username, destination, startDate, endDate, comment } =
+    Utils.postWithCredentials
+        { url = endpoint [ "trips" ] []
+        , body =
+            Http.jsonBody
+                (JE.object
+                    [ ( "username", JE.string username )
+                    , ( "destination", JE.string destination )
+                    , ( "startDate", encodeDate startDate )
+                    , ( "endDate", encodeDate endDate )
+                    , ( "comment", JE.string comment )
+                    ]
+                )
+        , expect = Http.expectWhatever CreatedTrip
+        }
+
+
 deleteUser : String -> Cmd Msg
 deleteUser username =
     Utils.deleteWithCredentials
@@ -237,6 +290,35 @@ decodeReview =
         (JD.field "rating" JD.int)
         (JD.field "user" JD.string)
         (JD.field "timestamp" JD.string)
+
+
+encodeDate : Date.Date -> JE.Value
+encodeDate date =
+    date |> Date.toIsoString |> JE.string
+
+
+decodeDate : JD.Decoder Date.Date
+decodeDate =
+    JD.string |> JD.andThen (Date.fromIsoString >> JDE.fromResult)
+
+
+fetchTrips : Cmd Msg
+fetchTrips =
+    Utils.getWithCredentials
+        { url = endpoint [ "trips" ] []
+        , expect =
+            Http.expectJson
+                (RemoteData.fromResult >> GotTrips)
+                (JD.list
+                    (JD.map4
+                        Trip
+                        (JD.field "destination" JD.string)
+                        (JD.field "startDate" decodeDate)
+                        (JD.field "endDate" decodeDate)
+                        (JD.field "comment" JD.string)
+                    )
+                )
+        }
 
 
 fetchUsers : Cmd Msg
@@ -301,6 +383,13 @@ routeParser =
 -}
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
+    let
+        ( startDatePicker, startDatePickerCmd ) =
+            DatePicker.init
+
+        ( endDatePicker, endDatePickerCmd ) =
+            DatePicker.init
+    in
     ( { route = Nothing
       , url = url
       , key = key
@@ -310,14 +399,25 @@ init _ url key =
       , password = ""
       , role = Nothing
       , users = RemoteData.NotAsked
+      , tripDestination = ""
+      , tripStartDate = Nothing
+      , tripEndDate = Nothing
+      , tripComment = ""
+      , trips = RemoteData.NotAsked
+      , startDatePicker = startDatePicker
+      , endDatePicker = endDatePicker
       , adminTab = Users
       , loginTab = LoginForm
       , loginError = Nothing
       , logoutError = Nothing
       , signUpError = Nothing
       , deleteUserError = Nothing
+      , createTripError = Nothing
       }
-    , Cmd.none
+    , Cmd.batch
+        [ Cmd.map UpdateTripStartDate startDatePickerCmd
+        , Cmd.map UpdateTripEndDate endDatePickerCmd
+        ]
     )
 
 
@@ -359,12 +459,59 @@ update msg model =
             in
             ( { model | role = maybeRole }, Cmd.none )
 
+        UpdateTripDestination x ->
+            ( { model | tripDestination = x }, Cmd.none )
+
+        UpdateTripStartDate dpMsg ->
+            let
+                ( newDatePicker, dateEvent ) =
+                    DatePicker.update DatePicker.defaultSettings dpMsg model.startDatePicker
+
+                newDate =
+                    case dateEvent of
+                        DatePicker.Picked changedDate ->
+                            Just changedDate
+
+                        _ ->
+                            model.tripStartDate
+            in
+            ( { model
+                | tripStartDate = newDate
+                , startDatePicker = newDatePicker
+              }
+            , Cmd.none
+            )
+
+        UpdateTripEndDate dpMsg ->
+            let
+                ( newDatePicker, dateEvent ) =
+                    DatePicker.update DatePicker.defaultSettings dpMsg model.endDatePicker
+
+                newDate =
+                    case dateEvent of
+                        DatePicker.Picked changedDate ->
+                            Just changedDate
+
+                        _ ->
+                            model.tripEndDate
+            in
+            ( { model
+                | tripEndDate = newDate
+                , endDatePicker = newDatePicker
+              }
+            , Cmd.none
+            )
+
+        UpdateTripComment x ->
+            ( { model | tripComment = x }, Cmd.none )
+
         ClearErrors ->
             ( { model
                 | loginError = Nothing
                 , logoutError = Nothing
                 , signUpError = Nothing
                 , deleteUserError = Nothing
+                , createTripError = Nothing
               }
             , Cmd.none
             )
@@ -400,27 +547,18 @@ update msg model =
                     ( { model
                         | url = url
                         , route = route
+                        , trips = RemoteData.Loading
                       }
-                    , Cmd.none
+                    , fetchTrips
                     )
 
                 Just ManagerHome ->
-                    case model.session of
-                        Nothing ->
-                            ( { model
-                                | url = url
-                                , route = route
-                              }
-                            , Cmd.none
-                            )
-
-                        Just session ->
-                            ( { model
-                                | url = url
-                                , route = route
-                              }
-                            , Cmd.none
-                            )
+                    ( { model
+                        | url = url
+                        , route = route
+                      }
+                    , Cmd.none
+                    )
 
                 Just AdminHome ->
                     ( { model
@@ -439,14 +577,14 @@ update msg model =
                     , Cmd.none
                     )
 
-        -- GET /all-usernames
+        -- GET /accounts
         AttemptGetUsers ->
             ( { model | users = RemoteData.Loading }, fetchUsers )
 
         GotUsers xs ->
             ( { model | users = xs }, Cmd.none )
 
-        -- DELETE /user/:username
+        -- DELETE /accounts
         AttemptDeleteUser username ->
             ( model, deleteUser username )
 
@@ -460,7 +598,47 @@ update msg model =
                     , sleepAndClearErrors
                     )
 
-        -- /create-account
+        -- POST /trips
+        AttemptCreateTrip startDate endDate ->
+            ( model
+            , case model.session of
+                Nothing ->
+                    Cmd.none
+
+                Just session ->
+                    createTrip
+                        { username = session.username
+                        , destination = model.tripDestination
+                        , startDate = startDate
+                        , endDate = endDate
+                        , comment = model.tripComment
+                        }
+            )
+
+        CreatedTrip result ->
+            case result of
+                Ok _ ->
+                    ( { model
+                        | tripDestination = ""
+                        , tripStartDate = Nothing
+                        , tripEndDate = Nothing
+                        , tripComment = ""
+                      }
+                    , fetchTrips
+                    )
+
+                Err e ->
+                    ( { model
+                        | createTripError = Just e
+                        , tripDestination = ""
+                        , tripStartDate = Nothing
+                        , tripEndDate = Nothing
+                        , tripComment = ""
+                      }
+                    , sleepAndClearErrors
+                    )
+
+        -- POST /accounts
         AttemptSignUp ->
             ( model
             , signUp
@@ -482,7 +660,11 @@ update msg model =
                     , sleepAndClearErrors
                     )
 
-        -- /login
+        -- GET /trips
+        GotTrips xs ->
+            ( { model | trips = xs }, Cmd.none )
+
+        -- POST /login
         AttemptLogin ->
             ( model, login model.username model.password )
 
@@ -498,7 +680,7 @@ update msg model =
                     , sleepAndClearErrors
                     )
 
-        -- / logout
+        -- GET /logout
         AttemptLogout ->
             ( model, logout )
 

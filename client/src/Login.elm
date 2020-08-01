@@ -1,5 +1,6 @@
 module Login exposing (render)
 
+import Common
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -137,24 +138,7 @@ login model =
         ]
         [ UI.header 3 "Welcome to Trip Planner"
         , loginForm model
-        , case model.loginError of
-            Nothing ->
-                text ""
-
-            Just e ->
-                UI.errorBanner
-                    { title = "Error logging in"
-                    , body = Utils.explainHttpError e
-                    }
-        , case model.signUpError of
-            Nothing ->
-                text ""
-
-            Just e ->
-                UI.errorBanner
-                    { title = "Error creating account"
-                    , body = Utils.explainHttpError e
-                    }
+        , Common.allErrors model
         ]
 
 
@@ -174,15 +158,7 @@ logout model =
             { label = "Logout"
             , handleClick = State.AttemptLogout
             }
-        , case model.logoutError of
-            Nothing ->
-                text ""
-
-            Just e ->
-                UI.errorBanner
-                    { title = "Error logging out"
-                    , body = Utils.explainHttpError e
-                    }
+        , Common.allErrors model
         ]
 
 

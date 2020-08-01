@@ -5,6 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import RemoteData
 import State
+import Common
 import Tailwind
 import UI
 import Utils
@@ -78,22 +79,5 @@ render model =
         , case model.adminTab of
             State.Users ->
                 allUsers model
-        , case model.logoutError of
-            Nothing ->
-                text ""
-
-            Just e ->
-                UI.errorBanner
-                    { title = "Error logging out"
-                    , body = Utils.explainHttpError e
-                    }
-        , case model.deleteUserError of
-            Nothing ->
-                text ""
-
-            Just e ->
-                UI.errorBanner
-                    { title = "Error attempting to delete user"
-                    , body = Utils.explainHttpError e
-                    }
+        , Common.allErrors model
         ]
