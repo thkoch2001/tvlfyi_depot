@@ -17,6 +17,7 @@
 #include "libutil/archive.hh"
 #include "libutil/hash.hh"
 #include "libutil/serialise.hh"
+#include "libutil/types.hh"
 
 namespace nix::daemon {
 
@@ -170,6 +171,29 @@ class WorkerServiceImpl final : public WorkerService::Service {
     return Status::OK;
   }
 
+  Status QuerySubstitutablePathInfos(
+      grpc::ServerContext*, const StorePaths* request,
+      nix::proto::SubstitutablePathInfos* response) override {
+    SubstitutablePathInfos infos;
+    PathSet paths;
+    for (const auto& path : request->paths()) {
+      paths.insert(path);
+    }
+    store_->querySubstitutablePathInfos(paths, infos);
+    for (const auto& [path, path_info] : infos) {
+      auto proto_path_info = response->add_path_infos();
+      proto_path_info->mutable_path()->set_path(path);
+      proto_path_info->mutable_deriver()->set_path(path_info.deriver);
+      for (const auto& ref : path_info.references) {
+        proto_path_info->add_references(ref);
+      }
+      proto_path_info->set_download_size(path_info.downloadSize);
+      proto_path_info->set_nar_size(path_info.narSize);
+    }
+
+    return Status::OK;
+  }
+
   Status QueryValidDerivers(grpc::ServerContext* context,
                             const StorePath* request,
                             StorePaths* response) override {
@@ -216,6 +240,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                        PathInfo* response) override {
     auto path = request->path();
     store_->assertStorePath(path);
+    response->mutable_path()->set_path(path);
     try {
       auto info = store_->queryPathInfo(path);
       response->mutable_deriver()->set_path(info->deriver);
