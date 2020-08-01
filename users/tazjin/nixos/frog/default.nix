@@ -279,6 +279,7 @@ in depot.lib.fix(self: {
       pwgen
       ripgrep
       rustup
+      screen
       scrot
       spotify
       steam
@@ -290,6 +291,7 @@ in depot.lib.fix(self: {
       v4l-utils
       vlc
       xclip
+      xsecurelock
       yubico-piv-tool
       yubikey-personalization
       zoxide
