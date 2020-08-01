@@ -114,6 +114,7 @@ instance FromJSON Role where
       "user" -> pure RegularUser
       "manager" -> pure Manager
       "admin" -> pure Admin
+      _ -> fail "Expected \"user\" or \"manager\" or \"admin\""
 
 instance ToField Role where
   toField RegularUser = SQLText "user"
