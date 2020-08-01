@@ -152,12 +152,7 @@ data Account = Account
 
 -- | Return a tuple with all of the fields for an Account record to use for SQL.
 accountFields :: Account -> (Username, HashedPassword, Email, Role, Maybe ProfilePicture)
-accountFields (Account { accountUsername
-                       , accountPassword
-                       , accountEmail
-                       , accountRole
-                       , accountProfilePicture
-                       })
+accountFields (Account {..})
   = ( accountUsername
     , accountPassword
     , accountEmail
@@ -247,10 +242,7 @@ data TripPK = TripPK
   } deriving (Eq, Show, Generic)
 
 tripPKFields :: TripPK -> (Username, Destination, Date)
-tripPKFields (TripPK{ tripPKUsername
-                    , tripPKDestination
-                    , tripPKStartDate
-                    })
+tripPKFields (TripPK{..})
   = (tripPKUsername, tripPKDestination, tripPKStartDate)
 
 instance FromJSON TripPK where
@@ -262,12 +254,7 @@ instance FromJSON TripPK where
 
 -- | Return the tuple representation of a Trip record for SQL.
 tripFields :: Trip -> (Username, Destination, Date, Date, Comment)
-tripFields (Trip{ tripUsername
-                , tripDestination
-                , tripStartDate
-                , tripEndDate
-                , tripComment
-                })
+tripFields (Trip{..})
   = ( tripUsername
     , tripDestination
     , tripStartDate
@@ -356,12 +343,13 @@ instance FromJSON CreateAccountRequest where
     createAccountRequestRole <- x .: "role"
     pure $ CreateAccountRequest{..}
 
-createAccountRequestFields :: CreateAccountRequest -> (Username, ClearTextPassword, Email, Role)
-createAccountRequestFields request =
-  ( createAccountRequestUsername request
-  , createAccountRequestPassword request
-  , createAccountRequestEmail request
-  , createAccountRequestRole request
+createAccountRequestFields :: CreateAccountRequest
+                           -> (Username, ClearTextPassword, Email, Role)
+createAccountRequestFields CreateAccountRequest{..} =
+  ( createAccountRequestUsername
+  , createAccountRequestPassword
+  , createAccountRequestEmail
+  , createAccountRequestRole
   )
 
 newtype SessionUUID = SessionUUID UUID.UUID
