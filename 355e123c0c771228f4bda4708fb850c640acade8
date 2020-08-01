@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9f87beb_42c6305f",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-01T22:04:55Z",
+      "side": 1,
+      "message": "are we not using timestamps in our schema?",
+      "range": {
+        "startLine": 78,
+        "startChar": 6,
+        "endLine": 78,
+        "endChar": 28
+      },
+      "revId": "355e123c0c771228f4bda4708fb850c640acade8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b687494_85cb4ec2",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-01T22:04:55Z",
+      "side": 1,
+      "message": "maybe: which is a PLIST of [...]?",
+      "range": {
+        "startLine": 299,
+        "startChar": 62,
+        "endLine": 299,
+        "endChar": 79
+      },
+      "revId": "355e123c0c771228f4bda4708fb850c640acade8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d80a563_28fabb39",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-01T22:04:55Z",
+      "side": 1,
+      "message": "could it be easier to make attrs an alist and iterate over it pairwise?",
+      "range": {
+        "startLine": 302,
+        "startChar": 11,
+        "endLine": 304,
+        "endChar": 0
+      },
+      "revId": "355e123c0c771228f4bda4708fb850c640acade8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf25f367_34d0529d",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-01T22:04:55Z",
+      "side": 1,
+      "message": "should this all be included in the change?",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 33
+      },
+      "revId": "355e123c0c771228f4bda4708fb850c640acade8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
