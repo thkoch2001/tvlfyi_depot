@@ -22,6 +22,57 @@
       "revId": "f746f285585fb5ba1ea71d66af12120ef648be59",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41e42174_5c463111",
+        "filename": "third_party/nix/src/libstore/legacy-ssh-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-01T00:28:27Z",
+      "side": 1,
+      "message": "and then rethrown, so this should have a real message",
+      "revId": "f746f285585fb5ba1ea71d66af12120ef648be59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b0a65b3_8d821e16",
+        "filename": "third_party/nix/src/libstore/local-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-01T00:28:27Z",
+      "side": 1,
+      "message": "I\u0027d use strformat for this, but it\u0027s whatever",
+      "revId": "f746f285585fb5ba1ea71d66af12120ef648be59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68328c8d_0ef9d0d0",
+        "filename": "third_party/nix/src/nix/hash.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-01T00:28:27Z",
+      "side": 1,
+      "message": "probably use logging",
+      "revId": "f746f285585fb5ba1ea71d66af12120ef648be59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
