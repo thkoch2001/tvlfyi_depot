@@ -22,6 +22,30 @@
       "revId": "4a49b83792257b9689f625a9454abd48d6cc7822",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "187328f6_aac2279f",
+        "filename": "ops/besadii/main.go2",
+        "patchSetId": 6
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-08-01T23:35:54Z",
+      "side": 1,
+      "message": "Doh.",
+      "parentUuid": "f32f23c9_b446664b",
+      "range": {
+        "startLine": 275,
+        "startChar": 34,
+        "endLine": 275,
+        "endChar": 46
+      },
+      "revId": "4a49b83792257b9689f625a9454abd48d6cc7822",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
