@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use serde_derive::Deserialize; // TODO(tazjin): move away from serde_derive
 
 #[derive(Deserialize)]
 pub struct Config {

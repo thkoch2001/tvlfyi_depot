@@ -2,6 +2,7 @@ use crate::models::{Entry, Keyword, NewEntry, NewKeyword};
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use failure::Error;
+use failure::format_err;
 use std::borrow::Cow;
 
 /// Maximum number of times we'll follow a `see: ` pointer.

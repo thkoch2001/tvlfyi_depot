@@ -1,5 +1,5 @@
-use crate::schema::{entries, keywords};
 use chrono::NaiveDateTime;
+use crate::schema::{entries, keywords};
 
 #[derive(Queryable)]
 pub struct Keyword {
