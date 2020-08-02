@@ -38,7 +38,8 @@ static bool haveInternet() {
       continue;
     }
     if (i->ifa_addr->sa_family == AF_INET) {
-      if (ntohl(((sockaddr_in*)i->ifa_addr)->sin_addr.s_addr) !=
+      if (ntohl(
+              (reinterpret_cast<sockaddr_in*>(i->ifa_addr))->sin_addr.s_addr) !=
           INADDR_LOOPBACK) {
         return true;
       }

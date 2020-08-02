@@ -546,7 +546,7 @@ BuildResult RemoteStore::buildDerivation(const Path& drvPath,
   BuildResult res;
   unsigned int status;
   conn->from >> status >> res.errorMsg;
-  res.status = (BuildResult::Status)status;
+  res.status = static_cast<BuildResult::Status>(status);
   return res;
 }
 

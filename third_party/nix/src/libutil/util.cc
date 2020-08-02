@@ -308,7 +308,7 @@ std::string readFile(int fd) {
   std::vector<unsigned char> buf(st.st_size);
   readFull(fd, buf.data(), st.st_size);
 
-  return std::string((char*)buf.data(), st.st_size);
+  return std::string(reinterpret_cast<char*>(buf.data()), st.st_size);
 }
 
 std::string readFile(absl::string_view path, bool drain) {
@@ -349,7 +349,7 @@ void writeFile(const Path& path, Source& source, mode_t mode) {
   while (true) {
     try {
       auto n = source.read(buf.data(), buf.size());
-      writeFull(fd.get(), (unsigned char*)buf.data(), n);
+      writeFull(fd.get(), static_cast<unsigned char*>(buf.data()), n);
     } catch (EndOfFile&) {
       break;
     }
@@ -619,7 +619,7 @@ void replaceSymlink(const Path& target, const Path& link) {
 void readFull(int fd, unsigned char* buf, size_t count) {
   while (count != 0u) {
     checkInterrupt();
-    ssize_t res = read(fd, (char*)buf, count);
+    ssize_t res = read(fd, reinterpret_cast<char*>(buf), count);
     if (res == -1) {
       if (errno == EINTR) {
         continue;
@@ -652,7 +652,8 @@ void writeFull(int fd, const unsigned char* buf, size_t count,
 }
 
 void writeFull(int fd, const std::string& s, bool allowInterrupts) {
-  writeFull(fd, (const unsigned char*)s.data(), s.size(), allowInterrupts);
+  writeFull(fd, reinterpret_cast<const unsigned char*>(s.data()), s.size(),
+            allowInterrupts);
 }
 
 std::string drainFD(int fd, bool block) {
@@ -954,7 +955,7 @@ pid_t startProcess(std::function<void()> fun, const ProcessOptions& options) {
 std::vector<char*> stringsToCharPtrs(const Strings& ss) {
   std::vector<char*> res;
   for (auto& s : ss) {
-    res.push_back((char*)s.c_str());
+    res.push_back(const_cast<char*>(s.c_str()));
   }
   res.push_back(nullptr);
   return res;
@@ -1270,7 +1271,7 @@ std::string filterANSIEscapes(const std::string& s, bool filterAll,
   size_t w = 0;
   auto i = s.begin();
 
-  while (w < (size_t)width && i != s.end()) {
+  while (w < static_cast<size_t>(width) && i != s.end()) {
     if (*i == '\e') {
       std::string e;
       e += *i++;
@@ -1305,7 +1306,7 @@ std::string filterANSIEscapes(const std::string& s, bool filterAll,
       i++;
       t += ' ';
       w++;
-      while (w < (size_t)width && ((w % 8) != 0u)) {
+      while (w < static_cast<size_t>(width) && ((w % 8) != 0u)) {
         t += ' ';
         w++;
       }

@@ -576,8 +576,8 @@ Value& mkString(Value& v, const std::string& s, const PathSet& context) {
   mkString(v, s.c_str());
   if (!context.empty()) {
     size_t n = 0;
-    v.string.context =
-        (const char**)allocBytes((context.size() + 1) * sizeof(char*));
+    v.string.context = static_cast<const char**>(
+        allocBytes((context.size() + 1) * sizeof(char*)));
     for (auto& i : context) {
       v.string.context[n++] = dupString(i.c_str());
     }
@@ -1702,7 +1702,8 @@ void EvalState::printStats() {
 
   struct rusage buf;
   getrusage(RUSAGE_SELF, &buf);
-  float cpuTime = buf.ru_utime.tv_sec + ((float)buf.ru_utime.tv_usec / 1000000);
+  float cpuTime = buf.ru_utime.tv_sec +
+                  (static_cast<float>(buf.ru_utime.tv_usec) / 1000000);
 
   uint64_t bEnvs = nrEnvs * sizeof(Env) + nrValuesInEnvs * sizeof(Value*);
   uint64_t bLists = nrListElems * sizeof(Value*);

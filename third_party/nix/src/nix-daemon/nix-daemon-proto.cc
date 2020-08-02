@@ -75,7 +75,7 @@ struct RetrieveRegularNARSink : ParseSink {
   void createDirectory(const Path& path) override { regular = false; }
 
   void receiveContents(unsigned char* data, unsigned int len) override {
-    s.append((const char*)data, len);
+    s.append(reinterpret_cast<const char*>(data), len);
   }
 
   void createSymlink(const Path& path, const std::string& target) override {

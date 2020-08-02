@@ -18,7 +18,7 @@ std::ostream& operator<<(std::ostream& str, const Expr& e) {
 
 static void showString(std::ostream& str, const std::string& s) {
   str << '"';
-  for (auto c : (std::string)s) {
+  for (auto c : std::string(s)) {
     if (c == '"' || c == '\\' || c == '$') {
       str << "\\" << c;
     } else if (c == '\n') {
@@ -191,7 +191,7 @@ std::ostream& operator<<(std::ostream& str, const Pos& pos) {
     str << "undefined position";
   } else {
     str << (format(ANSI_BOLD "%1%" ANSI_NORMAL ":%2%:%3%") %
-            (std::string)pos.file.value() % pos.line % pos.column)
+            std::string(pos.file.value()) % pos.line % pos.column)
                .str();
   }
   return str;
@@ -405,7 +405,7 @@ void ExprLambda::setName(Symbol& name) { this->name = name; }
 
 std::string ExprLambda::showNamePos() const {
   return (format("%1% at %2%") %
-          (name.has_value() ? "'" + (std::string)name.value() + "'"
+          (name.has_value() ? "'" + std::string(name.value()) + "'"
                             : "anonymous function") %
           pos)
       .str();
