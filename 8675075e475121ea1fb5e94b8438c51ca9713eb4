@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "459155be_3e06d92f",
+        "filename": "third_party/nix/src/tests/derivations_test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-02T17:51:02Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 83,
+        "startChar": 13,
+        "endLine": 83,
+        "endChar": 24
+      },
+      "revId": "8675075e475121ea1fb5e94b8438c51ca9713eb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4461dc32_2ad06edb",
+        "filename": "third_party/nix/src/tests/derivations_test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-02T17:51:02Z",
+      "side": 1,
+      "message": "These don\u0027t appear to use any special features of Rapidcheck - why not simply gtest EXPECT_EQ for everything here?",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 13
+      },
+      "revId": "8675075e475121ea1fb5e94b8438c51ca9713eb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
