@@ -16,10 +16,10 @@ const std::string drvExtension = ".drv";
 
 struct DerivationOutput {
   Path path;
+  // TODO(grfn): make these two fields a Hash
   std::string hashAlgo; /* hash used for expected hash computation */
   std::string hash;     /* expected hash, may be null */
   DerivationOutput() {}
-  // TODO(grfn): Make explicit
   DerivationOutput(Path path, std::string hashAlgo, std::string hash) {
     this->path = path;
     this->hashAlgo = hashAlgo;
@@ -91,6 +91,8 @@ Path writeDerivation(const ref<Store>& store, const Derivation& drv,
 
 /* Read a derivation from a file. */
 Derivation readDerivation(const Path& drvPath);
+
+Derivation parseDerivation(const std::string& s);
 
 /* Check whether a file name ends with the extension for
    derivations. */
