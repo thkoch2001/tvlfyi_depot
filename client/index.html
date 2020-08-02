@@ -13,25 +13,25 @@
     <div id="mount"></div>
     <script>
      function onSignIn(googleUser) {
-       var profile = googleUser.getBasicProfile();
-       console.log('ID: ' + profile.getId());
-       console.log('Name: ' + profile.getName());
-       console.log('Image URL: ' + profile.getImageUrl());
-       console.log('Email: ' + profile.getEmail());
-     }
-
-     function signOut() {
-       console.log('Signing out!');
-       var auth2 = gapi.auth2.getAuthInstance();
-       auth2.signOut().then(function() {
-         console.log('User signed out.');
-       });
+       console.log(googleUser);
      }
 
      var app = Elm.Main.init({node: document.getElementById("mount")});
 
      app.ports.printPage.subscribe(function() {
        window.print();
+     });
+
+     app.ports.googleSignIn.subscribe(function() {
+       var auth2 = gapi.auth2.getAuthInstance();
+       var googleUser = auth2.signIn();
+     });
+
+     app.ports.googleSignOut.subscribe(function() {
+       var auth2 = gapi.auth2.getAuthInstance();
+       auth2.signOut().then(function() {
+         console.log('Google user successfully signed out.');
+       });
      });
     </script>
   </body>

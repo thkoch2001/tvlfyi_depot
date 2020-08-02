@@ -43,6 +43,8 @@ type Msg
     | ClearErrors
     | ToggleLoginForm
     | PrintPage
+    | GoogleSignIn
+    | GoogleSignOut
     | UpdateInviteEmail String
     | UpdateInviteRole (Maybe Role)
     | ReceiveTodaysDate Date.Date
@@ -608,6 +610,12 @@ adminHome flags url key =
 port printPage : () -> Cmd msg
 
 
+port googleSignIn : () -> Cmd msg
+
+
+port googleSignOut : () -> Cmd msg
+
+
 {-| The initial state for the application.
 -}
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
@@ -731,6 +739,12 @@ update msg model =
 
         PrintPage ->
             ( model, printPage () )
+
+        GoogleSignIn ->
+            ( model, googleSignIn () )
+
+        GoogleSignOut ->
+            ( model, googleSignOut () )
 
         UpdateInviteEmail x ->
             ( { model | inviteEmail = x }, Cmd.none )

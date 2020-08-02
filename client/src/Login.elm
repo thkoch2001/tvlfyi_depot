@@ -10,6 +10,16 @@ import UI
 import Utils
 
 
+googleSignIn : Html State.Msg
+googleSignIn =
+    div
+        [ class "g-signin2"
+        , attribute "onsuccess" "onSignIn"
+        , onClick State.GoogleSignIn
+        ]
+        []
+
+
 loginForm : State.Model -> Html State.Msg
 loginForm model =
     div
@@ -111,11 +121,28 @@ loginForm model =
                 ]
             , case model.loginTab of
                 State.LoginForm ->
-                    UI.simpleButton { handleClick = State.AttemptLogin, label = "Login" }
+                    div [ [ "flex", "space-around" ] |> Tailwind.use |> class ]
+                        [ UI.simpleButton
+                            { handleClick = State.AttemptLogin
+                            , label = "Login"
+                            }
+                        , div [ [ "pl-4" ] |> Tailwind.use |> class ] [ googleSignIn ]
+                        ]
 
                 State.SignUpForm ->
-                    if String.length model.username > 0 && String.length model.email > 0 && String.length model.password > 0 then
-                        UI.simpleButton { handleClick = State.AttemptSignUp, label = "Sign up" }
+                    if
+                        List.all identity
+                            [ String.length model.username > 0
+                            , String.length model.email > 0
+                            , String.length model.password > 0
+                            ]
+                    then
+                        div []
+                            [ UI.simpleButton
+                                { handleClick = State.AttemptSignUp
+                                , label = "Sign up"
+                                }
+                            ]
 
                     else
                         UI.disabledButton { label = "Sign up" }
