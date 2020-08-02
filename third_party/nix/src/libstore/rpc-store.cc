@@ -214,9 +214,23 @@ Path RpcStore::addToStore(const std::string& name, const Path& srcPath,
   throw absl::StrCat("Not implemented ", __func__);
 }
 
-Path RpcStore::addTextToStore(const std::string& name, const std::string& s,
+Path RpcStore::addTextToStore(const std::string& name,
+                              const std::string& content,
                               const PathSet& references, RepairFlag repair) {
-  throw absl::StrCat("Not implemented ", __func__);
+  if (repair != 0u) {
+    throw Error(
+        "repairing is not supported when building through the Nix daemon");
+  }
+  ClientContext ctx;
+  proto::AddTextToStoreRequest request;
+  request.set_name(name);
+  request.set_content(content);
+  for (const auto& ref : references) {
+    request.add_references(ref);
+  }
+  proto::StorePath result;
+  SuccessOrThrow(stub_->AddTextToStore(&ctx, request, &result));
+  return result.path();
 }
 
 void RpcStore::narFromPath(const Path& path, Sink& sink) {
@@ -224,7 +238,14 @@ void RpcStore::narFromPath(const Path& path, Sink& sink) {
 }
 
 void RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
-  throw absl::StrCat("Not implemented ", __func__);
+  ClientContext ctx;
+  proto::BuildPathsRequest request;
+  for (const auto& path : paths) {
+    request.add_drvs(path);
+  }
+  google::protobuf::Empty response;
+  request.set_mode(nix::BuildModeToProto(buildMode));
+  SuccessOrThrow(stub_->BuildPaths(&ctx, request, &response));
 }
 
 BuildResult RpcStore::buildDerivation(const Path& drvPath,
