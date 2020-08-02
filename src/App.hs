@@ -89,7 +89,7 @@ server config@T.Config{..} = createAccount
         (Nothing, T.Admin) ->
           throwError err401 { errBody = "Only admins can create Admin accounts" }
         (Just cookie, _) ->
-          adminsOnly cookie doCreateAccount
+          adminsAnd cookie (\T.Account{..} -> accountRole == T.Manager) doCreateAccount
       where
         doCreateAccount :: Handler NoContent
         doCreateAccount = do
