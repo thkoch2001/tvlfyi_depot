@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "899cfd97_4207cf30",
+        "filename": "third_party/nix/src/tests/derivations_test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-02T19:13:49Z",
+      "side": 1,
+      "message": "oops, bad copy paste",
+      "parentUuid": "459155be_3e06d92f",
+      "range": {
+        "startLine": 83,
+        "startChar": 13,
+        "endLine": 83,
+        "endChar": 24
+      },
+      "revId": "8675075e475121ea1fb5e94b8438c51ca9713eb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4461dc32_2ad06edb",
         "filename": "third_party/nix/src/tests/derivations_test.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "8675075e475121ea1fb5e94b8438c51ca9713eb4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df3d51fb_74f5643e",
+        "filename": "third_party/nix/src/tests/derivations_test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-02T19:13:49Z",
+      "side": 1,
+      "message": "gtest assertions don\u0027t work well inside rapidcheck tests - they print on every single failure, whereas the rapidcheck ones only print on the fully shrunk failure (which is way easier to deal with)",
+      "parentUuid": "4461dc32_2ad06edb",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 13
+      },
+      "revId": "8675075e475121ea1fb5e94b8438c51ca9713eb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
