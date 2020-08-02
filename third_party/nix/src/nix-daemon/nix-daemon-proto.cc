@@ -172,6 +172,40 @@ class WorkerServiceImpl final : public WorkerService::Service {
     return Status::OK;
   }
 
+  Status AddTextToStore(grpc::ServerContext*,
+                        const nix::proto::AddTextToStoreRequest* request,
+                        nix::proto::StorePath* response) override {
+    PathSet references;
+    for (const auto& ref : request->references()) {
+      references.insert(ref);
+    }
+    auto path =
+        store_->addTextToStore(request->name(), request->content(), references);
+    response->set_path(path);
+    return Status::OK;
+  }
+
+  Status BuildPaths(grpc::ServerContext*,
+                    const nix::proto::BuildPathsRequest* request,
+                    google::protobuf::Empty*) override {
+    PathSet drvs;
+    for (const auto& drv : request->drvs()) {
+      drvs.insert(drv);
+    }
+    auto mode = BuildModeFrom(request->mode());
+
+    if (!mode.has_value()) {
+      return Status(grpc::StatusCode::INTERNAL, "Invalid build mode");
+    }
+
+    // TODO(grfn): If mode is repair and not trusted, we need to return an error
+    // here (but we can't yet because we don't know anything about trusted
+    // users)
+    store_->buildPaths(drvs, mode.value());
+
+    return Status::OK;
+  }
+
   Status QuerySubstitutablePathInfos(
       grpc::ServerContext*, const StorePaths* request,
       nix::proto::SubstitutablePathInfos* response) override {
@@ -357,7 +391,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
     store_->assertStorePath(drv_path);
     auto drv = BasicDerivation::from_proto(&request->derivation(), *store_);
 
-    auto build_mode = nix::build_mode_from(request->build_mode());
+    auto build_mode = nix::BuildModeFrom(request->build_mode());
     if (!build_mode) {
       return Status(grpc::StatusCode::INTERNAL, "Invalid build mode");
     }
