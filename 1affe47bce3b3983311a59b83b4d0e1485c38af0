@@ -22,6 +22,30 @@
       "revId": "1affe47bce3b3983311a59b83b4d0e1485c38af0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1341f8bb_b8588864",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-02T00:28:10Z",
+      "side": 1,
+      "message": "neither of those exist. This is for human consumption though.",
+      "parentUuid": "d47d1801_aefe6985",
+      "range": {
+        "startLine": 63,
+        "startChar": 32,
+        "endLine": 63,
+        "endChar": 73
+      },
+      "revId": "1affe47bce3b3983311a59b83b4d0e1485c38af0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
