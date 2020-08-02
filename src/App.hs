@@ -29,6 +29,7 @@ import qualified Accounts as Accounts
 import qualified Auth as Auth
 import qualified Trips as Trips
 import qualified Sessions as Sessions
+import qualified Invitations as Invitations
 import qualified LoginAttempts as LoginAttempts
 import qualified PendingAccounts as PendingAccounts
 --------------------------------------------------------------------------------
@@ -43,20 +44,32 @@ err429 = ServerError
 
 -- | Send an email to recipient, `to`, with a secret code.
 sendVerifyEmail :: T.Config
-                -> Text
                 -> T.Username
                 -> T.Email
                 -> T.RegistrationSecret
                 -> IO (Either Email.SendError Email.SendSuccess)
-sendVerifyEmail T.Config{..} apiKey (T.Username username) email@(T.Email to) (T.RegistrationSecret secretUUID) = do
-  Email.send apiKey subject (cs body) email
+sendVerifyEmail T.Config{..} (T.Username username) email@(T.Email to) (T.RegistrationSecret secretUUID) = do
+  Email.send mailgunAPIKey subject (cs body) email
   where
     subject = "Please confirm your account"
     -- TODO(wpcarro): Use a URL encoder
     -- TODO(wpcarro): Use a dynamic domain and port number
     body =
       let secret = secretUUID |> UUID.toString in
-        cs configServer ++ cs username ++ "&secret=" ++ secret
+        cs configServer ++ "/verify?username=" ++ cs username ++ "&secret=" ++ secret
+
+-- | Send an invitation email to recipient, `to`, with a secret code.
+sendInviteEmail :: T.Config
+                -> T.Email
+                -> T.InvitationSecret
+                -> IO (Either Email.SendError Email.SendSuccess)
+sendInviteEmail T.Config{..} email@(T.Email to) (T.InvitationSecret secretUUID) = do
+  Email.send mailgunAPIKey subject (cs body) email
+  where
+    subject = "You've been invited!"
+    body =
+      let secret = secretUUID |> UUID.toString in
+        cs configServer ++ "/accept-invitation?email=" ++ cs to ++ "&secret=" ++ secret
 
 server :: T.Config -> Server API
 server config@T.Config{..} = createAccount
@@ -70,6 +83,7 @@ server config@T.Config{..} = createAccount
                         :<|> login
                         :<|> logout
                         :<|> unfreezeAccount
+                        :<|> inviteUser
   where
     -- Admit Admins + whatever the predicate `p` passes.
     adminsAnd cookie p = Auth.assert dbFile cookie (\acct@T.Account{..} -> accountRole == T.Admin || p acct)
@@ -100,7 +114,7 @@ server config@T.Config{..} = createAccount
             createAccountRequestPassword
             createAccountRequestRole
             createAccountRequestEmail
-          liftIO $ sendVerifyEmail config mailgunAPIKey
+          liftIO $ sendVerifyEmail config
             createAccountRequestUsername
             createAccountRequestEmail
             secretUUID
@@ -218,6 +232,18 @@ server config@T.Config{..} = createAccount
       adminsAnd cookie (\T.Account{..} -> accountRole == T.Manager) $ do
         liftIO $ LoginAttempts.reset dbFile unfreezeAccountRequestUsername
         pure NoContent
+
+    inviteUser :: T.SessionCookie
+               -> T.InviteUserRequest
+               -> Handler NoContent
+    inviteUser cookie T.InviteUserRequest{..} = adminsOnly cookie $ do
+      secretUUID <- liftIO $ T.InvitationSecret <$> Random.randomIO
+      liftIO $ Invitations.create dbFile
+        secretUUID
+        inviteUserRequestEmail
+        inviteUserRequestRole
+      liftIO $ sendInviteEmail config inviteUserRequestEmail secretUUID
+      pure NoContent
 
 run :: T.Config -> IO ()
 run config@T.Config{..} =

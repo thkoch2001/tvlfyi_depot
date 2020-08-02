@@ -469,3 +469,30 @@ instance FromJSON UnfreezeAccountRequest where
   parseJSON = withObject "UnfreezeAccountRequest" $ \x -> do
     unfreezeAccountRequestUsername <- x .: "username"
     pure UnfreezeAccountRequest{..}
+
+data InviteUserRequest = InviteUserRequest
+  { inviteUserRequestEmail :: Email
+  , inviteUserRequestRole :: Role
+  } deriving (Eq, Show)
+
+instance FromJSON InviteUserRequest where
+  parseJSON = withObject "InviteUserRequest" $ \x -> do
+    inviteUserRequestEmail <- x .: "email"
+    inviteUserRequestRole <- x .: "role"
+    pure InviteUserRequest{..}
+
+newtype InvitationSecret = InvitationSecret UUID.UUID
+  deriving (Eq, Show)
+
+instance ToField InvitationSecret where
+  toField (InvitationSecret secretUUID) =
+    secretUUID |> UUID.toText |> SQLText
+
+instance FromField InvitationSecret where
+  fromField field =
+    case fieldData field of
+      (SQLText x) ->
+        case UUID.fromText x of
+          Nothing -> returnError ConversionFailed field ("Could not convert text to UUID: " ++ show x)
+          Just x -> Ok $ InvitationSecret x
+      _ -> returnError ConversionFailed field "Field data is not SQLText, which is what we expect"

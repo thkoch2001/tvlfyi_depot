@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS Trips;
 DROP TABLE IF EXISTS Sessions;
 DROP TABLE IF EXISTS LoginAttempts;
 DROP TABLE IF EXISTS PendingAccounts;
+DROP TABLE IF EXISTS Invitations;
 
 CREATE TABLE Accounts (
   username TEXT CHECK(LENGTH(username) > 0) NOT NULL,
@@ -54,6 +55,13 @@ CREATE TABLE PendingAccounts (
   role TEXT CHECK(role IN ('user', 'manager', 'admin')) NOT NULL,
   email TEXT CHECK(LENGTH(email) > 0) NOT NULL UNIQUE,
   PRIMARY KEY (username)
+);
+
+CREATE TABLE Invitations (
+  email TEXT CHECK(LENGTH(email) > 0) NOT NULL UNIQUE,
+  role TEXT CHECK(role IN ('user', 'manager', 'admin')) NOT NULL,
+  secret TEXT CHECK(LENGTH(secret) == 36) NOT NULL,
+  PRIMARY KEY (email)
 );
 
 COMMIT;

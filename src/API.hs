@@ -67,3 +67,7 @@ type API =
            :> SessionCookie
            :> ReqBody '[JSON] T.UnfreezeAccountRequest
            :> Post '[JSON] NoContent
+      :<|> "invite"
+           :> SessionCookie
+           :> ReqBody '[JSON] T.InviteUserRequest
+           :> Post '[JSON] NoContent
