@@ -71,6 +71,8 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   installCheckInputs = with pkgs; [
     fd
     gtest
+    jq
+    parallel
     rapidcheck
   ];
 
