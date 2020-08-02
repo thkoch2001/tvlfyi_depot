@@ -73,4 +73,4 @@ type API =
            :> Post '[JSON] NoContent
       :<|> "accept-invitation"
            :> ReqBody '[JSON] T.AcceptInvitationRequest
-           :> Get '[JSON] NoContent
+           :> Post '[JSON] NoContent
