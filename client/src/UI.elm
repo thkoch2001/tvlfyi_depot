@@ -40,7 +40,8 @@ errorBanner { title, body } =
 
         -- TODO(wpcarro): Consider supporting breakpoints, but for now
         -- don't.
-        , style "margin-left" "-512px"
+        , style "width" "800px"
+        , style "margin-left" "-400px"
         ]
         [ div
             [ [ "bg-red-500"
