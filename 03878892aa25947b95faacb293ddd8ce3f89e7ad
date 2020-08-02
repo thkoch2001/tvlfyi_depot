@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d9ae08fe_419a9823",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-02T02:11:17Z",
+      "side": 1,
+      "message": "you told me to use INTERNAL for this before :/",
+      "parentUuid": "1046aef5_435ed321",
+      "range": {
+        "startLine": 198,
+        "startChar": 38,
+        "endLine": 198,
+        "endChar": 46
+      },
+      "revId": "03878892aa25947b95faacb293ddd8ce3f89e7ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "94954dd9_ea64aade",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2020-08-02T02:07:49Z",
       "side": 1,
       "message": "try-catch-INTERNAL",
+      "range": {
+        "startLine": 204,
+        "startChar": 4,
+        "endLine": 204,
+        "endChar": 43
+      },
+      "revId": "03878892aa25947b95faacb293ddd8ce3f89e7ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50125384_b2c3360d",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-02T02:11:17Z",
+      "side": 1,
+      "message": "hmm??",
+      "parentUuid": "94954dd9_ea64aade",
       "range": {
         "startLine": 204,
         "startChar": 4,
