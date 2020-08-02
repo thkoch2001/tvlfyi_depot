@@ -55,6 +55,8 @@ with lib;
     hyperfine
 
     clj2nix
+    clojure
+    leiningen
 
     pg-dump-upsert
 
@@ -82,11 +84,11 @@ with lib;
 
     delta = {
       enable = true;
-      options = [
-        "--theme 'Solarized (light)'"
-        "--hunk-style" "plain"
-        "--commit-style" "box"
-      ];
+      options = {
+        theme = "Solarized (light)";
+        hunk-style = "plain";
+        commit-style = "box";
+      };
     };
   };
 
