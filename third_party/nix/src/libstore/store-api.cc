@@ -10,6 +10,7 @@
 #include <glog/logging.h>
 #include <grpcpp/create_channel.h>
 
+#include "libproto/worker.pb.h"
 #include "libstore/crypto.hh"
 #include "libstore/derivations.hh"
 #include "libstore/globals.hh"
@@ -21,7 +22,7 @@
 
 namespace nix {
 
-std::optional<BuildMode> build_mode_from(nix::proto::BuildMode mode) {
+std::optional<BuildMode> BuildModeFrom(nix::proto::BuildMode mode) {
   switch (mode) {
     case nix::proto::BuildMode::Normal:
       return BuildMode::bmNormal;
@@ -31,6 +32,17 @@ std::optional<BuildMode> build_mode_from(nix::proto::BuildMode mode) {
       return BuildMode::bmCheck;
     default:
       return {};
+  }
+}
+
+nix::proto::BuildMode BuildModeToProto(BuildMode mode) {
+  switch (mode) {
+    case BuildMode::bmNormal:
+      return nix::proto::BuildMode::Normal;
+    case BuildMode::bmRepair:
+      return nix::proto::BuildMode::Repair;
+    case BuildMode::bmCheck:
+      return nix::proto::BuildMode::Check;
   }
 }
 

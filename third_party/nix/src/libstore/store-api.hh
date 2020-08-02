@@ -184,7 +184,10 @@ enum BuildMode { bmNormal, bmRepair, bmCheck };
 
 // Convert the proto version of a `nix::proto::BuildMode` to its corresponding
 // nix `BuildMode`
-std::optional<BuildMode> build_mode_from(nix::proto::BuildMode mode);
+std::optional<BuildMode> BuildModeFrom(nix::proto::BuildMode mode);
+
+// Convert a `nix::BuildMode` to its corresponding proto representation
+nix::proto::BuildMode BuildModeToProto(BuildMode mode);
 
 struct BuildResult {
   /* Note: don't remove status codes, and only add new status codes
