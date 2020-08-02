@@ -126,7 +126,6 @@ void mainWrapped(int argc, char** argv) {
   }
 
   initNix();
-  initGC();
 
   programPath = argv[0];
   std::string programName = baseNameOf(programPath);

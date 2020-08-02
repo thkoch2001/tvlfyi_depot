@@ -16,6 +16,13 @@
 #include "libutil/hash.hh"
 
 namespace nix {
+namespace expr {
+
+// Initialise the Boehm GC once per program instance. This should be
+// called in places that require the garbage collector.
+void InitGC();
+
+}  // namespace expr
 
 class Store;
 class EvalState;
@@ -58,9 +65,6 @@ std::ostream& operator<<(std::ostream& str, const Value& v);
 
 typedef std::pair<std::string, std::string> SearchPathElem;
 typedef std::list<SearchPathElem> SearchPath;
-
-/* Initialise the Boehm GC, if applicable. */
-void initGC();
 
 typedef std::map<Path, Expr*, std::less<Path>,
                  traceable_allocator<std::pair<const Path, Expr*>>>

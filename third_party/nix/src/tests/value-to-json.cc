@@ -12,7 +12,7 @@
 
 class ValueTest : public ::testing::Test {
  protected:
-  static void SetUpTestCase() { nix::initGC(); }
+  static void SetUpTestCase() { nix::expr::InitGC(); }
 
   static void TearDownTestCase() {}
 };

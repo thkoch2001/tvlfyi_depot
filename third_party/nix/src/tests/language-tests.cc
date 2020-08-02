@@ -111,7 +111,7 @@ class NixEnvironment : public testing::Environment {
  public:
   void SetUp() override {
     google::InitGoogleLogging("--logtostderr=false");
-    nix::initGC();
+    nix::expr::InitGC();
   }
 };
 

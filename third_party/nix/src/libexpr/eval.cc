@@ -12,6 +12,7 @@
 
 #define GC_INCLUDE_NEW
 
+#include <absl/base/call_once.h>
 #include <absl/container/flat_hash_set.h>
 #include <absl/strings/match.h>
 #include <gc/gc.h>
@@ -34,6 +35,65 @@
 #include "libutil/visitor.hh"
 
 namespace nix {
+namespace {
+
+// Called when the Boehm GC runs out of memory.
+static void* BoehmOomHandler(size_t requested) {
+  /* Convert this to a proper C++ exception. */
+  LOG(FATAL) << "Garbage collector ran out of memory; requested " << requested
+             << " bytes";
+  throw std::bad_alloc();
+}
+
+void ConfigureBoehmGc() {
+  /* Don't look for interior pointers. This reduces the odds of
+     misdetection a bit. */
+  GC_set_all_interior_pointers(0);
+
+  /* We don't have any roots in data segments, so don't scan from
+     there. */
+  GC_set_no_dls(1);
+
+  GC_INIT();
+
+  GC_set_oom_fn(BoehmOomHandler);
+
+  /* Set the initial heap size to something fairly big (25% of
+     physical RAM, up to a maximum of 384 MiB) so that in most cases
+     we don't need to garbage collect at all.  (Collection has a
+     fairly significant overhead.)  The heap size can be overridden
+     through libgc's GC_INITIAL_HEAP_SIZE environment variable.  We
+     should probably also provide a nix.conf setting for this.  Note
+     that GC_expand_hp() causes a lot of virtual, but not physical
+     (resident) memory to be allocated.  This might be a problem on
+     systems that don't overcommit. */
+  if (getenv("GC_INITIAL_HEAP_SIZE") == nullptr) {
+    size_t size = 32 * 1024 * 1024;
+#if HAVE_SYSCONF && defined(_SC_PAGESIZE) && defined(_SC_PHYS_PAGES)
+    size_t maxSize = 384 * 1024 * 1024;
+    long pageSize = sysconf(_SC_PAGESIZE);
+    long pages = sysconf(_SC_PHYS_PAGES);
+    if (pageSize != -1) {
+      size = (pageSize * pages) / 4;
+    }  // 25% of RAM
+    if (size > maxSize) {
+      size = maxSize;
+    }
+#endif
+    DLOG(INFO) << "setting initial heap size to " << size << " bytes";
+    GC_expand_hp(size);
+  }
+}
+
+}  // namespace
+
+namespace expr {
+
+absl::once_flag gc_flag;
+
+void InitGC() { absl::call_once(gc_flag, &ConfigureBoehmGc); }
+
+}  // namespace expr
 
 static char* dupString(const char* s) {
   char* t;
@@ -187,14 +247,6 @@ std::string showType(const Value& v) {
   abort();
 }
 
-#if HAVE_BOEHMGC
-/* Called when the Boehm GC runs out of memory. */
-static void* oomHandler(size_t requested) {
-  /* Convert this to a proper C++ exception. */
-  throw std::bad_alloc();
-}
-#endif
-
 static Symbol getName(const AttrName& name, EvalState& state, Env& env) {
   return std::visit(
       util::overloaded{[&](const Symbol& name) -> Symbol { return name; },
@@ -205,59 +257,6 @@ static Symbol getName(const AttrName& name, EvalState& state, Env& env) {
                          return state.symbols.Create(nameValue.string.s);
                        }},
       name);
-}
-
-static bool gcInitialised = false;
-
-void initGC() {
-  if (gcInitialised) {
-    return;
-  }
-
-#if HAVE_BOEHMGC
-  /* Initialise the Boehm garbage collector. */
-
-  /* Don't look for interior pointers. This reduces the odds of
-     misdetection a bit. */
-  GC_set_all_interior_pointers(0);
-
-  /* We don't have any roots in data segments, so don't scan from
-     there. */
-  GC_set_no_dls(1);
-
-  GC_INIT();
-
-  GC_set_oom_fn(oomHandler);
-
-  /* Set the initial heap size to something fairly big (25% of
-     physical RAM, up to a maximum of 384 MiB) so that in most cases
-     we don't need to garbage collect at all.  (Collection has a
-     fairly significant overhead.)  The heap size can be overridden
-     through libgc's GC_INITIAL_HEAP_SIZE environment variable.  We
-     should probably also provide a nix.conf setting for this.  Note
-     that GC_expand_hp() causes a lot of virtual, but not physical
-     (resident) memory to be allocated.  This might be a problem on
-     systems that don't overcommit. */
-  if (getenv("GC_INITIAL_HEAP_SIZE") == nullptr) {
-    size_t size = 32 * 1024 * 1024;
-#if HAVE_SYSCONF && defined(_SC_PAGESIZE) && defined(_SC_PHYS_PAGES)
-    size_t maxSize = 384 * 1024 * 1024;
-    long pageSize = sysconf(_SC_PAGESIZE);
-    long pages = sysconf(_SC_PHYS_PAGES);
-    if (pageSize != -1) {
-      size = (pageSize * pages) / 4;
-    }  // 25% of RAM
-    if (size > maxSize) {
-      size = maxSize;
-    }
-#endif
-    DLOG(INFO) << "setting initial heap size to " << size << " bytes";
-    GC_expand_hp(size);
-  }
-
-#endif
-
-  gcInitialised = true;
 }
 
 /* Very hacky way to parse $NIX_PATH, which is colon-separated, but
@@ -334,9 +333,9 @@ EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
       store(store),
       baseEnv(allocEnv(128)),
       staticBaseEnv(false, nullptr) {
-  countCalls = getEnv("NIX_COUNT_CALLS", "0") != "0";
+  expr::InitGC();
 
-  assert(gcInitialised);
+  countCalls = getEnv("NIX_COUNT_CALLS", "0") != "0";
 
   /* Initialise the Nix expression search path. */
   if (!evalSettings.pureEval) {
