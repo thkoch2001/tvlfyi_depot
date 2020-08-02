@@ -277,6 +277,7 @@ void BinaryCacheStore::queryPathInfoUncached(
 
   auto narInfoFile = narInfoFileFor(storePath);
 
+  // TODO(riking): This can be a unique_ptr.
   auto callbackPtr = std::make_shared<decltype(callback)>(std::move(callback));
 
   getFile(narInfoFile, {[=](std::future<std::shared_ptr<std::string>> fut) {
@@ -289,6 +290,7 @@ void BinaryCacheStore::queryPathInfoUncached(
 
               stats.narInfoRead++;
 
+              // TODO(riking): This feels invalid.
               (*callbackPtr)(std::shared_ptr<ValidPathInfo>(
                   std::make_shared<NarInfo>(*this, *data, narInfoFile)));
 
