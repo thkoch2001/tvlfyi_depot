@@ -5,11 +5,65 @@ import Date
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Maybe.Extra as ME
 import RemoteData
 import State
 import Tailwind
 import UI
 import Utils
+
+
+roleToggle : State.Model -> State.Role -> Html State.Msg
+roleToggle model role =
+    div [ [ "px-1", "inline" ] |> Tailwind.use |> class ]
+        [ UI.toggleButton
+            { toggled = model.inviteRole == Just role
+            , label = State.roleToString role
+            , handleEnable = State.UpdateInviteRole (Just role)
+            , handleDisable = State.UpdateInviteRole Nothing
+            }
+        ]
+
+
+inviteUser : State.Model -> Html State.Msg
+inviteUser model =
+    div [ [ "pb-6" ] |> Tailwind.use |> class ]
+        [ UI.header 3 "Invite a user"
+        , UI.textField
+            { handleInput = State.UpdateInviteEmail
+            , inputId = "invite-email"
+            , inputValue = model.inviteEmail
+            , pholder = "Email..."
+            }
+        , div [ [ "pt-4" ] |> Tailwind.use |> class ]
+            [ roleToggle model State.User
+            , roleToggle model State.Manager
+            , roleToggle model State.Admin
+            ]
+        , UI.baseButton
+            { enabled =
+                List.all
+                    identity
+                    [ String.length model.inviteEmail > 0
+                    , ME.isJust model.inviteRole
+                    ]
+            , extraClasses = [ "my-4" ]
+            , label =
+                case model.inviteResponseStatus of
+                    RemoteData.Loading ->
+                        "Sending..."
+
+                    _ ->
+                        "Send invitation"
+            , handleClick =
+                case model.inviteRole of
+                    Nothing ->
+                        State.DoNothing
+
+                    Just role ->
+                        State.AttemptInviteUser role
+            }
+        ]
 
 
 allTrips : State.Model -> Html State.Msg
@@ -124,7 +178,10 @@ render model =
             ]
         , case model.adminTab of
             State.Accounts ->
-                allUsers model
+                div []
+                    [ inviteUser model
+                    , allUsers model
+                    ]
 
             State.Trips ->
                 allTrips model

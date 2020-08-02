@@ -40,6 +40,9 @@ type Msg
     | ClearErrors
     | ToggleLoginForm
     | PrintPage
+    | UpdateInviteEmail String
+    | UpdateInviteRole (Maybe Role)
+    | ReceiveTodaysDate Date.Date
       -- SPA
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
@@ -52,6 +55,7 @@ type Msg
     | AttemptDeleteAccount String
     | AttemptCreateTrip Date.Date Date.Date
     | AttemptDeleteTrip Trip
+    | AttemptInviteUser Role
       -- Inbound network
     | GotAccounts (WebData (List Account))
     | GotTrips (WebData (List Trip))
@@ -61,6 +65,7 @@ type Msg
     | GotDeleteAccount (Result Http.Error String)
     | GotCreateTrip (Result Http.Error ())
     | GotDeleteTrip (Result Http.Error ())
+    | GotInviteUser (Result Http.Error ())
 
 
 type Route
@@ -121,6 +126,7 @@ type alias Model =
     , url : Url.Url
     , key : Nav.Key
     , session : Maybe Session
+    , todaysDate : Maybe Date.Date
     , username : String
     , email : String
     , password : String
@@ -135,12 +141,16 @@ type alias Model =
     , trips : WebData (List Trip)
     , adminTab : AdminTab
     , loginTab : LoginTab
+    , inviteEmail : String
+    , inviteRole : Maybe Role
+    , inviteResponseStatus : WebData ()
     , loginError : Maybe Http.Error
     , logoutError : Maybe Http.Error
     , signUpError : Maybe Http.Error
     , deleteUserError : Maybe Http.Error
     , createTripError : Maybe Http.Error
     , deleteTripError : Maybe Http.Error
+    , inviteUserError : Maybe Http.Error
     }
 
 
@@ -151,6 +161,7 @@ allErrors model =
     , ( model.signUpError, "Error attempting to create your account" )
     , ( model.deleteUserError, "Error attempting to delete a user" )
     , ( model.createTripError, "Error attempting to create a trip" )
+    , ( model.inviteUserError, "Error attempting to invite a user" )
     ]
 
 
@@ -176,6 +187,19 @@ roleToString role =
 endpoint : List String -> List UrlBuilder.QueryParameter -> String
 endpoint =
     UrlBuilder.crossOrigin Shared.serverOrigin
+
+
+encodeRole : Role -> JE.Value
+encodeRole x =
+    case x of
+        User ->
+            JE.string "user"
+
+        Manager ->
+            JE.string "manager"
+
+        Admin ->
+            JE.string "admin"
 
 
 decodeRole : JD.Decoder Role
@@ -251,6 +275,21 @@ signUp { username, email, password } =
                     ]
                 )
         , expect = Http.expectJson GotSignUp decodeSession
+        }
+
+
+inviteUser : { email : String, role : Role } -> Cmd Msg
+inviteUser { email, role } =
+    Utils.postWithCredentials
+        { url = endpoint [ "invite" ] []
+        , body =
+            Http.jsonBody
+                (JE.object
+                    [ ( "email", JE.string email )
+                    , ( "role", encodeRole role )
+                    ]
+                )
+        , expect = Http.expectWhatever GotInviteUser
         }
 
 
@@ -424,6 +463,7 @@ prod _ url key =
       , url = url
       , key = key
       , session = Nothing
+      , todaysDate = Nothing
       , username = ""
       , email = ""
       , password = ""
@@ -438,16 +478,21 @@ prod _ url key =
       , endDatePicker = endDatePicker
       , adminTab = Accounts
       , loginTab = LoginForm
+      , inviteEmail = ""
+      , inviteRole = Nothing
+      , inviteResponseStatus = RemoteData.NotAsked
       , loginError = Nothing
       , logoutError = Nothing
       , signUpError = Nothing
       , deleteUserError = Nothing
       , createTripError = Nothing
       , deleteTripError = Nothing
+      , inviteUserError = Nothing
       }
     , Cmd.batch
         [ Cmd.map UpdateTripStartDate startDatePickerCmd
         , Cmd.map UpdateTripEndDate endDatePickerCmd
+        , Date.today |> Task.perform ReceiveTodaysDate
         ]
     )
 
@@ -632,6 +677,15 @@ update msg model =
         PrintPage ->
             ( model, printPage () )
 
+        UpdateInviteEmail x ->
+            ( { model | inviteEmail = x }, Cmd.none )
+
+        UpdateInviteRole mRole ->
+            ( { model | inviteRole = mRole }, Cmd.none )
+
+        ReceiveTodaysDate date ->
+            ( { model | todaysDate = Just date }, Cmd.none )
+
         LinkClicked urlRequest ->
             case urlRequest of
                 Browser.Internal url ->
@@ -763,6 +817,33 @@ update msg model =
 
                 Err e ->
                     ( { model | deleteTripError = Just e }
+                    , sleepAndClearErrors
+                    )
+
+        AttemptInviteUser role ->
+            ( { model | inviteResponseStatus = RemoteData.Loading }
+            , inviteUser
+                { email = model.inviteEmail
+                , role = role
+                }
+            )
+
+        GotInviteUser result ->
+            case result of
+                Ok _ ->
+                    ( { model
+                        | inviteEmail = ""
+                        , inviteRole = Nothing
+                        , inviteResponseStatus = RemoteData.Success ()
+                      }
+                    , Cmd.none
+                    )
+
+                Err x ->
+                    ( { model
+                        | inviteUserError = Just x
+                        , inviteResponseStatus = RemoteData.Failure x
+                      }
                     , sleepAndClearErrors
                     )
 
