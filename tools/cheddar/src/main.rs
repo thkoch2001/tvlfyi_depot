@@ -3,9 +3,10 @@ use comrak::arena_tree::Node;
 use comrak::nodes::{Ast, AstNode, NodeCodeBlock, NodeHtmlBlock, NodeValue};
 use comrak::{format_html, parse_document, Arena, ComrakOptions};
 use lazy_static::lazy_static;
-use rouille::{router, try_or_400};
 use rouille::Response;
+use rouille::{router, try_or_400};
 use serde::Deserialize;
+use serde_json::json;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::env;
@@ -19,7 +20,6 @@ use syntect::easy::HighlightLines;
 use syntect::highlighting::{Theme, ThemeSet};
 use syntect::parsing::{SyntaxReference, SyntaxSet};
 use syntect::util::LinesWithEndings;
-use serde_json::json;
 
 use syntect::html::{
     append_highlighted_html_for_styled_line, start_highlighted_html_snippet, IncludeBackground,
@@ -304,12 +304,7 @@ fn code_endpoint(request: &rouille::Request) -> rouille::Response {
         _ => "Solarized (dark)",
     }];
 
-    format_code(
-        theme,
-        &mut query.code.as_bytes(),
-        &mut buf,
-        &query.filepath,
-    );
+    format_code(theme, &mut query.code.as_bytes(), &mut buf, &query.filepath);
 
     Response::json(&json!({
         "is_plaintext": false,
@@ -319,8 +314,7 @@ fn code_endpoint(request: &rouille::Request) -> rouille::Response {
 
 // Server endpoint for rendering a Markdown file.
 fn markdown_endpoint(request: &rouille::Request) -> rouille::Response {
-    let mut texts: HashMap<String, String> =
-        try_or_400!(rouille::input::json_input(request));
+    let mut texts: HashMap<String, String> = try_or_400!(rouille::input::json_input(request));
 
     for text in texts.values_mut() {
         let mut buf: Vec<u8> = Vec::new();
