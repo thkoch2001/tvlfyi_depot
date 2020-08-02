@@ -96,7 +96,9 @@ struct CmdPathInfo final : StorePathsCommand, MixJSON {
 
         if (showSize || showClosureSize || showSigs) {
           std::cout << std::string(
-              std::max(0, (int)pathLen - (int)storePath.size()), ' ');
+              std::max(0, static_cast<int>(pathLen) -
+                              static_cast<int>(storePath.size())),
+              ' ');
         }
 
         if (showSize) {

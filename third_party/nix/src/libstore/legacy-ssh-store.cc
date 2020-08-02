@@ -214,7 +214,7 @@ struct LegacySSHStore : public Store {
     conn->to.flush();
 
     BuildResult status;
-    status.status = (BuildResult::Status)readInt(conn->from);
+    status.status = static_cast<BuildResult::Status>(readInt(conn->from));
     conn->from >> status.errorMsg;
 
     if (GET_PROTOCOL_MINOR(conn->remoteVersion) >= 3) {

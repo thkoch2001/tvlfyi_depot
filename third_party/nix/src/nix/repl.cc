@@ -194,7 +194,7 @@ static int listPossibleCallback(char* s, char*** avp) {
     return p;
   };
 
-  vp = check((char**)malloc(possible.size() * sizeof(char*)));
+  vp = check(static_cast<char**>(malloc(possible.size() * sizeof(char*))));
 
   for (auto& p : possible) {
     vp[ac++] = check(strdup(p.c_str()));
@@ -626,7 +626,7 @@ void NixRepl::addVarToScope(const Symbol& name, Value& v) {
   }
   staticEnv.vars[name] = displ;
   env->values[displ++] = &v;
-  varNames.insert((std::string)name);
+  varNames.insert(std::string(name));
 }
 
 Expr* NixRepl::parseString(const std::string& s) {

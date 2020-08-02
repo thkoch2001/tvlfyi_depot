@@ -16,7 +16,7 @@ static void sigsegvHandler(int signo, siginfo_t* info, void* ctx) {
   bool haveSP = true;
   char* sp = nullptr;
 #if defined(__x86_64__) && defined(REG_RSP)
-  sp = (char*)((ucontext_t*)ctx)->uc_mcontext.gregs[REG_RSP];
+  sp = (char*)(static_cast<ucontext_t*>(ctx))->uc_mcontext.gregs[REG_RSP];
 #elif defined(REG_ESP)
   sp = (char*)((ucontext_t*)ctx)->uc_mcontext.gregs[REG_ESP];
 #else
@@ -24,7 +24,7 @@ static void sigsegvHandler(int signo, siginfo_t* info, void* ctx) {
 #endif
 
   if (haveSP) {
-    ptrdiff_t diff = (char*)info->si_addr - sp;
+    ptrdiff_t diff = static_cast<char*>(info->si_addr) - sp;
     if (diff < 0) {
       diff = -diff;
     }
