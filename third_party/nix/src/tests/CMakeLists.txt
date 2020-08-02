@@ -11,6 +11,17 @@ target_link_libraries(attr-set
 
 gtest_discover_tests(attr-set)
 
+add_executable(derivations_test derivations_test.cc)
+target_link_libraries(derivations_test
+  nixexpr
+  nixstore
+  rapidcheck
+  rapidcheck_gtest
+  GTest::gtest_main
+)
+
+gtest_discover_tests(derivations_test)
+
 add_executable(hash_test hash_test.cc)
 target_link_libraries(hash_test
   nixutil
