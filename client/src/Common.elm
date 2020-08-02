@@ -25,3 +25,13 @@ allErrors model =
                                 }
                 )
         )
+
+
+withSession : State.Model -> (State.Session -> Html State.Msg) -> Html State.Msg
+withSession model renderWithSession =
+    case model.session of
+        Nothing ->
+            div [] [ UI.paragraph "You need a valid session to view this page. Please attempt to log in." ]
+
+        Just session ->
+            renderWithSession session
