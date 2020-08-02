@@ -151,9 +151,15 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   passthru = {
     build-shell = self.overrideAttrs (_: {
+      run_clang_tidy = pkgs.writeShellScriptBin "run-clang-tidy" ''
+        test -f compile_commands.json || (echo "run from build output directory"; exit 1) || exit 1
+        ${pkgs.jq}/bin/jq < compile_commands.json -r 'map(.file)|.[]' | grep -v '/generated/' | ${pkgs.parallel}/bin/parallel ${pkgs.clang-tools}/bin/clang-tidy -p compile_commands.json $@
+      '';
+
       shellHook = ''
         export NIX_DATA_DIR="${toString depotPath}/third_party"
         export NIX_TEST_VAR=foo
+        alias run_clang_tidy="$run_clang_tidy/bin/run-clang-tidy"
       '';
     });
     test-vm = import ./test-vm.nix args;
