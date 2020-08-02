@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41c50213_7208b323",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-02T02:10:18Z",
+      "side": 1,
+      "message": "why?",
+      "range": {
+        "startLine": 7,
+        "startChar": 26,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "7d5fc448b4b8836db99e10ba9d515aa7c49ffe59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
