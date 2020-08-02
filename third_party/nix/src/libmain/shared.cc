@@ -327,7 +327,7 @@ RunPager::RunPager() {
   if (pager == nullptr) {
     pager = getenv("PAGER");
   }
-  if (pager && ((std::string)pager == "" || (std::string)pager == "cat")) {
+  if (pager && (std::string(pager) == "" || std::string(pager) == "cat")) {
     return;
   }
 

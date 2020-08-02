@@ -876,7 +876,7 @@ static void prim_readFile(EvalState& state, const Pos& pos, Value** args,
   }
   std::string s =
       readFile(state.checkSourcePath(state.toRealPath(path, context)));
-  if (s.find((char)0) != std::string::npos) {
+  if (s.find(static_cast<char>(0)) != std::string::npos) {
     throw Error(format("the contents of the file '%1%' cannot be represented "
                        "as a Nix string") %
                 path);
@@ -1421,7 +1421,7 @@ static void prim_isList(EvalState& state, const Pos& pos, Value** args,
 static void elemAt(EvalState& state, const Pos& pos, Value& list, int n,
                    Value& v) {
   state.forceList(list, pos);
-  if (n < 0 || (unsigned int)n >= list.listSize()) {
+  if (n < 0 || static_cast<unsigned int>(n) >= list.listSize()) {
     throw Error(format("list index %1% is out of bounds, at %2%") % n % pos);
   }
   state.forceValue(*(*list.list)[n]);
@@ -1587,7 +1587,7 @@ static void prim_genList(EvalState& state, const Pos& pos, Value** args,
 
   state.mkList(v, len);
 
-  for (unsigned int n = 0; n < (unsigned int)len; ++n) {
+  for (unsigned int n = 0; n < static_cast<unsigned int>(len); ++n) {
     Value* arg = state.allocValue();
     mkInt(*arg, n);
     mkApp(*((*v.list)[n] = state.allocValue()), *args[0], *arg);
@@ -1790,7 +1790,10 @@ static void prim_substring(EvalState& state, const Pos& pos, Value** args,
                     pos);
   }
 
-  mkString(v, (unsigned int)start >= s.size() ? "" : std::string(s, start, len),
+  mkString(v,
+           static_cast<unsigned int>(start) >= s.size()
+               ? ""
+               : std::string(s, start, len),
            context);
 }
 

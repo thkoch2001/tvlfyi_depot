@@ -1050,8 +1050,9 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
           attrs["valid"] = isValid ? "1" : "0";
           attrs["substitutable"] = hasSubs ? "1" : "0";
         } else {
-          columns.push_back((std::string)(isInstalled ? "I" : "-") +
-                            (isValid ? "P" : "-") + (hasSubs ? "S" : "-"));
+          columns.push_back(absl::StrCat((isInstalled ? "I" : "-"),
+                                         (isValid ? "P" : "-"),
+                                         (hasSubs ? "S" : "-")));
         }
       }
 
@@ -1102,7 +1103,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
             attrs["maxComparedVersion"] = version;
           }
         } else {
-          std::string column = (std::string) "" + ch + " " + version;
+          std::string column = std::to_string(ch) + " " + version;
           if (diff == cvGreater && tty) {
             column = ANSI_RED + column + ANSI_NORMAL;
           }

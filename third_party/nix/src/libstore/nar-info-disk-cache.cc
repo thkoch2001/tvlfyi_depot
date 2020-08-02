@@ -164,8 +164,9 @@ class NarInfoDiskCacheImpl final : public NarInfoDiskCache {
               static_cast<int64_t>(wantMassQuery))(priority)
           .exec();
       assert(sqlite3_changes(state->db) == 1);
-      state->caches[uri] = Cache{(int)sqlite3_last_insert_rowid(state->db),
-                                 storeDir, wantMassQuery, priority};
+      state->caches[uri] =
+          Cache{static_cast<int>(sqlite3_last_insert_rowid(state->db)),
+                storeDir, wantMassQuery, priority};
     });
   }
 
@@ -181,8 +182,9 @@ class NarInfoDiskCacheImpl final : public NarInfoDiskCache {
           return false;
         }
         state->caches.emplace(
-            uri, Cache{(int)queryCache.getInt(0), queryCache.getStr(1),
-                       queryCache.getInt(2) != 0, (int)queryCache.getInt(3)});
+            uri, Cache{static_cast<int>(queryCache.getInt(0)),
+                       queryCache.getStr(1), queryCache.getInt(2) != 0,
+                       static_cast<int>(queryCache.getInt(3))});
       }
 
       auto& cache(getCache(*state, uri));

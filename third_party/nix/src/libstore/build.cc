@@ -1589,11 +1589,13 @@ MakeError(NotDeterministic, BuildError)
           8ULL * 1024 * 1024;  // FIXME: make configurable
       struct statvfs st;
       if (statvfs(worker.store.realStoreDir.c_str(), &st) == 0 &&
-          (unsigned long long)st.f_bavail * st.f_bsize < required) {
+          static_cast<unsigned long long>(st.f_bavail) * st.f_bsize <
+              required) {
         diskFull = true;
       }
       if (statvfs(tmpDir.c_str(), &st) == 0 &&
-          (unsigned long long)st.f_bavail * st.f_bsize < required) {
+          static_cast<unsigned long long>(st.f_bavail) * st.f_bsize <
+              required) {
         diskFull = true;
       }
 #endif
@@ -1832,7 +1834,7 @@ void chmod_(const Path& path, mode_t mode) {
 }
 
 int childEntry(void* arg) {
-  ((DerivationGoal*)arg)->runChild();
+  (static_cast<DerivationGoal*>(arg))->runChild();
   return 1;
 }
 
@@ -2361,9 +2363,9 @@ void DerivationGoal::startBuilder() {
           }
 
           size_t stackSize = 1 * 1024 * 1024;
-          char* stack =
-              (char*)mmap(nullptr, stackSize, PROT_WRITE | PROT_READ,
-                          MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
+          char* stack = static_cast<char*>(
+              mmap(nullptr, stackSize, PROT_WRITE | PROT_READ,
+                   MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0));
           if (stack == MAP_FAILED) {
             throw SysError("allocating stack");
           }
@@ -4483,9 +4485,9 @@ void Worker::waitForInput() {
   }
   if (nearest != steady_time_point::max()) {
     timeout.tv_sec = std::max(
-        1L,
-        (long)std::chrono::duration_cast<std::chrono::seconds>(nearest - before)
-            .count());
+        1L, static_cast<long>(std::chrono::duration_cast<std::chrono::seconds>(
+                                  nearest - before)
+                                  .count()));
     useTimeout = true;
   }
 
@@ -4500,10 +4502,11 @@ void Worker::waitForInput() {
       lastWokenUp = before;
     }
     timeout.tv_sec = std::max(
-        1L,
-        (long)std::chrono::duration_cast<std::chrono::seconds>(
-            lastWokenUp + std::chrono::seconds(settings.pollInterval) - before)
-            .count());
+        1L, static_cast<long>(std::chrono::duration_cast<std::chrono::seconds>(
+                                  lastWokenUp +
+                                  std::chrono::seconds(settings.pollInterval) -
+                                  before)
+                                  .count()));
   } else {
     lastWokenUp = steady_time_point::min();
   }
@@ -4568,7 +4571,7 @@ void Worker::waitForInput() {
           }
         } else {
           DLOG(INFO) << goal->getName() << ": read " << rd << " bytes";
-          std::string data((char*)buffer.data(), rd);
+          std::string data(reinterpret_cast<char*>(buffer.data()), rd);
           j->lastOutput = after;
           goal->handleChildOutput(k, data);
         }

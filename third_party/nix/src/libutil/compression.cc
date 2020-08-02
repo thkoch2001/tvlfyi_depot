@@ -99,7 +99,7 @@ struct BzipDecompressionSink : ChunkedCompressionSink {
       throw CompressionError("unable to initialise bzip2 decoder");
     }
 
-    strm.next_out = (char*)outbuf;
+    strm.next_out = reinterpret_cast<char*>(outbuf);
     strm.avail_out = sizeof(outbuf);
   }
 
@@ -128,7 +128,7 @@ struct BzipDecompressionSink : ChunkedCompressionSink {
 
       if (strm.avail_out < sizeof(outbuf) || strm.avail_in == 0) {
         nextSink(outbuf, sizeof(outbuf) - strm.avail_out);
-        strm.next_out = (char*)outbuf;
+        strm.next_out = reinterpret_cast<char*>(outbuf);
         strm.avail_out = sizeof(outbuf);
       }
     }
@@ -287,7 +287,7 @@ struct BzipCompressionSink : ChunkedCompressionSink {
       throw CompressionError("unable to initialise bzip2 encoder");
     }
 
-    strm.next_out = (char*)outbuf;
+    strm.next_out = reinterpret_cast<char*>(outbuf);
     strm.avail_out = sizeof(outbuf);
   }
 
@@ -316,7 +316,7 @@ struct BzipCompressionSink : ChunkedCompressionSink {
 
       if (strm.avail_out < sizeof(outbuf) || strm.avail_in == 0) {
         nextSink(outbuf, sizeof(outbuf) - strm.avail_out);
-        strm.next_out = (char*)outbuf;
+        strm.next_out = reinterpret_cast<char*>(outbuf);
         strm.avail_out = sizeof(outbuf);
       }
     }

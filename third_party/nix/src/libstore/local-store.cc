@@ -350,7 +350,8 @@ void LocalStore::openDB(State& state, bool create) {
     if (sqlite3_step(stmt) != SQLITE_ROW) {
       throwSQLiteError(db, "querying journal mode");
     }
-    prevMode = std::string((const char*)sqlite3_column_text(stmt, 0));
+    prevMode = std::string(
+        reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
   }
   if (prevMode != mode &&
       sqlite3_exec(db, ("pragma main.journal_mode = " + mode + ";").c_str(),
@@ -489,7 +490,7 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
      However, ignore files that we chown'ed ourselves previously to
      ensure that we don't fail on hard links within the same build
      (i.e. "touch $out/foo; ln $out/foo $out/bar"). */
-  if (fromUid != (uid_t)-1 && st.st_uid != fromUid) {
+  if (fromUid != static_cast<uid_t>(-1) && st.st_uid != fromUid) {
     if (S_ISDIR(st.st_mode)) {
       throw BuildError(format("invalid file '%1%': is a directory") % path);
     }
@@ -690,7 +691,8 @@ void LocalStore::queryPathInfoUncached(
 
       info->registrationTime = useQueryPathInfo.getInt(2);
 
-      auto s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 3);
+      auto s = reinterpret_cast<const char*>(
+          sqlite3_column_text(state->stmtQueryPathInfo, 3));
       if (s != nullptr) {
         info->deriver = s;
       }
@@ -700,12 +702,14 @@ void LocalStore::queryPathInfoUncached(
 
       info->ultimate = useQueryPathInfo.getInt(5) == 1;
 
-      s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 6);
+      s = reinterpret_cast<const char*>(
+          sqlite3_column_text(state->stmtQueryPathInfo, 6));
       if (s != nullptr) {
         info->sigs = absl::StrSplit(s, absl::ByChar(' '), absl::SkipEmpty());
       }
 
-      s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 7);
+      s = reinterpret_cast<const char*>(
+          sqlite3_column_text(state->stmtQueryPathInfo, 7));
       if (s != nullptr) {
         info->ca = s;
       }
@@ -860,8 +864,8 @@ Path LocalStore::queryPathFromHashPart(const std::string& hashPart) {
       return "";
     }
 
-    const char* s =
-        (const char*)sqlite3_column_text(state->stmtQueryPathFromHashPart, 0);
+    const char* s = reinterpret_cast<const char*>(
+        sqlite3_column_text(state->stmtQueryPathFromHashPart, 0));
     return (s != nullptr) &&
                    prefix.compare(0, prefix.size(), s, prefix.size()) == 0
                ? s

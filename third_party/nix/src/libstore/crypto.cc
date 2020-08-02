@@ -58,7 +58,8 @@ std::string SecretKey::signDetached(const std::string& data) const {
   unsigned long long sigLen;
   crypto_sign_detached(sig, &sigLen, (unsigned char*)data.data(), data.size(),
                        (unsigned char*)key.data());
-  return name + ":" + absl::Base64Escape(std::string((char*)sig, sigLen));
+  return name + ":" +
+         absl::Base64Escape(std::string(reinterpret_cast<char*>(sig), sigLen));
 #else
   noSodium();
 #endif
@@ -68,7 +69,8 @@ PublicKey SecretKey::toPublicKey() const {
 #if HAVE_SODIUM
   unsigned char pk[crypto_sign_PUBLICKEYBYTES];
   crypto_sign_ed25519_sk_to_pk(pk, (unsigned char*)key.data());
-  return PublicKey(name, std::string((char*)pk, crypto_sign_PUBLICKEYBYTES));
+  return PublicKey(name, std::string(reinterpret_cast<char*>(pk),
+                                     crypto_sign_PUBLICKEYBYTES));
 #else
   noSodium();
 #endif
@@ -102,8 +104,9 @@ bool verifyDetached(const std::string& data, const std::string& sig,
   }
 
   return crypto_sign_verify_detached(
-             (unsigned char*)sig2.data(), (unsigned char*)data.data(),
-             data.size(), (unsigned char*)key->second.key.data()) == 0;
+             reinterpret_cast<unsigned char*>(sig2.data()),
+             (unsigned char*)data.data(), data.size(),
+             (unsigned char*)key->second.key.data()) == 0;
 #else
   noSodium();
 #endif
