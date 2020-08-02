@@ -71,20 +71,34 @@ createTrip model =
         ]
 
 
-renderTrip : State.Trip -> Html State.Msg
-renderTrip trip =
+renderTrip : Date.Date -> State.Trip -> Html State.Msg
+renderTrip today trip =
     li
         [ [ "py-2" ]
             |> Tailwind.use
             |> class
         ]
-        [ UI.paragraph
-            (Date.toIsoString trip.startDate
-                ++ " - "
-                ++ Date.toIsoString trip.endDate
-                ++ " -> "
-                ++ trip.destination
-            )
+        [ if Date.compare today trip.startDate == GT then
+            UI.paragraph
+                (String.fromInt (Date.diff Date.Days trip.startDate today)
+                    ++ " days until you're travelling to "
+                    ++ trip.destination
+                    ++ " for "
+                    ++ String.fromInt
+                        (Date.diff
+                            Date.Days
+                            trip.startDate
+                            trip.endDate
+                        )
+                    ++ " days."
+                )
+
+          else
+            UI.paragraph
+                (String.fromInt (Date.diff Date.Days today trip.endDate)
+                    ++ " days ago you returned from your trip to "
+                    ++ trip.destination
+                )
         , UI.paragraph ("\"" ++ trip.comment ++ "\"")
         , UI.wrapNoPrint
             (UI.textButton
@@ -98,7 +112,7 @@ renderTrip trip =
 trips : State.Model -> Html State.Msg
 trips model =
     div []
-        [ UI.header 3 "Upcoming Trips"
+        [ UI.header 3 "Your Trips"
         , case model.trips of
             RemoteData.NotAsked ->
                 UI.paragraph "Somehow we've reached the user home page without requesting your trips data. Please report this to our engineering team at bugs@tripplaner.tld"
@@ -110,15 +124,24 @@ trips model =
                 UI.paragraph ("Error: " ++ Utils.explainHttpError e)
 
             RemoteData.Success xs ->
-                div [ [ "mb-10" ] |> Tailwind.use |> class ]
-                    [ ul [ [ "my-4" ] |> Tailwind.use |> class ] (xs |> List.map renderTrip)
-                    , UI.wrapNoPrint
-                        (UI.simpleButton
-                            { label = "Print iternary"
-                            , handleClick = State.PrintPage
-                            }
-                        )
-                    ]
+                case model.todaysDate of
+                    Nothing ->
+                        text ""
+
+                    Just today ->
+                        div [ [ "mb-10" ] |> Tailwind.use |> class ]
+                            [ ul [ [ "my-4" ] |> Tailwind.use |> class ]
+                                (xs
+                                    |> List.sortWith (\x y -> Date.compare y.startDate x.startDate)
+                                    |> List.map (renderTrip today)
+                                )
+                            , UI.wrapNoPrint
+                                (UI.simpleButton
+                                    { label = "Print iternary"
+                                    , handleClick = State.PrintPage
+                                    }
+                                )
+                            ]
         ]
 
 
