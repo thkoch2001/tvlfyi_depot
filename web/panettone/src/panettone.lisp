@@ -272,23 +272,26 @@
 (defgeneric render/issue-history-item (item))
 
 (defmethod render/issue-history-item ((comment model:issue-comment))
-  (who:with-html-output (*standard-output*)
-    (who:htm
-     (:li
-      :class "comment"
-      (:p (who:str (body comment)))
-      (:p
-       :class "comment-info"
-       (:span :class "username"
-              (who:esc (displayname (author comment)))
-              " at "
-              (who:esc (format-dottime (created-at comment)))))))))
+  (let ((fragment (format nil "comment-~A" (id comment))))
+    (who:with-html-output (*standard-output*)
+      (:li
+       :class "comment"
+       :id fragment
+       (:p (who:str (body comment)))
+       (:p
+        :class "comment-info"
+        (:span :class "username"
+               (who:esc (displayname (author comment)))
+               " at "
+               (:a :href (concatenate 'string "#" fragment)
+                   (who:esc (format-dottime (created-at comment))))))))))
 
 (defmethod render/issue-history-item ((event model:issue-event))
   (let ((user (find-user-by-dn (acting-user-dn event))))
     (who:with-html-output (*standard-output*)
       (:li
        :class "event"
+       :id
        (who:esc (displayname user))
        (if (string= (field event) "STATUS")
            (who:htm

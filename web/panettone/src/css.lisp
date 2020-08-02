@@ -77,7 +77,11 @@
      (.comment-info
       :color ,color/gray
       :margin 0
-      :padding-top "1rem")
+      :padding-top "1rem"
+
+      (a :text-decoration "none")
+      ((:and a :hover)
+       :text-decoration "underline"))
 
      ((:or .comment .event)
       :padding-top "1rem"
@@ -85,6 +89,10 @@
       :border-bottom "1px" "solid" ,color/gray
 
       (p :margin 0))
+
+     ((:and (:or .comment .event) :target)
+      :border-color ,color/primary
+      :border-bottom-width "3px")
 
      (.event
       :color ,color/gray))))
