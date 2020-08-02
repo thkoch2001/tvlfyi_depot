@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e432f664_ca5e4767",
+        "filename": "third_party/nix/src/libstore/derivations.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-02T16:02:41Z",
+      "side": 1,
+      "message": "this is what was breaking derivations. because c is an int, the to_string gives us the decimal representation - if we make c a char instead this works fine.",
+      "revId": "ef54f5da9fa30b5c302f2a49595ee5d041f9706a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
