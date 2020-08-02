@@ -71,7 +71,30 @@ createTrip model =
         ]
 
 
-trips : State.Model -> Html msg
+renderTrip : State.Trip -> Html State.Msg
+renderTrip trip =
+    li
+        [ [ "py-2" ]
+            |> Tailwind.use
+            |> class
+        ]
+        [ p []
+            [ text
+                (Date.toIsoString trip.startDate
+                    ++ " - "
+                    ++ Date.toIsoString trip.endDate
+                    ++ " -> "
+                    ++ trip.destination
+                )
+            ]
+        , UI.textButton
+            { label = "Delete"
+            , handleClick = State.AttemptDeleteTrip trip.destination trip.startDate
+            }
+        ]
+
+
+trips : State.Model -> Html State.Msg
 trips model =
     div []
         [ UI.header 3 "Upcoming Trips"
@@ -86,45 +109,30 @@ trips model =
                 UI.paragraph ("Error: " ++ Utils.explainHttpError e)
 
             RemoteData.Success xs ->
-                ul []
-                    (xs
-                        |> List.map
-                            (\trip ->
-                                li
-                                    [ [ "py-2" ]
-                                        |> Tailwind.use
-                                        |> class
-                                    ]
-                                    [ text
-                                        (Date.toIsoString trip.startDate
-                                            ++ " - "
-                                            ++ Date.toIsoString trip.endDate
-                                            ++ " -> "
-                                            ++ trip.destination
-                                        )
-                                    ]
-                            )
-                    )
+                ul [] (xs |> List.map renderTrip)
         ]
 
 
 render : State.Model -> Html State.Msg
 render model =
-    div
-        [ class
-            ([ "container"
-             , "mx-auto"
-             , "text-center"
-             ]
-                |> Tailwind.use
-            )
-        ]
-        [ UI.header 2 ("Welcome, " ++ model.username ++ "!")
-        , createTrip model
-        , trips model
-        , UI.textButton
-            { label = "Logout"
-            , handleClick = State.AttemptLogout
-            }
-        , Common.allErrors model
-        ]
+    Common.withSession model
+        (\session ->
+            div
+                [ class
+                    ([ "container"
+                     , "mx-auto"
+                     , "text-center"
+                     ]
+                        |> Tailwind.use
+                    )
+                ]
+                [ UI.header 2 ("Welcome, " ++ session.username ++ "!")
+                , createTrip model
+                , trips model
+                , UI.textButton
+                    { label = "Logout"
+                    , handleClick = State.AttemptLogout
+                    }
+                , Common.allErrors model
+                ]
+        )

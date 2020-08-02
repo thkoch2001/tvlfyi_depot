@@ -62,17 +62,18 @@ postWithCredentials { url, body, expect } =
 
 deleteWithCredentials :
     { url : String
+    , body : Http.Body
     , expect : Http.Expect msg
     }
     -> Cmd msg
-deleteWithCredentials { url, expect } =
+deleteWithCredentials { url, body, expect } =
     Http.riskyRequest
         { url = url
         , headers = [ Http.header "Origin" Shared.clientOrigin ]
         , method = "DELETE"
         , timeout = Nothing
         , tracker = Nothing
-        , body = Http.emptyBody
+        , body = body
         , expect = expect
         }
 

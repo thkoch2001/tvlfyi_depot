@@ -237,10 +237,10 @@ instance FromRow Trip where
 data TripPK = TripPK
   { tripPKUsername :: Username
   , tripPKDestination :: Destination
-  , tripPKStartDate :: Clock.UTCTime
+  , tripPKStartDate :: Calendar.Day
   } deriving (Eq, Show, Generic)
 
-tripPKFields :: TripPK -> (Username, Destination, Clock.UTCTime)
+tripPKFields :: TripPK -> (Username, Destination, Calendar.Day)
 tripPKFields (TripPK{..})
   = (tripPKUsername, tripPKDestination, tripPKStartDate)
 

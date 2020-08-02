@@ -49,6 +49,7 @@ type Msg
     | AttemptLogout
     | AttemptDeleteUser String
     | AttemptCreateTrip Date.Date Date.Date
+    | AttemptDeleteTrip String Date.Date
       -- Inbound network
     | GotUsers (WebData AllUsers)
     | GotTrips (WebData (List Trip))
@@ -56,7 +57,8 @@ type Msg
     | GotLogin (Result Http.Error Session)
     | GotLogout (Result Http.Error String)
     | GotDeleteUser (Result Http.Error String)
-    | CreatedTrip (Result Http.Error ())
+    | GotCreateTrip (Result Http.Error ())
+    | GotDeleteTrip (Result Http.Error ())
 
 
 type Route
@@ -135,6 +137,7 @@ type alias Model =
     , signUpError : Maybe Http.Error
     , deleteUserError : Maybe Http.Error
     , createTripError : Maybe Http.Error
+    , deleteTripError : Maybe Http.Error
     }
 
 
@@ -269,7 +272,28 @@ createTrip { username, destination, startDate, endDate, comment } =
                     , ( "comment", JE.string comment )
                     ]
                 )
-        , expect = Http.expectWhatever CreatedTrip
+        , expect = Http.expectWhatever GotCreateTrip
+        }
+
+
+deleteTrip :
+    { username : String
+    , destination : String
+    , startDate : Date.Date
+    }
+    -> Cmd Msg
+deleteTrip { username, destination, startDate } =
+    Utils.deleteWithCredentials
+        { url = endpoint [ "trips" ] []
+        , body =
+            Http.jsonBody
+                (JE.object
+                    [ ( "username", JE.string username )
+                    , ( "destination", JE.string destination )
+                    , ( "startDate", encodeDate startDate )
+                    ]
+                )
+        , expect = Http.expectWhatever GotDeleteTrip
         }
 
 
@@ -277,6 +301,7 @@ deleteUser : String -> Cmd Msg
 deleteUser username =
     Utils.deleteWithCredentials
         { url = endpoint [ "user", username ] []
+        , body = Http.emptyBody
         , expect = Http.expectString GotDeleteUser
         }
 
@@ -413,6 +438,7 @@ prod _ url key =
       , signUpError = Nothing
       , deleteUserError = Nothing
       , createTripError = Nothing
+      , deleteTripError = Nothing
       }
     , Cmd.batch
         [ Cmd.map UpdateTripStartDate startDatePickerCmd
@@ -651,7 +677,7 @@ update msg model =
                         }
             )
 
-        CreatedTrip result ->
+        GotCreateTrip result ->
             case result of
                 Ok _ ->
                     ( { model
@@ -671,6 +697,31 @@ update msg model =
                         , tripEndDate = Nothing
                         , tripComment = ""
                       }
+                    , sleepAndClearErrors
+                    )
+
+        -- DELETE /trips
+        AttemptDeleteTrip destination startDate ->
+            ( model
+            , case model.session of
+                Nothing ->
+                    Cmd.none
+
+                Just session ->
+                    deleteTrip
+                        { username = session.username
+                        , destination = destination
+                        , startDate = startDate
+                        }
+            )
+
+        GotDeleteTrip result ->
+            case result of
+                Ok _ ->
+                    ( model, fetchTrips )
+
+                Err e ->
+                    ( { model | deleteTripError = Just e }
                     , sleepAndClearErrors
                     )
 
