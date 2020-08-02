@@ -1,5 +1,5 @@
-use std::collections::HashSet;
 use serde::Deserialize;
+use std::collections::HashSet;
 
 #[derive(Deserialize)]
 pub struct Config {

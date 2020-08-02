@@ -1,13 +1,14 @@
 // TODO(tazjin): Upgrade to a Diesel version with public derive
 // macros.
-#[macro_use] extern crate diesel;
+#[macro_use]
+extern crate diesel;
 
 use crate::cfg::Config;
 use crate::keyword::KeywordDetails;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
-use failure::Error;
 use failure::format_err;
+use failure::Error;
 use irc::client::prelude::*;
 use lazy_static::lazy_static;
 use log::{debug, info, warn};
@@ -25,19 +26,14 @@ mod schema;
 lazy_static! {
     static ref LEARN_RE: Regex =
         Regex::new(r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*):\s*(?P<val>.*)"#).unwrap();
-
     static ref QUERY_RE: Regex =
         Regex::new(r#"^\?\?\s*(?P<subj>[^\[:]*)(?P<idx>\[[^\]]+\])?"#).unwrap();
-
     static ref QLAST_RE: Regex = Regex::new(r#"^\?\?\s*(?P<subj>[^\[:]*)!"#).unwrap();
-
     static ref INCREMENT_RE: Regex =
-        Regex::new(r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*)(?P<incrdecr>\+\+|\-\-)"#)
-        .unwrap();
-
-    static ref MOVE_RE: Regex = Regex::new(
-        r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*)(?P<idx>\[[^\]]+\])->(?P<new_idx>.*)"#
-    ).unwrap();
+        Regex::new(r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*)(?P<incrdecr>\+\+|\-\-)"#).unwrap();
+    static ref MOVE_RE: Regex =
+        Regex::new(r#"^\?\?(?P<gen>!)?\s*(?P<subj>[^\[:]*)(?P<idx>\[[^\]]+\])->(?P<new_idx>.*)"#)
+            .unwrap();
 }
 
 pub struct App {
@@ -159,9 +155,12 @@ impl App {
             if last.starts_with("\x01ACTION ") {
                 // Yes, this is inefficient, but it's better than writing some hacky CTCP parsing code
                 // I guess (also, characters are hard, so just blindly slicing seems like a bad idea)
-                format!("* {} {}", nick_to_grab, last.replace("\x01ACTION ", "").replace("\x01", ""))
-            }
-            else {
+                format!(
+                    "* {} {}",
+                    nick_to_grab,
+                    last.replace("\x01ACTION ", "").replace("\x01", "")
+                )
+            } else {
                 format!("<{}> {}", nick_to_grab, last)
             }
         } else {
@@ -195,7 +194,8 @@ impl App {
         }
         if let Some((i, val)) = idx {
             kwd.update(i, &val.to_string(), &db)?;
-            self.client.send_notice(target, kwd.format_entry(i).unwrap())?;
+            self.client
+                .send_notice(target, kwd.format_entry(i).unwrap())?;
         } else {
             let val = if is_incr { 1 } else { -1 };
             let idx = kwd.learn(nick, &val.to_string(), &db)?;
