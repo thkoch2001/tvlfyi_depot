@@ -150,7 +150,14 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   # TODO(tazjin): docs generation?
 
   passthru = {
-    build-shell = self.overrideAttrs (_: {
+    build-shell = self.overrideAttrs (up: rec {
+      run_clang_tidy = pkgs.writeShellScriptBin "run-clang-tidy" ''
+        test -f compile_commands.json || (echo "run from build output directory"; exit 1) || exit 1
+        ${pkgs.jq}/bin/jq < compile_commands.json -r 'map(.file)|.[]' | grep -v '/generated/' | ${pkgs.parallel}/bin/parallel ${pkgs.clang-tools}/bin/clang-tidy -p compile_commands.json $@
+      '';
+
+      installCheckInputs = up.installCheckInputs ++ [run_clang_tidy];
+
       shellHook = ''
         export NIX_DATA_DIR="${toString depotPath}/third_party"
         export NIX_TEST_VAR=foo
