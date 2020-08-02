@@ -310,3 +310,8 @@ datePicker { mDate, prompt, prefix, picker, onUpdate } =
     in
     div [ [ "w-1/2", "py-4", "mx-auto" ] |> Tailwind.use |> class ]
         [ DatePicker.view mDate settings picker |> Html.map onUpdate ]
+
+
+wrapNoPrint : Html State.Msg -> Html State.Msg
+wrapNoPrint component =
+    div [ [ "no-print" ] |> Tailwind.use |> class ] [ component ]

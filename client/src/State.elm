@@ -1,4 +1,4 @@
-module State exposing (..)
+port module State exposing (..)
 
 import Array exposing (Array)
 import Browser
@@ -39,6 +39,7 @@ type Msg
     | UpdateTripComment String
     | ClearErrors
     | ToggleLoginForm
+    | PrintPage
       -- SPA
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
@@ -476,11 +477,14 @@ userHome flags url key =
     )
 
 
+port printPage : () -> Cmd msg
+
+
 {-| The initial state for the application.
 -}
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    prod flags url key
+    userHome flags url key
 
 
 {-| Now that we have state, we need a function to change the state.
@@ -590,6 +594,9 @@ update msg model =
               }
             , Cmd.none
             )
+
+        PrintPage ->
+            ( model, printPage () )
 
         LinkClicked urlRequest ->
             case urlRequest of

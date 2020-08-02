@@ -78,19 +78,20 @@ renderTrip trip =
             |> Tailwind.use
             |> class
         ]
-        [ p []
-            [ text
-                (Date.toIsoString trip.startDate
-                    ++ " - "
-                    ++ Date.toIsoString trip.endDate
-                    ++ " -> "
-                    ++ trip.destination
-                )
-            ]
-        , UI.textButton
-            { label = "Delete"
-            , handleClick = State.AttemptDeleteTrip trip.destination trip.startDate
-            }
+        [ UI.paragraph
+            (Date.toIsoString trip.startDate
+                ++ " - "
+                ++ Date.toIsoString trip.endDate
+                ++ " -> "
+                ++ trip.destination
+            )
+        , UI.paragraph ("\"" ++ trip.comment ++ "\"")
+        , UI.wrapNoPrint
+            (UI.textButton
+                { label = "Delete"
+                , handleClick = State.AttemptDeleteTrip trip.destination trip.startDate
+                }
+            )
         ]
 
 
@@ -109,7 +110,15 @@ trips model =
                 UI.paragraph ("Error: " ++ Utils.explainHttpError e)
 
             RemoteData.Success xs ->
-                ul [] (xs |> List.map renderTrip)
+                div [ [ "mb-10" ] |> Tailwind.use |> class ]
+                    [ ul [ [ "my-4" ] |> Tailwind.use |> class ] (xs |> List.map renderTrip)
+                    , UI.wrapNoPrint
+                        (UI.simpleButton
+                            { label = "Print iternary"
+                            , handleClick = State.PrintPage
+                            }
+                        )
+                    ]
         ]
 
 
@@ -126,13 +135,15 @@ render model =
                         |> Tailwind.use
                     )
                 ]
-                [ UI.header 2 ("Welcome, " ++ session.username ++ "!")
-                , createTrip model
+                [ UI.wrapNoPrint (UI.header 2 ("Welcome, " ++ session.username ++ "!"))
+                , UI.wrapNoPrint (createTrip model)
                 , trips model
-                , UI.textButton
-                    { label = "Logout"
-                    , handleClick = State.AttemptLogout
-                    }
+                , UI.wrapNoPrint
+                    (UI.textButton
+                        { label = "Logout"
+                        , handleClick = State.AttemptLogout
+                        }
+                    )
                 , Common.allErrors model
                 ]
         )
