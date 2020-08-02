@@ -71,6 +71,61 @@ createTrip model =
         ]
 
 
+renderEditTrip : State.Model -> State.Trip -> Html State.Msg
+renderEditTrip model trip =
+    li []
+        [ div []
+            [ UI.textField
+                { handleInput = State.UpdateEditTripDestination
+                , inputId = "edit-trip-destination"
+                , inputValue = model.editTripDestination
+                , pholder = "Destination"
+                }
+            , UI.textField
+                { handleInput = State.UpdateEditTripComment
+                , inputId = "edit-trip-comment"
+                , inputValue = model.editTripComment
+                , pholder = "Comment"
+                }
+            ]
+        , div []
+            [ UI.baseButton
+                { enabled =
+                    case model.updateTripStatus of
+                        RemoteData.Loading ->
+                            False
+
+                        _ ->
+                            True
+                , extraClasses = []
+                , label =
+                    case model.updateTripStatus of
+                        RemoteData.Loading ->
+                            "Saving..."
+
+                        _ ->
+                            "Save"
+                , handleClick =
+                    State.AttemptUpdateTrip
+                        { username = trip.username
+                        , destination = trip.destination
+                        , startDate = trip.startDate
+                        }
+                        { username = trip.username
+                        , destination = model.editTripDestination
+                        , startDate = trip.startDate
+                        , endDate = trip.endDate
+                        , comment = model.editTripComment
+                        }
+                }
+            , UI.simpleButton
+                { label = "Cancel"
+                , handleClick = State.CancelEditTrip
+                }
+            ]
+        ]
+
+
 renderTrip : Date.Date -> State.Trip -> Html State.Msg
 renderTrip today trip =
     li
@@ -100,6 +155,12 @@ renderTrip today trip =
                     ++ trip.destination
                 )
         , UI.paragraph ("\"" ++ trip.comment ++ "\"")
+        , UI.wrapNoPrint
+            (UI.textButton
+                { label = "Edit"
+                , handleClick = State.EditTrip trip
+                }
+            )
         , UI.wrapNoPrint
             (UI.textButton
                 { label = "Delete"
@@ -133,7 +194,19 @@ trips model =
                             [ ul [ [ "my-4" ] |> Tailwind.use |> class ]
                                 (xs
                                     |> List.sortWith (\x y -> Date.compare y.startDate x.startDate)
-                                    |> List.map (renderTrip today)
+                                    |> List.map
+                                        (\trip ->
+                                            case model.editingTrip of
+                                                Nothing ->
+                                                    renderTrip today trip
+
+                                                Just x ->
+                                                    if x == trip then
+                                                        renderEditTrip model trip
+
+                                                    else
+                                                        renderTrip today trip
+                                        )
                                 )
                             , UI.wrapNoPrint
                                 (UI.simpleButton

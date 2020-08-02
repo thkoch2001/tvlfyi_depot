@@ -77,6 +77,24 @@ deleteWithCredentials { url, body, expect } =
         , expect = expect
         }
 
+putWithCredentials :
+    { url : String
+    , body : Http.Body
+    , expect : Http.Expect msg
+    }
+    -> Cmd msg
+putWithCredentials { url, body, expect } =
+    Http.riskyRequest
+        { url = url
+        , headers = [ Http.header "Origin" Shared.clientOrigin ]
+        , method = "PUT"
+        , timeout = Nothing
+        , tracker = Nothing
+        , body = body
+        , expect = expect
+        }
+
+
 
 formatTime : Time.Posix -> String
 formatTime ts =

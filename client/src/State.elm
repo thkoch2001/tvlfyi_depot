@@ -9,6 +9,7 @@ import Http
 import Json.Decode as JD
 import Json.Decode.Extra as JDE
 import Json.Encode as JE
+import Json.Encode.Extra as JEE
 import Process
 import RemoteData exposing (WebData)
 import Shared
@@ -37,12 +38,16 @@ type Msg
     | UpdateTripStartDate DatePicker.Msg
     | UpdateTripEndDate DatePicker.Msg
     | UpdateTripComment String
+    | UpdateEditTripDestination String
+    | UpdateEditTripComment String
     | ClearErrors
     | ToggleLoginForm
     | PrintPage
     | UpdateInviteEmail String
     | UpdateInviteRole (Maybe Role)
     | ReceiveTodaysDate Date.Date
+    | EditTrip Trip
+    | CancelEditTrip
       -- SPA
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
@@ -56,6 +61,7 @@ type Msg
     | AttemptCreateTrip Date.Date Date.Date
     | AttemptDeleteTrip Trip
     | AttemptInviteUser Role
+    | AttemptUpdateTrip TripPK Trip
       -- Inbound network
     | GotAccounts (WebData (List Account))
     | GotTrips (WebData (List Trip))
@@ -66,6 +72,7 @@ type Msg
     | GotCreateTrip (Result Http.Error ())
     | GotDeleteTrip (Result Http.Error ())
     | GotInviteUser (Result Http.Error ())
+    | GotUpdateTrip (Result Http.Error ())
 
 
 type Route
@@ -121,6 +128,13 @@ type alias Trip =
     }
 
 
+type alias TripPK =
+    { username : String
+    , destination : String
+    , startDate : Date.Date
+    }
+
+
 type alias Model =
     { route : Maybe Route
     , url : Url.Url
@@ -139,11 +153,15 @@ type alias Model =
     , tripEndDate : Maybe Date.Date
     , tripComment : String
     , trips : WebData (List Trip)
+    , editingTrip : Maybe Trip
+    , editTripDestination : String
+    , editTripComment : String
     , adminTab : AdminTab
     , loginTab : LoginTab
     , inviteEmail : String
     , inviteRole : Maybe Role
     , inviteResponseStatus : WebData ()
+    , updateTripStatus : WebData ()
     , loginError : Maybe Http.Error
     , logoutError : Maybe Http.Error
     , signUpError : Maybe Http.Error
@@ -278,6 +296,24 @@ signUp { username, email, password } =
         }
 
 
+updateTrip : TripPK -> Trip -> Cmd Msg
+updateTrip tripKey trip =
+    Utils.putWithCredentials
+        { url = endpoint [ "trips" ] []
+        , body =
+            Http.jsonBody
+                (JE.object
+                    [ ( "tripKey", encodeTripKey tripKey )
+                    , ( "destination", JE.string trip.destination )
+                    , ( "startDate", encodeDate trip.startDate )
+                    , ( "endDate", encodeDate trip.endDate )
+                    , ( "comment", JE.string trip.comment )
+                    ]
+                )
+        , expect = Http.expectWhatever GotUpdateTrip
+        }
+
+
 inviteUser : { email : String, role : Role } -> Cmd Msg
 inviteUser { email, role } =
     Utils.postWithCredentials
@@ -357,6 +393,15 @@ decodeReview =
         (JD.field "rating" JD.int)
         (JD.field "user" JD.string)
         (JD.field "timestamp" JD.string)
+
+
+encodeTripKey : TripPK -> JE.Value
+encodeTripKey tripKey =
+    JE.object
+        [ ( "username", JE.string tripKey.username )
+        , ( "destination", JE.string tripKey.destination )
+        , ( "startDate", encodeDate tripKey.startDate )
+        ]
 
 
 encodeDate : Date.Date -> JE.Value
@@ -474,6 +519,9 @@ prod _ url key =
       , tripEndDate = Nothing
       , tripComment = ""
       , trips = RemoteData.NotAsked
+      , editingTrip = Nothing
+      , editTripDestination = ""
+      , editTripComment = ""
       , startDatePicker = startDatePicker
       , endDatePicker = endDatePicker
       , adminTab = Accounts
@@ -481,6 +529,7 @@ prod _ url key =
       , inviteEmail = ""
       , inviteRole = Nothing
       , inviteResponseStatus = RemoteData.NotAsked
+      , updateTripStatus = RemoteData.NotAsked
       , loginError = Nothing
       , logoutError = Nothing
       , signUpError = Nothing
@@ -563,7 +612,7 @@ port printPage : () -> Cmd msg
 -}
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    adminHome flags url key
+    prod flags url key
 
 
 {-| Now that we have state, we need a function to change the state.
@@ -650,6 +699,12 @@ update msg model =
         UpdateTripComment x ->
             ( { model | tripComment = x }, Cmd.none )
 
+        UpdateEditTripDestination x ->
+            ( { model | editTripDestination = x }, Cmd.none )
+
+        UpdateEditTripComment x ->
+            ( { model | editTripComment = x }, Cmd.none )
+
         ClearErrors ->
             ( { model
                 | loginError = Nothing
@@ -685,6 +740,24 @@ update msg model =
 
         ReceiveTodaysDate date ->
             ( { model | todaysDate = Just date }, Cmd.none )
+
+        EditTrip trip ->
+            ( { model
+                | editingTrip = Just trip
+                , editTripDestination = trip.destination
+                , editTripComment = trip.comment
+              }
+            , Cmd.none
+            )
+
+        CancelEditTrip ->
+            ( { model
+                | editingTrip = Nothing
+                , editTripDestination = ""
+                , editTripComment = ""
+              }
+            , Cmd.none
+            )
 
         LinkClicked urlRequest ->
             case urlRequest of
@@ -839,12 +912,30 @@ update msg model =
                     , Cmd.none
                     )
 
-                Err x ->
+                Err e ->
                     ( { model
-                        | inviteUserError = Just x
-                        , inviteResponseStatus = RemoteData.Failure x
+                        | inviteUserError = Just e
+                        , inviteResponseStatus = RemoteData.Failure e
                       }
                     , sleepAndClearErrors
+                    )
+
+        -- PATCH /trips
+        AttemptUpdateTrip tripKey trip ->
+            ( { model | updateTripStatus = RemoteData.Loading }
+            , updateTrip tripKey trip
+            )
+
+        GotUpdateTrip result ->
+            case result of
+                Ok _ ->
+                    ( { model | updateTripStatus = RemoteData.Success () }
+                    , fetchTrips
+                    )
+
+                Err e ->
+                    ( { model | updateTripStatus = RemoteData.Failure e }
+                    , Cmd.none
                     )
 
         -- POST /accounts
