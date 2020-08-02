@@ -241,7 +241,8 @@ void LocalStore::findTempRoots(FDs& fds, Roots& tempRoots, bool censor) {
     std::string::size_type pos = 0;
     std::string::size_type end;
 
-    while ((end = contents.find((char)0, pos)) != std::string::npos) {
+    while ((end = contents.find(static_cast<char>(0), pos)) !=
+           std::string::npos) {
       Path root(contents, pos, end - pos);
       DLOG(INFO) << "got temporary root " << root;
       assertStorePath(root);
@@ -916,7 +917,7 @@ void LocalStore::autoGC(bool sync) {
       throw SysError("getting filesystem info about '%s'", realStoreDir);
     }
 
-    return (uint64_t)st.f_bavail * st.f_bsize;
+    return static_cast<uint64_t>(st.f_bavail) * st.f_bsize;
   };
 
   std::shared_future<void> future;

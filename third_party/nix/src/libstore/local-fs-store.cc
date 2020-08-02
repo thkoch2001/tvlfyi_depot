@@ -41,7 +41,7 @@ struct LocalStoreAccessor : public FSAccessor {
     return {S_ISREG(st.st_mode)
                 ? Type::tRegular
                 : S_ISLNK(st.st_mode) ? Type::tSymlink : Type::tDirectory,
-            S_ISREG(st.st_mode) ? (uint64_t)st.st_size : 0,
+            S_ISREG(st.st_mode) ? static_cast<uint64_t>(st.st_size) : 0,
             S_ISREG(st.st_mode) && ((st.st_mode & S_IXUSR) != 0u)};
   }
 

@@ -262,7 +262,7 @@ Path Store::makeFixedOutputPath(bool recursive, const Hash& hash,
                    "output:out",
                    hashString(
                        htSHA256,
-                       "fixed:out:" + (recursive ? (std::string) "r:" : "") +
+                       "fixed:out:" + (recursive ? std::string("r:") : "") +
                            hash.to_string(Base16) + ":"),
                    name);
 }
@@ -884,7 +884,7 @@ Strings ValidPathInfo::shortRefs() const {
 }
 
 std::string makeFixedOutputCA(bool recursive, const Hash& hash) {
-  return "fixed:" + (recursive ? (std::string) "r:" : "") + hash.to_string();
+  return "fixed:" + (recursive ? std::string("r:") : "") + hash.to_string();
 }
 
 void Store::addToStore(const ValidPathInfo& info, Source& narSource,

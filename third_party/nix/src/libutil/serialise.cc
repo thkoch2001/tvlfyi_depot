@@ -96,7 +96,7 @@ std::string Source::drain() {
     size_t n;
     try {
       n = read(buf.data(), buf.size());
-      s.append((char*)buf.data(), n);
+      s.append(reinterpret_cast<char*>(buf.data()), n);
     } catch (EndOfFile&) {
       break;
     }
@@ -129,7 +129,7 @@ size_t FdSource::readUnbuffered(unsigned char* data, size_t len) {
   ssize_t n;
   do {
     checkInterrupt();
-    n = ::read(fd, (char*)data, len);
+    n = ::read(fd, reinterpret_cast<char*>(data), len);
   } while (n == -1 && errno == EINTR);
   if (n == -1) {
     _good = false;
@@ -149,7 +149,7 @@ size_t StringSource::read(unsigned char* data, size_t len) {
   if (pos == s.size()) {
     throw EndOfFile("end of string reached");
   }
-  size_t n = s.copy((char*)data, len, pos);
+  size_t n = s.copy(reinterpret_cast<char*>(data), len, pos);
   pos += n;
   return n;
 }
@@ -179,7 +179,7 @@ std::unique_ptr<Source> sinkToSource(const std::function<void(Sink&)>& fun,
         coro = coro_t::pull_type([&](coro_t::push_type& yield) {
           LambdaSink sink([&](const unsigned char* data, size_t len) {
             if (len != 0u) {
-              yield(std::string((const char*)data, len));
+              yield(std::string(reinterpret_cast<const char*>(data), len));
             }
           });
           fun(sink);
@@ -200,7 +200,7 @@ std::unique_ptr<Source> sinkToSource(const std::function<void(Sink&)>& fun,
       }
 
       auto n = std::min(cur.size() - pos, len);
-      memcpy(data, (unsigned char*)cur.data() + pos, n);
+      memcpy(data, reinterpret_cast<unsigned char*>(cur.data()) + pos, n);
       pos += n;
 
       return n;
@@ -225,7 +225,7 @@ void writeString(const unsigned char* buf, size_t len, Sink& sink) {
 }
 
 Sink& operator<<(Sink& sink, const std::string& s) {
-  writeString((const unsigned char*)s.data(), s.size(), sink);
+  writeString(reinterpret_cast<const unsigned char*>(s.data()), s.size(), sink);
   return sink;
 }
 
@@ -276,7 +276,7 @@ std::string readString(Source& source, size_t max) {
     throw SerialisationError("string is too long");
   }
   std::string res(len, 0);
-  source((unsigned char*)res.data(), len);
+  source(reinterpret_cast<unsigned char*>(res.data()), len);
   readPadding(len, source);
   return res;
 }
@@ -305,7 +305,7 @@ void StringSink::operator()(const unsigned char* data, size_t len) {
     warnLargeDump();
     warned = true;
   }
-  s->append((const char*)data, len);
+  s->append(reinterpret_cast<const char*>(data), len);
 }
 
 }  // namespace nix

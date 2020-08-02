@@ -92,7 +92,7 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
   time_t now = time(0);
   struct stat st;
   if (stat(stampFile.c_str(), &st) != 0 ||
-      (uint64_t)st.st_mtime + settings.tarballTtl <= (uint64_t)now) {
+      static_cast<uint64_t>(st.st_mtime) + settings.tarballTtl <= static_cast<uint64_t>(now)) {
     /* Except that if this is a commit hash that we already have,
        we don't have to pull again. */
     if (!(std::regex_match(rev, commitHashRegex) && pathExists(cacheDir) &&
