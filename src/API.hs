@@ -21,7 +21,7 @@ type API =
            :> Post '[JSON] NoContent
       :<|> "verify"
            :> QueryParam' '[Required] "username" Text
-           :> QueryParam' '[Required] "secret" Text
+           :> QueryParam' '[Required] "secret" T.RegistrationSecret
            :> Get '[JSON] NoContent
       -- accounts: Read
       -- accounts: Update
@@ -71,3 +71,6 @@ type API =
            :> SessionCookie
            :> ReqBody '[JSON] T.InviteUserRequest
            :> Post '[JSON] NoContent
+      :<|> "accept-invitation"
+           :> ReqBody '[JSON] T.AcceptInvitationRequest
+           :> Get '[JSON] NoContent

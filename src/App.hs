@@ -84,6 +84,7 @@ server config@T.Config{..} = createAccount
                         :<|> logout
                         :<|> unfreezeAccount
                         :<|> inviteUser
+                        :<|> acceptInvitation
   where
     -- Admit Admins + whatever the predicate `p` passes.
     adminsAnd cookie p = Auth.assert dbFile cookie (\acct@T.Account{..} -> accountRole == T.Admin || p acct)
@@ -120,22 +121,18 @@ server config@T.Config{..} = createAccount
             secretUUID
           pure NoContent
 
-    verifyAccount :: Text -> Text -> Handler NoContent
-    verifyAccount username secret = do
-      let mSecretUUID = T.RegistrationSecret <$> UUID.fromText secret in do
-        case mSecretUUID of
-          Nothing -> throwError err401 { errBody = "Invalid secret format" }
-          Just secretUUID -> do
-            mPendingAccount <- liftIO $ PendingAccounts.get dbFile (T.Username username)
-            case mPendingAccount of
-              Nothing ->
-                throwError err401 { errBody = "Either your secret or your username (or both) is invalid" }
-              Just pendingAccount@T.PendingAccount{..} ->
-                if pendingAccountSecret == secretUUID then do
-                  liftIO $ Accounts.transferFromPending dbFile pendingAccount
-                  pure NoContent
-                else
-                  throwError err401 { errBody = "The secret you provided is invalid" }
+    verifyAccount :: Text -> T.RegistrationSecret -> Handler NoContent
+    verifyAccount username secretUUID = do
+      mPendingAccount <- liftIO $ PendingAccounts.get dbFile (T.Username username)
+      case mPendingAccount of
+        Nothing ->
+          throwError err401 { errBody = "Either your secret or your username (or both) is invalid" }
+        Just pendingAccount@T.PendingAccount{..} ->
+          if pendingAccountSecret == secretUUID then do
+            liftIO $ Accounts.transferFromPending dbFile pendingAccount
+            pure NoContent
+          else
+            throwError err401 { errBody = "The secret you provided is invalid" }
 
     deleteAccount :: T.SessionCookie -> Text -> Handler NoContent
     deleteAccount cookie username = adminsOnly cookie $ do
@@ -244,6 +241,22 @@ server config@T.Config{..} = createAccount
         inviteUserRequestRole
       liftIO $ sendInviteEmail config inviteUserRequestEmail secretUUID
       pure NoContent
+
+    acceptInvitation :: T.AcceptInvitationRequest -> Handler NoContent
+    acceptInvitation T.AcceptInvitationRequest{..} = do
+      mInvitation <- liftIO $ Invitations.get dbFile acceptInvitationRequestEmail
+      case mInvitation of
+        Nothing -> throwError err404 { errBody = "No invitation for email" }
+        Just T.Invitation{..} ->
+          if invitationSecret == acceptInvitationRequestSecret then do
+            liftIO $ Accounts.create dbFile
+              acceptInvitationRequestUsername
+              acceptInvitationRequestPassword
+              invitationEmail
+              invitationRole
+            pure NoContent
+          else
+            throwError err401 { errBody = "You are not providing a valid secret" }
 
 run :: T.Config -> IO ()
 run config@T.Config{..} =

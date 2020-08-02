@@ -401,7 +401,13 @@ instance FromHttpApiData SessionCookie where
     x |> TE.encodeUtf8 |> parseCookies |> SessionCookie |> pure
 
 newtype RegistrationSecret = RegistrationSecret UUID.UUID
-  deriving (Eq, Show)
+  deriving (Eq, Show, Generic)
+
+instance FromHttpApiData RegistrationSecret where
+  parseQueryParam x =
+    case UUID.fromText x of
+      Nothing -> Left x
+      Just uuid -> Right (RegistrationSecret uuid)
 
 instance FromField RegistrationSecret where
   fromField field =
@@ -482,7 +488,10 @@ instance FromJSON InviteUserRequest where
     pure InviteUserRequest{..}
 
 newtype InvitationSecret = InvitationSecret UUID.UUID
-  deriving (Eq, Show)
+  deriving (Eq, Show, Generic)
+
+instance ToJSON InvitationSecret
+instance FromJSON InvitationSecret
 
 instance ToField InvitationSecret where
   toField (InvitationSecret secretUUID) =
@@ -496,3 +505,29 @@ instance FromField InvitationSecret where
           Nothing -> returnError ConversionFailed field ("Could not convert text to UUID: " ++ show x)
           Just x -> Ok $ InvitationSecret x
       _ -> returnError ConversionFailed field "Field data is not SQLText, which is what we expect"
+
+data Invitation = Invitation
+  { invitationEmail :: Email
+  , invitationRole :: Role
+  , invitationSecret :: InvitationSecret
+  } deriving (Eq, Show)
+
+instance FromRow Invitation where
+  fromRow = Invitation <$> field
+                       <*> field
+                       <*> field
+
+data AcceptInvitationRequest = AcceptInvitationRequest
+  { acceptInvitationRequestUsername :: Username
+  , acceptInvitationRequestPassword :: ClearTextPassword
+  , acceptInvitationRequestEmail :: Email
+  , acceptInvitationRequestSecret :: InvitationSecret
+  } deriving (Eq, Show)
+
+instance FromJSON AcceptInvitationRequest where
+  parseJSON = withObject "AcceptInvitationRequest" $ \x -> do
+    acceptInvitationRequestUsername <- x .: "username"
+    acceptInvitationRequestPassword <- x .: "password"
+    acceptInvitationRequestEmail <- x .: "email"
+    acceptInvitationRequestSecret <- x .: "secret"
+    pure AcceptInvitationRequest{..}
