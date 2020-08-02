@@ -33,10 +33,10 @@ delete dbFile tripKey =
 -- | Return a list of all of the trips in `dbFile`.
 listAll :: FilePath -> IO [T.Trip]
 listAll dbFile = withConnection dbFile $ \conn ->
-  query_ conn "SELECT username,destination,startDate,endDate,comment FROM Trips"
+  query_ conn "SELECT username,destination,startDate,endDate,comment FROM Trips ORDER BY date(startDate) ASC"
 
 -- | Return a list of all of the trips in `dbFile`.
 list :: FilePath -> T.Username -> IO [T.Trip]
 list dbFile username = withConnection dbFile $ \conn ->
-  query conn "SELECT username,destination,startDate,endDate,comment FROM Trips WHERE username = ?"
+  query conn "SELECT username,destination,startDate,endDate,comment FROM Trips WHERE username = ? ORDER BY date(startDate) ASC"
     (Only username)
