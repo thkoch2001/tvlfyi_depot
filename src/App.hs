@@ -69,7 +69,7 @@ sendInviteEmail T.Config{..} email@(T.Email to) (T.InvitationSecret secretUUID) 
     subject = "You've been invited!"
     body =
       let secret = secretUUID |> UUID.toString in
-        cs configServer ++ "/accept-invitation?email=" ++ cs to ++ "&secret=" ++ secret
+        "To accept the invitation: POST /accept-invitation username=<username> password=<password> email=" ++ cs to ++ " secret=" ++ secret
 
 server :: T.Config -> Server API
 server config@T.Config{..} = createAccount
