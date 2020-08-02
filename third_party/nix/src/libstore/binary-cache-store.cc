@@ -88,7 +88,7 @@ void BinaryCacheStore::getFile(const std::string& path, Sink& sink) {
             }
           }});
   auto data = promise.get_future().get();
-  sink((unsigned char*)data->data(), data->size());
+  sink(reinterpret_cast<unsigned char*>(data->data()), data->size());
 }
 
 std::shared_ptr<std::string> BinaryCacheStore::getFile(
@@ -206,7 +206,9 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
           .count();
   DLOG(INFO) << "copying path '" << narInfo->path << "' (" << narInfo->narSize
              << " bytes, compressed "
-             << ((1.0 - (double)narCompressed->size() / nar->size()) * 100.0)
+             << ((1.0 -
+                  static_cast<double>(narCompressed->size()) / nar->size()) *
+                 100.0)
              << "% in " << duration << "ms) to binary cache";
 
   /* Atomically write the NAR file. */
@@ -288,9 +290,8 @@ void BinaryCacheStore::queryPathInfoUncached(
 
               stats.narInfoRead++;
 
-              (*callbackPtr)(
-                  (std::shared_ptr<ValidPathInfo>)std::make_shared<NarInfo>(
-                      *this, *data, narInfoFile));
+              (*callbackPtr)(std::shared_ptr<ValidPathInfo>(
+                  std::make_shared<NarInfo>(*this, *data, narInfoFile)));
 
             } catch (...) {
               callbackPtr->rethrow();

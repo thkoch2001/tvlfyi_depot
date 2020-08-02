@@ -181,7 +181,7 @@ static int _main(int argc, char** argv) {
       auto actualUri = resolveMirrorUri(*state, uri);
 
       AutoDelete tmpDir(createTempDir(), true);
-      Path tmpFile = (Path)tmpDir + "/tmp";
+      Path tmpFile = Path(tmpDir) + "/tmp";
 
       /* Download the file. */
       {
@@ -201,7 +201,7 @@ static int _main(int argc, char** argv) {
       /* Optionally unpack the file. */
       if (unpack) {
         LOG(INFO) << "unpacking...";
-        Path unpacked = (Path)tmpDir + "/unpacked";
+        Path unpacked = Path(tmpDir) + "/unpacked";
         createDirs(unpacked);
         if (absl::EndsWith(baseNameOf(uri), ".zip")) {
           runProgram("unzip", true, {"-qq", tmpFile, "-d", unpacked});

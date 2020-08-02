@@ -80,7 +80,7 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
       sink << "executable"
            << "";
     }
-    dumpContents(path, (size_t)st.st_size, sink);
+    dumpContents(path, static_cast<size_t>(st.st_size), sink);
   }
 
   else if (S_ISDIR(st.st_mode)) {
@@ -170,7 +170,7 @@ static void parseContents(ParseSink& sink, Source& source, const Path& path) {
   while (left != 0u) {
     checkInterrupt();
     auto n = buf.size();
-    if ((unsigned long long)n > left) {
+    if (static_cast<unsigned long long>(n) > left) {
       n = left;
     }
     source(buf.data(), n);
@@ -267,7 +267,7 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
           name = readString(source);
           if (name.empty() || name == "." || name == ".." ||
               name.find('/') != std::string::npos ||
-              name.find((char)0) != std::string::npos) {
+              name.find(static_cast<char>(0)) != std::string::npos) {
             throw Error(format("NAR contains invalid file name '%1%'") % name);
           }
           if (name <= prevName) {

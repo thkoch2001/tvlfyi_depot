@@ -964,7 +964,7 @@ static void opServe(Strings opFlags, Strings opArgs) {
   while (true) {
     ServeCommand cmd;
     try {
-      cmd = (ServeCommand)readInt(in);
+      cmd = static_cast<ServeCommand>(readInt(in));
     } catch (EndOfFile& e) {
       break;
     }
@@ -1174,13 +1174,15 @@ static void opGenerateBinaryCacheKey(Strings opFlags, Strings opArgs) {
     throw Error("key generation failed");
   }
 
-  writeFile(publicKeyFile, keyName + ":" +
-                               absl::Base64Escape(std::string(
-                                   (char*)pk, crypto_sign_PUBLICKEYBYTES)));
+  writeFile(publicKeyFile,
+            keyName + ":" +
+                absl::Base64Escape(std::string(reinterpret_cast<char*>(pk),
+                                               crypto_sign_PUBLICKEYBYTES)));
   umask(0077);
-  writeFile(secretKeyFile, keyName + ":" +
-                               absl::Base64Escape(std::string(
-                                   (char*)sk, crypto_sign_SECRETKEYBYTES)));
+  writeFile(secretKeyFile,
+            keyName + ":" +
+                absl::Base64Escape(std::string(reinterpret_cast<char*>(sk),
+                                               crypto_sign_SECRETKEYBYTES)));
 #else
   throw Error(
       "Nix was not compiled with libsodium, required for signed binary cache "
