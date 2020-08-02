@@ -1,0 +1,18 @@
+# This configuration file changes some defaults from the ones
+# documented on https://rust-lang.github.io/rustfmt/
+#
+# All other settings are left at the defaults.
+
+edition = "2018"
+newline_style = "Unix"
+wrap_comments = true
+comment_width = 100
+format_code_in_doc_comments = true
+normalize_comments = true
+merge_imports = true
+combine_control_expr = false
+overflow_delimited_expr = true
+match_block_trailing_comma = true
+inline_attribute_width = 100
+use_try_shorthand = true
+condense_wildcard_suffixes = true
