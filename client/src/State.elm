@@ -44,20 +44,21 @@ type Msg
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
       -- Outbound network
-    | AttemptGetUsers
+    | AttemptGetAccounts
+    | AttemptGetTrips
     | AttemptSignUp
     | AttemptLogin
     | AttemptLogout
-    | AttemptDeleteUser String
+    | AttemptDeleteAccount String
     | AttemptCreateTrip Date.Date Date.Date
-    | AttemptDeleteTrip String Date.Date
+    | AttemptDeleteTrip Trip
       -- Inbound network
-    | GotUsers (WebData AllUsers)
+    | GotAccounts (WebData (List Account))
     | GotTrips (WebData (List Trip))
     | GotSignUp (Result Http.Error Session)
     | GotLogin (Result Http.Error Session)
     | GotLogout (Result Http.Error String)
-    | GotDeleteUser (Result Http.Error String)
+    | GotDeleteAccount (Result Http.Error String)
     | GotCreateTrip (Result Http.Error ())
     | GotDeleteTrip (Result Http.Error ())
 
@@ -75,10 +76,9 @@ type Role
     | Admin
 
 
-type alias AllUsers =
-    { user : List String
-    , manager : List String
-    , admin : List String
+type alias Account =
+    { username : String
+    , role : Role
     }
 
 
@@ -98,7 +98,8 @@ type alias Review =
 
 
 type AdminTab
-    = Users
+    = Accounts
+    | Trips
 
 
 type LoginTab
@@ -107,7 +108,8 @@ type LoginTab
 
 
 type alias Trip =
-    { destination : String
+    { username : String
+    , destination : String
     , startDate : Date.Date
     , endDate : Date.Date
     , comment : String
@@ -123,7 +125,7 @@ type alias Model =
     , email : String
     , password : String
     , role : Maybe Role
-    , users : WebData AllUsers
+    , accounts : WebData (List Account)
     , startDatePicker : DatePicker.DatePicker
     , endDatePicker : DatePicker.DatePicker
     , tripDestination : String
@@ -191,8 +193,8 @@ decodeRole =
                 "admin" ->
                     JD.succeed Admin
 
-                _ ->
-                    JD.succeed User
+                x ->
+                    JD.fail ("Invalid input: " ++ x)
     in
     JD.string |> JD.andThen toRole
 
@@ -298,12 +300,12 @@ deleteTrip { username, destination, startDate } =
         }
 
 
-deleteUser : String -> Cmd Msg
-deleteUser username =
+deleteAccount : String -> Cmd Msg
+deleteAccount username =
     Utils.deleteWithCredentials
-        { url = endpoint [ "user", username ] []
+        { url = endpoint [ "accounts" ] [ UrlBuilder.string "username" username ]
         , body = Http.emptyBody
-        , expect = Http.expectString GotDeleteUser
+        , expect = Http.expectString GotDeleteAccount
         }
 
 
@@ -336,8 +338,9 @@ fetchTrips =
             Http.expectJson
                 (RemoteData.fromResult >> GotTrips)
                 (JD.list
-                    (JD.map4
+                    (JD.map5
                         Trip
+                        (JD.field "username" JD.string)
                         (JD.field "destination" JD.string)
                         (JD.field "startDate" decodeDate)
                         (JD.field "endDate" decodeDate)
@@ -347,18 +350,19 @@ fetchTrips =
         }
 
 
-fetchUsers : Cmd Msg
-fetchUsers =
+fetchAccounts : Cmd Msg
+fetchAccounts =
     Utils.getWithCredentials
-        { url = endpoint [ "all-usernames" ] []
+        { url = endpoint [ "accounts" ] []
         , expect =
             Http.expectJson
-                (RemoteData.fromResult >> GotUsers)
-                (JD.map3
-                    AllUsers
-                    (JD.field "user" (JD.list JD.string))
-                    (JD.field "manager" (JD.list JD.string))
-                    (JD.field "admin" (JD.list JD.string))
+                (RemoteData.fromResult >> GotAccounts)
+                (JD.list
+                    (JD.map2
+                        Account
+                        (JD.field "username" JD.string)
+                        (JD.field "role" decodeRole)
+                    )
                 )
         }
 
@@ -424,7 +428,7 @@ prod _ url key =
       , email = ""
       , password = ""
       , role = Nothing
-      , users = RemoteData.NotAsked
+      , accounts = RemoteData.NotAsked
       , tripDestination = ""
       , tripStartDate = Nothing
       , tripEndDate = Nothing
@@ -432,7 +436,7 @@ prod _ url key =
       , trips = RemoteData.NotAsked
       , startDatePicker = startDatePicker
       , endDatePicker = endDatePicker
-      , adminTab = Users
+      , adminTab = Accounts
       , loginTab = LoginForm
       , loginError = Nothing
       , logoutError = Nothing
@@ -461,17 +465,47 @@ userHome flags url key =
         , session = Just { username = "mimi", role = User }
         , trips =
             RemoteData.Success
-                [ { destination = "Barcelona"
+                [ { username = "mimi"
+                  , destination = "Barcelona"
                   , startDate = Date.fromCalendarDate 2020 Time.Sep 25
                   , endDate = Date.fromCalendarDate 2020 Time.Oct 5
                   , comment = "Blah"
                   }
-                , { destination = "Paris"
+                , { username = "mimi"
+                  , destination = "Paris"
                   , startDate = Date.fromCalendarDate 2021 Time.Jan 1
                   , endDate = Date.fromCalendarDate 2021 Time.Feb 1
                   , comment = "Bon voyage!"
                   }
                 ]
+      }
+    , cmd
+    )
+
+
+managerHome : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+managerHome flags url key =
+    let
+        ( model, cmd ) =
+            prod flags url key
+    in
+    ( { model
+        | route = Just ManagerHome
+        , session = Just { username = "bill", role = Manager }
+      }
+    , cmd
+    )
+
+
+adminHome : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+adminHome flags url key =
+    let
+        ( model, cmd ) =
+            prod flags url key
+    in
+    ( { model
+        | route = Just AdminHome
+        , session = Just { username = "wpcarro", role = Admin }
       }
     , cmd
     )
@@ -484,7 +518,7 @@ port printPage : () -> Cmd msg
 -}
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    userHome flags url key
+    adminHome flags url key
 
 
 {-| Now that we have state, we need a function to change the state.
@@ -625,17 +659,22 @@ update msg model =
                     ( { model
                         | url = url
                         , route = route
+                        , accounts = RemoteData.Loading
                       }
-                    , Cmd.none
+                    , fetchAccounts
                     )
 
                 Just AdminHome ->
                     ( { model
                         | url = url
                         , route = route
-                        , users = RemoteData.Loading
+                        , accounts = RemoteData.Loading
+                        , trips = RemoteData.Loading
                       }
-                    , Cmd.none
+                    , Cmd.batch
+                        [ fetchAccounts
+                        , fetchTrips
+                        ]
                     )
 
                 _ ->
@@ -647,20 +686,20 @@ update msg model =
                     )
 
         -- GET /accounts
-        AttemptGetUsers ->
-            ( { model | users = RemoteData.Loading }, fetchUsers )
+        AttemptGetAccounts ->
+            ( { model | accounts = RemoteData.Loading }, fetchAccounts )
 
-        GotUsers xs ->
-            ( { model | users = xs }, Cmd.none )
+        GotAccounts xs ->
+            ( { model | accounts = xs }, Cmd.none )
 
         -- DELETE /accounts
-        AttemptDeleteUser username ->
-            ( model, deleteUser username )
+        AttemptDeleteAccount username ->
+            ( model, deleteAccount username )
 
-        GotDeleteUser result ->
+        GotDeleteAccount result ->
             case result of
                 Ok _ ->
-                    ( model, fetchUsers )
+                    ( model, fetchAccounts )
 
                 Err e ->
                     ( { model | deleteUserError = Just e }
@@ -708,18 +747,13 @@ update msg model =
                     )
 
         -- DELETE /trips
-        AttemptDeleteTrip destination startDate ->
+        AttemptDeleteTrip trip ->
             ( model
-            , case model.session of
-                Nothing ->
-                    Cmd.none
-
-                Just session ->
-                    deleteTrip
-                        { username = session.username
-                        , destination = destination
-                        , startDate = startDate
-                        }
+            , deleteTrip
+                { username = trip.username
+                , destination = trip.destination
+                , startDate = trip.startDate
+                }
             )
 
         GotDeleteTrip result ->
@@ -755,6 +789,9 @@ update msg model =
                     )
 
         -- GET /trips
+        AttemptGetTrips ->
+            ( { model | trips = RemoteData.Loading }, fetchTrips )
+
         GotTrips xs ->
             ( { model | trips = xs }, Cmd.none )
 

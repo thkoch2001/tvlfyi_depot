@@ -14,11 +14,8 @@ import Utils
 
 render : State.Model -> Html State.Msg
 render model =
-    case model.session of
-        Nothing ->
-            text "You are unauthorized to view this page."
-
-        Just session ->
+    Common.withSession model
+        (\session ->
             div
                 [ class
                     ([ "container"
@@ -30,10 +27,11 @@ render model =
                 ]
                 [ h1 []
                     [ UI.header 2 ("Welcome back, " ++ session.username ++ "!")
-                    , UI.simpleButton
+                    , UI.textButton
                         { label = "Logout"
                         , handleClick = State.AttemptLogout
                         }
                     , Common.allErrors model
                     ]
                 ]
+        )

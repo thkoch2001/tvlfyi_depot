@@ -89,7 +89,7 @@ renderTrip trip =
         , UI.wrapNoPrint
             (UI.textButton
                 { label = "Delete"
-                , handleClick = State.AttemptDeleteTrip trip.destination trip.startDate
+                , handleClick = State.AttemptDeleteTrip trip
                 }
             )
         ]
