@@ -129,7 +129,8 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
        git fetch to update the local ref to the remote ref. */
     struct stat st;
     doFetch = stat(localRefFile.c_str(), &st) != 0 ||
-              (uint64_t)st.st_mtime + settings.tarballTtl <= (uint64_t)now;
+              static_cast<uint64_t>(st.st_mtime) + settings.tarballTtl <=
+                  static_cast<uint64_t>(now);
   }
   if (doFetch) {
     DLOG(INFO) << "fetching Git repository '" << uri << "'";

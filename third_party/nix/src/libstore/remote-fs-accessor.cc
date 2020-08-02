@@ -75,12 +75,14 @@ std::pair<ref<FSAccessor>, Path> RemoteFSAccessor::fetch(const Path& path_) {
               throw SysError("opening NAR cache file '%s'", cacheFile);
             }
 
-            if (lseek(fd.get(), offset, SEEK_SET) != (off_t)offset) {
+            if (lseek(fd.get(), offset, SEEK_SET) !=
+                static_cast<off_t>(offset)) {
               throw SysError("seeking in '%s'", cacheFile);
             }
 
             std::string buf(length, 0);
-            readFull(fd.get(), (unsigned char*)buf.data(), length);
+            readFull(fd.get(), reinterpret_cast<unsigned char*>(buf.data()),
+                     length);
 
             return buf;
           });
