@@ -30,7 +30,6 @@ using grpc::ClientContext;
 using nix::proto::WorkerService;
 
 static google::protobuf::Empty kEmpty;
-static ClientContext ctx;
 
 proto::StorePath StorePath(const Path& path) {
   proto::StorePath store_path;
@@ -65,12 +64,14 @@ void const RpcStore::SuccessOrThrow(const grpc::Status& status) const {
 }
 
 bool RpcStore::isValidPathUncached(const Path& path) {
+  ClientContext ctx;
   proto::IsValidPathResponse resp;
   SuccessOrThrow(stub_->IsValidPath(&ctx, StorePath(path), &resp));
   return resp.is_valid();
 }
 
 PathSet RpcStore::queryAllValidPaths() {
+  ClientContext ctx;
   proto::StorePaths paths;
   SuccessOrThrow(stub_->QueryAllValidPaths(&ctx, kEmpty, &paths));
   return FillFrom<PathSet>(paths.paths());
@@ -78,6 +79,7 @@ PathSet RpcStore::queryAllValidPaths() {
 
 PathSet RpcStore::queryValidPaths(const PathSet& paths,
                                   SubstituteFlag maybeSubstitute) {
+  ClientContext ctx;
   proto::StorePaths store_paths;
   for (const auto& path : paths) {
     store_paths.add_paths(path);
@@ -90,6 +92,7 @@ PathSet RpcStore::queryValidPaths(const PathSet& paths,
 void RpcStore::queryPathInfoUncached(
     const Path& path,
     Callback<std::shared_ptr<ValidPathInfo>> callback) noexcept {
+  ClientContext ctx;
   proto::StorePath store_path;
   store_path.set_path(path);
 
@@ -127,24 +130,28 @@ void RpcStore::queryPathInfoUncached(
 }
 
 void RpcStore::queryReferrers(const Path& path, PathSet& referrers) {
+  ClientContext ctx;
   proto::StorePaths paths;
   SuccessOrThrow(stub_->QueryReferrers(&ctx, StorePath(path), &paths));
   referrers.insert(paths.paths().begin(), paths.paths().end());
 }
 
 PathSet RpcStore::queryValidDerivers(const Path& path) {
+  ClientContext ctx;
   proto::StorePaths paths;
   SuccessOrThrow(stub_->QueryValidDerivers(&ctx, StorePath(path), &paths));
   return FillFrom<PathSet>(paths.paths());
 }
 
 PathSet RpcStore::queryDerivationOutputs(const Path& path) {
+  ClientContext ctx;
   proto::StorePaths paths;
   SuccessOrThrow(stub_->QueryDerivationOutputs(&ctx, StorePath(path), &paths));
   return FillFrom<PathSet>(paths.paths());
 }
 
 StringSet RpcStore::queryDerivationOutputNames(const Path& path) {
+  ClientContext ctx;
   proto::DerivationOutputNames output_names;
   SuccessOrThrow(
       stub_->QueryDerivationOutputNames(&ctx, StorePath(path), &output_names));
@@ -152,6 +159,7 @@ StringSet RpcStore::queryDerivationOutputNames(const Path& path) {
 }
 
 Path RpcStore::queryPathFromHashPart(const std::string& hashPart) {
+  ClientContext ctx;
   proto::StorePath path;
   proto::HashPart proto_hash_part;
   proto_hash_part.set_hash_part(hashPart);
@@ -160,6 +168,7 @@ Path RpcStore::queryPathFromHashPart(const std::string& hashPart) {
 }
 
 PathSet RpcStore::querySubstitutablePaths(const PathSet& paths) {
+  ClientContext ctx;
   proto::StorePaths result;
   SuccessOrThrow(
       stub_->QuerySubstitutablePaths(&ctx, StorePaths(paths), &result));
@@ -168,6 +177,7 @@ PathSet RpcStore::querySubstitutablePaths(const PathSet& paths) {
 
 void RpcStore::querySubstitutablePathInfos(const PathSet& paths,
                                            SubstitutablePathInfos& infos) {
+  ClientContext ctx;
   proto::SubstitutablePathInfos result;
   SuccessOrThrow(
       stub_->QuerySubstitutablePathInfos(&ctx, StorePaths(paths), &result));
