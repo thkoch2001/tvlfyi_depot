@@ -379,10 +379,10 @@ routeParser =
         ]
 
 
-{-| The initial state for the application.
+{-| Set init to `prod` when going live.
 -}
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init _ url key =
+prod : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+prod _ url key =
     let
         ( startDatePicker, startDatePickerCmd ) =
             DatePicker.init
@@ -419,6 +419,42 @@ init _ url key =
         , Cmd.map UpdateTripEndDate endDatePickerCmd
         ]
     )
+
+
+{-| When working on a feature for the UserHome, use this.
+-}
+userHome : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+userHome flags url key =
+    let
+        ( model, cmd ) =
+            prod flags url key
+    in
+    ( { model
+        | route = Just UserHome
+        , session = Just { username = "mimi", role = User }
+        , trips =
+            RemoteData.Success
+                [ { destination = "Barcelona"
+                  , startDate = Date.fromCalendarDate 2020 Time.Sep 25
+                  , endDate = Date.fromCalendarDate 2020 Time.Oct 5
+                  , comment = "Blah"
+                  }
+                , { destination = "Paris"
+                  , startDate = Date.fromCalendarDate 2021 Time.Jan 1
+                  , endDate = Date.fromCalendarDate 2021 Time.Feb 1
+                  , comment = "Bon voyage!"
+                  }
+                ]
+      }
+    , cmd
+    )
+
+
+{-| The initial state for the application.
+-}
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url key =
+    prod flags url key
 
 
 {-| Now that we have state, we need a function to change the state.
