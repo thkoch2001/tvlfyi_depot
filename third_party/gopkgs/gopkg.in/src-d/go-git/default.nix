@@ -12,7 +12,7 @@ depot.buildGo.external {
     sha256 = "08jl4ljrzzil7c3qcl2y1859nhpgw9ixxy1g40ff7kmq989yhs6v";
   };
 
-  deps = with depot.third_party; map (p: p.gopkg) [
+  deps = with depot.third_party; [
     gopkgs."github.com".emirpasic.gods.trees.binaryheap
     gopkgs."github.com".jbenet.go-context.io
     gopkgs."github.com".kevinburke.ssh_config
