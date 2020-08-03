@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "64f62722_3f968faa",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-03T14:41:17Z",
+      "side": 1,
+      "message": "The status code to use depends on the source of the data - https://grpc.github.io/grpc/core/md_doc_statuscodes.html\n\nHere, we\u0027re taking it from the proto input to this method. Any errors in there are the fault of the caller, hence an INVALID_ARGUMENT.\n\nOn the other hand, if buildPaths below throws an exception because some other enum conversion failed, that would be INTERNAL.\n\nNote that status codes are used to set retry policies - there\u0027s no point in retrying an INVALID_ARGUMENT, because the parameters are wrong, but there might be a chance that an INTERNAL is transient!",
+      "parentUuid": "d9ae08fe_419a9823",
+      "range": {
+        "startLine": 198,
+        "startChar": 38,
+        "endLine": 198,
+        "endChar": 46
+      },
+      "revId": "03878892aa25947b95faacb293ddd8ce3f89e7ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "94954dd9_ea64aade",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 3
