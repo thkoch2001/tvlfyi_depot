@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2194c7d4_b76e93e9",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-03T19:46:12Z",
+      "side": 1,
+      "message": "could probably make this into a local variable",
+      "range": {
+        "startLine": 64,
+        "startChar": 12,
+        "endLine": 64,
+        "endChar": 40
+      },
+      "revId": "ceb57724f0b7bffc2dd0e54b9947d23e800f6053",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "320648ad_08e69bec",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-03T19:46:12Z",
+      "side": 1,
+      "message": "this gives me pause (as all macros in C++ do). Is this really significantly better than just inlining the macro?",
+      "revId": "ceb57724f0b7bffc2dd0e54b9947d23e800f6053",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4918ab58_3721c0d0",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-03T19:46:12Z",
+      "side": 1,
+      "message": "probably a good excuse to change this to INVALID_ARGUMENT",
+      "range": {
+        "startLine": 153,
+        "startChar": 22,
+        "endLine": 153,
+        "endChar": 48
+      },
+      "revId": "ceb57724f0b7bffc2dd0e54b9947d23e800f6053",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81477ed3_2ba48b57",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-03T19:46:12Z",
+      "side": 1,
+      "message": "conflict markers",
+      "revId": "ceb57724f0b7bffc2dd0e54b9947d23e800f6053",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
