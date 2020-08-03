@@ -125,6 +125,7 @@ let
       texlive
       thttpd
       tree
+      unzip
       which
       writeShellScript
       writeShellScriptBin
