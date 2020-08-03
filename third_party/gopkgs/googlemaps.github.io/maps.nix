@@ -10,7 +10,7 @@ depot.nix.buildGo.external {
     sha256 = "1zpl85yd3m417060isdlhxzakqkf4f59jgpz3kcjp2i0mkrskkjs";
   };
 
-  deps = with depot.third_party; map (p: p.gopkg) [
+  deps = with depot.third_party; [
     gopkgs."github.com".google.uuid
     gopkgs."golang.org".x.time.rate
   ];

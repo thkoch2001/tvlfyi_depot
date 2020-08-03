@@ -7,7 +7,7 @@ depot.buildGo.external {
     rev = "8b4e46d953bd748a9ff098644a42389b3d8dab41";
   };
 
-  deps = with depot.third_party; map (p: p.gopkg) [
+  deps = with depot.third_party; [
     gopkgs."github.com".googleapis.gax-go.v2
     gopkgs."golang.org".x.oauth2.google
     gopkgs."golang.org".x.oauth2

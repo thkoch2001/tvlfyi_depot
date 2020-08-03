@@ -6,7 +6,7 @@ depot.nix.buildGo.program {
     ./main.go
   ];
 
-  deps = with depot.third_party; map (p: p.gopkg) [
+  deps = with depot.third_party; [
     # gopkgs."golang.org".x.oauth2.google
     gopkgs."googlemaps.github.io".maps
   ];
