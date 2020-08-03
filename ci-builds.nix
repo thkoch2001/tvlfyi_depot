@@ -63,6 +63,7 @@ in lib.fix (self: {
     cgit
     git
     grpc
+    loxy
     nix
     nix.test-vm
     openldap
