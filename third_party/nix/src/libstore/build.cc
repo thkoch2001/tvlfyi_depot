@@ -15,6 +15,7 @@
 
 #include <absl/strings/ascii.h>
 #include <absl/strings/numbers.h>
+#include <absl/strings/str_format.h>
 #include <absl/strings/str_split.h>
 #include <fcntl.h>
 #include <glog/logging.h>
@@ -1971,9 +1972,13 @@ void DerivationGoal::startBuilder() {
        fields are left empty. */
     std::string s = get(drv->env, "exportReferencesGraph");
     std::vector<std::string> ss = absl::StrSplit(s, absl::ByAnyChar(" \t\n\r"));
+    if (s.empty()) {
+      ss.clear();
+    }
     if (ss.size() % 2 != 0) {
-      throw BuildError(
-          format("odd number of tokens in 'exportReferencesGraph': '%1%'") % s);
+      throw BuildError(absl::StrFormat(
+          "odd number of tokens %d in 'exportReferencesGraph': '%s'", ss.size(),
+          s));
     }
     for (auto i = ss.begin(); i != ss.end();) {
       std::string fileName = *i++;
@@ -3959,7 +3964,7 @@ SubstitutionGoal::SubstitutionGoal(const Path& storePath, Worker& worker,
     : Goal(worker), repair(repair) {
   this->storePath = storePath;
   state = &SubstitutionGoal::init;
-  name = (format("substitution of '%1%'") % storePath).str();
+  name = absl::StrCat("substitution of ", storePath);
   trace("created");
   maintainExpectedSubstitutions =
       std::make_unique<MaintainCount<uint64_t>>(worker.expectedSubstitutions);
