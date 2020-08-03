@@ -7,7 +7,7 @@ depot.buildGo.external {
     rev = "643eada29081047b355cfaa1ceb9bc307a10423c";
   };
 
-  deps = with depot.third_party; map (p: p.gopkg) [
+  deps = with depot.third_party; [
     gopkgs."github.com".hashicorp.golang-lru.simplelru
     gopkgs."github.com".golang.groupcache.lru
   ];
