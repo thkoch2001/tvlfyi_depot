@@ -107,10 +107,10 @@ static std::string parseString(std::istream& str) {
       } else if (c == 't') {
         res += '\t';
       } else {
-        res += c;
+        res += static_cast<char>(c);
       }
     } else {
-      res += c;
+      res += static_cast<char>(c);
     }
   }
   return res;
