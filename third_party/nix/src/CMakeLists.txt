@@ -10,6 +10,7 @@ add_subdirectory(libutil)
 add_subdirectory(libstore)
 add_subdirectory(libmain)
 add_subdirectory(libexpr)
+add_subdirectory(nix-daemon)
 
 if (PACKAGE_TESTS)
   add_subdirectory(tests)
@@ -61,8 +62,6 @@ target_sources(nix
     nix-channel/nix-channel.cc
     nix-collect-garbage/nix-collect-garbage.cc
     nix-copy-closure/nix-copy-closure.cc
-    nix-daemon/nix-daemon-proto.cc
-    nix-daemon/nix-daemon-main.cc
     nix-env/nix-env.cc
     nix-env/user-env.cc
     nix-instantiate/nix-instantiate.cc
