@@ -164,7 +164,6 @@ let
     inherit (nixpkgs)
       aws-sdk-cpp
       bison
-      boehmgc
       boost # urgh
       brotli
       busybox-sandbox-shell
