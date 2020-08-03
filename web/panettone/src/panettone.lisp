@@ -228,7 +228,8 @@
     (:header
      (:h1
       (who:esc
-       (if (id issue) "Edit Issue" "New Issue"))))
+       (if (and issue (id issue))
+           "Edit Issue" "New Issue"))))
     (:main
      (render/alert message)
      (:form :method "post"
