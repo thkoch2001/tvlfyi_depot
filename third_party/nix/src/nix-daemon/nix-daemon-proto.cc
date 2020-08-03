@@ -83,6 +83,12 @@ struct RetrieveRegularNARSink : ParseSink {
   }
 };
 
+#define ASSERT_INPUT_STORE_PATH(path)                                          \
+  if (!store_->isStorePath(path)) {                                            \
+    return Status(grpc::StatusCode::INVALID_ARGUMENT,                          \
+                  absl::StrFormat("path '%s' is not in the Nix store", path)); \
+  }
+
 class WorkerServiceImpl final : public WorkerService::Service {
  public:
   WorkerServiceImpl(nix::Store& store) : store_(&store) {}
@@ -90,7 +96,6 @@ class WorkerServiceImpl final : public WorkerService::Service {
   Status IsValidPath(grpc::ServerContext* context, const StorePath* request,
                      nix::proto::IsValidPathResponse* response) override {
     const auto& path = request->path();
-    store_->assertStorePath(path);
     response->set_is_valid(store_->isValidPath(path));
 
     return Status::OK;
@@ -99,7 +104,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
   Status HasSubstitutes(grpc::ServerContext* context, const StorePath* request,
                         nix::proto::HasSubstitutesResponse* response) override {
     const auto& path = request->path();
-    store_->assertStorePath(path);
+    ASSERT_INPUT_STORE_PATH(path);
     PathSet res = store_->querySubstitutablePaths({path});
     response->set_has_substitutes(res.find(path) != res.end());
 
@@ -109,7 +114,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
   Status QueryReferrers(grpc::ServerContext* context, const StorePath* request,
                         StorePaths* response) override {
     const auto& path = request->path();
-    store_->assertStorePath(path);
+    ASSERT_INPUT_STORE_PATH(path);
 
     PathSet paths;
     store_->queryReferrers(path, paths);
@@ -199,7 +204,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                             const StorePath* request,
                             StorePaths* response) override {
     const auto& path = request->path();
-    store_->assertStorePath(path);
+    ASSERT_INPUT_STORE_PATH(path);
 
     PathSet paths = store_->queryValidDerivers(path);
 
@@ -214,7 +219,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                                 const StorePath* request,
                                 StorePaths* response) override {
     const auto& path = request->path();
-    store_->assertStorePath(path);
+    ASSERT_INPUT_STORE_PATH(path);
 
     PathSet paths = store_->queryDerivationOutputs(path);
 
@@ -230,7 +235,6 @@ class WorkerServiceImpl final : public WorkerService::Service {
                             StorePaths* response) override {
     const auto paths = store_->queryAllValidPaths();
     for (const auto& path : paths) {
-      store_->assertStorePath(path);
       response->add_paths(path);
     }
 
@@ -240,7 +244,8 @@ class WorkerServiceImpl final : public WorkerService::Service {
   Status QueryPathInfo(grpc::ServerContext* context, const StorePath* request,
                        PathInfo* response) override {
     auto path = request->path();
-    store_->assertStorePath(path);
+    ASSERT_INPUT_STORE_PATH(path);
+
     response->mutable_path()->set_path(path);
     try {
       auto info = store_->queryPathInfo(path);
@@ -276,7 +281,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
       grpc::ServerContext* context, const StorePath* request,
       nix::proto::DerivationOutputNames* response) override {
     auto path = request->path();
-    store_->assertStorePath(path);
+    ASSERT_INPUT_STORE_PATH(path);
     auto names = store_->queryDerivationOutputNames(path);
     for (const auto& name : names) {
       response->add_names(name);
@@ -290,7 +295,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                                StorePath* response) override {
     auto hash_part = request->hash_part();
     auto path = store_->queryPathFromHashPart(hash_part);
-    store_->assertStorePath(path);
+    ASSERT_INPUT_STORE_PATH(path);
     response->set_path(path);
     return Status::OK;
   }
@@ -300,7 +305,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                          StorePaths* response) override {
     std::set<Path> paths;
     for (const auto& path : request->paths()) {
-      store_->assertStorePath(path);
+      ASSERT_INPUT_STORE_PATH(path);
       paths.insert(path);
     }
 
@@ -318,7 +323,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                                  StorePaths* response) override {
     std::set<Path> paths;
     for (const auto& path : request->paths()) {
-      store_->assertStorePath(path);
+      ASSERT_INPUT_STORE_PATH(path);
       paths.insert(path);
     }
 
@@ -354,7 +359,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
       const nix::proto::BuildDerivationRequest* request,
       nix::proto::BuildDerivationResponse* response) override {
     auto drv_path = request->drv_path().path();
-    store_->assertStorePath(drv_path);
+    ASSERT_INPUT_STORE_PATH(drv_path);
     auto drv = BasicDerivation::from_proto(&request->derivation(), *store_);
 
     auto build_mode = nix::build_mode_from(request->build_mode());
@@ -374,7 +379,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                        const nix::proto::AddSignaturesRequest* request,
                        google::protobuf::Empty* response) override {
     auto path = request->path().path();
-    store_->assertStorePath(path);
+    ASSERT_INPUT_STORE_PATH(path);
 
     StringSet sigs;
     sigs.insert(request->sigs().sigs().begin(), request->sigs().sigs().end());
@@ -388,7 +393,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                       nix::proto::QueryMissingResponse* response) override {
     std::set<Path> targets;
     for (auto& path : request->paths()) {
-      store_->assertStorePath(path);
+      ASSERT_INPUT_STORE_PATH(path);
       targets.insert(path);
     }
     PathSet will_build;
