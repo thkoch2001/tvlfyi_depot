@@ -22,6 +22,30 @@
       "revId": "7d5fc448b4b8836db99e10ba9d515aa7c49ffe59",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3baac240_194a6745",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-03T02:48:46Z",
+      "side": 1,
+      "message": "I\u0027m using them to filter compile-commands.json to run clang-tidy in the nix shell. I suppose I should turn it into a script?",
+      "parentUuid": "41c50213_7208b323",
+      "range": {
+        "startLine": 7,
+        "startChar": 26,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "7d5fc448b4b8836db99e10ba9d515aa7c49ffe59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
