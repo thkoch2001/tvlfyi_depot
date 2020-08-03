@@ -30,6 +30,15 @@ target_link_libraries(hash_test
 
 gtest_discover_tests(hash_test)
 
+add_executable(store_test store_tests.cc)
+target_link_libraries(store_test
+  nixstore
+  nixstoremock
+  GTest::gtest_main
+)
+
+gtest_discover_tests(store_test)
+
 add_executable(value-to-json value-to-json.cc)
 target_link_libraries(value-to-json
   nixexpr
