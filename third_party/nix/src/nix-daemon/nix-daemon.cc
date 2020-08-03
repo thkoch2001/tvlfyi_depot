@@ -113,6 +113,9 @@ int RunServer() {
 }  // namespace nix::daemon
 
 int main(int argc, char** argv) {
+  FLAGS_logtostderr = true;
+  google::InitGoogleLogging(argv[0]);
+
   absl::SetFlagsUsageConfig({.version_string = [] { return nix::nixVersion; }});
   absl::ParseCommandLine(argc, argv);
 
