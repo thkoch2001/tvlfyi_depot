@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8486ebc7_3f906387",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-08-03T10:25:04Z",
+      "side": 1,
+      "message": "Add a nix/fetchGoModules OWNERS for yourself as well?",
+      "range": {
+        "startLine": 7,
+        "startChar": 26,
+        "endLine": 7,
+        "endChar": 66
+      },
+      "revId": "e8f47c5eaf80c0b62dc3ebb74f3ad8f8e8023a78",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
