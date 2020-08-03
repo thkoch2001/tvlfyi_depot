@@ -14,9 +14,14 @@ let
 
  # TODO(tazjin): this is copied from the original derivation, but what
  # is it for?
-  largeBoehm = pkgs.boehmgc.override {
-    enableLargeConfig = true;
-  };
+  largeBoehm = pkgs.boehmgc.overrideAttrs (up: rec {
+    patches = up.patches ++ [./third_party/boehmgc/0001-Add-ASan-poisoning-support-to-malloc-free.patch];
+
+    # TODO(riking): -fsanitize-blacklist?
+    preConfigure = up.preConfigure + ''
+     export NIX_CFLAGS_COMPILE+=" -fsanitize=address"
+   '';
+  });
 
   src = ./.;
 
