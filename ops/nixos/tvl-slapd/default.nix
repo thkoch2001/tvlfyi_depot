@@ -48,7 +48,7 @@ let
     {
       username = "edef";
       email = "edef@edef.eu";
-      password = "{SSHA}7w2XC6xxuhlUX2KvBpK4fD/X7ZCpfN/E";
+      password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$OORx4ERbkgvTmuYCJA8cIw$i5qaBzHkRVw7Tl+wZsTFTDqJwF0vuZqhW3VpknMYMc0";
     }
     {
       username = "ericvolp12";
