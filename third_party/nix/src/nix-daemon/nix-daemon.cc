@@ -1,5 +1,9 @@
 #include <filesystem>
 
+#include <absl/flags/flag.h>
+#include <absl/flags/internal/flag.h>
+#include <absl/flags/parse.h>
+#include <absl/flags/usage_config.h>
 #include <absl/strings/str_format.h>
 #include <fcntl.h>
 #include <glog/logging.h>
@@ -9,13 +13,15 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
-#include "libmain/shared.hh"
+#include "libmain/shared.hh"  // TODO(tazjin): can this be removed?
 #include "libstore/globals.hh"
 #include "libstore/store-api.hh"
 #include "libutil/util.hh"
 #include "nix-daemon-proto.hh"
 #include "nix-daemon/nix-daemon-proto.hh"
 #include "nix/legacy.hh"
+
+ABSL_FLAG(bool, pipe, false, "Use pipes for daemon communication");
 
 namespace nix::daemon {
 
@@ -105,39 +111,22 @@ int RunServer() {
   }
 }
 
-static int main_(int argc, char** argv) {
-  auto pipe = false;
+}  // namespace nix::daemon
 
-  // TODO(grfn): Replace with absl::flags
-  parseCmdLine(argc, argv,
-               [&](Strings::iterator& arg, const Strings::iterator& end) {
-                 if (*arg == "--help") {
-                   showManPage("nix-daemon");
-                 } else if (*arg == "--version") {
-                   printVersion("nix-daemon");
-                 } else if (*arg == "--pipe") {
-                   // Causes the daemon to forward stdin and stdout to and from
-                   // the actual daemon socket
-                   pipe = true;
-                 } else {
-                   return false;
-                 }
-                 return true;
-               });
+int main(int argc, char** argv) {
+  absl::SetFlagsUsageConfig({.version_string = [] { return nix::nixVersion; }});
+  absl::ParseCommandLine(argc, argv);
 
-  if (pipe) {
-    if (getStoreType() == tDaemon) {
-      return ForwardToSocket(settings.nixDaemonSocketFile);
+  if (absl::GetFlag(FLAGS_pipe)) {
+    if (nix::getStoreType() == nix::tDaemon) {
+      return nix::daemon::ForwardToSocket(nix::settings.nixDaemonSocketFile);
     } else {
       // TODO(grfn): Need to launch a server on stdin here - upstream calls
       // processConnection(true, "root", 0);
-      throw "Not implemented";
+      LOG(ERROR) << "not implemented";
+      return 1;
     }
   }
-  return RunServer();
+
+  return nix::daemon::RunServer();
 }
-
-// TODO(grfn): Replace this with something less magical
-static RegisterLegacyCommand s1("nix-daemon", main_);
-
-}  // namespace nix::daemon

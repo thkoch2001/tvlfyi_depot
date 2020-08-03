@@ -121,7 +121,6 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     ln -s $out/bin/nix $out/bin/nix-channel
     ln -s $out/bin/nix $out/bin/nix-collect-garbage
     ln -s $out/bin/nix $out/bin/nix-copy-closure
-    ln -s $out/bin/nix $out/bin/nix-daemon
     ln -s $out/bin/nix $out/bin/nix-env
     ln -s $out/bin/nix $out/bin/nix-hash
     ln -s $out/bin/nix $out/bin/nix-instantiate
