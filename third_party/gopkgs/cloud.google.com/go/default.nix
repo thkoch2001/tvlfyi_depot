@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
 depot.buildGo.external {
   path = "cloud.google.com/go";
