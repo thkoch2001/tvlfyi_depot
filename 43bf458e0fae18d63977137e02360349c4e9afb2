@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca0d2e72_14c12e95",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-03T14:56:35Z",
+      "side": 1,
+      "message": "nice! I like this general approach.",
+      "revId": "43bf458e0fae18d63977137e02360349c4e9afb2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
