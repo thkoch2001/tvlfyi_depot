@@ -224,38 +224,41 @@
      (render/issue-list :issues issues))))
 
 (defun render/issue-form (&optional issue message)
-  (render ()
-    (:header
-     (:h1
-      (who:esc
-       (if (and issue (id issue))
-           "Edit Issue" "New Issue"))))
-    (:main
-     (render/alert message)
-     (:form :method "post"
-            :action (if (id issue)
-                        (format nil "/issues/~A"
-                                (id issue))
-                        "/issues")
-            :class "issue-form"
-            (:div
-             (:input :type "text"
-                     :id "subject"
-                     :name "subject"
-                     :placeholder "Subject"
-                     :value (subject issue)))
+  (let ((editing (and issue (id issue))))
+    (render ()
+      (:header
+       (:h1
+        (who:esc
+         (if editing "Edit Issue" "New Issue"))))
+      (:main
+       (render/alert message)
+       (:form :method "post"
+              :action (if editing
+                          (format nil "/issues/~A"
+                                  (id issue))
+                          "/issues")
+              :class "issue-form"
+              (:div
+               (:input :type "text"
+                       :id "subject"
+                       :name "subject"
+                       :placeholder "Subject"
+                       :value (when editing
+                                (subject issue))))
 
-            (:div
-             (:textarea :name "body"
-                        :placeholder "Description"
-                        :rows 10
-                        (who:esc (body issue))))
+              (:div
+               (:textarea :name "body"
+                          :placeholder "Description"
+                          :rows 10
+                          (who:esc
+                           (when editing
+                             (body issue)))))
 
-            (:input :type "submit"
-                    :value
-                    (if (id issue)
-                        "Save Issue"
-                        "Create Issue"))))))
+              (:input :type "submit"
+                      :value
+                      (if editing
+                          "Save Issue"
+                          "Create Issue")))))))
 
 (defun render/new-comment (issue-id)
   (who:with-html-output (*standard-output*)
