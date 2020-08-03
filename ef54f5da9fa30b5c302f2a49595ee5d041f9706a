@@ -16,6 +16,24 @@
       "revId": "ef54f5da9fa30b5c302f2a49595ee5d041f9706a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b2d555d_4acb7401",
+        "filename": "third_party/nix/src/libstore/derivations.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-03T14:47:26Z",
+      "side": 1,
+      "message": "Created CL 1597.",
+      "parentUuid": "e432f664_ca5e4767",
+      "revId": "ef54f5da9fa30b5c302f2a49595ee5d041f9706a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
