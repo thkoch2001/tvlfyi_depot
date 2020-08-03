@@ -57,9 +57,16 @@ T FillFrom(const U& src) {
 // doing right now. We should at some point though
 void const RpcStore::SuccessOrThrow(const grpc::Status& status) const {
   if (!status.ok()) {
-    throw Error(absl::StrFormat("Rpc call to %s failed (%d): %s ",
-                                uri_.value_or("unknown URI"),
-                                status.error_code(), status.error_message()));
+    switch (status.error_code()) {
+      case grpc::StatusCode::UNIMPLEMENTED:
+        throw Unsupported(absl::StrFormat(
+            "operation is not supported by store at %s: %s",
+            uri_.value_or("unknown URI"), status.error_message()));
+      default:
+        throw Error(absl::StrFormat(
+            "Rpc call to %s failed (%d): %s ", uri_.value_or("unknown URI"),
+            status.error_code(), status.error_message()));
+    }
   }
 }
 
