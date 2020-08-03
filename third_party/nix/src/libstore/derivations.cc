@@ -408,15 +408,15 @@ Hash hashDerivationModulo(Store& store, Derivation drv) {
   return hashString(htSHA256, drv.unparse());
 }
 
-// TODO(tazjin): doc comment?
 DrvPathWithOutputs parseDrvPathWithOutputs(absl::string_view path) {
   auto pos = path.find('!');
   if (pos == absl::string_view::npos) {
     return DrvPathWithOutputs(path, std::set<std::string>());
   }
 
-  return DrvPathWithOutputs(path.substr(pos + 1),
-                            absl::StrSplit(path, absl::ByChar(',')));
+  return DrvPathWithOutputs(
+      path.substr(0, pos),
+      absl::StrSplit(path.substr(pos + 1), absl::ByChar(',')));
 }
 
 Path makeDrvPathWithOutputs(const Path& drvPath,
