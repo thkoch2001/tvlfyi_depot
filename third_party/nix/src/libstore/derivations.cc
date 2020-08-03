@@ -97,7 +97,7 @@ static std::string parseString(std::istream& str) {
   std::string res;
   expect(str, "\"");
   int c;
-  while ((c = str.get()) != '"') {
+  while ((c = str.get()) != '"' && c != EOF) {
     if (c == '\\') {
       c = str.get();
       if (c == 'n') {
@@ -106,11 +106,14 @@ static std::string parseString(std::istream& str) {
         res += '\r';
       } else if (c == 't') {
         res += '\t';
+      } else if (c == EOF) {
+        LOG(WARNING) << "unexpected EOF while parsing C-style string";
+        break;
       } else {
-        res += c;
+        res += static_cast<char>(c);
       }
     } else {
-      res += c;
+      res += static_cast<char>(c);
     }
   }
   return res;
