@@ -2,7 +2,7 @@
 
 let
 
-  inherit (depot.users.edef) fetchGoModule;
+  inherit (depot.nix) fetchGoModule;
 
 in
 
