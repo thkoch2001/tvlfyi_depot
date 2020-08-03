@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77f2fc23_65597fa3",
+        "filename": "third_party/nix/src/libstore/derivations.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-03T17:34:59Z",
+      "side": 1,
+      "message": "why not just have it be a char in the first place?",
+      "revId": "ada7f29f1d78e76e0fbd47c46340004aa0854ada",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
