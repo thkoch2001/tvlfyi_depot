@@ -46,6 +46,30 @@
       "revId": "7d5fc448b4b8836db99e10ba9d515aa7c49ffe59",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50de1050_4bc12f8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-03T13:21:54Z",
+      "side": 1,
+      "message": "or run with `nix-shell -p`... I\u0027d be concerned if they were in here that we wouldn\u0027t know if removing them would break anything. A comment or a note in the commit message would help with that.",
+      "parentUuid": "3baac240_194a6745",
+      "range": {
+        "startLine": 7,
+        "startChar": 26,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "7d5fc448b4b8836db99e10ba9d515aa7c49ffe59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
