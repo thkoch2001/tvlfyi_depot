@@ -1,3 +1,9 @@
+/*
+  NOTE: You are looking at the *previous* implementation of the Nix
+  daemon. This file is not in use, is only left in here for reference
+  and will be deleted from the codebase eventually.
+ */
+
 #include <algorithm>
 #include <cerrno>
 #include <climits>
