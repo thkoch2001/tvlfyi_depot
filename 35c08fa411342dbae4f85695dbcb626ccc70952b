@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c421d8d_e41c00dd",
+        "filename": "third_party/nix/src/libstore/derivations.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-03T19:50:40Z",
+      "side": 1,
+      "message": "probably error? also, shouldn\u0027t this fail somehow? what does `expect` do on failure?",
+      "range": {
+        "startLine": 111,
+        "startChar": 12,
+        "endLine": 111,
+        "endChar": 19
+      },
+      "revId": "35c08fa411342dbae4f85695dbcb626ccc70952b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
