@@ -22,6 +22,30 @@
       "revId": "24ba60c2be763637502fbedc17ee13eec599d404",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "164b1f49_fb0c0073",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-03T18:18:42Z",
+      "side": 1,
+      "message": "Done. I assumed that clangd would not include internal stuff, and am not entirely sure why it did. Maybe some config is missing.",
+      "parentUuid": "2e3d8ca2_21353e46",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 37
+      },
+      "revId": "24ba60c2be763637502fbedc17ee13eec599d404",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
