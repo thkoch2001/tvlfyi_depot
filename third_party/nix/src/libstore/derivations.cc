@@ -3,6 +3,7 @@
 #include <absl/strings/match.h>
 #include <absl/strings/str_split.h>
 #include <absl/strings/string_view.h>
+#include <glog/logging.h>
 
 #include "libstore/fs-accessor.hh"
 #include "libstore/globals.hh"
@@ -97,7 +98,7 @@ static std::string parseString(std::istream& str) {
   std::string res;
   expect(str, "\"");
   int c;
-  while ((c = str.get()) != '"') {
+  while ((c = str.get()) != '"' && c != EOF) {
     if (c == '\\') {
       c = str.get();
       if (c == 'n') {
@@ -106,11 +107,13 @@ static std::string parseString(std::istream& str) {
         res += '\r';
       } else if (c == 't') {
         res += '\t';
+      } else if (c == EOF) {
+        throw FormatError("unexpected EOF while parsing C-style escape");
       } else {
-        res += c;
+        res += static_cast<char>(c);
       }
     } else {
-      res += c;
+      res += static_cast<char>(c);
     }
   }
   return res;
