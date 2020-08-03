@@ -117,6 +117,30 @@
       "revId": "03878892aa25947b95faacb293ddd8ce3f89e7ad",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eba597be_d1d8491f",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-03T14:43:07Z",
+      "side": 1,
+      "message": "I was suggesting that we mark up all the methods that throw with an explicit conversion to INTERNAL errors, but that\u0027s not the current style of the file. Disregard.",
+      "parentUuid": "50125384_b2c3360d",
+      "range": {
+        "startLine": 204,
+        "startChar": 4,
+        "endLine": 204,
+        "endChar": 43
+      },
+      "revId": "03878892aa25947b95faacb293ddd8ce3f89e7ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
