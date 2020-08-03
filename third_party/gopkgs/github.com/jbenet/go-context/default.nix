@@ -10,7 +10,7 @@ depot.buildGo.external {
     sha256 = "0q91f5549n81w3z5927n4a1mdh220bdmgl42zi3h992dcc4ls0sl";
   };
 
-  deps = with depot.third_party; map (p: p.gopkg) [
+  deps = with depot.third_party; [
     gopkgs."golang.org".x.net.context
   ];
 }

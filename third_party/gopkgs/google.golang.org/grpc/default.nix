@@ -7,7 +7,7 @@ depot.buildGo.external {
     rev = "085c980048876e2735d4aba8f0d5bca4d7acaaa5";
   };
 
-  deps = with depot.third_party; map (p: p.gopkg) [
+  deps = with depot.third_party; [
     gopkgs."golang.org".x.net.trace
     gopkgs."golang.org".x.net.http2
     gopkgs."golang.org".x.net.http2.hpack

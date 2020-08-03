@@ -7,7 +7,7 @@ depot.buildGo.external {
     rev = "858c2ad4c8b6c5d10852cb89079f6ca1c7309787";
   };
 
-  deps = with depot.third_party; map (p: p.gopkg) [
+  deps = with depot.third_party; [
     gopkgs."golang.org".x.net.context.ctxhttp
     gopkgs."cloud.google.com".go.compute.metadata
   ];
