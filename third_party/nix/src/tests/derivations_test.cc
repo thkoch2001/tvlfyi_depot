@@ -103,4 +103,34 @@ RC_GTEST_FIXTURE_PROP(DerivationsTest, UnparseParseRoundTrip,
   AssertDerivationsEqual(drv, parsed);
 }
 
+class ParseDrvPathWithOutputsTest : public DerivationsTest {};
+
+TEST(ParseDrvPathWithOutputsTest, ParseDrvPathWithOutputs) {
+  auto input = "/nix/store/my51f75kp056md84gq2v08pd140pcz57-test.drv!out";
+  auto result = nix::parseDrvPathWithOutputs(input);
+
+  ASSERT_EQ(result.first,
+            "/nix/store/my51f75kp056md84gq2v08pd140pcz57-test.drv");
+  ASSERT_EQ(result.second, nix::PathSet{"out"});
+}
+
+TEST(ParseDrvPathWithOutputsTest, ParseDrvPathWithMultipleOutputs) {
+  auto input = "/nix/store/my51f75kp056md84gq2v08pd140pcz57-test.drv!out,dev";
+  auto result = nix::parseDrvPathWithOutputs(input);
+
+  nix::PathSet expected = {"out", "dev"};
+
+  ASSERT_EQ(result.first,
+            "/nix/store/my51f75kp056md84gq2v08pd140pcz57-test.drv");
+  ASSERT_EQ(result.second, expected);
+}
+
+TEST(ParseDrvPathWithOutputsTest, ParseDrvPathWithNoOutputs) {
+  auto input = "/nix/store/my51f75kp056md84gq2v08pd140pcz57-test";
+  auto result = nix::parseDrvPathWithOutputs(input);
+
+  ASSERT_EQ(result.first, "/nix/store/my51f75kp056md84gq2v08pd140pcz57-test");
+  ASSERT_EQ(result.second, nix::PathSet());
+}
+
 }  // namespace nix
