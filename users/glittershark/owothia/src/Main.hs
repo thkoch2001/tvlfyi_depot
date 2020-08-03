@@ -13,6 +13,7 @@ import qualified Data.ByteString as BS
 import           System.Random
 import           System.Envy
 import           Data.Maybe
+import qualified Data.Text
 --------------------------------------------------------------------------------
 
 data Config = Config
@@ -85,7 +86,10 @@ instance Random OwoType where
   randomR = const random
 
 owo :: OwoType -> Text -> Text
-owo Noun n = "I'm a " <> n <> " owo"
+owo Noun n =
+          if "o" `Data.Text.isSuffixOf` n
+          then "I'm a " <> n <> "wo"
+          else "I'm a " <> n <> " owo"
 owo Verb v = v <> " me owo"
 
 pickOwo :: OwoType -> POS Tag -> Maybe Text
