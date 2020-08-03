@@ -16,6 +16,24 @@
       "revId": "ada7f29f1d78e76e0fbd47c46340004aa0854ada",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf0c3683_dd5df1f1",
+        "filename": "third_party/nix/src/libstore/derivations.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-03T18:21:01Z",
+      "side": 1,
+      "message": "It can return -1 (EOF) as well. Changed the code to actually handle EOF properly.",
+      "parentUuid": "77f2fc23_65597fa3",
+      "revId": "ada7f29f1d78e76e0fbd47c46340004aa0854ada",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
