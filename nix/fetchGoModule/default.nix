@@ -14,7 +14,7 @@ in
 
 { path, version, sha256 }:
 
-(pkgs.fetchurl {
+pkgs.fetchurl {
   name = "source";
   url = "https://proxy.golang.org/${caseFold path}/@v/v${version}.zip";
   inherit sha256;
@@ -28,9 +28,7 @@ in
     cd "$unpackDir"
 
     mv "$downloadedFile" "$TMPDIR/src.zip"
-    unpackFile "$TMPDIR/src.zip"
+    ${pkgs.unzip}/bin/unzip "$TMPDIR/src.zip" -d "$unpackDir"
     mv "$unpackDir/${path}@v${version}" "$out"
   '';
-}).overrideAttrs ({ nativeBuildInputs ? [], ... }: {
-  nativeBuildInputs = nativeBuildInputs ++ [ pkgs.unzip ];
-})
+}
