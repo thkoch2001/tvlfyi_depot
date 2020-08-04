@@ -22,6 +22,29 @@
       "revId": "6a0227a4c36d64f9ce9ab2a44e4535b531a8c4e2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "083f4345_bb7386d8",
+        "filename": "docs/SPARSE_CHECKOUTS.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-08-04T23:22:05Z",
+      "side": 1,
+      "message": "trailing space",
+      "range": {
+        "startLine": 29,
+        "startChar": 31,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "6a0227a4c36d64f9ce9ab2a44e4535b531a8c4e2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
