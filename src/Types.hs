@@ -10,7 +10,6 @@ import Data.Aeson
 import Utils
 import Data.Text
 import Data.Typeable
-import Data.String.Conversions (cs)
 import Database.SQLite.Simple
 import Database.SQLite.Simple.Ok
 import Database.SQLite.Simple.FromField
@@ -22,7 +21,6 @@ import System.Envy (FromEnv, fromEnv, env)
 import Crypto.Random.Types (MonadRandom)
 
 import qualified Data.Time.Calendar as Calendar
-import qualified Data.Time.Format as TF
 import qualified Crypto.KDF.BCrypt as BC
 import qualified Data.Time.Clock as Clock
 import qualified Data.ByteString.Char8 as B
@@ -50,10 +48,10 @@ instance FromEnv Config where
 
 -- TODO(wpcarro): Properly handle NULL for columns like profilePicture.
 forNewtype :: (Typeable b) => (Text -> b) -> FieldParser b
-forNewtype wrapper field =
-  case fieldData field of
+forNewtype wrapper y =
+  case fieldData y of
     (SQLText x) -> Ok (wrapper x)
-    x -> returnError ConversionFailed field ("We expected SQLText, but we received: " ++ show x)
+    x -> returnError ConversionFailed y ("We expected SQLText, but we received: " ++ show x)
 
 newtype Username = Username Text
   deriving (Eq, Show, Generic)
@@ -74,10 +72,10 @@ instance ToField HashedPassword where
   toField (HashedPassword x) = SQLText (TE.decodeUtf8 x)
 
 instance FromField HashedPassword where
-  fromField field =
-    case fieldData field of
+  fromField y =
+    case fieldData y of
       (SQLText x) -> x |> TE.encodeUtf8 |> HashedPassword |> Ok
-      x -> returnError ConversionFailed field ("We expected SQLText, but we received: " ++ show x)
+      x -> returnError ConversionFailed y ("We expected SQLText, but we received: " ++ show x)
 
 newtype ClearTextPassword = ClearTextPassword Text
   deriving (Eq, Show, Generic)
@@ -125,12 +123,12 @@ instance ToField Role where
   toField Admin = SQLText "admin"
 
 instance FromField Role where
-  fromField field =
-    case fieldData field of
+  fromField y =
+    case fieldData y of
       (SQLText "user") -> Ok RegularUser
       (SQLText "manager") -> Ok Manager
       (SQLText "admin") -> Ok Admin
-      x -> returnError ConversionFailed field ("We expected user, manager, admin, but we received: " ++ show x)
+      x -> returnError ConversionFailed y ("We expected user, manager, admin, but we received: " ++ show x)
 
 -- TODO(wpcarro): Prefer Data.ByteString instead of Text
 newtype ProfilePicture = ProfilePicture Text
@@ -356,13 +354,13 @@ newtype SessionUUID = SessionUUID UUID.UUID
   deriving (Eq, Show, Generic)
 
 instance FromField SessionUUID where
-  fromField field =
-    case fieldData field of
+  fromField y =
+    case fieldData y of
       (SQLText x) ->
         case UUID.fromText x of
-          Nothing -> returnError ConversionFailed field ("Could not convert to UUID: " ++ show x)
-          Just x -> Ok $ SessionUUID x
-      _ -> returnError ConversionFailed field "Expected SQLText for SessionUUID, but we received"
+          Nothing -> returnError ConversionFailed y ("Could not convert to UUID: " ++ show x)
+          Just uuid -> Ok $ SessionUUID uuid
+      _ -> returnError ConversionFailed y "Expected SQLText for SessionUUID, but we received"
 
 instance ToField SessionUUID where
   toField (SessionUUID uuid) =
@@ -410,13 +408,13 @@ instance FromHttpApiData RegistrationSecret where
       Just uuid -> Right (RegistrationSecret uuid)
 
 instance FromField RegistrationSecret where
-  fromField field =
-    case fieldData field of
+  fromField y =
+    case fieldData y of
       (SQLText x) ->
         case UUID.fromText x of
-          Nothing -> returnError ConversionFailed field ("Could not convert text to UUID: " ++ show x)
-          Just x -> Ok $ RegistrationSecret x
-      _ -> returnError ConversionFailed field "Field data is not SQLText, which is what we expect"
+          Nothing -> returnError ConversionFailed y ("Could not convert text to UUID: " ++ show x)
+          Just uuid -> Ok $ RegistrationSecret uuid
+      _ -> returnError ConversionFailed y "Field data is not SQLText, which is what we expect"
 
 instance ToField RegistrationSecret where
   toField (RegistrationSecret secretUUID) =
@@ -498,13 +496,13 @@ instance ToField InvitationSecret where
     secretUUID |> UUID.toText |> SQLText
 
 instance FromField InvitationSecret where
-  fromField field =
-    case fieldData field of
+  fromField y =
+    case fieldData y of
       (SQLText x) ->
         case UUID.fromText x of
-          Nothing -> returnError ConversionFailed field ("Could not convert text to UUID: " ++ show x)
-          Just x -> Ok $ InvitationSecret x
-      _ -> returnError ConversionFailed field "Field data is not SQLText, which is what we expect"
+          Nothing -> returnError ConversionFailed y ("Could not convert text to UUID: " ++ show x)
+          Just z -> Ok $ InvitationSecret z
+      _ -> returnError ConversionFailed y "Field data is not SQLText, which is what we expect"
 
 data Invitation = Invitation
   { invitationEmail :: Email

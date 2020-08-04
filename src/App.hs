@@ -11,7 +11,6 @@ import Control.Monad.IO.Class (liftIO)
 import Data.String.Conversions (cs)
 import Data.Text (Text)
 import Servant
-import Servant.Server.Internal.ServerError
 import API
 import Utils
 import Web.Cookie
@@ -20,10 +19,7 @@ import qualified Network.Wai.Handler.Warp as Warp
 import qualified Network.Wai.Middleware.Cors as Cors
 import qualified System.Random as Random
 import qualified Email as Email
-import qualified Crypto.KDF.BCrypt as BC
-import qualified Data.Text.Encoding as TE
 import qualified Data.UUID as UUID
-import qualified Data.UUID.V4 as UUID
 import qualified Types as T
 import qualified Accounts as Accounts
 import qualified Auth as Auth
@@ -48,7 +44,7 @@ sendVerifyEmail :: T.Config
                 -> T.Email
                 -> T.RegistrationSecret
                 -> IO (Either Email.SendError Email.SendSuccess)
-sendVerifyEmail T.Config{..} (T.Username username) email@(T.Email to) (T.RegistrationSecret secretUUID) = do
+sendVerifyEmail T.Config{..} (T.Username username) email (T.RegistrationSecret secretUUID) = do
   Email.send mailgunAPIKey subject (cs body) email
   where
     subject = "Please confirm your account"
@@ -115,11 +111,13 @@ server config@T.Config{..} = createAccount
             createAccountRequestPassword
             createAccountRequestRole
             createAccountRequestEmail
-          liftIO $ sendVerifyEmail config
+          res <- liftIO $ sendVerifyEmail config
             createAccountRequestUsername
             createAccountRequestEmail
             secretUUID
-          pure NoContent
+          case res of
+            Left _ -> undefined
+            Right _ -> pure NoContent
 
     verifyAccount :: Text -> T.RegistrationSecret -> Handler NoContent
     verifyAccount username secretUUID = do
@@ -239,8 +237,10 @@ server config@T.Config{..} = createAccount
         secretUUID
         inviteUserRequestEmail
         inviteUserRequestRole
-      liftIO $ sendInviteEmail config inviteUserRequestEmail secretUUID
-      pure NoContent
+      res <- liftIO $ sendInviteEmail config inviteUserRequestEmail secretUUID
+      case res of
+        Left _ -> undefined
+        Right _ -> pure NoContent
 
     acceptInvitation :: T.AcceptInvitationRequest -> Handler NoContent
     acceptInvitation T.AcceptInvitationRequest{..} = do

@@ -4,19 +4,13 @@
 module Auth where
 --------------------------------------------------------------------------------
 import Control.Monad.IO.Class (liftIO)
-import Data.String.Conversions (cs)
-import Database.SQLite.Simple
-import Utils
 import Web.Cookie
 import Servant
-import Servant.Server.Internal.ServerError
 
 import qualified Data.UUID as UUID
-import qualified Web.Cookie as WC
 import qualified Sessions as Sessions
 import qualified Accounts as Accounts
 import qualified Types as T
-import qualified Data.ByteString.Lazy as LBS
 --------------------------------------------------------------------------------
 
 -- | Return the UUID from a Session cookie.
@@ -28,7 +22,7 @@ uuidFromCookie (T.SessionCookie cookies) = do
 
 -- | Attempt to return the account associated with `cookie`.
 accountFromCookie :: FilePath -> T.SessionCookie -> IO (Maybe T.Account)
-accountFromCookie dbFile cookie = withConnection dbFile $ \conn -> do
+accountFromCookie dbFile cookie =
   case uuidFromCookie cookie of
     Nothing -> pure Nothing
     Just uuid -> do

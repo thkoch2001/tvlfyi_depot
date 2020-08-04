@@ -58,7 +58,7 @@ delete dbFile uuid = withConnection dbFile $ \conn ->
 -- | Find or create a session in the Sessions table. If a session exists,
 -- refresh the token's validity.
 findOrCreate :: FilePath -> T.Account -> IO T.SessionUUID
-findOrCreate dbFile account = withConnection dbFile $ \conn ->
+findOrCreate dbFile account =
   let username = T.accountUsername account in do
     mSession <- find dbFile username
     case mSession of

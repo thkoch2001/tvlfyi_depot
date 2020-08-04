@@ -29,7 +29,7 @@ send apiKey subject body (T.Email to) = do
       res <- MG.sendEmail ctx x
       case res of
         Left e -> pure $ Left (ResponseError e)
-        Right x -> pure $ Right (SendSuccess x)
+        Right y -> pure $ Right (SendSuccess y)
   where
     ctx = MG.HailgunContext { MG.hailgunDomain = "sandboxda5038873f924b50af2f82a0f05cffdf.mailgun.org"
                             , MG.hailgunApiKey = cs apiKey
