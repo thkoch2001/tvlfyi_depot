@@ -30,6 +30,14 @@ let
       --plugin=protoc-gen-grpc=${pkgs.grpc}/bin/grpc_cpp_plugin --grpc_out=$out/libproto \
       $PROTO_SRCS/*.proto
   '';
+
+  # Derivation for busybox that just has the `busybox` binary in bin/, not all
+  # the symlinks, so cmake can find it
+  busybox = pkgs.runCommand "busybox" {} ''
+    mkdir -p $out/bin
+    cp ${pkgs.busybox}/bin/busybox $out/bin
+  '';
+
 in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   pname = "tvix";
   version = "2.3.4";
@@ -87,7 +95,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF \
       -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF \
-      -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
+      -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON \
   '';
 
   installCheckPhase = ''
@@ -113,6 +121,8 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   # Work around broken system header include flags in the cxx toolchain.
   LIBCXX_INCLUDE = "${pkgs.llvmPackages.libcxx}/include/c++/v1";
+
+  SANDBOX_SHELL="${pkgs.busybox}/bin/busybox";
 
   # Install the various symlinks to the Nix binary which users expect
   # to exist.
