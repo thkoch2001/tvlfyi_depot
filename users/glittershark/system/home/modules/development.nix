@@ -20,7 +20,8 @@ let
       sha256 = "1an4h8jjbj3r618ykjwk9brii4h9cxjqy47c4c8rivnvhimgf4wm";
     };
 
-    modSha256 = "07ci2726nrn8qjvwcypk6nf8zqmfnmvch8l28bmgj7hpfrbyb424";
+    vendorSha256 = "1a5fx6mrv30cl46kswicd8lf5i5shn1fykchvbnbhdpgxhbz6qi4";
+    deleteVendor = true;
   };
 
 in
