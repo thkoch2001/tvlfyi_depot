@@ -1,8 +1,11 @@
 # -*- mode: cmake; -*-
 add_library(nixstore SHARED)
+add_library(nixstoremock SHARED)
 set_property(TARGET nixstore PROPERTY CXX_STANDARD 17)
+set_property(TARGET nixstoremock PROPERTY CXX_STANDARD 17)
 include_directories(${PROJECT_BINARY_DIR}) # for config.h
 target_include_directories(nixstore PUBLIC "${nix_SOURCE_DIR}/src")
+target_include_directories(nixstoremock PUBLIC "${nix_SOURCE_DIR}/src")
 
 # The database schema is stored in schema.sql, but needs to be
 # available during the build as static data.
@@ -101,8 +104,24 @@ target_link_libraries(nixstore
   sodium
 )
 
+target_sources(nixstoremock
+  PUBLIC
+    mock-binary-cache-store.hh
+
+  PRIVATE
+    mock-binary-cache-store.cc
+)
+
+target_link_libraries(nixstoremock
+  nixstore
+
+  absl::btree
+  absl::flat_hash_map
+  glog
+)
+
 configure_file("nix-store.pc.in" "${PROJECT_BINARY_DIR}/nix-store.pc" @ONLY)
 INSTALL(FILES "${PROJECT_BINARY_DIR}/nix-store.pc" DESTINATION "${PKGCONFIG_INSTALL_DIR}")
 
 INSTALL(FILES ${HEADER_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/nix/libstore)
-INSTALL(TARGETS nixstore DESTINATION ${CMAKE_INSTALL_LIBDIR})
+INSTALL(TARGETS nixstore nixstoremock DESTINATION ${CMAKE_INSTALL_LIBDIR})
