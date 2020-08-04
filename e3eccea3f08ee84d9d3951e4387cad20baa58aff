@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ddd981a_38186f6c",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-04T08:25:11Z",
+      "side": 1,
+      "message": "HandleExceptions + ASSERT_INPUT_STORE_PATH?",
+      "range": {
+        "startLine": 233,
+        "startChar": 60,
+        "endLine": 233,
+        "endChar": 61
+      },
+      "revId": "e3eccea3f08ee84d9d3951e4387cad20baa58aff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1f1eeef_fcbc5548",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-04T08:25:11Z",
+      "side": 1,
+      "message": "HandleExceptions",
+      "range": {
+        "startLine": 241,
+        "startChar": 12,
+        "endLine": 241,
+        "endChar": 22
+      },
+      "revId": "e3eccea3f08ee84d9d3951e4387cad20baa58aff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
