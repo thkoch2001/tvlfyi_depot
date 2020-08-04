@@ -146,7 +146,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
           proto::AddToStoreRequest metadata_request;
           auto has_metadata = reader->Read(&metadata_request);
 
-          if (!has_metadata || metadata_request.has_meta()) {
+          if (!has_metadata || !metadata_request.has_meta()) {
             return Status(grpc::StatusCode::INVALID_ARGUMENT,
                           "Metadata must be set before sending file content");
           }
