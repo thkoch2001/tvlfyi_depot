@@ -102,7 +102,9 @@ in lib.fix (self: {
     hgeometry-combinatorial
     vinyl
     comonad-extras
-    depot.third_party.haskell-language-server.ghc883
+
+    # TODO(grfn): Disabled because of build errors with recent nixpkgs
+    # depot.third_party.haskell-language-server.ghc883
   ];
 
   # User-specific build targets
@@ -116,7 +118,7 @@ in lib.fix (self: {
   ];
 
   glittershark = with depot.users.glittershark; [
-    xanthous
+    # xanthous
     keyboard.layout
     owothia
 
