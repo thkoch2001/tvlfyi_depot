@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc359d69_ee681da4",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-04T00:25:58Z",
+      "side": 1,
+      "message": "TODO move to libutil",
+      "range": {
+        "startLine": 56,
+        "startChar": 27,
+        "endLine": 56,
+        "endChar": 47
+      },
+      "revId": "a522298a83dbc1adcd94e33e674de174650ab06a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
