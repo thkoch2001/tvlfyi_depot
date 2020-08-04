@@ -21,6 +21,9 @@ const int sha1HashSize = 20;
 const int sha256HashSize = 32;
 const int sha512HashSize = 64;
 
+// omitted: E O U T
+constexpr char base32Chars[] = "0123456789abcdfghijklmnpqrsvwxyz";
+
 enum Base : int { Base64, Base32, Base16, SRI };
 
 struct Hash {
