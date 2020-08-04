@@ -53,10 +53,6 @@ static int _main(int argc, char* argv[]) {
     unsetenv("DISPLAY");
     unsetenv("SSH_ASKPASS");
 
-    if (argc != 2) {
-      throw UsageError("called without required arguments");
-    }
-
     FdSource source(STDIN_FILENO);
 
     /* Read the parent's settings. */
