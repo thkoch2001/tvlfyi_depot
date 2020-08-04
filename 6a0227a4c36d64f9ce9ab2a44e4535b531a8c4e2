@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5f0da62_05a469fb",
+        "filename": "docs/SPARSE_CHECKOUTS.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-04T22:26:42Z",
+      "side": 1,
+      "message": "i would also accept /tvl/src/clients/",
+      "range": {
+        "startLine": 14,
+        "startChar": 19,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "6a0227a4c36d64f9ce9ab2a44e4535b531a8c4e2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
