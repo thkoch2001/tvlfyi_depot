@@ -16,6 +16,8 @@ enum HashType : char { htUnknown, htMD5, htSHA1, htSHA256, htSHA512 };
 
 std::optional<HashType> hash_type_from(nix::proto::HashType hash_type);
 
+nix::proto::HashType HashTypeToProto(HashType hash_type);
+
 const int md5HashSize = 16;
 const int sha1HashSize = 20;
 const int sha256HashSize = 32;
