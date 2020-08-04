@@ -30,6 +30,14 @@ let
       --plugin=protoc-gen-grpc=${pkgs.grpc}/bin/grpc_cpp_plugin --grpc_out=$out/libproto \
       $PROTO_SRCS/*.proto
   '';
+
+  # Derivation for busybox that just has the `busybox` binary in bin/, not all
+  # the symlinks, so cmake can find it
+  busybox = pkgs.runCommand "busybox" {} ''
+    mkdir -p $out/bin
+    cp ${pkgs.busybox}/bin/busybox $out/bin
+  '';
+
 in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   pname = "tvix";
   version = "2.3.4";
@@ -53,10 +61,12 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     bzip2
     c-ares
     curl
+    coreutils
     editline
     flex
     glog
     grpc
+    busybox
     libseccomp
     libsodium
     openssl
@@ -87,7 +97,8 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF \
       -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF \
-      -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
+      -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON \
+      -DSANDBOX_SHELL=${pkgs.busybox}/bin/busybox
   '';
 
   installCheckPhase = ''
