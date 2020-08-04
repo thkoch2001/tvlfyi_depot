@@ -11,6 +11,7 @@ in which you can develop:
 
 ```shell
 $ nix-shell
+$ npx tailwindcss build index.css -o output.css
 $ elm-live -- src/Main.elm --output=Main.min.js
 ```
 
