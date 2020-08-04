@@ -35,6 +35,21 @@ std::optional<HashType> hash_type_from(nix::proto::HashType hash_type) {
   }
 }
 
+nix::proto::HashType HashTypeToProto(HashType hash_type) {
+  switch (hash_type) {
+    case HashType::htUnknown:
+      return nix::proto::HashType::UNKNOWN;
+    case HashType::htMD5:
+      return nix::proto::HashType::MD5;
+    case HashType::htSHA1:
+      return nix::proto::HashType::SHA1;
+    case HashType::htSHA256:
+      return nix::proto::HashType::SHA256;
+    case HashType::htSHA512:
+      return nix::proto::HashType::SHA512;
+  }
+}
+
 void Hash::init() {
   if (type == htMD5) {
     hashSize = md5HashSize;
