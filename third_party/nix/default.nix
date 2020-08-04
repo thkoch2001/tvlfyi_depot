@@ -51,6 +51,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     aws-s3-cpp
     brotli
     bzip2
+    busybox
     c-ares
     curl
     editline
@@ -87,7 +88,8 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF \
       -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF \
-      -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
+      -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON \
+      -DSANDBOX_SHELL=${pkgs.busybox}/bin/busybox
   '';
 
   installCheckPhase = ''
