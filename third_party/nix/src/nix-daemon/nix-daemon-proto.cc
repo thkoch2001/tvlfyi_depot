@@ -1,5 +1,6 @@
 #include "nix-daemon-proto.hh"
 
+#include <filesystem>
 #include <sstream>
 
 #include <absl/strings/str_cat.h>
@@ -225,6 +226,30 @@ class WorkerServiceImpl final : public WorkerService::Service {
     store_->buildPaths(drvs, mode.value());
 
     return Status::OK;
+  }
+
+  Status AddIndirectRoot(grpc::ServerContext*,
+                         const nix::proto::StorePath* request,
+                         google::protobuf::Empty*) override {
+    auto path = std::filesystem::canonical(request->path());
+    ASSERT_INPUT_STORE_PATH(path);
+
+    return HandleExceptions(
+        [&]() -> Status {
+          store_->addIndirectRoot(path);
+          return Status::OK;
+        },
+        __FUNCTION__);
+  }
+
+  Status SyncWithGC(grpc::ServerContext*, const google::protobuf::Empty*,
+                    google::protobuf::Empty*) override {
+    return HandleExceptions(
+        [&]() -> Status {
+          store_->syncWithGC();
+          return Status::OK;
+        },
+        __FUNCTION__);
   }
 
   Status QuerySubstitutablePathInfos(
