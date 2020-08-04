@@ -22,6 +22,30 @@
       "revId": "f3912061ab492aee4fece570f4b80d773163de6e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97353e3b_e6863e54",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-04T21:19:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9508cb7_3eaaf864",
+      "range": {
+        "startLine": 293,
+        "startChar": 8,
+        "endLine": 293,
+        "endChar": 13
+      },
+      "revId": "f3912061ab492aee4fece570f4b80d773163de6e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
