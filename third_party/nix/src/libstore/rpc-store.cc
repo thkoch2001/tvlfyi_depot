@@ -1,6 +1,7 @@
 #include "rpc-store.hh"
 
 #include <algorithm>
+#include <filesystem>
 #include <memory>
 
 #include <absl/status/status.h>
@@ -20,6 +21,7 @@
 #include "libproto/worker.grpc.pb.h"
 #include "libproto/worker.pb.h"
 #include "libstore/store-api.hh"
+#include "libutil/archive.hh"
 #include "libutil/hash.hh"
 #include "libutil/types.hh"
 
@@ -53,6 +55,30 @@ T FillFrom(const U& src) {
   result.insert(src.begin(), src.end());
   return result;
 }
+
+class AddToStorePathWriterSink : public BufferedSink {
+ public:
+  explicit AddToStorePathWriterSink(
+      std::unique_ptr<
+          grpc_impl::ClientWriter<class nix::proto::AddToStoreRequest>>&&
+          writer)
+      : writer_(std::move(writer)), good_(true) {}
+
+  bool good() override { return true; }
+
+  void write(const unsigned char* data, size_t len) override {
+    proto::AddToStoreRequest req;
+    req.set_data(data, len);
+    good_ = writer_->Write(req);
+  }
+
+  grpc::Status Finish() { return writer_->Finish(); }
+
+ private:
+  std::unique_ptr<grpc_impl::ClientWriter<class nix::proto::AddToStoreRequest>>
+      writer_;
+  bool good_;
+};
 
 constexpr absl::StatusCode GRPCStatusCodeToAbsl(grpc::StatusCode code) {
   switch (code) {
@@ -304,7 +330,29 @@ void RpcStore::addToStore(const ValidPathInfo& info,
 Path RpcStore::addToStore(const std::string& name, const Path& srcPath,
                           bool recursive, HashType hashAlgo, PathFilter& filter,
                           RepairFlag repair) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  if (repair != 0u) {
+    throw Error(
+        "repairing is not supported when building through the Nix daemon");
+  }
+
+  ClientContext ctx;
+  proto::StorePath response;
+  auto writer = stub_->AddToStore(&ctx, &response);
+
+  proto::AddToStoreRequest metadata_req;
+  metadata_req.mutable_meta()->set_base_name(name);
+  // TODO(grfn): what is fixed?
+  metadata_req.mutable_meta()->set_fixed(!(hashAlgo == htSHA256 && recursive));
+  metadata_req.mutable_meta()->set_recursive(recursive);
+  metadata_req.mutable_meta()->set_hash_type(HashTypeToProto(hashAlgo));
+  writer->Write(metadata_req);
+
+  AddToStorePathWriterSink sink(std::move(writer));
+  dumpPath(std::filesystem::absolute(srcPath), sink);
+  sink.flush();
+  SuccessOrThrow(sink.Finish());
+
+  return response.path();
 }
 
 Path RpcStore::addTextToStore(const std::string& name,
