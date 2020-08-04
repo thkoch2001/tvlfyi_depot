@@ -5,7 +5,7 @@ version:             0.0.1.0
 executable owothia
   main-is:             Main.hs
   build-depends:       base
-                     , relude ^>= 0.6.0.0
+                     , relude
                      , irc-client
                      , lens
                      , chatter
