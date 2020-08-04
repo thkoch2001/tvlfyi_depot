@@ -22,6 +22,30 @@
       "revId": "215dd61468d108dbb6fbd3382025d091ccae4e51",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc01b5b2_3117c075",
+        "filename": "third_party/nix/src/libstore/references.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-04T20:15:14Z",
+      "side": 1,
+      "message": "FWIW I\u0027d be fine with a TODO to switch to absl::call_once, doesn\u0027t need to be in this CL",
+      "parentUuid": "39207422_95a075a0",
+      "range": {
+        "startLine": 18,
+        "startChar": 9,
+        "endLine": 18,
+        "endChar": 25
+      },
+      "revId": "215dd61468d108dbb6fbd3382025d091ccae4e51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
