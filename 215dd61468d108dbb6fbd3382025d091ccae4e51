@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ed700e92_a3942512",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-04T20:48:09Z",
+      "side": 1,
+      "message": "The intent was twofold:\n - stop having base32Chars exposed from libhash and instead have libhash provide a function that satisfies what libstore wanted from the constant\n - stop having a non-threadsafe jank once-init\n\nOnce again, lack of test coverage turns a refactor into a problem.",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 12,
+        "endChar": 25
+      },
+      "revId": "215dd61468d108dbb6fbd3382025d091ccae4e51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39207422_95a075a0",
         "filename": "third_party/nix/src/libstore/references.cc",
         "patchSetId": 1
