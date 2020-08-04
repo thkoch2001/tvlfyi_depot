@@ -25,10 +25,8 @@ pkgs.fetchurl {
   postFetch = ''
     unpackDir="$TMPDIR/unpack"
     mkdir "$unpackDir"
-    cd "$unpackDir"
 
-    mv "$downloadedFile" "$TMPDIR/src.zip"
-    ${pkgs.unzip}/bin/unzip "$TMPDIR/src.zip" -d "$unpackDir"
+    ${pkgs.unzip}/bin/unzip "$downloadedFile" -d "$unpackDir"
     mv "$unpackDir/${path}@v${version}" "$out"
   '';
 }
