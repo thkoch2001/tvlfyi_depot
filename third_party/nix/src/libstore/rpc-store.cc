@@ -15,6 +15,7 @@
 #include <grpcpp/impl/codegen/status.h>
 #include <grpcpp/impl/codegen/sync_stream.h>
 #include <grpcpp/security/credentials.h>
+#include <sys/ucontext.h>
 
 #include "libproto/worker.grpc.pb.h"
 #include "libproto/worker.pb.h"
@@ -355,11 +356,15 @@ void RpcStore::addTempRoot(const Path& path) {
 }
 
 void RpcStore::addIndirectRoot(const Path& path) {
-  throw Error(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  google::protobuf::Empty response;
+  SuccessOrThrow(stub_->AddIndirectRoot(&ctx, StorePath(path), &response));
 }
 
 void RpcStore::syncWithGC() {
-  throw Error(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  google::protobuf::Empty response;
+  SuccessOrThrow(stub_->SyncWithGC(&ctx, kEmpty, &response));
 }
 
 Roots RpcStore::findRoots(bool censor) {
