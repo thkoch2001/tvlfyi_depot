@@ -46,6 +46,30 @@
       "revId": "215dd61468d108dbb6fbd3382025d091ccae4e51",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59f4d34c_d4393bee",
+        "filename": "third_party/nix/src/libstore/references.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-04T20:45:37Z",
+      "side": 1,
+      "message": "Resolved",
+      "parentUuid": "cc01b5b2_3117c075",
+      "range": {
+        "startLine": 18,
+        "startChar": 9,
+        "endLine": 18,
+        "endChar": 25
+      },
+      "revId": "215dd61468d108dbb6fbd3382025d091ccae4e51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
