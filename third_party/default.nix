@@ -47,6 +47,7 @@ let
       buildGoPackage
       buildPackages
       buildkite-agent
+      busybox
       bzip2
       c-ares
       cacert
