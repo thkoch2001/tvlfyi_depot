@@ -290,20 +290,20 @@ void RpcStore::querySubstitutablePathInfos(const PathSet& paths,
 void RpcStore::addToStore(const ValidPathInfo& info, Source& narSource,
                           RepairFlag repair, CheckSigsFlag checkSigs,
                           std::shared_ptr<FSAccessor> accessor) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::addToStore(const ValidPathInfo& info,
                           const ref<std::string>& nar, RepairFlag repair,
                           CheckSigsFlag checkSigs,
                           std::shared_ptr<FSAccessor> accessor) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 Path RpcStore::addToStore(const std::string& name, const Path& srcPath,
                           bool recursive, HashType hashAlgo, PathFilter& filter,
                           RepairFlag repair) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 Path RpcStore::addTextToStore(const std::string& name,
@@ -326,7 +326,7 @@ Path RpcStore::addTextToStore(const std::string& name,
 }
 
 void RpcStore::narFromPath(const Path& path, Sink& sink) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
@@ -343,78 +343,80 @@ void RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
 BuildResult RpcStore::buildDerivation(const Path& drvPath,
                                       const BasicDerivation& drv,
                                       BuildMode buildMode) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::ensurePath(const Path& path) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::addTempRoot(const Path& path) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::addIndirectRoot(const Path& path) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::syncWithGC() {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 Roots RpcStore::findRoots(bool censor) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::collectGarbage(const GCOptions& options, GCResults& results) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::optimiseStore() {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 bool RpcStore::verifyStore(bool checkContents, RepairFlag repair) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::addSignatures(const Path& storePath, const StringSet& sigs) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::computeFSClosure(const PathSet& paths, PathSet& paths_,
                                 bool flipDirection, bool includeOutputs,
                                 bool includeDerivers) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::queryMissing(const PathSet& targets, PathSet& willBuild,
                             PathSet& willSubstitute, PathSet& unknown,
                             unsigned long long& downloadSize,
                             unsigned long long& narSize) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 std::shared_ptr<std::string> RpcStore::getBuildLog(const Path& path) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
-void RpcStore::connect() { throw absl::StrCat("Not implemented ", __func__); }
+void RpcStore::connect() {
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+}
 
 unsigned int RpcStore::getProtocol() {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 int RpcStore::getPriority() {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 Path RpcStore::toRealPath(const Path& storePath) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 void RpcStore::createUser(const std::string& userName, uid_t userId) {
-  throw absl::StrCat("Not implemented ", __func__);
+  throw Unsupported(absl::StrCat("Not implemented ", __func__));
 }
 
 }  // namespace store
