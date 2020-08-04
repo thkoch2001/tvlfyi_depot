@@ -51,7 +51,6 @@ in depot.lib.fix(self: {
   hardware = {
     cpu.amd.updateMicrocode = true;
     enableRedistributableFirmware = true;
-    u2f.enable = true;
     opengl = {
       enable = true;
       driSupport = true;
