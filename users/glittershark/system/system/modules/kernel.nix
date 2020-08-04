@@ -16,6 +16,7 @@ in
 {
   boot.kernelPackages = pkgs.linuxPackages.extend (self: super: {
     kernel = super.kernel.override {
+      ignoreConfigErrors = true;
       kernelPatches = super.kernel.kernelPatches ++ [{
         name = "linux-ck";
         patch = linux-ck;

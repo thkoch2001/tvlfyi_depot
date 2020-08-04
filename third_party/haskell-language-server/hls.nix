@@ -192,8 +192,8 @@ let
 
             semialign = self.callHackageDirect {
               pkg = "semialign";
-              ver = "1.1";
-              sha256 = "01wj9sv44y95zvidclvl3qkxrg777n46f1qxwnzq0mw2a9mi6frz";
+              ver = "1.1.0.1";
+              sha256 = "1xs5dvz87gx6xnannw6bc70nzr8ffhk0j6n7n0p5dqair9sz77x4";
             } {};
 
             semigroups = self.callHackageDirect {
