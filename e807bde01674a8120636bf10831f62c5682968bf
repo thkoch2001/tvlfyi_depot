@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c80032b4_bae877c0",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1975,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-04T00:37:42Z",
+      "side": 1,
+      "message": "add `, absl::SkipEmpty()` as an argument here, it is the canonical way of getting rid of \"empty string\" results.",
+      "range": {
+        "startLine": 1975,
+        "startChar": 78,
+        "endLine": 1975,
+        "endChar": 79
+      },
+      "revId": "e807bde01674a8120636bf10831f62c5682968bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2b80518_037063ef",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1976,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-04T00:37:42Z",
+      "side": 1,
+      "message": "this check is not needed anymore after the above suggestion is applied",
+      "range": {
+        "startLine": 1976,
+        "startChar": 4,
+        "endLine": 1976,
+        "endChar": 20
+      },
+      "revId": "e807bde01674a8120636bf10831f62c5682968bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
