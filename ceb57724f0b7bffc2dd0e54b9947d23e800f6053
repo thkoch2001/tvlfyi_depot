@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "986cde6f_724c7b1a",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-04T00:17:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2194c7d4_b76e93e9",
+      "range": {
+        "startLine": 64,
+        "startChar": 12,
+        "endLine": 64,
+        "endChar": 40
+      },
+      "revId": "ceb57724f0b7bffc2dd0e54b9947d23e800f6053",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "320648ad_08e69bec",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "ceb57724f0b7bffc2dd0e54b9947d23e800f6053",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0feca279_9a25550c",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-04T00:17:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "320648ad_08e69bec",
+      "revId": "ceb57724f0b7bffc2dd0e54b9947d23e800f6053",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "0b4c27d9_267bcef6",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-04T00:17:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4918ab58_3721c0d0",
+      "range": {
+        "startLine": 153,
+        "startChar": 22,
+        "endLine": 153,
+        "endChar": 48
+      },
+      "revId": "ceb57724f0b7bffc2dd0e54b9947d23e800f6053",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81477ed3_2ba48b57",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 3
@@ -79,6 +145,24 @@
       "revId": "ceb57724f0b7bffc2dd0e54b9947d23e800f6053",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be7bb00a_2a2c76a1",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-04T00:17:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81477ed3_2ba48b57",
+      "revId": "ceb57724f0b7bffc2dd0e54b9947d23e800f6053",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
