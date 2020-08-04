@@ -23,7 +23,7 @@
 #define NIX_LIBEXEC_DIR "@CMAKE_INSTALL_FULL_LIBEXECDIR@"
 #define NIX_BIN_DIR "@CMAKE_INSTALL_FULL_BINDIR@"
 #define NIX_MAN_DIR "@CMAKE_INSTALL_FULL_MANDIR@"
-#define SANDBOX_SHELL "/nix/store/zq8biwi5mj2lrn68kx0lk0fkpbqypyxd-busybox-1.31.1-x86_64-unknown-linux-musl/bin/busybox"
+#define SANDBOX_SHELL "@SANDBOX_SHELL@"
 
 // Defines used only in tests (e.g. to access data)
 #define NIX_SRC_DIR "@CMAKE_SOURCE_DIR@"
