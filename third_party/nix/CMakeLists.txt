@@ -40,6 +40,13 @@ if (CLANG_TIDY_PATH)
   endif()
 endif()
 
+find_program(BUSYBOX busybox)
+if (NOT SANDBOX_SHELL AND BUSYBOX)
+  set(SANDBOX_SHELL "${BUSYBOX}/bin/busybox")
+else()
+  message(FATAL_ERROR "Could not find busybox and SANDBOX_SHELL is not set")
+endif()
+
 # generate a configuration file (autoheader-style) to configure
 # certain symbols that Nix depends on.
 configure_file(config.h.in nix_config.h @ONLY)
