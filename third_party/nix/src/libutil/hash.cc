@@ -104,9 +104,6 @@ bool Hash::IsValidBase16(absl::string_view s) {
   return true;
 }
 
-// omitted: E O U T
-constexpr char base32Chars[] = "0123456789abcdfghijklmnpqrsvwxyz";
-
 constexpr signed char kUnBase32[] = {
     -1, -1, -1, -1, -1, -1, -1, -1, /* unprintables */
     -1, -1, -1, -1, -1, -1, -1, -1, /* unprintables */
