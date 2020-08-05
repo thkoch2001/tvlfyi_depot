@@ -252,6 +252,61 @@ class WorkerServiceImpl final : public WorkerService::Service {
         __FUNCTION__);
   }
 
+  Status FindRoots(grpc::ServerContext*, const google::protobuf::Empty*,
+                   nix::proto::FindRootsResponse* response) override {
+    return HandleExceptions(
+        [&]() -> Status {
+          auto roots = store_->findRoots(false);
+          for (const auto& [target, links] : roots) {
+            StorePaths link_paths;
+            for (const auto& link : links) {
+              link_paths.add_paths(link);
+            }
+            response->mutable_roots()->insert({target, link_paths});
+          }
+
+          return Status::OK;
+        },
+        __FUNCTION__);
+  }
+
+  Status CollectGarbage(grpc::ServerContext*,
+                        const proto::CollectGarbageRequest* request,
+                        proto::CollectGarbageResponse* response) override {
+    return HandleExceptions(
+        [&]() -> Status {
+          GCOptions options;
+          auto action = GCActionFromProto(request->action());
+          if (!action.has_value()) {
+            return Status(grpc::StatusCode::INVALID_ARGUMENT,
+                          "Invalid GC action");
+          }
+
+          options.action = action.value();
+          for (const auto& path : request->paths_to_delete()) {
+            options.pathsToDelete.insert(path);
+          }
+          options.ignoreLiveness = request->ignore_liveness();
+          options.maxFreed = request->max_freed();
+
+          if (options.ignoreLiveness) {
+            return Status(grpc::StatusCode::INVALID_ARGUMENT,
+                          "you are not allowed to ignore liveness");
+          }
+
+          GCResults results;
+          store_->collectGarbage(options, results);
+
+          for (const auto& path : results.paths) {
+            response->add_deleted_paths(path);
+          }
+          response->set_bytes_freed(results.bytesFreed);
+
+          return Status::OK;
+        },
+        __FUNCTION__);
+  }
+
   Status QuerySubstitutablePathInfos(
       grpc::ServerContext*, const StorePaths* request,
       nix::proto::SubstitutablePathInfos* response) override {
