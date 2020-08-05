@@ -16,6 +16,24 @@
       "revId": "b4c9fe27e0cfe58c36b1f750c5fe87e14c6d4cd7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9170e91_8fdf9a41",
+        "filename": "third_party/nix/src/libexpr/eval.hh",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T22:49:07Z",
+      "side": 1,
+      "message": "Too much cognitive overhead at the single site of processing for me. As long as it\u0027s initialized to something that will never drop a log line, it\u0027s fine.",
+      "parentUuid": "f0913bbc_377eea7f",
+      "revId": "b4c9fe27e0cfe58c36b1f750c5fe87e14c6d4cd7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
