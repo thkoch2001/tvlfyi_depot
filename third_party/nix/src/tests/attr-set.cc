@@ -7,7 +7,6 @@
 
 #include <absl/container/btree_map.h>
 #include <bits/stdint-intn.h>
-#include <gc/gc_cpp.h>
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
 #include <rapidcheck/Assertions.h>
@@ -16,6 +15,12 @@
 #include <rapidcheck/gen/Create.h>
 #include <rapidcheck/gen/Transform.h>
 #include <rapidcheck/gtest.h>
+
+#ifndef DISABLE_GC
+# include <gc/gc_cpp.h>
+#else
+# include "libexpr/fake_gc.h"
+#endif
 
 #include "libexpr/eval.hh"
 #include "libexpr/nixexpr.hh"
