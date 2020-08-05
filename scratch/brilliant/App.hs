@@ -8,7 +8,7 @@ import Utils ((|>))
 import qualified Utils
 --------------------------------------------------------------------------------
 
-transform :: Transform -> Keyboard -> Keyboard
-transform HorizontalFlip (Keyboard xs) = xs |> fmap reverse |> Keyboard
-transform VerticalFlip (Keyboard xs) = xs |> reverse |> Keyboard
-transform (Shift n) (Keyboard xs) = xs |> fmap (Utils.rotate n) |> Keyboard
+transform :: Keyboard -> Transform -> Keyboard
+transform (Keyboard xs) HorizontalFlip = xs |> fmap reverse |> Keyboard
+transform (Keyboard xs) VerticalFlip   = xs |> reverse |> Keyboard
+transform (Keyboard xs) (Shift n)      = xs |> fmap (Utils.rotate n) |> Keyboard
