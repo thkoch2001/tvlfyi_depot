@@ -155,7 +155,7 @@ its new value will be formatted using ~A into NEW-VALUE"))
 (define-condition issue-not-found (error)
   ((id :type integer
        :initarg :id
-       :reader not-found-id
+       :reader id
        :documentation "ID of the issue that was not found"))
   (:documentation
    "Error condition for when an issue requested by ID is not found"))
