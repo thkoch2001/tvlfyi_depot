@@ -4,5 +4,5 @@
 pkgs.writeShellScriptBin "depot-build" ''
   TARGET=$(git rev-parse --show-prefix | sed 's|/$||')
   echo "Building //$TARGET"
-  nix-build -A $(echo $TARGET | sed 's|/|.|') $(${pkgs.git}/bin/git rev-parse --show-toplevel)
+  nix-build -A $(echo $TARGET | sed 's|/|.|g') $(${pkgs.git}/bin/git rev-parse --show-toplevel)
 ''
