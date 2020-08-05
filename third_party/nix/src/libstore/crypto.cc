@@ -11,6 +11,7 @@
 
 namespace nix {
 
+// TODO(riking): convert to string_view to reduce allocations
 static std::pair<std::string, std::string> split(const std::string& s) {
   size_t colon = s.find(':');
   if (colon == std::string::npos || colon == 0) {
@@ -23,13 +24,13 @@ Key::Key(const std::string& s) {
   auto ss = split(s);
 
   name = ss.first;
-  key = ss.second;
+  std::string keyb64 = ss.second;
 
-  if (name.empty() || key.empty()) {
+  if (name.empty() || keyb64.empty()) {
     throw Error("secret key is corrupt");
   }
 
-  if (!absl::Base64Unescape(key, &key)) {
+  if (!absl::Base64Unescape(keyb64, &key)) {
     // TODO(grfn): replace this with StatusOr
     throw Error("Invalid Base64");
   }
