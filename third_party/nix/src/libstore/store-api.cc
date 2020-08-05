@@ -77,6 +77,35 @@ nix::proto::BuildStatus BuildResult::status_to_proto() {
   }
 }
 
+std::optional<GCOptions::GCAction> GCActionFromProto(
+    nix::proto::GCAction gc_action) {
+  switch (gc_action) {
+    case nix::proto::GCAction::ReturnLive:
+      return GCOptions::GCAction::gcReturnLive;
+    case nix::proto::GCAction::ReturnDead:
+      return GCOptions::GCAction::gcReturnDead;
+    case nix::proto::GCAction::DeleteDead:
+      return GCOptions::GCAction::gcDeleteDead;
+    case nix::proto::GCAction::DeleteSpecific:
+      return GCOptions::GCAction::gcDeleteSpecific;
+    default:
+      return {};
+  }
+}
+
+[[nodiscard]] const proto::GCAction GCOptions::ActionToProto() const {
+  switch (action) {
+    case GCOptions::GCAction::gcReturnLive:
+      return nix::proto::GCAction::ReturnLive;
+    case GCOptions::GCAction::gcReturnDead:
+      return nix::proto::GCAction::ReturnDead;
+    case GCOptions::GCAction::gcDeleteDead:
+      return nix::proto::GCAction::DeleteDead;
+    case GCOptions::GCAction::gcDeleteSpecific:
+      return nix::proto::GCAction::DeleteSpecific;
+  }
+}
+
 bool Store::isInStore(const Path& path) const {
   return isInDir(path, storeDir);
 }
