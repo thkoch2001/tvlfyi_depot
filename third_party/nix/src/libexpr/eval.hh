@@ -284,6 +284,10 @@ class EvalState : public gc {
 
   void realiseContext(const PathSet& context);
 
+  /* File access tracing. */
+  void traceFileAccess(const Path& path) const;
+  void EnableFileAccessTracing(std::function<void(const Path&)> fn);
+
  private:
   unsigned long nrEnvs = 0;
   unsigned long nrValuesInEnvs = 0;
@@ -298,6 +302,8 @@ class EvalState : public gc {
   unsigned long nrFunctionCalls = 0;
 
   bool countCalls;
+
+  std::function<void(const Path&)> fileAccessTraceFn;
 
   typedef std::map<Symbol, size_t> PrimOpCalls;
   PrimOpCalls primOpCalls;
