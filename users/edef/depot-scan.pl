@@ -3,7 +3,7 @@ use strict;
 
 if (/^evaluating file '(.*)'$/ or
     /^copied source '(.*)' -> '.*'$/ or
-    /^trace: lorri read: '(.*)'$/) {
+    /^trace: depot-scan '(.*)'$/) {
     print $1;
     next;
 }
