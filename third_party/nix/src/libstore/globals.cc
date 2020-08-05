@@ -1,6 +1,7 @@
 #include "libstore/globals.hh"
 
 #include <algorithm>
+#include <filesystem>
 #include <map>
 #include <thread>
 
@@ -70,7 +71,9 @@ Settings::Settings()
 }
 
 void loadConfFile() {
-  globalConfig.applyConfigFile(settings.nixConfDir + "/nix.conf");
+  if (std::filesystem::exists(settings.nixConfDir + "/nix.conf")) {
+    globalConfig.applyConfigFile(settings.nixConfDir + "/nix.conf");
+  }
 
   /* We only want to send overrides to the daemon, i.e. stuff from
      ~/.nix/nix.conf or the command line. */
@@ -80,7 +83,9 @@ void loadConfFile() {
   // Iterate over them in reverse so that the ones appearing first in the path
   // take priority
   for (auto dir = dirs.rbegin(); dir != dirs.rend(); dir++) {
-    globalConfig.applyConfigFile(*dir + "/nix/nix.conf");
+    if (std::filesystem::exists(*dir + "/nix.conf")) {
+      globalConfig.applyConfigFile(*dir + "/nix/nix.conf");
+    }
   }
 }
 
