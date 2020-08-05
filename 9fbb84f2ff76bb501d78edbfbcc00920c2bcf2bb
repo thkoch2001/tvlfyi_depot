@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ec8b5abd_78c8965f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T04:11:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c80c4bc_bbcad1ae",
+      "range": {
+        "startLine": 11,
+        "startChar": 43,
+        "endLine": 11,
+        "endChar": 61
+      },
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9be84a02_ba9d366c",
         "filename": "third_party/nix/src/libexpr/eval.cc",
         "patchSetId": 4
@@ -39,6 +63,24 @@
       "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5efcd589_14f7ab60",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T04:11:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9be84a02_ba9d366c",
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "e01ccb4c_f5e8e0a9",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T04:11:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e4127ad_ea4595bd",
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "812971ca_9f69c870",
         "filename": "third_party/nix/src/libexpr/eval.hh",
         "patchSetId": 4
@@ -73,6 +133,24 @@
       "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bca6e53_d2efc807",
+        "filename": "third_party/nix/src/libexpr/eval.hh",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T04:11:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "812971ca_9f69c870",
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "70018d7c_46b32d01",
+        "filename": "third_party/nix/src/libexpr/primops.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T04:11:33Z",
+      "side": 1,
+      "message": "Switched to tracing via the checkSourcePath method instead, which covers readDir.",
+      "parentUuid": "4ac32fda_8aa48714",
+      "range": {
+        "startLine": 948,
+        "startChar": 12,
+        "endLine": 948,
+        "endChar": 24
+      },
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94c5a2ff_bc77f3e3",
         "filename": "third_party/nix/src/nix-instantiate/nix-instantiate.cc",
         "patchSetId": 4
@@ -113,6 +215,24 @@
       "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f2ef902_aa32b25b",
+        "filename": "third_party/nix/src/nix-instantiate/nix-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T04:11:33Z",
+      "side": 1,
+      "message": "This is emulating absl::Flags behavior.",
+      "parentUuid": "94c5a2ff_bc77f3e3",
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -136,6 +256,30 @@
       "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d85e490d_e99a6d87",
+        "filename": "third_party/nix/src/nix-instantiate/nix-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T04:11:33Z",
+      "side": 1,
+      "message": "This is emulating absl::Flags behavior.",
+      "parentUuid": "79537c5e_1ed433a9",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 1
+      },
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
