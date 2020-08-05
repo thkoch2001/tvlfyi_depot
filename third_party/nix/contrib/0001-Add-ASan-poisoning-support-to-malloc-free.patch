@@ -1,0 +1,591 @@
+From db4e0312996fbfea3a223eac5c7d85104a785688 Mon Sep 17 00:00:00 2001
+From: Kane York <kanepyork@gmail.com>
+Date: Mon, 3 Aug 2020 14:50:15 -0700
+Subject: [PATCH] Add ASan poisoning support to malloc/free
+
+---
+ alloc.c                   |  4 ++--
+ dbg_mlc.c                 |  6 +++---
+ finalize.c                |  2 +-
+ gcj_mlc.c                 |  4 ++--
+ include/gc_cpp.h          |  6 +++++-
+ include/new_gc_alloc.h    | 16 ++++++++--------
+ include/private/gc_priv.h | 34 ++++++++++++++++++++++++++++++++--
+ malloc.c                  | 26 ++++++++++++++++++++------
+ mallocx.c                 |  3 ++-
+ new_hblk.c                | 12 +++++++-----
+ reclaim.c                 | 10 +++++-----
+ thread_local_alloc.c      |  4 ++--
+ typd_mlc.c                |  2 +-
+ 13 files changed, 90 insertions(+), 39 deletions(-)
+
+diff --git a/alloc.c b/alloc.c
+index 1d3903fd..090b5ecc 100644
+--- a/alloc.c
++++ b/alloc.c
+@@ -856,7 +856,7 @@ STATIC GC_bool GC_stopped_mark(GC_stop_func stop_func)
+ }
+ 
+ /* Set all mark bits for the free list whose first entry is q   */
+-GC_INNER void GC_set_fl_marks(ptr_t q)
++GC_INNER GC_TOUCHING void GC_set_fl_marks(ptr_t q)
+ {
+     if (q != NULL) {
+       struct hblk *h = HBLKPTR(q);
+@@ -933,7 +933,7 @@ GC_INNER void GC_set_fl_marks(ptr_t q)
+ 
+ /* Clear all mark bits for the free list whose first entry is q */
+ /* Decrement GC_bytes_found by number of bytes on free list.    */
+-STATIC void GC_clear_fl_marks(ptr_t q)
++STATIC GC_TOUCHING void GC_clear_fl_marks(ptr_t q)
+ {
+       struct hblk *h = HBLKPTR(q);
+       struct hblk *last_h = h;
+diff --git a/dbg_mlc.c b/dbg_mlc.c
+index 920da6ce..2e3c1edf 100644
+--- a/dbg_mlc.c
++++ b/dbg_mlc.c
+@@ -33,7 +33,7 @@
+   /* not always safe to return TRUE (1), even if the client does  */
+   /* its part.  Return -1 if the object with debug info has been  */
+   /* marked as deallocated.                                       */
+-  GC_INNER int GC_has_other_debug_info(ptr_t p)
++  GC_INNER GC_TOUCHING int GC_has_other_debug_info(ptr_t p)
+   {
+     ptr_t body = (ptr_t)((oh *)p + 1);
+     word sz = GC_size(p);
+@@ -272,7 +272,7 @@
+ # define CROSSES_HBLK(p, sz) \
+         (((word)((p) + sizeof(oh) + (sz) - 1) ^ (word)(p)) >= HBLKSIZE)
+ 
+-GC_INNER void *GC_store_debug_info_inner(void *p, word sz GC_ATTR_UNUSED,
++GC_INNER GC_TOUCHING void *GC_store_debug_info_inner(void *p, word sz GC_ATTR_UNUSED,
+                                          const char *string, int linenum)
+ {
+     word * result = (word *)((oh *)p + 1);
+@@ -323,7 +323,7 @@ static void *store_debug_info(void *p, size_t lb,
+   /* Check the object with debugging info at ohdr.      */
+   /* Return NULL if it's OK.  Else return clobbered     */
+   /* address.                                           */
+-  STATIC ptr_t GC_check_annotated_obj(oh *ohdr)
++  STATIC GC_TOUCHING ptr_t GC_check_annotated_obj(oh *ohdr)
+   {
+     ptr_t body = (ptr_t)(ohdr + 1);
+     word gc_sz = GC_size((ptr_t)ohdr);
+diff --git a/finalize.c b/finalize.c
+index d01c2aa8..89f836d6 100644
+--- a/finalize.c
++++ b/finalize.c
+@@ -685,7 +685,7 @@ STATIC void GC_unreachable_finalize_mark_proc(ptr_t p)
+ /* marking for finalization ordering.  Any objects marked       */
+ /* by that procedure will be guaranteed to not have been        */
+ /* finalized when this finalizer is invoked.                    */
+-STATIC void GC_register_finalizer_inner(void * obj,
++STATIC GC_TOUCHING void GC_register_finalizer_inner(void * obj,
+                                         GC_finalization_proc fn, void *cd,
+                                         GC_finalization_proc *ofn, void **ocd,
+                                         finalization_mark_proc mp)
+diff --git a/gcj_mlc.c b/gcj_mlc.c
+index 6829abdf..a7c5385d 100644
+--- a/gcj_mlc.c
++++ b/gcj_mlc.c
+@@ -157,7 +157,7 @@ static void maybe_finalize(void)
+   GC_INNER void * GC_core_gcj_malloc(size_t lb,
+                                      void * ptr_to_struct_containing_descr)
+ #else
+-  GC_API GC_ATTR_MALLOC void * GC_CALL GC_gcj_malloc(size_t lb,
++  GC_API GC_TOUCHING GC_ATTR_MALLOC void * GC_CALL GC_gcj_malloc(size_t lb,
+                                       void * ptr_to_struct_containing_descr)
+ #endif
+ {
+@@ -235,7 +235,7 @@ GC_API GC_ATTR_MALLOC void * GC_CALL GC_debug_gcj_malloc(size_t lb,
+ }
+ 
+ /* There is no THREAD_LOCAL_ALLOC for GC_gcj_malloc_ignore_off_page().  */
+-GC_API GC_ATTR_MALLOC void * GC_CALL GC_gcj_malloc_ignore_off_page(size_t lb,
++GC_API GC_TOUCHING GC_ATTR_MALLOC void * GC_CALL GC_gcj_malloc_ignore_off_page(size_t lb,
+                                      void * ptr_to_struct_containing_descr)
+ {
+     ptr_t op;
+diff --git a/include/gc_cpp.h b/include/gc_cpp.h
+index 3e166e66..eb80941d 100644
+--- a/include/gc_cpp.h
++++ b/include/gc_cpp.h
+@@ -189,6 +189,10 @@ by UseGC.  GC is an alias for UseGC, unless GC_NAME_CONFLICT is defined.
+ # endif
+ #endif // !GC_NOEXCEPT
+ 
++#ifndef GC_TOUCHING
++# define GC_TOUCHING __attribute__((no_sanitize("address")))
++#endif
++
+ #if defined(GC_NEW_ABORTS_ON_OOM) || defined(_LIBCPP_NO_EXCEPTIONS)
+ # define GC_OP_NEW_OOM_CHECK(obj) \
+                 do { if (!(obj)) GC_abort_on_oom(); } while (0)
+@@ -497,7 +501,7 @@ inline void GC_CALLBACK gc_cleanup::cleanup(void* obj, void* displ)
+   ((gc_cleanup*) ((char*) obj + (ptrdiff_t) displ))->~gc_cleanup();
+ }
+ 
+-inline gc_cleanup::gc_cleanup()
++inline GC_TOUCHING gc_cleanup::gc_cleanup()
+ {
+   GC_finalization_proc oldProc;
+   void* oldData;
+diff --git a/include/new_gc_alloc.h b/include/new_gc_alloc.h
+index 9b4d50ca..341fb3c4 100644
+--- a/include/new_gc_alloc.h
++++ b/include/new_gc_alloc.h
+@@ -179,7 +179,7 @@ typedef GC_aux_template<0> GC_aux;
+ template <int dummy>
+ class single_client_gc_alloc_template {
+     public:
+-        static void * allocate(size_t n)
++        static GC_TOUCHING void * allocate(size_t n)
+         {
+             size_t nwords = GC_round_up(n);
+             void ** flh;
+@@ -200,7 +200,7 @@ class single_client_gc_alloc_template {
+             GC_aux::GC_bytes_recently_allocd += nwords * GC_bytes_per_word;
+             return op;
+         }
+-        static void * ptr_free_allocate(size_t n)
++        static GC_TOUCHING void * ptr_free_allocate(size_t n)
+         {
+             size_t nwords = GC_round_up(n);
+             void ** flh;
+@@ -221,7 +221,7 @@ class single_client_gc_alloc_template {
+             GC_aux::GC_bytes_recently_allocd += nwords * GC_bytes_per_word;
+             return op;
+         }
+-        static void deallocate(void *p, size_t n)
++        static GC_TOUCHING void deallocate(void *p, size_t n)
+         {
+             if (n > GC_max_fast_bytes)  {
+                 GC_free(p);
+@@ -236,7 +236,7 @@ class single_client_gc_alloc_template {
+                 GC_aux::GC_bytes_recently_freed += nwords * GC_bytes_per_word;
+             }
+         }
+-        static void ptr_free_deallocate(void *p, size_t n)
++        static GC_TOUCHING void ptr_free_deallocate(void *p, size_t n)
+         {
+             if (n > GC_max_fast_bytes) {
+                 GC_free(p);
+@@ -257,7 +257,7 @@ typedef single_client_gc_alloc_template<0> single_client_gc_alloc;
+ template <int dummy>
+ class single_client_traceable_alloc_template {
+     public:
+-        static void * allocate(size_t n)
++        static GC_TOUCHING void * allocate(size_t n)
+         {
+             size_t nwords = GC_round_up_uncollectable(n);
+             void ** flh;
+@@ -279,7 +279,7 @@ class single_client_traceable_alloc_template {
+                                         nwords * GC_bytes_per_word;
+             return op;
+         }
+-        static void * ptr_free_allocate(size_t n)
++        static GC_TOUCHING void * ptr_free_allocate(size_t n)
+         {
+             size_t nwords = GC_round_up_uncollectable(n);
+             void ** flh;
+@@ -301,7 +301,7 @@ class single_client_traceable_alloc_template {
+                                         nwords * GC_bytes_per_word;
+             return op;
+         }
+-        static void deallocate(void *p, size_t n)
++        static GC_TOUCHING void deallocate(void *p, size_t n)
+         {
+             if (n > GC_max_fast_bytes)  {
+                 GC_free(p);
+@@ -315,7 +315,7 @@ class single_client_traceable_alloc_template {
+                                 nwords * GC_bytes_per_word;
+             }
+         }
+-        static void ptr_free_deallocate(void *p, size_t n)
++        static GC_TOUCHING void ptr_free_deallocate(void *p, size_t n)
+         {
+             if (n > GC_max_fast_bytes) {
+                 GC_free(p);
+diff --git a/include/private/gc_priv.h b/include/private/gc_priv.h
+index b2c20b16..5f6227c8 100644
+--- a/include/private/gc_priv.h
++++ b/include/private/gc_priv.h
+@@ -26,6 +26,10 @@
+ # define GC_BUILD
+ #endif
+ 
++#ifndef GC_TOUCHING
++#define GC_TOUCHING __attribute__((no_sanitize("address")))
++#endif
++
+ #if (defined(__linux__) || defined(__GLIBC__) || defined(__GNU__)) \
+     && !defined(_GNU_SOURCE)
+   /* Can't test LINUX, since this must be defined before other includes. */
+@@ -138,7 +142,7 @@ typedef int GC_bool;
+         && !defined(MSWINCE) && !defined(CYGWIN32)
+ #   if GC_GNUC_PREREQ(4, 0) && !defined(GC_NO_VISIBILITY)
+       /* See the corresponding GC_API definition. */
+-#     define GC_INNER __attribute__((__visibility__("hidden")))
++#     define GC_INNER __attribute__((__visibility__("hidden"))) GC_TOUCHING
+ #   else
+       /* The attribute is unsupported. */
+ #     define GC_INNER /* empty */
+@@ -236,7 +240,7 @@ typedef int GC_bool;
+ # if defined(__GNUC__)
+ #   if GC_GNUC_PREREQ(4, 0) && !defined(GC_NO_VISIBILITY)
+       /* Same as GC_API if GC_DLL.      */
+-#     define GC_API_OSCALL extern __attribute__((__visibility__("default")))
++#     define GC_API_OSCALL extern __attribute__((__visibility__("default"))) GC_TOUCHING
+ #   else
+       /* The attribute is unsupported.  */
+ #     define GC_API_OSCALL extern
+@@ -2710,6 +2714,32 @@ GC_INNER void *GC_store_debug_info_inner(void *p, word sz, const char *str,
+ # define ASSERT_CANCEL_DISABLED() (void)0
+ #endif /* !CANCEL_SAFE */
+ 
++/* Support AddressSanitizer by marking freed regions. */
++#ifdef __has_feature
++#if __has_feature(address_sanitizer) || defined(__SANITIZE_ADDRESS__)
++
++void __asan_poison_memory_region(void const volatile *addr, size_t size);
++void __asan_unpoison_memory_region(void const volatile *addr, size_t size);
++int __asan_address_is_poisoned(void const volatile *addr);
++void *__asan_region_is_poisoned(void *beg, size_t size);
++
++#define ASAN_POISON_MEMORY_REGION(addr, size) \
++  __asan_poison_memory_region((addr), (size))
++#define ASAN_UNPOISON_MEMORY_REGION(addr, size) \
++  __asan_unpoison_memory_region((addr), (size))
++#else
++#define ASAN_POISON_MEMORY_REGION(addr, size) \
++  ((void)(addr), (void)(size))
++#define ASAN_UNPOISON_MEMORY_REGION(addr, size) \
++  ((void)(addr), (void)(size))
++#endif
++#else
++#define ASAN_POISON_MEMORY_REGION(addr, size) \
++  ((void)(addr), (void)(size))
++#define ASAN_UNPOISON_MEMORY_REGION(addr, size) \
++  ((void)(addr), (void)(size))
++#endif
++
+ EXTERN_C_END
+ 
+ #endif /* GC_PRIVATE_H */
+diff --git a/malloc.c b/malloc.c
+index f21d11c2..250dd854 100644
+--- a/malloc.c
++++ b/malloc.c
+@@ -42,6 +42,8 @@ GC_INNER ptr_t GC_alloc_large(size_t lb, int k, unsigned flags)
+     ptr_t result;
+     GC_bool retry = FALSE;
+ 
++    size_t lb_req = lb;
++
+     GC_ASSERT(I_HOLD_LOCK());
+     lb = ROUNDUP_GRANULE_SIZE(lb);
+     n_blocks = OBJ_SZ_TO_BLOCKS_CHECKED(lb);
+@@ -76,13 +78,14 @@ GC_INNER ptr_t GC_alloc_large(size_t lb, int k, unsigned flags)
+         }
+         /* FIXME: Do we need some way to reset GC_max_large_allocd_bytes? */
+         result = h -> hb_body;
++        ASAN_UNPOISON_MEMORY_REGION(result, lb_req);
+     }
+     return result;
+ }
+ 
+ /* Allocate a large block of size lb bytes.  Clear if appropriate.      */
+ /* EXTRA_BYTES were already added to lb.                                */
+-STATIC ptr_t GC_alloc_large_and_clear(size_t lb, int k, unsigned flags)
++STATIC GC_TOUCHING ptr_t GC_alloc_large_and_clear(size_t lb, int k, unsigned flags)
+ {
+     ptr_t result;
+ 
+@@ -154,7 +157,7 @@ STATIC void GC_extend_size_map(size_t i)
+ /* Allocate lb bytes for an object of kind k.           */
+ /* Should not be used to directly to allocate objects   */
+ /* that require special handling on allocation.         */
+-GC_INNER void * GC_generic_malloc_inner(size_t lb, int k)
++GC_INNER GC_TOUCHING void * GC_generic_malloc_inner(size_t lb, int k)
+ {
+     void *op;
+ 
+@@ -193,6 +196,7 @@ GC_INNER void * GC_generic_malloc_inner(size_t lb, int k)
+               return NULL;
+           }
+         }
++        ASAN_UNPOISON_MEMORY_REGION(op, lb);
+         *opp = obj_link(op);
+         obj_link(op) = 0;
+         GC_bytes_allocd += GRANULES_TO_BYTES((word)lg);
+@@ -289,7 +293,7 @@ GC_API GC_ATTR_MALLOC void * GC_CALL GC_generic_malloc(size_t lb, int k)
+     }
+ }
+ 
+-GC_API GC_ATTR_MALLOC void * GC_CALL GC_malloc_kind_global(size_t lb, int k)
++GC_API GC_TOUCHING GC_ATTR_MALLOC void * GC_CALL GC_malloc_kind_global(size_t lb, int k)
+ {
+     GC_ASSERT(k < MAXOBJKINDS);
+     if (SMALL_OBJ(lb)) {
+@@ -304,6 +308,7 @@ GC_API GC_ATTR_MALLOC void * GC_CALL GC_malloc_kind_global(size_t lb, int k)
+         opp = &GC_obj_kinds[k].ok_freelist[lg];
+         op = *opp;
+         if (EXPECT(op != NULL, TRUE)) {
++            ASAN_UNPOISON_MEMORY_REGION(op, lb);
+             if (k == PTRFREE) {
+                 *opp = obj_link(op);
+             } else {
+@@ -346,7 +351,7 @@ GC_API GC_ATTR_MALLOC void * GC_CALL GC_malloc(size_t lb)
+     return GC_malloc_kind(lb, NORMAL);
+ }
+ 
+-GC_API GC_ATTR_MALLOC void * GC_CALL GC_generic_malloc_uncollectable(
++GC_API GC_TOUCHING GC_ATTR_MALLOC void * GC_CALL GC_generic_malloc_uncollectable(
+                                                         size_t lb, int k)
+ {
+     void *op;
+@@ -366,6 +371,7 @@ GC_API GC_ATTR_MALLOC void * GC_CALL GC_generic_malloc_uncollectable(
+         opp = &GC_obj_kinds[k].ok_freelist[lg];
+         op = *opp;
+         if (EXPECT(op != NULL, TRUE)) {
++            ASAN_UNPOISON_MEMORY_REGION(op, lb);
+             *opp = obj_link(op);
+             obj_link(op) = 0;
+             GC_bytes_allocd += GRANULES_TO_BYTES((word)lg);
+@@ -554,7 +560,7 @@ GC_API GC_ATTR_MALLOC void * GC_CALL GC_malloc_uncollectable(size_t lb)
+ #endif /* REDIRECT_MALLOC */
+ 
+ /* Explicitly deallocate an object p.                           */
+-GC_API void GC_CALL GC_free(void * p)
++GC_API GC_TOUCHING void GC_CALL GC_free(void * p)
+ {
+     struct hblk *h;
+     hdr *hhdr;
+@@ -593,13 +599,16 @@ GC_API void GC_CALL GC_free(void * p)
+         void **flh;
+ 
+         LOCK();
++        ASAN_POISON_MEMORY_REGION(p, sz);
+         GC_bytes_freed += sz;
+         if (IS_UNCOLLECTABLE(knd)) GC_non_gc_bytes -= sz;
+                 /* Its unnecessary to clear the mark bit.  If the       */
+                 /* object is reallocated, it doesn't matter.  O.w. the  */
+                 /* collector will do it, since it's on a free list.     */
+         if (ok -> ok_init && EXPECT(sz > sizeof(word), TRUE)) {
++            ASAN_UNPOISON_MEMORY_REGION((word *)p+1, sz-sizeof(word));
+             BZERO((word *)p + 1, sz-sizeof(word));
++            ASAN_POISON_MEMORY_REGION((word *)p+1, sz-sizeof(word));
+         }
+         flh = &(ok -> ok_freelist[ngranules]);
+         obj_link(p) = *flh;
+@@ -609,6 +618,7 @@ GC_API void GC_CALL GC_free(void * p)
+         size_t nblocks = OBJ_SZ_TO_BLOCKS(sz);
+ 
+         LOCK();
++        ASAN_POISON_MEMORY_REGION(p, sz);
+         GC_bytes_freed += sz;
+         if (IS_UNCOLLECTABLE(knd)) GC_non_gc_bytes -= sz;
+         if (nblocks > 1) {
+@@ -623,7 +633,7 @@ GC_API void GC_CALL GC_free(void * p)
+ /* Only used for internally allocated objects, so we can take some      */
+ /* shortcuts.                                                           */
+ #ifdef THREADS
+-  GC_INNER void GC_free_inner(void * p)
++  GC_INNER GC_TOUCHING void GC_free_inner(void * p)
+   {
+     struct hblk *h;
+     hdr *hhdr;
+@@ -641,15 +651,19 @@ GC_API void GC_CALL GC_free(void * p)
+     if (ngranules <= MAXOBJGRANULES) {
+         void ** flh;
+ 
++        ASAN_POISON_MEMORY_REGION(p, sz);
+         GC_bytes_freed += sz;
+         if (IS_UNCOLLECTABLE(knd)) GC_non_gc_bytes -= sz;
+         if (ok -> ok_init && EXPECT(sz > sizeof(word), TRUE)) {
++            ASAN_UNPOISON_MEMORY_REGION((word *)p+1, sz-sizeof(word));
+             BZERO((word *)p + 1, sz-sizeof(word));
++            ASAN_POISON_MEMORY_REGION((word *)p+1, sz-sizeof(word));
+         }
+         flh = &(ok -> ok_freelist[ngranules]);
+         obj_link(p) = *flh;
+         *flh = (ptr_t)p;
+     } else {
++        ASAN_POISON_MEMORY_REGION(p, sz);
+         size_t nblocks = OBJ_SZ_TO_BLOCKS(sz);
+         GC_bytes_freed += sz;
+         if (IS_UNCOLLECTABLE(knd)) GC_non_gc_bytes -= sz;
+diff --git a/mallocx.c b/mallocx.c
+index 9e93c707..5df4a1a0 100644
+--- a/mallocx.c
++++ b/mallocx.c
+@@ -148,6 +148,7 @@ GC_API void * GC_CALL GC_realloc(void * p, size_t lb)
+     }
+     if (ADD_SLOP(lb) <= sz) {
+         if (lb >= (sz >> 1)) {
++            ASAN_UNPOISON_MEMORY_REGION(p, lb);
+             if (orig_sz > lb) {
+               /* Clear unneeded part of object to avoid bogus pointer */
+               /* tracing.                                             */
+@@ -298,7 +299,7 @@ GC_API size_t GC_CALL GC_get_expl_freed_bytes_since_gc(void)
+ /* since the collector would not retain the entire list if it were      */
+ /* invoked just as we were returning.                                   */
+ /* Note that the client should usually clear the link field.            */
+-GC_API void GC_CALL GC_generic_malloc_many(size_t lb, int k, void **result)
++GC_API GC_TOUCHING void GC_CALL GC_generic_malloc_many(size_t lb, int k, void **result)
+ {
+     void *op;
+     void *p;
+diff --git a/new_hblk.c b/new_hblk.c
+index 5e3ce068..3f152894 100644
+--- a/new_hblk.c
++++ b/new_hblk.c
+@@ -27,7 +27,7 @@
+   /* Build a free list for size 2 (words) cleared objects inside        */
+   /* hblk h.  Set the last link to be ofl.  Return a pointer to the     */
+   /* first free list entry.                                             */
+-  STATIC ptr_t GC_build_fl_clear2(struct hblk *h, ptr_t ofl)
++  STATIC GC_TOUCHING ptr_t GC_build_fl_clear2(struct hblk *h, ptr_t ofl)
+   {
+     word * p = (word *)(h -> hb_body);
+     word * lim = (word *)(h + 1);
+@@ -47,7 +47,7 @@
+   }
+ 
+   /* The same for size 4 cleared objects.       */
+-  STATIC ptr_t GC_build_fl_clear4(struct hblk *h, ptr_t ofl)
++  STATIC GC_TOUCHING ptr_t GC_build_fl_clear4(struct hblk *h, ptr_t ofl)
+   {
+     word * p = (word *)(h -> hb_body);
+     word * lim = (word *)(h + 1);
+@@ -67,7 +67,7 @@
+   }
+ 
+   /* The same for size 2 uncleared objects.     */
+-  STATIC ptr_t GC_build_fl2(struct hblk *h, ptr_t ofl)
++  STATIC GC_TOUCHING ptr_t GC_build_fl2(struct hblk *h, ptr_t ofl)
+   {
+     word * p = (word *)(h -> hb_body);
+     word * lim = (word *)(h + 1);
+@@ -83,7 +83,7 @@
+   }
+ 
+   /* The same for size 4 uncleared objects.     */
+-  STATIC ptr_t GC_build_fl4(struct hblk *h, ptr_t ofl)
++  STATIC GC_TOUCHING ptr_t GC_build_fl4(struct hblk *h, ptr_t ofl)
+   {
+     word * p = (word *)(h -> hb_body);
+     word * lim = (word *)(h + 1);
+@@ -106,7 +106,7 @@
+ /* This could be called without the main GC lock, if we ensure that     */
+ /* there is no concurrent collection which might reclaim objects that   */
+ /* we have not yet allocated.                                           */
+-GC_INNER ptr_t GC_build_fl(struct hblk *h, size_t sz, GC_bool clear,
++GC_INNER GC_TOUCHING ptr_t GC_build_fl(struct hblk *h, size_t sz, GC_bool clear,
+                            ptr_t list)
+ {
+   word *p, *prev;
+@@ -140,6 +140,7 @@ GC_INNER ptr_t GC_build_fl(struct hblk *h, size_t sz, GC_bool clear,
+ # endif /* !SMALL_CONFIG */
+ 
+   /* Clear the page if necessary. */
++    ASAN_UNPOISON_MEMORY_REGION(h, HBLKSIZE);
+     if (clear) BZERO(h, HBLKSIZE);
+ 
+   /* Add objects to free list */
+@@ -161,6 +162,7 @@ GC_INNER ptr_t GC_build_fl(struct hblk *h, size_t sz, GC_bool clear,
+   /* Put p (which is now head of list of objects in *h) as first    */
+   /* pointer in the appropriate free list for this size.            */
+     *(ptr_t *)h = list;
++    ASAN_POISON_MEMORY_REGION(h, HBLKSIZE);
+     return ((ptr_t)p);
+ }
+ 
+diff --git a/reclaim.c b/reclaim.c
+index 45ce4a11..7755bd66 100644
+--- a/reclaim.c
++++ b/reclaim.c
+@@ -148,7 +148,7 @@ STATIC GC_bool GC_block_nearly_full(hdr *hhdr, word sz)
+  * free list.  Returns the new list.
+  * Clears unmarked objects.  Sz is in bytes.
+  */
+-STATIC ptr_t GC_reclaim_clear(struct hblk *hbp, hdr *hhdr, word sz,
++STATIC GC_TOUCHING ptr_t GC_reclaim_clear(struct hblk *hbp, hdr *hhdr, word sz,
+                               ptr_t list, signed_word *count)
+ {
+     word bit_no = 0;
+@@ -199,7 +199,7 @@ STATIC ptr_t GC_reclaim_clear(struct hblk *hbp, hdr *hhdr, word sz,
+ }
+ 
+ /* The same thing, but don't clear objects: */
+-STATIC ptr_t GC_reclaim_uninit(struct hblk *hbp, hdr *hhdr, word sz,
++STATIC GC_TOUCHING ptr_t GC_reclaim_uninit(struct hblk *hbp, hdr *hhdr, word sz,
+                                ptr_t list, signed_word *count)
+ {
+     word bit_no = 0;
+@@ -230,7 +230,7 @@ STATIC ptr_t GC_reclaim_uninit(struct hblk *hbp, hdr *hhdr, word sz,
+ #ifdef ENABLE_DISCLAIM
+   /* Call reclaim notifier for block's kind on each unmarked object in  */
+   /* block, all within a pair of corresponding enter/leave callbacks.   */
+-  STATIC ptr_t GC_disclaim_and_reclaim(struct hblk *hbp, hdr *hhdr, word sz,
++  STATIC GC_TOUCHING ptr_t GC_disclaim_and_reclaim(struct hblk *hbp, hdr *hhdr, word sz,
+                                        ptr_t list, signed_word *count)
+   {
+     word bit_no = 0;
+@@ -602,7 +602,7 @@ void GC_print_block_list(void)
+ #include "gc_inline.h" /* for GC_print_free_list prototype */
+ 
+ /* Currently for debugger use only: */
+-GC_API void GC_CALL GC_print_free_list(int kind, size_t sz_in_granules)
++GC_API GC_TOUCHING void GC_CALL GC_print_free_list(int kind, size_t sz_in_granules)
+ {
+     void *flh_next;
+     int n;
+@@ -626,7 +626,7 @@ GC_API void GC_CALL GC_print_free_list(int kind, size_t sz_in_granules)
+  * since may otherwise end up with dangling "descriptor" pointers.
+  * It may help for other pointer-containing objects.
+  */
+-STATIC void GC_clear_fl_links(void **flp)
++STATIC GC_TOUCHING void GC_clear_fl_links(void **flp)
+ {
+     void *next = *flp;
+ 
+diff --git a/thread_local_alloc.c b/thread_local_alloc.c
+index 3a04fbe8..4053dc4a 100644
+--- a/thread_local_alloc.c
++++ b/thread_local_alloc.c
+@@ -35,7 +35,7 @@ static GC_bool keys_initialized;
+ /* Return a single nonempty freelist fl to the global one pointed to    */
+ /* by gfl.                                                              */
+ 
+-static void return_single_freelist(void *fl, void **gfl)
++static GC_TOUCHING void return_single_freelist(void *fl, void **gfl)
+ {
+     if (*gfl == 0) {
+       *gfl = fl;
+@@ -141,7 +141,7 @@ GC_INNER void GC_destroy_thread_local(GC_tlfs p)
+ #   endif
+ }
+ 
+-GC_API GC_ATTR_MALLOC void * GC_CALL GC_malloc_kind(size_t bytes, int kind)
++GC_API GC_TOUCHING GC_ATTR_MALLOC void * GC_CALL GC_malloc_kind(size_t bytes, int kind)
+ {
+     size_t granules;
+     void *tsd;
+diff --git a/typd_mlc.c b/typd_mlc.c
+index 90a86bb7..c5adceab 100644
+--- a/typd_mlc.c
++++ b/typd_mlc.c
+@@ -615,7 +615,7 @@ GC_API GC_ATTR_MALLOC void * GC_CALL GC_malloc_explicitly_typed(size_t lb,
+ #define GENERAL_MALLOC_IOP(lb, k) \
+                 GC_clear_stack(GC_generic_malloc_ignore_off_page(lb, k))
+ 
+-GC_API GC_ATTR_MALLOC void * GC_CALL
++GC_API GC_TOUCHING GC_ATTR_MALLOC void * GC_CALL
+     GC_malloc_explicitly_typed_ignore_off_page(size_t lb, GC_descr d)
+ {
+     ptr_t op;
+-- 
+2.25.1
+

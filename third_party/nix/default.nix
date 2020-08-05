@@ -2,6 +2,7 @@ args@{
   pkgs ? (import ../.. {}).third_party
 , lib
 , buildType ? "release"
+, useASan ? true # DO NOT SUBMIT
 , depotPath ? ../..
 , ...
 }:
@@ -12,11 +13,24 @@ let
     customMemoryManagement = false;
   };
 
- # TODO(tazjin): this is copied from the original derivation, but what
- # is it for?
-  largeBoehm = pkgs.boehmgc.override {
+  # TODO(tazjin): this is copied from the original derivation, but what
+  # is it for?
+  largeBoehm = (pkgs.boehmgc.overrideAttrs(up: {
+    patches = up.patches ++ [./contrib/0001-Add-ASan-poisoning-support-to-malloc-free.patch];
+    CFLAGS = "-fsanitize=address -ggdb -Og -fstandalone-debug -DADDRESS_SANITIZER";
+    CPPFLAGS = "-fsanitize=address -ggdb -Og";
+    LDFLAGS = "-fsanitize=address -g -Og";
+      ASAN_OPTIONS = "detect_leaks=0";
+  })).override {
     enableLargeConfig = true;
+    stdenv = pkgs.stdenv;
   };
+
+  asanBoost = if useASan then
+    pkgs.boost.override {
+      extraB2Args = ["context-impl=ucontext" "define=BOOST_USE_ASAN"];
+    }
+    else pkgs.boost;
 
   src = ./.;
 
@@ -56,6 +70,19 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
  # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = with pkgs; [
     abseil_cpp
+    glog
+    grpc
+    protobuf
+  ] ++ builtins.map(drv: drv.overrideAttrs(up: {
+      CFLAGS = "-fsanitize=address";
+      CPPFLAGS = "-fsanitize=address";
+      CXXFLAGS = "-fsanitize=address";
+      LDFLAGS = "-fsanitize=address";
+      ASAN_OPTIONS = "detect_leaks=0";
+    })
+  ) (builtins.map (drv: drv.override {
+    stdenv = pkgs.stdenv;
+  }) (with pkgs; [
     aws-s3-cpp
     brotli
     bzip2
@@ -63,15 +90,12 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     curl
     editline
     flex
-    glog
-    grpc
     libseccomp
     libsodium
     openssl
-    protobuf
     sqlite
     xz
-  ];
+  ]));
 
   doCheck = false;
   doInstallCheck = true;
@@ -83,16 +107,18 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   ];
 
   propagatedBuildInputs = with pkgs; [
-    boost
+    asanBoost
     largeBoehm
   ];
 
   configurePhase = ''
+    export ASAN_OPTIONS="detect_leaks=0";
     mkdir build
     cd build
     cmake .. \
       -DCMAKE_INSTALL_PREFIX=$out \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      '' + (if useASan then "-DDISABLE_GC=1 " else "") + ''
       -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF \
       -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF \
       -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
@@ -173,5 +199,6 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
       '';
     });
     test-vm = import ./test-vm.nix args;
+    inherit largeBoehm;
   };
 })

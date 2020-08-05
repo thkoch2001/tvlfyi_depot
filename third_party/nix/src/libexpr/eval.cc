@@ -10,13 +10,17 @@
 #include <optional>
 #include <variant>
 
-#define GC_INCLUDE_NEW
+#ifndef DISABLE_GC
+# define GC_INCLUDE_NEW
+# include <gc/gc.h>
+# include <gc/gc_cpp.h>
+#else
+# include "libexpr/fake_gc.h"
+#endif
 
 #include <absl/base/call_once.h>
 #include <absl/container/flat_hash_set.h>
 #include <absl/strings/match.h>
-#include <gc/gc.h>
-#include <gc/gc_cpp.h>
 #include <glog/logging.h>
 #include <sys/resource.h>
 #include <sys/time.h>
@@ -36,6 +40,8 @@
 
 namespace nix {
 namespace {
+
+#ifndef DISABLE_GC
 
 // Called when the Boehm GC runs out of memory.
 static void* BoehmOomHandler(size_t requested) {
@@ -84,6 +90,13 @@ void ConfigureBoehmGc() {
     GC_expand_hp(size);
   }
 }
+
+#else
+
+void ConfigureBoehmGc() {
+}
+
+#endif
 
 }  // namespace
 
@@ -1713,9 +1726,13 @@ void EvalState::printStats() {
       nrAttrsets * sizeof(Bindings) + nrAttrsInAttrsets * sizeof(Attr);
 
 #if HAVE_BOEHMGC
+#ifndef DISABLE_GC
   GC_word heapSize;
   GC_word totalBytes;
   GC_get_heap_usage_safe(&heapSize, nullptr, nullptr, nullptr, &totalBytes);
+#elif __has_feature(address_sanitizer)
+  __asan_print_accumulated_stats();
+#endif
 #endif
   if (showStats) {
     auto outPath = getEnv("NIX_SHOW_STATS_PATH", "-");
@@ -1768,11 +1785,13 @@ void EvalState::printStats() {
     topObj.attr("nrPrimOpCalls", nrPrimOpCalls);
     topObj.attr("nrFunctionCalls", nrFunctionCalls);
 #if HAVE_BOEHMGC
+#ifndef DISABLE_GC
     {
       auto gc = topObj.object("gc");
       gc.attr("heapSize", heapSize);
       gc.attr("totalBytes", totalBytes);
     }
+#endif
 #endif
 
     if (countCalls) {

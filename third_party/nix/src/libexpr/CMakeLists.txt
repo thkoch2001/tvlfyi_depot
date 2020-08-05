@@ -75,9 +75,11 @@ target_link_libraries(nixexpr
   absl::flat_hash_set
   absl::node_hash_set
   absl::strings
-  gc
-  gccpp
 )
+
+if (NOT DISABLE_GC)
+  target_link_libraries(nixexpr gc gccpp)
+endif()
 
 configure_file("nix-expr.pc.in" "${PROJECT_BINARY_DIR}/nix-expr.pc" @ONLY)
 INSTALL(FILES "${PROJECT_BINARY_DIR}/nix-expr.pc" DESTINATION "${PKGCONFIG_INSTALL_DIR}")
