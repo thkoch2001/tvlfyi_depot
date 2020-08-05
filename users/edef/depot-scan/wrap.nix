@@ -1,7 +1,5 @@
 # this wraps import to override readFile and readDir to trace the files it touches
 # technique inspired by lorri
-{ ... }:
-
 let
 
   global = {
