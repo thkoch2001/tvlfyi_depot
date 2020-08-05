@@ -5,8 +5,12 @@
 #include <unordered_map>
 #include <vector>
 
+#ifndef DISABLE_GC
 #include <gc/gc_allocator.h>
 #include <gc/gc_cpp.h>
+#else
+#include "libexpr/fake_gc.h"
+#endif
 
 #include "libexpr/attr-set.hh"
 #include "libexpr/nixexpr.hh"
