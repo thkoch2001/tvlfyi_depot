@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c6c6e5a8_8fe0ed1e",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-05T03:20:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e4d8226_26001d56",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 10
+      },
+      "revId": "4d09c723e31c7f81223571f60ab53833ef5e1ccb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fea32fd3_affb814b",
         "filename": "third_party/nix/src/libutil/hash.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "4d09c723e31c7f81223571f60ab53833ef5e1ccb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffc87882_653c4623",
+        "filename": "third_party/nix/src/libutil/hash.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-05T03:20:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fea32fd3_affb814b",
+      "range": {
+        "startLine": 40,
+        "startChar": 9,
+        "endLine": 40,
+        "endChar": 28
+      },
+      "revId": "4d09c723e31c7f81223571f60ab53833ef5e1ccb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
