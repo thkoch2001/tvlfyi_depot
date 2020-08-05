@@ -70,6 +70,30 @@
       "revId": "9005b671a1e72d72f2c8072b335c0060f57eed2c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c48bc52a_3aac7f9a",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-05T01:39:25Z",
+      "side": 1,
+      "message": "should have been good_",
+      "parentUuid": "39175941_593b4ea2",
+      "range": {
+        "startLine": 67,
+        "startChar": 32,
+        "endLine": 67,
+        "endChar": 36
+      },
+      "revId": "9005b671a1e72d72f2c8072b335c0060f57eed2c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
