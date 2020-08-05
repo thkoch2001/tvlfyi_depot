@@ -22,7 +22,7 @@ target_link_libraries(derivations_test
 
 gtest_discover_tests(derivations_test)
 
-add_executable(hash_test hash_test.cc)
+add_executable(hash_test hash_test.cc compression_test.cc)
 target_link_libraries(hash_test
   nixutil
   GTest::gtest_main
