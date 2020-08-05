@@ -2,7 +2,12 @@
 #pragma once
 
 #include <absl/container/btree_map.h>
-#include <gc/gc_allocator.h>
+
+#ifndef DISABLE_GC
+# include <gc/gc_allocator.h>
+#else
+# include "libexpr/fake_gc.h"
+#endif
 
 #include "libexpr/nixexpr.hh"
 #include "libexpr/symbol-table.hh"
