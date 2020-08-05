@@ -22,8 +22,12 @@
 #include "libutil/finally.hh"
 #include "nix/command.hh"
 
-#define GC_INCLUDE_NEW
-#include <gc/gc_cpp.h>
+#ifndef DISABLE_GC
+# define GC_INCLUDE_NEW
+# include <gc/gc_cpp.h>
+#else
+# include "libexpr/fake_gc.h"
+#endif
 
 namespace nix {
 

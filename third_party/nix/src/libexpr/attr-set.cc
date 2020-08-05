@@ -3,8 +3,13 @@
 #include <new>
 
 #include <absl/container/btree_map.h>
-#include <gc/gc_cpp.h>
 #include <glog/logging.h>
+
+#ifndef DISABLE_GC
+#include <gc/gc_cpp.h>
+#else
+#include "libexpr/fake_gc.h"
+#endif
 
 #include "libexpr/eval-inline.hh"
 
@@ -97,3 +102,14 @@ Value* EvalState::allocAttr(Value& vAttrs, const Symbol& name) {
 }
 
 }  // namespace nix
+
+#ifdef DISABLE_GC
+extern "C" {
+
+const char* __asan_default_options(void) {
+  return "detect_leaks=0";
+}
+
+}
+#endif
+

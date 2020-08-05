@@ -51,6 +51,10 @@ else()
   endif()
 endif()
 
+if (DISABLE_GC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDISABLE_GC -fsanitize=address -fstandalone-debug")
+endif()
+
 # generate a configuration file (autoheader-style) to configure
 # certain symbols that Nix depends on.
 configure_file(config.h.in nix_config.h @ONLY)

@@ -2,7 +2,8 @@
 # third-party code) into my package tree.
 #
 # This includes *all packages needed from nixpkgs*.
-{ ... }:
+{ useASan ? false
+, ... }:
 
 let
   # Tracking nixos-unstable as of 2020-08-04.
