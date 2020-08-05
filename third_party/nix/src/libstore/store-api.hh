@@ -80,7 +80,12 @@ struct GCOptions {
 
   /* Stop after at least `maxFreed' bytes have been freed. */
   unsigned long long maxFreed{std::numeric_limits<unsigned long long>::max()};
+
+  [[nodiscard]] const proto::GCAction ActionToProto() const;
 };
+
+std::optional<GCOptions::GCAction> GCActionFromProto(
+    nix::proto::GCAction gc_action);
 
 struct GCResults {
   /* Depending on the action, the GC roots, or the paths that would

@@ -418,11 +418,36 @@ void RpcStore::syncWithGC() {
 }
 
 Roots RpcStore::findRoots(bool censor) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  proto::FindRootsResponse response;
+  SuccessOrThrow(stub_->FindRoots(&ctx, kEmpty, &response));
+  Roots result;
+
+  for (const auto& [target, links] : response.roots()) {
+    auto link_paths = FillFrom<std::unordered_set<std::string>>(links.paths());
+    result.insert({target, link_paths});
+  }
+
+  return result;
 }
 
 void RpcStore::collectGarbage(const GCOptions& options, GCResults& results) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  proto::CollectGarbageRequest request;
+  request.set_action(options.ActionToProto());
+  for (const auto& path : options.pathsToDelete) {
+    request.add_paths_to_delete(path);
+  }
+  request.set_ignore_liveness(options.ignoreLiveness);
+  request.set_max_freed(options.maxFreed);
+
+  proto::CollectGarbageResponse response;
+  SuccessOrThrow(stub_->CollectGarbage(&ctx, request, &response));
+
+  for (const auto& path : response.deleted_paths()) {
+    results.paths.insert(path);
+  }
+  results.bytesFreed = response.bytes_freed();
 }
 
 void RpcStore::optimiseStore() {

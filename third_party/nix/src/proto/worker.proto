@@ -203,7 +203,7 @@ message BuildPathsRequest {
 }
 
 message FindRootsResponse {
-  map<string, string> roots = 1;
+  map<string, StorePaths> roots = 1;
 }
 
 message SetOptionsRequest {
