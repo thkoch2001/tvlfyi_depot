@@ -835,7 +835,8 @@ void Downloader::download(DownloadRequest&& request, Sink& sink) {
         state.wait(state->avail);
       }
 
-      chunk = state->data;
+      chunk = std::move(state->data);
+      state->data = std::string();
 
       state->request.notify_one();
     }
