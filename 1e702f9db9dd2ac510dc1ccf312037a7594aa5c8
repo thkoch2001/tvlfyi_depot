@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bf22efe_c14fe506",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T03:38:28Z",
+      "side": 1,
+      "message": "We can just convert this to INVALID_ARGUMENT right now.",
+      "range": {
+        "startLine": 293,
+        "startChar": 12,
+        "endLine": 293,
+        "endChar": 66
+      },
+      "revId": "1e702f9db9dd2ac510dc1ccf312037a7594aa5c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
