@@ -6,3 +6,8 @@ import Data.Function ((&))
 
 (|>) :: a -> (a -> b) -> b
 (|>) = (&)
+
+-- | Rotate `xs` as a cycle `n` times.
+rotate :: Int -> [a] -> [a]
+rotate n xs = take size . drop (n `mod` size) . cycle $ xs
+  where size = length xs
