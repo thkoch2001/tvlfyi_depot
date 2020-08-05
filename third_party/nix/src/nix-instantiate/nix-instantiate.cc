@@ -96,6 +96,7 @@ static int _main(int argc, char** argv) {
     bool findFile = false;
     bool evalOnly = false;
     bool parseOnly = false;
+    bool traceFileAccess = false;
     OutputKind outputKind = okPlain;
     bool xmlOutputSourceLocation = true;
     bool strict = false;
@@ -143,6 +144,14 @@ static int _main(int argc, char** argv) {
                       repair = Repair;
                     } else if (*arg == "--dry-run") {
                       settings.readOnlyMode = true;
+                    } else if (*arg == "--trace-file-access") {
+                      traceFileAccess = true;
+                    } else if (*arg == "--trace-file-access=true") {
+                      traceFileAccess = true;
+                    } else if (*arg == "--trace-file-access=false") {
+                      traceFileAccess = false;
+                    } else if (*arg == "--notrace-file-access") {
+                      traceFileAccess = false;
                     } else if (*arg != "" && arg->at(0) == '-') {
                       return false;
                     } else {
@@ -161,6 +170,11 @@ static int _main(int argc, char** argv) {
 
     auto state = std::make_unique<EvalState>(myArgs.searchPath, store);
     state->repair = repair;
+    if (traceFileAccess) {
+      state->EnableFileAccessTracing([](const Path& path) {
+        std::cerr << "trace: depot-scan: " << path << "\n";
+      });
+    }
 
     Bindings& autoArgs = *myArgs.getAutoArgs(*state);
 

@@ -379,6 +379,7 @@ EvalState::EvalState(const Strings& _searchPath, const ref<Store>& store)
 EvalState::~EvalState() = default;
 
 Path EvalState::checkSourcePath(const Path& path_) {
+  TraceFileAccess(path_);
   if (!allowedPaths) {
     return path_;
   }
@@ -1817,6 +1818,20 @@ void EvalState::printStats() {
     //   symbols.dump([&](const std::string& s) { list.elem(s); });
     // }
   }
+}
+
+void EvalState::TraceFileAccess(const Path& realPath) {
+  if (file_access_trace_fn.has_value()) {
+    if (last_traced_file != realPath) {
+      (*file_access_trace_fn)(realPath);
+      // Basic deduplication.
+      last_traced_file = std::string(realPath);
+    }
+  }
+}
+
+void EvalState::EnableFileAccessTracing(std::function<void(const Path&)> fn) {
+  file_access_trace_fn = fn;
 }
 
 size_t valueSize(const Value& v) {
