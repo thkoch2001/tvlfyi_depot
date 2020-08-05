@@ -41,7 +41,7 @@ main = hspec $ do
 
   describe "App.transform" $ do
     it "flips a keyboard horizontally" $ do
-      App.transform HorizontalFlip Keyboard.qwerty == do
+      App.transform Keyboard.qwerty HorizontalFlip == do
         Keyboard [ reverse ['1','2','3','4','5','6','7','8','9','0']
                  , reverse ['Q','W','E','R','T','Y','U','I','O','P']
                  , reverse ['A','S','D','F','G','H','J','K','L',';']
@@ -49,7 +49,7 @@ main = hspec $ do
                  ]
 
     it "flips a keyboard vertically" $ do
-      App.transform VerticalFlip Keyboard.qwerty == do
+      App.transform Keyboard.qwerty VerticalFlip == do
         Keyboard $ reverse [ ['1','2','3','4','5','6','7','8','9','0']
                            , ['Q','W','E','R','T','Y','U','I','O','P']
                            , ['A','S','D','F','G','H','J','K','L',';']
@@ -57,7 +57,7 @@ main = hspec $ do
                            ]
 
     it "shifts a keyboard N times" $ do
-      App.transform (Shift 2) Keyboard.qwerty == do
+      App.transform Keyboard.qwerty (Shift 2) == do
         Keyboard $ [ Utils.rotate 2 ['1','2','3','4','5','6','7','8','9','0']
                    , Utils.rotate 2 ['Q','W','E','R','T','Y','U','I','O','P']
                    , Utils.rotate 2 ['A','S','D','F','G','H','J','K','L',';']
@@ -65,7 +65,7 @@ main = hspec $ do
                    ]
 
     it "shifts negative amounts" $ do
-      App.transform (Shift (-3)) Keyboard.qwerty == do
+      App.transform Keyboard.qwerty (Shift (-3)) == do
         Keyboard $ [ Utils.rotate (-3) ['1','2','3','4','5','6','7','8','9','0']
                    , Utils.rotate (-3) ['Q','W','E','R','T','Y','U','I','O','P']
                    , Utils.rotate (-3) ['A','S','D','F','G','H','J','K','L',';']
