@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8c80c4bc_bbcad1ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-05T03:07:07Z",
+      "side": 1,
+      "message": "this is now `trace: depot-scan:`",
+      "range": {
+        "startLine": 11,
+        "startChar": 43,
+        "endLine": 11,
+        "endChar": 61
+      },
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9be84a02_ba9d366c",
         "filename": "third_party/nix/src/libexpr/eval.cc",
         "patchSetId": 4
@@ -53,6 +76,29 @@
     },
     {
       "key": {
+        "uuid": "4ac32fda_8aa48714",
+        "filename": "third_party/nix/src/libexpr/primops.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-05T03:07:07Z",
+      "side": 1,
+      "message": "do we want to leave this out? we\u0027ll still need my tracing hack to cover without otherwise",
+      "range": {
+        "startLine": 948,
+        "startChar": 12,
+        "endLine": 948,
+        "endChar": 24
+      },
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "94c5a2ff_bc77f3e3",
         "filename": "third_party/nix/src/nix-instantiate/nix-instantiate.cc",
         "patchSetId": 4
@@ -64,6 +110,29 @@
       "writtenOn": "2020-08-05T02:57:55Z",
       "side": 1,
       "message": "I would expect this to be `no-trace-...`",
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79537c5e_1ed433a9",
+        "filename": "third_party/nix/src/nix-instantiate/nix-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-05T03:07:07Z",
+      "side": 1,
+      "message": "do we really want this many distinct flag forms? i\u0027m not particularly sure about /^--no[a-z]/ rather than /^--no-/",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 1
+      },
       "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
