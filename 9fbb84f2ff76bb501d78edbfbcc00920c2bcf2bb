@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9be84a02_ba9d366c",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-05T02:57:55Z",
+      "side": 1,
+      "message": "we\u0027ve been adhering to the google convention of PascalCase for methods in new code",
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e4127ad_ea4595bd",
+        "filename": "third_party/nix/src/libexpr/eval.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-05T02:57:55Z",
+      "side": 1,
+      "message": "is the this here necessary?",
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "812971ca_9f69c870",
+        "filename": "third_party/nix/src/libexpr/eval.hh",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-05T02:57:55Z",
+      "side": 1,
+      "message": "please make this a std::optional",
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94c5a2ff_bc77f3e3",
+        "filename": "third_party/nix/src/nix-instantiate/nix-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-05T02:57:55Z",
+      "side": 1,
+      "message": "I would expect this to be `no-trace-...`",
+      "revId": "9fbb84f2ff76bb501d78edbfbcc00920c2bcf2bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
