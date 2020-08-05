@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "461d8fa4_e1488690",
+        "filename": "third_party/nix/src/libstore/mock-binary-cache-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T03:20:57Z",
+      "side": 1,
+      "message": "`second` is a field of an std::pair, which contains the function we\u0027re calling.",
+      "parentUuid": "b7204745_94893cf6",
+      "revId": "233facb5475b414037e6b2e115e8388cc11b3fd8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4067d84_a76ab3fd",
         "filename": "third_party/nix/src/libstore/mock-binary-cache-store.hh",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "233facb5475b414037e6b2e115e8388cc11b3fd8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2342f6f9_06fdc9a9",
+        "filename": "third_party/nix/src/libstore/mock-binary-cache-store.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-05T03:20:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4067d84_a76ab3fd",
+      "revId": "233facb5475b414037e6b2e115e8388cc11b3fd8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
