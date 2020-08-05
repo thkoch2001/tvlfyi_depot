@@ -5,6 +5,7 @@ in pkgs.mkShell {
     (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
       hspec
       optparse-applicative
+      unordered-containers
     ]))
   ];
 }
