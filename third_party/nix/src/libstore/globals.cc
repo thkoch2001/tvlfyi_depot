@@ -70,7 +70,10 @@ Settings::Settings()
 }
 
 void loadConfFile() {
-  globalConfig.applyConfigFile(settings.nixConfDir + "/nix.conf");
+  try {
+    globalConfig.applyConfigFile(settings.nixConfDir + "/nix.conf");
+  } catch (SysError _fileNotFound) {
+  }
 
   /* We only want to send overrides to the daemon, i.e. stuff from
      ~/.nix/nix.conf or the command line. */
@@ -80,7 +83,10 @@ void loadConfFile() {
   // Iterate over them in reverse so that the ones appearing first in the path
   // take priority
   for (auto dir = dirs.rbegin(); dir != dirs.rend(); dir++) {
-    globalConfig.applyConfigFile(*dir + "/nix/nix.conf");
+    try {
+      globalConfig.applyConfigFile(*dir + "/nix/nix.conf");
+    } catch (SysError _fileNotFound) {
+    }
   }
 }
 
