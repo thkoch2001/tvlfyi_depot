@@ -516,6 +516,11 @@
   (setf (hunchentoot:content-type*) "text/css")
   (apply #'lass:compile-and-write panettone.css:styles))
 
+(defroute shorthand-issue
+    ("/:id" :decorators (@auth-optional))
+    (&path (id 'integer))
+  (hunchentoot:redirect (format nil "/issues/~A" id)))
+
 (defvar *acceptor* nil
   "Hunchentoot acceptor for Panettone's web server.")
 
