@@ -873,8 +873,9 @@ static void prim_readFile(EvalState& state, const Pos& pos, Value** args,
         format("cannot read '%1%', since path '%2%' is not valid, at %3%") %
         path % e.path % pos);
   }
-  std::string s =
-      readFile(state.checkSourcePath(state.toRealPath(path, context)));
+  Path finalPath = state.checkSourcePath(state.toRealPath(path, context));
+  state.traceFileAccess(finalPath);
+  std::string s = readFile(finalPath);
   if (s.find((char)0) != std::string::npos) {
     throw Error(format("the contents of the file '%1%' cannot be represented "
                        "as a Nix string") %

@@ -220,6 +220,7 @@ Expr* EvalState::parseExprFromFile(const Path& path) {
 }
 
 Expr* EvalState::parseExprFromFile(const Path& path, StaticEnv& staticEnv) {
+  traceFileAccess(path);
   return parse(readFile(path).c_str(), path, dirOf(path), staticEnv);
 }
 
