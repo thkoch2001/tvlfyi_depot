@@ -39,6 +39,7 @@
     </arg>
     <arg><option>--add-root</option> <replaceable>path</replaceable></arg>
     <arg><option>--indirect</option></arg>
+    <arg><option>--<arg>no</arg>trace-file-access</option></arg>
     <group>
       <arg choice='plain'><option>--expr</option></arg>
       <arg choice='plain'><option>-E</option></arg>
@@ -129,6 +130,13 @@ input.</para>
 
     </listitem>
 
+  </varlistentry>
+
+  <varlistentry><term><option>--<arg>no</arg>trace-file-access</option></term>
+    <listitem><para>While instantiating the expression, the evaluator will
+    print the full path to any files it reads with the prefix
+    <envar>trace-file-access: </envar> to the standard error.</para>
+    </listitem>
   </varlistentry>
 
   <varlistentry><term><option>--json</option></term>
@@ -253,6 +261,10 @@ $ nix-instantiate --eval --xml --strict -E 'rec { x = "foo"; y = x; }'
 
 </refsection>
 
+<refsection><title>Conformance</title>
+  <para>The <option>--trace-file-access</option> option is a nonstandard
+  extension added by Tvix in 2020.</para>
+</refsection>
 
 <refsection condition="manpage"><title>Environment variables</title>
 
