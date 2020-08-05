@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0913bbc_377eea7f",
+        "filename": "third_party/nix/src/libexpr/eval.hh",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-05T22:12:29Z",
+      "side": 1,
+      "message": "just a thought, but this seems to me like it should semantically be an optional instead.",
+      "revId": "b4c9fe27e0cfe58c36b1f750c5fe87e14c6d4cd7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
