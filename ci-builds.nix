@@ -65,6 +65,9 @@ in lib.fix (self: {
     grpc
     loxy
     nix
+    nix.overrideDerivation({
+      useASan = true;
+    })
     nix.test-vm
     openldap
     rapidcheck
