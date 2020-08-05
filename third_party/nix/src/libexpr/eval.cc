@@ -742,6 +742,7 @@ void EvalState::evalFile(const Path& path_, Value& v) {
   auto j = fileParseCache.find(path2);
   if (j != fileParseCache.end()) {
     e = j->second;
+    traceFileAccess(path2);  // parseExprFromFile will trace
   }
 
   if (e == nullptr) {
@@ -1581,6 +1582,7 @@ std::string EvalState::copyPathToStore(PathSet& context, const Path& path) {
             : store->addToStore(baseNameOf(path), checkSourcePath(path), true,
                                 htSHA256, defaultPathFilter, repair);
     srcToStore[path] = dstPath;
+    traceFileAccess(path);
     DLOG(INFO) << "copied source '" << path << "' -> '" << dstPath << "'";
   }
 
@@ -1817,6 +1819,18 @@ void EvalState::printStats() {
     //   symbols.dump([&](const std::string& s) { list.elem(s); });
     // }
   }
+}
+
+void EvalState::traceFileAccess(const Path& realPath) const {
+  if (fileAccessTraceFn == nullptr) {
+    return;
+  }
+
+  this->fileAccessTraceFn(realPath);
+}
+
+void EvalState::EnableFileAccessTracing(std::function<void(const Path&)> fn) {
+  fileAccessTraceFn = fn;
 }
 
 size_t valueSize(const Value& v) {
