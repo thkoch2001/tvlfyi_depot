@@ -7,7 +7,7 @@ import Text.ParserCombinators.ReadP
 
 data Transform = VerticalFlip
                | HorizontalFlip
-               | Shift Integer
+               | Shift Int
                deriving (Eq, Show)
 
 digit :: ReadP Char

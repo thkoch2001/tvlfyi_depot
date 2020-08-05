@@ -6,6 +6,7 @@ import qualified Data.List as List
 --------------------------------------------------------------------------------
 
 newtype Keyboard = Keyboard [[Char]]
+  deriving (Eq)
 
 instance Show Keyboard where
   show (Keyboard xxs) =
