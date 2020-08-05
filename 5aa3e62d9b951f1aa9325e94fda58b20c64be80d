@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc0345ad_d1b45e19",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-05T02:00:47Z",
+      "side": 1,
+      "message": "only those who pay the golden price may bear the wheel",
+      "range": {
+        "startLine": 358,
+        "startChar": 29,
+        "endLine": 358,
+        "endChar": 34
+      },
+      "revId": "5aa3e62d9b951f1aa9325e94fda58b20c64be80d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
