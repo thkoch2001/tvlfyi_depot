@@ -71,3 +71,10 @@ main = hspec $ do
                    , Utils.rotate (-3) ['A','S','D','F','G','H','J','K','L',';']
                    , Utils.rotate (-3) ['Z','X','C','V','B','N','M',',','.','/']
                    ]
+
+  describe "Transforms.optimize" $ do
+    it "removes superfluous horizontal transformations" $ do
+      Transforms.optimize [HorizontalFlip, HorizontalFlip] == []
+
+    it "removes superfluous vertical transformations" $ do
+      Transforms.optimize [VerticalFlip, VerticalFlip] == []
