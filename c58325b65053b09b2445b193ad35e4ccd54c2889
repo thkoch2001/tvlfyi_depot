@@ -22,6 +22,52 @@
       "revId": "c58325b65053b09b2445b193ad35e4ccd54c2889",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a02524a0_c11158be",
+        "filename": "third_party/nix/src/nix-env/nix-env.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-05T22:55:40Z",
+      "side": 1,
+      "message": "huh",
+      "range": {
+        "startLine": 1053,
+        "startChar": 28,
+        "endLine": 1053,
+        "endChar": 64
+      },
+      "revId": "c58325b65053b09b2445b193ad35e4ccd54c2889",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e6b7029_5e40efb3",
+        "filename": "third_party/nix/src/nix-env/nix-env.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-05T22:55:40Z",
+      "side": 1,
+      "message": "??",
+      "range": {
+        "startLine": 1105,
+        "startChar": 31,
+        "endLine": 1105,
+        "endChar": 47
+      },
+      "revId": "c58325b65053b09b2445b193ad35e4ccd54c2889",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
