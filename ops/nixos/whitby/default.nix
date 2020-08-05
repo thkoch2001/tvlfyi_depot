@@ -353,6 +353,14 @@ in lib.fix(self: {
       openssh.authorizedKeys.keys = depot.users.riking.keys.u2f ++ depot.users.riking.keys.passworded;
     };
 
+    users.edef = {
+      isNormalUser = true;
+      extraGroups = [ "git" "wheel" ];
+      openssh.authorizedKeys.keys = [
+        depot.users.edef.keys.all
+      ];
+    };
+
     users.qyliss = {
       isNormalUser = true;
       extraGroups = [ "git" ];
