@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7204745_94893cf6",
+        "filename": "third_party/nix/src/libstore/mock-binary-cache-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-05T03:00:47Z",
+      "side": 1,
+      "message": "isn\u0027t this side-effect free?",
+      "revId": "233facb5475b414037e6b2e115e8388cc11b3fd8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4067d84_a76ab3fd",
+        "filename": "third_party/nix/src/libstore/mock-binary-cache-store.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-05T03:00:47Z",
+      "side": 1,
+      "message": "I made this comment elsewhere, but we\u0027ve been adhering to PascalCase for methods",
+      "revId": "233facb5475b414037e6b2e115e8388cc11b3fd8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
