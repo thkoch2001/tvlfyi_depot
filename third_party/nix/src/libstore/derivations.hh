@@ -44,7 +44,7 @@ using DerivationOutputs = absl::btree_map<std::string, DerivationOutput>;
    output IDs we are interested in. */
 using DerivationInputs = absl::btree_map<Path, StringSet>;
 
-using StringPairs = std::map<std::string, std::string>;
+using StringPairs = absl::btree_map<std::string, std::string>;
 
 struct BasicDerivation {
   DerivationOutputs outputs; /* keyed on symbolic IDs */
