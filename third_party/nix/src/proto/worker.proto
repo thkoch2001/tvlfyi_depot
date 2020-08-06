@@ -33,6 +33,8 @@ service WorkerService {
   rpc EnsurePath(StorePath) returns (google.protobuf.Empty);
 
   // TODO: What does this do?
+  // TODO(grfn): This should not actually take a StorePath, as it's not a
+  // StorePath
   rpc AddTempRoot(StorePath) returns (google.protobuf.Empty);
 
   // TODO: What does this do?
@@ -260,6 +262,10 @@ message PathInfo {
   repeated string sigs = 7;
   // If non-empty, an assertion that the path is content-addressed
   string ca = 8;
+
+  // Only used for AddToStoreNarRequest
+  bool repair = 12;
+  bool check_sigs = 13;
 }
 
 message SubstitutablePathInfos {
@@ -318,9 +324,9 @@ message AddSignaturesRequest {
 }
 
 message AddToStoreNarRequest {
-  oneof add_oneoff {
+  oneof add_oneof {
     PathInfo path_info = 1;
-    bytes chunk = 2;
+    bytes data = 2;
   }
 }
 
