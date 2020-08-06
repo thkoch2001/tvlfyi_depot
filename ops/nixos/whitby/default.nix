@@ -156,6 +156,7 @@ in lib.fix(self: {
     trustedUsers = [
       "grfn"
       "lukegb"
+      "tazjin"
     ];
 
     sshServe = {
