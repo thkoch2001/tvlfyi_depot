@@ -931,7 +931,8 @@ std::pair<std::string, Store::Params> splitUriAndParams(
   Store::Params params;
   auto q = uri.find('?');
   if (q != std::string::npos) {
-    Strings parts = absl::StrSplit(uri.substr(q + 1), absl::ByChar('&'));
+    Strings parts =
+        absl::StrSplit(uri.substr(q + 1), absl::ByChar('&'), absl::SkipEmpty());
     for (const auto& s : parts) {
       auto e = s.find('=');
       if (e != std::string::npos) {

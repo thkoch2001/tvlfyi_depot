@@ -533,7 +533,8 @@ static void performOp(TunnelLogger* logger, const ref<Store>& store,
             trusted.insert(s);
           }
           Strings subs;
-          Strings ss = absl::StrSplit(value, absl::ByAnyChar(" \t\n\r"));
+          Strings ss = absl::StrSplit(value, absl::ByAnyChar(" \t\n\r"),
+                                      absl::SkipEmpty());
           for (auto& s : ss) {
             if (trusted.count(s) != 0u) {
               subs.push_back(s);

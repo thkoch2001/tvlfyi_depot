@@ -88,7 +88,8 @@ std::optional<Strings> ParsedDerivation::getStringsAttr(
     if (i == drv.env.end()) {
       return {};
     }
-    return absl::StrSplit(i->second, absl::ByAnyChar(" \t\n\r"));
+    return absl::StrSplit(i->second, absl::ByAnyChar(" \t\n\r"),
+                          absl::SkipEmpty());
   }
 }
 

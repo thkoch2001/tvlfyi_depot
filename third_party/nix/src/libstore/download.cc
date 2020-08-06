@@ -181,7 +181,8 @@ struct CurlDownloader : public Downloader {
                  << "': " << absl::StripAsciiWhitespace(line);
       if (line.compare(0, 5, "HTTP/") == 0) {  // new response starts
         result.etag = "";
-        std::vector<std::string> ss = absl::StrSplit(line, absl::ByChar(' '));
+        std::vector<std::string> ss =
+            absl::StrSplit(line, absl::ByChar(' '), absl::SkipEmpty());
         status = ss.size() >= 2 ? ss[1] : "";
         result.data = std::make_shared<std::string>();
         result.bodySize = 0;
@@ -895,8 +896,8 @@ CachedDownloadResult Downloader::downloadCached(
     storePath = readLink(fileLink);
     store->addTempRoot(storePath);
     if (store->isValidPath(storePath)) {
-      std::vector<std::string> ss =
-          absl::StrSplit(readFile(dataFile), absl::ByChar('\n'));
+      std::vector<std::string> ss = absl::StrSplit(
+          readFile(dataFile), absl::ByChar('\n'), absl::SkipEmpty());
       if (ss.size() >= 3 && ss[0] == url) {
         time_t lastChecked;
         if (absl::SimpleAtoi(ss[2], &lastChecked) &&
