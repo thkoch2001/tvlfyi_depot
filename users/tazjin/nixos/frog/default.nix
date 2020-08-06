@@ -280,6 +280,7 @@ in depot.lib.fix(self: {
       rustup
       screen
       scrot
+      sourcetrail
       spotify
       steam
       tokei
