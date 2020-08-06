@@ -22,6 +22,17 @@ namespace rc {
 using nix::Derivation;
 using nix::DerivationOutput;
 
+template <class K, class V>
+struct Arbitrary<absl::btree_map<K, V>> {
+  static Gen<absl::btree_map<K, V>> arbitrary() {
+    return gen::map(gen::arbitrary<std::map<K, V>>(), [](std::map<K, V> map) {
+      absl::btree_map<K, V> out_map;
+      out_map.insert(map.begin(), map.end());
+      return out_map;
+    });
+  }
+};
+
 template <>
 struct Arbitrary<nix::Base> {
   static Gen<nix::Base> arbitrary() {
