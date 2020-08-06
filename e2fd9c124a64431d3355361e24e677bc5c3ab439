@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faedec67_8de704ae",
+        "filename": "third_party/nix/src/libstore/nar-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-06T08:32:41Z",
+      "side": 1,
+      "message": "This is the usage that caused me to create this CL - an empty string gets treated as a corrupt path a few lines down.",
+      "range": {
+        "startLine": 66,
+        "startChar": 10,
+        "endLine": 66,
+        "endChar": 70
+      },
+      "revId": "e2fd9c124a64431d3355361e24e677bc5c3ab439",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
