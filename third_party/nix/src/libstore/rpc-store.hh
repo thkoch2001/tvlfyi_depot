@@ -56,12 +56,6 @@ class RpcStore : public LocalFSStore, public virtual Store {
                           CheckSigsFlag checkSigs = CheckSigs,
                           std::shared_ptr<FSAccessor> accessor = 0) override;
 
-  virtual void addToStore(const ValidPathInfo& info,
-                          const ref<std::string>& nar,
-                          RepairFlag repair = NoRepair,
-                          CheckSigsFlag checkSigs = CheckSigs,
-                          std::shared_ptr<FSAccessor> accessor = 0) override;
-
   virtual Path addToStore(const std::string& name, const Path& srcPath,
                           bool recursive = true, HashType hashAlgo = htSHA256,
                           PathFilter& filter = defaultPathFilter,
