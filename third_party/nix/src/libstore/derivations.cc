@@ -50,8 +50,9 @@ BasicDerivation BasicDerivation::from_proto(
   result.args.insert(result.args.end(), proto_derivation->args().begin(),
                      proto_derivation->args().end());
 
-  result.env.insert(proto_derivation->env().begin(),
-                    proto_derivation->env().end());
+  for (auto [k, v] : proto_derivation->env()) {
+    result.env.emplace(k, v);
+  }
 
   return result;
 }
