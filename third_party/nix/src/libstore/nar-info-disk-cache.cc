@@ -232,14 +232,15 @@ class NarInfoDiskCacheImpl final : public NarInfoDiskCache {
           auto hash_ = Hash::deserialize(queryNAR.getStr(6));
           narInfo->narHash = Hash::unwrap_throw(hash_);
           narInfo->narSize = queryNAR.getInt(7);
-          for (auto r : absl::StrSplit(queryNAR.getStr(8), absl::ByChar(' '))) {
+          for (auto r : absl::StrSplit(queryNAR.getStr(8), absl::ByChar(' '),
+                                       absl::SkipEmpty())) {
             narInfo->references.insert(absl::StrCat(cache.storeDir, "/", r));
           }
           if (!queryNAR.isNull(9)) {
             narInfo->deriver = cache.storeDir + "/" + queryNAR.getStr(9);
           }
-          for (auto& sig :
-               absl::StrSplit(queryNAR.getStr(10), absl::ByChar(' '))) {
+          for (auto& sig : absl::StrSplit(
+                   queryNAR.getStr(10), absl::ByChar(' '), absl::SkipEmpty())) {
             narInfo->sigs.insert(std::string(sig));
           }
           narInfo->ca = queryNAR.getStr(11);

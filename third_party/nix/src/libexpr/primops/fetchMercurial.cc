@@ -53,7 +53,7 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
           runProgram("hg", true,
                      {"status", "-R", uri, "--clean", "--modified", "--added",
                       "--no-status", "--print0"}),
-          absl::ByChar('\0'));
+          absl::ByChar('\0'), absl::SkipEmpty());
 
       PathFilter filter = [&](const Path& p) -> bool {
         assert(absl::StartsWith(p, uri));
@@ -129,7 +129,7 @@ HgInfo exportMercurial(ref<Store> store, const std::string& uri,
       absl::StrSplit(runProgram("hg", true,
                                 {"log", "-R", cacheDir, "-r", rev, "--template",
                                  "{node} {rev} {branch}"}),
-                     absl::ByAnyChar(" \t\n\r"));
+                     absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty());
   assert(tokens.size() == 3);
 
   HgInfo hgInfo;

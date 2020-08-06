@@ -123,7 +123,8 @@ struct CmdRun final : InstallablesCommand {
       todo.push(path);
     }
 
-    Strings unixPath = absl::StrSplit(getEnv("PATH"), absl::ByChar(':'));
+    Strings unixPath =
+        absl::StrSplit(getEnv("PATH"), absl::ByChar(':'), absl::SkipEmpty());
 
     while (!todo.empty()) {
       Path path = todo.front();
@@ -137,7 +138,8 @@ struct CmdRun final : InstallablesCommand {
       auto propPath = path + "/nix-support/propagated-user-env-packages";
       if (accessor->stat(propPath).type == FSAccessor::tRegular) {
         for (auto p :
-             absl::StrSplit(readFile(propPath), absl::ByAnyChar(" \t\n\r"))) {
+             absl::StrSplit(readFile(propPath), absl::ByAnyChar(" \t\n\r"),
+                            absl::SkipEmpty())) {
           todo.push(std::string(p));
         }
       }

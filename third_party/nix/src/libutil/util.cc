@@ -547,7 +547,7 @@ std::vector<Path> getConfigDirs() {
   Path configHome = getConfigDir();
   std::string configDirs = getEnv("XDG_CONFIG_DIRS");
   std::vector<std::string> result =
-      absl::StrSplit(configDirs, absl::ByChar(':'));
+      absl::StrSplit(configDirs, absl::ByChar(':'), absl::SkipEmpty());
   result.insert(result.begin(), configHome);
   return result;
 }

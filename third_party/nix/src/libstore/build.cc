@@ -2485,7 +2485,8 @@ void DerivationGoal::initTmpDir() {
      there is no size constraint). */
   if (!parsedDrv->getStructuredAttrs()) {
     std::set<std::string> passAsFile =
-        absl::StrSplit(get(drv->env, "passAsFile"), absl::ByAnyChar(" \t\n\r"));
+        absl::StrSplit(get(drv->env, "passAsFile"), absl::ByAnyChar(" \t\n\r"),
+                       absl::SkipEmpty());
     for (auto& i : drv->env) {
       if (passAsFile.find(i.first) == passAsFile.end()) {
         env[i.first] = i.second;
