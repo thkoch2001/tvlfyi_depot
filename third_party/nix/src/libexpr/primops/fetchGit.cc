@@ -57,7 +57,7 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
 
       std::set<std::string> files =
           absl::StrSplit(runProgram("git", true, {"-C", uri, "ls-files", "-z"}),
-                         absl::ByChar('\0'));
+                         absl::ByChar('\0'), absl::SkipEmpty());
 
       PathFilter filter = [&](const Path& p) -> bool {
         assert(absl::StartsWith(p, uri));

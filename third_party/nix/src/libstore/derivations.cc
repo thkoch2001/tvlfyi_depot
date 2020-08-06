@@ -419,7 +419,8 @@ DrvPathWithOutputs parseDrvPathWithOutputs(absl::string_view path) {
 
   return DrvPathWithOutputs(
       path.substr(0, pos),
-      absl::StrSplit(path.substr(pos + 1), absl::ByChar(',')));
+      absl::StrSplit(path.substr(pos + 1), absl::ByChar(','),
+                     absl::SkipEmpty()));
 }
 
 Path makeDrvPathWithOutputs(const Path& drvPath,

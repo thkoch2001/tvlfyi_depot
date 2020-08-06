@@ -468,9 +468,9 @@ static void canonicalisePathMetaData_(const Path& path, uid_t fromUid,
       throw SysError("querying extended attributes of '%s'", path);
     }
 
-    for (auto& eaName :
-         absl::StrSplit(std::string(eaBuf.data(), eaSize),
-                        absl::ByString(std::string("\000", 1)))) {
+    for (auto& eaName : absl::StrSplit(std::string(eaBuf.data(), eaSize),
+                                       absl::ByString(std::string("\000", 1)),
+                                       absl::SkipEmpty())) {
       /* Ignore SELinux security labels since these cannot be
          removed even by root. */
       if (eaName == "security.selinux") {
@@ -702,7 +702,7 @@ void LocalStore::queryPathInfoUncached(
 
       s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 6);
       if (s != nullptr) {
-        info->sigs = absl::StrSplit(s, absl::ByChar(' '));
+        info->sigs = absl::StrSplit(s, absl::ByChar(' '), absl::SkipEmpty());
       }
 
       s = (const char*)sqlite3_column_text(state->stmtQueryPathInfo, 7);

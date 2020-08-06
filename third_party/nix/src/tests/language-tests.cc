@@ -80,7 +80,8 @@ std::string TestNameFor(
     const testing::TestParamInfo<std::filesystem::path>& info) {
   std::string name;
 
-  for (auto part : absl::StrSplit(info.param.stem().string(), '-')) {
+  for (auto part :
+       absl::StrSplit(info.param.stem().string(), '-', absl::SkipEmpty())) {
     std::string part_owned(part);
     part_owned[0] = absl::ascii_toupper(part_owned[0]);
     absl::StrAppend(&name, part_owned);

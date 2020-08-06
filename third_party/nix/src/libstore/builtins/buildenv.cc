@@ -137,7 +137,7 @@ static void addPkg(const Path& pkgDir, int priority) {
   try {
     for (auto p : absl::StrSplit(
              readFile(pkgDir + "/nix-support/propagated-user-env-packages"),
-             absl::ByAnyChar(" \n"))) {
+             absl::ByAnyChar(" \n"), absl::SkipEmpty())) {
       auto pkg = std::string(p);
       if (!done.count(pkg)) {
         postponed.insert(pkg);
@@ -175,8 +175,8 @@ void builtinBuildenv(const BasicDerivation& drv) {
   /* Convert the stuff we get from the environment back into a
    * coherent data type. */
   Packages pkgs;
-  Strings derivations =
-      absl::StrSplit(getAttr("derivations"), absl::ByAnyChar(" \t\n\r"));
+  Strings derivations = absl::StrSplit(
+      getAttr("derivations"), absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty());
   while (!derivations.empty()) {
     /* !!! We're trusting the caller to structure derivations env var correctly
      */

@@ -59,14 +59,14 @@ Settings::Settings()
   auto s = getEnv("NIX_REMOTE_SYSTEMS");
   if (!s.empty()) {
     Strings ss;
-    for (auto p : absl::StrSplit(s, absl::ByChar(':'))) {
+    for (auto p : absl::StrSplit(s, absl::ByChar(':'), absl::SkipEmpty())) {
       ss.push_back(absl::StrCat("@", p));
     }
     builders = concatStringsSep(" ", ss);
   }
 
-  sandboxPaths =
-      absl::StrSplit("/bin/sh=" SANDBOX_SHELL, absl::ByAnyChar(" \t\n\r"));
+  sandboxPaths = absl::StrSplit("/bin/sh=" SANDBOX_SHELL,
+                                absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty());
 }
 
 void loadConfFile() {
