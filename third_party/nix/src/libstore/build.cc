@@ -713,7 +713,7 @@ HookInstance::~HookInstance() {
 
 //////////////////////////////////////////////////////////////////////
 
-typedef std::map<std::string, std::string> StringRewrites;
+using StringRewrites = std::map<std::string, std::string>;
 
 std::string rewriteStrings(std::string s, const StringRewrites& rewrites) {
   for (auto& i : rewrites) {

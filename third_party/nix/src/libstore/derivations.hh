@@ -42,10 +42,8 @@ using DerivationOutputs = absl::btree_map<std::string, DerivationOutput>;
 
 /* For inputs that are sub-derivations, we specify exactly which
    output IDs we are interested in. */
-// TODO(grfn): change to absl::flat_hash_map
-using DerivationInputs = std::map<Path, StringSet>;
+using DerivationInputs = absl::btree_map<Path, StringSet>;
 
-// TODO(grfn): change to absl::flat_hash_map
 using StringPairs = std::map<std::string, std::string>;
 
 struct BasicDerivation {
