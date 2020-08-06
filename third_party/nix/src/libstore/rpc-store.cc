@@ -56,18 +56,17 @@ T FillFrom(const U& src) {
   return result;
 }
 
-class AddToStorePathWriterSink : public BufferedSink {
+template <typename Request>
+class RPCSink : public BufferedSink {
  public:
-  explicit AddToStorePathWriterSink(
-      std::unique_ptr<
-          grpc_impl::ClientWriter<class nix::proto::AddToStoreRequest>>&&
-          writer)
+  using Writer = grpc::ClientWriter<Request>;
+  explicit RPCSink(std::unique_ptr<Writer>&& writer)
       : writer_(std::move(writer)), good_(true) {}
 
   bool good() override { return good_; }
 
   void write(const unsigned char* data, size_t len) override {
-    proto::AddToStoreRequest req;
+    Request req;
     req.set_data(data, len);
     if (!writer_->Write(req)) {
       good_ = false;
@@ -77,8 +76,7 @@ class AddToStorePathWriterSink : public BufferedSink {
   grpc::Status Finish() { return writer_->Finish(); }
 
  private:
-  std::unique_ptr<grpc_impl::ClientWriter<class nix::proto::AddToStoreRequest>>
-      writer_;
+  std::unique_ptr<Writer> writer_;
   bool good_;
 };
 
@@ -319,14 +317,33 @@ void RpcStore::querySubstitutablePathInfos(const PathSet& paths,
 void RpcStore::addToStore(const ValidPathInfo& info, Source& narSource,
                           RepairFlag repair, CheckSigsFlag checkSigs,
                           std::shared_ptr<FSAccessor> accessor) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
-}
+  ClientContext ctx;
+  google::protobuf::Empty response;
+  auto writer = stub_->AddToStoreNar(&ctx, &response);
 
-void RpcStore::addToStore(const ValidPathInfo& info,
-                          const ref<std::string>& nar, RepairFlag repair,
-                          CheckSigsFlag checkSigs,
-                          std::shared_ptr<FSAccessor> accessor) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  proto::AddToStoreNarRequest path_info_req;
+  path_info_req.mutable_path_info()->mutable_path()->set_path(info.path);
+  path_info_req.mutable_path_info()->mutable_deriver()->set_path(info.deriver);
+  path_info_req.mutable_path_info()->set_nar_hash(
+      info.narHash.to_string(Base16, false));
+  for (const auto& ref : info.references) {
+    path_info_req.mutable_path_info()->add_references(ref);
+  }
+  *path_info_req.mutable_path_info()->mutable_registration_time() =
+      TimeUtil::TimeTToTimestamp(info.registrationTime);
+  path_info_req.mutable_path_info()->set_nar_size(info.narSize);
+  path_info_req.mutable_path_info()->set_ultimate(info.ultimate);
+  for (const auto& sig : info.sigs) {
+    path_info_req.mutable_path_info()->add_sigs(sig);
+  }
+  path_info_req.mutable_path_info()->set_ca(info.ca);
+  path_info_req.mutable_path_info()->set_repair(repair);
+  path_info_req.mutable_path_info()->set_check_sigs(checkSigs);
+
+  writer->Write(path_info_req);
+
+  RPCSink sink(std::move(writer));
+  copyNAR(narSource, sink);
 }
 
 Path RpcStore::addToStore(const std::string& name, const Path& srcPath,
@@ -349,7 +366,7 @@ Path RpcStore::addToStore(const std::string& name, const Path& srcPath,
   metadata_req.mutable_meta()->set_hash_type(HashTypeToProto(hashAlgo));
   writer->Write(metadata_req);
 
-  AddToStorePathWriterSink sink(std::move(writer));
+  RPCSink sink(std::move(writer));
   dumpPath(std::filesystem::absolute(srcPath), sink);
   sink.flush();
   SuccessOrThrow(sink.Finish());
@@ -402,7 +419,9 @@ void RpcStore::ensurePath(const Path& path) {
 }
 
 void RpcStore::addTempRoot(const Path& path) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  google::protobuf::Empty response;
+  SuccessOrThrow(stub_->AddTempRoot(&ctx, StorePath(path), &response));
 }
 
 void RpcStore::addIndirectRoot(const Path& path) {
