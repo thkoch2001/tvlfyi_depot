@@ -423,8 +423,8 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
 
         try {
           auto mapFile = fmt("/proc/%s/maps", ent->d_name);
-          std::vector<std::string> mapLines =
-              absl::StrSplit(readFile(mapFile, true), absl::ByChar('\n'));
+          std::vector<std::string> mapLines = absl::StrSplit(
+              readFile(mapFile, true), absl::ByChar('\n'), absl::SkipEmpty());
           for (const auto& line : mapLines) {
             auto match = std::smatch{};
             if (std::regex_match(line, match, mapRegex)) {

@@ -97,8 +97,8 @@ class LocalStore : public LocalFSStore {
  public:
   // Hack for build-remote.cc.
   // TODO(tazjin): remove this when we've got gRPC
-  PathSet locksHeld =
-      absl::StrSplit(getEnv("NIX_HELD_LOCKS"), absl::ByAnyChar(" \t\n\r"));
+  PathSet locksHeld = absl::StrSplit(
+      getEnv("NIX_HELD_LOCKS"), absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty());
 
   /* Initialise the local store, upgrading the schema if
      necessary. */

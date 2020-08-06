@@ -26,14 +26,15 @@ static void readChannels() {
   auto channelsFile = readFile(channelsList);
 
   std::vector<std::string> lines =
-      absl::StrSplit(channelsFile, absl::ByChar('\n'));
+      absl::StrSplit(channelsFile, absl::ByChar('\n'), absl::SkipEmpty());
 
   for (auto& line : lines) {
     line = absl::StripTrailingAsciiWhitespace(line);
     if (std::regex_search(line, std::regex("^\\s*\\#"))) {
       continue;
     }
-    std::vector<std::string> split = absl::StrSplit(line, absl::ByChar(' '));
+    std::vector<std::string> split =
+        absl::StrSplit(line, absl::ByChar(' '), absl::SkipEmpty());
     auto url = std::regex_replace(split[0], std::regex("/*$"), "");
     auto name = split.size() > 1 ? split[1] : baseNameOf(url);
     channels[name] = url;

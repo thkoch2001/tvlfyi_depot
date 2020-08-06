@@ -62,7 +62,8 @@ NarInfo::NarInfo(const Store& store, const std::string& s,
         corrupt();
       }
     } else if (name == "References") {
-      std::vector<std::string> refs = absl::StrSplit(value, absl::ByChar(' '));
+      std::vector<std::string> refs =
+          absl::StrSplit(value, absl::ByChar(' '), absl::SkipEmpty());
       if (!references.empty()) {
         corrupt();
       }

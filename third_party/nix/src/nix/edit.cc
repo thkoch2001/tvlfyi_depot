@@ -55,7 +55,8 @@ struct CmdEdit final : InstallableCommand {
 
     auto editor = getEnv("EDITOR", "cat");
 
-    Strings args = absl::StrSplit(editor, absl::ByAnyChar(" \t\n\r"));
+    Strings args =
+        absl::StrSplit(editor, absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty());
 
     if (editor.find("emacs") != std::string::npos ||
         editor.find("nano") != std::string::npos ||

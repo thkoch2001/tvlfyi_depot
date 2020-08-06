@@ -620,7 +620,8 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
           } else if (i->name == state.sOutputHashMode) {
             handleHashMode(s);
           } else if (i->name == state.sOutputs) {
-            handleOutputs(absl::StrSplit(s, absl::ByAnyChar(" \t\n\r")));
+            handleOutputs(absl::StrSplit(s, absl::ByAnyChar(" \t\n\r"),
+                                         absl::SkipEmpty()));
           }
         }
       }

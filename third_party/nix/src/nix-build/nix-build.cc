@@ -114,7 +114,8 @@ static void _main(int argc, char** argv) {
       !std::regex_search(argv[1], std::regex("nix-shell"))) {
     script = argv[1];
     try {
-      Strings lines = absl::StrSplit(readFile(script), absl::ByChar('\n'));
+      Strings lines = absl::StrSplit(readFile(script), absl::ByChar('\n'),
+                                     absl::SkipEmpty());
       if (std::regex_search(lines.front(), std::regex("^#!"))) {
         lines.pop_front();
         inShebang = true;
@@ -443,8 +444,9 @@ static void _main(int argc, char** argv) {
     env["NIX_STORE"] = store->storeDir;
     env["NIX_BUILD_CORES"] = std::to_string(settings.buildCores);
 
-    StringSet passAsFile = absl::StrSplit(get(drv.env, "passAsFile", ""),
-                                          absl::ByAnyChar(" \t\n\r"));
+    StringSet passAsFile =
+        absl::StrSplit(get(drv.env, "passAsFile", ""),
+                       absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty());
 
     bool keepTmp = false;
     int fileNr = 0;

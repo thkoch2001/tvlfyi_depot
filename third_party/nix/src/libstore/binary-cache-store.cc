@@ -42,7 +42,8 @@ void BinaryCacheStore::init() {
     upsertFile(cacheInfoFile, "StoreDir: " + storeDir + "\n",
                "text/x-nix-cache-info");
   } else {
-    for (auto& line : absl::StrSplit(*cacheInfo, absl::ByChar('\n'))) {
+    for (auto& line :
+         absl::StrSplit(*cacheInfo, absl::ByChar('\n'), absl::SkipEmpty())) {
       size_t colon = line.find(':');
       if (colon == std::string::npos) {
         continue;

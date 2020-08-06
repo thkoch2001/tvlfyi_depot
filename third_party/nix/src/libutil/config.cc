@@ -262,7 +262,7 @@ void BaseSetting<bool>::convertToArg(Args& args, const std::string& category) {
 
 template <>
 void BaseSetting<Strings>::set(const std::string& str) {
-  value = absl::StrSplit(str, absl::ByAnyChar(" \t\n\r"));
+  value = absl::StrSplit(str, absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty());
 }
 
 template <>
@@ -280,7 +280,7 @@ void BaseSetting<Strings>::toJSON(JSONPlaceholder& out) {
 
 template <>
 void BaseSetting<StringSet>::set(const std::string& str) {
-  value = absl::StrSplit(str, absl::ByAnyChar(" \t\n\r"));
+  value = absl::StrSplit(str, absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty());
 }
 
 template <>

@@ -52,7 +52,8 @@ bool Machine::mandatoryMet(const std::set<std::string>& features) const {
 }
 
 void parseMachines(const std::string& s, Machines& machines) {
-  for (auto line : absl::StrSplit(s, absl::ByAnyChar("\n;"))) {
+  for (auto line :
+       absl::StrSplit(s, absl::ByAnyChar("\n;"), absl::SkipEmpty())) {
     // Skip empty lines & comments
     line = absl::StripAsciiWhitespace(line);
     if (line.empty() || line[line.find_first_not_of(" \t")] == '#') {
@@ -73,7 +74,7 @@ void parseMachines(const std::string& s, Machines& machines) {
     }
 
     std::vector<std::string> tokens =
-        absl::StrSplit(line, absl::ByAnyChar(" \t\n\r"));
+        absl::StrSplit(line, absl::ByAnyChar(" \t\n\r"), absl::SkipEmpty());
     auto sz = tokens.size();
     if (sz < 1) {
       throw FormatError("bad machine specification '%s'", line);
@@ -86,14 +87,17 @@ void parseMachines(const std::string& s, Machines& machines) {
     // TODO(tazjin): what???
     machines.emplace_back(
         tokens[0],
-        isSet(1) ? absl::StrSplit(tokens[1], absl::ByChar(','))
-                 : std::vector<std::string>{settings.thisSystem},
+        isSet(1)
+            ? absl::StrSplit(tokens[1], absl::ByChar(','), absl::SkipEmpty())
+            : std::vector<std::string>{settings.thisSystem},
         isSet(2) ? tokens[2] : "", isSet(3) ? std::stoull(tokens[3]) : 1LL,
         isSet(4) ? std::stoull(tokens[4]) : 1LL,
-        isSet(5) ? absl::StrSplit(tokens[5], absl::ByChar(','))
-                 : std::set<std::string>{},
-        isSet(6) ? absl::StrSplit(tokens[6], absl::ByChar(','))
-                 : std::set<std::string>{},
+        isSet(5)
+            ? absl::StrSplit(tokens[5], absl::ByChar(','), absl::SkipEmpty())
+            : std::set<std::string>{},
+        isSet(6)
+            ? absl::StrSplit(tokens[6], absl::ByChar(','), absl::SkipEmpty())
+            : std::set<std::string>{},
         isSet(7) ? tokens[7] : "");
   }
 }
