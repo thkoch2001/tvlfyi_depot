@@ -40,8 +40,9 @@ BasicDerivation BasicDerivation::from_proto(
   result.builder = proto_derivation->builder().path();
   store.assertStorePath(result.builder);
 
-  result.outputs.insert(proto_derivation->outputs().begin(),
-                        proto_derivation->outputs().end());
+  for (auto [k, v] : proto_derivation->outputs()) {
+    result.outputs.emplace(k, v);
+  }
 
   result.inputSrcs.insert(proto_derivation->input_sources().paths().begin(),
                           proto_derivation->input_sources().paths().end());

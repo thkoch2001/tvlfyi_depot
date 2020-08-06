@@ -2,6 +2,8 @@
 
 #include <map>
 
+#include <absl/container/btree_map.h>
+
 #include "libproto/worker.pb.h"
 #include "libstore/store-api.hh"
 #include "libutil/hash.hh"
@@ -35,16 +37,16 @@ struct DerivationOutput {
   void parseHashInfo(bool& recursive, Hash& hash) const;
 };
 
-// TODO(grfn): change to absl::flat_hash_map
-typedef std::map<std::string, DerivationOutput> DerivationOutputs;
+// TODO(tazjin): Determine whether this actually needs to be ordered.
+using DerivationOutputs = absl::btree_map<std::string, DerivationOutput>;
 
 /* For inputs that are sub-derivations, we specify exactly which
    output IDs we are interested in. */
 // TODO(grfn): change to absl::flat_hash_map
-typedef std::map<Path, StringSet> DerivationInputs;
+using DerivationInputs = std::map<Path, StringSet>;
 
 // TODO(grfn): change to absl::flat_hash_map
-typedef std::map<std::string, std::string> StringPairs;
+using StringPairs = std::map<std::string, std::string>;
 
 struct BasicDerivation {
   DerivationOutputs outputs; /* keyed on symbolic IDs */
@@ -54,7 +56,7 @@ struct BasicDerivation {
   Strings args;
   StringPairs env;
 
-  BasicDerivation(){};
+  BasicDerivation() = default;
 
   // Convert the given proto derivation to a BasicDerivation in the given
   // nix::Store.
