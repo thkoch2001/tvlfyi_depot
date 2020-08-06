@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <sstream>
+#include <string>
 
 #include <absl/strings/str_cat.h>
 #include <absl/strings/str_format.h>
@@ -10,6 +11,7 @@
 #include <grpcpp/impl/codegen/server_context.h>
 #include <grpcpp/impl/codegen/status.h>
 #include <grpcpp/impl/codegen/status_code_enum.h>
+#include <grpcpp/impl/codegen/sync_stream.h>
 
 #include "libmain/shared.hh"
 #include "libproto/worker.grpc.pb.h"
@@ -24,6 +26,7 @@
 
 namespace nix::daemon {
 
+using ::google::protobuf::util::TimeUtil;
 using ::grpc::Status;
 using ::nix::proto::BuildStatus;
 using ::nix::proto::PathInfo;
@@ -31,20 +34,20 @@ using ::nix::proto::StorePath;
 using ::nix::proto::StorePaths;
 using ::nix::proto::WorkerService;
 
-class AddToStoreRequestSource final : public Source {
-  using Reader = grpc::ServerReader<nix::proto::AddToStoreRequest>;
-
+template <typename Request>
+class RPCSource final : public Source {
  public:
-  explicit AddToStoreRequestSource(Reader* reader) : reader_(reader) {}
+  using Reader = grpc::ServerReader<Request>;
+  explicit RPCSource(Reader* reader) : reader_(reader) {}
 
   size_t read(unsigned char* data, size_t len) override {
     auto got = buffer_.sgetn(reinterpret_cast<char*>(data), len);
     if (got < len) {
-      proto::AddToStoreRequest msg;
+      Request msg;
       if (!reader_->Read(&msg)) {
         return got;
       }
-      if (msg.add_oneof_case() != proto::AddToStoreRequest::kData) {
+      if (msg.add_oneof_case() != Request::kData) {
         // TODO(grfn): Make Source::read return a StatusOr and get rid of this
         // throw
         throw Error(
@@ -152,7 +155,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
           }
 
           auto meta = metadata_request.meta();
-          AddToStoreRequestSource source(reader);
+          RPCSource source(reader);
           auto opt_hash_type = hash_type_from(meta.hash_type());
           if (!opt_hash_type) {
             return Status(grpc::StatusCode::INVALID_ARGUMENT,
@@ -194,6 +197,62 @@ class WorkerServiceImpl final : public WorkerService::Service {
         __FUNCTION__);
   }
 
+  Status AddToStoreNar(
+      grpc::ServerContext* context,
+      grpc::ServerReader<nix::proto::AddToStoreNarRequest>* reader,
+      google::protobuf::Empty*) override {
+    return HandleExceptions(
+        [&]() -> Status {
+          proto::AddToStoreNarRequest path_info_request;
+          auto has_path_info = reader->Read(&path_info_request);
+          if (!has_path_info || !path_info_request.has_path_info()) {
+            return Status(grpc::StatusCode::INVALID_ARGUMENT,
+                          "Path info must be set before sending nar content");
+          }
+
+          auto path_info = path_info_request.path_info();
+
+          ValidPathInfo info;
+          info.path = path_info.path().path();
+          info.deriver = path_info.deriver().path();
+
+          if (!info.deriver.empty()) {
+            ASSERT_INPUT_STORE_PATH(info.deriver);
+          }
+
+          auto nar_hash = Hash::deserialize(path_info.nar_hash(), htSHA256);
+
+          if (!nar_hash.ok()) {
+            return Status(grpc::StatusCode::INVALID_ARGUMENT,
+                          std::string(nar_hash.status().message()));
+          }
+
+          info.narHash = nar_hash.ConsumeValueOrDie();
+          for (const auto& ref : path_info.references()) {
+            info.references.insert(ref);
+          }
+          info.registrationTime =
+              TimeUtil::TimestampToTimeT(path_info.registration_time());
+          info.narSize = path_info.nar_size();
+          info.ultimate = path_info.ultimate();
+          for (const auto& sig : path_info.sigs()) {
+            info.sigs.insert(sig);
+          }
+          info.ca = path_info.ca();
+
+          auto repair = path_info.repair();
+          auto check_sigs = path_info.check_sigs();
+
+          std::string saved;
+          RPCSource source(reader);
+          store_->addToStore(info, source, static_cast<RepairFlag>(repair),
+                             check_sigs ? CheckSigs : NoCheckSigs, nullptr);
+
+          return Status::OK;
+        },
+        __FUNCTION__);
+  }
+
   Status AddTextToStore(grpc::ServerContext*,
                         const nix::proto::AddTextToStoreRequest* request,
                         nix::proto::StorePath* response) override {
@@ -226,6 +285,19 @@ class WorkerServiceImpl final : public WorkerService::Service {
     store_->buildPaths(drvs, mode.value());
 
     return Status::OK;
+  }
+
+  Status AddTempRoot(grpc::ServerContext*, const nix::proto::StorePath* request,
+                     google::protobuf::Empty*) override {
+    auto path = request->path();
+    ASSERT_INPUT_STORE_PATH(path);
+
+    return HandleExceptions(
+        [&]() -> Status {
+          store_->addTempRoot(path);
+          return Status::OK;
+        },
+        __FUNCTION__);
   }
 
   Status AddIndirectRoot(grpc::ServerContext*,
