@@ -303,8 +303,7 @@ class EvalState : public gc {
 
   bool countCalls;
 
-  std::optional<std::function<void(const Path&)>> file_access_trace_fn =
-      std::nullopt;
+  std::function<void(const Path&)> file_access_trace_fn = nullptr;
   Path last_traced_file = "";
 
   typedef std::map<Symbol, size_t> PrimOpCalls;
