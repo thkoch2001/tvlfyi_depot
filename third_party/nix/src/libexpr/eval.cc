@@ -1821,9 +1821,9 @@ void EvalState::printStats() {
 }
 
 void EvalState::TraceFileAccess(const Path& realPath) {
-  if (file_access_trace_fn.has_value()) {
+  if (file_access_trace_fn) {
     if (last_traced_file != realPath) {
-      (*file_access_trace_fn)(realPath);
+      file_access_trace_fn(realPath);
       // Basic deduplication.
       last_traced_file = std::string(realPath);
     }
