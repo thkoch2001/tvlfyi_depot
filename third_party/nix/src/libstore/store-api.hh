@@ -235,6 +235,9 @@ struct BuildResult {
   // Convert the status of this `BuildResult` to its corresponding
   // `nix::proto::BuildStatus`
   nix::proto::BuildStatus status_to_proto();
+
+  static std::optional<BuildResult> FromProto(
+      const nix::proto::BuildDerivationResponse& resp);
 };
 
 class Store : public std::enable_shared_from_this<Store>, public Config {
