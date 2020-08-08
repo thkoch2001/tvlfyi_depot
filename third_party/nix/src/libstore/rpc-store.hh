@@ -1,5 +1,7 @@
 #pragma once
 
+#include <absl/strings/string_view.h>
+
 #include "libproto/worker.grpc.pb.h"
 #include "libproto/worker.pb.h"
 #include "libstore/remote-store.hh"
@@ -132,7 +134,8 @@ class RpcStore : public LocalFSStore, public virtual Store {
   std::optional<std::string> uri_;
   std::unique_ptr<nix::proto::WorkerService::Stub> stub_;
 
-  void const SuccessOrThrow(const grpc::Status& status) const;
+  void const SuccessOrThrow(const grpc::Status& status,
+                            const absl::string_view& call = "") const;
 };
 
 }  // namespace nix::store

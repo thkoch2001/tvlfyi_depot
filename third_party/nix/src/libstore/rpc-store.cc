@@ -170,7 +170,8 @@ constexpr absl::string_view GRPCStatusCodeDescription(grpc::StatusCode code) {
 // TODO(grfn): Obviously this should go away and be replaced by StatusOr... but
 // that would require refactoring the entire store api, which we don't feel like
 // doing right now. We should at some point though
-void const RpcStore::SuccessOrThrow(const grpc::Status& status) const {
+void const RpcStore::SuccessOrThrow(const grpc::Status& status,
+                                    const absl::string_view& call) const {
   if (!status.ok()) {
     auto uri = uri_.value_or("unknown URI");
     switch (status.error_code()) {
@@ -190,14 +191,15 @@ void const RpcStore::SuccessOrThrow(const grpc::Status& status) const {
 bool RpcStore::isValidPathUncached(const Path& path) {
   ClientContext ctx;
   proto::IsValidPathResponse resp;
-  SuccessOrThrow(stub_->IsValidPath(&ctx, StorePath(path), &resp));
+  SuccessOrThrow(stub_->IsValidPath(&ctx, StorePath(path), &resp),
+                 __FUNCTION__);
   return resp.is_valid();
 }
 
 PathSet RpcStore::queryAllValidPaths() {
   ClientContext ctx;
   proto::StorePaths paths;
-  SuccessOrThrow(stub_->QueryAllValidPaths(&ctx, kEmpty, &paths));
+  SuccessOrThrow(stub_->QueryAllValidPaths(&ctx, kEmpty, &paths), __FUNCTION__);
   return FillFrom<PathSet>(paths.paths());
 }
 
@@ -209,7 +211,8 @@ PathSet RpcStore::queryValidPaths(const PathSet& paths,
     store_paths.add_paths(path);
   }
   proto::StorePaths result_paths;
-  SuccessOrThrow(stub_->QueryValidPaths(&ctx, store_paths, &result_paths));
+  SuccessOrThrow(stub_->QueryValidPaths(&ctx, store_paths, &result_paths),
+                 __FUNCTION__);
   return FillFrom<PathSet>(result_paths.paths());
 }
 
@@ -222,7 +225,8 @@ void RpcStore::queryPathInfoUncached(
 
   try {
     proto::PathInfo path_info;
-    SuccessOrThrow(stub_->QueryPathInfo(&ctx, store_path, &path_info));
+    SuccessOrThrow(stub_->QueryPathInfo(&ctx, store_path, &path_info),
+                   __FUNCTION__);
 
     std::shared_ptr<ValidPathInfo> info;
 
@@ -256,21 +260,24 @@ void RpcStore::queryPathInfoUncached(
 void RpcStore::queryReferrers(const Path& path, PathSet& referrers) {
   ClientContext ctx;
   proto::StorePaths paths;
-  SuccessOrThrow(stub_->QueryReferrers(&ctx, StorePath(path), &paths));
+  SuccessOrThrow(stub_->QueryReferrers(&ctx, StorePath(path), &paths),
+                 __FUNCTION__);
   referrers.insert(paths.paths().begin(), paths.paths().end());
 }
 
 PathSet RpcStore::queryValidDerivers(const Path& path) {
   ClientContext ctx;
   proto::StorePaths paths;
-  SuccessOrThrow(stub_->QueryValidDerivers(&ctx, StorePath(path), &paths));
+  SuccessOrThrow(stub_->QueryValidDerivers(&ctx, StorePath(path), &paths),
+                 __FUNCTION__);
   return FillFrom<PathSet>(paths.paths());
 }
 
 PathSet RpcStore::queryDerivationOutputs(const Path& path) {
   ClientContext ctx;
   proto::StorePaths paths;
-  SuccessOrThrow(stub_->QueryDerivationOutputs(&ctx, StorePath(path), &paths));
+  SuccessOrThrow(stub_->QueryDerivationOutputs(&ctx, StorePath(path), &paths),
+                 __FUNCTION__);
   return FillFrom<PathSet>(paths.paths());
 }
 
@@ -287,7 +294,8 @@ Path RpcStore::queryPathFromHashPart(const std::string& hashPart) {
   proto::StorePath path;
   proto::HashPart proto_hash_part;
   proto_hash_part.set_hash_part(hashPart);
-  SuccessOrThrow(stub_->QueryPathFromHashPart(&ctx, proto_hash_part, &path));
+  SuccessOrThrow(stub_->QueryPathFromHashPart(&ctx, proto_hash_part, &path),
+                 __FUNCTION__);
   return path.path();
 }
 
@@ -349,6 +357,7 @@ void RpcStore::addToStore(const ValidPathInfo& info, Source& narSource,
 
   RPCSink sink(std::move(writer));
   copyNAR(narSource, sink);
+  SuccessOrThrow(sink.Finish(), __FUNCTION__);
 }
 
 Path RpcStore::addToStore(const std::string& name, const Path& srcPath,
@@ -374,7 +383,7 @@ Path RpcStore::addToStore(const std::string& name, const Path& srcPath,
   RPCSink sink(std::move(writer));
   dumpPath(std::filesystem::absolute(srcPath), sink);
   sink.flush();
-  SuccessOrThrow(sink.Finish());
+  SuccessOrThrow(sink.Finish(), __FUNCTION__);
 
   return response.path();
 }
@@ -394,7 +403,7 @@ Path RpcStore::addTextToStore(const std::string& name,
     request.add_references(ref);
   }
   proto::StorePath result;
-  SuccessOrThrow(stub_->AddTextToStore(&ctx, request, &result));
+  SuccessOrThrow(stub_->AddTextToStore(&ctx, request, &result), __FUNCTION__);
   return result.path();
 }
 
@@ -410,7 +419,7 @@ void RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
   }
   google::protobuf::Empty response;
   request.set_mode(nix::BuildModeToProto(buildMode));
-  SuccessOrThrow(stub_->BuildPaths(&ctx, request, &response));
+  SuccessOrThrow(stub_->BuildPaths(&ctx, request, &response), __FUNCTION__);
 }
 
 BuildResult RpcStore::buildDerivation(const Path& drvPath,
@@ -426,25 +435,27 @@ void RpcStore::ensurePath(const Path& path) {
 void RpcStore::addTempRoot(const Path& path) {
   ClientContext ctx;
   google::protobuf::Empty response;
-  SuccessOrThrow(stub_->AddTempRoot(&ctx, StorePath(path), &response));
+  SuccessOrThrow(stub_->AddTempRoot(&ctx, StorePath(path), &response),
+                 __FUNCTION__);
 }
 
 void RpcStore::addIndirectRoot(const Path& path) {
   ClientContext ctx;
   google::protobuf::Empty response;
-  SuccessOrThrow(stub_->AddIndirectRoot(&ctx, StorePath(path), &response));
+  SuccessOrThrow(stub_->AddIndirectRoot(&ctx, StorePath(path), &response),
+                 __FUNCTION__);
 }
 
 void RpcStore::syncWithGC() {
   ClientContext ctx;
   google::protobuf::Empty response;
-  SuccessOrThrow(stub_->SyncWithGC(&ctx, kEmpty, &response));
+  SuccessOrThrow(stub_->SyncWithGC(&ctx, kEmpty, &response), __FUNCTION__);
 }
 
 Roots RpcStore::findRoots(bool censor) {
   ClientContext ctx;
   proto::FindRootsResponse response;
-  SuccessOrThrow(stub_->FindRoots(&ctx, kEmpty, &response));
+  SuccessOrThrow(stub_->FindRoots(&ctx, kEmpty, &response), __FUNCTION__);
   Roots result;
 
   for (const auto& [target, links] : response.roots()) {
@@ -466,7 +477,7 @@ void RpcStore::collectGarbage(const GCOptions& options, GCResults& results) {
   request.set_max_freed(options.maxFreed);
 
   proto::CollectGarbageResponse response;
-  SuccessOrThrow(stub_->CollectGarbage(&ctx, request, &response));
+  SuccessOrThrow(stub_->CollectGarbage(&ctx, request, &response), __FUNCTION__);
 
   for (const auto& path : response.deleted_paths()) {
     results.paths.insert(path);
