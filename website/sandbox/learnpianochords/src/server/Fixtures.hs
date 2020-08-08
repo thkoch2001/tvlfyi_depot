@@ -16,6 +16,7 @@ import qualified TestUtils
 data JWTFields = JWTFields
   { overwriteSigner :: Signer
   , overwriteAuds :: [StringOrURI]
+  , overwriteIss :: StringOrURI
   }
 
 defaultJWTFields :: JWTFields
@@ -23,6 +24,7 @@ defaultJWTFields = JWTFields
   { overwriteSigner = hmacSecret "secret"
   , overwriteAuds = ["771151720060-buofllhed98fgt0j22locma05e7rpngl.apps.googleusercontent.com"]
                     |> fmap TestUtils.unsafeStringOrURI
+  , overwriteIss = TestUtils.unsafeStringOrURI "accounts.google.com"
   }
 
 googleJWT :: JWTFields -> GoogleSignIn.EncodedJWT
@@ -43,7 +45,7 @@ googleJWT JWTFields{..} =
 
     claimSet :: JWTClaimsSet
     claimSet = JWTClaimsSet
-      { iss = stringOrURI "accounts.google.com"
+      { iss = Just overwriteIss
       , sub = stringOrURI "114079822315085727057"
       , aud = overwriteAuds |> Right |> Just
       -- TODO: Replace date creation with a human-readable date constructor.

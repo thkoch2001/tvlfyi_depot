@@ -32,3 +32,15 @@ main = hspec $ do
             encodedJWT = F.defaultJWTFields { F.overwriteAuds = auds }
                          |> F.googleJWT
         jwtIsValid' encodedJWT `shouldReturn` Valid
+
+      it "returns validation error when one of the iss field doesn't match accounts.google.com or https://accounts.google.com" $ do
+        let erroneousIssuer = TestUtils.unsafeStringOrURI "not-accounts.google.com"
+            encodedJWT = F.defaultJWTFields { F.overwriteIss = erroneousIssuer }
+                         |> F.googleJWT
+        jwtIsValid' encodedJWT `shouldReturn` WrongIssuer erroneousIssuer
+
+      it "returns validation success when the iss field matches accounts.google.com or https://accounts.google.com" $ do
+        let erroneousIssuer = TestUtils.unsafeStringOrURI "https://accounts.google.com"
+            encodedJWT = F.defaultJWTFields { F.overwriteIss = erroneousIssuer }
+                         |> F.googleJWT
+        jwtIsValid' encodedJWT `shouldReturn` Valid

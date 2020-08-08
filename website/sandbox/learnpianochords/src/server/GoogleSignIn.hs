@@ -8,6 +8,7 @@ import Web.JWT
 import Utils
 
 import qualified Network.HTTP.Simple as HTTP
+import qualified Data.Text as Text
 --------------------------------------------------------------------------------
 
 newtype EncodedJWT = EncodedJWT Text
@@ -18,7 +19,9 @@ data ValidationResult
   | DecodeError
   | GoogleSaysInvalid Text
   | NoMatchingClientIDs [StringOrURI]
-  | ClientIDParseFailure Text
+  | WrongIssuer StringOrURI
+  | StringOrURIParseFailure Text
+  | MissingIssuer
   deriving (Eq, Show)
 
 -- | Returns True when the supplied `jwt` meets the following criteria:
@@ -49,15 +52,31 @@ jwtIsValid skipHTTP (EncodedJWT encodedJWT) = do
   where
     continue :: JWT UnverifiedJWT -> IO ValidationResult
     continue jwt = do
-      let audValues = jwt |> claims |> auds
-          mClientID = stringOrURI "771151720060-buofllhed98fgt0j22locma05e7rpngl.apps.googleusercontent.com"
-      case mClientID of
-        Nothing ->
-          pure $ ClientIDParseFailure "771151720060-buofllhed98fgt0j22locma05e7rpngl.apps.googleusercontent.com"
-        Just clientID ->
+      let audValues :: [StringOrURI]
+          audValues = jwt |> claims |> auds
+          expectedClientID :: Text
+          expectedClientID = "771151720060-buofllhed98fgt0j22locma05e7rpngl.apps.googleusercontent.com"
+          expectedIssuers :: [Text]
+          expectedIssuers = [ "accounts.google.com"
+                            , "https://accounts.google.com"
+                            ]
+          mExpectedClientID :: Maybe StringOrURI
+          mExpectedClientID = stringOrURI expectedClientID
+          mExpectedIssuers :: Maybe [StringOrURI]
+          mExpectedIssuers = expectedIssuers |> traverse stringOrURI
+      case (mExpectedClientID, mExpectedIssuers) of
+        (Nothing, _) -> pure $ StringOrURIParseFailure expectedClientID
+        (_, Nothing) -> pure $ StringOrURIParseFailure (Text.unwords expectedIssuers)
+        (Just clientID, Just parsedIssuers) ->
           -- TODO: Prefer reading clientID from a config. I'm thinking of the
           -- AppContext type having my Configuration
           if not $ clientID `elem` audValues then
             pure $ NoMatchingClientIDs audValues
           else
-            pure Valid
+            case jwt |> claims |> iss of
+              Nothing -> pure MissingIssuer
+              Just jwtIssuer ->
+                if not $ jwtIssuer `elem` parsedIssuers then
+                  pure $ WrongIssuer jwtIssuer
+                else
+                  pure Valid
