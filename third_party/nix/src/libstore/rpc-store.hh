@@ -67,8 +67,6 @@ class RpcStore : public LocalFSStore, public virtual Store {
                               const PathSet& references,
                               RepairFlag repair = NoRepair) override;
 
-  virtual void narFromPath(const Path& path, Sink& sink) override;
-
   virtual void buildPaths(const PathSet& paths,
                           BuildMode buildMode = bmNormal) override;
 
@@ -97,11 +95,6 @@ class RpcStore : public LocalFSStore, public virtual Store {
   virtual void addSignatures(const Path& storePath,
                              const StringSet& sigs) override;
 
-  virtual void computeFSClosure(const PathSet& paths, PathSet& paths_,
-                                bool flipDirection = false,
-                                bool includeOutputs = false,
-                                bool includeDerivers = false) override;
-
   virtual void queryMissing(const PathSet& targets, PathSet& willBuild,
                             PathSet& willSubstitute, PathSet& unknown,
                             unsigned long long& downloadSize,
@@ -109,15 +102,9 @@ class RpcStore : public LocalFSStore, public virtual Store {
 
   virtual std::shared_ptr<std::string> getBuildLog(const Path& path) override;
 
-  virtual void connect() override;
+  void connect() override{};
 
   virtual unsigned int getProtocol() override;
-
-  virtual int getPriority() override;
-
-  virtual Path toRealPath(const Path& storePath) override;
-
-  virtual void createUser(const std::string& userName, uid_t userId) override;
 
  protected:
   virtual bool isValidPathUncached(const Path& path) override;
