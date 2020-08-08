@@ -3,7 +3,7 @@
 module GoogleSignIn where
 --------------------------------------------------------------------------------
 import Data.String.Conversions (cs)
-import Data.Text (Text)
+import Data.Text
 import Web.JWT
 import Utils
 
@@ -14,10 +14,16 @@ import qualified Data.Time.Clock.POSIX as POSIX
 --------------------------------------------------------------------------------
 
 newtype EncodedJWT = EncodedJWT Text
+  deriving (Show)
 
--- | Some of the errors that a JWT
+newtype DecodedJWT = DecodedJWT (JWT UnverifiedJWT)
+  deriving (Show)
+
+instance Eq DecodedJWT where
+  (DecodedJWT _) == (DecodedJWT _) = True
+
 data ValidationResult
-  = Valid
+  = Valid DecodedJWT
   | DecodeError
   | GoogleSaysInvalid Text
   | NoMatchingClientIDs [StringOrURI]
@@ -36,10 +42,10 @@ data ValidationResult
 -- * The `exp` time has not passed
 --
 -- Set `skipHTTP` to `True` to avoid making the network request for testing.
-jwtIsValid :: Bool
+validateJWT :: Bool
            -> EncodedJWT
            -> IO ValidationResult
-jwtIsValid skipHTTP (EncodedJWT encodedJWT) = do
+validateJWT skipHTTP (EncodedJWT encodedJWT) = do
   case encodedJWT |> decode of
     Nothing -> pure DecodeError
     Just jwt -> do
@@ -91,4 +97,16 @@ jwtIsValid skipHTTP (EncodedJWT encodedJWT) = do
                       if not $ currentTime <= jwtExpiry then
                         pure $ StaleExpiry jwtExpiry
                       else
-                        pure Valid
+                        pure $ jwt |> DecodedJWT |> Valid
+
+-- | Attempt to explain the `ValidationResult` to a human.
+explainResult :: ValidationResult -> String
+explainResult (Valid _) = "Everything appears to be valid"
+explainResult DecodeError = "We had difficulty decoding the provided JWT"
+explainResult (GoogleSaysInvalid x) = "After checking with Google, they claimed that the provided JWT was invalid: " ++ cs x
+explainResult (NoMatchingClientIDs audFields) = "None of the values in the `aud` field on the provided JWT match our client ID: " ++ show audFields
+explainResult (WrongIssuer issuer) = "The `iss` field in the provided JWT does not match what we expect: " ++ show issuer
+explainResult (StringOrURIParseFailure x) = "We had difficulty parsing values as URIs" ++ show x
+explainResult TimeConversionFailure = "We had difficulty converting the current time to a value we can use to compare with the JWT's `exp` field"
+explainResult (MissingRequiredClaim claim) = "Your JWT is missing the following claim: " ++ cs claim
+explainResult (StaleExpiry x) = "The `exp` field on your JWT has expired" ++ x |> show |> cs

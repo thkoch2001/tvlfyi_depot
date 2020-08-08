@@ -4,10 +4,11 @@
 module Types where
 --------------------------------------------------------------------------------
 import Data.Aeson
+import Data.Text
 --------------------------------------------------------------------------------
 
 data VerifyGoogleSignInRequest = VerifyGoogleSignInRequest
-  { idToken :: String
+  { idToken :: Text
   } deriving (Eq, Show)
 
 instance FromJSON VerifyGoogleSignInRequest where
