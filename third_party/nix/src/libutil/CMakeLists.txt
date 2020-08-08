@@ -18,6 +18,7 @@ set(HEADER_FILES
     lru-cache.hh
     monitor-fd.hh
     pool.hh
+    proto.hh
     ref.hh
     serialise.hh
     sync.hh
