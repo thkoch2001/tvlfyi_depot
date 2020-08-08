@@ -256,35 +256,43 @@ class WorkerServiceImpl final : public WorkerService::Service {
   Status AddTextToStore(grpc::ServerContext*,
                         const nix::proto::AddTextToStoreRequest* request,
                         nix::proto::StorePath* response) override {
-    PathSet references;
-    for (const auto& ref : request->references()) {
-      references.insert(ref);
-    }
-    auto path =
-        store_->addTextToStore(request->name(), request->content(), references);
-    response->set_path(path);
-    return Status::OK;
+    return HandleExceptions(
+        [&]() -> Status {
+          PathSet references;
+          for (const auto& ref : request->references()) {
+            references.insert(ref);
+          }
+          auto path = store_->addTextToStore(request->name(),
+                                             request->content(), references);
+          response->set_path(path);
+          return Status::OK;
+        },
+        __FUNCTION__);
   }
 
   Status BuildPaths(grpc::ServerContext*,
                     const nix::proto::BuildPathsRequest* request,
                     google::protobuf::Empty*) override {
-    PathSet drvs;
-    for (const auto& drv : request->drvs()) {
-      drvs.insert(drv);
-    }
-    auto mode = BuildModeFrom(request->mode());
+    return HandleExceptions(
+        [&]() -> Status {
+          PathSet drvs;
+          for (const auto& drv : request->drvs()) {
+            drvs.insert(drv);
+          }
+          auto mode = BuildModeFrom(request->mode());
 
-    if (!mode.has_value()) {
-      return Status(grpc::StatusCode::INTERNAL, "Invalid build mode");
-    }
+          if (!mode.has_value()) {
+            return Status(grpc::StatusCode::INTERNAL, "Invalid build mode");
+          }
 
-    // TODO(grfn): If mode is repair and not trusted, we need to return an error
-    // here (but we can't yet because we don't know anything about trusted
-    // users)
-    store_->buildPaths(drvs, mode.value());
+          // TODO(grfn): If mode is repair and not trusted, we need to return an
+          // error here (but we can't yet because we don't know anything about
+          // trusted users)
+          store_->buildPaths(drvs, mode.value());
 
-    return Status::OK;
+          return Status::OK;
+        },
+        __FUNCTION__);
   }
 
   Status AddTempRoot(grpc::ServerContext*, const nix::proto::StorePath* request,
