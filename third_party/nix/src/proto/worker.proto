@@ -107,6 +107,9 @@ service WorkerService {
   // derivations that will be built, and the set of output paths that
   // will be substituted.
   rpc QueryMissing(StorePaths) returns (QueryMissingResponse);
+
+  // Return the build log of the specified store path, if available
+  rpc GetBuildLog(StorePath) returns (BuildLog);
 }
 
 enum HashType {
@@ -336,4 +339,8 @@ message QueryMissingResponse {
   repeated string unknown = 3;
   uint64 download_size = 4;
   uint64 nar_size = 5;
+}
+
+message BuildLog {
+  string build_log = 1;
 }

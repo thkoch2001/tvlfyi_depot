@@ -22,7 +22,9 @@
 
 #include "libproto/worker.grpc.pb.h"
 #include "libproto/worker.pb.h"
+#include "libstore/derivations.hh"
 #include "libstore/store-api.hh"
+#include "libstore/worker-protocol.hh"
 #include "libutil/archive.hh"
 #include "libutil/hash.hh"
 #include "libutil/proto.hh"
@@ -315,10 +317,6 @@ Path RpcStore::addTextToStore(const std::string& name,
   return result.path();
 }
 
-void RpcStore::narFromPath(const Path& path, Sink& sink) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
-}
-
 void RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
   ClientContext ctx;
   proto::BuildPathsRequest request;
@@ -333,11 +331,29 @@ void RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
 BuildResult RpcStore::buildDerivation(const Path& drvPath,
                                       const BasicDerivation& drv,
                                       BuildMode buildMode) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  proto::BuildDerivationRequest request;
+  request.mutable_drv_path()->set_path(drvPath);
+  auto proto_drv = drv.to_proto();
+  request.set_allocated_derivation(&proto_drv);
+  request.set_build_mode(BuildModeToProto(buildMode));
+  proto::BuildDerivationResponse response;
+  SuccessOrThrow(stub_->BuildDerivation(&ctx, request, &response),
+                 __FUNCTION__);
+
+  const auto result = BuildResult::FromProto(response);
+  if (!result.has_value()) {
+    throw Error("Invalid response from daemon for buildDerivation");
+  }
+  return result.value();
 }
 
 void RpcStore::ensurePath(const Path& path) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  google::protobuf::Empty response;
+  SuccessOrThrow(
+      stub_->EnsurePath(&ctx, util::proto::StorePath(path), &response),
+      __FUNCTION__);
 }
 
 void RpcStore::addTempRoot(const Path& path) {
@@ -397,53 +413,64 @@ void RpcStore::collectGarbage(const GCOptions& options, GCResults& results) {
 }
 
 void RpcStore::optimiseStore() {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  google::protobuf::Empty response;
+  SuccessOrThrow(stub_->OptimiseStore(&ctx, kEmpty, &response), __FUNCTION__);
 }
 
 bool RpcStore::verifyStore(bool checkContents, RepairFlag repair) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  proto::VerifyStoreRequest request;
+  request.set_check_contents(checkContents);
+  request.set_repair(repair);
+  proto::VerifyStoreResponse response;
+  SuccessOrThrow(stub_->VerifyStore(&ctx, request, &response), __FUNCTION__);
+  return response.errors();
 }
 
 void RpcStore::addSignatures(const Path& storePath, const StringSet& sigs) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
-}
-
-void RpcStore::computeFSClosure(const PathSet& paths, PathSet& paths_,
-                                bool flipDirection, bool includeOutputs,
-                                bool includeDerivers) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  proto::AddSignaturesRequest request;
+  request.mutable_path()->set_path(storePath);
+  for (const auto& sig : sigs) {
+    request.mutable_sigs()->add_sigs(sig);
+  }
+  google::protobuf::Empty response;
+  SuccessOrThrow(stub_->AddSignatures(&ctx, request, &response), __FUNCTION__);
 }
 
 void RpcStore::queryMissing(const PathSet& targets, PathSet& willBuild,
                             PathSet& willSubstitute, PathSet& unknown,
                             unsigned long long& downloadSize,
                             unsigned long long& narSize) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  proto::QueryMissingResponse response;
+  SuccessOrThrow(
+      stub_->QueryMissing(&ctx, util::proto::StorePaths(targets), &response),
+      __FUNCTION__);
+
+  willBuild = util::proto::FillFrom<PathSet>(response.will_build());
+  willSubstitute = util::proto::FillFrom<PathSet>(response.will_substitute());
+  unknown = util::proto::FillFrom<PathSet>(response.unknown());
+  downloadSize = response.download_size();
+  narSize = response.nar_size();
 }
 
 std::shared_ptr<std::string> RpcStore::getBuildLog(const Path& path) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
+  ClientContext ctx;
+  proto::BuildLog response;
+  SuccessOrThrow(
+      stub_->GetBuildLog(&ctx, util::proto::StorePath(path), &response),
+      __FUNCTION__);
+
+  auto build_log = response.build_log();
+  if (build_log.empty()) {
+    return nullptr;
+  }
+  return std::make_shared<std::string>(build_log);
 }
 
-void RpcStore::connect() {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
-}
-
-unsigned int RpcStore::getProtocol() {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
-}
-
-int RpcStore::getPriority() {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
-}
-
-Path RpcStore::toRealPath(const Path& storePath) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
-}
-
-void RpcStore::createUser(const std::string& userName, uid_t userId) {
-  throw Unsupported(absl::StrCat("Not implemented ", __func__));
-}
+unsigned int RpcStore::getProtocol() { return PROTOCOL_VERSION; }
 
 }  // namespace store
 

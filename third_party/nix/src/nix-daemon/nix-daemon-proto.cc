@@ -690,6 +690,19 @@ class WorkerServiceImpl final : public WorkerService::Service {
         __FUNCTION__);
   };
 
+  Status GetBuildLog(grpc::ServerContext* context, const StorePath* request,
+                     proto::BuildLog* response) override {
+    return HandleExceptions(
+        [&]() -> Status {
+          const auto log = store_->getBuildLog(request->path());
+          if (log) {
+            response->set_build_log(*log);
+          }
+          return Status::OK;
+        },
+        __FUNCTION__);
+  }
+
  private:
   Status HandleExceptions(std::function<Status(void)> fn,
                           absl::string_view methodName) {

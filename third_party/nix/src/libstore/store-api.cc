@@ -77,6 +77,44 @@ nix::proto::BuildStatus BuildResult::status_to_proto() {
   }
 }
 
+std::optional<BuildResult> BuildResult::FromProto(
+    const nix::proto::BuildDerivationResponse& resp) {
+  BuildResult result;
+  switch (resp.status()) {
+    case proto::BuildStatus::Built:
+      result.status = BuildResult::Status::Built;
+    case proto::BuildStatus::Substituted:
+      result.status = BuildResult::Status::Substituted;
+    case proto::BuildStatus::AlreadyValid:
+      result.status = BuildResult::Status::AlreadyValid;
+    case proto::BuildStatus::PermanentFailure:
+      result.status = BuildResult::Status::PermanentFailure;
+    case proto::BuildStatus::InputRejected:
+      result.status = BuildResult::Status::InputRejected;
+    case proto::BuildStatus::OutputRejected:
+      result.status = BuildResult::Status::OutputRejected;
+    case proto::BuildStatus::TransientFailure:
+      result.status = BuildResult::Status::TransientFailure;
+    case proto::BuildStatus::CachedFailure:
+      result.status = BuildResult::Status::CachedFailure;
+    case proto::BuildStatus::TimedOut:
+      result.status = BuildResult::Status::TimedOut;
+    case proto::BuildStatus::MiscFailure:
+      result.status = BuildResult::Status::MiscFailure;
+    case proto::BuildStatus::DependencyFailed:
+      result.status = BuildResult::Status::DependencyFailed;
+    case proto::BuildStatus::LogLimitExceeded:
+      result.status = BuildResult::Status::LogLimitExceeded;
+    case proto::BuildStatus::NotDeterministic:
+      result.status = BuildResult::Status::NotDeterministic;
+    default:
+      return {};
+  }
+
+  result.errorMsg = resp.error_message();
+  return result;
+}
+
 std::optional<GCOptions::GCAction> GCActionFromProto(
     nix::proto::GCAction gc_action) {
   switch (gc_action) {
