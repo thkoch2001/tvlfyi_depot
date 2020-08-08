@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "528c3a8d_108d5600",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-08T21:49:17Z",
+      "side": 1,
+      "message": "have we incremented this constant yet? if not, does it actually matter?",
+      "range": {
+        "startLine": 473,
+        "startChar": 46,
+        "endLine": 473,
+        "endChar": 62
+      },
+      "revId": "d0d57886ca0ce66f83ee33ebc56fad31cf26077a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
