@@ -9,6 +9,8 @@ import Utils
 
 import qualified Network.HTTP.Simple as HTTP
 import qualified Data.Text as Text
+import qualified Web.JWT as JWT
+import qualified Data.Time.Clock.POSIX as POSIX
 --------------------------------------------------------------------------------
 
 newtype EncodedJWT = EncodedJWT Text
@@ -21,7 +23,9 @@ data ValidationResult
   | NoMatchingClientIDs [StringOrURI]
   | WrongIssuer StringOrURI
   | StringOrURIParseFailure Text
-  | MissingIssuer
+  | TimeConversionFailure
+  | MissingRequiredClaim Text
+  | StaleExpiry NumericDate
   deriving (Eq, Show)
 
 -- | Returns True when the supplied `jwt` meets the following criteria:
@@ -73,10 +77,18 @@ jwtIsValid skipHTTP (EncodedJWT encodedJWT) = do
           if not $ clientID `elem` audValues then
             pure $ NoMatchingClientIDs audValues
           else
-            case jwt |> claims |> iss of
-              Nothing -> pure MissingIssuer
-              Just jwtIssuer ->
+            case (jwt |> claims |> iss, jwt |> claims |> JWT.exp) of
+              (Nothing, _) -> pure $ MissingRequiredClaim "iss"
+              (_, Nothing) -> pure $ MissingRequiredClaim "exp"
+              (Just jwtIssuer, Just jwtExpiry) ->
                 if not $ jwtIssuer `elem` parsedIssuers then
                   pure $ WrongIssuer jwtIssuer
-                else
-                  pure Valid
+                else do
+                  mCurrentTime <- POSIX.getPOSIXTime |> fmap numericDate
+                  case mCurrentTime of
+                    Nothing -> pure TimeConversionFailure
+                    Just currentTime ->
+                      if not $ currentTime <= jwtExpiry then
+                        pure $ StaleExpiry jwtExpiry
+                      else
+                        pure Valid

@@ -4,11 +4,13 @@ module Spec where
 --------------------------------------------------------------------------------
 import Test.Hspec
 import Utils
+import Web.JWT (numericDate)
 import GoogleSignIn (ValidationResult(..))
 
 import qualified GoogleSignIn
 import qualified Fixtures as F
 import qualified TestUtils
+import qualified Data.Time.Clock.POSIX as POSIX
 --------------------------------------------------------------------------------
 
 main :: IO ()
@@ -44,3 +46,23 @@ main = hspec $ do
             encodedJWT = F.defaultJWTFields { F.overwriteIss = erroneousIssuer }
                          |> F.googleJWT
         jwtIsValid' encodedJWT `shouldReturn` Valid
+
+      it "fails validation when the exp field has expired" $ do
+        let mErroneousExp = numericDate 0
+        case mErroneousExp of
+          Nothing -> True `shouldBe` False
+          Just erroneousExp -> do
+            let encodedJWT = F.defaultJWTFields { F.overwriteExp = erroneousExp }
+                             |> F.googleJWT
+            jwtIsValid' encodedJWT `shouldReturn` StaleExpiry erroneousExp
+
+      it "passes validation when the exp field is current" $ do
+        mFreshExp <- POSIX.getPOSIXTime
+                     |> fmap (\x -> x * 60 * 60 * 24 * 10) -- 10 days later
+                     |> fmap numericDate
+        case mFreshExp of
+          Nothing -> True `shouldBe` False
+          Just freshExp -> do
+            let encodedJWT = F.defaultJWTFields { F.overwriteExp = freshExp }
+                             |> F.googleJWT
+            jwtIsValid' encodedJWT `shouldReturn` Valid

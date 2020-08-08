@@ -9,6 +9,8 @@ import Utils
 import qualified Data.Map as Map
 import qualified GoogleSignIn
 import qualified TestUtils
+import qualified Data.Time.Clock.POSIX as POSIX
+import qualified System.IO.Unsafe as Unsafe
 --------------------------------------------------------------------------------
 
 -- | These are the JWT fields that I'd like to overwrite in the `googleJWT`
@@ -17,15 +19,23 @@ data JWTFields = JWTFields
   { overwriteSigner :: Signer
   , overwriteAuds :: [StringOrURI]
   , overwriteIss :: StringOrURI
+  , overwriteExp :: NumericDate
   }
 
 defaultJWTFields :: JWTFields
-defaultJWTFields = JWTFields
-  { overwriteSigner = hmacSecret "secret"
-  , overwriteAuds = ["771151720060-buofllhed98fgt0j22locma05e7rpngl.apps.googleusercontent.com"]
-                    |> fmap TestUtils.unsafeStringOrURI
-  , overwriteIss = TestUtils.unsafeStringOrURI "accounts.google.com"
-  }
+defaultJWTFields = do
+  let tenDaysFromToday = POSIX.getPOSIXTime
+                         |> Unsafe.unsafePerformIO
+                         |> (\x -> x * 60 * 60 * 25 * 10)
+                         |> numericDate
+                         |> TestUtils.unsafeJust
+  JWTFields
+    { overwriteSigner = hmacSecret "secret"
+    , overwriteAuds = ["771151720060-buofllhed98fgt0j22locma05e7rpngl.apps.googleusercontent.com"]
+                      |> fmap TestUtils.unsafeStringOrURI
+    , overwriteIss = TestUtils.unsafeStringOrURI "accounts.google.com"
+    , overwriteExp = tenDaysFromToday
+    }
 
 googleJWT :: JWTFields -> GoogleSignIn.EncodedJWT
 googleJWT JWTFields{..} =
@@ -49,7 +59,7 @@ googleJWT JWTFields{..} =
       , sub = stringOrURI "114079822315085727057"
       , aud = overwriteAuds |> Right |> Just
       -- TODO: Replace date creation with a human-readable date constructor.
-      , Web.JWT.exp = numericDate 1596756453
+      , Web.JWT.exp = Just overwriteExp
       , nbf = Nothing
       -- TODO: Replace date creation with a human-readable date constructor.
       , iat = numericDate 1596752853
