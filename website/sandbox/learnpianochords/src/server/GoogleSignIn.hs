@@ -10,5 +10,5 @@ import Web.JWT
 -- * The value of `iss` matches is "accounts.google.com" or
 --   "https://accounts.google.com"
 -- * The `exp` time has not passed
-jwtIsValid :: JWT UnverifiedJWT -> Bool
-jwtIsValid jwt = False
+jwtIsValid :: JWT UnverifiedJWT -> IO Bool
+jwtIsValid jwt = pure False
