@@ -22,6 +22,30 @@
       "revId": "a68b80e41c4b1be4b53142c22bb6091bd0838eb8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c7c3b13_7ecc5cfb",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-08T16:51:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bda20107_cfd34e5a",
+      "range": {
+        "startLine": 248,
+        "startChar": 43,
+        "endLine": 248,
+        "endChar": 74
+      },
+      "revId": "a68b80e41c4b1be4b53142c22bb6091bd0838eb8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
