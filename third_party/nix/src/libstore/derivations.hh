@@ -35,6 +35,8 @@ struct DerivationOutput {
         hash(proto_derivation_output.hash()) {}
 
   void parseHashInfo(bool& recursive, Hash& hash) const;
+
+  [[nodiscard]] nix::proto::Derivation_DerivationOutput to_proto() const;
 };
 
 // TODO(tazjin): Determine whether this actually needs to be ordered.
@@ -60,6 +62,8 @@ struct BasicDerivation {
   // nix::Store.
   static BasicDerivation from_proto(
       const nix::proto::Derivation* proto_derivation, const nix::Store& store);
+
+  [[nodiscard]] nix::proto::Derivation to_proto() const;
 
   virtual ~BasicDerivation(){};
 
