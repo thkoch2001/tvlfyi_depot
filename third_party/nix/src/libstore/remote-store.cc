@@ -69,56 +69,6 @@ ref<RemoteStore::Connection> RemoteStore::openConnectionWrapper() {
   }
 }
 
-UDSRemoteStore::UDSRemoteStore(const Params& params)
-    : Store(params), LocalFSStore(params), RemoteStore(params) {}
-
-UDSRemoteStore::UDSRemoteStore(std::string socket_path, const Params& params)
-    : Store(params),
-      LocalFSStore(params),
-      RemoteStore(params),
-      path(socket_path) {}
-
-std::string UDSRemoteStore::getUri() {
-  if (path) {
-    return std::string("unix://") + *path;
-  }
-  return "daemon";
-}
-
-ref<RemoteStore::Connection> UDSRemoteStore::openConnection() {
-  auto conn = make_ref<Connection>();
-
-  /* Connect to a daemon that does the privileged work for us. */
-  conn->fd = socket(PF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
-  if (!conn->fd) {
-    throw SysError("cannot create Unix domain socket");
-  }
-  closeOnExec(conn->fd.get());
-
-  std::string socketPath = path ? *path : settings.nixDaemonSocketFile;
-
-  struct sockaddr_un addr;
-  addr.sun_family = AF_UNIX;
-  strncpy(addr.sun_path, socketPath.c_str(), sizeof(addr.sun_path));
-  if (addr.sun_path[sizeof(addr.sun_path) - 1] != '\0') {
-    throw Error(format("socket path '%1%' is too long") % socketPath);
-  }
-
-  if (::connect(conn->fd.get(), reinterpret_cast<struct sockaddr*>(&addr),
-                sizeof(addr)) == -1) {
-    throw SysError(format("cannot connect to daemon at '%1%'") % socketPath);
-  }
-
-  conn->from.fd = conn->fd.get();
-  conn->to.fd = conn->fd.get();
-
-  conn->startTime = std::chrono::steady_clock::now();
-
-  initConnection(*conn);
-
-  return conn;
-}
-
 void RemoteStore::initConnection(Connection& conn) {
   /* Send the magic greeting, check for the reply. */
   try {
@@ -726,17 +676,5 @@ std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
 
   return nullptr;
 }
-
-static std::string uriScheme = "unix://";
-
-static RegisterStoreImplementation regStore(
-    [](const std::string& uri,
-       const Store::Params& params) -> std::shared_ptr<Store> {
-      if (std::string(uri, 0, uriScheme.size()) != uriScheme) {
-        return nullptr;
-      }
-      return std::make_shared<UDSRemoteStore>(
-          std::string(uri, uriScheme.size()), params);
-    });
 
 }  // namespace nix
