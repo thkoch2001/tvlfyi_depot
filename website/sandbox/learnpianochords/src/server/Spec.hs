@@ -3,27 +3,29 @@
 module Spec where
 --------------------------------------------------------------------------------
 import Test.Hspec
-import Web.JWT
 import Utils
+import GoogleSignIn (ValidationResult(..))
 
 import qualified GoogleSignIn
 import qualified Fixtures as F
+import qualified TestUtils
 --------------------------------------------------------------------------------
 
 main :: IO ()
 main = hspec $ do
-  describe "GoogleSignIn" $ do
+  describe "GoogleSignIn" $
     describe "jwtIsValid" $ do
-      it "returns false when the signature is invalid" $ do
-        let mJWT = F.defaultJWTFields { F.overwriteSigner = hmacSecret "wrong" }
-                   |> F.googleJWT
-        case mJWT of
-          Nothing  -> True `shouldBe` False
-          Just jwt -> GoogleSignIn.jwtIsValid jwt `shouldReturn` False
+      let jwtIsValid' = GoogleSignIn.jwtIsValid True
+      it "returns validation error when the aud field doesn't match my client ID" $ do
+        let auds = ["wrong-client-id"]
+                   |> fmap TestUtils.unsafeStringOrURI
+            encodedJWT = F.defaultJWTFields { F.overwriteAuds = auds }
+                         |> F.googleJWT
+        jwtIsValid' encodedJWT `shouldReturn` NoMatchingClientIDs auds
 
-      it "returns false when the aud field doesn't match my client ID" $ do
-        let mJWT = F.defaultJWTFields { F.overwriteAud = stringOrURI "wrong" }
-                  |> F.googleJWT
-        case mJWT of
-          Nothing  -> True `shouldBe` False
-          Just jwt -> GoogleSignIn.jwtIsValid jwt `shouldReturn` False
+      it "returns validation success when one of the aud fields matches my client ID" $ do
+        let auds = ["wrong-client-id", "771151720060-buofllhed98fgt0j22locma05e7rpngl.apps.googleusercontent.com"]
+                   |> fmap TestUtils.unsafeStringOrURI
+            encodedJWT = F.defaultJWTFields { F.overwriteAuds = auds }
+                         |> F.googleJWT
+        jwtIsValid' encodedJWT `shouldReturn` Valid

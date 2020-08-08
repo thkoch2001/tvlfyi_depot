@@ -7,25 +7,28 @@ import Web.JWT
 import Utils
 
 import qualified Data.Map as Map
+import qualified GoogleSignIn
+import qualified TestUtils
 --------------------------------------------------------------------------------
 
 -- | These are the JWT fields that I'd like to overwrite in the `googleJWT`
 -- function.
 data JWTFields = JWTFields
   { overwriteSigner :: Signer
-  , overwriteAud :: Maybe StringOrURI
+  , overwriteAuds :: [StringOrURI]
   }
 
 defaultJWTFields :: JWTFields
 defaultJWTFields = JWTFields
   { overwriteSigner = hmacSecret "secret"
-  , overwriteAud = stringOrURI "771151720060-buofllhed98fgt0j22locma05e7rpngl.apps.googleusercontent.com"
+  , overwriteAuds = ["771151720060-buofllhed98fgt0j22locma05e7rpngl.apps.googleusercontent.com"]
+                    |> fmap TestUtils.unsafeStringOrURI
   }
 
-googleJWT :: JWTFields -> Maybe (JWT UnverifiedJWT)
+googleJWT :: JWTFields -> GoogleSignIn.EncodedJWT
 googleJWT JWTFields{..} =
   encodeSigned signer jwtHeader claimSet
-  |> decode
+  |> GoogleSignIn.EncodedJWT
   where
     signer :: Signer
     signer = overwriteSigner
@@ -42,7 +45,7 @@ googleJWT JWTFields{..} =
     claimSet = JWTClaimsSet
       { iss = stringOrURI "accounts.google.com"
       , sub = stringOrURI "114079822315085727057"
-      , aud = overwriteAud |> fmap Left
+      , aud = overwriteAuds |> Right |> Just
       -- TODO: Replace date creation with a human-readable date constructor.
       , Web.JWT.exp = numericDate 1596756453
       , nbf = Nothing
