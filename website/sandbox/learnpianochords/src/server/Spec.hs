@@ -18,12 +18,12 @@ main = hspec $ do
         let mJWT = F.defaultJWTFields { F.overwriteSigner = hmacSecret "wrong" }
                    |> F.googleJWT
         case mJWT of
-          Nothing -> True == False
-          Just jwt -> GoogleSignIn.jwtIsValid jwt == False
+          Nothing  -> True `shouldBe` False
+          Just jwt -> GoogleSignIn.jwtIsValid jwt `shouldReturn` False
 
       it "returns false when the aud field doesn't match my client ID" $ do
         let mJWT = F.defaultJWTFields { F.overwriteAud = stringOrURI "wrong" }
                   |> F.googleJWT
         case mJWT of
-          Nothing -> True == False
-          Just jwt -> GoogleSignIn.jwtIsValid jwt == False
+          Nothing  -> True `shouldBe` False
+          Just jwt -> GoogleSignIn.jwtIsValid jwt `shouldReturn` False
