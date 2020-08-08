@@ -11,6 +11,10 @@ in pkgs.mkShell {
       hpkgs.aeson
       hpkgs.wai-cors
       hpkgs.warp
+      hpkgs.jwt
+      hpkgs.unordered-containers
+      hpkgs.base64
+      hpkgs.http-conduit
     ]))
   ];
 }
