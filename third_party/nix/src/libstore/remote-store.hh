@@ -136,18 +136,4 @@ class RemoteStore : public virtual Store {
   std::atomic_bool failed{false};
 };
 
-class UDSRemoteStore : public LocalFSStore, public RemoteStore {
- public:
-  UDSRemoteStore(const Params& params);
-  UDSRemoteStore(std::string path, const Params& params);
-
-  std::string getUri() override;
-
-  bool sameMachine() override { return true; }
-
- private:
-  ref<RemoteStore::Connection> openConnection() override;
-  std::optional<std::string> path;
-};
-
 }  // namespace nix
