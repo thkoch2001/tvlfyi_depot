@@ -5,6 +5,7 @@
 #include <absl/strings/string_view.h>
 #include <glog/logging.h>
 
+#include "libproto/worker.pb.h"
 #include "libstore/fs-accessor.hh"
 #include "libstore/globals.hh"
 #include "libstore/store-api.hh"
@@ -33,6 +34,14 @@ void DerivationOutput::parseHashInfo(bool& recursive, Hash& hash) const {
   hash = Hash::unwrap_throw(hash_);
 }
 
+nix::proto::Derivation_DerivationOutput DerivationOutput::to_proto() const {
+  nix::proto::Derivation_DerivationOutput result;
+  result.mutable_path()->set_path(path);
+  result.set_hash_algo(hashAlgo);
+  result.set_hash(hash);
+  return result;
+}
+
 BasicDerivation BasicDerivation::from_proto(
     const nix::proto::Derivation* proto_derivation, const nix::Store& store) {
   BasicDerivation result;
@@ -52,6 +61,27 @@ BasicDerivation BasicDerivation::from_proto(
 
   for (auto [k, v] : proto_derivation->env()) {
     result.env.emplace(k, v);
+  }
+
+  return result;
+}
+
+nix::proto::Derivation BasicDerivation::to_proto() const {
+  nix::proto::Derivation result;
+  for (const auto& [key, output] : outputs) {
+    result.mutable_outputs()->insert({key, output.to_proto()});
+  }
+  for (const auto& input_src : inputSrcs) {
+    result.mutable_input_sources()->add_paths(input_src);
+  }
+  result.set_platform(platform);
+  result.mutable_builder()->set_path(builder);
+  for (const auto& arg : args) {
+    result.add_args(arg);
+  }
+
+  for (const auto& [key, value] : env) {
+    result.mutable_env()->insert({key, value});
   }
 
   return result;

@@ -690,22 +690,36 @@ class WorkerServiceImpl final : public WorkerService::Service {
         __FUNCTION__);
   };
 
- private:
-  Status HandleExceptions(std::function<Status(void)> fn,
-                          absl::string_view methodName) {
-    try {
-      return fn();
-    } catch (Unsupported& e) {
-      return Status(grpc::StatusCode::UNIMPLEMENTED,
-                    absl::StrCat(methodName, " is not supported: ", e.what()));
-    } catch (Error& e) {
-      return Status(grpc::StatusCode::INTERNAL, e.what());
-    }
-    // add more specific Error-Status mappings above
+  Status GetBuildLog(grpc::ServerContext* context, const StorePath* request,
+                     proto::BuildLog* response) override {
+    return HandleExceptions(
+        [&]() -> Status {
+          const auto log = store_->getBuildLog(request->path());
+          if (log) {
+            response->set_build_log(*log);
+          }
+          return Status::OK;
+        },
+        __FUNCTION__);
   }
 
-  ref<nix::Store> store_;
-};
+   private:
+    Status HandleExceptions(std::function<Status(void)> fn,
+                            absl::string_view methodName) {
+      try {
+        return fn();
+      } catch (Unsupported& e) {
+        return Status(
+            grpc::StatusCode::UNIMPLEMENTED,
+            absl::StrCat(methodName, " is not supported: ", e.what()));
+      } catch (Error& e) {
+        return Status(grpc::StatusCode::INTERNAL, e.what());
+      }
+      // add more specific Error-Status mappings above
+    }
+
+    ref<nix::Store> store_;
+  };
 
 WorkerService::Service* NewWorkerService(nix::Store& store) {
   return new WorkerServiceImpl(store);
