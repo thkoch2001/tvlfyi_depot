@@ -16,6 +16,9 @@ main = hspec $ do
   describe "GoogleSignIn" $
     describe "jwtIsValid" $ do
       let jwtIsValid' = GoogleSignIn.jwtIsValid True
+      it "returns a decode error when an incorrectly encoded JWT is used" $ do
+        jwtIsValid' (GoogleSignIn.EncodedJWT "rubbish") `shouldReturn` DecodeError
+
       it "returns validation error when the aud field doesn't match my client ID" $ do
         let auds = ["wrong-client-id"]
                    |> fmap TestUtils.unsafeStringOrURI
