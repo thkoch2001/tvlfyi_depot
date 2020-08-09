@@ -323,9 +323,8 @@ Path Store::makeStorePath(const std::string& type, const Hash& hash,
 
   checkStoreName(name);
 
-  return storeDir + "/" +
-         compressHash(hashString(htSHA256, s), 20).to_string(Base32, false) +
-         "-" + name;
+  return absl::StrCat(storeDir, "/", hashString(htSHA256, s).ToStorePathHash(),
+                      "-", name);
 }
 
 Path Store::makeOutputPath(const std::string& id, const Hash& hash,
