@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f54c3ac5_7116903b",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-09T17:54:38Z",
+      "side": 1,
+      "message": "You might just want to make `whitby` a list consisting of the yubikey and the Ed25519 key, so that you can update your whitby keys without needing approval from tazjin/lukegb.",
+      "revId": "55e9f172733898a5bbe7e2f956f4f71c931526af",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
