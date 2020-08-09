@@ -369,9 +369,8 @@
              (render/new-comment (id issue))))))))))
 
 (defun render/not-found (entity-type)
-  (setf (hunchentoot:return-code*) 404)
   (render ()
-    (:h1 (who:esc entity-type) " Not Found")))
+    (:h1 (who:esc entity-type) "Not Found")))
 
 ;;;
 ;;; HTTP handlers
@@ -453,12 +452,10 @@
 (defroute show-issue
     ("/issues/:id" :decorators (@auth-optional @handle-issue-not-found))
     (&path (id 'integer))
-  (when id
-    (let* ((issue (model:get-issue id))
-           (*title* (format nil "~A | Panettone"
-                            (subject issue))))
-      (render/issue issue))
-    (render/not-found "Issue")))
+  (let* ((issue (model:get-issue id))
+         (*title* (format nil "~A | Panettone"
+                          (subject issue))))
+    (render/issue issue)))
 
 (defroute edit-issue
     ("/issues/:id/edit" :decorators (@auth @handle-issue-not-found))
@@ -518,13 +515,6 @@
 (defroute styles ("/main.css") ()
   (setf (hunchentoot:content-type*) "text/css")
   (apply #'lass:compile-and-write panettone.css:styles))
-
-(defroute shorthand-issue
-    ("/:id" :decorators (@auth-optional))
-    (&path (id 'integer))
-  (if id
-      (hunchentoot:redirect (format nil "/issues/~A" id))
-      (render/not-found "Route")))
 
 (defvar *acceptor* nil
   "Hunchentoot acceptor for Panettone's web server.")
