@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 module Spec where
 --------------------------------------------------------------------------------
+import RIO
 import Test.Hspec
 import Utils
 import Web.JWT (numericDate, decode)
@@ -18,7 +19,7 @@ main = hspec $ do
     describe "validateJWT" $ do
       let validateJWT' = GoogleSignIn.validateJWT True
       it "returns a decode error when an incorrectly encoded JWT is used" $ do
-        validateJWT' (GoogleSignIn.EncodedJWT "rubbish") `shouldReturn` DecodeError
+        validateJWT' (GoogleSignIn.EncodedJWT "rubbish") `shouldReturn` CannotDecodeJWT
 
       it "returns validation error when the aud field doesn't match my client ID" $ do
         let auds = ["wrong-client-id"]
