@@ -158,6 +158,10 @@ bool Hash::IsValidBase32(absl::string_view s) {
   return true;
 }
 
+std::string Hash::ToStorePathHash() const {
+  return compressHash(*this, kStorePathHashSize).to_string(Base32, false);
+}
+
 static std::string printHash32(const Hash& hash) {
   assert(hash.hashSize);
   size_t len = hash.base32Len();
