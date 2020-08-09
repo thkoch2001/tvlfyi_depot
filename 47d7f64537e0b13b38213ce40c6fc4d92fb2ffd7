@@ -22,6 +22,30 @@
       "revId": "47d7f64537e0b13b38213ce40c6fc4d92fb2ffd7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56259117_37b69ae0",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-09T01:52:51Z",
+      "side": 1,
+      "message": "that happens below - this condition in particular will only get triggered if the stream is prematurely terminated - I\u0027d rather not ignore it.",
+      "parentUuid": "a4ddf491_4655bc3a",
+      "range": {
+        "startLine": 260,
+        "startChar": 5,
+        "endLine": 260,
+        "endChar": 49
+      },
+      "revId": "47d7f64537e0b13b38213ce40c6fc4d92fb2ffd7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
