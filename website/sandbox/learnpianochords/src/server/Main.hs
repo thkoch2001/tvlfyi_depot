@@ -1,41 +1,30 @@
 --------------------------------------------------------------------------------
 module Main where
 --------------------------------------------------------------------------------
-import Servant
-import API
-import Control.Monad.IO.Class (liftIO)
-import GoogleSignIn (EncodedJWT(..), ValidationResult(..))
-import Data.String.Conversions (cs)
-import Utils
+import RIO
+import Prelude (putStrLn)
 
-import qualified Network.Wai.Handler.Warp as Warp
-import qualified Network.Wai.Middleware.Cors as Cors
 import qualified Types as T
-import qualified GoogleSignIn
+import qualified System.Envy as Envy
+import qualified App
 --------------------------------------------------------------------------------
 
-server :: Server API
-server = verifyGoogleSignIn
-  where
-    verifyGoogleSignIn :: T.VerifyGoogleSignInRequest -> Handler NoContent
-    verifyGoogleSignIn T.VerifyGoogleSignInRequest{..} = do
-    validationResult <- liftIO $ GoogleSignIn.validateJWT False (EncodedJWT idToken)
-    case validationResult of
-      Valid _ -> do
-        liftIO $ putStrLn "Sign-in valid! Let's create a session"
-        pure NoContent
-      err -> do
-        throwError err401 { errBody = err |> GoogleSignIn.explainResult |> cs }
+-- | Attempt to read environment variables from the system and initialize the
+-- Context data type for our application.
+getAppContext :: IO (Either String T.Context)
+getAppContext = do
+  mEnv <- Envy.decodeEnv
+  case mEnv of
+    Left err -> pure $ Left err
+    Right T.Env{..} -> pure $ Right T.Context
+      { contextGoogleClientID = envGoogleClientID
+      , contextClientPort = 8000
+      , contextServerPort = 3000
+      }
 
 main :: IO ()
 main = do
-  Warp.run 3000 (enforceCors $ serve (Proxy @ API) $ server)
-  where
-    enforceCors = Cors.cors (const $ Just corsPolicy)
-    corsPolicy :: Cors.CorsResourcePolicy
-    corsPolicy =
-      Cors.simpleCorsResourcePolicy
-        { Cors.corsOrigins = Just (["http://localhost:8000"], True)
-        , Cors.corsMethods = Cors.simpleMethods ++ ["PUT", "PATCH", "DELETE", "OPTIONS"]
-        , Cors.corsRequestHeaders = Cors.simpleHeaders ++ ["Content-Type", "Authorization"]
-        }
+  mContext <- getAppContext
+  case mContext of
+    Left err -> putStrLn err
+    Right ctx -> runRIO ctx App.run

@@ -1,8 +1,8 @@
 --------------------------------------------------------------------------------
 module GoogleSignIn where
 --------------------------------------------------------------------------------
+import RIO
 import Data.String.Conversions (cs)
-import Data.Text
 import Web.JWT
 import Utils
 
@@ -23,7 +23,7 @@ instance Eq DecodedJWT where
 
 data ValidationResult
   = Valid DecodedJWT
-  | DecodeError
+  | CannotDecodeJWT
   | GoogleSaysInvalid Text
   | NoMatchingClientIDs [StringOrURI]
   | WrongIssuer StringOrURI
@@ -46,7 +46,7 @@ validateJWT :: Bool
            -> IO ValidationResult
 validateJWT skipHTTP (EncodedJWT encodedJWT) = do
   case encodedJWT |> decode of
-    Nothing -> pure DecodeError
+    Nothing -> pure CannotDecodeJWT
     Just jwt -> do
       if skipHTTP then
         continue jwt
@@ -101,7 +101,7 @@ validateJWT skipHTTP (EncodedJWT encodedJWT) = do
 -- | Attempt to explain the `ValidationResult` to a human.
 explainResult :: ValidationResult -> String
 explainResult (Valid _) = "Everything appears to be valid"
-explainResult DecodeError = "We had difficulty decoding the provided JWT"
+explainResult CannotDecodeJWT = "We had difficulty decoding the provided JWT"
 explainResult (GoogleSaysInvalid x) = "After checking with Google, they claimed that the provided JWT was invalid: " ++ cs x
 explainResult (NoMatchingClientIDs audFields) = "None of the values in the `aud` field on the provided JWT match our client ID: " ++ show audFields
 explainResult (WrongIssuer issuer) = "The `iss` field in the provided JWT does not match what we expect: " ++ show issuer
