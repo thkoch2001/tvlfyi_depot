@@ -1,0 +1,497 @@
+From c42ac9f33968c42c02b40a62b87b08b6f410f30b Mon Sep 17 00:00:00 2001
+From: multiplexd <multi@in-addr.xyz>
+Date: Mon, 10 Aug 2020 01:10:23 +0100
+Subject: [PATCH] Add quad- and octo-meter display meters
+
+---
+ CPUMeter.c              | 230 ++++++++++++++++++++++++++++++++++++++--
+ CPUMeter.h              |  12 +++
+ darwin/Platform.c       |   6 ++
+ dragonflybsd/Platform.c |   6 ++
+ freebsd/Platform.c      |   6 ++
+ linux/Platform.c        |   6 ++
+ openbsd/Platform.c      |   6 ++
+ solaris/Platform.c      |   6 ++
+ unsupported/Platform.c  |   6 ++
+ 9 files changed, 277 insertions(+), 7 deletions(-)
+
+diff --git a/CPUMeter.c b/CPUMeter.c
+index de5490d..8d00b81 100644
+--- a/CPUMeter.c
++++ b/CPUMeter.c
+@@ -181,6 +181,107 @@ static void AllCPUsMeter_updateMode(Meter* this, int mode) {
+       this->h = h * count;
+ }
+ 
++static void OctoCPUsMeter_updateMode(Meter* this, int mode) {
++   Meter** meters = (Meter**) this->drawData;
++   this->mode = mode;
++   int h = Meter_modes[mode]->h;
++   int start, count;
++   AllCPUsMeter_getRange(this, &start, &count);
++   for (int i = 0; i < count; i++) {
++      Meter_setMode(meters[i], mode);
++   }
++   this->h = h * ((count+1) / 8);
++}
++
++static void OctoColCPUsMeter_draw(Meter* this, int x, int y, int w) {
++   Meter** meters = (Meter**) this->drawData;
++   int start, count;
++   int pad = this->pl->settings->headerMargin ? 2 : 0;
++   AllCPUsMeter_getRange(this, &start, &count);
++   int height = (count+1)/8;
++   int startY = y;
++   for (int i = 0; i < height; i++) {
++      meters[i]->draw(meters[i], x, y, (w-pad)/8);
++      y += meters[i]->h;
++   }
++   y = startY;
++   for (int i = height; i < (count+1)/4; i++) {
++      meters[i]->draw(meters[i], x+(w-1)/8+(pad/2), y, (w-pad)/8);
++      y += meters[i]->h;
++   }
++   y = startY;
++   for (int i = 2*height; i < (count+1)/4 + (count+1)/8; i++) {
++      meters[i]->draw(meters[i], x+(w-1)/4+(pad/2), y, (w-pad)/8);
++      y += meters[i]->h;
++   }
++   y = startY;
++   for (int i = 3*height; i < (count+1)/2; i++) {
++      meters[i]->draw(meters[i], x+3*(w-1)/8+(pad/2), y, (w-pad)/8);
++      y += meters[i]->h;
++   }
++   y = startY;
++
++   for (int i = 4*height; i < (count+1)/2 + (count+1)/8; i++) {
++      meters[i]->draw(meters[i], x+(w-1)/2+1+(pad/2), y, (w-pad)/8);
++      y += meters[i]->h;
++   }
++   y = startY;
++   for (int i = 5*height; i < (count+1)/2 + (count+1)/4; i++) {
++      meters[i]->draw(meters[i], x+5*(w-1)/8+1+(pad/2), y, (w-pad)/8);
++      y += meters[i]->h;
++   }
++   y = startY;
++   for (int i = 6*height; i < (count+1)/2 + (count+1)/4 + (count+1)/8; i++) {
++      meters[i]->draw(meters[i], x+3*(w-1)/4+1+(pad/2), y, (w-pad)/8);
++      y += meters[i]->h;
++   }
++   y = startY;
++   for (int i = 7*height; i < count; i++) {
++      meters[i]->draw(meters[i], x+7*(w-1)/8+1+(pad/2), y, (w-pad)/8);
++      y += meters[i]->h;
++   }
++}
++
++static void QuadCPUsMeter_updateMode(Meter* this, int mode) {
++   Meter** meters = (Meter**) this->drawData;
++   this->mode = mode;
++   int h = Meter_modes[mode]->h;
++   int start, count;
++   AllCPUsMeter_getRange(this, &start, &count);
++   for (int i = 0; i < count; i++) {
++      Meter_setMode(meters[i], mode);
++   }
++   this->h = h * ((count+1) / 4);
++}
++
++static void QuadColCPUsMeter_draw(Meter* this, int x, int y, int w) {
++   Meter** meters = (Meter**) this->drawData;
++   int start, count;
++   int pad = this->pl->settings->headerMargin ? 2 : 0;
++   AllCPUsMeter_getRange(this, &start, &count);
++   int height = (count+1)/4;
++   int startY = y;
++   for (int i = 0; i < height; i++) {
++      meters[i]->draw(meters[i], x, y, (w-pad)/4);
++      y += meters[i]->h;
++   }
++   y = startY;
++   for (int i = height; i < (count+1)/2; i++) {
++      meters[i]->draw(meters[i], x+(w-1)/4+(pad/2), y, (w-pad)/4);
++      y += meters[i]->h;
++   }
++   y = startY;
++   for (int i = 2*height; i < (count+1)/2 + (count+1)/4; i++) {
++      meters[i]->draw(meters[i], x+(w-1)/2+(pad/2), y, (w-pad)/4);
++      y += meters[i]->h;
++   }
++   y = startY;
++   for (int i = 3*height; i < count; i++) {
++      meters[i]->draw(meters[i], x+3*(w-1)/4+1+(pad/2), y, (w-pad)/4);
++      y += meters[i]->h;
++   }
++}
++
+ static void DualColCPUsMeter_draw(Meter* this, int x, int y, int w) {
+    Meter** meters = (Meter**) this->drawData;
+    int start, count;
+@@ -219,7 +320,7 @@ MeterClass CPUMeter_class = {
+    .defaultMode = BAR_METERMODE,
+    .maxItems = CPU_METER_ITEMCOUNT,
+    .total = 100.0,
+-   .attributes = CPUMeter_attributes, 
++   .attributes = CPUMeter_attributes,
+    .name = "CPU",
+    .uiName = "CPU",
+    .caption = "CPU",
+@@ -234,7 +335,7 @@ MeterClass AllCPUsMeter_class = {
+    },
+    .defaultMode = CUSTOM_METERMODE,
+    .total = 100.0,
+-   .attributes = CPUMeter_attributes, 
++   .attributes = CPUMeter_attributes,
+    .name = "AllCPUs",
+    .uiName = "CPUs (1/1)",
+    .description = "CPUs (1/1): all CPUs",
+@@ -253,7 +354,7 @@ MeterClass AllCPUs2Meter_class = {
+    },
+    .defaultMode = CUSTOM_METERMODE,
+    .total = 100.0,
+-   .attributes = CPUMeter_attributes, 
++   .attributes = CPUMeter_attributes,
+    .name = "AllCPUs2",
+    .uiName = "CPUs (1&2/2)",
+    .description = "CPUs (1&2/2): all CPUs in 2 shorter columns",
+@@ -264,6 +365,44 @@ MeterClass AllCPUs2Meter_class = {
+    .done = AllCPUsMeter_done
+ };
+ 
++MeterClass AllCPUs4Meter_class = {
++   .super = {
++      .extends = Class(Meter),
++      .delete = Meter_delete,
++      .display = CPUMeter_display
++   },
++   .defaultMode = CUSTOM_METERMODE,
++   .total = 100.0,
++   .attributes = CPUMeter_attributes,
++   .name = "AllCPUs4",
++   .uiName = "CPUs (1-4/4)",
++   .description = "CPUs (1-4/4): all CPUs in 4 shorter columns",
++   .caption = "CPU",
++   .draw = QuadColCPUsMeter_draw,
++   .init = AllCPUsMeter_init,
++   .updateMode = QuadCPUsMeter_updateMode,
++   .done = AllCPUsMeter_done
++};
++
++MeterClass AllCPUs8Meter_class = {
++   .super = {
++      .extends = Class(Meter),
++      .delete = Meter_delete,
++      .display = CPUMeter_display
++   },
++   .defaultMode = CUSTOM_METERMODE,
++   .total = 100.0,
++   .attributes = CPUMeter_attributes,
++   .name = "AllCPUs8",
++   .uiName = "CPUs (1-8/8)",
++   .description = "CPUs (1-8/8): all CPUs in 8 shorter columns",
++   .caption = "CPU",
++   .draw = OctoColCPUsMeter_draw,
++   .init = AllCPUsMeter_init,
++   .updateMode = OctoCPUsMeter_updateMode,
++   .done = AllCPUsMeter_done
++};
++
+ MeterClass LeftCPUsMeter_class = {
+    .super = {
+       .extends = Class(Meter),
+@@ -272,7 +411,7 @@ MeterClass LeftCPUsMeter_class = {
+    },
+    .defaultMode = CUSTOM_METERMODE,
+    .total = 100.0,
+-   .attributes = CPUMeter_attributes, 
++   .attributes = CPUMeter_attributes,
+    .name = "LeftCPUs",
+    .uiName = "CPUs (1/2)",
+    .description = "CPUs (1/2): first half of list",
+@@ -291,7 +430,7 @@ MeterClass RightCPUsMeter_class = {
+    },
+    .defaultMode = CUSTOM_METERMODE,
+    .total = 100.0,
+-   .attributes = CPUMeter_attributes, 
++   .attributes = CPUMeter_attributes,
+    .name = "RightCPUs",
+    .uiName = "CPUs (2/2)",
+    .description = "CPUs (2/2): second half of list",
+@@ -310,7 +449,7 @@ MeterClass LeftCPUs2Meter_class = {
+    },
+    .defaultMode = CUSTOM_METERMODE,
+    .total = 100.0,
+-   .attributes = CPUMeter_attributes, 
++   .attributes = CPUMeter_attributes,
+    .name = "LeftCPUs2",
+    .uiName = "CPUs (1&2/4)",
+    .description = "CPUs (1&2/4): first half in 2 shorter columns",
+@@ -329,7 +468,7 @@ MeterClass RightCPUs2Meter_class = {
+    },
+    .defaultMode = CUSTOM_METERMODE,
+    .total = 100.0,
+-   .attributes = CPUMeter_attributes, 
++   .attributes = CPUMeter_attributes,
+    .name = "RightCPUs2",
+    .uiName = "CPUs (3&4/4)",
+    .description = "CPUs (3&4/4): second half in 2 shorter columns",
+@@ -340,3 +479,80 @@ MeterClass RightCPUs2Meter_class = {
+    .done = AllCPUsMeter_done
+ };
+ 
++MeterClass LeftCPUs4Meter_class = {
++   .super = {
++      .extends = Class(Meter),
++      .delete = Meter_delete,
++      .display = CPUMeter_display
++   },
++   .defaultMode = CUSTOM_METERMODE,
++   .total = 100.0,
++   .attributes = CPUMeter_attributes,
++   .name = "LeftCPUs4",
++   .uiName = "CPUs (1-4/8)",
++   .description = "CPUs (1-4/8): first half in 4 shorter columns",
++   .caption = "CPU",
++   .draw = QuadColCPUsMeter_draw,
++   .init = AllCPUsMeter_init,
++   .updateMode = QuadCPUsMeter_updateMode,
++   .done = AllCPUsMeter_done
++};
++
++MeterClass RightCPUs4Meter_class = {
++   .super = {
++      .extends = Class(Meter),
++      .delete = Meter_delete,
++      .display = CPUMeter_display
++   },
++   .defaultMode = CUSTOM_METERMODE,
++   .total = 100.0,
++   .attributes = CPUMeter_attributes,
++   .name = "RightCPUs4",
++   .uiName = "CPUs (5-8/8)",
++   .description = "CPUs (5-8/8): second half in 4 shorter columns",
++   .caption = "CPU",
++   .draw = QuadColCPUsMeter_draw,
++   .init = AllCPUsMeter_init,
++   .updateMode = QuadCPUsMeter_updateMode,
++   .done = AllCPUsMeter_done
++};
++
++
++MeterClass LeftCPUs8Meter_class = {
++   .super = {
++      .extends = Class(Meter),
++      .delete = Meter_delete,
++      .display = CPUMeter_display
++   },
++   .defaultMode = CUSTOM_METERMODE,
++   .total = 100.0,
++   .attributes = CPUMeter_attributes,
++   .name = "LeftCPUs8",
++   .uiName = "CPUs (1-8/16)",
++   .description = "CPUs (1-8/16): first half in 8 shorter columns",
++   .caption = "CPU",
++   .draw = OctoColCPUsMeter_draw,
++   .init = AllCPUsMeter_init,
++   .updateMode = OctoCPUsMeter_updateMode,
++   .done = AllCPUsMeter_done
++};
++
++MeterClass RightCPUs8Meter_class = {
++   .super = {
++      .extends = Class(Meter),
++      .delete = Meter_delete,
++      .display = CPUMeter_display
++   },
++   .defaultMode = CUSTOM_METERMODE,
++   .total = 100.0,
++   .attributes = CPUMeter_attributes,
++   .name = "RightCPUs8",
++   .uiName = "CPUs (9-16/16)",
++   .description = "CPUs (9-16/16): second half in 8 shorter columns",
++   .caption = "CPU",
++   .draw = OctoColCPUsMeter_draw,
++   .init = AllCPUsMeter_init,
++   .updateMode = OctoCPUsMeter_updateMode,
++   .done = AllCPUsMeter_done
++};
++
+diff --git a/CPUMeter.h b/CPUMeter.h
+index 2f16396..e8aa176 100644
+--- a/CPUMeter.h
++++ b/CPUMeter.h
+@@ -39,6 +39,10 @@ extern MeterClass AllCPUsMeter_class;
+ 
+ extern MeterClass AllCPUs2Meter_class;
+ 
++extern MeterClass AllCPUs4Meter_class;
++
++extern MeterClass AllCPUs8Meter_class;
++
+ extern MeterClass LeftCPUsMeter_class;
+ 
+ extern MeterClass RightCPUsMeter_class;
+@@ -47,5 +51,13 @@ extern MeterClass LeftCPUs2Meter_class;
+ 
+ extern MeterClass RightCPUs2Meter_class;
+ 
++extern MeterClass LeftCPUs4Meter_class;
++
++extern MeterClass RightCPUs4Meter_class;
++
++extern MeterClass LeftCPUs8Meter_class;
++
++extern MeterClass RightCPUs8Meter_class;
++
+ 
+ #endif
+diff --git a/darwin/Platform.c b/darwin/Platform.c
+index 286ff16..39929da 100644
+--- a/darwin/Platform.c
++++ b/darwin/Platform.c
+@@ -115,10 +115,16 @@ MeterClass* Platform_meterTypes[] = {
+    &UptimeMeter_class,
+    &AllCPUsMeter_class,
+    &AllCPUs2Meter_class,
++   &AllCPUs4Meter_class,
++   &AllCPUs8Meter_class,
+    &LeftCPUsMeter_class,
+    &RightCPUsMeter_class,
+    &LeftCPUs2Meter_class,
+    &RightCPUs2Meter_class,
++   &LeftCPUs4Meter_class,
++   &RightCPUs4Meter_class,
++   &LeftCPUs8Meter_class,
++   &RightCPUs8Meter_class,
+    &ZfsArcMeter_class,
+    &ZfsCompressedArcMeter_class,
+    &BlankMeter_class,
+diff --git a/dragonflybsd/Platform.c b/dragonflybsd/Platform.c
+index 370943d..7985949 100644
+--- a/dragonflybsd/Platform.c
++++ b/dragonflybsd/Platform.c
+@@ -100,10 +100,16 @@ MeterClass* Platform_meterTypes[] = {
+    &HostnameMeter_class,
+    &AllCPUsMeter_class,
+    &AllCPUs2Meter_class,
++   &AllCPUs4Meter_class,
++   &AllCPUs8Meter_class,
+    &LeftCPUsMeter_class,
+    &RightCPUsMeter_class,
+    &LeftCPUs2Meter_class,
+    &RightCPUs2Meter_class,
++   &LeftCPUs4Meter_class,
++   &RightCPUs4Meter_class,
++   &LeftCPUs8Meter_class,
++   &RightCPUs8Meter_class,
+    &BlankMeter_class,
+    NULL
+ };
+diff --git a/freebsd/Platform.c b/freebsd/Platform.c
+index 0986a3d..ed73673 100644
+--- a/freebsd/Platform.c
++++ b/freebsd/Platform.c
+@@ -101,10 +101,16 @@ MeterClass* Platform_meterTypes[] = {
+    &HostnameMeter_class,
+    &AllCPUsMeter_class,
+    &AllCPUs2Meter_class,
++   &AllCPUs4Meter_class,
++   &AllCPUs8Meter_class,
+    &LeftCPUsMeter_class,
+    &RightCPUsMeter_class,
+    &LeftCPUs2Meter_class,
+    &RightCPUs2Meter_class,
++   &LeftCPUs4Meter_class,
++   &RightCPUs4Meter_class,
++   &LeftCPUs8Meter_class,
++   &RightCPUs8Meter_class,
+    &BlankMeter_class,
+    &ZfsArcMeter_class,
+    &ZfsCompressedArcMeter_class,
+diff --git a/linux/Platform.c b/linux/Platform.c
+index f7088cf..1556b14 100644
+--- a/linux/Platform.c
++++ b/linux/Platform.c
+@@ -123,10 +123,16 @@ MeterClass* Platform_meterTypes[] = {
+    &HostnameMeter_class,
+    &AllCPUsMeter_class,
+    &AllCPUs2Meter_class,
++   &AllCPUs4Meter_class,
++   &AllCPUs8Meter_class,
+    &LeftCPUsMeter_class,
+    &RightCPUsMeter_class,
+    &LeftCPUs2Meter_class,
+    &RightCPUs2Meter_class,
++   &LeftCPUs4Meter_class,
++   &RightCPUs4Meter_class,
++   &LeftCPUs8Meter_class,
++   &RightCPUs8Meter_class,
+    &BlankMeter_class,
+    &ZfsArcMeter_class,
+    &ZfsCompressedArcMeter_class,
+diff --git a/openbsd/Platform.c b/openbsd/Platform.c
+index 4bb2e35..9604771 100644
+--- a/openbsd/Platform.c
++++ b/openbsd/Platform.c
+@@ -159,10 +159,16 @@ MeterClass* Platform_meterTypes[] = {
+    &HostnameMeter_class,
+    &AllCPUsMeter_class,
+    &AllCPUs2Meter_class,
++   &AllCPUs4Meter_class,
++   &AllCPUs8Meter_class,
+    &LeftCPUsMeter_class,
+    &RightCPUsMeter_class,
+    &LeftCPUs2Meter_class,
+    &RightCPUs2Meter_class,
++   &LeftCPUs4Meter_class,
++   &RightCPUs4Meter_class,
++   &LeftCPUs8Meter_class,
++   &RightCPUs8Meter_class,
+    &BlankMeter_class,
+    NULL
+ };
+diff --git a/solaris/Platform.c b/solaris/Platform.c
+index 7dcfe32..9d3b123 100644
+--- a/solaris/Platform.c
++++ b/solaris/Platform.c
+@@ -120,10 +120,16 @@ MeterClass* Platform_meterTypes[] = {
+    &UptimeMeter_class,
+    &AllCPUsMeter_class,
+    &AllCPUs2Meter_class,
++   &AllCPUs4Meter_class,
++   &AllCPUs8Meter_class,
+    &LeftCPUsMeter_class,
+    &RightCPUsMeter_class,
+    &LeftCPUs2Meter_class,
+    &RightCPUs2Meter_class,
++   &LeftCPUs4Meter_class,
++   &RightCPUs4Meter_class,
++   &LeftCPUs8Meter_class,
++   &RightCPUs8Meter_class,
+    &ZfsArcMeter_class,
+    &ZfsCompressedArcMeter_class,
+    &BlankMeter_class,
+diff --git a/unsupported/Platform.c b/unsupported/Platform.c
+index ba84419..8d60fed 100644
+--- a/unsupported/Platform.c
++++ b/unsupported/Platform.c
+@@ -73,10 +73,16 @@ MeterClass* Platform_meterTypes[] = {
+    &UptimeMeter_class,
+    &AllCPUsMeter_class,
+    &AllCPUs2Meter_class,
++   &AllCPUs4Meter_class,
++   &AllCPUs8Meter_class,
+    &LeftCPUsMeter_class,
+    &RightCPUsMeter_class,
+    &LeftCPUs2Meter_class,
+    &RightCPUs2Meter_class,
++   &LeftCPUs4Meter_class,
++   &RightCPUs4Meter_class,
++   &LeftCPUs8Meter_class,
++   &RightCPUs8Meter_class,
+    &BlankMeter_class,
+    NULL
+ };
+-- 
+2.20.1
+

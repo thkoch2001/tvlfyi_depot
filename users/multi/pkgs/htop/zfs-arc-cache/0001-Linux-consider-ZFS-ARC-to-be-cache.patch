@@ -1,0 +1,119 @@
+From d1dadae5674222a0134092b3313383e088deda89 Mon Sep 17 00:00:00 2001
+From: multiplexd <multi@in-addr.xyz>
+Date: Sat, 9 May 2020 20:13:09 +0100
+Subject: [PATCH] Linux: consider ZFS ARC to be cache
+
+---
+ ProcessList.c            |  1 +
+ ProcessList.h            |  1 +
+ linux/LinuxProcessList.c | 27 +++++++++++++++++++++++++++
+ linux/LinuxProcessList.h |  4 ++++
+ linux/Platform.c         |  5 +++--
+ 5 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/ProcessList.c b/ProcessList.c
+index 7482b03..7083957 100644
+--- a/ProcessList.c
++++ b/ProcessList.c
+@@ -67,6 +67,7 @@ typedef struct ProcessList_ {
+    unsigned long long int totalSwap;
+    unsigned long long int usedSwap;
+    unsigned long long int freeSwap;
++   unsigned long long int arcSize;
+ 
+    int cpuCount;
+ 
+diff --git a/ProcessList.h b/ProcessList.h
+index 572d484..65029f1 100644
+--- a/ProcessList.h
++++ b/ProcessList.h
+@@ -61,6 +61,7 @@ typedef struct ProcessList_ {
+    unsigned long long int totalSwap;
+    unsigned long long int usedSwap;
+    unsigned long long int freeSwap;
++   unsigned long long int arcSize;
+ 
+    int cpuCount;
+ 
+diff --git a/linux/LinuxProcessList.c b/linux/LinuxProcessList.c
+index 5f38540..507ebd2 100644
+--- a/linux/LinuxProcessList.c
++++ b/linux/LinuxProcessList.c
+@@ -104,6 +104,10 @@ typedef struct LinuxProcessList_ {
+ #define PROCSTATFILE PROCDIR "/stat"
+ #endif
+ 
++#ifndef ARCSTATFILE
++#define ARCSTATFILE PROCDIR "/spl/kstat/zfs/arcstats"
++#endif
++
+ #ifndef PROCMEMINFOFILE
+ #define PROCMEMINFOFILE PROCDIR "/meminfo"
+ #endif
+@@ -962,6 +966,29 @@ static inline void LinuxProcessList_scanMemoryInfo(ProcessList* this) {
+    this->cachedMem = this->cachedMem + sreclaimable - shmem;
+    this->usedSwap = this->totalSwap - swapFree;
+    fclose(file);
++
++   file = fopen(ARCSTATFILE, "r");
++   if (file == NULL && errno != ENOENT) {
++      CRT_fatalError("Cannot open " ARCSTATFILE);
++   }
++
++   if (file != NULL) {
++      // skip the first two lines
++      fgets(buffer, sizeof buffer, file);
++      fgets(buffer, sizeof buffer, file);
++
++      unsigned long long int arcsize = 0;
++      while (fgets(buffer, sizeof buffer, file)) {
++         #define tryRead(label, variable) do { if (String_startsWith(buffer, label) && sscanf(buffer + strlen(label), " %*d %llu", variable)) { break; } } while(0)
++         if (buffer[0] == 's') tryRead("size", &arcsize);
++      }
++
++      this->arcSize = arcsize / 1024;
++
++      fclose(file);
++   } else {
++      this->arcSize = 0;
++   }
+ }
+ 
+ static inline double LinuxProcessList_scanCPUTime(LinuxProcessList* this) {
+diff --git a/linux/LinuxProcessList.h b/linux/LinuxProcessList.h
+index f30b487..8f2edbb 100644
+--- a/linux/LinuxProcessList.h
++++ b/linux/LinuxProcessList.h
+@@ -77,6 +77,10 @@ typedef struct LinuxProcessList_ {
+ #define PROCSTATFILE PROCDIR "/stat"
+ #endif
+ 
++#ifndef ARCSTATFILE
++#define ARCSTATFILE PROCDIR "/spl/kstat/zfs/arcstats"
++#endif
++
+ #ifndef PROCMEMINFOFILE
+ #define PROCMEMINFOFILE PROCDIR "/meminfo"
+ #endif
+diff --git a/linux/Platform.c b/linux/Platform.c
+index ab90ca7..fb78c4c 100644
+--- a/linux/Platform.c
++++ b/linux/Platform.c
+@@ -200,11 +200,12 @@ void Platform_setMemoryValues(Meter* this) {
+    long int usedMem = pl->usedMem;
+    long int buffersMem = pl->buffersMem;
+    long int cachedMem = pl->cachedMem;
+-   usedMem -= buffersMem + cachedMem;
++   long int arcSize = pl->arcSize;
++   usedMem -= buffersMem + cachedMem + arcSize;
+    this->total = pl->totalMem;
+    this->values[0] = usedMem;
+    this->values[1] = buffersMem;
+-   this->values[2] = cachedMem;
++   this->values[2] = cachedMem + arcSize;
+ }
+ 
+ void Platform_setSwapValues(Meter* this) {
+-- 
+2.20.1
+

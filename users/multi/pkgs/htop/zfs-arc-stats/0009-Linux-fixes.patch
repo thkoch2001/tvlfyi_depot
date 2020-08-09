@@ -1,0 +1,29 @@
+From a267003f2f38df5d52ae3f07658c1bbd20b5fb5e Mon Sep 17 00:00:00 2001
+From: Ross Williams <ross@ross-williams.net>
+Date: Tue, 3 Sep 2019 19:56:38 +0000
+Subject: [PATCH 9/9] Linux fixes
+
+---
+ linux/LinuxProcessList.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/linux/LinuxProcessList.c b/linux/LinuxProcessList.c
+index 4596c3b..1d5700e 100644
+--- a/linux/LinuxProcessList.c
++++ b/linux/LinuxProcessList.c
+@@ -988,10 +988,10 @@ static inline void LinuxProcessList_scanZfsArcstats(LinuxProcessList* lpl) {
+       switch (buffer[0]) {
+       case 'c':
+          tryRead("c_max", &lpl->zfs.max);
+-         tryReadFlag("compressed", &lpl->zfs.compressed, &lpl->zfs.isCompressed);
++         tryReadFlag("compressed_size", &lpl->zfs.compressed, lpl->zfs.isCompressed);
+          break;
+       case 'u':
+-         tryRead("uncompressed", &lpl->zfs.uncompressed);
++         tryRead("uncompressed_size", &lpl->zfs.uncompressed);
+          break;
+       case 's':
+          tryRead("size", &lpl->zfs.size);
+-- 
+2.20.1
+

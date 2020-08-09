@@ -1,0 +1,817 @@
+From a88d2e313df7f5f2b781d5b14ffe0e7710018c10 Mon Sep 17 00:00:00 2001
+From: Ross Williams <ross@ross-williams.net>
+Date: Sun, 7 Jul 2019 23:27:00 +0000
+Subject: [PATCH 5/9] Refactor common OpenZFS sysctl access
+
+Darwin and FreeBSD export zfs kstats through the
+same APIs, so moving functions into a common file.
+---
+ Makefile.am                  | 21 ++++-----
+ darwin/DarwinProcessList.c   | 82 +++---------------------------------
+ darwin/DarwinProcessList.h   | 11 +----
+ darwin/Platform.c            | 14 +++---
+ darwin/Platform.h            |  2 +-
+ freebsd/FreeBSDProcessList.c | 77 +++++----------------------------
+ freebsd/FreeBSDProcessList.h | 14 ++----
+ freebsd/Platform.c           | 14 +++---
+ linux/LinuxProcessList.c     | 40 ++++++++----------
+ linux/LinuxProcessList.h     | 10 +----
+ linux/Platform.c             | 14 +++---
+ zfs/ZfsArcStats.c            | 19 +++++++++
+ zfs/ZfsArcStats.h            | 23 ++++++++++
+ zfs/openzfs_sysctl.c         | 81 +++++++++++++++++++++++++++++++++++
+ zfs/openzfs_sysctl.h         | 18 ++++++++
+ 15 files changed, 216 insertions(+), 224 deletions(-)
+ create mode 100644 zfs/ZfsArcStats.c
+ create mode 100644 zfs/ZfsArcStats.h
+ create mode 100644 zfs/openzfs_sysctl.c
+ create mode 100644 zfs/openzfs_sysctl.h
+
+diff --git a/Makefile.am b/Makefile.am
+index b6d2117..5eee631 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -36,10 +36,6 @@ TasksMeter.h UptimeMeter.h TraceScreen.h UsersTable.h Vector.h Process.h \
+ AffinityPanel.h HostnameMeter.h OpenFilesScreen.h Affinity.h IncSet.h Action.h \
+ EnvScreen.h InfoScreen.h XAlloc.h
+ 
+-zfs_platform_sources = zfs/ZfsArcMeter.c
+-
+-zfs_platform_headers = zfs/ZfsArcMeter.h
+-
+ all_platform_headers =
+ 
+ # Linux
+@@ -53,7 +49,8 @@ linux_platform_headers = \
+ 	linux/LinuxProcessList.h \
+ 	linux/LinuxCRT.h \
+ 	linux/Battery.h \
+-	$(zfs_platform_headers)
++	zfs/ZfsArcMeter.h \
++	zfs/ZfsArcStats.h
+ 
+ all_platform_headers += $(linux_platform_headers)
+ 
+@@ -61,7 +58,7 @@ if HTOP_LINUX
+ AM_CFLAGS += -rdynamic
+ myhtopplatsources = linux/Platform.c linux/IOPriorityPanel.c linux/IOPriority.c \
+ linux/LinuxProcess.c linux/LinuxProcessList.c linux/LinuxCRT.c linux/Battery.c \
+-$(zfs_platform_sources)
++zfs/ZfsArcMeter.c zfs/ZfsArcStats.c
+ 
+ myhtopplatheaders = $(linux_platform_headers)
+ endif
+@@ -75,14 +72,16 @@ freebsd_platform_headers = \
+ 	freebsd/FreeBSDProcess.h \
+ 	freebsd/FreeBSDCRT.h \
+ 	freebsd/Battery.h \
+-	$(zfs_platform_headers)
++	zfs/ZfsArcMeter.h \
++	zfs/ZfsArcStats.h \
++	zfs/openzfs_sysctl.h
+ 
+ all_platform_headers += $(freebsd_platform_headers)
+ 
+ if HTOP_FREEBSD
+ myhtopplatsources = freebsd/Platform.c freebsd/FreeBSDProcessList.c \
+ freebsd/FreeBSDProcess.c freebsd/FreeBSDCRT.c freebsd/Battery.c \
+-$(zfs_platform_sources)
++zfs/ZfsArcMeter.c zfs/ZfsArcStats.c zfs/openzfs_sysctl.c
+ 
+ myhtopplatheaders = $(freebsd_platform_headers)
+ endif
+@@ -135,7 +134,9 @@ darwin_platform_headers = \
+ 	darwin/DarwinProcessList.h \
+ 	darwin/DarwinCRT.h \
+ 	darwin/Battery.h \
+-	$(zfs_platform_headers)
++	zfs/ZfsArcMeter.h \
++	zfs/ZfsArcStats.h \
++	zfs/openzfs_sysctl.h
+ 
+ all_platform_headers += $(darwin_platform_headers)
+ 
+@@ -143,7 +144,7 @@ if HTOP_DARWIN
+ AM_LDFLAGS += -framework IOKit -framework CoreFoundation
+ myhtopplatsources = darwin/Platform.c darwin/DarwinProcess.c \
+ darwin/DarwinProcessList.c darwin/DarwinCRT.c darwin/Battery.c \
+-$(zfs_platform_sources)
++zfs/ZfsArcMeter.c zfs/ZfsArcStats.c zfs/openzfs_sysctl.c
+ 
+ myhtopplatheaders = $(darwin_platform_headers)
+ endif
+diff --git a/darwin/DarwinProcessList.c b/darwin/DarwinProcessList.c
+index 267e8e9..122e018 100644
+--- a/darwin/DarwinProcessList.c
++++ b/darwin/DarwinProcessList.c
+@@ -9,6 +9,8 @@ in the source distribution for its full text.
+ #include "DarwinProcess.h"
+ #include "DarwinProcessList.h"
+ #include "CRT.h"
++#include "zfs/ZfsArcStats.h"
++#include "zfs/openzfs_sysctl.h"
+ 
+ #include <stdlib.h>
+ #include <string.h>
+@@ -69,27 +71,11 @@ typedef struct DarwinProcessList_ {
+    uint64_t user_threads;
+    uint64_t global_diff;
+ 
+-   int zfsArcEnabled;
+-   unsigned long long int zfsArcMax;
+-   unsigned long long int zfsArcSize;
+-   unsigned long long int zfsArcMFU;
+-   unsigned long long int zfsArcMRU;
+-   unsigned long long int zfsArcAnon;
+-   unsigned long long int zfsArcHeader;
+-   unsigned long long int zfsArcOther;
+-
++   ZfsArcStats zfs;
+ } DarwinProcessList;
+ 
+ }*/
+ 
+-static int MIB_kstat_zfs_misc_arcstats_c_max[5];
+-static int MIB_kstat_zfs_misc_arcstats_size[5];
+-static int MIB_kstat_zfs_misc_arcstats_mfu_size[5];
+-static int MIB_kstat_zfs_misc_arcstats_mru_size[5];
+-static int MIB_kstat_zfs_misc_arcstats_anon_size[5];
+-static int MIB_kstat_zfs_misc_arcstats_hdr_size[5];
+-static int MIB_kstat_zfs_misc_arcstats_other_size[5];
+-
+ void ProcessList_getHostInfo(host_basic_info_data_t *p) {
+    mach_msg_type_number_t info_size = HOST_BASIC_INFO_COUNT;
+ 
+@@ -150,48 +136,6 @@ struct kinfo_proc *ProcessList_getKInfoProcs(size_t *count) {
+    return processes;
+ }
+ 
+-static inline void DarwinProcessList_scanZfsArcstats(DarwinProcessList* dpl) {
+-   size_t len;
+-
+-   if (dpl->zfsArcEnabled) {
+-      len = sizeof(dpl->zfsArcSize);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_size, 5, &(dpl->zfsArcSize), &len , NULL, 0);
+-      /* TODO: adjust reported memory in use to move ARC from wired to inactive
+-         Like:
+-         // In bytes
+-         dpl->vm_stats.wire_count -= dpl->zfsArcSize / vm_page_size;
+-         dpl->vm_stats.inactive_count += dpl->zfsArcSize / vm_page_size;
+-         // Would purgable_count be more true?
+-         // Then convert to KB:
+-      */
+-      dpl->zfsArcSize /= 1024;
+-
+-      len = sizeof(dpl->zfsArcMax);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_c_max, 5, &(dpl->zfsArcMax), &len , NULL, 0);
+-      dpl->zfsArcMax /= 1024;
+-
+-      len = sizeof(dpl->zfsArcMFU);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_mfu_size, 5, &(dpl->zfsArcMFU), &len , NULL, 0);
+-      dpl->zfsArcMFU /= 1024;
+-
+-      len = sizeof(dpl->zfsArcMRU);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_mru_size, 5, &(dpl->zfsArcMRU), &len , NULL, 0);
+-      dpl->zfsArcMRU /= 1024;
+-
+-      len = sizeof(dpl->zfsArcAnon);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_anon_size, 5, &(dpl->zfsArcAnon), &len , NULL, 0);
+-      dpl->zfsArcAnon /= 1024;
+-
+-      len = sizeof(dpl->zfsArcHeader);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_hdr_size, 5, &(dpl->zfsArcHeader), &len , NULL, 0);
+-      dpl->zfsArcHeader /= 1024;
+-
+-      len = sizeof(dpl->zfsArcOther);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_other_size, 5, &(dpl->zfsArcOther), &len , NULL, 0);
+-      dpl->zfsArcOther /= 1024;
+-   }
+-}
+-
+ ProcessList* ProcessList_new(UsersTable* usersTable, Hashtable* pidWhiteList, uid_t userId) {
+    size_t len;
+    DarwinProcessList* this = xCalloc(1, sizeof(DarwinProcessList));
+@@ -207,22 +151,8 @@ ProcessList* ProcessList_new(UsersTable* usersTable, Hashtable* pidWhiteList, ui
+    ProcessList_getVMStats(&this->vm_stats);
+ 
+    /* Initialize the ZFS kstats, if zfs.kext loaded */
+-   len = sizeof(this->zfsArcSize);
+-   if (sysctlbyname("kstat.zfs.misc.arcstats.size", &this->zfsArcSize, &len,
+-	    NULL, 0) == 0 && this->zfsArcSize != 0) {
+-		  this->zfsArcEnabled = 1;
+-
+-                  len = 5;
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.size", MIB_kstat_zfs_misc_arcstats_size, &len);
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.c_max", MIB_kstat_zfs_misc_arcstats_c_max, &len);
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.mfu_size", MIB_kstat_zfs_misc_arcstats_mfu_size, &len);
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.mru_size", MIB_kstat_zfs_misc_arcstats_mru_size, &len);
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.anon_size", MIB_kstat_zfs_misc_arcstats_anon_size, &len);
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.hdr_size", MIB_kstat_zfs_misc_arcstats_hdr_size, &len);
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.other_size", MIB_kstat_zfs_misc_arcstats_other_size, &len);
+-   } else {
+-		  this->zfsArcEnabled = 0;
+-   }
++   this->zfs.enabled = openzfs_sysctl_init();
++   openzfs_sysctl_updateArcStats(&this->zfs);
+ 
+    this->super.kernelThreads = 0;
+    this->super.userlandThreads = 0;
+@@ -252,7 +182,7 @@ void ProcessList_goThroughEntries(ProcessList* super) {
+     dpl->prev_load = dpl->curr_load;
+     ProcessList_allocateCPULoadInfo(&dpl->curr_load);
+     ProcessList_getVMStats(&dpl->vm_stats);
+-    DarwinProcessList_scanZfsArcstats(dpl);
++    openzfs_sysctl_updateArcStats(&dpl->zfs);
+ 
+     /* Get the time difference */
+     dpl->global_diff = 0;
+diff --git a/darwin/DarwinProcessList.h b/darwin/DarwinProcessList.h
+index 6686d05..73fbd34 100644
+--- a/darwin/DarwinProcessList.h
++++ b/darwin/DarwinProcessList.h
+@@ -21,6 +21,7 @@ negative value if more than the installed version
+ int CompareKernelVersion(short int major, short int minor, short int component);
+ 
+ #include "ProcessList.h"
++#include "zfs/ZfsArcStats.h"
+ #include <mach/mach_host.h>
+ #include <sys/sysctl.h>
+ 
+@@ -35,15 +36,7 @@ typedef struct DarwinProcessList_ {
+    uint64_t user_threads;
+    uint64_t global_diff;
+ 
+-   int zfsArcEnabled;
+-   unsigned long long int zfsArcMax;
+-   unsigned long long int zfsArcSize;
+-   unsigned long long int zfsArcMFU;
+-   unsigned long long int zfsArcMRU;
+-   unsigned long long int zfsArcAnon;
+-   unsigned long long int zfsArcHeader;
+-   unsigned long long int zfsArcOther;
+-
++   ZfsArcStats zfs;
+ } DarwinProcessList;
+ 
+ 
+diff --git a/darwin/Platform.c b/darwin/Platform.c
+index 52d60a9..8fbb9c9 100644
+--- a/darwin/Platform.c
++++ b/darwin/Platform.c
+@@ -246,18 +246,18 @@ void Platform_setSwapValues(Meter* mtr) {
+ void Platform_setZfsArcValues(Meter* this) {
+    DarwinProcessList* dpl = (DarwinProcessList*) this->pl;
+ 
+-   this->total = dpl->zfsArcMax;
+-   this->values[0] = dpl->zfsArcMFU;
+-   this->values[1] = dpl->zfsArcMRU;
+-   this->values[2] = dpl->zfsArcAnon;
+-   this->values[3] = dpl->zfsArcHeader;
+-   this->values[4] = dpl->zfsArcOther;
++   this->total = dpl->zfs.max;
++   this->values[0] = dpl->zfs.MFU;
++   this->values[1] = dpl->zfs.MRU;
++   this->values[2] = dpl->zfs.anon;
++   this->values[3] = dpl->zfs.header;
++   this->values[4] = dpl->zfs.other;
+ 
+    // "Hide" the last value so it can
+    // only be accessed by index and is not
+    // displayed by the Bar or Graph style
+    Meter_setItems(this, 5);
+-   this->values[5] = dpl->zfsArcSize;
++   this->values[5] = dpl->zfs.size;
+ }
+ 
+ char* Platform_getProcessEnv(pid_t pid) {
+diff --git a/darwin/Platform.h b/darwin/Platform.h
+index 4acda2c..f836077 100644
+--- a/darwin/Platform.h
++++ b/darwin/Platform.h
+@@ -48,7 +48,7 @@ void Platform_setMemoryValues(Meter* mtr);
+ 
+ void Platform_setSwapValues(Meter* mtr);
+ 
+-void Platform_setZfsArcValues(Meter* mtr);
++void Platform_setZfsArcValues(Meter* this);
+ 
+ char* Platform_getProcessEnv(pid_t pid);
+ 
+diff --git a/freebsd/FreeBSDProcessList.c b/freebsd/FreeBSDProcessList.c
+index 94cbaa1..1cbfdaa 100644
+--- a/freebsd/FreeBSDProcessList.c
++++ b/freebsd/FreeBSDProcessList.c
+@@ -8,6 +8,8 @@ in the source distribution for its full text.
+ #include "ProcessList.h"
+ #include "FreeBSDProcessList.h"
+ #include "FreeBSDProcess.h"
++#include "zfs/ZfsArcStats.h"
++#include "zfs/openzfs_sysctl.h"
+ 
+ #include <unistd.h>
+ #include <stdlib.h>
+@@ -21,6 +23,8 @@ in the source distribution for its full text.
+ 
+ /*{
+ 
++#include "zfs/ZfsArcStats.h"
++
+ #include <kvm.h>
+ #include <sys/param.h>
+ #include <sys/jail.h>
+@@ -45,20 +49,12 @@ typedef struct FreeBSDProcessList_ {
+    ProcessList super;
+    kvm_t* kd;
+ 
+-   int zfsArcEnabled;
+-
+    unsigned long long int memWire;
+    unsigned long long int memActive;
+    unsigned long long int memInactive;
+    unsigned long long int memFree;
+-   unsigned long long int memZfsArc;
+ 
+-   unsigned long long int zfsArcMax;
+-   unsigned long long int zfsArcMFU;
+-   unsigned long long int zfsArcMRU;
+-   unsigned long long int zFsArcAnon;
+-   unsigned long long int zFsArcHeader;
+-   unsigned long long int zFsArcOther;
++   ZfsArcStats zfs;
+ 
+    CPUData* cpus;
+ 
+@@ -86,14 +82,6 @@ static int MIB_vm_stats_vm_v_free_count[4];
+ 
+ static int MIB_vfs_bufspace[2];
+ 
+-static int MIB_kstat_zfs_misc_arcstats_size[5];
+-static int MIB_vfs_zfs_arc_max[3];
+-static int MIB_kstat_zfs_misc_arcstats_mfu_size[5];
+-static int MIB_kstat_zfs_misc_arcstats_mru_size[5];
+-static int MIB_kstat_zfs_misc_arcstats_anon_size[5];
+-static int MIB_kstat_zfs_misc_arcstats_hdr_size[5];
+-static int MIB_kstat_zfs_misc_arcstats_other_size[5];
+-
+ static int MIB_kern_cp_time[2];
+ static int MIB_kern_cp_times[2];
+ static int kernelFScale;
+@@ -130,25 +118,8 @@ ProcessList* ProcessList_new(UsersTable* usersTable, Hashtable* pidWhiteList, ui
+ 
+    len = 2; sysctlnametomib("vfs.bufspace", MIB_vfs_bufspace, &len);
+ 
+-   len = sizeof(fpl->memZfsArc);
+-   if (sysctlbyname("kstat.zfs.misc.arcstats.size", &fpl->memZfsArc, &len,
+-	    NULL, 0) == 0 && fpl->memZfsArc != 0) {
+-                  len = 5; sysctlnametomib("kstat.zfs.misc.arcstats.size", MIB_kstat_zfs_misc_arcstats_size, &len);
+-		  fpl->zfsArcEnabled = 1;
+-
+-                  len = 3;
+-                  sysctlnametomib("vfs.zfs.arc_max", MIB_vfs_zfs_arc_max, &len);
+-
+-                  len = 5;
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.mfu_size", MIB_kstat_zfs_misc_arcstats_mfu_size, &len);
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.mru_size", MIB_kstat_zfs_misc_arcstats_mru_size, &len);
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.anon_size", MIB_kstat_zfs_misc_arcstats_anon_size, &len);
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.hdr_size", MIB_kstat_zfs_misc_arcstats_hdr_size, &len);
+-                  sysctlnametomib("kstat.zfs.misc.arcstats.other_size", MIB_kstat_zfs_misc_arcstats_other_size, &len);
+-   } else {
+-		  fpl->zfsArcEnabled = 0;
+-   }
+-
++   fpl->zfs.enabled = openzfs_sysctl_init();
++   openzfs_sysctl_updateArcStats(&fpl->zfs);
+ 
+    int smp = 0;
+    len = sizeof(smp);
+@@ -339,36 +310,9 @@ static inline void FreeBSDProcessList_scanMemoryInfo(ProcessList* pl) {
+    sysctl(MIB_vm_stats_vm_v_cache_count, 4, &(pl->cachedMem), &len, NULL, 0);
+    pl->cachedMem *= pageSizeKb;
+ 
+-   if (fpl->zfsArcEnabled) {
+-      len = sizeof(fpl->memZfsArc);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_size, 5, &(fpl->memZfsArc), &len , NULL, 0);
+-      fpl->memZfsArc /= 1024;
+-      fpl->memWire -= fpl->memZfsArc;
+-      pl->cachedMem += fpl->memZfsArc;
+-
+-      len = sizeof(fpl->zfsArcMax);
+-      sysctl(MIB_vfs_zfs_arc_max, 3, &(fpl->zfsArcMax), &len , NULL, 0);
+-      fpl->zfsArcMax /= 1024;
+-
+-      len = sizeof(fpl->zfsArcMFU);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_mfu_size, 5, &(fpl->zfsArcMFU), &len , NULL, 0);
+-      fpl->zfsArcMFU /= 1024;
+-
+-      len = sizeof(fpl->zfsArcMRU);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_mru_size, 5, &(fpl->zfsArcMRU), &len , NULL, 0);
+-      fpl->zfsArcMRU /= 1024;
+-
+-      len = sizeof(fpl->zfsArcAnon);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_anon_size, 5, &(fpl->zfsArcAnon), &len , NULL, 0);
+-      fpl->zfsArcAnon /= 1024;
+-
+-      len = sizeof(fpl->zfsArcHeader);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_hdr_size, 5, &(fpl->zfsArcHeader), &len , NULL, 0);
+-      fpl->zfsArcHeader /= 1024;
+-
+-      len = sizeof(fpl->zfsArcOther);
+-      sysctl(MIB_kstat_zfs_misc_arcstats_other_size, 5, &(fpl->zfsArcOther), &len , NULL, 0);
+-      fpl->zfsArcOther /= 1024;
++   if (fpl->zfs.enabled) {
++      fpl->memWire -= fpl->zfs.size;
++      pl->cachedMem += fpl->zfs.size;
+    }
+ 
+    pl->usedMem = fpl->memActive + fpl->memWire;
+@@ -466,6 +410,7 @@ void ProcessList_goThroughEntries(ProcessList* this) {
+    bool hideKernelThreads = settings->hideKernelThreads;
+    bool hideUserlandThreads = settings->hideUserlandThreads;
+ 
++   openzfs_sysctl_updateArcStats(&fpl->zfs);
+    FreeBSDProcessList_scanMemoryInfo(this);
+    FreeBSDProcessList_scanCPUTime(this);
+ 
+diff --git a/freebsd/FreeBSDProcessList.h b/freebsd/FreeBSDProcessList.h
+index cf96a70..7c1b7ad 100644
+--- a/freebsd/FreeBSDProcessList.h
++++ b/freebsd/FreeBSDProcessList.h
+@@ -10,6 +10,8 @@ in the source distribution for its full text.
+ */
+ 
+ 
++#include "zfs/ZfsArcStats.h"
++
+ #include <kvm.h>
+ #include <sys/param.h>
+ #include <sys/jail.h>
+@@ -34,20 +36,12 @@ typedef struct FreeBSDProcessList_ {
+    ProcessList super;
+    kvm_t* kd;
+ 
+-   int zfsArcEnabled;
+-
+    unsigned long long int memWire;
+    unsigned long long int memActive;
+    unsigned long long int memInactive;
+    unsigned long long int memFree;
+-   unsigned long long int memZfsArc;
+-
+-   unsigned long long int zfsArcMax;
+-   unsigned long long int zfsArcMFU;
+-   unsigned long long int zfsArcMRU;
+-   unsigned long long int zfsArcAnon;
+-   unsigned long long int zfsArcHeader;
+-   unsigned long long int zfsArcOther;
++
++   ZfsArcStats zfs;
+ 
+    CPUData* cpus;
+ 
+diff --git a/freebsd/Platform.c b/freebsd/Platform.c
+index d8d2ed0..05c0e92 100644
+--- a/freebsd/Platform.c
++++ b/freebsd/Platform.c
+@@ -202,18 +202,18 @@ void Platform_setSwapValues(Meter* this) {
+ void Platform_setZfsArcValues(Meter* this) {
+    FreeBSDProcessList* fpl = (FreeBSDProcessList*) this->pl;
+ 
+-   this->total = fpl->zfsArcMax;
+-   this->values[0] = fpl->zfsArcMFU;
+-   this->values[1] = fpl->zfsArcMRU;
+-   this->values[2] = fpl->zfsArcAnon;
+-   this->values[3] = fpl->zfsArcHeader;
+-   this->values[4] = fpl->zfsArcOther;
++   this->total = fpl->zfs.max;
++   this->values[0] = fpl->zfs.MFU;
++   this->values[1] = fpl->zfs.MRU;
++   this->values[2] = fpl->zfs.anon;
++   this->values[3] = fpl->zfs.header;
++   this->values[4] = fpl->zfs.other;
+ 
+    // "Hide" the last value so it can
+    // only be accessed by index and is not
+    // displayed by the Bar or Graph style
+    Meter_setItems(this, 5);
+-   this->values[5] = fpl->memZfsArc;
++   this->values[5] = fpl->zfs.size;
+ }
+ 
+ void Platform_setTasksValues(Meter* this) {
+diff --git a/linux/LinuxProcessList.c b/linux/LinuxProcessList.c
+index 4d19185..3e88910 100644
+--- a/linux/LinuxProcessList.c
++++ b/linux/LinuxProcessList.c
+@@ -46,6 +46,7 @@ in the source distribution for its full text.
+ /*{
+ 
+ #include "ProcessList.h"
++#include "zfs/ZfsArcStats.h"
+ 
+ extern long long btime;
+ 
+@@ -95,14 +96,7 @@ typedef struct LinuxProcessList_ {
+    int netlink_family;
+    #endif
+ 
+-   int zfsArcEnabled;
+-   unsigned long long int memZfsArc;
+-   unsigned long long int zfsArcMax;
+-   unsigned long long int zfsArcMFU;
+-   unsigned long long int zfsArcMRU;
+-   unsigned long long int zfsArcAnon;
+-   unsigned long long int zfsArcHeader;
+-   unsigned long long int zfsArcOther;
++   ZfsArcStats zfs;
+ } LinuxProcessList;
+ 
+ #ifndef PROCDIR
+@@ -984,7 +978,7 @@ static inline void LinuxProcessList_scanZfsArcstats(LinuxProcessList* lpl) {
+ 
+    FILE* file = fopen(PROCARCSTATSFILE, "r");
+    if (file == NULL) {
+-      lpl->zfsArcEnabled = 0;
++      lpl->zfs.enabled = 0;
+       return;
+    }
+    char buffer[128];
+@@ -992,13 +986,13 @@ static inline void LinuxProcessList_scanZfsArcstats(LinuxProcessList* lpl) {
+       #define tryRead(label, variable) do { if (String_startsWith(buffer, label) && sscanf(buffer + strlen(label), " %*2u %32llu", variable)) { break; } } while(0)
+       switch (buffer[0]) {
+       case 'c':
+-         tryRead("c_max", &lpl->zfsArcMax);
++         tryRead("c_max", &lpl->zfs.max);
+          break;
+       case 's':
+-         tryRead("size", &lpl->memZfsArc);
++         tryRead("size", &lpl->zfs.size);
+          break;
+       case 'h':
+-         tryRead("hdr_size", &lpl->zfsArcHeader);
++         tryRead("hdr_size", &lpl->zfs.header);
+          break;
+       case 'd':
+          tryRead("dbuf_size", &dbufSize);
+@@ -1008,25 +1002,25 @@ static inline void LinuxProcessList_scanZfsArcstats(LinuxProcessList* lpl) {
+          tryRead("bonus_size", &bonusSize);
+          break;
+       case 'a':
+-         tryRead("anon_size", &lpl->zfsArcAnon);
++         tryRead("anon_size", &lpl->zfs.anon);
+          break;
+       case 'm':
+-         tryRead("mfu_size", &lpl->zfsArcMFU);
+-         tryRead("mru_size", &lpl->zfsArcMRU);
++         tryRead("mfu_size", &lpl->zfs.MFU);
++         tryRead("mru_size", &lpl->zfs.MRU);
+          break;
+       }
+       #undef tryRead
+    }
+    fclose(file);
+ 
+-   lpl->zfsArcEnabled = (lpl->memZfsArc > 0 ? 1 : 0);
+-   lpl->memZfsArc    /= 1024;
+-   lpl->zfsArcMax    /= 1024;
+-   lpl->zfsArcMFU    /= 1024;
+-   lpl->zfsArcMRU    /= 1024;
+-   lpl->zfsArcAnon   /= 1024;
+-   lpl->zfsArcHeader /= 1024;
+-   lpl->zfsArcOther   = (dbufSize + dnodeSize + bonusSize) / 1024;
++   lpl->zfs.enabled = (lpl->zfs.size > 0 ? 1 : 0);
++   lpl->zfs.size    /= 1024;
++   lpl->zfs.max    /= 1024;
++   lpl->zfs.MFU    /= 1024;
++   lpl->zfs.MRU    /= 1024;
++   lpl->zfs.anon   /= 1024;
++   lpl->zfs.header /= 1024;
++   lpl->zfs.other   = (dbufSize + dnodeSize + bonusSize) / 1024;
+ }
+ 
+ static inline double LinuxProcessList_scanCPUTime(LinuxProcessList* this) {
+diff --git a/linux/LinuxProcessList.h b/linux/LinuxProcessList.h
+index 749231e..353fe60 100644
+--- a/linux/LinuxProcessList.h
++++ b/linux/LinuxProcessList.h
+@@ -19,6 +19,7 @@ in the source distribution for its full text.
+ 
+ 
+ #include "ProcessList.h"
++#include "zfs/ZfsArcStats.h"
+ 
+ extern long long btime;
+ 
+@@ -68,14 +69,7 @@ typedef struct LinuxProcessList_ {
+    int netlink_family;
+    #endif
+ 
+-   int zfsArcEnabled;
+-   unsigned long long int memZfsArc;
+-   unsigned long long int zfsArcMax;
+-   unsigned long long int zfsArcMFU;
+-   unsigned long long int zfsArcMRU;
+-   unsigned long long int zfsArcAnon;
+-   unsigned long long int zfsArcHeader;
+-   unsigned long long int zfsArcOther;
++   ZfsArcStats zfs;
+ } LinuxProcessList;
+ 
+ #ifndef PROCDIR
+diff --git a/linux/Platform.c b/linux/Platform.c
+index 4e73c61..e2a3c6d 100644
+--- a/linux/Platform.c
++++ b/linux/Platform.c
+@@ -218,18 +218,18 @@ void Platform_setSwapValues(Meter* this) {
+ void Platform_setZfsArcValues(Meter* this) {
+    LinuxProcessList* lpl = (LinuxProcessList*) this->pl;
+ 
+-   this->total = lpl->zfsArcMax;
+-   this->values[0] = lpl->zfsArcMFU;
+-   this->values[1] = lpl->zfsArcMRU;
+-   this->values[2] = lpl->zfsArcAnon;
+-   this->values[3] = lpl->zfsArcHeader;
+-   this->values[4] = lpl->zfsArcOther;
++   this->total = lpl->zfs.max;
++   this->values[0] = lpl->zfs.MFU;
++   this->values[1] = lpl->zfs.MRU;
++   this->values[2] = lpl->zfs.anon;
++   this->values[3] = lpl->zfs.header;
++   this->values[4] = lpl->zfs.other;
+ 
+    // "Hide" the last value so it can
+    // only be accessed by index and is not
+    // displayed by the Bar or Graph style
+    Meter_setItems(this, 5);
+-   this->values[5] = lpl->memZfsArc;
++   this->values[5] = lpl->zfs.size;
+ }
+ 
+ char* Platform_getProcessEnv(pid_t pid) {
+diff --git a/zfs/ZfsArcStats.c b/zfs/ZfsArcStats.c
+new file mode 100644
+index 0000000..c33076a
+--- /dev/null
++++ b/zfs/ZfsArcStats.c
+@@ -0,0 +1,19 @@
++/*
++htop - ZfsArcStats.c
++(C) 2014 Hisham H. Muhammad
++Released under the GNU GPL, see the COPYING file
++in the source distribution for its full text.
++*/
++
++/*{
++typedef struct ZfsArcStats_ {
++   int enabled;
++   unsigned long long int max;
++   unsigned long long int size;
++   unsigned long long int MFU;
++   unsigned long long int MRU;
++   unsigned long long int anon;
++   unsigned long long int header;
++   unsigned long long int other;
++} ZfsArcStats;
++}*/
+diff --git a/zfs/ZfsArcStats.h b/zfs/ZfsArcStats.h
+new file mode 100644
+index 0000000..3697af2
+--- /dev/null
++++ b/zfs/ZfsArcStats.h
+@@ -0,0 +1,23 @@
++/* Do not edit this file. It was automatically generated. */
++
++#ifndef HEADER_ZfsArcStats
++#define HEADER_ZfsArcStats
++/*
++htop - ZfsArcStats.h
++(C) 2014 Hisham H. Muhammad
++Released under the GNU GPL, see the COPYING file
++in the source distribution for its full text.
++*/
++
++typedef struct ZfsArcStats_ {
++   int enabled;
++   unsigned long long int max;
++   unsigned long long int size;
++   unsigned long long int MFU;
++   unsigned long long int MRU;
++   unsigned long long int anon;
++   unsigned long long int header;
++   unsigned long long int other;
++} ZfsArcStats;
++
++#endif
+diff --git a/zfs/openzfs_sysctl.c b/zfs/openzfs_sysctl.c
+new file mode 100644
+index 0000000..ce48f23
+--- /dev/null
++++ b/zfs/openzfs_sysctl.c
+@@ -0,0 +1,81 @@
++/*
++htop - zfs/openzfs_sysctl.c
++(C) 2014 Hisham H. Muhammad
++Released under the GNU GPL, see the COPYING file
++in the source distribution for its full text.
++*/
++
++#include "zfs/openzfs_sysctl.h"
++#include "zfs/ZfsArcStats.h"
++
++#include <unistd.h>
++#include <stdlib.h>
++#include <sys/types.h>
++#include <sys/sysctl.h>
++
++static int MIB_kstat_zfs_misc_arcstats_size[5];
++static int MIB_kstat_zfs_misc_arcstats_c_max[5];
++static int MIB_kstat_zfs_misc_arcstats_mfu_size[5];
++static int MIB_kstat_zfs_misc_arcstats_mru_size[5];
++static int MIB_kstat_zfs_misc_arcstats_anon_size[5];
++static int MIB_kstat_zfs_misc_arcstats_hdr_size[5];
++static int MIB_kstat_zfs_misc_arcstats_other_size[5];
++
++/*{
++#include "zfs/ZfsArcStats.h"
++}*/
++
++int openzfs_sysctl_init() {
++   size_t len;
++   unsigned long long int arcSize;
++
++   len = sizeof(arcSize);
++   if (sysctlbyname("kstat.zfs.misc.arcstats.size", &arcSize, &len,
++	    NULL, 0) == 0 && arcSize != 0) {
++                  len = 5; sysctlnametomib("kstat.zfs.misc.arcstats.size", MIB_kstat_zfs_misc_arcstats_size, &len);
++
++                  sysctlnametomib("kstat.zfs.misc.arcstats.c_max", MIB_kstat_zfs_misc_arcstats_c_max, &len);
++                  sysctlnametomib("kstat.zfs.misc.arcstats.mfu_size", MIB_kstat_zfs_misc_arcstats_mfu_size, &len);
++                  sysctlnametomib("kstat.zfs.misc.arcstats.mru_size", MIB_kstat_zfs_misc_arcstats_mru_size, &len);
++                  sysctlnametomib("kstat.zfs.misc.arcstats.anon_size", MIB_kstat_zfs_misc_arcstats_anon_size, &len);
++                  sysctlnametomib("kstat.zfs.misc.arcstats.hdr_size", MIB_kstat_zfs_misc_arcstats_hdr_size, &len);
++                  sysctlnametomib("kstat.zfs.misc.arcstats.other_size", MIB_kstat_zfs_misc_arcstats_other_size, &len);
++                  return 1;
++   } else {
++		  return 0;
++   }
++}
++
++void openzfs_sysctl_updateArcStats(ZfsArcStats *stats) {
++   size_t len;
++
++   if (stats->enabled) {
++      len = sizeof(stats->size);
++      sysctl(MIB_kstat_zfs_misc_arcstats_size, 5, &(stats->size), &len , NULL, 0);
++      stats->size /= 1024;
++
++      len = sizeof(stats->max);
++      sysctl(MIB_kstat_zfs_misc_arcstats_c_max, 5, &(stats->max), &len , NULL, 0);
++      stats->max /= 1024;
++
++      len = sizeof(stats->MFU);
++      sysctl(MIB_kstat_zfs_misc_arcstats_mfu_size, 5, &(stats->MFU), &len , NULL, 0);
++      stats->MFU /= 1024;
++
++      len = sizeof(stats->MRU);
++      sysctl(MIB_kstat_zfs_misc_arcstats_mru_size, 5, &(stats->MRU), &len , NULL, 0);
++      stats->MRU /= 1024;
++
++      len = sizeof(stats->anon);
++      sysctl(MIB_kstat_zfs_misc_arcstats_anon_size, 5, &(stats->anon), &len , NULL, 0);
++      stats->anon /= 1024;
++
++      len = sizeof(stats->header);
++      sysctl(MIB_kstat_zfs_misc_arcstats_hdr_size, 5, &(stats->header), &len , NULL, 0);
++      stats->header /= 1024;
++
++      len = sizeof(stats->other);
++      sysctl(MIB_kstat_zfs_misc_arcstats_other_size, 5, &(stats->other), &len , NULL, 0);
++      stats->other /= 1024;
++   }
++}
+diff --git a/zfs/openzfs_sysctl.h b/zfs/openzfs_sysctl.h
+new file mode 100644
+index 0000000..7c04bd7
+--- /dev/null
++++ b/zfs/openzfs_sysctl.h
+@@ -0,0 +1,18 @@
++/* Do not edit this file. It was automatically generated. */
++
++#ifndef HEADER_openzfs
++#define HEADER_openzfs
++/*
++htop - zfs/openzfs_sysctl.h
++(C) 2014 Hisham H. Muhammad
++Released under the GNU GPL, see the COPYING file
++in the source distribution for its full text.
++*/
++
++#include "zfs/ZfsArcStats.h"
++
++int openzfs_sysctl_init();
++
++void openzfs_sysctl_updateArcStats(ZfsArcStats *stats);
++
++#endif
+-- 
+2.20.1
+
