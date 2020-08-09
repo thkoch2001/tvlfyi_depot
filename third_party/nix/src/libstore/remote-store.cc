@@ -696,8 +696,10 @@ std::exception_ptr RemoteStore::Connection::processStderr(Sink* sink,
         throw Error("no source");
       }
       auto len = readNum<size_t>(from);
-      auto buf = std::make_unique<unsigned char[]>(len);
-      writeString(buf.get(), source->read(buf.get(), len), to);
+      std::vector<unsigned char> buf;
+      buf.reserve(len);
+      ssize_t rlen = source->read(buf.data(), len);
+      writeString(buf.data(), rlen, to);
       to.flush();
     }
 
