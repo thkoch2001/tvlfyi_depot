@@ -22,6 +22,30 @@
       "revId": "26e4fc417b0c17c01e3291dad700e3e58fd76214",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77df27ea_ad0db23a",
+        "filename": "third_party/nix/src/tests/references_test.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-09T17:26:15Z",
+      "side": 1,
+      "message": "would rather not scope-creep for now; this covers the bug - if something else breaks then we can cover it in a more extensive test.",
+      "parentUuid": "11434f92_42117aea",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 0
+      },
+      "revId": "26e4fc417b0c17c01e3291dad700e3e58fd76214",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
