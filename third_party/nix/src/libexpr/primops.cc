@@ -1339,7 +1339,8 @@ static void prim_catAttrs(EvalState& state, const Pos& pos, Value** args,
   Symbol attrName = state.symbols.Create(state.forceStringNoCtx(*args[0], pos));
   state.forceList(*args[1], pos);
 
-  Value* res[args[1]->listSize()];
+  std::vector<Value*> res;
+  res.reserve(args[1]->listSize());
   unsigned int found = 0;
 
   for (unsigned int n = 0; n < args[1]->listSize(); ++n) {

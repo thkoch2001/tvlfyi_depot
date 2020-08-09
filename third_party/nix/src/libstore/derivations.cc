@@ -88,9 +88,10 @@ Path writeDerivation(const ref<Store>& store, const Derivation& drv,
 
 /* Read string `s' from stream `str'. */
 static void expect(std::istream& str, const std::string& s) {
-  char s2[s.size()];
-  str.read(s2, s.size());
-  if (std::string(s2, s.size()) != s) {
+  std::vector<char> buf;
+  buf.reserve(s.size());
+  str.read(buf.data(), s.size());
+  if (absl::string_view(buf.data(), buf.size()) != s) {
     throw FormatError(format("expected string '%1%'") % s);
   }
 }

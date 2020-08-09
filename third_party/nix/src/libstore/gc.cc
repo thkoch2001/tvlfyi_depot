@@ -344,27 +344,40 @@ Roots LocalStore::findRoots(bool censor) {
   return roots;
 }
 
-static void readProcLink(const std::string& file, Roots& roots) {
+static absl::Status readProcLink_Status(const std::string& file, Roots& roots) noexcept {
   /* 64 is the starting buffer size gnu readlink uses... */
-  auto bufsiz = ssize_t{64};
-try_again:
-  char buf[bufsiz];
-  auto res = readlink(file.c_str(), buf, bufsiz);
-  if (res == -1) {
-    if (errno == ENOENT || errno == EACCES || errno == ESRCH) {
-      return;
+  constexpr ssize_t kInitialBuffer = 64;
+
+  ssize_t bufsiz = kInitialBuffer;
+  while (1) {
+    std::vector<char> buf;
+    buf.reserve(bufsiz);
+    auto res = readlink(file.c_str(), buf.data(), bufsiz);
+    if (res == -1) {
+      if (errno == ENOENT || errno == EACCES || errno == ESRCH) {
+        // These errors are fine.
+        return absl::OkStatus();
+      }
+      return absl::InternalError(absl::StrCat("cannot read symlink ", file, ": ", strerror(errno)));
     }
-    throw SysError("reading symlink");
-  }
-  if (res == bufsiz) {
-    if (SSIZE_MAX / 2 < bufsiz) {
-      throw Error("stupidly long symlink");
+    if (res == bufsiz) {
+      if (SSIZE_MAX / 2 < bufsiz) {
+        return absl::ResourceExhaustedError(absl::StrCat("cannot read symlink ", file, ": contents too long (>", bufsiz, ")"));
+      }
+      bufsiz *= 2;
+      continue;
     }
-    bufsiz *= 2;
-    goto try_again;
+    if (res > 0 && buf[0] == '/') {
+      roots[std::string(buf.data(), res)].emplace(file);
+    }
+    return;
   }
-  if (res > 0 && buf[0] == '/') {
-    roots[std::string(static_cast<char*>(buf), res)].emplace(file);
+}
+
+static void readProcLink(const std::string& file, Roots& roots) {
+  absl::Status status = readProcLink_status(file, roots);
+  if (!status.ok()) {
+    throw SysError(status.ToString());
   }
 }
 

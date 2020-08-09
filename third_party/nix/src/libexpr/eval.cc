@@ -1006,7 +1006,8 @@ void EvalState::callPrimOp(Value& fun, Value& arg, Value& v, const Pos& pos) {
     /* We have all the arguments, so call the primop. */
 
     /* Put all the arguments in an array. */
-    Value* vArgs[arity];
+    std::vector<Value*> vArgs;
+    vArgs.reserve(arity);
     auto n = arity - 1;
     vArgs[n--] = &arg;
     for (Value* arg = &fun; arg->type == tPrimOpApp;
@@ -1019,7 +1020,7 @@ void EvalState::callPrimOp(Value& fun, Value& arg, Value& v, const Pos& pos) {
     if (countCalls) {
       primOpCalls[primOp->primOp->name]++;
     }
-    primOp->primOp->fun(*this, pos, vArgs, v);
+    primOp->primOp->fun(*this, pos, vArgs.data(), v);
   } else {
     Value* fun2 = allocValue();
     *fun2 = fun;
