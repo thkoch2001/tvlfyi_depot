@@ -8,6 +8,9 @@
 
 namespace nix {
 
+// Size of the hashes rendered in store paths, in bytes
+constexpr unsigned int kStorePathHashSize = 20;
+
 MakeError(BadHash, Error);
 
 // TODO(grfn): Replace this with the hash type enum from the daemon proto so we
@@ -90,6 +93,9 @@ struct Hash {
   /* Returns whether the passed string contains entirely valid base32
      characters. */
   static bool IsValidBase32(absl::string_view s);
+
+  // Convert this Hash to the format expected in store paths
+  [[nodiscard]] std::string ToStorePathHash() const;
 };
 
 /* Print a hash in base-16 if it's MD5, or base-32 otherwise. */
