@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE RecordWildCards #-}
 --------------------------------------------------------------------------------
 module Main where
 --------------------------------------------------------------------------------
