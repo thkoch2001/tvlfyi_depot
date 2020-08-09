@@ -1,0 +1,628 @@
+From 613556faebd16325da8c9057c81f39a2410d803f Mon Sep 17 00:00:00 2001
+From: Ross Williams <ross@ross-williams.net>
+Date: Tue, 3 Sep 2019 18:26:02 +0000
+Subject: [PATCH 8/9] Support for ZFS Compressed ARC statistics
+
+---
+ CRT.c                        | 14 ++++++
+ CRT.h                        |  2 +
+ Makefile.am                  | 12 +++--
+ darwin/Platform.c            |  8 ++++
+ darwin/Platform.h            |  2 +
+ freebsd/Platform.c           |  8 ++++
+ freebsd/Platform.h           |  2 +
+ linux/LinuxProcessList.c     | 10 +++++
+ linux/Platform.c             |  7 +++
+ linux/Platform.h             |  2 +
+ solaris/Platform.c           |  8 ++++
+ solaris/Platform.h           |  2 +
+ solaris/SolarisProcessList.c | 10 +++++
+ zfs/ZfsArcStats.c            |  3 ++
+ zfs/ZfsArcStats.h            |  3 ++
+ zfs/ZfsCompressedArcMeter.c  | 86 ++++++++++++++++++++++++++++++++++++
+ zfs/ZfsCompressedArcMeter.h  | 22 +++++++++
+ zfs/openzfs_sysctl.c         | 18 ++++++++
+ 18 files changed, 215 insertions(+), 4 deletions(-)
+ create mode 100644 zfs/ZfsCompressedArcMeter.c
+ create mode 100644 zfs/ZfsCompressedArcMeter.h
+
+diff --git a/CRT.c b/CRT.c
+index b9017aa..cb36b6c 100644
+--- a/CRT.c
++++ b/CRT.c
+@@ -133,6 +133,8 @@ typedef enum ColorElements_ {
+    ZFS_ANON,
+    ZFS_HEADER,
+    ZFS_OTHER,
++   ZFS_COMPRESSED,
++   ZFS_RATIO,
+    LAST_COLORELEMENT
+ } ColorElements;
+ 
+@@ -242,6 +244,8 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [ZFS_ANON] = ColorPair(Magenta,Black),
+       [ZFS_HEADER] = ColorPair(Cyan,Black),
+       [ZFS_OTHER] = ColorPair(Magenta,Black),
++      [ZFS_COMPRESSED] = ColorPair(Blue,Black),
++      [ZFS_RATIO] = ColorPair(Magenta,Black),
+    },
+    [COLORSCHEME_MONOCHROME] = {
+       [RESET_COLOR] = A_NORMAL,
+@@ -306,6 +310,8 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [ZFS_ANON] = A_DIM,
+       [ZFS_HEADER] = A_BOLD,
+       [ZFS_OTHER] = A_DIM,
++      [ZFS_COMPRESSED] = A_BOLD,
++      [ZFS_RATIO] = A_BOLD,
+    },
+    [COLORSCHEME_BLACKONWHITE] = {
+       [RESET_COLOR] = ColorPair(Black,White),
+@@ -370,6 +376,8 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [ZFS_ANON] = ColorPair(Magenta,White),
+       [ZFS_HEADER] = ColorPair(Yellow,White),
+       [ZFS_OTHER] = ColorPair(Magenta,White),
++      [ZFS_COMPRESSED] = ColorPair(Cyan,White),
++      [ZFS_RATIO] = ColorPair(Magenta,White),
+    },
+    [COLORSCHEME_LIGHTTERMINAL] = {
+       [RESET_COLOR] = ColorPair(Black,Black),
+@@ -434,6 +442,8 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [ZFS_ANON] = A_BOLD | ColorPair(Magenta,Black),
+       [ZFS_HEADER] = ColorPair(Black,Black),
+       [ZFS_OTHER] = A_BOLD | ColorPair(Magenta,Black),
++      [ZFS_COMPRESSED] = ColorPair(Cyan,Black),
++      [ZFS_RATIO] = A_BOLD | ColorPair(Magenta,Black),
+    },
+    [COLORSCHEME_MIDNIGHT] = {
+       [RESET_COLOR] = ColorPair(White,Blue),
+@@ -498,6 +508,8 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [ZFS_ANON] = A_BOLD | ColorPair(Magenta,Blue),
+       [ZFS_HEADER] = A_BOLD | ColorPair(Yellow,Blue),
+       [ZFS_OTHER] = A_BOLD | ColorPair(Magenta,Blue),
++      [ZFS_COMPRESSED] = A_BOLD | ColorPair(White,Blue),
++      [ZFS_RATIO] = A_BOLD | ColorPair(Magenta,Blue),
+    },
+    [COLORSCHEME_BLACKNIGHT] = {
+       [RESET_COLOR] = ColorPair(Cyan,Black),
+@@ -562,6 +574,8 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [ZFS_ANON] = ColorPair(Magenta,Black),
+       [ZFS_HEADER] = ColorPair(Yellow,Black),
+       [ZFS_OTHER] = ColorPair(Magenta,Black),
++      [ZFS_COMPRESSED] = ColorPair(Blue,Black),
++      [ZFS_RATIO] = ColorPair(Magenta,Black),
+    },
+    [COLORSCHEME_BROKENGRAY] = { 0 } // dynamically generated.
+ };
+diff --git a/CRT.h b/CRT.h
+index 2275349..d9eba55 100644
+--- a/CRT.h
++++ b/CRT.h
+@@ -121,6 +121,8 @@ typedef enum ColorElements_ {
+    ZFS_ANON,
+    ZFS_HEADER,
+    ZFS_OTHER,
++   ZFS_COMPRESSED,
++   ZFS_RATIO,
+    LAST_COLORELEMENT
+ } ColorElements;
+ 
+diff --git a/Makefile.am b/Makefile.am
+index 204a8b7..2d159f0 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -50,6 +50,7 @@ linux_platform_headers = \
+ 	linux/LinuxCRT.h \
+ 	linux/Battery.h \
+ 	zfs/ZfsArcMeter.h \
++	zfs/ZfsCompressedArcMeter.h \
+ 	zfs/ZfsArcStats.h
+ 
+ all_platform_headers += $(linux_platform_headers)
+@@ -58,7 +59,7 @@ if HTOP_LINUX
+ AM_CFLAGS += -rdynamic
+ myhtopplatsources = linux/Platform.c linux/IOPriorityPanel.c linux/IOPriority.c \
+ linux/LinuxProcess.c linux/LinuxProcessList.c linux/LinuxCRT.c linux/Battery.c \
+-zfs/ZfsArcMeter.c zfs/ZfsArcStats.c
++zfs/ZfsArcMeter.c zfs/ZfsCompressedArcMeter.c zfs/ZfsArcStats.c
+ 
+ myhtopplatheaders = $(linux_platform_headers)
+ endif
+@@ -73,6 +74,7 @@ freebsd_platform_headers = \
+ 	freebsd/FreeBSDCRT.h \
+ 	freebsd/Battery.h \
+ 	zfs/ZfsArcMeter.h \
++	zfs/ZfsCompressedArcMeter.h \
+ 	zfs/ZfsArcStats.h \
+ 	zfs/openzfs_sysctl.h
+ 
+@@ -81,7 +83,7 @@ all_platform_headers += $(freebsd_platform_headers)
+ if HTOP_FREEBSD
+ myhtopplatsources = freebsd/Platform.c freebsd/FreeBSDProcessList.c \
+ freebsd/FreeBSDProcess.c freebsd/FreeBSDCRT.c freebsd/Battery.c \
+-zfs/ZfsArcMeter.c zfs/ZfsArcStats.c zfs/openzfs_sysctl.c
++zfs/ZfsArcMeter.c zfs/ZfsCompressedArcMeter.c zfs/ZfsArcStats.c zfs/openzfs_sysctl.c
+ 
+ myhtopplatheaders = $(freebsd_platform_headers)
+ endif
+@@ -135,6 +137,7 @@ darwin_platform_headers = \
+ 	darwin/DarwinCRT.h \
+ 	darwin/Battery.h \
+ 	zfs/ZfsArcMeter.h \
++	zfs/ZfsCompressedArcMeter.h \
+ 	zfs/ZfsArcStats.h \
+ 	zfs/openzfs_sysctl.h
+ 
+@@ -144,7 +147,7 @@ if HTOP_DARWIN
+ AM_LDFLAGS += -framework IOKit -framework CoreFoundation
+ myhtopplatsources = darwin/Platform.c darwin/DarwinProcess.c \
+ darwin/DarwinProcessList.c darwin/DarwinCRT.c darwin/Battery.c \
+-zfs/ZfsArcMeter.c zfs/ZfsArcStats.c zfs/openzfs_sysctl.c
++zfs/ZfsArcMeter.c zfs/ZfsCompressedArcMeter.c zfs/ZfsArcStats.c zfs/openzfs_sysctl.c
+ 
+ myhtopplatheaders = $(darwin_platform_headers)
+ endif
+@@ -159,6 +162,7 @@ solaris_platform_headers = \
+ 	solaris/SolarisCRT.h \
+ 	solaris/Battery.h \
+ 	zfs/ZfsArcMeter.h \
++	zfs/ZfsCompressedArcMeter.h \
+ 	zfs/ZfsArcStats.h
+ 
+ all_platform_headers += $(solaris_platform_headers)
+@@ -167,7 +171,7 @@ if HTOP_SOLARIS
+ myhtopplatsources = solaris/Platform.c \
+ solaris/SolarisProcess.c solaris/SolarisProcessList.c \
+ solaris/SolarisCRT.c solaris/Battery.c \
+-zfs/ZfsArcMeter.c zfs/ZfsArcStats.c
++zfs/ZfsArcMeter.c zfs/ZfsCompressedArcMeter.c zfs/ZfsArcStats.c
+ 
+ myhtopplatheaders = $(solaris_platform_headers)
+ endif
+diff --git a/darwin/Platform.c b/darwin/Platform.c
+index f9f09b5..286ff16 100644
+--- a/darwin/Platform.c
++++ b/darwin/Platform.c
+@@ -16,6 +16,7 @@ in the source distribution for its full text.
+ #include "HostnameMeter.h"
+ #include "UptimeMeter.h"
+ #include "zfs/ZfsArcMeter.h"
++#include "zfs/ZfsCompressedArcMeter.h"
+ #include "DarwinProcessList.h"
+ 
+ #include <stdlib.h>
+@@ -119,6 +120,7 @@ MeterClass* Platform_meterTypes[] = {
+    &LeftCPUs2Meter_class,
+    &RightCPUs2Meter_class,
+    &ZfsArcMeter_class,
++   &ZfsCompressedArcMeter_class,
+    &BlankMeter_class,
+    NULL
+ };
+@@ -249,6 +251,12 @@ void Platform_setZfsArcValues(Meter* this) {
+    ZfsArcMeter_readStats(this, &(dpl->zfs));
+ }
+ 
++void Platform_setZfsCompressedArcValues(Meter* this) {
++   DarwinProcessList* dpl = (DarwinProcessList*) this->pl;
++
++   ZfsCompressedArcMeter_readStats(this, &(dpl->zfs));
++}
++
+ char* Platform_getProcessEnv(pid_t pid) {
+    char* env = NULL;
+ 
+diff --git a/darwin/Platform.h b/darwin/Platform.h
+index f836077..e17661d 100644
+--- a/darwin/Platform.h
++++ b/darwin/Platform.h
+@@ -50,6 +50,8 @@ void Platform_setSwapValues(Meter* mtr);
+ 
+ void Platform_setZfsArcValues(Meter* this);
+ 
++void Platform_setZfsCompressedArcValues(Meter* this);
++
+ char* Platform_getProcessEnv(pid_t pid);
+ 
+ #endif
+diff --git a/freebsd/Platform.c b/freebsd/Platform.c
+index b08a508..0986a3d 100644
+--- a/freebsd/Platform.c
++++ b/freebsd/Platform.c
+@@ -16,6 +16,7 @@ in the source distribution for its full text.
+ #include "ClockMeter.h"
+ #include "HostnameMeter.h"
+ #include "zfs/ZfsArcMeter.h"
++#include "zfs/ZfsCompressedArcMeter.h"
+ #include "FreeBSDProcess.h"
+ #include "FreeBSDProcessList.h"
+ 
+@@ -106,6 +107,7 @@ MeterClass* Platform_meterTypes[] = {
+    &RightCPUs2Meter_class,
+    &BlankMeter_class,
+    &ZfsArcMeter_class,
++   &ZfsCompressedArcMeter_class,
+    NULL
+ };
+ 
+@@ -205,6 +207,12 @@ void Platform_setZfsArcValues(Meter* this) {
+    ZfsArcMeter_readStats(this, &(fpl->zfs));
+ }
+ 
++void Platform_setZfsCompressedArcValues(Meter* this) {
++   FreeBSDProcessList* fpl = (FreeBSDProcessList*) this->pl;
++
++   ZfsCompressedArcMeter_readStats(this, &(fpl->zfs));
++}
++
+ void Platform_setTasksValues(Meter* this) {
+    // TODO
+ }
+diff --git a/freebsd/Platform.h b/freebsd/Platform.h
+index 3dc7ebf..0268f2c 100644
+--- a/freebsd/Platform.h
++++ b/freebsd/Platform.h
+@@ -46,6 +46,8 @@ void Platform_setSwapValues(Meter* this);
+ 
+ void Platform_setZfsArcValues(Meter* this);
+ 
++void Platform_setZfsCompressedArcValues(Meter* this);
++
+ void Platform_setTasksValues(Meter* this);
+ 
+ char* Platform_getProcessEnv(pid_t pid);
+diff --git a/linux/LinuxProcessList.c b/linux/LinuxProcessList.c
+index 3e88910..4596c3b 100644
+--- a/linux/LinuxProcessList.c
++++ b/linux/LinuxProcessList.c
+@@ -984,9 +984,14 @@ static inline void LinuxProcessList_scanZfsArcstats(LinuxProcessList* lpl) {
+    char buffer[128];
+    while (fgets(buffer, 128, file)) {
+       #define tryRead(label, variable) do { if (String_startsWith(buffer, label) && sscanf(buffer + strlen(label), " %*2u %32llu", variable)) { break; } } while(0)
++      #define tryReadFlag(label, variable, flag) do { if (String_startsWith(buffer, label) && sscanf(buffer + strlen(label), " %*2u %32llu", variable)) { flag = 1; break; } else { flag = 0; } } while(0)
+       switch (buffer[0]) {
+       case 'c':
+          tryRead("c_max", &lpl->zfs.max);
++         tryReadFlag("compressed", &lpl->zfs.compressed, &lpl->zfs.isCompressed);
++         break;
++      case 'u':
++         tryRead("uncompressed", &lpl->zfs.uncompressed);
+          break;
+       case 's':
+          tryRead("size", &lpl->zfs.size);
+@@ -1010,6 +1015,7 @@ static inline void LinuxProcessList_scanZfsArcstats(LinuxProcessList* lpl) {
+          break;
+       }
+       #undef tryRead
++      #undef tryReadFlag
+    }
+    fclose(file);
+ 
+@@ -1021,6 +1027,10 @@ static inline void LinuxProcessList_scanZfsArcstats(LinuxProcessList* lpl) {
+    lpl->zfs.anon   /= 1024;
+    lpl->zfs.header /= 1024;
+    lpl->zfs.other   = (dbufSize + dnodeSize + bonusSize) / 1024;
++   if ( lpl->zfs.isCompressed ) {
++      lpl->zfs.compressed /= 1024;
++      lpl->zfs.uncompressed /= 1024;
++   }
+ }
+ 
+ static inline double LinuxProcessList_scanCPUTime(LinuxProcessList* this) {
+diff --git a/linux/Platform.c b/linux/Platform.c
+index 69f6688..f7088cf 100644
+--- a/linux/Platform.c
++++ b/linux/Platform.c
+@@ -22,6 +22,7 @@ in the source distribution for its full text.
+ #include "ClockMeter.h"
+ #include "HostnameMeter.h"
+ #include "zfs/ZfsArcMeter.h"
++#include "zfs/ZfsCompressedArcMeter.h"
+ #include "LinuxProcess.h"
+ 
+ #include <math.h>
+@@ -128,6 +129,7 @@ MeterClass* Platform_meterTypes[] = {
+    &RightCPUs2Meter_class,
+    &BlankMeter_class,
+    &ZfsArcMeter_class,
++   &ZfsCompressedArcMeter_class,
+    NULL
+ };
+ 
+@@ -221,6 +223,11 @@ void Platform_setZfsArcValues(Meter* this) {
+    ZfsArcMeter_readStats(this, &(lpl->zfs));
+ }
+ 
++void Platform_setZfsCompressedArcValues(Meter* this) {
++   LinuxProcessList* lpl = (LinuxProcessList*) this->pl;
++
++   ZfsCompressedArcMeter_readStats(this, &(lpl->zfs));
++}
+ char* Platform_getProcessEnv(pid_t pid) {
+    char procname[32+1];
+    xSnprintf(procname, 32, "/proc/%d/environ", pid);
+diff --git a/linux/Platform.h b/linux/Platform.h
+index e775181..5d85eb3 100644
+--- a/linux/Platform.h
++++ b/linux/Platform.h
+@@ -45,6 +45,8 @@ void Platform_setSwapValues(Meter* this);
+ 
+ void Platform_setZfsArcValues(Meter* this);
+ 
++void Platform_setZfsCompressedArcValues(Meter* this);
++
+ char* Platform_getProcessEnv(pid_t pid);
+ 
+ #endif
+diff --git a/solaris/Platform.c b/solaris/Platform.c
+index 74ae14e..7dcfe32 100644
+--- a/solaris/Platform.c
++++ b/solaris/Platform.c
+@@ -18,6 +18,7 @@ in the source distribution for its full text.
+ #include "HostnameMeter.h"
+ #include "UptimeMeter.h"
+ #include "zfs/ZfsArcMeter.h"
++#include "zfs/ZfsCompressedArcMeter.h"
+ #include "SolarisProcess.h"
+ #include "SolarisProcessList.h"
+ 
+@@ -124,6 +125,7 @@ MeterClass* Platform_meterTypes[] = {
+    &LeftCPUs2Meter_class,
+    &RightCPUs2Meter_class,
+    &ZfsArcMeter_class,
++   &ZfsCompressedArcMeter_class,
+    &BlankMeter_class,
+    NULL
+ };
+@@ -228,6 +230,12 @@ void Platform_setZfsArcValues(Meter* this) {
+    ZfsArcMeter_readStats(this, &(spl->zfs));
+ }
+ 
++void Platform_setZfsCompressedArcValues(Meter* this) {
++   SolarisProcessList* spl = (SolarisProcessList*) this->pl;
++
++   ZfsCompressedArcMeter_readStats(this, &(spl->zfs));
++}
++
+ static int Platform_buildenv(void *accum, struct ps_prochandle *Phandle, uintptr_t addr, const char *str) {
+    envAccum *accump = accum;
+    (void) Phandle;
+diff --git a/solaris/Platform.h b/solaris/Platform.h
+index 62757ff..3b5aef8 100644
+--- a/solaris/Platform.h
++++ b/solaris/Platform.h
+@@ -62,6 +62,8 @@ void Platform_setSwapValues(Meter* this);
+ 
+ void Platform_setZfsArcValues(Meter* this);
+ 
++void Platform_setZfsCompressedArcValues(Meter* this);
++
+ char* Platform_getProcessEnv(pid_t pid);
+ 
+ #endif
+diff --git a/solaris/SolarisProcessList.c b/solaris/SolarisProcessList.c
+index b6bc6f5..d62ea1d 100644
+--- a/solaris/SolarisProcessList.c
++++ b/solaris/SolarisProcessList.c
+@@ -263,6 +263,16 @@ static inline void SolarisProcessList_scanZfsArcstats(ProcessList* pl) {
+ 
+       cur_kstat = kstat_data_lookup( arcstats, "other_size" );
+       spl->zfs.other = cur_kstat->value.ui64 / 1024;
++
++      if ((cur_kstat = kstat_data_lookup( arcstats, "compressed_size" )) != NULL) {
++         spl->zfs.compressed = cur_kstat->value.ui64 / 1024;
++         spl->zfs.isCompressed = 1;
++
++         cur_kstat = kstat_data_lookup( arcstats, "uncompressed_size" );
++         spl->zfs.uncompressed = cur_kstat->value.ui64 / 1024;
++      } else {
++         spl->zfs.isCompressed = 0;
++      }
+    }
+ }
+ 
+diff --git a/zfs/ZfsArcStats.c b/zfs/ZfsArcStats.c
+index c33076a..1bfaf47 100644
+--- a/zfs/ZfsArcStats.c
++++ b/zfs/ZfsArcStats.c
+@@ -8,6 +8,7 @@ in the source distribution for its full text.
+ /*{
+ typedef struct ZfsArcStats_ {
+    int enabled;
++   int isCompressed;
+    unsigned long long int max;
+    unsigned long long int size;
+    unsigned long long int MFU;
+@@ -15,5 +16,7 @@ typedef struct ZfsArcStats_ {
+    unsigned long long int anon;
+    unsigned long long int header;
+    unsigned long long int other;
++   unsigned long long int compressed;
++   unsigned long long int uncompressed;
+ } ZfsArcStats;
+ }*/
+diff --git a/zfs/ZfsArcStats.h b/zfs/ZfsArcStats.h
+index 3697af2..ee5d0ed 100644
+--- a/zfs/ZfsArcStats.h
++++ b/zfs/ZfsArcStats.h
+@@ -11,6 +11,7 @@ in the source distribution for its full text.
+ 
+ typedef struct ZfsArcStats_ {
+    int enabled;
++   int isCompressed;
+    unsigned long long int max;
+    unsigned long long int size;
+    unsigned long long int MFU;
+@@ -18,6 +19,8 @@ typedef struct ZfsArcStats_ {
+    unsigned long long int anon;
+    unsigned long long int header;
+    unsigned long long int other;
++   unsigned long long int compressed;
++   unsigned long long int uncompressed;
+ } ZfsArcStats;
+ 
+ #endif
+diff --git a/zfs/ZfsCompressedArcMeter.c b/zfs/ZfsCompressedArcMeter.c
+new file mode 100644
+index 0000000..ac3944d
+--- /dev/null
++++ b/zfs/ZfsCompressedArcMeter.c
+@@ -0,0 +1,86 @@
++/*
++htop - ZfsCompressedArcMeter.c
++(C) 2004-2011 Hisham H. Muhammad
++Released under the GNU GPL, see the COPYING file
++in the source distribution for its full text.
++*/
++
++#include "ZfsCompressedArcMeter.h"
++#include "ZfsArcStats.h"
++
++#include "CRT.h"
++#include "Platform.h"
++
++#include <stdlib.h>
++#include <string.h>
++#include <math.h>
++#include <sys/param.h>
++#include <assert.h>
++
++/*{
++#include "ZfsArcStats.h"
++
++#include "Meter.h"
++}*/
++
++int ZfsCompressedArcMeter_attributes[] = {
++   ZFS_COMPRESSED
++};
++
++void ZfsCompressedArcMeter_readStats(Meter* this, ZfsArcStats* stats) {
++   if ( stats->isCompressed ) {
++      this->total = stats->uncompressed;
++      this->values[0] = stats->compressed;
++   } else {
++      // For uncompressed ARC, report 1:1 ratio
++      this->total = stats->size;
++      this->values[0] = stats->size;
++   }
++}
++
++static void ZfsCompressedArcMeter_printRatioString(Meter* this, char* buffer, int size) {
++   xSnprintf(buffer, size, "%.2f:1", this->total/this->values[0]);
++}
++
++static void ZfsCompressedArcMeter_updateValues(Meter* this, char* buffer, int size) {
++   Platform_setZfsCompressedArcValues(this);
++
++   ZfsCompressedArcMeter_printRatioString(this, buffer, size);
++}
++
++static void ZfsCompressedArcMeter_display(Object* cast, RichString* out) {
++   char buffer[50];
++   Meter* this = (Meter*)cast;
++
++   if (this->values[0] > 0) {
++      Meter_humanUnit(buffer, this->total, 50);
++      RichString_append(out, CRT_colors[METER_VALUE], buffer);
++      RichString_append(out, CRT_colors[METER_TEXT], " Uncompressed, ");
++      Meter_humanUnit(buffer, this->values[0], 50);
++      RichString_append(out, CRT_colors[METER_VALUE], buffer);
++      RichString_append(out, CRT_colors[METER_TEXT], " Compressed, ");
++      ZfsCompressedArcMeter_printRatioString(this, buffer, 50);
++      RichString_append(out, CRT_colors[METER_VALUE], buffer);
++      RichString_append(out, CRT_colors[METER_TEXT], " Ratio");
++   } else {
++      RichString_write(out, CRT_colors[METER_TEXT], " ");
++      RichString_append(out, CRT_colors[FAILED_SEARCH], "Compression Unavailable");
++   }
++}
++
++MeterClass ZfsCompressedArcMeter_class = {
++   .super = {
++      .extends = Class(Meter),
++      .delete = Meter_delete,
++      .display = ZfsCompressedArcMeter_display,
++   },
++   .updateValues = ZfsCompressedArcMeter_updateValues,
++   .defaultMode = TEXT_METERMODE,
++   .maxItems = 1,
++   .total = 100.0,
++   .attributes = ZfsCompressedArcMeter_attributes,
++   .name = "ZFSCARC",
++   .uiName = "ZFS CARC",
++   .description = "ZFS CARC: Compressed ARC statistics",
++   .caption = "ARC: "
++};
+diff --git a/zfs/ZfsCompressedArcMeter.h b/zfs/ZfsCompressedArcMeter.h
+new file mode 100644
+index 0000000..5afcc99
+--- /dev/null
++++ b/zfs/ZfsCompressedArcMeter.h
+@@ -0,0 +1,22 @@
++/* Do not edit this file. It was automatically generated. */
++
++#ifndef HEADER_ZfsCompressedArcMeter
++#define HEADER_ZfsCompressedArcMeter
++/*
++htop - ZfsCompressedArcMeter.h
++(C) 2004-2011 Hisham H. Muhammad
++Released under the GNU GPL, see the COPYING file
++in the source distribution for its full text.
++*/
++
++#include "ZfsArcStats.h"
++
++#include "Meter.h"
++
++extern int ZfsCompressedArcMeter_attributes[];
++
++void ZfsCompressedArcMeter_readStats(Meter* this, ZfsArcStats* stats);
++
++extern MeterClass ZfsCompressedArcMeter_class;
++
++#endif
+diff --git a/zfs/openzfs_sysctl.c b/zfs/openzfs_sysctl.c
+index ceee4d1..c1ab223 100644
+--- a/zfs/openzfs_sysctl.c
++++ b/zfs/openzfs_sysctl.c
+@@ -20,6 +20,8 @@ static int MIB_kstat_zfs_misc_arcstats_mru_size[5];
+ static int MIB_kstat_zfs_misc_arcstats_anon_size[5];
+ static int MIB_kstat_zfs_misc_arcstats_hdr_size[5];
+ static int MIB_kstat_zfs_misc_arcstats_other_size[5];
++static int MIB_kstat_zfs_misc_arcstats_compressed_size[5];
++static int MIB_kstat_zfs_misc_arcstats_uncompressed_size[5];
+ 
+ /*{
+ #include "zfs/ZfsArcStats.h"
+@@ -41,6 +43,12 @@ void openzfs_sysctl_init(ZfsArcStats *stats) {
+                   sysctlnametomib("kstat.zfs.misc.arcstats.anon_size", MIB_kstat_zfs_misc_arcstats_anon_size, &len);
+                   sysctlnametomib("kstat.zfs.misc.arcstats.hdr_size", MIB_kstat_zfs_misc_arcstats_hdr_size, &len);
+                   sysctlnametomib("kstat.zfs.misc.arcstats.other_size", MIB_kstat_zfs_misc_arcstats_other_size, &len);
++                  if (sysctlnametomib("kstat.zfs.misc.arcstats.compressed_size", MIB_kstat_zfs_misc_arcstats_compressed_size, &len) == 0) {
++                     stats->isCompressed = 1;
++                     sysctlnametomib("kstat.zfs.misc.arcstats.uncompressed_size", MIB_kstat_zfs_misc_arcstats_uncompressed_size, &len);
++                  } else {
++                     stats->isCompressed = 0;
++                  }
+    } else {
+       stats->enabled = 0;
+    }
+@@ -77,5 +85,15 @@ void openzfs_sysctl_updateArcStats(ZfsArcStats *stats) {
+       len = sizeof(stats->other);
+       sysctl(MIB_kstat_zfs_misc_arcstats_other_size, 5, &(stats->other), &len , NULL, 0);
+       stats->other /= 1024;
++
++      if (stats->isCompressed) {
++         len = sizeof(stats->compressed);
++         sysctl(MIB_kstat_zfs_misc_arcstats_compressed_size, 5, &(stats->compressed), &len , NULL, 0);
++         stats->compressed /= 1024;
++
++         len = sizeof(stats->uncompressed);
++         sysctl(MIB_kstat_zfs_misc_arcstats_uncompressed_size, 5, &(stats->uncompressed), &len , NULL, 0);
++         stats->uncompressed /= 1024;
++      }
+    }
+ }
+-- 
+2.20.1
+

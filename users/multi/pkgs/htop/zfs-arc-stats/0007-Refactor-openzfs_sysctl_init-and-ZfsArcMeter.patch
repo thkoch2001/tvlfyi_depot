@@ -1,0 +1,267 @@
+From e450b586368750e771746ef3e2f5a070962dfd28 Mon Sep 17 00:00:00 2001
+From: Ross Williams <ross@ross-williams.net>
+Date: Tue, 3 Sep 2019 18:21:33 +0000
+Subject: [PATCH 7/9] Refactor openzfs_sysctl_init() and ZfsArcMeter...
+
+openzfs_sysctl_init() now returns void instead of int.
+The ZfsArcStats->enabled flag is set inside the init function
+now, instead of having to be set from its return value.
+Preparation for more flag setting in Compressed ARC commit.
+
+ZfsArcMeter_readStats() added and all Meter->values[] setting
+moved to it, eliminating duplicated code in
+{darwin,freebsd,linux,solaris}/Platform.c.
+---
+ darwin/DarwinProcessList.c   |  2 +-
+ darwin/Platform.c            | 13 +------------
+ freebsd/FreeBSDProcessList.c |  2 +-
+ freebsd/Platform.c           | 13 +------------
+ linux/Platform.c             | 13 +------------
+ solaris/Platform.c           | 13 +------------
+ zfs/ZfsArcMeter.c            | 18 ++++++++++++++++++
+ zfs/ZfsArcMeter.h            |  4 ++++
+ zfs/openzfs_sysctl.c         |  6 +++---
+ zfs/openzfs_sysctl.h         |  6 +++---
+ 10 files changed, 34 insertions(+), 56 deletions(-)
+
+diff --git a/darwin/DarwinProcessList.c b/darwin/DarwinProcessList.c
+index 122e018..9b4ba11 100644
+--- a/darwin/DarwinProcessList.c
++++ b/darwin/DarwinProcessList.c
+@@ -151,7 +151,7 @@ ProcessList* ProcessList_new(UsersTable* usersTable, Hashtable* pidWhiteList, ui
+    ProcessList_getVMStats(&this->vm_stats);
+ 
+    /* Initialize the ZFS kstats, if zfs.kext loaded */
+-   this->zfs.enabled = openzfs_sysctl_init();
++   openzfs_sysctl_init(&this->zfs);
+    openzfs_sysctl_updateArcStats(&this->zfs);
+ 
+    this->super.kernelThreads = 0;
+diff --git a/darwin/Platform.c b/darwin/Platform.c
+index 8fbb9c9..f9f09b5 100644
+--- a/darwin/Platform.c
++++ b/darwin/Platform.c
+@@ -246,18 +246,7 @@ void Platform_setSwapValues(Meter* mtr) {
+ void Platform_setZfsArcValues(Meter* this) {
+    DarwinProcessList* dpl = (DarwinProcessList*) this->pl;
+ 
+-   this->total = dpl->zfs.max;
+-   this->values[0] = dpl->zfs.MFU;
+-   this->values[1] = dpl->zfs.MRU;
+-   this->values[2] = dpl->zfs.anon;
+-   this->values[3] = dpl->zfs.header;
+-   this->values[4] = dpl->zfs.other;
+-
+-   // "Hide" the last value so it can
+-   // only be accessed by index and is not
+-   // displayed by the Bar or Graph style
+-   Meter_setItems(this, 5);
+-   this->values[5] = dpl->zfs.size;
++   ZfsArcMeter_readStats(this, &(dpl->zfs));
+ }
+ 
+ char* Platform_getProcessEnv(pid_t pid) {
+diff --git a/freebsd/FreeBSDProcessList.c b/freebsd/FreeBSDProcessList.c
+index 1cbfdaa..fd69419 100644
+--- a/freebsd/FreeBSDProcessList.c
++++ b/freebsd/FreeBSDProcessList.c
+@@ -118,7 +118,7 @@ ProcessList* ProcessList_new(UsersTable* usersTable, Hashtable* pidWhiteList, ui
+ 
+    len = 2; sysctlnametomib("vfs.bufspace", MIB_vfs_bufspace, &len);
+ 
+-   fpl->zfs.enabled = openzfs_sysctl_init();
++   openzfs_sysctl_init(&fpl->zfs);
+    openzfs_sysctl_updateArcStats(&fpl->zfs);
+ 
+    int smp = 0;
+diff --git a/freebsd/Platform.c b/freebsd/Platform.c
+index 05c0e92..b08a508 100644
+--- a/freebsd/Platform.c
++++ b/freebsd/Platform.c
+@@ -202,18 +202,7 @@ void Platform_setSwapValues(Meter* this) {
+ void Platform_setZfsArcValues(Meter* this) {
+    FreeBSDProcessList* fpl = (FreeBSDProcessList*) this->pl;
+ 
+-   this->total = fpl->zfs.max;
+-   this->values[0] = fpl->zfs.MFU;
+-   this->values[1] = fpl->zfs.MRU;
+-   this->values[2] = fpl->zfs.anon;
+-   this->values[3] = fpl->zfs.header;
+-   this->values[4] = fpl->zfs.other;
+-
+-   // "Hide" the last value so it can
+-   // only be accessed by index and is not
+-   // displayed by the Bar or Graph style
+-   Meter_setItems(this, 5);
+-   this->values[5] = fpl->zfs.size;
++   ZfsArcMeter_readStats(this, &(fpl->zfs));
+ }
+ 
+ void Platform_setTasksValues(Meter* this) {
+diff --git a/linux/Platform.c b/linux/Platform.c
+index e2a3c6d..69f6688 100644
+--- a/linux/Platform.c
++++ b/linux/Platform.c
+@@ -218,18 +218,7 @@ void Platform_setSwapValues(Meter* this) {
+ void Platform_setZfsArcValues(Meter* this) {
+    LinuxProcessList* lpl = (LinuxProcessList*) this->pl;
+ 
+-   this->total = lpl->zfs.max;
+-   this->values[0] = lpl->zfs.MFU;
+-   this->values[1] = lpl->zfs.MRU;
+-   this->values[2] = lpl->zfs.anon;
+-   this->values[3] = lpl->zfs.header;
+-   this->values[4] = lpl->zfs.other;
+-
+-   // "Hide" the last value so it can
+-   // only be accessed by index and is not
+-   // displayed by the Bar or Graph style
+-   Meter_setItems(this, 5);
+-   this->values[5] = lpl->zfs.size;
++   ZfsArcMeter_readStats(this, &(lpl->zfs));
+ }
+ 
+ char* Platform_getProcessEnv(pid_t pid) {
+diff --git a/solaris/Platform.c b/solaris/Platform.c
+index 8084d1f..74ae14e 100644
+--- a/solaris/Platform.c
++++ b/solaris/Platform.c
+@@ -225,18 +225,7 @@ void Platform_setSwapValues(Meter* this) {
+ void Platform_setZfsArcValues(Meter* this) {
+    SolarisProcessList* spl = (SolarisProcessList*) this->pl;
+ 
+-   this->total = spl->zfs.max;
+-   this->values[0] = spl->zfs.MFU;
+-   this->values[1] = spl->zfs.MRU;
+-   this->values[2] = spl->zfs.anon;
+-   this->values[3] = spl->zfs.header;
+-   this->values[4] = spl->zfs.other;
+-
+-   // "Hide" the last value so it can
+-   // only be accessed by index and is not
+-   // displayed by the Bar or Graph style
+-   Meter_setItems(this, 5);
+-   this->values[5] = spl->zfs.size;
++   ZfsArcMeter_readStats(this, &(spl->zfs));
+ }
+ 
+ static int Platform_buildenv(void *accum, struct ps_prochandle *Phandle, uintptr_t addr, const char *str) {
+diff --git a/zfs/ZfsArcMeter.c b/zfs/ZfsArcMeter.c
+index ebd8099..9f7028b 100644
+--- a/zfs/ZfsArcMeter.c
++++ b/zfs/ZfsArcMeter.c
+@@ -6,6 +6,7 @@ in the source distribution for its full text.
+ */
+ 
+ #include "ZfsArcMeter.h"
++#include "ZfsArcStats.h"
+ 
+ #include "CRT.h"
+ #include "Platform.h"
+@@ -17,6 +18,8 @@ in the source distribution for its full text.
+ #include <assert.h>
+ 
+ /*{
++#include "ZfsArcStats.h"
++
+ #include "Meter.h"
+ }*/
+ 
+@@ -24,6 +27,21 @@ int ZfsArcMeter_attributes[] = {
+    ZFS_MFU, ZFS_MRU, ZFS_ANON, ZFS_HEADER, ZFS_OTHER
+ };
+ 
++void ZfsArcMeter_readStats(Meter* this, ZfsArcStats* stats) {
++   this->total = stats->max;
++   this->values[0] = stats->MFU;
++   this->values[1] = stats->MRU;
++   this->values[2] = stats->anon;
++   this->values[3] = stats->header;
++   this->values[4] = stats->other;
++
++   // "Hide" the last value so it can
++   // only be accessed by index and is not
++   // displayed by the Bar or Graph style
++   Meter_setItems(this, 5);
++   this->values[5] = stats->size;
++}
++
+ static void ZfsArcMeter_updateValues(Meter* this, char* buffer, int size) {
+    int written;
+    Platform_setZfsArcValues(this);
+diff --git a/zfs/ZfsArcMeter.h b/zfs/ZfsArcMeter.h
+index b89be22..c52083d 100644
+--- a/zfs/ZfsArcMeter.h
++++ b/zfs/ZfsArcMeter.h
+@@ -9,10 +9,14 @@ Released under the GNU GPL, see the COPYING file
+ in the source distribution for its full text.
+ */
+ 
++#include "ZfsArcStats.h"
++
+ #include "Meter.h"
+ 
+ extern int ZfsArcMeter_attributes[];
+ 
++void ZfsArcMeter_readStats(Meter* this, ZfsArcStats* stats);
++
+ extern MeterClass ZfsArcMeter_class;
+ 
+ #endif
+diff --git a/zfs/openzfs_sysctl.c b/zfs/openzfs_sysctl.c
+index ce48f23..ceee4d1 100644
+--- a/zfs/openzfs_sysctl.c
++++ b/zfs/openzfs_sysctl.c
+@@ -25,13 +25,14 @@ static int MIB_kstat_zfs_misc_arcstats_other_size[5];
+ #include "zfs/ZfsArcStats.h"
+ }*/
+ 
+-int openzfs_sysctl_init() {
++void openzfs_sysctl_init(ZfsArcStats *stats) {
+    size_t len;
+    unsigned long long int arcSize;
+ 
+    len = sizeof(arcSize);
+    if (sysctlbyname("kstat.zfs.misc.arcstats.size", &arcSize, &len,
+ 	    NULL, 0) == 0 && arcSize != 0) {
++                  stats->enabled = 1;
+                   len = 5; sysctlnametomib("kstat.zfs.misc.arcstats.size", MIB_kstat_zfs_misc_arcstats_size, &len);
+ 
+                   sysctlnametomib("kstat.zfs.misc.arcstats.c_max", MIB_kstat_zfs_misc_arcstats_c_max, &len);
+@@ -40,9 +41,8 @@ int openzfs_sysctl_init() {
+                   sysctlnametomib("kstat.zfs.misc.arcstats.anon_size", MIB_kstat_zfs_misc_arcstats_anon_size, &len);
+                   sysctlnametomib("kstat.zfs.misc.arcstats.hdr_size", MIB_kstat_zfs_misc_arcstats_hdr_size, &len);
+                   sysctlnametomib("kstat.zfs.misc.arcstats.other_size", MIB_kstat_zfs_misc_arcstats_other_size, &len);
+-                  return 1;
+    } else {
+-		  return 0;
++      stats->enabled = 0;
+    }
+ }
+ 
+diff --git a/zfs/openzfs_sysctl.h b/zfs/openzfs_sysctl.h
+index 7c04bd7..6e44ac3 100644
+--- a/zfs/openzfs_sysctl.h
++++ b/zfs/openzfs_sysctl.h
+@@ -1,7 +1,7 @@
+ /* Do not edit this file. It was automatically generated. */
+ 
+-#ifndef HEADER_openzfs
+-#define HEADER_openzfs
++#ifndef HEADER_openzfs_sysctl
++#define HEADER_openzfs_sysctl
+ /*
+ htop - zfs/openzfs_sysctl.h
+ (C) 2014 Hisham H. Muhammad
+@@ -11,7 +11,7 @@ in the source distribution for its full text.
+ 
+ #include "zfs/ZfsArcStats.h"
+ 
+-int openzfs_sysctl_init();
++void openzfs_sysctl_init(ZfsArcStats *stats);
+ 
+ void openzfs_sysctl_updateArcStats(ZfsArcStats *stats);
+ 
+-- 
+2.20.1
+

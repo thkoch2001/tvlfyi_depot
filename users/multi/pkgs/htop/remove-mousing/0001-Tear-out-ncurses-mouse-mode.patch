@@ -1,0 +1,29 @@
+From b9575370e6ab804bd9689b99b81b99e4e84116a3 Mon Sep 17 00:00:00 2001
+From: multiplexd <multi@in-addr.xyz>
+Date: Sun, 5 Jul 2020 14:12:03 +0100
+Subject: [PATCH] Tear out ncurses mouse mode
+
+---
+ CRT.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/CRT.c b/CRT.c
+index ca9a10d..f6dd1e2 100644
+--- a/CRT.c
++++ b/CRT.c
+@@ -673,12 +673,6 @@ void CRT_init(int delay, int colorScheme) {
+ #endif
+       CRT_treeStrAscii;
+ 
+-#if NCURSES_MOUSE_VERSION > 1
+-   mousemask(BUTTON1_RELEASED | BUTTON4_PRESSED | BUTTON5_PRESSED, NULL);
+-#else
+-   mousemask(BUTTON1_RELEASED, NULL);
+-#endif
+-
+ }
+ 
+ void CRT_done() {
+-- 
+2.20.1
+

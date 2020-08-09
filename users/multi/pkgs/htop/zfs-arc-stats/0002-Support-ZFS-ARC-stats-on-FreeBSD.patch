@@ -1,0 +1,438 @@
+From a93edde1a21e533472b5d443002032260b5bd066 Mon Sep 17 00:00:00 2001
+From: Ross Williams <ross@ross-williams.net>
+Date: Sat, 6 Jul 2019 04:27:49 +0000
+Subject: [PATCH 2/9] Support ZFS ARC stats on FreeBSD
+
+New meter displays same ARC stats as FreeBSD top(1).
+Can be extended to other platforms that support ZFS.
+
+Pulling kstat.zfs.misc.arcstats.c_max as the meter
+total, so the meter has a meaningful value to work
+up to.
+
+The Text meter displays, first, the maximum
+ARC size (Meter.total), then second, the total
+ARC used, using the difference between Meter.maxItems
+and Meter.curItems to "hide" the used value from the
+Bar and Graph drawing functions by using an index
+in Meter.values[] that is beyond curItems - 1, but
+less than maxItems - 1.
+---
+ CRT.c                        | 35 ++++++++++++++++
+ CRT.h                        |  5 +++
+ Makefile.am                  | 10 ++++-
+ freebsd/FreeBSDProcessList.c | 48 ++++++++++++++++++++-
+ freebsd/FreeBSDProcessList.h |  6 +++
+ freebsd/Platform.c           | 19 +++++++++
+ freebsd/Platform.h           |  2 +
+ zfs/ZfsArcMeter.c            | 81 ++++++++++++++++++++++++++++++++++++
+ zfs/ZfsArcMeter.h            | 18 ++++++++
+ 9 files changed, 220 insertions(+), 4 deletions(-)
+ create mode 100644 zfs/ZfsArcMeter.c
+ create mode 100644 zfs/ZfsArcMeter.h
+
+diff --git a/CRT.c b/CRT.c
+index ca9a10d..b9017aa 100644
+--- a/CRT.c
++++ b/CRT.c
+@@ -128,6 +128,11 @@ typedef enum ColorElements_ {
+    CPU_SOFTIRQ,
+    CPU_STEAL,
+    CPU_GUEST,
++   ZFS_MFU,
++   ZFS_MRU,
++   ZFS_ANON,
++   ZFS_HEADER,
++   ZFS_OTHER,
+    LAST_COLORELEMENT
+ } ColorElements;
+ 
+@@ -232,6 +237,11 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [CPU_SOFTIRQ] = ColorPair(Magenta,Black),
+       [CPU_STEAL] = ColorPair(Cyan,Black),
+       [CPU_GUEST] = ColorPair(Cyan,Black),
++      [ZFS_MFU] = ColorPair(Blue,Black),
++      [ZFS_MRU] = ColorPair(Yellow,Black),
++      [ZFS_ANON] = ColorPair(Magenta,Black),
++      [ZFS_HEADER] = ColorPair(Cyan,Black),
++      [ZFS_OTHER] = ColorPair(Magenta,Black),
+    },
+    [COLORSCHEME_MONOCHROME] = {
+       [RESET_COLOR] = A_NORMAL,
+@@ -291,6 +301,11 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [CPU_SOFTIRQ] = A_BOLD,
+       [CPU_STEAL] = A_REVERSE,
+       [CPU_GUEST] = A_REVERSE,
++      [ZFS_MFU] = A_NORMAL,
++      [ZFS_MRU] = A_NORMAL,
++      [ZFS_ANON] = A_DIM,
++      [ZFS_HEADER] = A_BOLD,
++      [ZFS_OTHER] = A_DIM,
+    },
+    [COLORSCHEME_BLACKONWHITE] = {
+       [RESET_COLOR] = ColorPair(Black,White),
+@@ -350,6 +365,11 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [CPU_SOFTIRQ] = ColorPair(Blue,White),
+       [CPU_STEAL] = ColorPair(Cyan,White),
+       [CPU_GUEST] = ColorPair(Cyan,White),
++      [ZFS_MFU] = ColorPair(Cyan,White),
++      [ZFS_MRU] = ColorPair(Yellow,White),
++      [ZFS_ANON] = ColorPair(Magenta,White),
++      [ZFS_HEADER] = ColorPair(Yellow,White),
++      [ZFS_OTHER] = ColorPair(Magenta,White),
+    },
+    [COLORSCHEME_LIGHTTERMINAL] = {
+       [RESET_COLOR] = ColorPair(Black,Black),
+@@ -409,6 +429,11 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [CPU_SOFTIRQ] = ColorPair(Blue,Black),
+       [CPU_STEAL] = ColorPair(Black,Black),
+       [CPU_GUEST] = ColorPair(Black,Black),
++      [ZFS_MFU] = ColorPair(Cyan,Black),
++      [ZFS_MRU] = ColorPair(Yellow,Black),
++      [ZFS_ANON] = A_BOLD | ColorPair(Magenta,Black),
++      [ZFS_HEADER] = ColorPair(Black,Black),
++      [ZFS_OTHER] = A_BOLD | ColorPair(Magenta,Black),
+    },
+    [COLORSCHEME_MIDNIGHT] = {
+       [RESET_COLOR] = ColorPair(White,Blue),
+@@ -468,6 +493,11 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [CPU_SOFTIRQ] = ColorPair(Black,Blue),
+       [CPU_STEAL] = ColorPair(White,Blue),
+       [CPU_GUEST] = ColorPair(White,Blue),
++      [ZFS_MFU] = A_BOLD | ColorPair(White,Blue),
++      [ZFS_MRU] = A_BOLD | ColorPair(Yellow,Blue),
++      [ZFS_ANON] = A_BOLD | ColorPair(Magenta,Blue),
++      [ZFS_HEADER] = A_BOLD | ColorPair(Yellow,Blue),
++      [ZFS_OTHER] = A_BOLD | ColorPair(Magenta,Blue),
+    },
+    [COLORSCHEME_BLACKNIGHT] = {
+       [RESET_COLOR] = ColorPair(Cyan,Black),
+@@ -527,6 +557,11 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
+       [CPU_SOFTIRQ] = ColorPair(Blue,Black),
+       [CPU_STEAL] = ColorPair(Cyan,Black),
+       [CPU_GUEST] = ColorPair(Cyan,Black),
++      [ZFS_MFU] = ColorPair(Blue,Black),
++      [ZFS_MRU] = ColorPair(Yellow,Black),
++      [ZFS_ANON] = ColorPair(Magenta,Black),
++      [ZFS_HEADER] = ColorPair(Yellow,Black),
++      [ZFS_OTHER] = ColorPair(Magenta,Black),
+    },
+    [COLORSCHEME_BROKENGRAY] = { 0 } // dynamically generated.
+ };
+diff --git a/CRT.h b/CRT.h
+index 933fe06..2275349 100644
+--- a/CRT.h
++++ b/CRT.h
+@@ -116,6 +116,11 @@ typedef enum ColorElements_ {
+    CPU_SOFTIRQ,
+    CPU_STEAL,
+    CPU_GUEST,
++   ZFS_MFU,
++   ZFS_MRU,
++   ZFS_ANON,
++   ZFS_HEADER,
++   ZFS_OTHER,
+    LAST_COLORELEMENT
+ } ColorElements;
+ 
+diff --git a/Makefile.am b/Makefile.am
+index 7d19600..ad23d19 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -36,6 +36,10 @@ TasksMeter.h UptimeMeter.h TraceScreen.h UsersTable.h Vector.h Process.h \
+ AffinityPanel.h HostnameMeter.h OpenFilesScreen.h Affinity.h IncSet.h Action.h \
+ EnvScreen.h InfoScreen.h XAlloc.h
+ 
++zfs_platform_sources = zfs/ZfsArcMeter.c
++
++zfs_platform_headers = zfs/ZfsArcMeter.h
++
+ all_platform_headers =
+ 
+ # Linux
+@@ -68,13 +72,15 @@ freebsd_platform_headers = \
+ 	freebsd/FreeBSDProcessList.h \
+ 	freebsd/FreeBSDProcess.h \
+ 	freebsd/FreeBSDCRT.h \
+-	freebsd/Battery.h
++	freebsd/Battery.h \
++	$(zfs_platform_headers)
+ 
+ all_platform_headers += $(freebsd_platform_headers)
+ 
+ if HTOP_FREEBSD
+ myhtopplatsources = freebsd/Platform.c freebsd/FreeBSDProcessList.c \
+-freebsd/FreeBSDProcess.c freebsd/FreeBSDCRT.c freebsd/Battery.c
++freebsd/FreeBSDProcess.c freebsd/FreeBSDCRT.c freebsd/Battery.c \
++$(zfs_platform_sources)
+ 
+ myhtopplatheaders = $(freebsd_platform_headers)
+ endif
+diff --git a/freebsd/FreeBSDProcessList.c b/freebsd/FreeBSDProcessList.c
+index 26019b6..94cbaa1 100644
+--- a/freebsd/FreeBSDProcessList.c
++++ b/freebsd/FreeBSDProcessList.c
+@@ -53,6 +53,12 @@ typedef struct FreeBSDProcessList_ {
+    unsigned long long int memFree;
+    unsigned long long int memZfsArc;
+ 
++   unsigned long long int zfsArcMax;
++   unsigned long long int zfsArcMFU;
++   unsigned long long int zfsArcMRU;
++   unsigned long long int zFsArcAnon;
++   unsigned long long int zFsArcHeader;
++   unsigned long long int zFsArcOther;
+ 
+    CPUData* cpus;
+ 
+@@ -81,6 +87,12 @@ static int MIB_vm_stats_vm_v_free_count[4];
+ static int MIB_vfs_bufspace[2];
+ 
+ static int MIB_kstat_zfs_misc_arcstats_size[5];
++static int MIB_vfs_zfs_arc_max[3];
++static int MIB_kstat_zfs_misc_arcstats_mfu_size[5];
++static int MIB_kstat_zfs_misc_arcstats_mru_size[5];
++static int MIB_kstat_zfs_misc_arcstats_anon_size[5];
++static int MIB_kstat_zfs_misc_arcstats_hdr_size[5];
++static int MIB_kstat_zfs_misc_arcstats_other_size[5];
+ 
+ static int MIB_kern_cp_time[2];
+ static int MIB_kern_cp_times[2];
+@@ -123,6 +135,16 @@ ProcessList* ProcessList_new(UsersTable* usersTable, Hashtable* pidWhiteList, ui
+ 	    NULL, 0) == 0 && fpl->memZfsArc != 0) {
+                   len = 5; sysctlnametomib("kstat.zfs.misc.arcstats.size", MIB_kstat_zfs_misc_arcstats_size, &len);
+ 		  fpl->zfsArcEnabled = 1;
++
++                  len = 3;
++                  sysctlnametomib("vfs.zfs.arc_max", MIB_vfs_zfs_arc_max, &len);
++
++                  len = 5;
++                  sysctlnametomib("kstat.zfs.misc.arcstats.mfu_size", MIB_kstat_zfs_misc_arcstats_mfu_size, &len);
++                  sysctlnametomib("kstat.zfs.misc.arcstats.mru_size", MIB_kstat_zfs_misc_arcstats_mru_size, &len);
++                  sysctlnametomib("kstat.zfs.misc.arcstats.anon_size", MIB_kstat_zfs_misc_arcstats_anon_size, &len);
++                  sysctlnametomib("kstat.zfs.misc.arcstats.hdr_size", MIB_kstat_zfs_misc_arcstats_hdr_size, &len);
++                  sysctlnametomib("kstat.zfs.misc.arcstats.other_size", MIB_kstat_zfs_misc_arcstats_other_size, &len);
+    } else {
+ 		  fpl->zfsArcEnabled = 0;
+    }
+@@ -323,8 +345,30 @@ static inline void FreeBSDProcessList_scanMemoryInfo(ProcessList* pl) {
+       fpl->memZfsArc /= 1024;
+       fpl->memWire -= fpl->memZfsArc;
+       pl->cachedMem += fpl->memZfsArc;
+-      // maybe when we learn how to make custom memory meter
+-      // we could do custom arc breakdown?
++
++      len = sizeof(fpl->zfsArcMax);
++      sysctl(MIB_vfs_zfs_arc_max, 3, &(fpl->zfsArcMax), &len , NULL, 0);
++      fpl->zfsArcMax /= 1024;
++
++      len = sizeof(fpl->zfsArcMFU);
++      sysctl(MIB_kstat_zfs_misc_arcstats_mfu_size, 5, &(fpl->zfsArcMFU), &len , NULL, 0);
++      fpl->zfsArcMFU /= 1024;
++
++      len = sizeof(fpl->zfsArcMRU);
++      sysctl(MIB_kstat_zfs_misc_arcstats_mru_size, 5, &(fpl->zfsArcMRU), &len , NULL, 0);
++      fpl->zfsArcMRU /= 1024;
++
++      len = sizeof(fpl->zfsArcAnon);
++      sysctl(MIB_kstat_zfs_misc_arcstats_anon_size, 5, &(fpl->zfsArcAnon), &len , NULL, 0);
++      fpl->zfsArcAnon /= 1024;
++
++      len = sizeof(fpl->zfsArcHeader);
++      sysctl(MIB_kstat_zfs_misc_arcstats_hdr_size, 5, &(fpl->zfsArcHeader), &len , NULL, 0);
++      fpl->zfsArcHeader /= 1024;
++
++      len = sizeof(fpl->zfsArcOther);
++      sysctl(MIB_kstat_zfs_misc_arcstats_other_size, 5, &(fpl->zfsArcOther), &len , NULL, 0);
++      fpl->zfsArcOther /= 1024;
+    }
+ 
+    pl->usedMem = fpl->memActive + fpl->memWire;
+diff --git a/freebsd/FreeBSDProcessList.h b/freebsd/FreeBSDProcessList.h
+index af343fb..cf96a70 100644
+--- a/freebsd/FreeBSDProcessList.h
++++ b/freebsd/FreeBSDProcessList.h
+@@ -42,6 +42,12 @@ typedef struct FreeBSDProcessList_ {
+    unsigned long long int memFree;
+    unsigned long long int memZfsArc;
+ 
++   unsigned long long int zfsArcMax;
++   unsigned long long int zfsArcMFU;
++   unsigned long long int zfsArcMRU;
++   unsigned long long int zfsArcAnon;
++   unsigned long long int zfsArcHeader;
++   unsigned long long int zfsArcOther;
+ 
+    CPUData* cpus;
+ 
+diff --git a/freebsd/Platform.c b/freebsd/Platform.c
+index 5dd6ca4..d8d2ed0 100644
+--- a/freebsd/Platform.c
++++ b/freebsd/Platform.c
+@@ -15,6 +15,7 @@ in the source distribution for its full text.
+ #include "UptimeMeter.h"
+ #include "ClockMeter.h"
+ #include "HostnameMeter.h"
++#include "zfs/ZfsArcMeter.h"
+ #include "FreeBSDProcess.h"
+ #include "FreeBSDProcessList.h"
+ 
+@@ -104,6 +105,7 @@ MeterClass* Platform_meterTypes[] = {
+    &LeftCPUs2Meter_class,
+    &RightCPUs2Meter_class,
+    &BlankMeter_class,
++   &ZfsArcMeter_class,
+    NULL
+ };
+ 
+@@ -197,6 +199,23 @@ void Platform_setSwapValues(Meter* this) {
+    this->values[0] = pl->usedSwap;
+ }
+ 
++void Platform_setZfsArcValues(Meter* this) {
++   FreeBSDProcessList* fpl = (FreeBSDProcessList*) this->pl;
++
++   this->total = fpl->zfsArcMax;
++   this->values[0] = fpl->zfsArcMFU;
++   this->values[1] = fpl->zfsArcMRU;
++   this->values[2] = fpl->zfsArcAnon;
++   this->values[3] = fpl->zfsArcHeader;
++   this->values[4] = fpl->zfsArcOther;
++
++   // "Hide" the last value so it can
++   // only be accessed by index and is not
++   // displayed by the Bar or Graph style
++   Meter_setItems(this, 5);
++   this->values[5] = fpl->memZfsArc;
++}
++
+ void Platform_setTasksValues(Meter* this) {
+    // TODO
+ }
+diff --git a/freebsd/Platform.h b/freebsd/Platform.h
+index 1735e7e..3dc7ebf 100644
+--- a/freebsd/Platform.h
++++ b/freebsd/Platform.h
+@@ -44,6 +44,8 @@ void Platform_setMemoryValues(Meter* this);
+ 
+ void Platform_setSwapValues(Meter* this);
+ 
++void Platform_setZfsArcValues(Meter* this);
++
+ void Platform_setTasksValues(Meter* this);
+ 
+ char* Platform_getProcessEnv(pid_t pid);
+diff --git a/zfs/ZfsArcMeter.c b/zfs/ZfsArcMeter.c
+new file mode 100644
+index 0000000..e12c46e
+--- /dev/null
++++ b/zfs/ZfsArcMeter.c
+@@ -0,0 +1,81 @@
++/*
++htop - ZfsArcMeter.c
++(C) 2004-2011 Hisham H. Muhammad
++Released under the GNU GPL, see the COPYING file
++in the source distribution for its full text.
++*/
++
++#include "ZfsArcMeter.h"
++
++#include "CRT.h"
++#include "Platform.h"
++
++#include <stdlib.h>
++#include <string.h>
++#include <math.h>
++#include <sys/param.h>
++#include <assert.h>
++
++/*{
++#include "Meter.h"
++}*/
++
++int ZfsArcMeter_attributes[] = {
++   ZFS_MFU, ZFS_MRU, ZFS_ANON, ZFS_HEADER, ZFS_OTHER
++};
++
++static void ZfsArcMeter_updateValues(Meter* this, char* buffer, int size) {
++   int written;
++   Platform_setZfsArcValues(this);
++
++   written = Meter_humanUnit(buffer, this->values[5], size);
++   buffer += written;
++   if ((size -= written) > 0) {
++      *buffer++ = '/';
++      size--;
++      Meter_humanUnit(buffer, this->total, size);
++   }
++}
++
++static void ZfsArcMeter_display(Object* cast, RichString* out) {
++   char buffer[50];
++   Meter* this = (Meter*)cast;
++
++   RichString_write(out, CRT_colors[METER_TEXT], ":");
++   Meter_humanUnit(buffer, this->total, 50);
++   RichString_append(out, CRT_colors[METER_VALUE], buffer);
++   Meter_humanUnit(buffer, this->values[5], 50);
++   RichString_append(out, CRT_colors[METER_TEXT], " Used:");
++   RichString_append(out, CRT_colors[METER_VALUE], buffer);
++   Meter_humanUnit(buffer, this->values[0], 50);
++   RichString_append(out, CRT_colors[METER_TEXT], " MFU:");
++   RichString_append(out, CRT_colors[ZFS_MFU], buffer);
++   Meter_humanUnit(buffer, this->values[1], 50);
++   RichString_append(out, CRT_colors[METER_TEXT], " MRU:");
++   RichString_append(out, CRT_colors[ZFS_MRU], buffer);
++   Meter_humanUnit(buffer, this->values[2], 50);
++   RichString_append(out, CRT_colors[METER_TEXT], " Anon:");
++   RichString_append(out, CRT_colors[ZFS_ANON], buffer);
++   Meter_humanUnit(buffer, this->values[3], 50);
++   RichString_append(out, CRT_colors[METER_TEXT], " Hdr:");
++   RichString_append(out, CRT_colors[ZFS_HEADER], buffer);
++   Meter_humanUnit(buffer, this->values[4], 50);
++   RichString_append(out, CRT_colors[METER_TEXT], " Oth:");
++   RichString_append(out, CRT_colors[ZFS_OTHER], buffer);
++}
++
++MeterClass ZfsArcMeter_class = {
++   .super = {
++      .extends = Class(Meter),
++      .delete = Meter_delete,
++      .display = ZfsArcMeter_display,
++   },
++   .updateValues = ZfsArcMeter_updateValues, 
++   .defaultMode = TEXT_METERMODE,
++   .maxItems = 6,
++   .total = 100.0,
++   .attributes = ZfsArcMeter_attributes,
++   .name = "ZFSARC",
++   .uiName = "ZFS ARC",
++   .caption = "ARC"
++};
+diff --git a/zfs/ZfsArcMeter.h b/zfs/ZfsArcMeter.h
+new file mode 100644
+index 0000000..b89be22
+--- /dev/null
++++ b/zfs/ZfsArcMeter.h
+@@ -0,0 +1,18 @@
++/* Do not edit this file. It was automatically generated. */
++
++#ifndef HEADER_ZfsArcMeter
++#define HEADER_ZfsArcMeter
++/*
++htop - ZfsArcMeter.h
++(C) 2004-2011 Hisham H. Muhammad
++Released under the GNU GPL, see the COPYING file
++in the source distribution for its full text.
++*/
++
++#include "Meter.h"
++
++extern int ZfsArcMeter_attributes[];
++
++extern MeterClass ZfsArcMeter_class;
++
++#endif
+-- 
+2.20.1
+
