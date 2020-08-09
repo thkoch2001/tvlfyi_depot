@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11434f92_42117aea",
+        "filename": "third_party/nix/src/tests/references_test.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-09T10:16:37Z",
+      "side": 1,
+      "message": "perhaps write to f something that isn\u0027t the ref but is close to it?",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 0
+      },
+      "revId": "26e4fc417b0c17c01e3291dad700e3e58fd76214",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
