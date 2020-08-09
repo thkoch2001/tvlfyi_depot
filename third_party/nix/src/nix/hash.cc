@@ -36,8 +36,8 @@ struct CmdHash final : Command {
   void run() override {
     for (const auto& path : paths) {
       Hash h = mode == mFile ? hashFile(ht, path) : hashPath(ht, path).first;
-      if (truncate && h.hashSize > 20) {
-        h = compressHash(h, 20);
+      if (truncate && h.hashSize > nix::kStorePathHashSize) {
+        h = compressHash(h, nix::kStorePathHashSize);
       }
       std::cout << format("%1%\n") % h.to_string(base, base == SRI);
     }
