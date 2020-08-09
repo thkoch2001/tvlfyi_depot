@@ -22,6 +22,30 @@
       "revId": "d0d57886ca0ce66f83ee33ebc56fad31cf26077a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da55187f_6e16f9dc",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-09T01:58:39Z",
+      "side": 1,
+      "message": "I don\u0027t *think* it does, but I want to have it here at the \"current\" version so that store client callers that might query this get whatever the latest version is.",
+      "parentUuid": "528c3a8d_108d5600",
+      "range": {
+        "startLine": 473,
+        "startChar": 46,
+        "endLine": 473,
+        "endChar": 62
+      },
+      "revId": "d0d57886ca0ce66f83ee33ebc56fad31cf26077a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
