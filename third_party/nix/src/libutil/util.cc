@@ -45,6 +45,140 @@ std::string SysError::addErrno(const std::string& s) {
   return s + ": " + strerror(errNo);
 }
 
+absl::StatusCode StatusCodeFromErrno(int errnum) {
+  switch (errnum) {
+    case ECONNABORTED:
+    case ENOLINK:
+    case ENOTRECOVERABLE:
+    case EOWNERDEAD:
+    case EPIPE:
+    case ESTALE:
+      return absl::kAborted;
+    case EEXIST:
+      return absl::kAlreadyExists;
+    case ECANCELED:
+    case ETIME:
+      return absl::kCancelled;
+    case EBADF:
+    case ECHILD:
+    case EISCONN:
+    case EISDIR:
+    case ENOEXEC:
+    case ENOTCONN:
+    case ENOTEMPTY:
+    case ENOTTY:
+    case EROFS:
+    case ETXTBSY:
+    case EXDEV:
+      return absl::kFailedPrecondition;
+    case EDEADLK:
+    case EIO:
+    case EPROTO:
+      return absl::kInternal;
+    case EDESTADDRREQ:
+    case EFAULT:
+    case EILSEQ:
+    case EINVAL:
+    case EMULTIHOP:
+    case ENOPROTOOPT:
+    case ENOSTR:
+    case ENOTDIR:
+    case ENOTSOCK:
+    case EPROTOTYPE:
+    case ESPIPE:
+      return absl::kInvalidArgument;
+    case EIDRM:
+    case ENODEV:
+    case ENOENT:
+    case ENXIO:
+    case ESRCH:
+      return absl::kNotFound;
+    case EDOM:
+    case EFBIG:
+      return absl::kOutOfRange;
+    case EACCES:
+    case EPERM:
+      return absl::kPermissionDenied;
+    case E2BIG:
+    case EDQUOT:
+    case EFAULT:
+    case ELOOP:
+    case EMFILE:
+    case EMLINK:
+    case EMSGSIZE:
+    case ENAMETOOLONG:
+    case ENFILE:
+    case ENOBUFS:
+    case ENOLCK:
+    case ENOMEM:
+    case ENOSPC:
+    case ENOSR:
+    case EOVERFLOW:
+    case ERANGE:
+      return absl::kResourceExhausted;
+    case EAGAIN:
+    case EBUSY:
+    case ECONNREFUSED:
+    case ECONNRESET:
+    case EHOSTUNREACH:
+    case EINPROGRESS:
+    case EINTR:
+    case ENETDOWN:
+    case ENETRESET:
+    case ENETUNREACH:
+    case ENODATA:
+    case ETIMEDOUT:
+    case EWOULDBLOCK:
+      return absl::kUnavailable;
+    case ENOSYS:
+    case ENOTSUP:
+    case EOPNOTSUPP:
+    case EPROTONOSUPPORT:
+      return absl::kUnimplemented;
+    default:
+      return absl::kUnknown;
+  }
+}
+
+// Support code for StatusFromErrnoFD to get a string description for a file
+// descriptor.
+static std::string GetFDDescription(int fd) {
+  constexpr int kLinkSize = 512;
+
+  int errnum = errno;
+  std::string procFDPath = absl::StrCat("/proc/self/fd/", fd);
+  std::vector<char> linkContent(kLinkSize + 1);
+  ssize_t linkRd = readlink(procFDPath.c_str(), linkContent.data(), kLinkSize);
+  if (linkRd == -1 || linkRd == 0) {
+    return absl::StrCat("<file descriptor ", fd, ">");
+  }
+  if (linkRd == kLinkSize) {
+    linkContent[kLinkSize] = '\0';
+    return absl::StrCat(absl::string_view(linkContent.data(), kLinkSize),
+                        "...");
+  }
+  linkContent[linkRd] = '\0';
+  return std::string(linkContent.data(), linkRd);
+}
+
+absl::Status StatusFromErrno(int errnum, absl::string_view operation) {
+  return absl::Status(StatusCodeFromErrno(errnum),
+                      absl::StrCat(operation, " ", strerror(errnum)));
+}
+
+absl::Status StatusFromErrno(int errnum, absl::string_view operation,
+                             absl::string_view subject) {
+  return absl::Status(
+      StatusCodeFromErrno(errnum),
+      absl::StrCat(operation, " ", subject, " ", strerror(errnum)));
+}
+
+absl::Status StatusFromErrnoFD(int errnum, absl::string_view operation_name,
+                               int fd) {
+  std::string subject = GetFDDescription(fd);
+  return StatusFromErrno(errnum, operation, subject);
+}
+
 std::string getEnv(const std::string& key, const std::string& def) {
   char* value = getenv(key.c_str());
   return value != nullptr ? std::string(value) : def;

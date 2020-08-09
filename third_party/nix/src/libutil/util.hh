@@ -323,6 +323,26 @@ std::string statusToString(int status);
 
 bool statusOk(int status);
 
+/* absl::Status functions */
+
+// Deduce a reasonable absl::StatusCode from an errno value.
+absl::StatusCode StatusCodeFromErrno(int errnum);
+
+// Construct a status from an errno return.
+//
+// Format: 'operation subject: error'
+absl::Status StatusFromErrno(int errnum, absl::string_view operation, absl::string_view subject);
+
+// Construct a status from an errno return.
+//
+// Format: 'operation: error'
+absl::Status StatusFromErrno(int errnum, absl::string_view operation);
+
+// Construct a status from a file operation errno return.
+//
+// Format: 'operation /path/to/file: error'
+absl::Status StatusFromErrnoFD(int errnum, absl::string_view operation, int fd);
+
 /* Parse a string into a float. */
 template <class N>
 bool string2Float(const std::string& s, N& n) {
