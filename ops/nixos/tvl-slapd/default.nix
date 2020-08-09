@@ -76,6 +76,11 @@ let
       password = "{SSHA}7a85VNhpFElFw+N5xcjgGmt4HnBsaGp4";
     }
     {
+      username = "multi";
+      email = "depot@in-addr.xyz";
+      password = "{ARGON2}$argon2i$v=19$m=4096,t=3,p=1$qCfXhZUVft1YVPx7H4x7rw$dhtwtCrEMSpZfWQJbw2wpo5XHqiJqoZkiKeEbE6AdX0";
+    }
+    {
       username = "nyanotech";
       email = "nyanotechnology@gmail.com";
       password = "{SSHA}NIJ2RCRb1+Q4Bs63cyE91VZyiN47DG6y";
