@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5c37856_f78615df",
+        "filename": "third_party/nix/src/libnar/nar.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-09T17:53:22Z",
+      "side": 1,
+      "message": "https://google.github.io/styleguide/cppguide.html#Type_Names",
+      "range": {
+        "startLine": 16,
+        "startChar": 6,
+        "endLine": 16,
+        "endChar": 12
+      },
+      "revId": "75778f94bc1b8265b4d328d4f4f5ff654ff7d9a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46ea0eb0_52f08625",
+        "filename": "third_party/nix/src/libnar/nar.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-09T17:53:22Z",
+      "side": 1,
+      "message": "https://google.github.io/styleguide/cppguide.html#Function_Names",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 10
+      },
+      "revId": "75778f94bc1b8265b4d328d4f4f5ff654ff7d9a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4c00186_e8564ab5",
+        "filename": "third_party/nix/src/libnar/nar.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-09T17:53:22Z",
+      "side": 1,
+      "message": "https://google.github.io/styleguide/cppguide.html#trailing_return",
+      "range": {
+        "startLine": 26,
+        "startChar": 39,
+        "endLine": 26,
+        "endChar": 41
+      },
+      "revId": "75778f94bc1b8265b4d328d4f4f5ff654ff7d9a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "643578d9_d0c14fd6",
+        "filename": "third_party/nix/src/libnar/nar.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-09T17:53:22Z",
+      "side": 1,
+      "message": "https://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "range": {
+        "startLine": 59,
+        "startChar": 1,
+        "endLine": 59,
+        "endChar": 8
+      },
+      "revId": "75778f94bc1b8265b4d328d4f4f5ff654ff7d9a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57bc6687_509717c9",
+        "filename": "third_party/nix/src/libnar/nar.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-09T17:53:22Z",
+      "side": 1,
+      "message": "https://google.github.io/styleguide/cppguide.html#Implicit_Conversions",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 30
+      },
+      "revId": "75778f94bc1b8265b4d328d4f4f5ff654ff7d9a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
