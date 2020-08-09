@@ -66,26 +66,26 @@ struct Value;
    the inputSrcs of the derivations.
 
    For canonicity, the store paths should be in sorted order. */
-struct NixString {
+struct NixString : public gc {
   const char* s;
   const char** context;  // must be in sorted order
 };
 
-struct NixThunk {
+struct NixThunk : public gc {
   Env* env;
   Expr* expr;
 };
 
-struct NixApp {
+struct NixApp : public gc {
   Value *left, *right;
 };
 
-struct NixLambda {
+struct NixLambda : public gc {
   Env* env;
   ExprLambda* fun;
 };
 
-struct NixPrimOpApp {
+struct NixPrimOpApp : public gc {
   Value *left, *right;
 };
 
