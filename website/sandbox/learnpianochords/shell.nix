@@ -5,16 +5,5 @@ in pkgs.mkShell {
     elmPackages.elm
     elmPackages.elm-format
     elmPackages.elm-live
-    (haskellPackages.ghcWithPackages (hpkgs: [
-      hpkgs.hspec
-      hpkgs.servant-server
-      hpkgs.aeson
-      hpkgs.wai-cors
-      hpkgs.warp
-      hpkgs.jwt
-      hpkgs.unordered-containers
-      hpkgs.base64
-      hpkgs.http-conduit
-    ]))
   ];
 }
