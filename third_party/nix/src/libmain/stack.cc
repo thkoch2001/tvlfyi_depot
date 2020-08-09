@@ -29,7 +29,7 @@ static void sigsegvHandler(int signo, siginfo_t* info, void* ctx) {
       diff = -diff;
     }
     if (diff < 4096) {
-      char msg[] = "error: stack overflow (possible infinite recursion)\n";
+      constexpr char msg[] = "error: stack overflow (possible infinite recursion)\n";
       [[gnu::unused]] auto res = write(2, msg, strlen(msg));
       _exit(1);  // maybe abort instead?
     }
