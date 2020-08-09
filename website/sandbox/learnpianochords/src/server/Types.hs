@@ -23,6 +23,9 @@ data Context = Context
   , contextClientPort :: !Int
   }
 
+-- | Type synonym for my application monad.
+type App = RIO Context
+
 data VerifyGoogleSignInRequest = VerifyGoogleSignInRequest
   { idToken :: !Text
   } deriving (Eq, Show)
