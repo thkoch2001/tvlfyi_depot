@@ -30,6 +30,16 @@ target_link_libraries(hash_test
 
 gtest_discover_tests(hash_test)
 
+add_executable(references_test references_test.cc)
+target_link_libraries(references_test
+  nixstore
+  rapidcheck
+  rapidcheck_gtest
+  GTest::gtest_main
+)
+
+gtest_discover_tests(references_test)
+
 add_executable(store_test store_tests.cc)
 target_link_libraries(store_test
   nixstore
