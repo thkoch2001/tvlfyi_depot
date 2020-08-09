@@ -8,6 +8,7 @@
 #include <optional>
 #include <sstream>
 
+#include <absl/status/statusor.h>
 #include <absl/strings/string_view.h>
 #include <dirent.h>
 #include <signal.h>
@@ -304,6 +305,12 @@ void inline checkInterrupt() {
   if (_isInterrupted || (interruptCheck && interruptCheck())) _interrupted();
 }
 
+absl::Status inline checkInterrupt_Status() {
+  if (_isInterrupted || (interruptCheck && interruptCheck()))
+    return absl::CancelledError();
+  return absl::OkStatus();
+}
+
 MakeError(Interrupted, BaseError);
 
 MakeError(FormatError, Error);
@@ -322,6 +329,27 @@ std::string replaceStrings(const std::string& s, const std::string& from,
 std::string statusToString(int status);
 
 bool statusOk(int status);
+
+/* absl::Status functions */
+
+// Deduce a reasonable absl::StatusCode from an errno value.
+absl::StatusCode StatusCodeFromErrno(int errnum);
+
+// Construct a status from an errno return.
+//
+// Format: 'operation subject: error'
+absl::Status StatusFromErrno(int errnum, absl::string_view operation,
+                             absl::string_view subject);
+
+// Construct a status from an errno return.
+//
+// Format: 'operation: error'
+absl::Status StatusFromErrno(int errnum, absl::string_view operation);
+
+// Construct a status from a file operation errno return.
+//
+// Format: 'operation /path/to/file: error'
+absl::Status StatusFromErrnoFD(int errnum, absl::string_view operation, int fd);
 
 /* Parse a string into a float. */
 template <class N>
