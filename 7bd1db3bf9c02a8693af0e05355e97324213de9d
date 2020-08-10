@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "52005791_7fcc1765",
+        "filename": "third_party/nix/src/libexpr/parser.y",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-10T21:02:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d99a9967_763671da",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 45
+      },
+      "revId": "7bd1db3bf9c02a8693af0e05355e97324213de9d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76fb0ca7_f35c755f",
         "filename": "third_party/nix/src/libexpr/parser.y",
         "patchSetId": 5
