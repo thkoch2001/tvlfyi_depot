@@ -14,6 +14,29 @@
 %code requires {
 #define YY_NO_INPUT 1 // disable unused yyinput features
 #include "libexpr/parser.hh"
+
+// Allow GC tracing of YY-allocated structures
+#define YYMALLOC GC_MALLOC_UNCOLLECTABLE
+#define YYFREE GC_FREE
+#define YYREALLOC GC_REALLOC
+
+struct YYSTYPE : public gc {
+  union {
+    nix::Expr * e;
+    nix::ExprList * list;
+    nix::ExprAttrs * attrs;
+    nix::Formals * formals;
+    nix::Formal * formal;
+    nix::NixInt n;
+    nix::NixFloat nf;
+    const char * id; // !!! -> Symbol
+    char * path;
+    char * uri;
+    nix::AttrNameVector * attrNames;
+    nix::VectorExprs * string_parts;
+  };
+};
+
 }
 
 %{
@@ -39,22 +62,6 @@ void yyerror(YYLTYPE* loc, yyscan_t scanner, ParseData* data,
 }
 
 %}
-
-%union {
-  // !!! We're probably leaking stuff here.
-  nix::Expr * e;
-  nix::ExprList * list;
-  nix::ExprAttrs * attrs;
-  nix::Formals * formals;
-  nix::Formal * formal;
-  nix::NixInt n;
-  nix::NixFloat nf;
-  const char * id; // !!! -> Symbol
-  char * path;
-  char * uri;
-  std::vector<nix::AttrName> * attrNames;
-  std::vector<nix::Expr *> * string_parts;
-}
 
 %type <e> start expr expr_function expr_if expr_op
 %type <e> expr_app expr_select expr_simple
@@ -138,7 +145,7 @@ expr_op
   | expr_op UPDATE expr_op { $$ = new ExprOpUpdate(CUR_POS, $1, $3); }
   | expr_op '?' attrpath { $$ = new ExprOpHasAttr($1, *$3); }
   | expr_op '+' expr_op
-    { $$ = new ExprConcatStrings(CUR_POS, false, new std::vector<Expr *>({$1, $3})); }
+    { $$ = new ExprConcatStrings(CUR_POS, false, new nix::VectorExprs({$1, $3})); }
   | expr_op '-' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__sub")), $1), $3); }
   | expr_op '*' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__mul")), $1), $3); }
   | expr_op '/' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__div")), $1), $3); }
@@ -208,9 +215,9 @@ string_parts
 string_parts_interpolated
   : string_parts_interpolated STR { $$ = $1; $1->push_back($2); }
   | string_parts_interpolated DOLLAR_CURLY expr '}' { $$ = $1; $1->push_back($3); }
-  | DOLLAR_CURLY expr '}' { $$ = new std::vector<Expr *>; $$->push_back($2); }
+  | DOLLAR_CURLY expr '}' { $$ = new nix::VectorExprs; $$->push_back($2); }
   | STR DOLLAR_CURLY expr '}' {
-      $$ = new std::vector<Expr *>;
+      $$ = new nix::VectorExprs;
       $$->push_back($1);
       $$->push_back($3);
     }
@@ -219,7 +226,7 @@ string_parts_interpolated
 ind_string_parts
   : ind_string_parts IND_STR { $$ = $1; $1->push_back($2); }
   | ind_string_parts DOLLAR_CURLY expr '}' { $$ = $1; $1->push_back($3); }
-  | { $$ = new std::vector<Expr *>; }
+  | { $$ = new nix::VectorExprs; }
   ;
 
 binds
@@ -276,9 +283,9 @@ attrpath
           $$->push_back(AttrName($3));
       }
     }
-  | attr { $$ = new std::vector<AttrName>; $$->push_back(AttrName(data->symbols.Create($1))); }
+  | attr { $$ = new nix::AttrNameVector; $$->push_back(AttrName(data->symbols.Create($1))); }
   | string_attr
-    { $$ = new std::vector<AttrName>;
+    { $$ = new nix::AttrNameVector;
       ExprString *str = dynamic_cast<ExprString *>($1);
       if (str) {
           $$->push_back(AttrName(str->s));
