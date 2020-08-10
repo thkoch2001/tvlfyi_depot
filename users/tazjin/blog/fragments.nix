@@ -12,6 +12,7 @@
 let
   inherit (builtins) filter map hasAttr replaceStrings toFile;
   inherit (depot.third_party) runCommandNoCC writeText;
+  inherit (depot.users.tazjin) renderMarkdown;
 
   # Generate a post list for all listed, non-draft posts.
   isDraft = post: (hasAttr "draft" post) && post.draft;
@@ -87,7 +88,7 @@ let
     }
 
     # Write the actual post through cheddar's about-filter mechanism
-    cat ${post.content} | ${depot.tools.cheddar}/bin/cheddar --about-filter ${post.content} >> $out
+    cat ${renderMarkdown post.content} >> $out
     echo '</article>' >> $out
 
     cat ${toFile "footer.html" footer} >> $out
