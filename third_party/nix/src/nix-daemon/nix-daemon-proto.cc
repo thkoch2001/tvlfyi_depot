@@ -500,9 +500,9 @@ class WorkerServiceImpl final : public WorkerService::Service {
             response->set_ca(info->ca);
 
             return Status::OK;
-          } catch (InvalidPath&) {
+          } catch (InvalidPath& e) {
             return Status(grpc::StatusCode::INVALID_ARGUMENT,
-                          "Invalid store path");
+                          absl::StrCat(e.msg()));
           }
         },
         __FUNCTION__);
