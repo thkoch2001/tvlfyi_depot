@@ -5,7 +5,7 @@
 # elements for things such as blog posts and projects.
 #
 # Content for the blog is in //users/tazjin/blog instead of here.
-{ depot, lib, ... }:
+{ depot, lib, ... }@args:
 
 with depot;
 with nix.yants;
@@ -65,8 +65,10 @@ let
   ));
 
   homepage = index ((map postToEntry users.tazjin.blog.posts) ++ (import ./entries.nix));
+  atomFeed = import ./feed.nix args;
 in runCommandNoCC "website" {} ''
   mkdir $out
   cp ${homepage} $out/index.html
+  cp ${atomFeed} $out/feed.atom
   cp -r ${./static} $out/static
 ''
