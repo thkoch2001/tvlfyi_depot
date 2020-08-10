@@ -64,8 +64,9 @@ let
     ++ [ (builtins.readFile ./footer.html) ]
   ));
 
-  homepage = index ((map postToEntry users.tazjin.blog.posts) ++ (import ./entries.nix));
-  atomFeed = import ./feed.nix args;
+  pageEntries = import ./entries.nix;
+  homepage = index ((map postToEntry users.tazjin.blog.posts) ++ pageEntries);
+  atomFeed = import ./feed.nix (args // { inherit entry pageEntries; });
 in runCommandNoCC "website" {} ''
   mkdir $out
   cp ${homepage} $out/index.html
