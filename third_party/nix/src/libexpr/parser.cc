@@ -92,8 +92,7 @@ void addFormal(const Pos& pos, Formals* formals, const Formal& formal) {
   formals->argNames.insert(formal.name);
 }
 
-Expr* stripIndentation(const Pos& pos, SymbolTable& symbols,
-                       std::vector<Expr*>& es) {
+Expr* stripIndentation(const Pos& pos, SymbolTable& symbols, VectorExprs& es) {
   if (es.empty()) {
     return new ExprString(symbols.Create(""));
   }
@@ -138,11 +137,11 @@ Expr* stripIndentation(const Pos& pos, SymbolTable& symbols,
   }
 
   /* Strip spaces from each line. */
-  std::vector<Expr*>* es2 = new std::vector<Expr*>;
+  VectorExprs* es2 = new VectorExprs;
   atStartOfLine = true;
   size_t curDropped = 0;
   size_t n = es.size();
-  for (std::vector<Expr*>::iterator i = es.begin(); i != es.end(); ++i, --n) {
+  for (VectorExprs::iterator i = es.begin(); i != es.end(); ++i, --n) {
     ExprIndStr* e = dynamic_cast<ExprIndStr*>(*i);
     if (!e) {
       atStartOfLine = false;
