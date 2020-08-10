@@ -74,13 +74,18 @@ struct StaticEnv;
 /* An attribute path is a sequence of attribute names. */
 using AttrName = std::variant<Symbol, Expr*>;
 
-typedef std::vector<AttrName> AttrPath;
+typedef std::vector<AttrName, traceable_allocator<AttrName>> AttrPath;
+
+using AttrNameVector =
+    std::vector<nix::AttrName, traceable_allocator<nix::AttrName>>;
+
+using VectorExprs = std::vector<nix::Expr*, traceable_allocator<nix::Expr*>>;
 
 std::string showAttrPath(const AttrPath& attrPath);
 
 /* Abstract syntax of Nix expressions. */
 
-struct Expr {
+struct Expr : public gc {
   virtual ~Expr(){};
   virtual void show(std::ostream& str) const;
   virtual void bindVars(const StaticEnv& env);
@@ -186,7 +191,7 @@ struct ExprOpHasAttr : Expr {
 struct ExprAttrs : Expr {
   bool recursive;
 
-  struct AttrDef {
+  struct AttrDef : public gc {
     bool inherited;
     Expr* e;
     Pos pos;
@@ -196,17 +201,22 @@ struct ExprAttrs : Expr {
     AttrDef(){};
   };
 
-  typedef absl::flat_hash_map<Symbol, AttrDef> AttrDefs;
+  typedef absl::flat_hash_map<
+      Symbol, AttrDef, absl::container_internal::hash_default_hash<Symbol>,
+      absl::container_internal::hash_default_eq<Symbol>,
+      traceable_allocator<std::pair<const Symbol, AttrDef>>>
+      AttrDefs;
   AttrDefs attrs;
 
-  struct DynamicAttrDef {
+  struct DynamicAttrDef : public gc {
     Expr *nameExpr, *valueExpr;
     Pos pos;
     DynamicAttrDef(Expr* nameExpr, Expr* valueExpr, const Pos& pos)
         : nameExpr(nameExpr), valueExpr(valueExpr), pos(pos){};
   };
 
-  typedef std::vector<DynamicAttrDef> DynamicAttrDefs;
+  typedef std::vector<DynamicAttrDef, traceable_allocator<DynamicAttrDef>>
+      DynamicAttrDefs;
   DynamicAttrDefs dynamicAttrs;
 
   ExprAttrs() : recursive(false){};
@@ -214,20 +224,20 @@ struct ExprAttrs : Expr {
 };
 
 struct ExprList : Expr {
-  std::vector<Expr*> elems;
+  VectorExprs elems;
   ExprList(){};
   COMMON_METHODS
 };
 
-struct Formal {
+struct Formal : public gc {
   Symbol name;
   Expr* def;  // def = default, not definition
   Formal(const Symbol& name, Expr* def) : name(name), def(def){};
 };
 
 // Describes structured function arguments (e.g. `{ a }: ...`)
-struct Formals {
-  typedef std::list<Formal> Formals_;
+struct Formals : public gc {
+  typedef std::list<Formal, traceable_allocator<Formal>> Formals_;
   Formals_ formals;
   std::set<Symbol> argNames;  // used during parsing
   bool ellipsis;
@@ -325,8 +335,8 @@ MakeBinOp(ExprOpConcatLists, "++");
 struct ExprConcatStrings : Expr {
   Pos pos;
   bool forceString;
-  std::vector<Expr*>* es;
-  ExprConcatStrings(const Pos& pos, bool forceString, std::vector<Expr*>* es)
+  nix::VectorExprs* es;
+  ExprConcatStrings(const Pos& pos, bool forceString, nix::VectorExprs* es)
       : pos(pos), forceString(forceString), es(es){};
   COMMON_METHODS
 };
