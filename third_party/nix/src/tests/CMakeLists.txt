@@ -49,6 +49,14 @@ target_link_libraries(store_test
 
 gtest_discover_tests(store_test)
 
+add_executable(util_test util_tests.cc)
+target_link_libraries(util_test
+  nixutil
+  GTest::gtest_main
+)
+
+gtest_discover_tests(store_test)
+
 add_executable(value-to-json value-to-json.cc)
 target_link_libraries(value-to-json
   nixexpr

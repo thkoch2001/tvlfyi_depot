@@ -11,6 +11,7 @@ set(HEADER_FILES
     compression.hh
     config.hh
     finally.hh
+    filesystem.hh
     hash.hh
     istringstream_nocopy.hh
     json.hh
@@ -39,6 +40,7 @@ target_sources(nixutil
     args.cc
     compression.cc
     config.cc
+    filesystem.cc
     hash.cc
     json.cc
     serialise.cc
