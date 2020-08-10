@@ -22,6 +22,30 @@
       "revId": "c5b2ae4da3f7efd04837d1c6caf13e005bdb9b26",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83792cd8_ccacfa99",
+        "filename": "users/tazjin/blog/atom-feed.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-10T22:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3ffb45d_1ff01079",
+      "range": {
+        "startLine": 111,
+        "startChar": 30,
+        "endLine": 111,
+        "endChar": 37
+      },
+      "revId": "c5b2ae4da3f7efd04837d1c6caf13e005bdb9b26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
