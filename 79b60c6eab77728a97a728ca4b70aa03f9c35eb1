@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50d9c623_3362034a",
+        "filename": "third_party/nix/src/tests/status_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-10T17:42:08Z",
+      "side": 1,
+      "message": "since this is intended to be reused, mind adding a file-level doc comment explaining the usage?",
+      "revId": "79b60c6eab77728a97a728ca4b70aa03f9c35eb1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
