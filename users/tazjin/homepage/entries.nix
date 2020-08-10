@@ -1,6 +1,16 @@
 [
   {
     class = "misc";
+    title = "Interview with Joscha Bach";
+    url = "https://www.youtube.com/watch?v=P-2P3MSZrBM";
+    date = 1594594800;
+    description = ''
+      A fascinating, mind-bending interview by Lex Fridman with Joscha
+      Bach about the Nature of the Universe.
+    '';
+  }
+  {
+    class = "misc";
     title = "The Virus Lounge";
     url = "https://tvl.fyi";
     date = 1587435629;
