@@ -18,8 +18,6 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/quassel.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
-    "${depot.depotPath}/ops/nixos/sourcegraph.nix"
-    "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
   ];
   depot = depot;
 
@@ -212,19 +210,6 @@ in lib.fix(self: {
       group = "quassel";
       allowKeysForGroup = true;
     };
-
-    certs."tvl.fyi" = {
-      user = "nginx";
-      group = "nginx";
-      webroot = "/var/lib/acme/acme-challenge";
-      postRun = "systemctl reload nginx";
-      extraDomains = {
-        "b.tvl.fyi" = null;
-        "cl.tvl.fyi" = null;
-        "code.tvl.fyi" = null;
-        "cs.tvl.fyi" = null;
-      };
-    };
   };
 
   # Forward logs to Google Cloud Platform
@@ -350,30 +335,6 @@ in lib.fix(self: {
     serviceConfig = {
       Type = "oneshot";
     };
-  };
-
-  # Regularly back up Gerrit to Google Cloud Storage.
-  systemd.user.services.restic-gerrit = {
-    description = "Gerrit backups to Google Cloud Storage";
-    script = "${nixpkgs.restic}/bin/restic backup /var/lib/gerrit";
-    environment = {
-      RESTIC_REPOSITORY = "gs:tvl-fyi-backups:/camden";
-      RESTIC_PASSWORD_FILE = "%h/.config/restic/secret";
-      RESTIC_EXCLUDE_FILE = builtins.toFile "exclude-files" ''
-        /var/lib/gerrit/etc/secure.config
-        /var/lib/gerrit/etc/ssh_host_*_key
-        /var/lib/gerrit/etc/ssh_host_*_key
-        /var/lib/gerrit/etc/ssh_host_*_key
-        /var/lib/gerrit/etc/ssh_host_*_key
-        /var/lib/gerrit/etc/ssh_host_*_key
-        /var/lib/gerrit/tmp
-      '';
-    };
-  };
-
-  systemd.user.timers.restic-gerrit = {
-    wantedBy = [ "timers.target" ];
-    timerConfig.OnCalendar = "hourly";
   };
 
   system.stateVersion = "19.09";
