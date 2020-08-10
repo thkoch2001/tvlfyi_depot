@@ -45,6 +45,30 @@
       "revId": "7bd1db3bf9c02a8693af0e05355e97324213de9d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6166b7c_f30be091",
+        "filename": "third_party/nix/src/libexpr/parser.y",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-10T17:58:33Z",
+      "side": 1,
+      "message": "No. `new (GC)` is used if you want to override the heap allocator for a type that does not already inherit from gc.",
+      "parentUuid": "76fb0ca7_f35c755f",
+      "range": {
+        "startLine": 149,
+        "startChar": 49,
+        "endLine": 149,
+        "endChar": 53
+      },
+      "revId": "7bd1db3bf9c02a8693af0e05355e97324213de9d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
