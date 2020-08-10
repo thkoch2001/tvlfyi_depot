@@ -32,6 +32,7 @@ let
 
   posts = list post (import ./posts.nix);
   fragments = import ./fragments.nix args;
+  atom = import ./atom-feed.nix args;
 
   rendered = depot.third_party.runCommandNoCC "tazjins-blog" {} ''
     mkdir -p $out
