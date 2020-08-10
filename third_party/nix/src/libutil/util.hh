@@ -95,6 +95,13 @@ std::string readFile(int fd);
 std::string readFile(absl::string_view path, bool drain = false);
 void readFile(absl::string_view path, Sink& sink);
 
+// Read exactly the number of bytes from the given file descriptor that fstat()
+// says are available.
+absl::StatusOr<std::string> readFile_Status(int fd);
+
+// Fully read the file at the given path.
+absl::StatusOr<std::string> readFile_Status(absl::string_view path);
+
 /* Write a string to a file. */
 void writeFile(const Path& path, const std::string& s, mode_t mode = 0666);
 
