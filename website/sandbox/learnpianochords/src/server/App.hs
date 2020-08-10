@@ -15,12 +15,11 @@ import qualified GoogleSignIn
 import qualified Types as T
 --------------------------------------------------------------------------------
 
-server :: ServerT API T.App
-server = verifyGoogleSignIn
+server :: T.Context -> Server API
+server T.Context{..} = verifyGoogleSignIn
   where
-    verifyGoogleSignIn :: T.VerifyGoogleSignInRequest -> T.App NoContent
+    verifyGoogleSignIn :: T.VerifyGoogleSignInRequest -> Handler NoContent
     verifyGoogleSignIn T.VerifyGoogleSignInRequest{..} = do
-      T.Context{..} <- ask
       validationResult <- liftIO $ GoogleSignIn.validateJWT False (EncodedJWT idToken)
       case validationResult of
         Valid _ -> do
@@ -30,19 +29,18 @@ server = verifyGoogleSignIn
           --   Redirect the SPA to the sign-up / payment page
           pure NoContent
         err -> do
-          -- TODO: I would prefer to use `throwError` here, but after changing
-          -- to ServerT, I couldn't get the code to compile.
-          throwIO err401 { errBody = err |> GoogleSignIn.explainResult |> cs }
+          throwError err401 { errBody = err |> GoogleSignIn.explainResult |> cs }
 
-run :: T.App ()
+run :: T.App
 run = do
   ctx@T.Context{..} <- ask
-  server
-    |> hoistServer (Proxy @ API) (runRIO ctx)
+  ctx
+    |> server
     |> serve (Proxy @ API)
     |> cors (const $ Just corsPolicy)
     |> Warp.run contextServerPort
     |> liftIO
+  pure $ Right ()
   where
     corsPolicy :: CorsResourcePolicy
     corsPolicy = simpleCorsResourcePolicy
