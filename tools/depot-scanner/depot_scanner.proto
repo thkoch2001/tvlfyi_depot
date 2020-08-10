@@ -1,0 +1,46 @@
+// Copyright 2020 TVL
+// SPDX-License-Identifier: MIT
+
+syntax = "proto3";
+package tvl.tools.depot_scanner;
+option go_package = "code.tvl.fyi/tools/depot-scanner/proto";
+
+enum PathType {
+  UNKNOWN = 0;
+  DEPOT = 1;
+  STORE = 2;
+  CORE = 3;
+}
+
+message ScanRequest {
+  // Which revision of the depot
+  string revision = 1;
+  string attr = 2;
+  // Optionally, the attr to evaluate can be provided as a path to a folder or a
+  // .nix file.  This is used by the HTTP service.
+  string attrAsPath = 3;
+}
+
+message ScanResponse {
+  repeated string depotPath = 1;
+  repeated string nixStorePath = 2;
+  repeated string corePkgsPath = 4;
+  repeated string otherPath = 3;
+
+  bytes derivation = 5;
+}
+
+message ArchiveRequest {
+  repeated string depotPath = 1;
+}
+
+message ArchiveChunk {
+  bytes chunk = 1;
+}
+
+service DepotScanService {
+  rpc Scan(ScanRequest) returns (ScanResponse);
+
+  rpc MakeArchive(ArchiveRequest) returns (stream ArchiveChunk);
+}
+
