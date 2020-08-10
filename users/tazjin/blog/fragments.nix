@@ -28,7 +28,7 @@ let
     <meta name="description" content="tazjin&#39;s blog">
     <link rel="stylesheet" type="text/css" href="/static/tazjin.css" media="all">
     <link rel="icon" type="image/webp" href="/static/favicon.webp">
-    <link rel="alternate" type="application/rss+xml" title="RSS-Feed" href="/rss.xml">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.atom">
     <title>tazjin&#39;s blog: ${escape title}</title>
   </head>
   <body class="light">
