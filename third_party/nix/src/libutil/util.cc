@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <fstream>
 #include <future>
 #include <iostream>
 #include <sstream>
@@ -446,6 +447,68 @@ std::string readFile(int fd) {
   readFull(fd, buf.data(), st.st_size);
 
   return std::string(reinterpret_cast<char*>(buf.data()), st.st_size);
+}
+
+absl::StatusOr<std::string> readFile_Status(int fd) {
+  struct stat st;
+  if (fstat(fd, &st) == -1) {
+    return StatusFromErrnoFD(errno, "stat", fd);
+  }
+
+  std::vector<char> buf(st.st_size);
+  size_t count = st.st_size;
+  size_t off = 0;
+  while (count != 0) {
+    RETURN_IF_ERROR(checkInterrupt_Status());
+    ssize_t res = read(fd, buf.data() + off, count);
+    if (res <= -1) {
+      if (errno == EINTR) {
+        continue;
+      }
+      return StatusFromErrnoFD(errno, "read", fd);
+    }
+    if (res == 0) {
+      return absl::OutOfRangeError(
+          absl::StrCat("unexpected EOF after reading ", st.st_size - count, "/",
+                       st.st_size, " bytes from ", GetFDDescription(fd)));
+    }
+    count -= res;
+    off += res;
+  }
+  return std::string(buf.data(), buf.size());
+}
+
+absl::StatusOr<std::string> readFile_Status(absl::string_view path) {
+  std::ifstream in(path, std::ios::in | std::ios::binary);
+  if (!in) {
+    return StatusFromErrno(errno, "readFile: open", path);
+  }
+  in.exceptions(0);
+  errno = 0;
+
+  in.seekg(0, std::ios::end);
+  if (!in || errno != 0) {
+    return StatusFromErrno(errno, "readFile: seek end", path);
+  }
+
+  std::string contents;
+  ssize_t size = in.tellg();
+  if (!in || errno != 0) {
+    return StatusFromErrno(errno, "readFile: seek tell", path);
+  }
+  contents.resize(size);
+  in.seekg(0, std::ios::beg);
+  if (!in || errno != 0) {
+    return StatusFromErrno(errno, "readFile: seek start", path);
+  }
+
+  in.read(&contents[0], contents.size());
+  in.close();
+  if (!in || errno != 0) {
+    return StatusFromErrno(errno, "readFile: read", path);
+  }
+
+  return contents;
 }
 
 std::string readFile(absl::string_view path, bool drain) {
