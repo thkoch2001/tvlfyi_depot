@@ -5,6 +5,7 @@
 #include <optional>
 #include <variant>
 
+#include <gc/gc.h>
 #include <glog/logging.h>
 
 #include "libexpr/eval.hh"
@@ -59,8 +60,7 @@ void addAttr(ExprAttrs* attrs, AttrPath& attrPath, Expr* e, const Pos& pos);
 
 void addFormal(const Pos& pos, Formals* formals, const Formal& formal);
 
-Expr* stripIndentation(const Pos& pos, SymbolTable& symbols,
-                       std::vector<Expr*>& es);
+Expr* stripIndentation(const Pos& pos, SymbolTable& symbols, VectorExprs& es);
 
 Path resolveExprPath(Path path);
 
