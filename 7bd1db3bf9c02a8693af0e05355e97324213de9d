@@ -22,6 +22,29 @@
       "revId": "7bd1db3bf9c02a8693af0e05355e97324213de9d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76fb0ca7_f35c755f",
+        "filename": "third_party/nix/src/libexpr/parser.y",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-10T17:40:57Z",
+      "side": 1,
+      "message": "should this (and the rest in the file) be `new (GC)`?",
+      "range": {
+        "startLine": 149,
+        "startChar": 49,
+        "endLine": 149,
+        "endChar": 53
+      },
+      "revId": "7bd1db3bf9c02a8693af0e05355e97324213de9d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
