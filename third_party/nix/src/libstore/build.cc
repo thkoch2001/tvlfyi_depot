@@ -1530,9 +1530,9 @@ void replaceValidPath(const Path& storePath, const Path& tmpPath) {
   deletePath(oldPath);
 }
 
-MakeError(NotDeterministic, BuildError)
+MakeError(NotDeterministic, BuildError);
 
-    void DerivationGoal::buildDone() {
+void DerivationGoal::buildDone() {
   trace("build done");
 
   /* Release the build user at the end of this function. We don't do
