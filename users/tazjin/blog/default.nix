@@ -8,6 +8,7 @@ with depot.nix.yants;
 
 let
   inherit (builtins) filter hasAttr map;
+  inherit (depot.third_party) runCommandNoCC;
 
   # Type definition for a single blog post.
   post = struct "blog-post" {
@@ -31,10 +32,17 @@ let
   };
 
   posts = list post (import ./posts.nix);
-  fragments = import ./fragments.nix args;
+
+  # Render content of a post to HTML using cheddar, for use in both
+  # the web and feed versions of the blog.
+  renderContent = defun [ post drv ] (p: runCommandNoCC "${p.key}-body.html" {} ''
+    cat ${p.content} | ${depot.tools.cheddar}/bin/cheddar --about-filter ${p.content} > $out
+  '');
+
+  fragments = import ./fragments.nix (args // { inherit renderContent; });
   atom = import ./atom-feed.nix args;
 
-  rendered = depot.third_party.runCommandNoCC "tazjins-blog" {} ''
+  rendered = runCommandNoCC "tazjins-blog" {} ''
     mkdir -p $out
 
     ${lib.concatStringsSep "\n" (map (post:
