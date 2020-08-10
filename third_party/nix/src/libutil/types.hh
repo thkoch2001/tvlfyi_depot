@@ -93,9 +93,9 @@ class BaseError : public std::exception {
     using superClass::superClass;       \
   };
 
-MakeError(Error, BaseError)
+MakeError(Error, BaseError);
 
-    class SysError : public Error {
+class SysError : public Error {
  public:
   int errNo;
 

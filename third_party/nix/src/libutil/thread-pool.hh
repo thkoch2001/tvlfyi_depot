@@ -11,11 +11,11 @@
 
 namespace nix {
 
-MakeError(ThreadPoolShutDown, Error)
+MakeError(ThreadPoolShutDown, Error);
 
-    /* A simple thread pool that executes a queue of work items
-       (lambdas). */
-    class ThreadPool {
+/* A simple thread pool that executes a queue of work items
+   (lambdas). */
+class ThreadPool {
  public:
   ThreadPool(size_t maxThreads = 0);
 

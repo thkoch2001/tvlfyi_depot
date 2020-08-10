@@ -235,10 +235,10 @@ Sink& operator<<(Sink& sink, const std::string& s);
 Sink& operator<<(Sink& sink, const Strings& s);
 Sink& operator<<(Sink& sink, const StringSet& s);
 
-MakeError(SerialisationError, Error)
+MakeError(SerialisationError, Error);
 
-    template <typename T>
-    T readNum(Source& source) {
+template <typename T>
+T readNum(Source& source) {
   unsigned char buf[8];
   source(buf, sizeof(buf));
 
