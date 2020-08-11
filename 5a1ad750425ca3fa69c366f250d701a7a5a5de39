@@ -34,6 +34,24 @@
       "revId": "5a1ad750425ca3fa69c366f250d701a7a5a5de39",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6677bbb6_1ae11cfe",
+        "filename": "third_party/nix/src/libutil/util.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-11T00:57:59Z",
+      "side": 1,
+      "message": "Implemented in CL 1705",
+      "parentUuid": "afe2bd8d_b7d02451",
+      "revId": "5a1ad750425ca3fa69c366f250d701a7a5a5de39",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
