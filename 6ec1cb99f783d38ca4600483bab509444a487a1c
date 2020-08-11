@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "89476b5f_0e1de739",
+        "filename": "third_party/nix/src/libutil/filesystem.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-11T20:09:23Z",
+      "side": 1,
+      "message": "I don\u0027t think the extra conversions to/from the path type are useful in this particular case, since we are appending a known value that is not going to contain slashes or other characters that could cause trouble",
+      "parentUuid": "4a105f80_a52eb195",
+      "revId": "6ec1cb99f783d38ca4600483bab509444a487a1c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4c2d276_0fe759c3",
         "filename": "third_party/nix/src/libutil/filesystem.cc",
         "patchSetId": 9
