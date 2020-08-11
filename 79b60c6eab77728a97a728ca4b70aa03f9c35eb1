@@ -16,6 +16,24 @@
       "revId": "79b60c6eab77728a97a728ca4b70aa03f9c35eb1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba8f4856_12751ef1",
+        "filename": "third_party/nix/src/tests/status_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-11T00:58:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50d9c623_3362034a",
+      "revId": "79b60c6eab77728a97a728ca4b70aa03f9c35eb1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
