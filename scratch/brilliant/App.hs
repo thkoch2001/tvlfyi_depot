@@ -7,14 +7,31 @@ import Utils ((|>))
 
 import qualified Data.Char as Char
 import qualified Utils
+import qualified Data.List.Split as Split
 import qualified Keyboard
 import qualified Data.HashMap.Strict as HM
 --------------------------------------------------------------------------------
 
 transform :: Keyboard -> Transform -> Keyboard
-transform (Keyboard xs) HorizontalFlip = xs |> fmap reverse |> Keyboard
-transform (Keyboard xs) VerticalFlip   = xs |> reverse |> Keyboard
-transform (Keyboard xs) (Shift n)      = xs |> fmap (Utils.rotate n) |> Keyboard
+
+transform (Keyboard xs) xform =
+  case xform of
+    HorizontalFlip ->
+      xs
+      |> fmap reverse
+      |> Keyboard
+
+    VerticalFlip ->
+      xs
+      |> reverse
+      |> Keyboard
+
+    Shift n ->
+      xs
+      |> concat
+      |> Utils.rotate n
+      |> Split.chunksOf 10
+      |> Keyboard
 
 retypePassage :: String -> Keyboard -> Maybe String
 retypePassage passage newKeyboard =

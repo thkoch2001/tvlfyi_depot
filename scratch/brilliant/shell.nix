@@ -10,6 +10,7 @@ in pkgs.mkShell {
       hspec
       optparse-applicative
       unordered-containers
+      split
     ]))
   ];
 }
