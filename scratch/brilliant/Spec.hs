@@ -2,6 +2,7 @@
 module Spec where
 --------------------------------------------------------------------------------
 import Test.Hspec
+import Test.QuickCheck
 import Keyboard (Keyboard(..))
 import Transforms (Transform(..))
 
@@ -38,7 +39,30 @@ main = hspec $ do
       Transforms.fromString "HVS10potato" == Nothing
 
   describe "App.transform" $ do
-    it "flips a keyboard horizontally" $ do
+    it "flips any keyboard horizontally" $ do
+      property $ \first second third fourth ->
+        App.transform (Keyboard [first, second, third, fourth]) HorizontalFlip == do
+          Keyboard [ reverse first
+                   , reverse second
+                   , reverse third
+                   , reverse fourth
+                   ]
+
+    it "flips any keyboard vertically" $ do
+      property $ \first second third fourth ->
+        App.transform (Keyboard [first, second, third, fourth]) VerticalFlip == do
+          Keyboard $ reverse [first, second, third, fourth]
+
+    it "shifts any keyboard" $ do
+      property $ \first second third fourth n ->
+        App.transform (Keyboard [first, second, third, fourth]) (Shift n) == do
+          Keyboard $ [ Utils.rotate n first
+                     , Utils.rotate n second
+                     , Utils.rotate n third
+                     , Utils.rotate n fourth
+                     ]
+
+    it "flips a QWERTY keyboard horizontally" $ do
       App.transform Keyboard.qwerty HorizontalFlip == do
         Keyboard [ ['0','9','8','7','6','5','4','3','2','1']
                  , ['P','O','I','U','Y','T','R','E','W','Q']
