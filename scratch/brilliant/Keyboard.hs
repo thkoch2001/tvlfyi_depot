@@ -5,6 +5,7 @@
 module Keyboard where
 --------------------------------------------------------------------------------
 import Utils
+import Data.Coerce
 import Data.Hashable (Hashable)
 import GHC.Generics (Generic)
 
@@ -32,50 +33,13 @@ instance Hashable Coord
 
 -- | List of characters to their QWERTY coordinatees.
 coords :: [(Char, Coord)]
-coords = [ ('0', Coord { row = 0, col = 0 })
-         , ('1', Coord { row = 0, col = 1 })
-         , ('2', Coord { row = 0, col = 2 })
-         , ('3', Coord { row = 0, col = 3 })
-         , ('4', Coord { row = 0, col = 4 })
-         , ('5', Coord { row = 0, col = 5 })
-         , ('6', Coord { row = 0, col = 6 })
-         , ('7', Coord { row = 0, col = 7 })
-         , ('8', Coord { row = 0, col = 8 })
-         , ('9', Coord { row = 0, col = 9 })
-         -- second row
-         , ('Q', Coord { row = 1, col = 0 })
-         , ('W', Coord { row = 1, col = 1 })
-         , ('E', Coord { row = 1, col = 2 })
-         , ('R', Coord { row = 1, col = 3 })
-         , ('T', Coord { row = 1, col = 4 })
-         , ('Y', Coord { row = 1, col = 5 })
-         , ('U', Coord { row = 1, col = 6 })
-         , ('I', Coord { row = 1, col = 7 })
-         , ('O', Coord { row = 1, col = 8 })
-         , ('P', Coord { row = 1, col = 9 })
-         -- third row
-         , ('A', Coord { row = 2, col = 0 })
-         , ('S', Coord { row = 2, col = 1 })
-         , ('D', Coord { row = 2, col = 2 })
-         , ('F', Coord { row = 2, col = 3 })
-         , ('G', Coord { row = 2, col = 4 })
-         , ('H', Coord { row = 2, col = 5 })
-         , ('J', Coord { row = 2, col = 6 })
-         , ('K', Coord { row = 2, col = 7 })
-         , ('L', Coord { row = 2, col = 8 })
-         , (';', Coord { row = 2, col = 9 })
-         -- fourth row
-         , ('Z', Coord { row = 3, col = 0 })
-         , ('X', Coord { row = 3, col = 1 })
-         , ('C', Coord { row = 3, col = 2 })
-         , ('V', Coord { row = 3, col = 3 })
-         , ('B', Coord { row = 3, col = 4 })
-         , ('N', Coord { row = 3, col = 5 })
-         , ('M', Coord { row = 3, col = 6 })
-         , (',', Coord { row = 3, col = 7 })
-         , ('.', Coord { row = 3, col = 8 })
-         , ('/', Coord { row = 3, col = 9 })
-         ]
+coords =
+  qwerty
+  |> coerce
+  |> fmap (zip [0..])
+  |> zip [0..]
+  |> fmap (\(row, xs) -> xs |> fmap (\(col, char) -> (char, Coord row col)))
+  |> mconcat
 
 -- | Mapping of characters to their coordinates on a QWERTY keyboard with the
 -- top-left corner as 0,0.
