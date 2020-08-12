@@ -2,8 +2,6 @@
 module Spec where
 --------------------------------------------------------------------------------
 import Test.Hspec
-import Test.QuickCheck
-import Control.Exception (evaluate)
 import Keyboard (Keyboard(..))
 import Transforms (Transform(..))
 
@@ -42,34 +40,34 @@ main = hspec $ do
   describe "App.transform" $ do
     it "flips a keyboard horizontally" $ do
       App.transform Keyboard.qwerty HorizontalFlip == do
-        Keyboard [ reverse ['1','2','3','4','5','6','7','8','9','0']
-                 , reverse ['Q','W','E','R','T','Y','U','I','O','P']
-                 , reverse ['A','S','D','F','G','H','J','K','L',';']
-                 , reverse ['Z','X','C','V','B','N','M',',','.','/']
+        Keyboard [ ['0','9','8','7','6','5','4','3','2','1']
+                 , ['P','O','I','U','Y','T','R','E','W','Q']
+                 , [';','L','K','J','H','G','F','D','S','A']
+                 , ['/','.',',','M','N','B','V','C','X','Z']
                  ]
 
     it "flips a keyboard vertically" $ do
       App.transform Keyboard.qwerty VerticalFlip == do
-        Keyboard $ reverse [ ['1','2','3','4','5','6','7','8','9','0']
-                           , ['Q','W','E','R','T','Y','U','I','O','P']
-                           , ['A','S','D','F','G','H','J','K','L',';']
-                           , ['Z','X','C','V','B','N','M',',','.','/']
-                           ]
-
-    it "shifts a keyboard N times" $ do
-      App.transform Keyboard.qwerty (Shift 2) == do
-        Keyboard $ [ Utils.rotate 2 ['1','2','3','4','5','6','7','8','9','0']
-                   , Utils.rotate 2 ['Q','W','E','R','T','Y','U','I','O','P']
-                   , Utils.rotate 2 ['A','S','D','F','G','H','J','K','L',';']
-                   , Utils.rotate 2 ['Z','X','C','V','B','N','M',',','.','/']
+        Keyboard $ [ ['Z','X','C','V','B','N','M',',','.','/']
+                   , ['A','S','D','F','G','H','J','K','L',';']
+                   , ['Q','W','E','R','T','Y','U','I','O','P']
+                   , ['1','2','3','4','5','6','7','8','9','0']
                    ]
 
-    it "shifts negative amounts" $ do
+    it "shifts a keyboard left N times" $ do
+      App.transform Keyboard.qwerty (Shift 2) == do
+        Keyboard $ [ ['3','4','5','6','7','8','9','0','1','2']
+                   , ['E','R','T','Y','U','I','O','P','Q','W']
+                   , ['D','F','G','H','J','K','L',';','A','S']
+                   , ['C','V','B','N','M',',','.','/','Z','X']
+                   ]
+
+    it "shifts right negative amounts" $ do
       App.transform Keyboard.qwerty (Shift (-3)) == do
-        Keyboard $ [ Utils.rotate (-3) ['1','2','3','4','5','6','7','8','9','0']
-                   , Utils.rotate (-3) ['Q','W','E','R','T','Y','U','I','O','P']
-                   , Utils.rotate (-3) ['A','S','D','F','G','H','J','K','L',';']
-                   , Utils.rotate (-3) ['Z','X','C','V','B','N','M',',','.','/']
+        Keyboard $ [ ['8','9','0','1','2','3','4','5','6','7']
+                   , ['I','O','P','Q','W','E','R','T','Y','U']
+                   , ['K','L',';','A','S','D','F','G','H','J']
+                   , [',','.','/','Z','X','C','V','B','N','M']
                    ]
 
   describe "Transforms.optimize" $ do
