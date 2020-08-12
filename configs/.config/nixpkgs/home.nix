@@ -1,7 +1,14 @@
 { config, pkgs, ... }:
 
+# I know of two ways to install my home environment using home-manager:
+#
+# $ home-manager switch
+# $ nix-shell ~/home-manager -A install
+#
+# I believe these calls depend on nixpkgs being set in NIX_PATH, which is a
+# dependency that I'm trying to prune...
 let
-  briefcase = import <briefcase> {};
+  briefcase = import /home/wpcarro/briefcase {};
 in {
   home = {
     packages = with pkgs; [
@@ -103,6 +110,7 @@ in {
       gsh = "git show HEAD";
       gpf = "git push --force-with-lease";
       gd = "git diff";
+      b = "cd ~/briefcase";
     };
     shellAbbrs = {
       sys = "systemctl";
@@ -122,9 +130,11 @@ in {
     };
   };
 
-  programs.fzf = {
-    enable = true;
+  programs.fzf = let
     defaultCommand = "fd --hidden --follow --exclude '.git'";
+  in {
+    enable = true;
+    defaultCommand = defaultCommand;
     fileWidgetCommand = defaultCommand;
     enableFishIntegration = true;
   };
