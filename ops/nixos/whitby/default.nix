@@ -170,7 +170,11 @@ in lib.fix(self: {
   };
 
   programs.mtr.enable = true;
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    passwordAuthentication = false;
+    challengeResponseAuthentication = false;
+  };
 
   # Run a handful of Buildkite agents to support parallel builds.
   services.buildkite-agents = listToAttrs (map (n: rec {
