@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cstdint>
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -903,7 +904,7 @@ static std::string showAttrPath(EvalState& state, Env& env,
   return out.str();
 }
 
-unsigned long nrLookups = 0;
+uint64_t nrLookups = 0;
 
 void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
   Value vTmp;
