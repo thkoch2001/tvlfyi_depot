@@ -3,13 +3,46 @@
 Apply a series of transforms to a QWERTY keyboard then use the new keyboard to
 re-type a passage of text.
 
+## Environment
+
+You will need [Nix][nix] to build this program on your machine. The good news is
+that you won't need any Haskell-specific dependencies like `ghc`, `cabal`, or
+`stack`: just Nix.
+
+Once you have Nix installed, to build the program, run the following from this
+project's top-level directory:
+
+```shell
+$ nix-build
+```
+
+This should output an executable named `transform-keyboard` within a `result`
+directory:
+
+```shell
+$ tree result
+result
+└── transform-keyboard
+```
+
+### Testing
+
+To run the test suite, run the following from the project's top-level directory:
+
+```shell
+$ nix-shell
+$ runhaskell Spec.hs
+```
+
+[nix]: https://nixos.org/download.html
+
 ## Usage
 
 Here are some `--help` and usage examples:
 
 ```shell
-$ runhaskell Main.hs --help
-Usage: Main.hs (-t|--transforms ARG) (-p|--passage ARG)
+$ ./result/transform-keyboard --help
+Usage: transform-keyboard (-t|--transforms ARG) (-p|--passage ARG)
   Transform a QWERTY keyboard using a string of commands
 
 Available options:
@@ -21,7 +54,7 @@ Available options:
 Now a working example:
 
 ```shell
-$ runhaskell Main.hs --transforms=HHVS12VHVHS3 --passage='Hello,Brilliant.'
+$ ./result/transform-keyboard --transforms=HHVS12VHVHS3 --passage='Hello,Brilliant.'
 Typing: "Hello,Brilliant."
 On this keyboard:
 [N][M][,][.][/][Z][X][C][V][B]
@@ -34,7 +67,7 @@ Result: QKRRF30LDRRDY1;4
 ...and an example with an erroneous input (i.e. `!`):
 
 ```shell
-$ runhaskell Main.hs --transforms=HHVS12VHVHS3 --passage='Hello,Brilliant!'
+$ ./result/transform-keyboard --transforms=HHVS12VHVHS3 --passage='Hello,Brilliant!'
 Typing: "Hello,Brilliant!"
 On this keyboard:
 [N][M][,][.][/][Z][X][C][V][B]
@@ -46,17 +79,4 @@ Looks like at least one of the characters in your input passage doesn't fit on o
 [Q][W][E][R][T][Y][U][I][O][P]
 [A][S][D][F][G][H][J][K][L][;]
 [Z][X][C][V][B][N][M][,][.][/]
-```
-
-## Environment
-
-You'll need `runhaskell` and a few other Haskell libraries, so call `nix-shell`
-from this project's root directory.
-
-## Testing
-
-To run the test suite:
-
-```shell
-$ runhaskell Spec.hs
 ```
