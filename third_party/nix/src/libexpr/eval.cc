@@ -9,6 +9,7 @@
 #include <new>
 #include <optional>
 #include <variant>
+#include <cstdint>
 
 #define GC_INCLUDE_NEW
 
@@ -903,7 +904,7 @@ static std::string showAttrPath(EvalState& state, Env& env,
   return out.str();
 }
 
-unsigned long nrLookups = 0;
+uint64_t nrLookups = 0;
 
 void ExprSelect::eval(EvalState& state, Env& env, Value& v) {
   Value vTmp;

@@ -11,7 +11,7 @@
 
 namespace nix {
 
-typedef enum {
+using ValueType = enum {
   tInt = 1,
   tBool,
   tString,
@@ -27,7 +27,7 @@ typedef enum {
   tPrimOpApp,
   _reserved1,  // formerly tExternal
   tFloat
-} ValueType;
+};
 
 class Bindings;
 struct Env;
