@@ -5,9 +5,10 @@ let
     rev = "afa9ca61924f05aacfe495a7ad0fd84709d236cc";
   }) {};
 
-  ghc = pkgs.haskellPackages.ghcWithPackages (hpkgs: [
-    hpkgs.optparse-applicative
-    hpkgs.unordered-containers
+  ghc = pkgs.haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
+    optparse-applicative
+    unordered-containers
+    split
   ]);
 in pkgs.stdenv.mkDerivation {
   name = "transform-keyboard";

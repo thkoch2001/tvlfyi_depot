@@ -57,11 +57,11 @@ Now a working example:
 $ ./result/transform-keyboard --transforms=HHVS12VHVHS3 --passage='Hello,Brilliant.'
 Typing: "Hello,Brilliant."
 On this keyboard:
-[N][M][,][.][/][Z][X][C][V][B]
-[H][J][K][L][;][A][S][D][F][G]
-[Y][U][I][O][P][Q][W][E][R][T]
-[6][7][8][9][0][1][2][3][4][5]
-Result: QKRRF30LDRRDY1;4
+[H][J][K][L][;][Q][W][E][R][T]
+[Y][U][I][O][P][1][2][3][4][5]
+[6][7][8][9][0][Z][X][C][V][B]
+[N][M][,][.][/][A][S][D][F][G]
+Result: ZIVV4D/O3VV36APF
 ```
 
 ...and an example with an erroneous input (i.e. `!`):
@@ -70,10 +70,10 @@ Result: QKRRF30LDRRDY1;4
 $ ./result/transform-keyboard --transforms=HHVS12VHVHS3 --passage='Hello,Brilliant!'
 Typing: "Hello,Brilliant!"
 On this keyboard:
-[N][M][,][.][/][Z][X][C][V][B]
-[H][J][K][L][;][A][S][D][F][G]
-[Y][U][I][O][P][Q][W][E][R][T]
-[6][7][8][9][0][1][2][3][4][5]
+[H][J][K][L][;][Q][W][E][R][T]
+[Y][U][I][O][P][1][2][3][4][5]
+[6][7][8][9][0][Z][X][C][V][B]
+[N][M][,][.][/][A][S][D][F][G]
 Looks like at least one of the characters in your input passage doesn't fit on our QWERTY keyboard:
 [1][2][3][4][5][6][7][8][9][0]
 [Q][W][E][R][T][Y][U][I][O][P]
