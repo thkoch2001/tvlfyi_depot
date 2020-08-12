@@ -23,13 +23,14 @@ let
     depot = depot;
   };
 in {
-  nixos       = readTree ./nixos;
-  utils       = readTree ./utils;
-  emacs       = readTree ./emacs;
-  website     = readTree ./website;
-  lisp        = readTree ./lisp;
-  gopkgs      = readTree ./gopkgs;
-  monzo_ynab  = readTree ./monzo_ynab;
-  third_party = readTree ./third_party;
-  tools       = readTree ./tools;
+  nixos        = readTree ./nixos;
+  utils        = readTree ./utils;
+  emacs        = readTree ./emacs;
+  website      = readTree ./website;
+  lisp         = readTree ./lisp;
+  gopkgs       = readTree ./gopkgs;
+  monzo_ynab   = readTree ./monzo_ynab;
+  third_party  = readTree ./third_party;
+  tools        = readTree ./tools;
+  buildHaskell = readTree ./buildHaskell;
 }
