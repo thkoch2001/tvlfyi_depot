@@ -1,19 +1,17 @@
 let
-  pkgs = import /home/wpcarro/nixpkgs {};
-in pkgs.mkShell {
-  buildInputs = with pkgs; [
-    (haskellPackages.ghcWithPackages (hpkgs: [
-      hpkgs.hspec
-      hpkgs.servant-server
-      hpkgs.aeson
-      hpkgs.wai-cors
-      hpkgs.warp
-      hpkgs.jwt
-      hpkgs.unordered-containers
-      hpkgs.base64
-      hpkgs.http-conduit
-      hpkgs.rio
-      hpkgs.envy
-    ]))
+  briefcase = import /home/wpcarro/briefcase {};
+in briefcase.buildHaskell.shell {
+  deps = hpkgs: with hpkgs; [
+    hspec
+    servant-server
+    aeson
+    wai-cors
+    warp
+    jwt
+    unordered-containers
+    base64
+    http-conduit
+    rio
+    envy
   ];
 }
