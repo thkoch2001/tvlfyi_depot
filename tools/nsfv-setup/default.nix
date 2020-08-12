@@ -23,5 +23,5 @@ in pkgs.writeShellScriptBin "nsfv-setup" ''
 
   SINK=$(${pulseaudio}/bin/pacmd info | ${ripgrep}/bin/rg -r '$1' '^Default sink name: (.*)$')
   echo "Setting up NSFV filtering to sink ''${SINK}"
-  ${pulseaudio}/bin/pacmd load-module module-ladspa-sink sink_name=NSFV sink_master=''${SINK} label=noise_suppressor_mono plugin=${pkgs.nsfv}/lib/ladspa/librnnoise_ladspa.so control=42
+  ${pulseaudio}/bin/pacmd load-module module-ladspa-sink sink_name=NSFV sink_master=''${SINK} label=noise_suppressor_mono plugin=${pkgs.nsfv}/lib/ladspa/librnnoise_ladspa.so control=42 rate=48000
 ''
