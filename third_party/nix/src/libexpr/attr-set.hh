@@ -25,15 +25,17 @@ using AttributeMap = absl::btree_map<Symbol, Attr>;
 
 class Bindings {
  public:
-  typedef AttributeMap::iterator iterator;
+  using iterator = AttributeMap::iterator;
+  using const_iterator = AttributeMap::const_iterator;
 
   // Allocate a new attribute set that is visible to the garbage
   // collector.
-  static Bindings* NewGC(size_t capacity = 0);
+  static std::unique_ptr<Bindings> NewGC(size_t capacity = 0);
 
   // Create a new attribute set by merging two others. This is used to
   // implement the `//` operator in Nix.
-  static Bindings* Merge(const Bindings& lhs, const Bindings& rhs);
+  static std::unique_ptr<Bindings> Merge(const Bindings& lhs,
+                                         const Bindings& rhs);
 
   // Return the number of contained elements.
   size_t size() const;
@@ -44,11 +46,18 @@ class Bindings {
   // Insert, but do not replace, values in the attribute set.
   void push_back(const Attr& attr);
 
+  // Are these two attribute sets deeply equal?
+  // Note: Does not special-case derivations. Use state.eqValues() to check
+  // attrsets that may be derivations.
+  bool Equal(EvalState& state, const Bindings* other) const;
+
   // Look up a specific element of the attribute set.
   iterator find(const Symbol& name);
 
   iterator begin();
+  const_iterator cbegin() const;
   iterator end();
+  const_iterator cend() const;
 
   // Returns the elements of the attribute set as a vector, sorted
   // lexicographically by keys.
