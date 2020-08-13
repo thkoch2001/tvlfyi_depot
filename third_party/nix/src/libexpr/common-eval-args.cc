@@ -32,8 +32,8 @@ MixEvalArgs::MixEvalArgs() {
       .handler([&](const std::string& s) { searchPath.push_back(s); });
 }
 
-Bindings* MixEvalArgs::getAutoArgs(EvalState& state) {
-  Bindings* res = Bindings::NewGC(autoArgs.size());
+std::unique_ptr<Bindings> MixEvalArgs::getAutoArgs(EvalState& state) {
+  auto res = Bindings::NewGC(autoArgs.size());
   for (auto& i : autoArgs) {
     Value* v = state.allocValue();
     if (i.second[0] == 'E') {
