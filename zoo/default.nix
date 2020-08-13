@@ -1,10 +1,10 @@
-let
-  briefcase = import /home/wpcarro/briefcase {};
-in briefcase.buildHaskell.program {
-  name = "shift-time";
+{ briefcase, ... }:
+
+briefcase.buildHaskell.program {
+  name = "zoo";
   srcs = builtins.path {
     path = ./.;
-    name = "shift-time-src";
+    name = "zoo-src";
   };
   ghcExtensions = [
     "OverloadedStrings"
@@ -15,14 +15,7 @@ in briefcase.buildHaskell.program {
   deps = hpkgs: with hpkgs; [
     servant-server
     aeson
-    wai-cors
     warp
-    jwt
-    unordered-containers
-    base64
-    http-conduit
     rio
-    envy
-    req
   ];
 }
