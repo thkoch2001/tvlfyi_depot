@@ -7,7 +7,19 @@
 
     libinput.enable = true;
 
-#     windowManager.i3 = {
+    displayManager = {
+      defaultSession = "none+i3";
+
+      lightdm = {
+        enable = true;
+        autoLogin = {
+          enable = true;
+          user = "grfn";
+        };
+      };
+    };
+
+    windowManager.i3.enable = true;
 #       enable = true;
 #       extraPackages = with pkgs; [
 #         i3status

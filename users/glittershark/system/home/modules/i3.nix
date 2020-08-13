@@ -51,7 +51,8 @@ in {
         peek
       ];
 
-      xsession.scriptPath = ".hm-xsession";
+      xsession.scriptPath = ".xsession";
+
       xsession.windowManager.i3 = {
         enable = true;
         config = {
