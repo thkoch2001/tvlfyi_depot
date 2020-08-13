@@ -290,11 +290,7 @@ struct CompareValues {
   }
 };
 
-#if HAVE_BOEHMGC
-typedef std::list<Value*, gc_allocator<Value*>> ValueList;
-#else
 typedef std::list<Value*> ValueList;
-#endif
 
 static void prim_genericClosure(EvalState& state, const Pos& pos, Value** args,
                                 Value& v) {
@@ -1603,7 +1599,7 @@ static void prim_sort(EvalState& state, const Pos& pos, Value** args,
   state.forceList(*args[1], pos);
 
   // Copy of the input list which can be sorted in place.
-  auto outlist = new (GC) NixList(*args[1]->list);
+  auto outlist = new NixList(*args[1]->list);
 
   std::for_each(outlist->begin(), outlist->end(),
                 [&](Value* val) { state.forceValue(*val); });
@@ -1633,8 +1629,8 @@ static void prim_partition(EvalState& state, const Pos& pos, Value** args,
   state.forceFunction(*args[0], pos);
   state.forceList(*args[1], pos);
 
-  NixList* right = new (GC) NixList();
-  NixList* wrong = new (GC) NixList();
+  NixList* right = new NixList();
+  NixList* wrong = new NixList();
 
   for (Value* elem : *args[1]->list) {
     state.forceValue(*elem, pos);
@@ -1664,7 +1660,7 @@ static void prim_concatMap(EvalState& state, const Pos& pos, Value** args,
   state.forceFunction(*args[0], pos);
   state.forceList(*args[1], pos);
 
-  NixList* outlist = new (GC) NixList;
+  NixList* outlist = new NixList;
 
   for (Value* elem : *args[1]->list) {
     auto out = state.allocValue();

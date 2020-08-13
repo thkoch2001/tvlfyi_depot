@@ -3,9 +3,6 @@
 #include <tuple>
 #include <vector>
 
-#include <gc/gc_allocator.h>
-#include <gc/gc_cpp.h>
-
 #include "libexpr/symbol-table.hh"
 #include "libutil/types.hh"
 
@@ -66,32 +63,32 @@ struct Value;
    the inputSrcs of the derivations.
 
    For canonicity, the store paths should be in sorted order. */
-struct NixString : public gc {
+struct NixString {
   const char* s;
   const char** context;  // must be in sorted order
 };
 
-struct NixThunk : public gc {
+struct NixThunk {
   Env* env;
   Expr* expr;
 };
 
-struct NixApp : public gc {
+struct NixApp {
   Value *left, *right;
 };
 
-struct NixLambda : public gc {
+struct NixLambda {
   Env* env;
   ExprLambda* fun;
 };
 
-struct NixPrimOpApp : public gc {
+struct NixPrimOpApp {
   Value *left, *right;
 };
 
-using NixList = std::vector<Value*, traceable_allocator<Value*>>;
+using NixList = std::vector<Value*>;
 
-struct Value : public gc {
+struct Value {
   ValueType type;
   union {  // TODO(tazjin): std::variant
     NixInt integer;
@@ -177,9 +174,7 @@ void mkPath(Value& v, const char* s);
    not included. */
 size_t valueSize(const Value& v);
 
-typedef std::map<Symbol, Value*, std::less<Symbol>,
-                 traceable_allocator<std::pair<const Symbol, Value*>>>
-    ValueMap;
+using ValueMap = std::map<Symbol, Value*>;
 
 std::shared_ptr<Value*> allocRootValue(Value* v);
 

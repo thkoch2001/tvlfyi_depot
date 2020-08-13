@@ -2,7 +2,6 @@
 #pragma once
 
 #include <absl/container/btree_map.h>
-#include <gc/gc_allocator.h>
 
 #include "libexpr/nixexpr.hh"
 #include "libexpr/symbol-table.hh"
@@ -14,7 +13,7 @@ class EvalState;
 struct Value;
 
 /* Map one attribute name to its value. */
-struct Attr : public gc {
+struct Attr {
   Symbol name;
   Value* value;  // TODO(tazjin): Who owns this?
   Pos* pos;      // TODO(tazjin): Who owns this?
@@ -25,10 +24,9 @@ struct Attr : public gc {
 // Convenience alias for the backing map, with the garbage-collecting
 // allocator explicitly specified.
 using AttributeMap =
-    absl::btree_map<Symbol, Attr, std::less<Symbol>,
-                    traceable_allocator<std::pair<const Symbol, Attr>>>;
+    absl::btree_map<Symbol, Attr>;
 
-class Bindings : public gc {
+class Bindings {
  public:
   typedef AttributeMap::iterator iterator;
 

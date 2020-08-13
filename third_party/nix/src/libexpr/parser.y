@@ -15,12 +15,7 @@
 #define YY_NO_INPUT 1 // disable unused yyinput features
 #include "libexpr/parser.hh"
 
-// Allow GC tracing of YY-allocated structures
-#define YYMALLOC GC_MALLOC_UNCOLLECTABLE
-#define YYFREE GC_FREE
-#define YYREALLOC GC_REALLOC
-
-struct YYSTYPE : public gc {
+struct YYSTYPE {
   union {
     nix::Expr * e;
     nix::ExprList * list;

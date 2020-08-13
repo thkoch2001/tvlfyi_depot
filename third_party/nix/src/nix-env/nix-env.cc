@@ -48,7 +48,7 @@ struct InstallSourceInfo {
   Bindings* autoArgs;
 };
 
-struct Globals : public gc {
+struct Globals {
   InstallSourceInfo instSource;
   Path profile;
   std::shared_ptr<EvalState> state;
