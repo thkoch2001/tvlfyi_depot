@@ -11,7 +11,7 @@ class Bindings;
 struct MixEvalArgs : virtual Args {
   MixEvalArgs();
 
-  Bindings* getAutoArgs(EvalState& state);
+  std::unique_ptr<Bindings> getAutoArgs(EvalState& state);
 
   Strings searchPath;
 

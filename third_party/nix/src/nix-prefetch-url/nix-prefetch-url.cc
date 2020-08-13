@@ -107,7 +107,7 @@ static int _main(int argc, char** argv) {
     auto store = openStore();
     auto state = std::make_unique<EvalState>(myArgs.searchPath, store);
 
-    Bindings& autoArgs = *myArgs.getAutoArgs(*state);
+    std::unique_ptr<Bindings> autoArgs = myArgs.getAutoArgs(*state);
 
     /* If -A is given, get the URI from the specified Nix
        expression. */
@@ -122,7 +122,7 @@ static int _main(int argc, char** argv) {
           resolveExprPath(lookupFileArg(*state, args.empty() ? "." : args[0]));
       Value vRoot;
       state->evalFile(path, vRoot);
-      Value& v(*findAlongAttrPath(*state, attrPath, autoArgs, vRoot));
+      Value& v(*findAlongAttrPath(*state, attrPath, autoArgs.get(), vRoot));
       state->forceAttrs(v);
 
       /* Extract the URI. */
