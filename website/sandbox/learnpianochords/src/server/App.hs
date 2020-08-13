@@ -12,11 +12,13 @@ import Utils
 
 import qualified Network.Wai.Handler.Warp as Warp
 import qualified GoogleSignIn
+import qualified Stripe
 import qualified Types as T
 --------------------------------------------------------------------------------
 
 server :: T.Context -> Server API
-server T.Context{..} = verifyGoogleSignIn
+server ctx@T.Context{..} = verifyGoogleSignIn
+                      :<|> createPaymentIntent
   where
     verifyGoogleSignIn :: T.VerifyGoogleSignInRequest -> Handler NoContent
     verifyGoogleSignIn T.VerifyGoogleSignInRequest{..} = do
@@ -30,6 +32,11 @@ server T.Context{..} = verifyGoogleSignIn
           pure NoContent
         err -> do
           throwError err401 { errBody = err |> GoogleSignIn.explainResult |> cs }
+
+    createPaymentIntent :: T.PaymentIntent -> Handler T.CreatePaymentIntentResponse
+    createPaymentIntent pmt = do
+      clientSecret <- liftIO $ Stripe.createPaymentIntent ctx pmt
+      pure T.CreatePaymentIntentResponse{..}
 
 run :: T.App
 run = do
