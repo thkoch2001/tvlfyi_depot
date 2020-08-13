@@ -7,7 +7,7 @@
 
 namespace nix {
 
-struct DrvInfo : public gc {
+struct DrvInfo {
  public:
   typedef std::map<std::string, Path> Outputs;
 
@@ -67,11 +67,7 @@ struct DrvInfo : public gc {
   bool hasFailed() { return failed; };
 };
 
-#if HAVE_BOEHMGC
-typedef std::list<DrvInfo, traceable_allocator<DrvInfo> > DrvInfos;
-#else
 typedef std::list<DrvInfo> DrvInfos;
-#endif
 
 /* If value `v' denotes a derivation, return a DrvInfo object
    describing it. Otherwise return nothing. */
