@@ -42,7 +42,7 @@
 
    ("m" "Email" entry
     (file +org-default-todo-file)
-    "* TODO [[%l][%:subject]] :email:\n%i")
+    "* TODO [%l[%:subject]] :email:\n%i")
 
    ("n" "Notes" entry
     (file +org-default-todo-file)
@@ -52,7 +52,7 @@
 
    ("c" "Task note" entry
     (clock)
-    "* %U %?\n%i[[%l][Context]]\n"
+    "* %U %?\n%i[%l[Context]]\n"
     :kill-buffer t
     :unnarrowed t)
 
