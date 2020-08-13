@@ -1096,7 +1096,7 @@ void EvalState::callFunction(Value& fun, Value& arg, Value& v, const Pos& pos) {
 // prevents tail-call optimisation.
 void EvalState::incrFunctionCall(ExprLambda* fun) { functionCalls[fun]++; }
 
-void EvalState::autoCallFunction(Bindings& args, Value& fun, Value& res) {
+void EvalState::autoCallFunction(Bindings* args, Value& fun, Value& res) {
   forceValue(fun);
 
   if (fun.type == tAttrs) {
@@ -1118,8 +1118,8 @@ void EvalState::autoCallFunction(Bindings& args, Value& fun, Value& res) {
   mkAttrs(*actualArgs, fun.lambda.fun->formals->formals.size());
 
   for (auto& i : fun.lambda.fun->formals->formals) {
-    Bindings::iterator j = args.find(i.name);
-    if (j != args.end()) {
+    Bindings::iterator j = args->find(i.name);
+    if (j != args->end()) {
       actualArgs->attrs->push_back(j->second);
     } else if (i.def == nullptr) {
       throwTypeError(
@@ -1615,22 +1615,7 @@ bool EvalState::eqValues(Value& v1, Value& v2) {
         }
       }
 
-      if (v1.attrs->size() != v2.attrs->size()) {
-        return false;
-      }
-
-      /* Otherwise, compare the attributes one by one. */
-      Bindings::iterator i;
-      Bindings::iterator j;
-      for (i = v1.attrs->begin(), j = v2.attrs->begin(); i != v1.attrs->end();
-           ++i, ++j) {
-        if (i->second.name != j->second.name ||
-            !eqValues(*i->second.value, *j->second.value)) {
-          return false;
-        }
-      }
-
-      return true;
+      return v1.attrs->Equal(*this, v2.attrs.get());
     }
 
     /* Functions are incomparable. */
@@ -1811,8 +1796,8 @@ size_t valueSize(const Value& v) {
         sz += doString(v.path);
         break;
       case tAttrs:
-        if (seenBindings.find(v.attrs) == seenBindings.end()) {
-          seenBindings.insert(v.attrs);
+        if (seenBindings.find(v.attrs.get()) == seenBindings.end()) {
+          seenBindings.insert(v.attrs.get());
           sz += sizeof(Bindings);
           for (const auto& i : *v.attrs) {
             sz += doValue(*i.second.value);

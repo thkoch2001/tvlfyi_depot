@@ -23,7 +23,7 @@ static bool indirectRoot = false;
 enum OutputKind { okPlain, okXML, okJSON };
 
 void processExpr(EvalState& state, const Strings& attrPaths, bool parseOnly,
-                 bool strict, Bindings& autoArgs, bool evalOnly,
+                 bool strict, Bindings* autoArgs, bool evalOnly,
                  OutputKind output, bool location, Expr* e) {
   if (parseOnly) {
     std::cout << format("%1%\n") % *e;
@@ -40,7 +40,7 @@ void processExpr(EvalState& state, const Strings& attrPaths, bool parseOnly,
     PathSet context;
     if (evalOnly) {
       Value vRes;
-      if (autoArgs.empty()) {
+      if (autoArgs->empty()) {
         vRes = v;
       } else {
         state.autoCallFunction(autoArgs, v, vRes);
@@ -176,7 +176,7 @@ static int _main(int argc, char** argv) {
       });
     }
 
-    Bindings& autoArgs = *myArgs.getAutoArgs(*state);
+    std::unique_ptr<Bindings> autoArgs = myArgs.getAutoArgs(*state);
 
     if (attrPaths.empty()) {
       attrPaths = {""};
@@ -195,8 +195,8 @@ static int _main(int argc, char** argv) {
 
     if (readStdin) {
       Expr* e = state->parseStdin();
-      processExpr(*state, attrPaths, parseOnly, strict, autoArgs, evalOnly,
-                  outputKind, xmlOutputSourceLocation, e);
+      processExpr(*state, attrPaths, parseOnly, strict, autoArgs.get(),
+                  evalOnly, outputKind, xmlOutputSourceLocation, e);
     } else if (files.empty() && !fromArgs) {
       files.push_back("./default.nix");
     }
@@ -206,8 +206,8 @@ static int _main(int argc, char** argv) {
                     ? state->parseExprFromString(i, absPath("."))
                     : state->parseExprFromFile(resolveExprPath(
                           state->checkSourcePath(lookupFileArg(*state, i))));
-      processExpr(*state, attrPaths, parseOnly, strict, autoArgs, evalOnly,
-                  outputKind, xmlOutputSourceLocation, e);
+      processExpr(*state, attrPaths, parseOnly, strict, autoArgs.get(),
+                  evalOnly, outputKind, xmlOutputSourceLocation, e);
     }
 
     state->printStats();

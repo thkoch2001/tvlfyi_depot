@@ -247,8 +247,9 @@ class EvalState {
   void callPrimOp(Value& fun, Value& arg, Value& v, const Pos& pos);
 
   /* Automatically call a function for which each argument has a
-     default value or has a binding in the `args' map. */
-  void autoCallFunction(Bindings& args, Value& fun, Value& res);
+     default value or has a binding in the `args' map.  'args' need
+     not live past the end of the call. */
+  void autoCallFunction(Bindings* args, Value& fun, Value& res);
 
   /* Allocation primitives. */
   Value* allocValue();

@@ -9,8 +9,6 @@
 
 namespace nix {
 
-static Bindings ZERO_BINDINGS;
-
 // This function inherits its name from previous implementations, in
 // which Bindings was backed by an array of elements which was scanned
 // linearly.
@@ -22,8 +20,6 @@ static Bindings ZERO_BINDINGS;
 // This behaviour is mimicked by using .insert(), which will *not*
 // override existing values.
 void Bindings::push_back(const Attr& attr) {
-  assert(this != &ZERO_BINDINGS);
-
   auto [_, inserted] = attributes_.insert({attr.name, attr});
 
   if (!inserted) {
@@ -51,19 +47,46 @@ Bindings::iterator Bindings::find(const Symbol& name) {
   return attributes_.find(name);
 }
 
-Bindings::iterator Bindings::begin() { return attributes_.begin(); }
-
-Bindings::iterator Bindings::end() { return attributes_.end(); }
-
-Bindings* Bindings::NewGC(size_t capacity) {
-  if (capacity == 0) {
-    return &ZERO_BINDINGS;
+bool Bindings::Equal(EvalState& state, const Bindings* other) const {
+  if (this == other) {
+    return true;
   }
 
-  return new Bindings;
+  if (this->attributes_.size() != other->attributes_.size()) {
+    return false;
+  }
+
+  Bindings::const_iterator i;
+  Bindings::const_iterator j;
+  for (i = this->cbegin(), j = other->cbegin(); i != this->cend(); ++i, ++j) {
+    if (i->second.name != j->second.name ||
+        !state.eqValues(*i->second.value, *j->second.value)) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
-Bindings* Bindings::Merge(const Bindings& lhs, const Bindings& rhs) {
+Bindings::iterator Bindings::begin() { return attributes_.begin(); }
+Bindings::iterator Bindings::end() { return attributes_.end(); }
+Bindings::const_iterator Bindings::cbegin() const {
+  return attributes_.cbegin();
+}
+
+Bindings::const_iterator Bindings::cend() const { return attributes_.cend(); }
+
+std::unique_ptr<Bindings> Bindings::NewGC(size_t capacity) {
+  if (capacity == 0) {
+    // TODO(tazjin): A lot of 0-capacity Bindings are allocated.
+    // It would be nice to optimize that.
+  }
+
+  return std::make_unique<Bindings>();
+}
+
+std::unique_ptr<Bindings> Bindings::Merge(const Bindings& lhs,
+                                          const Bindings& rhs) {
   auto bindings = NewGC(lhs.size() + rhs.size());
 
   // Values are merged by inserting the entire iterator range of both

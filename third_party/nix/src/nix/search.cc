@@ -110,7 +110,8 @@ struct CmdSearch final : SourceExprCommand, MixJSON {
 
         if (v->type == tLambda && toplevel) {
           Value* v2 = state->allocValue();
-          state->autoCallFunction(*Bindings::NewGC(), *v, *v2);
+          auto dummyArgs = Bindings::NewGC();
+          state->autoCallFunction(dummyArgs.get(), *v, *v2);
           v = v2;
           state->forceValue(*v);
         }
