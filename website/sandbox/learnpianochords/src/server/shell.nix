@@ -13,5 +13,6 @@ in briefcase.buildHaskell.shell {
     http-conduit
     rio
     envy
+    req
   ];
 }

@@ -18,6 +18,7 @@ getAppContext = do
     Left err -> pure $ Left err
     Right T.Env{..} -> pure $ Right T.Context
       { contextGoogleClientID = envGoogleClientID
+      , contextStripeAPIKey = envStripeAPIKey
       , contextServerPort = envServerPort
       , contextClientPort = envClientPort
       }
