@@ -4,5 +4,6 @@ in briefcase.buildHaskell.shell {
   deps = hpkgs: with hpkgs; [
     hspec
     rio
+    string-conversions
   ];
 }
