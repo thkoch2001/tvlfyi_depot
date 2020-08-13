@@ -39,7 +39,7 @@ static Strings parseAttrPath(const std::string& s) {
 }
 
 Value* findAlongAttrPath(EvalState& state, const std::string& attrPath,
-                         Bindings& autoArgs, Value& vIn) {
+                         Bindings* autoArgs, Value& vIn) {
   Strings tokens = parseAttrPath(attrPath);
 
   Error attrError =

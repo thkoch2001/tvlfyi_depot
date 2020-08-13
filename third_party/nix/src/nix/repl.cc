@@ -35,7 +35,7 @@ namespace nix {
 struct NixRepl {
   std::string curDir;
   EvalState state;
-  Bindings* autoArgs;
+  std::unique_ptr<Bindings> autoArgs;
 
   Strings loadedFiles;
 
@@ -575,7 +575,7 @@ void NixRepl::loadFile(const Path& path) {
   Value v;
   Value v2;
   state.evalFile(lookupFileArg(state, path), v);
-  state.autoCallFunction(*autoArgs, v, v2);
+  state.autoCallFunction(autoArgs.get(), v, v2);
   addAttrsToScope(v2);
 }
 

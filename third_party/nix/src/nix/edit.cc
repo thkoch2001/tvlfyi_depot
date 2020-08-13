@@ -30,8 +30,8 @@ struct CmdEdit final : InstallableCommand {
 
     Value* v2;
     try {
-      auto dummyArgs = Bindings::NewGC();
-      v2 = findAlongAttrPath(*state, "meta.position", *dummyArgs, *v);
+      auto dummyArgs = Bindings::New();
+      v2 = findAlongAttrPath(*state, "meta.position", dummyArgs.get(), *v);
     } catch (Error&) {
       throw Error("package '%s' has no source location information",
                   installable->what());

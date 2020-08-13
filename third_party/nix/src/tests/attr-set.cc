@@ -121,14 +121,8 @@ class AttrSetTest : public ::testing::Test {
     symbol_table = &eval_state_->symbols;
   }
 
-  void assert_bindings_equal(nix::Bindings& lhs, nix::Bindings& rhs) {
-    Value lhs_val;
-    Value rhs_val;
-    lhs_val.type = rhs_val.type = ValueType::tAttrs;
-    lhs_val.attrs = &lhs;
-    rhs_val.attrs = &lhs;
-
-    RC_ASSERT(eval_state_->eqValues(lhs_val, rhs_val));
+  void assert_bindings_equal(nix::Bindings* lhs, nix::Bindings* rhs) {
+    RC_ASSERT(lhs->Equal(rhs, *eval_state_));
   }
 };
 
@@ -136,24 +130,26 @@ class AttrSetMonoidTest : public AttrSetTest {};
 
 RC_GTEST_FIXTURE_PROP(AttrSetMonoidTest, mergeLeftIdentity,
                       (nix::Bindings && bindings)) {
-  auto empty_bindings = nix::Bindings::NewGC();
-  auto result = *Bindings::Merge(*empty_bindings, bindings);
-  assert_bindings_equal(result, bindings);
+  auto empty_bindings = nix::Bindings::New();
+  auto result = Bindings::Merge(*empty_bindings, bindings);
+  assert_bindings_equal(result.get(), &bindings);
 }
 
 RC_GTEST_FIXTURE_PROP(AttrSetMonoidTest, mergeRightIdentity,
                       (nix::Bindings && bindings)) {
-  auto empty_bindings = nix::Bindings::NewGC();
-  auto result = *Bindings::Merge(bindings, *empty_bindings);
-  assert_bindings_equal(result, bindings);
+  auto empty_bindings = nix::Bindings::New();
+  auto result = Bindings::Merge(bindings, *empty_bindings);
+  assert_bindings_equal(result.get(), &bindings);
 }
 
 RC_GTEST_FIXTURE_PROP(AttrSetMonoidTest, mergeAssociative,
                       (nix::Bindings && bindings_1, nix::Bindings&& bindings_2,
                        nix::Bindings&& bindings_3)) {
-  assert_bindings_equal(
-      *Bindings::Merge(bindings_1, *Bindings::Merge(bindings_2, bindings_3)),
-      *Bindings::Merge(*Bindings::Merge(bindings_1, bindings_2), bindings_3));
+  auto b231 =
+      Bindings::Merge(bindings_1, *Bindings::Merge(bindings_2, bindings_3));
+  auto b123 =
+      Bindings::Merge(*Bindings::Merge(bindings_1, bindings_2), bindings_3);
+  assert_bindings_equal(b231.get(), b123.get());
 }
 
 }  // namespace nix

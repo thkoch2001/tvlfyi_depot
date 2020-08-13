@@ -20,8 +20,8 @@ DrvInfos queryInstalled(EvalState& state, const Path& userEnv) {
   if (pathExists(manifestFile)) {
     Value v;
     state.evalFile(manifestFile, v);
-    Bindings& bindings(*Bindings::NewGC());
-    getDerivations(state, v, "", bindings, elems, false);
+    std::unique_ptr<Bindings> bindings(Bindings::New());
+    getDerivations(state, v, "", bindings.get(), elems, false);
   }
   return elems;
 }
