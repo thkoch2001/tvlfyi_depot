@@ -7,7 +7,6 @@
 
 #include <absl/container/btree_map.h>
 #include <bits/stdint-intn.h>
-#include <gc/gc_cpp.h>
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
 #include <rapidcheck/Assertions.h>
@@ -55,7 +54,7 @@ struct Arbitrary<Value*> {
   static Gen<nix::Value*> arbitrary() {
     return gen::apply(
         [](nix::ValueType typ, int i) {
-          auto ret = new (GC) Value();
+          auto ret = new Value();
           ret->type = typ;
           ret->integer = i;
           return ret;
@@ -78,7 +77,7 @@ struct Arbitrary<nix::Pos*> {
   static Gen<nix::Pos*> arbitrary() {
     return gen::apply(
         [](unsigned int line, unsigned int column) {
-          return new (GC) Pos({}, line, column);
+          return new Pos({}, line, column);
         },
         gen::arbitrary<unsigned int>(), gen::arbitrary<unsigned int>());
   }

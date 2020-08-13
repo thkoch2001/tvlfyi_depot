@@ -3,7 +3,6 @@
 #include <new>
 
 #include <absl/container/btree_map.h>
-#include <gc/gc_cpp.h>
 #include <glog/logging.h>
 
 #include "libexpr/eval-inline.hh"
@@ -61,7 +60,7 @@ Bindings* Bindings::NewGC(size_t capacity) {
     return &ZERO_BINDINGS;
   }
 
-  return new (GC) Bindings;
+  return new Bindings;
 }
 
 Bindings* Bindings::Merge(const Bindings& lhs, const Bindings& rhs) {

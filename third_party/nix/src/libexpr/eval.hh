@@ -5,9 +5,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <gc/gc_allocator.h>
-#include <gc/gc_cpp.h>
-
 #include "libexpr/attr-set.hh"
 #include "libexpr/nixexpr.hh"
 #include "libexpr/symbol-table.hh"
@@ -39,16 +36,16 @@ struct PrimOp {
       : fun(fun), arity(arity), name(name) {}
 };
 
-struct Env : public gc {
+struct Env {
   Env(unsigned short size) : size(size) {
-    values = std::vector<Value*, traceable_allocator<Value*>>(size);
+    values = std::vector<Value*>(size);
   }
 
   Env* up;
   unsigned short size;           // used by ‘valueSize’
   unsigned short prevWith : 14;  // nr of levels up to next `with' environment
   enum { Plain = 0, HasWithExpr, HasWithAttrs } type : 2;
-  std::vector<Value*, traceable_allocator<Value*>> values;
+  std::vector<Value*> values;
   Expr* withAttrsExpr = nullptr;
 };
 
@@ -63,14 +60,12 @@ typedef std::map<Path, Path> SrcToStore;
 
 std::ostream& operator<<(std::ostream& str, const Value& v);
 
-typedef std::pair<std::string, std::string> SearchPathElem;
-typedef std::list<SearchPathElem> SearchPath;
+using SearchPathElem = std::pair<std::string, std::string>;
+using SearchPath = std::list<SearchPathElem>;
 
-typedef std::map<Path, Expr*, std::less<Path>,
-                 traceable_allocator<std::pair<const Path, Expr*>>>
-    FileParseCache;
+using FileParseCache = std::map<Path, Expr*>;
 
-class EvalState : public gc {
+class EvalState {
  public:
   SymbolTable symbols;
 
@@ -100,9 +95,7 @@ class EvalState : public gc {
   FileParseCache fileParseCache;
 
   /* A cache from path names to values. */
-  typedef std::map<Path, Value, std::less<Path>,
-                   traceable_allocator<std::pair<const Path, Value>>>
-      FileEvalCache;
+  using FileEvalCache = std::map<Path, Value>;
   FileEvalCache fileEvalCache;
 
   SearchPath searchPath;
