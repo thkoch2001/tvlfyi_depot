@@ -11,13 +11,9 @@
 #include <optional>
 #include <variant>
 
-#define GC_INCLUDE_NEW
-
 #include <absl/base/call_once.h>
 #include <absl/container/flat_hash_set.h>
 #include <absl/strings/match.h>
-#include <gc/gc.h>
-#include <gc/gc_cpp.h>
 #include <glog/logging.h>
 #include <sys/resource.h>
 #include <sys/time.h>
@@ -38,52 +34,7 @@
 namespace nix {
 namespace {
 
-// Called when the Boehm GC runs out of memory.
-static void* BoehmOomHandler(size_t requested) {
-  /* Convert this to a proper C++ exception. */
-  LOG(FATAL) << "Garbage collector ran out of memory; requested " << requested
-             << " bytes";
-  throw std::bad_alloc();
-}
-
-void ConfigureBoehmGc() {
-  /* Don't look for interior pointers. This reduces the odds of
-     misdetection a bit. */
-  GC_set_all_interior_pointers(0);
-
-  /* We don't have any roots in data segments, so don't scan from
-     there. */
-  GC_set_no_dls(1);
-
-  GC_INIT();
-
-  GC_set_oom_fn(BoehmOomHandler);
-
-  /* Set the initial heap size to something fairly big (25% of
-     physical RAM, up to a maximum of 384 MiB) so that in most cases
-     we don't need to garbage collect at all.  (Collection has a
-     fairly significant overhead.)  The heap size can be overridden
-     through libgc's GC_INITIAL_HEAP_SIZE environment variable.  We
-     should probably also provide a nix.conf setting for this.  Note
-     that GC_expand_hp() causes a lot of virtual, but not physical
-     (resident) memory to be allocated.  This might be a problem on
-     systems that don't overcommit. */
-  if (getenv("GC_INITIAL_HEAP_SIZE") == nullptr) {
-    size_t size = 32 * 1024 * 1024;
-#if HAVE_SYSCONF && defined(_SC_PAGESIZE) && defined(_SC_PHYS_PAGES)
-    size_t maxSize = 384 * 1024 * 1024;
-    long pageSize = sysconf(_SC_PAGESIZE);
-    long pages = sysconf(_SC_PHYS_PAGES);
-    if (pageSize != -1) {
-      size = (pageSize * pages) / 4;
-    }  // 25% of RAM
-    if (size > maxSize) {
-      size = maxSize;
-    }
-#endif
-    DLOG(INFO) << "setting initial heap size to " << size << " bytes";
-    GC_expand_hp(size);
-  }
+void ConfigureGc() { /* This function intentionally left blank. */
 }
 
 }  // namespace
@@ -92,13 +43,13 @@ namespace expr {
 
 absl::once_flag gc_flag;
 
-void InitGC() { absl::call_once(gc_flag, &ConfigureBoehmGc); }
+void InitGC() { absl::call_once(gc_flag, &ConfigureGc); }
 
 }  // namespace expr
 
 static char* dupString(const char* s) {
   char* t;
-  t = GC_STRDUP(s);
+  t = strdup(s);
   if (t == nullptr) {
     throw std::bad_alloc();
   }
@@ -106,7 +57,7 @@ static char* dupString(const char* s) {
 }
 
 std::shared_ptr<Value*> allocRootValue(Value* v) {
-  return std::allocate_shared<Value*>(traceable_allocator<Value*>(), v);
+  return std::make_shared<Value*>(v);
 }
 
 static void printValue(std::ostream& str, std::set<const Value*>& active,
@@ -489,7 +440,7 @@ Value* EvalState::addPrimOp(const std::string& name, size_t arity,
   Symbol sym = symbols.Create(name2);
   // Even though PrimOp doesn't need tracing, it needs to be collected.
   v->type = tPrimOp;
-  v->primOp = new (GC) PrimOp(primOp, arity, sym);
+  v->primOp = new PrimOp(primOp, arity, sym);
   staticBaseEnv.vars[symbols.Create(name)] = baseEnvDispl;
   baseEnv.values[baseEnvDispl++] = v;
   baseEnv.values[0]->attrs->push_back(Attr(sym, v));
@@ -631,7 +582,7 @@ inline Value* EvalState::lookupVar(Env* env, const ExprVar& var, bool noEval) {
 
 Value* EvalState::allocValue() {
   nrValues++;
-  return new (GC) Value;
+  return new Value;
 }
 
 Env& EvalState::allocEnv(size_t size) {
@@ -655,7 +606,7 @@ void EvalState::mkList(Value& v, NixList* list) {
 }
 
 void EvalState::mkList(Value& v, size_t size) {
-  EvalState::mkList(v, new (GC) NixList(size));
+  EvalState::mkList(v, new NixList(size));
 }
 
 unsigned long nrThunks = 0;
@@ -1262,7 +1213,7 @@ void ExprOpConcatLists::eval(EvalState& state, Env& env, Value& v) {
 void EvalState::concatLists(Value& v, const NixList& lists, const Pos& pos) {
   nrListConcats++;
 
-  auto outlist = new (GC) NixList();
+  auto outlist = new NixList();
 
   for (Value* list : lists) {
     forceList(*list, pos);
@@ -1344,10 +1295,7 @@ void ExprPos::eval(EvalState& state, Env& env, Value& v) {
 }
 
 template <typename T>
-using traceable_flat_hash_set =
-    absl::flat_hash_set<T, absl::container_internal::hash_default_hash<T>,
-                        absl::container_internal::hash_default_eq<T>,
-                        traceable_allocator<T>>;
+using traceable_flat_hash_set = absl::flat_hash_set<T>;
 
 void EvalState::forceValueDeep(Value& v) {
   traceable_flat_hash_set<const Value*> seen;
@@ -1713,11 +1661,6 @@ void EvalState::printStats() {
   uint64_t bAttrsets =
       nrAttrsets * sizeof(Bindings) + nrAttrsInAttrsets * sizeof(Attr);
 
-#if HAVE_BOEHMGC
-  GC_word heapSize;
-  GC_word totalBytes;
-  GC_get_heap_usage_safe(&heapSize, nullptr, nullptr, nullptr, &totalBytes);
-#endif
   if (showStats) {
     auto outPath = getEnv("NIX_SHOW_STATS_PATH", "-");
     std::fstream fs;
@@ -1768,13 +1711,6 @@ void EvalState::printStats() {
     topObj.attr("nrLookups", nrLookups);
     topObj.attr("nrPrimOpCalls", nrPrimOpCalls);
     topObj.attr("nrFunctionCalls", nrFunctionCalls);
-#if HAVE_BOEHMGC
-    {
-      auto gc = topObj.object("gc");
-      gc.attr("heapSize", heapSize);
-      gc.attr("totalBytes", totalBytes);
-    }
-#endif
 
     if (countCalls) {
       {
