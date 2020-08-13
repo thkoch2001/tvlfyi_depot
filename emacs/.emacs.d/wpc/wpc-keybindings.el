@@ -108,7 +108,7 @@
  "S" #'sort-lines
  "=" #'align
  "p" #'flycheck-previous-error
- "f" #'wpc/find-file
+ "f" #'project-find-file
  "n" #'flycheck-next-error
  "N" #'smerge-next
  "W" #'balance-windows

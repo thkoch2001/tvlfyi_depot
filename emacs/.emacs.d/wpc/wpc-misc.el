@@ -6,6 +6,18 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'project)
+(require 'f)
+(require 'dash)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; I'm borrowing from the dot-time format (i.e. https://dotti.me) to encode the
 ;; timestamp. This displays the UTC time and an offset to show the number of
 ;; hours East or West of UTC my current timezone is using `current-time-zone'.
@@ -185,6 +197,35 @@
 (use-package projectile
   :config
   (projectile-mode t))
+
+(defun project-find-function--briefcase (dir)
+  "Find the nearest default.nix file; otherwise, terminate at the .git
+  directory."
+  (let ((filenames (->> dir f-files (-map #'f-filename)))
+        (dirnames (->> dir f-directories (-map #'f-dirname))))
+    (if (or (-contains? filenames "default.nix")
+            (-contains? dirnames ".git"))
+        (cons 'monorepo dir)
+      (if (f-parent dir)
+          (project-find-function--briefcase (f-parent dir))
+        nil))))
+
+(cl-defmethod project-root ((project (head monorepo)))
+  (cdr project))
+
+(cl-defmethod project-roots ((project (head monorepo)))
+  (list (cdr project)))
+
+(cl-defmethod project-external-roots ((project (head monorepo)))
+  (project-external-roots (cons 'vc (cdr project))))
+
+(cl-defmethod project-ignores ((project (head monorepo)) dir)
+  (project-ignores (cons 'vc (cdr project)) dir))
+
+(cl-defmethod project-files ((project (head monorepo)) &optional dirs)
+  (project-files (cons 'vc (cdr project)) dirs))
+
+(setq project-find-functions (list #'project-find-function--briefcase))
 
 (use-package deadgrep
   :config
