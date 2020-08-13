@@ -5,7 +5,6 @@
 #include <optional>
 #include <variant>
 
-#include <gc/gc.h>
 #include <glog/logging.h>
 
 #include "libexpr/eval.hh"
@@ -20,7 +19,7 @@
 
 namespace nix {
 
-struct ParseData : public gc {
+struct ParseData {
   EvalState& state;
   SymbolTable& symbols;
   Expr* result;
