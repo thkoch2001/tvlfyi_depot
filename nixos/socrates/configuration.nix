@@ -115,27 +115,25 @@ in {
     rootUrl = "https://git.wpcarro.dev/";
   };
 
-  systemd.services.monzo-token-server = {
-    enable = true;
-    description = "Ensure my Monzo access token is valid";
-    script = "${briefcase.monzo_ynab.tokens}/bin/token-server";
-
-    # TODO(wpcarro): I'm unsure of the size of this security risk, but if a
-    # non-root user runs `systemctl cat monzo-token-server`, they could read the
-    # following, sensitive environment variables.
-    environment = {
-      store_path = "/var/cache/monzo_ynab";
-      monzo_client_id = readSecret "monzo-client-id";
-      monzo_client_secret = readSecret "monzo-client-secret";
-      ynab_personal_access_token = readSecret "ynab-personal-access-token";
-      ynab_account_id = readSecret "ynab-account-id";
-      ynab_budget_id = readSecret "ynab-budget-id";
-    };
-
-    serviceConfig = {
-      Type = "simple";
-    };
-  };
+  # systemd.services.monzo-token-server = {
+  #   enable = true;
+  #   description = "Ensure my Monzo access token is valid";
+  #   script = "${briefcase.monzo_ynab.tokens}/bin/token-server";
+  #   # TODO(wpcarro): I'm unsure of the size of this security risk, but if a
+  #   # non-root user runs `systemctl cat monzo-token-server`, they could read the
+  #   # following, sensitive environment variables.
+  #   environment = {
+  #     store_path = "/var/cache/monzo_ynab";
+  #     monzo_client_id = readSecret "monzo-client-id";
+  #     monzo_client_secret = readSecret "monzo-client-secret";
+  #     ynab_personal_access_token = readSecret "ynab-personal-access-token";
+  #     ynab_account_id = readSecret "ynab-account-id";
+  #     ynab_budget_id = readSecret "ynab-budget-id";
+  #   };
+  #   serviceConfig = {
+  #     Type = "simple";
+  #   };
+  # };
 
   services.gitDaemon = {
     enable = true;
