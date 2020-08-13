@@ -33,4 +33,5 @@ in {
   third_party  = readTree ./third_party;
   tools        = readTree ./tools;
   buildHaskell = readTree ./buildHaskell;
+  zoo          = readTree ./zoo;
 }
