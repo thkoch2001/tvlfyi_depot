@@ -12,12 +12,6 @@ let
     customMemoryManagement = false;
   };
 
- # TODO(tazjin): this is copied from the original derivation, but what
- # is it for?
-  largeBoehm = pkgs.boehmgc.override {
-    enableLargeConfig = true;
-  };
-
   src = ./.;
 
   # Proto generation in CMake is theoretically possible, but that is
@@ -84,7 +78,6 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   propagatedBuildInputs = with pkgs; [
     boost
-    largeBoehm
   ];
 
   configurePhase = ''
