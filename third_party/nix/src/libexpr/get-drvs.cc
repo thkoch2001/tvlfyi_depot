@@ -4,6 +4,7 @@
 #include <regex>
 #include <utility>
 
+#include <absl/container/flat_hash_set.h>
 #include <absl/strings/numbers.h>
 #include <glog/logging.h>
 
@@ -13,7 +14,8 @@
 
 namespace nix {
 
-DrvInfo::DrvInfo(EvalState& state, std::string attrPath, Bindings* attrs)
+DrvInfo::DrvInfo(EvalState& state, std::string attrPath,
+                 std::shared_ptr<Bindings> attrs)
     : state(&state), attrs(attrs), attrPath(std::move(attrPath)) {}
 
 DrvInfo::DrvInfo(EvalState& state, const ref<Store>& store,
@@ -161,7 +163,7 @@ std::string DrvInfo::queryOutputName() const {
 
 Bindings* DrvInfo::getMeta() {
   if (meta != nullptr) {
-    return meta;
+    return meta.get();
   }
   if (attrs == nullptr) {
     return nullptr;
@@ -172,7 +174,7 @@ Bindings* DrvInfo::getMeta() {
   }
   state->forceAttrs(*a->second.value, *a->second.pos);
   meta = a->second.value->attrs;
-  return meta;
+  return meta.get();
 }
 
 StringSet DrvInfo::queryMetaNames() {
@@ -292,8 +294,8 @@ bool DrvInfo::queryMetaBool(const std::string& name, bool def) {
 }
 
 void DrvInfo::setMeta(const std::string& name, Value* v) {
-  Bindings* old = getMeta();
-  meta = Bindings::NewGC(old->size() + 1);
+  std::shared_ptr<Bindings> old = meta;
+  meta = std::shared_ptr<Bindings>(Bindings::NewGC(old->size() + 1).release());
   Symbol sym = state->symbols.Create(name);
   if (old != nullptr) {
     for (auto i : *old) {
@@ -308,7 +310,7 @@ void DrvInfo::setMeta(const std::string& name, Value* v) {
 }
 
 /* Cache for already considered attrsets. */
-using Done = std::set<Bindings*>;
+using Done = absl::flat_hash_set<std::shared_ptr<Bindings>>;
 
 /* Evaluate value `v'.  If it evaluates to a set of type `derivation',
    then put information about it in `drvs' (unless it's already in `done').
@@ -364,7 +366,7 @@ static std::string addToPath(const std::string& s1, const std::string& s2) {
 static std::regex attrRegex("[A-Za-z_][A-Za-z0-9-_+]*");
 
 static void getDerivations(EvalState& state, Value& vIn,
-                           const std::string& pathPrefix, Bindings& autoArgs,
+                           const std::string& pathPrefix, Bindings* autoArgs,
                            DrvInfos& drvs, Done& done,
                            bool ignoreAssertionFailures) {
   Value v;
@@ -434,7 +436,7 @@ static void getDerivations(EvalState& state, Value& vIn,
 }
 
 void getDerivations(EvalState& state, Value& v, const std::string& pathPrefix,
-                    Bindings& autoArgs, DrvInfos& drvs,
+                    Bindings* autoArgs, DrvInfos& drvs,
                     bool ignoreAssertionFailures) {
   Done done;
   getDerivations(state, v, pathPrefix, autoArgs, drvs, done,

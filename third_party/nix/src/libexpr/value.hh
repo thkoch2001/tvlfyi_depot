@@ -95,7 +95,7 @@ struct Value {
     bool boolean;
     NixString string;
     const char* path;
-    Bindings* attrs;
+    std::shared_ptr<Bindings> attrs;
     NixList* list;
     NixThunk thunk;
     NixApp app;  // TODO(tazjin): "app"?

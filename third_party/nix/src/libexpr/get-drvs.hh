@@ -23,7 +23,8 @@ struct DrvInfo {
 
   bool failed = false;  // set if we get an AssertionError
 
-  Bindings *attrs = nullptr, *meta = nullptr;
+  std::shared_ptr<Bindings> attrs = nullptr;
+  std::shared_ptr<Bindings> meta = nullptr;
 
   Bindings* getMeta();
 
@@ -33,7 +34,8 @@ struct DrvInfo {
   std::string attrPath; /* path towards the derivation */
 
   DrvInfo(EvalState& state) : state(&state){};
-  DrvInfo(EvalState& state, std::string attrPath, Bindings* attrs);
+  DrvInfo(EvalState& state, std::string attrPath,
+          std::shared_ptr<Bindings> attrs);
   DrvInfo(EvalState& state, const ref<Store>& store,
           const std::string& drvPathWithOutputs);
 
@@ -75,7 +77,7 @@ std::optional<DrvInfo> getDerivation(EvalState& state, Value& v,
                                      bool ignoreAssertionFailures);
 
 void getDerivations(EvalState& state, Value& v, const std::string& pathPrefix,
-                    Bindings& autoArgs, DrvInfos& drvs,
+                    Bindings* autoArgs, DrvInfos& drvs,
                     bool ignoreAssertionFailures);
 
 }  // namespace nix
