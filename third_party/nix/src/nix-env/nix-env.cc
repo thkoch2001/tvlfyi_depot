@@ -46,7 +46,7 @@ struct InstallSourceInfo {
   Path nixExprPath;         /* for srcNixExprDrvs, srcNixExprs */
   Path profile;             /* for srcProfile */
   std::string systemFilter; /* for srcNixExprDrvs */
-  Bindings* autoArgs;
+  std::unique_ptr<Bindings> autoArgs;
 };
 
 struct Globals {
@@ -170,7 +170,7 @@ static void loadSourceExpr(EvalState& state, const Path& path, Value& v) {
 }
 
 static void loadDerivations(EvalState& state, const Path& nixExprPath,
-                            const std::string& systemFilter, Bindings& autoArgs,
+                            const std::string& systemFilter, Bindings* autoArgs,
                             const std::string& pathPrefix, DrvInfos& elems) {
   Value vRoot;
   loadSourceExpr(state, nixExprPath, vRoot);
@@ -333,7 +333,7 @@ static void queryInstSources(EvalState& state, InstallSourceInfo& instSource,
          Nix expression. */
       DrvInfos allElems;
       loadDerivations(state, instSource.nixExprPath, instSource.systemFilter,
-                      *instSource.autoArgs, "", allElems);
+                      instSource.autoArgs.get(), "", allElems);
 
       elems = filterBySelector(state, allElems, args, newestOnly);
 
@@ -356,7 +356,7 @@ static void queryInstSources(EvalState& state, InstallSourceInfo& instSource,
         Value vTmp;
         state.eval(eFun, vFun);
         mkApp(vTmp, vFun, vArg);
-        getDerivations(state, vTmp, "", *instSource.autoArgs, elems, true);
+        getDerivations(state, vTmp, "", instSource.autoArgs.get(), elems, true);
       }
 
       break;
@@ -410,8 +410,9 @@ static void queryInstSources(EvalState& state, InstallSourceInfo& instSource,
       Value vRoot;
       loadSourceExpr(state, instSource.nixExprPath, vRoot);
       for (auto& i : args) {
-        Value& v(*findAlongAttrPath(state, i, *instSource.autoArgs, vRoot));
-        getDerivations(state, v, "", *instSource.autoArgs, elems, true);
+        Value& v(
+            *findAlongAttrPath(state, i, instSource.autoArgs.get(), vRoot));
+        getDerivations(state, v, "", instSource.autoArgs.get(), elems, true);
       }
       break;
     }
@@ -959,7 +960,7 @@ static void opQuery(Globals& globals, Strings opFlags, Strings opArgs) {
   if (source == sAvailable || compareVersions) {
     loadDerivations(*globals.state, globals.instSource.nixExprPath,
                     globals.instSource.systemFilter,
-                    *globals.instSource.autoArgs, attrPath, availElems);
+                    globals.instSource.autoArgs.get(), attrPath, availElems);
   }
 
   DrvInfos elems_ = filterBySelector(

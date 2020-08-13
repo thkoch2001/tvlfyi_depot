@@ -266,7 +266,7 @@ static void _main(int argc, char** argv) {
   auto state = std::make_unique<EvalState>(myArgs.searchPath, store);
   state->repair = repair;
 
-  Bindings& autoArgs = *myArgs.getAutoArgs(*state);
+  std::unique_ptr<Bindings> autoArgs = myArgs.getAutoArgs(*state);
 
   if (packages) {
     std::ostringstream joined;
@@ -334,9 +334,9 @@ static void _main(int argc, char** argv) {
     state->eval(e, vRoot);
 
     for (auto& i : attrPaths) {
-      Value& v(*findAlongAttrPath(*state, i, autoArgs, vRoot));
+      Value& v(*findAlongAttrPath(*state, i, autoArgs.get(), vRoot));
       state->forceValue(v);
-      getDerivations(*state, v, "", autoArgs, drvs, false);
+      getDerivations(*state, v, "", autoArgs.get(), drvs, false);
     }
   }
 
