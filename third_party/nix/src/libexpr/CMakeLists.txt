@@ -62,6 +62,7 @@ target_sources(nixexpr
     parser.cc
     primops.cc
     symbol-table.cc
+    value.cc
     value-to-json.cc
     value-to-xml.cc
 )
