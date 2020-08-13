@@ -9,12 +9,12 @@
   };
 
   # Build a Haskell executable. This assumes a project directory with a
-  # top-level Main.hs. It also applies a few commonly used language extensions.
-  # Here is an overview of the arguments:
+  # top-level Main.hs.
   # - `name`: You can find the result at ./result/$name
   # - `srcs`: Will be passed to `srcs` field of `pkgs.stdenv.mkDerivation`.
   # - `deps`: A function that accepts `hpkgs` and returns a list of Haskell
-  #   dependencies.
+  # - `ghcExtensions`: A list of strings representing the language extensions to
+  #   use.
   program = { name, srcs, deps, ghcExtensions }: let
     ghc = pkgs.haskellPackages.ghcWithPackages (hpkgs: deps hpkgs);
   in pkgs.stdenv.mkDerivation {
