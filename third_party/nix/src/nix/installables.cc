@@ -121,10 +121,10 @@ struct InstallableValue : Installable {
 
     auto v = toValue(*state);
 
-    Bindings& autoArgs = *cmd.getAutoArgs(*state);
+    std::unique_ptr<Bindings> autoArgs = cmd.getAutoArgs(*state);
 
     DrvInfos drvs;
-    getDerivations(*state, *v, "", autoArgs, drvs, false);
+    getDerivations(*state, *v, "", autoArgs.get(), drvs, false);
 
     Buildables res;
 
@@ -184,9 +184,9 @@ struct InstallableAttrPath final : InstallableValue {
   Value* toValue(EvalState& state) override {
     auto source = cmd.getSourceExpr(state);
 
-    Bindings& autoArgs = *cmd.getAutoArgs(state);
+    std::unique_ptr<Bindings> autoArgs = cmd.getAutoArgs(state);
 
-    Value* v = findAlongAttrPath(state, attrPath, autoArgs, *source);
+    Value* v = findAlongAttrPath(state, attrPath, autoArgs.get(), *source);
     state.forceValue(*v);
 
     return v;
