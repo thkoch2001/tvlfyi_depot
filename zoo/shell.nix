@@ -5,5 +5,6 @@ in briefcase.buildHaskell.shell {
     hspec
     rio
     string-conversions
+    servant-server
   ];
 }

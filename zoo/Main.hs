@@ -1,15 +1,34 @@
 {-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeOperators #-}
 --------------------------------------------------------------------------------
 module Main where
 --------------------------------------------------------------------------------
-import RIO
+import RIO hiding (Handler)
 import RIO.Text
 import RIO.Time
-import Data.String.Conversions (cs)
+import Servant
 import Data.Time.Clock.POSIX
-import Prelude (putStrLn, putStr, print, getLine, read)
+import Prelude (read)
 import Text.ParserCombinators.ReadP
+
+import qualified Network.Wai.Handler.Warp as Warp
 --------------------------------------------------------------------------------
+
+type Api = "run"
+           :> QueryParam' '[Required] "offset" Text
+           :> Get '[JSON] UTCTime
+
+server :: Server Api
+server = compute
+  where
+    compute :: Text -> Handler UTCTime
+    compute x = do
+      case parseInput x of
+        Nothing -> throwError err401
+        Just req -> do
+          res <- liftIO $ shiftTime req
+          pure res
 
 data ShiftTimeRequest = ShiftTimeRequest
   { shiftSeconds :: Int
@@ -130,11 +149,4 @@ parseInput x =
     _ -> Nothing
 
 main :: IO ()
-main = do
-  putStr "Enter an offset (e.g. -10d-30s): "
-  x <- getLine
-  case parseInput (cs x) of
-    Nothing -> putStrLn "Try again!" >> main
-    Just req -> do
-      t <- shiftTime req
-      putStrLn $ show t
+main = Warp.run 8000 $ serve (Proxy @ Api) server
