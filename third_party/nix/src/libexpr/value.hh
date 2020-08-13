@@ -105,6 +105,13 @@ struct Value {
     NixFloat fpoint;
   };
 
+  Value() : type(tInt), integer(0) {}
+  Value(const Value& copy);
+  Value(Value&& move);
+  ~Value() {}
+  Value& operator=(const Value& copy);
+  Value& operator=(Value&& move);
+
   bool isList() const { return type == tList; }
 
   size_t listSize() const { return list->size(); }
