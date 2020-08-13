@@ -209,6 +209,13 @@ in {
         enableACME = true;
         root = briefcase.website.sandbox.learnpianochords;
       };
+      "zoo.wpcarro.dev" = {
+        addSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://localhost:8000";
+        };
+      };
     };
   };
 
