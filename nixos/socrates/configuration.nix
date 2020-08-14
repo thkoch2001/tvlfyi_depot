@@ -106,6 +106,13 @@ in {
     ];
   };
 
+  services.journaldriver = {
+    enable = true;
+    logStream = "home";
+    googleCloudProject = "wpcarros-infrastructure";
+    applicationCredentials = "/etc/gcp/key.json";
+  };
+
   services.openssh.enable = true;
 
   services.gitea = {
