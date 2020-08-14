@@ -23,14 +23,6 @@
   (call-interactively #'paredit-reindent-defun)
   (call-interactively #'clojure-align))
 
-(defun wpc/find-file ()
-  "Prefer project-based file-finding if inside of project; otherwise gracefully fallback."
-  (interactive)
-  (with-current-buffer (current-buffer)
-    (if (projectile-project-p)
-        (call-interactively #'counsel-projectile-find-file)
-      (call-interactively #'find-file))))
-
 (defun wpc/find-file-split (filename)
   "Creates a window split and then edits `filename'."
   (interactive)

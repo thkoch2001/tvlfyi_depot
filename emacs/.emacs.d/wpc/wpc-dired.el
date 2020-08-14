@@ -24,7 +24,7 @@
    "<SPC>" nil ;; This unblocks some of my leader-prefixed KBDs.
    "s" nil ;; This unblocks my window-splitting KBDs.
    "c" #'find-file
-   "f" #'wpc/find-file
+   "f" #'project-find-file
    "-" (lambda () (interactive) (find-alternate-file "..")))
   (general-add-hook 'dired-mode-hook
                     (list (enable dired-hide-details-mode)
