@@ -19,6 +19,7 @@
 #include "libstore/globals.hh"
 #include "libstore/store-api.hh"
 #include "libutil/affinity.hh"
+#include "libutil/status.hh"
 #include "libutil/util.hh"
 #include "nix/legacy.hh"
 
@@ -358,7 +359,7 @@ static void _main(int argc, char** argv) {
     }
 
     if (!dryRun) {
-      store->buildPaths(paths, buildMode);
+      util::OkOrThrow(store->buildPaths(paths, buildMode));
     }
   };
 

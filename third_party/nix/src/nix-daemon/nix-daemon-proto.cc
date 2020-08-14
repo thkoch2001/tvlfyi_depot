@@ -21,6 +21,7 @@
 #include "libstore/store-api.hh"
 #include "libutil/archive.hh"
 #include "libutil/hash.hh"
+#include "libutil/proto.hh"
 #include "libutil/serialise.hh"
 #include "libutil/types.hh"
 
@@ -288,9 +289,8 @@ class WorkerServiceImpl final : public WorkerService::Service {
           // TODO(grfn): If mode is repair and not trusted, we need to return an
           // error here (but we can't yet because we don't know anything about
           // trusted users)
-          store_->buildPaths(drvs, mode.value());
-
-          return Status::OK;
+          return nix::util::proto::AbslToGRPCStatus(
+              store_->buildPaths(drvs, mode.value()));
         },
         __FUNCTION__);
   }
