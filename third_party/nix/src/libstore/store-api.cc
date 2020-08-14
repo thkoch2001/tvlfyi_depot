@@ -3,6 +3,7 @@
 #include <future>
 #include <utility>
 
+#include <absl/status/status.h>
 #include <absl/strings/match.h>
 #include <absl/strings/numbers.h>
 #include <absl/strings/str_cat.h>
@@ -700,16 +701,20 @@ const Store::Stats& Store::getStats() {
   return stats;
 }
 
-void Store::buildPaths(const PathSet& paths, BuildMode buildMode) {
+absl::Status Store::buildPaths(const PathSet& paths, BuildMode) {
   for (auto& path : paths) {
     if (isDerivation(path)) {
-      unsupported("buildPaths");
+      return absl::Status(absl::StatusCode::kUnimplemented,
+                          "buildPaths is unsupported");
     }
   }
 
   if (queryValidPaths(paths).size() != paths.size()) {
-    unsupported("buildPaths");
+    return absl::Status(absl::StatusCode::kUnimplemented,
+                        "buildPaths is unsupported");
   }
+
+  return absl::OkStatus();
 }
 
 void copyStorePath(ref<Store> srcStore, const ref<Store>& dstStore,

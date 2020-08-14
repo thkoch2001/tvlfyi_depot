@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_set>
 
+#include <absl/status/status.h>
 #include <absl/strings/str_split.h>
 
 #include "libstore/pathlocks.hh"
@@ -155,7 +156,7 @@ class LocalStore : public LocalFSStore {
   Path addTextToStore(const std::string& name, const std::string& s,
                       const PathSet& references, RepairFlag repair) override;
 
-  void buildPaths(const PathSet& paths, BuildMode buildMode) override;
+  absl::Status buildPaths(const PathSet& paths, BuildMode buildMode) override;
 
   BuildResult buildDerivation(const Path& drvPath, const BasicDerivation& drv,
                               BuildMode buildMode) override;

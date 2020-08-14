@@ -317,15 +317,17 @@ Path RpcStore::addTextToStore(const std::string& name,
   return result.path();
 }
 
-void RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
+absl::Status RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
   ClientContext ctx;
   proto::BuildPathsRequest request;
   for (const auto& path : paths) {
     request.add_drvs(path);
   }
+
   google::protobuf::Empty response;
   request.set_mode(nix::BuildModeToProto(buildMode));
-  SuccessOrThrow(stub_->BuildPaths(&ctx, request, &response), __FUNCTION__);
+  return nix::util::proto::GRPCStatusToAbsl(
+      stub_->BuildPaths(&ctx, request, &response));
 }
 
 BuildResult RpcStore::buildDerivation(const Path& drvPath,
