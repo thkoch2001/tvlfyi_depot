@@ -71,7 +71,7 @@ class RemoteStore : public virtual Store {
   Path addTextToStore(const std::string& name, const std::string& s,
                       const PathSet& references, RepairFlag repair) override;
 
-  void buildPaths(const PathSet& paths, BuildMode buildMode) override;
+  absl::Status buildPaths(const PathSet& paths, BuildMode buildMode) override;
 
   BuildResult buildDerivation(const Path& drvPath, const BasicDerivation& drv,
                               BuildMode buildMode) override;

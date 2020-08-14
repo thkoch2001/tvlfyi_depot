@@ -16,6 +16,7 @@
 #include "libstore/worker-protocol.hh"
 #include "libutil/archive.hh"
 #include "libutil/monitor-fd.hh"
+#include "libutil/status.hh"
 #include "libutil/util.hh"
 #include "nix-store/dotgraph.hh"
 #include "nix-store/graphml.hh"
@@ -68,7 +69,7 @@ static PathSet realisePath(Path path, bool build = true) {
 
   if (isDerivation(p.first)) {
     if (build) {
-      store->buildPaths({path});
+      util::OkOrThrow(store->buildPaths({path}));
     }
     Derivation drv = store->derivationFromPath(p.first);
     rootNr++;
@@ -184,7 +185,8 @@ static void opRealise(Strings opFlags, Strings opArgs) {
   }
 
   /* Build all paths at the same time to exploit parallelism. */
-  store->buildPaths(PathSet(paths.begin(), paths.end()), buildMode);
+  util::OkOrThrow(
+      store->buildPaths(PathSet(paths.begin(), paths.end()), buildMode));
 
   if (!ignoreUnknown) {
     for (auto& i : paths) {
@@ -1002,7 +1004,7 @@ static void opServe(Strings opFlags, Strings opArgs) {
              does one path at a time. */
           if (!willSubstitute.empty()) {
             try {
-              store->buildPaths(willSubstitute);
+              util::OkOrThrow(store->buildPaths(willSubstitute));
             } catch (Error& e) {
               LOG(WARNING) << e.msg();
             }
@@ -1064,7 +1066,7 @@ static void opServe(Strings opFlags, Strings opArgs) {
 
         try {
           MonitorFdHup monitor(in.fd);
-          store->buildPaths(paths);
+          util::OkOrThrow(store->buildPaths(paths));
           out << 0;
         } catch (Error& e) {
           assert(e.status);

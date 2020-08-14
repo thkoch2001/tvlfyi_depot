@@ -3,6 +3,7 @@
 #include <cerrno>
 #include <cstring>
 
+#include <absl/status/status.h>
 #include <absl/strings/ascii.h>
 #include <fcntl.h>
 #include <glog/logging.h>
@@ -459,7 +460,8 @@ Path RemoteStore::addTextToStore(const std::string& name, const std::string& s,
   return readStorePath(*this, conn->from);
 }
 
-void RemoteStore::buildPaths(const PathSet& drvPaths, BuildMode buildMode) {
+absl::Status RemoteStore::buildPaths(const PathSet& drvPaths,
+                                     BuildMode buildMode) {
   auto conn(getConnection());
   conn->to << wopBuildPaths;
   if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 13) {
@@ -470,7 +472,8 @@ void RemoteStore::buildPaths(const PathSet& drvPaths, BuildMode buildMode) {
         /* Old daemons did not take a 'buildMode' parameter, so we
            need to validate it here on the client side.  */
         if (buildMode != bmNormal) {
-      throw Error(
+      return absl::Status(
+          absl::StatusCode::kInvalidArgument,
           "repairing or checking is not supported when building through the "
           "Nix daemon");
     }
@@ -485,6 +488,8 @@ void RemoteStore::buildPaths(const PathSet& drvPaths, BuildMode buildMode) {
   }
   conn.processStderr();
   readInt(conn->from);
+
+  return absl::OkStatus();
 }
 
 BuildResult RemoteStore::buildDerivation(const Path& drvPath,

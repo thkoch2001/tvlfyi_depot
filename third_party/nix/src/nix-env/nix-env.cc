@@ -23,6 +23,7 @@
 #include "libstore/profiles.hh"
 #include "libstore/store-api.hh"
 #include "libutil/json.hh"
+#include "libutil/status.hh"
 #include "libutil/util.hh"
 #include "libutil/xml-writer.hh"
 #include "nix-env/user-env.hh"
@@ -720,8 +721,8 @@ static void opSet(Globals& globals, Strings opFlags, Strings opArgs) {
     if (globals.dryRun) {
       return;
     }
-    globals.state->store->buildPaths(
-        paths, globals.state->repair != 0u ? bmRepair : bmNormal);
+    nix::util::OkOrThrow(globals.state->store->buildPaths(
+        paths, globals.state->repair != 0u ? bmRepair : bmNormal));
   } else {
     printMissing(globals.state->store, {drv.queryOutPath()});
     if (globals.dryRun) {

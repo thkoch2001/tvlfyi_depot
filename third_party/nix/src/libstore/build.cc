@@ -13,6 +13,7 @@
 #include <string>
 #include <thread>
 
+#include <absl/status/status.h>
 #include <absl/strings/ascii.h>
 #include <absl/strings/numbers.h>
 #include <absl/strings/str_cat.h>
@@ -4686,7 +4687,8 @@ static void primeCache(Store& store, const PathSet& paths) {
   }
 }
 
-void LocalStore::buildPaths(const PathSet& drvPaths, BuildMode buildMode) {
+absl::Status LocalStore::buildPaths(const PathSet& drvPaths,
+                                    BuildMode buildMode) {
   Worker worker(*this);
 
   primeCache(*this, drvPaths);
@@ -4717,8 +4719,12 @@ void LocalStore::buildPaths(const PathSet& drvPaths, BuildMode buildMode) {
   }
 
   if (!failed.empty()) {
-    throw Error(worker.exitStatus(), "build of %s failed", showPaths(failed));
+    return absl::Status(
+        absl::StatusCode::kInternal,
+        absl::StrFormat("build of %s failed (exit code %d)", showPaths(failed),
+                        worker.exitStatus()));
   }
+  return absl::OkStatus();
 }
 
 BuildResult LocalStore::buildDerivation(const Path& drvPath,
