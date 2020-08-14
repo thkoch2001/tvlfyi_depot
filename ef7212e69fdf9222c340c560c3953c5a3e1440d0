@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b227a97_5581b50e",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T02:30:11Z",
+      "side": 1,
+      "message": "I *might* swap the arguments here... but maybe that\u0027s a bikeshed",
+      "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cbc873a_7ab1275d",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T02:30:11Z",
+      "side": 1,
+      "message": "how hard is it to rename this?",
+      "range": {
+        "startLine": 79,
+        "startChar": 36,
+        "endLine": 79,
+        "endChar": 41
+      },
+      "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8036ef54_eb816503",
+        "filename": "third_party/nix/src/libexpr/get-drvs.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T02:30:11Z",
+      "side": 1,
+      "message": "uh?",
+      "range": {
+        "startLine": 298,
+        "startChar": 9,
+        "endLine": 298,
+        "endChar": 79
+      },
+      "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e78fc60_0ab20163",
+        "filename": "third_party/nix/src/tests/attr-set.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T02:30:11Z",
+      "side": 1,
+      "message": "+1",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 13
+      },
+      "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
