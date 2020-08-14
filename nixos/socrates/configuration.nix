@@ -170,6 +170,7 @@ in {
       '{'
           '"remote_addr":"$remote_addr",'
           '"method":"$request_method",'
+          '"host":"$host",'
           '"uri":"$request_uri",'
           '"status":$status,'
           '"request_size":$request_length,'
