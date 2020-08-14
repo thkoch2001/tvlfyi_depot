@@ -142,6 +142,16 @@ in {
   #   };
   # };
 
+  systemd.services.zoo = {
+    enable = true;
+    description = "Run my monoserver";
+    script = "${briefcase.zoo}/zoo";
+    environment = {};
+    serviceConfig = {
+      Restart = "always";
+    };
+  };
+
   services.gitDaemon = {
     enable = true;
     basePath = "/srv/git";
