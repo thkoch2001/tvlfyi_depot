@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3a94e2a_03362720",
+        "filename": "third_party/nix/src/libexpr/value.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T01:36:41Z",
+      "side": 1,
+      "message": "can we drop this and just leave a comment?",
+      "revId": "3e2d8cf13a786f8d50666acf0efe65574419052a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c532eed0_88bdbd81",
+        "filename": "third_party/nix/src/libexpr/value.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T01:36:41Z",
+      "side": 1,
+      "message": "this too.",
+      "revId": "3e2d8cf13a786f8d50666acf0efe65574419052a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96178344_44825611",
+        "filename": "third_party/nix/src/libexpr/value.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T01:36:41Z",
+      "side": 1,
+      "message": "let\u0027s LOG(FATAL) here",
+      "revId": "3e2d8cf13a786f8d50666acf0efe65574419052a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5235bedb_c37f6623",
+        "filename": "third_party/nix/src/libexpr/value.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T01:36:41Z",
+      "side": 1,
+      "message": "same comments in this function as above.",
+      "revId": "3e2d8cf13a786f8d50666acf0efe65574419052a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
