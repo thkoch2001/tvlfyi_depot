@@ -16,6 +16,7 @@
   (setq dired-recursive-copies 'always
         dired-recursive-deletes 'top
         dired-dwim-target t)
+  (setq dired-listing-switches "-la --group-directories-first")
   (general-define-key
    :keymaps 'dired-mode-map
    :states '(normal)
