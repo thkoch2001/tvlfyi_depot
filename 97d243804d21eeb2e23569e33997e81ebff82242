@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "96788a05_435aba91",
+        "filename": "third_party/nix/src/libutil/status.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T02:54:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35bde3f1_6bb92bcd",
+      "range": {
+        "startLine": 11,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "97d243804d21eeb2e23569e33997e81ebff82242",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5016de1_fcd9f723",
         "filename": "third_party/nix/src/libutil/status.hh",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "689c0b38_8ac519da",
+        "filename": "third_party/nix/src/libutil/status.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T02:54:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5016de1_fcd9f723",
+      "range": {
+        "startLine": 54,
+        "startChar": 16,
+        "endLine": 54,
+        "endChar": 31
+      },
+      "revId": "97d243804d21eeb2e23569e33997e81ebff82242",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2fcf5c0_48e07349",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "97d243804d21eeb2e23569e33997e81ebff82242",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "560afb28_63217d24",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-14T02:54:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2fcf5c0_48e07349",
+      "range": {
+        "startLine": 295,
+        "startChar": 10,
+        "endLine": 295,
+        "endChar": 28
+      },
+      "revId": "97d243804d21eeb2e23569e33997e81ebff82242",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
