@@ -170,6 +170,7 @@ in lib.fix(self: {
   };
 
   programs.mtr.enable = true;
+  programs.mosh.enable = true;
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
