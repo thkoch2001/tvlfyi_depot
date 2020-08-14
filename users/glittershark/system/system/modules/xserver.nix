@@ -10,12 +10,9 @@
     displayManager = {
       defaultSession = "none+i3";
 
-      lightdm = {
+      autoLogin = {
         enable = true;
-        autoLogin = {
-          enable = true;
-          user = "grfn";
-        };
+        user = "grfn";
       };
     };
 
