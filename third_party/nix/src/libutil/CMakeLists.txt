@@ -21,6 +21,7 @@ set(HEADER_FILES
     proto.hh
     ref.hh
     serialise.hh
+    status.hh
     sync.hh
     thread-pool.hh
     types.hh
