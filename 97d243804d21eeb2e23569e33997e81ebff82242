@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "8eccc1e4_5617f500",
+        "filename": "third_party/nix/src/libutil/status.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-14T03:02:43Z",
+      "side": 1,
+      "message": "Status code description is included in ToString",
+      "parentUuid": "689c0b38_8ac519da",
+      "range": {
+        "startLine": 54,
+        "startChar": 16,
+        "endLine": 54,
+        "endChar": 31
+      },
+      "revId": "97d243804d21eeb2e23569e33997e81ebff82242",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2fcf5c0_48e07349",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 2
