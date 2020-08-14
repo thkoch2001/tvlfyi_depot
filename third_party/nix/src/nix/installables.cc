@@ -9,6 +9,7 @@
 #include "libmain/shared.hh"
 #include "libstore/derivations.hh"
 #include "libstore/store-api.hh"
+#include "libutil/status.hh"
 #include "nix/command.hh"
 
 namespace nix {
@@ -273,7 +274,7 @@ Buildables build(
   if (mode == DryRun) {
     printMissing(store, pathsToBuild);
   } else if (mode == Build) {
-    store->buildPaths(pathsToBuild);
+    util::OkOrThrow(store->buildPaths(pathsToBuild));
   }
 
   return buildables;

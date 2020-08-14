@@ -445,7 +445,8 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
      output paths can be created by running the builder, after
      recursively building any sub-derivations. For inputs that are
      not derivations, substitute them. */
-  virtual void buildPaths(const PathSet& paths, BuildMode buildMode = bmNormal);
+  [[nodiscard]] virtual absl::Status buildPaths(const PathSet& paths,
+                                                BuildMode buildMode = bmNormal);
 
   /* Build a single non-materialized derivation (i.e. not from an
      on-disk .drv file). Note that ‘drvPath’ is only used for

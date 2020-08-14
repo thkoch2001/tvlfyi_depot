@@ -22,6 +22,7 @@
 #include "libstore/store-api.hh"
 #include "libutil/archive.hh"
 #include "libutil/json.hh"
+#include "libutil/status.hh"
 #include "libutil/util.hh"
 
 namespace nix {
@@ -90,7 +91,7 @@ void EvalState::realiseContext(const PathSet& context) {
   unsigned long long narSize;
   store->queryMissing(drvs, willBuild, willSubstitute, unknown, downloadSize,
                       narSize);
-  store->buildPaths(drvs);
+  nix::util::OkOrThrow(store->buildPaths(drvs));
 }
 
 /* Load and evaluate an expression from path specified by the

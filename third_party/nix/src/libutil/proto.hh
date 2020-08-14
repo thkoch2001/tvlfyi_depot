@@ -2,19 +2,20 @@
 
 #include <absl/status/status.h>
 #include <grpcpp/impl/codegen/status.h>
+#include <grpcpp/impl/codegen/status_code_enum.h>
 
 #include "libproto/worker.pb.h"
 #include "libutil/types.hh"
 
 namespace nix::util::proto {
 
-::nix::proto::StorePath StorePath(const Path& path) {
+inline ::nix::proto::StorePath StorePath(const Path& path) {
   ::nix::proto::StorePath store_path;
   store_path.set_path(path);
   return store_path;
 }
 
-::nix::proto::StorePaths StorePaths(const PathSet& paths) {
+inline ::nix::proto::StorePaths StorePaths(const PathSet& paths) {
   ::nix::proto::StorePaths result;
   for (const auto& path : paths) {
     result.add_paths(path);
@@ -70,6 +71,47 @@ constexpr absl::StatusCode GRPCStatusCodeToAbsl(grpc::StatusCode code) {
   }
 }
 
+constexpr grpc::StatusCode AbslStatusCodeToGRPC(absl::StatusCode code) {
+  switch (code) {
+    case absl::StatusCode::kOk:
+      return grpc::StatusCode::OK;
+    case absl::StatusCode::kCancelled:
+      return grpc::StatusCode::CANCELLED;
+    case absl::StatusCode::kUnknown:
+      return grpc::StatusCode::UNKNOWN;
+    case absl::StatusCode::kInvalidArgument:
+      return grpc::StatusCode::INVALID_ARGUMENT;
+    case absl::StatusCode::kDeadlineExceeded:
+      return grpc::StatusCode::DEADLINE_EXCEEDED;
+    case absl::StatusCode::kNotFound:
+      return grpc::StatusCode::NOT_FOUND;
+    case absl::StatusCode::kAlreadyExists:
+      return grpc::StatusCode::ALREADY_EXISTS;
+    case absl::StatusCode::kPermissionDenied:
+      return grpc::StatusCode::PERMISSION_DENIED;
+    case absl::StatusCode::kUnauthenticated:
+      return grpc::StatusCode::UNAUTHENTICATED;
+    case absl::StatusCode::kResourceExhausted:
+      return grpc::StatusCode::RESOURCE_EXHAUSTED;
+    case absl::StatusCode::kFailedPrecondition:
+      return grpc::StatusCode::FAILED_PRECONDITION;
+    case absl::StatusCode::kAborted:
+      return grpc::StatusCode::ABORTED;
+    case absl::StatusCode::kOutOfRange:
+      return grpc::StatusCode::OUT_OF_RANGE;
+    case absl::StatusCode::kUnimplemented:
+      return grpc::StatusCode::UNIMPLEMENTED;
+    case absl::StatusCode::kInternal:
+      return grpc::StatusCode::INTERNAL;
+    case absl::StatusCode::kUnavailable:
+      return grpc::StatusCode::UNAVAILABLE;
+    case absl::StatusCode::kDataLoss:
+      return grpc::StatusCode::DATA_LOSS;
+    default:
+      return grpc::StatusCode::INTERNAL;
+  }
+}
+
 constexpr absl::string_view GRPCStatusCodeDescription(grpc::StatusCode code) {
   switch (code) {
     case grpc::StatusCode::OK:
@@ -109,6 +151,24 @@ constexpr absl::string_view GRPCStatusCodeDescription(grpc::StatusCode code) {
     default:
       return "<BAD ERROR CODE>";
   };
+}
+
+inline absl::Status GRPCStatusToAbsl(grpc::Status status) {
+  if (status.ok()) {
+    return absl::OkStatus();
+  }
+
+  return absl::Status(GRPCStatusCodeToAbsl(status.error_code()),
+                      status.error_message());
+}
+
+inline grpc::Status AbslToGRPCStatus(absl::Status status) {
+  if (status.ok()) {
+    return grpc::Status::OK;
+  }
+
+  return grpc::Status(AbslStatusCodeToGRPC(status.code()),
+                      std::string(status.message()));
 }
 
 }  // namespace nix::util::proto
