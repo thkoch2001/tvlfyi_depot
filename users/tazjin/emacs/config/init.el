@@ -6,6 +6,14 @@
 (require 'use-package)
 (require 'seq)
 
+
+;; TODO(tazjin): Figure out what's up with vc.
+;;
+;; Leaving vc enabled breaks all find-file operations with messages
+;; about .git folders being absent, but in random places.
+(require 'vc)
+(setq vc-handled-backends nil)
+
 (package-initialize)
 
 ;; Initialise all packages installed via Nix.
