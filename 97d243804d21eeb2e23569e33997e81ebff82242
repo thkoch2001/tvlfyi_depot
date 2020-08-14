@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35bde3f1_6bb92bcd",
+        "filename": "third_party/nix/src/libutil/status.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-14T02:42:53Z",
+      "side": 1,
+      "message": "Use absl::StatusCodeToString",
+      "range": {
+        "startLine": 11,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "97d243804d21eeb2e23569e33997e81ebff82242",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5016de1_fcd9f723",
+        "filename": "third_party/nix/src/libutil/status.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-14T02:42:53Z",
+      "side": 1,
+      "message": "Prefer status.ToString() for human-readable text",
+      "range": {
+        "startLine": 54,
+        "startChar": 16,
+        "endLine": 54,
+        "endChar": 31
+      },
+      "revId": "97d243804d21eeb2e23569e33997e81ebff82242",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2fcf5c0_48e07349",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-14T02:42:53Z",
+      "side": 1,
+      "message": "dead code\n\nhttps://www.youtube.com/watch?v\u003d8ZSBYAYcRNs",
+      "range": {
+        "startLine": 295,
+        "startChar": 10,
+        "endLine": 295,
+        "endChar": 28
+      },
+      "revId": "97d243804d21eeb2e23569e33997e81ebff82242",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
