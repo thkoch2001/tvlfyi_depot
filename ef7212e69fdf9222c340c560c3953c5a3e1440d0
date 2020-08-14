@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a0dc1801_8741a7bb",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-14T03:01:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b227a97_5581b50e",
+      "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1cbc873a_7ab1275d",
         "filename": "third_party/nix/src/libexpr/attr-set.cc",
         "patchSetId": 4
@@ -39,6 +57,30 @@
       "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "596d7b95_e10866d1",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-14T03:01:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cbc873a_7ab1275d",
+      "range": {
+        "startLine": 79,
+        "startChar": 36,
+        "endLine": 79,
+        "endChar": 41
+      },
+      "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,53 @@
     },
     {
       "key": {
+        "uuid": "b0332343_903e777c",
+        "filename": "third_party/nix/src/libexpr/get-drvs.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-14T03:01:05Z",
+      "side": 1,
+      "message": "That\u0027s container size, not sizeof.\n\nOtherwise, this is completely normal for converting a unique_ptr to a shared_ptr.",
+      "parentUuid": "8036ef54_eb816503",
+      "range": {
+        "startLine": 298,
+        "startChar": 9,
+        "endLine": 298,
+        "endChar": 79
+      },
+      "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2488c85a_90d3e9e7",
+        "filename": "third_party/nix/src/libexpr/get-drvs.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-14T03:01:05Z",
+      "side": 1,
+      "message": "this is actually a required diff.",
+      "range": {
+        "startLine": 313,
+        "startChar": 13,
+        "endLine": 313,
+        "endChar": 60
+      },
+      "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e78fc60_0ab20163",
         "filename": "third_party/nix/src/tests/attr-set.cc",
         "patchSetId": 4
@@ -85,6 +174,30 @@
       "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f19d480_32354fe3",
+        "filename": "third_party/nix/src/tests/attr-set.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-14T03:01:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e78fc60_0ab20163",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 13
+      },
+      "revId": "ef7212e69fdf9222c340c560c3953c5a3e1440d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
