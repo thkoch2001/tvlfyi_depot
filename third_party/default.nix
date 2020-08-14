@@ -64,8 +64,12 @@ let
       dfu-programmer
       dfu-util
       diffutils
-      dockerTools
       docker-compose
+      dockerTools
+      emacs26
+      emacs26-nox
+      emacsPackages
+      emacsPackagesGen
       execline
       fd
       fetchFromGitHub
@@ -127,8 +131,8 @@ let
       ripgrep
       rsync
       runCommand
-      runCommandNoCC
       runCommandLocal
+      runCommandNoCC
       rustPlatform
       rustc
       s6-portable-utils
@@ -153,13 +157,6 @@ let
       xz
       zlib
       zstd;
-
-    # Inherit packages that should come from a stable channel
-    inherit (stableNixpkgs)
-      emacs26
-      emacs26-nox
-      emacsPackages
-      emacsPackagesGen;
 
     # Required by //third_party/nix
     inherit (nixpkgs)
