@@ -14,8 +14,12 @@ let
 
   emacsWithPackages = (third_party.emacsPackagesGen third_party.emacs26).emacsWithPackages;
 
+  # Pick telega from unstable channel for recent fixes.
+  unstable = import third_party.nixpkgsSrc {};
+  telegaUnstable = (unstable.emacsPackagesGen third_party.emacs26).telega;
+
   # $PATH for binaries that need to be available to Emacs
-  emacsBinPath = lib.makeBinPath [ third_party.telega ];
+  emacsBinPath = lib.makeBinPath [ telegaUnstable ];
 
   identity = x: x;
 
@@ -34,6 +38,7 @@ let
   # MELPA packages:
   (with epkgs.melpaPackages; [
     ace-link
+    bazel-mode
     browse-kill-ring
     cargo
     clojure-mode
@@ -86,7 +91,7 @@ let
     sly
     string-edit
     swiper
-    telega
+    telegaUnstable
     telephone-line
     terraform-mode
     toml-mode
