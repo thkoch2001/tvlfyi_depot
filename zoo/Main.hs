@@ -18,9 +18,11 @@ import qualified Network.Wai.Handler.Warp as Warp
 type Api = "run"
            :> QueryParam' '[Required] "offset" Text
            :> Get '[JSON] UTCTime
+      :<|> "mimi"
+           :> Get '[JSON] Text
 
 server :: Server Api
-server = compute
+server = compute :<|> helloMimi
   where
     compute :: Text -> Handler UTCTime
     compute x = do
@@ -29,6 +31,8 @@ server = compute
         Just req -> do
           res <- liftIO $ shiftTime req
           pure res
+    helloMimi :: Handler Text
+    helloMimi = pure "Hello, Mimi"
 
 data ShiftTimeRequest = ShiftTimeRequest
   { shiftSeconds :: Int
