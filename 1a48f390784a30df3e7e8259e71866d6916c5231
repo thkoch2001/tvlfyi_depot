@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df456c18_9f7020e3",
+        "filename": "third_party/nix/src/libexpr/primops.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1597,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2020-08-15T08:53:49Z",
+      "side": 1,
+      "message": "While having a full e2e test for this is good, if this had a bug, we should probably write a simple unit test for it too.",
+      "range": {
+        "startLine": 1597,
+        "startChar": 12,
+        "endLine": 1597,
+        "endChar": 21
+      },
+      "revId": "1a48f390784a30df3e7e8259e71866d6916c5231",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
