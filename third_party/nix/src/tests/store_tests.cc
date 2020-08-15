@@ -10,19 +10,13 @@
 
 #include "libstore/binary-cache-store.hh"
 #include "libstore/mock-binary-cache-store.hh"
+#include "tests/store-util.hh"
 
 using ::testing::HasSubstr;
 
 namespace nix {
 
 MakeError(InjectedError, Error);
-
-class StoreTest : public ::testing::Test {
- public:
-  static void SetUpTestSuite() {
-    google::InitGoogleLogging("--logtostderr=false");
-  }
-};
 
 class BinaryCacheStoreTest : public StoreTest {};
 
