@@ -1600,9 +1600,10 @@ static void prim_sort(EvalState& state, const Pos& pos, Value** args,
   state.forceList(*args[1], pos);
 
   // Copy of the input list which can be sorted in place.
-  auto outlist = new NixList(*args[1]->list);
+  v.type = tList;
+  v.list = new NixList(*args[1]->list);
 
-  std::for_each(outlist->begin(), outlist->end(),
+  std::for_each(v.list->begin(), v.list->end(),
                 [&](Value* val) { state.forceValue(*val); });
 
   auto comparator = [&](Value* a, Value* b) {
@@ -1612,8 +1613,8 @@ static void prim_sort(EvalState& state, const Pos& pos, Value** args,
       return CompareValues()(a, b);
     }
 
-    Value vTmp1;
-    Value vTmp2;
+    Value vTmp1{};
+    Value vTmp2{};
     state.callFunction(*args[0], *a, vTmp1, pos);
     state.callFunction(vTmp1, *b, vTmp2, pos);
     return state.forceBool(vTmp2, pos);
