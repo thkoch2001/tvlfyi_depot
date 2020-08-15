@@ -46,6 +46,7 @@
 #include "libexpr/nixexpr.hh"
 #include "nix_config.h"
 #include "tests/dummy-store.hh"
+#include "tests/store-util.hh"
 
 namespace nix::tests {
 namespace {
@@ -208,7 +209,7 @@ INSTANTIATE_TEST_SUITE_P(Eval, EvalFailureTest,
 class EvalSuccessTest : public testing::TestWithParam<std::filesystem::path> {};
 
 // Test pattern for files that should evaluate successfully.
-TEST_P(EvalSuccessTest, Fails) {
+TEST_P(EvalSuccessTest, Succeeds) {
   std::shared_ptr<Store> store = std::make_shared<DummyStore>();
   EvalState state({}, ref<Store>(store));
   auto path = GetParam();
@@ -234,6 +235,55 @@ TEST_P(EvalSuccessTest, Fails) {
 
 INSTANTIATE_TEST_SUITE_P(Eval, EvalSuccessTest,
                          testing::ValuesIn(TestFilesFor("eval-okay-")),
+                         TestNameFor);
+
+class BlankStoreTest : public nix::StoreTest {
+  virtual void TestBody() override{};
+};
+
+class EvalStoreSuccessTest
+    : public testing::TestWithParam<std::filesystem::path> {
+ public:
+  virtual void TearDown() { store_test_.TearDown(); }
+
+  absl::StatusOr<std::unique_ptr<nix::LocalStore>> OpenTemporaryStore() {
+    return store_test_.OpenTemporaryStore();
+  }
+
+ private:
+  BlankStoreTest store_test_;
+};
+
+// Test pattern for files that should evaluate successfully but require a real
+// store.
+TEST_P(EvalStoreSuccessTest, Succeeds) {
+  std::unique_ptr<nix::LocalStore> store_ =
+      OpenTemporaryStore().ConsumeValueOrDie();
+  ref<Store> store = ref<Store>(store_.release());
+  EvalState state({}, store);
+  auto path = GetParam();
+
+  Expr* expr = nullptr;
+  ASSERT_NO_THROW(expr = state.parseExprFromFile(GetParam().string()))
+      << path.stem().string() << ": should parse successfully";
+
+  Value result;
+
+  ASSERT_NO_THROW({
+    state.eval(expr, result);
+    state.forceValueDeep(result);
+  }) << path.stem().string()
+     << ": should evaluate successfully";
+
+  auto expected = ExpectedOutputFor(path.stem().string());
+  std::ostringstream value_str;
+  value_str << result;
+
+  EXPECT_EQ(expected, value_str.str()) << "evaluator output should match";
+}
+
+INSTANTIATE_TEST_SUITE_P(Eval, EvalStoreSuccessTest,
+                         testing::ValuesIn(TestFilesFor("evalstore-okay-")),
                          TestNameFor);
 
 }  // namespace nix::tests
