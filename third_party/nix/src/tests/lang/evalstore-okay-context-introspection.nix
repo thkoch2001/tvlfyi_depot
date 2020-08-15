@@ -6,7 +6,7 @@ let
     outputs = [ "out" "foo" ];
   };
 
-  path = "${./eval-okay-context-introspection.nix}";
+  path = "${./evalstore-okay-context-introspection.nix}";
 
   desired-context = {
     "${builtins.unsafeDiscardStringContext path}" = {
