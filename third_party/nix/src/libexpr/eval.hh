@@ -37,7 +37,7 @@ struct PrimOp {
 };
 
 struct Env {
-  Env(unsigned short size) : size(size) { values = std::vector<Value*>(size); }
+  Env(unsigned short size) : size(size) { values.reserve(size); }
 
   Env* up;
   unsigned short size;           // used by ‘valueSize’
