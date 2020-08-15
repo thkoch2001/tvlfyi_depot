@@ -1604,6 +1604,8 @@ static void prim_sort(EvalState& state, const Pos& pos, Value** args,
 
   std::for_each(outlist->begin(), outlist->end(),
                 [&](Value* val) { state.forceValue(*val); });
+  v.type = tList;
+  v.list = outlist;
 
   auto comparator = [&](Value* a, Value* b) {
     /* Optimization: if the comparator is lessThan, bypass
