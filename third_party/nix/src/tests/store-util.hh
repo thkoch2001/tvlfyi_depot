@@ -4,6 +4,7 @@
 
 #include <absl/status/statusor.h>
 #include <absl/strings/escaping.h>
+#include <glog/logging.h>
 #include <sys/random.h>
 
 #include "libstore/local-store.hh"
@@ -26,20 +27,23 @@ class StoreTest : public ::testing::Test {
       std::filesystem::path parent = std::filesystem::temp_directory_path()) {
     while (1) {
       constexpr int kByteCnt = 9;
-      std::string randBytes;
-      randBytes.reserve(kByteCnt);
+      std::array<char, kByteCnt> randBytes;
       if (getrandom(randBytes.data(), kByteCnt, 0) < 0) {
         return absl::InternalError("getrandom() failed");
       }
+      std::string escaped = absl::WebSafeBase64Escape(
+          absl::string_view(randBytes.data(), kByteCnt));
+      CHECK(escaped != "");
 
       std::error_code ec;
       std::filesystem::path candidate =
-          parent /
-          absl::StrCat("nixtest-", absl::WebSafeBase64Escape(randBytes));
+          parent / absl::StrCat("nixtest-", escaped);
       if (std::filesystem::create_directory(candidate, ec)) {
         cleanup_funcs_.push_back(
             [candidate]() { std::filesystem::remove_all(candidate); });
         return candidate;
+      } else {
+        LOG(ERROR) << "could not create dir " << candidate << ": " << ec;
       }
     }
   }
