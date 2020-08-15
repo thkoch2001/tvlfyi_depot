@@ -78,8 +78,8 @@ digit = satisfy (\c -> c >= '0' && c <= '9')
 int :: ReadP Int
 int = read <$> many1 digit
 
-line :: ReadP String
-line = manyTill get (char '\n')
+inputLine :: ReadP String
+inputLine = manyTill get (char '\n')
 
 direction :: ReadP Direction
 direction = do
@@ -89,6 +89,7 @@ direction = do
     'R' -> pure DirRight
     'U' -> pure DirUp
     'D' -> pure DirDown
+    _   -> fail $ "Unexpected direction: " ++ show c
 
 validMove :: Int -> Int -> ReadP Line
 validMove w h = do
@@ -97,7 +98,7 @@ validMove w h = do
   y <- int
   skipSpaces
   dir <- direction
-  char '\n'
+  _ <- char '\n'
   if x >= 0 && x <= w &&  y >= 0 && y <= h then do
     let beg = Point x y
     pure $ mkLine beg (shiftPoint dir beg)
@@ -106,9 +107,9 @@ validMove w h = do
 
 game :: ReadP Game
 game = do
-  w <- read <$> line :: ReadP Int
-  h <- read <$> line :: ReadP Int
-  locs <- read <$> line :: ReadP Int
+  w <- read <$> inputLine
+  h <- read <$> inputLine
+  locs <- read <$> inputLine
   moves <- count locs (validMove w h)
   eof
   pure $ Game mempty moves
@@ -157,7 +158,7 @@ doRotateLine Vertical   End CW  (Line _ end) = mkLineDir' end DirLeft
 doRotateLine Vertical   End CCW (Line _ end) = mkLineDir' end DirRight
 
 classifyOrientation :: Line -> Orientation
-classifyOrientation (Line (Point x1 y1) (Point x2 y2)) =
+classifyOrientation (Line (Point _ y1) (Point _ y2)) =
   if y1 == y2 then Horizontal else Vertical
 
 closesAnySquare :: HS.HashSet Line -> Line -> Bool
@@ -211,7 +212,7 @@ main = do
   input <- readFile "game.txt"
   case parseInput input of
     Nothing -> putStrLn "invalid"
-    Just game ->
-      case scoreGame Player1 game mempty of
+    Just parsedGame ->
+      case scoreGame Player1 parsedGame mempty of
         Nothing -> putStrLn "invalid"
         Just score -> print score
