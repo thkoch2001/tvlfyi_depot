@@ -9,10 +9,6 @@
 
 class StoreTest : public ::testing::Test {
  public:
-  static void SetUpTestSuite() {
-    google::InitGoogleLogging("--logtostderr=false");
-  }
-
   virtual void TearDown() {
     for (auto fn : cleanup_funcs_) {
       try {
