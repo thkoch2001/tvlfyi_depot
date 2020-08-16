@@ -6,8 +6,8 @@ let
   # I'm building this using `nixos-rebuild`. When I better understand how to
   # build socrates using readTree, prefer defining this as an anonymous
   # function.
-  pkgs = import <nixpkgs> {};
   briefcase = import <briefcase> {};
+  pkgs = briefcase.third_party.pkgs;
 
   trimNewline = x: pkgs.lib.removeSuffix "\n" x;
   readSecret = x: trimNewline (builtins.readFile ("/etc/secrets/" + x));
