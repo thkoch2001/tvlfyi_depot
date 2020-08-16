@@ -58,6 +58,13 @@ in {
       shell = pkgs.fish;
     };
 
+    users.buildkite-agent = {
+      # TODO: Consider setting this to `false` when you better understand the
+      # implications.
+      isNormalUser = true;
+      extraGroups = [ "git" ];
+    };
+
     users.git = {
       group = "git";
       isNormalUser = false;
