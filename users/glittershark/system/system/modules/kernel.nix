@@ -12,6 +12,13 @@ let
       sha256 = "01jyg9x2ligr0gjic8lg4f7hw3isz94kqwdbzdk9n8nghklh38p4";
     }} > $out
   '';
+
+  patched-linux-ck = applyPatches [
+    (fetchurl {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_ck1_for_5.7.14.patch\?h\=linux-ck";
+      sha256 = "0l8f2kph4f2lvcjn0s2fg6n9xa6f4khjz7rqc4zxk58r7fh4s5v4";
+    })
+  ] linux-ck;
 in
 {
   boot.kernelPackages = pkgs.linuxPackages_latest.extend (self: super: {
