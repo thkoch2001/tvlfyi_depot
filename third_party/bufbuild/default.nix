@@ -14,6 +14,8 @@ pkgs.buildGoModule {
     sha256 = "1rni5swfnb4sbrd9rls4mc3902xhqrlsja96lfcdfjzx08g6kg20";
   };
 
+  doCheck = false;
+
   # TODO(riking): postinstall produce shell completions for bash, fish, zsh
   # bin/buf bash-completion
   # bin/buf zsh-completion
