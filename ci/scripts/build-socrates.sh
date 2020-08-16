@@ -1,6 +1,6 @@
 set -euo pipefail
 set -x
 
-echo "$PATH"
+echo "$USER"
 
 /home/wpcarro/.nix-profile/bin/rebuild
