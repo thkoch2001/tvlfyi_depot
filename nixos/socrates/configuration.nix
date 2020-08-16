@@ -163,6 +163,12 @@ in {
   # lid.
   services.logind.lidSwitch = "ignore";
 
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      polkit.log("subject.user: " + subject.user + " is attempting action.id: " + action.id);
+    });
+  '';
+
   # Provision SSL certificates to support HTTPS connections.
   security.acme.acceptTerms = true;
   security.acme.email = "wpcarro@gmail.com";
