@@ -1,5 +1,7 @@
 # briefcase
 
+[![Build status](https://badge.buildkite.com/2dd3b5d59abfe9204bd26cfdafc107c2cdf7acf718352a6070.svg)](https://buildkite.com/wpcarros-infrastructure/build-briefcase)
+
 Welcome to my monorepo: briefcase.
 
 Herein you will find a variety of libraries, packages, and documents. Some of
