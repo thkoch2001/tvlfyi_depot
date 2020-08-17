@@ -30,6 +30,7 @@
 (load! "nix")
 (load! "email")
 (load! "cpp")
+(load! "lisp")
 
 (require 's)
 (require 'tvl)
