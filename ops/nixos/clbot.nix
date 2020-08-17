@@ -2,25 +2,58 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (builtins) concatStringsSep attrValues mapAttrs;
+  inherit (builtins) attrValues concatStringsSep mapAttrs readFile;
+  inherit (pkgs) runCommandNoCC;
+
   inherit (lib)
+    listToAttrs
     mkEnableOption
     mkIf
     mkOption
+    removeSuffix
     types;
 
-  description = "CLBot forwards Gerrit notifications to IRC";
+  description = "Bot to forward CL notifications";
   cfg = config.services.depot.clbot;
 
   mkFlags = flags:
     concatStringsSep " "
       (attrValues (mapAttrs (key: value: "-${key} \"${toString value}\"") flags));
+
+  # Escapes a unit name for use in systemd
+  systemdEscape = name: removeSuffix "\n" (readFile (runCommandNoCC "unit-name" {} ''
+    ${pkgs.systemd}/bin/systemd-escape '${name}' >> $out
+  ''));
+
+  mkUnit = flags: channel: {
+    name = "clbot-${systemdEscape channel}";
+    value = {
+      description = "${description} to ${channel}";
+      wantedBy = [ "multi-user.target" ];
+
+      script = "${config.depot.fun.clbot}/bin/clbot ${mkFlags (cfg.flags // {
+        irc_channel = channel;
+      })} -alsologtostderr";
+
+      serviceConfig = {
+        User = "clbot";
+        EnvironmentFile = "/etc/secrets/clbot";
+        Restart = "always";
+      };
+    };
+  };
 in {
   options.services.depot.clbot = {
     enable = mkEnableOption description;
+
     flags = mkOption {
       type = types.attrsOf types.str;
       description = "Key value pairs for command line flags";
+    };
+
+    channels = mkOption {
+      type = with types; listOf str;
+      description = "Channels in which to post (generates one unit per channel)";
     };
   };
 
@@ -37,16 +70,6 @@ in {
       };
     };
 
-    systemd.services.clbot = {
-      inherit description;
-      script = "${config.depot.fun.clbot}/bin/clbot ${mkFlags cfg.flags} -alsologtostderr";
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-        User = "clbot";
-        EnvironmentFile = "/etc/secrets/clbot";
-        Restart = "always";
-      };
-    };
+    systemd.services = listToAttrs (map (mkUnit cfg.flags) cfg.channels);
   };
 }
