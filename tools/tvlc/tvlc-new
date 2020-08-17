@@ -1,0 +1,102 @@
+#!/bin/bash
+
+source common.sh
+
+set -eu
+set -o pipefail
+
+function usage() {
+  echo "tvlc new [-n|--name CLIENTNAME] [derivation...]"
+  echo ""
+  cat <<EOF
+  The 'new' command creates a new git sparse checkout with the given name, and
+  contents needed to build the Nix derivation(s) specified on the command line.
+
+  Options:
+    -n/--name client-name: Sets the git branch and nice checkout name for the
+	workspace. If the option is not provided, the name will be based on the
+	first non-option command-line argument.
+    --branch branch-name: Sets the git branch name only.
+EOF
+}
+
+checkout_name=
+branch_name=
+
+options=$(getopt -o 'n:' --long debug --long name: -- "$@")
+eval set -- "$options"
+while true; do
+  case "$1" in
+  -h)
+    usage
+    exit 0
+    ;;
+  -v)
+    version
+    exit 0
+    ;;
+  -n|--name)
+    shift
+    checkout_name="$1"
+    if [ -z "$branch_name" ]; then
+      branch_name=tvlc-"$1"
+    fi
+    ;;
+  --branch)
+    shift
+    branch_name="$1"
+    ;;
+  --)
+    shift
+    break
+    ;;
+  esac
+  shift
+done
+
+if [ $# -eq 0 ]; then
+  echo "error: workspace name, target derivations required"
+  exit 1
+fi
+
+if [ -z "$checkout_name" ]; then
+  # TODO(riking): deduce
+  echo "error: workspace name (-n) required"
+  exit 1
+fi
+
+if [ -d "$nice_checkout_root/$checkout_name" ]; then
+  echo "error: checkout $checkout_name already exists"
+  # nb: shellescape checkout_name because we expect the user to copy-paste it
+  # shellcheck disable=SC1003
+  echo "consider deleting it with tvlc remove '${checkout_name/'/\'}'"
+  exit 1
+fi
+if [ -f "$DEPOT_ROOT/.git/refs/heads/$branch_name" ]; then
+  echo "error: branch $branch_name already exists in git"
+  # shellcheck disable=SC1003
+  echo "consider deleting it with cd $DEPOT_ROOT; git branch -d '${checkout_name/'/\'}'"
+  exit 1
+fi
+
+# TODO(riking): tvlc-get-depends
+
+# bash math
+checkout_id=$(("$(cat "$tvlc_root/next_clientid")"))
+next_checkout_id=$(("$checkout_id"+1))
+echo "$next_checkout_id" > "$tvlc_root/next_clientid"
+
+checkout_dir="$tvlc_root/clients/$checkout_id"
+mkdir "$checkout_dir"
+cd "$DEPOT_ROOT"
+git worktree add --no-checkout -b "$branch_name" "$checkout_dir"
+# BUG: git not creating the /info/ subdir
+mkdir "$DEPOT_ROOT/.git/worktrees/$checkout_id/info"
+
+cd "$checkout_dir"
+git sparse-checkout init --cone
+git sparse-checkout set "$@"
+
+ln -s "$checkout_dir" "$nice_checkout_root"/"$checkout_name"
+
+echo "$nice_checkout_root/$checkout_name"
