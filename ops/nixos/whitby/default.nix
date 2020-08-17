@@ -383,6 +383,12 @@ in lib.fix(self: {
       openssh.authorizedKeys.keys = depot.users.multi.keys.whitby;
     };
 
+    users.eta = {
+      isNormalUser = true;
+      extraGroups = [ "git" ];
+      openssh.authorizedKeys.keys = depot.users.eta.keys.whitby;
+    };
+
     # Set up a user & group for git shenanigans
     groups.git = {};
     users.git = {
