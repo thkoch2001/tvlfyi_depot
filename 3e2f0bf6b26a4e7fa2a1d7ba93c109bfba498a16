@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95d540c4_d937861c",
+        "filename": "third_party/nix/src/tests/store_tests.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-17T00:32:16Z",
+      "side": 1,
+      "message": "what\u0027s going on here?",
+      "range": {
+        "startLine": 120,
+        "startChar": 3,
+        "endLine": 121,
+        "endChar": 1
+      },
+      "revId": "3e2f0bf6b26a4e7fa2a1d7ba93c109bfba498a16",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
