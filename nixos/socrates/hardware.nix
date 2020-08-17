@@ -5,7 +5,7 @@
 
 {
   imports =
-    [ /home/wpcarro/nixpkgs/nixos/modules/installer/scan/not-detected.nix
+    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];

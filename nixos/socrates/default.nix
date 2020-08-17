@@ -1,5 +1,5 @@
 let
-  briefcase = import /home/wpcarro/briefcase {};
+  briefcase = import <briefcase> {};
   pkgs = briefcase.third_party.pkgs;
   trimNewline = x: pkgs.lib.removeSuffix "\n" x;
   readSecret = x: trimNewline (builtins.readFile ("/etc/secrets/" + x));

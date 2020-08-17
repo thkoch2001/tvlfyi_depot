@@ -8,7 +8,7 @@
 # I believe these calls depend on nixpkgs being set in NIX_PATH, which is a
 # dependency that I'm trying to prune...
 let
-  briefcase = import /home/wpcarro/briefcase {};
+  briefcase = import <briefcase> {};
 in {
   home = {
     packages = with pkgs; [
