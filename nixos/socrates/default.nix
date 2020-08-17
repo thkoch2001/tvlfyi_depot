@@ -50,13 +50,6 @@ in {
       shell = pkgs.fish;
     };
 
-    users.buildkite-agent = {
-      # TODO: Consider setting this to `false` when you better understand the
-      # implications.
-      isNormalUser = true;
-      extraGroups = [ "git" ];
-    };
-
     users.git = {
       group = "git";
       isNormalUser = false;
@@ -113,6 +106,13 @@ in {
     # Without this the links to clone a repository like briefcase will be
     # "http://localhost:3000/wpcarro/briefcase".
     rootUrl = "https://git.wpcarro.dev/";
+  };
+
+  services.buildkite-agents = {
+    socrates = {
+      enable = true;
+      tokenPath = "/etc/secrets/buildkite-agent-token";
+    };
   };
 
   # systemd.services.monzo-token-server = {
