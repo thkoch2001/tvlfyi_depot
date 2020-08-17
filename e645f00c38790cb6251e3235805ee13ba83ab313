@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a7269fc_1b298e80",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-17T01:40:15Z",
+      "side": 1,
+      "message": "empty line above here, otherwise the grouping looks confusing",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 8
+      },
+      "revId": "e645f00c38790cb6251e3235805ee13ba83ab313",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f2efc86_92aae5be",
+        "filename": "third_party/nix/src/libexpr/attr-set.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-17T01:40:15Z",
+      "side": 1,
+      "message": "I think we could have a static empty map, and a private constructor that uses that map instead of a new one.\n\nIt feels a bit unsafe though, because technically things can call insert unexpectedly. I would like to get to a point where we have something like a BindingsBuilder, but that\u0027s for later.",
+      "range": {
+        "startLine": 82,
+        "startChar": 7,
+        "endLine": 82,
+        "endChar": 41
+      },
+      "revId": "e645f00c38790cb6251e3235805ee13ba83ab313",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
