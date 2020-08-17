@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26092c60_ba4cf490",
+        "filename": "third_party/nix/src/tests/store-util.hh",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-17T23:38:09Z",
+      "side": 1,
+      "message": "I don\u0027t actually see any code paths out of this loop that actually loop more than once. is this missing a check to see if the directory already exists and recurring if it does?",
+      "range": {
+        "startLine": 39,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 61
+      },
+      "revId": "47928b2fc770ab3f221e28e48f120c6b0a428ce7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
