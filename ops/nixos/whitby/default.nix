@@ -218,6 +218,11 @@ in lib.fix(self: {
       # populated from /etc/secrets/clbot
       irc_pass = "$CLBOT_PASS";
     };
+
+    channels = [
+      "##tvl"
+      "##tvl-dev"
+    ];
   };
 
   services.depot = {
