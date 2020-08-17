@@ -67,8 +67,8 @@ class RpcStore : public LocalFSStore, public virtual Store {
                               const PathSet& references,
                               RepairFlag repair = NoRepair) override;
 
-  virtual absl::Status buildPaths(const PathSet& paths,
-                                  BuildMode buildMode = bmNormal) override;
+  absl::Status buildPaths(const PathSet& paths, BuildMode buildMode,
+                          std::ostream& build_log) override;
 
   virtual BuildResult buildDerivation(const Path& drvPath,
                                       const BasicDerivation& drv,

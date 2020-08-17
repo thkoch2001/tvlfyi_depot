@@ -461,7 +461,8 @@ Path RemoteStore::addTextToStore(const std::string& name, const std::string& s,
 }
 
 absl::Status RemoteStore::buildPaths(const PathSet& drvPaths,
-                                     BuildMode buildMode) {
+                                     BuildMode buildMode,
+                                     std::ostream& /*build_log*/) {
   auto conn(getConnection());
   conn->to << wopBuildPaths;
   if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 13) {

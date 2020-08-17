@@ -156,7 +156,8 @@ class LocalStore : public LocalFSStore {
   Path addTextToStore(const std::string& name, const std::string& s,
                       const PathSet& references, RepairFlag repair) override;
 
-  absl::Status buildPaths(const PathSet& paths, BuildMode buildMode) override;
+  absl::Status buildPaths(const PathSet& paths, BuildMode buildMode,
+                          std::ostream& build_log) override;
 
   BuildResult buildDerivation(const Path& drvPath, const BasicDerivation& drv,
                               BuildMode buildMode) override;

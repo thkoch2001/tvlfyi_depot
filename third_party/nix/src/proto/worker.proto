@@ -27,7 +27,7 @@ service WorkerService {
 
   // Build the specified derivations in one of the specified build
   // modes, defaulting to a normal build.
-  rpc BuildPaths(BuildPathsRequest) returns (google.protobuf.Empty);
+  rpc BuildPaths(BuildPathsRequest) returns (stream BuildResult);
 
   // TODO: What does this do?
   rpc EnsurePath(StorePath) returns (google.protobuf.Empty);
@@ -172,6 +172,19 @@ message StorePaths {
 
 message Signatures {
   repeated string sigs = 1;
+}
+
+message BuildResult {
+  message BuildLog {
+    StorePath path = 1;
+    string build_log = 2;
+  }
+
+  oneof result_type {
+    BuildLog build_log = 1;
+    // We have started building a path
+    StorePath building_path = 2;
+  }
 }
 
 message IsValidPathResponse {

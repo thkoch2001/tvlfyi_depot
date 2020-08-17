@@ -317,7 +317,8 @@ Path RpcStore::addTextToStore(const std::string& name,
   return result.path();
 }
 
-absl::Status RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
+absl::Status RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode,
+                                  std::ostream& build_log) {
   ClientContext ctx;
   proto::BuildPathsRequest request;
   for (const auto& path : paths) {
@@ -326,8 +327,19 @@ absl::Status RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
 
   google::protobuf::Empty response;
   request.set_mode(nix::BuildModeToProto(buildMode));
-  return nix::util::proto::GRPCStatusToAbsl(
-      stub_->BuildPaths(&ctx, request, &response));
+  auto reader = stub_->BuildPaths(&ctx, request);
+
+  proto::BuildResult msg;
+  while (reader->Read(&msg)) {
+    if (msg.has_build_log()) {
+      build_log << msg.build_log().build_log();
+    } else {
+      build_log << std::endl
+                << "Building path: " << msg.building_path().path() << std::endl;
+    }
+  }
+
+  return nix::util::proto::GRPCStatusToAbsl(reader->Finish());
 }
 
 BuildResult RpcStore::buildDerivation(const Path& drvPath,

@@ -1,13 +1,17 @@
 #pragma once
 
 #include <atomic>
+#include <ios>
 #include <limits>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 
+#include "boost/iostreams/device/null.hpp"
+#include "boost/iostreams/stream.hpp"
 #include "libproto/worker.pb.h"
 #include "libstore/crypto.hh"
 #include "libstore/globals.hh"
@@ -446,7 +450,23 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
      recursively building any sub-derivations. For inputs that are
      not derivations, substitute them. */
   [[nodiscard]] virtual absl::Status buildPaths(const PathSet& paths,
-                                                BuildMode buildMode = bmNormal);
+                                                BuildMode buildMode,
+                                                std::ostream& build_log);
+
+  [[nodiscard]] virtual absl::Status buildPaths(const PathSet& paths,
+                                                BuildMode buildMode) {
+    boost::iostreams::stream<boost::iostreams::null_sink> null_ostream;
+    return buildPaths(paths, buildMode, null_ostream);
+  }
+
+  [[nodiscard]] virtual absl::Status buildPaths(const PathSet& paths) {
+    return buildPaths(paths, bmNormal);
+  }
+
+  [[nodiscard]] virtual absl::Status buildPaths(const PathSet& paths,
+                                                std::ostream& build_log) {
+    return buildPaths(paths, bmNormal, build_log);
+  }
 
   /* Build a single non-materialized derivation (i.e. not from an
      on-disk .drv file). Note that ‘drvPath’ is only used for

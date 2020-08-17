@@ -7,6 +7,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <queue>
 #include <regex>
 #include <sstream>
@@ -140,7 +141,10 @@ class Goal : public std::enable_shared_from_this<Goal> {
   /* Whether the goal is finished. */
   ExitCode exitCode;
 
-  explicit Goal(Worker& worker) : worker(worker) {
+  std::ostream& build_log_;
+
+  Goal(Worker& worker, std::ostream& build_log)
+      : worker(worker), build_log_(build_log) {
     nrFailed = nrNoSubstituters = nrIncompleteClosure = 0;
     exitCode = ecBusy;
   }
@@ -277,12 +281,14 @@ class Worker {
   /* Make a goal (with caching). */
   GoalPtr makeDerivationGoal(const Path& drvPath,
                              const StringSet& wantedOutputs,
-                             BuildMode buildMode = bmNormal);
+                             BuildMode buildMode, std::ostream& build_log);
+
   std::shared_ptr<DerivationGoal> makeBasicDerivationGoal(
-      const Path& drvPath, const BasicDerivation& drv,
-      BuildMode buildMode = bmNormal);
-  GoalPtr makeSubstitutionGoal(const Path& storePath,
-                               RepairFlag repair = NoRepair);
+      const Path& drvPath, const BasicDerivation& drv, BuildMode buildMode,
+      std::ostream& build_log);
+
+  GoalPtr makeSubstitutionGoal(const Path& storePath, RepairFlag repair,
+                               std::ostream& build_log);
 
   /* Remove a dead goal. */
   void removeGoal(const GoalPtr& goal);
@@ -321,7 +327,7 @@ class Worker {
   void waitForAWhile(GoalPtr goal);
 
   /* Loop until the specified top-level goals have finished. */
-  void run(const Goals& topGoals);
+  void run(const Goals& topGoals, std::ostream& build_log);
 
   /* Wait for input to become available. */
   void waitForInput();
@@ -879,9 +885,9 @@ class DerivationGoal : public Goal {
 
  public:
   DerivationGoal(const Path& drvPath, StringSet wantedOutputs, Worker& worker,
-                 BuildMode buildMode = bmNormal);
+                 BuildMode buildMode, std::ostream& build_log);
   DerivationGoal(const Path& drvPath, const BasicDerivation& drv,
-                 Worker& worker, BuildMode buildMode = bmNormal);
+                 Worker& worker, BuildMode buildMode, std::ostream& build_log);
   ~DerivationGoal() override;
 
   /* Whether we need to perform hash rewriting if there are valid output paths.
@@ -987,8 +993,9 @@ class DerivationGoal : public Goal {
 const Path DerivationGoal::homeDir = "/homeless-shelter";
 
 DerivationGoal::DerivationGoal(const Path& drvPath, StringSet wantedOutputs,
-                               Worker& worker, BuildMode buildMode)
-    : Goal(worker),
+                               Worker& worker, BuildMode buildMode,
+                               std::ostream& build_log)
+    : Goal(worker, build_log),
       useDerivation(true),
       drvPath(drvPath),
       wantedOutputs(std::move(wantedOutputs)),
@@ -1002,8 +1009,9 @@ DerivationGoal::DerivationGoal(const Path& drvPath, StringSet wantedOutputs,
 }
 
 DerivationGoal::DerivationGoal(const Path& drvPath, const BasicDerivation& drv,
-                               Worker& worker, BuildMode buildMode)
-    : Goal(worker),
+                               Worker& worker, BuildMode buildMode,
+                               std::ostream& build_log)
+    : Goal(worker, build_log),
       useDerivation(false),
       drvPath(drvPath),
       buildMode(buildMode) {
@@ -4392,7 +4400,7 @@ void Worker::waitForAWhile(GoalPtr goal) {
   addToWeakGoals(waitingForAWhile, std::move(goal));
 }
 
-void Worker::run(const Goals& _topGoals) {
+void Worker::run(const Goals& _topGoals, std::ostream& build_log) {
   for (auto& i : _topGoals) {
     topGoals.insert(i);
   }
@@ -4688,7 +4696,8 @@ static void primeCache(Store& store, const PathSet& paths) {
 }
 
 absl::Status LocalStore::buildPaths(const PathSet& drvPaths,
-                                    BuildMode buildMode) {
+                                    BuildMode buildMode,
+                                    std::ostream& build_log) {
   Worker worker(*this);
 
   primeCache(*this, drvPaths);
@@ -4697,14 +4706,15 @@ absl::Status LocalStore::buildPaths(const PathSet& drvPaths,
   for (auto& i : drvPaths) {
     DrvPathWithOutputs i2 = parseDrvPathWithOutputs(i);
     if (isDerivation(i2.first)) {
-      goals.insert(worker.makeDerivationGoal(i2.first, i2.second, buildMode));
+      goals.insert(
+          worker.makeDerivationGoal(i2.first, i2.second, buildMode, build_log));
     } else {
       goals.insert(worker.makeSubstitutionGoal(
-          i, buildMode == bmRepair ? Repair : NoRepair));
+          i, buildMode == bmRepair ? Repair : NoRepair, build_log));
     }
   }
 
-  worker.run(goals);
+  worker.run(goals, build_log);
 
   PathSet failed;
   for (auto& i : goals) {

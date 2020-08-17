@@ -1,7 +1,9 @@
 #include "nix-daemon-proto.hh"
 
 #include <filesystem>
+#include <ostream>
 #include <sstream>
+#include <streambuf>
 #include <string>
 
 #include <absl/strings/str_cat.h>
@@ -29,7 +31,6 @@ namespace nix::daemon {
 
 using ::google::protobuf::util::TimeUtil;
 using ::grpc::Status;
-using ::nix::proto::BuildStatus;
 using ::nix::proto::PathInfo;
 using ::nix::proto::StorePath;
 using ::nix::proto::StorePaths;
@@ -92,6 +93,22 @@ struct RetrieveRegularNARSink : ParseSink {
     return Status(grpc::StatusCode::INVALID_ARGUMENT,                          \
                   absl::StrFormat("path '%s' is not in the Nix store", path)); \
   }
+
+class BuildLogStreambuf final : public std::streambuf {
+ public:
+  using Writer = grpc::ServerWriter<nix::proto::BuildResult>;
+  explicit BuildLogStreambuf(Writer* writer) : writer_(writer) {}
+
+  std::streamsize xsputn(const char_type* s, std::streamsize n) override {
+    nix::proto::BuildResult msg;
+    msg.mutable_build_log()->set_build_log(std::string(s, n));
+    writer_->Write(msg);
+    return n;
+  }
+
+ private:
+  Writer* writer_{};
+};
 
 class WorkerServiceImpl final : public WorkerService::Service {
  public:
@@ -271,9 +288,9 @@ class WorkerServiceImpl final : public WorkerService::Service {
         __FUNCTION__);
   }
 
-  Status BuildPaths(grpc::ServerContext*,
-                    const nix::proto::BuildPathsRequest* request,
-                    google::protobuf::Empty*) override {
+  Status BuildPaths(
+      grpc::ServerContext*, const nix::proto::BuildPathsRequest* request,
+      grpc::ServerWriter<nix::proto::BuildResult>* writer) override {
     return HandleExceptions(
         [&]() -> Status {
           PathSet drvs;
@@ -286,11 +303,14 @@ class WorkerServiceImpl final : public WorkerService::Service {
             return Status(grpc::StatusCode::INTERNAL, "Invalid build mode");
           }
 
+          BuildLogStreambuf buf(writer);
+          std::ostream build_log(&buf);
+
           // TODO(grfn): If mode is repair and not trusted, we need to return an
           // error here (but we can't yet because we don't know anything about
           // trusted users)
           return nix::util::proto::AbslToGRPCStatus(
-              store_->buildPaths(drvs, mode.value()));
+              store_->buildPaths(drvs, mode.value(), build_log));
         },
         __FUNCTION__);
   }
