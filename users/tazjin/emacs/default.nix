@@ -12,11 +12,11 @@
 let
   inherit (depot) third_party;
 
-  emacsWithPackages = (third_party.emacsPackagesGen third_party.emacs26).emacsWithPackages;
+  emacsWithPackages = (third_party.emacsPackagesGen third_party.emacs27).emacsWithPackages;
 
   # Pick telega from unstable channel for recent fixes.
   unstable = import third_party.nixpkgsSrc {};
-  telegaUnstable = (unstable.emacsPackagesGen third_party.emacs26).telega;
+  telegaUnstable = (unstable.emacsPackagesGen third_party.emacs27).telega;
 
   # $PATH for binaries that need to be available to Emacs
   emacsBinPath = lib.makeBinPath [ telegaUnstable ];
