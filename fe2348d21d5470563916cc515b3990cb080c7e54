@@ -16,6 +16,24 @@
       "revId": "fe2348d21d5470563916cc515b3990cb080c7e54",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ad7f649_4b4482e8",
+        "filename": "third_party/nix/src/libstore/globals.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-17T01:55:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e56e868_f90825c1",
+      "revId": "fe2348d21d5470563916cc515b3990cb080c7e54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
