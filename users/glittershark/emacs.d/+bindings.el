@@ -1192,7 +1192,7 @@ If invoked with a prefix ARG eval the expression after inserting it"
   "c" (general-key-dispatch 'evil-change
         "p" (general-key-dispatch 'sly-eval
               ;; "p" 'eval-sexp-at-point
-              "c" 'sly-pprint-eval-last-expression
+              "c" 'sly-eval-last-expression
               "d" 'sly-eval-defun
               ;; "r" 'cider-test-run-test
               )
@@ -1243,7 +1243,7 @@ If invoked with a prefix ARG eval the expression after inserting it"
                  (s-replace "\"" "")
                  (s-replace "\\n" "\n")))))
        nil nil nil)))
-    ('clj
+    (('clj 'multi)
      (funcall-interactively
       #'cider-test-run-ns-tests
       nil))))
@@ -1407,8 +1407,4 @@ If invoked with a prefix ARG eval the expression after inserting it"
    (:localleader
     :n "a" #'lsp-execute-code-action))
 
- (:map sly-mode-map
-  :n "g \\" #'sly-mrepl
-  :n "g d" #'sly-edit-definition
-  :n "K" #'sly-documentation
-  :n "g SPC" #'sly-eval-buffer))
+ )
