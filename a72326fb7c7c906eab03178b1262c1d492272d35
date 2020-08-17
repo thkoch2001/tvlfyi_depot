@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b2cd12e_4f57aac0",
+        "filename": "tools/depot-scanner/depot_scanner.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-17T21:53:36Z",
+      "side": 1,
+      "message": "if we\u0027re using apache for this subdirectory then we should add a LICENSE file (I don\u0027t mind either way, but the rest of the depot is MIT)",
+      "range": {
+        "startLine": 2,
+        "startChar": 28,
+        "endLine": 2,
+        "endChar": 38
+      },
+      "revId": "a72326fb7c7c906eab03178b1262c1d492272d35",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
