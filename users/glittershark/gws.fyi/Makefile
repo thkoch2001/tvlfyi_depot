@@ -7,7 +7,7 @@ renew:
 	@echo Renewing...
 	@certbot certonly \
 		--manual \
-		--domain gws.fyi \
+		--domain www.gws.fyi \
 		--preferred-challenges dns \
 		--server https://acme-v02.api.letsencrypt.org/directory \
 		--agree-tos \
@@ -16,9 +16,9 @@ renew:
 		--config-dir $(shell pwd)/letsencrypt/config
 	@echo "Reimporting certificate"
 	@aws acm import-certificate \
-	    --certificate file://letsencrypt/config/live/gws.fyi/cert.pem \
-	    --certificate-chain file://letsencrypt/config/live/gws.fyi/fullchain.pem \
-	    --private-key file://letsencrypt/config/live/gws.fyi/privkey.pem \
+	    --certificate file://letsencrypt/config/live/www.gws.fyi/cert.pem \
+	    --certificate-chain file://letsencrypt/config/live/www.gws.fyi/fullchain.pem \
+	    --private-key file://letsencrypt/config/live/www.gws.fyi/privkey.pem \
 	    --certificate-arn arn:aws:acm:us-east-1:797089351721:certificate/628e54f3-55f9-49c0-811a-eba516b68e30 \
 		--region us-east-1
 
@@ -27,4 +27,4 @@ backup:
 		letsencrypt/
 
 open:
-	$$BROWSER "http://gws.fyi"
+	$$BROWSER "https://www.gws.fyi"
