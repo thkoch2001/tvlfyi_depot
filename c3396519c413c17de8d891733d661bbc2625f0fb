@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "afbe22ac_97b7aa4c",
+        "filename": "third_party/nix/src/tests/store-util.hh",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-17T01:30:21Z",
+      "side": 1,
+      "message": "That function is in use on line 30. It returns the container directory for tmpdirs.",
+      "parentUuid": "6bec1baf_09ca96d8",
+      "range": {
+        "startLine": 29,
+        "startChar": 41,
+        "endLine": 29,
+        "endChar": 51
+      },
+      "revId": "c3396519c413c17de8d891733d661bbc2625f0fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5df45b31_888248ee",
         "filename": "third_party/nix/src/tests/store-util.hh",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "c3396519c413c17de8d891733d661bbc2625f0fb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90a63959_8fbaadfd",
+        "filename": "third_party/nix/src/tests/store-util.hh",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-17T01:30:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5df45b31_888248ee",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 14
+      },
+      "revId": "c3396519c413c17de8d891733d661bbc2625f0fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
