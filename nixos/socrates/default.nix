@@ -1,14 +1,6 @@
-{ ... }:
-
 let
-  # TODO(wpcarro): Instead of importing these dependencies as parameters that
-  # readTree will expose I need to import these dependencies manually because
-  # I'm building this using `nixos-rebuild`. When I better understand how to
-  # build socrates using readTree, prefer defining this as an anonymous
-  # function.
-  briefcase = import <briefcase> {};
+  briefcase = import /home/wpcarro/briefcase {};
   pkgs = briefcase.third_party.pkgs;
-
   trimNewline = x: pkgs.lib.removeSuffix "\n" x;
   readSecret = x: trimNewline (builtins.readFile ("/etc/secrets/" + x));
 in {
@@ -72,13 +64,7 @@ in {
   };
 
   nix = {
-    # Expose depot as <depot>, nixpkgs as <nixpkgs>
-    nixPath = [
-      "briefcase=/home/wpcarro/briefcase"
-      "depot=/home/wpcarro/depot"
-      "nixpkgs=/home/wpcarro/nixpkgs"
-    ];
-
+    nixPath = [];
     trustedUsers = [ "root" "wpcarro" ];
   };
 
@@ -229,16 +215,16 @@ in {
         enableACME = true;
         root = briefcase.website.blog;
       };
-      "sandbox.wpcarro.dev" = {
-        addSSL = true;
-        enableACME = true;
-        root = briefcase.website.sandbox;
-      };
-      "learnpianochords.app" = {
-        addSSL = true;
-        enableACME = true;
-        root = briefcase.website.sandbox.learnpianochords;
-      };
+      # "sandbox.wpcarro.dev" = {
+      #   addSSL = true;
+      #   enableACME = true;
+      #   root = briefcase.website.sandbox;
+      # };
+      # "learnpianochords.app" = {
+      #   addSSL = true;
+      #   enableACME = true;
+      #   root = briefcase.website.sandbox.learnpianochords;
+      # };
       "zoo.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
