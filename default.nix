@@ -29,7 +29,6 @@ in {
   website      = readTree ./website;
   lisp         = readTree ./lisp;
   gopkgs       = readTree ./gopkgs;
-  monzo_ynab   = readTree ./monzo_ynab;
   third_party  = readTree ./third_party;
   tools        = readTree ./tools;
   buildHaskell = readTree ./buildHaskell;

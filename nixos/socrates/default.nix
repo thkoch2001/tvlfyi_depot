@@ -118,7 +118,7 @@ in {
   # systemd.services.monzo-token-server = {
   #   enable = true;
   #   description = "Ensure my Monzo access token is valid";
-  #   script = "${briefcase.monzo_ynab.tokens}/bin/token-server";
+  #   script = "${briefcase.tools.monzo_ynab.tokens}/bin/token-server";
   #   # TODO(wpcarro): I'm unsure of the size of this security risk, but if a
   #   # non-root user runs `systemctl cat monzo-token-server`, they could read the
   #   # following, sensitive environment variables.
