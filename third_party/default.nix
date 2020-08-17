@@ -137,6 +137,7 @@ let
       rustc
       s6-portable-utils
       sbcl
+      shellcheck
       sqlite
       stdenvNoCC
       stern
