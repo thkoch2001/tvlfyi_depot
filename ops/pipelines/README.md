@@ -1,3 +1,5 @@
-This folder contains various utilities used for our [Buildkite CI
-setup][ci]. These are mostly hooks invoked by Buildkite runners, or
-configuration used to set up the build pipelines.
+This folder contains the dynamic configuration for our [Buildkite CI
+setup](https://tvl.fyi/builds).
+
+The configuration is built and dynamically loaded by Buildkite at the start of
+each CI pipeline.
