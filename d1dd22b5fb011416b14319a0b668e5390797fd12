@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b04b1947_aece121c",
+        "filename": "third_party/nix/src/tests/store-util.hh",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-17T01:30:44Z",
+      "side": 1,
+      "message": "Addressed in 1753",
+      "parentUuid": "b385b5db_59614afd",
+      "range": {
+        "startLine": 34,
+        "startChar": 17,
+        "endLine": 34,
+        "endChar": 25
+      },
+      "revId": "d1dd22b5fb011416b14319a0b668e5390797fd12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ae5b3b5_ac8a3caa",
         "filename": "third_party/nix/src/tests/store-util.hh",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "d1dd22b5fb011416b14319a0b668e5390797fd12",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8385e6fa_b459a8ec",
+        "filename": "third_party/nix/src/tests/store-util.hh",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-17T01:30:44Z",
+      "side": 1,
+      "message": "Addressed in 1753",
+      "parentUuid": "7ae5b3b5_ac8a3caa",
+      "revId": "d1dd22b5fb011416b14319a0b668e5390797fd12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
