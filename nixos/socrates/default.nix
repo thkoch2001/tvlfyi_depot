@@ -112,6 +112,7 @@ in {
     socrates = {
       enable = true;
       tokenPath = "/etc/secrets/buildkite-agent-token";
+      privateSshKeyPath = "/etc/ssh/buildkite_agent_id_rsa";
     };
   };
 
