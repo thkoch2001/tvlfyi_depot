@@ -1,10 +1,10 @@
 { depot, pkgs, ...}:
 
 let
-  localProto = depot.nix.buildGo.proto {
-    name = "code.tvl.fyi/tools/depot-scanner/proto"
-    proto = ./proto/depot_scanner.proto
-  }
+  localProto = depot.nix.buildGo.grpc {
+    name = "code.tvl.fyi/tools/depot-scanner/proto";
+    proto = ./depot_scanner.proto;
+  };
 in depot.nix.buildGo.program {
   name = "depot-scanner";
   srcs = [
@@ -13,4 +13,4 @@ in depot.nix.buildGo.program {
   deps = [
     localProto
   ];
-}
+} // { inherit localProto; }
