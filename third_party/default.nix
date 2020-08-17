@@ -218,6 +218,15 @@ in exposed.lib.fix(self: exposed // {
   clangStdenv = nixpkgs.llvmPackages_10.stdenv;
   stdenv = nixpkgs.llvmPackages_10.stdenv;
 
+  # Provide Emacs 27
+  #
+  # The assert exists because the name of the attribute is unversioned
+  # (which is different from previous versions).
+  emacs27 = assert ((exposed.lib.versions.major nixpkgs.emacs.version) == "27");
+    nixpkgs.emacs;
+  emacs27-nox = assert ((exposed.lib.versions.major nixpkgs.emacs.version) == "27");
+    nixpkgs.emacs-nox;
+
   # The Go authors have released a version of Go (in alpha) that has a
   # type system. This makes it available, specifically for use with
   # //nix/buildTypedGo.
