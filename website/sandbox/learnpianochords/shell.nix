@@ -1,5 +1,6 @@
 let
-  pkgs = import /home/wpcarro/nixpkgs {};
+  briefcase = import <briefcase> {};
+  pkgs = briefcase.third_party.pkgs;
 in pkgs.mkShell {
   buildInputs = with pkgs; [
     elmPackages.elm

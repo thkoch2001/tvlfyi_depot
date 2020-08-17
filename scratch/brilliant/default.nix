@@ -1,5 +1,5 @@
 let
-  briefcase = import /home/wpcarro/briefcase {};
+  briefcase = import <briefcase> {};
 in briefcase.buildHaskell.program {
   name = "transform-keyboard";
   srcs = builtins.path {
