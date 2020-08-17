@@ -1,9 +1,16 @@
 // Copyright 2020 TVL
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: MIT
 
 syntax = "proto3";
 package tvl.tools.depot_scanner;
 option go_package = "code.tvl.fyi/tools/depot-scanner/proto";
+
+enum PathType {
+  UNKNOWN = 0;
+  DEPOT = 1;
+  STORE = 2;
+  CORE = 3;
+}
 
 message ScanRequest {
   // Which revision of the depot
@@ -25,6 +32,10 @@ message ScanResponse {
 
 message ArchiveRequest {
   repeated string depotPath = 1;
+}
+
+message ArchiveChunk {
+  bytes chunk = 1;
 }
 
 service DepotScanService {
