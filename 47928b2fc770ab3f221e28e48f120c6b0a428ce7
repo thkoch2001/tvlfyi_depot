@@ -22,6 +22,30 @@
       "revId": "47928b2fc770ab3f221e28e48f120c6b0a428ce7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66d4d61b_1b5b1e03",
+        "filename": "third_party/nix/src/tests/store-util.hh",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-18T03:12:55Z",
+      "side": 1,
+      "message": "PTAL at the new version.",
+      "parentUuid": "26092c60_ba4cf490",
+      "range": {
+        "startLine": 39,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 61
+      },
+      "revId": "47928b2fc770ab3f221e28e48f120c6b0a428ce7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
