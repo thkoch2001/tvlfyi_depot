@@ -25,7 +25,6 @@ pkgs.buildGoModule rec {
   meta = with lib; {
     description = "a logging IRC proxy";
     homepage = "https://anomalous.eu/projects/loxy";
-    vcs = "https://src.anomalous.eu/loxy";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ V edef ];
   };
