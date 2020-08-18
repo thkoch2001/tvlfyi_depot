@@ -1,10 +1,8 @@
 let
-  pkgs = import <unstable> {};
-in pkgs.mkShell {
-  buildInputs = with pkgs; [
-    (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
-      hpkgs.quickcheck-simple
-      hpkgs.checkers
-    ]))
+  briefcase = import <briefcase> {};
+in briefcase.buildHaskell.shell {
+  deps = hpkgs: with hpkgs; [
+    quickcheck-simple
+    checkers
   ];
 }

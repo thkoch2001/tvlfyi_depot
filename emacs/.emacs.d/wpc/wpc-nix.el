@@ -59,7 +59,7 @@ This function was taken from @tazjin's depot and adapted for my monorepo.
   (interactive "sAttribute: ")
   (lexical-let* ((outbuf (get-buffer-create (format "*briefcase-out/%s*" attribute)))
          (errbuf (get-buffer-create (format "*briefcase-errors/%s*" attribute)))
-         (expression (format "let depot = import <depot> {}; briefcase = import <briefcase> {}; in depot.nix.buildLisp.sbclWith [ briefcase.%s ]" attribute))
+         (expression (format "let briefcase = import <briefcase> {}; in briefcase.third_party.depot.nix.buildLisp.sbclWith [ briefcase.%s ]" attribute))
          (command (list "nix-build" "-E" expression)))
     (message "Acquiring Lisp for <briefcase>.%s" attribute)
     (make-process :name (format "nix-build/%s" attribute)

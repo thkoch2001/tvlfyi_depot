@@ -1,6 +1,6 @@
-let
-  pkgs = import <nixpkgs> {};
-in pkgs.stdenv.mkDerivation {
+{ pkgs, ... }:
+
+pkgs.stdenv.mkDerivation {
   name = "ideal-website";
   src = builtins.path { path = ./.; name = "contentful"; };
   buildInputs = with pkgs; [

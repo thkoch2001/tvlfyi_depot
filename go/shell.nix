@@ -1,9 +1,10 @@
 let
-  pkgs = import <nixpkgs> {};
+  briefcase = import <briefcase> {};
+  pkgs = briefcase.third_party.pkgs;
 in pkgs.mkShell {
-  buildInputs = [
-    pkgs.go
-    pkgs.goimports
-    pkgs.godef
+  buildInputs = with pkgs; [
+    go
+    goimports
+    godef
   ];
 }
