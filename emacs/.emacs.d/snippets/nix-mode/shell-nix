@@ -2,9 +2,10 @@
 # name: shell.nix boilerplate
 # key: import
 # --
-with import <nixpkgs> {};
-
-stdenv.mkDerivation {
+let
+  briefcase = with import <briefcase> {};
+  pkgs = briefcase.third_party.pkgs;
+in stdenv.mkDerivation {
   name = "$1";
   buildInputs = [
     $2

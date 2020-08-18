@@ -1,7 +1,7 @@
 let
-  pkgs = import <nixpkgs> {};
-in
-pkgs.mkShell {
+  briefcase = import <briefcase> {};
+  pkgs = briefcase.third_party.pkgs;
+in pkgs.mkShell {
   buildInputs = with pkgs; [
     hugo
   ];

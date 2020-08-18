@@ -1,9 +1,5 @@
-with import <nixpkgs> {};
-
-stdenv.mkDerivation {
-  name = "f-hs";
-  buildInputs = [
-    (pkgs.haskellPackages.ghcWithPackages (pkgs: [
-    ]))
-  ];
+let
+  briefcase = import <briefcase> {};
+in briefcase.buildHaskell.shell {
+  deps = hpkgs: [];
 }

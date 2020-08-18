@@ -1,8 +1,4 @@
-{
-  pkgs ? import <nixpkgs> {},
-  depot ? import <depot> {},
-  ...
-}:
+{ pkgs, depot, ... }:
 
 pkgs.dockerTools.buildLayeredImage {
   name = "gemma";

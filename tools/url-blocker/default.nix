@@ -1,8 +1,6 @@
-{ ... }:
+{ pkgs, ... }:
 
 let
-  pkgs = import <unstable> {};
-
   ghc = pkgs.haskellPackages.ghcWithPackages (hpkgs: [
     hpkgs.time
     hpkgs.aeson
