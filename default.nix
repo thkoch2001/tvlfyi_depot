@@ -11,11 +11,6 @@ let
       ref = "nixos-20.03";
       rev = "afa9ca61924f05aacfe495a7ad0fd84709d236cc";
     }) {};
-    unstable = import (builtins.fetchGit {
-      url = "https://github.com/NixOS/nixpkgs-channels";
-      ref = "nixos-unstable";
-      rev = "dc80d7bc4a244120b3d766746c41c0d9c5f81dfa";
-    }) {};
     briefcase = import (builtins.path {
       path = ./.;
       name = "briefcase";

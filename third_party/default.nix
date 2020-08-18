@@ -1,5 +1,5 @@
-{ pkgs, unstable, briefcase, depot, ... }:
+{ pkgs, briefcase, depot, ... }:
 
 # Exposing these to be available as briefcase.third_party.pkgs for example.
 
-{ inherit pkgs unstable briefcase depot; }
+{ inherit pkgs briefcase depot; }
