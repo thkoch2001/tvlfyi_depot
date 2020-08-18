@@ -223,7 +223,10 @@ in exposed.lib.fix(self: exposed // {
   # The assert exists because the name of the attribute is unversioned
   # (which is different from previous versions).
   emacs27 = assert ((exposed.lib.versions.major nixpkgs.emacs.version) == "27");
-    nixpkgs.emacs;
+    nixpkgs.emacs.overrideAttrs(old: {
+      configureFlags = old.configureFlags ++ [ "--with-cairo" ];
+    });
+
   emacs27-nox = assert ((exposed.lib.versions.major nixpkgs.emacs.version) == "27");
     nixpkgs.emacs-nox;
 
