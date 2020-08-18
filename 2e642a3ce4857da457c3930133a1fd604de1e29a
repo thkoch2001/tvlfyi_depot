@@ -46,6 +46,30 @@
       "revId": "2e642a3ce4857da457c3930133a1fd604de1e29a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f9803dae_13ae9370",
+        "filename": "third_party/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-08-18T22:06:50Z",
+      "side": 1,
+      "message": "But little periodic bumps are much easier than big bumps :p",
+      "parentUuid": "80b37060_69c16d6b",
+      "range": {
+        "startLine": 227,
+        "startChar": 6,
+        "endLine": 227,
+        "endChar": 64
+      },
+      "revId": "2e642a3ce4857da457c3930133a1fd604de1e29a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
