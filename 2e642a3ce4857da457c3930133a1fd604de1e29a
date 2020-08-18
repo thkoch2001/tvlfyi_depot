@@ -22,6 +22,30 @@
       "revId": "2e642a3ce4857da457c3930133a1fd604de1e29a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80b37060_69c16d6b",
+        "filename": "third_party/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-18T22:01:30Z",
+      "side": 1,
+      "message": "cairo is already added in the derivation, upstream just forgot to enable it - they fixed it yesterday but I can\u0027t be bothered to bump channels again so soon",
+      "parentUuid": "805faef7_d5e9b719",
+      "range": {
+        "startLine": 227,
+        "startChar": 6,
+        "endLine": 227,
+        "endChar": 64
+      },
+      "revId": "2e642a3ce4857da457c3930133a1fd604de1e29a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
