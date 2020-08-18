@@ -21,7 +21,7 @@ unresolved_comments(Check) :-
     Check = label('All-Comments-Resolved', need(_)).
 
 commit_message(Check) :-
-    gerrit:commit_message_matches('^(feat|fix|docs|style|refactor|test|chore|merge)[\(:]'),
+    gerrit:commit_message_matches('^(feat|fix|docs|style|refactor|test|chore|merge|revert)[\(:]'),
     !,
     gerrit:uploader(Uploader),
     Check = label('Conformant-Commit-Message', ok(Uploader)).
