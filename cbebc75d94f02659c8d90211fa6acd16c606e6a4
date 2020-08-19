@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "748d5428_dfe99c5e",
+        "filename": "nix/buildGo/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2020-08-19T13:31:10Z",
+      "side": 0,
+      "message": "Can we get a CL for this? I\u0027d like to cherry-pick it.",
+      "revId": "cbebc75d94f02659c8d90211fa6acd16c606e6a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
