@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e65d9f1_1c2f95f3",
+        "filename": "tools/tvlc/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-19T01:19:07Z",
+      "side": 1,
+      "message": "is this intentional? also, \u0027\u0027\\n\u0027\u0027 is equivalent to just \"\"",
+      "range": {
+        "startLine": 8,
+        "startChar": 48,
+        "endLine": 9,
+        "endChar": 5
+      },
+      "revId": "52d3c92c49856f6bd50bbe2ecf3779c3dfe62659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
