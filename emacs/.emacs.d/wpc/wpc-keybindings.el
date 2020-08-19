@@ -115,15 +115,6 @@
  "gs" #'magit-status
  "E" #'refine
  "es" #'wpc/create-snippet
- ;; TODO: Replace with `macros/ilambda' when that is working again.
- "ev" (lambda () (interactive) (wpc/find-file-split "~/.config/nvim/init.vim"))
- "ee" (lambda () (interactive) (wpc/find-file-split "~/.emacs.d/init.el"))
- "ez" (lambda () (interactive) (wpc/find-file-split "~/.zshrc"))
- "ea" (lambda () (interactive) (wpc/find-file-split "~/aliases.zsh"))
- "ef" (lambda () (interactive) (wpc/find-file-split "~/functions.zsh"))
- "el" (lambda () (interactive) (wpc/find-file-split "~/variables.zsh"))
- "ex" (lambda () (interactive) (wpc/find-file-split "~/.Xresources"))
- "em" (lambda () (interactive) (wpc/find-file-split "~/.tmux.conf"))
  "l" #'linum-mode
  "B" #'magit-blame
  "w" #'save-buffer
