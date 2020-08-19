@@ -31,8 +31,6 @@
 ;; TODO: How can I package this using Nix?
 ;; (require 'egg-timer "~/programming/egg-timer.el/egg-timer.el")
 
-;; TODO: Reconcile kbd.el, keybindings.el, wpc-keybindings.el, keyboard.el.
-(require 'wpc-keybindings)
 (require 'keybindings)
 (require 'window-manager)
 (require 'wpc-ui)
