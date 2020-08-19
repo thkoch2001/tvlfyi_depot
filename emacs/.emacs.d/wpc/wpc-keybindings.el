@@ -91,36 +91,6 @@
 ;; kbds for magit is with `evil-magit'.
 (use-package evil-magit)
 
-;; TODO: Consider moving this to another module.
-(general-define-key
- :prefix "<SPC>"
- :states '(normal)
- "i" #'counsel-semantic-or-imenu
- "I" #'ibuffer
- "hk" #'helpful-callable
- "hf" #'helpful-function
- "hm" #'helpful-macro
- "hc" #'helpful-command
- "hk" #'helpful-key
- "hv" #'helpful-variable
- "hp" #'helpful-at-point
- "s" #'flyspell-mode
- "S" #'sort-lines
- "=" #'align
- "p" #'flycheck-previous-error
- "f" #'project-find-file
- "n" #'flycheck-next-error
- "N" #'smerge-next
- "W" #'balance-windows
- "gs" #'magit-status
- "E" #'refine
- "es" #'wpc/create-snippet
- "l" #'linum-mode
- "B" #'magit-blame
- "w" #'save-buffer
- "r" #'wpc/evil-replace-under-point
- "R" #'deadgrep)
-
 ;; create comments easily
 (use-package evil-commentary
   :after (evil)

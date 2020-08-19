@@ -32,25 +32,46 @@
   `(exwm-input-set-key (kbd ,c) ,fn))
 
 (keybinding/exwm "C-M-v" #'ivy-clipmenu/copy)
-
 (keybinding/exwm "<XF86MonBrightnessUp>" #'screen-brightness/increase)
 (keybinding/exwm "<XF86MonBrightnessDown>" #'screen-brightness/decrease)
-
 (keybinding/exwm "<XF86AudioMute>" #'pulse-audio/toggle-mute)
 (keybinding/exwm "<XF86AudioLowerVolume>" #'pulse-audio/decrease-volume)
 (keybinding/exwm "<XF86AudioRaiseVolume>" #'pulse-audio/increase-volume)
 (keybinding/exwm "<XF86AudioMicMute>" #'pulse-audio/toggle-microphone)
-
 (keybinding/exwm "C-M-c" #'chrome/browse)
-
 (keybinding/exwm (kbd/raw 'x11 "s") #'scrot/select)
-
 (keybinding/exwm "<C-M-tab>" #'exwm/switch-to-exwm-buffer)
 
 (general-define-key
  :prefix "<SPC>"
  :states '(normal)
- "." #'ffap)
+ "." #'ffap
+ "gn" #'notmuch
+ "i" #'counsel-semantic-or-imenu
+ "I" #'ibuffer
+ "hk" #'helpful-callable
+ "hf" #'helpful-function
+ "hm" #'helpful-macro
+ "hc" #'helpful-command
+ "hk" #'helpful-key
+ "hv" #'helpful-variable
+ "hp" #'helpful-at-point
+ "s" #'flyspell-mode
+ "S" #'sort-lines
+ "=" #'align
+ "p" #'flycheck-previous-error
+ "f" #'project-find-file
+ "n" #'flycheck-next-error
+ "N" #'smerge-next
+ "W" #'balance-windows
+ "gs" #'magit-status
+ "E" #'refine
+ "es" #'wpc/create-snippet
+ "l" #'linum-mode
+ "B" #'magit-blame
+ "w" #'save-buffer
+ "r" #'wpc/evil-replace-under-point
+ "R" #'deadgrep)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Vterm
@@ -84,10 +105,7 @@
    :prefix "<SPC>"
    :states '(normal)
    "d0" #'display/disable-laptop
-   "d1" #'display/enable-laptop)
-  (general-define-key
-   :prefix "<SPC>"
-   :states '(normal)
+   "d1" #'display/enable-laptop
    "D0" #'display/disable-4k
    "D1" #'display/enable-4k))
 
@@ -143,11 +161,6 @@
         (interactive)
         (notmuch-search-tag '("-inbox" "-action" "-review" "+waiting")))
  "e" #'notmuch-search-archive-thread)
-
-(general-define-key
- :states '(normal)
- :prefix "<SPC>"
- "gn" #'notmuch)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here
