@@ -29,63 +29,68 @@
 (require 'buffer)
 (require 'display)
 (require 'device)
-(require 'evil-ex)
 
-(use-package evil
-  :init
-  ;; Should remove the warning messages on init.
-  (setq evil-want-integration t)
-  ;; TODO: Troubleshoot why this binding causes the following warning:
-  ;; "Warning (evil-collection): `evil-want-keybinding' was set to nil but not
-  ;; before loading evil."
-  (setq evil-want-keybinding nil)
-  (general-evil-setup)
-  :config
-  ;; Ensure that evil's command mode behaves with readline bindings.
-  (general-define-key
-   :keymaps 'evil-ex-completion-map
-   "C-a" #'move-beginning-of-line
-   "C-e" #'move-end-of-line
-   "C-k" #'kill-line
-   "C-u" #'evil-delete-whole-line
-   "C-v" #'evil-paste-after
-   "C-d" #'delete-char
-   "C-f" #'forward-char
-   "M-b" #'backward-word
-   "M-f" #'forward-word
-   "M-d" #'kill-word
-   "M-DEL" #'backward-kill-word
-   "C-b" #'backward-char)
-  ;; TODO: Ensure all of my custom keybindings end up in a single map that is
-  ;; easy to enable or disable.
-  (general-mmap
-    :keymaps 'override
-    "RET" #'evil-goto-line
-    "H"   #'evil-first-non-blank
-    "L"   #'evil-end-of-line
-    "_"   #'ranger
-    "-"   #'dired-jump
-    "sl"  #'wpc/evil-window-vsplit-right
-    "sh"  #'evil-window-vsplit
-    "sk"  #'evil-window-split
-    "sj"  #'wpc/evil-window-split-down)
-  (general-nmap
-    :keymaps 'override
-    "gd" #'xref-find-definitions
-    ;; Wrapping `xref-find-references' in the `let' binding to prevent xref from
-    ;; prompting.  There are other ways to handle this variable, such as setting
-    ;; it globally with `setq' or buffer-locally with `setq-local'.  For now, I
-    ;; prefer setting it with `let', which should bind it in the dynamic scope
-    ;; for the duration of the `xref-find-references' function call.
-    "gx" (lambda ()
-           (interactive)
-           (let ((xref-prompt-for-identifier nil))
-             (call-interactively #'xref-find-references))))
-  (general-unbind 'motion "M-." "C-p" "<SPC>")
-  (general-unbind 'normal "s"   "M-." "C-p" "C-n")
-  (general-unbind 'insert "C-v" "C-d" "C-a" "C-e" "C-n" "C-p" "C-k")
-  (setq evil-symbol-word-search t)
-  (evil-mode 1))
+;; Note: The following lines must be sorted this way.
+(setq evil-want-integration t)
+(setq evil-want-keybinding nil)
+(general-evil-setup)
+(require 'evil)
+(require 'evil-collection)
+(require 'evil-magit)
+(require 'evil-commentary)
+(require 'evil-surround)
+(require 'key-chord)
+
+;; Ensure that evil's command mode behaves with readline bindings.
+(general-define-key
+ :keymaps 'evil-ex-completion-map
+ "C-a" #'move-beginning-of-line
+ "C-e" #'move-end-of-line
+ "C-k" #'kill-line
+ "C-u" #'evil-delete-whole-line
+ "C-v" #'evil-paste-after
+ "C-d" #'delete-char
+ "C-f" #'forward-char
+ "M-b" #'backward-word
+ "M-f" #'forward-word
+ "M-d" #'kill-word
+ "M-DEL" #'backward-kill-word
+ "C-b" #'backward-char)
+
+(general-mmap
+  :keymaps 'override
+  "RET" #'evil-goto-line
+  "H"   #'evil-first-non-blank
+  "L"   #'evil-end-of-line
+  "_"   #'ranger
+  "-"   #'dired-jump
+  "sl"  #'wpc/evil-window-vsplit-right
+  "sh"  #'evil-window-vsplit
+  "sk"  #'evil-window-split
+  "sj"  #'wpc/evil-window-split-down)
+
+(general-nmap
+  :keymaps 'override
+  "gd" #'xref-find-definitions
+  ;; Wrapping `xref-find-references' in the `let' binding to prevent xref from
+  ;; prompting.  There are other ways to handle this variable, such as setting
+  ;; it globally with `setq' or buffer-locally with `setq-local'.  For now, I
+  ;; prefer setting it with `let', which should bind it in the dynamic scope
+  ;; for the duration of the `xref-find-references' function call.
+  "gx" (lambda ()
+         (interactive)
+         (let ((xref-prompt-for-identifier nil))
+           (call-interactively #'xref-find-references))))
+
+(general-unbind 'motion "M-." "C-p" "<SPC>")
+(general-unbind 'normal "s"   "M-." "C-p" "C-n")
+(general-unbind 'insert "C-v" "C-d" "C-a" "C-e" "C-n" "C-p" "C-k")
+
+(setq evil-symbol-word-search t)
+(evil-mode 1)
+(evil-collection-init)
+(evil-commentary-mode)
+(global-evil-surround-mode 1)
 
 ;; Ensure the Evil search results get centered vertically.
 (progn
@@ -99,29 +104,8 @@
       (after advice-for-evil-search-previous activate)
     (evil-scroll-line-to-center (line-number-at-pos))))
 
-(use-package evil-collection
-  :after (evil)
-  :config
-  (evil-collection-init))
-
-(use-package evil-magit)
-
-;; create comments easily
-(use-package evil-commentary
-  :after (evil)
-  :config
-  (evil-commentary-mode))
-
-(use-package evil-surround
-  :after (evil)
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package key-chord
-  :after (evil)
-  :config
-  (key-chord-mode 1)
-  (key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
+(key-chord-mode 1)
+(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General KBDs
