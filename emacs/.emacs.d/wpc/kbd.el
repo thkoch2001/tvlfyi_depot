@@ -27,9 +27,6 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst kbd/install-kbds? t
-  "When t, install keybindings defined herein.")
-
 (defconst kbd/prefixes
   '((workspace . "s")
     (x11 . "C-s"))
@@ -80,11 +77,6 @@ Values for F include:
   (interactive)
   (message "[kbd] Awaiting keypress...")
   (message (string/format "[kbd] keycode: %s" (read-key))))
-
-;; (when kbd/install-kbds?
-;;   (general-define-key
-;;    :prefix "<SPC>"
-;;    "hr" #'kbd/print-keycode))
 
 (provide 'kbd)
 ;;; kbd.el ends here
