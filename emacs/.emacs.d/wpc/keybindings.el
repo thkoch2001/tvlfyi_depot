@@ -24,7 +24,7 @@
 (require 'scrot)
 (require 'ivy-clipmenu)
 (require 'general)
-(require 'window-manager)
+(require 'exwm)
 (require 'vterm-mgt)
 (require 'buffer)
 (require 'display)
