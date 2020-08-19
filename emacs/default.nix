@@ -24,6 +24,8 @@ let
     ]) ++
 
     (with epkgs.melpaPackages; [
+      org-bullets
+      sly
       notmuch
       elm-mode
       ts
