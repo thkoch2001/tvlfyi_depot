@@ -116,6 +116,7 @@ let
 
   withEmacsPath = emacsBin: pkgs.writeShellScriptBin "wpcarros-emacs" ''
     # TODO: Is this the best way to handle environment variables using Nix?
+    export XMODIFIERS=emacs
     export BRIEFCASE=$HOME/briefcase
     export DEPOT=$HOME/depot
 
@@ -134,7 +135,7 @@ let
 in {
   # Use `nix-env -f '<briefcase>' emacs.glinux` to install `wpcarro-emacs` on
   # gLinux machines. This will ensure that X and GL linkage behaves as expected.
-  glinux = withEmacsPath "/usr/bin/emacs";
+  glinux = withEmacsPath "/usr/bin/google-emacs";
 
   # Use `nix-env -f '<briefcase>' emacs.nixos` to install `wpcarros-emacs` on
   # NixOS machines.
