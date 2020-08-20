@@ -31,3 +31,5 @@ node_modules/
 /configs/.config/fish/fish_variables
 /website/blog/public/
 /emacs/.emacs.d/tramp
+.gitsecret/keys/random_seed
+!*.secret
