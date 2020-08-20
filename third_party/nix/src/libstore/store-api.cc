@@ -92,7 +92,7 @@ nix::proto::BuildStatus BuildResult::status_to_proto() {
 }
 
 std::optional<BuildResult> BuildResult::FromProto(
-    const nix::proto::BuildDerivationResponse& resp) {
+    const nix::proto::BuildResult& resp) {
   BuildResult result;
   switch (resp.status()) {
     case proto::BuildStatus::Built:
@@ -125,7 +125,7 @@ std::optional<BuildResult> BuildResult::FromProto(
       return {};
   }
 
-  result.errorMsg = resp.error_message();
+  result.errorMsg = resp.msg();
   return result;
 }
 
