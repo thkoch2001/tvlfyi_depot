@@ -455,11 +455,13 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
      output paths can be created by running the builder, after
      recursively building any sub-derivations. For inputs that are
      not derivations, substitute them. */
-  [[nodiscard]] virtual absl::Status buildPaths(const PathSet& paths,
-                                                BuildMode buildMode);
+  [[nodiscard]] virtual absl::Status buildPaths(std::ostream& log_sink,
+                                                const PathSet& paths,
+                                                BuildMode build_mode);
 
-  [[nodiscard]] absl::Status buildPaths(const PathSet& paths) {
-    return buildPaths(paths, bmNormal);
+  [[nodiscard]] absl::Status buildPaths(std::ostream& log_sink,
+                                        const PathSet& paths) {
+    return buildPaths(log_sink, paths, bmNormal);
   }
 
   /* Build a single non-materialized derivation (i.e. not from an

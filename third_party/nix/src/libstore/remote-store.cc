@@ -460,18 +460,19 @@ Path RemoteStore::addTextToStore(const std::string& name, const std::string& s,
   return readStorePath(*this, conn->from);
 }
 
-absl::Status RemoteStore::buildPaths(const PathSet& drvPaths,
-                                     BuildMode buildMode) {
+absl::Status RemoteStore::buildPaths(std::ostream& /* log_sink */,
+                                     const PathSet& drvPaths,
+                                     BuildMode build_mode) {
   auto conn(getConnection());
   conn->to << wopBuildPaths;
   if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 13) {
     conn->to << drvPaths;
     if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 15) {
-      conn->to << buildMode;
+      conn->to << build_mode;
     } else
         /* Old daemons did not take a 'buildMode' parameter, so we
            need to validate it here on the client side.  */
-        if (buildMode != bmNormal) {
+        if (build_mode != bmNormal) {
       return absl::Status(
           absl::StatusCode::kInvalidArgument,
           "repairing or checking is not supported when building through the "

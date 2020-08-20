@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <memory>
 #include <optional>
+#include <ostream>
 
 #include <absl/status/status.h>
 #include <absl/strings/str_cat.h>
@@ -318,7 +319,8 @@ Path RpcStore::addTextToStore(const std::string& name,
   return result.path();
 }
 
-absl::Status RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
+absl::Status RpcStore::buildPaths(std::ostream& log_sink, const PathSet& paths,
+                                  BuildMode build_mode) {
   ClientContext ctx;
   proto::BuildPathsRequest request;
   for (const auto& path : paths) {
@@ -326,14 +328,7 @@ absl::Status RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
   }
 
   google::protobuf::Empty response;
-  request.set_mode(nix::BuildModeToProto(buildMode));
-
-  // TODO(tazjin): Temporary no-op sink used to discard build output,
-  // but satisfy the compiler. A real one is needed.
-  //
-  // Maybe this should just be stderr, considering that this is the
-  // *client*, but I'm not sure.
-  std::ostream discard_logs = DiscardLogsSink();
+  request.set_mode(nix::BuildModeToProto(build_mode));
 
   std::unique_ptr<grpc::ClientReader<proto::BuildEvent>> reader =
       stub_->BuildPaths(&ctx, request);
@@ -342,11 +337,11 @@ absl::Status RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
   while (reader->Read(&event)) {
     if (event.has_build_log()) {
       // TODO(tazjin): Include .path()?
-      discard_logs << event.build_log().line();
+      log_sink << event.build_log().line();
     } else {
-      discard_logs << std::endl
-                   << "Building path: " << event.building_path().path()
-                   << std::endl;
+      log_sink << std::endl
+               << "Building path: " << event.building_path().path()
+               << std::endl;
     }
 
     // has_result() is not in use in this call (for now)

@@ -290,7 +290,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
 
   Status BuildPaths(
       grpc::ServerContext*, const nix::proto::BuildPathsRequest* request,
-      grpc::ServerWriter<nix::proto::BuildEvent>* /* writer */) override {
+      grpc::ServerWriter<nix::proto::BuildEvent>* writer) override {
     return HandleExceptions(
         [&]() -> Status {
           PathSet drvs;
@@ -303,11 +303,14 @@ class WorkerServiceImpl final : public WorkerService::Service {
             return Status(grpc::StatusCode::INTERNAL, "Invalid build mode");
           }
 
+          BuildLogStreambuf log_buffer(writer);
+          std::ostream log_sink(&log_buffer);
+
           // TODO(grfn): If mode is repair and not trusted, we need to return an
           // error here (but we can't yet because we don't know anything about
           // trusted users)
           return nix::util::proto::AbslToGRPCStatus(
-              store_->buildPaths(drvs, mode.value()));
+              store_->buildPaths(log_sink, drvs, mode.value()));
         },
         __FUNCTION__);
   }

@@ -722,8 +722,10 @@ static void opSet(Globals& globals, Strings opFlags, Strings opArgs) {
     if (globals.dryRun) {
       return;
     }
+    auto discard_logs = DiscardLogsSink();
     nix::util::OkOrThrow(globals.state->store->buildPaths(
-        paths, globals.state->repair != 0u ? bmRepair : bmNormal));
+        discard_logs, paths,
+        globals.state->repair != 0u ? bmRepair : bmNormal));
   } else {
     printMissing(globals.state->store, {drv.queryOutPath()});
     if (globals.dryRun) {

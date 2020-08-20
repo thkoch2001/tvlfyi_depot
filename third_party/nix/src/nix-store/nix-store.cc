@@ -69,7 +69,8 @@ static PathSet realisePath(Path path, bool build = true) {
 
   if (isDerivation(p.first)) {
     if (build) {
-      util::OkOrThrow(store->buildPaths({path}));
+      auto discard_logs = DiscardLogsSink();
+      util::OkOrThrow(store->buildPaths(discard_logs, {path}));
     }
     Derivation drv = store->derivationFromPath(p.first);
     rootNr++;
@@ -185,8 +186,9 @@ static void opRealise(Strings opFlags, Strings opArgs) {
   }
 
   /* Build all paths at the same time to exploit parallelism. */
-  util::OkOrThrow(
-      store->buildPaths(PathSet(paths.begin(), paths.end()), buildMode));
+  auto discard_logs = DiscardLogsSink();
+  util::OkOrThrow(store->buildPaths(
+      discard_logs, PathSet(paths.begin(), paths.end()), buildMode));
 
   if (!ignoreUnknown) {
     for (auto& i : paths) {
@@ -1004,7 +1006,8 @@ static void opServe(Strings opFlags, Strings opArgs) {
              does one path at a time. */
           if (!willSubstitute.empty()) {
             try {
-              util::OkOrThrow(store->buildPaths(willSubstitute));
+              auto discard_logs = DiscardLogsSink();
+              util::OkOrThrow(store->buildPaths(discard_logs, willSubstitute));
             } catch (Error& e) {
               LOG(WARNING) << e.msg();
             }
@@ -1066,7 +1069,8 @@ static void opServe(Strings opFlags, Strings opArgs) {
 
         try {
           MonitorFdHup monitor(in.fd);
-          util::OkOrThrow(store->buildPaths(paths));
+          auto discard_logs = DiscardLogsSink();
+          util::OkOrThrow(store->buildPaths(discard_logs, paths));
           out << 0;
         } catch (Error& e) {
           assert(e.status);

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <queue>
 #include <regex>
 #include <sstream>
@@ -4687,8 +4688,9 @@ static void primeCache(Store& store, const PathSet& paths) {
   }
 }
 
-absl::Status LocalStore::buildPaths(const PathSet& drvPaths,
-                                    BuildMode buildMode) {
+absl::Status LocalStore::buildPaths(std::ostream& /* log_sink */,
+                                    const PathSet& drvPaths,
+                                    BuildMode build_mode) {
   Worker worker(*this);
 
   primeCache(*this, drvPaths);
@@ -4697,10 +4699,10 @@ absl::Status LocalStore::buildPaths(const PathSet& drvPaths,
   for (auto& i : drvPaths) {
     DrvPathWithOutputs i2 = parseDrvPathWithOutputs(i);
     if (isDerivation(i2.first)) {
-      goals.insert(worker.makeDerivationGoal(i2.first, i2.second, buildMode));
+      goals.insert(worker.makeDerivationGoal(i2.first, i2.second, build_mode));
     } else {
       goals.insert(worker.makeSubstitutionGoal(
-          i, buildMode == bmRepair ? Repair : NoRepair));
+          i, build_mode == bmRepair ? Repair : NoRepair));
     }
   }
 

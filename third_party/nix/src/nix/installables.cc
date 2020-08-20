@@ -274,7 +274,8 @@ Buildables build(
   if (mode == DryRun) {
     printMissing(store, pathsToBuild);
   } else if (mode == Build) {
-    util::OkOrThrow(store->buildPaths(pathsToBuild));
+    auto discard_logs = DiscardLogsSink();
+    util::OkOrThrow(store->buildPaths(discard_logs, pathsToBuild));
   }
 
   return buildables;

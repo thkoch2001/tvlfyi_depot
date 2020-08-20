@@ -359,7 +359,8 @@ static void _main(int argc, char** argv) {
     }
 
     if (!dryRun) {
-      util::OkOrThrow(store->buildPaths(paths, buildMode));
+      auto discard_logs = DiscardLogsSink();
+      util::OkOrThrow(store->buildPaths(discard_logs, paths, buildMode));
     }
   };
 
