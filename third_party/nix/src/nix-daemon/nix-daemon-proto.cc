@@ -1,7 +1,9 @@
 #include "nix-daemon-proto.hh"
 
 #include <filesystem>
+#include <ostream>
 #include <sstream>
+#include <streambuf>
 #include <string>
 
 #include <absl/strings/str_cat.h>
@@ -91,6 +93,22 @@ struct RetrieveRegularNARSink : ParseSink {
     return Status(grpc::StatusCode::INVALID_ARGUMENT,                          \
                   absl::StrFormat("path '%s' is not in the Nix store", path)); \
   }
+
+class BuildLogStreambuf final : public std::streambuf {
+ public:
+  using Writer = grpc::ServerWriter<nix::proto::BuildEvent>;
+  explicit BuildLogStreambuf(Writer* writer) : writer_(writer) {}
+
+  std::streamsize xsputn(const char_type* s, std::streamsize n) override {
+    nix::proto::BuildEvent event;
+    event.mutable_build_log()->set_line(s, n);
+    writer_->Write(event);
+    return n;
+  }
+
+ private:
+  Writer* writer_{};
+};
 
 class WorkerServiceImpl final : public WorkerService::Service {
  public:
