@@ -63,6 +63,9 @@
    ("pt" "Tvix" entry
     (file+headline ,(notes-file "tvix.org") "Tvix TODO")
     "* TODO %?\nContext %a\nIn task: %K")
+   ("pw" "Windtunnel" entry
+    (file+headline ,(notes-file "windtunnel.org") "Tasks")
+    "* TODO %?\nContext: %a\nIn task: %K")
 
    ("d" "Data recording")
    )
