@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fb6b01c_2b433905",
+        "filename": "third_party/nix/src/libstore/remote-store.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-20T02:41:10Z",
+      "side": 1,
+      "message": "what the flip is this indendation\n\nCan you move the comment to inside the \u0027if\u0027 block? Separate style() CL.",
+      "range": {
+        "startLine": 472,
+        "startChar": 5,
+        "endLine": 480,
+        "endChar": 5
+      },
+      "revId": "b2126ae281d3d5eb99a6cc3d854446a475830a9c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
