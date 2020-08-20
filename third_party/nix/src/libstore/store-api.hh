@@ -50,7 +50,7 @@ const size_t storePathHashLen = 32;  // i.e. 160 bits
 /* Magic header of exportPath() output (obsolete). */
 const uint32_t exportMagic = 0x4558494e;
 
-typedef std::unordered_map<Path, std::unordered_set<std::string>> Roots;
+using Roots = std::unordered_map<Path, std::unordered_set<std::string>>;
 
 struct GCOptions {
   /* Garbage collector operation:
@@ -66,12 +66,12 @@ struct GCOptions {
      - `gcDeleteSpecific': delete the paths listed in
         `pathsToDelete', insofar as they are not reachable.
   */
-  typedef enum {
+  using GCAction = enum {
     gcReturnLive,
     gcReturnDead,
     gcDeleteDead,
     gcDeleteSpecific,
-  } GCAction;
+  };
 
   GCAction action{gcDeleteDead};
 
@@ -110,7 +110,7 @@ struct SubstitutablePathInfo {
   unsigned long long narSize;      /* 0 = unknown */
 };
 
-typedef std::map<Path, SubstitutablePathInfo> SubstitutablePathInfos;
+using SubstitutablePathInfos = std::map<Path, SubstitutablePathInfo>;
 
 struct ValidPathInfo {
   Path path;
@@ -248,7 +248,7 @@ struct BuildResult {
 
 class Store : public std::enable_shared_from_this<Store>, public Config {
  public:
-  typedef std::map<std::string, std::string> Params;
+  using Params = std::map<std::string, std::string>;
 
   const PathSetting storeDir_{this, false, settings.nixStore, "store",
                               "path to the Nix store"};
@@ -780,12 +780,11 @@ StoreType getStoreType(const std::string& uri = settings.storeUri.get(),
 std::list<ref<Store>> getDefaultSubstituters();
 
 /* Store implementation registration. */
-typedef std::function<std::shared_ptr<Store>(const std::string& uri,
-                                             const Store::Params& params)>
-    OpenStore;
+using OpenStore = std::function<std::shared_ptr<Store>(const std::string&,
+                                                       const Store::Params&)>;
 
 struct RegisterStoreImplementation {
-  typedef std::vector<OpenStore> Implementations;
+  using Implementations = std::vector<OpenStore>;
   static Implementations* implementations;
 
   RegisterStoreImplementation(OpenStore fun) {
