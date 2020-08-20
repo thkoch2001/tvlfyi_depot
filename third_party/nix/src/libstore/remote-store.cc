@@ -469,10 +469,9 @@ absl::Status RemoteStore::buildPaths(std::ostream& /* log_sink */,
     conn->to << drvPaths;
     if (GET_PROTOCOL_MINOR(conn->daemonVersion) >= 15) {
       conn->to << build_mode;
-    } else
-        /* Old daemons did not take a 'buildMode' parameter, so we
-           need to validate it here on the client side.  */
-        if (build_mode != bmNormal) {
+    } else if (build_mode != bmNormal) {
+      /* Old daemons did not take a 'buildMode' parameter, so we
+         need to validate it here on the client side.  */
       return absl::Status(
           absl::StatusCode::kInvalidArgument,
           "repairing or checking is not supported when building through the "
