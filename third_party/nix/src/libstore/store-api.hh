@@ -19,6 +19,12 @@
 
 namespace nix {
 
+// Create a no-op stream buffer used to discard build output in cases
+// where we don't have a build log sink to thread through.
+//
+// TODO(tazjin): Get rid of this and do *something* with those logs.
+std::ostream DiscardLogsSink();
+
 MakeError(SubstError, Error);
 MakeError(BuildError, Error); /* denotes a permanent build failure */
 MakeError(InvalidPath, Error);

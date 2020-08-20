@@ -1,6 +1,8 @@
 #include "libstore/store-api.hh"
 
 #include <future>
+#include <ostream>
+#include <streambuf>
 #include <utility>
 
 #include <absl/status/status.h>
@@ -22,6 +24,17 @@
 #include "libutil/util.hh"
 
 namespace nix {
+
+namespace {
+class NullStream : public std::streambuf {
+ public:
+  int overflow(int c) override { return c; }
+};
+
+static NullStream NULL_STREAM{};
+}  // namespace
+
+std::ostream DiscardLogsSink() { return std::ostream(&NULL_STREAM); }
 
 std::optional<BuildMode> BuildModeFrom(nix::proto::BuildMode mode) {
   switch (mode) {
