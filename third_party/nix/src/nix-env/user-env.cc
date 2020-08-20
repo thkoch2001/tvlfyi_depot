@@ -38,8 +38,9 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
   }
 
   DLOG(INFO) << "building user environment dependencies";
+  auto discard_logs = DiscardLogsSink();
   util::OkOrThrow(state.store->buildPaths(
-      drvsToBuild, state.repair != 0u ? bmRepair : bmNormal));
+      discard_logs, drvsToBuild, state.repair != 0u ? bmRepair : bmNormal));
 
   /* Construct the whole top level derivation. */
   PathSet references;
@@ -139,7 +140,7 @@ bool createUserEnv(EvalState& state, DrvInfos& elems, const Path& profile,
   /* Realise the resulting store expression. */
   DLOG(INFO) << "building user environment";
   util::OkOrThrow(state.store->buildPaths(
-      {topLevelDrv}, state.repair != 0u ? bmRepair : bmNormal));
+      discard_logs, {topLevelDrv}, state.repair != 0u ? bmRepair : bmNormal));
 
   /* Switch the current user environment to the output path. */
   auto store2 = state.store.dynamic_pointer_cast<LocalFSStore>();

@@ -91,7 +91,12 @@ void EvalState::realiseContext(const PathSet& context) {
   unsigned long long narSize;
   store->queryMissing(drvs, willBuild, willSubstitute, unknown, downloadSize,
                       narSize);
-  nix::util::OkOrThrow(store->buildPaths(drvs));
+
+  // TODO(tazjin): Figure out where these logs are supposed to go ...
+  // unless we keep a per-store stream open persistently there's no
+  // "generic" way to send logs anywhere for cases like this (IFD).
+  auto discard_logs = DiscardLogsSink();
+  nix::util::OkOrThrow(store->buildPaths(discard_logs, drvs));
 }
 
 /* Load and evaluate an expression from path specified by the

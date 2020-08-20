@@ -714,7 +714,8 @@ const Store::Stats& Store::getStats() {
   return stats;
 }
 
-absl::Status Store::buildPaths(const PathSet& paths, BuildMode) {
+absl::Status Store::buildPaths(std::ostream& /* log_sink */,
+                               const PathSet& paths, BuildMode) {
   for (auto& path : paths) {
     if (isDerivation(path)) {
       return absl::Status(absl::StatusCode::kUnimplemented,
