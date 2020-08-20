@@ -180,6 +180,12 @@
 ;; trim whitespace on save
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
+;; call `git secret hide` after saving ~/briefcase/secrets.json
+(add-hook 'after-save-hook
+          (lambda ()
+            (when (f-equal? (buffer-file-name) "~/briefcase/secrets.json")
+              (shell-command "git secret hide"))))
+
 ;; use tabs instead of spaces
 (setq-default indent-tabs-mode nil)
 
