@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f78532f2_e82744c8",
+        "filename": "third_party/nix/src/libstore/store-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-20T03:18:14Z",
+      "side": 1,
+      "message": "maybe this could go in util?",
+      "revId": "cb12ab66283f5925bb2dfff90061ae409326a736",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
