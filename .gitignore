@@ -1,5 +1,4 @@
 .vim
-.DS_Store
 ./configs/secrets
 **/*/.emacs.d/quelpa/**/*
 **/*/.emacs.d/elpa/**/*
@@ -18,12 +17,8 @@ Vundle.vim
 **/*/.emacs.d/projectile-bookmarks.eld
 **/*/.emacs.d/bookmarks
 **/*/transient/history.el
-
-# Haskell
 *.hi
 *.o
-
-# Python
 __pycache__
 *.class
 node_modules/
