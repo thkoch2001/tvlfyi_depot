@@ -1094,6 +1094,11 @@
 (use-package! github-review
   :after forge)
 
+(after! forge
+  (set-popup-rule!
+    "^\\*forge"
+    :size 0.75))
+
 (defun grfn/org-add-db-connection-params ()
   (interactive)
   (ivy-read
