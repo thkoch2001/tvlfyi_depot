@@ -16,6 +16,24 @@
       "revId": "ec03042e5269147cc72aa7d56767d301bdef760a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5cfc177_3388a8c0",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-20T11:34:47Z",
+      "side": 1,
+      "message": "You\u0027re already set as the author of this commit ;)",
+      "parentUuid": "35353a5d_5c192f67",
+      "revId": "ec03042e5269147cc72aa7d56767d301bdef760a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
