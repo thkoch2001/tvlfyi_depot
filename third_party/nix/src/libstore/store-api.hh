@@ -348,8 +348,12 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
  public:
   /* Query which of the given paths is valid. Optionally, try to
      substitute missing paths. */
-  virtual PathSet queryValidPaths(
-      const PathSet& paths, SubstituteFlag maybeSubstitute = NoSubstitute);
+  virtual PathSet queryValidPaths(const PathSet& paths,
+                                  SubstituteFlag maybeSubstitute);
+
+  PathSet queryValidPaths(const PathSet& paths) {
+    return queryValidPaths(paths, NoSubstitute);
+  }
 
   /* Query the set of all valid paths. Note that for some store
      backends, the name part of store paths may be omitted
@@ -452,14 +456,22 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
      recursively building any sub-derivations. For inputs that are
      not derivations, substitute them. */
   [[nodiscard]] virtual absl::Status buildPaths(const PathSet& paths,
-                                                BuildMode buildMode = bmNormal);
+                                                BuildMode buildMode);
+
+  [[nodiscard]] absl::Status buildPaths(const PathSet& paths) {
+    return buildPaths(paths, bmNormal);
+  }
 
   /* Build a single non-materialized derivation (i.e. not from an
      on-disk .drv file). Note that ‘drvPath’ is only used for
      informational purposes. */
   virtual BuildResult buildDerivation(const Path& drvPath,
                                       const BasicDerivation& drv,
-                                      BuildMode buildMode = bmNormal) = 0;
+                                      BuildMode buildMode) = 0;
+
+  BuildResult buildDerivation(const Path& drvPath, const BasicDerivation& drv) {
+    return buildDerivation(drvPath, drv, bmNormal);
+  }
 
   /* Ensure that a path is valid.  If it is not currently valid, it
      may be made valid by running a substitute (if defined for the
