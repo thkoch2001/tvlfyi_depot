@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <memory>
+#include <optional>
 
 #include <absl/status/status.h>
 #include <absl/strings/str_cat.h>
@@ -326,8 +327,32 @@ absl::Status RpcStore::buildPaths(const PathSet& paths, BuildMode buildMode) {
 
   google::protobuf::Empty response;
   request.set_mode(nix::BuildModeToProto(buildMode));
-  return nix::util::proto::GRPCStatusToAbsl(
-      stub_->BuildPaths(&ctx, request, &response));
+
+  // TODO(tazjin): Temporary no-op sink used to discard build output,
+  // but satisfy the compiler. A real one is needed.
+  //
+  // Maybe this should just be stderr, considering that this is the
+  // *client*, but I'm not sure.
+  std::ostream discard_logs = DiscardLogsSink();
+
+  std::unique_ptr<grpc::ClientReader<proto::BuildEvent>> reader =
+      stub_->BuildPaths(&ctx, request);
+
+  proto::BuildEvent event;
+  while (reader->Read(&event)) {
+    if (event.has_build_log()) {
+      // TODO(tazjin): Include .path()?
+      discard_logs << event.build_log().line();
+    } else {
+      discard_logs << std::endl
+                   << "Building path: " << event.building_path().path()
+                   << std::endl;
+    }
+
+    // has_result() is not in use in this call (for now)
+  }
+
+  return nix::util::proto::GRPCStatusToAbsl(reader->Finish());
 }
 
 BuildResult RpcStore::buildDerivation(const Path& drvPath,
@@ -339,11 +364,25 @@ BuildResult RpcStore::buildDerivation(const Path& drvPath,
   auto proto_drv = drv.to_proto();
   request.set_allocated_derivation(&proto_drv);
   request.set_build_mode(BuildModeToProto(buildMode));
-  proto::BuildDerivationResponse response;
-  SuccessOrThrow(stub_->BuildDerivation(&ctx, request, &response),
-                 __FUNCTION__);
 
-  const auto result = BuildResult::FromProto(response);
+  // Same note as in ::buildPaths ...
+  std::ostream discard_logs = DiscardLogsSink();
+
+  std::unique_ptr<grpc::ClientReader<proto::BuildEvent>> reader =
+      stub_->BuildDerivation(&ctx, request);
+
+  std::optional<BuildResult> result;
+
+  proto::BuildEvent event;
+  while (reader->Read(&event)) {
+    if (event.has_build_log()) {
+      discard_logs << event.build_log().line();
+    } else if (event.has_result()) {
+      result = BuildResult::FromProto(event.result());
+    }
+  }
+  SuccessOrThrow(reader->Finish(), __FUNCTION__);
+
   if (!result.has_value()) {
     throw Error("Invalid response from daemon for buildDerivation");
   }

@@ -271,9 +271,9 @@ class WorkerServiceImpl final : public WorkerService::Service {
         __FUNCTION__);
   }
 
-  Status BuildPaths(grpc::ServerContext*,
-                    const nix::proto::BuildPathsRequest* request,
-                    google::protobuf::Empty*) override {
+  Status BuildPaths(
+      grpc::ServerContext*, const nix::proto::BuildPathsRequest* request,
+      grpc::ServerWriter<nix::proto::BuildEvent>* /* writer */) override {
     return HandleExceptions(
         [&]() -> Status {
           PathSet drvs;
@@ -612,7 +612,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
   Status BuildDerivation(
       grpc::ServerContext* context,
       const nix::proto::BuildDerivationRequest* request,
-      nix::proto::BuildDerivationResponse* response) override {
+      grpc::ServerWriter<nix::proto::BuildEvent>* writer) override {
     return HandleExceptions(
         [&]() -> Status {
           auto drv_path = request->drv_path().path();
@@ -625,11 +625,19 @@ class WorkerServiceImpl final : public WorkerService::Service {
             return Status(grpc::StatusCode::INTERNAL, "Invalid build mode");
           }
 
-          auto res = store_->buildDerivation(drv_path, drv, *build_mode);
+          BuildResult res = store_->buildDerivation(drv_path, drv, *build_mode);
 
-          response->set_status(res.status_to_proto());
-          response->set_error_message(res.errorMsg);
+          proto::BuildResult proto_res{};
+          proto_res.set_status(res.status_to_proto());
 
+          if (!res.errorMsg.empty()) {
+            proto_res.set_msg(res.errorMsg);
+          }
+
+          proto::BuildEvent event{};
+          *event.mutable_result() = proto_res;
+
+          writer->Write(event);
           return Status::OK;
         },
         __FUNCTION__);

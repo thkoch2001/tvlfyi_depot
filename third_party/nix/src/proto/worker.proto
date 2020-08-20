@@ -27,7 +27,7 @@ service WorkerService {
 
   // Build the specified derivations in one of the specified build
   // modes, defaulting to a normal build.
-  rpc BuildPaths(BuildPathsRequest) returns (google.protobuf.Empty);
+  rpc BuildPaths(BuildPathsRequest) returns (stream BuildEvent);
 
   // TODO: What does this do?
   rpc EnsurePath(StorePath) returns (google.protobuf.Empty);
@@ -90,7 +90,7 @@ service WorkerService {
 
   // Build a single non-materialized derivation (i.e. not from an
   // on-disk .drv file).
-  rpc BuildDerivation(BuildDerivationRequest) returns (BuildDerivationResponse);
+  rpc BuildDerivation(BuildDerivationRequest) returns (stream BuildEvent);
 
   // Add signatures to the specified store path. The signatures are not
   // verified.
@@ -172,6 +172,32 @@ message StorePaths {
 
 message Signatures {
   repeated string sigs = 1;
+}
+
+// Represents the outcome of a build for a single store path.
+message BuildResult {
+  StorePath path = 1;
+  BuildStatus status = 2;
+  string msg = 3;
+}
+
+// Represents an event occuring during a build.
+message BuildEvent {
+  message LogLine {
+    string line = 1;
+    StorePath path = 2;
+  }
+
+  oneof result_type {
+    // Build for a store path has finished
+    BuildResult result = 1;
+
+    // A line of build log output was produced
+    LogLine build_log = 2;
+
+    // Build for a store path has started
+    StorePath building_path = 3;
+  }
 }
 
 message IsValidPathResponse {
@@ -314,11 +340,6 @@ message BuildDerivationRequest {
   StorePath drv_path = 1;
   Derivation derivation = 2;
   BuildMode build_mode = 3;
-}
-
-message BuildDerivationResponse {
-  BuildStatus status = 1;
-  string error_message = 2;
 }
 
 message AddSignaturesRequest {

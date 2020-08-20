@@ -189,7 +189,7 @@ struct ValidPathInfo {
   virtual ~ValidPathInfo() {}
 };
 
-typedef std::list<ValidPathInfo> ValidPathInfos;
+using ValidPathInfos = std::list<ValidPathInfo>;
 
 enum BuildMode { bmNormal, bmRepair, bmCheck };
 
@@ -243,7 +243,7 @@ struct BuildResult {
   nix::proto::BuildStatus status_to_proto();
 
   static std::optional<BuildResult> FromProto(
-      const nix::proto::BuildDerivationResponse& resp);
+      const nix::proto::BuildResult& resp);
 };
 
 class Store : public std::enable_shared_from_this<Store>, public Config {
