@@ -15,7 +15,7 @@
   :select t
   :side 'bottom
   :ttl nil
-  :size 0.3)
+  :size 0.5)
 
 (add-hook #'slack-message-buffer-mode-hook
           (lambda () (toggle-truncate-lines -1)))
