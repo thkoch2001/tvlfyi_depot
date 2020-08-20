@@ -96,21 +96,21 @@ struct CompareGoalPtrs {
 };
 
 /* Set of goals. */
-typedef std::set<GoalPtr, CompareGoalPtrs> Goals;
+using Goals = std::set<GoalPtr, CompareGoalPtrs>;
 using WeakGoals = std::list<WeakGoalPtr>;
 
 /* A map of paths to goals (and the other way around). */
-typedef std::map<Path, WeakGoalPtr> WeakGoalMap;
+using WeakGoalMap = std::map<Path, WeakGoalPtr>;
 
 class Goal : public std::enable_shared_from_this<Goal> {
  public:
-  typedef enum {
+  using ExitCode = enum {
     ecBusy,
     ecSuccess,
     ecFailed,
     ecNoSubstituters,
     ecIncompleteClosure
-  } ExitCode;
+  };
 
  protected:
   /* Backlink to the worker. */
@@ -728,7 +728,7 @@ std::string rewriteStrings(std::string s, const StringRewrites& rewrites) {
 
 //////////////////////////////////////////////////////////////////////
 
-typedef enum { rpAccept, rpDecline, rpPostpone } HookReply;
+using HookReply = enum { rpAccept, rpDecline, rpPostpone };
 
 class SubstitutionGoal;
 
@@ -835,16 +835,16 @@ class DerivationGoal : public Goal {
     explicit ChrootPath(Path source = "", bool optional = false)
         : source(std::move(source)), optional(optional) {}
   };
-  typedef std::map<Path, ChrootPath>
-      DirsInChroot;  // maps target path to source path
+  using DirsInChroot =
+      std::map<Path, ChrootPath>;  // maps target path to source path
   DirsInChroot dirsInChroot;
 
-  typedef std::map<std::string, std::string> Environment;
+  using Environment = std::map<std::string, std::string>;
   Environment env;
 
   /* Hash rewriting. */
   StringRewrites inputRewrites, outputRewrites;
-  typedef std::map<Path, Path> RedirectedOutputs;
+  using RedirectedOutputs = std::map<Path, Path>;
   RedirectedOutputs redirectedOutputs;
 
   BuildMode buildMode;
