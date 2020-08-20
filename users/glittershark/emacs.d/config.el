@@ -13,11 +13,7 @@
       doom-variable-pitch-font (font-spec :family "DejaVu Sans")
       doom-unicode-font (font-spec :family "Meslo LGSDZ Nerd Font"))
 
-(after! rust
-  ;; (require 'ein)
-  (setq rust-format-on-save t)
-  (add-hook! :after rust-mode-hook #'lsp)
-  (add-hook! :after rust-mode-hook #'rust-enable-format-on-save))
+(require 's)
 
 (load! "utils")
 (load! "company-sql")
@@ -31,9 +27,15 @@
 (load! "email")
 (load! "cpp")
 (load! "lisp")
+(load! "slack")
 
-(require 's)
 (require 'tvl)
+
+(after! rust
+  ;; (require 'ein)
+  (setq rust-format-on-save t)
+  (add-hook! :after rust-mode-hook #'lsp)
+  (add-hook! :after rust-mode-hook #'rust-enable-format-on-save))
 
 (add-hook! rust-mode
   (flycheck-rust-setup)
@@ -371,11 +373,6 @@
   (set-face-attribute 'slack-message-output-text nil :height 1.0)
   )
 
-(after! slack
-  (set-face-foreground 'slack-message-output-header +solarized-s-base01)
-  (set-face-attribute 'slack-message-output-header nil :underline nil)
-  (set-face-attribute 'slack-message-output-text nil :height 1.0))
-
 (after! evil
   (setq evil-shift-width 2))
 
@@ -545,10 +542,6 @@
    (when (and (eq major-mode 'haskell-mode)
               (bound-and-true-p brittany-haskell-mode))
      (urbint/format-haskell-source))))
-
-(require 'slack)
-(setq slack-buffer-emojify 't
-      slack-prefer-current-team 't)
 
 (require 'alert)
 (setq alert-default-style 'libnotify)
