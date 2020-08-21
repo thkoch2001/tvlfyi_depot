@@ -467,6 +467,7 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
   /* Build a single non-materialized derivation (i.e. not from an
      on-disk .drv file). Note that ‘drvPath’ is only used for
      informational purposes. */
+  // TODO(tazjin): Thread std::ostream through here, too.
   virtual BuildResult buildDerivation(const Path& drvPath,
                                       const BasicDerivation& drv,
                                       BuildMode buildMode) = 0;
