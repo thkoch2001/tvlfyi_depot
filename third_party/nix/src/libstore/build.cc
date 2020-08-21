@@ -1473,7 +1473,7 @@ void DerivationGoal::tryToBuild() {
     if (hook) {
       msg += fmt(" on '%s'", machineName);
     }
-    LOG(INFO) << msg << "[" << drvPath << "]";
+    log_sink_ << msg << "[" << drvPath << "]";
     mcRunningBuilds =
         std::make_unique<MaintainCount<uint64_t>>(worker.runningBuilds);
   };
@@ -3782,6 +3782,7 @@ void DerivationGoal::deleteTmpDir(bool force) {
   }
 }
 
+// TODO(tazjin): What ... what does this function ... do?
 void DerivationGoal::handleChildOutput(int fd, const std::string& data) {
   if ((hook && fd == hook->builderOut.readSide.get()) ||
       (!hook && fd == builderOut.readSide.get())) {
@@ -3824,7 +3825,7 @@ void DerivationGoal::handleChildOutput(int fd, const std::string& data) {
   }
 }
 
-void DerivationGoal::handleEOF(int fd) {
+void DerivationGoal::handleEOF(int /* fd */) {
   if (!currentLogLine.empty()) {
     flushLine();
   }
@@ -3834,7 +3835,7 @@ void DerivationGoal::handleEOF(int fd) {
 void DerivationGoal::flushLine() {
   if (settings.verboseBuild &&
       (settings.printRepeatedBuilds || curRound == 1)) {
-    LOG(INFO) << currentLogLine;
+    log_sink_ << currentLogLine;
   } else {
     logTail.push_back(currentLogLine);
     if (logTail.size() > settings.logLines) {
