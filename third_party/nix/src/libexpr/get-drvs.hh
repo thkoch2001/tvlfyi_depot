@@ -69,7 +69,7 @@ struct DrvInfo {
   bool hasFailed() { return failed; };
 };
 
-typedef std::list<DrvInfo> DrvInfos;
+using DrvInfos = std::list<DrvInfo>;
 
 /* If value `v' denotes a derivation, return a DrvInfo object
    describing it. Otherwise return nothing. */

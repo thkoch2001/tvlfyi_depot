@@ -203,7 +203,7 @@ class PathSetting : public BaseSetting<Path> {
 };
 
 struct GlobalConfig : public AbstractConfig {
-  typedef std::vector<Config*> ConfigRegistrations;
+  using ConfigRegistrations = std::vector<Config*>;
   static ConfigRegistrations* configRegistrations;
 
   bool set(const std::string& name, const std::string& value) override;

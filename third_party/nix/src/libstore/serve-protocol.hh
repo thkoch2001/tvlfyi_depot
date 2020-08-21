@@ -9,7 +9,7 @@ namespace nix {
 #define GET_PROTOCOL_MAJOR(x) ((x)&0xff00)
 #define GET_PROTOCOL_MINOR(x) ((x)&0x00ff)
 
-typedef enum {
+using ServeCommand = enum {
   cmdQueryValidPaths = 1,
   cmdQueryPathInfos = 2,
   cmdDumpStorePath = 3,
@@ -19,6 +19,6 @@ typedef enum {
   cmdQueryClosure = 7,
   cmdBuildDerivation = 8,
   cmdAddToStoreNar = 9,
-} ServeCommand;
+};
 
 }  // namespace nix

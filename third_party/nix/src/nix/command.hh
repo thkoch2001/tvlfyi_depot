@@ -51,7 +51,7 @@ struct Buildable {
   std::map<std::string, Path> outputs;
 };
 
-typedef std::vector<Buildable> Buildables;
+using Buildables = std::vector<Buildable>;
 
 struct Installable {
   virtual std::string what() = 0;
@@ -140,7 +140,7 @@ struct StorePathCommand : public InstallablesCommand {
   void run(ref<Store> store) override;
 };
 
-typedef std::map<std::string, ref<Command>> Commands;
+using Commands = std::map<std::string, ref<Command>>;
 
 /* An argument parser that supports multiple subcommands,
    i.e. ‘<command> <subcommand>’. */

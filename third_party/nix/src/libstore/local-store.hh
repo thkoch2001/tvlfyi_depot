@@ -172,7 +172,7 @@ class LocalStore : public LocalFSStore {
 
  private:
   typedef std::shared_ptr<AutoCloseFD> FDPtr;
-  typedef std::list<FDPtr> FDs;
+  using FDs = std::list<FDPtr>;
 
   void findTempRoots(FDs& fds, Roots& roots, bool censor);
 
@@ -270,7 +270,7 @@ class LocalStore : public LocalFSStore {
 
   void checkDerivationOutputs(const Path& drvPath, const Derivation& drv);
 
-  typedef std::unordered_set<ino_t> InodeHash;
+  using InodeHash = std::unordered_set<ino_t>;
 
   InodeHash loadInodeHash();
   static Strings readDirectoryIgnoringInodes(const Path& path,
@@ -295,8 +295,8 @@ class LocalStore : public LocalFSStore {
   friend class SubstitutionGoal;
 };
 
-typedef std::pair<dev_t, ino_t> Inode;
-typedef std::set<Inode> InodesSeen;
+using Inode = std::pair<dev_t, ino_t>;
+using InodesSeen = std::set<Inode>;
 
 /* "Fix", or canonicalise, the meta-data of the files in a store path
    after it has been built.  In particular:

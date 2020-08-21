@@ -32,14 +32,14 @@
 using namespace nix;
 using std::cout;
 
-typedef enum {
+using InstallSourceType = enum {
   srcNixExprDrvs,
   srcNixExprs,
   srcStorePaths,
   srcProfile,
   srcAttrPath,
   srcUnknown
-} InstallSourceType;
+};
 
 struct InstallSourceInfo {
   InstallSourceType type;
@@ -229,7 +229,7 @@ static DrvInfos filterBySelector(EvalState& state, const DrvInfos& allElems,
   std::set<unsigned int> done;
 
   for (auto& i : selectors) {
-    typedef std::list<std::pair<DrvInfo, unsigned int> > Matches;
+    using Matches = std::list<std::pair<DrvInfo, unsigned int> >;
     Matches matches;
     unsigned int n = 0;
     for (auto j = allElems.begin(); j != allElems.end(); ++j, ++n) {
@@ -249,7 +249,7 @@ static DrvInfos filterBySelector(EvalState& state, const DrvInfos& allElems,
        arbitrarily pick the first one. */
     if (newestOnly) {
       /* Map from package names to derivations. */
-      typedef std::map<std::string, std::pair<DrvInfo, unsigned int> > Newest;
+      using Newest = std::map<std::string, std::pair<DrvInfo, unsigned int> >;
       Newest newest;
       StringSet multiple;
 
@@ -834,7 +834,7 @@ void printTable(Table& table) {
    least one element with a higher version in the set.  `cvUnavail'
    means that there are no elements with the same name in the set. */
 
-typedef enum { cvLess, cvEqual, cvGreater, cvUnavail } VersionDiff;
+using VersionDiff = enum { cvLess, cvEqual, cvGreater, cvUnavail };
 
 static VersionDiff compareVersionAgainstSet(const DrvInfo& elem,
                                             const DrvInfos& elems,
