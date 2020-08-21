@@ -148,7 +148,6 @@ in lib.fix(self: {
   time.timeZone = "UTC";
 
   nix = {
-    package = depot.third_party.nix;
     nrBuildUsers = 128;
     maxJobs = lib.mkDefault 64;
     extraOptions = ''
