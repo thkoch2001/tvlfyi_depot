@@ -27,7 +27,7 @@ using boost::format;
    for all variadic arguments but ignoring the result. */
 struct nop {
   template <typename... T>
-  nop(T...) {}
+  explicit nop(T...) {}
 };
 
 struct FormatOrString {
@@ -69,11 +69,11 @@ class BaseError : public std::exception {
   unsigned int status = 1;  // exit status
 
   template <typename... Args>
-  BaseError(unsigned int status, Args... args)
+  explicit BaseError(unsigned int status, Args... args)
       : err(fmt(args...)), status(status) {}
 
   template <typename... Args>
-  BaseError(Args... args) : err(fmt(args...)) {}
+  explicit BaseError(Args... args) : err(fmt(args...)) {}
 
 #ifdef EXCEPTION_NEEDS_THROW_SPEC
   ~BaseError() noexcept {};
@@ -100,7 +100,7 @@ class SysError : public Error {
   int errNo;
 
   template <typename... Args>
-  SysError(Args... args) : Error(addErrno(fmt(args...))) {}
+  explicit SysError(Args... args) : Error(addErrno(fmt(args...))) {}
 
  private:
   std::string addErrno(const std::string& s);

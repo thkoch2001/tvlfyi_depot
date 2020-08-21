@@ -45,7 +45,7 @@ PathFilter defaultPathFilter = [](const Path& /*unused*/) { return true; };
 static void dumpContents(const Path& path, size_t size, Sink& sink) {
   sink << "contents" << size;
 
-  AutoCloseFD fd = open(path.c_str(), O_RDONLY | O_CLOEXEC);
+  AutoCloseFD fd(open(path.c_str(), O_RDONLY | O_CLOEXEC));
   if (!fd) {
     throw SysError(format("opening file '%1%'") % path);
   }
@@ -334,7 +334,8 @@ struct RestoreSink : ParseSink {
 
   void createRegularFile(const Path& path) override {
     Path p = dstPath + path;
-    fd = open(p.c_str(), O_CREAT | O_EXCL | O_WRONLY | O_CLOEXEC, 0666);
+    fd = AutoCloseFD(
+        open(p.c_str(), O_CREAT | O_EXCL | O_WRONLY | O_CLOEXEC, 0666));
     if (!fd) {
       throw SysError(format("creating file '%1%'") % p);
     }

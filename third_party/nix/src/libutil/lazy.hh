@@ -25,7 +25,7 @@ class Lazy {
   std::exception_ptr ex;
 
  public:
-  Lazy(Init init) : init(init) {}
+  explicit Lazy(Init init) : init(init) {}
 
   const T& operator()() {
     std::call_once(done, [&]() {

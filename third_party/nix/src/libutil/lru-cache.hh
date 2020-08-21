@@ -27,7 +27,7 @@ class LRUCache {
   LRU lru;
 
  public:
-  LRUCache(size_t capacity) : capacity(capacity) {}
+  explicit LRUCache(size_t capacity) : capacity(capacity) {}
 
   /* Insert or upsert an item in the cache. */
   void upsert(const Key& key, const Value& value) {

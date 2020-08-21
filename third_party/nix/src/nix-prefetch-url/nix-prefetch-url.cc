@@ -185,8 +185,8 @@ static int _main(int argc, char** argv) {
 
       /* Download the file. */
       {
-        AutoCloseFD fd =
-            open(tmpFile.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600);
+        AutoCloseFD fd(
+            open(tmpFile.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600));
         if (!fd) {
           throw SysError("creating temporary file '%s'", tmpFile);
         }

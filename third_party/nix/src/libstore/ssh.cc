@@ -88,8 +88,8 @@ std::unique_ptr<SSHMaster::Connection> SSHMaster::startCommand(
       },
       options);
 
-  in.readSide = -1;
-  out.writeSide = -1;
+  in.readSide = AutoCloseFD(-1);
+  out.writeSide = AutoCloseFD(-1);
 
   conn->out = std::move(out.readSide);
   conn->in = std::move(in.writeSide);
@@ -104,7 +104,7 @@ Path SSHMaster::startMaster() {
 
   auto state(state_.lock());
 
-  if (state->sshMaster != -1) {
+  if (state->sshMaster != Pid(-1)) {
     return state->socketPath;
   }
 
@@ -142,7 +142,7 @@ Path SSHMaster::startMaster() {
       },
       options);
 
-  out.writeSide = -1;
+  out.writeSide = AutoCloseFD(-1);
 
   std::string reply;
   try {

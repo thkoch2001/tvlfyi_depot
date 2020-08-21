@@ -23,7 +23,7 @@ struct BufferedSink : Sink {
   size_t bufSize, bufPos;
   std::unique_ptr<unsigned char[]> buffer;
 
-  BufferedSink(size_t bufSize = 32 * 1024)
+  explicit BufferedSink(size_t bufSize = 32 * 1024)
       : bufSize(bufSize), bufPos(0), buffer(nullptr) {}
 
   void operator()(const unsigned char* data, size_t len) override;
@@ -59,7 +59,7 @@ struct BufferedSource : Source {
   size_t bufSize, bufPosIn, bufPosOut;
   std::unique_ptr<unsigned char[]> buffer;
 
-  BufferedSource(size_t bufSize = 32 * 1024)
+  explicit BufferedSource(size_t bufSize = 32 * 1024)
       : bufSize(bufSize), bufPosIn(0), bufPosOut(0), buffer(nullptr) {}
 
   size_t read(unsigned char* data, size_t len) override;
@@ -78,7 +78,7 @@ struct FdSink : BufferedSink {
   size_t written = 0;
 
   FdSink() : fd(-1) {}
-  FdSink(int fd) : fd(fd) {}
+  explicit FdSink(int fd) : fd(fd) {}
   FdSink(FdSink&&) = default;
 
   FdSink& operator=(FdSink&& s) {
@@ -106,7 +106,7 @@ struct FdSource : BufferedSource {
   size_t read = 0;
 
   FdSource() : fd(-1) {}
-  FdSource(int fd) : fd(fd) {}
+  explicit FdSource(int fd) : fd(fd) {}
   FdSource(FdSource&&) = default;
 
   FdSource& operator=(FdSource&& s) {
@@ -129,7 +129,7 @@ struct FdSource : BufferedSource {
 struct StringSink : Sink {
   ref<std::string> s;
   StringSink() : s(make_ref<std::string>()){};
-  StringSink(ref<std::string> s) : s(s){};
+  explicit StringSink(ref<std::string> s) : s(s){};
   void operator()(const unsigned char* data, size_t len) override;
 };
 
@@ -137,7 +137,7 @@ struct StringSink : Sink {
 struct StringSource : Source {
   const std::string& s;
   size_t pos;
-  StringSource(const std::string& _s) : s(_s), pos(0) {}
+  explicit StringSource(const std::string& _s) : s(_s), pos(0) {}
   size_t read(unsigned char* data, size_t len) override;
 };
 
@@ -145,7 +145,8 @@ struct StringSource : Source {
 struct TeeSource : Source {
   Source& orig;
   ref<std::string> data;
-  TeeSource(Source& orig) : orig(orig), data(make_ref<std::string>()) {}
+  explicit TeeSource(Source& orig)
+      : orig(orig), data(make_ref<std::string>()) {}
   size_t read(unsigned char* data, size_t len) {
     size_t n = orig.read(data, len);
     this->data->append((const char*)data, n);
@@ -186,7 +187,7 @@ struct LambdaSink : Sink {
 
   lambda_t lambda;
 
-  LambdaSink(const lambda_t& lambda) : lambda(lambda) {}
+  explicit LambdaSink(const lambda_t& lambda) : lambda(lambda) {}
 
   virtual void operator()(const unsigned char* data, size_t len) {
     lambda(data, len);
@@ -199,7 +200,7 @@ struct LambdaSource : Source {
 
   lambda_t lambda;
 
-  LambdaSource(const lambda_t& lambda) : lambda(lambda) {}
+  explicit LambdaSource(const lambda_t& lambda) : lambda(lambda) {}
 
   size_t read(unsigned char* data, size_t len) override {
     return lambda(data, len);

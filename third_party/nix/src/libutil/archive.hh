@@ -62,7 +62,7 @@ struct ParseSink {
 struct TeeSink : ParseSink {
   TeeSource source;
 
-  TeeSink(Source& source) : source(source) {}
+  explicit TeeSink(Source& source) : source(source) {}
 };
 
 void parseDump(ParseSink& sink, Source& source);

@@ -167,11 +167,11 @@ class AutoDelete {
 
  public:
   AutoDelete();
-  AutoDelete(Path p, bool recursive = true);
+  explicit AutoDelete(Path p, bool recursive = true);
   ~AutoDelete();
   void cancel();
   void reset(const Path& p, bool recursive = true);
-  operator Path() const { return path; }
+  explicit operator Path() const { return path; }
 };
 
 class AutoCloseFD {
@@ -180,7 +180,7 @@ class AutoCloseFD {
 
  public:
   AutoCloseFD();
-  AutoCloseFD(int fd);
+  explicit AutoCloseFD(int fd);
   AutoCloseFD(const AutoCloseFD& fd) = delete;
   AutoCloseFD(AutoCloseFD&& that);
   ~AutoCloseFD();
@@ -210,16 +210,24 @@ class Pid {
 
  public:
   Pid();
-  Pid(pid_t pid);
+  explicit Pid(pid_t pid);
   ~Pid();
   void operator=(pid_t pid);
-  operator pid_t();
+  explicit operator pid_t();
   int kill();
   int wait();
 
   void setSeparatePG(bool separatePG);
   void setKillSignal(int signal);
   pid_t release();
+
+  friend bool operator==(const Pid& lhs, const Pid& rhs) {
+    return lhs.pid == rhs.pid;
+  }
+
+  friend bool operator!=(const Pid& lhs, const Pid& rhs) {
+    return !(lhs == rhs);
+  }
 };
 
 /* Kill all processes running under the specified uid by sending them
@@ -275,7 +283,8 @@ class ExecError : public Error {
   int status;
 
   template <typename... Args>
-  ExecError(int status, Args... args) : Error(args...), status(status) {}
+  explicit ExecError(int status, Args... args)
+      : Error(args...), status(status) {}
 };
 
 /* Convert a list of strings to a null-terminated vector of char
@@ -378,7 +387,7 @@ class Callback {
   std::atomic_flag done = ATOMIC_FLAG_INIT;
 
  public:
-  Callback(std::function<void(std::future<T>)> fun) : fun(fun) {}
+  explicit Callback(std::function<void(std::future<T>)> fun) : fun(fun) {}
 
   Callback(Callback&& callback) : fun(std::move(callback.fun)) {
     auto prev = callback.done.test_and_set();
@@ -449,7 +458,8 @@ template <typename T>
 struct MaintainCount {
   T& counter;
   long delta;
-  MaintainCount(T& counter, long delta = 1) : counter(counter), delta(delta) {
+  explicit MaintainCount(T& counter, long delta = 1)
+      : counter(counter), delta(delta) {
     counter += delta;
   }
   ~MaintainCount() { counter -= delta; }

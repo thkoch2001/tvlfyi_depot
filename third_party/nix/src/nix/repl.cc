@@ -394,10 +394,10 @@ static int runProgram(const std::string& program, const Strings& args) {
 
   Pid pid;
   pid = fork();
-  if (pid == -1) {
+  if (pid == Pid(-1)) {
     throw SysError("forking");
   }
-  if (pid == 0) {
+  if (pid == Pid(0)) {
     restoreAffinity();
     execvp(program.c_str(), stringsToCharPtrs(args2).data());
     _exit(1);

@@ -65,7 +65,8 @@ class Args {
     Args& args;
     Flag::ptr flag;
     friend class Args;
-    FlagMaker(Args& args) : args(args), flag(std::make_shared<Flag>()){};
+    explicit FlagMaker(Args& args)
+        : args(args), flag(std::make_shared<Flag>()){};
 
    public:
     ~FlagMaker();

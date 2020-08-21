@@ -35,8 +35,9 @@ AutoCloseFD LocalStore::openGCLock(LockType lockType) {
 
   DLOG(INFO) << "acquiring global GC lock " << fnGCLock;
 
-  AutoCloseFD fdGCLock =
-      open(fnGCLock.c_str(), O_RDWR | O_CREAT | O_CLOEXEC, 0600);
+  AutoCloseFD fdGCLock(
+      open(fnGCLock.c_str(), O_RDWR | O_CREAT | O_CLOEXEC, 0600));
+
   if (!fdGCLock) {
     throw SysError(format("opening global GC lock '%1%'") % fnGCLock);
   }
@@ -160,7 +161,7 @@ void LocalStore::addTempRoot(const Path& path) {
 
       state->fdTempRoots = openLockFile(fnTempRoots, true);
 
-      fdGCLock = -1;
+      fdGCLock = AutoCloseFD(-1);
 
       DLOG(INFO) << "acquiring read lock on " << fnTempRoots;
       lockFile(state->fdTempRoots.get(), ltRead, true);
@@ -886,7 +887,7 @@ void LocalStore::collectGarbage(const GCOptions& options, GCResults& results) {
   }
 
   /* Allow other processes to add to the store from here on. */
-  fdGCLock = -1;
+  fdGCLock = AutoCloseFD(-1);
   fds.clear();
 
   /* Delete the trash directory. */

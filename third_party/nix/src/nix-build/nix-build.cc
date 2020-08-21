@@ -146,7 +146,7 @@ static void _main(int argc, char** argv) {
   MyArgs myArgs(
       myName, [&](Strings::iterator& arg, const Strings::iterator& end) {
         if (*arg == "--help") {
-          deletePath(tmpDir);
+          deletePath(Path(tmpDir));
           showManPage(myName);
         }
 
