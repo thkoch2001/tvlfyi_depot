@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <iostream>
 #include <regex>
 
 #include <absl/strings/str_split.h>
@@ -92,11 +93,7 @@ void EvalState::realiseContext(const PathSet& context) {
   store->queryMissing(drvs, willBuild, willSubstitute, unknown, downloadSize,
                       narSize);
 
-  // TODO(tazjin): Figure out where these logs are supposed to go ...
-  // unless we keep a per-store stream open persistently there's no
-  // "generic" way to send logs anywhere for cases like this (IFD).
-  auto discard_logs = DiscardLogsSink();
-  nix::util::OkOrThrow(store->buildPaths(discard_logs, drvs));
+  nix::util::OkOrThrow(store->buildPaths(std::cerr, drvs));
 }
 
 /* Load and evaluate an expression from path specified by the

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <regex>
 #include <utility>
 
@@ -274,8 +275,7 @@ Buildables build(
   if (mode == DryRun) {
     printMissing(store, pathsToBuild);
   } else if (mode == Build) {
-    auto discard_logs = DiscardLogsSink();
-    util::OkOrThrow(store->buildPaths(discard_logs, pathsToBuild));
+    util::OkOrThrow(store->buildPaths(std::cerr, pathsToBuild));
   }
 
   return buildables;
