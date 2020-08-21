@@ -387,7 +387,7 @@ Hash hashFile(HashType ht, const Path& path) {
   Hash hash(ht);
   start(ht, ctx);
 
-  AutoCloseFD fd = open(path.c_str(), O_RDONLY | O_CLOEXEC);
+  AutoCloseFD fd(open(path.c_str(), O_RDONLY | O_CLOEXEC));
   if (!fd) {
     throw SysError(format("opening file '%1%'") % path);
   }

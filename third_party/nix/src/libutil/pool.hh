@@ -53,7 +53,7 @@ class Pool {
   std::condition_variable wakeup;
 
  public:
-  Pool(
+  explicit Pool(
       size_t max = std::numeric_limits<size_t>::max(),
       const Factory& factory = []() { return make_ref<R>(); },
       const Validator& validator = [](ref<R> r) { return true; })

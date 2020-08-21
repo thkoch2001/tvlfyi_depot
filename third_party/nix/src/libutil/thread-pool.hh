@@ -17,7 +17,7 @@ MakeError(ThreadPoolShutDown, Error);
    (lambdas). */
 class ThreadPool {
  public:
-  ThreadPool(size_t maxThreads = 0);
+  explicit ThreadPool(size_t maxThreads = 0);
 
   ~ThreadPool();
 

@@ -42,14 +42,14 @@ struct Hash {
   Hash(){};
 
   /* Create a zero-filled hash object. */
-  Hash(HashType type) : type(type) { init(); };
+  explicit Hash(HashType type) : type(type) { init(); };
 
   /* Initialize the hash from a string representation, in the format
      "[<type>:]<base16|base32|base64>" or "<type>-<base64>" (a
      Subresource Integrity hash expression). If the 'type' argument
      is htUnknown, then the hash type must be specified in the
      string. */
-  Hash(std::string_view s, HashType type = htUnknown);
+  explicit Hash(std::string_view s, HashType type = htUnknown);
 
   /* Status-returning version of above constructor */
   static absl::StatusOr<Hash> deserialize(std::string_view s,
@@ -61,7 +61,7 @@ struct Hash {
   void init();
 
   /* Check whether a hash is set. */
-  operator bool() const { return type != htUnknown; }
+  explicit operator bool() const { return type != htUnknown; }
 
   /* Check whether two hash are equal. */
   bool operator==(const Hash& h2) const;
@@ -136,7 +136,7 @@ class HashSink : public BufferedSink {
   unsigned long long bytes;
 
  public:
-  HashSink(HashType ht);
+  explicit HashSink(HashType ht);
   HashSink(const HashSink& h);
   ~HashSink();
   void write(const unsigned char* data, size_t len);

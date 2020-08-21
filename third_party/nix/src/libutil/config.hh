@@ -16,7 +16,8 @@ class AbstractConfig {
  protected:
   StringMap unknownSettings;
 
-  AbstractConfig(const StringMap& initials = {}) : unknownSettings(initials) {}
+  explicit AbstractConfig(const StringMap& initials = {})
+      : unknownSettings(initials) {}
 
  public:
   virtual bool set(const std::string& name, const std::string& value) = 0;
@@ -74,7 +75,7 @@ class Config : public AbstractConfig {
   Settings _settings;
 
  public:
-  Config(const StringMap& initials = {}) : AbstractConfig(initials) {}
+  explicit Config(const StringMap& initials = {}) : AbstractConfig(initials) {}
 
   bool set(const std::string& name, const std::string& value) override;
 
@@ -135,8 +136,8 @@ class BaseSetting : public AbstractSetting {
               const std::set<std::string>& aliases = {})
       : AbstractSetting(name, description, aliases), value(def) {}
 
-  operator const T&() const { return value; }
-  operator T&() { return value; }
+  explicit operator const T&() const { return value; }
+  explicit operator T&() { return value; }
   const T& get() const { return value; }
   bool operator==(const T& v2) const { return value == v2; }
   bool operator!=(const T& v2) const { return value != v2; }
@@ -218,7 +219,7 @@ struct GlobalConfig : public AbstractConfig {
   void convertToArgs(Args& args, const std::string& category) override;
 
   struct Register {
-    Register(Config* config);
+    explicit Register(Config* config);
   };
 };
 
