@@ -159,7 +159,7 @@ let
           expression = tests.expression;
         }
         else null;
-    in runCommandNoCC "${name}-cllib" {
+    in lib.fix (self: runCommandNoCC "${name}-cllib" {
       LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
       LANG = "C.UTF-8";
     } ''
@@ -181,7 +181,8 @@ let
       lispName = name;
       lispBinary = false;
       tests = testDrv;
-    };
+      sbcl = sbclWith [ self ];
+    });
 
   # 'program' creates an executable containing a dumped image of the
   # specified sources and dependencies.
@@ -210,7 +211,7 @@ let
           expression = tests.expression;
         }
         else null;
-    in runCommandNoCC "${name}" {
+    in lib.fix (self: runCommandNoCC "${name}" {
       nativeBuildInputs = [ makeWrapper ];
       LD_LIBRARY_PATH = libPath;
       LANG = "C.UTF-8";
@@ -231,7 +232,8 @@ let
       lispNativeDeps = native;
       lispBinary = true;
       tests = testDrv;
-    };
+      sbcl = sbclWith [ self ];
+    });
 
   # 'bundled' creates a "library" that calls 'require' on a built-in
   # package, such as any of SBCL's sb-* packages.
