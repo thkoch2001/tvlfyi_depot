@@ -359,8 +359,7 @@ static void _main(int argc, char** argv) {
     }
 
     if (!dryRun) {
-      auto discard_logs = DiscardLogsSink();
-      util::OkOrThrow(store->buildPaths(discard_logs, paths, buildMode));
+      util::OkOrThrow(store->buildPaths(std::cerr, paths, buildMode));
     }
   };
 

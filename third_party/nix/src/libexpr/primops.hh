@@ -6,7 +6,7 @@
 namespace nix {
 
 struct RegisterPrimOp {
-  typedef std::vector<std::tuple<std::string, size_t, PrimOpFun>> PrimOps;
+  using PrimOps = std::vector<std::tuple<std::string, size_t, PrimOpFun> >;
   static PrimOps* primOps;
   /* You can register a constant by passing an arity of 0. fun
      will get called during EvalState initialization, so there
