@@ -125,8 +125,9 @@ class Pool {
 
       /* If we're over the maximum number of instance, we need
          to wait until a slot becomes available. */
-      while (state_->idle.empty() && state_->inUse >= state_->max)
+      while (state_->idle.empty() && state_->inUse >= state_->max) {
         state_.wait(wakeup);
+      }
 
       while (!state_->idle.empty()) {
         auto p = state_->idle.back();
@@ -163,10 +164,11 @@ class Pool {
   void flushBad() {
     auto state_(state.lock());
     std::vector<ref<R>> left;
-    for (auto& p : state_->idle)
+    for (auto& p : state_->idle) {
       if (validator(p)) {
         left.push_back(p);
       }
+    }
     std::swap(state_->idle, left);
   }
 };

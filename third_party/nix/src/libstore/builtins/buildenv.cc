@@ -35,15 +35,17 @@ static void createLinks(const Path& srcDir, const Path& dstDir, int priority) {
   }
 
   for (const auto& ent : srcFiles) {
-    if (ent.name[0] == '.') /* not matched by glob */
+    if (ent.name[0] == '.') { /* not matched by glob */
       continue;
+    }
     auto srcFile = srcDir + "/" + ent.name;
     auto dstFile = dstDir + "/" + ent.name;
 
     struct stat srcSt;
     try {
-      if (stat(srcFile.c_str(), &srcSt) == -1)
+      if (stat(srcFile.c_str(), &srcSt) == -1) {
         throw SysError("getting status of '%1%'", srcFile);
+      }
     } catch (SysError& e) {
       if (e.errNo == ENOENT || e.errNo == ENOTDIR) {
         LOG(ERROR) << "warning: skipping dangling symlink '" << dstFile << "'";
@@ -61,10 +63,11 @@ static void createLinks(const Path& srcDir, const Path& dstDir, int priority) {
     if (absl::EndsWith(srcFile, "/propagated-build-inputs") ||
         absl::EndsWith(srcFile, "/nix-support") ||
         absl::EndsWith(srcFile, "/perllocal.pod") ||
-        absl::EndsWith(srcFile, "/info/dir") || absl::EndsWith(srcFile, "/log"))
+        absl::EndsWith(srcFile, "/info/dir") ||
+        absl::EndsWith(srcFile, "/log")) {
       continue;
 
-    else if (S_ISDIR(srcSt.st_mode)) {
+    } else if (S_ISDIR(srcSt.st_mode)) {
       struct stat dstSt;
       auto res = lstat(dstFile.c_str(), &dstSt);
       if (res == 0) {
@@ -73,19 +76,23 @@ static void createLinks(const Path& srcDir, const Path& dstDir, int priority) {
           continue;
         } else if (S_ISLNK(dstSt.st_mode)) {
           auto target = canonPath(dstFile, true);
-          if (!S_ISDIR(lstat(target).st_mode))
+          if (!S_ISDIR(lstat(target).st_mode)) {
             throw Error("collision between '%1%' and non-directory '%2%'",
                         srcFile, target);
-          if (unlink(dstFile.c_str()) == -1)
+          }
+          if (unlink(dstFile.c_str()) == -1) {
             throw SysError(format("unlinking '%1%'") % dstFile);
-          if (mkdir(dstFile.c_str(), 0755) == -1)
+          }
+          if (mkdir(dstFile.c_str(), 0755) == -1) {
             throw SysError(format("creating directory '%1%'"));
+          }
           createLinks(target, dstFile, priorities[dstFile]);
           createLinks(srcFile, dstFile, priority);
           continue;
         }
-      } else if (errno != ENOENT)
+      } else if (errno != ENOENT) {
         throw SysError(format("getting status of '%1%'") % dstFile);
+      }
     }
 
     else {
@@ -94,24 +101,28 @@ static void createLinks(const Path& srcDir, const Path& dstDir, int priority) {
       if (res == 0) {
         if (S_ISLNK(dstSt.st_mode)) {
           auto prevPriority = priorities[dstFile];
-          if (prevPriority == priority)
+          if (prevPriority == priority) {
             throw Error(
                 "packages '%1%' and '%2%' have the same priority %3%; "
                 "use 'nix-env --set-flag priority NUMBER INSTALLED_PKGNAME' "
                 "to change the priority of one of the conflicting packages"
                 " (0 being the highest priority)",
                 srcFile, readLink(dstFile), priority);
+          }
           if (prevPriority < priority) {
             continue;
           }
-          if (unlink(dstFile.c_str()) == -1)
+          if (unlink(dstFile.c_str()) == -1) {
             throw SysError(format("unlinking '%1%'") % dstFile);
-        } else if (S_ISDIR(dstSt.st_mode))
+          }
+        } else if (S_ISDIR(dstSt.st_mode)) {
           throw Error(
               "collision between non-directory '%1%' and directory '%2%'",
               srcFile, dstFile);
-      } else if (errno != ENOENT)
+        }
+      } else if (errno != ENOENT) {
         throw SysError(format("getting status of '%1%'") % dstFile);
+      }
     }
 
     createSymlink(srcFile, dstFile);
@@ -201,10 +212,11 @@ void builtinBuildenv(const BasicDerivation& drv) {
     return a.priority < b.priority ||
            (a.priority == b.priority && a.path < b.path);
   });
-  for (const auto& pkg : pkgs)
+  for (const auto& pkg : pkgs) {
     if (pkg.active) {
       addPkg(pkg.path, pkg.priority);
     }
+  }
 
   /* Symlink to the packages that have been "propagated" by packages
    * installed by the user (i.e., package X declares that it wants Y

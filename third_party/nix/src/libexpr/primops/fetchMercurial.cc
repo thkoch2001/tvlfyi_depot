@@ -28,10 +28,11 @@ std::regex commitHashRegex("^[0-9a-fA-F]{40}$");
 
 HgInfo exportMercurial(ref<Store> store, const std::string& uri,
                        std::string rev, const std::string& name) {
-  if (evalSettings.pureEval && rev == "")
+  if (evalSettings.pureEval && rev == "") {
     throw Error(
         "in pure evaluation mode, 'fetchMercurial' requires a Mercurial "
         "revision");
+  }
 
   if (rev == "" && absl::StartsWith(uri, "/") && pathExists(uri + "/.hg")) {
     bool clean = runProgram("hg", true,
@@ -199,20 +200,22 @@ static void prim_fetchMercurial(EvalState& state, const Pos& pos, Value** args,
     for (auto& attr_iter : *args[0]->attrs) {
       auto& attr = attr_iter.second;
       std::string n(attr.name);
-      if (n == "url")
+      if (n == "url") {
         url =
             state.coerceToString(*attr.pos, *attr.value, context, false, false);
-      else if (n == "rev")
+      } else if (n == "rev") {
         rev = state.forceStringNoCtx(*attr.value, *attr.pos);
-      else if (n == "name")
+      } else if (n == "name") {
         name = state.forceStringNoCtx(*attr.value, *attr.pos);
-      else
+      } else {
         throw EvalError("unsupported argument '%s' to 'fetchMercurial', at %s",
                         attr.name, *attr.pos);
+      }
     }
 
-    if (url.empty())
+    if (url.empty()) {
       throw EvalError(format("'url' argument required, at %1%") % pos);
+    }
 
   } else {
     url = state.coerceToString(pos, *args[0], context, false, false);
