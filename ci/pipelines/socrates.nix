@@ -12,7 +12,7 @@ let
           --no-out-link \
           --show-trace
       '';
-      label = ":laptop: Socrates [build]";
+      label = ":hammer: build";
     }
   ];
 in pkgs.writeText "socrates.yml" (builtins.toJSON pipeline)
