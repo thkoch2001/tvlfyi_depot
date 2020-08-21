@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "cb03d5cf_869b4dab",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-21T13:39:10Z",
+      "side": 1,
+      "message": "should this have been a static_cast?",
+      "revId": "6a01b7a19df40baca7b5fbda5bbbbc84cfd21572",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33db387f_7b770a31",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-21T13:39:10Z",
+      "side": 1,
+      "message": "here too",
+      "revId": "6a01b7a19df40baca7b5fbda5bbbbc84cfd21572",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2225736_378c95e7",
+        "filename": "third_party/nix/src/libutil/ref.hh",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-21T13:39:10Z",
+      "side": 1,
+      "message": "!!!!!",
+      "revId": "6a01b7a19df40baca7b5fbda5bbbbc84cfd21572",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "acb151c7_abebeac4",
         "filename": "third_party/nix/src/nix/repl.cc",
         "patchSetId": 2
