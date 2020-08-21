@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "acb151c7_abebeac4",
+        "filename": "third_party/nix/src/nix/repl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-21T10:12:56Z",
+      "side": 1,
+      "message": "future note: if not for the _exit, this would call kill(0) which is fun times.",
+      "range": {
+        "startLine": 400,
+        "startChar": 2,
+        "endLine": 401,
+        "endChar": 19
+      },
+      "revId": "6a01b7a19df40baca7b5fbda5bbbbc84cfd21572",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
