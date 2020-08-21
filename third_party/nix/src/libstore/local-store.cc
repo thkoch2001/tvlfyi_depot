@@ -135,8 +135,8 @@ LocalStore::LocalStore(const Params& params)
     struct stat st;
     if (stat(reservedPath.c_str(), &st) == -1 ||
         st.st_size != settings.reservedSize) {
-      AutoCloseFD fd =
-          open(reservedPath.c_str(), O_WRONLY | O_CREAT | O_CLOEXEC, 0600);
+      AutoCloseFD fd(
+          open(reservedPath.c_str(), O_WRONLY | O_CREAT | O_CLOEXEC, 0600));
       int res = -1;
 #if HAVE_POSIX_FALLOCATE
       res = posix_fallocate(fd.get(), 0, settings.reservedSize);
@@ -288,7 +288,7 @@ LocalStore::~LocalStore() {
   try {
     auto state(_state.lock());
     if (state->fdTempRoots) {
-      state->fdTempRoots = -1;
+      state->fdTempRoots = AutoCloseFD(-1);
       unlink(fnTempRoots.c_str());
     }
   } catch (...) {
@@ -1278,7 +1278,7 @@ bool LocalStore::verifyStore(bool checkContents, RepairFlag repair) {
   PathSet validPaths;
   PathSet done;
 
-  fdGCLock = -1;
+  fdGCLock = AutoCloseFD(-1);
 
   for (auto& i : validPaths2) {
     verifyPath(i, store, done, validPaths, repair, errors);

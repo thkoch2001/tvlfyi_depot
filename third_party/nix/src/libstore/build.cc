@@ -574,8 +574,8 @@ UserLock::UserLock() {
     }
 
     try {
-      AutoCloseFD fd =
-          open(fnUserLock.c_str(), O_RDWR | O_CREAT | O_CLOEXEC, 0600);
+      AutoCloseFD fd(
+          open(fnUserLock.c_str(), O_RDWR | O_CREAT | O_CLOEXEC, 0600));
       if (!fd) {
         throw SysError(format("opening user lock '%1%'") % fnUserLock);
       }
@@ -698,8 +698,8 @@ HookInstance::HookInstance() {
   });
 
   pid.setSeparatePG(true);
-  fromHook.writeSide = -1;
-  toHook.readSide = -1;
+  fromHook.writeSide = AutoCloseFD(-1);
+  toHook.readSide = AutoCloseFD(-1);
 
   sink = FdSink(toHook.writeSide.get());
   std::map<std::string, Config::SettingInfo> settings;
@@ -712,8 +712,8 @@ HookInstance::HookInstance() {
 
 HookInstance::~HookInstance() {
   try {
-    toHook.writeSide = -1;
-    if (pid != -1) {
+    toHook.writeSide = AutoCloseFD(-1);
+    if (pid != Pid(-1)) {
       pid.kill();
     }
   } catch (...) {
@@ -1056,7 +1056,7 @@ DerivationGoal::~DerivationGoal() {
 inline bool DerivationGoal::needsHashRewrite() { return !useChroot; }
 
 void DerivationGoal::killChild() {
-  if (pid != -1) {
+  if (pid != Pid(-1)) {
     worker.childTerminated(this);
 
     if (buildUser) {
@@ -1066,14 +1066,14 @@ void DerivationGoal::killChild() {
          it won't be killed, and we'll potentially lock up in
          pid.wait().  So also send a conventional kill to the
          child. */
-      ::kill(-pid, SIGKILL); /* ignore the result */
+      ::kill(-static_cast<pid_t>(pid), SIGKILL); /* ignore the result */
       buildUser->kill();
       pid.wait();
     } else {
       pid.kill();
     }
 
-    assert(pid == -1);
+    assert(pid == Pid(-1));
   }
 
   hook.reset();
@@ -1572,10 +1572,10 @@ void DerivationGoal::buildDone() {
 
   /* Close the read side of the logger pipe. */
   if (hook) {
-    hook->builderOut.readSide = -1;
-    hook->fromHook.readSide = -1;
+    hook->builderOut.readSide = AutoCloseFD(-1);
+    hook->fromHook.readSide = AutoCloseFD(-1);
   } else {
-    builderOut.readSide = -1;
+    builderOut.readSide = AutoCloseFD(-1);
   }
 
   /* Close the log file. */
@@ -1830,7 +1830,7 @@ HookReply DerivationGoal::tryBuildHook() {
   hook->sink << missingPaths;
 
   hook->sink = FdSink();
-  hook->toHook.writeSide = -1;
+  hook->toHook.writeSide = AutoCloseFD(-1);
 
   /* Create the log file and pipe. */
   Path logFile = openLogFile();
@@ -2268,7 +2268,7 @@ void DerivationGoal::startBuilder() {
   /* Create a pipe to get the output of the builder. */
   // builderOut.create();
 
-  builderOut.readSide = posix_openpt(O_RDWR | O_NOCTTY);
+  builderOut.readSide = AutoCloseFD(posix_openpt(O_RDWR | O_NOCTTY));
   if (!builderOut.readSide) {
     throw SysError("opening pseudoterminal master");
   }
@@ -2300,7 +2300,8 @@ void DerivationGoal::startBuilder() {
     throw SysError("unlocking pseudoterminal");
   }
 
-  builderOut.writeSide = open(slaveName.c_str(), O_RDWR | O_NOCTTY);
+  builderOut.writeSide =
+      AutoCloseFD(open(slaveName.c_str(), O_RDWR | O_NOCTTY));
   if (!builderOut.writeSide) {
     throw SysError("opening pseudoterminal slave");
   }
@@ -2364,7 +2365,7 @@ void DerivationGoal::startBuilder() {
 
     userNamespaceSync.create();
 
-    Pid helper = startProcess(
+    Pid helper(startProcess(
         [&]() {
           /* Drop additional groups here because we can't do it
              after we've created the new user namespace.  FIXME:
@@ -2421,7 +2422,7 @@ void DerivationGoal::startBuilder() {
           writeFull(builderOut.writeSide.get(), std::to_string(child) + "\n");
           _exit(0);
         },
-        options);
+        options));
 
     int res = helper.wait();
     if (res != 0 && settings.sandboxFallback) {
@@ -2432,7 +2433,7 @@ void DerivationGoal::startBuilder() {
       throw Error("unable to start build process");
     }
 
-    userNamespaceSync.readSide = -1;
+    userNamespaceSync.readSide = AutoCloseFD(-1);
 
     pid_t tmp;
     if (!absl::SimpleAtoi(readLine(builderOut.readSide.get()), &tmp)) {
@@ -2446,18 +2447,19 @@ void DerivationGoal::startBuilder() {
     uid_t hostUid = buildUser ? buildUser->getUID() : getuid();
     uid_t hostGid = buildUser ? buildUser->getGID() : getgid();
 
-    writeFile("/proc/" + std::to_string(pid) + "/uid_map",
+    writeFile("/proc/" + std::to_string(static_cast<pid_t>(pid)) + "/uid_map",
               (format("%d %d 1") % sandboxUid % hostUid).str());
 
-    writeFile("/proc/" + std::to_string(pid) + "/setgroups", "deny");
+    writeFile("/proc/" + std::to_string(static_cast<pid_t>(pid)) + "/setgroups",
+              "deny");
 
-    writeFile("/proc/" + std::to_string(pid) + "/gid_map",
+    writeFile("/proc/" + std::to_string(static_cast<pid_t>(pid)) + "/gid_map",
               (format("%d %d 1") % sandboxGid % hostGid).str());
 
     /* Signal the builder that we've updated its user
        namespace. */
     writeFull(userNamespaceSync.writeSide.get(), "1");
-    userNamespaceSync.writeSide = -1;
+    userNamespaceSync.writeSide = AutoCloseFD(-1);
 
   } else
 #endif
@@ -2468,7 +2470,7 @@ void DerivationGoal::startBuilder() {
 
   /* parent */
   pid.setSeparatePG(true);
-  builderOut.writeSide = -1;
+  builderOut.writeSide = AutoCloseFD(-1);
   worker.childStarted(shared_from_this(), {builderOut.readSide.get()}, true,
                       true);
 
@@ -2837,13 +2839,13 @@ void DerivationGoal::runChild() {
 
 #if __linux__
     if (useChroot) {
-      userNamespaceSync.writeSide = -1;
+      userNamespaceSync.writeSide = AutoCloseFD(-1);
 
       if (drainFD(userNamespaceSync.readSide.get()) != "1") {
         throw Error("user namespace initialisation failed");
       }
 
-      userNamespaceSync.readSide = -1;
+      userNamespaceSync.readSide = AutoCloseFD(-1);
 
       if (privateNetwork) {
         /* Initialise the loopback interface. */
@@ -3738,8 +3740,8 @@ Path DerivationGoal::openLogFile() {
   Path logFileName = fmt("%s/%s%s", dir, std::string(baseName, 2),
                          settings.compressLog ? ".bz2" : "");
 
-  fdLogFile =
-      open(logFileName.c_str(), O_CREAT | O_WRONLY | O_TRUNC | O_CLOEXEC, 0666);
+  fdLogFile = AutoCloseFD(open(logFileName.c_str(),
+                               O_CREAT | O_WRONLY | O_TRUNC | O_CLOEXEC, 0666));
   if (!fdLogFile) {
     throw SysError(format("creating log file '%1%'") % logFileName);
   }
@@ -3765,7 +3767,7 @@ void DerivationGoal::closeLogFile() {
     logFileSink->flush();
   }
   logSink = logFileSink = nullptr;
-  fdLogFile = -1;
+  fdLogFile = AutoCloseFD(-1);
 }
 
 void DerivationGoal::deleteTmpDir(bool force) {
@@ -4163,7 +4165,7 @@ void SubstitutionGoal::tryToRun() {
   thr = std::thread([this]() {
     try {
       /* Wake up the worker loop when we're done. */
-      Finally updateStats([this]() { outPipe.writeSide = -1; });
+      Finally updateStats([this]() { outPipe.writeSide = AutoCloseFD(-1); });
 
       copyStorePath(ref<Store>(sub),
                     ref<Store>(worker.store.shared_from_this()), storePath,

@@ -9,7 +9,7 @@ namespace nix {
 /* A simple non-nullable reference-counted pointer. Actually a wrapper
    around std::shared_ptr that prevents non-null constructions. */
 template <typename T>
-class ref {
+class ref {  // TODO(tazjin): rename to brainworm_ref or something
  private:
   std::shared_ptr<T> p;
 

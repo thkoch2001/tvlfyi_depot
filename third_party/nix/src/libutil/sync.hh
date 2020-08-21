@@ -31,15 +31,15 @@ class Sync {
 
  public:
   Sync() {}
-  Sync(const T& data) : data(data) {}
-  Sync(T&& data) noexcept : data(std::move(data)) {}
+  explicit Sync(const T& data) : data(data) {}
+  explicit Sync(T&& data) noexcept : data(std::move(data)) {}
 
   class Lock {
    private:
     Sync* s;
     std::unique_lock<M> lk;
     friend Sync;
-    Lock(Sync* s) : s(s), lk(s->mutex) {}
+    explicit Lock(Sync* s) : s(s), lk(s->mutex) {}
 
    public:
     Lock(Lock&& l) : s(l.s) { abort(); }

@@ -29,7 +29,7 @@ class JSONWriter {
 
   JSONWriter(std::ostream& str, bool indent);
 
-  JSONWriter(JSONState* state);
+  explicit JSONWriter(JSONState* state);
 
   ~JSONWriter();
 
@@ -50,10 +50,11 @@ class JSONList : JSONWriter {
 
   void open();
 
-  JSONList(JSONState* state) : JSONWriter(state) { open(); }
+  explicit JSONList(JSONState* state) : JSONWriter(state) { open(); }
 
  public:
-  JSONList(std::ostream& str, bool indent = false) : JSONWriter(str, indent) {
+  explicit JSONList(std::ostream& str, bool indent = false)
+      : JSONWriter(str, indent) {
     open();
   }
 
@@ -80,12 +81,13 @@ class JSONObject : JSONWriter {
 
   void open();
 
-  JSONObject(JSONState* state) : JSONWriter(state) { open(); }
+  explicit JSONObject(JSONState* state) : JSONWriter(state) { open(); }
 
   void attr(const std::string& s);
 
  public:
-  JSONObject(std::ostream& str, bool indent = false) : JSONWriter(str, indent) {
+  explicit JSONObject(std::ostream& str, bool indent = false)
+      : JSONWriter(str, indent) {
     open();
   }
 
@@ -114,7 +116,7 @@ class JSONPlaceholder : JSONWriter {
   friend class JSONList;
   friend class JSONObject;
 
-  JSONPlaceholder(JSONState* state) : JSONWriter(state) {}
+  explicit JSONPlaceholder(JSONState* state) : JSONWriter(state) {}
 
   void assertValid() {
     assertActive();
@@ -122,7 +124,7 @@ class JSONPlaceholder : JSONWriter {
   }
 
  public:
-  JSONPlaceholder(std::ostream& str, bool indent = false)
+  explicit JSONPlaceholder(std::ostream& str, bool indent = false)
       : JSONWriter(str, indent) {}
 
   ~JSONPlaceholder() { assert(!first || std::uncaught_exception()); }
