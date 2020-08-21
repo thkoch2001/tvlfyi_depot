@@ -5,6 +5,7 @@
 #include <memory>
 #include <optional>
 #include <ostream>
+#include <string_view>
 
 #include <absl/status/status.h>
 #include <absl/strings/str_cat.h>
@@ -35,6 +36,11 @@
 namespace nix {
 
 namespace store {
+
+// Should be set to the bandwidth delay product between the client and the
+// daemon. The current value, which should eventually be determined dynamically,
+// has currently been set to a developer's deskop computer, rounded up
+constexpr size_t kChunkSize = 1024 * 64;
 
 using google::protobuf::util::TimeUtil;
 using grpc::ClientContext;
@@ -308,14 +314,29 @@ Path RpcStore::addTextToStore(const std::string& name,
         "repairing is not supported when building through the Nix daemon");
   }
   ClientContext ctx;
-  proto::AddTextToStoreRequest request;
-  request.set_name(name);
-  request.set_content(content);
-  for (const auto& ref : references) {
-    request.add_references(ref);
-  }
   proto::StorePath result;
-  SuccessOrThrow(stub_->AddTextToStore(&ctx, request, &result), __FUNCTION__);
+  auto writer = stub_->AddTextToStore(&ctx, &result);
+
+  proto::AddTextToStoreRequest meta;
+  meta.mutable_meta()->set_name(name);
+  meta.mutable_meta()->set_size(content.size());
+  for (const auto& ref : references) {
+    meta.mutable_meta()->add_references(ref);
+  }
+  writer->Write(meta);
+
+  for (int i = 0; i <= content.size(); i += kChunkSize) {
+    auto len = std::min(kChunkSize, content.size() - i);
+    proto::AddTextToStoreRequest data;
+    data.set_data(content.data() + i, len);
+    if (!writer->Write(data)) {
+      // Finish() below will error
+      break;
+    }
+  }
+
+  writer->WritesDone();
+  SuccessOrThrow(writer->Finish(), __FUNCTION__);
   return result.path();
 }
 
