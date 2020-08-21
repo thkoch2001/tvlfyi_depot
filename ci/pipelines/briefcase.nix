@@ -3,7 +3,7 @@
 let
   pipeline.steps = [
     {
-      command = "${pkgs.git-secrets}/bin/git-secrets";
+      command = "${pkgs.git-secrets}/bin/git-secrets --scan-history";
       label = ":briefcase: Briefcase [lint]";
     }
     {
