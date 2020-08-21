@@ -1473,7 +1473,7 @@ void DerivationGoal::tryToBuild() {
     if (hook) {
       msg += fmt(" on '%s'", machineName);
     }
-    log_sink_ << msg << "[" << drvPath << "]";
+    log_sink_ << absl::StrCat(msg, "[", drvPath, "]\n");
     mcRunningBuilds =
         std::make_unique<MaintainCount<uint64_t>>(worker.runningBuilds);
   };
@@ -3835,7 +3835,7 @@ void DerivationGoal::handleEOF(int /* fd */) {
 void DerivationGoal::flushLine() {
   if (settings.verboseBuild &&
       (settings.printRepeatedBuilds || curRound == 1)) {
-    log_sink_ << currentLogLine;
+    log_sink_ << absl::StrCat(currentLogLine, "\n");
   } else {
     logTail.push_back(currentLogLine);
     if (logTail.size() > settings.logLines) {
