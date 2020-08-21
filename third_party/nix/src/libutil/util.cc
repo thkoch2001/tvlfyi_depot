@@ -312,7 +312,7 @@ std::string readFile(int fd) {
 }
 
 std::string readFile(absl::string_view path, bool drain) {
-  AutoCloseFD fd = open(std::string(path).c_str(), O_RDONLY | O_CLOEXEC);
+  AutoCloseFD fd(open(std::string(path).c_str(), O_RDONLY | O_CLOEXEC));
   if (!fd) {
     throw SysError(format("opening file '%1%'") % path);
   }
@@ -321,7 +321,7 @@ std::string readFile(absl::string_view path, bool drain) {
 
 void readFile(absl::string_view path, Sink& sink) {
   // TODO(tazjin): use stdlib functions for this stuff
-  AutoCloseFD fd = open(std::string(path).c_str(), O_RDONLY | O_CLOEXEC);
+  AutoCloseFD fd(open(std::string(path).c_str(), O_RDONLY | O_CLOEXEC));
   if (!fd) {
     throw SysError("opening file '%s'", path);
   }
@@ -329,8 +329,8 @@ void readFile(absl::string_view path, Sink& sink) {
 }
 
 void writeFile(const Path& path, const std::string& s, mode_t mode) {
-  AutoCloseFD fd =
-      open(path.c_str(), O_WRONLY | O_TRUNC | O_CREAT | O_CLOEXEC, mode);
+  AutoCloseFD fd(
+      open(path.c_str(), O_WRONLY | O_TRUNC | O_CREAT | O_CLOEXEC, mode));
   if (!fd) {
     throw SysError(format("opening file '%1%'") % path);
   }
@@ -338,8 +338,8 @@ void writeFile(const Path& path, const std::string& s, mode_t mode) {
 }
 
 void writeFile(const Path& path, Source& source, mode_t mode) {
-  AutoCloseFD fd =
-      open(path.c_str(), O_WRONLY | O_TRUNC | O_CREAT | O_CLOEXEC, mode);
+  AutoCloseFD fd(
+      open(path.c_str(), O_WRONLY | O_TRUNC | O_CREAT | O_CLOEXEC, mode));
   if (!fd) {
     throw SysError(format("opening file '%1%'") % path);
   }
@@ -790,8 +790,8 @@ void Pipe::create() {
   closeOnExec(fds[0]);
   closeOnExec(fds[1]);
 #endif
-  readSide = fds[0];
-  writeSide = fds[1];
+  readSide = AutoCloseFD(fds[0]);
+  writeSide = AutoCloseFD(fds[1]);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -868,7 +868,7 @@ void killUser(uid_t uid) {
 
   ProcessOptions options;
 
-  Pid pid = startProcess(
+  Pid pid(startProcess(
       [&]() {
         if (setuid(uid) == -1) {
           throw SysError("setting uid");
@@ -888,7 +888,7 @@ void killUser(uid_t uid) {
 
         _exit(0);
       },
-      options);
+      options));
 
   int status = pid.wait();
   if (status != 0) {
@@ -1024,7 +1024,7 @@ void runProgram2(const RunOptions& options) {
   ProcessOptions processOptions;
 
   /* Fork. */
-  Pid pid = startProcess(
+  Pid pid(startProcess(
       [&]() {
         if (options.environment) {
           replaceEnv(*options.environment);
@@ -1070,9 +1070,9 @@ void runProgram2(const RunOptions& options) {
 
         throw SysError("executing '%1%'", options.program);
       },
-      processOptions);
+      processOptions));
 
-  out.writeSide = -1;
+  out.writeSide = AutoCloseFD(-1);
 
   std::thread writerThread;
 
@@ -1085,7 +1085,7 @@ void runProgram2(const RunOptions& options) {
   });
 
   if (source != nullptr) {
-    in.readSide = -1;
+    in.readSide = AutoCloseFD(-1);
     writerThread = std::thread([&]() {
       try {
         std::vector<unsigned char> buf(8 * 1024);
@@ -1102,7 +1102,7 @@ void runProgram2(const RunOptions& options) {
       } catch (...) {
         promise.set_exception(std::current_exception());
       }
-      in.writeSide = -1;
+      in.writeSide = AutoCloseFD(-1);
     });
   }
 

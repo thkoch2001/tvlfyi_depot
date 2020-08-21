@@ -109,8 +109,8 @@ static int _main(int argc, char* argv[]) {
       mkdir(currentLoad.c_str(), 0777);
 
       while (true) {
-        bestSlotLock = -1;
-        AutoCloseFD lock = openLockFile(currentLoad + "/main-lock", true);
+        bestSlotLock = AutoCloseFD(-1);
+        AutoCloseFD lock(openLockFile(currentLoad + "/main-lock", true));
         lockFile(lock.get(), ltWrite, true);
 
         bool rightType = false;
@@ -177,7 +177,7 @@ static int _main(int argc, char* argv[]) {
 
         futimens(bestSlotLock.get(), nullptr);
 
-        lock = -1;
+        lock = AutoCloseFD(-1);
 
         try {
           DLOG(INFO) << "connecting to '" << bestMachine->storeUri << "'";
@@ -240,7 +240,7 @@ static int _main(int argc, char* argv[]) {
                 substitute);
     }
 
-    uploadLock = -1;
+    uploadLock = AutoCloseFD(-1);
 
     BasicDerivation drv(
         readDerivation(store->realStoreDir + "/" + baseNameOf(drvPath)));

@@ -8,6 +8,6 @@ class Finally {
   std::function<void()> fun;
 
  public:
-  Finally(std::function<void()> fun) : fun(fun) {}
+  explicit Finally(std::function<void()> fun) : fun(fun) {}
   ~Finally() { fun(); }
 };

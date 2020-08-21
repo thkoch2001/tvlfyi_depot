@@ -360,7 +360,7 @@ RunPager::RunPager() {
 
 RunPager::~RunPager() {
   try {
-    if (pid != -1) {
+    if (pid != Pid(-1)) {
       std::cout.flush();
       close(STDOUT_FILENO);
       pid.wait();

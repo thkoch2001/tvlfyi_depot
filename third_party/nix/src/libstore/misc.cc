@@ -38,74 +38,76 @@ void Store::computeFSClosure(const PathSet& startPaths, PathSet& paths_,
     }
 
     queryPathInfo(
-        path, {[&, path](std::future<ref<ValidPathInfo>> fut) {
-          // FIXME: calls to isValidPath() should be async
+        path,
+        Callback<ref<ValidPathInfo>>(
+            [&, path](std::future<ref<ValidPathInfo>> fut) {
+              // FIXME: calls to isValidPath() should be async
 
-          try {
-            auto info = fut.get();
+              try {
+                auto info = fut.get();
 
-            if (flipDirection) {
-              PathSet referrers;
-              queryReferrers(path, referrers);
-              for (auto& ref : referrers) {
-                if (ref != path) {
-                  enqueue(ref);
-                }
-              }
+                if (flipDirection) {
+                  PathSet referrers;
+                  queryReferrers(path, referrers);
+                  for (auto& ref : referrers) {
+                    if (ref != path) {
+                      enqueue(ref);
+                    }
+                  }
 
-              if (includeOutputs) {
-                for (auto& i : queryValidDerivers(path)) {
-                  enqueue(i);
-                }
-              }
+                  if (includeOutputs) {
+                    for (auto& i : queryValidDerivers(path)) {
+                      enqueue(i);
+                    }
+                  }
 
-              if (includeDerivers && isDerivation(path)) {
-                for (auto& i : queryDerivationOutputs(path)) {
-                  if (isValidPath(i) && queryPathInfo(i)->deriver == path) {
-                    enqueue(i);
+                  if (includeDerivers && isDerivation(path)) {
+                    for (auto& i : queryDerivationOutputs(path)) {
+                      if (isValidPath(i) && queryPathInfo(i)->deriver == path) {
+                        enqueue(i);
+                      }
+                    }
+                  }
+
+                } else {
+                  for (auto& ref : info->references) {
+                    if (ref != path) {
+                      enqueue(ref);
+                    }
+                  }
+
+                  if (includeOutputs && isDerivation(path)) {
+                    for (auto& i : queryDerivationOutputs(path)) {
+                      if (isValidPath(i)) {
+                        enqueue(i);
+                      }
+                    }
+                  }
+
+                  if (includeDerivers && isValidPath(info->deriver)) {
+                    enqueue(info->deriver);
                   }
                 }
-              }
 
-            } else {
-              for (auto& ref : info->references) {
-                if (ref != path) {
-                  enqueue(ref);
-                }
-              }
-
-              if (includeOutputs && isDerivation(path)) {
-                for (auto& i : queryDerivationOutputs(path)) {
-                  if (isValidPath(i)) {
-                    enqueue(i);
+                {
+                  auto state(state_.lock());
+                  assert(state->pending);
+                  if (--state->pending == 0u) {
+                    done.notify_one();
                   }
                 }
-              }
 
-              if (includeDerivers && isValidPath(info->deriver)) {
-                enqueue(info->deriver);
-              }
-            }
-
-            {
-              auto state(state_.lock());
-              assert(state->pending);
-              if (--state->pending == 0u) {
-                done.notify_one();
-              }
-            }
-
-          } catch (...) {
-            auto state(state_.lock());
-            if (!state->exc) {
-              state->exc = std::current_exception();
-            }
-            assert(state->pending);
-            if (--state->pending == 0u) {
-              done.notify_one();
-            }
-          };
-        }});
+              } catch (...) {
+                auto state(state_.lock());
+                if (!state->exc) {
+                  state->exc = std::current_exception();
+                }
+                assert(state->pending);
+                if (--state->pending == 0u) {
+                  done.notify_one();
+                }
+              };
+            }));
   };
 
   for (auto& startPath : startPaths) {

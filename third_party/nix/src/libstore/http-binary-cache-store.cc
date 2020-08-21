@@ -135,20 +135,22 @@ class HttpBinaryCacheStore : public BinaryCacheStore {
         std::make_shared<decltype(callback)>(std::move(callback));
 
     getDownloader()->enqueueDownload(
-        request, {[callbackPtr, this](std::future<DownloadResult> result) {
-          try {
-            (*callbackPtr)(result.get().data);
-          } catch (DownloadError& e) {
-            if (e.error == Downloader::NotFound ||
-                e.error == Downloader::Forbidden) {
-              return (*callbackPtr)(std::shared_ptr<std::string>());
-            }
-            maybeDisable();
-            callbackPtr->rethrow();
-          } catch (...) {
-            callbackPtr->rethrow();
-          }
-        }});
+        request,
+        Callback<DownloadResult>{
+            [callbackPtr, this](std::future<DownloadResult> result) {
+              try {
+                (*callbackPtr)(result.get().data);
+              } catch (DownloadError& e) {
+                if (e.error == Downloader::NotFound ||
+                    e.error == Downloader::Forbidden) {
+                  return (*callbackPtr)(std::shared_ptr<std::string>());
+                }
+                maybeDisable();
+                callbackPtr->rethrow();
+              } catch (...) {
+                callbackPtr->rethrow();
+              }
+            }});
   }
 };
 

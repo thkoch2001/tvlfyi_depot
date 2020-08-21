@@ -744,13 +744,15 @@ ref<Downloader> makeDownloader() { return make_ref<CurlDownloader>(); }
 std::future<DownloadResult> Downloader::enqueueDownload(
     const DownloadRequest& request) {
   auto promise = std::make_shared<std::promise<DownloadResult>>();
-  enqueueDownload(request, {[promise](std::future<DownloadResult> fut) {
-                    try {
-                      promise->set_value(fut.get());
-                    } catch (...) {
-                      promise->set_exception(std::current_exception());
-                    }
-                  }});
+  enqueueDownload(
+      request,
+      Callback<DownloadResult>([promise](std::future<DownloadResult> fut) {
+        try {
+          promise->set_value(fut.get());
+        } catch (...) {
+          promise->set_exception(std::current_exception());
+        }
+      }));
   return promise->get_future();
 }
 
@@ -807,17 +809,18 @@ void Downloader::download(DownloadRequest&& request, Sink& sink) {
     state->avail.notify_one();
   };
 
-  enqueueDownload(request, {[_state](std::future<DownloadResult> fut) {
-                    auto state(_state->lock());
-                    state->quit = true;
-                    try {
-                      fut.get();
-                    } catch (...) {
-                      state->exc = std::current_exception();
-                    }
-                    state->avail.notify_one();
-                    state->request.notify_one();
-                  }});
+  enqueueDownload(request, Callback<DownloadResult>(
+                               [_state](std::future<DownloadResult> fut) {
+                                 auto state(_state->lock());
+                                 state->quit = true;
+                                 try {
+                                   fut.get();
+                                 } catch (...) {
+                                   state->exc = std::current_exception();
+                                 }
+                                 state->avail.notify_one();
+                                 state->request.notify_one();
+                               }));
 
   while (true) {
     checkInterrupt();

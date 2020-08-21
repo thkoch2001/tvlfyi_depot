@@ -80,13 +80,14 @@ void BinaryCacheStore::getFile(
 
 void BinaryCacheStore::getFile(const std::string& path, Sink& sink) {
   std::promise<std::shared_ptr<std::string>> promise;
-  getFile(path, {[&](std::future<std::shared_ptr<std::string>> result) {
-            try {
-              promise.set_value(result.get());
-            } catch (...) {
-              promise.set_exception(std::current_exception());
-            }
-          }});
+  getFile(path, Callback<std::shared_ptr<std::string>>{
+                    [&](std::future<std::shared_ptr<std::string>> result) {
+                      try {
+                        promise.set_value(result.get());
+                      } catch (...) {
+                        promise.set_exception(std::current_exception());
+                      }
+                    }});
   auto data = promise.get_future().get();
   sink(reinterpret_cast<unsigned char*>(data->data()), data->size());
 }
@@ -280,23 +281,25 @@ void BinaryCacheStore::queryPathInfoUncached(
 
   auto callbackPtr = std::make_shared<decltype(callback)>(std::move(callback));
 
-  getFile(narInfoFile, {[=](std::future<std::shared_ptr<std::string>> fut) {
-            try {
-              auto data = fut.get();
+  getFile(narInfoFile,
+          Callback<std::shared_ptr<std::string>>(
+              [=](std::future<std::shared_ptr<std::string>> fut) {
+                try {
+                  auto data = fut.get();
 
-              if (!data) {
-                return (*callbackPtr)(nullptr);
-              }
+                  if (!data) {
+                    return (*callbackPtr)(nullptr);
+                  }
 
-              stats.narInfoRead++;
+                  stats.narInfoRead++;
 
-              (*callbackPtr)(std::shared_ptr<ValidPathInfo>(
-                  std::make_shared<NarInfo>(*this, *data, narInfoFile)));
+                  (*callbackPtr)(std::shared_ptr<ValidPathInfo>(
+                      std::make_shared<NarInfo>(*this, *data, narInfoFile)));
 
-            } catch (...) {
-              callbackPtr->rethrow();
-            }
-          }});
+                } catch (...) {
+                  callbackPtr->rethrow();
+                }
+              }));
 }
 
 Path BinaryCacheStore::addToStore(const std::string& name, const Path& srcPath,
