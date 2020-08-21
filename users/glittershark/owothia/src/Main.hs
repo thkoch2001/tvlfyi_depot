@@ -85,11 +85,23 @@ instance Random OwoType where
   random = over _1 (bool Noun Verb) . random
   randomR = const random
 
+vowels :: [Char]
+vowels = "aeiou"
+
+article :: Text -> Text
+article (x :< _) | x `elem` vowels = "an"
+article _ = "a"
+
 owo :: OwoType -> Text -> Text
-owo Noun n =
-          if "o" `Data.Text.isSuffixOf` n
-          then "I'm a " <> n <> "wo"
-          else "I'm a " <> n <> " owo"
+owo Noun n = mconcat
+  [ "I'm "
+  , article n
+  , " "
+  , n
+  , if "o" `Data.Text.isSuffixOf` n
+    then "wo"
+    else " owo"
+  ]
 owo Verb v = v <> " me owo"
 
 pickOwo :: OwoType -> POS Tag -> Maybe Text
