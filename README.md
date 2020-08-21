@@ -1,6 +1,6 @@
 # briefcase
 
-[![Build status](https://badge.buildkite.com/2dd3b5d59abfe9204bd26cfdafc107c2cdf7acf718352a6070.svg)](https://buildkite.com/wpcarros-infrastructure/build-briefcase)
+[![Build status](https://badge.buildkite.com/7fd2d34344d1768a00019e0cff2dfd736cd7fee2489f31ce52.svg)](https://buildkite.com/wpcarros-infrastructure/briefcase)
 
 Welcome to my monorepo: briefcase.
 
