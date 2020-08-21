@@ -3,9 +3,12 @@
 set -eu
 set -o pipefail
 
+source path-scripts
+
 XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 tvlc_root="$XDG_DATA_HOME/tvlc"
 
+nice_checkout_root=
 if [ -f "$tvlc_root"/nice_checkout_root ]; then
   nice_checkout_root="$(cat "$tvlc_root"/nice_checkout_root)"
 fi

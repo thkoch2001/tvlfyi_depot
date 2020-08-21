@@ -18,6 +18,7 @@ var nixStoreRoot = flag.String("store-path", "/nix/store/", "prefix for all vali
 
 var modeFlag = flag.String("mode", modeArchive, "operation mode. valid values: tar, print")
 var onlyFlag = flag.String("only", "", "only enable the listed output types, comma separated. valid values: DEPOT, STORE, CORE, UNKNOWN")
+var relativeFlag = flag.Bool("relpath", false, "when printing paths, print them relative to the root of their path type")
 
 const (
 	modeArchive = "tar"
@@ -164,16 +165,25 @@ func main() {
 	if *modeFlag == "print" {
 		if enabledPathTypes[pb.PathType_STORE] {
 			for k, _ := range results[nixStorePath] {
+				if *relativePath {
+					k = strings.TrimPrefix(k, *nixStoreRoot)
+					k = strings.TrimPrefix(k, "/")
+				}
 				fmt.Println(k)
 			}
 		}
 		if enabledPathTypes[pb.PathType_DEPOT] {
 			for k, _ := range results[depotPath] {
+				if *relativeFlag {
+					k = strings.TrimPrefix(k, *depotRoot)
+					k = strings.TrimPrefix(k, "/")
+				}
 				fmt.Println(k)
 			}
 		}
 		if enabledPathTypes[pb.PathType_CORE] {
 			for k, _ := range results[corePkgsPath] {
+				// TODO relativeFlag
 				fmt.Println(k)
 			}
 		}
