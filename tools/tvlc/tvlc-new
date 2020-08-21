@@ -79,7 +79,8 @@ if [ -f "$DEPOT_ROOT/.git/refs/heads/$branch_name" ]; then
   exit 1
 fi
 
-# TODO(riking): tvlc-get-depends
+# The big one: call into Nix to figure out what paths the desired derivations depend on.
+readarray -t includedPaths < <("$depot_scanner" --mode 'print' --only 'DEPOT' --relpath --depot "$DEPOT_ROOT" --nix-bin "$tvix_instantiate" "$@")
 
 # bash math
 checkout_id=$(("$(cat "$tvlc_root/next_clientid")"))
@@ -95,7 +96,7 @@ mkdir "$DEPOT_ROOT/.git/worktrees/$checkout_id/info"
 
 cd "$checkout_dir"
 git sparse-checkout init --cone
-git sparse-checkout set "$@"
+git sparse-checkout set "${includedPaths[@]}"
 
 ln -s "$checkout_dir" "$nice_checkout_root"/"$checkout_name"
 
