@@ -3,7 +3,11 @@
 let
   pipeline.steps = [
     {
-      command = "${pkgs.git-secrets}/bin/git-secrets --scan-history";
+      command = ''
+        git log -n 1
+        git show
+        ${pkgs.git-secrets}/bin/git-secrets --scan-history
+      '';
       label = ":broom: lint";
     }
     {
