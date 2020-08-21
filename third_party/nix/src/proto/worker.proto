@@ -23,7 +23,7 @@ service WorkerService {
   rpc AddToStore(stream AddToStoreRequest) returns (StorePath);
 
   // Adds the supplied string to the store, as a text file.
-  rpc AddTextToStore(AddTextToStoreRequest) returns (StorePath);
+  rpc AddTextToStore(stream AddTextToStoreRequest) returns (StorePath);
 
   // Build the specified derivations in one of the specified build
   // modes, defaulting to a normal build.
@@ -223,9 +223,16 @@ message AddToStoreRequest {
 }
 
 message AddTextToStoreRequest {
-  string name = 1;
-  string content = 2;
-  repeated string references = 3;
+  message Metadata {
+    string name = 1;
+    repeated string references = 2;
+    uint64 size = 3;
+  }
+
+  oneof add_oneof {
+    Metadata meta = 4;
+    bytes data = 5;
+  }
 }
 
 message BuildPathsRequest {
