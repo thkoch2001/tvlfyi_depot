@@ -36,6 +36,8 @@ namespace nix {
 
 namespace store {
 
+constexpr int kChunkSize = 1024 * 10;
+
 using google::protobuf::util::TimeUtil;
 using grpc::ClientContext;
 using nix::proto::WorkerService;
@@ -308,14 +310,29 @@ Path RpcStore::addTextToStore(const std::string& name,
         "repairing is not supported when building through the Nix daemon");
   }
   ClientContext ctx;
-  proto::AddTextToStoreRequest request;
-  request.set_name(name);
-  request.set_content(content);
-  for (const auto& ref : references) {
-    request.add_references(ref);
-  }
   proto::StorePath result;
-  SuccessOrThrow(stub_->AddTextToStore(&ctx, request, &result), __FUNCTION__);
+  auto writer = stub_->AddTextToStore(&ctx, &result);
+
+  proto::AddTextToStoreRequest meta;
+  meta.mutable_meta()->set_name(name);
+  meta.mutable_meta()->set_content(content);
+  for (const auto& ref : references) {
+    meta.mutable_meta()->add_references(ref);
+  }
+  writer->Write(meta);
+
+  for (int i = 0; i <= content.length(); i += kChunkSize) {
+    auto len = fmin(kChunkSize, content.length() - i);
+    std::string chunk(content, i, len);
+    proto::AddTextToStoreRequest data;
+    data.set_data(chunk);
+    if (!writer->Write(data)) {
+      throw Error("Could not write to nix daemon");
+    }
+  }
+
+  writer->WritesDone();
+  SuccessOrThrow(writer->Finish(), __FUNCTION__);
   return result.path();
 }
 

@@ -271,17 +271,39 @@ class WorkerServiceImpl final : public WorkerService::Service {
         __FUNCTION__);
   }
 
-  Status AddTextToStore(grpc::ServerContext*,
-                        const nix::proto::AddTextToStoreRequest* request,
-                        nix::proto::StorePath* response) override {
+  Status AddTextToStore(
+      grpc::ServerContext*,
+      grpc::ServerReader<nix::proto::AddTextToStoreRequest>* reader,
+      nix::proto::StorePath* response) override {
     return HandleExceptions(
         [&]() -> Status {
+          proto::AddTextToStoreRequest metadata_request;
+          auto has_metadata = reader->Read(&metadata_request);
+          if (!has_metadata || !metadata_request.has_meta()) {
+            return Status(grpc::StatusCode::INVALID_ARGUMENT,
+                          "Metadata must be set before sending content");
+          }
+
+          auto meta = metadata_request.meta();
+
           PathSet references;
-          for (const auto& ref : request->references()) {
+          for (const auto& ref : meta.references()) {
             references.insert(ref);
           }
-          auto path = store_->addTextToStore(request->name(),
-                                             request->content(), references);
+
+          std::string content;
+          proto::AddTextToStoreRequest data;
+
+          while (reader->Read(&data)) {
+            if (data.add_oneof_case() != data.kData) {
+              return Status(grpc::StatusCode::INVALID_ARGUMENT,
+                            "All requests except the first must contain data");
+            }
+
+            content.append(data.data());
+          }
+
+          auto path = store_->addTextToStore(meta.name(), content, references);
           response->set_path(path);
           return Status::OK;
         },
