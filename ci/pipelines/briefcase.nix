@@ -3,12 +3,7 @@
 let
   pipeline.steps = [
     {
-      command = ''
-        echo $(pwd)
-        git show HEAD
-        git log -n 1
-        ${pkgs.git-secrets}/bin/git-secrets --scan-history
-      '';
+      command = "${pkgs.git-secrets}/bin/git-secrets --scan-history";
       label = ":briefcase: Briefcase [lint]";
     }
     {
