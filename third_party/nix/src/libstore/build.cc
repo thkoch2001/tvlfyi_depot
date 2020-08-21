@@ -45,6 +45,7 @@
 #include "libstore/parsed-derivations.hh"
 #include "libstore/pathlocks.hh"
 #include "libstore/references.hh"
+#include "libstore/store-api.hh"
 #include "libutil/affinity.hh"
 #include "libutil/archive.hh"
 #include "libutil/compression.hh"
@@ -141,7 +142,12 @@ class Goal : public std::enable_shared_from_this<Goal> {
   /* Whether the goal is finished. */
   ExitCode exitCode;
 
-  explicit Goal(Worker& worker) : worker(worker) {
+  // Output stream for build logs.
+  // TODO(tazjin): Rename all build_log instances to log_sink.
+  std::ostream& log_sink_;
+
+  Goal(Worker& worker, std::ostream& log_sink)
+      : worker(worker), log_sink_(log_sink) {
     nrFailed = nrNoSubstituters = nrIncompleteClosure = 0;
     exitCode = ecBusy;
   }
@@ -276,13 +282,15 @@ class Worker {
   ~Worker();
 
   /* Make a goal (with caching). */
-  GoalPtr makeDerivationGoal(const Path& drvPath,
+  GoalPtr makeDerivationGoal(std::ostream& log_sink, const Path& drvPath,
                              const StringSet& wantedOutputs,
                              BuildMode buildMode = bmNormal);
+
   std::shared_ptr<DerivationGoal> makeBasicDerivationGoal(
-      const Path& drvPath, const BasicDerivation& drv,
+      std::ostream& log_sink, const Path& drvPath, const BasicDerivation& drv,
       BuildMode buildMode = bmNormal);
-  GoalPtr makeSubstitutionGoal(const Path& storePath,
+
+  GoalPtr makeSubstitutionGoal(std::ostream& log_sink, const Path& storePath,
                                RepairFlag repair = NoRepair);
 
   /* Remove a dead goal. */
@@ -879,10 +887,12 @@ class DerivationGoal : public Goal {
   std::string machineName;
 
  public:
-  DerivationGoal(const Path& drvPath, StringSet wantedOutputs, Worker& worker,
-                 BuildMode buildMode = bmNormal);
-  DerivationGoal(const Path& drvPath, const BasicDerivation& drv,
-                 Worker& worker, BuildMode buildMode = bmNormal);
+  DerivationGoal(Worker& worker, std::ostream& log_sink, const Path& drvPath,
+                 StringSet wantedOutputs, BuildMode buildMode = bmNormal);
+
+  DerivationGoal(Worker& worker, std::ostream& log_sink, const Path& drvPath,
+                 const BasicDerivation& drv, BuildMode buildMode = bmNormal);
+
   ~DerivationGoal() override;
 
   /* Whether we need to perform hash rewriting if there are valid output paths.
@@ -987,9 +997,10 @@ class DerivationGoal : public Goal {
 
 const Path DerivationGoal::homeDir = "/homeless-shelter";
 
-DerivationGoal::DerivationGoal(const Path& drvPath, StringSet wantedOutputs,
-                               Worker& worker, BuildMode buildMode)
-    : Goal(worker),
+DerivationGoal::DerivationGoal(Worker& worker, std::ostream& log_sink,
+                               const Path& drvPath, StringSet wantedOutputs,
+                               BuildMode buildMode)
+    : Goal(worker, log_sink),
       useDerivation(true),
       drvPath(drvPath),
       wantedOutputs(std::move(wantedOutputs)),
@@ -1002,9 +1013,10 @@ DerivationGoal::DerivationGoal(const Path& drvPath, StringSet wantedOutputs,
       std::make_unique<MaintainCount<uint64_t>>(worker.expectedBuilds);
 }
 
-DerivationGoal::DerivationGoal(const Path& drvPath, const BasicDerivation& drv,
-                               Worker& worker, BuildMode buildMode)
-    : Goal(worker),
+DerivationGoal::DerivationGoal(Worker& worker, std::ostream& log_sink,
+                               const Path& drvPath, const BasicDerivation& drv,
+                               BuildMode buildMode)
+    : Goal(worker, log_sink),
       useDerivation(false),
       drvPath(drvPath),
       buildMode(buildMode) {
@@ -1104,7 +1116,7 @@ void DerivationGoal::getDerivation() {
     return;
   }
 
-  addWaitee(worker.makeSubstitutionGoal(drvPath));
+  addWaitee(worker.makeSubstitutionGoal(log_sink_, drvPath));
 
   state = &DerivationGoal::loadDerivation;
 }
@@ -1158,7 +1170,7 @@ void DerivationGoal::haveDerivation() {
   if (settings.useSubstitutes && parsedDrv->substitutesAllowed()) {
     for (auto& i : invalidOutputs) {
       addWaitee(worker.makeSubstitutionGoal(
-          i, buildMode == bmRepair ? Repair : NoRepair));
+          log_sink_, i, buildMode == bmRepair ? Repair : NoRepair));
     }
   }
 
@@ -1224,7 +1236,8 @@ void DerivationGoal::outputsSubstituted() {
   if (useDerivation) {
     for (auto& i : dynamic_cast<Derivation*>(drv.get())->inputDrvs) {
       addWaitee(worker.makeDerivationGoal(
-          i.first, i.second, buildMode == bmRepair ? bmRepair : bmNormal));
+          log_sink_, i.first, i.second,
+          buildMode == bmRepair ? bmRepair : bmNormal));
     }
   }
 
@@ -1237,7 +1250,7 @@ void DerivationGoal::outputsSubstituted() {
                          "substitution is disabled") %
                   i % drvPath);
     }
-    addWaitee(worker.makeSubstitutionGoal(i));
+    addWaitee(worker.makeSubstitutionGoal(log_sink_, i));
   }
 
   if (waitees.empty()) { /* to prevent hang (no wake-up event) */
@@ -1294,9 +1307,10 @@ void DerivationGoal::repairClosure() {
                << "' in the output closure of '" << drvPath << "'";
     Path drvPath2 = outputsToDrv[i];
     if (drvPath2.empty()) {
-      addWaitee(worker.makeSubstitutionGoal(i, Repair));
+      addWaitee(worker.makeSubstitutionGoal(log_sink_, i, Repair));
     } else {
-      addWaitee(worker.makeDerivationGoal(drvPath2, PathSet(), bmRepair));
+      addWaitee(
+          worker.makeDerivationGoal(log_sink_, drvPath2, PathSet(), bmRepair));
     }
   }
 
@@ -3932,8 +3946,9 @@ class SubstitutionGoal : public Goal {
   GoalState state;
 
  public:
-  SubstitutionGoal(const Path& storePath, Worker& worker,
-                   RepairFlag repair = NoRepair);
+  SubstitutionGoal(Worker& worker, std::ostream& log_sink,
+                   const Path& storePath, RepairFlag repair = NoRepair);
+
   ~SubstitutionGoal() override;
 
   void timedOut() override { abort(); };
@@ -3963,9 +3978,9 @@ class SubstitutionGoal : public Goal {
   void amDone(ExitCode result) override { Goal::amDone(result); }
 };
 
-SubstitutionGoal::SubstitutionGoal(const Path& storePath, Worker& worker,
-                                   RepairFlag repair)
-    : Goal(worker), repair(repair) {
+SubstitutionGoal::SubstitutionGoal(Worker& worker, std::ostream& log_sink,
+                                   const Path& storePath, RepairFlag repair)
+    : Goal(worker, log_sink), repair(repair) {
   this->storePath = storePath;
   state = &SubstitutionGoal::init;
   name = absl::StrCat("substitution of ", storePath);
@@ -4092,7 +4107,7 @@ void SubstitutionGoal::tryNext() {
      paths referenced by this one. */
   for (auto& i : info->references) {
     if (i != storePath) { /* ignore self-references */
-      addWaitee(worker.makeSubstitutionGoal(i));
+      addWaitee(worker.makeSubstitutionGoal(log_sink_, i));
     }
   }
 
@@ -4254,14 +4269,14 @@ Worker::~Worker() {
   assert(expectedNarSize == 0);
 }
 
-GoalPtr Worker::makeDerivationGoal(const Path& path,
+GoalPtr Worker::makeDerivationGoal(std::ostream& log_sink, const Path& drv_path,
                                    const StringSet& wantedOutputs,
                                    BuildMode buildMode) {
-  GoalPtr goal = derivationGoals[path].lock();
+  GoalPtr goal = derivationGoals[drv_path].lock();
   if (!goal) {
-    goal =
-        std::make_shared<DerivationGoal>(path, wantedOutputs, *this, buildMode);
-    derivationGoals[path] = goal;
+    goal = std::make_shared<DerivationGoal>(*this, log_sink, drv_path,
+                                            wantedOutputs, buildMode);
+    derivationGoals[drv_path] = goal;
     wakeUp(goal);
   } else {
     (dynamic_cast<DerivationGoal*>(goal.get()))
@@ -4271,16 +4286,19 @@ GoalPtr Worker::makeDerivationGoal(const Path& path,
 }
 
 std::shared_ptr<DerivationGoal> Worker::makeBasicDerivationGoal(
-    const Path& drvPath, const BasicDerivation& drv, BuildMode buildMode) {
-  auto goal = std::make_shared<DerivationGoal>(drvPath, drv, *this, buildMode);
+    std::ostream& log_sink, const Path& drvPath, const BasicDerivation& drv,
+    BuildMode buildMode) {
+  std::shared_ptr<DerivationGoal> goal = std::make_shared<DerivationGoal>(
+      *this, log_sink, drvPath, drv, buildMode);
   wakeUp(goal);
   return goal;
 }
 
-GoalPtr Worker::makeSubstitutionGoal(const Path& path, RepairFlag repair) {
+GoalPtr Worker::makeSubstitutionGoal(std::ostream& log_sink, const Path& path,
+                                     RepairFlag repair) {
   GoalPtr goal = substitutionGoals[path].lock();
   if (!goal) {
-    goal = std::make_shared<SubstitutionGoal>(path, *this, repair);
+    goal = std::make_shared<SubstitutionGoal>(*this, log_sink, path, repair);
     substitutionGoals[path] = goal;
     wakeUp(goal);
   }
@@ -4688,7 +4706,7 @@ static void primeCache(Store& store, const PathSet& paths) {
   }
 }
 
-absl::Status LocalStore::buildPaths(std::ostream& /* log_sink */,
+absl::Status LocalStore::buildPaths(std::ostream& log_sink,
                                     const PathSet& drvPaths,
                                     BuildMode build_mode) {
   Worker worker(*this);
@@ -4699,10 +4717,11 @@ absl::Status LocalStore::buildPaths(std::ostream& /* log_sink */,
   for (auto& i : drvPaths) {
     DrvPathWithOutputs i2 = parseDrvPathWithOutputs(i);
     if (isDerivation(i2.first)) {
-      goals.insert(worker.makeDerivationGoal(i2.first, i2.second, build_mode));
+      goals.insert(
+          worker.makeDerivationGoal(log_sink, i2.first, i2.second, build_mode));
     } else {
       goals.insert(worker.makeSubstitutionGoal(
-          i, build_mode == bmRepair ? Repair : NoRepair));
+          log_sink, i, build_mode == bmRepair ? Repair : NoRepair));
     }
   }
 
@@ -4733,7 +4752,9 @@ BuildResult LocalStore::buildDerivation(const Path& drvPath,
                                         const BasicDerivation& drv,
                                         BuildMode buildMode) {
   Worker worker(*this);
-  auto goal = worker.makeBasicDerivationGoal(drvPath, drv, buildMode);
+  auto discard_logs = DiscardLogsSink();
+  auto goal =
+      worker.makeBasicDerivationGoal(discard_logs, drvPath, drv, buildMode);
 
   BuildResult result;
 
@@ -4757,7 +4778,8 @@ void LocalStore::ensurePath(const Path& path) {
   primeCache(*this, {path});
 
   Worker worker(*this);
-  GoalPtr goal = worker.makeSubstitutionGoal(path);
+  auto discard_logs = DiscardLogsSink();
+  GoalPtr goal = worker.makeSubstitutionGoal(discard_logs, path);
   Goals goals = {goal};
 
   worker.run(goals);
@@ -4770,7 +4792,8 @@ void LocalStore::ensurePath(const Path& path) {
 
 void LocalStore::repairPath(const Path& path) {
   Worker worker(*this);
-  GoalPtr goal = worker.makeSubstitutionGoal(path, Repair);
+  auto discard_logs = DiscardLogsSink();
+  GoalPtr goal = worker.makeSubstitutionGoal(discard_logs, path, Repair);
   Goals goals = {goal};
 
   worker.run(goals);
@@ -4781,7 +4804,8 @@ void LocalStore::repairPath(const Path& path) {
     auto deriver = queryPathInfo(path)->deriver;
     if (!deriver.empty() && isValidPath(deriver)) {
       goals.clear();
-      goals.insert(worker.makeDerivationGoal(deriver, StringSet(), bmRepair));
+      goals.insert(worker.makeDerivationGoal(discard_logs, deriver, StringSet(),
+                                             bmRepair));
       worker.run(goals);
     } else {
       throw Error(worker.exitStatus(), "cannot repair path '%s'", path);
