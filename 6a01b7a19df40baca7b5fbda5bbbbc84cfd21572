@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9eadc888_74f927e7",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-21T21:42:49Z",
+      "side": 1,
+      "message": "++ this should be -static_cast\u003cpid_t\u003e",
+      "parentUuid": "cb03d5cf_869b4dab",
+      "revId": "6a01b7a19df40baca7b5fbda5bbbbc84cfd21572",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33db387f_7b770a31",
         "filename": "third_party/nix/src/libstore/build.cc",
         "patchSetId": 2
