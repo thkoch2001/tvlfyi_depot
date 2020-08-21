@@ -195,7 +195,7 @@ struct LambdaSink : Sink {
 
 /* Convert a function into a source. */
 struct LambdaSource : Source {
-  typedef std::function<size_t(unsigned char*, size_t)> lambda_t;
+  using lambda_t = std::function<size_t(unsigned char*, size_t)>;
 
   lambda_t lambda;
 

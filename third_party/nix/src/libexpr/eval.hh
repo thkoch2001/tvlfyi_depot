@@ -54,7 +54,7 @@ void copyContext(const Value& v, PathSet& context);
 
 /* Cache for calls to addToStore(); maps source paths to the store
    paths. */
-typedef std::map<Path, Path> SrcToStore;
+using SrcToStore = std::map<Path, Path>;
 
 std::ostream& operator<<(std::ostream& str, const Value& v);
 
@@ -298,15 +298,15 @@ class EvalState {
   std::function<void(const Path&)> file_access_trace_fn = nullptr;
   Path last_traced_file = "";
 
-  typedef std::map<Symbol, size_t> PrimOpCalls;
+  using PrimOpCalls = std::map<Symbol, size_t>;
   PrimOpCalls primOpCalls;
 
-  typedef std::map<ExprLambda*, size_t> FunctionCalls;
+  using FunctionCalls = std::map<ExprLambda*, size_t>;
   FunctionCalls functionCalls;
 
   void incrFunctionCall(ExprLambda* fun);
 
-  typedef std::map<Pos, size_t> AttrSelects;
+  using AttrSelects = std::map<Pos, size_t>;
   AttrSelects attrSelects;
 
   friend struct ExprOpUpdate;

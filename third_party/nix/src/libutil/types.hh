@@ -107,12 +107,12 @@ class SysError : public Error {
 };
 
 typedef std::list<std::string> Strings;
-typedef std::set<std::string> StringSet;
-typedef std::map<std::string, std::string> StringMap;
+using StringSet = std::set<std::string>;
+using StringMap = std::map<std::string, std::string>;
 
 /* Paths are just strings. */
-typedef std::string Path;
-typedef std::list<Path> Paths;
-typedef std::set<Path> PathSet;
+using Path = std::string;
+using Paths = std::list<Path>;
+using PathSet = std::set<Path>;
 
 }  // namespace nix

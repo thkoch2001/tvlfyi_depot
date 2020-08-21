@@ -201,7 +201,7 @@ struct DIRDeleter {
   void operator()(DIR* dir) const { closedir(dir); }
 };
 
-typedef std::unique_ptr<DIR, DIRDeleter> AutoCloseDir;
+using AutoCloseDir = std::unique_ptr<DIR, DIRDeleter>;
 
 class Pid {
   pid_t pid = -1;
@@ -457,7 +457,7 @@ struct MaintainCount {
 std::pair<unsigned short, unsigned short> getWindowSize();
 
 /* Used in various places. */
-typedef std::function<bool(const Path& path)> PathFilter;
+using PathFilter = std::function<bool(const Path&)>;
 
 extern PathFilter defaultPathFilter;
 

@@ -12,15 +12,15 @@ template <class CharT, class Traits = std::char_traits<CharT>,
           class Allocator = std::allocator<CharT>>
 class basic_istringbuf_nocopy : public std::basic_streambuf<CharT, Traits> {
  public:
-  typedef std::basic_string<CharT, Traits, Allocator> string_type;
+  using string_type = std::basic_string<CharT, Traits, Allocator>;
 
-  typedef typename std::basic_streambuf<CharT, Traits>::off_type off_type;
+  using off_type = typename std::basic_streambuf<CharT, Traits>::off_type;
 
-  typedef typename std::basic_streambuf<CharT, Traits>::pos_type pos_type;
+  using pos_type = typename std::basic_streambuf<CharT, Traits>::pos_type;
 
-  typedef typename std::basic_streambuf<CharT, Traits>::int_type int_type;
+  using int_type = typename std::basic_streambuf<CharT, Traits>::int_type;
 
-  typedef typename std::basic_streambuf<CharT, Traits>::traits_type traits_type;
+  using traits_type = typename std::basic_streambuf<CharT, Traits>::traits_type;
 
  private:
   const string_type& s;
@@ -28,7 +28,7 @@ class basic_istringbuf_nocopy : public std::basic_streambuf<CharT, Traits> {
   off_type off;
 
  public:
-  basic_istringbuf_nocopy(const string_type& s) : s{s}, off{0} {}
+  explicit basic_istringbuf_nocopy(const string_type& s) : s{s}, off{0} {}
 
  private:
   pos_type seekoff(off_type off, std::ios_base::seekdir dir,
@@ -49,20 +49,23 @@ class basic_istringbuf_nocopy : public std::basic_streambuf<CharT, Traits> {
   std::streamsize showmanyc() { return s.size() - off; }
 
   int_type underflow() {
-    if (typename string_type::size_type(off) == s.size())
+    if (typename string_type::size_type(off) == s.size()) {
       return traits_type::eof();
+    }
     return traits_type::to_int_type(s[off]);
   }
 
   int_type uflow() {
-    if (typename string_type::size_type(off) == s.size())
+    if (typename string_type::size_type(off) == s.size()) {
       return traits_type::eof();
+    }
     return traits_type::to_int_type(s[off++]);
   }
 
   int_type pbackfail(int_type ch) {
-    if (off == 0 || (ch != traits_type::eof() && ch != s[off - 1]))
+    if (off == 0 || (ch != traits_type::eof() && ch != s[off - 1])) {
       return traits_type::eof();
+    }
 
     return traits_type::to_int_type(s[--off]);
   }
@@ -71,12 +74,12 @@ class basic_istringbuf_nocopy : public std::basic_streambuf<CharT, Traits> {
 template <class CharT, class Traits = std::char_traits<CharT>,
           class Allocator = std::allocator<CharT>>
 class basic_istringstream_nocopy : public std::basic_iostream<CharT, Traits> {
-  typedef basic_istringbuf_nocopy<CharT, Traits, Allocator> buf_type;
+  using buf_type = basic_istringbuf_nocopy<CharT, Traits, Allocator>;
   buf_type buf;
 
  public:
-  basic_istringstream_nocopy(const typename buf_type::string_type& s)
+  explicit basic_istringstream_nocopy(const typename buf_type::string_type& s)
       : std::basic_iostream<CharT, Traits>(&buf), buf(s){};
 };
 
-typedef basic_istringstream_nocopy<char> istringstream_nocopy;
+using istringstream_nocopy = basic_istringstream_nocopy<char>;

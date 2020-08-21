@@ -212,7 +212,7 @@ Strings argvToStrings(int argc, char** argv);
 std::string renderLabels(const Strings& labels);
 
 /* Helper function for printing 2-column tables. */
-typedef std::vector<std::pair<std::string, std::string>> Table2;
+using Table2 = std::vector<std::pair<std::string, std::string> >;
 
 void printTable(std::ostream& out, const Table2& table);
 

@@ -36,7 +36,7 @@ class Pool {
 
   /* A function that checks whether an instance of R is still
      usable. Unusable instances are removed from the pool. */
-  typedef std::function<bool(const ref<R>&)> Validator;
+  using Validator = std::function<bool(const ref<R>&)>;
 
  private:
   Factory factory;

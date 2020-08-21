@@ -120,7 +120,7 @@ static void createLinks(const Path& srcDir, const Path& dstDir, int priority) {
   }
 }
 
-typedef std::set<Path> FileProp;
+using FileProp = std::set<Path>;
 
 static FileProp done;
 static FileProp postponed = FileProp{};
@@ -158,7 +158,7 @@ struct Package {
       : path{path}, active{active}, priority{priority} {}
 };
 
-typedef std::vector<Package> Packages;
+using Packages = std::vector<Package>;
 
 void builtinBuildenv(const BasicDerivation& drv) {
   auto getAttr = [&](const std::string& name) {
