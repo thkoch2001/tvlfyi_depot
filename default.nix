@@ -18,6 +18,7 @@ let
     depot = depot;
   };
 in {
+  ci           = readTree ./ci;
   nixos        = readTree ./nixos;
   utils        = readTree ./utils;
   emacs        = readTree ./emacs;
