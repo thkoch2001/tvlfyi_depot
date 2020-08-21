@@ -8,7 +8,7 @@ let
     }
     {
       command = "nix-build . -I briefcase=$(pwd) --no-out-link --show-trace";
-      label = ":hammer: build";
+      label = ":nix: build";
     }
   ];
 in pkgs.writeText "briefcase.yaml" (builtins.toJSON pipeline)
