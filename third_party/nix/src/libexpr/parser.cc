@@ -85,9 +85,10 @@ void addAttr(ExprAttrs* attrs, AttrPath& attrPath, Expr* e, const Pos& pos) {
 }
 
 void addFormal(const Pos& pos, Formals* formals, const Formal& formal) {
-  if (formals->argNames.find(formal.name) != formals->argNames.end())
+  if (formals->argNames.find(formal.name) != formals->argNames.end()) {
     throw ParseError(format("duplicate formal function argument '%1%' at %2%") %
                      formal.name % pos);
+  }
   formals->formals.push_front(formal);
   formals->argNames.insert(formal.name);
 }
@@ -117,9 +118,9 @@ Expr* stripIndentation(const Pos& pos, SymbolTable& symbols, VectorExprs& es) {
     }
     for (size_t j = 0; j < e->s.size(); ++j) {
       if (atStartOfLine) {
-        if (e->s[j] == ' ')
+        if (e->s[j] == ' ') {
           curIndent++;
-        else if (e->s[j] == '\n') {
+        } else if (e->s[j] == '\n') {
           /* Empty line, doesn't influence minimum
              indentation. */
           curIndent = 0;
@@ -154,7 +155,9 @@ Expr* stripIndentation(const Pos& pos, SymbolTable& symbols, VectorExprs& es) {
     for (size_t j = 0; j < e->s.size(); ++j) {
       if (atStartOfLine) {
         if (e->s[j] == ' ') {
-          if (curDropped++ >= minIndent) s2 += e->s[j];
+          if (curDropped++ >= minIndent) {
+            s2 += e->s[j];
+          }
         } else if (e->s[j] == '\n') {
           curDropped = 0;
           s2 += e->s[j];
@@ -197,8 +200,9 @@ Path resolveExprPath(Path path) {
      path references work. */
   struct stat st;
   while (true) {
-    if (lstat(path.c_str(), &st))
+    if (lstat(path.c_str(), &st)) {
       throw SysError(format("getting status of '%1%'") % path);
+    }
     if (!S_ISLNK(st.st_mode)) {
       break;
     }
@@ -206,7 +210,9 @@ Path resolveExprPath(Path path) {
   }
 
   /* If `path' refers to a directory, append `/default.nix'. */
-  if (S_ISDIR(st.st_mode)) path = canonPath(path + "/default.nix");
+  if (S_ISDIR(st.st_mode)) {
+    path = canonPath(path + "/default.nix");
+  }
 
   return path;
 }
@@ -259,13 +265,14 @@ Path EvalState::findFile(SearchPath& searchPath, const std::string& path,
                          const Pos& pos) {
   for (auto& i : searchPath) {
     std::string suffix;
-    if (i.first.empty())
+    if (i.first.empty()) {
       suffix = "/" + path;
-    else {
+    } else {
       auto s = i.first.size();
       if (path.compare(0, s, i.first) != 0 ||
-          (path.size() > s && path[s] != '/'))
+          (path.size() > s && path[s] != '/')) {
         continue;
+      }
       suffix = path.size() == s ? "" : "/" + std::string(path, s);
     }
     auto r = resolveSearchPathElem(i);

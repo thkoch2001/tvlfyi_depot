@@ -434,13 +434,17 @@ static void _deletePath(int parentfd, const Path& path,
 
 static void _deletePath(const Path& path, unsigned long long& bytesFreed) {
   Path dir = dirOf(path);
-  if (dir == "") dir = "/";
+  if (dir == "") {
+    dir = "/";
+  }
 
   AutoCloseFD dirfd(open(dir.c_str(), O_RDONLY));
   if (!dirfd) {
     // This really shouldn't fail silently, but it's left this way
     // for backwards compatibility.
-    if (errno == ENOENT) return;
+    if (errno == ENOENT) {
+      return;
+    }
 
     throw SysError(format("opening directory '%1%'") % path);
   }

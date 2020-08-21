@@ -78,8 +78,9 @@ N getIntArg(const std::string& opt, Strings::iterator& i,
     }
   }
   N n;
-  if (!absl::SimpleAtoi(s, &n))
+  if (!absl::SimpleAtoi(s, &n)) {
     throw UsageError(format("'%1%' requires an integer argument") % opt);
+  }
   return n * multiplier;
 }
 

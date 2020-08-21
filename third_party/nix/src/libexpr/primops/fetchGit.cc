@@ -30,8 +30,9 @@ std::regex revRegex("^[0-9a-fA-F]{40}$");
 GitInfo exportGit(ref<Store> store, const std::string& uri,
                   std::optional<std::string> ref, std::string rev,
                   const std::string& name) {
-  if (evalSettings.pureEval && rev == "")
+  if (evalSettings.pureEval && rev == "") {
     throw Error("in pure evaluation mode, 'fetchGit' requires a Git revision");
+  }
 
   if (!ref && rev == "" && absl::StartsWith(uri, "/") &&
       pathExists(uri + "/.git")) {
@@ -90,8 +91,9 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
     ref = "HEAD"s;
   }
 
-  if (rev != "" && !std::regex_match(rev, revRegex))
+  if (rev != "" && !std::regex_match(rev, revRegex)) {
     throw Error("invalid Git revision '%s'", rev);
+  }
 
   deletePath(getCacheDir() + "/nix/git");
 
@@ -104,10 +106,11 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
   }
 
   Path localRefFile;
-  if (ref->compare(0, 5, "refs/") == 0)
+  if (ref->compare(0, 5, "refs/") == 0) {
     localRefFile = cacheDir + "/" + *ref;
-  else
+  } else {
     localRefFile = cacheDir + "/refs/heads/" + *ref;
+  }
 
   bool doFetch;
   time_t now = time(0);
@@ -226,22 +229,24 @@ static void prim_fetchGit(EvalState& state, const Pos& pos, Value** args,
     for (auto& attr_iter : *args[0]->attrs) {
       auto& attr = attr_iter.second;
       std::string n(attr.name);
-      if (n == "url")
+      if (n == "url") {
         url =
             state.coerceToString(*attr.pos, *attr.value, context, false, false);
-      else if (n == "ref")
+      } else if (n == "ref") {
         ref = state.forceStringNoCtx(*attr.value, *attr.pos);
-      else if (n == "rev")
+      } else if (n == "rev") {
         rev = state.forceStringNoCtx(*attr.value, *attr.pos);
-      else if (n == "name")
+      } else if (n == "name") {
         name = state.forceStringNoCtx(*attr.value, *attr.pos);
-      else
+      } else {
         throw EvalError("unsupported argument '%s' to 'fetchGit', at %s",
                         attr.name, *attr.pos);
+      }
     }
 
-    if (url.empty())
+    if (url.empty()) {
       throw EvalError(format("'url' argument required, at %1%") % pos);
+    }
 
   } else {
     url = state.coerceToString(pos, *args[0], context, false, false);

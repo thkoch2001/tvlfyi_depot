@@ -301,7 +301,9 @@ void setInterruptThrown();
 void _interrupted();
 
 void inline checkInterrupt() {
-  if (_isInterrupted || (interruptCheck && interruptCheck())) _interrupted();
+  if (_isInterrupted || (interruptCheck && interruptCheck())) {
+    _interrupted();
+  }
 }
 
 MakeError(Interrupted, BaseError);

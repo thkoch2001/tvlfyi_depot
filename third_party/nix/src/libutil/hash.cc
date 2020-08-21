@@ -111,9 +111,15 @@ static std::string printHash16(const Hash& hash) {
 
 bool Hash::IsValidBase16(absl::string_view s) {
   for (char c : s) {
-    if ('0' <= c && c <= '9') continue;
-    if ('a' <= c && c <= 'f') continue;
-    if ('A' <= c && c <= 'F') continue;
+    if ('0' <= c && c <= '9') {
+      continue;
+    }
+    if ('a' <= c && c <= 'f') {
+      continue;
+    }
+    if ('A' <= c && c <= 'F') {
+      continue;
+    }
     return false;
   }
   return true;

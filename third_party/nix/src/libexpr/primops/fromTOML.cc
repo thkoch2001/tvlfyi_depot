@@ -30,10 +30,12 @@ static void prim_fromTOML(EvalState& state, const Pos& pos, Value** args,
         if (auto i2 = i.second->as_table_array()) {
           size_t size2 = i2->get().size();
           state.mkList(v2, size2);
-          for (size_t j = 0; j < size2; ++j)
+          for (size_t j = 0; j < size2; ++j) {
             visit(*((*v2.list)[j] = state.allocValue()), i2->get()[j]);
-        } else
+          }
+        } else {
           visit(v2, i.second);
+        }
       }
     }
 
@@ -42,8 +44,9 @@ static void prim_fromTOML(EvalState& state, const Pos& pos, Value** args,
 
       state.mkList(v, size);
 
-      for (size_t i = 0; i < size; ++i)
+      for (size_t i = 0; i < size; ++i) {
         visit(*((*v.list)[i] = state.allocValue()), t2->get()[i]);
+      }
     }
 
     // Handle cases like 'a = [[{ a = true }]]', which IMHO should be
@@ -55,25 +58,28 @@ static void prim_fromTOML(EvalState& state, const Pos& pos, Value** args,
 
       state.mkList(v, size);
 
-      for (size_t j = 0; j < size; ++j)
+      for (size_t j = 0; j < size; ++j) {
         visit(*((*v.list)[j] = state.allocValue()), t2->get()[j]);
+      }
     }
 
     else if (t->is_value()) {
-      if (auto val = t->as<int64_t>())
+      if (auto val = t->as<int64_t>()) {
         mkInt(v, val->get());
-      else if (auto val = t->as<NixFloat>())
+      } else if (auto val = t->as<NixFloat>()) {
         mkFloat(v, val->get());
-      else if (auto val = t->as<bool>())
+      } else if (auto val = t->as<bool>()) {
         mkBool(v, val->get());
-      else if (auto val = t->as<std::string>())
+      } else if (auto val = t->as<std::string>()) {
         mkString(v, val->get());
-      else
+      } else {
         throw EvalError("unsupported value type in TOML");
+      }
     }
 
-    else
+    else {
       abort();
+    }
   };
 
   try {

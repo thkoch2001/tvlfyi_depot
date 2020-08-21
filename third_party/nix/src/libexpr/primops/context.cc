@@ -97,12 +97,13 @@ static void prim_getContext(EvalState& state, const Pos& pos, Value** args,
           ContextInfo{isPath, isAllOutputs,
                       output.empty() ? Strings{} : Strings{std::move(output)}});
     } else {
-      if (isPath)
+      if (isPath) {
         iter->second.path = true;
-      else if (isAllOutputs)
+      } else if (isAllOutputs) {
         iter->second.allOutputs = true;
-      else
+      } else {
         iter->second.outputs.emplace_back(std::move(output));
+      }
     }
   }
 
@@ -116,8 +117,9 @@ static void prim_getContext(EvalState& state, const Pos& pos, Value** args,
     if (info.second.path) {
       mkBool(*state.allocAttr(infoVal, sPath), true);
     }
-    if (info.second.allOutputs)
+    if (info.second.allOutputs) {
       mkBool(*state.allocAttr(infoVal, sAllOutputs), true);
+    }
     if (!info.second.outputs.empty()) {
       auto& outputsVal = *state.allocAttr(infoVal, state.sOutputs);
       state.mkList(outputsVal, info.second.outputs.size());
@@ -147,9 +149,10 @@ static void prim_appendContext(EvalState& state, const Pos& pos, Value** args,
   auto sAllOutputs = state.symbols.Create("allOutputs");
   for (const auto& attr_iter : *args[1]->attrs) {
     const Attr* i = &attr_iter.second;  // TODO(tazjin): get rid of this
-    if (!state.store->isStorePath(i->name))
+    if (!state.store->isStorePath(i->name)) {
       throw EvalError("Context key '%s' is not a store path, at %s", i->name,
                       i->pos);
+    }
     if (!settings.readOnlyMode) {
       state.store->ensurePath(i->name);
     }

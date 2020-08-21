@@ -90,11 +90,12 @@ void processGraph(ThreadPool& pool, const std::set<T>& nodes,
 
     {
       auto graph(graph_.lock());
-      for (auto& ref : refs)
+      for (auto& ref : refs) {
         if (graph->left.count(ref)) {
           graph->refs[node].insert(ref);
           graph->rrefs[ref].insert(node);
         }
+      }
       if (graph->refs[node].empty()) {
         goto doWork;
       }
@@ -131,8 +132,9 @@ void processGraph(ThreadPool& pool, const std::set<T>& nodes,
 
   pool.process();
 
-  if (!graph_.lock()->left.empty())
+  if (!graph_.lock()->left.empty()) {
     throw Error("graph processing incomplete (cyclic reference?)");
+  }
 }
 
 }  // namespace nix

@@ -79,16 +79,18 @@ static Expr* unescapeStr(SymbolTable& symbols, const char* s, size_t length) {
         t += '\r';
       } else if (c == 't') {
         t += '\t';
-      } else
+      } else {
         t += c;
+      }
     } else if (c == '\r') {
       /* Normalise CR and CR/LF into LF. */
       t += '\n';
       if (*s == '\n') {
         s++;
       } /* cr/lf */
-    } else
+    } else {
       t += c;
+    }
   }
   return new ExprString(symbols.Create(t));
 }
