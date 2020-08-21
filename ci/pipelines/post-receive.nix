@@ -3,6 +3,12 @@
 let
   pipeline.steps = [
     {
+      key = "build-briefcase";
+      command = "nix-build . -I briefcase=$(pwd) --no-out-link --show-trace";
+      label = ":nix: build briefcase";
+    }
+    {
+      key = "build-socrates";
       command = ''
         nix-build '<nixpkgs/nixos>' \
           -I briefcase="$(pwd)" \
@@ -12,7 +18,8 @@ let
           --no-out-link \
           --show-trace
       '';
-      label = ":nix: build";
+      label = ":nix: build socrates";
+      depends_on = "build-briefcase";
     }
   ];
-in pkgs.writeText "socrates.yml" (builtins.toJSON pipeline)
+in pkgs.writeText "pipeline.yaml" (builtins.toJSON pipeline)
