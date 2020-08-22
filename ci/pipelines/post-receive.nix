@@ -3,9 +3,15 @@
 let
   pipeline.steps = [
     {
+      key = "lint-secrets";
+      command = "${pkgs.git-secrets}/bin/git-secrets --scan-history";
+      label = ":broom: lint secrets";
+    }
+    {
       key = "build-briefcase";
       command = "nix-build . -I briefcase=$(pwd) --no-out-link --show-trace";
       label = ":nix: build briefcase";
+      depends_on = "lint-secrets";
     }
     {
       key = "build-socrates";
