@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d4afd983_b476ea23",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-22T18:36:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9eadc888_74f927e7",
+      "revId": "6a01b7a19df40baca7b5fbda5bbbbc84cfd21572",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33db387f_7b770a31",
         "filename": "third_party/nix/src/libstore/build.cc",
         "patchSetId": 2
@@ -51,6 +69,24 @@
       "revId": "6a01b7a19df40baca7b5fbda5bbbbc84cfd21572",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89ff02d6_519fa9f9",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-22T18:36:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33db387f_7b770a31",
+      "revId": "6a01b7a19df40baca7b5fbda5bbbbc84cfd21572",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
