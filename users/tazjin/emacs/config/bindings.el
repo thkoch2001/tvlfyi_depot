@@ -32,11 +32,11 @@
 (global-set-key (kbd "C-x r q") 'save-buffers-kill-terminal)
 (global-set-key (kbd "C-x C-c") 'ignore)
 
-;; Open Fefes Blog
-(global-set-key (kbd "C-c C-f") 'fefes-blog)
-
 ;; Open a file in project:
 (global-set-key (kbd "C-c f") 'project-find-file)
+
+;; Open a file via magit:
+(global-set-key (kbd "C-c C-f") #'magit-find-file-worktree)
 
 ;; Insert TODO comments
 (global-set-key (kbd "C-c t") 'insert-todo-comment)

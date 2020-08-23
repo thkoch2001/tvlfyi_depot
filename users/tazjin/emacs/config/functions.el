@@ -289,4 +289,11 @@
 
 (add-to-list 'project-find-functions #'find-depot-project)
 
+(defun magit-find-file-worktree ()
+  (interactive)
+  "Find a file in the current (ma)git worktree."
+  (magit-find-file--internal "{worktree}"
+                             (magit-read-file-from-rev "HEAD" "Find file")
+                             #'pop-to-buffer-same-window))
+
 (provide 'functions)
