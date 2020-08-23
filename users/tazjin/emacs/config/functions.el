@@ -40,8 +40,6 @@
   (interactive)
   (man "configuration.nix"))
 
-;; Open my monorepo in magit
-
 ;; Get the nix store path for a given derivation.
 ;; If the derivation has not been built before, this will trigger a build.
 (defun nix-store-path (derivation)
@@ -280,5 +278,15 @@
   "Sends `C-x' to the libvterm."
   (interactive)
   (vterm-send-key "x" nil nil t))
+
+(defun find-depot-project (dir)
+  "Function used in the `project-find-functions' hook list to
+  determine the current project root of a depot project."
+  (when (s-starts-with? "/depot" dir)
+    (if (f-exists-p (f-join dir "default.nix"))
+        (cons 'transient dir)
+      (find-depot-project (f-parent dir)))))
+
+(add-to-list 'project-find-functions #'find-depot-project)
 
 (provide 'functions)
