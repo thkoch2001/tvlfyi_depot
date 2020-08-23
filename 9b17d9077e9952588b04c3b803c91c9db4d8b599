@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "743b133a_ab49ef15",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-23T22:53:15Z",
+      "side": 1,
+      "message": "You might want to use std::min, which is C++ (not C) and defined in \u003calgorithm\u003e (already included here explicitly, rather than transitively like cmath).",
+      "range": {
+        "startLine": 326,
+        "startChar": 15,
+        "endLine": 326,
+        "endChar": 19
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
