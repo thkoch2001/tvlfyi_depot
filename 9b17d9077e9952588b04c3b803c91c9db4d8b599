@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c237fc17_b2a138c1",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-23T23:57:47Z",
+      "side": 1,
+      "message": ".size() is used above (which is the same as length()), I think only using one of them would be preferable because otherwise it seems like there\u0027s a reason for the switch",
+      "range": {
+        "startLine": 325,
+        "startChar": 31,
+        "endLine": 325,
+        "endChar": 37
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "743b133a_ab49ef15",
         "filename": "third_party/nix/src/libstore/rpc-store.cc",
         "patchSetId": 2
@@ -87,6 +110,29 @@
         "startChar": 16,
         "endLine": 298,
         "endChar": 51
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bec70e7d_5755ab29",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-23T23:57:47Z",
+      "side": 1,
+      "message": "This field seems to be unused (it is set, but never read). Do we need it?\n\nAlternatively, maybe we should check actual size vs. expected size after the transmission is done?",
+      "range": {
+        "startLine": 229,
+        "startChar": 4,
+        "endLine": 229,
+        "endChar": 20
       },
       "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
