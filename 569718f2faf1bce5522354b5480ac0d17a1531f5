@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "428fb4d8_8572208f",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-23T22:13:59Z",
+      "side": 1,
+      "message": "oops, yes",
+      "parentUuid": "f59236f0_0f065b90",
+      "range": {
+        "startLine": 318,
+        "startChar": 23,
+        "endLine": 318,
+        "endChar": 44
+      },
+      "revId": "569718f2faf1bce5522354b5480ac0d17a1531f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a55ca55_19472f0c",
         "filename": "third_party/nix/src/libstore/rpc-store.cc",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "f5213f51_276d2428",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-23T22:13:59Z",
+      "side": 1,
+      "message": "well set_data() doesn\u0027t take a string_view - but I used the overload that takes a pointer and a len. We lose some type safety here, but I guess it means less copying.",
+      "parentUuid": "3a55ca55_19472f0c",
+      "range": {
+        "startLine": 326,
+        "startChar": 9,
+        "endLine": 326,
+        "endChar": 15
+      },
+      "revId": "569718f2faf1bce5522354b5480ac0d17a1531f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b77955a_5c6880c6",
         "filename": "third_party/nix/src/libstore/rpc-store.cc",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "569718f2faf1bce5522354b5480ac0d17a1531f5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86548dff_c86300b1",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-23T22:13:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b77955a_5c6880c6",
+      "range": {
+        "startLine": 330,
+        "startChar": 6,
+        "endLine": 330,
+        "endChar": 17
+      },
+      "revId": "569718f2faf1bce5522354b5480ac0d17a1531f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
