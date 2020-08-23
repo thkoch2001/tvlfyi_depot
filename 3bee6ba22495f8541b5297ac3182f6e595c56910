@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38e142f7_ee201862",
+        "filename": "users/tazjin/emacs/config/functions.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-23T22:20:30Z",
+      "side": 1,
+      "message": "this should probably be configurable",
+      "range": {
+        "startLine": 285,
+        "startChar": 24,
+        "endLine": 285,
+        "endChar": 32
+      },
+      "revId": "3bee6ba22495f8541b5297ac3182f6e595c56910",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14c232f7_9d7a3804",
+        "filename": "users/tazjin/emacs/config/functions.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-23T22:20:30Z",
+      "side": 1,
+      "message": "feels like maybe we want something to make sure we don\u0027t recurse infinitely here?",
+      "revId": "3bee6ba22495f8541b5297ac3182f6e595c56910",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
