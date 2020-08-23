@@ -320,6 +320,13 @@ in lib.fix(self: {
     timerConfig.OnCalendar = "hourly";
   };
 
+  services.journaldriver = {
+    enable = true;
+    googleCloudProject = "tvl-fyi";
+    logStream = "whitby";
+    applicationCredentials = "/var/lib/journaldriver/key.json";
+  };
+
   security.sudo.extraRules = [
     {
       groups = ["wheel"];
