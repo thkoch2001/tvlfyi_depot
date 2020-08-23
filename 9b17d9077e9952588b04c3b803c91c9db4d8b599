@@ -22,6 +22,75 @@
       "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db29c9a3_9d448708",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-23T22:58:48Z",
+      "side": 1,
+      "message": "I\u0027d prefer an explicit type here",
+      "range": {
+        "startLine": 287,
+        "startChar": 10,
+        "endLine": 287,
+        "endChar": 14
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a552c03b_6303310b",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-23T22:58:48Z",
+      "side": 1,
+      "message": "Can you reuse the one from above?",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 295,
+        "endChar": 44
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78c99cc4_cd4ba45d",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-23T22:58:48Z",
+      "side": 1,
+      "message": "I think `data.has_data()` should exist",
+      "range": {
+        "startLine": 298,
+        "startChar": 16,
+        "endLine": 298,
+        "endChar": 51
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
