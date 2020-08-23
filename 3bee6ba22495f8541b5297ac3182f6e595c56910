@@ -81,6 +81,24 @@
       "revId": "3bee6ba22495f8541b5297ac3182f6e595c56910",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "59750ec7_afefbfff",
+        "filename": "users/tazjin/emacs/config/functions.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-23T22:48:01Z",
+      "side": 1,
+      "message": "(oh, also, #\u0027f-parent returns nil if path \u003d\u003d parent)",
+      "parentUuid": "4d2977c1_f7930c77",
+      "revId": "3bee6ba22495f8541b5297ac3182f6e595c56910",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
