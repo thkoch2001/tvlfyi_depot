@@ -888,6 +888,10 @@
     (before 1)
     (it 2)))
 
+(set-popup-rule!
+  "^\\*cider-test-report\\*$"
+  :size 0.5)
+
 (use-package! flycheck-clojure
   ;; :disabled t
   :after (flycheck cider)
