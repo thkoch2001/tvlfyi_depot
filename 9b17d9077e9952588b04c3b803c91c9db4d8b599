@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f67912e8_00eafc46",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-24T02:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c237fc17_b2a138c1",
+      "range": {
+        "startLine": 325,
+        "startChar": 31,
+        "endLine": 325,
+        "endChar": 37
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "743b133a_ab49ef15",
         "filename": "third_party/nix/src/libstore/rpc-store.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c02b8d3_45ffad92",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-24T02:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "743b133a_ab49ef15",
+      "range": {
+        "startLine": 326,
+        "startChar": 15,
+        "endLine": 326,
+        "endChar": 19
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4a1a54d8_0216fc55",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-24T02:53:34Z",
+      "side": 1,
+      "message": "Done. Why, out of curiosity?",
+      "parentUuid": "db29c9a3_9d448708",
+      "range": {
+        "startLine": 287,
+        "startChar": 10,
+        "endLine": 287,
+        "endChar": 14
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a552c03b_6303310b",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2020-08-23T22:58:48Z",
       "side": 1,
       "message": "Can you reuse the one from above?",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 295,
+        "endChar": 44
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bb92c97_696f7cc2",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-24T02:53:34Z",
+      "side": 1,
+      "message": "That feels a little weird to me, given that we\u0027re changing the side of the sum type it sits on. Without profiling to show that it\u0027s not being optimized that way anyway, I\u0027d rather keep it clear unless you feel strongly about it.",
+      "parentUuid": "a552c03b_6303310b",
       "range": {
         "startLine": 295,
         "startChar": 0,
@@ -114,6 +210,30 @@
       "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6da7bb18_bf7af78a",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-24T02:53:34Z",
+      "side": 1,
+      "message": "it doesn\u0027t, oddly. Maybe something to do with it being a primitive type rather than a message?",
+      "parentUuid": "78c99cc4_cd4ba45d",
+      "range": {
+        "startLine": 298,
+        "startChar": 16,
+        "endLine": 298,
+        "endChar": 51
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     },
     {
       "key": {
