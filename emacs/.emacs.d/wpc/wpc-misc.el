@@ -207,31 +207,12 @@
 (defun project-find-function--briefcase (dir)
   "Find the nearest default.nix file; otherwise, terminate at the .git
   directory."
-  (let ((filenames (->> dir f-files (-map #'f-filename)))
-        (dirnames (->> dir f-directories (-map #'f-dirname))))
-    (if (or (-contains? filenames "default.nix")
-            (-contains? dirnames ".git"))
-        (cons 'monorepo dir)
-      (if (f-parent dir)
-          (project-find-function--briefcase (f-parent dir))
-        nil))))
+  (when (s-starts-with? (getenv "BRIEFCASE") (f-expand dir))
+    (if (f-exists? (f-join dir "default.nix"))
+        (cons 'transient dir)
+      (project-find-function--briefcase (f-parent dir)))))
 
-(cl-defmethod project-root ((project (head monorepo)))
-  (cdr project))
-
-(cl-defmethod project-roots ((project (head monorepo)))
-  (list (cdr project)))
-
-(cl-defmethod project-external-roots ((project (head monorepo)))
-  (project-external-roots (cons 'vc (cdr project))))
-
-(cl-defmethod project-ignores ((project (head monorepo)) dir)
-  (project-ignores (cons 'vc (cdr project)) dir))
-
-(cl-defmethod project-files ((project (head monorepo)) &optional dirs)
-  (project-files (cons 'vc (cdr project)) dirs))
-
-(setq project-find-functions (list #'project-find-function--briefcase))
+(add-to-list 'project-find-functions #'project-find-function--briefcase)
 
 (use-package deadgrep
   :config
