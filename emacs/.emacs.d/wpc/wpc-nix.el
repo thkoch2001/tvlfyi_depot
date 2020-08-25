@@ -13,7 +13,6 @@
 ;; TODO: These may fail at startup. How can I make sure that the .envrc is
 ;; consulted when Emacs starts?
 (prelude/assert (f-exists? (getenv "BRIEFCASE")))
-(prelude/assert (f-exists? (getenv "DEPOT")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -31,9 +30,7 @@
          (bname (format "*%s*" pname)))
     (start-process pname bname
                    "nix-env"
-                   "-I" (format "nixpkgs=%s" (f-expand "~/nixpkgs"))
-                   "-I" (format "depot=%s" (f-expand "~/depot"))
-                   "-I" (format "briefcase=%s" (f-expand "~/briefcase"))
+                   "-I" (format "briefcase=%s" (getenv "BRIEFCASE"))
                    "-f" "<briefcase>" "-iA" emacs)
     (display-buffer bname)))
 
@@ -42,7 +39,7 @@
   (interactive)
   (start-process "nix/home-manager-switch" "*nix/home-manager-switch*"
                  "home-manager"
-                 "-I" (format "nixpkgs=%s" (f-expand "~/nixpkgs"))
+                 "-I" (format "nixpkgs=%s" (f-expand "~/nixpkgs-channels"))
                  "-I" (format "home-manager=%s" (f-expand "~/home-manager"))
                  "switch")
   (display-buffer "*nix/home-manager-switch*"))
