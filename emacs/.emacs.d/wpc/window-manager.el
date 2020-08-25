@@ -24,7 +24,6 @@
 (require 'kbd)
 (require 'ivy-helpers)
 (require 'display)
-(require 'org-helpers)
 (require 'vterm-mgt)
 (require 'dash)
 (require 'evil)
