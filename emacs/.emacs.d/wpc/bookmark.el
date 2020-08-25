@@ -21,6 +21,7 @@
 (require 'list)
 (require 'string)
 (require 'set)
+(require 'constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
@@ -60,7 +61,7 @@ Otherwise, open with `counsel-find-file'."
                   :path "~/depot"
                   :kbd "t")
    (make-bookmark :label "briefcase"
-                  :path (getenv "BRIEFCASE")
+                  :path constants/briefcase
                   :kbd "b")
    (make-bookmark :label "current project"
                   :path constants/current-project

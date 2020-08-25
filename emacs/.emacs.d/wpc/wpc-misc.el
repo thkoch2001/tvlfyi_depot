@@ -13,6 +13,7 @@
 (require 'project)
 (require 'f)
 (require 'dash)
+(require 'constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -180,10 +181,11 @@
 ;; trim whitespace on save
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
-;; call `git secret hide` after saving ~/briefcase/secrets.json
+;; call `git secret hide` after saving secrets.json
 (add-hook 'after-save-hook
           (lambda ()
-            (when (f-equal? (buffer-file-name) "~/briefcase/secrets.json")
+            (when (f-equal? (buffer-file-name)
+                            (f-join constants/briefcase "secrets.json"))
               (shell-command "git secret hide"))))
 
 ;; use tabs instead of spaces
@@ -207,7 +209,7 @@
 (defun project-find-function--briefcase (dir)
   "Find the nearest default.nix file; otherwise, terminate at the .git
   directory."
-  (when (s-starts-with? (getenv "BRIEFCASE") (f-expand dir))
+  (when (s-starts-with? constants/briefcase (f-expand dir))
     (if (f-exists? (f-join dir "default.nix"))
         (cons 'transient dir)
       (project-find-function--briefcase (f-parent dir)))))
