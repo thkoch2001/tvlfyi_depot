@@ -57,9 +57,6 @@ Otherwise, open with `counsel-find-file'."
 
 (defconst bookmark/whitelist
   (list
-   (make-bookmark :label "depot"
-                  :path "~/depot"
-                  :kbd "t")
    (make-bookmark :label "briefcase"
                   :path constants/briefcase
                   :kbd "b")
