@@ -10,8 +10,6 @@
 
 (require 'device)
 
-;; TODO: These may fail at startup. How can I make sure that the .envrc is
-;; consulted when Emacs starts?
 (prelude/assert (f-exists? (getenv "BRIEFCASE")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
