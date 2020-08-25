@@ -1,6 +1,13 @@
 # This file defines all the blog posts.
 [
   {
+    key = "overreactions";
+    title = "\"It Will Look Like We Overreacted\"";
+    date = 1598322507;
+    content = ./posts/overreactions.md;
+    draft = true;
+  }
+  {
     key = "emacs-is-underrated";
     title = "Emacs is the most underrated tool";
     date = 1581286656;
