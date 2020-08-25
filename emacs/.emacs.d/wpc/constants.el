@@ -13,18 +13,23 @@
 (require 'prelude)
 (require 'f)
 
+(prelude/assert (f-exists? (getenv "BRIEFCASE")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst constants/briefcase
+  (getenv "BRIEFCASE")
+  "Path to my monorepo, which various parts of my configuration rely on.")
 
 ;; TODO: Consider merging `ui.el' and `misc.el' because those are the only
 ;; current consumers of these constants, and I'm unsure if the indirection that
 ;; globally defined constants introduces is worth it.
 
-(defconst constants/current-project "~/briefcase"
+(defconst constants/current-project
+  constants/briefcase
   "Variable holding the directory for my currently active project.")
-
-(prelude/assert (f-directory? constants/current-project))
 
 (defconst constants/mouse-kbds
   '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]

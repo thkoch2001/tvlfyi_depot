@@ -9,8 +9,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'device)
-
-(prelude/assert (f-exists? (getenv "BRIEFCASE")))
+(require 'constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -28,7 +27,7 @@
          (bname (format "*%s*" pname)))
     (start-process pname bname
                    "nix-env"
-                   "-I" (format "briefcase=%s" (getenv "BRIEFCASE"))
+                   "-I" (format "briefcase=%s" constants/briefcase)
                    "-f" "<briefcase>" "-iA" emacs)
     (display-buffer bname)))
 
