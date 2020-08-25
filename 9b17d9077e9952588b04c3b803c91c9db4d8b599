@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "bf3755ae_8d967aa1",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-25T20:02:09Z",
+      "side": 1,
+      "message": "It\u0027s somewhat unidiomatic so it may confuse other people (as it did me) who then go on to check if data from the first one is used again somewhere, etc.\n\nIf you want to keep the separation please add a comment explaining it for the next person.",
+      "parentUuid": "6bb92c97_696f7cc2",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 295,
+        "endChar": 44
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "78c99cc4_cd4ba45d",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 2
