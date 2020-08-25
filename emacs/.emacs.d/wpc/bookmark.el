@@ -61,7 +61,7 @@ Otherwise, open with `counsel-find-file'."
                   :kbd "t")
    (make-bookmark :label "briefcase"
                   :path (getenv "BRIEFCASE")
-                  :kbd "d")
+                  :kbd "b")
    (make-bookmark :label "current project"
                   :path constants/current-project
                   :kbd "p"))
