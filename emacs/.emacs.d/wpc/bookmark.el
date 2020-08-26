@@ -65,31 +65,6 @@ Otherwise, open with `counsel-find-file'."
                   :kbd "p"))
   "List of registered bookmarks.")
 
-(defun bookmark/from-label (label)
-  "Return the bookmark with LABEL or nil."
-  (->> bookmark/whitelist
-       (list/find (lambda (b) (equal label (bookmark-label b))))))
-
-(defun bookmark/magit-status ()
-  "Use ivy to select a bookmark and jump to its `magit-status' buffer."
-  (interactive)
-  (let ((labels (set/new "briefcase" "depot"))
-        (all-labels (->> bookmark/whitelist
-                         (list/map (>> bookmark-label))
-                         set/from-list)))
-    (prelude/assert (set/subset? labels all-labels))
-    (ivy-read "Repository: "
-              (set/to-list labels)
-              :require-match t
-              :action (lambda (label)
-                        (->> label
-                             bookmark/from-label
-                             bookmark-path
-                             magit-status)))))
-
-;; TODO: Consider `ivy-read' extension that takes a list of structs,
-;; `struct-to-label' and `label-struct' functions.
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; API
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -103,21 +78,7 @@ Otherwise, open with `counsel-find-file'."
      ((f-file? path)
       (funcall bookmark/handle-file path)))))
 
-(defun bookmark/ivy-open ()
-  "Use ivy to filter available bookmarks."
-  (interactive)
-  (ivy-read "Bookmark: "
-            (->> bookmark/whitelist
-                 (list/map #'bookmark-label))
-            :require-match t
-            :action (lambda (label)
-                      (bookmark/open (bookmark/from-label label)))))
-
 (when bookmark/install-kbds?
-  (general-define-key
-   :prefix "<SPC>"
-   :states '(normal)
-   "jj" #'bookmark/ivy-open)
   (->> bookmark/whitelist
        (list/map
         (lambda (b)
@@ -127,11 +88,7 @@ Otherwise, open with `counsel-find-file'."
            (string/concat "j" (bookmark-kbd b))
            ;; TODO: Consider `cl-labels' so `which-key' minibuffer is more
            ;; helpful.
-           (lambda () (interactive) (bookmark/open b))))))
-  (general-define-key
-   :states '(normal)
-   :prefix "<SPC>"
-   "gS" #'bookmark/magit-status))
+           (lambda () (interactive) (bookmark/open b)))))))
 
 (provide 'bookmark)
 ;;; bookmark.el ends here
