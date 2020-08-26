@@ -1,4 +1,4 @@
-{ config, pkgs, depot, ... }:
+{ config ? throw "not a readTree target", pkgs, depot, ... }:
 
 let
   hmPath = "$HOME/nix/home-manager";
