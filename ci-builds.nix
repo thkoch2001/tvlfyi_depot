@@ -116,13 +116,4 @@ in lib.fix (self: {
     (systemFor nixos.camden)
     (systemFor nixos.frog)
   ];
-
-  glittershark = with depot.users.glittershark; [
-    # xanthous
-    keyboard.layout
-    owothia
-
-    (systemFor system.system.chupacabra)
-    system.home.chupacabra.activationPackage
-  ];
 })

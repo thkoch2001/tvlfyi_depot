@@ -1,0 +1,6 @@
+There are a few things in this folder that fail to evaluate under
+readTree.
+
+Some of these are nested deeper than things that evaluate fine, which
+leads to a problem where the CI build scanner fails to step into
+sub-attributes.
