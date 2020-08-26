@@ -34,7 +34,6 @@ let
     net           = readTree ./net;
     nix           = readTree ./nix;
     ops           = readTree ./ops;
-    presentations = readTree ./presentations;
     third_party   = readTree ./third_party;
     tools         = readTree ./tools;
     users         = readTree ./users;
