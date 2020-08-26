@@ -1,8 +1,9 @@
+# TODO(tazjin): move to user-folder
 { depot, pkgs, ... }:
 
 let
   stdenv = with pkgs; overrideCC clangStdenv clang_10;
-  abseil_cpp = pkgs.abseil_cpp.override { inherit stdenv; };
+  abseil_cpp = pkgs.abseil_cpp;
 in stdenv.mkDerivation {
   name = "dt";
   src = ./.;
@@ -11,4 +12,5 @@ in stdenv.mkDerivation {
     abseil_cpp
     farmhash
   ];
+  meta.ci = false;
 }
