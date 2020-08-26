@@ -114,6 +114,26 @@ let
       magit
     ]));
 
+  vendorDir = builtins.path {
+    path = ./.emacs.d/vendor;
+    name = "emacs-vendor";
+  };
+
+  wpcDir = builtins.path {
+    path = ./.emacs.d/wpc;
+    name = "emacs-libs";
+  };
+
+  wpcPackageEl = builtins.path {
+    path = ./.emacs.d/wpc/wpc-package.el;
+    name = "wpc-package.el";
+  };
+
+  initEl = builtins.path {
+    path = ./.emacs.d/init.el;
+    name = "init.el";
+  };
+
   withEmacsPath = emacsBin: pkgs.writeShellScriptBin "wpcarros-emacs" ''
     # TODO: Is this the best way to handle environment variables using Nix?
     export XMODIFIERS=emacs
@@ -126,11 +146,12 @@ let
       --debug-init \
       --no-site-file \
       --no-site-lisp \
-      --directory ${ ./.emacs.d/vendor } \
-      --directory ${ ./.emacs.d/wpc } \
-     --load ${ ./.emacs.d/wpc/wpc-package.el } \
-     --load ${ ./.emacs.d/init.el } \
-      --no-init-file $@
+      --directory ${vendorDir} \
+      --directory ${wpcDir} \
+      --load ${wpcPackageEl} \
+      --load ${initEl} \
+      --no-init-file \
+      $@
   '';
 in {
   # Use `nix-env -f '<briefcase>' emacs.glinux` to install `wpcarro-emacs` on
