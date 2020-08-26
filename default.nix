@@ -39,6 +39,22 @@ let
     users         = readTree ./users;
     web           = readTree ./web;
   };
+
+  # To determine build targets, we walk through the depot tree and
+  # fetch attributes that were imported by readTree and are buildable.
+  #
+  # Any build target that contains `meta.ci = false` will be skipped.
+
+  # Is this tree node eligible for build inclusion?
+  eligible = node: (node ? outPath) && (node.meta.ci or true);
+
+  # Walk the tree starting with 'node', recursively extending the list
+  # of build targets with anything that looks buildable.
+  gather = node:
+    if node ? __readTree then
+      (if eligible node then [node] else []) ++
+      concatMap gather (attrValues node)
+    else [];
 in fix(self: {
   config = config self;
 
@@ -55,8 +71,11 @@ in fix(self: {
   # (e.g. NixOS module inclusions)
   depotPath = ./.;
 
-  # Load CI builds in a way that can be injected into programs like besadii.
-  ciBuilds = import ./ci-builds.nix self.config;
+  # List of all buildable targets, for CI purposes.
+  #
+  # Note: This *must* be a nested attribute, otherwise we will get
+  # infinite recursion and everything blows up.
+  ci.targets = gather self;
 }
 
 # Add local packages as structured by readTree
