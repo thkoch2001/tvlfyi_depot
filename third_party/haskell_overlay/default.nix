@@ -1,4 +1,4 @@
-{ pkgs ? import ./nixpkgs.nix {} }:
+{ pkgs ? import ./nixpkgs.nix {}, ... }:
 
 self: super: with pkgs.haskell.lib; rec {
   aeson = doJailbreak super.aeson;
