@@ -43,7 +43,7 @@ let
     '';
   };
 
-in pkgs.stdenv.mkDerivation rec {
+in {
   inherit pathScripts;
   inherit commonsh;
   inherit tvlcNew;
