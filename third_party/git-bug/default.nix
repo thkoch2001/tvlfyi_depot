@@ -4,6 +4,7 @@ pkgs.buildGoModule {
   pname = "git-bug";
   version = "unstable-20200614";
   vendorSha256 = "1lmcs1b0rr2xfajmz205pjp94v8ih1qpj69za06wbp24r5nc2cjg";
+  doCheck = false;
 
   nativeBuildInputs = [ pkgs.installShellFiles ];
 

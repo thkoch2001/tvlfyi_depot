@@ -13,4 +13,4 @@ in depot.nix.buildGo.program {
   deps = [
     localProto
   ];
-} // { inherit localProto; }
+} // { inherit localProto; meta.ci = false; }
