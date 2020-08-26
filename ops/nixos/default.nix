@@ -42,4 +42,10 @@ rec {
     nix-env -p /nix/var/nix/profiles/system --set $system
     $system/bin/switch-to-configuration switch
   '';
+
+  # Systems that should be built in CI
+  #
+  # TODO(tazjin): Refactor the whole systems setup, it's a bit
+  # inconsistent at the moment.
+  whitbySystem = (nixosFor whitby).system // { __readTree = true; };
 }
