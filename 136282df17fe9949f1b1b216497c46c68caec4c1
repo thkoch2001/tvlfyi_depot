@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fd68b4b_13b99f7a",
+        "filename": "default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-26T23:34:04Z",
+      "side": 1,
+      "message": "feels like this should be ciEligible or something, since it\u0027s in the top level default.nix but actually ci related",
+      "revId": "136282df17fe9949f1b1b216497c46c68caec4c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
