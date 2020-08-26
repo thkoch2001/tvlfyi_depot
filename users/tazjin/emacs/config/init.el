@@ -165,14 +165,17 @@
   :config (progn
             (setq vterm-shell "fish")
             (setq vterm-exit-functions
-                  (lambda (&rest _) (kill-buffer (current-buffer))))
-            (setq vterm-set-title-functions
-                  (lambda (title)
-                    (rename-buffer
-                     (generate-new-buffer-name
-                      (format "vterm<%s>"
-                              (s-trim-left
-                               (s-chop-prefix "fish" title)))))))))
+                  (lambda (&rest _) (kill-buffer (current-buffer))))))
+
+;; vterm removed the ability to set a custom title generator function
+;; via the public API, so this overrides its private title generation
+;; function instead
+(defun vterm--set-title (title)
+  (rename-buffer
+   (generate-new-buffer-name
+    (format "vterm<%s>"
+            (s-trim-left
+             (s-chop-prefix "fish" title))))))
 
 ;;
 ;; Packages providing language-specific functionality
