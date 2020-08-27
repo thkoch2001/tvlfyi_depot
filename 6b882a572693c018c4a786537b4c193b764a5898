@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "268ec920_dc40123d",
+        "filename": "users/tazjin/nixos/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-27T16:47:43Z",
+      "side": 1,
+      "message": "this being here but not in the other targets is inconsistent.",
+      "range": {
+        "startLine": 11,
+        "startChar": 31,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "6b882a572693c018c4a786537b4c193b764a5898",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
