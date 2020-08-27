@@ -14,7 +14,7 @@ let
   # Create a pipeline step from a single target.
   mkStep = target: {
     command = "nix-build ${target.drvPath}";
-    label = ":nix: ${target.name}";
+    label = ":nix: ${target.__readTree}";
   };
 
   # Protobuf check step which validates that changes to .proto files
