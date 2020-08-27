@@ -148,6 +148,21 @@ let
       "$@"
   '';
 in {
+  inherit initEl;
+
+  # I need to start my Emacs from CI without the call to `--load ${initEl}`.
+  runScript = script: pkgs.writeShellScript "run-emacs-script" ''
+    export BRIEFCASE=$HOME/briefcase
+    export PATH="${emacsBinPath}:$PATH"
+    export EMACSLOADPATH="${wpcDir}:${vendorDir}:${wpcarrosEmacs.deps}/share/emacs/site-lisp"
+    exec ${wpcarrosEmacs}/bin/emacs \
+      --no-site-file \
+      --no-site-lisp \
+      --no-init-file \
+      --script ${script} \
+      "$@"
+  '';
+
   # Use `nix-env -f '<briefcase>' emacs.glinux` to install `wpcarro-emacs` on
   # gLinux machines. This will ensure that X and GL linkage behaves as expected.
   glinux = withEmacsPath "/usr/bin/google-emacs";
