@@ -270,6 +270,7 @@ static void _main(int argc, char** argv) {
 
   if (packages) {
     std::ostringstream joined;
+    // TODO(grfn): Generate a syntax tree here, not a string
     joined << "with import <nixpkgs> { }; (pkgs.runCommandCC or "
               "pkgs.runCommand) \"shell\" { buildInputs = [ ";
     for (const auto& i : left) {
