@@ -13,7 +13,7 @@ let
   # Create a pipeline step from a single target.
   mkStep = target: {
     command = "nix-build ${target.drvPath}";
-    label = ":nix: ${target.name}";
+    label = ":nix: ${target.__readTree}";
   };
 
   # This defines the build pipeline, using the pipeline format
