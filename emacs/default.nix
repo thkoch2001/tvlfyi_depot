@@ -138,17 +138,14 @@ let
     export XMODIFIERS=emacs
     export BRIEFCASE=$HOME/briefcase
     export PATH="${emacsBinPath}:$PATH"
-    export EMACSLOADPATH="${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
+    export EMACSLOADPATH="${wpcDir}:${vendorDir}:${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
     exec ${emacsBin} \
       --debug-init \
       --no-site-file \
       --no-site-lisp \
-      --directory ${vendorDir} \
-      --directory ${wpcDir} \
-      --load ${wpcPackageEl} \
       --load ${initEl} \
       --no-init-file \
-      $@
+      "$@"
   '';
 in {
   # Use `nix-env -f '<briefcase>' emacs.glinux` to install `wpcarro-emacs` on
