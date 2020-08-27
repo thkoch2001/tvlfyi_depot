@@ -135,11 +135,8 @@ let
   };
 
   withEmacsPath = emacsBin: pkgs.writeShellScriptBin "wpcarros-emacs" ''
-    # TODO: Is this the best way to handle environment variables using Nix?
     export XMODIFIERS=emacs
     export BRIEFCASE=$HOME/briefcase
-    export DEPOT=$HOME/depot
-
     export PATH="${emacsBinPath}:$PATH"
     export EMACSLOADPATH="${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
     exec ${emacsBin} \
