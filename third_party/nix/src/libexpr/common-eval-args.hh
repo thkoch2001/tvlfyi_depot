@@ -8,6 +8,8 @@ class Store;
 class EvalState;
 class Bindings;
 
+enum ArgType { kArgTypeString, kArgTypeExpr };
+
 struct MixEvalArgs : virtual Args {
   MixEvalArgs();
 
@@ -16,7 +18,7 @@ struct MixEvalArgs : virtual Args {
   Strings searchPath;
 
  private:
-  std::map<std::string, std::string> autoArgs;
+  std::map<std::string, std::pair<ArgType, std::string>> auto_args_;
 };
 
 Path lookupFileArg(EvalState& state, std::string s);
