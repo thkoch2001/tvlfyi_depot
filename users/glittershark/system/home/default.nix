@@ -20,7 +20,7 @@ rec {
 
       lib.depot = depot;
     };
-  }) // { __readTree = true; };
+  }) // { __readTree = "users/glittershark/system/home"; };
 
   chupacabra = home ./machines/chupacabra.nix;
 }
