@@ -5,7 +5,7 @@ rec {
 
   chupacabraSystem = (pkgs.nixos {
     configuration = chupacabra;
-  }).system // { __readTree = true; };
+  }).system;
 
   rebuilder =
     let
