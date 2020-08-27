@@ -20,7 +20,7 @@ rec {
 
       lib.depot = depot;
     };
-  }) // { __readTree = true; };
+  });
 
   chupacabra = home ./machines/chupacabra.nix;
 }

@@ -8,7 +8,7 @@ let
     configuration = lib.fix(config:
       foldl' lib.recursiveUpdate {} (map (c: c config) configs)
     );
-  }).system // { __readTree = true; };
+  }).system;
 
   caseFor = hostname: ''
     ${hostname})
