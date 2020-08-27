@@ -229,11 +229,11 @@ type reviewInput struct {
 	IgnoreDefaultAttentionSetRules bool           `json:"ignore_default_attention_set_rules"`
 }
 
-func postCommandMain() {
+
 	changeId := os.Getenv("GERRIT_CHANGE_ID")
 	patchset := os.Getenv("GERRIT_PATCHSET")
 
-	if changeId == "" || patchset == "" {
+
 		// If these variables are unset, but the hook was invoked, the
 		// build was most likely for a branch and not for a CL - no status
 		// needs to be reported back to Gerrit!
