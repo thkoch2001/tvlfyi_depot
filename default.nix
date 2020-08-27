@@ -73,9 +73,10 @@ in fix(self: {
 
   # List of all buildable targets, for CI purposes.
   #
-  # Note: This *must* be a nested attribute, otherwise we will get
-  # infinite recursion and everything blows up.
-  ci.targets = gather self;
+  # Note: To prevent infinite recursion, this *must* be a nested
+  # attribute set and ops.pipelines *must* be removed from the target
+  # inspection.
+  ci.targets = gather (self // { ops.pipelines = null; });
 }
 
 # Add local packages as structured by readTree
