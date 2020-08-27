@@ -4,22 +4,50 @@
 # It outputs a "YAML" (actually JSON) file which is evaluated and
 # submitted to Buildkite at the start of each build. This means we can
 # dynamically configure the pipeline execution here.
-{ depot, pkgs, ... }:
+{ depot, lib, pkgs, ... }:
 
 let
-  inherit (builtins) toJSON;
+  inherit (builtins) map toJSON;
+  inherit (lib) singleton;
   inherit (pkgs) writeText;
+
+  # Create a pipeline step from a single target.
+  mkStep = target: {
+    command = "nix-build ${target.drvPath}";
+    label = ":nix: ${target.name}";
+  };
+
+  # Protobuf check step which validates that changes to .proto files
+  # between revisions don't cause backwards-incompatible or otherwise
+  # flawed changes.
+  protoCheck = {
+    command = "${depot.nix.bufCheck}/bin/ci-buf-check";
+    label = ":water_buffalo:";
+  };
 
   # This defines the build pipeline, using the pipeline format
   # documented on https://buildkite.com/docs/pipelines/defining-steps
-  pipeline.steps = [
-    {
-      command = "nix-build -A ci.targets --show-trace";
-      label = ":duck:";
-    }
-    {
-      command = "${depot.nix.bufCheck}/bin/ci-buf-check";
-      label = ":water_buffalo:";
-    }
-  ];
-in writeText "depot.yaml" (toJSON pipeline)
+  #
+  # Pipeline steps need to stay in order.
+  pipeline.steps =
+    # Create build steps for each CI target
+    (map mkStep depot.ci.targets)
+
+    ++ [
+      # Simultaneously run protobuf checks
+      protoCheck
+
+      # Wait for all previous checks to complete
+      ({
+        wait = null;
+        continue_on_failure = true;
+      })
+
+      # Wait for all steps as :duck:, which will trigger the
+      # post-command hook. This step must be :duck:! (yes, really!)
+      ({
+        command = "echo 'all build steps completed'";
+        label = ":duck:";
+      })
+    ];
+in (writeText "depot.yaml" (toJSON pipeline))
