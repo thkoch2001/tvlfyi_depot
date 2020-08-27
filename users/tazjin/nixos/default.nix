@@ -4,11 +4,11 @@
 let
   inherit (builtins) foldl';
 
-  systemFor = configs: (depot.third_party.nixos {
+  systemFor = name: configs: (depot.third_party.nixos {
     configuration = lib.fix(config:
       foldl' lib.recursiveUpdate {} (map (c: c config) configs)
     );
-  }).system // { __readTree = true; };
+  }).system // { __readTree = "users/tazjin/nixos/${name}"; };
 
   caseFor = hostname: ''
     ${hostname})
@@ -39,6 +39,6 @@ let
 in {
   inherit rebuilder;
 
-  camdenSystem = systemFor [ depot.users.tazjin.nixos.camden ];
-  frogSystem = systemFor [ depot.users.tazjin.nixos.frog ];
+  camdenSystem = systemFor "camden" [ depot.users.tazjin.nixos.camden ];
+  frogSystem = systemFor "frog" [ depot.users.tazjin.nixos.frog ];
 }

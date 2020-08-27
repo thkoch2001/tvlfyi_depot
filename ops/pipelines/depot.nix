@@ -20,7 +20,7 @@ let
     command = ''
       nix-build ${target.drvPath} || buildkite-agent meta-data set "failure" "1"
     '';
-    label = ":nix: ${target.name}";
+    label = ":nix: ${target.__readTree}";
   };
 
   # Protobuf check step which validates that changes to .proto files
