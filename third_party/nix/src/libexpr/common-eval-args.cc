@@ -12,15 +12,17 @@ MixEvalArgs::MixEvalArgs() {
       .longName("arg")
       .description("argument to be passed to Nix functions")
       .labels({"name", "expr"})
-      .handler(
-          [&](std::vector<std::string> ss) { autoArgs[ss[0]] = 'E' + ss[1]; });
+      .handler([&](std::vector<std::string> ss) {
+        auto_args_[ss[0]] = std::make_pair(kArgTypeExpr, ss[1]);
+      });
 
   mkFlag()
       .longName("argstr")
       .description("string-valued argument to be passed to Nix functions")
       .labels({"name", "string"})
-      .handler(
-          [&](std::vector<std::string> ss) { autoArgs[ss[0]] = 'S' + ss[1]; });
+      .handler([&](std::vector<std::string> ss) {
+        auto_args_[ss[0]] = std::make_pair(kArgTypeString, ss[1]);
+      });
 
   mkFlag()
       .shortName('I')
@@ -33,16 +35,22 @@ MixEvalArgs::MixEvalArgs() {
 }
 
 std::unique_ptr<Bindings> MixEvalArgs::getAutoArgs(EvalState& state) {
-  auto res = Bindings::New(autoArgs.size());
-  for (auto& i : autoArgs) {
+  auto res = Bindings::New(auto_args_.size());
+  for (auto& [arg, arg_value] : auto_args_) {
     Value* v = state.allocValue();
-    if (i.second[0] == 'E') {
-      state.mkThunk_(*v, state.parseExprFromString(std::string(i.second, 1),
-                                                   absPath(".")));
-    } else {
-      mkString(*v, std::string(i.second, 1));
+    switch (arg_value.first) {
+      case kArgTypeExpr: {
+        state.mkThunk_(
+            *v, state.parseExprFromString(arg_value.second, absPath(".")));
+        break;
+      }
+      case kArgTypeString: {
+        mkString(*v, arg_value.second);
+        break;
+      }
     }
-    res->push_back(Attr(state.symbols.Create(i.first), v));
+
+    res->push_back(Attr(state.symbols.Create(arg), v));
   }
   return res;
 }
