@@ -7,19 +7,22 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (builtins) toJSON;
+  inherit (builtins) map toJSON;
   inherit (pkgs) writeText;
+
+  # Create a pipeline step from a single target.
+  mkStep = target: {
+    command = "nix-build ${target.drvPath}";
+    label = ":nix: ${target.name}";
+  };
 
   # This defines the build pipeline, using the pipeline format
   # documented on https://buildkite.com/docs/pipelines/defining-steps
-  pipeline.steps = [
-    {
-      command = "nix-build -A ci.targets --show-trace";
-      label = ":duck:";
-    }
-    {
+  #
+  # TODO(tazjin): We don't have a :duck:-step anymore, this kills the
+  # joke.
+  pipeline.steps = (map mkStep depot.ci.targets) ++ [{
       command = "${depot.nix.bufCheck}/bin/ci-buf-check";
       label = ":water_buffalo:";
-    }
-  ];
-in writeText "depot.yaml" (toJSON pipeline)
+    }];
+in (writeText "depot.yaml" (toJSON pipeline))
