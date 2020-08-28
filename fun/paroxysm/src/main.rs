@@ -230,12 +230,33 @@ impl App {
                 if let Some(mut idx) = idx {
                     if idx == -1 {
                         // 'get all entries' ('*' parses into this)
+                        // step 1: make a blob of all the quotes
+                        let mut data_to_upload = String::new();
                         for i in 0..kwd.entries.len() {
-                            self.client.send_notice(
-                                nick,
-                                format!("[{}] {}", chan, kwd.format_entry(i + 1).unwrap()),
-                            )?;
+                            data_to_upload.push_str(&kwd.format_entry_colours(i+1, false).unwrap());
+                            data_to_upload.push('\n');
                         }
+                        // step 2: attempt to POST it to eta's pastebin
+                        // TODO(eta): make configurable
+                        let response = crimp::Request::put("https://theta.eu.org/lx/upload")
+                            .user_agent("paroxysm/0.0.2 crimp/0.2")?
+                            .header("Linx-Expiry", "86400")? // 24 hours
+                            .body("text/plain", data_to_upload.as_bytes())
+                            .send()?
+                            .as_string()?;
+                        // step 3: tell the world about it
+                        if response.status != 200 {
+                            Err(format_err!("upload returned {}: {}", response.status, response.body))?
+                        }
+                        self.client.send_notice(
+                            target,
+                            format!(
+                                "\x02{}\x0f: uploaded {} quotes to \x02\x0311{}\x0f (will expire in \x0224\x0f hours)",
+                                subj,
+                                kwd.entries.len(),
+                                response.body
+                            )
+                        )?;
                     } else {
                         if idx == 0 {
                             idx = 1;
