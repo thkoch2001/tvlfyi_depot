@@ -36,26 +36,26 @@ in {
     msmtp
   ];
 
-  nixpkgs.overlays = [(self: super: {
-    notifymuch = self.python3Packages.callPackage ../../pkgs/notifymuch.nix {};
-  })];
+  # nixpkgs.overlays = [(self: super: {
+  #   notifymuch = self.python3Packages.callPackage ../../pkgs/notifymuch.nix {};
+  # })];
 
   systemd.user.services = mapAttrs' (name: account: {
     name = escapeUnitName "lieer-${name}";
     value.Service.ExecStart = mkForce "${pkgs.writeShellScript "sync-${name}" ''
       ${pkgs.gmailieer}/bin/gmi sync
-      ${pkgs.notifymuch}/bin/notifymuch
+      # ${pkgs.notifymuch}/bin/notifymuch
     ''}";
   }) accounts;
 
-  xdg.configFile."notifymuch/notifymuch.cfg".text = generators.toINI {} {
-    notifymuch = {
-      query = "is:unread and is:important";
-      mail_client = "";
-      recency_interval_hours = "48";
-      hidden_tags = "inbox unread attachment replied sent encrypted signed";
-    };
-  };
+  # xdg.configFile."notifymuch/notifymuch.cfg".text = generators.toINI {} {
+  #   notifymuch = {
+  #     query = "is:unread and is:important";
+  #     mail_client = "";
+  #     recency_interval_hours = "48";
+  #     hidden_tags = "inbox unread attachment replied sent encrypted signed";
+  #   };
+  # };
 
   accounts.email.maildirBasePath = "mail";
   accounts.email.accounts = mapAttrs (_: params@{ passEntry, ... }: {
