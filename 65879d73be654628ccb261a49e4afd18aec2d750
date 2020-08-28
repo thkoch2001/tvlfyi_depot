@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "653cc600_ad2d905a",
+        "filename": "web/panettone/src/authentication.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-08-28T23:36:13Z",
+      "side": 1,
+      "message": "If we\u0027re already importing Alexandria, there\u0027s ALEXANDRIA:WITH-GENSYMS to make this nicer!",
+      "revId": "65879d73be654628ccb261a49e4afd18aec2d750",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
