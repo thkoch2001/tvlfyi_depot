@@ -6,13 +6,46 @@
 (defvar *ldap* nil
   "The ldap connection")
 
+(defvar *ldap-host* "localhost"
+  "The host for the ldap connection")
+
+(defvar *ldap-port* 389
+  "The port for the ldap connection")
+
 (defclass/std user ()
   ((cn dn mail displayname :type string)))
 
 (defun connect-ldap (&key
                        (host "localhost")
                        (port 389))
-  (setq *ldap* (ldap:new-ldap :host host :port port)))
+  (setq *ldap-host* host
+        *ldap-port* port
+        *ldap* (ldap:new-ldap :host host :port port)))
+
+(defun reconnect-ldap ()
+  (setq *ldap* (ldap:new-ldap
+                :host *ldap-host*
+                :port *ldap-port*)))
+
+(defmacro with-ldap ((&key (max-tries 1)) &body body)
+  "Execute BODY in a context where ldap connection errors trigger a reconnect
+and a retry"
+  (let ((n (gensym)) (try (gensym)) (retry (gensym)) (e (gensym)))
+    `(flet
+         ((,try
+              (,n)
+            (flet ((,retry (,e)
+                     (if (>= ,n ,max-tries)
+                         (error ,e)
+                         (progn
+                           (reconnect-ldap)
+                           (,try (1+ ,n))))))
+              (handler-case
+                  (progn
+                    ,@body)
+                (end-of-file (,e) (,retry ,e))
+                (trivial-ldap:ldap-connection-error (,e) (,retry ,e))))))
+       (,try 0))))
 
 (defun ldap-entry->user (entry)
   (apply
@@ -28,15 +61,16 @@
 
 (defun find-user/ldap (username)
   (check-type username (simple-array character (*)))
-  (ldap:search
-   *ldap*
-   `(and (= objectClass organizationalPerson)
-         (or
-          (= cn ,username)
-          (= dn ,username)))
-   ;; TODO(grfn): make this configurable
-   :base "ou=users,dc=tvl,dc=fyi")
-  (ldap:next-search-result *ldap*))
+  (with-ldap ()
+    (ldap:search
+     *ldap*
+     `(and (= objectClass organizationalPerson)
+           (or
+            (= cn ,username)
+            (= dn ,username)))
+     ;; TODO(grfn): make this configurable
+     :base "ou=users,dc=tvl,dc=fyi")
+    (ldap:next-search-result *ldap*)))
 
 (defun find-user (username)
   (check-type username (simple-array character (*)))
@@ -44,14 +78,16 @@
     (ldap-entry->user ldap-entry)))
 
 (defun find-user-by-dn (dn)
-  (ldap:search *ldap* `(= objectClass organizationalPerson)
-               :base dn
-               :scope 'ldap:base)
-  (when-let ((ldap-entry (ldap:next-search-result *ldap*)))
-    (ldap-entry->user ldap-entry)))
+  (with-ldap ()
+    (progn
+      (ldap:search *ldap* `(= objectClass organizationalPerson)
+                   :base dn
+                   :scope 'ldap:base)
+      (when-let ((ldap-entry (ldap:next-search-result *ldap*)))
+        (ldap-entry->user ldap-entry)))))
 
 (comment
- (user-by-dn "cn=glittershark,ou=users,dc=tvl,dc=fyi")
+ (find-user-by-dn "cn=glittershark,ou=users,dc=tvl,dc=fyi")
  )
 
 (defun authenticate-user (user-or-username password)
