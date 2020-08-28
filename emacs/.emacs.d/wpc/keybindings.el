@@ -266,5 +266,15 @@
         (notmuch-search-tag '("-inbox" "-action" "-review" "+waiting")))
  "e" #'notmuch-search-archive-thread)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; magit
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(general-define-key
+ :states '(normal)
+ :keymaps '(magit-status-mode-map)
+ "l" #'evil-forward-char
+ "L" #'magit-log)
+
 (provide 'keybindings)
 ;;; keybindings.el ends here
