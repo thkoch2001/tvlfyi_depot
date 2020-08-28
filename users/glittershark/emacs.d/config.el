@@ -27,7 +27,6 @@
 (load! "email")
 (load! "cpp")
 (load! "lisp")
-(load! "slack")
 
 (require 'tvl)
 
@@ -156,6 +155,8 @@
 
 (add-to-list 'custom-theme-load-path "~/.doom.d/themes")
 (load-theme 'grfn-solarized-light t)
+
+(load! "slack")
 
 (defface haskell-import-face `((t (:foreground ,+solarized-magenta))) "")
 
