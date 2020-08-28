@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bb3ea839_d81f942d",
+        "filename": "ops/nixos/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-28T00:19:24Z",
+      "side": 1,
+      "message": "hmm, why?",
+      "parentUuid": "1a34c1fc_899b7fa6",
+      "range": {
+        "startLine": 51,
+        "startChar": 18,
+        "endLine": 51,
+        "endChar": 36
+      },
+      "revId": "6b882a572693c018c4a786537b4c193b764a5898",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "268ec920_dc40123d",
         "filename": "users/tazjin/nixos/default.nix",
         "patchSetId": 2
