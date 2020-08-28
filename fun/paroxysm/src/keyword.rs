@@ -108,8 +108,12 @@ impl KeywordDetails {
     }
 
     pub fn format_entry(&self, idx: usize) -> Option<String> {
+        self.format_entry_colours(idx, true)
+    }
+
+    pub fn format_entry_colours(&self, idx: usize, with_colours: bool) -> Option<String> {
         if let Some(ent) = self.entries.get(idx.saturating_sub(1)) {
-            let gen_clr = if self.keyword.chan == "*" {
+            let gen_clr = if self.keyword.chan == "*" && with_colours {
                 "\x0307"
             } else {
                 ""
@@ -117,13 +121,18 @@ impl KeywordDetails {
             let zwsp_name = Self::add_zwsp_to_name(&self.keyword.name)
                 .unwrap_or_else(|| self.keyword.name.clone());
             Some(format!(
-                "\x02{}{}\x0f\x0315[{}/{}]\x0f: {} \x0f\x0314[{}]\x0f",
+                "{}{}{name}{}[{idx}/{total}]{}: {text} {}[{date}]{}",
+                if with_colours { "\x02" } else { "" },
                 gen_clr,
-                zwsp_name,
-                idx,
-                self.entries.len(),
-                ent.text,
-                ent.creation_ts.date()
+                if with_colours { "\x0f\x0315" } else { "" },
+                if with_colours { "\x0f" } else { "" },
+                if with_colours { "\x0f\x0314" } else { "" },
+                if with_colours { "\x0f" } else { "" },
+                name = zwsp_name,
+                idx = idx,
+                total = self.entries.len(),
+                text = ent.text,
+                date = ent.creation_ts.date()
             ))
         } else {
             None
