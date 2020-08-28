@@ -40,6 +40,12 @@
      :outline "none"
      :border "none")))
 
+(defparameter markdown-styles
+  `((blockquote
+     :border-left "5px" "solid" ,color/light-gray
+     :padding-left "1rem"
+     :margin-left "0rem")))
+
 (defparameter issue-list-styles
   `((.issue-list
      :list-style-type "none"
