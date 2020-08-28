@@ -537,6 +537,8 @@
   (when session-secret
     (setq hunchentoot:*session-secret* session-secret))
 
+  (setq hunchentoot:*session-max-time* (* 60 60 24 90))
+
   (setq *acceptor*
         (make-instance 'easy-routes:routes-acceptor :port port))
   (hunchentoot:start *acceptor*))
