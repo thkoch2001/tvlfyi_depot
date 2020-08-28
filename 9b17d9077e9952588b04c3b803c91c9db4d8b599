@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "f5a0be08_0184ebd3",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-28T15:39:44Z",
+      "side": 1,
+      "message": "If you really feel like it\u0027s more idiomatic to reuse the variable I\u0027ve just done that. Feels weird to me, but I\u0027m admittedly more uncomfortable than most with local mutation.",
+      "parentUuid": "bf3755ae_8d967aa1",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 295,
+        "endChar": 44
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78c99cc4_cd4ba45d",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon-proto.cc",
         "patchSetId": 2
