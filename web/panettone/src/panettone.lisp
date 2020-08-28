@@ -526,12 +526,16 @@
 (defun start-panettone (&key port
                           (ldap-host "localhost")
                           (ldap-port 389)
-                          postgres-params)
+                          postgres-params
+                          session-secret)
   (connect-ldap :host ldap-host
                 :port ldap-port)
 
   (apply #'model:connect-postgres postgres-params)
   (migrate-db)
+
+  (when session-secret
+    (setq hunchentoot:*session-secret* session-secret))
 
   (setq *acceptor*
         (make-instance 'easy-routes:routes-acceptor :port port))
@@ -540,12 +544,16 @@
 (defun main ()
   (let ((port (integer-env "PANETTONE_PORT" :default 6161))
         (ldap-port (integer-env "LDAP_PORT" :default 389))
-        (cheddar-url (uiop:getenvp "CHEDDAR_URL")))
+        (cheddar-url (uiop:getenvp "CHEDDAR_URL"))
+        (session-secret (uiop:getenvp "SESSION_SECRET")))
     (when cheddar-url (setq *cheddar-url* cheddar-url))
     (setq hunchentoot:*show-lisp-backtraces-p* nil)
     (setq hunchentoot:*log-lisp-backtraces-p* nil)
+
     (start-panettone :port port
-                     :ldap-port ldap-port)
+                     :ldap-port ldap-port
+                     :session-secret session-secret)
+
     (sb-thread:join-thread
      (find-if (lambda (th)
                 (string= (sb-thread:thread-name th)
@@ -555,5 +563,6 @@
 (comment
  (setq hunchentoot:*catch-errors-p* nil)
  (start-panettone :port 6161
-                  :ldap-port 3899)
+                  :ldap-port 3899
+                  :session-secret "session-secret")
  )
