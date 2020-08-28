@@ -65,33 +65,35 @@
 
 (setf (who:html-mode) :html5)
 
-(defun render/footer-nav ()
+(defun render/nav ()
   (who:with-html-output (*standard-output*)
-    (:footer
-     (:nav
-      (if (find (hunchentoot:request-uri*)
-                (list "/" "/issues/closed")
-                :test #'string=)
-          (who:htm (:span :class "placeholder"))
-          (who:htm (:a :href "/" "All Issues")))
-      (if *user*
-          (who:htm
-           (:form :class "form-link log-out"
-                  :method "post"
-                  :action "/logout"
-                  (:input :type "submit" :value "Log Out")))
-          (who:htm
-           (:a :href
-               (format nil
-                       "/login?original-uri=~A"
-                       (drakma:url-encode (hunchentoot:request-uri*)
-                                          :utf-8))
-               "Log In")))))))
+    (:nav
+     (if (find (car (split "\\?" (hunchentoot:request-uri*) :limit 2))
+               (list "/" "/issues/closed")
+               :test #'string=)
+         (who:htm (:span :class "placeholder"))
+         (who:htm (:a :href "/" "All Issues")))
+     (if *user*
+         (who:htm
+          (:form :class "form-link log-out"
+                 :method "post"
+                 :action "/logout"
+                 (:input :type "submit" :value "Log Out")))
+         (who:htm
+          (:a :href
+              (format nil
+                      "/login?original-uri=~A"
+                      (drakma:url-encode (hunchentoot:request-uri*)
+                                         :utf-8))
+              "Log In"))))))
 
 (defun author (object)
   (find-user-by-dn (author-dn object)))
 
-(defmacro render ((&key (footer t)) &body body)
+(defmacro render ((&key
+                     (footer t)
+                     (header t))
+                  &body body)
   `(who:with-html-output-to-string (*standard-output* nil :prologue t)
      (:html
       :lang "en"
@@ -103,9 +105,14 @@
       (:body
        (:div
         :class "content"
+        (when ,header
+          (who:htm
+           (render/nav)))
         ,@body
         (when ,footer
-          (render/footer-nav)))))))
+          (who:htm
+           (:footer
+            (render/nav)))))))))
 
 (defun form-button (&key
                       class
@@ -129,7 +136,7 @@
       (who:htm (:div :class "alert" (who:esc message))))))
 
 (defun render/login (&key message (original-uri "/"))
-  (render (:footer nil)
+  (render (:footer nil :header nil)
     (:div
      :class "login-form"
      (:header

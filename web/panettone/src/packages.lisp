@@ -41,6 +41,7 @@
         :panettone.authentication)
   (:import-from :defclass-std :defclass/std)
   (:import-from :alexandria :if-let :when-let :switch :alist-hash-table)
+  (:import-from :cl-ppcre :split)
   (:import-from
    :panettone.model
    :id :subject :body :author-dn :issue-id :status :created-at
