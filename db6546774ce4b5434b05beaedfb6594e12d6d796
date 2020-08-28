@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d763b004_7c15c451",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-28T23:42:55Z",
+      "side": 1,
+      "message": "wait... why are we doing this again? can you say so in the commit?",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 63
+      },
+      "revId": "db6546774ce4b5434b05beaedfb6594e12d6d796",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63dc4d35_ba8cb085",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -42,6 +65,23 @@
         "endLine": 123,
         "endChar": 25
       },
+      "revId": "db6546774ce4b5434b05beaedfb6594e12d6d796",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc5b9281_e223d941",
+        "filename": "fun/paroxysm/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-28T23:42:55Z",
+      "side": 1,
+      "message": "I kinda want to say this should explicitly take failure and warn then discard, as we don\u0027t want tvldb to go down if your pastebin goes down.",
       "revId": "db6546774ce4b5434b05beaedfb6594e12d6d796",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
