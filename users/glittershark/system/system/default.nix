@@ -1,7 +1,11 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 rec {
   chupacabra = import ./machines/chupacabra.nix;
+
+  chupacabraSystem = (pkgs.nixos {
+    configuration = chupacabra;
+  }).system // { __readTree = true; };
 
   rebuilder =
     let
