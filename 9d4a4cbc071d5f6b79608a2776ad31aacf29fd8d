@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e4e152c_38979493",
+        "filename": "fun/paroxysm/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-28T23:53:10Z",
+      "side": 1,
+      "message": "what\u0027s using this?",
+      "revId": "9d4a4cbc071d5f6b79608a2776ad31aacf29fd8d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}

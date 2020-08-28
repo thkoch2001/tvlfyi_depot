@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15cefd3e_5d9009af",
+        "filename": "fun/paroxysm/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-28T23:53:10Z",
+      "side": 1,
+      "message": "this is a weird way of spelling `return` :P",
+      "revId": "c05f65e27bd66ca8f8c7c87bb76ae2825e7ca339",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
