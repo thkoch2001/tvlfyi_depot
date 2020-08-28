@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63dc4d35_ba8cb085",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-08-28T23:39:04Z",
+      "side": 1,
+      "message": "This wraps 😞",
+      "range": {
+        "startLine": 9,
+        "startChar": 72,
+        "endLine": 9,
+        "endChar": 76
+      },
+      "revId": "db6546774ce4b5434b05beaedfb6594e12d6d796",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5827714_93187ea5",
+        "filename": "fun/paroxysm/src/keyword.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-08-28T23:39:04Z",
+      "side": 1,
+      "message": "Use a named format! instead? It might stand a chance at making it more readable.",
+      "range": {
+        "startLine": 123,
+        "startChar": 16,
+        "endLine": 123,
+        "endChar": 25
+      },
+      "revId": "db6546774ce4b5434b05beaedfb6594e12d6d796",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
