@@ -1,4 +1,7 @@
-{ perl, stdenv, fetchFromGitHub }:
+{ pkgs }:
+
+with pkgs;
+
 stdenv.mkDerivation {
   name = "alsi";
   pname = "alsi";
