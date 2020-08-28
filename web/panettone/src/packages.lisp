@@ -11,7 +11,7 @@
   (:nicknames :authn)
   (:use :cl :panettone.util :klatre)
   (:import-from :defclass-std :defclass/std)
-  (:import-from :alexandria :when-let)
+  (:import-from :alexandria :when-let :with-gensyms)
   (:export
    :*user* :*ldap*
    :user :cn :dn :mail :displayname
