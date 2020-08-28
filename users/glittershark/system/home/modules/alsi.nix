@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
-let alsi = pkgs.callPackage ../../pkgs/alsi {};
-in
 {
-  home.packages = [ alsi ];
+  home.packages = [ config.lib.depot.third_party.alsi ];
 
   xdg.configFile."alsi/alsi.logo" = {
     source = ./nixos-logo.txt;
