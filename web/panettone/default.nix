@@ -5,6 +5,7 @@ depot.nix.buildLisp.program {
 
   deps = with depot.third_party.lisp; [
     cl-json
+    cl-ppcre
     cl-who
     drakma
     defclass-std
