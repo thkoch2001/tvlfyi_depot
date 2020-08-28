@@ -571,6 +571,8 @@
 
 (comment
  (setq hunchentoot:*catch-errors-p* nil)
+ ;; to setup an ssh tunnel to ldap+cheddar for development:
+ ;; ssh -NL 3899:localhost:389 -L 4238:localhost:4238 whitby.tvl.fyi
  (start-panettone :port 6161
                   :ldap-port 3899
                   :session-secret "session-secret")
