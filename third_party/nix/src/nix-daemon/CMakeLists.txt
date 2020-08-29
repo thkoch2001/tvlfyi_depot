@@ -8,6 +8,8 @@ add_executable(nix-daemon)
 include_directories(${PROJECT_BINARY_DIR}) # for config.h
 set_property(TARGET nix-daemon PROPERTY CXX_STANDARD 17)
 
+pkg_check_modules(systemd REQUIRED)
+
 target_sources(nix-daemon
   PRIVATE
     nix-daemon-proto.hh
@@ -21,6 +23,7 @@ target_link_libraries(nix-daemon
   nixmain
   absl::flags
   absl::flags_parse
+  systemd
 )
 
 install(TARGETS nix-daemon DESTINATION bin)
