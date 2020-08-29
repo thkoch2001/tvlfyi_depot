@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bea032ef_a8cb1169",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-29T02:03:59Z",
+      "side": 1,
+      "message": "// Should be set to the bandwidth-delay product between the client and the daemon. This measurement comes from a developer\u0027s desktop computer, rounded up.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 40
+      },
+      "revId": "98173d5e14b1ac4183c040ea94fc39078fd2d56f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
