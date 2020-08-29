@@ -61,6 +61,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     grpc
     libseccomp
     libsodium
+    systemd.lib.dev
     openssl
     protobuf
     sqlite
