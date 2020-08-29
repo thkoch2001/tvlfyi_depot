@@ -61,6 +61,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     grpc
     libseccomp
     libsodium
+    systemd.lib.dev
     openssl
     protobuf
     sqlite
@@ -85,7 +86,6 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     cd build
     cmake .. \
       -DCMAKE_INSTALL_PREFIX=$out \
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF \
       -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF \
       -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
