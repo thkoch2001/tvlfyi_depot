@@ -305,6 +305,30 @@
       "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b25ef40_ec48863c",
+        "filename": "third_party/nix/src/proto/worker.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-29T02:17:49Z",
+      "side": 1,
+      "message": "Used this to reserve the string buffer on the server side, which is what I had intended it for in the first place.",
+      "parentUuid": "bec70e7d_5755ab29",
+      "range": {
+        "startLine": 229,
+        "startChar": 4,
+        "endLine": 229,
+        "endChar": 20
+      },
+      "revId": "9b17d9077e9952588b04c3b803c91c9db4d8b599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
