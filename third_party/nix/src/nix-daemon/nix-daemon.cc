@@ -26,6 +26,10 @@ namespace nix::daemon {
 
 using grpc::Server;
 using grpc_impl::ServerBuilder;
+using ExternalConnectionType =
+    ServerBuilder::experimental_type::ExternalConnectionType;
+using NewConnectionParameters =
+    grpc::experimental::ExternalConnectionAcceptor::NewConnectionParameters;
 
 // TODO(grfn): There has to be a better way to do this - this was ported
 // verbatim from the old daemon implementation without much critical evaluation.
@@ -86,6 +90,8 @@ static int ForwardToSocket(nix::Path socket_path) {
   }
 }
 
+constexpr int kSdListenFdsStart = 3;
+
 int RunServer() {
   Store::Params params;
   params["path-info-cache-size"] = "0";
@@ -97,7 +103,46 @@ int RunServer() {
   auto socket_addr = absl::StrFormat("unix://%s", socket_path);
 
   ServerBuilder builder;
-  builder.AddListeningPort(socket_addr, grpc::InsecureServerCredentials());
+  if (!getEnv("LISTEN_FDS").empty()) {
+    // Handle systemd socket activation
+    if (getEnv("LISTEN_PID") != std::to_string(getpid()) ||
+        getEnv("LISTEN_FDS") != "1") {
+      throw Error("Unexpected systemd environment variables");
+    }
+    auto socket_fd = kSdListenFdsStart;
+
+    auto acceptor = builder.experimental().AddExternalConnectionAcceptor(
+        ExternalConnectionType::FROM_FD, grpc::InsecureServerCredentials());
+    for (;;) {
+      try {
+        struct sockaddr_un remote_addr {};
+        socklen_t remote_addr_len = sizeof(remote_addr);
+
+        int remote_fd =
+            accept(socket_fd, reinterpret_cast<struct sockaddr*>(&remote_addr),
+                   &remote_addr_len);
+        checkInterrupt();
+
+        if (!remote_fd) {
+          if (errno == EINTR) {
+            continue;
+          }
+          PCHECK(false) << "error accepting connection";
+        }
+
+        NewConnectionParameters p;
+        p.listener_fd = socket_fd;
+        p.fd = remote_fd;
+        acceptor->HandleNewConnection(&p);
+      } catch (Interrupted& e) {
+        return -1;
+      } catch (Error& e) {
+        LOG(ERROR) << "error processing connection: " << e.msg();
+      }
+    }
+  } else {
+    builder.AddListeningPort(socket_addr, grpc::InsecureServerCredentials());
+  }
   builder.RegisterService(worker);
 
   std::unique_ptr<Server> server(builder.BuildAndStart());
