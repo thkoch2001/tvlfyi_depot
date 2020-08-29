@@ -61,6 +61,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     grpc
     libseccomp
     libsodium
+    systemd.lib.dev
     openssl
     protobuf
     sqlite
@@ -85,7 +86,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     cd build
     cmake .. \
       -DCMAKE_INSTALL_PREFIX=$out \
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      -DCMAKE_BUILD_TYPE=Debug \
       -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF \
       -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF \
       -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
@@ -136,7 +137,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
     # configuration variables for templated files
     export storedir=/nix/store
-    export localstatedir=/nix/var/nix
+    export localstatedir=/nix/var
     export bindir=$out/bin
 
     mkdir -p $out/lib/systemd/system
@@ -146,6 +147,12 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     substituteAll \
       ${src}/misc/systemd/nix-daemon.socket.in \
       $out/lib/systemd/system/nix-daemon.socket
+
+    mkdir -p $out/etc/profile.d
+    substituteAll \
+      ${src}/scripts/nix-profile.sh.in $out/etc/profile.d/nix.sh
+    substituteAll \
+      ${src}/scripts/nix-profile-daemon.sh.in $out/etc/profile.d/nix-daemon.sh
   '';
 
   # TODO(tazjin): integration test setup?

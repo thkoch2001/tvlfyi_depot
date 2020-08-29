@@ -7,6 +7,8 @@ ConditionPathIsReadWrite=@localstatedir@/nix/daemon-socket
 [Service]
 ExecStart=@@bindir@/nix-daemon nix-daemon
 KillMode=process
+Environment=GRPC_VERBOSITY=DEBUG
+Environment=GRPC_TRACE=server_channel,executor,channel,api,fd_trace,polling
 
 [Install]
 WantedBy=multi-user.target
