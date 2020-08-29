@@ -6,9 +6,13 @@
 #include <streambuf>
 #include <string>
 
+#include <absl/container/flat_hash_set.h>
 #include <absl/strings/str_cat.h>
 #include <absl/strings/str_format.h>
+#include <glog/logging.h>
+#include <google/protobuf/descriptor.h>
 #include <google/protobuf/empty.pb.h>
+#include <google/protobuf/reflection.h>
 #include <google/protobuf/util/time_util.h>
 #include <grpcpp/impl/codegen/server_context.h>
 #include <grpcpp/impl/codegen/status.h>
@@ -16,6 +20,7 @@
 #include <grpcpp/impl/codegen/sync_stream.h>
 
 #include "libmain/shared.hh"
+#include "libproto/common.pb.h"
 #include "libproto/worker.grpc.pb.h"
 #include "libproto/worker.pb.h"
 #include "libstore/derivations.hh"
@@ -109,6 +114,112 @@ class BuildLogStreambuf final : public std::streambuf {
  private:
   Writer* writer_{};
 };
+
+absl::Status ApplySettings(grpc::ServerContext* context) {
+  auto metadata = context->client_metadata();
+  // Need to convert string_view to grpc::string_ref
+  grpc::string_ref optionsIdent = grpc::string_ref(
+      kNixOptionsIdentifier.data(), kNixOptionsIdentifier.length());
+
+  auto range = metadata.equal_range(optionsIdent);
+  nix::proto::RemoteOptions options;
+  for (auto it = range.first; it != range.second; ++it) {
+    // DCHECK(it->first == optionsIdent);
+    // TODO(riking): zero copy this?
+    std::string data(it->second.cbegin(), it->second.cend());
+    if (!options.ParseFromString(data)) {
+      return absl::InvalidArgumentError("could not parse nix.options");
+    }
+  }
+
+  auto descriptor = options.GetDescriptor();
+  auto reflection = options.GetReflection();
+  for (int fnum = 0; fnum < descriptor->field_count(); fnum++) {
+    auto field = descriptor->field(fnum);
+    if (!reflection->HasField(options, field)) {
+      continue;
+    }
+    if (!field->options().HasExtension(nix::proto::setting)) {
+      continue;
+    }
+    auto ext = field->options().GetExtension(nix::proto::setting);
+    const auto& setting_name = ext.name();
+
+    switch (field->number()) {
+      case nix::proto::RemoteOptions::kMaxSilentTimeFieldNumber: {
+        settings.set(setting_name, absl::StrCat(TimeUtil::DurationToSeconds(
+                                       options.max_silent_time())));
+        break;
+      }
+      case nix::proto::RemoteOptions::kBuildTimeoutFieldNumber: {
+        settings.set(
+            setting_name,
+            absl::StrCat(TimeUtil::DurationToSeconds(options.build_timeout())));
+        break;
+      }
+      case nix::proto::RemoteOptions::kConnectTimeoutFieldNumber: {
+        settings.set(setting_name, absl::StrCat(TimeUtil::DurationToSeconds(
+                                       options.connect_timeout())));
+        break;
+      }
+      case nix::proto::RemoteOptions::kSubstitutersFieldNumber:
+      case nix::proto::RemoteOptions::kExtraSubstitutersFieldNumber: {
+        absl::flat_hash_set<absl::string_view> permittedSubstituters;
+        permittedSubstituters.insert(settings.trustedSubstituters.get().begin(),
+                                     settings.trustedSubstituters.get().end());
+        permittedSubstituters.insert(settings.substituters.get().begin(),
+                                     settings.substituters.get().end());
+
+        auto& provided = (field->number() ==
+                       nix::proto::RemoteOptions::kSubstitutersFieldNumber)
+                          ? options.substituters()
+                          : options.extra_substituters();
+        nix::Strings result;
+        for (const auto& s : provided) {
+          if (permittedSubstituters.contains(s)) {
+            result.push_back(s);
+          } else {
+            LOG(WARNING) << "ignoring untrusted substituter from client: '" << s
+                         << "'";
+          }
+        }
+
+        if (field->number() ==
+            nix::proto::RemoteOptions::kSubstitutersFieldNumber) {
+          settings.substituters = result;
+        } else {
+          settings.extraSubstituters = result;
+        }
+        break;
+      }
+      default:
+        using CppType = google::protobuf::FieldDescriptor::CppType;
+        switch (field->cpp_type()) {
+          case CppType::CPPTYPE_INT64: {
+            settings.set(setting_name,
+                         absl::StrCat(reflection->GetInt64(options, field)));
+            break;
+          }
+          case CppType::CPPTYPE_BOOL: {
+            bool v = reflection->GetBool(options, field);
+            settings.set(setting_name, v ? "true" : "false");
+            break;
+          }
+          default: {
+            return absl::UnimplementedError(
+                "common setting field's type not supported");
+          }
+        }
+        break;
+    }
+  }
+
+  if (false /* user is trusted? */) {
+    for (const auto& pair : options.overrides()) {
+      settings.set(pair.first, pair.second);
+    }
+  }
+}
 
 class WorkerServiceImpl final : public WorkerService::Service {
  public:

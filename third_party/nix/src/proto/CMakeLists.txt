@@ -11,6 +11,7 @@ add_library(nixproto SHARED)
 set_property(TARGET nixproto PROPERTY CXX_STANDARD 17)
 
 set(HEADER_FILES
+  $ENV{NIX_PROTO_SRCS}/libproto/common.pb.h
   $ENV{NIX_PROTO_SRCS}/libproto/worker.grpc.pb.h
   $ENV{NIX_PROTO_SRCS}/libproto/worker.pb.h
 )
@@ -20,6 +21,7 @@ target_sources(nixproto
     ${HEADER_FILES}
 
   PRIVATE
+    $ENV{NIX_PROTO_SRCS}/libproto/common.pb.cc
     $ENV{NIX_PROTO_SRCS}/libproto/worker.grpc.pb.cc
     $ENV{NIX_PROTO_SRCS}/libproto/worker.pb.cc
 )

@@ -1,9 +1,35 @@
 syntax = "proto3";
 
+import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "common.proto";
 
 package nix.proto;
+
+// Pased to the server as the 'nix.options' metadata.
+message RemoteOptions {
+  // Settings usable by untrusted users are passed outside the map.
+  bool keep_failed = 2 [(nix.proto.setting).name = "keep-failed"];
+  bool keep_going = 3 [(nix.proto.setting).name = "keep-going"];
+  bool try_fallback = 4 [(nix.proto.setting).name = "fallback"];
+
+  int64 max_build_jobs = 5 [(nix.proto.setting).name = "max-jobs"];
+  google.protobuf.Duration max_silent_time = 6
+      [(nix.proto.setting).name = "max-silent-time"];
+  int64 build_cores = 7 [(nix.proto.setting).name = "cores"];
+  google.protobuf.Duration build_timeout = 8
+      [(nix.proto.setting).name = "timeout"];
+  google.protobuf.Duration connect_timeout = 9
+      [(nix.proto.setting).name = "connect-timeout"];
+  repeated string substituters = 10 [(nix.proto.setting).name = "substituters"];
+  repeated string extra_substituters = 11
+      [(nix.proto.setting).name = "extra-substituters"];
+
+  // All setting overrides. Only usable by trusted users.
+
+  map<string, string> overrides = 1;
+}
 
 // Service representing a worker used for building and interfacing
 // with the Nix store.

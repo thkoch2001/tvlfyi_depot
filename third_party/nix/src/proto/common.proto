@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+
+package nix.proto;
+
+message SettingsFieldMeta {
+  string name = 1;
+}
+
+extend google.protobuf.FieldOptions {
+  optional SettingsFieldMeta setting = 310504807;
+}

@@ -8,7 +8,7 @@
 #include <glog/logging.h>
 #include <grpcpp/security/server_credentials.h>
 #include <grpcpp/server.h>
-#include <grpcpp/server_builder_impl.h>
+#include <grpcpp/server_builder.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 
