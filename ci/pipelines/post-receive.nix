@@ -41,7 +41,7 @@ let
           --batch \
           --load ${elispLintSrc}/elisp-lint.el \
           --funcall elisp-lint-files-batch \
-          "$@"
+          "$$@"
       '';
       label = ":gnu: lint Emacs";
       depends_on = "init-emacs";
