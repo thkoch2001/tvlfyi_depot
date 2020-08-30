@@ -136,7 +136,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
     # configuration variables for templated files
     export storedir=/nix/store
-    export localstatedir=/nix/var/nix
+    export localstatedir=/nix/var
     export bindir=$out/bin
 
     mkdir -p $out/lib/systemd/system
