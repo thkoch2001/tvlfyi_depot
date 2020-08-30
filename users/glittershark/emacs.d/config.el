@@ -27,6 +27,7 @@
 (load! "email")
 (load! "cpp")
 (load! "lisp")
+(load! "clojure")
 
 (require 'tvl)
 
@@ -407,7 +408,8 @@
 
 (after! paxedit
   (add-hook! emacs-lisp-mode #'paxedit-mode)
-  (add-hook! clojure-mode #'paxedit-mode))
+  (add-hook! clojure-mode #'paxedit-mode)
+  (add-hook! common-lisp-mode #'paxedit-mode))
 
 (require 'haskell)
 
@@ -873,41 +875,6 @@
     :and "and" :or "or"
     :for "for"
     :return "return" :yield "yield"))
-
-(after! clojure-mode
-  (define-clojure-indent
-    (PUT 2)
-    (POST 2)
-    (GET 2)
-    (PATCH 2)
-    (DELETE 2)
-    (context 2)
-    (checking 3)
-    (match 1)
-    (domonad 0)
-    (describe 1)
-    (before 1)
-    (it 2)))
-
-(set-popup-rule!
-  "^\\*cider-test-report\\*$"
-  :size 0.5)
-
-(use-package! flycheck-clojure
-  ;; :disabled t
-  :after (flycheck cider)
-  :config
-  (flycheck-clojure-setup))
-
-(after! clj-refactor
-  (setq cljr-magic-requires :prompt
-        cljr-clojure-test-declaration "[clojure.test :refer :all]"
-        cljr-cljc-clojure-test-declaration"#?(:clj [clojure.test :refer :all]
-:cljs [cljs.test :refer-macros [deftest is testing])"
-        )
-  (add-to-list
-   'cljr-magic-require-namespaces
-   '("s" . "clojure.spec.alpha")))
 
 (use-package! sqlup-mode
   :hook
