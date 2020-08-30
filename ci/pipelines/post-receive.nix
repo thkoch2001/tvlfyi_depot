@@ -19,7 +19,9 @@ let
     }
     {
       key = "build-briefcase";
-      command = "nix-build . -I briefcase=$(pwd) --no-out-link --show-trace";
+      command = ''
+        nix-build . -I briefcase="$(pwd)" --no-out-link --show-trace
+      '';
       label = ":nix: build briefcase";
       depends_on = "lint-secrets";
     }
