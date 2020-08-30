@@ -16,6 +16,24 @@
       "revId": "8eb4fdae6044e4d7cb86f7b12f19e2c43accbc56",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9bbc8b4_b09fc288",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-30T22:16:21Z",
+      "side": 1,
+      "message": "well, no, but since we have to implement our own accept loop the extra complexity overhead doesn\u0027t really feel worth it yet without a compelling use case. down the road if the need presents itself to support multiple fds I think it\u0027d probably be fine to add support for.",
+      "parentUuid": "ed5cdde6_021a9720",
+      "revId": "8eb4fdae6044e4d7cb86f7b12f19e2c43accbc56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
