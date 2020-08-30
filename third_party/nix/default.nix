@@ -146,6 +146,12 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     substituteAll \
       ${src}/misc/systemd/nix-daemon.socket.in \
       $out/lib/systemd/system/nix-daemon.socket
+
+    mkdir -p $out/etc/profile.d
+    substituteAll \
+      ${src}/scripts/nix-profile.sh.in $out/etc/profile.d/nix.sh
+    substituteAll \
+      ${src}/scripts/nix-profile-daemon.sh.in $out/etc/profile.d/nix-daemon.sh
   '';
 
   # TODO(tazjin): integration test setup?
