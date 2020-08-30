@@ -67,6 +67,12 @@ in {
         filehistory = "/depot@\${commit}/-/blob/\${file}#&tab=history";
       };
 
+      # Auto-link panettone bug links
+      commentlink.panettone = {
+        match = "b/(\\d+)";
+        html = "<a href=\"https://b.tvl.fyi/issues/$1\">b/$1</a>";
+      };
+
       # Configures integration with the locally running OpenLDAP
       auth.type = "LDAP";
       ldap = {
