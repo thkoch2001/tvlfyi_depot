@@ -149,6 +149,7 @@ in lib.fix(self: {
   time.timeZone = "UTC";
 
   nix = {
+    package = depot.third_party.nix;
     nrBuildUsers = 128;
     maxJobs = lib.mkDefault 64;
     extraOptions = ''
@@ -186,6 +187,7 @@ in lib.fix(self: {
       enable = true;
       tokenPath = "/etc/secrets/buildkite-agent-token";
       hooks.post-command = "${buildkiteHooks}/bin/post-command";
+      runtimePackages = [ depot.third_party.nix ];
     };
   }) (range 1 32));
 
