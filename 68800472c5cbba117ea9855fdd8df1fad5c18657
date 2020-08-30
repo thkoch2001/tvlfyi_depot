@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b43a49f0_8c9cf3eb",
+        "filename": "third_party/nix/src/libutil/util.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-30T00:23:55Z",
+      "side": 1,
+      "message": "Can we rewrite this function? value_or() is not needed here.",
+      "range": {
+        "startLine": 511,
+        "startChar": 2,
+        "endLine": 516,
+        "endChar": 14
+      },
+      "revId": "68800472c5cbba117ea9855fdd8df1fad5c18657",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e69efa1_d09f802f",
+        "filename": "third_party/nix/src/nix-build/nix-build.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-30T00:23:55Z",
+      "side": 1,
+      "message": "assert shell.has_value() somehow, or rebind the variable, to avoid the \"*shell\" lower down",
+      "range": {
+        "startLine": 405,
+        "startChar": 0,
+        "endLine": 405,
+        "endChar": 5
+      },
+      "revId": "68800472c5cbba117ea9855fdd8df1fad5c18657",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
