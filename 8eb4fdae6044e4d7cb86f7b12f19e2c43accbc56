@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed5cdde6_021a9720",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-30T20:23:58Z",
+      "side": 1,
+      "message": "Is there any reason why you\u0027re failing on \u003e 1 fd? Does grpc not let you add multiple listeners?",
+      "revId": "8eb4fdae6044e4d7cb86f7b12f19e2c43accbc56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
