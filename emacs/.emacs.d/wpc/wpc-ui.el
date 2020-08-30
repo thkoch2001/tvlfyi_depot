@@ -21,8 +21,8 @@
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; increase line height
-(setq-default line-spacing 4)
+;; line height
+(setq-default line-spacing 0)
 
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
