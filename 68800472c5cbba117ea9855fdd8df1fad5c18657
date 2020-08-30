@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5e27fab2_dc71df9b",
+        "filename": "third_party/nix/src/libutil/util.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-30T15:58:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b43a49f0_8c9cf3eb",
+      "range": {
+        "startLine": 511,
+        "startChar": 2,
+        "endLine": 516,
+        "endChar": 14
+      },
+      "revId": "68800472c5cbba117ea9855fdd8df1fad5c18657",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e69efa1_d09f802f",
         "filename": "third_party/nix/src/nix-build/nix-build.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "68800472c5cbba117ea9855fdd8df1fad5c18657",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee3fe72d_309ffe1f",
+        "filename": "third_party/nix/src/nix-build/nix-build.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-30T15:58:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e69efa1_d09f802f",
+      "range": {
+        "startLine": 405,
+        "startChar": 0,
+        "endLine": 405,
+        "endChar": 5
+      },
+      "revId": "68800472c5cbba117ea9855fdd8df1fad5c18657",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
