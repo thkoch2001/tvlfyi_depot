@@ -20,7 +20,6 @@
 
 (require 'clipboard)
 (require 'screen-brightness)
-(require 'chrome)
 (require 'scrot)
 (require 'ivy-clipmenu)
 (require 'general)
@@ -126,7 +125,6 @@
 (keybinding/exwm "<XF86AudioLowerVolume>" #'pulse-audio/decrease-volume)
 (keybinding/exwm "<XF86AudioRaiseVolume>" #'pulse-audio/increase-volume)
 (keybinding/exwm "<XF86AudioMicMute>" #'pulse-audio/toggle-microphone)
-(keybinding/exwm "C-M-c" #'chrome/browse)
 (keybinding/exwm (kbd/raw 'x11 "s") #'scrot/select)
 (keybinding/exwm "<C-M-tab>" #'window-manager-switch-to-exwm-buffer)
 
