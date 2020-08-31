@@ -21,7 +21,11 @@
 
 ;; Constants
 (defconst wpc-javascript--js-hooks
-  '(js-mode-hook web-mode-hook typescript-mode-hook js2-mode-hook rjsx-mode-hook)
+  '(js-mode-hook
+    web-mode-hook
+    typescript-mode-hook
+    js2-mode-hook
+    rjsx-mode-hook)
   "All of the commonly used hooks for Javascript buffers.")
 
 (defconst wpc-javascript--frontend-hooks
