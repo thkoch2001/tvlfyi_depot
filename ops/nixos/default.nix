@@ -48,4 +48,5 @@ rec {
   # TODO(tazjin): Refactor the whole systems setup, it's a bit
   # inconsistent at the moment.
   whitbySystem = (nixosFor whitby).system;
+  targets = [ "whitbySystem" ];
 }
