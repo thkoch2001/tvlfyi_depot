@@ -1,5 +1,9 @@
 ;;; vterm-mgt.el --- Help me manage my vterm instances -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 ;; Supporting functions to instantiate vterm buffers, kill existing vterm
