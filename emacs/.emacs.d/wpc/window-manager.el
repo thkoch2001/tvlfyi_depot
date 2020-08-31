@@ -107,20 +107,6 @@
   (evil-set-initial-state 'exwm-mode 'emacs)
   (setq exwm-workspace-number
         (list/length window-manager--named-workspaces))
-  ;; EXWM supports "line-mode" and "char-mode".
-  ;;
-  ;; Note: It appears that calling `exwm-input-set-key' works if it's called
-  ;; during startup.  Once a session has started, it seems like this function is
-  ;; significantly less useful.  Is this a bug?
-  ;;
-  ;; Glossary:
-  ;; - char-mode: All keystrokes except `exwm' global ones are passed to the
-  ;;   application.
-  ;; - line-mode:
-  ;;
-  ;; `exwm-input-global-keys' = {line,char}-mode; can also call `exwm-input-set-key'
-  ;; `exwm-mode-map'          = line-mode
-  ;; `???'                    = char-mode. Is there a mode-map for this?
   (let ((kbds `(
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                 ;; Window sizing
@@ -176,7 +162,8 @@
     (setq exwm-input-global-keys
           (->> kbds
                (-map (lambda (plist)
-                       `(,(kbd (plist-get plist :key)) . ,(plist-get plist :fn)))))))
+                       `(,(kbd (plist-get plist :key)) .
+                         ,(plist-get plist :fn)))))))
   (setq exwm-input-simulation-keys
         ;; TODO: Consider supporting M-d and other readline style KBDs.
         '(([?\C-b] . [left])
@@ -304,7 +291,8 @@ Ivy is used to capture the user's input."
 
 (defun window-manager--label->index (label workspaces)
   "Return the index of the workspace in WORKSPACES named LABEL."
-  (let ((index (-elem-index label (-map #'window-manager--named-workspace-label workspaces))))
+  (let ((index (-elem-index label (-map #'window-manager--named-workspace-label
+                                        workspaces))))
     (if index index (error (format "No workspace found for label: %s" label)))))
 
 (defun window-manager--register-kbd (workspace)
@@ -312,7 +300,8 @@ Ivy is used to capture the user's input."
 Currently using super- as the prefix for switching workspaces."
   (let ((handler (lambda ()
                    (interactive)
-                   (window-manager--switch (window-manager--named-workspace-label workspace))))
+                   (window-manager--switch
+                    (window-manager--named-workspace-label workspace))))
         (key (window-manager--named-workspace-kbd workspace)))
     (exwm-input-set-key
      (kbd/for 'workspace key)
@@ -321,10 +310,12 @@ Currently using super- as the prefix for switching workspaces."
 (defun window-manager--change-workspace (workspace)
   "Switch EXWM workspaces to the WORKSPACE struct."
   (exwm-workspace-switch
-   (window-manager--label->index (window-manager--named-workspace-label workspace)
-                      window-manager--named-workspaces))
+   (window-manager--label->index
+    (window-manager--named-workspace-label workspace)
+    window-manager--named-workspaces))
   (window-manager--alert
-   (string/format "Switched to: %s" (window-manager--named-workspace-label workspace))))
+   (string/format "Switched to: %s"
+                  (window-manager--named-workspace-label workspace))))
 
 (defun window-manager--switch (label)
   "Switch to a named workspaces using LABEL."
@@ -339,7 +330,8 @@ Currently using super- as the prefix for switching workspaces."
 (defun window-manager-toggle-previous ()
   "Focus the previously active EXWM workspace."
   (interactive)
-  (window-manager--change-workspace (cycle/focus-previous! window-manager--workspaces)))
+  (window-manager--change-workspace
+   (cycle/focus-previous! window-manager--workspaces)))
 
 (defun window-manager--exwm-buffer? (x)
   "Return t if buffer X is an EXWM buffer."
@@ -347,7 +339,8 @@ Currently using super- as the prefix for switching workspaces."
 
 (defun window-manager--application-name (buffer)
   "Return the name of the application running in the EXWM BUFFER.
-This function asssumes that BUFFER passes the `window-manager--exwm-buffer?' predicate."
+This function asssumes that BUFFER passes the `window-manager--exwm-buffer?'
+predicate."
   (with-current-buffer buffer exwm-class-name))
 
 ;; TODO: Support disambiguating between two or more instances of the same
@@ -358,9 +351,10 @@ This function asssumes that BUFFER passes the `window-manager--exwm-buffer?' pre
   (interactive)
   (let* ((buffer-alist (->> (buffer-list)
                             (-filter #'window-manager--exwm-buffer?)
-                            (-map (lambda (buffer)
-                                    (cons (window-manager--application-name buffer)
-                                          buffer)))))
+                            (-map
+                             (lambda (buffer)
+                               (cons (window-manager--application-name buffer)
+                                     buffer)))))
          (label (completing-read "Switch to EXWM buffer: " buffer-alist)))
     (exwm-workspace-switch-to-buffer
      (alist-get label buffer-alist nil nil #'string=))))

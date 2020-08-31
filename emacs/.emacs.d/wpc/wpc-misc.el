@@ -3,7 +3,7 @@
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1"))
-;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
 
 ;;; Commentary:
 ;; This is the home of any configuration that couldn't find a better home.

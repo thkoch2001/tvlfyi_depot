@@ -1,5 +1,9 @@
-;;; email.el --- My Emacs email settings -*- lexical-binding: t -*-
+;;; email.el --- My email settings -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
 ;; Attempting to configure to `notmuch' for my personal use.

@@ -24,7 +24,6 @@
   :config
   (evil-set-initial-state 'org-mode 'normal)
   (general-add-hook 'org-mode-hook
-                    ;; TODO: consider supporting `(disable (list linum-mode company-mode))'
                     (list (disable linum-mode)
                           (disable company-mode)))
   (setq org-startup-folded nil)
