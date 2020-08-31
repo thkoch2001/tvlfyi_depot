@@ -19,7 +19,8 @@
 (require 'prelude)
 (require 'f)
 
-(defvar opam-user-setup "~/.emacs.d/opam-user-setup.el"
+(defconst opam-user-setup
+  (f-join user-emacs-directory "opam-user-setup.el")
   "File for the OPAM Emacs integration.")
 
 (prelude/assert (f-file? opam-user-setup))
@@ -33,7 +34,7 @@
   (add-hook-before-save 'tuareg-mode-hook #'ocamlformat-before-save))
 
 ;; ocamlformat
-(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+(require 'opam-user-setup opam-user-setup)
 (require 'ocamlformat)
 
 (provide 'wpc-ocaml)
