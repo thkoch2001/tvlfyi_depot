@@ -157,8 +157,7 @@
                 ;; Workspaces
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-                (:key ,(kbd/raw 'workspace "l") :fn window-manager-logout)
-                (:key ,(kbd/raw 'workspace "i") :fn window-manager-toggle-mode))))
+                (:key ,(kbd/raw 'workspace "l") :fn window-manager-logout))))
     (setq exwm-input-global-keys
           (->> kbds
                (-map (lambda (plist)
