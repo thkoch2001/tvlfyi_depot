@@ -74,16 +74,6 @@
 ;; set default buffer for Emacs
 (setq initial-buffer-choice constants/current-project)
 
-;; TODO: Re-enable this when base16-wpgtk are looking better.
-;; integration with wpgtk (in vendor directory)
-;; (require 'wpgtk-theme)
-
-;; base-16 themes to integrate with wpgtk
-;; (use-package base16-theme
-;;   :config
-;;   (require 'wpgtk)
-;;   (colorscheme/set 'base16-wpgtk))
-
 ;; premium Emacs themes
 (use-package doom-themes
   :config
