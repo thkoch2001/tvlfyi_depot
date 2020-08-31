@@ -8,7 +8,6 @@
 (require 'functions)
 (require 'prelude)
 (require 'macros)
-(require 'kaomoji)
 
 ;; Laptop XF-functionality
 (require 'pulse-audio)
