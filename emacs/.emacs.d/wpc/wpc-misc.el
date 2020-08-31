@@ -216,6 +216,11 @@
 
 (add-to-list 'project-find-functions #'wpc-misc--briefcase-find)
 
+(defun wpc-misc-pkill (name)
+  "Call the pkill executable using NAME as its argument."
+  (interactive "sProcess name: ")
+  (call-process "pkill" nil nil nil name))
+
 (use-package deadgrep
   :config
   (general-define-key
