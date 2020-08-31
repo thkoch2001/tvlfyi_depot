@@ -88,7 +88,7 @@
 
 (defun window-manager--alert (x)
   "Message X with a structured format."
-  (alert (string/concat "[exwm] " x)))
+  (alert (string-concat "[exwm] " x)))
 
 ;; Use Emacs as my primary window manager.
 (use-package exwm
@@ -274,10 +274,10 @@ Ivy is used to capture the user's input."
   (interactive)
   (let* ((name->cmd `(("Lock" . ,window-manager--xsecurelock)
                       ("Logout" . "sudo systemctl stop lightdm")
-                      ("Suspend" . ,(string/concat
+                      ("Suspend" . ,(string-concat
                                      window-manager--xsecurelock
                                      " && systemctl suspend"))
-                      ("Hibernate" . ,(string/concat
+                      ("Hibernate" . ,(string-concat
                                        window-manager--xsecurelock
                                        " && systemctl hibernate"))
                       ("Reboot" . "systemctl reboot")
@@ -313,7 +313,7 @@ Currently using super- as the prefix for switching workspaces."
     (window-manager--named-workspace-label workspace)
     window-manager--named-workspaces))
   (window-manager--alert
-   (string/format "Switched to: %s"
+   (string-format "Switched to: %s"
                   (window-manager--named-workspace-label workspace))))
 
 (defun window-manager--switch (label)

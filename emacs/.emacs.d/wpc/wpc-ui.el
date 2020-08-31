@@ -69,13 +69,6 @@
 ;; disable toolbar
 (tool-bar-mode -1)
 
-;; TODO: Re-enable `linum-mode' when I figure out why the theming is so ugly.
-;; enable line numbers
-;; (general-add-hook '(prog-mode-hook
-;;                     text-mode-hook
-;;                     conf-mode-hook)
-;;                   (enable linum-mode))
-
 ;; set default buffer for Emacs
 (setq initial-buffer-choice constants/current-project)
 

@@ -30,7 +30,7 @@
 
 (defun pulse-audio--message (x)
   "Output X to *Messages*."
-  (message (string/format "[pulse-audio.el] %s" x)))
+  (message (string-format "[pulse-audio.el] %s" x)))
 
 (defun pulse-audio-toggle-mute ()
   "Mute the default sink."
@@ -53,7 +53,7 @@
   (interactive)
   (prelude-start-process
    :name "pulse-audio-decrease-volume"
-   :command (string/format "pactl set-sink-volume @DEFAULT_SINK@ -%s%%"
+   :command (string-format "pactl set-sink-volume @DEFAULT_SINK@ -%s%%"
                            pulse-audio--step-size))
   (pulse-audio--message "Volume decreased."))
 
@@ -62,7 +62,7 @@
   (interactive)
   (prelude-start-process
    :name "pulse-audio-increase-volume"
-   :command (string/format "pactl set-sink-volume @DEFAULT_SINK@ +%s%%"
+   :command (string-format "pactl set-sink-volume @DEFAULT_SINK@ +%s%%"
                            pulse-audio--step-size))
   (pulse-audio--message "Volume increased."))
 

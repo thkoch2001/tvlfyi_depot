@@ -79,7 +79,7 @@
       ""
     (list/reduce (list/first xs)
                  (lambda (x acc)
-                   (string/concat acc joint x))
+                   (string-concat acc joint x))
                  (list/tail xs))))
 
 (defun list/length (xs)

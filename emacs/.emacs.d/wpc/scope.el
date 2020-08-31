@@ -37,7 +37,7 @@ The newest bindings eclipse the oldest."
 
 (defun scope/push-new (xs)
   "Push a new, empty scope onto XS."
-  (struct/update scope
+  (struct-update scope
                  scopes
                  (>> (stack/push (alist/new)))
                  xs))
@@ -65,7 +65,7 @@ The newest bindings eclipse the oldest."
 
 (defun scope/set (k v xs)
   "Set value, V, at key, K, in XS for the current scope."
-  (struct/update scope
+  (struct-update scope
                  scopes
                  (>> (stack/map-top (>> (alist/set k v))))
                  xs))

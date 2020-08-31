@@ -1,5 +1,9 @@
 ;;; struct.el --- Helpers for working with structs -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
 ;; Provides new macros for working with structs.  Also provides adapter
@@ -9,12 +13,6 @@
 ;; Sometimes `setf' just isn't enough.
 
 ;;; Code:
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Wish list
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; - TODO: Replace `symbol-name' and `intern' calls with isomorphism.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dependencies
@@ -27,44 +25,44 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar struct/enable-tests? t
+(defvar struct--enable-tests? t
   "When t, run the test suite defined herein.")
 
-(defmacro struct/update (type field f xs)
+(defmacro struct-update (type field f xs)
   "Apply F to FIELD in XS, which is a struct of TYPE.
 This is immutable."
   (let ((copier (->> type
                      symbol-name
-                     (string/prepend "copy-")
+                     (string-prepend "copy-")
                      intern))
         (accessor (->> field
                        symbol-name
-                       (string/prepend (string/concat (symbol-name type) "-"))
+                       (string-prepend (string-concat (symbol-name type) "-"))
                        intern)))
     `(let ((copy (,copier ,xs)))
        (setf (,accessor copy) (funcall ,f (,accessor copy)))
        copy)))
 
-(defmacro struct/set (type field x xs)
+(defmacro struct-set (type field x xs)
   "Immutably set FIELD in XS (struct TYPE) to X."
   (let ((copier (->> type
                      symbol-name
-                     (string/prepend "copy-")
+                     (string-prepend "copy-")
                      intern))
         (accessor (->> field
                        symbol-name
-                       (string/prepend (string/concat (symbol-name type) "-"))
+                       (string-prepend (string-concat (symbol-name type) "-"))
                        intern)))
     `(let ((copy (,copier ,xs)))
        (setf (,accessor copy) ,x)
        copy)))
 
-(defmacro struct/set! (type field x xs)
+(defmacro struct-set! (type field x xs)
   "Set FIELD in XS (struct TYPE) to X mutably.
 This is an adapter interface to `setf'."
   (let ((accessor (->> field
                        symbol-name
-                       (string/prepend (string/concat (symbol-name type) "-"))
+                       (string-prepend (string-concat (symbol-name type) "-"))
                        intern)))
     `(progn
        (setf (,accessor ,xs) ,x)
@@ -74,14 +72,14 @@ This is an adapter interface to `setf'."
 ;; Tests
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(when struct/enable-tests?
+(when struct--enable-tests?
   (cl-defstruct dummy name age)
-  (defvar test-dummy (make-dummy :name "Roofus" :age 19))
-  (struct/set! dummy name "Doofus" test-dummy)
-  (prelude-assert (string= "Doofus" (dummy-name test-dummy)))
-  (let ((result (struct/set dummy name "Shoofus" test-dummy)))
-    ;; Test the immutability of `struct/set'
-    (prelude-assert (string= "Doofus" (dummy-name test-dummy)))
+  (defvar struct--test-dummy (make-dummy :name "Roofus" :age 19))
+  (struct-set! dummy name "Doofus" struct--test-dummy)
+  (prelude-assert (string= "Doofus" (dummy-name struct--test-dummy)))
+  (let ((result (struct-set dummy name "Shoofus" struct--test-dummy)))
+    ;; Test the immutability of `struct-set'
+    (prelude-assert (string= "Doofus" (dummy-name struct--test-dummy)))
     (prelude-assert (string= "Shoofus" (dummy-name result)))))
 
 (provide 'struct)

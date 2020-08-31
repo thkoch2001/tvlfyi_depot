@@ -15,6 +15,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'f)
+(require 'macros)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -24,15 +25,15 @@
   :config
   (evil-set-initial-state 'org-mode 'normal)
   (general-add-hook 'org-mode-hook
-                    (list (disable linum-mode)
-                          (disable company-mode)))
+                    (list (macros-disable linum-mode)
+                          (macros-disable company-mode)))
   (setq org-startup-folded nil)
   (setq org-todo-keywords '((sequence "TODO" "BLOCKED" "DONE")))
   (general-unbind 'normal org-mode-map "M-h" "M-j" "M-k" "M-l"))
 
 (use-package org-bullets
   :config
-  (general-add-hook 'org-mode-hook (enable org-bullets-mode)))
+  (general-add-hook 'org-mode-hook (macros-enable org-bullets-mode)))
 
 (provide 'wpc-org)
 ;;; wpc-org.el ends here

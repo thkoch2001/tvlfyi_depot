@@ -83,7 +83,7 @@
            ('gigabyte (tuple/from bytes/gb "GB"))
            ('terabyte (tuple/from bytes/tb "TB"))
            ('petabyte (tuple/from bytes/pb "PB")))))
-    (string/format "%d%s"
+    (string-format "%d%s"
                    (round x (tuple/first base-and-unit))
                    (tuple/second base-and-unit))))
 

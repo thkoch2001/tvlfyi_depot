@@ -50,7 +50,7 @@ Values for F include:
 - workspace
 - x11"
   (prelude-assert (alist/has-key? f kbd/prefixes))
-  (string/format
+  (string-format
    "%s-%s"
    (alist/get f kbd/prefixes)
    x))
@@ -69,14 +69,14 @@ Values for F include:
   (interactive)
   (message "[kbd] Awaiting keypress...")
   (let ((key (read-key)))
-    (clipboard/copy (string/format "%s" key))
-    (message (string/format "[kbd] \"%s\" copied!" key))))
+    (clipboard/copy (string-format "%s" key))
+    (message (string-format "[kbd] \"%s\" copied!" key))))
 
 (defun kbd/print-keycode ()
   "Prints the pressed keybinding."
   (interactive)
   (message "[kbd] Awaiting keypress...")
-  (message (string/format "[kbd] keycode: %s" (read-key))))
+  (message (string-format "[kbd] keycode: %s" (read-key))))
 
 (provide 'kbd)
 ;;; kbd.el ends here

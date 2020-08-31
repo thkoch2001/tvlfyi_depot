@@ -48,7 +48,7 @@ The car models the enabled state of my laptop display; the cdr models the
   (interactive)
   (prelude-start-process
    :name "display/enable-4k"
-   :command (string/format
+   :command (string-format
              "xrandr --output %s --above %s --primary --auto --size 3840x2160 --rate 30.00 --dpi 144"
              display/4k-monitor
              display/laptop-monitor)))
@@ -58,7 +58,7 @@ The car models the enabled state of my laptop display; the cdr models the
   (interactive)
   (prelude-start-process
    :name "display/disable-4k"
-   :command (string/format "xrandr --output %s --off"
+   :command (string-format "xrandr --output %s --off"
                            display/4k-monitor)))
 
 (defun display/enable-laptop ()
@@ -68,7 +68,7 @@ Sometimes this is useful when I'm sharing my screen in a Google Hangout and I
   (interactive)
   (prelude-start-process
    :name "display/disable-laptop"
-   :command (string/format "xrandr --output %s --auto"
+   :command (string-format "xrandr --output %s --auto"
                            display/laptop-monitor)))
 
 (defun display/disable-laptop ()
@@ -78,7 +78,7 @@ Sometimes this is useful when I'm sharing my screen in a Google Hangout and I
   (interactive)
   (prelude-start-process
    :name "display/disable-laptop"
-   :command (string/format "xrandr --output %s --off"
+   :command (string-format "xrandr --output %s --off"
                            display/laptop-monitor)))
 
 (defun display/cycle-display-states ()

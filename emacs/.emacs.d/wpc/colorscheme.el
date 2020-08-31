@@ -72,7 +72,7 @@ Cycle prev otherwise."
                    (cycle/next colorscheme/whitelist)
                  (cycle/prev colorscheme/whitelist))))
     (colorscheme/set theme)
-    (message (s-concat "Active theme: " (symbol/to-string theme)))))
+    (message (s-concat "Active theme: " (symbol-to-string theme)))))
 
 (defun colorscheme/next ()
   "Disable the currently active theme and load the next theme."

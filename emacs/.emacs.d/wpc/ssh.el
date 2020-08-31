@@ -1,5 +1,9 @@
 ;;; ssh.el --- When working remotely -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
 ;; Configuration to make remote work easier.
