@@ -37,7 +37,7 @@
 (setq initial-scratch-message "")
 
 ;; disable custom variable entries from being written to ~/.emacs.d/init.el
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file (f-join user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
 
 ;; integrate Emacs with X11 clipboard
@@ -206,15 +206,15 @@
   :config
   (projectile-mode t))
 
-(defun project-find-function--briefcase (dir)
-  "Find the nearest default.nix file; otherwise, terminate at the .git
-  directory."
+;; TODO: Consider moving this into a briefcase.el module.
+(defun wpc-misc--briefcase-find (dir)
+  "Find the default.nix nearest to DIR."
   (when (s-starts-with? constants/briefcase (f-expand dir))
     (if (f-exists? (f-join dir "default.nix"))
         (cons 'transient dir)
-      (project-find-function--briefcase (f-parent dir)))))
+      (wpc-misc--briefcase-find (f-parent dir)))))
 
-(add-to-list 'project-find-functions #'project-find-function--briefcase)
+(add-to-list 'project-find-functions #'wpc-misc--briefcase-find)
 
 (use-package deadgrep
   :config
@@ -223,17 +223,17 @@
    :states 'normal
    "o" #'deadgrep-visit-result-other-window)
   (setq-default deadgrep--context '(0 . 3))
-  (defun deadgrep/region ()
+  (defun wpc-misc-deadgrep-region ()
     "Run a ripgrep search on the active region."
     (interactive)
     (deadgrep (region/to-string)))
-  (defun deadgrep/dwim ()
+  (defun wpc-misc-deadgrep-dwim ()
     "If a region is active, use that as the search, otherwise don't."
     (interactive)
     (with-current-buffer (current-buffer)
       (if (region-active-p)
           (setq deadgrep--additional-flags '("--multiline"))
-          (deadgrep/region)
+          (wpc-misc-deadgrep-region)
         (call-interactively #'deadgrep))))
   (advice-add
    'deadgrep--format-command
@@ -291,10 +291,6 @@
 (use-package emr
   :config
   (define-key prog-mode-map (kbd "M-RET") #'emr-show-refactor-menu))
-
-(defun wpc/frame-name ()
-  "Return the name of the current frame."
-  (frame-parameter nil 'name))
 
 ;; Start the Emacs server
 (server-start)
