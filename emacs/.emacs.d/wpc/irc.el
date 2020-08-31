@@ -45,7 +45,7 @@
 ;; TODO: Assert that no two servers have a channel with the same name. We need
 ;; this because that's the assumption that underpins the `irc/channel->server'
 ;; function. This will probably be an O(n^2) operation.
-(prelude/assert
+(prelude-assert
  (set/distinct? (set/from-list
                  (cycle/to-list
                   (alist/get "irc.freenode.net"
@@ -59,7 +59,7 @@
   "Resolve an IRC server from a given CHANNEL."
   (let ((result (alist/find (lambda (k v) (cycle/contains? channel v))
                             server->channels)))
-    (prelude/assert (maybe-some? result))
+    (prelude-assert (maybe-some? result))
     result))
 
 (defun irc/channel->cycle (server->channels channel)
@@ -166,7 +166,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when irc/enable-tests?
-  (prelude/assert
+  (prelude-assert
    (equal
     (irc/channel->server `(("irc.dairy.com" . ,(cycle/new "#cheese" "#milk"))
                            ("irc.color.com" . ,(cycle/new "#red" "#blue")))

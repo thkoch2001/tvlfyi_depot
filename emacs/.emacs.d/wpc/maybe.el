@@ -82,23 +82,23 @@
 
 (when maybe--run-tests?
   ;; nil?
-  (prelude/assert (maybe-nil? nil))
-  (prelude/refute (maybe-nil? t))
+  (prelude-assert (maybe-nil? nil))
+  (prelude-refute (maybe-nil? t))
   ;; some?
-  (prelude/assert (maybe-some? 10))
-  (prelude/refute (maybe-some? nil))
+  (prelude-assert (maybe-some? 10))
+  (prelude-refute (maybe-some? nil))
   ;; nils?
-  (prelude/assert (maybe-nils? nil nil nil nil))
-  (prelude/refute (maybe-nils? nil t nil t))
+  (prelude-assert (maybe-nils? nil nil nil nil))
+  (prelude-refute (maybe-nils? nil t nil t))
   ;; somes?
-  (prelude/assert (maybe-somes? t 10 '(1 2 3) "some"))
-  (prelude/refute (maybe-somes? t nil '(1 2 3) "some"))
+  (prelude-assert (maybe-somes? t 10 '(1 2 3) "some"))
+  (prelude-refute (maybe-somes? t nil '(1 2 3) "some"))
   ;; default
-  (prelude/assert
+  (prelude-assert
    (and (= 0 (maybe-default 5 0))
         (= 5 (maybe-default 5 nil))))
   ;; map
-  (prelude/assert
+  (prelude-assert
    (and (= 2 (maybe-map #'1+ 1))
         (eq nil (maybe-map #'1+ nil)))))
 

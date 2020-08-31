@@ -111,15 +111,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (when string/test?
-;;   (prelude/assert
+;;   (prelude-assert
 ;;    (string=
 ;;     (string/surround "-*-" "surround")
 ;;     "-*-surround-*-"))
-;;   (prelude/assert
+;;   (prelude-assert
 ;;    (string=
 ;;     (string/caps->kebab "CAPS_CASE_STRING")
 ;;     "caps-case-string"))
-;;   (prelude/assert
+;;   (prelude-assert
 ;;    (string=
 ;;     (string/kebab->caps "kebab-case-string")
 ;;     "KEBAB_CASE_STRING")))

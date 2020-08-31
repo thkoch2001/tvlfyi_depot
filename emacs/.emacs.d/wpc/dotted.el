@@ -38,11 +38,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (progn
-  (prelude/assert
+  (prelude-assert
    (equal '(fname . "Bob") (dotted/new 'fname "Bob")))
-  (prelude/assert
+  (prelude-assert
    (dotted/instance? '(one . two)))
-  (prelude/refute
+  (prelude-refute
    (dotted/instance? '(1 2 3))))
 
 (provide 'dotted)

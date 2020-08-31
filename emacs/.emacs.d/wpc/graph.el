@@ -64,11 +64,11 @@ The user must pass in a valid Neighbors Table since asserting on the shape of
 ;; TODO: Model each of the mapping functions into an isomorphism.
 (defun graph/edges->neighbors (xs)
   "Map Edge List, XS, into a Neighbors Table."
-  (prelude/assert (graph/instance? xs)))
+  (prelude-assert (graph/instance? xs)))
 
 (defun graph/neighbors->edges (xs)
   "Map Neighbors Table, XS, into an Edge List."
-  (prelude/assert (graph/instance? xs)))
+  (prelude-assert (graph/instance? xs)))
 
 ;; Below are three different models of the same unweighted, directed graph.
 

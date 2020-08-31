@@ -184,13 +184,13 @@ A tree is balanced if none of the differences between any two depths of two leaf
                                             (list (tree-node 9)
                                                   (tree-node 10)))))))
     ;; instance?
-    (prelude/assert (tree-instance? tree-a))
-    (prelude/assert (tree-instance? tree-b))
-    (prelude/refute (tree-instance? '(1 2 3)))
-    (prelude/refute (tree-instance? "oak"))
+    (prelude-assert (tree-instance? tree-a))
+    (prelude-assert (tree-instance? tree-b))
+    (prelude-refute (tree-instance? '(1 2 3)))
+    (prelude-refute (tree-instance? "oak"))
     ;; balanced?
-    (prelude/assert (tree-balanced? 1 tree-a))
-    (prelude/refute (tree-balanced? 1 tree-b))
+    (prelude-assert (tree-balanced? 1 tree-a))
+    (prelude-refute (tree-balanced? 1 tree-b))
     (message "Tests pass!")))
 
 (provide 'tree)

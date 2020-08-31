@@ -93,7 +93,7 @@
 (defun fonts/whitelist-set (font)
   "Focuses the FONT in the `fonts/whitelist' cycle.
 The size of the font is determined by `fonts/size'."
-  (prelude/assert (cycle/contains? font fonts/whitelist))
+  (prelude-assert (cycle/contains? font fonts/whitelist))
   (cycle/focus (lambda (x) (equal x font)) fonts/whitelist)
   (fonts/set (fonts/current) fonts/size))
 

@@ -14,7 +14,7 @@
 (require 'f)
 (require 'maybe)
 
-(prelude/assert (f-exists? (getenv "BRIEFCASE")))
+(prelude-assert (f-exists? (getenv "BRIEFCASE")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration

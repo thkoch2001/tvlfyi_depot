@@ -69,12 +69,12 @@ This function mutates XS."
 (when vector-enable-tests?
   (let ((xs [1 2 3])
         (ys [1 2 3]))
-    (prelude/assert (= 1 (vector-get 0 ys)))
+    (prelude-assert (= 1 (vector-get 0 ys)))
     (vector-set 0 4 ys)
-    (prelude/assert (= 1 (vector-get 0 ys)))
-    (prelude/assert (= 1 (vector-get 0 xs)))
+    (prelude-assert (= 1 (vector-get 0 ys)))
+    (prelude-assert (= 1 (vector-get 0 xs)))
     (vector-set! 0 4 xs)
-    (prelude/assert (= 4 (vector-get 0 xs)))))
+    (prelude-assert (= 4 (vector-get 0 xs)))))
 
 ;; TODO: Decide between "remove" and "delete" as the appropriate verbs.
 ;; TODO: Implement this.

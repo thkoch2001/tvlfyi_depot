@@ -43,7 +43,7 @@
 
 (defmacro vterm-mgt--assert-vterm-buffer ()
   "Error when the `current-buffer' is not a vterm buffer."
-  '(prelude/assert (vterm-mgt--instance? (current-buffer))))
+  '(prelude-assert (vterm-mgt--instance? (current-buffer))))
 
 (defun vterm-mgt-next ()
   "Replace the current buffer with the next item in `vterm-mgt--instances'.
