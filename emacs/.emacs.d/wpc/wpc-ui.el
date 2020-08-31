@@ -92,11 +92,6 @@
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 
-;; file browsing
-(use-package neotree
-  :config
-  (global-set-key [f8] #'neotree-toggle))
-
 ;; kbd discovery
 (use-package which-key
   :config
