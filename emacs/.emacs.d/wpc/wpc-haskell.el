@@ -1,12 +1,14 @@
-;;; haskell.el --- My Haskell preferences -*- lexical-binding: t -*-
+;;; wpc-haskell.el --- My Haskell preferences -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
 ;; Hosts my Haskell development preferences
 
 ;;; Code:
-
-;; Haskell support
 
 ;; font-locking, glyph support, etc
 (use-package haskell-mode
@@ -22,7 +24,7 @@
   (add-hook 'haskell-mode-hook #'flycheck-mode))
 
 ;; Test toggling
-(defun haskell/module->test ()
+(defun wpc-haskell-module->test ()
   "Jump from a module to a test."
   (let ((filename (->> buffer-file-name
                        (s-replace "/src/" "/test/")
@@ -31,21 +33,20 @@
     (make-directory (f-dirname filename) t)
     (find-file filename)))
 
-(defun haskell/test->module ()
+(defun wpc-haskell-test->module ()
   "Jump from a test to a module."
   (let ((filename (->> buffer-file-name
                        (s-replace "/test/" "/src/")
-                       (s-replace "Test.hs" ".hs")
-                       )))
+                       (s-replace "Test.hs" ".hs"))))
     (make-directory (f-dirname filename) t)
     (find-file filename)))
 
-(defun haskell/test<->module ()
+(defun wpc-haskell-test<->module ()
   "Toggle between test and module in Haskell."
   (interactive)
   (if (s-contains? "/src/" buffer-file-name)
-      (haskell/module->test)
-    (haskell/test->module)))
+      (wpc-haskell-module->test)
+    (wpc-haskell-test->module)))
 
 (provide 'wpc-haskell)
 ;;; wpc-haskell.el ends here
