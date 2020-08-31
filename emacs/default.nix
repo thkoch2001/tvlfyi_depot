@@ -14,6 +14,7 @@ let
     xsv
     scrot
     clipmenu
+    xorg.xset
   ]);
 
   emacsWithPackages = (emacsPackagesNgGen emacs26).emacsWithPackages;
