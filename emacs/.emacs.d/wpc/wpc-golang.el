@@ -1,5 +1,9 @@
-;;; wpc-ocaml.el --- Tooling preferences for Go -*- lexical-binding: t -*-
+;;; wpc-golang.el --- Tooling preferences for Go -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
 ;; Tooling support for golang development.
@@ -39,4 +43,4 @@
   (add-hook-before-save 'go-mode-hook #'gofmt-before-save))
 
 (provide 'wpc-golang)
-;;; wpc-ocaml.el ends here
+;;; wpc-golang.el ends here
