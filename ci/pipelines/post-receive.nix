@@ -1,14 +1,12 @@
 { briefcase, pkgs, ... }:
 
 let
-  elispLintSrc = builtins.fetchGit {
+  inherit (builtins) fetchGit path toJSON;
+  inherit (briefcase.emacs) initEl runScript;
+
+  elispLintSrc = fetchGit {
     url = "https://github.com/gonewest818/elisp-lint";
     rev = "2b645266be8010a6a49c6d0ebf6a3ad5bd290ff4";
-  };
-
-  scriptEl = builtins.path {
-    path = ./script.el;
-    name = "script.el";
   };
 
   pipeline.steps = [
@@ -27,16 +25,27 @@ let
     }
     {
       key = "init-emacs";
-      command = ''
-        ${briefcase.emacs.runScript scriptEl} ${briefcase.emacs.initEl}
-      '';
+      command = let
+        scriptEl = path {
+          path = ./script.el;
+          name = "script.el";
+        };
+        runScriptEl = runScript {
+          script = scriptEl;
+          briefcasePath = "$(pwd)";
+        };
+      in "${runScriptEl} ${initEl}";
       label = ":gnu: initialize Emacs";
       depends_on = "build-briefcase";
     }
     {
       key = "lint-emacs";
-      command = ''
-        ${briefcase.emacs.nixos}/bin/wpcarros-emacs \
+      command = let
+        nixosEmacs = briefcase.emacs.nixos {
+          briefcasePath = "$(pwd)";
+        };
+      in ''
+        ${nixosEmacs}/bin/wpcarros-emacs \
           --quick \
           --batch \
           --load ${elispLintSrc}/elisp-lint.el \
@@ -61,4 +70,4 @@ let
       depends_on = "build-briefcase";
     }
   ];
-in pkgs.writeText "pipeline.yaml" (builtins.toJSON pipeline)
+in pkgs.writeText "pipeline.yaml" (toJSON pipeline)
