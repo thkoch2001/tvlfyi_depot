@@ -2,7 +2,7 @@
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
-;; Package-Requires: ((ts "0.2") (emacs "25.1"))
+;; Package-Requires: ((emacs "25.1"))
 ;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
@@ -57,8 +57,10 @@
   (alist-get (completing-read label xs) xs nil nil #'equal))
 
 (defun timestring-copy-encoded-time ()
-  "Select a common time and then select an encoding.  The selected time will be
-encoded using the selected encoding and copied onto your clipboard."
+  "Select a common time and an encoding.
+
+The selected time will be encoded using the selected encoding and copied onto
+your clipboard."
   (interactive)
   (let ((time (funcall (timestring--completing-read
                         "Time: " timestring-supported-times)))
