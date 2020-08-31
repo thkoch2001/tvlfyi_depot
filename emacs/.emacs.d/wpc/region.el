@@ -2,8 +2,8 @@
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
 ;; Package-Requires: ((emacs "24"))
-;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; Sometimes Emacs's function names and argument ordering is great; other times,
@@ -16,7 +16,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun region-to-string ()
-  "Returns the string in the active region."
+  "Return the string in the active region."
   (buffer-substring-no-properties (region-beginning)
                                   (region-end)))
 

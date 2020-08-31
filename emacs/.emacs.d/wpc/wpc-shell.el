@@ -6,7 +6,7 @@
 ;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
-;; Helpers for my shell scripting. Includes bash, zsh, etc.
+;; Helpers for my shell scripting.  Includes bash, zsh, etc.
 
 ;;; Code:
 
