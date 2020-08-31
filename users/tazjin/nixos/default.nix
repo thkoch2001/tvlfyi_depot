@@ -41,4 +41,6 @@ in {
 
   camdenSystem = systemFor [ depot.users.tazjin.nixos.camden ];
   frogSystem = systemFor [ depot.users.tazjin.nixos.frog ];
+
+  targets = [ "camdenSystem" "frogSystem" ];
 }
