@@ -356,14 +356,13 @@ private/hlissner/snippets."
    (:desc "open" :prefix "o"
      :desc "Default browser"       :n  "b" #'browse-url-of-file
      :desc "Debugger"              :n  "d" #'+debug/open
-     :desc "REPL"                  :n  "r" #'+eval/open-repl
-     :desc "Terminal"              :n  "t" #'+term/open-popup
      :desc "Terminal in project"   :n  "T" #'+term/open-popup-in-project
 
      :desc "Slack IM"              :n  "i" #'slack-im-select
      :desc "Slack Channel"         :n  "c" #'slack-channel-select
      :desc "Slack Group"           :n  "g" #'slack-group-select
      :desc "Slack Unreads"         :n  "u" #'slack-select-unread-rooms
+     :desc "Slack Threads"         :n  "r" #'slack-all-threads
 
      :desc "Email"                 :n "m" #'notmuch-jump-search
 
