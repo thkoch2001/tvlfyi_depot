@@ -25,7 +25,7 @@
 (defun window-find (name)
   "Find a window by the NAME of the buffer it's hosting."
   (let ((buffer (get-buffer name)))
-    (if (maybe/some? buffer)
+    (if (maybe-some? buffer)
         (get-buffer-window buffer)
       nil)))
 

@@ -86,7 +86,7 @@
 
 (defun fonts/set (font &optional size)
   "Change the font to `FONT' with option integer, SIZE, in pixels."
-  (if (maybe/some? size)
+  (if (maybe-some? size)
       (set-frame-font (string/format "%s %s" font size) nil t)
     (set-frame-font font nil t)))
 

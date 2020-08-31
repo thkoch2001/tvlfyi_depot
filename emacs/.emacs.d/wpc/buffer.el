@@ -90,7 +90,7 @@ This will ignore Emacs-generated buffers, like *Messages*.  It will also ignore
 
 (defun buffer/exists? (name)
   "Return t if buffer, NAME, exists."
-  (maybe/some? (buffer/find name)))
+  (maybe-some? (buffer/find name)))
 
 (defun buffer/new (name)
   "Return a newly created buffer NAME."
@@ -100,7 +100,7 @@ This will ignore Emacs-generated buffers, like *Messages*.  It will also ignore
   "Find or create buffer, NAME.
 Return a reference to that buffer."
   (let ((x (buffer/find name)))
-    (if (maybe/some? x)
+    (if (maybe-some? x)
         x
       (buffer/new name))))
 
@@ -163,7 +163,7 @@ This function ignores Emacs-generated buffers, i.e. the ones that look like
   (interactive)
   (let* ((xs (buffer/source-code-buffers))
          (candidate (list/get 1 xs)))
-    (prelude/assert (maybe/some? candidate))
+    (prelude/assert (maybe-some? candidate))
     (switch-to-buffer candidate)))
 
 (when buffer/install-kbds?

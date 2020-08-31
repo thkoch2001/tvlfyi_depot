@@ -28,13 +28,13 @@
 (cl-defun math/triangle-of-power (&key base power result)
   ;; TODO: Assert two of three are set.
   (cond
-   ((maybe/somes? base power result)
+   ((maybe-somes? base power result)
     (error "All three arguments should not be set"))
-   ((maybe/somes? power result)
+   ((maybe-somes? power result)
     (message "power and result"))
-   ((maybe/somes? base result)
+   ((maybe-somes? base result)
     (log result base))
-   ((maybe/somes? base power)
+   ((maybe-somes? base power)
     (expt base power))
    (t
     (error "Two of the three arguments must be set"))))
