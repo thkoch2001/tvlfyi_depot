@@ -1,5 +1,9 @@
 ;;; maybe.el --- Library for dealing with nil values -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "24"))
+;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; Inspired by Elm's Maybe library.
@@ -39,36 +43,36 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar maybe/test? t
+(defvar maybe--run-tests? t
   "When t, run the test suite defined herein.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun maybe/nil? (x)
+(defun maybe-nil? (x)
   "Return t if X is nil."
   (eq nil x))
 
-(defun maybe/some? (x)
+(defun maybe-some? (x)
   "Return t when X is non-nil."
-  (not (maybe/nil? x)))
+  (not (maybe-nil? x)))
 
-(defun maybe/nils? (&rest xs)
+(defun maybe-nils? (&rest xs)
   "Return t if all XS are nil."
-  (list/all? #'maybe/nil? xs))
+  (list/all? #'maybe-nil? xs))
 
-(defun maybe/somes? (&rest xs)
+(defun maybe-somes? (&rest xs)
   "Return t if all XS are non-nil."
-  (list/all? #'maybe/some? xs))
+  (list/all? #'maybe-some? xs))
 
-(defun maybe/default (default x)
+(defun maybe-default (default x)
   "Return DEFAULT when X is nil."
-  (if (maybe/nil? x) default x))
+  (if (maybe-nil? x) default x))
 
-(defun maybe/map (f x)
+(defun maybe-map (f x)
   "Apply F to X if X is not nil."
-  (if (maybe/some? x)
+  (if (maybe-some? x)
       (funcall f x)
     x))
 
@@ -76,27 +80,27 @@
 ;; Tests
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(when maybe/test?
+(when maybe--run-tests?
   ;; nil?
-  (prelude/assert (maybe/nil? nil))
-  (prelude/refute (maybe/nil? t))
+  (prelude/assert (maybe-nil? nil))
+  (prelude/refute (maybe-nil? t))
   ;; some?
-  (prelude/assert (maybe/some? 10))
-  (prelude/refute (maybe/some? nil))
+  (prelude/assert (maybe-some? 10))
+  (prelude/refute (maybe-some? nil))
   ;; nils?
-  (prelude/assert (maybe/nils? nil nil nil nil))
-  (prelude/refute (maybe/nils? nil t nil t))
+  (prelude/assert (maybe-nils? nil nil nil nil))
+  (prelude/refute (maybe-nils? nil t nil t))
   ;; somes?
-  (prelude/assert (maybe/somes? t 10 '(1 2 3) "some"))
-  (prelude/refute (maybe/somes? t nil '(1 2 3) "some"))
+  (prelude/assert (maybe-somes? t 10 '(1 2 3) "some"))
+  (prelude/refute (maybe-somes? t nil '(1 2 3) "some"))
   ;; default
   (prelude/assert
-   (and (= 0 (maybe/default 5 0))
-        (= 5 (maybe/default 5 nil))))
+   (and (= 0 (maybe-default 5 0))
+        (= 5 (maybe-default 5 nil))))
   ;; map
   (prelude/assert
-   (and (= 2 (maybe/map #'1+ 1))
-        (eq nil (maybe/map #'1+ nil)))))
+   (and (= 2 (maybe-map #'1+ 1))
+        (eq nil (maybe-map #'1+ nil)))))
 
 (provide 'maybe)
 ;;; maybe.el ends here

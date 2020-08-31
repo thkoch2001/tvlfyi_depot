@@ -69,7 +69,7 @@ Depth-first traversals have the advantage of typically consuming less memory
   (cl-labels ((do-reduce-depth
                (acc f node depth)
                (let ((acc-new (funcall f node acc depth)))
-                 (if (or (maybe/nil? node)
+                 (if (or (maybe-nil? node)
                          (tree-leaf? node))
                      acc-new
                    (list/reduce
@@ -98,7 +98,7 @@ Depth-first traversals have the advantage of typically consuming less memory
    (tree-reduce-depth
     '()
     (lambda (node acc depth)
-      (if (or (maybe/nil? node)
+      (if (or (maybe-nil? node)
               (tree-leaf? node))
           (list/cons depth acc)
         acc))
@@ -139,7 +139,7 @@ generating test data.  Warning this function can overflow the stack."
 
 (defun tree-leaf? (node)
   "Return t if NODE has no children."
-  (maybe/nil? (node-children node)))
+  (maybe-nil? (node-children node)))
 
 (defun tree-balanced? (n xs)
   "Return t if the tree, XS, is balanced.

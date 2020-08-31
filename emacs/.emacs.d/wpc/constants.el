@@ -21,7 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defconst constants/ci?
-  (maybe/some? (getenv "CI"))
+  (maybe-some? (getenv "CI"))
   "True when Emacs is running in CI.")
 
 (defconst constants/briefcase

@@ -95,7 +95,7 @@ These are strict assertions and purposely do not rely on truthiness."
 (add-hook 'linum-mode-hook
           (lambda ()
             (setq linum/safe? t)
-            (when (maybe/some? linum/mru-color)
+            (when (maybe-some? linum/mru-color)
               (set-face-foreground 'linum linum/mru-color))))
 
 (defun prelude/set-line-number-color (color)
@@ -137,7 +137,7 @@ This is a wrapper around `start-process' that has an API that resembles
   "Return t if CLI tool NAME exists according to `exec-path'."
   (let ((file (locate-file name exec-path)))
     (require 'maybe)
-    (if (maybe/some? file)
+    (if (maybe-some? file)
         (f-exists? file)
       nil)))
 

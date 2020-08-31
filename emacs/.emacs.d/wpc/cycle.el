@@ -73,7 +73,7 @@
 (defun cycle/previous-focus (cycle)
   "Return the previously focused entry in CYCLE."
   (let ((i (cycle-previous-index cycle)))
-    (if (maybe/some? i)
+    (if (maybe-some? i)
         (nth i (cycle-xs cycle))
       nil)))
 
@@ -84,7 +84,7 @@
 This will error when previous-index is nil.  This function mutates the
 underlying struct."
   (let ((i (cycle-previous-index xs)))
-    (if (maybe/some? i)
+    (if (maybe-some? i)
         (progn
           (cycle/jump i xs)
           (cycle/current xs))
@@ -148,7 +148,7 @@ ITEM is the first item in XS that t for `equal'."
 
 (defun cycle/focused? (xs)
   "Return t if cycle XS has a non-nil value for current-index."
-  (maybe/some? (cycle-current-index xs)))
+  (maybe-some? (cycle-current-index xs)))
 
 (defun cycle/append (x xs)
   "Add X to the left of the focused element in XS.
@@ -196,7 +196,7 @@ If X is the currently focused value, after it's deleted, current-index will be
 
 (when cycle/enable-tests?
   (let ((xs (cycle/new 1 2 3)))
-    (prelude/assert (maybe/nil? (cycle/previous-focus xs)))
+    (prelude/assert (maybe-nil? (cycle/previous-focus xs)))
     (prelude/assert (= 1 (cycle/current xs)))
     (prelude/assert (= 2 (cycle/next xs)))
     (prelude/assert (= 1 (cycle/previous-focus xs)))

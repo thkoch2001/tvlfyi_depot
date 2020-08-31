@@ -59,7 +59,7 @@
   "Resolve an IRC server from a given CHANNEL."
   (let ((result (alist/find (lambda (k v) (cycle/contains? channel v))
                             server->channels)))
-    (prelude/assert (maybe/some? result))
+    (prelude/assert (maybe-some? result))
     result))
 
 (defun irc/channel->cycle (server->channels channel)

@@ -135,7 +135,7 @@ Returns the first occurrence of K in XS since alists support multiple entries."
   "Apply F to the value stored at K in XS.
 If `K' is not in `XS', this function errors.  Use `alist/upsert' if you're
 interested in inserting a value when a key doesn't already exist."
-  (if (maybe/nil? (alist/get k xs))
+  (if (maybe-nil? (alist/get k xs))
       (error "Refusing to update: key does not exist in alist")
     (alist/set k (funcall f (alist/get k xs)) xs)))
 
@@ -183,11 +183,11 @@ Mutative variant of `alist/delete'."
 
 (defun alist/has-key? (k xs)
   "Return t if XS has a key `equal' to K."
-  (maybe/some? (assoc k xs)))
+  (maybe-some? (assoc k xs)))
 
 (defun alist/has-value? (v xs)
   "Return t if XS has a value of V."
-  (maybe/some? (rassoc v xs)))
+  (maybe-some? (rassoc v xs)))
 
 (defun alist/count (xs)
   "Return the number of entries in XS."

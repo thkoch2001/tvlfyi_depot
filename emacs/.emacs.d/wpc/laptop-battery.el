@@ -32,7 +32,7 @@
 
 (defun laptop-battery/available? ()
   "Return t if battery information is available."
-  (maybe/some? battery-status-function))
+  (maybe-some? battery-status-function))
 
 (defun laptop-battery/percentage ()
   "Return the current percentage of the battery."
