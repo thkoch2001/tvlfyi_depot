@@ -69,7 +69,7 @@ in {
 
       # Auto-link panettone bug links
       commentlink.panettone = {
-        match = "b/(\\d+)";
+        match = "b/(\\\\d+)";
         html = "<a href=\"https://b.tvl.fyi/issues/$1\">b/$1</a>";
       };
 
