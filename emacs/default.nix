@@ -1,12 +1,12 @@
 { pkgs, ... }:
 
 let
-  # NOTE: I'm trying to keep the list of dependencies herein constrained to a
-  # list of generic dependencies (i.e. not project or language specific). For
-  # language-specific tooling, I'm intending to use shell.nix alongside lorri
-  # and direnv.
-  emacsBinPath = pkgs.lib.strings.makeBinPath (with pkgs; [
-    tdesktop # native telegram client
+  inherit (builtins) path;
+  inherit (pkgs) emacs26 emacsPackagesNgGen writeShellScript writeShellScriptBin;
+  inherit (pkgs.lib.strings) makeBinPath;
+
+  emacsBinPath = makeBinPath (with pkgs; [
+    tdesktop
     ripgrep
     gitAndTools.hub
     kubectl
@@ -16,7 +16,7 @@ let
     clipmenu
   ]);
 
-  emacsWithPackages = (pkgs.emacsPackagesNgGen pkgs.emacs26).emacsWithPackages;
+  emacsWithPackages = (emacsPackagesNgGen emacs26).emacsWithPackages;
 
   wpcarrosEmacs = emacsWithPackages (epkgs:
     (with epkgs.elpaPackages; [
@@ -111,28 +111,28 @@ let
       magit
     ]));
 
-  vendorDir = builtins.path {
+  vendorDir = path {
     path = ./.emacs.d/vendor;
     name = "emacs-vendor";
   };
 
-  wpcDir = builtins.path {
+  wpcDir = path {
     path = ./.emacs.d/wpc;
     name = "emacs-libs";
   };
 
-  wpcPackageEl = builtins.path {
+  wpcPackageEl = path {
     path = ./.emacs.d/wpc/wpc-package.el;
     name = "wpc-package.el";
   };
 
-  initEl = builtins.path {
+  initEl = path {
     path = ./.emacs.d/init.el;
     name = "init.el";
   };
 
   withEmacsPath = { emacsBin, briefcasePath }:
-    pkgs.writeShellScriptBin "wpcarros-emacs" ''
+    writeShellScriptBin "wpcarros-emacs" ''
       export XMODIFIERS=emacs
       export BRIEFCASE=${briefcasePath}
       export PATH="${emacsBinPath}:$PATH"
@@ -150,7 +150,7 @@ in {
 
   # I need to start my Emacs from CI without the call to `--load ${initEl}`.
   runScript = { script, briefcasePath }:
-    pkgs.writeShellScript "run-emacs-script" ''
+    writeShellScript "run-emacs-script" ''
       export BRIEFCASE=${briefcasePath}
       export PATH="${emacsBinPath}:$PATH"
       export EMACSLOADPATH="${wpcDir}:${vendorDir}:${wpcarrosEmacs.deps}/share/emacs/site-lisp"
