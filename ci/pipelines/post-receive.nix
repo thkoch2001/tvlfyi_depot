@@ -50,7 +50,7 @@ let
           --batch \
           --load ${elispLintSrc}/elisp-lint.el \
           --funcall elisp-lint-files-batch \
-          "$$@"
+          ./emacs/.emacs.d/wpc/*.el
       '';
       label = ":gnu: lint Emacs";
       depends_on = "init-emacs";
