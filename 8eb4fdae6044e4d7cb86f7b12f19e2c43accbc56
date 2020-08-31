@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "990b1ac7_925984b8",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-31T01:35:50Z",
+      "side": 1,
+      "message": "I\u0027m wondering if we should mark locations that we know are platform dependent somehow, for a future where e.g. OS X support is considered again.\n\n(alternatively do the ifdef dance)",
+      "range": {
+        "startLine": 107,
+        "startChar": 15,
+        "endLine": 107,
+        "endChar": 28
+      },
+      "revId": "8eb4fdae6044e4d7cb86f7b12f19e2c43accbc56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed5cdde6_021a9720",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon.cc",
         "patchSetId": 8
