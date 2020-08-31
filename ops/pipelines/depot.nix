@@ -13,12 +13,19 @@ let
 
   # Create an expression that builds the target at the specified
   # location.
-  mkBuildExpr =
-    let descend = expr: attr: "builtins.getAttr \"${attr}\" (${expr})";
-    in foldl' descend "import ./. {}";
+  mkBuildExpr = target:
+    let
+      descend = expr: attr: "builtins.getAttr \"${attr}\" (${expr})";
+      targetExpr = foldl' descend "import ./. {}" target.__readTree;
+      subtargetExpr = descend targetExpr target.__subtarget;
+    in if target ? __subtarget then subtargetExpr else targetExpr;
 
   # Create a pipeline label from the targets tree location.
-  mkLabel = concatStringsSep "/";
+  mkLabel = target:
+    let label = concatStringsSep "/" target.__readTree;
+    in if target ? __subtarget
+      then "${label}:${target.__subtarget}"
+      else label;
 
   # Create a pipeline step from a single target.
   #
@@ -27,9 +34,9 @@ let
   # regardless, but this data is not accessible.
   mkStep = target: {
     command = ''
-      nix-build -E '${mkBuildExpr target.__readTree}' || (buildkite-agent meta-data set "failure" "1" && exit 1)
+      nix-build -E '${mkBuildExpr target}' || (buildkite-agent meta-data set "failure" "1" && exit 1)
     '';
-    label = ":nix: ${mkLabel target.__readTree}";
+    label = ":nix: ${mkLabel target}";
   };
 
   # Protobuf check step which validates that changes to .proto files

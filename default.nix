@@ -50,10 +50,25 @@ let
 
   # Walk the tree starting with 'node', recursively extending the list
   # of build targets with anything that looks buildable.
+  #
+  # Any tree node can specify logical targets by exporting a 'targets'
+  # attribute containing a list of keys in itself. This enables target
+  # specifications that do not exist on disk directly.
   gather = node:
     if node ? __readTree then
-      (if eligible node then [node] else []) ++
-      concatMap gather (attrValues node)
+      # Include the node itself if it is eligible.
+      (if eligible node then [ node ] else [])
+      # Include eligible children of the node
+      ++ concatMap gather (attrValues node)
+      # Include specified sub-targets of the node
+      ++ filter eligible (map
+           (k: (node."${k}" or {}) // {
+             # Keep the same tree location, but explicitly mark this
+             # node as a subtarget.
+             __readTree = node.__readTree;
+             __subtarget = k;
+           })
+           (node.targets or []))
     else [];
 in fix(self: {
   config = config self;
