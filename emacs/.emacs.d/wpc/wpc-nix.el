@@ -4,6 +4,8 @@
 ;;; Commentary:
 ;; Configuration to support working with Nix.
 
+;;; Code:
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -19,7 +21,7 @@
   :mode "\\.nix\\'")
 
 ;; TODO(wpcarro): Ensure the sub-process can resolve <briefcase>.
-(defun nix/rebuild-emacs ()
+(defun wpc-nix-rebuild-emacs ()
   "Use nix-env to rebuild wpcarros-emacs."
   (interactive)
   (let* ((emacs (if (device/corporate?) "emacs.glinux" "emacs.nixos"))
@@ -31,32 +33,28 @@
                    "-f" "<briefcase>" "-iA" emacs)
     (display-buffer bname)))
 
-(defun nix/home-manager-switch ()
+(defun wpc-nix-home-manager-switch ()
   "Use Nix to reconfigure the user environment."
   (interactive)
-  (start-process "nix/home-manager-switch" "*nix/home-manager-switch*"
+  (start-process "wpc-nix-home-manager-switch" "*wpc-nix-home-manager-switch*"
                  "home-manager"
                  "-I" (format "nixpkgs=%s" (f-expand "~/nixpkgs-channels"))
                  "-I" (format "home-manager=%s" (f-expand "~/home-manager"))
                  "switch")
-  (display-buffer "*nix/home-manager-switch*"))
+  (display-buffer "*wpc-nix-home-manager-switch*"))
 
-(defun nix/sly-from-briefcase (attribute)
-  "Start a Sly REPL configured with a Lisp matching a derivation
-  from my monorepo.
+(defun wpc-nix-sly-from-briefcase (attr)
+  "Start a Sly REPL configured using the derivation pointed at by ATTR.
 
-This function was taken from @tazjin's depot and adapted for my monorepo.
-
-  The derivation invokes nix.buildLisp.sbclWith and is built
-  asynchronously. The build output is included in the error
-  thrown on build failures."
+  The derivation invokes nix.buildLisp.sbclWith and is built asynchronously.
+  The build output is included in the error thrown on build failures."
   (interactive "sAttribute: ")
-  (lexical-let* ((outbuf (get-buffer-create (format "*briefcase-out/%s*" attribute)))
-         (errbuf (get-buffer-create (format "*briefcase-errors/%s*" attribute)))
-         (expression (format "let briefcase = import <briefcase> {}; in briefcase.third_party.depot.nix.buildLisp.sbclWith [ briefcase.%s ]" attribute))
+  (lexical-let* ((outbuf (get-buffer-create (format "*briefcase-out/%s*" attr)))
+         (errbuf (get-buffer-create (format "*briefcase-errors/%s*" attr)))
+         (expression (format "let briefcase = import <briefcase> {}; in briefcase.third_party.depot.nix.buildLisp.sbclWith [ briefcase.%s ]" attr))
          (command (list "nix-build" "-E" expression)))
-    (message "Acquiring Lisp for <briefcase>.%s" attribute)
-    (make-process :name (format "nix-build/%s" attribute)
+    (message "Acquiring Lisp for <briefcase>.%s" attr)
+    (make-process :name (format "nix-build/%s" attr)
                   :buffer outbuf
                   :stderr errbuf
                   :command command
@@ -65,12 +63,15 @@ This function was taken from @tazjin's depot and adapted for my monorepo.
                     (unwind-protect
                         (pcase event
                           ("finished\n"
-                           (let* ((outpath (s-trim (with-current-buffer outbuf (buffer-string))))
+                           (let* ((outpath (s-trim (with-current-buffer outbuf
+                                                     (buffer-string))))
                                   (lisp-path (s-concat outpath "/bin/sbcl")))
-                             (message "Acquired Lisp for <briefcase>.%s at %s" attribute lisp-path)
+                             (message "Acquired Lisp for <briefcase>.%s at %s"
+                                      attr lisp-path)
                              (sly lisp-path)))
                           (_ (with-current-buffer errbuf
-                               (error "Failed to build '%s':\n%s" attribute (buffer-string)))))
+                               (error "Failed to build '%s':\n%s" attr
+                                      (buffer-string)))))
                       (kill-buffer outbuf)
                       (kill-buffer errbuf))))))
 
