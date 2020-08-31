@@ -126,7 +126,7 @@
 (use-package all-the-icons
   :config
   (unless (f-exists? "~/.local/share/fonts/all-the-icons.ttf")
-    (all-the-icons-install-fonts)))
+    (all-the-icons-install-fonts t)))
 
 ;; icons for Ivy
 (use-package all-the-icons-ivy
