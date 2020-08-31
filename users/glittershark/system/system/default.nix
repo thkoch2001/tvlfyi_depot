@@ -7,6 +7,9 @@ rec {
     configuration = chupacabra;
   }).system;
 
+  # Build chupacabra in CI
+  targets = [ "chupacabraSystem" ];
+
   rebuilder =
     let
       depotPath = "/home/grfn/code/depot";
