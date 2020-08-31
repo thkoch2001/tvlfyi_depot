@@ -128,7 +128,7 @@
 (keybinding/exwm "<XF86AudioMicMute>" #'pulse-audio/toggle-microphone)
 (keybinding/exwm "C-M-c" #'chrome/browse)
 (keybinding/exwm (kbd/raw 'x11 "s") #'scrot/select)
-(keybinding/exwm "<C-M-tab>" #'exwm/switch-to-exwm-buffer)
+(keybinding/exwm "<C-M-tab>" #'window-manager-switch-to-exwm-buffer)
 
 (general-define-key
  :keymaps 'override
