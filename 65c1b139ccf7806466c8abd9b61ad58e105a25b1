@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aec7337f_6314fdca",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-31T00:22:49Z",
+      "side": 1,
+      "message": "replace with (....; exit 1) to preserve the fail status to the command",
+      "range": {
+        "startLine": 30,
+        "startChar": 57,
+        "endLine": 30,
+        "endChar": 100
+      },
+      "revId": "65c1b139ccf7806466c8abd9b61ad58e105a25b1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
