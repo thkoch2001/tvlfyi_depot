@@ -1,5 +1,9 @@
-;;; dired.el --- My dired preferences -*- lexical-binding: t -*-
+;;; wpc-dired.el --- My dired preferences -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 ;; File management in Emacs, if learned and configured properly, should be
