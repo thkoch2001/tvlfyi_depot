@@ -16,6 +16,24 @@
       "revId": "ef7586497e8aa0b55ee2b89fbe6a62ba57040f9e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9467fbee_d6e77821",
+        "filename": "ops/nixos/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-08-31T22:57:26Z",
+      "side": 1,
+      "message": "Changed to `meta.targets` after discussion on the Meet.",
+      "parentUuid": "4336c164_dc049ea5",
+      "revId": "ef7586497e8aa0b55ee2b89fbe6a62ba57040f9e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
