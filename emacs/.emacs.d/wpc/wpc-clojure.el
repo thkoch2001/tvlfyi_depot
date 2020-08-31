@@ -1,37 +1,18 @@
-;;; clojure.el --- My Clojure preferences -*- lexical-binding: t -*-
+;;; wpc-clojure.el --- My Clojure preferences -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 ;; Hosting my Clojure tooling preferences
 
 ;;; Code:
 
-;; Helper functions
-
-;; (defun wpc/buffer-name-for-clojure-mode (mode)
-;;   (let* ((project-name (projectile-project-name))
-;;          (cljs-name (concat "*cider-repl CLJS " project-name "*"))
-;;          (clj-name  (concat "*cider-repl " project-name "*")))
-;;     (cond ((eq mode 'clojurescript-mode) cljs-name)
-;;           ((eq mode 'clojure-mode) clj-name)
-;;           ((eq mode 'clojurec-mode) cljs-name))))
-
-;; (defun wpc/repl-function-for-clojure-mode (mode)
-;;   (let ((project-name (projectile-project-name))
-;;         (cljs-fn #'cider-jack-in-clojurescript)
-;;         (clj-fn  #'cider-jack-in))
-;;     (cond ((eq mode 'clojurescript-mode) cljs-fn)
-;;           ((eq mode 'clojure-mode) clj-fn)
-;;           ((eq mode 'clojurec-mode) cljs-fn))))
-
-;; (defun wpc/find-or-create-clojure-or-clojurescript-repl ()
-;;   (interactive)
-;;   (with-current-buffer (current-buffer)
-;;     (let ((buffer-name   (wpc/buffer-name-for-clojure-mode major-mode))
-;;           (repl-function (wpc/repl-function-for-clojure-mode major-mode)))
-;;       (if (get-buffer buffer-name)
-;;           (switch-to-buffer buffer-name)
-;;         (funcall repl-function)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package clojure-mode
   :config
@@ -71,9 +52,7 @@
     "C-l"    #'cider-repl-clear-buffer
     "C-u"    #'kill-whole-line
     "<up>"   #'cider-repl-previous-input
-    "<down>" #'cider-repl-next-input
-    ;; "C-c 'j" #'wpc/find-or-create-clojure-or-clojurescript-repl
-    )
+    "<down>" #'cider-repl-next-input)
   (general-define-key
    :keymaps 'clojure-mode-map
    :states '(normal)
@@ -81,13 +60,7 @@
    "x" #'cider-eval-defun-at-point
    "X" #'cider-eval-buffer
    "d" #'cider-symbol-at-point)
-  (setq cider-prompt-for-symbol nil)
-  ;; (setq cider-cljs-lein-repl
-  ;;       "(do (require 'figwheel-sidecar.repl-api)
-  ;;            (figwheel-sidecar.repl-api/start-figwheel!)
-  ;;            (figwheel-sidecar.repl-api/cljs-repl))"
-  ;;       cider-prompt-for-symbol nil)
-  )
+  (setq cider-prompt-for-symbol nil))
 
 (provide 'wpc-clojure)
 ;;; wpc-clojure.el ends here
