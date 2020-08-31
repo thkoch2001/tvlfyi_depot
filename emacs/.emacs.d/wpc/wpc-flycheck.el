@@ -1,5 +1,9 @@
-;;; flycheck.el --- My flycheck configuration -*- lexical-binding: t -*-
+;;; wpc-flycheck.el --- My flycheck configuration -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
 ;; Hosts my Flycheck preferences
