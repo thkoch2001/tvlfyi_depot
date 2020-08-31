@@ -34,7 +34,6 @@ let
       ivy-pass
       clipmon # TODO: Prefer an Emacs client for clipmenud.
       protobuf-mode # TODO: Determine if this is coming from google-emacs.
-      # docker
       evil
       evil-collection
       evil-magit
@@ -50,7 +49,6 @@ let
       diminish
       doom-themes
       telephone-line
-      neotree # TODO: Remove this dependency from my config.
       which-key
       ivy
       restclient
@@ -95,7 +93,6 @@ let
       company-lsp
       suggest
       paradox
-      # emr
       flymake-shellcheck
       fish-mode
       tuareg
