@@ -125,7 +125,7 @@ generating test data.  Warning this function can overflow the stack."
                 :children (->> (series/range 0 (number/dec bf))
                                (list/map
                                 (lambda (_)
-                                  (when (random/boolean?)
+                                  (when (random-boolean?)
                                     (do-random d vf bf))))))))
     (do-random 0 value-fn branching-factor)))
 
