@@ -1,5 +1,9 @@
-;; wpc-javascript.el --- My Javascript preferences -*- lexical-binding: t -*-
+;;; wpc-javascript.el --- My Javascript preferences -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
 ;; This module hosts my Javascript tooling preferences.  This also includes
@@ -16,12 +20,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Constants
-(defconst wpc/js-hooks
+(defconst wpc-javascript--js-hooks
   '(js-mode-hook web-mode-hook typescript-mode-hook js2-mode-hook rjsx-mode-hook)
   "All of the commonly used hooks for Javascript buffers.")
 
-(defconst wpc/frontend-hooks
-  (-insert-at 0 'css-mode-hook wpc/js-hooks)
+(defconst wpc-javascript--frontend-hooks
+  (-insert-at 0 'css-mode-hook wpc-javascript--js-hooks)
   "All of the commonly user hooks for frontend development.")
 
 
@@ -33,7 +37,7 @@
 ;; Flow for Javascript
 (use-package add-node-modules-path
   :config
-  (general-add-hook wpc/js-hooks #'add-node-modules-path))
+  (general-add-hook wpc-javascript--js-hooks #'add-node-modules-path))
 
 (use-package web-mode
   :mode "\\.html\\'"
@@ -53,7 +57,7 @@
         js2-mode-show-strict-warnings nil))
 
 (progn
-  (defun tide/setup ()
+  (defun wpc-javascript-tide-setup ()
     (interactive)
     (tide-setup)
     (flycheck-mode 1)
@@ -63,19 +67,19 @@
     (company-mode 1))
   (use-package tide
     :config
-    (add-hook 'typescript-mode-hook #'tide/setup))
+    (add-hook 'typescript-mode-hook #'wpc-javascript-tide-setup))
   (require 'web-mode)
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
   (add-hook 'web-mode-hook
             (lambda ()
               (when (string-equal "tsx" (f-ext buffer-file-name))
-                (tide/setup))))
+                (wpc-javascript-tide-setup))))
   (flycheck-add-mode 'typescript-tslint 'web-mode))
 
 ;; JS autoformatting
 (use-package prettier-js
   :config
-  (general-add-hook wpc/frontend-hooks #'prettier-js-mode))
+  (general-add-hook wpc-javascript--frontend-hooks #'prettier-js-mode))
 
 ;; Support Elm
 (use-package elm-mode)
