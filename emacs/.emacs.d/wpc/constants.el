@@ -12,12 +12,17 @@
 
 (require 'prelude)
 (require 'f)
+(require 'maybe)
 
 (prelude/assert (f-exists? (getenv "BRIEFCASE")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst constants/ci?
+  (maybe/some? (getenv "CI"))
+  "True when Emacs is running in CI.")
 
 (defconst constants/briefcase
   (getenv "BRIEFCASE")
