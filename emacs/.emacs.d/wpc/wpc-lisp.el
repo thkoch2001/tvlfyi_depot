@@ -1,6 +1,11 @@
-;;; lisp.el --- Generic LISP preferences -*- lexical-binding: t -*-
-;; Author: William Carroll <wpcarro@gmail.com>
+;;; wpc-lisp.el --- Generic LISP preferences -*- lexical-binding: t -*-
 
+;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24"))
+
+;;; Commentary:
 ;; parent (up)
 ;; child (down)
 ;; prev-sibling (left)
@@ -20,7 +25,7 @@
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst wpc/lisp-mode-hooks
+(defconst wpc-lisp--hooks
   '(lisp-mode-hook
     emacs-lisp-mode-hook
     clojure-mode-hook
@@ -41,7 +46,7 @@
 
 (use-package rainbow-delimiters
   :config
-  (general-add-hook wpc/lisp-mode-hooks #'rainbow-delimiters-mode))
+  (general-add-hook wpc-lisp--hooks #'rainbow-delimiters-mode))
 
 (use-package racket-mode
   :config
@@ -56,7 +61,7 @@
 
 (use-package lispyville
   :init
-  (defconst lispyville-key-themes
+  (defconst wpc-lisp--lispyville-key-themes
     '(c-w
       operators
       text-objects
@@ -70,8 +75,8 @@
       escape)
     "All available key-themes in Lispyville.")
   :config
-  (general-add-hook wpc/lisp-mode-hooks #'lispyville-mode)
-  (lispyville-set-key-theme lispyville-key-themes)
+  (general-add-hook wpc-lisp--hooks #'lispyville-mode)
+  (lispyville-set-key-theme wpc-lisp--lispyville-key-themes)
   (progn
     (general-define-key
      :keymaps 'lispyville-mode-map
