@@ -163,7 +163,7 @@ This function ignores Emacs-generated buffers, i.e. the ones that look like
   (interactive)
   (let* ((xs (buffer/source-code-buffers))
          (candidate (list/get 1 xs)))
-    (prelude/assert (maybe-some? candidate))
+    (prelude-assert (maybe-some? candidate))
     (switch-to-buffer candidate)))
 
 (when buffer/install-kbds?
@@ -183,7 +183,7 @@ This function ignores Emacs-generated buffers, i.e. the ones that look like
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when buffer/enable-tests?
-  (prelude/assert
+  (prelude-assert
    (list/all? #'buffer/emacs-generated?
               '("*scratch*"
                 "*Messages*"

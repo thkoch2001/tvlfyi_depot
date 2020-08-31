@@ -60,18 +60,18 @@ If X isn't in XS (using `equal'), insert it at the front."
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; contains?/2
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    (prelude/refute
+    (prelude-refute
      (cache/contains? "turkey" cache))
-    (prelude/assert
+    (prelude-assert
      (cache/contains? "chicken" cache))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; touch/2
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    (prelude/assert
+    (prelude-assert
      (equal
       (cache/touch "nugget" cache)
       (cache/from-list '("nugget" "chicken"))))
-    (prelude/assert
+    (prelude-assert
      (equal
       (cache/touch "spicy" cache)
       (cache/from-list '("spicy" "chicken" "nugget"))))))

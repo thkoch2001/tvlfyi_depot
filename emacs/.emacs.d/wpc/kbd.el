@@ -33,7 +33,7 @@
   "Mapping of functions to designated keybinding prefixes to stay organized.")
 
 ;; Assert that no keybindings are colliding.
-(prelude/assert
+(prelude-assert
  (= (alist/count kbd/prefixes)
     (->> kbd/prefixes
          alist/values
@@ -49,7 +49,7 @@
 Values for F include:
 - workspace
 - x11"
-  (prelude/assert (alist/has-key? f kbd/prefixes))
+  (prelude-assert (alist/has-key? f kbd/prefixes))
   (string/format
    "%s-%s"
    (alist/get f kbd/prefixes)

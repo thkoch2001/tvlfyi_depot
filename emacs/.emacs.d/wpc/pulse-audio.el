@@ -35,7 +35,7 @@
 (defun pulse-audio-toggle-mute ()
   "Mute the default sink."
   (interactive)
-  (prelude/start-process
+  (prelude-start-process
    :name "pulse-audio-toggle-mute"
    :command "pactl set-sink-mute @DEFAULT_SINK@ toggle")
   (pulse-audio--message "Mute toggled."))
@@ -43,7 +43,7 @@
 (defun pulse-audio-toggle-microphone ()
   "Mute the default sink."
   (interactive)
-  (prelude/start-process
+  (prelude-start-process
    :name "pulse-audio-toggle-microphone"
    :command "pactl set-source-mute @DEFAULT_SOURCE@ toggle")
   (pulse-audio--message "Microphone toggled."))
@@ -51,7 +51,7 @@
 (defun pulse-audio-decrease-volume ()
   "Low the volume output of the default sink."
   (interactive)
-  (prelude/start-process
+  (prelude-start-process
    :name "pulse-audio-decrease-volume"
    :command (string/format "pactl set-sink-volume @DEFAULT_SINK@ -%s%%"
                            pulse-audio--step-size))
@@ -60,7 +60,7 @@
 (defun pulse-audio-increase-volume ()
   "Raise the volume output of the default sink."
   (interactive)
-  (prelude/start-process
+  (prelude-start-process
    :name "pulse-audio-increase-volume"
    :command (string/format "pactl set-sink-volume @DEFAULT_SINK@ +%s%%"
                            pulse-audio--step-size))

@@ -49,7 +49,7 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Move `prelude/assert' elsewhere so that I can require it without
+;; TODO: Move `prelude-assert' elsewhere so that I can require it without
 ;; introducing the circular dependency of list.el -> prelude.el -> list.el.
 ;;(require 'prelude)
 (require 'dash)
@@ -137,7 +137,7 @@
 ;;                         (if (alist/has-key? k acc)
 ;;                             (setf (alist-get k acc) (list v))
 ;;                           (setf (alist-get k acc) (list v))))))))
-;; (prelude/assert
+;; (prelude-assert
 ;;  (equal '(("John" . ("Cleese" "Malkovich"))
 ;;           ("Thomas" . ("Aquinas")))
 ;;         (list/index (lambda (x) (plist-get x :first-name))
@@ -210,7 +210,7 @@ Be leery of using this with things like alists.  Many data structures in Elisp
 ;; TODO: Add tests.
 (defun list/dedupe-adjacent (xs)
   "Return XS without adjacent duplicates."
-  (prelude/assert (not (list/empty? xs)))
+  (prelude-assert (not (list/empty? xs)))
   (list/reduce (list (list/first xs))
     (lambda (x acc)
       (if (equal x (list/first acc))
@@ -223,16 +223,16 @@ Be leery of using this with things like alists.  Many data structures in Elisp
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (when list/tests?
-;;   (prelude/assert
+;;   (prelude-assert
 ;;    (= 0
 ;;       (list/length '())))
-;;   (prelude/assert
+;;   (prelude-assert
 ;;    (= 5
 ;;       (list/length '(1 2 3 4 5))))
-;;   (prelude/assert
+;;   (prelude-assert
 ;;    (= 16
 ;;       (list/reduce 1 (lambda (x acc) (+ x acc)) '(1 2 3 4 5))))
-;;   (prelude/assert
+;;   (prelude-assert
 ;;    (equal '(2 4 6 8 10)
 ;;           (list/map (lambda (x) (* x 2)) '(1 2 3 4 5)))))
 

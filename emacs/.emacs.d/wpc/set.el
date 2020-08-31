@@ -113,59 +113,59 @@
 
 (when set/enable-testing?
   ;; set/distinct?
-  (prelude/assert
+  (prelude-assert
    (set/distinct? (set/new 'one 'two 'three)
                   (set/new 'a 'b 'c)))
-  (prelude/refute
+  (prelude-refute
    (set/distinct? (set/new 1 2 3)
                   (set/new 3 4 5)))
-  (prelude/refute
+  (prelude-refute
    (set/distinct? (set/new 1 2 3)
                   (set/new 1 2 3)))
   ;; set/equal?
-  (prelude/refute
+  (prelude-refute
    (set/equal? (set/new 'a 'b 'c)
                (set/new 'x 'y 'z)))
-  (prelude/refute
+  (prelude-refute
    (set/equal? (set/new 'a 'b 'c)
                (set/new 'a 'b)))
-  (prelude/assert
+  (prelude-assert
    (set/equal? (set/new 'a 'b 'c)
                (set/new 'a 'b 'c)))
   ;; set/intersection
-  (prelude/assert
+  (prelude-assert
    (set/equal? (set/new 2 3)
                (set/intersection (set/new 1 2 3)
                                  (set/new 2 3 4))))
   ;; set/{from,to}-list
-  (prelude/assert (equal '(1 2 3)
+  (prelude-assert (equal '(1 2 3)
                          (->> '(1 1 2 2 3 3)
                               set/from-list
                               set/to-list)))
   (let ((primary-colors (set/new "red" "green" "blue")))
     ;; set/subset?
-    (prelude/refute
+    (prelude-refute
      (set/subset? (set/new "black" "grey")
                   primary-colors))
-    (prelude/assert
+    (prelude-assert
      (set/subset? (set/new "red")
                   primary-colors))
     ;; set/superset?
-    (prelude/refute
+    (prelude-refute
      (set/superset? primary-colors
                     (set/new "black" "grey")))
-    (prelude/assert
+    (prelude-assert
      (set/superset? primary-colors
                     (set/new "red" "green" "blue")))
-    (prelude/assert
+    (prelude-assert
      (set/superset? primary-colors
                     (set/new "red" "blue"))))
   ;; set/empty?
-  (prelude/assert (set/empty? (set/new)))
-  (prelude/refute (set/empty? (set/new 1 2 3)))
+  (prelude-assert (set/empty? (set/new)))
+  (prelude-refute (set/empty? (set/new 1 2 3)))
   ;; set/count
-  (prelude/assert (= 0 (set/count (set/new))))
-  (prelude/assert (= 2 (set/count (set/new 1 1 2 2)))))
+  (prelude-assert (= 0 (set/count (set/new))))
+  (prelude-assert (= 2 (set/count (set/new 1 1 2 2)))))
 
 (provide 'set)
 ;;; set.el ends here

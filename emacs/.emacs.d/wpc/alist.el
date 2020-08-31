@@ -257,13 +257,13 @@ In this case, the last writer wins, which is B."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when alist/enable-tests?
-  (prelude/assert
+  (prelude-assert
    (equal '((2 . one)
             (3 . two))
           (alist/map-keys #'1+
                           '((1 . one)
                             (2 . two)))))
-  (prelude/assert
+  (prelude-assert
    (equal '((one . 2)
             (two . 3))
           (alist/map-values #'1+

@@ -68,7 +68,7 @@
       mail-envelope-from 'header)
 
 ;; Assert that no two saved searches share share a KBD
-(prelude/assert
+(prelude-assert
  (list/xs-distinct-by? (lambda (x) (plist-get x :key)) notmuch-saved-searches))
 
 (provide 'email)

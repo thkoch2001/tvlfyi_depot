@@ -80,7 +80,7 @@
   "List of `window-manager--named-workspace' structs.")
 
 ;; Assert that no two workspaces share KBDs.
-(prelude/assert (= (list/length window-manager--named-workspaces)
+(prelude-assert (= (list/length window-manager--named-workspaces)
                    (->> window-manager--named-workspaces
                         (list/map #'window-manager--named-workspace-kbd)
                         set/from-list
@@ -188,7 +188,7 @@
        cycle/from-list)
   "Cycle of the my EXWM workspaces.")
 
-(prelude/assert
+(prelude-assert
  (= exwm-workspace-number
     (list/length window-manager--named-workspaces)))
 

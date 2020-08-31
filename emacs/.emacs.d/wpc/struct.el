@@ -78,11 +78,11 @@ This is an adapter interface to `setf'."
   (cl-defstruct dummy name age)
   (defvar test-dummy (make-dummy :name "Roofus" :age 19))
   (struct/set! dummy name "Doofus" test-dummy)
-  (prelude/assert (string= "Doofus" (dummy-name test-dummy)))
+  (prelude-assert (string= "Doofus" (dummy-name test-dummy)))
   (let ((result (struct/set dummy name "Shoofus" test-dummy)))
     ;; Test the immutability of `struct/set'
-    (prelude/assert (string= "Doofus" (dummy-name test-dummy)))
-    (prelude/assert (string= "Shoofus" (dummy-name result)))))
+    (prelude-assert (string= "Doofus" (dummy-name test-dummy)))
+    (prelude-assert (string= "Shoofus" (dummy-name result)))))
 
 (provide 'struct)
 ;;; struct.el ends here

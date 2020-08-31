@@ -64,7 +64,7 @@
 ;; TODO: Support random-sample
 ;; (defun random-sample (n xs)
 ;;   "Return a randomly sample of list XS of size N."
-;;   (prelude/assert (and (>= n 0) (< n (list/length xs))))
+;;   (prelude-assert (and (>= n 0) (< n (list/length xs))))
 ;;   (cl-labels ((do-sample
 ;;                (n xs y ys)
 ;;                (if (= n (set/count ys))

@@ -50,7 +50,7 @@
     "Call `load-theme' with `THEME', ensuring that the line numbers are bright.
 There is no hook that I'm aware of to handle this more elegantly."
     (load-theme theme t)
-    (prelude/set-line-number-color "#da5468"))
+    (prelude-set-line-number-color "#da5468"))
 
 (defun colorscheme/whitelist-set (colorscheme)
   "Focus the COLORSCHEME in the `colorscheme/whitelist' cycle."

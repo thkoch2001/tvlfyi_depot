@@ -64,7 +64,7 @@
 
 (defun bytes/classify (x)
   "Return unit that closest fits byte count, X."
-  (prelude/assert (number/whole? x))
+  (prelude-assert (number/whole? x))
   (cond
    ((and (>= x 0)        (< x bytes/kb))     'byte)
    ((and (>= x bytes/kb) (< x bytes/mb)) 'kilobyte)
@@ -92,17 +92,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (progn
-  (prelude/assert
+  (prelude-assert
    (equal "1000B" (bytes/to-string 1000)))
-  (prelude/assert
+  (prelude-assert
    (equal "2KB" (bytes/to-string (* 2 bytes/kb))))
-  (prelude/assert
+  (prelude-assert
    (equal "17MB" (bytes/to-string (* 17 bytes/mb))))
-  (prelude/assert
+  (prelude-assert
    (equal "419GB" (bytes/to-string (* 419 bytes/gb))))
-  (prelude/assert
+  (prelude-assert
    (equal "999TB" (bytes/to-string (* 999 bytes/tb))))
-  (prelude/assert
+  (prelude-assert
    (equal "2PB" (bytes/to-string (* 2 bytes/pb)))))
 
 (provide 'bytes)

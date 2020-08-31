@@ -46,7 +46,7 @@ The car models the enabled state of my laptop display; the cdr models the
 (defun display/enable-4k ()
   "Attempt to connect to my 4K monitor."
   (interactive)
-  (prelude/start-process
+  (prelude-start-process
    :name "display/enable-4k"
    :command (string/format
              "xrandr --output %s --above %s --primary --auto --size 3840x2160 --rate 30.00 --dpi 144"
@@ -56,7 +56,7 @@ The car models the enabled state of my laptop display; the cdr models the
 (defun display/disable-4k ()
   "Disconnect from the 4K monitor."
   (interactive)
-  (prelude/start-process
+  (prelude-start-process
    :name "display/disable-4k"
    :command (string/format "xrandr --output %s --off"
                            display/4k-monitor)))
@@ -66,7 +66,7 @@ The car models the enabled state of my laptop display; the cdr models the
 Sometimes this is useful when I'm sharing my screen in a Google Hangout and I
   only want to present one of my monitors."
   (interactive)
-  (prelude/start-process
+  (prelude-start-process
    :name "display/disable-laptop"
    :command (string/format "xrandr --output %s --auto"
                            display/laptop-monitor)))
@@ -76,7 +76,7 @@ Sometimes this is useful when I'm sharing my screen in a Google Hangout and I
 Sometimes this is useful when I'm sharing my screen in a Google Hangout and I
   only want to present one of my monitors."
   (interactive)
-  (prelude/start-process
+  (prelude-start-process
    :name "display/disable-laptop"
    :command (string/format "xrandr --output %s --off"
                            display/laptop-monitor)))
