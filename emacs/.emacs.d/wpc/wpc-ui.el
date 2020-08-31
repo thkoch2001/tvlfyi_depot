@@ -10,6 +10,7 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'constants)
 (require 'prelude)
 (require 'alist)
 (require 'fonts)
@@ -115,8 +116,9 @@
 ;; all-the-icons
 (use-package all-the-icons
   :config
-  (unless (f-exists? "~/.local/share/fonts/all-the-icons.ttf")
-    (all-the-icons-install-fonts t)))
+  (when (not constants/ci?)
+    (unless (f-exists? "~/.local/share/fonts/all-the-icons.ttf")
+      (all-the-icons-install-fonts t))))
 
 ;; icons for Ivy
 (use-package all-the-icons-ivy
