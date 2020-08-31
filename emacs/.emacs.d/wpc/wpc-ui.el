@@ -1,5 +1,9 @@
 ;;; wpc-ui.el --- Any related to the UI/UX goes here -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "24"))
+;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; Hosts font settings, scrolling, color schemes.

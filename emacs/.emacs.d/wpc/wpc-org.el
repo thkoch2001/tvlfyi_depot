@@ -1,5 +1,9 @@
-;;; org.el --- My org preferences -*- lexical-binding: t -*-
+;;; wpc-org.el --- My org preferences -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "24.1"))
+;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; Hosts my org mode preferences
