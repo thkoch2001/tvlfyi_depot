@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "805abf42_8b3db35f",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-31T23:40:57Z",
+      "side": 1,
+      "message": "I am 90% sure this will work on macos, as it\u0027s only looking up env vars anyway. If that ends up not being the case we\u0027ll have to revisit anyway.\n\nAs a general rule, I am in support of starting to require marking locations which we *know* will not be cross-platform",
+      "parentUuid": "990b1ac7_925984b8",
+      "range": {
+        "startLine": 107,
+        "startChar": 15,
+        "endLine": 107,
+        "endChar": 28
+      },
+      "revId": "8eb4fdae6044e4d7cb86f7b12f19e2c43accbc56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed5cdde6_021a9720",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon.cc",
         "patchSetId": 8
