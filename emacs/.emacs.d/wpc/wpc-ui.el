@@ -12,7 +12,8 @@
 
 (require 'prelude)
 (require 'alist)
-(require 'themes)
+(require 'fonts)
+(require 'colorscheme)
 (require 'device)
 (require 'laptop-battery)
 (require 'modeline)
@@ -176,8 +177,8 @@
 (when (device/work-laptop?)
   (laptop-battery/display))
 
-;; Load a theme
-(themes/set "Solarized Light")
+(fonts/whitelist-set "JetBrainsMono")
+(colorscheme/whitelist-set 'doom-solarized-light)
 
 (modeline/setup)
 
