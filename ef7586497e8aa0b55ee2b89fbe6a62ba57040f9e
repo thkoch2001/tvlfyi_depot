@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4336c164_dc049ea5",
+        "filename": "ops/nixos/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-08-31T15:37:33Z",
+      "side": 1,
+      "message": "I wonder if this should be __targets to 1. indicate that it\u0027s special and 2. make it less likely for arbitrary sub-attributes to have a \"targets\" attribute with a different meaning and break things down the road",
+      "revId": "ef7586497e8aa0b55ee2b89fbe6a62ba57040f9e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
