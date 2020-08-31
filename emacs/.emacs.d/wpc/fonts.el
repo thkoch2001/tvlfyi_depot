@@ -87,7 +87,7 @@
 (defun fonts/set (font &optional size)
   "Change the font to `FONT' with option integer, SIZE, in pixels."
   (if (maybe-some? size)
-      (set-frame-font (string/format "%s %s" font size) nil t)
+      (set-frame-font (string-format "%s %s" font size) nil t)
     (set-frame-font font nil t)))
 
 (defun fonts/whitelist-set (font)
@@ -107,7 +107,7 @@ The size of the font is determined by `fonts/size'."
   "Message the currently enabled font."
   (interactive)
   (message
-   (string/format "[fonts] Current font: \"%s\""
+   (string-format "[fonts] Current font: \"%s\""
                   (fonts/current))))
 
 (defun fonts/current ()

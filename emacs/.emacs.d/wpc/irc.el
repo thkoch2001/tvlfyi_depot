@@ -87,7 +87,7 @@
 
 (defun irc/message (x)
   "Print message X in a structured way."
-  (message (string/format "[irc.el] %s" x)))
+  (message (string-format "[irc.el] %s" x)))
 
 ;; TODO: Integrate Google setup with Freenode setup.
 
@@ -136,7 +136,7 @@
       (erc-join-channel
        (cycle/next cycle))
       (irc/message
-       (string/format "Current IRC channel: %s" (cycle/current cycle))))))
+       (string-format "Current IRC channel: %s" (cycle/current cycle))))))
 
 (defun irc/prev-channel ()
   "Join the previous channel for the active server."
@@ -146,10 +146,10 @@
       (erc-join-channel
        (cycle/prev cycle))
       (irc/message
-       (string/format "Current IRC channel: %s" (cycle/current cycle))))))
+       (string-format "Current IRC channel: %s" (cycle/current cycle))))))
 
-(add-hook 'erc-mode-hook (disable auto-fill-mode))
-(add-hook 'erc-mode-hook (disable company-mode))
+(add-hook 'erc-mode-hook (macros-disable auto-fill-mode))
+(add-hook 'erc-mode-hook (macros-disable company-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keybindings

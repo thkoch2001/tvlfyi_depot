@@ -15,6 +15,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'prelude)
+(require 'macros)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -40,7 +41,7 @@
   (add-hook 'go-mode-hook (lambda ()
                             (set (make-local-variable 'compile-command)
                                  "go build -v")))
-  (add-hook-before-save 'go-mode-hook #'gofmt-before-save))
+  (macros-add-hook-before-save 'go-mode-hook #'gofmt-before-save))
 
 (provide 'wpc-golang)
 ;;; wpc-golang.el ends here

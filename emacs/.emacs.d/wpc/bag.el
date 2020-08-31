@@ -45,7 +45,7 @@
   (alist/has-key? x (bag-xs xs)))
 
 ;; TODO: Tabling this for now since working with structs seems to be
-;; disappointingly difficult.  Where is `struct/update'?
+;; disappointingly difficult.  Where is `struct-update'?
 ;; (defun bag/add (x xs)
 ;;   "Add X to XS.")
 

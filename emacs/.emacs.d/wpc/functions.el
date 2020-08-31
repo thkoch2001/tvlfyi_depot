@@ -111,7 +111,7 @@
 (defun wpc/evil-replace-under-point ()
   "Faster than typing %s//thing/g."
   (interactive)
-  (let ((term (s-replace "/" "\\/" (symbol/to-string (symbol-at-point)))))
+  (let ((term (s-replace "/" "\\/" (symbol-to-string (symbol-at-point)))))
     (save-excursion
       (evil-ex (concat "%s/\\b" term "\\b/")))))
 

@@ -1,5 +1,9 @@
 ;;; stack.el --- Working with stacks in Elisp -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 ;; A stack is a LIFO queue.
@@ -46,7 +50,7 @@
 
 (defun stack/push (x xs)
   "Push `X' on `XS'."
-  (struct/update stack
+  (struct-update stack
                  xs
                  (>> (list/cons x))
                  xs))
@@ -57,7 +61,7 @@
   "Return the stack, `XS', without the top element.
 Since I cannot figure out a nice way of return tuples in Elisp, if you want to
 look at the first element, use `stack/peek' before running `stack/pop'."
-  (struct/update stack
+  (struct-update stack
                  xs
                  (>> list/tail)
                  xs))

@@ -121,7 +121,7 @@ Return a reference to that buffer."
     (if (> (ts-diff (ts-now) last-called)
            buffer/source-code-timeout)
         (progn
-          (struct/set! source-code-cycle
+          (struct-set! source-code-cycle
                        cycle
                        (cycle/from-list (buffer/source-code-buffers))
                        buffer/source-code-cycle-state)
@@ -129,7 +129,7 @@ Return a reference to that buffer."
                         buffer/source-code-cycle-state)))
             (funcall cycle-fn cycle)
             (switch-to-buffer (cycle/current cycle)))
-          (struct/set! source-code-cycle
+          (struct-set! source-code-cycle
                        last-called
                        (ts-now)
                        buffer/source-code-cycle-state))

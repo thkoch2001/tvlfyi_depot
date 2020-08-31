@@ -45,7 +45,7 @@
 
 (defun set/add (x xs)
   "Add X to set XS."
-  (struct/update set
+  (struct-update set
                  xs
                  (lambda (table)
                    (let ((table-copy (ht-copy table)))

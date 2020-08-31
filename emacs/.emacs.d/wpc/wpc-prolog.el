@@ -14,7 +14,7 @@
 
 ;; TODO: Notice that the .pl extension conflicts with Perl files. This may
 ;; become a problem should I start working with Perl.
-(macros/support-file-extension "pl" prolog-mode)
+(macros-support-file-extension "pl" prolog-mode)
 
 (provide 'wpc-prolog)
 ;;; wpc-prolog.el ends here

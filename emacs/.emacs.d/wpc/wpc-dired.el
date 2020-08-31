@@ -11,9 +11,15 @@
 
 ;;; Code:
 
-;; TODO: Ensure sorting in dired is by type.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Rename wpc-dired.el to file-management.el
+(require 'macros)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (progn
   (require 'dired)
@@ -32,7 +38,7 @@
    "f" #'project-find-file
    "-" (lambda () (interactive) (find-alternate-file "..")))
   (general-add-hook 'dired-mode-hook
-                    (list (enable dired-hide-details-mode)
+                    (list (macros-enable dired-hide-details-mode)
                           #'auto-revert-mode)))
 
 (progn

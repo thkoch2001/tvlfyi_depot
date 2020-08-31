@@ -85,7 +85,7 @@ Otherwise, open with `counsel-find-file'."
           (general-define-key
            :prefix "<SPC>"
            :states '(normal)
-           (string/concat "j" (bookmark-kbd b))
+           (string-concat "j" (bookmark-kbd b))
            ;; TODO: Consider `cl-labels' so `which-key' minibuffer is more
            ;; helpful.
            (lambda () (interactive) (bookmark/open b)))))))

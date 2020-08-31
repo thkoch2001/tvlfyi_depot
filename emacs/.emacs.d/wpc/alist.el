@@ -233,7 +233,7 @@ In this case, the last writer wins, which is B."
 ;; - update-all
 
 ;; Scratch-pad
-(macros/comment
+(macros-comment
  (progn
    (setq person '((first-name . "William")
                   (first-name . "William")

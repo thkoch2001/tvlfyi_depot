@@ -34,7 +34,7 @@ See scrot's man page for more information.")
 This currently only works for PNG files because that's what I'm outputting"
   (call-process "xclip" nil nil nil
                 "-selection" "clipboard" "-t" "image/png" path)
-  (message (string/format "[scrot.el] Image copied to clipboard!")))
+  (message (string-format "[scrot.el] Image copied to clipboard!")))
 
 (defmacro scrot/call (&rest args)
   "Call scrot with ARGS."

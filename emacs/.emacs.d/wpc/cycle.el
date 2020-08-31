@@ -94,16 +94,16 @@ underlying struct."
   "Return the next value in `XS' and update `current-index'."
   (let* ((current-index (cycle-current-index xs))
          (next-index (next-index-> 0 (cycle/count xs) current-index)))
-    (struct/set! cycle previous-index current-index xs)
-    (struct/set! cycle current-index next-index xs)
+    (struct-set! cycle previous-index current-index xs)
+    (struct-set! cycle current-index next-index xs)
     (nth next-index (cycle-xs xs))))
 
 (defun cycle/prev (xs)
   "Return the previous value in `XS' and update `current-index'."
   (let* ((current-index (cycle-current-index xs))
          (next-index (next-index<- 0 (cycle/count xs) current-index)))
-    (struct/set! cycle previous-index current-index xs)
-    (struct/set! cycle current-index next-index xs)
+    (struct-set! cycle previous-index current-index xs)
+    (struct-set! cycle current-index next-index xs)
     (nth next-index (cycle-xs xs))))
 
 (defun cycle/current (cycle)
@@ -118,8 +118,8 @@ underlying struct."
   "Jump to the I index of XS."
   (let ((current-index (cycle-current-index xs))
         (next-index (math/mod i (cycle/count xs))))
-    (struct/set! cycle previous-index current-index xs)
-    (struct/set! cycle current-index next-index xs))
+    (struct-set! cycle previous-index current-index xs)
+    (struct-set! cycle current-index next-index xs))
   xs)
 
 (defun cycle/focus (p cycle)
@@ -155,19 +155,19 @@ ITEM is the first item in XS that t for `equal'."
 If there is no currently focused item, add X to the beginning of XS."
   (if (cycle/empty? xs)
       (progn
-        (struct/set! cycle xs (list x) xs)
-        (struct/set! cycle current-index 0 xs)
-        (struct/set! cycle previous-index nil xs))
+        (struct-set! cycle xs (list x) xs)
+        (struct-set! cycle current-index 0 xs)
+        (struct-set! cycle previous-index nil xs))
     (let ((curr-i (cycle-current-index xs))
           (prev-i (cycle-previous-index xs)))
       (if curr-i
           (progn
-            (struct/set! cycle xs (-insert-at curr-i x (cycle-xs xs)) xs)
-            (when (>= prev-i curr-i) (struct/set! cycle previous-index (1+ prev-i) xs))
-            (when curr-i (struct/set! cycle current-index (1+ curr-i) xs)))
+            (struct-set! cycle xs (-insert-at curr-i x (cycle-xs xs)) xs)
+            (when (>= prev-i curr-i) (struct-set! cycle previous-index (1+ prev-i) xs))
+            (when curr-i (struct-set! cycle current-index (1+ curr-i) xs)))
         (progn
-          (struct/set! cycle xs (cons x (cycle-xs xs)) xs)
-          (when prev-i (struct/set! cycle previous-index (1+ prev-i) xs))))
+          (struct-set! cycle xs (cons x (cycle-xs xs)) xs)
+          (when prev-i (struct-set! cycle previous-index (1+ prev-i) xs))))
       xs)))
 
 (defun cycle/remove (x xs)
@@ -181,13 +181,13 @@ If X is the currently focused value, after it's deleted, current-index will be
   (let ((curr-i (cycle-current-index xs))
         (prev-i (cycle-previous-index xs))
         (rm-i (-elem-index x (cycle-xs xs))))
-    (struct/set! cycle xs (-remove-at rm-i (cycle-xs xs)) xs)
+    (struct-set! cycle xs (-remove-at rm-i (cycle-xs xs)) xs)
     (when prev-i
-      (when (> prev-i rm-i) (struct/set! cycle previous-index (1- prev-i) xs))
-      (when (= prev-i rm-i) (struct/set! cycle previous-index nil xs)))
+      (when (> prev-i rm-i) (struct-set! cycle previous-index (1- prev-i) xs))
+      (when (= prev-i rm-i) (struct-set! cycle previous-index nil xs)))
     (when curr-i
-      (when (> curr-i rm-i) (struct/set! cycle current-index (1- curr-i) xs))
-      (when (= curr-i rm-i) (struct/set! cycle current-index nil xs)))
+      (when (> curr-i rm-i) (struct-set! cycle current-index (1- curr-i) xs))
+      (when (= curr-i rm-i) (struct-set! cycle current-index nil xs)))
     xs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

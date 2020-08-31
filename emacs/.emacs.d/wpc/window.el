@@ -30,7 +30,7 @@
       nil)))
 
 ;; TODO: Find a way to incorporate these into function documentation.
-(macros/comment
+(macros-comment
  (window-find "*scratch*"))
 
 (defun window-delete (window)

@@ -44,7 +44,7 @@
 (defun cache/touch (x xs)
   "Ensure value X in cache, XS, is front of the list.
 If X isn't in XS (using `equal'), insert it at the front."
-  (struct/update
+  (struct-update
    cache
    xs
    (>> (list/reject (lambda (y) (equal x y)))
