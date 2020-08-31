@@ -1,5 +1,9 @@
-;;; window.el --- Working with Emacs windows -*- lexical-binding: t -*-
+;;; window.el --- Working with windows -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 ;; Utilities to make CRUDing windows in Emacs easier.
@@ -18,7 +22,7 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun window/find (name)
+(defun window-find (name)
   "Find a window by the NAME of the buffer it's hosting."
   (let ((buffer (get-buffer name)))
     (if (maybe/some? buffer)
@@ -27,9 +31,9 @@
 
 ;; TODO: Find a way to incorporate these into function documentation.
 (macros/comment
- (window/find "*scratch*"))
+ (window-find "*scratch*"))
 
-(defun window/delete (window)
+(defun window-delete (window)
   "Delete the WINDOW reference."
   (delete-window window))
 
