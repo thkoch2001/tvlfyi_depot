@@ -14,6 +14,7 @@
 (require 'f)
 (require 'dash)
 (require 'constants)
+(require 'region)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -231,7 +232,7 @@
   (defun wpc-misc-deadgrep-region ()
     "Run a ripgrep search on the active region."
     (interactive)
-    (deadgrep (region/to-string)))
+    (deadgrep (region-to-string)))
   (defun wpc-misc-deadgrep-dwim ()
     "If a region is active, use that as the search, otherwise don't."
     (interactive)
