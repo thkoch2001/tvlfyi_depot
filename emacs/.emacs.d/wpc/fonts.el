@@ -18,7 +18,6 @@
 (require 'cycle)
 (require 'device)
 (require 'maybe)
-(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
@@ -33,9 +32,6 @@
     ('work-laptop "10")
     ('work-desktop "8"))
   "My preferred default font-size, which is device specific.")
-
-(defconst fonts/keybindings? t
-  "Install the keybindings when non-nil.")
 
 (defconst fonts/size-step 10
   "The amount (%) by which to increase or decrease a font.")
@@ -136,18 +132,6 @@ The size of the font is determined by `fonts/size'."
   "Restore font size to its default value."
   (interactive)
   (fonts/whitelist-set (fonts/current)))
-
-(when fonts/keybindings?
-  (progn
-    (general-define-key
-     :prefix "<SPC>"
-     :states '(normal)
-     "Ff" #'fonts/next
-     "Pf" #'fonts/prev)
-    (general-define-key "s-9" #'fonts/ivy-select)
-    (general-define-key "s-0" #'fonts/reset-size)
-    (general-define-key "s-j" #'fonts/decrease-size)
-    (general-define-key "s-k" #'fonts/increase-size)))
 
 (provide 'fonts)
 ;;; fonts.el ends here
