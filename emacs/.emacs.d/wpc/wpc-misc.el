@@ -1,5 +1,9 @@
-;;; misc.el --- Hosting miscellaneous configuration -*- lexical-binding: t -*-
+;;; wpc-misc.el --- Hosting miscellaneous configuration -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "25.1"))
+;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; This is the home of any configuration that couldn't find a better home.
@@ -196,11 +200,11 @@
 (setq vc-follow-symlinks t)
 
 ;; fullscreen settings
-(defvar ns-use-native-fullscreen nil)
+(setq ns-use-native-fullscreen nil)
 
 (use-package yasnippet
   :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
+  (setq yas-snippet-dirs (list (f-join user-emacs-directory "snippets")))
   (yas-global-mode 1))
 
 (use-package projectile

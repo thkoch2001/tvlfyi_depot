@@ -1,5 +1,9 @@
-;;; package.el --- My package configuration -*- lexical-binding: t -*-
+;;; wpc-package.el --- My package configuration -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "24.1"))
+;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; This module hosts all of the settings required to work with ELPA,

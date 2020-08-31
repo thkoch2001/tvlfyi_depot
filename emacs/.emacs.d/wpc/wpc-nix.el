@@ -1,5 +1,9 @@
 ;;; wpc-nix.el --- Nix support -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "25.1"))
+;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; Configuration to support working with Nix.
