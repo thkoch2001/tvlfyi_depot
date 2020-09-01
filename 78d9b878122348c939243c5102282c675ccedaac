@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "160d6e49_59e0e4fa",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4724,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-09-01T02:44:59Z",
+      "side": 1,
+      "message": "The function your fixing the default argument on isn\u0027t actually virtual. buildPaths is virtual though, right?\nTaking a look, we already fixed the default argument on buildPaths.",
+      "range": {
+        "startLine": 4714,
+        "startChar": 36,
+        "endLine": 4724,
+        "endChar": 77
+      },
+      "revId": "78d9b878122348c939243c5102282c675ccedaac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
