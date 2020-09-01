@@ -1,5 +1,9 @@
 ;;; ivy-helpers.el --- More interfaces to ivy -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
 ;; Hopefully to improve my workflows.
@@ -16,7 +20,7 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(cl-defun ivy-helpers/kv (prompt kv f)
+(cl-defun ivy-helpers-kv (prompt kv f)
   "PROMPT users with the keys in KV and return its corresponding value.  Calls F
 with the key and value from KV."
   (ivy-read
@@ -26,7 +30,7 @@ with the key and value from KV."
    :action (lambda (entry)
              (funcall f (car entry) (cdr entry)))))
 
-(defun ivy-helpers/do-run-external-command (cmd)
+(defun ivy-helpers-do-run-external-command (cmd)
   "Execute the specified CMD and notify the user when it finishes."
   (message "Starting %s..." cmd)
   (set-process-sentinel
@@ -35,7 +39,7 @@ with the key and value from KV."
      (when (string= event "finished\n")
        (message "%s process finished." process)))))
 
-(defun ivy-helpers/list-external-commands ()
+(defun ivy-helpers-list-external-commands ()
   "Creates a list of all external commands available on $PATH while filtering
 NixOS wrappers."
   (cl-loop
@@ -51,14 +55,14 @@ NixOS wrappers."
    append lsdir into completions
    finally return (sort completions 'string-lessp)))
 
-(defun ivy-helpers/run-external-command ()
+(defun ivy-helpers-run-external-command ()
   "Prompts the user with a list of all installed applications and
 lets them select one to launch."
   (interactive)
-  (let ((external-commands-list (ivy-helpers/list-external-commands)))
+  (let ((external-commands-list (ivy-helpers-list-external-commands)))
     (ivy-read "Command:" external-commands-list
               :require-match t
-              :action #'ivy-helpers/do-run-external-command)))
+              :action #'ivy-helpers-do-run-external-command)))
 
 ;;; Code:
 (provide 'ivy-helpers)

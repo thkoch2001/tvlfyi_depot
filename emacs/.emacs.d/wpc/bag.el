@@ -1,5 +1,9 @@
 ;;; bag.el --- Working with bags (aka multi-sets) -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
 ;; What is a bag?  A bag should be thought of as a frequency table.  It's a way
@@ -31,36 +35,36 @@
 
 (cl-defstruct bag xs)
 
-(defun bag/update (f xs)
+(defun bag-update (f xs)
   "Call F on alist in XS."
   (let ((ys (bag-xs xs)))
     (setf (bag-xs xs) (funcall f ys))))
 
-(defun bag/new ()
+(defun bag-new ()
   "Create an empty bag."
-  (make-bag :xs (alist/new)))
+  (make-bag :xs (alist-new)))
 
-(defun bag/contains? (x xs)
+(defun bag-contains? (x xs)
   "Return t if XS has X."
-  (alist/has-key? x (bag-xs xs)))
+  (alist-has-key? x (bag-xs xs)))
 
 ;; TODO: Tabling this for now since working with structs seems to be
 ;; disappointingly difficult.  Where is `struct-update'?
-;; (defun bag/add (x xs)
+;; (defun bag-add (x xs)
 ;;   "Add X to XS.")
 
 ;; TODO: What do we name delete vs. remove?
-;; (defun bag/remove (x xs)
+;; (defun bag-remove (x xs)
 ;;   "Remove X from XS.
 ;; This is a no-op is X doesn't exist in XS.")
 
-(defun bag/from-list (xs)
+(defun bag-from-list (xs)
   "Map a list of `XS' into a bag."
   (->> xs
-       (list/reduce
-        (bag/new)
+       (list-reduce
+        (bag-new)
         (lambda (x acc)
-          (bag/add x 1 #'number/inc acc)))))
+          (bag-add x 1 #'number-inc acc)))))
 
 (provide 'bag)
 ;;; bag.el ends here

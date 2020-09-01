@@ -1,5 +1,9 @@
 ;;; graph.el --- Working with in-memory graphs -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
 ;;
@@ -42,44 +46,44 @@
 (cl-defstruct graph neighbors edges)
 
 ;; TODO: How do you find the starting point for a topo sort?
-(defun graph/sort (xs)
+(defun graph-sort (xs)
   "Return a topological sort of XS.")
 
-(defun graph/from-edges (xs)
+(defun graph-from-edges (xs)
   "Create a graph struct from the Edge List, XS.
 The user must pass in a valid Edge List since asserting on the shape of XS might
   be expensive."
   (make-graph :edges xs))
 
-(defun graph/from-neighbors (xs)
+(defun graph-from-neighbors (xs)
   "Create a graph struct from a Neighbors Table, XS.
 The user must pass in a valid Neighbors Table since asserting on the shape of
   XS might be expensive."
   (make-graph :neighbors xs))
 
-(defun graph/instance? (xs)
+(defun graph-instance? (xs)
   "Return t if XS is a graph struct."
   (graph-p xs))
 
 ;; TODO: Model each of the mapping functions into an isomorphism.
-(defun graph/edges->neighbors (xs)
+(defun graph-edges->neighbors (xs)
   "Map Edge List, XS, into a Neighbors Table."
-  (prelude-assert (graph/instance? xs)))
+  (prelude-assert (graph-instance? xs)))
 
-(defun graph/neighbors->edges (xs)
+(defun graph-neighbors->edges (xs)
   "Map Neighbors Table, XS, into an Edge List."
-  (prelude-assert (graph/instance? xs)))
+  (prelude-assert (graph-instance? xs)))
 
 ;; Below are three different models of the same unweighted, directed graph.
 
-(defvar graph/edges
+(defvar graph-edges
   '((a . b) (a . c) (a . e)
     (b . c) (b . d)
     (c . e)
     (d . f)
     (e . d) (e . f)))
 
-(defvar graph/neighbors
+(defvar graph-neighbors
   ((a b c e)
    (b c d)
    (c e)

@@ -1,5 +1,9 @@
 ;;; scope.el --- Work with a scope data structure -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
 ;; Exposing an API for working with a scope data structure in a non-mutative
@@ -9,89 +13,93 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'alist)
 (require 'stack)
 (require 'struct)
 (require 'macros)
 
-(cl-defstruct scope scopes)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Create
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun scope/new ()
-  "Return an empty scope."
-  (make-scope :scopes (->> (stack/new)
-                           (stack/push (alist/new)))))
+(cl-defstruct scope scopes)
 
-(defun scope/flatten (xs)
+(defun scope-new ()
+  "Return an empty scope."
+  (make-scope :scopes (->> (stack-new)
+                           (stack-push (alist-new)))))
+
+(defun scope-flatten (xs)
   "Return a flattened representation of the scope, XS.
 The newest bindings eclipse the oldest."
   (->> xs
        scope-scopes
-       stack/to-list
-       (list/reduce (alist/new)
+       stack-to-list
+       (list-reduce (alist-new)
                     (lambda (scope acc)
-                      (alist/merge acc scope)))))
+                      (alist-merge acc scope)))))
 
-(defun scope/push-new (xs)
+(defun scope-push-new (xs)
   "Push a new, empty scope onto XS."
   (struct-update scope
                  scopes
-                 (>> (stack/push (alist/new)))
+                 (>> (stack-push (alist-new)))
                  xs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Read
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun scope/get (k xs)
+(defun scope-get (k xs)
   "Return K from XS if it's in scope."
   (->> xs
-       scope/flatten
-       (alist/get k)))
+       scope-flatten
+       (alist-get k)))
 
-(defun scope/current (xs)
+(defun scope-current (xs)
   "Return the newest scope from XS."
   (let ((xs-copy (copy-scope xs)))
     (->> xs-copy
          scope-scopes
-         stack/peek)))
+         stack-peek)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Update
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun scope/set (k v xs)
+(defun scope-set (k v xs)
   "Set value, V, at key, K, in XS for the current scope."
   (struct-update scope
                  scopes
-                 (>> (stack/map-top (>> (alist/set k v))))
+                 (>> (stack-map-top (>> (alist-set k v))))
                  xs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Delete
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun scope/pop (xs)
+(defun scope-pop (xs)
   "Return a new scope without the top element from XS."
   (->> xs
        scope-scopes
-       stack/pop))
+       stack-pop))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Predicates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun scope/defined? (k xs)
+(defun scope-defined? (k xs)
   "Return t if K is in scope of XS."
   (->> xs
-       scope/flatten
-       (alist/has-key? k)))
+       scope-flatten
+       (alist-has-key? k)))
 
 ;; TODO: Find a faster way to write aliases like this.
-(defun scope/instance? (xs)
+(defun scope-instance? (xs)
   "Return t if XS is a scope struct."
   (scope-p xs))
 

@@ -72,14 +72,14 @@ Depth-first traversals have the advantage of typically consuming less memory
                  (if (or (maybe-nil? node)
                          (tree-leaf? node))
                      acc-new
-                   (list/reduce
+                   (list-reduce
                     acc-new
                     (lambda (node acc)
                       (tree-do-reduce-depth
                        acc
                        f
                        node
-                       (number/inc depth)))
+                       (number-inc depth)))
                     (node-children node))))))
     (do-reduce-depth acc f node 0)))
 
@@ -94,13 +94,13 @@ Depth-first traversals have the advantage of typically consuming less memory
 ;; above.
 (defun tree-leaf-depths (xs)
   "Return a list of all of the depths of the leaf nodes in XS."
-  (list/reverse
+  (list-reverse
    (tree-reduce-depth
     '()
     (lambda (node acc depth)
       (if (or (maybe-nil? node)
               (tree-leaf? node))
-          (list/cons depth acc)
+          (list-cons depth acc)
         acc))
     xs)))
 
@@ -122,8 +122,8 @@ generating test data.  Warning this function can overflow the stack."
                (d vf bf)
                (make-node
                 :value (funcall vf d)
-                :children (->> (series/range 0 (number/dec bf))
-                               (list/map
+                :children (->> (series/range 0 (number-dec bf))
+                               (list-map
                                 (lambda (_)
                                   (when (random-boolean?)
                                     (do-random d vf bf))))))))
@@ -147,9 +147,9 @@ A tree is balanced if none of the differences between any two depths of two leaf
   nodes in XS is greater than N."
   (> n (->> xs
             tree-leaf-depths
-            set/from-list
-            set/count
-            number/dec)))
+            set-from-list
+            set-count
+            number-dec)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests

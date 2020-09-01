@@ -1,5 +1,9 @@
 ;;; sequence.el --- Working with the "sequence" types -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 ;; Elisp supports a typeclass none as "sequence" which covers the following
@@ -66,22 +70,22 @@
 ;; (defprotocol sequence
 ;;   :functions (reduce))
 ;; (definstance sequence list
-;;   :reduce #'list/reduce
-;;   :filter #'list/filter
-;;   :map    #'list/map)
+;;   :reduce #'list-reduce
+;;   :filter #'list-filter
+;;   :map    #'list-map)
 ;; (definstance sequence vector
 ;;   :reduce #'vector/reduce)
 ;; (definstance sequence string
 ;;   :reduce #'string)
 
-(defun sequence/classify (xs)
+(defun sequence-classify (xs)
   "Return the type of `XS'."
   (cond
    ((listp xs) 'list)
    ((vectorp xs) 'vector)
    ((stringp xs) 'string)))
 
-(defun sequence/reduce (acc f xs)
+(defun sequence-reduce (acc f xs)
   "Reduce of `XS' calling `F' on x and `ACC'."
   (seq-reduce
    (lambda (acc x)
@@ -91,12 +95,12 @@
 
 ;; Elixir also turned everything into a list for efficiecy reasons.
 
-(defun sequence/filter (p xs)
+(defun sequence-filter (p xs)
   "Filter `XS' with predicate, `P'.
 Returns a list regardless of the type of `XS'."
   (seq-filter p xs))
 
-(defun sequence/map (f xs)
+(defun sequence-map (f xs)
   "Maps `XS' calling `F' on each element.
 Returns a list regardless of the type of `XS'."
   (seq-map f xs))

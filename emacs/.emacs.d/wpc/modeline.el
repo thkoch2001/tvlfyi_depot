@@ -1,5 +1,9 @@
-;;; modeline.el --- Customize my Emacs mode-line -*- lexical-binding: t -*-
+;;; modeline.el --- Customize my mode-line -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "25.1"))
+;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; Because I use EXWM, I treat my Emacs mode-line like my system bar: I need to
@@ -13,7 +17,7 @@
 
 (use-package telephone-line)
 
-(defun modeline/bottom-right-window? ()
+(defun modeline-bottom-right-window? ()
   "Determines whether the last (i.e. bottom-right) window of the
   active frame is showing the buffer in which this function is
   executed."
@@ -23,23 +27,23 @@
          (last-window (car (seq-intersection right-windows bottom-windows))))
     (eq (current-buffer) (window-buffer last-window))))
 
-(defun modeline/maybe-render-time ()
+(defun modeline-maybe-render-time ()
   "Renders the mode-line-misc-info string for display in the
   mode-line if the currently active window is the last one in the
   frame.
 
   The idea is to not display information like the current time,
   load, battery levels on all buffers."
-  (when (modeline/bottom-right-window?)
+  (when (modeline-bottom-right-window?)
     (telephone-line-raw mode-line-misc-info t)))
 
-(defun modeline/setup ()
+(defun modeline-setup ()
   "Render my custom modeline."
   (telephone-line-defsegment telephone-line-last-window-segment ()
-    (modeline/maybe-render-time))
+    (modeline-maybe-render-time))
   ;; Display the current EXWM workspace index in the mode-line
   (telephone-line-defsegment telephone-line-exwm-workspace-index ()
-    (when (modeline/bottom-right-window?)
+    (when (modeline-bottom-right-window?)
       (format "[%s]" exwm-workspace-current-index)))
   ;; Define a highlight font for ~ important ~ information in the last
   ;; window.
@@ -61,4 +65,4 @@
   (telephone-line-mode 1))
 
 (provide 'modeline)
-;; modeline.el ends here
+;;; modeline.el ends here

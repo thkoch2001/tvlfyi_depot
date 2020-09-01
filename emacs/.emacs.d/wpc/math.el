@@ -1,5 +1,9 @@
 ;;; math.el --- Math stuffs -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "24.3"))
+;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; Containing some useful mathematical functions.
@@ -16,7 +20,7 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst math/pi pi
+(defconst math-pi pi
   "The number pi.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -25,7 +29,7 @@
 
 ;; TODO: Support all three arguments.
 ;; Int -> Int -> Int -> Boolean
-(cl-defun math/triangle-of-power (&key base power result)
+(cl-defun math-triangle-of-power (&key base power result)
   ;; TODO: Assert two of three are set.
   (cond
    ((maybe-somes? base power result)
@@ -39,19 +43,19 @@
    (t
     (error "Two of the three arguments must be set"))))
 
-(defun math/mod (x y)
+(defun math-mod (x y)
   "Return X mod Y."
   (mod x y))
 
-(defun math/exp (x y)
+(defun math-exp (x y)
   "Return X raised to the Y."
   (expt x y))
 
-(defun math/round (x)
+(defun math-round (x)
   "Round X to nearest ones digit."
   (round x))
 
-(defun math/floor (x)
+(defun math-floor (x)
   "Floor value X."
   (floor x))
 
