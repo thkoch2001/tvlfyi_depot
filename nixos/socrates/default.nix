@@ -1,8 +1,6 @@
 let
   briefcase = import <briefcase> {};
   pkgs = briefcase.third_party.pkgs;
-  trimNewline = x: pkgs.lib.removeSuffix "\n" x;
-  readSecret = x: trimNewline (builtins.readFile ("/etc/secrets/" + x));
 in {
   imports = [ ./hardware.nix ];
 
@@ -115,26 +113,6 @@ in {
       privateSshKeyPath = "/etc/ssh/buildkite_agent_id_rsa";
     };
   };
-
-  # systemd.services.monzo-token-server = {
-  #   enable = true;
-  #   description = "Ensure my Monzo access token is valid";
-  #   script = "${briefcase.tools.monzo_ynab.tokens}/bin/token-server";
-  #   # TODO(wpcarro): I'm unsure of the size of this security risk, but if a
-  #   # non-root user runs `systemctl cat monzo-token-server`, they could read the
-  #   # following, sensitive environment variables.
-  #   environment = {
-  #     store_path = "/var/cache/monzo_ynab";
-  #     monzo_client_id = readSecret "monzo-client-id";
-  #     monzo_client_secret = readSecret "monzo-client-secret";
-  #     ynab_personal_access_token = readSecret "ynab-personal-access-token";
-  #     ynab_account_id = readSecret "ynab-account-id";
-  #     ynab_budget_id = readSecret "ynab-budget-id";
-  #   };
-  #   serviceConfig = {
-  #     Type = "simple";
-  #   };
-  # };
 
   systemd.services.zoo = {
     enable = true;
