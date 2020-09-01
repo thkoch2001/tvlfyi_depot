@@ -18,13 +18,18 @@
 
 ;;; Code:
 
-(require 'list)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(cl-defstruct stack xs)
+(require 'list)
+(require '>)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Create
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(cl-defstruct stack xs)
 
 (defun stack-new ()
   "Create an empty stack."
@@ -52,7 +57,7 @@
   "Push `X' on `XS'."
   (struct-update stack
                  xs
-                 (>> (list-cons x))
+                 (>-> (list-cons x))
                  xs))
 
 ;; TODO: How to return something like {(list-head xs), (list-tail xs)} in Elixir
@@ -63,7 +68,7 @@ Since I cannot figure out a nice way of return tuples in Elisp, if you want to
 look at the first element, use `stack-peek' before running `stack-pop'."
   (struct-update stack
                  xs
-                 (>> list-tail)
+                 (>-> list-tail)
                  xs))
 
 (defun stack-map-top (f xs)

@@ -20,7 +20,7 @@
 (require 'alist)
 (require 'stack)
 (require 'struct)
-(require 'macros)
+(require '>)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Create
@@ -47,7 +47,7 @@ The newest bindings eclipse the oldest."
   "Push a new, empty scope onto XS."
   (struct-update scope
                  scopes
-                 (>> (stack-push (alist-new)))
+                 (>-> (stack-push (alist-new)))
                  xs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -75,7 +75,7 @@ The newest bindings eclipse the oldest."
   "Set value, V, at key, K, in XS for the current scope."
   (struct-update scope
                  scopes
-                 (>> (stack-map-top (>> (alist-set k v))))
+                 (>-> (stack-map-top (>-> (alist-set k v))))
                  xs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

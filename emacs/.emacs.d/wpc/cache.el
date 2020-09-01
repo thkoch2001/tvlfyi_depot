@@ -29,6 +29,7 @@
 
 (require 'prelude)
 (require 'struct)
+(require '>)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -55,7 +56,7 @@ If X isn't in XS (using `equal'), insert it at the front."
   (struct-update
    cache
    xs
-   (>> (list-reject (lambda (y) (equal x y)))
+   (>-> (list-reject (lambda (y) (equal x y)))
        (list-cons x))
    xs))
 

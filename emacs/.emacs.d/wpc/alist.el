@@ -60,20 +60,17 @@
 ;; TODO: Include a section that compares alist.el to a.el from
 ;; github.com/plexus/a.el.
 
-;; Dependencies:
+;;; Code:
 
-;; TODO: Consider dropping explicit dependency white-listing since all of these
-;; should be available in my Emacs.  The problem arises when this library needs
-;; to be published, in which case, something like Nix and a build process could
-;; possible insert the necessary require statements herein.  Not sure how I feel
-;; about this though.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'maybe)
 (require 'macros)
 (require 'dash)
 (require 'tuple)
 (require 'maybe)
-
-;;; Code:
 
 ;; TODO: Support function aliases for:
 ;; - create/set
