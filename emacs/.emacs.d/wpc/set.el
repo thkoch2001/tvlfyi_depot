@@ -65,7 +65,7 @@
        (list-reduce acc f)))
 
 (defun set-intersection (a b)
-  "Return the set intersection between sets A and B."
+  "Return the set intersection between A and B."
   (set-reduce (set-new)
               (lambda (x acc)
                 (if (set-contains? x b)
@@ -98,11 +98,11 @@
              (set-xs b)))
 
 (defun set-distinct? (a b)
-  "Return t if sets A and B have no shared members."
+  "Return t if A and B have no shared members."
   (set-empty? (set-intersection a b)))
 
 (defun set-superset? (a b)
-  "Return t if set A contains all of the members of set B."
+  "Return t if A has all of the members of B."
   (->> b
        set-to-list
        (list-all? (lambda (x) (set-contains? x a)))))
