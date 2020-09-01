@@ -1,4 +1,4 @@
-;;; constants.el --- Constants for organizing my Emacs -*- lexical-binding: t -*-
+;;; constants.el --- Constants for organizing my Elisp -*- lexical-binding: t -*-
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
@@ -26,7 +26,7 @@
 
 (defconst constants-ci?
   (maybe-some? (getenv "CI"))
-  "True when Emacs is running in CI.")
+  "Encoded as t when Emacs is running in CI.")
 
 (defconst constants-briefcase
   (getenv "BRIEFCASE")

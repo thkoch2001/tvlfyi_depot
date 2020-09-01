@@ -1,4 +1,4 @@
-;; string.el --- Library for working with strings -*- lexical-binding: t -*-
+;;; string.el --- Library for working with strings -*- lexical-binding: t -*-
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1

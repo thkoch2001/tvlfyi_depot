@@ -8,18 +8,21 @@
 ;;; Commentary:
 ;; Because I use EXWM, I treat my Emacs mode-line like my system bar: I need to
 ;; quickly check the system time, and I expect it to be at the bottom-right of
-;; my Emacs frame. I used doom-modeline for awhile, which is an impressive
+;; my Emacs frame.  I used doom-modeline for awhile, which is an impressive
 ;; package, but it conditionally colorizes on the modeline for the active
-;; buffer. So if my bottom-right window is inactive, I cannot see the time.
+;; buffer.  So if my bottom-right window is inactive, I cannot see the time.
 ;;
 ;; My friend, @tazjin, has a modeline setup that I think is more compatible with
 ;; EXWM, so I'm going to base my setup off of his.
 
+;;; Code:
+
 (use-package telephone-line)
 
 (defun modeline-bottom-right-window? ()
-  "Determines whether the last (i.e. bottom-right) window of the
-  active frame is showing the buffer in which this function is
+  "Determines whether the last (i.e.
+bottom-right) window of the
+active frame is showing the buffer in which this function is
   executed."
   (let* ((frame (selected-frame))
          (right-windows (window-at-side-list frame 'right))
@@ -28,9 +31,7 @@
     (eq (current-buffer) (window-buffer last-window))))
 
 (defun modeline-maybe-render-time ()
-  "Renders the mode-line-misc-info string for display in the
-  mode-line if the currently active window is the last one in the
-  frame.
+  "Conditionally renders the `mode-line-misc-info' string.
 
   The idea is to not display information like the current time,
   load, battery levels on all buffers."
@@ -47,7 +48,8 @@
       (format "[%s]" exwm-workspace-current-index)))
   ;; Define a highlight font for ~ important ~ information in the last
   ;; window.
-  (defface special-highlight '((t (:foreground "white" :background "#5f627f"))) "")
+  (defface special-highlight
+    '((t (:foreground "white" :background "#5f627f"))) "")
   (add-to-list 'telephone-line-faces
                '(highlight . (special-highlight . special-highlight)))
   (setq telephone-line-lhs
@@ -61,7 +63,6 @@
         telephone-line-primary-right-separator 'telephone-line-tan-right
         telephone-line-secondary-left-separator 'telephone-line-tan-hollow-left
         telephone-line-secondary-right-separator 'telephone-line-tan-hollow-right)
-
   (telephone-line-mode 1))
 
 (provide 'modeline)

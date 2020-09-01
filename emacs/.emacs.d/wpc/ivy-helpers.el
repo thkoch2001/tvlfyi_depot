@@ -40,8 +40,7 @@ with the key and value from KV."
        (message "%s process finished." process)))))
 
 (defun ivy-helpers-list-external-commands ()
-  "Creates a list of all external commands available on $PATH while filtering
-NixOS wrappers."
+  "Create a list of all external commands available on $PATH."
   (cl-loop
    for dir in (split-string (getenv "PATH") path-separator)
    when (and (file-exists-p dir) (file-accessible-directory-p dir))
@@ -56,8 +55,7 @@ NixOS wrappers."
    finally return (sort completions 'string-lessp)))
 
 (defun ivy-helpers-run-external-command ()
-  "Prompts the user with a list of all installed applications and
-lets them select one to launch."
+  "Prompts the user with a list of all installed applications to launch."
   (interactive)
   (let ((external-commands-list (ivy-helpers-list-external-commands)))
     (ivy-read "Command:" external-commands-list

@@ -3,7 +3,7 @@
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
 ;; URL: https://git.wpcarro.dev/wpcarro/briefcase
-;; Package-Requires: ((emacs "24"))
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 ;; Some wrappers to obtain battery information.

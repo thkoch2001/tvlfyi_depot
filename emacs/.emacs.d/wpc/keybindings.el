@@ -8,7 +8,7 @@
 ;;; Commentary:
 ;; Attempting to centralize my keybindings to simplify my configuration.
 ;;
-;; I have some expectations about my keybindings. Here are some of those
+;; I have some expectations about my keybindings.  Here are some of those
 ;; defined:
 ;; - In insert mode:
 ;;   - C-a: beginning-of-line
@@ -123,8 +123,8 @@
   `(exwm-input-set-key (kbd ,c) ,fn))
 
 (keybindings-exwm "C-M-v" #'ivy-clipmenu-copy)
-(keybindings-exwm "<XF86MonBrightnessUp>" #'screen-brightness/increase)
-(keybindings-exwm "<XF86MonBrightnessDown>" #'screen-brightness/decrease)
+(keybindings-exwm "<XF86MonBrightnessUp>" #'screen-brightness-increase)
+(keybindings-exwm "<XF86MonBrightnessDown>" #'screen-brightness-decrease)
 (keybindings-exwm "<XF86AudioMute>" #'pulse-audio/toggle-mute)
 (keybindings-exwm "<XF86AudioLowerVolume>" #'pulse-audio/decrease-volume)
 (keybindings-exwm "<XF86AudioRaiseVolume>" #'pulse-audio/increase-volume)

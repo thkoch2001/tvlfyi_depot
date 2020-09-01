@@ -1,9 +1,9 @@
-;;; cycle.el --- Simple module for working with cycles. -*- lexical-binding: t -*-
+;;; cycle.el --- Simple module for working with cycles -*- lexical-binding: t -*-
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
 ;; URL: https://git.wpcarro.dev/wpcarro/briefcase
-;; Package-Requires: ((emacs "24"))
+;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
 ;; Something like this may already exist, but I'm having trouble finding it, and
@@ -56,7 +56,7 @@
   "Return the list representation of a cycle, XS."
   (cycle-xs xs))
 
-(defun next-index<- (lo hi x)
+(defun cycle--next-index<- (lo hi x)
   "Return the next index in a cycle when moving downwards.
 - `LO' is the lower bound.
 - `HI' is the upper bound.
@@ -65,7 +65,7 @@
       (- hi 1)
     (- x 1)))
 
-(defun next-index-> (lo hi x)
+(defun cycle--next-index-> (lo hi x)
   "Return the next index in a cycle when moving upwards.
 - `LO' is the lower bound.
 - `HI' is the upper bound.
@@ -97,7 +97,7 @@ underlying struct."
 (defun cycle-next (xs)
   "Return the next value in `XS' and update `current-index'."
   (let* ((current-index (cycle-current-index xs))
-         (next-index (next-index-> 0 (cycle-count xs) current-index)))
+         (next-index (cycle--next-index-> 0 (cycle-count xs) current-index)))
     (struct-set! cycle previous-index current-index xs)
     (struct-set! cycle current-index next-index xs)
     (nth next-index (cycle-xs xs))))
@@ -105,7 +105,7 @@ underlying struct."
 (defun cycle-prev (xs)
   "Return the previous value in `XS' and update `current-index'."
   (let* ((current-index (cycle-current-index xs))
-         (next-index (next-index<- 0 (cycle-count xs) current-index)))
+         (next-index (cycle--next-index<- 0 (cycle-count xs) current-index)))
     (struct-set! cycle previous-index current-index xs)
     (struct-set! cycle current-index next-index xs)
     (nth next-index (cycle-xs xs))))
@@ -136,7 +136,7 @@ underlying struct."
       (error "No element in cycle matches predicate"))))
 
 (defun cycle-focus-item (x xs)
-  "Focus ITEM in cycle XS.
+  "Focus item, X, in cycle XS.
 ITEM is the first item in XS that t for `equal'."
   (cycle-focus (lambda (y) (equal x y)) xs))
 
