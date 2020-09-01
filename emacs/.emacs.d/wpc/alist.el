@@ -199,8 +199,10 @@ Mutative variant of `alist-delete'."
 
 ;; TODO: Should I support `alist-find-key' and `alist-find-value' variants?
 (defun alist-find (p xs)
-  "Apply a predicate fn, P, to each key and value in XS and return the key of
-  the first element that returns t."
+  "Find an element in XS.
+
+Apply a predicate fn, P, to each key and value in XS and return the key of the
+first element that returns t."
   (let ((result (list-find (lambda (x) (funcall p (car x) (cdr x))) xs)))
     (if result
         (car result)

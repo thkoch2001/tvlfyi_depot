@@ -3,7 +3,7 @@
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
 ;; URL: https://git.wpcarro.dev/wpcarro/briefcase
-;; Package-Requires: ((emacs "24"))
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 ;; Need to decide which client I will use for IRC.
@@ -60,14 +60,14 @@
                              irc-server->channels)))))
 
 (defun irc-channel->server (server->channels channel)
-  "Resolve an IRC server from a given CHANNEL."
+  "Using SERVER->CHANNELS, resolve an IRC server from a given CHANNEL."
   (let ((result (alist-find (lambda (k v) (cycle-contains? channel v))
                             server->channels)))
     (prelude-assert (maybe-some? result))
     result))
 
 (defun irc-channel->cycle (server->channels channel)
-  "Resolve an IRC's channels cycle from a given CHANNEL."
+  "Using SERVER->CHANNELS, resolve an IRC's channels cycle from CHANNEL."
   (alist-get (irc-channel->server server->channels channel)
              server->channels))
 
@@ -98,7 +98,7 @@
 ;; TODO: Support function or KBD for switching to an ERC buffer.
 
 (defun irc-kill-all-erc-processes ()
-  "Kills all ERC buffers and processes."
+  "Kill all ERC buffers and processes."
   (interactive)
   (->> (erc-buffer-list)
        (-map #'kill-buffer)))

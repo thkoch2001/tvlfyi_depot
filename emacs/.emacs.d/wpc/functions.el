@@ -13,17 +13,19 @@
 
 ;;; Code:
 (defun functions-evil-window-vsplit-right ()
+  "Split the window vertically and focus the right half."
   (interactive)
   (evil-window-vsplit)
   (windmove-right))
 
 (defun functions-evil-window-split-down ()
+  "Split the window horizontal and focus the bottom half."
   (interactive)
   (evil-window-split)
   (windmove-down))
 
 (defun functions-create-snippet ()
-  "Creates a window split and then opens the Yasnippet editor."
+  "Create a window split and then opens the Yasnippet editor."
   (interactive)
   (evil-window-vsplit)
   (call-interactively #'yas-new-snippet))

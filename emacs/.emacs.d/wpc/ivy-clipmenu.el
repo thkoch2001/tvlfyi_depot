@@ -83,7 +83,7 @@ This value defaults to 25.")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun ivy-clipmenu-parse-content (x)
-  "Parse the label from the entry in clipmenu's line-cache."
+  "Parse the label from the entry, X, in clipmenu's line-cache."
   (->> (s-split " " x)
        (-drop 1)
        (s-join " ")))

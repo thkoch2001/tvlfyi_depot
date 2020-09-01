@@ -1,4 +1,4 @@
-;; symbol.el --- Library for working with symbols. -*- lexical-binding: t -*-
+;;; symbol.el --- Library for working with symbols -*- lexical-binding: t -*-
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1

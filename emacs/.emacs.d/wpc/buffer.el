@@ -18,7 +18,7 @@
 ;; buffers":
 ;; 1. Toggling previous: <SPC><SPC>
 ;; 2. Using `ivy-read': <SPC>b
-;; TODO: These obscure evil KBDs. Maybe a hydra definition would be best?
+;; TODO: These obscure evil KBDs.  Maybe a hydra definition would be best?
 ;; 3. Cycling (forwards/backwards): C-f, C-b
 
 ;;; Code:
@@ -117,7 +117,7 @@ Return a reference to that buffer."
 ;; encapsulates all of this behavior.
 
 (defun buffer-cycle (cycle-fn)
-  "Cycle forwards or backwards through `buffer-source-code-buffers'."
+  "Using CYCLE-FN, move through `buffer-source-code-buffers'."
   (let ((last-called (source-code-cycle-last-called
                       buffer-source-code-cycle-state))
         (cycle (source-code-cycle-cycle
