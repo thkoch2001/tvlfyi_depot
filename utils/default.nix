@@ -1,14 +1,14 @@
-{ pkgs, ... }:
+args@{ pkgs, ... }:
 
-# Using this as a library to define some common utility functions that I often
-# reach for.
-{
-  # A unary function that returns its argument.
-  identity = x: x;
+# This top-level module exposes all of my utility functions for Nix. It should
+# be used like:
+# ```nix
+# inherit (briefcase.utils) fs;
+# ```
 
-  # Create a derivation that creates an executable shell script named `as` that
-  # calls the program located at `path`, forwarding all of the arguments.
-  wrapNonNixProgram = { path, as }: pkgs.writeShellScriptBin as ''
-    exec ${path} "$@"
-  '';
+let
+  builder = import ./builder.nix args;
+  fs      = import ./fs.nix args;
+in {
+  inherit builder fs;
 }
