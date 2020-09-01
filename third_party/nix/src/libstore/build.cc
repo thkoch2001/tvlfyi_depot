@@ -475,10 +475,10 @@ void handleDiffHook(uid_t uid, uid_t gid, Path tryA, Path tryB, Path drvPath,
       }
 
       if (!diffRes.second.empty()) {
-        LOG(ERROR) << absl::StripTrailingAsciiWhitespace(diffRes.second);
+        log_sink_ << absl::StripTrailingAsciiWhitespace(diffRes.second);
       }
     } catch (Error& error) {
-      LOG(ERROR) << "diff hook execution failed: " << error.what();
+      log_sink_ << "diff hook execution failed: " << error.what();
     }
   }
 }
@@ -1125,7 +1125,7 @@ void DerivationGoal::loadDerivation() {
   trace("loading derivation");
 
   if (nrFailed != 0) {
-    LOG(ERROR) << "cannot build missing derivation '" << drvPath << "'";
+    log_sink_ << "cannot build missing derivation '" << drvPath << "'";
     done(BuildResult::MiscFailure);
     return;
   }
@@ -1303,8 +1303,8 @@ void DerivationGoal::repairClosure() {
     if (worker.pathContentsGood(i)) {
       continue;
     }
-    LOG(ERROR) << "found corrupted or missing path '" << i
-               << "' in the output closure of '" << drvPath << "'";
+    log_sink_ << "found corrupted or missing path '" << i
+              << "' in the output closure of '" << drvPath << "'";
     Path drvPath2 = outputsToDrv[i];
     if (drvPath2.empty()) {
       addWaitee(worker.makeSubstitutionGoal(log_sink_, i, Repair));
@@ -1339,8 +1339,8 @@ void DerivationGoal::inputsRealised() {
     if (!useDerivation) {
       throw Error(format("some dependencies of '%1%' are missing") % drvPath);
     }
-    LOG(ERROR) << "cannot build derivation '" << drvPath << "': " << nrFailed
-               << " dependencies couldn't be built";
+    log_sink_ << "cannot build derivation '" << drvPath << "': " << nrFailed
+              << " dependencies couldn't be built";
     done(BuildResult::DependencyFailed);
     return;
   }
@@ -1355,7 +1355,7 @@ void DerivationGoal::inputsRealised() {
 
   /* The outputs are referenceable paths. */
   for (auto& i : drv->outputs) {
-    DLOG(INFO) << "building path " << i.second.path;
+    log_sink_ << "building path " << i.second.path;
     allPaths.insert(i.second.path);
   }
 
@@ -1515,7 +1515,7 @@ void DerivationGoal::tryToBuild() {
     startBuilder();
 
   } catch (BuildError& e) {
-    LOG(ERROR) << e.msg();
+    log_sink_ << e.msg();
     outputLocks.unlock();
     buildUser.reset();
     worker.permanentFailure = true;
@@ -1653,7 +1653,7 @@ void DerivationGoal::buildDone() {
     registerOutputs();
 
     if (settings.postBuildHook != "") {
-      LOG(INFO) << "running post-build-hook '" << settings.postBuildHook
+      log_sink_ << "running post-build-hook '" << settings.postBuildHook
                 << "' [" << drvPath << "]";
       auto outputPaths = drv->outputPaths();
       std::map<std::string, std::string> hookEnvironment = getEnv();
@@ -1683,7 +1683,7 @@ void DerivationGoal::buildDone() {
 
         void flushLine() {
           if (settings.verboseBuild) {
-            LOG(ERROR) << "post-build-hook: " << currentLine;
+            log_sink_ << "post-build-hook: " << currentLine;
           }
           currentLine.clear();
         }
@@ -1733,7 +1733,7 @@ void DerivationGoal::buildDone() {
     outputLocks.unlock();
 
   } catch (BuildError& e) {
-    LOG(ERROR) << e.msg();
+    log_sink_ << e.msg();
 
     outputLocks.unlock();
 
@@ -1808,9 +1808,9 @@ HookReply DerivationGoal::tryBuildHook() {
     }
   } catch (SysError& e) {
     if (e.errNo == EPIPE) {
-      LOG(ERROR) << "build hook died unexpectedly: "
-                 << absl::StripTrailingAsciiWhitespace(
-                        drainFD(worker.hook->fromHook.readSide.get()));
+      log_sink_ << "build hook died unexpectedly: "
+                << absl::StripTrailingAsciiWhitespace(
+                       drainFD(worker.hook->fromHook.readSide.get()));
       worker.hook = nullptr;
       return rpDecline;
     }
@@ -2754,8 +2754,8 @@ void setupSeccomp() {
 
   if (nativeSystem == "aarch64-linux" &&
       seccomp_arch_add(ctx, SCMP_ARCH_ARM) != 0) {
-    LOG(ERROR) << "unable to add ARM seccomp architecture; this may result in "
-               << "spurious build failures if running 32-bit ARM processes";
+    log_sink_ << "unable to add ARM seccomp architecture; this may result in "
+              << "spurious build failures if running 32-bit ARM processes";
   }
 
   /* Prevent builders from creating setuid/setgid binaries. */
@@ -3495,7 +3495,7 @@ void DerivationGoal::registerOutputs() {
           throw NotDeterministic(msg);
         }
 
-        LOG(ERROR) << msg;
+        log_sink_ << msg;
         curRound = nrRounds;  // we know enough, bail out early
       }
     }
@@ -3775,7 +3775,7 @@ void DerivationGoal::deleteTmpDir(bool force) {
     /* Don't keep temporary directories for builtins because they
        might have privileged stuff (like a copy of netrc). */
     if (settings.keepFailed && !force && !drv->isBuiltin()) {
-      LOG(INFO) << "note: keeping build directory '" << tmpDir << "'";
+      log_sink_ << "note: keeping build directory '" << tmpDir << "'";
       chmod(tmpDir.c_str(), 0755);
     } else {
       deletePath(tmpDir);
@@ -3790,9 +3790,9 @@ void DerivationGoal::handleChildOutput(int fd, const std::string& data) {
       (!hook && fd == builderOut.readSide.get())) {
     logSize += data.size();
     if (settings.maxLogSize && logSize > settings.maxLogSize) {
-      LOG(ERROR) << getName()
-                 << " killed after writing more than %2% bytes of log output"
-                 << settings.maxLogSize;
+      log_sink_ << getName()
+                << " killed after writing more than %2% bytes of log output"
+                << settings.maxLogSize;
       killChild();
       done(BuildResult::LogLimitExceeded);
       return;
@@ -4074,7 +4074,7 @@ void SubstitutionGoal::tryNext() {
     throw;
   } catch (Error& e) {
     if (settings.tryFallback) {
-      LOG(ERROR) << e.what();
+      log_sink_ << e.what();
       tryNext();
       return;
     }
@@ -4099,9 +4099,9 @@ void SubstitutionGoal::tryNext() {
   if (worker.store.requireSigs && !sub->isTrusted &&
       (info->checkSignatures(worker.store, worker.store.getPublicKeys()) ==
        0u)) {
-    LOG(WARNING) << "substituter '" << sub->getUri()
-                 << "' does not have a valid signature for path '" << storePath
-                 << "'";
+    log_sink_ << "substituter '" << sub->getUri()
+              << "' does not have a valid signature for path '" << storePath
+              << "'";
     tryNext();
     return;
   }
@@ -4192,7 +4192,7 @@ void SubstitutionGoal::finished() {
   try {
     promise.get_future().get();
   } catch (std::exception& e) {
-    LOG(ERROR) << e.what();
+    log_sink_ << e.what();
 
     /* Cause the parent build to fail unless --fallback is given,
        or the substitute has disappeared. The latter case behaves
@@ -4604,8 +4604,8 @@ void Worker::waitForInput() {
     if (goal->getExitCode() == Goal::ecBusy && 0 != settings.maxSilentTime &&
         j->respectTimeouts &&
         after - j->lastOutput >= std::chrono::seconds(settings.maxSilentTime)) {
-      LOG(ERROR) << goal->getName() << " timed out after "
-                 << settings.maxSilentTime << " seconds of silence";
+      log_sink_ << goal->getName() << " timed out after "
+                << settings.maxSilentTime << " seconds of silence";
       goal->timedOut();
     }
 
@@ -4613,8 +4613,8 @@ void Worker::waitForInput() {
              0 != settings.buildTimeout && j->respectTimeouts &&
              after - j->timeStarted >=
                  std::chrono::seconds(settings.buildTimeout)) {
-      LOG(ERROR) << goal->getName() << " timed out after "
-                 << settings.buildTimeout << " seconds";
+      log_sink_ << goal->getName() << " timed out after "
+                << settings.buildTimeout << " seconds";
       goal->timedOut();
     }
   }
@@ -4667,7 +4667,7 @@ bool Worker::pathContentsGood(const Path& path) {
   if (i != pathContentsGoodCache.end()) {
     return i->second;
   }
-  LOG(INFO) << "checking path '" << path << "'...";
+  log_sink_ << "checking path '" << path << "'...";
   auto info = store.queryPathInfo(path);
   bool res;
   if (!pathExists(path)) {
@@ -4679,7 +4679,7 @@ bool Worker::pathContentsGood(const Path& path) {
   }
   pathContentsGoodCache[path] = res;
   if (!res) {
-    LOG(ERROR) << "path '" << path << "' is corrupted or missing!";
+    log_sink_ << "path '" << path << "' is corrupted or missing!";
   }
   return res;
 }
