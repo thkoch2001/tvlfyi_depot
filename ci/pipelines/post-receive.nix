@@ -53,7 +53,7 @@ let
           ./emacs/.emacs.d/wpc/*.el
       '';
       label = ":gnu: lint Emacs";
-      depends_on = "init-emacs";
+      depends_on = "build-briefcase";
     }
     {
       key = "build-socrates";
