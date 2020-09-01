@@ -284,11 +284,11 @@ class Worker {
   /* Make a goal (with caching). */
   GoalPtr makeDerivationGoal(std::ostream& log_sink, const Path& drvPath,
                              const StringSet& wantedOutputs,
-                             BuildMode buildMode = bmNormal);
+                             BuildMode buildMode);
 
   std::shared_ptr<DerivationGoal> makeBasicDerivationGoal(
       std::ostream& log_sink, const Path& drvPath, const BasicDerivation& drv,
-      BuildMode buildMode = bmNormal);
+      BuildMode buildMode);
 
   GoalPtr makeSubstitutionGoal(std::ostream& log_sink, const Path& storePath,
                                RepairFlag repair = NoRepair);
@@ -888,10 +888,10 @@ class DerivationGoal : public Goal {
 
  public:
   DerivationGoal(Worker& worker, std::ostream& log_sink, const Path& drvPath,
-                 StringSet wantedOutputs, BuildMode buildMode = bmNormal);
+                 StringSet wantedOutputs, BuildMode buildMode);
 
   DerivationGoal(Worker& worker, std::ostream& log_sink, const Path& drvPath,
-                 const BasicDerivation& drv, BuildMode buildMode = bmNormal);
+                 const BasicDerivation& drv, BuildMode buildMode);
 
   ~DerivationGoal() override;
 
