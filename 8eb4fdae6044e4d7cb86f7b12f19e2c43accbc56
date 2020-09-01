@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5ca83b31_9916370d",
+        "filename": "third_party/nix/src/nix-daemon/nix-daemon.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-09-01T00:59:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "805abf42_8b3db35f",
+      "range": {
+        "startLine": 107,
+        "startChar": 15,
+        "endLine": 107,
+        "endChar": 28
+      },
+      "revId": "8eb4fdae6044e4d7cb86f7b12f19e2c43accbc56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed5cdde6_021a9720",
         "filename": "third_party/nix/src/nix-daemon/nix-daemon.cc",
         "patchSetId": 8
