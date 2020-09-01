@@ -10,6 +10,10 @@ let
     nix.package = depot.third_party.nix;
 
     virtualisation.qemu.options = [ "-nographic" ];
+
+    nix.nixPath = [
+      "depot=${depot.depotPath}"
+    ];
   };
 
   system = pkgs.nixos { inherit configuration; };
