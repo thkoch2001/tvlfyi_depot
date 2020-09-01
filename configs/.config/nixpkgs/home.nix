@@ -9,6 +9,8 @@
 # dependency that I'm trying to prune...
 let
   briefcase = import <briefcase> {};
+  inherit (briefcase.utils) builder;
+  inherit (builtins) toPath readFile;
 in {
   home = {
     packages = with pkgs; [
@@ -45,12 +47,12 @@ in {
 
   programs.home-manager = {
     enable = true;
-    path = builtins.toPath ~/home-manager;
+    path = toPath ~/home-manager;
   };
 
   programs.git = {
     enable = true;
-    package = briefcase.utils.wrapNonNixProgram {
+    package = builder.wrapNonNixProgram {
       path = "/usr/bin/git";
       as = "git";
     };
@@ -118,7 +120,7 @@ in {
       sysu = "systemctl --user";
       sysust = "systemctl --user status";
     };
-    promptInit = builtins.readFile ../fish/prompt.fish;
+    promptInit = readFile ../fish/prompt.fish;
     functions = {
       ptree = {
         body = ''
@@ -204,7 +206,7 @@ in {
     enable = true;
     latitude = "51.49";
     longitude = "-0.18";
-    package = briefcase.utils.wrapNonNixProgram {
+    package = builder.wrapNonNixProgram {
       path = "/usr/bin/redshift";
       as = "redshift";
     };
