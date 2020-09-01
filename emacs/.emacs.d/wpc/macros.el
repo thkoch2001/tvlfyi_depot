@@ -54,13 +54,6 @@ Usage: (add-hook-before-save 'reason-mode-hook #'refmt-before-save)"
   "Empty comment s-expresion where `BODY' is ignored."
   `nil)
 
-;; NOTE: Not prepending the "macros" to this macro, since brevity is its goal.
-(defmacro >> (&rest forms)
-  "Compose a new, point-free function by composing FORMS together."
-  (let ((sym (gensym)))
-    `(lambda (,sym)
-       (->> ,sym ,@forms))))
-
 (defmacro macros-support-file-extension (ext mode)
   "Register MODE to automatically load with files ending with EXT extension.
 Usage: (macros-support-file-extension \"pb\" protobuf-mode)"

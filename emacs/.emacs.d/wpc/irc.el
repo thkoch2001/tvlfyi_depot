@@ -22,6 +22,7 @@
 (require 'set)
 (require 'maybe)
 (require 'macros)
+(require '>)
 (require 'password-store)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -79,8 +80,8 @@
 (setq erc-autojoin-channels-alist
       (->> irc-server->channels
            (alist-map-values #'cycle-to-list)
-           (alist-map-keys (>> (s-chop-prefix "irc.")
-                               (s-chop-suffix ".net")))))
+           (alist-map-keys (>-> (s-chop-prefix "irc.")
+                                (s-chop-suffix ".net")))))
 
 (defcustom irc-install-kbds? t
   "When t, install the keybindings defined herein.")
