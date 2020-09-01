@@ -4,6 +4,36 @@
 (defun notes-file (f)
   (concat org-directory (if (string-prefix-p "/" f) "" "/") f))
 
+(defun grfn/org-project-tag->key (tag)
+  (s-replace-regexp "^project__" "" tag))
+
+(defun grfn/org-project-tag->name (tag)
+  (s-titleized-words
+   (s-join " " (s-split "_" (grfn/org-project-tag->key tag)))))
+
+(defun grfn/org-project-tag->keys (tag)
+  (s-join "" (cons "p"
+                   (-map (lambda (s) (substring-no-properties s 0 1))
+                         (s-split "_" (grfn/org-project-tag->key tag))))))
+
+(defun grfn/org-projects->agenda-commands (project-tags)
+  (loop for tag in project-tags
+        collect `(,(grfn/org-project-tag->keys tag)
+                  ,(grfn/org-project-tag->name tag)
+                  tags-todo
+                  ,tag)))
+
+(defun grfn/org-projects ()
+  (loop for (tag) in
+        (org-global-tags-completion-table
+         (directory-files-recursively "~/notes" "\\.org$"))
+        when (s-starts-with-p "project__" tag)
+        collect tag))
+
+(comment
+ (grfn/org-projects->agenda-commands (grfn/org-projects))
+ )
+
 (setq
  org-directory (expand-file-name "~/notes")
  +org-dir (expand-file-name "~/notes")
@@ -78,12 +108,15 @@
  org-todo-keywords '((sequence "TODO(t)" "ACTIVE(a)" "|" "DONE(d)" "RUNNING(r)")
                      (sequence "NEXT(n)" "WAITING(w)" "LATER(l)" "|" "CANCELLED(c)"))
  org-agenda-custom-commands
- '(("p" "Sprint Tasks" tags-todo "sprint")
+ `(("S" "Sprint Tasks" tags-todo "sprint")
    ("i" "Inbox" tags "inbox")
    ("r" "Running jobs" todo "RUNNING")
    ("w" "@Work" tags-todo "@work")
    ("n" . "Next...")
-   ("np" "Next Sprint" tags-todo "next_sprint|sprint_planning"))
+   ("np" "Next Sprint" tags-todo "next_sprint|sprint_planning")
+
+   ("p" . "Project...")
+   ,@(grfn/org-projects->agenda-commands (grfn/org-projects)))
 
  org-agenda-dim-blocked-tasks nil
  org-enforce-todo-dependencies nil
