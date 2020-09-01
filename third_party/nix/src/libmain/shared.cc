@@ -253,7 +253,7 @@ void parseCmdLine(
 }
 
 void printVersion(const std::string& programName) {
-  std::cout << format("%1% (Nix) %2%") % programName % nixVersion << std::endl;
+  std::cout << format("%1% (Tvix) %2%") % programName % nixVersion << std::endl;
 
   // TODO(tazjin): figure out what the fuck this is
   /*if (verbosity > lvlInfo) {
