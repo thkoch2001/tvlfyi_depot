@@ -124,6 +124,11 @@ in
       sshKey = "/home/grfn/.ssh/id_rsa";
       system = "x86_64-darwin";
       maxJobs = 8; # 16 cpus
+    } {
+      hostName = "eu.nixbuild.net";
+      system = "x86_64-linux";
+      maxJobs = 100;
+      supportedFeatures = [ "benchmark" "big-parallel" ];
     }];
 
     distributedBuilds = true;
