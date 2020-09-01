@@ -1,5 +1,9 @@
 ;;; bookmark.el --- Saved files and directories on my filesystem -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
 ;; After enjoying and relying on Emacs's builtin `jump-to-register' command, I'd
@@ -29,7 +33,7 @@
 
 (cl-defstruct bookmark label path kbd)
 
-(defconst bookmark/install-kbds? t
+(defconst bookmark-install-kbds? t
   "When t, install keybindings.")
 
 ;; TODO: Consider hosting this function somewhere other than here, since it
@@ -38,7 +42,7 @@
 ;; `counsel-projectile-switch-project-action'.  See the noise I made on GH for
 ;; more context: https://github.com/ericdanan/counsel-projectile/issues/137
 
-(defun bookmark/handle-directory-dwim (path)
+(defun bookmark-handle-directory-dwim (path)
   "Open PATH as either a project directory or a regular directory.
 If PATH is `projectile-project-p', open with `counsel-projectile-find-file'.
 Otherwise, open with `counsel-find-file'."
@@ -49,19 +53,19 @@ Otherwise, open with `counsel-find-file'."
     (let ((ivy-extra-directories nil))
       (counsel-find-file path))))
 
-(defconst bookmark/handle-directory #'bookmark/handle-directory-dwim
+(defconst bookmark-handle-directory #'bookmark-handle-directory-dwim
   "Function to call when a bookmark points to a directory.")
 
-(defconst bookmark/handle-file #'counsel-find-file-action
+(defconst bookmark-handle-file #'counsel-find-file-action
   "Function to call when a bookmark points to a file.")
 
-(defconst bookmark/whitelist
+(defconst bookmark-whitelist
   (list
    (make-bookmark :label "briefcase"
-                  :path constants/briefcase
+                  :path constants-briefcase
                   :kbd "b")
    (make-bookmark :label "current project"
-                  :path constants/current-project
+                  :path constants-current-project
                   :kbd "p"))
   "List of registered bookmarks.")
 
@@ -69,18 +73,18 @@ Otherwise, open with `counsel-find-file'."
 ;; API
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun bookmark/open (b)
+(defun bookmark-open (b)
   "Open bookmark, B, in a new buffer or an ivy minibuffer."
   (let ((path (bookmark-path b)))
     (cond
      ((f-directory? path)
-      (funcall bookmark/handle-directory path))
+      (funcall bookmark-handle-directory path))
      ((f-file? path)
-      (funcall bookmark/handle-file path)))))
+      (funcall bookmark-handle-file path)))))
 
-(when bookmark/install-kbds?
-  (->> bookmark/whitelist
-       (list/map
+(when bookmark-install-kbds?
+  (->> bookmark-whitelist
+       (list-map
         (lambda (b)
           (general-define-key
            :prefix "<SPC>"
@@ -88,7 +92,7 @@ Otherwise, open with `counsel-find-file'."
            (string-concat "j" (bookmark-kbd b))
            ;; TODO: Consider `cl-labels' so `which-key' minibuffer is more
            ;; helpful.
-           (lambda () (interactive) (bookmark/open b)))))))
+           (lambda () (interactive) (bookmark-open b)))))))
 
 (provide 'bookmark)
 ;;; bookmark.el ends here

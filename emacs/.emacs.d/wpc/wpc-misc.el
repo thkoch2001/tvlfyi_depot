@@ -179,7 +179,7 @@
       create-lockfiles nil)
 
 ;; ensure code wraps at 80 characters by default
-(setq-default fill-column constants/fill-column)
+(setq-default fill-column constants-fill-column)
 
 (put 'narrow-to-region 'disabled nil)
 
@@ -190,7 +190,7 @@
 (add-hook 'after-save-hook
           (lambda ()
             (when (f-equal? (buffer-file-name)
-                            (f-join constants/briefcase "secrets.json"))
+                            (f-join constants-briefcase "secrets.json"))
               (shell-command "git secret hide"))))
 
 ;; use tabs instead of spaces
@@ -214,7 +214,7 @@
 ;; TODO: Consider moving this into a briefcase.el module.
 (defun wpc-misc--briefcase-find (dir)
   "Find the default.nix nearest to DIR."
-  (when (s-starts-with? constants/briefcase (f-expand dir))
+  (when (s-starts-with? constants-briefcase (f-expand dir))
     (if (f-exists? (f-join dir "default.nix"))
         (cons 'transient dir)
       (wpc-misc--briefcase-find (f-parent dir)))))

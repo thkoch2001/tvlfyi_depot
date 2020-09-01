@@ -1,5 +1,9 @@
 ;;; device.el --- Physical device information -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
 ;; Functions for querying device information.
@@ -13,30 +17,30 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst device/hostname->device
+(defconst device-hostname->device
   '(("zeno.lon.corp.google.com" . work-desktop)
     ("seneca" . work-laptop))
   "Mapping hostname to a device symbol.")
 
 ;; TODO: Should I generate these predicates?
 
-(defun device/classify ()
+(defun device-classify ()
   "Return the device symbol for the current host or nil if not supported."
-  (alist/get system-name device/hostname->device))
+  (alist-get system-name device-hostname->device))
 
-(defun device/work-laptop? ()
+(defun device-work-laptop? ()
   "Return t if current device is work laptop."
   (equal 'work-laptop
-         (device/classify)))
+         (device-classify)))
 
-(defun device/work-desktop? ()
+(defun device-work-desktop? ()
   "Return t if current device is work desktop."
   (equal 'work-desktop
-         (device/classify)))
+         (device-classify)))
 
-(defun device/corporate? ()
+(defun device-corporate? ()
   "Return t if the current device is owned by my company."
-  (or (device/work-laptop?) (device/work-desktop?)))
+  (or (device-work-laptop?) (device-work-desktop?)))
 
 (provide 'device)
 ;;; device.el ends here

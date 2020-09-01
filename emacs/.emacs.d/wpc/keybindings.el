@@ -1,5 +1,9 @@
 ;;; keybindings.el --- Centralizing my keybindings -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 ;; Attempting to centralize my keybindings to simplify my configuration.
@@ -63,10 +67,10 @@
   "L"   #'evil-end-of-line
   "_"   #'ranger
   "-"   #'dired-jump
-  "sl"  #'wpc/evil-window-vsplit-right
+  "sl"  #'functions-evil-window-vsplit-right
   "sh"  #'evil-window-vsplit
   "sk"  #'evil-window-split
-  "sj"  #'wpc/evil-window-split-down)
+  "sj"  #'functions-evil-window-split-down)
 
 (general-nmap
   :keymaps 'override
@@ -114,19 +118,19 @@
 ;; have to bound to the readline function that deletes the entire line.
 (general-unbind "C-u")
 
-(defmacro keybinding/exwm (c fn)
+(defmacro keybindings-exwm (c fn)
   "Bind C to FN using `exwm-input-set-key' with `kbd' applied to C."
   `(exwm-input-set-key (kbd ,c) ,fn))
 
-(keybinding/exwm "C-M-v" #'ivy-clipmenu/copy)
-(keybinding/exwm "<XF86MonBrightnessUp>" #'screen-brightness/increase)
-(keybinding/exwm "<XF86MonBrightnessDown>" #'screen-brightness/decrease)
-(keybinding/exwm "<XF86AudioMute>" #'pulse-audio/toggle-mute)
-(keybinding/exwm "<XF86AudioLowerVolume>" #'pulse-audio/decrease-volume)
-(keybinding/exwm "<XF86AudioRaiseVolume>" #'pulse-audio/increase-volume)
-(keybinding/exwm "<XF86AudioMicMute>" #'pulse-audio/toggle-microphone)
-(keybinding/exwm (kbd/raw 'x11 "s") #'scrot/select)
-(keybinding/exwm "<C-M-tab>" #'window-manager-switch-to-exwm-buffer)
+(keybindings-exwm "C-M-v" #'ivy-clipmenu-copy)
+(keybindings-exwm "<XF86MonBrightnessUp>" #'screen-brightness/increase)
+(keybindings-exwm "<XF86MonBrightnessDown>" #'screen-brightness/decrease)
+(keybindings-exwm "<XF86AudioMute>" #'pulse-audio/toggle-mute)
+(keybindings-exwm "<XF86AudioLowerVolume>" #'pulse-audio/decrease-volume)
+(keybindings-exwm "<XF86AudioRaiseVolume>" #'pulse-audio/increase-volume)
+(keybindings-exwm "<XF86AudioMicMute>" #'pulse-audio/toggle-microphone)
+(keybindings-exwm (kbd-raw 'x11 "s") #'scrot-select)
+(keybindings-exwm "<C-M-tab>" #'window-manager-switch-to-exwm-buffer)
 
 (general-define-key
  :keymaps 'override
@@ -168,11 +172,11 @@
  "W" #'balance-windows
  "gs" #'magit-status
  "E" #'refine
- "es" #'wpc/create-snippet
+ "es" #'functions-create-snippet
  "l" #'linum-mode
  "B" #'magit-blame
  "w" #'save-buffer
- "r" #'wpc/evil-replace-under-point
+ "r" #'functions-evil-replace-under-point
  "R" #'deadgrep)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -180,13 +184,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Show or hide a vterm buffer.  I'm intentionally not defining this in
-;; vterm-mgt.el because it consumes `buffer/show-previous', and I'd like to
+;; vterm-mgt.el because it consumes `buffer-show-previous', and I'd like to
 ;; avoid bloating vterm-mgt.el with dependencies that others may not want.
-(general-define-key (kbd/raw 'x11 "t")
+(general-define-key (kbd-raw 'x11 "t")
                     (lambda ()
                       (interactive)
                       (if (vterm-mgt--instance? (current-buffer))
-                          (switch-to-buffer (first (buffer/source-code-buffers)))
+                          (switch-to-buffer (first (buffer-source-code-buffers)))
                         (call-interactively #'vterm-mgt-find-or-create))))
 
 (general-define-key
@@ -201,15 +205,15 @@
 ;; Displays
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(when (device/work-laptop?)
-  (keybinding/exwm "<XF86Display>" #'display/cycle-display-states)
+(when (device-work-laptop?)
+  (keybindings-exwm "<XF86Display>" #'display-cycle-display-states)
   (general-define-key
    :prefix "<SPC>"
    :states '(normal)
-   "d0" #'display/disable-laptop
-   "d1" #'display/enable-laptop
-   "D0" #'display/disable-4k
-   "D1" #'display/enable-4k))
+   "d0" #'display-disable-laptop
+   "d1" #'display-enable-laptop
+   "D0" #'display-disable-4k
+   "D1" #'display-enable-4k))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; notmuch
@@ -227,7 +231,7 @@
  "e" #'notmuch-show-archive-message-then-next-or-next-thread)
 
 ;; TODO(wpcarro): Consider moving this to a separate module
-(defun evil-ex-define-cmd-local (cmd f)
+(defun keybindings--evil-ex-define-cmd-local (cmd f)
   "Define CMD to F locally to a buffer."
   (unless (local-variable-p 'evil-ex-commands)
     (setq-local evil-ex-commands (copy-alist evil-ex-commands)))
@@ -241,7 +245,7 @@
 
 (add-hook 'notmuch-message-mode-hook
           (lambda ()
-            (evil-ex-define-cmd-local "x" #'notmuch-mua-send-and-exit)))
+            (keybindings--evil-ex-define-cmd-local "x" #'notmuch-mua-send-and-exit)))
 
 ;; For now, I'm mimmicking Gmail KBDs that I have memorized and enjoy
 (general-define-key

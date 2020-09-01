@@ -43,11 +43,11 @@
 
 ;; TODO: Decide between window-manager, exwm, or some other namespace.
 
-;; TODO: Support (cycle/from-list '(current previous)) to toggle back and forth
+;; TODO: Support (cycle-from-list '(current previous)) to toggle back and forth
 ;; between most recent workspace.
 
 ;; TODO: Support ad hoc cycle for loading a few workspaces that can be cycled
-;; between. (cycle/from-list '("Project" "Workspace"))
+;; between. (cycle-from-list '("Project" "Workspace"))
 
 ;; TODO: Consider supporting a workspace for Racket, Clojure, Common Lisp,
 ;; Haskell, Elixir, and a few other languages. These could behave very similarly
@@ -80,11 +80,11 @@
   "List of `window-manager--named-workspace' structs.")
 
 ;; Assert that no two workspaces share KBDs.
-(prelude-assert (= (list/length window-manager--named-workspaces)
+(prelude-assert (= (list-length window-manager--named-workspaces)
                    (->> window-manager--named-workspaces
-                        (list/map #'window-manager--named-workspace-kbd)
-                        set/from-list
-                        set/count)))
+                        (list-map #'window-manager--named-workspace-kbd)
+                        set-from-list
+                        set-count)))
 
 (defun window-manager--alert (x)
   "Message X with a structured format."
@@ -101,12 +101,12 @@
   (require 'exwm-randr)
   (exwm-randr-enable)
   (setq exwm-randr-workspace-monitor-plist
-        (list 0 display/4k-monitor
-              1 display/laptop-monitor))
+        (list 0 display-4k-monitor
+              1 display-laptop-monitor))
 
   (evil-set-initial-state 'exwm-mode 'emacs)
   (setq exwm-workspace-number
-        (list/length window-manager--named-workspaces))
+        (list-length window-manager--named-workspaces))
   (let ((kbds `(
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                 ;; Window sizing
@@ -146,7 +146,7 @@
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
                 (:key "M-:"               :fn eval-expression)
-                (:key "M-SPC"             :fn ivy-helpers/run-external-command)
+                (:key "M-SPC"             :fn ivy-helpers-run-external-command)
                 (:key "M-x"               :fn counsel-M-x)
                 (:key "<M-tab>"           :fn window-manager-next-workspace)
                 (:key "<M-S-iso-lefttab>" :fn window-manager-prev-workspace)
@@ -157,7 +157,7 @@
                 ;; Workspaces
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-                (:key ,(kbd/raw 'workspace "l") :fn window-manager-logout))))
+                (:key ,(kbd-raw 'workspace "l") :fn window-manager-logout))))
     (setq exwm-input-global-keys
           (->> kbds
                (-map (lambda (plist)
@@ -184,22 +184,22 @@
 ;; Here is the code required to allow EXWM to cycle workspaces.
 (defconst window-manager--workspaces
   (->> window-manager--named-workspaces
-       cycle/from-list)
+       cycle-from-list)
   "Cycle of the my EXWM workspaces.")
 
 (prelude-assert
  (= exwm-workspace-number
-    (list/length window-manager--named-workspaces)))
+    (list-length window-manager--named-workspaces)))
 
 (defun window-manager-next-workspace ()
   "Cycle forwards to the next workspace."
   (interactive)
-  (window-manager--change-workspace (cycle/next window-manager--workspaces)))
+  (window-manager--change-workspace (cycle-next window-manager--workspaces)))
 
 (defun window-manager-prev-workspace ()
   "Cycle backwards to the previous workspace."
   (interactive)
-  (window-manager--change-workspace (cycle/prev window-manager--workspaces)))
+  (window-manager--change-workspace (cycle-prev window-manager--workspaces)))
 
 ;; TODO: Create friendlier API for working with EXWM.
 
@@ -215,7 +215,7 @@
   (window-manager--alert "Switched to char-mode"))
 
 (defconst window-manager--modes
-  (cycle/from-list (list #'window-manager--char-mode
+  (cycle-from-list (list #'window-manager--char-mode
                          #'window-manager--line-mode))
   "Functions to switch exwm modes.")
 
@@ -224,7 +224,7 @@
   (interactive)
   (with-current-buffer (window-buffer)
     (when (eq major-mode 'exwm-mode)
-      (funcall (cycle/next window-manager--modes)))))
+      (funcall (cycle-next window-manager--modes)))))
 
 ;; Ensure exwm apps open in char-mode.
 (add-hook 'exwm-manage-finish-hook #'window-manager--char-mode)
@@ -285,7 +285,7 @@ Ivy is used to capture the user's input."
     (funcall
      (lambda ()
        (shell-command
-        (alist/get (ivy-read "System: " (alist/keys name->cmd))
+        (alist-get (ivy-read "System: " (alist-keys name->cmd))
                    name->cmd))))))
 
 (defun window-manager--label->index (label workspaces)
@@ -303,7 +303,7 @@ Currently using super- as the prefix for switching workspaces."
                     (window-manager--named-workspace-label workspace))))
         (key (window-manager--named-workspace-kbd workspace)))
     (exwm-input-set-key
-     (kbd/for 'workspace key)
+     (kbd-for 'workspace key)
      handler)))
 
 (defun window-manager--change-workspace (workspace)
@@ -318,11 +318,11 @@ Currently using super- as the prefix for switching workspaces."
 
 (defun window-manager--switch (label)
   "Switch to a named workspaces using LABEL."
-  (cycle/focus (lambda (x)
+  (cycle-focus (lambda (x)
                  (equal label
                         (window-manager--named-workspace-label x)))
                window-manager--workspaces)
-  (window-manager--change-workspace (cycle/current window-manager--workspaces)))
+  (window-manager--change-workspace (cycle-current window-manager--workspaces)))
 
 (exwm-input-set-key (kbd "C-S-f") #'window-manager-toggle-previous)
 
@@ -330,7 +330,7 @@ Currently using super- as the prefix for switching workspaces."
   "Focus the previously active EXWM workspace."
   (interactive)
   (window-manager--change-workspace
-   (cycle/focus-previous! window-manager--workspaces)))
+   (cycle-focus-previous! window-manager--workspaces)))
 
 (defun window-manager--exwm-buffer? (x)
   "Return t if buffer X is an EXWM buffer."
@@ -361,7 +361,7 @@ predicate."
 (when window-manager--install-kbds?
   (progn
     (->> window-manager--named-workspaces
-         (list/map #'window-manager--register-kbd))
+         (list-map #'window-manager--register-kbd))
     (window-manager--alert "Registered workspace KBDs!")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

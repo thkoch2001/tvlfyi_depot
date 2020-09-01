@@ -23,7 +23,9 @@
 
 (setq notmuch-saved-searches
       '((:name "inbox" :query "tag:inbox" :key "i")
-        (:name "direct" :query "tag:direct and tag:unread and not tag:sent" :key "d")
+        (:name "direct"
+         :query "tag:direct and tag:unread and not tag:sent"
+         :key "d")
         (:name "action" :query "tag:action" :key "a")
         (:name "review" :query "tag:review" :key "r")
         (:name "waiting" :query "tag:waiting" :key "w")
@@ -69,7 +71,7 @@
 
 ;; Assert that no two saved searches share share a KBD
 (prelude-assert
- (list/xs-distinct-by? (lambda (x) (plist-get x :key)) notmuch-saved-searches))
+ (list-xs-distinct-by? (lambda (x) (plist-get x :key)) notmuch-saved-searches))
 
 (provide 'email)
 ;;; email.el ends here

@@ -1,5 +1,9 @@
 ;;; dotted.el --- Working with dotted pairs in Elisp -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
 ;; Part of my primitives library extensions in Elisp.  Contrast my primitives
@@ -9,6 +13,10 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'prelude)
 (require 'macros)
 
@@ -16,20 +24,20 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(cl-defun dotted/new (&optional a b)
+(cl-defun dotted-new (&optional a b)
   "Create a new dotted pair (i.e. cons cell)."
   (cons a b))
 
-(defun dotted/instance? (x)
+(defun dotted-instance? (x)
   "Return t if X is a dotted pair."
   (let ((b (cdr x)))
     (and b (atom b))))
 
-(defun dotted/first (x)
+(defun dotted-first (x)
   "Return the first element of X."
   (car x))
 
-(defun dotted/second (x)
+(defun dotted-second (x)
   "Return the second element of X."
   (cdr x))
 
@@ -39,11 +47,11 @@
 
 (progn
   (prelude-assert
-   (equal '(fname . "Bob") (dotted/new 'fname "Bob")))
+   (equal '(fname . "Bob") (dotted-new 'fname "Bob")))
   (prelude-assert
-   (dotted/instance? '(one . two)))
+   (dotted-instance? '(one . two)))
   (prelude-refute
-   (dotted/instance? '(1 2 3))))
+   (dotted-instance? '(1 2 3))))
 
 (provide 'dotted)
 ;;; dotted.el ends here

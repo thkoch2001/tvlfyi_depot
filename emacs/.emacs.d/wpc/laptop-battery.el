@@ -1,5 +1,9 @@
 ;;; laptop-battery.el --- Display laptop battery information -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
 ;; Some wrappers to obtain battery information.
@@ -30,28 +34,28 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun laptop-battery/available? ()
+(defun laptop-battery-available? ()
   "Return t if battery information is available."
   (maybe-some? battery-status-function))
 
-(defun laptop-battery/percentage ()
+(defun laptop-battery-percentage ()
   "Return the current percentage of the battery."
   (->> battery-status-function
        funcall
-       (alist/get 112)))
+       (alist-get 112)))
 
-(defun laptop-battery/print-percentage ()
+(defun laptop-battery-print-percentage ()
   "Return the current percentage of the battery."
   (interactive)
-  (->> (laptop-battery/percentage)
+  (->> (laptop-battery-percentage)
        message))
 
-(defun laptop-battery/display ()
+(defun laptop-battery-display ()
   "Display laptop battery percentage in the modeline."
   (interactive)
   (display-battery-mode 1))
 
-(defun laptop-battery/hide ()
+(defun laptop-battery-hide ()
   "Hide laptop battery percentage in the modeline."
   (interactive)
   (display-battery-mode -1))

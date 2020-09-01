@@ -1,5 +1,9 @@
 ;;; cache.el --- Caching things -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; URL: https://git.wpcarro.dev/wpcarro/briefcase
+;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
 ;; An immutable cache data structure.
@@ -19,6 +23,10 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'prelude)
 (require 'struct)
 
@@ -31,24 +39,24 @@
 ;; TODO: Prefer another KBD for yasnippet form completion than company-mode's
 ;; current KBD.
 
-(defun cache/from-list (xs)
+(defun cache-from-list (xs)
   "Turn list, XS, into a cache."
   (make-cache :xs xs))
 
-(defun cache/contains? (x xs)
+(defun cache-contains? (x xs)
   "Return t if X in XS."
   (->> xs
        cache-xs
-       (list/contains? x)))
+       (list-contains? x)))
 
-(defun cache/touch (x xs)
+(defun cache-touch (x xs)
   "Ensure value X in cache, XS, is front of the list.
 If X isn't in XS (using `equal'), insert it at the front."
   (struct-update
    cache
    xs
-   (>> (list/reject (lambda (y) (equal x y)))
-       (list/cons x))
+   (>> (list-reject (lambda (y) (equal x y)))
+       (list-cons x))
    xs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,25 +64,25 @@ If X isn't in XS (using `equal'), insert it at the front."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (progn
-  (let ((cache (cache/from-list '("chicken" "nugget"))))
+  (let ((cache (cache-from-list '("chicken" "nugget"))))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; contains?/2
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     (prelude-refute
-     (cache/contains? "turkey" cache))
+     (cache-contains? "turkey" cache))
     (prelude-assert
-     (cache/contains? "chicken" cache))
+     (cache-contains? "chicken" cache))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; touch/2
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     (prelude-assert
      (equal
-      (cache/touch "nugget" cache)
-      (cache/from-list '("nugget" "chicken"))))
+      (cache-touch "nugget" cache)
+      (cache-from-list '("nugget" "chicken"))))
     (prelude-assert
      (equal
-      (cache/touch "spicy" cache)
-      (cache/from-list '("spicy" "chicken" "nugget"))))))
+      (cache-touch "spicy" cache)
+      (cache-from-list '("spicy" "chicken" "nugget"))))))
 
 (provide 'cache)
 ;;; cache.el ends here

@@ -60,11 +60,11 @@
 
 (defun maybe-nils? (&rest xs)
   "Return t if all XS are nil."
-  (list/all? #'maybe-nil? xs))
+  (list-all? #'maybe-nil? xs))
 
 (defun maybe-somes? (&rest xs)
   "Return t if all XS are non-nil."
-  (list/all? #'maybe-some? xs))
+  (list-all? #'maybe-some? xs))
 
 (defun maybe-default (default x)
   "Return DEFAULT when X is nil."

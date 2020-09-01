@@ -1,4 +1,5 @@
 ;;; screen-brightness.el --- Control laptop screen brightness -*- lexical-binding: t -*-
+
 ;; Author: William Carroll <wpcarro@gmail.com>
 
 ;;; Commentary:

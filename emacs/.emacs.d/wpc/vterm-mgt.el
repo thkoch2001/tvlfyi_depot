@@ -31,7 +31,7 @@
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst vterm-mgt--instances (cycle/new)
+(defconst vterm-mgt--instances (cycle-new)
   "A cycle tracking all of my vterm instances.")
 
 (defcustom vterm-mgt-scroll-on-focus nil
@@ -50,8 +50,8 @@
 This function should be called from a buffer running vterm."
   (interactive)
   (vterm-mgt--assert-vterm-buffer)
-  (cycle/focus-item (current-buffer) vterm-mgt--instances)
-  (switch-to-buffer (cycle/next vterm-mgt--instances))
+  (cycle-focus-item (current-buffer) vterm-mgt--instances)
+  (switch-to-buffer (cycle-next vterm-mgt--instances))
   (when vterm-mgt-scroll-on-focus (end-of-buffer)))
 
 (defun vterm-mgt-prev ()
@@ -59,8 +59,8 @@ This function should be called from a buffer running vterm."
 This function should be called from a buffer running vterm."
   (interactive)
   (vterm-mgt--assert-vterm-buffer)
-  (cycle/focus-item (current-buffer) vterm-mgt--instances)
-  (switch-to-buffer (cycle/prev vterm-mgt--instances))
+  (cycle-focus-item (current-buffer) vterm-mgt--instances)
+  (switch-to-buffer (cycle-prev vterm-mgt--instances))
   (when vterm-mgt-scroll-on-focus (end-of-buffer)))
 
 (defun vterm-mgt-instantiate ()
@@ -74,8 +74,8 @@ If however you must call `vterm', if you'd like to cycle through vterm
   collect any untracked vterm instances."
   (interactive)
   (let ((buffer (vterm)))
-    (cycle/append buffer vterm-mgt--instances)
-    (cycle/focus-item buffer vterm-mgt--instances)))
+    (cycle-append buffer vterm-mgt--instances)
+    (cycle-focus-item buffer vterm-mgt--instances)))
 
 (defun vterm-mgt-kill ()
   "Kill the current buffer and remove it from `vterm-mgt--instances'.
@@ -83,23 +83,23 @@ This function should be called from a buffer running vterm."
   (interactive)
   (vterm-mgt--assert-vterm-buffer)
   (let ((buffer (current-buffer)))
-    (cycle/remove buffer vterm-mgt--instances)
+    (cycle-remove buffer vterm-mgt--instances)
     (kill-buffer buffer)))
 
 (defun vterm-mgt-find-or-create ()
   "Call `switch-to-buffer' on a focused vterm instance if there is one.
 
-When `cycle/focused?' returns nil, focus the first item in the cycle.  When
+When `cycle-focused?' returns nil, focus the first item in the cycle.  When
 there are no items in the cycle, call `vterm-mgt-instantiate' to create a vterm
 instance."
   (interactive)
-  (if (cycle/empty? vterm-mgt--instances)
+  (if (cycle-empty? vterm-mgt--instances)
       (vterm-mgt-instantiate)
-    (if (cycle/focused? vterm-mgt--instances)
-        (switch-to-buffer (cycle/current vterm-mgt--instances))
+    (if (cycle-focused? vterm-mgt--instances)
+        (switch-to-buffer (cycle-current vterm-mgt--instances))
       (progn
-        (cycle/jump 0 vterm-mgt--instances)
-        (switch-to-buffer (cycle/current vterm-mgt--instances))))))
+        (cycle-jump 0 vterm-mgt--instances)
+        (switch-to-buffer (cycle-current vterm-mgt--instances))))))
 
 (defun vterm-mgt-rename-buffer (name)
   "Rename the current buffer ensuring that its NAME is wrapped in *vterm*<...>.
@@ -118,7 +118,7 @@ If for whatever reason, the state of `vterm-mgt--instances' is corrupted and
   (setq vterm-mgt--instances
         (->> (buffer-list)
              (-filter #'vterm-mgt--instance?)
-             cycle/from-list)))
+             cycle-from-list)))
 
 (provide 'vterm-mgt)
 ;;; vterm-mgt.el ends here
