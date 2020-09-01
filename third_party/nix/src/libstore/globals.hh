@@ -243,14 +243,21 @@ class Settings : public Config {
       this, false, "show-trace",
       "Whether to show a stack trace on evaluation errors."};
 
-  Setting<SandboxMode> sandboxMode{
-      this,
-      // TODO(tazjin): Turn sandboxing back on once it is time.
-      smDisabled,
-      "sandbox",
-      "Whether to enable sandboxed builds. Can be \"true\", \"false\" or "
-      "\"relaxed\".",
-      {"build-use-chroot", "build-use-sandbox"}};
+  Setting<SandboxMode> sandboxMode {
+    this,
+#if __linux__
+        smEnabled
+#else
+        smDisabled
+#endif
+        ,
+        "sandbox",
+        "Whether to enable sandboxed builds. Can be \"true\", \"false\" or "
+        "\"relaxed\".",
+    {
+      "build-use-chroot", "build-use-sandbox"
+    }
+  };
 
   Setting<PathSet> sandboxPaths{
       this,
