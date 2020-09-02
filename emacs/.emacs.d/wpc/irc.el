@@ -24,6 +24,7 @@
 (require 'macros)
 (require '>)
 (require 'password-store)
+(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration

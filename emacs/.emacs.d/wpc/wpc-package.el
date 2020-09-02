@@ -25,6 +25,8 @@
   (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
+;; TODO: Consider removing this, since I'm requiring general.el in individual
+;; modules.
 (use-package general)
 
 (provide 'wpc-package)

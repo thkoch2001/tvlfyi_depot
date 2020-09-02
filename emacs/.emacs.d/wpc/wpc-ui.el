@@ -22,6 +22,7 @@
 (require 'device)
 (require 'laptop-battery)
 (require 'modeline)
+(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration

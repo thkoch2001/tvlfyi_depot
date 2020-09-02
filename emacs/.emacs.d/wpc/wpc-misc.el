@@ -19,6 +19,7 @@
 (require 'dash)
 (require 'constants)
 (require 'region)
+(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
