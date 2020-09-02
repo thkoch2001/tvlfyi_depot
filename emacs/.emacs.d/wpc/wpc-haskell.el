@@ -10,10 +10,20 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'macros)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; font-locking, glyph support, etc
 (use-package haskell-mode
   :config
-  (add-hook-before-save 'haskell-mode #'haskell-align-imports))
+  (macros-add-hook-before-save 'haskell-mode #'haskell-align-imports))
 
 ;; LSP support
 (use-package lsp-haskell
