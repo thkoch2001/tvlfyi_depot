@@ -15,7 +15,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'dash)
-(require 'alist)
+(require 'al)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -30,7 +30,7 @@
 
 (defun device-classify ()
   "Return the device symbol for the current host or nil if not supported."
-  (alist-get system-name device-hostname->device))
+  (al-get system-name device-hostname->device))
 
 (defun device-work-laptop? ()
   "Return t if current device is work laptop."

@@ -16,7 +16,7 @@
 
 (require 'constants)
 (require 'prelude)
-(require 'alist)
+(require 'al)
 (require 'fonts)
 (require 'colorscheme)
 (require 'device)
@@ -91,7 +91,7 @@
   :config
   (counsel-mode t)
   (ivy-mode t)
-  (alist-set! #'counsel-M-x "" ivy-initial-inputs-alist)
+  (al-set! #'counsel-M-x "" ivy-initial-inputs-alist)
   ;; prefer using `helpful' variants
   (progn
     (setq counsel-describe-function-function #'helpful-callable)

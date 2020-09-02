@@ -23,7 +23,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'prelude)
-(require 'alist)
+(require 'al)
 (require 'set)
 (require 'string)
 
@@ -38,9 +38,9 @@
 
 ;; Assert that no keybindings are colliding.
 (prelude-assert
- (= (alist-count kbd-prefixes)
+ (= (al-count kbd-prefixes)
     (->> kbd-prefixes
-         alist-values
+         al-values
          set-from-list
          set-count)))
 
@@ -53,10 +53,10 @@
 Values for F include:
 - workspace
 - x11"
-  (prelude-assert (alist-has-key? f kbd-prefixes))
+  (prelude-assert (al-has-key? f kbd-prefixes))
   (string-format
    "%s-%s"
-   (alist-get f kbd-prefixes)
+   (al-get f kbd-prefixes)
    x))
 
 (defun kbd-for (f x)
