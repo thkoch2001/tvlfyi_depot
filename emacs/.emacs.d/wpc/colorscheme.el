@@ -19,16 +19,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'cycle)
-(require 'general)
 (require '>)
 (require 'cl-macs)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defcustom colorscheme-install-kbds? t
-  "If non-nil, enable the keybindings.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -89,14 +81,6 @@ Cycle prev otherwise."
   "Disable the currently active theme and load the previous theme."
   (interactive)
   (colorscheme-cycle :forward? nil))
-
-;; Keybindings
-(when colorscheme-install-kbds?
-  (general-define-key
-   :prefix "<SPC>"
-   :states '(normal)
-   "Ft" #'colorscheme-next
-   "Pt" #'colorscheme-prev))
 
 (provide 'colorscheme)
 ;;; colorscheme.el ends here

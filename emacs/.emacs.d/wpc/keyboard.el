@@ -41,9 +41,6 @@
 (defcustom keyboard-install-preferences? t
   "When t, install keyboard preferences.")
 
-(defcustom keyboard-install-kbds? nil
-  "When t, install keybindings.")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -138,20 +135,6 @@ NOTE: This function exists because occasionally I unplug and re-plug in a
 
 (when keyboard-install-preferences?
   (keyboard-set-preferences))
-
-;; TODO: Define minor-mode for this.
-(when keyboard-install-kbds?
-  (general-unbind 'motion "C-i" "C-y")
-  (general-define-key
-   ;; TODO: Choose better KBDs for these that don't interfere with useful evil
-   ;; ones.
-   ;; Use C-y when you accidentally send the key-repeat too high or too low to
-   ;; be meaningful.
-   "C-y" #'keyboard-reset-key-repeat
-   "C-i" #'keyboard-inc-repeat-rate
-   "C-u" #'keyboard-dec-repeat-rate
-   "C-S-i" #'keyboard-inc-repeat-delay
-   "C-S-u" #'keyboard-dec-repeat-delay))
 
 (provide 'keyboard)
 ;;; keyboard.el ends here
