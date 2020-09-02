@@ -92,7 +92,8 @@
   :config
   (counsel-mode t)
   (ivy-mode t)
-  (al-set! #'counsel-M-x "" ivy-initial-inputs-alist)
+  ;; Remove preceding "^" from ivy prompts
+  (setq ivy-initial-inputs-alist nil)
   ;; prefer using `helpful' variants
   (progn
     (setq counsel-describe-function-function #'helpful-callable)
