@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, depot, ... }:
 
 let
   inherit (builtins) path;
-  inherit (pkgs) emacs26 emacsPackagesNgGen writeShellScript writeShellScriptBin;
+  inherit (depot.third_party) emacsPackagesGen emacs27;
+  inherit (pkgs) writeShellScript writeShellScriptBin;
   inherit (pkgs.lib.strings) makeBinPath;
 
   emacsBinPath = makeBinPath (with pkgs; [
@@ -17,7 +18,7 @@ let
     xorg.xset
   ]);
 
-  emacsWithPackages = (emacsPackagesNgGen emacs26).emacsWithPackages;
+  emacsWithPackages = (emacsPackagesGen emacs27).emacsWithPackages;
 
   wpcarrosEmacs = emacsWithPackages (epkgs:
     (with epkgs.elpaPackages; [
@@ -32,6 +33,7 @@ let
       ts
       vterm
       base16-theme
+      password-store
       ivy-pass
       clipmon # TODO: Prefer an Emacs client for clipmenud.
       protobuf-mode # TODO: Determine if this is coming from google-emacs.
@@ -57,7 +59,6 @@ let
       parsec
       magit-popup
       direnv
-      emr
       ivy-prescient
       all-the-icons
       all-the-icons-ivy
@@ -109,7 +110,6 @@ let
       counsel
       flycheck
       ivy
-      magit
     ]));
 
   vendorDir = path {
