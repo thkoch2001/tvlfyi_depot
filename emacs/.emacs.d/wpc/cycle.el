@@ -18,6 +18,8 @@
 (require 'prelude)
 (require 'math)
 (require 'maybe)
+(require 'struct)
+(require 'cl-macs)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Wish list

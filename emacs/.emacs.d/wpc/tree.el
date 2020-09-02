@@ -37,6 +37,7 @@
 (require 'series)
 (require 'random)
 (require 'maybe)
+(require 'cl-macs)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library

@@ -18,6 +18,7 @@
 
 (require 'string)
 (require 'number)
+(require 'cl-macs)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants

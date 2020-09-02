@@ -23,6 +23,7 @@
 (require 'dash)
 (require 's)
 (require 'f)
+(require 'cl-macs)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utilities

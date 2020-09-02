@@ -19,6 +19,7 @@
 
 (require 'prelude)
 (require 'macros)
+(require 'cl-macs)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
