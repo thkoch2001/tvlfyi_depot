@@ -16,6 +16,7 @@
 
 (require 'prelude)
 (require 'macros)
+(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
