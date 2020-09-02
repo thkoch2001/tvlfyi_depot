@@ -20,19 +20,19 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'cl-macs)
+(require 'cl-lib)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl-defun clipboard-copy (x &key (message "[clipboard.el] Copied!"))
-  "Copy string, X, to X11's clipboard."
+  "Copy string, X, to X11's clipboard and `message' MESSAGE."
   (kill-new x)
   (message message))
 
 (cl-defun clipboard-paste (&key (message "[clipboard.el] Pasted!"))
-  "Paste contents of X11 clipboard."
+  "Paste contents of X11 clipboard and `message' MESSAGE."
   (yank)
   (message message))
 

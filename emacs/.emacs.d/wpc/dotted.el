@@ -19,14 +19,14 @@
 
 (require 'prelude)
 (require 'macros)
-(require 'cl-macs)
+(require 'cl-lib)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl-defun dotted-new (&optional a b)
-  "Create a new dotted pair (i.e. cons cell)."
+  "Create a new dotted pair of A and B."
   (cons a b))
 
 (defun dotted-instance? (x)
