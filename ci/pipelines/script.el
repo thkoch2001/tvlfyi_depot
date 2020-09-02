@@ -11,6 +11,7 @@
 (require 'prelude)
 (require 'f)
 (require 'dash)
+(require 'buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Script
@@ -27,13 +28,13 @@
    (message "Encountered an error while attempting to load init.el: %s" err)
    (kill-emacs 1)))
 
-(when (bufferp "*Errors*")
+(when (buffer-exists? "*Errors*")
   (progn
     (with-current-buffer "*Errors*"
       (message "Encountered errors in *Errors* buffer: %s" (buffer-string)))
     (kill-emacs 1)))
 
-(when (bufferp "*Warnings*")
+(when (buffer-exists? "*Warnings*")
   (progn
     (with-current-buffer "*Warnings*"
       (message "Encountered warnings in *Warnings* buffer: %s" (buffer-string)))
