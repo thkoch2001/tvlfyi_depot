@@ -14,15 +14,16 @@
 
 (require 'tuple)
 (require 'string)
-(require 'cl-macs)
+(require 'cl-lib)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl-defun ivy-helpers-kv (prompt kv f)
-  "PROMPT users with the keys in KV and return its corresponding value.  Calls F
-with the key and value from KV."
+  "PROMPT users with the keys in KV and return its corresponding value.
+
+Apply key and value from KV to F."
   (ivy-read
    prompt
    kv

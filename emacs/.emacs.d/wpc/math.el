@@ -15,7 +15,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'maybe)
-(require 'cl-macs)
+(require 'cl-lib)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
@@ -31,7 +31,6 @@
 ;; TODO: Support all three arguments.
 ;; Int -> Int -> Int -> Boolean
 (cl-defun math-triangle-of-power (&key base power result)
-  ;; TODO: Assert two of three are set.
   (cond
    ((maybe-somes? base power result)
     (error "All three arguments should not be set"))

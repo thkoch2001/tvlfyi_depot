@@ -23,7 +23,7 @@
 (require 'dash)
 (require 's)
 (require 'f)
-(require 'cl-macs)
+(require 'cl-lib)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utilities
@@ -130,7 +130,7 @@ This is a wrapper around `start-process' that has an API that resembles
              ,@program-args))))
 
 (defun prelude-executable-exists? (name)
-  "Return t if CLI tool NAME exists according to `exec-path'."
+  "Return t if CLI tool NAME exists according to the variable `exec-path'."
   (let ((file (locate-file name exec-path)))
     (require 'maybe)
     (if (maybe-some? file)

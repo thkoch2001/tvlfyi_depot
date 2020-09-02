@@ -107,7 +107,7 @@
   "Set K to V in XS."
   (if (al-has-key? k xs)
       (progn
-	;; Note: this is intentional `alist-get' and not `al-get'.
+        ;; Note: this is intentional `alist-get' and not `al-get'.
         (setf (alist-get k xs) v)
         xs)
     (list-cons `(,k . ,v) xs)))

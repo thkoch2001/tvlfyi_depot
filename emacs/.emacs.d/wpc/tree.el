@@ -37,7 +37,7 @@
 (require 'series)
 (require 'random)
 (require 'maybe)
-(require 'cl-macs)
+(require 'cl-lib)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -116,9 +116,11 @@ Depth-first traversals have the advantage of typically consuming less memory
 
 (cl-defun tree-random (&optional (value-fn (lambda (_) nil))
                                  (branching-factor 2))
-  "Randomly generate a tree with BRANCHING-FACTOR using VALUE-FN to compute the
-node values.  VALUE-FN is called with the current-depth of the node.  Useful for
-generating test data.  Warning this function can overflow the stack."
+  "Randomly generate a tree with BRANCHING-FACTOR.
+
+This uses VALUE-FN to compute the node values.  VALUE-FN is called with the
+current-depth of the node.  Useful for generating test data.  Warning this
+function can overflow the stack."
   (cl-labels ((do-random
                (d vf bf)
                (make-node

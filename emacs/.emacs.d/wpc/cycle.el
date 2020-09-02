@@ -19,7 +19,7 @@
 (require 'math)
 (require 'maybe)
 (require 'struct)
-(require 'cl-macs)
+(require 'cl-lib)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Wish list
