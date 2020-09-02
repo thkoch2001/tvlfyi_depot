@@ -33,9 +33,6 @@
 
 (cl-defstruct bookmark label path kbd)
 
-(defconst bookmark-install-kbds? t
-  "When t, install keybindings.")
-
 ;; TODO: Consider hosting this function somewhere other than here, since it
 ;; feels useful above of the context of bookmarks.
 ;; TODO: Assess whether it'd be better to use the existing function:
@@ -82,7 +79,9 @@ Otherwise, open with `counsel-find-file'."
      ((f-file? path)
       (funcall bookmark-handle-file path)))))
 
-(when bookmark-install-kbds?
+
+(defun bookmark-install-kbds ()
+  "Install the keybindings defined herein."
   (->> bookmark-whitelist
        (list-map
         (lambda (b)

@@ -32,7 +32,6 @@
   (-insert-at 0 'css-mode-hook wpc-javascript--js-hooks)
   "All of the commonly user hooks for frontend development.")
 
-
 ;; frontend indentation settings
 (setq typescript-indent-level 2
       js-indent-level 2
