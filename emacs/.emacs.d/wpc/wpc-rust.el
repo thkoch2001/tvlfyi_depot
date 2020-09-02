@@ -13,8 +13,18 @@
 ;; - `rustup component add rust-src`
 ;; - `rustup toolchain add nightly && cargo +nightly install racer`
 
-
 ;;; Code:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'macros)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (use-package racer
   :config
   (setq rust-sysroot (->> "~/.cargo/bin/rustc --print sysroot"
@@ -26,7 +36,7 @@
 (use-package rust-mode
   :config
   (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook-before-save 'rust-mode-hook #'rust-format-buffer)
+  (macros-add-hook-before-save 'rust-mode-hook #'rust-format-buffer)
   (define-key rust-mode-map
     (kbd "TAB")
     #'company-indent-or-complete-common)

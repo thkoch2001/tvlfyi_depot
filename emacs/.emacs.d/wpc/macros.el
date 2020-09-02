@@ -38,7 +38,7 @@ Useful in `add-hook' calls."
 
 (defmacro macros-add-hook-before-save (mode f)
   "Register a hook, `F', for a mode, `MODE' more conveniently.
-Usage: (add-hook-before-save 'reason-mode-hook #'refmt-before-save)"
+Usage: (macros-add-hook-before-save 'reason-mode-hook #'refmt-before-save)"
   `(add-hook ,mode
              (lambda ()
                (add-hook 'before-save-hook ,f))))
