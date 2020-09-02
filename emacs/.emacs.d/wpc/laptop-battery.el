@@ -27,7 +27,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'battery)
-(require 'alist)
+(require 'al)
 (require 'maybe)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -42,7 +42,7 @@
   "Return the current percentage of the battery."
   (->> battery-status-function
        funcall
-       (alist-get 112)))
+       (al-get 112)))
 
 (defun laptop-battery-print-percentage ()
   "Return the current percentage of the battery."

@@ -27,6 +27,7 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'al)
 (require 'number)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -42,11 +43,11 @@
 
 (defun bag-new ()
   "Create an empty bag."
-  (make-bag :xs (alist-new)))
+  (make-bag :xs (al-new)))
 
 (defun bag-contains? (x xs)
   "Return t if XS has X."
-  (alist-has-key? x (bag-xs xs)))
+  (al-has-key? x (bag-xs xs)))
 
 ;; TODO: Tabling this for now since working with structs seems to be
 ;; disappointingly difficult.  Where is `struct-update'?

@@ -18,7 +18,7 @@
 (require 'cycle)
 (require 'string)
 (require 'prelude)
-(require 'alist)
+(require 'al)
 (require 'set)
 (require 'maybe)
 (require 'macros)
@@ -53,24 +53,24 @@
 (prelude-assert
  (set-distinct? (set-from-list
                  (cycle-to-list
-                  (alist-get "irc.freenode.net"
-                             irc-server->channels)))
+                  (al-get "irc.freenode.net"
+                          irc-server->channels)))
                 (set-from-list
                  (cycle-to-list
-                  (alist-get "irc.corp.google.com"
-                             irc-server->channels)))))
+                  (al-get "irc.corp.google.com"
+                          irc-server->channels)))))
 
 (defun irc-channel->server (server->channels channel)
   "Using SERVER->CHANNELS, resolve an IRC server from a given CHANNEL."
-  (let ((result (alist-find (lambda (k v) (cycle-contains? channel v))
-                            server->channels)))
+  (let ((result (al-find (lambda (k v) (cycle-contains? channel v))
+                         server->channels)))
     (prelude-assert (maybe-some? result))
     result))
 
 (defun irc-channel->cycle (server->channels channel)
   "Using SERVER->CHANNELS, resolve an IRC's channels cycle from CHANNEL."
-  (alist-get (irc-channel->server server->channels channel)
-             server->channels))
+  (al-get (irc-channel->server server->channels channel)
+          server->channels))
 
 ;; Setting `erc-join-buffer' to 'bury prevents erc from stealing focus of the
 ;; current buffer when it connects to IRC servers.
@@ -79,9 +79,9 @@
 ;; TODO: Here is another horrible hack that should be revisted.
 (setq erc-autojoin-channels-alist
       (->> irc-server->channels
-           (alist-map-values #'cycle-to-list)
-           (alist-map-keys (>-> (s-chop-prefix "irc.")
-                                (s-chop-suffix ".net")))))
+           (al-map-values #'cycle-to-list)
+           (al-map-keys (>-> (s-chop-prefix "irc.")
+                             (s-chop-suffix ".net")))))
 
 (defcustom irc-install-kbds? t
   "When t, install the keybindings defined herein.")

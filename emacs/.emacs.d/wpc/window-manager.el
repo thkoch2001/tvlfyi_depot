@@ -21,6 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'alert)
+(require 'al)
 (require 'prelude)
 (require 'string)
 (require 'cycle)
@@ -285,8 +286,8 @@ Ivy is used to capture the user's input."
     (funcall
      (lambda ()
        (shell-command
-        (alist-get (ivy-read "System: " (alist-keys name->cmd))
-                   name->cmd))))))
+        (al-get (ivy-read "System: " (al-keys name->cmd))
+                name->cmd))))))
 
 (defun window-manager--label->index (label workspaces)
   "Return the index of the workspace in WORKSPACES named LABEL."
@@ -356,7 +357,7 @@ predicate."
                                      buffer)))))
          (label (completing-read "Switch to EXWM buffer: " buffer-alist)))
     (exwm-workspace-switch-to-buffer
-     (alist-get label buffer-alist nil nil #'string=))))
+     (al-get label buffer-alist))))
 
 (when window-manager--install-kbds?
   (progn

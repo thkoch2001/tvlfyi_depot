@@ -17,7 +17,7 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'alist)
+(require 'al)
 (require 'stack)
 (require 'struct)
 (require '>)
@@ -31,7 +31,7 @@
 (defun scope-new ()
   "Return an empty scope."
   (make-scope :scopes (->> (stack-new)
-                           (stack-push (alist-new)))))
+                           (stack-push (al-new)))))
 
 (defun scope-flatten (xs)
   "Return a flattened representation of the scope, XS.
@@ -39,15 +39,15 @@ The newest bindings eclipse the oldest."
   (->> xs
        scope-scopes
        stack-to-list
-       (list-reduce (alist-new)
+       (list-reduce (al-new)
                     (lambda (scope acc)
-                      (alist-merge acc scope)))))
+                      (al-merge acc scope)))))
 
 (defun scope-push-new (xs)
   "Push a new, empty scope onto XS."
   (struct-update scope
                  scopes
-                 (>-> (stack-push (alist-new)))
+                 (>-> (stack-push (al-new)))
                  xs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -58,7 +58,7 @@ The newest bindings eclipse the oldest."
   "Return K from XS if it's in scope."
   (->> xs
        scope-flatten
-       (alist-get k)))
+       (al-get k)))
 
 (defun scope-current (xs)
   "Return the newest scope from XS."
@@ -75,7 +75,7 @@ The newest bindings eclipse the oldest."
   "Set value, V, at key, K, in XS for the current scope."
   (struct-update scope
                  scopes
-                 (>-> (stack-map-top (>-> (alist-set k v))))
+                 (>-> (stack-map-top (>-> (al-set k v))))
                  xs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -96,7 +96,7 @@ The newest bindings eclipse the oldest."
   "Return t if K is in scope of XS."
   (->> xs
        scope-flatten
-       (alist-has-key? k)))
+       (al-has-key? k)))
 
 ;; TODO: Find a faster way to write aliases like this.
 (defun scope-instance? (xs)
