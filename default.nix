@@ -12,7 +12,7 @@ let
 
   depot = import (fetchGit {
     url = "https://cl.tvl.fyi/depot";
-    rev = "a2e86152401c7c531801c79347c3f15e1806aabc";
+    rev = "2f7b688389058b454ee12adc4b6b47740298f53b";
   }) {};
 
   pkgs = import (fetchGit {

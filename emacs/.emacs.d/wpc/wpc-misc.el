@@ -295,13 +295,6 @@
   :config
   (paradox-enable))
 
-;; TODO: Consider supporting a wpc-elisp.el package for Elisp tooling.
-;; The following functions are quite useful for Elisp development:
-;; - `emr-el-find-unused-definitions'
-(use-package emr
-  :config
-  (define-key prog-mode-map (kbd "M-RET") #'emr-show-refactor-menu))
-
 ;; Start the Emacs server
 (server-start)
 
