@@ -164,6 +164,7 @@
   (laptop-battery-display))
 
 (fonts-whitelist-set "JetBrainsMono")
+(fonts-enable-ligatures)
 (colorscheme-whitelist-set 'doom-solarized-light)
 
 (modeline-setup)
