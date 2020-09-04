@@ -34,24 +34,12 @@
   "The format string for the output screenshot file.
 See scrot's man page for more information.")
 
-(defun scrot-copy-image (path)
+(defun scrot--copy-image (path)
   "Use xclip to copy the image at PATH to the clipboard.
 This currently only works for PNG files because that's what I'm outputting"
   (call-process "xclip" nil nil nil
                 "-selection" "clipboard" "-t" "image/png" path)
   (message (string-format "[scrot.el] Image copied to clipboard!")))
-
-(defmacro scrot-call (&rest args)
-  "Call scrot with ARGS."
-  `(call-process ,scrot-path-to-executable nil nil nil ,@args))
-
-(defun scrot-fullscreen ()
-  "Screenshot the entire screen."
-  (interactive)
-  (let ((screenshot-path (f-join scrot-screenshot-directory
-                                 (ts-format scrot-output-format (ts-now)))))
-    (scrot-call screenshot-path)
-    (scrot-copy-image screenshot-path)))
 
 (defun scrot-select ()
   "Click-and-drag to screenshot a region.
@@ -59,8 +47,12 @@ The output path is copied to the user's clipboard."
   (interactive)
   (let ((screenshot-path (f-join scrot-screenshot-directory
                                  (ts-format scrot-output-format (ts-now)))))
-    (scrot-call "--select" screenshot-path)
-    (scrot-copy-image screenshot-path)))
+    (make-process
+     :name "scrot-select"
+     :command `(,scrot-path-to-executable "--select" ,screenshot-path)
+     :sentinel (lambda (proc _err)
+                 (when (= 0 (process-exit-status proc))
+                   (scrot--copy-image screenshot-path))))))
 
 (provide 'scrot)
 ;;; scrot.el ends here
