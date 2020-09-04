@@ -34,6 +34,7 @@
 (require 'buffer)
 (require 'display)
 (require 'device)
+(require 'fonts)
 
 ;; Note: The following lines must be sorted this way.
 (setq evil-want-integration t)
@@ -133,6 +134,9 @@
 (keybindings-exwm "<XF86AudioMicMute>" #'pulse-audio-toggle-microphone)
 (keybindings-exwm (kbd-raw 'x11 "s") #'scrot-select)
 (keybindings-exwm "<C-M-tab>" #'window-manager-switch-to-exwm-buffer)
+(keybindings-exwm (kbd-raw 'workspace "k") #'fonts-increase-size)
+(keybindings-exwm (kbd-raw 'workspace "j") #'fonts-decrease-size)
+(keybindings-exwm (kbd-raw 'workspace "0") #'fonts-reset-size)
 
 (general-define-key
  :keymaps 'override
