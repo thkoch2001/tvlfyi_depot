@@ -165,7 +165,8 @@
   :config (progn
             (setq vterm-shell "fish")
             (setq vterm-exit-functions
-                  (lambda (&rest _) (kill-buffer (current-buffer))))))
+                  (lambda (&rest _) (kill-buffer (current-buffer))))
+            (setq vterm-kill-buffer-on-exit t)))
 
 ;; vterm removed the ability to set a custom title generator function
 ;; via the public API, so this overrides its private title generation
