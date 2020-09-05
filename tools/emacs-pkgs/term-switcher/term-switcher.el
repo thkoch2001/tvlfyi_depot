@@ -29,10 +29,11 @@
 (defun ts/open-or-create-vterm (buffer-name)
   "Switch to the buffer with BUFFER-NAME or create a new vterm
   buffer."
-  (let ((buffer (get-buffer buffer-name)))
-    (if (not buffer)
-        (vterm)
-      (switch-to-buffer buffer))))
+  (if (equal "New vterm" buffer-name)
+      (vterm)
+    (if-let ((buffer (get-buffer buffer-name)))
+        (switch-to-buffer buffer)
+      (error "Could not find vterm buffer: %s" buffer-name))))
 
 (defun ts/is-vterm-buffer (buffer)
   "Determine whether BUFFER runs a vterm."
