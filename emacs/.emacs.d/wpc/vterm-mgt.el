@@ -31,11 +31,16 @@
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst vterm-mgt--instances (cycle-new)
-  "A cycle tracking all of my vterm instances.")
+(defgroup vterm-mgt nil
+  "Customization options for `vterm-mgt'.")
 
 (defcustom vterm-mgt-scroll-on-focus nil
-  "When t, call `end-of-buffer' after focusing a vterm instance.")
+  "When t, call `end-of-buffer' after focusing a vterm instance."
+  :type '(boolean)
+  :group 'vterm-mgt)
+
+(defconst vterm-mgt--instances (cycle-new)
+  "A cycle tracking all of my vterm instances.")
 
 (defun vterm-mgt--instance? (b)
   "Return t if the buffer B is a vterm instance."
@@ -113,7 +118,7 @@ This function should be called from a buffer running vterm."
 
 If for whatever reason, the state of `vterm-mgt--instances' is corrupted and
   misaligns with the state of vterm buffers in Emacs, use this function to
-  attempt to restore the state."
+  restore the state."
   (interactive)
   (setq vterm-mgt--instances
         (->> (buffer-list)
