@@ -6,6 +6,7 @@
 #include <absl/strings/str_format.h>
 #include <fcntl.h>
 #include <glog/logging.h>
+#include <grpcpp/resource_quota.h>
 #include <grpcpp/security/server_credentials.h>
 #include <grpcpp/server.h>
 #include <grpcpp/server_builder.h>
@@ -106,6 +107,13 @@ int RunServer() {
   auto store = openStore(settings.storeUri, params);
   auto worker = NewWorkerService(*store);
   ServerBuilder builder;
+
+  // TODO(grfn): Remove this once we tease all the global state out of the
+  // builder+store+etc.
+  grpc::ResourceQuota quota;
+  quota.SetMaxThreads(1);
+  builder.SetResourceQuota(quota);
+
   builder.RegisterService(worker);
 
   auto n_fds = sd_listen_fds(0);
