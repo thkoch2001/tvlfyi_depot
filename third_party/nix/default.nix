@@ -71,6 +71,9 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   doCheck = false;
   doInstallCheck = true;
 
+  # Preserve debug symbols, for core dumps + other live debugging
+  dontStrip = true;
+
   installCheckInputs = with pkgs; [
     fd
     gtest
