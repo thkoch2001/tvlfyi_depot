@@ -44,7 +44,9 @@
   `((blockquote
      :border-left "5px" "solid" ,color/light-gray
      :padding-left "1rem"
-     :margin-left "0rem")))
+     :margin-left "0rem")
+    (pre
+     :overflow-x "scroll")))
 
 (defparameter issue-list-styles
   `((.issue-list
