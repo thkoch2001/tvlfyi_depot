@@ -215,10 +215,16 @@
 ;; TODO: Consider moving this into a briefcase.el module.
 (defun wpc-misc--briefcase-find (dir)
   "Find the default.nix nearest to DIR."
-  (when (s-starts-with? constants-briefcase (f-expand dir))
-    (if (f-exists? (f-join dir "default.nix"))
-        (cons 'transient dir)
-      (wpc-misc--briefcase-find (f-parent dir)))))
+  ;; I use 'vc only at the root of my monorepo because 'transient doesn't use my
+  ;; .gitignore, which slows things down. Ideally, I could write a version that
+  ;; behaves like 'transient but also respects my monorepo's .gitignore and any
+  ;; ancestor .gitignore files.
+  (if (f-equal? constants-briefcase dir)
+      (cons 'vc dir)
+    (when (f-parent-of? constants-briefcase dir)
+      (if (f-exists? (f-join dir "default.nix"))
+          (cons 'transient dir)
+        (wpc-misc--briefcase-find (f-parent dir))))))
 
 (add-to-list 'project-find-functions #'wpc-misc--briefcase-find)
 
