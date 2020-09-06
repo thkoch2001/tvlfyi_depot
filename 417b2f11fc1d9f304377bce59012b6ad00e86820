@@ -22,6 +22,30 @@
       "revId": "417b2f11fc1d9f304377bce59012b6ad00e86820",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "091b633d_61bd2be5",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3795,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-09-06T21:02:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6cade28_aa3a1a0e",
+      "range": {
+        "startLine": 3794,
+        "startChar": 52,
+        "endLine": 3795,
+        "endChar": 39
+      },
+      "revId": "417b2f11fc1d9f304377bce59012b6ad00e86820",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
