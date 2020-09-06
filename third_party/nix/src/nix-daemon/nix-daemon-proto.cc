@@ -336,6 +336,19 @@ class WorkerServiceImpl final : public WorkerService::Service {
         __FUNCTION__);
   }
 
+  Status EnsurePath(grpc::ServerContext* context,
+                    const nix::proto::StorePath* request,
+                    google::protobuf::Empty*) override {
+    auto path = request->path();
+    ASSERT_INPUT_STORE_PATH(path);
+    return HandleExceptions(
+        [&]() -> Status {
+          store_->ensurePath(path);
+          return Status::OK;
+        },
+        __FUNCTION__);
+  }
+
   Status AddTempRoot(grpc::ServerContext*, const nix::proto::StorePath* request,
                      google::protobuf::Empty*) override {
     auto path = request->path();
