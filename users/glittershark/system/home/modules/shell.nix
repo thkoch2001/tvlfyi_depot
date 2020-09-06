@@ -17,6 +17,7 @@ let
     nbl = "nix build -f . --builders ''"; # nix build local
     nc = "nix copy --to https://nix.urbinternal.com";
     "nc." = "nix copy -f . --to https://nix.urbinternal.com";
+    lwo = "lorri watch --once";
 
     # Docker and friends
     "dcu" = "docker-compose up";
