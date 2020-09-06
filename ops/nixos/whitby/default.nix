@@ -186,7 +186,7 @@ in lib.fix(self: {
       tokenPath = "/etc/secrets/buildkite-agent-token";
       hooks.post-command = "${buildkiteHooks}/bin/post-command";
     };
-  }) (range 1 16));
+  }) (range 1 32));
 
   # Start a local SMTP relay to Gmail (used by gerrit)
   services.depot.smtprelay = {
