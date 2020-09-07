@@ -35,6 +35,7 @@
 (require 'display)
 (require 'device)
 (require 'fonts)
+(require 'bookmark)
 
 ;; Note: The following lines must be sorted this way.
 (setq evil-want-integration t)
@@ -50,6 +51,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Install KBDs like <SPC>jb to search through my monorepo.
+(bookmark-install-kbds)
 
 ;; Ensure that evil's command mode behaves with readline bindings.
 (general-define-key
