@@ -30,7 +30,7 @@ BinaryCacheStore::BinaryCacheStore(const Params& params) : Store(params) {
   }
 
   StringSink sink;
-  sink << narVersionMagic1;
+  sink << std::string(kNarVersionMagic1);
   narMagic = *sink.s;
 }
 

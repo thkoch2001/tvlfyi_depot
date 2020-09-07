@@ -1,3 +1,5 @@
+#include <absl/strings/str_cat.h>
+
 #include "libstore/remote-fs-accessor.hh"
 #include "libstore/remote-store.hh"
 #include "libstore/ssh.hh"
@@ -8,7 +10,7 @@
 
 namespace nix {
 
-static std::string uriScheme = "ssh-ng://";
+constexpr std::string_view kUriScheme = "ssh-ng://";
 
 class SSHStore : public RemoteStore {
  public:
@@ -25,7 +27,7 @@ class SSHStore : public RemoteStore {
                // Use SSH master only if using more than 1 connection.
                connections->capacity() > 1, compress) {}
 
-  std::string getUri() override { return uriScheme + host; }
+  std::string getUri() override { return absl::StrCat(kUriScheme, host); }
 
   bool sameMachine() override { return false; }
 
@@ -74,13 +76,14 @@ ref<RemoteStore::Connection> SSHStore::openConnection() {
   return conn;
 }
 
-static RegisterStoreImplementation regStore([](const std::string& uri,
-                                               const Store::Params& params)
-                                                -> std::shared_ptr<Store> {
-  if (std::string(uri, 0, uriScheme.size()) != uriScheme) {
-    return nullptr;
-  }
-  return std::make_shared<SSHStore>(std::string(uri, uriScheme.size()), params);
-});
+static RegisterStoreImplementation regStore(
+    [](const std::string& uri,
+       const Store::Params& params) -> std::shared_ptr<Store> {
+      if (std::string(uri, 0, kUriScheme.size()) != kUriScheme) {
+        return nullptr;
+      }
+      return std::make_shared<SSHStore>(std::string(uri, kUriScheme.size()),
+                                        params);
+    });
 
 }  // namespace nix

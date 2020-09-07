@@ -72,6 +72,6 @@ void restorePath(const Path& path, Source& source);
 /* Read a NAR from 'source' and write it to 'sink'. */
 void copyNAR(Source& source, Sink& sink);
 
-extern const std::string narVersionMagic1;
+constexpr std::string_view kNarVersionMagic1 = "nix-archive-1";
 
 }  // namespace nix
