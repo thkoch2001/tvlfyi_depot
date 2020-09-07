@@ -11,6 +11,7 @@ let
     ripgrep
     bat
     fd
+    fzf
     pass
     tokei
     nmap
