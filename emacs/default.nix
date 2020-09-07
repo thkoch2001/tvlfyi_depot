@@ -4,7 +4,7 @@ let
   inherit (builtins) path;
   inherit (depot.third_party) emacsPackagesGen emacs27;
   inherit (pkgs) writeShellScript writeShellScriptBin;
-  inherit (pkgs.lib.strings) makeBinPath;
+  inherit (pkgs.lib.strings) concatStringsSep makeBinPath;
 
   emacsBinPath = makeBinPath (with pkgs; [
     tdesktop
@@ -132,12 +132,19 @@ let
     name = "init.el";
   };
 
-  withEmacsPath = { emacsBin, briefcasePath }:
+  loadPath = concatStringsSep ":" [
+    wpcDir
+    vendorDir
+    # TODO: Explain why the trailing ":" is needed.
+    "${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
+  ];
+
+  withEmacsPath = { emacsBin, briefcasePath ? "$HOME/briefcase" }:
     writeShellScriptBin "wpcarros-emacs" ''
       export XMODIFIERS=emacs
       export BRIEFCASE=${briefcasePath}
       export PATH="${emacsBinPath}:$PATH"
-      export EMACSLOADPATH="${wpcDir}:${vendorDir}:${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
+      export EMACSLOADPATH="${loadPath}"
       exec ${emacsBin} \
         --debug-init \
         --no-site-file \
@@ -147,7 +154,7 @@ let
         "$@"
     '';
 in {
-  inherit initEl;
+  inherit initEl withEmacsPath;
 
   # I need to start my Emacs from CI without the call to `--load ${initEl}`.
   runScript = { script, briefcasePath }:
