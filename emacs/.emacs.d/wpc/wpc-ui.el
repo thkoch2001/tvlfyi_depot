@@ -163,9 +163,12 @@
 (when (device-work-laptop?)
   (laptop-battery-display))
 
-(fonts-whitelist-set "JetBrainsMono")
-(fonts-enable-ligatures)
-(colorscheme-whitelist-set 'doom-solarized-light)
+(if window-system
+    (progn
+      (fonts-whitelist-set "JetBrainsMono")
+      (fonts-enable-ligatures)
+      (colorscheme-whitelist-set 'doom-solarized-light))
+  (load-theme 'wombat))
 
 (modeline-setup)
 
