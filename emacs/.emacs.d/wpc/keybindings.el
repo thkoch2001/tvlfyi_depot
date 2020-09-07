@@ -36,6 +36,7 @@
 (require 'device)
 (require 'fonts)
 (require 'bookmark)
+(require 'constants)
 
 ;; Note: The following lines must be sorted this way.
 (setq evil-want-integration t)
@@ -183,7 +184,10 @@
  "n" #'flycheck-next-error
  "N" #'smerge-next
  "W" #'balance-windows
- "gs" #'magit-status
+ "gss" #'magit-status
+ "gsb" (lambda ()
+         (interactive)
+         (magit-status constants-briefcase))
  "E" #'refine
  "es" #'functions-create-snippet
  "l" #'linum-mode
