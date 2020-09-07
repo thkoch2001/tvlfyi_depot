@@ -183,13 +183,6 @@ in {
         "$@"
     '';
 
-  # Use `nix-env -f '<briefcase>' emacs.glinux` to install `wpcarro-emacs` on
-  # gLinux machines. This will ensure that X and GL linkage behaves as expected.
-  glinux = { briefcasePath ? "$HOME/briefcase" }: withEmacsPath {
-    inherit briefcasePath;
-    emacsBin = "/usr/bin/google-emacs";
-  };
-
   # Use `nix-env -f '<briefcase>' emacs.nixos` to install `wpcarros-emacs` on
   # NixOS machines.
   nixos = { briefcasePath ? "$HOME/briefcase" }: withEmacsPath {
