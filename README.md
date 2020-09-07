@@ -63,8 +63,7 @@ using `//` to indicate the root of my monorepo, the directory in which this
 
 - `//boilerplate`: scaffolding for projects. Boilerplate's goal is to
   reduce the startup costs of a project.
-- `//configs`: my dotfiles (e.g. `config.fish`, `init.vim`). Eventually Nix
-  `home-manager` should replace this.
+- `//configs`: my dotfiles (e.g. `config.fish`, `init.vim`).
 - `//emacs`: Emacs is both my preferred text editor and my window manager; with
   tens of thousands of lines of Emacs Lisp, you can safely assume that this
   directory hosts a lot of libraries and packages.
@@ -80,7 +79,6 @@ using `//` to indicate the root of my monorepo, the directory in which this
 
 Here are a few reminders when setting up a new machine:
 
-- Use Nix `home-manager` to configure the new machine.
 - Ensure `~/.password-store` exists.
 - Run `export_gpg` from a computer with my gpg credentials. Run `import_gpg`
   from the new machine.

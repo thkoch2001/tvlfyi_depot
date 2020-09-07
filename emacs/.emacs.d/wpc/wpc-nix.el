@@ -36,16 +36,6 @@
                    "-f" "<briefcase>" "-iA" "emacs.nixos")
     (display-buffer bname)))
 
-(defun wpc-nix-home-manager-switch ()
-  "Use Nix to reconfigure the user environment."
-  (interactive)
-  (start-process "wpc-nix-home-manager-switch" "*wpc-nix-home-manager-switch*"
-                 "home-manager"
-                 "-I" (format "nixpkgs=%s" (f-expand "~/nixpkgs-channels"))
-                 "-I" (format "home-manager=%s" (f-expand "~/home-manager"))
-                 "switch")
-  (display-buffer "*wpc-nix-home-manager-switch*"))
-
 (defun wpc-nix-sly-from-briefcase (attr)
   "Start a Sly REPL configured using the derivation pointed at by ATTR.
 
