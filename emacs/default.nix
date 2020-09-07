@@ -9,6 +9,16 @@ let
   emacsBinPath = makeBinPath (with pkgs; [
     tdesktop
     ripgrep
+    bat
+    fd
+    pass
+    tokei
+    nmap
+    tldr
+    diskus
+    jq
+    pup
+    exa
     gitAndTools.hub
     kubectl
     google-cloud-sdk
