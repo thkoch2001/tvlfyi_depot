@@ -221,7 +221,7 @@
   ;; ancestor .gitignore files.
   (if (f-equal? constants-briefcase dir)
       (cons 'vc dir)
-    (when (f-parent-of? constants-briefcase dir)
+    (when (f-ancestor-of? constants-briefcase dir)
       (if (f-exists? (f-join dir "default.nix"))
           (cons 'transient dir)
         (wpc-misc--briefcase-find (f-parent dir))))))
