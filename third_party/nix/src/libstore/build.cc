@@ -4241,14 +4241,13 @@ void SubstitutionGoal::handleEOF(int fd) {
 
 //////////////////////////////////////////////////////////////////////
 
-static bool working = false;
+static thread_local bool working = false;
 
 Worker::Worker(LocalStore& store, std::ostream& log_sink)
     : log_sink_(log_sink), store(store) {
-  /* Debugging: prevent recursive workers. */
-  if (working) {
-    abort();
-  }
+  // Debugging: prevent recursive workers.
+  // TODO(grfn): Do we need this?
+  CHECK(!working) << "Worker initialized during execution of a worker";
   working = true;
   nrLocalBuilds = 0;
   lastWokenUp = steady_time_point::min();
