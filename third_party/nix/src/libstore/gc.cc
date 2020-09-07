@@ -7,6 +7,7 @@
 #include <regex>
 
 #include <absl/strings/match.h>
+#include <absl/strings/str_cat.h>
 #include <absl/strings/str_split.h>
 #include <fcntl.h>
 #include <glog/logging.h>
@@ -22,8 +23,8 @@
 
 namespace nix {
 
-static std::string gcLockName = "gc.lock";
-static std::string gcRootsDir = "gcroots";
+constexpr std::string_view kGcLockName = "gc.lock";
+constexpr std::string_view kGcRootsDir = "gcroots";
 
 /* Acquire the global GC lock.  This is used to prevent new Nix
    processes from starting after the temporary root files have been
@@ -31,7 +32,7 @@ static std::string gcRootsDir = "gcroots";
    file, they will block until the garbage collector has finished /
    yielded the GC lock. */
 AutoCloseFD LocalStore::openGCLock(LockType lockType) {
-  Path fnGCLock = (format("%1%/%2%") % stateDir % gcLockName).str();
+  Path fnGCLock = (format("%1%/%2%") % stateDir % kGcLockName).str();
 
   DLOG(INFO) << "acquiring global GC lock " << fnGCLock;
 
@@ -74,7 +75,7 @@ void LocalStore::syncWithGC() { AutoCloseFD fdGCLock = openGCLock(ltRead); }
 void LocalStore::addIndirectRoot(const Path& path) {
   std::string hash = hashString(htSHA1, path).to_string(Base32, false);
   Path realRoot = canonPath(
-      (format("%1%/%2%/auto/%3%") % stateDir % gcRootsDir % hash).str());
+      (format("%1%/%2%/auto/%3%") % stateDir % kGcRootsDir % hash).str());
   makeSymlink(realRoot, path);
 }
 
@@ -106,7 +107,7 @@ Path LocalFSStore::addPermRoot(const Path& _storePath, const Path& _gcRoot,
   else {
     if (!allowOutsideRootsDir) {
       Path rootsDir =
-          canonPath((format("%1%/%2%") % stateDir % gcRootsDir).str());
+          canonPath((format("%1%/%2%") % stateDir % kGcRootsDir).str());
 
       if (std::string(gcRoot, 0, rootsDir.size() + 1) != rootsDir + "/") {
         throw Error(format("path '%1%' is not a valid garbage collector root; "
@@ -195,7 +196,7 @@ void LocalStore::addTempRoot(const Path& path) {
   lockFile(state->fdTempRoots.get(), ltRead, true);
 }
 
-static std::string censored = "{censored}";
+constexpr std::string_view kCensored = "{censored}";
 
 void LocalStore::findTempRoots(FDs& fds, Roots& tempRoots, bool censor) {
   /* Read the `temproots' directory for per-process temporary root
@@ -247,7 +248,7 @@ void LocalStore::findTempRoots(FDs& fds, Roots& tempRoots, bool censor) {
       Path root(contents, pos, end - pos);
       DLOG(INFO) << "got temporary root " << root;
       assertStorePath(root);
-      tempRoots[root].emplace(censor ? censored : fmt("{temp:%d}", pid));
+      tempRoots[root].emplace(censor ? kCensored : fmt("{temp:%d}", pid));
       pos = end + 1;
     }
 
@@ -287,7 +288,8 @@ void LocalStore::findRoots(const Path& path, unsigned char type, Roots& roots) {
       else {
         target = absPath(target, dirOf(path));
         if (!pathExists(target)) {
-          if (isInDir(path, stateDir + "/" + gcRootsDir + "/auto")) {
+          if (isInDir(path, absl::StrCat(stateDir.get(), "/", kGcRootsDir,
+                                         "/auto"))) {
             LOG(INFO) << "removing stale link from '" << path << "' to '"
                       << target << "'";
             unlink(path.c_str());
@@ -326,7 +328,7 @@ void LocalStore::findRoots(const Path& path, unsigned char type, Roots& roots) {
 
 void LocalStore::findRootsNoTemp(Roots& roots, bool censor) {
   /* Process direct roots in {gcroots,profiles}. */
-  findRoots(stateDir + "/" + gcRootsDir, DT_UNKNOWN, roots);
+  findRoots(absl::StrCat(stateDir.get(), "/", kGcRootsDir), DT_UNKNOWN, roots);
   findRoots(stateDir + "/profiles", DT_UNKNOWN, roots);
 
   /* Add additional roots returned by different platforms-specific
@@ -465,7 +467,7 @@ void LocalStore::findRuntimeRoots(Roots& roots, bool censor) {
       if (isStorePath(path) && isValidPath(path)) {
         DLOG(INFO) << "got additional root " << path;
         if (censor) {
-          roots[path].insert(censored);
+          roots[path].insert(std::string(kCensored));
         } else {
           roots[path].insert(links.begin(), links.end());
         }

@@ -81,7 +81,7 @@
 
 namespace nix {
 
-static std::string pathNullDevice = "/dev/null";
+constexpr std::string_view kPathNullDevice = "/dev/null";
 
 /* Forward definition. */
 class Worker;
@@ -448,9 +448,9 @@ static void commonChildInit(Pipe& logPipe) {
   }
 
   /* Reroute stdin to /dev/null. */
-  int fdDevNull = open(pathNullDevice.c_str(), O_RDWR);
+  int fdDevNull = open(kPathNullDevice.begin(), O_RDWR);
   if (fdDevNull == -1) {
-    throw SysError(format("cannot open '%1%'") % pathNullDevice);
+    throw SysError(format("cannot open '%1%'") % kPathNullDevice);
   }
   if (dup2(fdDevNull, STDIN_FILENO) == -1) {
     throw SysError("cannot dup null device into stdin");
