@@ -49,7 +49,6 @@ let
       password-store
       ivy-pass
       clipmon # TODO: Prefer an Emacs client for clipmenud.
-      protobuf-mode # TODO: Determine if this is coming from google-emacs.
       evil
       evil-collection
       evil-magit

@@ -18,7 +18,4 @@
 (require 'wpc-nix)
 (require 'wpc-rust)
 (require 'wpc-clojure)
-(require 'wpc-python)
-(require 'wpc-javascript)
 (require 'wpc-prolog)
-(require 'wpc-golang)
