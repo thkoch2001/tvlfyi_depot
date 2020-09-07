@@ -144,6 +144,7 @@ let
     writeShellScriptBin "wpcarros-emacs" ''
       export XMODIFIERS=emacs
       export BRIEFCASE=${briefcasePath}
+      export GOOGLE_BRIEFCASE="$HOME/google-briefcase"
       export PATH="${emacsBinPath}:$PATH"
       export EMACSLOADPATH="${loadPath}"
       exec ${emacsBin} \
