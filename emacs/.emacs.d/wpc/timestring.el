@@ -32,17 +32,22 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defgroup timestring nil
+  "Customize group for timestring configuration.")
+
 (defcustom timestring-supported-encodings
   '(("RFC 3339" . "%Y-%m-%dT%H:%M:%SZ")
     ;; Does anyone recognize this format?
     ("IDK" . "%Y-%m-%d %H:%M:%S %z"))
-  "Mapping of encoding names to their format strings.")
+  "Mapping of encoding names to their format strings."
+  :group 'timestring)
 
 (defcustom timestring-supported-times
   '(("yesterday" . timestring--yesterday)
     ("now" . ts-now)
     ("tomorrow" . timestring--tomorrow))
-  "Mapping of a labels to the functions that create those time objects.")
+  "Mapping of a labels to the functions that create those time objects."
+  :group 'timestring)
 
 (defun timestring--yesterday ()
   "Return a time object for yesterday."
