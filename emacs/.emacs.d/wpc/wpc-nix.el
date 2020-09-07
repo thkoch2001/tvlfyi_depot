@@ -28,13 +28,12 @@
 (defun wpc-nix-rebuild-emacs ()
   "Use nix-env to rebuild wpcarros-emacs."
   (interactive)
-  (let* ((emacs (if (device-corporate?) "emacs.glinux" "emacs.nixos"))
-         (pname (format "nix-build <briefcase/%s>" emacs))
+  (let* ((pname (format "nix-build <briefcase/emacs.nixos>"))
          (bname (format "*%s*" pname)))
     (start-process pname bname
                    "nix-env"
                    "-I" (format "briefcase=%s" constants-briefcase)
-                   "-f" "<briefcase>" "-iA" emacs)
+                   "-f" "<briefcase>" "-iA" "emacs.nixos")
     (display-buffer bname)))
 
 (defun wpc-nix-home-manager-switch ()
