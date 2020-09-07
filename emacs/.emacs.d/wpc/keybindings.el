@@ -107,16 +107,19 @@
 (global-evil-surround-mode 1)
 
 ;; Ensure the Evil search results get centered vertically.
-(progn
-  (defadvice isearch-update
-      (before advice-for-isearch-update activate)
-    (evil-scroll-line-to-center (line-number-at-pos)))
-  (defadvice evil-search-next
-      (after advice-for-evil-search-next activate)
-    (evil-scroll-line-to-center (line-number-at-pos)))
-  (defadvice evil-search-previous
-      (after advice-for-evil-search-previous activate)
-    (evil-scroll-line-to-center (line-number-at-pos))))
+;; When Emacs is run from a terminal, this forces Emacs to redraw itself, which
+;; is visually disruptive.
+(when window-system
+  (progn
+    (defadvice isearch-update
+        (before advice-for-isearch-update activate)
+      (evil-scroll-line-to-center (line-number-at-pos)))
+    (defadvice evil-search-next
+        (after advice-for-evil-search-next activate)
+      (evil-scroll-line-to-center (line-number-at-pos)))
+    (defadvice evil-search-previous
+        (after advice-for-evil-search-previous activate)
+      (evil-scroll-line-to-center (line-number-at-pos)))))
 
 (key-chord-mode 1)
 (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
