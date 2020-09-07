@@ -1,3 +1,5 @@
+#include <absl/strings/match.h>
+#include <absl/strings/str_cat.h>
 #include <glog/logging.h>
 
 #include "libstore/derivations.hh"
@@ -11,7 +13,7 @@
 
 namespace nix {
 
-static std::string uriScheme = "ssh://";
+constexpr std::string_view kUriScheme = "ssh://";
 
 struct LegacySSHStore : public Store {
   const Setting<int> maxConnections{
@@ -86,7 +88,7 @@ struct LegacySSHStore : public Store {
     return conn;
   };
 
-  std::string getUri() override { return uriScheme + host; }
+  std::string getUri() override { return absl::StrCat(kUriScheme, host); }
 
   void queryPathInfoUncached(
       const Path& path,
@@ -269,11 +271,11 @@ struct LegacySSHStore : public Store {
 static RegisterStoreImplementation regStore(
     [](const std::string& uri,
        const Store::Params& params) -> std::shared_ptr<Store> {
-      if (std::string(uri, 0, uriScheme.size()) != uriScheme) {
+      if (!absl::StartsWith(uri, kUriScheme)) {
         return nullptr;
       }
       return std::make_shared<LegacySSHStore>(
-          std::string(uri, uriScheme.size()), params);
+          std::string(uri, kUriScheme.size()), params);
     });
 
 }  // namespace nix

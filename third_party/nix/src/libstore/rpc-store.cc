@@ -531,13 +531,13 @@ unsigned int RpcStore::getProtocol() { return PROTOCOL_VERSION; }
 
 }  // namespace store
 
-static std::string uriScheme = "unix://";
+constexpr std::string_view kUriScheme = "unix://";
 
 // TODO(grfn): Make this a function that we call from main rather than... this
 static RegisterStoreImplementation regStore([](const std::string& uri,
                                                const Store::Params& params)
                                                 -> std::shared_ptr<Store> {
-  if (std::string(uri, 0, uriScheme.size()) != uriScheme) {
+  if (std::string(uri, 0, kUriScheme.size()) != kUriScheme) {
     return nullptr;
   }
   auto channel = grpc::CreateChannel(uri, grpc::InsecureChannelCredentials());

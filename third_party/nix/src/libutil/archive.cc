@@ -36,9 +36,7 @@ static ArchiveSettings archiveSettings;
 
 static GlobalConfig::Register r1(&archiveSettings);
 
-const std::string narVersionMagic1 = "nix-archive-1";
-
-static std::string caseHackSuffix = "~nix~case~hack~";
+constexpr std::string_view kCaseHackSuffix = "~nix~case~hack~";
 
 PathFilter defaultPathFilter = [](const Path& /*unused*/) { return true; };
 
@@ -93,7 +91,7 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
     for (auto& i : readDirectory(path)) {
       if (archiveSettings.useCaseHack) {
         std::string name(i.name);
-        size_t pos = i.name.find(caseHackSuffix);
+        size_t pos = i.name.find(kCaseHackSuffix);
         if (pos != std::string::npos) {
           DLOG(INFO) << "removing case hack suffix from " << path << "/"
                      << i.name;
@@ -134,12 +132,12 @@ static void dump(const Path& path, Sink& sink, PathFilter& filter) {
 }
 
 void dumpPath(const Path& path, Sink& sink, PathFilter& filter) {
-  sink << narVersionMagic1;
+  sink << std::string(kNarVersionMagic1);
   dump(path, sink, filter);
 }
 
 void dumpString(const std::string& s, Sink& sink) {
-  sink << narVersionMagic1 << "("
+  sink << std::string(kNarVersionMagic1) << "("
        << "type"
        << "regular"
        << "contents" << s << ")";
@@ -279,7 +277,7 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
             if (i != names.end()) {
               DLOG(INFO) << "case collision between '" << i->first << "' and '"
                          << name << "'";
-              name += caseHackSuffix;
+              name += kCaseHackSuffix;
               name += std::to_string(++i->second);
             } else {
               names[name] = 0;
@@ -310,12 +308,12 @@ static void parse(ParseSink& sink, Source& source, const Path& path) {
 void parseDump(ParseSink& sink, Source& source) {
   std::string version;
   try {
-    version = readString(source, narVersionMagic1.size());
+    version = readString(source, kNarVersionMagic1.size());
   } catch (SerialisationError& e) {
     /* This generally means the integer at the start couldn't be
        decoded.  Ignore and throw the exception below. */
   }
-  if (version != narVersionMagic1) {
+  if (version != kNarVersionMagic1) {
     throw badArchive("input doesn't look like a Nix archive");
   }
   parse(sink, source, "");
