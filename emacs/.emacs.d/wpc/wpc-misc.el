@@ -303,7 +303,7 @@
   (paradox-enable))
 
 ;; Start the Emacs server
-(when (not server-process)
+(when (not (server-running-p))
   (server-start))
 
 (provide 'wpc-misc)
