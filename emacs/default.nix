@@ -16,6 +16,7 @@ let
     scrot
     clipmenu
     xorg.xset
+    direnv
   ]);
 
   emacsWithPackages = (emacsPackagesGen emacs27).emacsWithPackages;
