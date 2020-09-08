@@ -37,6 +37,11 @@
 ;; Maximizes the tramp debugging noisiness while I'm still learning about tramp.
 (setq tramp-verbose 10)
 
+;; As confusing as this may seem, this forces Tramp to use *my* .ssh/config
+;; options, which enable ControlMaster. In other words, disabling this actually
+;; enables ControlMaster.
+(setq tramp-use-ssh-controlmaster-options nil)
+
 (defcustom ssh-hosts '("desktop" "socrates")
   "List of hosts to which I commonly connect.
 Note: It could be interesting to read these values from ~/.ssh-config, but
