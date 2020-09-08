@@ -47,6 +47,7 @@ in mkMerge [
   {
     home.packages = [
       crawl
+      multimc
     ];
   }
   (mkIf stdenv.isLinux {
@@ -55,4 +56,3 @@ in mkMerge [
     ];
   })
 ]
-
