@@ -86,6 +86,7 @@
 
 (general-nmap
   :keymaps 'override
+  "gu" #'browse-url-at-point
   "gd" #'xref-find-definitions
   ;; Wrapping `xref-find-references' in the `let' binding to prevent xref from
   ;; prompting.  There are other ways to handle this variable, such as setting
