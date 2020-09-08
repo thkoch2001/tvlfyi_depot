@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "321ef257_4c6bc250",
+        "filename": "third_party/nix/src/libstore/gc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-09-08T00:10:13Z",
+      "side": 1,
+      "message": "should be StrCat",
+      "range": {
+        "startLine": 35,
+        "startChar": 19,
+        "endLine": 35,
+        "endChar": 61
+      },
+      "revId": "010188a950c66c2e439afbf485889f1b3cfaadad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdb3904c_95d3d5a7",
+        "filename": "third_party/nix/src/libstore/legacy-ssh-store.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-09-08T00:10:13Z",
+      "side": 1,
+      "message": "Please see https://clang.llvm.org/extra/clang-tidy/checks/abseil-string-find-startswith.html",
+      "range": {
+        "startLine": 273,
+        "startChar": 10,
+        "endLine": 273,
+        "endChar": 25
+      },
+      "revId": "010188a950c66c2e439afbf485889f1b3cfaadad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6a69322_2ac31d25",
+        "filename": "third_party/nix/src/libutil/archive.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-09-08T00:10:13Z",
+      "side": 1,
+      "message": "not changed?",
+      "range": {
+        "startLine": 39,
+        "startChar": 18,
+        "endLine": 39,
+        "endChar": 34
+      },
+      "revId": "010188a950c66c2e439afbf485889f1b3cfaadad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
