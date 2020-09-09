@@ -23,4 +23,8 @@ rec {
   });
 
   chupacabra = home ./machines/chupacabra.nix;
+
+  chupacabraHome = chupacabra.activation-script;
+
+  meta.targets = [ "chupacabraHome" ];
 }
