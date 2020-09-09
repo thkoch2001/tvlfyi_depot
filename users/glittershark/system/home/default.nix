@@ -23,4 +23,6 @@ rec {
   });
 
   chupacabra = home ./machines/chupacabra.nix;
+
+  meta.targets = [ "chupacabra" ];
 }
