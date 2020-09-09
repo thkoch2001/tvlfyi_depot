@@ -6,6 +6,7 @@
     ../modules/reusable/battery.nix
     ../modules/tvl.nix
     ../modules/urbint.nix
+    ../modules/fcitx.nix
     ../../../../../ops/nixos/v4l2loopback.nix
   ];
 
