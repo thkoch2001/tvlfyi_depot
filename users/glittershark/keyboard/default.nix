@@ -58,4 +58,6 @@ rec {
       --mcu=atmega32u4 \
       -w ${layout}
   '';
+
+  meta.targets = [ "layout" ];
 }
