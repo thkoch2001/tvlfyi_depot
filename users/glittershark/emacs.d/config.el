@@ -235,6 +235,7 @@
 ;;
 (load! "+bindings")
 (load! "+commands")
+(load! "cpp")
 
 (load! "+private")
 
@@ -592,31 +593,47 @@
     ["f"]
     (list "o" "Reset HEAD@{1}" #'magit-reset-head-previous))
 
+  (defun magit-read-org-clubhouse-branch-name ()
+    (when-let ((story-id (org-clubhouse-clocked-in-story-id)))
+      (let ((desc
+             (magit-read-string-ns
+              (format "Story description (to go after gs/ch%d/)"
+                      story-id))))
+        (format "gs/ch%d/%s" story-id desc))))
+
   (defun magit-read-org-clubhouse-branch-args ()
-    (if-let ((story-id (org-clubhouse-clocked-in-story-id)))
+    (if (org-clubhouse-clocked-in-story-id)
         (let ((start-point (magit-read-starting-point
                             "Create and checkout branch for Clubhouse story"
                             nil
                             "origin/master")))
           (if (magit-rev-verify start-point)
-              (let ((desc (magit-read-string-ns
-                           (format "Story description (to go after gs/ch%d/)"
-                                   story-id))))
+              (when-let ((desc (magit-read-org-clubhouse-branch-name)))
                 (list
                  (format "gs/ch%d/%s" story-id desc)
                  start-point))
             (user-error "Not a valid starting point: %s" choice)))
       (user-error "No currently clocked-in clubhouse story")))
 
-  (define-suffix-command magit-checkout-org-clubhouse-branch (branch start-point)
+  (transient-define-suffix magit-checkout-org-clubhouse-branch (branch start-point)
     (interactive (magit-read-org-clubhouse-branch-args))
     (magit-branch-and-checkout branch start-point))
+
+  (transient-define-suffix magit-rename-org-clubhouse-branch (old new)
+    (interactive
+     (let ((branch (magit-read-local-branch "Rename branch")))
+       (list branch (magit-read-org-clubhouse-branch-name))))
+    (when (and old new)
+      (magit-branch-rename old new)))
 
   (transient-append-suffix
     #'magit-branch
     ["c"]
     (list "C" "Checkout Clubhouse branch" #'magit-checkout-org-clubhouse-branch))
-  )
+  (transient-append-suffix
+    #'magit-branch
+    ["c"]
+    (list "M" "Rename branch to Clubhouse ticket" #'magit-rename-org-clubhouse-branch)))
 
 ;; (defun grfn/split-window-more-sensibly (&optional window)
 ;;   (let ((window (or window (selected-window))))
