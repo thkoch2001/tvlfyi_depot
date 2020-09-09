@@ -58,6 +58,8 @@ with lib;
     clj2nix
     clojure
     leiningen
+    clj-kondo
+    babashka
 
     pg-dump-upsert
 
