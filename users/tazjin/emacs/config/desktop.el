@@ -96,7 +96,7 @@
      (progn
        (string-match
         (rx "Quassel IRC - "
-            (group (one-or-more (any alnum "#"))) ;; <-- channel name
+            (group (one-or-more (any alnum "&" "-" "#"))) ;; <-- channel name
             " (" (group (one-or-more (any ascii space))) ")" ;; <-- network name
             " — Quassel IRC")
         title)
