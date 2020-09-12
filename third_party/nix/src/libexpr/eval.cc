@@ -598,15 +598,15 @@ Env& EvalState::allocEnv(size_t size) {
   return *env;
 }
 
-void EvalState::mkList(Value& v, NixList* list) {
+void EvalState::mkList(Value& v, std::shared_ptr<NixList> list) {
+  nrListElems += list->size();
   clearValue(v);
   v.type = tList;
   v.list = list;
-  nrListElems += list->size();
 }
 
 void EvalState::mkList(Value& v, size_t size) {
-  EvalState::mkList(v, new NixList(size));
+  EvalState::mkList(v, std::make_shared<NixList>(size));
 }
 
 unsigned long nrThunks = 0;
@@ -1224,7 +1224,7 @@ void ExprOpConcatLists::eval(EvalState& state, Env& env, Value& v) {
 void EvalState::concatLists(Value& v, const NixList& lists, const Pos& pos) {
   nrListConcats++;
 
-  auto outlist = new NixList();
+  auto outlist = std::make_shared<NixList>();
 
   for (Value* list : lists) {
     forceList(*list, pos);
@@ -1816,8 +1816,8 @@ size_t valueSize(const Value& v) {
         }
         break;
       case tList:
-        if (seenLists.find(v.list) == seenLists.end()) {
-          seenLists.insert(v.list);
+        if (seenLists.find(v.list.get()) == seenLists.end()) {
+          seenLists.insert(v.list.get());
           sz += v.listSize() * sizeof(Value*);
           for (const Value* v : *v.list) {
             sz += doValue(*v);
