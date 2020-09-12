@@ -434,13 +434,12 @@ Value* EvalState::addPrimOp(const std::string& name, size_t arity,
     primOp(*this, noPos, nullptr, v);
     return addConstant(name, v);
   }
-  Value* v = allocValue();
   std::string name2 =
       std::string(name, 0, 2) == "__" ? std::string(name, 2) : name;
   Symbol sym = symbols.Create(name2);
-  // Even though PrimOp doesn't need tracing, it needs to be collected.
+  Value* v = allocValue();
   v->type = tPrimOp;
-  v->primOp = new PrimOp(primOp, arity, sym);
+  v->primOp = std::make_shared<PrimOp>(primOp, arity, sym);
   staticBaseEnv.vars[symbols.Create(name)] = baseEnvDispl;
   baseEnv.values[baseEnvDispl++] = v;
   baseEnv.values[0]->attrs->push_back(Attr(sym, v));

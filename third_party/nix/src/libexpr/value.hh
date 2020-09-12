@@ -100,7 +100,7 @@ struct Value {
     NixThunk thunk;
     NixApp app;  // TODO(tazjin): "app"?
     NixLambda lambda;
-    PrimOp* primOp;
+    std::shared_ptr<PrimOp> primOp;
     NixPrimOpApp primOpApp;
     NixFloat fpoint;
   };
