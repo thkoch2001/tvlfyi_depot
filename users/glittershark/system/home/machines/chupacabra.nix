@@ -11,6 +11,7 @@ in {
     ../modules/games.nix
     ../modules/rtlsdr.nix
     ../modules/urbint.nix
+    ../modules/ptt.nix
   ];
 
   # for when hacking
