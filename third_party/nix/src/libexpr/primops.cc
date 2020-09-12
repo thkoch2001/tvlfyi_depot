@@ -1603,7 +1603,7 @@ static void prim_sort(EvalState& state, const Pos& pos, Value** args,
 
   // Copy of the input list which can be sorted in place.
   v.type = tList;
-  v.list = new NixList(*args[1]->list);
+  v.list = std::make_shared<NixList>(*args[1]->list);
 
   std::for_each(v.list->begin(), v.list->end(),
                 [&](Value* val) { state.forceValue(*val); });
@@ -1633,8 +1633,8 @@ static void prim_partition(EvalState& state, const Pos& pos, Value** args,
   state.forceFunction(*args[0], pos);
   state.forceList(*args[1], pos);
 
-  NixList* right = new NixList();
-  NixList* wrong = new NixList();
+  std::shared_ptr<NixList> right = std::make_shared<NixList>();
+  std::shared_ptr<NixList> wrong = std::make_shared<NixList>();
 
   for (Value* elem : *args[1]->list) {
     state.forceValue(*elem, pos);
@@ -1664,7 +1664,7 @@ static void prim_concatMap(EvalState& state, const Pos& pos, Value** args,
   state.forceFunction(*args[0], pos);
   state.forceList(*args[1], pos);
 
-  NixList* outlist = new NixList;
+  std::shared_ptr<NixList> outlist = std::make_shared<NixList>();
 
   for (Value* elem : *args[1]->list) {
     auto out = state.allocValue();

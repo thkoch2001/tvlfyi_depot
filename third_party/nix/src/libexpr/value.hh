@@ -96,7 +96,7 @@ struct Value {
     NixString string;
     const char* path;
     std::shared_ptr<Bindings> attrs;
-    NixList* list;
+    std::shared_ptr<NixList> list;
     NixThunk thunk;
     NixApp app;  // TODO(tazjin): "app"?
     NixLambda lambda;

@@ -258,7 +258,7 @@ class EvalState {
   Value* allocAttr(Value& vAttrs, const Symbol& name);
 
   // Create a list value from the specified vector.
-  void mkList(Value& v, NixList* list);
+  void mkList(Value& v, std::shared_ptr<NixList> list);
 
   // Create a list value, allocating as many elements as specified in
   // size. This is used for the many cases in this codebase where
