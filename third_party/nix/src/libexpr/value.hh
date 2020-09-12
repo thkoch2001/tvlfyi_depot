@@ -105,7 +105,10 @@ struct Value {
     NixFloat fpoint;
   };
 
-  Value() : type(tInt), integer(0) {}
+  Value() : type(tInt), attrs(nullptr) {
+    static_assert(offsetof(Value, attrs) + sizeof(attrs) == sizeof(Value));
+  }
+
   Value(const Value& copy);
   Value(Value&& move);
   ~Value() {}
