@@ -94,13 +94,14 @@
     ;; "Quassel IRC - ##tvl (Freenode) — Quassel IRC"
     (`("quassel" ,title)
      (progn
-       (string-match
-        (rx "Quassel IRC - "
-            (group (one-or-more (any alnum "&" "-" "#"))) ;; <-- channel name
-            " (" (group (one-or-more (any ascii space))) ")" ;; <-- network name
-            " — Quassel IRC")
-        title)
-       (format "Quassel<%s>" (match-string 2 title))))
+       (if (string-match
+            (rx "Quassel IRC - "
+                (group (one-or-more (any alnum "[" "]" "&" "-" "#"))) ;; <-- channel name
+                " (" (group (one-or-more (any ascii space))) ")" ;; <-- network name
+                " — Quassel IRC")
+            title)
+           (format "Quassel<%s>" (match-string 2 title))
+         title)))
 
     ;; For any other application, a name is constructed from the
     ;; window's class and name.
