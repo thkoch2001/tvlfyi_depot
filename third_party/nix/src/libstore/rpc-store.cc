@@ -19,6 +19,7 @@
 #include <grpcpp/impl/codegen/client_context.h>
 #include <grpcpp/impl/codegen/completion_queue.h>
 #include <grpcpp/impl/codegen/status.h>
+#include <grpcpp/impl/codegen/status_code_enum.h>
 #include <grpcpp/impl/codegen/sync_stream.h>
 #include <grpcpp/security/credentials.h>
 #include <sys/ucontext.h>
@@ -135,8 +136,11 @@ void RpcStore::queryPathInfoUncached(
 
   try {
     proto::PathInfo path_info;
-    SuccessOrThrow(stub_->QueryPathInfo(&ctx, store_path, &path_info),
-                   __FUNCTION__);
+    auto result = stub_->QueryPathInfo(&ctx, store_path, &path_info);
+    if (result.error_code() == grpc::INVALID_ARGUMENT) {
+      throw InvalidPath(absl::StrFormat("path '%s' is not valid", path));
+    }
+    SuccessOrThrow(result);
 
     std::shared_ptr<ValidPathInfo> info;
 
