@@ -25,6 +25,7 @@
 (cl-defun google--request (url &key method params scope)
   (let ((p (aio-promise))
         (auth-token (google--get-token scope gcal-client-id gcal-client-secret)))
+    (oauth2-refresh-access auth-token)
     (oauth2-url-retrieve
      auth-token
      url
