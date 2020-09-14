@@ -144,3 +144,19 @@
 
 ;;; TODO: this doesn't work?
 (define-auto-insert "\\.org?$" #'grfn/insert-org-template t)
+
+(defun forge--post-submit-around---link-pr-to-org-item
+    (orig)
+  (let ((cb (funcall orig)))
+    (lambda (value headers status req)
+      (prog1 (funcall cb value headers status req)
+        (grfn/at-org-clocked-in-item
+         (let ((url (alist-get 'url value))
+               (number (alist-get 'number value)))
+           (org-set-property
+            "pull-request"
+            (org-make-link-string url (number-to-string number)))))))))
+
+(advice-add
+ #'forge--post-submit-callback
+ :around #'forge--post-submit-around---link-pr-to-org-item)
