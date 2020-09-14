@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b228c72_0cfe3ebe",
+        "filename": "third_party/nix/src/libstore/ssh-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-09-14T19:57:25Z",
+      "side": 1,
+      "message": "Ugh. This should just be a function somewhere ... if we clean up these we\u0027ll be able to make static binaries. I guess that\u0027s out of scope for this CL though ...",
+      "revId": "b3b5668c53bb1e8a59f48066593317de1f0b7e93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
