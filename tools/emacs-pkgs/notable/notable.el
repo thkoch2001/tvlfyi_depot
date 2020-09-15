@@ -21,6 +21,7 @@
 
 (require 'cl-lib)
 (require 'dash)
+(require 'dottime)
 (require 'f)
 (require 'ht)
 (require 'rx)
@@ -93,12 +94,16 @@
       (setq notable--next-note (+ 1 id))
       id)))
 
+(defun notable--note-path (id)
+  (check-type id integer)
+  (f-join notable-note-dir (format "note-%d.json" id)))
+
 (defun notable--add-note (content)
   "Add a note with CONTENT to the note store."
   (let* ((id (notable--next-id))
          (note (notable--make-note :time (time-convert nil 'integer)
                                    :content content))
-         (path (f-join notable-note-dir (format "note-%d.json" id))))
+         (path (notable--note-path id)))
     (when (f-exists? path) (error "Note file '%s' already exists!" path))
     (f-write-text (notable--serialize-note note) 'utf-8 path)
     (message "Saved note %d" id)))
@@ -111,6 +116,44 @@
            do (push (string-to-number (match-string 1 file)) res)
            finally return res))
 
+(defun notable--get-note (id)
+  (let ((path (notable--note-path id)))
+    (unless (f-exists? path)
+      (error "No note with ID %s in note storage!" id))
+    (notable--deserialize-note (f-read-text path 'utf-8))))
+
+;; Note list buffer implementation
+
+(define-derived-mode notable-list-mode fundamental-mode "notable"
+  "Major mode displaying the Notable note list."
+  ;; TODO(tazjin): `imenu' functions?
+
+  (set (make-local-variable 'scroll-preserve-screen-position) t)
+  (setq truncate-lines t)
+  (setq buffer-read-only t)
+  (setq buffer-undo-list t)
+  (hl-line-mode t))
+
+(defun notable--render-note (id note)
+  (check-type id integer)
+  (check-type note notable--note)
+
+  (let ((first-line (car (s-lines "foo")))
+        (date (dottime-format (seconds-to-time
+                               (notable--note-time note)))))
+    (insert (propertize (s-concat date "  " first-line)
+                        'notable-note-id id))
+    (insert "\n")))
+
+(defun notable--render-notes (notes)
+  "Retrieve each note in NOTES by ID and insert its contents into
+the list buffer.
+
+For larger notes only the first line is displayed."
+  (-each notes
+    (lambda (id)
+      (notable--render-note id (notable--get-note id)))))
+
 ;; User-facing functions
 
 (defun notable-take-note (content)
@@ -119,5 +162,20 @@ in Notable."
   (interactive "sEnter note: ")
   (check-type content string)
   (notable--add-note content))
+
+(defun notable-list-notes ()
+  "Open a buffer listing all active notes."
+  (interactive)
+
+  (let ((buffer (get-buffer-create "*notable*"))
+        (notes (notable--list-note-ids))
+        (inhibit-read-only t))
+    (with-current-buffer buffer
+      (notable-list-mode)
+      (erase-buffer)
+      (setq header-line-format "Notable notes"))
+    (switch-to-buffer buffer)
+    (goto-char (point-min))
+    (notable--render-notes notes)))
 
 (provide 'notable)
