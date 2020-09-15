@@ -51,14 +51,17 @@
 (defvar notable--note-lock (make-mutex "notable-notes")
   "Exclusive lock for note operations with shared state.")
 
+(defvar notable--note-regexp
+  (rx "note-"
+      (group (one-or-more (any num)))
+      ".json")
+  "Regular expression to match note file names.")
+
 (defvar notable--next-note
-  (let ((next 0)
-        (note-regexp (rx "note-"
-                         (group (one-or-more (any num)))
-                         ".json")))
+  (let ((next 0))
     (-each (f-entries notable-note-dir)
       (lambda (file)
-        (when-let* ((match (string-match note-regexp file))
+        (when-let* ((match (string-match notable--note-regexp file))
                     (id (string-to-number
                          (match-string 1 file)))
                     (larger (> id next)))
@@ -99,6 +102,14 @@
     (when (f-exists? path) (error "Note file '%s' already exists!" path))
     (f-write-text (notable--serialize-note note) 'utf-8 path)
     (message "Saved note %d" id)))
+
+(defun notable--list-note-ids ()
+  "List all note IDs (not contents) from `notable-note-dir'"
+  (cl-loop for file in (f-entries notable-note-dir)
+           with res = nil
+           if (string-match notable--note-regexp file)
+           do (push (string-to-number (match-string 1 file)) res)
+           finally return res))
 
 ;; User-facing functions
 
