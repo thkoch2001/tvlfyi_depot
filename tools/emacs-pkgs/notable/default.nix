@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
 pkgs.emacsPackages.trivialBuild rec {
   pname = "notable";
@@ -6,5 +6,6 @@ pkgs.emacsPackages.trivialBuild rec {
   src = ./notable.el;
   packageRequires = with pkgs.emacsPackages; [
     dash f ht s
+    depot.tools.emacs-pkgs.dottime
   ];
 }
