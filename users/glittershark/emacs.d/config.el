@@ -602,7 +602,7 @@
         (format "gs/ch%d/%s" story-id desc))))
 
   (defun magit-read-org-clubhouse-branch-args ()
-    (if (org-clubhouse-clocked-in-story-id)
+    (if-let ((story-id (org-clubhouse-clocked-in-story-id)))
         (let ((start-point (magit-read-starting-point
                             "Create and checkout branch for Clubhouse story"
                             nil
