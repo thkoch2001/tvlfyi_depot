@@ -122,6 +122,45 @@
       (error "No note with ID %s in note storage!" id))
     (notable--deserialize-note (f-read-text path 'utf-8))))
 
+;; Note view buffer implementation
+
+(define-derived-mode notable-note-mode fundamental-mode "notable-note"
+  "Major mode displaying a single Notable note."
+
+  (defvar-local notable-note nil "The note displayed by this buffer.")
+  (defvar-local notable-note-id nil "ID of this buffer's note.")
+  (set (make-local-variable 'scroll-preserve-screen-position) t)
+  (setq truncate-lines t)
+  (setq buffer-read-only t)
+  (setq buffer-undo-list t))
+
+(defvar notable-note-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "q" 'kill-current-buffer)
+    map)
+  "Map for single note display.")
+
+(defun notable--show-note (id)
+  "Display a single note in a separate buffer."
+  (check-type id integer)
+
+  (let ((note (notable--get-note id))
+        (buffer (get-buffer-create (format "*notable: %d*" id)))
+        (inhibit-read-only t))
+    (with-current-buffer buffer
+      (notable-note-mode)
+      (erase-buffer)
+      (setq header-line-format (format "Note from %s"
+                                       (dottime-format
+                                        (seconds-to-time (notable--note-time note))))))
+    (switch-to-buffer buffer)
+    (goto-char (point-min))
+    (insert (notable--note-content note))))
+
+(defun notable--show-note-at-point ()
+  (interactive)
+  (notable--show-note (get-text-property (point) 'notable-note-id)))
+
 ;; Note list buffer implementation
 
 (define-derived-mode notable-list-mode fundamental-mode "notable"
@@ -134,11 +173,19 @@
   (setq buffer-undo-list t)
   (hl-line-mode t))
 
+(setq notable-list-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "q" 'kill-current-buffer)
+    (define-key map "g" 'notable-list-notes)
+    (define-key map (kbd "RET") 'notable--show-note-at-point)
+    map))
+
 (defun notable--render-note (id note)
   (check-type id integer)
   (check-type note notable--note)
 
-  (let ((first-line (car (s-lines "foo")))
+  (let ((start (point))
+        (first-line (car (s-lines (notable--note-content note))))
         (date (dottime-format (seconds-to-time
                                (notable--note-time note)))))
     (insert (propertize (s-concat date "  " first-line)
