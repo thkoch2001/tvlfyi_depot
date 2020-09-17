@@ -98,6 +98,10 @@
   (check-type id integer)
   (f-join notable-note-dir (format "note-%d.json" id)))
 
+(defun notable--archive-path (id)
+  (check-type id integer)
+  (f-join notable-note-dir (format "archive-%d.json" id)))
+
 (defun notable--add-note (content)
   "Add a note with CONTENT to the note store."
   (let* ((id (notable--next-id))
@@ -107,6 +111,19 @@
     (when (f-exists? path) (error "Note file '%s' already exists!" path))
     (f-write-text (notable--serialize-note note) 'utf-8 path)
     (message "Saved note %d" id)))
+
+(defun notable--archive-note (id)
+  "Archive the note with ID."
+  (check-type id integer)
+
+  (unless (f-exists? (notable--note-path id))
+    (error "There is no note with ID %d." id))
+
+  (when (f-exists? (notable--archive-path id))
+    (error "Oh no, a note with ID %d has already been archived!" id))
+
+  (f-move (notable--note-path id) (notable--archive-path id))
+  (message "Archived note with ID %d." id))
 
 (defun notable--list-note-ids ()
   "List all note IDs (not contents) from `notable-note-dir'"
@@ -160,6 +177,10 @@
   (interactive)
   (notable--show-note (get-text-property (point) 'notable-note-id)))
 
+(defun notable--archive-note-at-point ()
+  (interactive)
+  (notable--archive-note (get-text-property (point) 'notable-note-id)))
+
 ;; Note list buffer implementation
 
 (define-derived-mode notable-list-mode fundamental-mode "notable"
@@ -174,6 +195,7 @@
 
 (setq notable-list-mode-map
       (let ((map (make-sparse-keymap)))
+        (define-key map "a" 'notable--archive-note-at-point)
         (define-key map "q" 'kill-current-buffer)
         (define-key map "g" 'notable-list-notes)
         (define-key map (kbd "RET") 'notable--show-note-at-point)
