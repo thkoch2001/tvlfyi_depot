@@ -204,10 +204,14 @@
   (check-type id integer)
   (check-type note notable--note)
 
-  (let ((start (point))
-        (first-line (car (s-lines (notable--note-content note))))
-        (date (dottime-format (seconds-to-time
-                               (notable--note-time note)))))
+  (let* ((start (point))
+         (date (dottime-format (seconds-to-time
+                                (notable--note-time note))))
+         (first-line (truncate-string-to-width
+                      (car (s-lines (notable--note-content note)))
+                      ;; Length of the window, minus the date prefix:
+                      (- (window-width) (+ 2 (length date)))
+                      nil nil 1)))
     (insert (propertize (s-concat date "  " first-line)
                         'notable-note-id id))
     (insert "\n")))
