@@ -20,7 +20,6 @@
 ;; specified by `notable-note-dir'.
 
 (require 'cl-lib)
-(require 'dash)
 (require 'dottime)
 (require 'f)
 (require 'ht)
@@ -60,13 +59,12 @@
 
 (defvar notable--next-note
   (let ((next 0))
-    (-each (f-entries notable-note-dir)
-      (lambda (file)
-        (when-let* ((match (string-match notable--note-regexp file))
-                    (id (string-to-number
-                         (match-string 1 file)))
-                    (larger (> id next)))
-          (setq next id))))
+    (dolist (file (f-entries notable-note-dir))
+      (when-let* ((match (string-match notable--note-regexp file))
+                  (id (string-to-number
+                       (match-string 1 file)))
+                  (larger (> id next)))
+        (setq next id)))
     (+ 1 next))
   "Next ID to use for notes. Initial value is determined based on
   the existing notes files.")
@@ -219,9 +217,8 @@
 the list buffer.
 
 For larger notes only the first line is displayed."
-  (-each notes
-    (lambda (id)
-      (notable--render-note id (notable--get-note id)))))
+  (dolist (id notes)
+    (notable--render-note id (notable--get-note id))))
 
 ;; User-facing functions
 
