@@ -5,7 +5,7 @@ pkgs.emacsPackages.trivialBuild rec {
   version = "1.0";
   src = ./notable.el;
   packageRequires = with pkgs.emacsPackages; [
-    dash f ht s
+    f ht s
     depot.tools.emacs-pkgs.dottime
   ];
 }
