@@ -151,7 +151,7 @@
     (lambda (value headers status req)
       (prog1 (funcall cb value headers status req)
         (grfn/at-org-clocked-in-item
-         (let ((url (alist-get 'url value))
+         (let ((url (alist-get 'html_url value))
                (number (alist-get 'number value)))
            (org-set-property
             "pull-request"
