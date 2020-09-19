@@ -103,6 +103,14 @@ class JSONSax : nlohmann::json_sax<json> {
     return handle_value<void(Value&, const char*)>(mkString, val.c_str());
   }
 
+#if NLOHMANN_JSON_VERSION_MAJOR >= 3 && NLOHMANN_JSON_VERSION_MINOR >= 8
+  bool binary(binary_t&) {
+    // This function ought to be unreachable
+    assert(false);
+    return true;
+  }
+#endif
+
   bool start_object(std::size_t) override {
     rs = std::make_unique<JSONObjectState>(std::move(rs));
     return true;
