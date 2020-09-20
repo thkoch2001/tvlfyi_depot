@@ -142,7 +142,7 @@ in lib.fix(self: {
     users.tazjin = {
       isNormalUser = true;
       uid = 1000;
-      extraGroups = [ "git" "wheel" ];
+      extraGroups = [ "git" "wheel" "quassel" ];
       shell = nixpkgs.fish;
     };
 
