@@ -9,7 +9,7 @@ let
   depot = import <depot> {};
   pkgs = import <nixpkgs> {};
 
-  depotPath = depot.users.multi.whitby.depot {};
+  depotPath = depot.users.multi.whitby.depot;
 in
 
 {
