@@ -12,6 +12,9 @@ in
     bash = {
       enable = true;
       initExtra = ''
+        bind '"\e[5~":history-search-backward'
+        bind '"\e[6~":history-search-forward'
+
         PS1="[\\u@\\h:\\w]\\\$ "
 
         _Z_CMD=d
@@ -28,6 +31,11 @@ in
         bind-key -n C-S-Right swap-window -t +1
       '';
     };
+
+    vim = {
+      enable = true;
+      extraConfig = "set mouse=";
+    };
   };
 
   home.sessionVariables = {
@@ -37,9 +45,15 @@ in
       "depot=$HOME/nix/depot:" +
       "/nix/var/nix/profiles/per-user/root/channels";
     HOME_MANAGER_CONFIG = <depot/users/multi/whitby/home-manager.nix>;
+    EDITOR = "vim";
   };
 
-  home.packages = (import ../pkgs { inherit pkgs; });
+  home.packages = [
+    pkgs.lsof
+    pkgs.strace
+    pkgs.file
+    pkgs.pciutils
+  ] ++ (import ../pkgs { inherit pkgs; });
 
   home.file = {
     z = {
