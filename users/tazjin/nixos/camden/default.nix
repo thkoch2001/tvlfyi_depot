@@ -228,6 +228,11 @@ in lib.fix(self: {
     ];
   };
 
+  services.bitlbee = {
+    enable = true;
+    portNumber = 2337; # bees
+  };
+
   # serve my website(s)
   services.nginx = {
     enable = true;
