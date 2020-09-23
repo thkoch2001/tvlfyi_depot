@@ -609,9 +609,7 @@
                             "origin/master")))
           (if (magit-rev-verify start-point)
               (when-let ((desc (magit-read-org-clubhouse-branch-name)))
-                (list
-                 (format "gs/ch%d/%s" story-id desc)
-                 start-point))
+                (list desc start-point))
             (user-error "Not a valid starting point: %s" choice)))
       (user-error "No currently clocked-in clubhouse story")))
 
