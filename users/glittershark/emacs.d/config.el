@@ -853,8 +853,8 @@
   (when (eq 'headline (car elt))
     (plist-get (cadr elt) :raw-value)))
 
-(setq +pretty-code-symbols
-      (append +pretty-code-symbols
+(setq +ligatures-extra-symbols
+      (append +ligatures-extra-symbols
               '(:equal     "≡"
                 :not-equal "≠"
                 :is        "≣"
