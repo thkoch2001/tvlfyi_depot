@@ -40,3 +40,5 @@
   (add-to-list
    'cljr-magic-require-namespaces
    '("s" . "clojure.spec.alpha")))
+
+(set-popup-rule! "^\\*cider-test-report" :size 0.4)
