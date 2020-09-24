@@ -44,6 +44,7 @@
   "Set the current X keyboard layout."
 
   (shell-command (format "setxkbmap %s" layout))
+  (shell-command "setxkbmap -option caps:super")
   (message "Set X11 keyboard layout to '%s'" layout))
 
 (defun create-window-name ()
@@ -160,6 +161,7 @@
 (bind-xkb "de" "k d")
 (bind-xkb "no" "k n")
 (bind-xkb "ru" "k r")
+(bind-xkb "se" "k s")
 
 ;; These are commented out because Emacs no longer starts (??) if
 ;; they're set at launch.
