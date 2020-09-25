@@ -296,4 +296,31 @@
                              (magit-read-file-from-rev "HEAD" "Find file")
                              #'pop-to-buffer-same-window))
 
+(defun songwhip--handle-result (status &optional cbargs)
+  ;; TODO(tazjin): Inspect status, which looks different in practice
+  ;; than the manual claims.
+  (if-let* ((response (json-parse-string
+                       (buffer-substring url-http-end-of-headers (point-max))))
+            (sw-path (ht-get* response "data" "path"))
+            (link (format "https://songwhip.com/%s" sw-path))
+            (select-enable-clipboard t))
+      (progn
+        (kill-new link)
+        (message "Copied Songwhip link (%s)" link))
+    (warn "Something went wrong while retrieving Songwhip link!")
+    ;; For debug purposes, the buffer is persisted in this case.
+    (setq songwhip--debug-buffer (current-buffer))))
+
+(defun songwhip-lookup-url (url)
+  "Look up URL on Songwhip and copy the resulting link to the clipboard."
+  (interactive "sEnter source URL: ")
+  (let ((songwhip-url "https://songwhip.com/api/")
+        (url-request-method "POST")
+        (url-request-extra-headers '(("Content-Type" . "application/json")))
+        (url-request-data
+         (json-serialize `((country . "GB")
+                           (url . ,url)))))
+    (url-retrieve "https://songwhip.com/api/" #'songwhip--handle-result nil t t)
+    (message "Requesting Songwhip URL ... please hold the line.")))
+
 (provide 'functions)
