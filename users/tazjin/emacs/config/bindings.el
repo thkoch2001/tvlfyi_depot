@@ -41,6 +41,9 @@
 ;; Insert TODO comments
 (global-set-key (kbd "C-c t") 'insert-todo-comment)
 
+;; Make sharing music easier
+(global-set-key (kbd "s-s w") #'songwhip-lookup-url)
+
 ;; Add subthread collapsing to notmuch-show.
 ;;
 ;; C-, closes a thread, C-. opens a thread. This mirrors stepping
