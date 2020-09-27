@@ -33,10 +33,11 @@
 ;; LON: +00 (UTC) or +01 (BST)
 ;; NYC: -05
 ;; SF:  -07
-(setq display-time-format
-      (concat "%H·%M"
-              (format "%0+3d" (/ (car (current-time-zone)) 3600))
-              " %a %d %b"))
+(setq display-time-string-forms
+      '((format-time-string
+         (concat "%H·%M"
+                 (format "%0+3d" (/ (car (current-time-zone)) 3600))
+                 " %a %d %b") nil t)))
 (display-time-mode 1)
 
 ;; Remove the boilerplate in the *scratch* buffer
