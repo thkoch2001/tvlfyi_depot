@@ -80,9 +80,9 @@ func main() {
 
 func generateMesasge(msg incomingIRC, redisc *redis.Client) string {
 	text := msg.Params[1]
-	username := msg.Name
-	supressionUsernames[strings.ToLower(username)] = true
-	supressionUsernames[strings.ToLower(username)+":"] = true
+	username := strings.ToLower(msg.Name)
+	supressionUsernames[username] = true
+	supressionUsernames[username+":"] = true
 
 	text = strings.ToLower(text)
 	text = strings.Replace(text, ",", "", -1)
