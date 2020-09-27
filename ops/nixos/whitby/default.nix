@@ -402,6 +402,12 @@ in lib.fix(self: {
       openssh.authorizedKeys.keys = depot.users.v.keys.whitby;
     };
 
+    users.cynthia = {
+      isNormalUser = true; # I'm normal OwO :3
+      extraGroups = [ "git" ];
+      openssh.authorizedKeys.keys = depot.users.cynthia.keys.all;
+    };
+
     # Set up a user & group for git shenanigans
     groups.git = {};
     users.git = {
