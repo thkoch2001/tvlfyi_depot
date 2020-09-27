@@ -241,7 +241,7 @@ impl App {
                         // TODO(eta): make configurable
                         let response = crimp::Request::put("https://theta.eu.org/lx/upload")
                             .user_agent("paroxysm/0.0.2 crimp/0.2")?
-                            .header("Linx-Expiry", "86400")? // 24 hours
+                            .header("Linx-Expiry", "7200")? // 2 hours
                             .body("text/plain", data_to_upload.as_bytes())
                             .timeout(std::time::Duration::from_secs(2))?
                             .send()?
