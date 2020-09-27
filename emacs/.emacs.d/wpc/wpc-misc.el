@@ -140,6 +140,14 @@
 ;; alternative to help
 (use-package helpful)
 
+;; If called from an existing helpful-mode buffer, reuse that buffer; otherwise,
+;; call `pop-to-buffer'.
+(setq helpful-switch-buffer-function
+      (lambda (buffer-or-name)
+        (if (eq major-mode 'helpful-mode)
+            (switch-to-buffer buffer-or-name)
+          (pop-to-buffer buffer-or-name))))
+
 ;; Emacs integration with direnv
 (use-package direnv
   :config
