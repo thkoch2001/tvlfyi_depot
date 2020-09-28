@@ -8,8 +8,6 @@
 ;;; Commentary:
 ;; Mostly wrappers around xrandr.
 ;;
-;; TODO: Look into autorandr to see if it could be useful.
-;;
 ;; Troubleshooting:
 ;; The following commands help me when I (infrequently) interact with xrandr.
 ;; - xrandr --listmonitors
@@ -22,75 +20,83 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'prelude)
-(require 'cycle)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; TODO: Consider if this logic should be conditioned by `device-work-laptop?'.
-(defconst display-laptop-monitor "eDP1"
-  "The xrandr identifier for my primary screen (on work laptop).")
-
-;; TODO: Why is HDMI-1, eDP-1 sometimes and HDMI1, eDP1 other times.
-(defconst display-4k-monitor "HDMI1"
-  "The xrandr identifer for my 4K monitor.")
-
-(defconst display-display-states (cycle-from-list '((t . nil) (nil . t)))
-  "A list of cons cells modelling enabled and disabled states for my displays.
-The car models the enabled state of my laptop display; the cdr models the
-  enabled state of my external monitor.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Debug why something this scales to 4k appropriately and other times it
-;; doesn't.
-(defun display-enable-4k ()
-  "Attempt to connect to my 4K monitor."
-  (interactive)
-  (prelude-start-process
-   :name "display-enable-4k"
-   :command (string-format
-             "xrandr --output %s --above %s --primary --auto --size 3840x2160 --rate 30.00 --dpi 144"
-             display-4k-monitor
-             display-laptop-monitor)))
+(cl-defmacro display-register (name &key
+                                    output
+                                    primary
+                                    position
+                                    size
+                                    rate
+                                    dpi
+                                    rotate)
+  "Macro to define a constant and two functions for {en,dis}abling a display.
 
-(defun display-disable-4k ()
-  "Disconnect from the 4K monitor."
-  (interactive)
-  (prelude-start-process
-   :name "display-disable-4k"
-   :command (string-format "xrandr --output %s --off"
-                           display-4k-monitor)))
+NAME - the human-readable identifier for the display
+OUTPUT - the xrandr identifier for the display
+PRIMARY - if true, send --primary flag to xrandr
+POSITION - one of {left-of,right-of,above,below,same-as}
+SIZE - the pixel resolution of the display
+RATE - the refresh rate
+DPI - the pixel density in dots per square inch
+rotate - one of {normal,left,right,inverted}
 
-(defun display-enable-laptop ()
-  "Turn the laptop monitor off.
-Sometimes this is useful when I'm sharing my screen in a Google Hangout and I
-  only want to present one of my monitors."
-  (interactive)
-  (prelude-start-process
-   :name "display-disable-laptop"
-   :command (string-format "xrandr --output %s --auto"
-                           display-laptop-monitor)))
+See the man-page for xrandr for more details."
+  `(progn
+     (defconst ,(intern (format "display-%s" name)) ,output
+       ,(format "The xrandr identifier for %s" name))
+     (defun ,(intern (format "display-enable-%s" name)) ()
+         ,(format "Attempt to enable my %s monitor" name)
+         (interactive)
+       (prelude-start-process
+        :name ,(format "display-enable-%s" name)
+        :command ,(format
+                   "xrandr --output %s --%s --%s %s --auto --size %dx%d --rate %0.2f --dpi %d --rotate %s"
+                   output
+                   (if primary "primary" "noprimary")
+                   (car position) (eval (cadr position))
+                   (car size) (cadr size)
+                   rate
+                   dpi
+                   rotate)))
+     (defun ,(intern (format "display-disable-%s" name)) ()
+         ,(format "Attempt to disable my %s monitor." name)
+         (interactive)
+         (prelude-start-process
+          :name ,(format "display-disable-%s" name)
+          :command ,(format
+                     "xrandr --output %s --off"
+                     output)))))
 
-(defun display-disable-laptop ()
-  "Turn the laptop monitor off.
-Sometimes this is useful when I'm sharing my screen in a Google Hangout and I
-  only want to present one of my monitors."
-  (interactive)
-  (prelude-start-process
-   :name "display-disable-laptop"
-   :command (string-format "xrandr --output %s --off"
-                           display-laptop-monitor)))
+(display-register laptop
+                  :output "eDP1"
+                  :primary nil
+                  :position (below display-4k-horizontal)
+                  :size (3840 2160)
+                  :rate 30.0
+                  :dpi 144
+                  :rotate normal)
 
-(defun display-cycle-display-states ()
-  "Cycle through `display-display-states' enabling and disabling displays."
-  (interactive)
-  (let ((state (cycle-next display-display-states)))
-    (if (car state) (display-enable-laptop) (display-disable-laptop))
-    (if (cdr state) (display-enable-4k) (display-disable-4k))))
+(display-register 4k-horizontal
+                  :output "HDMI1"
+                  :primary t
+                  :position (above display-laptop)
+                  :size (3840 2160)
+                  :rate 30.0
+                  :dpi 144
+                  :rotate normal)
+
+(display-register 4k-vertical
+                  :output "DP2"
+                  :primary nil
+                  :position (right-of display-4k-horizontal)
+                  :size (3840 2160)
+                  :rate 30.0
+                  :dpi 144
+                  :rotate right)
 
 (provide 'display)
 ;;; display.el ends here
