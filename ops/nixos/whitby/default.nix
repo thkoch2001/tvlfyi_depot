@@ -408,6 +408,12 @@ in lib.fix(self: {
       openssh.authorizedKeys.keys = depot.users.cynthia.keys.all;
     };
 
+    users.firefly = {
+      isNormalUser = true;
+      extraGroups = [ "git" ];
+      openssh.authorizedKeys.keys = depot.users.firefly.keys.whitby;
+    };
+
     # Set up a user & group for git shenanigans
     groups.git = {};
     users.git = {
