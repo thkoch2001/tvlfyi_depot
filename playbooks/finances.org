@@ -3,6 +3,7 @@
 ** Ensure Emergency fund is has a balance of $1000
 ** Open "finances_2020" Google Sheet
 ** Settle up with Mimi on TransferWise
+** Adjust GBP:USD exchange rate
 ** Adjust "Stocks (after tax)" to reflect amount Google sent
 ** Add remaining cash to "Carryover (cash)"
 ** Adjust "Paycheck" to reflect amount Google sent
