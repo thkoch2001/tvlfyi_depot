@@ -32,6 +32,7 @@
     tree
     ncat
     bc
+    pv
 
     # Security
     gnupg
