@@ -81,6 +81,10 @@
         (make-window-manager--named-workspace
          :label "Chatter"
          :kbd "h"
+         :display display-4k-vertical)
+        (make-window-manager--named-workspace
+         :label "Logs"
+         :kbd "t"
          :display display-4k-vertical))
   "List of `window-manager--named-workspace' structs.")
 
