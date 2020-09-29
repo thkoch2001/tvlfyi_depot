@@ -103,7 +103,7 @@
   (exwm-randr-enable)
   (setq exwm-randr-workspace-monitor-plist
         (list 0 display-4k-horizontal
-              1 display-laptop-monitor
+              1 display-laptop
               2 display-4k-vertical))
 
   (evil-set-initial-state 'exwm-mode 'emacs)

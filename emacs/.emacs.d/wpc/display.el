@@ -54,10 +54,14 @@ See the man-page for xrandr for more details."
        (prelude-start-process
         :name ,(format "display-enable-%s" name)
         :command ,(format
-                   "xrandr --output %s --%s --%s %s --auto --size %dx%d --rate %0.2f --dpi %d --rotate %s"
+                   "xrandr --output %s --%s %s --auto --size %dx%d --rate %0.2f --dpi %d --rotate %s"
                    output
                    (if primary "primary" "noprimary")
-                   (car position) (eval (cadr position))
+                   (if position
+                       (format "--%s %s"
+                               (car position)
+                               (eval (cadr position)))
+                     "")
                    (car size) (cadr size)
                    rate
                    dpi
@@ -71,10 +75,11 @@ See the man-page for xrandr for more details."
                      "xrandr --output %s --off"
                      output)))))
 
+;; I'm omitting the position argument to avoid a circular dependency between
+;; laptop and 4k-horizontal.
 (display-register laptop
                   :output "eDP1"
                   :primary nil
-                  :position (below display-4k-horizontal)
                   :size (3840 2160)
                   :rate 30.0
                   :dpi 144
