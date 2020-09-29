@@ -57,7 +57,7 @@
 ;; TODO: Support MRU cache of workspaces for easily switching back-and-forth
 ;; between workspaces.
 
-(cl-defstruct window-manager--named-workspace label kbd)
+(cl-defstruct window-manager--named-workspace label kbd display)
 
 (defconst window-manager--install-kbds? t
   "When t, install the keybindings to switch between named-workspaces.")
@@ -68,16 +68,20 @@
 (defconst window-manager--named-workspaces
   (list (make-window-manager--named-workspace
          :label "Web surfing"
-         :kbd "c")
+         :kbd "c"
+         :display display-4k-horizontal)
         (make-window-manager--named-workspace
          :label "Briefcase"
-         :kbd "d")
+         :kbd "d"
+         :display display-4k-horizontal)
         (make-window-manager--named-workspace
          :label "Todos"
-         :kbd "o")
+         :kbd "o"
+         :display display-4k-horizontal)
         (make-window-manager--named-workspace
          :label "Chatter"
-         :kbd "h"))
+         :kbd "h"
+         :display display-4k-vertical))
   "List of `window-manager--named-workspace' structs.")
 
 ;; Assert that no two workspaces share KBDs.
@@ -102,10 +106,10 @@
   (require 'exwm-randr)
   (exwm-randr-enable)
   (setq exwm-randr-workspace-monitor-plist
-        (list 0 display-4k-horizontal
-              1 display-laptop
-              2 display-4k-vertical))
-
+        (->> window-manager--named-workspaces
+             (-map-indexed (lambda (i x)
+                             (list i (window-manager--named-workspace-display x))))
+             -flatten))
   (evil-set-initial-state 'exwm-mode 'emacs)
   (setq exwm-workspace-number
         (list-length window-manager--named-workspaces))
@@ -113,7 +117,6 @@
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                 ;; Window sizing
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
                 (:key "C-M-=" :fn balance-windows)
                 ;; TODO: Make sure these don't interfere with LISP KBDs.
                 (:key "C-M-j" :fn shrink-window)
@@ -124,7 +127,6 @@
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                 ;; Window traversing
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
                 (:key "M-h" :fn windmove-left)
                 (:key "M-j" :fn windmove-down)
                 (:key "M-k" :fn windmove-up)
@@ -133,20 +135,17 @@
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                 ;; Window splitting
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
                 (:key "M-\\" :fn evil-window-vsplit)
                 (:key "M--"  :fn evil-window-split)
 
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                 ;; Window deletion
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
                 (:key "M-q" :fn delete-window)
 
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                 ;; Miscellaneous
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
                 (:key "M-:"               :fn eval-expression)
                 (:key "M-SPC"             :fn ivy-helpers-run-external-command)
                 (:key "M-x"               :fn counsel-M-x)
@@ -158,8 +157,8 @@
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                 ;; Workspaces
                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
                 (:key ,(kbd-raw 'workspace "l") :fn window-manager-logout))))
+
     (setq exwm-input-global-keys
           (->> kbds
                (-map (lambda (plist)
