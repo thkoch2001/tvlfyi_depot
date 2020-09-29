@@ -1,4 +1,4 @@
-{ depot, pkgs, ... }:
+args @ { depot, pkgs, ... }:
 
 rec {
   chupacabra = import ./machines/chupacabra.nix;
@@ -7,8 +7,13 @@ rec {
     configuration = chupacabra;
   }).system;
 
+  iso = import ./iso.nix args;
+
   # Build chupacabra in CI
-  meta.targets = [ "chupacabraSystem" ];
+  meta.targets = [
+    "chupacabraSystem"
+    "iso"
+  ];
 
   rebuilder =
     let
