@@ -7,11 +7,19 @@ rec {
     configuration = chupacabra;
   }).system;
 
+  mugwump = import ./machines/mugwump.nix;
+
+  mugwumpSystem = (pkgs.nixos {
+    configuration = mugwump;
+  }).system;
+
   iso = import ./iso.nix args;
 
   # Build chupacabra in CI
   meta.targets = [
     "chupacabraSystem"
+    "mugwumpSystem"
+
     "iso"
   ];
 

@@ -6,30 +6,19 @@ let
 
 in
 
-{
-  imports =
-    [
-      ./xserver.nix
-      ./fonts.nix
-      ./sound.nix
-      ./kernel.nix
-      ./rtlsdr.nix
-    ];
+with lib;
 
+{
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.useDHCP = false;
   networking.networkmanager.enable = true;
 
-  # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+  };
 
-  # Set your time zone.
   time.timeZone = "America/New_York";
 
   environment.systemPackages = with pkgs; [
@@ -44,30 +33,11 @@ in
     depot.users.glittershark.system.system.rebuilder
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  #   pinentryFlavor = "gnome3";
-  # };
-
-  programs.nm-applet.enable = true;
-
-
   services.openssh.enable = true;
 
   programs.ssh.startAgent = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  networking.firewall.enable = false;
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  networking.firewall.enable = mkDefault false;
 
   users.mutableUsers = true;
   programs.zsh.enable = true;
@@ -93,20 +63,6 @@ in
   system.stateVersion = "20.03"; # Did you read the comment?
 
   nixpkgs.config.allowUnfree = true;
-
-  services.geoclue2.enable = true;
-
-  powerManagement = {
-    enable = true;
-    cpuFreqGovernor = lib.mkDefault "powersave";
-    powertop.enable = true;
-  };
-  # Hibernate on low battery
-  laptop.onLowBattery = {
-    enable = true;
-    action = "hibernate";
-    thresholdPercentage = 5;
-  };
 
   nix = {
     trustedUsers = [ "grfn" ];
@@ -139,15 +95,4 @@ in
       options = "--delete-older-than 30d";
     };
   };
-
-  services.udev.extraRules = ''
-    # UDEV rules for Teensy USB devices
-    ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", ENV{ID_MM_DEVICE_IGNORE}="1"
-    ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789A]?", ENV{MTP_NO_PROBE}="1"
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789ABCD]?", MODE:="0666"
-    KERNEL=="ttyACM*", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", MODE:="0666"
-  '';
-
-  # Necessary to get steam working
-  hardware.opengl.driSupport32Bit = true;
 }
