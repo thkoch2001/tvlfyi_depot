@@ -45,4 +45,23 @@
     nix-review
     cachix
   ];
+
+  programs.ssh = {
+    enable = true;
+
+    matchBlocks = {
+      "dobharchu" = {
+        host = "dobharchu";
+        hostname = "172.16.0.4";
+        forwardAgent = true;
+        user = "griffin";
+      };
+
+      "mugwump" = {
+        host = "mugwump";
+        hostname = "172.16.0.5";
+        forwardAgent = true;
+      };
+    };
+  };
 }
