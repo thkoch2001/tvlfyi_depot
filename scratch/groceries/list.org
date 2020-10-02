@@ -1,79 +1,75 @@
+# The sections are sorted such that the first section is likely the first area
+# in the grocery store you'll encounter.
+#
+# This version is written for London's Borough Market.
 * Beer
-- 1x beer (6x)
+- 0x beer (6x)
 * Produce
-- 3x brocoli
+- 2x brocoli
 - 2x green beans
-- 0x green asparagus
-- 1x lettuce
+- 2x green asparagus
+- 2x spinach greens
 - 1x tomatoes
 - 1x zucchini
-- 3x lemons (3x)
-- 2x ginger
-- 0x shallots (10x)
-- 1x garlic
-- 1x avocado
+- 4x lemons
+- 0x garlic
+- 0x avocado
 - 0x basil plant
 * Pasta
-- 1x box of quinoa
-- 1x box of rice
-- 0x linguini pasta
-- 3x tortellini / ravioli
+- 0x box of quinoa
+- 0x box of rice
+- 1x GF pasta
+- 2x tortellini / ravioli
 - 0x tomato sauce
 - 0x pesto
 * Oil
 - 1x olive oil
 - 1x avocado oil
-- 1x coconut oil
+- 0x coconut oil
 * Condiments
-- 0x Red Tabasco
-- 1x Green Tabasco
-- 1x Habanero Tabasco
-- 0x senf
+- 1x red Tabasco
+- 1x green Tabasco
+- 1x habanero Tabasco
+- 0x mustard
 - 0x ketchup
 * Nuts
-- 2x almonds
-- 1x mixed nuts
+- 1x almonds
 - 0x walnuts
+- 0x peanuts
+- 0x cashews
+- 0x Brazil nuts
+- 0x mixed nuts
 * Bread
 - 1x GF bread
 - 0x flour
 - 1x GF flour
 * Sugar
-- 1x Lindt chocolate
+- 0x Lindt chocolate
 * Dairy
-- 2x butter
-- 1x coconut milk
-- 2x egg cartons (10x each)
-- 1x parmesan
+- 0x butter
+- 0x coconut milk
+- 0x egg cartons (10x each)
 - 1x sour cream
+- 1x parmesan
 - 2x gouda
-- 1x mystery cheese
+- 1x random cheese
 * Meat
-- 0x fleischwurst
-- 1x bacon bits
-- 0x jar Weiner Wurstel
-- 1x bratwurst (4x)
+- 1x sausages
 - 1x steak
 - 1x chicken
-- 4x spiedini
+- 1x lamb
+- 0x ground beef
 * Asian
-- 2x red curry
+- 0x red curry
 - 0x green curry
-- 3x coconut cream
+- 0x coconut cream
 * Frozen
 - 2x Salmon
-- 2x white fish
-- 1x shrimp
+- 1x white fish
+- 0x shrimp
 * Wine
 - 0x red wine
-- 1x white wine
+- 0x white wine
 * Miscellaneous
 - 0x coffee
-- 0x coffee filters
-- 0x bug spray
-- 1x 30 SPF sun screen
-- 0x tiki torch
-- 0x dish soap
-- 0x paper towels (6x)
-- 0x Brita
-- 1x Listerine
+- 0x tea
