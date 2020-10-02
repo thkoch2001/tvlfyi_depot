@@ -167,7 +167,7 @@
     (progn
       (fonts-whitelist-set "JetBrainsMono")
       (fonts-enable-ligatures)
-      (colorscheme-whitelist-set 'doom-solarized-light))
+      (colorscheme-whitelist-set 'doom-acario-dark))
   (load-theme 'wombat))
 
 (modeline-setup)
