@@ -67,11 +67,11 @@
 
 (defconst window-manager--named-workspaces
   (list (make-window-manager--named-workspace
-         :label "Web surfing"
+         :label "Web Browsing"
          :kbd "c"
          :display display-4k-horizontal)
         (make-window-manager--named-workspace
-         :label "Briefcase"
+         :label "Coding"
          :kbd "d"
          :display display-4k-horizontal)
         (make-window-manager--named-workspace
