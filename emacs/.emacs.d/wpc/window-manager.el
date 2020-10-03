@@ -369,6 +369,12 @@ predicate."
          (list-map #'window-manager--register-kbd))
     (window-manager--alert "Registered workspace KBDs!")))
 
+(defun window-manager-current-workspace ()
+  "Output the label of the currently active workspace."
+  (->> window-manager--workspaces
+       cycle-current
+       window-manager--named-workspace-label))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Startup Applications in `window-manager--named-workspaces'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
