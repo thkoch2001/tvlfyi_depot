@@ -316,6 +316,15 @@
  "g l" #'Info-history-back
  "g t" #'Info-toc)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ibuffer
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(general-define-key
+ :states '(normal)
+ :keymaps '(ibuffer-mode-map)
+ "M-j" nil
+ "K" #'ibuffer-do-delete)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here
