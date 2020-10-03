@@ -297,5 +297,10 @@
  "l" #'evil-forward-char
  "L" #'magit-log)
 
+(general-define-key
+ :states '(normal)
+ :keymaps '(Info-mode-map)
+ "RET" #'Info-follow-nearest-node)
+
 (provide 'keybindings)
 ;;; keybindings.el ends here
