@@ -167,7 +167,12 @@
     (progn
       (fonts-whitelist-set "JetBrainsMono")
       (fonts-enable-ligatures)
-      (colorscheme-whitelist-set 'doom-acario-dark))
+      (colorscheme-whitelist-set 'doom-acario-dark)
+      ;; the doom-acario-dark theme uses "Monospace Serif" as the font for
+      ;; comments, and I'd prefer JetBrainsMono (no italics).
+      (set-face-attribute font-lock-comment-face nil
+                          :family "JetBrainsMono"
+                          :slant 'normal))
   (load-theme 'wombat))
 
 (modeline-setup)
