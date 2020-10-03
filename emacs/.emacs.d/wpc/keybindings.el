@@ -310,6 +310,7 @@
  :states '(normal)
  :keymaps '(Info-mode-map)
  "SPC" nil
+ "g SPC" #'Info-scroll-up
  "RET" #'Info-follow-nearest-node
  "<C-tab>" #'Info-next
  "<C-S-iso-lefttab>" #'Info-prev
