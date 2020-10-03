@@ -177,6 +177,7 @@
  "hk" #'helpful-key
  "hv" #'helpful-variable
  "hp" #'helpful-at-point
+ "hi" #'info-apropos
  "s" #'flyspell-mode
  "S" #'sort-lines
  "=" #'align
@@ -297,10 +298,24 @@
  "l" #'evil-forward-char
  "L" #'magit-log)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Info-mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; NOTE: I find some of the following, existing KBDs useful:
+;;   M-x info-apropos
+;;   u   Info-up
+;;   M-n clone-buffer
 (general-define-key
  :states '(normal)
  :keymaps '(Info-mode-map)
- "RET" #'Info-follow-nearest-node)
+ "SPC" nil
+ "RET" #'Info-follow-nearest-node
+ "<C-tab>" #'Info-next
+ "<C-S-iso-lefttab>" #'Info-prev
+ "g l" #'Info-history-back
+ "g t" #'Info-toc)
+
 
 (provide 'keybindings)
 ;;; keybindings.el ends here
