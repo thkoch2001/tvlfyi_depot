@@ -177,6 +177,9 @@
                 tags-file-name
                 register-alist)))
 
+;; configure ibuffer
+(setq ibuffer-default-sorting-mode 'major-mode)
+
 ;; config Emacs to use $PATH values
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
