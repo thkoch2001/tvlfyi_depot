@@ -20,6 +20,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'prelude)
+(require 'dash)
+(require 's)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -28,55 +30,80 @@
 (cl-defmacro display-register (name &key
                                     output
                                     primary
-                                    position
+                                    coords
                                     size
                                     rate
                                     dpi
                                     rotate)
-  "Macro to define a constant and two functions for {en,dis}abling a display.
+  "Macro to define constants and two functions for {en,dis}abling a display.
 
-NAME - the human-readable identifier for the display
-OUTPUT - the xrandr identifier for the display
+NAME    - the human-readable identifier for the display
+OUTPUT  - the xrandr identifier for the display
 PRIMARY - if true, send --primary flag to xrandr
-POSITION - one of {left-of,right-of,above,below,same-as}
-SIZE - the pixel resolution of the display
-RATE - the refresh rate
-DPI - the pixel density in dots per square inch
-rotate - one of {normal,left,right,inverted}
+COORDS  - X and Y offsets
+SIZE    - the pixel resolution of the display
+RATE    - the refresh rate
+DPI     - the pixel density in dots per square inch
+rotate  - one of {normal,left,right,inverted}
 
 See the man-page for xrandr for more details."
   `(progn
      (defconst ,(intern (format "display-%s" name)) ,output
        ,(format "The xrandr identifier for %s" name))
+     (defconst ,(intern (format "display-%s-args" name))
+       ,(replace-regexp-in-string
+         "\s+" " "
+         (s-format "--output ${output} ${primary-flag} --auto \
+                    --size ${size-x}x${size-y} --rate ${rate} --dpi ${dpi} \
+                    --rotate ${rotate} ${pos-flag}"
+                   #'aget
+                   `(("output" . ,output)
+                     ("primary-flag" . ,(if primary "--primary" "--noprimary"))
+                     ("pos-flag" . ,(if coords
+                                        (format "--pos %dx%d"
+                                                (car coords)
+                                                (cadr coords))
+                                      ""))
+                     ("size-x" . ,(car size))
+                     ("size-y" . ,(cadr size))
+                     ("rate" . ,rate)
+                     ("dpi" . ,dpi)
+                     ("rotate" . ,rotate))))
+       ,(format "The arguments we pass to xrandr for display-%s." name))
+     (defconst ,(intern (format "display-%s-command" name))
+       (format "xrandr %s" ,(intern (format "display-%s-args" name)))
+       ,(format "The command we run to configure %s" name))
      (defun ,(intern (format "display-enable-%s" name)) ()
-         ,(format "Attempt to enable my %s monitor" name)
-         (interactive)
+       ,(format "Attempt to enable my %s monitor" name)
+       (interactive)
        (prelude-start-process
         :name ,(format "display-enable-%s" name)
-        :command ,(format
-                   "xrandr --output %s --%s %s --auto --size %dx%d --rate %0.2f --dpi %d --rotate %s"
-                   output
-                   (if primary "primary" "noprimary")
-                   (if position
-                       (format "--%s %s"
-                               (car position)
-                               (eval (cadr position)))
-                     "")
-                   (car size) (cadr size)
-                   rate
-                   dpi
-                   rotate)))
+        :command ,(intern (format "display-%s-command" name))))
      (defun ,(intern (format "display-disable-%s" name)) ()
-         ,(format "Attempt to disable my %s monitor." name)
-         (interactive)
-         (prelude-start-process
-          :name ,(format "display-disable-%s" name)
-          :command ,(format
-                     "xrandr --output %s --off"
-                     output)))))
+       ,(format "Attempt to disable my %s monitor." name)
+       (interactive)
+       (prelude-start-process
+        :name ,(format "display-disable-%s" name)
+        :command ,(format
+                   "xrandr --output %s --off"
+                   output)))))
 
-;; I'm omitting the position argument to avoid a circular dependency between
-;; laptop and 4k-horizontal.
+(defmacro display-arrangement (name &key displays)
+  "Create a function, display-arrange-<NAME>, to enable all your DISPLAYS."
+  `(defun ,(intern (format "display-arrange-%s" name)) ()
+     (interactive)
+     (prelude-start-process
+      :name ,(format "display-configure-%s" name)
+      :command ,(format "xrandr %s"
+                        (->> displays
+                             (-map (lambda (x)
+                                     (eval (intern (format "display-%s-args" x)))))
+                             (s-join " "))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (display-register laptop
                   :output "eDP1"
                   :primary nil
@@ -88,7 +115,7 @@ See the man-page for xrandr for more details."
 (display-register 4k-horizontal
                   :output "HDMI1"
                   :primary t
-                  :position (above display-laptop)
+                  :coords (0 1062)
                   :size (3840 2160)
                   :rate 30.0
                   :dpi 144
@@ -97,11 +124,14 @@ See the man-page for xrandr for more details."
 (display-register 4k-vertical
                   :output "DP2"
                   :primary nil
-                  :position (right-of display-4k-horizontal)
+                  :coords (3840 0)
                   :size (3840 2160)
                   :rate 30.0
                   :dpi 144
                   :rotate right)
+
+(display-arrangement primary
+                     :displays (4k-horizontal 4k-vertical))
 
 (provide 'display)
 ;;; display.el ends here
