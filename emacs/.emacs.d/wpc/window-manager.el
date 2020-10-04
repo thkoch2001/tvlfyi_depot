@@ -115,59 +115,7 @@
                              (list i (window-manager--named-workspace-display x))))
              -flatten))
   (evil-set-initial-state 'exwm-mode 'emacs)
-  (setq exwm-workspace-number
-        (list-length window-manager--named-workspaces))
-  (let ((kbds `(
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                ;; Window sizing
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                (:key "C-M-=" :fn balance-windows)
-                ;; TODO: Make sure these don't interfere with LISP KBDs.
-                (:key "C-M-j" :fn shrink-window)
-                (:key "C-M-k" :fn enlarge-window)
-                (:key "C-M-h" :fn shrink-window-horizontally)
-                (:key "C-M-l" :fn enlarge-window-horizontally)
-
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                ;; Window traversing
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                (:key "M-h" :fn windmove-left)
-                (:key "M-j" :fn windmove-down)
-                (:key "M-k" :fn windmove-up)
-                (:key "M-l" :fn windmove-right)
-
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                ;; Window splitting
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                (:key "M-\\" :fn evil-window-vsplit)
-                (:key "M--"  :fn evil-window-split)
-
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                ;; Window deletion
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                (:key "M-q" :fn delete-window)
-
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                ;; Miscellaneous
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                (:key "M-:"               :fn eval-expression)
-                (:key "M-SPC"             :fn ivy-helpers-run-external-command)
-                (:key "M-x"               :fn counsel-M-x)
-                (:key "<M-tab>"           :fn window-manager-next-workspace)
-                (:key "<M-S-iso-lefttab>" :fn window-manager-prev-workspace)
-                (:key "<M-iso-lefttab>"   :fn window-manager-prev-workspace)
-                (:key "C-M-\\"            :fn ivy-pass)
-
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                ;; Workspaces
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                (:key ,(kbd-raw 'workspace "l") :fn window-manager-logout))))
-
-    (setq exwm-input-global-keys
-          (->> kbds
-               (-map (lambda (plist)
-                       `(,(kbd (plist-get plist :key)) .
-                         ,(plist-get plist :fn)))))))
+  (setq exwm-workspace-number (list-length window-manager--named-workspaces))
   (setq exwm-input-simulation-keys
         ;; TODO: Consider supporting M-d and other readline style KBDs.
         '(([?\C-b] . [left])
@@ -183,8 +131,6 @@
           ;; TODO: Ensure C-c copies.
           ([?\C-c] . [C-c])))
   (exwm-enable))
-
-;; TODO: Package workspace management in another module.
 
 ;; Here is the code required to allow EXWM to cycle workspaces.
 (defconst window-manager--workspaces

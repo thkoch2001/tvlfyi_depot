@@ -37,6 +37,7 @@
 (require 'fonts)
 (require 'bookmark)
 (require 'constants)
+(require 'window-manager)
 
 ;; Note: The following lines must be sorted this way.
 (setq evil-want-integration t)
@@ -146,6 +147,41 @@
 (keybindings-exwm (kbd-raw 'workspace "k") #'fonts-increase-size)
 (keybindings-exwm (kbd-raw 'workspace "j") #'fonts-decrease-size)
 (keybindings-exwm (kbd-raw 'workspace "0") #'fonts-reset-size)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Window sizing
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(keybindings-exwm "C-M-=" #'balance-windows)
+(keybindings-exwm "C-M-j" #'shrink-window)
+(keybindings-exwm "C-M-k" #'enlarge-window)
+(keybindings-exwm "C-M-h" #'shrink-window-horizontally)
+(keybindings-exwm "C-M-l" #'enlarge-window-horizontally)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Window Management
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(keybindings-exwm "M-h" #'windmove-left)
+(keybindings-exwm "M-j" #'windmove-down)
+(keybindings-exwm "M-k" #'windmove-up)
+(keybindings-exwm "M-l" #'windmove-right)
+(keybindings-exwm "M-\\" #'evil-window-vsplit)
+(keybindings-exwm "M--" #'evil-window-split)
+(keybindings-exwm "M-q" #'delete-window)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Miscellaneous
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(keybindings-exwm "M-:" #'eval-expression)
+(keybindings-exwm "M-SPC" #'ivy-helpers-run-external-command)
+(keybindings-exwm "M-x" #'counsel-M-x)
+(keybindings-exwm "<M-tab>" #'window-manager-next-workspace)
+(keybindings-exwm "<M-S-iso-lefttab>" #'window-manager-prev-workspace)
+(keybindings-exwm "C-M-\\" #'ivy-pass)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Workspaces
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(keybindings-exwm (kbd-raw 'workspace "l") #'window-manager-logout)
 
 (general-define-key
  :keymaps 'override
