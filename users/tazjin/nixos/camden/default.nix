@@ -14,12 +14,24 @@ config: let
     extraConfig = "return 301 https://${to}$request_uri;";
   };
 in lib.fix(self: {
-  imports = [
-    "${depot.depotPath}/ops/nixos/depot.nix"
-    "${depot.depotPath}/ops/nixos/quassel.nix"
-    "${depot.depotPath}/ops/nixos/smtprelay.nix"
-  ];
   depot = depot;
+
+  # Disable the current ACME module and use the old one from 19.09
+  # instead, until the various regressions have been sorted out.
+  # TODO(tazjin): Remove this once the new ACME module works.
+  disabledModules = [ "security/acme.nix" ];
+  imports =
+    let oldChannel = fetchTarball {
+      # NixOS 19.09 on 2020-10-04
+      url = "https://github.com/NixOS/nixpkgs-channels/archive/75f4ba05c63be3f147bcc2f7bd4ba1f029cedcb1.tar.gz";
+      sha256 = "157c64220lf825ll4c0cxsdwg7cxqdx4z559fdp7kpz0g6p8fhhr";
+    };
+    in [
+      "${depot.depotPath}/ops/nixos/depot.nix"
+      "${depot.depotPath}/ops/nixos/quassel.nix"
+      "${depot.depotPath}/ops/nixos/smtprelay.nix"
+      "${oldChannel}/nixos/modules/security/acme.nix"
+    ];
 
   # camden is intended to boot unattended, despite having an encrypted
   # root partition.
@@ -186,10 +198,10 @@ in lib.fix(self: {
   # Provision a TLS certificate outside of nginx to avoid
   # nixpkgs#38144
   security.acme = {
-    acceptTerms = true;
-    email = "mail@tazj.in";
+    # acceptTerms = true;
 
     certs."tazj.in" = {
+      email = "mail@tazj.in";
       user = "nginx";
       group = "nginx";
       webroot = "/var/lib/acme/acme-challenge";
@@ -205,6 +217,7 @@ in lib.fix(self: {
     };
 
     certs."quassel.tazj.in" = {
+      email = "mail@tazj.in";
       webroot = "/var/lib/acme/challenge-quassel";
       user = "nginx"; # required because of a bug in the ACME module
       group = "quassel";
