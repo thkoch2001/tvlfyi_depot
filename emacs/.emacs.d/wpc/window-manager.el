@@ -31,7 +31,6 @@
 (require 'display)
 (require 'vterm-mgt)
 (require 'dash)
-(require 'evil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -114,7 +113,6 @@
              (-map-indexed (lambda (i x)
                              (list i (window-manager--named-workspace-display x))))
              -flatten))
-  (evil-set-initial-state 'exwm-mode 'emacs)
   (setq exwm-workspace-number (list-length window-manager--named-workspaces))
   (setq exwm-input-simulation-keys
         ;; TODO: Consider supporting M-d and other readline style KBDs.
