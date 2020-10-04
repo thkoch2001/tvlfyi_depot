@@ -330,7 +330,9 @@
 
 (general-define-key
  :states '(normal)
- :keymaps '(magit-status-mode-map)
+ :keymaps '(magit-status-mode-map
+            magit-log-mode-map
+            magit-revision-mode-map)
  "l" #'evil-forward-char
  "L" #'magit-log)
 
