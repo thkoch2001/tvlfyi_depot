@@ -127,6 +127,7 @@
 ;; git integration
 (use-package magit
   :config
+  (add-hook 'git-commit-setup-hook (lambda () (company-mode -1)))
   (setq magit-display-buffer-function
         #'magit-display-buffer-fullframe-status-v1))
 
