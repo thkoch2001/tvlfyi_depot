@@ -395,7 +395,7 @@ predicate."
 ;; Startup Applications in `window-manager--named-workspaces'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-hook 'exwm-init-hook (lambda () (window-manager--switch "Briefcase")))
+(add-hook 'exwm-init-hook (lambda () (window-manager--switch "Coding")))
 
 (provide 'window-manager)
 ;;; window-manager.el ends here
