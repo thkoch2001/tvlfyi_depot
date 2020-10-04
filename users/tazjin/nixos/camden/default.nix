@@ -124,6 +124,11 @@ in lib.fix(self: {
   programs.fish.enable = true;
   programs.mosh.enable = true;
 
+  fonts = {
+    fonts = [ nixpkgs.jetbrains-mono ];
+    fontconfig.defaultFonts.monospace = [ "JetBrains Mono" ];
+  };
+
   environment.systemPackages =
     # programs from the depot
     (with depot; [
@@ -138,6 +143,7 @@ in lib.fix(self: {
       curl
       direnv
       emacs26-nox
+      fswebcam
       git
       gnupg
       google-cloud-sdk
@@ -147,6 +153,7 @@ in lib.fix(self: {
       pciutils
       restic
       ripgrep
+      screen
     ]);
 
   users = {
@@ -154,7 +161,7 @@ in lib.fix(self: {
     users.tazjin = {
       isNormalUser = true;
       uid = 1000;
-      extraGroups = [ "git" "wheel" "quassel" ];
+      extraGroups = [ "git" "wheel" "quassel" "video" ];
       shell = nixpkgs.fish;
     };
 
@@ -257,7 +264,6 @@ in lib.fix(self: {
     recommendedTlsSettings = true;
     recommendedGzipSettings = true;
     recommendedProxySettings = true;
-
 
     appendConfig = ''
       rtmp_auto_push on;
