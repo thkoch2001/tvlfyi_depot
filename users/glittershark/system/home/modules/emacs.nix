@@ -79,6 +79,9 @@ in {
         };
       };
 
+      programs.zsh.shellAliases = {
+        "ec" = "emacsclient";
+      };
     }
     (mkIf pkgs.stdenv.isLinux {
       # Notes
