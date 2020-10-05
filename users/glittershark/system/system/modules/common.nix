@@ -30,6 +30,7 @@ with lib;
     libnotify
     file
     lm_sensors
+    dnsutils
     depot.users.glittershark.system.system.rebuilder
   ];
 
