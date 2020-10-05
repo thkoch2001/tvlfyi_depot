@@ -43,7 +43,7 @@ let
     {
       username = "cynthia";
       email = "cynthia@tvl.fyi";
-      password = "{SSHA}aHx2keEnXv6u6oiV2xxqfXdxjom/K8CP";
+      password = "{ARGON2}$argon2id$v=19$m=65536,t=4,p=1$TxjbMGenhEmkyYLrg5uGhbr60THB86YeRZg5bPdiTJo$k9gbRlAPjmxwdUwzbavvsAVkckgQZ0jS2oTtvZBPysk";
     }
     {
       username = "edef";
