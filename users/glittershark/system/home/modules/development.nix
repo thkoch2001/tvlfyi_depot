@@ -41,6 +41,7 @@ with lib;
     yq
     gitAndTools.hub
     gitAndTools.tig
+    gitAndTools.gh
     shellcheck
     httpie
     entr
