@@ -50,6 +50,11 @@
     enable = true;
 
     matchBlocks = {
+      "home" = {
+        host = "home.gws.fyi";
+        forwardAgent = true;
+      };
+
       "dobharchu" = {
         host = "dobharchu";
         hostname = "172.16.0.4";
