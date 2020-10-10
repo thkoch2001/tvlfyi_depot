@@ -139,14 +139,45 @@ tailwind classes =
 
 
 render : State.Model -> Html State.Msg
-render { dayOfWeek, completed } =
-    case dayOfWeek of
+render { today, visibleDayOfWeek, completed } =
+    case visibleDayOfWeek of
         Nothing ->
             p [] [ text "Unable to display habits because we do not know what day of the week it is." ]
 
         Just weekday ->
-            div [ class "font-mono py-6 px-6" ]
-                [ h1 [ class "text-3xl text-center" ] [ text (weekdayName weekday) ]
+            div
+                [ class "font-sans py-6 px-6"
+                , tailwind [ ( "pt-20", today /= visibleDayOfWeek ) ]
+                ]
+                [ header []
+                    [ if today /= visibleDayOfWeek then
+                        div [ class "text-center w-full bg-blue-600 text-white fixed top-0 left-0 px-3 py-4" ]
+                            [ p [ class "py-2 inline pr-5" ]
+                                [ text "As you are not viewing today's habits, the UI is in read-only mode" ]
+                            , button
+                                [ class "bg-blue-200 px-4 py-2 rounded text-blue-600 text-xs font-bold"
+                                , onClick State.ViewToday
+                                ]
+                                [ text "View Today's Habits" ]
+                            ]
+
+                      else
+                        text ""
+                    , div [ class "flex center" ]
+                        [ button
+                            [ class "w-1/4 text-gray-500"
+                            , onClick State.ViewPrevious
+                            ]
+                            [ text "‹ previous" ]
+                        , h1 [ class "font-bold text-gray-500 text-3xl text-center w-full" ]
+                            [ text (weekdayName weekday) ]
+                        , button
+                            [ class "w-1/4 text-gray-500"
+                            , onClick State.ViewNext
+                            ]
+                            [ text "next ›" ]
+                        ]
+                    ]
                 , ul []
                     (weekday
                         |> habitsFor
@@ -156,11 +187,15 @@ render { dayOfWeek, completed } =
                                     [ button
                                         [ class "py-5 px-3"
                                         , tailwind
-                                            [ ( "line-through"
-                                              , Set.member i completed
-                                              )
+                                            [ ( "line-through", today == visibleDayOfWeek && Set.member i completed )
                                             ]
-                                        , onClick (State.ToggleHabit i)
+                                        , onClick
+                                            (if today /= visibleDayOfWeek then
+                                                State.DoNothing
+
+                                             else
+                                                State.ToggleHabit i
+                                            )
                                         ]
                                         [ text x ]
                                     ]

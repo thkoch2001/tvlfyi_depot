@@ -12,6 +12,9 @@ type Msg
     | ReceiveDate Date.Date
     | ToggleHabit Int
     | MaybeAdjustWeekday
+    | ViewToday
+    | ViewPrevious
+    | ViewNext
 
 
 type View
@@ -31,9 +34,60 @@ type alias Habit =
 type alias Model =
     { isLoading : Bool
     , view : View
-    , dayOfWeek : Maybe Weekday
+    , today : Maybe Weekday
     , completed : Set Int
+    , visibleDayOfWeek : Maybe Weekday
     }
+
+
+previousDay : Weekday -> Weekday
+previousDay weekday =
+    case weekday of
+        Mon ->
+            Sun
+
+        Tue ->
+            Mon
+
+        Wed ->
+            Tue
+
+        Thu ->
+            Wed
+
+        Fri ->
+            Thu
+
+        Sat ->
+            Fri
+
+        Sun ->
+            Sat
+
+
+nextDay : Weekday -> Weekday
+nextDay weekday =
+    case weekday of
+        Mon ->
+            Tue
+
+        Tue ->
+            Wed
+
+        Wed ->
+            Thu
+
+        Thu ->
+            Fri
+
+        Fri ->
+            Sat
+
+        Sat ->
+            Sun
+
+        Sun ->
+            Mon
 
 
 {-| The initial state for the application.
@@ -42,8 +96,9 @@ init : ( Model, Cmd Msg )
 init =
     ( { isLoading = False
       , view = Habits
-      , dayOfWeek = Nothing
+      , today = Nothing
       , completed = Set.empty
+      , visibleDayOfWeek = Nothing
       }
     , Date.today |> Task.perform ReceiveDate
     )
@@ -52,7 +107,7 @@ init =
 {-| Now that we have state, we need a function to change the state.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg ({ completed } as model) =
+update msg ({ today, visibleDayOfWeek, completed } as model) =
     case msg of
         DoNothing ->
             ( model, Cmd.none )
@@ -66,7 +121,12 @@ update msg ({ completed } as model) =
             )
 
         ReceiveDate x ->
-            ( { model | dayOfWeek = Just (Date.weekday x) }, Cmd.none )
+            ( { model
+                | today = Just (Date.weekday x)
+                , visibleDayOfWeek = Just (Date.weekday x)
+              }
+            , Cmd.none
+            )
 
         ToggleHabit i ->
             ( { model
@@ -82,3 +142,20 @@ update msg ({ completed } as model) =
 
         MaybeAdjustWeekday ->
             ( model, Date.today |> Task.perform ReceiveDate )
+
+        ViewToday ->
+            ( { model | visibleDayOfWeek = today }, Cmd.none )
+
+        ViewPrevious ->
+            ( { model
+                | visibleDayOfWeek = visibleDayOfWeek |> Maybe.map previousDay
+              }
+            , Cmd.none
+            )
+
+        ViewNext ->
+            ( { model
+                | visibleDayOfWeek = visibleDayOfWeek |> Maybe.map nextDay
+              }
+            , Cmd.none
+            )
