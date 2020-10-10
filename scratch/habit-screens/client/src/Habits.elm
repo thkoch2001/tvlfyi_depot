@@ -60,7 +60,7 @@ friday =
 
 saturday : List State.Habit
 saturday =
-    [ "Nap"
+    [ "Warm Yin Yoga @ 15:00 (60 min)"
     ]
 
 
