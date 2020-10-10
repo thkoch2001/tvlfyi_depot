@@ -166,4 +166,8 @@ render { dayOfWeek, completed } =
                                     ]
                             )
                     )
+                , footer [ class "font-mono text-sm text-center text-gray-500 fixed bottom-0 left-0 w-full py-4" ]
+                    [ p [] [ text "This app is brought to you by William Carroll." ]
+                    , p [] [ text "Client: Elm; Server: n/a" ]
+                    ]
                 ]
