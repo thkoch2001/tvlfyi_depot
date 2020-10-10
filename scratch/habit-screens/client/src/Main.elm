@@ -4,11 +4,13 @@ import Browser
 import Habits
 import Html exposing (..)
 import State
+import Time
 
 
 subscriptions : State.Model -> Sub State.Msg
 subscriptions model =
-    Sub.none
+    -- once per minute
+    Time.every (1000 * 60) (\_ -> State.MaybeAdjustWeekday)
 
 
 view : State.Model -> Html State.Msg

@@ -11,6 +11,7 @@ type Msg
     | SetView View
     | ReceiveDate Date.Date
     | ToggleHabit Int
+    | MaybeAdjustWeekday
 
 
 type View
@@ -65,7 +66,7 @@ update msg ({ completed } as model) =
             )
 
         ReceiveDate x ->
-            ( { model | dayOfWeek = Just Sun }, Cmd.none )
+            ( { model | dayOfWeek = Just (Date.weekday x) }, Cmd.none )
 
         ToggleHabit i ->
             ( { model
@@ -78,3 +79,6 @@ update msg ({ completed } as model) =
               }
             , Cmd.none
             )
+
+        MaybeAdjustWeekday ->
+            ( model, Date.today |> Task.perform ReceiveDate )
