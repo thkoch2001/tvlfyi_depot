@@ -146,15 +146,15 @@ render { dayOfWeek, completed } =
 
         Just weekday ->
             div [ class "font-mono py-6 px-6" ]
-                [ h1 [ class "text-2xl text-center" ] [ text (weekdayName weekday) ]
+                [ h1 [ class "text-3xl text-center" ] [ text (weekdayName weekday) ]
                 , ul []
                     (weekday
                         |> habitsFor
                         |> List.indexedMap
                             (\i x ->
-                                li [ class "text-xl" ]
+                                li [ class "text-xl list-disc ml-6" ]
                                     [ button
-                                        [ class "py-5 px-6"
+                                        [ class "py-5 px-3"
                                         , tailwind
                                             [ ( "line-through"
                                               , Set.member i completed
