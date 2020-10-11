@@ -170,7 +170,7 @@ render { today, visibleDayOfWeek, completed } =
                             , onClick State.ViewPrevious
                             ]
                             [ text "‹ previous" ]
-                        , h1 [ class "font-bold text-gray-500 text-3xl text-center w-full" ]
+                        , h1 [ class "font-bold text-blue-500 text-3xl text-center w-full" ]
                             [ text (weekdayName weekday) ]
                         , UI.button
                             [ class "w-1/4 text-gray-500"
@@ -188,7 +188,10 @@ render { today, visibleDayOfWeek, completed } =
                                     [ if today == visibleDayOfWeek then
                                         UI.button
                                             [ class "py-5 px-3"
-                                            , tailwind [ ( "line-through", Set.member i completed ) ]
+                                            , tailwind
+                                                [ ( "line-through", Set.member i completed )
+                                                , ( "text-gray-400", Set.member i completed )
+                                                ]
                                             , onClick (State.ToggleHabit i)
                                             ]
                                             [ text x ]
@@ -202,7 +205,7 @@ render { today, visibleDayOfWeek, completed } =
                                     ]
                             )
                     )
-                , footer [ class "font-mono text-sm text-center text-gray-500 fixed bottom-0 left-0 w-full py-4" ]
+                , footer [ class "text-sm text-center text-gray-500 fixed bottom-0 left-0 w-full py-4" ]
                     [ p [] [ text "This app is brought to you by William Carroll." ]
                     , p [] [ text "Client: Elm; Server: n/a" ]
                     ]
