@@ -7,6 +7,7 @@ import Html.Events exposing (..)
 import Set
 import State
 import Time exposing (Weekday(..))
+import UI
 
 
 morning : List State.Habit
@@ -154,7 +155,7 @@ render { today, visibleDayOfWeek, completed } =
                         div [ class "text-center w-full bg-blue-600 text-white fixed top-0 left-0 px-3 py-4" ]
                             [ p [ class "py-2 inline pr-5" ]
                                 [ text "As you are not viewing today's habits, the UI is in read-only mode" ]
-                            , button
+                            , UI.button
                                 [ class "bg-blue-200 px-4 py-2 rounded text-blue-600 text-xs font-bold"
                                 , onClick State.ViewToday
                                 ]
@@ -164,40 +165,40 @@ render { today, visibleDayOfWeek, completed } =
                       else
                         text ""
                     , div [ class "flex center" ]
-                        [ button
+                        [ UI.button
                             [ class "w-1/4 text-gray-500"
                             , onClick State.ViewPrevious
                             ]
                             [ text "‹ previous" ]
                         , h1 [ class "font-bold text-gray-500 text-3xl text-center w-full" ]
                             [ text (weekdayName weekday) ]
-                        , button
+                        , UI.button
                             [ class "w-1/4 text-gray-500"
                             , onClick State.ViewNext
                             ]
                             [ text "next ›" ]
                         ]
                     ]
-                , ul []
+                , ul [ class "pt-6" ]
                     (weekday
                         |> habitsFor
                         |> List.indexedMap
                             (\i x ->
                                 li [ class "text-xl list-disc ml-6" ]
-                                    [ button
-                                        [ class "py-5 px-3"
-                                        , tailwind
-                                            [ ( "line-through", today == visibleDayOfWeek && Set.member i completed )
+                                    [ if today == visibleDayOfWeek then
+                                        UI.button
+                                            [ class "py-5 px-3"
+                                            , tailwind [ ( "line-through", Set.member i completed ) ]
+                                            , onClick (State.ToggleHabit i)
                                             ]
-                                        , onClick
-                                            (if today /= visibleDayOfWeek then
-                                                State.DoNothing
+                                            [ text x ]
 
-                                             else
-                                                State.ToggleHabit i
-                                            )
-                                        ]
-                                        [ text x ]
+                                      else
+                                        UI.button
+                                            [ class "py-5 px-3 cursor-not-allowed"
+                                            , onClick State.DoNothing
+                                            ]
+                                            [ text x ]
                                     ]
                             )
                     )
