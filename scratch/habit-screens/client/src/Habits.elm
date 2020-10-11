@@ -1,11 +1,12 @@
 module Habits exposing (render)
 
 import Browser
+import Date exposing (Date)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Set exposing (Set)
-import State
+import State exposing (HabitType(..))
 import Time exposing (Weekday(..))
 import UI
 import Utils exposing (Strategy(..))
@@ -38,7 +39,7 @@ evening =
             }
         )
         [ ( 30, "Read" )
-        , ( 1, "Record in State.Habit Journal" )
+        , ( 1, "Record in habit Journal" )
         ]
 
 
@@ -145,8 +146,84 @@ firstOfTheYear =
         ]
 
 
-weekdayName : Weekday -> String
-weekdayName weekday =
+habitTypes :
+    { includeMorning : Bool
+    , includeEvening : Bool
+    , date : Date
+    }
+    -> List State.HabitType
+habitTypes { includeMorning, includeEvening, date } =
+    let
+        habitTypePredicates : List ( State.HabitType, Date -> Bool )
+        habitTypePredicates =
+            [ ( Morning, \_ -> includeMorning )
+            , ( DayOfWeek, \_ -> True )
+            , ( Payday, \x -> Date.day x == 25 )
+            , ( FirstOfTheMonth, \x -> Date.day x == 1 )
+            , ( FirstOfTheYear, \x -> Date.day x == 1 && Date.monthNumber x == 1 )
+            , ( Evening, \_ -> includeEvening )
+            ]
+    in
+    habitTypePredicates
+        |> List.filter (\( _, predicate ) -> predicate date)
+        |> List.map (\( habitType, _ ) -> habitType)
+
+
+habitsFor : State.HabitType -> Weekday -> List State.Habit
+habitsFor habitType weekday =
+    case habitType of
+        Morning ->
+            morning
+
+        Evening ->
+            evening
+
+        DayOfWeek ->
+            let
+                toHabit : List ( Int, String ) -> List State.Habit
+                toHabit =
+                    List.map
+                        (\( duration, x ) ->
+                            { label = x
+                            , habitType = State.DayOfWeek
+                            , minutesDuration = duration
+                            }
+                        )
+            in
+            case weekday of
+                Mon ->
+                    toHabit monday
+
+                Tue ->
+                    toHabit tuesday
+
+                Wed ->
+                    toHabit wednesday
+
+                Thu ->
+                    toHabit thursday
+
+                Fri ->
+                    toHabit friday
+
+                Sat ->
+                    toHabit saturday
+
+                Sun ->
+                    toHabit sunday
+
+        Payday ->
+            payday
+
+        FirstOfTheMonth ->
+            firstOfTheMonth
+
+        FirstOfTheYear ->
+            firstOfTheYear
+
+
+weekdayLabelFor : Weekday -> State.WeekdayLabel
+weekdayLabelFor weekday =
     case weekday of
         Mon ->
             "Monday"
@@ -170,47 +247,12 @@ weekdayName weekday =
             "Sunday"
 
 
-habitsFor : Weekday -> List State.Habit
-habitsFor weekday =
-    let
-        toHabit =
-            List.map
-                (\( duration, x ) ->
-                    { label = x
-                    , habitType = State.DayOfWeek
-                    , minutesDuration = duration
-                    }
-                )
-    in
-    case weekday of
-        Mon ->
-            toHabit monday
-
-        Tue ->
-            toHabit tuesday
-
-        Wed ->
-            toHabit wednesday
-
-        Thu ->
-            toHabit thursday
-
-        Fri ->
-            toHabit friday
-
-        Sat ->
-            toHabit saturday
-
-        Sun ->
-            toHabit sunday
-
-
-timeRemaining : Set Int -> List State.Habit -> Int
-timeRemaining completed habits =
+timeRemaining : State.WeekdayLabel -> State.CompletedHabits -> List State.Habit -> Int
+timeRemaining weekdayLabel completed habits =
     habits
         |> List.indexedMap
-            (\i { minutesDuration } ->
-                if Set.member i completed then
+            (\i { label, minutesDuration } ->
+                if Set.member ( weekdayLabel, label ) completed then
                     0
 
                 else
@@ -220,24 +262,32 @@ timeRemaining completed habits =
 
 
 render : State.Model -> Html State.Msg
-render { today, visibleDayOfWeek, completed } =
-    case visibleDayOfWeek of
-        Nothing ->
-            p [] [ text "Unable to display habits because we do not know what day of the week it is." ]
-
-        Just weekday ->
+render { today, visibleDayOfWeek, completed, includeMorning, includeEvening } =
+    case ( today, visibleDayOfWeek ) of
+        ( Just todaysDate, Just visibleWeekday ) ->
             let
+                todaysWeekday : Weekday
+                todaysWeekday =
+                    Date.weekday todaysDate
+
+                habits : List State.Habit
                 habits =
-                    habitsFor weekday
+                    habitTypes
+                        { includeMorning = includeMorning
+                        , includeEvening = includeEvening
+                        , date = todaysDate
+                        }
+                        |> List.map (\habitType -> habitsFor habitType todaysWeekday)
+                        |> List.concat
             in
             div
                 [ Utils.class
                     [ Always "container mx-auto py-6 px-6"
-                    , When (today /= visibleDayOfWeek) "pt-20"
+                    , When (todaysWeekday /= visibleWeekday) "pt-20"
                     ]
                 ]
                 [ header []
-                    [ if today /= visibleDayOfWeek then
+                    [ if todaysWeekday /= visibleWeekday then
                         div [ class "text-center w-full bg-blue-600 text-white fixed top-0 left-0 px-3 py-4" ]
                             [ p [ class "py-2 inline pr-5" ]
                                 [ text "As you are not viewing today's habits, the UI is in read-only mode" ]
@@ -257,7 +307,7 @@ render { today, visibleDayOfWeek, completed } =
                             ]
                             [ text "‹ previous" ]
                         , h1 [ class "font-bold text-blue-500 text-3xl text-center w-full" ]
-                            [ text (weekdayName weekday) ]
+                            [ text (weekdayLabelFor visibleWeekday) ]
                         , UI.button
                             [ class "w-1/4 text-gray-500"
                             , onClick State.ViewNext
@@ -265,11 +315,12 @@ render { today, visibleDayOfWeek, completed } =
                             [ text "next ›" ]
                         ]
                     ]
-                , if today == visibleDayOfWeek then
+                , if todaysWeekday == visibleWeekday then
                     p [ class "text-center" ]
                         [ let
+                            t : Int
                             t =
-                                timeRemaining completed habits
+                                timeRemaining (weekdayLabelFor todaysWeekday) completed habits
                           in
                           if t == 0 then
                             text "Nothing to do!"
@@ -277,7 +328,7 @@ render { today, visibleDayOfWeek, completed } =
                           else
                             text
                                 ((habits
-                                    |> timeRemaining completed
+                                    |> timeRemaining (weekdayLabelFor todaysWeekday) completed
                                     |> String.fromInt
                                  )
                                     ++ " minutes remaining"
@@ -286,7 +337,7 @@ render { today, visibleDayOfWeek, completed } =
 
                   else
                     text ""
-                , if today == visibleDayOfWeek then
+                , if todaysWeekday == visibleWeekday then
                     div []
                         [ UI.button
                             [ onClick
@@ -304,10 +355,16 @@ render { today, visibleDayOfWeek, completed } =
                                 ]
                             ]
                             [ let
+                                numCompleted : Int
                                 numCompleted =
                                     habits
-                                        |> List.indexedMap (\i _ -> i)
-                                        |> List.filter (\i -> Set.member i completed)
+                                        |> List.indexedMap (\i { label } -> ( i, label ))
+                                        |> List.filter
+                                            (\( i, label ) ->
+                                                Set.member
+                                                    ( weekdayLabelFor todaysWeekday, label )
+                                                    completed
+                                            )
                                         |> List.length
                               in
                               if numCompleted == 0 then
@@ -315,6 +372,40 @@ render { today, visibleDayOfWeek, completed } =
 
                               else
                                 text ("Clear (" ++ String.fromInt numCompleted ++ ")")
+                            ]
+                        , UI.button
+                            [ onClick State.ToggleMorning
+                            , Utils.class
+                                [ Always "px-3 underline"
+                                , If includeMorning
+                                    "text-gray-600"
+                                    "text-blue-600"
+                                ]
+                            ]
+                            [ text
+                                (if includeMorning then
+                                    "Hide Morning"
+
+                                 else
+                                    "Show Morning"
+                                )
+                            ]
+                        , UI.button
+                            [ Utils.class
+                                [ Always "px-3 underline"
+                                , If includeEvening
+                                    "text-gray-600"
+                                    "text-blue-600"
+                                ]
+                            , onClick State.ToggleEvening
+                            ]
+                            [ text
+                                (if includeEvening then
+                                    "Hide Evening"
+
+                                 else
+                                    "Show Evening"
+                                )
                             ]
                         ]
 
@@ -325,14 +416,19 @@ render { today, visibleDayOfWeek, completed } =
                         |> List.indexedMap
                             (\i { label, minutesDuration } ->
                                 let
+                                    isCompleted : Bool
                                     isCompleted =
-                                        Set.member i completed
+                                        Set.member ( weekdayLabelFor todaysWeekday, label ) completed
                                 in
                                 li [ class "text-xl list-disc ml-6" ]
-                                    [ if today == visibleDayOfWeek then
+                                    [ if todaysWeekday == visibleWeekday then
                                         UI.button
                                             [ class "py-5 px-3"
-                                            , onClick (State.ToggleHabit i)
+                                            , onClick
+                                                (State.ToggleHabit
+                                                    (weekdayLabelFor todaysWeekday)
+                                                    label
+                                                )
                                             ]
                                             [ span
                                                 [ Utils.class
@@ -364,3 +460,6 @@ render { today, visibleDayOfWeek, completed } =
                     , p [] [ text "Client: Elm; Server: n/a" ]
                     ]
                 ]
+
+        ( _, _ ) ->
+            p [] [ text "Unable to display habits because we do not know what day of the week it is." ]

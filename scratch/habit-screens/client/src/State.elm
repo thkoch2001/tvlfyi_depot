@@ -1,21 +1,31 @@
 module State exposing (..)
 
-import Date
+import Date exposing (Date)
 import Set exposing (Set)
 import Task
 import Time exposing (Weekday(..))
 
 
+type alias WeekdayLabel =
+    String
+
+
+type alias HabitLabel =
+    String
+
+
 type Msg
     = DoNothing
     | SetView View
-    | ReceiveDate Date.Date
-    | ToggleHabit Int
+    | ReceiveDate Date
+    | ToggleHabit WeekdayLabel HabitLabel
     | MaybeAdjustWeekday
     | ViewToday
     | ViewPrevious
     | ViewNext
     | ClearAll
+    | ToggleMorning
+    | ToggleEvening
 
 
 type View
@@ -32,18 +42,24 @@ type HabitType
 
 
 type alias Habit =
-    { label : String
+    { label : HabitLabel
     , habitType : HabitType
     , minutesDuration : Int
     }
 
 
+type alias CompletedHabits =
+    Set ( WeekdayLabel, HabitLabel )
+
+
 type alias Model =
     { isLoading : Bool
     , view : View
-    , today : Maybe Weekday
-    , completed : Set Int
+    , today : Maybe Date
+    , completed : CompletedHabits
     , visibleDayOfWeek : Maybe Weekday
+    , includeMorning : Bool
+    , includeEvening : Bool
     }
 
 
@@ -106,6 +122,8 @@ init =
       , today = Nothing
       , completed = Set.empty
       , visibleDayOfWeek = Nothing
+      , includeMorning = False
+      , includeEvening = False
       }
     , Date.today |> Task.perform ReceiveDate
     )
@@ -129,20 +147,20 @@ update msg ({ today, visibleDayOfWeek, completed } as model) =
 
         ReceiveDate x ->
             ( { model
-                | today = Just (Date.weekday x)
+                | today = Just x
                 , visibleDayOfWeek = Just (Date.weekday x)
               }
             , Cmd.none
             )
 
-        ToggleHabit i ->
+        ToggleHabit weekdayLabel habitLabel ->
             ( { model
                 | completed =
-                    if Set.member i completed then
-                        Set.remove i completed
+                    if Set.member ( weekdayLabel, habitLabel ) completed then
+                        Set.remove ( weekdayLabel, habitLabel ) completed
 
                     else
-                        Set.insert i completed
+                        Set.insert ( weekdayLabel, habitLabel ) completed
               }
             , Cmd.none
             )
@@ -151,7 +169,7 @@ update msg ({ today, visibleDayOfWeek, completed } as model) =
             ( model, Date.today |> Task.perform ReceiveDate )
 
         ViewToday ->
-            ( { model | visibleDayOfWeek = today }, Cmd.none )
+            ( { model | visibleDayOfWeek = today |> Maybe.map Date.weekday }, Cmd.none )
 
         ViewPrevious ->
             ( { model
@@ -169,3 +187,9 @@ update msg ({ today, visibleDayOfWeek, completed } as model) =
 
         ClearAll ->
             ( { model | completed = Set.empty }, Cmd.none )
+
+        ToggleMorning ->
+            ( { model | includeMorning = not model.includeMorning }, Cmd.none )
+
+        ToggleEvening ->
+            ( { model | includeEvening = not model.includeEvening }, Cmd.none )
