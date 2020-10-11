@@ -4,7 +4,7 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Set
+import Set exposing (Set)
 import State
 import Time exposing (Weekday(..))
 import UI
@@ -205,6 +205,20 @@ habitsFor weekday =
             toHabit sunday
 
 
+timeRemaining : Set Int -> List State.Habit -> Int
+timeRemaining completed habits =
+    habits
+        |> List.indexedMap
+            (\i { minutesDuration } ->
+                if Set.member i completed then
+                    0
+
+                else
+                    minutesDuration
+            )
+        |> List.sum
+
+
 render : State.Model -> Html State.Msg
 render { today, visibleDayOfWeek, completed } =
     case visibleDayOfWeek of
@@ -247,7 +261,29 @@ render { today, visibleDayOfWeek, completed } =
                             [ text "next ›" ]
                         ]
                     ]
-                , ul [ class "pt-6" ]
+                , if today == visibleDayOfWeek then
+                    p [ class "text-center" ]
+                        [ let
+                            t =
+                                timeRemaining completed (habitsFor weekday)
+                          in
+                          if t == 0 then
+                            text "Nothing to do!"
+
+                          else
+                            text
+                                ((weekday
+                                    |> habitsFor
+                                    |> timeRemaining completed
+                                    |> String.fromInt
+                                 )
+                                    ++ " minutes remaining"
+                                )
+                        ]
+
+                  else
+                    text ""
+                , ul []
                     (weekday
                         |> habitsFor
                         |> List.indexedMap
