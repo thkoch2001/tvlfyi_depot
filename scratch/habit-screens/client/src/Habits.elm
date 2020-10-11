@@ -8,6 +8,7 @@ import Set
 import State
 import Time exposing (Weekday(..))
 import UI
+import Utils exposing (Strategy(..))
 
 
 morning : List State.Habit
@@ -201,14 +202,6 @@ habitsFor weekday =
             toHabit saturday
 
         Sun ->
-
-tailwind : List ( String, Bool ) -> Attribute msg
-tailwind classes =
-    classes
-        |> List.filter (\( k, v ) -> v)
-        |> List.map (\( k, v ) -> k)
-        |> String.join " "
-        |> class
             toHabit sunday
 
 
@@ -220,8 +213,10 @@ render { today, visibleDayOfWeek, completed } =
 
         Just weekday ->
             div
-                [ class "container mx-auto py-6 px-6"
-                , tailwind [ ( "pt-20", today /= visibleDayOfWeek ) ]
+                [ Utils.class
+                    [ Always "container mx-auto py-6 px-6"
+                    , When (today /= visibleDayOfWeek) "pt-20"
+                    ]
                 ]
                 [ header []
                     [ if today /= visibleDayOfWeek then
@@ -256,25 +251,39 @@ render { today, visibleDayOfWeek, completed } =
                     (weekday
                         |> habitsFor
                         |> List.indexedMap
-                            (\i x ->
+                            (\i { label, minutesDuration } ->
+                                let
+                                    isCompleted =
+                                        Set.member i completed
+                                in
                                 li [ class "text-xl list-disc ml-6" ]
                                     [ if today == visibleDayOfWeek then
                                         UI.button
                                             [ class "py-5 px-3"
-                                            , tailwind
-                                                [ ( "line-through", Set.member i completed )
-                                                , ( "text-gray-400", Set.member i completed )
-                                                ]
                                             , onClick (State.ToggleHabit i)
                                             ]
-                                            [ text x ]
+                                            [ span
+                                                [ Utils.class
+                                                    [ Always "text-white pt-1 px-2 rounded"
+                                                    , If isCompleted "bg-gray-400" "bg-blue-500"
+                                                    ]
+                                                ]
+                                                [ text (String.fromInt minutesDuration ++ " mins") ]
+                                            , p
+                                                [ Utils.class
+                                                    [ Always "inline pl-3"
+                                                    , When isCompleted "line-through text-gray-400"
+                                                    ]
+                                                ]
+                                                [ text label ]
+                                            ]
 
                                       else
                                         UI.button
                                             [ class "py-5 px-3 cursor-not-allowed"
                                             , onClick State.DoNothing
                                             ]
-                                            [ text x ]
+                                            [ text label ]
                                     ]
                             )
                     )
