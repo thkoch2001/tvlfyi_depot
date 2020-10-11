@@ -146,7 +146,7 @@ render { today, visibleDayOfWeek, completed } =
 
         Just weekday ->
             div
-                [ class "font-sans py-6 px-6"
+                [ class "container mx-auto py-6 px-6"
                 , tailwind [ ( "pt-20", today /= visibleDayOfWeek ) ]
                 ]
                 [ header []
