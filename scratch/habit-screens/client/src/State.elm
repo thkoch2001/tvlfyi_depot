@@ -15,6 +15,7 @@ type Msg
     | ViewToday
     | ViewPrevious
     | ViewNext
+    | ClearAll
 
 
 type View
@@ -165,3 +166,6 @@ update msg ({ today, visibleDayOfWeek, completed } as model) =
               }
             , Cmd.none
             )
+
+        ClearAll ->
+            ( { model | completed = Set.empty }, Cmd.none )

@@ -226,6 +226,10 @@ render { today, visibleDayOfWeek, completed } =
             p [] [ text "Unable to display habits because we do not know what day of the week it is." ]
 
         Just weekday ->
+            let
+                habits =
+                    habitsFor weekday
+            in
             div
                 [ Utils.class
                     [ Always "container mx-auto py-6 px-6"
@@ -265,15 +269,14 @@ render { today, visibleDayOfWeek, completed } =
                     p [ class "text-center" ]
                         [ let
                             t =
-                                timeRemaining completed (habitsFor weekday)
+                                timeRemaining completed habits
                           in
                           if t == 0 then
                             text "Nothing to do!"
 
                           else
                             text
-                                ((weekday
-                                    |> habitsFor
+                                ((habits
                                     |> timeRemaining completed
                                     |> String.fromInt
                                  )
@@ -283,9 +286,42 @@ render { today, visibleDayOfWeek, completed } =
 
                   else
                     text ""
+                , if today == visibleDayOfWeek then
+                    div []
+                        [ UI.button
+                            [ onClick
+                                (if Set.size completed == 0 then
+                                    State.DoNothing
+
+                                 else
+                                    State.ClearAll
+                                )
+                            , Utils.class
+                                [ Always "ml-10"
+                                , If (Set.size completed == 0)
+                                    "text-gray-500 cursor-not-allowed"
+                                    "text-red-500 underline cursor-pointer"
+                                ]
+                            ]
+                            [ let
+                                numCompleted =
+                                    habits
+                                        |> List.indexedMap (\i _ -> i)
+                                        |> List.filter (\i -> Set.member i completed)
+                                        |> List.length
+                              in
+                              if numCompleted == 0 then
+                                text "Clear"
+
+                              else
+                                text ("Clear (" ++ String.fromInt numCompleted ++ ")")
+                            ]
+                        ]
+
+                  else
+                    text ""
                 , ul []
-                    (weekday
-                        |> habitsFor
+                    (habits
                         |> List.indexedMap
                             (\i { label, minutesDuration } ->
                                 let
