@@ -22,13 +22,19 @@ type View
 
 
 type HabitType
-    = Daily
-    | Weekly
-    | Yearly
+    = Morning
+    | Evening
+    | DayOfWeek
+    | Payday
+    | FirstOfTheMonth
+    | FirstOfTheYear
 
 
 type alias Habit =
-    String
+    { label : String
+    , habitType : HabitType
+    , minutesDuration : Int
+    }
 
 
 type alias Model =
