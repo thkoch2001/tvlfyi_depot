@@ -316,7 +316,7 @@ render { today, visibleDayOfWeek, completed, includeMorning, includeEvening } =
                         ]
                     ]
                 , if todaysWeekday == visibleWeekday then
-                    p [ class "text-center" ]
+                    p [ class "text-center pt-1 pb-4" ]
                         [ let
                             t : Int
                             t =
@@ -348,7 +348,7 @@ render { today, visibleDayOfWeek, completed, includeMorning, includeEvening } =
                                     State.ClearAll
                                 )
                             , Utils.class
-                                [ Always "ml-10"
+                                [ Always "ml-10 px-3"
                                 , If (Set.size completed == 0)
                                     "text-gray-500 cursor-not-allowed"
                                     "text-red-500 underline cursor-pointer"
