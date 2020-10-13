@@ -9,6 +9,7 @@
     ../modules/fcitx.nix
     ../modules/rtlsdr.nix
     ../../../../../ops/nixos/v4l2loopback.nix
+    ../modules/desktop.nix
   ];
 
   hardware.enableRedistributableFirmware = true;
