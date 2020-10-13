@@ -96,6 +96,7 @@ with lib;
 
   services.nginx = {
     enable = true;
+    statusPage = true;
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     recommendedTlsSettings = true;
@@ -146,6 +147,8 @@ with lib;
       nginx = {
         enable = true;
         openFirewall = true;
+        sslVerify = false;
+        constLabels = [ "host=mugwump" ];
       };
     };
 
@@ -154,6 +157,12 @@ with lib;
       scrape_interval = "5s";
       static_configs = [{
         targets = ["localhost:${toString config.services.prometheus.exporters.node.port}"];
+      }];
+    } {
+      job_name = "nginx";
+      scrape_interval = "5s";
+      static_configs = [{
+        targets = ["localhost:${toString config.services.prometheus.exporters.nginx.port}"];
       }];
     }];
   };
