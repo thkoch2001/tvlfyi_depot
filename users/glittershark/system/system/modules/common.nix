@@ -32,6 +32,7 @@ with lib;
     lm_sensors
     dnsutils
     depot.users.glittershark.system.system.rebuilder
+    htop
   ];
 
   services.openssh.enable = true;
