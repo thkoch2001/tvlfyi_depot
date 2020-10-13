@@ -117,6 +117,12 @@ with lib;
     };
   };
 
+  security.acme.certs."metrics.gws.fyi" = {
+    dnsProvider = "namecheap";
+    credentialsFile = "/etc/secrets/namecheap.env";
+    webroot = mkForce null;
+  };
+
   services.prometheus = {
     enable = true;
     exporters = {
@@ -178,9 +184,23 @@ with lib;
     timerConfig.OnCalendar = "minutely";
   };
 
-  security.acme.certs."metrics.gws.fyi" = {
-    dnsProvider = "namecheap";
-    credentialsFile = "/etc/secrets/namecheap.env";
-    webroot = mkForce null;
-  };
+  virtualisation.docker.enable = true;
+
+  services.buildkite-agents = listToAttrs (map (n: rec {
+    name = "mugwump-${toString n}";
+    value = {
+      inherit name;
+      enable = true;
+      tokenPath = "/etc/secrets/buildkite-agent-token";
+      privateSshKeyPath = "/etc/secrets/buildkite-ssh-key";
+      runtimePackages = with pkgs; [
+        docker
+        nix
+        gnutar
+      ];
+    };
+  }) (range 1 2));
+
+  users.users."buildkite-agent-mugwump-1".extraGroups = [ "docker" ];
+  users.users."buildkite-agent-mugwump-2".extraGroups = [ "docker" ];
 }
