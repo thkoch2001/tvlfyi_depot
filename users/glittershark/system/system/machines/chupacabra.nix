@@ -114,4 +114,7 @@
 
   # Necessary to get steam working
   hardware.opengl.driSupport32Bit = true;
+
+  nix.binaryCaches = [ "ssh://grfn@172.16.0.5" ];
+  nix.trustedBinaryCaches = [ "ssh://grfn@172.16.0.5" ];
 }
