@@ -97,4 +97,10 @@ with lib;
       options = "--delete-older-than 30d";
     };
   };
+
+  services.udev.packages = with pkgs; [
+    yubikey-personalization
+  ];
+
+  services.pcscd.enable = true;
 }

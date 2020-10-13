@@ -38,6 +38,8 @@
     gnupg
     keybase
     openssl
+    yubikey-manager
+    yubikey-manager-qt
 
     # Nix things
     nixfmt
