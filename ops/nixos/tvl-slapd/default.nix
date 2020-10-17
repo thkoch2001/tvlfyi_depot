@@ -71,6 +71,11 @@ let
       password = "{SSHA}i7PSAsXwJT3jjmmvU77aar/tU/YPDCEO";
     }
     {
+      username = "htbf";
+      email = "h-tvl@htbf.dev";
+      password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$2iVXQQfd26icaIguHJg/CQ$hA9ziqn7kQ06AV6uQxJCGXoG8f+LWmH+nVlk00a1n/c";
+    }
+    {
       username = "isomer";
       email = "isomer@tvl.fyi";
       password = "{SSHA}OhWQkPJgH1rRJqYIaMUbbKC4iLEzvCev";
