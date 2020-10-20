@@ -40,6 +40,7 @@ digraph tvl {
     maskerad [href="https://femalelegends.com/"];
     multi [href="https://1.0.168.192.in-addr.xyz/"];
     ncl;
+    nikky [href="http://nikky.moe/"];
     nyanotech [href="https://twitter.com/nyanotech"];
     poigon;
     profpatsch [href="http://profpatsch.de/"];
@@ -47,6 +48,7 @@ digraph tvl {
     qyliss [href="https://alyssa.is"];
     rcombs [href="http://rcombs.me/"];
     seven [href="https://open.spotify.com/user/so7"];
+    spacekookie [href="https://spacekookie.de/"];
     tazjin [href="https://tazj.in/"];
     V [href="https://anomalous.eu/"];
     wpcarro [href="https://wpcarro.dev/"];
@@ -68,6 +70,7 @@ digraph tvl {
     ircv3 [href="https://ircv3.net/"];
     lgbtslack [label="lgbt.tech" href="https://lgbtq.technology/"];
     muccc [label="µccc" href="https://muc.ccc.de/"];
+    afra [label="AfRA" href="https://afra-berlin.de/"];
   }
 
   // special
@@ -138,6 +141,9 @@ digraph tvl {
     poigon -> eve;
     implr -> unspecific;
     hyperfekt -> espes;
+    afra -> unspecific;
+    nikky -> afra;
+    spacekookie -> qyliss;
   }
 
   // secondary edges (how are they connected otherwise?)
@@ -181,6 +187,8 @@ digraph tvl {
     artemist -> nix;
     hyperfekt -> edef;
     camsbury -> urbint;
+    spacekookie -> afra;
+    qyliss -> afra;
   }
 
   // baby
