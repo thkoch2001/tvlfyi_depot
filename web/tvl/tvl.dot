@@ -28,7 +28,7 @@ digraph tvl {
     grahamc [href="https://grahamc.com/"];
     htbf [href="https://htbf.dev/"];
     hyperfekt [href="https://hyperfekt.net"];
-    implr;
+    implr [href="https://twitter.com/implring"];
     Irenes [href="https://www.pluralpride.com/"];
     isomer [href="https://www.lorier.net/"];
     jooiiee [href="https://jooiiee.se/"];
@@ -138,7 +138,7 @@ digraph tvl {
     maskerad -> unspecific;
     nyanotech -> kanepyork;
     poigon -> eve;
-    implr -> unspecific;
+    implr -> lukegb;
     hyperfekt -> espes;
     afra -> unspecific;
     nikky -> afra;
