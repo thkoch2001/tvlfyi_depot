@@ -20,7 +20,8 @@ type incomingIRC struct {
 	User    string   `json:"User"`
 }
 
-var supressionUsernames map[string]bool
+var suppressionUsernames map[string]bool
+var noMkov map[string]bool
 
 func main() {
 	redisc := redis.NewClient(&redis.Options{
@@ -30,7 +31,27 @@ func main() {
 	})
 
 	fireaway := make(chan incomingIRC, 10)
-	supressionUsernames = make(map[string]bool)
+	suppressionUsernames = make(map[string]bool)
+
+	suppressionList := redisc.HGetAll("suppressionList")
+	suppressionListA, _ := suppressionList.Result()
+
+	suppressionListMap, _ := stringMaptoIntMap(suppressionListA)
+	for v, _ := range suppressionListMap {
+		suppressionUsernames[v] = true
+		suppressionUsernames[strings.ToLower(v)] = true
+	}
+
+	noMkov = make(map[string]bool)
+
+	noMkovRedis := redisc.HGetAll("nomkov")
+	noMkovRedisA, _ := noMkovRedis.Result()
+
+	noMkovMap, _ := stringMaptoIntMap(noMkovRedisA)
+	for v, _ := range noMkovMap {
+		noMkov[v] = true
+		noMkov[strings.ToLower(v)] = true
+	}
 
 	go func() {
 		for {
@@ -81,8 +102,11 @@ func main() {
 func generateMesasge(msg incomingIRC, redisc *redis.Client) string {
 	text := msg.Params[1]
 	username := strings.ToLower(msg.Name)
-	supressionUsernames[username] = true
-	supressionUsernames[username+":"] = true
+	suppressionUsernames[username] = true
+	suppressionUsernames[username+":"] = true
+	suppressionUsernames[msg.Name] = true
+	suppressionUsernames[msg.Name+":"] = true
+	redisc.HIncrBy("suppressionList", msg.Name, 1)
 
 	text = strings.ToLower(text)
 	text = strings.Replace(text, ",", "", -1)
@@ -92,16 +116,19 @@ func generateMesasge(msg incomingIRC, redisc *redis.Client) string {
 	text = strings.Replace(text, "?", "", -1)
 
 	words := strings.Split(text, " ")
-	lastWord := propwords(username, words[0], redisc)
+	lastWord := propwords(msg.Name, words[0], redisc)
 
-	if supressionUsernames[words[0]] {
-		if len(words[0]) < 2 {
-			words[0] = "vee"
-		}
-		words[0] = fmt.Sprintf("%s.%s", string(words[0][0]), words[0][1:])
+	if noMkov[username] {
+		lastWord = blockoutWord(lastWord)
+		words[0] = blockoutWord(words[0])
 	}
 
+	lastWord = filterHighlights(lastWord)
+
 	if lastWord == "_END_" {
+		if noMkov[username] {
+			return blockoutWord(words[0])
+		}
 		return words[0]
 	}
 	outputMsg := words[0] + " " + lastWord + " "
@@ -112,18 +139,39 @@ func generateMesasge(msg incomingIRC, redisc *redis.Client) string {
 			return outputMsg
 		}
 
-		if supressionUsernames[lastWord] {
-			if len(lastWord) < 2 {
-				lastWord = "vee"
-			}
-			lastWord = fmt.Sprintf("%s.%s", string(lastWord[0]), lastWord[1:])
+		if noMkov[username] {
+			lastWord = blockoutWord(lastWord)
 		}
+
+		lastWord = filterHighlights(lastWord)
 
 		outputMsg += lastWord + " "
 		if len(outputMsg) > 100 {
 			return outputMsg
 		}
 	}
+}
+
+// filterHighlights: tries to prevent highlights by checking against
+// a map called suppressionUsernames
+func filterHighlights(in string) string {
+	for username := range suppressionUsernames {
+		if strings.Contains(in, username) {
+			if len(in) < 2 {
+				in = fmt.Sprintf("%s.%s", string(in[0]), in[1:])
+				return in
+			}
+		}
+	}
+	return in
+}
+
+func blockoutWord(in string) string {
+	block := ""
+	for i := 0; i < len(in); i++ {
+		block += "█"
+	}
+	return block
 }
 
 func propwords(username string, start string, redisc *redis.Client) string {
@@ -190,7 +238,9 @@ func learnFromMessage(msg incomingIRC, redisc *redis.Client) {
 			nextWord = words[k+1]
 		}
 
-		redisc.HIncrBy(fmt.Sprintf("%s-%s", username, word), nextWord, 1)
+		if !noMkov[username] {
+			redisc.HIncrBy(fmt.Sprintf("%s-%s", username, word), nextWord, 1)
+		}
 		redisc.HIncrBy(fmt.Sprintf("generic-%s", word), nextWord, 1)
 	}
 }
