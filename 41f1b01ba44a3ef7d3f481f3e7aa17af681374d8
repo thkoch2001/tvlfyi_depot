@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49023789_c0083a72",
+        "filename": "web/tvl/tvl.dot",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-10-20T19:10:36Z",
+      "side": 0,
+      "message": "I was worried you\u0027d removed me for a second :p",
+      "range": {
+        "startLine": 113,
+        "startChar": 2,
+        "endLine": 113,
+        "endChar": 21
+      },
+      "revId": "41f1b01ba44a3ef7d3f481f3e7aa17af681374d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
