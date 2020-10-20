@@ -9,13 +9,13 @@ digraph tvl {
   // people
   subgraph {
     ac [href="https://the-alex.github.io/about/"];
+    adisbladis [href="http://nixos.expert/"];
     andi [label="andi-" href="https://andreas.rammhold.de/"];
     anon1 [color="grey" fontcolor="grey"];
     aranea;
     artemist [href="https://artem.ist/"];
     aurora [href="https://nonegenderleftfox.aventine.se/"];
     benjojo [href="https://benjojo.co.uk/"];
-    borb [href="https://twitter.com/FR31H31T"];
     camsbury [href="https://camsbury.com/"];
     cynthia [href="https://cynthia.re/"];
     edef [href="https://edef.eu/files/edef.hs"];
@@ -25,9 +25,12 @@ digraph tvl {
     firefly [href="http://firefly.nu/"];
     flokli [href="https://flokli.de/"];
     ghuntley [href="https://ghuntley.com/"];
-    glittershark [href="http://gws.fyi"];
+    grfn [href="http://gws.fyi"];
     grahamc [href="https://grahamc.com/"];
+    htbf [href="https://htbf.dev/"];
     hyperfekt [href="https://hyperfekt.net"];
+    implr;
+    Irenes [href="https://www.pluralpride.com/"];
     isomer [href="https://www.lorier.net/"];
     jooiiee [href="https://jooiiee.se/"];
     jusrin [href="https://jusrin.dev/"];
@@ -42,12 +45,11 @@ digraph tvl {
     poigon;
     profpatsch [href="http://profpatsch.de/"];
     puck [href="https://puckipedia.com/"];
-    q3k [href="https://q3k.org/"];
     qyliss [href="https://alyssa.is"];
     rcombs [href="http://rcombs.me/"];
     seven [href="https://open.spotify.com/user/so7"];
     tazjin [href="https://tazj.in/"];
-    tehhobbit;
+    V [href="https://anomalous.eu/"];
     wpcarro [href="https://wpcarro.dev/"];
   }
 
@@ -67,7 +69,6 @@ digraph tvl {
     ircv3 [href="https://ircv3.net/"];
     lgbtslack [label="lgbt.tech" href="https://lgbtq.technology/"];
     muccc [label="µccc" href="https://muc.ccc.de/"];
-    hswaw [href="https://hackerspace.pl/"];
   }
 
   // special
@@ -87,6 +88,7 @@ digraph tvl {
     edef -> tazjin;
 
     // via nix
+    adisbladis -> nix;
     jusrin -> nix;
     ghuntley -> nix;
     flokli -> nix;
@@ -104,19 +106,21 @@ digraph tvl {
     puck -> edef;
     qyliss -> edef;
     rcombs -> edef;
+    V -> edef;
 
     // via spotify
-    tehhobbit -> spotify;
     seven -> spotify;
 
     // via google
-    lukegb -> google;
+    htbf -> google;
+    Irenes -> google;
     isomer -> google;
+    lukegb -> google;
     wpcarro -> google;
 
     // via urbint
     ac -> urbint;
-    glittershark -> urbint;
+    grfn -> urbint;
 
     // random primary
     urbint -> wpcarro;
@@ -125,7 +129,6 @@ digraph tvl {
     aranea -> multi;
     artemist -> cynthia;
     aurora -> eve;
-    borb -> unspecific;
     cynthia -> benjojo;
     eta -> anon1;
     ericvolp -> lukegb;
@@ -135,7 +138,7 @@ digraph tvl {
     maskerad -> unspecific;
     nyanotech -> kanepyork;
     poigon -> eve;
-    q3k -> unspecific;
+    implr -> unspecific;
     hyperfekt -> espes;
   }
 
@@ -156,10 +159,6 @@ digraph tvl {
 
     // µccc
     leah2 -> muccc;
-    q3k -> muccc;
-
-    // hswaw
-    q3k -> hswaw;
 
     // random
     leah2 -> edef;
@@ -168,6 +167,7 @@ digraph tvl {
     eta -> firefly;
     cynthia -> firefly;
     cynthia -> lukegb;
+    implr -> google;
     kanepyork -> google;
     nyanotech -> google;
     lukegb -> benjojo;
@@ -176,7 +176,7 @@ digraph tvl {
     espes -> aurora;
     puck -> nix;
     qyliss -> nix;
-    glittershark -> nix;
+    grfn -> nix;
     edef -> nix;
     aranea -> nix;
     aranea -> profpatsch;
