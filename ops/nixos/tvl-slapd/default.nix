@@ -61,6 +61,11 @@ let
       password = "{SSHA}sOR5xzi7Lfv376XGQA8Hf6jyhTvo0XYc";
     }
     {
+      username = "etu";
+      email = "etu@failar.nu";
+      password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$RUrW8C9mWAkBSlkwSTH5dw$n3FXTeu41nDQfvJPI7TT3tcgwPmPJl8hPtaZ58qLq9A";
+    }
+    {
       username = "firefly";
       email = "firefly@firefly.nu";
       password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$RYVVkFoi3A1yYkI8J2zUwg$GUERvgHvU8SGjQmilDJGZu50hYRAHw+ejtuL+Skygs8";
