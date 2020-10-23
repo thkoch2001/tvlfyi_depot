@@ -206,9 +206,10 @@ with lib;
         docker
         nix
         gnutar
+        gzip
       ];
     };
-  }) (range 1 2));
+  }) (range 1 1));
 
   users.users."buildkite-agent-mugwump-1".extraGroups = [ "docker" ];
   users.users."buildkite-agent-mugwump-2".extraGroups = [ "docker" ];
