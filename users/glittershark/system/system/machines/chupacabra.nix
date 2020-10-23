@@ -19,6 +19,7 @@
   powerManagement = {
     enable = true;
     powertop.enable = true;
+    cpuFreqGovernor = "powersave";
   };
 
   laptop.onLowBattery = {
@@ -87,8 +88,6 @@
     [ { device = "/dev/disk/by-uuid/caa7e2ff-475b-4024-b29e-4f88f733fc4c"; }
     ];
 
-  nix.maxJobs = lib.mkDefault 12;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   # High-DPI console
   console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
@@ -115,6 +114,27 @@
   # Necessary to get steam working
   hardware.opengl.driSupport32Bit = true;
 
-  nix.binaryCaches = [ "ssh://grfn@172.16.0.5" ];
-  nix.trustedBinaryCaches = [ "ssh://grfn@172.16.0.5" ];
+  nix = {
+    maxJobs = lib.mkDefault 12;
+    binaryCaches = [ "ssh://grfn@172.16.0.5" ];
+    trustedBinaryCaches = [ "ssh://grfn@172.16.0.5" ];
+    buildMachines = [{
+      hostName = "172.16.0.3";
+      sshUser = "griffin";
+      sshKey = "/home/grfn/.ssh/id_rsa";
+      system = "x86_64-darwin";
+      maxJobs = 4;
+    } {
+      hostName = "172.16.0.4";
+      sshUser = "griffin";
+      sshKey = "/home/grfn/.ssh/id_rsa";
+      system = "x86_64-darwin";
+      maxJobs = 8; # 16 cpus
+    } {
+      hostName = "eu.nixbuild.net";
+      system = "x86_64-linux";
+      maxJobs = 100;
+      supportedFeatures = [ "benchmark" "big-parallel" ];
+    }];
+  };
 }
