@@ -49,5 +49,15 @@ in {
   home.packages = with pkgs; [
     steam
     xorg.libxcb
+    (writeShellScriptBin "rebuild-mugwump" ''
+      set -eo pipefail
+      cd ~/code/depot
+      nix build -f . users.glittershark.system.system.mugwumpSystem -o mugwump
+      nix copy -f . users.glittershark.system.system.mugwumpSystem \
+        --to ssh://mugwump
+      system=$(readlink -ef mugwump)
+      ssh mugwump sudo nix-env -p /nix/var/nix/profiles/system --set $system
+      ssh mugwump sudo $system/bin/switch-to-configuration switch
+    '')
   ];
 }
