@@ -69,31 +69,11 @@ with lib;
   nix = {
     trustedUsers = [ "grfn" ];
     autoOptimiseStore = true;
-
-    buildMachines = [{
-      hostName = "172.16.0.3";
-      sshUser = "griffin";
-      sshKey = "/home/grfn/.ssh/id_rsa";
-      system = "x86_64-darwin";
-      maxJobs = 4;
-    } {
-      hostName = "172.16.0.4";
-      sshUser = "griffin";
-      sshKey = "/home/grfn/.ssh/id_rsa";
-      system = "x86_64-darwin";
-      maxJobs = 8; # 16 cpus
-    } {
-      hostName = "eu.nixbuild.net";
-      system = "x86_64-linux";
-      maxJobs = 100;
-      supportedFeatures = [ "benchmark" "big-parallel" ];
-    }];
-
     distributedBuilds = true;
 
     gc = {
       automatic = true;
-      dates = "weekly";
+      dates = mkDefault "weekly";
       options = "--delete-older-than 30d";
     };
   };
