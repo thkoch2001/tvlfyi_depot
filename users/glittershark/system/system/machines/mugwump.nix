@@ -60,6 +60,8 @@ with lib;
     commands = [{ command = "ALL"; options = ["NOPASSWD"]; }];
   }];
 
+  nix.gc.dates = "monthly";
+
   services.fail2ban = {
     enable = true;
     ignoreIP = [
