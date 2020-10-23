@@ -88,7 +88,7 @@ with lib;
       datasources = [{
         name = "Prometheus";
         type = "prometheus";
-        url = "localhost:9090";
+        url = "http://localhost:9090";
       }];
     };
   };
