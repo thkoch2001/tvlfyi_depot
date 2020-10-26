@@ -155,7 +155,19 @@
                (number (alist-get 'number value)))
            (org-set-property
             "pull-request"
-            (org-make-link-string url (number-to-string number)))))))))
+            (org-make-link-string
+             url
+             (format "%s/%s/%d"
+                     (->> value
+                          (alist-get 'base)
+                          (alist-get 'repo)
+                          (alist-get 'name))
+                     (->> value
+                          (alist-get 'base)
+                          (alist-get 'repo)
+                          (alist-get 'owner)
+                          (alist-get 'login))
+                     number)))))))))
 
 (advice-add
  #'forge--post-submit-callback
