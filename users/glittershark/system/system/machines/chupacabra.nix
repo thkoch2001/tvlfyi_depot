@@ -118,23 +118,21 @@
     maxJobs = lib.mkDefault 12;
     binaryCaches = [ "ssh://grfn@172.16.0.5" ];
     trustedBinaryCaches = [ "ssh://grfn@172.16.0.5" ];
-    buildMachines = [{
-      hostName = "172.16.0.3";
-      sshUser = "griffin";
-      sshKey = "/home/grfn/.ssh/id_rsa";
-      system = "x86_64-darwin";
-      maxJobs = 4;
-    } {
-      hostName = "172.16.0.4";
-      sshUser = "griffin";
-      sshKey = "/home/grfn/.ssh/id_rsa";
-      system = "x86_64-darwin";
-      maxJobs = 8; # 16 cpus
-    } {
-      hostName = "eu.nixbuild.net";
-      system = "x86_64-linux";
-      maxJobs = 100;
-      supportedFeatures = [ "benchmark" "big-parallel" ];
-    }];
+    buildMachines = [
+      {
+        hostName = "172.16.0.4";
+        sshUser = "griffin";
+        sshKey = "/home/grfn/.ssh/id_rsa";
+        system = "x86_64-darwin";
+        maxJobs = 8; # 16 cpus
+      }
+      {
+        hostName = "172.16.0.3";
+        sshUser = "griffin";
+        sshKey = "/home/grfn/.ssh/id_rsa";
+        system = "x86_64-darwin";
+        maxJobs = 4;
+      }
+    ];
   };
 }
