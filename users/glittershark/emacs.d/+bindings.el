@@ -312,7 +312,9 @@ private/hlissner/snippets."
 
      (:desc "smerge" :prefix "m"
        :desc "Keep Current" :n "SPC" #'smerge-keep-current
-       :desc "Keep All"     :n "a" #'smerge-keep-all))
+       :desc "Keep All"     :n "a" #'smerge-keep-all
+       :desc "Keep Upper"   :n "u" #'smerge-keep-upper
+       :desc "Keep Lower"   :n "l" #'smerge-keep-lower))
 
    (:desc "help" :prefix "h"
      :n "h" help-map
