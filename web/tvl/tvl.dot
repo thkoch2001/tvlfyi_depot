@@ -108,7 +108,6 @@ digraph tvl {
     puck -> edef;
     qyliss -> edef;
     rcombs -> edef;
-    V -> edef;
 
     // via spotify
     seven -> spotify;
@@ -144,6 +143,7 @@ digraph tvl {
     afra -> unspecific;
     nikky -> afra;
     spacekookie -> qyliss;
+    V -> unspecific;
   }
 
   // secondary edges (how are they connected otherwise?)
