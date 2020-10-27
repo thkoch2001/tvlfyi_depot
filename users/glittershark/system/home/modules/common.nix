@@ -64,6 +64,13 @@
         user = "griffin";
       };
 
+      "cerberus" = {
+        host = "cerberus";
+        hostname = "172.16.0.3";
+        forwardAgent = true;
+        user = "griffin";
+      };
+
       "mugwump" = {
         host = "mugwump";
         hostname = "172.16.0.5";
