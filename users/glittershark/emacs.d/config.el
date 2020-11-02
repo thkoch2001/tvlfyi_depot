@@ -391,12 +391,13 @@
   (setf (alist-get 'file org-link-frame-setup) 'find-file-other-window)
   (set-face-foreground 'org-block +solarized-s-base00)
 
-  (add-hook! org-mode
-    (set-company-backend! 'org-mode
-      '(:separate company-ob-postgresql
-                  company-dabbrev
-                  company-yasnippet
-                  company-ispell))))
+  ;; (add-hook! org-mode
+  ;;   (set-company-backend! 'org-mode
+  ;;     '(:separate company-ob-postgresql
+  ;;                 company-dabbrev
+  ;;                 company-yasnippet
+  ;;                 company-ispell)))
+  )
 
 (after! magit
   (setq git-commit-summary-max-length 50))
