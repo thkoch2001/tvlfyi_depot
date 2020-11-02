@@ -123,6 +123,12 @@
 
  org-babel-clojure-backend 'cider)
 
+(defun +grfn/org-setup ()
+  (setq-local truncate-lines -1)
+  (line-number-mode -1))
+
+(add-hook 'org-mode-hook #'+grfn/org-setup)
+
 (defun +grfn/insert-work-template ()
   (interactive)
   (goto-char (point-min))
