@@ -20,6 +20,7 @@ in {
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "paroxysm";
+        Restart = "always";
       };
     };
   };
