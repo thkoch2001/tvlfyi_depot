@@ -209,7 +209,7 @@ in lib.fix(self: {
       gerrit_host = "cl.tvl.fyi:29418";
       gerrit_ssh_auth_username = "clbot";
       gerrit_ssh_auth_key = "/etc/secrets/clbot-key";
-      irc_server = "qwerty.zxcvbnm.ninja:6697";
+      irc_server = "znc.lukegb.com:6697";
 
       notify_branches = "canon,refs/meta/config";
       notify_repo = "depot";
