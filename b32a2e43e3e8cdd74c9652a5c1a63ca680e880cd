@@ -51,6 +51,24 @@
       "revId": "b32a2e43e3e8cdd74c9652a5c1a63ca680e880cd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb0f2c64_0c21e25f",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2020-11-08T18:48:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "90a2145b_369a8445",
+      "revId": "b32a2e43e3e8cdd74c9652a5c1a63ca680e880cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
