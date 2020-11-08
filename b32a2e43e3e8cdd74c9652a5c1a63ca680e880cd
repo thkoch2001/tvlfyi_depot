@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc4de8bf_c1fc3352",
+        "filename": "web/panettone/src/irc.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-08T18:44:49Z",
+      "side": 1,
+      "message": "this file needs to be in the build",
+      "revId": "b32a2e43e3e8cdd74c9652a5c1a63ca680e880cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90a2145b_369a8445",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-08T18:44:49Z",
+      "side": 1,
+      "message": "maybe pull this format up to top level, but up to you if you want to do that (feel free not to)",
+      "revId": "b32a2e43e3e8cdd74c9652a5c1a63ca680e880cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
