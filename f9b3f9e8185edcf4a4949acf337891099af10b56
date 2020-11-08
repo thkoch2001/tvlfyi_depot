@@ -22,6 +22,30 @@
       "revId": "f9b3f9e8185edcf4a4949acf337891099af10b56",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca575e1b_a7701f02",
+        "filename": "ops/nixos/irccat.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-08T18:37:23Z",
+      "side": 1,
+      "message": "Nope, that\u0027s the derivation data structure itself - it would be a type error in this case.",
+      "parentUuid": "4c361af5_93e481d1",
+      "range": {
+        "startLine": 37,
+        "startChar": 17,
+        "endLine": 37,
+        "endChar": 33
+      },
+      "revId": "f9b3f9e8185edcf4a4949acf337891099af10b56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
