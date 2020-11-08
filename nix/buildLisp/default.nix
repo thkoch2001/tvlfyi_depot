@@ -247,7 +247,8 @@ let
   sbclWith = deps:
   let lispDeps = filter (d: !d.lispBinary) (allDeps deps);
   in writeShellScriptBin "sbcl" ''
-    export LD_LIBRARY_PATH=${lib.makeLibraryPath (allNative [] lispDeps)};
+    export LD_LIBRARY_PATH="${lib.makeLibraryPath (allNative [] lispDeps)}"
+    export LANG="C.UTF-8"
     exec ${sbcl}/bin/sbcl ${lib.optionalString (deps != []) "--load ${writeText "load.lisp" (genLoadLisp lispDeps)}"} $@
   '';
 in {
