@@ -17,6 +17,7 @@ in lib.fix(self: {
   imports = [
     "${depot.depotPath}/ops/nixos/clbot.nix"
     "${depot.depotPath}/ops/nixos/depot.nix"
+    "${depot.depotPath}/ops/nixos/irccat.nix"
     "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
     "${depot.depotPath}/ops/nixos/panettone.nix"
     "${depot.depotPath}/ops/nixos/paroxysm.nix"
@@ -239,6 +240,24 @@ in lib.fix(self: {
 
     # Run the first cursed bot (quote bot)
     paroxysm.enable = true;
+
+    # Run irccat to forward messages to IRC
+    irccat = {
+      enable = true;
+      config = {
+        tcp.listen = ":4722"; # "ircc"
+        irc = {
+          server = "chat.freenode.net:6697";
+          tls = true;
+          nick = "tvlbot";
+          realname = "TVL Bot";
+          channels = [
+            "##tvl"
+            "##tvl-dev"
+          ];
+        };
+      };
+    };
   };
 
   services.postgresql = {
