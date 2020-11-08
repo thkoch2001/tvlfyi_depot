@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dad33fb7_b99cebb6",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-08T18:32:24Z",
+      "side": 1,
+      "message": "hmm I wonder if it\u0027d be better (or even possible) to only set this if we detect it to be an invalid LANG.\n\nI don\u0027t know how we would classify \"invalid\" though",
+      "revId": "f3e276b9f75be0471c3f047f6c802806ed9e7523",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
