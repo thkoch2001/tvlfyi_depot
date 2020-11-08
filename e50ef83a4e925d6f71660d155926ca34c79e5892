@@ -16,6 +16,24 @@
       "revId": "e50ef83a4e925d6f71660d155926ca34c79e5892",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9da296e5_a5eb2734",
+        "filename": "third_party/irccat/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-08T18:36:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c60a453b_f638be15",
+      "revId": "e50ef83a4e925d6f71660d155926ca34c79e5892",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
