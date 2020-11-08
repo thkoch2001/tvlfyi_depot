@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c361af5_93e481d1",
+        "filename": "ops/nixos/irccat.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-11-08T18:24:41Z",
+      "side": 1,
+      "message": "Does just configMerge work?",
+      "range": {
+        "startLine": 37,
+        "startChar": 17,
+        "endLine": 37,
+        "endChar": 33
+      },
+      "revId": "f9b3f9e8185edcf4a4949acf337891099af10b56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
