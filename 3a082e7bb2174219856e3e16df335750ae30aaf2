@@ -22,6 +22,30 @@
       "revId": "3a082e7bb2174219856e3e16df335750ae30aaf2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2109578a_4e07c06b",
+        "filename": "ops/nixos/irccat.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-08T18:21:05Z",
+      "side": 1,
+      "message": ":thonking:",
+      "parentUuid": "173e719d_27509da1",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 3
+      },
+      "revId": "3a082e7bb2174219856e3e16df335750ae30aaf2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
