@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (e84f9e fix(whitby): Use new IRC bouncer location for clbot)
 # Ignore the garbage folder, in which I slowly assemble a bunch of
 # trash locally that might be valuable in the future.
 garbage/
@@ -5,3 +6,8 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+=======
+*.elc
+*-pkg.el
+*-autoloads.el
+>>>>>>> BRANCH (036812 Make button events working with winner-mode)
