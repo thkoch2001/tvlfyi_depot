@@ -47,7 +47,6 @@ let
       vterm
       base16-theme
       password-store
-      ivy-pass
       clipmon # TODO: Prefer an Emacs client for clipmenud.
       evil
       evil-collection
@@ -65,15 +64,16 @@ let
       doom-themes
       telephone-line
       which-key
+      all-the-icons
+      all-the-icons-ivy
       ivy
+      ivy-pass
+      ivy-prescient
       restclient
       package-lint
       parsec
       magit-popup
       direnv
-      ivy-prescient
-      all-the-icons
-      all-the-icons-ivy
       alert
       nix-mode
       racer
@@ -121,7 +121,6 @@ let
       company
       counsel
       flycheck
-      ivy
     ]));
 
   vendorDir = path {
@@ -129,6 +128,7 @@ let
     name = "emacs-vendor";
   };
 
+  # TODO: byte-compile these by packaging each as an Elisp library.
   wpcDir = path {
     path = ./.emacs.d/wpc;
     name = "emacs-libs";
@@ -160,10 +160,10 @@ let
       export EMACSLOADPATH="${loadPath}"
       exec ${emacsBin} \
         --debug-init \
+        --no-init-file \
         --no-site-file \
         --no-site-lisp \
         --load ${initEl} \
-        --no-init-file \
         "$@"
     '';
 in {
