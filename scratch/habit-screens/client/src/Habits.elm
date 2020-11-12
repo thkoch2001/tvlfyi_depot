@@ -282,7 +282,7 @@ render { today, visibleDayOfWeek, completed, includeMorning, includeEvening } =
             in
             div
                 [ Utils.class
-                    [ Always "container mx-auto py-6 px-6"
+                    [ Always "max-w-xl mx-auto py-6 px-6"
                     , When (todaysWeekday /= visibleWeekday) "pt-20"
                     ]
                 ]
@@ -411,7 +411,7 @@ render { today, visibleDayOfWeek, completed, includeMorning, includeEvening } =
 
                   else
                     text ""
-                , ul []
+                , ul [ class "pb-10" ]
                     (habits
                         |> List.indexedMap
                             (\i { label, minutesDuration } ->
@@ -455,7 +455,7 @@ render { today, visibleDayOfWeek, completed, includeMorning, includeEvening } =
                                     ]
                             )
                     )
-                , footer [ class "text-sm text-center text-gray-500 fixed bottom-0 left-0 w-full py-4" ]
+                , footer [ class "bg-white text-sm text-center text-gray-500 fixed bottom-0 left-0 w-full py-4" ]
                     [ p [] [ text "This app is brought to you by William Carroll." ]
                     , p [] [ text "Client: Elm; Server: n/a" ]
                     ]
