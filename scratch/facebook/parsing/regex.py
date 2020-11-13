@@ -3,6 +3,16 @@
 #   - parser
 #   - compiler
 # ...for regex.
+#
+# BNF
+# expression -> ( char_class | CHAR ) quantifier? ( "|" expression )*
+# char_class -> "[" CHAR+ "]"
+# quantifier -> "?" | "*" | "+" | "{" INT? "," INT? "}"
+#
+# Of the numerous things I do not support, here are a few items of which I'm
+# aware:
+#   - alternatives:   (a|b)
+#   - capture groups: (ab)cd
 
 from parser import Parser
 import string
