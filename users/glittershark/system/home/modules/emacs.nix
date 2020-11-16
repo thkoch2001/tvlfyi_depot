@@ -53,10 +53,15 @@ in {
       programs.emacs = {
         enable = true;
         package = pkgs.emacsUnstable;
-        extraPackages = (epkgs: with depot.tools.emacs-pkgs; [
-          dottime
-          tvl
-        ]);
+        extraPackages = (epkgs:
+          (with depot.tools.emacs-pkgs; [
+            dottime
+            tvl
+          ])
+          ++ (with depot.third_party.emacs; [
+            vterm
+          ])
+        );
       };
 
       grfn.impure.clonedRepos = {
