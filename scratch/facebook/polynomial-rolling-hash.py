@@ -5,9 +5,12 @@ def compute_hash(x):
 
     x[0] * P^0 + x[1] * P^1 + ... x[n-1] * P^(n-1) % M
 
-    P and M are constants.
+    P and M are constants where P represents the next available prime number
+    that's GTE the number of unique characters you'll be hashing. In the case of
+    all lowercase characters, of which there are 26, the next available prime
+    number is 31.
     """
-    p = 31 # small prime number
+    p = 31
     m = int(10e9) + 9 # large prime number
     power = 0
     result = 0
@@ -18,6 +21,9 @@ def compute_hash(x):
 
 class HashTable(object):
     def __init__(self, size):
+        """
+        Create a hash table with `size` buckets.
+        """
         buckets = []
         for _ in range(size):
             buckets.append([])
@@ -55,5 +61,12 @@ class HashTable(object):
         self.xs[h].append((key, val))
 
     def delete(self, key):
+        """
+        Remove entry `key` from the hash table.
+        """
         h = self.compute_hash(key)
-        self.xs[h] = list(filter(lambda entry: entry[0] != key, self.xs[h]))
+        for i in range(len(self.xs[h])):
+            k, v = self.xs[h][i]
+            if k == key:
+                self.xs[h].remove((k, v))
+                return
