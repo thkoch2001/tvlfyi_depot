@@ -1,9 +1,10 @@
-def move_zeroes_to_end(xs):
-    n_zeroes = 0
-    for x in xs:
-        if x == 0:
-            n_zeroes += 1
+from collections import deque
 
+def move_zeroes_to_end_quadratic(xs):
+    """
+    This solution is suboptimal. It runs in quadratic time, and it uses constant
+    space.
+    """
     i = 0
     while i < len(xs) - 1:
         if xs[i] == 0:
@@ -14,13 +15,48 @@ def move_zeroes_to_end(xs):
                 break
             xs[i], xs[j] = xs[j], xs[i]
         i += 1
-    # add zeroes to the end
-    for i in range(n_zeroes):
-        xs[len(xs) - 1 - i] = 0
 
-xs = [1, 2, 0, 3, 4, 0, 0, 5, 0]
-print(xs)
-move_zeroes_to_end(xs)
-assert xs == [1, 2, 3, 4, 5, 0, 0, 0, 0]
-print(xs)
-print("Success!")
+def move_zeroes_to_end_linear(xs):
+    """
+    This solution is clever. It runs in linear time proportionate to the number
+    of elements in `xs`, and has linear space proportionate to the number of
+    consecutive zeroes in `xs`.
+    """
+    q = deque()
+    for i in range(len(xs)):
+        if xs[i] == 0:
+            q.append(i)
+        else:
+            if q:
+                j = q.popleft()
+                xs[i], xs[j] = xs[j], xs[i]
+                q.append(i)
+
+def move_zeroes_to_end_linear_constant_space(xs):
+    """
+    This is the optimal solution. It runs in linear time and uses constant
+    space.
+    """
+    i = 0
+    for j in range(len(xs)):
+        if xs[j] != 0:
+            xs[i], xs[j] = xs[j], xs[i]
+            i += 1
+
+
+################################################################################
+# Tests
+################################################################################
+
+xss = [
+    [1, 2, 0, 3, 4, 0, 0, 5, 0],
+    [0, 1, 2, 0, 3, 4],
+    [0, 0],
+]
+
+f = move_zeroes_to_end_linear_constant_space
+
+for xs in xss:
+    print(xs)
+    f(xs)
+    print(xs)
