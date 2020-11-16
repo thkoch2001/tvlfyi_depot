@@ -387,7 +387,7 @@
     (add-hook! evil-normal-state-entry-hook
       #'org-align-all-tags))
   (add-hook 'org-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (setq whitespace-global-modes '(not org-mode magit-mode))
+  (setq whitespace-global-modes '(not org-mode magit-mode vterm-mode))
   (setf (alist-get 'file org-link-frame-setup) 'find-file-other-window)
   (set-face-foreground 'org-block +solarized-s-base00)
 
