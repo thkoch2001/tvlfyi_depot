@@ -1,0 +1,9 @@
+# This build configuration provides a fallback which marks a build as
+# failed. This is used if evaluating the build configuration fails,
+# for example because of a syntax error in Nix code.
+---
+pipeline:
+  steps:
+    - command: "echo 'Nix evaluation failed!' && exit 1"
+      # This step *must* be :duck: to trigger the correct hook.
+      label: ":duck:"
