@@ -65,26 +65,28 @@ BasicDerivation BasicDerivation::from_proto(
 
   return result;
 }
-
 nix::proto::Derivation BasicDerivation::to_proto() const {
   nix::proto::Derivation result;
+  to_proto(&result);
+  return result;
+}
+
+void BasicDerivation::to_proto(nix::proto::Derivation* result) const {
   for (const auto& [key, output] : outputs) {
-    result.mutable_outputs()->insert({key, output.to_proto()});
+    result->mutable_outputs()->insert({key, output.to_proto()});
   }
   for (const auto& input_src : inputSrcs) {
-    result.mutable_input_sources()->add_paths(input_src);
+    result->mutable_input_sources()->add_paths(input_src);
   }
-  result.set_platform(platform);
-  result.mutable_builder()->set_path(builder);
+  result->set_platform(platform);
+  result->mutable_builder()->set_path(builder);
   for (const auto& arg : args) {
-    result.add_args(arg);
+    result->add_args(arg);
   }
 
   for (const auto& [key, value] : env) {
-    result.mutable_env()->insert({key, value});
+    result->mutable_env()->insert({key, value});
   }
-
-  return result;
 }
 
 Path BasicDerivation::findOutput(const std::string& id) const {

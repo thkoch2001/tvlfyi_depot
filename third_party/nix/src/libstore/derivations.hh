@@ -64,6 +64,7 @@ struct BasicDerivation {
       const nix::proto::Derivation* proto_derivation, const nix::Store& store);
 
   [[nodiscard]] nix::proto::Derivation to_proto() const;
+  void to_proto(nix::proto::Derivation* derivation) const;
 
   virtual ~BasicDerivation(){};
 
