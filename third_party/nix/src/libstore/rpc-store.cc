@@ -381,8 +381,8 @@ BuildResult RpcStore::buildDerivation(const Path& drvPath,
   ClientContext ctx;
   proto::BuildDerivationRequest request;
   request.mutable_drv_path()->set_path(drvPath);
-  auto proto_drv = drv.to_proto();
-  request.set_allocated_derivation(&proto_drv);
+  proto::Derivation proto_drv = drv.to_proto();
+  *request.mutable_derivation() = proto_drv;
   request.set_build_mode(BuildModeToProto(buildMode));
 
   // Same note as in ::buildPaths ...
