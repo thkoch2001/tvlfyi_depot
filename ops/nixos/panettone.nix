@@ -38,6 +38,23 @@ in {
       '';
       type = types.str;
     };
+
+    irccatHost = mkOption {
+      description = "Hostname for the irccat instance";
+      type = types.str;
+      default = "localhost";
+    };
+
+    irccatPort = mkOption {
+      description = "Port for the irccat instance";
+      type = types.int;
+      default = 4722;
+    };
+
+    irccatChannel = mkOption {
+      description = "IRC channels to post to via irccat";
+      type = types.str;
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -78,6 +95,9 @@ in {
         PGHOST = "localhost";
         PGUSER = cfg.dbUser;
         PGDATABASE = cfg.dbName;
+        IRCCATHOST = cfg.irccatHost;
+        IRCCATPORT = toString cfg.irccatPort;
+        ISSUECHANNEL = cfg.irccatChannel;
       };
     };
   };
