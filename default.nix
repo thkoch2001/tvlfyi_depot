@@ -95,6 +95,11 @@ in fix(self: {
     # generate pipelines because that also leads to infinite
     # recursion.
     ops = self.ops // { pipelines = null; };
+
+    # intentionally cause the build to fail to experiment with b/66
+    gobba gobble
+
+    UwU :3
   });
 }
 
