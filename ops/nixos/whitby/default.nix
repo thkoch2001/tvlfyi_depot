@@ -236,6 +236,7 @@ in lib.fix(self: {
       dbUser = "panettone";
       dbName = "panettone";
       secretsFile = "/etc/secrets/panettone";
+      irccatChannel = "##tvl,##tvl-dev";
     };
 
     # Run the first cursed bot (quote bot)
