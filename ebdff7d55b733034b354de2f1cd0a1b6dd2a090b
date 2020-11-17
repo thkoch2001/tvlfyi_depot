@@ -16,6 +16,24 @@
       "revId": "ebdff7d55b733034b354de2f1cd0a1b6dd2a090b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39b48e7a_f44a8618",
+        "filename": "ops/pipelines/fallback.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-17T22:32:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de2ecc5a_58b4e270",
+      "revId": "ebdff7d55b733034b354de2f1cd0a1b6dd2a090b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
