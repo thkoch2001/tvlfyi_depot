@@ -6,8 +6,8 @@ def choose_a(m, xs):
     Randomly choose `m` elements from `xs`.
     This algorithm runs in linear time with respect to the size of `xs`.
     """
-    result = xs[:m]
-    for i in range(m, len(xs)):
+    result = [None] * m
+    for i in range(len(xs)):
         j = random.randint(0, i)
         if j < m:
             result[j] = xs[i]
