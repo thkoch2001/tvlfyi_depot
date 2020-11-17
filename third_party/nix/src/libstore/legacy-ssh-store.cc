@@ -60,7 +60,9 @@ struct LegacySSHStore : public Store {
   ref<Connection> openConnection() {
     auto conn = make_ref<Connection>();
     conn->sshConn = master.startCommand(
-        fmt("%s --serve --write", remoteProgram) +
+        fmt("/nix/store/88ziycmbaiq333ppzdcqgnavp1c3pmh9-valgrind-3.15.0/bin/"
+            "valgrind --log-file /tmp/valgrind.out %s --serve --write",
+            remoteProgram) +
         (remoteStore.get().empty()
              ? ""
              : " --store " + shellEscape(remoteStore.get())));
