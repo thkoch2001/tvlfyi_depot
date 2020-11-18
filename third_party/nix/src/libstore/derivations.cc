@@ -72,7 +72,7 @@ nix::proto::Derivation BasicDerivation::to_proto() const {
     result.mutable_outputs()->insert({key, output.to_proto()});
   }
   for (const auto& input_src : inputSrcs) {
-    result.mutable_input_sources()->add_paths(input_src);
+    *result.mutable_input_sources()->add_paths() = input_src;
   }
   result.set_platform(platform);
   result.mutable_builder()->set_path(builder);
