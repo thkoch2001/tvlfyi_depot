@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3338e67a_b4fc083a",
+        "filename": "third_party/nix/src/proto/common.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-18T15:41:26Z",
+      "side": 1,
+      "message": "what\u0027s going on here?",
+      "range": {
+        "startLine": 12,
+        "startChar": 39,
+        "endLine": 12,
+        "endChar": 48
+      },
+      "revId": "5bf9c4514d5e010093e4218ea1a15130f08458c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9203ee6_91e2f3e9",
         "filename": "third_party/nix/src/proto/worker.proto",
         "patchSetId": 1
