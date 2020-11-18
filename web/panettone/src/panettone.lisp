@@ -450,14 +450,10 @@
       (render/issue-form
        (make-instance 'model:issue :subject subject :body body)
        "Subject is required")
-      (let ((issue
-              (model:create-issue :subject subject
-                                  :body body
-                                  :author-dn (dn *user*))))
-        (send-irc-notification (format nil "b/~A: \"~A\" opened by ~A - https://b.tvl.fyi/issues/~A"
-                                       (issue-id issue) subject (dn *user*)
-                                       (issue-id issue))
-                               :channel (uiop:getenvp "ISSUECHANNEL"))
+      (progn
+        (model:create-issue :subject subject
+                            :body body
+                            :author-dn (dn *user*))
         (hunchentoot:redirect "/"))))
 
 (defroute show-issue

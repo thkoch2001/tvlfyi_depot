@@ -7,10 +7,6 @@
   (:use :cl :lass)
   (:export :styles))
 
-(defpackage panettone.irc
-  (:use :cl :usocket)
-  (:export :send-irc-notification))
-
 (defpackage :panettone.authentication
   (:nicknames :authn)
   (:use :cl :panettone.util :klatre)
@@ -51,6 +47,5 @@
    :id :subject :body :author-dn :issue-id :status :created-at
    :field :previous-value :new-value :acting-user-dn
    :issue-comments :num-comments :issue-events)
-  (:import-from :panettone.irc :send-irc-notification)
   (:shadow :next)
   (:export :start-pannetone :config :main))
