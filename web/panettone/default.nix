@@ -26,7 +26,6 @@ depot.nix.buildLisp.program {
     ./src/css.lisp
     ./src/authentication.lisp
     ./src/model.lisp
-    ./src/irc.lisp
     ./src/panettone.lisp
   ];
 
