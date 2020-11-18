@@ -114,6 +114,34 @@ RC_GTEST_FIXTURE_PROP(DerivationsTest, UnparseParseRoundTrip,
   AssertDerivationsEqual(drv, parsed);
 }
 
+// NOLINTNEXTLINE
+RC_GTEST_FIXTURE_PROP(DerivationsTest, ToProtoPreservesInput,
+                      (Derivation && drv)) {
+  auto proto = drv.to_proto();
+
+  RC_ASSERT(proto.outputs_size() == drv.outputs.size());
+  RC_ASSERT(proto.input_sources().paths_size() == drv.inputSrcs.size());
+  auto paths = proto.input_sources().paths();
+  for (const auto& input_src : drv.inputSrcs) {
+    RC_ASSERT(std::find(paths.begin(), paths.end(), input_src) != paths.end());
+  }
+
+  RC_ASSERT(proto.platform() == drv.platform);
+  RC_ASSERT(proto.builder().path() == drv.builder);
+
+  RC_ASSERT(proto.args_size() == drv.args.size());
+  auto args = proto.args();
+  for (const auto& arg : drv.args) {
+    RC_ASSERT(std::find(args.begin(), args.end(), arg) != args.end());
+  }
+
+  RC_ASSERT(proto.env_size() == drv.env.size());
+  auto env = proto.env();
+  for (const auto& [key, value] : drv.env) {
+    RC_ASSERT(env.at(key) == value);
+  }
+}
+
 class ParseDrvPathWithOutputsTest : public DerivationsTest {};
 
 TEST(ParseDrvPathWithOutputsTest, ParseDrvPathWithOutputs) {
