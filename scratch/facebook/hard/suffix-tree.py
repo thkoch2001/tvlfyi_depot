@@ -1,4 +1,5 @@
 import random
+from collections import deque
 
 def exists(pattern, tree):
     """
@@ -42,6 +43,34 @@ def suffix_tree(xs):
                 parent = children
     return root
 
+def suffix_tree(x):
+    """
+    Creates a suffix from the input string, `x`. This implementation uses a
+    stack.
+    """
+    result = [None, []]
+    q = deque()
+    for i in range(len(x)):
+        q.append((result, x[i:]))
+    while q:
+        parent, x = q.popleft()
+        s = []
+        s.append((parent, x))
+        while s:
+            parent, x = s.pop()
+            if not x:
+                continue
+            c, rest = x[0], x[1:]
+            grafted = False
+            for child in parent[1]:
+                if c == child[0]:
+                    s.append((child, rest))
+                    grafted = True
+            if not grafted:
+                child = [c, []]
+                parent[1].append(child)
+                s.append((child, rest))
+    return result[1]
 
 ################################################################################
 # Tests
