@@ -435,17 +435,17 @@ struct CurlDownloader : public Downloader {
             code == CURLE_ABORTED_BY_CALLBACK && _isInterrupted
                 ? DownloadError(Interrupted, fmt("%s of '%s' was interrupted",
                                                  request.verb(), request.uri))
-                : httpStatus != 0
-                      ? DownloadError(
-                            err, fmt("unable to %s '%s': HTTP error %d",
-                                     request.verb(), request.uri, httpStatus) +
-                                     (code == CURLE_OK
-                                          ? ""
-                                          : fmt(" (curl error: %s)",
-                                                curl_easy_strerror(code))))
-                      : DownloadError(err, fmt("unable to %s '%s': %s (%d)",
-                                               request.verb(), request.uri,
-                                               curl_easy_strerror(code), code));
+            : httpStatus != 0
+                ? DownloadError(
+                      err,
+                      fmt("unable to %s '%s': HTTP error %d", request.verb(),
+                          request.uri, httpStatus) +
+                          (code == CURLE_OK ? ""
+                                            : fmt(" (curl error: %s)",
+                                                  curl_easy_strerror(code))))
+                : DownloadError(
+                      err, fmt("unable to %s '%s': %s (%d)", request.verb(),
+                               request.uri, curl_easy_strerror(code), code));
 
         /* If this is a transient error, then maybe retry the
            download after a while. If we're writing to a

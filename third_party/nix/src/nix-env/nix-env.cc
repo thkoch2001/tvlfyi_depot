@@ -260,13 +260,10 @@ static DrvInfos filterBySelector(EvalState& state, const DrvInfos& allElems,
         auto k = newest.find(drvName.name);
 
         if (k != newest.end()) {
-          d = j.first.querySystem() == k->second.first.querySystem()
-                  ? 0
-                  : j.first.querySystem() == settings.thisSystem
-                        ? 1
-                        : k->second.first.querySystem() == settings.thisSystem
-                              ? -1
-                              : 0;
+          d = j.first.querySystem() == k->second.first.querySystem() ? 0
+              : j.first.querySystem() == settings.thisSystem         ? 1
+              : k->second.first.querySystem() == settings.thisSystem ? -1
+                                                                     : 0;
           if (d == 0) {
             d = comparePriorities(state, j.first, k->second.first);
           }
