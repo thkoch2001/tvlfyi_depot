@@ -1462,12 +1462,10 @@ void DerivationGoal::tryToBuild() {
   bool buildLocally = buildMode != bmNormal || parsedDrv->willBuildLocally();
 
   auto started = [&]() {
-    auto msg = fmt(buildMode == bmRepair
-                       ? "repairing outputs of '%s'"
-                       : buildMode == bmCheck
-                             ? "checking outputs of '%s'"
-                             : nrRounds > 1 ? "building '%s' (round %d/%d)"
-                                            : "building '%s'",
+    auto msg = fmt(buildMode == bmRepair  ? "repairing outputs of '%s'"
+                   : buildMode == bmCheck ? "checking outputs of '%s'"
+                   : nrRounds > 1         ? "building '%s' (round %d/%d)"
+                                          : "building '%s'",
                    drvPath, curRound, nrRounds);
 
     if (hook) {
@@ -1748,10 +1746,9 @@ void DerivationGoal::buildDone() {
     else {
       st = dynamic_cast<NotDeterministic*>(&e) != nullptr
                ? BuildResult::NotDeterministic
-               : statusOk(status)
-                     ? BuildResult::OutputRejected
-                     : fixedOutput || diskFull ? BuildResult::TransientFailure
-                                               : BuildResult::PermanentFailure;
+           : statusOk(status)        ? BuildResult::OutputRejected
+           : fixedOutput || diskFull ? BuildResult::TransientFailure
+                                     : BuildResult::PermanentFailure;
     }
 
     done(st, e.msg());

@@ -1,11 +1,6 @@
 { config ? throw "not a readTree target", ... }:
 
 let
-  homeManagerSrc = (fetchTarball {
-      url = "https://github.com/nix-community/home-manager/archive/9b1b55ba0264a55add4b7b4e022bdc2832b531f6.tar.gz";
-      sha256 = "1lvnprvqfsjhi811ldagvfy4ilysxdj4arzi0f0gskll6czwjdr7";
-  });
-
   depot = import <depot> {};
   pkgs = import <nixpkgs> {};
 
@@ -14,7 +9,10 @@ in
 
 {
   programs = {
-    home-manager = { enable = true; path = homeManagerSrc; };
+    home-manager = {
+      enable = true;
+      path = pkgs.home-manager.src;
+    };
 
     bash = {
       enable = true;
