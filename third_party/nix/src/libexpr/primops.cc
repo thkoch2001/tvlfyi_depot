@@ -964,12 +964,10 @@ static void prim_readDir(EvalState& state, const Pos& pos, Value** args,
     if (ent.type == DT_UNKNOWN) {
       ent.type = getFileType(path + "/" + ent.name);
     }
-    mkStringNoCopy(*ent_val,
-                   ent.type == DT_REG
-                       ? "regular"
-                       : ent.type == DT_DIR
-                             ? "directory"
-                             : ent.type == DT_LNK ? "symlink" : "unknown");
+    mkStringNoCopy(*ent_val, ent.type == DT_REG   ? "regular"
+                             : ent.type == DT_DIR ? "directory"
+                             : ent.type == DT_LNK ? "symlink"
+                                                  : "unknown");
   }
 }
 
@@ -1055,13 +1053,11 @@ static void addPath(EvalState& state, const Pos& pos, const std::string& name,
     state.callFunction(*filterFun, arg1, fun2, noPos);
 
     Value arg2;
-    mkString(arg2, S_ISREG(st.st_mode)
-                       ? "regular"
-                       : S_ISDIR(st.st_mode)
-                             ? "directory"
-                             : S_ISLNK(st.st_mode)
-                                   ? "symlink"
-                                   : "unknown" /* not supported, will fail! */);
+    mkString(arg2, S_ISREG(st.st_mode)   ? "regular"
+                   : S_ISDIR(st.st_mode) ? "directory"
+                   : S_ISLNK(st.st_mode)
+                       ? "symlink"
+                       : "unknown" /* not supported, will fail! */);
 
     Value res;
     state.callFunction(fun2, arg2, res, noPos);
