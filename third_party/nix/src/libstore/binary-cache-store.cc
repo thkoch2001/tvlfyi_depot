@@ -214,10 +214,10 @@ void BinaryCacheStore::addToStore(const ValidPathInfo& info,
 
   /* Atomically write the NAR file. */
   narInfo->url = "nar/" + narInfo->fileHash.to_string(Base32, false) + ".nar" +
-                 (compression == "xz" ? ".xz"
-                                      : compression == "bzip2"
-                                            ? ".bz2"
-                                            : compression == "br" ? ".br" : "");
+                 (compression == "xz"      ? ".xz"
+                  : compression == "bzip2" ? ".bz2"
+                  : compression == "br"    ? ".br"
+                                           : "");
   if ((repair != 0u) || !fileExists(narInfo->url)) {
     stats.narWrite++;
     upsertFile(narInfo->url, *narCompressed, "application/x-nix-nar");

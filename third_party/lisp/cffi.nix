@@ -4,7 +4,7 @@
 with depot.nix;
 let src = builtins.fetchGit {
   url = "https://github.com/cffi/cffi.git";
-  rev = "5e838bf46d0089c43ebd3ea014a207c403e29c61";
+  rev = "a49ff36a95cb62ffa6cb069d98378d665769926b";
 };
 in buildLisp.library {
   name = "cffi";
