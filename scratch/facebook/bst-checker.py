@@ -6,47 +6,17 @@ class Node(object):
         self.left = left
         self.right = right
 
-    def insert_left(self, value):
-        self.left = Node(value)
-        return self.left
-
-    def insert_right(self, value):
-        self.right = Node(value)
-        return self.right
-
-    def min(self):
-        xs = deque()
-        result = float('inf')
-        xs.append(self)
-        while xs:
-            node = xs.popleft()
-            result = min(result, node.value)
-            if node.left:
-                xs.append(node.left)
-            if node.right:
-                xs.append(node.right)
-        return result
-
-    def max(self):
-        xs = deque()
-        result = float('-inf')
-        xs.append(self)
-        while xs:
-            node = xs.popleft()
-            result = max(result, node.value)
-            if node.left:
-                xs.append(node.left)
-            if node.right:
-                xs.append(node.right)
-        return result
-
     def is_bst(self):
-        result = True
-        if self.left:
-            result = result and self.left.max() < self.value
-        if self.right:
-            result = result and self.right.min() > self.value
-        return result
+        s = []
+        s.append((float('-inf'), self, float('inf')))
+        while s:
+            lo, node, hi = s.pop()
+            if lo <= node.value <= hi:
+                node.left and s.append((lo, node.left, node.value))
+                node.right and s.append((node.value, node.right, hi))
+            else:
+                return False
+        return True
 
 
 x = Node(
