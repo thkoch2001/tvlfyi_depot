@@ -47,25 +47,19 @@
 
 #include <stddef.h>
 
+#include "absl/base/attributes.h"
 #include "absl/base/config.h"
+#ifdef __cplusplus
+#include "absl/base/macros.h"
+#endif
 
 // TODO(rogeeff): Remove after the backward compatibility period.
 #include "absl/base/internal/dynamic_annotations.h"  // IWYU pragma: export
 
 // -------------------------------------------------------------------------
-// Decide which features are enabled
+// Decide which features are enabled.
 
-#ifndef DYNAMIC_ANNOTATIONS_ENABLED
-#define DYNAMIC_ANNOTATIONS_ENABLED 0
-#endif
-
-#if defined(__clang__) && !defined(SWIG)
-#define ABSL_INTERNAL_IGNORE_READS_ATTRIBUTE_ENABLED 1
-#else
-#define ABSL_INTERNAL_IGNORE_READS_ATTRIBUTE_ENABLED 0
-#endif
-
-#if DYNAMIC_ANNOTATIONS_ENABLED != 0
+#ifdef ABSL_HAVE_THREAD_SANITIZER
 
 #define ABSL_INTERNAL_RACE_ANNOTATIONS_ENABLED 1
 #define ABSL_INTERNAL_READS_ANNOTATIONS_ENABLED 1
@@ -85,25 +79,20 @@
 // will issue a warning, if these attributes are compiled. Only include them
 // when compiling using Clang.
 
-// ANNOTALYSIS_ENABLED == 1 when IGNORE_READ_ATTRIBUTE_ENABLED == 1
-#define ABSL_INTERNAL_ANNOTALYSIS_ENABLED \
-  ABSL_INTERNAL_IGNORE_READS_ATTRIBUTE_ENABLED
+#if defined(__clang__)
+#define ABSL_INTERNAL_ANNOTALYSIS_ENABLED 1
+#if !defined(SWIG)
+#define ABSL_INTERNAL_IGNORE_READS_ATTRIBUTE_ENABLED 1
+#endif
+#else
+#define ABSL_INTERNAL_ANNOTALYSIS_ENABLED 0
+#endif
+
 // Read/write annotations are enabled in Annotalysis mode; disabled otherwise.
 #define ABSL_INTERNAL_READS_WRITES_ANNOTATIONS_ENABLED \
   ABSL_INTERNAL_ANNOTALYSIS_ENABLED
-#endif
 
-// Memory annotations are also made available to LLVM's Memory Sanitizer
-#if defined(MEMORY_SANITIZER) && defined(__has_feature) && \
-    !defined(__native_client__)
-#if __has_feature(memory_sanitizer)
-#define ABSL_INTERNAL_MEMORY_ANNOTATIONS_ENABLED 1
-#endif
-#endif
-
-#ifndef ABSL_INTERNAL_MEMORY_ANNOTATIONS_ENABLED
-#define ABSL_INTERNAL_MEMORY_ANNOTATIONS_ENABLED 0
-#endif
+#endif  // ABSL_HAVE_THREAD_SANITIZER
 
 #ifdef __cplusplus
 #define ABSL_INTERNAL_BEGIN_EXTERN_C extern "C" {
@@ -165,7 +154,7 @@
   ABSL_INTERNAL_GLOBAL_SCOPED(AnnotateRWLockCreate)(__FILE__, __LINE__, lock)
 
 // Report that a linker initialized lock has been created at address `lock`.
-#ifdef THREAD_SANITIZER
+#ifdef ABSL_HAVE_THREAD_SANITIZER
 #define ABSL_ANNOTATE_RWLOCK_CREATE_STATIC(lock)          \
   ABSL_INTERNAL_GLOBAL_SCOPED(AnnotateRWLockCreateStatic) \
   (__FILE__, __LINE__, lock)
@@ -243,7 +232,7 @@ ABSL_INTERNAL_END_EXTERN_C
 // -------------------------------------------------------------------------
 // Define memory annotations.
 
-#if ABSL_INTERNAL_MEMORY_ANNOTATIONS_ENABLED == 1
+#ifdef ABSL_HAVE_MEMORY_SANITIZER
 
 #include <sanitizer/msan_interface.h>
 
@@ -253,9 +242,10 @@ ABSL_INTERNAL_END_EXTERN_C
 #define ABSL_ANNOTATE_MEMORY_IS_UNINITIALIZED(address, size) \
   __msan_allocated_memory(address, size)
 
-#else  // ABSL_INTERNAL_MEMORY_ANNOTATIONS_ENABLED == 0
+#else  // !defined(ABSL_HAVE_MEMORY_SANITIZER)
 
-#if DYNAMIC_ANNOTATIONS_ENABLED == 1
+// TODO(rogeeff): remove this branch
+#ifdef ABSL_HAVE_THREAD_SANITIZER
 #define ABSL_ANNOTATE_MEMORY_IS_INITIALIZED(address, size) \
   do {                                                     \
     (void)(address);                                       \
@@ -273,24 +263,24 @@ ABSL_INTERNAL_END_EXTERN_C
 
 #endif
 
-#endif  // ABSL_INTERNAL_MEMORY_ANNOTATIONS_ENABLED
+#endif  // ABSL_HAVE_MEMORY_SANITIZER
 
 // -------------------------------------------------------------------------
 // Define IGNORE_READS_BEGIN/_END attributes.
 
-#if ABSL_INTERNAL_IGNORE_READS_ATTRIBUTE_ENABLED == 1
+#if defined(ABSL_INTERNAL_IGNORE_READS_ATTRIBUTE_ENABLED)
 
 #define ABSL_INTERNAL_IGNORE_READS_BEGIN_ATTRIBUTE \
   __attribute((exclusive_lock_function("*")))
 #define ABSL_INTERNAL_IGNORE_READS_END_ATTRIBUTE \
   __attribute((unlock_function("*")))
 
-#else  // ABSL_INTERNAL_IGNORE_READS_ATTRIBUTE_ENABLED == 0
+#else  // !defined(ABSL_INTERNAL_IGNORE_READS_ATTRIBUTE_ENABLED)
 
 #define ABSL_INTERNAL_IGNORE_READS_BEGIN_ATTRIBUTE  // empty
 #define ABSL_INTERNAL_IGNORE_READS_END_ATTRIBUTE    // empty
 
-#endif  // ABSL_INTERNAL_IGNORE_READS_ATTRIBUTE_ENABLED
+#endif  // defined(ABSL_INTERNAL_IGNORE_READS_ATTRIBUTE_ENABLED)
 
 // -------------------------------------------------------------------------
 // Define IGNORE_READS_BEGIN/_END annotations.
@@ -429,46 +419,35 @@ ABSL_NAMESPACE_END
 
 #endif
 
+#ifdef __cplusplus
+#ifdef ABSL_HAVE_THREAD_SANITIZER
 ABSL_INTERNAL_BEGIN_EXTERN_C
-
-// -------------------------------------------------------------------------
-// Return non-zero value if running under valgrind.
-//
-//  If "valgrind.h" is included into dynamic_annotations.cc,
-//  the regular valgrind mechanism will be used.
-//  See http://valgrind.org/docs/manual/manual-core-adv.html about
-//  RUNNING_ON_VALGRIND and other valgrind "client requests".
-//  The file "valgrind.h" may be obtained by doing
-//     svn co svn://svn.valgrind.org/valgrind/trunk/include
-//
-//  If for some reason you can't use "valgrind.h" or want to fake valgrind,
-//  there are two ways to make this function return non-zero:
-//    - Use environment variable: export RUNNING_ON_VALGRIND=1
-//    - Make your tool intercept the function RunningOnValgrind() and
-//      change its return value.
-//
-int RunningOnValgrind(void);
-
-// ValgrindSlowdown returns:
-//    * 1.0, if (RunningOnValgrind() == 0)
-//    * 50.0, if (RunningOnValgrind() != 0 && getenv("VALGRIND_SLOWDOWN") ==
-//    NULL)
-//    * atof(getenv("VALGRIND_SLOWDOWN")) otherwise
-//   This function can be used to scale timeout values:
-//   EXAMPLE:
-//   for (;;) {
-//     DoExpensiveBackgroundTask();
-//     SleepForSeconds(5 * ValgrindSlowdown());
-//   }
-//
-double ValgrindSlowdown(void);
-
+int RunningOnValgrind();
+double ValgrindSlowdown();
 ABSL_INTERNAL_END_EXTERN_C
+#else
+namespace absl {
+ABSL_NAMESPACE_BEGIN
+namespace base_internal {
+ABSL_DEPRECATED(
+    "Don't use this interface. It is misleading and is being deleted.")
+ABSL_ATTRIBUTE_ALWAYS_INLINE inline int RunningOnValgrind() { return 0; }
+ABSL_DEPRECATED(
+    "Don't use this interface. It is misleading and is being deleted.")
+ABSL_ATTRIBUTE_ALWAYS_INLINE inline double ValgrindSlowdown() { return 1.0; }
+}  // namespace base_internal
+ABSL_NAMESPACE_END
+}  // namespace absl
+
+using absl::base_internal::RunningOnValgrind;
+using absl::base_internal::ValgrindSlowdown;
+#endif
+#endif
 
 // -------------------------------------------------------------------------
 // Address sanitizer annotations
 
-#ifdef ADDRESS_SANITIZER
+#ifdef ABSL_HAVE_ADDRESS_SANITIZER
 // Describe the current state of a contiguous container such as e.g.
 // std::vector or std::string. For more details see
 // sanitizer/common_interface_defs.h, which is provided by the compiler.
@@ -483,16 +462,15 @@ ABSL_INTERNAL_END_EXTERN_C
 
 #else
 
-#define ABSL_ANNOTATE_CONTIGUOUS_CONTAINER(beg, end, old_mid, new_mid)
+#define ABSL_ANNOTATE_CONTIGUOUS_CONTAINER(beg, end, old_mid, new_mid)  // empty
 #define ABSL_ADDRESS_SANITIZER_REDZONE(name) static_assert(true, "")
 
-#endif  // ADDRESS_SANITIZER
+#endif  // ABSL_HAVE_ADDRESS_SANITIZER
 
 // -------------------------------------------------------------------------
 // Undefine the macros intended only for this file.
 
 #undef ABSL_INTERNAL_RACE_ANNOTATIONS_ENABLED
-#undef ABSL_INTERNAL_MEMORY_ANNOTATIONS_ENABLED
 #undef ABSL_INTERNAL_READS_ANNOTATIONS_ENABLED
 #undef ABSL_INTERNAL_WRITES_ANNOTATIONS_ENABLED
 #undef ABSL_INTERNAL_ANNOTALYSIS_ENABLED
