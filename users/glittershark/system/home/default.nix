@@ -5,12 +5,7 @@ with lib;
 rec {
   nixpkgs = import pkgs.nixpkgsSrc {};
 
-  home-manager = (fetchTarball {
-    url = "https://github.com/rycee/home-manager/archive/152769aed96d4d6f005ab40daf03ec4f5102c763.tar.gz";
-    sha256 = "10svwspmsf46rijzsh0h9nmz1mq2998wcml8yp36mwksgi8695pc";
-  });
-
-  home = confPath: (import "${home-manager}/modules" {
+  home = confPath: (import "${nixpkgs.home-manager.src}/modules" {
     pkgs = nixpkgs;
     configuration = { config, lib, ... }: {
       imports = [confPath];
