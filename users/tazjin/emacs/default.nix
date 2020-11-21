@@ -52,7 +52,6 @@ let
     elixir-mode
     elm-mode
     erlang
-    geiser
     go-mode
     gruber-darker-theme
     haskell-mode

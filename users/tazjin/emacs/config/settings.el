@@ -1,8 +1,5 @@
 (require 'uniquify)
 
-;; Move files to trash when deleting
-(setq delete-by-moving-to-trash t)
-
 ;; We don't live in the 80s, but we're also not a shitty web app.
 (setq gc-cons-threshold 20000000)
 
