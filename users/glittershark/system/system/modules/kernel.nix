@@ -8,6 +8,7 @@ let
   patched-linux-ck = stdenvNoCC.mkDerivation {
     name = "linux-ck";
     src = builtins.fetchurl {
+      name = "linux-ck-patch-${mm}-ck1.xz";
       # example: http://ck.kolivas.org/patches/5.0/5.4/5.4-ck1/patch-5.4-ck1.xz
       url = "http://ck.kolivas.org/patches/${mj}.0/${mm}/${mm}-ck1/patch-${mm}-ck1.xz";
       sha256 = "01jyg9x2ligr0gjic8lg4f7hw3isz94kqwdbzdk9n8nghklh38p4";
