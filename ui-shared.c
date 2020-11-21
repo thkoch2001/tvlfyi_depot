@@ -517,7 +517,7 @@ static void cgit_self_link(char *name, const char *title, const char *class)
 				ctx.qry.ofs, 1);
         else if (!strcmp(ctx.qry.page, "about"))
 		cgit_about_link(name, title, class, ctx.qry.head,
-			        ctx.qry.has_sha1 ? ctx.qry.sha1 : NULL,
+			        ctx.qry.has_oid ? ctx.qry.oid : NULL,
 			        ctx.qry.path);
 	else if (!strcmp(ctx.qry.page, "summary"))
 		cgit_summary_link(name, title, class, ctx.qry.head);
@@ -1044,7 +1044,7 @@ void cgit_print_pageheader(void)
 	if (ctx.env.authenticated && ctx.repo) {
 		if (ctx.repo->readme.nr) {
 			cgit_about_link("about", NULL, hc("about"), ctx.qry.head,
-					 ctx.qry.sha1, ctx.qry.vpath);
+					 ctx.qry.oid, ctx.qry.vpath);
 		}
 		cgit_summary_link("summary", NULL, hc("summary"),
 				  ctx.qry.head);
