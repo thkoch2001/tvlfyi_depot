@@ -99,7 +99,7 @@ static void print_dir(const struct object_id *oid, const char *base,
 			fullpath = NULL;
 		}
 		html("<li>");
-		cgit_plain_link("../", NULL, NULL, ctx.qry.head, ctx.qry.sha1,
+		cgit_plain_link("../", NULL, NULL, ctx.qry.head, ctx.qry.oid,
 				fullpath);
 		html("</li>\n");
 	}
@@ -118,7 +118,7 @@ static void print_dir_entry(const struct object_id *oid, const char *base,
 	if (S_ISGITLINK(mode)) {
 		cgit_submodule_link(NULL, fullpath, oid_to_hex(oid));
 	} else
-		cgit_plain_link(path, NULL, NULL, ctx.qry.head, ctx.qry.sha1,
+		cgit_plain_link(path, NULL, NULL, ctx.qry.head, ctx.qry.oid,
 				fullpath);
 	html("</li>\n");
 	free(fullpath);
@@ -163,7 +163,7 @@ static int basedir_len(const char *path)
 
 void cgit_print_plain(void)
 {
-	const char *rev = ctx.qry.sha1;
+	const char *rev = ctx.qry.oid;
 	struct object_id oid;
 	struct commit *commit;
 	struct pathspec_item path_items = {
@@ -193,13 +193,14 @@ void cgit_print_plain(void)
 	if (!path_items.match) {
 		path_items.match = "";
 		walk_tree_ctx.match_baselen = -1;
-		print_dir(&commit->maybe_tree->object.oid, "", 0, "");
+		print_dir(get_commit_tree_oid(commit), "", 0, "");
 		walk_tree_ctx.match = 2;
 	}
 	else
 		walk_tree_ctx.match_baselen = basedir_len(path_items.match);
-	read_tree_recursive(the_repository, commit->maybe_tree,
-		"", 0, 0, &paths, walk_tree, &walk_tree_ctx);
+	read_tree_recursive(the_repository,
+		            repo_get_commit_tree(the_repository, commit),
+		            "", 0, 0, &paths, walk_tree, &walk_tree_ctx);
 	if (!walk_tree_ctx.match)
 		cgit_print_error_page(404, "Not found", "Not found");
 	else if (walk_tree_ctx.match == 2)
