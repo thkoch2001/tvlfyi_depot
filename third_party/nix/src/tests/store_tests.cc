@@ -90,8 +90,9 @@ TEST_F(BinaryCacheStoreTest, BasicErrors) {
 
 // ./tests/add.sh
 TEST_F(StoreTest, AddFileHashes) {
-  auto store_ = OpenTemporaryStore().ConsumeValueOrDie();
-  nix::Store* store = static_cast<nix::Store*>(store_.get());
+  auto store_ = OpenTemporaryStore();
+  CHECK(store_.ok()) << "failed to open temporary store";
+  nix::Store* store = store_->release();
   nix::Path dataPath = NIX_SRC_DIR "/src/tests/lang/data";
   std::string dataName = "data";
 

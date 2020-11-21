@@ -58,10 +58,13 @@ class StoreTest : public ::testing::Test {
   }
 
   absl::StatusOr<std::unique_ptr<nix::LocalStore>> OpenTemporaryStore() {
-    ASSIGN_OR_RETURN(std::filesystem::path storePath, OpenTempDir());
+    absl::StatusOr<std::filesystem::path> storePath = OpenTempDir();
+    if (!storePath.ok()) {
+      return storePath.status();
+    }
 
     nix::Store::Params params;
-    params["root"] = storePath;
+    params["root"] = *storePath;
 
     return std::make_unique<nix::LocalStore>(params);
   }

@@ -257,9 +257,10 @@ class EvalStoreSuccessTest
 // Test pattern for files that should evaluate successfully but require a real
 // store.
 TEST_P(EvalStoreSuccessTest, Succeeds) {
-  std::unique_ptr<nix::LocalStore> store_ =
-      OpenTemporaryStore().ConsumeValueOrDie();
-  ref<Store> store = ref<Store>(store_.release());
+  absl::StatusOr<std::unique_ptr<nix::LocalStore>> store_ =
+      OpenTemporaryStore();
+  CHECK(store_.ok()) << "failed to open temporary store";
+  ref<Store> store = ref<Store>(store_->release());
   EvalState state({}, store);
   auto path = GetParam();
 

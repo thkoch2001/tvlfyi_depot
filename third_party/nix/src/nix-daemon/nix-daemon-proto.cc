@@ -245,7 +245,7 @@ class WorkerServiceImpl final : public WorkerService::Service {
                           std::string(nar_hash.status().message()));
           }
 
-          info.narHash = nar_hash.ConsumeValueOrDie();
+          info.narHash = *nar_hash;
           for (const auto& ref : path_info.references()) {
             info.references.insert(ref);
           }
