@@ -97,8 +97,8 @@ static void print_fileinfo(struct fileinfo *info)
 		html("]</span>");
 	}
 	htmlf("</td><td class='%s'>", class);
-	cgit_diff_link(info->new_path, NULL, NULL, ctx.qry.head, ctx.qry.sha1,
-		       ctx.qry.sha2, info->new_path);
+	cgit_diff_link(info->new_path, NULL, NULL, ctx.qry.head, ctx.qry.oid,
+		       ctx.qry.oid2, info->new_path);
 	if (info->status == DIFF_STATUS_COPIED || info->status == DIFF_STATUS_RENAMED) {
 		htmlf(" (%s from ",
 		      info->status == DIFF_STATUS_COPIED ? "copied" : "renamed");
@@ -194,8 +194,8 @@ static void cgit_print_diffstat(const struct object_id *old_oid,
 	int i;
 
 	html("<div class='diffstat-header'>");
-	cgit_diff_link("Diffstat", NULL, NULL, ctx.qry.head, ctx.qry.sha1,
-		       ctx.qry.sha2, NULL);
+	cgit_diff_link("Diffstat", NULL, NULL, ctx.qry.head, ctx.qry.oid,
+		       ctx.qry.oid2, NULL);
 	if (prefix) {
 		html(" (limited to '");
 		html_txt(prefix);
@@ -413,7 +413,7 @@ void cgit_print_diff(const char *new_rev, const char *old_rev,
 			"Bad commit: %s", oid_to_hex(new_rev_oid));
 		return;
 	}
-	new_tree_oid = &commit->maybe_tree->object.oid;
+	new_tree_oid = get_commit_tree_oid(commit);
 
 	if (old_rev) {
 		if (get_oid(old_rev, old_rev_oid)) {
@@ -434,7 +434,7 @@ void cgit_print_diff(const char *new_rev, const char *old_rev,
 				"Bad commit: %s", oid_to_hex(old_rev_oid));
 			return;
 		}
-		old_tree_oid = &commit2->maybe_tree->object.oid;
+		old_tree_oid = get_commit_tree_oid(commit2);
 	} else {
 		old_tree_oid = NULL;
 	}
