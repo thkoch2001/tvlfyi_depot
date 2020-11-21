@@ -5,11 +5,11 @@
 { ... }:
 
 let
-  # Tracking nixos-unstable as of 2020-08-16.
-  nixpkgsCommit = "16fc531784ac226fb268cc59ad573d2746c109c1";
+  # Tracking nixos-unstable as of 2020-11-21.
+  nixpkgsCommit = "a322b32e9d74fb476944ff6cfb55833dc69cfaaa";
   nixpkgsSrc = fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs-channels/archive/${nixpkgsCommit}.tar.gz";
-    sha256 = "0qw1jpdfih9y0dycslapzfp8bl4z7vfg9c7qz176wghwybm4sx0a";
+    url = "https://github.com/NixOS/nixpkgs/archive/${nixpkgsCommit}.tar.gz";
+    sha256 = "1r0mkiqxija75spnyksmh8x5j4smnrxv5f7768s81gsl570kls0l";
   };
   nixpkgs = import nixpkgsSrc {
     config.allowUnfree = true;
@@ -21,11 +21,11 @@ let
     ];
   };
 
-  # Tracking nixos-20.03 as of 2020-08-04.
-  stableCommit = "977000f149bd4ddb65bf1af09552898a0f305c72";
+  # Tracking nixos-20.09 as of 2020-11-21.
+  stableCommit = "58f9c4c7d3a42c912362ca68577162e38ea8edfb";
   stableNixpkgsSrc = fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs-channels/archive/${stableCommit}.tar.gz";
-    sha256 = "1ad3bviywxd64g4vwk4ppjkkajd3rfqjhnp6xcz3w0ih0sbn0rh5";
+    url = "https://github.com/NixOS/nixpkgs/archive/${stableCommit}.tar.gz";
+    sha256 = "1517dy07jf4zhzknqbgm617lgjxsn7a6k1vgq61c67f6h55qs5ij";
   };
   stableNixpkgs = import stableNixpkgsSrc {};
 
