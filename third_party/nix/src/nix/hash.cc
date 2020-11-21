@@ -58,18 +58,18 @@ struct CmdToBase final : Command {
   }
 
   std::string name() override {
-    return base == Base16
-               ? "to-base16"
-               : base == Base32 ? "to-base32"
-                                : base == Base64 ? "to-base64" : "to-sri";
+    return base == Base16   ? "to-base16"
+           : base == Base32 ? "to-base32"
+           : base == Base64 ? "to-base64"
+                            : "to-sri";
   }
 
   std::string description() override {
-    return fmt(
-        "convert a hash to %s representation",
-        base == Base16
-            ? "base-16"
-            : base == Base32 ? "base-32" : base == Base64 ? "base-64" : "SRI");
+    return fmt("convert a hash to %s representation",
+               base == Base16   ? "base-16"
+               : base == Base32 ? "base-32"
+               : base == Base64 ? "base-64"
+                                : "SRI");
   }
 
   void run() override {
