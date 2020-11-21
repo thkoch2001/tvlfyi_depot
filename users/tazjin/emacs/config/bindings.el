@@ -15,7 +15,6 @@
 ;; Start eshell or switch to it if it's active.
 (global-set-key (kbd "C-x m") 'eshell)
 
-;; Start a new eshell even if one is active.
 (global-set-key (kbd "C-x C-p") 'ivy-browse-repositories)
 (global-set-key (kbd "M-g M-g") 'goto-line-with-feedback)
 
