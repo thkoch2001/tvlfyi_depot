@@ -53,7 +53,7 @@ typedef enum {
 } WorkerOp;
 
 #define STDERR_NEXT 0x6f6c6d67
-#define STDERR_READ 0x64617461   // data needed from source
+#define STDERR_READ 0x64617461  // data needed from source
 #define STDERR_WRITE 0x64617416  // data for sink
 #define STDERR_LAST 0x616c7473
 #define STDERR_ERROR 0x63787470

@@ -31,9 +31,8 @@ struct MixLs : virtual Args, MixJSON {
         auto st = accessor->stat(curPath);
         std::string tp = st.type == FSAccessor::Type::tRegular
                              ? (st.isExecutable ? "-r-xr-xr-x" : "-r--r--r--")
-                             : st.type == FSAccessor::Type::tSymlink
-                                   ? "lrwxrwxrwx"
-                                   : "dr-xr-xr-x";
+                         : st.type == FSAccessor::Type::tSymlink ? "lrwxrwxrwx"
+                                                                 : "dr-xr-xr-x";
         std::cout << (format("%s %20d %s") % tp % st.fileSize % relPath);
         if (st.type == FSAccessor::Type::tSymlink) {
           std::cout << " -> " << accessor->readLink(curPath);
