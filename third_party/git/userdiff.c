@@ -23,11 +23,37 @@ IPATTERN("ada",
 	 "[a-zA-Z][a-zA-Z0-9_]*"
 	 "|[-+]?[0-9][0-9#_.aAbBcCdDeEfF]*([eE][+-]?[0-9_]+)?"
 	 "|=>|\\.\\.|\\*\\*|:=|/=|>=|<=|<<|>>|<>"),
+PATTERNS("dts",
+	 "!;\n"
+	 "!=\n"
+	 /* lines beginning with a word optionally preceded by '&' or the root */
+	 "^[ \t]*((/[ \t]*\\{|&?[a-zA-Z_]).*)",
+	 /* -- */
+	 /* Property names and math operators */
+	 "[a-zA-Z0-9,._+?#-]+"
+	 "|[-+*/%&^|!~]|>>|<<|&&|\\|\\|"),
+PATTERNS("elixir",
+	 "^[ \t]*((def(macro|module|impl|protocol|p)?|test)[ \t].*)$",
+	 /* -- */
+	 /* Atoms, names, and module attributes */
+	 "[@:]?[a-zA-Z0-9@_?!]+"
+	 /* Numbers with specific base */
+	 "|[-+]?0[xob][0-9a-fA-F]+"
+	 /* Numbers */
+	 "|[-+]?[0-9][0-9_.]*([eE][-+]?[0-9_]+)?"
+	 /* Operators and atoms that represent them */
+	 "|:?(\\+\\+|--|\\.\\.|~~~|<>|\\^\\^\\^|<?\\|>|<<<?|>?>>|<<?~|~>?>|<~>|<=|>=|===?|!==?|=~|&&&?|\\|\\|\\|?|=>|<-|\\\\\\\\|->)"
+	 /* Not real operators, but should be grouped */
+	 "|:?%[A-Za-z0-9_.]\\{\\}?"),
 IPATTERN("fortran",
+	 /* Don't match comment lines */
 	 "!^([C*]|[ \t]*!)\n"
+	 /* Don't match 'module procedure' lines */
 	 "!^[ \t]*MODULE[ \t]+PROCEDURE[ \t]\n"
+	 /* Program, module, block data */
 	 "^[ \t]*((END[ \t]+)?(PROGRAM|MODULE|BLOCK[ \t]+DATA"
-		"|([^'\" \t]+[ \t]+)*(SUBROUTINE|FUNCTION))[ \t]+[A-Z].*)$",
+		/* Subroutines and functions */
+		"|([^!'\" \t]+[ \t]+)*(SUBROUTINE|FUNCTION))[ \t]+[A-Z].*)$",
 	 /* -- */
 	 "[a-zA-Z][a-zA-Z0-9_]*"
 	 "|\\.([Ee][Qq]|[Nn][Ee]|[Gg][TtEe]|[Ll][TtEe]|[Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee]|[Aa][Nn][Dd]|[Oo][Rr]|[Nn]?[Ee][Qq][Vv]|[Nn][Oo][Tt])\\."
@@ -57,6 +83,9 @@ PATTERNS("java",
 	 "|[-+0-9.e]+[fFlL]?|0[xXbB]?[0-9a-fA-F]+[lL]?"
 	 "|[-+*/<>%&^|=!]="
 	 "|--|\\+\\+|<<=?|>>>?=?|&&|\\|\\|"),
+PATTERNS("markdown",
+	 "^ {0,3}#{1,6}[ \t].*",
+	 "[^<>= \t]+"),
 PATTERNS("matlab",
 	 /*
 	  * Octave pattern is mostly the same as matlab, except that '%%%' and
@@ -124,7 +153,7 @@ PATTERNS("php",
 	 "[a-zA-Z_][a-zA-Z0-9_]*"
 	 "|[-+0-9.e]+|0[xXbB]?[0-9a-fA-F]+"
 	 "|[-+*/<>%&^|=!.]=|--|\\+\\+|<<=?|>>=?|===|&&|\\|\\||::|->"),
-PATTERNS("python", "^[ \t]*((class|def)[ \t].*)$",
+PATTERNS("python", "^[ \t]*((class|(async[ \t]+)?def)[ \t].*)$",
 	 /* -- */
 	 "[a-zA-Z_][a-zA-Z0-9_]*"
 	 "|[-+0-9.e]+[jJlL]?|0[xX]?[0-9a-fA-F]+[lL]?"
@@ -200,7 +229,7 @@ static struct userdiff_driver driver_false = {
 	{ NULL, 0 }
 };
 
-static struct userdiff_driver *userdiff_find_by_namelen(const char *k, int len)
+static struct userdiff_driver *userdiff_find_by_namelen(const char *k, size_t len)
 {
 	int i;
 	for (i = 0; i < ndrivers; i++) {
@@ -244,7 +273,7 @@ int userdiff_config(const char *k, const char *v)
 {
 	struct userdiff_driver *drv;
 	const char *name, *type;
-	int namelen;
+	size_t namelen;
 
 	if (parse_config_key(k, "diff", &name, &namelen, &type) || !name)
 		return 0;

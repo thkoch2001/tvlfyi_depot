@@ -11,7 +11,7 @@ D=$(pwd)
 
 test_bundle_object_count () {
 	git verify-pack -v "$1" >verify.out &&
-	test "$2" = $(grep '^[0-9a-f]\{40\} ' verify.out | wc -l)
+	test "$2" = $(grep "^$OID_REGEX " verify.out | wc -l)
 }
 
 convert_bundle_to_pack () {
@@ -174,6 +174,30 @@ test_expect_success 'fetch --prune --tags with refspec prunes based on refspec' 
 	git rev-parse sometag
 '
 
+test_expect_success '--refmap="" ignores configured refspec' '
+	cd "$TRASH_DIRECTORY" &&
+	git clone "$D" remote-refs &&
+	git -C remote-refs rev-parse remotes/origin/master >old &&
+	git -C remote-refs update-ref refs/remotes/origin/master master~1 &&
+	git -C remote-refs rev-parse remotes/origin/master >new &&
+	git -C remote-refs fetch --refmap= origin "+refs/heads/*:refs/hidden/origin/*" &&
+	git -C remote-refs rev-parse remotes/origin/master >actual &&
+	test_cmp new actual &&
+	git -C remote-refs fetch origin &&
+	git -C remote-refs rev-parse remotes/origin/master >actual &&
+	test_cmp old actual
+'
+
+test_expect_success '--refmap="" and --prune' '
+	git -C remote-refs update-ref refs/remotes/origin/foo/otherbranch master &&
+	git -C remote-refs update-ref refs/hidden/foo/otherbranch master &&
+	git -C remote-refs fetch --prune --refmap="" origin +refs/heads/*:refs/hidden/* &&
+	git -C remote-refs rev-parse remotes/origin/foo/otherbranch &&
+	test_must_fail git -C remote-refs rev-parse refs/hidden/foo/otherbranch &&
+	git -C remote-refs fetch --prune origin &&
+	test_must_fail git -C remote-refs rev-parse remotes/origin/foo/otherbranch
+'
+
 test_expect_success 'fetch tags when there is no tags' '
 
     cd "$D" &&
@@ -189,7 +213,7 @@ test_expect_success 'fetch tags when there is no tags' '
 test_expect_success 'fetch following tags' '
 
 	cd "$D" &&
-	git tag -a -m 'annotated' anno HEAD &&
+	git tag -a -m "annotated" anno HEAD &&
 	git tag light HEAD &&
 
 	mkdir four &&
@@ -257,14 +281,19 @@ test_expect_success 'create bundle 1' '
 	cd "$D" &&
 	echo >file updated again by origin &&
 	git commit -a -m "tip" &&
-	git bundle create bundle1 master^..master
+	git bundle create --version=3 bundle1 master^..master
 '
 
 test_expect_success 'header of bundle looks right' '
-	head -n 1 "$D"/bundle1 | grep "^#" &&
-	head -n 2 "$D"/bundle1 | grep "^-[0-9a-f]\{40\} " &&
-	head -n 3 "$D"/bundle1 | grep "^[0-9a-f]\{40\} " &&
-	head -n 4 "$D"/bundle1 | grep "^$"
+	cat >expect <<-EOF &&
+	# v3 git bundle
+	@object-format=$(test_oid algo)
+	-OID updated by origin
+	OID refs/heads/master
+
+	EOF
+	sed -e "s/$OID_REGEX/OID/g" -e "5q" "$D"/bundle1 >actual &&
+	test_cmp expect actual
 '
 
 test_expect_success 'create bundle 2' '
@@ -289,7 +318,7 @@ test_expect_success 'bundle 1 has only 3 files ' '
 test_expect_success 'unbundle 2' '
 	cd "$D/bundle" &&
 	git fetch ../bundle2 master:master &&
-	test "tip" = "$(git log -1 --pretty=oneline master | cut -b42-)"
+	test "tip" = "$(git log -1 --pretty=oneline master | cut -d" " -f2)"
 '
 
 test_expect_success 'bundle does not prerequisite objects' '
@@ -306,7 +335,7 @@ test_expect_success 'bundle does not prerequisite objects' '
 test_expect_success 'bundle should be able to create a full history' '
 
 	cd "$D" &&
-	git tag -a -m '1.0' v1.0 master &&
+	git tag -a -m "1.0" v1.0 master &&
 	git bundle create bundle4 v1.0
 
 '
@@ -354,7 +383,6 @@ test_expect_success 'fetch from GIT URL with a non-applying branch.<name>.merge 
 # the strange name is: a\!'b
 test_expect_success 'quoting of a strangely named repo' '
 	test_must_fail git fetch "a\\!'\''b" > result 2>&1 &&
-	cat result &&
 	grep "fatal: '\''a\\\\!'\''b'\''" result
 '
 
@@ -515,10 +543,23 @@ test_expect_success 'fetch into the current branch with --update-head-ok' '
 
 '
 
-test_expect_success 'fetch --dry-run' '
+test_expect_success 'fetch --dry-run does not touch FETCH_HEAD, but still prints what would be written' '
+	rm -f .git/FETCH_HEAD err &&
+	git fetch --dry-run . 2>err &&
+	! test -f .git/FETCH_HEAD &&
+	grep FETCH_HEAD err
+'
 
+test_expect_success '--no-write-fetch-head does not touch FETCH_HEAD, and does not print what would be written' '
+	rm -f .git/FETCH_HEAD err &&
+	git fetch --no-write-fetch-head . 2>err &&
+	! test -f .git/FETCH_HEAD &&
+	! grep FETCH_HEAD err
+'
+
+test_expect_success '--write-fetch-head gets defeated by --dry-run' '
 	rm -f .git/FETCH_HEAD &&
-	git fetch --dry-run . &&
+	git fetch --dry-run --write-fetch-head . &&
 	! test -f .git/FETCH_HEAD
 '
 
@@ -567,6 +608,35 @@ test_expect_success 'LHS of refspec follows ref disambiguation rules' '
 		git -C client fetch ../server +t:refs/heads/checkthis &&
 		git -C server rev-parse wanted >expect &&
 		git -C client rev-parse checkthis >actual
+	)
+'
+
+test_expect_success 'fetch.writeCommitGraph' '
+	git clone three write &&
+	(
+		cd three &&
+		test_commit new
+	) &&
+	(
+		cd write &&
+		git -c fetch.writeCommitGraph fetch origin &&
+		test_path_is_file .git/objects/info/commit-graphs/commit-graph-chain
+	)
+'
+
+test_expect_success 'fetch.writeCommitGraph with submodules' '
+	git clone dups super &&
+	(
+		cd super &&
+		git submodule add "file://$TRASH_DIRECTORY/three" &&
+		git commit -m "add submodule"
+	) &&
+	git clone "super" super-clone &&
+	(
+		cd super-clone &&
+		rm -rf .git/objects/info &&
+		git -c fetch.writeCommitGraph=true fetch origin &&
+		test_path_is_file .git/objects/info/commit-graphs/commit-graph-chain
 	)
 '
 
@@ -744,7 +814,7 @@ test_configured_prune true  true  unset unset pruned pruned \
 	"--prune origin refs/tags/*:refs/tags/* +refs/heads/*:refs/remotes/origin/*"
 
 # --prune-tags on its own does nothing, needs --prune as well, same
-# for for fetch.pruneTags without fetch.prune
+# for fetch.pruneTags without fetch.prune
 test_configured_prune unset unset unset unset kept kept     "--prune-tags"
 test_configured_prune unset unset true unset  kept kept     ""
 test_configured_prune unset unset unset true  kept kept     ""
@@ -866,7 +936,7 @@ test_expect_success 'fetching with auto-gc does not lock up' '
 		git config fetch.unpackLimit 1 &&
 		git config gc.autoPackLimit 1 &&
 		git config gc.autoDetach false &&
-		GIT_ASK_YESNO="$D/askyesno" git fetch >fetch.out 2>&1 &&
+		GIT_ASK_YESNO="$D/askyesno" git fetch --verbose >fetch.out 2>&1 &&
 		test_i18ngrep "Auto packing the repository" fetch.out &&
 		! grep "Should I try again" fetch.out
 	)
@@ -900,6 +970,29 @@ test_expect_success C_LOCALE_OUTPUT 'fetch compact output' '
 	extraaa    -> *
 	EOF
 	test_cmp expect actual
+'
+
+test_expect_success '--no-show-forced-updates' '
+	mkdir forced-updates &&
+	(
+		cd forced-updates &&
+		git init &&
+		test_commit 1 &&
+		test_commit 2
+	) &&
+	git clone forced-updates forced-update-clone &&
+	git clone forced-updates no-forced-update-clone &&
+	git -C forced-updates reset --hard HEAD~1 &&
+	(
+		cd forced-update-clone &&
+		git fetch --show-forced-updates origin 2>output &&
+		test_i18ngrep "(forced update)" output
+	) &&
+	(
+		cd no-forced-update-clone &&
+		git fetch --no-show-forced-updates origin 2>output &&
+		test_i18ngrep ! "(forced update)" output
+	)
 '
 
 setup_negotiation_tip () {
@@ -978,27 +1071,7 @@ test_expect_success '--negotiation-tip limits "have" lines sent with HTTP protoc
 	check_negotiation_tip
 '
 
-test_expect_success '--no-show-forced-updates' '
-	mkdir forced-updates &&
-	(
-		cd forced-updates &&
-		git init &&
-		test_commit 1 &&
-		test_commit 2
-	) &&
-	git clone forced-updates forced-update-clone &&
-	git clone forced-updates no-forced-update-clone &&
-	git -C forced-updates reset --hard HEAD~1 &&
-	(
-		cd forced-update-clone &&
-		git fetch --show-forced-updates origin 2>output &&
-		test_i18ngrep "(forced update)" output
-	) &&
-	(
-		cd no-forced-update-clone &&
-		git fetch --no-show-forced-updates origin 2>output &&
-		! test_i18ngrep "(forced update)" output
-	)
-'
+# DO NOT add non-httpd-specific tests here, because the last part of this
+# test script is only executed when httpd is available and enabled.
 
 test_done

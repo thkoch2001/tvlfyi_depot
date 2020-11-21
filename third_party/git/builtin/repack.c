@@ -7,10 +7,13 @@
 #include "sigchain.h"
 #include "strbuf.h"
 #include "string-list.h"
-#include "argv-array.h"
+#include "strvec.h"
 #include "midx.h"
 #include "packfile.h"
+#include "prune-packed.h"
 #include "object-store.h"
+#include "promisor-remote.h"
+#include "shallow.h"
 
 static int delta_base_offset = 1;
 static int pack_kept_objects = -1;
@@ -130,7 +133,11 @@ static void get_non_kept_pack_filenames(struct string_list *fname_list,
 static void remove_redundant_pack(const char *dir_name, const char *base_name)
 {
 	struct strbuf buf = STRBUF_INIT;
-	strbuf_addf(&buf, "%s/%s.pack", dir_name, base_name);
+	struct multi_pack_index *m = get_local_multi_pack_index(the_repository);
+	strbuf_addf(&buf, "%s.pack", base_name);
+	if (m && midx_contains_pack(m, buf.buf))
+		clear_midx_file(the_repository);
+	strbuf_insertf(&buf, 0, "%s/", dir_name);
 	unlink_pack_path(buf.buf, 1);
 	strbuf_release(&buf);
 }
@@ -150,28 +157,28 @@ struct pack_objects_args {
 static void prepare_pack_objects(struct child_process *cmd,
 				 const struct pack_objects_args *args)
 {
-	argv_array_push(&cmd->args, "pack-objects");
+	strvec_push(&cmd->args, "pack-objects");
 	if (args->window)
-		argv_array_pushf(&cmd->args, "--window=%s", args->window);
+		strvec_pushf(&cmd->args, "--window=%s", args->window);
 	if (args->window_memory)
-		argv_array_pushf(&cmd->args, "--window-memory=%s", args->window_memory);
+		strvec_pushf(&cmd->args, "--window-memory=%s", args->window_memory);
 	if (args->depth)
-		argv_array_pushf(&cmd->args, "--depth=%s", args->depth);
+		strvec_pushf(&cmd->args, "--depth=%s", args->depth);
 	if (args->threads)
-		argv_array_pushf(&cmd->args, "--threads=%s", args->threads);
+		strvec_pushf(&cmd->args, "--threads=%s", args->threads);
 	if (args->max_pack_size)
-		argv_array_pushf(&cmd->args, "--max-pack-size=%s", args->max_pack_size);
+		strvec_pushf(&cmd->args, "--max-pack-size=%s", args->max_pack_size);
 	if (args->no_reuse_delta)
-		argv_array_pushf(&cmd->args, "--no-reuse-delta");
+		strvec_pushf(&cmd->args, "--no-reuse-delta");
 	if (args->no_reuse_object)
-		argv_array_pushf(&cmd->args, "--no-reuse-object");
+		strvec_pushf(&cmd->args, "--no-reuse-object");
 	if (args->local)
-		argv_array_push(&cmd->args,  "--local");
+		strvec_push(&cmd->args,  "--local");
 	if (args->quiet)
-		argv_array_push(&cmd->args,  "--quiet");
+		strvec_push(&cmd->args,  "--quiet");
 	if (delta_base_offset)
-		argv_array_push(&cmd->args,  "--delta-base-offset");
-	argv_array_push(&cmd->args, packtmp);
+		strvec_push(&cmd->args,  "--delta-base-offset");
+	strvec_push(&cmd->args, packtmp);
 	cmd->git_cmd = 1;
 	cmd->out = -1;
 }
@@ -190,7 +197,7 @@ static int write_oid(const struct object_id *oid, struct packed_git *pack,
 			die(_("could not start pack-objects to repack promisor objects"));
 	}
 
-	xwrite(cmd->in, oid_to_hex(oid), GIT_SHA1_HEXSZ);
+	xwrite(cmd->in, oid_to_hex(oid), the_hash_algo->hexsz);
 	xwrite(cmd->in, "\n", 1);
 	return 0;
 }
@@ -232,6 +239,13 @@ static void repack_promisor_objects(const struct pack_objects_args *args,
 		/*
 		 * pack-objects creates the .pack and .idx files, but not the
 		 * .promisor file. Create the .promisor file, which is empty.
+		 *
+		 * NEEDSWORK: fetch-pack sometimes generates non-empty
+		 * .promisor files containing the ref names and associated
+		 * hashes at the point of generation of the corresponding
+		 * packfile, but this would not preserve their contents. Maybe
+		 * concatenate the contents of all .promisor files instead of
+		 * just creating a new empty file.
 		 */
 		promisor_name = mkpathdup("%s-%s.promisor", packtmp,
 					  line.buf);
@@ -276,7 +290,6 @@ int cmd_repack(int argc, const char **argv, const char *prefix)
 	int keep_unreachable = 0;
 	struct string_list keep_pack_list = STRING_LIST_INIT_NODUP;
 	int no_update_server_info = 0;
-	int midx_cleared = 0;
 	struct pack_objects_args po_args = {NULL};
 
 	struct option builtin_repack_options[] = {
@@ -351,24 +364,24 @@ int cmd_repack(int argc, const char **argv, const char *prefix)
 
 	prepare_pack_objects(&cmd, &po_args);
 
-	argv_array_push(&cmd.args, "--keep-true-parents");
+	strvec_push(&cmd.args, "--keep-true-parents");
 	if (!pack_kept_objects)
-		argv_array_push(&cmd.args, "--honor-pack-keep");
+		strvec_push(&cmd.args, "--honor-pack-keep");
 	for (i = 0; i < keep_pack_list.nr; i++)
-		argv_array_pushf(&cmd.args, "--keep-pack=%s",
-				 keep_pack_list.items[i].string);
-	argv_array_push(&cmd.args, "--non-empty");
-	argv_array_push(&cmd.args, "--all");
-	argv_array_push(&cmd.args, "--reflog");
-	argv_array_push(&cmd.args, "--indexed-objects");
-	if (repository_format_partial_clone)
-		argv_array_push(&cmd.args, "--exclude-promisor-objects");
+		strvec_pushf(&cmd.args, "--keep-pack=%s",
+			     keep_pack_list.items[i].string);
+	strvec_push(&cmd.args, "--non-empty");
+	strvec_push(&cmd.args, "--all");
+	strvec_push(&cmd.args, "--reflog");
+	strvec_push(&cmd.args, "--indexed-objects");
+	if (has_promisor_remote())
+		strvec_push(&cmd.args, "--exclude-promisor-objects");
 	if (write_bitmaps > 0)
-		argv_array_push(&cmd.args, "--write-bitmap-index");
+		strvec_push(&cmd.args, "--write-bitmap-index");
 	else if (write_bitmaps < 0)
-		argv_array_push(&cmd.args, "--write-bitmap-index-quiet");
+		strvec_push(&cmd.args, "--write-bitmap-index-quiet");
 	if (use_delta_islands)
-		argv_array_push(&cmd.args, "--delta-islands");
+		strvec_push(&cmd.args, "--delta-islands");
 
 	if (pack_everything & ALL_INTO_ONE) {
 		get_non_kept_pack_filenames(&existing_packs, &keep_pack_list);
@@ -377,23 +390,23 @@ int cmd_repack(int argc, const char **argv, const char *prefix)
 
 		if (existing_packs.nr && delete_redundant) {
 			if (unpack_unreachable) {
-				argv_array_pushf(&cmd.args,
-						"--unpack-unreachable=%s",
-						unpack_unreachable);
-				argv_array_push(&cmd.env_array, "GIT_REF_PARANOIA=1");
+				strvec_pushf(&cmd.args,
+					     "--unpack-unreachable=%s",
+					     unpack_unreachable);
+				strvec_push(&cmd.env_array, "GIT_REF_PARANOIA=1");
 			} else if (pack_everything & LOOSEN_UNREACHABLE) {
-				argv_array_push(&cmd.args,
-						"--unpack-unreachable");
+				strvec_push(&cmd.args,
+					    "--unpack-unreachable");
 			} else if (keep_unreachable) {
-				argv_array_push(&cmd.args, "--keep-unreachable");
-				argv_array_push(&cmd.args, "--pack-loose-unreachable");
+				strvec_push(&cmd.args, "--keep-unreachable");
+				strvec_push(&cmd.args, "--pack-loose-unreachable");
 			} else {
-				argv_array_push(&cmd.env_array, "GIT_REF_PARANOIA=1");
+				strvec_push(&cmd.env_array, "GIT_REF_PARANOIA=1");
 			}
 		}
 	} else {
-		argv_array_push(&cmd.args, "--unpacked");
-		argv_array_push(&cmd.args, "--incremental");
+		strvec_push(&cmd.args, "--unpacked");
+		strvec_push(&cmd.args, "--incremental");
 	}
 
 	cmd.no_stdin = 1;
@@ -428,11 +441,6 @@ int cmd_repack(int argc, const char **argv, const char *prefix)
 	for_each_string_list_item(item, &names) {
 		for (ext = 0; ext < ARRAY_SIZE(exts); ext++) {
 			char *fname, *fname_old;
-
-			if (!midx_cleared) {
-				clear_midx_file(the_repository);
-				midx_cleared = 1;
-			}
 
 			fname = mkpathdup("%s/pack-%s%s", packdir,
 						item->string, exts[ext].name);
@@ -561,7 +569,7 @@ int cmd_repack(int argc, const char **argv, const char *prefix)
 	remove_temporary_files();
 
 	if (git_env_bool(GIT_TEST_MULTI_PACK_INDEX, 0))
-		write_midx_file(get_object_directory());
+		write_midx_file(get_object_directory(), 0);
 
 	string_list_clear(&names, 0);
 	string_list_clear(&rollback, 0);

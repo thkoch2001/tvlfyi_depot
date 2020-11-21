@@ -33,10 +33,10 @@
 #include "commit-slab.h"
 #include "repository.h"
 #include "commit-reach.h"
-#include "interdiff.h"
 #include "range-diff.h"
 
 #define MAIL_DEFAULT_WRAP 72
+#define COVER_FROM_AUTO_MAX_SUBJECT_LEN 100
 
 /* Set a default date-time format for git log ("log.date" config variable) */
 static const char *default_date_mode = NULL;
@@ -45,6 +45,7 @@ static int default_abbrev_commit;
 static int default_show_root = 1;
 static int default_follow;
 static int default_show_signature;
+static int default_encode_email_headers = 1;
 static int decoration_style;
 static int decoration_given;
 static int use_mailmap_config = 1;
@@ -150,6 +151,7 @@ static void cmd_log_init_defaults(struct rev_info *rev)
 	rev->show_root_diff = default_show_root;
 	rev->subject_prefix = fmt_patch_subject_prefix;
 	rev->show_signature = default_show_signature;
+	rev->encode_email_headers = default_encode_email_headers;
 	rev->diffopt.flags.allow_textconv = 1;
 
 	if (default_date_mode)
@@ -163,21 +165,24 @@ static void cmd_log_init_finish(int argc, const char **argv, const char *prefix,
 	int quiet = 0, source = 0, mailmap;
 	static struct line_opt_callback_data line_cb = {NULL, NULL, STRING_LIST_INIT_DUP};
 	static struct string_list decorate_refs_exclude = STRING_LIST_INIT_NODUP;
+	static struct string_list decorate_refs_exclude_config = STRING_LIST_INIT_NODUP;
 	static struct string_list decorate_refs_include = STRING_LIST_INIT_NODUP;
 	struct decoration_filter decoration_filter = {&decorate_refs_include,
-						      &decorate_refs_exclude};
+						      &decorate_refs_exclude,
+						      &decorate_refs_exclude_config};
 	static struct revision_sources revision_sources;
 
 	const struct option builtin_log_options[] = {
 		OPT__QUIET(&quiet, N_("suppress diff output")),
 		OPT_BOOL(0, "source", &source, N_("show source")),
 		OPT_BOOL(0, "use-mailmap", &mailmap, N_("Use mail map file")),
+		OPT_ALIAS(0, "mailmap", "use-mailmap"),
 		OPT_STRING_LIST(0, "decorate-refs", &decorate_refs_include,
 				N_("pattern"), N_("only decorate refs that match <pattern>")),
 		OPT_STRING_LIST(0, "decorate-refs-exclude", &decorate_refs_exclude,
 				N_("pattern"), N_("do not decorate refs that match <pattern>")),
-		{ OPTION_CALLBACK, 0, "decorate", NULL, NULL, N_("decorate options"),
-		  PARSE_OPT_OPTARG, decorate_callback},
+		OPT_CALLBACK_F(0, "decorate", NULL, NULL, N_("decorate options"),
+			       PARSE_OPT_OPTARG, decorate_callback),
 		OPT_CALLBACK('L', NULL, &line_cb, "n,m:file",
 			     N_("Process line range n,m in file, counting from 1"),
 			     log_line_range_callback),
@@ -207,7 +212,7 @@ static void cmd_log_init_finish(int argc, const char **argv, const char *prefix,
 	if (!rev->show_notes_given && (!rev->pretty_given || w.notes))
 		rev->show_notes = 1;
 	if (rev->show_notes)
-		init_display_notes(&rev->notes_opt);
+		load_display_notes(&rev->notes_opt);
 
 	if ((rev->diffopt.pickaxe_opts & DIFF_PICKAXE_KINDS_MASK) ||
 	    rev->diffopt.filter || rev->diffopt.flags.follow_renames)
@@ -235,7 +240,19 @@ static void cmd_log_init_finish(int argc, const char **argv, const char *prefix,
 	}
 
 	if (decoration_style) {
+		const struct string_list *config_exclude =
+			repo_config_get_value_multi(the_repository,
+						    "log.excludeDecoration");
+
+		if (config_exclude) {
+			struct string_list_item *item;
+			for_each_string_list_item(item, config_exclude)
+				string_list_append(&decorate_refs_exclude_config,
+						   item->string);
+		}
+
 		rev->show_decorations = 1;
+
 		load_ref_decorations(&decoration_filter, decoration_style);
 	}
 
@@ -437,6 +454,10 @@ static int git_log_config(const char *var, const char *value, void *cb)
 		return git_config_string(&fmt_pretty, var, value);
 	if (!strcmp(var, "format.subjectprefix"))
 		return git_config_string(&fmt_patch_subject_prefix, var, value);
+	if (!strcmp(var, "format.encodeemailheaders")) {
+		default_encode_email_headers = git_config_bool(var, value);
+		return 0;
+	}
 	if (!strcmp(var, "log.abbrevcommit")) {
 		default_abbrev_commit = git_config_bool(var, value);
 		return 0;
@@ -577,8 +598,8 @@ static int show_tree_object(const struct object_id *oid,
 static void show_setup_revisions_tweak(struct rev_info *rev,
 				       struct setup_revision_opt *opt)
 {
-	if (rev->ignore_merges) {
-		/* There was no "-m" on the command line */
+	if (rev->ignore_merges < 0) {
+		/* There was no "-m" variant on the command line */
 		rev->ignore_merges = 0;
 		if (!rev->first_parent_only && !rev->combine_merges) {
 			/* No "--first-parent", "-c", or "--cc" */
@@ -627,6 +648,7 @@ int cmd_show(int argc, const char **argv, const char *prefix)
 			break;
 		case OBJ_TAG: {
 			struct tag *t = (struct tag *)o;
+			struct object_id *oid = get_tagged_oid(t);
 
 			if (rev.shown_one)
 				putchar('\n');
@@ -638,10 +660,10 @@ int cmd_show(int argc, const char **argv, const char *prefix)
 			rev.shown_one = 1;
 			if (ret)
 				break;
-			o = parse_object(the_repository, &t->tagged->oid);
+			o = parse_object(the_repository, oid);
 			if (!o)
 				ret = error(_("could not read object %s"),
-					    oid_to_hex(&t->tagged->oid));
+					    oid_to_hex(oid));
 			objects[i].item = o;
 			i--;
 			break;
@@ -709,8 +731,7 @@ static void log_setup_revisions_tweak(struct rev_info *rev,
 	if (!rev->diffopt.output_format && rev->combine_merges)
 		rev->diffopt.output_format = DIFF_FORMAT_PATCH;
 
-	/* Turn -m on when --cc/-c was given */
-	if (rev->combine_merges)
+	if (rev->first_parent_only && rev->ignore_merges < 0)
 		rev->ignore_merges = 0;
 }
 
@@ -764,28 +785,62 @@ static void add_header(const char *value)
 	item->string[len] = '\0';
 }
 
-#define THREAD_SHALLOW 1
-#define THREAD_DEEP 2
-static int thread;
-static int do_signoff;
-static int base_auto;
-static char *from;
-static const char *signature = git_version_string;
-static const char *signature_file;
-static int config_cover_letter;
-static const char *config_output_directory;
-
-enum {
+enum cover_setting {
 	COVER_UNSET,
 	COVER_OFF,
 	COVER_ON,
 	COVER_AUTO
 };
 
+enum thread_level {
+	THREAD_UNSET,
+	THREAD_SHALLOW,
+	THREAD_DEEP
+};
+
+enum cover_from_description {
+	COVER_FROM_NONE,
+	COVER_FROM_MESSAGE,
+	COVER_FROM_SUBJECT,
+	COVER_FROM_AUTO
+};
+
+enum auto_base_setting {
+	AUTO_BASE_NEVER,
+	AUTO_BASE_ALWAYS,
+	AUTO_BASE_WHEN_ABLE
+};
+
+static enum thread_level thread;
+static int do_signoff;
+static enum auto_base_setting auto_base;
+static char *from;
+static const char *signature = git_version_string;
+static const char *signature_file;
+static enum cover_setting config_cover_letter;
+static const char *config_output_directory;
+static enum cover_from_description cover_from_description_mode = COVER_FROM_MESSAGE;
+static int show_notes;
+static struct display_notes_opt notes_opt;
+
+static enum cover_from_description parse_cover_from_description(const char *arg)
+{
+	if (!arg || !strcmp(arg, "default"))
+		return COVER_FROM_MESSAGE;
+	else if (!strcmp(arg, "none"))
+		return COVER_FROM_NONE;
+	else if (!strcmp(arg, "message"))
+		return COVER_FROM_MESSAGE;
+	else if (!strcmp(arg, "subject"))
+		return COVER_FROM_SUBJECT;
+	else if (!strcmp(arg, "auto"))
+		return COVER_FROM_AUTO;
+	else
+		die(_("%s: invalid cover from description mode"), arg);
+}
+
 static int git_format_config(const char *var, const char *value, void *cb)
 {
-	struct rev_info *rev = cb;
-
 	if (!strcmp(var, "format.headers")) {
 		if (!value)
 			die(_("format.headers without value"));
@@ -835,7 +890,7 @@ static int git_format_config(const char *var, const char *value, void *cb)
 			thread = THREAD_SHALLOW;
 			return 0;
 		}
-		thread = git_config_bool(var, value) && THREAD_SHALLOW;
+		thread = git_config_bool(var, value) ? THREAD_SHALLOW : THREAD_UNSET;
 		return 0;
 	}
 	if (!strcmp(var, "format.signoff")) {
@@ -857,7 +912,11 @@ static int git_format_config(const char *var, const char *value, void *cb)
 	if (!strcmp(var, "format.outputdirectory"))
 		return git_config_string(&config_output_directory, var, value);
 	if (!strcmp(var, "format.useautobase")) {
-		base_auto = git_config_bool(var, value);
+		if (value && !strcasecmp(value, "whenAble")) {
+			auto_base = AUTO_BASE_WHEN_ABLE;
+			return 0;
+		}
+		auto_base = git_config_bool(var, value) ? AUTO_BASE_ALWAYS : AUTO_BASE_NEVER;
 		return 0;
 	}
 	if (!strcmp(var, "format.from")) {
@@ -872,19 +931,17 @@ static int git_format_config(const char *var, const char *value, void *cb)
 		return 0;
 	}
 	if (!strcmp(var, "format.notes")) {
-		struct strbuf buf = STRBUF_INIT;
 		int b = git_parse_maybe_bool(value);
-		if (!b)
-			return 0;
-		rev->show_notes = 1;
-		if (b < 0) {
-			strbuf_addstr(&buf, value);
-			expand_notes_ref(&buf);
-			string_list_append(&rev->notes_opt.extra_notes_refs,
-					strbuf_detach(&buf, NULL));
-		} else {
-			rev->notes_opt.use_default_notes = 1;
-		}
+		if (b < 0)
+			enable_ref_display_notes(&notes_opt, &show_notes, value);
+		else if (b)
+			enable_default_display_notes(&notes_opt, &show_notes);
+		else
+			disable_display_notes(&notes_opt, &show_notes);
+		return 0;
+	}
+	if (!strcmp(var, "format.coverfromdescription")) {
+		cover_from_description_mode = parse_cover_from_description(value);
 		return 0;
 	}
 
@@ -993,20 +1050,6 @@ static void print_signature(FILE *file)
 	putc('\n', file);
 }
 
-static void add_branch_description(struct strbuf *buf, const char *branch_name)
-{
-	struct strbuf desc = STRBUF_INIT;
-	if (!branch_name || !*branch_name)
-		return;
-	read_branch_desc(&desc, branch_name);
-	if (desc.len) {
-		strbuf_addch(buf, '\n');
-		strbuf_addbuf(buf, &desc);
-		strbuf_addch(buf, '\n');
-	}
-	strbuf_release(&desc);
-}
-
 static char *find_branch_name(struct rev_info *rev)
 {
 	int i, positive = -1;
@@ -1027,7 +1070,7 @@ static char *find_branch_name(struct rev_info *rev)
 		return NULL;
 	ref = rev->cmdline.rev[positive].name;
 	tip_oid = &rev->cmdline.rev[positive].item->oid;
-	if (dwim_ref(ref, strlen(ref), &branch_oid, &full_ref) &&
+	if (dwim_ref(ref, strlen(ref), &branch_oid, &full_ref, 0) &&
 	    skip_prefix(full_ref, "refs/heads/", &v) &&
 	    oideq(tip_oid, &branch_oid))
 		branch = xstrdup(v);
@@ -1053,6 +1096,63 @@ static void show_diffstat(struct rev_info *rev,
 	fprintf(rev->diffopt.file, "\n");
 }
 
+static void prepare_cover_text(struct pretty_print_context *pp,
+			       const char *branch_name,
+			       struct strbuf *sb,
+			       const char *encoding,
+			       int need_8bit_cte)
+{
+	const char *subject = "*** SUBJECT HERE ***";
+	const char *body = "*** BLURB HERE ***";
+	struct strbuf description_sb = STRBUF_INIT;
+	struct strbuf subject_sb = STRBUF_INIT;
+
+	if (cover_from_description_mode == COVER_FROM_NONE)
+		goto do_pp;
+
+	if (branch_name && *branch_name)
+		read_branch_desc(&description_sb, branch_name);
+	if (!description_sb.len)
+		goto do_pp;
+
+	if (cover_from_description_mode == COVER_FROM_SUBJECT ||
+			cover_from_description_mode == COVER_FROM_AUTO)
+		body = format_subject(&subject_sb, description_sb.buf, " ");
+
+	if (cover_from_description_mode == COVER_FROM_MESSAGE ||
+			(cover_from_description_mode == COVER_FROM_AUTO &&
+			 subject_sb.len > COVER_FROM_AUTO_MAX_SUBJECT_LEN))
+		body = description_sb.buf;
+	else
+		subject = subject_sb.buf;
+
+do_pp:
+	pp_title_line(pp, &subject, sb, encoding, need_8bit_cte);
+	pp_remainder(pp, &body, sb, 0);
+
+	strbuf_release(&description_sb);
+	strbuf_release(&subject_sb);
+}
+
+static int get_notes_refs(struct string_list_item *item, void *arg)
+{
+	strvec_pushf(arg, "--notes=%s", item->string);
+	return 0;
+}
+
+static void get_notes_args(struct strvec *arg, struct rev_info *rev)
+{
+	if (!rev->show_notes) {
+		strvec_push(arg, "--no-notes");
+	} else if (rev->notes_opt.use_default_notes > 0 ||
+		   (rev->notes_opt.use_default_notes == -1 &&
+		    !rev->notes_opt.extra_notes_refs.nr)) {
+		strvec_push(arg, "--notes");
+	} else {
+		for_each_string_list(&rev->notes_opt.extra_notes_refs, get_notes_refs, arg);
+	}
+}
+
 static void make_cover_letter(struct rev_info *rev, int use_stdout,
 			      struct commit *origin,
 			      int nr, struct commit **list,
@@ -1060,8 +1160,6 @@ static void make_cover_letter(struct rev_info *rev, int use_stdout,
 			      int quiet)
 {
 	const char *committer;
-	const char *body = "*** SUBJECT HERE ***\n\n*** BLURB HERE ***\n";
-	const char *msg;
 	struct shortlog log;
 	struct strbuf sb = STRBUF_INIT;
 	int i;
@@ -1091,15 +1189,12 @@ static void make_cover_letter(struct rev_info *rev, int use_stdout,
 	if (!branch_name)
 		branch_name = find_branch_name(rev);
 
-	msg = body;
 	pp.fmt = CMIT_FMT_EMAIL;
 	pp.date_mode.type = DATE_RFC2822;
 	pp.rev = rev;
 	pp.print_email_subject = 1;
 	pp_user_info(&pp, NULL, &sb, committer, encoding);
-	pp_title_line(&pp, &msg, &sb, encoding, need_8bit_cte);
-	pp_remainder(&pp, &msg, &sb, 0);
-	add_branch_description(&sb, branch_name);
+	prepare_cover_text(&pp, branch_name, &sb, encoding, need_8bit_cte);
 	fprintf(rev->diffopt.file, "%s\n", sb.buf);
 
 	strbuf_release(&sb);
@@ -1110,6 +1205,7 @@ static void make_cover_letter(struct rev_info *rev, int use_stdout,
 	log.in1 = 2;
 	log.in2 = 4;
 	log.file = rev->diffopt.file;
+	log.groups = SHORTLOG_GROUP_AUTHOR;
 	for (i = 0; i < nr; i++)
 		shortlog_add_commit(&log, list[i]);
 
@@ -1121,7 +1217,8 @@ static void make_cover_letter(struct rev_info *rev, int use_stdout,
 
 	if (rev->idiff_oid1) {
 		fprintf_ln(rev->diffopt.file, "%s", rev->idiff_title);
-		show_interdiff(rev, 0);
+		show_interdiff(rev->idiff_oid1, rev->idiff_oid2, 0,
+			       &rev->diffopt);
 	}
 
 	if (rev->rdiff1) {
@@ -1130,13 +1227,16 @@ static void make_cover_letter(struct rev_info *rev, int use_stdout,
 		 * can be added later if deemed desirable.
 		 */
 		struct diff_options opts;
+		struct strvec other_arg = STRVEC_INIT;
 		diff_setup(&opts);
 		opts.file = rev->diffopt.file;
 		opts.use_color = rev->diffopt.use_color;
 		diff_setup_done(&opts);
 		fprintf_ln(rev->diffopt.file, "%s", rev->rdiff_title);
+		get_notes_args(&other_arg, rev);
 		show_range_diff(rev->rdiff1, rev->rdiff2,
-				rev->creation_factor, 1, &opts);
+				rev->creation_factor, 1, &opts, &other_arg);
+		strvec_clear(&other_arg);
 	}
 }
 
@@ -1248,9 +1348,9 @@ static int output_directory_callback(const struct option *opt, const char *arg,
 
 static int thread_callback(const struct option *opt, const char *arg, int unset)
 {
-	int *thread = (int *)opt->value;
+	enum thread_level *thread = (enum thread_level *)opt->value;
 	if (unset)
-		*thread = 0;
+		*thread = THREAD_UNSET;
 	else if (!arg || !strcmp(arg, "shallow"))
 		*thread = THREAD_SHALLOW;
 	else if (!strcmp(arg, "deep"))
@@ -1297,7 +1397,7 @@ static int header_callback(const struct option *opt, const char *arg, int unset)
 		string_list_clear(&extra_to, 0);
 		string_list_clear(&extra_cc, 0);
 	} else {
-	    add_header(arg);
+		add_header(arg);
 	}
 	return 0;
 }
@@ -1335,6 +1435,23 @@ static int from_callback(const struct option *opt, const char *arg, int unset)
 	return 0;
 }
 
+static int base_callback(const struct option *opt, const char *arg, int unset)
+{
+	const char **base_commit = opt->value;
+
+	if (unset) {
+		auto_base = AUTO_BASE_NEVER;
+		*base_commit = NULL;
+	} else if (!strcmp(arg, "auto")) {
+		auto_base = AUTO_BASE_ALWAYS;
+		*base_commit = NULL;
+	} else {
+		auto_base = AUTO_BASE_NEVER;
+		*base_commit = arg;
+	}
+	return 0;
+}
+
 struct base_tree_info {
 	struct object_id base_commit;
 	int nr_patch_id, alloc_patch_id;
@@ -1347,13 +1464,36 @@ static struct commit *get_base_commit(const char *base_commit,
 {
 	struct commit *base = NULL;
 	struct commit **rev;
-	int i = 0, rev_nr = 0;
+	int i = 0, rev_nr = 0, auto_select, die_on_failure;
 
-	if (base_commit && strcmp(base_commit, "auto")) {
+	switch (auto_base) {
+	case AUTO_BASE_NEVER:
+		if (base_commit) {
+			auto_select = 0;
+			die_on_failure = 1;
+		} else {
+			/* no base information is requested */
+			return NULL;
+		}
+		break;
+	case AUTO_BASE_ALWAYS:
+	case AUTO_BASE_WHEN_ABLE:
+		if (base_commit) {
+			BUG("requested automatic base selection but a commit was provided");
+		} else {
+			auto_select = 1;
+			die_on_failure = auto_base == AUTO_BASE_ALWAYS;
+		}
+		break;
+	default:
+		BUG("unexpected automatic base selection method");
+	}
+
+	if (!auto_select) {
 		base = lookup_commit_reference_by_name(base_commit);
 		if (!base)
 			die(_("unknown commit %s"), base_commit);
-	} else if ((base_commit && !strcmp(base_commit, "auto")) || base_auto) {
+	} else {
 		struct branch *curr_branch = branch_get(NULL);
 		const char *upstream = branch_get_upstream(curr_branch, NULL);
 		if (upstream) {
@@ -1361,19 +1501,32 @@ static struct commit *get_base_commit(const char *base_commit,
 			struct commit *commit;
 			struct object_id oid;
 
-			if (get_oid(upstream, &oid))
-				die(_("failed to resolve '%s' as a valid ref"), upstream);
+			if (get_oid(upstream, &oid)) {
+				if (die_on_failure)
+					die(_("failed to resolve '%s' as a valid ref"), upstream);
+				else
+					return NULL;
+			}
 			commit = lookup_commit_or_die(&oid, "upstream base");
 			base_list = get_merge_bases_many(commit, total, list);
 			/* There should be one and only one merge base. */
-			if (!base_list || base_list->next)
-				die(_("could not find exact merge base"));
+			if (!base_list || base_list->next) {
+				if (die_on_failure) {
+					die(_("could not find exact merge base"));
+				} else {
+					free_commit_list(base_list);
+					return NULL;
+				}
+			}
 			base = base_list->item;
 			free_commit_list(base_list);
 		} else {
-			die(_("failed to get upstream, if you want to record base commit automatically,\n"
-			      "please use git branch --set-upstream-to to track a remote branch.\n"
-			      "Or you could specify base commit by --base=<base-commit-id> manually"));
+			if (die_on_failure)
+				die(_("failed to get upstream, if you want to record base commit automatically,\n"
+				      "please use git branch --set-upstream-to to track a remote branch.\n"
+				      "Or you could specify base commit by --base=<base-commit-id> manually"));
+			else
+				return NULL;
 		}
 	}
 
@@ -1390,8 +1543,14 @@ static struct commit *get_base_commit(const char *base_commit,
 		for (i = 0; i < rev_nr / 2; i++) {
 			struct commit_list *merge_base;
 			merge_base = get_merge_bases(rev[2 * i], rev[2 * i + 1]);
-			if (!merge_base || merge_base->next)
-				die(_("failed to find exact merge base"));
+			if (!merge_base || merge_base->next) {
+				if (die_on_failure) {
+					die(_("failed to find exact merge base"));
+				} else {
+					free(rev);
+					return NULL;
+				}
+			}
 
 			rev[i] = merge_base->item;
 		}
@@ -1401,12 +1560,24 @@ static struct commit *get_base_commit(const char *base_commit,
 		rev_nr = DIV_ROUND_UP(rev_nr, 2);
 	}
 
-	if (!in_merge_bases(base, rev[0]))
-		die(_("base commit should be the ancestor of revision list"));
+	if (!in_merge_bases(base, rev[0])) {
+		if (die_on_failure) {
+			die(_("base commit should be the ancestor of revision list"));
+		} else {
+			free(rev);
+			return NULL;
+		}
+	}
 
 	for (i = 0; i < total; i++) {
-		if (base == list[i])
-			die(_("base commit shouldn't be in revision list"));
+		if (base == list[i]) {
+			if (die_on_failure) {
+				die(_("base commit shouldn't be in revision list"));
+			} else {
+				free(rev);
+				return NULL;
+			}
+		}
 	}
 
 	free(rev);
@@ -1506,16 +1677,20 @@ static void infer_range_diff_ranges(struct strbuf *r1,
 				    struct commit *head)
 {
 	const char *head_oid = oid_to_hex(&head->object.oid);
+	int prev_is_range = !!strstr(prev, "..");
 
-	if (!strstr(prev, "..")) {
-		strbuf_addf(r1, "%s..%s", head_oid, prev);
-		strbuf_addf(r2, "%s..%s", prev, head_oid);
-	} else if (!origin) {
-		die(_("failed to infer range-diff ranges"));
-	} else {
+	if (prev_is_range)
 		strbuf_addstr(r1, prev);
-		strbuf_addf(r2, "%s..%s",
-			    oid_to_hex(&origin->object.oid), head_oid);
+	else
+		strbuf_addf(r1, "%s..%s", head_oid, prev);
+
+	if (origin)
+		strbuf_addf(r2, "%s..%s", oid_to_hex(&origin->object.oid), head_oid);
+	else if (prev_is_range)
+		die(_("failed to infer range-diff origin of current series"));
+	else {
+		warning(_("using '%s' as range-diff origin of current series"), prev);
+		strbuf_addf(r2, "%s..%s", prev, head_oid);
 	}
 }
 
@@ -1541,9 +1716,11 @@ int cmd_format_patch(int argc, const char **argv, const char *prefix)
 	int use_patch_format = 0;
 	int quiet = 0;
 	int reroll_count = -1;
+	char *cover_from_description_arg = NULL;
 	char *branch_name = NULL;
 	char *base_commit = NULL;
 	struct base_tree_info bases;
+	struct commit *base;
 	int show_progress = 0;
 	struct progress *progress = NULL;
 	struct oid_array idiff_prev = OID_ARRAY_INIT;
@@ -1555,12 +1732,12 @@ int cmd_format_patch(int argc, const char **argv, const char *prefix)
 	int creation_factor = -1;
 
 	const struct option builtin_format_patch_options[] = {
-		{ OPTION_CALLBACK, 'n', "numbered", &numbered, NULL,
+		OPT_CALLBACK_F('n', "numbered", &numbered, NULL,
 			    N_("use [PATCH n/m] even with a single patch"),
-			    PARSE_OPT_NOARG, numbered_callback },
-		{ OPTION_CALLBACK, 'N', "no-numbered", &numbered, NULL,
+			    PARSE_OPT_NOARG, numbered_callback),
+		OPT_CALLBACK_F('N', "no-numbered", &numbered, NULL,
 			    N_("use [PATCH] even with multiple patches"),
-			    PARSE_OPT_NOARG | PARSE_OPT_NONEG, no_numbered_callback },
+			    PARSE_OPT_NOARG | PARSE_OPT_NONEG, no_numbered_callback),
 		OPT_BOOL('s', "signoff", &do_signoff, N_("add Signed-off-by:")),
 		OPT_BOOL(0, "stdout", &use_stdout,
 			    N_("print patches to standard out")),
@@ -1574,18 +1751,21 @@ int cmd_format_patch(int argc, const char **argv, const char *prefix)
 			    N_("start numbering patches at <n> instead of 1")),
 		OPT_INTEGER('v', "reroll-count", &reroll_count,
 			    N_("mark the series as Nth re-roll")),
-		{ OPTION_CALLBACK, 0, "rfc", &rev, NULL,
+		OPT_CALLBACK_F(0, "rfc", &rev, NULL,
 			    N_("Use [RFC PATCH] instead of [PATCH]"),
-			    PARSE_OPT_NOARG | PARSE_OPT_NONEG, rfc_callback },
-		{ OPTION_CALLBACK, 0, "subject-prefix", &rev, N_("prefix"),
+			    PARSE_OPT_NOARG | PARSE_OPT_NONEG, rfc_callback),
+		OPT_STRING(0, "cover-from-description", &cover_from_description_arg,
+			    N_("cover-from-description-mode"),
+			    N_("generate parts of a cover letter based on a branch's description")),
+		OPT_CALLBACK_F(0, "subject-prefix", &rev, N_("prefix"),
 			    N_("Use [<prefix>] instead of [PATCH]"),
-			    PARSE_OPT_NONEG, subject_prefix_callback },
-		{ OPTION_CALLBACK, 'o', "output-directory", &output_directory,
+			    PARSE_OPT_NONEG, subject_prefix_callback),
+		OPT_CALLBACK_F('o', "output-directory", &output_directory,
 			    N_("dir"), N_("store resulting files in <dir>"),
-			    PARSE_OPT_NONEG, output_directory_callback },
-		{ OPTION_CALLBACK, 'k', "keep-subject", &rev, NULL,
+			    PARSE_OPT_NONEG, output_directory_callback),
+		OPT_CALLBACK_F('k', "keep-subject", &rev, NULL,
 			    N_("don't strip/add [PATCH]"),
-			    PARSE_OPT_NOARG | PARSE_OPT_NONEG, keep_callback },
+			    PARSE_OPT_NOARG | PARSE_OPT_NONEG, keep_callback),
 		OPT_BOOL(0, "no-binary", &no_binary_diff,
 			 N_("don't output binary diffs")),
 		OPT_BOOL(0, "zero-commit", &zero_commit,
@@ -1596,31 +1776,30 @@ int cmd_format_patch(int argc, const char **argv, const char *prefix)
 			      N_("show patch format instead of default (patch + stat)"),
 			      1, PARSE_OPT_NONEG),
 		OPT_GROUP(N_("Messaging")),
-		{ OPTION_CALLBACK, 0, "add-header", NULL, N_("header"),
-			    N_("add email header"), 0, header_callback },
-		{ OPTION_CALLBACK, 0, "to", NULL, N_("email"), N_("add To: header"),
-			    0, to_callback },
-		{ OPTION_CALLBACK, 0, "cc", NULL, N_("email"), N_("add Cc: header"),
-			    0, cc_callback },
-		{ OPTION_CALLBACK, 0, "from", &from, N_("ident"),
+		OPT_CALLBACK(0, "add-header", NULL, N_("header"),
+			    N_("add email header"), header_callback),
+		OPT_CALLBACK(0, "to", NULL, N_("email"), N_("add To: header"), to_callback),
+		OPT_CALLBACK(0, "cc", NULL, N_("email"), N_("add Cc: header"), cc_callback),
+		OPT_CALLBACK_F(0, "from", &from, N_("ident"),
 			    N_("set From address to <ident> (or committer ident if absent)"),
-			    PARSE_OPT_OPTARG, from_callback },
+			    PARSE_OPT_OPTARG, from_callback),
 		OPT_STRING(0, "in-reply-to", &in_reply_to, N_("message-id"),
 			    N_("make first mail a reply to <message-id>")),
-		{ OPTION_CALLBACK, 0, "attach", &rev, N_("boundary"),
+		OPT_CALLBACK_F(0, "attach", &rev, N_("boundary"),
 			    N_("attach the patch"), PARSE_OPT_OPTARG,
-			    attach_callback },
-		{ OPTION_CALLBACK, 0, "inline", &rev, N_("boundary"),
+			    attach_callback),
+		OPT_CALLBACK_F(0, "inline", &rev, N_("boundary"),
 			    N_("inline the patch"),
 			    PARSE_OPT_OPTARG | PARSE_OPT_NONEG,
-			    inline_callback },
-		{ OPTION_CALLBACK, 0, "thread", &thread, N_("style"),
+			    inline_callback),
+		OPT_CALLBACK_F(0, "thread", &thread, N_("style"),
 			    N_("enable message threading, styles: shallow, deep"),
-			    PARSE_OPT_OPTARG, thread_callback },
+			    PARSE_OPT_OPTARG, thread_callback),
 		OPT_STRING(0, "signature", &signature, N_("signature"),
 			    N_("add a signature")),
-		OPT_STRING(0, "base", &base_commit, N_("base-commit"),
-			   N_("add prerequisite tree info to the patch series")),
+		OPT_CALLBACK_F(0, "base", &base_commit, N_("base-commit"),
+			       N_("add prerequisite tree info to the patch series"),
+			       0, base_callback),
 		OPT_FILENAME(0, "signature-file", &signature_file,
 				N_("add a signature from a file")),
 		OPT__QUIET(&quiet, N_("don't print the patch filenames")),
@@ -1640,9 +1819,13 @@ int cmd_format_patch(int argc, const char **argv, const char *prefix)
 	extra_to.strdup_strings = 1;
 	extra_cc.strdup_strings = 1;
 	init_log_defaults();
+	init_display_notes(&notes_opt);
+	git_config(git_format_config, NULL);
 	repo_init_revisions(the_repository, &rev, prefix);
-	git_config(git_format_config, &rev);
+	rev.show_notes = show_notes;
+	memcpy(&rev.notes_opt, &notes_opt, sizeof(notes_opt));
 	rev.commit_format = CMIT_FMT_EMAIL;
+	rev.encode_email_headers = default_encode_email_headers;
 	rev.expand_tabs_in_log_default = 0;
 	rev.verbose_header = 1;
 	rev.diff = 1;
@@ -1667,6 +1850,9 @@ int cmd_format_patch(int argc, const char **argv, const char *prefix)
 			     builtin_format_patch_usage,
 			     PARSE_OPT_KEEP_ARGV0 | PARSE_OPT_KEEP_UNKNOWN |
 			     PARSE_OPT_KEEP_DASHDASH);
+
+	if (cover_from_description_arg)
+		cover_from_description_mode = parse_cover_from_description(cover_from_description_arg);
 
 	if (0 < reroll_count) {
 		struct strbuf sprefix = STRBUF_INIT;
@@ -1754,7 +1940,7 @@ int cmd_format_patch(int argc, const char **argv, const char *prefix)
 		rev.diffopt.flags.binary = 1;
 
 	if (rev.show_notes)
-		init_display_notes(&rev.notes_opt);
+		load_display_notes(&rev.notes_opt);
 
 	if (!output_directory && !use_stdout)
 		output_directory = config_output_directory;
@@ -1765,10 +1951,26 @@ int cmd_format_patch(int argc, const char **argv, const char *prefix)
 		setup_pager();
 
 	if (output_directory) {
+		int saved;
 		if (rev.diffopt.use_color != GIT_COLOR_ALWAYS)
 			rev.diffopt.use_color = GIT_COLOR_NEVER;
 		if (use_stdout)
 			die(_("standard output, or directory, which one?"));
+		/*
+		 * We consider <outdir> as 'outside of gitdir', therefore avoid
+		 * applying adjust_shared_perm in s-c-l-d.
+		 */
+		saved = get_shared_repository();
+		set_shared_repository(0);
+		switch (safe_create_leading_directories_const(output_directory)) {
+		case SCLD_OK:
+		case SCLD_EXISTS:
+			break;
+		default:
+			die(_("could not create leading directories "
+			      "of '%s'"), output_directory);
+		}
+		set_shared_repository(saved);
 		if (mkdir(output_directory, 0777) < 0 && errno != EEXIST)
 			die_errno(_("could not create directory '%s'"),
 				  output_directory);
@@ -1897,8 +2099,8 @@ int cmd_format_patch(int argc, const char **argv, const char *prefix)
 	}
 
 	memset(&bases, 0, sizeof(bases));
-	if (base_commit || base_auto) {
-		struct commit *base = get_base_commit(base_commit, list, nr);
+	base = get_base_commit(base_commit, list, nr);
+	if (base) {
 		reset_revision_walk();
 		clear_object_flags(UNINTERESTING);
 		prepare_bases(&bases, base, list, nr);

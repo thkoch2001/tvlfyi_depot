@@ -38,9 +38,8 @@ static int need_large_offset(off_t offset, const struct pack_idx_option *opts)
 }
 
 /*
- * On entry *sha1 contains the pack content SHA1 hash, on exit it is
- * the SHA1 hash of sorted object names. The objects array passed in
- * will be sorted by SHA1 on exit.
+ * The *sha1 contains the pack content SHA1 hash.
+ * The objects array passed in will be sorted by SHA1 on exit.
  */
 const char *write_idx_file(const char *index_name, struct pack_idx_entry **objects,
 			   int nr_objects, const struct pack_idx_option *opts,
@@ -118,10 +117,8 @@ const char *write_idx_file(const char *index_name, struct pack_idx_entry **objec
 	list = sorted_by_sha;
 	for (i = 0; i < nr_objects; i++) {
 		struct pack_idx_entry *obj = *list++;
-		if (index_version < 2) {
-			uint32_t offset = htonl(obj->offset);
-			hashwrite(f, &offset, 4);
-		}
+		if (index_version < 2)
+			hashwrite_be32(f, obj->offset);
 		hashwrite(f, obj->oid.hash, the_hash_algo->rawsz);
 		if ((opts->flags & WRITE_IDX_STRICT) &&
 		    (i && oideq(&list[-2]->oid, &obj->oid)))
@@ -136,8 +133,7 @@ const char *write_idx_file(const char *index_name, struct pack_idx_entry **objec
 		list = sorted_by_sha;
 		for (i = 0; i < nr_objects; i++) {
 			struct pack_idx_entry *obj = *list++;
-			uint32_t crc32_val = htonl(obj->crc32);
-			hashwrite(f, &crc32_val, 4);
+			hashwrite_be32(f, obj->crc32);
 		}
 
 		/* write the 32-bit offset table */
@@ -149,8 +145,7 @@ const char *write_idx_file(const char *index_name, struct pack_idx_entry **objec
 			offset = (need_large_offset(obj->offset, opts)
 				  ? (0x80000000 | nr_large_offset++)
 				  : obj->offset);
-			offset = htonl(offset);
-			hashwrite(f, &offset, 4);
+			hashwrite_be32(f, offset);
 		}
 
 		/* write the large offset table */
@@ -349,7 +344,7 @@ void finish_tmp_packfile(struct strbuf *name_buffer,
 			 struct pack_idx_entry **written_list,
 			 uint32_t nr_written,
 			 struct pack_idx_option *pack_idx_opts,
-			 unsigned char sha1[])
+			 unsigned char hash[])
 {
 	const char *idx_tmp_name;
 	int basename_len = name_buffer->len;
@@ -358,18 +353,18 @@ void finish_tmp_packfile(struct strbuf *name_buffer,
 		die_errno("unable to make temporary pack file readable");
 
 	idx_tmp_name = write_idx_file(NULL, written_list, nr_written,
-				      pack_idx_opts, sha1);
+				      pack_idx_opts, hash);
 	if (adjust_shared_perm(idx_tmp_name))
 		die_errno("unable to make temporary index file readable");
 
-	strbuf_addf(name_buffer, "%s.pack", sha1_to_hex(sha1));
+	strbuf_addf(name_buffer, "%s.pack", hash_to_hex(hash));
 
 	if (rename(pack_tmp_name, name_buffer->buf))
 		die_errno("unable to rename temporary pack file");
 
 	strbuf_setlen(name_buffer, basename_len);
 
-	strbuf_addf(name_buffer, "%s.idx", sha1_to_hex(sha1));
+	strbuf_addf(name_buffer, "%s.idx", hash_to_hex(hash));
 	if (rename(idx_tmp_name, name_buffer->buf))
 		die_errno("unable to rename temporary index file");
 

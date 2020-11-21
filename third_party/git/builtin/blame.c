@@ -26,8 +26,8 @@
 #include "progress.h"
 #include "object-store.h"
 #include "blame.h"
-#include "string-list.h"
 #include "refs.h"
+#include "tag.h"
 
 static char blame_usage[] = N_("git blame [<options>] [<rev-opts>] [<rev>] [--] <file>");
 
@@ -320,18 +320,18 @@ static const char *format_time(timestamp_t time, const char *tz_str,
 	return time_buf.buf;
 }
 
-#define OUTPUT_ANNOTATE_COMPAT	001
-#define OUTPUT_LONG_OBJECT_NAME	002
-#define OUTPUT_RAW_TIMESTAMP	004
-#define OUTPUT_PORCELAIN	010
-#define OUTPUT_SHOW_NAME	020
-#define OUTPUT_SHOW_NUMBER	040
-#define OUTPUT_SHOW_SCORE	0100
-#define OUTPUT_NO_AUTHOR	0200
-#define OUTPUT_SHOW_EMAIL	0400
-#define OUTPUT_LINE_PORCELAIN	01000
-#define OUTPUT_COLOR_LINE	02000
-#define OUTPUT_SHOW_AGE_WITH_COLOR	04000
+#define OUTPUT_ANNOTATE_COMPAT      (1U<<0)
+#define OUTPUT_LONG_OBJECT_NAME     (1U<<1)
+#define OUTPUT_RAW_TIMESTAMP        (1U<<2)
+#define OUTPUT_PORCELAIN            (1U<<3)
+#define OUTPUT_SHOW_NAME            (1U<<4)
+#define OUTPUT_SHOW_NUMBER          (1U<<5)
+#define OUTPUT_SHOW_SCORE           (1U<<6)
+#define OUTPUT_NO_AUTHOR            (1U<<7)
+#define OUTPUT_SHOW_EMAIL           (1U<<8)
+#define OUTPUT_LINE_PORCELAIN       (1U<<9)
+#define OUTPUT_COLOR_LINE           (1U<<10)
+#define OUTPUT_SHOW_AGE_WITH_COLOR  (1U<<11)
 
 static void emit_porcelain_details(struct blame_origin *suspect, int repeat)
 {
@@ -460,7 +460,7 @@ static void emit_other(struct blame_scoreboard *sb, struct blame_entry *ent, int
 
 	for (cnt = 0; cnt < ent->num_lines; cnt++) {
 		char ch;
-		int length = (opt & OUTPUT_LONG_OBJECT_NAME) ? GIT_SHA1_HEXSZ : abbrev;
+		int length = (opt & OUTPUT_LONG_OBJECT_NAME) ? the_hash_algo->hexsz : abbrev;
 
 		if (opt & OUTPUT_COLOR_LINE) {
 			if (cnt > 0) {
@@ -804,6 +804,26 @@ static int is_a_rev(const char *name)
 	return OBJ_NONE < oid_object_info(the_repository, &oid, NULL);
 }
 
+static int peel_to_commit_oid(struct object_id *oid_ret, void *cbdata)
+{
+	struct repository *r = ((struct blame_scoreboard *)cbdata)->repo;
+	struct object_id oid;
+
+	oidcpy(&oid, oid_ret);
+	while (1) {
+		struct object *obj;
+		int kind = oid_object_info(r, &oid, NULL);
+		if (kind == OBJ_COMMIT) {
+			oidcpy(oid_ret, &oid);
+			return 0;
+		}
+		if (kind != OBJ_TAG)
+			return -1;
+		obj = deref_tag(r, parse_object(r, &oid), NULL, 0);
+		oidcpy(&oid, &obj->oid);
+	}
+}
+
 static void build_ignorelist(struct blame_scoreboard *sb,
 			     struct string_list *ignore_revs_file_list,
 			     struct string_list *ignore_rev_list)
@@ -816,10 +836,12 @@ static void build_ignorelist(struct blame_scoreboard *sb,
 		if (!strcmp(i->string, ""))
 			oidset_clear(&sb->ignore_list);
 		else
-			oidset_parse_file(&sb->ignore_list, i->string);
+			oidset_parse_file_carefully(&sb->ignore_list, i->string,
+						    peel_to_commit_oid, sb);
 	}
 	for_each_string_list_item(i, ignore_rev_list) {
-		if (get_oid_committish(i->string, &oid))
+		if (get_oid_committish(i->string, &oid) ||
+		    peel_to_commit_oid(&oid, sb))
 			die(_("cannot find revision %s to ignore"), i->string);
 		oidset_insert(&sb->ignore_list, &oid);
 	}
@@ -843,7 +865,7 @@ int cmd_blame(int argc, const char **argv, const char *prefix)
 	const char *contents_from = NULL;
 	const struct option options[] = {
 		OPT_BOOL(0, "incremental", &incremental, N_("Show blame entries as we find them, incrementally")),
-		OPT_BOOL('b', NULL, &blank_boundary, N_("Show blank SHA-1 for boundary commits (Default: off)")),
+		OPT_BOOL('b', NULL, &blank_boundary, N_("Do not show object names of boundary commits (Default: off)")),
 		OPT_BOOL(0, "root", &show_root, N_("Do not treat root commits as boundaries (Default: off)")),
 		OPT_BOOL(0, "show-stats", &show_stats, N_("Show work cost statistics")),
 		OPT_BOOL(0, "progress", &show_progress, N_("Force progress reporting")),
@@ -862,19 +884,11 @@ int cmd_blame(int argc, const char **argv, const char *prefix)
 		OPT_STRING_LIST(0, "ignore-revs-file", &ignore_revs_file_list, N_("file"), N_("Ignore revisions from <file>")),
 		OPT_BIT(0, "color-lines", &output_option, N_("color redundant metadata from previous line differently"), OUTPUT_COLOR_LINE),
 		OPT_BIT(0, "color-by-age", &output_option, N_("color lines by age"), OUTPUT_SHOW_AGE_WITH_COLOR),
-
-		/*
-		 * The following two options are parsed by parse_revision_opt()
-		 * and are only included here to get included in the "-h"
-		 * output:
-		 */
-		{ OPTION_LOWLEVEL_CALLBACK, 0, "indent-heuristic", NULL, NULL, N_("Use an experimental heuristic to improve diffs"), PARSE_OPT_NOARG, NULL, 0, parse_opt_unknown_cb },
-
 		OPT_BIT(0, "minimal", &xdl_opts, N_("Spend extra cycles to find better match"), XDF_NEED_MINIMAL),
 		OPT_STRING('S', NULL, &revs_file, N_("file"), N_("Use revisions from <file> instead of calling git-rev-list")),
 		OPT_STRING(0, "contents", &contents_from, N_("file"), N_("Use <file>'s contents as the final image")),
-		{ OPTION_CALLBACK, 'C', NULL, &opt, N_("score"), N_("Find line copies within and across files"), PARSE_OPT_OPTARG, blame_copy_callback },
-		{ OPTION_CALLBACK, 'M', NULL, &opt, N_("score"), N_("Find line movements within and across files"), PARSE_OPT_OPTARG, blame_move_callback },
+		OPT_CALLBACK_F('C', NULL, &opt, N_("score"), N_("Find line copies within and across files"), PARSE_OPT_OPTARG, blame_copy_callback),
+		OPT_CALLBACK_F('M', NULL, &opt, N_("score"), N_("Find line movements within and across files"), PARSE_OPT_OPTARG, blame_move_callback),
 		OPT_STRING_LIST('L', NULL, &range_list, N_("n,m"), N_("Process only line range n,m, counting from 1")),
 		OPT__ABBREV(&abbrev),
 		OPT_END()
@@ -885,6 +899,7 @@ int cmd_blame(int argc, const char **argv, const char *prefix)
 	struct range_set ranges;
 	unsigned int range_i;
 	long anchor;
+	const int hexsz = the_hash_algo->hexsz;
 
 	setup_default_color_by_age();
 	git_config(git_blame_config, &output_option);
@@ -931,11 +946,11 @@ parse_done:
 	} else if (show_progress < 0)
 		show_progress = isatty(2);
 
-	if (0 < abbrev && abbrev < GIT_SHA1_HEXSZ)
+	if (0 < abbrev && abbrev < hexsz)
 		/* one more abbrev length is needed for the boundary commit */
 		abbrev++;
 	else if (!abbrev)
-		abbrev = GIT_SHA1_HEXSZ;
+		abbrev = hexsz;
 
 	if (revs_file && read_ancestry(revs_file))
 		die_errno("reading graft file '%s' failed", revs_file);
@@ -1072,6 +1087,14 @@ parse_done:
 	string_list_clear(&ignore_revs_file_list, 0);
 	string_list_clear(&ignore_rev_list, 0);
 	setup_scoreboard(&sb, path, &o);
+
+	/*
+	 * Changed-path Bloom filters are disabled when looking
+	 * for copies.
+	 */
+	if (!(opt & PICKAXE_BLAME_COPY))
+		setup_blame_bloom_data(&sb, path);
+
 	lno = sb.num_lines;
 
 	if (lno && !range_list.nr)
@@ -1175,5 +1198,7 @@ parse_done:
 		printf("num get patch: %d\n", sb.num_get_patch);
 		printf("num commits: %d\n", sb.num_commits);
 	}
+
+	cleanup_scoreboard(&sb);
 	return 0;
 }

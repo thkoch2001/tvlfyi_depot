@@ -5,7 +5,7 @@
 with depot.third_party;
 
 (originals.git.overrideAttrs(_: {
-  version = "2.23.0";
+  version = "2.29.2";
   src = ./.;
   doInstallCheck = false;
   preConfigure = ''

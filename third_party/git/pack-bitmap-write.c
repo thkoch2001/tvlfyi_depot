@@ -144,7 +144,7 @@ static inline void reset_all_seen(void)
 
 static uint32_t find_object_pos(const struct object_id *oid)
 {
-	struct object_entry *entry = packlist_find(writer.to_pack, oid, NULL);
+	struct object_entry *entry = packlist_find(writer.to_pack, oid);
 
 	if (!entry) {
 		die("Failed to write bitmap index. Packfile doesn't have full closure "
@@ -503,8 +503,7 @@ static void write_hash_cache(struct hashfile *f,
 
 	for (i = 0; i < index_nr; ++i) {
 		struct object_entry *entry = (struct object_entry *)index[i];
-		uint32_t hash_value = htonl(entry->hash);
-		hashwrite(f, &hash_value, sizeof(hash_value));
+		hashwrite_be32(f, entry->hash);
 	}
 }
 
