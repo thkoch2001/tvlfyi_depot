@@ -78,7 +78,7 @@ static int FindPayloadIndexByUrl(const Payloads* payloads,
                                  absl::string_view type_url) {
   if (payloads == nullptr) return -1;
 
-  for (int i = 0; i < payloads->size(); ++i) {
+  for (size_t i = 0; i < payloads->size(); ++i) {
     if ((*payloads)[i].type_url == type_url) return i;
   }
 
@@ -167,7 +167,7 @@ void Status::ForEachPayload(
     bool in_reverse =
         payloads->size() > 1 && reinterpret_cast<uintptr_t>(payloads) % 13 > 6;
 
-    for (int index = 0; index < payloads->size(); ++index) {
+    for (size_t index = 0; index < payloads->size(); ++index) {
       const auto& elem =
           (*payloads)[in_reverse ? payloads->size() - 1 - index : index];
 
@@ -209,11 +209,8 @@ void Status::UnrefNonInlined(uintptr_t rep) {
 
 uintptr_t Status::NewRep(absl::StatusCode code, absl::string_view msg,
                          std::unique_ptr<status_internal::Payloads> payloads) {
-  status_internal::StatusRep* rep = new status_internal::StatusRep;
-  rep->ref.store(1, std::memory_order_relaxed);
-  rep->code = code;
-  rep->message.assign(msg.data(), msg.size());
-  rep->payloads = std::move(payloads);
+  status_internal::StatusRep* rep = new status_internal::StatusRep(
+      code, std::string(msg.data(), msg.size()), std::move(payloads));
   return PointerToRep(rep);
 }
 
