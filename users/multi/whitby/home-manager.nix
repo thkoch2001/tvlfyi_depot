@@ -11,7 +11,7 @@ in
   programs = {
     home-manager = {
       enable = true;
-      path = pkgs.home-manager.src;
+      path = toString pkgs.home-manager.src;
     };
 
     bash = {
