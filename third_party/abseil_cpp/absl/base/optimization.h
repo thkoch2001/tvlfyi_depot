@@ -171,7 +171,7 @@
 // to yield performance improvements.
 #if ABSL_HAVE_BUILTIN(__builtin_expect) || \
     (defined(__GNUC__) && !defined(__clang__))
-#define ABSL_PREDICT_FALSE(x) (__builtin_expect(x, 0))
+#define ABSL_PREDICT_FALSE(x) (__builtin_expect(false || (x), false))
 #define ABSL_PREDICT_TRUE(x) (__builtin_expect(false || (x), true))
 #else
 #define ABSL_PREDICT_FALSE(x) (x)
@@ -179,7 +179,7 @@
 #endif
 
 // ABSL_INTERNAL_ASSUME(cond)
-// Informs the compiler than a condition is always true and that it can assume
+// Informs the compiler that a condition is always true and that it can assume
 // it to be true for optimization purposes. The call has undefined behavior if
 // the condition is false.
 // In !NDEBUG mode, the condition is checked with an assert().
