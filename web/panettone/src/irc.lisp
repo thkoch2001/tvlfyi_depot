@@ -21,6 +21,9 @@ May signal a condition if sending fails."
       (let ((socket (socket-connect irchost ircport)))
         (unwind-protect
              (progn
-               (format (socket-stream socket) "~@[~A ~]~A~%" channel body)
+               (format (socket-stream socket) "~@[~A ~]~A~A~%"
+                       channel
+                       #\ZERO_WIDTH_SPACE
+                       body)
                (finish-output (socket-stream socket)))
           (ignore-errors (socket-close socket)))))))
