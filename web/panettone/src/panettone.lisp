@@ -450,10 +450,15 @@
       (render/issue-form
        (make-instance 'model:issue :subject subject :body body)
        "Subject is required")
-      (progn
-        (model:create-issue :subject subject
-                            :body body
-                            :author-dn (dn *user*))
+      (let ((issue
+              (model:create-issue :subject subject
+                                  :body body
+                                  :author-dn (dn *user*))))
+        (send-irc-notification (format nil "b/~A: \"~A\" opened by ~A - https://b.tvl.fyi/issues/~A"
+                                       (id issue) subject (cn *user*)
+                                       (id issue))
+                               :channel (or (uiop:getenvp "ISSUECHANNEL")
+                                            "##tvl-dev"))
         (hunchentoot:redirect "/"))))
 
 (defroute show-issue
@@ -571,8 +576,8 @@
 
 (comment
  (setq hunchentoot:*catch-errors-p* nil)
- ;; to setup an ssh tunnel to ldap+cheddar for development:
- ;; ssh -NL 3899:localhost:389 -L 4238:localhost:4238 whitby.tvl.fyi
+ ;; to setup an ssh tunnel to ldap+cheddar+irccat for development:
+ ;; ssh -NL 3899:localhost:389 -L 4238:localhost:4238 -L 4722:localhost:4722 whitby.tvl.fyi
  (start-panettone :port 6161
                   :ldap-port 3899
                   :session-secret "session-secret")
