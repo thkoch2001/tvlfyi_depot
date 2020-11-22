@@ -1,6 +1,13 @@
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
-let
-  htop = import ./htop { inherit pkgs; };
+let 
+  nixpkgs = import pkgs.nixpkgsSrc {};
+  localpkg = path: import path { pkgs = nixpkgs; };
+
+  packages = {
+    htop = localpkg ./htop;
+  };
 in
-  [ htop ]
+  packages // {
+    meta.targets = builtins.attrNames packages;
+  }
