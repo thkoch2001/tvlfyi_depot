@@ -2,6 +2,10 @@
 
 let
   nixpkgs = import pkgs.nixpkgsSrc {};
+
+  # use the depot checkout in my home directory, to make hacking around easier,
+  # instead of the depot checkout sitting in the nix stores
+  depotPath = "/home/multi/depot";
 in
 
 {
@@ -43,8 +47,8 @@ in
   home.sessionVariables = {
     NIX_PATH =
       "nixpkgs=${pkgs.nixpkgsSrc}:" +
-      "depot=${depot.depotPath}";
-    HOME_MANAGER_CONFIG = "${depot.depotPath}/users/multi/home/home-manager.nix";
+      "depot=${depotPath}";
+    HOME_MANAGER_CONFIG = "${depotPath}/users/multi/home/home-manager.nix";
     EDITOR = "vim";
   };
 
