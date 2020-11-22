@@ -44,7 +44,7 @@ in
     NIX_PATH =
       "nixpkgs=${pkgs.nixpkgsSrc}:" +
       "depot=${depot.depotPath}";
-    HOME_MANAGER_CONFIG = "${depot.depotPath}/users/multi/whitby/home-manager.nix";
+    HOME_MANAGER_CONFIG = "${depot.depotPath}/users/multi/home/home-manager.nix";
     EDITOR = "vim";
   };
 
