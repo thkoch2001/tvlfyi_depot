@@ -4,7 +4,6 @@ let
   depot = import <depot> {};
   pkgs = import <nixpkgs> {};
 
-  depotPath = depot.users.multi.whitby.depot;
 in
 
 {
@@ -46,8 +45,8 @@ in
   home.sessionVariables = {
     NIX_PATH =
       "nixpkgs=${depot.third_party.nixpkgsSrc}:" +
-      "depot=${depotPath}";
-    HOME_MANAGER_CONFIG = "${depotPath}/users/multi/whitby/home-manager.nix";
+      "depot=${depot.depotPath}";
+    HOME_MANAGER_CONFIG = "${depot.depotPath}/users/multi/whitby/home-manager.nix";
     EDITOR = "vim";
   };
 
