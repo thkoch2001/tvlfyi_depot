@@ -322,8 +322,8 @@ std::pair<bool, std::string> EvalState::resolveSearchPathElem(
     }
   }
 
-  DLOG(INFO) << "resolved search path element '" << elem.second << "' to '"
-             << res.second << "'";
+  VLOG(2) << "resolved search path element '" << elem.second << "' to '"
+          << res.second << "'";
 
   searchPathResolved[elem.second] = res;
   return res;

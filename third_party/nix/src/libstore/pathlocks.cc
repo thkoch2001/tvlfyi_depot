@@ -92,7 +92,7 @@ bool PathLocks::lockPaths(const PathSet& paths, const std::string& waitMsg,
     checkInterrupt();
     Path lockPath = path + ".lock";
 
-    DLOG(INFO) << "locking path '" << path << "'";
+    VLOG(2) << "locking path '" << path << "'";
 
     AutoCloseFD fd;
 
@@ -115,7 +115,7 @@ bool PathLocks::lockPaths(const PathSet& paths, const std::string& waitMsg,
         }
       }
 
-      DLOG(INFO) << "lock acquired on '" << lockPath << "'";
+      VLOG(2) << "lock acquired on '" << lockPath << "'";
 
       /* Check that the lock file hasn't become stale (i.e.,
          hasn't been unlinked). */
@@ -159,7 +159,7 @@ void PathLocks::unlock() {
       LOG(WARNING) << "cannot close lock file on '" << i.second << "'";
     }
 
-    DLOG(INFO) << "lock released on '" << i.second << "'";
+    VLOG(2) << "lock released on '" << i.second << "'";
   }
 
   fds.clear();
