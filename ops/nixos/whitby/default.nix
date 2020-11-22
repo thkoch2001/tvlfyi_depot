@@ -32,6 +32,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/www/todo.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/b.tvl.fyi.nix"
+    "${depot.depotPath}/ops/nixos/www/wigglydonke.rs.nix"
     "${depot.third_party.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
   ];
 

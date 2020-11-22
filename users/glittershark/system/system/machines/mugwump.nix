@@ -111,12 +111,6 @@ with lib;
           proxyPass = "http://localhost:${toString config.services.grafana.port}";
         };
       };
-
-      "wigglydonke.rs" = {
-        enableACME = true;
-        forceSSL = true;
-        root = ../../../wigglydonke.rs;
-      };
     };
   };
 
