@@ -242,6 +242,8 @@ static void _main(int argc, char** argv) {
         else if (*arg == "--keep") {
           keepVars.insert(getArg(*arg, arg, end));
 
+        } else if (*arg == "--quiet") {
+          FLAGS_stderrthreshold = google::GLOG_FATAL;
         } else if (*arg == "-") {
           readStdin = true;
 
