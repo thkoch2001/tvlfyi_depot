@@ -688,7 +688,7 @@ void EvalState::evalFile(const Path& path_, Value& v) {
     return;
   }
 
-  DLOG(INFO) << "evaluating file '" << path2 << "'";
+  VLOG(2) << "evaluating file '" << path2 << "'";
   Expr* e = nullptr;
 
   auto j = fileParseCache.find(path2);
@@ -1541,7 +1541,7 @@ std::string EvalState::copyPathToStore(PathSet& context, const Path& path) {
             : store->addToStore(baseNameOf(path), checkSourcePath(path), true,
                                 htSHA256, defaultPathFilter, repair);
     srcToStore[path] = dstPath;
-    DLOG(INFO) << "copied source '" << path << "' -> '" << dstPath << "'";
+    VLOG(2) << "copied source '" << path << "' -> '" << dstPath << "'";
   }
 
   context.insert(dstPath);
