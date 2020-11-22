@@ -454,11 +454,13 @@
               (model:create-issue :subject subject
                                   :body body
                                   :author-dn (dn *user*))))
-        (send-irc-notification (format nil "b/~A: \"~A\" opened by ~A - https://b.tvl.fyi/issues/~A"
-                                       (id issue) subject (cn *user*)
-                                       (id issue))
-                               :channel (or (uiop:getenvp "ISSUECHANNEL")
-                                            "##tvl-dev"))
+        (send-irc-notification
+         (format nil
+                 "b/~A: \"~A\" opened by ~A - https://b.tvl.fyi/issues/~A"
+                 (id issue) subject (cn *user*)
+                 (id issue))
+         :channel (or (uiop:getenvp "ISSUECHANNEL")
+                      "##tvl-dev"))
         (hunchentoot:redirect "/"))))
 
 (defroute show-issue
@@ -515,6 +517,13 @@
                          :method :post)
     (&path (id 'integer))
   (model:set-issue-status id :closed)
+  (let ((issue (model:get-issue id)))
+    (send-irc-notification
+     (format nil
+             "b/~A: \"~A\" closed by ~A - https://b.tvl.fyi/issues/~A"
+             id (subject issue) (cn *user*) id)
+     :channel (or (uiop:getenvp "ISSUECHANNEL")
+                  "##tvl-dev")))
   (hunchentoot:redirect (format nil "/issues/~A" id)))
 
 (defroute open-issue
