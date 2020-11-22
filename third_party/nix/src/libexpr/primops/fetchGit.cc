@@ -160,7 +160,7 @@ GitInfo exportGit(ref<Store> store, const std::string& uri,
                 : absl::StripTrailingAsciiWhitespace(readFile(localRefFile));
   gitInfo.shortRev = std::string(gitInfo.rev, 0, 7);
 
-  DLOG(INFO) << "using revision " << gitInfo.rev << " of repo '" << uri << "'";
+  VLOG(2) << "using revision " << gitInfo.rev << " of repo '" << uri << "'";
 
   std::string storeLinkName =
       hashString(htSHA512, name + std::string("\0"s) + gitInfo.rev)

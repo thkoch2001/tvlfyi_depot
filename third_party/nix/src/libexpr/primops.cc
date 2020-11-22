@@ -745,7 +745,7 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   /* Write the resulting term into the Nix store directory. */
   Path drvPath = writeDerivation(state.store, drv, drvName, state.repair);
 
-  DLOG(INFO) << "instantiated '" << drvName << "' -> '" << drvPath << "'";
+  VLOG(2) << "instantiated '" << drvName << "' -> '" << drvPath << "'";
 
   /* Optimisation, but required in read-only mode! because in that
      case we don't actually write store derivations, so we can't

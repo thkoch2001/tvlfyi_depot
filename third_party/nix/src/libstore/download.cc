@@ -588,7 +588,7 @@ struct CurlDownloader : public Downloader {
                             nextWakeup - std::chrono::steady_clock::now())
                             .count()))
               : maxSleepTimeMs;
-      DLOG(INFO) << "download thread waiting for " << sleepTimeMs << " ms";
+      VLOG(2) << "download thread waiting for " << sleepTimeMs << " ms";
       mc = curl_multi_wait(curlm, extraFDs, 1, sleepTimeMs, &numfds);
       if (mc != CURLM_OK) {
         throw nix::Error(format("unexpected error from curl_multi_wait(): %s") %
