@@ -20,7 +20,13 @@ rec {
   allSystems = import ./all-systems.nix args;
 
   nixosFor = configuration: depot.third_party.nixos {
-    inherit configuration;
+    configuration = {
+      inherit depot;
+      imports = [
+        configuration
+        "${depot.depotPath}/ops/nixos/depot.nix"
+      ];
+    };
   };
 
   findSystem = hostname:
