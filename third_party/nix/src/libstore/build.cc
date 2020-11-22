@@ -1127,7 +1127,8 @@ void DerivationGoal::loadDerivation() {
   trace("loading derivation");
 
   if (nrFailed != 0) {
-    log_sink() << "cannot build missing derivation '" << drvPath << "'";
+    log_sink() << "cannot build missing derivation '" << drvPath << "'"
+               << std::endl;
     done(BuildResult::MiscFailure);
     return;
   }
@@ -1305,7 +1306,7 @@ void DerivationGoal::repairClosure() {
       continue;
     }
     log_sink() << "found corrupted or missing path '" << i
-               << "' in the output closure of '" << drvPath << "'";
+               << "' in the output closure of '" << drvPath << "'" << std::endl;
     Path drvPath2 = outputsToDrv[i];
     if (drvPath2.empty()) {
       addWaitee(worker.makeSubstitutionGoal(i, Repair));
@@ -1340,7 +1341,7 @@ void DerivationGoal::inputsRealised() {
       throw Error(format("some dependencies of '%1%' are missing") % drvPath);
     }
     log_sink() << "cannot build derivation '" << drvPath << "': " << nrFailed
-               << " dependencies couldn't be built";
+               << " dependencies couldn't be built" << std::endl;
     done(BuildResult::DependencyFailed);
     return;
   }
@@ -1355,7 +1356,7 @@ void DerivationGoal::inputsRealised() {
 
   /* The outputs are referenceable paths. */
   for (auto& i : drv->outputs) {
-    log_sink() << "building path " << i.second.path;
+    log_sink() << "building path " << i.second.path << std::endl;
     allPaths.insert(i.second.path);
   }
 
@@ -1471,7 +1472,7 @@ void DerivationGoal::tryToBuild() {
     if (hook) {
       msg += fmt(" on '%s'", machineName);
     }
-    log_sink() << absl::StrCat(msg, "[", drvPath, "]\n");
+    log_sink() << absl::StrCat(msg, "[", drvPath, "]\n") << std::endl;
     mcRunningBuilds =
         std::make_unique<MaintainCount<uint64_t>>(worker.runningBuilds);
   };
@@ -1513,7 +1514,7 @@ void DerivationGoal::tryToBuild() {
     startBuilder();
 
   } catch (BuildError& e) {
-    log_sink() << e.msg();
+    log_sink() << e.msg() << std::endl;
     outputLocks.unlock();
     buildUser.reset();
     worker.permanentFailure = true;
@@ -1652,7 +1653,7 @@ void DerivationGoal::buildDone() {
 
     if (settings.postBuildHook != "") {
       log_sink() << "running post-build-hook '" << settings.postBuildHook
-                 << "' [" << drvPath << "]";
+                 << "' [" << drvPath << "]" << std::endl;
       auto outputPaths = drv->outputPaths();
       std::map<std::string, std::string> hookEnvironment = getEnv();
 
@@ -1731,7 +1732,7 @@ void DerivationGoal::buildDone() {
     outputLocks.unlock();
 
   } catch (BuildError& e) {
-    log_sink() << e.msg();
+    log_sink() << e.msg() << std::endl;
 
     outputLocks.unlock();
 
@@ -1807,7 +1808,8 @@ HookReply DerivationGoal::tryBuildHook() {
     if (e.errNo == EPIPE) {
       log_sink() << "build hook died unexpectedly: "
                  << absl::StripTrailingAsciiWhitespace(
-                        drainFD(worker.hook->fromHook.readSide.get()));
+                        drainFD(worker.hook->fromHook.readSide.get()))
+                 << std::endl;
       worker.hook = nullptr;
       return rpDecline;
     }
@@ -3492,7 +3494,7 @@ void DerivationGoal::registerOutputs() {
           throw NotDeterministic(msg);
         }
 
-        log_sink() << msg;
+        log_sink() << msg << std::endl;
         curRound = nrRounds;  // we know enough, bail out early
       }
     }
@@ -3772,7 +3774,8 @@ void DerivationGoal::deleteTmpDir(bool force) {
     /* Don't keep temporary directories for builtins because they
        might have privileged stuff (like a copy of netrc). */
     if (settings.keepFailed && !force && !drv->isBuiltin()) {
-      log_sink() << "note: keeping build directory '" << tmpDir << "'";
+      log_sink() << "note: keeping build directory '" << tmpDir << "'"
+                 << std::endl;
       chmod(tmpDir.c_str(), 0755);
     } else {
       deletePath(tmpDir);
@@ -3788,7 +3791,7 @@ void DerivationGoal::handleChildOutput(int fd, const std::string& data) {
     logSize += data.size();
     if (settings.maxLogSize && logSize > settings.maxLogSize) {
       log_sink() << getName() << " killed after writing more than "
-                 << settings.maxLogSize << " bytes of log output";
+                 << settings.maxLogSize << " bytes of log output" << std::endl;
       killChild();
       done(BuildResult::LogLimitExceeded);
       return;
@@ -3833,7 +3836,7 @@ void DerivationGoal::handleEOF(int /* fd */) {
 void DerivationGoal::flushLine() {
   if (settings.verboseBuild &&
       (settings.printRepeatedBuilds || curRound == 1)) {
-    log_sink() << absl::StrCat(currentLogLine, "\n");
+    log_sink() << absl::StrCat(currentLogLine, "\n") << std::endl;
   } else {
     logTail.push_back(currentLogLine);
     if (logTail.size() > settings.logLines) {
@@ -4070,7 +4073,7 @@ void SubstitutionGoal::tryNext() {
     throw;
   } catch (Error& e) {
     if (settings.tryFallback) {
-      log_sink() << e.what();
+      log_sink() << e.what() << std::endl;
       tryNext();
       return;
     }
@@ -4097,7 +4100,7 @@ void SubstitutionGoal::tryNext() {
        0u)) {
     log_sink() << "substituter '" << sub->getUri()
                << "' does not have a valid signature for path '" << storePath
-               << "'";
+               << "'" << std::endl;
     tryNext();
     return;
   }
@@ -4188,7 +4191,7 @@ void SubstitutionGoal::finished() {
   try {
     promise.get_future().get();
   } catch (std::exception& e) {
-    log_sink() << e.what();
+    log_sink() << e.what() << std::endl;
 
     /* Cause the parent build to fail unless --fallback is given,
        or the substitute has disappeared. The latter case behaves
