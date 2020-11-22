@@ -6,7 +6,6 @@
 (require 'use-package)
 (require 'seq)
 
-
 ;; TODO(tazjin): Figure out what's up with vc.
 ;;
 ;; Leaving vc enabled breaks all find-file operations with messages
@@ -256,6 +255,10 @@
 
 (use-package web-mode)
 (use-package yaml-mode)
+
+;; Initialise midnight.el, which by default automatically cleans up
+;; unused buffers at midnight.
+(require 'midnight)
 
 (defgroup tazjin nil
   "Settings related to my configuration")
