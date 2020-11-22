@@ -2,6 +2,7 @@
 
 let
   nixpkgs = import pkgs.nixpkgsSrc {};
+  localpkgs = depot.users.multi.pkgs;
 
   # use the depot checkout in my home directory, to make hacking around easier,
   # instead of the depot checkout sitting in the nix stores
@@ -57,6 +58,7 @@ in
     nixpkgs.strace
     nixpkgs.file
     nixpkgs.pciutils
+    localpkgs.htop
   ];
 
   home.file = {
