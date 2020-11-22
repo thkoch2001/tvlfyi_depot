@@ -179,9 +179,12 @@ struct ExprSelect : Expr {
 };
 
 struct ExprOpHasAttr : Expr {
+  Pos pos;
   Expr* e;
   AttrPath attrPath;
   ExprOpHasAttr(Expr* e, const AttrPath& attrPath) : e(e), attrPath(attrPath){};
+  ExprOpHasAttr(const Pos& pos, Expr* e, const AttrPath& attrPath)
+      : pos(pos), e(e), attrPath(attrPath){};
   COMMON_METHODS
 };
 
@@ -279,9 +282,12 @@ struct ExprWith : Expr {
 };
 
 struct ExprIf : Expr {
+  Pos pos;
   Expr *cond, *then, *else_;
   ExprIf(Expr* cond, Expr* then, Expr* else_)
       : cond(cond), then(then), else_(else_){};
+  ExprIf(const Pos& pos, Expr* cond, Expr* then, Expr* else_)
+      : pos(pos), cond(cond), then(then), else_(else_){};
   COMMON_METHODS
 };
 
@@ -294,8 +300,10 @@ struct ExprAssert : Expr {
 };
 
 struct ExprOpNot : Expr {
+  Pos pos;
   Expr* e;
-  ExprOpNot(Expr* e) : e(e){};
+  explicit ExprOpNot(Expr* e) : e(e){};
+  ExprOpNot(const Pos& pos, Expr* e) : pos(pos), e(e){};
   COMMON_METHODS
 };
 

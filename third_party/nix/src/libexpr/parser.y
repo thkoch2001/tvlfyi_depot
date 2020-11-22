@@ -121,15 +121,15 @@ expr_function
   ;
 
 expr_if
-  : IF expr THEN expr ELSE expr { $$ = new ExprIf($2, $4, $6); }
+  : IF expr THEN expr ELSE expr { $$ = new ExprIf(CUR_POS, $2, $4, $6); }
   | expr_op
   ;
 
 expr_op
-  : '!' expr_op %prec NOT { $$ = new ExprOpNot($2); }
+  : '!' expr_op %prec NOT { $$ = new ExprOpNot(CUR_POS, $2); }
   | '-' expr_op %prec NEGATE { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__sub")), new ExprInt(0)), $2); }
-  | expr_op EQ expr_op { $$ = new ExprOpEq($1, $3); }
-  | expr_op NEQ expr_op { $$ = new ExprOpNEq($1, $3); }
+  | expr_op EQ expr_op { $$ = new ExprOpEq(CUR_POS, $1, $3); }
+  | expr_op NEQ expr_op { $$ = new ExprOpNEq(CUR_POS, $1, $3); }
   | expr_op '<' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__lessThan")), $1), $3); }
   | expr_op LEQ expr_op { $$ = new ExprOpNot(new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__lessThan")), $3), $1)); }
   | expr_op '>' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__lessThan")), $3), $1); }
@@ -138,7 +138,7 @@ expr_op
   | expr_op OR expr_op { $$ = new ExprOpOr(CUR_POS, $1, $3); }
   | expr_op IMPL expr_op { $$ = new ExprOpImpl(CUR_POS, $1, $3); }
   | expr_op UPDATE expr_op { $$ = new ExprOpUpdate(CUR_POS, $1, $3); }
-  | expr_op '?' attrpath { $$ = new ExprOpHasAttr($1, *$3); }
+  | expr_op '?' attrpath { $$ = new ExprOpHasAttr(CUR_POS, $1, *$3); }
   | expr_op '+' expr_op
     { $$ = new ExprConcatStrings(CUR_POS, false, new nix::VectorExprs({$1, $3})); }
   | expr_op '-' expr_op { $$ = new ExprApp(CUR_POS, new ExprApp(new ExprVar(data->symbols.Create("__sub")), $1), $3); }
