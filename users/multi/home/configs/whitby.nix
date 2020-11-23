@@ -19,14 +19,51 @@ in
     bash = {
       enable = true;
       initExtra = ''
-        bind '"\e[5~":history-search-backward'
-        bind '"\e[6~":history-search-forward'
+        PS1="[\\u@\\h:\\w"
+        if [[ -n "$IN_NIX_SHELL" ]]; then
+            PS1="$PS1 (nix-shell)]\\\$ "
+        else
+            PS1="$PS1]\\\$ "
+        fi
 
-        PS1="[\\u@\\h:\\w]\\\$ "
+        nix-shell() {
+            local comarg=0
+            for i in "$@"; do
+                [[ "$i" == "--command" ]] && comarg=1
+            done
+
+            if (( commarg == 0 )); then
+                command nix-shell --command bash "$@"
+            else
+                command nix-shell "$@"
+            fi
+        }
 
         _Z_CMD=d
         source ~/.z.sh
       '';
+    };
+
+    readline = {
+      enable = true;
+      bindings = {
+        "\\e[5~" = "history-search-backward";
+        "\\e[6~" = "history-search-forward";
+        "\\C-w" = "\"\\e\\C-h\"";
+      };
+      includeSystemConfig = false;
+      variables = {
+        expand-tilde = true;
+        colored-stats = true;
+        page-completions = false;
+        menu-complete-display-prefix = true;
+        colored-completion-prefix = true;
+        completion-query-items = 0;
+        completion-ignore-case = true;
+        revert-all-at-newline = true;
+        show-all-if-ambiguous = true;
+        skip-completed-text = true;
+      };
     };
 
     tmux = {
