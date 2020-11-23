@@ -4,7 +4,9 @@ use std::io;
 use std::io::Write;
 use std::process;
 
+mod errors;
 mod interpreter;
+mod scanner;
 
 fn main() {
     let mut args = env::args();
