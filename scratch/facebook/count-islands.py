@@ -8,6 +8,7 @@ def maybe_queue(row, col, game, q, seen):
     if row >= 0 and row < len(game) and col >= 0 and col < len(game[0]):
         if game[row][col] == 'L' and (row, col) not in seen:
             q.append((row, col))
+            seen.add((row, col))
 
 def visit_island(row, col, game, seen):
     """
@@ -18,7 +19,6 @@ def visit_island(row, col, game, seen):
     q.append((row, col))
     while q:
         row, col = q.popleft()
-        seen.add((row, col))
         maybe_queue(row - 1, col, game, q, seen) # UP
         maybe_queue(row + 1, col, game, q, seen) # DOWN
         maybe_queue(row, col - 1, game, q, seen) # LEFT

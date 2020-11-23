@@ -25,10 +25,10 @@ class GraphNode(object):
         while xs:
             node = xs.popleft()
             result.append('{} ({})'.format(node.label, str(node.color)))
-            seen.add(node.label)
             for c in node.neighbors:
                 if c.label not in seen:
                     xs.append(c)
+                    seen.add(node.label)
         return ', '.join(result)
 
 def color_graph(graph, d):
@@ -40,11 +40,11 @@ def color_graph(graph, d):
     while xs:
         x, color = xs.popleft()
         x.color = color
-        seen.add(x.label)
         for c in x.neighbors:
             if c.label not in seen:
                 palette.advance()
                 xs.append((c, palette.get()))
+                seen.add(x.label)
 
 a = GraphNode('a')
 b = GraphNode('b')
