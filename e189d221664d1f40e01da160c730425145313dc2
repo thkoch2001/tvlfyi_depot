@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2382e1c0_f63521ba",
+        "filename": "third_party/nix/src/libexpr/json-to-value.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-23T01:18:11Z",
+      "side": 1,
+      "message": "I realise this is a backport, but this shouldn\u0027t be qualified like this. What are your thoughts on updating imported patches vs. fixing them up later?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 21
+      },
+      "revId": "e189d221664d1f40e01da160c730425145313dc2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
