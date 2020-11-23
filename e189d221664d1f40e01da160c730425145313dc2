@@ -22,6 +22,30 @@
       "revId": "e189d221664d1f40e01da160c730425145313dc2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "461ac583_5c4ca585",
+        "filename": "third_party/nix/src/libexpr/json-to-value.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-23T16:13:11Z",
+      "side": 1,
+      "message": "I think it\u0027s probably fine to update them, given we\u0027re already making things compile and clang_formatting things. the *idea* behind the patch still stands.",
+      "parentUuid": "2382e1c0_f63521ba",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 21
+      },
+      "revId": "e189d221664d1f40e01da160c730425145313dc2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
