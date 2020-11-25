@@ -59,6 +59,8 @@ in
     gnupg
     keybase
     openssl
+    yubikey-manager
+    yubikey-manager-qt
 
     # Spotify...etc
     spotify
@@ -82,13 +84,6 @@ in
       "file:///home/grfn/code"
     ];
   };
-
-  # programs.tarsnap = {
-  #   enable = true;
-  #   keyfile = "/home/grfn/.private/tarsnap.key";
-  #   printStats = true;
-  #   humanizeNumbers = true;
-  # };
 
   programs.zsh.initExtra = ''
     [[ ! $IN_NIX_SHELL ]] && alsi -l

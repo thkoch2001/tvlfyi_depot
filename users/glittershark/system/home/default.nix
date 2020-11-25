@@ -21,5 +21,9 @@ rec {
 
   chupacabraHome = chupacabra.activation-script;
 
+  dobharchu = home ./machines/dobharchu.nix;
+
+  dobharchuHome = dobharchu.activation-script;
+
   meta.targets = [ "chupacabraHome" ];
 }

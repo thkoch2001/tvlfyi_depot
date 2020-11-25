@@ -21,7 +21,7 @@ let
     };
 
     vendorSha256 = "1a5fx6mrv30cl46kswicd8lf5i5shn1fykchvbnbhdpgxhbz6qi4";
-    deleteVendor = true;
+    deleteVendor = pkgs.stdenv.isLinux;
   };
 
 in
@@ -52,8 +52,6 @@ with lib;
 
     gdb
     lldb
-    valgrind
-    rr
     hyperfine
 
     clj2nix
@@ -63,7 +61,10 @@ with lib;
     pg-dump-upsert
 
     config.lib.depot.third_party.clang-tools
-  ]; # ++ optional (stdenv.isLinux) julia;
+  ] ++ optionals (stdenv.isLinux) [
+    valgrind
+    rr
+  ];
 
   programs.git = {
     enable = true;
