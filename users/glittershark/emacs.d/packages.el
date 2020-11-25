@@ -74,11 +74,6 @@
 (package! racer :disable t)
 (package! cargo)
 
-;; Elixir
-(package! flycheck-credo)
-(package! flycheck-mix)
-(package! flycheck-dialyxir)
-
 ;; Lisp
 (package! paxedit)
 

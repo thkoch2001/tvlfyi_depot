@@ -4,14 +4,17 @@
 (setq x-super-keysym 'alt
       x-alt-keysym   'meta)
 
-(setq user-mail-address "griffin@urbint.com"
+(setq user-mail-address "root@gws.fyi"
       user-full-name    "Griffin Smith")
 
-(setq doom-font (font-spec :family "Meslo LGSDZ Nerd Font" :size 14)
-      doom-big-font (font-spec :family "Meslo LGSDZ Nerd Font" :size 24)
-      doom-big-font-increment 5
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans")
-      doom-unicode-font (font-spec :family "Meslo LGSDZ Nerd Font"))
+(let ((font-family (pcase system-type
+                     ('darwin "MesloLGSDZ NF")
+                     ('gnu/linux "Meslo LGSDZ Nerd Font"))))
+  (setq doom-font (font-spec :family font-family :size 14)
+        doom-big-font (font-spec :family font-family :size 24)
+        doom-big-font-increment 5
+        doom-variable-pitch-font (font-spec :family "DejaVu Sans")
+        doom-unicode-font (font-spec :family font-family)))
 
 (require 's)
 
@@ -56,8 +59,6 @@
   (require 'flycheck-dialyxir) (flycheck-dialyxir-setup)
 
   (flycheck-mode))
-
-(setq exec-path (append exec-path '("/home/grfn/.cargo/bin")))
 
 (after! cargo
   (setq cargo-process--custom-path-to-bin "/home/grfn/.cargo/bin/cargo"))

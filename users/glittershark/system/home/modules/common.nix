@@ -38,8 +38,6 @@
     gnupg
     keybase
     openssl
-    yubikey-manager
-    yubikey-manager-qt
 
     # Nix things
     nixfmt
@@ -77,5 +75,13 @@
         forwardAgent = true;
       };
     };
+  };
+
+  services.lorri.enable = true;
+
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
   };
 }

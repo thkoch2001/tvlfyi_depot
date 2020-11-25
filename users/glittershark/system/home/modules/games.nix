@@ -47,12 +47,12 @@ in mkMerge [
   {
     home.packages = [
       crawl
-      multimc
     ];
   }
   (mkIf stdenv.isLinux {
     home.packages = [
       df
+      multimc
     ];
   })
 ]
