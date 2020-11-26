@@ -32,7 +32,6 @@ with lib;
   imports = [
     ./lib/zshFunctions.nix
     ./development/kube.nix
-    ./development/urbint.nix
     ./development/agda.nix
   ];
 
