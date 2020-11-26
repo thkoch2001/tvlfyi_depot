@@ -10,7 +10,6 @@ in {
     ../modules/common.nix
     ../modules/games.nix
     ../modules/rtlsdr.nix
-    ../modules/urbint.nix
     ../modules/ptt.nix
   ];
 

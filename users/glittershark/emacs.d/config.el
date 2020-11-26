@@ -284,34 +284,6 @@
 
 (setq doom-modeline-height 12)
 
-(load "/home/grfn/code/org-clubhouse/org-clubhouse.el")
-(use-package! org-clubhouse
-  :config
-  (setq org-clubhouse-state-alist
-        '(("PROPOSED" . "Proposed")
-          ("BACKLOG"  . "Backlog")
-          ("TODO"     . "Scheduled")
-          ("ACTIVE"   . "In Progress")
-          ("PR"       . "Peer Review")
-          ("TESTING"  . "Stakeholder Review")
-          ("DONE"     . "Completed"))
-        org-clubhouse-username "griffin"
-        org-clubhouse-claim-story-on-status-update
-        '("ACTIVE" "PR" "TESTING" "DONE")
-        org-clubhouse-create-stories-with-labels 'existing
-        org-clubhouse-workflow-name "Urbint")
-
-  (defun grfn/sprint-tasks ()
-    (interactive)
-    (find-file "/home/griffin/notes/work.org")
-    (goto-char 1)
-    (search-forward "* Sprint Tasks")
-    (goto-eol) (insert-char ?\n)
-    (org-clubhouse-headlines-from-query
-     2
-     "owner:griffin state:Scheduled")))
-
-
 
 ;; Should really figure out which of these is correct, eventually
 
@@ -520,34 +492,6 @@
 ;   :keymap '()
 ;   )
 
-
-(defun urbint/format-haskell-source ()
-  (interactive)
-  (let ((output-buffer (generate-new-buffer "brittany-out"))
-        (config-file-path
-         (concat (string-trim
-                  (shell-command-to-string "stack path --project-root"))
-                 "/brittany.yaml")))
-    (when (= 0 (call-process-region
-                (point-min) (point-max)
-                "stack"
-                nil output-buffer nil
-                "exec" "--" "brittany" "--config-file" config-file-path))
-      (let ((pt (point))
-            (wst (window-start))
-            (formatted-source (with-current-buffer output-buffer
-                                (buffer-string))))
-        (erase-buffer)
-        (insert formatted-source)
-        (goto-char pt)
-        (set-window-start nil wst)))))
-
-(add-hook
- 'before-save-hook
- (lambda ()
-   (when (and (eq major-mode 'haskell-mode)
-              (bound-and-true-p brittany-haskell-mode))
-     (urbint/format-haskell-source))))
 
 (require 'alert)
 (setq alert-default-style 'libnotify)
@@ -1128,39 +1072,6 @@
     )
    )
   )
-
-;; (use-package! mu4e
-;;   :config
-;;   (setq mu4e-contexts
-;;         `(,(make-mu4e-context
-;;             :name "work"
-;;             :match-func
-;;             (lambda (msg)
-;;               (when msg
-;;                 (string-match-p "^/work"
-;;                                 (mu4e-message-field msg :maildir))))
-;;             :vars
-;;             '((user-mail-address . "griffin@urbint.com")))
-;;           ,(make-mu4e-context
-;;             :name "personal"
-;;             :match-func
-;;             (lambda (msg)
-;;               (when msg
-;;                 (string-match-p "^/personal"
-;;                                 (mu4e-message-field msg :maildir))))
-;;             :vars
-;;             '((user-mail-address . "root@gws.fyi"))))
-;;         mu4e-maildir (expand-file-name "mail" "~")
-;;         sendmail-program "msmtp"
-;;         send-mail-function #'smtpmail-send-it
-;;         message-sendmail-f-is-evil t
-;;         message-sendmail-extra-arguments '("--read-envelope-from")
-;;         message-send-mail-function #'message-send-mail-with-sendmail)
-
-;;   (set-email-account!
-;;    "work"
-;;    '((user-mail-address . "griffin@urbint.com")
-;;      (smtmpmail-smtp-user . "griffin@urbint.com"))))
 
 (solaire-global-mode -1)
 

@@ -12,15 +12,10 @@ let
     in stringAsChars subst name;
 
   accounts = {
-    work = {
-      primary = true;
-      address = "griffin@urbint.com";
-      aliases = [ "grfn@urbint.com" ];
-      passEntry = "urbint/msmtp-app-password";
-    };
-
     personal = {
+      primary = true;
       address = "root@gws.fyi";
+      aliases = [ "grfn@gws.fyi" ];
       passEntry = "root-gws-msmtp";
     };
   };

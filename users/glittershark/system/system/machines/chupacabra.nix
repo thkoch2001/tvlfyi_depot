@@ -5,7 +5,6 @@
     ../modules/common.nix
     ../modules/reusable/battery.nix
     ../modules/tvl.nix
-    ../modules/urbint.nix
     ../modules/fcitx.nix
     ../modules/rtlsdr.nix
     ../../../../../ops/nixos/v4l2loopback.nix
@@ -42,9 +41,13 @@
       };
     };
 
-    kernel.sysctl."vm.swappiness" = 1;
     kernelModules = [ "kvm-intel" ];
     kernelParams = [ "acpi_rev_override" ];
+
+    kernel.sysctl = {
+      "kernel.perf_event_paranoid" = -1;
+      "vm.swappiness" = 1;
+    };
   };
 
   services.thermald.enable = true;
