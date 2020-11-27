@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "435ed842_53664bb7",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-11-27T20:01:21Z",
+      "side": 1,
+      "message": "this is heinous.",
+      "range": {
+        "startLine": 1470,
+        "startChar": 18,
+        "endLine": 1470,
+        "endChar": 48
+      },
+      "revId": "65b7635d7cf9b19741baa00c6324cb230beb8736",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
