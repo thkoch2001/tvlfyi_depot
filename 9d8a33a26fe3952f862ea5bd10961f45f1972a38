@@ -16,6 +16,24 @@
       "revId": "9d8a33a26fe3952f862ea5bd10961f45f1972a38",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94786ac2_93826eeb",
+        "filename": "third_party/nix/src/libmain/common-args.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2020-11-27T20:21:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdbed2cc_9d0dcef5",
+      "revId": "9d8a33a26fe3952f862ea5bd10961f45f1972a38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
