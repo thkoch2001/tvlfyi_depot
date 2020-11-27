@@ -1463,15 +1463,22 @@ void DerivationGoal::tryToBuild() {
   bool buildLocally = buildMode != bmNormal || parsedDrv->willBuildLocally();
 
   auto started = [&]() {
-    auto msg = fmt(buildMode == bmRepair  ? "repairing outputs of '%s'"
-                   : buildMode == bmCheck ? "checking outputs of '%s'"
-                   : nrRounds > 1         ? "building '%s' (round %d/%d)"
-                                          : "building '%s'",
-                   drvPath, curRound, nrRounds);
+    std::string msg;
+    if (buildMode == bmRepair) {
+      msg = absl::StrFormat("repairing outputs of '%s'", drvPath);
+    } else if (buildMode == bmCheck) {
+      msg = absl::StrFormat("checking outputs of '%s'", drvPath);
+    } else if (nrRounds > 1) {
+      msg = absl::StrFormat("building '%s' (round %d/%d)", drvPath, curRound,
+                            nrRounds);
+    } else {
+      msg = absl::StrFormat("building '%s'", drvPath);
+    }
 
     if (hook) {
-      msg += fmt(" on '%s'", machineName);
+      absl::StrAppend(&msg, absl::StrFormat(" on '%s'", machineName));
     }
+
     log_sink() << msg << std::endl;
     mcRunningBuilds =
         std::make_unique<MaintainCount<uint64_t>>(worker.runningBuilds);
