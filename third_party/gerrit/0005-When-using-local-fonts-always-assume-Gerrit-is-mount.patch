@@ -1,7 +1,7 @@
-From 73edc92dfa584117f6a4373388c9bc47e50a5713 Mon Sep 17 00:00:00 2001
+From dfa0d782edb6b2d789f71a2462ba93e6101b5e4e Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Sat, 11 Jul 2020 00:45:57 +0000
-Subject: [PATCH 5/7] When using local fonts, always assume Gerrit is mounted
+Subject: [PATCH 5/6] When using local fonts, always assume Gerrit is mounted
  at the root.
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH 5/7] When using local fonts, always assume Gerrit is mounted
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/polygerrit-ui/app/rollup.config.js b/polygerrit-ui/app/rollup.config.js
-index db0e2f7159..7bde541405 100644
+index c8e9baa98c..9438504bd8 100644
 --- a/polygerrit-ui/app/rollup.config.js
 +++ b/polygerrit-ui/app/rollup.config.js
 @@ -50,7 +50,7 @@ const importLocalFontMetaUrlResolver = function() {
@@ -22,5 +22,5 @@ index db0e2f7159..7bde541405 100644
        return null;
      }
 -- 
-2.27.0
+2.29.2
 

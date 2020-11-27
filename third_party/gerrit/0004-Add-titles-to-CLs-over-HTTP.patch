@@ -1,30 +1,30 @@
-From 61035d1e81884390708675ab994e0e7210659883 Mon Sep 17 00:00:00 2001
+From ad4564c31401a900702fca6e3f673badbfbdf9d9 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:03:02 +0100
-Subject: [PATCH 4/7] Add titles to CLs over HTTP
+Subject: [PATCH 4/6] Add titles to CLs over HTTP
 
 ---
- .../gerrit/httpd/raw/IndexHtmlUtil.java       | 14 +++-
+ .../gerrit/httpd/raw/IndexHtmlUtil.java       | 13 +++-
  .../google/gerrit/httpd/raw/IndexServlet.java |  7 +-
  .../google/gerrit/httpd/raw/StaticModule.java |  5 +-
  .../gerrit/httpd/raw/TitleComputer.java       | 67 +++++++++++++++++++
  .../gerrit/httpd/raw/PolyGerritIndexHtml.soy  |  4 +-
- 5 files changed, 89 insertions(+), 8 deletions(-)
+ 5 files changed, 88 insertions(+), 8 deletions(-)
  create mode 100644 java/com/google/gerrit/httpd/raw/TitleComputer.java
 
 diff --git a/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java b/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java
-index cddaea4aaf..d5f43de025 100644
+index 77d02c16d0..3b2cae702a 100644
 --- a/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java
 +++ b/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java
-@@ -42,6 +42,7 @@ import java.util.Arrays;
+@@ -38,6 +38,7 @@ import java.util.Arrays;
  import java.util.Collections;
  import java.util.HashMap;
  import java.util.Map;
 +import java.util.Optional;
  import java.util.Set;
  import java.util.function.Function;
- import java.util.regex.Matcher;
-@@ -110,7 +111,8 @@ public class IndexHtmlUtil {
+ 
+@@ -58,13 +59,14 @@ public class IndexHtmlUtil {
        String faviconPath,
        Map<String, String[]> urlParameterMap,
        Function<String, SanitizedContent> urlInScriptTagOrdainer,
@@ -34,37 +34,34 @@ index cddaea4aaf..d5f43de025 100644
        throws URISyntaxException, RestApiException {
      ImmutableMap.Builder<String, Object> data = ImmutableMap.builder();
      data.putAll(
-@@ -121,7 +123,7 @@ public class IndexHtmlUtil {
-                 urlParameterMap,
-                 urlInScriptTagOrdainer,
-                 requestedURL))
--        .putAll(dynamicTemplateData(gerritApi));
+             staticTemplateData(
+                 canonicalURL, cdnPath, faviconPath, urlParameterMap, urlInScriptTagOrdainer))
+-        .putAll(dynamicTemplateData(gerritApi, requestedURL));
 +        .putAll(dynamicTemplateData(gerritApi, requestedURL, titleComputer));
  
      Set<String> enabledExperiments = experimentData(urlParameterMap);
      if (!enabledExperiments.isEmpty()) {
-@@ -131,7 +133,9 @@ public class IndexHtmlUtil {
-   }
+@@ -75,7 +77,9 @@ public class IndexHtmlUtil {
  
    /** Returns dynamic parameters of {@code index.html}. */
--  public static ImmutableMap<String, Object> dynamicTemplateData(GerritApi gerritApi)
-+  public static ImmutableMap<String, Object> dynamicTemplateData(GerritApi gerritApi,
-+                                                                 String requestedURL,
-+                                                                 TitleComputer titleComputer)
-       throws RestApiException {
+   public static ImmutableMap<String, Object> dynamicTemplateData(
+-      GerritApi gerritApi, String requestedURL) throws RestApiException, URISyntaxException {
++      GerritApi gerritApi,
++      String requestedURL,
++      TitleComputer titleComputer) throws RestApiException, URISyntaxException {
      ImmutableMap.Builder<String, Object> data = ImmutableMap.builder();
      Map<String, SanitizedContent> initialData = new HashMap<>();
-@@ -158,6 +162,10 @@ public class IndexHtmlUtil {
+     Server serverApi = gerritApi.config().server();
+@@ -126,6 +130,9 @@ public class IndexHtmlUtil {
+       // Don't render data
      }
  
-     data.put("gerritInitialData", initialData);
-+
 +    Optional<String> title = titleComputer.computeTitle(requestedURL);
 +    title.ifPresent(s -> data.put("title", s));
 +
+     data.put("gerritInitialData", initialData);
      return data.build();
    }
- 
 diff --git a/java/com/google/gerrit/httpd/raw/IndexServlet.java b/java/com/google/gerrit/httpd/raw/IndexServlet.java
 index 97d22701de..089ef4725f 100644
 --- a/java/com/google/gerrit/httpd/raw/IndexServlet.java
@@ -103,10 +100,10 @@ index 97d22701de..089ef4725f 100644
      } catch (URISyntaxException | RestApiException e) {
        throw new IOException(e);
 diff --git a/java/com/google/gerrit/httpd/raw/StaticModule.java b/java/com/google/gerrit/httpd/raw/StaticModule.java
-index 414a120194..e1b6fb082d 100644
+index 4b2c8a9733..466fbaa27c 100644
 --- a/java/com/google/gerrit/httpd/raw/StaticModule.java
 +++ b/java/com/google/gerrit/httpd/raw/StaticModule.java
-@@ -220,11 +220,12 @@ public class StaticModule extends ServletModule {
+@@ -221,11 +221,12 @@ public class StaticModule extends ServletModule {
      HttpServlet getPolyGerritUiIndexServlet(
          @CanonicalWebUrl @Nullable String canonicalUrl,
          @GerritServerConfig Config cfg,
@@ -195,12 +192,12 @@ index 0000000000..8fd2053ad0
 +  }
 +}
 diff --git a/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy b/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy
-index 32ba0bc790..2515c71d6a 100644
+index 000f4e2b5f..fcc26f7f54 100644
 --- a/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy
 +++ b/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy
 @@ -33,10 +33,12 @@
-   {@param? preloadChangePage: ?}
-   {@param? preloadDiffPage: ?}
+   {@param? defaultDashboardHex: ?}
+   {@param? dashboardQuery: ?}
    {@param? userIsAuthenticated: ?}
 +  {@param? title: ?}
    <!DOCTYPE html>{\n}
@@ -213,5 +210,5 @@ index 32ba0bc790..2515c71d6a 100644
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">{\n}
  
 -- 
-2.27.0
+2.29.2
 

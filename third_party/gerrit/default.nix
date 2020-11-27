@@ -16,7 +16,7 @@ let
     targetPkgs = pkgs: [
       (pkgs.bazel.override { enableNixHacks = true; })
       detzip
-      pkgs.jdk
+      pkgs.jdk11_headless
       pkgs.zlib
       pkgs.python
       pkgs.curl
@@ -28,15 +28,16 @@ let
     runScript = "/bin/bazel-run";
   };
   bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.2.3-951-gd888625eb5";
+  version = "3.3.0-rc7-520-gdef99cd679";
 in
 pkgs.lib.makeOverridable pkgs.buildBazelPackage {
-  name = "gerrit-${version}";
+  pname = "gerrit";
+  inherit version;
 
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "d888625eb5e1c91b257c9501924efdd9ae498422";
-    sha256 = "15dgjn5xqhvgwnc4klmh2m8f205x1fhchbs8x312lm2g2apdhdcc";
+    rev = "d36cf01b0f03eb6a555c915cc9d570e4b07d485b";
+    sha256 = "sha256:0a8qnwyhkl8amp34qlnym50787iaxg34k0f44dsyj6qlkj6aqx57";
     fetchSubmodules = true;
   };
   patches = [
@@ -56,27 +57,12 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
     "--disk_cache="
   ];
   removeRulesCC = false;
+  fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "1f624gb1whmadf7qyv5l2yqw7pgbjlbfyk1gzkrcykhlwsxz9z0f";
+    sha256 = "sha256:042m2fzp6hhc76hiyvjakx2bcpbwsbf8gv20d6zifi237dgw6pj3";
     preBuild = ''
       rm .bazelversion
-    '';
-    buildPhase = ''
-      runHook preBuild
-
-      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-      USER=homeless-shelter \
-      bazel \
-        --output_base="$bazelOut" \
-        --output_user_root="$bazelUserRoot" \
-        build --nobuild \
-        --loading_phase_threads=1 \
-        $bazelFlags \
-        $bazelFetchFlags \
-        $bazelTarget
-
-      runHook postBuild
     '';
 
     installPhase = ''
