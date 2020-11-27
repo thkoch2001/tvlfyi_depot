@@ -384,9 +384,6 @@ BuildResult RpcStore::buildDerivation(const Path& drvPath,
   *request.mutable_derivation() = proto_drv;
   request.set_build_mode(BuildModeToProto(buildMode));
 
-  // Same note as in ::buildPaths ...
-  std::ostream discard_logs = DiscardLogsSink();
-
   std::unique_ptr<grpc::ClientReader<proto::BuildEvent>> reader =
       stub_->BuildDerivation(&ctx, request);
 
@@ -395,7 +392,7 @@ BuildResult RpcStore::buildDerivation(const Path& drvPath,
   proto::BuildEvent event;
   while (reader->Read(&event)) {
     if (event.has_build_log()) {
-      discard_logs << event.build_log().line();
+      LOG(INFO) << event.build_log().line();
     } else if (event.has_result()) {
       result = BuildResult::FromProto(event.result());
     }
