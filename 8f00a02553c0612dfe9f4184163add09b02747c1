@@ -16,6 +16,24 @@
       "revId": "8f00a02553c0612dfe9f4184163add09b02747c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8284f15a_f5c3bf5e",
+        "filename": "third_party/nix/src/libexpr/json-to-value.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T18:02:53Z",
+      "side": 1,
+      "message": "Good point. Removed.",
+      "parentUuid": "65705aae_c2eb9fed",
+      "revId": "8f00a02553c0612dfe9f4184163add09b02747c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
