@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46984379_f4303a58",
+        "filename": "third_party/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T23:20:34Z",
+      "side": 1,
+      "message": "+1",
+      "revId": "d5ec23a04e058c7885e98b9b146439d0a27c7b61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2979f2a6_66a71ad7",
+        "filename": "third_party/gerrit/0002-Syntax-highlight-nix.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T23:20:34Z",
+      "side": 1,
+      "message": "lol",
+      "range": {
+        "startLine": 18,
+        "startChar": 5,
+        "endLine": 18,
+        "endChar": 31
+      },
+      "revId": "d5ec23a04e058c7885e98b9b146439d0a27c7b61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcb0a0ad_f61b143f",
+        "filename": "third_party/gerrit/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T23:20:34Z",
+      "side": 1,
+      "message": "+1",
+      "range": {
+        "startLine": 34,
+        "startChar": 2,
+        "endLine": 35,
+        "endChar": 18
+      },
+      "revId": "d5ec23a04e058c7885e98b9b146439d0a27c7b61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fbce1f3c_d6943cb2",
+        "filename": "third_party/gerrit/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T23:20:34Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 63,
+        "startChar": 14,
+        "endLine": 63,
+        "endChar": 21
+      },
+      "revId": "d5ec23a04e058c7885e98b9b146439d0a27c7b61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d59cf3f_d01cc049",
+        "filename": "third_party/gerrit_plugins/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T23:20:34Z",
+      "side": 1,
+      "message": "I think prefixing hashes with the hash algo is deprecated",
+      "range": {
+        "startLine": 10,
+        "startChar": 22,
+        "endLine": 10,
+        "endChar": 29
+      },
+      "revId": "d5ec23a04e058c7885e98b9b146439d0a27c7b61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41c691f6_dcbcd3b4",
+        "filename": "third_party/gerrit_plugins/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T23:20:34Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 29,
+        "startChar": 22,
+        "endLine": 29,
+        "endChar": 29
+      },
+      "revId": "d5ec23a04e058c7885e98b9b146439d0a27c7b61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcf6b01a_eafa365e",
+        "filename": "third_party/gerrit_plugins/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T23:20:34Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 33,
+        "startChar": 16,
+        "endLine": 33,
+        "endChar": 23
+      },
+      "revId": "d5ec23a04e058c7885e98b9b146439d0a27c7b61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
