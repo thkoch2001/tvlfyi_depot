@@ -4,7 +4,7 @@
 
 let
   inherit (pkgs) fetchFromGitHub;
-  stdenv = with pkgs; overrideCC pkgs.stdenv clang_10;
+  stdenv = with pkgs; overrideCC pkgs.stdenv clang_11;
 in stdenv.mkDerivation {
   name = "googleapis-cpp";
   src = ./.;
