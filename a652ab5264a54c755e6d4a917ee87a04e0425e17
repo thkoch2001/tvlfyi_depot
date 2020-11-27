@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a285933f_fbd9f90a",
+        "filename": "third_party/nix/src/libstore/build.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3839,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T19:00:15Z",
+      "side": 1,
+      "message": "that comma looks missplaced",
+      "range": {
+        "startLine": 3839,
+        "startChar": 32,
+        "endLine": 3839,
+        "endChar": 33
+      },
+      "revId": "a652ab5264a54c755e6d4a917ee87a04e0425e17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
