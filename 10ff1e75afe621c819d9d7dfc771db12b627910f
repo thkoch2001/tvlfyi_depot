@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "fad88325_c7ba8fce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T16:37:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d347f5a9_7500d577",
+      "range": {
+        "startLine": 7,
+        "startChar": 19,
+        "endLine": 7,
+        "endChar": 28
+      },
+      "revId": "10ff1e75afe621c819d9d7dfc771db12b627910f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e453e1d_31c18334",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T16:37:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e94063ef_64dffe63",
+      "range": {
+        "startLine": 7,
+        "startChar": 19,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "10ff1e75afe621c819d9d7dfc771db12b627910f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3c40191_3de820c2",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -94,6 +142,54 @@
     },
     {
       "key": {
+        "uuid": "7f047f7b_30cf6d62",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T16:37:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f3c40191_3de820c2",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "10ff1e75afe621c819d9d7dfc771db12b627910f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e47a4786_1fe8bd59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T16:37:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2d79eb0a_12a239f3",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 7
+      },
+      "revId": "10ff1e75afe621c819d9d7dfc771db12b627910f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa05705_776dd217",
         "filename": "third_party/nix/default.nix",
         "patchSetId": 1
@@ -128,6 +224,24 @@
       "writtenOn": "2020-11-27T16:09:31Z",
       "side": 1,
       "message": "We should consider in future using something like Profpatsch\u0027s filterSourceGitignore :^)",
+      "revId": "10ff1e75afe621c819d9d7dfc771db12b627910f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6662b8_627a6569",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T16:37:30Z",
+      "side": 1,
+      "message": "I never really liked those approaches as they focus on gitignore files. Those might serve a similar purpose but you want to exclude *additional* files for your build. Usually something like the README.md in the repo also doesn\u0027t matter for the source you are building but still influences (and busts all binary caches) when you build the project.\n\nIdeally we would use something like //nix/buildGo for CMake where we declare each and every input to the builds.\n\nFor the time being this approach should strike the balance between the two extremes.",
+      "parentUuid": "25893063_f7130d31",
       "revId": "10ff1e75afe621c819d9d7dfc771db12b627910f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
