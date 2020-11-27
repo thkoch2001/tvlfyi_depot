@@ -125,6 +125,7 @@ let
       pulseaudio
       python3
       python3Packages
+      quassel
       remarshal
       rink
       ripgrep
@@ -184,7 +185,6 @@ let
       mercurial
       perl
       perlPackages
-      quassel
       utillinuxMinimal;
 
     haskellPackages = (nixpkgs.haskellPackages.override {
