@@ -22,6 +22,30 @@
       "revId": "49d849149a2d6089b4719d7526285cec5320d019",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39c8f13c_2de6c48e",
+        "filename": "third_party/nix/src/libstore/binary-cache-store.hh",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T23:22:13Z",
+      "side": 1,
+      "message": "Done. Linter says to make it /*log_sink*/, though.",
+      "parentUuid": "fe7e511f_4203ef6b",
+      "range": {
+        "startLine": 96,
+        "startChar": 42,
+        "endLine": 96,
+        "endChar": 44
+      },
+      "revId": "49d849149a2d6089b4719d7526285cec5320d019",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
