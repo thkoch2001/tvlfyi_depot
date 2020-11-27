@@ -199,7 +199,8 @@ struct LegacySSHStore : public Store {
     unsupported("addTextToStore");
   }
 
-  BuildResult buildDerivation(const Path& drvPath, const BasicDerivation& drv,
+  BuildResult buildDerivation(std::ostream& /*log_sink*/, const Path& drvPath,
+                              const BasicDerivation& drv,
                               BuildMode buildMode) override {
     auto conn(connections->get());
 

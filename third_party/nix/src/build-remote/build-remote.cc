@@ -246,7 +246,7 @@ static int _main(int argc, char* argv[]) {
         readDerivation(store->realStoreDir + "/" + baseNameOf(drvPath)));
     drv.inputSrcs = inputs;
 
-    auto result = sshStore->buildDerivation(drvPath, drv);
+    auto result = sshStore->buildDerivation(std::cerr, drvPath, drv);
 
     if (!result.success()) {
       throw Error("build of '%s' on '%s' failed: %s", drvPath, storeUri,

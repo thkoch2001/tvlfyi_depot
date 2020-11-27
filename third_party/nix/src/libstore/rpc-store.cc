@@ -374,7 +374,8 @@ absl::Status RpcStore::buildPaths(std::ostream& log_sink, const PathSet& paths,
   return nix::util::proto::GRPCStatusToAbsl(reader->Finish());
 }
 
-BuildResult RpcStore::buildDerivation(const Path& drvPath,
+BuildResult RpcStore::buildDerivation(std::ostream& log_sink,
+                                      const Path& drvPath,
                                       const BasicDerivation& drv,
                                       BuildMode buildMode) {
   ClientContext ctx;
@@ -392,7 +393,7 @@ BuildResult RpcStore::buildDerivation(const Path& drvPath,
   proto::BuildEvent event;
   while (reader->Read(&event)) {
     if (event.has_build_log()) {
-      LOG(INFO) << event.build_log().line();
+      log_sink << event.build_log().line();
     } else if (event.has_result()) {
       result = BuildResult::FromProto(event.result());
     }
