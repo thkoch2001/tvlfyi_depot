@@ -3836,7 +3836,7 @@ void DerivationGoal::handleEOF(int /* fd */) {
 void DerivationGoal::flushLine() {
   if (settings.verboseBuild &&
       (settings.printRepeatedBuilds || curRound == 1)) {
-    log_sink() << absl::StrCat(currentLogLine, "\n") << std::endl;
+    log_sink() << currentLogLine, << std::endl;
   } else {
     logTail.push_back(currentLogLine);
     if (logTail.size() > settings.logLines) {
