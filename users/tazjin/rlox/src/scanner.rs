@@ -133,3 +133,16 @@ impl<'a> Scanner<'a> {
         return self.tokens;
     }
 }
+
+pub fn scan<'a>(input: &'a [char]) -> Vec<Token<'a>> {
+    let scanner = Scanner {
+        source: &input,
+        tokens: vec![],
+        errors: vec![],
+        start: 0,
+        current: 0,
+        line: 0,
+    };
+
+    return scanner.scan_tokens();
+}
