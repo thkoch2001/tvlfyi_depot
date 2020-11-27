@@ -90,6 +90,7 @@ impl<'a> Scanner<'a> {
 
     fn scan_token(&mut self) {
         match self.advance() {
+            // simple single-character tokens
             '(' => self.add_token(TokenKind::LeftParen),
             ')' => self.add_token(TokenKind::RightParen),
             '{' => self.add_token(TokenKind::LeftBrace),
@@ -101,11 +102,26 @@ impl<'a> Scanner<'a> {
             ';' => self.add_token(TokenKind::Semicolon),
             '*' => self.add_token(TokenKind::Star),
 
+            // possible multi-character tokens
+            '!' => self.add_if_next('=', TokenKind::BangEqual, TokenKind::Bang),
+            '=' => self.add_if_next('=', TokenKind::EqualEqual, TokenKind::Equal),
+            '<' => self.add_if_next('=', TokenKind::LessEqual, TokenKind::Less),
+            '>' => self.add_if_next('=', TokenKind::GreaterEqual, TokenKind::Greater),
+
             unexpected => self.errors.push(Error {
                 line: self.line,
                 kind: ErrorKind::UnexpectedChar(unexpected),
             }),
         };
+    }
+
+    fn add_if_next(&mut self, expected:char, then: TokenKind, or: TokenKind) {
+        if self.is_at_end() || self.source[self.current] != expected {
+            self.add_token(or);
+        } else {
+            self.current += 1;
+            self.add_token(then);
+        }
     }
 
     fn scan_tokens(mut self) -> Vec<Token<'a>> {
