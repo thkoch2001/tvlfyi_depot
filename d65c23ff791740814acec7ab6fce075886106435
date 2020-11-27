@@ -34,6 +34,24 @@
       "revId": "d65c23ff791740814acec7ab6fce075886106435",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a98cbf1_32cc65e3",
+        "filename": "third_party/nix/src/libmain/common-args.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T20:51:01Z",
+      "side": 1,
+      "message": "Let\u0027s change it - \"decrease\" feels a little bit like a misnomer now.",
+      "parentUuid": "7a1dc428_7dbf5b7a",
+      "revId": "d65c23ff791740814acec7ab6fce075886106435",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
