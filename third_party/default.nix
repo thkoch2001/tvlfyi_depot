@@ -54,8 +54,7 @@ let
       cairo
       cargo
       cgit
-      clang-tools
-      clang_10
+      clang_11
       cmake
       coreutils
       cudatoolkit
@@ -219,10 +218,14 @@ in exposed.lib.fix(self: exposed // {
     ffmpeg = nixpkgs.ffmpeg-full;
   };
 
-  # Use LLVM 10
-  llvmPackages = nixpkgs.llvmPackages_10;
-  clangStdenv = nixpkgs.llvmPackages_10.stdenv;
-  stdenv = nixpkgs.llvmPackages_10.stdenv;
+  # Use LLVM 11
+  llvmPackages = nixpkgs.llvmPackages_11;
+  clangStdenv = nixpkgs.llvmPackages_11.stdenv;
+  stdenv = nixpkgs.llvmPackages_11.stdenv;
+
+  clang-tools = (nixpkgs.clang-tools.override {
+    llvmPackages = llvmPackages;
+  });
 
   # Provide Emacs 27
   #
