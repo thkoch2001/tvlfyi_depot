@@ -307,7 +307,7 @@ int handleExceptions(const std::string& programName,
     if (!e.prefix().empty() && !settings.showTrace) {
       LOG(INFO) << "(use '--show-trace' to show detailed location information)";
     }
-    return e.status;
+    return static_cast<int>(e.status);
   } catch (std::bad_alloc& e) {
     LOG(ERROR) << error << "failed to allocate: " << e.what();
     return 1;
