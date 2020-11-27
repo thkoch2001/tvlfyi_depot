@@ -71,8 +71,8 @@ in
       terminal = "tmux-256color";
       escapeTime = 50;
       extraConfig = ''
-        bind-key -n C-S-Left swap-window -t -1
-        bind-key -n C-S-Right swap-window -t +1
+        bind-key -n C-S-Left swap-window -dt -1
+        bind-key -n C-S-Right swap-window -dt +1
       '';
     };
 
