@@ -46,6 +46,30 @@
       "revId": "49d849149a2d6089b4719d7526285cec5320d019",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19b80124_0e327490",
+        "filename": "third_party/nix/src/libstore/binary-cache-store.hh",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T23:25:41Z",
+      "side": 1,
+      "message": "Good enough :-)",
+      "parentUuid": "39c8f13c_2de6c48e",
+      "range": {
+        "startLine": 96,
+        "startChar": 42,
+        "endLine": 96,
+        "endChar": 44
+      },
+      "revId": "49d849149a2d6089b4719d7526285cec5320d019",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
