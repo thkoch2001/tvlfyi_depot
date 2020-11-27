@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "06b296bf_75c5fa22",
+        "filename": "third_party/nix/src/libstore/remote-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T23:38:58Z",
+      "side": 1,
+      "message": "the whole connection handling stuff is suspicious",
+      "parentUuid": "b4b744d7_21b224bf",
+      "range": {
+        "startLine": 501,
+        "startChar": 2,
+        "endLine": 501,
+        "endChar": 23
+      },
+      "revId": "5501a9d50e446fc3b77bd0d29d7d10e2b688a150",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4be7cc13_f5f66dea",
         "filename": "third_party/nix/src/libstore/rpc-store.cc",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-11-27T23:32:44Z",
       "side": 1,
       "message": "we should probably rename this from \"line\" to \"chunk\"",
+      "range": {
+        "startLine": 396,
+        "startChar": 36,
+        "endLine": 396,
+        "endChar": 40
+      },
+      "revId": "5501a9d50e446fc3b77bd0d29d7d10e2b688a150",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "befa94c3_04009d61",
+        "filename": "third_party/nix/src/libstore/rpc-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T23:38:58Z",
+      "side": 1,
+      "message": "agreed.",
+      "parentUuid": "4be7cc13_f5f66dea",
       "range": {
         "startLine": 396,
         "startChar": 36,
