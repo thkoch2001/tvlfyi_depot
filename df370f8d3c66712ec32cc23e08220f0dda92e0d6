@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36874211_3d777acb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T17:43:07Z",
+      "side": 1,
+      "message": "I don\u0027t, I\u0027m just lazy :P",
+      "revId": "df370f8d3c66712ec32cc23e08220f0dda92e0d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
+    }
+  ]
+}
