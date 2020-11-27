@@ -234,11 +234,11 @@ void ExprVar::bindVars(const StaticEnv& env) {
      set its level and displacement. */
   const StaticEnv* curEnv;
   unsigned int level;
-  int withLevel = -1;
+  std::optional<unsigned int> withLevel = std::nullopt;
   for (curEnv = &env, level = 0; curEnv != nullptr;
        curEnv = curEnv->up, level++) {
     if (curEnv->isWith) {
-      if (withLevel == -1) {
+      if (!withLevel.has_value()) {
         withLevel = level;
       }
     } else {
@@ -255,13 +255,13 @@ void ExprVar::bindVars(const StaticEnv& env) {
   /* Otherwise, the variable must be obtained from the nearest
      enclosing `with'.  If there is no `with', then we can issue an
      "undefined variable" error now. */
-  if (withLevel == -1) {
+  if (!withLevel.has_value()) {
     throw UndefinedVarError(format("undefined variable '%1%' at %2%") % name %
                             pos);
   }
 
   fromWith = true;
-  this->level = withLevel;
+  this->level = withLevel.value();
 }
 
 void ExprSelect::bindVars(const StaticEnv& env) {
