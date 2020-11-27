@@ -52,6 +52,24 @@
       "revId": "8f00a02553c0612dfe9f4184163add09b02747c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6b975a89_5cda5ee9",
+        "filename": "third_party/nix/src/libexpr/json-to-value.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T18:58:48Z",
+      "side": 1,
+      "message": "Ahh right, std::move converts to a \u0026\u0026 that was all the magic it did... I must get used to C++ again.",
+      "parentUuid": "9c05c52e_20809f58",
+      "revId": "8f00a02553c0612dfe9f4184163add09b02747c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
