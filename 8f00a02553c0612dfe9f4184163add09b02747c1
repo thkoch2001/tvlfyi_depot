@@ -34,6 +34,24 @@
       "revId": "8f00a02553c0612dfe9f4184163add09b02747c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c05c52e_20809f58",
+        "filename": "third_party/nix/src/libexpr/json-to-value.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T18:12:44Z",
+      "side": 1,
+      "message": "hm. guess it *was* necessary.",
+      "parentUuid": "8284f15a_f5c3bf5e",
+      "revId": "8f00a02553c0612dfe9f4184163add09b02747c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
