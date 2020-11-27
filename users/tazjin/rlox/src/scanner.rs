@@ -55,13 +55,13 @@ pub enum TokenKind {
 #[derive(Debug)]
 pub struct Token<'a> {
     kind: TokenKind,
-    lexeme: &'a str,
+    lexeme: &'a [char],
     // literal: Object, // TODO(tazjin): Uhh?
     line: usize,
 }
 
 struct Scanner<'a> {
-    source: &'a str,
+    source: &'a [char],
     tokens: Vec<Token<'a>>,
     errors: Vec<Error>,
     start: usize,   // offset of first character in current lexeme
@@ -76,11 +76,7 @@ impl<'a> Scanner<'a> {
 
     fn advance(&mut self) -> char {
         self.current += 1;
-
-        // TODO(tazjin): Due to utf8-safety, this is a bit annoying.
-        // Since string iteration is not the point here I'm just
-        // leaving this as is for now.
-        self.source.chars().nth(self.current - 1).unwrap()
+        self.source[self.current-1]
     }
 
     fn add_token(&mut self, kind: TokenKind) {
