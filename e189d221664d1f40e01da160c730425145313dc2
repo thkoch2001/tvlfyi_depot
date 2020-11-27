@@ -70,6 +70,30 @@
       "revId": "e189d221664d1f40e01da160c730425145313dc2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cbbdd0f_842e5903",
+        "filename": "third_party/nix/src/libexpr/json-to-value.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T17:16:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72cfcacc_decef29e",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 21
+      },
+      "revId": "e189d221664d1f40e01da160c730425145313dc2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": false
     }
   ]
 }
