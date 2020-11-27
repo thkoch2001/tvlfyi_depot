@@ -9,6 +9,22 @@ namespace nix {
 MixCommonArgs::MixCommonArgs(const std::string& programName)
     : programName(programName) {
   mkFlag()
+      .longName("verbose")
+      .shortName('v')
+      .description("increase verbosity level")
+      .handler([]() {
+        FLAGS_stderrthreshold = google::GLOG_INFO;
+        FLAGS_v += 1;
+      });
+
+  mkFlag()
+      .longName("quiet")
+      .description("decrease verbosity level")
+      .handler([]() {
+        FLAGS_stderrthreshold = google::GLOG_FATAL;
+      });
+
+  mkFlag()
       .longName("option")
       .labels({"name", "value"})
       .description("set a Nix configuration option (overriding nix.conf)")
