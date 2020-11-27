@@ -239,7 +239,7 @@ in depot.lib.fix(self: {
       chromium
       clang-manpages
       clang-tools
-      clang_10
+      clang_11
       curl
       direnv
       dnsutils
