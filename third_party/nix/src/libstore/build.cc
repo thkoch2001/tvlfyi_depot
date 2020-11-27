@@ -4754,11 +4754,11 @@ absl::Status LocalStore::buildPaths(std::ostream& log_sink,
   return absl::OkStatus();
 }
 
-BuildResult LocalStore::buildDerivation(const Path& drvPath,
+BuildResult LocalStore::buildDerivation(std::ostream& log_sink,
+                                        const Path& drvPath,
                                         const BasicDerivation& drv,
                                         BuildMode buildMode) {
-  auto discard_logs = DiscardLogsSink();
-  Worker worker(*this, discard_logs);
+  Worker worker(*this, log_sink);
   auto goal = worker.makeBasicDerivationGoal(drvPath, drv, buildMode);
 
   BuildResult result;

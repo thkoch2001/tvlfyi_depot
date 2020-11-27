@@ -687,7 +687,10 @@ class WorkerServiceImpl final : public WorkerService::Service {
             return Status(grpc::StatusCode::INTERNAL, "Invalid build mode");
           }
 
-          BuildResult res = store_->buildDerivation(drv_path, drv, *build_mode);
+          BuildLogStreambuf log_buffer(writer);
+          std::ostream log_sink(&log_buffer);
+          BuildResult res =
+              store_->buildDerivation(log_sink, drv_path, drv, *build_mode);
 
           proto::BuildResult proto_res{};
           proto_res.set_status(res.status_to_proto());

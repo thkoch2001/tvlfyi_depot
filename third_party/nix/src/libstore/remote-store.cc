@@ -492,7 +492,8 @@ absl::Status RemoteStore::buildPaths(std::ostream& /* log_sink */,
   return absl::OkStatus();
 }
 
-BuildResult RemoteStore::buildDerivation(const Path& drvPath,
+BuildResult RemoteStore::buildDerivation(std::ostream& /*log_sink*/,
+                                         const Path& drvPath,
                                          const BasicDerivation& drv,
                                          BuildMode buildMode) {
   auto conn(getConnection());

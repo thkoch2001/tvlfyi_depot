@@ -93,7 +93,8 @@ class BinaryCacheStore : public Store {
 
   void narFromPath(const Path& path, Sink& sink) override;
 
-  BuildResult buildDerivation(const Path& drvPath, const BasicDerivation& drv,
+  BuildResult buildDerivation(std::ostream&, const Path& drvPath,
+                              const BasicDerivation& drv,
                               BuildMode buildMode) override {
     unsupported("buildDerivation");
   }

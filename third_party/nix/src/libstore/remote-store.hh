@@ -74,7 +74,8 @@ class RemoteStore : public virtual Store {
   absl::Status buildPaths(std::ostream& log_sink, const PathSet& paths,
                           BuildMode build_mode) override;
 
-  BuildResult buildDerivation(const Path& drvPath, const BasicDerivation& drv,
+  BuildResult buildDerivation(std::ostream& log_sink, const Path& drvPath,
+                              const BasicDerivation& drv,
                               BuildMode buildMode) override;
 
   void ensurePath(const Path& path) override;
