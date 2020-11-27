@@ -1472,7 +1472,7 @@ void DerivationGoal::tryToBuild() {
     if (hook) {
       msg += fmt(" on '%s'", machineName);
     }
-    log_sink() << absl::StrCat(msg, "[", drvPath, "]\n") << std::endl;
+    log_sink() << msg << std::endl;
     mcRunningBuilds =
         std::make_unique<MaintainCount<uint64_t>>(worker.runningBuilds);
   };

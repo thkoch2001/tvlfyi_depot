@@ -364,8 +364,7 @@ absl::Status RpcStore::buildPaths(std::ostream& log_sink, const PathSet& paths,
       // TODO(tazjin): Include .path()?
       log_sink << event.build_log().line();
     } else {
-      log_sink << std::endl
-               << "Building path: " << event.building_path().path()
+      log_sink << "Building path: " << event.building_path().path()
                << std::endl;
     }
 
