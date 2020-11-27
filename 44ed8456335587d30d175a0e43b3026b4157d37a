@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "041c4dca_1cdaa082",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T17:59:36Z",
+      "side": 1,
+      "message": "this caveat feels equivalent to having a remote configured, to me, especially since `git clone` configures a remote by default.\n\nThough maybe that\u0027s just because my gerrit username doesn\u0027t match USER, so this requires extra setup for me. Given that, I\u0027m not gonna block this if other people want it.",
+      "range": {
+        "startLine": 10,
+        "startChar": 22,
+        "endLine": 11,
+        "endChar": 29
+      },
+      "revId": "44ed8456335587d30d175a0e43b3026b4157d37a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
