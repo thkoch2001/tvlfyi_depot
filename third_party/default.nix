@@ -54,7 +54,6 @@ let
       cairo
       cargo
       cgit
-      clang-tools
       clang_10
       cmake
       coreutils
@@ -189,6 +188,10 @@ let
 
     haskellPackages = (nixpkgs.haskellPackages.override {
       overrides = (import ./haskell_overlay { pkgs = nixpkgs; });
+    });
+
+    clang-tools = (nixpkgs.clang-tools.override {
+      llvmPackages = nixpkgs.llvmPackages_10;
     });
 
     gradle_6 = (nixpkgs.gradleGen.override {
