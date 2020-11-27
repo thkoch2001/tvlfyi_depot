@@ -674,15 +674,13 @@ class WorkerServiceImpl final : public WorkerService::Service {
   }
 
   Status BuildDerivation(
-      grpc::ServerContext* context,
-      const nix::proto::BuildDerivationRequest* request,
+      grpc::ServerContext*, const nix::proto::BuildDerivationRequest* request,
       grpc::ServerWriter<nix::proto::BuildEvent>* writer) override {
     return HandleExceptions(
         [&]() -> Status {
           auto drv_path = request->drv_path().path();
           ASSERT_INPUT_STORE_PATH(drv_path);
-          auto drv =
-              BasicDerivation::from_proto(&request->derivation(), *store_);
+          auto drv = BasicDerivation::from_proto(&request->derivation());
 
           auto build_mode = nix::BuildModeFrom(request->build_mode());
           if (!build_mode) {

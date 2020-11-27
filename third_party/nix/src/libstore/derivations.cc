@@ -43,11 +43,10 @@ nix::proto::Derivation_DerivationOutput DerivationOutput::to_proto() const {
 }
 
 BasicDerivation BasicDerivation::from_proto(
-    const nix::proto::Derivation* proto_derivation, const nix::Store& store) {
+    const nix::proto::Derivation* proto_derivation) {
   BasicDerivation result;
   result.platform = proto_derivation->platform();
   result.builder = proto_derivation->builder().path();
-  store.assertStorePath(result.builder);
 
   for (auto [k, v] : proto_derivation->outputs()) {
     result.outputs.emplace(k, v);
