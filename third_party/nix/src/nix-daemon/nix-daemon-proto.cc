@@ -99,11 +99,21 @@ class BuildLogStreambuf final : public std::streambuf {
   using Writer = grpc::ServerWriter<nix::proto::BuildEvent>;
   explicit BuildLogStreambuf(Writer* writer) : writer_(writer) {}
 
+  // TODO(grfn): buffer with a timeout so we don't have too many messages
   std::streamsize xsputn(const char_type* s, std::streamsize n) override {
     nix::proto::BuildEvent event;
     event.mutable_build_log()->set_line(s, n);
     writer_->Write(event);
     return n;
+  }
+
+  int_type overflow(int_type ch) override {
+    if (ch != traits_type::eof()) {
+      nix::proto::BuildEvent event;
+      event.mutable_build_log()->set_line(std::string(1, ch));
+      writer_->Write(event);
+    }
+    return ch;
   }
 
  private:
