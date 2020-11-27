@@ -94,6 +94,7 @@ let
       installShellFiles
       jdk
       jdk11
+      jdk11_headless
       jetbrains-mono
       jq
       kontemplate

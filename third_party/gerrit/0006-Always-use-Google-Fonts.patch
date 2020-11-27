@@ -1,7 +1,7 @@
-From f3b85ab3ac139d8ec51c09aa5e0d430d65e35a96 Mon Sep 17 00:00:00 2001
+From def99cd67963afad42bd70f21fd2f626603481e4 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Sat, 11 Jul 2020 00:46:13 +0000
-Subject: [PATCH 6/7] Always use Google Fonts.
+Subject: [PATCH 6/6] Always use Google Fonts.
 
 We're not a corporate, and we're not behind the GFW. Always use Google Fonts,
 because even though we no longer get the caching benefits (boo, browsers),
@@ -11,10 +11,10 @@ it is still a better geographically-distributed CDN.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java b/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java
-index d5f43de025..9c68a1d327 100644
+index 3b2cae702a..84ce678b6d 100644
 --- a/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java
 +++ b/java/com/google/gerrit/httpd/raw/IndexHtmlUtil.java
-@@ -231,7 +231,7 @@ public class IndexHtmlUtil {
+@@ -182,7 +182,7 @@ public class IndexHtmlUtil {
      if (urlParameterMap.containsKey("ce")) {
        data.put("polyfillCE", "true");
      }
@@ -24,5 +24,5 @@ index d5f43de025..9c68a1d327 100644
      }
  
 -- 
-2.27.0
+2.29.2
 
