@@ -12,12 +12,36 @@ let
     customMemoryManagement = false;
   };
 
-  src = ./.;
+  src = let
+    srcDir = ./.;
+    # create relative paths for all the sources we are filtering
+    asRelative = path:
+      let
+        srcS = toString srcDir;
+        pathS = toString path;
+      in
+        if ! lib.hasPrefix srcS pathS then
+          throw "Path is outside of the working directory."
+        else
+        lib.removePrefix srcS pathS;
+
+  in builtins.filterSource (path: type:
+    # Strip out .nix files that are in the root of the repository.  Changing
+    # the expression of tvix shouldn't cause a rebuild of tvix unless really
+    # required.
+    !(dirOf (asRelative path) == "/" && lib.hasSuffix ".nix" path) &&
+
+    # remove the proto files from the repo as those are compiled separately
+    !(lib.hasPrefix "src/proto" (asRelative path)) &&
+
+    # ignore result symlinks
+    !(type == "symlink" && lib.hasPrefix "result" (baseNameOf path))
+  ) srcDir;
 
   # Proto generation in CMake is theoretically possible, but that is
   # very theoretical - this does it in Nix instead.
   protoSrcs = pkgs.runCommand "nix-proto-srcs" {} ''
-    export PROTO_SRCS=${src + "/src/proto"}
+    export PROTO_SRCS=${./src/proto}
     mkdir -p $out/libproto
     ${pkgs.protobuf}/bin/protoc -I=$PROTO_SRCS \
       --cpp_out=$out/libproto \
