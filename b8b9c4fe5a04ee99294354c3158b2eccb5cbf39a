@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d656728_01c78289",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T17:11:18Z",
+      "side": 1,
+      "message": "nesting `let`s like this feels a little wonky to me, though I can see the point.",
+      "revId": "b8b9c4fe5a04ee99294354c3158b2eccb5cbf39a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e366c21a_4b49eeb1",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T17:11:18Z",
+      "side": 1,
+      "message": "this should be impossible, right? is it even worth dealing with here?",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 59
+      },
+      "revId": "b8b9c4fe5a04ee99294354c3158b2eccb5cbf39a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
