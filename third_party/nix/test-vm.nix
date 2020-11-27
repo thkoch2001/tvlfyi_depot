@@ -9,6 +9,10 @@ let
 
     nix.package = depot.third_party.nix;
 
+    environment.systemPackages = [
+      pkgs.gdb
+    ];
+
     virtualisation.qemu.options = [ "-nographic" "-curses" ];
 
     nix.nixPath = [

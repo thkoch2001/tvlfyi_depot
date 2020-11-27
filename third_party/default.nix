@@ -178,6 +178,7 @@ let
       docbook_xsl_ns
       editline
       flex
+      gdb
       libseccomp
       libsodium
       libxml2
