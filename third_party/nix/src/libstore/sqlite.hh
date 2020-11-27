@@ -45,7 +45,7 @@ struct SQLiteStmt {
 
    private:
     SQLiteStmt& stmt;
-    unsigned int curArg = 1;
+    int curArg = 1;
     Use(SQLiteStmt& stmt);
 
    public:
