@@ -21,8 +21,8 @@
 (defgroup tvl nil
   "Customisation options for TVL functionality.")
 
-(defcustom tvl-gerrit-remote "origin"
-  "Name of the git remote for gerrit"
+(defcustom tvl-gerrit-url "ssh://code.tvl.fyi:29418/depot"
+  "Gerrit SSH URL"
   :group 'tvl)
 
 (defcustom tvl-depot-path "/depot"
@@ -37,7 +37,7 @@
 (define-suffix-command magit-gerrit-push-for-review ()
   "Push to Gerrit for review."
   (interactive)
-  (magit-push-refspecs tvl-gerrit-remote
+  (magit-push-refspecs tvl-gerrit-url
                        (tvl--gerrit-ref "canon")
                        nil))
 
@@ -48,7 +48,7 @@
 (define-suffix-command magit-gerrit-push-wip ()
   "Push to Gerrit as a work-in-progress."
   (interactive)
-  (magit-push-refspecs tvl-gerrit-remote
+  (magit-push-refspecs tvl-gerrit-url
                        (concat (tvl--gerrit-ref "canon") "%wip")
                        nil))
 
@@ -59,7 +59,7 @@
 (define-suffix-command magit-gerrit-submit ()
   "Push to Gerrit for review."
   (interactive)
-  (magit-push-refspecs tvl-gerrit-remote
+  (magit-push-refspecs tvl-gerrit-url
                        (tvl--gerrit-ref "canon" '("submit"))
                        nil))
 
@@ -73,7 +73,7 @@
 rubberstamp operation is dangerous and should only be used in
 `//users'."
   (interactive)
-  (magit-push-refspecs tvl-gerrit-remote
+  (magit-push-refspecs tvl-gerrit-url
                        (tvl--gerrit-ref "canon"
                                         '("Code-Review+2" "publish-comments"))
                        nil))
