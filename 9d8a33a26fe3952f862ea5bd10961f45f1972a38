@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdbed2cc_9d0dcef5",
+        "filename": "third_party/nix/src/libmain/common-args.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-27T19:59:17Z",
+      "side": 1,
+      "message": "this should increase `FLAGS_v`: http://rpg.ifi.uzh.ch/docs/glog.html#verbose, and probably just set stderrthreshold to GLOG_INFO if v is set even once.",
+      "revId": "9d8a33a26fe3952f862ea5bd10961f45f1972a38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
