@@ -468,12 +468,14 @@ class Store : public std::enable_shared_from_this<Store>, public Config {
      on-disk .drv file). Note that ‘drvPath’ is only used for
      informational purposes. */
   // TODO(tazjin): Thread std::ostream through here, too.
-  virtual BuildResult buildDerivation(const Path& drvPath,
+  virtual BuildResult buildDerivation(std::ostream& log_sink,
+                                      const Path& drvPath,
                                       const BasicDerivation& drv,
                                       BuildMode buildMode) = 0;
 
-  BuildResult buildDerivation(const Path& drvPath, const BasicDerivation& drv) {
-    return buildDerivation(drvPath, drv, bmNormal);
+  BuildResult buildDerivation(std::ostream& log_sink, const Path& drvPath,
+                              const BasicDerivation& drv) {
+    return buildDerivation(log_sink, drvPath, drv, bmNormal);
   }
 
   /* Ensure that a path is valid.  If it is not currently valid, it

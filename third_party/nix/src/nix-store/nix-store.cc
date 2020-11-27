@@ -1088,7 +1088,7 @@ static void opServe(Strings opFlags, Strings opArgs) {
         getBuildSettings();
 
         MonitorFdHup monitor(in.fd);
-        auto status = store->buildDerivation(drvPath, drv);
+        auto status = store->buildDerivation(std::cerr, drvPath, drv);
 
         out << status.status << status.errorMsg;
 

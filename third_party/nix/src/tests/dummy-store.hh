@@ -36,7 +36,8 @@ class DummyStore final : public Store {
 
   void narFromPath(const Path& path, Sink& sink) {}
 
-  BuildResult buildDerivation(const Path& drvPath, const BasicDerivation& drv,
+  BuildResult buildDerivation(std::ostream& log_sink, const Path& drvPath,
+                              const BasicDerivation& drv,
                               BuildMode buildMode = bmNormal) {
     return BuildResult{};
   }
