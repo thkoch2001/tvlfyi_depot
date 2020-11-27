@@ -9,7 +9,7 @@ let
 
     nix.package = depot.third_party.nix;
 
-    virtualisation.qemu.options = [ "-nographic" ];
+    virtualisation.qemu.options = [ "-nographic" "-curses" ];
 
     nix.nixPath = [
       "depot=${depot.depotPath}"
