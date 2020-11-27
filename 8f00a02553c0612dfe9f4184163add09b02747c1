@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65705aae_c2eb9fed",
+        "filename": "third_party/nix/src/libexpr/json-to-value.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T17:37:48Z",
+      "side": 1,
+      "message": "Is the std::move here actually required (and helpful) given that the constructor only accepts \u0026\u0026 refs anyway?",
+      "revId": "8f00a02553c0612dfe9f4184163add09b02747c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
