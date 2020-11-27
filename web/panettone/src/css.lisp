@@ -46,7 +46,7 @@
      :padding-left "1rem"
      :margin-left "0rem")
     (pre
-     :overflow-x "scroll")))
+     :overflow-x "auto")))
 
 (defparameter issue-list-styles
   `((.issue-list
