@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8e761249_ef182b7f",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T18:55:05Z",
+      "side": 1,
+      "message": "Why wonky? I think it tightly controls the scope of the required vars to where it is actually required. I hate code where you have gigantic scope with everything and can\u0027t follow the \"flow\" anymore.",
+      "parentUuid": "4d656728_01c78289",
+      "revId": "b8b9c4fe5a04ee99294354c3158b2eccb5cbf39a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e366c21a_4b49eeb1",
         "filename": "third_party/nix/default.nix",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2020-11-27T17:11:18Z",
       "side": 1,
       "message": "this should be impossible, right? is it even worth dealing with here?",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 59
+      },
+      "revId": "b8b9c4fe5a04ee99294354c3158b2eccb5cbf39a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eba6f62b_8f6ecdc6",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-27T18:55:05Z",
+      "side": 1,
+      "message": "Yes it is currently impossible in the code but I wanted to avoid silence failure (stripping a prefix that wasn\u0027t there) explicitly. I also always get the argument order of hasPrefix and hasSuffix wrong so that is why I originally added it. :)",
+      "parentUuid": "e366c21a_4b49eeb1",
       "range": {
         "startLine": 23,
         "startChar": 8,
