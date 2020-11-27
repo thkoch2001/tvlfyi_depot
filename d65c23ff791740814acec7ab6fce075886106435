@@ -16,6 +16,24 @@
       "revId": "d65c23ff791740814acec7ab6fce075886106435",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a1dc428_7dbf5b7a",
+        "filename": "third_party/nix/src/libmain/common-args.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2020-11-27T20:26:36Z",
+      "side": 1,
+      "message": "I was just re-using the text which upstream used in the option description before we patched them out. I don\u0027t have any strong feelings about this though, I\u0027m happy to go with either.",
+      "parentUuid": "d0254c6b_690ed581",
+      "revId": "d65c23ff791740814acec7ab6fce075886106435",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
