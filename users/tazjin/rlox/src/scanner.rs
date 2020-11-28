@@ -26,7 +26,7 @@ pub enum TokenKind {
     LessEqual,
 
     // Literals.
-    Identifier,
+    Identifier(String),
     String(String),
     Number(f64),
 
@@ -120,14 +120,17 @@ impl<'a> Scanner<'a> {
             }
 
             // ignore whitespace
-            ' ' => {}
-            '\r' => {}
-            '\t' => {}
-            '\n' => self.line += 1,
+            ws if ws.is_whitespace() => {
+                if ws == '\n' {
+                    self.line += 1
+                }
+            }
 
             '"' => self.scan_string(),
 
             digit if digit.is_digit(10) => self.scan_number(),
+
+            chr if chr.is_alphabetic() || chr == '_' => self.scan_identifier(),
 
             unexpected => self.errors.push(Error {
                 line: self.line,
@@ -162,7 +165,7 @@ impl<'a> Scanner<'a> {
     }
 
     fn peek_next(&self) -> char {
-        if (self.current + 1 >= self.source.len()) {
+        if self.current + 1 >= self.source.len() {
             return '\0';
         } else {
             return self.source[self.current + 1];
@@ -220,12 +223,44 @@ impl<'a> Scanner<'a> {
         self.add_token(TokenKind::Number(num));
     }
 
+    fn scan_identifier(&mut self) {
+        while self.peek().is_alphanumeric() || self.peek() == '_' {
+            self.advance();
+        }
+
+        let ident: String = self.source[self.start..self.current].iter().collect();
+
+        // Determine whether this is an identifier, or a keyword:
+        let token_kind = match ident.as_str() {
+            "and" => TokenKind::And,
+            "class" => TokenKind::Class,
+            "else" => TokenKind::Else,
+            "false" => TokenKind::False,
+            "for" => TokenKind::For,
+            "fun" => TokenKind::Fun,
+            "if" => TokenKind::If,
+            "nil" => TokenKind::Nil,
+            "or" => TokenKind::Or,
+            "print" => TokenKind::Print,
+            "return" => TokenKind::Return,
+            "super" => TokenKind::Super,
+            "this" => TokenKind::This,
+            "true" => TokenKind::True,
+            "var" => TokenKind::Var,
+            "while" => TokenKind::While,
+            _ => TokenKind::Identifier(ident),
+        };
+
+        self.add_token(token_kind);
+    }
+
     fn scan_tokens(mut self) -> Vec<Token<'a>> {
         while !self.is_at_end() {
             self.start = self.current;
             self.scan_token();
         }
 
+        self.add_token(TokenKind::Eof);
         return self.tokens;
     }
 }
