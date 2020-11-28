@@ -97,30 +97,43 @@ std::optional<BuildResult> BuildResult::FromProto(
   switch (resp.status()) {
     case proto::BuildStatus::Built:
       result.status = BuildResult::Status::Built;
+      break;
     case proto::BuildStatus::Substituted:
       result.status = BuildResult::Status::Substituted;
+      break;
     case proto::BuildStatus::AlreadyValid:
       result.status = BuildResult::Status::AlreadyValid;
+      break;
     case proto::BuildStatus::PermanentFailure:
       result.status = BuildResult::Status::PermanentFailure;
+      break;
     case proto::BuildStatus::InputRejected:
       result.status = BuildResult::Status::InputRejected;
+      break;
     case proto::BuildStatus::OutputRejected:
       result.status = BuildResult::Status::OutputRejected;
+      break;
     case proto::BuildStatus::TransientFailure:
       result.status = BuildResult::Status::TransientFailure;
+      break;
     case proto::BuildStatus::CachedFailure:
       result.status = BuildResult::Status::CachedFailure;
+      break;
     case proto::BuildStatus::TimedOut:
       result.status = BuildResult::Status::TimedOut;
+      break;
     case proto::BuildStatus::MiscFailure:
       result.status = BuildResult::Status::MiscFailure;
+      break;
     case proto::BuildStatus::DependencyFailed:
       result.status = BuildResult::Status::DependencyFailed;
+      break;
     case proto::BuildStatus::LogLimitExceeded:
       result.status = BuildResult::Status::LogLimitExceeded;
+      break;
     case proto::BuildStatus::NotDeterministic:
       result.status = BuildResult::Status::NotDeterministic;
+      break;
     default:
       return {};
   }
