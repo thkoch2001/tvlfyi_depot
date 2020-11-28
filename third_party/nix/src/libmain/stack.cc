@@ -14,17 +14,18 @@ static void sigsegvHandler(int signo, siginfo_t* info, void* ctx) {
      the stack pointer.  Unfortunately, getting the stack pointer is
      not portable. */
   bool haveSP = true;
-  char* sp = nullptr;
+  uintptr_t sp = 0;
+  const mcontext_t* machctx = &(static_cast<ucontext_t*>(ctx))->uc_mcontext;
 #if defined(__x86_64__) && defined(REG_RSP)
-  sp = (char*)(static_cast<ucontext_t*>(ctx))->uc_mcontext.gregs[REG_RSP];
+  sp = static_cast<uintptr_t>(machctx->gregs[REG_RSP]);
 #elif defined(REG_ESP)
-  sp = (char*)((ucontext_t*)ctx)->uc_mcontext.gregs[REG_ESP];
+  sp = static_cast<uintptr_t>(machctx->gregs[REG_ESP]);
 #else
   haveSP = false;
 #endif
 
   if (haveSP) {
-    ptrdiff_t diff = static_cast<char*>(info->si_addr) - sp;
+    ptrdiff_t diff = reinterpret_cast<uintptr_t>(info->si_addr) - sp;
     if (diff < 0) {
       diff = -diff;
     }
