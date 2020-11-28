@@ -16,6 +16,8 @@ let
     ];
 
     virtualisation.qemu.options = [ "-nographic" "-curses" ];
+    virtualisation.memorySize = 2048;
+    virtualisation.diskSize = 2048;
 
     nix.nixPath = [
       "depot=${depot.depotPath}"
