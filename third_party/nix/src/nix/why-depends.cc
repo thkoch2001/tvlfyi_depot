@@ -7,8 +7,7 @@
 #include "libstore/store-api.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace {
 static std::string hilite(const std::string& s, size_t pos, size_t len,
                           const std::string& colour = ANSI_RED) {
   return std::string(s, 0, pos) + colour + std::string(s, pos, len) +
@@ -22,7 +21,9 @@ static std::string filterPrintable(const std::string& s) {
   }
   return res;
 }
+}  // namespace
 
+namespace nix {
 struct CmdWhyDepends final : SourceExprCommand {
   std::string _package, _dependency;
   bool all = false;
@@ -263,5 +264,6 @@ struct CmdWhyDepends final : SourceExprCommand {
     }
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdWhyDepends>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdWhyDepends>());

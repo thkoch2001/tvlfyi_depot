@@ -1,8 +1,7 @@
 #include "libstore/store-api.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdDumpPath final : StorePathCommand {
   std::string name() override { return "dump-path"; }
 
@@ -24,5 +23,6 @@ struct CmdDumpPath final : StorePathCommand {
     sink.flush();
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdDumpPath>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdDumpPath>());

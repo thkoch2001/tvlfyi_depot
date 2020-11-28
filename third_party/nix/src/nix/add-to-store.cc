@@ -3,8 +3,7 @@
 #include "libutil/archive.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdAddToStore final : MixDryRun, StoreCommand {
   Path path;
   std::optional<std::string> namePart;
@@ -47,5 +46,6 @@ struct CmdAddToStore final : MixDryRun, StoreCommand {
     std::cout << fmt("%s\n", info.path);
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdAddToStore>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdAddToStore>());

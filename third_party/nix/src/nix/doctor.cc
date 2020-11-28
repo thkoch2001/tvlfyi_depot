@@ -8,9 +8,8 @@
 #include "libstore/worker-protocol.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
-std::string formatProtocol(unsigned int proto) {
+namespace nix {
+static std::string formatProtocol(unsigned int proto) {
   if (proto != 0u) {
     auto major = GET_PROTOCOL_MAJOR(proto) >> 8;
     auto minor = GET_PROTOCOL_MINOR(proto);
@@ -138,5 +137,6 @@ struct CmdDoctor final : StoreCommand {
     return true;
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdDoctor>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdDoctor>());
