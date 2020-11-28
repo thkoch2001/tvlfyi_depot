@@ -38,5 +38,6 @@ fn run_prompt() {
             .read_line(&mut line)
             .expect("failed to read user input");
         interpreter::run(&line);
+        line.clear();
     }
 }
