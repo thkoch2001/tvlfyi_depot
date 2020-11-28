@@ -111,6 +111,30 @@
     },
     {
       "key": {
+        "uuid": "7cceea33_693f26ae",
+        "filename": "third_party/gerrit_plugins/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2020-11-28T15:29:15Z",
+      "side": 1,
+      "message": "I thought it was the other way around?",
+      "parentUuid": "6d59cf3f_d01cc049",
+      "range": {
+        "startLine": 10,
+        "startChar": 22,
+        "endLine": 10,
+        "endChar": 29
+      },
+      "revId": "d5ec23a04e058c7885e98b9b146439d0a27c7b61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41c691f6_dcbcd3b4",
         "filename": "third_party/gerrit_plugins/default.nix",
         "patchSetId": 2
