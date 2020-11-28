@@ -6,6 +6,7 @@ use std::process;
 
 mod errors;
 mod interpreter;
+mod parser;
 mod scanner;
 
 fn main() {
