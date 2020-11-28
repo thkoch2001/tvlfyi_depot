@@ -4,8 +4,7 @@
 #include "libstore/store-api.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdOptimiseStore final : StoreCommand {
   CmdOptimiseStore() = default;
 
@@ -23,5 +22,6 @@ struct CmdOptimiseStore final : StoreCommand {
 
   void run(ref<Store> store) override { store->optimiseStore(); }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdOptimiseStore>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdOptimiseStore>());

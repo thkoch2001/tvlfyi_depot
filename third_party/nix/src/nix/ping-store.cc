@@ -2,8 +2,7 @@
 #include "libstore/store-api.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdPingStore final : StoreCommand {
   std::string name() override { return "ping-store"; }
 
@@ -21,5 +20,6 @@ struct CmdPingStore final : StoreCommand {
 
   void run(ref<Store> store) override { store->connect(); }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdPingStore>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdPingStore>());

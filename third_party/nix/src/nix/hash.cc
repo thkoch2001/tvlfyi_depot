@@ -4,8 +4,7 @@
 #include "nix/command.hh"
 #include "nix/legacy.hh"
 
-using namespace nix;
-
+namespace nix::cmdnix {
 struct CmdHash final : Command {
   enum Mode { mFile, mPath };
   Mode mode;
@@ -150,3 +149,4 @@ static int compatNixHash(int argc, char** argv) {
 }
 
 static RegisterLegacyCommand s1("nix-hash", compatNixHash);
+}  // namespace nix::cmdnix

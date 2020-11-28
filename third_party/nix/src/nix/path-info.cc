@@ -7,8 +7,7 @@
 #include "libutil/json.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdPathInfo final : StorePathsCommand, MixJSON {
   bool showSize = false;
   bool showClosureSize = false;
@@ -129,5 +128,6 @@ struct CmdPathInfo final : StorePathsCommand, MixJSON {
     }
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdPathInfo>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdPathInfo>());

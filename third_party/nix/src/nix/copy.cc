@@ -6,8 +6,7 @@
 #include "libutil/thread-pool.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdCopy final : StorePathsCommand {
   std::string srcUri, dstUri;
 
@@ -82,5 +81,6 @@ struct CmdCopy final : StorePathsCommand {
               NoRepair, checkSigs, substitute);
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdCopy>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdCopy>());

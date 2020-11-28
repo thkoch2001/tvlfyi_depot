@@ -7,8 +7,7 @@
 #include "libutil/json.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdShowDerivation final : InstallablesCommand {
   bool recursive = false;
 
@@ -109,5 +108,6 @@ struct CmdShowDerivation final : InstallablesCommand {
     std::cout << "\n";
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdShowDerivation>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdShowDerivation>());

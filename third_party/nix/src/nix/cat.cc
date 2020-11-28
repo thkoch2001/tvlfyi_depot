@@ -3,8 +3,7 @@
 #include "libstore/store-api.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct MixCat : virtual Args {
   std::string path;
 
@@ -51,6 +50,7 @@ struct CmdCatNar final : StoreCommand, MixCat {
     cat(makeNarAccessor(make_ref<std::string>(readFile(narPath))));
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdCatStore>());
-static RegisterCommand r2(make_ref<CmdCatNar>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdCatStore>());
+static nix::RegisterCommand r2(nix::make_ref<nix::CmdCatNar>());

@@ -14,8 +14,7 @@
 #include "libutil/json.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace {
 std::string wrap(const std::string& prefix, const std::string& s) {
   return prefix + s + ANSI_NORMAL;
 }
@@ -26,7 +25,9 @@ std::string hilite(const std::string& s, const std::smatch& m,
                    : std::string(m.prefix()) + ANSI_RED + std::string(m.str()) +
                          postfix + std::string(m.suffix());
 }
+}  // namespace
 
+namespace nix {
 struct CmdSearch final : SourceExprCommand, MixJSON {
   std::vector<std::string> res;
 
@@ -270,5 +271,6 @@ struct CmdSearch final : SourceExprCommand, MixJSON {
     }
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdSearch>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdSearch>());
