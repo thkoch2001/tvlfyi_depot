@@ -171,18 +171,18 @@ LegacyArgs::LegacyArgs(
       .longName("keep-failed")
       .shortName('K')
       .description("keep temporary directories of failed builds")
-      .set(&(bool&)settings.keepFailed, true);
+      .set(&static_cast<bool&>(settings.keepFailed), true);
 
   mkFlag()
       .longName("keep-going")
       .shortName('k')
       .description("keep going after a build fails")
-      .set(&(bool&)settings.keepGoing, true);
+      .set(&static_cast<bool&>(settings.keepGoing), true);
 
   mkFlag()
       .longName("fallback")
       .description("build from source if substitution fails")
-      .set(&(bool&)settings.tryFallback, true);
+      .set(&static_cast<bool&>(settings.tryFallback), true);
 
   auto intSettingAlias = [&](char shortName, const std::string& longName,
                              const std::string& description,
@@ -210,7 +210,7 @@ LegacyArgs::LegacyArgs(
       .longName("store")
       .label("store-uri")
       .description("URI of the Nix store to use")
-      .dest(&(std::string&)settings.storeUri);
+      .dest(&static_cast<std::string&>(settings.storeUri));
 }
 
 bool LegacyArgs::processFlag(Strings::iterator& pos, Strings::iterator end) {

@@ -14,9 +14,9 @@ constexpr std::string_view kUriScheme = "ssh-ng://";
 
 class SSHStore : public RemoteStore {
  public:
-  const Setting<Path> sshKey{(Store*)this, "", "ssh-key",
+  const Setting<Path> sshKey{static_cast<Store*>(this), "", "ssh-key",
                              "path to an SSH private key"};
-  const Setting<bool> compress{(Store*)this, false, "compress",
+  const Setting<bool> compress{static_cast<Store*>(this), false, "compress",
                                "whether to compress the connection"};
 
   SSHStore(const std::string& host, const Params& params)
