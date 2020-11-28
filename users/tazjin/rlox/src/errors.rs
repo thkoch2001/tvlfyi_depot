@@ -1,6 +1,7 @@
 #[derive(Debug)]
 pub enum ErrorKind {
     UnexpectedChar(char),
+    UnterminatedString,
 }
 
 #[derive(Debug)]
