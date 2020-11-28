@@ -8,8 +8,7 @@
 #include "libutil/thread-pool.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdVerify final : StorePathsCommand {
   bool noContents = false;
   bool noTrust = false;
@@ -167,5 +166,6 @@ struct CmdVerify final : StorePathsCommand {
                (failed != 0u ? 4 : 0));
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdVerify>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdVerify>());

@@ -4,8 +4,7 @@
 #include "libutil/json.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdShowConfig final : Command, MixJSON {
   CmdShowConfig() = default;
 
@@ -27,5 +26,6 @@ struct CmdShowConfig final : Command, MixJSON {
     }
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdShowConfig>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdShowConfig>());

@@ -5,8 +5,7 @@
 #include "libutil/json.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct MixLs : virtual Args, MixJSON {
   std::string path;
 
@@ -132,6 +131,7 @@ struct CmdLsNar final : Command, MixLs {
     list(makeNarAccessor(make_ref<std::string>(readFile(narPath, true))));
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdLsStore>());
-static RegisterCommand r2(make_ref<CmdLsNar>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdLsStore>());
+static nix::RegisterCommand r2(nix::make_ref<nix::CmdLsNar>());

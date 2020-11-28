@@ -7,8 +7,7 @@
 #include "libmain/shared.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdEdit final : InstallableCommand {
   std::string name() override { return "edit"; }
 
@@ -71,5 +70,6 @@ struct CmdEdit final : InstallableCommand {
     throw SysError("cannot run editor '%s'", editor);
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdEdit>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdEdit>());

@@ -7,8 +7,7 @@
 #include "libutil/thread-pool.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdCopySigs final : StorePathsCommand {
   Strings substituterUris;
 
@@ -97,7 +96,7 @@ struct CmdCopySigs final : StorePathsCommand {
   }
 };
 
-static RegisterCommand r1(make_ref<CmdCopySigs>());
+static nix::RegisterCommand r1(make_ref<CmdCopySigs>());
 
 struct CmdSignPaths final : StorePathsCommand {
   Path secretKeyFile;
@@ -143,3 +142,5 @@ struct CmdSignPaths final : StorePathsCommand {
 };
 
 static RegisterCommand r3(make_ref<CmdSignPaths>());
+
+}  // namespace nix
