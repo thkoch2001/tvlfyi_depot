@@ -10,6 +10,6 @@ pub struct Error {
     pub kind: ErrorKind,
 }
 
-pub fn report(loc: &str, err: &Error) {
-    eprintln!("[line {}] Error {}: {:?}", err.line, loc, err.kind);
+pub fn report(err: &Error) {
+    eprintln!("[line {}] Error: {:?}", err.line, err.kind);
 }
