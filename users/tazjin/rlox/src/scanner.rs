@@ -254,19 +254,18 @@ impl<'a> Scanner<'a> {
         self.add_token(token_kind);
     }
 
-    fn scan_tokens(mut self) -> Vec<Token<'a>> {
+    fn scan_tokens(&mut self) {
         while !self.is_at_end() {
             self.start = self.current;
             self.scan_token();
         }
 
         self.add_token(TokenKind::Eof);
-        return self.tokens;
     }
 }
 
-pub fn scan<'a>(input: &'a [char]) -> Vec<Token<'a>> {
-    let scanner = Scanner {
+pub fn scan<'a>(input: &'a [char]) -> Result<Vec<Token<'a>>, Vec<Error>> {
+    let mut scanner = Scanner {
         source: &input,
         tokens: vec![],
         errors: vec![],
@@ -275,5 +274,11 @@ pub fn scan<'a>(input: &'a [char]) -> Vec<Token<'a>> {
         line: 0,
     };
 
-    return scanner.scan_tokens();
+    scanner.scan_tokens();
+
+    if !scanner.errors.is_empty() {
+        return Err(scanner.errors);
+    }
+
+    return Ok(scanner.tokens);
 }
