@@ -27,7 +27,7 @@ pub enum TokenKind {
 
     // Literals.
     Identifier,
-    String,
+    String(String),
     Number,
 
     // Keywords.
@@ -76,7 +76,7 @@ impl<'a> Scanner<'a> {
 
     fn advance(&mut self) -> char {
         self.current += 1;
-        self.source[self.current-1]
+        self.source[self.current - 1]
     }
 
     fn add_token(&mut self, kind: TokenKind) {
@@ -117,13 +117,15 @@ impl<'a> Scanner<'a> {
                 } else {
                     self.add_token(TokenKind::Slash);
                 }
-            },
+            }
 
             // ignore whitespace
-            ' ' => {},
-            '\r' => {},
-            '\t' => {},
+            ' ' => {}
+            '\r' => {}
+            '\t' => {}
             '\n' => self.line += 1,
+
+            '"' => self.scan_string(),
 
             unexpected => self.errors.push(Error {
                 line: self.line,
@@ -155,6 +157,33 @@ impl<'a> Scanner<'a> {
         } else {
             return self.source[self.current];
         }
+    }
+
+    fn scan_string(&mut self) {
+        while (self.peek() != '"' && !self.is_at_end()) {
+            if self.peek() == '\n' {
+                self.line += 1;
+            }
+
+            self.advance();
+        }
+
+        if self.is_at_end() {
+            self.errors.push(Error {
+                line: self.line,
+                kind: ErrorKind::UnterminatedString,
+            });
+            return;
+        }
+
+        // closing '"'
+        self.advance();
+
+        // add token without surrounding quotes
+        let string: String = self.source[(self.start + 1)..(self.current - 1)]
+            .iter()
+            .collect();
+        self.add_token(TokenKind::String(string));
     }
 
     fn scan_tokens(mut self) -> Vec<Token<'a>> {
