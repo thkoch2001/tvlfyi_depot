@@ -119,6 +119,12 @@ impl<'a> Scanner<'a> {
                 }
             },
 
+            // ignore whitespace
+            ' ' => {},
+            '\r' => {},
+            '\t' => {},
+            '\n' => self.line += 1,
+
             unexpected => self.errors.push(Error {
                 line: self.line,
                 kind: ErrorKind::UnexpectedChar(unexpected),
