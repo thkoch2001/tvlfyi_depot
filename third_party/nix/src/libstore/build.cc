@@ -4156,7 +4156,7 @@ void SubstitutionGoal::tryToRun() {
      a substituter to run.  This is because substitutions cannot be
      distributed to another machine via the build hook. */
   if (worker.getNrLocalBuilds() >=
-      std::max(1U, (unsigned int)settings.maxBuildJobs)) {
+      std::max(1U, static_cast<unsigned int>(settings.maxBuildJobs))) {
     worker.waitForBuildSlot(shared_from_this());
     return;
   }

@@ -95,10 +95,13 @@ struct CurlDownloader : public Downloader {
               if (httpStatus == 0 || httpStatus == 200 || httpStatus == 201 ||
                   httpStatus == 206) {
                 writtenToSink += len;
-                this->request.dataCallback((char*)data, len);
+                this->request.dataCallback(
+                    const_cast<char*>(reinterpret_cast<const char*>(data)),
+                    len);
               }
             } else {
-              this->result.data->append((char*)data, len);
+              this->result.data->append(reinterpret_cast<const char*>(data),
+                                        len);
             }
           }) {
       LOG(INFO) << (request.data ? "uploading '" : "downloading '")

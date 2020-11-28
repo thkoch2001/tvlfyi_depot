@@ -48,7 +48,7 @@ template Paths readStorePaths(Store& store, Source& from);
 RemoteStore::RemoteStore(const Params& params)
     : Store(params),
       connections(make_ref<Pool<Connection>>(
-          std::max(1, (int)maxConnections),
+          std::max(1, static_cast<int>(maxConnections)),
           [this]() { return openConnectionWrapper(); },
           [this](const ref<Connection>& r) {
             return r->to.good() && r->from.good() &&

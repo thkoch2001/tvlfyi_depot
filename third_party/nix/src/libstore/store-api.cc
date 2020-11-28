@@ -408,7 +408,7 @@ Store::Store(const Params& params)
     : Config(params),
       state(Sync<State>{
           State{LRUCache<std::string, std::shared_ptr<ValidPathInfo>>(
-              (size_t)pathInfoCacheSize)}}) {}
+              static_cast<size_t>(pathInfoCacheSize))}}) {}
 
 std::string Store::getUri() { return ""; }
 

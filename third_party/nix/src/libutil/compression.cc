@@ -113,7 +113,8 @@ struct BzipDecompressionSink : ChunkedCompressionSink {
   void writeInternal(const unsigned char* data, size_t len) override {
     assert(len <= std::numeric_limits<decltype(strm.avail_in)>::max());
 
-    strm.next_in = (char*)data;
+    // TODO(riking): don't remove const qualifier
+    strm.next_in = const_cast<char*>(reinterpret_cast<const char*>(data));
     strm.avail_in = len;
 
     while (strm.avail_in != 0u) {
@@ -301,7 +302,8 @@ struct BzipCompressionSink : ChunkedCompressionSink {
   void writeInternal(const unsigned char* data, size_t len) override {
     assert(len <= std::numeric_limits<decltype(strm.avail_in)>::max());
 
-    strm.next_in = (char*)data;
+    // TODO(riking): don't remove const qualifier
+    strm.next_in = const_cast<char*>(reinterpret_cast<const char*>(data));
     strm.avail_in = len;
 
     while (!finished && ((data == nullptr) || (strm.avail_in != 0u))) {

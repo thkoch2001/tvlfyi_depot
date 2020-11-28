@@ -50,7 +50,7 @@ struct LegacySSHStore : public Store {
       : Store(params),
         host(host),
         connections(make_ref<Pool<Connection>>(
-            std::max(1, (int)maxConnections),
+            std::max(1, static_cast<int>(maxConnections)),
             [this]() { return openConnection(); },
             [](const ref<Connection>& r) { return r->good; })),
         master(host, sshKey,
