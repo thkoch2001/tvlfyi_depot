@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d5b8a12_59c288f8",
+        "filename": "third_party/nix/src/libutil/thread-pool.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-28T10:58:29Z",
+      "side": 1,
+      "message": "Not actionable for this CL but this looks like a nice way to shoot ourselves in the foot. IIRC `interruptCheck` is global across the entire code base and `quit` is contained in this `ThreadPool` (that might go out of scope).\n\nThis might be bug/TODO worthy.",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 18
+      },
+      "revId": "3f2f9145c185c7dc5606b94714c0decdcbeeac51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
