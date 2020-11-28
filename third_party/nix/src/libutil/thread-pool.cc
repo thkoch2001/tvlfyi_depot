@@ -25,7 +25,7 @@ void ThreadPool::shutdown() {
   std::vector<std::thread> workers;
   {
     auto state(state_.lock());
-    quit = true;
+    quit.store(true, std::memory_order_relaxed);
     std::swap(workers, state->workers);
   }
 
@@ -44,7 +44,7 @@ void ThreadPool::shutdown() {
 
 void ThreadPool::enqueue(const work_t& t) {
   auto state(state_.lock());
-  if (quit) {
+  if (quit.load(std::memory_order_relaxed)) {
     throw ThreadPoolShutDown(
         "cannot enqueue a work item while the thread pool is shutting down");
   }
@@ -66,7 +66,7 @@ void ThreadPool::process() {
 
     auto state(state_.lock());
 
-    assert(quit);
+    assert(quit.load(std::memory_order_relaxed));
 
     if (state->exception) {
       std::rethrow_exception(state->exception);
@@ -85,7 +85,7 @@ void ThreadPool::process() {
 
 void ThreadPool::doWork(bool mainThread) {
   if (!mainThread) {
-    interruptCheck = [&]() { return (bool)quit; };
+    interruptCheck = [&]() { return quit.load(std::memory_order_relaxed); };
   }
 
   bool didWork = false;
@@ -104,7 +104,9 @@ void ThreadPool::doWork(bool mainThread) {
           if (!state->exception) {
             state->exception = exc;
             // Tell the other workers to quit.
-            quit = true;
+            // memory ordering: relaxed is okay because notify_all is a
+            // synchronization point
+            quit.store(true, std::memory_order_relaxed);
             work.notify_all();
           } else {
             /* Print the exception, since we can't
@@ -125,7 +127,7 @@ void ThreadPool::doWork(bool mainThread) {
       /* Wait until a work item is available or we're asked to
          quit. */
       while (true) {
-        if (quit) {
+        if (quit.load(std::memory_order_relaxed)) {
           return;
         }
 
@@ -137,7 +139,9 @@ void ThreadPool::doWork(bool mainThread) {
            main thread is running process(), then no new items
            can be added. So exit. */
         if ((state->active == 0u) && state->draining) {
-          quit = true;
+          // memory ordering: relaxed is okay because notify_all is a
+          // synchronization point
+          quit.store(std::memory_order_relaxed);
           work.notify_all();
           return;
         }
