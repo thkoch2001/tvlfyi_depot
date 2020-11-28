@@ -66,3 +66,13 @@ target_link_libraries(language-tests
 )
 
 gtest_discover_tests(language-tests)
+
+add_executable(store-api-test store-api-test.cc)
+target_link_libraries(store-api-test
+  nixstore
+  rapidcheck
+  rapidcheck_gtest
+  GTest::gtest_main
+)
+
+gtest_discover_tests(store-api-test)
