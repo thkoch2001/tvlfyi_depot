@@ -13,10 +13,10 @@
 #include "libutil/finally.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+// note: exported in header file
 std::string chrootHelperName = "__run_in_chroot";
 
+namespace nix {
 struct CmdRun final : InstallablesCommand {
   std::vector<std::string> command = {"bash"};
   StringSet keep, unset;
@@ -187,13 +187,14 @@ struct CmdRun final : InstallablesCommand {
 };
 
 static RegisterCommand r1(make_ref<CmdRun>());
+}  // namespace nix
 
 void chrootHelper(int argc, char** argv) {
   int p = 1;
   std::string storeDir = argv[p++];
   std::string realStoreDir = argv[p++];
   std::string cmd = argv[p++];
-  Strings args;
+  nix::Strings args;
   while (p < argc) {
     args.push_back(argv[p++]);
   }
@@ -206,7 +207,7 @@ void chrootHelper(int argc, char** argv) {
     /* Try with just CLONE_NEWNS in case user namespaces are
        specifically disabled. */
     if (unshare(CLONE_NEWNS) == -1) {
-      throw SysError("setting up a private mount namespace");
+      throw nix::SysError("setting up a private mount namespace");
     }
   }
 
@@ -217,65 +218,65 @@ void chrootHelper(int argc, char** argv) {
      but that doesn't work in a user namespace yet (Ubuntu has a
      patch for this:
      https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1478578). */
-  if (!pathExists(storeDir)) {
+  if (!nix::pathExists(storeDir)) {
     // FIXME: Use overlayfs?
 
-    Path tmpDir = createTempDir();
+    nix::Path tmpDir = nix::createTempDir();
 
-    createDirs(tmpDir + storeDir);
+    nix::createDirs(tmpDir + storeDir);
 
     if (mount(realStoreDir.c_str(), (tmpDir + storeDir).c_str(), "", MS_BIND,
               nullptr) == -1) {
-      throw SysError("mounting '%s' on '%s'", realStoreDir, storeDir);
+      throw nix::SysError("mounting '%s' on '%s'", realStoreDir, storeDir);
     }
 
-    for (const auto& entry : readDirectory("/")) {
+    for (const auto& entry : nix::readDirectory("/")) {
       auto src = "/" + entry.name;
-      auto st = lstat(src);
+      auto st = nix::lstat(src);
       if (!S_ISDIR(st.st_mode)) {
         continue;
       }
-      Path dst = tmpDir + "/" + entry.name;
-      if (pathExists(dst)) {
+      nix::Path dst = tmpDir + "/" + entry.name;
+      if (nix::pathExists(dst)) {
         continue;
       }
       if (mkdir(dst.c_str(), 0700) == -1) {
-        throw SysError("creating directory '%s'", dst);
+        throw nix::SysError("creating directory '%s'", dst);
       }
       if (mount(src.c_str(), dst.c_str(), "", MS_BIND | MS_REC, nullptr) ==
           -1) {
-        throw SysError("mounting '%s' on '%s'", src, dst);
+        throw nix::SysError("mounting '%s' on '%s'", src, dst);
       }
     }
 
     char* cwd = getcwd(nullptr, 0);
     if (cwd == nullptr) {
-      throw SysError("getting current directory");
+      throw nix::SysError("getting current directory");
     }
-    Finally freeCwd([&]() { free(cwd); });
+    ::Finally freeCwd([&]() { free(cwd); });
 
     if (chroot(tmpDir.c_str()) == -1) {
-      throw SysError(format("chrooting into '%s'") % tmpDir);
+      throw nix::SysError(nix::format("chrooting into '%s'") % tmpDir);
     }
 
     if (chdir(cwd) == -1) {
-      throw SysError(format("chdir to '%s' in chroot") % cwd);
+      throw nix::SysError(nix::format("chdir to '%s' in chroot") % cwd);
     }
   } else if (mount(realStoreDir.c_str(), storeDir.c_str(), "", MS_BIND,
                    nullptr) == -1) {
-    throw SysError("mounting '%s' on '%s'", realStoreDir, storeDir);
+    throw nix::SysError("mounting '%s' on '%s'", realStoreDir, storeDir);
   }
 
-  writeFile("/proc/self/setgroups", "deny");
-  writeFile("/proc/self/uid_map", fmt("%d %d %d", uid, uid, 1));
-  writeFile("/proc/self/gid_map", fmt("%d %d %d", gid, gid, 1));
+  nix::writeFile("/proc/self/setgroups", "deny");
+  nix::writeFile("/proc/self/uid_map", nix::fmt("%d %d %d", uid, uid, 1));
+  nix::writeFile("/proc/self/gid_map", nix::fmt("%d %d %d", gid, gid, 1));
 
-  execvp(cmd.c_str(), stringsToCharPtrs(args).data());
+  execvp(cmd.c_str(), nix::stringsToCharPtrs(args).data());
 
-  throw SysError("unable to exec '%s'", cmd);
+  throw nix::SysError("unable to exec '%s'", cmd);
 
 #else
-  throw Error(
+  throw nix::Error(
       "mounting the Nix store on '%s' is not supported on this platform",
       storeDir);
 #endif

@@ -5,8 +5,7 @@
 #include "libstore/store-api.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdLog final : InstallableCommand {
   CmdLog() = default;
 
@@ -59,5 +58,6 @@ struct CmdLog final : InstallableCommand {
     throw Error("build log of '%s' is not available", installable->what());
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdLog>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdLog>());

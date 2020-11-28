@@ -3,8 +3,7 @@
 #include "libstore/store-api.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdBuild final : MixDryRun, InstallablesCommand {
   Path outLink = "result";
 
@@ -64,5 +63,6 @@ struct CmdBuild final : MixDryRun, InstallablesCommand {
     }
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdBuild>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdBuild>());

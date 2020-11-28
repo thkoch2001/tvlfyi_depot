@@ -7,8 +7,7 @@
 #include "libutil/json.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdEval final : MixJSON, InstallableCommand {
   bool raw = false;
 
@@ -52,5 +51,6 @@ struct CmdEval final : MixJSON, InstallableCommand {
     }
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdEval>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdEval>());

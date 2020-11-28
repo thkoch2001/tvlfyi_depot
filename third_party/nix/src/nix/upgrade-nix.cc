@@ -11,8 +11,7 @@
 #include "libstore/store-api.hh"
 #include "nix/command.hh"
 
-using namespace nix;
-
+namespace nix {
 struct CmdUpgradeNix final : MixDryRun, StoreCommand {
   Path profileDir;
   std::string storePathsUrl =
@@ -163,5 +162,6 @@ struct CmdUpgradeNix final : MixDryRun, StoreCommand {
     return state->forceString(*v2);
   }
 };
+}  // namespace nix
 
-static RegisterCommand r1(make_ref<CmdUpgradeNix>());
+static nix::RegisterCommand r1(nix::make_ref<nix::CmdUpgradeNix>());
