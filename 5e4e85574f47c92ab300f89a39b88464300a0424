@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "530cf826_4eda3f7b",
+        "filename": "third_party/nix/src/libmain/stack.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2020-11-28T10:43:08Z",
+      "side": 1,
+      "message": "For the sake of readability would it make sense to have `(static_cast\u003cucontext_t*\u003e(ctx))-\u003euc_mcontext` as a variable before the #if-elif block? Nesting these static casts two levels deep isn\u0027t the most readable code. The compiler should be smart enough to just ignore it in the `haveSP \u003d false` case, no?",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 50
+      },
+      "revId": "5e4e85574f47c92ab300f89a39b88464300a0424",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    }
+  ]
+}
