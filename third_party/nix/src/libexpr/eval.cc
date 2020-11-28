@@ -1719,12 +1719,14 @@ void EvalState::printStats() {
         for (auto& i : functionCalls) {
           auto obj = list.object();
           if (i.first->name.has_value()) {
-            obj.attr("name", (const std::string&)i.first->name.value());
+            obj.attr("name",
+                     static_cast<const std::string&>(i.first->name.value()));
           } else {
             obj.attr("name", nullptr);
           }
           if (i.first->pos) {
-            obj.attr("file", (const std::string&)i.first->pos.file);
+            obj.attr("file",
+                     static_cast<const std::string&>(i.first->pos.file));
             obj.attr("line", i.first->pos.line);
             obj.attr("column", i.first->pos.column);
           }
@@ -1736,7 +1738,7 @@ void EvalState::printStats() {
         for (auto& i : attrSelects) {
           auto obj = list.object();
           if (i.first) {
-            obj.attr("file", (const std::string&)i.first.file);
+            obj.attr("file", static_cast<const std::string&>(i.first.file));
             obj.attr("line", i.first.line);
             obj.attr("column", i.first.column);
           }

@@ -635,7 +635,7 @@ void writeFull(int fd, const unsigned char* buf, size_t count,
     if (allowInterrupts) {
       checkInterrupt();
     }
-    ssize_t res = write(fd, (char*)buf, count);
+    ssize_t res = write(fd, buf, count);
     if (res == -1 && errno != EINTR) {
       throw SysError("writing to file");
     }
