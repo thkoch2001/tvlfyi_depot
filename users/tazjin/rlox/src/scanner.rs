@@ -108,6 +108,17 @@ impl<'a> Scanner<'a> {
             '<' => self.add_if_next('=', TokenKind::LessEqual, TokenKind::Less),
             '>' => self.add_if_next('=', TokenKind::GreaterEqual, TokenKind::Greater),
 
+            '/' => {
+                // support comments until EOL by discarding characters
+                if self.match_next('/') {
+                    while self.peek() != '\n' && !self.is_at_end() {
+                        self.advance();
+                    }
+                } else {
+                    self.add_token(TokenKind::Slash);
+                }
+            },
+
             unexpected => self.errors.push(Error {
                 line: self.line,
                 kind: ErrorKind::UnexpectedChar(unexpected),
@@ -115,12 +126,28 @@ impl<'a> Scanner<'a> {
         };
     }
 
-    fn add_if_next(&mut self, expected:char, then: TokenKind, or: TokenKind) {
+    fn match_next(&mut self, expected: char) -> bool {
         if self.is_at_end() || self.source[self.current] != expected {
-            self.add_token(or);
+            false
         } else {
             self.current += 1;
+            true
+        }
+    }
+
+    fn add_if_next(&mut self, expected: char, then: TokenKind, or: TokenKind) {
+        if self.match_next(expected) {
             self.add_token(then);
+        } else {
+            self.add_token(or);
+        }
+    }
+
+    fn peek(&self) -> char {
+        if self.is_at_end() {
+            return '\0';
+        } else {
+            return self.source[self.current];
         }
     }
 
