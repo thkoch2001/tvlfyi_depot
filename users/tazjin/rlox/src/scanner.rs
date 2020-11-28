@@ -28,7 +28,7 @@ pub enum TokenKind {
     // Literals.
     Identifier,
     String(String),
-    Number,
+    Number(f64),
 
     // Keywords.
     And,
@@ -127,6 +127,8 @@ impl<'a> Scanner<'a> {
 
             '"' => self.scan_string(),
 
+            digit if digit.is_digit(10) => self.scan_number(),
+
             unexpected => self.errors.push(Error {
                 line: self.line,
                 kind: ErrorKind::UnexpectedChar(unexpected),
@@ -159,8 +161,16 @@ impl<'a> Scanner<'a> {
         }
     }
 
+    fn peek_next(&self) -> char {
+        if (self.current + 1 >= self.source.len()) {
+            return '\0';
+        } else {
+            return self.source[self.current + 1];
+        }
+    }
+
     fn scan_string(&mut self) {
-        while (self.peek() != '"' && !self.is_at_end()) {
+        while self.peek() != '"' && !self.is_at_end() {
             if self.peek() == '\n' {
                 self.line += 1;
             }
@@ -184,6 +194,30 @@ impl<'a> Scanner<'a> {
             .iter()
             .collect();
         self.add_token(TokenKind::String(string));
+    }
+
+    fn scan_number(&mut self) {
+        while self.peek().is_digit(10) {
+            self.advance();
+        }
+
+        // Look for a fractional part
+        if self.peek() == '.' && self.peek_next().is_digit(10) {
+            // consume '.'
+            self.advance();
+
+            while self.peek().is_digit(10) {
+                self.advance();
+            }
+        }
+
+        let num: f64 = self.source[self.start..self.current]
+            .iter()
+            .collect::<String>()
+            .parse()
+            .expect("float parsing should always work");
+
+        self.add_token(TokenKind::Number(num));
     }
 
     fn scan_tokens(mut self) -> Vec<Token<'a>> {
