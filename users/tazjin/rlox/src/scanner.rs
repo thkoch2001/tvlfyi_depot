@@ -1,6 +1,6 @@
 use crate::errors::{Error, ErrorKind};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum TokenKind {
     // Single-character tokens.
     LeftParen,
@@ -54,10 +54,9 @@ pub enum TokenKind {
 
 #[derive(Debug)]
 pub struct Token<'a> {
-    kind: TokenKind,
-    lexeme: &'a [char],
-    // literal: Object, // TODO(tazjin): Uhh?
-    line: usize,
+    pub kind: TokenKind,
+    pub lexeme: &'a [char],
+    pub line: usize,
 }
 
 struct Scanner<'a> {
