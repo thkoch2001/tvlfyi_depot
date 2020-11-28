@@ -21,6 +21,8 @@ class Symbol {
 
   operator const std::string&() const { return *s; }
 
+  const std::string& as_str() const { return *s; }
+
   bool set() const { return s; }
 
   bool empty() const { return s->empty(); }
