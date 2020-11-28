@@ -16,73 +16,7 @@
 #include "libexpr/eval.hh"
 #include "libutil/hash.hh"
 #include "libutil/types.hh"
-
-namespace rc {
-
-using nix::Derivation;
-using nix::DerivationOutput;
-
-template <class K, class V>
-struct Arbitrary<absl::btree_map<K, V>> {
-  static Gen<absl::btree_map<K, V>> arbitrary() {
-    return gen::map(gen::arbitrary<std::map<K, V>>(), [](std::map<K, V> map) {
-      absl::btree_map<K, V> out_map;
-      out_map.insert(map.begin(), map.end());
-      return out_map;
-    });
-  }
-};
-
-template <>
-struct Arbitrary<nix::Base> {
-  static Gen<nix::Base> arbitrary() {
-    return gen::element(nix::Base16, nix::Base32, nix::Base64);
-  }
-};
-
-template <>
-struct Arbitrary<DerivationOutput> {
-  static Gen<DerivationOutput> arbitrary() {
-    return gen::apply(
-        [](std::string content, std::string path, std::string hash_algo,
-           bool recursive, bool include_algo_in_hash, nix::Base base) {
-          auto hash_type = nix::parseHashType(hash_algo);
-          auto hash = nix::hashString(hash_type, content);
-          return DerivationOutput(
-              path, recursive ? absl::StrCat("r:", hash_algo) : hash_algo,
-              hash.to_string(base, include_algo_in_hash));
-        },
-        gen::arbitrary<std::string>(),
-        gen::map(gen::arbitrary<std::string>(),
-                 [](std::string s) { return absl::StrCat("/", s); }),
-        gen::element<std::string>("md5", "sha1", "sha256", "sha512"),
-        gen::arbitrary<bool>(), gen::arbitrary<bool>(),
-        gen::arbitrary<nix::Base>());
-  }
-};
-
-template <>
-struct Arbitrary<Derivation> {
-  static Gen<Derivation> arbitrary() {
-    auto gen_path = gen::map(gen::arbitrary<std::string>(), [](std::string s) {
-      return absl::StrCat("/", s);
-    });
-
-    return gen::build<Derivation>(
-        gen::set(&nix::BasicDerivation::outputs),
-        gen::set(&nix::BasicDerivation::inputSrcs,
-                 gen::container<nix::PathSet>(gen_path)),
-        gen::set(&nix::BasicDerivation::platform),
-        gen::set(&nix::BasicDerivation::builder, gen_path),
-        gen::set(&nix::BasicDerivation::args),
-        gen::set(&nix::BasicDerivation::env),
-        gen::set(&Derivation::inputDrvs,
-                 gen::container<nix::DerivationInputs>(
-                     gen_path, gen::arbitrary<nix::StringSet>())));
-  }
-};
-
-}  // namespace rc
+#include "tests/arbitrary.hh"
 
 namespace nix {
 

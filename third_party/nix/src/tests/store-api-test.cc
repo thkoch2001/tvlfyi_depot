@@ -2,31 +2,10 @@
 
 #include <gtest/gtest.h>
 #include <rapidcheck/Assertions.h>
-#include <rapidcheck/Gen.h>
 #include <rapidcheck/gtest.h>
 
 #include "libproto/worker.pb.h"
-
-namespace rc {
-template <>
-struct Arbitrary<nix::BuildResult::Status> {
-  static Gen<nix::BuildResult::Status> arbitrary() {
-    return gen::element(nix::BuildResult::Status::Built,
-                        nix::BuildResult::Status::Substituted,
-                        nix::BuildResult::Status::AlreadyValid,
-                        nix::BuildResult::Status::PermanentFailure,
-                        nix::BuildResult::Status::InputRejected,
-                        nix::BuildResult::Status::OutputRejected,
-                        nix::BuildResult::Status::TransientFailure,
-                        nix::BuildResult::Status::CachedFailure,
-                        nix::BuildResult::Status::TimedOut,
-                        nix::BuildResult::Status::MiscFailure,
-                        nix::BuildResult::Status::DependencyFailed,
-                        nix::BuildResult::Status::LogLimitExceeded,
-                        nix::BuildResult::Status::NotDeterministic);
-  }
-};
-}  // namespace rc
+#include "tests/arbitrary.hh"
 
 namespace nix {
 
