@@ -28,6 +28,9 @@ case "${TARGET_TOOL}" in
   gerrit)
     attr="tools.gerrit-cli"
     ;;
+  gerrit-update)
+    attr="tools.gerrit-update"
+    ;;
   hash-password)
     attr="tools.hash-password"
     ;;
