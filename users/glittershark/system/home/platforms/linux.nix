@@ -88,4 +88,6 @@ in
   programs.zsh.initExtra = ''
     [[ ! $IN_NIX_SHELL ]] && alsi -l
   '';
+
+  services.lorri.enable = true;
 }
