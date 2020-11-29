@@ -25,5 +25,12 @@ rec {
 
   dobharchuHome = dobharchu.activation-script;
 
-  meta.targets = [ "chupacabraHome" ];
+  yeren = home ./machines/yeren.nix;
+
+  yerenHome = yeren.activation-script;
+
+  meta.targets = [
+    "chupacabraHome"
+    "yerenHome"
+  ];
 }
