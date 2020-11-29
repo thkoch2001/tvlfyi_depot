@@ -15,7 +15,8 @@
         location / {
           proxy_pass http://localhost:4778;
           proxy_set_header  X-Forwarded-For $remote_addr;
-          proxy_set_header  Host $host;
+          # The :443 suffix is a workaround for https://b.tvl.fyi/issues/88.
+          proxy_set_header  Host $host:443;
         }
       '';
     };
