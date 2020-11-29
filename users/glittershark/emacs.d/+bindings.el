@@ -121,6 +121,8 @@ private/hlissner/snippets."
  :nmvo doom-leader-key nil
  :nmvo doom-localleader-key nil)
 
+(undefine-key! :keymaps 'doom-leader-map "/")
+
 (map!
  ;; --- Global keybindings ---------------------------
  ;; Make M-x available everywhere
