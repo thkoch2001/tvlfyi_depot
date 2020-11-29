@@ -33,6 +33,7 @@ with lib;
     ./lib/zshFunctions.nix
     ./development/kube.nix
     ./development/agda.nix
+    ./development/rust.nix
   ];
 
   home.packages = with pkgs; [
