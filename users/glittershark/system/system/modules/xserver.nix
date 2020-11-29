@@ -9,19 +9,8 @@
 
     displayManager = {
       defaultSession = "none+i3";
-
-      autoLogin = {
-        enable = true;
-        user = "grfn";
-      };
     };
 
     windowManager.i3.enable = true;
-#       enable = true;
-#       extraPackages = with pkgs; [
-#         i3status
-#         i3lock
-#       ];
-#     };
   };
 }

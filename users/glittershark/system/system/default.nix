@@ -13,12 +13,19 @@ rec {
     configuration = mugwump;
   }).system;
 
+  yeren = import ./machines/yeren.nix;
+
+  yerenSystem = (pkgs.nixos {
+    configuration = yeren;
+  }).system;
+
   iso = import ./iso.nix args;
 
   # Build chupacabra in CI
   meta.targets = [
     "chupacabraSystem"
     "mugwumpSystem"
+    "yerenSystem"
 
     "iso"
   ];

@@ -16,10 +16,4 @@
   ];
 
   services.geoclue2.enable = true;
-
-  powerManagement = {
-    enable = true;
-    cpuFreqGovernor = lib.mkDefault "powersave";
-    powertop.enable = true;
-  };
 }
