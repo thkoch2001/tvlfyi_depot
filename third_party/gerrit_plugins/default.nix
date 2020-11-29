@@ -35,4 +35,16 @@ in
       leaveDotGit = true;
     };
   };
+  
+  # https://gerrit.googlesource.com/plugins/avatars-gravatar
+  avatars-gravatar = buildGerritBazelPlugin {
+    name = "avatars-gravatar";
+    depsOutputHash = "sha256:0svnzfq1zbqwrjik760j350xr4vs5n5y5gnlz2kh9c60knc35rpq";
+    src = pkgs.fetchgit {
+      url = "https://gerrit.googlesource.com/plugins/avatars-gravatar";
+      rev = "85d9b12f003f801717c79d7546a9044c527f6f92";
+      sha256 = "sha256:1lrdadky3qh6aw89rj9bwrxs9xghi5vjwxb5jhmsknilv1g31zxs";
+      leaveDotGit = true;
+    };
+  };
 }

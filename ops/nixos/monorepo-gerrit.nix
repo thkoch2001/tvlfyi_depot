@@ -19,6 +19,7 @@ in {
 
     plugins = with config.depot.third_party.gerrit_plugins; [
       checks
+      avatars-gravatar
       owners
     ];
 
