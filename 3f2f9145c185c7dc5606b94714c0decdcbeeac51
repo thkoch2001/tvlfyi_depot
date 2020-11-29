@@ -22,6 +22,47 @@
       "revId": "3f2f9145c185c7dc5606b94714c0decdcbeeac51",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2a6f6ff_e435b842",
+        "filename": "third_party/nix/src/libutil/thread-pool.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-29T02:22:11Z",
+      "side": 1,
+      "message": "This might actually be the one place we *don\u0027t* want memory_order_relaxed",
+      "parentUuid": "2d5b8a12_59c288f8",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 18
+      },
+      "revId": "3f2f9145c185c7dc5606b94714c0decdcbeeac51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dd31bd7_90aa430b",
+        "filename": "third_party/nix/src/libutil/thread-pool.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-11-29T02:22:11Z",
+      "side": 1,
+      "message": "doesn\u0027t this need a value?",
+      "revId": "3f2f9145c185c7dc5606b94714c0decdcbeeac51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
+      "unresolved": true
     }
   ]
 }
