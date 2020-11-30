@@ -51,11 +51,6 @@
 (use-package dash)
 (use-package dash-functional)
 
-(use-package dottime
-  :demand
-  :after (notmuch telega)
-  :config (dottime-display-mode t))
-
 (use-package gruber-darker-theme)
 
 (use-package eglot
@@ -301,5 +296,7 @@
 ;; `withLocalConfig'.
 (if-let (local-file (locate-library "local"))
     (load local-file))
+
+(require 'dottime)
 
 (provide 'init)
