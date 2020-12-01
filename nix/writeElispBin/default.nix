@@ -1,6 +1,6 @@
 { depot, pkgs, ... }:
 
-{ name, src, deps ? (_: []), emacs ? pkgs.emacs26-nox }:
+{ name, src, deps ? (_: []), emacs ? pkgs.emacs27-nox }:
 
 let
   inherit (pkgs) emacsPackages emacsPackagesGen;
