@@ -17,6 +17,9 @@ let
         --output DP-4 --off
     '';
   };
+
+  inherit (builtins) map;
+  inherit (lib) mkMerge range;
 in {
   options = with lib; {
     system.machine.wirelessInterface = mkOption {
@@ -51,6 +54,11 @@ in {
         # GIFs
         picom
         peek
+
+        (pkgs.writeShellScriptBin "lock" ''
+          playerctl pause
+          ${pkgs.i3lock}/bin/i3lock -c 222222
+        '')
       ];
 
       xsession.scriptPath = ".xsession";
@@ -59,47 +67,60 @@ in {
         enable = true;
         config = {
           modifier = mod;
-          keybindings = lib.mkOptionDefault rec {
-            "${mod}+h" = "focus left";
-            "${mod}+j" = "focus down";
-            "${mod}+k" = "focus up";
-            "${mod}+l" = "focus right";
-            "${mod}+semicolon" = "focus parent";
+          keybindings =
+            mkMerge (
+              (map
+                (n: {
+                  "${mod}+${toString n}" =
+                    "workspace ${toString n}";
+                  "${mod}+Shift+${toString n}" =
+                    "move container to workspace ${toString n}";
+                })
+                (range 0 9))
+            ++ [(rec {
+              "${mod}+h" = "focus left";
+              "${mod}+j" = "focus down";
+              "${mod}+k" = "focus up";
+              "${mod}+l" = "focus right";
+              "${mod}+semicolon" = "focus parent";
 
-            "${mod}+Shift+h" = "move left";
-            "${mod}+Shift+j" = "move down";
-            "${mod}+Shift+k" = "move up";
-            "${mod}+Shift+l" = "move right";
+              "${mod}+Shift+h" = "move left";
+              "${mod}+Shift+j" = "move down";
+              "${mod}+Shift+k" = "move up";
+              "${mod}+Shift+l" = "move right";
 
-            "${mod}+Shift+x" = "kill";
+              "${mod}+Shift+x" = "kill";
 
-            "${mod}+Return" = "exec alacritty";
+              "${mod}+Return" = "exec alacritty";
 
-            "${mod}+Shift+s" = "split h";
-            "${mod}+Shift+v" = "split v";
+              "${mod}+Shift+s" = "split h";
+              "${mod}+Shift+v" = "split v";
+              "${mod}+e" = "layout toggle split";
+              "${mod}+w" = "layout tabbed";
+              "${mod}+s" = "layout stacking";
 
-            "${mod}+f" = "fullscreen";
+              "${mod}+f" = "fullscreen";
 
-            "${mod}+Shift+r" = "restart";
+              "${mod}+Shift+r" = "restart";
 
-            "${mod}+r" = "mode resize";
+              "${mod}+r" = "mode resize";
 
-            # Marks
-            "${mod}+Shift+m" = ''exec i3-input -F "mark %s" -l 1 -P 'Mark: ' '';
-            "${mod}+m" = ''exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: ' '';
+              # Marks
+              "${mod}+Shift+m" = ''exec i3-input -F "mark %s" -l 1 -P 'Mark: ' '';
+              "${mod}+m" = ''exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: ' '';
 
-            # Screenshots
-            "${mod}+q" = "exec \"maim | xclip -selection clipboard -t image/png\"";
-            "${mod}+Shift+q" = "exec \"maim -s | xclip -selection clipboard -t image/png\"";
-            "${mod}+Ctrl+q" = "exec ${pkgs.writeShellScript "peek.sh" ''
+              # Screenshots
+              "${mod}+q" = "exec \"maim | xclip -selection clipboard -t image/png\"";
+              "${mod}+Shift+q" = "exec \"maim -s | xclip -selection clipboard -t image/png\"";
+              "${mod}+Ctrl+q" = "exec ${pkgs.writeShellScript "peek.sh" ''
               ${pkgs.picom}/bin/picom &
               picom_pid=$!
               ${pkgs.peek}/bin/peek || true
               kill -SIGINT $picom_pid
             ''}";
 
-            # Launching applications
-            "${mod}+u" = "exec ${pkgs.writeShellScript "rofi" ''
+              # Launching applications
+              "${mod}+u" = "exec ${pkgs.writeShellScript "rofi" ''
               rofi \
                 -modi 'combi' \
                 -combi-modi "window,drun,ssh,run" \
@@ -107,32 +128,35 @@ in {
                 -show combi
             ''}";
 
-            # Passwords
-            "${mod}+p" = "exec rofi-pass -font '${decorationFont}'";
+              # Passwords
+              "${mod}+p" = "exec rofi-pass -font '${decorationFont}'";
 
-            # Media
-            "XF86AudioPlay" = "exec playerctl play-pause";
-            "XF86AudioNext" = "exec playerctl next";
-            "XF86AudioPrev" = "exec playerctl previous";
-            "XF86AudioRaiseVolume" = "exec pulseaudio-ctl up";
-            "XF86AudioLowerVolume" = "exec pulseaudio-ctl down";
-            "XF86AudioMute" = "exec pulseaudio-ctl mute";
+              # Media
+              "XF86AudioPlay" = "exec playerctl play-pause";
+              "XF86AudioNext" = "exec playerctl next";
+              "XF86AudioPrev" = "exec playerctl previous";
+              "XF86AudioRaiseVolume" = "exec pulseaudio-ctl up";
+              "XF86AudioLowerVolume" = "exec pulseaudio-ctl down";
+              "XF86AudioMute" = "exec pulseaudio-ctl mute";
 
-            # Lock
-            Pause = "exec \"sh -c 'playerctl pause; ${pkgs.i3lock}/bin/i3lock -c 222222'\"";
-            F7 = Pause;
+              # Lock
+              Pause = "exec lock";
 
-            # Screen Layout
-            "${mod}+Shift+t" = "exec xrandr --auto";
-            "${mod}+t" = "exec ${screenlayout.home}";
-            "${mod}+Ctrl+t" = "exec ${pkgs.writeShellScript "fix_term.sh" ''
+              # Sleep/hibernate
+              "${mod}+Escape" = "exec systemctl suspend";
+              "${mod}+Shift+Escape" = "exec systemctl hibernate";
+
+              # Screen Layout
+              "${mod}+Shift+t" = "exec xrandr --auto";
+              "${mod}+t" = "exec ${screenlayout.home}";
+              "${mod}+Ctrl+t" = "exec ${pkgs.writeShellScript "fix_term.sh" ''
               xrandr --output eDP-1 --off && ${screenlayout.home}
             ''}";
 
-            # Notifications
-            "${mod}+Shift+n" = "exec killall -SIGUSR1 .dunst-wrapped";
-            "${mod}+n" = "exec killall -SIGUSR2 .dunst-wrapped";
-          };
+              # Notifications
+              "${mod}+Shift+n" = "exec killall -SIGUSR1 .dunst-wrapped";
+              "${mod}+n" = "exec killall -SIGUSR2 .dunst-wrapped";
+            })]);
 
           fonts = [ decorationFont ];
 
