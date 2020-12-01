@@ -59,4 +59,6 @@ in {
       ssh mugwump sudo $system/bin/switch-to-configuration switch
     '')
   ];
+
+  xsession.windowManager.i3.config.keybindings.F7 = "exec lock";
 }
