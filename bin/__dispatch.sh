@@ -16,9 +16,6 @@ case "${TARGET_TOOL}" in
   age-keygen)
     attr="third_party.age"
     ;;
-  aoc2019)
-    attr="fun.aoc2019.${1}"
-    ;;
   depot-build)
     attr="tools.depot-build"
     ;;
