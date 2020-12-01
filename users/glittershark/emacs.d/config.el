@@ -18,6 +18,8 @@
 
 (require 's)
 
+(undefine-key! :keymaps 'doom-leader-map "/")
+
 (load! "utils")
 (load! "company-sql")
 (load! "org-query")

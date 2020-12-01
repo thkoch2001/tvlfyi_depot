@@ -4,6 +4,8 @@
 (require 'f)
 (require 'predd)
 
+(undefine-key! :keymaps 'doom-leader-map "/")
+
 (defmacro find-file-in! (path &optional project-p)
   "Returns an interactive function for searching files."
   `(lambda () (interactive)
