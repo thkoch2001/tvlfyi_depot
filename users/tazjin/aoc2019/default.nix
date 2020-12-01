@@ -13,7 +13,7 @@ let
   solutionFiles = filter (e: dir."${e}" == "regular" && isSolution e) (attrNames dir);
   solutions = map (f: let day = getDay f; in {
     name = day;
-    value = depot.writeElispBin { # TODO(tazjin): move writeElispBin to depot.nix
+    value = depot.nix.writeElispBin {
       name = "aoc2019";
       deps = p: with p; [ dash s ht ];
       src = ./. + ("/" + f);
