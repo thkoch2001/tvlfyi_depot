@@ -28,6 +28,11 @@
     kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
+    kernelParams = [
+      "i915.preliminary_hw_support=1"
+      "i915.enable_rc6=0"
+      "i915.enable_psr=0"
+    ];
   };
 
   fileSystems = {
@@ -43,4 +48,25 @@
   };
 
   swapDevices = [{ device = "/dev/mapper/cryptswap"; }];
+
+  services.xserver = {
+    exportConfiguration = true;
+    extraConfig = ''
+      Section "Device"
+        Identifier  "Intel Graphics"
+        Driver      "intel"
+        Option      "TripleBuffer" "true"
+        Option      "TearFree"     "true"
+        Option      "DRI"          "true"
+        Option      "AccelMethod"  "sna"
+      EndSection
+    '';
+  };
+
+  hardware.opengl.extraPackages = with pkgs; [
+    vaapiIntel
+    vaapiVdpau
+    libvdpau-va-gl
+    intel-media-driver
+  ];
 }
