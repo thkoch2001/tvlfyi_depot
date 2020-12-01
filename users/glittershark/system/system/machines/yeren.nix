@@ -8,6 +8,8 @@
     ../modules/xserver.nix
     ../modules/fonts.nix
     ../modules/sound.nix
+    ../modules/tvl.nix
+    ../modules/development.nix
   ];
 
   networking.hostName = "yeren";
@@ -69,4 +71,18 @@
     libvdpau-va-gl
     intel-media-driver
   ];
+
+  services.fprintd = {
+    enable = true;
+    package = config.depot.users.glittershark.pkgs.fprintd;
+  };
+
+  security.pam.services = {
+    login.fprintAuth = true;
+    sudo.fprintAuth = true;
+    i3lock.fprintAuth = false;
+    i3lock-color.fprintAuth = false;
+    lightdm.fprintAuth = true;
+    lightdm-greeter.fprintAuth = true;
+  };
 }

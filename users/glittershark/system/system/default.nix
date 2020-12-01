@@ -16,7 +16,13 @@ rec {
   yeren = import ./machines/yeren.nix;
 
   yerenSystem = (pkgs.nixos {
-    configuration = yeren;
+    configuration = { ... }: {
+      imports = [
+        ./machines/yeren.nix
+        "${depot.depotPath}/ops/nixos/depot.nix"
+      ];
+      inherit depot;
+    };
   }).system;
 
   iso = import ./iso.nix args;
