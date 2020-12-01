@@ -33,6 +33,7 @@
 (load! "cpp")
 (load! "lisp")
 (load! "clojure")
+(load! "rust")
 
 (require 'tvl)
 
