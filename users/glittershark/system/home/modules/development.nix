@@ -168,10 +168,8 @@ with lib;
       "grl" = "git reflog";
 
       # Haskell
-      "cb" = "cabal build";
       "crl" = "cabal repl";
       "cr" = "cabal run";
-      "ct" = "cabal run test";
       "cnb" = "cabal new-build";
       "cob" = "cabal old-build";
       "cnr" = "cabal new-run";
