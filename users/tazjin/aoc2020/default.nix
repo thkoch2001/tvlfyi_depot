@@ -15,7 +15,7 @@ let
     name = day;
     value = depot.nix.writeElispBin {
       name = "aoc2020";
-      deps = p: with p; [ dash s ht ];
+      deps = p: with p; [ dash s ht p.f ];
       src = ./. + ("/" + f);
     };
   }) solutionFiles;
