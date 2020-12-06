@@ -5,6 +5,7 @@
 //
 // My Rust implementation skips this step because it's unnecessary, we
 // have real types.
+use crate::errors::{Error, ErrorKind};
 use crate::scanner::{Token, TokenKind};
 
 // AST
@@ -60,22 +61,23 @@ struct Parser<'a> {
     current: usize,
 }
 
+type ExprResult<'a> = Result<Expr<'a>, Error>;
+
 impl<'a> Parser<'a> {
     // recursive-descent parser functions
 
-    fn expression(&mut self) -> Expr<'a> {
+    fn expression(&mut self) -> ExprResult<'a> {
         self.equality()
     }
 
-    fn equality(&mut self) -> Expr<'a> {
+    fn equality(&mut self) -> ExprResult<'a> {
         self.binary_operator(
             &[TokenKind::BangEqual, TokenKind::EqualEqual],
-            Self::comparison,
             Self::comparison,
         )
     }
 
-    fn comparison(&mut self) -> Expr<'a> {
+    fn comparison(&mut self) -> ExprResult<'a> {
         self.binary_operator(
             &[
                 TokenKind::Greater,
@@ -84,38 +86,29 @@ impl<'a> Parser<'a> {
                 TokenKind::LessEqual,
             ],
             Self::term,
-            Self::term,
         )
     }
 
-    fn term(&mut self) -> Expr<'a> {
-        self.binary_operator(
-            &[TokenKind::Minus, TokenKind::Plus],
-            Self::factor,
-            Self::factor,
-        )
+    fn term(&mut self) -> ExprResult<'a> {
+        self.binary_operator(&[TokenKind::Minus, TokenKind::Plus], Self::factor)
     }
 
-    fn factor(&mut self) -> Expr<'a> {
-        self.binary_operator(
-            &[TokenKind::Slash, TokenKind::Star],
-            Self::unary,
-            Self::unary,
-        )
+    fn factor(&mut self) -> ExprResult<'a> {
+        self.binary_operator(&[TokenKind::Slash, TokenKind::Star], Self::unary)
     }
 
-    fn unary(&mut self) -> Expr<'a> {
+    fn unary(&mut self) -> ExprResult<'a> {
         if self.match_token(&[TokenKind::Bang, TokenKind::Minus]) {
-            return Expr::Unary(Unary {
+            return Ok(Expr::Unary(Unary {
                 operator: self.previous(),
-                right: Box::new(self.unary()),
-            });
+                right: Box::new(self.unary()?),
+            }));
         }
 
         return self.primary();
     }
 
-    fn primary(&mut self) -> Expr<'a> {
+    fn primary(&mut self) -> ExprResult<'a> {
         let next = self.advance();
         let literal = match next.kind {
             TokenKind::True => Literal::Boolean(true),
@@ -132,7 +125,7 @@ impl<'a> Parser<'a> {
             unexpected => panic!("Parser encountered unexpected token '{:?}'", unexpected),
         };
 
-        Expr::Literal(literal)
+        Ok(Expr::Literal(literal))
     }
 
     // internal helpers
@@ -178,19 +171,18 @@ impl<'a> Parser<'a> {
     fn binary_operator(
         &mut self,
         oneof: &[TokenKind],
-        left: fn(&mut Parser<'a>) -> Expr<'a>,
-        right: fn(&mut Parser<'a>) -> Expr<'a>,
-    ) -> Expr<'a> {
-        let mut expr = left(self);
+        each: fn(&mut Parser<'a>) -> ExprResult<'a>,
+    ) -> ExprResult<'a> {
+        let mut expr = each(self)?;
 
         while self.match_token(oneof) {
             expr = Expr::Binary(Binary {
                 left: Box::new(expr),
                 operator: self.previous(),
-                right: Box::new(right(self)),
+                right: Box::new(each(self)?),
             })
         }
 
-        return expr;
+        return Ok(expr);
     }
 }
