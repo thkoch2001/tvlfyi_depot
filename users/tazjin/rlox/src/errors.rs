@@ -3,6 +3,7 @@ pub enum ErrorKind {
     UnexpectedChar(char),
     UnterminatedString,
     UnmatchedParens,
+    ExpectedExpression(String),
 }
 
 #[derive(Debug)]
