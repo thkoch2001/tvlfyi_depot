@@ -118,7 +118,9 @@ impl<'a> Parser<'a> {
             TokenKind::String(string) => Literal::String(string),
 
             TokenKind::LeftParen => {
-                unimplemented!("need error handling to deal with unbalanced parens");
+                let expr = self.expression()?;
+                self.consume(&TokenKind::RightParen, ErrorKind::UnmatchedParens)?;
+                return Ok(Expr::Grouping(Grouping(Box::new(expr))));
             }
 
             // This branch indicates a parser bug, not invalid input.
@@ -166,6 +168,18 @@ impl<'a> Parser<'a> {
 
     fn previous(&self) -> Token<'a> {
         self.tokens[self.current - 1].clone()
+    }
+
+    fn consume(&mut self, kind: &TokenKind, err: ErrorKind) -> Result<(), Error> {
+        if self.check_token(kind) {
+            self.advance();
+            return Ok(());
+        }
+
+        Err(Error {
+            line: self.peek().line,
+            kind: err,
+        })
     }
 
     fn binary_operator(
