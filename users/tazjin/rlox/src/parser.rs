@@ -100,7 +100,7 @@ impl<'a> Parser<'a> {
     fn unary(&mut self) -> ExprResult<'a> {
         if self.match_token(&[TokenKind::Bang, TokenKind::Minus]) {
             return Ok(Expr::Unary(Unary {
-                operator: self.previous(),
+                operator: self.previous().clone(),
                 right: Box::new(self.unary()?),
             }));
         }
@@ -123,8 +123,13 @@ impl<'a> Parser<'a> {
                 return Ok(Expr::Grouping(Grouping(Box::new(expr))));
             }
 
-            // This branch indicates a parser bug, not invalid input.
-            unexpected => panic!("Parser encountered unexpected token '{:?}'", unexpected),
+            unexpected => {
+                eprintln!("encountered {:?}", unexpected);
+                return Err(Error {
+                    line: next.line,
+                    kind: ErrorKind::ExpectedExpression(next.lexeme.into_iter().collect()),
+                });
+            }
         };
 
         Ok(Expr::Literal(literal))
@@ -150,7 +155,7 @@ impl<'a> Parser<'a> {
             self.current += 1;
         }
 
-        return self.previous();
+        return self.previous().clone();
     }
 
     fn is_at_end(&self) -> bool {
@@ -166,8 +171,8 @@ impl<'a> Parser<'a> {
         &self.tokens[self.current]
     }
 
-    fn previous(&self) -> Token<'a> {
-        self.tokens[self.current - 1].clone()
+    fn previous(&self) -> &Token<'a> {
+        &self.tokens[self.current - 1]
     }
 
     fn consume(&mut self, kind: &TokenKind, err: ErrorKind) -> Result<(), Error> {
@@ -182,6 +187,31 @@ impl<'a> Parser<'a> {
         })
     }
 
+    fn synchronise(&mut self) {
+        self.advance();
+
+        while !self.is_at_end() {
+            if self.previous().kind == TokenKind::Semicolon {
+                return;
+            }
+
+            match self.peek().kind {
+                TokenKind::Class
+                | TokenKind::Fun
+                | TokenKind::Var
+                | TokenKind::For
+                | TokenKind::If
+                | TokenKind::While
+                | TokenKind::Print
+                | TokenKind::Return => return,
+
+                _ => {
+                    self.advance();
+                }
+            }
+        }
+    }
+
     fn binary_operator(
         &mut self,
         oneof: &[TokenKind],
@@ -192,7 +222,7 @@ impl<'a> Parser<'a> {
         while self.match_token(oneof) {
             expr = Expr::Binary(Binary {
                 left: Box::new(expr),
-                operator: self.previous(),
+                operator: self.previous().clone(),
                 right: Box::new(each(self)?),
             })
         }
@@ -201,8 +231,34 @@ impl<'a> Parser<'a> {
     }
 }
 
-pub fn parse<'a>(tokens: Vec<Token<'a>>) -> ExprResult<'a> {
+pub fn parse<'a>(tokens: Vec<Token<'a>>) -> Result<Expr<'a>, Vec<Error>> {
     let mut parser = Parser { tokens, current: 0 };
+    let mut errors: Vec<Error> = vec![];
 
-    parser.expression()
+    while !parser.is_at_end() {
+        match parser.expression() {
+            Err(err) => {
+                errors.push(err);
+                parser.synchronise();
+            }
+            Ok(expr) => {
+                if !parser.is_at_end() {
+                    // TODO(tazjin): This isn't a functional language
+                    // - multiple statements should be allowed, at
+                    // some point.
+                    let current = &parser.tokens[parser.current];
+                    errors.push(Error {
+                        line: current.line,
+                        kind: ErrorKind::UnexpectedChar(current.lexeme[0]),
+                    });
+                }
+
+                if errors.is_empty() {
+                    return Ok(expr);
+                }
+            }
+        }
+    }
+
+    return Err(errors);
 }

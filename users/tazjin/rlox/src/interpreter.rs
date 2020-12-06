@@ -11,7 +11,7 @@ pub fn run(code: &str) {
             print_tokens(&tokens);
             match parser::parse(tokens) {
                 Ok(expr) => println!("Expression:\n{:?}", expr),
-                Err(error) => report_errors(vec![error]),
+                Err(errors) => report_errors(errors),
             }
         }
         Err(errors) => report_errors(errors),
