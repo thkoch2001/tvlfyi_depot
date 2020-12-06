@@ -1,4 +1,5 @@
 use crate::errors::{report, Error};
+use crate::parser;
 use crate::scanner::{self, Token};
 
 // Run some Lox code and print it to stdout
@@ -6,12 +7,19 @@ pub fn run(code: &str) {
     let chars: Vec<char> = code.chars().collect();
 
     match scanner::scan(&chars) {
-        Ok(tokens) => print_tokens(tokens),
+        Ok(tokens) => {
+            print_tokens(&tokens);
+            match parser::parse(tokens) {
+                Ok(expr) => println!("Expression:\n{:?}", expr),
+                Err(error) => report_errors(vec![error]),
+            }
+        }
         Err(errors) => report_errors(errors),
     }
 }
 
-fn print_tokens<'a>(tokens: Vec<Token<'a>>) {
+fn print_tokens<'a>(tokens: &Vec<Token<'a>>) {
+    println!("Tokens:");
     for token in tokens {
         println!("{:?}", token);
     }

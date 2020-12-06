@@ -11,17 +11,17 @@ use crate::scanner::{Token, TokenKind};
 // AST
 
 #[derive(Debug)]
-struct Binary<'a> {
+pub struct Binary<'a> {
     left: Box<Expr<'a>>,
     operator: Token<'a>,
     right: Box<Expr<'a>>,
 }
 
 #[derive(Debug)]
-struct Grouping<'a>(Box<Expr<'a>>);
+pub struct Grouping<'a>(Box<Expr<'a>>);
 
 #[derive(Debug)]
-enum Literal {
+pub enum Literal {
     Boolean(bool),
     Number(f64),
     String(String),
@@ -29,13 +29,13 @@ enum Literal {
 }
 
 #[derive(Debug)]
-struct Unary<'a> {
+pub struct Unary<'a> {
     operator: Token<'a>,
     right: Box<Expr<'a>>,
 }
 
 #[derive(Debug)]
-enum Expr<'a> {
+pub enum Expr<'a> {
     Binary(Binary<'a>),
     Grouping(Grouping<'a>),
     Literal(Literal),
@@ -199,4 +199,10 @@ impl<'a> Parser<'a> {
 
         return Ok(expr);
     }
+}
+
+pub fn parse<'a>(tokens: Vec<Token<'a>>) -> ExprResult<'a> {
+    let mut parser = Parser { tokens, current: 0 };
+
+    parser.expression()
 }
