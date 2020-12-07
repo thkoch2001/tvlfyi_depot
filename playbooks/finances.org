@@ -2,7 +2,7 @@
 * Finance Chain (25th of each month)
 ** Ensure Emergency fund is has a balance of $1000
 ** Open "finances_2020" Google Sheet
-** Settle up with Mimi on TransferWise
+** Settle up with Mimi on SplitWise
 ** Adjust GBP:USD exchange rate
 ** Adjust "Stocks (after tax)" to reflect amount Google sent
 ** Add remaining cash to "Carryover (cash)"
