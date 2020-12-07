@@ -26,6 +26,16 @@ def choose_b(m, xs):
     random.shuffle(ys)
     return ys[:m]
 
+def choose_c(m, xs):
+    """
+    This is one, possibly inefficient, way to randomly sample `m` elements from
+    `xs`.
+    """
+    choices = set()
+    while len(choices) < m:
+        choices.add(random.randint(0, len(xs) - 1))
+    return [xs[i] for i in choices]
+
 # ROYGBIV
 xs = [
     'red',
@@ -37,3 +47,4 @@ xs = [
     'violet',
 ]
 print(choose_b(3, xs))
+print(choose_c(3, xs))
