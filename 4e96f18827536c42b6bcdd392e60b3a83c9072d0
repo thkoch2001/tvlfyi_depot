@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3e9a8f2_1cf846b9",
+        "filename": "users/tazjin/nisp/transform.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-12-08T16:42:08Z",
+      "side": 1,
+      "message": "mapconcat?",
+      "revId": "4e96f18827536c42b6bcdd392e60b3a83c9072d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
