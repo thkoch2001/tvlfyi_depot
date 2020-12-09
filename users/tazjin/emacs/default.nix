@@ -60,7 +60,6 @@ let
     idle-highlight-mode
     intero
     ivy
-    ivy-pass
     ivy-prescient
     jq-mode
     kotlin-mode
