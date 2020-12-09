@@ -69,8 +69,6 @@
   (setq enable-recursive-minibuffers t)
   (setq ivy-use-virtual-buffers t))
 
-(use-package ivy-pass :after (ivy))
-
 (use-package ivy-prescient
   :after (ivy prescient)
   :config

@@ -129,10 +129,10 @@
                          (interactive)
                          (exwm-workspace-switch-create ,i))))
 
-;; Launch applications / any command  with completion (dmenu style!)
+;; Launch applications / any command with completion (dmenu style!)
 (exwm-input-set-key (kbd "s-d") #'counsel-linux-app)
-(exwm-input-set-key (kbd "s-x") #'ivy-run-external-command)
-(exwm-input-set-key (kbd "s-p") #'ivy-password-store)
+(exwm-input-set-key (kbd "s-x") #'run-external-command)
+(exwm-input-set-key (kbd "s-p") #'password-store-lookup)
 
 ;; Add X11 terminal selector to a key
 (exwm-input-set-key (kbd "C-x t") #'ts/switch-to-terminal)

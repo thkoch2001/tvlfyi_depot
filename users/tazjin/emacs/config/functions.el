@@ -59,9 +59,6 @@
            (buffer-name)
            require-final-newline))
 
-;; Helm includes a command to run external applications, which does
-;; not seem to exist in ivy. This implementation uses some of the
-;; logic from Helm to provide similar functionality using ivy.
 (defun list-external-commands ()
   "Creates a list of all external commands available on $PATH
   while filtering NixOS wrappers."
@@ -82,9 +79,9 @@
   '(("google-chrome" . "--force-device-scale-factor=1.4"))
 
   "This setting lets me add additional flags to specific commands
-  that are run interactively via `ivy-run-external-command'.")
+  that are run interactively via `run-external-command'.")
 
-(defun run-external-command (cmd)
+(defun run-external-command--handler (cmd)
   "Execute the specified command and notify the user when it
   finishes."
     (let* ((extra-flags (cdr (assoc cmd external-command-flag-overrides)))
@@ -96,46 +93,48 @@
          (when (string= event "finished\n")
            (message "%s process finished." process))))))
 
-(defun ivy-run-external-command ()
+(defun run-external-command ()
   "Prompts the user with a list of all installed applications and
   lets them select one to launch."
 
   (interactive)
   (let ((external-commands-list (list-external-commands)))
-    (ivy-read "Command:" external-commands-list
-              :require-match t
-              :history 'external-commands-history
-              :action #'run-external-command)))
+    (run-external-command--handler
+     (completing-read "Command: " external-commands-list
+                      nil                             ;; predicate
+                      t                               ;; require-match
+                      nil                             ;; initial-input
+                      ;; hist
+                      'external-commands-history))))
 
-(defun ivy-password-store (&optional password-store-dir)
-  "Custom version of password-store integration with ivy that
-  actually uses the GPG agent correctly."
+(defun password-store-lookup (&optional password-store-dir)
+  "Interactive password-store lookup function that actually uses
+the GPG agent correctly."
 
   (interactive)
-  (ivy-read "Copy password of entry: "
-            (password-store-list (or password-store-dir (password-store-dir)))
-            :require-match t
-            :keymap ivy-pass-map
-            :action (lambda (entry)
-                      (let ((password (auth-source-pass-get 'secret entry)))
-                        (password-store-clear)
-                        (kill-new password)
-                        (setq password-store-kill-ring-pointer kill-ring-yank-pointer)
-                        (message "Copied %s to the kill ring. Will clear in %s seconds."
-                                 entry (password-store-timeout))
-                        (setq password-store-timeout-timer
-                              (run-at-time (password-store-timeout)
-                                           nil 'password-store-clear))))))
 
-(defun ivy-browse-repositories ()
+  (let* ((entry (completing-read "Copy password of entry: "
+                   (password-store-list (or password-store-dir
+                                            (password-store-dir)))
+                   nil ;; predicate
+                   t   ;; require-match
+                   ))
+         (password (auth-source-pass-get 'secret entry)))
+    (password-store-clear)
+    (kill-new password)
+    (setq password-store-kill-ring-pointer kill-ring-yank-pointer)
+    (message "Copied %s to the kill ring. Will clear in %s seconds."
+             entry (password-store-timeout))
+    (setq password-store-timeout-timer
+          (run-at-time (password-store-timeout)
+                       nil 'password-store-clear))))
+
+(defun browse-repositories ()
   "Select a git repository and open its associated magit buffer."
 
   (interactive)
-  (ivy-read "Repository: "
-            (magit-list-repos)
-            :require-match t
-            :sort t
-            :action #'magit-status))
+  (magit-status
+   (completing-read "Repository: " (magit-list-repos))))
 
 (defun bottom-right-window-p ()
   "Determines whether the last (i.e. bottom-right) window of the

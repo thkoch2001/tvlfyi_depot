@@ -15,7 +15,7 @@
 ;; Start eshell or switch to it if it's active.
 (global-set-key (kbd "C-x m") 'eshell)
 
-(global-set-key (kbd "C-x C-p") 'ivy-browse-repositories)
+(global-set-key (kbd "C-x C-p") 'browse-repositories)
 (global-set-key (kbd "M-g M-g") 'goto-line-with-feedback)
 
 ;; Miscellaneous editing commands
