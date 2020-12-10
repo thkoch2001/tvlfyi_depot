@@ -34,6 +34,24 @@
       "parentUuid": "b3e9a8f2_1cf846b9",
       "revId": "4e96f18827536c42b6bcdd392e60b3a83c9072d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edcafebb_87b4f2cb",
+        "filename": "users/tazjin/nisp/transform.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2020-12-10T17:08:34Z",
+      "side": 1,
+      "message": "`mapconcat` is a function. this could be something like:\n\n(mapconcat #\u0027nisp/expr element \" \")",
+      "parentUuid": "c7f3ab65_f041a108",
+      "revId": "4e96f18827536c42b6bcdd392e60b3a83c9072d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
