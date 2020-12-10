@@ -1,11 +1,10 @@
 { depot, lib, ... }:
 
 config: let
+  inherit (depot.third_party) lieer;
   nixpkgs = import depot.third_party.nixpkgsSrc {
     config.allowUnfree = true;
   };
-
-  lieer = depot.third_party.lieer {};
 
   # add google-c-style here because other machines get it from, eh,
   # elsewhere.
