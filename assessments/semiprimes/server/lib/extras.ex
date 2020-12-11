@@ -1,4 +1,8 @@
 defmodule Extras do
+  @moduledoc """
+  Hosts utility functions intended to supplement the standard library.
+  """
+
   @doc """
   Return an ascending range starting at `a` and ending at `b` (exclusive).
 
