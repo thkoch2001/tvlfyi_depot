@@ -28,3 +28,17 @@ numbers *Semiprimes*.
   return the answer for all.
 - Considering this module will be used by a long running service, could you
   optimize it to give answers faster?
+
+## Usage
+
+To run the application you'll need to have `elixir` installed. Assuming `elixir`
+is already installed, consult the following steps to start the application:
+
+```shell
+$ cd server
+$ mix deps.get
+$ iex -S mix
+```
+
+Now open a web browser and visit `http://localhost:8080`!
+
