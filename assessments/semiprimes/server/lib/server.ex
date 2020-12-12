@@ -16,11 +16,11 @@ defmodule Server do
 
           res ->
             Cache.put(n, res)
-            res
+            {:miss, res}
         end
 
       hit ->
-        hit
+        {:hit, hit}
     end
   end
 

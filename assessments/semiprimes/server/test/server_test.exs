@@ -4,6 +4,7 @@ defmodule ServerTest do
 
   describe "semiprime" do
     test "returns the factors when the number is semiprime" do
+      Cache.clear()
       # Semiprimes below 30
       [
         {4, [2, 2]},
@@ -18,7 +19,7 @@ defmodule ServerTest do
         {26, [2, 13]}
       ]
       |> Enum.each(fn {input, expected} ->
-        assert Server.semiprime(input) == expected
+        assert Server.semiprime(input) == {:miss, expected}
       end)
     end
 
