@@ -22,7 +22,11 @@ defmodule Server.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:cortex, "~> 0.1", only: [:dev, :test]}
+      {:cortex, "~> 0.1", only: [:dev, :test]},
+      {:plug_cowboy, "~> 2.4.1"},
+      {:cowboy, "~> 2.8.0"},
+      {:plug, "~> 1.11.0"},
+      {:poison, "~> 4.0.1"}
     ]
   end
 end
