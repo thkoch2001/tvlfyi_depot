@@ -4,15 +4,30 @@ defmodule Server do
   """
 
   @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Server.hello()
-      :world
-
+  If `n` contains exactly two prime factors, return those prime factors;
+  otherwise, return nothing.
   """
-  def hello do
-    :world
+  def semiprime(n) do
+    case Cache.get(n) do
+      nil ->
+        case do_semiprime(n) do
+          nil ->
+            nil
+
+          res ->
+            Cache.put(n, res)
+            res
+        end
+
+      hit ->
+        hit
+    end
+  end
+
+  defp do_semiprime(n) do
+    case Math.factor(n) do
+      [_, _] = res -> res
+      _ -> nil
+    end
   end
 end
