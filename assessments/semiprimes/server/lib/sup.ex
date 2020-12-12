@@ -5,6 +5,7 @@ defmodule Sup do
   """
 
   use Supervisor
+  alias Plug.Adapters.Cowboy
 
   def start_link(opts \\ []) do
     Supervisor.start_link(__MODULE__, :ok, opts)
@@ -13,7 +14,8 @@ defmodule Sup do
   @impl true
   def init(:ok) do
     children = [
-      Cache
+      Cache,
+      Cowboy.child_spec(scheme: :http, plug: Router, options: [port: 8000])
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
