@@ -24,4 +24,18 @@ defmodule Cache do
   def put(key, value) do
     Agent.update(__MODULE__, &Map.put(&1, key, value))
   end
+
+  @doc """
+  List the contents of the cache. Useful for debugging purposes.
+  """
+  def list() do
+    Agent.get(__MODULE__, & &1)
+  end
+
+  @doc """
+  Invalidate the entire cache.
+  """
+  def clear() do
+    Agent.update(__MODULE__, fn _ -> %{} end)
+  end
 end
