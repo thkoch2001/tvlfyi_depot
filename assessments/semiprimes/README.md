@@ -17,7 +17,7 @@ numbers *Semiprimes*.
 ## Task
 
 - Write a module which provides a function to tell whether a given number, `N`,
-  is a semiprime. `N` will be 10^5.
+  is a semiprime. `N` will be less than 100,000
 - Please implement an API (RESTful or GraphQL) to factor a given number into two
   prime numbers if it’s a semiprime, otherwise, return an error message.
 
