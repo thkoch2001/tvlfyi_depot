@@ -11,10 +11,8 @@ defmodule MathTest do
         {21, [3, 7]}
       ]
       |> Enum.map(fn {input, expected} ->
-        Math.factor(input) == expected
+        assert Math.factor(input) == expected
       end)
-      |> Enum.all?()
-      |> assert
     end
 
     test "handles large numbers" do
