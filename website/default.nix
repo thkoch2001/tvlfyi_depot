@@ -8,6 +8,6 @@ pkgs.stdenv.mkDerivation {
     cp $src/index.html $out
 
     mkdir -p $out/habits
-    cp ${briefcase.website.habit-screens} $out/habits/index.html
+    cp -r ${briefcase.website.habit-screens} $out/habits/index.html
   '';
 }
