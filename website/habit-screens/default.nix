@@ -1,8 +1,6 @@
-{ nixpkgs ? <nixpkgs>
-, config ? {}
-}:
+{ pkgs ? <nixpkgs> , ... }:
 
-with (import nixpkgs config);
+with pkgs;
 
 let
   mkDerivation =
@@ -42,12 +40,22 @@ let
         '') targets)}
       '';
     };
-in mkDerivation {
-  name = "elm-app-0.1.0";
-  srcs = ./elm-srcs.nix;
-  src = ./.;
-  targets = ["Main"];
-  srcdir = "./src";
-  outputJavaScript = false;
+  mainDotElm = mkDerivation {
+    name = "elm-app-0.1.0";
+    srcs = ./elm-srcs.nix;
+    src = ./.;
+    targets = ["Main"];
+    srcdir = "./src";
+    outputJavaScript = true;
+  };
+in stdenv.mkDerivation {
+  name = "habit-screens";
+  buildInputs = [];
+  src = builtins.path { path = ./.; name = "habit-screens"; };
+  buildPhase = ''
+    mkdir -p $out
+    cp index.html output.css ${mainDotElm}/Main.min.js $out
+  '';
+  dontInstall = true;
 }
 
