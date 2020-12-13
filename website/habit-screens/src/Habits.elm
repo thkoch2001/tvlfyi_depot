@@ -23,8 +23,8 @@ morning =
         )
         [ ( 1, "Make bed" )
         , ( 2, "Brush teeth" )
+        , ( 30, "Run (15 minutes)" )
         , ( 10, "Shower" )
-        , ( 1, "Do push-ups" )
         , ( 10, "Meditate" )
         ]
 
@@ -90,8 +90,6 @@ sunday =
     , ( 10, "Mop tile and wood floors" )
     , ( 10, "Laundry" )
     , ( 5, "Vacuum bedroom" )
-    , ( 5, "Dust surfaces" )
-    , ( 5, "Clean mirrors" )
     , ( 5, "Clean desk" )
     ]
 
