@@ -122,8 +122,8 @@ init =
       , today = Nothing
       , completed = Set.empty
       , visibleDayOfWeek = Nothing
-      , includeMorning = False
-      , includeEvening = False
+      , includeMorning = True
+      , includeEvening = True
       }
     , Date.today |> Task.perform ReceiveDate
     )
