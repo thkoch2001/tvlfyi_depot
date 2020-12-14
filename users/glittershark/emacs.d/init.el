@@ -40,6 +40,7 @@
        ;;parinfer          ; turn lisp into python, sort of
        rotate-text       ; cycle region at point between text candidates
        snippets          ; my elves. They type so I don't have to
+       word-wrap
 
        :emacs
        (dired            ; making dired pretty [functional]
@@ -50,6 +51,7 @@
        ;;eshell            ; a consistent, cross-platform shell (WIP)
        ;;term              ; terminals in Emacs
        vc                ; version-control and Emacs, sitting in a tree
+       (undo +tree)
 
        :tools
        ;;ansible
@@ -58,7 +60,7 @@
        docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
        ;; ein               ; tame Jupyter notebooks with emacs
-       eval              ; run code, run (also, repls)
+       (eval +overlay)              ; run code, run (also, repls)
        gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
@@ -153,7 +155,7 @@
        ;; +langtool)       ; a proofreader (grammar/style check) for Emacs
 
        :email
-       (mu4e +gmail)
+       ;; (mu4e +gmail)
        notmuch
 
        :collab
