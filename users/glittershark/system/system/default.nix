@@ -1,5 +1,9 @@
 args @ { depot, pkgs, ... }:
 
+let
+  nixpkgs = import pkgs.nixpkgsSrc {};
+in
+
 rec {
   chupacabra = import ./machines/chupacabra.nix;
 
@@ -11,6 +15,27 @@ rec {
 
   mugwumpSystem = (pkgs.nixos {
     configuration = mugwump;
+  }).system;
+
+  roswell = import ./machines/roswell.nix;
+
+  roswellSystem = (pkgs.nixos {
+    configuration = { ... }: {
+      imports = [
+        ./machines/roswell.nix
+        "${nixpkgs.home-manager.src}/nixos"
+        "${depot.depotPath}/ops/nixos/depot.nix"
+      ];
+      inherit depot;
+
+      home-manager.users.grfn = { config, lib, ... }: {
+        imports = [ ../../home/machines/roswell.nix ];
+        lib.depot = config.depot;
+        _module.args.pkgs = lib.mkForce
+          (import pkgs.nixpkgsSrc
+            (lib.filterAttrs (n: v: v != null) config.nixpkgs));
+      };
+    };
   }).system;
 
   yeren = import ./machines/yeren.nix;
@@ -31,6 +56,7 @@ rec {
   meta.targets = [
     "chupacabraSystem"
     "mugwumpSystem"
+    "roswellSystem"
     "yerenSystem"
 
     "iso"
