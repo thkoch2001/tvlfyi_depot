@@ -37,21 +37,6 @@
 
 (require 'tvl)
 
-(after! rust
-  ;; (require 'ein)
-  (setq rust-format-on-save t)
-  (add-hook! :after rust-mode-hook #'lsp)
-  (add-hook! :after rust-mode-hook #'rust-enable-format-on-save))
-
-(add-hook! rust-mode
-  (flycheck-rust-setup)
-  (flycheck-mode)
-  (cargo-minor-mode)
-  (lsp)
-  (rust-enable-format-on-save)
-  (map! :map rust-mode-map
-        "C-c C-f" #'rust-format-buffer))
-
 (add-hook! elixir-mode
   (require 'flycheck-credo)
   (setq flycheck-elixir-credo-strict t)
@@ -62,9 +47,6 @@
   (require 'flycheck-dialyxir) (flycheck-dialyxir-setup)
 
   (flycheck-mode))
-
-(after! cargo
-  (setq cargo-process--custom-path-to-bin "/home/grfn/.cargo/bin/cargo"))
 
 (setq +solarized-s-base03    "#002b36"
       +solarized-s-base02    "#073642"
