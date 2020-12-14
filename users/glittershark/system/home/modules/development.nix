@@ -47,7 +47,7 @@ with lib;
     entr
     gnumake
     inetutils
-    loc
+    tokei
     jsonnet
 
     gdb
