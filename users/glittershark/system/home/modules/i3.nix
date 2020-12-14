@@ -143,8 +143,14 @@ in {
               Pause = "exec lock";
 
               # Sleep/hibernate
-              "${mod}+Escape" = "exec systemctl suspend";
-              "${mod}+Shift+Escape" = "exec systemctl hibernate";
+              # "${mod}+Escape" = "exec systemctl suspend";
+              # "${mod}+Shift+Escape" = "exec systemctl hibernate";
+
+              # Scratch buffer
+              "${mod}+minus" = "scratchpad show";
+              "${mod}+Shift+minus" = "move scratchpad";
+              "${mod}+space" = "focus mode_toggle";
+              "${mod}+Shift+space" = "floating toggle";
 
               # Screen Layout
               "${mod}+Shift+t" = "exec xrandr --auto";
