@@ -22,6 +22,29 @@ in
   home.packages = with pkgs; [
     zoom-us
     slack
+    mysql
+    graphviz
+
+    (discord.override rec {
+      version = "0.0.13";
+      src = fetchurl {
+        url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
+        sha256 = "0d5z6cbj9dg3hjw84pyg75f8dwdvi2mqxb9ic8dfqzk064ssiv7y";
+      };
+    })
+
+    steam
+
+    (awscli2.overridePythonAttrs (oldAttrs: {
+      postPatch = ''
+        substituteInPlace setup.py \
+          --replace 'colorama>=0.2.5,<0.4.4' 'colorama'  \
+          --replace 'wcwidth<0.2.0' 'colorama' \
+          --replace 'cryptography>=2.8.0,<=2.9.0' 'cryptography' \
+          --replace 'docutils>=0.10,<0.16' 'docutils' \
+          --replace 'ruamel.yaml>=0.15.0,<0.16.0' 'ruamel.yaml'
+      '';
+    }))
   ];
 
   systemd.user.services.laptop-keyboard = {
