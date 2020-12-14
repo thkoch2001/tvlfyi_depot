@@ -32,8 +32,6 @@
     extraModulePackages = [ ];
     kernelParams = [
       "i915.preliminary_hw_support=1"
-      "i915.enable_rc6=0"
-      "i915.enable_psr=0"
     ];
   };
 
