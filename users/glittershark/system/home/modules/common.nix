@@ -74,6 +74,12 @@
         hostname = "172.16.0.5";
         forwardAgent = true;
       };
+
+      "roswell" = {
+        host = "roswell";
+        hostname = "18.223.118.13";
+        forwardAgent = true;
+      };
     };
   };
 
