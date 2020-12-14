@@ -309,7 +309,7 @@ private/hlissner/snippets."
      :desc "Git revert hunk"       :n  "r" #'git-gutter:revert-hunk
      :desc "Git revert buffer"     :n  "R" #'vc-revert
      ;; :desc "List gists"            :n  "g" #'+gist:list
-     :desc "Git grep"              :n  "g" #'counsel-git-grep
+     :desc "Git grep"              :n  "g" #'counsel-projectile-rg
      :desc "Checkout Branch"       :n  "c" #'counsel-git-checkout
      :desc "Next hunk"             :nv "]" #'git-gutter:next-hunk
      :desc "Previous hunk"         :nv "[" #'git-gutter:previous-hunk
