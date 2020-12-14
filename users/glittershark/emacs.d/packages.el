@@ -71,7 +71,7 @@
 
 ;; Rust
 (package! rustic :disable t)
-(package! racer :disable t)
+;; (package! racer :disable t)
 (package! cargo)
 
 ;; Lisp

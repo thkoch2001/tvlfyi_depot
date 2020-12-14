@@ -392,11 +392,6 @@
   (set-fill-column 80)
   (setq evil-shift-width 2))
 
-;; (load! org-clubhouse)
-(add-hook! org-mode #'org-clubhouse-mode)
-
-(load! "slack-snippets")
-
 (auth-source-pass-enable)
 
 (require 'fill-column-indicator)
@@ -698,8 +693,8 @@
 ;;   ;; (push "build" counsel-etags-ignore-directories)
 ;;   )
 
-(use-package! evil-magit
-  :after (magit))
+;; (use-package! evil-magit
+;;   :after (magit))
 
 (use-package! writeroom-mode)
 
