@@ -1097,7 +1097,7 @@ private/hlissner/snippets."
     (eval-sexp-region (car bounds)
                       (cdr bounds))))
 
-(defun eval-last-sexp ()
+(defun eval-last-sexp (_)
   (interactive)
   (eval-sexp (preceding-sexp)))
 
