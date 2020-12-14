@@ -269,6 +269,21 @@
 
 (setq doom-modeline-height 12)
 
+(load "/home/grfn/code/org-clubhouse/org-clubhouse.el")
+(use-package! org-clubhouse
+  :hook (org-mode . org-clubhouse-mode)
+  :config
+  (setq org-clubhouse-state-alist '(("BACKLOG" . "Unscheduled")
+                                    ("TODO" . "Ready for Development")
+                                    ("ACTIVE" . "In Development")
+                                    ("PR" . "Ready for Review")
+                                    ("DONE" . "Completed"))
+        org-clubhouse-username "griffinsmith"
+        org-clubhouse-claim-story-on-status-update '("ACTIVE" "PR" "DONE")
+        org-clubhouse-create-stories-with-labels 'existing
+        org-clubhouse-workflow-name "Engineering"))
+
+
 
 ;; Should really figure out which of these is correct, eventually
 
