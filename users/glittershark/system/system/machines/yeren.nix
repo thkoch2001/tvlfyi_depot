@@ -75,6 +75,21 @@
     package = config.depot.users.glittershark.pkgs.fprintd;
   };
 
+  security.pam.loginLimits = [
+    {
+      domain = "grfn";
+      type = "soft";
+      item = "nofile";
+      value = "65535";
+    }
+    {
+      domain = "grfn";
+      type = "hard";
+      item = "nofile";
+      value = "unlimited";
+    }
+  ];
+
   security.pam.services = {
     login.fprintAuth = true;
     sudo.fprintAuth = true;
