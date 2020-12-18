@@ -62,8 +62,8 @@
 ** TODO Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
 ** TODO Valid Anagram - https://leetcode.com/problems/valid-anagram/
 ** TODO Group Anagrams - https://leetcode.com/problems/group-anagrams/
-** TODO Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
-** TODO Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
+** DONE Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
+** DONE Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
 ** TODO Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
 ** TODO Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
 ** TODO Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
