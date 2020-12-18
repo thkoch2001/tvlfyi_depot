@@ -68,19 +68,19 @@
 ** TODO Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
 ** TODO Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
 * Tree
-** TODO Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
-** TODO Same Tree - https://leetcode.com/problems/same-tree/
-** TODO Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
+** DONE Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
+** DONE Same Tree - https://leetcode.com/problems/same-tree/
+** DONE Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
 ** TODO Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
 ** TODO Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
-** TODO Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+** DONE Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 ** TODO Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
 ** TODO Construct Binary Tree from Preorder and Inorder Traversal - https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
 ** TODO Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
 ** TODO Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
-** TODO Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
-** TODO Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
-** TODO Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
+** DONE Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+** DONE Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
+** DONE Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
 ** TODO Word Search II - https://leetcode.com/problems/word-search-ii/
 * Heap
 ** DONE Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
