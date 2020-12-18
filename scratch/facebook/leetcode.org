@@ -45,10 +45,10 @@
 ** TODO Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
 ** TODO Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
 * Linked List
-** TODO Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
-** TODO Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
-** TODO Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
-** TODO Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
+** DONE Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
+** DONE Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
+** DONE Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
+** DONE Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 ** TODO Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 ** TODO Reorder List - https://leetcode.com/problems/reorder-list/
 * Matrix
