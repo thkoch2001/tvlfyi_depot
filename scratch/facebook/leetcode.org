@@ -13,16 +13,16 @@
 ** DONE Container With Most Water - https://leetcode.com/problems/container-with-most-water/
 * Binary
 ** TODO Sum of Two Integers - https://leetcode.com/problems/sum-of-two-integers/
-** TODO Number of 1 Bits - https://leetcode.com/problems/number-of-1-bits/
+** DONE Number of 1 Bits - https://leetcode.com/problems/number-of-1-bits/
 ** TODO Counting Bits - https://leetcode.com/problems/counting-bits/
-** TODO Missing Number - https://leetcode.com/problems/missing-number/
+** DONE Missing Number - https://leetcode.com/problems/missing-number/
 ** TODO Reverse Bits - https://leetcode.com/problems/reverse-bits/
 * Dynamic Programming
 ** TODO Climbing Stairs - https://leetcode.com/problems/climbing-stairs/
 ** TODO Coin Change - https://leetcode.com/problems/coin-change/
 ** TODO Longest Increasing Subsequence - https://leetcode.com/problems/longest-increasing-subsequence/
 ** TODO Longest Common Subsequence -
-** TODO Word Break Problem - https://leetcode.com/problems/word-break/
+** DONE Word Break Problem - https://leetcode.com/problems/word-break/
 ** TODO Combination Sum - https://leetcode.com/problems/combination-sum-iv/
 ** TODO House Robber - https://leetcode.com/problems/house-robber/
 ** TODO House Robber II - https://leetcode.com/problems/house-robber-ii/
@@ -30,19 +30,19 @@
 ** TODO Unique Paths - https://leetcode.com/problems/unique-paths/
 ** TODO Jump Game - https://leetcode.com/problems/jump-game/
 * Graph
-** TODO Clone Graph - https://leetcode.com/problems/clone-graph/
-** TODO Course Schedule - https://leetcode.com/problems/course-schedule/
+** DONE Clone Graph - https://leetcode.com/problems/clone-graph/
+** DONE Course Schedule - https://leetcode.com/problems/course-schedule/
 ** TODO Pacific Atlantic Water Flow - https://leetcode.com/problems/pacific-atlantic-water-flow/
-** TODO Number of Islands - https://leetcode.com/problems/number-of-islands/
+** DONE Number of Islands - https://leetcode.com/problems/number-of-islands/
 ** TODO Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
 ** TODO Alien Dictionary (Leetcode Premium) - https://leetcode.com/problems/alien-dictionary/
 ** TODO Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
-** TODO Number of Connected Components in an Undirected Graph (Leetcode Premium) - https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
+** DONE Number of Connected Components in an Undirected Graph (Leetcode Premium) - https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 * Interval
 ** TODO Insert Interval - https://leetcode.com/problems/insert-interval/
-** TODO Merge Intervals - https://leetcode.com/problems/merge-intervals/
+** DONE Merge Intervals - https://leetcode.com/problems/merge-intervals/
 ** TODO Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
-** TODO Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
+** DONE Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
 ** TODO Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
 * Linked List
 ** DONE Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
