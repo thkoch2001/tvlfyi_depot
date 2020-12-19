@@ -94,10 +94,10 @@
   (interactive)
   (tree-sitter-move--move-skip-non-sibling-nodes 'tsc-get-parent))
 
-;; TODO doesn’t work yet because sibling nodes are only skipped upwards
-;; (defun tree-sitter-move-down ()
-;;   (interactive)
-;;   (tree-sitter-move--move-skip-non-sibling-nodes (lambda (n) (tsc-get-nth-named-child n 0))))
+;; TODO: does not skip siblings yet, because the skip function only goes up (not down)
+(defun tree-sitter-move-down ()
+  (interactive)
+  (tree-sitter-move--move-if-possible (lambda (n) (tsc-get-nth-named-child n 0))))
 
 (defun tree-sitter-move--move-skip-non-sibling-nodes (move-fn)
   "Moves to the sidewards next sibling. If the current node does not have siblings, go
