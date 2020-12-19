@@ -15,6 +15,7 @@
 (defun tree-sitter-move--setup ()
   ;; TODO
   (progn
+    ;; TODO: if tree-sitter-mode fails to load, display a better error
     (tree-sitter-mode t)
     (setq tree-sitter-move--cursor (tsc-root-node tree-sitter-tree))
     (add-variable-watcher
