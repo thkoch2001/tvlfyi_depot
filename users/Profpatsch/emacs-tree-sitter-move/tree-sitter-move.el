@@ -44,34 +44,31 @@
   (tree-sitter-mode nil))
 
 ;; Get the syntax node the cursor is on.
-(defun tsc-node-named-node-at-point ()
+(defun tsc-get-named-node-at-point ()
   (let ((p (point)))
     (tsc-get-named-descendant-for-position-range
      (tsc-root-node tree-sitter-tree) p p)))
 
-(defun tsc-get-node-at-point ()
-  (let ((p (point)))
-    (tsc-get-descendant-for-position-range
-     (tsc-root-node tree-sitter-tree) p p)))
-
 (defun tsc-get-first-named-node-with-siblings-up (node)
   "Returns the first 'upwards' node that has siblings. That includes the current
-  node, so if the given node has siblings, it is returned."
-  (let ((has-siblings-p
-         (lambda (n)
-           (> (tsc-count-named-children (tsc-get-parent n))
-              1)))
-        (res node))
-    (while (not (funcall has-siblings-p res))
-      ;; TODO tsc-get-parent is called twice, nicer somehow?
-      (setq res (tsc-get-parent res)))
-    res))
+  node, so if the given node has siblings, it is returned. Returns nil if there
+  is no such node until the root"
+  (when-let ((has-siblings-p
+            (lambda (parent-node)
+              (> (tsc-count-named-children parent-node)
+                 1)))
+           (cur node)
+           (parent (tsc-get-parent node)))
+      (while (not (funcall has-siblings-p parent))
+        (setq cur parent)
+        (setq parent (tsc-get-parent cur)))
+    cur))
 
 (defun tree-sitter-move--set-cursor-to-node (node)
   (setq tree-sitter-move--cursor node))
 
 (defun tree-sitter-move--set-cursor-to-node-at-point ()
-  (tree-sitter-move--set-cursor-to-node (tsc-get-node-at-point)))
+  (tree-sitter-move--set-cursor-to-node (tsc-get-named-node-at-point)))
 
 (defun tree-sitter-move--move-point-to-node (node)
   (set-window-point
@@ -81,13 +78,22 @@
 
 ;; interactive commands (“do what I expect” section)
 
+(defun tree-sitter-move-reset ()
+  (interactive)
+  (tree-sitter-move--set-cursor-to-node-at-point))
+
 (defun tree-sitter-move-right ()
   "Moves to the next sibling. If the current node does not have siblings, go
   upwards until something has siblings and then move right."
   (interactive)
-  (tree-sitter-move--set-cursor-to-node-at-point)
-  (let ((next (tsc-get-next-named-sibling
-               (tsc-get-first-named-node-with-siblings-up tree-sitter-move--cursor))))
+  (tree-sitter-move--move-if-possible
+   (lambda (cur)
+     (when-let ((with-siblings
+                 (tsc-get-first-named-node-with-siblings-up cur)))
+       (tsc-get-next-named-sibling with-siblings)))))
+
+(defun tree-sitter-move--move-if-possible (dir-fn)
+  (let ((next (funcall dir-fn tree-sitter-move--cursor)))
     (when next
       (tree-sitter-move--set-cursor-to-node next)
       (tree-sitter-move--move-point-to-node next))))
