@@ -12,15 +12,15 @@ use crate::scanner::{Token, TokenKind};
 
 #[derive(Debug)]
 pub struct Binary<'a> {
-    left: Box<Expr<'a>>,
-    operator: Token<'a>,
-    right: Box<Expr<'a>>,
+    pub left: Box<Expr<'a>>,
+    pub operator: Token<'a>,
+    pub right: Box<Expr<'a>>,
 }
 
 #[derive(Debug)]
-pub struct Grouping<'a>(Box<Expr<'a>>);
+pub struct Grouping<'a>(pub Box<Expr<'a>>);
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Literal {
     Boolean(bool),
     Number(f64),
@@ -30,8 +30,8 @@ pub enum Literal {
 
 #[derive(Debug)]
 pub struct Unary<'a> {
-    operator: Token<'a>,
-    right: Box<Expr<'a>>,
+    pub operator: Token<'a>,
+    pub right: Box<Expr<'a>>,
 }
 
 #[derive(Debug)]
