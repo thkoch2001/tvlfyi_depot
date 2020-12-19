@@ -50,19 +50,27 @@
     (tsc-get-named-descendant-for-position-range
      (tsc-root-node tree-sitter-tree) p p)))
 
+;; TODO: is this function necessary?
+;; Maybe tree-sitter always guarantees that parents are named?
+(defun tsc-get-named-parent (node)
+  (when-let ((parent (tsc-get-parent node)))
+    (while (and parent (not (tsc-node-named-p parent)))
+      (setq parent (tsc-get-parent parent)))
+    parent))
+
 (defun tsc-get-first-named-node-with-siblings-up (node)
   "Returns the first 'upwards' node that has siblings. That includes the current
   node, so if the given node has siblings, it is returned. Returns nil if there
   is no such node until the root"
   (when-let ((has-siblings-p
-            (lambda (parent-node)
-              (> (tsc-count-named-children parent-node)
-                 1)))
-           (cur node)
-           (parent (tsc-get-parent node)))
-      (while (not (funcall has-siblings-p parent))
-        (setq cur parent)
-        (setq parent (tsc-get-parent cur)))
+              (lambda (parent-node)
+                (> (tsc-count-named-children parent-node)
+                   1)))
+             (cur node)
+             (parent (tsc-get-named-parent node)))
+    (while (and parent (not (funcall has-siblings-p parent)))
+      (setq cur parent)
+      (setq parent (tsc-get-named-parent cur)))
     cur))
 
 (defun tree-sitter-move--set-cursor-to-node (node)
