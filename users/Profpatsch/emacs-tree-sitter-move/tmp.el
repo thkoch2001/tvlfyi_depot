@@ -7,6 +7,7 @@
       '((python-mode . python)))
 
 
+(define-key evil-normal-state-map (kbd "C-.") #'tree-sitter-move-reset)
 (define-key evil-normal-state-map (kbd "C-<right>") #'tree-sitter-move-right)
 ;; (define-key evil-normal-state-map (kbd "C-<left>") 'sp-backward-parallel-sexp)
 ;; (define-key evil-normal-state-map (kbd "C-<down>") 'sp-down-sexp)
