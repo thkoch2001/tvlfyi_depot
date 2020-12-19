@@ -1,4 +1,4 @@
-use crate::errors::{report, Error};
+use crate::errors::{report, Error, ErrorKind};
 use crate::parser::{self, Expr, Literal};
 use crate::scanner::{self, Token, TokenKind};
 
@@ -44,21 +44,28 @@ fn eval_truthy(lit: &Literal) -> bool {
     }
 }
 
-fn eval_unary<'a>(expr: &parser::Unary<'a>) -> Literal {
-    let right = eval(&*expr.right);
+fn eval_unary<'a>(expr: &parser::Unary<'a>) -> Result<Literal, Error> {
+    let right = eval(&*expr.right)?;
 
     match (&expr.operator.kind, right) {
-        (TokenKind::Minus, Literal::Number(num)) => Literal::Number(-num),
-        (TokenKind::Bang, right) => Literal::Boolean(!eval_truthy(&right)),
-        _ => unimplemented!("no handling of type errors"),
+        (TokenKind::Minus, Literal::Number(num)) => Ok(Literal::Number(-num)),
+        (TokenKind::Bang, right) => Ok(Literal::Boolean(!eval_truthy(&right))),
+
+        (op, right) => Err(Error {
+            line: expr.operator.line,
+            kind: ErrorKind::TypeError(format!(
+                "Operator '{:?}' can not be called with argument '{:?}'",
+                op, right
+            )),
+        }),
     }
 }
 
-fn eval_binary<'a>(expr: &parser::Binary<'a>) -> Literal {
-    let left = eval(&*expr.left);
-    let right = eval(&*expr.right);
+fn eval_binary<'a>(expr: &parser::Binary<'a>) -> Result<Literal, Error> {
+    let left = eval(&*expr.left)?;
+    let right = eval(&*expr.right)?;
 
-    match (&expr.operator.kind, left, right) {
+    let result = match (&expr.operator.kind, left, right) {
         // Numeric
         (TokenKind::Minus, Literal::Number(l), Literal::Number(r)) => Literal::Number(l - r),
         (TokenKind::Slash, Literal::Number(l), Literal::Number(r)) => Literal::Number(l / r),
@@ -82,13 +89,23 @@ fn eval_binary<'a>(expr: &parser::Binary<'a>) -> Literal {
         (TokenKind::Equal, l, r) => Literal::Boolean(l == r),
         (TokenKind::BangEqual, l, r) => Literal::Boolean(l != r),
 
-        _ => unimplemented!("type errors unhandled"),
-    }
+        (op, left, right) => {
+            return Err(Error {
+                line: expr.operator.line,
+                kind: ErrorKind::TypeError(format!(
+                    "Operator '{:?}' can not be called with arguments '({:?}, {:?})'",
+                    op, left, right
+                )),
+            })
+        }
+    };
+
+    Ok(result)
 }
 
-fn eval<'a>(expr: &Expr<'a>) -> Literal {
+fn eval<'a>(expr: &Expr<'a>) -> Result<Literal, Error> {
     match expr {
-        Expr::Literal(lit) => lit.clone(),
+        Expr::Literal(lit) => Ok(lit.clone()),
         Expr::Grouping(grouping) => eval(&*grouping.0),
         Expr::Unary(unary) => eval_unary(unary),
         Expr::Binary(binary) => eval_binary(binary),
