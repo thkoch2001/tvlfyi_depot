@@ -9,6 +9,6 @@
 
 (define-key evil-normal-state-map (kbd "C-.") #'tree-sitter-move-reset)
 (define-key evil-normal-state-map (kbd "C-<right>") #'tree-sitter-move-right)
-;; (define-key evil-normal-state-map (kbd "C-<left>") 'sp-backward-parallel-sexp)
-;; (define-key evil-normal-state-map (kbd "C-<down>") 'sp-down-sexp)
-;; (define-key evil-normal-state-map (kbd "C-<up>") 'sp-backward-up-sexp)
+(define-key evil-normal-state-map (kbd "C-<left>") #'tree-sitter-move-left)
+(define-key evil-normal-state-map (kbd "C-<up>") 'tree-sitter-move-up)
+(define-key evil-normal-state-map (kbd "C-<down>") 'tree-sitter-move-down)
