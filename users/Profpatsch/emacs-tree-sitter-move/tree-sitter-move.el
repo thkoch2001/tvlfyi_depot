@@ -83,14 +83,30 @@
   (tree-sitter-move--set-cursor-to-node-at-point))
 
 (defun tree-sitter-move-right ()
-  "Moves to the next sibling. If the current node does not have siblings, go
-  upwards until something has siblings and then move right."
   (interactive)
+  (tree-sitter-move--move-skip-non-sibling-nodes 'tsc-get-next-named-sibling))
+
+(defun tree-sitter-move-left ()
+  (interactive)
+  (tree-sitter-move--move-skip-non-sibling-nodes 'tsc-get-prev-named-sibling))
+
+(defun tree-sitter-move-up ()
+  (interactive)
+  (tree-sitter-move--move-skip-non-sibling-nodes 'tsc-get-parent))
+
+;; TODO doesn’t work yet because sibling nodes are only skipped upwards
+;; (defun tree-sitter-move-down ()
+;;   (interactive)
+;;   (tree-sitter-move--move-skip-non-sibling-nodes (lambda (n) (tsc-get-nth-named-child n 0))))
+
+(defun tree-sitter-move--move-skip-non-sibling-nodes (move-fn)
+  "Moves to the sidewards next sibling. If the current node does not have siblings, go
+  upwards until something has siblings and then move to the side (right or left)."
   (tree-sitter-move--move-if-possible
    (lambda (cur)
      (when-let ((with-siblings
                  (tsc-get-first-named-node-with-siblings-up cur)))
-       (tsc-get-next-named-sibling with-siblings)))))
+       (funcall move-fn with-siblings)))))
 
 (defun tree-sitter-move--move-if-possible (dir-fn)
   (let ((next (funcall dir-fn tree-sitter-move--cursor)))
