@@ -1,0 +1,111 @@
+From e796e238d8fcf442443f66de2fd0f3944473fd44 Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Sun, 20 Dec 2020 14:29:22 +0000
+Subject: [PATCH 7/6] Keep left padding on account chip if no avatar provider
+ present
+
+At the moment, if there's no plugin that provides avatars then the left
+padding is still removed if there *would* be an avatar there, which
+leads to some weirdly offset text.
+
+Change-Id: I1ff0745aa267d7fb227e39460c8ea80ef5ec2f55
+---
+ .../gr-account-label/gr-account-label.ts      |  6 ++
+ .../gr-account-label/gr-account-label_test.js | 63 +++++++++++++++++++
+ 2 files changed, 69 insertions(+)
+
+diff --git a/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label.ts b/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label.ts
+index a6c4201a66..416a77526d 100644
+--- a/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label.ts
++++ b/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label.ts
+@@ -147,7 +147,13 @@ export class GrAccountLabel extends GestureEventListeners(
+     change: ChangeInfo,
+     force: boolean
+   ) {
++    const avatarsAvailable = (
++      !!config &&
++      !!config.change &&
++      !!config.plugin.has_avatars
++    );
+     return (
++      avatarsAvailable &&
+       !hideAvatar &&
+       !this._hasAttention(config, highlight, account, change, force)
+     );
+diff --git a/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label_test.js b/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label_test.js
+index 42b1dd7184..111d0550cd 100644
+--- a/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label_test.js
++++ b/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label_test.js
+@@ -46,6 +46,69 @@ suite('gr-account-label tests', () => {
+     });
+   });
+ 
++  suite('_computeCancelLeftPadding', () => {
++    test('config not ready', () => {
++      assert.isFalse(
++        element._computeCancelLeftPadding(
++          /*hideAvatar=*/false,
++          /*config=*/undefined,
++          /*highlight=*/false,
++          /*account=*/element.account,
++          /*change=*/element.change,
++          /*force=*/false));
++    });
++
++    test('no avatar provider', () => {
++      const config = {
++        plugin: {},
++      };
++      assert.isFalse(
++        element._computeCancelLeftPadding(
++          /*hideAvatar=*/false,
++          /*config=*/config,
++          /*highlight=*/false,
++          /*account=*/element.account,
++          /*change=*/element.change,
++          /*force=*/false));
++    });
++
++    test('avatar provider present', () => {
++      const config = {
++        plugin: {
++          has_avatars: true,
++        },
++      };
++      assert.isTrue(
++        element._computeCancelLeftPadding(
++          /*hideAvatar=*/false,
++          /*config=*/config,
++          /*highlight=*/false,
++          /*account=*/element.account,
++          /*change=*/element.change,
++          /*force=*/false));
++    });
++
++    test('has attention', () => {
++      const config = {
++        change: {enable_attention_set: true},
++        user: {anonymous_coward_name: 'Anonymous Coward'},
++        plugin: {has_avatars: true},
++      };
++      const selfAccount = createAccount('kermit', 31);
++      const account = createAccount('ernie', 42);
++      const change = {attention_set: {42: {}}};
++
++      assert.isFalse(
++        element._computeCancelLeftPadding(
++          /*hideAvatar=*/false,
++          /*config=*/config,
++          /*highlight=*/true,
++          /*account=*/account,
++          /*change=*/change,
++          /*force=*/false));
++    });
++  });
++
+   suite('_computeName', () => {
+     test('not showing anonymous', () => {
+       const account = {name: 'Wyatt'};
+-- 
+2.29.2
+
