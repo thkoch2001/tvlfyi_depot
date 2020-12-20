@@ -1,4 +1,4 @@
-From ad4564c31401a900702fca6e3f673badbfbdf9d9 Mon Sep 17 00:00:00 2001
+From 97c5e78c42fe70e3f9cd9bc37129700067525967 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:03:02 +0100
 Subject: [PATCH 4/6] Add titles to CLs over HTTP
@@ -192,7 +192,7 @@ index 0000000000..8fd2053ad0
 +  }
 +}
 diff --git a/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy b/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy
-index 000f4e2b5f..fcc26f7f54 100644
+index 31ea7d2175..abadd089b4 100644
 --- a/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy
 +++ b/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy
 @@ -33,10 +33,12 @@

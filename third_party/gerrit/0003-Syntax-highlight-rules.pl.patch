@@ -1,4 +1,4 @@
-From 9358b1cdd5f13e6638030446880f731785ca38f1 Mon Sep 17 00:00:00 2001
+From a76aba976de1a1e46c5aeb8772f3f2d58c7efda4 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:43 +0100
 Subject: [PATCH 3/6] Syntax highlight rules.pl
