@@ -80,9 +80,6 @@
 (use-package multiple-cursors)
 
 (use-package notmuch
-  :bind (:map global-map
-              ("s-g m" . notmuch)
-              ("s-g M" . counsel-notmuch)) ;; g m -> gmail
   :config
   (setq notmuch-search-oldest-first nil)
   (setq notmuch-show-all-tags-list t)

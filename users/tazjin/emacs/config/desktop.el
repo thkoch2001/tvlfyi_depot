@@ -256,6 +256,11 @@
    (exwm-input-set-key (kbd "s-m b") #'randr-frog-layout-both)
    (exwm-input-set-key (kbd "s-m r") #'randr-frog-layout-right-only)))
 
+;; Notmuch shortcuts as EXWM globals
+;; (g m => gmail)
+(exwm-input-set-key (kbd "s-g m") #'notmuch)
+(exwm-input-set-key (kbd "s-g M") #'counsel-notmuch)
+
 (exwm-randr-enable)
 
 ;; Let buffers move seamlessly between workspaces by making them
