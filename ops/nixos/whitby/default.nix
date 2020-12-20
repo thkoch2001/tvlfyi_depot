@@ -147,6 +147,12 @@ in lib.fix(self: {
     '';
   };
 
+  # Disable background git gc system-wide, as it has a tendency to break CI. This
+  environment.etc."gitconfig".source = depot.third_party.writeText "gitconfig" ''
+    [gc]
+    autoDetach = false
+  '';
+
   time.timeZone = "UTC";
 
   nix = {
