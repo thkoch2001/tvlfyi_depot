@@ -30,11 +30,6 @@
       (find-file (concat "/sudo:root@localhost:" (read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-;; Open Fefes blog
-(defun fefes-blog ()
-  (interactive)
-  (eww "https://blog.fefe.de/"))
-
 ;; Open the NixOS man page
 (defun nixos-man ()
   (interactive)
