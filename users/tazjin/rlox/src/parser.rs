@@ -42,9 +42,25 @@ pub enum Expr<'a> {
     Unary(Unary<'a>),
 }
 
+#[derive(Debug)]
+pub enum Statement<'a> {
+    Expr(Expr<'a>),
+    Print(Expr<'a>),
+}
+
+pub type Program<'a> = Vec<Statement<'a>>;
+
 // Parser
 
 /*
+program        → statement* EOF ;
+
+statement      → exprStmt
+               | printStmt ;
+
+exprStmt       → expression ";" ;
+printStmt      → "print" expression ";" ;
+
 expression     → equality ;
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
@@ -62,9 +78,30 @@ struct Parser<'a> {
 }
 
 type ExprResult<'a> = Result<Expr<'a>, Error>;
+type StmtResult<'a> = Result<Statement<'a>, Error>;
 
 impl<'a> Parser<'a> {
     // recursive-descent parser functions
+
+    fn statement(&mut self) -> StmtResult<'a> {
+        if self.match_token(&[TokenKind::Print]) {
+            self.print_statement()
+        } else {
+            self.expr_statement()
+        }
+    }
+
+    fn print_statement(&mut self) -> StmtResult<'a> {
+        let expr = self.expression()?;
+        self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
+        Ok(Statement::Print(expr))
+    }
+
+    fn expr_statement(&mut self) -> StmtResult<'a> {
+        let expr = self.expression()?;
+        self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
+        Ok(Statement::Expr(expr))
+    }
 
     fn expression(&mut self) -> ExprResult<'a> {
         self.equality()
@@ -231,34 +268,26 @@ impl<'a> Parser<'a> {
     }
 }
 
-pub fn parse<'a>(tokens: Vec<Token<'a>>) -> Result<Expr<'a>, Vec<Error>> {
+pub fn parse<'a>(tokens: Vec<Token<'a>>) -> Result<Program<'a>, Vec<Error>> {
     let mut parser = Parser { tokens, current: 0 };
+    let mut program: Program<'a> = vec![];
     let mut errors: Vec<Error> = vec![];
 
     while !parser.is_at_end() {
-        match parser.expression() {
+        match parser.statement() {
             Err(err) => {
                 errors.push(err);
                 parser.synchronise();
             }
-            Ok(expr) => {
-                if !parser.is_at_end() {
-                    // TODO(tazjin): This isn't a functional language
-                    // - multiple statements should be allowed, at
-                    // some point.
-                    let current = &parser.tokens[parser.current];
-                    errors.push(Error {
-                        line: current.line,
-                        kind: ErrorKind::UnexpectedChar(current.lexeme[0]),
-                    });
-                }
-
-                if errors.is_empty() {
-                    return Ok(expr);
-                }
+            Ok(stmt) => {
+                program.push(stmt);
             }
         }
     }
 
-    return Err(errors);
+    if errors.is_empty() {
+        Ok(program)
+    } else {
+        Err(errors)
+    }
 }

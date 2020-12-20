@@ -1,30 +1,22 @@
 use crate::errors::{report, Error, ErrorKind};
-use crate::parser::{self, Expr, Literal};
-use crate::scanner::{self, Token, TokenKind};
+use crate::parser::{self, Expr, Literal, Program, Statement};
+use crate::scanner::{self, TokenKind};
 
 // Run some Lox code and print it to stdout
 pub fn run(code: &str) {
     let chars: Vec<char> = code.chars().collect();
 
     match scanner::scan(&chars) {
-        Ok(tokens) => {
-            print_tokens(&tokens);
-            match parser::parse(tokens) {
-                Ok(expr) => {
-                    println!("Expression:\n{:?}", expr);
-                    println!("Result: {:?}", eval(&expr));
+        Ok(tokens) => match parser::parse(tokens) {
+            Ok(program) => {
+                println!("Program:\n{:?}", program);
+                if let Err(err) = run_program(&program) {
+                    println!("Error in program: {:?}", err);
                 }
-                Err(errors) => report_errors(errors),
             }
-        }
+            Err(errors) => report_errors(errors),
+        },
         Err(errors) => report_errors(errors),
-    }
-}
-
-fn print_tokens<'a>(tokens: &Vec<Token<'a>>) {
-    println!("Tokens:");
-    for token in tokens {
-        println!("{:?}", token);
     }
 }
 
@@ -110,4 +102,20 @@ fn eval<'a>(expr: &Expr<'a>) -> Result<Literal, Error> {
         Expr::Unary(unary) => eval_unary(unary),
         Expr::Binary(binary) => eval_binary(binary),
     }
+}
+
+fn run_program<'a>(program: &Program<'a>) -> Result<(), Error> {
+    for stmt in program {
+        match stmt {
+            Statement::Expr(expr) => {
+                eval(expr)?;
+            }
+            Statement::Print(expr) => {
+                let result = eval(expr)?;
+                println!("{:?}", result)
+            }
+        }
+    }
+
+    Ok(())
 }

@@ -4,6 +4,7 @@ pub enum ErrorKind {
     UnterminatedString,
     UnmatchedParens,
     ExpectedExpression(String),
+    ExpectedSemicolon,
     TypeError(String),
 }
 
