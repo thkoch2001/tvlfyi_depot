@@ -1,5 +1,5 @@
 use crate::errors::{report, Error, ErrorKind};
-use crate::parser::{self, Expr, Literal, Program, Statement};
+use crate::parser::{self, Declaration, Expr, Literal, Program, Statement};
 use crate::scanner::{self, TokenKind};
 
 // Run some Lox code and print it to stdout
@@ -104,16 +104,24 @@ fn eval<'a>(expr: &Expr<'a>) -> Result<Literal, Error> {
     }
 }
 
+fn run_stmt<'a>(stmt: &Statement<'a>) -> Result<(), Error> {
+    match stmt {
+        Statement::Expr(expr) => {
+            eval(expr)?;
+        }
+        Statement::Print(expr) => {
+            let result = eval(expr)?;
+            println!("{:?}", result)
+        }
+    }
+
+    Ok(())
+}
+
 fn run_program<'a>(program: &Program<'a>) -> Result<(), Error> {
-    for stmt in program {
-        match stmt {
-            Statement::Expr(expr) => {
-                eval(expr)?;
-            }
-            Statement::Print(expr) => {
-                let result = eval(expr)?;
-                println!("{:?}", result)
-            }
+    for decl in program {
+        match decl {
+            Declaration::Stmt(stmt) => run_stmt(stmt)?,
         }
     }
 

@@ -48,12 +48,20 @@ pub enum Statement<'a> {
     Print(Expr<'a>),
 }
 
-pub type Program<'a> = Vec<Statement<'a>>;
+#[derive(Debug)]
+pub enum Declaration<'a> {
+    Stmt(Statement<'a>),
+}
+
+pub type Program<'a> = Vec<Declaration<'a>>;
 
 // Parser
 
 /*
-program        → statement* EOF ;
+program        → declaration* EOF ;
+
+declaration    → varDecl
+               | statement ;
 
 statement      → exprStmt
                | printStmt ;
@@ -79,9 +87,14 @@ struct Parser<'a> {
 
 type ExprResult<'a> = Result<Expr<'a>, Error>;
 type StmtResult<'a> = Result<Statement<'a>, Error>;
+type DeclResult<'a> = Result<Declaration<'a>, Error>;
 
 impl<'a> Parser<'a> {
     // recursive-descent parser functions
+
+    fn declaration(&mut self) -> DeclResult<'a> {
+        Ok(Declaration::Stmt(self.statement()?))
+    }
 
     fn statement(&mut self) -> StmtResult<'a> {
         if self.match_token(&[TokenKind::Print]) {
@@ -274,13 +287,13 @@ pub fn parse<'a>(tokens: Vec<Token<'a>>) -> Result<Program<'a>, Vec<Error>> {
     let mut errors: Vec<Error> = vec![];
 
     while !parser.is_at_end() {
-        match parser.statement() {
+        match parser.declaration() {
             Err(err) => {
                 errors.push(err);
                 parser.synchronise();
             }
-            Ok(stmt) => {
-                program.push(stmt);
+            Ok(decl) => {
+                program.push(decl);
             }
         }
     }
