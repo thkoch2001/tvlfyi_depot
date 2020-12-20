@@ -58,9 +58,10 @@ in lib.fix(self: {
         ssh = {
           enable = true;
           port = 2222;
-          authorizedKeys = [
-            depot.users.tazjin.keys.frog
-          ];
+          authorizedKeys =
+            depot.users.tazjin.keys.all
+            ++ depot.users.lukegb.keys.all
+            ++ [ depot.users.glittershark.keys.whitby ];
 
           hostKeys = [
             /etc/secrets/initrd_host_ed25519_key
