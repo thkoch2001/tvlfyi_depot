@@ -96,13 +96,13 @@
 ** DONE Reorder List
    https://leetcode.com/problems/reorder-list/
 * Matrix
-** TODO Set Matrix Zeroes
+** DONE Set Matrix Zeroes
    https://leetcode.com/problems/set-matrix-zeroes/
-** TODO Spiral Matrix
+** DONE Spiral Matrix
    https://leetcode.com/problems/spiral-matrix/
 ** TODO Rotate Image
    https://leetcode.com/problems/rotate-image/
-** TODO Word Search
+** DONE Word Search
    https://leetcode.com/problems/word-search/
 * String
 ** TODO Longest Substring Without Repeating Characters
