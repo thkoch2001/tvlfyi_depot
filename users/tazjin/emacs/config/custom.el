@@ -6,7 +6,6 @@
  '(ac-auto-show-menu 0.8)
  '(ac-delay 0.2)
  '(avy-background t)
- '(cargo-process--custom-path-to-bin "env CARGO_INCREMENTAL=1 cargo")
  '(cargo-process--enable-rust-backtrace 1)
  '(company-auto-complete (quote (quote company-explicit-action-p)))
  '(company-idle-delay 0.5)
