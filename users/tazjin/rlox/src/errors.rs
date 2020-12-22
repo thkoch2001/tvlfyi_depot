@@ -5,6 +5,7 @@ pub enum ErrorKind {
     UnmatchedParens,
     ExpectedExpression(String),
     ExpectedSemicolon,
+    ExpectedVariableName,
     TypeError(String),
 }
 

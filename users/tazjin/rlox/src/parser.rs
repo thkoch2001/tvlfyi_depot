@@ -35,11 +35,15 @@ pub struct Unary<'a> {
 }
 
 #[derive(Debug)]
+pub struct Variable<'a>(pub Token<'a>);
+
+#[derive(Debug)]
 pub enum Expr<'a> {
     Binary(Binary<'a>),
     Grouping(Grouping<'a>),
     Literal(Literal),
     Unary(Unary<'a>),
+    Variable(Variable<'a>),
 }
 
 #[derive(Debug)]
@@ -48,9 +52,17 @@ pub enum Statement<'a> {
     Print(Expr<'a>),
 }
 
+// Not to be confused with `Variable`, which is for access.
+#[derive(Debug)]
+pub struct Var<'a> {
+    pub name: Token<'a>,
+    pub initialiser: Option<Expr<'a>>,
+}
+
 #[derive(Debug)]
 pub enum Declaration<'a> {
     Stmt(Statement<'a>),
+    Var(Var<'a>),
 }
 
 pub type Program<'a> = Vec<Declaration<'a>>;
@@ -93,7 +105,34 @@ impl<'a> Parser<'a> {
     // recursive-descent parser functions
 
     fn declaration(&mut self) -> DeclResult<'a> {
+        if self.match_token(&[TokenKind::Var]) {
+            return self.var_declaration();
+        }
+
         Ok(Declaration::Stmt(self.statement()?))
+    }
+
+    fn var_declaration(&mut self) -> DeclResult<'a> {
+        // Since `TokenKind::Identifier` carries data, we can't use
+        // `consume`.
+        if let TokenKind::Identifier(_) = self.peek().kind {
+            let mut var = Var {
+                name: self.advance(),
+                initialiser: None,
+            };
+
+            if self.match_token(&[TokenKind::Equal]) {
+                var.initialiser = Some(self.expression()?);
+            }
+
+            self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
+            return Ok(Declaration::Var(var));
+        }
+
+        return Err(Error {
+            line: self.peek().line,
+            kind: ErrorKind::ExpectedVariableName,
+        });
     }
 
     fn statement(&mut self) -> StmtResult<'a> {
@@ -173,6 +212,8 @@ impl<'a> Parser<'a> {
                 return Ok(Expr::Grouping(Grouping(Box::new(expr))));
             }
 
+            TokenKind::Identifier(_) => return Ok(Expr::Variable(Variable(next))),
+
             unexpected => {
                 eprintln!("encountered {:?}", unexpected);
                 return Err(Error {
@@ -225,10 +266,9 @@ impl<'a> Parser<'a> {
         &self.tokens[self.current - 1]
     }
 
-    fn consume(&mut self, kind: &TokenKind, err: ErrorKind) -> Result<(), Error> {
+    fn consume(&mut self, kind: &TokenKind, err: ErrorKind) -> Result<Token, Error> {
         if self.check_token(kind) {
-            self.advance();
-            return Ok(());
+            return Ok(self.advance());
         }
 
         Err(Error {
