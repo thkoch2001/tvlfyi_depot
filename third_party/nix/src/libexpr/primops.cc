@@ -510,11 +510,11 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
   StringSet outputs;
   outputs.insert("out");
 
-  for (auto& i : args[0]->attrs->SortedByKeys()) {
-    if (i->name == state.sIgnoreNulls) {
+  for (auto& [_, i] : *args[0]->attrs) {
+    if (i.name == state.sIgnoreNulls) {
       continue;
     }
-    const std::string& key = i->name;
+    const std::string& key = i.name;
 
     auto handleHashMode = [&](const std::string& s) {
       if (s == "recursive") {
@@ -556,19 +556,19 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
 
     try {
       if (ignoreNulls) {
-        state.forceValue(*i->value);
-        if (i->value->type == tNull) {
+        state.forceValue(*i.value);
+        if (i.value->type == tNull) {
           continue;
         }
       }
 
       /* The `args' attribute is special: it supplies the
          command-line arguments to the builder. */
-      if (i->name == state.sArgs) {
-        state.forceList(*i->value, pos);
-        for (unsigned int n = 0; n < i->value->listSize(); ++n) {
-          std::string s = state.coerceToString(
-              posDrvName, *(*i->value->list)[n], context, true);
+      if (i.name == state.sArgs) {
+        state.forceList(*i.value, pos);
+        for (unsigned int n = 0; n < i.value->listSize(); ++n) {
+          std::string s = state.coerceToString(posDrvName, *(*i.value->list)[n],
+                                               context, true);
           drv.args.push_back(s);
         }
       }
@@ -577,48 +577,48 @@ static void prim_derivationStrict(EvalState& state, const Pos& pos,
          the environment. */
       else {
         if (jsonObject) {
-          if (i->name == state.sStructuredAttrs) {
+          if (i.name == state.sStructuredAttrs) {
             continue;
           }
 
           auto placeholder(jsonObject->placeholder(key));
-          printValueAsJSON(state, true, *i->value, placeholder, context);
+          printValueAsJSON(state, true, *i.value, placeholder, context);
 
-          if (i->name == state.sBuilder) {
-            drv.builder = state.forceString(*i->value, context, posDrvName);
-          } else if (i->name == state.sSystem) {
-            drv.platform = state.forceStringNoCtx(*i->value, posDrvName);
-          } else if (i->name == state.sOutputHash) {
-            outputHash = state.forceStringNoCtx(*i->value, posDrvName);
-          } else if (i->name == state.sOutputHashAlgo) {
-            outputHashAlgo = state.forceStringNoCtx(*i->value, posDrvName);
-          } else if (i->name == state.sOutputHashMode) {
-            handleHashMode(state.forceStringNoCtx(*i->value, posDrvName));
-          } else if (i->name == state.sOutputs) {
+          if (i.name == state.sBuilder) {
+            drv.builder = state.forceString(*i.value, context, posDrvName);
+          } else if (i.name == state.sSystem) {
+            drv.platform = state.forceStringNoCtx(*i.value, posDrvName);
+          } else if (i.name == state.sOutputHash) {
+            outputHash = state.forceStringNoCtx(*i.value, posDrvName);
+          } else if (i.name == state.sOutputHashAlgo) {
+            outputHashAlgo = state.forceStringNoCtx(*i.value, posDrvName);
+          } else if (i.name == state.sOutputHashMode) {
+            handleHashMode(state.forceStringNoCtx(*i.value, posDrvName));
+          } else if (i.name == state.sOutputs) {
             /* Require ‘outputs’ to be a list of strings. */
-            state.forceList(*i->value, posDrvName);
+            state.forceList(*i.value, posDrvName);
             Strings ss;
-            for (unsigned int n = 0; n < i->value->listSize(); ++n) {
+            for (unsigned int n = 0; n < i.value->listSize(); ++n) {
               ss.emplace_back(
-                  state.forceStringNoCtx(*(*i->value->list)[n], posDrvName));
+                  state.forceStringNoCtx(*(*i.value->list)[n], posDrvName));
             }
             handleOutputs(ss);
           }
 
         } else {
-          auto s = state.coerceToString(posDrvName, *i->value, context, true);
+          auto s = state.coerceToString(posDrvName, *i.value, context, true);
           drv.env.emplace(key, s);
-          if (i->name == state.sBuilder) {
+          if (i.name == state.sBuilder) {
             drv.builder = s;
-          } else if (i->name == state.sSystem) {
+          } else if (i.name == state.sSystem) {
             drv.platform = s;
-          } else if (i->name == state.sOutputHash) {
+          } else if (i.name == state.sOutputHash) {
             outputHash = s;
-          } else if (i->name == state.sOutputHashAlgo) {
+          } else if (i.name == state.sOutputHashAlgo) {
             outputHashAlgo = s;
-          } else if (i->name == state.sOutputHashMode) {
+          } else if (i.name == state.sOutputHashMode) {
             handleHashMode(s);
-          } else if (i->name == state.sOutputs) {
+          } else if (i.name == state.sOutputs) {
             handleOutputs(absl::StrSplit(s, absl::ByAnyChar(" \t\n\r"),
                                          absl::SkipEmpty()));
           }

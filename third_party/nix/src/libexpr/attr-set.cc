@@ -32,17 +32,6 @@ size_t Bindings::size() const { return attributes_.size(); }
 
 bool Bindings::empty() { return attributes_.empty(); }
 
-std::vector<const Attr*> Bindings::SortedByKeys() {
-  std::vector<const Attr*> res;
-  res.reserve(attributes_.size());
-
-  for (const auto& [key, value] : attributes_) {
-    res.emplace_back(&value);
-  }
-
-  return res;
-}
-
 Bindings::iterator Bindings::find(const Symbol& name) {
   return attributes_.find(name);
 }
