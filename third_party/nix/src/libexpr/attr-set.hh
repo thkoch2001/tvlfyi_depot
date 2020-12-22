@@ -59,13 +59,6 @@ class Bindings {
   iterator end();
   const_iterator cend() const;
 
-  // Returns the elements of the attribute set as a vector, sorted
-  // lexicographically by keys.
-  //
-  // This is used primarily for builtins that have guaranteed
-  // ordering, such as `attrNames` or `attrValues`.
-  std::vector<const Attr*> SortedByKeys();
-
   // oh no
   friend class EvalState;
 
