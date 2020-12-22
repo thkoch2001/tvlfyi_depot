@@ -101,6 +101,7 @@ fn eval<'a>(expr: &Expr<'a>) -> Result<Literal, Error> {
         Expr::Grouping(grouping) => eval(&*grouping.0),
         Expr::Unary(unary) => eval_unary(unary),
         Expr::Binary(binary) => eval_binary(binary),
+        Expr::Variable(_) => unimplemented!(),
     }
 }
 
@@ -122,6 +123,7 @@ fn run_program<'a>(program: &Program<'a>) -> Result<(), Error> {
     for decl in program {
         match decl {
             Declaration::Stmt(stmt) => run_stmt(stmt)?,
+            Declaration::Var(_var) => unimplemented!(),
         }
     }
 
