@@ -102,9 +102,9 @@ static void printValue(std::ostream& str, std::set<const Value*>& active,
       break;
     case tAttrs: {
       str << "{ ";
-      for (auto& i : v.attrs->SortedByKeys()) {
-        str << i->name << " = ";
-        printValue(str, active, *i->value);
+      for (const auto& [key, value] : *v.attrs) {
+        str << key << " = ";
+        printValue(str, active, *value.value);
         str << "; ";
       }
       str << "}";

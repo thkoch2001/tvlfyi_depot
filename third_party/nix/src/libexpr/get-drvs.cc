@@ -389,26 +389,26 @@ static void getDerivations(EvalState& state, Value& vIn,
        there are names clashes between derivations, the derivation
        bound to the attribute with the "lower" name should take
        precedence). */
-    for (auto& i : v.attrs->SortedByKeys()) {
-      DLOG(INFO) << "evaluating attribute '" << i->name << "'";
-      if (!std::regex_match(std::string(i->name), attrRegex)) {
+    for (auto& [_, i] : *v.attrs) {
+      DLOG(INFO) << "evaluating attribute '" << i.name << "'";
+      if (!std::regex_match(std::string(i.name), attrRegex)) {
         continue;
       }
-      std::string pathPrefix2 = addToPath(pathPrefix, i->name);
+      std::string pathPrefix2 = addToPath(pathPrefix, i.name);
       if (combineChannels) {
-        getDerivations(state, *i->value, pathPrefix2, autoArgs, drvs, done,
+        getDerivations(state, *i.value, pathPrefix2, autoArgs, drvs, done,
                        ignoreAssertionFailures);
-      } else if (getDerivation(state, *i->value, pathPrefix2, drvs, done,
+      } else if (getDerivation(state, *i.value, pathPrefix2, drvs, done,
                                ignoreAssertionFailures)) {
         /* If the value of this attribute is itself a set,
            should we recurse into it?  => Only if it has a
            `recurseForDerivations = true' attribute. */
-        if (i->value->type == tAttrs) {
-          Bindings::iterator j = i->value->attrs->find(
+        if (i.value->type == tAttrs) {
+          Bindings::iterator j = i.value->attrs->find(
               state.symbols.Create("recurseForDerivations"));
-          if (j != i->value->attrs->end() &&
+          if (j != i.value->attrs->end() &&
               state.forceBool(*j->second.value, *j->second.pos)) {
-            getDerivations(state, *i->value, pathPrefix2, autoArgs, drvs, done,
+            getDerivations(state, *i.value, pathPrefix2, autoArgs, drvs, done,
                            ignoreAssertionFailures);
           }
         }
