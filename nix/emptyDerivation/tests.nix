@@ -26,7 +26,23 @@ let
       "bar")
   ];
 
+  extraAttribute = it "extra attribute" [
+    (assertEq "extra does not change store hash"
+      (emptyDerivation { extra = { foo = 42; }; })
+      (emptyDerivation {}))
+    (assertEq "extra can be empty"
+      (emptyDerivation { extra = { }; bar = "foo"; })
+      (emptyDerivation { bar = "foo"; }))
+    (assertEq "extra will always be in the final result even if not given"
+      (emptyDerivation { }).extra
+      {})
+    (assertEq "extra will evaluate to itself"
+      (emptyDerivation { extra = { foo = 42; }; }).extra
+      { foo = 42; })
+   ];
+
 in runTestsuite "emptyDerivation" [
   empty
   overrideBuilder
+  extraAttribute
 ]
