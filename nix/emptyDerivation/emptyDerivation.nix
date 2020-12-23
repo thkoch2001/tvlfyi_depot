@@ -8,6 +8,7 @@
 # as a function and pass an attrset. The set you pass
 # is `//`-merged with the attrset before calling derivation,
 # so you can use this to add more fields.
+overrides:
 
 let
   bins = getBins pkgs.s6-portable-utils [ "s6-touch" ]
@@ -26,9 +27,4 @@ let
     ];
   };
 
-in (derivation emptiness) // {
-  # This allows us to call the empty derivation
-  # like a function and override fields/add new fields.
-  __functor = _: overrides:
-    derivation (emptiness // overrides);
-}
+in derivation (emptiness // overrides)
