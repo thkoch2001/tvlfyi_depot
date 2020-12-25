@@ -111,9 +111,9 @@
    https://leetcode.com/problems/longest-repeating-character-replacement/
 ** TODO Minimum Window Substring
    https://leetcode.com/problems/minimum-window-substring/
-** TODO Valid Anagram
+** DONE Valid Anagram
    https://leetcode.com/problems/valid-anagram/
-** TODO Group Anagrams
+** DONE Group Anagrams
    https://leetcode.com/problems/group-anagrams/
 ** DONE Valid Parentheses
    https://leetcode.com/problems/valid-parentheses/
@@ -123,7 +123,7 @@
    https://leetcode.com/problems/longest-palindromic-substring/
 ** TODO Palindromic Substrings
    https://leetcode.com/problems/palindromic-substrings/
-** TODO Encode and Decode Strings (Leetcode Premium)
+** DONE Encode and Decode Strings (Leetcode Premium)
    https://leetcode.com/problems/encode-and-decode-strings/
 * Tree
 ** DONE Maximum Depth of Binary Tree
