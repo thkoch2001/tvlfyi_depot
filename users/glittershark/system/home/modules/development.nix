@@ -21,7 +21,6 @@ let
     };
 
     vendorSha256 = "1a5fx6mrv30cl46kswicd8lf5i5shn1fykchvbnbhdpgxhbz6qi4";
-    deleteVendor = pkgs.stdenv.isLinux;
   };
 
 in
@@ -32,7 +31,8 @@ with lib;
   imports = [
     ./lib/zshFunctions.nix
     ./development/kube.nix
-    ./development/agda.nix
+    # TODO(grfn): agda build is broken in the nixpkgs checkout
+    # ./development/agda.nix
     ./development/rust.nix
   ];
 
