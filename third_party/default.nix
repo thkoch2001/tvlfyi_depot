@@ -5,11 +5,11 @@
 { ... }:
 
 let
-  # Tracking nixos-unstable as of 2020-11-21.
-  nixpkgsCommit = "a322b32e9d74fb476944ff6cfb55833dc69cfaaa";
+  # Tracking nixos-unstable as of 2020-12-28.
+  nixpkgsCommit = "2f47650c2f28d87f86ab807b8a339c684d91ec56";
   nixpkgsSrc = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${nixpkgsCommit}.tar.gz";
-    sha256 = "1r0mkiqxija75spnyksmh8x5j4smnrxv5f7768s81gsl570kls0l";
+    sha256 = "17akl75x28rzq97gaad32flswdsp150nfsg7h909kda721zql71a";
   };
   nixpkgs = import nixpkgsSrc {
     config.allowUnfree = true;
@@ -21,11 +21,11 @@ let
     ];
   };
 
-  # Tracking nixos-20.09 as of 2020-11-21.
-  stableCommit = "58f9c4c7d3a42c912362ca68577162e38ea8edfb";
+  # Tracking nixos-20.09 as of 2020-12-28.
+  stableCommit = "0c81b9a4f170f734bd7e587a39e56470c59733e7";
   stableNixpkgsSrc = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${stableCommit}.tar.gz";
-    sha256 = "1517dy07jf4zhzknqbgm617lgjxsn7a6k1vgq61c67f6h55qs5ij";
+    sha256 = "1fl5ks6p78bamqanbk9xpy83jzzcdw2mdabrp59n33xv7jix1jzx";
   };
   stableNixpkgs = import stableNixpkgsSrc {};
 
@@ -100,6 +100,7 @@ let
       lib
       libredirect
       linuxPackages
+      linuxPackages_5_9
       luajit
       lutris
       makeFontsConf
@@ -184,8 +185,7 @@ let
       libxslt
       mercurial
       perl
-      perlPackages
-      utillinuxMinimal;
+      perlPackages;
 
     haskellPackages = (nixpkgs.haskellPackages.override {
       overrides = (import ./haskell_overlay { pkgs = nixpkgs; });
