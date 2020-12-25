@@ -5,11 +5,11 @@
 { ... }:
 
 let
-  # Tracking nixos-unstable as of 2020-11-21.
-  nixpkgsCommit = "a322b32e9d74fb476944ff6cfb55833dc69cfaaa";
+  # Tracking nixos-unstable as of 2020-12-25.
+  nixpkgsCommit = "57a787c9fa91f149c86a1ce83d57e07cfa589e07";
   nixpkgsSrc = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${nixpkgsCommit}.tar.gz";
-    sha256 = "1r0mkiqxija75spnyksmh8x5j4smnrxv5f7768s81gsl570kls0l";
+    sha256 = "1g759bvi0cb8yvwbmdlmix6b0qy1k2xpzpv4y43nczx9d3gyh7wz";
   };
   nixpkgs = import nixpkgsSrc {
     config.allowUnfree = true;
@@ -21,11 +21,11 @@ let
     ];
   };
 
-  # Tracking nixos-20.09 as of 2020-11-21.
-  stableCommit = "58f9c4c7d3a42c912362ca68577162e38ea8edfb";
+  # Tracking nixos-20.09 as of 2020-12-25.
+  stableCommit = "ca119749d86f484066fae7680af8a44ea1f11ca8";
   stableNixpkgsSrc = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${stableCommit}.tar.gz";
-    sha256 = "1517dy07jf4zhzknqbgm617lgjxsn7a6k1vgq61c67f6h55qs5ij";
+    sha256 = "1mzcw6ia7q7j7pcfwn5ixhry5x0r29dvf5zjz3ip3fpkn7f72aj0";
   };
   stableNixpkgs = import stableNixpkgsSrc {};
 
@@ -184,8 +184,7 @@ let
       libxslt
       mercurial
       perl
-      perlPackages
-      utillinuxMinimal;
+      perlPackages;
 
     haskellPackages = (nixpkgs.haskellPackages.override {
       overrides = (import ./haskell_overlay { pkgs = nixpkgs; });
