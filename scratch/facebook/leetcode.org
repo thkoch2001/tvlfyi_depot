@@ -33,7 +33,7 @@
 ** TODO Reverse Bits
    https://leetcode.com/problems/reverse-bits/
 * Dynamic Programming
-** TODO Climbing Stairs
+** DONE Climbing Stairs
    https://leetcode.com/problems/climbing-stairs/
 ** TODO Coin Change
    https://leetcode.com/problems/coin-change/
