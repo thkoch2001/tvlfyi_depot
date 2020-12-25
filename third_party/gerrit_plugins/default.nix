@@ -11,7 +11,7 @@ in
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/owners";
       rev = "17817c9e319073c03513f9d5177b6142b8fd567b";
-      sha256 = "sha256:0gz9kqi32qnmhxc4r5fyrywfj3pfifiirk8l49f30m9rzhd9yrmy";
+      sha256 = "sha256:1p089shybp50svckcq51d0hfisjvbggndmvmhh8pvzvi6w8n9d89";
       deepClone = true;
       leaveDotGit = true;
     };
@@ -29,7 +29,7 @@ in
     depsOutputHash = "sha256:1y1mfnznqrm73vf97ilzn7vjy3fcfqnz9jxgp6h5584k9adnb6zl";
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/checks";
-      rev = "ab49a63f5c159bda42d9ad1bdb9286bede6c5de4";
+      rev = "1p089shybp50svckcq51d0hfisjvbggndmvmhh8pvzvi6w8n9d89";
       sha256 = "sha256:1czsvdz50r2c53vyz65if5ddm3i32zxi448irj94hc1bxmygdqbc";
       deepClone = true;
       leaveDotGit = true;

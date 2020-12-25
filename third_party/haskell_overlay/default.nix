@@ -50,6 +50,10 @@ self: super: with pkgs.haskell.lib; rec {
     sha256 = "06s3mmqbsfwv09j2s45qnd66nrxfp9280gnl9ng8yh128pfr7bjh";
   } {});
 
+  # random <1.2
+  test-framework = doJailbreak super.test-framework;
+  hashable = doJailbreak super.hashable;
+
   random-source = overrideSrc super.random-source rec {
     src = pkgs.fetchzip {
       url = "mirror://hackage/random-source-${version}/random-source-${version}.tar.gz";
