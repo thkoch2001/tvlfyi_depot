@@ -22,7 +22,7 @@
 ** DONE Container With Most Water
    https://leetcode.com/problems/container-with-most-water/
 * Binary
-** TODO Sum of Two Integers
+** DONE Sum of Two Integers
    https://leetcode.com/problems/sum-of-two-integers/
 ** DONE Number of 1 Bits
    https://leetcode.com/problems/number-of-1-bits/
