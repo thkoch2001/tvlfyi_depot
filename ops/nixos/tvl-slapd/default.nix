@@ -168,21 +168,19 @@ in {
     rootdn = "cn=admin,dc=tvl,dc=fyi";
     rootpw = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$OfcgkOQ96VQ3aJj7NfA9vQ$oS6HQOkYl/bUYg4SejpltQYy7kvqx/RUxvoR4zo1vXU";
 
-    # ACL configuration
-    extraDatabaseConfig = ''
-      # Allow users to change their own password
-      access to attrs=userPassword
-        by self write
-        by anonymous auth
-        by users none
+    settings = {
+      "olcDatabase={1}mdb".attrs = {
+        objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
+        olcDatabase = "{1}mdb";
+        olcSuffix = "dc=tvl,dc=fyi";
+        olcAccess = "to *  by * read";
+      };
 
-      # Allow default read access to other directory elements
-      access to * by * read
-    '';
-
-    extraConfig = ''
-      moduleload pw-argon2
-    '';
+      "cn=module{0}".attrs = {
+        objectClass = "olcModuleList";
+        olcModuleLoad = "pw-argon2";
+      };
+    };
 
     # Contents are immutable at runtime, and adding user accounts etc.
     # is done statically in the LDIF-formatted contents in this folder.
