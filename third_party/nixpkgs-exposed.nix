@@ -71,6 +71,7 @@
     lib
     libredirect
     linuxPackages
+    linuxPackages_5_9
     luajit
     lutris
     makeFontsConf
@@ -158,7 +159,7 @@
     mercurial
     perl
     perlPackages
-    utillinuxMinimal;
+    ;
 
   haskellPackages = (nixpkgs.haskellPackages.override {
     overrides = (import ./haskell_overlay { pkgs = nixpkgs; });
