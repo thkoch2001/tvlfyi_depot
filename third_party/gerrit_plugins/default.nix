@@ -11,7 +11,7 @@ in
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/owners";
       rev = "17817c9e319073c03513f9d5177b6142b8fd567b";
-      sha256 = "sha256:0gz9kqi32qnmhxc4r5fyrywfj3pfifiirk8l49f30m9rzhd9yrmy";
+      sha256 = "sha256:1p089shybp50svckcq51d0hfisjvbggndmvmhh8pvzvi6w8n9d89";
       deepClone = true;
       leaveDotGit = true;
     };
