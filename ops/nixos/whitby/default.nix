@@ -157,7 +157,7 @@ in lib.fix(self: {
   time.timeZone = "UTC";
 
   nix = {
-    nrBuildUsers = 128;
+    nrBuildUsers = 256;
     maxJobs = lib.mkDefault 64;
     extraOptions = ''
       secret-key-files = /etc/secrets/nix-cache-privkey
