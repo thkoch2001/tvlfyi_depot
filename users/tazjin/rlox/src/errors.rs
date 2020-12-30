@@ -7,6 +7,8 @@ pub enum ErrorKind {
     ExpectedSemicolon,
     ExpectedVariableName,
     TypeError(String),
+    UndefinedVariable(String),
+    InternalError(String),
 }
 
 #[derive(Debug)]
