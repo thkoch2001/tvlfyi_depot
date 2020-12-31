@@ -1,5 +1,5 @@
 use crate::errors::{Error, ErrorKind};
-use crate::parser::{self, Declaration, Expr, Literal, Program, Statement};
+use crate::parser::{self, Expr, Literal, Program, Statement};
 use crate::scanner::{self, TokenKind};
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -78,6 +78,14 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
+    pub fn interpret<'a>(&mut self, program: &Program<'a>) -> Result<(), Error> {
+        for stmt in program {
+            self.interpret_stmt(stmt)?;
+        }
+
+        Ok(())
+    }
+
     fn interpret_stmt<'a>(&mut self, stmt: &Statement<'a>) -> Result<(), Error> {
         match stmt {
             Statement::Expr(expr) => {
@@ -87,6 +95,7 @@ impl Interpreter {
                 let result = self.eval(expr)?;
                 println!("{:?}", result)
             }
+            Statement::Var(var) => return self.interpret_var(var),
         }
 
         Ok(())
@@ -100,17 +109,6 @@ impl Interpreter {
         let value = self.eval(init)?;
         self.globals.define(&var.name, value)?;
         return Ok(());
-    }
-
-    pub fn interpret<'a>(&mut self, program: &Program<'a>) -> Result<(), Error> {
-        for decl in program {
-            match decl {
-                Declaration::Stmt(stmt) => self.interpret_stmt(stmt)?,
-                Declaration::Var(var) => self.interpret_var(var)?,
-            }
-        }
-
-        Ok(())
     }
 
     fn eval<'a>(&mut self, expr: &Expr<'a>) -> Result<Literal, Error> {
