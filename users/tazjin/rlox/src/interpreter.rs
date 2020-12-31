@@ -28,6 +28,19 @@ impl Environment {
                 kind: ErrorKind::UndefinedVariable(ident.into()),
             })
     }
+
+    fn assign(&mut self, name: &scanner::Token, value: Literal) -> Result<(), Error> {
+        let ident = identifier_str(name)?;
+        let target = self.values
+            .get_mut(ident)
+            .ok_or_else(|| Error {
+                line: name.line,
+                kind: ErrorKind::UndefinedVariable(ident.into()),
+            })?;
+
+        *target = value;
+        Ok(())
+    }
 }
 
 fn identifier_str<'a>(name: &'a scanner::Token) -> Result<&'a str, Error> {
@@ -156,7 +169,7 @@ impl Interpreter {
 
     fn eval_assign<'a>(&mut self, assign: &parser::Assign<'a>) -> Result<Literal, Error> {
         let value = self.eval(&assign.value)?;
-        self.globals.define(&assign.name, value.clone())?;
+        self.globals.assign(&assign.name, value.clone())?;
         Ok(value)
     }
 }
