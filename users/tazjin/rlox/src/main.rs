@@ -25,12 +25,14 @@ fn main() {
 // Run Lox code from a file and print results to stdout
 fn run_file(file: &str) {
     let contents = fs::read_to_string(file).expect("failed to read the input file");
-    interpreter::run(&contents);
+    let mut lox = interpreter::Interpreter::default();
+    run(&mut lox, &contents);
 }
 
 // Evaluate Lox code interactively in a shitty REPL.
 fn run_prompt() {
     let mut line = String::new();
+    let mut lox = interpreter::Interpreter::default();
 
     loop {
         print!("> ");
@@ -38,7 +40,30 @@ fn run_prompt() {
         io::stdin()
             .read_line(&mut line)
             .expect("failed to read user input");
-        interpreter::run(&line);
+        run(&mut lox, &line);
         line.clear();
+    }
+}
+
+fn run(lox: &mut interpreter::Interpreter, code: &str) {
+    let chars: Vec<char> = code.chars().collect();
+
+    match scanner::scan(&chars) {
+        Ok(tokens) => match parser::parse(tokens) {
+            Ok(program) => {
+                println!("Program:\n{:?}", program);
+                if let Err(err) = lox.interpret(&program) {
+                    println!("Error in program: {:?}", err);
+                }
+            }
+            Err(errors) => report_errors(errors),
+        },
+        Err(errors) => report_errors(errors),
+    }
+}
+
+fn report_errors(errors: Vec<errors::Error>) {
+    for error in errors {
+        errors::report(&error);
     }
 }

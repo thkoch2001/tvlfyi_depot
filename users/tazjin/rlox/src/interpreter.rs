@@ -1,32 +1,7 @@
-use crate::errors::{report, Error, ErrorKind};
+use crate::errors::{Error, ErrorKind};
 use crate::parser::{self, Declaration, Expr, Literal, Program, Statement};
-use crate::scanner::{self, TokenKind};
+use crate::scanner::TokenKind;
 use std::collections::HashMap;
-
-// Run some Lox code and print it to stdout
-pub fn run(code: &str) {
-    let chars: Vec<char> = code.chars().collect();
-
-    match scanner::scan(&chars) {
-        Ok(tokens) => match parser::parse(tokens) {
-            Ok(program) => {
-                let mut interpreter = Interpreter::default();
-                println!("Program:\n{:?}", program);
-                if let Err(err) = interpreter.interpret(&program) {
-                    println!("Error in program: {:?}", err);
-                }
-            }
-            Err(errors) => report_errors(errors),
-        },
-        Err(errors) => report_errors(errors),
-    }
-}
-
-fn report_errors(errors: Vec<Error>) {
-    for error in errors {
-        report(&error);
-    }
-}
 
 // Tree-walk interpreter
 
@@ -60,7 +35,7 @@ impl Environment {
 }
 
 #[derive(Debug, Default)]
-struct Interpreter {
+pub struct Interpreter {
     globals: Environment,
 }
 
