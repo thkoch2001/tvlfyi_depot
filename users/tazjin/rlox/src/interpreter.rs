@@ -2,11 +2,14 @@ use crate::errors::{Error, ErrorKind};
 use crate::parser::{self, Declaration, Expr, Literal, Program, Statement};
 use crate::scanner::{self, TokenKind};
 use std::collections::HashMap;
+use std::rc::Rc;
+use std::sync::RwLock;
 
 // Tree-walk interpreter
 
 #[derive(Debug, Default)]
 struct Environment {
+    enclosing: Option<Rc<RwLock<Environment>>>,
     values: HashMap<String, Literal>,
 }
 
@@ -27,19 +30,34 @@ impl Environment {
                 line: name.0.line,
                 kind: ErrorKind::UndefinedVariable(ident.into()),
             })
+            .or_else(|err| {
+                if let Some(parent) = &self.enclosing {
+                    parent.read().unwrap().get(name)
+                } else {
+                    Err(err)
+                }
+            })
     }
 
     fn assign(&mut self, name: &scanner::Token, value: Literal) -> Result<(), Error> {
         let ident = identifier_str(name)?;
-        let target = self.values
-            .get_mut(ident)
-            .ok_or_else(|| Error {
-                line: name.line,
-                kind: ErrorKind::UndefinedVariable(ident.into()),
-            })?;
 
-        *target = value;
-        Ok(())
+        match self.values.get_mut(ident) {
+            Some(target) => {
+                *target = value;
+                Ok(())
+            }
+            None => {
+                if let Some(parent) = &self.enclosing {
+                    return parent.write().unwrap().assign(name, value);
+                }
+
+                Err(Error {
+                    line: name.line,
+                    kind: ErrorKind::UndefinedVariable(ident.into()),
+                })
+            }
+        }
     }
 }
 
