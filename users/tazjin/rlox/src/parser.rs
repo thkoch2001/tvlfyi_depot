@@ -62,14 +62,15 @@ pub struct Var<'a> {
     pub initialiser: Option<Expr<'a>>,
 }
 
+pub type Block<'a> = Vec<Statement<'a>>;
+
 #[derive(Debug)]
 pub enum Statement<'a> {
     Expr(Expr<'a>),
     Print(Expr<'a>),
     Var(Var<'a>),
+    Block(Block<'a>),
 }
-
-pub type Program<'a> = Vec<Statement<'a>>;
 
 // Parser
 
@@ -143,6 +144,8 @@ impl<'a> Parser<'a> {
     fn statement(&mut self) -> StmtResult<'a> {
         if self.match_token(&[TokenKind::Print]) {
             self.print_statement()
+        } else if self.match_token(&[TokenKind::LeftBrace]) {
+            self.block_statement()
         } else {
             self.expr_statement()
         }
@@ -152,6 +155,18 @@ impl<'a> Parser<'a> {
         let expr = self.expression()?;
         self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
         Ok(Statement::Print(expr))
+    }
+
+    fn block_statement(&mut self) -> StmtResult<'a> {
+        let mut block: Block<'a> = vec![];
+
+        while !self.check_token(&TokenKind::RightBrace) && !self.is_at_end() {
+            block.push(self.declaration()?);
+        }
+
+        self.consume(&TokenKind::RightBrace, ErrorKind::ExpectedClosingBrace)?;
+
+        Ok(Statement::Block(block))
     }
 
     fn expr_statement(&mut self) -> StmtResult<'a> {
@@ -349,9 +364,9 @@ impl<'a> Parser<'a> {
     }
 }
 
-pub fn parse<'a>(tokens: Vec<Token<'a>>) -> Result<Program<'a>, Vec<Error>> {
+pub fn parse<'a>(tokens: Vec<Token<'a>>) -> Result<Block<'a>, Vec<Error>> {
     let mut parser = Parser { tokens, current: 0 };
-    let mut program: Program<'a> = vec![];
+    let mut program: Block<'a> = vec![];
     let mut errors: Vec<Error> = vec![];
 
     while !parser.is_at_end() {

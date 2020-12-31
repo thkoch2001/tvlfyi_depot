@@ -1,5 +1,5 @@
 use crate::errors::{Error, ErrorKind};
-use crate::parser::{self, Expr, Literal, Program, Statement};
+use crate::parser::{self, Block, Expr, Literal, Statement};
 use crate::scanner::{self, TokenKind};
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -78,7 +78,7 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
-    pub fn interpret<'a>(&mut self, program: &Program<'a>) -> Result<(), Error> {
+    pub fn interpret<'a>(&mut self, program: &Block<'a>) -> Result<(), Error> {
         for stmt in program {
             self.interpret_stmt(stmt)?;
         }
@@ -96,6 +96,7 @@ impl Interpreter {
                 println!("{:?}", result)
             }
             Statement::Var(var) => return self.interpret_var(var),
+            Statement::Block(_) => unimplemented!(),
         }
 
         Ok(())
