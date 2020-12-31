@@ -96,7 +96,7 @@ impl Interpreter {
                 println!("{:?}", result)
             }
             Statement::Var(var) => return self.interpret_var(var),
-            Statement::Block(_) => unimplemented!(),
+            Statement::Block(block) => return self.interpret_block(block),
         }
 
         Ok(())
@@ -110,6 +110,33 @@ impl Interpreter {
         let value = self.eval(init)?;
         self.globals.define(&var.name, value)?;
         return Ok(());
+    }
+
+    fn interpret_block<'a>(&mut self, block: &parser::Block<'a>) -> Result<(), Error> {
+        // Initialise a new environment and point it at the parent
+        // (this is a bit tedious because we need to wrap it in and
+        // out of the Rc).
+        //
+        // TODO(tazjin): Refactor this to use Rc on the interpreter itself.
+        let mut previous = Rc::new(RwLock::new(std::mem::replace(
+            &mut self.globals,
+            Environment::default(),
+        )));
+
+        self.globals.enclosing = Some(previous);
+
+        let result = self.interpret(block);
+
+        // Swap it back, discarding the child env.
+        previous = self
+            .globals
+            .enclosing
+            .take()
+            .expect("child environment should not simply vanish");
+
+        self.globals = Rc::try_unwrap(previous).unwrap().into_inner().unwrap();
+
+        return result;
     }
 
     fn eval<'a>(&mut self, expr: &Expr<'a>) -> Result<Literal, Error> {
