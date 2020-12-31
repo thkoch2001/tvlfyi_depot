@@ -11,6 +11,12 @@ use crate::scanner::{Token, TokenKind};
 // AST
 
 #[derive(Debug)]
+pub struct Assign<'a> {
+    pub name: Token<'a>,
+    pub value: Box<Expr<'a>>,
+}
+
+#[derive(Debug)]
 pub struct Binary<'a> {
     pub left: Box<Expr<'a>>,
     pub operator: Token<'a>,
@@ -34,11 +40,13 @@ pub struct Unary<'a> {
     pub right: Box<Expr<'a>>,
 }
 
+// Not to be confused with `Var`, which is for assignment.
 #[derive(Debug)]
 pub struct Variable<'a>(pub Token<'a>);
 
 #[derive(Debug)]
 pub enum Expr<'a> {
+    Assign(Assign<'a>),
     Binary(Binary<'a>),
     Grouping(Grouping<'a>),
     Literal(Literal),
@@ -81,7 +89,9 @@ statement      → exprStmt
 exprStmt       → expression ";" ;
 printStmt      → "print" expression ";" ;
 
-expression     → equality ;
+expression     → assignment ;
+assignment     → IDENTIFIER "=" assignment
+               | equality ;
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 term           → factor ( ( "-" | "+" ) factor )* ;
@@ -156,7 +166,30 @@ impl<'a> Parser<'a> {
     }
 
     fn expression(&mut self) -> ExprResult<'a> {
-        self.equality()
+        self.assignment()
+    }
+
+    fn assignment(&mut self) -> ExprResult<'a> {
+        let expr = self.equality()?;
+
+        if self.match_token(&[TokenKind::Equal]) {
+            let equals = self.previous().clone();
+            let value = self.assignment()?;
+
+            if let Expr::Variable(Variable(name)) = expr {
+                return Ok(Expr::Assign(Assign {
+                    name,
+                    value: Box::new(value),
+                }));
+            }
+
+            return Err(Error {
+                line: equals.line,
+                kind: ErrorKind::InvalidAssignmentTarget(format!("{:?}", equals)),
+            });
+        }
+
+        Ok(expr)
     }
 
     fn equality(&mut self) -> ExprResult<'a> {

@@ -1,6 +1,6 @@
 use crate::errors::{Error, ErrorKind};
 use crate::parser::{self, Declaration, Expr, Literal, Program, Statement};
-use crate::scanner::TokenKind;
+use crate::scanner::{self, TokenKind};
 use std::collections::HashMap;
 
 // Tree-walk interpreter
@@ -11,24 +11,31 @@ struct Environment {
 }
 
 impl Environment {
-    fn define(&mut self, name: &str, value: Literal) {
-        self.values.insert(name.into(), value);
+    fn define(&mut self, name: &scanner::Token, value: Literal) -> Result<(), Error> {
+        let ident = identifier_str(name)?;
+        self.values.insert(ident.into(), value);
+        Ok(())
     }
 
     fn get(&self, name: &parser::Variable) -> Result<Literal, Error> {
-        if let TokenKind::Identifier(ident) = &name.0.kind {
-            return self
-                .values
-                .get(ident)
-                .map(Clone::clone)
-                .ok_or_else(|| Error {
-                    line: name.0.line,
-                    kind: ErrorKind::UndefinedVariable(ident.into()),
-                });
-        }
+        let ident = identifier_str(&name.0)?;
 
+        self.values
+            .get(ident)
+            .map(Clone::clone)
+            .ok_or_else(|| Error {
+                line: name.0.line,
+                kind: ErrorKind::UndefinedVariable(ident.into()),
+            })
+    }
+}
+
+fn identifier_str<'a>(name: &'a scanner::Token) -> Result<&'a str, Error> {
+    if let TokenKind::Identifier(ident) = &name.kind {
+        Ok(ident)
+    } else {
         Err(Error {
-            line: name.0.line,
+            line: name.line,
             kind: ErrorKind::InternalError("unexpected identifier kind".into()),
         })
     }
@@ -40,7 +47,7 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
-    fn interpret_stmt<'a>(&self, stmt: &Statement<'a>) -> Result<(), Error> {
+    fn interpret_stmt<'a>(&mut self, stmt: &Statement<'a>) -> Result<(), Error> {
         match stmt {
             Statement::Expr(expr) => {
                 self.eval(expr)?;
@@ -55,20 +62,13 @@ impl Interpreter {
     }
 
     fn interpret_var<'a>(&mut self, var: &parser::Var<'a>) -> Result<(), Error> {
-        if let TokenKind::Identifier(ident) = &var.name.kind {
-            let init = var.initialiser.as_ref().ok_or_else(|| Error {
-                line: var.name.line,
-                kind: ErrorKind::InternalError("missing variable initialiser".into()),
-            })?;
-
-            self.globals.define(ident, self.eval(init)?);
-            return Ok(());
-        }
-
-        Err(Error {
+        let init = var.initialiser.as_ref().ok_or_else(|| Error {
             line: var.name.line,
-            kind: ErrorKind::InternalError("unexpected identifier kind".into()),
-        })
+            kind: ErrorKind::InternalError("missing variable initialiser".into()),
+        })?;
+        let value = self.eval(init)?;
+        self.globals.define(&var.name, value)?;
+        return Ok(());
     }
 
     pub fn interpret<'a>(&mut self, program: &Program<'a>) -> Result<(), Error> {
@@ -82,8 +82,9 @@ impl Interpreter {
         Ok(())
     }
 
-    fn eval<'a>(&self, expr: &Expr<'a>) -> Result<Literal, Error> {
+    fn eval<'a>(&mut self, expr: &Expr<'a>) -> Result<Literal, Error> {
         match expr {
+            Expr::Assign(assign) => self.eval_assign(assign),
             Expr::Literal(lit) => Ok(lit.clone()),
             Expr::Grouping(grouping) => self.eval(&*grouping.0),
             Expr::Unary(unary) => self.eval_unary(unary),
@@ -92,7 +93,7 @@ impl Interpreter {
         }
     }
 
-    fn eval_unary<'a>(&self, expr: &parser::Unary<'a>) -> Result<Literal, Error> {
+    fn eval_unary<'a>(&mut self, expr: &parser::Unary<'a>) -> Result<Literal, Error> {
         let right = self.eval(&*expr.right)?;
 
         match (&expr.operator.kind, right) {
@@ -109,7 +110,7 @@ impl Interpreter {
         }
     }
 
-    fn eval_binary<'a>(&self, expr: &parser::Binary<'a>) -> Result<Literal, Error> {
+    fn eval_binary<'a>(&mut self, expr: &parser::Binary<'a>) -> Result<Literal, Error> {
         let left = self.eval(&*expr.left)?;
         let right = self.eval(&*expr.right)?;
 
@@ -151,6 +152,12 @@ impl Interpreter {
         };
 
         Ok(result)
+    }
+
+    fn eval_assign<'a>(&mut self, assign: &parser::Assign<'a>) -> Result<Literal, Error> {
+        let value = self.eval(&assign.value)?;
+        self.globals.define(&assign.name, value.clone())?;
+        Ok(value)
     }
 }
 

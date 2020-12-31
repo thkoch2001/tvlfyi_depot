@@ -9,6 +9,7 @@ pub enum ErrorKind {
     TypeError(String),
     UndefinedVariable(String),
     InternalError(String),
+    InvalidAssignmentTarget(String),
 }
 
 #[derive(Debug)]
