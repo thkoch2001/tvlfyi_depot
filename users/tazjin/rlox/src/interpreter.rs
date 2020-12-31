@@ -74,10 +74,40 @@ fn identifier_str<'a>(name: &'a scanner::Token) -> Result<&'a str, Error> {
 
 #[derive(Debug, Default)]
 pub struct Interpreter {
-    globals: Environment,
+    env: Rc<RwLock<Environment>>,
 }
 
 impl Interpreter {
+    // Environment modification helpers
+    fn define_var(&mut self, name: &scanner::Token, value: Literal) -> Result<(), Error> {
+        self.env
+            .write()
+            .expect("environment lock is poisoned")
+            .define(name, value)
+    }
+
+    fn assign_var(&mut self, name: &scanner::Token, value: Literal) -> Result<(), Error> {
+        self.env
+            .write()
+            .expect("environment lock is poisoned")
+            .assign(name, value)
+    }
+
+    fn get_var(&mut self, var: &parser::Variable) -> Result<Literal, Error> {
+        self.env
+            .read()
+            .expect("environment lock is poisoned")
+            .get(var)
+    }
+
+    fn set_enclosing(&mut self, parent: Rc<RwLock<Environment>>) {
+        self.env
+            .write()
+            .expect("environment lock is poisoned")
+            .enclosing = Some(parent);
+    }
+
+    // Interpreter itself
     pub fn interpret<'a>(&mut self, program: &Block<'a>) -> Result<(), Error> {
         for stmt in program {
             self.interpret_stmt(stmt)?;
@@ -108,7 +138,7 @@ impl Interpreter {
             kind: ErrorKind::InternalError("missing variable initialiser".into()),
         })?;
         let value = self.eval(init)?;
-        self.globals.define(&var.name, value)?;
+        self.define_var(&var.name, value)?;
         return Ok(());
     }
 
@@ -118,23 +148,13 @@ impl Interpreter {
         // out of the Rc).
         //
         // TODO(tazjin): Refactor this to use Rc on the interpreter itself.
-        let mut previous = Rc::new(RwLock::new(std::mem::replace(
-            &mut self.globals,
-            Environment::default(),
-        )));
-
-        self.globals.enclosing = Some(previous);
+        let previous = std::mem::replace(&mut self.env, Default::default());
+        self.set_enclosing(previous.clone());
 
         let result = self.interpret(block);
 
         // Swap it back, discarding the child env.
-        previous = self
-            .globals
-            .enclosing
-            .take()
-            .expect("child environment should not simply vanish");
-
-        self.globals = Rc::try_unwrap(previous).unwrap().into_inner().unwrap();
+        self.env = previous;
 
         return result;
     }
@@ -146,7 +166,7 @@ impl Interpreter {
             Expr::Grouping(grouping) => self.eval(&*grouping.0),
             Expr::Unary(unary) => self.eval_unary(unary),
             Expr::Binary(binary) => self.eval_binary(binary),
-            Expr::Variable(var) => self.globals.get(var),
+            Expr::Variable(var) => self.get_var(var),
         }
     }
 
@@ -213,7 +233,7 @@ impl Interpreter {
 
     fn eval_assign<'a>(&mut self, assign: &parser::Assign<'a>) -> Result<Literal, Error> {
         let value = self.eval(&assign.value)?;
-        self.globals.assign(&assign.name, value.clone())?;
+        self.assign_var(&assign.name, value.clone())?;
         Ok(value)
     }
 }
