@@ -54,13 +54,8 @@ pub enum Expr<'a> {
     Variable(Variable<'a>),
 }
 
-#[derive(Debug)]
-pub enum Statement<'a> {
-    Expr(Expr<'a>),
-    Print(Expr<'a>),
-}
-
-// Not to be confused with `Variable`, which is for access.
+// Variable assignment. Not to be confused with `Variable`, which is
+// for access.
 #[derive(Debug)]
 pub struct Var<'a> {
     pub name: Token<'a>,
@@ -68,12 +63,13 @@ pub struct Var<'a> {
 }
 
 #[derive(Debug)]
-pub enum Declaration<'a> {
-    Stmt(Statement<'a>),
+pub enum Statement<'a> {
+    Expr(Expr<'a>),
+    Print(Expr<'a>),
     Var(Var<'a>),
 }
 
-pub type Program<'a> = Vec<Declaration<'a>>;
+pub type Program<'a> = Vec<Statement<'a>>;
 
 // Parser
 
@@ -109,20 +105,19 @@ struct Parser<'a> {
 
 type ExprResult<'a> = Result<Expr<'a>, Error>;
 type StmtResult<'a> = Result<Statement<'a>, Error>;
-type DeclResult<'a> = Result<Declaration<'a>, Error>;
 
 impl<'a> Parser<'a> {
     // recursive-descent parser functions
 
-    fn declaration(&mut self) -> DeclResult<'a> {
+    fn declaration(&mut self) -> StmtResult<'a> {
         if self.match_token(&[TokenKind::Var]) {
             return self.var_declaration();
         }
 
-        Ok(Declaration::Stmt(self.statement()?))
+        self.statement()
     }
 
-    fn var_declaration(&mut self) -> DeclResult<'a> {
+    fn var_declaration(&mut self) -> StmtResult<'a> {
         // Since `TokenKind::Identifier` carries data, we can't use
         // `consume`.
         if let TokenKind::Identifier(_) = self.peek().kind {
@@ -136,7 +131,7 @@ impl<'a> Parser<'a> {
             }
 
             self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
-            return Ok(Declaration::Var(var));
+            return Ok(Statement::Var(var));
         }
 
         return Err(Error {
