@@ -1,4 +1,4 @@
-{ stdenv, pkgs, runExecline, getBins, writeScript
+{ stdenv, pkgs, runExecline, runExeclineLocal, getBins, writeScript
 # https://www.mail-archive.com/skaware@list.skarnet.org/msg01256.html
 , coreutils }:
 
@@ -44,23 +44,15 @@ let
   };
 
   # basic test that touches out
-  basic = runExecline "run-execline-test-basic" {
-    derivationArgs = {
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-    };
+  basic = runExeclineLocal "run-execline-test-basic" {
   } [
       "importas" "-ui" "out" "out"
       "${bins.s6-touch}" "$out"
   ];
 
   # whether the stdin argument works as intended
-  stdin = fileHasLine "foo" (runExecline "run-execline-test-stdin" {
+  stdin = fileHasLine "foo" (runExeclineLocal "run-execline-test-stdin" {
     stdin = "foo\nbar\nfoo";
-    derivationArgs = {
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-    };
   } [
       "importas" "-ui" "out" "out"
       # this pipes stdout of s6-cat to $out
@@ -68,15 +60,12 @@ let
       "redirfd" "-w" "1" "$out" bins.s6-cat
   ]);
 
-  wrapWithVar = runExecline "run-execline-test-wrap-with-var" {
+
+  wrapWithVar = runExeclineLocal "run-execline-test-wrap-with-var" {
     builderWrapper = writeScript "var-wrapper" ''
       #!${bins.execlineb} -S0
       export myvar myvalue $@
     '';
-    derivationArgs = {
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-    };
   } [
     "importas" "-ui" "v" "myvar"
     "if" [ bins.s6-test "myvalue" "=" "$v" ]
