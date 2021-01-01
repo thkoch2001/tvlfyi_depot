@@ -1,19 +1,28 @@
-{ depot, pkgs, python3Lib }:
+{ depot, pkgs, python3, python3Lib }:
 
 let
-  testLib = python3Lib {
-    name = "test_lib";
+  transitiveLib = python3Lib {
+    name = "transitive";
   } ''
-    def test():
-      return "test"
+    def transitive(s):
+      return s + " 1 2 3"
   '';
 
-  pythonWithLib = pkgs.writers.writePython3 "python-with-lib" {
-    libraries = [ testLib ];
+  testLib = python3Lib {
+    name = "test_lib";
+    libraries = _: [ transitiveLib ];
+  } ''
+    import transitive
+    def test():
+      return transitive.transitive("test")
+  '';
+
+  pythonWithLib = python3 "python-with-lib" {
+    libraries = _: [ testLib ];
   } ''
     import test_lib
 
-    assert(test_lib.test() == "test")
+    assert(test_lib.test() == "test 1 2 3")
   '';
 
 in {
