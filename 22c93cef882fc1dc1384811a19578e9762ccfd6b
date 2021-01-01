@@ -16,6 +16,24 @@
       "message": "I haven’t migrated this over yet, dunno what the best way to have a shell for a subdir is.",
       "revId": "22c93cef882fc1dc1384811a19578e9762ccfd6b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3ff9ab5_710e4c12",
+        "filename": "shell.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-01T14:18:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "600ebb46_74341b47",
+      "revId": "22c93cef882fc1dc1384811a19578e9762ccfd6b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
