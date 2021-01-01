@@ -296,4 +296,27 @@ in lib.fix (self: {
     in sig: func: if length sig < 2
       then (throw "Signature must at least have two types (a -> b)")
       else defun' sig func;
+
+  # Restricting types
+  #
+  # `restrict` wraps a type `t`, and uses a predicate `pred` to further
+  # restrict the values, giving the restriction a descriptive `name`.
+  #
+  # First, the wrapped type definition is checked (e.g. int) and then the
+  # value is checked with the predicate, so the predicate can already
+  # depend on the value being of the wrapped type.
+  restrict = name: pred: t:
+    let restriction = "${t.name}[${name}]"; in typedef' {
+    name = restriction;
+    checkType = v:
+      let res = t.checkType v;
+      in
+        if !(t.checkToBool res)
+        then res
+        else {
+          ok = pred v;
+          err = "${prettyPrint v} does not conform to restriction '${restriction}'";
+        };
+  };
+
 })
