@@ -155,6 +155,7 @@ let
       writeShellScript
       writeShellScriptBin
       writeText
+      writers
       xorg
       xz
       zlib
