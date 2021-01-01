@@ -92,4 +92,11 @@ deepSeq rec {
     (struct { a = int; b = option string; })
     (sum { a = int; b = option string; })
   ];
+
+  testRestrict = [
+    ((restrict "< 42" (i: i < 42) int) 25)
+    ((restrict "not too long" (l: builtins.length l < 3) (list int)) [ 1 2 ])
+    (list (restrict "eq 5" (v: v == 5) any) [ 5 5 5 ])
+  ];
+
 } (pkgs.writeText "yants-tests" "All tests passed!")
