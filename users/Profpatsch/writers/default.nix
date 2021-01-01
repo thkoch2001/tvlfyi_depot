@@ -2,6 +2,14 @@
 let
   bins = depot.nix.getBins pkgs.coreutils ["printf" "mkdir" "cat"];
 
+  python3 = name: args@{
+    libraries ? (_: []),
+    flakeIgnore ? []
+  }: pkgs.writers.writePython3 name {
+    libraries = libraries pkgs.python3Packages;
+    flakeIgnore = flakeIgnore;
+  };
+
   python3Lib = { name, libraries ? (_: []) }: moduleString:
     let srcTree = depot.nix.runExecline.local name { stdin = moduleString; } [
       "importas" "out" "out"
@@ -30,10 +38,18 @@ let
       doCheck = false;
     };
 
-  tests = import ./tests.nix { inherit depot pkgs python3Lib; };
+  tests = import ./tests.nix {
+    inherit
+      depot
+      pkgs
+      python3
+      python3Lib
+      ;
+   };
 
 in {
   inherit
+    python3
     python3Lib
     tests
     ;
