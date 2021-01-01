@@ -6,8 +6,18 @@ let
     inherit pkgs lib;
   };
 
+  runExeclineLocal = name: args: execline:
+    runExecline name
+      (args // {
+        derivationArgs = args.derivationArgs or {} // {
+          preferLocalBuild = true;
+          allowSubstitutes = false;
+        };
+      })
+      execline;
+
   tests = import ./tests.nix {
-    inherit runExecline;
+    inherit runExecline runExeclineLocal;
     inherit (depot.nix) getBins writeScript;
     inherit (pkgs) stdenv coreutils;
     inherit pkgs;
@@ -15,5 +25,6 @@ let
 
 in {
   __functor = _: runExecline;
+  local = runExeclineLocal;
   inherit tests;
 }
