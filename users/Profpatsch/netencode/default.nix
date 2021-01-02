@@ -40,9 +40,60 @@ let
 
   netencode-rs = netencode-rs-common false;
 
+  gen = import ./netencode.nix;
+
+  cfg-if = pkgs.buildRustCrate {
+    pname = "cfg-if";
+    version = "1.0.0";
+    crateName = "cfg-if";
+    sha256 = "1fzidq152hnxhg4lj6r2gv4jpnn8yivp27z6q6xy7w6v0dp6bai9";
+  };
+
+  log = pkgs.buildRustCrate {
+    pname = "log";
+    version = "0.4.11";
+    crateName = "log";
+    sha256 = "0m6xhqxsps5mgd7r91g5mqkndbh8zbjd58p7w75r330zl4n40l07";
+    dependencies = [ cfg-if ];
+  };
+
+  serde_derive = pkgs.buildRustCrate {
+    pname = "serde";
+    version = "1.0.118";
+    crateName = "serde";
+    sha256 = "1kbi2csphq8m4z77fpd6v8jih10j7867wniqnlxnk308mrnxi4r2";
+  };
+
+  serde = pkgs.buildRustCrate {
+    pname = "serde";
+    version = "1.0.118";
+    crateName = "serde";
+    sha256 = "1kbi2csphq8m4z77fpd6v8jih10j7867wniqnlxnk308mrnxi4r2";
+    features = [ "std" ];
+  };
+
+  mustache = pkgs.buildRustCrate {
+    pname = "mustache";
+    version = "0.9.0";
+    crateName = "mustache";
+    sha256 = "1zgl8l15i19lzp90icgwyi6zqdd31b9vm8w129f41d1zd0hs7ayq";
+    dependencies = [ log serde ];
+  };
+
+  netencode-mustache = imports.writers.rustSimple {
+    name = "netencode_mustache";
+    dependencies = [
+      netencode-rs
+      mustache
+    ];
+  } (builtins.readFile ./netencode-mustache.rs);
+
+
 in {
   inherit
    netencode-rs
    netencode-rs-tests
+   netencode-mustache
+   gen
    ;
 }
