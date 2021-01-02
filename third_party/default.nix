@@ -135,6 +135,7 @@ let
       runCommandNoCC
       rustPlatform
       rustc
+      buildRustCrate
       s6-portable-utils
       sbcl
       shellcheck
