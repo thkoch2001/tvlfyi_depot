@@ -7,7 +7,8 @@ let
       ;
   };
 
-  python-netstring-test = imports.writers.python3 "python-netstring" {
+  python-netstring-test = imports.writers.python3 {
+    name = "python-netstring";
     libraries = p: [
       python-netstring
     ];
