@@ -338,7 +338,7 @@ pub mod parse {
         ))(s)
     }
 
-    fn t_t(s: &[u8]) -> IResult<&[u8], T>  {
+    pub fn t_t(s: &[u8]) -> IResult<&[u8], T>  {
         alt((
             text,
             binary(),
