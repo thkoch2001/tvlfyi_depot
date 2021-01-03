@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cfc7e88_a52aac61",
+        "filename": "nix/yants/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-01-03T11:18:06Z",
+      "side": 1,
+      "message": "I think I would prefer if this had a more structured name, for example we could say that a certain type of brace indicates a restriction and make this `name \u003d \"${t.name}[${name}]\";`, so that `restrict \"\u003e 5\" (n: n \u003e 5) int` has the name `int[\u003e 5]` rather than a completely free-form text.\n\nThoughts?",
+      "range": {
+        "startLine": 309,
+        "startChar": 4,
+        "endLine": 309,
+        "endChar": 16
+      },
+      "revId": "4561260ebf69946b7274d473dcc6d8f0f01456af",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
