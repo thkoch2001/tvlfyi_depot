@@ -1,0 +1,9 @@
+inherited: true
+
+matchers:
+  # The nixpkgs whitelist needs to be changed every time we reference
+  # a new attribute, so every commiter should be able to change it,
+  # otherwise we create undue blockers on superowners.
+  - exact: nixpkgs-exposed.nix
+    owners:
+      - Profpatsch
