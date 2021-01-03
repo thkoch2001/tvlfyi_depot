@@ -22,6 +22,30 @@
       },
       "revId": "4561260ebf69946b7274d473dcc6d8f0f01456af",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7a6cb54_bc0c4481",
+        "filename": "nix/yants/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-03T15:31:20Z",
+      "side": 1,
+      "message": "Updated:\n\n```\nerror: [\n  1\n  2\n  3\n] does not conform to restriction \u0027list\u003cint\u003e[not too long]\u0027\n```\n\n```\nerror: expected type list\u003cany[eq 5]\u003e, but found:\n4: 4 does not conform to restriction \u0027any[eq 5]\u0027\n```",
+      "parentUuid": "1cfc7e88_a52aac61",
+      "range": {
+        "startLine": 309,
+        "startChar": 4,
+        "endLine": 309,
+        "endChar": 16
+      },
+      "revId": "4561260ebf69946b7274d473dcc6d8f0f01456af",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
