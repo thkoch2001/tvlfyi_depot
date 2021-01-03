@@ -62,6 +62,13 @@ pub struct Var<'a> {
     pub initialiser: Option<Expr<'a>>,
 }
 
+#[derive(Debug)]
+pub struct If<'a> {
+    pub condition: Expr<'a>,
+    pub then_branch: Box<Statement<'a>>,
+    pub else_branch: Option<Box<Statement<'a>>>,
+}
+
 pub type Block<'a> = Vec<Statement<'a>>;
 
 #[derive(Debug)]
@@ -70,6 +77,7 @@ pub enum Statement<'a> {
     Print(Expr<'a>),
     Var(Var<'a>),
     Block(Block<'a>),
+    If(If<'a>),
 }
 
 // Parser
@@ -81,9 +89,15 @@ declaration    → varDecl
                | statement ;
 
 statement      → exprStmt
-               | printStmt ;
+               | ifStmt
+               | printStmt
+               | block ;
 
 exprStmt       → expression ";" ;
+
+ifStmt         → "if" "(" expression ")" statement
+               ( "else" statement )? ;
+
 printStmt      → "print" expression ";" ;
 
 expression     → assignment ;
@@ -146,6 +160,8 @@ impl<'a> Parser<'a> {
             self.print_statement()
         } else if self.match_token(&[TokenKind::LeftBrace]) {
             self.block_statement()
+        } else if self.match_token(&[TokenKind::If]) {
+            self.if_statement()
         } else {
             self.expr_statement()
         }
@@ -167,6 +183,32 @@ impl<'a> Parser<'a> {
         self.consume(&TokenKind::RightBrace, ErrorKind::ExpectedClosingBrace)?;
 
         Ok(Statement::Block(block))
+    }
+
+    fn if_statement(&mut self) -> StmtResult<'a> {
+        self.consume(
+            &TokenKind::LeftParen,
+            ErrorKind::ExpectedToken("Expected '(' after 'if'"),
+        )?;
+        let condition = self.expression()?;
+        self.consume(
+            &TokenKind::RightParen,
+            ErrorKind::ExpectedToken("Expected ')' after condition"),
+        )?;
+
+        let then_branch = Box::new(self.statement()?);
+
+        let mut stmt = If {
+            condition,
+            then_branch,
+            else_branch: Option::None,
+        };
+
+        if self.match_token(&[TokenKind::Else]) {
+            stmt.else_branch = Some(Box::new(self.statement()?));
+        }
+
+        Ok(Statement::If(stmt))
     }
 
     fn expr_statement(&mut self) -> StmtResult<'a> {
