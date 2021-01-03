@@ -7,6 +7,7 @@ pub enum ErrorKind {
     ExpectedSemicolon,
     ExpectedClosingBrace,
     ExpectedVariableName,
+    ExpectedToken(&'static str),
     TypeError(String),
     UndefinedVariable(String),
     InternalError(String),

@@ -127,6 +127,7 @@ impl Interpreter {
             }
             Statement::Var(var) => return self.interpret_var(var),
             Statement::Block(block) => return self.interpret_block(block),
+            Statement::If(_) => unimplemented!(),
         }
 
         Ok(())
