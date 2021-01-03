@@ -127,7 +127,7 @@ impl Interpreter {
             }
             Statement::Var(var) => return self.interpret_var(var),
             Statement::Block(block) => return self.interpret_block(block),
-            Statement::If(_) => unimplemented!(),
+            Statement::If(if_stmt) => return self.interpret_if(if_stmt),
         }
 
         Ok(())
@@ -158,6 +158,18 @@ impl Interpreter {
         self.env = previous;
 
         return result;
+    }
+
+    fn interpret_if<'a>(&mut self, if_stmt: &parser::If<'a>) -> Result<(), Error> {
+        let condition = self.eval(&if_stmt.condition)?;
+
+        if eval_truthy(&condition) {
+            self.interpret_stmt(&if_stmt.then_branch)
+        } else if let Some(else_branch) = &if_stmt.else_branch {
+            self.interpret_stmt(else_branch)
+        } else {
+            Ok(())
+        }
     }
 
     fn eval<'a>(&mut self, expr: &Expr<'a>) -> Result<Literal, Error> {
