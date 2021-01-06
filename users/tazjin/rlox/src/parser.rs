@@ -104,10 +104,15 @@ declaration    → varDecl
                | statement ;
 
 statement      → exprStmt
+               | forStmt
                | ifStmt
                | printStmt
                | whileStmt
                | block ;
+
+forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
+                 expression? ";"
+                 expression? ")" statement ;
 
 whileStmt      → "while" "(" expression ")" statement ;
 
@@ -184,6 +189,8 @@ impl<'a> Parser<'a> {
             self.if_statement()
         } else if self.match_token(&[TokenKind::While]) {
             self.while_statement()
+        } else if self.match_token(&[TokenKind::For]) {
+            self.for_statement()
         } else {
             self.expr_statement()
         }
@@ -250,6 +257,61 @@ impl<'a> Parser<'a> {
             condition,
             body: Box::new(self.statement()?),
         }))
+    }
+
+    fn for_statement(&mut self) -> StmtResult<'a> {
+        // Parsing of clauses ...
+        self.consume(
+            &TokenKind::LeftParen,
+            ErrorKind::ExpectedToken("Expected '(' after 'for'"),
+        )?;
+
+        let initialiser = if self.match_token(&[TokenKind::Semicolon]) {
+            None
+        } else if self.match_token(&[TokenKind::Var]) {
+            Some(self.var_declaration()?)
+        } else {
+            Some(self.expr_statement()?)
+        };
+
+        let condition = if self.check_token(&TokenKind::Semicolon) {
+            // unspecified condition => infinite loop
+            Expr::Literal(Literal::Boolean(true))
+        } else {
+            self.expression()?
+        };
+
+        self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
+
+        let increment = if self.check_token(&TokenKind::RightParen) {
+            None
+        } else {
+            Some(self.expression()?)
+        };
+
+        self.consume(
+            &TokenKind::RightParen,
+            ErrorKind::ExpectedToken("Expected ')' after for clauses"),
+        )?;
+
+        let mut body = self.statement()?;
+
+        // ... desugaring to while
+
+        if let Some(inc) = increment {
+            body = Statement::Block(vec![body, Statement::Expr(inc)]);
+        }
+
+        body = Statement::While(While {
+            condition,
+            body: Box::new(body),
+        });
+
+        if let Some(init) = initialiser {
+            body = Statement::Block(vec![init, body]);
+        }
+
+        Ok(body)
     }
 
     fn expr_statement(&mut self) -> StmtResult<'a> {
