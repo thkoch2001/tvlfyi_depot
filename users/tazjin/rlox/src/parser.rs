@@ -24,6 +24,13 @@ pub struct Binary<'a> {
 }
 
 #[derive(Debug)]
+pub struct Logical<'a> {
+    pub left: Box<Expr<'a>>,
+    pub operator: Token<'a>,
+    pub right: Box<Expr<'a>>,
+}
+
+#[derive(Debug)]
 pub struct Grouping<'a>(pub Box<Expr<'a>>);
 
 #[derive(Debug, Clone, PartialEq)]
@@ -52,6 +59,7 @@ pub enum Expr<'a> {
     Literal(Literal),
     Unary(Unary<'a>),
     Variable(Variable<'a>),
+    Logical(Logical<'a>),
 }
 
 // Variable assignment. Not to be confused with `Variable`, which is
@@ -102,7 +110,9 @@ printStmt      → "print" expression ";" ;
 
 expression     → assignment ;
 assignment     → IDENTIFIER "=" assignment
-               | equality ;
+               | logic_or ;
+logic_or       → logic_and ( "or" logic_and )* ;
+logic_and      → equality ( "and" equality )* ;
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 term           → factor ( ( "-" | "+" ) factor )* ;
@@ -222,7 +232,7 @@ impl<'a> Parser<'a> {
     }
 
     fn assignment(&mut self) -> ExprResult<'a> {
-        let expr = self.equality()?;
+        let expr = self.logic_or()?;
 
         if self.match_token(&[TokenKind::Equal]) {
             let equals = self.previous().clone();
@@ -239,6 +249,34 @@ impl<'a> Parser<'a> {
                 line: equals.line,
                 kind: ErrorKind::InvalidAssignmentTarget(format!("{:?}", equals)),
             });
+        }
+
+        Ok(expr)
+    }
+
+    fn logic_or(&mut self) -> ExprResult<'a> {
+        let mut expr = self.logic_and()?;
+
+        while self.match_token(&[TokenKind::Or]) {
+            expr = Expr::Logical(Logical {
+                left: Box::new(expr),
+                operator: self.previous().clone(),
+                right: Box::new(self.logic_and()?),
+            })
+        }
+
+        Ok(expr)
+    }
+
+    fn logic_and(&mut self) -> ExprResult<'a> {
+        let mut expr = self.equality()?;
+
+        while self.match_token(&[TokenKind::And]) {
+            expr = Expr::Logical(Logical {
+                left: Box::new(expr),
+                operator: self.previous().clone(),
+                right: Box::new(self.equality()?),
+            })
         }
 
         Ok(expr)
