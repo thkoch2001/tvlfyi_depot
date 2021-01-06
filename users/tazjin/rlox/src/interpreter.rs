@@ -128,6 +128,7 @@ impl Interpreter {
             Statement::Var(var) => return self.interpret_var(var),
             Statement::Block(block) => return self.interpret_block(block),
             Statement::If(if_stmt) => return self.interpret_if(if_stmt),
+            Statement::While(while_stmt) => return self.interpret_while(while_stmt),
         }
 
         Ok(())
@@ -170,6 +171,14 @@ impl Interpreter {
         } else {
             Ok(())
         }
+    }
+
+    fn interpret_while<'a>(&mut self, stmt: &parser::While<'a>) -> Result<(), Error> {
+        while eval_truthy(&self.eval(&stmt.condition)?) {
+            self.interpret_stmt(&stmt.body)?;
+        }
+
+        Ok(())
     }
 
     fn eval<'a>(&mut self, expr: &Expr<'a>) -> Result<Literal, Error> {

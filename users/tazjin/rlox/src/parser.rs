@@ -77,6 +77,12 @@ pub struct If<'a> {
     pub else_branch: Option<Box<Statement<'a>>>,
 }
 
+#[derive(Debug)]
+pub struct While<'a> {
+    pub condition: Expr<'a>,
+    pub body: Box<Statement<'a>>,
+}
+
 pub type Block<'a> = Vec<Statement<'a>>;
 
 #[derive(Debug)]
@@ -86,6 +92,7 @@ pub enum Statement<'a> {
     Var(Var<'a>),
     Block(Block<'a>),
     If(If<'a>),
+    While(While<'a>),
 }
 
 // Parser
@@ -172,6 +179,8 @@ impl<'a> Parser<'a> {
             self.block_statement()
         } else if self.match_token(&[TokenKind::If]) {
             self.if_statement()
+        } else if self.match_token(&[TokenKind::While]) {
+            self.while_statement()
         } else {
             self.expr_statement()
         }
@@ -219,6 +228,25 @@ impl<'a> Parser<'a> {
         }
 
         Ok(Statement::If(stmt))
+    }
+
+    fn while_statement(&mut self) -> StmtResult<'a> {
+        self.consume(
+            &TokenKind::LeftParen,
+            ErrorKind::ExpectedToken("Expected '(' after 'while'"),
+        )?;
+
+        let condition = self.expression()?;
+
+        self.consume(
+            &TokenKind::RightParen,
+            ErrorKind::ExpectedToken("Expected ')' after 'while'"),
+        )?;
+
+        Ok(Statement::While(While {
+            condition,
+            body: Box::new(self.statement()?),
+        }))
     }
 
     fn expr_statement(&mut self) -> StmtResult<'a> {
