@@ -180,6 +180,7 @@ impl Interpreter {
             Expr::Unary(unary) => self.eval_unary(unary),
             Expr::Binary(binary) => self.eval_binary(binary),
             Expr::Variable(var) => self.get_var(var),
+            Expr::Logical(log) => self.eval_logical(log),
         }
     }
 
@@ -248,6 +249,20 @@ impl Interpreter {
         let value = self.eval(&assign.value)?;
         self.assign_var(&assign.name, value.clone())?;
         Ok(value)
+    }
+
+    fn eval_logical<'a>(&mut self, logical: &parser::Logical<'a>) -> Result<Literal, Error> {
+        let left = eval_truthy(&self.eval(&logical.left)?);
+        let right = eval_truthy(&self.eval(&logical.right)?);
+
+        match &logical.operator.kind {
+            TokenKind::And => Ok(Literal::Boolean(left && right)),
+            TokenKind::Or => Ok(Literal::Boolean(left || right)),
+            kind => Err(Error {
+                line: logical.operator.line,
+                kind: ErrorKind::InternalError(format!("Invalid logical operator: {:?}", kind)),
+            }),
+        }
     }
 }
 
