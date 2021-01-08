@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "759e46b3_0ad275e3",
+        "filename": "users/glittershark/system/home/modules/development.nix",
+        "patchSetId": 19
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-01-08T18:07:19Z",
+      "side": 1,
+      "message": "T.T",
+      "revId": "d989c289bd0184e312a9bb951ad5cd2af6149a90",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
