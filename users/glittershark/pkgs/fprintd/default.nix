@@ -1,7 +1,7 @@
 args @ { pkgs, ... }:
 
 let
-  nixpkgs = import pkgs.nixpkgsSrc {
+  nixpkgs = import pkgs.stableNixpkgsSrc {
     config.allowUnfree = true;
   };
   inherit (nixpkgs)
