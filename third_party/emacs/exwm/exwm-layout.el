@@ -179,7 +179,8 @@
                          :window id :value-mask xcb:CW:EventMask
                          :event-mask (exwm--get-client-event-mask)))
       (exwm-layout--set-state id xcb:icccm:WM_STATE:IconicState)
-      (cl-pushnew xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state)
+      ;; Temporarily commented out because of https://github.com/ch11ng/exwm/issues/759
+      ;; (cl-pushnew xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state)
       (exwm-layout--set-ewmh-state id)
       (exwm-layout--auto-iconify)
       (xcb:flush exwm--connection))))
