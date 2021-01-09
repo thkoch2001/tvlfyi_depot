@@ -70,6 +70,11 @@
     intel-media-driver
   ];
 
+  # the fprintd module hardcodes pkgs.fprintd :'(
+  nixpkgs.overlays = [(_: _: {
+    fprintd = config.depot.users.glittershark.pkgs.fprintd;
+  })];
+
   services.fprintd = {
     enable = true;
     package = config.depot.users.glittershark.pkgs.fprintd;

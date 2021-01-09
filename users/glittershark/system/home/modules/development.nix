@@ -63,7 +63,6 @@ with lib;
     config.lib.depot.third_party.clang-tools
   ] ++ optionals (stdenv.isLinux) [
     valgrind
-    rr
   ];
 
   programs.git = {
