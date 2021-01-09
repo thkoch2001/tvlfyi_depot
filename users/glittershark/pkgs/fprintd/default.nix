@@ -3,7 +3,11 @@ args @ { pkgs, ... }:
 let
   nixpkgs = import pkgs.nixpkgsSrc {
     config.allowUnfree = true;
+    overlays = [(self: super: {
+      gcc = super.gcc9;
+    })];
   };
+
   inherit (nixpkgs)
     stdenv
     fetchFromGitLab

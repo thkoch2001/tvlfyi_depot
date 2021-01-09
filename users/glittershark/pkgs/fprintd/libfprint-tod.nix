@@ -22,7 +22,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libfprint";
+  pname = "libfprint-tod";
   version = "1.90.2";
   outputs = [ "out" "devdoc" ];
 
