@@ -14,12 +14,8 @@ let
 
   emacsWithPackages = (third_party.emacsPackagesGen third_party.emacs27).emacsWithPackages;
 
-  # Pick telega from unstable channel for recent fixes.
-  unstable = import third_party.nixpkgsSrc {};
-  telegaUnstable = (unstable.emacsPackagesGen third_party.emacs27).telega;
-
   # $PATH for binaries that need to be available to Emacs
-  emacsBinPath = lib.makeBinPath [ telegaUnstable ];
+  emacsBinPath = lib.makeBinPath [ third_party.stableTelega ];
 
   identity = x: x;
 
@@ -89,7 +85,6 @@ let
     sly
     string-edit
     swiper
-    telegaUnstable
     telephone-line
     terraform-mode
     toml-mode
@@ -111,6 +106,7 @@ let
     tvl
 
     # patched / overridden versions of packages
+    depot.third_party.stableTelega
     depot.third_party.emacs.exwm
     depot.third_party.emacs.rcirc
     depot.third_party.emacs.vterm
