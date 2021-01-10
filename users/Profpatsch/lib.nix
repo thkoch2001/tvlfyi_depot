@@ -12,7 +12,7 @@ let
   ];
 
   eprintf = depot.nix.writeExecline "eprintf" {} [
-    "fdmove" "-c" "1" "2" bins.printf "%s" "$@"
+    "fdmove" "-c" "1" "2" bins.printf "$@"
   ];
 
 in {

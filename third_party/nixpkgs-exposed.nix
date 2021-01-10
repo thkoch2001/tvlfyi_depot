@@ -45,6 +45,7 @@
     fetchgit
     fetchurl
     fetchzip
+    findutils
     fira
     fira-code
     fira-mono
@@ -54,6 +55,7 @@
     gettext
     glibc
     gmock
+    gnused
     gnutar
     google-cloud-sdk
     graphviz
