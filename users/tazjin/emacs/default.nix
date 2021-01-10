@@ -73,7 +73,6 @@ let
     nginx-mode
     nix-mode
     notmuch # this comes from pkgs.third_party
-    org-journal
     org-ql
     paredit
     password-store
