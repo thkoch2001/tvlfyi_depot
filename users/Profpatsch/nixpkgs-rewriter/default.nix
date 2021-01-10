@@ -8,6 +8,12 @@ let
     eprintf
     ;
 
+  bins = depot.nix.getBins pkgs.coreutils [ "head" "shuf" ]
+      // depot.nix.getBins pkgs.jq [ "jq" ]
+      // depot.nix.getBins pkgs.findutils [ "xargs" ]
+      // depot.nix.getBins pkgs.gnused [ "sed" ]
+      ;
+
   export-json-object = pkgs.writers.writePython3 "export-json-object" {} ''
     import json
     import sys
@@ -35,9 +41,9 @@ let
     "importas" "-ui" "file" "fileName"
     "importas" "-ui" "from" "fromLine"
     "importas" "-ui" "to" "toLine"
-    "if" [ eprintf "\${from}-\${to}" ]
+    "if" [ eprintf "%s-%s\n" "$from" "$to" ]
     (debugExec "adding lib")
-    "sed"
+    bins.sed
       "-e" "\${from},\${to} \${1}"
       "-i" "$file"
   ];
@@ -68,17 +74,40 @@ let
     )
     do
       echo "replacing stdenv.lib meta in $file" >&2
-      sed -e '/${metaString}/ s/stdenv.lib/lib/' \
+      ${bins.sed} -e '/${metaString}/ s/stdenv.lib/lib/' \
           -i "$file"
       ${add-lib-if-necessary} "$file"
     done
   '';
 
+  instantiate-nixpkgs-randomly = writeExecline "instantiate-nixpkgs-randomly" { readNArgs = 1; } [
+    "export" "NIXPKGS_ALLOW_BROKEN" "1"
+    "export" "NIXPKGS_ALLOW_UNFREE" "1"
+    "export" "NIXPKGS_ALLOW_INSECURE" "1"
+    "export" "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" "1"
+    "pipeline" [
+      "nix"
+        "eval"
+        "--raw"
+        ''(
+          let pkgs = import ''${1} {};
+          in builtins.toJSON (builtins.attrNames pkgs)
+        )''
+    ]
+    "pipeline" [ bins.jq "-r" ".[]" ]
+    "pipeline" [ bins.shuf ]
+    "pipeline" [ bins.head "-n" "1000" ]
+    bins.xargs "-I" "{}" "-n1"
+    "if" [ eprintf "instantiating %s\n" "{}" ]
+    "nix-instantiate" "$1" "-A" "{}"
+  ];
+
 in {
+  inherit
+   instantiate-nixpkgs-randomly
   # requires hnix, which we don’t want in tvl for now
   # uncomment manually if you want to use it.
-  # inherit
   #   meta-stdenv-lib
   #   replace-stdenv-lib
-  #   ;
+    ;
 }
