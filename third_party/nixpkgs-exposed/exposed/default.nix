@@ -1,3 +1,6 @@
+# TODO(Profpatsch): this file has to be in yet another subdir
+# because of how readTree interprets .skip-subtree
+# see https://b.tvl.fyi/issues/89
 { nixpkgs, stableNixpkgs }:
 {
   # Inherit the packages from nixos-unstable that should be available inside
