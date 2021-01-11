@@ -128,7 +128,7 @@ instructions:
    You can probably create ARGON2 hashes with other tools, but that is
    your job to figure out.
 4. Create a commit adding yourself (see e.g.
-   [CL/223](https://cl.tvl.fyi/c/depot/+/223)).
+   [CL/2348](https://cl.tvl.fyi/c/depot/+/2348/))
 5. Submit the commit via email (see below).
 
 ## Submitting changes via email
