@@ -106,6 +106,11 @@ let
       password = "{SSHA}jcFXxRplMFxH4gpa0X5VdUzW64T95TwQ";
     }
     {
+      username = "sterni";
+      email = "sternenseemann@systemli.org";
+      password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$+NbF1izPMGqN5bASCBDV9g$aqBVplHwiyDpflZUmLtjkLWzKhxi7hwjm5fOwfbKohU";
+    }
+    {
       username = "q3k";
       email = "q3k@q3k.org";
       password = "{SSHA}BEccJdtnhVLDzOn+pxNfayNi3QFcEABE";
