@@ -1,0 +1,5 @@
+#include "/etc/regolith/styles/ubuntu/root"
+
+i3-wm.program.lock: xset s activate
+i3-wm.program.1: /bin/sh $HOME/.config/regolith/initrc
+
