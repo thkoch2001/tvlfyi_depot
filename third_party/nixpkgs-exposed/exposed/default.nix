@@ -1,3 +1,6 @@
+# TODO(Profpatsch): this file has to be in yet another subdir
+# because of how readTree interprets .skip-subtree
+# see https://b.tvl.fyi/issues/89
 { nixpkgs, stableNixpkgs }:
 {
   # Inherit the packages from nixos-unstable that should be available inside
@@ -162,7 +165,7 @@
     ;
 
   haskellPackages = (nixpkgs.haskellPackages.override {
-    overrides = (import ./haskell_overlay { pkgs = nixpkgs; });
+    overrides = (import ../haskell_overlay { pkgs = nixpkgs; });
   });
 
   gradle_6 = (nixpkgs.gradleGen.override {
