@@ -22,6 +22,30 @@
       },
       "revId": "d52a6ea25110bf7e11118f6760a6602d8f55f10f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69032c54_8ec9b401",
+        "filename": "third_party/nixpkgs-exposed/exposed/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-11T19:43:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19f9f64c_d28181cc",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 18
+      },
+      "revId": "d52a6ea25110bf7e11118f6760a6602d8f55f10f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
