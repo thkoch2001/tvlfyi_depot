@@ -47,6 +47,13 @@ pub struct Unary<'a> {
     pub right: Box<Expr<'a>>,
 }
 
+#[derive(Debug)]
+pub struct Call<'a> {
+    pub callee: Box<Expr<'a>>,
+    pub paren: Token<'a>,
+    pub args: Vec<Expr<'a>>,
+}
+
 // Not to be confused with `Var`, which is for assignment.
 #[derive(Debug)]
 pub struct Variable<'a>(pub Token<'a>);
@@ -58,6 +65,7 @@ pub enum Expr<'a> {
     Grouping(Grouping<'a>),
     Literal(Literal),
     Unary(Unary<'a>),
+    Call(Call<'a>),
     Variable(Variable<'a>),
     Logical(Logical<'a>),
 }
@@ -132,8 +140,9 @@ equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 term           → factor ( ( "-" | "+" ) factor )* ;
 factor         → unary ( ( "/" | "*" ) unary )* ;
-unary          → ( "!" | "-" ) unary
-               | primary ;
+unary          → ( "!" | "-" ) unary | call ;
+call           → primary ( "(" arguments? ")" )* ;
+arguments      → expression ( "," expression )* ;
 primary        → NUMBER | STRING | "true" | "false" | "nil"
                | "(" expression ")" ;
 */
@@ -410,7 +419,46 @@ impl<'a> Parser<'a> {
             }));
         }
 
-        return self.primary();
+        return self.call();
+    }
+
+    fn call(&mut self) -> ExprResult<'a> {
+        let mut expr = self.primary()?;
+
+        loop {
+            if self.match_token(&[TokenKind::LeftParen]) {
+                expr = self.finish_call(expr)?;
+            } else {
+                break;
+            }
+        }
+
+        Ok(expr)
+    }
+
+    fn finish_call(&mut self, callee: Expr<'a>) -> ExprResult<'a> {
+        let mut args = vec![];
+
+        if !self.check_token(&TokenKind::RightParen) {
+            loop {
+                // TODO(tazjin): Check for max args count
+                args.push(self.expression()?);
+                if !self.match_token(&[TokenKind::Comma]) {
+                    break;
+                }
+            }
+        }
+
+        let paren = self.consume(
+            &TokenKind::RightParen,
+            ErrorKind::ExpectedToken("Expect ')' after arguments."),
+        )?;
+
+        Ok(Expr::Call(Call {
+            args,
+            callee: Box::new(callee),
+            paren,
+        }))
     }
 
     fn primary(&mut self) -> ExprResult<'a> {
@@ -482,7 +530,7 @@ impl<'a> Parser<'a> {
         &self.tokens[self.current - 1]
     }
 
-    fn consume(&mut self, kind: &TokenKind, err: ErrorKind) -> Result<Token, Error> {
+    fn consume(&mut self, kind: &TokenKind, err: ErrorKind) -> Result<Token<'a>, Error> {
         if self.check_token(kind) {
             return Ok(self.advance());
         }
