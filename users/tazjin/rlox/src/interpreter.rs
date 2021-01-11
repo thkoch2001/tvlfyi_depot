@@ -190,6 +190,7 @@ impl Interpreter {
             Expr::Binary(binary) => self.eval_binary(binary),
             Expr::Variable(var) => self.get_var(var),
             Expr::Logical(log) => self.eval_logical(log),
+            Expr::Call(_) => unimplemented!(),
         }
     }
 
