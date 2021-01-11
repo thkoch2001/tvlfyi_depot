@@ -29,7 +29,7 @@ let
   };
   stableNixpkgs = import stableNixpkgsSrc {};
 
-  exposed = import ./nixpkgs-exposed.nix { inherit nixpkgs stableNixpkgs; };
+  exposed = import ./nixpkgs-exposed/exposed.nix { inherit nixpkgs stableNixpkgs; };
 
 in exposed.lib.fix(self: exposed // {
   callPackage = nixpkgs.lib.callPackageWith self;
