@@ -8,6 +8,9 @@
    (concat thing-at-point-file-name-chars
            "><!?")))
 
+(defun +grfn/clojure-setup ()
+  (flycheck-mode -1))
+
 (after! clojure-mode
   (define-clojure-indent
     (PUT 2)
@@ -23,7 +26,8 @@
     (before 1)
     (it 2))
 
-  (add-hook 'clojure-mode-hook #'clojure-thing-at-point-setup))
+  (add-hook 'clojure-mode-hook #'clojure-thing-at-point-setup)
+  (add-hook 'clojure-mode-hook #'+grfn/clojure-setup))
 
 (use-package! flycheck-clojure
   ;; :disabled t
