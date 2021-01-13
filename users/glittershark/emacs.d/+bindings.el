@@ -932,10 +932,10 @@ private/hlissner/snippets."
       ;; :i [remap delete-backward-char]   #'doom/deflate-space-maybe
       ;; :i [remap newline]                #'doom/newline-and-indent
 
-      (:after org
-        (:map org-mode-map
-          :i [remap doom/inflate-space-maybe] #'org-self-insert-command
-          ))
+      (:map org-mode-map
+       :i [remap doom/inflate-space-maybe] #'org-self-insert-command
+       "C-c C-x C-i" #'org-clock-in
+       "C-c C-x <C-i>" #'org-clock-in)
 
       ;; Restore common editing keys (and ESC) in minibuffer
       (:map (minibuffer-local-map
