@@ -7,20 +7,41 @@ use std::sync::RwLock;
 
 // Tree-walk interpreter
 
+// Representation of an in-language value.
+#[derive(Clone, Debug)]
+enum Value {
+    Literal(Literal),
+}
+
+impl From<Literal> for Value {
+    fn from(lit: Literal) -> Value {
+        Value::Literal(lit)
+    }
+}
+
+impl Value {
+    fn expect_literal(self) -> Result<Literal, Error> {
+        match self {
+            Value::Literal(lit) => Ok(lit),
+            _ => unimplemented!(), // which error? which line?
+        }
+    }
+}
+
 #[derive(Debug, Default)]
 struct Environment {
     enclosing: Option<Rc<RwLock<Environment>>>,
-    values: HashMap<String, Literal>,
+    values: HashMap<String, Value>,
 }
 
 impl Environment {
-    fn define(&mut self, name: &scanner::Token, value: Literal) -> Result<(), Error> {
+    fn define(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
         let ident = identifier_str(name)?;
         self.values.insert(ident.into(), value);
         Ok(())
     }
 
-    fn get(&self, name: &parser::Variable) -> Result<Literal, Error> {
+    fn get(&self, name: &parser::Variable) -> Result<Value, Error> {
         let ident = identifier_str(&name.0)?;
 
         self.values
@@ -39,7 +60,7 @@ impl Environment {
             })
     }
 
-    fn assign(&mut self, name: &scanner::Token, value: Literal) -> Result<(), Error> {
+    fn assign(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
         let ident = identifier_str(name)?;
 
         match self.values.get_mut(ident) {
@@ -79,21 +100,21 @@ pub struct Interpreter {
 
 impl Interpreter {
     // Environment modification helpers
-    fn define_var(&mut self, name: &scanner::Token, value: Literal) -> Result<(), Error> {
+    fn define_var(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
         self.env
             .write()
             .expect("environment lock is poisoned")
             .define(name, value)
     }
 
-    fn assign_var(&mut self, name: &scanner::Token, value: Literal) -> Result<(), Error> {
+    fn assign_var(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
         self.env
             .write()
             .expect("environment lock is poisoned")
             .assign(name, value)
     }
 
-    fn get_var(&mut self, var: &parser::Variable) -> Result<Literal, Error> {
+    fn get_var(&mut self, var: &parser::Variable) -> Result<Value, Error> {
         self.env
             .read()
             .expect("environment lock is poisoned")
@@ -181,10 +202,10 @@ impl Interpreter {
         Ok(())
     }
 
-    fn eval<'a>(&mut self, expr: &Expr<'a>) -> Result<Literal, Error> {
+    fn eval<'a>(&mut self, expr: &Expr<'a>) -> Result<Value, Error> {
         match expr {
             Expr::Assign(assign) => self.eval_assign(assign),
-            Expr::Literal(lit) => Ok(lit.clone()),
+            Expr::Literal(lit) => Ok(lit.clone().into()),
             Expr::Grouping(grouping) => self.eval(&*grouping.0),
             Expr::Unary(unary) => self.eval_unary(unary),
             Expr::Binary(binary) => self.eval_binary(binary),
@@ -194,12 +215,14 @@ impl Interpreter {
         }
     }
 
-    fn eval_unary<'a>(&mut self, expr: &parser::Unary<'a>) -> Result<Literal, Error> {
+    fn eval_unary<'a>(&mut self, expr: &parser::Unary<'a>) -> Result<Value, Error> {
         let right = self.eval(&*expr.right)?;
 
         match (&expr.operator.kind, right) {
-            (TokenKind::Minus, Literal::Number(num)) => Ok(Literal::Number(-num)),
-            (TokenKind::Bang, right) => Ok(Literal::Boolean(!eval_truthy(&right))),
+            (TokenKind::Minus, Value::Literal(Literal::Number(num))) => {
+                Ok(Literal::Number(-num).into())
+            }
+            (TokenKind::Bang, right) => Ok(Literal::Boolean(!eval_truthy(&right)).into()),
 
             (op, right) => Err(Error {
                 line: expr.operator.line,
@@ -211,9 +234,9 @@ impl Interpreter {
         }
     }
 
-    fn eval_binary<'a>(&mut self, expr: &parser::Binary<'a>) -> Result<Literal, Error> {
-        let left = self.eval(&*expr.left)?;
-        let right = self.eval(&*expr.right)?;
+    fn eval_binary<'a>(&mut self, expr: &parser::Binary<'a>) -> Result<Value, Error> {
+        let left = self.eval(&*expr.left)?.expect_literal()?;
+        let right = self.eval(&*expr.right)?.expect_literal()?;
 
         let result = match (&expr.operator.kind, left, right) {
             // Numeric
@@ -252,22 +275,22 @@ impl Interpreter {
             }
         };
 
-        Ok(result)
+        Ok(result.into())
     }
 
-    fn eval_assign<'a>(&mut self, assign: &parser::Assign<'a>) -> Result<Literal, Error> {
+    fn eval_assign<'a>(&mut self, assign: &parser::Assign<'a>) -> Result<Value, Error> {
         let value = self.eval(&assign.value)?;
         self.assign_var(&assign.name, value.clone())?;
         Ok(value)
     }
 
-    fn eval_logical<'a>(&mut self, logical: &parser::Logical<'a>) -> Result<Literal, Error> {
+    fn eval_logical<'a>(&mut self, logical: &parser::Logical<'a>) -> Result<Value, Error> {
         let left = eval_truthy(&self.eval(&logical.left)?);
         let right = eval_truthy(&self.eval(&logical.right)?);
 
         match &logical.operator.kind {
-            TokenKind::And => Ok(Literal::Boolean(left && right)),
-            TokenKind::Or => Ok(Literal::Boolean(left || right)),
+            TokenKind::And => Ok(Literal::Boolean(left && right).into()),
+            TokenKind::Or => Ok(Literal::Boolean(left || right).into()),
             kind => Err(Error {
                 line: logical.operator.line,
                 kind: ErrorKind::InternalError(format!("Invalid logical operator: {:?}", kind)),
@@ -278,10 +301,14 @@ impl Interpreter {
 
 // Interpreter functions not dependent on interpreter-state.
 
-fn eval_truthy(lit: &Literal) -> bool {
-    match lit {
-        Literal::Nil => false,
-        Literal::Boolean(b) => *b,
-        _ => true,
+fn eval_truthy(lit: &Value) -> bool {
+    if let Value::Literal(lit) = lit {
+        match lit {
+            Literal::Nil => false,
+            Literal::Boolean(b) => *b,
+            _ => true,
+        }
+    } else {
+        false
     }
 }
