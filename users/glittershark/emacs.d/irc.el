@@ -28,6 +28,14 @@
 
 (setq tvl-enabled? t)
 
+(defun disable-tvl-notifications ()
+  (interactive)
+  (setq tvl-enabled? nil))
+
+(defun enable-tvl-notifications ()
+  (interactive)
+  (setq tvl-enabled? t))
+
 (defun erc-alert-important-p (info)
   (let ((message (plist-get info :message))
         (erc-message (-> info (plist-get :data) (plist-get :message)))
