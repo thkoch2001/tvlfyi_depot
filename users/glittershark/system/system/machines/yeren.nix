@@ -33,6 +33,11 @@
     kernelParams = [
       "i915.preliminary_hw_support=1"
     ];
+
+    # https://bbs.archlinux.org/viewtopic.php?pid=1933643#p1933643
+    extraModprobeConfig = ''
+      options snd-intel-dspcfg dsp_driver=1
+    '';
   };
 
   fileSystems = {
@@ -62,6 +67,11 @@
       EndSection
     '';
   };
+
+  hardware.firmware = with pkgs; [
+    alsa-firmware
+    sof-firmware
+  ];
 
   hardware.opengl.extraPackages = with pkgs; [
     vaapiIntel
@@ -111,4 +121,6 @@
     load-module module-remap-source source_name=KompleteAudio6_2 source_properties=device.description=KompleteAudio6Input2 master=alsa_input.usb-Native_Instruments_Komplete_Audio_6_458E0FFD-00.multichannel-input remix=no channels=1 master_channel_map=front-right channel_map=mono
     load-module module-remap-sink sink_name=KompleteAudio6_12 sink_properties=device.description=KompleteAudio6_12 remix=no master=alsa_output.usb-Native_Instruments_Komplete_Audio_6_458E0FFD-00.analog-surround-21 channels=2 master_channel_map=front-left,front-right channel_map=front-left,front-right
   '';
+
+  services.fwupd.enable = true;
 }
