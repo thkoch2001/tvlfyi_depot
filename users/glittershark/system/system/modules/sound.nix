@@ -11,4 +11,6 @@
     pasystray
     pavucontrol
   ];
+
+  hardware.pulseaudio.package = pkgs.pulseaudioFull;
 }
