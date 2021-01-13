@@ -49,6 +49,7 @@ with lib;
     inetutils
     tokei
     jsonnet
+    ngrok
 
     gdb
     lldb
