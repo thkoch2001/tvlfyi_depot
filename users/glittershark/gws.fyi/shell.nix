@@ -1,4 +1,4 @@
-with import <nixpkgs> {};
+with import <nixpkgs> { config.allowUnfree = true; };
 mkShell {
   buildInputs = [
     awscli
