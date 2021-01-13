@@ -47,6 +47,7 @@ in mkMerge [
   {
     home.packages = [
       crawl
+      xonotic
     ];
   }
   (mkIf stdenv.isLinux {
