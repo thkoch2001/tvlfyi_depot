@@ -611,7 +611,9 @@
         lsp-ui-doc-header nil
         lsp-ui-doc-position 'top
         lsp-ui-doc-alignment 'window
-        lsp-ui-doc-frame-hook '+grfn/lsp-ui-doc-frame-hook)
+        lsp-ui-doc-frame-hook '+grfn/lsp-ui-doc-frame-hook
+        lsp-ui-doc-max-width 150
+        lsp-ui-doc-max-height 13)
   (setq imenu-auto-rescan t)
   (set-face-background 'lsp-ui-doc-background +solarized-s-base2)
   (set-face-background 'lsp-face-highlight-read +solarized-s-base2)
