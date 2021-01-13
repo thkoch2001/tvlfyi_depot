@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: async test
+# uuid:
+# key: atest
+# condition: t
+# --
+#[tokio::test(threaded_scheduler)]
+async fn ${1:test_name}() {
+   `%`$0
+}
