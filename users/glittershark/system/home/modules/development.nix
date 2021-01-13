@@ -83,6 +83,7 @@ with lib;
     extraConfig = {
       github.user = "glittershark";
       merge.conflictstyle = "diff3";
+      rerere.enabled = "true";
     };
 
     delta = {
