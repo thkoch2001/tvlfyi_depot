@@ -442,6 +442,11 @@ in lib.fix(self: {
       openssh.authorizedKeys.keys = depot.users.firefly.keys.whitby;
     };
 
+    users.sterni = {
+      isNormalUser = true;
+      openssh.authorizedKeys.keys = depot.users.sterni.keys.all;
+    };
+
     # Set up a user & group for git shenanigans
     groups.git = {};
     users.git = {
