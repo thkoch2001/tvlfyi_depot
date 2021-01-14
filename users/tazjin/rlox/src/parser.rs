@@ -7,6 +7,7 @@
 // have real types.
 use crate::errors::{Error, ErrorKind};
 use crate::scanner::{Token, TokenKind};
+use std::rc::Rc;
 
 // AST
 
@@ -108,7 +109,7 @@ pub enum Statement<'a> {
     Block(Block<'a>),
     If(If<'a>),
     While(While<'a>),
-    Function(Function<'a>),
+    Function(Rc<Function<'a>>),
 }
 
 // Parser
@@ -221,11 +222,11 @@ impl<'a> Parser<'a> {
             ErrorKind::ExpectedToken("Expect '{' before function body."),
         )?;
 
-        Ok(Statement::Function(Function {
+        Ok(Statement::Function(Rc::new(Function {
             name,
             params,
             body: self.block_statement()?,
-        }))
+        })))
     }
 
     fn var_declaration(&mut self) -> StmtResult<'a> {
