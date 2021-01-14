@@ -24,6 +24,7 @@ depot.nix.buildLisp.program {
     ./src/packages.lisp
     ./src/util.lisp
     ./src/css.lisp
+    ./src/inline-markdown.lisp
     ./src/authentication.lisp
     ./src/model.lisp
     ./src/irc.lisp
@@ -38,6 +39,7 @@ depot.nix.buildLisp.program {
     srcs = [
       ./test/package.lisp
       ./test/model_test.lisp
+      ./test/inline-markdown_test.lisp
     ];
 
     expression = "(fiveam:run!)";
