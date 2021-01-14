@@ -25,14 +25,14 @@ fn main() {
 // Run Lox code from a file and print results to stdout
 fn run_file(file: &str) {
     let contents = fs::read_to_string(file).expect("failed to read the input file");
-    let mut lox = interpreter::Interpreter::default();
+    let mut lox = interpreter::Interpreter::create();
     run(&mut lox, &contents);
 }
 
 // Evaluate Lox code interactively in a shitty REPL.
 fn run_prompt() {
     let mut line = String::new();
-    let mut lox = interpreter::Interpreter::default();
+    let mut lox = interpreter::Interpreter::create();
 
     loop {
         print!("> ");
