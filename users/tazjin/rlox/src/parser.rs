@@ -159,7 +159,7 @@ impl<'a> Parser<'a> {
     // recursive-descent parser functions
 
     fn declaration(&mut self) -> StmtResult<'a> {
-        if self.match_token(&[TokenKind::Var]) {
+        if self.match_token(&TokenKind::Var) {
             return self.var_declaration();
         }
 
@@ -175,7 +175,7 @@ impl<'a> Parser<'a> {
                 initialiser: None,
             };
 
-            if self.match_token(&[TokenKind::Equal]) {
+            if self.match_token(&TokenKind::Equal) {
                 var.initialiser = Some(self.expression()?);
             }
 
@@ -190,15 +190,15 @@ impl<'a> Parser<'a> {
     }
 
     fn statement(&mut self) -> StmtResult<'a> {
-        if self.match_token(&[TokenKind::Print]) {
+        if self.match_token(&TokenKind::Print) {
             self.print_statement()
-        } else if self.match_token(&[TokenKind::LeftBrace]) {
+        } else if self.match_token(&TokenKind::LeftBrace) {
             self.block_statement()
-        } else if self.match_token(&[TokenKind::If]) {
+        } else if self.match_token(&TokenKind::If) {
             self.if_statement()
-        } else if self.match_token(&[TokenKind::While]) {
+        } else if self.match_token(&TokenKind::While) {
             self.while_statement()
-        } else if self.match_token(&[TokenKind::For]) {
+        } else if self.match_token(&TokenKind::For) {
             self.for_statement()
         } else {
             self.expr_statement()
@@ -242,7 +242,7 @@ impl<'a> Parser<'a> {
             else_branch: Option::None,
         };
 
-        if self.match_token(&[TokenKind::Else]) {
+        if self.match_token(&TokenKind::Else) {
             stmt.else_branch = Some(Box::new(self.statement()?));
         }
 
@@ -275,9 +275,9 @@ impl<'a> Parser<'a> {
             ErrorKind::ExpectedToken("Expected '(' after 'for'"),
         )?;
 
-        let initialiser = if self.match_token(&[TokenKind::Semicolon]) {
+        let initialiser = if self.match_token(&TokenKind::Semicolon) {
             None
-        } else if self.match_token(&[TokenKind::Var]) {
+        } else if self.match_token(&TokenKind::Var) {
             Some(self.var_declaration()?)
         } else {
             Some(self.expr_statement()?)
@@ -336,7 +336,7 @@ impl<'a> Parser<'a> {
     fn assignment(&mut self) -> ExprResult<'a> {
         let expr = self.logic_or()?;
 
-        if self.match_token(&[TokenKind::Equal]) {
+        if self.match_token(&TokenKind::Equal) {
             let equals = self.previous().clone();
             let value = self.assignment()?;
 
@@ -359,7 +359,7 @@ impl<'a> Parser<'a> {
     fn logic_or(&mut self) -> ExprResult<'a> {
         let mut expr = self.logic_and()?;
 
-        while self.match_token(&[TokenKind::Or]) {
+        while self.match_token(&TokenKind::Or) {
             expr = Expr::Logical(Logical {
                 left: Box::new(expr),
                 operator: self.previous().clone(),
@@ -373,7 +373,7 @@ impl<'a> Parser<'a> {
     fn logic_and(&mut self) -> ExprResult<'a> {
         let mut expr = self.equality()?;
 
-        while self.match_token(&[TokenKind::And]) {
+        while self.match_token(&TokenKind::And) {
             expr = Expr::Logical(Logical {
                 left: Box::new(expr),
                 operator: self.previous().clone(),
@@ -412,7 +412,7 @@ impl<'a> Parser<'a> {
     }
 
     fn unary(&mut self) -> ExprResult<'a> {
-        if self.match_token(&[TokenKind::Bang, TokenKind::Minus]) {
+        if self.match_token(&TokenKind::Bang) || self.match_token(&TokenKind::Minus) {
             return Ok(Expr::Unary(Unary {
                 operator: self.previous().clone(),
                 right: Box::new(self.unary()?),
@@ -426,7 +426,7 @@ impl<'a> Parser<'a> {
         let mut expr = self.primary()?;
 
         loop {
-            if self.match_token(&[TokenKind::LeftParen]) {
+            if self.match_token(&TokenKind::LeftParen) {
                 expr = self.finish_call(expr)?;
             } else {
                 break;
@@ -443,7 +443,7 @@ impl<'a> Parser<'a> {
             loop {
                 // TODO(tazjin): Check for max args count
                 args.push(self.expression()?);
-                if !self.match_token(&[TokenKind::Comma]) {
+                if !self.match_token(&TokenKind::Comma) {
                     break;
                 }
             }
@@ -493,15 +493,13 @@ impl<'a> Parser<'a> {
     // internal helpers
 
     /// Check if the next token is in `oneof`, and advance if it is.
-    fn match_token(&mut self, oneof: &[TokenKind]) -> bool {
-        for token in oneof {
-            if self.check_token(token) {
-                self.advance();
-                return true;
-            }
+    fn match_token(&mut self, token: &TokenKind) -> bool {
+        if self.check_token(token) {
+            self.advance();
+            return true;
         }
 
-        return false;
+        false
     }
 
     /// Return the next token and advance parser state.
@@ -573,7 +571,7 @@ impl<'a> Parser<'a> {
     ) -> ExprResult<'a> {
         let mut expr = each(self)?;
 
-        while self.match_token(oneof) {
+        while oneof.iter().any(|t| self.match_token(t)) {
             expr = Expr::Binary(Binary {
                 left: Box::new(expr),
                 operator: self.previous().clone(),
