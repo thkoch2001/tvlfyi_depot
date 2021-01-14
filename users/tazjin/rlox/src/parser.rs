@@ -80,6 +80,11 @@ pub struct Var {
 }
 
 #[derive(Debug)]
+pub struct Return {
+    pub value: Expr,
+}
+
+#[derive(Debug)]
 pub struct If {
     pub condition: Expr,
     pub then_branch: Box<Statement>,
@@ -110,6 +115,7 @@ pub enum Statement {
     If(If),
     While(While),
     Function(Rc<Function>),
+    Return(Return),
 }
 
 // Parser
@@ -130,12 +136,15 @@ statement      → exprStmt
                | forStmt
                | ifStmt
                | printStmt
+               | returnStmt
                | whileStmt
                | block ;
 
 forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
                  expression? ";"
                  expression? ")" statement ;
+
+returnStmt     → "return" expression? ";" ;
 
 whileStmt      → "while" "(" expression ")" statement ;
 
@@ -256,6 +265,8 @@ impl Parser {
             self.while_statement()
         } else if self.match_token(&TokenKind::For) {
             self.for_statement()
+        } else if self.match_token(&TokenKind::Return) {
+            self.return_statement()
         } else {
             self.expr_statement()
         }
@@ -377,6 +388,12 @@ impl Parser {
         }
 
         Ok(body)
+    }
+
+    fn return_statement(&mut self) -> StmtResult {
+        let value = self.expression()?;
+        self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
+        Ok(Statement::Return(Return { value }))
     }
 
     fn expr_statement(&mut self) -> StmtResult {

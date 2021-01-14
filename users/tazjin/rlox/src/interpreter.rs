@@ -40,7 +40,18 @@ impl Callable {
                     fn_env.define(param, value)?;
                 }
 
-                lox.interpret_block(Rc::new(RwLock::new(fn_env)), &func.body)
+                let result = lox.interpret_block(Rc::new(RwLock::new(fn_env)), &func.body);
+
+                match result {
+                    // extract returned values if applicable
+                    Err(Error {
+                        kind: ErrorKind::FunctionReturn(value),
+                        ..
+                    }) => Ok(value),
+
+                    // otherwise just return the result itself
+                    _ => result,
+                }
             }
         }
     }
@@ -221,6 +232,12 @@ impl Interpreter {
             Statement::If(if_stmt) => return self.interpret_if(if_stmt),
             Statement::While(while_stmt) => return self.interpret_while(while_stmt),
             Statement::Function(func) => return self.interpret_function(func.clone()),
+            Statement::Return(ret) => {
+                return Err(Error {
+                    line: 0,
+                    kind: ErrorKind::FunctionReturn(self.eval(&ret.value)?),
+                })
+            }
         };
 
         Ok(value)
