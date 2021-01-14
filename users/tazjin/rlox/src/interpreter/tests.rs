@@ -70,3 +70,18 @@ fn test_binary_operators() {
         parse_eval(&code("\"foo\" + \"bar\";"))
     );
 }
+
+#[test]
+fn test_functions() {
+    let code = code(
+        r#"
+fun add(a, b, c) {
+  a + b + c;
+}
+
+add(1, 2, 3);
+"#,
+    );
+
+    assert_eq!(Value::Literal(Literal::Number(6.0)), parse_eval(&code));
+}

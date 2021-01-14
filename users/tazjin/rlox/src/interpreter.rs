@@ -41,7 +41,7 @@ impl<'a> Callable<'a> {
                 }
 
                 lox.interpret_block(Rc::new(RwLock::new(fn_env)), &func.body)
-            },
+            }
         }
     }
 }
@@ -220,7 +220,7 @@ impl<'a> Interpreter<'a> {
             Statement::Block(block) => return self.interpret_block(Default::default(), block),
             Statement::If(if_stmt) => return self.interpret_if(if_stmt),
             Statement::While(while_stmt) => return self.interpret_while(while_stmt),
-            Statement::Function(_) => unimplemented!(),
+            Statement::Function(func) => return self.interpret_function(func.clone()),
         };
 
         Ok(value)
@@ -275,6 +275,13 @@ impl<'a> Interpreter<'a> {
             value = self.interpret_stmt(&stmt.body)?;
         }
 
+        Ok(value)
+    }
+
+    fn interpret_function(&mut self, stmt: Rc<parser::Function<'a>>) -> Result<Value<'a>, Error> {
+        let name = stmt.name.clone();
+        let value = Value::Callable(Callable::Function(stmt));
+        self.define_var(&name, value.clone())?;
         Ok(value)
     }
 
