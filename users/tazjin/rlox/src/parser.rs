@@ -12,27 +12,27 @@ use std::rc::Rc;
 // AST
 
 #[derive(Debug)]
-pub struct Assign<'a> {
-    pub name: Token<'a>,
-    pub value: Box<Expr<'a>>,
+pub struct Assign {
+    pub name: Token,
+    pub value: Box<Expr>,
 }
 
 #[derive(Debug)]
-pub struct Binary<'a> {
-    pub left: Box<Expr<'a>>,
-    pub operator: Token<'a>,
-    pub right: Box<Expr<'a>>,
+pub struct Binary {
+    pub left: Box<Expr>,
+    pub operator: Token,
+    pub right: Box<Expr>,
 }
 
 #[derive(Debug)]
-pub struct Logical<'a> {
-    pub left: Box<Expr<'a>>,
-    pub operator: Token<'a>,
-    pub right: Box<Expr<'a>>,
+pub struct Logical {
+    pub left: Box<Expr>,
+    pub operator: Token,
+    pub right: Box<Expr>,
 }
 
 #[derive(Debug)]
-pub struct Grouping<'a>(pub Box<Expr<'a>>);
+pub struct Grouping(pub Box<Expr>);
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Literal {
@@ -43,73 +43,73 @@ pub enum Literal {
 }
 
 #[derive(Debug)]
-pub struct Unary<'a> {
-    pub operator: Token<'a>,
-    pub right: Box<Expr<'a>>,
+pub struct Unary {
+    pub operator: Token,
+    pub right: Box<Expr>,
 }
 
 #[derive(Debug)]
-pub struct Call<'a> {
-    pub callee: Box<Expr<'a>>,
-    pub paren: Token<'a>,
-    pub args: Vec<Expr<'a>>,
+pub struct Call {
+    pub callee: Box<Expr>,
+    pub paren: Token,
+    pub args: Vec<Expr>,
 }
 
 // Not to be confused with `Var`, which is for assignment.
 #[derive(Debug)]
-pub struct Variable<'a>(pub Token<'a>);
+pub struct Variable(pub Token);
 
 #[derive(Debug)]
-pub enum Expr<'a> {
-    Assign(Assign<'a>),
-    Binary(Binary<'a>),
-    Grouping(Grouping<'a>),
+pub enum Expr {
+    Assign(Assign),
+    Binary(Binary),
+    Grouping(Grouping),
     Literal(Literal),
-    Unary(Unary<'a>),
-    Call(Call<'a>),
-    Variable(Variable<'a>),
-    Logical(Logical<'a>),
+    Unary(Unary),
+    Call(Call),
+    Variable(Variable),
+    Logical(Logical),
 }
 
 // Variable assignment. Not to be confused with `Variable`, which is
 // for access.
 #[derive(Debug)]
-pub struct Var<'a> {
-    pub name: Token<'a>,
-    pub initialiser: Option<Expr<'a>>,
+pub struct Var {
+    pub name: Token,
+    pub initialiser: Option<Expr>,
 }
 
 #[derive(Debug)]
-pub struct If<'a> {
-    pub condition: Expr<'a>,
-    pub then_branch: Box<Statement<'a>>,
-    pub else_branch: Option<Box<Statement<'a>>>,
+pub struct If {
+    pub condition: Expr,
+    pub then_branch: Box<Statement>,
+    pub else_branch: Option<Box<Statement>>,
 }
 
 #[derive(Debug)]
-pub struct While<'a> {
-    pub condition: Expr<'a>,
-    pub body: Box<Statement<'a>>,
+pub struct While {
+    pub condition: Expr,
+    pub body: Box<Statement>,
 }
 
-pub type Block<'a> = Vec<Statement<'a>>;
+pub type Block = Vec<Statement>;
 
 #[derive(Debug)]
-pub struct Function<'a> {
-    pub name: Token<'a>,
-    pub params: Vec<Token<'a>>,
-    pub body: Block<'a>,
+pub struct Function {
+    pub name: Token,
+    pub params: Vec<Token>,
+    pub body: Block,
 }
 
 #[derive(Debug)]
-pub enum Statement<'a> {
-    Expr(Expr<'a>),
-    Print(Expr<'a>),
-    Var(Var<'a>),
-    Block(Block<'a>),
-    If(If<'a>),
-    While(While<'a>),
-    Function(Rc<Function<'a>>),
+pub enum Statement {
+    Expr(Expr),
+    Print(Expr),
+    Var(Var),
+    Block(Block),
+    If(If),
+    While(While),
+    Function(Rc<Function>),
 }
 
 // Parser
@@ -162,18 +162,18 @@ primary        → NUMBER | STRING | "true" | "false" | "nil"
                | "(" expression ")" ;
 */
 
-struct Parser<'a> {
-    tokens: Vec<Token<'a>>,
+struct Parser {
+    tokens: Vec<Token>,
     current: usize,
 }
 
-type ExprResult<'a> = Result<Expr<'a>, Error>;
-type StmtResult<'a> = Result<Statement<'a>, Error>;
+type ExprResult = Result<Expr, Error>;
+type StmtResult = Result<Statement, Error>;
 
-impl<'a> Parser<'a> {
+impl Parser {
     // recursive-descent parser functions
 
-    fn declaration(&mut self) -> StmtResult<'a> {
+    fn declaration(&mut self) -> StmtResult {
         if self.match_token(&TokenKind::Fun) {
             return self.function();
         }
@@ -185,7 +185,7 @@ impl<'a> Parser<'a> {
         self.statement()
     }
 
-    fn function(&mut self) -> StmtResult<'a> {
+    fn function(&mut self) -> StmtResult {
         let name = self.identifier("Expected function name.")?;
 
         self.consume(
@@ -229,7 +229,7 @@ impl<'a> Parser<'a> {
         })))
     }
 
-    fn var_declaration(&mut self) -> StmtResult<'a> {
+    fn var_declaration(&mut self) -> StmtResult {
         // Since `TokenKind::Identifier` carries data, we can't use
         // `consume`.
         let mut var = Var {
@@ -245,7 +245,7 @@ impl<'a> Parser<'a> {
         Ok(Statement::Var(var))
     }
 
-    fn statement(&mut self) -> StmtResult<'a> {
+    fn statement(&mut self) -> StmtResult {
         if self.match_token(&TokenKind::Print) {
             self.print_statement()
         } else if self.match_token(&TokenKind::LeftBrace) {
@@ -261,14 +261,14 @@ impl<'a> Parser<'a> {
         }
     }
 
-    fn print_statement(&mut self) -> StmtResult<'a> {
+    fn print_statement(&mut self) -> StmtResult {
         let expr = self.expression()?;
         self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
         Ok(Statement::Print(expr))
     }
 
-    fn block_statement(&mut self) -> Result<Block<'a>, Error> {
-        let mut block: Block<'a> = vec![];
+    fn block_statement(&mut self) -> Result<Block, Error> {
+        let mut block: Block = vec![];
 
         while !self.check_token(&TokenKind::RightBrace) && !self.is_at_end() {
             block.push(self.declaration()?);
@@ -279,7 +279,7 @@ impl<'a> Parser<'a> {
         Ok(block)
     }
 
-    fn if_statement(&mut self) -> StmtResult<'a> {
+    fn if_statement(&mut self) -> StmtResult {
         self.consume(
             &TokenKind::LeftParen,
             ErrorKind::ExpectedToken("Expected '(' after 'if'"),
@@ -305,7 +305,7 @@ impl<'a> Parser<'a> {
         Ok(Statement::If(stmt))
     }
 
-    fn while_statement(&mut self) -> StmtResult<'a> {
+    fn while_statement(&mut self) -> StmtResult {
         self.consume(
             &TokenKind::LeftParen,
             ErrorKind::ExpectedToken("Expected '(' after 'while'"),
@@ -324,7 +324,7 @@ impl<'a> Parser<'a> {
         }))
     }
 
-    fn for_statement(&mut self) -> StmtResult<'a> {
+    fn for_statement(&mut self) -> StmtResult {
         // Parsing of clauses ...
         self.consume(
             &TokenKind::LeftParen,
@@ -379,17 +379,17 @@ impl<'a> Parser<'a> {
         Ok(body)
     }
 
-    fn expr_statement(&mut self) -> StmtResult<'a> {
+    fn expr_statement(&mut self) -> StmtResult {
         let expr = self.expression()?;
         self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
         Ok(Statement::Expr(expr))
     }
 
-    fn expression(&mut self) -> ExprResult<'a> {
+    fn expression(&mut self) -> ExprResult {
         self.assignment()
     }
 
-    fn assignment(&mut self) -> ExprResult<'a> {
+    fn assignment(&mut self) -> ExprResult {
         let expr = self.logic_or()?;
 
         if self.match_token(&TokenKind::Equal) {
@@ -412,7 +412,7 @@ impl<'a> Parser<'a> {
         Ok(expr)
     }
 
-    fn logic_or(&mut self) -> ExprResult<'a> {
+    fn logic_or(&mut self) -> ExprResult {
         let mut expr = self.logic_and()?;
 
         while self.match_token(&TokenKind::Or) {
@@ -426,7 +426,7 @@ impl<'a> Parser<'a> {
         Ok(expr)
     }
 
-    fn logic_and(&mut self) -> ExprResult<'a> {
+    fn logic_and(&mut self) -> ExprResult {
         let mut expr = self.equality()?;
 
         while self.match_token(&TokenKind::And) {
@@ -440,14 +440,14 @@ impl<'a> Parser<'a> {
         Ok(expr)
     }
 
-    fn equality(&mut self) -> ExprResult<'a> {
+    fn equality(&mut self) -> ExprResult {
         self.binary_operator(
             &[TokenKind::BangEqual, TokenKind::EqualEqual],
             Self::comparison,
         )
     }
 
-    fn comparison(&mut self) -> ExprResult<'a> {
+    fn comparison(&mut self) -> ExprResult {
         self.binary_operator(
             &[
                 TokenKind::Greater,
@@ -459,15 +459,15 @@ impl<'a> Parser<'a> {
         )
     }
 
-    fn term(&mut self) -> ExprResult<'a> {
+    fn term(&mut self) -> ExprResult {
         self.binary_operator(&[TokenKind::Minus, TokenKind::Plus], Self::factor)
     }
 
-    fn factor(&mut self) -> ExprResult<'a> {
+    fn factor(&mut self) -> ExprResult {
         self.binary_operator(&[TokenKind::Slash, TokenKind::Star], Self::unary)
     }
 
-    fn unary(&mut self) -> ExprResult<'a> {
+    fn unary(&mut self) -> ExprResult {
         if self.match_token(&TokenKind::Bang) || self.match_token(&TokenKind::Minus) {
             return Ok(Expr::Unary(Unary {
                 operator: self.previous().clone(),
@@ -478,7 +478,7 @@ impl<'a> Parser<'a> {
         return self.call();
     }
 
-    fn call(&mut self) -> ExprResult<'a> {
+    fn call(&mut self) -> ExprResult {
         let mut expr = self.primary()?;
 
         loop {
@@ -492,7 +492,7 @@ impl<'a> Parser<'a> {
         Ok(expr)
     }
 
-    fn finish_call(&mut self, callee: Expr<'a>) -> ExprResult<'a> {
+    fn finish_call(&mut self, callee: Expr) -> ExprResult {
         let mut args = vec![];
 
         if !self.check_token(&TokenKind::RightParen) {
@@ -517,7 +517,7 @@ impl<'a> Parser<'a> {
         }))
     }
 
-    fn primary(&mut self) -> ExprResult<'a> {
+    fn primary(&mut self) -> ExprResult {
         let next = self.advance();
         let literal = match next.kind {
             TokenKind::True => Literal::Boolean(true),
@@ -538,7 +538,7 @@ impl<'a> Parser<'a> {
                 eprintln!("encountered {:?}", unexpected);
                 return Err(Error {
                     line: next.line,
-                    kind: ErrorKind::ExpectedExpression(next.lexeme.into_iter().collect()),
+                    kind: ErrorKind::ExpectedExpression(next.lexeme),
                 });
             }
         };
@@ -548,7 +548,7 @@ impl<'a> Parser<'a> {
 
     // internal helpers
 
-    fn identifier(&mut self, err: &'static str) -> Result<Token<'a>, Error> {
+    fn identifier(&mut self, err: &'static str) -> Result<Token, Error> {
         if let TokenKind::Identifier(_) = self.peek().kind {
             Ok(self.advance())
         } else {
@@ -570,7 +570,7 @@ impl<'a> Parser<'a> {
     }
 
     /// Return the next token and advance parser state.
-    fn advance(&mut self) -> Token<'a> {
+    fn advance(&mut self) -> Token {
         if !self.is_at_end() {
             self.current += 1;
         }
@@ -587,15 +587,15 @@ impl<'a> Parser<'a> {
         self.peek().kind == *token
     }
 
-    fn peek(&self) -> &Token<'a> {
+    fn peek(&self) -> &Token {
         &self.tokens[self.current]
     }
 
-    fn previous(&self) -> &Token<'a> {
+    fn previous(&self) -> &Token {
         &self.tokens[self.current - 1]
     }
 
-    fn consume(&mut self, kind: &TokenKind, err: ErrorKind) -> Result<Token<'a>, Error> {
+    fn consume(&mut self, kind: &TokenKind, err: ErrorKind) -> Result<Token, Error> {
         if self.check_token(kind) {
             return Ok(self.advance());
         }
@@ -634,8 +634,8 @@ impl<'a> Parser<'a> {
     fn binary_operator(
         &mut self,
         oneof: &[TokenKind],
-        each: fn(&mut Parser<'a>) -> ExprResult<'a>,
-    ) -> ExprResult<'a> {
+        each: fn(&mut Parser) -> ExprResult,
+    ) -> ExprResult {
         let mut expr = each(self)?;
 
         while oneof.iter().any(|t| self.match_token(t)) {
@@ -650,9 +650,9 @@ impl<'a> Parser<'a> {
     }
 }
 
-pub fn parse<'a>(tokens: Vec<Token<'a>>) -> Result<Block<'a>, Vec<Error>> {
+pub fn parse(tokens: Vec<Token>) -> Result<Block, Vec<Error>> {
     let mut parser = Parser { tokens, current: 0 };
-    let mut program: Block<'a> = vec![];
+    let mut program: Block = vec![];
     let mut errors: Vec<Error> = vec![];
 
     while !parser.is_at_end() {

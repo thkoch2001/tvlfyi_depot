@@ -53,15 +53,15 @@ pub enum TokenKind {
 }
 
 #[derive(Clone, Debug)]
-pub struct Token<'a> {
+pub struct Token {
     pub kind: TokenKind,
-    pub lexeme: &'a [char],
+    pub lexeme: String,
     pub line: usize,
 }
 
 struct Scanner<'a> {
     source: &'a [char],
-    tokens: Vec<Token<'a>>,
+    tokens: Vec<Token>,
     errors: Vec<Error>,
     start: usize,   // offset of first character in current lexeme
     current: usize, // current offset into source
@@ -82,7 +82,7 @@ impl<'a> Scanner<'a> {
         let lexeme = &self.source[self.start..self.current];
         self.tokens.push(Token {
             kind,
-            lexeme,
+            lexeme: lexeme.into_iter().collect(),
             line: self.line,
         })
     }
@@ -263,7 +263,7 @@ impl<'a> Scanner<'a> {
     }
 }
 
-pub fn scan<'a>(input: &'a [char]) -> Result<Vec<Token<'a>>, Vec<Error>> {
+pub fn scan<'a>(input: &'a [char]) -> Result<Vec<Token>, Vec<Error>> {
     let mut scanner = Scanner {
         source: &input,
         tokens: vec![],
