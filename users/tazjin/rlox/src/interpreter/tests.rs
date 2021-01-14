@@ -76,3 +76,25 @@ add(1, 2, 3);
 
     assert_eq!(Value::Literal(Literal::Number(6.0)), result);
 }
+
+#[test]
+fn test_closure() {
+    let result = parse_eval(
+        r#"
+fun makeCounter() {
+  var i = 0;
+  fun count() {
+    i = i + 1;
+  }
+
+  return count;
+}
+
+var counter = makeCounter();
+counter(); // "1".
+counter(); // "2".
+"#,
+    );
+
+    assert_eq!(Value::Literal(Literal::Number(2.0)), result);
+}
