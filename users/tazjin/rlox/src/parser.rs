@@ -169,24 +169,17 @@ impl<'a> Parser<'a> {
     fn var_declaration(&mut self) -> StmtResult<'a> {
         // Since `TokenKind::Identifier` carries data, we can't use
         // `consume`.
-        if let TokenKind::Identifier(_) = self.peek().kind {
-            let mut var = Var {
-                name: self.advance(),
-                initialiser: None,
-            };
+        let mut var = Var {
+            name: self.identifier("Expected variable name.")?,
+            initialiser: None,
+        };
 
-            if self.match_token(&TokenKind::Equal) {
-                var.initialiser = Some(self.expression()?);
-            }
-
-            self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
-            return Ok(Statement::Var(var));
+        if self.match_token(&TokenKind::Equal) {
+            var.initialiser = Some(self.expression()?);
         }
 
-        return Err(Error {
-            line: self.peek().line,
-            kind: ErrorKind::ExpectedVariableName,
-        });
+        self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedSemicolon)?;
+        Ok(Statement::Var(var))
     }
 
     fn statement(&mut self) -> StmtResult<'a> {
@@ -491,6 +484,17 @@ impl<'a> Parser<'a> {
     }
 
     // internal helpers
+
+    fn identifier(&mut self, err: &'static str) -> Result<Token<'a>, Error> {
+        if let TokenKind::Identifier(_) = self.peek().kind {
+            Ok(self.advance())
+        } else {
+            Err(Error {
+                line: self.peek().line,
+                kind: ErrorKind::ExpectedToken(err),
+            })
+        }
+    }
 
     /// Check if the next token is in `oneof`, and advance if it is.
     fn match_token(&mut self, token: &TokenKind) -> bool {
