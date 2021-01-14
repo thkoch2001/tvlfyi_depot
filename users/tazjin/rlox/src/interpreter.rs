@@ -172,43 +172,45 @@ impl Interpreter {
     }
 
     // Interpreter itself
-    pub fn interpret<'a>(&mut self, program: &Block<'a>) -> Result<(), Error> {
+    pub fn interpret<'a>(&mut self, program: &Block<'a>) -> Result<Value, Error> {
+        let mut value = Value::Literal(Literal::Nil);
+
         for stmt in program {
-            self.interpret_stmt(stmt)?;
+            value = self.interpret_stmt(stmt)?;
         }
 
-        Ok(())
+        Ok(value)
     }
 
-    fn interpret_stmt<'a>(&mut self, stmt: &Statement<'a>) -> Result<(), Error> {
-        match stmt {
-            Statement::Expr(expr) => {
-                self.eval(expr)?;
-            }
+    fn interpret_stmt<'a>(&mut self, stmt: &Statement<'a>) -> Result<Value, Error> {
+        let value = match stmt {
+            Statement::Expr(expr) => self.eval(expr)?,
             Statement::Print(expr) => {
                 let result = self.eval(expr)?;
-                println!("{:?}", result)
+                let output = format!("{:?}", result);
+                println!("{}", output);
+                Value::Literal(Literal::String(output))
             }
             Statement::Var(var) => return self.interpret_var(var),
             Statement::Block(block) => return self.interpret_block(block),
             Statement::If(if_stmt) => return self.interpret_if(if_stmt),
             Statement::While(while_stmt) => return self.interpret_while(while_stmt),
-        }
+        };
 
-        Ok(())
+        Ok(value)
     }
 
-    fn interpret_var<'a>(&mut self, var: &parser::Var<'a>) -> Result<(), Error> {
+    fn interpret_var<'a>(&mut self, var: &parser::Var<'a>) -> Result<Value, Error> {
         let init = var.initialiser.as_ref().ok_or_else(|| Error {
             line: var.name.line,
             kind: ErrorKind::InternalError("missing variable initialiser".into()),
         })?;
         let value = self.eval(init)?;
-        self.define_var(&var.name, value)?;
-        return Ok(());
+        self.define_var(&var.name, value.clone())?;
+        Ok(value)
     }
 
-    fn interpret_block<'a>(&mut self, block: &parser::Block<'a>) -> Result<(), Error> {
+    fn interpret_block<'a>(&mut self, block: &parser::Block<'a>) -> Result<Value, Error> {
         // Initialise a new environment and point it at the parent
         // (this is a bit tedious because we need to wrap it in and
         // out of the Rc).
@@ -225,7 +227,7 @@ impl Interpreter {
         return result;
     }
 
-    fn interpret_if<'a>(&mut self, if_stmt: &parser::If<'a>) -> Result<(), Error> {
+    fn interpret_if<'a>(&mut self, if_stmt: &parser::If<'a>) -> Result<Value, Error> {
         let condition = self.eval(&if_stmt.condition)?;
 
         if eval_truthy(&condition) {
@@ -233,16 +235,17 @@ impl Interpreter {
         } else if let Some(else_branch) = &if_stmt.else_branch {
             self.interpret_stmt(else_branch)
         } else {
-            Ok(())
+            Ok(Value::Literal(Literal::Nil))
         }
     }
 
-    fn interpret_while<'a>(&mut self, stmt: &parser::While<'a>) -> Result<(), Error> {
+    fn interpret_while<'a>(&mut self, stmt: &parser::While<'a>) -> Result<Value, Error> {
+        let mut value = Value::Literal(Literal::Nil);
         while eval_truthy(&self.eval(&stmt.condition)?) {
-            self.interpret_stmt(&stmt.body)?;
+            value = self.interpret_stmt(&stmt.body)?;
         }
 
-        Ok(())
+        Ok(value)
     }
 
     fn eval<'a>(&mut self, expr: &Expr<'a>) -> Result<Value, Error> {
