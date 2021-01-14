@@ -33,8 +33,9 @@ impl Callable {
 
 // Representation of an in-language value.
 #[derive(Clone, Debug)]
-enum Value {
+pub enum Value {
     Literal(Literal),
+    Callable(Callable),
 }
 
 impl From<Literal> for Value {
@@ -235,7 +236,7 @@ impl Interpreter {
             Expr::Binary(binary) => self.eval_binary(binary),
             Expr::Variable(var) => self.get_var(var),
             Expr::Logical(log) => self.eval_logical(log),
-            Expr::Call(_) => unimplemented!(),
+            Expr::Call(call) => self.eval_call(call),
         }
     }
 
@@ -320,6 +321,36 @@ impl Interpreter {
                 kind: ErrorKind::InternalError(format!("Invalid logical operator: {:?}", kind)),
             }),
         }
+    }
+
+    fn eval_call<'a>(&mut self, call: &parser::Call<'a>) -> Result<Value, Error> {
+        let callable = match self.eval(&call.callee)? {
+            Value::Callable(c) => c,
+            Value::Literal(v) => {
+                return Err(Error {
+                    line: call.paren.line,
+                    kind: ErrorKind::RuntimeError(format!("not callable: {:?}", v)),
+                })
+            }
+        };
+
+        let mut args = vec![];
+        for arg in &call.args {
+            args.push(self.eval(arg)?);
+        }
+
+        if callable.arity() != args.len() {
+            return Err(Error {
+                line: call.paren.line,
+                kind: ErrorKind::RuntimeError(format!(
+                    "Expected {} arguments, but got {}",
+                    callable.arity(),
+                    args.len(),
+                )),
+            });
+        }
+
+        callable.call(args)
     }
 }
 

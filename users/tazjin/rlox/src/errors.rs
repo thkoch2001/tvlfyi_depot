@@ -12,6 +12,7 @@ pub enum ErrorKind {
     UndefinedVariable(String),
     InternalError(String),
     InvalidAssignmentTarget(String),
+    RuntimeError(String),
 }
 
 #[derive(Debug)]
