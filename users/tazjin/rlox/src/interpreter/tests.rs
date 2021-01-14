@@ -1,8 +1,11 @@
 use super::*;
 
+fn code(code: &str) -> Vec<char> {
+    code.chars().collect()
+}
+
 /// Evaluate a code snippet, returning a value.
-fn parse_eval(code: &str) -> Value {
-    let chars: Vec<char> = code.chars().collect();
+fn parse_eval<'a>(chars: &'a [char]) -> Value<'a> {
     let tokens = scanner::scan(&chars).expect("could not scan code");
     let program = parser::parse(tokens).expect("could not parse code");
     Interpreter::create()
@@ -12,7 +15,7 @@ fn parse_eval(code: &str) -> Value {
 
 #[test]
 fn test_if() {
-    let result = parse_eval(
+    let code = code(
         r#"
 if (42 > 23)
   "pass";
@@ -21,12 +24,15 @@ else
 "#,
     );
 
-    assert_eq!(Value::Literal(Literal::String("pass".into())), result);
+    assert_eq!(
+        Value::Literal(Literal::String("pass".into())),
+        parse_eval(&code)
+    );
 }
 
 #[test]
 fn test_scope() {
-    let result = parse_eval(
+    let code = code(
         r#"
 var result = "";
 
@@ -48,16 +54,19 @@ var c = "global c";
 
     assert_eq!(
         Value::Literal(Literal::String("inner a, outer b, global c".into())),
-        result
+        parse_eval(&code),
     );
 }
 
 #[test]
 fn test_binary_operators() {
-    assert_eq!(Value::Literal(Literal::Number(42.0)), parse_eval("40 + 2;"));
+    assert_eq!(
+        Value::Literal(Literal::Number(42.0)),
+        parse_eval(&code("40 + 2;"))
+    );
 
     assert_eq!(
         Value::Literal(Literal::String("foobar".into())),
-        parse_eval("\"foo\" + \"bar\";")
+        parse_eval(&code("\"foo\" + \"bar\";"))
     );
 }

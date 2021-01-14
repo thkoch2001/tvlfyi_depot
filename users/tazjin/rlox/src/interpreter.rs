@@ -16,32 +16,35 @@ mod tests;
 // Representation of all callables, including builtins & user-defined
 // functions.
 #[derive(Clone, Debug)]
-pub enum Callable {
+pub enum Callable<'a> {
     Builtin(&'static dyn builtins::Builtin),
+    Function(Rc<parser::Function<'a>>),
 }
 
-impl Callable {
+impl<'a> Callable<'a> {
     fn arity(&self) -> usize {
         match self {
             Callable::Builtin(builtin) => builtin.arity(),
+            _ => unimplemented!(),
         }
     }
 
-    fn call(&self, args: Vec<Value>) -> Result<Value, Error> {
+    fn call(&self, args: Vec<Value>) -> Result<Value<'a>, Error> {
         match self {
             Callable::Builtin(builtin) => builtin.call(args),
+            _ => unimplemented!(),
         }
     }
 }
 
 // Representation of an in-language value.
 #[derive(Clone, Debug)]
-pub enum Value {
+pub enum Value<'a> {
     Literal(Literal),
-    Callable(Callable),
+    Callable(Callable<'a>),
 }
 
-impl PartialEq for Value {
+impl<'a> PartialEq for Value<'a> {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
             (Value::Literal(lhs), Value::Literal(rhs)) => lhs == rhs,
@@ -51,13 +54,13 @@ impl PartialEq for Value {
     }
 }
 
-impl From<Literal> for Value {
-    fn from(lit: Literal) -> Value {
+impl<'a> From<Literal> for Value<'a> {
+    fn from(lit: Literal) -> Value<'a> {
         Value::Literal(lit)
     }
 }
 
-impl Value {
+impl<'a> Value<'a> {
     fn expect_literal(self) -> Result<Literal, Error> {
         match self {
             Value::Literal(lit) => Ok(lit),
@@ -67,19 +70,19 @@ impl Value {
 }
 
 #[derive(Debug, Default)]
-struct Environment {
-    enclosing: Option<Rc<RwLock<Environment>>>,
-    values: HashMap<String, Value>,
+struct Environment<'a> {
+    enclosing: Option<Rc<RwLock<Environment<'a>>>>,
+    values: HashMap<String, Value<'a>>,
 }
 
-impl Environment {
-    fn define(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
+impl<'a> Environment<'a> {
+    fn define(&mut self, name: &scanner::Token, value: Value<'a>) -> Result<(), Error> {
         let ident = identifier_str(name)?;
         self.values.insert(ident.into(), value);
         Ok(())
     }
 
-    fn get(&self, name: &parser::Variable) -> Result<Value, Error> {
+    fn get(&self, name: &parser::Variable) -> Result<Value<'a>, Error> {
         let ident = identifier_str(&name.0)?;
 
         self.values
@@ -98,7 +101,7 @@ impl Environment {
             })
     }
 
-    fn assign(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
+    fn assign(&mut self, name: &scanner::Token, value: Value<'a>) -> Result<(), Error> {
         let ident = identifier_str(name)?;
 
         match self.values.get_mut(ident) {
@@ -132,11 +135,11 @@ fn identifier_str<'a>(name: &'a scanner::Token) -> Result<&'a str, Error> {
 }
 
 #[derive(Debug)]
-pub struct Interpreter {
-    env: Rc<RwLock<Environment>>,
+pub struct Interpreter<'a> {
+    env: Rc<RwLock<Environment<'a>>>,
 }
 
-impl Interpreter {
+impl<'a> Interpreter<'a> {
     /// Create a new interpreter and configure the initial global
     /// variable set.
     pub fn create() -> Self {
@@ -156,28 +159,28 @@ impl Interpreter {
     }
 
     // Environment modification helpers
-    fn define_var(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
+    fn define_var(&mut self, name: &scanner::Token, value: Value<'a>) -> Result<(), Error> {
         self.env
             .write()
             .expect("environment lock is poisoned")
             .define(name, value)
     }
 
-    fn assign_var(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
+    fn assign_var(&mut self, name: &scanner::Token, value: Value<'a>) -> Result<(), Error> {
         self.env
             .write()
             .expect("environment lock is poisoned")
             .assign(name, value)
     }
 
-    fn get_var(&mut self, var: &parser::Variable) -> Result<Value, Error> {
+    fn get_var(&mut self, var: &parser::Variable) -> Result<Value<'a>, Error> {
         self.env
             .read()
             .expect("environment lock is poisoned")
             .get(var)
     }
 
-    fn set_enclosing(&mut self, parent: Rc<RwLock<Environment>>) {
+    fn set_enclosing(&mut self, parent: Rc<RwLock<Environment<'a>>>) {
         self.env
             .write()
             .expect("environment lock is poisoned")
@@ -185,7 +188,7 @@ impl Interpreter {
     }
 
     // Interpreter itself
-    pub fn interpret<'a>(&mut self, program: &Block<'a>) -> Result<Value, Error> {
+    pub fn interpret(&mut self, program: &Block<'a>) -> Result<Value<'a>, Error> {
         let mut value = Value::Literal(Literal::Nil);
 
         for stmt in program {
@@ -195,7 +198,7 @@ impl Interpreter {
         Ok(value)
     }
 
-    fn interpret_stmt<'a>(&mut self, stmt: &Statement<'a>) -> Result<Value, Error> {
+    fn interpret_stmt(&mut self, stmt: &Statement<'a>) -> Result<Value<'a>, Error> {
         let value = match stmt {
             Statement::Expr(expr) => self.eval(expr)?,
             Statement::Print(expr) => {
@@ -214,7 +217,7 @@ impl Interpreter {
         Ok(value)
     }
 
-    fn interpret_var<'a>(&mut self, var: &parser::Var<'a>) -> Result<Value, Error> {
+    fn interpret_var(&mut self, var: &parser::Var<'a>) -> Result<Value<'a>, Error> {
         let init = var.initialiser.as_ref().ok_or_else(|| Error {
             line: var.name.line,
             kind: ErrorKind::InternalError("missing variable initialiser".into()),
@@ -224,7 +227,7 @@ impl Interpreter {
         Ok(value)
     }
 
-    fn interpret_block<'a>(&mut self, block: &parser::Block<'a>) -> Result<Value, Error> {
+    fn interpret_block(&mut self, block: &parser::Block<'a>) -> Result<Value<'a>, Error> {
         // Initialise a new environment and point it at the parent
         // (this is a bit tedious because we need to wrap it in and
         // out of the Rc).
@@ -241,7 +244,7 @@ impl Interpreter {
         return result;
     }
 
-    fn interpret_if<'a>(&mut self, if_stmt: &parser::If<'a>) -> Result<Value, Error> {
+    fn interpret_if(&mut self, if_stmt: &parser::If<'a>) -> Result<Value<'a>, Error> {
         let condition = self.eval(&if_stmt.condition)?;
 
         if eval_truthy(&condition) {
@@ -253,7 +256,7 @@ impl Interpreter {
         }
     }
 
-    fn interpret_while<'a>(&mut self, stmt: &parser::While<'a>) -> Result<Value, Error> {
+    fn interpret_while(&mut self, stmt: &parser::While<'a>) -> Result<Value<'a>, Error> {
         let mut value = Value::Literal(Literal::Nil);
         while eval_truthy(&self.eval(&stmt.condition)?) {
             value = self.interpret_stmt(&stmt.body)?;
@@ -262,7 +265,7 @@ impl Interpreter {
         Ok(value)
     }
 
-    fn eval<'a>(&mut self, expr: &Expr<'a>) -> Result<Value, Error> {
+    fn eval(&mut self, expr: &Expr<'a>) -> Result<Value<'a>, Error> {
         match expr {
             Expr::Assign(assign) => self.eval_assign(assign),
             Expr::Literal(lit) => Ok(lit.clone().into()),
@@ -275,7 +278,7 @@ impl Interpreter {
         }
     }
 
-    fn eval_unary<'a>(&mut self, expr: &parser::Unary<'a>) -> Result<Value, Error> {
+    fn eval_unary(&mut self, expr: &parser::Unary<'a>) -> Result<Value<'a>, Error> {
         let right = self.eval(&*expr.right)?;
 
         match (&expr.operator.kind, right) {
@@ -294,7 +297,7 @@ impl Interpreter {
         }
     }
 
-    fn eval_binary<'a>(&mut self, expr: &parser::Binary<'a>) -> Result<Value, Error> {
+    fn eval_binary(&mut self, expr: &parser::Binary<'a>) -> Result<Value<'a>, Error> {
         let left = self.eval(&*expr.left)?.expect_literal()?;
         let right = self.eval(&*expr.right)?.expect_literal()?;
 
@@ -338,13 +341,13 @@ impl Interpreter {
         Ok(result.into())
     }
 
-    fn eval_assign<'a>(&mut self, assign: &parser::Assign<'a>) -> Result<Value, Error> {
+    fn eval_assign(&mut self, assign: &parser::Assign<'a>) -> Result<Value<'a>, Error> {
         let value = self.eval(&assign.value)?;
         self.assign_var(&assign.name, value.clone())?;
         Ok(value)
     }
 
-    fn eval_logical<'a>(&mut self, logical: &parser::Logical<'a>) -> Result<Value, Error> {
+    fn eval_logical(&mut self, logical: &parser::Logical<'a>) -> Result<Value<'a>, Error> {
         let left = eval_truthy(&self.eval(&logical.left)?);
         let right = eval_truthy(&self.eval(&logical.right)?);
 
@@ -358,7 +361,7 @@ impl Interpreter {
         }
     }
 
-    fn eval_call<'a>(&mut self, call: &parser::Call<'a>) -> Result<Value, Error> {
+    fn eval_call(&mut self, call: &parser::Call<'a>) -> Result<Value<'a>, Error> {
         let callable = match self.eval(&call.callee)? {
             Value::Callable(c) => c,
             Value::Literal(v) => {
