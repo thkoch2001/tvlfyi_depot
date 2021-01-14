@@ -94,6 +94,13 @@ pub struct While<'a> {
 pub type Block<'a> = Vec<Statement<'a>>;
 
 #[derive(Debug)]
+pub struct Function<'a> {
+    pub name: Token<'a>,
+    pub params: Vec<Token<'a>>,
+    pub body: Block<'a>,
+}
+
+#[derive(Debug)]
 pub enum Statement<'a> {
     Expr(Expr<'a>),
     Print(Expr<'a>),
@@ -101,6 +108,7 @@ pub enum Statement<'a> {
     Block(Block<'a>),
     If(If<'a>),
     While(While<'a>),
+    Function(Function<'a>),
 }
 
 // Parser
@@ -108,8 +116,14 @@ pub enum Statement<'a> {
 /*
 program        → declaration* EOF ;
 
-declaration    → varDecl
+declaration    → funDecl
+               | varDecl
                | statement ;
+
+funDecl        → "fun" function ;
+function       → IDENTIFIER "(" parameters? ")" block ;
+parameters     → IDENTIFIER ( "," IDENTIFIER )* ;
+
 
 statement      → exprStmt
                | forStmt
@@ -159,11 +173,59 @@ impl<'a> Parser<'a> {
     // recursive-descent parser functions
 
     fn declaration(&mut self) -> StmtResult<'a> {
+        if self.match_token(&TokenKind::Fun) {
+            return self.function();
+        }
+
         if self.match_token(&TokenKind::Var) {
             return self.var_declaration();
         }
 
         self.statement()
+    }
+
+    fn function(&mut self) -> StmtResult<'a> {
+        let name = self.identifier("Expected function name.")?;
+
+        self.consume(
+            &TokenKind::LeftParen,
+            ErrorKind::ExpectedToken("Expect '(' after function name."),
+        )?;
+
+        let mut params = vec![];
+
+        if !self.check_token(&TokenKind::RightParen) {
+            loop {
+                if params.len() >= 255 {
+                    return Err(Error {
+                        line: self.peek().line,
+                        kind: ErrorKind::InternalError("255 parameter limit exceeded.".into()),
+                    });
+                }
+
+                params.push(self.identifier("Expected parameter name.")?);
+
+                if !self.match_token(&TokenKind::Comma) {
+                    break;
+                }
+            }
+        }
+
+        self.consume(
+            &TokenKind::RightParen,
+            ErrorKind::ExpectedToken("Expect ')' after parameters."),
+        )?;
+
+        self.consume(
+            &TokenKind::LeftBrace,
+            ErrorKind::ExpectedToken("Expect '{' before function body."),
+        )?;
+
+        Ok(Statement::Function(Function {
+            name,
+            params,
+            body: self.block_statement()?,
+        }))
     }
 
     fn var_declaration(&mut self) -> StmtResult<'a> {
@@ -186,7 +248,7 @@ impl<'a> Parser<'a> {
         if self.match_token(&TokenKind::Print) {
             self.print_statement()
         } else if self.match_token(&TokenKind::LeftBrace) {
-            self.block_statement()
+            Ok(Statement::Block(self.block_statement()?))
         } else if self.match_token(&TokenKind::If) {
             self.if_statement()
         } else if self.match_token(&TokenKind::While) {
@@ -204,7 +266,7 @@ impl<'a> Parser<'a> {
         Ok(Statement::Print(expr))
     }
 
-    fn block_statement(&mut self) -> StmtResult<'a> {
+    fn block_statement(&mut self) -> Result<Block<'a>, Error> {
         let mut block: Block<'a> = vec![];
 
         while !self.check_token(&TokenKind::RightBrace) && !self.is_at_end() {
@@ -213,7 +275,7 @@ impl<'a> Parser<'a> {
 
         self.consume(&TokenKind::RightBrace, ErrorKind::ExpectedClosingBrace)?;
 
-        Ok(Statement::Block(block))
+        Ok(block)
     }
 
     fn if_statement(&mut self) -> StmtResult<'a> {

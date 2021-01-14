@@ -208,6 +208,7 @@ impl Interpreter {
             Statement::Block(block) => return self.interpret_block(block),
             Statement::If(if_stmt) => return self.interpret_if(if_stmt),
             Statement::While(while_stmt) => return self.interpret_while(while_stmt),
+            Statement::Function(_) => unimplemented!(),
         };
 
         Ok(value)
