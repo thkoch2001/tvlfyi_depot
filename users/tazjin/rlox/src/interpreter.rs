@@ -25,14 +25,23 @@ impl<'a> Callable<'a> {
     fn arity(&self) -> usize {
         match self {
             Callable::Builtin(builtin) => builtin.arity(),
-            _ => unimplemented!(),
+            Callable::Function(func) => func.params.len(),
         }
     }
 
-    fn call(&self, args: Vec<Value>) -> Result<Value<'a>, Error> {
+    fn call(&self, lox: &mut Interpreter<'a>, args: Vec<Value<'a>>) -> Result<Value<'a>, Error> {
         match self {
             Callable::Builtin(builtin) => builtin.call(args),
-            _ => unimplemented!(),
+
+            Callable::Function(func) => {
+                let mut fn_env: Environment<'a> = Default::default();
+
+                for (param, value) in func.params.iter().zip(args.into_iter()) {
+                    fn_env.define(param, value)?;
+                }
+
+                lox.interpret_block(Rc::new(RwLock::new(fn_env)), &func.body)
+            },
         }
     }
 }
@@ -208,7 +217,7 @@ impl<'a> Interpreter<'a> {
                 Value::Literal(Literal::String(output))
             }
             Statement::Var(var) => return self.interpret_var(var),
-            Statement::Block(block) => return self.interpret_block(block),
+            Statement::Block(block) => return self.interpret_block(Default::default(), block),
             Statement::If(if_stmt) => return self.interpret_if(if_stmt),
             Statement::While(while_stmt) => return self.interpret_while(while_stmt),
             Statement::Function(_) => unimplemented!(),
@@ -227,13 +236,17 @@ impl<'a> Interpreter<'a> {
         Ok(value)
     }
 
-    fn interpret_block(&mut self, block: &parser::Block<'a>) -> Result<Value<'a>, Error> {
+    fn interpret_block(
+        &mut self,
+        env: Rc<RwLock<Environment<'a>>>,
+        block: &parser::Block<'a>,
+    ) -> Result<Value<'a>, Error> {
         // Initialise a new environment and point it at the parent
         // (this is a bit tedious because we need to wrap it in and
         // out of the Rc).
         //
         // TODO(tazjin): Refactor this to use Rc on the interpreter itself.
-        let previous = std::mem::replace(&mut self.env, Default::default());
+        let previous = std::mem::replace(&mut self.env, env);
         self.set_enclosing(previous.clone());
 
         let result = self.interpret(block);
@@ -388,7 +401,7 @@ impl<'a> Interpreter<'a> {
             });
         }
 
-        callable.call(args)
+        callable.call(self, args)
     }
 }
 
