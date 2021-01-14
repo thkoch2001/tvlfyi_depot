@@ -8,6 +8,9 @@ use std::sync::RwLock;
 // Implementation of built-in functions.
 mod builtins;
 
+#[cfg(test)]
+mod tests;
+
 // Tree-walk interpreter
 
 // Representation of all callables, including builtins & user-defined
