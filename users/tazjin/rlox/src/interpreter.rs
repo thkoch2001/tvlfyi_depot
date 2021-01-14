@@ -118,12 +118,30 @@ fn identifier_str<'a>(name: &'a scanner::Token) -> Result<&'a str, Error> {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Interpreter {
     env: Rc<RwLock<Environment>>,
 }
 
 impl Interpreter {
+    /// Create a new interpreter and configure the initial global
+    /// variable set.
+    pub fn create() -> Self {
+        let mut globals = HashMap::new();
+
+        globals.insert(
+            "clock".into(),
+            Value::Callable(Callable::Builtin(&builtins::Clock {})),
+        );
+
+        Interpreter {
+            env: Rc::new(RwLock::new(Environment {
+                enclosing: None,
+                values: globals,
+            })),
+        }
+    }
+
     // Environment modification helpers
     fn define_var(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
         self.env
