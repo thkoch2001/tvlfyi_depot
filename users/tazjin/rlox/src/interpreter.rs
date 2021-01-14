@@ -5,7 +5,31 @@ use std::collections::HashMap;
 use std::rc::Rc;
 use std::sync::RwLock;
 
+// Implementation of built-in functions.
+mod builtins;
+
 // Tree-walk interpreter
+
+// Representation of all callables, including builtins & user-defined
+// functions.
+#[derive(Clone, Debug)]
+pub enum Callable {
+    Builtin(&'static dyn builtins::Builtin),
+}
+
+impl Callable {
+    fn arity(&self) -> usize {
+        match self {
+            Callable::Builtin(builtin) => builtin.arity(),
+        }
+    }
+
+    fn call(&self, args: Vec<Value>) -> Result<Value, Error> {
+        match self {
+            Callable::Builtin(builtin) => builtin.call(args),
+        }
+    }
+}
 
 // Representation of an in-language value.
 #[derive(Clone, Debug)]
