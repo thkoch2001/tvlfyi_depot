@@ -192,7 +192,7 @@
            (:a :href (format nil "/issues/~A" issue-id)
                (:p
                 (:span :class "issue-subject"
-                       (who:esc (subject issue))))
+                       (render-inline-markdown (subject issue))))
                (:span :class "issue-number"
                       (who:esc (format nil "#~A" issue-id)))
                " - "
@@ -328,7 +328,7 @@
         (issue-status (status issue)))
     (render ()
       (:header
-       (:h1 (who:esc (subject issue)))
+       (:h1 (render-inline-markdown (subject issue)))
        (:div :class "issue-number"
              (who:esc (format nil "#~A" issue-id))))
       (:main

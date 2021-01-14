@@ -7,6 +7,11 @@
   (:use :cl :lass)
   (:export :styles))
 
+(defpackage panettone.inline-markdown
+  (:use :cl)
+  (:import-from :alexandria :define-constant)
+  (:export :render-inline-markdown))
+
 (defpackage panettone.irc
   (:use :cl :usocket)
   (:export :send-irc-notification))
@@ -42,7 +47,8 @@
 (defpackage panettone
   (:use :cl :klatre :easy-routes :iterate
         :panettone.util
-        :panettone.authentication)
+        :panettone.authentication
+        :panettone.inline-markdown)
   (:import-from :defclass-std :defclass/std)
   (:import-from :alexandria :if-let :when-let :switch :alist-hash-table)
   (:import-from :cl-ppcre :split)
