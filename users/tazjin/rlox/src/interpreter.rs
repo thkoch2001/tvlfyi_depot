@@ -38,6 +38,16 @@ pub enum Value {
     Callable(Callable),
 }
 
+impl PartialEq for Value {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Value::Literal(lhs), Value::Literal(rhs)) => lhs == rhs,
+            // functions do not have equality
+            _ => false,
+        }
+    }
+}
+
 impl From<Literal> for Value {
     fn from(lit: Literal) -> Value {
         Value::Literal(lit)
