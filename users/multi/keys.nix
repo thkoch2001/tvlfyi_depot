@@ -10,7 +10,6 @@ let
   };
 
   configs = {
-    whitby = [ keys.thinkpad.interactiveLogin keys.yubikey ]; # back compat
     whitbyLogin = [ keys.thinkpad.interactiveLogin keys.thinkpad.nixRemote keys.yubikey ];
     whitbyNix = [ keys.thinkpad.nixRemote ];
   };
