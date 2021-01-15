@@ -147,7 +147,7 @@
       (:form
        :method :post :action "/login"
        (:input :type "hidden" :name "original-uri"
-               :value original-uri)
+               :value (who:escape-string original-uri))
        (:div
         (:label :for "username"
                 "Username")
@@ -251,7 +251,8 @@
                        :name "subject"
                        :placeholder "Subject"
                        :value (when editing
-                                (subject issue))))
+                                (who:escape-string
+                                  (subject issue)))))
 
               (:div
                (:textarea :name "body"
