@@ -174,7 +174,8 @@ in lib.fix(self: {
       keys = with depot.users;
         tazjin.keys.all
         ++ lukegb.keys.all
-        ++ [ glittershark.keys.whitby ];
+        ++ [ glittershark.keys.whitby ]
+        ++ multi.keys.whitbyNix;
     };
   };
 
@@ -415,7 +416,7 @@ in lib.fix(self: {
     users.multi = {
       isNormalUser = true;
       extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.multi.keys.whitby;
+      openssh.authorizedKeys.keys = depot.users.multi.keys.whitbyLogin;
     };
 
     users.eta = {
