@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79ebdf98_2bb0b83e",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-01-15T13:05:33Z",
+      "side": 1,
+      "message": "This may have limited utility without you also being a trusted-user - but it\u0027s worth checking.",
+      "range": {
+        "startLine": 178,
+        "startChar": 11,
+        "endLine": 178,
+        "endChar": 31
+      },
+      "revId": "34c082baff8af560f964fbaf4df35a7abea2776b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
