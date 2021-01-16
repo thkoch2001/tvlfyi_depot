@@ -106,22 +106,32 @@ impl Environment {
         Ok(())
     }
 
-    fn get(&self, name: &parser::Variable) -> Result<Value, Error> {
-        let ident = identifier_str(&name.name)?;
+    fn get(&self, ident: &str, line: usize, depth: usize) -> Result<Value, Error> {
+        println!("looking up {} at depth {}", ident, depth);
+        if depth > 0 {
+            match &self.enclosing {
+                None => {
+                    return Err(Error {
+                        line,
+                        kind: ErrorKind::InternalError(format!(
+                            "invalid depth {} for {}",
+                            depth, ident
+                        )),
+                    })
+                }
+                Some(parent) => {
+                    let env = parent.read().expect("fatal: environment lock poisoned");
+                    return env.get(ident, line, depth - 1);
+                }
+            }
+        }
 
         self.values
             .get(ident)
             .map(Clone::clone)
             .ok_or_else(|| Error {
-                line: name.name.line,
+                line,
                 kind: ErrorKind::UndefinedVariable(ident.into()),
-            })
-            .or_else(|err| {
-                if let Some(parent) = &self.enclosing {
-                    parent.read().unwrap().get(name)
-                } else {
-                    Err(err)
-                }
             })
     }
 
@@ -198,10 +208,16 @@ impl Interpreter {
     }
 
     fn get_var(&mut self, var: &parser::Variable) -> Result<Value, Error> {
+        let ident = identifier_str(&var.name)?;
+        let depth = var.depth.ok_or_else(|| Error {
+            line: var.name.line,
+            kind: ErrorKind::UndefinedVariable(ident.into()),
+        })?;
+
         self.env
             .read()
             .expect("environment lock is poisoned")
-            .get(var)
+            .get(ident, var.name.line, depth)
     }
 
     // Interpreter itself
