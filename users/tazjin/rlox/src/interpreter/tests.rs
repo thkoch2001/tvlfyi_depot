@@ -1,10 +1,13 @@
 use super::*;
+use crate::resolver;
 
 /// Evaluate a code snippet, returning a value.
 fn parse_eval(code: &str) -> Value {
     let chars: Vec<char> = code.chars().collect();
     let tokens = scanner::scan(&chars).expect("could not scan code");
-    let program = parser::parse(tokens).expect("could not parse code");
+    let mut program = parser::parse(tokens).expect("could not parse code");
+    program = resolver::resolve(program).expect("could not resolve code");
+
     Interpreter::create()
         .interpret(&program)
         .expect("could not eval code")
