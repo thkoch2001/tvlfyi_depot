@@ -15,6 +15,7 @@ use std::rc::Rc;
 pub struct Assign {
     pub name: Token,
     pub value: Box<Expr>,
+    pub depth: Option<usize>,
 }
 
 #[derive(Debug)]
@@ -57,7 +58,10 @@ pub struct Call {
 
 // Not to be confused with `Var`, which is for assignment.
 #[derive(Debug)]
-pub struct Variable(pub Token);
+pub struct Variable {
+    pub name: Token,
+    pub depth: Option<usize>,
+}
 
 #[derive(Debug)]
 pub enum Expr {
@@ -413,10 +417,11 @@ impl Parser {
             let equals = self.previous().clone();
             let value = self.assignment()?;
 
-            if let Expr::Variable(Variable(name)) = expr {
+            if let Expr::Variable(Variable { name, .. }) = expr {
                 return Ok(Expr::Assign(Assign {
                     name,
                     value: Box::new(value),
+                    depth: None,
                 }));
             }
 
@@ -549,7 +554,12 @@ impl Parser {
                 return Ok(Expr::Grouping(Grouping(Box::new(expr))));
             }
 
-            TokenKind::Identifier(_) => return Ok(Expr::Variable(Variable(next))),
+            TokenKind::Identifier(_) => {
+                return Ok(Expr::Variable(Variable {
+                    name: next,
+                    depth: None,
+                }))
+            }
 
             unexpected => {
                 eprintln!("encountered {:?}", unexpected);

@@ -7,6 +7,7 @@ use std::process;
 mod errors;
 mod interpreter;
 mod parser;
+mod resolver;
 mod scanner;
 
 fn main() {
@@ -48,17 +49,13 @@ fn run_prompt() {
 fn run(lox: &mut interpreter::Interpreter, code: &str) {
     let chars: Vec<char> = code.chars().collect();
 
-    match scanner::scan(&chars) {
-        Ok(tokens) => match parser::parse(tokens) {
-            Ok(program) => {
-                println!("Program:\n{:?}", program);
-                if let Err(err) = lox.interpret(&program) {
-                    println!("Error in program: {:?}", err);
-                }
-            }
-            Err(errors) => report_errors(errors),
-        },
-        Err(errors) => report_errors(errors),
+    let result = scanner::scan(&chars)
+        .and_then(|tokens| parser::parse(tokens))
+        .and_then(|program| resolver::resolve(program).map_err(|e| vec![e]))
+        .and_then(|program| lox.interpret(&program).map_err(|e| vec![e]));
+
+    if let Err(errors) = result {
+        report_errors(errors);
     }
 }
 
