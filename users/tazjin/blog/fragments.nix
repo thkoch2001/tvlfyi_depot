@@ -44,9 +44,7 @@ let
       <p class="footer">
         <a class="uncoloured-link" href="https://tazj.in">homepage</a>
         |
-        <a class="uncoloured-link" href="https://git.tazj.in/about">code</a>
-        |
-        <a class="uncoloured-link" href="https://twitter.com/tazjin">twitter</a>
+        <a class="uncoloured-link" href="https://cs.tvl.fyi/">code</a>
       </p>
       <p class="lod">ಠ_ಠ</p>
     </footer>
