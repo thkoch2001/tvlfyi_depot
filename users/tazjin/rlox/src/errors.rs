@@ -14,6 +14,7 @@ pub enum ErrorKind {
     InternalError(String),
     InvalidAssignmentTarget(String),
     RuntimeError(String),
+    StaticError(String),
 
     // This variant is not an error, rather it is used for
     // short-circuiting out of a function body that hits a `return`

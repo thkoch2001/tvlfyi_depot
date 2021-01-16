@@ -107,13 +107,13 @@ impl Environment {
     }
 
     fn get(&self, name: &parser::Variable) -> Result<Value, Error> {
-        let ident = identifier_str(&name.0)?;
+        let ident = identifier_str(&name.name)?;
 
         self.values
             .get(ident)
             .map(Clone::clone)
             .ok_or_else(|| Error {
-                line: name.0.line,
+                line: name.name.line,
                 kind: ErrorKind::UndefinedVariable(ident.into()),
             })
             .or_else(|err| {
