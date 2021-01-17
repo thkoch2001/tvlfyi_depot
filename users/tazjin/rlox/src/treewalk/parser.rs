@@ -5,8 +5,8 @@
 //
 // My Rust implementation skips this step because it's unnecessary, we
 // have real types.
-use crate::errors::{Error, ErrorKind};
-use crate::scanner::{Token, TokenKind};
+use crate::treewalk::errors::{Error, ErrorKind};
+use crate::treewalk::scanner::{Token, TokenKind};
 use std::rc::Rc;
 
 // AST

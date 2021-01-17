@@ -1,4 +1,4 @@
-use crate::errors::{Error, ErrorKind};
+use crate::treewalk::errors::{Error, ErrorKind};
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum TokenKind {

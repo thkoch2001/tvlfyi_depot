@@ -1,7 +1,7 @@
-use crate::errors::{Error, ErrorKind};
-use crate::parser::{self, Block, Expr, Literal, Statement};
-use crate::scanner::{self, TokenKind};
-use crate::treewalk::resolver;
+use crate::treewalk::errors::{Error, ErrorKind};
+use crate::treewalk::parser::{self, Block, Expr, Literal, Statement};
+use crate::treewalk::scanner::{self, TokenKind};
+use crate::treewalk::treewalk::resolver;
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::sync::RwLock;

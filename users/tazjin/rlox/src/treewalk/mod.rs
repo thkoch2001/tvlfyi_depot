@@ -1,7 +1,10 @@
 use crate::*;
 
-pub mod interpreter;
+mod errors;
+mod parser;
 mod resolver;
+mod scanner;
+pub mod interpreter;
 
 pub fn main() {
     let mut args = env::args();
@@ -48,5 +51,11 @@ fn run(lox: &mut treewalk::interpreter::Interpreter, code: &str) {
 
     if let Err(errors) = result {
         report_errors(errors);
+    }
+}
+
+fn report_errors(errors: Vec<errors::Error>) {
+    for error in errors {
+        errors::report(&error);
     }
 }
