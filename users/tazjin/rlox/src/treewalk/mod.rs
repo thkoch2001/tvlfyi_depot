@@ -1,10 +1,10 @@
 use crate::*;
 
 mod errors;
+pub mod interpreter;
 mod parser;
 mod resolver;
 mod scanner;
-pub mod interpreter;
 
 pub fn main() {
     let mut args = env::args();
