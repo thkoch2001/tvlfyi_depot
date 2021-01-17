@@ -1,8 +1,8 @@
 use std::fmt;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use crate::errors::Error;
-use crate::parser::Literal;
+use crate::treewalk::errors::Error;
+use crate::treewalk::parser::Literal;
 use crate::treewalk::interpreter::Value;
 
 pub trait Builtin: fmt::Debug {

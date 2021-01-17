@@ -6,9 +6,9 @@
 use std::collections::HashMap;
 use std::rc::Rc;
 
-use crate::errors::{Error, ErrorKind};
-use crate::parser::{self, Expr, Statement};
-use crate::scanner::Token;
+use crate::treewalk::errors::{Error, ErrorKind};
+use crate::treewalk::parser::{self, Expr, Statement};
+use crate::treewalk::scanner::Token;
 
 #[derive(Default)]
 struct Resolver<'a> {
