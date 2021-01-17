@@ -2,7 +2,7 @@ use std::fmt;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::errors::Error;
-use crate::interpreter::Value;
+use crate::treewalk::interpreter::Value;
 use crate::parser::Literal;
 
 pub trait Builtin: fmt::Debug {
