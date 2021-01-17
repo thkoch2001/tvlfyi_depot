@@ -5,4 +5,13 @@ pub enum OpCode {
 
     /// Return from the current function.
     OpReturn,
+
+    /// Unary negation
+    OpNegate,
+
+    // Arithmetic operators
+    OpAdd,
+    OpSubtract,
+    OpMultiply,
+    OpDivide,
 }
