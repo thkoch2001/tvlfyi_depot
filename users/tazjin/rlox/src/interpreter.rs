@@ -1,5 +1,6 @@
 use crate::errors::{Error, ErrorKind};
 use crate::parser::{self, Block, Expr, Literal, Statement};
+use crate::resolver;
 use crate::scanner::{self, TokenKind};
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -44,7 +45,8 @@ impl Callable {
                     fn_env.define(param, value)?;
                 }
 
-                let result = lox.interpret_block(Some(Rc::new(RwLock::new(fn_env))), &func.body);
+                let result =
+                    lox.interpret_block_with_env(Some(Rc::new(RwLock::new(fn_env))), &func.body);
 
                 match result {
                     // extract returned values if applicable
@@ -107,7 +109,6 @@ impl Environment {
     }
 
     fn get(&self, ident: &str, line: usize, depth: usize) -> Result<Value, Error> {
-        println!("looking up {} at depth {}", ident, depth);
         if depth > 0 {
             match &self.enclosing {
                 None => {
@@ -221,7 +222,12 @@ impl Interpreter {
     }
 
     // Interpreter itself
-    pub fn interpret(&mut self, program: &Block) -> Result<Value, Error> {
+    pub fn interpret(&mut self, mut program: Block) -> Result<Value, Error> {
+        resolver::resolve(&mut program)?;
+        self.interpret_block(&program)
+    }
+
+    fn interpret_block(&mut self, program: &Block) -> Result<Value, Error> {
         let mut value = Value::Literal(Literal::Nil);
 
         for stmt in program {
@@ -241,7 +247,7 @@ impl Interpreter {
                 Value::Literal(Literal::String(output))
             }
             Statement::Var(var) => return self.interpret_var(var),
-            Statement::Block(block) => return self.interpret_block(None, block),
+            Statement::Block(block) => return self.interpret_block_with_env(None, block),
             Statement::If(if_stmt) => return self.interpret_if(if_stmt),
             Statement::While(while_stmt) => return self.interpret_while(while_stmt),
             Statement::Function(func) => return self.interpret_function(func.clone()),
@@ -269,7 +275,7 @@ impl Interpreter {
     /// Interpret the block in the supplied environment. If no
     /// environment is supplied, a new one is created using the
     /// current one as its parent.
-    fn interpret_block(
+    fn interpret_block_with_env(
         &mut self,
         env: Option<Rc<RwLock<Environment>>>,
         block: &parser::Block,
@@ -284,7 +290,7 @@ impl Interpreter {
         };
 
         let previous = std::mem::replace(&mut self.env, env);
-        let result = self.interpret(block);
+        let result = self.interpret_block(block);
 
         // Swap it back, discarding the child env.
         self.env = previous;
