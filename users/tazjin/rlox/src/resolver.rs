@@ -186,8 +186,7 @@ impl<'a> Resolver<'a> {
     }
 }
 
-pub fn resolve(mut block: parser::Block) -> Result<parser::Block, Error> {
+pub fn resolve(block: &mut parser::Block) -> Result<(), Error> {
     let mut resolver: Resolver = Default::default();
-    resolver.resolve(&mut block)?;
-    Ok(block)
+    resolver.resolve(block)
 }

@@ -51,8 +51,7 @@ fn run(lox: &mut interpreter::Interpreter, code: &str) {
 
     let result = scanner::scan(&chars)
         .and_then(|tokens| parser::parse(tokens))
-        .and_then(|program| resolver::resolve(program).map_err(|e| vec![e]))
-        .and_then(|program| lox.interpret(&program).map_err(|e| vec![e]));
+        .and_then(|program| lox.interpret(program).map_err(|e| vec![e]));
 
     if let Err(errors) = result {
         report_errors(errors);
