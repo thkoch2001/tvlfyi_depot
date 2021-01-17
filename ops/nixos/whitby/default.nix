@@ -462,7 +462,7 @@ in lib.fix(self: {
 
   security.acme = {
     acceptTerms = true;
-    email = "mail@tazj.in";
+    email = "certs@tvl.fyi";
   };
 
   system.stateVersion = "20.03";
