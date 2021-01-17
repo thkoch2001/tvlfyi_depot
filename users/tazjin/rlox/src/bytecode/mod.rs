@@ -3,8 +3,10 @@
 //! https://craftinginterpreters.com/chunks-of-bytecode.html
 
 mod chunk;
+mod errors;
 mod opcode;
 mod value;
+mod vm;
 
 use chunk::Chunk;
 use opcode::OpCode;
@@ -16,5 +18,5 @@ pub fn main() {
     chunk.add_op(OpCode::OpConstant(constant), 1);
     chunk.add_op(OpCode::OpReturn, 1);
 
-    chunk::disassemble(&chunk, "test chunk");
+    vm::interpret(chunk).expect("it should work");
 }
