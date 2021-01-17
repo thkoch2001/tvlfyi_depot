@@ -66,6 +66,7 @@ impl Chunk {
 
 /// Print a single disassembled instruction at the specified offset.
 /// Some instructions are printed "raw", others have special handling.
+#[cfg(feature = "disassemble")]
 pub fn disassemble_instruction(chunk: &Chunk, offset: usize) {
     print!("{:04} ", offset);
 
