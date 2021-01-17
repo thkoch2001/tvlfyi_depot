@@ -69,26 +69,26 @@ impl<'a> Resolver<'a> {
     }
 
     fn resolve_var(&mut self, var: &'a mut parser::Var) -> Result<(), Error> {
-        self.declare(&var.name);
+        self.declare(&var.name.lexeme);
 
         if let Some(init) = &mut var.initialiser {
             self.resolve_expr(init)?;
         }
 
-        self.define(&var.name);
+        self.define(&var.name.lexeme);
 
         Ok(())
     }
 
     fn resolve_function(&mut self, func: &'a mut parser::Function) -> Result<(), Error> {
-        self.declare(&func.name);
-        self.define(&func.name);
+        self.declare(&func.name.lexeme);
+        self.define(&func.name.lexeme);
 
         self.begin_scope();
 
         for param in &func.params {
-            self.declare(param);
-            self.define(param);
+            self.declare(&param.lexeme);
+            self.define(&param.lexeme);
         }
 
         for stmt in &mut func.body {
@@ -165,15 +165,15 @@ impl<'a> Resolver<'a> {
 
     // Internal helpers
 
-    fn declare(&mut self, name: &'a Token) {
+    fn declare(&mut self, name: &'a str) {
         if let Some(scope) = self.scopes.last_mut() {
-            scope.insert(&name.lexeme, false);
+            scope.insert(&name, false);
         }
     }
 
-    fn define(&mut self, name: &'a Token) {
+    fn define(&mut self, name: &'a str) {
         if let Some(scope) = self.scopes.last_mut() {
-            scope.insert(&name.lexeme, true);
+            scope.insert(&name, true);
         }
     }
 
@@ -186,7 +186,14 @@ impl<'a> Resolver<'a> {
     }
 }
 
-pub fn resolve(block: &mut parser::Block) -> Result<(), Error> {
+pub fn resolve(globals: &[String], block: &mut parser::Block) -> Result<(), Error> {
     let mut resolver: Resolver = Default::default();
+
+    // Scope for static globals only starts, never ends.
+    resolver.begin_scope();
+    for global in globals {
+        resolver.define(global);
+    }
+
     resolver.resolve(block)
 }

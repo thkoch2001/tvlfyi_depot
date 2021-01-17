@@ -223,8 +223,39 @@ impl Interpreter {
 
     // Interpreter itself
     pub fn interpret(&mut self, mut program: Block) -> Result<Value, Error> {
-        resolver::resolve(&mut program)?;
-        self.interpret_block(&program)
+        let globals = self.env.read()
+            .expect("static globals lock poisoned")
+            .values.keys().map(Clone::clone)
+            .collect::<Vec<String>>();
+
+        resolver::resolve(&globals, &mut program)?;
+        self.interpret_block_with_env(None, &program)
+    }
+
+    /// Interpret the block in the supplied environment. If no
+    /// environment is supplied, a new one is created using the
+    /// current one as its parent.
+    fn interpret_block_with_env(
+        &mut self,
+        env: Option<Rc<RwLock<Environment>>>,
+        block: &parser::Block,
+    ) -> Result<Value, Error> {
+        let env = match env {
+            Some(env) => env,
+            None => {
+                let env: Rc<RwLock<Environment>> = Default::default();
+                set_enclosing_env(&env, self.env.clone());
+                env
+            }
+        };
+
+        let previous = std::mem::replace(&mut self.env, env);
+        let result = self.interpret_block(block);
+
+        // Swap it back, discarding the child env.
+        self.env = previous;
+
+        return result;
     }
 
     fn interpret_block(&mut self, program: &Block) -> Result<Value, Error> {
@@ -270,32 +301,6 @@ impl Interpreter {
         let value = self.eval(init)?;
         self.define_var(&var.name, value.clone())?;
         Ok(value)
-    }
-
-    /// Interpret the block in the supplied environment. If no
-    /// environment is supplied, a new one is created using the
-    /// current one as its parent.
-    fn interpret_block_with_env(
-        &mut self,
-        env: Option<Rc<RwLock<Environment>>>,
-        block: &parser::Block,
-    ) -> Result<Value, Error> {
-        let env = match env {
-            Some(env) => env,
-            None => {
-                let env: Rc<RwLock<Environment>> = Default::default();
-                set_enclosing_env(&env, self.env.clone());
-                env
-            }
-        };
-
-        let previous = std::mem::replace(&mut self.env, env);
-        let result = self.interpret_block(block);
-
-        // Swap it back, discarding the child env.
-        self.env = previous;
-
-        return result;
     }
 
     fn interpret_if(&mut self, if_stmt: &parser::If) -> Result<Value, Error> {
