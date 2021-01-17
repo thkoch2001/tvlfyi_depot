@@ -13,6 +13,7 @@
     avrlibc
     bashInteractive
     bat
+    bc
     buildBazelPackage
     buildFHSUserEnv
     buildGoModule
@@ -44,6 +45,7 @@
     emacsPackagesGen
     execline
     fd
+    fdtools
     fetchFromGitHub
     fetchgit
     fetchurl
@@ -87,9 +89,11 @@
     mkShell
     moreutils
     nano
+    ncurses
     nginx
     ninja
     nix
+    ocamlPackages
     openssh
     openssl
     overrideCC

@@ -50,4 +50,36 @@ rec {
     buildDependencies = [ cc ];
     sha256 = "0jwwbvs4icpra7m1ycvnyri5h3sbw4qrfvgnnvnk72h4w93qhzhr";
   };
+
+  libc = pkgs.buildRustCrate {
+    pname = "libc";
+    crateName = "libc";
+    version = "0.2.82";
+    sha256 = "02zgn6c0xwh331hky417lbr29kmvrw3ylxs8822syyhjfjqszvsx";
+  };
+
+  bitflags = pkgs.buildRustCrate {
+    pname = "bitflags";
+    crateName = "bitflags";
+    version = "1.2.1";
+    sha256 = "0b77awhpn7yaqjjibm69ginfn996azx5vkzfjj39g3wbsqs7mkxg";
+  };
+
+  inotify-sys = pkgs.buildRustCrate {
+    pname = "inotify-sys";
+    crateName = "inotify-sys";
+    version = "0.1.5";
+    dependencies = [ libc ];
+    sha256 = "1yiy577xxhi0j90nbg9nkd8cqwc1xix62rz55jjngvxa5jl5613v";
+  };
+
+  inotify = pkgs.buildRustCrate {
+    pname = "inotify";
+    crateName = "inotify";
+    version = "0.9.2";
+    edition = "2018";
+    dependencies = [ bitflags libc inotify-sys ];
+    sha256 = "0fcknyvknglwwk1pdzdlb4m0ry2dym1yx8r5prf2v00pxnjk0hv2";
+  };
+
 }
