@@ -23,6 +23,14 @@ impl VM {
     }
 }
 
+macro_rules! binary_op {
+    ( $vm:ident, $op:tt ) => {{
+        let a = $vm.pop();
+        let b = $vm.pop();
+        $vm.push(a $op b);
+    }}
+}
+
 impl VM {
     fn run(&mut self) -> LoxResult<()> {
         loop {
@@ -43,6 +51,16 @@ impl VM {
                     let c = *self.chunk.constant(*idx);
                     self.push(c);
                 }
+
+                OpCode::OpNegate => {
+                    let v = self.pop();
+                    self.push(-v)
+                }
+
+                OpCode::OpAdd => binary_op!(self, +),
+                OpCode::OpSubtract => binary_op!(self, -),
+                OpCode::OpMultiply => binary_op!(self, *),
+                OpCode::OpDivide => binary_op!(self, /),
             }
         }
     }
