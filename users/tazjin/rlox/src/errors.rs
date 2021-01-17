@@ -1,4 +1,4 @@
-use crate::interpreter::Value;
+use crate::treewalk::interpreter::Value;
 
 #[derive(Debug)]
 pub enum ErrorKind {

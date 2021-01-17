@@ -1,6 +1,6 @@
 use crate::errors::{Error, ErrorKind};
 use crate::parser::{self, Block, Expr, Literal, Statement};
-use crate::resolver;
+use crate::treewalk::resolver;
 use crate::scanner::{self, TokenKind};
 use std::collections::HashMap;
 use std::rc::Rc;

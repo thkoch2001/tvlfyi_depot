@@ -5,10 +5,9 @@ use std::io::Write;
 use std::process;
 
 mod errors;
-mod interpreter;
 mod parser;
-mod resolver;
 mod scanner;
+mod treewalk;
 
 fn main() {
     let mut args = env::args();
@@ -26,14 +25,14 @@ fn main() {
 // Run Lox code from a file and print results to stdout
 fn run_file(file: &str) {
     let contents = fs::read_to_string(file).expect("failed to read the input file");
-    let mut lox = interpreter::Interpreter::create();
+    let mut lox = treewalk::interpreter::Interpreter::create();
     run(&mut lox, &contents);
 }
 
 // Evaluate Lox code interactively in a shitty REPL.
 fn run_prompt() {
     let mut line = String::new();
-    let mut lox = interpreter::Interpreter::create();
+    let mut lox = treewalk::interpreter::Interpreter::create();
 
     loop {
         print!("> ");
@@ -46,7 +45,7 @@ fn run_prompt() {
     }
 }
 
-fn run(lox: &mut interpreter::Interpreter, code: &str) {
+fn run(lox: &mut treewalk::interpreter::Interpreter, code: &str) {
     let chars: Vec<char> = code.chars().collect();
 
     let result = scanner::scan(&chars)
