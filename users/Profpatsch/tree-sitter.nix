@@ -1,14 +1,16 @@
 { depot, pkgs, lib, ... }:
 
 let
+  bins = depot.nix.getBins pkgs.coreutils [ "head" "printf" "cat" ]
+      // depot.nix.getBins pkgs.ncurses [ "tput" ]
+      // depot.nix.getBins pkgs.bc [ "bc" ]
+      // depot.nix.getBins pkgs.ocamlPackages.sexp [ "sexp" ];
+
   print-ast = depot.users.Profpatsch.writers.rustSimple {
     name = "print-ast";
     dependencies = with depot.users.Profpatsch.rust-crates; [
       libloading
       tree-sitter
-    ];
-    buildInputs = [
-      pkgs.tree-sitter
     ];
   } ''
     extern crate libloading;
@@ -39,9 +41,7 @@ let
       let mut parser = Parser::new();
       let lang = _load_language(so, symbol_name).unwrap();
       parser.set_language(lang).unwrap();
-      let mut bytes = Vec::new();
-      let mut file = std::fs::OpenOptions::new().read(true).open(file).unwrap();
-      file.read_to_end(&mut bytes);
+      let bytes = std::fs::read(&file).unwrap();
       print!("{}", parser.parse(&bytes, None).unwrap().root_node().to_sexp());
     }
 
@@ -58,8 +58,85 @@ let
     };
   };
 
-  parse-nix-file = depot.nix.writeExecline "parse-nix-file" { readNArgs = 1; } [
-    print-ast "${tree-sitter-nix}/parser" "tree_sitter_nix" "$1"
+  watch-file-modified = depot.users.Profpatsch.writers.rustSimple {
+    name = "watch-file-modified";
+    dependencies = [ depot.users.Profpatsch.rust-crates.inotify ];
+  } ''
+    extern crate inotify;
+    use inotify::{EventMask, WatchMask, Inotify};
+    use std::io::Write;
+
+    fn main() {
+        let mut inotify = Inotify::init()
+            .expect("Failed to initialize inotify");
+
+        let file = std::env::args().nth(1).unwrap();
+
+        let file_watch = inotify
+            .add_watch(
+                &file,
+                WatchMask::MODIFY
+            )
+            .expect("Failed to add inotify watch");
+
+        fn to_netstring(s: &[u8]) -> Vec<u8> {
+            let len = s.len();
+            // length of the integer as ascii
+            let i_len = ((len as f64).log10() as usize) + 1;
+            let ns_len = i_len + 1 + len + 1;
+            let mut res = Vec::with_capacity(ns_len);
+            res.extend_from_slice(format!("{}:", len).as_bytes());
+            res.extend_from_slice(s);
+            res.push(b',');
+            res
+        }
+
+        let mut buffer = [0u8; 4096];
+        loop {
+            let events = inotify
+                .read_events_blocking(&mut buffer)
+                .expect("Failed to read inotify events");
+
+            for event in events {
+                if event.wd == file_watch {
+                  std::io::stdout().write(&to_netstring(file.as_bytes()));
+                  std::io::stdout().flush();
+                }
+            }
+        }
+    }
+
+  '';
+
+  # clear screen and set LINES and COLUMNS to terminal height & width
+  clear-screen = depot.nix.writeExecline "clear-screen" {} [
+    "if" [ bins.tput "clear" ]
+    "backtick" "-in" "LINES" [ bins.tput "lines" ]
+    "backtick" "-in" "COLUMNS" [ bins.tput "cols" ]
+    "$@"
+  ];
+
+  print-nix-file = depot.nix.writeExecline "print-nix-file" { readNArgs = 1; } [
+    "pipeline" [ print-ast "${tree-sitter-nix}/parser" "tree_sitter_nix" "$1" ]
+    "pipeline" [ bins.sexp "print" ]
+    clear-screen
+    "importas" "-ui" "lines" "LINES"
+    "backtick" "-in" "ls" [
+      "pipeline"
+        # when you pull out bc to decrement an integer it’s time to switch to python lol
+        [ bins.printf "x=%s; --x\n" "$lines" ]
+        bins.bc
+    ]
+    "importas" "-ui" "l" "ls"
+    bins.head "-n\${l}"
+  ];
+
+  print-nix-file-on-update = depot.nix.writeExecline "print-nix-file-on-update" { readNArgs = 1; } [
+    "if" [ print-nix-file "$1" ]
+    "pipeline" [ watch-file-modified "$1" ]
+    "forstdin" "-d" "" "file"
+    "importas" "file" "file"
+    print-nix-file "$file"
   ];
 
   # copied from nixpkgs
@@ -104,6 +181,7 @@ in {
   inherit
     print-ast
     tree-sitter-nix
-    parse-nix-file
+    print-nix-file-on-update
+    watch-file-modified
     ;
 }
