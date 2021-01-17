@@ -1,7 +1,7 @@
 use crate::errors::{Error, ErrorKind};
 use crate::parser::{self, Block, Expr, Literal, Statement};
-use crate::treewalk::resolver;
 use crate::scanner::{self, TokenKind};
+use crate::treewalk::resolver;
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::sync::RwLock;
@@ -223,9 +223,13 @@ impl Interpreter {
 
     // Interpreter itself
     pub fn interpret(&mut self, mut program: Block) -> Result<Value, Error> {
-        let globals = self.env.read()
+        let globals = self
+            .env
+            .read()
             .expect("static globals lock poisoned")
-            .values.keys().map(Clone::clone)
+            .values
+            .keys()
+            .map(Clone::clone)
             .collect::<Vec<String>>();
 
         resolver::resolve(&globals, &mut program)?;
