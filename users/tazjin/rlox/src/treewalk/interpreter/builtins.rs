@@ -2,8 +2,8 @@ use std::fmt;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::treewalk::errors::Error;
-use crate::treewalk::parser::Literal;
 use crate::treewalk::interpreter::Value;
+use crate::treewalk::parser::Literal;
 
 pub trait Builtin: fmt::Debug {
     fn arity(&self) -> usize;

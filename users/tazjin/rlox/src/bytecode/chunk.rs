@@ -10,7 +10,7 @@ use super::value;
 // problem.
 #[derive(Debug, Default)]
 pub struct Chunk {
-    code: Vec<OpCode>,
+    pub code: Vec<OpCode>,
     lines: Vec<Span>,
     constants: Vec<value::Value>,
 }
@@ -38,6 +38,10 @@ impl Chunk {
         idx
     }
 
+    pub fn constant(&self, idx: usize) -> &value::Value {
+        self.constants.index(idx)
+    }
+
     fn add_line(&mut self, line: usize) {
         match self.lines.last_mut() {
             Some(span) if span.line == line => span.count += 1,
@@ -58,26 +62,11 @@ impl Chunk {
     }
 }
 
-impl Index<usize> for Chunk {
-    type Output = OpCode;
-
-    fn index(&self, offset: usize) -> &Self::Output {
-        self.code.index(offset)
-    }
-}
-
 // Disassembler
-pub fn disassemble(chunk: &Chunk, name: &str) {
-    println!("== {} ==", name);
-
-    for (idx, _) in chunk.code.iter().enumerate() {
-        disassemble_instruction(chunk, idx);
-    }
-}
 
 /// Print a single disassembled instruction at the specified offset.
 /// Some instructions are printed "raw", others have special handling.
-fn disassemble_instruction(chunk: &Chunk, offset: usize) {
+pub fn disassemble_instruction(chunk: &Chunk, offset: usize) {
     print!("{:04} ", offset);
 
     let line = chunk.get_line(offset);
@@ -87,8 +76,8 @@ fn disassemble_instruction(chunk: &Chunk, offset: usize) {
         print!("{:4} ", line);
     }
 
-    match &chunk[offset] {
-        OpCode::OpConstant(idx) => println!("OpConstant idx '{:?}'", chunk.constants[*idx]),
+    match chunk.code.index(offset) {
+        OpCode::OpConstant(idx) => println!("OpConstant({}) '{:?}'", *idx, chunk.constant(*idx)),
         op => println!("{:?}", op),
     }
 }
