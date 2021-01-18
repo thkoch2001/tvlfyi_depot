@@ -1,4 +1,6 @@
+use crate::scanner::ScannerError;
 use crate::treewalk::interpreter::Value;
+
 use std::fmt;
 
 #[derive(Debug)]
@@ -37,5 +39,21 @@ pub struct Error {
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "[line {}] Error: {:?}", self.line, self.kind)
+    }
+}
+
+impl From<ScannerError> for Error {
+    fn from(err: ScannerError) -> Self {
+        match err {
+            ScannerError::UnexpectedChar { line, unexpected } => Error {
+                line,
+                kind: ErrorKind::UnexpectedChar(unexpected),
+            },
+
+            ScannerError::UnterminatedString { line } => Error {
+                line,
+                kind: ErrorKind::UnterminatedString,
+            },
+        }
     }
 }
