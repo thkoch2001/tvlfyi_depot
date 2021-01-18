@@ -113,7 +113,7 @@ instructions:
 
 1. Be a member of `##tvl-dev` or `##tvl`.
 2. Clone the depot locally (via `git clone "https://cl.tvl.fyi/depot"`).
-3. Create a user entry in our LDAP server in [tvl-slapd/default.nix][tvl-slapd].
+3. Create a user entry in our LDAP server in [ops/users][ops-users].
 
    We recommend using ARGON2 password hashes, which can be created
    with the `slappasswd` tool if OpenLDAP was compiled with ARGON2
@@ -149,5 +149,5 @@ The email address is a [public group][].
 [Gerrit walkthrough]: https://gerrit-review.googlesource.com/Documentation/intro-gerrit-walkthrough.html
 [OWNERS]: https://cl.tvl.fyi/plugins/owners/Documentation/config.md
 [guidelines]: ./CONTRIBUTING.md#commit-messages
-[tvl-slapd]: ../ops/nixos/tvl-slapd/default.nix
+[ops-users]: ../ops/users/default.nix
 [public group]: https://groups.google.com/a/tazj.in/forum/?hl=en#!forum/depot
