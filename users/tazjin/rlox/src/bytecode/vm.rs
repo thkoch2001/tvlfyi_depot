@@ -32,7 +32,7 @@ macro_rules! binary_op {
 }
 
 impl VM {
-    fn run(&mut self) -> LoxResult<()> {
+    fn run(&mut self) -> LoxResult<Value> {
         loop {
             let op = &self.chunk.code[self.ip];
 
@@ -42,10 +42,7 @@ impl VM {
             self.ip += 1;
 
             match op {
-                OpCode::OpReturn => {
-                    println!("{:?}", self.pop());
-                    return Ok(());
-                }
+                OpCode::OpReturn => return Ok(self.pop()),
 
                 OpCode::OpConstant(idx) => {
                     let c = *self.chunk.constant(*idx);
@@ -66,7 +63,7 @@ impl VM {
     }
 }
 
-pub fn interpret(chunk: chunk::Chunk) -> LoxResult<()> {
+pub fn interpret(chunk: chunk::Chunk) -> LoxResult<Value> {
     let mut vm = VM {
         chunk,
         ip: 0,
