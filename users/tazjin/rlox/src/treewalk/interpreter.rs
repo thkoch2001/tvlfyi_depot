@@ -1,7 +1,8 @@
 use crate::treewalk::errors::{Error, ErrorKind};
 use crate::treewalk::parser::{self, Block, Expr, Literal, Statement};
+use crate::treewalk::resolver;
 use crate::treewalk::scanner::{self, TokenKind};
-use crate::treewalk::treewalk::resolver;
+use crate::Lox;
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::sync::RwLock;
@@ -174,10 +175,13 @@ pub struct Interpreter {
     env: Rc<RwLock<Environment>>,
 }
 
-impl Interpreter {
+impl Lox for Interpreter {
+    type Value = Value;
+    type Error = Error;
+
     /// Create a new interpreter and configure the initial global
     /// variable set.
-    pub fn create() -> Self {
+    fn create() -> Self {
         let mut globals = HashMap::new();
 
         globals.insert(
@@ -193,6 +197,27 @@ impl Interpreter {
         }
     }
 
+    fn interpret(&mut self, code: String) -> Result<Value, Vec<Error>> {
+        let chars: Vec<char> = code.chars().collect();
+
+        let mut program = scanner::scan(&chars).and_then(|tokens| parser::parse(tokens))?;
+
+        let globals = self
+            .env
+            .read()
+            .expect("static globals lock poisoned")
+            .values
+            .keys()
+            .map(Clone::clone)
+            .collect::<Vec<String>>();
+
+        resolver::resolve(&globals, &mut program).map_err(|e| vec![e])?;
+        self.interpret_block_with_env(None, &program)
+            .map_err(|e| vec![e])
+    }
+}
+
+impl Interpreter {
     // Environment modification helpers
     fn define_var(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
         self.env
@@ -219,21 +244,6 @@ impl Interpreter {
             .read()
             .expect("environment lock is poisoned")
             .get(ident, var.name.line, depth)
-    }
-
-    // Interpreter itself
-    pub fn interpret(&mut self, mut program: Block) -> Result<Value, Error> {
-        let globals = self
-            .env
-            .read()
-            .expect("static globals lock poisoned")
-            .values
-            .keys()
-            .map(Clone::clone)
-            .collect::<Vec<String>>();
-
-        resolver::resolve(&globals, &mut program)?;
-        self.interpret_block_with_env(None, &program)
     }
 
     /// Interpret the block in the supplied environment. If no

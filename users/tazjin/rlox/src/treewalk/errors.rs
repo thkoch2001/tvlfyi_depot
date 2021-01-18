@@ -1,4 +1,5 @@
 use crate::treewalk::interpreter::Value;
+use std::fmt;
 
 #[derive(Debug)]
 pub enum ErrorKind {
@@ -33,6 +34,8 @@ pub struct Error {
     pub kind: ErrorKind,
 }
 
-pub fn report(err: &Error) {
-    eprintln!("[line {}] Error: {:?}", err.line, err.kind);
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "[line {}] Error: {:?}", self.line, self.kind)
+    }
 }
