@@ -20,19 +20,12 @@ let
     fromJSON
     head
     readFile
+    map
     ;
 
   inherit (lib) concatStringsSep;
 
-  # We should extract this from TVL slapd, but that data is not easily
-  # accessible right now.
-  knownUsers = [
-    "tazjin"
-    "riking"
-    "Profpatsch"
-    "grfn"
-    "lukegb"
-  ];
+  knownUsers = map (u: u.username) depot.ops.users;
 
   todo = struct {
     file = string;
