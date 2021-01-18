@@ -1,5 +1,3 @@
-use crate::treewalk::errors::{Error, ErrorKind};
-
 #[derive(Clone, Debug, PartialEq)]
 pub enum TokenKind {
     // Single-character tokens.
@@ -59,10 +57,15 @@ pub struct Token {
     pub line: usize,
 }
 
+pub enum ScannerError {
+    UnexpectedChar { line: usize, unexpected: char },
+    UnterminatedString { line: usize },
+}
+
 struct Scanner<'a> {
     source: &'a [char],
     tokens: Vec<Token>,
-    errors: Vec<Error>,
+    errors: Vec<ScannerError>,
     start: usize,   // offset of first character in current lexeme
     current: usize, // current offset into source
     line: usize,    // current line in source
@@ -131,9 +134,9 @@ impl<'a> Scanner<'a> {
 
             chr if chr.is_alphabetic() || chr == '_' => self.scan_identifier(),
 
-            unexpected => self.errors.push(Error {
+            unexpected => self.errors.push(ScannerError::UnexpectedChar {
                 line: self.line,
-                kind: ErrorKind::UnexpectedChar(unexpected),
+                unexpected,
             }),
         };
     }
@@ -181,10 +184,8 @@ impl<'a> Scanner<'a> {
         }
 
         if self.is_at_end() {
-            self.errors.push(Error {
-                line: self.line,
-                kind: ErrorKind::UnterminatedString,
-            });
+            self.errors
+                .push(ScannerError::UnterminatedString { line: self.line });
             return;
         }
 
@@ -263,7 +264,7 @@ impl<'a> Scanner<'a> {
     }
 }
 
-pub fn scan<'a>(input: &'a [char]) -> Result<Vec<Token>, Vec<Error>> {
+pub fn scan<'a>(input: &'a [char]) -> Result<Vec<Token>, Vec<ScannerError>> {
     let mut scanner = Scanner {
         source: &input,
         tokens: vec![],

@@ -200,7 +200,9 @@ impl Lox for Interpreter {
     fn interpret(&mut self, code: String) -> Result<Value, Vec<Error>> {
         let chars: Vec<char> = code.chars().collect();
 
-        let mut program = scanner::scan(&chars).and_then(|tokens| parser::parse(tokens))?;
+        let mut program = scanner::scan(&chars)
+            .map_err(|errors| errors.into_iter().map(Into::into).collect())
+            .and_then(|tokens| parser::parse(tokens))?;
 
         let globals = self
             .env

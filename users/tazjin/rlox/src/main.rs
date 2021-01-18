@@ -5,6 +5,7 @@ use std::io::Write;
 use std::process;
 
 mod bytecode;
+mod scanner;
 mod treewalk;
 
 /// Trait for making the different interpreters callable in the same
