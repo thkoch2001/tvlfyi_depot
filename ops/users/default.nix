@@ -114,12 +114,6 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$SHRFps5sVgyUXYdmqGPw9g$tEx9DwKK1RjWlw52GLwOZ/iHep+QJboaZE83f1pXSwQ";
   }
   {
-    username = "v";
-    displayName = "V";
-    email = "v@anomalous.eu";
-    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$Wa11vk3gQKhJr1uzvtRTRQ$RHfvcC2j6rDUgWfezm05N03LeGIEezeKtmFmt+rfvM4";
-  }
-  {
     username = "ben";
     email = "tvl@benjojo.co.uk";
     password = "{SSHA}Zi48mSPsRMEPhff44w4RHi0SjjyhjWk1";

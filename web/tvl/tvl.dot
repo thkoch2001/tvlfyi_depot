@@ -50,7 +50,6 @@ digraph tvl {
     seven [href="https://open.spotify.com/user/so7"];
     spacekookie [href="https://spacekookie.de/"];
     tazjin [href="https://tazj.in/"];
-    V [href="https://anomalous.eu/"];
     wpcarro [href="https://wpcarro.dev/"];
   }
 
@@ -143,7 +142,6 @@ digraph tvl {
     afra -> unspecific;
     nikky -> afra;
     spacekookie -> qyliss;
-    V -> unspecific;
   }
 
   // secondary edges (how are they connected otherwise?)
