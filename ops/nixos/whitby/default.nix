@@ -426,12 +426,6 @@ in lib.fix(self: {
       openssh.authorizedKeys.keys = depot.users.eta.keys.whitby;
     };
 
-    users.v = {
-      isNormalUser = true;  # Questionable...
-      extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.v.keys.whitby;
-    };
-
     users.cynthia = {
       isNormalUser = true; # I'm normal OwO :3
       extraGroups = [ "git" ];
