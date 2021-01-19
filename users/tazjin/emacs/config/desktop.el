@@ -30,8 +30,17 @@
   (shell-command "xbacklight -dec 5")
   (message "Brightness decreased"))
 
+(defun set-xkb-layout (layout)
+  "Set the current X keyboard layout."
+
+  (shell-command (format "setxkbmap %s" layout))
+  (shell-command "setxkbmap -option caps:super")
+  (message "Set X11 keyboard layout to '%s'" layout))
+
 (defun lock-screen ()
   (interactive)
+  (set-xkb-layout "us")
+
   ;; A sudoers configuration is in place that lets me execute this
   ;; particular command without having to enter a password.
   ;;
@@ -39,13 +48,6 @@
   ;; xsecurelock.service to be started as a system-wide service that
   ;; is tied to suspend.target.
   (shell-command "/usr/bin/sudo /usr/bin/systemctl start xsecurelock.service"))
-
-(defun set-xkb-layout (layout)
-  "Set the current X keyboard layout."
-
-  (shell-command (format "setxkbmap %s" layout))
-  (shell-command "setxkbmap -option caps:super")
-  (message "Set X11 keyboard layout to '%s'" layout))
 
 (defun create-window-name ()
   "Construct window names to be used for EXWM buffers by
