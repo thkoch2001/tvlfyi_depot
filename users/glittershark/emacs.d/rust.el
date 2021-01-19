@@ -6,6 +6,7 @@
   (interactive)
 
   (push '(?> . ("<" . ">")) evil-surround-pairs-alist)
+  (push '(?< . ("< " . " >")) evil-surround-pairs-alist)
 
   (setq lsp-rust-server 'rust-analyzer)
   (setq-local whitespace-line-column 100
