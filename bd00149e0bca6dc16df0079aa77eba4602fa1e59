@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90edd9e6_87cdd890",
+        "filename": "web/panettone/src/inline-markdown.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-01-19T14:31:23Z",
+      "side": 1,
+      "message": "Can you not return multiple values instead? cf http://www.lispworks.com/documentation/HyperSpec/Body/f_values.htm",
+      "revId": "bd00149e0bca6dc16df0079aa77eba4602fa1e59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3d190b3_e798b361",
+        "filename": "web/panettone/src/inline-markdown.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-01-19T14:31:23Z",
+      "side": 1,
+      "message": "This could maybe have a #. before (cons ...) to compute it at compile-time, seeing as it doesn\u0027t look like you mutate SPECIAL-TOKS anywhere.",
+      "revId": "bd00149e0bca6dc16df0079aa77eba4602fa1e59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc3089c4_5e87ce8f",
+        "filename": "web/panettone/src/inline-markdown.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-01-19T14:31:23Z",
+      "side": 1,
+      "message": "better: (unless (null toks) (reduce ...))",
+      "revId": "bd00149e0bca6dc16df0079aa77eba4602fa1e59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4e28c15_3e0371ed",
+        "filename": "web/panettone/src/inline-markdown.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-01-19T14:31:23Z",
+      "side": 1,
+      "message": "nit: whitespace",
+      "revId": "bd00149e0bca6dc16df0079aa77eba4602fa1e59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
