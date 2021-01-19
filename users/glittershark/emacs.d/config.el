@@ -129,6 +129,7 @@
              (elixir-atom-face ((t (:foreground ,+solarized-cyan))))
              (linum ((t (:background ,+solarized-s-base2 :foreground ,+solarized-s-base1))))
              (line-number ((t (:background ,+solarized-s-base2 :foreground ,+solarized-s-base1))))
+             (line-number-current-line ((t (:background ,+solarized-s-base2 :foreground ,+solarized-s-base1))))
 
              (haskell-operator-face ((t (:foreground ,+solarized-green))))
              (haskell-keyword-face ((t (:foreground ,+solarized-cyan))))
