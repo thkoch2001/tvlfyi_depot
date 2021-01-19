@@ -144,8 +144,6 @@
 (add-to-list 'custom-theme-load-path "~/.doom.d/themes")
 (load-theme 'grfn-solarized-light t)
 
-(load! "slack")
-
 (defface haskell-import-face `((t (:foreground ,+solarized-magenta))) "")
 
 (setq doom-theme 'grfn-solarized-light)
