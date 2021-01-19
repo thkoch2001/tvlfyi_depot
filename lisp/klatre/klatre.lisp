@@ -76,18 +76,23 @@ separated by SEP."
 (defparameter dottime-format
   '((:year 4) #\- (:month 2) #\- (:day 2)
     #\T
-    (:hour 2) #\· (:min 2) "+00") ; TODO(grfn): Allow passing offset
+    (:hour 2) #\· (:min 2))
   "`:LOCAL-TIME' format specifier for dottime")
 
-(defun format-dottime (timestamp)
-  "Return TIMESTAMP formatted as dottime, using a +00 offset"
+(defun format-dottime (timestamp &optional (offset 0))
+  "Return TIMESTAMP formatted as dottime, with a specified offset or +00"
   (check-type timestamp local-time:timestamp)
-  (local-time:format-timestring nil timestamp
-                                :format dottime-format
-                                :timezone local-time:+utc-zone+))
+  (concatenate 'string
+    (local-time:format-timestring nil timestamp
+                                  :format dottime-format
+                                  :timezone local-time:+utc-zone+)
+    ; render sign manually since format prints it after padding
+    (if (>= offset 0) "+" "-")
+    (format nil "~2,'0D" (abs offset))))
 
 (comment
- (format-dottime (local-time:now)))
+ (format-dottime (local-time:now))
+ (format-dottime (local-time:now) 2))
 
 (defun try-parse-integer (str)
   "Attempt to parse STR as an integer, returning nil if it is invalid."
