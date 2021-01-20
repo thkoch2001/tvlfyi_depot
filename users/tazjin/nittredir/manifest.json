@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "nittredir",
+  "version": "1.0",
+  "description": "Redirect twitter.com to nitter.net",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "*://twitter.com/*"
+  ]
+}
