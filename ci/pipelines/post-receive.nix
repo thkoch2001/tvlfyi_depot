@@ -39,23 +39,6 @@ let
       depends_on = "build-briefcase";
     }
     {
-      key = "lint-emacs";
-      command = let
-        nixosEmacs = briefcase.emacs.nixos {
-          briefcasePath = "$(pwd)";
-        };
-      in ''
-        ${nixosEmacs}/bin/wpcarros-emacs \
-          --quick \
-          --batch \
-          --load ${elispLintSrc}/elisp-lint.el \
-          --funcall elisp-lint-files-batch \
-          ./emacs/.emacs.d/wpc/*.el
-      '';
-      label = ":gnu: lint Emacs";
-      depends_on = "build-briefcase";
-    }
-    {
       key = "build-socrates";
       command = ''
         nix-build '<nixpkgs/nixos>' \
