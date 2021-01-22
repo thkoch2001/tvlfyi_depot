@@ -420,6 +420,19 @@ instance ToField RegistrationSecret where
   toField (RegistrationSecret secretUUID) =
     secretUUID |> UUID.toText |> SQLText
 
+instance FromJSON RegistrationSecret
+
+data VerifyAccountRequest = VerifyAccountRequest
+  { verifyAccountRequestUsername :: Username
+  , verifyAccountRequestSecret :: RegistrationSecret
+  } deriving (Eq, Show)
+
+instance FromJSON VerifyAccountRequest where
+  parseJSON = withObject "VerifyAccountRequest" $ \x -> do
+    verifyAccountRequestUsername <- x .: "username"
+    verifyAccountRequestSecret   <- x .: "secret"
+    pure VerifyAccountRequest{..}
+
 data PendingAccount = PendingAccount
   { pendingAccountSecret :: RegistrationSecret
   , pendingAccountUsername :: Username
