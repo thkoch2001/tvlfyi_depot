@@ -48,11 +48,9 @@ sendVerifyEmail T.Config{..} (T.Username username) email (T.RegistrationSecret s
   Email.send mailgunAPIKey subject (cs body) email
   where
     subject = "Please confirm your account"
-    -- TODO(wpcarro): Use a URL encoder
-    -- TODO(wpcarro): Use a dynamic domain and port number
     body =
       let secret = secretUUID |> UUID.toString in
-        cs configServer ++ "/verify?username=" ++ cs username ++ "&secret=" ++ secret
+        "To verify your account: POST /verify username=" ++ cs username ++ " secret=" ++ secret
 
 -- | Send an invitation email to recipient, `to`, with a secret code.
 sendInviteEmail :: T.Config
@@ -119,14 +117,14 @@ server config@T.Config{..} = createAccount
             Left _ -> undefined
             Right _ -> pure NoContent
 
-    verifyAccount :: Text -> T.RegistrationSecret -> Handler NoContent
-    verifyAccount username secretUUID = do
-      mPendingAccount <- liftIO $ PendingAccounts.get dbFile (T.Username username)
+    verifyAccount :: T.VerifyAccountRequest -> Handler NoContent
+    verifyAccount T.VerifyAccountRequest{..} = do
+      mPendingAccount <- liftIO $ PendingAccounts.get dbFile verifyAccountRequestUsername
       case mPendingAccount of
         Nothing ->
           throwError err401 { errBody = "Either your secret or your username (or both) is invalid" }
         Just pendingAccount@T.PendingAccount{..} ->
-          if pendingAccountSecret == secretUUID then do
+          if pendingAccountSecret == verifyAccountRequestSecret then do
             liftIO $ Accounts.transferFromPending dbFile pendingAccount
             pure NoContent
           else
