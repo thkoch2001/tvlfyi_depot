@@ -60,9 +60,13 @@ let
 
   watch-file-modified = depot.users.Profpatsch.writers.rustSimple {
     name = "watch-file-modified";
-    dependencies = [ depot.users.Profpatsch.rust-crates.inotify ];
+    dependencies = [
+      depot.users.Profpatsch.rust-crates.inotify
+      depot.users.Profpatsch.netstring.rust-netstring
+    ];
   } ''
     extern crate inotify;
+    extern crate netstring;
     use inotify::{EventMask, WatchMask, Inotify};
     use std::io::Write;
 
@@ -79,18 +83,6 @@ let
             )
             .expect("Failed to add inotify watch");
 
-        fn to_netstring(s: &[u8]) -> Vec<u8> {
-            let len = s.len();
-            // length of the integer as ascii
-            let i_len = ((len as f64).log10() as usize) + 1;
-            let ns_len = i_len + 1 + len + 1;
-            let mut res = Vec::with_capacity(ns_len);
-            res.extend_from_slice(format!("{}:", len).as_bytes());
-            res.extend_from_slice(s);
-            res.push(b',');
-            res
-        }
-
         let mut buffer = [0u8; 4096];
         loop {
             let events = inotify
@@ -99,7 +91,7 @@ let
 
             for event in events {
                 if event.wd == file_watch {
-                  std::io::stdout().write(&to_netstring(file.as_bytes()));
+                  std::io::stdout().write(&netstring::to_netstring(file.as_bytes()));
                   std::io::stdout().flush();
                 }
             }
