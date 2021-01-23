@@ -1,14 +1,9 @@
-{ depot, lib, pkgs, python-netstring, toNetstring, toNetstringKeyVal }:
+{ depot, lib, pkgs, python-netstring, rust-netstring, toNetstring, toNetstringKeyVal }:
 
 let
-  imports = {
-    inherit (depot.users.Profpatsch)
-      writers
-      ;
-  };
 
-  python-netstring-test = imports.writers.python3 {
-    name = "python-netstring";
+  python-netstring-test = depot.users.Profpatsch.writers.python3 {
+    name = "python-netstring-test";
     libraries = p: [
       python-netstring
     ];
@@ -36,11 +31,31 @@ let
       ),
       { b'foo': b'42', b'bar': b'hi' }
     )
+  '';
 
+  rust-netstring-test = depot.users.Profpatsch.writers.rustSimple {
+    name = "rust-netstring-test";
+    dependencies = [
+      rust-netstring
+    ];
+  } ''
+    extern crate netstring;
+
+    fn main() {
+      assert_eq!(
+        std::str::from_utf8(&netstring::to_netstring(b"hello")).unwrap(),
+        r##"${toNetstring "hello"}"##
+      );
+      assert_eq!(
+        std::str::from_utf8(&netstring::to_netstring("こんにちは".as_bytes())).unwrap(),
+        r##"${toNetstring "こんにちは"}"##
+      );
+    }
   '';
 
 in {
   inherit
     python-netstring-test
+    rust-netstring-test
     ;
 }
