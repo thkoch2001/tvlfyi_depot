@@ -38,7 +38,6 @@ digraph tvl {
     lukegb [href="https://lukegb.com/"];
     marcusr [href="http://marcus.nordaaker.com/"];
     maskerad [href="https://femalelegends.com/"];
-    multi [href="https://1.0.168.192.in-addr.xyz/"];
     ncl;
     nikky [href="http://nikky.moe/"];
     nyanotech [href="https://twitter.com/nyanotech"];
@@ -102,7 +101,6 @@ digraph tvl {
     espes -> edef;
     firefly -> edef;
     leah2 -> aurora;
-    multi -> edef;
     ncl -> edef;
     puck -> edef;
     qyliss -> edef;
@@ -125,7 +123,6 @@ digraph tvl {
     urbint -> wpcarro;
     camsbury -> wpcarro;
     anon1 -> google;
-    aranea -> multi;
     artemist -> cynthia;
     aurora -> eve;
     cynthia -> benjojo;
@@ -155,7 +152,6 @@ digraph tvl {
     artemist -> lgbtslack;
 
     // ircv3
-    multi -> ircv3;
     eta -> ircv3;
     firefly -> ircv3;
 
@@ -165,7 +161,6 @@ digraph tvl {
     // random
     leah2 -> edef;
     lukegb -> isomer;
-    eta -> multi;
     eta -> firefly;
     cynthia -> firefly;
     cynthia -> lukegb;
@@ -173,7 +168,6 @@ digraph tvl {
     kanepyork -> google;
     nyanotech -> google;
     lukegb -> benjojo;
-    multi -> benjojo;
     espes -> benjojo;
     espes -> aurora;
     puck -> nix;
