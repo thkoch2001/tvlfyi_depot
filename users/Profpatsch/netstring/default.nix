@@ -36,12 +36,29 @@ let
         return res
   '';
 
+  rust-netstring = depot.users.Profpatsch.writers.rustSimpleLib {
+    name = "netstring";
+  } ''
+    pub fn to_netstring(s: &[u8]) -> Vec<u8> {
+        let len = s.len();
+        // length of the integer as ascii
+        let i_len = ((len as f64).log10() as usize) + 1;
+        let ns_len = i_len + 1 + len + 1;
+        let mut res = Vec::with_capacity(ns_len);
+        res.extend_from_slice(format!("{}:", len).as_bytes());
+        res.extend_from_slice(s);
+        res.push(b',');
+        res
+    }
+  '';
+
   tests = import ./tests.nix {
     inherit
       depot
       pkgs
       lib
       python-netstring
+      rust-netstring
       toNetstring
       toNetstringKeyVal
       ;
@@ -52,6 +69,7 @@ in {
     toNetstring
     toNetstringKeyVal
     python-netstring
+    rust-netstring
     tests
       ;
 
