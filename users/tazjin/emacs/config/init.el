@@ -121,8 +121,6 @@
   :config (setq magit-repository-directories '(("/home/tazjin/projects" . 2)
                                                ("/home/tazjin" . 1))))
 
-(use-package org-ql)
-
 (use-package password-store)
 (use-package pg)
 (use-package restclient)
