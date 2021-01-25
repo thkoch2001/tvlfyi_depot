@@ -33,6 +33,24 @@
       "message": "hm, I suppose this is ostensibly XSS safety",
       "revId": "5030ad1c3e93ffea1714a1c637ff4fdcd39c032d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d9f735f_f10c0820",
+        "filename": "web/panettone/test/inline-markdown_test.lisp",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-01-25T20:54:03Z",
+      "side": 1,
+      "message": "Yes, who:escape-string is pretty aggressive.\n\nAs a side note, we could contemplate to switch to who:escape-string-minimal-plus-quotes for panettone as a whole which would make the HTML source a bit more human readable probably.",
+      "parentUuid": "e05729f9_8c450b95",
+      "revId": "5030ad1c3e93ffea1714a1c637ff4fdcd39c032d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
