@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87eeb021_d736ca83",
+        "filename": "web/panettone/src/inline-markdown.lisp",
+        "patchSetId": 8
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-01-25T20:10:31Z",
+      "side": 1,
+      "message": "ahh, never mind, I see it now. Ignore me",
+      "revId": "5030ad1c3e93ffea1714a1c637ff4fdcd39c032d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e05729f9_8c450b95",
+        "filename": "web/panettone/test/inline-markdown_test.lisp",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-01-25T20:10:31Z",
+      "side": 1,
+      "message": "hm, I suppose this is ostensibly XSS safety",
+      "revId": "5030ad1c3e93ffea1714a1c637ff4fdcd39c032d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
