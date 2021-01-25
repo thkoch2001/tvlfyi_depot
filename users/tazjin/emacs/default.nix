@@ -54,12 +54,10 @@ let
     ht
     hydra
     idle-highlight-mode
-    intero
     ivy
     ivy-prescient
     jq-mode
     kotlin-mode
-    lispy
     lsp-mode
     magit
     markdown-toc
@@ -69,14 +67,11 @@ let
     nginx-mode
     nix-mode
     notmuch # this comes from pkgs.third_party
-    org-ql
     paredit
     password-store
-    pg
     polymode
     prescient
     protobuf-mode
-    racket-mode
     rainbow-delimiters
     refine
     request
