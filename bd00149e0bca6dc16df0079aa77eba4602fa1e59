@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2965d39_574628f6",
+        "filename": "web/panettone/src/inline-markdown.lisp",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-01-25T21:01:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c2d2b01_6cad89f4",
+      "revId": "bd00149e0bca6dc16df0079aa77eba4602fa1e59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3d190b3_e798b361",
