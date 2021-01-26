@@ -1,4 +1,4 @@
-{ pkgs, depot, ... }:
+{ depot, pkgs, lib, ... }:
 
 let
   imports = {
@@ -40,7 +40,7 @@ let
 
   netencode-rs = netencode-rs-common false;
 
-  gen = import ./netencode.nix;
+  gen = import ./gen.nix { inherit lib; };
 
   cfg-if = pkgs.buildRustCrate {
     pname = "cfg-if";
