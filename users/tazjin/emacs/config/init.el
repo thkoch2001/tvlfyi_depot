@@ -50,7 +50,6 @@
 
 (use-package dash)
 (use-package dash-functional)
-
 (use-package gruber-darker-theme)
 
 (use-package eglot
@@ -122,7 +121,6 @@
                                                ("/home/tazjin" . 1))))
 
 (use-package password-store)
-(use-package pg)
 (use-package restclient)
 
 (use-package vterm
