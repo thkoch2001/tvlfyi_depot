@@ -1,3 +1,4 @@
+{ lib }:
 let
 
   netstring = tag: suffix: s:
@@ -26,9 +27,23 @@ let
   concatStrings = builtins.concatStringsSep "";
 
   record = lokv: netstring "{" "}"
-    (concatStrings (map (kv: tag kv.key kv.val) lokv));
+    (concatStrings (map ({key, val}: tag key val) lokv));
 
   list = l: netstring "[" "]" (concatStrings l);
+
+  dwim = val:
+    let match = {
+      "bool" = n1;
+      "int" = i6;
+      "string" = text;
+      "set" = attrs: record (lib.mapAttrsToList
+        (k: v: {
+          key = k;
+          val = dwim v;
+        }) attrs);
+      "list" = l: list (map dwim l);
+    };
+    in match.${builtins.typeOf val} val;
 
 in {
   inherit
@@ -45,5 +60,6 @@ in {
     tag
     record
     list
+    dwim
     ;
 }
