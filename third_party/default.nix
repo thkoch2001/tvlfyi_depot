@@ -41,8 +41,9 @@ in exposed.lib.fix(self: exposed // {
   # Packages to be overridden
   originals = {
     inherit (nixpkgs) gtest openldap go grpc notmuch rr;
-    inherit (stableNixpkgs) git;
+    inherit (stableNixpkgs) git tdlib;
     ffmpeg = nixpkgs.ffmpeg-full;
+    telega = stableNixpkgs.emacsPackages.telega;
   };
 
   # Use LLVM 11
@@ -65,9 +66,6 @@ in exposed.lib.fix(self: exposed // {
 
   emacs27-nox = assert ((exposed.lib.versions.major nixpkgs.emacs.version) == "27");
     nixpkgs.emacs-nox;
-
-  # Provide telega.el from stable
-  stableTelega = stableNixpkgs.emacsPackages.telega;
 
   # The Go authors have released a version of Go (in alpha) that has a
   # type system. This makes it available, specifically for use with
