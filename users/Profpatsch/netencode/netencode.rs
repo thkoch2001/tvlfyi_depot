@@ -25,7 +25,7 @@ pub enum T {
     // TODO: make into &str
     Sum(Tag<String, Box<T>>),
     // TODO: make into &str
-    Record(HashMap<String, Box<T>>),
+    Record(HashMap<String, T>),
     List(Box<Vec<T>>),
 }
 
@@ -47,7 +47,7 @@ pub enum U<'a> {
     Binary(&'a [u8]),
     // Tags
     Sum(Tag<&'a str, Box<U<'a>>>),
-    Record(Vec<(&'a str, Box<U<'a>>)>),
+    Record(Vec<(&'a str, U<'a>)>),
     List(&'a [u8]),
 }
 
@@ -98,7 +98,7 @@ pub fn encode<W: Write>(w: &mut W, u: U) -> std::io::Result<()> {
       U::Record(m) => {
           let mut c = std::io::Cursor::new(vec![]);
           for (k, v) in m {
-              encode_tag(&mut c, k, *v)?;
+              encode_tag(&mut c, k, v)?;
           }
           write!(w, "{{{}:", c.get_ref().len())?;
           w.write(c.get_ref())?;
@@ -280,7 +280,7 @@ pub mod parse {
         map_parser(list_g(), nom::multi::many_m_n(n, n, u_u))
     }
 
-    fn record_t<'a>(s: &'a [u8]) -> IResult<&'a [u8], HashMap<String, Box<T>>> {
+    fn record_t<'a>(s: &'a [u8]) -> IResult<&'a [u8], HashMap<String, T>> {
         let (s, r) = record_g(t_t)(s)?;
         Ok((s,
             r.into_iter()
@@ -291,7 +291,7 @@ pub mod parse {
             .collect::<HashMap<_,_>>()))
     }
 
-    fn record_g<'a, P, O>(inner: P) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], Vec<(&'a str, Box<O>)>>
+    fn record_g<'a, P, O>(inner: P) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], Vec<(&'a str, O)>>
     where
         O: Clone,
         P: Fn(&'a [u8]) -> IResult<&'a [u8], O>
@@ -302,7 +302,7 @@ pub mod parse {
                 tag_g(inner),
                 Vec::new(),
                 |mut acc: Vec<_>, Tag { tag, mut val }| {
-                    acc.push((tag, Box::new(val)));
+                    acc.push((tag, val));
                     acc
                 }
             )
@@ -502,17 +502,17 @@ pub mod parse {
             assert_eq!(
                 record_t("{21:<1:a|u,<1:b|u,<1:c|u,}".as_bytes()),
                 Ok(("".as_bytes(), vec![
-                    ("a".to_owned(), Box::new(T::Unit)),
-                    ("b".to_owned(), Box::new(T::Unit)),
-                    ("c".to_owned(), Box::new(T::Unit)),
-                ].into_iter().collect::<HashMap<String, Box<T>>>()))
+                    ("a".to_owned(), T::Unit),
+                    ("b".to_owned(), T::Unit),
+                    ("c".to_owned(), T::Unit),
+                ].into_iter().collect::<HashMap<String, T>>()))
             );
             // duplicated keys are ignored (first is taken)
             assert_eq!(
                 record_t("{25:<1:a|u,<1:b|u,<1:a|i1:-1,}".as_bytes()),
                 Ok(("".as_bytes(), vec![
-                    ("a".to_owned(), Box::new(T::Unit)),
-                    ("b".to_owned(), Box::new(T::Unit)),
+                    ("a".to_owned(), T::Unit),
+                    ("b".to_owned(), T::Unit),
                 ].into_iter().collect::<HashMap<_,_>>()))
             );
         }
@@ -539,13 +539,13 @@ pub mod parse {
             assert_eq!(
                 t_t("{52:<1:a|u,<3:foo|[33:<1:A|u,<1:A|n1:1,<1:B|[7:i3:127,]]}".as_bytes()),
                 Ok(("".as_bytes(), T::Record(vec![
-                    ("a".to_owned(), Box::new(T::Unit)),
-                    ("foo".to_owned(), Box::new(T::List(Box::new(vec![
+                    ("a".to_owned(), T::Unit),
+                    ("foo".to_owned(), T::List(Box::new(vec![
                         T::Sum(Tag { tag: "A".to_owned(), val: Box::new(T::Unit) }),
                         T::Sum(Tag { tag: "A".to_owned(), val: Box::new(T::N1(true)) }),
                         T::Sum(Tag { tag: "B".to_owned(), val: Box::new(T::List(Box::new(vec![T::I3(127)]))) }),
-                    ]))))
-                ].into_iter().collect::<HashMap<String, Box<T>>>())))
+                    ])))
+                ].into_iter().collect::<HashMap<String, T>>())))
             );
         }
 
