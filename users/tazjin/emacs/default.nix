@@ -15,7 +15,7 @@ let
   emacsWithPackages = (third_party.emacsPackagesGen third_party.emacs27).emacsWithPackages;
 
   # $PATH for binaries that need to be available to Emacs
-  emacsBinPath = lib.makeBinPath [ third_party.stableTelega ];
+  emacsBinPath = lib.makeBinPath [ third_party.telega ];
 
   identity = x: x;
 
@@ -100,7 +100,7 @@ let
     tvl
 
     # patched / overridden versions of packages
-    depot.third_party.stableTelega
+    depot.third_party.telega
     depot.third_party.emacs.exwm
     depot.third_party.emacs.rcirc
     depot.third_party.emacs.vterm
