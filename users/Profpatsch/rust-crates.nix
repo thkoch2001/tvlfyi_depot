@@ -82,4 +82,11 @@ rec {
     sha256 = "0fcknyvknglwwk1pdzdlb4m0ry2dym1yx8r5prf2v00pxnjk0hv2";
   };
 
+  httparse = pkgs.buildRustCrate {
+    pname = "httparse";
+    version = "1.3.4";
+    crateName = "httparse";
+    sha256 = "0dggj4s0cq69bn63q9nqzzay5acmwl33nrbhjjsh5xys8sk2x4jw";
+  };
+
 }
