@@ -34,6 +34,74 @@
       "parentUuid": "68f06ba7_30856940",
       "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6081c55a_61e3146f",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-01-27T14:26:52Z",
+      "side": 1,
+      "message": "I feel like `isTag` should not throw an error if the supplied value is not a set at least by virtue of being named like the builtin type discriminators.\n\nA check for set would be nice imo.",
+      "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c09bf3a_a8711c02",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-01-27T14:26:52Z",
+      "side": 1,
+      "message": "The documentation here is inaccurate: `discrDef` expects a list of discrimantors, not a set.\n\nUsing a set would be nice for consistency, but isn\u0027t desireable probably because it\u0027d make predicate application order unpredictable.",
+      "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f62496f3_7ccc4b3f",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-01-27T14:26:52Z",
+      "side": 1,
+      "message": "You could reuse `isTag` here, I think?",
+      "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dca7248_0524c4b5",
+        "filename": "nix/tag/tests.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-01-27T14:26:52Z",
+      "side": 1,
+      "message": "Tests for `match` would be nice.",
+      "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
