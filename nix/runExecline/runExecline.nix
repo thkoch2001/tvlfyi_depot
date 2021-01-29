@@ -51,6 +51,7 @@ let
 
 in
 
+# TODO: move name into the attrset
 name:
 {
 # a string to pass as stdin to the execline script
