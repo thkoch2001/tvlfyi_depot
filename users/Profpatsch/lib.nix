@@ -22,7 +22,7 @@ let
   ];
 
   eprintenv = depot.nix.writeExecline "eprintenv" { readNArgs = 1; } [
-    "fdmove" "-c" "1" "2" bins.printenv "$1"
+    "fdmove" "-c" "1" "2" bins.printenv "$1" "$@"
   ];
 
 in {
