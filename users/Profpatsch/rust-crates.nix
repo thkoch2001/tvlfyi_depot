@@ -14,6 +14,13 @@ rec {
     sha256 = "12q71z6ck8wlqrwgi25x3lrryyks9djymswn9b1c6qq0i01jpc1p";
   };
 
+  ascii = pkgs.buildRustCrate {
+    pname = "ascii";
+    crateName = "ascii";
+    version = "1.0.0";
+    sha256 = "0gam8xsn981wfa40srsniivffjsfz1pg0xnigmczk9k7azb1ks1m";
+  };
+
   regex-syntax = pkgs.buildRustCrate {
     pname = "regex-syntax";
     crateName = "regex-syntax";

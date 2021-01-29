@@ -1,6 +1,7 @@
 extern crate httparse;
 extern crate netencode;
 extern crate arglib_netencode;
+extern crate ascii;
 
 use std::os::unix::io::FromRawFd;
 use std::io::Read;
@@ -63,11 +64,11 @@ fn main() -> std::io::Result<()> {
     fn normalize_headers<'a>(headers: &'a [httparse::Header]) -> Vec<(String, &'a str)> {
         let mut res = vec![];
         for httparse::Header { name, value } in headers {
-            let val = std::str::from_utf8(*value)
-                .expect(&format!("read-http: we require header values to be UTF-8 (they should be ASCII), but the header {} was {:?}", name, value));
+            let val = ascii::AsciiStr::from_ascii(*value)
+                .expect(&format!("read-http: we require header values to be ASCII, but the header {} was {:?}", name, value));
             // lowercase the headers, since the standard doesn’t care
             // and we want unique strings to match agains
-            res.push((name.to_lowercase(), val))
+            res.push((name.to_lowercase(), val.as_str()))
         }
         res
     }
