@@ -89,11 +89,36 @@ let
   } (builtins.readFile ./netencode-mustache.rs);
 
 
+  record-splice-env = imports.writers.rustSimple {
+    name = "record-splice-env";
+    dependencies = [
+      netencode-rs
+      depot.users.Profpatsch.execline.exec-helpers
+    ];
+  } ''
+    extern crate netencode;
+    extern crate exec_helpers;
+    use netencode::dec::{Record, ScalarAsBytes, Decoder, DecodeError};
+    fn main() {
+        let t = netencode::t_from_stdin_or_panic("record-splice-env");
+            match Record::<ScalarAsBytes>::dec(t) {
+                Ok(map) => {
+                    exec_helpers::exec_into_args(
+                        "record-splice-env",
+                        map.iter().map(|(k,v)| (k.as_bytes(), &v[..])
+                    );
+                },
+                Err(DecodeError(err)) => panic!("{}", err),
+            }
+    }
+  '';
+
 in {
   inherit
    netencode-rs
    netencode-rs-tests
    netencode-mustache
+   record-splice-env
    gen
    ;
 }
