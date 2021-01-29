@@ -9,7 +9,11 @@
            "><!?")))
 
 (defun +grfn/clojure-setup ()
-  (flycheck-mode -1))
+  ;; (flycheck-select-checker 'clj-kondo)
+  (push 'clojure-cider-kibit flycheck-disabled-checkers)
+  (push 'clojure-cider-eastwood flycheck-disabled-checkers)
+  (push 'clojure-cider-typed flycheck-disabled-checkers)
+  )
 
 (after! clojure-mode
   (define-clojure-indent
