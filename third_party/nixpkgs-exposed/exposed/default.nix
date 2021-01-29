@@ -11,6 +11,7 @@
     autoreconfHook
     avrdude
     avrlibc
+    bash
     bashInteractive
     bat
     bc
@@ -29,6 +30,7 @@
     cachix
     cairo
     cargo
+    cdb
     cgit
     clang_11
     cmake
@@ -82,6 +84,7 @@
     libffi
     linuxPackages
     linuxPackages_5_11
+    lowdown
     luajit
     lutris
     makeFontsConf
@@ -122,6 +125,7 @@
     runCommandNoCC
     rustPlatform
     rustc
+    s6-networking
     s6-portable-utils
     sbcl
     shellcheck
@@ -135,6 +139,7 @@
     terraform_0_12
     texlive
     thttpd
+    time
     tree
     tree-sitter
     which
