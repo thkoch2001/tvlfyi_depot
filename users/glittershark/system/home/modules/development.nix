@@ -58,6 +58,7 @@ with lib;
     clj2nix
     clojure
     leiningen
+    clj-kondo
 
     pg-dump-upsert
 
