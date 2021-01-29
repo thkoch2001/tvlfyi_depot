@@ -90,6 +90,10 @@
 (defun author (object)
   (find-user-by-dn (author-dn object)))
 
+(defun displayname-if-known (user)
+  (or (when user (displayname user))
+      "someone"))
+
 (defmacro render ((&key
                      (footer t)
                      (header t))
@@ -171,11 +175,8 @@
     (:span :class "created-by-at"
            "Opened by "
            (:span :class "username"
-                  (who:esc
-                   (or
-                    (when-let ((author (author issue)))
-                      (displayname author))
-                    "someone")))
+                  (who:esc (displayname-if-known
+                             (author issue))))
            " at "
            (:span :class "timestamp"
                   (who:esc
@@ -293,7 +294,8 @@
        (:p
         :class "comment-info"
         (:span :class "username"
-               (who:esc (displayname (author comment)))
+               (who:esc
+                 (displayname-if-known (author comment)))
                " at "
                (:a :href (concatenate 'string "#" fragment)
                    (who:esc (format-dottime (created-at comment))))))))))
@@ -304,7 +306,7 @@
       (:li
        :class "event"
        :id
-       (who:esc (displayname user))
+       (who:esc (displayname-if-known user))
        (if (string= (field event) "STATUS")
            (who:htm
             (who:esc
