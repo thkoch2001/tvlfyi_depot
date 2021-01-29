@@ -16,6 +16,24 @@
       "message": "this indentation is a little odd - usually I\u0027d expect this to be two spaces in from the `when-let`",
       "revId": "d5836c84a264a9366da099716199ba3af8178298",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c441226a_7acffecf",
+        "filename": "web/panettone/src/authentication.lisp",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-01-29T17:18:06Z",
+      "side": 1,
+      "message": "Yeah, missed that and vim lisp syntax doesn\u0027t really know about when-let.",
+      "parentUuid": "703610bf_f7cc2488",
+      "revId": "d5836c84a264a9366da099716199ba3af8178298",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
