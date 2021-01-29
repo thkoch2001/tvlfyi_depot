@@ -60,12 +60,14 @@ fn main() -> std::io::Result<()> {
     }
 
 
-    fn lowercase_headers<'a>(headers: &'a [httparse::Header]) -> Vec<(String, &'a [u8])> {
+    fn normalize_headers<'a>(headers: &'a [httparse::Header]) -> Vec<(String, &'a str)> {
         let mut res = vec![];
         for httparse::Header { name, value } in headers {
+            let val = std::str::from_utf8(*value)
+                .expect(&format!("read-http: we require header values to be UTF-8 (they should be ASCII), but the header {} was {:?}", name, value));
             // lowercase the headers, since the standard doesn’t care
             // and we want unique strings to match agains
-            res.push((name.to_lowercase(), *value))
+            res.push((name.to_lowercase(), val))
         }
         res
     }
@@ -105,7 +107,7 @@ fn main() -> std::io::Result<()> {
             }
             let method = req.method.expect("method must be filled on complete parse");
             let path = req.path.expect("path must be filled on complete parse");
-            write_dict_req(method, path, &lowercase_headers(req.headers))
+            write_dict_req(method, path, &normalize_headers(req.headers))
         },
         Response => {
             let mut resp = httparse::Response::new(&mut headers);
@@ -120,12 +122,12 @@ fn main() -> std::io::Result<()> {
             }
             let code = resp.code.expect("code must be filled on complete parse");
             let reason = resp.reason.expect("reason must be filled on complete parse");
-            write_dict_resp(code, reason, &lowercase_headers(resp.headers))
+            write_dict_resp(code, reason, &normalize_headers(resp.headers))
         }
     }
 }
 
-fn write_dict_req<'buf>(method: &'buf str, path: &'buf str, headers: &[(String, &[u8])]) -> std::io::Result<()> {
+fn write_dict_req<'buf>(method: &'buf str, path: &'buf str, headers: &[(String, &str)]) -> std::io::Result<()> {
     let mut http = vec![
         ("method", U::Text(method.as_bytes())),
         ("path", U::Text(path.as_bytes())),
@@ -133,7 +135,7 @@ fn write_dict_req<'buf>(method: &'buf str, path: &'buf str, headers: &[(String, 
     write_dict(http, headers)
 }
 
-fn write_dict_resp<'buf>(code: u16, reason: &'buf str, headers: &[(String, &[u8])]) -> std::io::Result<()> {
+fn write_dict_resp<'buf>(code: u16, reason: &'buf str, headers: &[(String, &str)]) -> std::io::Result<()> {
     let mut http = vec![
         ("status", U::N6(code as u64)),
         ("status-text", U::Text(reason.as_bytes())),
@@ -142,16 +144,16 @@ fn write_dict_resp<'buf>(code: u16, reason: &'buf str, headers: &[(String, &[u8]
 }
 
 
-fn write_dict<'buf, 'a>(mut http: Vec<(&str, U<'a>)>, headers: &'a[(String, &[u8])]) -> std::io::Result<()> {
+fn write_dict<'buf, 'a>(mut http: Vec<(&str, U<'a>)>, headers: &'a[(String, &str)]) -> std::io::Result<()> {
     http.push(("headers", U::Record(
         headers.iter().map(
             |(name, value)|
-            (name.as_str(), U::Binary(value))
+            (name.as_str(), U::Text(value.as_bytes()))
         ).collect::<Vec<_>>()
     )));
 
     netencode::encode(
-        &mut std::io::stderr(),
+        &mut std::io::stdout(),
         U::Record(http)
     )?;
     Ok(())
