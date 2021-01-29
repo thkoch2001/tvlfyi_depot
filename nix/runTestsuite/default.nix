@@ -56,10 +56,14 @@ let
       yep = struct "yep" {
         test = string;
       };
-      nope = struct "nope" {
+      nope-eq = struct "nope-eq" {
         test = string;
         left = any;
         right = any;
+      };
+      nope-throw = struct "nope-throw" {
+        test = string;
+        expr = any;
       };
     };
 
@@ -76,9 +80,20 @@ let
     (desc: left: right:
       if left == right
       then { yep = { test = desc; }; }
-      else { nope = {
+      else { nope-eq = {
         test = desc;
         inherit left right;
+      };
+    });
+
+  # assert that the expression throws when `deepSeq`-ed
+  assertThrows = defun [ string any AssertResult ]
+    (desc: expr:
+      if ! (builtins.tryEval (builtins.deepSeq expr {})).success
+      then { yep = { test = desc; }; }
+      else { nope-throw = {
+        test = desc;
+        inherit expr;
       };
     });
 
@@ -99,7 +114,8 @@ let
         goodAss = ass: {
           good = AssertResult.match ass {
             yep = _: true;
-            nope = _: false;
+            nope-eq = _: false;
+            nope-throw = _: false;
           };
           x = ass;
         };
@@ -108,7 +124,8 @@ let
           asserts = partitionTests (ass:
             AssertResult.match ass {
               yep = _: true;
-              nope = _: false;
+              nope-eq = _: false;
+              nope-throw = _: false;
             }) it.asserts;
         };
         goodIts = partitionTests (it: (goodIt it).asserts.err == []);
@@ -133,6 +150,7 @@ let
 in {
   inherit
     assertEq
+    assertThrows
     it
     runTestsuite
     ;
