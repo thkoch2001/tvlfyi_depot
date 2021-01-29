@@ -26,7 +26,17 @@
 # will fail the second it group because true is not false.
 
 let
-  inherit (depot.nix.yants) sum struct string any unit defun list;
+  inherit (depot.nix.yants)
+    sum
+    struct
+    string
+    any
+    defun
+    list
+    drv
+    ;
+
+  bins = depot.nix.getBins pkgs.coreutils [ "printf" "touch" ];
 
   # rewrite the builtins.partition result
   # to use `ok` and `err` instead of `right` and `wrong`.
@@ -83,7 +93,7 @@ let
   # and print the result of the test suite.
   #
   # Takes a test suite name as first argument.
-  runTestsuite = defun [ string (list ItResult) unit ]
+  runTestsuite = defun [ string (list ItResult) drv ]
     (name: itResults:
       let
         goodAss = ass: {
@@ -105,12 +115,20 @@ let
         res = goodIts itResults;
       in
         if res.err == []
-        then {}
-        # TODO(Profpatsch): pretty printing of results
-        # and probably also somewhat easier to read output
-        else throw
-          ( "testsuite ${name} failed!\n"
-          + lib.generators.toPretty {} res));
+        then depot.nix.runExecline.local "testsuite-${name}-successful" {} [
+          "importas" "out" "out"
+          "if" [ bins.printf "%s\n" "testsuite ${name} successful!" ]
+          bins.touch "$out"
+        ]
+        else depot.nix.runExecline.local "testsuite-${name}-failed" {} [
+          "importas" "out" "out"
+          "if" [
+            bins.printf "%s\n%s\n"
+              "testsuite ${name} failed!"
+              (lib.generators.toPretty {} res)
+          ]
+          "exit" "1"
+        ]);
 
 in {
   inherit
