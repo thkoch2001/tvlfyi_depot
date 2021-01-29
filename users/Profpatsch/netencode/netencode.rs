@@ -563,3 +563,49 @@ pub mod parse {
 
     }
 }
+
+pub mod dec {
+    use super::*;
+    use std::collections::HashMap;
+
+    pub struct DecodeError(pub String);
+
+    pub trait Decoder {
+        type A;
+        fn dec(T) -> Result<Self::A, DecodeError>;
+    }
+
+    pub struct ScalarAsBytes;
+
+    impl Decoder for ScalarAsBytes {
+        type A = Vec<u8>;
+        fn dec(t: T) -> Result<Self::A, DecodeError> {
+            match t {
+                T::N3(u) => Ok(format!("{}", u).into_bytes()),
+                T::N6(u) => Ok(format!("{}", u).into_bytes()),
+                T::N7(u) => Ok(format!("{}", u).into_bytes()),
+                T::I3(i) => Ok(format!("{}", i).into_bytes()),
+                T::I6(i) => Ok(format!("{}", i).into_bytes()),
+                T::I7(i) => Ok(format!("{}", i).into_bytes()),
+                T::Text(t) => Ok(t.into_bytes()),
+                T::Binary(b) => Ok(b),
+                o => Err(DecodeError(format!("Cannot decode {:?} into scalar", o))),
+            }
+        }
+    }
+
+    pub struct Record<T>(pub T);
+
+    impl<Inner: Decoder> Decoder for Record<Inner> {
+        type A = HashMap<String, Inner::A>;
+        fn dec(t: T) -> Result<Self::A, DecodeError> {
+            match t {
+                T::Record(map) =>
+                    map.into_iter()
+                    .map(|(k, v)| Inner::dec(v).map(|v2| (k, v2)))
+                    .collect::<Result<Self::A, _>>(),
+                o => Err(DecodeError(format!("Cannot decode {:?} into record", o)))
+            }
+        }
+    }
+}
