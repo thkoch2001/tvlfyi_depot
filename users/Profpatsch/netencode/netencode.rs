@@ -1,7 +1,7 @@
 extern crate nom;
 
 use std::collections::HashMap;
-use std::io::Write;
+use std::io::{Write, Read};
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum T {
@@ -114,6 +114,18 @@ pub fn encode<W: Write>(w: &mut W, u: U) -> std::io::Result<()> {
 
 pub fn text(s: String) -> T {
     T::Text(s)
+}
+
+pub fn t_from_stdin_or_panic(prog_name: &str) -> T {
+    let mut buf = vec![];
+    std::io::stdin().lock().read_to_end(&mut buf);
+    match parse::t_t(&buf) {
+        Ok((rest, t)) => match rest {
+            b"" => t,
+            _ => panic!("{}: stdin contained some soup after netencode value: {:?}", prog_name, rest)
+        },
+        Err(err) => panic!("{}: unable to parse netencode from stdin: {:?}", prog_name, err)
+    }
 }
 
 pub mod parse {
