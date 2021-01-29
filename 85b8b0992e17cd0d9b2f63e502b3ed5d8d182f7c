@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80d06eed_98d9a6ba",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-01-29T13:11:43Z",
+      "side": 1,
+      "message": "I think I would prefer something like \"unknown\" or \"anonymous\", to make it clearer that this is an unusual condition.",
+      "range": {
+        "startLine": 95,
+        "startChar": 7,
+        "endLine": 95,
+        "endChar": 14
+      },
+      "revId": "85b8b0992e17cd0d9b2f63e502b3ed5d8d182f7c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
