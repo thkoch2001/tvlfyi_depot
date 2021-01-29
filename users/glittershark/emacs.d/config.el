@@ -213,8 +213,8 @@
 ;;  `((,(rx "-- |") . 'haskell-keyword-face)))
 
 
-(load-file (let ((coding-system-for-read 'utf-8))
-                (shell-command-to-string "agda-mode locate")))
+;; (load-file (let ((coding-system-for-read 'utf-8))
+;;                 (shell-command-to-string "agda-mode locate")))
 
 (defvar +grfn-dir (file-name-directory load-file-name))
 (defvar +grfn-snippets-dir (expand-file-name "snippets/" +grfn-dir))
