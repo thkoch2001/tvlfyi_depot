@@ -62,6 +62,7 @@
     gmock
     gnused
     gnutar
+    go
     google-cloud-sdk
     graphviz
     gzip
