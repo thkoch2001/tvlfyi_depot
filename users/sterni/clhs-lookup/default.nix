@@ -32,6 +32,5 @@ let
       ./clhs-lookup.lisp
     ];
   };
-in {
-  inherit clhs clhs-lookup;
-}
+in
+  clhs-lookup
