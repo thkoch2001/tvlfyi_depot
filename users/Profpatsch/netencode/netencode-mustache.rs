@@ -1,30 +1,12 @@
 extern crate netencode;
 extern crate mustache;
+extern crate arglib_netencode;
 
 use mustache::{Data};
 use netencode::{T};
 use std::collections::HashMap;
 use std::os::unix::ffi::{OsStrExt};
 use std::io::{Read};
-
-fn arglib_netencode(env: Option<&std::ffi::OsStr>) -> Result<T, String> {
-    let env = match env {
-        None => std::ffi::OsStr::from_bytes("ARGLIB_NETENCODE".as_bytes()),
-        Some(a) => a
-    };
-    match std::env::var_os(env) {
-        None => Err(format!("could not read args, envvar {} not set", env.to_string_lossy())),
-        // TODO: good error handling for the different parser errors
-        Some(soup) => match netencode::parse::t_t(soup.as_bytes()) {
-            Ok((remainder, t)) => match remainder.is_empty() {
-                true => Ok(t),
-                false => Err(format!("there was some unparsed bytes remaining: {:?}", remainder))
-            },
-            Err(err) => Err(format!("parsing error: {:?}", err))
-        }
-    }
-}
-
 
 fn netencode_to_mustache_data_dwim(t: T) -> Data {
     match t {
@@ -42,7 +24,7 @@ fn netencode_to_mustache_data_dwim(t: T) -> Data {
         T::Sum(tag) => unimplemented!(),
         T::Record(xs) => Data::Map(
             xs.into_iter()
-                .map(|(key, val)| (key, netencode_to_mustache_data_dwim(*val)))
+                .map(|(key, val)| (key, netencode_to_mustache_data_dwim(val)))
                 .collect::<HashMap<_,_>>()
         ),
         T::List(xs) => Data::Vec(
@@ -55,7 +37,7 @@ fn netencode_to_mustache_data_dwim(t: T) -> Data {
 
 pub fn from_stdin() -> () {
     let data = netencode_to_mustache_data_dwim(
-        arglib_netencode(None).unwrap()
+        arglib_netencode::arglib_netencode(Some(std::ffi::OsStr::new("TEMPLATE_DATA"))).unwrap()
     );
     let mut stdin = String::new();
     std::io::stdin().read_to_string(&mut stdin).unwrap();
