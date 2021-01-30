@@ -50,7 +50,8 @@
         :panettone.authentication
         :panettone.inline-markdown)
   (:import-from :defclass-std :defclass/std)
-  (:import-from :alexandria :if-let :when-let :switch :alist-hash-table)
+  (:import-from :alexandria :if-let :when-let :switch
+                :alist-hash-table :define-constant)
   (:import-from :cl-ppcre :split)
   (:import-from
    :panettone.model

@@ -231,6 +231,19 @@
       (:a :href "/" "View open isues"))
      (render/issue-list :issues issues))))
 
+(define-constant +offset-input-id+ "utc-offset" :test #'equal)
+(define-constant +offset-script+
+  (format nil
+    "function storeOffset () {
+      var now = new Date();
+      var offset = -now.getTimezoneOffset() / 60;
+      var offsetInput = document.getElementById('~A');
+      offsetInput.value = offset;
+    }
+    document.addEventListener('DOMContentLoaded', storeOffset);"
+    +offset-input-id+)
+  :test #'equal)
+
 (defun render/issue-form (&optional issue message)
   (let ((editing (and issue (id issue))))
     (render ()
@@ -263,11 +276,17 @@
                            (when editing
                              (body issue)))))
 
+              (:input :type "hidden"
+                      :value 0
+                      :name +offset-input-id+
+                      :id +offset-input-id+)
+
               (:input :type "submit"
                       :value
                       (if editing
                           "Save Issue"
-                          "Create Issue")))))))
+                          "Create Issue")))
+       (:script (who:str +offset-script+))))))
 
 (defun render/new-comment (issue-id)
   (who:with-html-output (*standard-output*)
