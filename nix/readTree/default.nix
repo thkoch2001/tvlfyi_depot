@@ -21,9 +21,9 @@ let
     then true
     else builtins.trace msg false;
 
-  argsWithPath = args: parts:
-    let meta.locatedAt = parts;
-    in meta // (if isAttrs args then args else args meta);
+  argsWithPath = args: parts: args // {
+    locatedAt = parts;
+  };
 
   readDirVisible = path:
     let
