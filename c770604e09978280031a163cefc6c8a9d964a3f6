@@ -159,6 +159,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2777434c_42fd2f92",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-30T15:31:00Z",
+      "side": 1,
+      "message": "No, nix doesn’t cache subexpressions it evaluates, even if they are the same.\n\n```\n{ a \u003d length l;\n  b \u003d length l; }\n```\n\nwill run `length l` twice, you need to float it into a `let` if you don’t want to incur the cost.\n\nI believe GHC does some optimizations like that within the scope of a function or depending on whether something is inlined in a core pass.",
+      "parentUuid": "70746f0b_d699bae0",
+      "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1dca7248_0524c4b5",
