@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55d2f98b_fd26fc7a",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-01-30T15:33:39Z",
+      "side": 1,
+      "message": "You can reuse `len` here.",
+      "revId": "2f6ac057ba251accc3bffd8cc6c4df3b44fb0976",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
