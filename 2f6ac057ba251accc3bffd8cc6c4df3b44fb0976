@@ -34,6 +34,24 @@
       "parentUuid": "55d2f98b_fd26fc7a",
       "revId": "2f6ac057ba251accc3bffd8cc6c4df3b44fb0976",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "496befad_a60c2ff8",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-30T15:38:46Z",
+      "side": 1,
+      "message": "lol, pretty sure I floated it out for that purpose but then didn’t replace both.",
+      "parentUuid": "55d2f98b_fd26fc7a",
+      "revId": "2f6ac057ba251accc3bffd8cc6c4df3b44fb0976",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
