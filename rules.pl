@@ -9,6 +9,21 @@
 % - The CI build has run successfully.
 % - The commit message conforms to our guidelines.
 
+% Helper predicate which relates a list and an element of that list
+% to the list of elements before the first occurrence of the element.
+% We use this in this file to get the first line of a commit message
+% (as a list of codepoints).
+%
+% take_until_equal(23, [8,5,16,23,5,6], L).
+%   L = [8, 5, 16].
+take_until_equal(S, [], []).
+take_until_equal(S, [X|Xs], Init) :-
+  ( S == X ->
+    Init = []
+  ; Init = [X|Rest],
+    take_till(S, Xs, Rest)
+  ).
+
 unresolved_comments(Check) :-
     gerrit:unresolved_comments_count(0),
     !,
@@ -21,7 +36,12 @@ unresolved_comments(Check) :-
     Check = label('All-Comments-Resolved', need(_)).
 
 commit_message(Check) :-
+    % Check if the commit message uses the prescribed angular-style commit format
     gerrit:commit_message_matches('^(feat|fix|docs|style|refactor|test|chore|merge|revert)[\(:]'),
+    % Check if the first line of the commit message is less than 68 characters long
+    gerrit:commit_message(Message), name(Message, MessageCodes),
+    take_until_equal(10, MessageCodes, FirstLine), length(FirstLine, FirstLineLength),
+    FirstLineLength =< 68,
     !,
     gerrit:uploader(Uploader),
     Check = label('Conformant-Commit-Message', ok(Uploader)).
