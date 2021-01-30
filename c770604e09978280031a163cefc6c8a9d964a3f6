@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a6565e6_751b691c",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-30T15:17:09Z",
+      "side": 1,
+      "message": "Isn’t that a slippery slope though, because now you can’t distinguish whether you have a random scalar or list, or just an attrset that has more or less elements;\n\nMaybe the best is to rename the function to `verifyTag` or something.\n\nUpdate: I renamed it to `verifyTag`.",
+      "parentUuid": "6081c55a_61e3146f",
+      "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c09bf3a_a8711c02",
@@ -66,6 +84,24 @@
       "writtenOn": "2021-01-27T14:26:52Z",
       "side": 1,
       "message": "The documentation here is inaccurate: `discrDef` expects a list of discrimantors, not a set.\n\nUsing a set would be nice for consistency, but isn\u0027t desireable probably because it\u0027d make predicate application order unpredictable.",
+      "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61c86494_2623937c",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-30T15:17:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c09bf3a_a8711c02",
       "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -87,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20db89fc_402d344b",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-30T15:17:09Z",
+      "side": 1,
+      "message": "\u003e You could reuse `isTag` here, I think?\n\nI tried that, but then `isTag` does some extra work like the `builtins.head cases`, so I opted for being more standalone \u0026 slightly quicker.",
+      "parentUuid": "f62496f3_7ccc4b3f",
+      "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1dca7248_0524c4b5",
@@ -100,6 +154,24 @@
       "writtenOn": "2021-01-27T14:26:52Z",
       "side": 1,
       "message": "Tests for `match` would be nice.",
+      "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9ac92b6_e2ff0a8e",
+        "filename": "nix/tag/tests.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-30T15:17:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dca7248_0524c4b5",
       "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
