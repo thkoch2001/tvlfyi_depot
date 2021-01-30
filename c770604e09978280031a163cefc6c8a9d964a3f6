@@ -141,6 +141,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70746f0b_d699bae0",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-01-30T15:25:36Z",
+      "side": 1,
+      "message": "Isn\u0027t that irrelevant if you only evaluate `(isTag x).isTag` because of laziness?",
+      "parentUuid": "20db89fc_402d344b",
+      "revId": "c770604e09978280031a163cefc6c8a9d964a3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1dca7248_0524c4b5",
