@@ -9,6 +9,19 @@
 % - The CI build has run successfully.
 % - The commit message conforms to our guidelines.
 
+% helper predicate which relates a list to a sublist
+% from its beginning up to S.
+%
+% take_till(4, [1,2,3,4,5,6], L).
+%   L = [1, 2, 3].
+take_till(S, [], []).
+take_till(S, [X|Xs], Init) :-
+  ( S == X ->
+    Init = []
+  ; Init = [X|Rest],
+    take_till(S, Xs, Rest)
+  ).
+
 unresolved_comments(Check) :-
     gerrit:unresolved_comments_count(0),
     !,
@@ -21,7 +34,12 @@ unresolved_comments(Check) :-
     Check = label('All-Comments-Resolved', need(_)).
 
 commit_message(Check) :-
+    % Check if the commit message uses the prescribed angular-style commit format
     gerrit:commit_message_matches('^(feat|fix|docs|style|refactor|test|chore|merge|revert)[\(:]'),
+    % Check if the first line of the commit message is less than 68 characters long
+    gerrit:commit_message(Message), name(Message, MessageCodes),
+    take_till(10, MessageCodes, FirstLine), length(FirstLine, FirstLineLength),
+    FirstLineLength =< 68,
     !,
     gerrit:uploader(Uploader),
     Check = label('Conformant-Commit-Message', ok(Uploader)).
