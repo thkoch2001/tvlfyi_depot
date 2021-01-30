@@ -11,5 +11,5 @@ steps:
         exit
       }
 
-      nix-build -A ops.pipelines.depot -o depot.yaml || fallback
+      nix-build -A ops.pipelines.depot -o depot.yaml --show-trace || fallback
       buildkite-agent pipeline upload depot.yaml || fallback
