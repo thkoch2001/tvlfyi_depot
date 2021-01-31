@@ -45,6 +45,10 @@ let
     tryEval
     ;
 
+  # Wrapper around tryEval and deepSeq that
+  # returns true if an expression throws.
+  throws = expr: !(tryEval (deepSeq expr {})).success;
+
   # rewrite the builtins.partition result
   # to use `ok` and `err` instead of `right` and `wrong`.
   partitionTests = pred: xs:
@@ -63,6 +67,7 @@ let
       throw = struct "throw" {
         expr = any;
       };
+      no-throw = struct "no-throw" { };
       bool = struct "bool" { };
     };
 
@@ -124,8 +129,14 @@ let
     (desc: expr:
       let
         ctx = { throw = { inherit expr; }; };
-        res = !(tryEval (deepSeq expr {})).success;
-      in assertBoolContext ctx desc res);
+      in assertBoolContext ctx desc (throws expr));
+
+  # assert that the expression does not throw when `deepSeq`-ed
+  assertDoesNotThrow = defun [ string any AssertResult ]
+    (desc: expr:
+      let
+        ctx = { no-throw = { }; };
+      in assertBoolContext ctx desc (!(throws expr)));
 
   # Annotate a bunch of asserts with a descriptive name
   it = desc: asserts: {
@@ -180,6 +191,7 @@ in {
     assertBool
     assertEq
     assertThrows
+    assertDoesNotThrow
     it
     runTestsuite
     ;
