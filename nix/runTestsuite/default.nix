@@ -34,9 +34,14 @@ let
     defun
     list
     drv
+    bool
     ;
 
   bins = depot.nix.getBins pkgs.coreutils [ "printf" "touch" ];
+
+  # Returns true if the given expression throws when `deepSeq`-ed
+  throws = expr:
+    !(builtins.tryEval (builtins.deepSeq expr {})).success;
 
   # rewrite the builtins.partition result
   # to use `ok` and `err` instead of `right` and `wrong`.
@@ -47,23 +52,30 @@ let
       err = res.wrong;
     };
 
+  AssertErrorContext =
+    sum "AssertErrorContext" {
+      not-equal = struct "not-equal" {
+        left = any;
+        right = any;
+      };
+      should-throw = struct "should-throw" {
+        expr = any;
+      };
+    };
+
   # The result of an assert,
   # either it’s true (yep) or false (nope).
-  # If it’s nope, we return the left and right
-  # side of the assert, together with the description.
+  # If it's nope we return an additional context
+  # attribute which gives details on the failure
+  # depending on the type of assert performed.
   AssertResult =
     sum "AssertResult" {
       yep = struct "yep" {
         test = string;
       };
-      nope-eq = struct "nope-eq" {
+      nope = struct "nope" {
         test = string;
-        left = any;
-        right = any;
-      };
-      nope-throw = struct "nope-throw" {
-        test = string;
-        expr = any;
+        context = AssertErrorContext;
       };
     };
 
@@ -75,27 +87,37 @@ let
       asserts = list AssertResult;
     };
 
+  # If the given boolean is true return a positive AssertResult.
+  # If the given boolean is false return a negative AssertResult
+  # with the provided AssertErrorContext describing the failure.
+  #
+  # This function is intended as a generic assert to implement
+  # more assert types and is not exposed to the user.
+  assertBoolContext = defun [ AssertErrorContext string bool AssertResult ]
+    (context: desc: res:
+      if res
+      then { yep = { test = desc; }; }
+      else { nope = {
+        test = desc;
+        inherit context;
+      };
+    });
+
   # assert that left and right values are equal
   assertEq = defun [ string any any AssertResult ]
     (desc: left: right:
-      if left == right
-      then { yep = { test = desc; }; }
-      else { nope-eq = {
-        test = desc;
-        inherit left right;
-      };
-    });
+      let
+        context = { not-equal = { inherit left right; }; };
+      in
+        assertBoolContext context desc (left == right));
 
   # assert that the expression throws when `deepSeq`-ed
   assertThrows = defun [ string any AssertResult ]
     (desc: expr:
-      if ! (builtins.tryEval (builtins.deepSeq expr {})).success
-      then { yep = { test = desc; }; }
-      else { nope-throw = {
-        test = desc;
-        inherit expr;
-      };
-    });
+      let
+        context = { should-throw = { inherit expr; }; };
+      in
+        assertBoolContext context desc (throws expr));
 
   # Annotate a bunch of asserts with a descriptive name
   it = desc: asserts: {
@@ -114,8 +136,7 @@ let
         goodAss = ass: {
           good = AssertResult.match ass {
             yep = _: true;
-            nope-eq = _: false;
-            nope-throw = _: false;
+            nope = _: false;
           };
           x = ass;
         };
@@ -124,8 +145,7 @@ let
           asserts = partitionTests (ass:
             AssertResult.match ass {
               yep = _: true;
-              nope-eq = _: false;
-              nope-throw = _: false;
+              nope = _: false;
             }) it.asserts;
         };
         goodIts = partitionTests (it: (goodIt it).asserts.err == []);
