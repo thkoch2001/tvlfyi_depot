@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a18c0c78_d28300b8",
+        "filename": "nix/runTestsuite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-01-31T13:08:52Z",
+      "side": 1,
+      "message": "This took me a while to see the third argument to assertEq is `res`",
+      "range": {
+        "startLine": 90,
+        "startChar": 3,
+        "endLine": 91,
+        "endChar": 67
+      },
+      "revId": "cce17306b74b96a72d463f619a28bf8c1cfe51d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
