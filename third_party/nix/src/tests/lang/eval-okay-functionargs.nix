@@ -6,6 +6,14 @@ let
   atermFun = { stdenv, fetchurl }: { name = "aterm-${stdenv.name}"; };
   aterm2Fun = { stdenv, fetchurl }: { name = "aterm2-${stdenv.name}"; };
   nixFun = { stdenv, fetchurl, aterm }: { name = "nix-${stdenv.name}-${aterm.name}"; };
+
+  trivialFunctionArgsUsage = [
+    (builtins.functionArgs nixFun)
+    (builtins.functionArgs ({ name ? "Karl", color }: "${name} is ${color}"))
+    (builtins.functionArgs (x: y: x + y))
+    (builtins.functionArgs builtins.map)
+    (builtins.functionArgs builtins.fetchurl)
+  ];
   
   mplayerFun =
     { stdenv, fetchurl, enableX11 ? false, xorg ? null, enableFoo ? true, foo ? null  }:
@@ -67,7 +75,8 @@ let
   
 in
 
-  [ pkgs.stdenv.name
+  trivialFunctionArgsUsage ++ [
+    pkgs.stdenv.name
     pkgs.fetchurl.name
     pkgs.aterm.name
     pkgs2.aterm.name
