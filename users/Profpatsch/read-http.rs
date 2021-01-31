@@ -2,10 +2,12 @@ extern crate httparse;
 extern crate netencode;
 extern crate arglib_netencode;
 extern crate ascii;
+extern crate exec_helpers;
 
 use std::os::unix::io::FromRawFd;
 use std::io::Read;
 use std::io::Write;
+use exec_helpers::{die_user_error, die_expected_error, die_temporary};
 
 use netencode::{U, T};
 
@@ -15,25 +17,21 @@ enum What {
 }
 
 fn main() -> std::io::Result<()> {
-    fn die<T: std::fmt::Display>(msg: T) -> ! {
-        eprintln!("{}", msg);
-        std::process::exit(1);
-    }
 
     let what : What = match arglib_netencode::arglib_netencode(None).unwrap() {
         T::Record(rec) => match rec.get("what") {
             Some(T::Text(t)) => match t.as_str() {
                 "request" => What::Request,
                 "response" => What::Response,
-                _ => die("read-http arglib: what should be either t:request or t:response"),
+                _ => die_user_error("read-http arglib", "`what` should be either t:request or t:response"),
             },
-            Some(o) => die(format!("read-http arglib: expected a record of text, got {:#?}", o)),
+            Some(o) => die_user_error("read-http arglib", format!("expected a record of text, got {:#?}", o)),
             None => {
                 eprintln!("read-http arglib: no `what` given, defaulting to Response");
                 What::Response
             }
         }
-        o => die(format!("read-http arglib: expected a record, got {:#?}", o))
+        o => die_user_error("read-http arglib", format!("expected a record, got {:#?}", o))
     };
 
     fn read_stdin_to_complete<F>(mut parse: F) -> ()
@@ -49,13 +47,13 @@ fn main() -> std::io::Result<()> {
                 Ok(size) => if size == 0 {
                     break;
                 },
-                Err(err) => panic!("could not read from stdin, {:?}", err)
+                Err(err) => die_temporary("read-http", format!("could not read from stdin, {:?}", err))
             }
             match parse(&buf) {
                 Ok(status) => {
                     res = status;
                 }
-                Err(err) => die(format!("httparse parsing failed: {:#?}", err))
+                Err(err) => die_temporary("read-http", format!("httparse parsing failed: {:#?}", err))
             }
         }
     }
@@ -84,7 +82,7 @@ fn main() -> std::io::Result<()> {
                         return Some(());
                     }
                 },
-                Some(Err(err)) => die(format!("error reading from stdin: {:?}", err)),
+                Some(Err(err)) => die_temporary("read-http", format!("error reading from stdin: {:?}", err)),
                 None => return None
             }
         }
@@ -101,10 +99,10 @@ fn main() -> std::io::Result<()> {
             match read_till_end_of_header(&mut buf, stdin.lock()) {
                 Some(()) => match req.parse(&buf) {
                     Ok(httparse::Status::Complete(_body_start)) => {},
-                    Ok(httparse::Status::Partial) => die("httparse should have gotten a full header"),
-                    Err(err) => die(format!("httparse response parsing failed: {:#?}", err))
+                    Ok(httparse::Status::Partial) => die_expected_error("read-http", "httparse should have gotten a full header"),
+                    Err(err) => die_expected_error("read-http", format!("httparse response parsing failed: {:#?}", err))
                 },
-                None => die(format!("httparse end of stdin reached before able to parse request headers"))
+                None => die_expected_error("read-http", format!("httparse end of stdin reached before able to parse request headers"))
             }
             let method = req.method.expect("method must be filled on complete parse");
             let path = req.path.expect("path must be filled on complete parse");
@@ -116,10 +114,10 @@ fn main() -> std::io::Result<()> {
             match read_till_end_of_header(&mut buf, stdin.lock()) {
                 Some(()) => match resp.parse(&buf) {
                     Ok(httparse::Status::Complete(_body_start)) => {},
-                    Ok(httparse::Status::Partial) => die("httparse should have gotten a full header"),
-                    Err(err) => die(format!("httparse response parsing failed: {:#?}", err))
+                    Ok(httparse::Status::Partial) => die_expected_error("read-http", "httparse should have gotten a full header"),
+                    Err(err) => die_expected_error("read-http", format!("httparse response parsing failed: {:#?}", err))
                 },
-                None => die(format!("httparse end of stdin reached before able to parse response headers"))
+                None => die_expected_error("read-http", format!("httparse end of stdin reached before able to parse response headers"))
             }
             let code = resp.code.expect("code must be filled on complete parse");
             let reason = resp.reason.expect("reason must be filled on complete parse");

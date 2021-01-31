@@ -10,11 +10,8 @@ let
       depot.users.Profpatsch.rust-crates.httparse
       depot.users.Profpatsch.netencode.netencode-rs
       depot.users.Profpatsch.arglib.netencode.rust
+      depot.users.Profpatsch.execline.exec-helpers
     ];
   } (builtins.readFile ./read-http.rs);
 
-in {
-  inherit
-    read-http
-    ;
-}
+in read-http

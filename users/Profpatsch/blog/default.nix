@@ -53,7 +53,7 @@ let
     (arglibNetencode {
       what = "request";
     })
-    "pipeline" [ depot.users.Profpatsch.read-http.read-http ]
+    "pipeline" [ depot.users.Profpatsch.read-http ]
     depot.users.Profpatsch.netencode.record-splice-env [ "headers" ]
     "if" [ bins.printf "%s" ''
       HTTP/1.1 200 OK
@@ -80,22 +80,16 @@ let
 
   capture-stdin = depot.users.Profpatsch.writers.rustSimple {
     name = "capture-stdin";
+    dependencies = [ depot.users.Profpatsch.execline.exec-helpers ];
   } ''
+    extern crate exec_helpers;
     use std::io::Read;
-    use std::os::unix::process::CommandExt;
-    use std::os::unix::ffi::OsStrExt;
     fn main() {
+      let (args, prog) = exec_helpers::args_for_exec("capture-stdin", 1);
+      let valname = &args[1];
       let mut v : Vec<u8> = vec![];
-      let mut args = std::env::args_os();
-      let valname = args.nth(1).unwrap();
-      let next_cmd = args.nth(0).unwrap();
-      let rest = args;
       std::io::stdin().lock().read_to_end(&mut v).unwrap();
-      let err = std::process::Command::new(next_cmd)
-        .args(rest)
-        .env(valname, std::ffi::OsStr::from_bytes(&v))
-        .exec();
-      panic!("capture-stdin: exec failed {:?}", err);
+      exec_helpers::exec_into_args("capture-stdin", prog, vec![(valname, v)]);
     }
   '';
 

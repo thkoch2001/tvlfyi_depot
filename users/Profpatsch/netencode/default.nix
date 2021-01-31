@@ -30,7 +30,10 @@ let
 
   netencode-rs-common = tests: imports.writers.rustSimpleLib {
     name = "netencode";
-    dependencies = [ nom ];
+    dependencies = [
+      nom
+      depot.users.Profpatsch.execline.exec-helpers
+    ];
     buildTests = tests;
     release = false;
     verbose = true;
@@ -101,13 +104,13 @@ let
     use netencode::dec::{Record, ScalarAsBytes, Decoder, DecodeError};
 
     fn main() {
-        let t = netencode::t_from_stdin_or_panic("record-splice-env");
+        let t = netencode::t_from_stdin_or_die_user_error("record-splice-env");
         let (_, prog) = exec_helpers::args_for_exec("record-splice-env", 0);
         match Record::<ScalarAsBytes>::dec(t) {
             Ok(map) => {
                 exec_helpers::exec_into_args("record-splice-env", prog, map);
             },
-            Err(DecodeError(err)) => panic!("{}", err),
+            Err(DecodeError(err)) => exec_helpers::die_user_error("record-splice-env", err),
         }
     }
   '';
