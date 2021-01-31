@@ -130,6 +130,11 @@ let
         then { yep = { test = desc; }; }
         else { nope = { test = desc; inherit context; }; });
 
+  # assert that the expression does not throw when `deepSeq`-ed
+  assertDoesNotThrow = defun [ string any AssertResult ]
+    (desc: expr:
+      assertBoolContext (throw "true != true") desc (builtins.deepSeq expr true));
+
   # Annotate a bunch of asserts with a descriptive name
   it = desc: asserts: {
     it-desc = desc;
@@ -182,6 +187,7 @@ in {
   inherit
     assertEq
     assertThrows
+    assertDoesNotThrow
     it
     runTestsuite
     ;
