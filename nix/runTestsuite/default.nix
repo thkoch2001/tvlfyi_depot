@@ -61,6 +61,7 @@ let
       should-throw = struct "should-throw" {
         expr = any;
       };
+      unexpected-throw = struct "unexpected-throw" { };
     };
 
   # The result of an assert,
@@ -121,6 +122,11 @@ let
       in
         assertBoolContext context desc (throws expr));
 
+  # assert that the expression does not throw when `deepSeq`-ed
+  assertDoesNotThrow = defun [ string any AssertResult ]
+    (desc: expr:
+      assertBoolContext { unexpected-throw = { }; } desc (!(throws expr)));
+
   # Annotate a bunch of asserts with a descriptive name
   it = desc: asserts: {
     it-desc = desc;
@@ -173,6 +179,7 @@ in {
   inherit
     assertEq
     assertThrows
+    assertDoesNotThrow
     it
     runTestsuite
     ;
