@@ -1,4 +1,5 @@
 extern crate nom;
+extern crate exec_helpers;
 
 use std::collections::HashMap;
 use std::io::{Write, Read};
@@ -116,15 +117,15 @@ pub fn text(s: String) -> T {
     T::Text(s)
 }
 
-pub fn t_from_stdin_or_panic(prog_name: &str) -> T {
+pub fn t_from_stdin_or_die_user_error(prog_name: &str) -> T {
     let mut buf = vec![];
     std::io::stdin().lock().read_to_end(&mut buf);
     match parse::t_t(&buf) {
         Ok((rest, t)) => match rest {
             b"" => t,
-            _ => panic!("{}: stdin contained some soup after netencode value: {:?}", prog_name, rest)
+            _ => exec_helpers::die_user_error(prog_name, format!("stdin contained some soup after netencode value: {:?}", rest))
         },
-        Err(err) => panic!("{}: unable to parse netencode from stdin: {:?}", prog_name, err)
+        Err(err) => exec_helpers::die_user_error(prog_name, format!("unable to parse netencode from stdin: {:?}", err))
     }
 }
 

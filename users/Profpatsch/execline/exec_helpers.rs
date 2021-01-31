@@ -36,6 +36,59 @@ pub fn exec_into_args<'a, 'b, Args, Arg, Env, Key, Val>(current_prog_name: &str,
     let env = env_additions.into_iter().collect::<Vec<(Key, Val)>>();
     let env = env.iter().map(|(k,v)| (OsStr::from_bytes(k.as_ref()), OsStr::from_bytes(v.as_ref())));
     let err = std::process::Command::new(prog).args(args).envs(env).exec();
-    panic!("{}: exec failed: {:?}", current_prog_name, err);
+    die_missing_executable(current_prog_name, format!("exec failed: {:?}", err));
 }
 
+/// Exit 1 to signify a generic expected error
+/// (e.g. something that sometimes just goes wrong, like a nix build).
+pub fn die_expected_error<S>(current_prog_name: &str, msg: S) -> !
+where S: AsRef<str>
+{
+  die_with(1, current_prog_name, msg)
+}
+
+/// Exit 100 to signify a user error (“the user is holding it wrong”).
+/// This is a permanent error, if the program is executed the same way
+/// it should crash with 100 again.
+pub fn die_user_error<S>(current_prog_name: &str, msg: S) -> !
+where S: AsRef<str>
+{
+    die_with(100, current_prog_name, msg)
+}
+
+/// Exit 101 to signify an unexpected crash (failing assertion or panic).
+/// This is the same exit code that `panic!()` emits.
+pub fn die_panic<S>(current_prog_name: &str, msg: S) -> !
+where S: AsRef<str>
+{
+    die_with(101, current_prog_name, msg)
+}
+
+/// Exit 111 to signify a temporary error (such as resource exhaustion)
+pub fn die_temporary<S>(current_prog_name: &str, msg: S) -> !
+where S: AsRef<str>
+{
+    die_with(111, current_prog_name, msg)
+}
+
+/// Exit 126 to signify an environment problem
+/// (the user has set up stuff incorrectly so the program cannot work)
+pub fn die_environment_problem<S>(current_prog_name: &str, msg: S) -> !
+where S: AsRef<str>
+{
+    die_with(126, current_prog_name, msg)
+}
+
+/// Exit 127 to signify a missing executable.
+pub fn die_missing_executable<S>(current_prog_name: &str, msg: S) -> !
+where S: AsRef<str>
+{
+    die_with(127, current_prog_name, msg)
+}
+
+fn die_with<S>(status: i32, current_prog_name: &str, msg: S) -> !
+    where S: AsRef<str>
+{
+    eprintln!("{}: {}", current_prog_name, msg.as_ref());
+    std::process::exit(status)
+}
