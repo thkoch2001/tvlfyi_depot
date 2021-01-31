@@ -34,6 +34,7 @@ let
     defun
     list
     drv
+    bool
     ;
 
   bins = depot.nix.getBins pkgs.coreutils [ "printf" "touch" ];
@@ -56,14 +57,10 @@ let
       yep = struct "yep" {
         test = string;
       };
-      nope-eq = struct "nope-eq" {
+      nope = struct "nope" {
         test = string;
         left = any;
         right = any;
-      };
-      nope-throw = struct "nope-throw" {
-        test = string;
-        expr = any;
       };
     };
 
@@ -80,22 +77,26 @@ let
     (desc: left: right:
       if left == right
       then { yep = { test = desc; }; }
-      else { nope-eq = {
+      else { nope = {
         test = desc;
         inherit left right;
       };
     });
 
+  # assertEq wrapper over the success attribute of tryEval for
+  # implementing assertThrows and assertDoesNotThrow
+  assertTryEvalResult = defun [ bool string any AssertResult ]
+    (res: desc: expr:
+      assertEq desc
+        (builtins.tryEval (builtins.deepSeq expr {})).success res);
+
   # assert that the expression throws when `deepSeq`-ed
   assertThrows = defun [ string any AssertResult ]
-    (desc: expr:
-      if ! (builtins.tryEval (builtins.deepSeq expr {})).success
-      then { yep = { test = desc; }; }
-      else { nope-throw = {
-        test = desc;
-        inherit expr;
-      };
-    });
+    (assertTryEvalResult false);
+
+  # assert that the expression does not throw when `deepSeq`-ed
+  assertDoesNotThrow = defun [ string any AssertResult ]
+    (assertTryEvalResult true);
 
   # Annotate a bunch of asserts with a descriptive name
   it = desc: asserts: {
@@ -114,8 +115,7 @@ let
         goodAss = ass: {
           good = AssertResult.match ass {
             yep = _: true;
-            nope-eq = _: false;
-            nope-throw = _: false;
+            nope = _: false;
           };
           x = ass;
         };
@@ -124,8 +124,7 @@ let
           asserts = partitionTests (ass:
             AssertResult.match ass {
               yep = _: true;
-              nope-eq = _: false;
-              nope-throw = _: false;
+              nope = _: false;
             }) it.asserts;
         };
         goodIts = partitionTests (it: (goodIt it).asserts.err == []);
@@ -151,6 +150,7 @@ in {
   inherit
     assertEq
     assertThrows
+    assertDoesNotThrow
     it
     runTestsuite
     ;
