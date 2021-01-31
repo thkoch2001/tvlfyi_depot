@@ -3,6 +3,7 @@ with builtins;
 [ (isNull null)
   (isNull (x: x))
   (isFunction (x: x))
+  (isFunction functionArgs)
   (isFunction "fnord")
   (isString ("foo" + "bar"))
   (isString [ "x" ])
