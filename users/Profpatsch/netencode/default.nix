@@ -99,17 +99,16 @@ let
     extern crate netencode;
     extern crate exec_helpers;
     use netencode::dec::{Record, ScalarAsBytes, Decoder, DecodeError};
+
     fn main() {
         let t = netencode::t_from_stdin_or_panic("record-splice-env");
-            match Record::<ScalarAsBytes>::dec(t) {
-                Ok(map) => {
-                    exec_helpers::exec_into_args(
-                        "record-splice-env",
-                        map.iter().map(|(k,v)| (k.as_bytes(), &v[..])
-                    );
-                },
-                Err(DecodeError(err)) => panic!("{}", err),
-            }
+        let (_, prog) = exec_helpers::args_for_exec("record-splice-env", 0);
+        match Record::<ScalarAsBytes>::dec(t) {
+            Ok(map) => {
+                exec_helpers::exec_into_args("record-splice-env", prog, map);
+            },
+            Err(DecodeError(err)) => panic!("{}", err),
+        }
     }
   '';
 
