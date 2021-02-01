@@ -1,28 +1,34 @@
 { depot, pkgs, ... }:
 
-with builtins;
 with depot.nix.yants;
 
 # Note: Derivations are not included in the tests below as they cause
 # issues with deepSeq.
 
-deepSeq rec {
-  # Test that all primitive types match
-  primitives = [
-    (unit {})
-    (int 15)
-    (bool false)
-    (float 13.37)
-    (string "Hello!")
-    (function (x: x * 2))
-    (path /nix)
+let
+
+  inherit (depot.nix.runTestsuite)
+    runTestsuite
+    it
+    assertEq
+    assertThrows
+    assertDoesNotThrow
+    ;
+
+  testPrimitives = it "checks that all primitive types match" [
+    (assertDoesNotThrow "unit type" (unit {}))
+    (assertDoesNotThrow "int type" (int 15))
+    (assertDoesNotThrow "bool type" (bool false))
+    (assertDoesNotThrow "float type" (float 13.37))
+    (assertDoesNotThrow "string type" (string "Hello!"))
+    (assertDoesNotThrow "function type" (function (x: x * 2)))
+    (assertDoesNotThrow "path type" (path /nix))
   ];
 
-  # Test that polymorphic types work as intended
-  poly = [
-    (option int null)
-    (list string [ "foo" "bar" ])
-    (either int float 42)
+  testPoly = it "checks that polymorphic types work as intended" [
+    (assertDoesNotThrow "option type" (option int null))
+    (assertDoesNotThrow "list type" (list string [ "foo" "bar" ]))
+    (assertDoesNotThrow "either type" (either int float 42))
   ];
 
   # Test that structures work as planned.
@@ -36,19 +42,31 @@ deepSeq rec {
     });
   };
 
-  testPerson = person {
-    name = "Brynhjulf";
-    age  = 42;
-    contact.email = "brynhjulf@yants.nix";
-  };
+  testStruct = it "checks that structures work as intended" [
+    (assertDoesNotThrow "person struct" (person {
+      name = "Brynhjulf";
+      age  = 42;
+      contact.email = "brynhjulf@yants.nix";
+    }))
+  ];
 
   # Test enum definitions & matching
   colour = enum "colour" [ "red" "blue" "green" ];
-  testMatch = colour.match "red" {
+  colourMatcher = {
     red = "It is in fact red!";
-    blue = throw "It should not be blue!";
-    green = throw "It should not be green!";
+    blue = "It should not be blue!";
+    green = "It should not be green!";
   };
+
+  testEnum = it "checks enum definitions and matching" [
+    (assertEq "enum is matched correctly"
+      "It is in fact red!" (colour.match "red" colourMatcher))
+    (assertThrows "out of bounds enum fails"
+      (colour.match "alpha" (colourMatcher // {
+        alpha = "This should never happen";
+      }))
+    )
+  ];
 
   # Test sum type definitions
   creature = sum "creature" {
@@ -59,44 +77,70 @@ deepSeq rec {
 
     pet = enum "pet" [ "dog" "lizard" "cat" ];
   };
-
-  testSum = creature {
+  some-human = creature {
     human = {
       name = "Brynhjulf";
       age = 42;
     };
   };
 
-  testSumMatch = creature.match testSum {
-    human = v: "It's a human named ${v.name}";
-    pet = v: throw "It's not supposed to be a pet!";
-  };
+  testSum = it "checks sum types definitions and matching" [
+    (assertDoesNotThrow "creature sum type" some-human)
+    (assertEq "sum type is matched correctly"
+      "It's a human named Brynhjulf" (creature.match some-human {
+        human = v: "It's a human named ${v.name}";
+        pet = v: "It's not supposed to be a pet!";
+      })
+    )
+  ];
 
   # Test curried function definitions
   func = defun [ string int string ]
   (name: age: "${name} is ${toString age} years old");
 
-  testFunc = func "Brynhjulf" 42;
+  testFunctions = it "checks function definitions" [
+    (assertDoesNotThrow "function application" (func "Brynhjulf" 42))
+  ];
 
   # Test that all types are types.
-  testTypes = map type [
-    any bool drv float int string path
+  assertIsType = name: t:
+    assertDoesNotThrow "${name} is a type" (type t);
+  testTypes = it "checks that all types are types" [
+    (assertIsType "any" any)
+    (assertIsType "bool" bool)
+    (assertIsType "drv" drv)
+    (assertIsType "float" float)
+    (assertIsType "int" int)
+    (assertIsType "string" string)
+    (assertIsType "path" path)
 
-    (attrs int)
-    (eitherN [ int string bool ])
-    (either int string)
-    (enum [ "foo" "bar" ])
-    (list string)
-    (option int)
-    (option (list string))
-    (struct { a = int; b = option string; })
-    (sum { a = int; b = option string; })
+    (assertIsType "attrs int" (attrs int))
+    (assertIsType "eitherN [ ... ]" (eitherN [ int string bool ]))
+    (assertIsType "either int string" (either int string))
+    (assertIsType "enum [ ... ]" (enum [ "foo" "bar" ]))
+    (assertIsType "list string" (list string))
+    (assertIsType "option int" (option int))
+    (assertIsType "option (list string)" (option (list string)))
+    (assertIsType "struct { ... }" (struct { a = int; b = option string; }))
+    (assertIsType "sum { ... }" (sum { a = int; b = option string; }))
   ];
 
-  testRestrict = [
-    ((restrict "< 42" (i: i < 42) int) 25)
-    ((restrict "not too long" (l: builtins.length l < 3) (list int)) [ 1 2 ])
-    (list (restrict "eq 5" (v: v == 5) any) [ 5 5 5 ])
+  testRestrict = it "checks restrict types" [
+    (assertDoesNotThrow "< 42" ((restrict "< 42" (i: i < 42) int) 25))
+    (assertDoesNotThrow "list length < 3"
+      ((restrict "not too long" (l: builtins.length l < 3) (list int)) [ 1 2 ]))
+    (assertDoesNotThrow "list eq 5"
+      (list (restrict "eq 5" (v: v == 5) any) [ 5 5 5 ]))
   ];
 
-} (pkgs.writeText "yants-tests" "All tests passed!")
+in
+  runTestsuite "yants" [
+    testPrimitives
+    testPoly
+    testStruct
+    testEnum
+    testSum
+    testFunctions
+    testTypes
+    testRestrict
+  ]
