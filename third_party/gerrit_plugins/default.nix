@@ -30,7 +30,7 @@ in
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/checks";
       rev = "ab49a63f5c159bda42d9ad1bdb9286bede6c5de4";
-      sha256 = "sha256:1gy67ixjk91mvraww4iw69q7n03w719r3lrzv5xp5glxrzaf1mpf";
+      sha256 = "0svzs9hm49w8f6h5dkcipw91gxgvf0yaxj34amhn0qwp01ggwirc";
       deepClone = true;
       leaveDotGit = true;
     };
