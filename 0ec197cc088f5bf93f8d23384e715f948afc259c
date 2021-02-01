@@ -16,6 +16,24 @@
       "message": "Wouldn\u0027t this give incorrect results for a primop that takes formals like `builtins.fetchGit` or something?",
       "revId": "0ec197cc088f5bf93f8d23384e715f948afc259c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a522879_9a08c7e6",
+        "filename": "third_party/nix/src/libexpr/primops.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-02-01T15:49:46Z",
+      "side": 1,
+      "message": "That is indeed correct and I feel like we should address this because the behavior may be consistent as upstream argues (https://github.com/NixOS/nix/pull/3626#issuecomment-698546704), but is certainly unexpected.\n\nThe thing is that the fetch* builtins are implemented what would equate to something like the following nix code:\n\n```\nfetchurl \u003d args: if (args ? url) then throw \"…\" else …\n```\n\nSo in a sense the fetch* builtins have no \"formal argument\" although users certainly would expect them to have some.\n\nUnfortunately nix doesn\u0027t track any meta data about formal arguments of builtins internally, so I\u0027m not sure what the best approach would be to implement such a feature.",
+      "parentUuid": "b51f583c_2182c254",
+      "revId": "0ec197cc088f5bf93f8d23384e715f948afc259c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
