@@ -44,7 +44,7 @@ pub enum U<'a> {
     I6(i64),
     I7(i128),
     // Text
-    Text(&'a [u8]),
+    Text(&'a str),
     Binary(&'a [u8]),
     // Tags
     Sum(Tag<&'a str, U<'a>>),
@@ -87,7 +87,7 @@ pub fn encode<W: Write>(w: &mut W, u: U) -> std::io::Result<()> {
       U::I7(i) => write!(w, "i7:{},", i),
       U::Text(s) => {
           write!(w, "t{}:", s.len());
-          w.write(&s);
+          w.write(s.as_bytes());
           write!(w, ",")
       }
       U::Binary(s) => {
@@ -247,16 +247,16 @@ pub mod parse {
 
     /// parse text scalar (`t5:hello,`)
     fn text(s: &[u8]) -> IResult<&[u8], T> {
-        let (s, res) = text_g()(s)?;
-        Ok((s, T::Text(
-            std::str::from_utf8(res)
-                .map_err(|_| nom::Err::Failure((s, ErrorKind::Char)))
-                .map(|s| s.to_string())?,
-        )))
+        let (s, res) = text_g(s)?;
+        Ok((s, T::Text(res.to_string())))
     }
 
-    fn text_g() -> impl Fn(&[u8]) -> IResult<&[u8], &[u8]> {
-        sized('t', ',')
+    fn text_g(s: &[u8]) -> IResult<&[u8], &str> {
+        let (s, res) = sized('t', ',')(s)?;
+        Ok((s,
+            std::str::from_utf8(res)
+                .map_err(|_| nom::Err::Failure((s, ErrorKind::Char)))?,
+        ))
     }
 
     fn binary<'a>() -> impl Fn(&'a [u8]) -> IResult<&'a [u8], T> {
@@ -324,7 +324,7 @@ pub mod parse {
 
     pub fn u_u(s: &[u8]) -> IResult<&[u8], U> {
         alt((
-            map(text_g(), U::Text),
+            map(text_g, U::Text),
             map(binary_g(), U::Binary),
             map(unit_t, |()| U::Unit),
             map(tag_g(u_u), |t| U::Sum(t)),
