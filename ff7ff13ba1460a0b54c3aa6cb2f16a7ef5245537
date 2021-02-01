@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b572d319_adf8b2f6",
+        "filename": "nix/runTestsuite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-02-01T14:12:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1db2eb5_93c3aeab",
+      "range": {
+        "startLine": 53,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 55
+      },
+      "revId": "ff7ff13ba1460a0b54c3aa6cb2f16a7ef5245537",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c032a898_abe4d229",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-02-01T10:24:30Z",
       "side": 1,
       "message": "I don’t like this function, it’s too complicated. I think there’s value in duplicating some of the checks instead of having a kitchen-sink like this that has branches on boolean inputs and then more branching on outputs.\n\nThis is a difference in philosophy of (e)lisp and lazy functional languages :)",
+      "range": {
+        "startLine": 87,
+        "startChar": 2,
+        "endLine": 111,
+        "endChar": 29
+      },
+      "revId": "ff7ff13ba1460a0b54c3aa6cb2f16a7ef5245537",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00294703_c2aa51d1",
+        "filename": "nix/runTestsuite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-02-01T14:12:50Z",
+      "side": 1,
+      "message": "Fair enough, it\u0027s not nice. What nix is missing is clearly a CL-style `cond` :p",
+      "parentUuid": "c032a898_abe4d229",
       "range": {
         "startLine": 87,
         "startChar": 2,
