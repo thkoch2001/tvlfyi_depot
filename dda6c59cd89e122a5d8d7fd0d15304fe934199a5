@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef560ba8_4fe0bdf9",
+        "filename": "nix/runTestsuite/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-01T07:09:19Z",
+      "side": 1,
+      "message": "not a giant fan of importing builtins, I think it’s worthwhile to have the prefix inline.",
+      "range": {
+        "startLine": 42,
+        "startChar": 1,
+        "endLine": 45,
+        "endChar": 11
+      },
+      "revId": "dda6c59cd89e122a5d8d7fd0d15304fe934199a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce277353_8a9b2336",
+        "filename": "nix/runTestsuite/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-01T07:09:19Z",
+      "side": 1,
+      "message": "I don’t think there is much value in exporting this, it is always a trivial `assertEq` away, and even more declarative because you can also write `false` instead of the `!` bullcrap. Plus, it adds more mental overhead to the API.",
+      "revId": "dda6c59cd89e122a5d8d7fd0d15304fe934199a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
