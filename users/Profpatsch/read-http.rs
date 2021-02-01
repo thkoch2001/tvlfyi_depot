@@ -128,8 +128,8 @@ fn main() -> std::io::Result<()> {
 
 fn write_dict_req<'buf>(method: &'buf str, path: &'buf str, headers: &[(String, &str)]) -> std::io::Result<()> {
     let mut http = vec![
-        ("method", U::Text(method.as_bytes())),
-        ("path", U::Text(path.as_bytes())),
+        ("method", U::Text(method)),
+        ("path", U::Text(path)),
     ];
     write_dict(http, headers)
 }
@@ -137,7 +137,7 @@ fn write_dict_req<'buf>(method: &'buf str, path: &'buf str, headers: &[(String, 
 fn write_dict_resp<'buf>(code: u16, reason: &'buf str, headers: &[(String, &str)]) -> std::io::Result<()> {
     let mut http = vec![
         ("status", U::N6(code as u64)),
-        ("status-text", U::Text(reason.as_bytes())),
+        ("status-text", U::Text(reason)),
     ];
     write_dict(http, headers)
 }
@@ -147,7 +147,7 @@ fn write_dict<'buf, 'a>(mut http: Vec<(&str, U<'a>)>, headers: &'a[(String, &str
     http.push(("headers", U::Record(
         headers.iter().map(
             |(name, value)|
-            (name.as_str(), U::Text(value.as_bytes()))
+            (name.as_str(), U::Text(value))
         ).collect::<Vec<_>>()
     )));
 
