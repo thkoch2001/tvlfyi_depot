@@ -34,6 +34,24 @@
       "parentUuid": "b51f583c_2182c254",
       "revId": "0ec197cc088f5bf93f8d23384e715f948afc259c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f4c165_2ce0d717",
+        "filename": "third_party/nix/src/libexpr/primops.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-02-01T15:54:54Z",
+      "side": 1,
+      "message": "I read the upstream discussion, and I\u0027m convinced that we should just land this for now and address any further work around primop formals in a follow-up.",
+      "parentUuid": "2a522879_9a08c7e6",
+      "revId": "0ec197cc088f5bf93f8d23384e715f948afc259c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
