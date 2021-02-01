@@ -147,8 +147,11 @@ cd ~/build/tvix
 nix-shell $DEPOT_PATH -A third_party.nix.build-shell
 
 # Disable clang-tidy for quicker builds
-cmake $DEPOT_PATH -DCLANG_TIDY_PATH=""
+cmake $DEPOT_PATH/third_party/nix/ -DCLANG_TIDY_PATH=""
 make -j16 -l12
+
+# Run tests
+make test
 ```
 
 ## Contributing to the fork
