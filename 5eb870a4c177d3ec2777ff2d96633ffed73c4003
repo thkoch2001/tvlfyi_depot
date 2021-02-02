@@ -46,6 +46,30 @@
       },
       "revId": "5eb870a4c177d3ec2777ff2d96633ffed73c4003",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd2bdbef_c67928cc",
+        "filename": "nix/yants/tests/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-02-02T09:20:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6418d431_3a8f3197",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 69
+      },
+      "revId": "5eb870a4c177d3ec2777ff2d96633ffed73c4003",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
