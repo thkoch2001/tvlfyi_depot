@@ -22,6 +22,30 @@
       },
       "revId": "5eb870a4c177d3ec2777ff2d96633ffed73c4003",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6418d431_3a8f3197",
+        "filename": "nix/yants/tests/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-02-02T09:13:28Z",
+      "side": 1,
+      "message": "`assertDoesNotThrow` uses `deepSeq` as well, so it may still be relevant, but I\u0027ll have to try around a bit some kind of checks for derivations should be possible hopefully.",
+      "parentUuid": "567cb37b_e18be1d7",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 69
+      },
+      "revId": "5eb870a4c177d3ec2777ff2d96633ffed73c4003",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
