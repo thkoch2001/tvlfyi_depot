@@ -30,6 +30,39 @@ pub enum T {
     List(Vec<T>),
 }
 
+impl T {
+    fn to_u<'a>(&'a self) -> U<'a> {
+        match self {
+            T::Unit => U::Unit,
+            T::N1(b) => U::N1(*b),
+            T::N3(u) => U::N3(*u),
+            T::N6(u) => U::N6(*u),
+            T::N7(u) => U::N7(*u),
+            T::I3(i) => U::I3(*i),
+            T::I6(i) => U::I6(*i),
+            T::I7(i) => U::I7(*i),
+            T::Text(t) => U::Text(t.as_str()),
+            T::Binary(v) => U::Binary(v),
+            T::Sum(Tag { tag, val }) => U::Sum(
+                Tag { tag: tag.as_str(), val: Box::new(val.to_u()) }
+            ),
+            T::Record(map) => U::Record(
+                map.iter().map(|(k, v)| (k.as_str(), v.to_u())).collect()
+            ),
+            T::List(l) => U::List(
+                l.iter().map(|v| v.to_u()).collect::<Vec<U<'a>>>()
+            ),
+        }
+    }
+
+    pub fn encode<'a>(&'a self) -> Vec<u8> {
+        match self {
+            // TODO: don’t go via U, inefficient
+            o => o.to_u().encode()
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum U<'a> {
     Unit,
@@ -52,6 +85,14 @@ pub enum U<'a> {
     List(Vec<U<'a>>),
 }
 
+impl<'a> U<'a> {
+    pub fn encode(&self) -> Vec<u8> {
+        let mut c = std::io::Cursor::new(vec![]);
+        encode(&mut c, self);
+        c.into_inner()
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Tag<S, A> {
     // TODO: make into &str
@@ -69,16 +110,16 @@ impl<S, A> Tag<S, A> {
     }
 }
 
-fn encode_tag<W: Write>(w: &mut W, tag: &str, val: U) -> std::io::Result<()> {
+fn encode_tag<W: Write>(w: &mut W, tag: &str, val: &U) -> std::io::Result<()> {
     write!(w, "<{}:{}|", tag.len(), tag)?;
     encode(w, val)?;
     Ok(())
 }
 
-pub fn encode<W: Write>(w: &mut W, u: U) -> std::io::Result<()> {
+pub fn encode<W: Write>(w: &mut W, u: &U) -> std::io::Result<()> {
   match u {
       U::Unit => write!(w, "u,"),
-      U::N1(b) => if b { write!(w, "n1:1,") } else { write!(w, "n1:0,") },
+      U::N1(b) => if *b { write!(w, "n1:1,") } else { write!(w, "n1:0,") },
       U::N3(n) => write!(w, "n3:{},", n),
       U::N6(n) => write!(w, "n6:{},", n),
       U::N7(n) => write!(w, "n7:{},", n),
@@ -95,7 +136,7 @@ pub fn encode<W: Write>(w: &mut W, u: U) -> std::io::Result<()> {
           w.write(&s);
           write!(w, ",")
       },
-      U::Sum(Tag{tag, val}) => encode_tag(w, tag, *val),
+      U::Sum(Tag{tag, val}) => encode_tag(w, tag, val),
       U::Record(m) => {
           let mut c = std::io::Cursor::new(vec![]);
           for (k, v) in m {

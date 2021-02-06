@@ -171,7 +171,7 @@ fn write_dict<'buf, 'a>(mut http: HashMap<&str, U<'a>>, headers: &'a HashMap<Str
     };
     netencode::encode(
         &mut std::io::stdout(),
-        U::Record(http)
+        &U::Record(http)
     )?;
     Ok(())
 }
