@@ -49,7 +49,7 @@ pub enum U<'a> {
     // Tags
     Sum(Tag<&'a str, U<'a>>),
     Record(Vec<(&'a str, U<'a>)>),
-    List(&'a [u8]),
+    List(Vec<U<'a>>),
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -106,8 +106,12 @@ pub fn encode<W: Write>(w: &mut W, u: U) -> std::io::Result<()> {
           write!(w, "}}")
       },
       U::List(l) => {
-          write!(w, "[{}:", l.len())?;
-          w.write(l)?;
+          let mut c = std::io::Cursor::new(vec![]);
+          for u in l {
+              encode(&mut c, u)?;
+          }
+          write!(w, "[{}:", c.get_ref().len())?;
+          w.write(c.get_ref())?;
           write!(w, "]")
       }
   }
@@ -268,29 +272,18 @@ pub mod parse {
     }
 
     fn list_t(s: &[u8]) -> IResult<&[u8], Vec<T>> {
-        map_parser(list_g(), nom::multi::many0(t_t))(s)
+        list_g(t_t)(s)
     }
 
-    fn list_g() -> impl Fn(&[u8]) -> IResult<&[u8], &[u8]> {
-        sized('[', ']')
-    }
-
-    fn skip() -> impl Fn(&[u8]) -> IResult<&[u8], ()> {
-        move |s: &[u8]| {
-            let (s, ()) = alt((
-                // TODO: only use the sized parsers here
-                map(text, |_| ()),
-                map(unit_t, |_| ()),
-                map(list_g(), |_| ()),
-                map(t_t, |_| ()),
-                // TODO: add rest of parsers
-            ))(s)?;
-            Ok((s, ()))
-        }
-    }
-
-    fn list_take<'a>(n: usize) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], Vec<U<'a>>> {
-        map_parser(list_g(), nom::multi::many_m_n(n, n, u_u))
+    fn list_g<'a, P, O>(inner: P) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], Vec<O>>
+    where
+        O: Clone,
+        P: Fn(&'a [u8]) -> IResult<&'a [u8], O>
+    {
+        map_parser(
+            sized('[', ']'),
+            nom::multi::many0(inner)
+        )
     }
 
     fn record_t<'a>(s: &'a [u8]) -> IResult<&'a [u8], HashMap<String, T>> {
@@ -328,7 +321,7 @@ pub mod parse {
             map(binary_g(), U::Binary),
             map(unit_t, |()| U::Unit),
             map(tag_g(u_u), |t| U::Sum(t)),
-            map(list_g(), U::List),
+            map(list_g(u_u), U::List),
             map(record_g(u_u), U::Record),
 
             map(bool_t(), |u| U::N1(u)),
@@ -491,13 +484,6 @@ pub mod parse {
                     T::Unit,
                     T::Unit,
                     T::Unit,
-                ]))
-            );
-            assert_eq!(
-                list_take(2)("[6:u,u,u,]".as_bytes()),
-                Ok(("".as_bytes(), vec![
-                    U::Unit,
-                    U::Unit,
                 ]))
             );
             assert_eq!(
