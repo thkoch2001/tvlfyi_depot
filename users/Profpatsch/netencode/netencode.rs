@@ -48,7 +48,7 @@ pub enum U<'a> {
     Binary(&'a [u8]),
     // Tags
     Sum(Tag<&'a str, U<'a>>),
-    Record(Vec<(&'a str, U<'a>)>),
+    Record(HashMap<&'a str, U<'a>>),
     List(Vec<U<'a>>),
 }
 
@@ -290,14 +290,11 @@ pub mod parse {
         let (s, r) = record_g(t_t)(s)?;
         Ok((s,
             r.into_iter()
-            // ignore duplicated tag names that appear later
-            // by reverting the vector now
-            .rev()
             .map(|(k, v)| (k.to_string(), v))
             .collect::<HashMap<_,_>>()))
     }
 
-    fn record_g<'a, P, O>(inner: P) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], Vec<(&'a str, O)>>
+    fn record_g<'a, P, O>(inner: P) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], HashMap<&'a str, O>>
     where
         O: Clone,
         P: Fn(&'a [u8]) -> IResult<&'a [u8], O>
@@ -306,9 +303,13 @@ pub mod parse {
             sized('{', '}'),
             nom::multi::fold_many1(
                 tag_g(inner),
-                Vec::new(),
-                |mut acc: Vec<_>, Tag { tag, mut val }| {
-                    acc.push((tag, *val));
+                HashMap::new(),
+                |mut acc: HashMap<_,_>, Tag { tag, mut val }| {
+                    // ignore duplicated tag names that appear later
+                    // according to netencode spec
+                    if ! acc.contains_key(tag) {
+                        acc.insert(tag, *val);
+                    }
                     acc
                 }
             )
