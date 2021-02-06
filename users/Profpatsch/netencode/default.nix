@@ -86,6 +86,7 @@ let
   netencode-mustache = imports.writers.rustSimple {
     name = "netencode_mustache";
     dependencies = [
+      depot.users.Profpatsch.arglib.netencode.rust
       netencode-rs
       mustache
     ];
