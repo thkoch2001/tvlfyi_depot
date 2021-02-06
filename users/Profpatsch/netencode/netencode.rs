@@ -556,7 +556,7 @@ pub mod parse {
                     ("foo".to_owned(), T::List(vec![
                         T::Sum(Tag { tag: "A".to_owned(), val: Box::new(T::Unit) }),
                         T::Sum(Tag { tag: "A".to_owned(), val: Box::new(T::N1(true)) }),
-                        T::Sum(Tag { tag: "B".to_owned(), val: Box::new(T::List(Box::new(vec![T::I3(127)]))) }),
+                        T::Sum(Tag { tag: "B".to_owned(), val: Box::new(T::List(vec![T::I3(127)])) }),
                     ]))
                 ].into_iter().collect::<HashMap<String, T>>())))
             );
