@@ -7,6 +7,7 @@ extern crate exec_helpers;
 use std::os::unix::io::FromRawFd;
 use std::io::Read;
 use std::io::Write;
+use std::collections::HashMap;
 use exec_helpers::{die_user_error, die_expected_error, die_temporary};
 
 use netencode::{U, T};
@@ -16,6 +17,8 @@ enum What {
     Response
 }
 
+// reads a http request (stdin), and writes all headers to stdout, as netencoded record.
+// The keys are text, but can be lists of text iff headers appear multiple times, so beware.
 fn main() -> std::io::Result<()> {
 
     let what : What = match arglib_netencode::arglib_netencode(None).unwrap() {
@@ -58,24 +61,40 @@ fn main() -> std::io::Result<()> {
         }
     }
 
-
-    fn normalize_headers<'a>(headers: &'a [httparse::Header]) -> Vec<(String, &'a str)> {
-        let mut res = vec![];
+    fn normalize_headers<'a>(headers: &'a [httparse::Header]) -> HashMap<String, U<'a>> {
+        let mut res = HashMap::new();
         for httparse::Header { name, value } in headers {
             let val = ascii::AsciiStr::from_ascii(*value)
-                .expect(&format!("read-http: we require header values to be ASCII, but the header {} was {:?}", name, value));
-            // lowercase the headers, since the standard doesn’t care
-            // and we want unique strings to match agains
-            res.push((name.to_lowercase(), val.as_str()))
+                .expect(&format!("read-http: we require header values to be ASCII, but the header {} was {:?}", name, value))
+                .as_str();
+            // lowercase the header names, since the standard doesn’t care
+            // and we want unique strings to match against
+            let name_lower = name.to_lowercase();
+            match res.insert(name_lower, U::Text(val)) {
+                None => (),
+                Some(U::Text(t)) => {
+                    let name_lower = name.to_lowercase();
+                    let _ = res.insert(name_lower, U::List(vec![U::Text(t), U::Text(val)]));
+                    ()
+                },
+                Some(U::List(mut l)) => {
+                    let name_lower = name.to_lowercase();
+                    l.push(U::Text(val));
+                    let _ = res.insert(name_lower, U::List(l));
+                    ()
+                },
+                Some(o) => panic!("read-http: header not text nor list: {:?}", o),
+            }
         }
         res
     }
 
     // tries to read until the end of the http header (deliniated by two newlines "\r\n\r\n")
     fn read_till_end_of_header<R: Read>(buf: &mut Vec<u8>, reader: R) -> Option<()> {
-        let mut chunker = Chunkyboi::new(reader, 4096);
+        let mut chonker = Chunkyboi::new(reader, 4096);
         loop {
-            match chunker.next() {
+            // TODO: attacker can send looooong input, set upper maximum
+            match chonker.next() {
                 Some(Ok(chunk)) => {
                     buf.extend_from_slice(&chunk);
                     if chunk.windows(4).any(|c| c == b"\r\n\r\n" ) {
@@ -126,31 +145,30 @@ fn main() -> std::io::Result<()> {
     }
 }
 
-fn write_dict_req<'buf>(method: &'buf str, path: &'buf str, headers: &[(String, &str)]) -> std::io::Result<()> {
+fn write_dict_req<'a, 'buf>(method: &'buf str, path: &'buf str, headers: &'a HashMap<String, U<'a>>) -> std::io::Result<()> {
     let mut http = vec![
         ("method", U::Text(method)),
         ("path", U::Text(path)),
-    ];
+    ].into_iter().collect();
     write_dict(http, headers)
 }
 
-fn write_dict_resp<'buf>(code: u16, reason: &'buf str, headers: &[(String, &str)]) -> std::io::Result<()> {
+fn write_dict_resp<'a, 'buf>(code: u16, reason: &'buf str, headers: &'a HashMap<String, U<'a>>) -> std::io::Result<()> {
     let mut http = vec![
         ("status", U::N6(code as u64)),
         ("status-text", U::Text(reason)),
-    ];
+    ].into_iter().collect();
     write_dict(http, headers)
 }
 
 
-fn write_dict<'buf, 'a>(mut http: Vec<(&str, U<'a>)>, headers: &'a[(String, &str)]) -> std::io::Result<()> {
-    http.push(("headers", U::Record(
-        headers.iter().map(
-            |(name, value)|
-            (name.as_str(), U::Text(value))
-        ).collect::<Vec<_>>()
-    )));
-
+fn write_dict<'buf, 'a>(mut http: HashMap<&str, U<'a>>, headers: &'a HashMap<String, U<'a>>) -> std::io::Result<()> {
+    match http.insert("headers", U::Record(
+        headers.iter().map(|(k,v)| (k.as_str(), v.clone())).collect()
+    )) {
+        None => (),
+        Some(_) => panic!("read-http: headers already in dict"),
+    };
     netencode::encode(
         &mut std::io::stdout(),
         U::Record(http)

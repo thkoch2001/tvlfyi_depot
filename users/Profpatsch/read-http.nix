@@ -2,7 +2,6 @@
 
 let
 
-  # reads a http request (stdin), and writes all headers to stdout, as netencoded dict
   read-http = depot.users.Profpatsch.writers.rustSimple {
     name = "read-http";
     dependencies = [
