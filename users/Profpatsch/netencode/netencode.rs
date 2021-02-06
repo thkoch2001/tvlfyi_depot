@@ -162,16 +162,16 @@ pub fn text(s: String) -> T {
     T::Text(s)
 }
 
-pub fn t_from_stdin_or_die_user_error(prog_name: &str) -> T {
-    let mut buf = vec![];
-    std::io::stdin().lock().read_to_end(&mut buf);
-    match parse::t_t(&buf) {
-        Ok((rest, t)) => match rest {
-            b"" => t,
+pub fn u_from_stdin_or_die_user_error<'a>(prog_name: &'_ str, stdin_buf: &'a mut Vec<u8>) -> U<'a> {
+    std::io::stdin().lock().read_to_end(stdin_buf);
+    let u = match parse::u_u(stdin_buf) {
+        Ok((rest, u)) => match rest {
+            b"" => u,
             _ => exec_helpers::die_user_error(prog_name, format!("stdin contained some soup after netencode value: {:?}", rest))
         },
         Err(err) => exec_helpers::die_user_error(prog_name, format!("unable to parse netencode from stdin: {:?}", err))
-    }
+    };
+    u
 }
 
 pub mod parse {
@@ -599,25 +599,25 @@ pub mod dec {
 
     pub struct DecodeError(pub String);
 
-    pub trait Decoder {
+    pub trait Decoder<'a> {
         type A;
-        fn dec(T) -> Result<Self::A, DecodeError>;
+        fn dec(u: U<'a>) -> Result<Self::A, DecodeError>;
     }
 
     pub struct ScalarAsBytes;
 
-    impl Decoder for ScalarAsBytes {
+    impl<'a> Decoder<'a> for ScalarAsBytes {
         type A = Vec<u8>;
-        fn dec(t: T) -> Result<Self::A, DecodeError> {
-            match t {
-                T::N3(u) => Ok(format!("{}", u).into_bytes()),
-                T::N6(u) => Ok(format!("{}", u).into_bytes()),
-                T::N7(u) => Ok(format!("{}", u).into_bytes()),
-                T::I3(i) => Ok(format!("{}", i).into_bytes()),
-                T::I6(i) => Ok(format!("{}", i).into_bytes()),
-                T::I7(i) => Ok(format!("{}", i).into_bytes()),
-                T::Text(t) => Ok(t.into_bytes()),
-                T::Binary(b) => Ok(b),
+        fn dec(u: U<'a>) -> Result<Self::A, DecodeError> {
+            match u {
+                U::N3(u) => Ok(format!("{}", u).into_bytes()),
+                U::N6(u) => Ok(format!("{}", u).into_bytes()),
+                U::N7(u) => Ok(format!("{}", u).into_bytes()),
+                U::I3(i) => Ok(format!("{}", i).into_bytes()),
+                U::I6(i) => Ok(format!("{}", i).into_bytes()),
+                U::I7(i) => Ok(format!("{}", i).into_bytes()),
+                U::Text(t) => Ok(t.as_bytes().to_owned()),
+                U::Binary(b) => Ok(b.to_owned()),
                 o => Err(DecodeError(format!("Cannot decode {:?} into scalar", o))),
             }
         }
@@ -625,11 +625,11 @@ pub mod dec {
 
     pub struct Record<T>(pub T);
 
-    impl<Inner: Decoder> Decoder for Record<Inner> {
-        type A = HashMap<String, Inner::A>;
-        fn dec(t: T) -> Result<Self::A, DecodeError> {
-            match t {
-                T::Record(map) =>
+    impl<'a, Inner: Decoder<'a>> Decoder<'a> for Record<Inner> {
+        type A = HashMap<&'a str, Inner::A>;
+        fn dec(u: U<'a>) -> Result<Self::A, DecodeError> {
+            match u {
+                U::Record(map) =>
                     map.into_iter()
                     .map(|(k, v)| Inner::dec(v).map(|v2| (k, v2)))
                     .collect::<Result<Self::A, _>>(),

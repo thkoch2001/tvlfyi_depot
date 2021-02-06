@@ -105,9 +105,10 @@ let
     use netencode::dec::{Record, ScalarAsBytes, Decoder, DecodeError};
 
     fn main() {
-        let t = netencode::t_from_stdin_or_die_user_error("record-splice-env");
+        let mut buf = vec![];
+        let u = netencode::u_from_stdin_or_die_user_error("record-splice-env", &mut buf);
         let (_, prog) = exec_helpers::args_for_exec("record-splice-env", 0);
-        match Record::<ScalarAsBytes>::dec(t) {
+        match Record::<ScalarAsBytes>::dec(u) {
             Ok(map) => {
                 exec_helpers::exec_into_args("record-splice-env", prog, map);
             },
