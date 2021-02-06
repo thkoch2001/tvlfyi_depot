@@ -18,8 +18,8 @@ let
   config = depot: {
     inherit depot;
 
-    # Expose lib & ciBuilds attributes to packages.
-    inherit (depot) ciBuilds lib;
+    # Expose lib attribute to packages.
+    inherit (depot) lib;
 
     # Pass third_party as 'pkgs' (for compatibility with external
     # imports for certain subdirectories)
