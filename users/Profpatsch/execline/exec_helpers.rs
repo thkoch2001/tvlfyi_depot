@@ -31,12 +31,12 @@ pub fn exec_into_args<'a, 'b, Args, Arg, Env, Key, Val>(current_prog_name: &str,
     // TODO: is this possible without collecting into a Vec first, just leaving it an IntoIterator?
     let args = args.into_iter().collect::<Vec<Arg>>();
     let mut args = args.iter().map(|v| OsStr::from_bytes(v.as_ref()));
-    let prog = args.nth(1).expect(&format!("{}: first argument must be an executable", current_prog_name));
+    let prog = args.nth(0).expect(&format!("{}: first argument must be an executable", current_prog_name));
     // TODO: same here
     let env = env_additions.into_iter().collect::<Vec<(Key, Val)>>();
     let env = env.iter().map(|(k,v)| (OsStr::from_bytes(k.as_ref()), OsStr::from_bytes(v.as_ref())));
     let err = std::process::Command::new(prog).args(args).envs(env).exec();
-    die_missing_executable(current_prog_name, format!("exec failed: {:?}", err));
+    die_missing_executable(current_prog_name, format!("exec failed: {}, while trying to execing into {:?}", err, prog));
 }
 
 /// Exit 1 to signify a generic expected error
