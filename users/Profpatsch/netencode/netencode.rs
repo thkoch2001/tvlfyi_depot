@@ -604,6 +604,24 @@ pub mod dec {
         fn dec(u: U<'a>) -> Result<Self::A, DecodeError>;
     }
 
+    pub struct AnyT;
+    pub struct AnyU;
+
+    // impl Decoder for AnyT {
+    //     type A = T;
+    //     fn dec(u: U) -> Result<Self::A, DecodeError> {
+    //         // TODO: implement
+    //         parse::u_into_t(u)
+    //     }
+    // }
+
+    impl<'a> Decoder<'a> for AnyU {
+        type A = U<'a>;
+        fn dec(u: U<'a>) -> Result<Self::A, DecodeError> {
+            Ok(u)
+        }
+    }
+
     pub struct ScalarAsBytes;
 
     impl<'a> Decoder<'a> for ScalarAsBytes {
@@ -635,6 +653,14 @@ pub mod dec {
                     .collect::<Result<Self::A, _>>(),
                 o => Err(DecodeError(format!("Cannot decode {:?} into record", o)))
             }
+        }
+    }
+
+    fn dec_u(b: &[u8]) -> Result<U, DecodeError> {
+        match parse::u_u(b) {
+            Ok((b"", u)) => Ok(u),
+            Ok((rest, _)) => Err(DecodeError(format!("Cannot decode nested U, it contains trailing bytes"))),
+            Err(err) => Err(DecodeError(format!("Cannot decode nested U bytes: {:?}", err))),
         }
     }
 }
