@@ -80,6 +80,8 @@ pub enum U<'a> {
     Text(&'a str),
     Binary(&'a [u8]),
     // Tags
+    // TODO: the U-recursion we do here means we can’t be breadth-lazy anymore
+    // like we originally planned; maybe we want to go `U<'a>` → `&'a [u8]` again?
     Sum(Tag<&'a str, U<'a>>),
     Record(HashMap<&'a str, U<'a>>),
     List(Vec<U<'a>>),
@@ -90,6 +92,30 @@ impl<'a> U<'a> {
         let mut c = std::io::Cursor::new(vec![]);
         encode(&mut c, self);
         c.into_inner()
+    }
+
+    pub fn to_t(&self) -> T {
+        match self {
+            U::Unit => T::Unit,
+            U::N1(b) => T::N1(*b),
+            U::N3(u) => T::N3(*u),
+            U::N6(u) => T::N6(*u),
+            U::N7(u) => T::N7(*u),
+            U::I3(i) => T::I3(*i),
+            U::I6(i) => T::I6(*i),
+            U::I7(i) => T::I7(*i),
+            U::Text(t) => T::Text((*t).to_owned()),
+            U::Binary(v) => T::Binary((*v).to_owned()),
+            U::Sum(Tag { tag, val }) => T::Sum(
+                Tag { tag: (*tag).to_owned(), val: Box::new(val.to_t()) }
+            ),
+            U::Record(map) => T::Record(
+                map.iter().map(|(k, v)| ((*k).to_owned(), v.to_t())).collect::<HashMap<String, T>>()
+            ),
+            U::List(l) => T::List(
+                l.iter().map(|v| v.to_t()).collect::<Vec<T>>()
+            ),
+        }
     }
 }
 
@@ -609,13 +635,12 @@ pub mod dec {
     #[derive(Clone, Copy)]
     pub struct AnyU;
 
-    // impl Decoder for AnyT {
-    //     type A = T;
-    //     fn dec(u: U) -> Result<Self::A, DecodeError> {
-    //         // TODO: implement
-    //         parse::u_into_t(u)
-    //     }
-    // }
+    impl<'a> Decoder<'a> for AnyT {
+        type A = T;
+        fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
+            Ok(u.to_t())
+        }
+    }
 
     impl<'a> Decoder<'a> for AnyU {
         type A = U<'a>;
