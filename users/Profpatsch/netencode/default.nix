@@ -108,7 +108,7 @@ let
         let mut buf = vec![];
         let u = netencode::u_from_stdin_or_die_user_error("record-splice-env", &mut buf);
         let (_, prog) = exec_helpers::args_for_exec("record-splice-env", 0);
-        match Record::<ScalarAsBytes>::dec(u) {
+        match Record(ScalarAsBytes).dec(u) {
             Ok(map) => {
                 exec_helpers::exec_into_args("record-splice-env", prog, map);
             },

@@ -601,10 +601,12 @@ pub mod dec {
 
     pub trait Decoder<'a> {
         type A;
-        fn dec(u: U<'a>) -> Result<Self::A, DecodeError>;
+        fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError>;
     }
 
+    #[derive(Clone, Copy)]
     pub struct AnyT;
+    #[derive(Clone, Copy)]
     pub struct AnyU;
 
     // impl Decoder for AnyT {
@@ -617,16 +619,17 @@ pub mod dec {
 
     impl<'a> Decoder<'a> for AnyU {
         type A = U<'a>;
-        fn dec(u: U<'a>) -> Result<Self::A, DecodeError> {
+        fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
             Ok(u)
         }
     }
 
+    #[derive(Clone, Copy)]
     pub struct ScalarAsBytes;
 
     impl<'a> Decoder<'a> for ScalarAsBytes {
         type A = Vec<u8>;
-        fn dec(u: U<'a>) -> Result<Self::A, DecodeError> {
+        fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
             match u {
                 U::N3(u) => Ok(format!("{}", u).into_bytes()),
                 U::N6(u) => Ok(format!("{}", u).into_bytes()),
@@ -641,17 +644,37 @@ pub mod dec {
         }
     }
 
+    #[derive(Clone, Copy)]
     pub struct Record<T>(pub T);
 
     impl<'a, Inner: Decoder<'a>> Decoder<'a> for Record<Inner> {
         type A = HashMap<&'a str, Inner::A>;
-        fn dec(u: U<'a>) -> Result<Self::A, DecodeError> {
+        fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
             match u {
                 U::Record(map) =>
                     map.into_iter()
-                    .map(|(k, v)| Inner::dec(v).map(|v2| (k, v2)))
+                    .map(|(k, v)| self.0.dec(v).map(|v2| (k, v2)))
                     .collect::<Result<Self::A, _>>(),
                 o => Err(DecodeError(format!("Cannot decode {:?} into record", o)))
+            }
+        }
+    }
+
+    #[derive(Clone, Copy)]
+    pub struct RecordDot<'a, T> {
+        field: &'a str,
+        inner: T
+    }
+
+    impl <'a, Inner: Decoder<'a> + Copy> Decoder<'a> for RecordDot<'_, Inner> {
+        type A = Inner::A;
+        fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
+            match Record(self.inner).dec(u) {
+                Ok(mut map) => match map.remove(self.field) {
+                    Some(inner) => Ok(inner),
+                    None => Err(DecodeError(format!("Cannot find `{}` in record map", self.field))),
+                },
+                Err(err) => Err(err),
             }
         }
     }
