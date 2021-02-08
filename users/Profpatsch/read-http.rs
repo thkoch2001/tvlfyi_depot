@@ -21,14 +21,14 @@ enum What {
 // The keys are text, but can be lists of text iff headers appear multiple times, so beware.
 fn main() -> std::io::Result<()> {
 
-    let what : What = match arglib_netencode::arglib_netencode(None).unwrap() {
+    let what : What = match arglib_netencode::arglib_netencode("read-http", None) {
         T::Record(rec) => match rec.get("what") {
             Some(T::Text(t)) => match t.as_str() {
                 "request" => What::Request,
                 "response" => What::Response,
-                _ => die_user_error("read-http arglib", "`what` should be either t:request or t:response"),
+                _ => die_user_error("read-http", "`what` should be either t:request or t:response"),
             },
-            Some(o) => die_user_error("read-http arglib", format!("expected a record of text, got {:#?}", o)),
+            Some(o) => die_user_error("read-http", format!("expected a record of text, got {:#?}", o)),
             None => {
                 eprintln!("read-http arglib: no `what` given, defaulting to Response");
                 What::Response
