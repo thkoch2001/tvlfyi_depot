@@ -37,7 +37,7 @@ fn netencode_to_mustache_data_dwim(t: T) -> Data {
 
 pub fn from_stdin() -> () {
     let data = netencode_to_mustache_data_dwim(
-        arglib_netencode::arglib_netencode(Some(std::ffi::OsStr::new("TEMPLATE_DATA"))).unwrap()
+        arglib_netencode::arglib_netencode("netencode-mustache", Some(std::ffi::OsStr::new("TEMPLATE_DATA")))
     );
     let mut stdin = String::new();
     std::io::stdin().read_to_string(&mut stdin).unwrap();
