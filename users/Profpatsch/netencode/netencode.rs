@@ -3,6 +3,7 @@ extern crate exec_helpers;
 
 use std::collections::HashMap;
 use std::io::{Write, Read};
+use std::fmt::{Display, Debug};
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum T {
@@ -21,6 +22,7 @@ pub enum T {
     // Text
     // TODO: make into &str
     Text(String),
+    // TODO: rename to Bytes
     Binary(Vec<u8>),
     // Tags
     // TODO: make into &str
@@ -31,7 +33,7 @@ pub enum T {
 }
 
 impl T {
-    fn to_u<'a>(&'a self) -> U<'a> {
+    pub fn to_u<'a>(&'a self) -> U<'a> {
         match self {
             T::Unit => U::Unit,
             T::N1(b) => U::N1(*b),
@@ -650,6 +652,32 @@ pub mod dec {
     }
 
     #[derive(Clone, Copy)]
+    pub struct Text;
+    // TODO: rename to Bytes
+    #[derive(Clone, Copy)]
+    pub struct Binary;
+
+    impl<'a> Decoder<'a> for Text {
+        type A = &'a str;
+        fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
+            match u {
+                U::Text(t) => Ok(t),
+                other => Err(DecodeError(format!("Cannot decode {:?} into Text", other))),
+            }
+        }
+    }
+
+    impl<'a> Decoder<'a> for Binary {
+        type A = &'a [u8];
+        fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
+            match u {
+                U::Binary(b) => Ok(b),
+                other => Err(DecodeError(format!("Cannot decode {:?} into Binary", other))),
+            }
+        }
+    }
+
+    #[derive(Clone, Copy)]
     pub struct ScalarAsBytes;
 
     impl<'a> Decoder<'a> for ScalarAsBytes {
@@ -672,7 +700,9 @@ pub mod dec {
     #[derive(Clone, Copy)]
     pub struct Record<T>(pub T);
 
-    impl<'a, Inner: Decoder<'a>> Decoder<'a> for Record<Inner> {
+    impl<'a, Inner> Decoder<'a> for Record<Inner>
+        where Inner: Decoder<'a>
+    {
         type A = HashMap<&'a str, Inner::A>;
         fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
             match u {
@@ -687,19 +717,43 @@ pub mod dec {
 
     #[derive(Clone, Copy)]
     pub struct RecordDot<'a, T> {
-        field: &'a str,
-        inner: T
+        pub field: &'a str,
+        pub inner: T
     }
 
-    impl <'a, Inner: Decoder<'a> + Copy> Decoder<'a> for RecordDot<'_, Inner> {
+    impl <'a, Inner> Decoder<'a> for RecordDot<'_, Inner>
+        where Inner: Decoder<'a> + Clone
+    {
         type A = Inner::A;
         fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
-            match Record(self.inner).dec(u) {
+            match Record(self.inner.clone()).dec(u) {
                 Ok(mut map) => match map.remove(self.field) {
                     Some(inner) => Ok(inner),
                     None => Err(DecodeError(format!("Cannot find `{}` in record map", self.field))),
                 },
                 Err(err) => Err(err),
+            }
+        }
+    }
+
+    #[derive(Clone)]
+    pub struct OneOf<T, A>{
+        pub inner: T,
+        pub list: Vec<A>,
+    }
+
+    impl <'a, Inner> Decoder<'a> for OneOf<Inner, Inner::A>
+        where Inner: Decoder<'a>,
+              Inner::A: Display + Debug + PartialEq
+    {
+        type A = Inner::A;
+        fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
+            match self.inner.dec(u) {
+                Ok(inner) => match self.list.iter().any(|x| x.eq(&inner)) {
+                    true => Ok(inner),
+                    false => Err(DecodeError(format!("{} is not one of {:?}", inner, self.list)))
+                },
+                Err(err) => Err(err)
             }
         }
     }
