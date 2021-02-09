@@ -9,7 +9,7 @@ pub fn args_for_exec(current_prog_name: &str, no_of_positional_args: usize) -> (
     let mut args = args.map(|arg| arg.into_vec());
     let mut pos_args = vec![];
     // get positional args
-    for i in 1..no_of_positional_args {
+    for i in 1..no_of_positional_args+1 {
             pos_args.push(
                 args.nth(0).expect(
                     &format!("{}: expects {} positional args, only got {}", current_prog_name, no_of_positional_args, i))
