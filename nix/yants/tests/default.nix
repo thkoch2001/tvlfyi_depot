@@ -15,6 +15,15 @@ let
     assertDoesNotThrow
     ;
 
+  # this derivation won't throw if evaluated with deepSeq
+  # unlike most things even remotely related with nixpkgs
+  trivialDerivation = derivation {
+    name = "trivial-derivation";
+    inherit (pkgs.stdenv) system;
+    builder = "/bin/sh";
+    args = [ "-c" "echo hello > $out" ];
+  };
+
   testPrimitives = it "checks that all primitive types match" [
     (assertDoesNotThrow "unit type" (unit {}))
     (assertDoesNotThrow "int type" (int 15))
@@ -23,6 +32,7 @@ let
     (assertDoesNotThrow "string type" (string "Hello!"))
     (assertDoesNotThrow "function type" (function (x: x * 2)))
     (assertDoesNotThrow "path type" (path /nix))
+    (assertDoesNotThrow "derivation" (drv trivialDerivation))
   ];
 
   testPoly = it "checks that polymorphic types work as intended" [
