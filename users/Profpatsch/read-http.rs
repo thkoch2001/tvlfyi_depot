@@ -10,7 +10,8 @@ use std::io::Write;
 use std::collections::HashMap;
 use exec_helpers::{die_user_error, die_expected_error, die_temporary};
 
-use netencode::{U, T};
+use netencode::{U, T, dec};
+use netencode::dec::Decoder;
 
 enum What {
     Request,
@@ -21,20 +22,18 @@ enum What {
 // The keys are text, but can be lists of text iff headers appear multiple times, so beware.
 fn main() -> std::io::Result<()> {
 
-    let what : What = match arglib_netencode::arglib_netencode("read-http", None) {
-        T::Record(rec) => match rec.get("what") {
-            Some(T::Text(t)) => match t.as_str() {
-                "request" => What::Request,
-                "response" => What::Response,
-                _ => die_user_error("read-http", "`what` should be either t:request or t:response"),
-            },
-            Some(o) => die_user_error("read-http", format!("expected a record of text, got {:#?}", o)),
-            None => {
-                eprintln!("read-http arglib: no `what` given, defaulting to Response");
-                What::Response
-            }
+    let args = dec::RecordDot {
+        field: "what",
+        inner: dec::OneOf {
+            list: vec!["request", "response"],
+            inner: dec::Text
         }
-        o => die_user_error("read-http arglib", format!("expected a record, got {:#?}", o))
+    };
+    let what : What = match args.dec(arglib_netencode::arglib_netencode("read-http", None).to_u()) {
+        Ok("request") => What::Request,
+        Ok("response") => What::Response,
+        Ok(v) => panic!("shouldn’t happen!, value was: {}", v),
+        Err(dec::DecodeError(err)) => die_user_error("read-http", err),
     };
 
     fn read_stdin_to_complete<F>(mut parse: F) -> ()
