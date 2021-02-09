@@ -11,6 +11,16 @@ pub fn no_args(current_prog_name: &str) -> () {
     }
 }
 
+pub fn args(current_prog_name: &str, no_of_positional_args: usize) -> Vec<Vec<u8>> {
+    let mut args = std::env::args_os();
+    // remove argv[0]
+    let _ = args.nth(0);
+    if args.len() != no_of_positional_args {
+        die_user_error(current_prog_name, format!("Expected {} arguments, got {}, namely {:?}", no_of_positional_args, args.len(), args.collect::<Vec<_>>()))
+    }
+    args.map(|arg| arg.into_vec()).collect()
+}
+
 pub fn args_for_exec(current_prog_name: &str, no_of_positional_args: usize) -> (Vec<Vec<u8>>, Vec<Vec<u8>>) {
     let mut args = std::env::args_os();
     // remove argv[0]

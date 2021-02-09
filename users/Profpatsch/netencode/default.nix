@@ -109,7 +109,7 @@ let
 
     fn main() {
         let mut buf = vec![];
-        let (args, prog) = exec_helpers::args_for_exec("record-get", 1);
+        let args = exec_helpers::args("record-get", 1);
         let field = match std::str::from_utf8(&args[0]) {
             Ok(f) => f,
             Err(_e) => exec_helpers::die_user_error("record-get", format!("The field name needs to be valid unicode"))
