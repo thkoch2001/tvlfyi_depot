@@ -2,6 +2,15 @@ use std::os::unix::process::CommandExt;
 use std::ffi::OsStr;
 use std::os::unix::ffi::{OsStringExt, OsStrExt};
 
+pub fn no_args(current_prog_name: &str) -> () {
+    let mut args = std::env::args_os();
+    // remove argv[0]
+    let _ = args.nth(0);
+    if args.len() > 0 {
+        die_user_error(current_prog_name, format!("Expected no arguments, got {:?}", args.collect::<Vec<_>>()))
+    }
+}
+
 pub fn args_for_exec(current_prog_name: &str, no_of_positional_args: usize) -> (Vec<Vec<u8>>, Vec<Vec<u8>>) {
     let mut args = std::env::args_os();
     // remove argv[0]
