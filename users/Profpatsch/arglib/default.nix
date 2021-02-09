@@ -20,7 +20,7 @@ let
               None => std::ffi::OsStr::from_bytes("ARGLIB_NETENCODE".as_bytes()),
               Some(a) => a
           };
-          match std::env::var_os(env) {
+          let t = match std::env::var_os(env) {
               None => exec_helpers::die_user_error(prog_name, format!("could not read args, envvar {} not set", env.to_string_lossy())),
               // TODO: good error handling for the different parser errors
               Some(soup) => match netencode::parse::t_t(soup.as_bytes()) {
@@ -30,7 +30,9 @@ let
                   },
                   Err(err) => exec_helpers::die_environment_problem(prog_name, format!("arglib parsing error: {:?}", err))
               }
-          }
+          };
+          std::env::remove_var(env);
+          t
       }
     '';
   };
