@@ -22,6 +22,8 @@ enum What {
 // The keys are text, but can be lists of text iff headers appear multiple times, so beware.
 fn main() -> std::io::Result<()> {
 
+    exec_helpers::no_args("read-http");
+
     let args = dec::RecordDot {
         field: "what",
         inner: dec::OneOf {
