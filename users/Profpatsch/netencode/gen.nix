@@ -8,8 +8,8 @@ let
 
   n1 = b: if b then "n1:1," else "n1:0,";
 
-  n = i: n: netstring "n${toString i}" "," (toString n);
-  i = i: n: netstring "i${toString i}" "," (toString n);
+  n = i: n: "n${toString i}:${toString n},";
+  i = i: n: "i${toString i}:${toString n},";
 
   n3 = n 3;
   n6 = n 6;
