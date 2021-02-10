@@ -29,6 +29,7 @@ in {
 
     services.nginx.virtualHosts."git.tazj.in" = {
       enableACME = true;
+      forceSSL = true;
       extraConfig = "return 301 https://code.tvl.fyi$request_uri;";
     };
   };
