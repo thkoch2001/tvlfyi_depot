@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04a8f435_7f7a21fe",
+        "filename": "rules.pl",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-02-12T18:29:06Z",
+      "side": 1,
+      "message": "I found this comment \u0026 example hard to understand because my intuition was that this would have something to do with lengths \u0026 indices. Maybe rewrite to make it clear that it\u0027s looking for `S` by equality.",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "db645d233c49459a0543883542c6e6d62df287a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
