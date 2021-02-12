@@ -22,6 +22,30 @@
       },
       "revId": "db645d233c49459a0543883542c6e6d62df287a0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16e5439f_733ca935",
+        "filename": "rules.pl",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-02-12T22:23:55Z",
+      "side": 1,
+      "message": "Fair, new comment + naming should be better!",
+      "parentUuid": "04a8f435_7f7a21fe",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "db645d233c49459a0543883542c6e6d62df287a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
