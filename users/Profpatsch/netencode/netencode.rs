@@ -758,11 +758,19 @@ pub mod dec {
         }
     }
 
-    fn dec_u(b: &[u8]) -> Result<U, DecodeError> {
-        match parse::u_u(b) {
-            Ok((b"", u)) => Ok(u),
-            Ok((rest, _)) => Err(DecodeError(format!("Cannot decode nested U, it contains trailing bytes"))),
-            Err(err) => Err(DecodeError(format!("Cannot decode nested U bytes: {:?}", err))),
+    #[derive(Clone)]
+    pub struct Try<T>(pub T);
+
+    impl <'a, Inner> Decoder<'a> for Try<Inner>
+        where Inner: Decoder<'a>
+    {
+        type A = Option<Inner::A>;
+        fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
+            match self.0.dec(u) {
+                Ok(inner) => Ok(Some(inner)),
+                Err(err) => Ok(None)
+            }
         }
     }
+
 }
