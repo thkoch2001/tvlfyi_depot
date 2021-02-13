@@ -22,7 +22,10 @@ let
   ];
 
   eprintenv = depot.nix.writeExecline "eprintenv" { readNArgs = 1; } [
-    "fdmove" "-c" "1" "2" bins.printenv "$1" "$@"
+    "ifelse" [ "fdmove" "-c" "1" "2" bins.printenv "$1" ]
+    [ "$@" ]
+    "if" [ eprintf "eprintenv: could not find \"\${1}\" in the environment\n" ]
+    "$@"
   ];
 
   # remove everything but a few selected environment variables
