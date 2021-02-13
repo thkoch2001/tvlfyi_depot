@@ -131,15 +131,20 @@ let
   } ''
     extern crate netencode;
     extern crate exec_helpers;
-    use netencode::dec::{Record, ScalarAsBytes, Decoder, DecodeError};
+    use netencode::dec::{Record, Try, ScalarAsBytes, Decoder, DecodeError};
 
     fn main() {
         let mut buf = vec![];
         let u = netencode::u_from_stdin_or_die_user_error("record-splice-env", &mut buf);
         let (_, prog) = exec_helpers::args_for_exec("record-splice-env", 0);
-        match Record(ScalarAsBytes).dec(u) {
+        match Record(Try(ScalarAsBytes)).dec(u) {
             Ok(map) => {
-                exec_helpers::exec_into_args("record-splice-env", prog, map);
+                exec_helpers::exec_into_args(
+                    "record-splice-env",
+                    prog,
+                    // some elements can’t be decoded as scalars, so just ignore them
+                    map.into_iter().filter_map(|(k, v)| v.map(|v2| (k, v2)))
+                );
             },
             Err(DecodeError(err)) => exec_helpers::die_user_error("record-splice-env", err),
         }
