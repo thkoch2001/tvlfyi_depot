@@ -125,12 +125,39 @@ let
     }
   '';
 
+  env-splice-record = imports.writers.rustSimple {
+    name = "env-splice-record";
+    dependencies = [
+      netencode-rs
+      depot.users.Profpatsch.execline.exec-helpers
+    ];
+  } ''
+    extern crate netencode;
+    extern crate exec_helpers;
+    use netencode::{T};
+    use std::os::unix::ffi::OsStringExt;
+
+    fn main() {
+        exec_helpers::no_args("env-splice-record");
+        let mut res = std::collections::HashMap::new();
+        for (key, val) in std::env::vars_os() {
+          match (String::from_utf8(key.into_vec()), String::from_utf8(val.into_vec())) {
+            (Ok(k), Ok(v)) => { let _ = res.insert(k, T::Text(v)); },
+            // same as in record-splice-env, we ignore non-utf8 variables
+            (_, _) => {},
+          }
+        }
+        netencode::encode(&mut std::io::stdout(), &T::Record(res).to_u()).unwrap()
+    }
+  '';
+
 in depot.nix.utils.drvTargets {
   inherit
-   netencode-rs
-   netencode-mustache
-   record-get
-   record-splice-env
-   gen
-   ;
+    netencode-rs
+    netencode-mustache
+    record-get
+    record-splice-env
+    env-splice-record
+    gen
+    ;
 }
