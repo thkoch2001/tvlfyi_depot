@@ -26,6 +26,7 @@ pub enum T {
     Binary(Vec<u8>),
     // Tags
     // TODO: make into &str
+    // TODO: rename to Tag
     Sum(Tag<String, T>),
     // TODO: make into &str
     Record(HashMap<String, T>),
@@ -81,9 +82,10 @@ pub enum U<'a> {
     // Text
     Text(&'a str),
     Binary(&'a [u8]),
-    // Tags
     // TODO: the U-recursion we do here means we can’t be breadth-lazy anymore
     // like we originally planned; maybe we want to go `U<'a>` → `&'a [u8]` again?
+    // Tags
+    // TODO: rename to Tag
     Sum(Tag<&'a str, U<'a>>),
     Record(HashMap<&'a str, U<'a>>),
     List(Vec<U<'a>>),
@@ -195,7 +197,7 @@ pub fn u_from_stdin_or_die_user_error<'a>(prog_name: &'_ str, stdin_buf: &'a mut
     let u = match parse::u_u(stdin_buf) {
         Ok((rest, u)) => match rest {
             b"" => u,
-            _ => exec_helpers::die_user_error(prog_name, format!("stdin contained some soup after netencode value: {:?}", rest))
+            _ => exec_helpers::die_user_error(prog_name, format!("stdin contained some soup after netencode value: {:?}", String::from_utf8_lossy(rest)))
         },
         Err(err) => exec_helpers::die_user_error(prog_name, format!("unable to parse netencode from stdin: {:?}", err))
     };
