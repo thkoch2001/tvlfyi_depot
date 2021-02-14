@@ -1,4 +1,4 @@
-{ depot, pkgs, python3, python3Lib, rustSimpleLib, rustSimple }:
+{ depot, pkgs, python3, python3Lib, rustSimpleLib, rustSimple, testRustSimple }:
 
 let
   run = drv: depot.nix.runExecline.local "run-${drv.name}" {} [
@@ -33,7 +33,7 @@ let
   '');
 
 
-  rustTransitiveLib = rustSimpleLib {
+  rustTransitiveLib = testRustSimple (rustSimpleLib {
     name = "transitive";
   } ''
     pub fn transitive(s: &str) -> String {
@@ -41,7 +41,17 @@ let
       new.push_str(" 1 2 3");
       new
     }
-  '';
+
+    #[cfg(test)]
+    mod tests {
+      use super::*;
+
+      #[test]
+      fn test_transitive() {
+        assert_eq!(transitive("foo").as_str(), "foo 1 2 3")
+      }
+    }
+  '');
 
   rustTestLib = rustSimpleLib {
     name = "test_lib";

@@ -147,6 +147,7 @@ let
       python3Lib
       rustSimpleLib
       rustSimple
+      testRustSimple
       ;
    };
 
