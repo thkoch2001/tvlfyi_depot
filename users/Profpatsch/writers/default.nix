@@ -1,8 +1,10 @@
 { depot, pkgs, lib, ... }:
 let
-  bins = depot.nix.getBins pkgs.coreutils ["printf" "mkdir" "cat" "ln"];
+  bins = depot.nix.getBins pkgs.coreutils ["printf" "mkdir" "cat" "ln" "ls" "touch" ];
 
   inherit (depot.nix.yants) defun struct restrict attrs list string drv any;
+
+  inherit (depot.nix) drvSeqL;
 
   FlakeError =
     restrict
@@ -111,6 +113,32 @@ let
       '';
     } // args);
 
+  /* Takes a `buildRustCrate` derivation as an input,
+    * builds it with `{ buildTests = true; }` and runs
+    * all tests found in its `tests` dir. If they are
+    * all successful, `$out` will point to the crate
+    * built with `{ buildTests = false; }`, otherwise
+    * it will fail to build.
+    *
+    * See also `nix.drvSeqL` which is used to implement
+    * this behavior.
+    */
+  testRustSimple = rustDrv:
+    let
+      crate = buildTests: rustDrv.override { inherit buildTests; };
+      tests = depot.nix.runExecline.local "${rustDrv.name}-tests-run" {} [
+        "importas" "out" "out"
+        "if" [
+          "pipeline" [ bins.ls "${crate true}/tests" ]
+          "forstdin" "test"
+          "importas" "test" "test"
+          "${crate true}/tests/$test"
+        ]
+        bins.touch "$out"
+      ];
+    in drvSeqL [ tests ] (crate false);
+
+
   tests = import ./tests.nix {
     inherit
       depot
@@ -129,6 +157,7 @@ in {
     rustSimple
     rustSimpleBin
     rustSimpleLib
+    testRustSimple
     tests
     ;
 }
