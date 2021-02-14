@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d7ac4fc_3e1f9072",
+        "filename": "users/Profpatsch/netencode/pretty.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-02-14T16:34:33Z",
+      "side": 1,
+      "message": "What about trying to decode binary using utf-8 and if fails just hexdumping the slice (or using Debug)?",
+      "revId": "da7ea5cd30e744e90bc0b01b47f870e0750f8def",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
