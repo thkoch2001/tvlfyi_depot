@@ -18,6 +18,36 @@ let
 
   gen = import ./gen.nix { inherit lib; };
 
+  pretty-rs = imports.writers.rustSimpleLib {
+    name = "netencode-pretty";
+    dependencies = [
+      netencode-rs
+    ];
+  } (builtins.readFile ./pretty.rs);
+
+  pretty = depot.users.Profpatsch.writers.rustSimple {
+    name = "netencode-pretty";
+    dependencies = [
+      netencode-rs
+      pretty-rs
+      depot.users.Profpatsch.execline.exec-helpers
+    ];
+  } ''
+    extern crate netencode;
+    extern crate netencode_pretty;
+    extern crate exec_helpers;
+
+    fn main() {
+      let (_, prog) = exec_helpers::args_for_exec("eprint-stdin-netencode", 0);
+      let mut buf = vec![];
+      let u = netencode::u_from_stdin_or_die_user_error("eprint-stdin-netencode", &mut buf);
+      match netencode_pretty::Pretty::from_u(u).print_multiline(&mut std::io::stdout()) {
+        Ok(()) => {},
+        Err(err) => exec_helpers::die_temporary("eprint-stdin-netencode", format!("could not write to stdout: {}", err))
+      }
+    }
+  '';
+
   netencode-mustache = imports.writers.rustSimple {
     name = "netencode_mustache";
     dependencies = [
@@ -115,6 +145,8 @@ let
 in depot.nix.utils.drvTargets {
   inherit
     netencode-rs
+    pretty-rs
+    pretty
     netencode-mustache
     record-get
     record-splice-env
