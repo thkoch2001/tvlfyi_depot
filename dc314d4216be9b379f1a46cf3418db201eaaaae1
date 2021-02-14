@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e6edc9e_fcec4df8",
+        "filename": "users/Profpatsch/writers/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-14T12:34:38Z",
+      "side": 1,
+      "message": "s/drv/rustDrv/",
+      "revId": "dc314d4216be9b379f1a46cf3418db201eaaaae1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "428f0de4_ce471d1f",
+        "filename": "users/Profpatsch/writers/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-14T12:34:38Z",
+      "side": 1,
+      "message": "crate \u003d buildTests: drv.override { inherit buildTests; };",
+      "revId": "dc314d4216be9b379f1a46cf3418db201eaaaae1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
