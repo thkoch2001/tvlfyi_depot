@@ -38,12 +38,12 @@ let
     extern crate exec_helpers;
 
     fn main() {
-      let (_, prog) = exec_helpers::args_for_exec("eprint-stdin-netencode", 0);
+      let (_, prog) = exec_helpers::args_for_exec("netencode-pretty", 0);
       let mut buf = vec![];
-      let u = netencode::u_from_stdin_or_die_user_error("eprint-stdin-netencode", &mut buf);
+      let u = netencode::u_from_stdin_or_die_user_error("netencode-pretty", &mut buf);
       match netencode_pretty::Pretty::from_u(u).print_multiline(&mut std::io::stdout()) {
         Ok(()) => {},
-        Err(err) => exec_helpers::die_temporary("eprint-stdin-netencode", format!("could not write to stdout: {}", err))
+        Err(err) => exec_helpers::die_temporary("netencode-pretty", format!("could not write to stdout: {}", err))
       }
     }
   '';
