@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04082f08_b1a05beb",
+        "filename": "users/Profpatsch/writers/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-02-14T12:38:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e6edc9e_fcec4df8",
+      "revId": "dc314d4216be9b379f1a46cf3418db201eaaaae1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "428f0de4_ce471d1f",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-02-14T12:34:38Z",
       "side": 1,
       "message": "crate \u003d buildTests: drv.override { inherit buildTests; };",
+      "revId": "dc314d4216be9b379f1a46cf3418db201eaaaae1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54a9f6d8_7d229ce2",
+        "filename": "users/Profpatsch/writers/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-02-14T12:38:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "428f0de4_ce471d1f",
       "revId": "dc314d4216be9b379f1a46cf3418db201eaaaae1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
