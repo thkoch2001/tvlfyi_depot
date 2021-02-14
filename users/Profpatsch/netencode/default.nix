@@ -6,20 +6,16 @@ let
       writers;
   };
 
-  netencode-rs-common = tests: imports.writers.rustSimpleLib {
-    name = "netencode";
-    dependencies = [
-      depot.users.Profpatsch.rust-crates.nom
-      depot.users.Profpatsch.execline.exec-helpers
-    ];
-    buildTests = tests;
-    release = false;
-    verbose = true;
-  } (builtins.readFile ./netencode.rs);
-
-  netencode-rs-tests = netencode-rs-common true;
-
-  netencode-rs = netencode-rs-common false;
+  netencode-rs = imports.writers.testRustSimple
+    (imports.writers.rustSimpleLib {
+      name = "netencode";
+      dependencies = [
+        depot.users.Profpatsch.rust-crates.nom
+        depot.users.Profpatsch.execline.exec-helpers
+      ];
+      release = false;
+      verbose = true;
+    } (builtins.readFile ./netencode.rs));
 
   gen = import ./gen.nix { inherit lib; };
 
@@ -132,7 +128,6 @@ let
 in {
   inherit
    netencode-rs
-   netencode-rs-tests
    netencode-mustache
    record-get
    record-splice-env
