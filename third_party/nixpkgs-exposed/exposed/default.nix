@@ -2,6 +2,7 @@
 # because of how readTree interprets .skip-subtree
 # see https://b.tvl.fyi/issues/89
 { nixpkgs, stableNixpkgs }:
+
 {
   # Inherit the packages from nixos-unstable that should be available inside
   # of the repo. They become available under `pkgs.third_party.<name>`
@@ -78,6 +79,7 @@
     kontemplate
     lib
     libredirect
+    libsForQt5
     linuxPackages
     linuxPackages_5_9
     luajit
@@ -107,6 +109,7 @@
     pulseaudio
     python3
     python3Packages
+    qtbase
     quassel
     remarshal
     rink
@@ -133,10 +136,10 @@
     tree
     tree-sitter
     which
-    writers
     writeShellScript
     writeShellScriptBin
     writeText
+    writers
     xorg
     xz
     zlib
