@@ -36,16 +36,16 @@ let
 
   serde_derive = pkgs.buildRustCrate {
     pname = "serde";
-    version = "1.0.118";
     crateName = "serde";
-    sha256 = "1kbi2csphq8m4z77fpd6v8jih10j7867wniqnlxnk308mrnxi4r2";
+    version = "1.0.123";
+    sha256 = "05xl2s1vpf3p7fi2yc9qlzw88d5ap0z3qmhmd7axa6pp9pn1s5xc";
   };
 
   serde = pkgs.buildRustCrate {
     pname = "serde";
-    version = "1.0.118";
     crateName = "serde";
-    sha256 = "1kbi2csphq8m4z77fpd6v8jih10j7867wniqnlxnk308mrnxi4r2";
+    version = "1.0.123";
+    sha256 = "05xl2s1vpf3p7fi2yc9qlzw88d5ap0z3qmhmd7axa6pp9pn1s5xc";
     features = [ "std" ];
   };
 
