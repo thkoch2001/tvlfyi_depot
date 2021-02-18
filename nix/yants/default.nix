@@ -76,9 +76,10 @@ with builtins; let
   # error message constructor.
   typedef = name: check: typedef' {
     inherit name;
-    checkType = check;
-    checkToBool = r: r;
-    toError = value: _result: typeError name value;
+    checkType = v: {
+      ok = check v;
+      err = typeError name v;
+    };
   };
 
   checkEach = name: t: l: foldl' (acc: e:
