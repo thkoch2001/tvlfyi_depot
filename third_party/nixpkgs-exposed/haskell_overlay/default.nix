@@ -90,14 +90,6 @@ self: super: with pkgs.haskell.lib; rec {
 
   test-framework-quickcheck2 = doJailbreak super.test-framework-quickcheck2;
 
-  vector = overrideSrc (doJailbreak super.vector) rec {
-    src = pkgs.fetchzip {
-      url = "mirror://hackage/vector-${version}/vector-${version}.tar.gz";
-      sha256 = "1312lpb1f4jzbmcjp7mdf9l9ykp1hscxdr66cl8zlcs8kbr13bm7";
-    };
-    version = "0.12.1.2";
-  };
-
   vinyl = overrideSrc (markUnbroken super.vinyl)
     rec {
       src = pkgs.fetchzip {
