@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 (pkgs.originals.grpc.override {
-  abseil-cpp = pkgs.abseil_cpp;
   protobuf = pkgs.protobuf;
   stdenv = pkgs.llvmPackages.libcxxStdenv;
 }).overrideAttrs(orig: rec {
