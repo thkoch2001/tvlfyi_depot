@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4834fb5e_3e64cfe0",
+        "filename": "nix/yants/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-02-19T13:28:17Z",
+      "side": 1,
+      "message": "It seems odd to me to have this field populated in the success case. Maybe compute the result of `check v` once, and then use it for both the value of `ok` and to conditionally set `err`.",
+      "range": {
+        "startLine": 81,
+        "startChar": 12,
+        "endLine": 81,
+        "endChar": 29
+      },
+      "revId": "f0a1687a3eb5a30319c4b6ddfe22fd1c3c0d746b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
