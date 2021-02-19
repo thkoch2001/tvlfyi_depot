@@ -230,6 +230,11 @@
   (shell-command "xrandr --output HDMI1 --right-of eDP1 --auto --primary")
   (exwm-randr-refresh))
 
+(defun randr-vauxhall-layout-remarkable ()
+  "Make the reMarkable the primary screen."
+  (interactive)
+  (shell-command "xrandr --output VIRTUAL1 --primary"))
+
 ;; Layouts for frog (desktop)
 
 (defun randr-frog-layout-right-only ()
@@ -252,7 +257,8 @@
   ("vauxhall"
    (exwm-input-set-key (kbd "s-m s") #'randr-vauxhall-layout-single)
    (exwm-input-set-key (kbd "s-m a") #'randr-vauxhall-layout-all)
-   (exwm-input-set-key (kbd "s-m w") #'randr-vauxhall-layout-wide-only))
+   (exwm-input-set-key (kbd "s-m w") #'randr-vauxhall-layout-wide-only)
+   (exwm-input-set-key (kbd "s-m r") #'randr-vauxhall-layout-remarkable))
 
   ("frog"
    (exwm-input-set-key (kbd "s-m b") #'randr-frog-layout-both)
