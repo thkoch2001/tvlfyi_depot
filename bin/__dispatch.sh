@@ -19,9 +19,6 @@ case "${TARGET_TOOL}" in
   depot-build)
     attr="tools.depot-build"
     ;;
-  git-bug)
-    attr="third_party.git-bug"
-    ;;
   gerrit)
     attr="tools.gerrit-cli"
     ;;
