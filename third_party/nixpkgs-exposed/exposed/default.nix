@@ -79,7 +79,7 @@
     lib
     libredirect
     linuxPackages
-    linuxPackages_5_9
+    linuxPackages_5_11
     luajit
     lutris
     makeFontsConf
