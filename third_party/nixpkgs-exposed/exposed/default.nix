@@ -128,6 +128,7 @@
     sqlite
     stdenvNoCC
     stern
+    substituteAll
     symlinkJoin
     systemd
     tdlib
