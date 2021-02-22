@@ -45,8 +45,7 @@
 
 (use-package counsel
   :after (ivy)
-  :config (counsel-mode 1)
-  :bind (("C-c r g" . counsel-rg)))
+  :config (counsel-mode 1))
 
 (use-package dash)
 (use-package dash-functional)
