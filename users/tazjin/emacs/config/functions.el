@@ -317,4 +317,12 @@ the GPG agent correctly."
     (url-retrieve "https://songwhip.com/api/" #'songwhip--handle-result nil t t)
     (message "Requesting Songwhip URL ... please hold the line.")))
 
+(defun rg-in-project (&optional prefix)
+  "Interactively call ripgrep in the current project, or fall
+  back to ripgrep default behaviour if prefix is set."
+  (interactive "P")
+  (counsel-rg nil (unless prefix
+                    (if-let ((pr (project-current)))
+                        (project-root pr)))))
+
 (provide 'functions)
