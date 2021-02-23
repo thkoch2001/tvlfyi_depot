@@ -45,7 +45,7 @@ extern crate systemd;
 extern crate ureq;
 
 use chrono::offset::LocalResult;
-use chrono::prelude::*;
+use chrono::prelude::{DateTime, TimeZone, Utc};
 use failure::ResultExt;
 use serde_json::{from_str, Value};
 use std::env;
@@ -55,7 +55,7 @@ use std::mem;
 use std::path::PathBuf;
 use std::process;
 use std::time::{Duration, Instant};
-use systemd::journal::*;
+use systemd::journal::{Journal, JournalFiles, JournalRecord, JournalSeek};
 
 #[cfg(test)]
 mod tests;
@@ -553,7 +553,7 @@ fn flush(token: &mut Token,
     if token.is_expired() {
         debug!("Refreshing Google metadata access token");
         let new_token = get_token()?;
-        mem::replace(token, new_token);
+        *token = new_token;
     }
 
     for chunk in entries.chunks(750) {
