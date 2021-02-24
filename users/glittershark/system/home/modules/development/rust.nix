@@ -15,6 +15,7 @@
     "cb" = "cargo build";
     "ct" = "cargo test";
     "ctw" = "fd -e rs | entr cargo test";
+    "cch" = "cargo check";
   };
 
   home.file.".cargo/config".text = ''
