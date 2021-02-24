@@ -4,7 +4,7 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ../modules/common.nix
-    ../modules/reusable/battery.nix
+    ../modules/laptop.nix
     ../modules/xserver.nix
     ../modules/fonts.nix
     ../modules/sound.nix

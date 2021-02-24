@@ -3,7 +3,7 @@
 {
   imports = [
     ../modules/common.nix
-    ../modules/reusable/battery.nix
+    ../modules/laptop.nix
     ../modules/tvl.nix
     ../modules/fcitx.nix
     ../modules/rtlsdr.nix
