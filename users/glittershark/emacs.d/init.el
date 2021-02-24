@@ -80,7 +80,7 @@
 
        :checkers
        syntax          ; tasing you for every semicolon you forget
-       spell          ; tasing you for misspelling mispelling
+       ; spell           ; tasing you for misspelling mispelling
 
        :lang
        agda              ; types of types of types of types...
