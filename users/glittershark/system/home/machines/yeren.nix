@@ -24,6 +24,8 @@ in
     slack
     mysql
     graphviz
+    mypaint
+    xdot
 
     (discord.override rec {
       version = "0.0.13";
