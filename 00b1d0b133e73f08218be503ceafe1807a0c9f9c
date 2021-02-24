@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60e43415_6f21754f",
+        "filename": "users/sterni/nix/int.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-24T13:10:02Z",
+      "side": 1,
+      "message": "this stuff has some worrying overhead for a low level operation like bitshift …",
+      "revId": "00b1d0b133e73f08218be503ceafe1807a0c9f9c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "488438b7_1f7d2ae5",
+        "filename": "users/sterni/nix/int.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-24T13:10:02Z",
+      "side": 1,
+      "message": "no tests?",
+      "revId": "00b1d0b133e73f08218be503ceafe1807a0c9f9c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de10d2e9_4c031aaf",
+        "filename": "users/sterni/nix/url.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-24T13:10:02Z",
+      "side": 1,
+      "message": "love how most of the other stuff is just yak-shaving a sufficiently powerful stdlib :P",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 5
+      },
+      "revId": "00b1d0b133e73f08218be503ceafe1807a0c9f9c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
