@@ -485,8 +485,8 @@ private/hlissner/snippets."
  ;; repeat in visual mode (FIXME buggy)
  :v  "."  #'evil-repeat
  ;; don't leave visual mode after shifting
- :v  "<"  #'+evil/visual-dedent  ; vnoremap < <gv
- :v  ">"  #'+evil/visual-indent  ; vnoremap > >gv
+ ;; :v  "<"  #'+evil/visual-dedent  ; vnoremap < <gv
+ ;; :v  ">"  #'+evil/visual-indent  ; vnoremap > >gv
  ;; paste from recent yank register (which isn't overwritten)
  :v  "C-p" "\"0p"
 
@@ -1390,8 +1390,9 @@ If invoked with a prefix ARG eval the expression after inserting it"
 
  (:after w3m
    (:map w3m-mode-map
-     "/" 'evil-search-forward
-     "?" 'evil-search-backward))
+     "/" #'evil-search-forward
+     "?" #'evil-search-backward
+     "r" #'w3m-reload-this-page))
 
  (:after slack
    (:map slack-message-buffer-mode-map
