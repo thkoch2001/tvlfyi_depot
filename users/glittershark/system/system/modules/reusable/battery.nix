@@ -7,7 +7,7 @@ with lib;
 
       thresholdPercentage = mkOption {
         description = "Threshold battery percentage on which to perform the action";
-        default = 5;
+        default = 8;
         type = types.int;
       };
 
@@ -26,7 +26,7 @@ with lib;
       ''SUBSYSTEM=="power_supply", ''
       ''ATTR{status}=="Discharging", ''
       ''ATTR{capacity}=="[0-${toString cfg.thresholdPercentage}]", ''
-      ''RUN+="/${pkgs.systemd}/bin/systemctl ${cfg.action}"''
+      ''RUN+="${pkgs.systemd}/bin/systemctl ${cfg.action}"''
     ];
   };
 }
