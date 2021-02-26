@@ -15,7 +15,7 @@ let
   fix = f: let x = f x; in x;
 
   # Global configuration that all packages are called with.
-  config = depot: {
+  config = depot: args // {
     inherit depot;
 
     # Expose lib attribute to packages.
