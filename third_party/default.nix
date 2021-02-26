@@ -2,7 +2,7 @@
 # third-party code) into my package tree.
 #
 # This includes *all packages needed from nixpkgs*.
-{ ... }:
+{ ... }@args:
 
 let
   # Tracking nixos-unstable as of 2021-02-18.
@@ -11,7 +11,7 @@ let
     url = "https://github.com/NixOS/nixpkgs/archive/${nixpkgsCommit}.tar.gz";
     sha256 = "10qfg11g8m0q2k3ibcm0ivjq494gqynshm3smjl1rfn5ifjf5fz8";
   };
-  nixpkgs = import nixpkgsSrc {
+  nixpkgs = args.nixpkgs or (import nixpkgsSrc {
     config.allowUnfree = true;
     config.allowBroken = true;
 
@@ -19,7 +19,7 @@ let
     config.permittedInsecurePackages = [
       "p7zip-16.02"
     ];
-  };
+  });
 
   # Tracking nixos-20.09 as of 2021-02-17.
   stableCommit = "5c53c720ff690ef82a9fe4849e7b70c104e1c82f";
@@ -27,7 +27,7 @@ let
     url = "https://github.com/NixOS/nixpkgs/archive/${stableCommit}.tar.gz";
     sha256 = "0gjxfxbfc6maqg48k9ai476s6zkc94p0y3v9yjgwbiy7b38pqfys";
   };
-  stableNixpkgs = import stableNixpkgsSrc {};
+  stableNixpkgs = args.stableNixpkgs or (import stableNixpkgsSrc {});
 
   exposed = import ./nixpkgs-exposed/exposed { inherit nixpkgs stableNixpkgs; };
 
