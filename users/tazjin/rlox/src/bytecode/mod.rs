@@ -3,6 +3,7 @@
 //! https://craftinginterpreters.com/chunks-of-bytecode.html
 
 mod chunk;
+mod compiler;
 mod errors;
 mod opcode;
 mod value;
@@ -20,7 +21,7 @@ impl crate::Lox for Interpreter {
     }
 
     fn interpret(&mut self, code: String) -> Result<Self::Value, Vec<Self::Error>> {
-        let chunk: Chunk = Default::default();
+        let chunk = compiler::compile(&code)?;
         vm::interpret(chunk).map_err(|e| vec![e])
     }
 }
