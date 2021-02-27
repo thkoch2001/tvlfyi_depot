@@ -4,9 +4,6 @@ use super::opcode::OpCode;
 use super::value::Value;
 use crate::scanner::{self, Token, TokenKind};
 
-#[cfg(test)]
-mod tests;
-
 struct Compiler<T: Iterator<Item = Token>> {
     tokens: T,
     chunk: Chunk,
@@ -225,7 +222,10 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.emit_op(OpCode::OpReturn);
 
         #[cfg(feature = "disassemble")]
-        chunk::disassemble_chunk(&self.chunk);
+        {
+            chunk::disassemble_chunk(&self.chunk);
+            println!("== compilation finished ==");
+        }
 
         Ok(())
     }
