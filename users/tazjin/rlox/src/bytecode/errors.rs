@@ -37,4 +37,12 @@ impl From<ScannerError> for Error {
     }
 }
 
+// Convenience implementation as we're often dealing with vectors of
+// errors (to report as many issues as possible before terminating)
+impl From<Error> for Vec<Error> {
+    fn from(err: Error) -> Self {
+        vec![err]
+    }
+}
+
 pub type LoxResult<T> = Result<T, Error>;
