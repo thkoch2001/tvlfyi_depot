@@ -19,7 +19,10 @@ impl crate::Lox for Interpreter {
         Interpreter {}
     }
 
-    fn interpret(&mut self, code: String) -> Result<Self::Value, Vec<Self::Error>> {
+    fn interpret(
+        &mut self,
+        code: String,
+    ) -> Result<Self::Value, Vec<Self::Error>> {
         let chunk = compiler::compile(&code)?;
         vm::interpret(chunk).map_err(|e| vec![e])
     }
