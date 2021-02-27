@@ -25,8 +25,8 @@ impl VM {
 
 macro_rules! binary_op {
     ( $vm:ident, $op:tt ) => {{
-        let a = $vm.pop();
         let b = $vm.pop();
+        let a = $vm.pop();
         $vm.push(a $op b);
     }}
 }
