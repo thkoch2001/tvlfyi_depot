@@ -34,7 +34,11 @@ impl Callable {
         }
     }
 
-    fn call(&self, lox: &mut Interpreter, args: Vec<Value>) -> Result<Value, Error> {
+    fn call(
+        &self,
+        lox: &mut Interpreter,
+        args: Vec<Value>,
+    ) -> Result<Value, Error> {
         match self {
             Callable::Builtin(builtin) => builtin.call(args),
 
@@ -46,8 +50,10 @@ impl Callable {
                     fn_env.define(param, value)?;
                 }
 
-                let result =
-                    lox.interpret_block_with_env(Some(Rc::new(RwLock::new(fn_env))), &func.body);
+                let result = lox.interpret_block_with_env(
+                    Some(Rc::new(RwLock::new(fn_env))),
+                    &func.body,
+                );
 
                 match result {
                     // extract returned values if applicable
@@ -103,13 +109,22 @@ pub struct Environment {
 }
 
 impl Environment {
-    fn define(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
+    fn define(
+        &mut self,
+        name: &scanner::Token,
+        value: Value,
+    ) -> Result<(), Error> {
         let ident = identifier_str(name)?;
         self.values.insert(ident.into(), value);
         Ok(())
     }
 
-    fn get(&self, ident: &str, line: usize, depth: usize) -> Result<Value, Error> {
+    fn get(
+        &self,
+        ident: &str,
+        line: usize,
+        depth: usize,
+    ) -> Result<Value, Error> {
         if depth > 0 {
             match &self.enclosing {
                 None => {
@@ -122,7 +137,9 @@ impl Environment {
                     })
                 }
                 Some(parent) => {
-                    let env = parent.read().expect("fatal: environment lock poisoned");
+                    let env = parent
+                        .read()
+                        .expect("fatal: environment lock poisoned");
                     return env.get(ident, line, depth - 1);
                 }
             }
@@ -137,7 +154,11 @@ impl Environment {
             })
     }
 
-    fn assign(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
+    fn assign(
+        &mut self,
+        name: &scanner::Token,
+        value: Value,
+    ) -> Result<(), Error> {
         let ident = identifier_str(name)?;
 
         match self.values.get_mut(ident) {
@@ -221,14 +242,22 @@ impl Lox for Interpreter {
 
 impl Interpreter {
     // Environment modification helpers
-    fn define_var(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
+    fn define_var(
+        &mut self,
+        name: &scanner::Token,
+        value: Value,
+    ) -> Result<(), Error> {
         self.env
             .write()
             .expect("environment lock is poisoned")
             .define(name, value)
     }
 
-    fn assign_var(&mut self, name: &scanner::Token, value: Value) -> Result<(), Error> {
+    fn assign_var(
+        &mut self,
+        name: &scanner::Token,
+        value: Value,
+    ) -> Result<(), Error> {
         self.env
             .write()
             .expect("environment lock is poisoned")
@@ -242,10 +271,11 @@ impl Interpreter {
             kind: ErrorKind::UndefinedVariable(ident.into()),
         })?;
 
-        self.env
-            .read()
-            .expect("environment lock is poisoned")
-            .get(ident, var.name.line, depth)
+        self.env.read().expect("environment lock is poisoned").get(
+            ident,
+            var.name.line,
+            depth,
+        )
     }
 
     /// Interpret the block in the supplied environment. If no
@@ -294,10 +324,16 @@ impl Interpreter {
                 Value::Literal(Literal::String(output))
             }
             Statement::Var(var) => return self.interpret_var(var),
-            Statement::Block(block) => return self.interpret_block_with_env(None, block),
+            Statement::Block(block) => {
+                return self.interpret_block_with_env(None, block)
+            }
             Statement::If(if_stmt) => return self.interpret_if(if_stmt),
-            Statement::While(while_stmt) => return self.interpret_while(while_stmt),
-            Statement::Function(func) => return self.interpret_function(func.clone()),
+            Statement::While(while_stmt) => {
+                return self.interpret_while(while_stmt)
+            }
+            Statement::Function(func) => {
+                return self.interpret_function(func.clone())
+            }
             Statement::Return(ret) => {
                 return Err(Error {
                     line: 0,
@@ -312,7 +348,9 @@ impl Interpreter {
     fn interpret_var(&mut self, var: &parser::Var) -> Result<Value, Error> {
         let init = var.initialiser.as_ref().ok_or_else(|| Error {
             line: var.name.line,
-            kind: ErrorKind::InternalError("missing variable initialiser".into()),
+            kind: ErrorKind::InternalError(
+                "missing variable initialiser".into(),
+            ),
         })?;
         let value = self.eval(init)?;
         self.define_var(&var.name, value.clone())?;
@@ -331,7 +369,10 @@ impl Interpreter {
         }
     }
 
-    fn interpret_while(&mut self, stmt: &parser::While) -> Result<Value, Error> {
+    fn interpret_while(
+        &mut self,
+        stmt: &parser::While,
+    ) -> Result<Value, Error> {
         let mut value = Value::Literal(Literal::Nil);
         while eval_truthy(&self.eval(&stmt.condition)?) {
             value = self.interpret_stmt(&stmt.body)?;
@@ -340,7 +381,10 @@ impl Interpreter {
         Ok(value)
     }
 
-    fn interpret_function(&mut self, func: Rc<parser::Function>) -> Result<Value, Error> {
+    fn interpret_function(
+        &mut self,
+        func: Rc<parser::Function>,
+    ) -> Result<Value, Error> {
         let name = func.name.clone();
         let value = Value::Callable(Callable::Function {
             func,
@@ -370,7 +414,9 @@ impl Interpreter {
             (TokenKind::Minus, Value::Literal(Literal::Number(num))) => {
                 Ok(Literal::Number(-num).into())
             }
-            (TokenKind::Bang, right) => Ok(Literal::Boolean(!eval_truthy(&right)).into()),
+            (TokenKind::Bang, right) => {
+                Ok(Literal::Boolean(!eval_truthy(&right)).into())
+            }
 
             (op, right) => Err(Error {
                 line: expr.operator.line,
@@ -432,7 +478,10 @@ impl Interpreter {
         Ok(value)
     }
 
-    fn eval_logical(&mut self, logical: &parser::Logical) -> Result<Value, Error> {
+    fn eval_logical(
+        &mut self,
+        logical: &parser::Logical,
+    ) -> Result<Value, Error> {
         let left = eval_truthy(&self.eval(&logical.left)?);
         let right = eval_truthy(&self.eval(&logical.right)?);
 
@@ -441,7 +490,10 @@ impl Interpreter {
             TokenKind::Or => Ok(Literal::Boolean(left || right).into()),
             kind => Err(Error {
                 line: logical.operator.line,
-                kind: ErrorKind::InternalError(format!("Invalid logical operator: {:?}", kind)),
+                kind: ErrorKind::InternalError(format!(
+                    "Invalid logical operator: {:?}",
+                    kind
+                )),
             }),
         }
     }
@@ -452,7 +504,10 @@ impl Interpreter {
             Value::Literal(v) => {
                 return Err(Error {
                     line: call.paren.line,
-                    kind: ErrorKind::RuntimeError(format!("not callable: {:?}", v)),
+                    kind: ErrorKind::RuntimeError(format!(
+                        "not callable: {:?}",
+                        v
+                    )),
                 })
             }
         };
@@ -491,7 +546,10 @@ fn eval_truthy(lit: &Value) -> bool {
     }
 }
 
-fn set_enclosing_env(this: &RwLock<Environment>, parent: Rc<RwLock<Environment>>) {
+fn set_enclosing_env(
+    this: &RwLock<Environment>,
+    parent: Rc<RwLock<Environment>>,
+) {
     this.write()
         .expect("environment lock is poisoned")
         .enclosing = Some(parent);

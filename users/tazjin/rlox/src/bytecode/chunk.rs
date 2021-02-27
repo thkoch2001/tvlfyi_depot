@@ -78,7 +78,9 @@ pub fn disassemble_instruction(chunk: &Chunk, offset: usize) {
     }
 
     match chunk.code.index(offset) {
-        OpCode::OpConstant(idx) => println!("OpConstant({}) '{:?}'", *idx, chunk.constant(*idx)),
+        OpCode::OpConstant(idx) => {
+            println!("OpConstant({}) '{:?}'", *idx, chunk.constant(*idx))
+        }
         op => println!("{:?}", op),
     }
 }
