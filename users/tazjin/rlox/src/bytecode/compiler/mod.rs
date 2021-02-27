@@ -219,6 +219,10 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn end_compiler(&mut self) -> LoxResult<()> {
         self.emit_op(OpCode::OpReturn);
+
+        #[cfg(feature = "disassemble")]
+        chunk::disassemble_chunk(&self.chunk);
+
         Ok(())
     }
 
