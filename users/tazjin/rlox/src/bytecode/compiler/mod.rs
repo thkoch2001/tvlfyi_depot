@@ -1,25 +1,44 @@
 use super::chunk::Chunk;
 use super::errors::{Error, ErrorKind, LoxResult};
 use super::opcode::OpCode;
-use crate::scanner;
+use super::value::Value;
+use crate::scanner::{self, Token, TokenKind};
 
-struct Compiler<T: Iterator<Item = scanner::Token>> {
+#[cfg(test)]
+mod tests;
+
+struct Compiler<T: Iterator<Item = Token>> {
     tokens: T,
     chunk: Chunk,
     panic: bool,
     errors: Vec<Error>,
 
     // TODO(tazjin): Restructure so that these don't need to be Option?
-    current: Option<scanner::Token>,
-    previous: Option<scanner::Token>,
+    current: Option<Token>,
+    previous: Option<Token>,
 }
 
-impl<T: Iterator<Item = scanner::Token>> Compiler<T> {
+#[derive(Debug, PartialEq, PartialOrd)]
+enum Precedence {
+    None,
+    Assignment, // =
+    Or,         // or
+    And,        // and
+    Equality,   // == !=
+    Comparison, // < > <= >=
+    Term,       // + -
+    Factor,     // * /
+    Unary,      // ! -
+    Call,       // . ()
+    Primary,
+}
+
+impl<T: Iterator<Item = Token>> Compiler<T> {
     fn compile(&mut self) -> LoxResult<()> {
         self.advance();
-        self.expression();
+        self.expression()?;
         self.consume(
-            &scanner::TokenKind::Eof,
+            &TokenKind::Eof,
             ErrorKind::ExpectedToken("Expected end of expression"),
         )?;
 
@@ -31,13 +50,44 @@ impl<T: Iterator<Item = scanner::Token>> Compiler<T> {
         self.current = self.tokens.next();
     }
 
-    fn expression(&mut self) {
-        unimplemented!()
+    fn expression(&mut self) -> LoxResult<()> {
+        self.parse_precedence(Precedence::Assignment)
+    }
+
+    // TODO(tazjin): Assumption is that we have access to the previous
+    // token wherever this ends up invoked. True?
+    fn number(&mut self, num: f64) {
+        self.emit_constant(num);
+    }
+
+    fn grouping(&mut self, num: f64) -> LoxResult<()> {
+        self.expression()?;
+        self.consume(
+            &TokenKind::RightParen,
+            ErrorKind::ExpectedToken("Expected ')' after expression"),
+        )
+    }
+
+    fn unary(&mut self, kind: &TokenKind) -> LoxResult<()> {
+        // Compile the operand
+        self.parse_precedence(Precedence::Unary)?;
+
+        // Emit operator instruction
+        match kind {
+            TokenKind::Minus => self.emit_op(OpCode::OpNegate),
+            _ => unreachable!("only called for unary operator tokens"),
+        }
+
+        Ok(())
+    }
+
+    fn parse_precedence(&mut self, precedence: Precedence) -> LoxResult<()> {
+        unimplemented!("what goes here?")
     }
 
     fn consume(
         &mut self,
-        expected: &scanner::TokenKind,
+        expected: &TokenKind,
         err: ErrorKind,
     ) -> LoxResult<()> {
         unimplemented!()
@@ -57,13 +107,18 @@ impl<T: Iterator<Item = scanner::Token>> Compiler<T> {
         self.current_chunk().add_op(op, line);
     }
 
-    fn previous(&self) -> &scanner::Token {
+    fn emit_constant(&mut self, val: Value) {
+        let idx = self.chunk.add_constant(val);
+        self.emit_op(OpCode::OpConstant(idx));
+    }
+
+    fn previous(&self) -> &Token {
         self.previous
             .as_ref()
             .expect("invalid internal compiler state: missing previous token")
     }
 
-    fn error_at(&mut self, token: &scanner::Token, kind: ErrorKind) {
+    fn error_at(&mut self, token: &Token, kind: ErrorKind) {
         if self.panic {
             return;
         }
