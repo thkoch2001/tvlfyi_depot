@@ -11,7 +11,7 @@ mod treewalk;
 /// Trait for making the different interpreters callable in the same
 /// way.
 pub trait Lox {
-    type Value;
+    type Value: std::fmt::Debug;
     type Error: std::fmt::Display;
 
     fn create() -> Self;
@@ -69,9 +69,12 @@ fn run_prompt<I: Lox>() {
 }
 
 fn run<I: Lox>(lox: &mut I, code: String) {
-    if let Err(errors) = lox.interpret(code) {
-        for error in errors {
-            eprintln!("{}", error);
+    match lox.interpret(code) {
+        Ok(result) => println!("=> {:?}", result),
+        Err(errors) => {
+            for error in errors {
+                eprintln!("{}", error);
+            }
         }
     }
 }
