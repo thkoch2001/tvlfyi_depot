@@ -3,6 +3,7 @@
 //! https://craftinginterpreters.com/chunks-of-bytecode.html
 
 mod chunk;
+mod compiler;
 mod errors;
 mod opcode;
 mod value;

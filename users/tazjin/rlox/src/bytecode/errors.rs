@@ -6,6 +6,7 @@ use std::fmt;
 pub enum ErrorKind {
     UnexpectedChar(char),
     UnterminatedString,
+    ExpectedToken(&'static str),
     InternalError(&'static str),
 }
 
