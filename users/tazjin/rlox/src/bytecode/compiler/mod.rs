@@ -183,12 +183,26 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     fn parse_precedence(&mut self, precedence: Precedence) -> LoxResult<()> {
         self.advance();
         let rule: ParseRule<T> = rule_for(&self.previous().kind);
+        let prefix_fn = match rule.prefix {
+            None => unimplemented!("expected expression or something, unclear"),
+            Some(func) => func,
+        };
 
-        if let Some(func) = rule.prefix {
-            func(self)?;
+        prefix_fn(self)?;
+
+        while precedence <= rule_for::<T>(&self.current().kind).precedence {
+            self.advance();
+            match rule_for::<T>(&self.previous().kind).infix {
+                Some(func) => {
+                    func(self)?;
+                }
+                None => {
+                    unreachable!("invalid compiler state: error in parse rules")
+                }
+            }
         }
 
-        unimplemented!("expect expression?")
+        Ok(())
     }
 
     fn consume(
@@ -222,6 +236,12 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.previous
             .as_ref()
             .expect("invalid internal compiler state: missing previous token")
+    }
+
+    fn current(&self) -> &Token {
+        self.current
+            .as_ref()
+            .expect("invalid internal compiler state: missing current token")
     }
 
     fn error_at(&mut self, token: &Token, kind: ErrorKind) {
