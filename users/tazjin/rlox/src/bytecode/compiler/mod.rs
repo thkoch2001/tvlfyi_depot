@@ -1,4 +1,4 @@
-use super::chunk::Chunk;
+use super::chunk::{self, Chunk};
 use super::errors::{Error, ErrorKind, LoxResult};
 use super::opcode::OpCode;
 use super::value::Value;
@@ -115,7 +115,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.consume(
             &TokenKind::Eof,
             ErrorKind::ExpectedToken("Expected end of expression"),
-        )?;
+        );
 
         self.end_compiler()
     }
@@ -129,11 +129,13 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.parse_precedence(Precedence::Assignment)
     }
 
-    // TODO(tazjin): Assumption is that we have access to the previous
-    // token wherever this ends up invoked. True?
     fn number(&mut self) -> LoxResult<()> {
-        let num = unimplemented!("get out of previous()");
-        self.emit_constant(num);
+        if let TokenKind::Number(num) = self.previous().kind {
+            self.emit_constant(num);
+            return Ok(());
+        }
+
+        unreachable!("internal parser error: entered number() incorrectly")
     }
 
     fn grouping(&mut self) -> LoxResult<()> {
@@ -141,7 +143,8 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.consume(
             &TokenKind::RightParen,
             ErrorKind::ExpectedToken("Expected ')' after expression"),
-        )
+        );
+        Ok(())
     }
 
     fn unary(&mut self) -> LoxResult<()> {
@@ -177,7 +180,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             _ => unreachable!("only called for binary operator tokens"),
         }
 
-        unimplemented!()
+        Ok(())
     }
 
     fn parse_precedence(&mut self, precedence: Precedence) -> LoxResult<()> {
@@ -205,12 +208,13 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         Ok(())
     }
 
-    fn consume(
-        &mut self,
-        expected: &TokenKind,
-        err: ErrorKind,
-    ) -> LoxResult<()> {
-        unimplemented!()
+    fn consume(&mut self, expected: &TokenKind, err: ErrorKind) {
+        if (self.current().kind == *expected) {
+            self.advance();
+            return;
+        }
+
+        self.error_at(self.current().line, err);
     }
 
     fn current_chunk(&mut self) -> &mut Chunk {
@@ -248,16 +252,13 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             .expect("invalid internal compiler state: missing current token")
     }
 
-    fn error_at(&mut self, token: &Token, kind: ErrorKind) {
+    fn error_at(&mut self, line: usize, kind: ErrorKind) {
         if self.panic {
             return;
         }
 
         self.panic = true;
-        self.errors.push(Error {
-            kind,
-            line: token.line,
-        })
+        self.errors.push(Error { kind, line })
     }
 }
 
@@ -279,7 +280,7 @@ pub fn compile(code: &str) -> Result<Chunk, Vec<Error>> {
     compiler.compile()?;
 
     if compiler.errors.is_empty() {
-        Ok(unimplemented!())
+        Ok(compiler.chunk)
     } else {
         Err(compiler.errors)
     }
