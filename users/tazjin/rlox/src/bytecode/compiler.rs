@@ -4,10 +4,10 @@ use super::opcode::OpCode;
 use crate::scanner;
 
 struct Compiler<T: Iterator<Item = scanner::Token>> {
-    // panic: bool,
-    errors: Vec<Error>,
     tokens: T,
     chunk: Chunk,
+    panic: bool,
+    errors: Vec<Error>,
 
     // TODO(tazjin): Restructure so that these don't need to be Option?
     current: Option<scanner::Token>,
@@ -48,15 +48,31 @@ impl<T: Iterator<Item = scanner::Token>> Compiler<T> {
     }
 
     fn end_compiler(&mut self) -> LoxResult<()> {
-        let line = self.previous().line;
-        self.current_chunk().add_op(OpCode::OpReturn, line);
+        self.emit_op(OpCode::OpReturn);
         Ok(())
+    }
+
+    fn emit_op(&mut self, op: OpCode) {
+        let line = self.previous().line;
+        self.current_chunk().add_op(op, line);
     }
 
     fn previous(&self) -> &scanner::Token {
         self.previous
             .as_ref()
             .expect("invalid internal compiler state: missing previous token")
+    }
+
+    fn error_at(&mut self, token: &scanner::Token, kind: ErrorKind) {
+        if self.panic {
+            return;
+        }
+
+        self.panic = true;
+        self.errors.push(Error {
+            kind,
+            line: token.line,
+        })
     }
 }
 
@@ -68,10 +84,11 @@ pub fn compile(code: &str) -> Result<Chunk, Vec<Error>> {
 
     let mut compiler = Compiler {
         tokens: tokens.into_iter().peekable(),
+        chunk: Default::default(),
+        panic: false,
         errors: vec![],
         current: None,
         previous: None,
-        chunk: Default::default(),
     };
 
     compiler.compile()?;
