@@ -33,6 +33,28 @@ enum Precedence {
     Primary,
 }
 
+type ParseFn<T> = fn(&mut Compiler<T>) -> LoxResult<()>;
+
+struct ParseRule<T: Iterator<Item = Token>> {
+    prefix: Option<ParseFn<T>>,
+    infix: Option<ParseFn<T>>,
+    precedence: Precedence,
+}
+
+impl<T: Iterator<Item = Token>> ParseRule<T> {
+    fn new(
+        prefix: Option<ParseFn<T>>,
+        infix: Option<ParseFn<T>>,
+        precedence: Precedence,
+    ) -> Self {
+        ParseRule {
+            prefix,
+            infix,
+            precedence,
+        }
+    }
+}
+
 impl Precedence {
     // Return the next highest precedence, if there is one.
     fn next(&self) -> Self {
@@ -51,6 +73,38 @@ impl Precedence {
                 "invalid parser state: no higher precedence than Primary"
             ),
         }
+    }
+}
+
+fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
+    match token {
+        TokenKind::LeftParen => {
+            ParseRule::new(Some(Compiler::grouping), None, Precedence::None)
+        }
+
+        TokenKind::Minus => ParseRule::new(
+            Some(Compiler::unary),
+            Some(Compiler::binary),
+            Precedence::Term,
+        ),
+
+        TokenKind::Plus => {
+            ParseRule::new(None, Some(Compiler::binary), Precedence::Term)
+        }
+
+        TokenKind::Slash => {
+            ParseRule::new(None, Some(Compiler::binary), Precedence::Factor)
+        }
+
+        TokenKind::Star => {
+            ParseRule::new(None, Some(Compiler::binary), Precedence::Factor)
+        }
+
+        TokenKind::Number(_) => {
+            ParseRule::new(Some(Compiler::number), None, Precedence::None)
+        }
+
+        _ => ParseRule::new(None, None, Precedence::None),
     }
 }
 
@@ -77,11 +131,12 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     // TODO(tazjin): Assumption is that we have access to the previous
     // token wherever this ends up invoked. True?
-    fn number(&mut self, num: f64) {
+    fn number(&mut self) -> LoxResult<()> {
+        let num = unimplemented!("get out of previous()");
         self.emit_constant(num);
     }
 
-    fn grouping(&mut self, num: f64) -> LoxResult<()> {
+    fn grouping(&mut self) -> LoxResult<()> {
         self.expression()?;
         self.consume(
             &TokenKind::RightParen,
@@ -110,8 +165,8 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         let operator = self.previous().kind.clone();
 
         // Compile the right operand
-        let rule = self.get_rule(&operator);
-        self.parse_precedence(unimplemented!("rule.precendece.next()"))?;
+        let rule: ParseRule<T> = rule_for(&operator);
+        self.parse_precedence(rule.precedence)?;
 
         // Emit operator instruction
         match operator {
@@ -125,12 +180,15 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         unimplemented!()
     }
 
-    fn get_rule(&mut self, op: &TokenKind) -> usize {
-        unimplemented!();
-    }
-
     fn parse_precedence(&mut self, precedence: Precedence) -> LoxResult<()> {
-        unimplemented!("what goes here?")
+        self.advance();
+        let rule: ParseRule<T> = rule_for(&self.previous().kind);
+
+        if let Some(func) = rule.prefix {
+            func(self)?;
+        }
+
+        unimplemented!("expect expression?")
     }
 
     fn consume(
