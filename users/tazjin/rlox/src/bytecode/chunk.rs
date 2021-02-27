@@ -84,3 +84,10 @@ pub fn disassemble_instruction(chunk: &Chunk, offset: usize) {
         op => println!("{:?}", op),
     }
 }
+
+#[cfg(feature = "disassemble")]
+pub fn disassemble_chunk(chunk: &Chunk) {
+    for (idx, _) in chunk.code.iter().enumerate() {
+        disassemble_instruction(chunk, idx);
+    }
+}
