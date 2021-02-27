@@ -33,6 +33,27 @@ enum Precedence {
     Primary,
 }
 
+impl Precedence {
+    // Return the next highest precedence, if there is one.
+    fn next(&self) -> Self {
+        match self {
+            Precedence::None => Precedence::Assignment,
+            Precedence::Assignment => Precedence::Or,
+            Precedence::Or => Precedence::And,
+            Precedence::And => Precedence::Equality,
+            Precedence::Equality => Precedence::Comparison,
+            Precedence::Comparison => Precedence::Term,
+            Precedence::Term => Precedence::Factor,
+            Precedence::Factor => Precedence::Unary,
+            Precedence::Unary => Precedence::Call,
+            Precedence::Call => Precedence::Primary,
+            Precedence::Primary => panic!(
+                "invalid parser state: no higher precedence than Primary"
+            ),
+        }
+    }
+}
+
 impl<T: Iterator<Item = Token>> Compiler<T> {
     fn compile(&mut self) -> LoxResult<()> {
         self.advance();
@@ -68,7 +89,10 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         )
     }
 
-    fn unary(&mut self, kind: &TokenKind) -> LoxResult<()> {
+    fn unary(&mut self) -> LoxResult<()> {
+        // TODO(tazjin): Avoid clone
+        let kind = self.previous().kind.clone();
+
         // Compile the operand
         self.parse_precedence(Precedence::Unary)?;
 
@@ -79,6 +103,30 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         }
 
         Ok(())
+    }
+
+    fn binary(&mut self) -> LoxResult<()> {
+        // Remember the operator
+        let operator = self.previous().kind.clone();
+
+        // Compile the right operand
+        let rule = self.get_rule(&operator);
+        self.parse_precedence(unimplemented!("rule.precendece.next()"))?;
+
+        // Emit operator instruction
+        match operator {
+            TokenKind::Minus => self.emit_op(OpCode::OpSubtract),
+            TokenKind::Plus => self.emit_op(OpCode::OpAdd),
+            TokenKind::Star => self.emit_op(OpCode::OpMultiply),
+            TokenKind::Slash => self.emit_op(OpCode::OpDivide),
+            _ => unreachable!("only called for binary operator tokens"),
+        }
+
+        unimplemented!()
+    }
+
+    fn get_rule(&mut self, op: &TokenKind) -> usize {
+        unimplemented!();
     }
 
     fn parse_precedence(&mut self, precedence: Precedence) -> LoxResult<()> {
