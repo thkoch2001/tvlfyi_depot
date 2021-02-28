@@ -11,8 +11,9 @@ pub enum OpCode {
     /// Return from the current function.
     OpReturn,
 
-    // Boolean operators
+    // Boolean & comparison operators
     OpNot,
+    OpEqual,
 
     /// Unary negation
     OpNegate,

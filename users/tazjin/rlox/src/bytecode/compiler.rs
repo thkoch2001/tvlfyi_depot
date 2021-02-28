@@ -120,6 +120,14 @@ fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
             ParseRule::new(Some(Compiler::unary), None, Precedence::None)
         }
 
+        TokenKind::BangEqual => {
+            ParseRule::new(None, Some(Compiler::binary), Precedence::Equality)
+        }
+
+        TokenKind::EqualEqual => {
+            ParseRule::new(None, Some(Compiler::binary), Precedence::Equality)
+        }
+
         _ => ParseRule::new(None, None, Precedence::None),
     }
 }
@@ -194,6 +202,14 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             TokenKind::Plus => self.emit_op(OpCode::OpAdd),
             TokenKind::Star => self.emit_op(OpCode::OpMultiply),
             TokenKind::Slash => self.emit_op(OpCode::OpDivide),
+
+            TokenKind::BangEqual => {
+                self.emit_op(OpCode::OpEqual);
+                self.emit_op(OpCode::OpNot);
+            }
+
+            TokenKind::EqualEqual => self.emit_op(OpCode::OpEqual),
+
             _ => unreachable!("only called for binary operator tokens"),
         }
 

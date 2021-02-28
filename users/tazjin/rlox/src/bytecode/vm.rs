@@ -85,6 +85,12 @@ impl VM {
                     self.push(Value::Bool(v.is_falsey()));
                 }
 
+                OpCode::OpEqual => {
+                    let b = self.pop();
+                    let a = self.pop();
+                    self.push(Value::Bool(a == b));
+                }
+
                 OpCode::OpNegate => {
                     let v = self.pop();
                     with_type!(
