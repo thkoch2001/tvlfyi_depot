@@ -76,6 +76,11 @@ impl VM {
                 OpCode::OpTrue => self.push(Value::Bool(true)),
                 OpCode::OpFalse => self.push(Value::Bool(false)),
 
+                OpCode::OpNot => {
+                    let v = self.pop();
+                    self.push(Value::Bool(v.is_falsey()));
+                }
+
                 OpCode::OpNegate => {
                     let v = self.pop();
                     with_type!(

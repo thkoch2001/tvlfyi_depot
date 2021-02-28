@@ -58,3 +58,12 @@ fn trivial_literals() {
     expect("false", Value::Bool(false));
     expect("nil", Value::Nil);
 }
+
+#[test]
+fn negation() {
+    expect("!true", Value::Bool(false));
+    expect("!false", Value::Bool(true));
+    expect("!nil", Value::Bool(true));
+    expect("!13.5", Value::Bool(false));
+    expect("!-42", Value::Bool(false));
+}
