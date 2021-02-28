@@ -42,16 +42,20 @@ macro_rules! with_type {
 }
 
 macro_rules! binary_op {
-    ( $vm:ident, $op:tt ) => {{
+    ( $vm:ident, $type:tt, $op:tt ) => {
+        binary_op!($vm, $type, $type, $op)
+    };
+
+    ( $vm:ident, $in_type:tt, $out_type:tt, $op:tt ) => {{
         let b = $vm.pop();
         let a = $vm.pop();
 
-        with_type!($vm, b, Value::Number(num_b), {
-            with_type!($vm, a, Value::Number(num_a), {
-                $vm.push(Value::Number(num_a $op num_b))
+        with_type!($vm, b, Value::$in_type(val_b), {
+            with_type!($vm, a, Value::$in_type(val_a), {
+                $vm.push(Value::$out_type(val_a $op val_b))
             })
         })
-    }}
+    }};
 }
 
 impl VM {
@@ -91,10 +95,10 @@ impl VM {
                     );
                 }
 
-                OpCode::OpAdd => binary_op!(self, +),
-                OpCode::OpSubtract => binary_op!(self, -),
-                OpCode::OpMultiply => binary_op!(self, *),
-                OpCode::OpDivide => binary_op!(self, /),
+                OpCode::OpAdd => binary_op!(self, Number, +),
+                OpCode::OpSubtract => binary_op!(self, Number, -),
+                OpCode::OpMultiply => binary_op!(self, Number, *),
+                OpCode::OpDivide => binary_op!(self, Number, /),
             }
 
             #[cfg(feature = "disassemble")]
