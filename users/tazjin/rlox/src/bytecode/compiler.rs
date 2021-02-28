@@ -1,8 +1,11 @@
-use super::chunk::{self, Chunk};
+use super::chunk::Chunk;
 use super::errors::{Error, ErrorKind, LoxResult};
 use super::opcode::OpCode;
 use super::value::Value;
 use crate::scanner::{self, Token, TokenKind};
+
+#[cfg(feature = "disassemble")]
+use super::chunk;
 
 struct Compiler<T: Iterator<Item = Token>> {
     tokens: T,
@@ -101,6 +104,18 @@ fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
             ParseRule::new(Some(Compiler::number), None, Precedence::None)
         }
 
+        TokenKind::True => {
+            ParseRule::new(Some(Compiler::literal), None, Precedence::None)
+        }
+
+        TokenKind::False => {
+            ParseRule::new(Some(Compiler::literal), None, Precedence::None)
+        }
+
+        TokenKind::Nil => {
+            ParseRule::new(Some(Compiler::literal), None, Precedence::None)
+        }
+
         _ => ParseRule::new(None, None, Precedence::None),
     }
 }
@@ -180,6 +195,17 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         Ok(())
     }
 
+    fn literal(&mut self) -> LoxResult<()> {
+        match self.previous().kind {
+            TokenKind::Nil => self.emit_op(OpCode::OpNil),
+            TokenKind::True => self.emit_op(OpCode::OpTrue),
+            TokenKind::False => self.emit_op(OpCode::OpFalse),
+            _ => unreachable!("only called for literal value tokens"),
+        }
+
+        Ok(())
+    }
+
     fn parse_precedence(&mut self, precedence: Precedence) -> LoxResult<()> {
         self.advance();
         let rule: ParseRule<T> = rule_for(&self.previous().kind);
@@ -206,7 +232,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     }
 
     fn consume(&mut self, expected: &TokenKind, err: ErrorKind) {
-        if (self.current().kind == *expected) {
+        if self.current().kind == *expected {
             self.advance();
             return;
         }

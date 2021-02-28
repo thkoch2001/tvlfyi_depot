@@ -1,12 +1,17 @@
+use super::value::Value;
 use super::*;
 
 use crate::Lox;
 
-fn expect_num(code: &str, value: f64) {
+fn expect(code: &str, value: Value) {
     let result = Interpreter::create()
         .interpret(code.into())
         .expect("evaluation failed");
-    assert_eq!(result, value::Value::Number(value));
+    assert_eq!(result, value);
+}
+
+fn expect_num(code: &str, value: f64) {
+    expect(code, Value::Number(value))
 }
 
 #[test]
@@ -45,4 +50,11 @@ fn arithmetic() {
     expect_num("10 - 3 * 2", 4.0);
     expect_num("-4 * -4 + (14 - 5)", 25.0);
     expect_num("(702 + 408) - ((239 - 734) / -5) + -4", 1007.0);
+}
+
+#[test]
+fn trivial_literals() {
+    expect("true", Value::Bool(true));
+    expect("false", Value::Bool(false));
+    expect("nil", Value::Nil);
 }
