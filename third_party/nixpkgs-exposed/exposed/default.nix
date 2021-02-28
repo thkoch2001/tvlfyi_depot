@@ -15,6 +15,7 @@
     bat
     bc
     bind
+    binutils-unwrapped
     buildBazelPackage
     buildFHSUserEnv
     buildGoModule
@@ -58,6 +59,7 @@
     flamegraph
     fontconfig
     freetype
+    gcc-unwrapped
     gettext
     glibc
     gmock
@@ -93,6 +95,7 @@
     minify
     mkShell
     moreutils
+    musl
     nano
     ncurses
     nginx
