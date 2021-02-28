@@ -23,11 +23,34 @@ impl VM {
     }
 }
 
+macro_rules! with_type {
+    ( $self:ident, $val:ident, $type:pat, $body:expr ) => {
+        match $val {
+            $type => $body,
+            _ => {
+                return Err(Error {
+                    line: $self.chunk.get_line($self.ip),
+                    kind: ErrorKind::TypeError(format!(
+                        "Expected type {}, but found value: {:?}",
+                        stringify!($type),
+                        $val,
+                    )),
+                })
+            }
+        }
+    };
+}
+
 macro_rules! binary_op {
     ( $vm:ident, $op:tt ) => {{
         let b = $vm.pop();
         let a = $vm.pop();
-        $vm.push(a $op b);
+
+        with_type!($vm, b, Value::Number(num_b), {
+            with_type!($vm, a, Value::Number(num_a), {
+                $vm.push(Value::Number(num_a $op num_b))
+            })
+        })
     }}
 }
 
@@ -45,13 +68,18 @@ impl VM {
                 OpCode::OpReturn => return Ok(self.pop()),
 
                 OpCode::OpConstant(idx) => {
-                    let c = *self.chunk.constant(*idx);
+                    let c = self.chunk.constant(*idx).clone();
                     self.push(c);
                 }
 
                 OpCode::OpNegate => {
                     let v = self.pop();
-                    self.push(-v)
+                    with_type!(
+                        self,
+                        v,
+                        Value::Number(num),
+                        self.push(Value::Number(-num))
+                    );
                 }
 
                 OpCode::OpAdd => binary_op!(self, +),

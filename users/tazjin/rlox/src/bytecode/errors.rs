@@ -8,6 +8,7 @@ pub enum ErrorKind {
     UnterminatedString,
     ExpectedToken(&'static str),
     InternalError(&'static str),
+    TypeError(String),
 }
 
 #[derive(Debug)]
