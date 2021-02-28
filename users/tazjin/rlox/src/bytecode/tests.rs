@@ -14,6 +14,10 @@ fn expect_num(code: &str, value: f64) {
     expect(code, Value::Number(value))
 }
 
+fn expect_bool(code: &str, value: bool) {
+    expect(code, Value::Bool(value))
+}
+
 #[test]
 fn numbers() {
     expect_num("1", 1.0);
@@ -61,9 +65,26 @@ fn trivial_literals() {
 
 #[test]
 fn negation() {
-    expect("!true", Value::Bool(false));
-    expect("!false", Value::Bool(true));
-    expect("!nil", Value::Bool(true));
-    expect("!13.5", Value::Bool(false));
-    expect("!-42", Value::Bool(false));
+    expect_bool("!true", false);
+    expect_bool("!false", true);
+    expect_bool("!nil", true);
+    expect_bool("!13.5", false);
+    expect_bool("!-42", false);
+}
+
+#[test]
+fn equality() {
+    expect_bool("42 == 42", true);
+    expect_bool("42 != 42", false);
+    expect_bool("42 == 42.0", true);
+
+    expect_bool("true == true", true);
+    expect_bool("true == false", false);
+    expect_bool("true == !false", true);
+    expect_bool("true != true", false);
+    expect_bool("true != false", true);
+
+    expect_bool("42 == false", false);
+    expect_bool("42 == true", false);
+    expect_bool("!42 == !true", true);
 }
