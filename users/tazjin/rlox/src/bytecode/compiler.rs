@@ -144,6 +144,10 @@ fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
             ParseRule::new(None, Some(Compiler::binary), Precedence::Comparison)
         }
 
+        TokenKind::String(_) => {
+            ParseRule::new(Some(Compiler::string), None, Precedence::None)
+        },
+
         _ => ParseRule::new(None, None, Precedence::None),
     }
 }
@@ -250,6 +254,18 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             TokenKind::True => self.emit_op(OpCode::OpTrue),
             TokenKind::False => self.emit_op(OpCode::OpFalse),
             _ => unreachable!("only called for literal value tokens"),
+        }
+
+        Ok(())
+    }
+
+    fn string(&mut self) -> LoxResult<()> {
+        match &self.previous().kind {
+            TokenKind::String(s) => {
+                let s = s.clone();
+                self.emit_constant(Value::String(s));
+            }
+            _ => unreachable!("only called for strings"),
         }
 
         Ok(())
