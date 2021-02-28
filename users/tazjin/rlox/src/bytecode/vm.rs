@@ -59,6 +59,9 @@ impl VM {
                 OpCode::OpMultiply => binary_op!(self, *),
                 OpCode::OpDivide => binary_op!(self, /),
             }
+
+            #[cfg(feature = "disassemble")]
+            println!("=> {:?}", self.stack);
         }
     }
 }
