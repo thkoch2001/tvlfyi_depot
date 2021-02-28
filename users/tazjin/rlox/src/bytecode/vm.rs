@@ -91,6 +91,9 @@ impl VM {
                     self.push(Value::Bool(a == b));
                 }
 
+                OpCode::OpLess => binary_op!(self, Number, Bool, <),
+                OpCode::OpGreater => binary_op!(self, Number, Bool, >),
+
                 OpCode::OpNegate => {
                     let v = self.pop();
                     with_type!(
