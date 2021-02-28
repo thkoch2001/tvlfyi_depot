@@ -104,10 +104,32 @@ impl VM {
                     );
                 }
 
-                OpCode::OpAdd => binary_op!(self, Number, +),
                 OpCode::OpSubtract => binary_op!(self, Number, -),
                 OpCode::OpMultiply => binary_op!(self, Number, *),
                 OpCode::OpDivide => binary_op!(self, Number, /),
+
+                OpCode::OpAdd => {
+                    let b = self.pop();
+                    let a = self.pop();
+
+                    match (a, b) {
+                        (Value::String(s_a), Value::String(s_b)) => {
+                            let mut new_s = s_a.clone();
+                            new_s.push_str(&s_b);
+                            self.push(Value::String(new_s));
+                        }
+
+                        (Value::Number(n_a), Value::Number(n_b)) =>
+                            self.push(Value::Number(n_a + n_b)),
+
+                        _ => return Err(Error {
+                            line: self.chunk.get_line(self.ip - 1),
+                            kind: ErrorKind::TypeError(
+                                "'+' operator only works on strings and numbers".into()
+                            ),
+                        })
+                    }
+                }
             }
 
             #[cfg(feature = "disassemble")]
