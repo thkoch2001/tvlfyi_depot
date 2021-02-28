@@ -88,3 +88,13 @@ fn equality() {
     expect_bool("42 == true", false);
     expect_bool("!42 == !true", true);
 }
+
+#[test]
+fn comparisons() {
+    expect_bool("42 > 23", true);
+    expect_bool("42 < 23", false);
+    expect_bool("42 <= 42", true);
+    expect_bool("42 <= 23", false);
+    expect_bool("42 >= 42", true);
+    expect_bool("42 >= 23", true);
+}

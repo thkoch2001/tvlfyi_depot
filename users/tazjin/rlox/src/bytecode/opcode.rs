@@ -14,6 +14,8 @@ pub enum OpCode {
     // Boolean & comparison operators
     OpNot,
     OpEqual,
+    OpGreater,
+    OpLess,
 
     /// Unary negation
     OpNegate,
