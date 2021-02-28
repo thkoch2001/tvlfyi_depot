@@ -9,6 +9,9 @@ mod opcode;
 mod value;
 mod vm;
 
+#[cfg(test)]
+mod tests;
+
 use chunk::Chunk;
 pub struct Interpreter {}
 
