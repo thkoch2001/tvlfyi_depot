@@ -4,3 +4,13 @@ pub enum Value {
     Bool(bool),
     Number(f64),
 }
+
+impl Value {
+    pub fn is_falsey(&self) -> bool {
+        match self {
+            Value::Nil => true,
+            Value::Bool(false) => true,
+            _ => false,
+        }
+    }
+}

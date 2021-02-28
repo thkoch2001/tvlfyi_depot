@@ -116,6 +116,10 @@ fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
             ParseRule::new(Some(Compiler::literal), None, Precedence::None)
         }
 
+        TokenKind::Bang => {
+            ParseRule::new(Some(Compiler::unary), None, Precedence::None)
+        }
+
         _ => ParseRule::new(None, None, Precedence::None),
     }
 }
@@ -168,6 +172,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
         // Emit operator instruction
         match kind {
+            TokenKind::Bang => self.emit_op(OpCode::OpNot),
             TokenKind::Minus => self.emit_op(OpCode::OpNegate),
             _ => unreachable!("only called for unary operator tokens"),
         }
