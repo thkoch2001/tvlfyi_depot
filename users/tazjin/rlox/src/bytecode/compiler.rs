@@ -166,7 +166,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
         // Compile the right operand
         let rule: ParseRule<T> = rule_for(&operator);
-        self.parse_precedence(rule.precedence)?;
+        self.parse_precedence(rule.precedence.next())?;
 
         // Emit operator instruction
         match operator {
