@@ -128,7 +128,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn number(&mut self) -> LoxResult<()> {
         if let TokenKind::Number(num) = self.previous().kind {
-            self.emit_constant(num);
+            self.emit_constant(Value::Number(num));
             return Ok(());
         }
 

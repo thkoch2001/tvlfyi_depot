@@ -49,7 +49,7 @@ impl Chunk {
         }
     }
 
-    fn get_line(&self, offset: usize) -> usize {
+    pub fn get_line(&self, offset: usize) -> usize {
         let mut pos = 0;
         for span in &self.lines {
             pos += span.count;
