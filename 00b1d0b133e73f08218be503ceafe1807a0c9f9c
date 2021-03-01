@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "50c5bb62_6b866f55",
+        "filename": "users/sterni/nix/int.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-01T14:19:37Z",
+      "side": 1,
+      "message": "Should be a bit better by ad-hoc reimplementing exp instead of calling it, but I don\u0027t think it can be done much better. In practice this is pretty okay in comparison to things like list indexing.",
+      "parentUuid": "60e43415_6f21754f",
+      "revId": "00b1d0b133e73f08218be503ceafe1807a0c9f9c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "488438b7_1f7d2ae5",
         "filename": "users/sterni/nix/int.nix",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2021-02-24T13:10:02Z",
       "side": 1,
       "message": "no tests?",
+      "revId": "00b1d0b133e73f08218be503ceafe1807a0c9f9c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a515202_461d964e",
+        "filename": "users/sterni/nix/int.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-01T14:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "488438b7_1f7d2ae5",
       "revId": "00b1d0b133e73f08218be503ceafe1807a0c9f9c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -48,6 +84,30 @@
       "writtenOn": "2021-02-24T13:10:02Z",
       "side": 1,
       "message": "love how most of the other stuff is just yak-shaving a sufficiently powerful stdlib :P",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 5
+      },
+      "revId": "00b1d0b133e73f08218be503ceafe1807a0c9f9c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64cf7d2a_b91d1007",
+        "filename": "users/sterni/nix/url.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-01T14:19:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "de10d2e9_4c031aaf",
       "range": {
         "startLine": 5,
         "startChar": 0,
