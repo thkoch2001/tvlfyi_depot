@@ -5,6 +5,7 @@
 mod chunk;
 mod compiler;
 mod errors;
+mod interner;
 mod opcode;
 mod value;
 mod vm;
