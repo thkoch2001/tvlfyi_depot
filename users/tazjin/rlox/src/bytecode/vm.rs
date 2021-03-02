@@ -13,6 +13,12 @@ pub struct VM {
 
     stack: Vec<Value>,
     strings: Interner,
+
+    // Operations that consume values from the stack without pushing
+    // anything leave their last value in this slot, which makes it
+    // possible to return values from interpreters that ran code which
+    // ended with a statement.
+    last_drop: Option<Value>,
 }
 
 impl VM {
@@ -72,12 +78,15 @@ impl VM {
 
             match op {
                 OpCode::OpReturn => {
-                    if self.stack.is_empty() {
+                    if !self.stack.is_empty() {
+                        let val = self.pop();
+                        return Ok(self.return_value(val));
+                    } else if self.last_drop.is_some() {
+                        let val = self.last_drop.take().unwrap();
+                        return Ok(self.return_value(val));
+                    } else {
                         return Ok(Value::Nil);
                     }
-
-                    let val = self.pop();
-                    return Ok(self.return_value(val));
                 }
 
                 OpCode::OpConstant(idx) => {
@@ -144,6 +153,10 @@ impl VM {
                     let val = self.pop();
                     println!("{}", self.print_value(val));
                 }
+
+                OpCode::OpPop => {
+                    self.last_drop = Some(self.pop());
+                }
             }
 
             #[cfg(feature = "disassemble")]
@@ -186,6 +199,7 @@ pub fn interpret(strings: Interner, chunk: chunk::Chunk) -> LoxResult<Value> {
         strings,
         ip: 0,
         stack: vec![],
+        last_drop: None,
     };
 
     vm.run()

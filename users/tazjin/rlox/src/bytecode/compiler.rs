@@ -179,10 +179,10 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn statement(&mut self) -> LoxResult<()> {
         if self.match_token(&TokenKind::Print) {
-            return self.print_statement();
+            self.print_statement()
+        } else {
+            self.expression_statement()
         }
-
-        Ok(())
     }
 
     fn print_statement(&mut self) -> LoxResult<()> {
@@ -192,6 +192,16 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             ErrorKind::ExpectedToken("Expected ';' after value"),
         );
         self.emit_op(OpCode::OpPrint);
+        Ok(())
+    }
+
+    fn expression_statement(&mut self) -> LoxResult<()> {
+        self.expression()?;
+        self.consume(
+            &TokenKind::Semicolon,
+            ErrorKind::ExpectedToken("Expected ';' after expression"),
+        );
+        self.emit_op(OpCode::OpPop);
         Ok(())
     }
 
