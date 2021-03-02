@@ -25,4 +25,7 @@ pub enum OpCode {
     OpSubtract,
     OpMultiply,
     OpDivide,
+
+    // Built in operations
+    OpPrint,
 }
