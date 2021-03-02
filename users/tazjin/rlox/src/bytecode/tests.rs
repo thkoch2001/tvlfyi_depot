@@ -18,6 +18,10 @@ fn expect_bool(code: &str, value: bool) {
     expect(code, Value::Bool(value))
 }
 
+fn expect_str(code: &str, value: &str) {
+    expect(code, Value::String(value.to_string().into()))
+}
+
 #[test]
 fn numbers() {
     expect_num("1", 1.0);
@@ -97,4 +101,10 @@ fn comparisons() {
     expect_bool("42 <= 23", false);
     expect_bool("42 >= 42", true);
     expect_bool("42 >= 23", true);
+}
+
+#[test]
+fn strings() {
+    expect_str("\"hello\"", "hello");
+    expect_str("\"hello\" + \" world\"", "hello world");
 }
