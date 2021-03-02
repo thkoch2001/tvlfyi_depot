@@ -1,5 +1,6 @@
 use super::chunk::Chunk;
 use super::errors::{Error, ErrorKind, LoxResult};
+use super::interner::Interner;
 use super::opcode::OpCode;
 use super::value::Value;
 use crate::scanner::{self, Token, TokenKind};
@@ -12,8 +13,8 @@ struct Compiler<T: Iterator<Item = Token>> {
     chunk: Chunk,
     panic: bool,
     errors: Vec<Error>,
+    strings: Interner,
 
-    // TODO(tazjin): Restructure so that these don't need to be Option?
     current: Option<Token>,
     previous: Option<Token>,
 }
@@ -146,7 +147,7 @@ fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
 
         TokenKind::String(_) => {
             ParseRule::new(Some(Compiler::string), None, Precedence::None)
-        },
+        }
 
         _ => ParseRule::new(None, None, Precedence::None),
     }
@@ -260,13 +261,13 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     }
 
     fn string(&mut self) -> LoxResult<()> {
-        match &self.previous().kind {
-            TokenKind::String(s) => {
-                let s = s.clone();
-                self.emit_constant(Value::String(s));
-            }
+        let val = match &self.previous().kind {
+            TokenKind::String(s) => s.clone(),
             _ => unreachable!("only called for strings"),
-        }
+        };
+
+        let id = self.strings.intern(val);
+        self.emit_constant(Value::String(id.into()));
 
         Ok(())
     }
@@ -353,7 +354,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     }
 }
 
-pub fn compile(code: &str) -> Result<Chunk, Vec<Error>> {
+pub fn compile(code: &str) -> Result<(Interner, Chunk), Vec<Error>> {
     let chars = code.chars().collect::<Vec<char>>();
     let tokens = scanner::scan(&chars).map_err(|errors| {
         errors.into_iter().map(Into::into).collect::<Vec<Error>>()
@@ -364,6 +365,7 @@ pub fn compile(code: &str) -> Result<Chunk, Vec<Error>> {
         chunk: Default::default(),
         panic: false,
         errors: vec![],
+        strings: Interner::with_capacity(1024),
         current: None,
         previous: None,
     };
@@ -371,7 +373,7 @@ pub fn compile(code: &str) -> Result<Chunk, Vec<Error>> {
     compiler.compile()?;
 
     if compiler.errors.is_empty() {
-        Ok(compiler.chunk)
+        Ok((compiler.strings, compiler.chunk))
     } else {
         Err(compiler.errors)
     }
