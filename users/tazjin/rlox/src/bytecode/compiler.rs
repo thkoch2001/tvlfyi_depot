@@ -156,11 +156,10 @@ fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
 impl<T: Iterator<Item = Token>> Compiler<T> {
     fn compile(&mut self) -> LoxResult<()> {
         self.advance();
-        self.expression()?;
-        self.consume(
-            &TokenKind::Eof,
-            ErrorKind::ExpectedToken("Expected end of expression"),
-        );
+
+        while !self.match_token(&TokenKind::Eof) {
+            self.declaration()?;
+        }
 
         self.end_compiler()
     }
@@ -172,6 +171,28 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn expression(&mut self) -> LoxResult<()> {
         self.parse_precedence(Precedence::Assignment)
+    }
+
+    fn declaration(&mut self) -> LoxResult<()> {
+        self.statement()
+    }
+
+    fn statement(&mut self) -> LoxResult<()> {
+        if self.match_token(&TokenKind::Print) {
+            return self.print_statement();
+        }
+
+        Ok(())
+    }
+
+    fn print_statement(&mut self) -> LoxResult<()> {
+        self.expression()?;
+        self.consume(
+            &TokenKind::Semicolon,
+            ErrorKind::ExpectedToken("Expected ';' after value"),
+        );
+        self.emit_op(OpCode::OpPrint);
+        Ok(())
     }
 
     fn number(&mut self) -> LoxResult<()> {
@@ -351,6 +372,19 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
         self.panic = true;
         self.errors.push(Error { kind, line })
+    }
+
+    fn match_token(&mut self, token: &TokenKind) -> bool {
+        if !self.check(token) {
+            return false;
+        }
+
+        self.advance();
+        true
+    }
+
+    fn check(&self, token: &TokenKind) -> bool {
+        return self.current().kind == *token;
     }
 }
 

@@ -72,6 +72,10 @@ impl VM {
 
             match op {
                 OpCode::OpReturn => {
+                    if self.stack.is_empty() {
+                        return Ok(Value::Nil);
+                    }
+
                     let val = self.pop();
                     return Ok(self.return_value(val));
                 }
@@ -135,6 +139,11 @@ impl VM {
                         })
                     }
                 }
+
+                OpCode::OpPrint => {
+                    let val = self.pop();
+                    println!("{}", self.print_value(val));
+                }
             }
 
             #[cfg(feature = "disassemble")]
@@ -157,6 +166,16 @@ impl VM {
         match string {
             LoxString::Heap(s) => s.as_str(),
             LoxString::Interned(id) => self.strings.lookup(*id),
+        }
+    }
+
+    fn print_value(&self, val: Value) -> String {
+        match val {
+            Value::String(LoxString::Heap(s)) => s,
+            Value::String(LoxString::Interned(id)) => {
+                self.strings.lookup(id).into()
+            }
+            _ => format!("{:?}", val),
         }
     }
 }
