@@ -1,7 +1,8 @@
 use super::chunk;
 use super::errors::*;
+use super::interner::Interner;
 use super::opcode::OpCode;
-use super::value::Value;
+use super::value::{LoxString, Value};
 
 pub struct VM {
     chunk: chunk::Chunk,
@@ -11,6 +12,7 @@ pub struct VM {
     ip: usize,
 
     stack: Vec<Value>,
+    strings: Interner,
 }
 
 impl VM {
@@ -69,7 +71,10 @@ impl VM {
             self.ip += 1;
 
             match op {
-                OpCode::OpReturn => return Ok(self.pop()),
+                OpCode::OpReturn => {
+                    let val = self.pop();
+                    return Ok(self.return_value(val));
+                }
 
                 OpCode::OpConstant(idx) => {
                     let c = self.chunk.constant(*idx).clone();
@@ -114,9 +119,9 @@ impl VM {
 
                     match (a, b) {
                         (Value::String(s_a), Value::String(s_b)) => {
-                            let mut new_s = s_a.clone();
-                            new_s.push_str(&s_b);
-                            self.push(Value::String(new_s));
+                            let mut new_s = self.resolve_str(&s_a).to_string();
+                            new_s.push_str(self.resolve_str(&s_b));
+                            self.push(Value::String(new_s.into()));
                         }
 
                         (Value::Number(n_a), Value::Number(n_b)) =>
@@ -136,11 +141,30 @@ impl VM {
             println!("=> {:?}", self.stack);
         }
     }
+
+    // For some types of values (e.g. interned strings), returns
+    // should no longer include any references into the interpreter.
+    fn return_value(&self, val: Value) -> Value {
+        match val {
+            Value::String(string @ LoxString::Interned(_)) => {
+                Value::String(self.resolve_str(&string).to_string().into())
+            }
+            _ => val,
+        }
+    }
+
+    fn resolve_str<'a>(&'a self, string: &'a LoxString) -> &'a str {
+        match string {
+            LoxString::Heap(s) => s.as_str(),
+            LoxString::Interned(id) => self.strings.lookup(*id),
+        }
+    }
 }
 
-pub fn interpret(chunk: chunk::Chunk) -> LoxResult<Value> {
+pub fn interpret(strings: Interner, chunk: chunk::Chunk) -> LoxResult<Value> {
     let mut vm = VM {
         chunk,
+        strings,
         ip: 0,
         stack: vec![],
     };

@@ -1,9 +1,29 @@
+use super::interner::InternedStr;
+
 #[derive(Clone, Debug, PartialEq)]
 pub enum Value {
     Nil,
     Bool(bool),
     Number(f64),
-    String(String),
+    String(LoxString),
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub enum LoxString {
+    Heap(String),
+    Interned(InternedStr),
+}
+
+impl From<String> for LoxString {
+    fn from(s: String) -> Self {
+        LoxString::Heap(s)
+    }
+}
+
+impl From<InternedStr> for LoxString {
+    fn from(s: InternedStr) -> Self {
+        LoxString::Interned(s)
+    }
 }
 
 impl Value {
