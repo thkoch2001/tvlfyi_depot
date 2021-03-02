@@ -7,7 +7,6 @@ let
   inherit (pkgs.lib.strings) concatStringsSep makeBinPath;
 
   emacsBinPath = makeBinPath (with pkgs; [
-    tdesktop
     ripgrep
     bat
     fd
