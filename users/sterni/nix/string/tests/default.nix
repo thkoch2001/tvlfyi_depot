@@ -45,9 +45,21 @@ let
       null)
   ];
 
+  dontEval = builtins.throw "this should not get evaluated";
+
+  testMatch = it "tests match" [
+    (assertEq "basic match usage" 42
+      (string.match "answer" {
+        "answer" = 42;
+        "banana" = dontEval;
+        "maleur" = dontEval;
+      }))
+  ];
+
 in
   runTestsuite "nix.string" [
     testTakeDrop
     testIndexing
     testFinding
+    testMatch
   ]

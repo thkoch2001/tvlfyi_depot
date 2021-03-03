@@ -33,17 +33,7 @@ let
       ]))
   ];
 
-  testMatch = it "tests match" [
-    (assertEq "basic match usage" 42
-      (match "answer" {
-        "answer" = 42;
-        "banana" = dontEval;
-        "maleur" = dontEval;
-      }))
-  ];
-
 in
   runTestsuite "nix.flow" [
     testCond
-    testMatch
   ]
