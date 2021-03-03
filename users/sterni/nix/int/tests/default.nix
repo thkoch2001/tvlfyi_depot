@@ -12,7 +12,6 @@ let
     int
     string
     fun
-    flow
     ;
 
   testBounds = it "checks minBound and maxBound" [
@@ -113,7 +112,7 @@ let
 
   checkShift = { a, b, c, op }@args:
     let
-      f = flow.match op {
+      f = string.match op {
         "<<" = int.bitShiftL;
         ">>" = int.bitShiftR;
       };

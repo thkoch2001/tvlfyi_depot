@@ -44,11 +44,9 @@ let
   # TODO(sterni): condf or magic
   # like <nixpkgs/pkgs/build-support/coq/extra-lib.nix>
 
-  match = val: matcher: matcher."${val}";
 
 in {
   inherit
     cond
-    match
     ;
 }

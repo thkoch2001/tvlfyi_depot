@@ -55,6 +55,9 @@ let
       then s
       else pad { inherit char; "${side}" = diff; } s;
 
+  # pattern matching for strings only
+  match = val: matcher: matcher."${val}";
+
 in {
   inherit
     take
@@ -67,5 +70,6 @@ in {
     fromChars
     pad
     fit
+    match
     ;
 }
