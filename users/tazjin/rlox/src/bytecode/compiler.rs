@@ -174,7 +174,13 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     }
 
     fn declaration(&mut self) -> LoxResult<()> {
-        self.statement()
+        self.statement()?;
+
+        if self.panic {
+            self.synchronise();
+        }
+
+        Ok(())
     }
 
     fn statement(&mut self) -> LoxResult<()> {
@@ -395,6 +401,31 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn check(&self, token: &TokenKind) -> bool {
         return self.current().kind == *token;
+    }
+
+    fn synchronise(&mut self) {
+        self.panic = false;
+
+        while self.current().kind != TokenKind::Eof {
+            if self.previous().kind == TokenKind::Semicolon {
+                return;
+            }
+
+            match self.current().kind {
+                TokenKind::Class
+                | TokenKind::Fun
+                | TokenKind::Var
+                | TokenKind::For
+                | TokenKind::If
+                | TokenKind::While
+                | TokenKind::Print
+                | TokenKind::Return => return,
+
+                _ => {
+                    self.advance();
+                }
+            }
+        }
     }
 }
 
