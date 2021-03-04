@@ -23,7 +23,7 @@ let
 
   # Compose a list of functions,
   # application is left to right
-  lrs = fs: x:
+  lrs = x: fs:
     builtins.foldl' (v: f: f v) x fs;
 
 in
