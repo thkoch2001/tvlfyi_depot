@@ -97,6 +97,8 @@ let
   # i. e. they truncate towards 0
   mod = a: b: let res = a / b; in a - (res * b);
 
+  inRange = a: b: x: x >= a && x <= b;
+
 in {
   inherit
     maxBound
@@ -117,5 +119,6 @@ in {
     bitXor
     toHex
     fromHex
+    inRange
     ;
 }
