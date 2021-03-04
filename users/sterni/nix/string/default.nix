@@ -7,15 +7,16 @@ let
     ord
     ;
 
-  inherit (depot.users.sterni.nix.flow)
-    cond
+  inherit (depot.users.sterni.nix)
+    int
+    flow
     ;
 
   take = n: s:
     builtins.substring 0 n s;
 
   drop = n: s:
-    builtins.substring n (builtins.stringLength s - n) s;
+    builtins.substring n int.maxBound s;
 
   charAt = i: s:
     let
@@ -26,7 +27,7 @@ let
     let
       len = builtins.stringLength s;
       go = i:
-        cond [
+        flow.cond [
           [ (i >= len) null ]
           [ (charAt i s == char) i ]
           [ true (go (i + 1)) ]
