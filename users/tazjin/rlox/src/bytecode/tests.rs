@@ -108,3 +108,13 @@ fn strings() {
     expect_str("\"hello\";", "hello");
     expect_str("\"hello\" + \" world\";", "hello world");
 }
+
+#[test]
+fn variables() {
+    expect_num("var a = 5; a;", 5.0);
+    expect_num("var a = 5; var b = 2; a * b;", 10.0);
+    expect_str(
+        "var greeting = \"hello\"; var name = \"Zubnog\"; greeting + \" \" + name;",
+        "hello Zubnog",
+    );
+}

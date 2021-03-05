@@ -145,6 +145,10 @@ fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
             ParseRule::new(None, Some(Compiler::binary), Precedence::Comparison)
         }
 
+        TokenKind::Identifier(_) => {
+            ParseRule::new(Some(Compiler::variable), None, Precedence::None)
+        }
+
         TokenKind::String(_) => {
             ParseRule::new(Some(Compiler::string), None, Precedence::None)
         }
@@ -238,7 +242,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn number(&mut self) -> LoxResult<()> {
         if let TokenKind::Number(num) = self.previous().kind {
-            self.emit_constant(Value::Number(num));
+            self.emit_constant(Value::Number(num), true);
             return Ok(());
         }
 
@@ -330,9 +334,21 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         };
 
         let id = self.strings.intern(val);
-        self.emit_constant(Value::String(id.into()));
+        self.emit_constant(Value::String(id.into()), true);
 
         Ok(())
+    }
+
+    fn named_variable(&mut self) -> LoxResult<()> {
+        let ident = self.identifier_str(Self::previous)?;
+        let constant_id =
+            self.emit_constant(Value::String(ident.into()), false);
+        self.emit_op(OpCode::OpGetGlobal(constant_id));
+        Ok(())
+    }
+
+    fn variable(&mut self) -> LoxResult<()> {
+        self.named_variable()
     }
 
     fn parse_precedence(&mut self, precedence: Precedence) -> LoxResult<()> {
@@ -385,7 +401,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         );
 
         let id = self.identifier_str(Self::previous)?;
-        Ok(self.emit_constant(Value::String(id.into())))
+        Ok(self.emit_constant(Value::String(id.into()), false))
     }
 
     fn current_chunk(&mut self) -> &mut Chunk {
@@ -409,9 +425,13 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.current_chunk().add_op(op, line);
     }
 
-    fn emit_constant(&mut self, val: Value) -> usize {
+    fn emit_constant(&mut self, val: Value, with_op: bool) -> usize {
         let idx = self.chunk.add_constant(val);
-        self.emit_op(OpCode::OpConstant(idx));
+
+        if with_op {
+            self.emit_op(OpCode::OpConstant(idx));
+        }
+
         idx
     }
 

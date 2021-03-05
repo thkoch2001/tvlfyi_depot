@@ -30,6 +30,7 @@ pub enum OpCode {
     OpPrint,
     OpPop,
 
-    // Variable definitions
+    // Variable management
     OpDefineGlobal(usize),
+    OpGetGlobal(usize),
 }
