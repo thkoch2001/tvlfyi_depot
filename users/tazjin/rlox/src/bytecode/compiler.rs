@@ -153,6 +153,15 @@ fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
     }
 }
 
+macro_rules! consume {
+    ( $self:ident, $expected:pat, $err:expr ) => {
+        match $self.current().kind {
+            $expected => $self.advance(),
+            _ => $self.error_at($self.current().line, $err),
+        }
+    };
+}
+
 impl<T: Iterator<Item = Token>> Compiler<T> {
     fn compile(&mut self) -> LoxResult<()> {
         self.advance();
@@ -193,9 +202,10 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn print_statement(&mut self) -> LoxResult<()> {
         self.expression()?;
-        self.consume(
-            &TokenKind::Semicolon,
-            ErrorKind::ExpectedToken("Expected ';' after value"),
+        consume!(
+            self,
+            TokenKind::Semicolon,
+            ErrorKind::ExpectedToken("Expected ';' after value")
         );
         self.emit_op(OpCode::OpPrint);
         Ok(())
@@ -203,9 +213,10 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn expression_statement(&mut self) -> LoxResult<()> {
         self.expression()?;
-        self.consume(
-            &TokenKind::Semicolon,
-            ErrorKind::ExpectedToken("Expected ';' after expression"),
+        consume!(
+            self,
+            TokenKind::Semicolon,
+            ErrorKind::ExpectedToken("Expected ';' after expression")
         );
         self.emit_op(OpCode::OpPop);
         Ok(())
@@ -222,9 +233,10 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn grouping(&mut self) -> LoxResult<()> {
         self.expression()?;
-        self.consume(
-            &TokenKind::RightParen,
-            ErrorKind::ExpectedToken("Expected ')' after expression"),
+        consume!(
+            self,
+            TokenKind::RightParen,
+            ErrorKind::ExpectedToken("Expected ')' after expression")
         );
         Ok(())
     }
@@ -332,15 +344,6 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         }
 
         Ok(())
-    }
-
-    fn consume(&mut self, expected: &TokenKind, err: ErrorKind) {
-        if self.current().kind == *expected {
-            self.advance();
-            return;
-        }
-
-        self.error_at(self.current().line, err);
     }
 
     fn current_chunk(&mut self) -> &mut Chunk {
