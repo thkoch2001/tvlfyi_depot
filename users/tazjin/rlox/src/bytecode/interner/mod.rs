@@ -11,7 +11,7 @@ use std::collections::HashMap;
 #[cfg(test)]
 mod tests;
 
-#[derive(Clone, Copy, Debug, PartialEq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct InternedStr {
     id: usize,
 }

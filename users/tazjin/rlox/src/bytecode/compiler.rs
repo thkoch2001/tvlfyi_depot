@@ -1,6 +1,6 @@
 use super::chunk::Chunk;
 use super::errors::{Error, ErrorKind, LoxResult};
-use super::interner::Interner;
+use super::interner::{InternedStr, Interner};
 use super::opcode::OpCode;
 use super::value::Value;
 use crate::scanner::{self, Token, TokenKind};
@@ -173,8 +173,30 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.parse_precedence(Precedence::Assignment)
     }
 
+    fn var_declaration(&mut self) -> LoxResult<()> {
+        let global = self.parse_variable()?;
+
+        if self.match_token(&TokenKind::Equal) {
+            self.expression()?;
+        } else {
+            self.emit_op(OpCode::OpNil);
+        }
+
+        self.expect_semicolon("expect ';' after variable declaration")?;
+        self.define_variable(global)
+    }
+
+    fn define_variable(&mut self, var: usize) -> LoxResult<()> {
+        self.emit_op(OpCode::OpDefineGlobal(var));
+        Ok(())
+    }
+
     fn declaration(&mut self) -> LoxResult<()> {
-        self.statement()?;
+        if self.match_token(&TokenKind::Var) {
+            self.var_declaration()?;
+        } else {
+            self.statement()?;
+        }
 
         if self.panic {
             self.synchronise();
@@ -193,20 +215,14 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn print_statement(&mut self) -> LoxResult<()> {
         self.expression()?;
-        self.consume(
-            &TokenKind::Semicolon,
-            ErrorKind::ExpectedToken("Expected ';' after value"),
-        );
+        self.expect_semicolon("expect ';' after print statement")?;
         self.emit_op(OpCode::OpPrint);
         Ok(())
     }
 
     fn expression_statement(&mut self) -> LoxResult<()> {
         self.expression()?;
-        self.consume(
-            &TokenKind::Semicolon,
-            ErrorKind::ExpectedToken("Expected ';' after expression"),
-        );
+        self.expect_semicolon("expect ';' after expression")?;
         self.emit_op(OpCode::OpPop);
         Ok(())
     }
@@ -334,6 +350,28 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         Ok(())
     }
 
+    fn identifier_str(
+        &mut self,
+        token_fn: fn(&Self) -> &Token,
+    ) -> LoxResult<InternedStr> {
+        let ident = match &token_fn(self).kind {
+            TokenKind::Identifier(ident) => ident.to_string(),
+            _ => {
+                return Err(Error {
+                    line: self.current().line,
+                    kind: ErrorKind::ExpectedToken("Expected identifier"),
+                })
+            }
+        };
+
+        Ok(self.strings.intern(ident))
+    }
+
+    fn parse_variable(&mut self) -> LoxResult<usize> {
+        let id = self.identifier_str(Self::current)?;
+        Ok(self.emit_constant(Value::String(id.into())))
+    }
+
     fn consume(&mut self, expected: &TokenKind, err: ErrorKind) {
         if self.current().kind == *expected {
             self.advance();
@@ -364,9 +402,10 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.current_chunk().add_op(op, line);
     }
 
-    fn emit_constant(&mut self, val: Value) {
+    fn emit_constant(&mut self, val: Value) -> usize {
         let idx = self.chunk.add_constant(val);
         self.emit_op(OpCode::OpConstant(idx));
+        idx
     }
 
     fn previous(&self) -> &Token {
@@ -426,6 +465,11 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
                 }
             }
         }
+    }
+
+    fn expect_semicolon(&mut self, msg: &'static str) -> LoxResult<()> {
+        self.consume(&TokenKind::Semicolon, ErrorKind::ExpectedToken(msg));
+        Ok(())
     }
 }
 
