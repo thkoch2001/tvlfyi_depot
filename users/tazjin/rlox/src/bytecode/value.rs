@@ -8,7 +8,7 @@ pub enum Value {
     String(LoxString),
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum LoxString {
     Heap(String),
     Interned(InternedStr),

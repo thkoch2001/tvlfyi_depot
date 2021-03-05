@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use super::chunk;
 use super::errors::*;
 use super::interner::Interner;
@@ -13,6 +15,8 @@ pub struct VM {
 
     stack: Vec<Value>,
     strings: Interner,
+
+    globals: HashMap<LoxString, Value>,
 
     // Operations that consume values from the stack without pushing
     // anything leave their last value in this slot, which makes it
@@ -157,6 +161,15 @@ impl VM {
                 OpCode::OpPop => {
                     self.last_drop = Some(self.pop());
                 }
+
+                OpCode::OpDefineGlobal(name_idx) => {
+                    let name = self.chunk.constant(*name_idx);
+                    with_type!(self, name, Value::String(name), {
+                        let name = name.clone();
+                        let val = self.pop();
+                        self.globals.insert(name, val);
+                    });
+                }
             }
 
             #[cfg(feature = "disassemble")]
@@ -197,6 +210,7 @@ pub fn interpret(strings: Interner, chunk: chunk::Chunk) -> LoxResult<Value> {
     let mut vm = VM {
         chunk,
         strings,
+        globals: HashMap::new(),
         ip: 0,
         stack: vec![],
         last_drop: None,
