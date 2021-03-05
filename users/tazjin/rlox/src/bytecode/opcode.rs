@@ -29,4 +29,7 @@ pub enum OpCode {
     // Built in operations
     OpPrint,
     OpPop,
+
+    // Variable definitions
+    OpDefineGlobal(usize),
 }
