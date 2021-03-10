@@ -80,10 +80,12 @@
     libredirect
     linuxPackages
     linuxPackages_5_11
+    lowdown
     luajit
     lutris
     makeFontsConf
     makeWrapper
+    mandoc
     mdbook
     meson
     mime-types
