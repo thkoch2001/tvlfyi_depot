@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9383754a_2c8873a6",
+        "filename": "users/sterni/htmlman/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-10T16:01:26Z",
+      "side": 1,
+      "message": "in theory you can remove the `()` here but maybe you put them for clarity (then nvm)",
+      "revId": "a5191de7fbc7fa42190e483ef152601085d0f0a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59d4e6f7_61fdd619",
+        "filename": "users/sterni/htmlman/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-10T16:01:26Z",
+      "side": 1,
+      "message": "toplel",
+      "revId": "a5191de7fbc7fa42190e483ef152601085d0f0a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6063b151_afb959c7",
+        "filename": "users/sterni/htmlman/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-10T16:01:26Z",
+      "side": 1,
+      "message": "I had this as something like\n\n```\n  runExeclineStdout \u003d name: args: cmd: depot.nix.runExecline name args ([\n    \"importas\" \"-ui\" \"out\" \"out\"\n    \"redirfd\" \"-w\" \"1\" \"$out\"\n  ] ++ cmd);\n```\n\ndunno how well it composes though",
+      "range": {
+        "startLine": 35,
+        "startChar": 1,
+        "endLine": 42,
+        "endChar": 30
+      },
+      "revId": "a5191de7fbc7fa42190e483ef152601085d0f0a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bc215ed_16f5d09f",
+        "filename": "users/sterni/htmlman/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-10T16:01:26Z",
+      "side": 1,
+      "message": "you can use https://skarnet.org/software/execline/multisubstitute.html here, to importas multiple things at the same time.\n\nmaybe also -u to pop the envvar at the same time.\n\nNewer execline added -E to nearly every command which introduces an envvar, so you don’t have to put an importas immediately after (ofc this doesn’t apply here because the variables are set by the nix builder).",
+      "range": {
+        "startLine": 108,
+        "startChar": 1,
+        "endLine": 113,
+        "endChar": 14
+      },
+      "revId": "a5191de7fbc7fa42190e483ef152601085d0f0a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc039bdf_021d0f8a",
+        "filename": "users/sterni/htmlman/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-10T16:01:26Z",
+      "side": 1,
+      "message": "why the cat here? It’s a noop right? In case there is no $style?",
+      "revId": "a5191de7fbc7fa42190e483ef152601085d0f0a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
