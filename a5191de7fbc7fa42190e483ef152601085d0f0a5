@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "daf84b5a_f5fc2b86",
+        "filename": "users/sterni/htmlman/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-10T16:22:45Z",
+      "side": 1,
+      "message": "Didn\u0027t know that thx.",
+      "parentUuid": "9383754a_2c8873a6",
+      "revId": "a5191de7fbc7fa42190e483ef152601085d0f0a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "59d4e6f7_61fdd619",
         "filename": "users/sterni/htmlman/default.nix",
         "patchSetId": 3
@@ -58,6 +76,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f24273ee_a62e16bc",
+        "filename": "users/sterni/htmlman/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-10T16:22:45Z",
+      "side": 1,
+      "message": "I can just have a `execlineStdoutInto` function which returns a execline block as nix representation for my case.",
+      "parentUuid": "6063b151_afb959c7",
+      "range": {
+        "startLine": 35,
+        "startChar": 1,
+        "endLine": 42,
+        "endChar": 30
+      },
+      "revId": "a5191de7fbc7fa42190e483ef152601085d0f0a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bc215ed_16f5d09f",
@@ -81,6 +123,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "131266e0_b188781f",
+        "filename": "users/sterni/htmlman/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-10T16:22:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bc215ed_16f5d09f",
+      "range": {
+        "startLine": 108,
+        "startChar": 1,
+        "endLine": 113,
+        "endChar": 14
+      },
+      "revId": "a5191de7fbc7fa42190e483ef152601085d0f0a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc039bdf_021d0f8a",
@@ -94,6 +160,24 @@
       "writtenOn": "2021-03-10T16:01:26Z",
       "side": 1,
       "message": "why the cat here? It’s a noop right? In case there is no $style?",
+      "revId": "a5191de7fbc7fa42190e483ef152601085d0f0a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40265d51_a041123c",
+        "filename": "users/sterni/htmlman/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-10T16:22:45Z",
+      "side": 1,
+      "message": "In case `normalizeCss \u003d true`, it will `cat /nix/store/…normalize.css style.css`",
+      "parentUuid": "cc039bdf_021d0f8a",
       "revId": "a5191de7fbc7fa42190e483ef152601085d0f0a5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
