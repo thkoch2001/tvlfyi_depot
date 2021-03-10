@@ -84,6 +84,7 @@
     lutris
     makeFontsConf
     makeWrapper
+    mandoc
     mdbook
     meson
     mime-types
