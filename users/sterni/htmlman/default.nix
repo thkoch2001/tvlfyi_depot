@@ -4,6 +4,7 @@ let
   inherit (depot.nix)
     getBins
     runExecline
+    yants
     ;
 
   inherit (depot.tools)
@@ -156,16 +157,42 @@ let
     # CSS to use as a string
     , normalizeCss ? true
     # whether to include normalize.css before the custom CSS
+    , linkXr ? "all"
+    # How to handle cross references in the html output:
+    #
+    # * none:     don't convert cross references into hyperlinks
+    # * all:      link all cross references as if they were
+    #             rendered into $out by htmlman
+    # * inManDir: link to all man pages which have their source
+    #             in `manDir` and use the format string defined
+    #             in linkXrFallback for all other cross references.
+    , linkXrFallback ? "https://manpages.debian.org/unstable/%N.%S.en.html"
+    # fallback link to use if linkXr == "inManDir" and the man
+    # page is not in ${manDir}. Placeholders %N (name of page)
+    # and %S (section of page) can be used. See mandoc(1) for
+    # more information.
     }:
 
     let
+      linkXrEnum = yants.enum "linkXr" [ "all" "inManDir" "none" ];
+
       index = indexTemplate {
         inherit title description pages;
       };
+
       resolvePath = { path ? null, name, section }:
         if path != null
         then path
         else "${manDir}/${name}.${toString section}";
+
+      mandocOpts = lib.concatStringsSep "," ([
+        "style=style.css"
+      ] ++ linkXrEnum.match linkXr {
+        all      = [ "man=./%N.%S.html" ];
+        inManDir = [ "man=./%N.%S.html;${linkXrFallback}" ];
+        none     = [ ];
+      });
+
       html =
         runExecline.local "htmlman-${title}" {
           derivationArgs = {
@@ -188,12 +215,15 @@ let
               "$style"
             ])
           ])
+          # let mandoc check for available man pages
+          "execline-cd" "${manDir}"
         ] ++ lib.concatMap ({ name, section, ... }@p:
           execlineStdoutInto "\${out}/${name}.${toString section}.html" [
           "if" [
             bins.mandoc
-            "-T" "html" "-mdoc"
-            "-O" "style=style.css"
+            "-mdoc"
+            "-T" "html"
+            "-O" mandocOpts
             (resolvePath p)
           ]
         ]) pages);
