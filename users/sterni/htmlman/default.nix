@@ -4,6 +4,7 @@ let
   inherit (depot.nix)
     getBins
     runExecline
+    yants
     ;
 
   inherit (depot.tools)
@@ -156,16 +157,40 @@ let
     # CSS to use as a string
     , normalizeCss ? true
     # whether to include normalize.css before the custom CSS
+    , linkXr ? "all"
+    # whether to convert cross references into hyperlinks,
+    # see linkXrEnum for all available options.
+    , linkXrFallback ? "https://manpages.debian.org/unstable/%N.%S.en.html"
+    # fallback link to use if linkXr == "inManDir" and the man
+    # page is not in ${manDir}. Placeholders %N (name of page)
+    # and %S (section of page) can be used. See mandoc(1) for
+    # more information.
     }:
 
     let
+      linkXrEnum = yants.enum "linkXr" [
+        "all"        # link all man pages, assuming they will all be in $out
+        "inManDir"   # link only man pages in ${manDir}, fallback to man7.org
+        "none"       # don't hyperlink .Xr
+      ];
+
       index = indexTemplate {
         inherit title description pages;
       };
+
       resolvePath = { path ? null, name, section }:
         if path != null
         then path
         else "${manDir}/${name}.${toString section}";
+
+      mandocOpts = lib.concatStringsSep "," ([
+        "style=style.css"
+      ] ++ linkXrEnum.match linkXr {
+        all      = [ "man=./%N.%S.html" ];
+        inManDir = [ "man=./%N.%S.html;${linkXrFallback}" ];
+        none     = [ ];
+      });
+
       html =
         runExecline.local "htmlman-${title}" {
           derivationArgs = {
@@ -188,12 +213,15 @@ let
               "$style"
             ])
           ])
+          # let mandoc check for available man pages
+          "execline-cd" "${manDir}"
         ] ++ lib.concatMap ({ name, section, ... }@p:
           execlineStdoutInto "\${out}/${name}.${toString section}.html" [
           "if" [
             bins.mandoc
-            "-T" "html" "-mdoc"
-            "-O" "style=style.css"
+            "-mdoc"
+            "-T" "html"
+            "-O" mandocOpts
             (resolvePath p)
           ]
         ]) pages);
