@@ -2,6 +2,11 @@
 
 [
   {
+    username = "adisbladis";
+    email = "adisbladis@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$wdgoLRrUgZuz0Kin9YiNgQ$E40VIgzgpMpylZqkfByTKiWQnerupfuf7LDgOsU8tJA";
+  }
+  {
     username = "andi";
     email = "andi@notmuch.email";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$8lefg7+8UPAEh9Ott8zH0A$7YuLRraTC1IgxTNTxFJF03AWmqBS3GX2+vfD4XVTrb0";
