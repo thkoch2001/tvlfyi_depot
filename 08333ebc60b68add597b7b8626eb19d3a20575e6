@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1c3757f4_3ff87736",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-14T13:21:49Z",
+      "side": 1,
+      "message": "That wasn\u0027t deployed automatically though - I had a wrapper script for editing posts which un/rechunked them.",
+      "parentUuid": "c2ae9dd5_bd0c1798",
+      "revId": "08333ebc60b68add597b7b8626eb19d3a20575e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "cbf8e6af_9adf9adc",
         "filename": "ops/dns/default.nix",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2021-03-14T13:17:53Z",
       "side": 1,
       "message": "Don\u0027t know too much about bind or DNS — from skimming the man page it seems we might want to use named-compilezone for deployment purposes or stricter checking maybe? We would lose the output probably and might  not be necessary for gcloud.",
+      "revId": "08333ebc60b68add597b7b8626eb19d3a20575e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31894ea5_38dcda59",
+        "filename": "ops/dns/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-14T13:21:49Z",
+      "side": 1,
+      "message": "`gcloud dns` consumes the actual zone file format (which is checked in here), not the compiled representation used for bind.\n\nThe thing here is that named-checkzone is a tool from the bind server utilities, but our actual server isn\u0027t bind so we\u0027re only using it for validating the file.",
+      "parentUuid": "cbf8e6af_9adf9adc",
       "revId": "08333ebc60b68add597b7b8626eb19d3a20575e6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
