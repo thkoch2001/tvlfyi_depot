@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2ae9dd5_bd0c1798",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-14T13:17:53Z",
+      "side": 1,
+      "message": "Didn\u0027t you have the gcloud interaction already figured out for your dns blog? :p",
+      "revId": "08333ebc60b68add597b7b8626eb19d3a20575e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbf8e6af_9adf9adc",
+        "filename": "ops/dns/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-14T13:17:53Z",
+      "side": 1,
+      "message": "Don\u0027t know too much about bind or DNS — from skimming the man page it seems we might want to use named-compilezone for deployment purposes or stricter checking maybe? We would lose the output probably and might  not be necessary for gcloud.",
+      "revId": "08333ebc60b68add597b7b8626eb19d3a20575e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9169a21_66b87d93",
+        "filename": "ops/dns/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-14T13:17:53Z",
+      "side": 1,
+      "message": "we could of course automatically generate the targets for when we have more zones:\n\n```\nlet\n  …\n\n  zones \u003d {\n    tvl-fyi \u003d …\n  };\n\nin zones // {\n  meta.targets \u003d builtins.attrNames zones;\n}\n```",
+      "revId": "08333ebc60b68add597b7b8626eb19d3a20575e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
