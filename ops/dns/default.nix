@@ -8,6 +8,7 @@ let
 
   zones = {
     tvl-fyi = checkZone "tvl.fyi" ./tvl.fyi.zone;
+    tvl-su = checkZone "tvl.su" ./tvl.su.zone;
   };
 in zones // {
   meta.targets = builtins.attrNames zones;
