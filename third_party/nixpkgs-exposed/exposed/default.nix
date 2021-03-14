@@ -14,6 +14,7 @@
     bashInteractive
     bat
     bc
+    bind
     buildBazelPackage
     buildFHSUserEnv
     buildGoModule
