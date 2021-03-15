@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (4d193f feat(users/adisbladis): Add to users)
 # Ignore the garbage folder, in which I slowly assemble a bunch of
 # trash locally that might be valuable in the future.
 garbage/
@@ -5,3 +6,6 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+=======
+/target
+>>>>>>> BRANCH (b93268 Implement top-level ascription of declarations)
