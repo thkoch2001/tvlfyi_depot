@@ -52,25 +52,11 @@ let
     }
   '';
 
-  tests = import ./tests.nix {
-    inherit
-      depot
-      pkgs
-      lib
-      python-netstring
-      rust-netstring
-      toNetstring
-      toNetstringKeyVal
-      ;
-  };
-
-in {
+in depot.nix.utils.drvTargets {
   inherit
     toNetstring
     toNetstringKeyVal
     python-netstring
     rust-netstring
-    tests
       ;
-
 }
