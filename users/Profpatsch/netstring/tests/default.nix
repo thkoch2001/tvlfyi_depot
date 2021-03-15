@@ -1,6 +1,13 @@
-{ depot, lib, pkgs, python-netstring, rust-netstring, toNetstring, toNetstringKeyVal }:
+{ depot, lib, pkgs, ... }:
 
 let
+
+  inherit (depot.users.Profpatsch.netstring)
+    toNetstring
+    toNetstringKeyVal
+    python-netstring
+    rust-netstring
+    ;
 
   python-netstring-test = depot.users.Profpatsch.writers.python3 {
     name = "python-netstring-test";
@@ -53,7 +60,7 @@ let
     }
   '';
 
-in {
+in depot.nix.utils.drvTargets {
   inherit
     python-netstring-test
     rust-netstring-test

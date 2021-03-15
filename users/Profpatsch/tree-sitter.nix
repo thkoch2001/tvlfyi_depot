@@ -169,7 +169,7 @@ let
         '';
       };
 
-in {
+in depot.nix.utils.drvTargets {
   inherit
     print-ast
     tree-sitter-nix
