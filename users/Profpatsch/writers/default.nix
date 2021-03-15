@@ -161,4 +161,6 @@ in {
     testRustSimple
     tests
     ;
+
+  meta.target = [ "tests" ];
 }

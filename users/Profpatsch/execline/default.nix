@@ -5,7 +5,7 @@ let
     name = "exec-helpers";
   } (builtins.readFile ./exec_helpers.rs);
 
-in {
+in depot.nix.utils.drvTargets {
   inherit
     exec-helpers
     ;

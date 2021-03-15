@@ -76,7 +76,7 @@ let
   '');
 
 
-in {
+in depot.nix.utils.drvTargets {
   inherit
     pythonWithLib
     rustTransitiveLib
