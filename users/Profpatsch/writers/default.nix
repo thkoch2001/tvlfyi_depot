@@ -138,19 +138,6 @@ let
       ];
     in drvSeqL [ tests ] (crate false);
 
-
-  tests = import ./tests.nix {
-    inherit
-      depot
-      pkgs
-      python3
-      python3Lib
-      rustSimpleLib
-      rustSimple
-      testRustSimple
-      ;
-   };
-
 in {
   inherit
     python3
@@ -159,6 +146,5 @@ in {
     rustSimpleBin
     rustSimpleLib
     testRustSimple
-    tests
     ;
 }

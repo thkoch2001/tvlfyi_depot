@@ -37,8 +37,4 @@ let
     '';
   };
 
-in {
-   inherit
-    netencode
-    ;
-}
+in depot.nix.utils.drvTargets netencode
