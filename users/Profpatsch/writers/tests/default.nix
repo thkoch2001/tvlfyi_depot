@@ -1,10 +1,23 @@
-{ depot, pkgs, python3, python3Lib, rustSimpleLib, rustSimple, testRustSimple }:
+{ depot, ... }:
 
 let
+  inherit (depot.users.Profpatsch.writers)
+    python3Lib
+    python3
+    testRustSimple
+    rustSimple
+    rustSimpleLib
+    rustSimpleBin
+    ;
+
+  inherit (depot.third_party)
+    coreutils
+    ;
+
   run = drv: depot.nix.runExecline.local "run-${drv.name}" {} [
     "if" [ drv ]
     "importas" "out" "out"
-    "${pkgs.coreutils}/bin/touch" "$out"
+    "${coreutils}/bin/touch" "$out"
   ];
 
   pythonTransitiveLib = python3Lib {
@@ -76,7 +89,7 @@ let
   '');
 
 
-in {
+in depot.nix.utils.drvTargets {
   inherit
     pythonWithLib
     rustTransitiveLib

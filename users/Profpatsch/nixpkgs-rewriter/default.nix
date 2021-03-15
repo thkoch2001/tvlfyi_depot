@@ -102,7 +102,7 @@ let
     "nix-instantiate" "$1" "-A" "{}"
   ];
 
-in {
+in depot.nix.utils.drvTargets {
   inherit
    instantiate-nixpkgs-randomly
   # requires hnix, which we don’t want in tvl for now
