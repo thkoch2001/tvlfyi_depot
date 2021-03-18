@@ -40,8 +40,8 @@
     diffutils
     docker-compose
     dockerTools
-    emacs26
-    emacs26-nox
+    emacs27
+    emacs27-nox
     emacsPackages
     emacsPackagesGen
     execline

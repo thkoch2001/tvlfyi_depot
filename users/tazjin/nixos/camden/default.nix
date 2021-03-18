@@ -142,7 +142,7 @@ in lib.fix(self: {
       bat
       curl
       direnv
-      emacs26-nox
+      emacs27-nox
       fswebcam
       git
       gnupg
