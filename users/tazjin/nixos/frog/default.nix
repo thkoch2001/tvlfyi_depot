@@ -242,7 +242,7 @@ in depot.lib.fix(self: {
       curl
       direnv
       dnsutils
-      emacs26 # mostly for emacsclient
+      emacs27 # mostly for emacsclient
       exa
       fd
       file
