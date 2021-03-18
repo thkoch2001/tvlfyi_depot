@@ -22,7 +22,7 @@ in python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     notmuch
     oauth2client
-    google_api_python_client
+    google-api-python-client
     tqdm
   ];
 }
