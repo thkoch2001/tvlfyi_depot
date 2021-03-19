@@ -78,10 +78,10 @@
 (use-package multiple-cursors)
 
 (use-package notmuch
-  :config
-  (setq notmuch-search-oldest-first nil)
-  (setq notmuch-show-all-tags-list t)
-  (setq notmuch-hello-tag-list-make-query "tag:unread"))
+  :custom
+  (notmuch-search-oldest-first nil)
+  (notmuch-show-all-tags-list t)
+  (notmuch-hello-tag-list-make-query "tag:unread"))
 
 (use-package paredit :hook ((lisp-mode . paredit-mode)
                             (emacs-lisp-mode . paredit-mode)))

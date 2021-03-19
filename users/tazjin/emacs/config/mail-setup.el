@@ -22,7 +22,6 @@
       '((:name "inbox" :query "tag:inbox" :count-query "tag:inbox AND tag:unread" :key "i")
         (:name "sent" :query "tag:sent" :key "t")
         (:name "drafts" :query "tag:draft")))
-(custom-set-variables '(notmuch-search-oldest-first nil))
 (setq notmuch-show-empty-saved-searches t)
 
 ;; Mail sending configuration
