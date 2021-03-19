@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f9a291_77a38162",
+        "filename": "third_party/nixpkgs-exposed/exposed/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-19T23:51:49Z",
+      "side": 1,
+      "message": "`//third_party/default.nix` exposes the following, so this is unnecessary\n\n```\n  # Use LLVM 11\n  llvmPackages \u003d nixpkgs.llvmPackages_11;\n```",
+      "revId": "1d6d24f661bc7136fed6aa49ebc2a679ff3123a8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
