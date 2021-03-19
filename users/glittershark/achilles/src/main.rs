@@ -1,6 +1,3 @@
-#![feature(str_split_once)]
-#![feature(or_insert_with_key)]
-
 use clap::Clap;
 
 pub mod ast;

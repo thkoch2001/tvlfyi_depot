@@ -79,8 +79,10 @@
     kontemplate
     lib
     libredirect
+    libffi
     linuxPackages
     linuxPackages_5_11
+    llvm_11
     luajit
     lutris
     makeFontsConf
