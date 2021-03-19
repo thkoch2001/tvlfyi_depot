@@ -6,6 +6,8 @@ let
 
 in
 
+# overlay can be removed when this is in our pin:
+# https://github.com/NixOS/nixpkgs/pull/116803
 pkgs.haskellPackages.extend (self: super: {
   regex-tdfa-text = hlib.doJailbreak
     (hlib.appendPatch
