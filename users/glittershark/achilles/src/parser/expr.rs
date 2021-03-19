@@ -165,9 +165,16 @@ named!(bool_(&str) -> Literal, alt!(
 ));
 
 fn string_internal(i: &str) -> nom::IResult<&str, Cow<'_, str>, nom::error::Error<&str>> {
-    let (s, rem) = i
-        .split_once('"')
-        .ok_or_else(|| nom::Err::Error(nom::error::Error::new(i, nom::error::ErrorKind::Tag)))?;
+    // TODO(grfn): use String::split_once when that's stable
+    let (s, rem) = if let Some(pos) = i.find('"') {
+        (&i[..pos], &i[(pos + 1)..])
+    } else {
+        return Err(nom::Err::Error(nom::error::Error::new(
+            i,
+            nom::error::ErrorKind::Tag,
+        )));
+    };
+
     Ok((rem, Cow::Borrowed(s)))
 }
 

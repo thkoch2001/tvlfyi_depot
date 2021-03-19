@@ -358,9 +358,9 @@ impl<'ast> Typechecker<'ast> {
         let mut universalize_type = move |ty| match ty {
             Type::Exist(tv) if self.resolve_tv(tv).is_none() => vars
                 .entry(tv)
-                .or_insert_with_key(|tv| {
+                .or_insert_with(|| {
                     let ty = self.fresh_univ();
-                    self.ctx.insert(*tv, ty.clone());
+                    self.ctx.insert(tv, ty.clone());
                     ty
                 })
                 .clone(),
