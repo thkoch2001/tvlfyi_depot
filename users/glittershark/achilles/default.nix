@@ -1,3 +1,20 @@
-# TODO(glittershark): Write the actual default.nix
+{ pkgs, ... }:
 
-_: "nothing to see yet"
+pkgs.naersk.buildPackage {
+  src = ./.;
+
+  buildInputs = with pkgs; [
+    clang_11
+    llvmPackages.llvm
+    llvmPackages.bintools
+    llvmPackages.clang
+    llvmPackages.libclang.lib
+    zlib
+    ncurses
+    libxml2
+    libffi
+    pkgconfig
+  ];
+
+  doCheck = true;
+}
