@@ -26,19 +26,5 @@ self: super: with pkgs.haskell.lib; rec {
     '';
   });
 
-  # pin hgeometry* to 0.11.0.0 since 0.12.0.0 removes triangulationEdges
-  # which is used by //users/glittershark/xanthous
-  hgeometry =
-    self.callHackageDirect {
-      pkg = "hgeometry";
-      ver = "0.11.0.0";
-      sha256 = "0qidbpgs6jxrirrhmy7iabwd62178sm68fqrmqg3w3gfyx8nm8ls";
-    } {};
-
-  hgeometry-combinatorial =
-    self.callHackageDirect {
-      pkg = "hgeometry-combinatorial";
-      ver = "0.11.0.0";
-      sha256 = "0c9ccqz1m45kkdkzw00gvzdspjljhg12vish6himqjqpms7g6sag";
-    } {};
+  hgeometry-combinatorial = dontCheck super.hgeometry-combinatorial;
 }
