@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e63bd42_daf8d448",
+        "filename": "third_party/impermanence/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-20T23:55:42Z",
+      "side": 1,
+      "message": "Upstream has no submodules. Why do you need a pkgs.fetchgit based checkout?",
+      "revId": "d93431baabab19915093b93529b5a25ffdd4eaee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
