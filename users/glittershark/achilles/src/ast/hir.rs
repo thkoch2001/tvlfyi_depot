@@ -228,6 +228,13 @@ pub enum Decl<'a, T> {
 }
 
 impl<'a, T> Decl<'a, T> {
+    pub fn name(&self) -> &Ident<'a> {
+        match self {
+            Decl::Fun { name, .. } => name,
+            Decl::Extern { name, .. } => name,
+        }
+    }
+
     pub fn type_(&self) -> Option<&T> {
         match self {
             Decl::Fun { type_, .. } => Some(type_),
