@@ -9,6 +9,7 @@ mod type_;
 
 use crate::ast::{Arg, Decl, Fun, Ident};
 pub use expr::expr;
+use type_::function_type;
 pub use type_::type_;
 
 pub type Error = nom::Err<nom::error::Error<String>>;
@@ -79,9 +80,24 @@ named!(arg(&str) -> Arg, alt!(
     ascripted_arg
 ));
 
+named!(extern_decl(&str) -> Decl, do_parse!(
+    complete!(tag!("extern"))
+        >> multispace1
+        >> name: ident
+        >> multispace0
+        >> char!(':')
+        >> multispace0
+        >> type_: function_type
+        >> multispace0
+        >> (Decl::Extern {
+            name,
+            type_
+        })
+));
+
 named!(fun_decl(&str) -> Decl, do_parse!(
     complete!(tag!("fn"))
-        >> multispace0
+        >> multispace1
         >> name: ident
         >> multispace1
         >> args: separated_list0!(multispace1, arg)
@@ -112,7 +128,8 @@ named!(ascription_decl(&str) -> Decl, do_parse!(
 
 named!(pub decl(&str) -> Decl, alt!(
     ascription_decl |
-    fun_decl
+    fun_decl |
+    extern_decl
 ));
 
 named!(pub toplevel(&str) -> Vec<Decl>, terminated!(many0!(decl), multispace0));
