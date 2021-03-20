@@ -9,7 +9,7 @@ use inkwell::module::Module;
 use inkwell::support::LLVMString;
 use inkwell::types::{BasicType, BasicTypeEnum, FunctionType, IntType};
 use inkwell::values::{AnyValueEnum, BasicValueEnum, FunctionValue};
-use inkwell::IntPredicate;
+use inkwell::{AddressSpace, IntPredicate};
 use thiserror::Error;
 
 use crate::ast::hir::{Binding, Decl, Expr};
@@ -249,6 +249,26 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
         Ok(self.finish_function(&res))
     }
 
+    pub fn codegen_extern(
+        &mut self,
+        name: &str,
+        args: &'ast [Type],
+        ret: &'ast Type,
+    ) -> Result<()> {
+        self.module.add_function(
+            name,
+            self.codegen_type(ret).fn_type(
+                &args
+                    .iter()
+                    .map(|t| self.codegen_type(t))
+                    .collect::<Vec<_>>(),
+                false,
+            ),
+            None,
+        );
+        Ok(())
+    }
+
     pub fn codegen_decl(&mut self, decl: &'ast Decl<'ast, Type>) -> Result<()> {
         match decl {
             Decl::Fun {
@@ -257,6 +277,11 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 self.codegen_function(name.into(), args, body)?;
                 Ok(())
             }
+            Decl::Extern {
+                name,
+                arg_types,
+                ret_type,
+            } => self.codegen_extern(name.into(), arg_types, ret_type),
         }
     }
 
@@ -274,7 +299,18 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
 
     fn codegen_type(&self, type_: &'ast Type) -> BasicTypeEnum<'ctx> {
         // TODO
-        self.context.i64_type().into()
+        match type_ {
+            Type::Int => self.context.i64_type().into(),
+            Type::Float => self.context.f64_type().into(),
+            Type::Bool => self.context.bool_type().into(),
+            Type::CString => self
+                .context
+                .i8_type()
+                .ptr_type(AddressSpace::Generic)
+                .into(),
+            Type::Function(_) => todo!(),
+            Type::Var(_) => unreachable!(),
+        }
     }
 
     fn codegen_int_type(&self, type_: &'ast Type) -> IntType<'ctx> {
