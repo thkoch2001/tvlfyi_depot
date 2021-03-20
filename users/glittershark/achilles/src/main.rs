@@ -6,6 +6,7 @@ pub(crate) mod commands;
 pub(crate) mod common;
 pub mod compiler;
 pub mod interpreter;
+pub(crate) mod passes;
 #[macro_use]
 pub mod parser;
 pub mod tc;

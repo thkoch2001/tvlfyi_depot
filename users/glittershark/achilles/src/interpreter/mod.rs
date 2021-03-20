@@ -96,7 +96,12 @@ impl<'a> Interpreter<'a> {
                 }
                 Ok(Value::from(*interpreter.eval(body)?.as_type::<i64>()?))
             }
-            Expr::Fun { args, body, type_ } => {
+            Expr::Fun {
+                type_args: _,
+                args,
+                body,
+                type_,
+            } => {
                 let type_ = match type_ {
                     Type::Function(ft) => ft.clone(),
                     _ => unreachable!("Function expression without function type"),

@@ -14,12 +14,11 @@ const FIXTURES: &[Fixture] = &[
         exit_code: 5,
         expected_output: "",
     },
-    // TODO(grfn): needs monomorphization
-    // Fixture {
-    //     name: "functions",
-    //     exit_code: 9,
-    //     expected_output: "",
-    // },
+    Fixture {
+        name: "functions",
+        exit_code: 9,
+        expected_output: "",
+    },
     Fixture {
         name: "externs",
         exit_code: 0,
