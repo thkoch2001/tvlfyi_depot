@@ -7,6 +7,7 @@
 (with depot.users.tazjin.nixos; [
   camden
   frog
+  tverskoy
 ]) ++
 
 (with depot.users.glittershark.system.system; [
