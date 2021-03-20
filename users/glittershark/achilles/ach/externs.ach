@@ -1,0 +1,5 @@
+extern puts : fn cstring -> int
+
+fn main =
+    let _ = puts "foobar"
+    in 0
