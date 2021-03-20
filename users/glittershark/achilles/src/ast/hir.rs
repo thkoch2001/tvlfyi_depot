@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use itertools::Itertools;
 
 use super::{BinaryOperator, Ident, Literal, UnaryOperator};
@@ -55,6 +57,7 @@ pub enum Expr<'a, T> {
     },
 
     Fun {
+        type_args: Vec<Ident<'a>>,
         args: Vec<(Ident<'a>, T)>,
         body: Box<Expr<'a, T>>,
         type_: T,
@@ -62,6 +65,7 @@ pub enum Expr<'a, T> {
 
     Call {
         fun: Box<Expr<'a, T>>,
+        type_args: HashMap<Ident<'a>, T>,
         args: Vec<Expr<'a, T>>,
         type_: T,
     },
@@ -133,16 +137,31 @@ impl<'a, T> Expr<'a, T> {
                 else_: Box::new(else_.traverse_type(f.clone())?),
                 type_: f(type_)?,
             }),
-            Expr::Fun { args, body, type_ } => Ok(Expr::Fun {
+            Expr::Fun {
+                args,
+                type_args,
+                body,
+                type_,
+            } => Ok(Expr::Fun {
                 args: args
                     .into_iter()
                     .map(|(id, t)| Ok((id, f.clone()(t)?)))
                     .collect::<Result<Vec<_>, E>>()?,
+                type_args,
                 body: Box::new(body.traverse_type(f.clone())?),
                 type_: f(type_)?,
             }),
-            Expr::Call { fun, args, type_ } => Ok(Expr::Call {
+            Expr::Call {
+                fun,
+                type_args,
+                args,
+                type_,
+            } => Ok(Expr::Call {
                 fun: Box::new(fun.traverse_type(f.clone())?),
+                type_args: type_args
+                    .into_iter()
+                    .map(|(id, ty)| Ok((id, f.clone()(ty)?)))
+                    .collect::<Result<HashMap<_, _>, E>>()?,
                 args: args
                     .into_iter()
                     .map(|e| e.traverse_type(f.clone()))
@@ -180,7 +199,7 @@ impl<'a, T> Expr<'a, T> {
                 body,
                 type_,
             } => Expr::Let {
-                bindings: bindings.into_iter().map(|b| b.to_owned()).collect(),
+                bindings: bindings.iter().map(|b| b.to_owned()).collect(),
                 body: Box::new((**body).to_owned()),
                 type_: type_.clone(),
             },
@@ -195,26 +214,43 @@ impl<'a, T> Expr<'a, T> {
                 else_: Box::new((**else_).to_owned()),
                 type_: type_.clone(),
             },
-            Expr::Fun { args, body, type_ } => Expr::Fun {
+            Expr::Fun {
+                args,
+                type_args,
+                body,
+                type_,
+            } => Expr::Fun {
                 args: args
-                    .into_iter()
+                    .iter()
                     .map(|(id, t)| (id.to_owned(), t.clone()))
                     .collect(),
+                type_args: type_args.iter().map(|arg| arg.to_owned()).collect(),
                 body: Box::new((**body).to_owned()),
                 type_: type_.clone(),
             },
-            Expr::Call { fun, args, type_ } => Expr::Call {
+            Expr::Call {
+                fun,
+                type_args,
+                args,
+                type_,
+            } => Expr::Call {
                 fun: Box::new((**fun).to_owned()),
-                args: args.into_iter().map(|e| e.to_owned()).collect(),
+                type_args: type_args
+                    .iter()
+                    .map(|(id, t)| (id.to_owned(), t.clone()))
+                    .collect(),
+                args: args.iter().map(|e| e.to_owned()).collect(),
                 type_: type_.clone(),
             },
         }
     }
 }
 
+#[derive(Debug, Clone)]
 pub enum Decl<'a, T> {
     Fun {
         name: Ident<'a>,
+        type_args: Vec<Ident<'a>>,
         args: Vec<(Ident<'a>, T)>,
         body: Box<Expr<'a, T>>,
         type_: T,
@@ -235,6 +271,13 @@ impl<'a, T> Decl<'a, T> {
         }
     }
 
+    pub fn set_name(&mut self, new_name: Ident<'a>) {
+        match self {
+            Decl::Fun { name, .. } => *name = new_name,
+            Decl::Extern { name, .. } => *name = new_name,
+        }
+    }
+
     pub fn type_(&self) -> Option<&T> {
         match self {
             Decl::Fun { type_, .. } => Some(type_),
@@ -249,11 +292,13 @@ impl<'a, T> Decl<'a, T> {
         match self {
             Decl::Fun {
                 name,
+                type_args,
                 args,
                 body,
                 type_,
             } => Ok(Decl::Fun {
                 name,
+                type_args,
                 args: args
                     .into_iter()
                     .map(|(id, t)| Ok((id, f(t)?)))

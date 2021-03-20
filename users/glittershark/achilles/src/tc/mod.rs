@@ -266,6 +266,7 @@ impl<'ast> Typechecker<'ast> {
                         args: args.iter().map(|(_, ty)| ty.clone()).collect(),
                         ret: Box::new(body.type_().clone()),
                     },
+                    type_args: vec![], // TODO fill in once we do let generalization
                     args,
                     body: Box::new(body),
                 })
@@ -289,9 +290,10 @@ impl<'ast> Typechecker<'ast> {
                         Ok(arg)
                     })
                     .try_collect()?;
-                self.commit_instantiations();
+                let type_args = self.commit_instantiations();
                 Ok(hir::Expr::Call {
                     fun: Box::new(fun),
+                    type_args,
                     args,
                     type_: ret_ty,
                 })
@@ -325,8 +327,14 @@ impl<'ast> Typechecker<'ast> {
                 self.env.set(name.clone(), type_);
                 self.env.pop();
                 match body {
-                    hir::Expr::Fun { args, body, type_ } => Ok(Some(hir::Decl::Fun {
+                    hir::Expr::Fun {
+                        type_args,
+                        args,
+                        body,
+                        type_,
+                    } => Ok(Some(hir::Decl::Fun {
                         name,
+                        type_args,
                         args,
                         body,
                         type_,
@@ -538,17 +546,21 @@ impl<'ast> Typechecker<'ast> {
             })
     }
 
-    fn commit_instantiations(&mut self) {
+    fn commit_instantiations(&mut self) -> HashMap<Ident<'ast>, Type> {
+        let mut res = HashMap::new();
         let mut ctx = mem::take(&mut self.ctx);
         for (_, v) in ctx.iter_mut() {
             if let Type::Univ(tv) = v {
-                if let Some(concrete) = self.instantiations.resolve(&self.name_univ(*tv)) {
+                let tv_name = self.name_univ(*tv);
+                if let Some(concrete) = self.instantiations.resolve(&tv_name) {
+                    res.insert(tv_name, concrete.clone());
                     *v = concrete.clone();
                 }
             }
         }
         self.ctx = ctx;
         self.instantiations.pop();
+        res
     }
 
     fn types_match(&self, type_: &Type, ast_type: &ast::Type<'ast>) -> bool {

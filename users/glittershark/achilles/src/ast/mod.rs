@@ -356,6 +356,26 @@ impl<'a> Type<'a> {
         let mut substs = HashMap::new();
         do_alpha_equiv(&mut substs, self, other)
     }
+
+    pub fn traverse_type_vars<'b, F>(self, mut f: F) -> Type<'b>
+    where
+        F: FnMut(Ident<'a>) -> Type<'b> + Clone,
+    {
+        match self {
+            Type::Var(tv) => f(tv),
+            Type::Function(FunctionType { args, ret }) => Type::Function(FunctionType {
+                args: args
+                    .into_iter()
+                    .map(|t| t.traverse_type_vars(f.clone()))
+                    .collect(),
+                ret: Box::new(ret.traverse_type_vars(f)),
+            }),
+            Type::Int => Type::Int,
+            Type::Float => Type::Float,
+            Type::Bool => Type::Bool,
+            Type::CString => Type::CString,
+        }
+    }
 }
 
 impl<'a> Display for Type<'a> {

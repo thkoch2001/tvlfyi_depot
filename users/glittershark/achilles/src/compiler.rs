@@ -8,6 +8,7 @@ use test_strategy::Arbitrary;
 
 use crate::codegen::{self, Codegen};
 use crate::common::Result;
+use crate::passes::hir::monomorphize;
 use crate::{parser, tc};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Arbitrary)]
@@ -55,7 +56,8 @@ pub struct CompilerOptions {
 pub fn compile_file(input: &Path, output: &Path, options: &CompilerOptions) -> Result<()> {
     let src = fs::read_to_string(input)?;
     let (_, decls) = parser::toplevel(&src)?; // TODO: statements
-    let decls = tc::typecheck_toplevel(decls)?;
+    let mut decls = tc::typecheck_toplevel(decls)?;
+    monomorphize::run_toplevel(&mut decls);
 
     let context = codegen::Context::create();
     let mut codegen = Codegen::new(
