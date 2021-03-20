@@ -22,7 +22,6 @@ let
   tazjinsEmacs = pkgfun: (emacsWithPackages(epkgs: pkgfun(
   # Actual ELPA packages (the enlightened!)
   (with epkgs.elpaPackages; [
-    ace-window
     avy
     flymake
     pinentry
@@ -33,6 +32,7 @@ let
 
   # MELPA packages:
   (with epkgs.melpaPackages; [
+    ace-window
     ace-link
     bazel-mode
     browse-kill-ring
