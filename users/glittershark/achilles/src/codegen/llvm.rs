@@ -92,7 +92,11 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                     Literal::Bool(b) => Ok(AnyValueEnum::IntValue(
                         ty.const_int(if *b { 1 } else { 0 }, false),
                     )),
-                    Literal::String(_) => todo!(),
+                    Literal::String(s) => Ok(self
+                        .builder
+                        .build_global_string_ptr(s, "s")
+                        .as_pointer_value()
+                        .into()),
                 }
             }
             Expr::UnaryOp { op, rhs, .. } => {
