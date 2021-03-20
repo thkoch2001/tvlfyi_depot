@@ -337,6 +337,19 @@ impl<'ast> Typechecker<'ast> {
                 self.env.set(name.clone(), type_);
                 Ok(None)
             }
+            ast::Decl::Extern { name, type_ } => {
+                let type_ = self.type_from_ast_type(ast::Type::Function(type_));
+                self.env.set(name.clone(), type_.clone());
+                let (arg_types, ret_type) = match type_ {
+                    Type::Fun { args, ret } => (args, *ret),
+                    _ => unreachable!(),
+                };
+                Ok(Some(hir::Decl::Extern {
+                    name,
+                    arg_types,
+                    ret_type,
+                }))
+            }
         }
     }
 

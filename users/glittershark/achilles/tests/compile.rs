@@ -2,7 +2,30 @@ use std::process::Command;
 
 use crate_root::root;
 
-const FIXTURES: &[(&str, i32)] = &[("simple", 5), ("functions", 9)];
+struct Fixture {
+    name: &'static str,
+    exit_code: i32,
+    expected_output: &'static str,
+}
+
+const FIXTURES: &[Fixture] = &[
+    Fixture {
+        name: "simple",
+        exit_code: 5,
+        expected_output: "",
+    },
+    // TODO(grfn): needs monomorphization
+    // Fixture {
+    //     name: "functions",
+    //     exit_code: 9,
+    //     expected_output: "",
+    // },
+    Fixture {
+        name: "externs",
+        exit_code: 0,
+        expected_output: "foobar\n",
+    },
+];
 
 #[test]
 fn compile_and_run_files() {
@@ -21,13 +44,18 @@ fn compile_and_run_files() {
         "make clean failed"
     );
 
-    for (fixture, exit_code) in FIXTURES {
-        println!(">>> Testing: {}", fixture);
+    for Fixture {
+        name,
+        exit_code,
+        expected_output,
+    } in FIXTURES
+    {
+        println!(">>> Testing: {}", name);
 
-        println!("    Running: `make {}`", fixture);
+        println!("    Running: `make {}`", name);
         assert!(
             Command::new("make")
-                .arg(fixture)
+                .arg(name)
                 .current_dir(&ach)
                 .spawn()
                 .unwrap()
@@ -37,18 +65,11 @@ fn compile_and_run_files() {
             "make failed"
         );
 
-        let out_path = ach.join(fixture);
+        let out_path = ach.join(name);
         println!("    Running: `{}`", out_path.to_str().unwrap());
-        assert_eq!(
-            Command::new(out_path)
-                .spawn()
-                .unwrap()
-                .wait()
-                .unwrap()
-                .code()
-                .unwrap(),
-            *exit_code,
-        );
+        let output = Command::new(out_path).output().unwrap();
+        assert_eq!(output.status.code().unwrap(), *exit_code,);
+        assert_eq!(output.stdout, expected_output.as_bytes());
         println!("    OK");
     }
 }

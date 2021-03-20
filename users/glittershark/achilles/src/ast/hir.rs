@@ -219,12 +219,19 @@ pub enum Decl<'a, T> {
         body: Box<Expr<'a, T>>,
         type_: T,
     },
+
+    Extern {
+        name: Ident<'a>,
+        arg_types: Vec<T>,
+        ret_type: T,
+    },
 }
 
 impl<'a, T> Decl<'a, T> {
-    pub fn type_(&self) -> &T {
+    pub fn type_(&self) -> Option<&T> {
         match self {
-            Decl::Fun { type_, .. } => type_,
+            Decl::Fun { type_, .. } => Some(type_),
+            Decl::Extern { .. } => None,
         }
     }
 
@@ -246,6 +253,15 @@ impl<'a, T> Decl<'a, T> {
                     .try_collect()?,
                 body: Box::new(body.traverse_type(f.clone())?),
                 type_: f(type_)?,
+            }),
+            Decl::Extern {
+                name,
+                arg_types,
+                ret_type,
+            } => Ok(Decl::Extern {
+                name,
+                arg_types: arg_types.into_iter().map(f.clone()).try_collect()?,
+                ret_type: f(ret_type)?,
             }),
         }
     }
