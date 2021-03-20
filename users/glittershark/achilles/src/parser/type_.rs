@@ -4,7 +4,7 @@ use nom::{alt, delimited, do_parse, map, named, opt, separated_list0, tag, termi
 use super::ident;
 use crate::ast::{FunctionType, Type};
 
-named!(function_type(&str) -> Type, do_parse!(
+named!(pub function_type(&str) -> FunctionType, do_parse!(
     tag!("fn")
         >> multispace1
         >> args: map!(opt!(terminated!(separated_list0!(
@@ -18,10 +18,10 @@ named!(function_type(&str) -> Type, do_parse!(
         >> tag!("->")
         >> multispace1
         >> ret: type_
-        >> (Type::Function(FunctionType {
+        >> (FunctionType {
             args,
             ret: Box::new(ret)
-        }))
+        })
 ));
 
 named!(pub type_(&str) -> Type, alt!(
@@ -29,7 +29,7 @@ named!(pub type_(&str) -> Type, alt!(
     tag!("float") => { |_| Type::Float } |
     tag!("bool") => { |_| Type::Bool } |
     tag!("cstring") => { |_| Type::CString } |
-    function_type |
+    function_type => { |ft| Type::Function(ft) }|
     ident => { |id| Type::Var(id) } |
     delimited!(
         tuple!(tag!("("), multispace0),
