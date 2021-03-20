@@ -265,8 +265,18 @@ impl<'a> Fun<'a> {
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Decl<'a> {
-    Fun { name: Ident<'a>, body: Fun<'a> },
-    Ascription { name: Ident<'a>, type_: Type<'a> },
+    Fun {
+        name: Ident<'a>,
+        body: Fun<'a>,
+    },
+    Ascription {
+        name: Ident<'a>,
+        type_: Type<'a>,
+    },
+    Extern {
+        name: Ident<'a>,
+        type_: FunctionType<'a>,
+    },
 }
 
 ////
