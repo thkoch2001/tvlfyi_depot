@@ -22,6 +22,7 @@ pub(crate) fn is_reserved(s: &str) -> bool {
             | "let"
             | "in"
             | "fn"
+            | "ty"
             | "int"
             | "float"
             | "bool"
@@ -115,11 +116,14 @@ named!(fun_decl(&str) -> Decl, do_parse!(
 ));
 
 named!(ascription_decl(&str) -> Decl, do_parse!(
-    name: ident
+    complete!(tag!("ty"))
+        >> multispace1
+        >> name: ident
         >> multispace0
         >> complete!(char!(':'))
         >> multispace0
         >> type_: type_
+        >> multispace0
         >> (Decl::Ascription {
             name,
             type_
@@ -199,7 +203,7 @@ mod tests {
 
     #[test]
     fn top_level_ascription() {
-        let res = test_parse!(toplevel, "id : fn a -> a");
+        let res = test_parse!(toplevel, "ty id : fn a -> a");
         assert_eq!(
             res,
             vec![Decl::Ascription {
