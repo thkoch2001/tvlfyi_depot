@@ -16,6 +16,24 @@
       "message": "Doesn\u0027t need exposing anymore, right?",
       "revId": "467feb7d145660de477db9e433a0635d44ae71a0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a6620f3_77f69c51",
+        "filename": "third_party/nixpkgs-exposed/exposed/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-03-20T19:52:40Z",
+      "side": 1,
+      "message": "oops, thanks",
+      "parentUuid": "14ca56be_aaadc8ba",
+      "revId": "467feb7d145660de477db9e433a0635d44ae71a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
