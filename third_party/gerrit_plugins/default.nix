@@ -26,11 +26,11 @@ in
   # https://gerrit.googlesource.com/plugins/checks
   checks = buildGerritBazelPlugin {
     name = "checks";
-    depsOutputHash = "sha256:1y1mfnznqrm73vf97ilzn7vjy3fcfqnz9jxgp6h5584k9adnb6zl";
+    depsOutputHash = "sha256:1s4ldzny9f8vpp96sff8zy2kigz3hi560ikrgyp5630ffrc8affq";
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/checks";
       rev = "ab49a63f5c159bda42d9ad1bdb9286bede6c5de4";
-      sha256 = "0svzs9hm49w8f6h5dkcipw91gxgvf0yaxj34amhn0qwp01ggwirc";
+      sha256 = "0ghhmzkfmpn0xc6imvxgsk2wqckxm5g62h0k3bymyl7r48blmrn2";
       deepClone = true;
       leaveDotGit = true;
     };
