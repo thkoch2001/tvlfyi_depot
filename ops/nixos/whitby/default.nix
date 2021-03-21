@@ -364,10 +364,6 @@ in lib.fix(self: {
   ];
 
   users = {
-    users.root.openssh.authorizedKeys.keys = [
-      depot.users.tazjin.keys.frog
-    ];
-
     users.tazjin = {
       isNormalUser = true;
       extraGroups = [ "git" "wheel" ];
