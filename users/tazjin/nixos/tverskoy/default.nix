@@ -255,6 +255,7 @@ in lib.fix(self: {
         ];
 
         files = [
+          ".config/mimeapps.list"
           ".notmuch-config"
         ];
       };
