@@ -16,6 +16,24 @@
       "message": "Upstream has no submodules. Why do you need a pkgs.fetchgit based checkout?",
       "revId": "d93431baabab19915093b93529b5a25ffdd4eaee",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e14f5c71_d384d678",
+        "filename": "third_party/impermanence/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-21T00:43:38Z",
+      "side": 1,
+      "message": "Hmm, this is what `nix-prefetch-github` generated and I didn\u0027t pay much attention to it. I\u0027ll drop this, rebuild and see if it\u0027s fine.",
+      "parentUuid": "7e63bd42_daf8d448",
+      "revId": "d93431baabab19915093b93529b5a25ffdd4eaee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
