@@ -263,6 +263,9 @@ in lib.fix(self: {
         enable = true;
         userName = "Vincent Ambo";
         userEmail = "mail@tazj.in";
+        extraConfig = {
+          pull.rebase = true;
+        };
       };
     };
 
