@@ -167,7 +167,7 @@ in lib.fix(self: {
   users.users.tazjin = {
     isNormalUser = true;
     createHome = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "video" ];
     uid = 1000;
     shell = nixpkgs.fish;
     initialHashedPassword = "$6$d3FywUNCuZnJ4l.$ZW2ul59MLYon1v1xhC3lTJZfZ91lWW6Tpi13MpME0cJcYZNrsx7ABdgQRn.K05awruG2Y9ARAzURnmiJ31WTS1";
