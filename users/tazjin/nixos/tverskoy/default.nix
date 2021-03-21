@@ -19,11 +19,18 @@ config: let
 in lib.fix(self: {
   imports = [
     "${depot.third_party.impermanence}/nixos.nix"
+    "${nixpkgs.home-manager.src}/nixos"
   ];
 
   boot = {
     initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
     initrd.kernelModules = [ ];
+
+    # Restore /home to the blank snapshot, erasing all ephemeral data.
+    initrd.postDeviceCommands = lib.mkAfter ''
+      zfs rollback -r zpool/ephemeral/home@tazjin-clean
+    '';
+
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
     kernelPackages = nixpkgs.linuxPackages_latest;
@@ -156,6 +163,7 @@ in lib.fix(self: {
 
   users.users.tazjin = {
     isNormalUser = true;
+    createHome = true;
     extraGroups = [ "wheel" "networkmanager" ];
     uid = 1000;
     shell = nixpkgs.fish;
@@ -164,6 +172,9 @@ in lib.fix(self: {
 
   programs = {
     light.enable = true;
+
+    # Required by impermanence
+    fuse.userAllowOther = true;
   };
 
   environment.systemPackages =
@@ -216,5 +227,37 @@ in lib.fix(self: {
       xsecurelock
     ]);
 
-  system.stateVersion = "20.09";
+    home-manager.useGlobalPkgs = true;
+    home-manager.users.tazjin = { config, lib, ... }: {
+      imports = [ "${depot.third_party.impermanence}/home-manager.nix" ];
+
+      home.persistence."/persist/tazjin/home" = {
+        allowOther = true;
+
+        directories = [
+          ".config/google-chrome"
+          ".config/quassel-irc.org"
+          ".config/spotify"
+          ".gnupg"
+          ".local/share/direnv"
+          ".local/share/fish/"
+          ".password-store"
+          ".ssh"
+          ".telega"
+          "mail"
+        ];
+
+        files = [
+          ".notmuch-config"
+        ];
+      };
+
+      programs.git = {
+        enable = true;
+        userName = "Vincent Ambo";
+        userEmail = "mail@tazj.in";
+      };
+    };
+
+    system.stateVersion = "20.09";
 })
