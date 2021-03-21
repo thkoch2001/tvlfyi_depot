@@ -122,6 +122,7 @@ in lib.fix(self: {
   };
 
   security.rtkit.enable = true;
+
   services = {
     pipewire = {
       enable = true;
@@ -131,6 +132,7 @@ in lib.fix(self: {
 
     redshift.enable = true;
     blueman.enable = true;
+    mullvad-vpn.enable = true;
 
     xserver = {
       enable = true;
@@ -172,7 +174,9 @@ in lib.fix(self: {
   };
 
   programs = {
+    fish.enable = true;
     light.enable = true;
+    ssh.startAgent = true;
 
     # Required by impermanence
     fuse.userAllowOther = true;
@@ -207,6 +211,7 @@ in lib.fix(self: {
       jq
       manpages
       msmtp
+      mullvad-vpn
       networkmanagerapplet
       nix-prefetch-github
       notmuch
@@ -222,6 +227,7 @@ in lib.fix(self: {
       rustup
       screen
       scrot
+      spotify
       tokei
       tree
       vlc
