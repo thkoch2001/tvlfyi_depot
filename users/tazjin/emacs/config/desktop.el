@@ -22,12 +22,12 @@
 
 (defun brightness-up ()
   (interactive)
-  (shell-command "xbacklight -inc 5")
+  (shell-command "light -A 4")
   (message "Brightness increased"))
 
 (defun brightness-down ()
   (interactive)
-  (shell-command "xbacklight -dec 5")
+  (shell-command "light -U 4")
   (message "Brightness decreased"))
 
 (defun set-xkb-layout (layout)
