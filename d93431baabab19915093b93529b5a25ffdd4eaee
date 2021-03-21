@@ -34,6 +34,24 @@
       "parentUuid": "7e63bd42_daf8d448",
       "revId": "d93431baabab19915093b93529b5a25ffdd4eaee",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a508290_85622fe5",
+        "filename": "third_party/impermanence/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-21T00:44:59Z",
+      "side": 1,
+      "message": "Seems to be fine, so ... done.",
+      "parentUuid": "e14f5c71_d384d678",
+      "revId": "d93431baabab19915093b93529b5a25ffdd4eaee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
