@@ -111,10 +111,11 @@ in lib.fix(self: {
 
   environment.persistence."/persist" = {
     directories = [
-      "/var/log"
+      "/etc/NetworkManager/system-connections"
+      "/var/cache/mullvad-vpn"
       "/var/lib/bluetooth"
       "/var/lib/systemd/coredump"
-      "/etc/NetworkManager/system-connections"
+      "/var/log"
     ];
     files = [
       "/etc/machine-id"
@@ -250,6 +251,7 @@ in lib.fix(self: {
           ".local/share/direnv"
           ".local/share/fish/"
           ".password-store"
+          ".rustup"
           ".ssh"
           ".telega"
           "mail"
