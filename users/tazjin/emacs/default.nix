@@ -37,6 +37,7 @@ let
     bazel-mode
     browse-kill-ring
     cargo
+    company
     clojure-mode
     cmake-mode
     counsel
