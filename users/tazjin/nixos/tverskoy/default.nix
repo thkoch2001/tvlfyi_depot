@@ -17,6 +17,10 @@ config: let
     monolithic = false;
   };
 in lib.fix(self: {
+  imports = [
+    "${depot.third_party.impermanence}/nixos.nix"
+  ];
+
   boot = {
     initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
     initrd.kernelModules = [ ];
@@ -52,6 +56,7 @@ in lib.fix(self: {
     "/persist" = {
       device = "zpool/safe/persist";
       fsType = "zfs";
+      neededForBoot = true;
     };
 
     "/boot" = {
@@ -96,6 +101,18 @@ in lib.fix(self: {
         monospace = [ "JetBrains Mono" ];
       };
     };
+  };
+
+  environment.persistence."/persist" = {
+    directories = [
+      "/var/log"
+      "/var/lib/bluetooth"
+      "/var/lib/systemd/coredump"
+      "/etc/NetworkManager/system-connections"
+    ];
+    files = [
+      "/etc/machine-id"
+    ];
   };
 
   security.rtkit.enable = true;
