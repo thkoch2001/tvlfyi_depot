@@ -221,6 +221,7 @@ in lib.fix(self: {
       pavucontrol
       pinentry
       pinentry-emacs
+      pulseaudioLight # for pactl
       pwgen
       quasselClient
       ripgrep
