@@ -76,7 +76,6 @@ in lib.fix(self: {
     cpu.amd.updateMicrocode = true;
     enableRedistributableFirmware = true;
     bluetooth.enable = true;
-    bluetooth.hsphfpd.enable = true;
   };
 
   networking = {
@@ -130,8 +129,7 @@ in lib.fix(self: {
       pulse.enable = true;
     };
 
-    # redshift.enable = true;
-
+    redshift.enable = true;
     blueman.enable = true;
 
     xserver = {
@@ -155,6 +153,9 @@ in lib.fix(self: {
       };
     };
   };
+
+  # Automatically detect location to use for redshift
+  location.provider = "geoclue2";
 
   # Do not restart the display manager automatically
   systemd.services.display-manager.restartIfChanged = lib.mkForce false;
