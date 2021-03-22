@@ -197,6 +197,7 @@ in lib.fix(self: {
       chromium
       curl
       direnv
+      dnsutils
       emacs27-nox # emacsclient
       exa
       fd
@@ -211,6 +212,7 @@ in lib.fix(self: {
       imagemagick
       jq
       manpages
+      mosh
       msmtp
       mullvad-vpn
       networkmanagerapplet
