@@ -237,7 +237,39 @@ in lib.fix(self: {
 
   services.depot = {
     # Run a SourceGraph code search instance
-    sourcegraph.enable = true;
+    sourcegraph = {
+      enable = true;
+
+      # Note: Sourcegraph configuration keys contain dots, so the
+      # names must be quoted here.
+      siteConfig = {
+        externalURL = "https://cs.tvl.fyi";
+        disablePublicRepoRedirects =  true;
+	      "search.index.enabled" = true;
+        "batchChanges.enabled" = false;
+        "codeIntelAutoIndexing" = true;
+
+        "auth.providers" = [
+		      {
+			      type = "builtin";
+			      allowSignup = false;
+		      }
+
+          # Allows unauthenticated access by having nginx force logins
+          # to the "Anonymous" user account.
+		      {
+			      type = "http-header";
+			      usernameHeader = "X-SG-Auth";
+		      }
+        ];
+      };
+
+      codeHostConfig.OTHER = lib.singleton {
+        url = "https://cl.tvl.fyi";
+        repos = ["depot"];
+        repositoryPathPattern = "{repo}";
+      };
+    };
 
     # Run the Panettone issue tracker
     panettone = {
