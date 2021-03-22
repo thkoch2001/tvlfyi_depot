@@ -119,4 +119,93 @@ rec {
     features = [ "std" "alloc" ];
   };
 
+  base64 = pkgs.buildRustCrate {
+    pname = "base64";
+    version = "0.13.0";
+    crateName = "base64";
+    edition = "2018";
+    sha256 = "0i0jk5sgq37kc4c90d1g7dp7zvphbg0dbqc1ajnn0vffjxblgamg";
+    features = [ "alloc" "std" ];
+  };
+
+  bufstream = pkgs.buildRustCrate {
+    pname = "bufstream";
+    version = "0.1.4";
+    crateName = "bufstream";
+    sha256 = "10rqm7jly5jjx7wcc19q6q4m2zsrw3l2v3m1054wnbwvdh42xxf1";
+  };
+
+  autocfg = pkgs.buildRustCrate {
+    pname = "autocfg";
+    version = "1.0.1";
+    crateName = "autocfg";
+    sha256 = "1lsjz23jdcchcqbsmlzd4iksg3hc8bdvy677jy0938i2gp24frw1";
+  };
+
+  num-traits = pkgs.buildRustCrate {
+    pname = "num-traits";
+    version = "0.2.14";
+    crateName = "num-traits";
+    buildDependencies = [ autocfg ];
+    sha256 = "09ac9dcp6cr57vjzyiy213y7312jqcy84mkamp99zr40qd1gwnyk";
+  };
+
+  num-integer = pkgs.buildRustCrate {
+    pname = "num-integer";
+    version = "0.1.44";
+    crateName = "num-integer";
+    dependencies = [ num-traits ];
+    buildDependencies = [ autocfg ];
+    sha256 = "1gdbnfgnivp90h644wmqj4a20yfmdga2xxxacx53pjbcazvfvajc";
+  };
+
+  chrono = pkgs.buildRustCrate {
+    pname = "chrono";
+    version = "0.4.19";
+    crateName = "chrono";
+    dependencies = [ num-traits num-integer ];
+    features = [ "alloc" "std" ];
+    sha256 = "0cjf5dnfbk99607vz6n5r6bhwykcypq5psihvk845sxrhnzadsar";
+  };
+
+  imap-proto = pkgs.buildRustCrate {
+    pname = "imap-proto";
+    version = "0.10.2";
+    crateName = "imap-proto";
+    dependencies = [ nom ];
+    sha256 = "1bf5r4d0z7c8wxrvr7kjy26500wr7cd4sxz49ix3b3yzc6ayyqv1";
+  };
+
+  lazy_static = pkgs.buildRustCrate {
+    pname = "lazy_static";
+    version = "1.4.0";
+    crateName = "lazy_static";
+    sha256 = "13h6sdghdcy7vcqsm2gasfw3qg7ssa0fl3sw7lq6pdkbk52wbyfr";
+  };
+
+  imap = pkgs.buildRustCrate {
+    pname = "imap";
+    version = "2.4.0";
+    crateName = "imap";
+    edition = "2018";
+    dependencies = [
+      base64
+      bufstream
+      chrono
+      imap-proto
+      lazy_static
+      nom
+      regex
+    ];
+    sha256 = "1nj6x45qnid98nv637623rrh7imcxk0kad89ry8j5dkkgccvjyc0";
+  };
+
+  epoll = pkgs.buildRustCrate {
+    pname = "epoll";
+    version = "4.3.1";
+    crateName = "epoll";
+    dependencies = [ bitflags libc ];
+    sha256 = "0dgmgdmrfbjkpxn1w3xmmwsm2a623a9qdwn90s8yl78n4a36kbh9";
+  };
+
 }
