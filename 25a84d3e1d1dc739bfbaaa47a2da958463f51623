@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4751d306_e7a47822",
+        "filename": "third_party/nixpkgs-exposed/exposed/default.nix",
+        "patchSetId": 22
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-22T00:35:33Z",
+      "side": 1,
+      "message": "`tools.cheddar` is a good option here since it supports syntax highlighting in markdown without any hassle.",
+      "revId": "25a84d3e1d1dc739bfbaaa47a2da958463f51623",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
