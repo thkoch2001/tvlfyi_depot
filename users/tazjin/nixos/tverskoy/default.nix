@@ -22,6 +22,12 @@ in lib.fix(self: {
     "${nixpkgs.home-manager.src}/nixos"
   ];
 
+  nix.nixPath = lib.mkForce [
+    "nixpkgs=${depot.third_party.nixpkgsSrc}"
+    "nixos=${depot.third_party.nixpkgsSrc}"
+    "depot=/depot"
+  ];
+
   boot = {
     initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
     initrd.kernelModules = [ ];
