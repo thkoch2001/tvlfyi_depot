@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "github.com/golang/groupcache";
   src = builtins.fetchGit {
     url = "https://github.com/golang/groupcache";

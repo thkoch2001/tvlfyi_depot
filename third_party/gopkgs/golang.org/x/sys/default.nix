@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "golang.org/x/sys";
   src = builtins.fetchGit {
     url = "https://go.googlesource.com/sys";

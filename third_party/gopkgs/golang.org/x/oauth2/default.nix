@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "golang.org/x/oauth2";
   src = builtins.fetchGit {
     url = "https://go.googlesource.com/oauth2";

@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "gopkg.in/warnings.v0";
 
   src = depot.third_party.fetchFromGitHub {

@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "github.com/sergi/go-diff";
 
   src = depot.third_party.fetchFromGitHub {
