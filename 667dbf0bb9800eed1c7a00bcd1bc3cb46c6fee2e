@@ -16,6 +16,24 @@
       "message": "Wouldn\u0027t `[]` make more sense in respect to how the `__readTree` attr is populated elsewhere?",
       "revId": "667dbf0bb9800eed1c7a00bcd1bc3cb46c6fee2e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d91a561_6ead5671",
+        "filename": "default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-23T23:52:21Z",
+      "side": 1,
+      "message": "Totally true, done.",
+      "parentUuid": "82d0fe47_93a1991e",
+      "revId": "667dbf0bb9800eed1c7a00bcd1bc3cb46c6fee2e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
