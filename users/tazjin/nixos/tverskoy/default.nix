@@ -287,6 +287,7 @@ in lib.fix(self: {
         userEmail = "mail@tazj.in";
         extraConfig = {
           pull.rebase = true;
+          init.defaultBranch = "canon";
         };
       };
 
