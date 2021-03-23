@@ -1,13 +1,12 @@
 { depot, ... }:
 
 let
-  inherit (depot) elmPackages;
   inherit (depot.third_party) cacert iana-etc libredirect stdenv runCommandNoCC writeText;
 
   frontend = stdenv.mkDerivation {
     name = "gemma-frontend.html";
     src = ./frontend;
-    buildInputs = [ cacert iana-etc elmPackages.elm ];
+    buildInputs = [ cacert iana-etc ]; # elmPackages.elm
 
     # The individual Elm packages this requires are not packaged and I
     # can't be bothered to do that now, so lets open the escape hatch:
@@ -47,4 +46,6 @@ in depot.nix.buildLisp.program {
     ./src/gemma.lisp
     injectFrontend
   ];
-}
+# depot does not currently have Gemma's frontend dependencies, thus
+# the build is disabled.
+} // { meta.ci = false; }
