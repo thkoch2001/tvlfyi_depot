@@ -279,6 +279,23 @@ in lib.fix(self: {
           pull.rebase = true;
         };
       };
+
+      services.screen-locker = {
+        enable = true;
+        enableDetectSleep = true;
+        inactiveInterval = 10; # minutes
+
+        # Use a screen lock command that resets the keyboard layout
+        # before locking, to avoid locking me out when the layout is
+        # in Russian.
+        lockCmd = nixpkgs.writeShellScript "screen-lock" ''
+          ${nixpkgs.xorg.setxkbmap}/bin/setxkbmap us
+          ${nixpkgs.xorg.setxkbmap}/bin/setxkbmap -option caps:super
+          exec ${nixpkgs.xsecurelock}/bin/xsecurelock
+        '';
+      };
+
+      systemd.user.startServices = true;
     };
 
     system.stateVersion = "20.09";
