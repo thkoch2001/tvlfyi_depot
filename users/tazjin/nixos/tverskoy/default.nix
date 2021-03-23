@@ -279,6 +279,15 @@ in lib.fix(self: {
           pull.rebase = true;
         };
       };
+
+      services.screen-locker = {
+        enable = true;
+        lockCmd = "${nixpkgs.xsecurelock}/bin/xsecurelock";
+        enableDetectSleep = true;
+        inactiveInterval = 10; # minutes
+      };
+
+      systemd.user.startServices = true;
     };
 
     system.stateVersion = "20.09";
