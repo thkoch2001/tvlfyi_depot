@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "google.golang.org/api";
   src = builtins.fetchGit {
     url = "https://code.googlesource.com/google-api-go-client";

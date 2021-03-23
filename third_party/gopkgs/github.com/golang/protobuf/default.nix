@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "github.com/golang/protobuf";
   src = builtins.fetchGit {
     url = "https://github.com/golang/protobuf";

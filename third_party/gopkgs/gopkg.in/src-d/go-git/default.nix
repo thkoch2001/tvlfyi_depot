@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   # .v4 is used throughout the codebase and I can't be bothered to do
   # anything else about it other than using that package path here.
   path = "gopkg.in/src-d/go-git.v4";

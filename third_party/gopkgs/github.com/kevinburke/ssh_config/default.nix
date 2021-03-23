@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "github.com/kevinburke/ssh_config";
 
   src = depot.third_party.fetchFromGitHub {

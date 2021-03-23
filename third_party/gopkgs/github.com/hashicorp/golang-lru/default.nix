@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "github.com/hashicorp/golang-lru";
   src = builtins.fetchGit {
     url = "https://github.com/hashicorp/golang-lru";

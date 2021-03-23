@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "go.opencensus.io";
   src = builtins.fetchGit {
     url = "https://github.com/census-instrumentation/opencensus-go";
