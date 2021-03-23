@@ -221,21 +221,31 @@ The following options are supported:
 
 Ivy is used to capture the user's input."
   (interactive)
-  (let* ((name->cmd `(("Lock" . ,window-manager--xsecurelock)
-                      ("Logout" . "sudo systemctl stop lightdm")
-                      ("Suspend" . ,(string-concat
-                                     window-manager--xsecurelock
-                                     " && systemctl suspend"))
-                      ("Hibernate" . ,(string-concat
-                                       window-manager--xsecurelock
-                                       " && systemctl hibernate"))
-                      ("Reboot" . "systemctl reboot")
-                      ("Shutdown" . "systemctl poweroff"))))
+  (let* ((name->cmd `(("Lock" .
+                       (lambda ()
+                         (shell-command window-manager--xsecurelock)))
+                      ("Logout" .
+                       (lambda ()
+                         (let ((default-directory "/sudo::"))
+                           (shell-command "systemctl stop lightdm"))))
+                      ("Suspend" .
+                       (lambda ()
+                         (shell-command "systemctl suspend")))
+                      ("Hibernate" .
+                       (lambda ()
+                         (shell-command "systemctl hibernate")))
+                      ("Reboot" .
+                       (lambda ()
+                         (let ((default-directory "/sudo::"))
+                           (shell-command "reboot"))))
+                      ("Shutdown" .
+                       (lambda ()
+                         (let ((default-directory "/sudo::"))
+                           (shell-command "shutdown now")))))))
     (funcall
      (lambda ()
-       (shell-command
-        (al-get (ivy-read "System: " (al-keys name->cmd))
-                name->cmd))))))
+       (funcall (al-get (ivy-read "System: " (al-keys name->cmd))
+                        name->cmd))))))
 
 (defun window-manager--label->index (label workspaces)
   "Return the index of the workspace in WORKSPACES named LABEL."
