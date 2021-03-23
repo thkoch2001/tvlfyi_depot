@@ -12,6 +12,18 @@
 (require 'exwm-randr)
 (require 'exwm-systemtray)
 
+(defcustom tazjin--screen-lock-command "xsecurelock"
+  "Command to execute for locking the screen."
+  :group 'tazjin)
+
+(defcustom tazjin--backlight-increase-command "light -A 4"
+  "Command to increase screen brightness."
+  :group 'tazjin)
+
+(defcustom tazjin--backlight-decrease-command "light -U 4"
+  "Command to decrease screen brightness."
+  :group 'tazjin)
+
 (defun pactl (cmd)
   (shell-command (concat "pactl " cmd))
   (message "Volume command: %s" cmd))
@@ -22,12 +34,12 @@
 
 (defun brightness-up ()
   (interactive)
-  (shell-command "light -A 4")
+  (shell-command tazjin--backlight-increase-command)
   (message "Brightness increased"))
 
 (defun brightness-down ()
   (interactive)
-  (shell-command "light -U 4")
+  (shell-command tazjin--backlight-decrease-command)
   (message "Brightness decreased"))
 
 (defun set-xkb-layout (layout)
@@ -40,14 +52,7 @@
 (defun lock-screen ()
   (interactive)
   (set-xkb-layout "us")
-
-  ;; A sudoers configuration is in place that lets me execute this
-  ;; particular command without having to enter a password.
-  ;;
-  ;; The reason for things being set up this way is that I want
-  ;; xsecurelock.service to be started as a system-wide service that
-  ;; is tied to suspend.target.
-  (shell-command "/usr/bin/sudo /usr/bin/systemctl start xsecurelock.service"))
+  (shell-command tazjin--screen-lock-command))
 
 (defun create-window-name ()
   "Construct window names to be used for EXWM buffers by
