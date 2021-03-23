@@ -100,10 +100,4 @@ in fix(self: {
 
 # Add local packages as structured by readTree
 // (localPkgs (readTree' self.config))
-
-# Load overrides into the top-level.
-#
-# This can be used to move things from third_party into the top-level, too (such
-# as `lib`).
-// (readTree' { depot = self; pkgs = self.third_party; }) ./overrides
 )
