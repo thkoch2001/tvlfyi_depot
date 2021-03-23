@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82d0fe47_93a1991e",
+        "filename": "default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-23T23:46:48Z",
+      "side": 1,
+      "message": "Wouldn\u0027t `[]` make more sense in respect to how the `__readTree` attr is populated elsewhere?",
+      "revId": "667dbf0bb9800eed1c7a00bcd1bc3cb46c6fee2e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
