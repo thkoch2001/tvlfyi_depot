@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "gopkg.in/irc.v3";
 
   src = depot.third_party.fetchFromGitHub {

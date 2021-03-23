@@ -1,6 +1,6 @@
 { depot, pkgs, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "cloud.google.com/go";
   src = builtins.fetchGit {
     url = "https://code.googlesource.com/gocloud";

@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "golang.org/x/time";
 
   src = builtins.fetchGit {

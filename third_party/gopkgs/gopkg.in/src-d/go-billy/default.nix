@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "gopkg.in/src-d/go-billy.v4";
 
   src = depot.third_party.fetchFromGitHub {

@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.external {
+depot.nix.buildGo.external {
   path = "github.com/xanzy/ssh-agent";
 
   src = depot.third_party.fetchFromGitHub {
