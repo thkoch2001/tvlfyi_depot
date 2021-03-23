@@ -16,6 +16,15 @@ config: let
     enableDaemon = false;
     monolithic = false;
   };
+
+  # Use a screen lock command that resets the keyboard layout
+  # before locking, to avoid locking me out when the layout is
+  # in Russian.
+  screenLock = nixpkgs.writeShellScriptBin "tazjin-screen-lock" ''
+    ${nixpkgs.xorg.setxkbmap}/bin/setxkbmap us
+    ${nixpkgs.xorg.setxkbmap}/bin/setxkbmap -option caps:super
+    exec ${nixpkgs.xsecurelock}/bin/xsecurelock
+  '';
 in lib.fix(self: {
   imports = [
     "${depot.third_party.impermanence}/nixos.nix"
@@ -195,6 +204,7 @@ in lib.fix(self: {
       emacs
       third_party.lieer
       tools.nsfv-setup
+      screenLock
     ]) ++
 
     # programs from nixpkgs
@@ -279,6 +289,15 @@ in lib.fix(self: {
           pull.rebase = true;
         };
       };
+
+      services.screen-locker = {
+        enable = true;
+        enableDetectSleep = true;
+        inactiveInterval = 10; # minutes
+        lockCmd = "${screenLock}/bin/tazjin-screen-lock";
+      };
+
+      systemd.user.startServices = true;
     };
 
     system.stateVersion = "20.09";
