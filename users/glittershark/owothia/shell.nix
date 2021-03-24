@@ -9,6 +9,6 @@ args@{ pkgs ? (import ../../../. {}).third_party, ... }:
   buildInputs = with pkgs.haskellPackages; [
     cabal-install
     hlint
-    pkgs.haskell-language-server.ghc883
+    pkgs.haskell-language-server.ghc884
   ];
 }
