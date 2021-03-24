@@ -5,11 +5,11 @@
 { ... }:
 
 let
-  # Tracking nixos-unstable as of 2021-03-18.
-  nixpkgsCommit = "1f77a4c8c74bbe896053994836790aa9bf6dc5ba";
+  # Tracking nixos-unstable as of 2021-03-25.
+  nixpkgsCommit = "60dd94fb7e01a8288f6638eee71d7cb354c49327";
   nixpkgsSrc = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${nixpkgsCommit}.tar.gz";
-    sha256 = "1j62nmzz3w33dplzf1xz1pg1pfkxii7lwdqmsxmc71cs9cm3s7n1";
+    sha256 = "0skdwk9bdld295kzrymirs8xrzycqmhsclaz8s18jhcz75hb8sk3";
   };
   nixpkgs = import nixpkgsSrc {
     config.allowUnfree = true;
@@ -21,11 +21,11 @@ let
     ];
   };
 
-  # Tracking nixos-20.09 as of 2021-03-15.
-  stableCommit = "12d9950bf47e0ac20d4d04e189448ee075242117";
+  # Tracking nixos-20.09 as of 2021-03-25.
+  stableCommit = "223d0d733a66b46504ea6b4c15f88b7cc4db58fb";
   stableNixpkgsSrc = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${stableCommit}.tar.gz";
-    sha256 = "09wy33zbzxj33296ddrrb79630kxpj1c3kiv38zs4wrw24206c2v";
+    sha256 = "073327ris0frqa3kpid3nsjr9w8yx2z83xpsc24w898mrs9r7d5v";
   };
   stableNixpkgs = import stableNixpkgsSrc {};
 
