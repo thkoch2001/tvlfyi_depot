@@ -5,8 +5,8 @@
 { ... }:
 
 let
-  # Tracking nixos-unstable as of 2021-03-18.
-  nixpkgsCommit = "1f77a4c8c74bbe896053994836790aa9bf6dc5ba";
+  # Tracking nixos-unstable as of 2021-03-23.
+  nixpkgsCommit = "d3f7e969b9860fb80750147aeb56dab1c730e756";
   nixpkgsSrc = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${nixpkgsCommit}.tar.gz";
     sha256 = "1j62nmzz3w33dplzf1xz1pg1pfkxii7lwdqmsxmc71cs9cm3s7n1";
@@ -21,8 +21,8 @@ let
     ];
   };
 
-  # Tracking nixos-20.09 as of 2021-03-15.
-  stableCommit = "12d9950bf47e0ac20d4d04e189448ee075242117";
+  # Tracking nixos-20.09 as of 2021-03-22.
+  stableCommit = "f8929dce13e729357f31d5b2950cbb097744bed7";
   stableNixpkgsSrc = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${stableCommit}.tar.gz";
     sha256 = "09wy33zbzxj33296ddrrb79630kxpj1c3kiv38zs4wrw24206c2v";
