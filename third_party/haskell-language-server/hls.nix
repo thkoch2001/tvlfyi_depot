@@ -1,5 +1,5 @@
 # Pulled from https://github.com/korayal/hls-nix/blob/master/default.nix but
-# with the hashes updated for our nixpkgs pin and ghc 8.8.3
+# with the hashes updated for our nixpkgs pin and ghc 8.8.4
 { pkgs, ghc }:
 let
   hlib = pkgs.haskell.lib;
