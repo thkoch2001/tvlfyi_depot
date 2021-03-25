@@ -210,9 +210,9 @@ pub mod parse {
     use std::collections::HashMap;
 
     use nom::{IResult};
-    use nom::bytes::complete::{tag, take};
+    use nom::bytes::streaming::{tag, take};
     use nom::branch::{alt};
-    use nom::character::complete::{digit1, char};
+    use nom::character::streaming::{digit1, char};
     use nom::sequence::{tuple};
     use nom::combinator::{map, map_res, flat_map, map_parser, opt};
     use nom::error::{context, ErrorKind, ParseError};
