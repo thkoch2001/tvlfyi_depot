@@ -77,6 +77,10 @@ in lib.fix(self: {
       };
     };
 
+    kernel.sysctl = {
+      "net.ipv4.tcp_congestion_control" = "bbr";
+    };
+
     loader.grub = {
       enable = true;
       version = 2;
