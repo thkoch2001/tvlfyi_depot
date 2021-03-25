@@ -2,7 +2,7 @@
 #
 # https://tailscale.com/kb/1018/install-acls
 
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 with depot.nix.yants;
 
@@ -27,4 +27,4 @@ let
     # Actual ACL entries
     ACLs = list acl;
   };
-in config: toFile "tailscale-acl.json" (toJSON (aclConfig config))
+in config: pkgs.writeText "tailscale-acl.json" (toJSON (aclConfig config))
