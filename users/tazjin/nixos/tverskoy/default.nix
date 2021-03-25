@@ -193,6 +193,7 @@ in lib.fix(self: {
     fish.enable = true;
     light.enable = true;
     ssh.startAgent = true;
+    mosh.enable = true;
 
     # Required by impermanence
     fuse.userAllowOther = true;
