@@ -168,6 +168,7 @@ in lib.fix(self: {
       "grfn"
       "lukegb"
       "tazjin"
+      "sterni"
     ];
 
     sshServe = {
@@ -175,7 +176,9 @@ in lib.fix(self: {
       keys = with depot.users;
         tazjin.keys.all
         ++ lukegb.keys.all
-        ++ [ glittershark.keys.whitby ];
+        ++ [ glittershark.keys.whitby ]
+        ++ sterni.keys.all
+        ;
     };
   };
 
