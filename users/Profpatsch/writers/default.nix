@@ -1,6 +1,7 @@
 { depot, pkgs, lib, ... }:
 let
-  bins = depot.nix.getBins pkgs.coreutils ["printf" "mkdir" "cat" "ln" "ls" "touch" ];
+  bins = depot.nix.getBins pkgs.s6-portable-utils ["s6-mkdir" "s6-cat" "s6-ln" "s6-ls" "s6-touch" ]
+      // depot.nix.getBins pkgs.coreutils ["printf" ];
 
   inherit (depot.nix.yants) defun struct restrict attrs list string drv any;
 
@@ -41,7 +42,7 @@ let
   python3Lib = { name, libraries ? (_: []) }: moduleString:
     let srcTree = depot.nix.runExecline.local name { stdin = moduleString; } [
       "importas" "out" "out"
-      "if" [ bins.mkdir "-p" "\${out}/${name}" ]
+      "if" [ bins.s6-mkdir "-p" "\${out}/${name}" ]
       "if" [
         "redirfd" "-w" "1" "\${out}/setup.py"
         bins.printf ''
@@ -56,7 +57,7 @@ let
       "if" [
         # redirect stdin to the init py
         "redirfd" "-w" "1" "\${out}/${name}/__init__.py"
-        bins.cat
+        bins.s6-cat
       ]
     ];
     in pkgs.python3Packages.buildPythonPackage {
@@ -71,7 +72,7 @@ let
 
   linkTo = name: path: depot.nix.runExecline.local name {} [
     "importas" "out" "out"
-    bins.ln "-sT" path "$out"
+    bins.s6-ln "-s" path "$out"
   ];
 
   rustSimpleBin = {
@@ -129,12 +130,12 @@ let
       tests = depot.nix.runExecline.local "${rustDrv.name}-tests-run" {} [
         "importas" "out" "out"
         "if" [
-          "pipeline" [ bins.ls "${crate true}/tests" ]
+          "pipeline" [ bins.s6-ls "${crate true}/tests" ]
           "forstdin" "-o0" "test"
           "importas" "test" "test"
           "${crate true}/tests/$test"
         ]
-        bins.touch "$out"
+        bins.s6-touch "$out"
       ];
     in drvSeqL [ tests ] (crate false);
 
