@@ -22,6 +22,30 @@
       },
       "revId": "3ddd1a993cd5db23c5c6406195590e2fe549e94d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bd786c1_764d722d",
+        "filename": "nix/tailscale/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-25T18:38:52Z",
+      "side": 1,
+      "message": "Done. I was considering to just delete this file since nothing uses it, but I might use it again soon(tm).",
+      "parentUuid": "d88743c3_a4123fb4",
+      "range": {
+        "startLine": 30,
+        "startChar": 16,
+        "endLine": 30,
+        "endChar": 25
+      },
+      "revId": "3ddd1a993cd5db23c5c6406195590e2fe549e94d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
