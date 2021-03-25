@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d88743c3_a4123fb4",
+        "filename": "nix/tailscale/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-25T18:22:18Z",
+      "side": 1,
+      "message": "pkgs.write*Text*",
+      "range": {
+        "startLine": 30,
+        "startChar": 16,
+        "endLine": 30,
+        "endChar": 25
+      },
+      "revId": "3ddd1a993cd5db23c5c6406195590e2fe549e94d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
