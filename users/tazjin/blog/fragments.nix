@@ -10,7 +10,7 @@
 { depot, lib, ... }:
 
 let
-  inherit (builtins) filter map hasAttr replaceStrings toFile;
+  inherit (builtins) filter map hasAttr replaceStrings;
   inherit (depot.third_party) runCommandNoCC writeText;
   inherit (depot.users.tazjin) renderMarkdown;
 
@@ -51,7 +51,7 @@ let
   </body>
   '';
 
-  draftWarning = toFile "draft.html" ''
+  draftWarning = writeText "draft.html" ''
     <p class="cheddar-callout cheddar-warning">
       <b>Note:</b> This post is a <b>draft</b>! Please do not share
       the link to it without asking me first.
@@ -59,7 +59,7 @@ let
     <hr>
   '';
 
-  unlistedWarning = toFile "unlisted.html" ''
+  unlistedWarning = writeText "unlisted.html" ''
     <p class="cheddar-callout cheddar-warning">
       <b>Note:</b> This post is <b>unlisted</b>! Please do not share
       the link to it without asking me first.
@@ -68,7 +68,7 @@ let
   '';
 
   renderPost = post: runCommandNoCC "${post.key}.html" {} ''
-    cat ${toFile "header.html" (header post.title)} > $out
+    cat ${writeText "header.html" (header post.title)} > $out
 
     # Write the post title & date
     echo '<article><h2 class="inline">${escape post.title}</h2>' >> $out
@@ -89,7 +89,7 @@ let
     cat ${renderMarkdown post.content} >> $out
     echo '</article>' >> $out
 
-    cat ${toFile "footer.html" footer} >> $out
+    cat ${writeText "footer.html" footer} >> $out
   '';
 in {
   inherit renderPost isDraft isUnlisted;
