@@ -37,7 +37,8 @@ let
     bool
     ;
 
-  bins = depot.nix.getBins pkgs.coreutils [ "printf" "touch" ];
+  bins = depot.nix.getBins pkgs.coreutils [ "printf" ]
+      // depot.nix.getBins pkgs.s6-portable-utils [ "s6-touch" ];
 
   # Returns true if the given expression throws when `deepSeq`-ed
   throws = expr:
@@ -161,7 +162,7 @@ let
         then depot.nix.runExecline.local "testsuite-${name}-successful" {} [
           "importas" "out" "out"
           "if" [ bins.printf "%s\n" "testsuite ${name} successful!" ]
-          bins.touch "$out"
+          bins.s6-touch "$out"
         ]
         else depot.nix.runExecline.local "testsuite-${name}-failed" {} [
           "importas" "out" "out"
