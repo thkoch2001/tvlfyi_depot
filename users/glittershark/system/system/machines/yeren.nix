@@ -28,9 +28,12 @@
     };
 
     kernelPackages = pkgs.linuxPackages_latest;
+
     kernelModules = [ "kvm-intel" ];
     blacklistedKernelModules = [ "psmouse" ];
-    extraModulePackages = [ ];
+    extraModulePackages = [
+      config.boot.kernelPackages.digimend
+    ];
     kernelParams = [
       "i915.preliminary_hw_support=1"
     ];
