@@ -12,16 +12,6 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$8lefg7+8UPAEh9Ott8zH0A$7YuLRraTC1IgxTNTxFJF03AWmqBS3GX2+vfD4XVTrb0";
   }
   {
-    username = "artemist";
-    email = "me@artem.ist";
-    password = "{SSHA}N6Tl/txGQwlmVa7xVJCXpGcD1U4bJaI+";
-  }
-  {
-    username = "camsbury";
-    email = "camsbury7@gmail.com";
-    password = "{SSHA}r6/I/zefrAb1jWTdhuqWik0CXT8E+/E5";
-  }
-  {
     username = "cynthia";
     email = "cynthia@tvl.fyi";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=4,p=1$TxjbMGenhEmkyYLrg5uGhbr60THB86YeRZg5bPdiTJo$k9gbRlAPjmxwdUwzbavvsAVkckgQZ0jS2oTtvZBPysk";
@@ -85,11 +75,6 @@
     username = "sterni";
     email = "sternenseemann@systemli.org";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$+NbF1izPMGqN5bASCBDV9g$aqBVplHwiyDpflZUmLtjkLWzKhxi7hwjm5fOwfbKohU";
-  }
-  {
-    username = "q3k";
-    email = "q3k@q3k.org";
-    password = "{SSHA}BEccJdtnhVLDzOn+pxNfayNi3QFcEABE";
   }
   {
     username = "qyliss";
