@@ -17,7 +17,6 @@ in
   buildInputs = with haskellPackages; [
     cabal-install
     hlint
-    # TODO(sterni): versions out of sync
-    # pkgs.haskell-language-server.ghc884
+    haskell-language-server
   ];
 }
