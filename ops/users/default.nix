@@ -52,6 +52,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$RYVVkFoi3A1yYkI8J2zUwg$GUERvgHvU8SGjQmilDJGZu50hYRAHw+ejtuL+Skygs8";
   }
   {
+    username = "flokli";
+    email = "flokli@flokli.de";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$TrezbwIY5TKLnJiii0wafQ$K0S2p9I8tiqP907nkgoK6IbG9ia4IuDiylTcIs5pesw";
+  }
+  {
     username = "glittershark";
     email = "grfn@gws.fyi";
     password = "{SSHA}i7PSAsXwJT3jjmmvU77aar/tU/YPDCEO";
