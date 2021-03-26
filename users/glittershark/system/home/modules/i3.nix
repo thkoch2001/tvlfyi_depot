@@ -321,6 +321,7 @@ in {
             word_wrap = true;
             padding = 8;
             horizontal_padding = 8;
+            max_icon_size = 45;
           };
 
           frame = {
