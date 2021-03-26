@@ -1,14 +1,23 @@
-args@{ pkgs ? (import ../../../. {}).third_party, ... }:
+{ pkgs ? (import ../../../. {}).third_party, ... }:
 
-((import ./packageSet.nix args).extend (pkgs.haskell.lib.packageSourceOverrides {
-  owothia = pkgs.gitignoreSource ./.;
+let
+  inherit (pkgs)
+    haskellPackages
+    haskell
+    gitignoreSource
+    ;
+in
+
+(haskellPackages.extend (haskell.lib.packageSourceOverrides {
+  owothia = gitignoreSource ./.;
 })).shellFor {
-  packages = p: [p.owothia];
+  packages = p: [ p.owothia ];
   withHoogle = true;
   doBenchmark = true;
-  buildInputs = with pkgs.haskellPackages; [
+  buildInputs = with haskellPackages; [
     cabal-install
     hlint
-    pkgs.haskell-language-server.ghc884
+    # TODO(sterni): versions out of sync
+    # pkgs.haskell-language-server.ghc884
   ];
 }

@@ -1,6 +1,4 @@
-{ pkgs ? (import ../../../. {}).third_party
-, lib ? pkgs.lib
-, ...
-}:
+{ pkgs ? (import ../../../. {}).third_party, ... }:
 
-(import ./packageSet.nix {}).callPackage (import ./pkg.nix { inherit pkgs; }) {}
+pkgs.haskellPackages.callCabal2nix "owothia"
+  (pkgs.gitignoreSource ./.) { }
