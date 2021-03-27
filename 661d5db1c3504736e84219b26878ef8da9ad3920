@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a6e29af_37d33bf6",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-27T10:26:28Z",
+      "side": 1,
+      "message": "That\u0027s reasonable, it seems like that\u0027s also currently supported.\n\nThe main question is what the evaluator returns in that case - we\u0027d like to constrain the flow back to a single Nix value. Does that mean it yields a synthetic list, for example? I\u0027m not sure.",
+      "parentUuid": "d114ceb7_f9c02b30",
+      "revId": "661d5db1c3504736e84219b26878ef8da9ad3920",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ce879a96_4d880ece",
         "filename": "tvix/proto/evaluator.proto",
         "patchSetId": 2
@@ -31,6 +49,30 @@
       "writtenOn": "2021-03-27T09:04:59Z",
       "side": 1,
       "message": "s/errot/error/",
+      "range": {
+        "startLine": 37,
+        "startChar": 48,
+        "endLine": 37,
+        "endChar": 53
+      },
+      "revId": "661d5db1c3504736e84219b26878ef8da9ad3920",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc5d62d6_a5c54f52",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-27T10:26:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce879a96_4d880ece",
       "range": {
         "startLine": 37,
         "startChar": 48,
