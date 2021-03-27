@@ -3,7 +3,6 @@
 pkgs.naersk.buildPackage {
   src = ./.;
   doDoc = false;
-  doCheck = false;
 
   override = x: {
     # Use our custom bat syntax set, which is everything from upstream,
