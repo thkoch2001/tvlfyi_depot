@@ -1,15 +1,15 @@
 [package]
 name = "cheddar"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Vincent Ambo <mail@tazj.in>"]
 edition = "2018"
 
 [dependencies]
 clap = "2.33"
-comrak = "0.7"
+comrak = "0.10"
 lazy_static = "1.4"
 rouille = "3.0"
-syntect = "4.2.0"
+syntect = "4.5.0"
 serde_json = "1.0"
 
 [dependencies.serde]
