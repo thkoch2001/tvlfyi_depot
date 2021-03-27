@@ -37,17 +37,23 @@ lazy_static! {
 
     // Configure Comrak's Markdown rendering with all the bells &
     // whistles!
-    static ref MD_OPTS: ComrakOptions = ComrakOptions{
-        ext_strikethrough: true,
-        ext_tagfilter: true,
-        ext_table: true,
-        ext_autolink: true,
-        ext_tasklist: true,
-        ext_header_ids: Some(String::new()), // yyeeesss!
-        ext_footnotes: true,
-        ext_description_lists: true,
-        unsafe_: true, // required for tagfilter
-        ..ComrakOptions::default()
+    static ref MD_OPTS: ComrakOptions = {
+        let mut options = ComrakOptions::default();
+
+        // Enable non-standard Markdown features:
+        options.extension.strikethrough = true;
+        options.extension.tagfilter = true;
+        options.extension.table = true;
+        options.extension.autolink = true;
+        options.extension.tasklist = true;
+        options.extension.header_ids = Some(String::new()); // yyeeesss!
+        options.extension.footnotes = true;
+        options.extension.description_lists = true;
+
+        // Required for tagfilter
+        options.render.unsafe_ = true;
+
+        options
     };
 
     // Configures a map of specific filenames to languages, for cases
@@ -125,10 +131,8 @@ fn highlight_code_block(code_block: &NodeCodeBlock) -> NodeValue {
         buf
     };
 
-    let block = NodeHtmlBlock {
-        block_type: 1, // It's unclear what behaviour is toggled by this
-        literal: rendered.into_bytes(),
-    };
+    let mut block = NodeHtmlBlock::default();
+    block.literal = rendered.into_bytes();
 
     NodeValue::HtmlBlock(block)
 }
@@ -173,10 +177,9 @@ fn format_callout_paragraph(callout: Callout) -> NodeValue {
         Callout::Tip => "cheddar-tip",
     };
 
-    NodeValue::HtmlBlock(NodeHtmlBlock {
-        block_type: 1,
-        literal: format!("<p class=\"cheddar-callout {}\">", class).into_bytes(),
-    })
+    let mut block = NodeHtmlBlock::default();
+    block.literal = format!("<p class=\"cheddar-callout {}\">", class).into_bytes();
+    NodeValue::HtmlBlock(block)
 }
 
 fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
@@ -194,23 +197,21 @@ fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     // This node must exist with a lifetime greater than that of the parsed AST
     // in case that callouts are encountered (otherwise insertion into the tree
     // is not possible).
-    let p_close = Node::new(RefCell::new(Ast {
-        start_line: 0, // TODO(tazjin): hrmm
-        content: vec![],
-        open: false,
-        last_line_blank: false,
-        value: NodeValue::HtmlBlock(NodeHtmlBlock {
-            block_type: 1,
-            literal: b"</p>".to_vec(),
-        }),
-    }));
+    let mut p_close_value = NodeHtmlBlock::default();
+    p_close_value.literal = b"</p>".to_vec();
 
-    // Syntax highlighting is implemented by traversing the arena and
-    // replacing all code blocks with HTML blocks rendered by syntect.
+    let p_close_node = Ast::new(NodeValue::HtmlBlock(p_close_value));
+    let p_close = Node::new(RefCell::new(p_close_node));
+
+    // Special features of Cheddar are implemented by traversing the
+    // arena and reacting on nodes that we might want to modify.
     iter_nodes(root, &|node| {
         let mut ast = node.data.borrow_mut();
         let new = match &ast.value {
+            // Syntax highlighting is implemented by replacing the
+            // code block node with literal HTML.
             NodeValue::CodeBlock(code) => Some(highlight_code_block(code)),
+
             NodeValue::Paragraph => {
                 if let Some(callout) = has_callout(node) {
                     node.insert_after(&p_close);
