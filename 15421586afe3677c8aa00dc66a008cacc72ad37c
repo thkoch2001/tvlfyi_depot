@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fb62ee6_9e7e7225",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-03-27T22:02:12Z",
+      "side": 1,
+      "message": "BuildResultChunk and BuildResult are both used to send outputs over the wire.\n\nWe have other places where we\u0027ll need to do the same, and I\u0027d prefer if the underlying protos could be moved into a separate file (and we do the bikeshed about how that protocol looks like there).",
+      "revId": "15421586afe3677c8aa00dc66a008cacc72ad37c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d4198f4_72c06136",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-03-27T22:02:12Z",
+      "side": 1,
+      "message": "Again, should probably be moved into a separate file.\n\nLooking at the gdoc history, there was a\n\n```\n  /// Error that occured during a build. This does not close the stream.\n  /// If the error is so severe the coordinator wants to kill the evaluation,\n  /// it can simply close the stream.\n  BuildError(BuildError),\n\n```\n\nThis BuildError was to notify the evaluator that an error has occured while it built something requested with BuildRequest (but allowing the evaluator to keep evaluating) - independent of whether it already started streaming it or not.\n\nWe currently somewhat miss this possibility.",
+      "revId": "15421586afe3677c8aa00dc66a008cacc72ad37c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
