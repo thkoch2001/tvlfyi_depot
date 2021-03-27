@@ -25,6 +25,9 @@ use syntect::html::{
     append_highlighted_html_for_styled_line, start_highlighted_html_snippet, IncludeBackground,
 };
 
+#[cfg(test)]
+mod tests;
+
 lazy_static! {
     // Load syntaxes & themes lazily. Initialisation might not be
     // required in the case of Markdown rendering (if there's no code
