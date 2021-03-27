@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d114ceb7_f9c02b30",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-27T09:04:59Z",
+      "side": 1,
+      "message": "Should this maybe allow specifying multiple attributes? Evaluating two attributes of a file is probably more efficient than evaluating the same file twice for a single attribute each time.",
+      "revId": "661d5db1c3504736e84219b26878ef8da9ad3920",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce879a96_4d880ece",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-27T09:04:59Z",
+      "side": 1,
+      "message": "s/errot/error/",
+      "range": {
+        "startLine": 37,
+        "startChar": 48,
+        "endLine": 37,
+        "endChar": 53
+      },
+      "revId": "661d5db1c3504736e84219b26878ef8da9ad3920",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
