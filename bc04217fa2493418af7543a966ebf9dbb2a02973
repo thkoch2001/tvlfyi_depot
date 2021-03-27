@@ -16,6 +16,24 @@
       "message": "integration tests like this traditionally go in the `tests/` directory, not `src/`, yeah?",
       "revId": "bc04217fa2493418af7543a966ebf9dbb2a02973",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4816ffac_004e129f",
+        "filename": "tools/cheddar/src/tests.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-27T15:52:36Z",
+      "side": 1,
+      "message": "cheddar is not a library, it\u0027s a binary, and this tests the binaries internal API",
+      "parentUuid": "f3e04677_2776d9d5",
+      "revId": "bc04217fa2493418af7543a966ebf9dbb2a02973",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
