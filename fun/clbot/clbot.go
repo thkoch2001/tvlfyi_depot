@@ -165,6 +165,14 @@ func noping(user string) string {
 	return string(un[0:1]) + zeroWidthSpace + string(un[1:])
 }
 
+// Apply noping to each instance of the username in the supplied
+// message. With this users will not be pinged for their own CLs, but
+// they will be notified if someone else writes a CL that includes
+// their username.
+func nopingAll(username, message string) string {
+	return strings.ReplaceAll(message, username, noping(username))
+}
+
 func patchSetURL(c gerritevents.Change, p gerritevents.PatchSet) string {
 	return fmt.Sprintf("https://cl.tvl.fyi/%d", c.Number)
 }
@@ -223,12 +231,14 @@ func main() {
 				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] || e.PatchSet.Number != 1 {
 					continue
 				}
-				parsedMsg = fmt.Sprintf("CL/%d: %q proposed by %s - %s", e.Change.Number, e.Change.Subject, noping(username(e.PatchSet)), patchSetURL(e.Change, e.PatchSet))
+				user := username(e.PatchSet)
+				parsedMsg = nopingAll(user, fmt.Sprintf("CL/%d: %q proposed by %s - %s", e.Change.Number, e.Change.Subject, user, patchSetURL(e.Change, e.PatchSet)))
 			case *gerritevents.ChangeMerged:
 				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] {
 					continue
 				}
-				parsedMsg = fmt.Sprintf("CL/%d: %q applied by %s - %s", e.Change.Number, e.Change.Subject, noping(username(e.PatchSet)), patchSetURL(e.Change, e.PatchSet))
+				user := username(e.PatchSet)
+				parsedMsg = nopingAll(user, fmt.Sprintf("CL/%d: %q applied by %s - %s", e.Change.Number, e.Change.Subject, user, patchSetURL(e.Change, e.PatchSet)))
 			}
 			if parsedMsg != "" {
 				sendMsgChan <- parsedMsg
