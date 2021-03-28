@@ -246,7 +246,7 @@ impl<'a, T> Expr<'a, T> {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Decl<'a, T> {
     Fun {
         name: Ident<'a>,

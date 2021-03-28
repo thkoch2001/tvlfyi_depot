@@ -186,7 +186,9 @@ named!(string(&str) -> Literal, preceded!(
     )
 ));
 
-named!(literal(&str) -> Literal, alt!(int | bool_ | string));
+named!(unit(&str) -> Literal, map!(complete!(tag!("()")), |_| Literal::Unit));
+
+named!(literal(&str) -> Literal, alt!(int | bool_ | string | unit));
 
 named!(literal_expr(&str) -> Expr, map!(literal, Expr::Literal));
 
@@ -270,7 +272,6 @@ named!(funcref(&str) -> Expr, alt!(
 
 named!(no_arg_call(&str) -> Expr, do_parse!(
     fun: funcref
-        >> multispace0
         >> complete!(tag!("()"))
         >> (Expr::Call {
             fun: Box::new(fun),
@@ -432,6 +433,11 @@ pub(crate) mod tests {
     }
 
     #[test]
+    fn unit() {
+        assert_eq!(test_parse!(expr, "()"), Expr::Literal(Literal::Unit));
+    }
+
+    #[test]
     fn bools() {
         assert_eq!(
             test_parse!(expr, "true"),
@@ -513,6 +519,18 @@ pub(crate) mod tests {
                 args: vec![]
             }
         );
+    }
+
+    #[test]
+    fn unit_call() {
+        let res = test_parse!(expr, "f ()");
+        assert_eq!(
+            res,
+            Expr::Call {
+                fun: ident_expr("f"),
+                args: vec![Expr::Literal(Literal::Unit)]
+            }
+        )
     }
 
     #[test]

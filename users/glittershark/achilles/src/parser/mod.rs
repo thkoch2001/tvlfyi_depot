@@ -1,9 +1,9 @@
 use nom::character::complete::{multispace0, multispace1};
 use nom::error::{ErrorKind, ParseError};
-use nom::{alt, char, complete, do_parse, many0, named, separated_list0, tag, terminated};
+use nom::{alt, char, complete, do_parse, eof, many0, named, separated_list0, tag, terminated};
 
 #[macro_use]
-mod macros;
+pub(crate) mod macros;
 mod expr;
 mod type_;
 
@@ -136,7 +136,11 @@ named!(pub decl(&str) -> Decl, alt!(
     extern_decl
 ));
 
-named!(pub toplevel(&str) -> Vec<Decl>, terminated!(many0!(decl), multispace0));
+named!(pub toplevel(&str) -> Vec<Decl>, do_parse!(
+    decls: many0!(decl)
+        >> multispace0
+        >> eof!()
+        >> (decls)));
 
 #[cfg(test)]
 mod tests {
@@ -213,6 +217,23 @@ mod tests {
                     ret: Box::new(Type::Var("a".try_into().unwrap()))
                 })
             }]
+        )
+    }
+
+    #[test]
+    fn return_unit() {
+        assert_eq!(
+            test_parse!(decl, "fn g _ = ()"),
+            Decl::Fun {
+                name: "g".try_into().unwrap(),
+                body: Fun {
+                    args: vec![Arg {
+                        ident: "_".try_into().unwrap(),
+                        type_: None,
+                    }],
+                    body: Expr::Literal(Literal::Unit),
+                },
+            }
         )
     }
 }

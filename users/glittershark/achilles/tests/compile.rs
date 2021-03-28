@@ -24,6 +24,11 @@ const FIXTURES: &[Fixture] = &[
         exit_code: 0,
         expected_output: "foobar\n",
     },
+    Fixture {
+        name: "units",
+        exit_code: 0,
+        expected_output: "hi\n",
+    },
 ];
 
 #[test]
