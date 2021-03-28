@@ -54,6 +54,7 @@ with lib;
     gdb
     lldb
     hyperfine
+    config.lib.depot.third_party.clang-tools
 
     clj2nix
     clojure
@@ -62,7 +63,7 @@ with lib;
 
     pg-dump-upsert
 
-    config.lib.depot.third_party.clang-tools
+    nodePackages.prettier
   ] ++ optionals (stdenv.isLinux) [
     julia
     valgrind
