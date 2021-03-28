@@ -146,6 +146,24 @@ with lib;
         sslVerify = false;
         constLabels = [ "host=mugwump" ];
       };
+
+      blackbox = {
+        enable = true;
+        openFirewall = true;
+        configFile = pkgs.writeText "blackbox-exporter.yaml" (builtins.toJSON {
+          modules = {
+            https_2xx = {
+              prober = "http";
+              http = {
+                method = "GET";
+                fail_if_ssl = false;
+                fail_if_not_ssl = true;
+                preferred_ip_protocol = "ip4";
+              };
+            };
+          };
+        });
+      };
     };
 
     scrapeConfigs = [{
@@ -159,6 +177,28 @@ with lib;
       scrape_interval = "5s";
       static_configs = [{
         targets = ["localhost:${toString config.services.prometheus.exporters.nginx.port}"];
+      }];
+    } {
+      job_name = "blackbox";
+      metrics_path = "/probe";
+      params.module = ["https_2xx"];
+      scrape_interval = "5s";
+      static_configs = [{
+        targets = [
+          "https://www.gws.fyi"
+          "https://windtunnel.ci"
+          "https://app.windtunnel.ci"
+        ];
+      }];
+      relabel_configs = [{
+        source_labels = ["__address__"];
+        target_label = "__param_target";
+      } {
+        source_labels = ["__param_target"];
+        target_label = "instance";
+      } {
+        target_label = "__address__";
+        replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
       }];
     }];
   };
