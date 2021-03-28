@@ -90,6 +90,7 @@
     mdbook
     meson
     mime-types
+    minify
     mkShell
     moreutils
     nano
