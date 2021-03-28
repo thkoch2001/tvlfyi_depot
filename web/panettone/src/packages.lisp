@@ -13,8 +13,9 @@
   (:export :render-inline-markdown))
 
 (defpackage panettone.irc
+  (:nicknames :irc)
   (:use :cl :usocket)
-  (:export :send-irc-notification))
+  (:export :noping :send-irc-notification))
 
 (defpackage :panettone.authentication
   (:nicknames :authn)

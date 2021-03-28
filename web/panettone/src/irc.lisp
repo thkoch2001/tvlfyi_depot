@@ -2,6 +2,12 @@
 
 (in-package :panettone.irc)
 
+(defun noping (s)
+  (format nil "~A~A~A"
+          (char s 0)
+          #\ZERO_WIDTH_SPACE
+          (subseq s 1)))
+
 (defun get-irccat-config ()
   "Reads the IRCCATHOST and IRCCATPORT environment variables, and returns them
 as two values"
