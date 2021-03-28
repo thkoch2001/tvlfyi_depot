@@ -44,6 +44,16 @@
     nix-prefetch-github
     nix-review
     cachix
+    (writeShellScriptBin "rebuild-mugwump" ''
+      set -eo pipefail
+      cd ~/code/depot
+      nix build -f . users.glittershark.system.system.mugwumpSystem -o /tmp/mugwump
+      nix copy -f . users.glittershark.system.system.mugwumpSystem \
+        --to ssh://mugwump
+      system=$(readlink -ef /tmp/mugwump)
+      ssh mugwump sudo nix-env -p /nix/var/nix/profiles/system --set $system
+      ssh mugwump sudo $system/bin/switch-to-configuration switch
+    '')
   ];
 
   programs.ssh = {
