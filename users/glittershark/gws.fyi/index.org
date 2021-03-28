@@ -5,16 +5,31 @@
 my name is griffin ward smith (aka grfn, glittershark, gws) and i'm a software
 engineer and musician
 
-code
+* code
+
 - [[https://github.com/glittershark/][github]]
 - [[https://cs.tvl.fyi/depot/-/tree/users/glittershark][my directory in the tvl monorepo]]
 
-music
+* work
+
+i'm currently working for a relatively new stealth-mode startup. i can't talk much
+about it yet, but if you're interested in rust, distributed systems, and
+databases please reach out
+
+* projects
+
+- [[https://windtunnel.ci/][windtunnel]], a continuous benchmarking software-as-a-service currently accepting early alpha users (send me an email if you want to try it out!)
+- [[https://cs.tvl.fyi/depot/-/tree/users/glittershark/achilles][achilles]], a compiler for (what I plan to become) a dependently typed, low-level functional programming language targeting LLVM
+- [[https://github.com/glittershark/org-clubhouse][org-clubhouse]], an emacs package for lightweight integration between [[https://orgmode.org/][org-mode]] and [[https://clubhouse.io/][the clubhouse project management tool]]
+- [[https://cs.tvl.fyi/depot/-/tree/users/glittershark/xanthous][xanthous]], a terminal roguelike in haskell that I work on intermittently and exclusively for fun
+
+* music
+
 - https://sacrosanct.bandcamp.com/, a post-rock project with a [[https://bandcamp.com/h34rken][friend of mine]]
 - [[https://soundcloud.com/missingggg][my current soundcloud]], releasing instrumental hip-hop under the name *missing*
 - you can also find a log of all the music I listen to [[https://www.last.fm/user/wildgriffin45][on last.fm]]
 
-contact
+* contact
 
 - [[mailto:web@gws.fyi][web@gws.fyi]]
 - [[https://twitter.com/glittershark1][twitter]]
