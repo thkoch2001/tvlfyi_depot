@@ -219,6 +219,7 @@ in lib.fix(self: {
       exa
       fd
       file
+      firefox
       gdb
       git
       gnupg
@@ -249,6 +250,7 @@ in lib.fix(self: {
       screen
       scrot
       spotify
+      syncthing
       tokei
       tree
       vlc
@@ -263,9 +265,11 @@ in lib.fix(self: {
         allowOther = true;
 
         directories = [
+          ".cargo"
           ".config/google-chrome"
           ".config/quassel-irc.org"
           ".config/spotify"
+          ".config/syncthing"
           ".gnupg"
           ".local/share/direnv"
           ".local/share/fish/"
@@ -273,6 +277,7 @@ in lib.fix(self: {
           ".rustup"
           ".ssh"
           ".telega"
+          "go"
           "mail"
         ];
 
