@@ -16,6 +16,7 @@ renew:
 		--config-dir $(shell pwd)/letsencrypt/config
 	@echo "Reimporting certificate"
 	@aws acm import-certificate \
+	    --profile personal \
 	    --certificate file://letsencrypt/config/live/www.gws.fyi/cert.pem \
 	    --certificate-chain file://letsencrypt/config/live/www.gws.fyi/fullchain.pem \
 	    --private-key file://letsencrypt/config/live/www.gws.fyi/privkey.pem \
