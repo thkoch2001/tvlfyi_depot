@@ -460,7 +460,9 @@
         (send-irc-notification
          (format nil
                  "b/~A: \"~A\" opened by ~A - https://b.tvl.fyi/issues/~A"
-                 (id issue) subject (cn *user*)
+                 (id issue)
+                 subject
+                 (irc:noping (cn *user*))
                  (id issue))
          :channel (or (uiop:getenvp "ISSUECHANNEL")
                       "##tvl-dev"))
@@ -524,7 +526,10 @@
     (send-irc-notification
      (format nil
              "b/~A: \"~A\" closed by ~A - https://b.tvl.fyi/issues/~A"
-             id (subject issue) (cn *user*) id)
+             id
+             (subject issue)
+             (irc:noping (cn *user*))
+             id)
      :channel (or (uiop:getenvp "ISSUECHANNEL")
                   "##tvl-dev")))
   (hunchentoot:redirect (format nil "/issues/~A" id)))
