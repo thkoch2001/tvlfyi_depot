@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3322bc77_85ac7204",
+        "filename": "web/panettone/src/irc.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-28T15:18:02Z",
+      "side": 1,
+      "message": "If S is zero-length, this will throw.",
+      "revId": "8567399ee54cfdd96d35e8276a4a034f5d89efa4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
