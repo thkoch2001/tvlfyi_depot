@@ -16,6 +16,24 @@
       "message": "If S is zero-length, this will throw.",
       "revId": "8567399ee54cfdd96d35e8276a4a034f5d89efa4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eed2fa2_6d95502f",
+        "filename": "web/panettone/src/irc.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-28T15:24:20Z",
+      "side": 1,
+      "message": "Do we have cases where usernames are empty? If we don\u0027t expect them, I\u0027d probably do this Erlang-style and accept the error and see if we ever run into it.",
+      "parentUuid": "3322bc77_85ac7204",
+      "revId": "8567399ee54cfdd96d35e8276a4a034f5d89efa4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
