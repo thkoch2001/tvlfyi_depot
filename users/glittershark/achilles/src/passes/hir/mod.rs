@@ -4,6 +4,7 @@ use crate::ast::hir::{Binding, Decl, Expr};
 use crate::ast::{BinaryOperator, Ident, Literal, UnaryOperator};
 
 pub(crate) mod monomorphize;
+pub(crate) mod strip_positive_units;
 
 pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
     type Error;
@@ -53,7 +54,12 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
         Ok(())
     }
 
+    fn pre_visit_expr(&mut self, _expr: &mut Expr<'ast, T>) -> Result<(), Self::Error> {
+        Ok(())
+    }
+
     fn visit_expr(&mut self, expr: &mut Expr<'ast, T>) -> Result<(), Self::Error> {
+        self.pre_visit_expr(expr)?;
         match expr {
             Expr::Ident(id, t) => {
                 self.visit_ident(id)?;
@@ -140,6 +146,17 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
         Ok(())
     }
 
+    fn post_visit_fun_decl(
+        &mut self,
+        _name: &mut Ident<'ast>,
+        _type_args: &mut Vec<Ident>,
+        _args: &mut Vec<(Ident, T)>,
+        _body: &mut Box<Expr<T>>,
+        _type_: &mut T,
+    ) -> Result<(), Self::Error> {
+        Ok(())
+    }
+
     fn visit_decl(&mut self, decl: &'a mut Decl<'ast, T>) -> Result<(), Self::Error> {
         match decl {
             Decl::Fun {
@@ -150,15 +167,16 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
                 type_,
             } => {
                 self.visit_ident(name)?;
-                for type_arg in type_args {
+                for type_arg in type_args.iter_mut() {
                     self.visit_ident(type_arg)?;
                 }
-                for (arg, t) in args {
+                for (arg, t) in args.iter_mut() {
                     self.visit_ident(arg)?;
                     self.visit_type(t)?;
                 }
                 self.visit_expr(body)?;
                 self.visit_type(type_)?;
+                self.post_visit_fun_decl(name, type_args, args, body, type_)?;
             }
             Decl::Extern {
                 name,

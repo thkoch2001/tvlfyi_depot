@@ -30,6 +30,7 @@ impl<'a> Ident<'a> {
         Ident(Cow::Owned(self.0.clone().into_owned()))
     }
 
+    /// Construct an identifier from a &str without checking that it's a valid identifier
     pub fn from_str_unchecked(s: &'a str) -> Self {
         debug_assert!(is_valid_identifier(s));
         Self(Cow::Borrowed(s))
@@ -109,6 +110,7 @@ pub enum UnaryOperator {
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Literal<'a> {
+    Unit,
     Int(u64),
     Bool(bool),
     String(Cow<'a, str>),
@@ -120,6 +122,7 @@ impl<'a> Literal<'a> {
             Literal::Int(i) => Literal::Int(*i),
             Literal::Bool(b) => Literal::Bool(*b),
             Literal::String(s) => Literal::String(Cow::Owned(s.clone().into_owned())),
+            Literal::Unit => Literal::Unit,
         }
     }
 }
@@ -308,6 +311,7 @@ pub enum Type<'a> {
     Float,
     Bool,
     CString,
+    Unit,
     Var(Ident<'a>),
     Function(FunctionType<'a>),
 }
@@ -319,6 +323,7 @@ impl<'a> Type<'a> {
             Type::Float => Type::Float,
             Type::Bool => Type::Bool,
             Type::CString => Type::CString,
+            Type::Unit => Type::Unit,
             Type::Var(v) => Type::Var(v.to_owned()),
             Type::Function(f) => Type::Function(f.to_owned()),
         }
@@ -374,6 +379,7 @@ impl<'a> Type<'a> {
             Type::Float => Type::Float,
             Type::Bool => Type::Bool,
             Type::CString => Type::CString,
+            Type::Unit => Type::Unit,
         }
     }
 }
@@ -385,6 +391,7 @@ impl<'a> Display for Type<'a> {
             Type::Float => f.write_str("float"),
             Type::Bool => f.write_str("bool"),
             Type::CString => f.write_str("cstring"),
+            Type::Unit => f.write_str("()"),
             Type::Var(v) => v.fmt(f),
             Type::Function(ft) => ft.fmt(f),
         }

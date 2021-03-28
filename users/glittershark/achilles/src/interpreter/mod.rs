@@ -30,6 +30,7 @@ impl<'a> Interpreter<'a> {
             Expr::Literal(Literal::Int(i), _) => Ok((*i).into()),
             Expr::Literal(Literal::Bool(b), _) => Ok((*b).into()),
             Expr::Literal(Literal::String(s), _) => Ok(s.clone().into()),
+            Expr::Literal(Literal::Unit, _) => unreachable!(),
             Expr::UnaryOp { op, rhs, .. } => {
                 let rhs = self.eval(rhs)?;
                 match op {

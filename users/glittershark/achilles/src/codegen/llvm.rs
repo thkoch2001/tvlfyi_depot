@@ -68,8 +68,12 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
         self.function_stack.last().unwrap()
     }
 
-    pub fn finish_function(&mut self, res: &BasicValueEnum<'ctx>) -> FunctionValue<'ctx> {
-        self.builder.build_return(Some(res));
+    pub fn finish_function(&mut self, res: Option<&BasicValueEnum<'ctx>>) -> FunctionValue<'ctx> {
+        self.builder.build_return(match res {
+            // lol
+            Some(val) => Some(val),
+            None => None,
+        });
         self.function_stack.pop().unwrap()
     }
 
@@ -78,79 +82,92 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
             .append_basic_block(*self.function_stack.last().unwrap(), name)
     }
 
-    pub fn codegen_expr(&mut self, expr: &'ast Expr<'ast, Type>) -> Result<AnyValueEnum<'ctx>> {
+    pub fn codegen_expr(
+        &mut self,
+        expr: &'ast Expr<'ast, Type>,
+    ) -> Result<Option<AnyValueEnum<'ctx>>> {
         match expr {
             Expr::Ident(id, _) => self
                 .env
                 .resolve(id)
                 .cloned()
-                .ok_or_else(|| Error::UndefinedVariable(id.to_owned())),
+                .ok_or_else(|| Error::UndefinedVariable(id.to_owned()))
+                .map(Some),
             Expr::Literal(lit, ty) => {
                 let ty = self.codegen_int_type(ty);
                 match lit {
-                    Literal::Int(i) => Ok(AnyValueEnum::IntValue(ty.const_int(*i, false))),
-                    Literal::Bool(b) => Ok(AnyValueEnum::IntValue(
+                    Literal::Int(i) => Ok(Some(AnyValueEnum::IntValue(ty.const_int(*i, false)))),
+                    Literal::Bool(b) => Ok(Some(AnyValueEnum::IntValue(
                         ty.const_int(if *b { 1 } else { 0 }, false),
+                    ))),
+                    Literal::String(s) => Ok(Some(
+                        self.builder
+                            .build_global_string_ptr(s, "s")
+                            .as_pointer_value()
+                            .into(),
                     )),
-                    Literal::String(s) => Ok(self
-                        .builder
-                        .build_global_string_ptr(s, "s")
-                        .as_pointer_value()
-                        .into()),
+                    Literal::Unit => Ok(None),
                 }
             }
             Expr::UnaryOp { op, rhs, .. } => {
-                let rhs = self.codegen_expr(rhs)?;
+                let rhs = self.codegen_expr(rhs)?.unwrap();
                 match op {
                     UnaryOperator::Not => unimplemented!(),
-                    UnaryOperator::Neg => Ok(AnyValueEnum::IntValue(
+                    UnaryOperator::Neg => Ok(Some(AnyValueEnum::IntValue(
                         self.builder.build_int_neg(rhs.into_int_value(), "neg"),
-                    )),
+                    ))),
                 }
             }
             Expr::BinaryOp { lhs, op, rhs, .. } => {
-                let lhs = self.codegen_expr(lhs)?;
-                let rhs = self.codegen_expr(rhs)?;
+                let lhs = self.codegen_expr(lhs)?.unwrap();
+                let rhs = self.codegen_expr(rhs)?.unwrap();
                 match op {
-                    BinaryOperator::Add => Ok(AnyValueEnum::IntValue(self.builder.build_int_add(
-                        lhs.into_int_value(),
-                        rhs.into_int_value(),
-                        "add",
-                    ))),
-                    BinaryOperator::Sub => Ok(AnyValueEnum::IntValue(self.builder.build_int_sub(
-                        lhs.into_int_value(),
-                        rhs.into_int_value(),
-                        "add",
-                    ))),
-                    BinaryOperator::Mul => Ok(AnyValueEnum::IntValue(self.builder.build_int_sub(
-                        lhs.into_int_value(),
-                        rhs.into_int_value(),
-                        "add",
-                    ))),
-                    BinaryOperator::Div => {
-                        Ok(AnyValueEnum::IntValue(self.builder.build_int_signed_div(
+                    BinaryOperator::Add => {
+                        Ok(Some(AnyValueEnum::IntValue(self.builder.build_int_add(
                             lhs.into_int_value(),
                             rhs.into_int_value(),
                             "add",
-                        )))
+                        ))))
                     }
+                    BinaryOperator::Sub => {
+                        Ok(Some(AnyValueEnum::IntValue(self.builder.build_int_sub(
+                            lhs.into_int_value(),
+                            rhs.into_int_value(),
+                            "add",
+                        ))))
+                    }
+                    BinaryOperator::Mul => {
+                        Ok(Some(AnyValueEnum::IntValue(self.builder.build_int_sub(
+                            lhs.into_int_value(),
+                            rhs.into_int_value(),
+                            "add",
+                        ))))
+                    }
+                    BinaryOperator::Div => Ok(Some(AnyValueEnum::IntValue(
+                        self.builder.build_int_signed_div(
+                            lhs.into_int_value(),
+                            rhs.into_int_value(),
+                            "add",
+                        ),
+                    ))),
                     BinaryOperator::Pow => unimplemented!(),
-                    BinaryOperator::Equ => {
-                        Ok(AnyValueEnum::IntValue(self.builder.build_int_compare(
+                    BinaryOperator::Equ => Ok(Some(AnyValueEnum::IntValue(
+                        self.builder.build_int_compare(
                             IntPredicate::EQ,
                             lhs.into_int_value(),
                             rhs.into_int_value(),
                             "eq",
-                        )))
-                    }
+                        ),
+                    ))),
                     BinaryOperator::Neq => todo!(),
                 }
             }
             Expr::Let { bindings, body, .. } => {
                 self.env.push();
                 for Binding { ident, body, .. } in bindings {
-                    let val = self.codegen_expr(body)?;
-                    self.env.set(ident, val);
+                    if let Some(val) = self.codegen_expr(body)? {
+                        self.env.set(ident, val);
+                    }
                 }
                 let res = self.codegen_expr(body);
                 self.env.pop();
@@ -165,7 +182,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 let then_block = self.append_basic_block("then");
                 let else_block = self.append_basic_block("else");
                 let join_block = self.append_basic_block("join");
-                let condition = self.codegen_expr(condition)?;
+                let condition = self.codegen_expr(condition)?.unwrap();
                 self.builder.build_conditional_branch(
                     condition.into_int_value(),
                     then_block,
@@ -180,12 +197,22 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 self.builder.build_unconditional_branch(join_block);
 
                 self.builder.position_at_end(join_block);
-                let phi = self.builder.build_phi(self.codegen_type(type_), "join");
-                phi.add_incoming(&[
-                    (&BasicValueEnum::try_from(then_res).unwrap(), then_block),
-                    (&BasicValueEnum::try_from(else_res).unwrap(), else_block),
-                ]);
-                Ok(phi.as_basic_value().into())
+                if let Some(phi_type) = self.codegen_type(type_) {
+                    let phi = self.builder.build_phi(phi_type, "join");
+                    phi.add_incoming(&[
+                        (
+                            &BasicValueEnum::try_from(then_res.unwrap()).unwrap(),
+                            then_block,
+                        ),
+                        (
+                            &BasicValueEnum::try_from(else_res.unwrap()).unwrap(),
+                            else_block,
+                        ),
+                    ]);
+                    Ok(Some(phi.as_basic_value().into()))
+                } else {
+                    Ok(None)
+                }
             }
             Expr::Call { fun, args, .. } => {
                 if let Expr::Ident(id, _) = &**fun {
@@ -196,15 +223,14 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                         .ok_or_else(|| Error::UndefinedVariable(id.to_owned()))?;
                     let args = args
                         .iter()
-                        .map(|arg| Ok(self.codegen_expr(arg)?.try_into().unwrap()))
+                        .map(|arg| Ok(self.codegen_expr(arg)?.unwrap().try_into().unwrap()))
                         .collect::<Result<Vec<_>>>()?;
                     Ok(self
                         .builder
                         .build_call(function, &args, "call")
                         .try_as_basic_value()
                         .left()
-                        .unwrap()
-                        .into())
+                        .map(|val| val.into()))
                 } else {
                     todo!()
                 }
@@ -216,7 +242,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 let function = self.codegen_function(&fname, args, body)?;
                 self.builder.position_at_end(cur_block);
                 self.env.restore(env);
-                Ok(function.into())
+                Ok(Some(function.into()))
             }
         }
     }
@@ -227,15 +253,17 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
         args: &'ast [(Ident<'ast>, Type)],
         body: &'ast Expr<'ast, Type>,
     ) -> Result<FunctionValue<'ctx>> {
+        let arg_types = args
+            .iter()
+            .filter_map(|(_, at)| self.codegen_type(at))
+            .collect::<Vec<_>>();
+
         self.new_function(
             name,
-            self.codegen_type(body.type_()).fn_type(
-                args.iter()
-                    .map(|(_, at)| self.codegen_type(at))
-                    .collect::<Vec<_>>()
-                    .as_slice(),
-                false,
-            ),
+            match self.codegen_type(body.type_()) {
+                Some(ret_ty) => ret_ty.fn_type(&arg_types, false),
+                None => self.context.void_type().fn_type(&arg_types, false),
+            },
         );
         self.env.push();
         for (i, (arg, _)) in args.iter().enumerate() {
@@ -244,9 +272,9 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 self.cur_function().get_nth_param(i as u32).unwrap().into(),
             );
         }
-        let res = self.codegen_expr(body)?.try_into().unwrap();
+        let res = self.codegen_expr(body)?;
         self.env.pop();
-        Ok(self.finish_function(&res))
+        Ok(self.finish_function(res.map(|av| av.try_into().unwrap()).as_ref()))
     }
 
     pub fn codegen_extern(
@@ -255,15 +283,16 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
         args: &'ast [Type],
         ret: &'ast Type,
     ) -> Result<()> {
+        let arg_types = args
+            .iter()
+            .map(|t| self.codegen_type(t).unwrap())
+            .collect::<Vec<_>>();
         self.module.add_function(
             name,
-            self.codegen_type(ret).fn_type(
-                &args
-                    .iter()
-                    .map(|t| self.codegen_type(t))
-                    .collect::<Vec<_>>(),
-                false,
-            ),
+            match self.codegen_type(ret) {
+                Some(ret_ty) => ret_ty.fn_type(&arg_types, false),
+                None => self.context.void_type().fn_type(&arg_types, false),
+            },
             None,
         );
         Ok(())
@@ -287,29 +316,31 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
 
     pub fn codegen_main(&mut self, expr: &'ast Expr<'ast, Type>) -> Result<()> {
         self.new_function("main", self.context.i64_type().fn_type(&[], false));
-        let res = self.codegen_expr(expr)?.try_into().unwrap();
+        let res = self.codegen_expr(expr)?;
         if *expr.type_() != Type::Int {
             self.builder
                 .build_return(Some(&self.context.i64_type().const_int(0, false)));
         } else {
-            self.finish_function(&res);
+            self.finish_function(res.map(|r| r.try_into().unwrap()).as_ref());
         }
         Ok(())
     }
 
-    fn codegen_type(&self, type_: &'ast Type) -> BasicTypeEnum<'ctx> {
+    fn codegen_type(&self, type_: &'ast Type) -> Option<BasicTypeEnum<'ctx>> {
         // TODO
         match type_ {
-            Type::Int => self.context.i64_type().into(),
-            Type::Float => self.context.f64_type().into(),
-            Type::Bool => self.context.bool_type().into(),
-            Type::CString => self
-                .context
-                .i8_type()
-                .ptr_type(AddressSpace::Generic)
-                .into(),
+            Type::Int => Some(self.context.i64_type().into()),
+            Type::Float => Some(self.context.f64_type().into()),
+            Type::Bool => Some(self.context.bool_type().into()),
+            Type::CString => Some(
+                self.context
+                    .i8_type()
+                    .ptr_type(AddressSpace::Generic)
+                    .into(),
+            ),
             Type::Function(_) => todo!(),
             Type::Var(_) => unreachable!(),
+            Type::Unit => None,
         }
     }
 
