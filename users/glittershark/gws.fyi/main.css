@@ -2,7 +2,6 @@
 
 body {
   margin-top: 40px;
-  margin-left: 150px;
   max-width: 900px;
   line-height: 1.6;
   font-size: 16px;
@@ -10,6 +9,18 @@ body {
   color: #3a1616;
   padding: 0 10px;
   font-family: Inter, sans-serif;
+}
+
+@media (min-width: 1050px) {
+  body {
+    margin-left: 150px;
+  }
+}
+
+@media (min-width: 2000px) {
+  body {
+    margin-left: 300px;
+  }
 }
 
 input {
