@@ -98,6 +98,7 @@ in lib.fix(self: {
     hostId = "3c91827f";
     useDHCP = false;
     networkmanager.enable = true;
+    firewall.enable = false;
 
     nameservers = [
       "8.8.8.8"
