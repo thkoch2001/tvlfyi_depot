@@ -169,6 +169,24 @@ fn has_callout<'a>(node: &Node<'a, RefCell<Ast>>) -> Option<Callout> {
     }
 }
 
+enum LinkType {
+    BUG,
+    CHANGELIST,
+}
+
+enum FragmentType {
+    Text(String),
+    Link {
+        type_: LinkType,
+        target: String,
+        text: String,
+    },
+}
+
+fn split_shortlinks(input: String) -> Vec<FragmentType> {
+    unimplemented!()
+}
+
 fn format_callout_paragraph(callout: Callout) -> NodeValue {
     let class = match callout {
         Callout::Todo => "cheddar-todo",
@@ -180,6 +198,13 @@ fn format_callout_paragraph(callout: Callout) -> NodeValue {
     let mut block = NodeHtmlBlock::default();
     block.literal = format!("<p class=\"cheddar-callout {}\">", class).into_bytes();
     NodeValue::HtmlBlock(block)
+}
+
+// Detect TVL short links and make them clickable.
+fn linkify(text: &[u8]) -> Option<NodeValue> {
+    let mut out = String::new();
+
+    unimplemented!()
 }
 
 fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
@@ -194,6 +219,8 @@ fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     let arena = Arena::new();
     let root = parse_document(&arena, &document, &MD_OPTS);
 
+    println!("before:\n{:?}", root);
+
     // This node must exist with a lifetime greater than that of the parsed AST
     // in case that callouts are encountered (otherwise insertion into the tree
     // is not possible).
@@ -207,26 +234,34 @@ fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     // arena and reacting on nodes that we might want to modify.
     iter_nodes(root, &|node| {
         let mut ast = node.data.borrow_mut();
-        let new = match &ast.value {
+        match &ast.value {
             // Syntax highlighting is implemented by replacing the
             // code block node with literal HTML.
-            NodeValue::CodeBlock(code) => Some(highlight_code_block(code)),
+            NodeValue::CodeBlock(code) => {
+                ast.value = highlight_code_block(code);
+            }
 
             NodeValue::Paragraph => {
                 if let Some(callout) = has_callout(node) {
                     node.insert_after(&p_close);
-                    Some(format_callout_paragraph(callout))
-                } else {
-                    None
+                    ast.value = format_callout_paragraph(callout)
                 }
             }
-            _ => None,
-        };
 
-        if let Some(new_value) = new {
-            ast.value = new_value
-        }
+            NodeValue::Text(text) => {
+                // Do nothing if the parent is already a link.
+                // if node.parent()
+
+                if let Some(nodes) = linkify(text) {
+                    unimplemented!()
+                }
+            }
+            // NodeValue::Text(text) => Some(linkify(text)),
+            _ => {}
+        };
     });
+
+    println!("after:\n{:?}", root);
 
     format_html(root, &MD_OPTS, writer).expect("Markdown rendering failed");
 }

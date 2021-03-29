@@ -61,3 +61,9 @@ toString 42
 "#,
     );
 }
+
+#[test]
+fn linkifies_bugs() {
+    // expect_markdown("b/1234", "<p><a>b/1234</a>");
+    expect_markdown("before [foo](bar) after", "");
+}
