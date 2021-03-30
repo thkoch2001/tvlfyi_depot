@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f19e2135_b5ff1539",
+        "filename": "users/Profpatsch/netencode/netencode.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-30T10:59:15Z",
+      "side": 1,
+      "message": "Would it be a alternative to this to use a peek operation in the inner parser to check for the delimiter and only to consume it in the parent parser?",
+      "revId": "ce5c5f5f721f265a88308c7bbfe6a72a1544d37d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
