@@ -88,6 +88,24 @@
       "parentUuid": "b8ecac2e_4a8d6a63",
       "revId": "bc04217fa2493418af7543a966ebf9dbb2a02973",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1af63f2_2ff74d5d",
+        "filename": "tools/cheddar/src/tests.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-03-30T22:51:22Z",
+      "side": 1,
+      "message": "Running `cargo test` from //tools/cheddar finds zero tests, and copying the tests into the same file will get more messy.\n\nI\u0027d be more happy if `format_markdown` was public, and the tests exercising it were moved to //tools/cheddar/tests/integration_tests.rs`.\n\nThere\u0027s not much preventing `format_markdown` to be used as a library, except the silent lazy dependency on `BAT_SYNTAXES` (which we should document?)",
+      "parentUuid": "85ce46ff_c8739f36",
+      "revId": "bc04217fa2493418af7543a966ebf9dbb2a02973",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
