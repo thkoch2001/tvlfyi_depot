@@ -22,6 +22,30 @@
       },
       "revId": "6a675a9527c411396c965c7cd9db454b611b904f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2585258e_ac904316",
+        "filename": "nix/buildManPages/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-30T15:44:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "87771c66_33c7021f",
+      "range": {
+        "startLine": 5,
+        "startChar": 4,
+        "endLine": 5,
+        "endChar": 7
+      },
+      "revId": "6a675a9527c411396c965c7cd9db454b611b904f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

@@ -22,6 +22,30 @@
       },
       "revId": "ceadaedf17c1b96d17bfdb49fca56110cb175cf7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57412da1_bd6a2a7c",
+        "filename": "nix/buildManPages/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-30T15:44:47Z",
+      "side": 1,
+      "message": "This is just because I have a default value specified in two places and pass around the `{ … }@args`. If I\u0027d ever decide to change the default, out of sync defaults would result in everything breaking essentially because both parts would behave differently.",
+      "parentUuid": "6e00c6bc_9e1cb4b1",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "ceadaedf17c1b96d17bfdb49fca56110cb175cf7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
