@@ -13,6 +13,7 @@
     avrlibc
     bashInteractive
     bat
+    bat_syntaxes
     bc
     bind
     buildBazelPackage
