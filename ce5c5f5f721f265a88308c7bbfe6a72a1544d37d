@@ -16,6 +16,24 @@
       "message": "Would it be a alternative to this to use a peek operation in the inner parser to check for the delimiter and only to consume it in the parent parser?",
       "revId": "ce5c5f5f721f265a88308c7bbfe6a72a1544d37d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "302612d9_ce0f4462",
+        "filename": "users/Profpatsch/netencode/netencode.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-30T11:30:43Z",
+      "side": 1,
+      "message": "Hmmmm, maybe? I didn’t even know `nom` had a `peek`, but the implementation look pretty trivial actually.\n\nI think I’ll stay with the current solution, I feel it’s harder to wrap my head around `peek` than one specific helper.",
+      "parentUuid": "f19e2135_b5ff1539",
+      "revId": "ce5c5f5f721f265a88308c7bbfe6a72a1544d37d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
