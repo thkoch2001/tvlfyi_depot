@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e3b40d5_2191d2c1",
+        "filename": "users/sterni/clock/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-03-30T16:02:41Z",
+      "side": 1,
+      "message": "you monster",
+      "revId": "888b940bb19f7be0ede3e26fc5b67bd10e492f4c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
