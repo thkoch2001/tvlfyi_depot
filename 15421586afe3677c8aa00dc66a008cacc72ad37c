@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "599d7814_41657ea8",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-30T14:48:10Z",
+      "side": 1,
+      "message": "\u003e are both used to send outputs over the wire\n\nNo, the contents of outputs are only enclosed in BuildResultChunk - BuildResult is the final message for a build confirming either its success or failure. An alternative way of doing this is making the result field a oneof of a success/error message, I\u0027ll try that and put it in here.\n\nI\u0027d prefer not extracting very simple messages to avoid making the proto structure too complicated - IMO, if there is another structure somewhere that also has `output` and `drv_hash` that\u0027s fine.",
+      "parentUuid": "1fb62ee6_9e7e7225",
+      "revId": "15421586afe3677c8aa00dc66a008cacc72ad37c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4d4198f4_72c06136",
         "filename": "tvix/proto/evaluator.proto",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2021-03-27T22:02:12Z",
       "side": 1,
       "message": "Again, should probably be moved into a separate file.\n\nLooking at the gdoc history, there was a\n\n```\n  /// Error that occured during a build. This does not close the stream.\n  /// If the error is so severe the coordinator wants to kill the evaluation,\n  /// it can simply close the stream.\n  BuildError(BuildError),\n\n```\n\nThis BuildError was to notify the evaluator that an error has occured while it built something requested with BuildRequest (but allowing the evaluator to keep evaluating) - independent of whether it already started streaming it or not.\n\nWe currently somewhat miss this possibility.",
+      "revId": "15421586afe3677c8aa00dc66a008cacc72ad37c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89911512_553c5c81",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-30T14:48:10Z",
+      "side": 1,
+      "message": "The intention of `BuildResult` is to indicate that a build is completed, either successfully (with the requested output optionally having been streamed back) or unsuccessfully with an error. Either way, this is the final message returned for each build.\n\nI\u0027ll update the comment to make this clearer!",
+      "parentUuid": "4d4198f4_72c06136",
       "revId": "15421586afe3677c8aa00dc66a008cacc72ad37c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
