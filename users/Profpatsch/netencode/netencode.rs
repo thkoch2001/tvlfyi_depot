@@ -213,6 +213,7 @@ pub mod parse {
     use nom::bytes::streaming::{tag, take};
     use nom::branch::{alt};
     use nom::character::streaming::{digit1, char};
+    use nom::character::complete;
     use nom::sequence::{tuple};
     use nom::combinator::{map, map_res, flat_map, map_parser, opt};
     use nom::error::{context, ErrorKind, ParseError};
@@ -233,8 +234,10 @@ pub mod parse {
 
     fn sized(begin: char, end: char) -> impl Fn(&[u8]) -> IResult<&[u8], &[u8]> {
         move |s: &[u8]| {
-            let (s, (_, len, _)) = tuple((
-                char(begin),
+            // This is the point where we check the descriminator;
+            // if the beginning char does not match, we can immediately return.
+            let (s, _) = char(begin)(s)?;
+            let (s, (len, _)) = tuple((
                 usize_t,
                 char(':')
             ))(s)?;
@@ -321,6 +324,7 @@ pub mod parse {
     /// parse text scalar (`t5:hello,`)
     fn text(s: &[u8]) -> IResult<&[u8], T> {
         let (s, res) = text_g(s)?;
+
         Ok((s, T::Text(res.to_string())))
     }
 
@@ -344,14 +348,33 @@ pub mod parse {
         list_g(t_t)(s)
     }
 
+    /// Wrap the inner parser of an `many0`/`fold_many0`, so that the parser
+    /// is not called when the `s` is empty already, preventing it from
+    /// returning `Incomplete` on streaming parsing.
+    fn inner_no_empty_string<'a, P, O>(inner: P) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], O>
+    where
+        O: Clone,
+        P: Fn(&'a [u8]) -> IResult<&'a [u8], O>,
+    {
+        move |s: &'a [u8]| {
+            if s.is_empty() {
+                // This is a bit hacky, many0/many1 considers the inside done
+                // when a parser returns `Err::Error`, ignoring the actual error content
+                Err(nom::Err::Error((s, nom::error::ErrorKind::Many0)))
+            } else {
+                inner(s)
+            }
+        }
+    }
+
     fn list_g<'a, P, O>(inner: P) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], Vec<O>>
     where
         O: Clone,
-        P: Fn(&'a [u8]) -> IResult<&'a [u8], O>
+        P: Fn(&'a [u8]) -> IResult<&'a [u8], O>,
     {
         map_parser(
             sized('[', ']'),
-            nom::multi::many0(inner)
+            nom::multi::many0(inner_no_empty_string(inner))
         )
     }
 
@@ -368,21 +391,29 @@ pub mod parse {
         O: Clone,
         P: Fn(&'a [u8]) -> IResult<&'a [u8], O>
     {
-        map_parser(
-            sized('{', '}'),
-            nom::multi::fold_many1(
-                tag_g(inner),
-                HashMap::new(),
-                |mut acc: HashMap<_,_>, Tag { tag, mut val }| {
-                    // ignore duplicated tag names that appear later
-                    // according to netencode spec
-                    if ! acc.contains_key(tag) {
-                        acc.insert(tag, *val);
+        move |s: &'a [u8]| {
+            let (s, map) = map_parser(
+                sized('{', '}'),
+                nom::multi::fold_many0(
+                    inner_no_empty_string(tag_g(&inner)),
+                    HashMap::new(),
+                    |mut acc: HashMap<_,_>, Tag { tag, mut val }| {
+                        // ignore duplicated tag names that appear later
+                        // according to netencode spec
+                        if ! acc.contains_key(tag) {
+                            acc.insert(tag, *val);
+                        }
+                        acc
                     }
-                    acc
-                }
-            )
-        )
+                )
+            )(s)?;
+            if map.is_empty() {
+                // records must not be empty, according to the spec
+                Err(nom::Err::Failure((s,nom::error::ErrorKind::Many1)))
+            } else {
+                Ok((s, map))
+            }
+        }
     }
 
     pub fn u_u(s: &[u8]) -> IResult<&[u8], U> {
@@ -512,16 +543,19 @@ pub mod parse {
         fn test_parse_text() {
             assert_eq!(
                 text("t5:hello,".as_bytes()),
-                Ok(("".as_bytes(), T::Text("hello".to_owned())))
+                Ok(("".as_bytes(), T::Text("hello".to_owned()))),
+                "{}", r"t5:hello,"
             );
             assert_eq!(
-                text("t4:fo,".as_bytes()),
-                // TODO: way better parse error messages
-                Err(nom::Err::Error(("fo,".as_bytes(), nom::error::ErrorKind::Eof)))
+                text("t4:fo".as_bytes()),
+                // The content of the text should be 4 long
+                Err(nom::Err::Incomplete(nom::Needed::Size(4))),
+                "{}", r"t4:fo,"
             );
             assert_eq!(
                 text("t9:今日は,".as_bytes()),
-                Ok(("".as_bytes(), T::Text("今日は".to_owned())))
+                Ok(("".as_bytes(), T::Text("今日は".to_owned()))),
+                "{}", r"t9:今日は,"
             );
         }
 
@@ -529,16 +563,25 @@ pub mod parse {
         fn test_parse_binary() {
             assert_eq!(
                 binary()("b5:hello,".as_bytes()),
-                Ok(("".as_bytes(), T::Binary(Vec::from("hello".to_owned()))))
+                Ok(("".as_bytes(), T::Binary(Vec::from("hello".to_owned())))),
+                "{}", r"b5:hello,"
             );
             assert_eq!(
-                binary()("b4:fo,".as_bytes()),
-                // TODO: way better parse error messages
-                Err(nom::Err::Error(("fo,".as_bytes(), nom::error::ErrorKind::Eof)))
+                binary()("b4:fo".as_bytes()),
+                // The content of the byte should be 4 long
+                Err(nom::Err::Incomplete(nom::Needed::Size(4))),
+                "{}", r"b4:fo,"
             );
+            assert_eq!(
+                binary()("b4:foob".as_bytes()),
+                // The content is 4 bytes now, but the finishing , is missing
+                Err(nom::Err::Incomplete(nom::Needed::Size(1))),
+                    "{}", r"b4:fo,"
+                );
             assert_eq!(
                 binary()("b9:今日は,".as_bytes()),
-                Ok(("".as_bytes(), T::Binary(Vec::from("今日は".as_bytes()))))
+                Ok(("".as_bytes(), T::Binary(Vec::from("今日は".as_bytes())))),
+                "{}", r"b9:今日は,"
             );
         }
 
@@ -546,7 +589,8 @@ pub mod parse {
         fn test_list() {
             assert_eq!(
                 list_t("[0:]".as_bytes()),
-                Ok(("".as_bytes(), vec![]))
+                Ok(("".as_bytes(), vec![])),
+                "{}", r"[0:]"
             );
             assert_eq!(
                 list_t("[6:u,u,u,]".as_bytes()),
@@ -554,7 +598,8 @@ pub mod parse {
                     T::Unit,
                     T::Unit,
                     T::Unit,
-                ]))
+                ])),
+                "{}", r"[6:u,u,u,]"
             );
             assert_eq!(
                 list_t("[15:u,[7:t3:foo,]u,]".as_bytes()),
@@ -562,7 +607,8 @@ pub mod parse {
                     T::Unit,
                     T::List(vec![T::Text("foo".to_owned())]),
                     T::Unit,
-                ]))
+                ])),
+                "{}", r"[15:u,[7:t3:foo,]u,]"
             );
         }
 
@@ -574,7 +620,8 @@ pub mod parse {
                     ("a".to_owned(), T::Unit),
                     ("b".to_owned(), T::Unit),
                     ("c".to_owned(), T::Unit),
-                ].into_iter().collect::<HashMap<String, T>>()))
+                ].into_iter().collect::<HashMap<String, T>>())),
+                "{}", r"{21:<1:a|u,<1:b|u,<1:c|u,}"
             );
             // duplicated keys are ignored (first is taken)
             assert_eq!(
@@ -582,7 +629,14 @@ pub mod parse {
                 Ok(("".as_bytes(), vec![
                     ("a".to_owned(), T::Unit),
                     ("b".to_owned(), T::Unit),
-                ].into_iter().collect::<HashMap<_,_>>()))
+                ].into_iter().collect::<HashMap<_,_>>())),
+                "{}", r"{25:<1:a|u,<1:b|u,<1:a|i1:-1,}"
+            );
+            // empty records are not allowed
+            assert_eq!(
+                record_t("{0:}".as_bytes()),
+                Err(nom::Err::Failure(("".as_bytes(), nom::error::ErrorKind::Many1))),
+                "{}", r"{0:}"
             );
         }
 
@@ -590,18 +644,21 @@ pub mod parse {
         fn test_parse() {
             assert_eq!(
                 t_t("n3:255,".as_bytes()),
-                Ok(("".as_bytes(), T::N3(255)))
+                Ok(("".as_bytes(), T::N3(255))),
+                "{}", r"n3:255,"
             );
             assert_eq!(
                 t_t("t6:halloo,".as_bytes()),
-                Ok(("".as_bytes(), T::Text("halloo".to_owned())))
+                Ok(("".as_bytes(), T::Text("halloo".to_owned()))),
+                "{}", r"t6:halloo,"
             );
             assert_eq!(
                 t_t("<3:foo|t6:halloo,".as_bytes()),
                 Ok(("".as_bytes(), T::Sum (Tag {
                     tag: "foo".to_owned(),
                     val: Box::new(T::Text("halloo".to_owned()))
-                })))
+                }))),
+                "{}", r"<3:foo|t6:halloo,"
             );
             // { a: Unit
             // , foo: List <A: Unit | B: List i3> }
@@ -614,7 +671,8 @@ pub mod parse {
                         T::Sum(Tag { tag: "A".to_owned(), val: Box::new(T::N1(true)) }),
                         T::Sum(Tag { tag: "B".to_owned(), val: Box::new(T::List(vec![T::I3(127)])) }),
                     ]))
-                ].into_iter().collect::<HashMap<String, T>>())))
+                ].into_iter().collect::<HashMap<String, T>>()))),
+                "{}", r"{52:<1:a|u,<3:foo|[33:<1:A|u,<1:A|n1:1,<1:B|[7:i3:127,]]}"
             );
         }
 
