@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff9ad95b_902c23d2",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-30T15:34:58Z",
+      "side": 1,
+      "message": "Intuitively and similarly to how it is currently, I\u0027d say the client would receive multiple `NixValue` or `Derivation` messages and has to decide what to do with them.\n\nI\u0027d say this is desireable since in effect the values are independent of each other we just mash them together for efficiency and convenience.",
+      "parentUuid": "9a6e29af_37d33bf6",
+      "revId": "661d5db1c3504736e84219b26878ef8da9ad3920",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ce879a96_4d880ece",
         "filename": "tvix/proto/evaluator.proto",
         "patchSetId": 2
