@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3689d9e3_50685a37",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-03-30T15:41:52Z",
+      "side": 1,
+      "message": "is the semantics here that the individual fields get concatenated together? or just the output and data fields? Can that be documented?",
+      "parentUuid": "d2b7b7e0_e3be290d",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b0bc132_414a20a0",
         "filename": "tvix/proto/evaluator.proto",
         "patchSetId": 6
@@ -137,6 +155,24 @@
       "side": 1,
       "message": "This is for the IFD case, i.e. if the evaluator needs to request a build output (see the comment below on the `build_request` field) - I\u0027ll restructure the comments on this so that it\u0027s more obvious with the reading direction!",
       "parentUuid": "1b0bc132_414a20a0",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62e6fbe6_e20c2147",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-03-30T15:41:52Z",
+      "side": 1,
+      "message": "maybe a field-level comment would be useful as well.",
+      "parentUuid": "d8f6c6d2_80b66898",
       "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
