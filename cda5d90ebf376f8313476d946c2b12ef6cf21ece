@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88acc112_a5dc7787",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-03-30T15:16:02Z",
+      "side": 1,
+      "message": "arguments as well at some point, yeah? to simulate `--arg` and `--argstr`?",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95ee1f14_1cea9302",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-03-30T15:16:02Z",
+      "side": 1,
+      "message": "there\u0027s an implication here that the evaluator daemon is running on the same filesystem as the client, which seems like it might not be desired long-term",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da902e37_50047d27",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-03-30T15:16:02Z",
+      "side": 1,
+      "message": "is this chunked because a single build request might result in multiple derivations being built? if so, how do we get at \"the derivation I asked for\"?\n\nEDIT: I guess that\u0027s BuildSuccess?",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b0bc132_414a20a0",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-03-30T15:16:02Z",
+      "side": 1,
+      "message": "What does this mean?",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
