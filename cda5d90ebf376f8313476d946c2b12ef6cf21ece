@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da38c8b3_8dbbd39e",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-30T15:34:52Z",
+      "side": 1,
+      "message": "Hm, I guess we can add those as a map\u003cstring, NixValue\u003e",
+      "parentUuid": "88acc112_a5dc7787",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95ee1f14_1cea9302",
         "filename": "tvix/proto/evaluator.proto",
         "patchSetId": 6
@@ -31,6 +49,24 @@
       "writtenOn": "2021-03-30T15:16:02Z",
       "side": 1,
       "message": "there\u0027s an implication here that the evaluator daemon is running on the same filesystem as the client, which seems like it might not be desired long-term",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7afe56a8_721371ce",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-30T15:34:52Z",
+      "side": 1,
+      "message": "There are two message alternatives that trigger evaluation - the other one is `evaluate_expression`, which just contains a string with an expression to evaluate.\n\nIn general we assume that filesystem access for the evaluator is pretty much a requirement, because otherwise relative imports and such (which are all over the place) need an additional back \u0026 forth protocol between the evaluator and coordinator.\n\nHowever, the current protocol design would let us add this later on if we determine that we do need it - but for V1 it\u0027s overhead.",
+      "parentUuid": "95ee1f14_1cea9302",
       "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d2b7b7e0_e3be290d",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-30T15:34:52Z",
+      "side": 1,
+      "message": "It\u0027s chunked because a build output can be arbitrarily large. It\u0027s probably rare that people generate very large Nix files and import them, but I could imagine use-cases for e.g. very large JSON files.",
+      "parentUuid": "da902e37_50047d27",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b0bc132_414a20a0",
         "filename": "tvix/proto/evaluator.proto",
         "patchSetId": 6
@@ -65,6 +119,24 @@
       "writtenOn": "2021-03-30T15:16:02Z",
       "side": 1,
       "message": "What does this mean?",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8f6c6d2_80b66898",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-30T15:34:52Z",
+      "side": 1,
+      "message": "This is for the IFD case, i.e. if the evaluator needs to request a build output (see the comment below on the `build_request` field) - I\u0027ll restructure the comments on this so that it\u0027s more obvious with the reading direction!",
+      "parentUuid": "1b0bc132_414a20a0",
       "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
