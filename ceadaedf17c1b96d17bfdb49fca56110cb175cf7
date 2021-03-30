@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e00c6bc_9e1cb4b1",
+        "filename": "nix/buildManPages/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-30T11:04:24Z",
+      "side": 1,
+      "message": "I don\u0027t think extracting this into a variable makes sense, `gzip ? true` is pretty clear already.",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "ceadaedf17c1b96d17bfdb49fca56110cb175cf7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

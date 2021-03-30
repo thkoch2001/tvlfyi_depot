@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87771c66_33c7021f",
+        "filename": "nix/buildManPages/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-30T11:04:24Z",
+      "side": 1,
+      "message": "lib is also passed in as a top-level key, fyi",
+      "range": {
+        "startLine": 5,
+        "startChar": 4,
+        "endLine": 5,
+        "endChar": 7
+      },
+      "revId": "6a675a9527c411396c965c7cd9db454b611b904f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
