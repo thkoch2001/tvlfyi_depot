@@ -34,6 +34,7 @@
 (load! "lisp")
 (load! "clojure")
 (load! "rust")
+(load! "terraform")
 
 (require 'tvl)
 
