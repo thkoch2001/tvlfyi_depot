@@ -114,6 +114,75 @@
       },
       "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da2f0e90_3aed9584",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-31T21:38:39Z",
+      "side": 1,
+      "message": "it doesn\u0027t just receive, \"receives derivations from the coordinator and builds them.\"",
+      "range": {
+        "startLine": 45,
+        "startChar": 17,
+        "endLine": 45,
+        "endChar": 25
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c57edafa_6fdda0b7",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-31T21:38:39Z",
+      "side": 1,
+      "message": "Builder",
+      "range": {
+        "startLine": 45,
+        "startChar": 11,
+        "endLine": 45,
+        "endChar": 16
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e5fa775_a97d4e04",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-31T21:38:39Z",
+      "side": 1,
+      "message": "-",
+      "range": {
+        "startLine": 55,
+        "startChar": 101,
+        "endLine": 55,
+        "endChar": 102
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
