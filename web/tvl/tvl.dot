@@ -12,7 +12,6 @@ digraph tvl {
     andi [label="andi-" href="https://andreas.rammhold.de/"];
     anon1 [color="grey" fontcolor="grey"];
     aranea;
-    artemist [href="https://artem.ist/"];
     aurora [href="https://nonegenderleftfox.aventine.se/"];
     benjojo [href="https://benjojo.co.uk/"];
     camsbury [href="https://camsbury.com/"];
@@ -25,7 +24,6 @@ digraph tvl {
     flokli [href="https://flokli.de/"];
     ghuntley [href="https://ghuntley.com/"];
     grfn [href="http://gws.fyi"];
-    grahamc [href="https://grahamc.com/"];
     htbf [href="https://htbf.dev/"];
     hyperfekt [href="https://hyperfekt.net"];
     implr [href="https://twitter.com/implring"];
@@ -93,7 +91,6 @@ digraph tvl {
     ghuntley -> nix;
     flokli -> nix;
     andi -> nix;
-    grahamc -> nix;
     profpatsch -> nix;
 
     // via edef
@@ -123,7 +120,6 @@ digraph tvl {
     urbint -> wpcarro;
     camsbury -> wpcarro;
     anon1 -> google;
-    artemist -> cynthia;
     aurora -> eve;
     cynthia -> benjojo;
     eta -> anon1;
@@ -149,7 +145,6 @@ digraph tvl {
     aurora -> lgbtslack;
     leah2 -> lgbtslack;
     edef -> lgbtslack;
-    artemist -> lgbtslack;
 
     // ircv3
     eta -> ircv3;
@@ -176,7 +171,6 @@ digraph tvl {
     edef -> nix;
     aranea -> nix;
     aranea -> profpatsch;
-    artemist -> nix;
     hyperfekt -> edef;
     camsbury -> urbint;
     spacekookie -> afra;
