@@ -106,6 +106,7 @@
     parallel
     pkgconfig
     pkgsCross
+    plantuml
     postgresql
     pounce
     pulseaudio
