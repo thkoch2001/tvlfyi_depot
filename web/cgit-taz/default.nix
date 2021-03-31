@@ -26,7 +26,7 @@ let
     # Repository configuration
     repo.url=depot
     repo.path=/var/lib/gerrit/git/depot.git/
-    repo.desc=monorepo for tazjin's virus lounge
+    repo.desc=monorepo for the virus lounge
     repo.owner=tazjin <mail@tazj.in>
     repo.clone-url=https://code.tvl.fyi
   '';
