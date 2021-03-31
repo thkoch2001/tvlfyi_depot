@@ -49,6 +49,7 @@ lazy_static! {
         options.extension.header_ids = Some(String::new()); // yyeeesss!
         options.extension.footnotes = true;
         options.extension.description_lists = true;
+        options.extension.front_matter_delimiter = Some("---".to_owned());
 
         // Required for tagfilter
         options.render.unsafe_ = true;
