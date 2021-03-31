@@ -36,6 +36,7 @@ let
     ops           = readTree ./ops;
     third_party   = readTree ./third_party;
     tools         = readTree ./tools;
+    tvix          = readTree ./tvix;
     users         = readTree ./users;
     web           = readTree ./web;
   };
