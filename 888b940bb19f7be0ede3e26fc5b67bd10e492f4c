@@ -16,6 +16,24 @@
       "message": "you monster",
       "revId": "888b940bb19f7be0ede3e26fc5b67bd10e492f4c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de78e8c0_8d232374",
+        "filename": "users/sterni/clock/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-03-31T14:59:57Z",
+      "side": 1,
+      "message": "seems more sensible moving this into a normal file actually…",
+      "parentUuid": "5e3b40d5_2191d2c1",
+      "revId": "888b940bb19f7be0ede3e26fc5b67bd10e492f4c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
