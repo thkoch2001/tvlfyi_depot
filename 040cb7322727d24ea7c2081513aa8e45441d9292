@@ -47,6 +47,54 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94290074_abd252e1",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2021-03-31T21:49:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3054757b_f3f3fae2",
+      "range": {
+        "startLine": 39,
+        "startChar": 139,
+        "endLine": 39,
+        "endChar": 147
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36297070_6f52416f",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2021-03-31T21:49:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb3c6e33_3ce34bee",
+      "range": {
+        "startLine": 39,
+        "startChar": 46,
+        "endLine": 39,
+        "endChar": 49
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54166879_525e5641",
@@ -163,6 +211,102 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef504cfb_7359d4fb",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2021-03-31T21:49:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f740d4f_40377f5a",
+      "range": {
+        "startLine": 41,
+        "startChar": 213,
+        "endLine": 41,
+        "endChar": 217
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52e8d01c_927cb147",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2021-03-31T21:49:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54166879_525e5641",
+      "range": {
+        "startLine": 41,
+        "startChar": 15,
+        "endLine": 41,
+        "endChar": 89
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd81dc88_904241fa",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2021-03-31T21:49:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "680a975a_1ecf11a9",
+      "range": {
+        "startLine": 41,
+        "startChar": 106,
+        "endLine": 41,
+        "endChar": 116
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e89011e4_004d7d6a",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2021-03-31T21:49:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff97dec7_17b2ef98",
+      "range": {
+        "startLine": 41,
+        "startChar": 276,
+        "endLine": 41,
+        "endChar": 297
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da2f0e90_3aed9584",
@@ -209,6 +353,54 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f658badd_7dc8388c",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2021-03-31T21:49:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da2f0e90_3aed9584",
+      "range": {
+        "startLine": 45,
+        "startChar": 17,
+        "endLine": 45,
+        "endChar": 25
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3a400aa_455b07c6",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2021-03-31T21:49:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c57edafa_6fdda0b7",
+      "range": {
+        "startLine": 45,
+        "startChar": 11,
+        "endLine": 45,
+        "endChar": 16
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e5fa775_a97d4e04",
@@ -222,6 +414,30 @@
       "writtenOn": "2021-03-31T21:38:39Z",
       "side": 1,
       "message": "-",
+      "range": {
+        "startLine": 55,
+        "startChar": 101,
+        "endLine": 55,
+        "endChar": 102
+      },
+      "revId": "040cb7322727d24ea7c2081513aa8e45441d9292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f1b04f1_76f22381",
+        "filename": "tvix/doc/components.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2021-03-31T21:49:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e5fa775_a97d4e04",
       "range": {
         "startLine": 55,
         "startChar": 101,
