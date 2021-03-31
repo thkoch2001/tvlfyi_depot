@@ -106,6 +106,24 @@
       "parentUuid": "85ce46ff_c8739f36",
       "revId": "bc04217fa2493418af7543a966ebf9dbb2a02973",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fdf8f3d_d75a2da2",
+        "filename": "tools/cheddar/src/tests.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-03-31T22:05:58Z",
+      "side": 1,
+      "message": "We can turn it into a library, but that would be a separate CL - please consider filing a bug on b.tvl.fyi for it.\n\nI fixed the test discovery in the last patchset",
+      "parentUuid": "c1af63f2_2ff74d5d",
+      "revId": "bc04217fa2493418af7543a966ebf9dbb2a02973",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
