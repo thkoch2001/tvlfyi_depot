@@ -53,11 +53,13 @@ let
       <hr>
       <footer>
         <p class="footer">
-          <a class="uncoloured-link" href="https://tazj.in">homepage</a>
-          |
           <a class="uncoloured-link" href="https://cs.tvl.fyi/depot/-/blob/README.md">code</a>
           |
-          <a class="uncoloured-link" href="https://twitter.com/tazjin">twitter</a>
+          <a class="uncoloured-link" href="https://cl.tvl.fyi/">reviews</a>
+          |
+          <a class="uncoloured-link" href="https://b.tvl.fyi/">bugs</a>
+          |
+          <a class="uncoloured-link" href="https://todo.tvl.fyi/">todos</a>
         </p>
         <p class="lod">ಠ_ಠ</p>
       </footer>
