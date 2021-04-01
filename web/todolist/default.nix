@@ -47,7 +47,7 @@ let
       //${t.file}:${toString t.line}</a>'');
 
   todoElement = defun [ todo string ] (t: ''
-    <p>At ${fileLink t}:</p>
+    <p>${fileLink t}:</p>
     <blockquote>${t.todo}</blockquote>
 
   '');
