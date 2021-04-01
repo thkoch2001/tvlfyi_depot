@@ -6,6 +6,7 @@ let
     char
     int
     string
+    flow
     ;
 
   reserved = c: builtins.elem c [
@@ -35,8 +36,46 @@ let
         else percentEncode c;
     in lib.concatStrings (builtins.map tr chars);
 
+  decode = s:
+    let
+      tokens = builtins.split "%" s;
+      decodeStep =
+        { result ? ""
+        , inPercent ? false
+        }: s:
+        flow.cond [
+          [
+            (builtins.isList s)
+            {
+              inherit result;
+              inPercent = true;
+            }
+          ]
+          [
+            inPercent
+            {
+              inPercent = false;
+              # first two characters came after an %
+              # the rest is the string until the next %
+              result = result
+                + char.chr (int.fromHex (string.take 2 s))
+                + (string.drop 2 s);
+            }
+          ]
+          [
+            (!inPercent)
+            {
+              result = result + s;
+            }
+          ]
+        ];
+
+    in
+      (builtins.foldl' decodeStep {} tokens).result;
+
 in {
   inherit
     encode
+    decode
     ;
 }

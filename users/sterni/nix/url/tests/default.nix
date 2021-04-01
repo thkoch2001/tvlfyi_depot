@@ -16,6 +16,10 @@ let
     assertEq "encode ${builtins.toJSON left} == ${builtins.toJSON right}"
       (url.encode args left) right;
 
+  checkDecoding = { left, right }:
+  assertEq "${builtins.toJSON left} == decode ${builtins.toJSON right}"
+    (url.decode left) right;
+
   unreserved = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_~";
 
   encodeExpected = [
@@ -30,6 +34,9 @@ let
 
   testEncode = it "checks url.encode"
     (builtins.map (checkEncoding {}) encodeExpected);
+
+  testDecode = it "checks url.decode"
+    (builtins.map checkDecoding encodeExpected);
 
   testLeaveReserved = it "checks that leaveReserved is like id for valid URLs"
     (builtins.map (x: checkEncoding { leaveReserved = true; } { left = x; right = x; }) [
