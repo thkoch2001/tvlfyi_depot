@@ -18,6 +18,12 @@ let
       aliases = [ "grfn@gws.fyi" ];
       passEntry = "root-gws-msmtp";
     };
+
+    work = {
+      address = "griffin@readyset.io";
+      passEntry = "readyset/msmtp";
+    };
+
   };
 
 in {
@@ -37,10 +43,13 @@ in {
 
   systemd.user.services = mapAttrs' (name: account: {
     name = escapeUnitName "lieer-${name}";
-    value.Service.ExecStart = mkForce "${pkgs.writeShellScript "sync-${name}" ''
-      ${pkgs.gmailieer}/bin/gmi sync
-    ''}";
-    # ${pkgs.notifymuch}/bin/notifymuch
+    value.Service = {
+      ExecStart = mkForce "${pkgs.writeShellScript "sync-${name}" ''
+        ${pkgs.gmailieer}/bin/gmi sync --path ~/mail/${name}
+      ''}";
+      Environment = "NOTMUCH_CONFIG=${config.home.sessionVariables.NOTMUCH_CONFIG}";
+    };
+
   }) accounts;
 
   # xdg.configFile."notifymuch/notifymuch.cfg".text = generators.toINI {} {
