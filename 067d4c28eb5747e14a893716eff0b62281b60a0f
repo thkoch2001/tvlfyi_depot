@@ -90,6 +90,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f18780f_3479153a",
+        "filename": "third_party/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-01T11:27:35Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "714d1d97_ad732df5",
+      "revId": "067d4c28eb5747e14a893716eff0b62281b60a0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "298e2cd0_aa8c994e",
