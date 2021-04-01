@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "142d4026_7f5d8fda",
+        "filename": "third_party/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-01T11:02:38Z",
+      "side": 1,
+      "message": "Maybe comment why this is commented out, or just drop the line entirely?",
+      "revId": "8b87b5cc7c8ba3595110169d4feae85d9004ee1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
