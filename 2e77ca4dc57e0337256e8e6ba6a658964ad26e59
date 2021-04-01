@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4aa0004_c7529d44",
+        "filename": "third_party/hii/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-01T11:05:00Z",
+      "side": 1,
+      "message": "Add yourself as an OWNER of third_party/hii?",
+      "revId": "2e77ca4dc57e0337256e8e6ba6a658964ad26e59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
