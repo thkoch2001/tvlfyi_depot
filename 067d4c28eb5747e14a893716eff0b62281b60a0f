@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97a63645_2402e299",
+        "filename": "third_party/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-01T10:48:22Z",
+      "side": 1,
+      "message": "What would you say we should write instead? The original (heh) comment has exactly 0 content. What is overridden by what? Why?",
+      "parentUuid": "60ff3b09_92c563e4",
+      "revId": "067d4c28eb5747e14a893716eff0b62281b60a0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "298e2cd0_aa8c994e",
