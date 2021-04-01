@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60ff3b09_92c563e4",
+        "filename": "third_party/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-01T09:28:27Z",
+      "side": 1,
+      "message": "Well I am not completely satisfied as these attributes are precisely exposed to be overridden not in case someone needs the upstream attributes. De facto only the expressions doing the overriding need the upstream versions, but eh.",
+      "parentUuid": "d9f7e03d_195c2926",
+      "revId": "067d4c28eb5747e14a893716eff0b62281b60a0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "298e2cd0_aa8c994e",
