@@ -1,0 +1,4 @@
+/* limit the width of /about/** to help readability */
+.content #summary {
+  max-width: 800 px;
+}
