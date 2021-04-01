@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     rm -rf git # remove submodule dir ...
     cp -r --no-preserve=ownership,mode ${depot.third_party.git.src} git
     makeFlagsArray+=(prefix="$out" CGIT_SCRIPT_PATH="$out/cgit/")
+    cat tvl-extra.css >> cgit.css
   '';
 
   meta = {
