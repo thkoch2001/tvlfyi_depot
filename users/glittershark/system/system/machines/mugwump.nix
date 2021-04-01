@@ -114,6 +114,32 @@ with lib;
     };
   };
 
+  services.ddclient = {
+    enable = true;
+    domains = [ "home.gws.fyi" ];
+    interval = "1d";
+    zone = "gws.fyi";
+    protocol = "cloudflare";
+    username = "root@gws.fyi";
+    quiet = true;
+  };
+
+  systemd.services.ddclient.serviceConfig = {
+    EnvironmentFile = "/etc/secrets/cloudflare.env";
+    DynamicUser = lib.mkForce false;
+    ExecStart = lib.mkForce (
+      let runtimeDir =
+            config.systemd.services.ddclient.serviceConfig.RuntimeDirectory;
+      in pkgs.writeShellScript "ddclient" ''
+        set -eo pipefail
+
+        ${pkgs.gnused}/bin/sed -i -s s/password=/password=$CLOUDFLARE_API_KEY/ /run/${runtimeDir}/ddclient.conf
+        exec ${pkgs.ddclient}/bin/ddclient \
+          -file /run/${runtimeDir}/ddclient.conf \
+          -login=$CLOUDFLARE_EMAIL \
+      '');
+  };
+
   security.acme.certs."metrics.gws.fyi" = {
     dnsProvider = "namecheap";
     credentialsFile = "/etc/secrets/namecheap.env";
