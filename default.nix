@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf pkgconfig ];
   buildInputs = [ openssl zlib luajit ];
 
+  enableParallelBuilding = true;
+
   postPatch = ''
     sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
         -e 's|"bzip2"|"${bzip2.bin}/bin/bzip2"|' \
