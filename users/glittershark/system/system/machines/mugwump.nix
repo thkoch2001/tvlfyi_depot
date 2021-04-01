@@ -141,8 +141,8 @@ with lib;
   };
 
   security.acme.certs."metrics.gws.fyi" = {
-    dnsProvider = "namecheap";
-    credentialsFile = "/etc/secrets/namecheap.env";
+    dnsProvider = "cloudflare";
+    credentialsFile = "/etc/secrets/cloudflare.env";
     webroot = mkForce null;
   };
 
@@ -211,9 +211,10 @@ with lib;
       scrape_interval = "5s";
       static_configs = [{
         targets = [
-          "https://www.gws.fyi"
+          "https://gws.fyi"
           "https://windtunnel.ci"
           "https://app.windtunnel.ci"
+          "https://metrics.gws.fyi"
         ];
       }];
       relabel_configs = [{
