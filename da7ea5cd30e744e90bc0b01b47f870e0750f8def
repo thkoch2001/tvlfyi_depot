@@ -70,6 +70,24 @@
       "parentUuid": "3e8fc8d3_da8eb1bf",
       "revId": "da7ea5cd30e744e90bc0b01b47f870e0750f8def",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97962d63_8603008c",
+        "filename": "users/Profpatsch/netencode/pretty.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-01T12:55:51Z",
+      "side": 1,
+      "message": "I would just hex format everything which is in binary or alternatively throw away the binary / text distinction altogether if you expect it to be best effort ASCII, then Text would be the default?!\n\nI\u0027d intuitively expect Text to be UTF-8 and Binary to be anything else for which completely hexdumping seems like the sanest pretty print option.",
+      "parentUuid": "40648f81_264659df",
+      "revId": "da7ea5cd30e744e90bc0b01b47f870e0750f8def",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
