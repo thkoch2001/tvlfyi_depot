@@ -3,15 +3,20 @@
 #
 # This assumes that the filter used is something like 'TODO\(\w+\):'
 
+# Capture the username and todo entry from an input string.
+def capture_todo:
+  capture("TODO\\((?<user>\\w+)\\):\\s+(?<todo>.*)$");
+
 # Construct a structure with only the fields we need to populate the
 # page.
 def simplify_match:
-  .data.submatches[0].match.text as $todo
+  .data as $data
+  | (.data.submatches[0].match.text | capture_todo) as $capture
   | {
-     file: (.data.path.text | sub("/nix/store/.+-depot/"; "")),
-     line: .data.line_number,
-     todo: $todo,
-     user: ($todo | capture("TODO\\((?<user>\\w+)\\)") | .user),
+     file: ($data | .path.text | sub("/nix/store/.+-depot/"; "")),
+     line: ($data | .line_number),
+     todo: ($capture | .todo),
+     user: ($capture | .user),
      };
 
 # Group all matches first by the user and return them in sorted order
