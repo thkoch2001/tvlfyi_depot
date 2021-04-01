@@ -52,6 +52,24 @@
       "parentUuid": "6b71b044_200e6eb2",
       "revId": "da7ea5cd30e744e90bc0b01b47f870e0750f8def",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40648f81_264659df",
+        "filename": "users/Profpatsch/netencode/pretty.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-01T11:32:47Z",
+      "side": 1,
+      "message": "Given that I expect most binary data to be best-effort ASCII anyway … hm. I guess something akin to what hexdump does would be the best?\n\nOTOH utf-8 is basically ascii, and with replacement chars you get the same as the `hexdump -C` right-hand side I think?",
+      "parentUuid": "3e8fc8d3_da8eb1bf",
+      "revId": "da7ea5cd30e744e90bc0b01b47f870e0750f8def",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
