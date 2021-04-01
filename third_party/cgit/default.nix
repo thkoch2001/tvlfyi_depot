@@ -1,8 +1,9 @@
 { depot, ... }:
 
 let
-  inherit (depot.third_party) stdenv gzip bzip2 xz luajit zlib autoconf openssl pkgconfig;
-in stdenv.mkDerivation rec {
+  inherit (depot.third_party) lib stdenv gzip bzip2 xz luajit zlib autoconf openssl pkgconfig;
+in
+stdenv.mkDerivation rec {
   pname = "cgit";
   version = "master";
   src = ./.;
@@ -30,8 +31,8 @@ in stdenv.mkDerivation rec {
     homepage = https://git.zx2c4.com/cgit/about/;
     repositories.git = git://git.zx2c4.com/cgit;
     description = "Web frontend for git repositories";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }
