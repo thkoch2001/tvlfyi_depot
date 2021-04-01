@@ -52,8 +52,7 @@ in {
   # Generate embeddable nginx configuration for redirects from old post URLs
   oldRedirects = lib.concatStringsSep "\n" (map (post: ''
     location ~* ^(/en)?/${post.oldKey} {
-      # TODO(tazjin): 301 once this works
-      return 302 https://tazj.in/blog/${post.key};
+      return 301 https://tazj.in/blog/${post.key};
     }
   '') (filter (hasAttr "oldKey") posts));
 }
