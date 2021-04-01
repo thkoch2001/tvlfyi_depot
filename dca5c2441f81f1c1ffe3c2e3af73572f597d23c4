@@ -16,6 +16,24 @@
       "message": "I wonder what the story for go cross compilation with nix is (lol).",
       "revId": "dca5c2441f81f1c1ffe3c2e3af73572f597d23c4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "109062e2_9634ca7f",
+        "filename": "third_party/hii/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-01T07:18:48Z",
+      "side": 1,
+      "message": "probably no",
+      "parentUuid": "f526a1da_f854e906",
+      "revId": "dca5c2441f81f1c1ffe3c2e3af73572f597d23c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
