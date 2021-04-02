@@ -113,4 +113,9 @@
     email = "jamie@kwiius.com";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$OkAMHVAfQ3nJhBffYJwk7Q$JV3DrF9eOU+4VL6I+nkaMUUOMqWuNzdp7N7U5Xwa3fg";
   }
+  {
+    username = "milan";
+    email = "milan@petabyte.dev";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$VQAHgOqYVr7mzjEr8IAMdQ$eAXvy58eRkjg+96RKBCwUoRDpNyGDdes4rVtxoQbaeI";
+  }
 ]
