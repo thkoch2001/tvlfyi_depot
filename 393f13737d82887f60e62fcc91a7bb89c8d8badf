@@ -16,6 +16,24 @@
       "message": "is this intentionally removed? does depot already provide this?",
       "revId": "393f13737d82887f60e62fcc91a7bb89c8d8badf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b14b3c88_09493fe4",
+        "filename": "users/glittershark/system/system/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-02T13:19:21Z",
+      "side": 0,
+      "message": "Yeah: nixosFor automatically provides this module and sets config.depot",
+      "parentUuid": "10799fdb_5ff74fb1",
+      "revId": "393f13737d82887f60e62fcc91a7bb89c8d8badf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
