@@ -16,6 +16,24 @@
       "message": "wow, line length",
       "revId": "ff549dd28eb60a7a82377d4d513766c14de0bf35",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "878a28d7_0c872bfa",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-02T20:04:39Z",
+      "side": 1,
+      "message": "hashtag go style guide hashtag",
+      "parentUuid": "f9db8040_5b0dc7e9",
+      "revId": "ff549dd28eb60a7a82377d4d513766c14de0bf35",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
