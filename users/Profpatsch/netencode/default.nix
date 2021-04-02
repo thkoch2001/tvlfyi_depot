@@ -10,7 +10,7 @@ let
     (imports.writers.rustSimpleLib {
       name = "netencode";
       dependencies = [
-        depot.users.Profpatsch.rust-crates.nom
+        depot.third_party.rust-crates.nom
         depot.users.Profpatsch.execline.exec-helpers
       ];
       release = false;
@@ -19,50 +19,12 @@ let
 
   gen = import ./gen.nix { inherit lib; };
 
-  cfg-if = pkgs.buildRustCrate {
-    pname = "cfg-if";
-    version = "1.0.0";
-    crateName = "cfg-if";
-    sha256 = "1fzidq152hnxhg4lj6r2gv4jpnn8yivp27z6q6xy7w6v0dp6bai9";
-  };
-
-  log = pkgs.buildRustCrate {
-    pname = "log";
-    version = "0.4.11";
-    crateName = "log";
-    sha256 = "0m6xhqxsps5mgd7r91g5mqkndbh8zbjd58p7w75r330zl4n40l07";
-    dependencies = [ cfg-if ];
-  };
-
-  serde_derive = pkgs.buildRustCrate {
-    pname = "serde";
-    crateName = "serde";
-    version = "1.0.123";
-    sha256 = "05xl2s1vpf3p7fi2yc9qlzw88d5ap0z3qmhmd7axa6pp9pn1s5xc";
-  };
-
-  serde = pkgs.buildRustCrate {
-    pname = "serde";
-    crateName = "serde";
-    version = "1.0.123";
-    sha256 = "05xl2s1vpf3p7fi2yc9qlzw88d5ap0z3qmhmd7axa6pp9pn1s5xc";
-    features = [ "std" ];
-  };
-
-  mustache = pkgs.buildRustCrate {
-    pname = "mustache";
-    version = "0.9.0";
-    crateName = "mustache";
-    sha256 = "1zgl8l15i19lzp90icgwyi6zqdd31b9vm8w129f41d1zd0hs7ayq";
-    dependencies = [ log serde ];
-  };
-
   netencode-mustache = imports.writers.rustSimple {
     name = "netencode_mustache";
     dependencies = [
       depot.users.Profpatsch.arglib.netencode.rust
       netencode-rs
-      mustache
+      depot.third_party.rust-crates.mustache
     ];
   } (builtins.readFile ./netencode-mustache.rs);
 
