@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ depot, config, lib, pkgs, ... }:
 
 let
   cfg = config.services.depot.paroxysm;
@@ -9,7 +9,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.paroxysm = {
       inherit description;
-      script = "${config.depot.fun.paroxysm}/bin/paroxysm";
+      script = "${depot.fun.paroxysm}/bin/paroxysm";
       wantedBy = [ "multi-user.target" ];
 
       environment = {
