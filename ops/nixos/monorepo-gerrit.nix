@@ -1,11 +1,11 @@
 # Gerrit configuration for the TVL monorepo
-{ pkgs, config, lib, ... }:
+{ depot, pkgs, config, lib, ... }:
 
 let
   cfg = config.services.gerrit;
   gerritHooks = pkgs.runCommandNoCC "gerrit-hooks" {} ''
     mkdir -p $out
-    ln -s ${config.depot.ops.besadii}/bin/besadii $out/ref-updated
+    ln -s ${depot.ops.besadii}/bin/besadii $out/ref-updated
   '';
 in {
   services.gerrit = {
@@ -17,12 +17,12 @@ in {
       "hooks"
     ];
 
-    plugins = with config.depot.third_party.gerrit_plugins; [
+    plugins = with depot.third_party.gerrit_plugins; [
       checks
       owners
     ];
 
-    package = config.depot.third_party.gerrit;
+    package = depot.third_party.gerrit;
 
     jvmHeapLimit = "4g";
 

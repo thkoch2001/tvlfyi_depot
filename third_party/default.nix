@@ -87,5 +87,5 @@ in exposed.lib.fix(self: exposed // {
     nixpkgs.emacs-nox;
 
   # Make NixOS available
-  nixos = import "${nixpkgsSrc}/nixos";
+  nixosEval = import "${nixpkgsSrc}/nixos/lib/eval-config.nix";
 })

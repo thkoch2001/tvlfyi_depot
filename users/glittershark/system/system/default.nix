@@ -22,9 +22,9 @@ rec {
   roswellSystem = (pkgs.nixos {
     configuration = { ... }: {
       imports = [
+        depot.ops.nixos.baseModule
         ./machines/roswell.nix
         "${nixpkgs.home-manager.src}/nixos"
-        "${depot.depotPath}/ops/nixos/depot.nix"
       ];
       inherit depot;
 
@@ -43,10 +43,9 @@ rec {
   yerenSystem = (pkgs.nixos {
     configuration = { ... }: {
       imports = [
+        depot.ops.nixos.baseModule
         ./machines/yeren.nix
-        "${depot.depotPath}/ops/nixos/depot.nix"
       ];
-      inherit depot;
     };
   }).system;
 

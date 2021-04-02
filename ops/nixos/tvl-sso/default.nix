@@ -1,8 +1,8 @@
 # Configures an Apereo CAS instance for TVL SSO
-{ config, ... }:
+{ depot, ... }:
 
 let
-  inherit (config.depot.third_party) apereo-cas;
+  inherit (depot.third_party) apereo-cas;
 in {
   config = {
     environment.systemPackages = [ apereo-cas ];
