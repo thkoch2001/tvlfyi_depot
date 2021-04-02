@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d15cb3f3_508dca6f",
+        "filename": "users/sterni/dot-time-man-pages.nix",
+        "patchSetId": 9
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2021-04-02T04:28:19Z",
+      "side": 1,
+      "message": "I\u0027m slightly surprised this doesn\u0027t produce the more traditional `User \u003cuser@example.org\u003e` format.",
+      "revId": "f16c07a92dc7e772eb0ae46c11fdc99b574a1775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
