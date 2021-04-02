@@ -5,8 +5,8 @@ let
     name = "imap-idle";
     dependencies = [
       depot.users.Profpatsch.arglib.netencode.rust
-      depot.users.Profpatsch.rust-crates.imap
-      depot.users.Profpatsch.rust-crates.epoll
+      depot.third_party.rust-crates.imap
+      depot.third_party.rust-crates.epoll
       depot.users.Profpatsch.execline.exec-helpers
     ];
   } (builtins.readFile ./imap-idle.rs);
