@@ -1,4 +1,4 @@
-{ config, ... }:
+{ depot, ... }:
 
 {
   imports = [
@@ -8,7 +8,7 @@
   config = {
     services.nginx.virtualHosts."tvl.fyi" = {
       serverName = "tvl.fyi";
-      root = config.depot.web.tvl;
+      root = depot.web.tvl;
       enableACME = true;
       forceSSL = true;
 

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ depot, ... }:
 
 {
   imports = [
@@ -9,7 +9,7 @@
     services.nginx.virtualHosts."todo.tvl.fyi" = {
       serverName = "todo.tvl.fyi";
       serverAliases = [ "todo.tvl.su" ];
-      root = config.depot.web.todolist;
+      root = depot.web.todolist;
       enableACME = true;
       forceSSL = true;
 

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ depot, ... }:
 
 {
   imports = [
@@ -17,7 +17,7 @@
         #
         # TODO(tazjin): Implement a way of serving this dynamically
         location = /about/tvix/docs/component-flow.svg {
-            alias ${config.depot.tvix.docs.svg}/component-flow.svg;
+            alias ${depot.tvix.docs.svg}/component-flow.svg;
         }
 
         # Static assets must always hit the root.

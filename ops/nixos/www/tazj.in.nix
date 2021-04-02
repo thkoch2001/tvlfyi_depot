@@ -1,8 +1,7 @@
 # serve tazjin's website & blog
-{ config, lib, pkgs, ... }:
+{ depot, config, lib, pkgs, ... }:
 
-let depot = config.depot;
-in {
+{
   imports = [
     ./base.nix
   ];
