@@ -16,6 +16,24 @@
       "message": "I\u0027m slightly surprised this doesn\u0027t produce the more traditional `User \u003cuser@example.org\u003e` format.",
       "revId": "f16c07a92dc7e772eb0ae46c11fdc99b574a1775",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9276c3be_96106cbc",
+        "filename": "users/sterni/dot-time-man-pages.nix",
+        "patchSetId": 9
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-02T08:26:08Z",
+      "side": 1,
+      "message": "Mostly because I was too stupid to figure out how to do this without spaces between the email address and the angle brackets.\n\nSeems like a good idea to try once more, I guess.",
+      "parentUuid": "d15cb3f3_508dca6f",
+      "revId": "f16c07a92dc7e772eb0ae46c11fdc99b574a1775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
