@@ -30,7 +30,6 @@ rec {
     configuration = { ... }: {
       imports = [
         baseModule
-        "${depot.depotPath}/ops/nixos/depot.nix"  # TODO(lukegb): remove this once config.depot is no longer referenced.
         configuration
       ];
       config.depot = depot;
