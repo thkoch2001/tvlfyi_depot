@@ -6,7 +6,9 @@ let
     ;
 in
 
-rec {
+with depot.third_party.rust-crates;
+
+{
   cfg-if = pkgs.buildRustCrate {
     pname = "cfg-if";
     crateName = "cfg-if";
