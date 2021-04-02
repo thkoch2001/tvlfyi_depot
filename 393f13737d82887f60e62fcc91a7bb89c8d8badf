@@ -70,6 +70,24 @@
       "parentUuid": "5cbace0e_9004852f",
       "revId": "393f13737d82887f60e62fcc91a7bb89c8d8badf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b83a081c_cfbe48ea",
+        "filename": "users/glittershark/system/system/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-02T14:03:12Z",
+      "side": 0,
+      "message": "(e.g. https://cl.tvl.fyi/c/depot/+/2764/1... which I probably should have just merged into this CL, but eh)",
+      "parentUuid": "1a2dc4a7_71d35a3c",
+      "revId": "393f13737d82887f60e62fcc91a7bb89c8d8badf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
