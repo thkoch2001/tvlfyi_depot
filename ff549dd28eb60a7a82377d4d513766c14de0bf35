@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9db8040_5b0dc7e9",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-02T19:56:52Z",
+      "side": 1,
+      "message": "wow, line length",
+      "revId": "ff549dd28eb60a7a82377d4d513766c14de0bf35",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
