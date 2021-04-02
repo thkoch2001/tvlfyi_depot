@@ -232,13 +232,13 @@ func main() {
 					continue
 				}
 				user := username(e.PatchSet)
-				parsedMsg = nopingAll(user, fmt.Sprintf("CL/%d: %q proposed by %s - %s", e.Change.Number, e.Change.Subject, user, patchSetURL(e.Change, e.PatchSet)))
+				parsedMsg = nopingAll(user, fmt.Sprintf("CL/%d proposed by %s - %s - %s", e.Change.Number, user, e.Change.Subject, patchSetURL(e.Change, e.PatchSet)))
 			case *gerritevents.ChangeMerged:
 				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] {
 					continue
 				}
 				user := username(e.PatchSet)
-				parsedMsg = nopingAll(user, fmt.Sprintf("CL/%d: %q applied by %s - %s", e.Change.Number, e.Change.Subject, user, patchSetURL(e.Change, e.PatchSet)))
+				parsedMsg = nopingAll(user, fmt.Sprintf("CL/%d applied by %s - %s - %s", e.Change.Number, user, e.Change.Subject, patchSetURL(e.Change, e.PatchSet)))
 			}
 			if parsedMsg != "" {
 				sendMsgChan <- parsedMsg
