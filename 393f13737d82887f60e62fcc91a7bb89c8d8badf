@@ -52,6 +52,24 @@
       "parentUuid": "10799fdb_5ff74fb1",
       "revId": "393f13737d82887f60e62fcc91a7bb89c8d8badf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a2dc4a7_71d35a3c",
+        "filename": "users/glittershark/system/system/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-02T14:02:34Z",
+      "side": 0,
+      "message": "Right; that\u0027s the end state. At this point, though, all the NixOS modules are still expecting to find config.depot, although they\u0027re _also_ passed depot as an argument.\n\nBasically, this change migrates grfn\u0027s systems to being ready for all the modules to use the depot argument instead, while still remaining compatible for the moment with the old config.depot arg.",
+      "parentUuid": "5cbace0e_9004852f",
+      "revId": "393f13737d82887f60e62fcc91a7bb89c8d8badf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
