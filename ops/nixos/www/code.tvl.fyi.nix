@@ -8,6 +8,7 @@
   config = {
     services.nginx.virtualHosts.cgit = {
       serverName = "code.tvl.fyi";
+      serverAliases = [ "code.tvl.su" ];
       enableACME = true;
       forceSSL = true;
 
