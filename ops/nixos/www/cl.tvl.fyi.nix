@@ -8,6 +8,7 @@
   config = {
     services.nginx.virtualHosts.gerrit = {
       serverName = "cl.tvl.fyi";
+      serverAliases = [ "cl.tvl.su" ];
       enableACME = true;
       forceSSL = true;
 

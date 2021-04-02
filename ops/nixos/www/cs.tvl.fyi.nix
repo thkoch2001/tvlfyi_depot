@@ -8,6 +8,7 @@
   config = {
     services.nginx.virtualHosts."cs.tvl.fyi" = {
       serverName = "cs.tvl.fyi";
+      serverAliases = [ "cs.tvl.su" ];
       enableACME = true;
       forceSSL = true;
 
