@@ -4,8 +4,8 @@
 with depot.nix.yants;
 
 let
-  inherit (builtins) map readFile sort;
-  inherit (lib) singleton;
+  inherit (builtins) map readFile sort foldl';
+  inherit (lib) max singleton;
   inherit (pkgs) writeText;
   inherit (depot.users.tazjin) atom-feed blog renderMarkdown;
 
@@ -37,12 +37,13 @@ let
 
   allEntries = (map postToEntry blog.posts) ++ (map pageEntryToEntry pageEntries);
 
+  mostRecentlyUpdated = foldl' max 0 (map (e: e.updated) allEntries);
+
   feed = {
     id = "https://tazj.in/";
     title = "tazjin's interblag";
     subtitle = "my posts, projects and other interesting things";
-    # TODO(tazjin): Take the most recently updated entry time instead.
-    updated = builtins.currentTime;
+    updated = mostRecentlyUpdated;
     rights = "© 2020 tazjin";
     authors = [ "tazjin" ];
 
