@@ -1,8 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ depot, config, lib, pkgs, ... }:
 
 let
   cfg = config.services.depot.panettone;
-  depot = config.depot;
 in {
   options.services.depot.panettone = with lib; {
     enable = mkEnableOption "Panettone issue tracker";
