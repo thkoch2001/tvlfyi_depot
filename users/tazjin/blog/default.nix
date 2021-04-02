@@ -15,6 +15,9 @@ let
     title = string;
     date = int;
 
+    # Optional time at which this post was last updated.
+    updated = option int;
+
     # Path to the Markdown file containing the post content.
     content = path;
 
