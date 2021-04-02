@@ -19,36 +19,26 @@ rec {
 
   roswell = import ./machines/roswell.nix;
 
-  roswellSystem = (pkgs.nixos {
-    configuration = { ... }: {
-      imports = [
-        ./machines/roswell.nix
-        "${nixpkgs.home-manager.src}/nixos"
-        "${depot.depotPath}/ops/nixos/depot.nix"
-      ];
-      inherit depot;
+  roswellSystem = (depot.ops.nixos.nixosFor { ... }: {
+    imports = [
+      depot.ops.nixos.baseModule
+      ./machines/roswell.nix
+      "${nixpkgs.home-manager.src}/nixos"
+    ];
+    inherit depot;
 
-      home-manager.users.grfn = { config, lib, ... }: {
-        imports = [ ../home/machines/roswell.nix ];
-        lib.depot = depot;
-        _module.args.pkgs = lib.mkForce
-          (import pkgs.nixpkgsSrc
-            (lib.filterAttrs (n: v: v != null) config.nixpkgs));
-      };
+    home-manager.users.grfn = { config, lib, ... }: {
+      imports = [ ../home/machines/roswell.nix ];
+      lib.depot = depot;
+      _module.args.pkgs = lib.mkForce
+        (import pkgs.nixpkgsSrc
+          (lib.filterAttrs (n: v: v != null) config.nixpkgs));
     };
   }).system;
 
   yeren = import ./machines/yeren.nix;
 
-  yerenSystem = (pkgs.nixos {
-    configuration = { ... }: {
-      imports = [
-        ./machines/yeren.nix
-        "${depot.depotPath}/ops/nixos/depot.nix"
-      ];
-      inherit depot;
-    };
-  }).system;
+  yerenSystem = depot.ops.nixos.nixosFor yeren;
 
   iso = import ./iso.nix args;
 

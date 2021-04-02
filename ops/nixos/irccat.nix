@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ depot, config, lib, pkgs, ... }:
 
 let
   cfg = config.services.depot.irccat;
@@ -35,7 +35,7 @@ in {
     systemd.services.irccat = {
       inherit description;
       preStart = "${configMerge}";
-      script = "${config.depot.third_party.irccat}/bin/irccat";
+      script = "${depot.third_party.irccat}/bin/irccat";
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
