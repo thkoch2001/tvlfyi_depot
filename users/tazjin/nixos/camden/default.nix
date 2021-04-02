@@ -14,8 +14,6 @@ config: let
     extraConfig = "return 301 https://${to}$request_uri;";
   };
 in lib.fix(self: {
-  depot = depot;
-
   # Disable the current ACME module and use the old one from 19.09
   # instead, until the various regressions have been sorted out.
   # TODO(tazjin): Remove this once the new ACME module works.
@@ -27,7 +25,6 @@ in lib.fix(self: {
       sha256 = "157c64220lf825ll4c0cxsdwg7cxqdx4z559fdp7kpz0g6p8fhhr";
     };
     in [
-      "${depot.depotPath}/ops/nixos/depot.nix"
       "${depot.depotPath}/ops/nixos/quassel.nix"
       "${depot.depotPath}/ops/nixos/smtprelay.nix"
       "${oldChannel}/nixos/modules/security/acme.nix"
