@@ -8,7 +8,7 @@ let
 
   print-ast = depot.users.Profpatsch.writers.rustSimple {
     name = "print-ast";
-    dependencies = with depot.users.Profpatsch.rust-crates; [
+    dependencies = with depot.third_party.rust-crates; [
       libloading
       tree-sitter
     ];
@@ -61,7 +61,7 @@ let
   watch-file-modified = depot.users.Profpatsch.writers.rustSimple {
     name = "watch-file-modified";
     dependencies = [
-      depot.users.Profpatsch.rust-crates.inotify
+      depot.third_party.rust-crates.inotify
       depot.users.Profpatsch.netstring.rust-netstring
     ];
   } ''
