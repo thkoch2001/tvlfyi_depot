@@ -19,14 +19,19 @@ rec {
 
   allSystems = import ./all-systems.nix args;
 
-  nixosFor = configuration: depot.third_party.nixos {
-    configuration = {
-      inherit depot;
-      imports = [
-        configuration
-        "${depot.depotPath}/ops/nixos/depot.nix"
-      ];
+  # This provides our standard set of arguments to all NixOS modules.
+  baseModule = { ... }: {
+    _module.args = {
+      inherit (args) depot;
     };
+  };
+
+  nixosFor = configuration: depot.third_party.nixosEval {
+    system = builtins.currentSystem;
+    modules = [
+      baseModule
+      configuration
+    ];
   };
 
   findSystem = hostname:

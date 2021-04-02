@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ depot, lib, pkgs, ... }:
 
 {
   imports = [
@@ -9,7 +9,7 @@
     services.nginx.virtualHosts."wigglydonke.rs" = {
       enableACME = true;
       forceSSL = true;
-      root = "${config.depot.depotPath}/users/glittershark/wigglydonke.rs";
+      root = "${depot.depotPath}/users/glittershark/wigglydonke.rs";
     };
   };
 }
