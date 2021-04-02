@@ -74,6 +74,11 @@ let
     echo '<article><h2 class="inline">${escape post.title}</h2>' >> $out
     echo '<aside class="date">' >> $out
     date --date="@${toString post.date}" '+%Y-%m-%d' >> $out
+    ${
+      if post ? updated
+      then ''date --date="@${toString post.updated}" '+ (updated %Y-%m-%d)' >> $out''
+      else ""
+    }
     echo '</aside>' >> $out
 
     ${

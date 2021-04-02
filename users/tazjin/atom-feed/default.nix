@@ -111,6 +111,10 @@ let
       ${elem "title" e.title}
       ${elem "id" e.id}
       ${elem "updated" (renderEpoch e.updated)}
+      ${if e ? published
+        then elem "published" (renderEpoch e.published)
+        else ""
+      }
       ${if e ? content
         then ''<content type="html">${escape e.content}</content>''
         else ""

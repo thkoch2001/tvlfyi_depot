@@ -14,7 +14,7 @@ let
     title = post.title;
     content = readFile (renderMarkdown post.content);
     published = post.date;
-    updated = post.date; # TODO(tazjin): this should be distinct from published
+    updated = post.updated or post.date;
 
     links = singleton {
       rel = "alternate";
