@@ -13,10 +13,8 @@ let
     ln -s ${depot.ops.besadii}/bin/besadii $out/bin/post-command
   '';
 in lib.fix(self: {
-  inherit depot;
   imports = [
     "${depot.depotPath}/ops/nixos/clbot.nix"
-    "${depot.depotPath}/ops/nixos/depot.nix"
     "${depot.depotPath}/ops/nixos/irccat.nix"
     "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
     "${depot.depotPath}/ops/nixos/panettone.nix"

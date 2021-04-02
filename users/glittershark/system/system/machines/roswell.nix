@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ depot, config, lib, pkgs, modulesPath, ... }:
 
 {
   imports = [
@@ -12,6 +12,6 @@
   networking.hostName = "roswell";
 
   users.users.grfn.openssh.authorizedKeys.keys = [
-    config.depot.users.glittershark.keys.main
+    depot.users.glittershark.keys.main
   ];
 }

@@ -1,10 +1,9 @@
 # Run sourcegraph, including its entire machinery, in a container.
 # Running it outside of a container is a futile endeavour for now.
-{ config, pkgs, lib, ... }:
+{ depot, config, pkgs, lib, ... }:
 
 let
   cfg = config.services.depot.sourcegraph;
-  depot = config.depot;
 in {
   options.services.depot.sourcegraph = with lib; {
     enable = mkEnableOption "SourceGraph code search engine";

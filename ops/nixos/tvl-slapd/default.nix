@@ -1,9 +1,9 @@
 # Configures an OpenLDAP instance for TVL
 #
 # TODO(tazjin): Configure ldaps://
-{ config, lib, pkgs, ... }:
+{ depot, lib, pkgs, ... }:
 
-with config.depot.nix.yants;
+with depot.nix.yants;
 
 let
   user = struct {
@@ -24,7 +24,7 @@ let
     userPassword: ${u.password}
   '');
 
-  inherit (config.depot.ops) users;
+  inherit (depot.ops) users;
 
 in {
   # Use our patched OpenLDAP derivation which enables stronger password hashing.
@@ -34,7 +34,7 @@ in {
   # *large* number of rebuilds of packages such as GPG and Python.
   nixpkgs.overlays = [
     (_: _: {
-      inherit (config.depot.third_party) openldap;
+      inherit (depot.third_party) openldap;
     })
   ];
 
