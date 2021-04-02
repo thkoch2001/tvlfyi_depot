@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10799fdb_5ff74fb1",
+        "filename": "users/glittershark/system/system/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-02T13:15:54Z",
+      "side": 0,
+      "message": "is this intentionally removed? does depot already provide this?",
+      "revId": "393f13737d82887f60e62fcc91a7bb89c8d8badf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
