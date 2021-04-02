@@ -34,6 +34,42 @@
       "parentUuid": "d15cb3f3_508dca6f",
       "revId": "f16c07a92dc7e772eb0ae46c11fdc99b574a1775",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "150589c7_2d956318",
+        "filename": "users/sterni/dot-time-man-pages.nix",
+        "patchSetId": 9
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-02T09:13:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9276c3be_96106cbc",
+      "revId": "f16c07a92dc7e772eb0ae46c11fdc99b574a1775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ec5ad47_27b3b539",
+        "filename": "users/sterni/dot-time-man-pages.nix",
+        "patchSetId": 9
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-02T09:13:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9276c3be_96106cbc",
+      "revId": "f16c07a92dc7e772eb0ae46c11fdc99b574a1775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
