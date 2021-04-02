@@ -1,5 +1,5 @@
 # NixOS module for configuring the simple SMTP relay.
-{ pkgs, config, lib, ... }:
+{ depot, pkgs, config, lib, ... }:
 
 let
   inherit (builtins) attrValues mapAttrs;
@@ -40,7 +40,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.smtprelay = {
       inherit description;
-      script = "${config.depot.third_party.smtprelay}/bin/smtprelay ${prepareArgs cfg.args}";
+      script = "${depot.third_party.smtprelay}/bin/smtprelay ${prepareArgs cfg.args}";
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

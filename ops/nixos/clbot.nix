@@ -1,5 +1,5 @@
 # Module that configures CLBot, our Gerrit->IRC info bridge.
-{ config, lib, pkgs, ... }:
+{ depot, config, lib, pkgs, ... }:
 
 let
   inherit (builtins) attrValues concatStringsSep mapAttrs readFile;
@@ -31,7 +31,7 @@ let
       description = "${description} to ${channel}";
       wantedBy = [ "multi-user.target" ];
 
-      script = "${config.depot.fun.clbot}/bin/clbot ${mkFlags (cfg.flags // {
+      script = "${depot.fun.clbot}/bin/clbot ${mkFlags (cfg.flags // {
         irc_channel = channel;
       })} -alsologtostderr";
 
