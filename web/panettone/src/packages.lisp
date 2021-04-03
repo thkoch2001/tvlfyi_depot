@@ -32,7 +32,7 @@
   (:use :cl :panettone.util :klatre :postmodern :iterate)
   (:import-from :alexandria :if-let :when-let :define-constant)
   (:export
-   :connect-postgres :ddl/init
+   :connect-postgres :ddl/init :make-thread
 
    :user-settings
    :user-dn :enable-email-notifications-p :settings-for-user
@@ -46,7 +46,8 @@
 
    :issue-events
 
-   :issue-comments :num-comments :create-issue-comment))
+   :issue-comments :num-comments :create-issue-comment
+   :issue-commenter-dns))
 
 (defpackage panettone.email
   (:nicknames :email)
@@ -69,6 +70,7 @@
   (:import-from :defclass-std :defclass/std)
   (:import-from :alexandria :if-let :when-let :switch :alist-hash-table)
   (:import-from :cl-ppcre :split)
+  (:import-from :bordeaux-threads :make-thread)
   (:import-from
    :panettone.model
    :id :subject :body :author-dn :issue-id :status :created-at
