@@ -1,5 +1,11 @@
 { depot, ... }:
 
+# TVL tool rust crate dependencies, where tools like carnix are not used.
+# Intended for manual updates, which keeps us honest with what we pull into our closure.
+#
+# Sorted topologically, dependencies of a library always appear *before* that library.
+# That is, tools which are used by multiple libraries appear on top of the file.
+
 let
   buildRustCrate = attrs@{
     edition ? "2018",
