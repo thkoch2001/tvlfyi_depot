@@ -34,6 +34,9 @@
   (:export
    :connect-postgres :ddl/init
 
+   :user-settings
+   :user-dn :enable-email-notifications-p :settings-for-user
+
    :issue :issue-comment :issue-event
    :id :subject :body :author-dn :issue-id :status :created-at :acting-user-dn
    :field :previous-value :new-value
