@@ -423,6 +423,9 @@ given subject an body (in a thread, since smtp is slow)"
             :subject subject
             :message message)))))))
 
+(defun link-to-issue (issue-id)
+  (format nil "https://b.tvl.fyi/issues/~A" issue-id))
+
 (defun @auth-optional (next)
   (let ((*user* (hunchentoot:session-value 'user)))
     (funcall next)))
@@ -567,10 +570,13 @@ given subject an body (in a thread, since smtp is slow)"
        (let ((issue (model:get-issue id)))
          (send-email-for-issue
           id
-          :subject (format nil "~A commented on \"~A\""
+          :subject (format nil "~A commented on b/~A: \"~A\""
                            (displayname *user*)
+                           id
                            (subject issue))
-          :message body))
+          :message (format nil "~A~%~%~A"
+                           body
+                           (link-to-issue id))))
        (redirect-to-issue)))))
 
 (defroute close-issue
@@ -581,18 +587,20 @@ given subject an body (in a thread, since smtp is slow)"
   (let ((issue (model:get-issue id)))
     (send-irc-notification
      (format nil
-             "b/~A: \"~A\" closed by ~A - https://b.tvl.fyi/issues/~A"
+             "b/~A: \"~A\" closed by ~A - ~A"
              id
              (subject issue)
              (irc:noping (cn *user*))
-             id)
+             (link-to-issue id))
      :channel (or (uiop:getenvp "ISSUECHANNEL")
                   "##tvl-dev"))
     (send-email-for-issue
      id
-     :subject (format nil "~A closed \"~A\""
-                      (dn *user*)
-                      (subject issue))))
+     :subject (format nil "b/~A: \"~A\" closed by ~A"
+                      id
+                      (subject issue)
+                      (dn *user*))
+     :message (link-to-issue id)))
   (hunchentoot:redirect (format nil "/issues/~A" id)))
 
 (defroute open-issue
@@ -603,18 +611,20 @@ given subject an body (in a thread, since smtp is slow)"
   (let ((issue (model:get-issue id)))
     (send-irc-notification
      (format nil
-             "b/~A: \"~A\" reopened by ~A - https://b.tvl.fyi/issues/~A"
+             "b/~A: \"~A\" reopened by ~A - ~A"
              id
              (subject issue)
              (irc:noping (cn *user*))
-             id)
+             (link-to-issue id))
      :channel (or (uiop:getenvp "ISSUECHANNEL")
                   "##tvl-dev"))
     (send-email-for-issue
      id
-     :subject (format nil "~A reopened \"~A\""
-                      (dn *user*)
-                      (subject issue))))
+     :subject (format nil "b/~A: \"~A\" reopened by ~A"
+                      id
+                      (subject issue)
+                      (dn *user*))
+     :message (link-to-issue id)))
   (hunchentoot:redirect (format nil "/issues/~A" id)))
 
 (defroute styles ("/main.css") ()
