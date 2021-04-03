@@ -45,6 +45,30 @@
       },
       "revId": "f33878dcda39bb53db78d03dd16eb18dd395e5d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c730cd7_ff730ab7",
+        "filename": "web/panettone/src/email.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-03T20:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28aa1578_c76b90ea",
+      "range": {
+        "startLine": 16,
+        "startChar": 40,
+        "endLine": 16,
+        "endChar": 49
+      },
+      "revId": "f33878dcda39bb53db78d03dd16eb18dd395e5d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
