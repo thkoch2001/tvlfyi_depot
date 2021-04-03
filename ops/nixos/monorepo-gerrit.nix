@@ -20,6 +20,7 @@ in {
     plugins = with depot.third_party.gerrit_plugins; [
       checks
       owners
+      oauth
     ];
 
     package = depot.third_party.gerrit;
@@ -74,18 +75,11 @@ in {
       };
 
       # Configures integration with the locally running OpenLDAP
-      auth.type = "LDAP";
-      ldap = {
-        server = "ldap://localhost";
-        accountBase = "ou=users,dc=tvl,dc=fyi";
-        accountPattern = "(&(objectClass=organizationalPerson)(cn=\${username}))";
-        accountFullName = "displayName";
-        accountEmailAddress = "mail";
-        accountSshUserName = "cn";
-        groupBase = "ou=groups,dc=tvl,dc=fyi";
-
-        # TODO(tazjin): Assuming this is what we'll be doing ...
-        groupMemberPattern = "(&(objectClass=group)(member=\${dn}))";
+      auth.type = "OAUTH";
+      plugin.gerrit-oauth-provider-cas-oauth = {
+        root-url = "https://login.tvl.fyi";
+        client-id = "OAUTH-TVL-gerrit-Fv0d8Aizz5";
+        # client-secret is set in /var/lib/gerrit/etc/secure.config.
       };
 
       # Email sending (emails are relayed via the tazj.in domain's
