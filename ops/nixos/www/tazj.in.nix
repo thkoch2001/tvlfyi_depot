@@ -23,6 +23,11 @@
 
           try_files $uri $uri.html $uri/ =404;
         }
+
+        # Temporary place for serving static files.
+        location /blobs/ {
+          alias /var/lib/tazjins-blobs/;
+        }
       '';
     };
 
