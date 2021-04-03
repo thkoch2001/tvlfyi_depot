@@ -48,6 +48,7 @@
     fd
     fdtools
     fetchFromGitHub
+    fetchFromGitLab
     fetchgit
     fetchurl
     fetchzip
