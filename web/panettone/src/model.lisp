@@ -10,6 +10,20 @@
   "Initialize the global postgresql connection for Panettone"
   (postmodern:connect-toplevel database user password host :port port))
 
+(defun make-thread
+    (function &rest args)
+  "Make a new thread as per `BORDEAUX-THREADS:MAKE-THREAD' but with its own, new
+database connection."
+  (let ((spec `(,(or (uiop:getenvp "PGDATABASE") "panettone")
+                ,(or (uiop:getenvp "PGUSER") "panettone")
+                ,(or (uiop:getenvp "PGPASSWORD") "password")
+                ,(or (uiop:getenvp "PGHOST") "localhost")
+                :port ,(or (integer-env "PGPORT") 5432))))
+    (apply #'bt:make-thread
+           (lambda ()
+             (postmodern:call-with-connection spec function))
+           args)))
+
 ;;;
 ;;; Schema
 ;;;
@@ -356,10 +370,20 @@ ISSUE-ID, which should be a plist of initforms, and return an instance of
     (error 'issue-not-found :id issue-id))
   (insert-dao (apply #'make-instance 'issue-comment :issue-id issue-id attrs)))
 
+(defun issue-commenter-dns (issue-id)
+  "Returns a list of all the dns of users who have commented on ISSUE-ID"
+  (query (:select 'author-dn :distinct
+          :from 'issue-comments
+          :where (:= 'issue-id issue-id))
+         :column))
+
 (comment
  (connect-postgres)
  (ddl/init)
  (make-instance 'issue :subject "test")
  (create-issue :subject "test"
                :author-dn "cn=glittershark,ou=users,dc=tvl,dc=fyi")
+
+ (issue-commenter-dns 1)
+
  )
