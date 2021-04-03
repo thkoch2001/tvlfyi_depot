@@ -48,6 +48,19 @@
 
    :issue-comments :num-comments :create-issue-comment))
 
+(defpackage panettone.email
+  (:nicknames :email)
+  (:use :cl)
+  (:import-from :alexandria :when-let)
+  (:import-from :panettone.model
+   :settings-for-user :enable-email-notifications-p)
+  (:import-from :panettone.authentication
+   :find-user-by-dn :mail :displayname)
+  (:export
+   :*smtp-server* :*smtp-server-port* :*notification-from*
+   :*notification-from-display-name* :*notification-subject-prefix*
+   :notify-user :send-email-notification))
+
 (defpackage panettone
   (:use :cl :klatre :easy-routes :iterate
         :panettone.util

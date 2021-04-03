@@ -78,6 +78,8 @@ and a retry"
     (ldap-entry->user ldap-entry)))
 
 (defun find-user-by-dn (dn)
+  "Look up the user with the given DN in the LDAP database, returning an
+instance of `user'"
   (with-ldap ()
     (let ((have-results
             (handler-case
