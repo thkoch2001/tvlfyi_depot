@@ -20,6 +20,7 @@ in {
     plugins = with depot.third_party.gerrit_plugins; [
       checks
       owners
+      oauth
     ];
 
     package = depot.third_party.gerrit;
@@ -73,20 +74,16 @@ in {
         html = "<a href=\"https://b.tvl.fyi/issues/$1\">b/$1</a>";
       };
 
-      # Configures integration with the locally running OpenLDAP
-      auth.type = "LDAP";
-      ldap = {
-        server = "ldap://localhost";
-        accountBase = "ou=users,dc=tvl,dc=fyi";
-        accountPattern = "(&(objectClass=organizationalPerson)(cn=\${username}))";
-        accountFullName = "displayName";
-        accountEmailAddress = "mail";
-        accountSshUserName = "cn";
-        groupBase = "ou=groups,dc=tvl,dc=fyi";
-
-        # TODO(tazjin): Assuming this is what we'll be doing ...
-        groupMemberPattern = "(&(objectClass=group)(member=\${dn}))";
+      # Configures integration with CAS, which then integrates with a variety of backends.
+      auth.type = "OAUTH";
+      plugin.gerrit-oauth-provider-cas-oauth = {
+        root-url = "https://login.tvl.fyi";
+        client-id = "OAUTH-TVL-gerrit-Fv0d8Aizz5";
+        # client-secret is set in /var/lib/gerrit/etc/secure.config.
       };
+
+      # Use Gerrit's built-in HTTP passwords, rather than trying to use the password against the backing OAuth provider.
+      auth.gitBasicAuthPolicy = "HTTP";
 
       # Email sending (emails are relayed via the tazj.in domain's
       # GSuite currently).
