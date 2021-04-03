@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3e13e6b_0827e178",
+        "filename": "web/panettone/src/email.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-03T19:28:02Z",
+      "side": 1,
+      "message": "really should fix this, now that we have tvl.su configured with gsuite",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "f33878dcda39bb53db78d03dd16eb18dd395e5d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28aa1578_c76b90ea",
+        "filename": "web/panettone/src/email.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-03T19:28:02Z",
+      "side": 1,
+      "message": "I have a personal preference for this being all lowercase, which you can choose to ignore.",
+      "range": {
+        "startLine": 16,
+        "startChar": 40,
+        "endLine": 16,
+        "endChar": 49
+      },
+      "revId": "f33878dcda39bb53db78d03dd16eb18dd395e5d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
