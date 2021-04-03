@@ -395,6 +395,19 @@ ISSUE-ID, which should be a plist of initforms, and return an instance of
           :where (:= 'issue-id issue-id))
          :column))
 
+(defun issue-subscribers (issue-id)
+  "Returns a list of user DNs who should receive notifications for actions taken
+  on ISSUE-ID.
+
+Currently this is implemented as the author of issue plus all the users who have
+commented on the issue, but in the future we likely want to also allow
+explicitly subscribing to / unsubscribing from individual issues."
+  (let ((issue (get-issue issue-id)))
+    (adjoin (author-dn issue)
+            (issue-commenter-dns issue-id)
+            :test #'equal)))
+
+
 (comment
  (connect-postgres)
  (ddl/init)
@@ -403,5 +416,6 @@ ISSUE-ID, which should be a plist of initforms, and return an instance of
                :author-dn "cn=glittershark,ou=users,dc=tvl,dc=fyi")
 
  (issue-commenter-dns 1)
+ (issue-subscribers 1)
 
  )
