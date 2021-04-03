@@ -6,11 +6,11 @@ in depot.nix.utils.drvTargets {
   # https://gerrit.googlesource.com/plugins/owners
   owners = buildGerritBazelPlugin rec {
     name = "owners";
-    depsOutputHash = "sha256:1cffbbn687dcl46jm70fd5h6an7jwalssvy0y1aqnhrwmbr4gwi9";
+    depsOutputHash = "sha256:0j7hn945l5y5pz109mrcx2hh2lb2gi5gf4wrrbypx43rmyhlz3s8";
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/owners";
-      rev = "17817c9e319073c03513f9d5177b6142b8fd567b";
-      sha256 = "sha256:06j1wp5xpwabmzyhjjl5rcmgsxqi8ffzgzf8avbr61qzgh76f22n";
+      rev = "f3335231b98e14664fdd1b325486bb0824800ac3";
+      sha256 = "sha256:0dqf36wn6gnkwia3529dwlcib2np78dgsjs7dymg5isy1i8p655f";
     };
     overlayPluginCmd = ''
       chmod +w "$out" "$out/plugins/external_plugin_deps.bzl"
@@ -23,11 +23,11 @@ in depot.nix.utils.drvTargets {
   # https://gerrit.googlesource.com/plugins/checks
   checks = buildGerritBazelPlugin {
     name = "checks";
-    depsOutputHash = "sha256:1s4ldzny9f8vpp96sff8zy2kigz3hi560ikrgyp5630ffrc8affq";
+    depsOutputHash = "sha256:01krrafg5df42z3r7y74g8lx859my4610cqx3a7d02laqq9yjqc6";
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/checks";
-      rev = "ab49a63f5c159bda42d9ad1bdb9286bede6c5de4";
-      sha256 = "sha256:0plvgx61pwksfdr4fpclzm9pxrn4pcydk08jp4y60qd3qlydks3j";
+      rev = "990e936b1e050c4fe7ac3e590bdb5cfff0311232";
+      sha256 = "sha256:0cgrwrimsxx0dnqvp0akv5pz17hy743lhkqvsks60fijb34ps54s";
     };
   };
 }
