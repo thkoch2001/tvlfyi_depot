@@ -600,6 +600,21 @@ given subject an body (in a thread, to avoid blocking)"
                         :method :post)
     (&path (id 'integer))
   (model:set-issue-status id :open)
+  (let ((issue (model:get-issue id)))
+    (send-irc-notification
+     (format nil
+             "b/~A: \"~A\" reopened by ~A - https://b.tvl.fyi/issues/~A"
+             id
+             (subject issue)
+             (irc:noping (cn *user*))
+             id)
+     :channel (or (uiop:getenvp "ISSUECHANNEL")
+                  "##tvl-dev"))
+    (send-email-for-issue
+     id
+     :subject (format nil "~A reopened \"~A\""
+                      (dn *user*)
+                      (subject issue))))
   (hunchentoot:redirect (format nil "/issues/~A" id)))
 
 (defroute styles ("/main.css") ()
