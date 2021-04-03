@@ -409,6 +409,20 @@
 ;;; HTTP handlers
 ;;;
 
+(defun send-email-for-issue
+    (issue-id &key subject (message ""))
+  "Send an email notification to all subscribers to the given issue with the
+given subject an body (in a thread, to avoid blocking)"
+  (let ((current-user *user*))
+    (model:make-thread
+     (lambda ()
+       (dolist (user-dn (model:issue-subscribers issue-id))
+         (when (not (equal (dn current-user) user-dn))
+           (email:notify-user
+            user-dn
+            :subject subject
+            :message message)))))))
+
 (defun @auth-optional (next)
   (let ((*user* (hunchentoot:session-value 'user)))
     (funcall next)))
@@ -550,22 +564,13 @@
         :body body
         :author-dn (dn *user*))
 
-       ;; Send email notifications (in a thread, since smtp is slow)
-       (let ((current-user *user*))
-         (model:make-thread
-          (lambda ()
-            (let ((issue (model:get-issue id)))
-              (dolist (user-dn (remove-duplicates
-                                (cons (author-dn issue)
-                                      (model:issue-commenter-dns id))
-                                :test #'equal))
-                (when (not (equal (dn current-user) user-dn))
-                  (email:notify-user
-                   user-dn
-                   :subject (format nil "~A commented on \"~A\""
-                                    (displayname current-user)
-                                    (subject issue))
-                   :message body)))))))
+       (let ((issue (model:get-issue id)))
+         (send-email-for-issue
+          id
+          :subject (format nil "~A commented on \"~A\""
+                           (displayname *user*)
+                           (subject issue))
+          :message body))
        (redirect-to-issue)))))
 
 (defroute close-issue
@@ -582,7 +587,12 @@
              (irc:noping (cn *user*))
              id)
      :channel (or (uiop:getenvp "ISSUECHANNEL")
-                  "##tvl-dev")))
+                  "##tvl-dev"))
+    (send-email-for-issue
+     id
+     :subject (format nil "~A closed \"~A\""
+                      (dn *user*)
+                      (subject issue))))
   (hunchentoot:redirect (format nil "/issues/~A" id)))
 
 (defroute open-issue
