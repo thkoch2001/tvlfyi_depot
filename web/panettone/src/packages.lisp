@@ -32,7 +32,7 @@
   (:use :cl :panettone.util :klatre :postmodern :iterate)
   (:import-from :alexandria :if-let :when-let :define-constant)
   (:export
-   :connect-postgres :ddl/init
+   :connect-postgres :ddl/init :make-thread
 
    :issue :issue-comment :issue-event
    :id :subject :body :author-dn :issue-id :status :created-at :acting-user-dn
@@ -43,7 +43,8 @@
 
    :issue-events
 
-   :issue-comments :num-comments :create-issue-comment))
+   :issue-comments :num-comments :create-issue-comment
+   :issue-commenter-dns))
 
 (defpackage panettone
   (:use :cl :klatre :easy-routes :iterate
@@ -53,6 +54,7 @@
   (:import-from :defclass-std :defclass/std)
   (:import-from :alexandria :if-let :when-let :switch :alist-hash-table)
   (:import-from :cl-ppcre :split)
+  (:import-from :bordeaux-threads :make-thread)
   (:import-from
    :panettone.model
    :id :subject :body :author-dn :issue-id :status :created-at

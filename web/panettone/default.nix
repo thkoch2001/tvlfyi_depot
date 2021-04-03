@@ -4,6 +4,7 @@ depot.nix.buildLisp.program {
   name = "panettone";
 
   deps = with depot.third_party.lisp; [
+    bordeaux-threads
     cl-json
     cl-ppcre
     cl-who
