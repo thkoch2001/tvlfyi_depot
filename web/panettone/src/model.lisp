@@ -14,6 +14,34 @@
 ;;; Schema
 ;;;
 
+(defclass user-settings ()
+  ((user-dn :col-type string :initarg :user-dn :accessor user-dn)
+   (enable-email-notifications
+    :col-type boolean
+    :initarg :enable-email-notifications
+    :accessor enable-email-notifications-p
+    :initform t
+    :col-default t))
+  (:metaclass dao-class)
+  (:keys user-dn)
+  (:table-name user_settings)
+  (:documentation
+   "Panettone settings for an individual user DN"))
+
+(deftable (user-settings "user_settings")
+  (!dao-def))
+
+(defun settings-for-user (dn)
+  "Retrieve the settings for the user with the given DN, creating a new row in
+  the database if not yet present"
+  (or
+   (car
+    (query-dao
+     'user-settings
+     (:select '* :from 'user-settings :where (:= 'user-dn dn))))
+   (insert-dao (make-instance 'user-settings :user-dn dn))))
+
+
 (define-constant +issue-statuses+ '(:open :closed)
   :test #'equal)
 
@@ -134,7 +162,8 @@ its new value will be formatted using ~A into NEW-VALUE"))
 (define-constant +all-tables+
     '(issue
       issue-comment
-      issue-event)
+      issue-event
+      user-settings)
   :test #'equal)
 
 (defun ddl/create-tables ()
