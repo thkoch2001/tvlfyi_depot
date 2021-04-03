@@ -1,17 +1,17 @@
-From 27575eba5e812c4e86aa35f32e2958758312cf87 Mon Sep 17 00:00:00 2001
+From 556c4f189d0ed41fb5ad59545ffcf5e957bbb820 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:32 +0100
-Subject: [PATCH 2/6] Syntax highlight nix
+Subject: [PATCH 2/7] Syntax highlight nix
 
 ---
  .../app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts         | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts
-index f5e5e047bc..0c3bb40ce4 100644
+index 081d28d749..2762ccc625 100644
 --- a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts
 +++ b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts
-@@ -105,6 +105,7 @@ const LANGUAGE_MAP = new Map<string, string>([
+@@ -99,6 +99,7 @@ const LANGUAGE_MAP = new Map<string, string>([
    ['text/x-vhdl', 'vhdl'],
    ['text/x-yaml', 'yaml'],
    ['text/vbscript', 'vbscript'],
