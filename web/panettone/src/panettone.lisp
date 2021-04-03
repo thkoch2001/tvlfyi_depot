@@ -75,10 +75,12 @@
          (who:htm (:a :href "/" "All Issues")))
      (if *user*
          (who:htm
-          (:form :class "form-link log-out"
-                 :method "post"
-                 :action "/logout"
-                 (:input :type "submit" :value "Log Out")))
+          (:div :class "nav-group"
+           (:a :href "/settings" "Settings")
+           (:form :class "form-link log-out"
+                  :method "post"
+                  :action "/logout"
+                  (:input :type "submit" :value "Log Out"))))
          (who:htm
           (:a :href
               (format nil
@@ -168,6 +170,27 @@
                 :placeholder "password"))
        (:input :type "submit"
                :value "Submit"))))))
+
+(defun render/settings ()
+  (let ((settings (model:settings-for-user (dn *user*))))
+    (render ()
+      (:div
+       :class "settings-page"
+       (:header
+        (:h1 "Settings"))
+       (:form
+        :method :post :action "/settings"
+        (:div
+         (:label :class "checkbox"
+          (:input :type "checkbox"
+                  :name "enable-email-notifications"
+                  :id "enable-email-notifications"
+                  :checked (model:enable-email-notifications-p
+                            settings))
+          "Enable Email Notifications"))
+        (:div :class "form-group"
+         (:input :type "submit"
+                 :value "Save Settings")))))))
 
 (defun created-by-at (issue)
   (check-type issue model:issue)
@@ -437,6 +460,17 @@
 (defroute index ("/" :decorators (@auth-optional)) ()
   (let ((issues (model:list-issues :status :open)))
     (render/index :issues issues)))
+
+(defroute settings ("/settings" :method :get :decorators (@auth)) ()
+  (render/settings))
+
+(defroute save-settings ("/settings" :method :post :decorators (@auth))
+    (&post enable-email-notifications)
+  (let ((settings (model:settings-for-user (dn *user*))))
+    (model:update-user-settings
+     settings
+     'model:enable-email-notifications enable-email-notifications)
+    (render/settings)))
 
 (defroute handle-closed-issues
     ("/issues/closed" :decorators (@auth-optional)) ()

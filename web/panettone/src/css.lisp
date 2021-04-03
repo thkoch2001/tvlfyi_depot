@@ -138,7 +138,13 @@
 
      ((:and input (:= type "submit")
             (:or :hover :active :focus))
-      :box-shadow 0 0 0 0))))
+      :box-shadow 0 0 0 0))
+
+    (.form-group
+     :margin-top "1rem")
+
+    (label.checkbox
+     :cursor "pointer")))
 
 (defparameter issue-styles
   `((.issue-info
@@ -193,7 +199,12 @@
     (nav
      :display "flex"
      :color ,color/gray
-     :justify-content "space-between")
+     :justify-content "space-between"
+
+     (.nav-group
+      :display "flex"
+      (>*
+       :margin-left "0.5rem")))
 
     (footer
      :border-top "1px" "solid" ,color/gray
