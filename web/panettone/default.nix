@@ -6,9 +6,10 @@ depot.nix.buildLisp.program {
   deps = with depot.third_party.lisp; [
     cl-json
     cl-ppcre
+    cl-smtp
     cl-who
-    drakma
     defclass-std
+    drakma
     easy-routes
     hunchentoot
     lass
