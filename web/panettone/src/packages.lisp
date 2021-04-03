@@ -48,7 +48,7 @@
    :issue-events
 
    :issue-comments :num-comments :create-issue-comment
-   :issue-commenter-dns))
+   :issue-commenter-dns :issue-subscribers))
 
 (defpackage panettone.email
   (:nicknames :email)
