@@ -395,6 +395,20 @@ ISSUE-ID, which should be a plist of initforms, and return an instance of
           :where (:= 'issue-id issue-id))
          :column))
 
+(defun issue-subscribers (issue-id)
+  "Returns a list of all issues who should receive notifications for actions
+  taken on ISSUE-ID.
+
+Currently this is implemented as the author of issue plus all the users who have
+commented on the issue, but in the future we likely want to also allow
+explicitly subscribing to / unsubscribing from individual issues."
+  (let ((issue (get-issue issue-id)))
+    (remove-duplicates
+     (cons (author-dn issue)
+           (issue-commenter-dns issue-id))
+     :test #'equal)))
+
+
 (comment
  (connect-postgres)
  (ddl/init)
