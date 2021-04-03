@@ -84,6 +84,7 @@
     linuxPackages
     linuxPackages_5_11
     luajit
+    luajitPackages
     lutris
     makeFontsConf
     makeWrapper
