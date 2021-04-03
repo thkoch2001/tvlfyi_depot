@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f933e92a_5621c24e",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 3
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-03T21:01:47Z",
+      "side": 1,
+      "message": "Returns a list of _user DNs_ who …",
+      "revId": "b2c212dc9d9ef90e5bef97aee39e7bfd7435ab9e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1554fbb_20091f92",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 3
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-03T21:01:47Z",
+      "side": 1,
+      "message": "Again, `adjoin` could work here.",
+      "revId": "b2c212dc9d9ef90e5bef97aee39e7bfd7435ab9e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74fdbfd5_6783a89a",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 3
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-03T21:01:47Z",
+      "side": 1,
+      "message": "Is this potentially racy btw when ppl do stuff at the same time or does hunchentoot isolate global variables somehow (?)",
+      "revId": "b2c212dc9d9ef90e5bef97aee39e7bfd7435ab9e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
