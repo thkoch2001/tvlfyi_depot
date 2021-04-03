@@ -36,6 +36,7 @@
 
    :user-settings
    :user-dn :enable-email-notifications-p :settings-for-user
+   :update-user-settings :enable-email-notifications
 
    :issue :issue-comment :issue-event
    :id :subject :body :author-dn :issue-id :status :created-at :acting-user-dn
