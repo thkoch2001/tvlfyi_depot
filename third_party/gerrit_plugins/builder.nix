@@ -7,6 +7,7 @@
     overlayPluginCmd ? ''
       cp -R "${src}" "$out/plugins/${name}"
     '',
+    postPatch ? "",
   }: ((depot.third_party.gerrit.override {
     name = "${name}.jar";
 
@@ -24,5 +25,9 @@
     installPhase = ''
       cp "bazel-bin/plugins/${name}/${name}.jar" "$out"
     '';
+    postPatch = if super ? postPatch then ''
+      ${super.postPatch}
+      ${postPatch}
+    '' else postPatch;
   }));
 }

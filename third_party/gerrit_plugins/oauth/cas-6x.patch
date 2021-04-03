@@ -1,0 +1,41 @@
+diff --git a/src/main/java/com/googlesource/gerrit/plugins/oauth/CasApi.java b/src/main/java/com/googlesource/gerrit/plugins/oauth/CasApi.java
+index 450549f..27310cd 100644
+--- a/src/main/java/com/googlesource/gerrit/plugins/oauth/CasApi.java
++++ b/src/main/java/com/googlesource/gerrit/plugins/oauth/CasApi.java
+@@ -15,7 +15,7 @@
+ package com.googlesource.gerrit.plugins.oauth;
+ 
+ import com.github.scribejava.core.builder.api.DefaultApi20;
+-import com.github.scribejava.core.extractors.OAuth2AccessTokenExtractor;
++import com.github.scribejava.core.extractors.OAuth2AccessTokenJsonExtractor;
+ import com.github.scribejava.core.extractors.TokenExtractor;
+ import com.github.scribejava.core.model.OAuth2AccessToken;
+ import com.github.scribejava.core.oauth2.bearersignature.BearerSignature;
+@@ -47,6 +47,6 @@ public class CasApi extends DefaultApi20 {
+ 
+   @Override
+   public TokenExtractor<OAuth2AccessToken> getAccessTokenExtractor() {
+-    return OAuth2AccessTokenExtractor.instance();
++    return OAuth2AccessTokenJsonExtractor.instance();
+   }
+ }
+diff --git a/src/main/java/com/googlesource/gerrit/plugins/oauth/CasOAuthService.java b/src/main/java/com/googlesource/gerrit/plugins/oauth/CasOAuthService.java
+index 5f3e4a1..5594b26 100644
+--- a/src/main/java/com/googlesource/gerrit/plugins/oauth/CasOAuthService.java
++++ b/src/main/java/com/googlesource/gerrit/plugins/oauth/CasOAuthService.java
+@@ -135,6 +135,15 @@ class CasOAuthService implements OAuthServiceProvider {
+           property = getStringElement(obj, "login");
+           if (property != null) login = property;
+         }
++      } else if (attrListJson.isJsonObject()) {
++        JsonObject obj = attrListJson.getAsJsonObject();
++
++        String property = getStringElement(obj, "mail");
++        if (property != null) email = property;
++        property = getStringElement(obj, "displayName");
++        if (property != null) name = property;
++        property = getStringElement(obj, "uid");
++        if (property != null) login = property;
+       }
+ 
+       return new OAuthUserInfo(
