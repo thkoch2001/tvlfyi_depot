@@ -1,5 +1,8 @@
 { depot, pkgs, ... }:
 
+# TVL tool rust crate dependencies, where tools like carnix are not used.
+# Intended for manual updates, which keeps us honest with what we pull into our closure.
+
 let
   buildRustCrate = attrs@{
     edition ? "2018",
