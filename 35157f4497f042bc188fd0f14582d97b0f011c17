@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2e43acc_336ace0b",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-03T19:36:37Z",
+      "side": 1,
+      "message": "as before; I\u0027d probably rephrase this to just say \"in a thread, to avoid blocking\" to not go into the details",
+      "range": {
+        "startLine": 415,
+        "startChar": 23,
+        "endLine": 415,
+        "endChar": 54
+      },
+      "revId": "35157f4497f042bc188fd0f14582d97b0f011c17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
