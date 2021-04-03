@@ -55,6 +55,24 @@ database connection."
      (:select '* :from 'user-settings :where (:= 'user-dn dn))))
    (insert-dao (make-instance 'user-settings :user-dn dn))))
 
+(defun update-user-settings (settings &rest attrs)
+  "Update the fields of the settings for USER with the given ATTRS, which is a
+  plist of slot and value"
+  (check-type settings user-settings)
+  (when-let ((set-fields
+              (iter
+                (for slot in '(enable-email-notifications))
+                (for new-value = (getf attrs slot))
+                (appending
+                 (progn
+                   (setf (slot-value settings slot) new-value)
+                   (list slot new-value))))))
+    (execute
+     (sql-compile
+      `(:update user-settings
+        :set ,@set-fields
+        :where (:= user-dn ,(user-dn settings)))))))
+
 
 (define-constant +issue-statuses+ '(:open :closed)
   :test #'equal)
