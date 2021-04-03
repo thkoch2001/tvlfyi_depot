@@ -515,6 +515,23 @@
         :issue-id id
         :body body
         :author-dn (dn *user*))
+
+       ;; Send email notifications (in a thread, since smtp is slow)
+       (let ((current-user *user*))
+         (model:make-thread
+          (lambda ()
+            (let ((issue (model:get-issue id)))
+              (dolist (user-dn (remove-duplicates
+                                (cons (author-dn issue)
+                                      (model:issue-commenter-dns id))
+                                :test #'equal))
+                (when (not (equal (dn current-user) user-dn))
+                  (email:notify-user
+                   user-dn
+                   :subject (format nil "~A commented on \"~A\""
+                                    (displayname current-user)
+                                    (subject issue))
+                   :message body)))))))
        (redirect-to-issue)))))
 
 (defroute close-issue
