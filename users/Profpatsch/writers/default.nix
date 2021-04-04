@@ -82,6 +82,7 @@ let
   }@args: src: pkgs.buildRustCrate ({
       pname = name;
       version = "1.0.0";
+      edition = "2018";
       crateName = name;
       crateBin = [ name ];
       dependencies = dependencies;
@@ -102,6 +103,7 @@ let
   }@args: src: pkgs.buildRustCrate ({
       pname = name;
       version = "1.0.0";
+      edition = "2018";
       crateName = name;
       dependencies = dependencies;
       src = pkgs.runCommandLocal "write-lib.rs" {
