@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "044fa7e9_94551b09",
+        "filename": "web/panettone/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-04T14:11:54Z",
+      "side": 1,
+      "message": "Potentially - I don\u0027t actually understand that code super well, it just came from some code tazjin had written and I stole it verbatim",
+      "parentUuid": "1d35c279_42be71a5",
+      "revId": "b230e3315bff0996b19f034eadb024e8a2a6f997",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7b63f99_fceede84",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-04-03T20:38:35Z",
       "side": 1,
       "message": "Slight optimization could be to use `adjoin` here since `issue-commenter-dns` already only has unique members (because of `:distinct`), so we only need to check if the issue author has commented or not.",
+      "revId": "b230e3315bff0996b19f034eadb024e8a2a6f997",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ce031b1_32947698",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 4
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-04T14:11:54Z",
+      "side": 1,
+      "message": "Done in CL/2807",
+      "parentUuid": "d7b63f99_fceede84",
       "revId": "b230e3315bff0996b19f034eadb024e8a2a6f997",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
