@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a7ee1be_d6688a77",
+        "filename": "ops/nixos/www/b.tvl.fyi.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-04T14:17:09Z",
+      "side": 1,
+      "message": "panettone will need to be updated to understand this before this merges.",
+      "revId": "88ee1684aabd20c46a539e252de85c53666b38b1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
