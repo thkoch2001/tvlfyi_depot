@@ -26,6 +26,7 @@ depot.nix.buildLisp.program {
     ./src/packages.lisp
     ./src/util.lisp
     ./src/css.lisp
+    ./src/email.lisp
     ./src/inline-markdown.lisp
     ./src/authentication.lisp
     ./src/model.lisp
