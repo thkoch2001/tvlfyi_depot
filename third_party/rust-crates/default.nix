@@ -1,4 +1,4 @@
-{ depot, pkgs, ... }:
+{ depot, ... }:
 
 # TVL tool rust crate dependencies, where tools like carnix are not used.
 # Intended for manual updates, which keeps us honest with what we pull into our closure.
@@ -7,11 +7,18 @@
 # That is, tools which are used by multiple libraries appear on top of the file.
 
 let
-  inherit (pkgs)
-    buildRustCrate
-    ;
+  buildRustCrate = attrs@{
+    edition ? "2018",
+    ...
+  }: depot.pkgs.buildRustCrate (attrs // {
+    # yes, the nix `attrs@{}` syntax is braindead, just a fact.
+    inherit
+      edition
+      ;
+   });
 in
 
+# TODO: remove this giant with because it screws with the static analyzer
 with depot.third_party.rust-crates;
 
 {
@@ -99,7 +106,6 @@ with depot.third_party.rust-crates;
     pname = "inotify";
     crateName = "inotify";
     version = "0.9.2";
-    edition = "2018";
     dependencies = [ bitflags libc inotify-sys ];
     sha256 = "0fcknyvknglwwk1pdzdlb4m0ry2dym1yx8r5prf2v00pxnjk0hv2";
   };
@@ -138,7 +144,6 @@ with depot.third_party.rust-crates;
     pname = "base64";
     version = "0.13.0";
     crateName = "base64";
-    edition = "2018";
     sha256 = "0i0jk5sgq37kc4c90d1g7dp7zvphbg0dbqc1ajnn0vffjxblgamg";
     features = [ "alloc" "std" ];
   };
@@ -202,7 +207,6 @@ with depot.third_party.rust-crates;
     pname = "imap";
     version = "2.4.0";
     crateName = "imap";
-    edition = "2018";
     dependencies = [
       base64
       bufstream
@@ -252,7 +256,6 @@ with depot.third_party.rust-crates;
     sha256 = "0sgc8dycigq0nxr4j613m4q733alfb2i10s6nz80lsbbqgrka21q";
     dependencies = [ serde ryu itoa ];
     features = [ "std" ];
-    edition = "2018";
   };
 
   log = buildRustCrate {
@@ -278,7 +281,7 @@ with depot.third_party.rust-crates;
     dependencies = [ log serde ];
   };
 
-  semver-parser = pkgs.buildRustCrate {
+  semver-parser = buildRustCrate {
     pname = "semver-parser";
     version = "0.7.0";
     crateName = "semver-parser";
@@ -286,7 +289,7 @@ with depot.third_party.rust-crates;
     dependencies = [ ];
   };
 
-  semver = pkgs.buildRustCrate {
+  semver = buildRustCrate {
     pname = "semver";
     version = "0.10.0";
     crateName = "semver";
@@ -294,12 +297,11 @@ with depot.third_party.rust-crates;
     dependencies = [ semver-parser ];
   };
 
-  toml = pkgs.buildRustCrate {
+  toml = buildRustCrate {
     pname = "toml";
     version = "0.5.8";
     crateName = "toml";
     sha256 = "1vwjwmwsy83pbgvvm11a6grbhb09zkcrv9v95wfwv48wjm01wdj4";
-    edition = "2018";
     dependencies = [ serde ];
   };
 }
