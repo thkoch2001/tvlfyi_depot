@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "aeb3a375_57791c12",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-04T14:25:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d6f8505_dd95d10e",
+      "revId": "d3cbfca1567121294f58b5bbaa72acd602aaca2d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "29728370_9ab0bb7b",
         "filename": "third_party/rust-crates/default.nix",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2021-04-04T14:19:15Z",
       "side": 1,
       "message": "??static analyzer??",
+      "revId": "d3cbfca1567121294f58b5bbaa72acd602aaca2d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d166076_98fbf618",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-04T14:25:49Z",
+      "side": 1,
+      "message": "nix-mode has a static variable scope analyzer that uses `nix-instantiate` somehow to find stuff that is not in scope. `with` breaks it for anything inside.",
+      "parentUuid": "29728370_9ab0bb7b",
       "revId": "d3cbfca1567121294f58b5bbaa72acd602aaca2d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
