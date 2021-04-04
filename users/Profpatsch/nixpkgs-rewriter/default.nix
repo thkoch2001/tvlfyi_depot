@@ -5,7 +5,6 @@ let
     ;
   inherit (depot.users.Profpatsch.lib)
     debugExec
-    eprintf
     ;
 
   bins = depot.nix.getBins pkgs.coreutils [ "head" "shuf" ]
@@ -41,7 +40,7 @@ let
     "importas" "-ui" "file" "fileName"
     "importas" "-ui" "from" "fromLine"
     "importas" "-ui" "to" "toLine"
-    "if" [ eprintf "%s-%s\n" "$from" "$to" ]
+    "if" [ depot.tools.eprintf "%s-%s\n" "$from" "$to" ]
     (debugExec "adding lib")
     bins.sed
       "-e" "\${from},\${to} \${1}"
@@ -98,7 +97,7 @@ let
     "pipeline" [ bins.shuf ]
     "pipeline" [ bins.head "-n" "1000" ]
     bins.xargs "-I" "{}" "-n1"
-    "if" [ eprintf "instantiating %s\n" "{}" ]
+    "if" [ depot.tools.eprintf "instantiating %s\n" "{}" ]
     "nix-instantiate" "$1" "-A" "{}"
   ];
 
