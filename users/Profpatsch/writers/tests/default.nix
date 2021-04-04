@@ -4,7 +4,6 @@ let
   inherit (depot.users.Profpatsch.writers)
     python3Lib
     python3
-    testRustSimple
     rustSimple
     rustSimpleLib
     rustSimpleBin
@@ -46,7 +45,7 @@ let
   '');
 
 
-  rustTransitiveLib = testRustSimple (rustSimpleLib {
+  rustTransitiveLib = rustSimpleLib {
     name = "transitive";
   } ''
     pub fn transitive(s: &str) -> String {
@@ -64,7 +63,7 @@ let
         assert_eq!(transitive("foo").as_str(), "foo 1 2 3")
       }
     }
-  '');
+  '';
 
   rustTestLib = rustSimpleLib {
     name = "test_lib";
