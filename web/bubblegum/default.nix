@@ -94,7 +94,14 @@ let
   respond = statusArg: headers: bodyArg:
     let
       status =
-        if builtins.isString statusArg then {
+        if builtins.isInt statusArg
+        then {
+          code = statusArg;
+          line = lib.findFirst
+            (line: statusCodes."${line}" == statusArg)
+            null
+            (builtins.attrNames statusCodes);
+        } else if builtins.isString statusArg then {
           code = statusCodes."${statusArg}" or null;
           line = statusArg;
         } else {
