@@ -31,11 +31,21 @@ in lib.fix(self: {
     "${nixpkgs.home-manager.src}/nixos"
   ];
 
-  nix.nixPath = lib.mkForce [
-    "nixpkgs=${depot.third_party.nixpkgsSrc}"
-    "nixos=${depot.third_party.nixpkgsSrc}"
-    "depot=/depot"
-  ];
+  nix = {
+    nixPath = lib.mkForce [
+      "nixpkgs=${depot.third_party.nixpkgsSrc}"
+      "nixos=${depot.third_party.nixpkgsSrc}"
+      "depot=/depot"
+    ];
+
+    binaryCachePublicKeys = [
+      "cache.tvl.su:kjc6KOMupXc1vHVufJUoDUYeLzbwSr9abcAKdn/U1Jk="
+    ];
+
+    binaryCaches = [
+      "https://cache.tvl.su"
+    ];
+  };
 
   boot = {
     initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
