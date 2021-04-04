@@ -78,8 +78,11 @@ let
   rustSimpleBin = {
     name,
     dependencies ? [],
+    doCheck ? true,
     ...
-  }@args: src: pkgs.buildRustCrate ({
+  }@args: src:
+    (if doCheck then testRustSimple else pkgs.lib.id)
+    (pkgs.buildRustCrate ({
       pname = name;
       version = "1.0.0";
       crateName = name;
@@ -93,13 +96,16 @@ let
         cp "$srcPath" $out/src/bin/${name}.rs
         find $out
       '';
-    } // args);
+    } // args));
 
   rustSimpleLib = {
     name,
     dependencies ? [],
+    doCheck ? true,
     ...
-  }@args: src: pkgs.buildRustCrate ({
+  }@args: src:
+    (if doCheck then testRustSimple else pkgs.lib.id)
+    (pkgs.buildRustCrate ({
       pname = name;
       version = "1.0.0";
       crateName = name;
@@ -112,7 +118,7 @@ let
         cp "$srcPath" $out/src/lib.rs
         find $out
       '';
-    } // args);
+    } // args));
 
   /* Takes a `buildRustCrate` derivation as an input,
     * builds it with `{ buildTests = true; }` and runs
@@ -146,6 +152,5 @@ in {
     rustSimple
     rustSimpleBin
     rustSimpleLib
-    testRustSimple
     ;
 }

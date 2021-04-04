@@ -6,8 +6,7 @@ let
       writers;
   };
 
-  netencode-rs = imports.writers.testRustSimple
-    (imports.writers.rustSimpleLib {
+  netencode-rs = imports.writers.rustSimpleLib {
       name = "netencode";
       dependencies = [
         depot.third_party.rust-crates.nom
@@ -15,7 +14,7 @@ let
       ];
       release = false;
       verbose = true;
-    } (builtins.readFile ./netencode.rs));
+    } (builtins.readFile ./netencode.rs);
 
   gen = import ./gen.nix { inherit lib; };
 
