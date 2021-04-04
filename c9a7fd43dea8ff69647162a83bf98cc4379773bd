@@ -45,6 +45,30 @@
       },
       "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce92d493_67cfff33",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-04T15:29:27Z",
+      "side": 1,
+      "message": "I think so, it’s not really hard to uphold, just sort dependencies before your thing.",
+      "parentUuid": "e7594ce0_19c822ab",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 86
+      },
+      "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
