@@ -81,6 +81,12 @@ in lib.fix(self: {
       neededForBoot = true;
     };
 
+    # SD card
+    "/mnt" = {
+      device = "/dev/disk/by-uuid/c602d703-f1b9-4a44-9e45-94dfe24bdaa8";
+      fsType = "ext4";
+    };
+
     "/boot" = {
       device = "/dev/disk/by-uuid/BF4F-388B";
       fsType = "vfat";
