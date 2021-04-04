@@ -69,6 +69,24 @@
       "parentUuid": "29728370_9ab0bb7b",
       "revId": "d3cbfca1567121294f58b5bbaa72acd602aaca2d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3473ea1_412ea349",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-04T14:26:41Z",
+      "side": 1,
+      "message": "oh, cool. I guess I always use `with` so I don\u0027t notice it there :P",
+      "parentUuid": "9d166076_98fbf618",
+      "revId": "d3cbfca1567121294f58b5bbaa72acd602aaca2d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
