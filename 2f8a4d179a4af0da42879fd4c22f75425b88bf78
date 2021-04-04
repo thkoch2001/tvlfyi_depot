@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8d26b47_2efa0e13",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-04T14:52:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ea6c75d2_1ad3e3fa",
+      "revId": "2f8a4d179a4af0da42879fd4c22f75425b88bf78",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "465e17c3_dd1175e2",
