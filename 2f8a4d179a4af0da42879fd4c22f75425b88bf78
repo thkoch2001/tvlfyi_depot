@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea6c75d2_1ad3e3fa",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-04T14:46:49Z",
+      "side": 1,
+      "message": "I’m currently working on the second solution, I think nothing is more aggravating than having unrelated lints fail because of a stateful CI check.",
+      "parentUuid": "ee714367_9a08da46",
+      "revId": "2f8a4d179a4af0da42879fd4c22f75425b88bf78",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "465e17c3_dd1175e2",
         "filename": "tools/rust-crates-advisory/default.nix",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2021-04-04T10:13:32Z",
       "side": 1,
       "message": "`lib.filterAttrs (attr: !lib.hasPrefix \"__\" attr)`?",
+      "revId": "2f8a4d179a4af0da42879fd4c22f75425b88bf78",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "166d7034_f2ff4aef",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-04T14:46:49Z",
+      "side": 1,
+      "message": "not fond of adding logic like that now, since I want people to feel the pain when they introduce extra meta attrs. :P",
+      "parentUuid": "465e17c3_dd1175e2",
       "revId": "2f8a4d179a4af0da42879fd4c22f75425b88bf78",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2021-04-04T10:13:32Z",
       "side": 1,
       "message": "Would be neat to expose `check-crate-advisory` as well somehow.",
+      "revId": "2f8a4d179a4af0da42879fd4c22f75425b88bf78",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9455a54_325a9437",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-04T14:46:49Z",
+      "side": 1,
+      "message": "I think we can do that by using the multi-attrs approach",
+      "parentUuid": "c2ce0538_8e07d871",
       "revId": "2f8a4d179a4af0da42879fd4c22f75425b88bf78",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
