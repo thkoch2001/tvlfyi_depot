@@ -2,22 +2,10 @@
 
 let
 
-  inherit (depot.nix.yants)
-    defun
-    restrict
-    struct
-    string
-    int
-    attrs
-    enum
-    ;
-
   inherit (depot.nix)
     runExecline
     getBins
     ;
-
-  headers = attrs string;
 
   statusCodes = {
     # 1xx
@@ -90,9 +78,6 @@ let
     "Network Authentication Required" = 511;
   };
 
-  status = enum "bubblegum.status"
-    (builtins.attrNames statusCodes);
-
   /* Generate a CGI response. Takes three arguments:
 
      1. Status of the response as a string which is
@@ -104,21 +89,42 @@ let
 
      See the [README](./README.md) for an example.
 
-    Type: Status -> Headers -> Body -> string
+    Type: string -> attrs string -> string -> string
   */
-  respond = defun [ status headers string string ]
-    (s: hs: body:
-      let
-        code = status.match s statusCodes;
-        renderedHeaders = lib.concatStrings
-          (lib.mapAttrsToList (n: v: "${n}: ${v}\r\n") hs);
-      in
-        lib.concatStrings [
-          "Status: ${toString code} ${s}\r\n"
-          renderedHeaders
-          "\r\n"
-          body
-        ]);
+  respond =
+    # response status as the textual representation in the
+    # HTTP protocol. See `statusCodes` for a list of valid
+    # options.
+    statusArg:
+    # headers as an attribute set of strings
+    headers:
+    # response body as a string
+    bodyArg:
+    let
+      status =
+        if builtins.isString statusArg then {
+          code = statusCodes."${statusArg}" or null;
+          line = statusArg;
+        } else {
+          code = null; line = null;
+        };
+      renderedHeaders = lib.concatStrings
+        (lib.mapAttrsToList (n: v: "${n}: ${toString v}\r\n") headers);
+      internalError = msg: respond 500 {
+        Content-type = "text/plain";
+      } "bubblegum error: ${msg}";
+      body = builtins.tryEval bodyArg;
+    in
+      if status.code == null || status.line == null
+      then internalError "Invalid status ${lib.generators.toPretty {} statusArg}."
+      else if !body.success
+      then internalError "Unknown evaluation error in user code"
+      else lib.concatStrings [
+        "Status: ${toString status.code} ${status.line}\r\n"
+        renderedHeaders
+        "\r\n"
+        body.value
+      ];
 
   /* Returns the value of the `SCRIPT_NAME` environment
      variable used by CGI.
@@ -147,11 +153,10 @@ let
 
      Type: string -> string
   */
-  absolutePath = defun [ string string ]
-    (path:
-      if builtins.substring 0 1 path == "/"
-      then "${scriptName}${path}"
-      else "${scriptName}/${path}");
+  absolutePath = path:
+    if builtins.substring 0 1 path == "/"
+    then "${scriptName}${path}"
+    else "${scriptName}/${path}";
 
   bins = getBins pkgs.coreutils [ "env" "tee" "cat" "printf" "chmod" ]
       // getBins depot.users.sterni.nint [ "nint" ];

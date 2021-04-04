@@ -33,6 +33,18 @@ let
         No coffee, I'm afraid
       '';
     };
+    "/type-error" = {
+      status = 666;
+      title = "bad usage";
+      content = ''
+        Never gonna see this.
+      '';
+    };
+    "/eval-error" = {
+      status = "OK";
+      title = "evaluation error";
+      content = builtins.throw "lol";
+    };
   };
 
   notFound = {
