@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7e28386_4db17b7c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-04T14:16:11Z",
+      "side": 1,
+      "message": "we\u0027re using `b/4` to refer to bugs, if that\u0027s what this is doing",
+      "revId": "7834e16eaa4ea9de6195f28cae3038d52e1171cb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
