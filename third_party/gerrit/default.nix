@@ -36,8 +36,8 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
 
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "abb30fe7f1ecf07d7b5098d6ad7e4423389c41e5";
-    sha256 = "sha256:0xsxhqyjl2dd1wglfk43b8c7591l2x5ikb4l7nxi96czladqy82v";
+    rev = "595e6db974449ff278709f5e87cd8d42199305fc";
+    sha256 = "sha256:17mad9k41rvnzq91nr9w2lax6rdk7pgf20qc4chajay99faimhph";
     fetchSubmodules = true;
   };
   patches = [
@@ -61,7 +61,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:18grb9fghrh84a08f2jqv3wrbf37bk9v1iy2bcaj6xq2phdbkr10";
+    sha256 = "sha256:0jlaylzbl2yscdfji77g1k4r3lcdmjxfbcxpnpwbcs83zpg8rsmf";
     preBuild = ''
       rm .bazelversion
     '';
