@@ -13,10 +13,6 @@ let
     "$@"
   ];
 
-  eprintf = depot.nix.writeExecline "eprintf" {} [
-    "fdmove" "-c" "1" "2" bins.printf "$@"
-  ];
-
   eprint-stdin = depot.nix.writeExecline "eprint-stdin" {} [
     "pipeline" [ bins.multitee "0-1,2" ] "$@"
   ];
@@ -37,7 +33,7 @@ let
   eprintenv = depot.nix.writeExecline "eprintenv" { readNArgs = 1; } [
     "ifelse" [ "fdmove" "-c" "1" "2" bins.printenv "$1" ]
     [ "$@" ]
-    "if" [ eprintf "eprintenv: could not find \"\${1}\" in the environment\n" ]
+    "if" [ depot.tools.eprintf "eprintenv: could not find \"\${1}\" in the environment\n" ]
     "$@"
   ];
 
@@ -54,7 +50,6 @@ let
 in {
   inherit
     debugExec
-    eprintf
     eprint-stdin
     eprint-stdin-netencode
     eprintenv

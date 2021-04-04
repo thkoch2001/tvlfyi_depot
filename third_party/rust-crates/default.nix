@@ -283,4 +283,31 @@ with depot.third_party.rust-crates;
     sha256 = "1zgl8l15i19lzp90icgwyi6zqdd31b9vm8w129f41d1zd0hs7ayq";
     dependencies = [ log serde ];
   };
+
+  semver-parser = buildRustCrate {
+    pname = "semver-parser";
+    version = "0.7.0";
+    crateName = "semver-parser";
+    edition = "2015";
+    sha256 = "1da66c8413yakx0y15k8c055yna5lyb6fr0fw9318kdwkrk5k12h";
+    dependencies = [ ];
+  };
+
+  semver = buildRustCrate {
+    pname = "semver";
+    version = "0.10.0";
+    crateName = "semver";
+    edition = "2015";
+    sha256 = "0pbkdwlpq4d0hgdrymm2rcw31plni2siwd882gbcbscjvyvrrrqa";
+    dependencies = [ semver-parser ];
+  };
+
+  toml = buildRustCrate {
+    pname = "toml";
+    version = "0.5.8";
+    crateName = "toml";
+    sha256 = "1vwjwmwsy83pbgvvm11a6grbhb09zkcrv9v95wfwv48wjm01wdj4";
+    edition = "2018";
+    dependencies = [ serde ];
+  };
 }

@@ -81,7 +81,7 @@ let
     me.netencode.record-splice-env
     runOr return500
     "importas" "-i" "path" "path"
-    "if" [ me.lib.eprintf "GET \${path}\n" ]
+    "if" [ depot.tools.eprintf "GET \${path}\n" ]
     runOr return404
     "backtick" "-ni" "TEMPLATE_DATA" [
       "ifelse" [ bins.test "$path" "=" "/notes" ]
@@ -118,7 +118,7 @@ let
     "importas" "?" "?"
     "ifelse" [ bins.test "$?" "-eq" "0" ]
     []
-    "if" [ me.lib.eprintf "runOr: exited \${?}, running \${1}\n" ]
+    "if" [ depot.tools.eprintf "runOr: exited \${?}, running \${1}\n" ]
     "$1"
   ];
 
