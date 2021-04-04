@@ -89,12 +89,12 @@ let
 
      See the [README](./README.md) for an example.
 
-    Type: string -> attrs string -> string -> string
+    Type: either int string -> attrs string -> string -> string
   */
   respond =
-    # response status as the textual representation in the
-    # HTTP protocol. See `statusCodes` for a list of valid
-    # options.
+    # response status as an integer (status code) or its
+    # textual representation in the HTTP protocol.
+    # See `statusCodes` for a list of valid options.
     statusArg:
     # headers as an attribute set of strings
     headers:
@@ -102,7 +102,14 @@ let
     bodyArg:
     let
       status =
-        if builtins.isString statusArg then {
+        if builtins.isInt statusArg
+        then {
+          code = statusArg;
+          line = lib.findFirst
+            (line: statusCodes."${line}" == statusArg)
+            null
+            (builtins.attrNames statusCodes);
+        } else if builtins.isString statusArg then {
           code = statusCodes."${statusArg}" or null;
           line = statusArg;
         } else {

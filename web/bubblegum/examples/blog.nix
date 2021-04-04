@@ -108,24 +108,24 @@ let
     if pathInfo == "/"
     then {
       title = "blog";
-      status = "OK";
+      status = 200;
       inner = index posts;
     }
     else if !(validatePathInfo pathInfo)
     then {
       title = "Bad Request";
-      status = "Bad Request";
+      status = 400;
       inner = "No slashes in post names 😡";
     }
     # CGI should already url.decode for us
     else if builtins.pathExists (blogdir + "/" + pathInfo)
     then rec {
       title = parseTitle pathInfo;
-      status = "OK";
+      status = 200;
       inner = post title pathInfo;
     } else {
       title = "Not Found";
-      status = "Not Found";
+      status = 404;
       inner = "<h1>404 — not found</h1>";
     };
 in
