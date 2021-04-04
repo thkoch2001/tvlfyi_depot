@@ -5,7 +5,6 @@ let
     edition ? "2018",
     ...
   }: depot.third_party.buildRustCrate (attrs // {
-    # yes, the nix `attrs@{}` syntax is braindead, just a fact.
     inherit
       edition
       ;
