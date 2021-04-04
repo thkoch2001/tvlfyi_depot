@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab40404a_ec82f0dc",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 3
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-04T14:14:32Z",
+      "side": 1,
+      "message": "oops, thanks!",
+      "parentUuid": "f933e92a_5621c24e",
+      "revId": "b2c212dc9d9ef90e5bef97aee39e7bfd7435ab9e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1554fbb_20091f92",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-04-03T21:01:47Z",
       "side": 1,
       "message": "Again, `adjoin` could work here.",
+      "revId": "b2c212dc9d9ef90e5bef97aee39e7bfd7435ab9e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f38b13c5_bd2bbdc2",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 3
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-04T14:14:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1554fbb_20091f92",
       "revId": "b2c212dc9d9ef90e5bef97aee39e7bfd7435ab9e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
