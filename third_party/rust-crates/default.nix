@@ -1,11 +1,18 @@
-{ depot, pkgs, ... }:
+{ depot, ... }:
 
 let
-  inherit (pkgs)
-    buildRustCrate
-    ;
+  buildRustCrate = attrs@{
+    edition ? "2018",
+    ...
+  }: depot.third_party.buildRustCrate (attrs // {
+    # yes, the nix `attrs@{}` syntax is braindead, just a fact.
+    inherit
+      edition
+      ;
+   });
 in
 
+# TODO: remove this giant with because it screws with the static analyzer
 with depot.third_party.rust-crates;
 
 {
@@ -27,6 +34,7 @@ with depot.third_party.rust-crates;
     pname = "ascii";
     crateName = "ascii";
     version = "1.0.0";
+    edition = "2015";
     sha256 = "0gam8xsn981wfa40srsniivffjsfz1pg0xnigmczk9k7azb1ks1m";
   };
 
@@ -34,6 +42,7 @@ with depot.third_party.rust-crates;
     pname = "regex-syntax";
     crateName = "regex-syntax";
     version = "0.6.22";
+    edition = "2015";
     sha256 = "0r00n2dgyixacl1sczqp18gxf0xh7x272hcdp62412lypba2gqyg";
   };
 
@@ -43,6 +52,7 @@ with depot.third_party.rust-crates;
     version = "1.4.3";
     features = [ "std" ];
     dependencies = [ regex-syntax ];
+    edition = "2015";
     sha256 = "0w0b4bh0ng20lf5y8raaxmxj46ikjqpgwy1iggzpby9lhv9vydkp";
   };
 
@@ -51,6 +61,7 @@ with depot.third_party.rust-crates;
     crateName = "libloading";
     version = "0.6.7";
     dependencies = [ cfg-if ];
+    edition = "2015";
     sha256 = "111d8zsizswnxiqn43vcgnc2ym9spsx1i6pcfp35ca3yw2ixq95j";
   };
 
@@ -71,6 +82,7 @@ with depot.third_party.rust-crates;
     pname = "libc";
     crateName = "libc";
     version = "0.2.82";
+    edition = "2015";
     sha256 = "02zgn6c0xwh331hky417lbr29kmvrw3ylxs8822syyhjfjqszvsx";
   };
 
@@ -93,7 +105,6 @@ with depot.third_party.rust-crates;
     pname = "inotify";
     crateName = "inotify";
     version = "0.9.2";
-    edition = "2018";
     dependencies = [ bitflags libc inotify-sys ];
     sha256 = "0fcknyvknglwwk1pdzdlb4m0ry2dym1yx8r5prf2v00pxnjk0hv2";
   };
@@ -102,6 +113,7 @@ with depot.third_party.rust-crates;
     pname = "httparse";
     version = "1.3.4";
     crateName = "httparse";
+    edition = "2015";
     sha256 = "0dggj4s0cq69bn63q9nqzzay5acmwl33nrbhjjsh5xys8sk2x4jw";
   };
 
@@ -109,6 +121,7 @@ with depot.third_party.rust-crates;
     pname = "version-check";
     version = "0.9.2";
     crateName = "version-check";
+    edition = "2015";
     sha256 = "1vwvc1mzwv8ana9jv8z933p2xzgj1533qwwl5zr8mi89azyhq21v";
   };
 
@@ -116,6 +129,7 @@ with depot.third_party.rust-crates;
     pname = "memchr";
     version = "2.3.3";
     crateName = "memchr";
+    edition = "2015";
     sha256 = "1ivxvlswglk6wd46gadkbbsknr94gwryk6y21v64ja7x4icrpihw";
   };
   nom = buildRustCrate {
@@ -132,7 +146,6 @@ with depot.third_party.rust-crates;
     pname = "base64";
     version = "0.13.0";
     crateName = "base64";
-    edition = "2018";
     sha256 = "0i0jk5sgq37kc4c90d1g7dp7zvphbg0dbqc1ajnn0vffjxblgamg";
     features = [ "alloc" "std" ];
   };
@@ -148,6 +161,7 @@ with depot.third_party.rust-crates;
     pname = "autocfg";
     version = "1.0.1";
     crateName = "autocfg";
+    edition = "2015";
     sha256 = "1lsjz23jdcchcqbsmlzd4iksg3hc8bdvy677jy0938i2gp24frw1";
   };
 
@@ -155,6 +169,7 @@ with depot.third_party.rust-crates;
     pname = "num-traits";
     version = "0.2.14";
     crateName = "num-traits";
+    edition = "2015";
     buildDependencies = [ autocfg ];
     sha256 = "09ac9dcp6cr57vjzyiy213y7312jqcy84mkamp99zr40qd1gwnyk";
   };
@@ -163,6 +178,7 @@ with depot.third_party.rust-crates;
     pname = "num-integer";
     version = "0.1.44";
     crateName = "num-integer";
+    edition = "2015";
     dependencies = [ num-traits ];
     buildDependencies = [ autocfg ];
     sha256 = "1gdbnfgnivp90h644wmqj4a20yfmdga2xxxacx53pjbcazvfvajc";
@@ -172,6 +188,7 @@ with depot.third_party.rust-crates;
     pname = "chrono";
     version = "0.4.19";
     crateName = "chrono";
+    edition = "2015";
     dependencies = [ num-traits num-integer ];
     features = [ "alloc" "std" ];
     sha256 = "0cjf5dnfbk99607vz6n5r6bhwykcypq5psihvk845sxrhnzadsar";
@@ -196,7 +213,6 @@ with depot.third_party.rust-crates;
     pname = "imap";
     version = "2.4.0";
     crateName = "imap";
-    edition = "2018";
     dependencies = [
       base64
       bufstream
@@ -221,6 +237,7 @@ with depot.third_party.rust-crates;
     pname = "serde";
     crateName = "serde";
     version = "1.0.123";
+    edition = "2015";
     sha256 = "05xl2s1vpf3p7fi2yc9qlzw88d5ap0z3qmhmd7axa6pp9pn1s5xc";
     features = [ "std" ];
   };
@@ -246,7 +263,6 @@ with depot.third_party.rust-crates;
     sha256 = "0sgc8dycigq0nxr4j613m4q733alfb2i10s6nz80lsbbqgrka21q";
     dependencies = [ serde ryu itoa ];
     features = [ "std" ];
-    edition = "2018";
   };
 
   log = buildRustCrate {
@@ -257,17 +273,11 @@ with depot.third_party.rust-crates;
     dependencies = [ cfg-if ];
   };
 
-  serde_derive = buildRustCrate {
-    pname = "serde";
-    crateName = "serde";
-    version = "1.0.123";
-    sha256 = "05xl2s1vpf3p7fi2yc9qlzw88d5ap0z3qmhmd7axa6pp9pn1s5xc";
-  };
-
   mustache = buildRustCrate {
     pname = "mustache";
     version = "0.9.0";
     crateName = "mustache";
+    edition = "2015";
     sha256 = "1zgl8l15i19lzp90icgwyi6zqdd31b9vm8w129f41d1zd0hs7ayq";
     dependencies = [ log serde ];
   };
