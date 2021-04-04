@@ -16,6 +16,24 @@
       "message": "Set bindAddress to \"localhost\" for hygiene?",
       "revId": "ae24068a17df7f6536d30863fd3f12e3d3978b26",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "466a1cfc_d4250bcf",
+        "filename": "ops/nixos/whitby/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-04T18:45:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26b1c345_f34fc7e8",
+      "revId": "ae24068a17df7f6536d30863fd3f12e3d3978b26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
