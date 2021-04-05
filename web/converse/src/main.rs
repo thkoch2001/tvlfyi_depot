@@ -30,6 +30,7 @@ extern crate log;
 #[macro_use]
 extern crate serde_derive;
 
+extern crate rouille;
 extern crate actix;
 extern crate actix_web;
 extern crate chrono;
