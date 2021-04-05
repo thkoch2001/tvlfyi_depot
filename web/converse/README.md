@@ -1,5 +1,5 @@
-#+TITLE: Converse
-#+AUTHOR: Vincent Ambo
+Converse
+========
 
 Welcome to Converse, a work-in-progress forum software written in
 Rust. The intention behind Converse is to provide a simple forum-like
