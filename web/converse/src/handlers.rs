@@ -46,13 +46,13 @@ const NEW_THREAD_LENGTH_ERR: &'static str = "Title and body can not be empty!";
 /// Represents the state carried by the web server actors.
 pub struct AppState {
     /// Address of the database actor
-    pub db: Addr<Syn, DbExecutor>,
+    pub db: Addr<DbExecutor>,
 
     /// Address of the OIDC actor
-    pub oidc: Addr<Syn, OidcExecutor>,
+    pub oidc: Addr<OidcExecutor>,
 
     /// Address of the rendering actor
-    pub renderer: Addr<Syn, Renderer>,
+    pub renderer: Addr<Renderer>,
 }
 
 pub fn forum_index(state: State<AppState>) -> ConverseResponse {
@@ -113,9 +113,9 @@ pub struct NewThreadForm {
 
 /// This handler receives a "New thread"-form and redirects the user
 /// to the new thread after creation.
-pub fn submit_thread(state: State<AppState>,
-                     input: Form<NewThreadForm>,
-                     req: HttpRequest<AppState>) -> ConverseResponse {
+pub fn submit_thread((state, input, req): (State<AppState>,
+                                           Form<NewThreadForm>,
+                                           HttpRequest<AppState>)) -> ConverseResponse {
     // Trim whitespace out of inputs:
     let input = NewThreadForm {
         title: input.title.trim().into(),
@@ -328,7 +328,7 @@ impl EmbeddedFile for App<AppState> {
 pub struct RequireLogin;
 
 impl <S> Middleware<S> for RequireLogin {
-    fn start(&self, req: &mut HttpRequest<S>) -> actix_web::Result<Started> {
+    fn start(&self, req: &HttpRequest<S>) -> actix_web::Result<Started> {
         let logged_in = req.identity().is_some();
         let is_oidc_req = req.path().starts_with("/oidc");
 

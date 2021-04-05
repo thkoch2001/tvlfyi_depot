@@ -90,7 +90,7 @@ fn config_default(name: &str, default: &str) -> String {
     env::var(name).unwrap_or(default.into())
 }
 
-fn start_db_executor() -> Addr<Syn, DbExecutor> {
+fn start_db_executor() -> Addr<DbExecutor> {
     info!("Initialising database connection pool ...");
     let db_url = config("DATABASE_URL");
 
@@ -100,7 +100,7 @@ fn start_db_executor() -> Addr<Syn, DbExecutor> {
     SyncArbiter::start(2, move || DbExecutor(pool.clone()))
 }
 
-fn schedule_search_refresh(db: Addr<Syn, DbExecutor>) {
+fn schedule_search_refresh(db: Addr<DbExecutor>) {
     use tokio::prelude::*;
     use tokio::timer::Interval;
     use std::time::{Duration, Instant};
@@ -114,7 +114,7 @@ fn schedule_search_refresh(db: Addr<Syn, DbExecutor>) {
     thread::spawn(|| tokio::run(task));
 }
 
-fn start_oidc_executor(base_url: &str) -> Addr<Syn, OidcExecutor> {
+fn start_oidc_executor(base_url: &str) -> Addr<OidcExecutor> {
     info!("Initialising OIDC integration ...");
     let oidc_url = config("OIDC_DISCOVERY_URL");
     let oidc_config = oidc::load_oidc(&oidc_url)
@@ -130,7 +130,7 @@ fn start_oidc_executor(base_url: &str) -> Addr<Syn, OidcExecutor> {
     oidc.start()
 }
 
-fn start_renderer() -> Addr<Syn, Renderer> {
+fn start_renderer() -> Addr<Renderer> {
     let comrak = comrak::ComrakOptions{
         github_pre_lang: true,
         ext_strikethrough: true,
@@ -155,9 +155,9 @@ fn gen_session_key() -> [u8; 64] {
 }
 
 fn start_http_server(base_url: String,
-                     db_addr: Addr<Syn, DbExecutor>,
-                     oidc_addr: Addr<Syn, OidcExecutor>,
-                     renderer_addr: Addr<Syn, Renderer>) {
+                     db_addr: Addr<DbExecutor>,
+                     oidc_addr: Addr<OidcExecutor>,
+                     renderer_addr: Addr<Renderer>) {
     info!("Initialising HTTP server ...");
     let bind_host = config_default("CONVERSE_BIND_HOST", "127.0.0.1:4567");
     let key = gen_session_key();
@@ -182,14 +182,14 @@ fn start_http_server(base_url: String,
             .middleware(identity)
             .resource("/", |r| r.method(Method::GET).with(forum_index))
             .resource("/thread/new", |r| r.method(Method::GET).with(new_thread))
-            .resource("/thread/submit", |r| r.method(Method::POST).with3(submit_thread))
-            .resource("/thread/reply", |r| r.method(Method::POST).with3(reply_thread))
-            .resource("/thread/{id}", |r| r.method(Method::GET).with3(forum_thread))
-            .resource("/post/{id}/edit", |r| r.method(Method::GET).with3(edit_form))
-            .resource("/post/edit", |r| r.method(Method::POST).with3(edit_post))
-            .resource("/search", |r| r.method(Method::GET).with2(search_forum))
+            .resource("/thread/submit", |r| r.method(Method::POST).with(submit_thread))
+            .resource("/thread/reply", |r| r.method(Method::POST).with(reply_thread))
+            .resource("/thread/{id}", |r| r.method(Method::GET).with(forum_thread))
+            .resource("/post/{id}/edit", |r| r.method(Method::GET).with(edit_form))
+            .resource("/post/edit", |r| r.method(Method::POST).with(edit_post))
+            .resource("/search", |r| r.method(Method::GET).with(search_forum))
             .resource("/oidc/login", |r| r.method(Method::GET).with(login))
-            .resource("/oidc/callback", |r| r.method(Method::POST).with3(callback))
+            .resource("/oidc/callback", |r| r.method(Method::POST).with(callback))
             .static_file("/static/highlight.css", include_bytes!("../static/highlight.css"))
             .static_file("/static/highlight.js", include_bytes!("../static/highlight.js"))
             .static_file("/static/styles.css", include_bytes!("../static/styles.css"));
