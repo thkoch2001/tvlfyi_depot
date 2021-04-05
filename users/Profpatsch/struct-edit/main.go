@@ -152,20 +152,32 @@ type enumerate struct {
 // for scalars it’s just a nil index & the val itself.
 // Guaranteed to always return at least one element.
 func (v val) enumerate() (e []enumerate) {
-	switch v.tag {
+	e = enumerateInner(v.tag, v.val)
+	if e == nil {
+		e = append(e, enumerate{
+			i: nil,
+			v: v,
+		})
+	}
+	return
+}
+
+// like enumerate, but returns an empty slice for scalars without inner vals.
+func enumerateInner(tag tag, v interface{}) (e []enumerate) {
+	switch tag {
 	case tagString:
 		fallthrough
 	case tagFloat:
-		e = []enumerate{enumerate{i: index(nil), v: v}}
+		e = nil
 	case tagList:
-		for i, v := range v.val.([]val) {
+		for i, v := range v.([]val) {
 			e = append(e, enumerate{i: index(uint(i)), v: v})
 		}
 	case tagMap:
 		// map sorting order is not stable (actually randomized thank jabber)
 		// so let’s sort them
 		keys := []string{}
-		m := v.val.(map[string]val)
+		m := v.(map[string]val)
 		for k, _ := range m {
 			keys = append(keys, k)
 		}
@@ -174,7 +186,7 @@ func (v val) enumerate() (e []enumerate) {
 			e = append(e, enumerate{i: index(k), v: m[k]})
 		}
 	default:
-		log.Fatalf("unknown val tag %s, %v", v.tag, v)
+		log.Fatalf("unknown val tag %s, %v", tag, v)
 	}
 	return
 }
