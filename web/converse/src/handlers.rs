@@ -32,7 +32,6 @@ use actix_web;
 use crate::db::*;
 use crate::errors::ConverseError;
 use futures::Future;
-use mime_guess::guess_mime_type;
 use crate::models::*;
 use crate::oidc::*;
 use crate::render::*;
@@ -316,7 +315,7 @@ pub trait EmbeddedFile {
 impl EmbeddedFile for App<AppState> {
     fn static_file(self, path: &'static str, content: &'static [u8]) -> Self {
         self.route(path, Method::GET, move |_: HttpRequest<_>| {
-            let mime = format!("{}", guess_mime_type(path));
+            let mime = format!("{}", mime_guess::from_path(path).first_or_octet_stream());
             HttpResponse::Ok()
                 .content_type(mime.as_str())
                 .body(content)
