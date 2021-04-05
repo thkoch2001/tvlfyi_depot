@@ -34,6 +34,7 @@ use r2d2;
 use tokio_timer;
 
 pub type Result<T> = result::Result<T, ConverseError>;
+pub type ConverseResult<T> = result::Result<T, ConverseError>;
 
 #[derive(Debug, Fail)]
 pub enum ConverseError {

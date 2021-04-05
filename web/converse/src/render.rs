@@ -47,12 +47,6 @@ impl fmt::Display for FormattedDate {
     }
 }
 
-/// Message used to render the index page.
-pub struct IndexPage {
-    pub threads: Vec<ThreadIndex>,
-}
-message!(IndexPage, Result<String>);
-
 #[derive(Debug)]
 struct IndexThread {
     id: i32,
@@ -69,39 +63,6 @@ struct IndexThread {
 struct IndexPageTemplate {
     threads: Vec<IndexThread>,
 }
-
-impl Handler<IndexPage> for Renderer {
-    type Result = Result<String>;
-
-    fn handle(&mut self, msg: IndexPage, _: &mut Self::Context) -> Self::Result {
-        let threads: Vec<IndexThread> = msg.threads
-            .into_iter()
-            .map(|thread| IndexThread {
-                id: thread.thread_id,
-                title: thread.title, // escape_html(&thread.title),
-                sticky: thread.sticky,
-                closed: thread.closed,
-                posted: FormattedDate(thread.posted),
-                author_name: thread.thread_author,
-                post_author: thread.post_author,
-            })
-            .collect();
-
-        let tpl = IndexPageTemplate {
-            threads
-        };
-
-        tpl.render().map_err(|e| e.into())
-    }
-}
-
-/// Message used to render a thread.
-pub struct ThreadPage {
-    pub current_user: i32,
-    pub thread: Thread,
-    pub posts: Vec<SimplePost>,
-}
-message!(ThreadPage, Result<String>);
 
 // "Renderable" structures with data transformations applied.
 #[derive(Debug)]
@@ -128,39 +89,6 @@ struct RenderableThreadPage {
 /// Helper function for computing Gravatar links.
 fn md5_hex(input: &[u8]) -> String {
     format!("{:x}", md5::compute(input))
-}
-
-fn prepare_thread(comrak: &ComrakOptions, page: ThreadPage) -> RenderableThreadPage {
-    let user = page.current_user;
-
-    let posts = page.posts.into_iter().map(|post| {
-        let editable = user != 1 && post.user_id == user;
-
-        RenderablePost {
-            id: post.id,
-            body: markdown_to_html(&post.body, comrak),
-            posted: FormattedDate(post.posted),
-            author_name: post.author_name.clone(),
-            author_gravatar: md5_hex(post.author_email.as_bytes()),
-            editable,
-        }
-    }).collect();
-
-    RenderableThreadPage {
-        posts,
-        closed: page.thread.closed,
-        id: page.thread.id,
-        title: page.thread.title,
-    }
-}
-
-impl Handler<ThreadPage> for Renderer {
-    type Result = Result<String>;
-
-    fn handle(&mut self, msg: ThreadPage, _: &mut Self::Context) -> Self::Result {
-        let renderable = prepare_thread(&self.comrak, msg);
-        renderable.render().map_err(|e| e.into())
-    }
 }
 
 /// The different types of editing modes supported by the editing
@@ -262,4 +190,51 @@ impl Handler<SearchResultPage> for Renderer {
     fn handle(&mut self, msg: SearchResultPage, _: &mut Self::Context) -> Self::Result {
         msg.render().map_err(|e| e.into())
     }
+}
+
+// TODO: actor-free implementation below
+
+/// Render the index page for the given thread list.
+pub fn index_page(threads: Vec<ThreadIndex>) -> Result<String> {
+    let threads: Vec<IndexThread> = threads
+        .into_iter()
+        .map(|thread| IndexThread {
+            id: thread.thread_id,
+            title: thread.title, // escape_html(&thread.title),
+            sticky: thread.sticky,
+            closed: thread.closed,
+            posted: FormattedDate(thread.posted),
+            author_name: thread.thread_author,
+            post_author: thread.post_author,
+        })
+        .collect();
+
+    let tpl = IndexPageTemplate { threads };
+    tpl.render().map_err(|e| e.into())
+}
+
+// Render the page of a given thread.
+pub fn thread_page(user: i32, thread: Thread, posts: Vec<SimplePost>) -> Result<String> {
+    let posts = posts.into_iter().map(|post| {
+        let editable = user != 1 && post.user_id == user;
+
+        let comrak = ComrakOptions::default(); // TODO(tazjin): cheddar
+        RenderablePost {
+            id: post.id,
+            body: markdown_to_html(&post.body, &comrak),
+            posted: FormattedDate(post.posted),
+            author_name: post.author_name.clone(),
+            author_gravatar: md5_hex(post.author_email.as_bytes()),
+            editable,
+        }
+    }).collect();
+
+    let renderable = RenderableThreadPage {
+        posts,
+        closed: thread.closed,
+        id: thread.id,
+        title: thread.title,
+    };
+
+    Ok(renderable.render()?)
 }

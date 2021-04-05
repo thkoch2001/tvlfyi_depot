@@ -30,6 +30,7 @@ tokio-timer = "0.2"
 url = "1.7"
 url_serde = "0.2"
 curl = "*" # bounded by crimp
+rouille = "3.0"
 
 [build-dependencies]
 pulldown-cmark = "0.1"

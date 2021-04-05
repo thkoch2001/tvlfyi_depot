@@ -30,11 +30,13 @@ use actix_web::middleware::identity::RequestIdentity;
 use actix_web::middleware::{Started, Middleware};
 use actix_web;
 use crate::db::*;
-use crate::errors::ConverseError;
+use crate::errors::{ConverseResult, ConverseError};
 use futures::Future;
 use crate::models::*;
 use crate::oidc::*;
 use crate::render::*;
+
+use rouille::{Request, Response};
 
 type ConverseResponse = Box<dyn Future<Item=HttpResponse, Error=ConverseError>>;
 
@@ -54,15 +56,14 @@ pub struct AppState {
     pub renderer: Addr<Renderer>,
 }
 
-pub fn forum_index(state: State<AppState>) -> ConverseResponse {
-    state.db.send(ListThreads)
-        .flatten()
-        .and_then(move |res| state.renderer.send(IndexPage {
-            threads: res
-        }).from_err())
-        .flatten()
-        .map(|res| HttpResponse::Ok().content_type(HTML).body(res))
-        .responder()
+/// Serve the forum's index page.
+pub fn forum_index_rouille(db: &DbExecutor) -> ConverseResult<Response> {
+    let threads = db.list_threads()?;
+    Ok(Response::html(index_page(threads)?))
+}
+
+pub fn forum_index(_: State<AppState>) -> ConverseResponse {
+    unimplemented!()
 }
 
 /// Returns the ID of the currently logged in user. If there is no ID
@@ -78,23 +79,23 @@ pub fn get_user_id(req: &HttpRequest<AppState>) -> i32 {
     }
 }
 
-/// This handler retrieves and displays a single forum thread.
-pub fn forum_thread(state: State<AppState>,
-                    req: HttpRequest<AppState>,
-                    thread_id: Path<i32>) -> ConverseResponse {
-    let id = thread_id.into_inner();
-    let user = get_user_id(&req);
+pub fn get_user_id_rouille(_req: &Request) -> i32 {
+    // TODO(tazjin): Implement session support in rouille somehow.
+    ANONYMOUS
+}
 
-    state.db.send(GetThread(id))
-        .flatten()
-        .and_then(move |res| state.renderer.send(ThreadPage {
-            current_user: user,
-            thread: res.0,
-            posts: res.1,
-        }).from_err())
-        .flatten()
-        .map(|res| HttpResponse::Ok().content_type(HTML).body(res))
-        .responder()
+pub fn forum_thread_rouille(req: &Request, db: &DbExecutor, thread_id: i32)
+                            -> ConverseResult<Response> {
+    let user = get_user_id_rouille(&req);
+    let thread = db.get_thread(thread_id)?;
+    Ok(Response::html(thread_page(user, thread.0, thread.1)?))
+}
+
+/// This handler retrieves and displays a single forum thread.
+pub fn forum_thread(_: State<AppState>,
+                    _: HttpRequest<AppState>,
+                    _: Path<i32>) -> ConverseResponse {
+    unimplemented!()
 }
 
 /// This handler presents the user with the "New Thread" form.
