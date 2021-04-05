@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50161d17_03bac8a1",
+        "filename": "web/converse/.gitattributes",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-05T15:11:36Z",
+      "side": 1,
+      "message": "(GitHub specific)",
+      "revId": "8142149e28991b15affc5e4576a033e0ada9778b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29c5ca52_80211b97",
+        "filename": "web/converse/.travis.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-05T15:11:36Z",
+      "side": 1,
+      "message": "(not applicable anymore)",
+      "revId": "8142149e28991b15affc5e4576a033e0ada9778b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d765702c_6b2187dd",
+        "filename": "web/converse/CODE_OF_CONDUCT.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-05T15:11:36Z",
+      "side": 1,
+      "message": "Duplicate of //docs/CODE_OF_CONDUCT.md fyi.",
+      "revId": "8142149e28991b15affc5e4576a033e0ada9778b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59e99e44_542d942f",
+        "filename": "web/converse/CONTRIBUTING.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-05T15:11:36Z",
+      "side": 1,
+      "message": "This is also somewhat addressed by //docs/CONTRIBUTING.md",
+      "revId": "8142149e28991b15affc5e4576a033e0ada9778b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21b8a1fa_f32cee93",
+        "filename": "web/converse/templates/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-05T15:11:36Z",
+      "side": 1,
+      "message": "I\u0027m guessing there are a lot of URLs to the former source location due to it being AGPL. Just want to point it out, you can probably do this in a separate CL.",
+      "revId": "8142149e28991b15affc5e4576a033e0ada9778b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
