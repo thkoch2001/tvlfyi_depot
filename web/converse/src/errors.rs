@@ -31,7 +31,6 @@ use actix_web;
 use askama;
 use diesel;
 use r2d2;
-use reqwest;
 use tokio_timer;
 
 pub type Result<T> = result::Result<T, ConverseError>;
@@ -61,6 +60,9 @@ pub enum ConverseError {
 
     #[fail(display = "thread {} is closed and can not be responded to", id)]
     ThreadClosed { id: i32 },
+
+    #[fail(display = "JSON serialisation failed: {}", error)]
+    Serialisation { error: serde_json::Error },
 
     // This variant is used as a catch-all for wrapping
     // actix-web-compatible response errors, such as the errors it
@@ -103,10 +105,16 @@ impl From<actix_web::Error> for ConverseError {
     }
 }
 
-impl From<reqwest::Error> for ConverseError {
-    fn from(error: reqwest::Error) -> ConverseError {
+impl From<serde_json::Error> for ConverseError {
+    fn from(error: serde_json::Error) -> ConverseError {
+        ConverseError::Serialisation { error }
+    }
+}
+
+impl From<curl::Error> for ConverseError {
+    fn from(error: curl::Error) -> ConverseError {
         ConverseError::InternalError {
-            reason: format!("Failed to make HTTP request: {}", error),
+            reason: format!("error during HTTP request: {}", error),
         }
     }
 }
