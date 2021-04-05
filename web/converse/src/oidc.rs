@@ -27,8 +27,6 @@ use reqwest;
 use url::Url;
 use url_serde;
 use errors::*;
-use reqwest::header::Authorization;
-use hyper::header::Bearer;
 
 /// This structure represents the contents of an OIDC discovery
 /// document.
@@ -130,7 +128,7 @@ impl Handler<RetrieveToken> for OidcExecutor {
         let token: TokenResponse = response.json()?;
 
         let user: Userinfo = client.get(&self.oidc_config.userinfo_endpoint)
-            .header(Authorization(Bearer { token: token.access_token }))
+            .header("Authorization", format!("Bearer {}", token.access_token ))
             .send()?
             .json()?;
 
