@@ -23,8 +23,8 @@ use diesel::{self, sql_query};
 use diesel::sql_types::Text;
 use diesel::prelude::*;
 use diesel::r2d2::{Pool, ConnectionManager};
-use models::*;
-use errors::{ConverseError, Result};
+use crate::models::*;
+use crate::errors::{ConverseError, Result};
 
 /// The DB actor itself. Several of these will be run in parallel by
 /// `SyncArbiter`.
@@ -43,7 +43,7 @@ impl Handler<ListThreads> for DbExecutor {
     type Result = <ListThreads as Message>::Result;
 
     fn handle(&mut self, _: ListThreads, _: &mut Self::Context) -> Self::Result {
-        use schema::thread_index::dsl::*;
+        use crate::schema::thread_index::dsl::*;
 
         let conn = self.0.get()?;
         let results = thread_index
@@ -67,8 +67,8 @@ impl Handler<LookupOrCreateUser> for DbExecutor {
     fn handle(&mut self,
               msg: LookupOrCreateUser,
               _: &mut Self::Context) -> Self::Result {
-        use schema::users;
-        use schema::users::dsl::*;
+        use crate::schema::users;
+        use crate::schema::users::dsl::*;
 
         let conn = self.0.get()?;
 
@@ -104,8 +104,8 @@ impl Handler<GetThread> for DbExecutor {
     type Result = <GetThread as Message>::Result;
 
     fn handle(&mut self, msg: GetThread, _: &mut Self::Context) -> Self::Result {
-        use schema::threads::dsl::*;
-        use schema::simple_posts::dsl::id;
+        use crate::schema::threads::dsl::*;
+        use crate::schema::simple_posts::dsl::id;
 
         let conn = self.0.get()?;
         let thread_result: Thread = threads
@@ -129,7 +129,7 @@ impl Handler<GetPost> for DbExecutor {
     type Result = <GetPost as Message>::Result;
 
     fn handle(&mut self, msg: GetPost, _: &mut Self::Context) -> Self::Result {
-        use schema::simple_posts::dsl::*;
+        use crate::schema::simple_posts::dsl::*;
         let conn = self.0.get()?;
         Ok(simple_posts.find(msg.id).first(&conn)?)
     }
@@ -148,7 +148,7 @@ impl Handler<UpdatePost> for DbExecutor {
     type Result = Result<Post>;
 
     fn handle(&mut self, msg: UpdatePost, _: &mut Self::Context) -> Self::Result {
-        use schema::posts::dsl::*;
+        use crate::schema::posts::dsl::*;
         let conn = self.0.get()?;
         let updated = diesel::update(posts.find(msg.post_id))
             .set(body.eq(msg.post))
@@ -169,8 +169,8 @@ impl Handler<CreateThread> for DbExecutor {
     type Result = <CreateThread as Message>::Result;
 
     fn handle(&mut self, msg: CreateThread, _: &mut Self::Context) -> Self::Result {
-        use schema::threads;
-        use schema::posts;
+        use crate::schema::threads;
+        use crate::schema::posts;
 
         let conn = self.0.get()?;
 
@@ -204,12 +204,12 @@ impl Handler<CreatePost> for DbExecutor {
     type Result = <CreatePost as Message>::Result;
 
     fn handle(&mut self, msg: CreatePost, _: &mut Self::Context) -> Self::Result {
-        use schema::posts;
+        use crate::schema::posts;
 
         let conn = self.0.get()?;
 
         let closed: bool = {
-            use schema::threads::dsl::*;
+            use crate::schema::threads::dsl::*;
             threads.select(closed)
                 .find(msg.0.thread_id)
                 .first(&conn)?

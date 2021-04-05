@@ -66,7 +66,7 @@ pub enum ConverseError {
     // actix-web-compatible response errors, such as the errors it
     // throws itself.
     #[fail(display = "Actix response error: {}", error)]
-    Actix { error: Box<ResponseError> },
+    Actix { error: Box<dyn ResponseError> },
 }
 
 // Establish conversion links to foreign errors:

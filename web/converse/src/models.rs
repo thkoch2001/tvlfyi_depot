@@ -17,7 +17,7 @@
 // <https://www.gnu.org/licenses/>.
 
 use chrono::prelude::{DateTime, Utc};
-use schema::{users, threads, posts, simple_posts};
+use crate::schema::{users, threads, posts, simple_posts};
 use diesel::sql_types::{Text, Integer};
 
 /// Represents a single user in the Converse database. Converse does
