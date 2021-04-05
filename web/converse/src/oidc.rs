@@ -23,10 +23,11 @@
 //! this has so far only been tested with Office365.
 
 use actix::prelude::*;
-use reqwest;
+use crate::errors::*;
+use crimp::Request;
 use url::Url;
 use url_serde;
-use crate::errors::*;
+use curl::easy::Form;
 
 /// This structure represents the contents of an OIDC discovery
 /// document.
@@ -111,26 +112,37 @@ impl Handler<RetrieveToken> for OidcExecutor {
 
     fn handle(&mut self, msg: RetrieveToken, _: &mut Self::Context) -> Self::Result {
         debug!("Received OAuth2 code, requesting access_token");
-        let client = reqwest::Client::new();
-        let params: [(&str, &str); 5] = [
-            ("client_id", &self.client_id),
-            ("client_secret", &self.client_secret),
-            ("grant_type", "authorization_code"),
-            ("code", &msg.0.code),
-            ("redirect_uri", &self.redirect_uri),
-        ];
 
-        let mut response = client.post(&self.oidc_config.token_endpoint)
-            .form(&params)
+        let mut form = Form::new();
+        form.part("client_id").contents(&self.client_id.as_bytes())
+            .add().expect("critical error: invalid form data");
+
+        form.part("client_secret").contents(&self.client_secret.as_bytes())
+            .add().expect("critical error: invalid form data");
+
+        form.part("grant_type").contents("authorization_code".as_bytes())
+            .add().expect("critical error: invalid form data");
+
+        form.part("code").contents(&msg.0.code.as_bytes())
+            .add().expect("critical error: invalid form data");
+
+        form.part("redirect_uri").contents(&self.redirect_uri.as_bytes())
+            .add().expect("critical error: invalid form data");
+
+        let response = Request::post(&self.oidc_config.token_endpoint)
+            .user_agent(concat!("converse-", env!("CARGO_PKG_VERSION")))?
+            .form(form)
             .send()?;
 
         debug!("Received token response: {:?}", response);
-        let token: TokenResponse = response.json()?;
+        let token: TokenResponse = response.as_json()?.body;
 
-        let user: Userinfo = client.get(&self.oidc_config.userinfo_endpoint)
-            .header("Authorization", format!("Bearer {}", token.access_token ))
+        let bearer = format!("Bearer {}", token.access_token);
+        let user: Userinfo = Request::get(&self.oidc_config.userinfo_endpoint)
+            .user_agent(concat!("converse-", env!("CARGO_PKG_VERSION")))?
+            .header("Authorization", &bearer)?
             .send()?
-            .json()?;
+            .as_json()?.body;
 
         Ok(Author {
             name: user.name,
@@ -142,6 +154,6 @@ impl Handler<RetrieveToken> for OidcExecutor {
 /// Convenience function to attempt loading an OIDC discovery document
 /// from a specified URL:
 pub fn load_oidc(url: &str) -> Result<OidcConfig> {
-    let config: OidcConfig = reqwest::get(url)?.json()?;
+    let config: OidcConfig = Request::get(url).send()?.as_json()?.body;
     Ok(config)
 }
