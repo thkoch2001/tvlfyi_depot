@@ -333,16 +333,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case "up":
-			m, err = m.ascend()
+			m, err = m.prev()
 
 		case "down":
-			m, err = m.descend()
-
-		case "right":
 			m, err = m.next()
 
+		case "right":
+			m, err = m.descend()
+
 		case "left":
-			m, err = m.prev()
+			m, err = m.ascend()
 
 			// 	case "enter":
 			// 		_, ok := m.selected[m.cursor]
