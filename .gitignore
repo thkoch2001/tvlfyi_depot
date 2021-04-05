@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (386afd feat(web/bubblegum): allow passing status as an int)
 # Ignore the garbage folder, in which I slowly assemble a bunch of
 # trash locally that might be valuable in the future.
 garbage/
@@ -5,3 +6,8 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+=======
+.envrc
+/target/
+**/*.rs.bk
+>>>>>>> BRANCH (091680 chore: Relicense under GPL-3.0)
