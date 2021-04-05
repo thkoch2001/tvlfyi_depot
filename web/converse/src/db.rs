@@ -16,7 +16,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/>.
 
-//! This module implements the database connection actor.
+//! This module implements the database executor, which holds the
+//! database connection and performs queries on it.
 
 use actix::prelude::*;
 use diesel::{self, sql_query};
@@ -25,212 +26,6 @@ use diesel::prelude::*;
 use diesel::r2d2::{Pool, ConnectionManager};
 use crate::models::*;
 use crate::errors::{ConverseError, Result};
-
-/// The DB actor itself. Several of these will be run in parallel by
-/// `SyncArbiter`.
-pub struct DbExecutor(pub Pool<ConnectionManager<PgConnection>>);
-
-impl Actor for DbExecutor {
-    type Context = SyncContext<Self>;
-}
-
-/// Message used to request a list of threads.
-/// TODO: This should support page numbers.
-pub struct ListThreads;
-message!(ListThreads, Result<Vec<ThreadIndex>>);
-
-impl Handler<ListThreads> for DbExecutor {
-    type Result = <ListThreads as Message>::Result;
-
-    fn handle(&mut self, _: ListThreads, _: &mut Self::Context) -> Self::Result {
-        use crate::schema::thread_index::dsl::*;
-
-        let conn = self.0.get()?;
-        let results = thread_index
-            .load::<ThreadIndex>(&conn)?;
-        Ok(results)
-    }
-}
-
-/// Message used to look up a user based on their email-address. If
-/// the user does not exist, it is created.
-pub struct LookupOrCreateUser {
-    pub email: String,
-    pub name: String,
-}
-
-message!(LookupOrCreateUser, Result<User>);
-
-impl Handler<LookupOrCreateUser> for DbExecutor {
-    type Result = <LookupOrCreateUser as Message>::Result;
-
-    fn handle(&mut self,
-              msg: LookupOrCreateUser,
-              _: &mut Self::Context) -> Self::Result {
-        use crate::schema::users;
-        use crate::schema::users::dsl::*;
-
-        let conn = self.0.get()?;
-
-        let opt_user = users
-            .filter(email.eq(&msg.email))
-            .first(&conn).optional()?;
-
-        if let Some(user) = opt_user {
-            Ok(user)
-        } else {
-            let new_user = NewUser {
-                email: msg.email,
-                name: msg.name,
-            };
-
-            let user: User = diesel::insert_into(users::table)
-                .values(&new_user)
-                .get_result(&conn)?;
-
-            info!("Created new user {} with ID {}", new_user.email, user.id);
-
-            Ok(user)
-        }
-    }
-}
-
-/// Message used to fetch a specific thread. Returns the thread and
-/// its posts.
-pub struct GetThread(pub i32);
-message!(GetThread, Result<(Thread, Vec<SimplePost>)>);
-
-impl Handler<GetThread> for DbExecutor {
-    type Result = <GetThread as Message>::Result;
-
-    fn handle(&mut self, msg: GetThread, _: &mut Self::Context) -> Self::Result {
-        use crate::schema::threads::dsl::*;
-        use crate::schema::simple_posts::dsl::id;
-
-        let conn = self.0.get()?;
-        let thread_result: Thread = threads
-            .find(msg.0).first(&conn)?;
-
-        let post_list = SimplePost::belonging_to(&thread_result)
-            .order_by(id.asc())
-            .load::<SimplePost>(&conn)?;
-
-        Ok((thread_result, post_list))
-    }
-}
-
-/// Message used to fetch a specific post.
-#[derive(Deserialize, Debug)]
-pub struct GetPost { pub id: i32 }
-
-message!(GetPost, Result<SimplePost>);
-
-impl Handler<GetPost> for DbExecutor {
-    type Result = <GetPost as Message>::Result;
-
-    fn handle(&mut self, msg: GetPost, _: &mut Self::Context) -> Self::Result {
-        use crate::schema::simple_posts::dsl::*;
-        let conn = self.0.get()?;
-        Ok(simple_posts.find(msg.id).first(&conn)?)
-    }
-}
-
-/// Message used to update the content of a post.
-#[derive(Deserialize)]
-pub struct UpdatePost {
-    pub post_id: i32,
-    pub post: String,
-}
-
-message!(UpdatePost, Result<Post>);
-
-impl Handler<UpdatePost> for DbExecutor {
-    type Result = Result<Post>;
-
-    fn handle(&mut self, msg: UpdatePost, _: &mut Self::Context) -> Self::Result {
-        use crate::schema::posts::dsl::*;
-        let conn = self.0.get()?;
-        let updated = diesel::update(posts.find(msg.post_id))
-            .set(body.eq(msg.post))
-            .get_result(&conn)?;
-
-        Ok(updated)
-    }
-}
-
-/// Message used to create a new thread
-pub struct CreateThread {
-    pub new_thread: NewThread,
-    pub post: String,
-}
-message!(CreateThread, Result<Thread>);
-
-impl Handler<CreateThread> for DbExecutor {
-    type Result = <CreateThread as Message>::Result;
-
-    fn handle(&mut self, msg: CreateThread, _: &mut Self::Context) -> Self::Result {
-        use crate::schema::threads;
-        use crate::schema::posts;
-
-        let conn = self.0.get()?;
-
-        conn.transaction::<Thread, ConverseError, _>(|| {
-            // First insert the thread structure itself
-            let thread: Thread = diesel::insert_into(threads::table)
-                .values(&msg.new_thread)
-                .get_result(&conn)?;
-
-            // ... then create the first post in the thread.
-            let new_post = NewPost {
-                thread_id: thread.id,
-                body: msg.post,
-                user_id: msg.new_thread.user_id,
-            };
-
-            diesel::insert_into(posts::table)
-                .values(&new_post)
-                .execute(&conn)?;
-
-            Ok(thread)
-        })
-    }
-}
-
-/// Message used to create a new reply
-pub struct CreatePost(pub NewPost);
-message!(CreatePost, Result<Post>);
-
-impl Handler<CreatePost> for DbExecutor {
-    type Result = <CreatePost as Message>::Result;
-
-    fn handle(&mut self, msg: CreatePost, _: &mut Self::Context) -> Self::Result {
-        use crate::schema::posts;
-
-        let conn = self.0.get()?;
-
-        let closed: bool = {
-            use crate::schema::threads::dsl::*;
-            threads.select(closed)
-                .find(msg.0.thread_id)
-                .first(&conn)?
-        };
-
-        if closed {
-            return Err(ConverseError::ThreadClosed {
-                id: msg.0.thread_id
-            })
-        }
-
-        Ok(diesel::insert_into(posts::table)
-           .values(&msg.0)
-           .get_result(&conn)?)
-    }
-}
-
-/// Message used to search for posts
-#[derive(Deserialize)]
-pub struct SearchPosts { pub query: String }
-message!(SearchPosts, Result<Vec<SearchResult>>);
 
 /// Raw PostgreSQL query used to perform full-text search on posts
 /// with a supplied phrase. For now, the query language is hardcoded
@@ -249,17 +44,266 @@ SELECT post_id,
   LIMIT 50
 "#;
 
-impl Handler<SearchPosts> for DbExecutor {
-    type Result = <SearchPosts as Message>::Result;
+const REFRESH_QUERY: &'static str = "REFRESH MATERIALIZED VIEW search_index";
 
-    fn handle(&mut self, msg: SearchPosts, _: &mut Self::Context) -> Self::Result {
+pub struct DbExecutor(pub Pool<ConnectionManager<PgConnection>>);
+
+impl DbExecutor {
+    /// Request a list of threads.
+    //
+    // TODO(tazjin): This should support pagination.
+    pub fn list_threads(&self) -> Result<Vec<ThreadIndex>> {
+        use crate::schema::thread_index::dsl::*;
+
+        let conn = self.0.get()?;
+        let results = thread_index
+            .load::<ThreadIndex>(&conn)?;
+        Ok(results)
+    }
+
+    /// Look up a user based on their email-address. If the user does
+    /// not exist, it is created.
+    pub fn lookup_or_create_user(&self, user_email: &str, user_name: &str) -> Result<User> {
+        use crate::schema::users;
+        use crate::schema::users::dsl::*;
+
+        let conn = self.0.get()?;
+
+        let opt_user = users
+            .filter(email.eq(email))
+            .first(&conn).optional()?;
+
+        if let Some(user) = opt_user {
+            Ok(user)
+        } else {
+            let new_user = NewUser {
+                email: user_email.to_string(),
+                name: user_name.to_string(),
+            };
+
+            let user: User = diesel::insert_into(users::table)
+                .values(&new_user)
+                .get_result(&conn)?;
+
+            info!("Created new user {} with ID {}", new_user.email, user.id);
+
+            Ok(user)
+        }
+    }
+
+    /// Fetch a specific thread and return it with its posts.
+    pub fn get_thread(&self, thread_id: i32) -> Result<(Thread, Vec<SimplePost>)> {
+        use crate::schema::threads::dsl::*;
+        use crate::schema::simple_posts::dsl::id;
+
+        let conn = self.0.get()?;
+        let thread_result: Thread = threads
+            .find(thread_id).first(&conn)?;
+
+        let post_list = SimplePost::belonging_to(&thread_result)
+            .order_by(id.asc())
+            .load::<SimplePost>(&conn)?;
+
+        Ok((thread_result, post_list))
+    }
+
+    /// Fetch a specific post.
+    pub fn get_post(&self, post_id: i32) -> Result<SimplePost> {
+        use crate::schema::simple_posts::dsl::*;
+        let conn = self.0.get()?;
+        Ok(simple_posts.find(post_id).first(&conn)?)
+    }
+
+    /// Update the content of a post.
+    pub fn update_post(&self, post_id: i32, post_text: String) -> Result<Post> {
+        use crate::schema::posts::dsl::*;
+        let conn = self.0.get()?;
+        let updated = diesel::update(posts.find(post_id))
+            .set(body.eq(post_text))
+            .get_result(&conn)?;
+
+        Ok(updated)
+    }
+
+    /// Create a new thread.
+    pub fn create_thread(&self, new_thread: NewThread, post_text: String) -> Result<Thread> {
+                use crate::schema::threads;
+        use crate::schema::posts;
+
+        let conn = self.0.get()?;
+
+        conn.transaction::<Thread, ConverseError, _>(|| {
+            // First insert the thread structure itself
+            let thread: Thread = diesel::insert_into(threads::table)
+                .values(&new_thread)
+                .get_result(&conn)?;
+
+            // ... then create the first post in the thread.
+            let new_post = NewPost {
+                thread_id: thread.id,
+                body: post_text,
+                user_id: new_thread.user_id,
+            };
+
+            diesel::insert_into(posts::table)
+                .values(&new_post)
+                .execute(&conn)?;
+
+            Ok(thread)
+        })
+    }
+
+    /// Create a new post.
+    pub fn create_post(&self, new_post: NewPost) -> Result<Post> {
+        use crate::schema::posts;
+
+        let conn = self.0.get()?;
+
+        let closed: bool = {
+            use crate::schema::threads::dsl::*;
+            threads.select(closed)
+                .find(new_post.thread_id)
+                .first(&conn)?
+        };
+
+        if closed {
+            return Err(ConverseError::ThreadClosed {
+                id: new_post.thread_id
+            })
+        }
+
+        Ok(diesel::insert_into(posts::table)
+           .values(&new_post)
+           .get_result(&conn)?)
+    }
+
+    /// Search for posts.
+    pub fn search_posts(&self, query: String) -> Result<Vec<SearchResult>> {
         let conn = self.0.get()?;
 
         let search_results = sql_query(SEARCH_QUERY)
-            .bind::<Text, _>(msg.query)
+            .bind::<Text, _>(query)
             .get_results::<SearchResult>(&conn)?;
 
         Ok(search_results)
+    }
+
+    /// Trigger a refresh of the view used for full-text searching.
+    pub fn refresh_search_view(&self) -> Result<()> {
+        let conn = self.0.get()?;
+        debug!("Refreshing search_index view in DB");
+        sql_query(REFRESH_QUERY).execute(&conn)?;
+        Ok(())
+    }
+}
+
+
+// Old actor implementation:
+
+impl Actor for DbExecutor {
+    type Context = SyncContext<Self>;
+}
+
+/// Message used to look up a user based on their email-address. If
+/// the user does not exist, it is created.
+pub struct LookupOrCreateUser {
+    pub email: String,
+    pub name: String,
+}
+
+message!(LookupOrCreateUser, Result<User>);
+
+impl Handler<LookupOrCreateUser> for DbExecutor {
+    type Result = <LookupOrCreateUser as Message>::Result;
+
+    fn handle(&mut self,
+              _: LookupOrCreateUser,
+              _: &mut Self::Context) -> Self::Result {
+        unimplemented!()
+    }
+}
+
+/// Message used to fetch a specific thread. Returns the thread and
+/// its posts.
+pub struct GetThread(pub i32);
+message!(GetThread, Result<(Thread, Vec<SimplePost>)>);
+
+impl Handler<GetThread> for DbExecutor {
+    type Result = <GetThread as Message>::Result;
+
+    fn handle(&mut self, _: GetThread, _: &mut Self::Context) -> Self::Result {
+        unimplemented!()
+    }
+}
+
+/// Message used to fetch a specific post.
+#[derive(Deserialize, Debug)]
+pub struct GetPost { pub id: i32 }
+
+message!(GetPost, Result<SimplePost>);
+
+impl Handler<GetPost> for DbExecutor {
+    type Result = <GetPost as Message>::Result;
+
+    fn handle(&mut self, _: GetPost, _: &mut Self::Context) -> Self::Result {
+        unimplemented!()
+    }
+}
+
+/// Message used to update the content of a post.
+#[derive(Deserialize)]
+pub struct UpdatePost {
+    pub post_id: i32,
+    pub post: String,
+}
+
+message!(UpdatePost, Result<Post>);
+
+impl Handler<UpdatePost> for DbExecutor {
+    type Result = Result<Post>;
+
+    fn handle(&mut self, _: UpdatePost, _: &mut Self::Context) -> Self::Result {
+        unimplemented!()
+    }
+}
+
+/// Message used to create a new thread
+pub struct CreateThread {
+    pub new_thread: NewThread,
+    pub post: String,
+}
+message!(CreateThread, Result<Thread>);
+
+impl Handler<CreateThread> for DbExecutor {
+    type Result = <CreateThread as Message>::Result;
+
+    fn handle(&mut self, _: CreateThread, _: &mut Self::Context) -> Self::Result {
+        unimplemented!()
+    }
+}
+
+/// Message used to create a new reply
+pub struct CreatePost(pub NewPost);
+message!(CreatePost, Result<Post>);
+
+impl Handler<CreatePost> for DbExecutor {
+    type Result = <CreatePost as Message>::Result;
+
+    fn handle(&mut self, _: CreatePost, _: &mut Self::Context) -> Self::Result {
+        unimplemented!()
+    }
+}
+
+/// Message used to search for posts
+#[derive(Deserialize)]
+pub struct SearchPosts { pub query: String }
+message!(SearchPosts, Result<Vec<SearchResult>>);
+
+impl Handler<SearchPosts> for DbExecutor {
+    type Result = <SearchPosts as Message>::Result;
+
+    fn handle(&mut self, _: SearchPosts, _: &mut Self::Context) -> Self::Result {
+        unimplemented!()
     }
 }
 
@@ -268,15 +312,10 @@ impl Handler<SearchPosts> for DbExecutor {
 pub struct RefreshSearchView;
 message!(RefreshSearchView, Result<()>);
 
-const REFRESH_QUERY: &'static str = "REFRESH MATERIALIZED VIEW search_index";
-
 impl Handler<RefreshSearchView> for DbExecutor {
     type Result = Result<()>;
 
     fn handle(&mut self, _: RefreshSearchView, _: &mut Self::Context) -> Self::Result {
-        let conn = self.0.get()?;
-        debug!("Refreshing search_index view in DB");
-        sql_query(REFRESH_QUERY).execute(&conn)?;
-        Ok(())
+        unimplemented!()
     }
 }
