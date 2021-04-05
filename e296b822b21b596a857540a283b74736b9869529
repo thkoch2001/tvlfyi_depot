@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "003173b8_a1381a5e",
+        "filename": "web/converse/templates/index.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-05T15:28:28Z",
+      "side": 1,
+      "message": "Needs to either be `https://code.tvl.fyi/about/web/converse/README.org` (which isn\u0027t really very about-y because cheddar just renders it as a source file) or `https://code.tvl.fyi/tree/web/converse/`. Currently it\u0027s just a blank screen.\n\nSourcegraph also doesn\u0027t render org mode files.",
+      "range": {
+        "startLine": 74,
+        "startChar": 33,
+        "endLine": 74,
+        "endChar": 72
+      },
+      "revId": "e296b822b21b596a857540a283b74736b9869529",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
