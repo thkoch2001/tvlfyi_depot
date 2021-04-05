@@ -84,6 +84,24 @@
       "message": "I\u0027m guessing there are a lot of URLs to the former source location due to it being AGPL. Just want to point it out, you can probably do this in a separate CL.",
       "revId": "8142149e28991b15affc5e4576a033e0ada9778b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8795411_b66a36f4",
+        "filename": "web/converse/templates/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-05T15:13:06Z",
+      "side": 1,
+      "message": "Yeah, I don\u0027t wanna do any changes in the import CL beyond what is necessary to make CI pass. Will clean all of these up in the next CL.",
+      "parentUuid": "21b8a1fa_f32cee93",
+      "revId": "8142149e28991b15affc5e4576a033e0ada9778b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
