@@ -73,13 +73,13 @@ use actix_web::*;
 use actix_web::http::Method;
 use actix_web::middleware::Logger;
 use actix_web::middleware::identity::{IdentityService, CookieIdentityPolicy};
-use db::*;
+use crate::db::*;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
-use handlers::*;
-use oidc::OidcExecutor;
+use crate::handlers::*;
+use crate::oidc::OidcExecutor;
 use rand::{OsRng, Rng};
-use render::Renderer;
+use crate::render::Renderer;
 use std::env;
 
 fn config(name: &str) -> String {

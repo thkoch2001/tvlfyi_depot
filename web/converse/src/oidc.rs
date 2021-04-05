@@ -26,7 +26,7 @@ use actix::prelude::*;
 use reqwest;
 use url::Url;
 use url_serde;
-use errors::*;
+use crate::errors::*;
 
 /// This structure represents the contents of an OIDC discovery
 /// document.

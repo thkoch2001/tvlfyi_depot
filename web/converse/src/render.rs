@@ -22,10 +22,10 @@
 
 use actix::prelude::*;
 use askama::Template;
-use errors::*;
+use crate::errors::*;
 use std::fmt;
 use md5;
-use models::*;
+use crate::models::*;
 use chrono::prelude::{DateTime, Utc};
 use comrak::{ComrakOptions, markdown_to_html};
 

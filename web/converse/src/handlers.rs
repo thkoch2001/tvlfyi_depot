@@ -29,15 +29,15 @@ use actix_web::http::Method;
 use actix_web::middleware::identity::RequestIdentity;
 use actix_web::middleware::{Started, Middleware};
 use actix_web;
-use db::*;
-use errors::ConverseError;
+use crate::db::*;
+use crate::errors::ConverseError;
 use futures::Future;
 use mime_guess::guess_mime_type;
-use models::*;
-use oidc::*;
-use render::*;
+use crate::models::*;
+use crate::oidc::*;
+use crate::render::*;
 
-type ConverseResponse = Box<Future<Item=HttpResponse, Error=ConverseError>>;
+type ConverseResponse = Box<dyn Future<Item=HttpResponse, Error=ConverseError>>;
 
 const HTML: &'static str = "text/html";
 const ANONYMOUS: i32 = 1;
@@ -288,7 +288,7 @@ pub fn login(state: State<AppState>) -> ConverseResponse {
 /// otherwise a new user is created.
 pub fn callback(state: State<AppState>,
                 data: Form<CodeResponse>,
-                mut req: HttpRequest<AppState>) -> ConverseResponse {
+                req: HttpRequest<AppState>) -> ConverseResponse {
     state.oidc.send(RetrieveToken(data.0)).flatten()
         .map(|author| LookupOrCreateUser {
             email: author.email,
