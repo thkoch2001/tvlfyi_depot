@@ -8,11 +8,10 @@
    "Render the argument, or the elements of the argument, as markdown, and return
    the same structure"))
 
-(defmethod render-markdown ((markdown string))
-  (cdr
-   (assoc :markdown
-          (cl-json:decode-json
-           (drakma:http-request
+(defun request-markdown-from-cheddar (input)
+  "Send the CL value INPUT encoded as JSON to cheddar's
+  markdown endpoint and return the decoded response."
+  (let ((s (drakma:http-request
             (concatenate 'string
                          *cheddar-url*
                          "/markdown")
@@ -21,24 +20,18 @@
             :content-type "application/json"
             :external-format-out :utf-8
             :external-format-in :utf-8
-            :content (json:encode-json-to-string
-                      `((markdown . ,markdown)))
-            :want-stream t)))))
+            :content (json:encode-json-to-string input)
+            :want-stream t)))
+    (cl-json:decode-json s)))
+
+(defmethod render-markdown ((markdown string))
+  (cdr (assoc :markdown
+              (request-markdown-from-cheddar
+               `((markdown . ,markdown))))))
 
 (defmethod render-markdown ((markdown hash-table))
   (alist-hash-table
-   (cl-json:decode-json
-    (drakma:http-request
-     (concatenate 'string
-                  *cheddar-url*
-                  "/markdown")
-     :accept "application/json"
-     :method :post
-     :content-type "application/json"
-     :external-format-out :utf-8
-     :external-format-in :utf-8
-     :content (json:encode-json-to-string markdown)
-     :want-stream t))))
+   (request-markdown-from-cheddar markdown)))
 
 (defun markdownify-comment-bodies (comments)
   "Convert the bodies of the given list of comments to markdown in-place using
