@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1996c443_f24fc280",
+        "filename": "third_party/nixpkgs-exposed/exposed/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-06T17:04:03Z",
+      "side": 1,
+      "message": "I am astonished that this wasn\u0027t already in the list.",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 9
+      },
+      "revId": "624cbb7213fc52a15742b80c125c2f93eb22558d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
