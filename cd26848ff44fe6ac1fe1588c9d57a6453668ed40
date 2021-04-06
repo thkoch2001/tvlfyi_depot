@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1466492_e808b253",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-06T16:16:13Z",
+      "side": 1,
+      "message": "can you write this as `TODO($username)`, or `TODO(b/$bug)`, so that it gets picked up on todo.tvl.fyi?",
+      "range": {
+        "startLine": 13,
+        "startChar": 6,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "cd26848ff44fe6ac1fe1588c9d57a6453668ed40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05ed6f1c_d69c85fb",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-06T16:16:13Z",
+      "side": 1,
+      "message": "I think we shouldn\u0027t depend on stuff from //users outside of //users, as it\u0027s more volatile than other things. Would it be feasible to move this out of your user folder and thus into shared responsibility?",
+      "range": {
+        "startLine": 57,
+        "startChar": 10,
+        "endLine": 57,
+        "endChar": 32
+      },
+      "revId": "cd26848ff44fe6ac1fe1588c9d57a6453668ed40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "061f29fe_3426432a",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-06T16:16:13Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 65,
+        "startChar": 13,
+        "endLine": 65,
+        "endChar": 39
+      },
+      "revId": "cd26848ff44fe6ac1fe1588c9d57a6453668ed40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
