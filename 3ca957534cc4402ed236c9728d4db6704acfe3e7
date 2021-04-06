@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3047011_300daa54",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-06T14:32:18Z",
+      "side": 1,
+      "message": "does this work as a LET around the `CL-JSON:DECODE-JSON`?",
+      "revId": "3ca957534cc4402ed236c9728d4db6704acfe3e7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
