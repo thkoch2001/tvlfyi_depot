@@ -16,6 +16,24 @@
       "message": "does this work as a LET around the `CL-JSON:DECODE-JSON`?",
       "revId": "3ca957534cc4402ed236c9728d4db6704acfe3e7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6599196_39a86d33",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-06T14:41:41Z",
+      "side": 1,
+      "message": "Not sure what you mean, `s` is a flexi-stream returned by drakma which is lexically scoped by the let above. The setf just mutates the s symbol in scope.\n\nThis is also more or less what the drakma documentation suggests: https://edicl.github.io/drakma/#ex-response-stream",
+      "parentUuid": "d3047011_300daa54",
+      "revId": "3ca957534cc4402ed236c9728d4db6704acfe3e7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
