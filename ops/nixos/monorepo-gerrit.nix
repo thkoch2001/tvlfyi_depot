@@ -18,9 +18,9 @@ in {
     ];
 
     plugins = with depot.third_party.gerrit_plugins; [
-      checks
       owners
       oauth
+      depot.ops.gerrit-tvl
     ];
 
     package = depot.third_party.gerrit;

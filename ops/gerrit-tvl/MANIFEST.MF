@@ -1,0 +1,2 @@
+Gerrit-HttpModule: su.tvl.gerrit.HttpModule
+Gerrit-PluginName: tvl
