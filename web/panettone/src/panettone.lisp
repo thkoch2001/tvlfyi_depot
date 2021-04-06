@@ -19,9 +19,9 @@
             :method :post
             :content-type "application/json"
             :external-format-out :utf-8
-            :external-format-in :utf-8
             :content (json:encode-json-to-string input)
             :want-stream t)))
+    (setf (flexi-streams:flexi-stream-external-format s) :utf-8)
     (cl-json:decode-json s)))
 
 (defmethod render-markdown ((markdown string))
