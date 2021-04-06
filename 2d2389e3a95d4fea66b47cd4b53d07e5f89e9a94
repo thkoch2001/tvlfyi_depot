@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "271b6fc2_b009281f",
+        "filename": "ops/gerrit-tvl/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-06T17:07:23Z",
+      "side": 1,
+      "message": "what\u0027s this used for?",
+      "range": {
+        "startLine": 4,
+        "startChar": 2,
+        "endLine": 4,
+        "endChar": 11
+      },
+      "revId": "2d2389e3a95d4fea66b47cd4b53d07e5f89e9a94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
