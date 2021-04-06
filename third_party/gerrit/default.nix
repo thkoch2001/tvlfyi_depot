@@ -52,7 +52,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
     ./polygerrit-revert-typescript.patch
   ];
 
-  bazelTarget = "release";
+  bazelTarget = "release api-skip-javadoc";
   inherit bazel;
 
   bazelFlags = [
@@ -63,7 +63,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:18grb9fghrh84a08f2jqv3wrbf37bk9v1iy2bcaj6xq2phdbkr10";
+    sha256 = "sha256:0xa2i4fjjnkxwxs33fjvcxsrrgfpnz72yb3vwpr1d0sy8z1fag1i";
     preBuild = ''
       rm .bazelversion
     '';
@@ -121,9 +121,14 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
       rm .bazelversion
     '';
     installPhase = ''
-      mkdir -p "$out"/webapps/
+      mkdir -p "$out"/webapps/ "$out"/share/api/
       cp bazel-bin/release.war "$out"/webapps/gerrit-${version}.war
+      unzip bazel-bin/api-skip-javadoc.zip -d "$out"/share/api
     '';
+
+    nativeBuildInputs = with pkgs; [
+      unzip
+    ];
   };
 
   passthru = {

@@ -139,6 +139,7 @@
     thttpd
     tree
     tree-sitter
+    unzip
     which
     writers
     writeShellScript
