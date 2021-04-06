@@ -22,6 +22,30 @@
       },
       "revId": "2d2389e3a95d4fea66b47cd4b53d07e5f89e9a94",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27570be2_7533848f",
+        "filename": "ops/gerrit-tvl/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-06T17:16:01Z",
+      "side": 1,
+      "message": "Ah, oops. Nothing. I _thought_ I would need this variable but I don\u0027t, because javac -d puts everything into the right place.",
+      "parentUuid": "271b6fc2_b009281f",
+      "range": {
+        "startLine": 4,
+        "startChar": 2,
+        "endLine": 4,
+        "endChar": 11
+      },
+      "revId": "2d2389e3a95d4fea66b47cd4b53d07e5f89e9a94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
