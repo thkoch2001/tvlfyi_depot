@@ -16,6 +16,41 @@
       "message": "uh",
       "revId": "9b26afd65d7ffab20acf7936c592829493cc51a0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52df2f02_255b082f",
+        "filename": "ops/gerrit-tvl/static/tvl.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-06T21:27:55Z",
+      "side": 1,
+      "message": ":thonking:\n\nI suppose it\u0027s read only?",
+      "parentUuid": "7d598774_42eaba54",
+      "revId": "9b26afd65d7ffab20acf7936c592829493cc51a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a7a4d92_24b5d97a",
+        "filename": "ops/gerrit-tvl/static/tvl.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-06T21:27:55Z",
+      "side": 1,
+      "message": "If we\u0027re lucky we can just add a link to `https://buildkite.com/organizations/tvl/pipelines/depot/builds/\u003cbuild id\u003e/jobs/\u003cjob uuid\u003e/retry`, needs to be tested though.",
+      "revId": "9b26afd65d7ffab20acf7936c592829493cc51a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
