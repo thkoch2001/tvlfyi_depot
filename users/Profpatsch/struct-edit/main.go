@@ -15,10 +15,8 @@ import (
 )
 
 // Keeps the full data structure and a path that indexes our current position into it.
-// selectedIndex is the currently selected item. (TODO: save per level)
 type model struct {
 	path          []index
-	selectedIndex index
 	data          val
 }
 
@@ -31,14 +29,17 @@ type index interface{}
 type val struct {
 	// the “type” of value; see tag const belove
 	tag tag
+	// last known position of our cursor
+	last_index index
 	// documentation (TODO)
 	doc string
 	// the actual value;
+	// the actual structure is behind a pointer so we can replace the struct.
 	// determined by the tag
-	// tagString -> string
-	// tagFloat -> float64
-	// tagList -> []val
-	// tagMap -> map[string]val
+	// tagString -> *string
+	// tagFloat -> *float64
+	// tagList -> *[]val
+	// tagMap -> *map[string]val
 	val interface{}
 }
 
@@ -56,9 +57,9 @@ func (v val) Render() string {
 	s := ""
 	switch v.tag {
 	case tagString:
-		s += v.val.(string)
+		s += *v.val.(*string)
 	case tagFloat:
-		s += fmt.Sprint(v.val.(float64))
+		s += fmt.Sprint(*v.val.(*float64))
 	case tagList:
 		s += "[ "
 		vs := []string{}
@@ -103,14 +104,16 @@ func makeVal(i interface{}) val {
 	case string:
 		v = val{
 			tag: tagString,
+			last_index: index(nil),
 			doc: "",
-			val: i,
+			val: &i,
 		}
 	case float64:
 		v = val{
 			tag: tagFloat,
+			last_index: index(nil),
 			doc: "",
-			val: i,
+			val: &i,
 		}
 	case []interface{}:
 		ls := []val{}
@@ -119,8 +122,9 @@ func makeVal(i interface{}) val {
 		}
 		v = val{
 			tag: tagList,
+			last_index: pos1Inner(tagList, &ls),
 			doc: "",
-			val: ls,
+			val: &ls,
 		}
 	case map[string]interface{}:
 		ls := map[string]val{}
@@ -129,8 +133,9 @@ func makeVal(i interface{}) val {
 		}
 		v = val{
 			tag: tagMap,
+			last_index: pos1Inner(tagMap, &ls),
 			doc: "",
-			val: ls,
+			val: &ls,
 		}
 	default:
 		log.Fatalf("makeVal: cannot read json of type %T", i)
@@ -141,6 +146,10 @@ func makeVal(i interface{}) val {
 // return an index that point at the first entry in val
 func (v val) pos1() index {
 	return v.enumerate()[0].i
+}
+
+func pos1Inner(tag tag, v interface{}) index {
+	return enumerateInner(tag, v)[0].i
 }
 
 type enumerate struct {
@@ -170,14 +179,14 @@ func enumerateInner(tag tag, v interface{}) (e []enumerate) {
 	case tagFloat:
 		e = nil
 	case tagList:
-		for i, v := range v.([]val) {
+		for i, v := range *v.(*[]val) {
 			e = append(e, enumerate{i: index(uint(i)), v: v})
 		}
 	case tagMap:
 		// map sorting order is not stable (actually randomized thank jabber)
 		// so let’s sort them
 		keys := []string{}
-		m := v.(map[string]val)
+		m := *v.(*map[string]val)
 		for k, _ := range m {
 			keys = append(keys, k)
 		}
@@ -203,7 +212,9 @@ func (m model) PathString() string {
 
 // walk the given path down in data, to get the value at that point.
 // Assumes that all path indexes are valid indexes into data.
-func walk(data val, path []index) (val, bool, error) {
+// Returns a pointer to the value at point, in order to be able to change it.
+func walk(data *val, path []index) (*val, bool, error) {
+	res := data
 	atPath := func(index int) string {
 		return fmt.Sprintf("at path %v", path[:index+1])
 	}
@@ -211,53 +222,58 @@ func walk(data val, path []index) (val, bool, error) {
 		return fmt.Errorf("walk: can’t walk into %s %v %s", ty, val, atPath(index))
 	}
 	for i, p := range path {
-		switch data.tag {
+		switch res.tag {
 		case tagString:
-			return data, true, nil
+			return nil, true, nil
 		case tagFloat:
-			return data, true, nil
+			return nil, true, nil
 		case tagList:
 			switch p := p.(type) {
 			case uint:
-				list := data.val.([]val)
+				list := *res.val.(*[]val)
 				if int(p) >= len(list) || p < 0 {
-					return data, false, fmt.Errorf("index out of bounds %s", atPath(i))
+					return nil, false, fmt.Errorf("index out of bounds %s", atPath(i))
 				}
-				data = list[p]
+				res = &list[p]
 			default:
-				return data, false, fmt.Errorf("not a list index %s", atPath(i))
+				return nil, false, fmt.Errorf("not a list index %s", atPath(i))
 			}
 		case tagMap:
 			switch p := p.(type) {
 			case string:
-				m := data.val.(map[string]val)
-				var ok bool
-				if data, ok = m[p]; !ok {
-					return data, false, fmt.Errorf("index %s not in map %s", p, atPath(i))
+				m := *res.val.(*map[string]val)
+				if a, ok := m[p]; ok {
+					res = &a
+				} else {
+				  return nil, false, fmt.Errorf("index %s not in map %s", p, atPath(i))
 				}
 			default:
-				return data, false, fmt.Errorf("not a map index %v %s", p, atPath(i))
+				return nil, false, fmt.Errorf("not a map index %v %s", p, atPath(i))
 			}
 
 		default:
-			return data, false, errf(string(data.tag), data.val, i)
+			return nil, false, errf(string(res.tag), res.val, i)
 		}
 	}
-	return data, false, nil
+	return res, false, nil
 }
 
 // descend into the selected index. Assumes that the index is valid.
 // Will not descend into scalars.
 func (m model) descend() (model, error) {
-	newPath := append(m.path, m.selectedIndex)
-	lower, bounce, err := walk(m.data, newPath)
+	// TODO: two walks?!
+	this, _, err := walk(&m.data, m.path)
+	if err != nil {
+		return m, err
+	}
+	newPath := append(m.path, this.last_index)
+	_, bounce, err := walk(&m.data, newPath)
 	if err != nil {
 		return m, err
 	}
 	// only descend if we *can*
 	if !bounce {
 		m.path = newPath
-		m.selectedIndex = lower.pos1()
 	}
 	return m, nil
 }
@@ -266,8 +282,7 @@ func (m model) descend() (model, error) {
 func (m model) ascend() (model, error) {
 	if len(m.path) > 0 {
 		m.path = m.path[:len(m.path)-1]
-		upper, _, err := walk(m.data, m.path)
-		m.selectedIndex = upper.pos1()
+		_, _, err := walk(&m.data, m.path)
 		return m, err
 	}
 	return m, nil
@@ -276,8 +291,7 @@ func (m model) ascend() (model, error) {
 /// go to the next item, or wraparound
 func (min model) next() (m model, err error) {
 	m = min
-	var this val
-	this, _, err = walk(m.data, m.path)
+	this, _, err := walk(&m.data, m.path)
 	if err != nil {
 		return
 	}
@@ -285,17 +299,17 @@ func (min model) next() (m model, err error) {
 	setNext := false
 	for _, enum := range enumL {
 		if setNext {
-			m.selectedIndex = enum.i
+			this.last_index = enum.i
 			setNext = false
 			break
 		}
-		if enum.i == m.selectedIndex {
+		if enum.i == this.last_index {
 			setNext = true
 		}
 	}
 	// wraparound
 	if setNext {
-		m.selectedIndex = enumL[0].i
+		this.last_index = enumL[0].i
 	}
 	return
 }
@@ -303,8 +317,7 @@ func (min model) next() (m model, err error) {
 /// go to the previous item, or wraparound
 func (min model) prev() (m model, err error) {
 	m = min
-	var this val
-	this, _, err = walk(m.data, m.path)
+	this, _, err := walk(&m.data, m.path)
 	if err != nil {
 		return
 	}
@@ -312,8 +325,8 @@ func (min model) prev() (m model, err error) {
 	// last element, wraparound
 	prevIndex := enumL[len(enumL)-1].i
 	for _, enum := range enumL {
-		if enum.i == m.selectedIndex {
-			m.selectedIndex = prevIndex
+		if enum.i == this.last_index {
+			this.last_index = prevIndex
 			break
 		}
 		prevIndex = enum.i
@@ -332,7 +345,6 @@ func initialModel(v interface{}) model {
 	return model{
 		path:          []index{},
 		data:          val,
-		selectedIndex: val.pos1(),
 	}
 }
 
@@ -381,17 +393,18 @@ var selectedColor = lipgloss.NewStyle().
 
 func (m model) View() string {
 	s := pathColor.Render(m.PathString())
-	cur, _, err := walk(m.data, m.path)
+	cur, _, err := walk(&m.data, m.path)
 	if err != nil {
 		log.Fatal(err)
 	}
+	s += cur.doc + "\n"
 	s += "\n"
 	for _, enum := range cur.enumerate() {
 		is := renderIndex(enum.i)
 		if is != "" {
 			s += is + " "
 		}
-		if enum.i == m.selectedIndex {
+		if enum.i == cur.last_index {
 			s += selectedColor.Render(enum.v.Render())
 		} else {
 			s += enum.v.Render()
