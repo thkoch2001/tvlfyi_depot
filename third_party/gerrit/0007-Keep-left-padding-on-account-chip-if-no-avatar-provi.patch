@@ -1,7 +1,7 @@
-From e796e238d8fcf442443f66de2fd0f3944473fd44 Mon Sep 17 00:00:00 2001
+From 8258bb2deef504656d7b79868dcacdcd00fa1778 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Sun, 20 Dec 2020 14:29:22 +0000
-Subject: [PATCH 7/6] Keep left padding on account chip if no avatar provider
+Subject: [PATCH 7/7] Keep left padding on account chip if no avatar provider
  present
 
 At the moment, if there's no plugin that provides avatars then the left
@@ -15,10 +15,10 @@ Change-Id: I1ff0745aa267d7fb227e39460c8ea80ef5ec2f55
  2 files changed, 69 insertions(+)
 
 diff --git a/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label.ts b/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label.ts
-index a6c4201a66..416a77526d 100644
+index 64bae58c41..220fcf413b 100644
 --- a/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label.ts
 +++ b/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label.ts
-@@ -147,7 +147,13 @@ export class GrAccountLabel extends GestureEventListeners(
+@@ -151,7 +151,13 @@ export class GrAccountLabel extends PolymerElement {
      change: ChangeInfo,
      force: boolean
    ) {
@@ -33,10 +33,10 @@ index a6c4201a66..416a77526d 100644
        !this._hasAttention(config, highlight, account, change, force)
      );
 diff --git a/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label_test.js b/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label_test.js
-index 42b1dd7184..111d0550cd 100644
+index f37aa01a2d..4a21222dca 100644
 --- a/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label_test.js
 +++ b/polygerrit-ui/app/elements/shared/gr-account-label/gr-account-label_test.js
-@@ -46,6 +46,69 @@ suite('gr-account-label tests', () => {
+@@ -44,6 +44,69 @@ suite('gr-account-label tests', () => {
      });
    });
  
