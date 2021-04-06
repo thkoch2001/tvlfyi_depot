@@ -28,7 +28,7 @@ let
     runScript = "/bin/bazel-run";
   };
   bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.3.0-rc7-520-gdef99cd679";
+  version = "3.3.2-1990-gabb30fe7f1";
 in
 pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   pname = "gerrit";
@@ -36,8 +36,8 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
 
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "595e6db974449ff278709f5e87cd8d42199305fc";
-    sha256 = "sha256:17mad9k41rvnzq91nr9w2lax6rdk7pgf20qc4chajay99faimhph";
+    rev = "abb30fe7f1ecf07d7b5098d6ad7e4423389c41e5";
+    sha256 = "sha256:0xsxhqyjl2dd1wglfk43b8c7591l2x5ikb4l7nxi96czladqy82v";
     fetchSubmodules = true;
   };
   patches = [
@@ -48,6 +48,8 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
     ./0005-When-using-local-fonts-always-assume-Gerrit-is-mount.patch
     ./0006-Always-use-Google-Fonts.patch
     ./0007-Keep-left-padding-on-account-chip-if-no-avatar-provi.patch
+
+    ./polygerrit-revert-typescript.patch
   ];
 
   bazelTarget = "release";
@@ -61,7 +63,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:0jlaylzbl2yscdfji77g1k4r3lcdmjxfbcxpnpwbcs83zpg8rsmf";
+    sha256 = "sha256:18grb9fghrh84a08f2jqv3wrbf37bk9v1iy2bcaj6xq2phdbkr10";
     preBuild = ''
       rm .bazelversion
     '';
