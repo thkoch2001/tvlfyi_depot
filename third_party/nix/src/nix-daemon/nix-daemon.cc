@@ -27,7 +27,7 @@ ABSL_FLAG(bool, pipe, false, "Use pipes for daemon communication");
 namespace nix::daemon {
 
 using grpc::Server;
-using grpc_impl::ServerBuilder;
+using grpc::ServerBuilder;
 
 namespace {
 
