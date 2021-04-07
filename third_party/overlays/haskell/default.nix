@@ -20,18 +20,6 @@ let
     hashable = doJailbreak hsSuper.hashable;
     test-framework-quickcheck2 = doJailbreak hsSuper.test-framework-quickcheck2;
     pandoc = doJailbreak hsSuper.pandoc;
-
-    # can be removed if we have the following PR or equivalent
-    # https://github.com/NixOS/nixpkgs/pull/116931
-    hedgehog-classes = overrideCabal hsSuper.hedgehog-classes (attrs: {
-      # remove version bound on semirings which is inside a
-      # conditional, so doJailbreak doesn't work
-      prePatch = ''
-        sed -i 's|semirings.*0.6|semirings|g' hedgehog-classes.cabal
-      '';
-    });
-
-    hgeometry-combinatorial = dontCheck hsSuper.hgeometry-combinatorial;
   };
 in {
   haskellPackages = super.haskellPackages.override {

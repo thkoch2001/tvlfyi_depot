@@ -24,4 +24,8 @@ self: super: {
   clang-tools = (super.clang-tools.override {
     llvmPackages = self.llvmPackages_11;
   });
+
+  # Pick an older version of SBCL as the default, to avoid issues with
+  # warnings in newer SBCL.
+  sbcl = super.sbcl_2_0_8;
 }
