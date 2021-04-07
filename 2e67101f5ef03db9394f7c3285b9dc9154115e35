@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8818d89_aa0620cc",
+        "filename": "ops/gerrit-tvl/static/tvl.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-07T10:54:31Z",
+      "side": 1,
+      "message": "I\u0027m floored that there is no stdlib thing for this.\n\n(scnr)",
+      "range": {
+        "startLine": 15,
+        "startChar": 9,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "2e67101f5ef03db9394f7c3285b9dc9154115e35",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
