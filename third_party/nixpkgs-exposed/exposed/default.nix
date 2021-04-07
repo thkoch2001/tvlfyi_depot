@@ -7,6 +7,7 @@
   # of the repo. They become available under `pkgs.third_party.<name>`
   inherit (nixpkgs)
     age
+    atk
     autoconf
     autoreconfHook
     avrdude
@@ -35,6 +36,8 @@
     coreutils
     cudatoolkit
     darwin
+    dbus-glib
+    dbus_libs
     dfu-programmer
     dfu-util
     diffutils
@@ -59,8 +62,11 @@
     flamegraph
     fontconfig
     freetype
+    gdk-pixbuf
     gettext
     glibc
+    glib
+    gtk3
     gmock
     gnused
     gnutar
@@ -79,6 +85,7 @@
     jq
     kontemplate
     lib
+    libappindicator-gtk3
     libredirect
     libffi
     linuxPackages
@@ -104,6 +111,7 @@
     openssl
     overrideCC
     pandoc
+    pango
     parallel
     pkgconfig
     pkgsCross
