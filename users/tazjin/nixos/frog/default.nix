@@ -42,9 +42,11 @@ in depot.lib.fix(self: {
       "kernel.perf_event_paranoid" = -1;
     };
 
-    kernelPatches = [
-      depot.third_party.kernelPatches.trx40_usb_audio
-    ];
+    # Enable this again if frog is put back into use ...
+    #
+    # kernelPatches = [
+    #   depot.third_party.kernelPatches.trx40_usb_audio
+    # ];
   };
 
   hardware = {
