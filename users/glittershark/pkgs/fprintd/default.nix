@@ -11,29 +11,29 @@ let
   };
 
   inherit (nixpkgs)
-    stdenv
-    fetchFromGitLab
-    fetchpatch
-    pkgconfig
-    meson
-    ninja
-    perl
-    gettext
     cairo
-    gtk-doc
-    libxslt
-    docbook-xsl-nons
-    docbook_xml_dtd_412
-    glib
     dbus
     dbus-glib
-    polkit
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+    fetchFromGitLab
+    fetchpatch
+    gettext
+    glib
+    gtk-doc
+    libxslt
+    meson
+    ninja
     nss
     pam
-    systemd
-    python3;
-  libfprint-tod = nixpkgs.callPackage ./libfprint-tod.nix {};
+    perl
+    pkgconfig
+    polkit
+    python3
+    stdenv
+    systemd;
 
+  libfprint-tod = nixpkgs.callPackage ./libfprint-tod.nix {};
 in
 
 stdenv.mkDerivation rec {
@@ -82,13 +82,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib
     dbus-glib
-    polkit
+    glib
+    libfprint-tod
     nss
     pam
+    polkit
     systemd
-    libfprint-tod
   ];
 
   checkInputs = with python3.pkgs; [
