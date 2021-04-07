@@ -85,15 +85,13 @@
     intel-media-driver
   ];
 
-  # the fprintd module hardcodes pkgs.fprintd :'(
-  nixpkgs.overlays = [(_: _: {
-    fprintd = depot.users.glittershark.pkgs.fprintd;
-  })];
-
   services.fprintd = {
     enable = true;
-    package = depot.users.glittershark.pkgs.fprintd;
+    package = pkgs.fprintd-tod;
   };
+
+  systemd.services.fprintd.environment.FP_TOD_DRIVERS_DIR =
+    "${pkgs.libfprint-2-tod1-goodix}/usr/lib/libfprint-2/tod-1";
 
   security.pam.loginLimits = [
     {
