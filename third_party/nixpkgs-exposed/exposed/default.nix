@@ -73,6 +73,7 @@
     go
     google-cloud-sdk
     graphviz
+    gtest
     gzip
     haskell
     iana-etc
@@ -132,7 +133,6 @@
     rustPlatform
     rustc
     s6-portable-utils
-    sbcl
     shellcheck
     sqlite
     stdenvNoCC
@@ -185,6 +185,10 @@
     perl
     perlPackages
     ;
+
+  # Pick an older version of SBCL as the default, to avoid issues with
+  # warnings in newer SBCL.
+  sbcl = nixpkgs.sbcl_2_0_8;
 
   haskellPackages = (nixpkgs.haskellPackages.override {
     overrides = (import ../haskell_overlay { pkgs = nixpkgs; });
