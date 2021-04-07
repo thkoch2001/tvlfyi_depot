@@ -67,6 +67,7 @@
     go
     google-cloud-sdk
     graphviz
+    gtest
     gzip
     haskell
     iana-etc
