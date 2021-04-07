@@ -93,6 +93,30 @@
       },
       "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bebb9ee_6df2ac27",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-07T09:56:49Z",
+      "side": 1,
+      "message": "This means that adding any new dependencies is a very painful process of figuring out exactly where to insert them, and we have no way to confirm that the sort order is actually correct without writing more code.\n\nMy take is that they should just be:\n\na) alphabetic\nb) in separate files\n\nIf this gets large, then b) is also likely the correct answer (to avoid a haskellPackages.nix style situation)",
+      "parentUuid": "ce92d493_67cfff33",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 86
+      },
+      "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
