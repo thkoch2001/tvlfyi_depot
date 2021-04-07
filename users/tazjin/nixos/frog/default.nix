@@ -42,9 +42,11 @@ in depot.lib.fix(self: {
       "kernel.perf_event_paranoid" = -1;
     };
 
-    kernelPatches = [
-      depot.third_party.kernelPatches.trx40_usb_audio
-    ];
+    # Enable this again if frog is put back into use ...
+    #
+    # kernelPatches = [
+    #   depot.third_party.kernelPatches.trx40_usb_audio
+    # ];
   };
 
   hardware = {
@@ -226,7 +228,6 @@ in depot.lib.fix(self: {
       quasselClient
       third_party.ffmpeg
       third_party.git
-      third_party.lutris
       third_party.rr
       tools.nsfv-setup
     ]) ++
@@ -280,7 +281,6 @@ in depot.lib.fix(self: {
       screen
       scrot
       spotify
-      steam
       tokei
       transmission
       tree
@@ -293,6 +293,10 @@ in depot.lib.fix(self: {
       yubico-piv-tool
       yubikey-personalization
       zoxide
+
+      # Commented out because of interim breakage:
+      # steam
+      # lutris
     ]);
 
   # ... and other nonsense.
