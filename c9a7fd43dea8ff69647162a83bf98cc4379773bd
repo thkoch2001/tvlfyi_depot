@@ -117,6 +117,30 @@
       },
       "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31203839_fccdeebf",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-08T18:25:54Z",
+      "side": 1,
+      "message": "I have to say I was rather annoyed by the third_party/gopkgs structure, having to juggle a different file for each tiny unit is unnerving and leads to hard to notice copy \u0026 paste errors.\n\nI’d like to keep it in one file until it reaches a level of criticality, let’s say 50k lines. :P\n\nI personally don’t care how it’s sorted, I don’t even think necessarily having all rust deps in a central location is a good idea (friction due to unrelated updates). So I can remove the topological instruction.",
+      "parentUuid": "7bebb9ee_6df2ac27",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 86
+      },
+      "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
