@@ -5,13 +5,6 @@ let
   inherit (lib) range;
 
   nixpkgs = import depot.third_party.nixpkgsSrc {};
-
-  # All Buildkite hooks are actually besadii, but it's being invoked
-  # with different names.
-  buildkiteHooks = depot.third_party.runCommandNoCC "buildkite-hooks" {} ''
-    mkdir -p $out/bin
-    ln -s ${depot.ops.besadii}/bin/besadii $out/bin/post-command
-  '';
 in lib.fix(self: {
   imports = [
     "${depot.depotPath}/ops/nixos/clbot.nix"
@@ -21,6 +14,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/paroxysm.nix"
     "${depot.depotPath}/ops/nixos/smtprelay.nix"
     "${depot.depotPath}/ops/nixos/sourcegraph.nix"
+    "${depot.depotPath}/ops/nixos/tvl-buildkite.nix"
     "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
     "${depot.depotPath}/ops/nixos/tvl-sso/default.nix"
     "${depot.depotPath}/ops/nixos/www/b.tvl.fyi.nix"
@@ -194,15 +188,10 @@ in lib.fix(self: {
   };
 
   # Run a handful of Buildkite agents to support parallel builds.
-  services.buildkite-agents = listToAttrs (map (n: rec {
-    name = "whitby-${toString n}";
-    value = {
-      inherit name;
-      enable = true;
-      tokenPath = "/etc/secrets/buildkite-agent-token";
-      hooks.post-command = "${buildkiteHooks}/bin/post-command";
-    };
-  }) (range 1 32));
+  services.depot.buildkite = {
+    enable = true;
+    agentCount = 32;
+  };
 
   # Start a local SMTP relay to Gmail (used by gerrit)
   services.depot.smtprelay = {
