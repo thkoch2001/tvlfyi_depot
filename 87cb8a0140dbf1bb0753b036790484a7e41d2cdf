@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "943d89a1_c8404f8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-09T19:08:18Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "928e4211_9a417982",
+      "revId": "87cb8a0140dbf1bb0753b036790484a7e41d2cdf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c099bca2_cdd11897",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-04-09T18:58:10Z",
       "side": 1,
       "message": "Is this symlinking really necessary? Doesn\u0027t seem to be in PATH anywhere and hooks.postcommand also gets everything passed directly.",
+      "revId": "87cb8a0140dbf1bb0753b036790484a7e41d2cdf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0503d29_8358271d",
+        "filename": "ops/nixos/tvl-buildkite.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-09T19:08:18Z",
+      "side": 1,
+      "message": "besadii dispatches functionality based on $0, because of how Gerrit works (it also provides Gerrit hooks). We just reused the same mechanism for Buildkite, rather than adding more flags.",
+      "parentUuid": "c099bca2_cdd11897",
       "revId": "87cb8a0140dbf1bb0753b036790484a7e41d2cdf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
