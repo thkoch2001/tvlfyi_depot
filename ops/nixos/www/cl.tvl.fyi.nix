@@ -6,6 +6,11 @@
   ];
 
   config = {
+    services.nginx.virtualHosts."cl-shortlink" = {
+      serverName = "cl";
+      extraConfig = "return 302 https://cl.tvl.fyi$request_uri;";
+    };
+
     services.nginx.virtualHosts.gerrit = {
       serverName = "cl.tvl.fyi";
       serverAliases = [ "cl.tvl.su" ];
