@@ -27,16 +27,20 @@ let
       then "${label}:${target.__subtarget}"
       else label;
 
+  # Shell snippet for this build's temporary gcroot folder.
+  gcrootDir = "/tmp/$''{BUILDKITE_JOB_ID}";
+
   # Create a pipeline step from a single target.
   #
   # If the build fails, Buildkite metadata is updated to mark the
   # pipeline as failed. Buildkite has a concept of a failed pipeline
   # regardless, but this data is not accessible.
-  mkStep = target: {
+  mkStep = target: let label = mkLabel target; in {
     command = ''
-      nix-build -E '${mkBuildExpr target}' || (buildkite-agent meta-data set "failure" "1"; exit 1)
+      nix-store -E '${mkBuildExpr target}' --indirect --add-root ${gcrootDir}/label || \
+        (buildkite-agent meta-data set "failure" "1"; exit 1)
     '';
-    label = ":nix: ${mkLabel target}";
+    label = ":nix: ${label}";
   };
 
   # Protobuf check step which validates that changes to .proto files
