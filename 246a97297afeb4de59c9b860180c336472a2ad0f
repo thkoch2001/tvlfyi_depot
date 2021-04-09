@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56cf1a86_ca8a4c2a",
+        "filename": "ops/nixos/tvl-buildkite.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-09T19:25:11Z",
+      "side": 1,
+      "message": "we could probably map on config.services.buildkite-agents instead and pull the name attribute, but doesn\u0027t really matter I guess (let\u0027s hope the name generation stays stable).",
+      "revId": "246a97297afeb4de59c9b860180c336472a2ad0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
