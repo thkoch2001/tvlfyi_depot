@@ -460,6 +460,13 @@ in lib.fix(self: {
       createHome = true;
       home = "/var/lib/git";
     };
+  } // {
+    # Set up a group for all Buildkite agent users
+    groups.buildkite-agents = {};
+    users = listToAttrs (map (n: {
+      name = "buildkite-agent-${toString n}";
+      value.extraGroups = [ "buildkite-agents" ];
+    }) (range 1 32));
   };
 
   security.acme = {
