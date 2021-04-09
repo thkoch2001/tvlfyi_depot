@@ -80,6 +80,7 @@ let
     sly
     string-edit
     swiper
+    telega
     telephone-line
     terraform-mode
     toml-mode
@@ -101,7 +102,6 @@ let
     tvl
 
     # patched / overridden versions of packages
-    depot.third_party.telega
     depot.third_party.emacs.exwm
     depot.third_party.emacs.rcirc
     depot.third_party.emacs.vterm
