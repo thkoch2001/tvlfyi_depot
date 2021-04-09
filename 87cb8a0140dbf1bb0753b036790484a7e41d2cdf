@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "928e4211_9a417982",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-09T18:58:10Z",
+      "side": 1,
+      "message": "I presume you want to do the buildkite users stuff in a second CL?",
+      "revId": "87cb8a0140dbf1bb0753b036790484a7e41d2cdf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c099bca2_cdd11897",
+        "filename": "ops/nixos/tvl-buildkite.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-09T18:58:10Z",
+      "side": 1,
+      "message": "Is this symlinking really necessary? Doesn\u0027t seem to be in PATH anywhere and hooks.postcommand also gets everything passed directly.",
+      "revId": "87cb8a0140dbf1bb0753b036790484a7e41d2cdf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
