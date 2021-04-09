@@ -15,7 +15,7 @@ let
   emacsWithPackages = (third_party.emacsPackagesGen third_party.emacs27).emacsWithPackages;
 
   # $PATH for binaries that need to be available to Emacs
-  emacsBinPath = lib.makeBinPath [ third_party.telega ];
+  emacsBinPath = lib.makeBinPath [ third_party.emacsPackages.telega ];
 
   identity = x: x;
 
@@ -80,6 +80,7 @@ let
     sly
     string-edit
     swiper
+    telega
     telephone-line
     terraform-mode
     toml-mode
@@ -101,7 +102,6 @@ let
     tvl
 
     # patched / overridden versions of packages
-    depot.third_party.telega
     depot.third_party.emacs.exwm
     depot.third_party.emacs.rcirc
     depot.third_party.emacs.vterm
