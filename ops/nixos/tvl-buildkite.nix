@@ -32,5 +32,14 @@ in {
         hooks.post-command = "${buildkiteHooks}/bin/post-command";
       };
     }) agents);
+
+    # Set up a group for all Buildkite agent users
+    users = {
+      groups.buildkite-agents = {};
+      users = builtins.listToAttrs (map (n: {
+        name = "buildkite-agent-whitby-${toString n}";
+        value.extraGroups = [ "buildkite-agents" ];
+      }) agents);
+    };
   };
 }
