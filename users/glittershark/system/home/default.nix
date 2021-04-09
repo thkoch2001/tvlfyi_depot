@@ -3,15 +3,13 @@
 with lib;
 
 rec {
-  nixpkgs = import pkgs.nixpkgsSrc {};
-
-  home = confPath: (import "${nixpkgs.home-manager.src}/modules" {
-    pkgs = nixpkgs;
+  home = confPath: (import "${pkgs.home-manager.src}/modules" {
+    inherit pkgs;
     configuration = { config, lib, ... }: {
       imports = [confPath];
 
       _module.args.pkgs = mkForce
-        (import pkgs.nixpkgsSrc (filterAttrs (n: v: v != null) config.nixpkgs));
+        (import depot.third_party.nixpkgsSrc (filterAttrs (n: v: v != null) config.nixpkgs));
 
       lib.depot = depot;
     };

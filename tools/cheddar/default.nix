@@ -1,13 +1,13 @@
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
-pkgs.naersk.buildPackage {
+depot.third_party.naersk.buildPackage {
   src = ./.;
   doDoc = false;
 
   override = x: {
     # Use our custom bat syntax set, which is everything from upstream,
     # plus additional languages we care about.
-    BAT_SYNTAXES = "${pkgs.bat_syntaxes}";
+    BAT_SYNTAXES = "${depot.third_party.bat_syntaxes}";
 
     # LLVM packages (why are they even required?) are not found
     # automatically if added to buildInputs, hence this ...

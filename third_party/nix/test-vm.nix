@@ -1,10 +1,9 @@
 { depot, pkgs, ... }:
 
 let
-
   configuration = { ... }: {
     imports = [
-      "${pkgs.nixpkgsSrc}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+      "${depot.third_party.nixpkgsSrc}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
     ];
 
     nix.package = depot.third_party.nix;
@@ -16,6 +15,5 @@ let
     ];
   };
 
-  system = pkgs.nixos { inherit configuration; };
-
+  system = depot.third_party.partialNixos { inherit configuration; };
 in system.vm

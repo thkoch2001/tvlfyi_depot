@@ -1,19 +1,15 @@
 args @ { depot, pkgs, ... }:
 
-let
-  nixpkgs = import pkgs.nixpkgsSrc {};
-in
-
 rec {
   chupacabra = import ./machines/chupacabra.nix;
 
-  chupacabraSystem = (pkgs.nixos {
+  chupacabraSystem = (depot.third_party.partialNixos {
     configuration = chupacabra;
   }).system;
 
   mugwump = import ./machines/mugwump.nix;
 
-  mugwumpSystem = (pkgs.nixos {
+  mugwumpSystem = (depot.third_party.partialNixos {
     configuration = mugwump;
   }).system;
 
@@ -22,14 +18,14 @@ rec {
   roswellSystem = (depot.ops.nixos.nixosFor ({ ... }: {
     imports = [
       ./machines/roswell.nix
-      "${nixpkgs.home-manager.src}/nixos"
+      "${pkgs.home-manager.src}/nixos"
     ];
 
     home-manager.users.grfn = { config, lib, ... }: {
       imports = [ ../home/machines/roswell.nix ];
       lib.depot = depot;
       _module.args.pkgs = lib.mkForce
-        (import pkgs.nixpkgsSrc
+        (import depot.third_party.nixpkgsSrc
           (lib.filterAttrs (n: v: v != null) config.nixpkgs));
     };
   })).system;

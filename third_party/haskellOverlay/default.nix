@@ -1,4 +1,8 @@
-{ pkgs }:
+# Defines overrides for Haskell packages, for example to avoid
+# breakage currently present in nixpkgs or to modify package versions.
+
+{ ... }: # This file needs nothing from readTree
+{ pkgs }: # ... but is called with a separate package set in the overlay
 
 self: super: with pkgs.haskell.lib; rec {
   generic-arbitrary = appendPatch

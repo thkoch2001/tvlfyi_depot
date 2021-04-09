@@ -1,9 +1,11 @@
-args @ { pkgs, ... }:
+{ depot, pkgs, ... }:
 
 let
-  nixpkgs = import pkgs.nixpkgsSrc {
+  nixpkgs = import depot.third_party.nixpkgsSrc {
     config.allowUnfree = true;
     overlays = [(self: super: {
+      # TODO(grfn): Can we not override this here? It bootstraps
+      # rustc, builds firefox, and many other things.
       gcc = super.gcc9;
     })];
   };
