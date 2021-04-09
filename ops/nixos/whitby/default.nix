@@ -204,6 +204,13 @@ in lib.fix(self: {
     };
   }) (range 1 32));
 
+  # Set up a group for all buildkite agent users
+  users.groups.buildkite-agents = {};
+  users.users = listToAttrs (map (n: {
+    name = "buildkite-agent-${n}";
+    value.extraGroups = [ "buildkite-agents" ];
+  }) (range 1 32));
+
   # Start a local SMTP relay to Gmail (used by gerrit)
   services.depot.smtprelay = {
     enable = true;
