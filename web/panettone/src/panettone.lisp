@@ -592,7 +592,7 @@ given subject an body (in a thread, to avoid blocking)"
      :subject (format nil "b/~A: \"~A\" closed by ~A"
                       id
                       (subject issue)
-                      (dn *user*))
+                      (displayname *user*))
      :message (link-to-issue id)))
   (hunchentoot:redirect (format nil "/issues/~A" id)))
 
@@ -616,7 +616,7 @@ given subject an body (in a thread, to avoid blocking)"
      :subject (format nil "b/~A: \"~A\" reopened by ~A"
                       id
                       (subject issue)
-                      (dn *user*))
+                      (displayname *user*))
      :message (link-to-issue id)))
   (hunchentoot:redirect (format nil "/issues/~A" id)))
 
