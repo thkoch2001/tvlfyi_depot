@@ -1,9 +1,6 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let
-  pkgs = depot.third_party;
-in
-pkgs.naersk.buildPackage {
+depot.third_party.naersk.buildPackage {
   name = "paroxysm";
   version = "0.0.2";
   src = ./.;

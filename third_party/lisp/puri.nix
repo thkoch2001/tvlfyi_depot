@@ -1,7 +1,7 @@
 # Portable URI library
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = depot.third_party.fetchgit {
+let src = pkgs.fetchgit {
   url = "http://git.kpe.io/puri.git";
   rev = "4bbab89d9ccbb26346899d1f496c97604fec567b";
   sha256 = "0gq2rsr0aihs0z20v4zqvmdl4szq53b52rh97pvnmwrlbn4mapmd";

@@ -1,9 +1,9 @@
 # Closer to MOP is a compatibility layer that rectifies many of the
 # absent or incorrect CLOS MOP features across a broad range of Common
 # Lisp implementations
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = depot.third_party.fetchFromGitHub {
+let src = pkgs.fetchFromGitHub {
   owner = "pcostanza";
   repo = "closer-mop";
   rev = "e1d1430524086709a7ea8e0eede6849aa29d6276";

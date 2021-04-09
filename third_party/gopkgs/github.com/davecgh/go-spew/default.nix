@@ -1,8 +1,8 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "github.com/davecgh/go-spew";
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "davecgh";
     repo = "go-spew";
     rev = "8991bc29aa16c548c550c7ff78260e27b9ab7c73";
