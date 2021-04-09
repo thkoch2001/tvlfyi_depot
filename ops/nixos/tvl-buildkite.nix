@@ -33,4 +33,13 @@ in {
       };
     }) agents);
   };
+
+  # Set up a group for all Buildkite agent users
+  users = {
+    groups.buildkite-agents = {};
+    users = listToAttrs (map (n: {
+      name = "buildkite-agent-whitby-${toString n}";
+      value.extraGroups = [ "buildkite-agents" ];
+    }) (range 1 32));
+  };
 }
