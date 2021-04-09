@@ -7,7 +7,7 @@
 # Forcing Emacs to link against Imagemagick currently causes libvterm
 # to segfault, which is a lot less desirable than not having telega
 # render images correctly.
-{ depot, lib, ... }:
+{ depot, lib, pkgs, ... }:
 
 let
   inherit (depot) third_party;
@@ -15,7 +15,7 @@ let
   emacsWithPackages = (third_party.emacsPackagesGen third_party.emacs27).emacsWithPackages;
 
   # $PATH for binaries that need to be available to Emacs
-  emacsBinPath = lib.makeBinPath [ third_party.telega ];
+  emacsBinPath = lib.makeBinPath [ third_party.emacsPackages.telega ];
 
   identity = x: x;
 
@@ -100,8 +100,10 @@ let
     term-switcher
     tvl
 
+    # telega comes from a mysterious third package set
+    pkgs.emacsPackages.telega
+
     # patched / overridden versions of packages
-    depot.third_party.telega
     depot.third_party.emacs.exwm
     depot.third_party.emacs.rcirc
     depot.third_party.emacs.vterm
