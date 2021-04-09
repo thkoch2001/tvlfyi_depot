@@ -112,6 +112,7 @@ in lib.fix(self: {
   networking = {
     hostName = "tverskoy";
     hostId = "3c91827f";
+    domain = "tvl.su";
     useDHCP = false;
     networkmanager.enable = true;
     firewall.enable = false;
