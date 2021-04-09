@@ -19,11 +19,11 @@ let
     inherit depot;
 
     # Expose lib attribute to packages.
-    inherit (depot) lib;
+    inherit (depot.third_party.nixpkgs) lib;
 
     # Pass third_party as 'pkgs' (for compatibility with external
     # imports for certain subdirectories)
-    pkgs = depot.third_party;
+    pkgs = depot.third_party.nixpkgs;
   };
 
   readTree' = import ./nix/readTree {};
@@ -74,9 +74,6 @@ let
 in fix(self: {
   __readTree = [];
   config = config self;
-
-  # Elevate 'lib' from nixpkgs
-  lib = import (self.third_party.nixpkgsSrc + "/lib");
 
   # Expose readTree for downstream repo consumers.
   readTree = {
