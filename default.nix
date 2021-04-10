@@ -24,6 +24,13 @@ let
     # Pass third_party as 'pkgs' (for compatibility with external
     # imports for certain subdirectories)
     pkgs = depot.third_party.nixpkgs;
+
+    # Pass arguments passed to the entire depot through, for packages
+    # that would like to add functionality based on this.
+    #
+    # Note that it is intended for exception circumstance, such as
+    # debugging by bisecting nixpkgs.
+    externalArgs = args;
   };
 
   readTree' = import ./nix/readTree {};
