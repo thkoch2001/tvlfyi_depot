@@ -7,15 +7,13 @@
 # Forcing Emacs to link against Imagemagick currently causes libvterm
 # to segfault, which is a lot less desirable than not having telega
 # render images correctly.
-{ depot, lib, ... }:
+{ depot, lib, pkgs, ... }:
 
 let
-  inherit (depot) third_party;
-
-  emacsWithPackages = (third_party.emacsPackagesGen third_party.emacs27).emacsWithPackages;
+  emacsWithPackages = (pkgs.emacsPackagesGen pkgs.emacs27).emacsWithPackages;
 
   # $PATH for binaries that need to be available to Emacs
-  emacsBinPath = lib.makeBinPath [ third_party.telega ];
+  emacsBinPath = lib.makeBinPath [ depot.third_party.telega ];
 
   identity = x: x;
 
@@ -107,7 +105,7 @@ let
     depot.third_party.emacs.vterm
     depot.third_party.emacs.explain-pause-mode
   ]))));
-in lib.fix(self: l: f: third_party.writeShellScriptBin "tazjins-emacs" ''
+in lib.fix(self: l: f: pkgs.writeShellScriptBin "tazjins-emacs" ''
   export PATH="${emacsBinPath}:$PATH"
   exec ${tazjinsEmacs f}/bin/emacs \
     --debug-init \
@@ -127,7 +125,7 @@ in lib.fix(self: l: f: third_party.writeShellScriptBin "tazjins-emacs" ''
 
     # Build a derivation that uses the specified local Emacs (i.e.
     # built outside of Nix) instead
-    withLocalEmacs = emacsBin: third_party.writeShellScriptBin "tazjins-emacs" ''
+    withLocalEmacs = emacsBin: pkgs.writeShellScriptBin "tazjins-emacs" ''
       export PATH="${emacsBinPath}:$PATH"
       export EMACSLOADPATH="${(tazjinsEmacs f).deps}/share/emacs/site-lisp:"
       exec ${emacsBin} \

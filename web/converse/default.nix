@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
-pkgs.naersk.buildPackage {
+depot.third_party.naersk.buildPackage {
   src = ./.;
   buildInputs = with pkgs; [ openssl postgresql.lib ];
   nativeBuildInputs = [ pkgs.pkgconfig ];
