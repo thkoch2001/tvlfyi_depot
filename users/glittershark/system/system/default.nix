@@ -1,19 +1,15 @@
 args @ { depot, pkgs, ... }:
 
-let
-  nixpkgs = import pkgs.nixpkgsSrc {};
-in
-
 rec {
   chupacabra = import ./machines/chupacabra.nix;
 
-  chupacabraSystem = (pkgs.nixos {
+  chupacabraSystem = (depot.third_party.nixos {
     configuration = chupacabra;
   }).system;
 
   mugwump = import ./machines/mugwump.nix;
 
-  mugwumpSystem = (pkgs.nixos {
+  mugwumpSystem = (depot.third_party.nixos {
     configuration = mugwump;
   }).system;
 
@@ -22,14 +18,14 @@ rec {
   roswellSystem = (depot.ops.nixos.nixosFor ({ ... }: {
     imports = [
       ./machines/roswell.nix
-      "${nixpkgs.home-manager.src}/nixos"
+      "${pkgs.home-manager.src}/nixos"
     ];
 
     home-manager.users.grfn = { config, lib, ... }: {
       imports = [ ../home/machines/roswell.nix ];
       lib.depot = depot;
       _module.args.pkgs = lib.mkForce
-        (import pkgs.nixpkgsSrc
+        (import pkgs.path
           (lib.filterAttrs (n: v: v != null) config.nixpkgs));
     };
   })).system;
@@ -60,7 +56,7 @@ rec {
           system=$(nix-build -E '(import ${depotPath} {}).users.glittershark.system.system.${hostname}' --no-out-link)
           ;;
       '';
-    in depot.third_party.writeShellScriptBin "rebuilder" ''
+    in pkgs.writeShellScriptBin "rebuilder" ''
       set -ue
       if [[ $EUID -ne 0 ]]; then
         echo "Oh no! Only root is allowed to rebuild the system!" >&2

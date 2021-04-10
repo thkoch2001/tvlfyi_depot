@@ -1,4 +1,6 @@
-{ pkgs ? (import ../../../. {}).third_party, ... }:
+{ depot ? (import ../../../. {})
+, pkgs ? depot.third_party.nixpkgs
+, ... }:
 
 pkgs.haskellPackages.callCabal2nix "owothia"
-  (pkgs.gitignoreSource ./.) { }
+  (depot.third_party.gitignoreSource ./.) { }
