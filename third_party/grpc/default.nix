@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-(pkgs.originals.grpc.override {
+(pkgs.grpc.override {
   protobuf = pkgs.protobuf;
   stdenv = pkgs.llvmPackages.libcxxStdenv;
 }).overrideAttrs(orig: rec {
