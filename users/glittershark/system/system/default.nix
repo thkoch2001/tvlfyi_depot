@@ -32,7 +32,7 @@ rec {
 
   yeren = import ./machines/yeren.nix;
 
-  yerenSystem = depot.ops.nixos.nixosFor yeren;
+  yerenSystem = (depot.ops.nixos.nixosFor yeren).system;
 
   iso = import ./iso.nix args;
 
