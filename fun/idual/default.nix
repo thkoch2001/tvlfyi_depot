@@ -1,7 +1,7 @@
-{ pkgs, lib, ... }:
+{ depot, pkgs, lib, ... }:
 
 let
-  inherit (pkgs) python python3 python3Packages;
+  inherit (pkgs) python3 python3Packages;
 
   opts = {
     pname   = "idualctl";
@@ -9,12 +9,12 @@ let
     src     = ./.;
 
     propagatedBuildInputs = [
-      python.broadlink
+      depot.third_party.python.broadlink
     ];
   };
   package = python3Packages.buildPythonPackage opts;
   script  = python3Packages.buildPythonApplication opts;
-in {
+in depot.nix.utils.drvTargets {
   inherit script;
   python  = python3.withPackages (_: [ package ]);
   setAlarm = pkgs.writeShellScriptBin "set-alarm" ''
