@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
-(pkgs.originals.grpc.override {
-  protobuf = pkgs.protobuf;
+(pkgs.grpc.override {
+  protobuf = depot.third_party.protobuf;
   stdenv = pkgs.llvmPackages.libcxxStdenv;
 }).overrideAttrs(orig: rec {
   version = "1.30.0";
