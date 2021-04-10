@@ -1,23 +1,20 @@
-{ depot, lib, ... }:
+{ depot, lib, pkgs, ... }:
 
 config: let
   inherit (depot.third_party) lieer;
-  nixpkgs = import depot.third_party.nixpkgsSrc {
-    config.allowUnfree = true;
-  };
 
   # add google-c-style here because other machines get it from, eh,
   # elsewhere.
   frogEmacs = (depot.users.tazjin.emacs.overrideEmacs(epkgs: epkgs ++ [
-    depot.third_party.emacsPackages.google-c-style
+    pkgs.emacsPackages.google-c-style
   ]));
 
-  quasselClient = depot.third_party.quassel.override {
+  quasselClient = pkgs.quassel.override {
     client = true;
     enableDaemon = false;
     monolithic = false;
   };
-in depot.lib.fix(self: {
+in lib.fix(self: {
   imports = [
     "${depot.depotPath}/ops/nixos/v4l2loopback.nix"
   ];
@@ -37,7 +34,7 @@ in depot.lib.fix(self: {
       kernelModules = [ "dm-snapshot" ];
     };
 
-    kernelPackages = nixpkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_latest;
     kernel.sysctl = {
       "kernel.perf_event_paranoid" = -1;
     };
@@ -58,7 +55,7 @@ in depot.lib.fix(self: {
 
     pulseaudio = {
       enable = true;
-      package = nixpkgs.pulseaudioFull;
+      package = pkgs.pulseaudioFull;
     };
 
     bluetooth = {
@@ -70,14 +67,14 @@ in depot.lib.fix(self: {
     maxJobs = 48;
     nixPath = [
       "depot=/depot"
-      "nixpkgs=${depot.third_party.nixpkgsSrc}"
+      "nixpkgs=${pkgs.path}"
     ];
 
     binaryCaches = ["ssh://nix-ssh@whitby.tvl.fyi"];
     binaryCachePublicKeys = ["cache.tvl.fyi:fd+9d1ceCPvDX/xVhcfv8nAa6njEhAGAEe+oGJDEeoc="];
   };
 
-  nixpkgs.pkgs = nixpkgs;
+  nixpkgs.pkgs = pkgs;
 
   networking = {
     hostName = "frog";
@@ -95,7 +92,7 @@ in depot.lib.fix(self: {
   # Generate an immutable /etc/resolv.conf from the nameserver settings
   # above (otherwise DHCP overwrites it):
   environment.etc."resolv.conf" = with lib; {
-    source = depot.third_party.writeText "resolv.conf" ''
+    source = pkgs.writeText "resolv.conf" ''
       ${concatStringsSep "\n" (map (ns: "nameserver ${ns}") self.networking.nameservers)}
       options edns0
     '';
@@ -114,7 +111,7 @@ in depot.lib.fix(self: {
     extraGroups = [ "wheel" "audio" "docker" ];
     isNormalUser = true;
     uid = 1000;
-    shell = nixpkgs.fish;
+    shell = pkgs.fish;
   };
 
   security.sudo = {
@@ -123,7 +120,7 @@ in depot.lib.fix(self: {
   };
 
   fonts = {
-    fonts = with nixpkgs; [
+    fonts = with pkgs; [
       corefonts
       dejavu_fonts
       jetbrains-mono
@@ -158,7 +155,7 @@ in depot.lib.fix(self: {
   # Required for Yubikey usage as smartcard
   services.pcscd.enable = true;
   services.udev.packages = [
-    nixpkgs.yubikey-personalization
+    pkgs.yubikey-personalization
   ];
 
   # Enable Docker for Nixery testing
@@ -175,7 +172,7 @@ in depot.lib.fix(self: {
     videoDrivers = [ "amdgpu" ];
     displayManager = {
       # Give EXWM permission to control the session.
-      sessionCommands = "${nixpkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
+      sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
 
       lightdm.enable = true;
       lightdm.greeters.gtk.clock-format = "%H·%M"; # TODO(tazjin): TZ?
@@ -224,7 +221,6 @@ in depot.lib.fix(self: {
       lieer
       ops.kontemplate
       quasselClient
-      third_party.ffmpeg
       third_party.git
       third_party.lutris
       third_party.rr
@@ -232,7 +228,7 @@ in depot.lib.fix(self: {
     ]) ++
 
     # programs from nixpkgs
-    (with nixpkgs; [
+    (with pkgs; [
       age
       bat
       chromium
@@ -245,6 +241,7 @@ in depot.lib.fix(self: {
       emacs27 # mostly for emacsclient
       exa
       fd
+      ffmpeg-full
       file
       gdb
       gnupg
