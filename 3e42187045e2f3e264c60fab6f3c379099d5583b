@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a44e1e7f_11b90001",
+        "filename": "third_party/overlays/haskell/default.nix",
+        "patchSetId": 25
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-10T20:50:24Z",
+      "side": 1,
+      "message": "random \u003d dontCheck super.random_1_2_0; works, but that\u0027s for another CL or CL/2921.",
+      "revId": "3e42187045e2f3e264c60fab6f3c379099d5583b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

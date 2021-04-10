@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "853594b4_55c57c5a",
+        "filename": "ops/nixos/default.nix",
+        "patchSetId": 28
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-10T20:50:24Z",
+      "side": 1,
+      "message": "This should be `third_party.nixos` then?",
+      "revId": "e0a23ccbfe8998a62cdba9b7d1cb3eb93063f96f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a544684d_e41f0c47",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 28
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-10T20:50:24Z",
+      "side": 1,
+      "message": "should be `depot.third_party.nixpkgs`.",
+      "revId": "e0a23ccbfe8998a62cdba9b7d1cb3eb93063f96f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23968986_7a00e4cc",
+        "filename": "third_party/nixpkgs/default.nix",
+        "patchSetId": 28
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-10T20:50:24Z",
+      "side": 1,
+      "message": "Could be interesting to experiment with `crossOverlays` here, maybe this will reduce rebuilds required for ifd in haskellPackages?",
+      "revId": "e0a23ccbfe8998a62cdba9b7d1cb3eb93063f96f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eecf66f2_dbc96931",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 28
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-10T20:50:24Z",
+      "side": 1,
+      "message": "This is probably not necessary, as `clangStdenv \u003d if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;`.",
+      "revId": "e0a23ccbfe8998a62cdba9b7d1cb3eb93063f96f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
