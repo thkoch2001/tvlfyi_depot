@@ -189,7 +189,9 @@
     ;
 
   haskellPackages = (nixpkgs.haskellPackages.override {
-    overrides = (import ../haskell_overlay { pkgs = nixpkgs; });
+    overrides = (import ../../haskellOverlay
+    { /* empty readTree arg */ }
+    { pkgs = nixpkgs; });
   });
 
   gradle_6 = (nixpkgs.gradleGen.override {
