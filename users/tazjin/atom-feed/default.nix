@@ -1,13 +1,13 @@
 # This file defines functions for generating an Atom feed.
 
-{ depot, lib, ... }:
+{ depot, lib, pkgs, ... }:
 
 with depot.nix.yants;
 
 let
   inherit (builtins) map readFile replaceStrings;
   inherit (lib) concatStrings concatStringsSep removeSuffix;
-  inherit (depot.third_party) runCommandNoCC;
+  inherit (pkgs) runCommandNoCC;
 
   # 'link' describes a related link to a feed, or feed element.
   #

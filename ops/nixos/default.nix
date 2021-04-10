@@ -8,9 +8,7 @@
 # situation.
 { depot, lib, pkgs, ... }@args:
 
-let
-  inherit (lib) findFirst isAttrs;
-  nixos = import "${depot.third_party.nixpkgsSrc}/nixos";
+let inherit (lib) findFirst isAttrs;
 in rec {
   whitby = import ./whitby/default.nix args;
 
@@ -25,7 +23,7 @@ in rec {
     };
   };
 
-  nixosFor = configuration: (nixos {
+  nixosFor = configuration: (depot.third_party.nixos {
     configuration = { ... }: {
       imports = [
         baseModule

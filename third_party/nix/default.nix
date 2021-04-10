@@ -1,5 +1,6 @@
 args@{
-  pkgs ? (import ../.. {}).third_party
+  depot ? (import ../.. {})
+, pkgs ? depot.third_party.nixpkgs
 , lib
 , buildType ? "release"
 , depotPath ? ../..
@@ -43,10 +44,11 @@ let
   protoSrcs = pkgs.runCommand "nix-proto-srcs" {} ''
     export PROTO_SRCS=${./src/proto}
     mkdir -p $out/libproto
-    ${pkgs.protobuf}/bin/protoc -I=$PROTO_SRCS \
+    ${depot.third_party.protobuf}/bin/protoc -I=$PROTO_SRCS \
       --cpp_out=$out/libproto \
-      --plugin=protoc-gen-grpc=${pkgs.grpc}/bin/grpc_cpp_plugin --grpc_out=$out/libproto \
-      $PROTO_SRCS/*.proto
+      --plugin=protoc-gen-grpc=${depot.third_party.grpc}/bin/grpc_cpp_plugin \
+        --grpc_out=$out/libproto \
+        $PROTO_SRCS/*.proto
   '';
 
   # Derivation for busybox that just has the `busybox` binary in bin/, not all
@@ -73,7 +75,6 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
  # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = with pkgs; [
-    abseil_cpp
     aws-s3-cpp
     brotli
     bzip2
@@ -81,16 +82,18 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     curl
     editline
     flex
-    glog
-    grpc
     libseccomp
     libsodium
     systemd.dev
     openssl
-    protobuf
     sqlite
     xz
-  ];
+  ] ++ (with depot.third_party; [
+    abseil_cpp
+    glog
+    grpc
+    protobuf
+  ]);
 
   doCheck = false;
   doInstallCheck = true;
@@ -99,8 +102,8 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   dontStrip = true;
 
   installCheckInputs = with pkgs; [
+    depot.third_party.gtest
     fd
-    gtest
     rapidcheck
   ];
 
@@ -184,6 +187,9 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   # TODO(tazjin): integration test setup?
   # TODO(tazjin): docs generation?
+
+  # TODO(tazjin): Sort out after CL/2910 lands
+  meta.ci = false;
 
   passthru = {
     build-shell = self.overrideAttrs (up: rec {
