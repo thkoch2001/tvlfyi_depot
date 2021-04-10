@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d853b5b_db340bd1",
+        "filename": "ops/nixos/default.nix",
+        "patchSetId": 28
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-10T20:53:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "853594b4_55c57c5a",
+      "revId": "e0a23ccbfe8998a62cdba9b7d1cb3eb93063f96f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a544684d_e41f0c47",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-04-10T20:50:24Z",
       "side": 1,
       "message": "should be `depot.third_party.nixpkgs`.",
+      "revId": "e0a23ccbfe8998a62cdba9b7d1cb3eb93063f96f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b58c782_11834b99",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 28
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-10T20:53:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a544684d_e41f0c47",
       "revId": "e0a23ccbfe8998a62cdba9b7d1cb3eb93063f96f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
