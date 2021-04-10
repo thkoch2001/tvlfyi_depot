@@ -2,7 +2,7 @@
 
 let
   stdenv = with pkgs; overrideCC clangStdenv clang_11;
-  abseil_cpp = pkgs.abseil_cpp;
+  abseil_cpp = pkgs.abseil-cpp;
 in stdenv.mkDerivation {
   name = "dt";
   src = ./.;
