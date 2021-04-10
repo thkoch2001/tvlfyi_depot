@@ -2,7 +2,7 @@
 
 let
   inherit (pkgs) cacert iana-etc libredirect stdenv runCommandNoCC writeText;
-  elmPackages = pkgs.elmPackages_0_18;
+  elmPackages = depot.third_party.elmPackages_0_18;
 
   frontend = stdenv.mkDerivation {
     name = "gemma-frontend.html";
@@ -36,7 +36,7 @@ let
 in depot.nix.buildLisp.program {
   name = "gemma";
 
-  deps = with pkgs.lisp; [
+  deps = with depot.third_party.lisp; [
     cl-json
     cl-prevalence
     hunchentoot

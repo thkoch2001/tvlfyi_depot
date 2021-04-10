@@ -1,7 +1,7 @@
-{ depot, ... }:
+{ pkgs, ... }:
 
-depot.third_party.writeShellScriptBin "start-tvl-stream" ''
-  env LD_LIBRARY_PATH=/run/opengl-driver/lib/ ${depot.third_party.ffmpeg}/bin/ffmpeg \
+pkgs.writeShellScriptBin "start-tvl-stream" ''
+  env LD_LIBRARY_PATH=/run/opengl-driver/lib/ ${pkgs.ffmpeg-full}/bin/ffmpeg \
        -vsync 0 \
        -hwaccel cuvid \
        -init_hw_device cuda=0 -filter_hw_device 0 \
