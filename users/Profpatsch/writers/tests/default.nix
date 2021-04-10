@@ -1,4 +1,4 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 let
   inherit (depot.users.Profpatsch.writers)
@@ -9,7 +9,7 @@ let
     rustSimpleBin
     ;
 
-  inherit (depot.third_party)
+  inherit (pkgs)
     coreutils
     ;
 
