@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-(pkgs.originals.gtest.override {
+(pkgs.gtest.override {
   stdenv = pkgs.llvmPackages.libcxxStdenv;
 }).overrideAttrs(_: {
   src = pkgs.fetchFromGitHub {
