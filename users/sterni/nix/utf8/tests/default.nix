@@ -1,8 +1,8 @@
-{ depot, lib, ... }:
+{ depot, pkgs, lib, ... }:
 
 let
 
-  inherit (depot.third_party)
+  inherit (pkgs)
     runCommandLocal
     ;
 

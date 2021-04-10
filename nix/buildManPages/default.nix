@@ -1,8 +1,7 @@
-{ depot, ... }:
+{ depot, pkgs, lib, ... }:
 
 let
-  inherit (depot.third_party)
-    lib
+  inherit (pkgs)
     gzip
     mandoc
     coreutils
