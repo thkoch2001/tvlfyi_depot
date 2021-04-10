@@ -1,7 +1,7 @@
 # A Common Lisp abstraction layer over platform dependent functionality.
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = depot.third_party.fetchFromGitHub {
+let src = pkgs.fetchFromGitHub {
   owner = "svenvc";
   repo = "s-sysdeps";
   rev = "d28246b5dffef9e73a0e0e6cfbc4e878006fe34d";

@@ -1,5 +1,5 @@
 # Common Lisp bindings to OpenSSL
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 with depot.nix;
 
@@ -21,7 +21,7 @@ in buildLisp.library {
     (buildLisp.bundled "sb-posix")
   ];
 
-  native = [ depot.third_party.openssl ];
+  native = [ pkgs.openssl ];
 
   srcs = map (f: src + ("/src/" + f)) [
     "package.lisp"

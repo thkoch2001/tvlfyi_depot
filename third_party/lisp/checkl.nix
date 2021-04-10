@@ -12,7 +12,7 @@ let
 
 in depot.nix.buildLisp.library {
   name = "checkl";
-  deps = with pkgs.lisp; [
+  deps = with depot.third_party.lisp; [
     (bundled "asdf")
     marshal
     fiveam

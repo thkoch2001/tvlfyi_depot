@@ -1,9 +1,9 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "gopkg.in/warnings.v0";
 
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "go-warnings";
     repo = "warnings";
     rev = "27b9fabbdaf131d2169ec3ff7db8ffc4d839635e";

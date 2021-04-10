@@ -11,7 +11,7 @@ let
 
 in depot.nix.buildLisp.library {
   name = "cl-smtp";
-  deps = with pkgs.lisp; [
+  deps = with depot.third_party.lisp; [
     usocket
     trivial-gray-streams
     flexi-streams

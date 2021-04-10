@@ -1,7 +1,7 @@
 # Library for manipulating dates & times
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = depot.third_party.fetchFromGitHub {
+let src = pkgs.fetchFromGitHub {
   owner = "dlowe-net";
   repo = "local-time";
   rev = "dc54f61415c76ee755a6f69d4154a3a282f2789f";

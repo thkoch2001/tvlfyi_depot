@@ -1,7 +1,7 @@
 # A library to easily read and write complex binary formats.
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = depot.third_party.fetchFromGitHub {
+let src = pkgs.fetchFromGitHub {
   owner = "j3pic";
   repo = "lisp-binary";
   rev = "1aefc8618b7734f68697ddf59bc93cb8522aa0bf";

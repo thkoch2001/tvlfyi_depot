@@ -1,7 +1,7 @@
 # Compatibility layer for minor MOP implementation differences
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = depot.third_party.fetchFromGitHub {
+let src = pkgs.fetchFromGitHub {
   owner = "gwkkwg";
   repo = "moptilities";
   rev = "a436f16b357c96b82397ec018ea469574c10dd41";

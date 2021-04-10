@@ -1,8 +1,8 @@
 # cl-prevalence is an implementation of object prevalence for CL (i.e.
 # an in-memory database)
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = depot.third_party.fetchFromGitHub {
+let src = pkgs.fetchFromGitHub {
   owner = "40ants";
   repo = "cl-prevalence";
   rev = "da3ed6c4594b1c2fca90c178c1993973c4bf16c9";

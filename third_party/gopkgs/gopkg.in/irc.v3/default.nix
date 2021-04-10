@@ -1,9 +1,9 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "gopkg.in/irc.v3";
 
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "go-irc";
     repo = "irc";
     rev = "21a5301d6035ea204b2a7bb522a7b4598e5f6b28";

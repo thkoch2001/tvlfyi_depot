@@ -1,9 +1,9 @@
 # Portable pathname library
-{ depot, ...}:
+{ depot, pkgs, ...}:
 
 with depot.nix;
 
-let src = depot.third_party.fetchFromGitHub {
+let src = pkgs.fetchFromGitHub {
   owner = "edicl";
   repo = "cl-fad";
   rev = "c13d81c4bd9ba3a172631fd05dd213ab90e7d4cb";
