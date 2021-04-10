@@ -16,6 +16,24 @@
       "message": "How about using `pkgs.path` here. This would arguably decouple it further and not require us to continue exposing `nixpkgsSrc` for all eternity.",
       "revId": "9dc7f300faa81051520801a6fe68d4a7dec341e8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb9d09f_519b6b93",
+        "filename": "third_party/rapidcheck/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-10T11:43:56Z",
+      "side": 1,
+      "message": "Hmm, probably a good idea. Done.",
+      "parentUuid": "b685063a_cb9333e5",
+      "revId": "9dc7f300faa81051520801a6fe68d4a7dec341e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
