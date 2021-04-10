@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62bea51d_2bb696f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-10T21:34:10Z",
+      "side": 1,
+      "message": "Works fine: https://buildkite.com/tvl/depot/builds/6392#6f50277c-02fa-4a9e-b555-3b35bf745b54",
+      "revId": "873f43b94f6929c0aa678aa72b96477cc0af63ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
