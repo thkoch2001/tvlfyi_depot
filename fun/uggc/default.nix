@@ -1,7 +1,8 @@
-{ depot, pkgs, ... }@args:
+{ depot, pkgs, ... }:
 
 let
-  inherit (pkgs) gopkgs;
+  inherit (depot.third_party) gopkgs;
+
   uggc = depot.nix.buildGo.program {
     name = "uggc";
     srcs = [
