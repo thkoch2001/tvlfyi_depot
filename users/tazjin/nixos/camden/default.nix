@@ -2,7 +2,7 @@
 { depot, pkgs, lib, ... }:
 
 config: let
-  nixpkgs = import depot.third_party.nixpkgsSrc {
+  nixpkgs = import pkgs.path {
     config.allowUnfree = true;
   };
 
@@ -85,7 +85,7 @@ in lib.fix(self: {
 
     nixPath = [
       "depot=/home/tazjin/depot"
-      "nixpkgs=${depot.third_party.nixpkgsSrc}"
+      "nixpkgs=${pkgs.path}"
     ];
 
     trustedUsers = [ "root" "tazjin" ];
@@ -131,7 +131,6 @@ in lib.fix(self: {
     (with depot; [
       fun.idual.script
       fun.idual.setAlarm
-      third_party.pounce
     ]) ++
 
     # programs from nixpkgs

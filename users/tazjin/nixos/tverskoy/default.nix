@@ -7,7 +7,7 @@ config: let
     depot.third_party.emacsPackages.google-c-style
   ]));
 
-  nixpkgs = import depot.third_party.nixpkgsSrc {
+  nixpkgs = import pkgs.path {
     config.allowUnfree = true;
   };
 
@@ -33,8 +33,8 @@ in lib.fix(self: {
 
   nix = {
     nixPath = lib.mkForce [
-      "nixpkgs=${depot.third_party.nixpkgsSrc}"
-      "nixos=${depot.third_party.nixpkgsSrc}"
+      "nixpkgs=${pkgs.path}"
+      "nixos=${pkgs.path}"
       "depot=/depot"
     ];
 
