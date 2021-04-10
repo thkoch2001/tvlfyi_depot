@@ -16,6 +16,24 @@
       "message": "Either `pkgs.path` or ~~inherit (pkgs) nixos;~~ (not exposed yet right?)",
       "revId": "07bf587a3da53b45134fdb4ec98620d589fee5c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82c204fc_6f33632d",
+        "filename": "ops/nixos/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-10T12:09:16Z",
+      "side": 1,
+      "message": "Doing this now opens a larger rabbithole, as it ends up importing identical modules from different paths and failing. We\u0027ll have to do the nixpkgsSrc refactoring later, I\u0027ll open a bug for it.",
+      "parentUuid": "67b12654_6cdc819d",
+      "revId": "07bf587a3da53b45134fdb4ec98620d589fee5c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
