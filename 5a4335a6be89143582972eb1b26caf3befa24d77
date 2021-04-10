@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce6f0f8d_1ddcc79b",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-10T21:36:37Z",
+      "side": 1,
+      "message": "indent oopsie?",
+      "revId": "5a4335a6be89143582972eb1b26caf3befa24d77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
