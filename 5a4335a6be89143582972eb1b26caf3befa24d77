@@ -16,6 +16,24 @@
       "message": "indent oopsie?",
       "revId": "5a4335a6be89143582972eb1b26caf3befa24d77",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "175c83f5_ff583d43",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-10T21:43:14Z",
+      "side": 1,
+      "message": "Oopsie.",
+      "parentUuid": "ce6f0f8d_1ddcc79b",
+      "revId": "5a4335a6be89143582972eb1b26caf3befa24d77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
