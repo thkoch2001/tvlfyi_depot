@@ -74,6 +74,12 @@ in {
         html = "<a href=\"https://b.tvl.fyi/issues/$1\">b/$1</a>";
       };
 
+      # Auto-link other CLs
+      commentlink.gerrit = {
+        match = "cl/(\\\\d+)";
+        html = "<a href=\"https://cl.tvl.fyi/$1\">cl/$1</a>";
+      };
+
       # Configures integration with CAS, which then integrates with a variety
       # of backends.
       auth.type = "OAUTH";
