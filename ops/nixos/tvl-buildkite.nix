@@ -1,5 +1,5 @@
 # Configuration for the TVL buildkite agents.
-{ config, depot, lib, ... }:
+{ config, depot, pkgs, lib, ... }:
 
 let
   cfg = config.services.depot.buildkite;
@@ -8,7 +8,7 @@ let
 
   # All Buildkite hooks are actually besadii, but it's being invoked
   # with different names.
-  buildkiteHooks = depot.third_party.runCommandNoCC "buildkite-hooks" {} ''
+  buildkiteHooks = pkgs.runCommandNoCC "buildkite-hooks" {} ''
     mkdir -p $out/bin
     ln -s ${depot.ops.besadii}/bin/besadii $out/bin/post-command
   '';

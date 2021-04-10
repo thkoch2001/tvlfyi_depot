@@ -1,11 +1,9 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-with depot.third_party;
-
-naersk.buildPackage {
+depot.third_party.naersk.buildPackage {
   src = ./.;
 
-  buildInputs = [
+  buildInputs = with pkgs; [
     pkgconfig openssl systemd.dev
   ];
 }
