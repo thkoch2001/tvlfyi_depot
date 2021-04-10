@@ -12,7 +12,7 @@ let
 
   cl-postgres = depot.nix.buildLisp.library {
     name = "cl-postgres";
-    deps = with pkgs.lisp; [
+    deps = with depot.third_party.lisp; [
       md5
       split-sequence
       ironclad
@@ -44,7 +44,7 @@ let
 
   s-sql = depot.nix.buildLisp.library {
     name = "s-sql";
-    deps = with pkgs.lisp; [
+    deps = with depot.third_party.lisp; [
       cl-postgres
       alexandria
     ];
@@ -58,7 +58,7 @@ let
   postmodern = depot.nix.buildLisp.library {
     name = "postmodern";
 
-    deps = with pkgs.lisp; [
+    deps = with depot.third_party.lisp; [
       alexandria
       cl-postgres
       s-sql

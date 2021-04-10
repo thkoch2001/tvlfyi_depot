@@ -1,7 +1,7 @@
 # Portable chunked streams for Common Lisp
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = depot.third_party.fetchFromGitHub {
+let src = pkgs.fetchFromGitHub {
   owner = "edicl";
   repo = "chunga";
   rev = "16330852d01dfde4dd97dee7cd985a88ea571e7e";

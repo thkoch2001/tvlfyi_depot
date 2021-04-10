@@ -1,9 +1,8 @@
-{ depot, ... }:
+{ depot, lib, pkgs, ... }:
 
 let
-  inherit (depot.third_party) lib stdenv gzip bzip2 xz luajit zlib autoconf openssl pkgconfig;
-in
-stdenv.mkDerivation rec {
+  inherit (pkgs) stdenv gzip bzip2 xz luajit zlib autoconf openssl pkgconfig;
+in stdenv.mkDerivation rec {
   pname = "cgit";
   version = "master";
   src = ./.;

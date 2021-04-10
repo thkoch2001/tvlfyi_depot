@@ -16,7 +16,7 @@ let
 in depot.nix.buildLisp.library {
   name = "uax-15";
 
-  deps = with pkgs.lisp; [
+  deps = with depot.third_party.lisp; [
     split-sequence
     cl-ppcre
     (bundled "uiop")

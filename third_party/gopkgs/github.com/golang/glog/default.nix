@@ -1,8 +1,8 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "github.com/golang/glog";
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "golang";
     repo = "glog";
     rev = "23def4e6c14b4da8ac2ed8007337bc5eb5007998";

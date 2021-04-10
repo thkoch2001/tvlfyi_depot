@@ -1,7 +1,7 @@
 # Implementation of RFC2388 (multipart/form-data)
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = depot.third_party.fetchFromGitHub {
+let src = pkgs.fetchFromGitHub {
   owner = "jdz";
   repo = "rfc2388";
   rev = "591bcf7e77f2c222c43953a80f8c297751dc0c4e";

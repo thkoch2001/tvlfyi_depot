@@ -1,9 +1,9 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "github.com/kevinburke/ssh_config";
 
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "kevinburke";
     repo = "ssh_config";
     rev = "01f96b0aa0cdcaa93f9495f89bbc6cb5a992ce6e";

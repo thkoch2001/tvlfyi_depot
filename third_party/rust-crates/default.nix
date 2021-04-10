@@ -1,10 +1,10 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 let
   buildRustCrate = attrs@{
     edition ? "2018",
     ...
-  }: depot.third_party.buildRustCrate (attrs // {
+  }: pkgs.buildRustCrate (attrs // {
     inherit
       edition
       ;

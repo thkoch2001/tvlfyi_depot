@@ -113,6 +113,7 @@
     pandoc
     pango
     parallel
+    path
     pkgconfig
     pkgsCross
     plantuml

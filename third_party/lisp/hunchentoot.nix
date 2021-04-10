@@ -1,8 +1,8 @@
 # Hunchentoot is a web framework for Common Lisp.
-{ depot, ...}:
+{ depot, pkgs, ...}:
 
 let
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "edicl";
     repo = "hunchentoot";
     rev = "585b45b6b873f2da421fdf456b61860ab5868207";
