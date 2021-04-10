@@ -11,11 +11,9 @@ let
     generic-arbitrary = appendPatch hsSuper.generic-arbitrary
       [ ./patches/generic-arbitrary-export-garbitrary.patch ];
 
-    # random = dontCheck (hsSuper.callHackageDirect {
-    #   pkg = "random";
-    #   ver = "1.2.0";
-    #   sha256 = "06s3mmqbsfwv09j2s45qnd66nrxfp9280gnl9ng8yh128pfr7bjh";
-    # } {});
+    # check dependencies cause circular dependency on itself
+    # and thus an infinite recursion
+    random = dontCheck hsSuper.random_1_2_0;
 
     # random <1.2
     test-framework = doJailbreak hsSuper.test-framework;
