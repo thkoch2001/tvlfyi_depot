@@ -55,6 +55,7 @@
     fetchgit
     fetchurl
     fetchzip
+    ffmpeg-full
     findutils
     fira
     fira-code
