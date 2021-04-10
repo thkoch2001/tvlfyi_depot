@@ -73,7 +73,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
  # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = with pkgs; [
-    abseil_cpp
+    abseil-cpp
     aws-s3-cpp
     brotli
     bzip2
