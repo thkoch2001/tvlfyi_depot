@@ -3,7 +3,7 @@
 { pkgs, ... }:
 
 let
-  tdlib = pkgs.originals.tdlib.overrideAttrs(old: {
+  tdlib = pkgs.tdlib.overrideAttrs(old: {
     version = "1.6.6";
     src = pkgs.fetchFromGitHub {
       owner = "tdlib";
@@ -15,7 +15,7 @@ let
 # Emacs packages use some sort of fixed point override scheme and
 # don't expose individual overrides in the override-functor, hence the
 # mess below.
-in pkgs.originals.telega.overrideAttrs(old: {
+in pkgs.emacsPackages.telega.overrideAttrs(old: {
   buildInputs = [ tdlib ] ++
     (builtins.filter (p: !(p ? pname) || p.pname != "tdlib") old.buildInputs);
 })

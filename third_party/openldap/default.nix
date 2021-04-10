@@ -6,7 +6,7 @@
 # derivation to include this module.
 { pkgs, ... }:
 
-pkgs.originals.openldap.overrideAttrs(old: {
+pkgs.openldap.overrideAttrs(old: {
   buildInputs = old.buildInputs ++ [ pkgs.libsodium ];
 
   postBuild = ''
