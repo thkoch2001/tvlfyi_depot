@@ -1,10 +1,8 @@
-{ depot, lib, ... }:
+{ depot, lib, pkgs, ... }:
 
 let
   inherit (builtins) listToAttrs;
   inherit (lib) range;
-
-  nixpkgs = import depot.third_party.nixpkgsSrc {};
 in lib.fix(self: {
   imports = [
     "${depot.depotPath}/ops/nixos/clbot.nix"
@@ -27,7 +25,7 @@ in lib.fix(self: {
     "${depot.depotPath}/ops/nixos/www/todo.tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/tvl.fyi.nix"
     "${depot.depotPath}/ops/nixos/www/wigglydonke.rs.nix"
-    "${depot.third_party.nixpkgsSrc}/nixos/modules/services/web-apps/gerrit.nix"
+    "${pkgs.path}/nixos/modules/services/web-apps/gerrit.nix"
   ];
 
   hardware = {
@@ -140,14 +138,14 @@ in lib.fix(self: {
   # Generate an immutable /etc/resolv.conf from the nameserver settings
   # above (otherwise DHCP overwrites it):
   environment.etc."resolv.conf" = with lib; {
-    source = depot.third_party.writeText "resolv.conf" ''
+    source = pkgs.writeText "resolv.conf" ''
       ${concatStringsSep "\n" (map (ns: "nameserver ${ns}") self.networking.nameservers)}
       options edns0
     '';
   };
 
   # Disable background git gc system-wide, as it has a tendency to break CI.
-  environment.etc."gitconfig".source = depot.third_party.writeText "gitconfig" ''
+  environment.etc."gitconfig".source = pkgs.writeText "gitconfig" ''
     [gc]
     autoDetach = false
   '';
@@ -304,7 +302,7 @@ in lib.fix(self: {
     bindAddress = "localhost";
   };
 
-  environment.systemPackages = with nixpkgs; [
+  environment.systemPackages = with pkgs; [
     bb
     curl
     emacs-nox
@@ -332,7 +330,7 @@ in lib.fix(self: {
   # Regularly back up whitby to Google Cloud Storage.
   systemd.services.restic = {
     description = "Backups to Google Cloud Storage";
-    script = "${nixpkgs.restic}/bin/restic backup /var/lib/gerrit /var/backup/postgresql";
+    script = "${pkgs.restic}/bin/restic backup /var/lib/gerrit /var/backup/postgresql";
 
     environment = {
       GOOGLE_PROJECT_ID = "tazjins-infrastructure";
@@ -369,7 +367,7 @@ in lib.fix(self: {
     users.tazjin = {
       isNormalUser = true;
       extraGroups = [ "git" "wheel" ];
-      shell = nixpkgs.fish;
+      shell = pkgs.fish;
       openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
     };
 

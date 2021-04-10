@@ -1,11 +1,15 @@
 # This derivation configures a 'cgit' instance to serve repositories
 # from a different source.
-
-{ depot, ... }:
-
-with depot.third_party;
+{ depot, pkgs, ... }:
 
 let
+  inherit (pkgs)
+    mime-types
+    thttpd
+    writeShellScriptBin
+    writeText
+    ;
+
   sourceFilter = writeShellScriptBin "cheddar-about" ''
     exec ${depot.tools.cheddar}/bin/cheddar --about-filter $@
   '';
@@ -33,7 +37,7 @@ let
 
   thttpdConfig = writeText "thttpd.conf" ''
     port=2448
-    dir=${cgit}/cgit
+    dir=${depot.third_party.cgit}/cgit
     nochroot
     novhost
     cgipat=**.cgi
