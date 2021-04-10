@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "201a8d1d_376160a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-10T20:50:56Z",
+      "side": 1,
+      "message": "haven\u0027t reviewed everything (just took a look at //third_party and //users/glittershark) but what I did see LGTM",
+      "revId": "e0a23ccbfe8998a62cdba9b7d1cb3eb93063f96f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "853594b4_55c57c5a",
@@ -65,6 +82,23 @@
       "writtenOn": "2021-04-10T20:50:24Z",
       "side": 1,
       "message": "This is probably not necessary, as `clangStdenv \u003d if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;`.",
+      "revId": "e0a23ccbfe8998a62cdba9b7d1cb3eb93063f96f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59c43070_e370987e",
+        "filename": "users/glittershark/pkgs/fprintd/default.nix",
+        "patchSetId": 28
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-10T20:50:56Z",
+      "side": 1,
+      "message": "I\u0027ll look into it: https://b.tvl.fyi/issues/115",
       "revId": "e0a23ccbfe8998a62cdba9b7d1cb3eb93063f96f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
