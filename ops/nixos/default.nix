@@ -6,13 +6,12 @@
 #
 # TODO(tazjin): Find a more elegant solution for the whole module
 # situation.
-{ lib, pkgs, depot, ... }@args:
+{ depot, lib, pkgs, ... }@args:
 
 let
   inherit (lib) findFirst isAttrs;
-in
-
-rec {
+  nixos = import "${pkgs.path}/nixos";
+in rec {
   whitby = import ./whitby/default.nix args;
 
   # System installation
@@ -26,7 +25,7 @@ rec {
     };
   };
 
-  nixosFor = configuration: (depot.third_party.nixos {
+  nixosFor = configuration: (nixos {
     configuration = { ... }: {
       imports = [
         baseModule

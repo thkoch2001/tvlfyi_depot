@@ -1,4 +1,4 @@
-# Copyright (C) 2016-2019  Vincent Ambo <mail@tazj.in>
+# Copyright (C) 2016-2021  Vincent Ambo <mail@tazj.in>
 #
 # This file is part of Kontemplate.
 #
@@ -10,15 +10,15 @@
 # This file is the Nix derivation used to install Kontemplate on
 # Nix-based systems.
 
-{ depot, ... }:
+{ lib, pkgs, ... }:
 
-with depot.third_party; buildGoPackage rec {
+pkgs.buildGoPackage rec {
   name = "kontemplate-${version}";
   version = "canon";
   src = ./.;
   goPackagePath = "github.com/tazjin/kontemplate";
   goDeps = ./deps.nix;
-  buildInputs = [ parallel ];
+  buildInputs = [ pkgs.parallel ];
 
   # Enable checks and configure check-phase to include vet:
   doCheck = true;
