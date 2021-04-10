@@ -141,6 +141,30 @@
       },
       "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91381bf0_3d193b87",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-10T15:36:10Z",
+      "side": 1,
+      "message": "I think gopkgs is a bit different because it\u0027s hierarchical, by nature of how go packages work, which isn\u0027t the case for Haskell packages.\n\nI\u0027d favour removing the topological instruction, it\u0027s just not going to work.",
+      "parentUuid": "31203839_fccdeebf",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 86
+      },
+      "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
