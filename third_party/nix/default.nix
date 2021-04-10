@@ -1,5 +1,6 @@
 args@{
-  pkgs ? (import ../.. {}).third_party
+  depot ? (import ../.. {})
+, pkgs ? depot.third_party
 , lib
 , buildType ? "release"
 , depotPath ? ../..
@@ -73,7 +74,6 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
  # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = with pkgs; [
-    abseil_cpp
     aws-s3-cpp
     brotli
     bzip2
@@ -81,15 +81,17 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     curl
     editline
     flex
-    glog
-    grpc
     libseccomp
     libsodium
     systemd.dev
     openssl
-    protobuf
     sqlite
     xz
+  ] ++ with depot.third_party; [
+    abseil_cpp
+    glog
+    grpc
+    protobuf
   ];
 
   doCheck = false;
@@ -99,8 +101,8 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   dontStrip = true;
 
   installCheckInputs = with pkgs; [
+    depot.third_party.gtest
     fd
-    gtest
     rapidcheck
   ];
 
