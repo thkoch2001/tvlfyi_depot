@@ -1,8 +1,8 @@
 # unix-opts is a portable command line argument parser
-{ depot, ...}:
+{ depot, pkgs, ...}:
 
 let
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "libre-man";
     repo = "unix-opts";
     rev = "b805050b074bd860edd18cfc8776fdec666ec36e";

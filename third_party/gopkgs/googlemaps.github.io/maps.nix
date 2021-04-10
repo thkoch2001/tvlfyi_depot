@@ -1,9 +1,9 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "googlemaps.github.io/maps";
 
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "googlemaps";
     repo = "google-maps-services-go";
     rev = "a46d9fca56ac82caa79408b2417ea93a75e3b986";

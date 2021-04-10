@@ -9,7 +9,7 @@ let src = pkgs.fetchFromGitHub {
 in depot.nix.buildLisp.library {
   name = "trivial-ldap";
 
-  deps = with pkgs.lisp; [
+  deps = with depot.third_party.lisp; [
     usocket
     cl-plus-ssl
     cl-yacc

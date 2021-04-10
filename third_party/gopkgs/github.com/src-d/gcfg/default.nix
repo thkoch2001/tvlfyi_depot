@@ -1,9 +1,9 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "github.com/src-d/gcfg";
 
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "src-d";
     repo = "gcfg";
     rev = "1ac3a1ac202429a54835fe8408a92880156b489d";

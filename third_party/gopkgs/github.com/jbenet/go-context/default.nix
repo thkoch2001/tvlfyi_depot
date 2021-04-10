@@ -1,9 +1,9 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "github.com/jbenet/go-context";
 
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "jbenet";
     repo = "go-context";
     rev = "d14ea06fba99483203c19d92cfcd13ebe73135f4";

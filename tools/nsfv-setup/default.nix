@@ -10,10 +10,11 @@
 #
 # If this script is run while an NSFV sink exists, the existing sink
 # will first be removed.
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
 let
-  inherit (pkgs) ripgrep pulseaudio nsfv;
+  inherit (pkgs) ripgrep pulseaudio;
+  inherit (depot.third_party) nsfv;
 in pkgs.writeShellScriptBin "nsfv-setup" ''
   export PATH="${ripgrep}/bin:${pulseaudio}/bin:$PATH"
 
@@ -23,5 +24,5 @@ in pkgs.writeShellScriptBin "nsfv-setup" ''
 
   SINK=$(${pulseaudio}/bin/pacmd info | ${ripgrep}/bin/rg -r '$1' '^Default sink name: (.*)$')
   echo "Setting up NSFV filtering to sink ''${SINK}"
-  ${pulseaudio}/bin/pacmd load-module module-ladspa-sink sink_name=NSFV sink_master=''${SINK} label=noise_suppressor_mono plugin=${pkgs.nsfv}/lib/ladspa/librnnoise_ladspa.so control=42 rate=48000
+  ${pulseaudio}/bin/pacmd load-module module-ladspa-sink sink_name=NSFV sink_master=''${SINK} label=noise_suppressor_mono plugin=${nsfv}/lib/ladspa/librnnoise_ladspa.so control=42 rate=48000
 ''

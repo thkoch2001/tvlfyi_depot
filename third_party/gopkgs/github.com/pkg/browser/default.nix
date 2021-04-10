@@ -1,9 +1,9 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "github.com/pkg/browser";
 
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "pkg";
     repo = "browser";
     rev = "0a3d74bf9ce488f035cf5bc36f753a711bc74334";
