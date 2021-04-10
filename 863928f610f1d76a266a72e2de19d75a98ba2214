@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c48b43fd_588601e4",
+        "filename": "users/tazjin/dt/default.nix",
+        "patchSetId": 31
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-10T21:16:14Z",
+      "side": 1,
+      "message": "This should be exactly our clangStdenv (for a follow up).",
+      "revId": "863928f610f1d76a266a72e2de19d75a98ba2214",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
