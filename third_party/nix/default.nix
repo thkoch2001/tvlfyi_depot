@@ -74,7 +74,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   ];
 
  # TODO(tazjin): Some of these might only be required for native inputs
-  buildInputs = with pkgs; [
+ buildInputs = (with pkgs; [
     aws-s3-cpp
     brotli
     bzip2
@@ -88,7 +88,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     openssl
     sqlite
     xz
-  ] ++ (with depot.third_party; [
+  ]) ++ (with depot.third_party; [
     abseil_cpp
     glog
     grpc
@@ -187,9 +187,6 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
 
   # TODO(tazjin): integration test setup?
   # TODO(tazjin): docs generation?
-
-  # TODO(tazjin): Sort out after CL/2910 lands
-  meta.ci = false;
 
   passthru = {
     build-shell = self.overrideAttrs (up: rec {
