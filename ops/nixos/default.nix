@@ -10,7 +10,7 @@
 
 let
   inherit (lib) findFirst isAttrs;
-  nixos = import "${depot.third_party.nixpkgsSrc}/nixos";
+  nixos = import "${pkgs.path}/nixos";
 in rec {
   whitby = import ./whitby/default.nix args;
 

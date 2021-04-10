@@ -54,7 +54,7 @@ with lib;
     gdb
     lldb
     hyperfine
-    config.lib.depot.third_party.clang-tools
+    clang-tools
 
     clj2nix
     clojure

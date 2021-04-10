@@ -2,12 +2,12 @@
 #
 # Only TODOs that match the form 'TODO($username)' are considered, and
 # only for users that are known to us.
-{ depot, lib, ... }:
+{ depot, lib, pkgs, ... }:
 
 with depot.nix.yants;
 
 let
-  inherit (depot.third_party)
+  inherit (pkgs)
     jq
     ripgrep
     runCommandNoCC
