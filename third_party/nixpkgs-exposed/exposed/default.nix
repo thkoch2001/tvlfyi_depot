@@ -91,6 +91,7 @@
     libffi
     linuxPackages
     linuxPackages_5_11
+    lr
     luajit
     lutris
     makeFontsConf
