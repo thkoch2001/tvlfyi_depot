@@ -5,14 +5,14 @@
 # elements for things such as blog posts and projects.
 #
 # Content for the blog is in //users/tazjin/blog instead of here.
-{ depot, lib, ... }@args:
+{ depot, lib, pkgs, ... }@args:
 
 with depot;
 with nix.yants;
 
 let
   inherit (builtins) readFile replaceStrings sort;
-  inherit (third_party) writeFile runCommandNoCC;
+  inherit (pkgs) writeFile runCommandNoCC;
 
   # The different types of entries on the homepage.
   entryClass = enum "entryClass" [ "blog" "project" "misc" ];
