@@ -1,9 +1,9 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "github.com/cenkalti/backoff/v4";
 
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "cenkalti";
     repo = "backoff";
     rev = "18fe4ce5a8550e0d0919b680ad3c080a5455bddf";

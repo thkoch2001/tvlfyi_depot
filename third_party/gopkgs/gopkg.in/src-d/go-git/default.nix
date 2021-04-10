@@ -1,11 +1,11 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   # .v4 is used throughout the codebase and I can't be bothered to do
   # anything else about it other than using that package path here.
   path = "gopkg.in/src-d/go-git.v4";
 
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "src-d";
     repo = "go-git";
     rev = "1a7db85bca7027d90afdb5ce711622aaac9feaed";

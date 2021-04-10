@@ -1,9 +1,9 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "github.com/sergi/go-diff";
 
-  src = depot.third_party.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "sergi";
     repo = "go-diff";
     rev = "58c5cb1602ee9676b5d3590d782bedde80706fcc";

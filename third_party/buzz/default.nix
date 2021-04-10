@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
-pkgs.naersk.buildPackage {
+depot.third_party.naersk.buildPackage {
   src = pkgs.fetchFromGitHub {
     owner = "jonhoo";
     repo = "buzz";
