@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7295db01_28ac219c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-10T12:18:12Z",
+      "side": 1,
+      "message": "can we directly move it into //third_party/overlays/haskell.nix where it is gonna be in the future?",
+      "revId": "affbc769a212f43c4bd555a92e340ff6eed8179d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
