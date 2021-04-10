@@ -19,11 +19,11 @@ let
     inherit depot;
 
     # Expose lib attribute to packages.
-    inherit (depot) lib;
+    inherit (depot.third_party.nixpkgs) lib;
 
     # Pass third_party as 'pkgs' (for compatibility with external
     # imports for certain subdirectories)
-    pkgs = depot.third_party;
+    pkgs = depot.third_party.nixpkgs;
   };
 
   readTree' = import ./nix/readTree {};
@@ -75,9 +75,6 @@ in fix(self: {
   __readTree = [];
   config = config self;
 
-  # Elevate 'lib' from nixpkgs
-  lib = import (self.third_party.nixpkgsSrc + "/lib");
-
   # Expose readTree for downstream repo consumers.
   readTree = {
     __functor = x: (readTree' x.config);
@@ -97,6 +94,9 @@ in fix(self: {
     # generate pipelines because that also leads to infinite
     # recursion.
     ops = self.ops // { pipelines = null; };
+
+    # remove nixpkgs from the set, for obvious reasons.
+    third_party = self.third_party // { nixpkgs = null; };
   });
 }
 

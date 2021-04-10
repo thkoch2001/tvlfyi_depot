@@ -2,7 +2,7 @@
 # files in this repository.
 #
 # All blog posts are rendered from Markdown by cheddar.
-{ depot, lib, ... }@args:
+{ depot, lib, pkgs, ... }@args:
 
 with depot.nix.yants;
 
@@ -36,7 +36,7 @@ let
   posts = list post (import ./posts.nix);
   fragments = import ./fragments.nix args;
 
-  rendered = depot.third_party.runCommandNoCC "tazjins-blog" {} ''
+  rendered = pkgs.runCommandNoCC "tazjins-blog" {} ''
     mkdir -p $out
 
     ${lib.concatStringsSep "\n" (map (post:
