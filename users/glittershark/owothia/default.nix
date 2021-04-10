@@ -2,5 +2,11 @@
 , pkgs ? depot.third_party.nixpkgs
 , ... }:
 
-pkgs.haskellPackages.callCabal2nix "owothia"
-  (depot.third_party.gitignoreSource ./.) { }
+let
+  basePkg = pkgs.haskellPackages.callPackage ./pkg.nix { };
+in
+
+pkgs.haskell.lib.overrideSrc basePkg {
+  src = depot.third_party.gitignoreSource ./.;
+  version = "canon";
+}
