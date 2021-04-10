@@ -2,7 +2,7 @@
 
 config: let
   inherit (depot.third_party) lieer;
-  nixpkgs = import depot.third_party.nixpkgsSrc {
+  nixpkgs = import pkgs.path {
     config.allowUnfree = true;
   };
 
@@ -70,7 +70,7 @@ in depot.lib.fix(self: {
     maxJobs = 48;
     nixPath = [
       "depot=/depot"
-      "nixpkgs=${depot.third_party.nixpkgsSrc}"
+      "nixpkgs=${pkgs.path}"
     ];
 
     binaryCaches = ["ssh://nix-ssh@whitby.tvl.fyi"];
