@@ -5,11 +5,24 @@ self: super: with pkgs.haskell.lib; rec {
     super.generic-arbitrary
     [ ./patches/generic-arbitrary-export-garbitrary.patch ];
 
-  random = dontCheck (self.callHackageDirect {
-    pkg = "random";
-    ver = "1.2.0";
-    sha256 = "06s3mmqbsfwv09j2s45qnd66nrxfp9280gnl9ng8yh128pfr7bjh";
-  } {});
+  # random = super.random_1_2_0 causes infinite recursion
+  # for some reason, to investigate if it is avoidable.
+  random = overrideCabal super.random (random_1_1: {
+    # change sources to 1.2.0
+    src = pkgs.fetchurl {
+      url = "https://hackage.haskell.org/package/random-1.2.0/random-1.2.0.tar.gz";
+      sha256 = "1pmr7zbbqg58kihhhwj8figf5jdchhi7ik2apsyxbgsqq3vrqlg4";
+    };
+    version = "1.2.0";
+    # don't fetch updated cabal file, jailbreak instead
+    editedCabalFile = null;
+    jailbreak = true;
+    # get rid of test deps, add new dependency splitmix
+    doCheck = false;
+    libraryHaskellDepends = [
+      self.splitmix
+    ] ++ random_1_1.libraryHaskellDepends;
+  });
 
   # random <1.2
   test-framework = doJailbreak super.test-framework;
