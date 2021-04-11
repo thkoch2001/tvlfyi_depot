@@ -16,6 +16,24 @@
       "message": "rip",
       "revId": "36eb7db0bf7e36fe10240df912a2c6d9e64e7b4f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abebbd1c_f04a7c8b",
+        "filename": "users/tazjin/nixos/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-11T21:25:55Z",
+      "side": 1,
+      "message": "lol, updated",
+      "parentUuid": "d7b0c817_0761023e",
+      "revId": "36eb7db0bf7e36fe10240df912a2c6d9e64e7b4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
