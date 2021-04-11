@@ -10,7 +10,7 @@
   tverskoy
 ]) ++
 
-(with depot.users.glittershark.system.system; [
+(with depot.users.grfn.system.system; [
   chupacabra
   yeren
 ])
