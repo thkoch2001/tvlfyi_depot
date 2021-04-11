@@ -1,6 +1,6 @@
 { depot, ... }:
 
-(with depot.ops.nixos; [
+(with depot.ops.machines; [
   whitby
 ]) ++
 
