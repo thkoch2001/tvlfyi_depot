@@ -9,7 +9,7 @@
 let
   inherit (builtins) concatStringsSep foldl' map toJSON;
   inherit (lib) singleton;
-  inherit (pkgs) writeText;
+  inherit (pkgs) symlinkJoin writeText;
 
   # Create an expression that builds the target at the specified
   # location.
@@ -47,6 +47,12 @@ let
     label = ":water_buffalo:";
   };
 
+  # Derivation that creates a gcroot for all depot targets.
+  depotGcRoot = symlinkJoin {
+    name = "depot-gc-root";
+    paths = depot.ci.targets;
+  };
+
   # This defines the build pipeline, using the pipeline format
   # documented on https://buildkite.com/docs/pipelines/defining-steps
   #
@@ -80,6 +86,23 @@ let
       ({
         command = "exit $(buildkite-agent meta-data get 'failure')";
         label = ":duck:";
+      })
+
+      # After duck, on success, create a gcroot if the build branch is
+      # canon.
+      #
+      # We care that this anchors *most* of the depot, in practice
+      # it's unimportant if there is a build race and we get +-1 of
+      # the targets.
+      ({
+        command = "nix-store --add-root /nix/var/nix/gcroots/depot-canon"
+          + " --realise ${depotGcRoot.drvPath}";
+        label = ":anchor:";
+        # "if" = ''build.branch == "canon"'';
+        depends_on = {
+          step = ":duck:";
+          allow_failure = false;
+        };
       })
     ];
 in (writeText "depot.yaml" (toJSON pipeline))
