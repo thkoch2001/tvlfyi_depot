@@ -95,7 +95,7 @@ let
       ({
         command = "nix-instantiate -A ci.gcroot --add-root /nix/var/nix/gcroots/depot/canon";
         label = ":anchor:";
-        "if" = ''build.branch == "canon"'';
+        "if" = ''build.branch == "refs/heads/canon"'';
         depends_on = [{
           step = ":duck:";
           allow_failure = false;
