@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f4bcb95_677b6f1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-11T16:40:03Z",
+      "side": 1,
+      "message": "The last patchset introduces a branch filter to canon only, so the last patchset log will not include this step.\n\nYou can look at https://buildkite.com/tvl/depot/builds/6448#5b8c31e0-9269-4216-9335-1f0a7cf91e64 for a successful run.\n\nNote that this currently requires the `/nix/var/nix/gcroots/depot` folder to be set up manually (permissions wise), we might fix that with systemd-tmpfiles or something later.",
+      "revId": "9074bab13f1a3dcbbace0e1210f8c0c32cb6142a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
