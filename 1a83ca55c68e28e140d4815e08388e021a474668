@@ -16,6 +16,24 @@
       "message": "This ensures files created by the buildkite agents are always owned by the same group, without having to manually chgrp afterwards.",
       "revId": "1a83ca55c68e28e140d4815e08388e021a474668",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "613706de_10d3879a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-11T16:01:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59f34cb1_72c0672f",
+      "revId": "1a83ca55c68e28e140d4815e08388e021a474668",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
