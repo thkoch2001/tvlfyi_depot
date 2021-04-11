@@ -9,7 +9,7 @@
 let
   inherit (builtins) concatStringsSep foldl' map toJSON;
   inherit (lib) singleton;
-  inherit (pkgs) writeText;
+  inherit (pkgs) symlinkJoin writeText;
 
   # Create an expression that builds the target at the specified
   # location.
@@ -80,6 +80,28 @@ let
       ({
         command = "exit $(buildkite-agent meta-data get 'failure')";
         label = ":duck:";
+      })
+
+      # After duck, on success, create a gcroot if the build branch is
+      # canon.
+      #
+      # We care that this anchors *most* of the depot, in practice
+      # it's unimportant if there is a build race and we get +-1 of
+      # the targets.
+      #
+      # Unfortunately this requires a third evaluation of the graph,
+      # but since it happens after :duck: it should not affect the
+      # timing of status reporting back to Gerrit.
+      ({
+        # --add-root /nix/var/nix/gcroots/depot-canon \
+        command = "nix-instantiate -A ci.gcroot";
+        label = ":anchor:";
+        # "if" = ''build.branch == "canon"'';
+        depends_on = ":duck:";
+        # lib.singleton {
+        #   step = ":duck:";
+        #   allow_failure = false;
+        # };
       })
     ];
 in (writeText "depot.yaml" (toJSON pipeline))
