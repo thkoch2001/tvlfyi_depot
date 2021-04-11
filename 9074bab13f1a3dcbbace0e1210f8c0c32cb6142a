@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad869194_0e23a86f",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 26
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-11T19:58:02Z",
+      "side": 1,
+      "message": "I prefer this form, but it is a weak attachment - so done.",
+      "parentUuid": "d1668e09_0ca4eeed",
+      "revId": "9074bab13f1a3dcbbace0e1210f8c0c32cb6142a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2b4fd72_ac49ffbb",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-04-11T19:52:16Z",
       "side": 1,
       "message": "I think this is the default",
+      "revId": "9074bab13f1a3dcbbace0e1210f8c0c32cb6142a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4c8903b_430cb596",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 26
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-11T19:58:02Z",
+      "side": 1,
+      "message": "Yes, but it makes it more obvious what is going on - it\u0027s not so much here to influence functionality, but readability.",
+      "parentUuid": "e2b4fd72_ac49ffbb",
       "revId": "9074bab13f1a3dcbbace0e1210f8c0c32cb6142a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
