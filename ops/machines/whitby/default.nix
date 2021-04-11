@@ -1,30 +1,31 @@
-{ depot, lib, pkgs, ... }:
+{ depot, lib, pkgs, ... }: # readTree options
+config: # passed by module system
 
 let
   inherit (builtins) listToAttrs;
   inherit (lib) range;
 in lib.fix(self: {
   imports = [
-    "${depot.depotPath}/ops/nixos/clbot.nix"
-    "${depot.depotPath}/ops/nixos/irccat.nix"
-    "${depot.depotPath}/ops/nixos/monorepo-gerrit.nix"
-    "${depot.depotPath}/ops/nixos/panettone.nix"
-    "${depot.depotPath}/ops/nixos/paroxysm.nix"
-    "${depot.depotPath}/ops/nixos/smtprelay.nix"
-    "${depot.depotPath}/ops/nixos/sourcegraph.nix"
-    "${depot.depotPath}/ops/nixos/tvl-buildkite.nix"
-    "${depot.depotPath}/ops/nixos/tvl-slapd/default.nix"
-    "${depot.depotPath}/ops/nixos/tvl-sso/default.nix"
-    "${depot.depotPath}/ops/nixos/www/b.tvl.fyi.nix"
-    "${depot.depotPath}/ops/nixos/www/cache.tvl.su.nix"
-    "${depot.depotPath}/ops/nixos/www/cl.tvl.fyi.nix"
-    "${depot.depotPath}/ops/nixos/www/code.tvl.fyi.nix"
-    "${depot.depotPath}/ops/nixos/www/cs.tvl.fyi.nix"
-    "${depot.depotPath}/ops/nixos/www/login.tvl.fyi.nix"
-    "${depot.depotPath}/ops/nixos/www/tazj.in.nix"
-    "${depot.depotPath}/ops/nixos/www/todo.tvl.fyi.nix"
-    "${depot.depotPath}/ops/nixos/www/tvl.fyi.nix"
-    "${depot.depotPath}/ops/nixos/www/wigglydonke.rs.nix"
+    "${depot.depotPath}/ops/modules/clbot.nix"
+    "${depot.depotPath}/ops/modules/irccat.nix"
+    "${depot.depotPath}/ops/modules/monorepo-gerrit.nix"
+    "${depot.depotPath}/ops/modules/panettone.nix"
+    "${depot.depotPath}/ops/modules/paroxysm.nix"
+    "${depot.depotPath}/ops/modules/smtprelay.nix"
+    "${depot.depotPath}/ops/modules/sourcegraph.nix"
+    "${depot.depotPath}/ops/modules/tvl-buildkite.nix"
+    "${depot.depotPath}/ops/modules/tvl-slapd/default.nix"
+    "${depot.depotPath}/ops/modules/tvl-sso/default.nix"
+    "${depot.depotPath}/ops/modules/www/b.tvl.fyi.nix"
+    "${depot.depotPath}/ops/modules/www/cache.tvl.su.nix"
+    "${depot.depotPath}/ops/modules/www/cl.tvl.fyi.nix"
+    "${depot.depotPath}/ops/modules/www/code.tvl.fyi.nix"
+    "${depot.depotPath}/ops/modules/www/cs.tvl.fyi.nix"
+    "${depot.depotPath}/ops/modules/www/login.tvl.fyi.nix"
+    "${depot.depotPath}/ops/modules/www/tazj.in.nix"
+    "${depot.depotPath}/ops/modules/www/todo.tvl.fyi.nix"
+    "${depot.depotPath}/ops/modules/www/tvl.fyi.nix"
+    "${depot.depotPath}/ops/modules/www/wigglydonke.rs.nix"
     "${pkgs.path}/nixos/modules/services/web-apps/gerrit.nix"
   ];
 

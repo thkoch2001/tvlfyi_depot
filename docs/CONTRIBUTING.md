@@ -60,7 +60,7 @@ And `scope` should refer to some kind of logical grouping inside of the project.
 
 It does not make sense to include the full path unless it aids in
 disambiguating. For example, when changing the configuration of the host
-`camden` at `//ops/nixos/camden` it is enough to write `feat(camden): ...`.
+`whitby` at `//ops/machines/whitby` it is enough to write `feat(whitby): ...`.
 
 Please take a look at the existing commit log for examples.
 
