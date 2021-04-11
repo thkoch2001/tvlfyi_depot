@@ -85,7 +85,7 @@ Some examples:
   generator which generates the web page and Atom feed for
   [tazj.in](https://tazj.in)
 * `//users/tazjin/finito`: A persistent finite-state machine library for Rust.
-* `//users/glittershark/xanthous`: A (WIP) TUI RPG, written in Haskell.
+* `//users/grfn/xanthous`: A (WIP) TUI RPG, written in Haskell.
 * `//users/tazjin/emacs`: tazjin's Emacs & EXWM configuration
 
 # Licensing
