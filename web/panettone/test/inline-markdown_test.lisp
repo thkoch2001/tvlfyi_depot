@@ -10,12 +10,12 @@
 
 (inline-markdown-unit-test
   inline-markdown-typical-test
-  "hello _world_, here is ~~no~~ `code`!"
+  "hello *world*, here is ~~no~~ `code`!"
   "hello <em>world</em>, here is <del>no</del> <code>code</code>!")
 
 (inline-markdown-unit-test
   inline-markdown-two-emphasize-types-test
-  "_stress_ *this*"
+  "*stress* *this*"
   "<em>stress</em> <em>this</em>")
 
 (inline-markdown-unit-test
@@ -30,8 +30,8 @@
 
 (inline-markdown-unit-test
   inline-markdown-escaping-test
-  "A backslash \\\\ shows: \\*, \\_, \\` and \\~~"
-  "A backslash \\ shows: *, _, ` and ~~")
+  "A backslash \\\\ shows: \\*, \\` and \\~~"
+  "A backslash \\ shows: *, ` and ~~")
 
 (inline-markdown-unit-test
   inline-markdown-nested-escaping-test
@@ -45,7 +45,7 @@
 
 (inline-markdown-unit-test
   inline-markdown-no-unclosed-tags-test
-  "A tag, once opened, _must be closed"
+  "A tag, once opened, *must be closed"
   "A tag, once opened, <em>must be closed</em>")
 
 (inline-markdown-unit-test
