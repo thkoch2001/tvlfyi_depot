@@ -5,13 +5,14 @@
 let src = pkgs.fetchFromGitHub {
   owner = "40ants";
   repo = "cl-prevalence";
-  rev = "da3ed6c4594b1c2fca90c178c1993973c4bf16c9";
-  sha256 = "0bq905hv1626dl6b7s0zn4lbdh608g1pxaljl1fda6pwp9hmj95a";
+  rev = "b1f90a525f37be0335a8761051fa5661aa74b696";
+  sha256 = "1svw58pp7jxb9l08cgnqxf0cf8qa9qsb0z2fnv86a51z7pfz4c0g";
 };
 in depot.nix.buildLisp.library {
   name = "cl-prevalence";
 
   deps = with depot.third_party.lisp; [
+    bordeaux-threads
     s-xml
     s-sysdeps
   ];
