@@ -16,6 +16,23 @@
       "message": "This works as intended, for example I have started bisecting cl/2901 with this as the check command:\n\n  nix-build --arg nixpkgsBisectPath $NIXPKGS_CHECKOUT -A users.glittershark.pkgs.fprintd $DEPOT_CHECKOUT\n\nDidn\u0027t get very far though because each iteration of this needs like 200GB of disk space as it bootstraps _everything_",
       "revId": "66a0ca768915a416322177e8fd246f7a5d2d19e9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aabbd0c6_b69be16e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-11T10:02:48Z",
+      "side": 1,
+      "message": "really like it. The question is if we want to overcompilcate it by namespacing stuff maybe?",
+      "revId": "66a0ca768915a416322177e8fd246f7a5d2d19e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
