@@ -36,9 +36,12 @@ in {
     # Set up a group for all Buildkite agent users
     users = {
       groups.buildkite-agents = {};
-      users = builtins.listToAttrs (map (n: {
+      users = builtins.listToAttrs (map (n: rec {
         name = "buildkite-agent-whitby-${toString n}";
-        value.extraGroups = [ "buildkite-agents" ];
+        value = {
+          group = lib.mkForce "buildkite-agents";
+          extraGroups = [ name ];
+        };
       }) agents);
     };
   };
