@@ -105,6 +105,12 @@ in fix(self: {
     # remove nixpkgs from the set, for obvious reasons.
     third_party = self.third_party // { nixpkgs = null; };
   });
+
+  # Derivation that gcroots all depot targets.
+  ci.gcroot = self.third_party.nixpkgs.symlinkJoin {
+    name = "depot-gcroot";
+    paths = self.ci.targets;
+  };
 }
 
 # Add local packages as structured by readTree
