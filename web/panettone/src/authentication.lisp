@@ -95,7 +95,7 @@ instance of `user'"
           (ldap-entry->user ldap-entry))))))
 
 (comment
- (find-user-by-dn "cn=glittershark,ou=users,dc=tvl,dc=fyi")
+ (find-user-by-dn "cn=grfn,ou=users,dc=tvl,dc=fyi")
  )
 
 (defun authenticate-user (user-or-username password)

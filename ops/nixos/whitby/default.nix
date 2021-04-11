@@ -53,7 +53,7 @@ in lib.fix(self: {
           authorizedKeys =
             depot.users.tazjin.keys.all
             ++ depot.users.lukegb.keys.all
-            ++ [ depot.users.glittershark.keys.whitby ];
+            ++ [ depot.users.grfn.keys.whitby ];
 
           hostKeys = [
             /etc/secrets/initrd_host_ed25519_key
@@ -171,7 +171,7 @@ in lib.fix(self: {
       keys = with depot.users;
         tazjin.keys.all
         ++ lukegb.keys.all
-        ++ [ glittershark.keys.whitby ]
+        ++ [ grfn.keys.whitby ]
         ++ sterni.keys.all
         ;
     };
@@ -381,7 +381,7 @@ in lib.fix(self: {
       isNormalUser = true;
       extraGroups = [ "git" "wheel" ];
       openssh.authorizedKeys.keys = [
-        depot.users.glittershark.keys.whitby
+        depot.users.grfn.keys.whitby
       ];
     };
 
