@@ -1,21 +1,8 @@
-# Most of the Nix expressions in this folder are NixOS modules, which
-# are not readTree compatible.
-#
-# Some things (such as system configurations) are, and we import them
-# here manually.
-#
-# TODO(tazjin): Find a more elegant solution for the whole module
-# situation.
+# Helper functions for instantiating depot-compatible NixOS machines.
 { depot, lib, pkgs, ... }@args:
 
 let inherit (lib) findFirst isAttrs;
 in rec {
-  whitby = import ./whitby/default.nix args;
-
-  # System installation
-
-  allSystems = import ./all-systems.nix args;
-
   # This provides our standard set of arguments to all NixOS modules.
   baseModule = { ... }: {
     _module.args = {
@@ -36,7 +23,7 @@ in rec {
     (findFirst
       (system: system.config.networking.hostName == hostname)
       (throw "${hostname} is not a known NixOS host")
-      (map nixosFor allSystems));
+      (map nixosFor depot.ops.machines.all-systems));
 
   rebuild-system = pkgs.writeShellScriptBin "rebuild-system" ''
     set -ue
@@ -53,9 +40,6 @@ in rec {
   '';
 
   # Systems that should be built in CI
-  #
-  # TODO(tazjin): Refactor the whole systems setup, it's a bit
-  # inconsistent at the moment.
-  whitbySystem = (nixosFor whitby).system;
+  whitbySystem = (nixosFor depot.ops.machines.whitby).system;
   meta.targets = [ "whitbySystem" ];
 }
