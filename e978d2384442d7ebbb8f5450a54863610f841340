@@ -16,6 +16,24 @@
       "message": "how do I generate this file?",
       "revId": "e978d2384442d7ebbb8f5450a54863610f841340",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11c476d0_c5cd41b1",
+        "filename": "users/glittershark/xanthous/pkg.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-11T20:10:51Z",
+      "side": 1,
+      "message": "cabal2nix ./. \u003e pkg.nix",
+      "parentUuid": "03530dd2_10c804f6",
+      "revId": "e978d2384442d7ebbb8f5450a54863610f841340",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
