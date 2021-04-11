@@ -1,5 +1,5 @@
 { depot, lib, pkgs, ... }: # readTree options
-config: # passed by module system
+{ config, ... }: # passed by module system
 
 let
   inherit (builtins) listToAttrs;
@@ -355,6 +355,29 @@ in lib.fix(self: {
     googleCloudProject = "tvl-fyi";
     logStream = "whitby";
     applicationCredentials = "/var/lib/journaldriver/key.json";
+  };
+
+  # Configure Prometheus & Grafana. Exporter configuration for
+  # Prometheus is inside the respective service modules.
+  services.prometheus = {
+    enable = true;
+    exporters.node = {
+      enable = true;
+
+      enabledCollectors = [
+        "logind"
+        "processes"
+        "systemd"
+      ];
+    };
+
+    scrapeConfigs = [{
+      job_name = "node";
+      scrape_interval = "5s";
+      static_configs = [{
+        targets = ["localhost:${toString config.services.prometheus.exporters.node.port}"];
+      }];
+    }];
   };
 
   security.sudo.extraRules = [
