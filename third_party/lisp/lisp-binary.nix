@@ -4,8 +4,8 @@
 let src = pkgs.fetchFromGitHub {
   owner = "j3pic";
   repo = "lisp-binary";
-  rev = "1aefc8618b7734f68697ddf59bc93cb8522aa0bf";
-  sha256 = "1hflzn3mjp32jz9fxx9wayp3c3x58s77cgjfbs06nrynqkv0c6df";
+  rev = "052df578900dea59bf951e0a6749281fa73432e4";
+  sha256 = "1i1s5g01aimfq6lndcl1pnw7ly5hdh0wmjp2dj9cjjwbkz9lnwcf";
 };
 in depot.nix.buildLisp.library {
   name = "lisp-binary";
