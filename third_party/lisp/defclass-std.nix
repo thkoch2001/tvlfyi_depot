@@ -1,10 +1,12 @@
+# A shortcut macro to write DEFCLASS forms quickly
+# Seems to be unmaintained (since early 2021)
 { depot, pkgs, ... }:
 
 let src = pkgs.fetchFromGitHub {
     owner = "EuAndreh";
     repo = "defclass-std";
-    rev = "0300f171c1308e5ff3efd66b4f4e766f2bcde259";
-    sha256 = "0ggzh80ajx4k6w5c3xprnd7m27q5hx9xx9lxs4jv0pbrlg18ijcw";
+    rev = "a4d32260a619eddf3a3e49df3af304f3c07ccec6";
+    sha256 = "1c0ymb49wd205lzxmnmsrpqyv0pn61snn2xvsbk5iis135r4fr18";
   };
 in depot.nix.buildLisp.library {
   name = "defclass-std";
