@@ -3,7 +3,6 @@
 
 (define-constant +inline-markup-types+
   '(("~~" :del)
-    ("_"  :em)
     ("*"  :em)
     ("`"  :code))
   :test #'equal)
