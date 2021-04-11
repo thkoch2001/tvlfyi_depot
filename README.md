@@ -42,7 +42,7 @@ Twitter][].
   [`//ops/pipelines`](https://cs.tvl.fyi/depot/-/tree/ops/pipelines).
 
 All services that we host are deployed on NixOS machines that we manage. Their
-configuration is tracked in `//ops/nixos`.
+configuration is tracked in `//ops/{modules,machines}`.
 
 ## Nix
 
