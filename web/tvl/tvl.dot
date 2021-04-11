@@ -11,7 +11,6 @@ digraph tvl {
     adisbladis [href="http://nixos.expert/"];
     andi [label="andi-" href="https://andreas.rammhold.de/"];
     anon1 [color="grey" fontcolor="grey"];
-    aranea;
     aurora [href="https://nonegenderleftfox.aventine.se/"];
     benjojo [href="https://benjojo.co.uk/"];
     camsbury [href="https://camsbury.com/"];
@@ -169,8 +168,6 @@ digraph tvl {
     qyliss -> nix;
     grfn -> nix;
     edef -> nix;
-    aranea -> nix;
-    aranea -> profpatsch;
     hyperfekt -> edef;
     camsbury -> urbint;
     spacekookie -> afra;
