@@ -413,7 +413,7 @@ explicitly subscribing to / unsubscribing from individual issues."
  (ddl/init)
  (make-instance 'issue :subject "test")
  (create-issue :subject "test"
-               :author-dn "cn=glittershark,ou=users,dc=tvl,dc=fyi")
+               :author-dn "cn=grfn,ou=users,dc=tvl,dc=fyi")
 
  (issue-commenter-dns 1)
  (issue-subscribers 1)
