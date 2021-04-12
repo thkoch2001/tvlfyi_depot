@@ -1,52 +1,20 @@
 # This file sets up the top-level package set by traversing the package tree
-# (see read-tree.nix for details) and constructing a matching attribute set
+# (see //nix/readTree for details) and constructing a matching attribute set
 # tree.
-#
-# This makes packages accessible via the Nixery instance that is configured to
-# use this repository as its nixpkgs source.
 
 { nixpkgsBisectPath ? null, ... }@args:
 
-with builtins;
-
 let
+  inherit (builtins)
+    attrValues
+    concatMap
+    filter
+    ;
+
   # This definition of fix is identical to <nixpkgs>.lib.fix, but the global
   # package set is not available here.
   fix = f: let x = f x; in x;
-
-  # Global configuration that all packages are called with.
-  config = depot: {
-    inherit depot;
-
-    # Expose lib attribute to packages.
-    inherit (depot.third_party.nixpkgs) lib;
-
-    # Pass third_party as 'pkgs' (for compatibility with external
-    # imports for certain subdirectories)
-    pkgs = depot.third_party.nixpkgs;
-
-    # Pass arguments passed to the entire depot through, for packages
-    # that would like to add functionality based on this.
-    #
-    # Note that it is intended for exceptional circumstance, such as
-    # debugging by bisecting nixpkgs.
-    externalArgs = args;
-  };
-
   readTree' = import ./nix/readTree {};
-
-  localPkgs = readTree: {
-    fun           = readTree ./fun;
-    lisp          = readTree ./lisp;
-    net           = readTree ./net;
-    nix           = readTree ./nix;
-    ops           = readTree ./ops;
-    third_party   = readTree ./third_party;
-    tools         = readTree ./tools;
-    tvix          = readTree ./tvix;
-    users         = readTree ./users;
-    web           = readTree ./web;
-  };
 
   # To determine build targets, we walk through the depot tree and
   # fetch attributes that were imported by readTree and are buildable.
@@ -78,25 +46,33 @@ let
            })
            (node.meta.targets or []))
     else [];
-in fix(self: {
-  __readTree = [];
-  config = config self;
 
-  # Expose readTree for downstream repo consumers.
-  readTree = {
-    __functor = x: (readTree' x.config);
-    config = self.config;
-  };
+in fix(self: (readTree' {
+  depot = self;
+
+  # Pass third_party as 'pkgs' (for compatibility with external
+  # imports for certain subdirectories)
+  pkgs = self.third_party.nixpkgs;
+
+  # Expose lib attribute to packages.
+  lib = self.config.pkgs.lib;
+
+  # Pass arguments passed to the entire depot through, for packages
+  # that would like to add functionality based on this.
+  #
+  # Note that it is intended for exceptional circumstance, such as
+  # debugging by bisecting nixpkgs.
+  externalArgs = args;
 
   # Make the path to the depot available for things that might need it
   # (e.g. NixOS module inclusions)
   depotPath = ./.;
-
+} ./.) // {
   # List of all buildable targets, for CI purposes.
   #
   # Note: To prevent infinite recursion, this *must* be a nested
   # attribute set (which does not have a __readTree attribute).
-  ci.targets = gather (self // {
+  ci.targets = gather (self.depot // {
     # remove the pipelines themselves from the set over which to
     # generate pipelines because that also leads to infinite
     # recursion.
@@ -111,8 +87,4 @@ in fix(self: {
     name = "depot-gcroot";
     paths = self.ci.targets;
   };
-}
-
-# Add local packages as structured by readTree
-// (localPkgs (readTree' self.config))
-)
+})
