@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "832a8676_9362f06a",
+        "filename": "default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-12T20:45:27Z",
+      "side": 1,
+      "message": "note that this change was introduced in cl/2925.",
+      "parentUuid": "1e3c581f_f591da15",
+      "range": {
+        "startLine": 70,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 14
+      },
+      "revId": "5951b8f32a7daccd2fc1adeeae002bf8945cdf21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b890de55_b3f709b2",
         "filename": "nix/readTree/default.nix",
         "patchSetId": 8
