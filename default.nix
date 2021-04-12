@@ -47,12 +47,7 @@ let
            (node.meta.targets or []))
     else [];
 
-  # Make the path to the depot available for things that might need it
-  # (e.g. NixOS module inclusions)
-  depotPath = ./.;
 in fix(self: (readTree' {
-  # TODO(tazjin): Settle on one way of using depotPath
-  inherit depotPath;
   depot = self;
 
   # Pass third_party as 'pkgs' (for compatibility with external
@@ -69,7 +64,9 @@ in fix(self: (readTree' {
   # debugging by bisecting nixpkgs.
   externalArgs = args;
 } ./.) // {
-  inherit depotPath;
+  # Make the path to the depot available for things that might need it
+  # (e.g. NixOS module inclusions)
+  path = ./.;
 
   # List of all buildable targets, for CI purposes.
   #

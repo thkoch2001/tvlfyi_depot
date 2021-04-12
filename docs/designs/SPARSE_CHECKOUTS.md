@@ -9,7 +9,7 @@ Open items:
    the closure of a given source directory, using [depot-scan].
 
 ```bash
-DEPOT_ROOT="${depot.depotPath}"
+DEPOT_ROOT="${depot.path}"
 XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 CLIENT_ROOT="$XDG_DATA_HOME/tvlc/clients"
 NICE_CHECKOUT_ROOT="$HOME/tvlc"

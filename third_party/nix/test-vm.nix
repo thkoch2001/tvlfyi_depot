@@ -11,7 +11,7 @@ let
     virtualisation.qemu.options = [ "-nographic" "-curses" ];
 
     nix.nixPath = [
-      "depot=${depot.depotPath}"
+      "depot=${depot.path}"
     ];
   };
 
