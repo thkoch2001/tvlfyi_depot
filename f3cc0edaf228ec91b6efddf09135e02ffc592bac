@@ -22,6 +22,30 @@
       },
       "revId": "f3cc0edaf228ec91b6efddf09135e02ffc592bac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3419c23f_e88ca031",
+        "filename": "ops/modules/www/status.tvl.su.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T17:40:09Z",
+      "side": 1,
+      "message": "Or, more precisely, I think you mean \"status.tvl.su\" here.",
+      "parentUuid": "0aa43c27_5f72caba",
+      "range": {
+        "startLine": 12,
+        "startChar": 40,
+        "endLine": 12,
+        "endChar": 54
+      },
+      "revId": "f3cc0edaf228ec91b6efddf09135e02ffc592bac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
