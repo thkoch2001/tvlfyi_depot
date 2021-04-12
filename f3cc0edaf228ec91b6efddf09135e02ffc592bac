@@ -46,6 +46,30 @@
       },
       "revId": "f3cc0edaf228ec91b6efddf09135e02ffc592bac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb7ddcac_d816715e",
+        "filename": "ops/modules/www/status.tvl.su.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-12T21:51:17Z",
+      "side": 1,
+      "message": "I heard these days people will solve the halting problem for 50$ on fiverr.com.\n\nAnyways, done.",
+      "parentUuid": "3419c23f_e88ca031",
+      "range": {
+        "startLine": 12,
+        "startChar": 40,
+        "endLine": 12,
+        "endChar": 54
+      },
+      "revId": "f3cc0edaf228ec91b6efddf09135e02ffc592bac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

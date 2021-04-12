@@ -16,6 +16,24 @@
       "message": "we likely want to do https://grafana.com/docs/grafana/latest/auth/ldap/ as well",
       "revId": "f2b07de3d845939074973345ee6fcc8b0f49491f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39b25cba_55ec9ca6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-12T21:51:17Z",
+      "side": 1,
+      "message": "Rather OIDC (to CAS)! Lets get it up and running first and then figure out the rest.",
+      "parentUuid": "def3da69_ad9398b8",
+      "revId": "f2b07de3d845939074973345ee6fcc8b0f49491f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
