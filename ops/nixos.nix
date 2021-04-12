@@ -33,7 +33,7 @@ in rec {
     fi
 
     echo "Rebuilding NixOS for $HOSTNAME"
-    system=$(nix-build -E "((import ${toString depot.depotPath} {}).ops.nixos.findSystem \"$HOSTNAME\").system" --no-out-link --show-trace)
+    system=$(nix-build -E "((import ${toString depot.path} {}).ops.nixos.findSystem \"$HOSTNAME\").system" --no-out-link --show-trace)
 
     nix-env -p /nix/var/nix/profiles/system --set $system
     $system/bin/switch-to-configuration switch

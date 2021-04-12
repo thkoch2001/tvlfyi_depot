@@ -35,7 +35,7 @@ let
   };
 
   allTodos = fromJSON (readFile (runCommandNoCC "depot-todos.json" {} ''
-    ${ripgrep}/bin/rg --json 'TODO\(\w+\):.*$' ${depot.depotPath} | \
+    ${ripgrep}/bin/rg --json 'TODO\(\w+\):.*$' ${depot.path} | \
       ${jq}/bin/jq -s -f ${./extract-todos.jq} > $out
   ''));
 

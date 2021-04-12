@@ -3,7 +3,6 @@ args@{
 , pkgs ? depot.third_party.nixpkgs
 , lib
 , buildType ? "release"
-, depotPath ? ../..
 , ...
 }:
 
@@ -198,7 +197,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
       installCheckInputs = up.installCheckInputs ++ [run_clang_tidy];
 
       shellHook = ''
-        export NIX_DATA_DIR="${toString depotPath}/third_party"
+        export NIX_DATA_DIR="${toString depot.path}/third_party"
         export NIX_TEST_VAR=foo
       '';
     });
