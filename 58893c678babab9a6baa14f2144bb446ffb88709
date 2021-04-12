@@ -138,6 +138,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3bf765d4_b9fb1004",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-12T23:53:40Z",
+      "side": 1,
+      "message": "there is! the grafana \"provision\" key in the gerrit nixos module supports embedding entire dashboards.",
+      "parentUuid": "6bf449a9_4e824df2",
+      "range": {
+        "startLine": 398,
+        "startChar": 106,
+        "endLine": 398,
+        "endChar": 112
+      },
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ffb88dc9_e78f33c4",
         "filename": "ops/machines/whitby/default.nix",
         "patchSetId": 1
