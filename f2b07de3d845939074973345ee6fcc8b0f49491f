@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "def3da69_ad9398b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-12T18:54:54Z",
+      "side": 1,
+      "message": "we likely want to do https://grafana.com/docs/grafana/latest/auth/ldap/ as well",
+      "revId": "f2b07de3d845939074973345ee6fcc8b0f49491f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
