@@ -92,7 +92,7 @@ with lib;
     delta = {
       enable = true;
       options = {
-        theme = "Solarized (light)";
+        syntax-theme = "Solarized (light)";
         hunk-style = "plain";
         commit-style = "box";
       };
