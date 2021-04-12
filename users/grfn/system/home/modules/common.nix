@@ -54,6 +54,12 @@
       ssh mugwump sudo nix-env -p /nix/var/nix/profiles/system --set $system
       ssh mugwump sudo $system/bin/switch-to-configuration switch
     '')
+    (writeShellScriptBin "rebuild-home" ''
+      set -eo pipefail
+      cd ~/code/depot
+      nix build -f . users.grfn.system.home.$(hostname)Home -o /tmp/home
+      /tmp/home/activate
+    '')
   ];
 
   programs.ssh = {
