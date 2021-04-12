@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e3c581f_f591da15",
+        "filename": "default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-12T20:44:26Z",
+      "side": 1,
+      "message": "toplevelArgs, perhaps? I\u0027m not sure the word \"external\" would be super obvious to me out of context",
+      "range": {
+        "startLine": 70,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 14
+      },
+      "revId": "5951b8f32a7daccd2fc1adeeae002bf8945cdf21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b890de55_b3f709b2",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-12T20:44:26Z",
+      "side": 1,
+      "message": "I wonder if at this point it\u0027d be cleaner to just make the entire function take an attribute set",
+      "range": {
+        "startLine": 87,
+        "startChar": 44,
+        "endLine": 87,
+        "endChar": 62
+      },
+      "revId": "5951b8f32a7daccd2fc1adeeae002bf8945cdf21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
