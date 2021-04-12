@@ -8,7 +8,7 @@
 
 let
   inherit (builtins) map elemAt match filter;
-  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl;
+  inherit (pkgs) lib runCommandNoCC buildPackages writeText writeShellScriptBin sbcl;
 
   #
   # Internal helper definitions
@@ -212,7 +212,7 @@ let
         }
         else null;
     in lib.fix (self: runCommandNoCC "${name}" {
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ buildPackages.makeWrapper ];
       LD_LIBRARY_PATH = libPath;
       LANG = "C.UTF-8";
     } ''
