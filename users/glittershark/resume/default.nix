@@ -3,30 +3,32 @@
 with pkgs.lib;
 
 pkgs.runCommandNoCC "resume.pdf" {
-  buildInputs = [(pkgs.texlive.combine {
-    inherit (pkgs.texlive)
-      capt-of
-      collection-fontsrecommended
-      enumitem
-      etoolbox
-      fancyvrb
-      float
-      fncychap
-      framed
-      l3packages
-      microtype
-      needspace
-      parskip
-      scheme-basic
-      tabulary
-      titlesec
-      ulem
-      upquote
-      varwidth
-      wrapfig
-      xcolor
-      ;
-  })];
+  buildInputs = with pkgs.buildPackages; [
+    (texlive.combine {
+      inherit (texlive)
+        capt-of
+        collection-fontsrecommended
+        enumitem
+        etoolbox
+        fancyvrb
+        float
+        fncychap
+        framed
+        l3packages
+        microtype
+        needspace
+        parskip
+        scheme-basic
+        tabulary
+        titlesec
+        ulem
+        upquote
+        varwidth
+        wrapfig
+        xcolor
+        ;
+      })
+    ];
 } ''
   cp ${builtins.filterSource (path: type:
     type == "regular" &&

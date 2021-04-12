@@ -3,7 +3,8 @@ let
   runExecline = import ./runExecline.nix {
     inherit (pkgs) stdenv;
     inherit (depot.nix) escapeExecline getBins;
-    inherit pkgs lib;
+    inherit lib;
+    pkgs = pkgs.buildPackages;
   };
 
   runExeclineLocal = name: args: execline:
@@ -19,8 +20,9 @@ let
   tests = import ./tests.nix {
     inherit runExecline runExeclineLocal;
     inherit (depot.nix) getBins writeScript;
-    inherit (pkgs) stdenv coreutils;
-    inherit pkgs;
+    inherit (pkgs) stdenv;
+    inherit (pkgs.buildPackages) coreutils;
+    pkgs = pkgs.buildPackages;
   };
 
 in {
