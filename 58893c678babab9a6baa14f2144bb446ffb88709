@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36046147_202d516c",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:34:41Z",
+      "side": 1,
+      "message": "Do we want to make everyone with TVL accounts Admin, or Editor, or something else?",
+      "range": {
+        "startLine": 398,
+        "startChar": 106,
+        "endLine": 398,
+        "endChar": 112
+      },
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaafb773_a7d94388",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:34:41Z",
+      "side": 1,
+      "message": "This also enables anonymous access so you can view everything without being logged in.",
+      "range": {
+        "startLine": 407,
+        "startChar": 10,
+        "endLine": 407,
+        "endChar": 20
+      },
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
