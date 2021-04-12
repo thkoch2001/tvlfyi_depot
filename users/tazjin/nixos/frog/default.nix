@@ -16,7 +16,7 @@ config: let
   };
 in lib.fix(self: {
   imports = [
-    "${depot.depotPath}/ops/modules/v4l2loopback.nix"
+    "${depot.path}/ops/modules/v4l2loopback.nix"
   ];
 
   boot = {

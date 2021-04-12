@@ -25,8 +25,8 @@ in lib.fix(self: {
       sha256 = "157c64220lf825ll4c0cxsdwg7cxqdx4z559fdp7kpz0g6p8fhhr";
     };
     in [
-      "${depot.depotPath}/ops/modules/quassel.nix"
-      "${depot.depotPath}/ops/modules/smtprelay.nix"
+      "${depot.path}/ops/modules/quassel.nix"
+      "${depot.path}/ops/modules/smtprelay.nix"
       "${oldChannel}/nixos/modules/security/acme.nix"
     ];
 
