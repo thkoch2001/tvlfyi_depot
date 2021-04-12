@@ -50,6 +50,7 @@ with lib;
     tokei
     jsonnet
     ngrok
+    amber
 
     gdb
     lldb
