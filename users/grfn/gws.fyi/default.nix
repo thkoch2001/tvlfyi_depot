@@ -22,9 +22,6 @@ let
 
 in (writeShellScript "deploy.sh" ''
   ${awscli}/bin/aws --profile personal s3 sync ${website}/ ${bucket}
-  ${awscli}/bin/aws --profile personal cloudfront create-invalidation \
-    --distribution-id "${distributionID}" \
-    --paths "/*"
   echo "Deployed to http://gws.fyi"
 '') // {
   inherit website;
