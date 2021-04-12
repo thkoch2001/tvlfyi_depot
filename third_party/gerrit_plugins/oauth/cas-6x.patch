@@ -20,22 +20,50 @@ index 450549f..27310cd 100644
    }
  }
 diff --git a/src/main/java/com/googlesource/gerrit/plugins/oauth/CasOAuthService.java b/src/main/java/com/googlesource/gerrit/plugins/oauth/CasOAuthService.java
-index 5f3e4a1..5594b26 100644
+index 5f3e4a1..fc5bc50 100644
 --- a/src/main/java/com/googlesource/gerrit/plugins/oauth/CasOAuthService.java
 +++ b/src/main/java/com/googlesource/gerrit/plugins/oauth/CasOAuthService.java
-@@ -135,6 +135,15 @@ class CasOAuthService implements OAuthServiceProvider {
-           property = getStringElement(obj, "login");
-           if (property != null) login = property;
-         }
-+      } else if (attrListJson.isJsonObject()) {
-+        JsonObject obj = attrListJson.getAsJsonObject();
-+
-+        String property = getStringElement(obj, "mail");
-+        if (property != null) email = property;
-+        property = getStringElement(obj, "displayName");
-+        if (property != null) name = property;
-+        property = getStringElement(obj, "uid");
-+        if (property != null) login = property;
+@@ -106,36 +106,14 @@ class CasOAuthService implements OAuthServiceProvider {
+         throw new IOException(String.format("CAS response missing id: %s", response.getBody()));
        }
  
+-      JsonElement attrListJson = jsonObject.get("attributes");
+-      if (attrListJson == null) {
+-        throw new IOException(
+-            String.format("CAS response missing attributes: %s", response.getBody()));
+-      }
+-
+       String email = null, name = null, login = null;
+-      if (attrListJson.isJsonArray()) {
+-        // It is possible for CAS to be configured to not return any attributes (email, name,
+-        // login),
+-        // in which case,
+-        // CAS returns an empty JSON object "attributes":{}, rather than "null" or an empty JSON
+-        // array
+-        // "attributes": []
+-
+-        JsonArray attrJson = attrListJson.getAsJsonArray();
+-        for (JsonElement elem : attrJson) {
+-          if (elem == null || !elem.isJsonObject()) {
+-            throw new IOException(String.format("Invalid JSON '%s': not a JSON Object", elem));
+-          }
+-          JsonObject obj = elem.getAsJsonObject();
+-
+-          String property = getStringElement(obj, "email");
+-          if (property != null) email = property;
+-          property = getStringElement(obj, "name");
+-          if (property != null) name = property;
+-          property = getStringElement(obj, "login");
+-          if (property != null) login = property;
+-        }
+-      }
++
++      String property = getStringElement(jsonObject, "mail");
++      if (property != null) email = property;
++      property = getStringElement(jsonObject, "displayName");
++      if (property != null) name = property;
++      property = getStringElement(jsonObject, "uid");
++      if (property != null) login = property;
+ 
        return new OAuthUserInfo(
+           CAS_PROVIDER_PREFIX + id.getAsString(),
