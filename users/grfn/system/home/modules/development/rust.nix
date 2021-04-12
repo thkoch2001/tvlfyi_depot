@@ -7,6 +7,7 @@
     rust-analyzer
     cargo-edit
     cargo-expand
+    cargo-flamegraph
     sccache
   ];
 
