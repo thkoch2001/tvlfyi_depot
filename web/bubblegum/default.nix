@@ -207,7 +207,7 @@ let
       ] ++ [
         "${bins.nint}"
         # always pass depot so scripts can use this library
-        "--arg depot '(import ${depot.depotPath} {})'"
+        "--arg depot '(import ${depot.path} {})'"
       ]);
     in runExecline.local drvName {} [
       "importas" "out" "out"
