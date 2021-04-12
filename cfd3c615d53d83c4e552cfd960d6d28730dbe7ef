@@ -22,6 +22,30 @@
       },
       "revId": "cfd3c615d53d83c4e552cfd960d6d28730dbe7ef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53cb9e8d_8274e640",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-12T17:24:37Z",
+      "side": 1,
+      "message": "The comment includes the stuff added in the next CL, I felt like rewriting it was not useful in between :p",
+      "parentUuid": "2e5d5f50_d58238cc",
+      "range": {
+        "startLine": 360,
+        "startChar": 27,
+        "endLine": 360,
+        "endChar": 34
+      },
+      "revId": "cfd3c615d53d83c4e552cfd960d6d28730dbe7ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
