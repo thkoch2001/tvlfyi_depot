@@ -65,6 +65,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cce81759_d2ee477b",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:53:52Z",
+      "side": 1,
+      "message": "Yeah, it has to match the value in the CAS services config. There\u0027s no real reason for putting a unique string here but I do it just because then it\u0027s super easy to grep for.\n\nIf you\u0027re curious as to what the CAS service config looks like, there\u0027s one in /etc/cas/services/grafana-6.json.",
+      "parentUuid": "57c6e258_fffaed62",
+      "range": {
+        "startLine": 395,
+        "startChar": 43,
+        "endLine": 395,
+        "endChar": 53
+      },
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36046147_202d516c",
@@ -160,6 +184,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06e9d5d8_1c6e21b9",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:53:52Z",
+      "side": 1,
+      "message": "It\u0027s not easy _yet_.\n\nFiled https://b.tvl.fyi/issues/120 to follow up, I\u0027ll leave this as-is for the moment.",
+      "parentUuid": "4905f23a_f8e9c662",
+      "range": {
+        "startLine": 398,
+        "startChar": 106,
+        "endLine": 398,
+        "endChar": 112
+      },
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffb88dc9_e78f33c4",
@@ -177,6 +225,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe57249c_bbd9608f",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:53:52Z",
+      "side": 1,
+      "message": "Probably not: I\u0027m kinda avoiding using DNs in places and preferring to use usernames instead.\n\nThey can\u0027t conflict, anyway, because you need to log into CAS with a unique username.",
+      "parentUuid": "ffb88dc9_e78f33c4",
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97991899_ad944948",
@@ -190,6 +256,24 @@
       "writtenOn": "2021-04-12T23:40:22Z",
       "side": 1,
       "message": "do we want this?",
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22e6f774_41e310f2",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:53:52Z",
+      "side": 1,
+      "message": "Yeah, this means \"allow creating new Grafana accounts if the identity isn\u0027t one I\u0027ve seen before\", basically.",
+      "parentUuid": "97991899_ad944948",
       "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -265,6 +349,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc4e19e6_fecc2c1e",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:53:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "968a479d_8dda983f",
+      "range": {
+        "startLine": 407,
+        "startChar": 10,
+        "endLine": 407,
+        "endChar": 20
+      },
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4709b1c_b67da188",
@@ -278,6 +386,30 @@
       "writtenOn": "2021-04-12T23:40:22Z",
       "side": 1,
       "message": "\"raw\", maybe?",
+      "range": {
+        "startLine": 419,
+        "startChar": 19,
+        "endLine": 419,
+        "endChar": 23
+      },
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff64f82e_581b5598",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:53:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4709b1c_b67da188",
       "range": {
         "startLine": 419,
         "startChar": 19,
@@ -305,6 +437,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad7f3946_3320507c",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:53:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0320f85_0b6b7e03",
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7f7ada7_37489945",
@@ -318,6 +468,24 @@
       "writtenOn": "2021-04-12T23:40:22Z",
       "side": 1,
       "message": "just a thought - maybe we could have a convention of commenting the *keys* that are present in an /etc/secrets EnvironmentFile at least, so we don\u0027t have to go ssh to whitby to see what\u0027s in there?",
+      "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77b73c33_852838e9",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T23:53:52Z",
+      "side": 1,
+      "message": "But then I\u0027d have to admit that I\u0027ve put the entire CAS config into the secrets file...",
+      "parentUuid": "d7f7ada7_37489945",
       "revId": "58893c678babab9a6baa14f2144bb446ffb88709",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
