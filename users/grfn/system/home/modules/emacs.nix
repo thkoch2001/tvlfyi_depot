@@ -27,7 +27,7 @@ in {
     {
       home.packages = with pkgs; [
         # LaTeX (for org export)
-        (pkgs.texlive.combine {
+        (pkgs.buildPackages.texlive.combine {
           inherit (pkgs.texlive)
           scheme-basic collection-fontsrecommended ulem
           fncychap titlesec tabulary varwidth framed fancyvrb float parskip

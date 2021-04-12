@@ -55,8 +55,15 @@ in import nixpkgsSrc {
   config.allowUnfree = true;
   config.allowBroken = true;
   overlays = [
+    depot.third_party.overlays.fixes
     stableOverlay
     depot.third_party.overlays.tvl
+  ];
+  # Apply haskell overlay only to pkgs(HostTarget). Since
+  # haskellPackages takes tools for import from derivation from
+  # buildPackages, this makes sure we can substitute everything
+  # needed for evaluation from cache.nixos.org.
+  crossOverlays = [
     depot.third_party.overlays.haskell
   ];
 }

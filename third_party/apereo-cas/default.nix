@@ -44,7 +44,7 @@ pkgs.stdenvNoCC.mkDerivation {
   inherit name version meta;
 
   src = overlay;
-  nativeBuildInputs = with pkgs; [ gradle makeWrapper ];
+  nativeBuildInputs = with pkgs.buildPackages; [ gradle makeWrapper ];
   buildInputs = with pkgs; [ jdk ];
 
   buildPhase = ''

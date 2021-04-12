@@ -1,11 +1,11 @@
 { pkgs, ... }:
 
-with pkgs;
+with pkgs.buildPackages;
 with lib;
 
 let
 
-  emacsWithPackages = (pkgs.emacsPackagesGen pkgs.emacs27).emacsWithPackages;
+  emacsWithPackages = (emacsPackagesGen emacs27).emacsWithPackages;
 
   emacs = emacsWithPackages (p: with p; [
     org

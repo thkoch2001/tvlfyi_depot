@@ -4,8 +4,8 @@
 
 with pkgs;
 
-let tex = texlive.combine {
-  inherit (texlive)
+let tex = buildPackages.texlive.combine {
+  inherit (buildPackages.texlive)
     beamer
     beamertheme-metropolis
     etoolbox

@@ -1,13 +1,22 @@
 args@{ pkgs, ... }:
-with pkgs;
+
 let
+  inherit (pkgs.buildPackages)
+    minify
+    runCommand
+    writeShellScript
+    ;
+  inherit (pkgs)
+    awscli
+    ;
+
   site = import ./site.nix args;
   resume = import ../resume args;
   bucket = "s3://gws.fyi";
   distributionID = "E2ST43JNBH8C64";
 
   css = runCommand "main.css" {
-    buildInputs = [ pkgs.minify ];
+    buildInputs = [ minify ];
   } ''
     minify --type css < ${./main.css} > $out
   '';

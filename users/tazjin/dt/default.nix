@@ -1,10 +1,9 @@
 { depot, pkgs, ... }:
 
-let stdenv = with pkgs; overrideCC clangStdenv clang_11;
-in stdenv.mkDerivation {
+pkgs.clangStdenv.mkDerivation {
   name = "dt";
   src = ./.;
-  nativeBuildInputs = [ pkgs.cmake ];
+  nativeBuildInputs = [ pkgs.buildPackages.cmake ];
   buildInputs = with depot.third_party; [
     abseil_cpp
     farmhash
