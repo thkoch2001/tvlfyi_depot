@@ -4,7 +4,7 @@
 let
   inherit (builtins) listToAttrs;
   inherit (lib) range;
-in lib.fix(self: {
+in {
   imports = [
     "${depot.path}/ops/modules/clbot.nix"
     "${depot.path}/ops/modules/irccat.nix"
@@ -22,6 +22,7 @@ in lib.fix(self: {
     "${depot.path}/ops/modules/www/code.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/cs.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/login.tvl.fyi.nix"
+    "${depot.path}/ops/modules/www/status.tvl.su.nix"
     "${depot.path}/ops/modules/www/tazj.in.nix"
     "${depot.path}/ops/modules/www/todo.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/tvl.fyi.nix"
@@ -140,7 +141,7 @@ in lib.fix(self: {
   # above (otherwise DHCP overwrites it):
   environment.etc."resolv.conf" = with lib; {
     source = pkgs.writeText "resolv.conf" ''
-      ${concatStringsSep "\n" (map (ns: "nameserver ${ns}") self.networking.nameservers)}
+      ${concatStringsSep "\n" (map (ns: "nameserver ${ns}") config.networking.nameservers)}
       options edns0
     '';
   };
@@ -331,7 +332,7 @@ in lib.fix(self: {
   # Regularly back up whitby to Google Cloud Storage.
   systemd.services.restic = {
     description = "Backups to Google Cloud Storage";
-    script = "${pkgs.restic}/bin/restic backup /var/lib/gerrit /var/backup/postgresql";
+    script = "${pkgs.restic}/bin/restic backup /var/lib/gerrit /var/backup/postgresql /var/lib/grafana";
 
     environment = {
       GOOGLE_PROJECT_ID = "tazjins-infrastructure";
@@ -378,6 +379,23 @@ in lib.fix(self: {
         targets = ["localhost:${toString config.services.prometheus.exporters.node.port}"];
       }];
     }];
+  };
+
+  services.grafana = {
+    enable = true;
+    port = 4723; # "graf" on phone keyboard
+    domain = "status.tvl.su";
+    rootUrl = "https://status.tvl.su";
+    analytics.reporting.enable = false;
+
+    provision = {
+      enable = true;
+      datasources = [{
+        name = "Prometheus";
+        type = "prometheus";
+        url = "http://localhost:9090";
+      }];
+    };
   };
 
   security.sudo.extraRules = [
@@ -479,4 +497,4 @@ in lib.fix(self: {
   };
 
   system.stateVersion = "20.03";
-})
+}
