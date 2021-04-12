@@ -33,7 +33,7 @@ let
   # regardless, but this data is not accessible.
   mkStep = target: {
     command = ''
-      nix-build -E '${mkBuildExpr target}' || (buildkite-agent meta-data set "failure" "1"; exit 1)
+      nix-build -E '${mkBuildExpr target}' --show-trace || (buildkite-agent meta-data set "failure" "1"; exit 1)
     '';
     label = ":nix: ${mkLabel target}";
   };
