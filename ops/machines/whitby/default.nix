@@ -158,6 +158,11 @@ in lib.fix(self: {
     maxJobs = lib.mkDefault 64;
     extraOptions = ''
       secret-key-files = /etc/secrets/nix-cache-privkey
+
+      # Garbage collect up to 420GiB if a build pushes available disk
+      # space below 20GiB
+      min-free = ${toString (20 * 1024 * 1024 * 1024)}
+      max-free = ${toString (440 * 1024 * 1024 * 1024)}
     '';
 
     trustedUsers = [
