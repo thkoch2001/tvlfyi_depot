@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3279fa0_80214f92",
+        "filename": "default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-12T20:49:07Z",
+      "side": 1,
+      "message": "Yeah, I\u0027d prefer not to change any names in here - but feel free to file a bug or something for a discussion about it.",
+      "parentUuid": "832a8676_9362f06a",
+      "range": {
+        "startLine": 70,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 14
+      },
+      "revId": "5951b8f32a7daccd2fc1adeeae002bf8945cdf21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b890de55_b3f709b2",
