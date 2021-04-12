@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec "$(nix-build --no-out-link ../../.. -A users.glittershark.keyboard.flash)"
+exec "$(nix-build --no-out-link ../../.. -A users.grfn.keyboard.flash)"

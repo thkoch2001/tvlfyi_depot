@@ -8,7 +8,7 @@ engineer and musician
 * code
 
 - [[https://github.com/glittershark/][github]]
-- [[https://cs.tvl.fyi/depot/-/tree/users/glittershark][my directory in the tvl monorepo]]
+- [[https://cs.tvl.fyi/depot/-/tree/users/grfn][my directory in the tvl monorepo]]
 
 * work
 
@@ -19,9 +19,9 @@ databases please reach out
 * projects
 
 - [[https://windtunnel.ci/][windtunnel]], a continuous benchmarking software-as-a-service currently accepting early alpha users (send me an email if you want to try it out!)
-- [[https://cs.tvl.fyi/depot/-/tree/users/glittershark/achilles][achilles]], a compiler for (what I plan to become) a dependently typed, low-level functional programming language targeting LLVM
+- [[https://cs.tvl.fyi/depot/-/tree/users/grfn/achilles][achilles]], a compiler for (what I plan to become) a dependently typed, low-level functional programming language targeting LLVM
 - [[https://github.com/glittershark/org-clubhouse][org-clubhouse]], an emacs package for lightweight integration between [[https://orgmode.org/][org-mode]] and [[https://clubhouse.io/][the clubhouse project management tool]]
-- [[https://cs.tvl.fyi/depot/-/tree/users/glittershark/xanthous][xanthous]], a terminal roguelike in haskell that I work on intermittently and exclusively for fun
+- [[https://cs.tvl.fyi/depot/-/tree/users/grfn/xanthous][xanthous]], a terminal roguelike in haskell that I work on intermittently and exclusively for fun
 
 * music
 
