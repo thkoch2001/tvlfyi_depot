@@ -387,6 +387,45 @@ in {
     domain = "status.tvl.su";
     rootUrl = "https://status.tvl.su";
     analytics.reporting.enable = false;
+    extraOptions = let
+      options = {
+        auth = {
+          generic_oauth = {
+            enabled = true;
+            client_id = "OAUTH-TVL-grafana-f1A1EmHLDT";
+            scopes = "openid profile email";
+            name = "TVL";
+            role_attribute_path = "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Viewer'";
+            email_attribute_path = "mail";
+            login_attribute_path = "sub";
+            name_attribute_path = "displayName";
+            allow_sign_up = true;
+            auth_url = "https://login.tvl.fyi/oidc/authorize";
+            token_url = "https://login.tvl.fyi/oidc/accessToken";
+            api_url = "https://login.tvl.fyi/oidc/profile";
+          };
+          anonymous = {
+            enabled = true;
+            org_name = "The Virus Lounge";
+            org_role = "Viewer";
+          };
+          basic.enabled = false;
+          oauth_auto_login = true;
+          disable_login_form = true;
+        };
+      };
+      inherit (builtins) typeOf replaceStrings listToAttrs concatLists;
+      inherit (lib) toUpper mapAttrsToList nameValuePair concatStringsSep;
+      encodeName = bits: replaceStrings ["."] ["_"] (toUpper (concatStringsSep "_" bits));
+      optionToString = value:
+        if (typeOf value) == "bool" then if value then "true" else "false"
+        else builtins.toString value;
+      encodeOptions = prefix: inp: concatLists (mapAttrsToList (name: value:
+        if (typeOf value) == "set"
+          then encodeOptions (prefix ++ [name]) value
+          else [ (nameValuePair (encodeName (prefix ++ [name])) (optionToString value)) ]
+        ) inp);
+    in listToAttrs (encodeOptions [] options);
 
     provision = {
       enable = true;
@@ -397,6 +436,7 @@ in {
       }];
     };
   };
+  systemd.services.grafana.serviceConfig.EnvironmentFile = "/etc/secrets/grafana";
 
   security.sudo.extraRules = [
     {
