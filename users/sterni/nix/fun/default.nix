@@ -26,6 +26,19 @@ let
   lrs = x: fs:
     builtins.foldl' (v: f: f v) x fs;
 
+  # Warning: cursed function
+  #
+  # Check if a function has an attribute
+  # set pattern with an ellipsis as its argument.
+  #
+  # s/o to puck for discovering that you could use
+  # builtins.toXML to introspect functions more than
+  # you should be able to in Nix.
+  hasEllipsis = f:
+    builtins.isFunction f &&
+    builtins.match ".*<attrspat ellipsis=\"1\">.*"
+      (builtins.toXML f) != null;
+
 in
 
 {
@@ -41,5 +54,6 @@ in
     rls
     lr
     lrs
+    hasEllipsis
     ;
 }
