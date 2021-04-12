@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e5d5f50_d58238cc",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-04-12T16:02:18Z",
+      "side": 1,
+      "message": "It doesn\u0027t, though.",
+      "range": {
+        "startLine": 360,
+        "startChar": 27,
+        "endLine": 360,
+        "endChar": 34
+      },
+      "revId": "cfd3c615d53d83c4e552cfd960d6d28730dbe7ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
