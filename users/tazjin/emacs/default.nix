@@ -10,7 +10,8 @@
 { depot, lib, pkgs, ... }:
 
 let
-  emacsWithPackages = (pkgs.emacsPackagesGen pkgs.emacs27).emacsWithPackages;
+  inherit (pkgs.buildPackages) emacsPackagesGen;
+  emacsWithPackages = (emacsPackagesGen pkgs.emacs27).emacsWithPackages;
 
   # $PATH for binaries that need to be available to Emacs
   emacsBinPath = lib.makeBinPath [ pkgs.emacsPackages.telega ];

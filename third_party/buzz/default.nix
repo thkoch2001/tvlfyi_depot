@@ -9,8 +9,13 @@ depot.third_party.naersk.buildPackage {
     fetchSubmodules = true;
   };
 
-  buildInputs = with pkgs; [
+  nativeBuildInputs = with pkgs.pkgsBuildTarget; [
+    llvmPackages.bintools
+    llvmPackages.clang
     pkgconfig
+  ];
+
+  buildInputs = with pkgs; [
     dbus_libs
     glib
     openssl
@@ -21,11 +26,8 @@ depot.third_party.naersk.buildPackage {
     gtk3
     dbus-glib
     libappindicator-gtk3
-    clang_11
-    llvmPackages.llvm
-    llvmPackages.bintools
-    llvmPackages.clang
     llvmPackages.libclang
+    llvmPackages.llvm
   ];
 
   LIBCLANG_PATH = "${pkgs.llvmPackages.libclang}/lib/libclang.so";
