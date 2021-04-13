@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ depot, ... }:
 
-pkgs.emacsPackages.trivialBuild rec {
+depot.tools.emacs-pkgs.builder {
   pname = "nix-util";
   version = "1.0";
   src = ./nix-util.el;
