@@ -22,6 +22,30 @@
       },
       "revId": "919ede433ce6fc3cd017417e45a352af36d81a94",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3290e23_4cfe52dc",
+        "filename": "tools/emacs-pkgs/dottime/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-13T22:01:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "987cefec_0de8464e",
+      "range": {
+        "startLine": 3,
+        "startChar": 23,
+        "endLine": 3,
+        "endChar": 30
+      },
+      "revId": "919ede433ce6fc3cd017417e45a352af36d81a94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
