@@ -9,6 +9,7 @@
 # render images correctly.
 { lib, pkgs, ... }:
 
+pkgs.makeOverridable({ emacs ? pkgs.emacs27 }:
 let
   emacsWithPackages = (pkgs.emacsPackagesGen pkgs.emacs27).emacsWithPackages;
 
@@ -141,3 +142,4 @@ in lib.fix(self: l: f: pkgs.writeShellScriptBin "tazjins-emacs" ''
         --eval "(require 'init)" $@
     '';
   }) null identity
+) {}
