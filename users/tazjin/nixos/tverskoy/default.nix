@@ -3,9 +3,12 @@
 config: let
   # add google-c-style here because other machines get it from, eh,
   # elsewhere.
-  emacs = (depot.users.tazjin.emacs.overrideEmacs(epkgs: epkgs ++ [
-    pkgs.emacsPackages.google-c-style
-  ]));
+  # emacs = (depot.users.tazjin.emacs.overrideEmacs(epkgs: epkgs ++ [
+  #   pkgs.emacsPackages.google-c-style
+  # ]));
+  emacs = depot.users.tazjin.emacs.override {
+    emacs = pkgs.emacsGcc;
+  };
 
   nixpkgs = import pkgs.path {
     config.allowUnfree = true;
