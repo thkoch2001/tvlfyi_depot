@@ -7,7 +7,7 @@
 # Forcing Emacs to link against Imagemagick currently causes libvterm
 # to segfault, which is a lot less desirable than not having telega
 # render images correctly.
-{ depot, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   emacsWithPackages = (pkgs.emacsPackagesGen pkgs.emacs27).emacsWithPackages;
@@ -91,21 +91,22 @@ let
     yasnippet
   ]) ++
 
+  # Other external packages:
+  (with epkgs; [
+    exwm
+    vterm
+    telega
+  ]) ++
+
   # Custom packages
-  (with depot.tools.emacs-pkgs; [
+  (with epkgs.tvlPackages; [
     dottime
     nix-util
     term-switcher
     tvl
 
-    # telega comes from a mysterious third package set
-    pkgs.emacsPackages.telega
-
     # patched / overridden versions of packages
-    depot.third_party.emacs.exwm
-    depot.third_party.emacs.rcirc
-    depot.third_party.emacs.vterm
-    depot.third_party.emacs.explain-pause-mode
+    rcirc
   ]))));
 in lib.fix(self: l: f: pkgs.writeShellScriptBin "tazjins-emacs" ''
   export PATH="${emacsBinPath}:$PATH"
