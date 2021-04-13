@@ -547,7 +547,7 @@ in {
     groups.git = {};
     users.git = {
       group = "git";
-      isNormalUser = false;
+      isSystemUser = true;
       createHome = true;
       home = "/var/lib/git";
     };

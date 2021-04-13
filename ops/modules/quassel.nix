@@ -66,7 +66,7 @@ in {
 
     users = {
       users.quassel = {
-        isNormalUser = false;
+        isSystemUser = true;
         group = "quassel";
       };
 
