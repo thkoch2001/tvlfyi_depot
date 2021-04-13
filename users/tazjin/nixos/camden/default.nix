@@ -155,7 +155,7 @@ in lib.fix(self: {
     groups.git = {};
     users.git = {
       group = "git";
-      isNormalUser = false;
+      isSystemUser = true;
     };
   };
 
