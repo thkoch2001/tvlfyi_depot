@@ -1,6 +1,6 @@
 # This overlay is used to make TVL-specific modifications in the
 # nixpkgs tree, where required.
-{ ... }:
+{ depot, ... }:
 
 self: super: {
   # Required for apereo-cas
@@ -24,4 +24,11 @@ self: super: {
   clang-tools = (super.clang-tools.override {
     llvmPackages = self.llvmPackages_11;
   });
+
+  # Add our Emacs packages to the fixpoint
+  emacsPackagesFor = emacs: (
+    (super.emacsPackagesFor emacs).overrideScope' (eself: esuper: {
+      tvlPackages = depot.tools.emacs-pkgs;
+    })
+  );
 }
