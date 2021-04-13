@@ -47,9 +47,9 @@ in {
         enable = true;
         package = pkgs.emacsUnstable;
         extraPackages = (epkgs:
-          (with epkgs.tvlPackages; [
-            dottime
-            tvl
+          (with epkgs; [
+            tvlPackages.dottime
+            tvlPackages.tvl
             vterm
           ])
         );
