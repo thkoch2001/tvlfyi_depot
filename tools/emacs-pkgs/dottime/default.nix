@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ depot, ... }:
 
-pkgs.emacsPackages.trivialBuild rec {
+depot.tools.emacs-pkgs.buildEmacsPackage {
   pname = "dottime";
   version = "1.0";
   src = ./dottime.el;
