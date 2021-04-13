@@ -66,7 +66,7 @@ in {
 
       users.clbot = {
         group = "clbot";
-        isNormalUser = false;
+        isSystemUser = true;
       };
     };
 

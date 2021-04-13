@@ -274,6 +274,12 @@ with lib;
     };
   }) (range 1 1));
 
-  users.users."buildkite-agent-mugwump-1".extraGroups = [ "docker" ];
-  users.users."buildkite-agent-mugwump-2".extraGroups = [ "docker" ];
+  users.users."buildkite-agent-mugwump-1" = {
+    isSystemUser = true;
+    extraGroups = [ "docker" ];
+  };
+  users.users."buildkite-agent-mugwump-2" = {
+    isSystemUser = true;
+    extraGroups = [ "docker" ];
+  };
 }
