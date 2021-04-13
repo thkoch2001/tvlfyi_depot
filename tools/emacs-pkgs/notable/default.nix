@@ -1,11 +1,15 @@
-{ depot, pkgs, ... }:
+{ depot, ... }:
 
-pkgs.emacsPackages.trivialBuild rec {
+depot.tools.emacs-pkgs.buildEmacsPackage rec {
   pname = "notable";
   version = "1.0";
   src = ./notable.el;
-  packageRequires = with pkgs.emacsPackages; [
+
+  externalRequires = epkgs: with epkgs; [
     f ht s
+  ];
+
+  internalRequires = [
     depot.tools.emacs-pkgs.dottime
   ];
 }
