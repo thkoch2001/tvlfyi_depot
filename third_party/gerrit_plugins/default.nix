@@ -6,7 +6,7 @@ in depot.nix.utils.drvTargets {
   # https://gerrit.googlesource.com/plugins/owners
   owners = buildGerritBazelPlugin rec {
     name = "owners";
-    depsOutputHash = "sha256:0j7hn945l5y5pz109mrcx2hh2lb2gi5gf4wrrbypx43rmyhlz3s8";
+    depsOutputHash = "sha256:162hxk2qsix0x1aarhsaqi52q7j7mjpyk8af57w0a012i55ryqqa";
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/owners";
       rev = "f3335231b98e14664fdd1b325486bb0824800ac3";
@@ -23,7 +23,7 @@ in depot.nix.utils.drvTargets {
   # https://gerrit.googlesource.com/plugins/checks
   checks = buildGerritBazelPlugin {
     name = "checks";
-    depsOutputHash = "sha256:01krrafg5df42z3r7y74g8lx859my4610cqx3a7d02laqq9yjqc6";
+    depsOutputHash = "sha256:1262xhl2z1pml6iimhnjm5l3gzddz0rjj6sjq53212dk2dxs5y1b";
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/checks";
       rev = "990e936b1e050c4fe7ac3e590bdb5cfff0311232";
