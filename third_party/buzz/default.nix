@@ -27,5 +27,5 @@ depot.third_party.naersk.buildPackage {
     llvmPackages.libclang
   ];
 
-  LIBCLANG_PATH = "${pkgs.llvmPackages.libclang}/lib/libclang.so";
+  LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib/libclang.so";
 }

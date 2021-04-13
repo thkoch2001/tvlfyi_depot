@@ -187,6 +187,9 @@ in lib.fix (self: pkgs.llvmPackages_11.libcxxStdenv.mkDerivation {
   # TODO(tazjin): integration test setup?
   # TODO(tazjin): docs generation?
 
+  # TODO(b/132): Reenable when linker errors are fixed.
+  meta.ci = false;
+
   passthru = {
     build-shell = self.overrideAttrs (up: rec {
       run_clang_tidy = pkgs.writeShellScriptBin "run-clang-tidy" ''
