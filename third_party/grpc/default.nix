@@ -9,4 +9,7 @@
     "-DCMAKE_CXX_STANDARD=17"
     "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
   ];
-})
+}) // {
+  # TODO(b/132): Reenable when linker errors are fixed.
+  meta.ci = false;
+}

@@ -18,7 +18,10 @@ in {
         Restart = "always";
       };
     };
-    users.users.apereo-cas = {};
+    users.users.apereo-cas = {
+      isSystemUser = true;
+      group = "apereo-cas";
+    };
     users.groups.apereo-cas = {};
   };
 }

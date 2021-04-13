@@ -76,7 +76,7 @@ with lib;
 
     nodePackages.prettier
   ] ++ optionals (stdenv.isLinux) [
-    julia
+    julia-stable
     valgrind
   ];
 
