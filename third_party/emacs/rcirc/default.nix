@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ depot, ... }:
 
-pkgs.emacsPackages.trivialBuild rec {
+depot.tools.emacs-pkgs.buildEmacsPackage rec {
   pname = "rcirc";
   version = "1";
   src = ./rcirc.el;
