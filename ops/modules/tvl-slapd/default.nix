@@ -34,7 +34,7 @@ in {
   # *large* number of rebuilds of packages such as GPG and Python.
   nixpkgs.overlays = [
     (_: _: {
-      inherit (depot.third_party) openldap;
+      inherit (pkgs) openldap;
     })
   ];
 
@@ -58,7 +58,7 @@ in {
       };
 
       "cn=schema".includes =
-        map (schema: "${depot.third_party.openldap}/etc/schema/${schema}.ldif")
+        map (schema: "${pkgs.openldap}/etc/schema/${schema}.ldif")
             [ "core" "cosine" "inetorgperson" "nis" ];
     };
 
