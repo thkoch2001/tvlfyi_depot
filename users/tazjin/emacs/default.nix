@@ -33,7 +33,7 @@ let
   (with epkgs.melpaPackages; [
     ace-window
     ace-link
-    bazel-mode
+    # bazel-mode TODO(tazjin): where did this go?
     browse-kill-ring
     cargo
     company

@@ -38,16 +38,7 @@ in
 
     steam
 
-    (awscli2.overridePythonAttrs (oldAttrs: {
-      postPatch = ''
-        substituteInPlace setup.py \
-          --replace 'colorama>=0.2.5,<0.4.4' 'colorama'  \
-          --replace 'wcwidth<0.2.0' 'colorama' \
-          --replace 'cryptography>=2.8.0,<=2.9.0' 'cryptography' \
-          --replace 'docutils>=0.10,<0.16' 'docutils' \
-          --replace 'ruamel.yaml>=0.15.0,<0.16.0' 'ruamel.yaml'
-      '';
-    }))
+    awscli2
   ];
 
   systemd.user.services.laptop-keyboard = {
