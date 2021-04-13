@@ -39,6 +39,7 @@ in {
       users = builtins.listToAttrs (map (n: rec {
         name = "buildkite-agent-whitby-${toString n}";
         value = {
+          isSystemUser = true;
           group = lib.mkForce "buildkite-agents";
           extraGroups = [ name ];
         };
