@@ -1,14 +1,8 @@
-{ pkgs, ... }:
+{ depot, ... }:
 
-with pkgs.emacsPackages;
-
-melpaBuild rec {
+depot.tools.emacs-pkgs.builder {
   pname = "term-switcher";
   version = "1.0";
   src = ./term-switcher.el;
-  packageRequires = [ dash ivy s vterm ];
-
-  recipe = builtins.toFile "recipe" ''
-    (term-switcher :fetcher github :repo "tazjin/depot")
-  '';
+  externalRequires = epkgs: with epkgs; [ dash ivy s vterm ];
 }

@@ -1,10 +1,8 @@
-{ pkgs, ... }:
+{ depot, ... }:
 
-with pkgs.emacsPackages;
-
-trivialBuild rec {
+depot.tools.emacs-pkgs.builder {
   pname = "tvl";
   version = "1.0";
   src = ./tvl.el;
-  packageRequires = [ magit s ];
+  externalRequires = (epkgs: with epkgs; [ magit s ]);
 }
