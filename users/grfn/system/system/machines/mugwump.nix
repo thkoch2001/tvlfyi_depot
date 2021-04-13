@@ -262,6 +262,7 @@ with lib;
     name = "mugwump-${toString n}";
     value = {
       inherit name;
+      isSystemUser = true;
       enable = true;
       tokenPath = "/etc/secrets/buildkite-agent-token";
       privateSshKeyPath = "/etc/secrets/buildkite-ssh-key";
