@@ -1,10 +1,11 @@
 #!/bin/sh
 set -ue
 
-# Imports a zone file into a Google Cloud DNS zone of the same name
+# Imports a zone file into Google Cloud DNS
 readonly ZONE="${1}"
+readonly FILE="${2}"
 
-gcloud dns record-sets import "${ZONE}" \
+gcloud dns record-sets import "${FILE}" \
        --project composite-watch-759 \
        --zone-file-format \
        --delete-all-existing \
