@@ -79,6 +79,7 @@ in {
 
     systemd.timers.automatic-gc = {
       inherit description;
+      requisite = [ "nix-daemon.service" ];
       wantedBy = [ "multi-user.target" ];
 
       timerConfig = {
