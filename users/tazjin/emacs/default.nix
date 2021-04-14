@@ -9,7 +9,7 @@
 # render images correctly.
 { lib, pkgs, ... }:
 
-pkgs.makeOverridable({ emacs ? pkgs.emacs27 }:
+pkgs.makeOverridable({ emacs ? pkgs.emacsGcc }:
 let
   emacsWithPackages = (pkgs.emacsPackagesGen emacs).emacsWithPackages;
 
