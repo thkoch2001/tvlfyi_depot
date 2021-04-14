@@ -6,6 +6,7 @@ let
   inherit (lib) range;
 in {
   imports = [
+    "${depot.path}/ops/modules/automatic-gc.nix"
     "${depot.path}/ops/modules/clbot.nix"
     "${depot.path}/ops/modules/irccat.nix"
     "${depot.path}/ops/modules/monorepo-gerrit.nix"
@@ -185,6 +186,15 @@ in {
     enable = true;
     passwordAuthentication = false;
     challengeResponseAuthentication = false;
+  };
+
+  # Automatically collect garbage from the Nix store.
+  services.depot.automatic-gc = {
+    enable = true;
+    interval = "1 hour";
+    diskThreshold = 200; # GiB
+    maxFreed = 420; # GiB
+    preserveGenerations = "90d";
   };
 
   # Run a handful of Buildkite agents to support parallel builds.
