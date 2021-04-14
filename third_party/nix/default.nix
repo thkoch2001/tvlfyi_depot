@@ -43,9 +43,9 @@ let
   protoSrcs = pkgs.runCommand "nix-proto-srcs" {} ''
     export PROTO_SRCS=${./src/proto}
     mkdir -p $out/libproto
-    ${depot.third_party.protobuf}/bin/protoc -I=$PROTO_SRCS \
+    ${pkgs.protobuf}/bin/protoc -I=$PROTO_SRCS \
       --cpp_out=$out/libproto \
-      --plugin=protoc-gen-grpc=${depot.third_party.grpc}/bin/grpc_cpp_plugin \
+      --plugin=protoc-gen-grpc=${pkgs.grpc}/bin/grpc_cpp_plugin \
         --grpc_out=$out/libproto \
         $PROTO_SRCS/*.proto
   '';
@@ -81,17 +81,17 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
     curl
     editline
     flex
+    glog
+    grpc
     libseccomp
     libsodium
-    systemd.dev
     openssl
+    protobuf
     sqlite
+    systemd.dev
     xz
   ]) ++ (with depot.third_party; [
     abseil_cpp
-    glog
-    grpc
-    protobuf
   ]);
 
   doCheck = false;
