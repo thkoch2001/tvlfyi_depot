@@ -95,8 +95,9 @@ let
   # Other external packages:
   (with epkgs; [
     exwm
-    vterm
+    google-c-style
     telega
+    vterm
   ]) ++
 
   # Custom packages
