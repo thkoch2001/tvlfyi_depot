@@ -3,12 +3,6 @@
 config: let
   inherit (depot.third_party) lieer;
 
-  # add google-c-style here because other machines get it from, eh,
-  # elsewhere.
-  frogEmacs = (depot.users.tazjin.emacs.overrideEmacs(epkgs: epkgs ++ [
-    pkgs.emacsPackages.google-c-style
-  ]));
-
   quasselClient = pkgs.quassel.override {
     client = true;
     enableDaemon = false;
@@ -182,7 +176,7 @@ in lib.fix(self: {
 
     windowManager.session = lib.singleton {
       name = "exwm";
-      start = "${frogEmacs}/bin/tazjins-emacs";
+      start = "${depot.users.tazjin.emacs}/bin/tazjins-emacs";
     };
   };
 
@@ -217,7 +211,6 @@ in lib.fix(self: {
   environment.systemPackages =
     # programs from the depot
     (with depot; [
-      frogEmacs
       fun.idual.script
       fun.uggc
       lieer
@@ -225,6 +218,7 @@ in lib.fix(self: {
       quasselClient
       third_party.git
       tools.nsfv-setup
+      users.tazjin.emacs
     ]) ++
 
     # programs from nixpkgs
