@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b51a2008_65568f6d",
+        "filename": "ops/modules/automatic-gc.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-14T19:37:30Z",
+      "side": 1,
+      "message": "You should probably also make sure that this doesn\u0027t get launched if `nix-daemon` isn\u0027t running.",
+      "revId": "bddd81c346a9a8d0a28f5935f8246201323ba3e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
