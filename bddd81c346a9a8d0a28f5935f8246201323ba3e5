@@ -16,6 +16,24 @@
       "message": "You should probably also make sure that this doesn\u0027t get launched if `nix-daemon` isn\u0027t running.",
       "revId": "bddd81c346a9a8d0a28f5935f8246201323ba3e5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a93e960b_9152cdd3",
+        "filename": "ops/modules/automatic-gc.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-14T19:51:27Z",
+      "side": 1,
+      "message": "cl/3015",
+      "parentUuid": "b51a2008_65568f6d",
+      "revId": "bddd81c346a9a8d0a28f5935f8246201323ba3e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
