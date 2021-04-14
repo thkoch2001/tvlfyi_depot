@@ -43,9 +43,9 @@ let
   protoSrcs = pkgs.runCommand "nix-proto-srcs" {} ''
     export PROTO_SRCS=${./src/proto}
     mkdir -p $out/libproto
-    ${depot.third_party.protobuf}/bin/protoc -I=$PROTO_SRCS \
+    ${pkgs.protobuf}/bin/protoc -I=$PROTO_SRCS \
       --cpp_out=$out/libproto \
-      --plugin=protoc-gen-grpc=${depot.third_party.grpc}/bin/grpc_cpp_plugin \
+      --plugin=protoc-gen-grpc=${pkgs.grpc}/bin/grpc_cpp_plugin \
         --grpc_out=$out/libproto \
         $PROTO_SRCS/*.proto
   '';
@@ -74,6 +74,7 @@ in lib.fix (self: pkgs.llvmPackages_11.libcxxStdenv.mkDerivation {
 
   # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = (with pkgs; [
+    abseil-cpp
     aws-s3-cpp
     brotli
     bzip2
@@ -81,17 +82,15 @@ in lib.fix (self: pkgs.llvmPackages_11.libcxxStdenv.mkDerivation {
     curl
     editline
     flex
-    libseccomp
-    libsodium
-    systemd.dev
-    openssl
-    sqlite
-    xz
-  ]) ++ (with depot.third_party; [
-    abseil_cpp
     glog
     grpc
+    libseccomp
+    libsodium
+    openssl
     protobuf
+    sqlite
+    systemd.dev
+    xz
   ]);
 
   doCheck = false;
