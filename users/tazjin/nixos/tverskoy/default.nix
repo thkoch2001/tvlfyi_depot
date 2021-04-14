@@ -1,12 +1,6 @@
 { depot, lib, pkgs, ... }:
 
 config: let
-  # add google-c-style here because other machines get it from, eh,
-  # elsewhere.
-  emacs = (depot.users.tazjin.emacs.overrideEmacs(epkgs: epkgs ++ [
-    pkgs.emacsPackages.google-c-style
-  ]));
-
   nixpkgs = import pkgs.path {
     config.allowUnfree = true;
   };
@@ -220,10 +214,10 @@ in lib.fix(self: {
   environment.systemPackages =
     # programs from the depot
     (with depot; [
-      emacs
+      screenLock
       third_party.lieer
       tools.nsfv-setup
-      screenLock
+      users.tazjin.emacs
     ]) ++
 
     # programs from nixpkgs
