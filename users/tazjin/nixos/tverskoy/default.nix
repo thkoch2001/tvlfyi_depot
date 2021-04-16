@@ -161,6 +161,7 @@ in lib.fix(self: {
     redshift.enable = true;
     blueman.enable = true;
     mullvad-vpn.enable = true;
+    tlp.enable = true;
 
     xserver = {
       enable = true;
