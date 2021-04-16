@@ -9,6 +9,7 @@
     cargo-expand
     cargo-flamegraph
     sccache
+    evcxr
   ];
 
   programs.zsh.shellAliases = {
