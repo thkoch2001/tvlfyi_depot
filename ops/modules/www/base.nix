@@ -9,6 +9,10 @@
       recommendedTlsSettings = true;
       recommendedGzipSettings = true;
       recommendedProxySettings = true;
+
+      appendHttpConfig = ''
+        add_header Permissions-Policy "interest-cohort=()";
+      '';
     };
 
     # NixOS 20.03 broke nginx and I can't be bothered to debug it
