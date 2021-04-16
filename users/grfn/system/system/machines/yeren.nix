@@ -43,6 +43,10 @@
     extraModprobeConfig = ''
       options snd-intel-dspcfg dsp_driver=1
     '';
+
+    kernel.sysctl = {
+      "kernel.perf_event_paranoid" = -1;
+    };
   };
 
   fileSystems = {

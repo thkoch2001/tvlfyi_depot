@@ -56,6 +56,16 @@ with lib;
     lldb
     hyperfine
     clang-tools
+    (rr.overrideAttrs (_: rec {
+      version = "f25671d094edac8059cec56b98d7f10f2c740697";
+      src = pkgs.fetchFromGitHub {
+        owner = "rr-debugger";
+        repo = "rr";
+        rev = version;
+        sha256 = "149s4mw8vl8d3nx15sfp62z0izp2dibz99k720j75rjnkwk2bq2z";
+        fetchSubmodules = true;
+      };
+    }))
 
     clj2nix
     clojure
