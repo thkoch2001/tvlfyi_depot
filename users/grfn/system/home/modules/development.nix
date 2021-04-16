@@ -110,6 +110,14 @@ with lib;
     };
   };
 
+  home.file.".gdbinit".text = ''
+    set history filename ~/.gdb_history
+    set history save on
+    set history size unlimited
+    set history remove-duplicates unlimited
+    set history expansion on
+  '';
+
   home.file.".psqlrc".text = ''
     \set QUIET 1
     \timing
