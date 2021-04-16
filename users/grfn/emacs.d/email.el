@@ -26,3 +26,11 @@
           (:name "personal" :query "tag:inbox and tag:important and path:personal/**"
                  :key "p"))
         message-send-mail-function 'message-send-mail-with-sendmail)
+
+(set-popup-rule! "^\\*notmuch-saved-search-"
+  :ignore t)
+
+(set-popup-rule! (lambda (_ action)
+                   (eq (car action)
+                       'display-buffer-same-window))
+  :ignore t)
