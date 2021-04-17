@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::mem;
 
-use ast::hir::Binding;
+use ast::hir::{Binding, Pattern};
 use ast::Literal;
 use void::{ResultVoidExt, Void};
 
@@ -42,8 +42,10 @@ impl<'a, 'ast> Visitor<'a, 'ast, ast::Type<'ast>> for StripPositiveUnits {
                 bindings: extracted
                     .into_iter()
                     .map(|expr| Binding {
-                        ident: Ident::from_str_unchecked("___discarded"),
-                        type_: expr.type_().clone(),
+                        pat: Pattern::Id(
+                            Ident::from_str_unchecked("___discarded"),
+                            expr.type_().clone(),
+                        ),
                         body: expr,
                     })
                     .collect(),

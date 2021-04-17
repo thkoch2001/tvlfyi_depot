@@ -6,6 +6,7 @@ use nom::{alt, char, complete, do_parse, eof, many0, named, separated_list0, tag
 pub(crate) mod macros;
 mod expr;
 mod type_;
+mod util;
 
 use crate::ast::{Arg, Decl, Fun, Ident};
 pub use expr::expr;

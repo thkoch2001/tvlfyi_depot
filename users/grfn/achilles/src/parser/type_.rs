@@ -2,17 +2,14 @@ use nom::character::complete::{multispace0, multispace1};
 use nom::{alt, delimited, do_parse, map, named, opt, separated_list0, tag, terminated, tuple};
 
 use super::ident;
+use super::util::comma;
 use crate::ast::{FunctionType, Type};
 
 named!(pub function_type(&str) -> FunctionType, do_parse!(
     tag!("fn")
         >> multispace1
         >> args: map!(opt!(terminated!(separated_list0!(
-            tuple!(
-                multispace0,
-                tag!(","),
-                multispace0
-            ),
+            comma,
             type_
         ), multispace1)), |args| args.unwrap_or_default())
         >> tag!("->")
@@ -24,12 +21,32 @@ named!(pub function_type(&str) -> FunctionType, do_parse!(
         })
 ));
 
+named!(tuple_type(&str) -> Type, do_parse!(
+    tag!("(")
+        >> multispace0
+        >> fst: type_
+        >> comma
+        >> rest: separated_list0!(
+            comma,
+            type_
+        )
+        >> multispace0
+        >> tag!(")")
+        >> ({
+            let mut members = Vec::with_capacity(rest.len() + 1);
+            members.push(fst);
+            members.append(&mut rest.clone());
+            Type::Tuple(members)
+        })
+));
+
 named!(pub type_(&str) -> Type, alt!(
     tag!("int") => { |_| Type::Int } |
     tag!("float") => { |_| Type::Float } |
     tag!("bool") => { |_| Type::Bool } |
     tag!("cstring") => { |_| Type::CString } |
     tag!("()") => { |_| Type::Unit } |
+    tuple_type |
     function_type => { |ft| Type::Function(ft) }|
     ident => { |id| Type::Var(id) } |
     delimited!(
@@ -108,6 +125,14 @@ mod tests {
                 ],
                 ret: Box::new(Type::Float)
             })
+        )
+    }
+
+    #[test]
+    fn tuple() {
+        assert_eq!(
+            test_parse!(type_, "(int, int)"),
+            Type::Tuple(vec![Type::Int, Type::Int])
         )
     }
 

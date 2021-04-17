@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::ast::hir::{Binding, Decl, Expr};
+use crate::ast::hir::{Binding, Decl, Expr, Pattern};
 use crate::ast::{BinaryOperator, Ident, Literal, UnaryOperator};
 
 pub(crate) mod monomorphize;
@@ -29,9 +29,12 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
         Ok(())
     }
 
+    fn visit_pattern(&mut self, _pat: &mut Pattern<'ast, T>) -> Result<(), Self::Error> {
+        Ok(())
+    }
+
     fn visit_binding(&mut self, binding: &mut Binding<'ast, T>) -> Result<(), Self::Error> {
-        self.visit_ident(&mut binding.ident)?;
-        self.visit_type(&mut binding.type_)?;
+        self.visit_pattern(&mut binding.pat)?;
         self.visit_expr(&mut binding.body)?;
         Ok(())
     }
@@ -51,6 +54,13 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
         _type_args: &mut HashMap<Ident<'ast>, T>,
         _args: &mut Vec<Expr<'ast, T>>,
     ) -> Result<(), Self::Error> {
+        Ok(())
+    }
+
+    fn visit_tuple(&mut self, members: &mut Vec<Expr<'ast, T>>) -> Result<(), Self::Error> {
+        for expr in members {
+            self.visit_expr(expr)?;
+        }
         Ok(())
     }
 
@@ -137,12 +147,16 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
                 self.visit_type(type_)?;
                 self.post_visit_call(fun, type_args, args)?;
             }
+            Expr::Tuple(tup, type_) => {
+                self.visit_tuple(tup)?;
+                self.visit_type(type_)?;
+            }
         }
 
         Ok(())
     }
 
-    fn post_visit_decl(&mut self, decl: &'a Decl<'ast, T>) -> Result<(), Self::Error> {
+    fn post_visit_decl(&mut self, _decl: &'a Decl<'ast, T>) -> Result<(), Self::Error> {
         Ok(())
     }
 
