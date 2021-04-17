@@ -142,6 +142,10 @@ in {
               # Lock
               Pause = "exec lock";
 
+              # Brightness
+              "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl -q s 5%-";
+              "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl -q s 5%+";
+
               # Sleep/hibernate
               # "${mod}+Escape" = "exec systemctl suspend";
               # "${mod}+Shift+Escape" = "exec systemctl hibernate";
