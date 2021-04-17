@@ -50,7 +50,7 @@ in lib.fix(self: {
       zfs rollback -r zpool/ephemeral/home@tazjin-clean
     '';
 
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = [ "kvm-amd" "i2c_dev" ];
     extraModulePackages = [ ];
     kernelPackages = nixpkgs.linuxPackages_latest;
     loader.systemd-boot.enable = true;
@@ -163,6 +163,11 @@ in lib.fix(self: {
     mullvad-vpn.enable = true;
     tlp.enable = true;
 
+    # expose i2c device as /dev/i2c-amdgpu-dm and make it user-accessible
+    udev.extraRules = ''
+      SUBSYSTEM=="i2c-dev", ACTION=="add", DEVPATH=="/devices/pci0000:00/0000:00:08.1/0000:06:00.0/i2c-5/i2c-dev/i2c-5", SYMLINK+="i2c-amdgpu-dm", TAG+="uaccess"
+    '';
+
     xserver = {
       enable = true;
       layout = "us";
@@ -227,6 +232,7 @@ in lib.fix(self: {
       chromium
       curl
       direnv
+      ddcutil
       dnsutils
       emacs27-nox # emacsclient
       exa
