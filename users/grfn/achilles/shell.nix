@@ -1,7 +1,4 @@
-with import (builtins.fetchTarball {
-  url = "https://github.com/nixos/nixpkgs/archive/93a812bb9f9c398bd5b9636ab3674dcfe8cfb884.tar.gz";
-  sha256 = "14zzsgnigd7vjbrpzm1s4qsknm73sci38ss00x96wamz6psaxyah";
-}) {};
+with (import ../../.. {}).third_party.nixpkgs;
 
 mkShell {
   buildInputs = [
@@ -17,4 +14,5 @@ mkShell {
     pkg-config
   ];
 
+  LLVM_SYS_110_PREFIX = llvmPackages_11.bintools;
 }
