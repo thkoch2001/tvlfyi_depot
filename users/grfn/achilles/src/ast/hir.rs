@@ -5,9 +5,42 @@ use itertools::Itertools;
 use super::{BinaryOperator, Ident, Literal, UnaryOperator};
 
 #[derive(Debug, PartialEq, Eq, Clone)]
+pub enum Pattern<'a, T> {
+    Id(Ident<'a>, T),
+    Tuple(Vec<Pattern<'a, T>>),
+}
+
+impl<'a, T> Pattern<'a, T> {
+    pub fn to_owned(&self) -> Pattern<'static, T>
+    where
+        T: Clone,
+    {
+        match self {
+            Pattern::Id(id, t) => Pattern::Id(id.to_owned(), t.clone()),
+            Pattern::Tuple(pats) => {
+                Pattern::Tuple(pats.into_iter().map(Pattern::to_owned).collect())
+            }
+        }
+    }
+
+    pub fn traverse_type<F, U, E>(self, f: F) -> Result<Pattern<'a, U>, E>
+    where
+        F: Fn(T) -> Result<U, E> + Clone,
+    {
+        match self {
+            Pattern::Id(id, t) => Ok(Pattern::Id(id, f(t)?)),
+            Pattern::Tuple(pats) => Ok(Pattern::Tuple(
+                pats.into_iter()
+                    .map(|pat| pat.traverse_type(f.clone()))
+                    .collect::<Result<Vec<_>, _>>()?,
+            )),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Binding<'a, T> {
-    pub ident: Ident<'a>,
-    pub type_: T,
+    pub pat: Pattern<'a, T>,
     pub body: Expr<'a, T>,
 }
 
@@ -17,8 +50,7 @@ impl<'a, T> Binding<'a, T> {
         T: Clone,
     {
         Binding {
-            ident: self.ident.to_owned(),
-            type_: self.type_.clone(),
+            pat: self.pat.to_owned(),
             body: self.body.to_owned(),
         }
     }
@@ -29,6 +61,8 @@ pub enum Expr<'a, T> {
     Ident(Ident<'a>, T),
 
     Literal(Literal<'a>, T),
+
+    Tuple(Vec<Expr<'a, T>>, T),
 
     UnaryOp {
         op: UnaryOperator,
@@ -76,6 +110,7 @@ impl<'a, T> Expr<'a, T> {
         match self {
             Expr::Ident(_, t) => t,
             Expr::Literal(_, t) => t,
+            Expr::Tuple(_, t) => t,
             Expr::UnaryOp { type_, .. } => type_,
             Expr::BinaryOp { type_, .. } => type_,
             Expr::Let { type_, .. } => type_,
@@ -115,10 +150,9 @@ impl<'a, T> Expr<'a, T> {
             } => Ok(Expr::Let {
                 bindings: bindings
                     .into_iter()
-                    .map(|Binding { ident, type_, body }| {
+                    .map(|Binding { pat, body }| {
                         Ok(Binding {
-                            ident,
-                            type_: f(type_)?,
+                            pat: pat.traverse_type(f.clone())?,
                             body: body.traverse_type(f.clone())?,
                         })
                     })
@@ -168,6 +202,13 @@ impl<'a, T> Expr<'a, T> {
                     .collect::<Result<Vec<_>, E>>()?,
                 type_: f(type_)?,
             }),
+            Expr::Tuple(members, t) => Ok(Expr::Tuple(
+                members
+                    .into_iter()
+                    .map(|t| t.traverse_type(f.clone()))
+                    .try_collect()?,
+                f(t)?,
+            )),
         }
     }
 
@@ -242,6 +283,9 @@ impl<'a, T> Expr<'a, T> {
                 args: args.iter().map(|e| e.to_owned()).collect(),
                 type_: type_.clone(),
             },
+            Expr::Tuple(members, t) => {
+                Expr::Tuple(members.into_iter().map(Expr::to_owned).collect(), t.clone())
+            }
         }
     }
 }

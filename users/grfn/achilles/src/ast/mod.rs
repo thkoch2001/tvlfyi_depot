@@ -128,8 +128,23 @@ impl<'a> Literal<'a> {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
+pub enum Pattern<'a> {
+    Id(Ident<'a>),
+    Tuple(Vec<Pattern<'a>>),
+}
+
+impl<'a> Pattern<'a> {
+    pub fn to_owned(&self) -> Pattern<'static> {
+        match self {
+            Pattern::Id(id) => Pattern::Id(id.to_owned()),
+            Pattern::Tuple(pats) => Pattern::Tuple(pats.iter().map(Pattern::to_owned).collect()),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Binding<'a> {
-    pub ident: Ident<'a>,
+    pub pat: Pattern<'a>,
     pub type_: Option<Type<'a>>,
     pub body: Expr<'a>,
 }
@@ -137,7 +152,7 @@ pub struct Binding<'a> {
 impl<'a> Binding<'a> {
     fn to_owned(&self) -> Binding<'static> {
         Binding {
-            ident: self.ident.to_owned(),
+            pat: self.pat.to_owned(),
             type_: self.type_.as_ref().map(|t| t.to_owned()),
             body: self.body.to_owned(),
         }
@@ -179,6 +194,8 @@ pub enum Expr<'a> {
         args: Vec<Expr<'a>>,
     },
 
+    Tuple(Vec<Expr<'a>>),
+
     Ascription {
         expr: Box<Expr<'a>>,
         type_: Type<'a>,
@@ -190,6 +207,9 @@ impl<'a> Expr<'a> {
         match self {
             Expr::Ident(ref id) => Expr::Ident(id.to_owned()),
             Expr::Literal(ref lit) => Expr::Literal(lit.to_owned()),
+            Expr::Tuple(ref members) => {
+                Expr::Tuple(members.into_iter().map(Expr::to_owned).collect())
+            }
             Expr::UnaryOp { op, rhs } => Expr::UnaryOp {
                 op: *op,
                 rhs: Box::new((**rhs).to_owned()),
@@ -312,6 +332,7 @@ pub enum Type<'a> {
     Bool,
     CString,
     Unit,
+    Tuple(Vec<Type<'a>>),
     Var(Ident<'a>),
     Function(FunctionType<'a>),
 }
@@ -326,6 +347,7 @@ impl<'a> Type<'a> {
             Type::Unit => Type::Unit,
             Type::Var(v) => Type::Var(v.to_owned()),
             Type::Function(f) => Type::Function(f.to_owned()),
+            Type::Tuple(members) => Type::Tuple(members.iter().map(Type::to_owned).collect()),
         }
     }
 
@@ -379,7 +401,21 @@ impl<'a> Type<'a> {
             Type::Float => Type::Float,
             Type::Bool => Type::Bool,
             Type::CString => Type::CString,
+            Type::Tuple(members) => Type::Tuple(
+                members
+                    .into_iter()
+                    .map(|t| t.traverse_type_vars(f.clone()))
+                    .collect(),
+            ),
             Type::Unit => Type::Unit,
+        }
+    }
+
+    pub fn as_tuple(&self) -> Option<&Vec<Type<'a>>> {
+        if let Self::Tuple(v) = self {
+            Some(v)
+        } else {
+            None
         }
     }
 }
@@ -394,6 +430,7 @@ impl<'a> Display for Type<'a> {
             Type::Unit => f.write_str("()"),
             Type::Var(v) => v.fmt(f),
             Type::Function(ft) => ft.fmt(f),
+            Type::Tuple(ms) => write!(f, "({})", ms.iter().join(", ")),
         }
     }
 }

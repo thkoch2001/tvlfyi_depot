@@ -6,6 +6,7 @@ use std::rc::Rc;
 use std::result;
 
 use derive_more::{Deref, From, TryInto};
+use itertools::Itertools;
 
 use super::{Error, Result};
 use crate::ast::hir::Expr;
@@ -25,6 +26,7 @@ pub enum Val<'a> {
     Float(f64),
     Bool(bool),
     String(Cow<'a, str>),
+    Tuple(Vec<Value<'a>>),
     Function(Function<'a>),
 }
 
@@ -49,6 +51,7 @@ impl<'a> fmt::Debug for Val<'a> {
             Val::Function(Function { type_, .. }) => {
                 f.debug_struct("Function").field("type_", type_).finish()
             }
+            Val::Tuple(members) => f.debug_tuple("Tuple").field(members).finish(),
         }
     }
 }
@@ -79,6 +82,7 @@ impl<'a> Display for Val<'a> {
             Val::Bool(x) => x.fmt(f),
             Val::String(s) => write!(f, "{:?}", s),
             Val::Function(Function { type_, .. }) => write!(f, "<{}>", type_),
+            Val::Tuple(members) => write!(f, "({})", members.iter().join(", ")),
         }
     }
 }
@@ -91,6 +95,7 @@ impl<'a> Val<'a> {
             Val::Bool(_) => Type::Bool,
             Val::String(_) => Type::CString,
             Val::Function(Function { type_, .. }) => Type::Function(type_.clone()),
+            Val::Tuple(members) => Type::Tuple(members.iter().map(|expr| expr.type_()).collect()),
         }
     }
 
@@ -112,6 +117,22 @@ impl<'a> Val<'a> {
                 actual: self.type_().to_owned(),
                 expected: Type::Function(function_type.to_owned()),
             }),
+        }
+    }
+
+    pub fn as_tuple(&self) -> Option<&Vec<Value<'a>>> {
+        if let Self::Tuple(v) = self {
+            Some(v)
+        } else {
+            None
+        }
+    }
+
+    pub fn try_into_tuple(self) -> result::Result<Vec<Value<'a>>, Self> {
+        if let Self::Tuple(v) = self {
+            Ok(v)
+        } else {
+            Err(self)
         }
     }
 }

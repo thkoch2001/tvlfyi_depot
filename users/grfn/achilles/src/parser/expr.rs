@@ -8,7 +8,8 @@ use nom::{
 };
 use pratt::{Affix, Associativity, PrattParser, Precedence};
 
-use crate::ast::{BinaryOperator, Binding, Expr, Fun, Literal, UnaryOperator};
+use super::util::comma;
+use crate::ast::{BinaryOperator, Binding, Expr, Fun, Literal, Pattern, UnaryOperator};
 use crate::parser::{arg, ident, type_};
 
 #[derive(Debug)]
@@ -192,9 +193,45 @@ named!(literal(&str) -> Literal, alt!(int | bool_ | string | unit));
 
 named!(literal_expr(&str) -> Expr, map!(literal, Expr::Literal));
 
+named!(tuple(&str) -> Expr, do_parse!(
+    complete!(tag!("("))
+        >> multispace0
+        >> fst: expr
+        >> comma
+        >> rest: separated_list0!(
+            comma,
+            expr
+        )
+        >> multispace0
+        >> tag!(")")
+        >> ({
+            let mut members = Vec::with_capacity(rest.len() + 1);
+            members.push(fst);
+            members.append(&mut rest.clone());
+            Expr::Tuple(members)
+        })
+));
+
+named!(tuple_pattern(&str) -> Pattern, do_parse!(
+    complete!(tag!("("))
+        >> multispace0
+        >> pats: separated_list0!(
+            comma,
+            pattern
+        )
+        >> multispace0
+        >> tag!(")")
+        >> (Pattern::Tuple(pats))
+));
+
+named!(pattern(&str) -> Pattern, alt!(
+    ident => { |id| Pattern::Id(id) } |
+    tuple_pattern
+));
+
 named!(binding(&str) -> Binding, do_parse!(
     multispace0
-        >> ident: ident
+        >> pat: pattern
         >> multispace0
         >> type_: opt!(preceded!(tuple!(tag!(":"), multispace0), type_))
         >> multispace0
@@ -202,7 +239,7 @@ named!(binding(&str) -> Binding, do_parse!(
         >> multispace0
         >> body: expr
         >> (Binding {
-            ident,
+            pat,
             type_,
             body
         })
@@ -267,6 +304,7 @@ named!(paren_expr(&str) -> Expr,
 
 named!(funcref(&str) -> Expr, alt!(
     ident_expr |
+    tuple |
     paren_expr
 ));
 
@@ -296,6 +334,7 @@ named!(fun_expr(&str) -> Expr, do_parse!(
 named!(fn_arg(&str) -> Expr, alt!(
     ident_expr |
     literal_expr |
+    tuple |
     paren_expr
 ));
 
@@ -314,7 +353,8 @@ named!(simple_expr_unascripted(&str) -> Expr, alt!(
     if_ |
     fun_expr |
     literal_expr |
-    ident_expr
+    ident_expr |
+    tuple
 ));
 
 named!(simple_expr(&str) -> Expr, alt!(
@@ -334,7 +374,7 @@ named!(pub expr(&str) -> Expr, alt!(
 #[cfg(test)]
 pub(crate) mod tests {
     use super::*;
-    use crate::ast::{Arg, Ident, Type};
+    use crate::ast::{Arg, Ident, Pattern, Type};
     use std::convert::TryFrom;
     use BinaryOperator::*;
     use Expr::{BinaryOp, If, Let, UnaryOp};
@@ -450,6 +490,17 @@ pub(crate) mod tests {
     }
 
     #[test]
+    fn tuple() {
+        assert_eq!(
+            test_parse!(expr, "(1, \"seven\")"),
+            Expr::Tuple(vec![
+                Expr::Literal(Literal::Int(1)),
+                Expr::Literal(Literal::String(Cow::Borrowed("seven")))
+            ])
+        )
+    }
+
+    #[test]
     fn simple_string_lit() {
         assert_eq!(
             test_parse!(expr, "\"foobar\""),
@@ -465,12 +516,12 @@ pub(crate) mod tests {
             Let {
                 bindings: vec![
                     Binding {
-                        ident: Ident::try_from("x").unwrap(),
+                        pat: Pattern::Id(Ident::try_from("x").unwrap()),
                         type_: None,
                         body: Expr::Literal(Literal::Int(1))
                     },
                     Binding {
-                        ident: Ident::try_from("y").unwrap(),
+                        pat: Pattern::Id(Ident::try_from("y").unwrap()),
                         type_: None,
                         body: Expr::BinaryOp {
                             lhs: ident_expr("x"),
@@ -553,7 +604,7 @@ pub(crate) mod tests {
             Expr::Call {
                 fun: Box::new(Expr::Let {
                     bindings: vec![Binding {
-                        ident: Ident::try_from("x").unwrap(),
+                        pat: Pattern::Id(Ident::try_from("x").unwrap()),
                         type_: None,
                         body: Expr::Literal(Literal::Int(1))
                     }],
@@ -571,7 +622,7 @@ pub(crate) mod tests {
             res,
             Expr::Let {
                 bindings: vec![Binding {
-                    ident: Ident::try_from("id").unwrap(),
+                    pat: Pattern::Id(Ident::try_from("id").unwrap()),
                     type_: None,
                     body: Expr::Fun(Box::new(Fun {
                         args: vec![Arg::try_from("x").unwrap()],
@@ -584,6 +635,28 @@ pub(crate) mod tests {
                 })
             }
         );
+    }
+
+    #[test]
+    fn tuple_binding() {
+        let res = test_parse!(expr, "let (x, y) = (1, 2) in x");
+        assert_eq!(
+            res,
+            Expr::Let {
+                bindings: vec![Binding {
+                    pat: Pattern::Tuple(vec![
+                        Pattern::Id(Ident::from_str_unchecked("x")),
+                        Pattern::Id(Ident::from_str_unchecked("y"))
+                    ]),
+                    body: Expr::Tuple(vec![
+                        Expr::Literal(Literal::Int(1)),
+                        Expr::Literal(Literal::Int(2))
+                    ]),
+                    type_: None
+                }],
+                body: Box::new(Expr::Ident(Ident::from_str_unchecked("x")))
+            }
+        )
     }
 
     mod ascriptions {
@@ -608,7 +681,7 @@ pub(crate) mod tests {
                 res,
                 Expr::Let {
                     bindings: vec![Binding {
-                        ident: Ident::try_from("const_1").unwrap(),
+                        pat: Pattern::Id(Ident::try_from("const_1").unwrap()),
                         type_: None,
                         body: Expr::Fun(Box::new(Fun {
                             args: vec![Arg::try_from("x").unwrap()],
@@ -633,7 +706,7 @@ pub(crate) mod tests {
                 res,
                 Expr::Let {
                     bindings: vec![Binding {
-                        ident: Ident::try_from("x").unwrap(),
+                        pat: Pattern::Id(Ident::try_from("x").unwrap()),
                         type_: Some(Type::Int),
                         body: Expr::Literal(Literal::Int(1))
                     }],

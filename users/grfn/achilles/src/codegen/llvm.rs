@@ -7,12 +7,13 @@ use inkwell::builder::Builder;
 pub use inkwell::context::Context;
 use inkwell::module::Module;
 use inkwell::support::LLVMString;
-use inkwell::types::{BasicType, BasicTypeEnum, FunctionType, IntType};
-use inkwell::values::{AnyValueEnum, BasicValueEnum, FunctionValue};
+use inkwell::types::{BasicType, BasicTypeEnum, FunctionType, IntType, StructType};
+use inkwell::values::{AnyValueEnum, BasicValueEnum, FunctionValue, StructValue};
 use inkwell::{AddressSpace, IntPredicate};
+use itertools::Itertools;
 use thiserror::Error;
 
-use crate::ast::hir::{Binding, Decl, Expr};
+use crate::ast::hir::{Binding, Decl, Expr, Pattern};
 use crate::ast::{BinaryOperator, Ident, Literal, Type, UnaryOperator};
 use crate::common::env::Env;
 
@@ -80,6 +81,25 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
     pub fn append_basic_block(&self, name: &str) -> BasicBlock<'ctx> {
         self.context
             .append_basic_block(*self.function_stack.last().unwrap(), name)
+    }
+
+    fn bind_pattern(&mut self, pat: &'ast Pattern<'ast, Type>, val: AnyValueEnum<'ctx>) {
+        match pat {
+            Pattern::Id(id, _) => self.env.set(id, val),
+            Pattern::Tuple(pats) => {
+                for (i, pat) in pats.iter().enumerate() {
+                    let member = self
+                        .builder
+                        .build_extract_value(
+                            StructValue::try_from(val).unwrap(),
+                            i as _,
+                            "pat_bind",
+                        )
+                        .unwrap();
+                    self.bind_pattern(pat, member.into());
+                }
+            }
+        }
     }
 
     pub fn codegen_expr(
@@ -164,9 +184,9 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
             }
             Expr::Let { bindings, body, .. } => {
                 self.env.push();
-                for Binding { ident, body, .. } in bindings {
+                for Binding { pat, body, .. } in bindings {
                     if let Some(val) = self.codegen_expr(body)? {
-                        self.env.set(ident, val);
+                        self.bind_pattern(pat, val);
                     }
                 }
                 let res = self.codegen_expr(body);
@@ -243,6 +263,19 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 self.builder.position_at_end(cur_block);
                 self.env.restore(env);
                 Ok(Some(function.into()))
+            }
+            Expr::Tuple(members, ty) => {
+                let values = members
+                    .into_iter()
+                    .map(|expr| self.codegen_expr(expr))
+                    .collect::<Result<Vec<_>>>()?
+                    .into_iter()
+                    .filter_map(|x| x)
+                    .map(|x| x.try_into().unwrap())
+                    .collect_vec();
+                let field_types = ty.as_tuple().unwrap();
+                let tuple_type = self.codegen_tuple_type(field_types);
+                Ok(Some(tuple_type.const_named_struct(&values).into()))
             }
         }
     }
@@ -341,7 +374,18 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
             Type::Function(_) => todo!(),
             Type::Var(_) => unreachable!(),
             Type::Unit => None,
+            Type::Tuple(ts) => Some(self.codegen_tuple_type(ts).into()),
         }
+    }
+
+    fn codegen_tuple_type(&self, ts: &'ast [Type]) -> StructType<'ctx> {
+        self.context.struct_type(
+            ts.iter()
+                .filter_map(|t| self.codegen_type(t))
+                .collect_vec()
+                .as_slice(),
+            false,
+        )
     }
 
     fn codegen_int_type(&self, type_: &'ast Type) -> IntType<'ctx> {
@@ -432,5 +476,11 @@ mod tests {
     fn function_call() {
         let res = jit_eval::<i64>("let id = fn x = x in id 1").unwrap();
         assert_eq!(res, 1);
+    }
+
+    #[test]
+    fn bind_tuple_pattern() {
+        let res = jit_eval::<i64>("let (x, y) = (1, 2) in x + y").unwrap();
+        assert_eq!(res, 3);
     }
 }

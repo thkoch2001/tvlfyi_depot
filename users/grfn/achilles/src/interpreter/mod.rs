@@ -1,9 +1,12 @@
 mod error;
 mod value;
 
+use itertools::Itertools;
+use value::Val;
+
 pub use self::error::{Error, Result};
 pub use self::value::{Function, Value};
-use crate::ast::hir::{Binding, Expr};
+use crate::ast::hir::{Binding, Expr, Pattern};
 use crate::ast::{BinaryOperator, FunctionType, Ident, Literal, Type, UnaryOperator};
 use crate::common::env::Env;
 
@@ -22,6 +25,17 @@ impl<'a> Interpreter<'a> {
             .resolve(var)
             .cloned()
             .ok_or_else(|| Error::UndefinedVariable(var.to_owned()))
+    }
+
+    fn bind_pattern(&mut self, pattern: &'a Pattern<'a, Type>, value: Value<'a>) {
+        match pattern {
+            Pattern::Id(id, _) => self.env.set(id, value),
+            Pattern::Tuple(pats) => {
+                for (pat, val) in pats.iter().zip(value.as_tuple().unwrap().clone()) {
+                    self.bind_pattern(pat, val);
+                }
+            }
+        }
     }
 
     pub fn eval(&mut self, expr: &'a Expr<'a, Type>) -> Result<Value<'a>> {
@@ -53,9 +67,9 @@ impl<'a> Interpreter<'a> {
             }
             Expr::Let { bindings, body, .. } => {
                 self.env.push();
-                for Binding { ident, body, .. } in bindings {
+                for Binding { pat, body, .. } in bindings {
                     let val = self.eval(body)?;
-                    self.env.set(ident, val);
+                    self.bind_pattern(pat, val);
                 }
                 let res = self.eval(body)?;
                 self.env.pop();
@@ -115,6 +129,13 @@ impl<'a> Interpreter<'a> {
                     body: (**body).to_owned(),
                 }))
             }
+            Expr::Tuple(members, _) => Ok(Val::Tuple(
+                members
+                    .into_iter()
+                    .map(|expr| self.eval(expr))
+                    .try_collect()?,
+            )
+            .into()),
         }?;
         debug_assert_eq!(&res.type_(), expr.type_());
         Ok(res)
