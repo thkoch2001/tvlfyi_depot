@@ -50,7 +50,7 @@ in lib.fix(self: {
       zfs rollback -r zpool/ephemeral/home@tazjin-clean
     '';
 
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = [ "kvm-amd" "i2c_dev" ];
     extraModulePackages = [ ];
     kernelPackages = nixpkgs.linuxPackages_latest;
     loader.systemd-boot.enable = true;
