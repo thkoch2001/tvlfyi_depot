@@ -69,9 +69,11 @@
         :panettone.authentication
         :panettone.inline-markdown)
   (:import-from :defclass-std :defclass/std)
-  (:import-from :alexandria :if-let :when-let :switch :alist-hash-table)
+  (:import-from :alexandria :if-let :when-let :switch :alist-hash-table
+                :assoc-value :eswitch)
   (:import-from :cl-ppcre :split)
   (:import-from :bordeaux-threads :make-thread)
+  (:import-from :cl-json :encode-json :encode-json-to-string)
   (:import-from
    :panettone.model
    :id :subject :body :author-dn :issue-id :status :created-at
