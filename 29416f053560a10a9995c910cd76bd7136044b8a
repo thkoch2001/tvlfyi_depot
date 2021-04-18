@@ -1,0 +1,308 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b968e34_d98493f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "I feel like this stuff is just what `runExecline` was made for, esp. combined with iterating over lists of arguments via netstrings.",
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8101f2cb_a2498915",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "maybe a comment about the flag ordering",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 51,
+        "endChar": 1
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48ff6dcf_dda29708",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "why buildC.musl but buildC.compilers.gcc? why not buildC.libcs.musl or something?",
+      "range": {
+        "startLine": 112,
+        "startChar": 1,
+        "endLine": 116,
+        "endChar": 31
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6ffc904_17294c57",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "should? what happens if it’s not?",
+      "range": {
+        "startLine": 124,
+        "startChar": 3,
+        "endLine": 127,
+        "endChar": 51
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11f4ffc3_19420c32",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "compiled, as paths  (the comma changes meaning)",
+      "range": {
+        "startLine": 144,
+        "startChar": 28,
+        "endLine": 144,
+        "endChar": 70
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0319ecf9_6f2a061a",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "instead of concating a (potentially too long argv) here, I’d construct a netencode list and pass it via the `stdin` argument of `runExecline`, then iterate over it via `forstdin -d \u0027\u0027` (empty string splits on netencode).\n\nsee https://code.tvl.fyi/tree/users/Profpatsch/netstring/default.nix?id\u003d10d8e1d66517d8e5ad86cec74e13f689e48a5efe#n3\nfor the functions and https://code.tvl.fyi/tree/tools/rust-crates-advisory/default.nix?id\u003d10d8e1d66517d8e5ad86cec74e13f689e48a5efe#n53 for an example.",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 23
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "328c430f_c3994cb6",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "nice",
+      "range": {
+        "startLine": 245,
+        "startChar": 27,
+        "endLine": 245,
+        "endChar": 43
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2af20f6_deda5712",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "always keep in mind the argv exec limits for unbounded stuff.\n\nin `rules_haskell` we always sooner or later reach the limit for one or the other user. Some people have absurd closures, and especially for linker flags you need to pass transitively this quickly goes out of bounds.",
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d09dfce9_9b69ced7",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "isFunction is a code smell imho, but could be valid here.",
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "247293ec_b07a35bf",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "maybe add comment that this is for readTree discovery",
+      "range": {
+        "startLine": 275,
+        "startChar": 0,
+        "endLine": 277,
+        "endChar": 20
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c5cc23f_13fdedc0",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "nit: whitespace binding rules confusing here",
+      "range": {
+        "startLine": 372,
+        "startChar": 4,
+        "endLine": 372,
+        "endChar": 17
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "832b9a7f_8ef18770",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "ok wow lol",
+      "range": {
+        "startLine": 453,
+        "startChar": 8,
+        "endLine": 453,
+        "endChar": 23
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b3a806b_9a15bf96",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "sounds reasonable to me",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 470,
+        "endChar": 31
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1950e68f_9165d6e8",
+        "filename": "nix/buildC/selfTests/freestanding.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-18T13:02:31Z",
+      "side": 1,
+      "message": "what’s a freestanding",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 51
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
