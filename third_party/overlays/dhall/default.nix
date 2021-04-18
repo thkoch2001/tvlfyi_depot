@@ -1,4 +1,6 @@
-{ pkgs, ... }:
+{ ... }:
+
+pkgs: _:
 
 let
   # binary releases of dhall tools, since the build in nixpkgs is
