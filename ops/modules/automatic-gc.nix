@@ -22,7 +22,7 @@ let
       echo "Have ''${AVAILABLE_KIB} KiB, but want ''${MIN_THRESHOLD_KIB} KiB."
       echo "Triggering Nix garbage collection up to ''${MAX_FREED_BYTES} bytes."
       set -x
-      nix-collect-garbage \
+      ${config.nix.package}/bin/nix-collect-garbage \
         --delete-older-than "''${GEN_THRESHOLD}" \
         --max-freed "''${MAX_FREED_BYTES}"
     else
