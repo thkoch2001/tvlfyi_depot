@@ -8,6 +8,13 @@ in rec {
     _module.args = {
       inherit (args) depot;
     };
+
+    # Ensure that pkgs == third_party.nix
+    nixpkgs.pkgs = depot.third_party.nixpkgs;
+    nix.nixPath = [
+      "nixos=${pkgs.path}"
+      "nixpath=${pkgs.path}"
+    ];
   };
 
   nixosFor = configuration: (depot.third_party.nixos {

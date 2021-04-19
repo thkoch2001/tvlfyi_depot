@@ -2,10 +2,6 @@
 { depot, pkgs, lib, ... }:
 
 config: let
-  nixpkgs = import pkgs.path {
-    config.allowUnfree = true;
-  };
-
   nginxRedirect = { from, to, acmeHost }: {
     serverName = from;
     useACMEHost = acmeHost;
@@ -83,11 +79,6 @@ in lib.fix(self: {
   nix = {
     maxJobs = lib.mkDefault 4;
 
-    nixPath = [
-      "depot=/home/tazjin/depot"
-      "nixpkgs=${pkgs.path}"
-    ];
-
     trustedUsers = [ "root" "tazjin" ];
 
     binaryCaches = [
@@ -98,7 +89,6 @@ in lib.fix(self: {
       "tazjin.cachix.org-1:IZkgLeqfOr1kAZjypItHMg1NoBjm4zX9Zzep8oRSh7U="
     ];
   };
-  nixpkgs.pkgs = nixpkgs;
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
@@ -122,7 +112,7 @@ in lib.fix(self: {
   programs.mosh.enable = true;
 
   fonts = {
-    fonts = [ nixpkgs.jetbrains-mono ];
+    fonts = [ pkgs.jetbrains-mono ];
     fontconfig.defaultFonts.monospace = [ "JetBrains Mono" ];
   };
 
@@ -134,7 +124,7 @@ in lib.fix(self: {
     ]) ++
 
     # programs from nixpkgs
-    (with nixpkgs; [
+    (with pkgs; [
       bat
       curl
       direnv
@@ -158,7 +148,7 @@ in lib.fix(self: {
       isNormalUser = true;
       uid = 1000;
       extraGroups = [ "git" "wheel" "quassel" "video" ];
-      shell = nixpkgs.fish;
+      shell = pkgs.fish;
     };
 
     # Set up a user & group for general git shenanigans
@@ -183,7 +173,7 @@ in lib.fix(self: {
   # anymore, all solution attempts have failed, so here's a
   # brute-force fix.
   systemd.services.fix-nginx = {
-    script = "${nixpkgs.coreutils}/bin/chown -R nginx: /var/spool/nginx /var/cache/nginx";
+    script = "${pkgs.coreutils}/bin/chown -R nginx: /var/spool/nginx /var/cache/nginx";
 
     serviceConfig = {
       User = "root";
@@ -253,7 +243,7 @@ in lib.fix(self: {
   services.nginx = {
     enable = true;
     enableReload = true;
-    package = with nixpkgs; nginx.override {
+    package = with pkgs; nginx.override {
       modules = [ nginxModules.rtmp ];
     };
 
