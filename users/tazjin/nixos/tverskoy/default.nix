@@ -1,10 +1,6 @@
 { depot, lib, pkgs, ... }:
 
 config: let
-  nixpkgs = import pkgs.path {
-    config.allowUnfree = true;
-  };
-
   quasselClient = pkgs.quassel.override {
     client = true;
     enableDaemon = false;
@@ -14,24 +10,18 @@ config: let
   # Use a screen lock command that resets the keyboard layout
   # before locking, to avoid locking me out when the layout is
   # in Russian.
-  screenLock = nixpkgs.writeShellScriptBin "tazjin-screen-lock" ''
-    ${nixpkgs.xorg.setxkbmap}/bin/setxkbmap us
-    ${nixpkgs.xorg.setxkbmap}/bin/setxkbmap -option caps:super
-    exec ${nixpkgs.xsecurelock}/bin/xsecurelock
+  screenLock = pkgs.writeShellScriptBin "tazjin-screen-lock" ''
+    ${pkgs.xorg.setxkbmap}/bin/setxkbmap us
+    ${pkgs.xorg.setxkbmap}/bin/setxkbmap -option caps:super
+    exec ${pkgs.xsecurelock}/bin/xsecurelock
   '';
 in lib.fix(self: {
   imports = [
     "${depot.third_party.impermanence}/nixos.nix"
-    "${nixpkgs.home-manager.src}/nixos"
+    "${pkgs.home-manager.src}/nixos"
   ];
 
   nix = {
-    nixPath = lib.mkForce [
-      "nixpkgs=${pkgs.path}"
-      "nixos=${pkgs.path}"
-      "depot=/depot"
-    ];
-
     binaryCachePublicKeys = [
       "cache.tvl.su:kjc6KOMupXc1vHVufJUoDUYeLzbwSr9abcAKdn/U1Jk="
     ];
@@ -52,7 +42,7 @@ in lib.fix(self: {
 
     kernelModules = [ "kvm-amd" "i2c_dev" ];
     extraModulePackages = [ ];
-    kernelPackages = nixpkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_latest;
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
@@ -118,7 +108,7 @@ in lib.fix(self: {
   };
 
   fonts = {
-    fonts = with nixpkgs; [
+    fonts = with pkgs; [
       corefonts
       dejavu_fonts
       jetbrains-mono
@@ -178,7 +168,7 @@ in lib.fix(self: {
 
       displayManager = {
         # Give EXWM permission to control the session.
-        sessionCommands = "${nixpkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
+        sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
         lightdm.enable = true;
         # lightdm.greeters.gtk.clock-format = "%H:%M"; # TODO(tazjin): TZ?
       };
@@ -203,7 +193,7 @@ in lib.fix(self: {
     createHome = true;
     extraGroups = [ "wheel" "networkmanager" "video" ];
     uid = 1000;
-    shell = nixpkgs.fish;
+    shell = pkgs.fish;
     initialHashedPassword = "$6$d3FywUNCuZnJ4l.$ZW2ul59MLYon1v1xhC3lTJZfZ91lWW6Tpi13MpME0cJcYZNrsx7ABdgQRn.K05awruG2Y9ARAzURnmiJ31WTS1";
   };
 
@@ -227,7 +217,7 @@ in lib.fix(self: {
     ]) ++
 
     # programs from nixpkgs
-    (with nixpkgs; [
+    (with pkgs; [
       bat
       chromium
       curl
