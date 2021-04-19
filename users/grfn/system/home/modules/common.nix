@@ -13,7 +13,8 @@
     ../modules/lib/cloneRepo.nix
   ];
 
-  nixpkgs.config.allowUnfree = true;
+  # Use the same nixpkgs as everything else
+  home-manager.useGlobalPkgs = true;
 
   programs.password-store.enable = true;
 
