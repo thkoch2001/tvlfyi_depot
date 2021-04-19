@@ -307,7 +307,150 @@ with depot.third_party.rust-crates;
     version = "0.5.8";
     crateName = "toml";
     sha256 = "1vwjwmwsy83pbgvvm11a6grbhb09zkcrv9v95wfwv48wjm01wdj4";
-    edition = "2018";
     dependencies = [ serde ];
+  };
+
+  pkg-config = buildRustCrate {
+    pname = "pkg-config";
+    version = "0.3.19";
+    crateName = "pkg_config";
+    sha256 = "1kd047p8jv6mhmfzddjvfa2nwkfrb3l1wml6lfm51n1cr06cc9lz";
+  };
+
+  libz-sys = buildRustCrate {
+    pname = "libz-sys";
+    version = "1.1.2";
+    crateName = "libz-sys";
+    sha256 = "1y7v6bkwr4b6yaf951p1ns7mx47b29ziwdd5wziaic14gs1gwq30";
+    buildDependencies = [
+      cc
+      pkg-config
+    ];
+  };
+
+  libgit2-sys = buildRustCrate {
+    pname = "libgit2-sys";
+    version = "0.12.19+1.1.0";
+    crateName = "libgit2_sys";
+    sha256 = "0sw4qwkf48xh5rlv3iw3jsc8qgqkb5nhb7i8dbsyfpwxcdsd139j";
+    dependencies = [
+      libc
+      libz-sys
+    ];
+    libPath = "lib.rs";
+    libName = "libgit2_sys";
+    # TODO: this should be available via `pkgs.defaultCrateOverrides`,
+    # I thought that was included by default?
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ pkgs.zlib pkgs.libgit2 ];
+    buildDependencies = [
+      cc
+      pkg-config
+    ];
+  };
+
+  matches = buildRustCrate {
+    pname = "matches";
+    version = "0.1.8";
+    crateName = "matches";
+    sha256 = "03hl636fg6xggy0a26200xs74amk3k9n0908rga2szn68agyz3cv";
+    libPath = "lib.rs";
+  };
+
+  percent-encoding = buildRustCrate {
+    pname = "percent_encoding";
+    version = "2.1.0";
+    crateName = "percent_encoding";
+    sha256 = "0i838f2nr81585ckmfymf8l1x1vdmx6n8xqvli0lgcy60yl2axy3";
+    libPath = "lib.rs";
+  };
+
+  form_urlencoded = buildRustCrate {
+    pname = "form_urlencoded";
+    version = "1.0.1";
+    crateName = "form_urlencoded";
+    sha256 = "0rhv2hfrzk2smdh27walkm66zlvccnnwrbd47fmf8jh6m420dhj8";
+    dependencies = [
+      matches
+      percent-encoding
+    ];
+  };
+
+  tinyvec_macros = buildRustCrate {
+    pname = "tinyvec_macros";
+    version = "0.1.0";
+    crateName = "tinyvec-macros";
+    sha256 = "0aim73hyq5g8b2hs9gjq2sv0xm4xzfbwp5fdyg1frljqzkapq682";
+  };
+
+  tinyvec = buildRustCrate {
+    pname = "tinyvec";
+    version = "1.2.0";
+    crateName = "tinyvec";
+    sha256 = "1c95nma20kiyrjwfsk7hzd5ir6yy4bm63fmfbfb4dm9ahnlvdp3y";
+    features = [ "alloc" ];
+    dependencies = [
+      tinyvec_macros
+    ];
+  };
+
+  unicode-normalization = buildRustCrate {
+    pname = "unicode-normalization";
+    version = "0.1.17";
+    crateName = "unicode_normalization";
+    sha256 = "0w4s0avzlf7pzcclhhih93aap613398sshm6jrxcwq0f9lhis11c";
+    dependencies = [
+      tinyvec
+    ];
+  };
+
+  unicode-bidi = buildRustCrate {
+    pname = "unicode-bidi";
+    version = "0.3.5";
+    crateName = "unicode_bidi";
+    sha256 = "193jzlxj1dfcms2381lyd45zh4ywlicj9lzcfpid1zbkmfarymkz";
+    dependencies = [
+      matches
+    ];
+  };
+
+  idna = buildRustCrate {
+    pname = "idna";
+    version = "0.2.3";
+    crateName = "idna";
+    sha256 = "0hwypd0fpym9lmd4bbqpwyr5lhrlvmvzhi1vy9asc5wxwkzrh299";
+    dependencies = [
+      matches
+      unicode-normalization
+      unicode-bidi
+    ];
+  };
+
+  url = buildRustCrate {
+    pname = "url";
+    version = "2.2.1";
+    crateName = "url";
+    sha256 = "1ci1djafh83qhpzbmxnr9w5gcrjs3ghf8rrxdy4vklqyji6fvn5v";
+    dependencies = [
+      form_urlencoded
+      idna
+      matches
+      percent-encoding
+    ];
+  };
+
+
+  git2 = buildRustCrate {
+    pname = "git2";
+    version = "0.13.18";
+    crateName = "git2";
+    sha256 = "1z0rhlcp4fjaajjb4ldw5mdsif1328410wx7znibgnvw7lmqhv72";
+    dependencies = [
+      bitflags
+      libc
+      libgit2-sys
+      log
+      url
+    ];
   };
 }
