@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t this module also apply our overlays?",
       "revId": "2aee34284e28664c6e01e6d58c28a71f3d00b970",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5570a41_b403e587",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-19T23:06:44Z",
+      "side": 1,
+      "message": "it\u0027s using the imported package set, so the overlays are already applied",
+      "parentUuid": "088f6ec9_ba6addfb",
+      "revId": "2aee34284e28664c6e01e6d58c28a71f3d00b970",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
