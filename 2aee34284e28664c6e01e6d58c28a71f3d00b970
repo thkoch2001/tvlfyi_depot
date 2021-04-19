@@ -34,6 +34,24 @@
       "parentUuid": "088f6ec9_ba6addfb",
       "revId": "2aee34284e28664c6e01e6d58c28a71f3d00b970",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8594e658_abf2fe00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-19T23:08:06Z",
+      "side": 1,
+      "message": "Yeah, but `nix.nixPath` needs to get the overlays somehow as well since I don\u0027t think `pkgs.path` preserves the overlays.",
+      "parentUuid": "f5570a41_b403e587",
+      "revId": "2aee34284e28664c6e01e6d58c28a71f3d00b970",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
