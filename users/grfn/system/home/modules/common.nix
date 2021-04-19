@@ -13,8 +13,6 @@
     ../modules/lib/cloneRepo.nix
   ];
 
-  nixpkgs.config.allowUnfree = true;
-
   programs.password-store.enable = true;
 
   grfn.impure.clonedRepos.passwordStore = {
