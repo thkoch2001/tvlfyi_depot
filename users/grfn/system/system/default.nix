@@ -21,12 +21,12 @@ rec {
       "${pkgs.home-manager.src}/nixos"
     ];
 
+    # Use the same nixpkgs as everything else
+    home-manager.useGlobalPkgs = true;
+
     home-manager.users.grfn = { config, lib, ... }: {
       imports = [ ../home/machines/roswell.nix ];
       lib.depot = depot;
-      _module.args.pkgs = lib.mkForce
-        (import pkgs.path
-          (lib.filterAttrs (n: v: v != null) config.nixpkgs));
     };
   })).system;
 
