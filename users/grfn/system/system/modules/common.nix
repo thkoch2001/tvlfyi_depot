@@ -56,8 +56,6 @@ with lib;
     shell = pkgs.zsh;
   };
 
-  nixpkgs.config.allowUnfree = true;
-
   nix = {
     trustedUsers = [ "grfn" ];
     autoOptimiseStore = true;
