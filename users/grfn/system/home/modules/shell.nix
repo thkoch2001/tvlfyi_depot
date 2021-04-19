@@ -67,6 +67,7 @@ in {
   home.packages = with pkgs; [
     zsh
     autojump
+    ntfy
   ];
 
   home.sessionVariables = {
@@ -157,6 +158,8 @@ in {
         rev = "a65382a353eaee5a98f068c330947c032a1263bb";
         sha256 = "0l41ac5b7p8yyjvpfp438kw7zl9dblrpd7icjg1v3ig3xy87zv0n";
       }}/nix-shell.plugin.zsh
+
+      eval "$(${pkgs.ntfy}/bin/ntfy shell-integration)"
 
       export RPS1=""
       autoload -U promptinit; promptinit
