@@ -6,12 +6,9 @@ rec {
   home = confPath: (import "${pkgs.home-manager.src}/modules" {
     inherit pkgs;
     configuration = { config, lib, ... }: {
-      imports = [confPath];
-
-      _module.args.pkgs = mkForce
-        (import pkgs.path (filterAttrs (n: v: v != null) config.nixpkgs));
-
+      imports = [ confPath ];
       lib.depot = depot;
+      useNixpkgsModule = false;
     };
   });
 

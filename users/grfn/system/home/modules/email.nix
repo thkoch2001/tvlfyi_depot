@@ -37,10 +37,6 @@ in {
     msmtp
   ];
 
-  # nixpkgs.overlays = [(self: super: {
-  #   notifymuch = self.python3Packages.callPackage ../../pkgs/notifymuch.nix {};
-  # })];
-
   systemd.user.services = mapAttrs' (name: account: {
     name = escapeUnitName "lieer-${name}";
     value.Service = {
