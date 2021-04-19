@@ -37,9 +37,6 @@ in
     cachix
   ];
 
-
-  nixpkgs.config.allowUnfree = true;
-
   programs.password-store.enable = true;
 
   programs.home-manager.enable = true;
