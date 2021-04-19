@@ -1,0 +1,17 @@
+Check if this can be removed after the next rustc stable bump.
+The patch is unnecessary with rustc 1.57.0 (f1edd0429 2021-11-29).
+diff --git a/src/attr.rs b/src/attr.rs
+index 33b1d2d..ebfd02b 100644
+--- a/src/attr.rs
++++ b/src/attr.rs
+@@ -69,8 +69,8 @@ impl<'string> AttrValue<'string> {
+ ///
+ /// Note that this implementation does not differentiate between [`AttrValue::String`] and
+ /// [`AttrValue::Bytes`].
+-impl PartialEq for AttrValue<'_> {
+-    fn eq(&self, other: &AttrValue<'_>) -> bool {
++impl<'a> PartialEq for AttrValue<'a> {
++    fn eq(&self, other: &AttrValue<'a>) -> bool {
+         match (self, other) {
+             (Self::True, AttrValue::True)
+             | (Self::False, AttrValue::False)
