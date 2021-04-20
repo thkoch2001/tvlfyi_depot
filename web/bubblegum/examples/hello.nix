@@ -1,7 +1,7 @@
 { depot, ... }:
 
 let
-  inherit (depot)
+  inherit (depot.third_party.nixpkgs)
     lib
     ;
 
