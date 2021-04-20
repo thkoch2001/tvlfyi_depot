@@ -5,6 +5,7 @@ let
   inherit (depot.nix)
     runExecline
     getBins
+    utils
     ;
 
   statusCodes = {
@@ -179,16 +180,13 @@ let
       # the input path or name of the input derivation.
       # Must be given if the input is a string.
     , name ? null
-    }:
+    , ...
+    }@args:
     input: let
       drvName =
-        if name != null
-        then name
-        else if builtins.isPath input
-        then baseNameOf input
-        else if lib.isDerivation input
-        then input.name
-        else builtins.throw "Need name";
+        if builtins.isString input || args ? name
+        then args.name
+        else utils.storePathName input;
       script =
         if builtins.isPath input || lib.isDerivation input
         then input
