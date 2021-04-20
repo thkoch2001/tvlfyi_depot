@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec8955a7_5d7798d4",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-20T10:17:25Z",
+      "side": 1,
+      "message": "What do you mean exactly? I think it is only important that `-L` comes before `-l`.\n\nOr do you mean adding a note about what I explain below with `flattenDeps`? Probably a good idea, yeah.",
+      "parentUuid": "8101f2cb_a2498915",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 51,
+        "endChar": 1
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "48ff6dcf_dda29708",
         "filename": "nix/buildC/default.nix",
         "patchSetId": 40
@@ -54,6 +78,30 @@
       "writtenOn": "2021-04-18T13:02:31Z",
       "side": 1,
       "message": "why buildC.musl but buildC.compilers.gcc? why not buildC.libcs.musl or something?",
+      "range": {
+        "startLine": 112,
+        "startChar": 1,
+        "endLine": 116,
+        "endChar": 31
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ebf4742_9365908f",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-20T10:17:25Z",
+      "side": 1,
+      "message": "You\u0027re right. Not sure if I prefer prefixed or unprefixed for both though…",
+      "parentUuid": "48ff6dcf_dda29708",
       "range": {
         "startLine": 112,
         "startChar": 1,
@@ -87,6 +135,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c6fdda3_ccf8551c",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-20T10:17:25Z",
+      "side": 1,
+      "message": "Clarified the documentation comment. `libName` is normative, not descriptive, so the wording here is inaccurate (for libraryFormDrv it\u0027s a different story of course).\n\nThe idea here is that you can have a differing `name` and `libName`: For `libschrift` which has `libschrift.a` in its `lib` dir, the (package) `name` would be libschrift (maybe `libschrift-0.10.0` even), but libName would be `schrift`.",
+      "parentUuid": "a6ffc904_17294c57",
+      "range": {
+        "startLine": 124,
+        "startChar": 3,
+        "endLine": 127,
+        "endChar": 51
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11f4ffc3_19420c32",
@@ -100,6 +172,30 @@
       "writtenOn": "2021-04-18T13:02:31Z",
       "side": 1,
       "message": "compiled, as paths  (the comma changes meaning)",
+      "range": {
+        "startLine": 144,
+        "startChar": 28,
+        "endLine": 144,
+        "endChar": 70
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff10ae6b_d5854167",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-20T10:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11f4ffc3_19420c32",
       "range": {
         "startLine": 144,
         "startChar": 28,
@@ -156,6 +252,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59d84861_9abc8195",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-20T10:17:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "328c430f_c3994cb6",
+      "range": {
+        "startLine": 245,
+        "startChar": 27,
+        "endLine": 245,
+        "endChar": 43
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2af20f6_deda5712",
@@ -192,6 +312,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e36b7fed_cbc965fb",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-20T10:17:25Z",
+      "side": 1,
+      "message": "It is a convenience feature: I haven\u0027t really added an integrated test facility to buildC yet (like buildLisp has for example), so tests are just derivations built by buildC which depend on the actual library you are trying to build.\n\nIf you write your test as a function, you receive the “parent” derivation as an argument, so you don\u0027t have to have a lib.fix somewhere.\n\nThe whole test infrastructure could probably be improved, but my intention is currently to keep it as simple as possible, i. e. everything is a wrapper around buildC.library in the end.",
+      "parentUuid": "d09dfce9_9b69ced7",
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "247293ec_b07a35bf",
         "filename": "nix/buildC/default.nix",
         "patchSetId": 40
@@ -203,6 +341,30 @@
       "writtenOn": "2021-04-18T13:02:31Z",
       "side": 1,
       "message": "maybe add comment that this is for readTree discovery",
+      "range": {
+        "startLine": 275,
+        "startChar": 0,
+        "endLine": 277,
+        "endChar": 20
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a860ed5a_0077e4f1",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-20T10:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "247293ec_b07a35bf",
       "range": {
         "startLine": 275,
         "startChar": 0,
@@ -226,6 +388,30 @@
       "writtenOn": "2021-04-18T13:02:31Z",
       "side": 1,
       "message": "nit: whitespace binding rules confusing here",
+      "range": {
+        "startLine": 372,
+        "startChar": 4,
+        "endLine": 372,
+        "endChar": 17
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7685bf12_e88b6096",
+        "filename": "nix/buildC/default.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-20T10:17:25Z",
+      "side": 1,
+      "message": "Better now?",
+      "parentUuid": "2c5cc23f_13fdedc0",
       "range": {
         "startLine": 372,
         "startChar": 4,
@@ -295,6 +481,30 @@
       "writtenOn": "2021-04-18T13:02:31Z",
       "side": 1,
       "message": "what’s a freestanding",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 51
+      },
+      "revId": "29416f053560a10a9995c910cd76bd7136044b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28e8b00e_e2436722",
+        "filename": "nix/buildC/selfTests/freestanding.nix",
+        "patchSetId": 40
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-20T10:17:25Z",
+      "side": 1,
+      "message": "something is freestanding if it doesn\u0027t depend on anything, i. e. not even libc (although you can still depend on the syscall interface I guess).\n\nI\u0027ll probably just throw this away since it isn\u0027t something I\u0027m interested in pursuing further.",
+      "parentUuid": "1950e68f_9165d6e8",
       "range": {
         "startLine": 3,
         "startChar": 0,
