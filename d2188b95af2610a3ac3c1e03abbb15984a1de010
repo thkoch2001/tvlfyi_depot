@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "776d71a9_86390998",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-20T10:21:36Z",
+      "side": 1,
+      "message": "nit: it",
+      "range": {
+        "startLine": 51,
+        "startChar": 43,
+        "endLine": 51,
+        "endChar": 47
+      },
+      "revId": "d2188b95af2610a3ac3c1e03abbb15984a1de010",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c59ffe30_fb417526",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-20T10:21:36Z",
+      "side": 1,
+      "message": "should this comment be above L46?",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 0
+      },
+      "revId": "d2188b95af2610a3ac3c1e03abbb15984a1de010",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
