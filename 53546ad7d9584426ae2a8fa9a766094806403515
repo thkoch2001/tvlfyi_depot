@@ -50,6 +50,23 @@
       "message": "Why in nixpkgs? Investigating the implementation of the nix package manager would probably be sufficient? Maybe this sentence needs more motivation.",
       "revId": "53546ad7d9584426ae2a8fa9a766094806403515",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d7ffdcd_0aca3416",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-04-21T20:10:17Z",
+      "side": 1,
+      "message": "I assume we should explicitly distinguish/mark weird or surprising behaviour found in Nix, that purposefully isn\u0027t implemented in Tvix somewhere. But should it be part of the language spec? I feel like only the \"canonical\" parts should live there (that apply to both implementations), and the \"Nix only warts\" should be a separate document.",
+      "revId": "53546ad7d9584426ae2a8fa9a766094806403515",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
