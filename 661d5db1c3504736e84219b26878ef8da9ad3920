@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13fadd15_9680e45f",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-22T21:43:42Z",
+      "side": 1,
+      "message": "As flokli mentioned below, we\u0027re sticking to one attribute per Evaluate call - however, since the evaluator can keep internal state, this call can be made multiple times and evaluation can be partially shared.",
+      "parentUuid": "ff9ad95b_902c23d2",
+      "revId": "661d5db1c3504736e84219b26878ef8da9ad3920",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce879a96_4d880ece",

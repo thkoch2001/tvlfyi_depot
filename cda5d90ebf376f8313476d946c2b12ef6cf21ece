@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05b99ff9_40084904",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-22T21:43:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da38c8b3_8dbbd39e",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95ee1f14_1cea9302",
@@ -209,6 +227,24 @@
       "side": 1,
       "message": "maybe a field-level comment would be useful as well.",
       "parentUuid": "d8f6c6d2_80b66898",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f088d04_ad2d9bd4",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-22T21:43:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62e6fbe6_e20c2147",
       "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
