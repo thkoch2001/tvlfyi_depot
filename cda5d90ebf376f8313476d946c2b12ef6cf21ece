@@ -142,6 +142,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b8dad82_5d30954c",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-22T21:17:20Z",
+      "side": 1,
+      "message": "IMO for now this is the model we should pursue.",
+      "parentUuid": "9f4dcab3_819f0bfe",
+      "revId": "cda5d90ebf376f8313476d946c2b12ef6cf21ece",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b0bc132_414a20a0",
