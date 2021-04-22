@@ -139,6 +139,24 @@
       "parentUuid": "2d7ffdcd_0aca3416",
       "revId": "53546ad7d9584426ae2a8fa9a766094806403515",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4d456db_b3242e56",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-04-22T21:45:44Z",
+      "side": 1,
+      "message": "Fair enough.",
+      "parentUuid": "418b3237_a8e4f87b",
+      "revId": "53546ad7d9584426ae2a8fa9a766094806403515",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
