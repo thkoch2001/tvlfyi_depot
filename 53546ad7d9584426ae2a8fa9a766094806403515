@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "815e22a5_e5330790",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-22T09:51:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dc6b8d7_668112b3",
+      "revId": "53546ad7d9584426ae2a8fa9a766094806403515",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f8af1fd_3a9524e7",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f046071_0271f629",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-22T09:51:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f8af1fd_3a9524e7",
+      "revId": "53546ad7d9584426ae2a8fa9a766094806403515",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1dea2ba2_e98f8652",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-04-21T20:08:15Z",
       "side": 1,
       "message": "Why in nixpkgs? Investigating the implementation of the nix package manager would probably be sufficient? Maybe this sentence needs more motivation.",
+      "revId": "53546ad7d9584426ae2a8fa9a766094806403515",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b57e003_c85ef8a4",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-22T09:51:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dea2ba2_e98f8652",
       "revId": "53546ad7d9584426ae2a8fa9a766094806403515",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
