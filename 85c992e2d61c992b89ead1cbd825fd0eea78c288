@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bca9fb5d_66166947",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-22T09:45:18Z",
+      "side": 1,
+      "message": "technically these are keywords, but whatever",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 6
+      },
+      "revId": "85c992e2d61c992b89ead1cbd825fd0eea78c288",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
