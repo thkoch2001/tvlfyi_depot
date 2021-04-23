@@ -6,7 +6,7 @@ let
       // depot.nix.getBins pkgs.bc [ "bc" ]
       // depot.nix.getBins pkgs.ocamlPackages.sexp [ "sexp" ];
 
-  print-ast = depot.users.Profpatsch.writers.rustSimple {
+  print-ast = depot.nix.writers.rustSimple {
     name = "print-ast";
     dependencies = with depot.third_party.rust-crates; [
       libloading
@@ -58,7 +58,7 @@ let
     };
   };
 
-  watch-file-modified = depot.users.Profpatsch.writers.rustSimple {
+  watch-file-modified = depot.nix.writers.rustSimple {
     name = "watch-file-modified";
     dependencies = [
       depot.third_party.rust-crates.inotify
