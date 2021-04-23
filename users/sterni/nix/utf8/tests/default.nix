@@ -14,7 +14,7 @@ let
     assertDoesNotThrow
     ;
 
-  inherit (depot.users.Profpatsch.writers)
+  inherit (depot.nix.writers)
     rustSimple
     ;
 
