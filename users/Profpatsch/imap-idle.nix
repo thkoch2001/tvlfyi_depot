@@ -1,7 +1,7 @@
 { depot, pkgs, lib, ... }:
 
 let
-  imap-idle = depot.users.Profpatsch.writers.rustSimple {
+  imap-idle = depot.nix.writers.rustSimple {
     name = "imap-idle";
     dependencies = [
       depot.users.Profpatsch.arglib.netencode.rust

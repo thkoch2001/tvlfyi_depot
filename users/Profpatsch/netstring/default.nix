@@ -27,7 +27,7 @@ let
         return res
   '';
 
-  rust-netstring = depot.users.Profpatsch.writers.rustSimpleLib {
+  rust-netstring = depot.nix.writers.rustSimpleLib {
     name = "netstring";
   } ''
     pub fn to_netstring(s: &[u8]) -> Vec<u8> {
