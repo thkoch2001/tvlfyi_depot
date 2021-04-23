@@ -2,7 +2,7 @@
 
 let
   netencode = {
-    rust = depot.users.Profpatsch.writers.rustSimpleLib {
+    rust = depot.nix.writers.rustSimpleLib {
       name = "arglib-netencode";
       dependencies = [
         depot.users.Profpatsch.execline.exec-helpers

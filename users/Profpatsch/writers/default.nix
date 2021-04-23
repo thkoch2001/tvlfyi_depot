@@ -67,90 +67,10 @@ let
       doCheck = false;
     };
 
-  rustSimple = args@{name, ...}: src:
-    linkTo name "${rustSimpleBin args src}/bin/${name}";
-
-  linkTo = name: path: depot.nix.runExecline.local name {} [
-    "importas" "out" "out"
-    bins.s6-ln "-s" path "$out"
-  ];
-
-  rustSimpleBin = {
-    name,
-    dependencies ? [],
-    doCheck ? true,
-    ...
-  }@args: src:
-    (if doCheck then testRustSimple else pkgs.lib.id)
-    (pkgs.buildRustCrate ({
-      pname = name;
-      version = "1.0.0";
-      crateName = name;
-      crateBin = [ name ];
-      dependencies = dependencies;
-      src = pkgs.runCommandLocal "write-main.rs" {
-        src = src;
-        passAsFile = [ "src" ];
-      } ''
-        mkdir -p $out/src/bin
-        cp "$srcPath" $out/src/bin/${name}.rs
-        find $out
-      '';
-    } // args));
-
-  rustSimpleLib = {
-    name,
-    dependencies ? [],
-    doCheck ? true,
-    ...
-  }@args: src:
-    (if doCheck then testRustSimple else pkgs.lib.id)
-    (pkgs.buildRustCrate ({
-      pname = name;
-      version = "1.0.0";
-      crateName = name;
-      dependencies = dependencies;
-      src = pkgs.runCommandLocal "write-lib.rs" {
-        src = src;
-        passAsFile = [ "src" ];
-      } ''
-        mkdir -p $out/src
-        cp "$srcPath" $out/src/lib.rs
-        find $out
-      '';
-    } // args));
-
-  /* Takes a `buildRustCrate` derivation as an input,
-    * builds it with `{ buildTests = true; }` and runs
-    * all tests found in its `tests` dir. If they are
-    * all successful, `$out` will point to the crate
-    * built with `{ buildTests = false; }`, otherwise
-    * it will fail to build.
-    *
-    * See also `nix.drvSeqL` which is used to implement
-    * this behavior.
-    */
-  testRustSimple = rustDrv:
-    let
-      crate = buildTests: rustDrv.override { inherit buildTests; };
-      tests = depot.nix.runExecline.local "${rustDrv.name}-tests-run" {} [
-        "importas" "out" "out"
-        "if" [
-          "pipeline" [ bins.s6-ls "${crate true}/tests" ]
-          "forstdin" "-o0" "test"
-          "importas" "test" "test"
-          "${crate true}/tests/$test"
-        ]
-        bins.s6-touch "$out"
-      ];
-    in drvSeqL [ tests ] (crate false);
 
 in {
   inherit
     python3
     python3Lib
-    rustSimple
-    rustSimpleBin
-    rustSimpleLib
     ;
 }

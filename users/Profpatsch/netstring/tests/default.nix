@@ -2,15 +2,10 @@
 
 let
 
-  inherit (depot.users.Profpatsch.netstring)
-    python-netstring
-    rust-netstring
-    ;
-
   python-netstring-test = depot.users.Profpatsch.writers.python3 {
     name = "python-netstring-test";
     libraries = p: [
-      python-netstring
+      depot.users.Profpatsch.netstring.python-netstring
     ];
   } ''
     import netstring
@@ -38,10 +33,10 @@ let
     )
   '';
 
-  rust-netstring-test = depot.users.Profpatsch.writers.rustSimple {
+  rust-netstring-test = depot.nix.writers.rustSimple {
     name = "rust-netstring-test";
     dependencies = [
-      rust-netstring
+      depot.users.Profpatsch.netstring.rust-netstring
     ];
   } ''
     extern crate netstring;
