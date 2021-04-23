@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df8bcd07_a3f4cf9c",
+        "filename": "third_party/gopkgs/github.com/charmbracelet/bubbletea/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-23T17:19:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ef9e585_0dac2e16",
+      "revId": "9ee4a04dd4b8a19f026959ac78e325c1024f5aec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61861750_ed9ac09a",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-04-23T16:34:59Z",
       "side": 1,
       "message": "Just remove this?",
+      "revId": "9ee4a04dd4b8a19f026959ac78e325c1024f5aec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1756846e_c096afcd",
+        "filename": "third_party/gopkgs/github.com/lucasb-eyer/go-colorful/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-23T17:19:33Z",
+      "side": 1,
+      "message": "Done\n\nNot sure it’s worth teh hassle though, since we are just filling in templates here anywäy",
+      "parentUuid": "61861750_ed9ac09a",
       "revId": "9ee4a04dd4b8a19f026959ac78e325c1024f5aec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
