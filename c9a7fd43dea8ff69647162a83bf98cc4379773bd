@@ -165,6 +165,54 @@
       },
       "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46aea9bc_33a5c07a",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-23T16:07:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91381bf0_3d193b87",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 86
+      },
+      "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bca12153_aa8b094e",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-23T16:07:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91381bf0_3d193b87",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 86
+      },
+      "revId": "c9a7fd43dea8ff69647162a83bf98cc4379773bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
