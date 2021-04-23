@@ -26,6 +26,7 @@ in
     graphviz
     mypaint
     xdot
+    tdesktop
 
     (discord.override rec {
       version = "0.0.14";
