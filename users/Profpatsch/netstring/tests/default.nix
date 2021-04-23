@@ -3,8 +3,6 @@
 let
 
   inherit (depot.users.Profpatsch.netstring)
-    toNetstring
-    toNetstringKeyVal
     python-netstring
     rust-netstring
     ;
@@ -21,20 +19,20 @@ let
       assert left == right, "{} /= {}".format(str(left), str(right))
 
     assEq(
-      netstring.read_netstring(b"""${toNetstring "hi!"}"""),
+      netstring.read_netstring(b"""${depot.nix.netstring.fromString "hi!"}"""),
       (b"hi!", b"")
     )
 
     assEq(
       netstring.read_netstring_key_val(
-        b"""${toNetstringKeyVal { foo = "42"; }}"""
+        b"""${depot.nix.netstring.attrsToKeyValList { foo = "42"; }}"""
       ),
       (b'foo', b'42', b"")
     )
 
     assEq(
       netstring.read_netstring_key_val_list(
-        b"""${toNetstringKeyVal { foo = "42"; bar = "hi"; }}"""
+        b"""${depot.nix.netstring.attrsToKeyValList { foo = "42"; bar = "hi"; }}"""
       ),
       { b'foo': b'42', b'bar': b'hi' }
     )
@@ -51,11 +49,11 @@ let
     fn main() {
       assert_eq!(
         std::str::from_utf8(&netstring::to_netstring(b"hello")).unwrap(),
-        r##"${toNetstring "hello"}"##
+        r##"${depot.nix.netstring.fromString "hello"}"##
       );
       assert_eq!(
         std::str::from_utf8(&netstring::to_netstring("こんにちは".as_bytes())).unwrap(),
-        r##"${toNetstring "こんにちは"}"##
+        r##"${depot.nix.netstring.fromString "こんにちは"}"##
       );
     }
   '';
