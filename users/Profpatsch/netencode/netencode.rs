@@ -158,12 +158,12 @@ pub fn encode<W: Write>(w: &mut W, u: &U) -> std::io::Result<()> {
       U::I7(i) => write!(w, "i7:{},", i),
       U::Text(s) => {
           write!(w, "t{}:", s.len());
-          w.write(s.as_bytes());
+          w.write_all(s.as_bytes());
           write!(w, ",")
       }
       U::Binary(s) => {
           write!(w, "b{}:", s.len());
-          w.write(&s);
+          w.write_all(&s);
           write!(w, ",")
       },
       U::Sum(Tag{tag, val}) => encode_tag(w, tag, val),
@@ -173,7 +173,7 @@ pub fn encode<W: Write>(w: &mut W, u: &U) -> std::io::Result<()> {
               encode_tag(&mut c, k, v)?;
           }
           write!(w, "{{{}:", c.get_ref().len())?;
-          w.write(c.get_ref())?;
+          w.write_all(c.get_ref())?;
           write!(w, "}}")
       },
       U::List(l) => {
@@ -182,7 +182,7 @@ pub fn encode<W: Write>(w: &mut W, u: &U) -> std::io::Result<()> {
               encode(&mut c, u)?;
           }
           write!(w, "[{}:", c.get_ref().len())?;
-          w.write(c.get_ref())?;
+          w.write_all(c.get_ref())?;
           write!(w, "]")
       }
   }
