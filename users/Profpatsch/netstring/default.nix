@@ -1,14 +1,5 @@
 { lib, pkgs, depot, ... }:
 let
-  toNetstring = s:
-    "${toString (builtins.stringLength s)}:${s},";
-
-  toNetstringKeyVal = attrs:
-    lib.concatStrings
-      (lib.mapAttrsToList
-        (k: v: toNetstring (toNetstring k + toNetstring v))
-        attrs);
-
   python-netstring = depot.users.Profpatsch.writers.python3Lib {
     name = "netstring";
   } ''
@@ -54,8 +45,6 @@ let
 
 in depot.nix.utils.drvTargets {
   inherit
-    toNetstring
-    toNetstringKeyVal
     python-netstring
     rust-netstring
       ;
