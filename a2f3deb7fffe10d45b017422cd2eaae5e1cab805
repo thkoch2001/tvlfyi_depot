@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeab8a47_73652d67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-23T17:15:55Z",
+      "side": 1,
+      "message": "the rust writer is not yet refactored",
+      "revId": "a2f3deb7fffe10d45b017422cd2eaae5e1cab805",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e94e4c5_7c7f3ddb",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-23T17:15:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1466492_e808b253",
+      "range": {
+        "startLine": 13,
+        "startChar": 6,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "cd26848ff44fe6ac1fe1588c9d57a6453668ed40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05ed6f1c_d69c85fb",
@@ -47,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "094d0074_a78f1cfb",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-23T17:15:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05ed6f1c_d69c85fb",
+      "range": {
+        "startLine": 57,
+        "startChar": 10,
+        "endLine": 57,
+        "endChar": 32
+      },
+      "revId": "cd26848ff44fe6ac1fe1588c9d57a6453668ed40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "061f29fe_3426432a",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-04-06T16:16:13Z",
       "side": 1,
       "message": "same",
+      "range": {
+        "startLine": 65,
+        "startChar": 13,
+        "endLine": 65,
+        "endChar": 39
+      },
+      "revId": "cd26848ff44fe6ac1fe1588c9d57a6453668ed40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cff676b_657e85cd",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-23T17:15:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "061f29fe_3426432a",
       "range": {
         "startLine": 65,
         "startChar": 13,
