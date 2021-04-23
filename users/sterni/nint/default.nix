@@ -1,7 +1,7 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (depot.users.Profpatsch.writers)
+  inherit (depot.nix.writers)
     rustSimpleBin
     ;
 in

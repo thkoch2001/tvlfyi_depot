@@ -1,12 +1,7 @@
 { depot, pkgs, lib, ... }:
 
 let
-  imports = {
-    inherit (depot.users.Profpatsch)
-      writers;
-  };
-
-  netencode-rs = imports.writers.rustSimpleLib {
+  netencode-rs = depot.nix.writers.rustSimpleLib {
       name = "netencode";
       dependencies = [
         depot.third_party.rust-crates.nom
@@ -18,14 +13,14 @@ let
 
   gen = import ./gen.nix { inherit lib; };
 
-  pretty-rs = imports.writers.rustSimpleLib {
+  pretty-rs = depot.nix.writers.rustSimpleLib {
     name = "netencode-pretty";
     dependencies = [
       netencode-rs
     ];
   } (builtins.readFile ./pretty.rs);
 
-  pretty = depot.users.Profpatsch.writers.rustSimple {
+  pretty = depot.nix.writers.rustSimple {
     name = "netencode-pretty";
     dependencies = [
       netencode-rs
@@ -48,7 +43,7 @@ let
     }
   '';
 
-  netencode-mustache = imports.writers.rustSimple {
+  netencode-mustache = depot.nix.writers.rustSimple {
     name = "netencode_mustache";
     dependencies = [
       depot.users.Profpatsch.arglib.netencode.rust
@@ -58,7 +53,7 @@ let
   } (builtins.readFile ./netencode-mustache.rs);
 
 
-  record-get = imports.writers.rustSimple {
+  record-get = depot.nix.writers.rustSimple {
     name = "record-get";
     dependencies = [
       netencode-rs
@@ -87,7 +82,7 @@ let
     }
   '';
 
-  record-splice-env = imports.writers.rustSimple {
+  record-splice-env = depot.nix.writers.rustSimple {
     name = "record-splice-env";
     dependencies = [
       netencode-rs
@@ -116,7 +111,7 @@ let
     }
   '';
 
-  env-splice-record = imports.writers.rustSimple {
+  env-splice-record = depot.nix.writers.rustSimple {
     name = "env-splice-record";
     dependencies = [
       netencode-rs

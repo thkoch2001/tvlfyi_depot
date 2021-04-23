@@ -2,7 +2,7 @@
 
 let
 
-  read-http = depot.users.Profpatsch.writers.rustSimple {
+  read-http = depot.nix.writers.rustSimple {
     name = "read-http";
     dependencies = [
       depot.third_party.rust-crates.ascii
