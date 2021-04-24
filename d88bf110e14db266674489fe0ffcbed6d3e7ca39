@@ -16,6 +16,24 @@
       "message": "This belongs in //tools, doesn\u0027t it?",
       "revId": "d88bf110e14db266674489fe0ffcbed6d3e7ca39",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebee5395_bf3398ae",
+        "filename": "nix/eprintf.nix",
+        "patchSetId": 18
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-24T20:32:22Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "91e1561e_5199463b",
+      "revId": "d88bf110e14db266674489fe0ffcbed6d3e7ca39",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
