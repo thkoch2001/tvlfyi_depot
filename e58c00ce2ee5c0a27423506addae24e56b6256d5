@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32261553_87319c88",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-24T16:25:41Z",
+      "side": 1,
+      "message": "\"derivations\" in quotes might be useful here (or italics), to make it clear that this is introducing a new term",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faf5cb5b_81e99aca",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-24T16:25:41Z",
+      "side": 1,
+      "message": "\"package builds and similar operations\" is a little vague, even for the opening paragraph - maybe something like \"how to build a package\" and just leave it at that?",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4108207_6eb62463",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-24T16:25:41Z",
+      "side": 1,
+      "message": "I\u0027d drop \"many\" here",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "525dc42d_1ed1fa2d",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-24T16:25:41Z",
+      "side": 1,
+      "message": "s/as well as/and, imo",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12650be2_65d58fa9",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-24T16:25:41Z",
+      "side": 1,
+      "message": "\"its domain\" is not yet well specified - maybe we could just say \"syntactic sugar for common operations?\"",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32f7eae6_c26db62d",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-24T16:25:41Z",
+      "side": 1,
+      "message": "1. I\u0027m not sure \"attribute sets\" is really syntatic sugar, it\u0027s a compound data struture\n2. if, on the other hand, this is meant to provide an example of \"operations which are common in its domain\", I\u0027m not sure attribute sets qualify as an \"operation\"",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "495943b6_1c4e09c6",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-24T16:25:41Z",
+      "side": 1,
+      "message": "s/it/but/",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6c9e233_91227a56",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-24T16:25:41Z",
+      "side": 1,
+      "message": "deficiencies is misspelled here",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
