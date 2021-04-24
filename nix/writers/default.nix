@@ -9,9 +9,7 @@ let
     bins.s6-ln "-s" path "$out"
   ];
 
-  # Build a rust executable.
-  # Takes all arguments that `pkgs.buildRustCrate` accepts.
-  # Rather leaky abstraction.
+  # Build a rust executable, $out is the executable.
   rustSimple = args@{name, ...}: src:
     linkTo name "${rustSimpleBin args src}/bin/${name}";
 
@@ -20,8 +18,7 @@ let
     name,
     dependencies ? [],
     doCheck ? true,
-    ...
-  }@args: src:
+  }: src:
     (if doCheck then testRustSimple else pkgs.lib.id)
     (pkgs.buildRustCrate ({
       pname = name;
@@ -37,7 +34,7 @@ let
         cp "$srcPath" $out/src/bin/${name}.rs
         find $out
       '';
-    } // args));
+    }));
 
   # Build a rust library, that can be used as dependency to `rustSimple`.
   # Wrapper around `pkgs.buildRustCrate`, takes all its arguments.
@@ -45,8 +42,7 @@ let
     name,
     dependencies ? [],
     doCheck ? true,
-    ...
-  }@args: src:
+  }: src:
     (if doCheck then testRustSimple else pkgs.lib.id)
     (pkgs.buildRustCrate ({
       pname = name;
@@ -61,7 +57,7 @@ let
         cp "$srcPath" $out/src/lib.rs
         find $out
       '';
-    } // args));
+    }));
 
   /* Takes a `buildRustCrate` derivation as an input,
     * builds it with `{ buildTests = true; }` and runs
