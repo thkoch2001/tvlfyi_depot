@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "feae8fa5_da20905d",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-24T20:02:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32261553_87319c88",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "faf5cb5b_81e99aca",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-04-24T16:25:41Z",
       "side": 1,
       "message": "\"package builds and similar operations\" is a little vague, even for the opening paragraph - maybe something like \"how to build a package\" and just leave it at that?",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7869323b_7f1f73a0",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-24T20:02:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "faf5cb5b_81e99aca",
       "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12c1fd02_3e42b3c2",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-24T20:02:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4108207_6eb62463",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "525dc42d_1ed1fa2d",
@@ -65,6 +119,24 @@
       "writtenOn": "2021-04-24T16:25:41Z",
       "side": 1,
       "message": "s/as well as/and, imo",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c1ea90_45e4e420",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-24T20:02:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "525dc42d_1ed1fa2d",
       "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8651520_4794c71e",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-24T20:02:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12650be2_65d58fa9",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32f7eae6_c26db62d",
@@ -99,6 +189,24 @@
       "writtenOn": "2021-04-24T16:25:41Z",
       "side": 1,
       "message": "1. I\u0027m not sure \"attribute sets\" is really syntatic sugar, it\u0027s a compound data struture\n2. if, on the other hand, this is meant to provide an example of \"operations which are common in its domain\", I\u0027m not sure attribute sets qualify as an \"operation\"",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afceaa10_b72f7df5",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-24T20:02:49Z",
+      "side": 1,
+      "message": "this is more about stuff like `or` and `.`, I\u0027ve rephrased slightly",
+      "parentUuid": "32f7eae6_c26db62d",
       "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -120,6 +228,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d39020da_7c465a21",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-24T20:02:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "495943b6_1c4e09c6",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6c9e233_91227a56",
@@ -133,6 +259,24 @@
       "writtenOn": "2021-04-24T16:25:41Z",
       "side": 1,
       "message": "deficiencies is misspelled here",
+      "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16a4d704_c168e91f",
+        "filename": "tvix/docs/language-spec.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-04-24T20:02:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6c9e233_91227a56",
       "revId": "e58c00ce2ee5c0a27423506addae24e56b6256d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
