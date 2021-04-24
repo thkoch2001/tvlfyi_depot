@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1026b425_eca78bc2",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-24T16:29:38Z",
+      "side": 1,
+      "message": "maybe specify \"absolute\"?",
+      "revId": "32202bbad69f89114912652b6db6aa2b8013921a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1856fb12_a118f8eb",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-04-24T16:29:38Z",
+      "side": 1,
+      "message": "\"the value it evaluates to\", maybe?",
+      "revId": "32202bbad69f89114912652b6db6aa2b8013921a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
