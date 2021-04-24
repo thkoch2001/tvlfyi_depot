@@ -7,8 +7,6 @@ let
         depot.third_party.rust-crates.nom
         depot.users.Profpatsch.execline.exec-helpers
       ];
-      release = false;
-      verbose = true;
     } (builtins.readFile ./netencode.rs);
 
   gen = import ./gen.nix { inherit lib; };
