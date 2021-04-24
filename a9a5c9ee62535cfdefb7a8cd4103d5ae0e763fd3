@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "641756de_710b1240",
+        "filename": "nix/writers/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-04-24T12:24:58Z",
+      "side": 0,
+      "message": "This comment is outdated now.",
+      "revId": "a9a5c9ee62535cfdefb7a8cd4103d5ae0e763fd3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
