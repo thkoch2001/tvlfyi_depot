@@ -5,7 +5,7 @@ doing that first before reading the response to have the proper context.
 
 ------------------------------------------------------------------------
 
-One of my current client makes use of
+One of my current clients makes use of
 [WatchGuard](http://www.watchguard.com/help/docs/fireware/11/en-US/Content/en-US/mvpn/ssl/mvpn_ssl_client-install_c.html)
 Mobile VPN software to provide access to the internal network.
 
@@ -15,22 +15,22 @@ provided, but it quickly turned out that this was only a piece of the
 puzzle.
 
 The problem is that this VPN setup is secured using 2-factor
-authentication (good!), but it does not use OpenVPN\'s default
+authentication (good!), but it does not use OpenVPN's default
 [challenge/response](https://openvpn.net/index.php/open-source/documentation/miscellaneous/79-management-interface.html)
 functionality to negotiate the credentials.
 
 Connecting with the OpenVPN config that the website supplied caused the
-VPN server to send me a token to my phone, but I simply couldn\'t figure
+VPN server to send me a token to my phone, but I simply couldn't figure
 out how to supply it back to the server. In a normal challenge/response
 setting the token would be supplied as the password on the second
 authentication round, but the VPN server kept rejecting that.
 
 Other possibilities were various combinations of username&password
-(I\'ve seen a lot of those around) so I tried a whole bunch, for example
+(I've seen a lot of those around) so I tried a whole bunch, for example
 `$password:$token` or even a `sha1(password, token)` - to no avail.
 
 At this point it was time to crank out
-[Hopper](https://www.hopperapp.com/) and see what\'s actually going on
+[Hopper](https://www.hopperapp.com/) and see what's actually going on
 in the official OS X client - which uses OpenVPN under the hood!
 
 Diving into the client
@@ -95,7 +95,7 @@ formatted the URL, opened it and checked whether the `logon_status` was
 `4` before proceeding with the `logon_id` and `chaStr` contained in the
 response.
 
-*(Code snippets from here on are Hopper\'s pseudo-Objective-C)*
+*(Code snippets from here on are Hopper's pseudo-Objective-C)*
 
 ![sslvpnLogon](/static/img/watchblob_3.webp)
 
@@ -112,7 +112,7 @@ to do something quite interesting:
 
 ![processTokenPrompt2](/static/img/watchblob_5.webp)
 
-The user\'s password was overwritten with the (verified) OTP token -
+The user's password was overwritten with the (verified) OTP token -
 before OpenVPN had even been started!
 
 Reading a bit more of the code in the subsequent
@@ -130,29 +130,29 @@ after configuring OpenVPN with the correct config file:
 TL;DR
 -----
 
-Rather than using OpenVPN\'s built-in challenge/response mechanism, the
+Rather than using OpenVPN's built-in challenge/response mechanism, the
 WatchGuard client validates user credentials *outside* of the VPN
 connection protocol and then passes on the OTP token, which seems to be
-temporarily in a \'blessed\' state after verification, as the user\'s
+temporarily in a 'blessed' state after verification, as the user's
 password.
 
-I didn\'t check to see how much verification of this token is performed
+I didn't check to see how much verification of this token is performed
 (does it check the source IP against the IP that performed the challenge
 validation?), but this certainly seems like a bit of a security issue -
 considering that an attacker on the same network would, if they time the
 attack right, only need your username and 6-digit OTP token to
 authenticate.
 
-Don\'t roll your own security, folks!
+Don't roll your own security, folks!
 
 Bonus
 -----
 
 The whole reason why I set out to do this is so I could connect to this
-VPN from Linux, so this blog post wouldn\'t be complete without a
+VPN from Linux, so this blog post wouldn't be complete without a
 solution for that.
 
-To make this process really easy I\'ve written a [little
+To make this process really easy I've written a [little
 tool](https://github.com/tazjin/watchblob) that performs the steps
 mentioned above from the CLI and lets users know when they can
 authenticate using their OTP token.
