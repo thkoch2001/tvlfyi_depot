@@ -118,4 +118,9 @@
     email = "milan@petabyte.dev";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$VQAHgOqYVr7mzjEr8IAMdQ$eAXvy58eRkjg+96RKBCwUoRDpNyGDdes4rVtxoQbaeI";
   }
+  {
+    username = "ezemtsov";
+    email = "eugene.zemtsov@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$eAEjTm0+JD0+p0o/GA8JmQ$uRtHCT+B/DBNr1rlOcLlROrkYsMj2T9ns/E9Ep3gJ1A";
+  }
 ]
