@@ -1,12 +1,10 @@
-use clap::{App, Arg};
+//! This file implements the rendering logic of cheddar with public
+//! functions for syntax-highlighting code and for turning Markdown
+//! into HTML with TVL extensions.
 use comrak::arena_tree::Node;
 use comrak::nodes::{Ast, AstNode, NodeCodeBlock, NodeHtmlBlock, NodeValue};
 use comrak::{format_html, parse_document, Arena, ComrakOptions};
 use lazy_static::lazy_static;
-use rouille::Response;
-use rouille::{router, try_or_400};
-use serde::Deserialize;
-use serde_json::json;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::env;
@@ -29,11 +27,15 @@ use syntect::html::{
 mod tests;
 
 lazy_static! {
-    // Load syntaxes & themes lazily. Initialisation might not be
-    // required in the case of Markdown rendering (if there's no code
-    // blocks within the document).
+    // Load syntaxes lazily. Initialisation might not be required in
+    // the case of Markdown rendering (if there's no code blocks
+    // within the document).
+    //
+    // Note that the syntax set is included from the path pointed to
+    // by the BAT_SYNTAXES environment variable at compile time. This
+    // variable is populated by Nix and points to TVL's syntax set.
     static ref SYNTAXES: SyntaxSet = from_binary(include_bytes!(env!("BAT_SYNTAXES")));
-    static ref THEMES: ThemeSet = ThemeSet::load_defaults();
+    pub static ref THEMES: ThemeSet = ThemeSet::load_defaults();
 
     // Configure Comrak's Markdown rendering with all the bells &
     // whistles!
@@ -183,7 +185,7 @@ fn format_callout_paragraph(callout: Callout) -> NodeValue {
     NodeValue::HtmlBlock(block)
 }
 
-fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
+pub fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     let document = {
         let mut buffer = String::new();
         reader
@@ -245,7 +247,7 @@ fn find_syntax_for_file(filename: &str) -> &'static SyntaxReference {
         .unwrap_or_else(|| SYNTAXES.find_syntax_plain_text())
 }
 
-fn format_code<R: BufRead, W: Write>(
+pub fn format_code<R: BufRead, W: Write>(
     theme: &Theme,
     reader: &mut R,
     writer: &mut W,
@@ -286,124 +288,4 @@ fn format_code<R: BufRead, W: Write>(
     }
 
     writeln!(writer, "</pre>").expect("write should not fail");
-}
-
-// Server endpoint for rendering the syntax of source code. This
-// replaces the 'syntect_server' component of Sourcegraph.
-fn code_endpoint(request: &rouille::Request) -> rouille::Response {
-    #[derive(Deserialize)]
-    struct SourcegraphQuery {
-        filepath: String,
-        theme: String,
-        code: String,
-    }
-
-    let query: SourcegraphQuery = try_or_400!(rouille::input::json_input(request));
-    let mut buf: Vec<u8> = Vec::new();
-
-    // We don't use syntect with the sourcegraph themes bundled
-    // currently, so let's fall back to something that is kind of
-    // similar (tm).
-    let theme = &THEMES.themes[match query.theme.as_str() {
-        "Sourcegraph (light)" => "Solarized (light)",
-        _ => "Solarized (dark)",
-    }];
-
-    format_code(theme, &mut query.code.as_bytes(), &mut buf, &query.filepath);
-
-    Response::json(&json!({
-        "is_plaintext": false,
-        "data": String::from_utf8_lossy(&buf)
-    }))
-}
-
-// Server endpoint for rendering a Markdown file.
-fn markdown_endpoint(request: &rouille::Request) -> rouille::Response {
-    let mut texts: HashMap<String, String> = try_or_400!(rouille::input::json_input(request));
-
-    for text in texts.values_mut() {
-        let mut buf: Vec<u8> = Vec::new();
-        format_markdown(&mut text.as_bytes(), &mut buf);
-        *text = String::from_utf8_lossy(&buf).to_string();
-    }
-
-    Response::json(&texts)
-}
-
-fn highlighting_server(listen: &str) {
-    println!("Starting syntax highlighting server on '{}'", listen);
-
-    rouille::start_server(listen, move |request| {
-        router!(request,
-                // Markdown rendering route
-                (POST) (/markdown) => {
-                    markdown_endpoint(request)
-                },
-
-                // Code rendering route
-                (POST) (/) => {
-                    code_endpoint(request)
-                },
-
-                _ => {
-                    rouille::Response::empty_404()
-                },
-        )
-    });
-}
-
-fn main() {
-    // Parse the command-line flags passed to cheddar to determine
-    // whether it is running in about-filter mode (`--about-filter`)
-    // and what file extension has been supplied.
-    let matches = App::new("cheddar")
-        .about("TVL's syntax highlighter")
-        .arg(
-            Arg::with_name("about-filter")
-                .help("Run as a cgit about-filter (renders Markdown)")
-                .long("about-filter")
-                .takes_value(false),
-        )
-        .arg(
-            Arg::with_name("sourcegraph-server")
-                .help("Run as a Sourcegraph compatible web-server")
-                .long("sourcegraph-server")
-                .takes_value(false),
-        )
-        .arg(
-            Arg::with_name("listen")
-                .help("Address to listen on")
-                .long("listen")
-                .takes_value(true),
-        )
-        .arg(Arg::with_name("filename").help("File to render").index(1))
-        .get_matches();
-
-    if matches.is_present("sourcegraph-server") {
-        highlighting_server(
-            matches
-                .value_of("listen")
-                .expect("Listening address is required for server mode"),
-        );
-        return;
-    }
-
-    let filename = matches.value_of("filename").expect("filename is required");
-
-    let stdin = io::stdin();
-    let mut in_handle = stdin.lock();
-
-    let stdout = io::stdout();
-    let mut out_handle = stdout.lock();
-
-    if matches.is_present("about-filter") && filename.ends_with(".md") {
-        format_markdown(&mut in_handle, &mut out_handle);
-    } else {
-        format_code(
-            &THEMES.themes["InspiredGitHub"],
-            &mut in_handle,
-            &mut out_handle,
-            filename,
-        );
-    }
 }
