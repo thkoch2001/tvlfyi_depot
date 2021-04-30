@@ -61,3 +61,37 @@ toString 42
 "#,
     );
 }
+
+#[test]
+fn highlights_bug_link() {
+    expect_markdown(
+        "Please look at b/123.",
+        "<p>Please look at <a href=\"https://b.tvl.fyi/123\">b/123</a>.</p>",
+    );
+}
+
+#[test]
+fn highlights_cl_link() {
+    expect_markdown(
+        "Please look at cl/420.",
+        "<p>Please look at <a href=\"https://cl.tvl.fyi/420\">cl/420</a>.</p>",
+    );
+}
+
+#[test]
+fn highlights_multiple_shortlinks() {
+    expect_markdown(
+        "Please look at cl/420, b/123.",
+        "<p>Please look at <a href=\"https://cl.tvl.fyi/420\">cl/420</a>, <a href=\"https://b.tvl.fyi/123\">b/123</a>.</p>",
+    );
+
+    expect_markdown(
+        "b/213/cl/213 are different things",
+        "<p><a href=\"https://b.tvl.fyi/213\">b/213</a>/<a href=\"https://cl.tvl.fyi/213\">cl/213</a> are different things</p>",
+    );
+}
+
+#[test]
+fn ignores_invalid_shortlinks() {
+    expect_markdown("b/abc is not a real bug", "<p>b/abc is not a real bug</p>");
+}
