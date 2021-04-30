@@ -51,42 +51,11 @@
   (values))
 
 ;;;
-;;; Responses
-;;;
-
-(defun request-format ()
-  "Returns the content type requested by the current hunchentoot request as a
-symbol equal to either `:html' or `:json', defaulting to `:html' if not
-specified."
-  (eswitch ((hunchentoot:header-in* :accept) :test #'equal)
-    ("application/json" :json)
-    ("text/html" :html)
-    ("*/*" :html)))
-
-(defun format->mime (format)
-  (ecase format
-    (:json "application/json")
-    (:html "text/html")))
-
-(defmacro format-case (&rest clauses)
-  "Execute the cdr of the element in CLAUSES whose car is equal to the current
-request format, a symbol that can be either `:JSON' or `:HTML'"
-  (let ((format (gensym "format")))
-    `(let ((,format (request-format)))
-       (setf (hunchentoot:content-type*) (format->mime ,format))
-       (case ,format ,@clauses))))
-
-(defmethod encode-json ((ts local-time:timestamp)
-                        &optional (stream json:*json-output*))
-  (encode-json (local-time:format-rfc3339-timestring
-                nil ts)
-               stream))
-
-;;;
 ;;; Views
 ;;;
 
 (defvar *title* "Panettone")
+
 (setf (who:html-mode) :html5)
 
 (defun render/nav ()
@@ -500,9 +469,7 @@ given subject an body (in a thread, to avoid blocking)"
 
 (defroute index ("/" :decorators (@auth-optional)) ()
   (let ((issues (model:list-issues :status :open)))
-    (format-case
-     (:html (render/index :issues issues))
-     (:json (encode-json-to-string issues)))))
+    (render/index :issues issues)))
 
 (defroute settings ("/settings" :method :get :decorators (@auth)) ()
   (render/settings))
@@ -551,9 +518,7 @@ given subject an body (in a thread, to avoid blocking)"
   (let* ((issue (model:get-issue id))
          (*title* (format nil "~A | Panettone"
                           (subject issue))))
-    (format-case
-     (:html (render/issue issue))
-     (:json (encode-json-to-string issue)))))
+    (render/issue issue)))
 
 (defroute edit-issue
     ("/issues/:id/edit" :decorators (@auth @handle-issue-not-found))
