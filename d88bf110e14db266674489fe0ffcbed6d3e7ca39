@@ -34,6 +34,24 @@
       "parentUuid": "91e1561e_5199463b",
       "revId": "d88bf110e14db266674489fe0ffcbed6d3e7ca39",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b90d490c_8542d7d6",
+        "filename": "nix/eprintf.nix",
+        "patchSetId": 18
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-04-30T21:52:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebee5395_bf3398ae",
+      "revId": "d88bf110e14db266674489fe0ffcbed6d3e7ca39",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
