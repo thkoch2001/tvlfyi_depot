@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e107c6d_574f16aa",
+        "filename": "tools/cheddar/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-04-30T21:41:48Z",
+      "side": 1,
+      "message": "Can we add some information this requires BAT_SYNTAXES? That\u0027d probably be something important to know - or make the syntax stuff pluggable in the library, ask for an actual path to be passed in, and move the BAT_SYNTAXES reading out into the command line program.",
+      "revId": "6c06356eb7e5e81ab6e2806765ce94367298d6b7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
