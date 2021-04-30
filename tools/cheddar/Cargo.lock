@@ -196,6 +196,7 @@ dependencies = [
  "clap",
  "comrak",
  "lazy_static",
+ "regex",
  "rouille",
  "serde",
  "serde_json",

@@ -5,6 +5,7 @@ use comrak::arena_tree::Node;
 use comrak::nodes::{Ast, AstNode, NodeCodeBlock, NodeHtmlBlock, NodeValue};
 use comrak::{format_html, parse_document, Arena, ComrakOptions};
 use lazy_static::lazy_static;
+use regex::Regex;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::env;
@@ -68,6 +69,13 @@ lazy_static! {
         map.insert("rules.pl", "Prolog");
         map
     };
+
+    // Supported shortlinks in Markdown files.
+    //
+    // Currently only bug links (e.g. b/123) and CL links (e.g.
+    // cl/345) are supported. Coincidentally these have the same
+    // format, which makes the initial implementation easy.
+    static ref SHORTLINK: Regex = Regex::new("\\b(?P<type>b|cl)/(?P<dest>\\d+)\\b").unwrap();
 }
 
 // HTML fragment used when rendering inline blocks in Markdown documents.
@@ -172,6 +180,12 @@ fn has_callout<'a>(node: &Node<'a, RefCell<Ast>>) -> Option<Callout> {
     }
 }
 
+// Replace instances of known shortlinks in the input document with
+// Markdown syntax for a highlighted link.
+fn linkify_shortlinks<'a>(input: &'a str) -> std::borrow::Cow<'a, str> {
+    SHORTLINK.replace_all(input, "[$type/$dest](https://$type.tvl.fyi/$dest)")
+}
+
 fn format_callout_paragraph(callout: Callout) -> NodeValue {
     let class = match callout {
         Callout::Todo => "cheddar-todo",
@@ -195,7 +209,7 @@ pub fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     };
 
     let arena = Arena::new();
-    let root = parse_document(&arena, &document, &MD_OPTS);
+    let root = parse_document(&arena, &linkify_shortlinks(&document), &MD_OPTS);
 
     // This node must exist with a lifetime greater than that of the parsed AST
     // in case that callouts are encountered (otherwise insertion into the tree
