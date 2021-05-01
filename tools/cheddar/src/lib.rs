@@ -280,7 +280,7 @@ pub fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     format_markdown_with_shortlinks(reader, writer, &TVL_LINKS)
 }
 
-fn find_syntax_for_file(filename: &str) -> &'static SyntaxReference {
+
     (*FILENAME_OVERRIDES)
         .get(filename)
         .and_then(|name| SYNTAXES.find_syntax_by_name(name))
