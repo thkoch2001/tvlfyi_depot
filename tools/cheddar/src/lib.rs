@@ -70,12 +70,29 @@ lazy_static! {
         map
     };
 
-    // Supported shortlinks in Markdown files.
-    //
-    // Currently only bug links (e.g. b/123) and CL links (e.g.
-    // cl/345) are supported. Coincidentally these have the same
-    // format, which makes the initial implementation easy.
-    static ref SHORTLINK: Regex = Regex::new("\\b(?P<type>b|cl)/(?P<dest>\\d+)\\b").unwrap();
+    // Default shortlink set used in cheddar (i.e. TVL's shortlinks)
+    static ref TVL_LINKS: Vec<Shortlink> = vec![
+        // TVL shortlinks for bugs and changelists (e.g. b/123,
+        // cl/123). Coincidentally these have the same format, which
+        // makes the initial implementation easy.
+        Shortlink {
+            pattern: Regex::new(r#"\b(?P<type>b|cl)/(?P<dest>\d+)\b"#).unwrap(),
+            replacement: "[$type/$dest](https://$type.tvl.fyi/$dest)",
+        }
+    ];
+}
+
+/// Structure that describes a single shortlink that should be
+/// automatically highlighted. Highlighting is performed as a string
+/// replacement over input Markdown.
+pub struct Shortlink {
+    /// Short link pattern to recognise. Make sure to anchor these
+    /// correctly.
+    pub pattern: Regex,
+
+    /// Replacement string, as per the documentation of
+    /// [`Regex::replace`].
+    pub replacement: &'static str,
 }
 
 // HTML fragment used when rendering inline blocks in Markdown documents.
@@ -182,8 +199,15 @@ fn has_callout<'a>(node: &Node<'a, RefCell<Ast>>) -> Option<Callout> {
 
 // Replace instances of known shortlinks in the input document with
 // Markdown syntax for a highlighted link.
-fn linkify_shortlinks<'a>(input: &'a str) -> std::borrow::Cow<'a, str> {
-    SHORTLINK.replace_all(input, "[$type/$dest](https://$type.tvl.fyi/$dest)")
+fn linkify_shortlinks(mut text: String, shortlinks: &[Shortlink]) -> String {
+    for link in shortlinks {
+        text = link
+            .pattern
+            .replace_all(&text, link.replacement)
+            .to_string();
+    }
+
+    return text;
 }
 
 fn format_callout_paragraph(callout: Callout) -> NodeValue {
@@ -199,7 +223,11 @@ fn format_callout_paragraph(callout: Callout) -> NodeValue {
     NodeValue::HtmlBlock(block)
 }
 
-pub fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
+pub fn format_markdown_with_shortlinks<R: BufRead, W: Write>(
+    reader: &mut R,
+    writer: &mut W,
+    shortlinks: &[Shortlink],
+) {
     let document = {
         let mut buffer = String::new();
         reader
@@ -209,7 +237,7 @@ pub fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     };
 
     let arena = Arena::new();
-    let root = parse_document(&arena, &linkify_shortlinks(&document), &MD_OPTS);
+    let root = parse_document(&arena, &linkify_shortlinks(document, shortlinks), &MD_OPTS);
 
     // This node must exist with a lifetime greater than that of the parsed AST
     // in case that callouts are encountered (otherwise insertion into the tree
@@ -246,6 +274,10 @@ pub fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
     });
 
     format_html(root, &MD_OPTS, writer).expect("Markdown rendering failed");
+}
+
+pub fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
+    format_markdown_with_shortlinks(reader, writer, &TVL_LINKS)
 }
 
 fn find_syntax_for_file(filename: &str) -> &'static SyntaxReference {
