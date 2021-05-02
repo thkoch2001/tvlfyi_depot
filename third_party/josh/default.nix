@@ -5,8 +5,8 @@ let
   gitSrc = pkgs.fetchFromGitHub {
     owner = "esrlabs";
     repo = "josh";
-    rev = "1c1965deb0278de92452a597c092f16b531274ae";
-    sha256 = "0a0ybx4dqr9gfcn1kqy2nirdsfbdwkfz24ljnri564c5381ccldw";
+    rev = "92fd7fb193d0df25b106207675f233cfe1d26d0d";
+    sha256 = pkgs.lib.fakeSha256;
   };
 
   src = pkgs.applyPatches {
