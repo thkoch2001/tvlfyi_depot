@@ -2,20 +2,20 @@
 { depot, pkgs, ... }:
 
 let
-  gitSrc = pkgs.fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "esrlabs";
     repo = "josh";
-    rev = "1c1965deb0278de92452a597c092f16b531274ae";
-    sha256 = "0a0ybx4dqr9gfcn1kqy2nirdsfbdwkfz24ljnri564c5381ccldw";
+    rev = "92fd7fb193d0df25b106207675f233cfe1d26d0d";
+    sha256 = "0fzy9xbr0vnw239gl8famrqncn8pxlnwkfvy3gxl7c80d78yg9j7";
   };
 
-  src = pkgs.applyPatches {
-    name = "josh-src";
-    src = gitSrc;
-    patches = [
-      ./pin-git2-rev.patch
-    ];
-  };
+  # src = pkgs.applyPatches {
+  #   name = "josh-src";
+  #   src = gitSrc;
+  #   patches = [
+  #     ./pin-git2-rev.patch
+  #   ];
+  # };
 in depot.third_party.naersk.buildPackage {
   inherit src;
 
