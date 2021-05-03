@@ -6,6 +6,7 @@ let
   inherit (lib) range;
 in {
   imports = [
+    "${depot.path}/ops/modules/atward.nix"
     "${depot.path}/ops/modules/automatic-gc.nix"
     "${depot.path}/ops/modules/clbot.nix"
     "${depot.path}/ops/modules/irccat.nix"
@@ -273,6 +274,9 @@ in {
         };
       };
     };
+
+    # Run atward, the search engine redirection thing.
+    atward.enable = true;
   };
 
   services.postgresql = {
