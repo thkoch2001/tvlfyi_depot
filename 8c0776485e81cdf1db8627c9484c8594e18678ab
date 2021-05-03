@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac87f237_a5c48bdb",
+        "filename": "web/atward/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-05-03T23:13:38Z",
+      "side": 1,
+      "message": "This should probably be [::], or [::1], depending on whether you really want this to listen on all addresses, and not just localhost.",
+      "revId": "8c0776485e81cdf1db8627c9484c8594e18678ab",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
