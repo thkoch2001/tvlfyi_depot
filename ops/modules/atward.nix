@@ -7,6 +7,12 @@ in {
   options.services.depot.atward = {
     enable = lib.mkEnableOption description;
 
+    host = lib.mkOption {
+      type = lib.types.str;
+      default = "[::1]";
+      description = "Host on which atward should listen";
+    };
+
     port = lib.mkOption {
       type = lib.types.int;
       default = 28973;
@@ -25,7 +31,7 @@ in {
         Restart = "always";
       };
 
-      environment.ATWARD_PORT = toString cfg.port;
+      environment.ATWARD_LISTEN_ADDRESS = "${cfg.host}:${toString cfg.port}";
     };
   };
 }

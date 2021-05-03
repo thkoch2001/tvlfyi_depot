@@ -58,8 +58,8 @@ fn fallback() -> Response {
 
 fn main() {
     let queries = queries();
-    let port = std::env::var("ATWARD_PORT").unwrap_or("28973".to_string());
-    let address = format!("0.0.0.0:{}", port);
+    let address = std::env::var("ATWARD_LISTEN_ADDRESS")
+        .expect("ATWARD_LISTEN_ADDRESS environment variable must be set");
 
     rouille::start_server(&address, move |request| {
         rouille::log(&request, std::io::stderr(), || {
