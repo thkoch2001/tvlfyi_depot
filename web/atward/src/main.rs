@@ -30,6 +30,11 @@ fn queries() -> Vec<Query> {
             pattern: Regex::new("^b/(?P<bug>\\d+)$").unwrap(),
             target: |_, captures| Some(format!("https://b.tvl.fyi/{}", &captures["bug"])),
         },
+        // Changelists (e.g. cl/42)
+        Query {
+            pattern: Regex::new("^cl/(?P<cl>\\d+)$").unwrap(),
+            target: |_, captures| Some(format!("https://cl.tvl.fyi/{}", &captures["cl"])),
+        },
     ]
 }
 
@@ -79,5 +84,16 @@ mod tests {
 
         assert_eq!(dispatch(&queries(), "something only mentioning b/42"), None,);
         assert_eq!(dispatch(&queries(), "b/invalid"), None,);
+    }
+
+    #[test]
+    fn cl_query() {
+        assert_eq!(
+            dispatch(&queries(), "cl/42"),
+            Some("https://cl.tvl.fyi/42".to_string())
+        );
+
+        assert_eq!(dispatch(&queries(), "something only mentioning cl/42"), None,);
+        assert_eq!(dispatch(&queries(), "cl/invalid"), None,);
     }
 }
