@@ -5,6 +5,7 @@
 //! browsers and attempts to send users to useful locations based on
 //! their search query (falling back to another search engine).
 use regex::Regex;
+use rouille::Response;
 
 /// A query type supported by atward. It consists of a pattern on
 /// which to match and trigger the query, and a function to execute
@@ -46,8 +47,23 @@ fn dispatch(queries: &[Query], uri: &str) -> Option<String> {
     None
 }
 
+fn fallback() -> Response {
+    Response::text("no match for atward whimchst query").with_status_code(404)
+}
+
 fn main() {
-    println!("Hello, world!");
+    let queries = queries();
+    let port = std::env::var("ATWARD_PORT").unwrap_or("28973".to_string());
+    let address = format!("0.0.0.0:{}", port);
+
+    rouille::start_server(&address, move |request| {
+        rouille::log(&request, std::io::stderr(), || {
+            match dispatch(&queries, &request.url()) {
+                None => fallback(),
+                Some(destination) => Response::redirect_303(destination),
+            }
+        })
+    });
 }
 
 #[cfg(test)]
