@@ -16,13 +16,16 @@ let
     bins.lowdown "-s" "-Thtml" "-o" "$out" note
   ];
 
-  preventing-oom = renderNote "preventing-oom" ./notes/preventing-oom.md;
-
   notes = [
     {
       route = [ "notes" "preventing-oom" ];
       name = "Preventing OOM";
-      page = preventing-oom;
+      page = renderNote "preventing-oom" ./notes/preventing-oom.md;
+    }
+    {
+      route = [ "notes" "rust-string-conversions" ];
+      name = "Converting between different String types in Rust";
+      page = renderNote "rust-string-conversions" ./notes/rust-string-conversions.md;
     }
   ];
 
@@ -308,7 +311,6 @@ let
 
 in depot.nix.utils.drvTargets {
    inherit
-    preventing-oom
     router
     notes-server
     split-stdin
