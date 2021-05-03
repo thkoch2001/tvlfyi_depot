@@ -16,6 +16,24 @@
       "message": "This would probably be easier understandable if squashed with the previous commit, as it mostly changes everything introduced here.\n\nAlso, I\u0027m still inclined to say that below TVL_LINKS code should live in tools/cheddar/src/bin/cheddar.rs, not the library.\n\nShameless selfishness, but I\u0027d like to use cheddar as a library, outside TVL context.\n\nOnce there\u0027s other entrypoints into cheddar library code (and they are in TVL context), we could think about sharing these regexes across these entrypoints, but I\u0027d really prefer if lib.rs could be somewhat agnostic.",
       "revId": "8f5c0b8eb5a79b5c577a077be44ac584178c45e8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df0b6311_2458821f",
+        "filename": "tools/cheddar/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-03T20:17:47Z",
+      "side": 0,
+      "message": "\u003e This would probably be easier understandable if squashed with the previous commit, as it mostly changes everything introduced here.\n\nI can squash them, but the previous one is more about the regex and the tests introduced, not about the extra complexity of making the links generic. No strong opinion but the current commit chain is how this evolved in practice.\n\n\u003e Also, I\u0027m still inclined to say that below TVL_LINKS code should live in tools/cheddar/src/bin/cheddar.rs, not the library.\n\nI pretty strongly disagree with this. This library is \"TVL first\", and we shouldn\u0027t need to build additional stuff around it to make sure it is reusable within our ecosystem. Inside of the depot, I want `format_markdown` to always do The Right Thing. The API for using an alternative set of shortlinks adds support for external use-cases without shortlinks (which are likely also going to be rare).",
+      "parentUuid": "2ee790ae_b447bebc",
+      "revId": "8f5c0b8eb5a79b5c577a077be44ac584178c45e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
