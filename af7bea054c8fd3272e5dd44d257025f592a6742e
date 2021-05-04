@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2181bea_352808da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-05-04T15:38:51Z",
+      "side": 1,
+      "message": "nice1",
+      "revId": "af7bea054c8fd3272e5dd44d257025f592a6742e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58726066_d66899dc",
+        "filename": "tools/cheddar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-05-04T15:38:51Z",
+      "side": 1,
+      "message": "nit: maybe use a raw string here to avoid \\\\\\\\\\\\\\?",
+      "revId": "af7bea054c8fd3272e5dd44d257025f592a6742e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
