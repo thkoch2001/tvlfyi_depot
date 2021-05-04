@@ -18,6 +18,7 @@ in {
     "${depot.path}/ops/modules/tvl-buildkite.nix"
     "${depot.path}/ops/modules/tvl-slapd/default.nix"
     "${depot.path}/ops/modules/tvl-sso/default.nix"
+    "${depot.path}/ops/modules/www/atward.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/b.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/cache.tvl.su.nix"
     "${depot.path}/ops/modules/www/cl.tvl.fyi.nix"
