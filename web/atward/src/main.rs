@@ -22,6 +22,15 @@ struct Query {
     target: for<'s> fn(&'s str, regex::Captures<'s>) -> Option<String>,
 }
 
+/// Create a URL to a file (and, optionally, specific line) in cgit.
+fn cgit_url(path: &str) -> String {
+    if path.ends_with(".md") {
+        format!("https://code.tvl.fyi/about/{}", path)
+    } else {
+        format!("https://code.tvl.fyi/tree/{}", path)
+    }
+}
+
 /// Definition of all supported queries in atward.
 fn queries() -> Vec<Query> {
     vec![
@@ -34,6 +43,12 @@ fn queries() -> Vec<Query> {
         Query {
             pattern: Regex::new("^cl/(?P<cl>\\d+)$").unwrap(),
             target: |_, captures| Some(format!("https://cl.tvl.fyi/{}", &captures["cl"])),
+        },
+        // Depot paths (e.g. //web/atward or //ops/nixos/whitby/default.nix)
+        // TODO(tazjin): Add support for specifying lines in a query parameter
+        Query {
+            pattern: Regex::new("^//(?P<path>[a-zA-Z].*)$").unwrap(),
+            target: |_, captures| Some(cgit_url(&captures["path"])),
         },
     ]
 }
@@ -93,7 +108,25 @@ mod tests {
             Some("https://cl.tvl.fyi/42".to_string())
         );
 
-        assert_eq!(dispatch(&queries(), "something only mentioning cl/42"), None,);
+        assert_eq!(
+            dispatch(&queries(), "something only mentioning cl/42"),
+            None,
+        );
         assert_eq!(dispatch(&queries(), "cl/invalid"), None,);
+    }
+
+    #[test]
+    fn depot_path_query() {
+        assert_eq!(
+            dispatch(&queries(), "//web/atward/default.nix"),
+            Some("https://code.tvl.fyi/tree/web/atward/default.nix".to_string()),
+        );
+
+        assert_eq!(
+            dispatch(&queries(), "//nix/readTree/README.md"),
+            Some("https://code.tvl.fyi/about/nix/readTree/README.md".to_string()),
+        );
+
+        assert_eq!(dispatch(&queries(), "/not/a/depot/path"), None);
     }
 }
