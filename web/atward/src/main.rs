@@ -63,7 +63,12 @@ fn main() {
 
     rouille::start_server(&address, move |request| {
         rouille::log(&request, std::io::stderr(), || {
-            match dispatch(&queries, &request.url()) {
+            let query = match request.get_param("q") {
+                Some(q) => q,
+                None => return fallback(),
+            };
+
+            match dispatch(&queries, &query) {
                 None => fallback(),
                 Some(destination) => Response::redirect_303(destination),
             }
@@ -93,7 +98,10 @@ mod tests {
             Some("https://cl.tvl.fyi/42".to_string())
         );
 
-        assert_eq!(dispatch(&queries(), "something only mentioning cl/42"), None,);
+        assert_eq!(
+            dispatch(&queries(), "something only mentioning cl/42"),
+            None,
+        );
         assert_eq!(dispatch(&queries(), "cl/invalid"), None,);
     }
 }
