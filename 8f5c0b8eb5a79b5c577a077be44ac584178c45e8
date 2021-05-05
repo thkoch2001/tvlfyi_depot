@@ -34,6 +34,24 @@
       "parentUuid": "2ee790ae_b447bebc",
       "revId": "8f5c0b8eb5a79b5c577a077be44ac584178c45e8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a613083_57ec8a29",
+        "filename": "tools/cheddar/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-05T11:43:58Z",
+      "side": 0,
+      "message": "The other commit is merged at this point, so I\u0027m marking this as resolved.",
+      "parentUuid": "df0b6311_2458821f",
+      "revId": "8f5c0b8eb5a79b5c577a077be44ac584178c45e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
