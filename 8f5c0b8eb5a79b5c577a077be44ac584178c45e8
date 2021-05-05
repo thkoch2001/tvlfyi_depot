@@ -52,6 +52,24 @@
       "parentUuid": "df0b6311_2458821f",
       "revId": "8f5c0b8eb5a79b5c577a077be44ac584178c45e8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1800b4c2_36c8f051",
+        "filename": "tools/cheddar/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-05-05T13:09:00Z",
+      "side": 0,
+      "message": "\u003e I want `format_markdown` to always do The Right Thing.\n\nWhy not make it configurable in some variant of `format_markdown_xyz` and `format_markdown` always uses the default TVL configuration (which would also be exposed).",
+      "parentUuid": "2a613083_57ec8a29",
+      "revId": "8f5c0b8eb5a79b5c577a077be44ac584178c45e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
