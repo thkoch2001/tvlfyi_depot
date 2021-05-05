@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9486c223_35ea8cc8",
+        "filename": "web/atward/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-05T10:10:24Z",
+      "side": 1,
+      "message": "rustfmt seems to be unsure about how it wants this to be v0v",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 10
+      },
+      "revId": "fd86f1aecf8c9d644e6f3e2c8bd86b5b1f3c03b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
