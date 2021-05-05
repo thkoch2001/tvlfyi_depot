@@ -11,7 +11,7 @@
     # configured tvl.fyi/tvl.su search domain.
     services.nginx.virtualHosts."at-shortlink" = {
       serverName = "at";
-      extraConfig = "return 302 https://atward.tvl.fyi$request_uri";
+      extraConfig = "return 302 https://atward.tvl.fyi$request_uri;";
     };
 
     services.nginx.virtualHosts."atward" = {
