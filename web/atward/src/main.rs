@@ -7,10 +7,10 @@
 use regex::Regex;
 use rouille::Response;
 
-/// A query type supported by atward. It consists of a pattern on
+/// A query handler supported by atward. It consists of a pattern on
 /// which to match and trigger the query, and a function to execute
 /// that returns the target URL.
-struct Query {
+struct Handler {
     /// Regular expression on which to match the query string.
     pattern: Regex,
 
@@ -31,22 +31,22 @@ fn cgit_url(path: &str) -> String {
     }
 }
 
-/// Definition of all supported queries in atward.
-fn queries() -> Vec<Query> {
+/// Definition of all supported query handlers in atward.
+fn handlers() -> Vec<Handler> {
     vec![
         // Bug IDs (e.g. b/123)
-        Query {
+        Handler {
             pattern: Regex::new("^b/(?P<bug>\\d+)$").unwrap(),
             target: |_, captures| Some(format!("https://b.tvl.fyi/{}", &captures["bug"])),
         },
         // Changelists (e.g. cl/42)
-        Query {
+        Handler {
             pattern: Regex::new("^cl/(?P<cl>\\d+)$").unwrap(),
             target: |_, captures| Some(format!("https://cl.tvl.fyi/{}", &captures["cl"])),
         },
         // Depot paths (e.g. //web/atward or //ops/nixos/whitby/default.nix)
         // TODO(tazjin): Add support for specifying lines in a query parameter
-        Query {
+        Handler {
             pattern: Regex::new("^//(?P<path>[a-zA-Z].*)$").unwrap(),
             target: |_, captures| Some(cgit_url(&captures["path"])),
         },
@@ -55,7 +55,7 @@ fn queries() -> Vec<Query> {
 
 /// Attempt to match against all known query types, and return the
 /// destination URL if one is found.
-fn dispatch(queries: &[Query], uri: &str) -> Option<String> {
+fn dispatch(queries: &[Handler], uri: &str) -> Option<String> {
     for query in queries {
         if let Some(captures) = query.pattern.captures(uri) {
             if let Some(destination) = (query.target)(uri, captures) {
@@ -72,7 +72,7 @@ fn fallback() -> Response {
 }
 
 fn main() {
-    let queries = queries();
+    let queries = handlers();
     let address = std::env::var("ATWARD_LISTEN_ADDRESS")
         .expect("ATWARD_LISTEN_ADDRESS environment variable must be set");
 
@@ -98,40 +98,40 @@ mod tests {
     #[test]
     fn bug_query() {
         assert_eq!(
-            dispatch(&queries(), "b/42"),
+            dispatch(&handlers(), "b/42"),
             Some("https://b.tvl.fyi/42".to_string())
         );
 
-        assert_eq!(dispatch(&queries(), "something only mentioning b/42"), None,);
-        assert_eq!(dispatch(&queries(), "b/invalid"), None,);
+        assert_eq!(dispatch(&handlers(), "something only mentioning b/42"), None,);
+        assert_eq!(dispatch(&handlers(), "b/invalid"), None,);
     }
 
     #[test]
     fn cl_query() {
         assert_eq!(
-            dispatch(&queries(), "cl/42"),
+            dispatch(&handlers(), "cl/42"),
             Some("https://cl.tvl.fyi/42".to_string())
         );
 
         assert_eq!(
-            dispatch(&queries(), "something only mentioning cl/42"),
+            dispatch(&handlers(), "something only mentioning cl/42"),
             None,
         );
-        assert_eq!(dispatch(&queries(), "cl/invalid"), None,);
+        assert_eq!(dispatch(&handlers(), "cl/invalid"), None,);
     }
 
     #[test]
     fn depot_path_query() {
         assert_eq!(
-            dispatch(&queries(), "//web/atward/default.nix"),
+            dispatch(&handlers(), "//web/atward/default.nix"),
             Some("https://code.tvl.fyi/tree/web/atward/default.nix".to_string()),
         );
 
         assert_eq!(
-            dispatch(&queries(), "//nix/readTree/README.md"),
+            dispatch(&handlers(), "//nix/readTree/README.md"),
             Some("https://code.tvl.fyi/about/nix/readTree/README.md".to_string()),
         );
 
-        assert_eq!(dispatch(&queries(), "/not/a/depot/path"), None);
+        assert_eq!(dispatch(&handlers(), "/not/a/depot/path"), None);
     }
 }
