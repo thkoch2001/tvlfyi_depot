@@ -19,7 +19,33 @@ struct Handler {
     ///
     /// Returning `None` causes atward to fall through to the next
     /// query (and eventually to the default search engine).
-    target: for<'s> fn(&'s str, regex::Captures<'s>) -> Option<String>,
+    target: for<'s> fn(&Query, regex::Captures<'s>) -> Option<String>,
+}
+
+/// An Atward query supplied by a user.
+struct Query {
+    /// Query string itself.
+    query: String,
+}
+
+impl Query {
+    fn from_request(req: &rouille::Request) -> Option<Query> {
+        let query = match req.get_param("q") {
+            Some(q) => q,
+            None => return None,
+        };
+
+        Some(Query { query })
+    }
+}
+
+#[cfg(test)]
+impl From<&str> for Query {
+    fn from(query: &str) -> Query {
+        Query {
+            query: query.to_string(),
+        }
+    }
 }
 
 /// Create a URL to a file (and, optionally, specific line) in cgit.
@@ -55,10 +81,10 @@ fn handlers() -> Vec<Handler> {
 
 /// Attempt to match against all known query types, and return the
 /// destination URL if one is found.
-fn dispatch(queries: &[Handler], uri: &str) -> Option<String> {
-    for query in queries {
-        if let Some(captures) = query.pattern.captures(uri) {
-            if let Some(destination) = (query.target)(uri, captures) {
+fn dispatch(handlers: &[Handler], query: &Query) -> Option<String> {
+    for handler in handlers {
+        if let Some(captures) = handler.pattern.captures(&query.query) {
+            if let Some(destination) = (handler.target)(query, captures) {
                 return Some(destination);
             }
         }
@@ -79,7 +105,7 @@ fn main() {
 
     rouille::start_server(&address, move |request| {
         rouille::log(&request, std::io::stderr(), || {
-            let query = match request.get_param("q") {
+            let query = match Query::from_request(&request) {
                 Some(q) => q,
                 None => return fallback(),
             };
@@ -99,40 +125,43 @@ mod tests {
     #[test]
     fn bug_query() {
         assert_eq!(
-            dispatch(&handlers(), "b/42"),
+            dispatch(&handlers(), &"b/42".into()),
             Some("https://b.tvl.fyi/42".to_string())
         );
 
-        assert_eq!(dispatch(&handlers(), "something only mentioning b/42"), None,);
-        assert_eq!(dispatch(&handlers(), "b/invalid"), None,);
+        assert_eq!(
+            dispatch(&handlers(), &"something only mentioning b/42".into()),
+            None,
+        );
+        assert_eq!(dispatch(&handlers(), &"b/invalid".into()), None,);
     }
 
     #[test]
     fn cl_query() {
         assert_eq!(
-            dispatch(&handlers(), "cl/42"),
+            dispatch(&handlers(), &"cl/42".into()),
             Some("https://cl.tvl.fyi/42".to_string())
         );
 
         assert_eq!(
-            dispatch(&handlers(), "something only mentioning cl/42"),
+            dispatch(&handlers(), &"something only mentioning cl/42".into()),
             None,
         );
-        assert_eq!(dispatch(&handlers(), "cl/invalid"), None,);
+        assert_eq!(dispatch(&handlers(), &"cl/invalid".into()), None,);
     }
 
     #[test]
     fn depot_path_query() {
         assert_eq!(
-            dispatch(&handlers(), "//web/atward/default.nix"),
+            dispatch(&handlers(), &"//web/atward/default.nix".into()),
             Some("https://code.tvl.fyi/tree/web/atward/default.nix".to_string()),
         );
 
         assert_eq!(
-            dispatch(&handlers(), "//nix/readTree/README.md"),
+            dispatch(&handlers(), &"//nix/readTree/README.md".into()),
             Some("https://code.tvl.fyi/about/nix/readTree/README.md".to_string()),
         );
 
-        assert_eq!(dispatch(&handlers(), "/not/a/depot/path"), None);
+        assert_eq!(dispatch(&handlers(), &"/not/a/depot/path".into()), None);
     }
 }
