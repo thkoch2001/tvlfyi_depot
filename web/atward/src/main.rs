@@ -26,6 +26,9 @@ struct Handler {
 struct Query {
     /// Query string itself.
     query: String,
+
+    /// Should Sourcegraph be used instead of cgit?
+    cs: bool,
 }
 
 impl Query {
@@ -35,7 +38,12 @@ impl Query {
             None => return None,
         };
 
-        Some(Query { query })
+        let cs = match req.get_param("cs") {
+            Some(s) if s == "true" => true,
+            _ => false,
+        };
+
+        Some(Query { query, cs })
     }
 }
 
@@ -44,6 +52,7 @@ impl From<&str> for Query {
     fn from(query: &str) -> Query {
         Query {
             query: query.to_string(),
+            cs: false,
         }
     }
 }
@@ -55,6 +64,11 @@ fn cgit_url(path: &str) -> String {
     } else {
         format!("https://code.tvl.fyi/tree/{}", path)
     }
+}
+
+/// Create a URL to a path in Sourcegraph.
+fn sourcegraph_path_url(path: &str) -> String {
+    format!("https://cs.tvl.fyi/depot/-/tree/{}", path)
 }
 
 /// Definition of all supported query handlers in atward.
@@ -74,7 +88,13 @@ fn handlers() -> Vec<Handler> {
         // TODO(tazjin): Add support for specifying lines in a query parameter
         Handler {
             pattern: Regex::new("^//(?P<path>[a-zA-Z].*)$").unwrap(),
-            target: |_, captures| Some(cgit_url(&captures["path"])),
+            target: |query, captures| {
+                if query.cs {
+                    Some(sourcegraph_path_url(&captures["path"]))
+                } else {
+                    Some(cgit_url(&captures["path"]))
+                }
+            },
         },
     ]
 }
@@ -151,7 +171,7 @@ mod tests {
     }
 
     #[test]
-    fn depot_path_query() {
+    fn depot_path_cgit_query() {
         assert_eq!(
             dispatch(&handlers(), &"//web/atward/default.nix".into()),
             Some("https://code.tvl.fyi/tree/web/atward/default.nix".to_string()),
@@ -163,5 +183,30 @@ mod tests {
         );
 
         assert_eq!(dispatch(&handlers(), &"/not/a/depot/path".into()), None);
+    }
+
+    #[test]
+    fn depot_path_sourcegraph_query() {
+        assert_eq!(
+            dispatch(
+                &handlers(),
+                &Query {
+                    query: "//web/atward/default.nix".to_string(),
+                    cs: true,
+                }
+            ),
+            Some("https://cs.tvl.fyi/depot/-/tree/web/atward/default.nix".to_string()),
+        );
+
+        assert_eq!(
+            dispatch(
+                &handlers(),
+                &Query {
+                    query: "/not/a/depot/path".to_string(),
+                    cs: true,
+                }
+            ),
+            None
+        );
     }
 }
