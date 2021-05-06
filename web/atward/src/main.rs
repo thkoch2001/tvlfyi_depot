@@ -68,7 +68,8 @@ fn dispatch(queries: &[Handler], uri: &str) -> Option<String> {
 }
 
 fn fallback() -> Response {
-    Response::text("no match for atward whimchst query").with_status_code(404)
+    Response::text("error for emphasis that i am angery and the query whimchst i angery atward")
+        .with_status_code(404)
 }
 
 fn main() {
