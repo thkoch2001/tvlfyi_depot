@@ -46,6 +46,12 @@ in {
       ];
 
       environment.SRC_SYNTECT_SERVER = "http://172.17.0.1:${toString cfg.cheddarPort}";
+
+      # Sourcegraph needs a higher nofile limit, it logs warnings
+      # otherwise (unclear whether it actually affects the service).
+      extraOptions = [
+        "--ulimit nofile=10000:10000"
+      ];
     };
   };
 }
