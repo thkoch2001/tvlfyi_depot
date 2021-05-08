@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "351ff898_014f0c90",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-05-08T21:44:51Z",
+      "side": 1,
+      "message": "yes, this sounds good to me. We might have some headaches with file access and copying things around for \"remote evaluation\" as described in the brainstorming document, but it feels sane to use absolute paths here, and assume evaluator and requester live in the same mount namespace (or one that\u0027s sufficiently similar enough)",
+      "parentUuid": "1026b425_eca78bc2",
+      "revId": "32202bbad69f89114912652b6db6aa2b8013921a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1856fb12_a118f8eb",
         "filename": "tvix/proto/evaluator.proto",
         "patchSetId": 11
@@ -31,6 +49,23 @@
       "writtenOn": "2021-04-24T16:29:38Z",
       "side": 1,
       "message": "\"the value it evaluates to\", maybe?",
+      "revId": "32202bbad69f89114912652b6db6aa2b8013921a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f90688e_dab71046",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-05-08T21:44:51Z",
+      "side": 1,
+      "message": "We realized we also need to communicate the working directory here, as relative paths (like a ./. in the expression passed) need to keep working. As it\u0027s now two values, I propose splitting this in a separate `EvaluateExpression` message, like `EvaluateFile` already is.",
       "revId": "32202bbad69f89114912652b6db6aa2b8013921a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
