@@ -16,6 +16,24 @@
       "message": "s/targt/target/",
       "revId": "dc7a5fd978859bef23693009d4a82a514c244614",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0c8a1d5_a70b0cec",
+        "filename": "tvix/proto/default.nix",
+        "patchSetId": 14
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-08T22:29:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38563a85_24999fc3",
+      "revId": "dc7a5fd978859bef23693009d4a82a514c244614",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
