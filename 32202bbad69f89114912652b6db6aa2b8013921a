@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c970f2c_9e7b8e9f",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-08T22:09:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "351ff898_014f0c90",
+      "revId": "32202bbad69f89114912652b6db6aa2b8013921a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1856fb12_a118f8eb",
@@ -53,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57eb4d8a_74a7d222",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-08T22:09:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1856fb12_a118f8eb",
+      "revId": "32202bbad69f89114912652b6db6aa2b8013921a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f90688e_dab71046",
@@ -66,6 +102,24 @@
       "writtenOn": "2021-05-08T21:44:51Z",
       "side": 1,
       "message": "We realized we also need to communicate the working directory here, as relative paths (like a ./. in the expression passed) need to keep working. As it\u0027s now two values, I propose splitting this in a separate `EvaluateExpression` message, like `EvaluateFile` already is.",
+      "revId": "32202bbad69f89114912652b6db6aa2b8013921a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dca8f0e_20f0db49",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 11
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-08T22:09:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f90688e_dab71046",
       "revId": "32202bbad69f89114912652b6db6aa2b8013921a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
