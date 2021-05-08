@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b0ec28b_d26b4c2e",
+        "filename": "tvix/proto/evaluator.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-05-08T22:11:35Z",
+      "side": 1,
+      "message": "Let\u0027s add a comment here that this is likely to change once more of the Store protocol has been fleshed out.\n\nI\u0027m pretty sure we\u0027ll the same underlying primitives here in the longer run.",
+      "parentUuid": "599d7814_41657ea8",
+      "revId": "15421586afe3677c8aa00dc66a008cacc72ad37c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4d4198f4_72c06136",
         "filename": "tvix/proto/evaluator.proto",
         "patchSetId": 3
