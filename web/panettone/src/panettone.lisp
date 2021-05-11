@@ -515,7 +515,11 @@ given subject an body (in a thread, to avoid blocking)"
 (defroute show-issue
     ("/issues/:id" :decorators (@auth-optional @handle-issue-not-found))
     (&path (id 'integer))
-  (let* ((issue (model:get-issue id))
+  (let* ((issue (or
+                  (model:get-issue id)
+                  (progn
+                    (setf (hunchentoot:return-code*) 404)
+                    (hunchentoot:abort-request-handler "issue not found"))))
          (*title* (format nil "~A | Panettone"
                           (subject issue))))
     (render/issue issue)))
