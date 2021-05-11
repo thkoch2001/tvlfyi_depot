@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c586e246_c612947d",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2021-05-11T22:32:48Z",
+      "side": 1,
+      "message": "Done, following google\u0027s style guide https://google.github.io/styleguide/htmlcssguide.html#Optional_Tags",
+      "parentUuid": "5e3fee2c_0321021f",
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f5afe07_e9533fef",
