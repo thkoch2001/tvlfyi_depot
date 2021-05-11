@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e3fee2c_0321021f",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2021-05-11T22:27:29Z",
+      "side": 1,
+      "message": "Where is the \u003chtml\u003e element?",
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f5afe07_e9533fef",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2021-05-11T22:27:29Z",
+      "side": 1,
+      "message": "I believe there are compatibility issues using webp, I would suggest using something like PNG.\n\nAlso that icon is not square, it is 94x96, it should be square, preferably something like 64x64.",
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ac351a2_60f446d1",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2021-05-11T22:27:29Z",
+      "side": 1,
+      "message": "is it called \"atward\" or \"TVL Search\"?",
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6420eeaf_819450d5",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2021-05-11T22:27:29Z",
+      "side": 1,
+      "message": "what\u0027s this random space?",
+      "range": {
+        "startLine": 18,
+        "startChar": 49,
+        "endLine": 18,
+        "endChar": 50
+      },
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da011558_ca6213f5",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2021-05-11T22:27:29Z",
+      "side": 1,
+      "message": "is it \"at.tvl.fyi\" or \"atward.tvl.fyi\"?",
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
