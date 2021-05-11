@@ -1,0 +1,10 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>TVL</ShortName>
+  <Description>The Virus Lounge Search</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="96" height="94" type="image/webp">https://tvl.fyi/static/favicon.webp</Image>
+  <Url type="text/html" template="https://at.tvl.fyi/">
+    <Param name="q" value="{searchTerms}"/>
+  </Url>
+</OpenSearchDescription>
