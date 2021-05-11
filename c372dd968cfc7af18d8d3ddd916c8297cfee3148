@@ -33,6 +33,24 @@
       "message": "If we are omitting the \u003chtml\u003e element, we should follow that entirely, as in also omitting \u003chead\u003e and \u003cbody\u003e as partially following it is a bit weird.\nhttps://google.github.io/styleguide/htmlcssguide.html#Optional_Tags",
       "revId": "c372dd968cfc7af18d8d3ddd916c8297cfee3148",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "368e81a5_80120695",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-11T22:41:51Z",
+      "side": 1,
+      "message": "I got rid of \u003chead\u003e, but we have an actually relevant CSS class on the body so I kept that (the CSS has a light and a dark theme, which is toggled for the whole body). Not sure what the recommended alternative for that is.",
+      "parentUuid": "9c2612ca_64a007cb",
+      "revId": "c372dd968cfc7af18d8d3ddd916c8297cfee3148",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
