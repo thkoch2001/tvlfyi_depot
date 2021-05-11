@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5176d36_6115f579",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-11T22:16:03Z",
+      "side": 1,
+      "message": "I think you could figure out this Rust code, but that\u0027s fine :p",
+      "parentUuid": "f04415ae_652017dd",
+      "revId": "2dbcaf97143eb172094e094edacb38a1ad6d220e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ecc8a8d_835013e1",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "294a12f6_033a99b5",
+        "filename": "web/atward/src/opensearch.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-11T22:16:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ecc8a8d_835013e1",
+      "revId": "2dbcaf97143eb172094e094edacb38a1ad6d220e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff157d67_9b80a1ea",
@@ -48,6 +84,30 @@
       "writtenOn": "2021-05-11T22:12:02Z",
       "side": 1,
       "message": "Firefox rejects all remote icons over 10KB.\nAlso I wouldn\u0027t use webp, PNG is fine though.\nIt also isn\u0027t square, MDN says:\n\u003e URI of an icon for the search engine. When possible, include a 16×16 image of type image/x-icon (such as /favicon.ico) and a 64×64 image of type image/jpeg or image/png.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 93
+      },
+      "revId": "2dbcaf97143eb172094e094edacb38a1ad6d220e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7925617_a37203f3",
+        "filename": "web/atward/src/opensearch.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-11T22:16:03Z",
+      "side": 1,
+      "message": "Icon removed",
+      "parentUuid": "ff157d67_9b80a1ea",
       "range": {
         "startLine": 6,
         "startChar": 0,
