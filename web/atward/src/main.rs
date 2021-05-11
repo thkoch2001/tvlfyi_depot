@@ -113,6 +113,14 @@ fn dispatch(handlers: &[Handler], query: &Query) -> Option<String> {
     None
 }
 
+/// Render the atward index page which gives users some information
+/// about how to use the service.
+fn index() -> Response {
+    Response::html(include_str!("index.html"))
+}
+
+/// Render the fallback page which informs users that their query is
+/// unsupported.
 fn fallback() -> Response {
     Response::text("error for emphasis that i am angery and the query whimchst i angery atward")
         .with_status_code(404)
@@ -127,7 +135,7 @@ fn main() {
         rouille::log(&request, std::io::stderr(), || {
             let query = match Query::from_request(&request) {
                 Some(q) => q,
-                None => return fallback(),
+                None => return index(),
             };
 
             match dispatch(&queries, &query) {
