@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f98dfc0c_44f23a7f",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-11T22:37:12Z",
+      "side": 1,
+      "message": "Gone with the wind: https://google.github.io/styleguide/htmlcssguide.html#Optional_Tags",
+      "parentUuid": "5e3fee2c_0321021f",
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f5afe07_e9533fef",
@@ -55,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a23a8e6_0c7aedf3",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-11T22:37:12Z",
+      "side": 1,
+      "message": "Hm, this is the same as the one on tvl.fyi and it seems to work fine in both major browsers so I\u0027m inclined to not change this. I think there are issues with webp on iPhones because of an Apple/Google codec dispute, but I think iPhones don\u0027t render favicons anyways.",
+      "parentUuid": "1f5afe07_e9533fef",
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ac351a2_60f446d1",
         "filename": "web/atward/src/index.html",
         "patchSetId": 2
@@ -66,6 +102,24 @@
       "writtenOn": "2021-05-11T22:27:29Z",
       "side": 1,
       "message": "is it called \"atward\" or \"TVL Search\"?",
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08bf5bb5_57498e19",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-11T22:37:12Z",
+      "side": 1,
+      "message": "I think without the context of the URL bar having a title that is more descriptive makes more sense. Imagine somebody opening it in a new tab, forgetting about it, and later seeing a tab just called \"atward\" vs. \"TVL Search\" - the latter is more likely to be useful.",
+      "parentUuid": "5ac351a2_60f446d1",
       "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -93,6 +147,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62452f72_0ad67bd5",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-11T22:37:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6420eeaf_819450d5",
+      "range": {
+        "startLine": 18,
+        "startChar": 49,
+        "endLine": 18,
+        "endChar": 50
+      },
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da011558_ca6213f5",
@@ -106,6 +184,24 @@
       "writtenOn": "2021-05-11T22:27:29Z",
       "side": 1,
       "message": "is it \"at.tvl.fyi\" or \"atward.tvl.fyi\"?",
+      "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb6376e2_27b41d40",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-11T22:37:12Z",
+      "side": 1,
+      "message": "Both, actually!",
+      "parentUuid": "da011558_ca6213f5",
       "revId": "c423e81313a855f2932f58a3db22bcf78e001e14",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
