@@ -113,6 +113,13 @@ fn dispatch(handlers: &[Handler], query: &Query) -> Option<String> {
     None
 }
 
+/// Return the opensearch.xml file which is required for adding atward
+/// as a search engine in Firefox.
+fn opensearch() -> Response {
+    Response::text(include_str!("opensearch.xml"))
+        .with_unique_header("Content-Type", "application/opensearchdescription+xml")
+}
+
 /// Render the atward index page which gives users some information
 /// about how to use the service.
 fn index() -> Response {
@@ -133,6 +140,10 @@ fn main() {
 
     rouille::start_server(&address, move |request| {
         rouille::log(&request, std::io::stderr(), || {
+            if request.url() == "/opensearch.xml" {
+                return opensearch();
+            }
+
             let query = match Query::from_request(&request) {
                 Some(q) => q,
                 None => return index(),
