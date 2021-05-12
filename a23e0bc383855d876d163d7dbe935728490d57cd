@@ -1,6 +1,57 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b380be3_a94cecfc",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-05-12T12:27:33Z",
+      "side": 1,
+      "message": "This looks like it\u0027s going to get annoying to add extra settings on the JS side.",
+      "revId": "a23e0bc383855d876d163d7dbe935728490d57cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c2864d8_b65a5c73",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-05-12T12:27:33Z",
+      "side": 1,
+      "message": "You want to either `onchange` or `oninput`:\n\nhttps://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/change_event\nhttps://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/input_event\n\nThe difference is somewhat subtle, so I\u0027m not quite sure if it matters in any case we are interested in, but onclick may cause problems for someone selecting the box with a keyboard.",
+      "revId": "a23e0bc383855d876d163d7dbe935728490d57cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2043585_b34d57d8",
+        "filename": "web/atward/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-05-12T12:27:33Z",
+      "side": 1,
+      "message": "For a different CL maybe: This should also match The param `cs \u003d\u003d \"\"`, so you can use `/?cs\u0026q\u003d%s`.",
+      "revId": "a23e0bc383855d876d163d7dbe935728490d57cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2bd345ac_fd68c7ed",
