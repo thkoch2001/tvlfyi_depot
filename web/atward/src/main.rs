@@ -5,7 +5,8 @@
 //! browsers and attempts to send users to useful locations based on
 //! their search query (falling back to another search engine).
 use regex::Regex;
-use rouille::Response;
+use rouille::input::cookies;
+use rouille::{Request, Response};
 
 /// A query handler supported by atward. It consists of a pattern on
 /// which to match and trigger the query, and a function to execute
@@ -23,6 +24,7 @@ struct Handler {
 }
 
 /// An Atward query supplied by a user.
+#[derive(Debug, PartialEq)]
 struct Query {
     /// Query string itself.
     query: String,
@@ -31,19 +33,38 @@ struct Query {
     cs: bool,
 }
 
+/// Helper function for setting a parameter based on a query
+/// parameter.
+fn query_setting(req: &Request, config: &mut bool, param: &str) {
+    match req.get_param(param) {
+        Some(s) if s == "true" => *config = true,
+        Some(s) if s == "false" => *config = false,
+        _ => {}
+    }
+}
+
 impl Query {
-    fn from_request(req: &rouille::Request) -> Option<Query> {
-        let query = match req.get_param("q") {
-            Some(q) => q,
+    fn from_request(req: &Request) -> Option<Query> {
+        // First extract the actual search query ...
+        let mut query = match req.get_param("q") {
+            Some(query) => Query { query, cs: false },
             None => return None,
         };
 
-        let cs = match req.get_param("cs") {
-            Some(s) if s == "true" => true,
-            _ => false,
-        };
+        // ... then apply settings to it. Settings in query parameters
+        // take precedence over cookies.
+        for cookie in cookies(req) {
+            match cookie {
+                ("cs", "true") => {
+                    query.cs = true;
+                }
+                _ => {}
+            }
+        }
 
-        Some(Query { query, cs })
+        query_setting(req, &mut query.cs, "cs");
+
+        Some(query)
     }
 }
 
@@ -226,6 +247,72 @@ mod tests {
                 }
             ),
             None
+        );
+    }
+
+    #[test]
+    fn request_to_query() {
+        assert_eq!(
+            Query::from_request(&Request::fake_http("GET", "/?q=b%2F42", vec![], vec![]))
+                .expect("request should parse to a query"),
+            Query {
+                query: "b/42".to_string(),
+                cs: false,
+            },
+        );
+
+        assert_eq!(
+            Query::from_request(&Request::fake_http("GET", "/", vec![], vec![])),
+            None
+        );
+    }
+
+    #[test]
+    fn settings_from_cookie() {
+        assert_eq!(
+            Query::from_request(&Request::fake_http(
+                "GET",
+                "/?q=b%2F42",
+                vec![("Cookie".to_string(), "cs=true;".to_string())],
+                vec![]
+            ))
+            .expect("request should parse to a query"),
+            Query {
+                query: "b/42".to_string(),
+                cs: true,
+            },
+        );
+    }
+
+    #[test]
+    fn settings_from_query_parameter() {
+        assert_eq!(
+            Query::from_request(&Request::fake_http(
+                "GET",
+                "/?q=b%2F42&cs=true",
+                vec![],
+                vec![]
+            ))
+            .expect("request should parse to a query"),
+            Query {
+                query: "b/42".to_string(),
+                cs: true,
+            },
+        );
+
+        // Query parameter should override cookie
+        assert_eq!(
+            Query::from_request(&Request::fake_http(
+                "GET",
+                "/?q=b%2F42&cs=false",
+                vec![("Cookie".to_string(), "cs=true;".to_string())],
+                vec![]
+            ))
+            .expect("request should parse to a query"),
+            Query {
+                query: "b/42".to_string(),
+                cs: false,
+            },
         );
     }
 }
