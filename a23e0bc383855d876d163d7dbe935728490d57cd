@@ -72,6 +72,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a9a9c46_560d8115",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-05-12T12:54:30Z",
+      "side": 1,
+      "message": "I\u0027ll take your word for it :)",
+      "parentUuid": "e3cf66b5_663880aa",
+      "revId": "a23e0bc383855d876d163d7dbe935728490d57cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c2864d8_b65a5c73",
