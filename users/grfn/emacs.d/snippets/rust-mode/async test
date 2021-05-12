@@ -4,7 +4,7 @@
 # key: atest
 # condition: t
 # --
-#[tokio::test(threaded_scheduler)]
+#[tokio::test(flavor = "multi_thread")]
 async fn ${1:test_name}() {
    `%`$0
 }
