@@ -42,7 +42,7 @@ runCommandNoCC "index.html" {
     <hr>
     <footer>
       <p class="footer">
-        <a class="uncoloured-link" href="https://cs.tvl.fyi/depot/-/blob/README.md">code</a>
+        <a class="uncoloured-link" href="https://at.tvl.fyi/?q=%2F%2FREADME.md">code</a>
         |
         <a class="uncoloured-link" href="https://cl.tvl.fyi/">reviews</a>
         |
