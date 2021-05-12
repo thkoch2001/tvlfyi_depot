@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dc8b0db_4d6f5ef4",
+        "filename": "web/tvl/template/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-12T14:56:33Z",
+      "side": 1,
+      "message": "I think this should say \"search\" (similar to how the others don\u0027t say gerrit or panettone)",
+      "range": {
+        "startLine": 49,
+        "startChar": 66,
+        "endLine": 49,
+        "endChar": 72
+      },
+      "revId": "0babe7a6865808fd0635e1d8433449e2524848af",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
