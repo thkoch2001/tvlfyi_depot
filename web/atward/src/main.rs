@@ -144,7 +144,7 @@ fn opensearch() -> Response {
 /// Render the atward index page which gives users some information
 /// about how to use the service.
 fn index() -> Response {
-    Response::html(include_str!("index.html"))
+    Response::html(include_str!(env!("ATWARD_INDEX_HTML")))
 }
 
 /// Render the fallback page which informs users that their query is
