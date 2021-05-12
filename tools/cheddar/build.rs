@@ -43,7 +43,7 @@ fn main() {
         .expect("Nix returned invalid output after building syntax set");
 
     // Return an instruction to Cargo that will set the environment
-    // variale during rustc calls.
+    // variable during rustc calls.
     //
     // https://doc.rust-lang.org/cargo/reference/build-scripts.html#cargorustc-envvarvalue
     println!("cargo:rustc-env={}={}", BAT_SYNTAXES, out_path.trim());
