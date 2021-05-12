@@ -9,28 +9,9 @@ let
     ${graphviz}/bin/neato -Tsvg ${./tvl.dot} > $out
   '';
 
-  homepage = writeText "index.html" ''
-    <!DOCTYPE html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="description" content="The Virus Lounge">
-      <link rel="stylesheet" type="text/css" href="/static/tazjin.css" media="all">
-      <link rel="icon" type="image/webp" href="/static/favicon.webp">
-      <title>The Virus Lounge</title>
-      <style>
-        svg {
-          max-width: inherit;
-          height: auto;
-        }
-      </style>
-    </head>
-    <body class="light">
-      <header>
-        <h1><a class="blog-title" href="/">The Virus Lounge</a> </h1>
-        <hr>
-      </header>
-
+  homepage = depot.web.tvl.template {
+    title = "The Virus Lounge";
+    content = ''
       <main>
         <img alt="The Virus Lounge" src="/static/virus_lounge.webp">
       </main>
@@ -49,22 +30,16 @@ let
         It's pretty straightforward. Feel free to click on people, too.
       </p>
       ${builtins.readFile tvlGraph}
-
-      <hr>
-      <footer>
-        <p class="footer">
-          <a class="uncoloured-link" href="https://cs.tvl.fyi/depot/-/blob/README.md">code</a>
-          |
-          <a class="uncoloured-link" href="https://cl.tvl.fyi/">reviews</a>
-          |
-          <a class="uncoloured-link" href="https://b.tvl.fyi/">bugs</a>
-          |
-          <a class="uncoloured-link" href="https://todo.tvl.fyi/">todos</a>
-        </p>
-        <p class="lod">ಠ_ಠ</p>
-      </footer>
-    </body>
-  '';
+    '';
+    extraHead = ''
+      <style>
+        svg {
+          max-width: inherit;
+          height: auto;
+        }
+      </style>
+    '';
+  };
 in runCommandNoCC "website" {} ''
   mkdir -p $out/static
   cp ${homepage} $out/index.html
