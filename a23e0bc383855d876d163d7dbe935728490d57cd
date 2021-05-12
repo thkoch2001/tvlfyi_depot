@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3cf66b5_663880aa",
+        "filename": "web/atward/src/index.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-12T12:48:50Z",
+      "side": 1,
+      "message": "Nope, this is just how it works. Javascript being Javascript and all that. I was also confused about it but it seems to be right.",
+      "parentUuid": "124be5e6_9384385c",
+      "revId": "a23e0bc383855d876d163d7dbe935728490d57cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c2864d8_b65a5c73",
