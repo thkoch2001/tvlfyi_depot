@@ -11,30 +11,34 @@
 }@args:
 
 let
-  inherit (pkgs) writeText lib;
+  inherit (pkgs) runCommandNoCC lib;
+  inherit (depot.tools) cheddar;
 
   baseUrl = lib.optionalString useUrls "https://tvl.fyi";
 in
 
-writeText "index.html" (''
-  <!DOCTYPE html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="The Virus Lounge">
-    <link rel="stylesheet" type="text/css" href="${baseUrl}/static/tazjin.css" media="all">
-    <link rel="icon" type="image/webp" href="${baseUrl}/static/favicon.webp">
-    <title>${title}</title>
-'' + lib.optionalString (args ? extraHead) extraHead + ''
-  </head>
-  <body class="light">
-    <header>
-      <h1><a class="blog-title" href="/">${title}</a> </h1>
-      <hr>
-    </header>
+runCommandNoCC "index.html" {
+  headerPart = ''
+    <!DOCTYPE html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="The Virus Lounge">
+      <link rel="stylesheet" type="text/css" href="${baseUrl}/static/tazjin.css" media="all">
+      <link rel="icon" type="image/webp" href="${baseUrl}/static/favicon.webp">
+      <title>${title}</title>
+  '' + lib.optionalString (args ? extraHead) extraHead + ''
+    </head>
+    <body class="light">
+      <header>
+        <h1><a class="blog-title" href="/">${title}</a> </h1>
+        <hr>
+      </header>
+  '';
 
-    ${content}
+  inherit content;
 
+  footerPart = ''
     <hr>
     <footer>
       <p class="footer">
@@ -51,4 +55,10 @@ writeText "index.html" (''
       <p class="lod">ಠ_ಠ</p>
     </footer>
   </body>
-'')
+  '';
+
+  passAsFile = [ "headerPart" "content" "footerPart" ];
+} ''
+  ${cheddar}/bin/cheddar --about-filter content.md < $contentPath > rendered.html
+  cat $headerPartPath rendered.html $footerPartPath > $out
+''
