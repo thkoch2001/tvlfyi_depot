@@ -45,6 +45,8 @@ writeText "index.html" (''
         <a class="uncoloured-link" href="https://b.tvl.fyi/">bugs</a>
         |
         <a class="uncoloured-link" href="https://todo.tvl.fyi/">todos</a>
+        |
+        <a class="uncoloured-link" href="https://atward.tvl.fyi/">atward</a>
       </p>
       <p class="lod">ಠ_ಠ</p>
     </footer>
