@@ -6,7 +6,28 @@
 <link rel="icon" type="image/webp" href="https://tvl.fyi/static/favicon.webp">
 <link rel="search" type="application/opensearchdescription+xml" title="TVL Search" href="https://at.tvl.fyi/opensearch.xml">
 <title>TVL Search</title>
-<body class="light">
+<script>
+  /* Initialise the state of all settings. */
+  function loadSettings() {
+      loadSetting(document.getElementById('cs-setting'), 'cs');
+  }
+
+  /* Initialise the state of a setting from a cookie. */
+  function loadSetting(checkbox, name) {
+      if (document.cookie.split(';').some(function(cookie) {
+          return cookie.indexOf(`${name}=true`) >= 0;
+      })) {
+          checkbox.checked = true;
+      }
+  }
+
+  /* Persist the state of a checkbox in a cookie */
+  function saveSetting(checkbox, name) {
+      console.log(`setting atward parameter '${name}' to ${checkbox.checked.toString()}`);
+      document.cookie = `${name}=${checkbox.checked.toString()};`;
+  }
+</script>
+<body class="light" onload="loadSettings();">
   <header>
     <h1><a class="blog-title" href="/">atward</a></h1>
     <hr/>
@@ -47,12 +68,28 @@
       <li><kbd>cs=true</kbd> - use Sourcegraph instead of cgit to view code</li>
     </ul>
   </p>
-  <p class="cheddar-callout cheddar-todo">
-    In <b>Firefox</b>, configuring query parameters is difficult as
-    users can not edit search engines directly. There are browser
-    extensions and other workarounds for this issue, but we do not
-    recommend any particular one.
+  <p>
+    In some browsers (like Firefox) users can not edit query
+    parameters for search engines. As an alternative configuration can
+    be supplied via cookies with the same names as the configuration
+    parameters.
   </p>
+  <p>
+    The form below can set this configuration:
+    <form class="cheddar-callout cheddar-todo">
+      <input type="checkbox"
+             id="cs-setting"
+             onchange="saveSetting(this, 'cs');"
+             > Use Sourcegraph instead of cgit</input>
+    </form>
+  </p>
+  <noscript>
+    <p class="cheddar-callout cheddar-warning">
+      The form above only works with Javascript enabled. Only a few
+      lines of Javascript are used, and they are licensed under a
+      free-software license (MIT).
+    </p>
+  </noscript>
 
   <h3>Source code</h3>
   <p>
