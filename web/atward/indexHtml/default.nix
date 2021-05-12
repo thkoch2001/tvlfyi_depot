@@ -43,8 +43,9 @@ depot.web.tvl.template {
     <form class="cheddar-callout cheddar-todo">
       <input type="checkbox"
              id="cs-setting"
-             onchange="saveSetting(this, 'cs');"
-             > Use Sourcegraph instead of cgit</input>
+             name="cs-setting"
+             onchange="saveSetting(this, 'cs');">
+      <label for="cs-setting">Use Sourcegraph instead of cgit</label>
     </form>
 
     <noscript>
