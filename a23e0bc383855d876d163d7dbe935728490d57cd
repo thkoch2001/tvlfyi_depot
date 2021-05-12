@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bd345ac_fd68c7ed",
+        "filename": "web/atward/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-12T11:58:22Z",
+      "side": 1,
+      "message": "This is a bit awkward because cookies and query parameters have different APIs in rouille, but it\u0027ll do.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "a23e0bc383855d876d163d7dbe935728490d57cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
