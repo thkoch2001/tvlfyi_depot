@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8243e617_e82235c7",
+        "filename": "web/tvl/template/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-12T14:57:17Z",
+      "side": 1,
+      "message": "for another CL, but I think we should actually make this an atward link",
+      "range": {
+        "startLine": 45,
+        "startChar": 41,
+        "endLine": 45,
+        "endChar": 72
+      },
+      "revId": "fb6d0e5f3d4177c24e44581d705afd0a897fff0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
