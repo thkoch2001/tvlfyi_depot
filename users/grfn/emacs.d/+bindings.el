@@ -210,7 +210,7 @@ private/hlissner/snippets."
      :desc "Buffer"                :nv "b" #'doom/previous-buffer
      :desc "Diff Hunk"             :nv "d" #'git-gutter:previous-hunk
      :desc "Todo"                  :nv "t" #'hl-todo-previous
-     :desc "Error"                 :nv "e" #'previous-error
+     :desc "Error"                 :nv "e" #'flycheck-previous-error
      :desc "Workspace"             :nv "w" #'+workspace/switch-left
      :desc "Smart jump"            :nv "h" #'smart-backward
      :desc "Spelling error"        :nv "s" #'evil-prev-flyspell-error
@@ -222,7 +222,7 @@ private/hlissner/snippets."
      :desc "Buffer"                :nv "b" #'doom/next-buffer
      :desc "Diff Hunk"             :nv "d" #'git-gutter:next-hunk
      :desc "Todo"                  :nv "t" #'hl-todo-next
-     :desc "Error"                 :nv "e" #'next-error
+     :desc "Error"                 :nv "e" #'flycheck-next-error
      :desc "Workspace"             :nv "w" #'+workspace/switch-right
      :desc "Smart jump"            :nv "l" #'smart-forward
      :desc "Spelling error"        :nv "s" #'evil-next-flyspell-error
@@ -635,8 +635,8 @@ private/hlissner/snippets."
  :v  "V"  #'er/contract-region
 
  ;; flycheck
- :m  "]e" #'next-error
- :m  "[e" #'previous-error
+ :m  "]e" #'flycheck-next-error
+ :m  "[e" #'flycheck-previous-error
  (:after flycheck
    :map flycheck-error-list-mode-map
    :n "C-n" #'flycheck-error-list-next-error
