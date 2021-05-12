@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fed7c0f1_70736ebe",
+        "filename": "web/atward/build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-12T15:25:06Z",
+      "side": 1,
+      "message": "built",
+      "range": {
+        "startLine": 20,
+        "startChar": 21,
+        "endLine": 20,
+        "endChar": 26
+      },
+      "revId": "46bd632c7ac64efeb4225de840bfca2b77bc294c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44956f2b_b09f8b40",
+        "filename": "web/atward/build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-12T15:25:06Z",
+      "side": 1,
+      "message": "variable (this might be my typo, so it might also be in cheddar)",
+      "range": {
+        "startLine": 46,
+        "startChar": 7,
+        "endLine": 46,
+        "endChar": 14
+      },
+      "revId": "46bd632c7ac64efeb4225de840bfca2b77bc294c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
