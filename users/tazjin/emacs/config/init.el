@@ -206,7 +206,9 @@
 
 (use-package telega
   :bind (:map global-map ("s-t" . telega))
-  :config (telega-mode-line-mode 1))
+  :config
+  (telega-mode-line-mode 1)
+  (add-hook 'telega-msg-ignore-predicates 'telega-msg-from-blocked-sender-p))
 
 (use-package terraform-mode)
 (use-package toml-mode)
