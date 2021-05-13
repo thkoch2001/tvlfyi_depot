@@ -39,6 +39,7 @@
     ];
     kernelParams = [
       "i915.preliminary_hw_support=1"
+      "pcie_aspm=force"
     ];
 
     # https://bbs.archlinux.org/viewtopic.php?pid=1933643#p1933643
