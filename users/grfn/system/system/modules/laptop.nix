@@ -10,4 +10,6 @@
   services.logind.extraConfig = ''
     HandlePowerKey=hibernate
   '';
+
+  services.tlp.enable = true;
 }
