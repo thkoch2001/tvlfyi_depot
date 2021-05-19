@@ -11,9 +11,6 @@ A large portion of the software here is very self-referential, meaning that it
 exists to sustain the operation of the repository. This is the case because we
 partially see this as [an experiment][] in tooling for monorepos.
 
-If you've ended up here and have no idea who I am, feel free to follow me [on
-Twitter][].
-
 # Highlights
 
 ## Services
@@ -41,12 +38,14 @@ Twitter][].
   dynamically via
   [`//ops/pipelines`](https://cs.tvl.fyi/depot/-/tree/ops/pipelines).
 
+* A search service that makes TVL services available via textual
+  shortcuts is available: [atward](https://at.tvl.fyi)
+
 All services that we host are deployed on NixOS machines that we manage. Their
 configuration is tracked in `//ops/{modules,machines}`.
 
 ## Nix
 
-* `//third_party/nix` contains Tvix, [our fork][tvix] of the Nix package manager
 * [`//nix/readTree`](https://cs.tvl.fyi/depot/-/blob/nix/readTree/README.md)
   contains the Nix code which automatically registers projects in our Nix
   attribute hierarchy based on their in-tree location
@@ -58,6 +57,9 @@ configuration is tracked in `//ops/{modules,machines}`.
 * `//nix/buildLisp` implements a Nix library that can build Common Lisp
   software. Currently only SBCL is supported. Lisp programs in this repository
   are built using this library.
+* `//web/bubblegum` contains a CGI-based web framework written in Nix.
+* `//tvix` contains initial work towards a modular architecture for Nix.
+* `//third_party/nix` contains [our fork][tvix] of the Nix package manager.
 
 We have a variety of other tools and libraries in the `//nix` folder which may
 be of interest.
@@ -84,9 +86,10 @@ Some examples:
 * `//users/tazjin/homepage` && `//users/tazjin/blog`: A Nix-based static site
   generator which generates the web page and Atom feed for
   [tazj.in](https://tazj.in)
-* `//users/tazjin/finito`: A persistent finite-state machine library for Rust.
 * `//users/grfn/xanthous`: A (WIP) TUI RPG, written in Haskell.
 * `//users/tazjin/emacs`: tazjin's Emacs & EXWM configuration
+* `//users/sterni/nint`: A shebang-compatible interpreter wrapper for Nix.
+* `//users/tazjin/finito`: A persistent finite-state machine library for Rust.
 
 # Licensing
 
@@ -99,11 +102,12 @@ If you'd like to contribute to any of the tools in here, please check out the
 [contribution guidelines](./docs/CONTRIBUTING.md) and our [code of
 conduct](./docs/CODE_OF_CONDUCT.md).
 
+IRC users can find us in `##tvl-dev` on Freenode.
+
 [monorepo]: https://en.wikipedia.org/wiki/Monorepo
 [tvl]: https://tvl.fyi
 [Nix]: https://nixos.org/nix
 [an experiment]: https://tvl.fyi/monorepo-doc
-[on Twitter]: https://twitter.com/tazjin
 [panettone]: https://cs.tvl.fyi/depot@canon/-/tree/web/panettone
 [tvix]: https://cs.tvl.fyi/depot/-/blob/third_party/nix/README.md
 [dottime]: https://dotti.me
