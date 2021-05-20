@@ -13,7 +13,7 @@ in rec {
     nixpkgs.pkgs = depot.third_party.nixpkgs;
     nix.nixPath = [
       "nixos=${pkgs.path}"
-      "nixpath=${pkgs.path}"
+      "nixpkgs=${pkgs.path}"
     ];
   };
 
