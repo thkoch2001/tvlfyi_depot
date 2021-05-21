@@ -129,7 +129,8 @@ in {
       interface = "enp196s0";
     };
 
-    firewall.allowedTCPPorts = [ 22 80 443 4238 29418 ];
+    firewall.allowedTCPPorts = [ 22 80 443 4238 8443 29418 ];
+    firewall.allowedUDPPorts = [ 8443 ];
 
     interfaces.enp196s0.useDHCP = true;
     interfaces.enp196s0.ipv6.addresses = [
@@ -310,6 +311,12 @@ in {
       "tvldb"
       "panettone"
     ];
+  };
+
+  services.shadowsocks = {
+    enable = true;
+    port = 8443;
+    passwordFile = "/etc/secrets/shadowsocks-secret.sec";
   };
 
   services.nix-serve = {
