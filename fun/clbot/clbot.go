@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"os"
 	"os/signal"
 	"strings"
@@ -28,6 +29,7 @@ var (
 	gerritAuthKeyPath  = flag.String("gerrit_ssh_auth_key", "", "Gerrit SSH private key path")
 
 	ircServer    = flag.String("irc_server", "chat.freenode.net:7000", "IRC server to connect to")
+	ircTls       = flag.Bool("irc_tls", false, "Does the server connection need TLS?")
 	ircNick      = flag.String("irc_nick", "clbot", "Nick to use when connecting to IRC")
 	ircUser      = flag.String("irc_user", "clbot", "User string to use for IRC")
 	ircName      = flag.String("irc_name", "clbot", "Name string to use for IRC")
@@ -111,11 +113,21 @@ func runIRC(ctx context.Context, ircCfg irc.ClientConfig, sendMsg <-chan string)
 
 		(func() {
 			connectedStart := time.Now()
-			ircConn, err := tls.Dial("tcp", *ircServer, nil)
+
+			var ircConn net.Conn
+			var err error
+
+			if *ircTls {
+				ircConn, err = tls.Dial("tcp", *ircServer, nil)
+			} else {
+				ircConn, err = net.Dial("tcp", *ircServer)
+			}
+
 			if err != nil {
-				log.Errorf("connecting to IRC at tcp/%s: %v", *ircServer, err)
+				log.Errorf("connecting to IRC at tcp/%s (tls: %v): %v", *ircServer, *ircTls, err)
 				return
 			}
+
 			ircClient := irc.NewClient(ircConn, ircCfg)
 			ircClientCtx, cancel := context.WithCancel(ctx)
 			defer cancel()
