@@ -246,14 +246,17 @@ in {
   # Start the Gerrit->IRC bot
   services.depot.clbot = {
     enable = true;
+    channels = [ "#tvl" ];
 
-    # Almost all configuration values are already correct (well, duh),
-    # see //fun/clbot for details.
+    # See //fun/clbot for details.
     flags = {
       gerrit_host = "cl.tvl.fyi:29418";
       gerrit_ssh_auth_username = "clbot";
-      gerrit_ssh_auth_key = "/etc/secrets/clbot-key";
-      irc_server = "znc.lukegb.com:6697";
+      gerrit_ssh_auth_key = "/etc/secrets/id_clbot";
+
+      irc_server = "localhost:${toString config.services.znc.config.Listener.l.Port}";
+      irc_user = "tvlbot";
+      irc_nick = "tvlbot";
 
       notify_branches = "canon,refs/meta/config";
       notify_repo = "depot";
@@ -262,11 +265,6 @@ in {
       # populated from /etc/secrets/clbot
       irc_pass = "$CLBOT_PASS";
     };
-
-    channels = [
-      "##tvl"
-      "##tvl-dev"
-    ];
   };
 
   services.depot = {
