@@ -52,6 +52,24 @@
       "parentUuid": "fadcc993_11b627ec",
       "revId": "87a5da3eccb1742017478a7872b388c80013320b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "432fd130_cf78fbe6",
+        "filename": "ops/modules/owothia.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-22T19:40:41Z",
+      "side": 1,
+      "message": "Resolving after discussion IRL, though that doesn\u0027t mean we reached consensus.",
+      "parentUuid": "7141d4f2_1c703e03",
+      "revId": "87a5da3eccb1742017478a7872b388c80013320b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
