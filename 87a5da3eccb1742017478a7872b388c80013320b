@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "335fc760_03952de8",
+        "filename": "ops/modules/owothia.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-05-22T15:22:11Z",
+      "side": 1,
+      "message": "Maybe add a dependency on `network.target` or even better the `znc` service.",
+      "revId": "87a5da3eccb1742017478a7872b388c80013320b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
