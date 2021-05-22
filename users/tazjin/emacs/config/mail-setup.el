@@ -25,8 +25,10 @@
 (setq notmuch-show-empty-saved-searches t)
 
 ;; Mail sending configuration
-(setq send-mail-function 'sendmail-send-it) ;; sendmail provided by MSMTP
-(setq notmuch-always-prompt-for-sender t)
+(setq sendmail-program "gmi") ;; lieer binary supports sendmail emulation
+(setq message-sendmail-extra-arguments
+      '("send" "--quiet" "-t" "-C" "~/mail/account.tazjin"))
+(setq send-mail-function 'sendmail-send-it)
 (setq notmuch-mua-user-agent-function
       (lambda () (format "Emacs %s; notmuch.el %s" emacs-version notmuch-emacs-version)))
 (setq mail-host-address (system-name))
