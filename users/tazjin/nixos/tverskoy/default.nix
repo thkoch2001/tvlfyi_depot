@@ -211,7 +211,6 @@ in lib.fix(self: {
     # programs from the depot
     (with depot; [
       screenLock
-      third_party.lieer
       tools.nsfv-setup
       users.tazjin.emacs
     ]) ++
@@ -238,6 +237,7 @@ in lib.fix(self: {
       iftop
       imagemagick
       jq
+      lieer
       manpages
       mosh
       msmtp
@@ -247,8 +247,8 @@ in lib.fix(self: {
       notmuch
       openssh
       openssl
-      pass
       paperlike-go
+      pass
       pavucontrol
       pinentry
       pinentry-emacs
