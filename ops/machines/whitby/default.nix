@@ -284,6 +284,13 @@ in {
     # Run the first cursed bot (quote bot)
     paroxysm.enable = true;
 
+    # Run the second cursed bot
+    owothia = {
+      enable = true;
+      ircServer = "localhost";
+      ircPort = config.services.znc.config.Listener.l.Port;
+    };
+
     # Run irccat to forward messages to IRC
     irccat = {
       enable = true;
