@@ -1,7 +1,7 @@
 { depot, lib, pkgs, ... }:
 
 config: let
-  inherit (depot.third_party) lieer;
+  inherit (pkgs) lieer;
 
   quasselClient = pkgs.quassel.override {
     client = true;
