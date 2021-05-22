@@ -34,6 +34,24 @@
       "parentUuid": "335fc760_03952de8",
       "revId": "87a5da3eccb1742017478a7872b388c80013320b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7141d4f2_1c703e03",
+        "filename": "ops/modules/owothia.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-22T18:58:30Z",
+      "side": 1,
+      "message": "I don\u0027t really agree with this, the service itself has a configurable IRC endpoint so the module isn\u0027t tightly coupled with this specific server. It\u0027s - IMO - better to let these things fail independently if they want to.",
+      "parentUuid": "fadcc993_11b627ec",
+      "revId": "87a5da3eccb1742017478a7872b388c80013320b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
