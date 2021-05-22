@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dbafb03_dfa1ac81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-05-22T20:34:02Z",
+      "side": 1,
+      "message": "I don\u0027t think it really matters, but making a correct shortlink implementation is kinda hard, because you kinda want to try to make sure that shortlink pattern matches don\u0027t overlap with previous replacements.\n\nOTOH... whatever",
+      "revId": "31be0397c8a84ea36ddab3db62c012d683f437ee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
