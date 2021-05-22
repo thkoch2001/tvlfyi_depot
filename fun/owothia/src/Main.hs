@@ -12,7 +12,9 @@ import           NLP.Corpora.Conll (Tag)
 import qualified Data.ByteString as BS
 import           System.Random
 import           System.Envy
+import           System.IO as S
 import           Data.Maybe
+import           Data.Foldable (traverse_)
 import qualified Data.Text
 --------------------------------------------------------------------------------
 
@@ -23,9 +25,15 @@ data Config = Config
   , _ircServerPassword :: Maybe Text
   , _nickservPassword :: Maybe Text
   , _ircNick :: Maybe Text
+  , _ircIdent :: Maybe Text
+  , _ircChannels :: [Text]
   }
   deriving stock (Show, Eq, Generic)
 makeLenses ''Config
+
+instance Var [Text] where
+  toVar ts = show ts
+  fromVar s = readMaybe s >>= (pure . map Data.Text.pack)
 
 instance FromEnv Config where
   fromEnv _ =
@@ -35,6 +43,8 @@ instance FromEnv Config where
        <*> envMaybe "IRC_SERVER_PASSWORD"
        <*> envMaybe "NICKSERV_PASSWORD"
        <*> envMaybe "IRC_NICK"
+       <*> envMaybe "IRC_IDENT"
+       <*> env "IRC_CHANNELS"
 
 stopWord :: Text -> Bool
 stopWord "'s"   = True
@@ -116,25 +126,25 @@ owothiaHandler conf nick state tagger = EventHandler Just $ \src ev -> do
   hasIdentified <- readIORef state
   when (not hasIdentified) $ do
     nickservAuth
-    send $ Join "##tvl"
+    traverse_ (send . Join) (conf ^. ircChannels)
     writeIORef state True
 
   when ("You are now identified" `BS.isInfixOf` (ev ^. raw)) $
-    send $ Join "##tvl"
+    traverse_ (send . Join) (conf ^. ircChannels)
 
   case (src, ev ^. message) of
-    (Channel "##tvl" nick, Privmsg _ (Right m)) -> do
+    (Channel chan nick, Privmsg _ (Right m)) -> do
       willOwo <- doOwo conf
-      when willOwo $ owoMessage m
-    _ -> pure ()
+      when willOwo $ owoMessage chan m
+    _ -> pure()
 
   pure ()
 
   where
-    owoMessage m = do
+    owoMessage chan m = do
       owoType <- liftIO randomIO
       mWord <- liftIO $ randomOwo owoType tagger m
-      for_ mWord $ \word -> send $ Privmsg "##tvl" $ Right $ owo owoType word
+      for_ mWord $ \word -> send $ Privmsg chan $ Right $ owo owoType word
     nickservAuthMsg = "IDENTIFY " <> nick <> " " <> fromJust (conf ^. nickservPassword)
     nickservAuth = send $ Privmsg "NickServ" $ Right nickservAuthMsg
 
@@ -143,14 +153,16 @@ main = do
   conf <- either fail pure =<< decodeEnv
   tagger <- defaultTagger
   state <- newIORef $ not . isJust $ (conf ^. nickservPassword)
+  S.hSetBuffering stdout LineBuffering
   let nick = fromMaybe "owothia" (conf ^. ircNick)
       conn =
         plainConnection (conf ^. ircServer) (conf ^. ircPort)
           & realname .~ "Owothia Revströwö"
           & password .~ (conf ^. ircServerPassword)
+          & username .~ fromMaybe "owothia" (conf ^. ircIdent)
           & logfunc .~ stdoutLogger
       cfg =
         defaultInstanceConfig nick
-          & channels .~ ["##tvl"]
+          & channels .~ (conf ^. ircChannels)
           & handlers %~ (owothiaHandler conf nick state tagger : )
   runClient conn cfg ()
