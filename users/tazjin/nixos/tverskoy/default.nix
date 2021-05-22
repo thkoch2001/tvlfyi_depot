@@ -267,6 +267,25 @@ in lib.fix(self: {
       xsecurelock
     ]);
 
+    systemd.user.services.lieer-tazjin = {
+      description = "Synchronise mail@tazj.in via lieer";
+      script = "${pkgs.lieer}/bin/gmi sync";
+
+      serviceConfig = {
+        WorkingDirectory = "%h/mail/account.tazjin";
+        Type = "oneshot";
+      };
+    };
+
+    systemd.user.timers.lieer-tazjin = {
+      wantedBy = [ "timers.target" ];
+
+      timerConfig = {
+        OnActiveSec = "1";
+        OnUnitActiveSec = "180";
+      };
+    };
+
     home-manager.useGlobalPkgs = true;
     home-manager.users.tazjin = { config, lib, ... }: {
       imports = [ "${depot.third_party.impermanence}/home-manager.nix" ];
