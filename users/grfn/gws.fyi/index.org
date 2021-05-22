@@ -34,5 +34,5 @@ databases please reach out
 - [[mailto:web@gws.fyi][web@gws.fyi]]
 - [[https://twitter.com/glittershark1][twitter]]
 - https://keybase.io/glittershark
-- grfn on freenode
+- grfn on IRC (hackint, libera.chat, freenode)
 - [[http://keys.gnupg.net/pks/lookup?op=get&search=0x44EF5B5E861C09A7][gpg key: 0F11A989879E8BBBFDC1E23644EF5B5E861C09A7]]

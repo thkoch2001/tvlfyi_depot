@@ -99,7 +99,7 @@
     ;; Quassel buffers
     ;;
     ;; These have a title format that looks like:
-    ;; "Quassel IRC - ##tvl (Freenode) — Quassel IRC"
+    ;; "Quassel IRC - #tvl (HackInt) — Quassel IRC"
     (`("quassel" ,title)
      (progn
        (if (string-match
