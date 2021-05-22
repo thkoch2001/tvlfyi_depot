@@ -11,6 +11,7 @@ in {
     "${depot.path}/ops/modules/clbot.nix"
     "${depot.path}/ops/modules/irccat.nix"
     "${depot.path}/ops/modules/monorepo-gerrit.nix"
+    "${depot.path}/ops/modules/owothia.nix"
     "${depot.path}/ops/modules/panettone.nix"
     "${depot.path}/ops/modules/paroxysm.nix"
     "${depot.path}/ops/modules/smtprelay.nix"
@@ -285,6 +286,13 @@ in {
 
     # Run the first cursed bot (quote bot)
     paroxysm.enable = true;
+
+    # Run the second cursed bot
+    owothia = {
+      enable = true;
+      ircServer = "localhost";
+      ircPort = config.services.znc.config.Listener.l.Port;
+    };
 
     # Run irccat to forward messages to IRC
     irccat = {
