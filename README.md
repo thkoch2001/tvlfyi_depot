@@ -102,7 +102,8 @@ If you'd like to contribute to any of the tools in here, please check out the
 [contribution guidelines](./docs/CONTRIBUTING.md) and our [code of
 conduct](./docs/CODE_OF_CONDUCT.md).
 
-IRC users can find us in `##tvl-dev` on Freenode.
+IRC users can find us in `#tvl` on [HackInt][], which is also reachable via XMPP
+at `#tvl@irc.hackint.org` (sic!).
 
 [monorepo]: https://en.wikipedia.org/wiki/Monorepo
 [tvl]: https://tvl.fyi
@@ -111,3 +112,4 @@ IRC users can find us in `##tvl-dev` on Freenode.
 [panettone]: https://cs.tvl.fyi/depot@canon/-/tree/web/panettone
 [tvix]: https://cs.tvl.fyi/depot/-/blob/third_party/nix/README.md
 [dottime]: https://dotti.me
+[HackInt]: https://hackint.org/
