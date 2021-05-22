@@ -16,6 +16,24 @@
       "message": "Maybe add a dependency on `network.target` or even better the `znc` service.",
       "revId": "87a5da3eccb1742017478a7872b388c80013320b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fadcc993_11b627ec",
+        "filename": "ops/modules/owothia.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-22T17:49:43Z",
+      "side": 1,
+      "message": "agreed re znc service dependency",
+      "parentUuid": "335fc760_03952de8",
+      "revId": "87a5da3eccb1742017478a7872b388c80013320b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
