@@ -279,7 +279,7 @@ in {
       dbUser = "panettone";
       dbName = "panettone";
       secretsFile = "/etc/secrets/panettone";
-      irccatChannel = "##tvl,##tvl-dev";
+      irccatChannel = "#tvl";
     };
 
     # Run the first cursed bot (quote bot)
@@ -298,13 +298,12 @@ in {
       config = {
         tcp.listen = ":4722"; # "ircc"
         irc = {
-          server = "chat.freenode.net:6697";
-          tls = true;
+          server = "localhost:${toString config.services.znc.config.Listener.l.Port}";
+          tls = false;
           nick = "tvlbot";
           realname = "TVL Bot";
           channels = [
-            "##tvl"
-            "##tvl-dev"
+            "#tvl"
           ];
         };
       };
