@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bc299e28_5328fc1b",
+        "filename": "docs/REVIEWS.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-05-23T19:33:02Z",
+      "side": 1,
+      "message": "\u003csterni\u003e andi-: is it HackInt or hackint\n\u003candi-\u003e all lower",
+      "revId": "bf435e9dec3915d8d5c0c720cf9180cb100d7eab",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d0b537c_299d4424",
         "filename": "users/grfn/emacs.d/config.el",
         "patchSetId": 1
