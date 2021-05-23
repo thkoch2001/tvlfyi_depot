@@ -27,6 +27,7 @@ in {
     "${depot.path}/ops/modules/www/code.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/cs.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/images.tvl.fyi.nix"
+    "${depot.path}/ops/modules/www/deploys.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/login.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/nixery.dev.nix"
     "${depot.path}/ops/modules/www/status.tvl.su.nix"
@@ -396,7 +397,7 @@ in {
   # Regularly back up whitby to Google Cloud Storage.
   systemd.services.restic = {
     description = "Backups to Google Cloud Storage";
-    script = "${pkgs.restic}/bin/restic backup /var/lib/gerrit /var/backup/postgresql /var/lib/grafana /var/lib/znc";
+    script = "${pkgs.restic}/bin/restic backup /var/lib/gerrit /var/backup/postgresql /var/lib/grafana /var/lib/znc /var/html/deploys.tvl.fyi";
 
     environment = {
       GOOGLE_PROJECT_ID = "tazjins-infrastructure";
