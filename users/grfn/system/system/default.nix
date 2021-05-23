@@ -9,9 +9,7 @@ rec {
 
   mugwump = import ./machines/mugwump.nix;
 
-  mugwumpSystem = (depot.third_party.nixos {
-    configuration = mugwump;
-  }).system;
+  mugwumpSystem = (depot.ops.nixos.nixosFor mugwump).system;
 
   roswell = import ./machines/roswell.nix;
 
