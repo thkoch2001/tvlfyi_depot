@@ -24,13 +24,14 @@ whitby.tvl.fyi. 21600 IN A 49.12.129.211
 whitby.tvl.fyi. 21600 IN AAAA 2a01:4f8:242:5b21:0:feed:edef:beef
 
 ;; TVL services
-at.tvl.fyi.     21600 IN CNAME whitby.tvl.fyi.
-atward.tvl.fyi. 21600 IN CNAME whitby.tvl.fyi.
-b.tvl.fyi.      21600 IN CNAME whitby.tvl.fyi.
-cache.tvl.fyi.  21600 IN CNAME whitby.tvl.fyi.
-cl.tvl.fyi.     21600 IN CNAME whitby.tvl.fyi.
-code.tvl.fyi.   21600 IN CNAME whitby.tvl.fyi.
-cs.tvl.fyi.     21600 IN CNAME whitby.tvl.fyi.
-login.tvl.fyi.  21600 IN CNAME whitby.tvl.fyi.
-status.tvl.fyi. 21600 IN CNAME whitby.tvl.fyi.
-todo.tvl.fyi.   21600 IN CNAME whitby.tvl.fyi.
+at.tvl.fyi.      21600 IN CNAME whitby.tvl.fyi.
+atward.tvl.fyi.  21600 IN CNAME whitby.tvl.fyi.
+b.tvl.fyi.       21600 IN CNAME whitby.tvl.fyi.
+cache.tvl.fyi.   21600 IN CNAME whitby.tvl.fyi.
+cl.tvl.fyi.      21600 IN CNAME whitby.tvl.fyi.
+code.tvl.fyi.    21600 IN CNAME whitby.tvl.fyi.
+cs.tvl.fyi.      21600 IN CNAME whitby.tvl.fyi.
+deploys.tvl.fyi. 21600 IN CNAME whitby.tvl.fyi.
+login.tvl.fyi.   21600 IN CNAME whitby.tvl.fyi.
+status.tvl.fyi.  21600 IN CNAME whitby.tvl.fyi.
+todo.tvl.fyi.    21600 IN CNAME whitby.tvl.fyi.
