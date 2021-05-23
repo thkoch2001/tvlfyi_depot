@@ -1,7 +1,7 @@
 # Utility for invoking slappasswd with the correct options for
 # creating an ARGON2 password hash.
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
 pkgs.writeShellScriptBin "hash-password" ''
-  ${pkgs.openldap}/bin/slappasswd -o module-load=pw-argon2 -h '{ARGON2}'
+  ${depot.third_party.openldap}/bin/slappasswd -o module-load=pw-argon2 -h '{ARGON2}'
 ''
