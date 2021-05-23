@@ -14,7 +14,7 @@
   {
     username = "cschilling";
     email = "christian.schilling.de@gmail.com";
-    password = "{ARGON2}$argon2d$v=19$m=65536,t=4,p=1$c2RzcjEyMzQyYXM$dVXyWJRKJsVXtun/OM6wmU970K3zT/6hbLkoddHAW50";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$9VN3IS6ViW5FFbVKWOZI6Q$gZxuYAYk0Opq4E5i8cbcNjfznCQNc+RiP7Xv1CUnrQU";
   }
   {
     username = "cynthia";
