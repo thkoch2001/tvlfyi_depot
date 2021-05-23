@@ -45,7 +45,7 @@
                   (string-match erc-noise-regexp
                                 message)))
          (or (and tvl-enabled?
-                  (string-equal erc-channel "##tvl"))
+                  (string-equal erc-channel "#tvl"))
              (string-match "grfn" message)))))
 
 (comment

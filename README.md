@@ -102,10 +102,10 @@ If you'd like to contribute to any of the tools in here, please check out the
 [contribution guidelines](./docs/CONTRIBUTING.md) and our [code of
 conduct](./docs/CODE_OF_CONDUCT.md).
 
-IRC users can find us in [`#tvl`](tvl-irc) on [HackInt][], which is also
+IRC users can find us in [`#tvl`](tvl-irc) on [hackint][], which is also
 reachable [via XMPP][hackint-xmpp] at [`#tvl@irc.hackint.org`][tvl-xmpp] (sic!).
 
-HackInt also provide a [web chat][tvl-webchat].
+Hackint also provide a [web chat][tvl-webchat].
 
 [monorepo]: https://en.wikipedia.org/wiki/Monorepo
 [tvl]: https://tvl.fyi
@@ -115,7 +115,7 @@ HackInt also provide a [web chat][tvl-webchat].
 [tvix]: https://cs.tvl.fyi/depot/-/blob/third_party/nix/README.md
 [dottime]: https://dotti.me
 [tvl-irc]: ircs://irc.hackint.org:6697/#tvl
-[HackInt]: https://hackint.org/
+[hackint]: https://hackint.org/
 [hackint-xmpp]: https://hackint.org/transport/xmpp
 [tvl-xmpp]: xmpp:#tvl@irc.hackint.org?join
 [tvl-webchat]: https://webirc.hackint.org/#ircs://irc.hackint.org/#tvl
