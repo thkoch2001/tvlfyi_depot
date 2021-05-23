@@ -317,11 +317,12 @@
                    (who:esc (format-dottime (created-at comment))))))))))
 
 (defmethod render/issue-history-item ((event model:issue-event))
-  (let ((user (find-user-by-dn (acting-user-dn event))))
+  (let ((user (find-user-by-dn (acting-user-dn event)))
+        (fragment (format nil "event-~A" (id event))))
     (who:with-html-output (*standard-output*)
       (:li
        :class "event"
-       :id
+       :id fragment
        (who:esc (displayname-if-known user))
        (if (string= (field event) "STATUS")
            (who:htm
