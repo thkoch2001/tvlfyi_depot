@@ -301,7 +301,9 @@ in {
           server = "localhost:${toString config.services.znc.config.Listener.l.Port}";
           tls = false;
           nick = "tvlbot";
-          realname = "TVL Bot";
+          # Note: irccat means 'ident' where it says 'realname', so
+          # this is critical for connecting to ZNC.
+          realname = "tvlbot";
           channels = [
             "#tvl"
           ];
