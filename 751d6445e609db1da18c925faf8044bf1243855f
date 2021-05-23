@@ -22,6 +22,30 @@
       },
       "revId": "751d6445e609db1da18c925faf8044bf1243855f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37375ac4_c0229fca",
+        "filename": "ops/users/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-05-23T12:41:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cb831c51_29077279",
+      "range": {
+        "startLine": 17,
+        "startChar": 31,
+        "endLine": 17,
+        "endChar": 32
+      },
+      "revId": "751d6445e609db1da18c925faf8044bf1243855f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
