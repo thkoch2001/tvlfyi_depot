@@ -513,7 +513,7 @@ given subject an body (in a thread, to avoid blocking)"
                  (irc:noping (cn *user*))
                  (id issue))
          :channel (or (uiop:getenvp "ISSUECHANNEL")
-                      "##tvl-dev"))
+                      "#tvl"))
         (hunchentoot:redirect "/"))))
 
 (defroute show-issue
@@ -590,7 +590,7 @@ given subject an body (in a thread, to avoid blocking)"
              (irc:noping (cn *user*))
              (link-to-issue id))
      :channel (or (uiop:getenvp "ISSUECHANNEL")
-                  "##tvl-dev"))
+                  "#tvl"))
     (send-email-for-issue
      id
      :subject (format nil "b/~A: \"~A\" closed by ~A"
@@ -614,7 +614,7 @@ given subject an body (in a thread, to avoid blocking)"
              (irc:noping (cn *user*))
              (link-to-issue id))
      :channel (or (uiop:getenvp "ISSUECHANNEL")
-                  "##tvl-dev"))
+                  "#tvl"))
     (send-email-for-issue
      id
      :subject (format nil "b/~A: \"~A\" reopened by ~A"
