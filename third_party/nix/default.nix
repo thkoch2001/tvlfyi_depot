@@ -57,14 +57,14 @@ let
     cp ${pkgs.busybox}/bin/busybox $out/bin
   '';
 
-in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
+in lib.fix (self: pkgs.llvmPackages_11.libcxxStdenv.mkDerivation {
   pname = "tvix";
   version = "2.3.4";
   inherit src;
 
   nativeBuildInputs = with pkgs; [
     bison
-    clang-tools
+    clang-tools_11
     cmake
     libxml2
     libxslt
@@ -143,7 +143,7 @@ in lib.fix (self: pkgs.llvmPackages.libcxxStdenv.mkDerivation {
   NIX_PROTO_SRCS = protoSrcs;
 
   # Work around broken system header include flags in the cxx toolchain.
-  LIBCXX_INCLUDE = "${pkgs.llvmPackages.libcxx}/include/c++/v1";
+  LIBCXX_INCLUDE = "${pkgs.llvmPackages_11.libcxx}/include/c++/v1";
 
   SANDBOX_SHELL="${pkgs.busybox}/bin/busybox";
 
