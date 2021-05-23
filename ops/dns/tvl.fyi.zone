@@ -31,6 +31,7 @@ cache.tvl.fyi.  21600 IN CNAME whitby.tvl.fyi.
 cl.tvl.fyi.     21600 IN CNAME whitby.tvl.fyi.
 code.tvl.fyi.   21600 IN CNAME whitby.tvl.fyi.
 cs.tvl.fyi.     21600 IN CNAME whitby.tvl.fyi.
+deploy.tvl.fyi. 21600 IN CNAME whitby.tvl.fyi.
 login.tvl.fyi.  21600 IN CNAME whitby.tvl.fyi.
 status.tvl.fyi. 21600 IN CNAME whitby.tvl.fyi.
 todo.tvl.fyi.   21600 IN CNAME whitby.tvl.fyi.
