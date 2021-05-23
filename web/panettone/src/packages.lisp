@@ -43,7 +43,7 @@
    :field :previous-value :new-value
 
    :get-issue :issue-exists-p :list-issues :create-issue :set-issue-status
-   :update-issue :delete-issue :issue-not-found
+   :update-issue :delete-issue :issue-not-found :not-found-id
 
    :issue-events
 
