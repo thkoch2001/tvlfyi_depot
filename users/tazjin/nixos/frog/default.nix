@@ -220,7 +220,7 @@ in lib.fix(self: {
       bat
       chromium
       clang-manpages
-      clang-tools
+      clang-tools_11
       clang_11
       curl
       direnv

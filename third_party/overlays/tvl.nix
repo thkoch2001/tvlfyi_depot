@@ -18,12 +18,9 @@ self: super: {
     };
   };
 
-  # Use LLVM 11
-  llvmPackages = self.llvmPackages_11;
-  clangStdenv = self.llvmPackages_11.stdenv;
-  clang-tools = (super.clang-tools.override {
+  clang-tools_11 = self.clang-tools.override {
     llvmPackages = self.llvmPackages_11;
-  });
+  };
 
   # Add our Emacs packages to the fixpoint
   emacsPackagesFor = emacs: (
