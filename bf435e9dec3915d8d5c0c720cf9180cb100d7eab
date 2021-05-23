@@ -68,6 +68,24 @@
       "message": "#tvl is not on freende…",
       "revId": "bf435e9dec3915d8d5c0c720cf9180cb100d7eab",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "974a4f62_35e9a753",
+        "filename": "users/grfn/emacs.d/config.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-23T19:41:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d0b537c_299d4424",
+      "revId": "bf435e9dec3915d8d5c0c720cf9180cb100d7eab",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
