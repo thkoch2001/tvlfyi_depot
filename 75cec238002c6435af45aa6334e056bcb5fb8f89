@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d6cce01_90d1f19e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-23T17:56:04Z",
+      "side": 1,
+      "message": "Can you split this into two changes (DNS change first)? That needs to be deployed before the nginx changes, otherwise the ACME units will be throwing errors.",
+      "revId": "75cec238002c6435af45aa6334e056bcb5fb8f89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
