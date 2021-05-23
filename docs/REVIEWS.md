@@ -111,7 +111,7 @@ themselves**.
 If you would like to have an account on the Gerrit instance, follow these
 instructions:
 
-1. Be a member of `##tvl-dev` or `##tvl`.
+1. Be a member of `#tvl` on HackInt.
 2. Clone the depot locally (via `git clone "https://cl.tvl.fyi/depot"`).
 3. Create a user entry in our LDAP server in [ops/users][ops-users].
 
