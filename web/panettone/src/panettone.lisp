@@ -396,7 +396,7 @@
 
 (defun render/not-found (entity-type)
   (render ()
-    (:h1 (who:esc entity-type) "Not Found")))
+    (:h1 (who:esc entity-type) " Not Found")))
 
 ;;;
 ;;; HTTP handlers
@@ -446,7 +446,7 @@ given subject an body (in a thread, to avoid blocking)"
   (handler-case (funcall next)
     (model:issue-not-found (err)
       (render/not-found
-       (format nil "Issue #~A" (model:id err))))))
+       (format nil "Issue #~A" (model:not-found-id err))))))
 
 (defroute login-form ("/login" :method :get)
     (original-uri)
