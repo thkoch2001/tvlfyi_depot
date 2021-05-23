@@ -16,6 +16,24 @@
       "message": "shouldn\u0027t this have been nixpkgs?",
       "revId": "5f19e8e6a73f7d76fa4bb62036891e824b64b515",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf26c672_4ca6e2e3",
+        "filename": "ops/nixos.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-23T13:58:57Z",
+      "side": 1,
+      "message": "Fixed in cl/3123",
+      "parentUuid": "ea7f3ae4_f1ad7960",
+      "revId": "5f19e8e6a73f7d76fa4bb62036891e824b64b515",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
