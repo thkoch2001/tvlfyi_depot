@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
-let inherit (pkgs) cmake llvmPackages;
-in llvmPackages.libcxxStdenv.mkDerivation rec {
+let inherit (pkgs) cmake llvmPackages_11;
+in llvmPackages_11.libcxxStdenv.mkDerivation rec {
   pname = "abseil-cpp";
   version = "20200519-768eb2ca+tvl-1";
   src = ./.;
