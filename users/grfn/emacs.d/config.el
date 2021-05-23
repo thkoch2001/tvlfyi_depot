@@ -1082,7 +1082,7 @@
   :config (direnv-mode))
 
 (after! erc
-  ;; (setq erc-autojoin-channels-alist '(("freenode.net" "#nixos" "#haskell" "##tvl")))
+  ;; (setq erc-autojoin-channels-alist '(("freenode.net" "#nixos" "#haskell" "#tvl")))
   )
 
 (defun evil-disable-insert-state-bindings ()
