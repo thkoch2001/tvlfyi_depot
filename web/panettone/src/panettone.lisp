@@ -324,21 +324,24 @@
        :class "event"
        :id fragment
        (who:esc (displayname-if-known user))
-       (if (string= (field event) "STATUS")
-           (who:htm
-            (who:esc
-             (switch ((new-value event) :test #'string=)
-               ("OPEN" " reopened ")
-               ("CLOSED" " closed ")))
-            " this issue ")
-           (who:htm
-            " changed the "
-            (who:esc (string-downcase (field event)))
-            " of this issue from \""
-            (who:esc (previous-value event))
-            "\" to \""
-            (who:esc (new-value event))
-            "\""))
+       (switch ((field event) :test #'string=)
+         ("STATUS"
+          (who:htm
+           (who:esc
+            (switch ((new-value event) :test #'string=)
+              ("OPEN" " reopened ")
+              ("CLOSED" " closed ")))
+           " this issue "))
+         ("BODY" (who:htm " updated the body of this issue"))
+         (t
+          (who:htm
+           " changed the "
+           (who:esc (string-downcase (field event)))
+           " of this issue from \""
+           (who:esc (previous-value event))
+           "\" to \""
+           (who:esc (new-value event))
+           "\"")))
        " at "
        (who:esc (format-dottime (created-at event)))))))
 
