@@ -72,6 +72,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f63af5d0_ee2400dd",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-23T18:32:07Z",
+      "side": 1,
+      "message": "not for this CL, but I\u0027d like to add CSS or something to this to get it to look the same way as our other pages",
+      "range": {
+        "startLine": 41,
+        "startChar": 6,
+        "endLine": 41,
+        "endChar": 15
+      },
+      "revId": "fad43c96fe57930767d2ea7b380d03f54997bd31",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "34bdf9c1_05c4e878",
         "filename": "ops/deploy-whitby/deploy-whitby.sh",
         "patchSetId": 4
