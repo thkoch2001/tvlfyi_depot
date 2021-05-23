@@ -12,6 +12,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$8lefg7+8UPAEh9Ott8zH0A$7YuLRraTC1IgxTNTxFJF03AWmqBS3GX2+vfD4XVTrb0";
   }
   {
+    username = "cschilling";
+    email = "christian.schilling.de@gmail.com";
+    password = "{ARGON2}$argon2d$v=19$m=65536,t=4,p=1$c2RzcjEyMzQyYXM$dVXyWJRKJsVXtun/OM6wmU970K3zT/6hbLkoddHAW50";
+  }
+  {
     username = "cynthia";
     email = "cynthia@tvl.fyi";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=4,p=1$TxjbMGenhEmkyYLrg5uGhbr60THB86YeRZg5bPdiTJo$k9gbRlAPjmxwdUwzbavvsAVkckgQZ0jS2oTtvZBPysk";
