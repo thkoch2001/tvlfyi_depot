@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68d9a274_2e75b25a",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 5
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-05-23T14:02:59Z",
+      "side": 1,
+      "message": "Isn\u0027t the accessor `issue-id`?",
+      "revId": "5f7d1a33fdd920218c369bd4a52da74e29098f79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
