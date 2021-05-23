@@ -579,7 +579,7 @@ in {
 
     users.sterni = {
       isNormalUser = true;
-      extraGroups = [ "git" ];
+      extraGroups = [ "git" "wheel" ];
       openssh.authorizedKeys.keys = depot.users.sterni.keys.all;
     };
 
