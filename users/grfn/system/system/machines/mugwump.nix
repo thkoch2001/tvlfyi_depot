@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, modulesPath, depot, ... }:
 
 with lib;
 
@@ -6,6 +6,7 @@ with lib;
   imports = [
     ../modules/common.nix
     (modulesPath + "/installer/scan/not-detected.nix")
+    "${depot.path}/ops/modules/prometheus-fail2ban-exporter.nix"
   ];
 
   networking.hostName = "mugwump";
@@ -158,11 +159,6 @@ with lib;
           "systemd"
           "tcpstat"
           "wifi"
-          "textfile"
-        ];
-
-        extraFlags = [
-          "--collector.textfile.directory=/var/lib/prometheus/node-exporter"
         ];
       };
 
@@ -228,32 +224,6 @@ with lib;
         replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
       }];
     }];
-  };
-
-  systemd.services."prometheus-fail2ban-exporter" = {
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" "fail2ban.service" ];
-    serviceConfig = {
-      User = "root";
-      Type = "oneshot";
-      ExecStart = pkgs.writeShellScript "prometheus-fail2ban-exporter" ''
-        set -eo pipefail
-        mkdir -p /var/lib/prometheus/node-exporter
-        exec ${pkgs.python3.withPackages (p: [
-          p.prometheus_client
-        ])}/bin/python ${pkgs.fetchurl {
-          url = "https://raw.githubusercontent.com/jangrewe/prometheus-fail2ban-exporter/11066950b47bb2dbef96ea8544f76e46ed829e81/fail2ban-exporter.py";
-          sha256 = "049lsvw1nj65bbvp8ygyz3743ayzdawrbjixaxmpm03qbrcfmwc4";
-        }}
-      '';
-    };
-
-    path = with pkgs; [ fail2ban ];
-  };
-
-  systemd.timers."prometheus-fail2ban-exporter" = {
-    wantedBy = [ "multi-user.target" ];
-    timerConfig.OnCalendar = "minutely";
   };
 
   virtualisation.docker.enable = true;
