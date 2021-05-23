@@ -358,6 +358,8 @@ in {
     bindAddress = "localhost";
   };
 
+  services.fail2ban.enable = true;
+
   environment.systemPackages = with pkgs; [
     bb
     curl
