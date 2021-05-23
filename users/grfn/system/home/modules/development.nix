@@ -55,7 +55,7 @@ with lib;
     gdb
     lldb
     hyperfine
-    clang-tools
+    clang-tools_11
     (rr.overrideAttrs (_: rec {
       version = "f25671d094edac8059cec56b98d7f10f2c740697";
       src = pkgs.fetchFromGitHub {

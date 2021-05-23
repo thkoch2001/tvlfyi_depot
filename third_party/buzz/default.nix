@@ -21,7 +21,6 @@ depot.third_party.naersk.buildPackage {
     gtk3
     dbus-glib
     libappindicator-gtk3
-    clang_11
     llvmPackages.llvm
     llvmPackages.bintools
     llvmPackages.clang

@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 (pkgs.gtest.override {
-  stdenv = pkgs.llvmPackages.libcxxStdenv;
+  stdenv = pkgs.llvmPackages_11.libcxxStdenv;
 }).overrideAttrs(_: {
   src = pkgs.fetchFromGitHub {
     owner = "google";
