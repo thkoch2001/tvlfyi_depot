@@ -25,6 +25,7 @@ in {
     "${depot.path}/ops/modules/www/cl.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/code.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/cs.tvl.fyi.nix"
+    "${depot.path}/ops/modules/www/deploys.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/login.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/status.tvl.su.nix"
     "${depot.path}/ops/modules/www/tazj.in.nix"
