@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb17f52c_36141b17",
+        "filename": "ops/deploy-whitby/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-24T18:16:06Z",
+      "side": 1,
+      "message": "maybe you could use the `phases` attribute or something to disable this instead",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
