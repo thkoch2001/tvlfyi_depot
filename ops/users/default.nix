@@ -69,7 +69,7 @@
   {
     username = "kn";
     email = "klemens@posteo.de";
-    password = "{ARGON2}$argon2id$v=19$m=65536,t=3,p=1$NGYzZjFkYjMyNzY0MDc5M2NhYzU5ZmI5NzhmMmY0NGE$XDjCTUrzbXaAwl1DZeVMLldLJXcs15kFkqU1o3vwAt8";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$CoRZInysud4sduDoMjVOCw$/bdvAvyPO2DPxOcHlBiG2+rbTGF9XAcHUhPurxiIpZM";
   }
   {
     username = "lukegb";
