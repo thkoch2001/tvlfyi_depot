@@ -390,7 +390,7 @@ in {
   # Regularly back up whitby to Google Cloud Storage.
   systemd.services.restic = {
     description = "Backups to Google Cloud Storage";
-    script = "${pkgs.restic}/bin/restic backup /var/lib/gerrit /var/backup/postgresql /var/lib/grafana";
+    script = "${pkgs.restic}/bin/restic backup /var/lib/gerrit /var/backup/postgresql /var/lib/grafana /var/lib/znc";
 
     environment = {
       GOOGLE_PROJECT_ID = "tazjins-infrastructure";
