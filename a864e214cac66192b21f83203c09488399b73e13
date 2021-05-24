@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a37752c_0d8025e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-24T22:40:50Z",
+      "side": 1,
+      "message": "The diff for this ends up as a no-op: https://tazj.in/blobs/ldap-diff.html",
+      "revId": "a864e214cac66192b21f83203c09488399b73e13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
