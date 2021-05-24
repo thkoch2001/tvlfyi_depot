@@ -16,6 +16,24 @@
       "message": "I mean, this should *probably* be Klemens",
       "revId": "c6f64f8dc1f70f22c5d1bc41479479444f1a8c4f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fad25bb0_e2cdf013",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-05-24T14:53:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "036b4648_f47bd5d3",
+      "revId": "c6f64f8dc1f70f22c5d1bc41479479444f1a8c4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
