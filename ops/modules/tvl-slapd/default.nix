@@ -40,24 +40,26 @@ in {
 
   services.openldap = {
     enable = true;
-    dataDir = "/var/lib/openldap";
-    database = "mdb";
-    suffix = "dc=tvl,dc=fyi";
-    rootdn = "cn=admin,dc=tvl,dc=fyi";
-    rootpw = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$OfcgkOQ96VQ3aJj7NfA9vQ$oS6HQOkYl/bUYg4SejpltQYy7kvqx/RUxvoR4zo1vXU";
 
     settings.children = {
       "olcDatabase={1}mdb".attrs = {
         objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
         olcDatabase = "{1}mdb";
+        olcDbDirectory = "/var/lib/openldap";
         olcSuffix = "dc=tvl,dc=fyi";
         olcAccess = "to *  by * read";
+        olcRootDN = "cn=admin,dc=tvl,dc=fyi";
+        olcRootPW = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$OfcgkOQ96VQ3aJj7NfA9vQ$oS6HQOkYl/bUYg4SejpltQYy7kvqx/RUxvoR4zo1vXU";
       };
 
       "cn=module{0}".attrs = {
         objectClass = "olcModuleList";
         olcModuleLoad = "pw-argon2";
       };
+
+      "cn=schema".includes =
+        map (schema: "${depot.third_party.openldap}/etc/schema/${schema}.ldif")
+            [ "core" "cosine" "inetorgperson" "nis" ];
     };
 
     # Contents are immutable at runtime, and adding user accounts etc.
