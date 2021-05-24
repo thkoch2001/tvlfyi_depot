@@ -5,10 +5,6 @@ let inherit (lib) findFirst isAttrs;
 in rec {
   # This provides our standard set of arguments to all NixOS modules.
   baseModule = { ... }: {
-    _module.args = {
-      inherit (args) depot;
-    };
-
     # Ensure that pkgs == third_party.nix
     nixpkgs.pkgs = depot.third_party.nixpkgs;
     nix.nixPath = [
@@ -23,6 +19,10 @@ in rec {
         baseModule
         configuration
       ];
+    };
+
+    specialArgs = {
+      inherit (args) depot;
     };
   });
 
