@@ -17,7 +17,33 @@
 {
   # Expose a partially applied NixOS, expecting an attribute set with
   # a `configuration` key. Exposing it like this makes it possible to
-  # modify some of the base configuration used by NixOS. passed to
-  # this.
-  nixos = import "${pkgs.path}/nixos";
+  # modify some of the base configuration used by NixOS.
+  #
+  # This partially reimplements the code in
+  # <nixpkgs/nixos/default.nix> as we need to modify its internals to
+  # be able to pass `specialArgs`. We depend on this because `depot`
+  # needs to be partially evaluated in NixOS configuration before
+  # module imports are resolved.
+  nixos = {
+    configuration,
+    specialArgs ? {},
+    system ? builtins.currentSystem,
+    ...
+  }:
+  let
+    eval = import "${pkgs.path}/nixos/lib/eval-config.nix" {
+      inherit specialArgs system;
+      modules = [ configuration ];
+    };
+
+    # This is for `nixos-rebuild build-vm'.
+    vmConfig = (import "${pkgs.path}/nixos/lib/eval-config.nix" {
+      inherit specialArgs system;
+      modules = [ configuration ./modules/virtualisation/qemu-vm.nix ];
+    }).config;
+  in {
+    inherit (eval) pkgs config options;
+    system = eval.config.system.build.toplevel;
+    vm = vmConfig.system.build.vm;
+  };
 }
