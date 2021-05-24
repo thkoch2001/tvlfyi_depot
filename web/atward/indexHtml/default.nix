@@ -59,7 +59,7 @@ depot.web.tvl.template {
     ### Source code
 
     atward's source code lives at
-    [//web/atward](https://atward.tvl.fyi/?q=%2F%2Fweb%2Fatward).
+    [//web/atward](https://at.tvl.fyi/?q=%2F%2Fweb%2Fatward).
   '';
   extraHead = ''
     <script>
