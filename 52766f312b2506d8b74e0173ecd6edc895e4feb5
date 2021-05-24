@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4a3bf1f_501358dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2021-05-24T20:03:15Z",
+      "side": 1,
+      "message": "Enough nits picked, already looking fine as is *for starters*.",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb17f52c_36141b17",
@@ -20,6 +37,125 @@
         "endLine": 6,
         "endChar": 20
       },
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "122c208c_1fdd0d19",
+        "filename": "ops/deploy-whitby/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2021-05-24T20:03:15Z",
+      "side": 1,
+      "message": "Two spaces too many, no?",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a319b3f_cda9d7f6",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2021-05-24T20:03:15Z",
+      "side": 1,
+      "message": "Using the directory as lock is inherently racy and I think the callee (your systemd-timer unit) should deal with this instead of the script itself.\n\nFine for now I guess but once it actually deploys this ought to change.",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39f3cfbb_93635235",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2021-05-24T20:03:15Z",
+      "side": 1,
+      "message": "Use a variable for this path as `-f` will silently fail on nonexistent files;\nthe shell\u0027s `nounset` option however will fail if besaid variable is unset.",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74a20583_58bbdb7c",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2021-05-24T20:03:15Z",
+      "side": 1,
+      "message": "git-clone(1) has `-b|--branch \u003cname\u003e`.",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dd57737_0b3d7f09",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2021-05-24T20:03:15Z",
+      "side": 1,
+      "message": "The shell\u0027s `noclobber` option is a safe and sane way to protect against truncating existing files by means of redirection;  not that it should ever happen here, but your lock primitive is flawed already and `set -C` is basically always a good idea (I set it in all my interactive shells and therefore force myself to explicitly use `\u003e| ./file` for truncating existing data.",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "536a184a_923bea3b",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2021-05-24T20:03:15Z",
+      "side": 1,
+      "message": "`!` is special in bash\u0027s interactive mode (see bash(1)\u0027s HISTORY EXPANSION), i.e. omitting the trailing whitespace inside the double quotes would do try to execute `system` -- not an issue here (at this point), but pointing it out seems helpful nonetheless given that you plan on testing that script manually and such issues are annoying to fix after the fact.",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ba91128_40c0cdec",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2021-05-24T20:03:15Z",
+      "side": 1,
+      "message": "You probably want a connection timeout (`-w 5`) here such that nc(1) won\u0027t try to connect forever.",
       "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
