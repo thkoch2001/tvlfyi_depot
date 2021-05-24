@@ -9,7 +9,7 @@
     services.nginx.virtualHosts."wigglydonke.rs" = {
       enableACME = true;
       forceSSL = true;
-      root = "${depot.path}/users/grfn/wigglydonke.rs";
+      root = "${depot.path + "/users/grfn/wigglydonke.rs"}";
     };
   };
 }
