@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1ac7774_fd1e6117",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-25T07:49:06Z",
+      "side": 1,
+      "message": "idea: having the list of paths as an option might be cool",
+      "revId": "42148ac34d26c72684ec3c81acb8574cc5807598",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
