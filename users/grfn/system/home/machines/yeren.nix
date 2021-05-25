@@ -8,6 +8,7 @@ in
   imports = [
     ../platforms/linux.nix
     ../modules/common.nix
+    ../modules/development/readyset.nix
   ];
 
   # for when hacking
