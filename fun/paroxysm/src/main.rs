@@ -301,8 +301,12 @@ impl App {
                 }
             }
             None => {
-                self.client
-                    .send_notice(target, format!("\x02{}\x0f: never heard of it", subj))?;
+                // If someone just posts "??????????", don't spam the channel with
+                // an error message (but do allow joke entries to appear if set).
+                if !subj.chars().all(|c| c == '?' || c == ' ') {
+                    self.client
+                        .send_notice(target, format!("\x02{}\x0f: never heard of it", subj))?;
+                }
             }
         }
         Ok(())
