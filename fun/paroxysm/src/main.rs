@@ -239,7 +239,7 @@ impl App {
                         }
                         // step 2: attempt to POST it to eta's pastebin
                         // TODO(eta): make configurable
-                        let response = crimp::Request::put("https://theta.eu.org/lx/upload")
+                        let response = crimp::Request::put("https://eta.st/lx/upload")
                             .user_agent("paroxysm/0.0.2 crimp/0.2")?
                             .header("Linx-Expiry", "7200")? // 2 hours
                             .body("text/plain", data_to_upload.as_bytes())
