@@ -10,7 +10,7 @@
 
    ;; String handling
    #:+dottime-format+ #:format-dottime
-   #:try-parse-integer
+   #:try-parse-integer #:format-dottime-offset
 
    ;; Function utilities
    #:partial))
