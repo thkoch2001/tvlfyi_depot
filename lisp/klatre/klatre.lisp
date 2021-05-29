@@ -86,6 +86,12 @@ separated by SEP."
     (local-time:format-timestring nil timestamp
                                   :format dottime-format
                                   :timezone local-time:+utc-zone+)
+    (format-dottime-offset offset)))
+
+(defun format-dottime-offset (offset)
+  "Render OFFSET in hours in the format specified by dottime."
+  (check-type offset integer)
+  (concatenate 'string
     ; render sign manually since format prints it after padding
     (if (>= offset 0) "+" "-")
     (format nil "~2,'0D" (abs offset))))
