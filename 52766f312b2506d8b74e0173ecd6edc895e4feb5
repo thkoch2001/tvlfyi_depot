@@ -41,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5a01956_e23c87e4",
+        "filename": "ops/deploy-whitby/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-31T13:34:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb17f52c_36141b17",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "122c208c_1fdd0d19",
@@ -54,6 +78,24 @@
       "writtenOn": "2021-05-24T20:03:15Z",
       "side": 1,
       "message": "Two spaces too many, no?",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab552fd1_244d039e",
+        "filename": "ops/deploy-whitby/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-31T13:34:07Z",
+      "side": 1,
+      "message": "Nope, this is matching the `lib.makeBinPath` argument",
+      "parentUuid": "122c208c_1fdd0d19",
       "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -75,6 +117,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "121bab25_5a08656f",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-31T13:34:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3a319b3f_cda9d7f6",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39f3cfbb_93635235",
@@ -88,6 +148,24 @@
       "writtenOn": "2021-05-24T20:03:15Z",
       "side": 1,
       "message": "Use a variable for this path as `-f` will silently fail on nonexistent files;\nthe shell\u0027s `nounset` option however will fail if besaid variable is unset.",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17bb8d20_fdae606d",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-31T13:34:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39f3cfbb_93635235",
       "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -109,6 +187,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f4e364c_bbc0c07c",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-31T13:34:07Z",
+      "side": 1,
+      "message": "This needs to support commit IDs, in addition to just branches",
+      "parentUuid": "74a20583_58bbdb7c",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9dd57737_0b3d7f09",
@@ -122,6 +218,24 @@
       "writtenOn": "2021-05-24T20:03:15Z",
       "side": 1,
       "message": "The shell\u0027s `noclobber` option is a safe and sane way to protect against truncating existing files by means of redirection;  not that it should ever happen here, but your lock primitive is flawed already and `set -C` is basically always a good idea (I set it in all my interactive shells and therefore force myself to explicitly use `\u003e| ./file` for truncating existing data.",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e9ef1f8_3025984d",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-31T13:34:07Z",
+      "side": 1,
+      "message": "Done. Did end up using \u003e| here, as I do want to clobber this file.",
+      "parentUuid": "9dd57737_0b3d7f09",
       "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -143,6 +257,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15315387_976214ae",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-31T13:34:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "536a184a_923bea3b",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ba91128_40c0cdec",
@@ -156,6 +288,24 @@
       "writtenOn": "2021-05-24T20:03:15Z",
       "side": 1,
       "message": "You probably want a connection timeout (`-w 5`) here such that nc(1) won\u0027t try to connect forever.",
+      "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa0ffc5_2cbb1970",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-31T13:34:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ba91128_40c0cdec",
       "revId": "52766f312b2506d8b74e0173ecd6edc895e4feb5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
