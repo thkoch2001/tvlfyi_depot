@@ -37,7 +37,7 @@
 
 ; TODO(sterni): upstream this into local-time
 (defun setup-default-timezone ()
-  (let* ((tz (uiop:getenv "TZ"))
+  (let* ((tz (remove #\: (uiop:getenv "TZ") :count 1))
          (tz-dir (uiop:getenv "TZDIR"))
          (tz-file (if (and tz tz-dir)
                     (merge-pathnames
