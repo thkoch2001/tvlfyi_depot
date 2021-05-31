@@ -22,6 +22,30 @@
       },
       "revId": "d0dcc3b2fef0ee22e35632820b73a7e5acc1c8dd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b11787e4_5e2467e9",
+        "filename": "third_party/prometheus-fail2ban-exporter/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-05-31T13:37:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f1b2091_a1860ff8",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 0
+      },
+      "revId": "d0dcc3b2fef0ee22e35632820b73a7e5acc1c8dd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
