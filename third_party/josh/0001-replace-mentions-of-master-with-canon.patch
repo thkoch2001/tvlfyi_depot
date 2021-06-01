@@ -1,0 +1,47 @@
+From 4245dbdcacc3a4d4801a50071ba84379be4e1d2e Mon Sep 17 00:00:00 2001
+From: Vincent Ambo <mail@tazj.in>
+Date: Tue, 1 Jun 2021 23:27:30 +0200
+Subject: [PATCH] replace mentions of 'master' with 'canon'
+
+While there are areas of josh that hardcode `master`, we can override
+this to make it work for the TVL use-case.
+---
+ josh-proxy/src/bin/josh-proxy.rs | 2 +-
+ src/housekeeping.rs              | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/josh-proxy/src/bin/josh-proxy.rs b/josh-proxy/src/bin/josh-proxy.rs
+index 6f15566..76f4a5d 100644
+--- a/josh-proxy/src/bin/josh-proxy.rs
++++ b/josh-proxy/src/bin/josh-proxy.rs
+@@ -374,7 +374,7 @@ async fn call_service(
+ 
+     let mut headref = parsed_url.headref.trim_start_matches("@").to_owned();
+     if headref == "" {
+-        headref = "refs/heads/master".to_string();
++        headref = "refs/heads/canon".to_string();
+     }
+ 
+     let remote_url = [
+diff --git a/src/housekeeping.rs b/src/housekeeping.rs
+index 5d08f81..1d55bc4 100644
+--- a/src/housekeeping.rs
++++ b/src/housekeeping.rs
+@@ -44,12 +44,12 @@ pub fn memorize_from_to(
+ ) -> Vec<(String, String)> {
+     let mut refs = vec![];
+     let glob = format!(
+-        "refs/josh/upstream/{}/refs/heads/master",
++        "refs/josh/upstream/{}/refs/heads/canon",
+         &to_ns(upstream_repo)
+     );
+     for refname in repo.references_glob(&glob).unwrap().names() {
+         let refname = refname.unwrap();
+-        let to_ref = format!("refs/{}/heads/master", &namespace);
++        let to_ref = format!("refs/{}/heads/canon", &namespace);
+ 
+         refs.push((refname.to_owned(), to_ref.clone()));
+     }
+-- 
+2.31.1
+
