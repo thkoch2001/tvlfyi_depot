@@ -76,6 +76,7 @@ let
     refine
     request
     restclient
+    rust-mode
     sly
     string-edit
     swiper
