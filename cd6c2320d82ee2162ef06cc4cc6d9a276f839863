@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4a4dc14_71956c27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-06-01T21:39:04Z",
+      "side": 1,
+      "message": "Has the annonymous thing already been fixed in the commit we build from?",
+      "revId": "cd6c2320d82ee2162ef06cc4cc6d9a276f839863",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
