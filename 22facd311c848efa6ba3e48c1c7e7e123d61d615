@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc894624_55693155",
+        "filename": "ops/modules/www/deploys.tvl.fyi.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-06-01T14:48:14Z",
+      "side": 1,
+      "message": "unsure about this service; /srv is not a folder that exists by default and `nginx` doesn\u0027t have permission to create things at /\n\nIt seems like we should anchor this somewhere that nginx has access to (something in /var?), or see if we can use something like the tmpfiles mechanism for the folder creation instead (as it does it as root and then chowns).\n\nAlso, since this folder contains mutable data which we might want to keep, it should probably be added to the `restic` setup in whitby/default.nix",
+      "range": {
+        "startLine": 12,
+        "startChar": 25,
+        "endLine": 12,
+        "endChar": 49
+      },
+      "revId": "22facd311c848efa6ba3e48c1c7e7e123d61d615",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
