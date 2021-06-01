@@ -3,8 +3,6 @@
 pkgs.callPackage (pkgs.fetchFromGitHub {
   owner = "nmattia";
   repo = "naersk";
-  rev = "a82fd7dc31a58c462b6dfa9d9d886fa2cc75dfd4";
-  sha256 = "00bjwir52y6jbf0b22qy9qxramw35k5fc7kp9hymr1zgpmw9kbwg";
-}) {
-  lndir = pkgs.xorg.lndir;
-}
+  rev = "a3f40fe42cc6d267ff7518fa3199e99ff1444ac4";
+  sha256 = "1nf7fn8anghwf6p5p58ywbcwdkjxq112qv663rn52jq9k95iakdi";
+}) {}
