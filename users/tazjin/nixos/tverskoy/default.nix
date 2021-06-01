@@ -202,6 +202,7 @@ in lib.fix(self: {
     light.enable = true;
     ssh.startAgent = true;
     mosh.enable = true;
+    steam.enable = true;
 
     # Required by impermanence
     fuse.userAllowOther = true;
@@ -220,8 +221,8 @@ in lib.fix(self: {
       bat
       chromium
       curl
-      direnv
       ddcutil
+      direnv
       dnsutils
       emacs27-nox # emacsclient
       exa
@@ -302,10 +303,12 @@ in lib.fix(self: {
           ".gnupg"
           ".local/share/direnv"
           ".local/share/fish"
+          ".local/share/steam" # steam main data
           ".mozilla/firefox"
           ".password-store"
           ".rustup"
           ".ssh"
+          ".steam" # steam legacy symlinks
           ".telega"
           "go"
           "mail"
