@@ -220,8 +220,8 @@ in lib.fix(self: {
       bat
       chromium
       curl
-      direnv
       ddcutil
+      direnv
       dnsutils
       emacs27-nox # emacsclient
       exa
@@ -260,6 +260,7 @@ in lib.fix(self: {
       screen
       scrot
       spotify
+      steam
       syncthing
       tokei
       tree
