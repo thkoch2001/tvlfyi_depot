@@ -220,8 +220,8 @@ in lib.fix(self: {
       bat
       chromium
       curl
-      direnv
       ddcutil
+      direnv
       dnsutils
       emacs27-nox # emacsclient
       exa
@@ -260,6 +260,7 @@ in lib.fix(self: {
       screen
       scrot
       spotify
+      steam
       syncthing
       tokei
       tree
@@ -302,10 +303,12 @@ in lib.fix(self: {
           ".gnupg"
           ".local/share/direnv"
           ".local/share/fish"
+          ".local/share/steam" # steam main data
           ".mozilla/firefox"
           ".password-store"
           ".rustup"
           ".ssh"
+          ".steam" # steam legacy symlinks
           ".telega"
           "go"
           "mail"
