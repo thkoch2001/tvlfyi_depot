@@ -5,8 +5,8 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "esrlabs";
     repo = "josh";
-    rev = "92fd7fb193d0df25b106207675f233cfe1d26d0d";
-    sha256 = "0fzy9xbr0vnw239gl8famrqncn8pxlnwkfvy3gxl7c80d78yg9j7";
+    rev = "c56b1b81b66a43c67f94530bcb4979c1a9307c97";
+    sha256 = "0vahfiv7min1carlhzljn4f4xv9v9fxxq5y8qwwldg7agxck3x6m";
   };
 in depot.third_party.naersk.buildPackage {
   inherit src;
