@@ -16,6 +16,23 @@
       "message": "Has the annonymous thing already been fixed in the commit we build from?",
       "revId": "cd6c2320d82ee2162ef06cc4cc6d9a276f839863",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e7e85df_7bd016c6",
+        "filename": "third_party/josh/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-06-01T21:41:13Z",
+      "side": 1,
+      "message": "patchFlags \u003d \"-p0\"; I think.",
+      "revId": "cd6c2320d82ee2162ef06cc4cc6d9a276f839863",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
