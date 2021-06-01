@@ -22,4 +22,8 @@ in depot.third_party.naersk.buildPackage {
     "-p" "josh-proxy"
     "-p" "josh-ui"
   ];
+
+  override = x: x // {
+    patches = [ ./0001-replace-mentions-of-master-with-canon.patch ];
+  };
 }
