@@ -21,7 +21,7 @@ let
     '';
 
 in (writeShellScript "deploy.sh" ''
-  ${awscli}/bin/aws --profile personal s3 sync ${website}/ ${bucket}
+  ${awscli2}/bin/aws --profile personal s3 sync ${website}/ ${bucket}
   echo "Deployed to http://gws.fyi"
 '') // {
   inherit website;
