@@ -45,6 +45,7 @@ in lib.fix(self: {
     kernelPackages = pkgs.linuxPackages_latest;
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
+    zfs.enableUnstable = true;
   };
 
   fileSystems = {
