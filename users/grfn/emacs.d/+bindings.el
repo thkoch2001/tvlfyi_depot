@@ -262,7 +262,7 @@ private/hlissner/snippets."
 
    (:desc "buffer" :prefix "b"
      :desc "New empty buffer"        :n "n" #'evil-buffer-new
-     :desc "Switch workspace buffer" :n "b" #'persp-switch-to-buffer
+     :desc "Switch workspace buffer" :n "b" #'switch-to-buffer
      :desc "Switch buffer"           :n "B" #'switch-to-buffer
      :desc "Kill buffer"             :n "k" #'doom/kill-this-buffer
      :desc "Kill other buffers"      :n "o" #'doom/kill-other-buffers
