@@ -127,9 +127,6 @@
            :repo "glittershark/nix-update-el"))
 (package! direnv)
 
-;;; Email
-(package! mu4e)
-
 ;;; Sequence diagrams
 (package! wsd-mode
   :recipe (:host github
