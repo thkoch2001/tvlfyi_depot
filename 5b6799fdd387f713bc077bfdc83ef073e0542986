@@ -16,6 +16,24 @@
       "message": "For random 1.2.0 we\u0027d need at least 7db379d016a9bad7b7da9b81103ab7454faa3344 which isn\u0027t in unstable yet. Seems like the unstable channel is still stuck on Saturday whereas the haskell update was merged today (wednesday).",
       "revId": "5b6799fdd387f713bc077bfdc83ef073e0542986",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa023e3_5440a7f6",
+        "filename": "third_party/nixpkgs/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-06-05T01:49:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be0658f8_79f32f8b",
+      "revId": "5b6799fdd387f713bc077bfdc83ef073e0542986",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
