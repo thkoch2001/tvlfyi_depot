@@ -3,9 +3,15 @@
 (require 'erc)
 (require 'alert)
 
-(defun irc-connect ()
-  (interactive)
-  (let ((pw (s-trim (shell-command-to-string "pass irccloud/freenode")))
+(defvar irc-servers
+  '("hackint"
+    "libera"))
+
+(defun irc-connect (server)
+  (interactive
+   (list (ivy-read "Server: " irc-servers)))
+  (let ((pw (s-trim (shell-command-to-string
+                     (format "pass irccloud/%s" server))))
         (gnutls-verify-error nil))
     (erc-tls :server "bnc.irccloud.com"
              :port 6697
