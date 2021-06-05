@@ -353,24 +353,7 @@
   (setq evil-shift-width 2))
 
 (after! org
-  (load! "org-config")
-
-  (set-face-foreground 'org-block +solarized-s-base00)
-  (add-hook! org-mode
-    (add-hook! evil-normal-state-entry-hook
-      #'org-align-all-tags))
-  (add-hook 'org-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (setq whitespace-global-modes '(not org-mode magit-mode vterm-mode))
-  (setf (alist-get 'file org-link-frame-setup) 'find-file-other-window)
-  (set-face-foreground 'org-block +solarized-s-base00)
-
-  ;; (add-hook! org-mode
-  ;;   (set-company-backend! 'org-mode
-  ;;     '(:separate company-ob-postgresql
-  ;;                 company-dabbrev
-  ;;                 company-yasnippet
-  ;;                 company-ispell)))
-  )
+  (load! "org-config"))
 
 (after! magit
   (setq git-commit-summary-max-length 50))

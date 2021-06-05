@@ -122,11 +122,6 @@
 
  org-babel-clojure-backend 'cider)
 
-(defun +grfn/org-setup ()
-  (setq-local truncate-lines -1)
-  (line-number-mode -1))
-
-(add-hook 'org-mode-hook #'+grfn/org-setup)
 
 (defun +grfn/insert-work-template ()
   (interactive)
@@ -177,3 +172,22 @@
 (advice-add
  #'forge--post-submit-callback
  :around #'forge--post-submit-around---link-pr-to-org-item)
+
+(defun +grfn/org-setup ()
+  (setq-local truncate-lines -1)
+  (display-line-numbers-mode -1)
+  (line-number-mode -1))
+
+(add-hook 'org-mode-hook #'+grfn/org-setup)
+
+(set-face-foreground 'org-block +solarized-s-base00)
+(setq whitespace-global-modes '(not org-mode magit-mode vterm-mode))
+(setf (alist-get 'file org-link-frame-setup) 'find-file-other-window)
+(set-face-foreground 'org-block +solarized-s-base00)
+
+;; (add-hook! org-mode
+;;   (set-company-backend! 'org-mode
+;;     '(:separate company-ob-postgresql
+;;                 company-dabbrev
+;;                 company-yasnippet
+;;                 company-ispell)))
