@@ -353,7 +353,7 @@ private/hlissner/snippets."
      :desc "Store link"             :n  "l" #'org-store-link
      :desc "Browse notes"           :n  "N" #'+hlissner/browse-notes
      :desc "Org capture"            :n  "x" #'+org-capture/open
-     :desc "Create clubhouse story" :n  "c" #'org-clubhouse-create-story
+     :desc "Create clubhouse story" :n  "c" #'org-tracker-create-issue
      :desc "Archive subtree"        :n  "k" #'org-archive-subtree
      :desc "Goto clocked-in note"   :n  "g" #'org-clock-goto
      :desc "Clock Out"              :n  "o" #'org-clock-out)

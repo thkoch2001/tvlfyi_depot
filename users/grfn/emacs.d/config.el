@@ -223,6 +223,22 @@
 (load! "+commands")
 (load! "cpp")
 
+
+(add-to-list 'load-path "/home/grfn/code/org-tracker")
+(require 'org-tracker)
+(use-package! org-tracker
+  :hook (org-mode . org-tracker-mode)
+  :config
+  (setq org-tracker-state-alist '(("BACKLOG" . "Backlog")
+                                  ("PLANNED" . "Planned")
+                                  ("TODO" . "Seleted for Development")
+                                  ("ACTIVE" . "In Progress")
+                                  ("PR" . "Code Review")
+                                  ("DONE" . "Done"))
+        org-tracker-username "griffin@readyset.io"
+        org-tracker-claim-ticket-on-status-update '("ACTIVE" "PR" "DONE")
+        org-tracker-create-stories-with-labels 'existing))
+
 (load! "+private")
 
 (require 'dash)
@@ -268,20 +284,6 @@
         company-minimum-prefix-length 1))
 
 (setq doom-modeline-height 12)
-
-(load "/home/grfn/code/org-clubhouse/org-clubhouse.el")
-(use-package! org-clubhouse
-  :hook (org-mode . org-clubhouse-mode)
-  :config
-  (setq org-clubhouse-state-alist '(("BACKLOG" . "Unscheduled")
-                                    ("TODO" . "Ready for Development")
-                                    ("ACTIVE" . "In Development")
-                                    ("PR" . "Ready for Review")
-                                    ("DONE" . "Completed"))
-        org-clubhouse-username "griffinsmith"
-        org-clubhouse-claim-story-on-status-update '("ACTIVE" "PR" "DONE")
-        org-clubhouse-create-stories-with-labels 'existing
-        org-clubhouse-workflow-name "Engineering"))
 
 
 
@@ -517,45 +519,45 @@
     ["f"]
     (list "o" "Reset HEAD@{1}" #'magit-reset-head-previous))
 
-  (defun magit-read-org-clubhouse-branch-name ()
-    (when-let ((story-id (org-clubhouse-clocked-in-story-id)))
+  (defun magit-read-org-tracker-branch-name ()
+    (when-let ((issue-id (org-tracker-clocked-in-issue-id)))
       (let ((desc
              (magit-read-string-ns
-              (format "Story description (to go after gs/ch%d/)"
-                      story-id))))
-        (format "gs/ch%d/%s" story-id desc))))
+              (format "Issue description (to go after gs/%s/)"
+                      issue-id))))
+        (format "gs/%s/%s" issue-id desc))))
 
-  (defun magit-read-org-clubhouse-branch-args ()
-    (if-let ((story-id (org-clubhouse-clocked-in-story-id)))
+  (defun magit-read-org-tracker-branch-args ()
+    (if-let ((issue-id (org-tracker-clocked-in-issue-id)))
         (let ((start-point (magit-read-starting-point
-                            "Create and checkout branch for Clubhouse story"
+                            "Create and checkout branch for Tracker issue"
                             nil
                             "origin/master")))
           (if (magit-rev-verify start-point)
-              (when-let ((desc (magit-read-org-clubhouse-branch-name)))
+              (when-let ((desc (magit-read-org-tracker-branch-name)))
                 (list desc start-point))
             (user-error "Not a valid starting point: %s" choice)))
-      (user-error "No currently clocked-in clubhouse story")))
+      (user-error "No currently clocked-in tracker issue")))
 
-  (transient-define-suffix magit-checkout-org-clubhouse-branch (branch start-point)
-    (interactive (magit-read-org-clubhouse-branch-args))
+  (transient-define-suffix magit-checkout-org-tracker-branch (branch start-point)
+    (interactive (magit-read-org-tracker-branch-args))
     (magit-branch-and-checkout branch start-point))
 
-  (transient-define-suffix magit-rename-org-clubhouse-branch (old new)
+  (transient-define-suffix magit-rename-org-tracker-branch (old new)
     (interactive
      (let ((branch (magit-read-local-branch "Rename branch")))
-       (list branch (magit-read-org-clubhouse-branch-name))))
+       (list branch (magit-read-org-tracker-branch-name))))
     (when (and old new)
       (magit-branch-rename old new)))
 
   (transient-append-suffix
     #'magit-branch
     ["c"]
-    (list "C" "Checkout Clubhouse branch" #'magit-checkout-org-clubhouse-branch))
+    (list "C" "Checkout Tracker branch" #'magit-checkout-org-tracker-branch))
   (transient-append-suffix
     #'magit-branch
     ["c"]
-    (list "M" "Rename branch to Clubhouse ticket" #'magit-rename-org-clubhouse-branch)))
+    (list "M" "Rename branch to Tracker ticket" #'magit-rename-org-tracker-branch)))
 
 ;; (defun grfn/split-window-more-sensibly (&optional window)
 ;;   (let ((window (or window (selected-window))))

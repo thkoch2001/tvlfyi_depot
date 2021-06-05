@@ -17,9 +17,9 @@
 (package! string-inflection)
 
 ;;; Org
-(package! org-clubhouse
+(package! org-tracker
   :recipe (:host file
-           :local-repo "~/code/org-clubhouse"))
+           :local-repo "~/code/org-tracker"))
 (package! org-alert)
 (package! ob-http)
 (package! ob-ipython)
