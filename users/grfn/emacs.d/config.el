@@ -613,8 +613,6 @@
   (add-to-list #'company-backends #'company-lsp)
   (setq company-lsp-async t))
 
-(use-package! dap-mode)
-
 (defun +grfn/haskell-mode-setup ()
   (interactive)
   (flymake-mode -1)

@@ -67,7 +67,6 @@
 (package! lsp-ui :recipe (:host github :repo "emacs-lsp/lsp-ui"))
 (package! company-lsp)
 (package! lsp-treemacs)
-(package! dap-mode)
 
 ;; Rust
 (package! rustic :disable t)
