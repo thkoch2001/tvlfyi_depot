@@ -41,6 +41,7 @@ in {
         fd
         clang
         gnutls
+        emacsPackages.telega
       ];
 
       programs.emacs = {
@@ -51,6 +52,7 @@ in {
             tvlPackages.dottime
             tvlPackages.tvl
             vterm
+            telega
           ])
         );
       };
