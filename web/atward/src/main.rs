@@ -105,6 +105,11 @@ fn handlers() -> Vec<Handler> {
             pattern: Regex::new("^cl/(?P<cl>\\d+)$").unwrap(),
             target: |_, captures| Some(format!("https://cl.tvl.fyi/{}", &captures["cl"])),
         },
+        // Non-parameterised short hostnames should redirect to $host.tvl.fyi
+        Handler {
+            pattern: Regex::new("^(?P<host>b|cl|cs|code|at|todo)$").unwrap(),
+            target: |_, captures| Some(format!("https://{}.tvl.fyi/", &captures["host"])),
+        },
         // Depot paths (e.g. //web/atward or //ops/nixos/whitby/default.nix)
         // TODO(tazjin): Add support for specifying lines in a query parameter
         Handler {
@@ -247,6 +252,29 @@ mod tests {
                 }
             ),
             None
+        );
+    }
+
+    #[test]
+    fn plain_host_queries() {
+        assert_eq!(
+            dispatch(&handlers(), &"cs".into()),
+            Some("https://cs.tvl.fyi/".to_string()),
+        );
+
+        assert_eq!(
+            dispatch(&handlers(), &"cl".into()),
+            Some("https://cl.tvl.fyi/".to_string()),
+        );
+
+        assert_eq!(
+            dispatch(&handlers(), &"b".into()),
+            Some("https://b.tvl.fyi/".to_string()),
+        );
+
+        assert_eq!(
+            dispatch(&handlers(), &"todo".into()),
+            Some("https://todo.tvl.fyi/".to_string()),
         );
     }
 
