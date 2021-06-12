@@ -104,6 +104,24 @@
       "parentUuid": "d1eabca4_b76bb154",
       "revId": "e979b2bd7c5fc65e001f9a32f2848f228061e911",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57200828_d4c1acb7",
+        "filename": "web/atward/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-06-12T17:53:13Z",
+      "side": 1,
+      "message": "ah, sure, makes sense",
+      "parentUuid": "af3f1922_e01e63af",
+      "revId": "e979b2bd7c5fc65e001f9a32f2848f228061e911",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
