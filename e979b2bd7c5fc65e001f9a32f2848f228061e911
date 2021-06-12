@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9c03fb37_97dd881c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-06-12T16:58:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f4996da_ad5dd236",
+      "revId": "e979b2bd7c5fc65e001f9a32f2848f228061e911",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "47ada46a_83ae994f",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2021-06-12T14:59:19Z",
       "side": 1,
       "message": "Could `//` dispatch to `code`/`cs` as well?",
+      "revId": "e979b2bd7c5fc65e001f9a32f2848f228061e911",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d14baab4_0825473a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-06-12T16:58:20Z",
+      "side": 1,
+      "message": "Hmm, maybe - could you open a separate bug for it?",
+      "parentUuid": "47ada46a_83ae994f",
       "revId": "e979b2bd7c5fc65e001f9a32f2848f228061e911",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -48,6 +84,24 @@
       "writtenOn": "2021-06-12T15:51:23Z",
       "side": 1,
       "message": "could we just make this any sequence of url-safe characters, so it\u0027s future-proof against other supported subdomains?",
+      "revId": "e979b2bd7c5fc65e001f9a32f2848f228061e911",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af3f1922_e01e63af",
+        "filename": "web/atward/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-06-12T16:58:20Z",
+      "side": 1,
+      "message": "I\u0027d rather not, as there\u0027s a backlog item for supporting fallback queries (i.e. non-recognised terms should go to $fallback_search, e.g. Sourcegraph or Google or whatever). This requires us to roughly know the set of good terms.",
+      "parentUuid": "d1eabca4_b76bb154",
       "revId": "e979b2bd7c5fc65e001f9a32f2848f228061e911",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
