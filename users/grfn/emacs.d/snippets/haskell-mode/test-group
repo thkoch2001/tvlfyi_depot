@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: test-group
+# uuid:
+# key: testGroup
+# condition: t
+# --
+testGroup "${1:name}"
+[ $0
+]
