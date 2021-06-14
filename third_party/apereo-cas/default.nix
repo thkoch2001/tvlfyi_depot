@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
   name = "apereo-cas-${version}";
@@ -8,7 +8,7 @@ let
   jdk = pkgs.jdk11;
   gradle = pkgs.gradle_6;
 
-  meta = with pkgs.stdenvNoCC.lib; {
+  meta = with lib; {
     homepage = "https://www.apereo.org/projects/cas";
     description = "CAS provides enterprise single sign-on for the Web";
     platforms = platforms.linux;
