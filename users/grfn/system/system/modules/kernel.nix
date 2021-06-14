@@ -24,7 +24,7 @@ let
   };
 in
 {
-  boot.kernelPackages = pkgs.linuxPackages_5_11.extend (self: super: {
+  boot.kernelPackages = pkgs.linuxPackages_5_12.extend (self: super: {
     kernel = super.kernel.override {
       ignoreConfigErrors = true;
       kernelPatches = super.kernel.kernelPatches ++ [{
