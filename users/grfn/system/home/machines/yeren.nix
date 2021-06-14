@@ -28,6 +28,7 @@ in
     mypaint
     xdot
     tdesktop
+    subsurface
 
     (discord.override rec {
       version = "0.0.15";
