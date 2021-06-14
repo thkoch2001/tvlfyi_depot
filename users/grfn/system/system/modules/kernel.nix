@@ -11,7 +11,7 @@ let
       name = "linux-ck-patch-${mm}-ck1.xz";
       # example: http://ck.kolivas.org/patches/5.0/5.4/5.4-ck1/patch-5.4-ck1.xz
       url = "http://ck.kolivas.org/patches/${mj}.0/${mm}/${mm}-ck1/patch-${mm}-ck1.xz";
-      sha256 = "14lfpq9hvq1amxrl0ayfid1d04kd35vwsvk1ppnqa87nqfkjq47c";
+      sha256 = "0z6x9vqks0b5sr47ip6zc4gva1j4g3swwdj7gjvgfwcqrakg44yw";
     };
 
     unpackPhase = ''
@@ -24,7 +24,7 @@ let
   };
 in
 {
-  boot.kernelPackages = pkgs.linuxPackages_5_11.extend (self: super: {
+  boot.kernelPackages = pkgs.linuxPackages_5_12.extend (self: super: {
     kernel = super.kernel.override {
       ignoreConfigErrors = true;
       kernelPatches = super.kernel.kernelPatches ++ [{
