@@ -231,7 +231,7 @@
   :config
   (setq org-tracker-state-alist '(("BACKLOG" . "Backlog")
                                   ("PLANNED" . "Planned")
-                                  ("TODO" . "Seleted for Development")
+                                  ("TODO" . "Selected for Development")
                                   ("ACTIVE" . "In Progress")
                                   ("PR" . "Code Review")
                                   ("DONE" . "Done"))
