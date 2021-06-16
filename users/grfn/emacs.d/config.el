@@ -237,7 +237,13 @@
                                   ("DONE" . "Done"))
         org-tracker-username "griffin@readyset.io"
         org-tracker-claim-ticket-on-status-update '("ACTIVE" "PR" "DONE")
-        org-tracker-create-stories-with-labels 'existing))
+        org-tracker-create-stories-with-labels 'existing)
+
+  (defun org-tracker-headlines-from-assigned-to-me (level)
+    (interactive "*nLevel: ")
+    (org-tracker-headlines-from-search
+     level
+     "assignee = currentUser() and statusCategory = 2")))
 
 (load! "+private")
 
