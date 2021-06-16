@@ -29,9 +29,25 @@ in {
         # LaTeX (for org export)
         (pkgs.texlive.combine {
           inherit (pkgs.texlive)
-          scheme-basic collection-fontsrecommended ulem
-          fncychap titlesec tabulary varwidth framed fancyvrb float parskip
-          wrapfig upquote capt-of needspace;
+            capt-of
+            collection-fontsrecommended
+            dvipng
+            fancyvrb
+            float
+            fncychap
+            framed
+            mathpartir
+            needspace
+            parskip
+            scheme-basic
+            semantic
+            tabulary
+            titlesec
+            ulem
+            upquote
+            varwidth
+            wrapfig
+          ;
         })
 
         ispell
