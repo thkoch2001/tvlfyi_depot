@@ -821,6 +821,7 @@ private/hlissner/snippets."
      :n "K"     #'lsp-describe-thing-at-point
      ;; :n "g d"   #'lsp-ui-peek-find-definitions
      :n "g d"   #'lsp-ui-peek-find-definitions
+     :n "g R"   #'lsp-find-references
      ;; :n "g SPC" #'intero-repl-load
      ;; :n "g y"   #'lsp-ui-
      ))
