@@ -39,6 +39,7 @@ with lib;
   home.packages = with pkgs; [
     jq
     yq
+    gron
     gitAndTools.hub
     gitAndTools.tig
     gitAndTools.gh
