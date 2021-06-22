@@ -241,7 +241,8 @@
 
   (defun org-tracker-headlines-from-assigned-to-me (level)
     (interactive "*nLevel: ")
-    (org-tracker-headlines-from-search
+    (funcall-interactively
+     #'org-tracker-headlines-from-search
      level
      "assignee = currentUser() and statusCategory = 2")))
 
