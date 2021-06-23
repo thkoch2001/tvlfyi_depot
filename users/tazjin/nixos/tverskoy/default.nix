@@ -257,6 +257,7 @@ in lib.fix(self: {
       pulseaudioLight # for pactl
       pwgen
       quasselClient
+      rink
       ripgrep
       rustup
       screen
