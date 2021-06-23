@@ -173,10 +173,10 @@
 ;; These are commented out because Emacs no longer starts (??) if
 ;; they're set at launch.
 ;;
-;; (bind-xkb "us" "л г")
-;; (bind-xkb "de" "л в")
-;; (bind-xkb "no" "л т")
-;; (bind-xkb "ru" "л к")
+(bind-xkb "us" "л г")
+(bind-xkb "de" "л в")
+(bind-xkb "no" "л т")
+(bind-xkb "ru" "л к")
 
 ;; Line-editing shortcuts
 (exwm-input-set-simulation-keys
