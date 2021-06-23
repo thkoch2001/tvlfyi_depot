@@ -229,10 +229,20 @@
   (interactive)
   (set-randr-config
    '(("eDP1" 8 9 0)
-     ("HDMI1" 1 2 4 5 6 7)))
+     ("HDMI1" 1 2 3 4 5 6 7)))
 
   (shell-command "xrandr --output DP2 --off")
   (shell-command "xrandr --output HDMI1 --right-of eDP1 --auto --primary")
+  (exwm-randr-refresh))
+
+(defun randr-tverskoy-extend-tv ()
+  "Move the last workspace on the TV to the side."
+  (interactive)
+  (set-randr-config
+   '(("eDP" 1 2 3 4 5 6 7 8 9)
+     ("HDMI-A-0" 0)))
+
+  (shell-command "xrandr --output HDMI-A-0 --above eDP --auto")
   (exwm-randr-refresh))
 
 (defun randr-vauxhall-layout-remarkable ()
