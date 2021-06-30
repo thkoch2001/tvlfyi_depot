@@ -10,6 +10,7 @@ in {
       description = "Apereo CAS Single Sign On server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      environment.JDK_JAVA_OPTIONS = "-Xmx512M -Xms512M";
       serviceConfig = {
         User = "apereo-cas";
         Group = "apereo-cas";
