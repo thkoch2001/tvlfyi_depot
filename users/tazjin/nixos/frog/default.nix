@@ -248,7 +248,6 @@ in lib.fix(self: {
       nix-prefetch-github
       notmuch
       obs-studio
-      obs-v4l2sink
       openssh
       openssl
       pass
