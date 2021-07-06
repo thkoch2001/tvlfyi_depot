@@ -915,7 +915,9 @@
   (modify-syntax-entry ?- "w"))
 
 (after! flycheck
-  (put 'flycheck-python-pylint-executable 'safe-local-variable (lambda (_) t)))
+  (put 'flycheck-python-pylint-executable 'safe-local-variable (lambda (_) t))
+  (setq flycheck-error-list-minimum-level 'warn
+        flycheck-navigation-minimum-level 'warn))
 
 (defvar alembic-command "alembic"
   "Command to execute when running alembic")
