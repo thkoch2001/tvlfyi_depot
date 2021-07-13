@@ -205,6 +205,7 @@ in lib.fix(self: {
     light.enable = true;
     ssh.startAgent = true;
     mosh.enable = true;
+    steam.enable = true;
 
     # Required by impermanence
     fuse.userAllowOther = true;
@@ -304,12 +305,14 @@ in lib.fix(self: {
           ".config/spotify"
           ".config/syncthing"
           ".gnupg"
+          ".local/share/Steam"
           ".local/share/direnv"
           ".local/share/fish"
           ".mozilla/firefox"
           ".password-store"
           ".rustup"
           ".ssh"
+          ".steam"
           ".telega"
           "go"
           "mail"
