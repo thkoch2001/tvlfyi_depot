@@ -22,7 +22,6 @@
 
 (load! "utils")
 (load! "company-sql")
-(load! "org-query")
 (load! "show-matching-paren")
 (load! "irc")
 (load! "github-org")
@@ -362,6 +361,7 @@
   (setq evil-shift-width 2))
 
 (after! org
+  (load! "org-query")
   (load! "org-config"))
 
 (after! magit
@@ -707,6 +707,7 @@
 
 (use-package! graphql-mode)
 
+
 (require 'whitespace)
 (setq whitespace-style '(face lines-tail))
 (global-whitespace-mode t)
@@ -895,7 +896,6 @@
 (use-package! ob-async)
 
 (use-package! org-recent-headings
-  :after (org)
   :config
   (map! :n "SPC n r" #'org-recent-headings-ivy))
 
@@ -906,6 +906,11 @@
   (setq-default org-sticky-header-heading-star "●"))
 
 (enable-theme 'grfn-solarized-light)
+
+;;; this needs to be *after the theme*, or else I get no agenda items.
+;;; whuuu??
+(load! "org-config")
+
 
 ;;; word-char
 (add-hook! prog-mode
