@@ -66,4 +66,7 @@ in
   };
 
   xsession.windowManager.i3.config.keybindings.F9 = "exec lock";
+
+  xdg.mimeApps.defaultApplications."x-scheme-handler/tg" =
+    "telegramdesktop.desktop";
 }
