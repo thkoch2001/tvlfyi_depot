@@ -11,7 +11,10 @@
                  :key "w")
           (:name "personal" :query "tag:inbox and tag:important and path:personal/**"
                  :key "p"))
-        message-send-mail-function 'message-send-mail-with-sendmail)
+        message-send-mail-function 'message-send-mail-with-sendmail
+        message-sendmail-f-is-evil 't
+        message-sendmail-envelope-from 'header
+        message-sendmail-extra-arguments '("--read-envelope-from"))
 
   (add-hook! notmuch-message-mode-hook #'notmuch-company-setup))
 
@@ -25,7 +28,10 @@
                  :key "w")
           (:name "personal" :query "tag:inbox and tag:important and path:personal/**"
                  :key "p"))
-        message-send-mail-function 'message-send-mail-with-sendmail)
+        message-send-mail-function 'message-send-mail-with-sendmail
+        message-sendmail-f-is-evil 't
+        message-sendmail-envelope-from 'header
+        message-sendmail-extra-arguments '("--read-envelope-from"))
 
 (set-popup-rule! "^\\*notmuch-saved-search-"
   :ignore t)
