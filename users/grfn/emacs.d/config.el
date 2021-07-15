@@ -436,35 +436,7 @@
   (add-hook! json-mode #'prettier-js-mode)
   (add-hook! css-mode  #'prettier-js-mode))
 
-(require 'flycheck-flow)
-(with-eval-after-load 'flycheck
-  (flycheck-add-mode 'javascript-flow 'rjsx-mode)
-  (flycheck-add-mode 'javascript-flow 'flow-minor-mode)
-  (flycheck-add-mode 'javascript-eslint 'flow-minor-mode)
-  (flycheck-add-next-checker 'javascript-flow 'javascript-eslint))
-
-
-(require 'flow-minor-mode)
-
 (remove-hook 'js2-mode-hook 'tide-setup t)
-
-;; (require 'company-flow)
-;; (eval-after-load 'company
-;;   (lambda () (add-to-list 'company-backends 'company-flow)))
-(defun flow/set-flow-executable ()
-  (interactive)
-  (let* ((os (pcase system-type
-               ('darwin "osx")
-               ('gnu/linux "linux64")
-               (_ nil)))
-         (root (locate-dominating-file  buffer-file-name  "node_modules/flow-bin"))
-         (executable (car (file-expand-wildcards
-                           (concat root "node_modules/flow-bin/*" os "*/flow")))))
-    (setq-local company-flow-executable executable)
-    ;; These are not necessary for this package, but a good idea if you use
-    ;; these other packages
-    (setq-local flow-minor-default-binary executable)
-    (setq-local flycheck-javascript-flow-executable executable)))
 
 ;; Set this to the mode you use, I use rjsx-mode
 (add-hook 'rjsx-mode-hook #'flow/set-flow-executable t)
