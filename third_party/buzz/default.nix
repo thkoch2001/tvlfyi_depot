@@ -4,9 +4,8 @@ depot.third_party.naersk.buildPackage {
   src = pkgs.fetchFromGitHub {
     owner = "jonhoo";
     repo = "buzz";
-    rev = "aede85850bd4b919128da6267c8cf151e7246a35";
-    sha256 = "02z3cqqfaylasqyafv0fbzcfav0vby7nngh642gb4cxrm3jqkz2w";
-    fetchSubmodules = true;
+    rev = "02479643ed1b0325050245dbb3b70411b8cffb7a";
+    sha256 = "1spklfv02qlinlail5rmhh1c4926gyrkr2ydd9g6z919rxkl0ywk";
   };
 
   buildInputs = with pkgs; [
