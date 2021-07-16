@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8819e49c_6478fd4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-07-16T20:16:56Z",
+      "side": 1,
+      "message": "Your emacs is kaputt",
+      "revId": "906a64a815c6b4e9d8dc5a7e355ebfb77477a133",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
