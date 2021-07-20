@@ -130,6 +130,7 @@ in lib.fix(self: {
   environment.persistence."/persist" = {
     directories = [
       "/etc/NetworkManager/system-connections"
+      "/etc/mullvad-vpn"
       "/var/cache/mullvad-vpn"
       "/var/lib/bluetooth"
       "/var/lib/systemd/coredump"
