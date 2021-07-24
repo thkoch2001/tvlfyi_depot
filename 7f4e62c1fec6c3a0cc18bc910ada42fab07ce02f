@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab74ca7b_491a209e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-07-24T20:48:29Z",
+      "side": 1,
+      "message": "https://github.com/nix-community/emacs-overlay/pull/165 getting merged will fix users.tazjin.emacs (see /nix/store/2lp4kvw6x9im3fz47jl79qxbdwncnzf5-tazjins-emacs on a whitby near you).",
+      "revId": "7f4e62c1fec6c3a0cc18bc910ada42fab07ce02f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
