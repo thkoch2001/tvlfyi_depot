@@ -1,0 +1,15 @@
+diff --git a/xml/catalog.lisp b/xml/catalog.lisp
+index f8ba136..fc2c83c 100644
+--- a/xml/catalog.lisp
++++ b/xml/catalog.lisp
+@@ -226,9 +226,7 @@
+       (warn "ignoring catalog error: ~A" c))))
+ 
+ (defparameter *catalog-dtd*
+-    (let* ((cxml
+-            (slot-value (asdf:find-system :cxml) 'asdf::relative-pathname))
+-           (dtd (merge-pathnames "catalog.dtd" cxml)))
++    (let* ((dtd (merge-pathnames "catalog.dtd" "@out@/")))
+       (with-open-file (s dtd :element-type '(unsigned-byte 8))
+         (let ((bytes
+                (make-array (file-length s) :element-type '(unsigned-byte 8))))
