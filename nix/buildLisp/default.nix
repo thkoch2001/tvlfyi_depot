@@ -162,6 +162,13 @@ let
     in lib.fix (self: runCommandNoCC "${name}-cllib" {
       LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
       LANG = "C.UTF-8";
+      passthru = {
+        inherit lispNativeDeps lispDeps;
+        lispName = name;
+        lispBinary = false;
+        tests = testDrv;
+        sbcl = sbclWith [ self ];
+      };
     } ''
       ${if ! isNull testDrv
         then "echo 'Test ${testDrv} succeeded'"
@@ -176,13 +183,7 @@ let
 
       chmod +x cat_fasls
       ./cat_fasls > $out/${name}.fasl
-    '' // {
-      inherit lispNativeDeps lispDeps;
-      lispName = name;
-      lispBinary = false;
-      tests = testDrv;
-      sbcl = sbclWith [ self ];
-    });
+    '');
 
   # 'program' creates an executable containing a dumped image of the
   # specified sources and dependencies.
@@ -215,6 +216,14 @@ let
       nativeBuildInputs = [ makeWrapper ];
       LD_LIBRARY_PATH = libPath;
       LANG = "C.UTF-8";
+      passthru = {
+        lispName = name;
+        lispDeps = [ selfLib ] ++ (tests.deps or []);
+        lispNativeDeps = native;
+        lispBinary = true;
+        tests = testDrv;
+        sbcl = sbclWith [ self ];
+      };
     } ''
       ${if ! isNull testDrv
         then "echo 'Test ${testDrv} succeeded'"
@@ -226,14 +235,7 @@ let
       }
 
       wrapProgram $out/bin/${name} --prefix LD_LIBRARY_PATH : "${libPath}"
-    '' // {
-      lispName = name;
-      lispDeps = [ selfLib ] ++ (tests.deps or []);
-      lispNativeDeps = native;
-      lispBinary = true;
-      tests = testDrv;
-      sbcl = sbclWith [ self ];
-    });
+    '');
 
   # 'bundled' creates a "library" that calls 'require' on a built-in
   # package, such as any of SBCL's sb-* packages.
