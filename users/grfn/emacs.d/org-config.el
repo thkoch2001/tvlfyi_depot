@@ -61,7 +61,7 @@
  org-cycle-separator-lines 2
  org-hidden-keywords '(title)
  org-tags-column -130
- org-ellipsis "⤵"
+ org-ellipsis "…"
  org-imenu-depth 9
  org-capture-templates
  `(("t" "Todo" entry
