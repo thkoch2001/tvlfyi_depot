@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4381a28_8b6e42b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-01T21:19:55Z",
+      "side": 1,
+      "message": "Hmm, last time I tried this I ended up with weird infinite recursion issues - maybe one of the depot structure refactorings has since gotten rid of those. LGTM",
+      "revId": "6bee8c2ce285b43909a1b7cc7d14e559f5fff36b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
