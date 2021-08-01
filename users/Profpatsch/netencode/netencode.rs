@@ -690,8 +690,10 @@ pub mod dec {
         fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError>;
     }
 
+    /// Any netencode, as `T`.
     #[derive(Clone, Copy)]
     pub struct AnyT;
+    /// Any netencode, as `U`.
     #[derive(Clone, Copy)]
     pub struct AnyU;
 
@@ -709,8 +711,11 @@ pub mod dec {
         }
     }
 
+    /// A text
     #[derive(Clone, Copy)]
     pub struct Text;
+
+    /// A bytestring
     // TODO: rename to Bytes
     #[derive(Clone, Copy)]
     pub struct Binary;
@@ -735,6 +740,7 @@ pub mod dec {
         }
     }
 
+    /// Any scalar, converted to bytes.
     #[derive(Clone, Copy)]
     pub struct ScalarAsBytes;
 
@@ -755,6 +761,7 @@ pub mod dec {
         }
     }
 
+    /// A map of Ts (TODO: rename to map)
     #[derive(Clone, Copy)]
     pub struct Record<T>(pub T);
 
@@ -773,6 +780,7 @@ pub mod dec {
         }
     }
 
+    /// Assume a record and project out the field with the given name and type.
     #[derive(Clone, Copy)]
     pub struct RecordDot<'a, T> {
         pub field: &'a str,
@@ -794,6 +802,7 @@ pub mod dec {
         }
     }
 
+    /// Equals one of the listed `A`s exactly, after decoding.
     #[derive(Clone)]
     pub struct OneOf<T, A>{
         pub inner: T,
@@ -816,6 +825,7 @@ pub mod dec {
         }
     }
 
+    /// Try decoding as `T`.
     #[derive(Clone)]
     pub struct Try<T>(pub T);
 
