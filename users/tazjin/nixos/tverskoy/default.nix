@@ -236,6 +236,7 @@ in lib.fix(self: {
       git
       gnupg
       google-chrome
+      gtk3 # for gtk-launch
       htop
       hyperfine
       iftop
