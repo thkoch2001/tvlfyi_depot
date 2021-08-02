@@ -1,6 +1,7 @@
  ;;; mime.lisp --- MIME regression tests
 
  ;;; Copyright (C) 2012 by Walter C. Pelissero
+ ;;; Copyright (C) 2021 by the TVL Authors
 
  ;;; Author: Walter C. Pelissero <walter@pelissero.de>
  ;;; Project: mime4cl
@@ -28,11 +29,13 @@
 			 *load-pathname*
 			 #P"")))
 
+(defvar *sample1-file* (make-pathname :defaults #.(or *compile-file-pathname*
+                                                      *load-pathname*)
+                                      :name "sample1"
+                                      :type "msg"))
+
 (deftest mime.1
-    (let* ((orig (mime-message (make-pathname :defaults #.(or *compile-file-pathname*
-							   *load-pathname*)
-					   :name "sample1"
-					   :type "msg")))
+    (let* ((orig (mime-message *sample1-file*))
 	   (dup (mime-message (with-output-to-string (out) (encode-mime-part orig out)))))
       (mime= orig dup))
   t)
