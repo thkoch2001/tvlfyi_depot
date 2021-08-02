@@ -19,4 +19,10 @@ depot.nix.buildLisp.library {
     ./serial.lisp
     ./mp/sbcl.lisp
   ];
+
+  # TODO(sterni): implement OS interaction for ECL and CCL
+  brokenOn = [
+    "ecl"
+    "ccl"
+  ];
 }

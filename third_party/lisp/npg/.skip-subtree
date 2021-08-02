@@ -1,0 +1,1 @@
+prevent readTree creating entries for subdirs without .nix files
