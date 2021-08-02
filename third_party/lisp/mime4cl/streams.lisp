@@ -1,6 +1,7 @@
  ;;; eds.lisp --- En/De-coding Streams
 
  ;;; Copyright (C) 2012 by Walter C. Pelissero
+ ;;; Copyright (C) 2021 by the TVL Authors
 
  ;;; Author: Walter C. Pelissero <walter@pelissero.de>
  ;;; Project: mime4cl
@@ -63,7 +64,8 @@
 	       :initarg :dont-close)))
 
 (defmethod stream-file-position ((stream coder-stream-mixin) &optional position)
-  (file-position (slot-value stream 'real-stream) position))
+  (apply #'file-position (remove nil (list (slot-value stream 'real-stream)
+                                           position))))
 
 (defclass coder-input-stream-mixin (fundamental-binary-input-stream coder-stream-mixin)
   ())
