@@ -1,0 +1,12 @@
+--- a/streams.lisp	2021-08-02 12:29:32.259822547 +0200
++++ b/streams.lisp	2021-08-02 12:29:22.407833876 +0200
+@@ -63,7 +63,8 @@
+ 	       :initarg :dont-close)))
+ 
+ (defmethod stream-file-position ((stream coder-stream-mixin) &optional position)
+-  (file-position (slot-value stream 'real-stream) position))
++  (apply #'file-position (remove nil (list (slot-value stream 'real-stream)
++                                           position))))
+ 
+ (defclass coder-input-stream-mixin (fundamental-binary-input-stream coder-stream-mixin)
+   ())
