@@ -24,6 +24,7 @@
  (:map rust-mode-map
   :n "g RET" #'cargo-process-current-file-tests
   :n "g R" #'lsp-find-references
+  :n "g d" #'lsp-find-definition
   (:localleader
    "m" #'lsp-rust-analyzer-expand-macro)))
 
