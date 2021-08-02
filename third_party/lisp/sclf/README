@@ -1,2 +1,6 @@
-SCLF is a collection of disparate Common Lisp functions that are
-common enough in my code but couldn't find a place anywhere else.
+SCLF has originally been written by Walter C. Pelissero and vendored
+into depot since it is a dependency of mime4cl. Upstream and depot version
+may diverge.
+
+Upstream Website: http://wcp.sdf-eu.org/software/#sclf
+Vendored Tarball: http://wcp.sdf-eu.org/software/sclf-20150207T213551.tbz

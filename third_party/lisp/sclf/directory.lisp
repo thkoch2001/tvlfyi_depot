@@ -1,6 +1,7 @@
 ;;;  directory.lisp --- filesystem directory access
 
 ;;;  Copyright (C) 2006, 2007, 2008, 2009, 2010 by Walter C. Pelissero
+;;;  Copyright (C) 2021 by the TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: sclf
@@ -348,18 +349,12 @@ are defined."
 (defun stat-modification-time (stat)
   "Return the modification time of the STAT structure as Lisp
 Universal Time, which is not the same as the Unix time."
-  #-(or cmu sbcl) (error "Don't know how to adjust Unix time to Lisp Universal Time.")
-  (+ #+cmu lisp::unix-to-universal-time
-     #+sbcl sb-impl::unix-to-universal-time
-     (stat-mtime stat)))
+  (unix->universal-time (stat-mtime stat)))
 
 (defun stat-creation-time (stat)
   "Return the creation time of the STAT structure as Lisp
 Universal Time, which is not the same as the Unix time."
-  #-(or cmu sbcl) (error "Don't know how to adjust Unix time to Lisp Universal Time.")
-  (+ #+cmu lisp::unix-to-universal-time
-     #+sbcl sb-impl::unix-to-universal-time
-     (stat-ctime stat)))
+  (unix->universal-time (stat-ctime stat)))
 
 (defun file-modification-time (file)
   "Return the modification time of FILE as Lisp Universal Time, which
