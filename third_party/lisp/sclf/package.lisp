@@ -1,6 +1,7 @@
 ;;;  package.lisp --- packages description
 
 ;;;  Copyright (C) 2006, 2007, 2008, 2009, 2010 by Walter C. Pelissero
+;;;  Copyright (C) 2021 by the TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: sclf
@@ -179,6 +180,7 @@
 	   #:stat-mode
 	   #:save-file-excursion
 	   #:stat-modification-time
+	   #:stat-creation-time
 	   #:file-modification-time
 	   #:file-creation-time
 	   #:show
