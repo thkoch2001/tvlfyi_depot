@@ -1,0 +1,7 @@
+MIME4CL is a Common Lisp library for dealing with MIME messages.
+It has been originally written by Watler C. Pelissero and vendored
+into depot as upstream is inactive and provides no VC repo of any
+kind. Upstream and depot version may diverge.
+
+Upstream Website: http://wcp.sdf-eu.org/software/#mime4cl
+Vendored Tarball: http://wcp.sdf-eu.org/software/mime4cl-20150207T211851.tbz
