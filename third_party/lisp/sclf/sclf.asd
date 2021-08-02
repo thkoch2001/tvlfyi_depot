@@ -1,6 +1,7 @@
 ;;;  sclf.asd --- system definition
 
 ;;;  Copyright (C) 2005, 2006, 2008, 2009 by Walter C. Pelissero
+;;;  Copyright (C) 2021 by the TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: SCLF
@@ -44,8 +45,8 @@ uses, too small to fit anywhere else."
      (:file "sclf" :depends-on ("package"))
      (:file "sysproc" :depends-on ("package" "sclf"))
      (:file "lazy" :depends-on ("package" "sclf"))
-     (:file "directory" :depends-on ("package" "sclf"))
      (:file "time" :depends-on ("package" "sclf"))
+     (:file "directory" :depends-on ("package" "sclf" "time"))
      (:file "serial" :depends-on ("package" "sclf"))
      (:module "mp"
 	      :depends-on ("package" "sclf")
