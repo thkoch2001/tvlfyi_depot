@@ -3,6 +3,13 @@
 			   for Common Lisp
 
 	 Copyright (C) 2003-2006, 2010 by Walter C. Pelissero
+	 Copyright (C) 2021 by the TVL Authors
+
+Vendored into depot as it is a dependency of mime4cl and upstream has
+become inactive. Upstream and depot version may diverge.
+
+Upstream Website: http://wcp.sdf-eu.org/software/#npg
+Vendored Tarball: http://wcp.sdf-eu.org/software/npg-20150517T144652.tbz
 
 This library is  free software; you can redistribute  it and/or modify
 it  under  the terms  of  the GNU  Lesser  General  Public License  as
@@ -36,6 +43,6 @@ though.
 
 Multiple concurrent parsers are supported.
 
-To compile, an ASDF file is provided.
+To compile, an ASDF and nix file are provided.
 
 See the examples directory for clues on how to use it.
