@@ -90,10 +90,11 @@
     intel-media-driver
   ];
 
-  services.fprintd = {
-    enable = true;
-    package = pkgs.fprintd-tod;
-  };
+  # Disabled for now until libfprint-tod can get a version bump
+  # services.fprintd = {
+  #   enable = true;
+  #   package = pkgs.fprintd-tod;
+  # };
 
   systemd.services.fprintd.environment.FP_TOD_DRIVERS_DIR =
     "${pkgs.libfprint-2-tod1-goodix}/usr/lib/libfprint-2/tod-1";
