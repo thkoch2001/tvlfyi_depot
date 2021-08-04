@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f07b303b_36fdd847",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-04T15:21:43Z",
+      "side": 1,
+      "message": "notmuch build failure fixed in `23b7966ea8568d70650c2f61ece3fbbf9447451a` (theoretically).\n\nhttps://github.com/NixOS/nixpkgs/issues/132567\n\n(Looks fixable via an overlay, if necessary).",
+      "revId": "47dde1db84fcee512e5fbb9cc20c2d241159017c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
