@@ -28,4 +28,12 @@ self: super: {
       tvlPackages = depot.tools.emacs-pkgs // depot.third_party.emacs;
     })
   );
+
+  # Temporary fix for python3Packages.notmuch
+  # See https://github.com/NixOS/nixpkgs/pull/132592/
+  notmuch = super.notmuch.overrideAttrs(old: {
+    passthru = old.passthru // {
+      pythonSourceRoot = "notmuch-${old.version}/bindings/python";
+    };
+  });
 }
