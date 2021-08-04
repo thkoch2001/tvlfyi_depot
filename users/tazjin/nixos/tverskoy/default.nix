@@ -254,6 +254,7 @@ in lib.fix(self: {
       paperlike-go
       pass
       pavucontrol
+      picom
       pinentry
       pinentry-emacs
       pulseaudioLight # for pactl
