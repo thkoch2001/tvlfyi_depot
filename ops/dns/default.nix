@@ -11,6 +11,7 @@ let
   '';
 
 in drvTargets {
+  nixery-dev checkZone "nixery.dev" ./nixery.dev.zone;
   tvl-fyi = checkZone "tvl.fyi" ./tvl.fyi.zone;
   tvl-su = checkZone "tvl.su" ./tvl.su.zone;
 }
