@@ -71,6 +71,8 @@
     ;; as the title.
     (`("Google-chrome" ,(and (pred (lambda (title) (s-ends-with? " - Cider" title))) title))
      (format "Cider<%s>" (s-chop-suffix " - Cider" title)))
+    (`("Google-chrome" ,(and (pred (lambda (title) (s-ends-with? " - Cider V" title))) title))
+     (format "Cider V<%s>" (s-chop-suffix " - Cider V" title)))
 
     ;; Attempt to detect IRCCloud windows via their title, which is a
     ;; combination of the channel name and network.
