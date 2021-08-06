@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3011298c_7dc706a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-06T12:29:33Z",
+      "side": 1,
+      "message": "Seems to be a straightforward import of the current records.",
+      "revId": "4029d6d70cc509b87c77a70657a76d7787e43709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "727a3470_8a02ff0b",
+        "filename": "ops/dns/nixery.dev.zone",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-06T12:29:33Z",
+      "side": 1,
+      "message": "Out of curiosity: Why does one need multiple identical A (and AAAA) records?",
+      "revId": "4029d6d70cc509b87c77a70657a76d7787e43709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0af95f22_69d121a8",
+        "filename": "ops/dns/nixery.dev.zone",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-06T12:29:33Z",
+      "side": 1,
+      "message": "this one would need to be updated right? Could it be an alias to plain nixery.dev?",
+      "revId": "4029d6d70cc509b87c77a70657a76d7787e43709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
