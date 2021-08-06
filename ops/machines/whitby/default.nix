@@ -11,6 +11,7 @@ in {
     "${depot.path}/ops/modules/clbot.nix"
     "${depot.path}/ops/modules/irccat.nix"
     "${depot.path}/ops/modules/monorepo-gerrit.nix"
+    "${depot.path}/ops/modules/nixery.nix"
     "${depot.path}/ops/modules/owothia.nix"
     "${depot.path}/ops/modules/panettone.nix"
     "${depot.path}/ops/modules/paroxysm.nix"
