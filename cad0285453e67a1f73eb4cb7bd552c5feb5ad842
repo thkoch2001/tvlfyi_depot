@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60acfabd_ab11c09b",
+        "filename": ".nixery/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-06T13:18:15Z",
+      "side": 1,
+      "message": "“by overlaying the top-level depot attributes” is now outdated.",
+      "revId": "cad0285453e67a1f73eb4cb7bd552c5feb5ad842",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
