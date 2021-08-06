@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e63a859_7628cdd3",
+        "filename": "ops/dns/nixery.dev.zone",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-06T13:04:12Z",
+      "side": 1,
+      "message": "Redundancy, in this case. This is just the default AppEngine setup.",
+      "parentUuid": "727a3470_8a02ff0b",
+      "revId": "4029d6d70cc509b87c77a70657a76d7787e43709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0af95f22_69d121a8",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-08-06T12:29:33Z",
       "side": 1,
       "message": "this one would need to be updated right? Could it be an alias to plain nixery.dev?",
+      "revId": "4029d6d70cc509b87c77a70657a76d7787e43709",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80d02dd1_684ba754",
+        "filename": "ops/dns/nixery.dev.zone",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-06T13:04:12Z",
+      "side": 1,
+      "message": "Same as above, this is the default AppEngine setup (i.e. these records just do what Google says they should :p)",
+      "parentUuid": "0af95f22_69d121a8",
       "revId": "4029d6d70cc509b87c77a70657a76d7787e43709",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
