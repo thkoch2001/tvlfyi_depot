@@ -16,6 +16,24 @@
       "message": "you are missing a `//` here.",
       "revId": "23f938a06e1ac812e95eed21a110dd6bbb827360",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9878275a_3fbb8ed3",
+        "filename": ".nixery/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-06T11:56:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68eef1c5_d7b008dc",
+      "revId": "23f938a06e1ac812e95eed21a110dd6bbb827360",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
