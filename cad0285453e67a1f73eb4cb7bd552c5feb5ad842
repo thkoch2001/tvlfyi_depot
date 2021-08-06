@@ -16,6 +16,24 @@
       "message": "“by overlaying the top-level depot attributes” is now outdated.",
       "revId": "cad0285453e67a1f73eb4cb7bd552c5feb5ad842",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e95e1ca_9887b17e",
+        "filename": ".nixery/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-06T13:22:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60acfabd_ab11c09b",
+      "revId": "cad0285453e67a1f73eb4cb7bd552c5feb5ad842",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
