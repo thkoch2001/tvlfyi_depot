@@ -16,6 +16,24 @@
       "message": "\"${depot.path}/.nixery\"? or does nixery check for .nixery by itself?",
       "revId": "31afd45bfabdab13152ef52deecd69ecca561444",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ac91283_9470f6c1",
+        "filename": "ops/modules/nixery.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-06T13:25:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c7d1736_4e55bab7",
+      "revId": "31afd45bfabdab13152ef52deecd69ecca561444",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
