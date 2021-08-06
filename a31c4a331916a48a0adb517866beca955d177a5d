@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd2dd4b7_f07c4ead",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-06T12:25:20Z",
+      "side": 1,
+      "message": "One drawback of this approach is that using `appendOverlays` or `extend` will make the tvl attribute vanish. A solution could be to introduce tvl via an attribute:\n\n```\ndepot.third_party.nixpkgs.extend (_: _: {\n  tvl \u003d depot;\n})\n```",
+      "revId": "a31c4a331916a48a0adb517866beca955d177a5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
