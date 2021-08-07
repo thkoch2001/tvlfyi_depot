@@ -8,6 +8,7 @@
     cargo-edit
     cargo-expand
     cargo-flamegraph
+    cargo-rr
     sccache
     evcxr
   ];
