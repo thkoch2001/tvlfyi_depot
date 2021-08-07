@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0980c53_56089216",
+        "filename": "users/Profpatsch/blog/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-07T19:24:19Z",
+      "side": 1,
+      "message": "you can just use `depot.path` instead…",
+      "range": {
+        "startLine": 76,
+        "startChar": 8,
+        "endLine": 76,
+        "endChar": 17
+      },
+      "revId": "0026b45b22c88e46a7b17cd3316efb8c42793223",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8255145_9d07827e",
+        "filename": "users/Profpatsch/blog/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-07T19:24:19Z",
+      "side": 1,
+      "message": "just use `depot.users.sterni.nix.url.encode` lol",
+      "revId": "0026b45b22c88e46a7b17cd3316efb8c42793223",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
