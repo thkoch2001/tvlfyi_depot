@@ -162,11 +162,6 @@ let
     ''
   ];
 
-  split-stdin = depot.nix.writeExecline "split-stdin" { argMode = "env"; } [
-    "pipeline" [ "runblock" "1" bins.bash "-c" ''${bins.tee} >("$@")'' "bash-split-stdin" ]
-    "runblock" "-r" "1"
-  ];
-
   capture-stdin = depot.nix.writers.rustSimple {
     name = "capture-stdin";
     dependencies = [ depot.users.Profpatsch.execline.exec-helpers ];
@@ -231,7 +226,6 @@ in depot.nix.utils.drvTargets {
    inherit
     router
     notes-server
-    split-stdin
     index
     router-lookup
     ;
