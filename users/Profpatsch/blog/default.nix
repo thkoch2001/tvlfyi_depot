@@ -3,17 +3,12 @@
 let
   bins = depot.nix.getBins pkgs.lowdown [ "lowdown" ]
       // depot.nix.getBins pkgs.cdb [ "cdbget" "cdbmake" "cdbdump" ]
-      // depot.nix.getBins pkgs.coreutils [ "mv" "cat" "printf" "tee" "env" "test" "echo" "printenv" ]
-      // depot.nix.getBins pkgs.bash [ "bash" ]
+      // depot.nix.getBins pkgs.coreutils [ "mv" "cat" "printf" "test" ]
       // depot.nix.getBins pkgs.s6-networking [ "s6-tcpserver" ]
       // depot.nix.getBins pkgs.time [ "time" ]
       ;
 
-  renderNote = name: note: depot.nix.runExecline "${name}.html" {} [
-    "importas" "out" "out"
-    bins.lowdown "-s" "-Thtml" "-o" "$out" note
-  ];
-
+  # /
   toplevel = [
     {
       route = [ "notes" ];
@@ -22,6 +17,7 @@ let
     }
   ];
 
+  # /notes/*
   notes = [
     {
       route = [ "notes" "preventing-oom" ];
@@ -35,10 +31,18 @@ let
     }
   ];
 
+  # convert a note to html via lowdown
+  renderNote = name: note: depot.nix.runExecline "${name}.html" {} [
+    "importas" "out" "out"
+    bins.lowdown "-s" "-Thtml" "-o" "$out" note
+  ];
+
+  # all notes with `route` converted to an absolute path
   notesFullRoute = lib.pipe notes [
     (map (x@{route, ...}: x // { route = mkRoute route; }))
   ];
 
+  # a cdb from route to a netencoded version of data for each route
   router = lib.pipe notesFullRoute [
     (map (x: {
       name = x.route;
@@ -48,6 +52,7 @@ let
     (cdbMake "notes-router")
   ];
 
+  # look up a route by path ($1)
   router-lookup = depot.nix.writeExecline "router-lookup" { readNArgs = 1; } [
     cdbLookup router "$1"
   ];
@@ -78,6 +83,7 @@ let
     "$@"
   ];
 
+  # A simple http server that serves the site. Yes, it’s horrible.
   notes-server = { port }: depot.nix.writeExecline "blog-server" {} [
     (depot.users.Profpatsch.lib.runInEmptyEnv [ "PATH" ])
     bins.s6-tcpserver "127.0.0.1" port
@@ -124,6 +130,7 @@ let
     bins.cat "$serve-file"
   ];
 
+  # run argv or $1 if argv returns a failure status code.
   runOr = depot.nix.writeExecline "run-or" { readNArgs = 1; } [
     "foreground" [ "$@" ]
     "importas" "?" "?"
@@ -177,11 +184,7 @@ let
     }
   '';
 
-  on-stdin = depot.nix.writeExecline "on-stdin" { readNArgs = 1; } [
-    "pipeline" [ bins.printf "%s" "$1" ]
-    "$@"
-  ];
-
+  # go from a list of path elements to an absolute route string
   mkRoute = route: "/" + lib.concatMapStringsSep "/" urlencodeAscii route;
 
   # urlencodes, but only ASCII characters
@@ -197,15 +200,19 @@ let
     builtins.replaceStrings raw enc urlPiece;
 
 
+  # create a cdb record entry, as required by the cdbmake tool
   cdbRecord = key: val:
     "+${toString (builtins.stringLength key)},${toString (builtins.stringLength val)}:"
     + "${key}->${val}\n";
+
+  # create a full cdbmake input from an attribute set of keys to values (strings)
   cdbRecords =
     with depot.nix.yants;
     defun [ (attrs (either drv string)) string ]
     (attrs:
       (lib.concatStrings (lib.mapAttrsToList cdbRecord attrs)) + "\n");
 
+  # run cdbmake on a list of key/value pairs (strings
   cdbMake = name: attrs: depot.nix.runExecline "${name}.cdb" {
     stdin = cdbRecords attrs;
   } [
@@ -215,6 +222,7 @@ let
     bins.mv "db" "$out"
   ];
 
+  # look up a key ($2) in the given cdb ($1)
   cdbLookup = depot.nix.writeExecline "cdb-lookup" { readNArgs = 2; } [
     # cdb ($1) on stdin
     "redirfd" "-r" "0" "$1"
