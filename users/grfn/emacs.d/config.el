@@ -1076,3 +1076,7 @@
 
 (add-to-list 'safe-local-variable-values
              '(truncate-lines . t))
+
+(set-popup-rule!
+  "^\\*gud-"
+  :quit nil)
