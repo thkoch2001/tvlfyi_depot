@@ -15,19 +15,32 @@ let
       name = "Notes";
       page = router;
     }
+    {
+      route = [ "projects" ];
+      name = "Projects";
+      # page = projects;
+    }
   ];
 
   # /notes/*
   notes = [
     {
       route = [ "notes" "preventing-oom" ];
-      name = "Preventing OOM";
+      name = "Preventing out-of-memory (OOM) errors on Linux";
       page = renderNote "preventing-oom" ./notes/preventing-oom.md;
     }
     {
       route = [ "notes" "rust-string-conversions" ];
       name = "Converting between different String types in Rust";
       page = renderNote "rust-string-conversions" ./notes/rust-string-conversions.md;
+    }
+  ];
+
+  projects = [
+    {
+      name = "netencode";
+      description = "A human-readble nested data exchange format inspired by netstrings and bencode.";
+      link = depotCgitLink { relativePath = "users/Profpatsch/netencode/README.md"; };
     }
   ];
 
@@ -52,6 +65,21 @@ let
     (cdbMake "notes-router")
   ];
 
+  # Create a link to the given source file/directory, given the relative path in the depot repo.
+  # Checks that the file exists at evaluation time.
+  depotCgitLink = {
+    # relative path from the depot root (without leading /).
+    relativePath
+  }:
+    # TODO: we might want to provide this from toplevel;
+    # it’s the path of depot in the current file system, as determined by nix.
+    let depotPath = toString ../../..;
+    in assert
+         (lib.assertMsg
+           (builtins.pathExists (depotPath + "/" + relativePath))
+           "depotCgitLink: path /${relativePath} does not exist in depot");
+      "https://code.tvl.fyi/tree/${relativePath}";
+
   # look up a route by path ($1)
   router-lookup = depot.nix.writeExecline "router-lookup" { readNArgs = 1; } [
     cdbLookup router "$1"
@@ -62,7 +90,17 @@ let
     "redirfd" "-w" "1" "$out"
   ] ++ cmd);
 
-  index = runExeclineStdout "index" {
+  notes-index-html =
+    let o = notesFullRoute;
+    in ''
+      <ul>
+      ${scope o (o: ''
+        <li><a href="${str o.route}">${esc o.name}<a></li>
+      '')}
+      </ul>
+    '';
+
+  notes-index  = runExeclineStdout "notes-index" {
     stdin = depot.users.Profpatsch.netencode.gen.dwim notesFullRoute;
   } [
     "withstdinas" "-in" "TEMPLATE_DATA"
@@ -78,13 +116,56 @@ let
     depot.users.Profpatsch.netencode.netencode-mustache
   ];
 
+  # A simple mustache-inspired string interpolation combinator
+  # that takes an object and a template (a function from o to string)
+  # and returns a string.
+  scope = o: tpl:
+    if builtins.typeOf o == "list" then
+      lib.concatMapStringsSep "\n" tpl o
+    else if builtins.typeOf o == "set" then
+      tpl o
+    else throw "${lib.generators.toPretty {} o} not allowed in template";
+
+  # string-escape html (TODO)
+  str = s: s;
+  # html-escape (TODO)
+  esc = s: s;
+
+  projects-index-html =
+  let o = projects;
+  in ''
+    <dl>
+    ${scope o (o: ''
+      <dt><a href="${str o.link}">${esc o.name}<a></dt>
+      <dd>${esc o.description}</dd>
+    '')}
+    </dl>
+  '';
+
+  projects-index = runExeclineStdout "projects-index" {
+    stdin = depot.users.Profpatsch.netencode.gen.dwim projects;
+  } [
+    "withstdinas" "-in" "TEMPLATE_DATA"
+    "pipeline" [
+      bins.printf ''
+        <dl>
+        {{#.}}
+          <dt><a href="{{link}}">{{name}}<a></dt>
+          <dd>{{description}}</dd>
+        {{/.}}
+        </dl>
+      ''
+    ]
+    depot.users.Profpatsch.netencode.netencode-mustache
+  ];
+
   arglibNetencode = val: depot.nix.writeExecline "arglib-netencode" { } [
     "export" "ARGLIB_NETENCODE" (depot.users.Profpatsch.netencode.gen.dwim val)
     "$@"
   ];
 
   # A simple http server that serves the site. Yes, it’s horrible.
-  notes-server = { port }: depot.nix.writeExecline "blog-server" {} [
+  site-server = { port }: depot.nix.writeExecline "blog-server" {} [
     (depot.users.Profpatsch.lib.runInEmptyEnv [ "PATH" ])
     bins.s6-tcpserver "127.0.0.1" port
     bins.time "--format=time: %es" "--"
@@ -101,9 +182,15 @@ let
     "if" [ depot.tools.eprintf "GET \${path}\n" ]
     runOr return404
     "backtick" "-ni" "TEMPLATE_DATA" [
+      # TODO: factor this out of here, this is routing not serving
       "ifelse" [ bins.test "$path" "=" "/notes" ]
         [ "export" "content-type" "text/html"
-          "export" "serve-file" index
+          "export" "serve-file" notes-index
+          depot.users.Profpatsch.netencode.env-splice-record
+        ]
+      "ifelse" [ bins.test "$path" "=" "/projects" ]
+        [ "export" "content-type" "text/html"
+          "export" "serve-file" projects-index
           depot.users.Profpatsch.netencode.env-splice-record
         ]
       # TODO: ignore potential query arguments. See 404 message
@@ -233,8 +320,12 @@ let
 in depot.nix.utils.drvTargets {
    inherit
     router
-    notes-server
-    index
+    depotCgitLink
+    site-server
+    notes-index
+    notes-index-html
+    projects-index
+    projects-index-html
     router-lookup
     ;
 
