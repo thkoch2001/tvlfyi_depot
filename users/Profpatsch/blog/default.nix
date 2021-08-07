@@ -9,8 +9,6 @@ let
       // depot.nix.getBins pkgs.time [ "time" ]
       ;
 
-  me = depot.users.Profpatsch;
-
   renderNote = name: note: depot.nix.runExecline "${name}.html" {} [
     "importas" "out" "out"
     bins.lowdown "-s" "-Thtml" "-o" "$out" note
@@ -44,7 +42,7 @@ let
   router = lib.pipe notesFullRoute [
     (map (x: {
       name = x.route;
-      value = me.netencode.gen.dwim x;
+      value = depot.users.Profpatsch.netencode.gen.dwim x;
     }))
     lib.listToAttrs
     (cdbMake "notes-router")
@@ -60,7 +58,7 @@ let
   ] ++ cmd);
 
   index = runExeclineStdout "index" {
-    stdin = me.netencode.gen.dwim notesFullRoute;
+    stdin = depot.users.Profpatsch.netencode.gen.dwim notesFullRoute;
   } [
     "withstdinas" "-in" "TEMPLATE_DATA"
     "pipeline" [
@@ -72,16 +70,16 @@ let
         </ul>
       ''
     ]
-    me.netencode.netencode-mustache
+    depot.users.Profpatsch.netencode.netencode-mustache
   ];
 
   arglibNetencode = val: depot.nix.writeExecline "arglib-netencode" { } [
-    "export" "ARGLIB_NETENCODE" (me.netencode.gen.dwim val)
+    "export" "ARGLIB_NETENCODE" (depot.users.Profpatsch.netencode.gen.dwim val)
     "$@"
   ];
 
   notes-server = { port }: depot.nix.writeExecline "blog-server" {} [
-    (me.lib.runInEmptyEnv [ "PATH" ])
+    (depot.users.Profpatsch.lib.runInEmptyEnv [ "PATH" ])
     bins.s6-tcpserver "127.0.0.1" port
     bins.time "--format=time: %es" "--"
     runOr return400
@@ -89,9 +87,9 @@ let
       (arglibNetencode {
         what = "request";
       })
-      me.read-http
+      depot.users.Profpatsch.read-http
     ]
-    me.netencode.record-splice-env
+    depot.users.Profpatsch.netencode.record-splice-env
     runOr return500
     "importas" "-i" "path" "path"
     "if" [ depot.tools.eprintf "GET \${path}\n" ]
@@ -100,15 +98,15 @@ let
       "ifelse" [ bins.test "$path" "=" "/notes" ]
         [ "export" "content-type" "text/html"
           "export" "serve-file" index
-          me.netencode.env-splice-record
+          depot.users.Profpatsch.netencode.env-splice-record
         ]
       # TODO: ignore potential query arguments. See 404 message
       "pipeline" [ router-lookup "$path" ]
-      me.netencode.record-splice-env
+      depot.users.Profpatsch.netencode.record-splice-env
       "importas" "-ui" "page" "page"
       "export" "content-type" "text/html"
       "export" "serve-file" "$page"
-      me.netencode.env-splice-record
+      depot.users.Profpatsch.netencode.env-splice-record
     ]
     runOr return500
     "if" [
@@ -118,10 +116,10 @@ let
         Connection: close
 
       '' ]
-      me.netencode.netencode-mustache
+      depot.users.Profpatsch.netencode.netencode-mustache
     ]
     "pipeline" [ "importas" "t" "TEMPLATE_DATA" bins.printf "%s" "$t" ]
-    me.netencode.record-splice-env
+    depot.users.Profpatsch.netencode.record-splice-env
     "importas" "-ui" "serve-file" "serve-file"
     bins.cat "$serve-file"
   ];
@@ -171,7 +169,7 @@ let
 
   capture-stdin = depot.nix.writers.rustSimple {
     name = "capture-stdin";
-    dependencies = [ me.execline.exec-helpers ];
+    dependencies = [ depot.users.Profpatsch.execline.exec-helpers ];
   } ''
     extern crate exec_helpers;
     use std::io::Read;
@@ -217,7 +215,7 @@ let
     stdin = cdbRecords attrs;
   } [
     "importas" "out" "out"
-    me.lib.eprint-stdin
+    depot.users.Profpatsch.lib.eprint-stdin
     "if" [ bins.cdbmake "db" "tmp" ]
     bins.mv "db" "$out"
   ];
