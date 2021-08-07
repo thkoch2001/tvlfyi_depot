@@ -14,57 +14,19 @@ let
   # Internal helper definitions
   #
 
-  # 'genLoadLisp' generates Lisp code that instructs SBCL to load all
-  # the provided Lisp libraries.
-  genLoadLisp = deps: lib.concatStringsSep "\n"
-    (map (lib: "(load \"${lib}/${lib.lispName}.fasl\")") (allDeps deps));
+  genLoadLispGeneric = impl: deps:
+    let
+      depsWithImpl = builtins.map (
+        dep: dep.overrideLisp (_: { implementation = impl.name; })
+      ) (allDeps deps);
+    in lib.concatStringsSep "\n"
+      (map (lib: "(load \"${lib}/${lib.lispName}.${impl.faslExt}\")") depsWithImpl);
 
-  # 'genCompileLisp' generates a Lisp file that instructs SBCL to
-  # compile the provided list of Lisp source files to $out.
-  genCompileLisp = srcs: deps: writeText "compile.lisp" ''
-    ;; This file compiles the specified sources into the Nix build
-    ;; directory, creating one FASL file for each source.
-    (require 'sb-posix)
-
-    ${genLoadLisp deps}
-
-    (defun nix-compile-lisp (file srcfile)
-      (let ((outfile (make-pathname :type "fasl"
-                                    :directory (or (sb-posix:getenv "NIX_BUILD_TOP")
-                                                   (error "not running in a Nix build"))
-                                    :name (substitute #\- #\/ srcfile))))
-        (multiple-value-bind (_outfile _warnings-p failure-p)
-            (compile-file srcfile :output-file outfile)
-          (if failure-p (sb-posix:exit 1)
-              (progn
-                ;; For the case of multiple files belonging to the same
-                ;; library being compiled, load them in order:
-                (load outfile)
-
-                ;; Write them to the FASL list in the same order:
-                (format file "cat ~a~%" (namestring outfile)))))))
-
-    (let ((*compile-verbose* t)
-          ;; FASL files are compiled into the working directory of the
-          ;; build and *then* moved to the correct out location.
-          (pwd (sb-posix:getcwd)))
-
-      (with-open-file (file "cat_fasls"
-                            :direction :output
-                            :if-does-not-exist :create)
-
-        ;; These forms were inserted by the Nix build:
-        ${
-          lib.concatStringsSep "\n" (map (src: "(nix-compile-lisp file \"${src}\")") srcs)
-        }
-        ))
-  '';
-
-  # 'genTestLisp' generates a Lisp file that loads all sources and deps and
-  # executes expression
-  genTestLisp = name: srcs: deps: expression: writeText "${name}.lisp" ''
+  # 'genTestLispGeneric' generates a Lisp file that loads all sources and deps
+  # and executes expression for a given implementation description.
+  genTestLispGeneric = impl: { name, srcs, deps, expression }: writeText "${name}.lisp" ''
     ;; Dependencies
-    ${genLoadLisp deps}
+    ${impl.genLoadLisp deps}
 
     ;; Sources
     ${lib.concatStringsSep "\n" (map (src: "(load \"${src}\")") srcs)}
@@ -90,26 +52,6 @@ let
     lib.flatten (native ++ (map (d: d.lispNativeDeps) deps))
   );
 
-  # 'genDumpLisp' generates a Lisp file that instructs SBCL to dump
-  # the currently loaded image as an executable to $out/bin/$name.
-  #
-  # TODO(tazjin): Compression is currently unsupported because the
-  # SBCL in nixpkgs is, by default, not compiled with zlib support.
-  genDumpLisp = name: main: deps: writeText "dump.lisp" ''
-    (require 'sb-posix)
-
-    ${genLoadLisp deps}
-
-    (let* ((bindir (concatenate 'string (sb-posix:getenv "out") "/bin"))
-           (outpath (make-pathname :name "${name}"
-                                   :directory bindir)))
-      (save-lisp-and-die outpath
-                         :executable t
-                         :toplevel (function ${main})
-                         :purify t))
-    ;;
-  '';
-
   # Add an `overrideLisp` attribute to a function result that works
   # similar to `overrideAttrs`, but is used specifically for the
   # arguments passed to Lisp builders.
@@ -119,7 +61,7 @@ let
 
   # 'testSuite' builds a Common Lisp test suite that loads all of srcs and deps,
   # and then executes expression to check its result
-  testSuite = { name, expression, srcs, deps ? [], native ? [] }:
+  testSuite = { name, expression, srcs, deps ? [], native ? [], impl }:
     let
       lispNativeDeps = allNative native deps;
       lispDeps = allDeps deps;
@@ -129,11 +71,99 @@ let
     } ''
       echo "Running test suite ${name}"
 
-      ${sbcl}/bin/sbcl --script ${genTestLisp name srcs deps expression} \
-        | tee $out
+      ${impl.runScript} ${
+        impl.genTestLisp {
+          inherit name srcs deps expression;
+        }
+      } | tee $out
 
       echo "Test suite ${name} succeeded"
     '';
+
+  impls = lib.mapAttrs (name: v: { inherit name; } // v) {
+    sbcl = {
+      runScript = "${sbcl}/bin/sbcl --script";
+      faslExt = "fasl";
+
+      # 'genLoadLisp' generates Lisp code that instructs SBCL to load all
+      # the provided Lisp libraries.
+      genLoadLisp = genLoadLispGeneric impls.sbcl;
+
+      # 'genCompileLisp' generates a Lisp file that instructs SBCL to
+      # compile the provided list of Lisp source files to $out.
+      genCompileLisp = { name, srcs, deps }: writeText "sbcl-compile.lisp" ''
+        ;; This file compiles the specified sources into the Nix build
+        ;; directory, creating one FASL file for each source.
+        (require 'sb-posix)
+
+        ${impls.sbcl.genLoadLisp deps}
+
+        (defun pipe (in-stream out-stream)
+          (loop for u = (read-byte in-stream nil nil)
+                while u do (write-byte u out-stream)))
+
+        (defun nix-compile-lisp (file srcfile)
+          (let ((outfile (make-pathname :type "fasl"
+                                        :directory (or (sb-posix:getenv "NIX_BUILD_TOP")
+                                                       (error "not running in a Nix build"))
+                                        :name (substitute #\- #\/ srcfile))))
+            (multiple-value-bind (_outfile _warnings-p failure-p)
+                (compile-file srcfile :output-file outfile)
+              (if failure-p (sb-posix:exit 1)
+                  (progn
+                    ;; For the case of multiple files belonging to the same
+                    ;; library being compiled, load them in order:
+                    (load outfile)
+
+                    ;; Write them to the FASL list in the same order:
+                    (with-open-file (compiled-file outfile
+                                                   :direction :input
+                                                   :element-type 'unsigned-byte)
+                      (pipe compiled-file file)))))))
+
+        (let ((*compile-verbose* t)
+              (catted-fasl (make-pathname :type "fasl"
+                                          :directory (or (sb-posix:getenv "out")
+                                                         (error "not running in a Nix build"))
+                                          :name "${name}")))
+
+          (with-open-file (file catted-fasl
+                                :direction :output
+                                :if-does-not-exist :create
+                                :element-type 'unsigned-byte)
+
+            ;; These forms were inserted by the Nix build:
+            ${
+              lib.concatStringsSep "\n" (map (src: "(nix-compile-lisp file \"${src}\")") srcs)
+            }
+            ))
+      '';
+
+      # 'genDumpLisp' generates a Lisp file that instructs SBCL to dump
+      # the currently loaded image as an executable to $out/bin/$name.
+      #
+      # TODO(tazjin): Compression is currently unsupported because the
+      # SBCL in nixpkgs is, by default, not compiled with zlib support.
+      genDumpLisp = { name, main, deps }: writeText "sbcl-dump.lisp" ''
+        (require 'sb-posix)
+
+        ${impls.sbcl.genLoadLisp deps}
+
+        (let* ((bindir (concatenate 'string (sb-posix:getenv "out") "/bin"))
+               (outpath (make-pathname :name "${name}"
+                                       :directory bindir)))
+          (save-lisp-and-die outpath
+                             :executable t
+                             :toplevel (function ${main})
+                             :purify t))
+        ;;
+      '';
+
+      genTestLisp = genTestLispGeneric impls.sbcl;
+
+      lispWith = sbclWith;
+    };
+  };
 
   #
   # Public API functions
@@ -143,12 +173,15 @@ let
   # which can then be loaded into SBCL.
   library =
     { name
+    , implementation ? "sbcl"
     , srcs
     , deps ? []
     , native ? []
     , tests ? null
     }:
     let
+      impl = impls."${implementation}" or
+        (builtins.throw "Unkown Common Lisp Implementation ${implementation}");
       lispNativeDeps = (allNative native deps);
       lispDeps = allDeps deps;
       testDrv = if ! isNull tests
@@ -157,6 +190,7 @@ let
           srcs = srcs ++ (tests.srcs or []);
           deps = deps ++ (tests.deps or []);
           expression = tests.expression;
+          inherit impl;
         }
         else null;
     in lib.fix (self: runCommandNoCC "${name}-cllib" {
@@ -167,28 +201,28 @@ let
         lispName = name;
         lispBinary = false;
         tests = testDrv;
-        sbcl = sbclWith [ self ];
+        "${impl.name}" = impl.lispWith [ self ];
       };
     } ''
       ${if ! isNull testDrv
         then "echo 'Test ${testDrv} succeeded'"
         else "echo 'No tests run'"}
-      ${sbcl}/bin/sbcl --script ${genCompileLisp srcs lispDeps}
 
-      echo "Compilation finished, assembling FASL files"
-
-      # FASL files can be combined by simply concatenating them
-      # together, but it needs to be in the compilation order.
       mkdir $out
 
-      chmod +x cat_fasls
-      ./cat_fasls > $out/${name}.fasl
+      ${impl.runScript} ${
+        impl.genCompileLisp {
+          inherit name srcs;
+          deps = lispDeps;
+        }
+      }
     '');
 
   # 'program' creates an executable containing a dumped image of the
   # specified sources and dependencies.
   program =
     { name
+    , implementation ? "sbcl"
     , main ? "${name}:main"
     , srcs
     , deps ? []
@@ -196,6 +230,8 @@ let
     , tests ? null
     }:
     let
+      impl = impls."${implementation}" or
+        (builtins.throw "Unkown Common Lisp Implementation ${implementation}");
       lispDeps = allDeps deps;
       libPath = lib.makeLibraryPath (allNative native lispDeps);
       selfLib = library {
@@ -210,6 +246,7 @@ let
               srcs ++ (tests.srcs or []));
           deps = deps ++ (tests.deps or []);
           expression = tests.expression;
+          inherit impl;
         }
         else null;
     in lib.fix (self: runCommandNoCC "${name}" {
@@ -230,8 +267,11 @@ let
         else ""}
       mkdir -p $out/bin
 
-      ${sbcl}/bin/sbcl --script ${
-        genDumpLisp name main ([ selfLib ] ++ lispDeps)
+      ${impl.runScript} ${
+        impl.genDumpLisp {
+          inherit name main;
+          deps = ([ selfLib ] ++ lispDeps);
+        }
       }
 
       wrapProgram $out/bin/${name} --prefix LD_LIBRARY_PATH : "${libPath}"
@@ -251,7 +291,7 @@ let
   in writeShellScriptBin "sbcl" ''
     export LD_LIBRARY_PATH="${lib.makeLibraryPath (allNative [] lispDeps)}"
     export LANG="C.UTF-8"
-    exec ${sbcl}/bin/sbcl ${lib.optionalString (deps != []) "--load ${writeText "load.lisp" (genLoadLisp lispDeps)}"} $@
+    exec ${sbcl}/bin/sbcl ${lib.optionalString (deps != []) "--load ${writeText "load.lisp" (impls.sbcl.genLoadLisp lispDeps)}"} $@
   '';
 in {
   library = makeOverridable library;
