@@ -16,6 +16,14 @@ let
     bins.lowdown "-s" "-Thtml" "-o" "$out" note
   ];
 
+  toplevel = [
+    {
+      route = [ "notes" ];
+      name = "Notes";
+      page = router;
+    }
+  ];
+
   notes = [
     {
       route = [ "notes" "preventing-oom" ];
@@ -29,8 +37,11 @@ let
     }
   ];
 
-  router = lib.pipe notes [
+  notesFullRoute = lib.pipe notes [
     (map (x@{route, ...}: x // { route = mkRoute route; }))
+  ];
+
+  router = lib.pipe notesFullRoute [
     (map (x: {
       name = x.route;
       value = me.netencode.gen.dwim x;
@@ -48,13 +59,15 @@ let
     "redirfd" "-w" "1" "$out"
   ] ++ cmd);
 
-  index = runExeclineStdout "index" {} [
-    "backtick" "-in" "TEMPLATE_DATA" [ cdbDumpNetencode router ]
+  index = runExeclineStdout "index" {
+    stdin = me.netencode.gen.dwim notesFullRoute;
+  } [
+    "withstdinas" "-in" "TEMPLATE_DATA"
     "pipeline" [
       bins.printf ''
         <ul>
         {{#.}}
-          <li><a href="{{key}}">{{val}}<a></li>
+          <li><a href="{{route}}">{{name}}<a></li>
         {{/.}}
         </ul>
       ''
