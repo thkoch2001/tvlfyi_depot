@@ -27,12 +27,12 @@ let
     {
       route = [ "notes" "preventing-oom" ];
       name = "Preventing out-of-memory (OOM) errors on Linux";
-      page = renderNote "preventing-oom" ./notes/preventing-oom.md;
+      page = markdownToHtml "preventing-oom" ./notes/preventing-oom.md;
     }
     {
       route = [ "notes" "rust-string-conversions" ];
       name = "Converting between different String types in Rust";
-      page = renderNote "rust-string-conversions" ./notes/rust-string-conversions.md;
+      page = markdownToHtml "rust-string-conversions" ./notes/rust-string-conversions.md;
     }
   ];
 
@@ -44,7 +44,7 @@ let
     }
     {
       name = "netencode";
-      description = "A human-readble nested data exchange format inspired by netstrings and bencode.";
+      description = ''A human-readble nested data exchange format inspired by <a href="https://en.wikipedia.org/wiki/Netstring">netstrings</a> and <a href="https://en.wikipedia.org/wiki/Bencode">bencode</a>.'';
       link = depotCgitLink { relativePath = "users/Profpatsch/netencode/README.md"; };
     }
     {
@@ -54,8 +54,20 @@ let
     }
   ];
 
-  # convert a note to html via lowdown
-  renderNote = name: note: depot.nix.runExecline "${name}.html" {} [
+  posts = [
+    {
+      date = "2017-05-04";
+      title = "Ligature Emulation in Emacs";
+      subtitle = "It’s not pretty, but the results are";
+      description = "How to set up ligatures using <code>prettify-symbols-mode</code> and the Hasklig/FiraCode fonts.";
+      page = markdownToHtml "2017-05-04-ligature-emluation-in-emacs" ./posts/2017-05-04-ligature-emulation-in-emacs.md;
+      route = [ "posts" "2017-05-04-ligature-emluation-in-emacs" ];
+      tags = ["emacs"];
+    }
+  ];
+
+  # convert a markdown file to html via lowdown
+  markdownToHtml = name: note: depot.nix.runExecline "${name}.html" {} [
     "importas" "out" "out"
     bins.lowdown "-s" "-Thtml" "-o" "$out" note
   ];
@@ -65,14 +77,19 @@ let
     (map (x@{route, ...}: x // { route = mkRoute route; }))
   ];
 
+  # all posts with `route` converted to an absolute path
+  postsFullRoute = lib.pipe posts [
+    (map (x@{route, ...}: x // { route = mkRoute route; }))
+  ];
+
   # a cdb from route to a netencoded version of data for each route
-  router = lib.pipe notesFullRoute [
+  router = lib.pipe (notesFullRoute ++ postsFullRoute) [
     (map (x: {
       name = x.route;
       value = depot.users.Profpatsch.netencode.gen.dwim x;
     }))
     lib.listToAttrs
-    (cdbMake "notes-router")
+    (cdbMake "router")
   ];
 
   # Create a link to the given source file/directory, given the relative path in the depot repo.
@@ -110,21 +127,7 @@ let
       </ul>
     '';
 
-  notes-index  = runExeclineStdout "notes-index" {
-    stdin = depot.users.Profpatsch.netencode.gen.dwim notesFullRoute;
-  } [
-    "withstdinas" "-in" "TEMPLATE_DATA"
-    "pipeline" [
-      bins.printf ''
-        <ul>
-        {{#.}}
-          <li><a href="{{route}}">{{name}}</a></li>
-        {{/.}}
-        </ul>
-      ''
-    ]
-    depot.users.Profpatsch.netencode.netencode-mustache
-  ];
+  notes-index = pkgs.writeText "notes-index.html" notes-index-html;
 
   # A simple mustache-inspired string interpolation combinator
   # that takes an object and a template (a function from o to string)
@@ -153,22 +156,20 @@ let
     </dl>
   '';
 
-  projects-index = runExeclineStdout "projects-index" {
-    stdin = depot.users.Profpatsch.netencode.gen.dwim projects;
-  } [
-    "withstdinas" "-in" "TEMPLATE_DATA"
-    "pipeline" [
-      bins.printf ''
-        <dl>
-        {{#.}}
-          <dt><a href="{{link}}">{{name}}</a></dt>
-          <dd>{{{description}}}</dd>
-        {{/.}}
-        </dl>
-      ''
-    ]
-    depot.users.Profpatsch.netencode.netencode-mustache
-  ];
+  projects-index = pkgs.writeText "projects-index.html" projects-index-html;
+
+  posts-index-html =
+  let o = postsFullRoute;
+  in ''
+    <dl>
+    ${scope o (o: ''
+      <dt>${str o.date} <a href="${str o.route}">${esc o.title}</a></dt>
+      <dd>${html o.description}</dd>
+    '')}
+    </dl>
+  '';
+
+  posts-index = pkgs.writeText "projects-index.html" posts-index-html;
 
   arglibNetencode = val: depot.nix.writeExecline "arglib-netencode" { } [
     "export" "ARGLIB_NETENCODE" (depot.users.Profpatsch.netencode.gen.dwim val)
@@ -202,6 +203,11 @@ let
       "ifelse" [ bins.test "$path" "=" "/projects" ]
         [ "export" "content-type" "text/html"
           "export" "serve-file" projects-index
+          depot.users.Profpatsch.netencode.env-splice-record
+        ]
+      "ifelse" [ bins.test "$path" "=" "/posts" ]
+        [ "export" "content-type" "text/html"
+          "export" "serve-file" posts-index
           depot.users.Profpatsch.netencode.env-splice-record
         ]
       # TODO: ignore potential query arguments. See 404 message
@@ -337,6 +343,7 @@ in depot.nix.utils.drvTargets {
     notes-index-html
     projects-index
     projects-index-html
+    posts-index-html
     router-lookup
     ;
 
