@@ -256,6 +256,5 @@ let
 in {
   library = makeOverridable library;
   program = makeOverridable program;
-  sbclWith = makeOverridable sbclWith;
-  bundled = makeOverridable bundled;
+  inherit sbclWith bundled;
 }
