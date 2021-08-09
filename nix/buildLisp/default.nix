@@ -8,13 +8,21 @@
 
 let
   inherit (builtins) map elemAt match filter;
-  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl;
+  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl ecl-static;
 
   #
   # Internal helper definitions
   #
 
   defaultImplementation = "sbcl";
+
+  disableDebugger = writeText "disable-debugger.lisp" ''
+    (setf *debugger-hook*
+          (lambda (error hook)
+            (declare (ignore hook))
+            (format *error-output* "~%Unhandled error: ~a~%" error)
+            #+ecl (ext:quit 1)))
+  '';
 
   implFilter = impl: xs:
     let
@@ -160,6 +168,9 @@ let
   #   executable which runs 'main' (and exits) where 'main' is available from
   #   'deps'. The executable should be created as "$out/bin/${name}", usually
   #   by dumping the lisp image with the replaced toplevel function replaced.
+  # - wrapProgram :: boolean
+  #   Whether to wrap the resulting binary / image with a wrapper script setting
+  #   `LD_LIBRARY_PATH`.
   # - genTestLisp :: { name, srcs, deps, expression } -> file
   #   Builds a lisp file which loads the given 'deps' and 'srcs' files and
   #   then evaluates 'expression'. Depending on whether 'expression' returns
@@ -252,6 +263,8 @@ let
                              :purify t))
       '';
 
+      wrapProgram = true;
+
       genTestLisp = genTestLispGeneric impls.sbcl;
 
       lispWith = deps:
@@ -264,6 +277,138 @@ let
               "--load ${writeText "load.lisp" (impls.sbcl.genLoadLisp lispDeps)}"
           } $@
         '';
+    };
+    ecl = {
+      runScript = "${ecl-static}/bin/ecl --load ${disableDebugger} --shell";
+      faslExt = "fasc";
+      genLoadLisp = genLoadLispGeneric impls.ecl;
+      genCompileLisp = { name, srcs, deps }: writeText "ecl-compile.lisp" ''
+        ;; This seems to be required to bring make the 'c' package available
+        ;; early, otherwise ECL tends to fail with a read failure…
+        (ext:install-c-compiler)
+
+        ;; Load dependencies
+        ${impls.ecl.genLoadLisp deps}
+
+        (defun getenv-or-fail (var)
+          (or (ext:getenv var)
+              (error (format nil "Missing expected environment variable ~A" var))))
+
+        (defun nix-compile-file (srcfile &key native)
+          "Compile the given srcfile into a compilation unit in :out-dir using
+          a unique name based on srcfile as the filename which is returned after
+          compilation. If :native is true, create an native object file,
+          otherwise a byte-compile fasc file is built and immediately loaded."
+
+          (let* ((unique-name (substitute #\_ #\/ srcfile))
+                 (out-file (make-pathname :type (if native "o" "fasc")
+                                          :directory (getenv-or-fail "NIX_BUILD_TOP")
+                                          :name unique-name)))
+            (multiple-value-bind (out-truename _warnings-p failure-p)
+                (compile-file srcfile :system-p native
+                                      :load (not native)
+                                      :output-file out-file
+                                      :verbose t :print t)
+              (if failure-p (ext:quit 1) out-truename))))
+
+        (let* ((out-dir (getenv-or-fail "out"))
+               (nix-build-dir (getenv-or-fail "NIX_BUILD_TOP"))
+               (srcs
+                ;; These forms are inserted by the Nix build
+                '(${lib.concatMapStringsSep "\n" (src: "\"${src}\"") srcs})))
+
+          ;; First, we'll byte compile loadable FASL files and load them
+          ;; immediately. Since we are using a statically linked ECL, there's
+          ;; no way to load native objects, so we rely on byte compilation
+          ;; for all our loading — which is crucial in compilation of course.
+          (ext:install-bytecodes-compiler)
+
+          ;; ECL's bytecode FASLs can just be concatenated to create a bundle
+          ;; at least since a recent bugfix which we apply as a patch.
+          ;; See also: https://gitlab.com/embeddable-common-lisp/ecl/-/issues/649
+          (let ((bundle-out (make-pathname :type "fasc" :name "${name}"
+                                           :directory out-dir)))
+
+            (with-open-file (fasc-stream bundle-out :direction :output)
+              (ext:run-program "cat"
+                               (mapcar (lambda (f)
+                                         (namestring
+                                          (nix-compile-file f :native nil)))
+                                       srcs)
+                               :output fasc-stream)))
+
+          (ext:install-c-compiler)
+
+          ;; Build a (natively compiled) static archive (.a) file. We want to
+          ;; use this for (statically) linking an executable later. The bytecode
+          ;; dance is only required because we can't load such archives.
+          (c:build-static-library
+           (make-pathname :type "a" :name "${name}" :directory out-dir)
+           :lisp-files (mapcar (lambda (x)
+                                 (nix-compile-file x :native t))
+                               srcs)))
+      '';
+      genDumpLisp = { name, main, deps }: writeText "ecl-dump.lisp" ''
+        (defun getenv-or-fail (var)
+          (or (ext:getenv var)
+              (error (format nil "Missing expected environment variable ~A" var))))
+
+        ${impls.ecl.genLoadLisp deps}
+
+        ;; makes a 'c' package available that can link executables
+        (ext:install-c-compiler)
+
+        (c:build-program
+         (make-pathname :name "${name}"
+                        :directory (concatenate 'string
+                                                (getenv-or-fail "out")
+                                                "/bin"))
+         :epilogue-code '(progn
+                          ;; UIOP doesn't understand ECL, so we need to make it
+                          ;; aware that we are a proper executable, causing it
+                          ;; to handle argument parsing and such properly
+                          (setf uiop:*image-dumped-p* :executable)
+                          ;; Run the actual application…
+                          (${main})
+                          ;; … and exit.
+                          (ext:quit))
+         ;; ECL can't remember these from its own build…
+         :ld-flags '("-static")
+         :lisp-files
+         ;; The following forms are inserted by the Nix build
+         '(${
+             lib.concatMapStrings (dep: ''
+               "${dep}/${dep.lispName}.a"
+             '') (allDeps impls.ecl deps)
+           }))
+      '';
+
+      wrapProgram = false;
+
+      genTestLisp = genTestLispGeneric impls.ecl;
+
+      lispWith = deps:
+        let lispDeps = filter (d: !d.lispBinary) (allDeps impls.ecl deps);
+        in writeShellScriptBin "ecl" ''
+          exec ${ecl-static}/bin/ecl ${
+            lib.optionalString (deps != [])
+              "--load ${writeText "load.lisp" (impls.ecl.genLoadLisp lispDeps)}"
+          } $@
+        '';
+
+      bundled = name: runCommandNoCC "${name}-cllib" {
+        passthru = {
+          lispName = name;
+          lispNativeDeps = [];
+          lispDeps = [];
+          lispBinary = false;
+          repl = impls.ecl.lispWith [ (impls.ecl.bundled name) ];
+        };
+      } ''
+        mkdir -p "$out"
+        ln -s "${ecl-static}/lib/ecl-${ecl-static.version}/${name}.${impls.ecl.faslExt}" -t "$out"
+        ln -s "${ecl-static}/lib/ecl-${ecl-static.version}/lib${name}.a" "$out/${name}.a"
+      '';
     };
   };
 
@@ -377,7 +522,7 @@ let
         tests = testDrv;
       };
       inherit meta;
-    } ''
+    } (''
       ${if ! isNull testDrv
         then "echo 'Test ${testDrv} succeeded'"
         else ""}
@@ -389,9 +534,9 @@ let
           deps = ([ selfLib ] ++ lispDeps);
         }
       }
-
+    '' + lib.optionalString impl.wrapProgram ''
       wrapProgram $out/bin/${name} --prefix LD_LIBRARY_PATH : "${libPath}"
-    '');
+    ''));
 
   # 'bundled' creates a "library" which makes a built-in package available,
   # such as any of SBCL's sb-* packages or ASDF. By default this is done
