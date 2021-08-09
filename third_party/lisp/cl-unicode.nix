@@ -29,7 +29,10 @@ let
     deps = with depot.third_party.lisp; [
       cl-unicode-base
       flexi-streams
-      (bundled "uiop")
+      {
+        ecl = bundled "asdf";
+        default = bundled "uiop";
+      }
     ];
 
     srcs = (map (f: src + ("/build/" + f)) [
