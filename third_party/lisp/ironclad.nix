@@ -15,7 +15,7 @@ in depot.nix.buildLisp.library {
 
   deps = with depot.third_party.lisp; [
     (bundled "asdf")
-    (bundled "sb-rotate-byte")
+    { sbcl = bundled "sb-rotate-byte"; }
     alexandria
     bordeaux-threads
     nibbles
