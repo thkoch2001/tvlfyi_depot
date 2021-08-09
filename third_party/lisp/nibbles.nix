@@ -24,9 +24,10 @@ in depot.nix.buildLisp.library {
     "types.lisp"
     "vectors.lisp"
     "streams.lisp"
-    "sbcl-opt/fndb.lisp"
-    "sbcl-opt/nib-tran.lisp"
-    "sbcl-opt/x86-vm.lisp"
-    "sbcl-opt/x86-64-vm.lisp"
+  ] ++ [
+    { sbcl = "${src}/sbcl-opt/fndb.lisp"; }
+    { sbcl = "${src}/sbcl-opt/nib-tran.lisp"; }
+    { sbcl = "${src}/sbcl-opt/x86-vm.lisp"; }
+    { sbcl = "${src}/sbcl-opt/x86-64-vm.lisp"; }
   ];
 }

@@ -47,4 +47,9 @@ in depot.nix.buildLisp.program {
     ./src/gemma.lisp
     injectFrontend
   ];
+
+  # depends on SBCL
+  badImplementations = [
+    "ecl"
+  ];
 }
