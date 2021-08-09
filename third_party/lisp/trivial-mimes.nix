@@ -10,14 +10,19 @@ let
 
   mime-types = pkgs.runCommand "mime-types.lisp" {} ''
     substitute ${src}/mime-types.lisp $out \
-      --replace /etc/mime.types ${src}/mime.types
+      --replace /etc/mime.types ${src}/mime.types \
+      --replace "asdf:system-source-directory" "prin1-to-string"
+      # hack around asdf lookup on ECL we can't prevent (no uiop w/o asdf)
   '';
 
 in depot.nix.buildLisp.library {
   name = "trivial-mimes";
 
   deps = [
-    (depot.nix.buildLisp.bundled "uiop")
+    {
+      ecl = depot.nix.buildLisp.bundled "asdf";
+      default = depot.nix.buildLisp.bundled "uiop";
+    }
   ];
 
   srcs = [ mime-types ];
