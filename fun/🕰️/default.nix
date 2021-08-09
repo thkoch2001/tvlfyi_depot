@@ -21,7 +21,10 @@ let
     deps = [
       depot.third_party.lisp.unix-opts
       depot.lisp.klatre
-      (buildLisp.bundled "uiop")
+      {
+        default = buildLisp.bundled "asdf";
+        sbcl = buildLisp.bundled "uiop";
+      }
       lib
     ];
 
