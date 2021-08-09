@@ -10,33 +10,40 @@ let
     sha256 = "0k4bib9mbrzalbl9ivkw4a7g4c7bbad1l5jw4pzkifqszy2swkr5";
   };
 
+  getSrc = f: "${src}/src/${f}";
+
 in depot.nix.buildLisp.library {
   name = "ironclad";
 
   deps = with depot.third_party.lisp; [
     (bundled "asdf")
-    (bundled "sb-rotate-byte")
-    (bundled "sb-posix")
+    { sbcl = bundled "sb-rotate-byte"; }
+    { sbcl = bundled "sb-posix"; }
     alexandria
     bordeaux-threads
     nibbles
   ];
 
   srcs = [
-    "${src}/ironclad.asd"
-    # TODO(grfn): Figure out how to get this compiling with the assembly
-    # optimization eventually - see https://cl.tvl.fyi/c/depot/+/1333
-    (runCommand "package.lisp" {} ''
-      substitute ${src}/src/package.lisp $out \
-        --replace \#-ecl-bytecmp "" \
-        --replace '(pushnew :ironclad-assembly *features*)' ""
-    '')
-  ] ++ (map (f: src + ("/src/" + f)) [
+    {
+      # TODO(grfn): Figure out how to get this compiling with the assembly
+      # optimization eventually - see https://cl.tvl.fyi/c/depot/+/1333
+      sbcl = runCommand "package.lisp" {} ''
+        substitute ${src}/src/package.lisp $out \
+          --replace \#-ecl-bytecmp "" \
+          --replace '(pushnew :ironclad-assembly *features*)' ""
+      '';
+      default = getSrc "package.lisp";
+    }
+  ] ++ map getSrc [
     "macro-utils.lisp"
+  ] ++ [
+    { sbcl = getSrc "opt/sbcl/fndb.lisp"; }
+    { sbcl = getSrc "opt/sbcl/cpu-features.lisp"; }
+    { sbcl = getSrc "opt/sbcl/x86oid-vm.lisp"; }
 
-    "opt/sbcl/fndb.lisp"
-    "opt/sbcl/cpu-features.lisp"
-    "opt/sbcl/x86oid-vm.lisp"
+    { ecl = getSrc "opt/ecl/c-functions.lisp"; }
+  ] ++ map getSrc [
 
     "common.lisp"
     "conditions.lisp"
@@ -142,5 +149,5 @@ in depot.nix.buildLisp.library {
     "public-key/elgamal.lisp"
     "public-key/pkcs1.lisp"
     "public-key/rsa.lisp"
-  ]);
+  ];
 }
