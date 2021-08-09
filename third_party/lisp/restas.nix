@@ -35,4 +35,7 @@ in depot.nix.buildLisp.library {
     "policy.lisp"
   ];
 
+  brokenOn = [
+    "ecl" # dynamic cffi
+  ];
 }

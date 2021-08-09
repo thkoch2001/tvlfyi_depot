@@ -15,7 +15,9 @@ in buildLisp.library {
   deps = with depot.third_party.lisp; [
     alexandria
     bordeaux-threads
-    (buildLisp.bundled "sb-posix")
+    {
+      sbcl = buildLisp.bundled "sb-posix";
+    }
   ];
 
   srcs = map (f: src + ("/" + f)) [

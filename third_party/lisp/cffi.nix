@@ -13,11 +13,14 @@ in buildLisp.library {
     babel
     trivial-features
     (buildLisp.bundled "asdf")
-    (buildLisp.bundled "uiop")
   ];
 
-  srcs = map (f: src + ("/src/" + f)) [
-    "cffi-sbcl.lisp"
+  srcs = [
+    {
+      ecl = src + "/src/cffi-ecl.lisp";
+      sbcl = src + "/src/cffi-sbcl.lisp";
+    }
+  ] ++ map (f: src + ("/src/" + f)) [
     "package.lisp"
     "utils.lisp"
     "libraries.lisp"
