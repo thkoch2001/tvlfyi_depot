@@ -21,9 +21,10 @@ let
 
   clhs-lookup = buildLisp.program {
     name = "clhs-lookup";
+    implementation = "ecl";
 
     deps = [
-      (buildLisp.bundled "uiop")
+      (buildLisp.bundled "asdf")
     ];
 
     srcs = [
