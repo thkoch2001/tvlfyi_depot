@@ -14,4 +14,8 @@ depot.nix.buildLisp.library {
     ./message.lisp
     ./client.lisp
   ];
+
+  badImplementations = [
+    "ecl" # dynamic cffi
+  ];
 }

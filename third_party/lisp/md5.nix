@@ -11,6 +11,11 @@ let src = pkgs.fetchFromGitHub {
 };
 in buildLisp.library {
   name = "md5";
-  deps = [ (buildLisp.bundled "sb-rotate-byte") ];
+  deps = [
+    {
+      sbcl = buildLisp.bundled "sb-rotate-byte";
+      default = depot.third_party.lisp.flexi-streams;
+    }
+  ];
   srcs = [ (src + "/md5.lisp") ];
 }
