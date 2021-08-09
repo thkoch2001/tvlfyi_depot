@@ -8,11 +8,13 @@
 
 let
   inherit (builtins) map elemAt match filter;
-  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl;
+  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl ecl-static;
 
   #
   # Internal helper definitions
   #
+
+  defaultImplementation = "sbcl";
 
   # Generates lisp code which instructs the given lisp implementation to load
   # all the given dependencies.
@@ -221,6 +223,119 @@ let
           } $@
         '';
     };
+    ecl = {
+      runScript = "${ecl-static}/bin/ecl --shell";
+      faslExt = "fasc";
+      genLoadLisp = genLoadLispGeneric impls.ecl;
+      genCompileLisp = { name, srcs, deps }: writeText "ecl-compile.lisp" ''
+        ;; We need to do this here, so reading the let* later doesn't fail
+        ;; when it doesn't find the c:build-static-library symbol for some
+        ;; reason. Not sure if there's a better workaround for this.
+        (ext:install-c-compiler)
+
+        ${impls.ecl.genLoadLisp deps}
+
+        (defun getenv-or-fail (var)
+          (or (ext:getenv var)
+              (error (format nil "Missing expected environment variable ~A" var))))
+
+        (defun nix-compile-file (native srcfile)
+          (let* ((nix-build-top (getenv-or-fail "NIX_BUILD_TOP"))
+                 (unique-name (substitute #\_ #\/ srcfile))
+                 (out-file (make-pathname :type (if native "o" "fasc")
+                                          :directory nix-build-top
+                                          :name unique-name)))
+            (multiple-value-bind (out-truename _warnings-p failure-p)
+                (compile-file srcfile :system-p native
+                                      :load (not native)
+                                      :output-file out-file)
+              (if failure-p (ext:quit 1) out-truename))))
+
+        (let* ((*compile-verbose* t)
+               (*compile-print* t)
+               (srcs
+                ;; These forms are inserted by the Nix build
+                '(${lib.concatMapStringsSep "\n" (src: "\"${src}\"") srcs})))
+
+          (ext:install-bytecodes-compiler)
+
+          ;; Build a byte-compiled FASL (.fasc) file. This can be loaded
+          ;; dynamically via 'load'. It is slower than the natively compiled
+          ;; equivalent (.fas which is a shared object internally), but we only
+          ;; use this while compiling and in lispWith where performance is not
+          ;; as critical. The built libraries and executables use the static
+          ;; archive.
+          (with-open-file (output (make-pathname :type "fasc" :name "${name}"
+                                  :directory (getenv-or-fail "out"))
+                           :direction :output
+                           :if-does-not-exist :create)
+
+            (ext:run-program "cat" (mapcar (lambda (x) (namestring (nix-compile-file nil x))) srcs) :output output))
+
+          (ext:install-c-compiler)
+
+          ;; Build a (natively compiled) static archive (.a) file. This is
+          ;; necessary for linking an executable later.
+          (c:build-static-library
+           (make-pathname :type "a" :name "${name}"
+                          :directory (getenv-or-fail "out"))
+           :lisp-files (mapcar (lambda (x) (nix-compile-file t x)) srcs)))
+      '';
+      genDumpLisp = { name, main, deps }: writeText "ecl-dump.lisp" ''
+        (defun getenv-or-fail (var)
+          (or (ext:getenv var)
+              (error (format nil "Missing expected environment variable ~A" var))))
+
+        ${impls.ecl.genLoadLisp deps}
+
+        ;; makes a 'c' package available that can link executables
+        (ext:install-c-compiler)
+
+        (c:build-program
+         (make-pathname :name "${name}"
+                        :directory (concatenate 'string
+                                                (getenv-or-fail "out")
+                                                "/bin"))
+         :epilogue-code '(progn (${main}) (ext:quit))
+         :ld-flags '("-static")
+         :lisp-files
+         ;; The following forms are inserted by the Nix build
+         '(${
+             let
+               depsWithImpl = builtins.map (
+                 dep: dep.overrideLisp (_: { implementation = "ecl"; })
+               ) (allDeps deps);
+             in
+               lib.concatMapStrings (dep: ''
+                 "${dep}/${dep.lispName}.a"
+               '') depsWithImpl
+           }))
+      '';
+      genTestLisp = genTestLispGeneric impls.ecl;
+
+      lispWith = deps:
+        let lispDeps = filter (d: !d.lispBinary) (allDepsForImpl impls.ecl deps);
+        in writeShellScriptBin "ecl" ''
+          exec ${ecl-static}/bin/ecl ${
+            lib.optionalString (deps != [])
+              "--load ${writeText "load.lisp" (impls.ecl.genLoadLisp lispDeps)}"
+          } $@
+        '';
+
+      bundled = name: runCommandNoCC "${name}-cllib" {
+        passthru = {
+          lispName = name;
+          lispNativeDeps = [];
+          lispDeps = [];
+          lispBinary = false;
+          ecl = impls.ecl.lispWith [ (impls.ecl.bundled name) ];
+        };
+      } ''
+        mkdir -p "$out"
+        ln -s "${ecl-static}/lib/ecl-${ecl-static.version}/${name}.${impls.ecl.faslExt}" -t "$out"
+        ln -s "${ecl-static}/lib/ecl-${ecl-static.version}/lib${name}.a" "$out/${name}.a"
+      '';
+    };
   };
 
   #
@@ -232,7 +347,7 @@ let
   # loaded and built into an executable via 'program'.
   library =
     { name
-    , implementation ? "sbcl"
+    , implementation ? defaultImplementation
     , srcs
     , deps ? []
     , native ? []
@@ -281,7 +396,7 @@ let
   # specified sources and dependencies.
   program =
     { name
-    , implementation ? "sbcl"
+    , implementation ? defaultImplementation
     , main ? "${name}:main"
     , srcs
     , deps ? []
@@ -353,24 +468,39 @@ let
   # bundled "asdf" # equivalent to bundled { default = "asdf"; }
   bundled = arg:
     let
+      emptyLib = implementation: library {
+        name = "empty";
+        srcs = [
+          (builtins.toFile "empty.lisp" "nil")
+        ];
+        inherit implementation;
+      };
+
       bundled' =
-       { # the implementation to _actually_ build with
-         implementation ? defaultImplementation
-       , ...
-       }@args:
+        { # the implementation to _actually_ build with
+          implementation ? defaultImplementation
+        , ...
+        }@args:
 
-       let
-         name = args."${implementation}" or args.default or
-           (builtins.throw "Bundled dependency not available for ${implementation}");
+        let
+          name = args."${implementation}" or args.default or
+            (builtins.throw "Bundled dependency not available for ${implementation}");
 
-         defaultBundled = name: library {
-           inherit name;
-           srcs = lib.singleton (builtins.toFile "${name}.lisp" "(require '${name})");
-         };
+          defaultBundled = name: library {
+            inherit name;
+            srcs = lib.singleton (builtins.toFile "${name}.lisp" "(require '${name})");
+          };
 
-       in impls."${implementation}".bundled or defaultBundled name;
-    in (makeOverridable bundled')
-      (if builtins.isString arg then { default = arg; } else arg);
+        in
+          if name == null
+          then emptyLib implementation
+          else impls."${implementation}".bundled or defaultBundled name;
+
+      args =
+        if builtins.isString arg
+        then { default = arg; }
+        else arg;
+    in (makeOverridable bundled') args;
 in {
   library = makeOverridable library;
   program = makeOverridable program;
