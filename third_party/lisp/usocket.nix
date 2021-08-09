@@ -33,6 +33,12 @@ in buildLisp.library {
     "package.lisp"
     "usocket.lisp"
     "condition.lisp"
-    "backend/sbcl.lisp"
+  ] ++ [
+    { sbcl = "${src}/backend/sbcl.lisp"; }
+
+    # ECL actually has two files, it supports the SBCL backend,
+    # but usocket also has some ECL specific code
+    { ecl = "${src}/backend/sbcl.lisp"; }
+    { ecl = "${src}/backend/ecl.lisp"; }
   ]);
 }
