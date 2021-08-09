@@ -8,7 +8,7 @@
 
 let
   inherit (builtins) map elemAt match filter;
-  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl;
+  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl ecl-static;
 
   #
   # Internal helper definitions
@@ -235,6 +235,131 @@ let
               "--load ${writeText "load.lisp" (impls.sbcl.genLoadLisp lispDeps)}"
           } $@
         '';
+    };
+    ecl = {
+      runScript = "${ecl-static}/bin/ecl --shell";
+      faslExt = "fasc";
+      genLoadLisp = genLoadLispGeneric impls.ecl;
+      genCompileLisp = { name, srcs, deps }: writeText "ecl-compile.lisp" ''
+        ;; This seems to be required to bring make the 'c' package available
+        ;; early, otherwise ECL tends to fail with a read failure…
+        (ext:install-c-compiler)
+
+        ;; Load dependencies
+        ${impls.ecl.genLoadLisp deps}
+
+        (defun getenv-or-fail (var)
+          (or (ext:getenv var)
+              (error (format nil "Missing expected environment variable ~A" var))))
+
+        (defun nix-compile-file (srcfile &key native out-dir)
+          "Compile the given srcfile into a compilation unit in :out-dir using
+          a unique name based on srcfile as the filename which is returned after
+          compilation. If :native is true, create an native object file,
+          otherwise a byte-compile fasc file is built and immediately loaded."
+
+          (let* ((unique-name (substitute #\_ #\/ srcfile))
+                 (out-file (make-pathname :type (if native "o" "fasc")
+                                          :directory out-dir
+                                          :name unique-name)))
+            (multiple-value-bind (out-truename _warnings-p failure-p)
+                (compile-file srcfile :system-p native
+                                      :load (not native)
+                                      :output-file out-file
+                                      :verbose t :print t)
+              (if failure-p (ext:quit 1) out-truename))))
+
+        (let* ((out-dir (getenv-or-fail "out"))
+               (nix-build-dir (getenv-or-fail "NIX_BUILD_TOP"))
+               (srcs
+                ;; These forms are inserted by the Nix build
+                '(${lib.concatMapStringsSep "\n" (src: "\"${src}\"") srcs})))
+
+          ;; First, we'll byte compile loadable FASL files and load them
+          ;; immediately. Since we are using a statically linked ECL, there's
+          ;; no way to load native objects, so we rely on byte compilation
+          ;; for all our loading — which is crucial in compilation of course.
+          (ext:install-bytecodes-compiler)
+
+          ;; Unfortunately there doesn't seem to be a simple way to combine
+          ;; ECL's bytecode FASLs (and the native ones are not available to us).
+          ;; As a workaround we write the individual bytecode FASLs to $out and
+          ;; compile a wrapper FASL to $out/${name}.fasc which loads the others
+          ;; in order.
+          ;; See also: https://gitlab.com/embeddable-common-lisp/ecl/-/issues/649
+          ;; TODO(sterni): Write a custom combining function if possible
+          (let ((bundle-out (make-pathname :type "fasc" :name "${name}"
+                                           :directory out-dir))
+                (fascs (mapcar (lambda (x)
+                                 (let* ((f (nix-compile-file x :native nil
+                                                               :out-dir out-dir)))
+                                   (format nil "(load \"~A\")~%" (namestring f))))
+                               srcs)))
+            (with-input-from-string (s (apply #'concatenate (cons 'string fascs)))
+              (compile-file s :output-file bundle-out
+                              :system-p nil :load nil)))
+
+          (ext:install-c-compiler)
+
+          ;; Build a (natively compiled) static archive (.a) file. We want to
+          ;; use this for (statically) linking an executable later. The bytecode
+          ;; dance is only required because we can't load such archives.
+          (c:build-static-library
+           (make-pathname :type "a" :name "${name}" :directory out-dir)
+           :lisp-files (mapcar (lambda (x)
+                                 (nix-compile-file x :native t
+                                                     :out-dir nix-build-dir))
+                               srcs)))
+      '';
+      genDumpLisp = { name, main, deps }: writeText "ecl-dump.lisp" ''
+        (defun getenv-or-fail (var)
+          (or (ext:getenv var)
+              (error (format nil "Missing expected environment variable ~A" var))))
+
+        ${impls.ecl.genLoadLisp deps}
+
+        ;; makes a 'c' package available that can link executables
+        (ext:install-c-compiler)
+
+        (c:build-program
+         (make-pathname :name "${name}"
+                        :directory (concatenate 'string
+                                                (getenv-or-fail "out")
+                                                "/bin"))
+         :epilogue-code '(progn (${main}) (ext:quit))
+         :ld-flags '("-static")
+         :lisp-files
+         ;; The following forms are inserted by the Nix build
+         '(${
+             lib.concatMapStrings (dep: ''
+               "${dep}/${dep.lispName}.a"
+             '') (allDepsForImpl impls.ecl deps)
+           }))
+      '';
+      genTestLisp = genTestLispGeneric impls.ecl;
+
+      lispWith = deps:
+        let lispDeps = filter (d: !d.lispBinary) (allDepsForImpl impls.ecl deps);
+        in writeShellScriptBin "ecl" ''
+          exec ${ecl-static}/bin/ecl ${
+            lib.optionalString (deps != [])
+              "--load ${writeText "load.lisp" (impls.ecl.genLoadLisp lispDeps)}"
+          } $@
+        '';
+
+      bundled = name: runCommandNoCC "${name}-cllib" {
+        passthru = {
+          lispName = name;
+          lispNativeDeps = [];
+          lispDeps = [];
+          lispBinary = false;
+          ecl = impls.ecl.lispWith [ (impls.ecl.bundled name) ];
+        };
+      } ''
+        mkdir -p "$out"
+        ln -s "${ecl-static}/lib/ecl-${ecl-static.version}/${name}.${impls.ecl.faslExt}" -t "$out"
+        ln -s "${ecl-static}/lib/ecl-${ecl-static.version}/lib${name}.a" "$out/${name}.a"
+      '';
     };
   };
 
