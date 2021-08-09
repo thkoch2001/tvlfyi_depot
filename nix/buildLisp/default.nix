@@ -8,7 +8,7 @@
 
 let
   inherit (builtins) map elemAt match filter;
-  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl;
+  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl ecl;
 
   #
   # Internal helper definitions
@@ -162,6 +162,92 @@ let
       genTestLisp = genTestLispGeneric impls.sbcl;
 
       lispWith = sbclWith;
+    };
+    ecl = {
+      runScript = "${ecl}/bin/ecl -shell";
+      faslExt = "fas";
+      genLoadLisp = genLoadLispGeneric impls.ecl;
+      genCompileLisp = { name, srcs, deps }: writeText "ecl-compile.lisp" ''
+        ;; makes ECL use a C compiler (and not its byte compiler)
+        ;; and makes the 'c' package available.
+        (ext:install-c-compiler)
+
+        ${impls.ecl.genLoadLisp deps}
+
+        (defun getenv-or-fail (var)
+          (or (ext:getenv var)
+              (error (format nil "Missing expected environment variable ~A" var))))
+
+        (defun nix-compile-file (srcfile)
+          (let* ((nix-build-top (getenv-or-fail "NIX_BUILD_TOP"))
+                 (unique-name (substitute #\_ #\/ srcfile))
+                 (out-file (make-pathname :type "o" :directory nix-build-top
+                                          :name unique-name)))
+            (multiple-value-bind (out-truename _warnings-p failure-p)
+                (compile-file srcfile :system-p t :output-file out-file)
+              (if failure-p (ext:quit 1)
+                  (progn
+                    ;; let's load fasl built from the same object file as the
+                    ;; final fasl to prevent any discrepancies.
+                    (let ((tmp-fasl (make-pathname :type "fas" :name unique-name
+                                                   :directory nix-build-top)))
+                      (c:build-fasl tmp-fasl :lisp-files (list out-truename))
+                      (load tmp-fasl))
+                    ;; finally return the pathname of the built object
+                    out-truename)))))
+
+        (let* ((srcs
+                ;; These forms are inserted by the Nix build
+                '(${lib.concatMapStringsSep "\n" (src: "\"${src}\"") srcs}))
+               (objs (mapcar #'nix-compile-file srcs)))
+
+          ;; TODO(sterni): build static lib
+          ;; Build a (natively compiled) FASL (.fas) file. This can be loaded
+          ;; dynamically via 'load' and is a shared object file internally
+          (c:build-fasl
+           (make-pathname :type "fas" :name "${name}"
+                          :directory (getenv-or-fail "out"))
+           :lisp-files objs)
+
+          ;; Build a (natively compiled) static archive (.a) file. This is
+          ;; necessary for linking an executable later.
+          (c:build-static-library
+           (make-pathname :type "a" :name "${name}"
+                          :directory (getenv-or-fail "out"))
+           :lisp-files objs))
+      '';
+      genDumpLisp = { name, main, deps }: writeText "ecl-dump.lisp" ''
+        ;; makes ECL use a C compiler (and not its byte compiler)
+        ;; and makes the 'c' package available.
+        (ext:install-c-compiler)
+
+        (defun getenv-or-fail (var)
+          (or (ext:getenv var)
+              (error (format nil "Missing expected environment variable ~A" var))))
+
+        ${impls.ecl.genLoadLisp deps}
+
+        (c:build-program
+         (make-pathname :name "${name}"
+                        :directory (concatenate 'string
+                                                (getenv-or-fail "out")
+                                                "/bin"))
+         :epilogue-code '(progn (${main}) (ext:quit))
+         :lisp-files
+         ;; The following forms are inserted by the Nix build
+         '(${
+             let
+               depsWithImpl = builtins.map (
+                 dep: dep.overrideLisp (_: { implementation = "ecl"; })
+               ) (allDeps deps);
+             in
+               lib.concatMapStrings (dep: ''
+                 "${dep}/${dep.lispName}.a"
+               '') depsWithImpl
+           }))
+      '';
+      genTestLisp = genTestLispGeneric impls.ecl;
+      lispWith = _: pkgs.emptyFile;
     };
   };
 
