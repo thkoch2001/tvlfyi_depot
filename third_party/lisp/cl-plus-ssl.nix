@@ -37,4 +37,8 @@ in buildLisp.library {
     "context.lisp"
     "verify-hostname.lisp"
   ];
+
+  badImplementations = [
+    "ecl" # dynamic cffi
+  ];
 }

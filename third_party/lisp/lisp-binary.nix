@@ -28,4 +28,8 @@ in depot.nix.buildLisp.library {
     "binary-2.lisp"
     "types.lisp"
   ];
+
+  badImplementations = [
+    "ecl" # dynamic cffi
+  ];
 }
