@@ -83,6 +83,10 @@ let
       "table.lisp"
       "deftable.lisp"
     ]);
+
+    badImplementations = [
+      "ecl" # TODO(sterni): https://gitlab.com/embeddable-common-lisp/ecl/-/issues/651
+    ];
   };
 
 in postmodern // {
