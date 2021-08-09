@@ -15,6 +15,9 @@ in depot.nix.buildLisp.library {
   srcs = [
     "${src}/closer-mop-packages.lisp"
     "${src}/closer-mop-shared.lisp"
-    "${src}/closer-sbcl.lisp"
+    {
+      sbcl = "${src}/closer-sbcl.lisp";
+      ecl = "${src}/closer-ecl.lisp";
+    }
   ];
 }

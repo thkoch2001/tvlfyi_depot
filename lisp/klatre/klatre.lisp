@@ -105,7 +105,8 @@ separated by SEP."
   "Attempt to parse STR as an integer, returning nil if it is invalid."
   (check-type str string)
   (handler-case (parse-integer str)
-    (sb-int:simple-parse-error (_) (declare (ignore _)) nil)))
+    (#+sbcl sb-int:simple-parse-error
+     #-sbcl parse-error (_) (declare (ignore _)) nil)))
 
 ;;;
 ;;; Function utilities
