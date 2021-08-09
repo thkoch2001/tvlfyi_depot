@@ -11,4 +11,8 @@ in depot.nix.buildLisp.library {
   name = "moptilities";
   deps = [ depot.third_party.lisp.closer-mop ];
   srcs = [ "${src}/dev/moptilities.lisp" ];
+
+  brokenOn = [
+    "ecl" # TODO(sterni): https://gitlab.com/embeddable-common-lisp/ecl/-/issues/651
+  ];
 }

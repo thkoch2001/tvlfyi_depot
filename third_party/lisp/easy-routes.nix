@@ -23,4 +23,7 @@ in depot.nix.buildLisp.library {
     "routes-map-printer.lisp"
   ];
 
+  brokenOn = [
+    "ecl" # dynamic cffi
+  ];
 }
