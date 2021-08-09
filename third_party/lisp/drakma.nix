@@ -32,4 +32,8 @@ in depot.nix.buildLisp.library {
     "encoding.lisp"
     "request.lisp"
   ];
+
+  brokenOn = [
+    "ecl" # dynamic cffi
+  ];
 }

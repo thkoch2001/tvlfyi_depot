@@ -58,4 +58,8 @@ in depot.nix.buildLisp.library {
     "acceptor.lisp"
     "easy-handlers.lisp"
   ];
+
+  brokenOn = [
+    "ecl" # dynamic cffi
+  ];
 }
