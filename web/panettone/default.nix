@@ -47,4 +47,8 @@ depot.nix.buildLisp.program {
 
     expression = "(fiveam:run!)";
   };
+
+  brokenOn = [
+    "ecl" # dependencies use dynamic cffi
+  ];
 }

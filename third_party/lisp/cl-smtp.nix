@@ -25,4 +25,8 @@ in depot.nix.buildLisp.library {
     "cl-smtp.lisp"
     "mime-types.lisp"
   ];
+
+  brokenOn = [
+    "ecl" # dynamic cffi
+  ];
 }

@@ -19,4 +19,8 @@ in depot.nix.buildLisp.library {
     "package.lisp"
     "trivial-ldap.lisp"
   ];
+
+  brokenOn = [
+    "ecl" # dynamic cffi
+  ];
 }
