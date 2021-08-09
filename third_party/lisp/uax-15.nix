@@ -19,7 +19,6 @@ in depot.nix.buildLisp.library {
   deps = with depot.third_party.lisp; [
     split-sequence
     cl-ppcre
-    (bundled "uiop")
     (bundled "asdf")
   ];
 

@@ -32,7 +32,7 @@
 
 (defun main ()
   (let* ((browser (or (uiop:getenvp "BROWSER") "xdg-open"))
-         (args    (uiop:command-line-arguments))
+         (args    (#+sbcl uiop:command-line-arguments #+ecl ext:command-args))
          (prin    (member "--print" args :test #'equal))
          (syms    (remove-if (lambda (x) (eq (char x 0) #\-)) args))
          (paths (find-symbols-paths syms *clhs-path*)))
