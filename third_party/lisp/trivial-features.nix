@@ -7,6 +7,9 @@ let src = builtins.fetchGit {
 in depot.nix.buildLisp.library {
   name = "trivial-features";
   srcs = [
-    (src + "/src/tf-sbcl.lisp")
+    {
+      sbcl = src + "/src/tf-sbcl.lisp";
+      ecl = src + "/src/tf-ecl.lisp";
+    }
   ];
 }
