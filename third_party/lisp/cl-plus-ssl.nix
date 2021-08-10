@@ -17,7 +17,7 @@ in buildLisp.library {
     trivial-features
     trivial-garbage
     trivial-gray-streams
-    (buildLisp.bundled "uiop")
+    (buildLisp.bundled "asdf")
     (buildLisp.bundled "sb-posix")
   ];
 
