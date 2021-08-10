@@ -17,7 +17,7 @@ in depot.nix.buildLisp.library {
   name = "trivial-mimes";
 
   deps = [
-    (depot.nix.buildLisp.bundled "uiop")
+    (depot.nix.buildLisp.bundled "asdf")
   ];
 
   srcs = [ mime-types ];

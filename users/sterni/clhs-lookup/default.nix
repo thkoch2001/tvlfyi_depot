@@ -23,7 +23,7 @@ let
     name = "clhs-lookup";
 
     deps = [
-      (buildLisp.bundled "uiop")
+      (buildLisp.bundled "asdf")
     ];
 
     srcs = [

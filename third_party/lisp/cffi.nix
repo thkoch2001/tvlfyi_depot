@@ -13,7 +13,7 @@ in buildLisp.library {
     babel
     trivial-features
     (buildLisp.bundled "asdf")
-    (buildLisp.bundled "uiop")
+    (buildLisp.bundled "asdf")
   ];
 
   srcs = map (f: src + ("/src/" + f)) [
