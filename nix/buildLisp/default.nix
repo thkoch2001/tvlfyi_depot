@@ -16,6 +16,12 @@ let
 
   defaultImplementation = "sbcl";
 
+  filterSrcs = impl: srcs: builtins.map (
+    src: if builtins.isAttrs src then src.${impl.name} else src
+  ) (builtins.filter (
+    src: !(builtins.isAttrs src) || src ? ${impl.name}
+  ) srcs);
+
   # Generates lisp code which instructs the given lisp implementation to load
   # all the given dependencies.
   genLoadLispGeneric = impl: deps:
@@ -76,6 +82,7 @@ let
     let
       lispNativeDeps = allNative native deps;
       lispDeps = allDeps deps;
+      srcsForImpl = filterSrcs impl srcs;
     in runCommandNoCC name {
       LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
       LANG = "C.UTF-8";
@@ -84,7 +91,8 @@ let
 
       ${impl.runScript} ${
         impl.genTestLisp {
-          inherit name srcs deps expression;
+          inherit name deps expression;
+          srcs = srcsForImpl;
         }
       } | tee $out
 
@@ -356,12 +364,13 @@ let
     let
       impl = impls."${implementation}" or
         (builtins.throw "Unkown Common Lisp Implementation ${implementation}");
+      srcsForImpl = filterSrcs impl srcs;
       lispNativeDeps = (allNative native deps);
       lispDeps = allDeps deps;
       testDrv = if ! isNull tests
         then testSuite {
           name = tests.name or "${name}-test";
-          srcs = srcs ++ (tests.srcs or []);
+          srcs = srcsForImpl ++ (tests.srcs or []);
           deps = deps ++ (tests.deps or []);
           expression = tests.expression;
           inherit impl;
@@ -386,7 +395,8 @@ let
 
       ${impl.runScript} ${
         impl.genCompileLisp {
-          inherit name srcs;
+          srcs = srcsForImpl;
+          inherit name;
           deps = lispDeps;
         }
       }
@@ -408,17 +418,19 @@ let
         (builtins.throw "Unkown Common Lisp Implementation ${implementation}");
       lispDeps = allDeps deps;
       libPath = lib.makeLibraryPath (allNative native lispDeps);
+      srcsForImpl = filterSrcs impl srcs;
       # overriding is used internally to propagate the implementation to use
       selfLib = (makeOverridable library) {
-        inherit name srcs native;
+        inherit name native;
         deps = lispDeps;
+        srcs = srcsForImpl;
       };
       testDrv = if ! isNull tests
         then testSuite {
           name = tests.name or "${name}-test";
           srcs =
-            (
-              srcs ++ (tests.srcs or []));
+            ( # testSuite does run filterSrcs as well
+              srcsForImpl ++ (tests.srcs or []));
           deps = deps ++ (tests.deps or []);
           expression = tests.expression;
           inherit impl;
