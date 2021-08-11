@@ -16,6 +16,51 @@ let
 
   defaultImplementation = "sbcl";
 
+  # Process a list of arbitrary values which also contains “implementation
+  # filter sets” which describe conditonal inclusion of elements depending
+  # on the CL implementation used. Elements are processed in the following
+  # manner:
+  #
+  # * Paths, strings, derivations are left as is
+  # * A non-derivation attribute set is processed like this:
+  #   1. If it has an attribute equal to impl.name, replace with its value.
+  #   2. Alternatively use the value of the "default" attribute.
+  #   3. In all other cases delete the element from the list.
+  #
+  # This can be used to express dependencies or source files which are specific
+  # to certain implementations:
+  #
+  #  srcs = [
+  #    # mixable with unconditional entries
+  #    ./package.lisp
+  #
+  #    # implementation specific source files
+  #    {
+  #      ccl = ./impl-ccl.lisp;
+  #      sbcl = ./impl-sbcl.lisp;
+  #      ecl = ./impl-ecl.lisp;
+  #    }
+  #  ];
+  #
+  #  deps = [
+  #    # this dependency is ignored if impl.name != "sbcl"
+  #    { sbcl = buildLisp.bundled "sb-posix"; }
+  #
+  #    # only special casing for a single implementation
+  #    {
+  #      sbcl = buildLisp.bundled "uiop";
+  #      default = buildLisp.bundled "asdf";
+  #    }
+  #  ];
+  implFilter = impl: xs:
+    let
+      isFilterSet = x: builtins.isAttrs x && !(lib.isDerivation x);
+    in builtins.map (
+      x: if isFilterSet x then x.${impl.name} or x.default else x
+    ) (builtins.filter (
+      x: !(isFilterSet x) || x ? ${impl.name} || x ? default
+    ) xs);
+
   # Generates lisp code which instructs the given lisp implementation to load
   # all the given dependencies.
   genLoadLispGeneric = impl: deps:
@@ -72,7 +117,8 @@ let
   testSuite = { name, expression, srcs, deps ? [], native ? [], impl }:
     let
       lispNativeDeps = allNative native deps;
-      lispDeps = allDeps impl deps;
+      lispDeps = allDeps impl (implFilter impl deps);
+      filteredSrcs = implFilter impl srcs;
     in runCommandNoCC name {
       LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
       LANG = "C.UTF-8";
@@ -81,7 +127,9 @@ let
 
       ${impl.runScript} ${
         impl.genTestLisp {
-          inherit name srcs deps expression;
+          inherit name expression;
+          srcs = filteredSrcs;
+          deps = lispDeps;
         }
       } | tee $out
 
@@ -240,13 +288,15 @@ let
     let
       impl = impls."${implementation}" or
         (builtins.throw "Unkown Common Lisp Implementation ${implementation}");
-      lispNativeDeps = (allNative native deps);
-      lispDeps = allDeps impl deps;
+      filteredDeps = implFilter impl deps;
+      filteredSrcs = implFilter impl srcs;
+      lispNativeDeps = (allNative native filteredDeps);
+      lispDeps = allDeps impl filteredDeps;
       testDrv = if ! isNull tests
         then testSuite {
           name = tests.name or "${name}-test";
-          srcs = srcs ++ (tests.srcs or []);
-          deps = deps ++ (tests.deps or []);
+          srcs = filteredSrcs ++ (tests.srcs or []);
+          deps = filteredDeps ++ (tests.deps or []);
           expression = tests.expression;
           inherit impl;
         }
@@ -270,7 +320,8 @@ let
 
       ${impl.runScript} ${
         impl.genCompileLisp {
-          inherit name srcs;
+          srcs = filteredSrcs;
+          inherit name;
           deps = lispDeps;
         }
       }
@@ -290,20 +341,23 @@ let
     let
       impl = impls."${implementation}" or
         (builtins.throw "Unkown Common Lisp Implementation ${implementation}");
-      lispDeps = allDeps impl deps;
+      filteredSrcs = implFilter impl srcs;
+      filteredDeps = implFilter impl deps;
+      lispDeps = allDeps impl filteredDeps;
       libPath = lib.makeLibraryPath (allNative native lispDeps);
       # overriding is used internally to propagate the implementation to use
       selfLib = (makeOverridable library) {
-        inherit name srcs native;
+        inherit name native;
         deps = lispDeps;
+        srcs = filteredSrcs;
       };
       testDrv = if ! isNull tests
         then testSuite {
           name = tests.name or "${name}-test";
           srcs =
-            (
-              srcs ++ (tests.srcs or []));
-          deps = deps ++ (tests.deps or []);
+            ( # testSuite does run implFilter as well
+              filteredSrcs ++ (tests.srcs or []));
+          deps = filteredDeps ++ (tests.deps or []);
           expression = tests.expression;
           inherit impl;
         }
@@ -314,7 +368,7 @@ let
       LANG = "C.UTF-8";
       passthru = {
         lispName = name;
-        lispDeps = [ selfLib ] ++ (tests.deps or []);
+        lispDeps = [ selfLib ];
         lispNativeDeps = native;
         lispBinary = true;
         tests = testDrv;
