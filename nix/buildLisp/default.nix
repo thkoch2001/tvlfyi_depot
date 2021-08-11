@@ -124,6 +124,16 @@ let
   #   Builds a script (or dumped image) which when executed loads (or has
   #   loaded) all given dependencies. When built this should create an executable
   #   at "$out/bin/${implementation}".
+  #
+  # Optional members:
+  #
+  # - bundled :: string -> library
+  #   Allows giving an implementation specific builder for a bundled library.
+  #   This function is used as a replacement for the internal defaultBundled
+  #   function and only needs to support one implementation. The returned derivation
+  #   must behave like one built by 'library' (in particular have the same files
+  #   available in "$out" and the same 'passthru' attributes), but may be built
+  #   completely differently.
   impls = lib.mapAttrs (name: v: { inherit name; } // v) {
     sbcl = {
       runScript = "${sbcl}/bin/sbcl --script";
@@ -326,12 +336,27 @@ let
       wrapProgram $out/bin/${name} --prefix LD_LIBRARY_PATH : "${libPath}"
     '');
 
-  # 'bundled' creates a "library" that calls 'require' on a built-in
-  # package, such as any of SBCL's sb-* packages.
-  bundled = name: (makeOverridable library) {
-    inherit name;
-    srcs = lib.singleton (builtins.toFile "${name}.lisp" "(require '${name})");
-  };
+  # 'bundled' creates a "library" which makes a built-in package available,
+  # such as any of SBCL's sb-* packages or ASDF. By default this is done
+  # by calling 'require', but implementations are free to provide a more
+  # their own specific bundled function.
+  bundled = name:
+    let
+      defaultBundled = name: library {
+        inherit name;
+        srcs = lib.singleton (builtins.toFile "${name}.lisp" "(require '${name})");
+      };
+
+      bundled' =
+        { implementation ? defaultImplementation
+        , name
+        }:
+        impls."${implementation}".bundled or defaultBundled name;
+
+    in (makeOverridable bundled') {
+      inherit name;
+    };
+
 in {
   library = makeOverridable library;
   program = makeOverridable program;
