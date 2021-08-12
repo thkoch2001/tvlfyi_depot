@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "295bf051_3f2c79e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-12T15:14:53Z",
+      "side": 1,
+      "message": "Emacs does this automatically on file save, but it doesn\u0027t really matter because Cloud DNS assigns its own serials on updates anyways.",
+      "parentUuid": "668e50e2_d2226631",
+      "revId": "2da6dcaa969435caf4ec357e425385e03d399cd9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be4d4c55_92b1d456",
