@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f32f8d74_881a03ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-12T13:44:23Z",
+      "side": 1,
+      "message": "I think it\u0027s wise to keep this depot specific like it is and not try to shoehorn this into lib.trivial as emulating the actual nixpkgs version it itself expects is quite annoying as it requires nowing the revcount: https://github.com/openlab-aux/vuizvui/blob/master/release.nix#L7-L9",
+      "revId": "19b2bfdee0eaaa289647299fa9a2c0e7ff3cf793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
