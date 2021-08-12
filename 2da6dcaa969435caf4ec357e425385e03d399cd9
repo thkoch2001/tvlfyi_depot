@@ -16,6 +16,23 @@
       "message": "Serial increase by 3 or 2 respectively is intentional?",
       "revId": "2da6dcaa969435caf4ec357e425385e03d399cd9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be4d4c55_92b1d456",
+        "filename": "ops/dns/tvl.su.zone",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-12T15:13:15Z",
+      "side": 1,
+      "message": "should be whitby.tvl.su right?",
+      "revId": "2da6dcaa969435caf4ec357e425385e03d399cd9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
