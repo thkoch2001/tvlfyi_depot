@@ -5,7 +5,7 @@
 ;;
 ;; This zone is mostly identical to tvl.fyi and will eventually become
 ;; the primary zone.
-tvl.su. 21600 IN SOA ns-cloud-b1.googledomains.com. cloud-dns-hostmaster.google.com. 27 21600 3600 259200 300
+tvl.su. 21600 IN SOA ns-cloud-b1.googledomains.com. cloud-dns-hostmaster.google.com. 29 21600 3600 259200 300
 tvl.su. 21600 IN NS ns-cloud-b1.googledomains.com.
 tvl.su. 21600 IN NS ns-cloud-b2.googledomains.com.
 tvl.su. 21600 IN NS ns-cloud-b3.googledomains.com.
@@ -20,16 +20,17 @@ whitby.tvl.su. 21600 IN A 49.12.129.211
 whitby.tvl.su. 21600 IN AAAA 2a01:4f8:242:5b21:0:feed:edef:beef
 
 ;; TVL services
-at.tvl.su.     21600 IN CNAME whitby.tvl.su.
-atward.tvl.su. 21600 IN CNAME whitby.tvl.su.
-b.tvl.su.      21600 IN CNAME whitby.tvl.su.
-cache.tvl.su.  21600 IN CNAME whitby.tvl.su.
-cl.tvl.su.     21600 IN CNAME whitby.tvl.su.
-code.tvl.su.   21600 IN CNAME whitby.tvl.su.
-cs.tvl.su.     21600 IN CNAME whitby.tvl.su.
-login.tvl.su.  21600 IN CNAME whitby.tvl.su.
-status.tvl.su. 21600 IN CNAME whitby.tvl.su.
-todo.tvl.su.   21600 IN CNAME whitby.tvl.su.
+at.tvl.su.      21600 IN CNAME whitby.tvl.su.
+atward.tvl.su.  21600 IN CNAME whitby.tvl.su.
+b.tvl.su.       21600 IN CNAME whitby.tvl.su.
+cache.tvl.su.   21600 IN CNAME whitby.tvl.su.
+cl.tvl.su.      21600 IN CNAME whitby.tvl.su.
+code.tvl.su.    21600 IN CNAME whitby.tvl.su.
+cs.tvl.su.      21600 IN CNAME whitby.tvl.su.
+login.tvl.su.   21600 IN CNAME whitby.tvl.su.
+status.tvl.su.  21600 IN CNAME whitby.tvl.su.
+todo.tvl.su.    21600 IN CNAME whitby.tvl.su.
+images.tvl.fyi. 21600 IN CNAME whitby.tvl.fyi.
 
 ;; Google Workspaces domain verification
 tvl.su. 21600 IN TXT "google-site-verification=3ksTBzFK3lZlzD3ddBfpaHs9qasfAiYBmvbW2T_ejH4"
