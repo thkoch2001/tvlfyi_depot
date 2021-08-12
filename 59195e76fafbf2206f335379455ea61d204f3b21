@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ce9916c_84c9e6e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-12T15:10:18Z",
+      "side": 1,
+      "message": "I think we could experiment with having an extra function in buildLisp that loads an `asd` file and gets the needed components from it somehow (asdf must surely expose this?!) and for starters outputs a sequential list which later could become more bespoke with individual components becoming individual derivations etc.",
+      "revId": "59195e76fafbf2206f335379455ea61d204f3b21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
