@@ -18,6 +18,10 @@ restrictions should be highlighted:
 
 * Only SBCL is supported (though the plan is to add support for at
   least ABCL and Clozure CL, and maybe make it extensible)
+* Parallel compilation is not possible: Since buildLisp doesn't encode
+  dependencies between components (i. e. source files) like ASDF,
+  it must compile source files in sequence to avoid errors due to
+  undefined symbols.
 
 ## Usage
 
