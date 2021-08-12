@@ -2,7 +2,7 @@
 ;;
 ;; This zone is hosted in the project 'tvl-fyi', and registered via
 ;; Google Domains.
-tvl.fyi. 21600 IN SOA ns-cloud-b1.googledomains.com. cloud-dns-hostmaster.google.com. 15 21600 3600 259200 300
+tvl.fyi. 21600 IN SOA ns-cloud-b1.googledomains.com. cloud-dns-hostmaster.google.com. 18 21600 3600 259200 300
 tvl.fyi. 21600 IN NS ns-cloud-b1.googledomains.com.
 tvl.fyi. 21600 IN NS ns-cloud-b2.googledomains.com.
 tvl.fyi. 21600 IN NS ns-cloud-b3.googledomains.com.
@@ -32,6 +32,7 @@ cl.tvl.fyi.      21600 IN CNAME whitby.tvl.fyi.
 code.tvl.fyi.    21600 IN CNAME whitby.tvl.fyi.
 cs.tvl.fyi.      21600 IN CNAME whitby.tvl.fyi.
 deploys.tvl.fyi. 21600 IN CNAME whitby.tvl.fyi.
+images.tvl.fyi.  21600 IN CNAME whitby.tvl.fyi.
 login.tvl.fyi.   21600 IN CNAME whitby.tvl.fyi.
 status.tvl.fyi.  21600 IN CNAME whitby.tvl.fyi.
 todo.tvl.fyi.    21600 IN CNAME whitby.tvl.fyi.
