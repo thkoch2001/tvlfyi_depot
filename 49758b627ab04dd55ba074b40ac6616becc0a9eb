@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25d2e19e_e637a349",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-12T19:36:08Z",
+      "side": 1,
+      "message": "LGPL is completely fine IMO.",
+      "range": {
+        "startLine": 36,
+        "startChar": 35,
+        "endLine": 36,
+        "endChar": 59
+      },
+      "revId": "49758b627ab04dd55ba074b40ac6616becc0a9eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
