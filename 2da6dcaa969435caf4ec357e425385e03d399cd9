@@ -69,6 +69,24 @@
       "parentUuid": "be4d4c55_92b1d456",
       "revId": "2da6dcaa969435caf4ec357e425385e03d399cd9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82f029b9_7cf23b6c",
+        "filename": "ops/dns/tvl.su.zone",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-12T15:15:00Z",
+      "side": 1,
+      "message": "Derp. Done.",
+      "parentUuid": "4c07b53d_bd74104a",
+      "revId": "2da6dcaa969435caf4ec357e425385e03d399cd9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
