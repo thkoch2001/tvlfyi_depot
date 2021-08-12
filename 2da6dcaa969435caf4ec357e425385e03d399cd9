@@ -33,6 +33,24 @@
       "message": "should be whitby.tvl.su right?",
       "revId": "2da6dcaa969435caf4ec357e425385e03d399cd9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c07b53d_bd74104a",
+        "filename": "ops/dns/tvl.su.zone",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-12T15:13:38Z",
+      "side": 1,
+      "message": "and images.tvl.su as well.",
+      "parentUuid": "be4d4c55_92b1d456",
+      "revId": "2da6dcaa969435caf4ec357e425385e03d399cd9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
