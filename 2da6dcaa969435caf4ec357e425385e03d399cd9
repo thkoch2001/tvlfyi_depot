@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "668e50e2_d2226631",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-12T15:12:47Z",
+      "side": 1,
+      "message": "Serial increase by 3 or 2 respectively is intentional?",
+      "revId": "2da6dcaa969435caf4ec357e425385e03d399cd9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
