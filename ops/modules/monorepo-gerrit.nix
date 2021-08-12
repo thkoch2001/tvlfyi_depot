@@ -27,6 +27,13 @@ in {
 
     jvmHeapLimit = "4g";
 
+    # In some NixOS channel bump, the default version of OpenJDK has
+    # changed to one that is incompatible with our current version of
+    # Gerrit.
+    #
+    # TODO(tazjin): Update Gerrit and remove this when possible.
+    jvmPackage = pkgs.openjdk11_headless;
+
     settings = {
       core.packedGitLimit = "100m";
       log.jsonLogging = true;
