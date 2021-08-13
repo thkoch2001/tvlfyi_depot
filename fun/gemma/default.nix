@@ -50,6 +50,7 @@ in depot.nix.buildLisp.program {
 
   # depends on SBCL
   brokenOn = [
+    "ccl"
     "ecl"
   ];
 }
