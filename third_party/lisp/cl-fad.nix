@@ -22,6 +22,9 @@ in buildLisp.library {
 
   srcs = map (f: src + ("/" + f)) [
     "packages.lisp"
+  ] ++ [
+    { ccl =  "${src}/openmcl.lisp"; }
+  ] ++ map (f: src + ("/" + f)) [
     "fad.lisp"
     "path.lisp"
     "temporary-files.lisp"

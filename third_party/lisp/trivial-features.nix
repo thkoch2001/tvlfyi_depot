@@ -10,6 +10,7 @@ in depot.nix.buildLisp.library {
     {
       sbcl = src + "/src/tf-sbcl.lisp";
       ecl = src + "/src/tf-ecl.lisp";
+      ccl = src + "/src/tf-openmcl.lisp";
     }
   ];
 }
