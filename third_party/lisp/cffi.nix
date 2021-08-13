@@ -19,6 +19,7 @@ in buildLisp.library {
     {
       ecl = src + "/src/cffi-ecl.lisp";
       sbcl = src + "/src/cffi-sbcl.lisp";
+      ccl = src + "/src/cffi-openmcl.lisp";
     }
   ] ++ map (f: src + ("/src/" + f)) [
     "package.lisp"
