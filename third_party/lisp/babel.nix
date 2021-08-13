@@ -7,7 +7,10 @@ let src = builtins.fetchGit {
 };
 in depot.nix.buildLisp.library {
   name = "babel";
-  deps = [ depot.third_party.lisp.alexandria ];
+  deps = [
+    depot.third_party.lisp.alexandria
+    depot.third_party.lisp.trivial-features
+  ];
 
   srcs = map (f: src + ("/src/" + f)) [
     "packages.lisp"
