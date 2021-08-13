@@ -4,9 +4,10 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "mrossini-ethz";
     repo = "physical-quantities";
-    rev = "8feb66ef3293fcb9ff4c4bd3ee872bfc385a590e";
-    sha256 = "1qznv0hmn2n7g9dxx1iw0qpr0pf2lnbahn0x0b3v50xzcb65kgig";
+    rev = "v0.2.1";
+    sha256 = "0mb2s94s6fhw5vfa89naalw7ld11sdsszlqpz0c65dvpfyfmmdmh";
   };
+
 in depot.nix.buildLisp.library {
   name = "physical-quantities";
 
