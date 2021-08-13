@@ -3,7 +3,7 @@
 
 let src = builtins.fetchGit {
   url = "https://github.com/cl-babel/babel.git";
-  rev = "ec9a17cdbdba3c1dd39609fc7961cfb3f0aa260e";
+  rev = "f892d0587c7f3a1e6c0899425921b48008c29ee3"; # 2020-07-19
 };
 in depot.nix.buildLisp.library {
   name = "babel";
