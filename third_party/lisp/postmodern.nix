@@ -83,6 +83,10 @@ let
       "table.lisp"
       "deftable.lisp"
     ]);
+
+    badImplementations = [
+      "ccl" # nibbles is broken
+    ];
   };
 
 in postmodern // {
