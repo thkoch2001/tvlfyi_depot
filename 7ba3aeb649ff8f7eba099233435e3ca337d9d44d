@@ -69,6 +69,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5105ef7a_89ba4c9b",
+        "filename": "third_party/overlays/ecl-static.nix",
+        "patchSetId": 20
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-13T12:14:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58b04f2d_0fa3fcdd",
+      "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56491804_e0e09247",
