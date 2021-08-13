@@ -19,7 +19,6 @@ let
       cl-base64
       uax-15
       usocket
-      (bundled "sb-bsd-sockets")
     ];
 
     srcs = map (f: src + ("/cl-postgres/" + f)) [
