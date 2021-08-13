@@ -50,5 +50,6 @@ depot.nix.buildLisp.program {
 
   brokenOn = [
     "ecl" # dependencies use dynamic cffi
+    "ccl" # The value NIL is not of the expected type STRING. when loading model.lisp
   ];
 }
