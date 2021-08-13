@@ -41,7 +41,7 @@
 (defun chunk-list (size list &key (start 0) end)
   "Returns successive chunks of list of size SIZE, starting at START and ending
 at END."
-  (declare (inline check-list/bounded check-list/simple))
+  (declare (inline chunk-list/bounded chunk-list/unbounded))
   (check-type size (integer 1))
   (let ((list (nthcdr start list)))
     (when list
