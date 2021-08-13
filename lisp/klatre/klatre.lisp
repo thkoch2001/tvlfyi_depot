@@ -1,7 +1,8 @@
 (in-package #:klatre)
 (declaim (optimize (safety 3)))
 
-(defmacro comment (&rest _))
+(defmacro comment (&rest _)
+  (declare (ignore _)))
 
 (defun posp (n) (> n 0))
 
@@ -104,7 +105,7 @@ separated by SEP."
   "Attempt to parse STR as an integer, returning nil if it is invalid."
   (check-type str string)
   (handler-case (parse-integer str)
-    (sb-int:simple-parse-error (_) nil)))
+    (sb-int:simple-parse-error (_) (declare (ignore _)) nil)))
 
 ;;;
 ;;; Function utilities
