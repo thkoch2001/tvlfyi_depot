@@ -6,8 +6,8 @@ with depot.nix;
 let src = pkgs.fetchFromGitHub {
   owner = "edicl";
   repo = "cl-fad";
-  rev = "c13d81c4bd9ba3a172631fd05dd213ab90e7d4cb";
-  sha256 = "1gc8i82v6gks7g0lnm54r4prk2mklidv2flm5fvbr0a7rsys0vpa";
+  rev = "13cbffe08fc660041359302f4057f8fc20d09402"; # 2021-01-10
+  sha256 = "049laj8an6g9bh0m0cn0bxhq313p8qq1h37cil15l66147ad8slc";
 };
 in buildLisp.library {
   name = "cl-fad";
