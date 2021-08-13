@@ -86,6 +86,7 @@ let
 
     badImplementations = [
       "ecl" # TODO(sterni): https://gitlab.com/embeddable-common-lisp/ecl/-/issues/651
+      "ccl" # nibbles is broken
     ];
   };
 
