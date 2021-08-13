@@ -31,4 +31,8 @@ in depot.nix.buildLisp.library {
     "units.lisp"
     "asdf.lisp"
   ];
+
+  badImplementations = [
+    "ccl" # physical-quantities is broken
+  ];
 }

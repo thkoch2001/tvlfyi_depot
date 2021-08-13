@@ -8,7 +8,8 @@
 
 let
   inherit (builtins) map elemAt match filter;
-  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl ecl-static;
+  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl ecl-static ccl;
+  inherit (pkgs.stdenv) targetPlatform;
 
   #
   # Internal helper definitions
@@ -21,6 +22,7 @@ let
           (lambda (error hook)
             (declare (ignore hook))
             (format *error-output* "~%Unhandled error: ~a~%" error)
+            #+ccl (quit 1)
             #+ecl (ext:quit 1)))
   '';
 
@@ -409,6 +411,106 @@ let
         mkdir -p "$out"
         ln -s "${ecl-static}/lib/ecl-${ecl-static.version}/${name}.${impls.ecl.faslExt}" -t "$out"
         ln -s "${ecl-static}/lib/ecl-${ecl-static.version}/lib${name}.a" "$out/${name}.a"
+      '';
+    };
+    ccl = {
+      # Relatively bespoke wrapper script necessary to make CCL just™ execute
+      # a lisp file as a script.
+      runScript = pkgs.writers.writeBash "ccl" ''
+        # don't print intro message etc.
+        args=("--quiet")
+
+        # makes CCL crash on error instead of entering the debugger
+        args+=("--load" "${disableDebugger}")
+
+        # load files from command line in order
+        for f in "$@"; do
+          args+=("--load" "$f")
+        done
+
+        # Exit if everythin was processed successfully
+        args+=("--eval" "(quit)")
+
+        exec ${ccl}/bin/ccl ''${args[@]}
+      '';
+
+      # See https://ccl.clozure.com/docs/ccl.html#building-definitions
+      faslExt =
+        /**/ if targetPlatform.isPowerPC && targetPlatform.is32bit then "pfsl"
+        else if targetPlatform.isPowerPC && targetPlatform.is64bit then "p64fsl"
+        else if targetPlatform.isx86_64 && targetPlatform.isLinux then "lx64fsl"
+        else if targetPlatform.isx86_32 && targetPlatform.isLinux then "lx32fsl"
+        else if targetPlatform.isAarch32 && targetPlatform.isLinux then "lafsl"
+        else if targetPlatform.isx86_32 && targetPlatform.isDarwin then "dx32fsl"
+        else if targetPlatform.isx86_64 && targetPlatform.isDarwin then "dx64fsl"
+        else if targetPlatform.isx86_64 && targetPlatform.isDarwin then "dx64fsl"
+        else if targetPlatform.isx86_32 && targetPlatform.isFreeBSD then "fx32fsl"
+        else if targetPlatform.isx86_64 && targetPlatform.isFreeBSD then "fx64fsl"
+        else if targetPlatform.isx86_32 && targetPlatform.isWindows then "wx32fsl"
+        else if targetPlatform.isx86_64 && targetPlatform.isWindows then "wx64fsl"
+        else builtins.throw "Don't know what FASLs are called for this platform: "
+          + pkgs.stdenv.targetPlatform.system;
+
+      genLoadLisp = genLoadLispGeneric impls.ccl;
+
+      genCompileLisp = { name, srcs, deps }: writeText "ccl-compile.lisp" ''
+        ${impls.ccl.genLoadLisp deps}
+
+        (defun getenv-or-fail (var)
+          (or (getenv var)
+              (error (format nil "Missing expected environment variable ~A" var))))
+
+        (defun nix-compile-file (srcfile)
+          "Trivial wrapper around COMPILE-FILE which causes CCL to exit if
+          compilation fails and LOADs the compiled file on success."
+          (let ((output (make-pathname :name (substitute #\_ #\/ srcfile)
+                                       :type "${impls.ccl.faslExt}"
+                                       :directory (getenv-or-fail "NIX_BUILD_TOP"))))
+            (multiple-value-bind (out-truename _warnings-p failure-p)
+                (compile-file srcfile :output-file output :print t :verbose t)
+                (declare (ignore _warnings-p))
+              (if failure-p (quit 1)
+                  (progn (load out-truename) out-truename)))))
+
+        (fasl-concatenate (make-pathname :name "${name}" :type "${impls.ccl.faslExt}"
+                                         :directory (getenv-or-fail "out"))
+                          (mapcar #'nix-compile-file
+                                  ;; These forms where inserted by the Nix build
+                                  '(${
+                                      lib.concatMapStrings (src: ''
+                                        "${src}"
+                                      '') srcs
+                                   })))
+      '';
+
+      genDumpLisp = { name, main, deps }: writeText "ccl-dump.lisp" ''
+        ${impls.ccl.genLoadLisp deps}
+
+        (let* ((out (or (getenv "out") (error "Not running in a Nix build")))
+               (bindir (concatenate 'string out "/bin/"))
+               (executable (make-pathname :directory bindir :name "${name}")))
+
+          (save-application executable
+                            :purify t
+                            :error-handler :quit
+                            :toplevel-function (function ${main})
+                            :mode #o755
+                            ;; TODO(sterni): use :native t on macOS
+                            :prepend-kernel t))
+      '';
+
+      wrapProgram = true;
+
+      genTestLisp = genTestLispGeneric impls.ccl;
+
+      lispWith = deps:
+        let lispDeps = filter (d: !d.lispBinary) (allDeps impls.ccl deps);
+        in writeShellScriptBin "ccl" ''
+          export LD_LIBRARY_PATH="${lib.makeLibraryPath (allNative [] lispDeps)}"
+          exec ${ccl}/bin/ccl ${
+            lib.optionalString (deps != [])
+              "--load ${writeText "load.lisp" (impls.ccl.genLoadLisp lispDeps)}"
+          } "$@"
       '';
     };
   };
