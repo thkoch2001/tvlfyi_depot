@@ -37,5 +37,6 @@ in depot.nix.buildLisp.library {
 
   badImplementations = [
     "ecl" # dynamic cffi
+    "ccl" # routes is broken
   ];
 }
