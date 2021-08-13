@@ -25,5 +25,6 @@ in depot.nix.buildLisp.library {
 
   badImplementations = [
     "ecl" # dynamic cffi
+    "ccl" # easy-routes is broken
   ];
 }

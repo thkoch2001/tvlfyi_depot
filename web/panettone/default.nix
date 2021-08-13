@@ -50,5 +50,6 @@ depot.nix.buildLisp.program {
 
   badImplementations = [
     "ecl" # dependencies use dynamic cffi
+    "ccl" # nibbles, physical-quantities, … (?) are broken
   ];
 }
