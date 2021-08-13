@@ -25,4 +25,7 @@ in depot.nix.buildLisp.library {
     "mapper.lisp"
   ];
 
+  badImplementations = [
+    "ccl" # TODO(sterni): undeclared ignored variables
+  ];
 }

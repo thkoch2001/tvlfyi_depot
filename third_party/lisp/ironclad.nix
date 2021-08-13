@@ -143,4 +143,8 @@ in depot.nix.buildLisp.library {
     "public-key/pkcs1.lisp"
     "public-key/rsa.lisp"
   ]);
+
+  badImplementations = [
+    "ccl" # nibbles is broken
+  ];
 }
