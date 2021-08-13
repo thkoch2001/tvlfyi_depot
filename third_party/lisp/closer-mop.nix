@@ -18,6 +18,7 @@ in depot.nix.buildLisp.library {
     {
       sbcl = "${src}/closer-sbcl.lisp";
       ecl = "${src}/closer-ecl.lisp";
+      ccl = "${src}/closer-ccl.lisp";
     }
   ];
 }
