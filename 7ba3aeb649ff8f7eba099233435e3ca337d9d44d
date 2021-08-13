@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f50bf4fe_41c64111",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-13T11:10:42Z",
+      "side": 1,
+      "message": "Nice work! I\u0027ve always wanted something like this; it\u0027s really nice to see buildLisp used in this way (since ASDF is pretty crap at static linking properly as far as I can tell).",
+      "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e937d877_566d4ec5",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 20
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-13T11:10:42Z",
+      "side": 1,
+      "message": "more of a note to self: I wonder whether it\u0027s possible to re-compile ECL with the .a linked in or something horribly cursed like that, instead of doing the bytecode dance",
+      "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8dfd85e_7045c8b0",
+        "filename": "third_party/lisp/trivial-mimes.nix",
+        "patchSetId": 20
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-13T11:10:42Z",
+      "side": 1,
+      "message": "more details? this seems cursed; I\u0027d kinda like to know the story here (!)",
+      "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58b04f2d_0fa3fcdd",
+        "filename": "third_party/overlays/ecl-static.nix",
+        "patchSetId": 20
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-13T11:10:42Z",
+      "side": 1,
+      "message": "do we not want --enable-dffi\u003dno here? (I guess we can always fix CFFI in a later CL)",
+      "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56491804_e0e09247",
+        "filename": "users/sterni/clhs-lookup/clhs-lookup.lisp",
+        "patchSetId": 20
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-13T11:10:42Z",
+      "side": 1,
+      "message": "does the UIOP version not work under ECL?",
+      "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
