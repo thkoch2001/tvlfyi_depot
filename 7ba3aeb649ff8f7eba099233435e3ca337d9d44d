@@ -52,6 +52,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4e6e76f_e4cc2b3c",
+        "filename": "third_party/lisp/trivial-mimes.nix",
+        "patchSetId": 20
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-13T23:15:35Z",
+      "side": 1,
+      "message": "Do you like how I elaborated? I\u0027m not sure what is going exactly here, but the system lookup just fails in ECL (and CCL) with more or less weird errors. SBCL seems to not care for some reason?!",
+      "parentUuid": "e8dfd85e_7045c8b0",
+      "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58b04f2d_0fa3fcdd",
@@ -100,6 +118,24 @@
       "writtenOn": "2021-08-13T11:10:42Z",
       "side": 1,
       "message": "does the UIOP version not work under ECL?",
+      "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d107dd16_381eb069",
+        "filename": "users/sterni/clhs-lookup/clhs-lookup.lisp",
+        "patchSetId": 20
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-13T23:15:35Z",
+      "side": 1,
+      "message": "Tested again and it does. I\u0027m pretty sure it wasn\u0027t working at some point though…",
+      "parentUuid": "56491804_e0e09247",
       "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
