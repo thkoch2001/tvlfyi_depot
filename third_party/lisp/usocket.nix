@@ -14,7 +14,10 @@ in buildLisp.library {
   name = "usocket";
   deps = with depot.third_party.lisp; [
     (buildLisp.bundled "asdf")
-    (buildLisp.bundled "sb-bsd-sockets")
+    {
+      ecl = buildLisp.bundled "sb-bsd-sockets";
+      sbcl = buildLisp.bundled "sb-bsd-sockets";
+    }
     split-sequence
   ];
 
@@ -40,5 +43,9 @@ in buildLisp.library {
     # but usocket also has some ECL specific code
     { ecl = "${src}/backend/sbcl.lisp"; }
     { ecl = "${src}/backend/ecl.lisp"; }
+
+    # Same for CCL
+    { ccl = "${src}/backend/openmcl.lisp"; }
+    { ccl = "${src}/backend/clozure.lisp"; }
   ]);
 }

@@ -43,6 +43,8 @@ in depot.nix.buildLisp.library {
     { sbcl = getSrc "opt/sbcl/x86oid-vm.lisp"; }
 
     { ecl = getSrc "opt/ecl/c-functions.lisp"; }
+
+    { ccl = getSrc "opt/ccl/x86oid-vm.lisp"; }
   ] ++ map getSrc [
 
     "common.lisp"
