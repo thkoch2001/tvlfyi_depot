@@ -33,7 +33,7 @@
   }
   {
     username = "eta";
-    email = "eta@theta.eu.org";
+    email = "tvl@eta.st";
     password = "{SSHA}sOR5xzi7Lfv376XGQA8Hf6jyhTvo0XYc";
   }
   {
