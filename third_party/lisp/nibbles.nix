@@ -21,7 +21,6 @@ in depot.nix.buildLisp.library {
     "package.lisp"
     "types.lisp"
     "macro-utils.lisp"
-    "types.lisp"
     "vectors.lisp"
     "streams.lisp"
   ] ++ [

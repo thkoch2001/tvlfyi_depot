@@ -17,8 +17,11 @@ in buildLisp.library {
     trivial-features
     trivial-garbage
     trivial-gray-streams
-    (buildLisp.bundled "uiop")
-    (buildLisp.bundled "sb-posix")
+    {
+      scbl = buildLisp.bundled "uiop";
+      default = buildLisp.bundled "asdf";
+    }
+    { sbcl = buildLisp.bundled "sb-posix"; }
   ];
 
   native = [ pkgs.openssl ];
