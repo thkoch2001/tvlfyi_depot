@@ -27,4 +27,8 @@ in depot.nix.buildLisp.library {
     "read-macro.lisp"
     "si-units.lisp"
   ];
+
+  badImplementations = [
+    "ccl" # TODO(sterni): INLINE declaration for unknown function HAS-UNIT-P
+  ];
 }

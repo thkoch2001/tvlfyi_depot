@@ -24,4 +24,8 @@ in depot.nix.buildLisp.library {
     "vectors.lisp"
     "streams.lisp"
   ];
+
+  badImplementations = [
+    "ccl" # duplicate type definitions
+  ];
 }
