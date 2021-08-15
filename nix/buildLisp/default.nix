@@ -305,7 +305,15 @@ let
                                        :directory bindir)))
           (save-lisp-and-die outpath
                              :executable t
-                             :toplevel (function ${main})
+                             :toplevel
+                             (lambda ()
+                               ;; Filter out everything prior to the `--` we
+                               ;; insert in the wrapper to prevent SBCL from
+                               ;; parsing arguments at startup
+                               (replace sb-ext:*posix-argv*
+                                        (cdr (member "--" sb-ext:*posix-argv*
+                                                     :test #'string=)))
+                               (${main}))
                              :purify t))
       '';
 
@@ -539,7 +547,16 @@ let
           (save-application executable
                             :purify t
                             :error-handler :quit
-                            :toplevel-function (function ${main})
+                            :toplevel-function
+                            (lambda ()
+                              ;; Filter out everything prior to the `--` we
+                              ;; insert in the wrapper to prevent SBCL from
+                              ;; parsing arguments at startup
+                              (replace ccl:*command-line-argument-list*
+                                       (cdr (member "--"
+                                                    ccl:*command-line-argument-list*
+                                                    :test #'string=)))
+                              (${main}))
                             :mode #o755
                             ;; TODO(sterni): use :native t on macOS
                             :prepend-kernel t))
@@ -676,7 +693,9 @@ let
         }
       }
     '' + lib.optionalString implementation.wrapProgram ''
-      wrapProgram $out/bin/${name} --prefix LD_LIBRARY_PATH : "${libPath}"
+      wrapProgram $out/bin/${name} \
+        --prefix LD_LIBRARY_PATH : "${libPath}" \
+        --add-flags "\$NIX_BUILDLISP_LISP_ARGS --"
     ''));
 
   # 'bundled' creates a "library" which makes a built-in package available,
