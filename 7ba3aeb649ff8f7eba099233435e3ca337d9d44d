@@ -70,6 +70,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf5bda4e_ccca09fa",
+        "filename": "third_party/lisp/trivial-mimes.nix",
+        "patchSetId": 20
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-15T09:54:38Z",
+      "side": 1,
+      "message": "this works for me; thanks",
+      "parentUuid": "f4e6e76f_e4cc2b3c",
+      "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58b04f2d_0fa3fcdd",
@@ -154,6 +172,24 @@
       "side": 1,
       "message": "Testing was influenced by a uncommited change I had which adds `--` to the wrapper. This fixes uiop:command-line-arguments for ECL. Extremely cursed.",
       "parentUuid": "d107dd16_381eb069",
+      "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9a1a692_5fa81522",
+        "filename": "users/sterni/clhs-lookup/clhs-lookup.lisp",
+        "patchSetId": 20
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-15T09:54:38Z",
+      "side": 1,
+      "message": "Indeed :c",
+      "parentUuid": "e4d33d8c_4d05e83e",
       "revId": "7ba3aeb649ff8f7eba099233435e3ca337d9d44d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
