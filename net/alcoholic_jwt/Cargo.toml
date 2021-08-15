@@ -1,12 +1,12 @@
 [package]
 name = "alcoholic_jwt"
 description = "Library for validation of RS256 JWTs"
-version = "1.0.0"
-authors = ["Vincent Ambo <vincent@aprila.no>"]
+version = "1.0.1"
+authors = ["Vincent Ambo <mail@tazj.in>"]
 keywords = ["jwt", "token", "jwks"]
 categories = ["authentication"]
 license = "GPL-3.0-or-later"
-repository = "https://github.com/aprilabank/alcoholic_jwt"
+repository = "https://code.tvl.fyi/tree/net/alcoholic_jwt"
 
 [dependencies]
 base64 = "0.10"
