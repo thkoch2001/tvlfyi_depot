@@ -3,10 +3,11 @@
 let
   inherit (depot.nix.buildLisp) bundled;
   src = pkgs.fetchFromGitHub {
-    owner = "froydnj";
+    owner = "sharplispers";
     repo = "nibbles";
-    rev = "9de8c755c2ff24117748a3271e8582bb8d4a6b6c";
-    sha256 = "11rznn33m950mp4zgnpyjaliy3z3rvibfdr8y4vnk2aq42kqi7dj";
+    rev = "dad25240928d5cf8f7df69c4398244e03570bb35";
+    sha256 = "0r6ljlpgjmkf87pmvdwzva8qj15bhznc3ylgcjjqyy4frbx9lygz";
+    name = "nibbles-source";
   };
 
 in depot.nix.buildLisp.library {
@@ -23,5 +24,9 @@ in depot.nix.buildLisp.library {
     "types.lisp"
     "vectors.lisp"
     "streams.lisp"
+    "sbcl-opt/fndb.lisp"
+    "sbcl-opt/nib-tran.lisp"
+    "sbcl-opt/x86-vm.lisp"
+    "sbcl-opt/x86-64-vm.lisp"
   ];
 }
