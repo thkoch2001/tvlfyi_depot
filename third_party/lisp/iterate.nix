@@ -4,7 +4,7 @@
 
 let src = builtins.fetchGit {
   url = "https://gitlab.common-lisp.net/iterate/iterate.git";
-  rev = "a1c47b2b74f6c96149d717be90c07a1b273ced69";
+  rev = "c24f6715bb3b962499bb4643636baaac2df4a957"; # 2021-05-23, 1.5.3
 };
 in depot.nix.buildLisp.library {
   name = "iterate";
