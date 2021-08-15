@@ -261,7 +261,13 @@ let
                                        :directory bindir)))
           (save-lisp-and-die outpath
                              :executable t
-                             :toplevel (function ${main})
+                             :toplevel
+                             (lambda ()
+                               ;; Filter out the `--` we insert in the wrapper to
+                               ;; prevent SBCL from parsing arguments at startup
+                               (delete "--" sb-ext:*posix-argv*
+                                       :test #'string= :count 1)
+                               (${main}))
                              :purify t))
       '';
 
@@ -493,7 +499,13 @@ let
           (save-application executable
                             :purify t
                             :error-handler :quit
-                            :toplevel-function (function ${main})
+                            :toplevel-function
+                            (lambda ()
+                              ;; Filter out the `--` we insert in the wrapper to
+                              ;; prevent CCL from parsing arguments at startup
+                              (delete "--" ccl:*command-line-argument-list*
+                                      :test #'string= :count 1)
+                              (${main}))
                             :mode #o755
                             ;; TODO(sterni): use :native t on macOS
                             :prepend-kernel t))
@@ -638,7 +650,9 @@ let
         }
       }
     '' + lib.optionalString impl.wrapProgram ''
-      wrapProgram $out/bin/${name} --prefix LD_LIBRARY_PATH : "${libPath}"
+      wrapProgram $out/bin/${name} \
+        --prefix LD_LIBRARY_PATH : "${libPath}" \
+        --add-flags "--"
     ''));
 
   # 'bundled' creates a "library" which makes a built-in package available,
