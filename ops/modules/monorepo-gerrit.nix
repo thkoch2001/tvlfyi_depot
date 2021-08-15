@@ -96,6 +96,9 @@ in {
         # client-secret is set in /var/lib/gerrit/etc/secure.config.
       };
 
+      # Allow users to add additional email addresses to their accounts.
+      oauth.allowRegisterNewEmail = true;
+
       # Use Gerrit's built-in HTTP passwords, rather than trying to use the
       # password against the backing OAuth provider.
       auth.gitBasicAuthPolicy = "HTTP";
