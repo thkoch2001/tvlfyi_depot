@@ -76,6 +76,40 @@ let
     overrideLisp = new: makeOverridable f (orig // (new orig));
   };
 
+  # This is a wrapper arround 'makeOverridable' which performs its
+  # function, but also adds a the following additional attributes to the
+  # resulting derivation, namely a repl attribute which builds a `lispWith`
+  # derivation for the current implementation and additional attributes for
+  # every all implementations. So `drv.sbcl` would build the derivation
+  # with SBCL regardless of what was specified in the initial arguments.
+  withExtras = f: args:
+    let
+      drv = (makeOverridable f) args;
+    in lib.fix (self:
+      drv.overrideLisp (old:
+        let
+          implementation = old.implementation or defaultImplementation;
+          badImplementations = old.badImplementations or [];
+          targets = lib.subtractLists badImplementations
+            (builtins.attrNames impls);
+        in {
+          passthru = (old.passthru or {}) // {
+            repl = impls."${implementation}".lispWith [ self ];
+
+            # meta is done via passthru to minimize rebuilds caused by overriding
+            meta = (old.passthru.meta or {}) // {
+              inherit targets;
+            };
+          } // builtins.listToAttrs (builtins.map (name: {
+            inherit name;
+            value = self.overrideLisp (_: {
+              implementation = name;
+            });
+          }) (builtins.attrNames impls));
+        }) // {
+          overrideLisp = new: withExtras f (args // new args);
+        });
+
   # 'testSuite' builds a Common Lisp test suite that loads all of srcs and deps,
   # and then executes expression to check its result
   testSuite = { name, expression, srcs, deps ? [], native ? [], impl }:
@@ -244,10 +278,12 @@ let
   library =
     { name
     , implementation ? defaultImplementation
+    , badImplementations ? [] # TODO(sterni): make this a warning
     , srcs
     , deps ? []
     , native ? []
     , tests ? null
+    , passthru ? {}
     }:
     let
       impl = impls."${implementation}" or
@@ -268,12 +304,11 @@ let
     in lib.fix (self: runCommandNoCC "${name}-cllib" {
       LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
       LANG = "C.UTF-8";
-      passthru = {
+      passthru = passthru // {
         inherit lispNativeDeps lispDeps;
         lispName = name;
         lispBinary = false;
         tests = testDrv;
-        "${impl.name}" = impl.lispWith [ self ];
       };
     } ''
       ${if ! isNull testDrv
@@ -296,11 +331,13 @@ let
   program =
     { name
     , implementation ? defaultImplementation
+    , badImplementations ? [] # TODO(sterni): make this a warning
     , main ? "${name}:main"
     , srcs
     , deps ? []
     , native ? []
     , tests ? null
+    , passthru ? {}
     }:
     let
       impl = impls."${implementation}" or
@@ -311,7 +348,7 @@ let
       libPath = lib.makeLibraryPath (allNative native lispDeps);
       # overriding is used internally to propagate the implementation to use
       selfLib = (makeOverridable library) {
-        inherit name native;
+        inherit name native badImplementations;
         deps = lispDeps;
         srcs = filteredSrcs;
       };
@@ -330,13 +367,12 @@ let
       nativeBuildInputs = [ makeWrapper ];
       LD_LIBRARY_PATH = libPath;
       LANG = "C.UTF-8";
-      passthru = {
+      passthru = passthru // {
         lispName = name;
         lispDeps = [ selfLib ];
         lispNativeDeps = native;
         lispBinary = true;
         tests = testDrv;
-        ${implementation} = impl.lispWith [ self ];
       };
     } ''
       ${if ! isNull testDrv
@@ -376,8 +412,8 @@ let
     };
 
 in {
-  library = makeOverridable library;
-  program = makeOverridable program;
+  library = withExtras library;
+  program = withExtras program;
   inherit bundled;
 
   # 'sbclWith' creates an image with the specified libraries /
