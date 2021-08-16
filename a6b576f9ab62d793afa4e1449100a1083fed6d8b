@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8cb3254_6ed8b61e",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 17
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-16T13:38:13Z",
+      "side": 1,
+      "message": "one of the most elaborate ways I\u0027ve seen to avoid duplicating a string :p",
+      "range": {
+        "startLine": 127,
+        "startChar": 10,
+        "endLine": 127,
+        "endChar": 56
+      },
+      "revId": "a6b576f9ab62d793afa4e1449100a1083fed6d8b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

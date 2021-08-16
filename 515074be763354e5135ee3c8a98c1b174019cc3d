@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b54ab4b_b5ce3a3d",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 26
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-16T13:38:13Z",
+      "side": 1,
+      "message": "shouldn\u0027t this also be impl.name?",
+      "range": {
+        "startLine": 311,
+        "startChar": 10,
+        "endLine": 311,
+        "endChar": 24
+      },
+      "revId": "515074be763354e5135ee3c8a98c1b174019cc3d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
