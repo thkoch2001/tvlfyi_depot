@@ -46,6 +46,30 @@
       },
       "revId": "515074be763354e5135ee3c8a98c1b174019cc3d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60875c5e_6b5b19da",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 26
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-16T19:22:39Z",
+      "side": 1,
+      "message": "Yeah that\u0027s right. As pointed out above the key point here is duplication. I think inputting the implementation set directly instead of its name may fix such stupidities in the code anyways.\n\nAlso I ended up scrapping the REPL which is named like the implementation passthru derivation anyways in CL/3359, so I think I\u0027ll just rename it to `repl` statically here already if the name change is alright with you (interestingly I checked and it doesn\u0027t seem it was relied on much, both your and grfn\u0027s emacs configs use `sbclWith` exclusively, although I must say I used it interactively quite often, so keeping the feature makes sense).",
+      "parentUuid": "c3a4bd33_10e867d6",
+      "range": {
+        "startLine": 311,
+        "startChar": 10,
+        "endLine": 311,
+        "endChar": 24
+      },
+      "revId": "515074be763354e5135ee3c8a98c1b174019cc3d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
