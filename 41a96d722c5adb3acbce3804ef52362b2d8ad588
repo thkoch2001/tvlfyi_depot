@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f5af5b6_84db6e56",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-16T21:38:29Z",
+      "side": 1,
+      "message": "By the way the `dep.\"${impl.name}\" or (dep.overrideLisp (_: { … }))` is an amazing optimization of the implementation normalization across the dependency tree I found probably more due to luck than brains: It cuts the time needed to instantiate web.panettone from 8-9s to 600-900ms.\n\nI\u0027m not quite sure why this is so much faster (I suspect a lot of dependencies appear multiple times and nix can somehow cache the computations of dependency attributes), but I\u0027ll take it. This is probably the biggest reason for having this feature as well.",
+      "revId": "41a96d722c5adb3acbce3804ef52362b2d8ad588",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
