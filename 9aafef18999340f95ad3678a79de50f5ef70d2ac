@@ -22,6 +22,30 @@
       },
       "revId": "9aafef18999340f95ad3678a79de50f5ef70d2ac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d035373c_a539a957",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 19
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-16T21:19:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8a57420_e5f35e00",
+      "range": {
+        "startLine": 341,
+        "startChar": 66,
+        "endLine": 341,
+        "endChar": 72
+      },
+      "revId": "9aafef18999340f95ad3678a79de50f5ef70d2ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
