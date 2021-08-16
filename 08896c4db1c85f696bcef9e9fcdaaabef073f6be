@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed94818e_d2d9cc16",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-16T21:23:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab31c6d8_72bd8da8",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 9
+      },
+      "revId": "08896c4db1c85f696bcef9e9fcdaaabef073f6be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53d03e16_e6bfb0dc",
@@ -37,6 +61,24 @@
       "writtenOn": "2021-08-16T14:49:54Z",
       "side": 1,
       "message": "Hmm, what if you *want* to pass arguments to SBCL (or whichever implementation)?",
+      "revId": "08896c4db1c85f696bcef9e9fcdaaabef073f6be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "802b8afd_71a81287",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-16T21:23:11Z",
+      "side": 1,
+      "message": "Yeah, that doesn\u0027t work anymore, true. We could add support for statically passing certain flags to buildLisp theoretically, but temporarily tweaking the runtime will no longer be possible conveniently.\n\nThe problem is that as soon as you have a CLI, the behavior of CCL and SBCL *will* be a problem: If you can\u0027t even parse `--help` this is pretty bad. Arguably CCL is even worse which parses one character flags as well like `-d` and `-I`. Whereas SBCL\u0027s options (apart from `--help`) are less likely to clash (`--core`, `--dynamic-space-size`, `--tls-limit`, ...).",
+      "parentUuid": "53d03e16_e6bfb0dc",
       "revId": "08896c4db1c85f696bcef9e9fcdaaabef073f6be",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
