@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c25af97_3365f206",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-17T23:14:14Z",
+      "side": 1,
+      "message": "I hope I have explained it better now (commit and comment)",
+      "parentUuid": "b36ed6a0_49c5490d",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 3
+      },
+      "revId": "0f95e1ffebec185d54881c3d200afe2bc129948d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98545afb_e0a53574",
         "filename": "nix/buildLisp/default.nix",
         "patchSetId": 19
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-17T19:27:29Z",
       "side": 1,
       "message": "Maybe this should be a yants type? Just a thought, I\u0027m not actually sure we want to depend on yants in this.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 67
+      },
+      "revId": "0f95e1ffebec185d54881c3d200afe2bc129948d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e556d16_6ecccdfa",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 19
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-17T23:14:14Z",
+      "side": 1,
+      "message": "The set has no static structure and doesn\u0027t have to be distinguished from arbitrary values: The lists for deps and srcs should only ever contain strings, paths and derivations. The predicate is just to check for an attribute set which is not a derivation — so by elimination it must be a filter set.",
+      "parentUuid": "98545afb_e0a53574",
       "range": {
         "startLine": 21,
         "startChar": 0,
