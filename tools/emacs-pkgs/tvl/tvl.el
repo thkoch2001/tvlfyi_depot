@@ -29,6 +29,11 @@
   "Location at which the TVL depot is checked out."
   :group 'tvl)
 
+(defcustom tvl-target-branch "canon"
+  "Branch to use to target CLs"
+  :group 'tvl
+  :safe (lambda (_) t))
+
 (defun tvl--gerrit-ref (target-branch &optional flags)
   (let ((flag-suffix (if flags (format "%%l=%s" (s-join "," flags))
                        "")))
@@ -38,7 +43,7 @@
   "Push to Gerrit for review."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
-                       (tvl--gerrit-ref "canon")
+                       (tvl--gerrit-ref tvl-target-branch)
                        nil))
 
 (transient-append-suffix
@@ -49,7 +54,7 @@
   "Push to Gerrit as a work-in-progress."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
-                       (concat (tvl--gerrit-ref "canon") "%wip")
+                       (concat (tvl--gerrit-ref tvl-target-branch) "%wip")
                        nil))
 
 (transient-append-suffix
@@ -60,7 +65,7 @@
   "Push to Gerrit for review."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
-                       (tvl--gerrit-ref "canon" '("submit"))
+                       (tvl--gerrit-ref tvl-target-branch '("submit"))
                        nil))
 
 (transient-append-suffix
@@ -74,7 +79,7 @@ rubberstamp operation is dangerous and should only be used in
 `//users'."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
-                       (tvl--gerrit-ref "canon"
+                       (tvl--gerrit-ref tvl-target-branch
                                         '("Code-Review+2" "publish-comments"))
                        nil))
 
