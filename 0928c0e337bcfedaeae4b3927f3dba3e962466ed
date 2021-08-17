@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3820af29_1b7b5148",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 20
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-17T21:16:54Z",
+      "side": 1,
+      "message": "bundled\u0027 is overrideable which is used by buildLisp to switch implementation, but yeah it\u0027s no longer possible to override the underlying `library` call, but tbh I don\u0027t see a real use case for it (maybe a cursed one?).",
+      "parentUuid": "a8d86a0d_7a1ef4cf",
+      "range": {
+        "startLine": 345,
+        "startChar": 45,
+        "endLine": 345,
+        "endChar": 52
+      },
+      "revId": "0928c0e337bcfedaeae4b3927f3dba3e962466ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4bd40cb_2f8cc8d9",
         "filename": "nix/buildLisp/default.nix",
         "patchSetId": 20
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-17T19:22:51Z",
       "side": 1,
       "message": "How is this change related?",
+      "range": {
+        "startLine": 367,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 44
+      },
+      "revId": "0928c0e337bcfedaeae4b3927f3dba3e962466ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8fa13c8_674bd5b7",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 20
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-17T21:16:54Z",
+      "side": 1,
+      "message": "It\u0027s not I think I just noticed at some point that the allDeps is not necessary here and commited it in the worng place, will fix.",
+      "parentUuid": "d4bd40cb_2f8cc8d9",
       "range": {
         "startLine": 367,
         "startChar": 0,
