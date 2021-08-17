@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04527139_9a8dcd44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-17T19:24:19Z",
+      "side": 1,
+      "message": "Actually the README should probably also be updated to mention this.",
+      "revId": "24bfa6469a76bc52af0044b6b5bbc3d697aafb32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
