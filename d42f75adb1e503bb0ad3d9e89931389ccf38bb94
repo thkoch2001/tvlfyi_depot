@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dffa15a3_7b277faf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-17T18:18:23Z",
+      "side": 1,
+      "message": "LGTM to unblock, but we might wanna look into how to put this into magit\u0027s config UI. Maybe we should also split out a magerrit.el or something like that. ",
+      "revId": "d42f75adb1e503bb0ad3d9e89931389ccf38bb94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
