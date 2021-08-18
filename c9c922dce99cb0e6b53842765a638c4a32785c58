@@ -51,6 +51,24 @@
       "parentUuid": "22973740_bf330798",
       "revId": "c9c922dce99cb0e6b53842765a638c4a32785c58",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5358afb_7c7e516d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-18T15:56:46Z",
+      "side": 1,
+      "message": "I guess we maybe could have a nix.pathType thing where\n\n{\n  __functor \u003d _: pathType;\n  inherit isFunction isSymlink isRegularFile isDirectory;\n}\n\nThe questions really is what to do with stuff like storePathName or drvTargets which are 10 line functions more or less.",
+      "parentUuid": "14553b6f_2ced2d12",
+      "revId": "c9c922dce99cb0e6b53842765a638c4a32785c58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
