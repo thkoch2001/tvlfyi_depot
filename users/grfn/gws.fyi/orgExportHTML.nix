@@ -22,12 +22,23 @@ let
   bn = builtins.baseNameOf src;
   filename = elemAt (splitString "." bn) 0;
 
+  isDirectory = import (runCommand "isDirectory" {} ''
+    if [ -d ${src} ]; then
+      echo "true" > $out
+    else
+      echo "false" > $out
+    fi
+  '');
+
   outName =
     if isNull headline
     then
       let bn = builtins.baseNameOf src;
           filename = elemAt (splitString "." bn) 0;
-      in filename + ".html"
+      in
+        if isDirectory
+        then filename
+        else filename + ".html"
     else "${filename}-${replaceStrings [" "] ["-"] filename}.html";
 
   escapeDoubleQuotes = replaceStrings ["\""] ["\\\""];
@@ -39,16 +50,29 @@ let
 
 in
 
-runCommand outName {} ''
-  cp ${src} file.org
-  echo "${emacs}/bin/emacs --batch"
-  ${emacs}/bin/emacs --batch \
-    --load ${./config.el} \
-    --visit file.org \
-    --eval "(progn
-      ${escapeDoubleQuotes navToHeadline}
-      (org-html-export-to-html))" \
-    --kill
-  substitute file.html $out \
-    --replace '<title>&lrm;</title>' ""
+runCommand outName { inherit src; } ''
+  buildFile() {
+    cp "$1" file.org
+    ${emacs}/bin/emacs --batch \
+      --load ${./config.el} \
+      --visit file.org \
+      --eval "(progn
+        ${escapeDoubleQuotes navToHeadline}
+        (org-html-export-to-html))" \
+      --kill
+    rm file.org
+    substitute file.html "$2" \
+      --replace '<title>&lrm;</title>' ""
+    rm file.html
+  }
+
+  if [ -d $src ]; then
+    for file in $src/*; do
+      result=''${file/$src/$out}
+      mkdir -p $(dirname $result)
+      buildFile $file ''${result/.org/.html}
+    done
+  else
+    buildFile $src $out
+  fi
 ''
