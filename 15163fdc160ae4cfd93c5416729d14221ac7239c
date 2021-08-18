@@ -56,6 +56,30 @@
       },
       "revId": "15163fdc160ae4cfd93c5416729d14221ac7239c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91722951_4da90b54",
+        "filename": "users/grfn/gws.fyi/recipes/tomato-sauce.org",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-08-18T14:23:44Z",
+      "side": 1,
+      "message": "Thanks! fixed in cl/3373",
+      "parentUuid": "e59838da_c8ca406e",
+      "range": {
+        "startLine": 48,
+        "startChar": 13,
+        "endLine": 48,
+        "endChar": 15
+      },
+      "revId": "15163fdc160ae4cfd93c5416729d14221ac7239c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
