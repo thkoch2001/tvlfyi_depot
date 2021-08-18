@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffaf55ba_a9df51e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-18T09:13:34Z",
+      "side": 1,
+      "message": "🍅🍅🍅",
+      "revId": "15163fdc160ae4cfd93c5416729d14221ac7239c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e59838da_c8ca406e",
+        "filename": "users/grfn/gws.fyi/recipes/tomato-sauce.org",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-18T09:13:34Z",
+      "side": 1,
+      "message": "i. e.?",
+      "range": {
+        "startLine": 48,
+        "startChar": 13,
+        "endLine": 48,
+        "endChar": 15
+      },
+      "revId": "15163fdc160ae4cfd93c5416729d14221ac7239c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
