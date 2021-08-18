@@ -58,9 +58,74 @@ let
     else builtins.throw "Don't know how to get (base)name of "
       + lib.generators.toPretty {} p;
 
+  /* Get the type of a path itself as it would be returned for a
+     directory child by builtins.readDir.
+
+     Type: path(-like) -> option<string>
+
+     Example:
+       pathType ./foo.c
+       => "regular"
+
+       pathType /home/lukas
+       => "directory"
+
+       pathType ./result
+       => "symlink"
+
+       pathType /does/not/exist
+       => null
+  */
+  pathType = path:
+    let
+      # baseNameOf is very annoyed if we proceed with string context.
+      # We need to call toString to prevent unsafeDiscardStringContext
+      # from importing a path into store which messes with base- and
+      # dirname of course.
+      path'= builtins.unsafeDiscardStringContext (toString path);
+      # To read the containing directory we absolutely need
+      # to keep the string context, otherwise a derivation
+      # would not be realized before our check (at eval time)
+      containingDir = builtins.readDir (builtins.dirOf path);
+    in
+      containingDir.${builtins.baseNameOf path'} or null;
+
+  pathType' = path:
+    let
+      p = pathType path;
+    in
+      if p == null
+      then builtins.throw "${lib.generators.toPretty {} path} does not exist"
+      else p;
+
+  /* Check whether the given path is a directory.
+     Throws if the path in question doesn't exist.
+
+     Type: path(-like) -> bool
+  */
+  isDirectory = path: pathType' path == "directory";
+
+  /* Check whether the given path is a regular file.
+     Throws if the path in question doesn't exist.
+
+     Type: path(-like) -> bool
+  */
+  isRegularFile = path: pathType' path == "regular";
+
+  /* Check whether the given path is a symbolic link.
+     Throws if the path in question doesn't exist.
+
+     Type: path(-like) -> bool
+  */
+  isSymlink = path: pathType' path == "symlink";
+
 in {
   inherit
     drvTargets
     storePathName
+    pathType
+    isDirectory
+    isRegularFile
+    isSymlink
     ;
 }
