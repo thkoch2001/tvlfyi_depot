@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, depot, ... }:
 
 with pkgs;
 with lib;
@@ -22,21 +22,13 @@ let
   bn = builtins.baseNameOf src;
   filename = elemAt (splitString "." bn) 0;
 
-  isDirectory = import (runCommand "isDirectory" {} ''
-    if [ -d ${src} ]; then
-      echo "true" > $out
-    else
-      echo "false" > $out
-    fi
-  '');
-
   outName =
     if isNull headline
     then
       let bn = builtins.baseNameOf src;
           filename = elemAt (splitString "." bn) 0;
       in
-        if isDirectory
+        if depot.nix.utils.isDirectory src
         then filename
         else filename + ".html"
     else "${filename}-${replaceStrings [" "] ["-"] filename}.html";
