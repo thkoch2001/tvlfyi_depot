@@ -17,6 +17,7 @@ let
       mkdir -p $out
       cp ${css} $out/main.css
       cp ${site.index} $out/index.html
+      cp -r ${site.recipes} $out/recipes
       cp ${resume} $out/resume.pdf
     '';
 
@@ -24,5 +25,5 @@ in (writeShellScript "deploy.sh" ''
   ${awscli2}/bin/aws --profile personal s3 sync ${website}/ ${bucket}
   echo "Deployed to http://gws.fyi"
 '') // {
-  inherit website;
+  inherit website site;
 }

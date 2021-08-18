@@ -98,6 +98,13 @@ h3 {
   font-family: Inter, sans-serif;
 }
 
+h1.title,
+h2.title,
+h3.title {
+  text-align: left;
+  margin-bottom: 1.5em;
+}
+
 h2 {
   font-size: 18px;
 }
