@@ -8,4 +8,5 @@ in
 
 {
   index = orgExportHTML ./index.org;
+  recipes = orgExportHTML ./recipes;
 }
