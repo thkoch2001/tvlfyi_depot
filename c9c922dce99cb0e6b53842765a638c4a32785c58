@@ -16,6 +16,41 @@
       "message": "Why suddenly a utils module, when all the other nix functinos are file-per-function?",
       "revId": "c9c922dce99cb0e6b53842765a638c4a32785c58",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c44b2695_0b78b877",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-08-18T13:43:16Z",
+      "side": 1,
+      "message": "this is sweet, thanks for this!",
+      "revId": "c9c922dce99cb0e6b53842765a638c4a32785c58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14553b6f_2ced2d12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-08-18T13:43:16Z",
+      "side": 1,
+      "message": "I vastly prefer this as a module, fwiw",
+      "parentUuid": "22973740_bf330798",
+      "revId": "c9c922dce99cb0e6b53842765a638c4a32785c58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
