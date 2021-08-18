@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22973740_bf330798",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-18T09:46:11Z",
+      "side": 1,
+      "message": "Why suddenly a utils module, when all the other nix functinos are file-per-function?",
+      "revId": "c9c922dce99cb0e6b53842765a638c4a32785c58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
