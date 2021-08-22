@@ -16,6 +16,24 @@
       "message": "maybe we could take a page out of nixpkgs\u0027s book here wrt supported platforms?",
       "revId": "21e0996a767254e3b386a6a72f5b808f070eab89",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aa47868_86f569bb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-22T16:00:22Z",
+      "side": 1,
+      "message": "Going with brokenOn for now, I think I\u0027ll just redo this later if I have a better idea.",
+      "parentUuid": "2fb6bc3c_6d7112c2",
+      "revId": "21e0996a767254e3b386a6a72f5b808f070eab89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
