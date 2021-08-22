@@ -1,6 +1,7 @@
 ;;;  mime4cl.lisp --- MIME primitives for Common Lisp
 
 ;;;  Copyright (C) 2005-2008, 2010 by Walter C. Pelissero
+;;;  Copyright (C) 2021 by the TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: mime4cl
@@ -961,6 +962,29 @@ is a string."))
       (some #'(lambda (p)
 		(find-mime-part-by-id p id))
 	    (mime-parts part))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod find-mime-text-part (msg)
+  (:documentation
+   "Return message if it is a text message or first text part.
+   If no suitable text part is found, return NIL."))
+
+(defmethod find-mime-text-part ((part mime-text))
+  part) ; found our target
+
+(defmethod find-mime-text-part ((msg mime-message))
+  ;; mime-body is either a mime-part or mime-multipart
+  (find-mime-text-part (mime-body msg)))
+
+(defmethod find-mime-text-part ((parts mime-multipart))
+  ;; multipart messages may have a body, otherwise we
+  ;; search for the first text part
+  (or (call-next-method)
+      (find-if #'find-mime-text-part (mime-parts parts))))
+
+(defmethod find-mime-text-part ((part mime-part))
+  nil) ; default case
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
