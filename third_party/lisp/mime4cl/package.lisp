@@ -65,6 +65,7 @@
 	   #:mime=
 	   #:find-mime-part-by-path
 	   #:find-mime-part-by-id
+	   #:find-mime-text-part
 	   #:encode-mime-part
 	   #:encode-mime-body
 	   #:decode-quoted-printable-stream
