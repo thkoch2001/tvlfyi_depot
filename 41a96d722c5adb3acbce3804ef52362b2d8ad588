@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "09299f3b_30127c1c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-22T15:55:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8acb5fc8_dcba35b2",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 18
+      },
+      "revId": "41a96d722c5adb3acbce3804ef52362b2d8ad588",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4f5af5b6_84db6e56",
         "filename": "nix/buildLisp/default.nix",
         "patchSetId": 7
