@@ -22,6 +22,30 @@
       },
       "revId": "0d942dca4058f390feaf0a5ce064efb3f55c1855",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f24ace68_77eaaed5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-23T20:18:09Z",
+      "side": 1,
+      "message": "The README is correct. This comment is also not incorrect, but misleading. What I originally meant is that *compilation* will fail because crucial definitions are missing, but eval would succeed of course.\n\nTried to clarify the message.",
+      "parentUuid": "3b9563f2_5730cefd",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 0
+      },
+      "revId": "0d942dca4058f390feaf0a5ce064efb3f55c1855",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
