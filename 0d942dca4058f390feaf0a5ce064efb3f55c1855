@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b9563f2_5730cefd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-23T20:06:17Z",
+      "side": 1,
+      "message": "In the updated README later on it says:\n\n\u003e `buildLisp` will pick the value of the attribute named like the\nused implementation or `default` and ignore the set completely if both are missing.\n\nWhich one is correct, or does this change somewhere in between this CL and the docs one?",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 0
+      },
+      "revId": "0d942dca4058f390feaf0a5ce064efb3f55c1855",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

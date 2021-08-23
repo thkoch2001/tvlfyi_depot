@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "970592fe_1eb7f156",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-23T20:06:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c25af97_3365f206",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 3
+      },
+      "revId": "0f95e1ffebec185d54881c3d200afe2bc129948d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98545afb_e0a53574",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "The set has no static structure and doesn\u0027t have to be distinguished from arbitrary values: The lists for deps and srcs should only ever contain strings, paths and derivations. The predicate is just to check for an attribute set which is not a derivation — so by elimination it must be a filter set.",
       "parentUuid": "98545afb_e0a53574",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 67
+      },
+      "revId": "0f95e1ffebec185d54881c3d200afe2bc129948d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a15fea8_53a54ba2",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 19
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-23T20:06:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0e556d16_6ecccdfa",
       "range": {
         "startLine": 21,
         "startChar": 0,
