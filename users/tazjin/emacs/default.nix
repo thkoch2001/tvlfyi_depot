@@ -18,27 +18,16 @@ let
 
   identity = x: x;
 
-  tazjinsEmacs = pkgfun: (emacsWithPackages(epkgs: pkgfun(
-  # Actual ELPA packages (the enlightened!)
-  (with epkgs.elpaPackages; [
-    avy
-    flymake
-    pinentry
-    rainbow-mode
-    undo-tree
-    xelb
-  ]) ++
-
-  # MELPA packages:
-  (with epkgs.melpaPackages; [
-    ace-window
+  tazjinsEmacs = pkgfun: (emacsWithPackages(epkgs: pkgfun(with epkgs; [
     ace-link
-    # bazel-mode TODO(tazjin): where did this go?
+    ace-window
+    avy
+    bazel
     browse-kill-ring
     cargo
-    company
     clojure-mode
     cmake-mode
+    company
     counsel
     counsel-notmuch
     dash-functional
@@ -47,8 +36,11 @@ let
     eglot
     elixir-mode
     elm-mode
-    # erlang
+    erlang
+    exwm
+    flymake
     go-mode
+    google-c-style
     gruber-darker-theme
     haskell-mode
     ht
@@ -69,10 +61,12 @@ let
     notmuch # this comes from pkgs.third_party
     paredit
     password-store
+    pinentry
     polymode
     prescient
     protobuf-mode
     rainbow-delimiters
+    rainbow-mode
     refine
     request
     restclient
@@ -80,37 +74,29 @@ let
     sly
     string-edit
     swiper
+    telega
     telephone-line
     terraform-mode
     toml-mode
     transient
+    undo-tree
     use-package
     uuidgen
+    vterm
     web-mode
     websocket
     which-key
+    xelb
     yaml-mode
     yasnippet
-  ]) ++
 
-  # Other external packages:
-  (with epkgs; [
-    exwm
-    google-c-style
-    telega
-    vterm
-  ]) ++
-
-  # Custom packages
-  (with epkgs.tvlPackages; [
-    dottime
-    nix-util
-    term-switcher
-    tvl
-
-    # patched / overridden versions of packages
-    rcirc
-  ]))));
+    # Custom depot packages (either ours, or overridden ones)
+    tvlPackages.dottime
+    tvlPackages.nix-util
+    tvlPackages.rcirc
+    tvlPackages.term-switcher
+    tvlPackages.tvl
+  ])));
 in lib.fix(self: l: f: pkgs.writeShellScriptBin "tazjins-emacs" ''
   export PATH="${emacsBinPath}:$PATH"
   exec ${tazjinsEmacs f}/bin/emacs \
