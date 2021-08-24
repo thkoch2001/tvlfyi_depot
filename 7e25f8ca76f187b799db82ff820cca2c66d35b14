@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ab1a64c7_54ea8192",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 25
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-24T17:30:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc099b36_10f9612d",
+      "range": {
+        "startLine": 472,
+        "startChar": 26,
+        "endLine": 472,
+        "endChar": 28
+      },
+      "revId": "7e25f8ca76f187b799db82ff820cca2c66d35b14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "dfab83ff_2da4fe83",
         "filename": "nix/buildLisp/default.nix",
         "patchSetId": 25
