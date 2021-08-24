@@ -22,6 +22,30 @@
       },
       "revId": "75d44f0209361d84d9ecc8a112348933695e4ac9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf7a5a2f_3a940b0e",
+        "filename": "users/sterni/emacs/init.el",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-24T12:19:57Z",
+      "side": 1,
+      "message": "thanks!",
+      "parentUuid": "4be139c5_c34cc465",
+      "range": {
+        "startLine": 35,
+        "startChar": 31,
+        "endLine": 35,
+        "endChar": 40
+      },
+      "revId": "75d44f0209361d84d9ecc8a112348933695e4ac9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
