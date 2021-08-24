@@ -1,21 +1,10 @@
 ;; Google Cloud DNS zone for nixery.dev
-nixery.dev. 21600 IN SOA ns-cloud-b1.googledomains.com. cloud-dns-hostmaster.google.com. 3 21600 3600 259200 300
+nixery.dev. 21600 IN SOA ns-cloud-b1.googledomains.com. cloud-dns-hostmaster.google.com. 5 21600 3600 259200 300
 nixery.dev. 21600 IN NS ns-cloud-b1.googledomains.com.
 nixery.dev. 21600 IN NS ns-cloud-b2.googledomains.com.
 nixery.dev. 21600 IN NS ns-cloud-b3.googledomains.com.
 nixery.dev. 21600 IN NS ns-cloud-b4.googledomains.com.
 
-;; Records for current Google App Engine setup
-nixery.dev. 300 IN TXT "google-site-verification=VbkD1AYRVYQ3R-FbGCbt9pBOfiIsW4-l0KLfJHEzN4A"
-
-nixery.dev. 60 IN A 216.239.32.21
-nixery.dev. 60 IN A 216.239.34.21
-nixery.dev. 60 IN A 216.239.36.21
-nixery.dev. 60 IN A 216.239.38.21
-
-nixery.dev. 60 IN AAAA 2001:4860:4802:32::15
-nixery.dev. 60 IN AAAA 2001:4860:4802:34::15
-nixery.dev. 60 IN AAAA 2001:4860:4802:36::15
-nixery.dev. 60 IN AAAA 2001:4860:4802:38::15
-
-www.nixery.dev. 60 IN CNAME ghs.googlehosted.com.
+;; Records for pointing nixery.dev to whitby
+nixery.dev. 300 IN A 49.12.129.211
+nixery.dev. 300 IN AAAA 2a01:4f8:242:5b21:0:feed:edef:beef
