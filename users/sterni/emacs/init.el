@@ -32,7 +32,7 @@
 (add-hook 'after-make-frame-functions
           (lambda (frame) (scroll-bar-mode 0)))
 
-;; don't center on cursor when scrooling
+;; don't center on cursor when scrolling
 (setq scroll-conservatively 1)
 
 ;; type less
