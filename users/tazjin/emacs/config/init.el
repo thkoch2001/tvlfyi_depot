@@ -205,7 +205,7 @@
   (setq common-lisp-hyperspec-root "file:///home/tazjin/docs/lisp/"))
 
 (use-package telega
-  ;; :bind (:map global-map ("s-t" . telega))
+  :bind (:map global-map ("s-t" . telega))
   :config
   (telega-mode-line-mode 1)
   (add-hook 'telega-msg-ignore-predicates 'telega-msg-from-blocked-sender-p))
