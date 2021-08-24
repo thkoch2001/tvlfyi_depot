@@ -48,7 +48,6 @@
   :config (counsel-mode 1))
 
 (use-package dash)
-(use-package dash-functional)
 (use-package gruber-darker-theme)
 
 (use-package eglot
