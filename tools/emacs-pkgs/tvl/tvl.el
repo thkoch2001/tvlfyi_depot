@@ -23,15 +23,18 @@
 
 (defcustom tvl-gerrit-remote "origin"
   "Name of the git remote for gerrit"
+  :type '(string)
   :group 'tvl)
 
 (defcustom tvl-depot-path "/depot"
   "Location at which the TVL depot is checked out."
+  :type '(string)
   :group 'tvl)
 
 (defcustom tvl-target-branch "canon"
   "Branch to use to target CLs"
   :group 'tvl
+  :type '(string)
   :safe (lambda (_) t))
 
 (defun tvl--gerrit-ref (target-branch &optional flags)
@@ -39,7 +42,7 @@
                        "")))
     (format "HEAD:refs/for/%s%s" target-branch flag-suffix)))
 
-(define-suffix-command magit-gerrit-push-for-review ()
+(transient-define-suffix magit-gerrit-push-for-review ()
   "Push to Gerrit for review."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
@@ -50,7 +53,7 @@
   #'magit-push ["r"]
   (list "R" "push to Gerrit for review" #'magit-gerrit-push-for-review))
 
-(define-suffix-command magit-gerrit-push-wip ()
+(transient-define-suffix magit-gerrit-push-wip ()
   "Push to Gerrit as a work-in-progress."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
@@ -61,7 +64,7 @@
   #'magit-push ["r"]
   (list "W" "push to Gerrit as a work-in-progress" #'magit-gerrit-push-wip))
 
-(define-suffix-command magit-gerrit-submit ()
+(transient-define-suffix magit-gerrit-submit ()
   "Push to Gerrit for review."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
@@ -73,7 +76,7 @@
   (list "S" "push to Gerrit to submit" #'magit-gerrit-submit))
 
 
-(define-suffix-command magit-gerrit-rubberstamp ()
+(transient-define-suffix magit-gerrit-rubberstamp ()
   "Push, automatically approve and submit to Gerrit. This
 rubberstamp operation is dangerous and should only be used in
 `//users'."
@@ -90,7 +93,7 @@ rubberstamp operation is dangerous and should only be used in
 (defun tvl-depot-status ()
   "Open the TVL monorepo in magit."
   (interactive)
-  (magit-status tvl-depot-path))
+  (call-interactively (magit-status tvl-depot-path)))
 
 (provide 'tvl)
 ;;; tvl.el ends here
