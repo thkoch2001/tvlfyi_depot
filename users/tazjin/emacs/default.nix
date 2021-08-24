@@ -30,7 +30,6 @@ let
     company
     counsel
     counsel-notmuch
-    dash-functional
     direnv
     dockerfile-mode
     eglot
