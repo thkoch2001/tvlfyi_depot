@@ -14,7 +14,7 @@
   (setq rust-format-show-buffer nil)
   (setq lsp-rust-analyzer-import-merge-behaviour "last"
         lsp-rust-analyzer-cargo-watch-command "clippy"
-        lsp-rust-analyzer-cargo-watch-args ["--target-dir" "/home/grfn/readyset/readyset/target/check"]
+        lsp-rust-analyzer-cargo-watch-args ["--target-dir" "/home/grfn/code/readyset/readyset/target/rust-analyzer"]
         lsp-ui-doc-enable t)
   (rust-enable-format-on-save)
   (lsp))
