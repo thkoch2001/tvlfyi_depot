@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21cf7a1e_f106cf9b",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 20
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-24T12:08:08Z",
+      "side": 1,
+      "message": "Please add a TODO and mark this resolved.",
+      "parentUuid": "eed9a793_1b2da84f",
+      "range": {
+        "startLine": 345,
+        "startChar": 45,
+        "endLine": 345,
+        "endChar": 52
+      },
+      "revId": "0928c0e337bcfedaeae4b3927f3dba3e962466ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4bd40cb_2f8cc8d9",
         "filename": "nix/buildLisp/default.nix",
         "patchSetId": 20
