@@ -22,6 +22,30 @@
       },
       "revId": "09706acfde5a5ab2e7acd91b7a0b79c30080e460",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eb868e1_c2e3c423",
+        "filename": "nix/buildLisp/default.nix",
+        "patchSetId": 45
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-24T17:31:01Z",
+      "side": 1,
+      "message": "Alright like this?",
+      "parentUuid": "256a2072_1367b74c",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "09706acfde5a5ab2e7acd91b7a0b79c30080e460",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
