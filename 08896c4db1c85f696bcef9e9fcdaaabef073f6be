@@ -81,6 +81,24 @@
       "parentUuid": "53d03e16_e6bfb0dc",
       "revId": "08896c4db1c85f696bcef9e9fcdaaabef073f6be",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61f93cdd_77667ecc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-24T21:19:36Z",
+      "side": 1,
+      "message": "I think passing argumentation args might be required in unexpected situations, so we should have a way of doing it.\n\nOne solution could be to have a buildLisp specific envvar that is read in this script and extends the flag array with that stuff to explicitly pass args to the implementation.\n\nIf you think that\u0027s reasonable I\u0027m fine with opening a bug for it / making a TODO and submitting this as is, I just think it needs a solution.",
+      "parentUuid": "802b8afd_71a81287",
+      "revId": "08896c4db1c85f696bcef9e9fcdaaabef073f6be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
