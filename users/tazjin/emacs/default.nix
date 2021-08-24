@@ -14,7 +14,7 @@ let
   emacsWithPackages = (pkgs.emacsPackagesGen emacs).emacsWithPackages;
 
   # $PATH for binaries that need to be available to Emacs
-  emacsBinPath = lib.makeBinPath [ pkgs.emacsPackages.tvlPackages.telega ];
+  emacsBinPath = lib.makeBinPath [ pkgs.emacsPackages.telega ];
 
   identity = x: x;
 
@@ -110,7 +110,6 @@ let
 
     # patched / overridden versions of packages
     rcirc
-    telega
   ]))));
 in lib.fix(self: l: f: pkgs.writeShellScriptBin "tazjins-emacs" ''
   export PATH="${emacsBinPath}:$PATH"
