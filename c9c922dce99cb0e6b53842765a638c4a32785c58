@@ -87,6 +87,24 @@
       "parentUuid": "c5358afb_7c7e516d",
       "revId": "c9c922dce99cb0e6b53842765a638c4a32785c58",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d123de4_36b423ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-24T12:12:23Z",
+      "side": 1,
+      "message": "Profpatsch, can you file a bug where we can have this discussion? This CL doesn\u0027t introduce the utils module, so I think it\u0027s out of scope here.",
+      "parentUuid": "3c309b80_0a77e6e3",
+      "revId": "c9c922dce99cb0e6b53842765a638c4a32785c58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
