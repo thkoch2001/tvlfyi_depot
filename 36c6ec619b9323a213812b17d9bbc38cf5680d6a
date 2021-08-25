@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df080e37_8b684483",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-25T13:51:24Z",
+      "side": 1,
+      "message": "Waving through as this is my commit and I\u0027m quite sure about it :p",
+      "revId": "36c6ec619b9323a213812b17d9bbc38cf5680d6a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
