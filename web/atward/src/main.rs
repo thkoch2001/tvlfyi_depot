@@ -113,12 +113,18 @@ fn handlers() -> Vec<Handler> {
         // Depot paths (e.g. //web/atward or //ops/nixos/whitby/default.nix)
         // TODO(tazjin): Add support for specifying lines in a query parameter
         Handler {
-            pattern: Regex::new("^//(?P<path>[a-zA-Z].*)$").unwrap(),
+            pattern: Regex::new("^//(?P<path>[a-zA-Z].*)?$").unwrap(),
             target: |query, captures| {
+                // Pass an empty string if the path is missing, to
+                // redirect to the depot root.
+                let path = captures.name("path")
+                    .map(|m| m.as_str())
+                    .unwrap_or("");
+
                 if query.cs {
-                    Some(sourcegraph_path_url(&captures["path"]))
+                    Some(sourcegraph_path_url(path))
                 } else {
-                    Some(cgit_url(&captures["path"]))
+                    Some(cgit_url(path))
                 }
             },
         },
@@ -252,6 +258,20 @@ mod tests {
                 }
             ),
             None
+        );
+    }
+
+    #[test]
+    fn depot_root_cgit_query() {
+        assert_eq!(
+            dispatch(
+                &handlers(),
+                &Query {
+                    query: "//".to_string(),
+                    cs: false,
+                }
+            ),
+            Some("https://code.tvl.fyi/tree/".to_string()),
         );
     }
 
