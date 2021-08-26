@@ -88,6 +88,35 @@ the `expression` parameter should be a Lisp expression and will be evaluated
 after loading all sources and dependencies (including library/program
 dependencies). It must return a non-`NIL` value if the test suite has passed.
 
+## Example
+
+Using buildLisp could look like this:
+
+```nix
+{ buildLisp, lispPkgs }:
+
+let libExample = buildLisp.library {
+    name = "lib-example";
+    srcs = [ ./lib.lisp ];
+
+    deps = with lispPkgs; [
+      (buildLisp.bundled "sb-posix")
+      iterate
+      cl-ppcre
+    ];
+};
+in buildLisp.program {
+    name = "example";
+    deps = [ libExample ];
+    srcs = [ ./main.lisp ];
+    tests = {
+      deps = [ lispPkgs.fiveam ];
+      srcs = [ ./tests.lisp ];
+      expression = "(fiveam:run!)";
+    };
+}
+```
+
 ## Development REPLs
 
 `buildLisp` builds loadable variants of both `program` and `library` derivations
@@ -194,35 +223,6 @@ implementation names on which the derivation is not expected to work.
 This only influences `meta.targets` which is read by depot's CI to
 check which variants (see "Implementations") of the derivation to
 build, so it may not be useful outside of depot.
-
-## Example
-
-Using buildLisp could look like this:
-
-```nix
-{ buildLisp, lispPkgs }:
-
-let libExample = buildLisp.library {
-    name = "lib-example";
-    srcs = [ ./lib.lisp ];
-
-    deps = with lispPkgs; [
-      (buildLisp.bundled "sb-posix")
-      iterate
-      cl-ppcre
-    ];
-};
-in buildLisp.program {
-    name = "example";
-    deps = [ libExample ];
-    srcs = [ ./main.lisp ];
-    tests = {
-      deps = [ lispPkgs.fiveam ];
-      srcs = [ ./tests.lisp ];
-      expression = "(fiveam:run!)";
-    };
-}
-```
 
 [sbcl]: http://www.sbcl.org/
 [ccl]: https://ccl.clozure.com/
