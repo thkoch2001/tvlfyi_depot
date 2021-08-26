@@ -177,6 +177,24 @@
       "parentUuid": "e9e4c493_4d82451e",
       "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf21c759_8cee0169",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-26T16:07:42Z",
+      "side": 1,
+      "message": "Hm, but an env lookup to determine this would also be impure, right?",
+      "parentUuid": "816b07fa_6590b461",
+      "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
