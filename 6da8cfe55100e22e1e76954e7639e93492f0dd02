@@ -213,6 +213,24 @@
       "parentUuid": "cf21c759_8cee0169",
       "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6720c946_214dffde",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-26T16:24:58Z",
+      "side": 1,
+      "message": "Now guarding against `BUILDKITE_BUILD_ID` presence.",
+      "parentUuid": "e17e59ea_e185fd51",
+      "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
