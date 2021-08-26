@@ -32,9 +32,21 @@ let
   # pipeline as failed. Buildkite has a concept of a failed pipeline
   # regardless, but this data is not accessible.
   mkStep = target: {
-    command = ''
-      nix-build -E '${mkBuildExpr target}' --show-trace || (buildkite-agent meta-data set "failure" "1"; exit 1)
-    '';
+    command = let
+      drvPath = builtins.unsafeDiscardStringContext target.drvPath;
+    in lib.concatStringsSep " " [
+      # First try to realise the drvPath of the target so we don't evaluate twice.
+      # Nix has no concept of depending on a derivation file without depending on
+      # at least one of its `outPath`s, so we need to discard the string context
+      # if we don't want to build everything during pipeline construction.
+      "nix-store --realise '${drvPath}'"
+      # However, Nix doesn't track references of store paths to derivations, so
+      # there's no guarantee that the derivation file is not garbage collected.
+      # To handle this case we fall back to an ordinary build if the derivation
+      # file is missing.
+      "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
+      "|| (buildkite-agent meta-data set 'failure' '1'; exit 1)"
+    ];
     label = ":nix: ${mkLabel target}";
   };
 
