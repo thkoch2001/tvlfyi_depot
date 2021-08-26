@@ -16,6 +16,24 @@
       "message": "is this a permission thing? shouldn\u0027t a path be imported into the store normally?",
       "revId": "cd4c532ed3136f1244937a45c0ed83611f307e06",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c9b23d2_493334b0",
+        "filename": "web/static/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-26T17:44:02Z",
+      "side": 1,
+      "message": "It needs to be a derivation so that it can be built with `nix-build` (e.g. in CI).",
+      "parentUuid": "59182427_e43ed72c",
+      "revId": "cd4c532ed3136f1244937a45c0ed83611f307e06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
