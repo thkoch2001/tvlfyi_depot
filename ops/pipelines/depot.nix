@@ -48,6 +48,9 @@ let
       "|| (buildkite-agent meta-data set 'failure' '1'; exit 1)"
     ];
     label = ":nix: ${mkLabel target}";
+
+    # Skip build steps if their out path has already been built.
+    skip = builtins.pathExists (builtins.unsafeDiscardStringContext target.outPath);
   };
 
   # Protobuf check step which validates that changes to .proto files
