@@ -1,0 +1,8 @@
+# -*- mode: shell-script; -*-
+# Set DEPOT_PIPELINE_GCROOT to the file which will hold our built depot.yaml
+# buildkite pipeline which also gcroots all derivation store paths we'll
+# realize. We keep this until :duck: to prevent a race condition with the
+# garbage collector.
+set -eu
+
+export DEPOT_PIPELINE_GCROOT="/nix/var/nix/gcroots/depot/build-$BUILDKITE_BUILD_ID-depot.yaml"
