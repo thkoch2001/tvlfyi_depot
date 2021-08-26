@@ -48,6 +48,12 @@ let
       "|| (buildkite-agent meta-data set 'failure' '1'; exit 1)"
     ];
     label = ":nix: ${mkLabel target}";
+
+    # Skip build steps if their out path has already been built. Full
+    # builds are always run on canon.
+    skip = with builtins;
+      (getEnv "BUILDKITE_BRANCH" != "canon") &&
+      (pathExists (unsafeDiscardStringContext target.outPath));
   };
 
   # Protobuf check step which validates that changes to .proto files
