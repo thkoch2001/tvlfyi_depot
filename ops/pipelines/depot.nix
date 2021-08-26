@@ -55,7 +55,7 @@ let
         # Only skip in real Buildkite builds
         (getEnv "BUILDKITE_BUILD_ID" != "") &&
         # Always build everything for the canon branch.
-        (getEnv "BUILDKITE_BRANCH" != "canon") &&
+        (getEnv "BUILDKITE_BRANCH" != "refs/heads/canon") &&
         # Discard string context to avoid realising the store path during
         # pipeline construction.
         (pathExists (unsafeDiscardStringContext target.outPath));
