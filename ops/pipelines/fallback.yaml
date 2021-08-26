@@ -3,6 +3,8 @@
 # for example because of a syntax error in Nix code.
 ---
 steps:
-  - command: "echo 'Nix evaluation failed!' && exit 1"
+  - command: |
+      rm -f "$DEPOT_PIPELINE_GCROOT"
+      echo 'Nix evaluation failed!' && exit 1
     # This step *must* be :duck: to trigger the correct hook.
     label: ":duck:"
