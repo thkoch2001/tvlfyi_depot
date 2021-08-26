@@ -71,5 +71,7 @@ in runCommandNoCC "website" {} ''
   mkdir $out
   cp ${homepage} $out/index.html
   cp ${atomFeed} $out/feed.atom
-  cp -r ${./static} $out/static
+  mkdir $out/static
+  cp -r ${depot.web.static}/* $out/static
+  cp -rf ${./static}/* $out/static
 ''
