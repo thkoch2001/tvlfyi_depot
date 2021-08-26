@@ -28,6 +28,7 @@
         ("https://grahamc.com/feed/" blog)
         ("https://michael.stapelberg.ch/feed.xml" blog)
         ("https://kazu-yamamoto.hatenablog.jp/feed" blog)
+        ("https://ariadne.space/feed/" blog)
         ("https://bodil.lol/rss.xml" blog)
         ("http://blog.nullspace.io/feed.xml" blog)
         ("https://blog.kingcons.io/rss.xml" blog)
