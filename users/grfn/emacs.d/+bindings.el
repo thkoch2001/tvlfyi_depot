@@ -114,6 +114,12 @@ private/hlissner/snippets."
       (paxedit-implicit-sexp-kill n)
       (paxedit-sexp-kill n)
       (message paxedit-message-kill)))
+
+;;;
+
+(evil-set-command-property 'flycheck-next-error :repeat nil)
+(evil-set-command-property 'flycheck-prev-error :repeat nil)
+
 ;;;
 
 (map!
