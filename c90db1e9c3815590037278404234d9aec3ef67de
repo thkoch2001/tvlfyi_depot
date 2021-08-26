@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08647cc4_7fd7a26f",
+        "filename": "default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-26T17:48:08Z",
+      "side": 1,
+      "message": "I didn\u0027t want to write a string joining function in Nix to make this a nicer output (lib is not available here).",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 44
+      },
+      "revId": "c90db1e9c3815590037278404234d9aec3ef67de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
