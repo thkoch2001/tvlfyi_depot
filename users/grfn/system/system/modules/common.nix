@@ -31,7 +31,6 @@ with lib;
     file
     lm_sensors
     dnsutils
-    depot.users.grfn.system.system.rebuilder
     htop
   ];
 
