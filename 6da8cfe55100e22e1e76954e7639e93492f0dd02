@@ -141,6 +141,24 @@
       "parentUuid": "ad91af2e_05ddedd2",
       "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9e4c493_4d82451e",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-26T16:03:24Z",
+      "side": 1,
+      "message": "I\u0027m not sure what the use-case is for building the pipeline locally, but you could set `BUILDKITE_BRANCH\u003dcanon` to simulate the behaviour without step-skipping and get the pipeline with everything active.",
+      "parentUuid": "68474d7a_df7e28bc",
+      "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
