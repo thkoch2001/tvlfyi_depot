@@ -34,6 +34,9 @@ let
   mkStep = target: {
     command = let
       drvPath = builtins.unsafeDiscardStringContext target.drvPath;
+      shouldSkip = with builtins;
+        (getEnv "BUILDKITE_BRANCH" != "canon") &&
+        (pathExists (unsafeDiscardStringContext target.outPath));
     in lib.concatStringsSep " " [
       # First try to realise the drvPath of the target so we don't evaluate twice.
       # Nix has no concept of depending on a derivation file without depending on
@@ -48,6 +51,10 @@ let
       "|| (buildkite-agent meta-data set 'failure' '1'; exit 1)"
     ];
     label = ":nix: ${mkLabel target}";
+
+    # Skip build steps if their out path has already been built. Full
+    # builds are always run on canon.
+    skip = if shouldSkip then "Target was already built." else false;
   };
 
   # Protobuf check step which validates that changes to .proto files
