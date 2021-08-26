@@ -10,15 +10,6 @@ let
   inherit (builtins) concatStringsSep foldl' map toJSON;
   inherit (pkgs) symlinkJoin writeText;
 
-  # Create an expression that builds the target at the specified
-  # location.
-  mkBuildExpr = target:
-    let
-      descend = expr: attr: "builtins.getAttr \"${attr}\" (${expr})";
-      targetExpr = foldl' descend "import ./. {}" target.__readTree;
-      subtargetExpr = descend targetExpr target.__subtarget;
-    in if target ? __subtarget then subtargetExpr else targetExpr;
-
   # Create a pipeline label from the targets tree location.
   mkLabel = target:
     let label = concatStringsSep "/" target.__readTree;
@@ -33,19 +24,21 @@ let
   # regardless, but this data is not accessible.
   mkStep = target: {
     command = let
-      drvPath = builtins.unsafeDiscardStringContext target.drvPath;
-    in lib.concatStringsSep " " [
-      # First try to realise the drvPath of the target so we don't evaluate twice.
-      # Nix has no concept of depending on a derivation file without depending on
-      # at least one of its `outPath`s, so we need to discard the string context
-      # if we don't want to build everything during pipeline construction.
+      drvPathNoCtx = builtins.unsafeDiscardStringContext target.drvPath;
+      # referencing a .drv path by default creates a dependency via a
+      # string context of { allOutputs = true; }. Which would cause
+      # Nix to build all targets while constructing the pipeline.
+      # To work around this we change the context to only require
+      # { path = true; } which makes sure the resulting depot.yaml
+      # references the .drv paths and that they are alive as long
+      # as the depot.yaml is alive.
+      newCtx = {
+        ${drvPathNoCtx} = { path = true; };
+      };
+      drvPath = builtins.appendContext drvPathNoCtx newCtx;
+    in lib.concatStringsSep " || " [
       "nix-store --realise '${drvPath}'"
-      # However, Nix doesn't track references of store paths to derivations, so
-      # there's no guarantee that the derivation file is not garbage collected.
-      # To handle this case we fall back to an ordinary build if the derivation
-      # file is missing.
-      "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
-      "|| (buildkite-agent meta-data set 'failure' '1'; exit 1)"
+      "(buildkite-agent meta-data set 'failure' '1'; exit 1)"
     ];
     label = ":nix: ${mkLabel target}";
 
@@ -99,9 +92,10 @@ let
 
       # Wait for all steps to complete, then exit with success or
       # failure depending on whether any failure status was written.
-      # This step must be :duck:! (yes, really!)
+      # This step must be :duck:! (yes, really!) Additionally we clean
+      # up the gcroot which prevented all needed drv files from being gced.
       ({
-        command = "exit $(buildkite-agent meta-data get 'failure')";
+        command = "rm -f \"$DEPOT_PIPELINE_GCROOT\"; exit $(buildkite-agent meta-data get 'failure')";
         label = ":duck:";
         key = ":duck:";
       })
