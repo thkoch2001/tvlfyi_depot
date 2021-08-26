@@ -11,5 +11,6 @@ steps:
         exit
       }
 
-      nix-build -A ops.pipelines.depot -o depot.yaml --show-trace || fallback
-      buildkite-agent pipeline upload depot.yaml || fallback
+      nix-build -A ops.pipelines.depot -o "$DEPOT_PIPELINE_GCROOT" --show-trace || fallback
+
+      buildkite-agent pipeline upload "$DEPOT_PIPELINE_GCROOT" || fallback
