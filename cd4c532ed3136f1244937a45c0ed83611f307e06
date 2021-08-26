@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59182427_e43ed72c",
+        "filename": "web/static/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-26T17:42:58Z",
+      "side": 1,
+      "message": "is this a permission thing? shouldn\u0027t a path be imported into the store normally?",
+      "revId": "cd4c532ed3136f1244937a45c0ed83611f307e06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
