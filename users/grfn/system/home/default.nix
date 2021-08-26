@@ -18,10 +18,6 @@ rec {
     };
   });
 
-  chupacabra = home ./machines/chupacabra.nix;
-
-  chupacabraHome = chupacabra.activation-script;
-
   dobharchu = home ./machines/dobharchu.nix;
 
   dobharchuHome = dobharchu.activation-script;
@@ -31,7 +27,6 @@ rec {
   yerenHome = yeren.activation-script;
 
   meta.targets = [
-    "chupacabraHome"
     "yerenHome"
   ];
 }
