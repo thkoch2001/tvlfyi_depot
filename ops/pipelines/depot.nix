@@ -48,6 +48,18 @@ let
       "|| (buildkite-agent meta-data set 'failure' '1'; exit 1)"
     ];
     label = ":nix: ${mkLabel target}";
+
+    # Skip build steps if their out path has already been built.
+    skip = let
+      shouldSkip = with builtins;
+        # Only skip in real Buildkite builds
+        (getEnv "BUILDKITE_BUILD_ID" != "") &&
+        # Always build everything for the canon branch.
+        (getEnv "BUILDKITE_BRANCH" != "canon") &&
+        # Discard string context to avoid realising the store path during
+        # pipeline construction.
+        (pathExists (unsafeDiscardStringContext target.outPath));
+      in if shouldSkip then "Target was already built." else false;
   };
 
   # Protobuf check step which validates that changes to .proto files
