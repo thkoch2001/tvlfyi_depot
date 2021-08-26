@@ -8,13 +8,56 @@ let
   inherit (builtins)
     attrValues
     concatMap
+    elem
+    elemAt
     filter
     ;
 
   # This definition of fix is identical to <nixpkgs>.lib.fix, but the global
   # package set is not available here.
   fix = f: let x = f x; in x;
-  readTree' = import ./nix/readTree {};
+
+  # readTree argument filter to generally disallow access to //users
+  # from other depot parts. Exceptions can be added for specific
+  # (full) paths.
+  depotArgsFilter = args: parts:
+    if (elemAt parts 0) == "users" || elem parts [
+      # whitby is allowed to access //users for two reasons:
+      #
+      # 1. Users host their SSH key sets in //users.
+      # 2. tazjin's website is currently hosted on whitby because
+      #    camden is in storage.
+      #
+      # Due to evaluation order this also affects //ops/nixos.nix.
+      [ "ops" "machines" "whitby" ]
+
+      # TODO(tazjin): Can this one be removed somehow?
+      [ "ops" "nixos" ]
+
+      # //web/bubblegum has examples using //users/sterni, they should
+      # probably be in the user folder instead with a link there.
+      # TODO(sterni): Clean this up.
+      [ "web" "bubblegum" ]
+    ]
+    then args
+    else args // {
+      depot = args.depot // {
+        users = throw ''
+          Access to items from the //users folder is not permitted from
+          other depot paths. Code under //users is not considered stable
+          or dependable in the wider depot context.
+
+          If a project under //users is required by something else,
+          please move it to a different depot path.
+
+          At location: [ ${toString parts} ]
+        '';
+      };
+    };
+
+    readTree' = import ./nix/readTree {
+      argsFilter = depotArgsFilter;
+    };
 
   # To determine build targets, we walk through the depot tree and
   # fetch attributes that were imported by readTree and are buildable.
