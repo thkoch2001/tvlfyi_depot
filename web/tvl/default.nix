@@ -41,11 +41,7 @@ let
     '';
   };
 in runCommandNoCC "website" {} ''
-  mkdir -p $out/static
+  mkdir $out
   cp ${homepage} $out/index.html
-  cp -r ${./static}/* $out/static
-
-  # Some assets are stolen from tazjin's blog
-  cp ${depot.users.tazjin.homepage}/static/jetbrains-* $out/static
-  cp ${depot.users.tazjin.homepage}/static/tazjin.css $out/static
+  cp -r ${depot.web.static} $out/static
 ''
