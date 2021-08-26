@@ -50,7 +50,7 @@ let
           If a project under //users is required by something else,
           please move it to a different depot path.
 
-          At location: [ ${toString parts} ]
+          At location: //${builtins.concatStringsSep "/" parts}
         '';
       };
     };
