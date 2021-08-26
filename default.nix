@@ -28,11 +28,12 @@ let
       # 2. tazjin's website is currently hosted on whitby because
       #    camden is in storage.
       #
-      # Due to evaluation order this also affects //ops/nixos.nix.
       [ "ops" "machines" "whitby" ]
 
+      # Due to evaluation order this also affects these targets.
       # TODO(tazjin): Can this one be removed somehow?
       [ "ops" "nixos" ]
+      [ "ops" "machines" "all-systems" ]
 
       # //web/bubblegum has examples using //users/sterni, they should
       # probably be in the user folder instead with a link there.
