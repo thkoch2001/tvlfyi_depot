@@ -224,6 +224,30 @@ This only influences `meta.targets` which is read by depot's CI to
 check which variants (see "Implementations") of the derivation to
 build, so it may not be useful outside of depot.
 
+## Influencing the Lisp Runtime
+
+Lisp implementations which create an executable by dumping an image
+usually parse a few implementation-specific command line options on
+executable startup that influence runtime settings related to things
+like GC. `buildLisp` generates a wrapper which makes sure that this
+never interferes with the argument parsing implemented in the actual
+application, but sometimes it is useful to run an executable with
+special settings. To allow this, the content of `NIX_BUILDLISP_LISP_ARGS`
+is passed to the lisp implementation.
+
+For example, you can make the underlying SBCL print its version for
+any executable built with `buildLisp` (and SBCL) like this:
+
+```console
+$ env NIX_BUILDLISP_LISP_ARGS="--version" ./result/bin/🕰️
+SBCL 2.1.2.nixos
+```
+
+In practice you'd probably want to specify options like
+`--dynamic-space-size` or `--tls-limit` (try passing `--help` for a
+full list). Naturally, these options are completely different for
+different implementations.
+
 [sbcl]: http://www.sbcl.org/
 [ccl]: https://ccl.clozure.com/
 [ecl]: https://common-lisp.net/project/ecl/
