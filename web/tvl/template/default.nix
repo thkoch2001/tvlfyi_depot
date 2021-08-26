@@ -24,7 +24,7 @@ runCommandNoCC "index.html" {
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="description" content="The Virus Lounge">
-      <link rel="stylesheet" type="text/css" href="${baseUrl}/static/tazjin.css" media="all">
+      <link rel="stylesheet" type="text/css" href="${baseUrl}/static/tvl.css" media="all">
       <link rel="icon" type="image/webp" href="${baseUrl}/static/favicon.webp">
       <title>${title}</title>
   '' + lib.optionalString (args ? extraHead) extraHead + ''
