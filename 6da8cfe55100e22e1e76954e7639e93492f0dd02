@@ -159,6 +159,24 @@
       "parentUuid": "68474d7a_df7e28bc",
       "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "816b07fa_6590b461",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-26T16:06:32Z",
+      "side": 1,
+      "message": "I guess it doesn\u0027t really matter, but I feel like that you should need to take an active step to make the pipeline impure as opposed to it being impure by default.",
+      "parentUuid": "e9e4c493_4d82451e",
+      "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
