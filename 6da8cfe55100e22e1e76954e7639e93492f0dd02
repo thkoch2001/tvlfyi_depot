@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "55e17416_349ed196",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-08-26T15:52:18Z",
+      "side": 1,
+      "message": "Instead of skipping the step, could we omit it entirely? That\u0027ll make the buildkite UI a lot cleaner to click around in.",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 8
+      },
+      "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4c61e5ac_2c6421c8",
         "filename": "ops/pipelines/depot.nix",
         "patchSetId": 5
@@ -14,6 +37,24 @@
       "writtenOn": "2021-08-26T15:48:38Z",
       "side": 1,
       "message": "I\u0027d also check that we are actually running inside buildkite via some kind of env lookup, since this behavior is probably surprising when building the pipeline locally -- this should be a purpose specific build impurity.",
+      "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad91af2e_05ddedd2",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-08-26T15:52:18Z",
+      "side": 1,
+      "message": "well, this is just spitting out some JSON that we feed into buildkite, not actually running any builds - and in that case if I\u0027m doing it locally, I\u0027d want to see what *would* be run in buildkite.",
+      "parentUuid": "4c61e5ac_2c6421c8",
       "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
