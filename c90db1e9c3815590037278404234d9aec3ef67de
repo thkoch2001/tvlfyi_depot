@@ -22,6 +22,30 @@
       },
       "revId": "c90db1e9c3815590037278404234d9aec3ef67de",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa43ea26_b72c0c3f",
+        "filename": "default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-26T20:46:17Z",
+      "side": 1,
+      "message": "builtins.concatStringsSep is a thing though",
+      "parentUuid": "08647cc4_7fd7a26f",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 44
+      },
+      "revId": "c90db1e9c3815590037278404234d9aec3ef67de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
