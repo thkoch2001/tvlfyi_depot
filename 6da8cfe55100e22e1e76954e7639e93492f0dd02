@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff1d5c9a_25b55b16",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-26T15:55:47Z",
+      "side": 1,
+      "message": "Yeah, it means you can toggle the step view and then see a message saying that it was already built.",
+      "parentUuid": "9cef3b5f_b3a76edc",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 8
+      },
+      "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c61e5ac_2c6421c8",
@@ -79,6 +103,24 @@
       "side": 1,
       "message": "well, this is just spitting out some JSON that we feed into buildkite, not actually running any builds - and in that case if I\u0027m doing it locally, I\u0027d want to see what *would* be run in buildkite.",
       "parentUuid": "4c61e5ac_2c6421c8",
+      "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfc5c95f_ef37a299",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-26T15:55:47Z",
+      "side": 1,
+      "message": "I agree with grfn here.",
+      "parentUuid": "ad91af2e_05ddedd2",
       "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
