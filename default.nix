@@ -8,13 +8,45 @@ let
   inherit (builtins)
     attrValues
     concatMap
+    elem
+    elemAt
     filter
     ;
 
   # This definition of fix is identical to <nixpkgs>.lib.fix, but the global
   # package set is not available here.
   fix = f: let x = f x; in x;
-  readTree' = import ./nix/readTree {};
+
+  # readTree argument filter to disallow certain usage patterns of
+  # targets within depot.
+  depotArgsFilter = args: parts:
+    if (elemAt parts 0) == "users" || elem parts [
+      # whitby is temporarily allowed to access //users because it
+      # hosts tazjin's website until camden (or some replacement
+      # machine) is back online.
+      #
+      # TODO(tazjin): Remove exception after website is moved.
+      [ "ops" "machines" "whitby" ]
+    ]
+    then args
+    else args // {
+      depot = args.depot // {
+        users = throw ''
+          Access to items from the //users folder is not permitted from
+          other depot paths. Code under //users is not considered stable
+          or dependable in the wider depot context.
+
+          If a project under //users is required by something else,
+          please move it to a different depot path.
+
+          At location: [ ${toString parts} ]
+        '';
+      };
+    };
+
+    readTree' = import ./nix/readTree {
+      argsFilter = depotArgsFilter;
+    };
 
   # To determine build targets, we walk through the depot tree and
   # fetch attributes that were imported by readTree and are buildable.
