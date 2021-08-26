@@ -1,12 +1,6 @@
 args @ { depot, pkgs, ... }:
 
 rec {
-  chupacabra = import ./machines/chupacabra.nix;
-
-  chupacabraSystem = (depot.third_party.nixos {
-    configuration = chupacabra;
-  }).system;
-
   mugwump = import ./machines/mugwump.nix;
 
   mugwumpSystem = (depot.ops.nixos.nixosFor mugwump).system;
@@ -34,9 +28,7 @@ rec {
 
   iso = import ./iso.nix args;
 
-  # Build chupacabra in CI
   meta.targets = [
-    "chupacabraSystem"
     "mugwumpSystem"
     "roswellSystem"
     "yerenSystem"

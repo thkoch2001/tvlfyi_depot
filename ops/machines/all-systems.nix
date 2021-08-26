@@ -11,6 +11,5 @@
 ]) ++
 
 (with depot.users.grfn.system.system; [
-  chupacabra
   yeren
 ])
