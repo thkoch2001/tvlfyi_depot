@@ -123,6 +123,24 @@
       "parentUuid": "ad91af2e_05ddedd2",
       "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68474d7a_df7e28bc",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-26T15:56:12Z",
+      "side": 1,
+      "message": "But what you build locally has no bearing over what is actually run anyways since the latter depends on the state of whitby\u0027s /nix/store. You\u0027ll likely not have the entirety of depot in your nix store, so doing this with your local /nix/store would be inaccurate anyways.",
+      "parentUuid": "ad91af2e_05ddedd2",
+      "revId": "6da8cfe55100e22e1e76954e7639e93492f0dd02",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
