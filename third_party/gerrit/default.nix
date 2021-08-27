@@ -28,7 +28,7 @@ let
     runScript = "/bin/bazel-run";
   };
   bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.3.2-1990-gabb30fe7f1";
+  version = "3.4.1";
 in
 pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   pname = "gerrit";
@@ -36,8 +36,9 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
 
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "abb30fe7f1ecf07d7b5098d6ad7e4423389c41e5";
-    sha256 = "sha256:0xsxhqyjl2dd1wglfk43b8c7591l2x5ikb4l7nxi96czladqy82v";
+    # tag v3.4.1
+    rev = "fa9181a7283f2f53abbeb38df1111d83592f9923";
+    sha256 = "sha256:0000000000000000000000000000000000000000000000000000";
     fetchSubmodules = true;
   };
   patches = [
@@ -47,9 +48,6 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
     ./0004-Add-titles-to-CLs-over-HTTP.patch
     ./0005-When-using-local-fonts-always-assume-Gerrit-is-mount.patch
     ./0006-Always-use-Google-Fonts.patch
-    ./0007-Keep-left-padding-on-account-chip-if-no-avatar-provi.patch
-
-    ./polygerrit-revert-typescript.patch
   ];
 
   bazelTarget = "release api-skip-javadoc";
@@ -63,7 +61,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:0i40brj8c49920fhl7h84rlbg1i4bz5c0p7sflm7h9m5m6jr8a1y";
+    sha256 = "sha256:0000000000000000000000000000000000000000000000000000";
     preBuild = ''
       rm .bazelversion
     '';
