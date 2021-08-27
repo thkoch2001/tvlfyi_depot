@@ -22,6 +22,30 @@
       },
       "revId": "22facd311c848efa6ba3e48c1c7e7e123d61d615",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36bac1d7_fd5e9eda",
+        "filename": "ops/modules/www/deploys.tvl.fyi.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-08-27T14:27:14Z",
+      "side": 1,
+      "message": "so, how do you feel about just putting this at `/var/html` for now and calling it a day",
+      "parentUuid": "fc894624_55693155",
+      "range": {
+        "startLine": 12,
+        "startChar": 25,
+        "endLine": 12,
+        "endChar": 49
+      },
+      "revId": "22facd311c848efa6ba3e48c1c7e7e123d61d615",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
