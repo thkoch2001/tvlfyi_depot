@@ -1,14 +1,14 @@
-From 7c2e72527d177fd26505821e6297e6aa270a4f96 Mon Sep 17 00:00:00 2001
+From be348f64eda257ae0af1f89552548d3e8eca3688 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:43 +0100
-Subject: [PATCH 3/7] Syntax highlight rules.pl
+Subject: [PATCH 3/6] Syntax highlight rules.pl
 
 ---
  .../diff/gr-syntax-layer/gr-syntax-layer.ts         | 13 ++++++++++++-
  1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts
-index 2762ccc625..ebb5d9dad9 100644
+index 2762ccc625..598e14589f 100644
 --- a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts
 +++ b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts
 @@ -103,6 +103,10 @@ const LANGUAGE_MAP = new Map<string, string>([
@@ -35,12 +35,12 @@ index 2762ccc625..ebb5d9dad9 100644
      // The Gerrit API provides only content-type, but for other users of
      // gr-diff it may be more convenient to specify the language directly.
 -    return metaInfo.language ?? LANGUAGE_MAP.get(metaInfo.content_type);
-+    return metaInfo.language ?? 
++    return metaInfo.language ??
 +        FILENAME_OVERRIDES.get(this._basename(metaInfo.name)) ??
 +        LANGUAGE_MAP.get(metaInfo.content_type);
    }
  
    /**
 -- 
-2.29.2
+2.32.0
 
