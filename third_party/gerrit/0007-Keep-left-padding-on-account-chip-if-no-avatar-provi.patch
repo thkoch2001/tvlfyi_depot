@@ -1,4 +1,4 @@
-From 8258bb2deef504656d7b79868dcacdcd00fa1778 Mon Sep 17 00:00:00 2001
+From 9062a3705c67f576a2484fe69a39847ae7ff293a Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Sun, 20 Dec 2020 14:29:22 +0000
 Subject: [PATCH 7/7] Keep left padding on account chip if no avatar provider
@@ -107,5 +107,5 @@ index f37aa01a2d..4a21222dca 100644
      test('not showing anonymous', () => {
        const account = {name: 'Wyatt'};
 -- 
-2.29.2
+2.32.0
 

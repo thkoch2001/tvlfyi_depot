@@ -1,4 +1,4 @@
-From 556c4f189d0ed41fb5ad59545ffcf5e957bbb820 Mon Sep 17 00:00:00 2001
+From 924647c354576ade0dc46fdf30596967f58bb4c6 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:32 +0100
 Subject: [PATCH 2/7] Syntax highlight nix
@@ -20,5 +20,5 @@ index 081d28d749..2762ccc625 100644
  const ASYNC_DELAY = 10;
  
 -- 
-2.29.2
+2.32.0
 
