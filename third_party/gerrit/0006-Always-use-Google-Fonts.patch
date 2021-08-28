@@ -1,7 +1,7 @@
-From e5c8621646bbde242453a1ac6b0b82f6279789e0 Mon Sep 17 00:00:00 2001
+From d71f51afe12a280b92831070a583b15c8b6bc2f4 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Sat, 11 Jul 2020 00:46:13 +0000
-Subject: [PATCH 6/7] Always use Google Fonts.
+Subject: [PATCH 6/6] Always use Google Fonts.
 
 We're not a corporate, and we're not behind the GFW. Always use Google Fonts,
 because even though we no longer get the caching benefits (boo, browsers),
@@ -24,5 +24,5 @@ index a9cfceb3b6..9c287c6e45 100644
      }
  
 -- 
-2.29.2
+2.32.0
 
