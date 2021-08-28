@@ -1,7 +1,7 @@
-From 152fd4ed4cc45d467fd56945debb759870cd53ca Mon Sep 17 00:00:00 2001
+From 32bf13d8316f93828d2ff47ccfca38d4e7a634b1 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:03:02 +0100
-Subject: [PATCH 4/7] Add titles to CLs over HTTP
+Subject: [PATCH 4/6] Add titles to CLs over HTTP
 
 ---
  .../gerrit/httpd/raw/IndexHtmlUtil.java       | 13 +++-
@@ -102,10 +102,10 @@ index 3f2c2028ae..7861c007df 100644
      } catch (URISyntaxException | RestApiException e) {
        throw new IOException(e);
 diff --git a/java/com/google/gerrit/httpd/raw/StaticModule.java b/java/com/google/gerrit/httpd/raw/StaticModule.java
-index cac716feb9..6b17d8ea6f 100644
+index bb1eb92525..6b20c504d2 100644
 --- a/java/com/google/gerrit/httpd/raw/StaticModule.java
 +++ b/java/com/google/gerrit/httpd/raw/StaticModule.java
-@@ -223,11 +223,13 @@ public class StaticModule extends ServletModule {
+@@ -224,11 +224,13 @@ public class StaticModule extends ServletModule {
          @CanonicalWebUrl @Nullable String canonicalUrl,
          @GerritServerConfig Config cfg,
          GerritApi gerritApi,
@@ -195,7 +195,7 @@ index 0000000000..8fd2053ad0
 +  }
 +}
 diff --git a/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy b/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy
-index 93584c6b05..6e6a1e5401 100644
+index 11717fb8a4..1ae9046360 100644
 --- a/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy
 +++ b/resources/com/google/gerrit/httpd/raw/PolyGerritIndexHtml.soy
 @@ -33,10 +33,12 @@
@@ -213,5 +213,5 @@ index 93584c6b05..6e6a1e5401 100644
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">{\n}
  
 -- 
-2.29.2
+2.32.0
 
