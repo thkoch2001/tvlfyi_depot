@@ -46,6 +46,30 @@
       },
       "revId": "22facd311c848efa6ba3e48c1c7e7e123d61d615",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ce0ddc8_82b45d1a",
+        "filename": "ops/modules/www/deploys.tvl.fyi.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-28T11:08:52Z",
+      "side": 1,
+      "message": "Fine.",
+      "parentUuid": "36bac1d7_fd5e9eda",
+      "range": {
+        "startLine": 12,
+        "startChar": 25,
+        "endLine": 12,
+        "endChar": 49
+      },
+      "revId": "22facd311c848efa6ba3e48c1c7e7e123d61d615",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
