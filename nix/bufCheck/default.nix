@@ -3,7 +3,7 @@
 { depot, pkgs, ... }:
 
 pkgs.writeShellScriptBin "ci-buf-check" ''
-  ${depot.third_party.bufbuild}/bin/buf check lint --input "${depot.path}"
+  ${depot.third_party.bufbuild}/bin/buf check lint --input .
   # Report-only
-  ${depot.third_party.bufbuild}/bin/buf check breaking --input "${depot.path}" --against-input "${depot.path}/.git#branch=canon" || true
+  ${depot.third_party.bufbuild}/bin/buf check breaking --input "." --against-input "./.git#branch=canon" || true
 ''
