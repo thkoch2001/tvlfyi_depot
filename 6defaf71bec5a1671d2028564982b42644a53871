@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26ae145c_4b82aa27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-08-29T12:39:55Z",
+      "side": 1,
+      "message": "An alternative would be to use `BUILDKITE_BUILD_CHECKOUT_PATH` (and fallback to PWD, I guess?), but probably unnecessary…",
+      "revId": "6defaf71bec5a1671d2028564982b42644a53871",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
