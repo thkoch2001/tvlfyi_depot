@@ -1,6 +1,8 @@
-# This file defines the static pipeline which is uploaded in the
-# Buildkite admin interface. These steps run at the beginning of each
-# build and cause the dynamic pipeline generation to run.
+# This file defines the static Buildkite pipeline which attempts to
+# create the dynamic pipeline of all depot targets.
+#
+# If something fails during the creation of the pipeline, the fallback
+# is executed instead which will simply report an error to Gerrit.
 ---
 steps:
   - label: ":llama:"
@@ -12,4 +14,5 @@ steps:
       }
 
       nix-build -A ops.pipelines.depot -o depot.yaml --show-trace || fallback
+      buildkite-agent meta-data set 'failure' '0'
       buildkite-agent pipeline upload depot.yaml || fallback

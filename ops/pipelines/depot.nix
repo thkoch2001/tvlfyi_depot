@@ -75,15 +75,6 @@ let
   #
   # Pipeline steps need to stay in order.
   pipeline.steps =
-    # Zero the failure status
-    [
-      {
-        command = "buildkite-agent meta-data set 'failure' '0'";
-        label = ":buildkite:";
-      }
-      { wait = null; }
-    ]
-
     # Create build steps for each CI target
     ++ (map mkStep depot.ci.targets)
 
