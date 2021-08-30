@@ -78,13 +78,18 @@ in {
   # originally I generated a nix file containing a list of
   # characters, but infinisil uses a better way which I adapt
   # which is using builtins.readFile instead of import.
-  __generateAllChars = pkgs.writers.writeC "generate-all-chars" {} ''
-    #include <stdio.h>
+  __generateAllChars = pkgs.runCommandCC "generate-all-chars" {
+    source = ''
+      #include <stdio.h>
 
-    int main(void) {
-      for(int i = 1; i <= 0xff; i++) {
-        putchar(i);
+      int main(void) {
+        for(int i = 1; i <= 0xff; i++) {
+          putchar(i);
+        }
       }
-    }
+    '';
+    passAsFile = [ "source" ];
+  } ''
+    $CC -o "$out" -x c "$sourcePath"
   '';
 }
