@@ -49,7 +49,6 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
     ./0004-Add-titles-to-CLs-over-HTTP.patch
     ./0005-When-using-local-fonts-always-assume-Gerrit-is-mount.patch
     ./0006-Always-use-Google-Fonts.patch
-    ./0007-Keep-left-padding-on-account-chip-if-no-avatar-provi.patch
   ];
 
   bazelTarget = "release api-skip-javadoc";
