@@ -133,4 +133,10 @@
     email = "eugene.zemtsov@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$eAEjTm0+JD0+p0o/GA8JmQ$uRtHCT+B/DBNr1rlOcLlROrkYsMj2T9ns/E9Ep3gJ1A";
   }
+  {
+    username = "mdjnsn";
+    email = "mdj@mikejohnson.xyz";
+    displayName = "Mike Johnson";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$bHVoZ3VnMjNlMml1MjMyMzRsM2pnaGwyM2c0aGwyM2c$s7ks8ujqzsGhCNfN/wFISLf2tVHZSr5sGpu/6r/HbRQ";
+  }
 ]
