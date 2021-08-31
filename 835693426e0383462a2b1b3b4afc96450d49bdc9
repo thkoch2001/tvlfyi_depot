@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8de931d8_5092433e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-08-31T18:41:37Z",
+      "side": 1,
+      "message": "Approving, this patch was submitted via mail.",
+      "revId": "835693426e0383462a2b1b3b4afc96450d49bdc9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
