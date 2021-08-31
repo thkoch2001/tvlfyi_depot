@@ -137,6 +137,6 @@
     username = "mdjnsn";
     email = "mdj@mikejohnson.xyz";
     displayName = "Mike Johnson";
-    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$bHVoZ3VnMjNlMml1MjMyMzRsM2pnaGwyM2c0aGwyM2c$s7ks8ujqzsGhCNfN/wFISLf2tVHZSr5sGpu/6r/HbRQ";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$77+f5DFbuzs5myyIUN2nHg$xyXkRhIHFVaPMZUhxPk1uxMpLeEmU3BeyQjDsNPlJVw";
   }
 ]
