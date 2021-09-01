@@ -26,6 +26,10 @@ self: super: {
   emacsPackagesFor = emacs: (
     (super.emacsPackagesFor emacs).overrideScope' (eself: esuper: {
       tvlPackages = depot.tools.emacs-pkgs // depot.third_party.emacs;
+
+      # Use the notmuch from nixpkgs instead of from the Emacs
+      # overlay, to avoid versions being out of sync.
+      notmuch = super.notmuch.emacs;
     })
   );
 
