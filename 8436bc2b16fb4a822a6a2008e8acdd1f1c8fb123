@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a695cb71_10cedf2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-01T12:27:28Z",
+      "side": 1,
+      "message": "grfn doesn\u0027t use this and I confirmed it works, so lgtm",
+      "revId": "8436bc2b16fb4a822a6a2008e8acdd1f1c8fb123",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
