@@ -16,6 +16,24 @@
       "message": "same note here as on cl/3376",
       "revId": "04f2986431bbe08f0e7209c317966b32dff76059",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20467cd1_84721d66",
+        "filename": "third_party/lisp/npg/README",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-01T22:29:30Z",
+      "side": 1,
+      "message": "Done in cl/3269.",
+      "parentUuid": "f8a91225_862047da",
+      "revId": "04f2986431bbe08f0e7209c317966b32dff76059",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
