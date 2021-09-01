@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0967716_02df39a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-01T09:47:44Z",
+      "side": 1,
+      "message": "Hm, a few thoughts:\n\n1. I don\u0027t really like the use of hooks here. We already have hooks on the agent level and this makes things a little more confusing. Could be solved by duplicating the path or setting it as a Buildkite build variable.\n\n2. I\u0027m not sure if this is an improvement overall. Personally I\u0027m fine with the fallback to evaluation (GC currently only happens ~once per week). The evaluation fallback also makes it easier to distribute this to other machines if there are more agents (which would be a problem with this, I think?). What are your thoughts?",
+      "revId": "f7d48ef7fbf70d6691492a7d970dfdb45f0879f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
