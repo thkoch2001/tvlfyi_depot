@@ -57,7 +57,7 @@ let
     multiple-cursors
     nginx-mode
     nix-mode
-    notmuch # this comes from pkgs.third_party
+    notmuch
     paredit
     password-store
     pinentry
