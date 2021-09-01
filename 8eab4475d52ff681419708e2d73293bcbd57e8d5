@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04478d26_8614dde5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-09-01T22:11:32Z",
+      "side": 1,
+      "message": "not really reviewing the code obviously since it\u0027s vendored in.",
+      "revId": "8eab4475d52ff681419708e2d73293bcbd57e8d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a3de10_ec31eb14",
+        "filename": "third_party/lisp/sclf/README",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-09-01T22:11:32Z",
+      "side": 1,
+      "message": "can you add a note to this file indicating this was vendored in and linking to where it was vendored from?\n\nAlso, would you add yourself to OWNERS with inherit for this directory? I don\u0027t understand enough about this code to want to maintain it myself.",
+      "revId": "8eab4475d52ff681419708e2d73293bcbd57e8d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
