@@ -48,7 +48,6 @@ depot.nix.buildLisp.library {
   name = "closure-html";
 
   srcs = getSrcs [
-    "closure-html.asd"
     "src/defpack.lisp"
     "src/define-html-dtd.lisp"
     "src/glisp/util.lisp"
@@ -65,7 +64,6 @@ depot.nix.buildLisp.library {
   ];
 
   deps = [
-    (depot.nix.buildLisp.bundled "asdf")
     depot.third_party.lisp.flexi-streams
     depot.third_party.lisp.closure-common
   ];
