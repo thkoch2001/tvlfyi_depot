@@ -29,11 +29,10 @@ self: super: {
     })
   );
 
-  # Temporary fix for python3Packages.notmuch
-  # See https://github.com/NixOS/nixpkgs/pull/132592/
+  # dottime support for notmuch
   notmuch = super.notmuch.overrideAttrs(old: {
     passthru = old.passthru // {
-      pythonSourceRoot = "notmuch-${old.version}/bindings/python";
+      patches = old.patches ++ [ ./patches/notmuch-dottime.patch ];
     };
   });
 }
