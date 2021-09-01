@@ -33,6 +33,24 @@
       "message": "can you add a note to this file indicating this was vendored in and linking to where it was vendored from?\n\nAlso, would you add yourself to OWNERS with inherit for this directory? I don\u0027t understand enough about this code to want to maintain it myself.",
       "revId": "8eab4475d52ff681419708e2d73293bcbd57e8d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60344cd9_fb4ec6f7",
+        "filename": "third_party/lisp/sclf/README",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-01T22:28:51Z",
+      "side": 1,
+      "message": "Both done in CL/3268, please see if that checks out.",
+      "parentUuid": "64a3de10_ec31eb14",
+      "revId": "8eab4475d52ff681419708e2d73293bcbd57e8d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
