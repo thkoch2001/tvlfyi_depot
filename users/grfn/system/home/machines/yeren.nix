@@ -1,6 +1,7 @@
 { pkgs, lib, config, ... }:
 
 let
+  inherit (builtins) pathExists;
   laptopKeyboardId = "5";
 in
 
@@ -9,7 +10,7 @@ in
     ../platforms/linux.nix
     ../modules/common.nix
     ../modules/development/readyset.nix
-  ];
+  ] ++ (lib.optional (pathExists ../modules/private.nix) ../modules/private.nix);
 
   # for when hacking
   programs.home-manager.enable = true;
