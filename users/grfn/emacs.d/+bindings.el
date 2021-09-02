@@ -376,7 +376,7 @@ private/hlissner/snippets."
      :desc "Slack Unreads"         :n  "u" #'slack-select-unread-rooms
      :desc "Slack Threads"         :n  "r" #'slack-all-threads
 
-     :desc "Email"                 :n "m" #'notmuch-jump-search
+     :desc "Email"                 :n "m" #'notmuch-tree-jump-search
 
      (:desc "ERC" :prefix "e"
        :desc "Channel" :n "c" #'erc-switch-to-buffer)
