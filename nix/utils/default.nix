@@ -98,6 +98,12 @@ let
       then builtins.throw "${lib.generators.toPretty {} path} does not exist"
       else p;
 
+  /* Check whether the given path exists.
+
+     Type: path(-like) -> bool
+  */
+  pathExists = path: ! isNull (pathType path);
+
   /* Check whether the given path is a directory.
      Throws if the path in question doesn't exist.
 
@@ -124,6 +130,7 @@ in {
     drvTargets
     storePathName
     pathType
+    pathExists
     isDirectory
     isRegularFile
     isSymlink
