@@ -9,6 +9,7 @@
     cargo-expand
     cargo-flamegraph
     cargo-rr
+    cargo-udeps
     sccache
     evcxr
   ];
