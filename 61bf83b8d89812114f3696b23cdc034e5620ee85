@@ -16,6 +16,24 @@
       "message": "`inherit (builtins) pathExists;` should be sufficient, I think, and possibly with less edge cases. Or do they behave differently in some cases?\n\nI\u0027d be fine with reexposing it for consistency reasons.",
       "revId": "61bf83b8d89812114f3696b23cdc034e5620ee85",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86ff30af_5c4e8631",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-09-02T16:59:03Z",
+      "side": 1,
+      "message": "er... lol, I didn\u0027t even realize that existed.",
+      "parentUuid": "fb924eff_4aa90022",
+      "revId": "61bf83b8d89812114f3696b23cdc034e5620ee85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
