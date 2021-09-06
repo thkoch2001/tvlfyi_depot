@@ -147,6 +147,7 @@
 
 (use-package haskell-mode)
 (use-package urweb-mode)
+(use-package bqn-mode)
 (use-package yaml-mode)
 (use-package dockerfile-mode)
 (use-package sly

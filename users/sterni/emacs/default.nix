@@ -27,6 +27,7 @@ let
     epkgs.melpaPackages.elfeed
     epkgs.melpaPackages.magit
     epkgs.tvlPackages.tvl
+    epkgs.bqn-mode
   ]);
 in
 
