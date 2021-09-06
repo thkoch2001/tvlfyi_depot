@@ -147,6 +147,9 @@
 
 (use-package haskell-mode)
 (use-package urweb-mode)
+(use-package bqn-mode
+  :mode "\\.bqn\\'"
+  :custom bqn-mode-map-prefix "C-s-") ; probably rather using C-\
 (use-package yaml-mode)
 (use-package dockerfile-mode)
 (use-package sly

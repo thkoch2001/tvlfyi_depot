@@ -10,6 +10,7 @@ let
     epkgs.melpaPackages.evil-collection
     epkgs.melpaPackages.use-package
     # languages
+    epkgs.bqn-mode
     epkgs.elpaPackages.ada-mode
     epkgs.melpaPackages.adoc-mode
     epkgs.melpaPackages.dockerfile-mode
