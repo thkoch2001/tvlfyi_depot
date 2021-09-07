@@ -22,8 +22,14 @@ let
     "/clock" = {
       status = "OK";
       title = "clock";
+      /*
       content = ''
         It is ${toString builtins.currentTime}s since 1970-01-01 00:00 UTC.
+      '';
+      */
+      content = ''
+        Just imagine a dynamic example here. It's commented out
+        because it makes CI annoying.
       '';
     };
     "/coffee" = {
