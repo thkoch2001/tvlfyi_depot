@@ -51,8 +51,8 @@ in
   '';
 
   home.file.".agda/libraries".text = ''
-    ${config.home.homeDirectory}/code/agda-stdlib/standard-library.agda-lib
-    ${config.home.homeDirectory}/code/agda-categories/agda-categories.agda-lib
+    /home/grfn/code/agda-stdlib/standard-library.agda-lib
+    /home/grfn/code/agda-categories/agda-categories.agda-lib
   '';
 
 }
