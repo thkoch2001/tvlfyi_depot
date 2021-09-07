@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e21aaf50_3ab7b29b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-07T19:20:49Z",
+      "side": 1,
+      "message": "I believe this doesn\u0027t fix the issue. The files in `examples/` are just written to `$out` as is and not evaluated. The problem is most likely rather that we need to rely on `depot.path` to import the `web.bubblegum` library (which has some dependencies from depot unfortunately).",
+      "revId": "63307cc6f777c077a30a263f45299c91c7d48e84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
