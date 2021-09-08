@@ -58,10 +58,9 @@ let
       importedFile = import path;
       pathType = builtins.typeOf importedFile;
       imported =
-        assert assertMsg
-          (pathType == "lambda")
-          "readTree: trying to import ${toString path}, but it’s a ${pathType}, you need to make it a function like { depot, pkgs, ... }";
-        importedFile (argsFilter (argsWithPath args parts) parts);
+        if pathType != "lambda"
+        then builtins.throw "readTree: trying to import ${toString path}, but it’s a ${pathType}, you need to make it a function like { depot, pkgs, ... }"
+        else importedFile (argsFilter (argsWithPath args parts) parts);
     in if (isAttrs imported)
       then imported // (marker parts)
       else imported;
