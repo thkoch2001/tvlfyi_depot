@@ -21,6 +21,7 @@
         ("https://tazj.in/feed.atom" blog cool-and-nice)
         ("https://alyssa.is/feed.xml" blog cool-and-nice)
         ("https://eta.st/feed.xml" blog cool-and-nice)
+        ("https://h.eta.st/rss" cool-and-nice)
         ("https://spectrum-os.org/git/www/atom/bibliography.html" links blog)
         ("https://rachelbythebay.com/w/atom.xml" blog)
         ("http://evrl.com/feed.xml" blog)
