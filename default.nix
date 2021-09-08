@@ -60,6 +60,9 @@ let
       args = depotArgs;
       path = ./.;
       filter = depotArgsFilter;
+      scopedArgs = {
+        __findFile = _: _: throw "Do not import from NIX_PATH in the depot!";
+      };
     };
 
   # To determine build targets, we walk through the depot tree and
