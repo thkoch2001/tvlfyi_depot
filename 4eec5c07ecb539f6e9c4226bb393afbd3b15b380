@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91474e3e_ab291ada",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-08T22:24:58Z",
+      "side": 1,
+      "message": "This should solve the “purity” issue you were complaining about :)",
+      "revId": "4eec5c07ecb539f6e9c4226bb393afbd3b15b380",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
