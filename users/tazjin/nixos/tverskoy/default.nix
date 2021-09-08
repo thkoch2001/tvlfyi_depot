@@ -203,6 +203,14 @@ in lib.fix(self: {
     };
   };
 
+  # Set variables to enable EXWM-XIM
+  environment.sessionVariables = {
+    XMODIFIERS = "@im=exwm-xim";
+    GTK_IM_MODULE = "xim";
+    QT_IM_MODULE = "xim";
+    CLUTTER_IM_MODULE = "xim";
+  };
+
   # Automatically detect location to use for redshift
   location.provider = "geoclue2";
 
