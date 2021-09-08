@@ -6,7 +6,26 @@ let
     runExecline
     getBins
     utils
+    sparseTree
     ;
+
+  minimalDepot = sparseTree depot.path [
+    # general depot things
+    (depot.path + "/default.nix")
+    (depot.path + "/nix/readTree")
+    # nixpkgs for lib and packages
+    (depot.path + "/third_party/nixpkgs")
+    (depot.path + "/third_party/overlays")
+    # bubblegum and its dependencies
+    (depot.path + "/web/bubblegum")
+    (depot.path + "/nix/runExecline")
+    (depot.path + "/nix/utils")
+    (depot.path + "/nix/sparseTree")
+    # tvix docs for svg demo
+    (depot.path + "/tvix/docs")
+    # for blog.nix
+    (depot.path + "/users/sterni/nix")
+  ];
 
   statusCodes = {
     # 1xx
@@ -205,7 +224,7 @@ let
       ] ++ [
         "${bins.nint}"
         # always pass depot so scripts can use this library
-        "--arg depot '(import ${depot.path} {})'"
+        "--arg depot '(import ${minimalDepot} {})'"
       ]);
     in runExecline.local drvName {} [
       "importas" "out" "out"
