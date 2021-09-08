@@ -4,13 +4,14 @@
 ;; window-management (EXWM) as well as additional system-wide
 ;; commands.
 
-(require 's)
-(require 'f)
 (require 'dash)
 (require 'exwm)
 (require 'exwm-config)
 (require 'exwm-randr)
 (require 'exwm-systemtray)
+(require 'exwm-xim )
+(require 'f)
+(require 's)
 
 (defcustom tazjin--screen-lock-command "tazjin-screen-lock"
   "Command to execute for locking the screen."
@@ -42,16 +43,9 @@
   (shell-command tazjin--backlight-decrease-command)
   (message "Brightness decreased"))
 
-(defun set-xkb-layout (layout)
-  "Set the current X keyboard layout."
-
-  (shell-command (format "setxkbmap %s" layout))
-  (shell-command "setxkbmap -option caps:super")
-  (message "Set X11 keyboard layout to '%s'" layout))
-
 (defun lock-screen ()
   (interactive)
-  (set-xkb-layout "us")
+  (deactivate-input-method)
   (shell-command tazjin--screen-lock-command))
 
 (defun create-window-name ()
@@ -159,26 +153,10 @@
 (exwm-input-set-key (kbd "<XF86MonBrightnessUp>") #'brightness-up)
 (exwm-input-set-key (kbd "<XF86Display>") #'lock-screen)
 
-;; Shortcuts for switching between keyboard layouts
-(defmacro bind-xkb (lang key)
-  `(exwm-input-set-key (kbd (format "s-%s" ,key))
-                       (lambda ()
-                         (interactive)
-                         (set-xkb-layout ,lang))))
-
-(bind-xkb "us" "k u")
-(bind-xkb "de" "k d")
-(bind-xkb "no" "k n")
-(bind-xkb "ru" "k r")
-(bind-xkb "se" "k s")
-
-;; These are commented out because Emacs no longer starts (??) if
-;; they're set at launch.
-;;
-(bind-xkb "us" "л г")
-(bind-xkb "de" "л в")
-(bind-xkb "no" "л т")
-(bind-xkb "ru" "л к")
+;; Configuration of EXWM input method handling for X applications
+(exwm-xim-enable)
+(setq default-input-method "russian-computer")
+(push ?\C-\\ exwm-input-prefix-keys)
 
 ;; Line-editing shortcuts
 (exwm-input-set-simulation-keys
