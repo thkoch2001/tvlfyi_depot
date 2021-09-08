@@ -56,8 +56,10 @@ let
       };
     };
 
-    readTree' = import ./nix/readTree {
-      argsFilter = depotArgsFilter;
+    readDepot = depotArgs: import ./nix/readTree {} {
+      args = depotArgs;
+      path = ./.;
+      filter = depotArgsFilter;
     };
 
   # To determine build targets, we walk through the depot tree and
@@ -91,7 +93,7 @@ let
            (node.meta.targets or []))
     else [];
 
-in fix(self: (readTree' {
+in fix(self: (readDepot {
   depot = self;
 
   # Pass third_party as 'pkgs' (for compatibility with external
@@ -107,7 +109,7 @@ in fix(self: (readTree' {
   # Note that it is intended for exceptional circumstance, such as
   # debugging by bisecting nixpkgs.
   externalArgs = args;
-} ./.) // {
+}) // {
   # Make the path to the depot available for things that might need it
   # (e.g. NixOS module inclusions)
   path = ./.;
