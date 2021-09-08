@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "660d8c54_01da365e",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-08T22:31:01Z",
+      "side": 1,
+      "message": "Maybe time to make importWithMark accept an attribute set?",
+      "revId": "56555b2a14c4779910c2c16e74b02dbb54f8069b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc44275f_bf94707a",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-08T22:31:01Z",
+      "side": 1,
+      "message": "Wonder if the default should maybe be `{}`. In case a caller dynamically determines  `scopedArgs` and it could sometimes be `{}`, they wouldn\u0027t pay the price for `scopedImport` (if there\u0027s any) in such a case.\n\nNot a very important use case likely, so fine either way.",
+      "revId": "56555b2a14c4779910c2c16e74b02dbb54f8069b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
