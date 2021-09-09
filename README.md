@@ -58,6 +58,7 @@ configuration is tracked in `//ops/{modules,machines}`.
   software. Currently only SBCL is supported. Lisp programs in this repository
   are built using this library.
 * `//web/bubblegum` contains a CGI-based web framework written in Nix.
+* `//nix/nint`: A shebang-compatible interpreter wrapper for Nix.
 * `//tvix` contains initial work towards a modular architecture for Nix.
 * `//third_party/nix` contains [our fork][tvix] of the Nix package manager.
 
@@ -88,7 +89,6 @@ Some examples:
   [tazj.in](https://tazj.in)
 * `//users/grfn/xanthous`: A (WIP) TUI RPG, written in Haskell.
 * `//users/tazjin/emacs`: tazjin's Emacs & EXWM configuration
-* `//users/sterni/nint`: A shebang-compatible interpreter wrapper for Nix.
 * `//users/tazjin/finito`: A persistent finite-state machine library for Rust.
 
 # Licensing
