@@ -22,6 +22,30 @@
       },
       "revId": "12ddfe2b76a659ba592a2a95143dac0847881585",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0133f32d_b86bd200",
+        "filename": "web/bubblegum/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-09T15:57:50Z",
+      "side": 1,
+      "message": "Yes, I\u0027ve been thinking as well recently, but I don\u0027t think we can do it true readTree and (pure) evaluation. The most workable approach seems to be edef\u0027s depot-scanner, but it is a bit overzealous from my testing (I think it should be possible to filter / map the output appropriately, but I can\u0027t tell if it\u0027s actually feasible).",
+      "parentUuid": "fa0b1223_00ee2a65",
+      "range": {
+        "startLine": 12,
+        "startChar": 39,
+        "endLine": 12,
+        "endChar": 40
+      },
+      "revId": "12ddfe2b76a659ba592a2a95143dac0847881585",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
