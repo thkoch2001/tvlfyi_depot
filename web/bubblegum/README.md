@@ -2,7 +2,7 @@
 
 `bubblegum` is a CGI programming library for the Nix expression language.
 It provides a few helpers to make writing CGI scripts which are executable
-using [//users/sterni/nint](../../users/sterni/nint/README.md) convenient.
+using [//nix/nint](../../nix/nint/README.md) convenient.
 
 An example nix.cgi script looks like this (don't worry about the shebang
 too much, you can use `web.bubblegum.writeCGI` to set this up without

@@ -34,11 +34,6 @@ let
       # TODO(tazjin): Can this one be removed somehow?
       [ "ops" "nixos" ]
       [ "ops" "machines" "all-systems" ]
-
-      # //web/bubblegum has examples using //users/sterni, they should
-      # probably be in the user folder instead with a link there.
-      # TODO(sterni): Clean this up.
-      [ "web" "bubblegum" ]
     ]
     then args
     else args // {

@@ -7,6 +7,7 @@ let
     getBins
     utils
     sparseTree
+    nint
     ;
 
   minimalDepot = sparseTree depot.path [
@@ -186,7 +187,7 @@ let
     else "${scriptName}/${path}";
 
   bins = getBins pkgs.coreutils [ "env" "tee" "cat" "printf" "chmod" ]
-      // getBins depot.users.sterni.nint [ "nint" ];
+      // getBins nint [ "nint" ];
 
   /* Type: args -> either path derivation string -> derivation
   */
