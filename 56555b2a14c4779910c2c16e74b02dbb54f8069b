@@ -33,6 +33,24 @@
       "message": "Wonder if the default should maybe be `{}`. In case a caller dynamically determines  `scopedArgs` and it could sometimes be `{}`, they wouldn\u0027t pay the price for `scopedImport` (if there\u0027s any) in such a case.\n\nNot a very important use case likely, so fine either way.",
       "revId": "56555b2a14c4779910c2c16e74b02dbb54f8069b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "043af5b1_d31d70ba",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-09T11:36:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc44275f_bf94707a",
+      "revId": "56555b2a14c4779910c2c16e74b02dbb54f8069b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
