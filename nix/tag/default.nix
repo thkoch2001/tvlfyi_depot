@@ -43,8 +43,8 @@ let
   #   discrDef "smol" [
   #     { biggerFive = i: i > 5; }
   #     { negative = i: i < 0; }
-  #   ] -100
-  #   => { negative = 100; }
+  #   ] (-100)
+  #   => { negative = -100; }
   #   discrDef "smol" [
   #     { biggerFive = i: i > 5; }
   #     { negative = i: i < 0; }
