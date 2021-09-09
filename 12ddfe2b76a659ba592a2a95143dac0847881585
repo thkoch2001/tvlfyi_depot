@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa0b1223_00ee2a65",
+        "filename": "web/bubblegum/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-09T15:34:32Z",
+      "side": 1,
+      "message": "I always wonder if we can introspect this list somehow. Just to kick off the thought process, not for this CL ;)",
+      "range": {
+        "startLine": 12,
+        "startChar": 39,
+        "endLine": 12,
+        "endChar": 40
+      },
+      "revId": "12ddfe2b76a659ba592a2a95143dac0847881585",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
