@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36f73b38_1e9248b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-10T11:47:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "466723ff_91f6d80c",
+      "revId": "289cdc83426905cd861a6568fc169bb5c715cd84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e068ee8_0ab0d4a3",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-09-03T11:54:49Z",
       "side": 1,
       "message": "this will fail, nginx doesn\u0027t have permission to create things in /var\n\nI still think this should use systemd\u0027s tmpfiles mechanism",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "289cdc83426905cd861a6568fc169bb5c715cd84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c02ed7b3_7ddd8a10",
+        "filename": "ops/modules/www/deploys.tvl.fyi.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-10T11:47:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e068ee8_0ab0d4a3",
       "range": {
         "startLine": 15,
         "startChar": 0,
