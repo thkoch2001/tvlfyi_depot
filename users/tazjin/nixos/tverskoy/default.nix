@@ -18,6 +18,7 @@ config: let
 in lib.fix(self: {
   imports = [
     "${depot.third_party.impermanence}/nixos.nix"
+    "${depot.path + "/ops/modules/automatic-gc.nix"}"
     "${pkgs.home-manager.src}/nixos"
   ];
 
@@ -180,6 +181,15 @@ in lib.fix(self: {
         name = "exwm";
         start = "${depot.users.tazjin.emacs}/bin/tazjins-emacs";
       };
+    };
+
+    # Automatically collect garbage from the Nix store.
+    depot.automatic-gc = {
+      enable = true;
+      interval = "1 hour";
+      diskThreshold = 42; # GiB
+      maxFreed = 100; # GiB
+      preserveGenerations = "14d";
     };
   };
 
