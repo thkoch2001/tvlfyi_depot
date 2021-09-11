@@ -34,7 +34,7 @@ git -C "$worktree_dir" checkout "$new_rev"
 current=$(nix show-derivation /run/current-system | jq -r 'keys | .[0]')
 new=$(nix-instantiate -A ops.nixos.whitbySystem "$worktree_dir")
 
-diff_filename="$(drv_hash "$current")..$(drv_hash "$new")"
+diff_filename="$(drv_hash "$current")..$(drv_hash "$new").html"
 nix-diff "$current" "$new" --color always \
     | ansi2html \
     >| "$HTML_ROOT/diff/$diff_filename"
