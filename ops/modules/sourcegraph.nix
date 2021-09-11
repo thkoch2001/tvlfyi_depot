@@ -45,7 +45,8 @@ in {
         "/var/lib/sourcegraph/data:/var/opt/sourcegraph"
       ];
 
-      environment.SRC_SYNTECT_SERVER = "http://172.17.0.1:${toString cfg.cheddarPort}";
+      # TODO(tazjin): Figure out what changed in the protocol.
+      # environment.SRC_SYNTECT_SERVER = "http://172.17.0.1:${toString cfg.cheddarPort}";
 
       # Sourcegraph needs a higher nofile limit, it logs warnings
       # otherwise (unclear whether it actually affects the service).
