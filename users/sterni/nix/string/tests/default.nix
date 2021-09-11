@@ -56,10 +56,17 @@ let
       }))
   ];
 
+  f = "f";
+  testPrintf = it "prints f" [
+    (assertEq "basic %s usage" "print ${f}" (string.printf "print %s" f))
+    (assertEq "% escaping" "100%" (string.printf "100%%"))
+  ];
+
 in
   runTestsuite "nix.string" [
     testTakeDrop
     testIndexing
     testFinding
     testMatch
+    testPrintf
   ]
