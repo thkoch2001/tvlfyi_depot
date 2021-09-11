@@ -38,6 +38,7 @@ diff_filename="$(drv_hash "$current")..$(drv_hash "$new").html"
 nix-diff "$current" "$new" --color always \
     | ansi2html \
     >| "$HTML_ROOT/diff/$diff_filename"
+chmod a+r "$HTML_ROOT/diff/$diff_filename"
 
 echo "#tvl whitby is being deployed! system diff: $URL_BASE/$diff_filename" \
     | nc -w 5 -N localhost "$IRCCAT_PORT"
