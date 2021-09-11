@@ -11,8 +11,10 @@ let
 
   inherit (depot.nix.utils)
     isDirectory
+    realPathIsDirectory
     isRegularFile
     isSymlink
+    pathType
     storePathName
     ;
 
@@ -29,6 +31,13 @@ let
       (isDirectory ./symlink-directory) false)
     (assertUtilsPred "file not isDirectory"
       (isDirectory ./directory/file) false)
+    # realPathIsDirectory
+    (assertUtilsPred "directory realPathIsDirectory"
+      (realPathIsDirectory ./directory) true)
+    (assertUtilsPred "symlink to directory realPathIsDirectory"
+      (realPathIsDirectory ./symlink-directory) true)
+    (assertUtilsPred "realPathIsDirectory resolves chained symlinks"
+      (realPathIsDirectory ./symlink-symlink-directory) true)
     # isRegularFile
     (assertUtilsPred "file isRegularFile"
       (isRegularFile ./directory/file) true)
@@ -52,11 +61,26 @@ let
     # missing files throw
     (assertThrows "isDirectory throws on missing file"
       (isDirectory ./does-not-exist))
+    (assertThrows "realPathIsDirectory throws on missing file"
+      (realPathIsDirectory ./does-not-exist))
     (assertThrows "isRegularFile throws on missing file"
       (isRegularFile ./does-not-exist))
     (assertThrows "isSymlink throws on missing file"
       (isSymlink ./does-not-exist))
   ]);
+
+  symlinkPathTypeTests = it "correctly judges symlinks" [
+    (assertEq "symlinks to directories are detected correcty"
+      ((pathType ./symlink-directory).symlink or null) "directory")
+    (assertEq "symlinks to symlinks to directories are detected correctly"
+      ((pathType ./symlink-symlink-directory).symlink or null) "directory")
+    (assertEq "symlinks to files are detected-ish"
+      ((pathType ./symlink-file).symlink or null) "regular-or-missing")
+    (assertEq "symlinks to symlinks to files are detected-ish"
+      ((pathType ./symlink-symlink-file).symlink or null) "regular-or-missing")
+    (assertEq "symlinks to nowhere are not distinguished from files"
+      ((pathType ./missing).symlink or null) "regular-or-missing")
+  ];
 
   cheddarStorePath =
     builtins.unsafeDiscardStringContext depot.tools.cheddar.outPath;
@@ -75,5 +99,6 @@ in
 
 runTestsuite "nix.utils" [
   pathPredicates
+  symlinkPathTypeTests
   storePathNameTests
 ]
