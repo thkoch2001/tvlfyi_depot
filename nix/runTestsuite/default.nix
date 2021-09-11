@@ -38,7 +38,7 @@ let
     ;
 
   bins = depot.nix.getBins pkgs.coreutils [ "printf" ]
-      // depot.nix.getBins pkgs.s6-portable-utils [ "s6-touch" ];
+      // depot.nix.getBins pkgs.s6-portable-utils [ "s6-touch" "s6-false" ];
 
   # Returns true if the given expression throws when `deepSeq`-ed
   throws = expr:
@@ -157,10 +157,13 @@ let
         };
         goodIts = partitionTests (it: (goodIt it).asserts.err == []);
         res = goodIts itResults;
+        prettyRes = lib.generators.toPretty {} res;
       in
         if res.err == []
         then depot.nix.runExecline.local "testsuite-${name}-successful" {} [
           "importas" "out" "out"
+          # force derivation to rebuild if test case list changes
+          "ifelse" [ bins.s6-false ] [ bins.printf "" prettyRes ]
           "if" [ bins.printf "%s\n" "testsuite ${name} successful!" ]
           bins.s6-touch "$out"
         ]
@@ -169,7 +172,7 @@ let
           "if" [
             bins.printf "%s\n%s\n"
               "testsuite ${name} failed!"
-              (lib.generators.toPretty {} res)
+              prettyRes
           ]
           "exit" "1"
         ]);
