@@ -11,6 +11,7 @@ let
 
   inherit (depot.nix.utils)
     isDirectory
+    realPathIsDirectory
     isRegularFile
     isSymlink
     ;
@@ -28,6 +29,13 @@ let
       (isDirectory ./symlink-directory) false)
     (assertUtilsPred "file not isDirectory"
       (isDirectory ./directory/file) false)
+    # realPathIsDirectory
+    (assertUtilsPred "directory realPathIsDirectory"
+      (realPathIsDirectory ./directory) true)
+    (assertUtilsPred "symlink to directory realPathIsDirectory"
+      (realPathIsDirectory ./symlink-directory) true)
+    (assertUtilsPred "realPathIsDirectory resolves chained symlinks"
+      (realPathIsDirectory ./symlink-symlink-directory) true)
     # isRegularFile
     (assertUtilsPred "file isRegularFile"
       (isRegularFile ./directory/file) true)
@@ -51,6 +59,8 @@ let
     # missing files throw
     (assertThrows "isDirectory throws on missing file"
       (isDirectory ./does-not-exist))
+    (assertThrows "realPathIsDirectory throws on missing file"
+      (realPathIsDirectory ./does-not-exist))
     (assertThrows "isRegularFile throws on missing file"
       (isRegularFile ./does-not-exist))
     (assertThrows "isSymlink throws on missing file"
