@@ -39,4 +39,7 @@ self: super: {
       patches = old.patches ++ [ ./patches/notmuch-dottime.patch ];
     };
   });
+
+  # Use latest SBCL, nixpkgs hasn't upgraded yet
+  sbcl = self.sbcl_2_1_8;
 }
