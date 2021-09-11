@@ -8,7 +8,7 @@
   config = {
     # Ensure the directory for deployment diffs exists.
     systemd.tmpfiles.rules = [
-      "d /var/html/deploys.tvl.fyi 0755 nginx nginx -"
+      "d /var/html/deploys.tvl.fyi/diff 0755 nginx nginx -"
     ];
 
     services.nginx.virtualHosts."deploys.tvl.fyi" = {
