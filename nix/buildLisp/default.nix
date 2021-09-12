@@ -310,9 +310,9 @@ let
                                ;; Filter out everything prior to the `--` we
                                ;; insert in the wrapper to prevent SBCL from
                                ;; parsing arguments at startup
-                               (replace sb-ext:*posix-argv*
-                                        (cdr (member "--" sb-ext:*posix-argv*
-                                                     :test #'string=)))
+                               (setf sb-ext:*posix-argv*
+                                     (delete "--" sb-ext:*posix-argv*
+                                             :test #'string= :count 1))
                                (${main}))
                              :purify t))
       '';
@@ -552,10 +552,9 @@ let
                               ;; Filter out everything prior to the `--` we
                               ;; insert in the wrapper to prevent SBCL from
                               ;; parsing arguments at startup
-                              (replace ccl:*command-line-argument-list*
-                                       (cdr (member "--"
-                                                    ccl:*command-line-argument-list*
-                                                    :test #'string=)))
+                              (setf ccl:*command-line-argument-list*
+                                    (delete "--" ccl:*command-line-argument-list*
+                                                 :test #'string= :count 1))
                               (${main}))
                             :mode #o755
                             ;; TODO(sterni): use :native t on macOS
