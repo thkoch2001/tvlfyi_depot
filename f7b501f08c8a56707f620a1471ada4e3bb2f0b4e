@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60a47961_325b70ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-13T09:55:23Z",
+      "side": 1,
+      "message": "Some improvements to the tag library that make the examples easier.",
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "886d8e3e_e31753d1",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-13T09:55:23Z",
+      "side": 1,
+      "message": "The `?`-syntax for tags is cute, although it kinda depends on the internal representation of tags.\n\n idk if it would be better to have a domain-specific function like `tag.isTag`, otoh I don’t think we can gain much by doing that?",
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffcd37f8_814f923e",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-13T09:55:23Z",
+      "side": 1,
+      "message": "hrm. now I feel like we should really have a function for this.\n\nSomething like \n\n```\nmatchDef false {\n  symlink \u003d s: s \u003d\u003d \"directory\";\n  directory \u003d true;\n}\n```",
+      "range": {
+        "startLine": 103,
+        "startChar": 37,
+        "endLine": 103,
+        "endChar": 84
+      },
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a7dde09_8128b77f",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-13T09:55:23Z",
+      "side": 1,
+      "message": "This would need a `tag.tagName`",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 55
+      },
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
