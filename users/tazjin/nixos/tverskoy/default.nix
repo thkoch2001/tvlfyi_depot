@@ -204,7 +204,7 @@ in lib.fix(self: {
   users.users.tazjin = {
     isNormalUser = true;
     createHome = true;
-    extraGroups = [ "wheel" "networkmanager" "video" ];
+    extraGroups = [ "wheel" "networkmanager" "video" "adbusers" ];
     uid = 1000;
     shell = pkgs.fish;
     initialHashedPassword = "$6$d3FywUNCuZnJ4l.$ZW2ul59MLYon1v1xhC3lTJZfZ91lWW6Tpi13MpME0cJcYZNrsx7ABdgQRn.K05awruG2Y9ARAzURnmiJ31WTS1";
@@ -216,6 +216,7 @@ in lib.fix(self: {
     ssh.startAgent = true;
     mosh.enable = true;
     steam.enable = true;
+    adb.enable = true;
 
     # Required by impermanence
     fuse.userAllowOther = true;
