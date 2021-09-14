@@ -11,10 +11,10 @@ TARGET_TOOL=$(basename "$0")
 
 case "${TARGET_TOOL}" in
   age)
-    attr="third_party.age"
+    attr="third_party.nixpkgs-age"
     ;;
   age-keygen)
-    attr="third_party.age"
+    attr="third_party.nixpkgs.age"
     ;;
   depot-build)
     attr="tools.depot-build"
@@ -32,13 +32,13 @@ case "${TARGET_TOOL}" in
     attr="tools.hash-password"
     ;;
   kontemplate)
-    attr="kontemplate"
+    attr="ops.kontemplate"
     ;;
   meson)
-    attr="third_party.meson"
+    attr="third_party.nixpkgs.meson"
     ;;
   ninja)
-    attr="third_party.ninja"
+    attr="third_party.nixpkgs.ninja"
     ;;
   nint)
     attr="nix.nint"
@@ -49,14 +49,11 @@ case "${TARGET_TOOL}" in
   rebuild-system)
     attr="ops.nixos.rebuild-system"
     ;;
-  rebuilder)
-    attr="users.tazjin.nixos.rebuilder"
-    ;;
   rink)
-    attr="third_party.rink"
+    attr="third_party.nixpkgs.rink"
     ;;
   stern)
-    attr="third_party.stern"
+    attr="third_party.nixpkgs.stern"
     ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
