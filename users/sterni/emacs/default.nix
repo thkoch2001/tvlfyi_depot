@@ -19,6 +19,7 @@ let
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.sly
     epkgs.melpaPackages.yaml-mode
+    epkgs.rust-mode
     epkgs.urweb-mode
     # misc
     epkgs.melpaPackages.hl-todo
