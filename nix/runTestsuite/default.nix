@@ -140,23 +140,13 @@ let
   runTestsuite = defun [ string (list ItResult) drv ]
     (name: itResults:
       let
-        goodAss = ass: {
-          good = AssertResult.match ass {
-            yep = _: true;
-            nope = _: false;
-          };
-          x = ass;
+        goodAss = ass: AssertResult.match ass {
+          yep = _: true;
+          nope = _: false;
         };
-        goodIt = it: {
-          inherit (it) it-desc;
-          asserts = partitionTests (ass:
-            AssertResult.match ass {
-              yep = _: true;
-              nope = _: false;
-            }) it.asserts;
-        };
-        goodIts = partitionTests (it: (goodIt it).asserts.err == []);
-        res = goodIts itResults;
+        res = partitionTests (it:
+          (partitionTests goodAss it.asserts).err == []
+        ) itResults;
         prettyRes = lib.generators.toPretty {} res;
       in
         if res.err == []
