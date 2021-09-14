@@ -24,7 +24,7 @@ let
       val = null;
     };
 
-  # like `isTag`, but throws the error message if it is not a tag.
+  # like `verifyTag`, but throws the error message if it is not a tag.
   assertIsTag = tag:
     let res = verifyTag tag; in
     assert lib.assertMsg res.isTag res.errmsg;
