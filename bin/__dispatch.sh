@@ -40,6 +40,9 @@ case "${TARGET_TOOL}" in
   ninja)
     attr="third_party.ninja"
     ;;
+  nint)
+    attr="nix.nint"
+    ;;
   perf-flamegraph)
     attr="tools.perf-flamegraph"
     ;;
