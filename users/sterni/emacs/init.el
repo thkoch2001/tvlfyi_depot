@@ -152,6 +152,7 @@
   :custom bqn-mode-map-prefix "C-s-") ; probably rather using C-\
 (use-package yaml-mode)
 (use-package dockerfile-mode)
+(use-package rust-mode)
 (use-package sly
   :after evil
   :hook ((sly-mrepl-mode . (lambda () (rainbow-delimiters-mode-enable))))
