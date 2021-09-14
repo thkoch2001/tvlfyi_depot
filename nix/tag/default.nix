@@ -24,6 +24,18 @@ let
       val = null;
     };
 
+  # Returns the tag name of a given tag attribute set.
+  # Throws if the tag is invalid.
+  #
+  # Type: tag -> string
+  tagName = tag: (assertIsTag tag).name;
+
+  # Returns the tagged value of a given tag attribute set.
+  # Throws if the tag is invalid.
+  #
+  # Type: tag -> any
+  tagValue = tag: (assertIsTag tag).val;
+
   # like `verifyTag`, but throws the error message if it is not a tag.
   assertIsTag = tag:
     let res = verifyTag tag; in
@@ -139,7 +151,8 @@ let
 in {
    inherit
      verifyTag
-     assertIsTag
+     tagName
+     tagValue
      discr
      discrDef
      match
