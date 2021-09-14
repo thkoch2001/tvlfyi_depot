@@ -14,6 +14,7 @@ let
     realPathIsDirectory
     isRegularFile
     isSymlink
+    storePathName
     ;
 
   assertUtilsPred = msg: act: exp: [
@@ -66,8 +67,23 @@ let
     (assertThrows "isSymlink throws on missing file"
       (isSymlink ./does-not-exist))
   ]);
+
+  cheddarStorePath =
+    builtins.unsafeDiscardStringContext depot.tools.cheddar.outPath;
+
+  storePathNameTests = it "it correctly gets the basename of a store path" [
+    (assertEq "base name of a derivation"
+      (storePathName depot.tools.cheddar) depot.tools.cheddar.name)
+    (assertEq "base name of a store path string"
+      (storePathName cheddarStorePath) depot.tools.cheddar.name)
+    (assertEq "base name of a path within a store path"
+      (storePathName "${cheddarStorePath}/bin/cheddar") "cheddar")
+    (assertEq "base name of a path"
+      (storePathName ../default.nix) "default.nix")
+  ];
 in
 
 runTestsuite "nix.utils" [
   pathPredicates
+  storePathNameTests
 ]
