@@ -16,6 +16,24 @@
       "message": "I’d unexport `assertIsTag` since it’s just an implementation detail.",
       "revId": "9aa7e5eb5f6b75987d9974697f0a7acf11dd1eb8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "840ffc16_51ce9a71",
+        "filename": "nix/tag/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-14T13:58:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13c59a77_b947e209",
+      "revId": "9aa7e5eb5f6b75987d9974697f0a7acf11dd1eb8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
