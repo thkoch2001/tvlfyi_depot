@@ -15,8 +15,16 @@ to the following calling convention:
     program name at `builtins.head argv`.
   * Extra arguments can be manually passed as described below.
 
-* The return value should always be a string (throwing is also okay)
-  which is printed to stdout by `nint`.
+* The return value must either be
+
+  * A string which is rendered to `stdout`.
+
+  * An attribute set with the following optional attributes:
+
+    * `stdout`: A string that's rendered to `stdout`
+    * `stderr`: A string that's rendered to `stderr`
+    * `exit`: A number which is used as an exit code.
+      If missing, nint always exits with 0 (or equivalent).
 
 ## Usage
 
