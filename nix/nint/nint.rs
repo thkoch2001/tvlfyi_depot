@@ -3,7 +3,7 @@ extern crate serde_json;
 use serde_json::Value;
 use std::ffi::OsString;
 use std::os::unix::ffi::{OsStringExt, OsStrExt};
-use std::io::{Error, ErrorKind, Write};
+use std::io::{Error, ErrorKind, Write, stdout, stderr};
 use std::process::Command;
 
 fn render_nix_string(s: &OsString) -> OsString {
@@ -99,10 +99,10 @@ fn main() -> std::io::Result<()> {
                           .output()?;
 
         match serde_json::from_slice(&run.stdout[..]) {
-            Ok(Value::String(s)) => Ok(print!("{}", s)),
+            Ok(Value::String(s)) => stdout().write_all(s.as_bytes()),
             Ok(_) => Err(Error::new(ErrorKind::Other, "output must be a string")),
             _ => {
-                std::io::stderr().write_all(&run.stderr[..]);
+                stderr().write_all(&run.stderr[..]);
                 Err(Error::new(ErrorKind::Other, "internal nix error"))
             },
         }
