@@ -39,7 +39,7 @@ let
   # like `verifyTag`, but throws the error message if it is not a tag.
   assertIsTag = tag:
     let res = verifyTag tag; in
-    assert lib.assertMsg res.isTag res.errmsg;
+    assert res.isTag || throw res.errmsg;
     { inherit (res) name val; };
 
 
