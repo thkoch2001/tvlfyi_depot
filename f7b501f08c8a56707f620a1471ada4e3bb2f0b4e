@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbe2c934_7803c97b",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-14T14:07:18Z",
+      "side": 1,
+      "message": "IMO the strength of //nix/tag is precisely this internal structure which allows us to use the ergonomic nix idioms like foo ? bar and foo.bar or null \u003d\u003d \"foo\". \n\nHiding this behind an API would make working with tags much more annoying.",
+      "parentUuid": "886d8e3e_e31753d1",
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ffcd37f8_814f923e",
         "filename": "nix/utils/default.nix",
         "patchSetId": 4
@@ -71,6 +89,30 @@
       "writtenOn": "2021-09-13T09:55:23Z",
       "side": 1,
       "message": "This would need a `tag.tagName`",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 55
+      },
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fb84d6b_9032841a",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-14T14:07:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a7dde09_8128b77f",
       "range": {
         "startLine": 114,
         "startChar": 0,
