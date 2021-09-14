@@ -14,6 +14,7 @@ let
     realPathIsDirectory
     isRegularFile
     isSymlink
+    pathType
     storePathName
     ;
 
@@ -68,6 +69,19 @@ let
       (isSymlink ./does-not-exist))
   ]);
 
+  symlinkPathTypeTests = it "correctly judges symlinks" [
+    (assertEq "symlinks to directories are detected correcty"
+      ((pathType ./symlink-directory).symlink or null) "directory")
+    (assertEq "symlinks to symlinks to directories are detected correctly"
+      ((pathType ./symlink-symlink-directory).symlink or null) "directory")
+    (assertEq "symlinks to files are detected-ish"
+      ((pathType ./symlink-file).symlink or null) "regular-or-missing")
+    (assertEq "symlinks to symlinks to files are detected-ish"
+      ((pathType ./symlink-symlink-file).symlink or null) "regular-or-missing")
+    (assertEq "symlinks to nowhere are not distinguished from files"
+      ((pathType ./missing).symlink or null) "regular-or-missing")
+  ];
+
   cheddarStorePath =
     builtins.unsafeDiscardStringContext depot.tools.cheddar.outPath;
 
@@ -85,5 +99,6 @@ in
 
 runTestsuite "nix.utils" [
   pathPredicates
+  symlinkPathTypeTests
   storePathNameTests
 ]
