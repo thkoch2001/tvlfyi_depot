@@ -5,6 +5,7 @@ use std::ffi::OsString;
 use std::os::unix::ffi::{OsStringExt, OsStrExt};
 use std::io::{Error, ErrorKind, Write, stdout, stderr};
 use std::process::Command;
+use std::convert::{TryFrom};
 
 fn render_nix_string(s: &OsString) -> OsString {
     let mut rendered = Vec::new();
@@ -38,6 +39,26 @@ fn render_nix_list(arr: &[OsString]) -> OsString {
     rendered.extend(b"]");
 
     OsString::from_vec(rendered)
+}
+
+/// Slightly overkill helper macro which takes a `Map<String, Value>` obtained
+/// from `Value::Object` and an output name (`stderr` or `stdout`) as an
+/// identifier. If a value exists for the given output in the object it gets
+/// written to the appropriate output.
+macro_rules! handle_set_output {
+    ($map_name:ident, $output_name:ident) => {
+        match $map_name.get(stringify!($output_name)) {
+            Some(Value::String(s)) =>
+                $output_name().write_all(s.as_bytes()),
+            Some(_) => Err(
+                Error::new(
+                    ErrorKind::Other,
+                    format!("Attribute {} must be a string!", stringify!($output_name)),
+                )
+            ),
+            None => Ok(()),
+        }
+    }
 }
 
 fn main() -> std::io::Result<()> {
@@ -100,7 +121,31 @@ fn main() -> std::io::Result<()> {
 
         match serde_json::from_slice(&run.stdout[..]) {
             Ok(Value::String(s)) => stdout().write_all(s.as_bytes()),
-            Ok(_) => Err(Error::new(ErrorKind::Other, "output must be a string")),
+            Ok(Value::Object(m)) => {
+                handle_set_output!(m, stdout)?;
+                handle_set_output!(m, stderr)?;
+
+                match m.get("exit") {
+                    Some(Value::Number(n)) => {
+                        let code = n.as_i64().and_then(|v| i32::try_from(v).ok());
+
+                        match code {
+                            Some(i) => std::process::exit(i),
+                            None => Err(
+                                Error::new(
+                                    ErrorKind::Other,
+                                    "Attribute exit is not an i32"
+                                )
+                            ),
+                        }
+                    },
+                    Some(_) => Err(
+                        Error::new(ErrorKind::Other, "exit must be a number")
+                    ),
+                    None => Ok(()),
+                }
+            },
+            Ok(_) => Err(Error::new(ErrorKind::Other, "output must be a string or an object")),
             _ => {
                 stderr().write_all(&run.stderr[..]);
                 Err(Error::new(ErrorKind::Other, "internal nix error"))
