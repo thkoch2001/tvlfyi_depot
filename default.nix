@@ -11,6 +11,7 @@ let
     elem
     elemAt
     filter
+    getAttr
     ;
 
   # This definition of fix is identical to <nixpkgs>.lib.fix, but the global
@@ -79,13 +80,14 @@ let
       # Include the node itself if it is eligible.
       (if eligible node then [ node ] else [])
       # Include eligible children of the node
-      ++ concatMap gather (attrValues node)
+      ++ concatMap gather (map (attr: getAttr attr node) node.__readTreeChildren)
       # Include specified sub-targets of the node
       ++ filter eligible (map
            (k: (node."${k}" or {}) // {
              # Keep the same tree location, but explicitly mark this
              # node as a subtarget.
              __readTree = node.__readTree;
+             __readTreeChildren = [];
              __subtarget = k;
            })
            (node.meta.targets or []))
