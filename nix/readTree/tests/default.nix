@@ -2,7 +2,7 @@
 
 let
   inherit (depot.nix.runTestsuite)
-    runTestsuite
+    runNintTestsuite
     it
     assertEq
     assertThrows
@@ -97,7 +97,7 @@ let
     #   (depot.nix.readTree {} ./test-wrong-no-dots).no-dots-in-function)
   ];
 
-in runTestsuite "readTree" [
+in runNintTestsuite "readTree" [
   example
   traversal-logic
   wrong
