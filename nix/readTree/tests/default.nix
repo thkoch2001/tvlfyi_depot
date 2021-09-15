@@ -2,7 +2,7 @@
 
 let
   inherit (depot.nix.runTestsuite)
-    runTestsuite
+    runNintTestsuite
     it
     assertEq
     assertThrows
@@ -119,7 +119,7 @@ let
       read-markers.directory-marked.nested.__readTreeChildren [ ])
   ];
 
-in runTestsuite "readTree" [
+in runNintTestsuite "readTree" [
   example
   traversal-logic
   wrong

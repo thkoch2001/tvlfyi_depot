@@ -26,9 +26,8 @@ let
       then "${label}:${target.__subtarget}"
       else label;
 
-  # Create a pipeline step from a single target.
-  mkStep = target: {
-    command = let
+  mkDrvCommand = target:
+    let
       drvPath = builtins.unsafeDiscardStringContext target.drvPath;
     in lib.concatStringsSep " " [
       # First try to realise the drvPath of the target so we don't evaluate twice.
@@ -42,7 +41,41 @@ let
       # file is missing.
       "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
     ];
-    label = ":nix: ${mkLabel target}";
+
+  mkNintCommand = target:
+    let
+      pathFragment = lib.concatStringsSep "/" target.__readTree;
+      paths = builtins.filter (p: builtins.pathExists (depot.path + "/${p}")) [
+        "${pathFragment}/default.nix"
+        "${pathFragment}.nix"
+      ];
+    in
+      if paths == []
+      then throw "Found no nix file for target ${pathFragment}"
+      else if  target ? __subtarget
+      then throw "nint testsuites don't support subtargets like ${mkLabel target}"
+      else lib.concatStringsSep " " [
+        "./bin/nint"
+        "--arg" "depot" "'import ./. {}'"
+        "--arg" "pkgs" "'(import ./. {}).third_party.nixpkgs'"
+        "--arg" "lib" "'(import ./. {}).third_party.nixpkgs.lib'"
+        "./${builtins.head paths}"
+      ];
+
+  # Create a pipeline step from a single target.
+  mkStep = target: {
+    command =
+      if target.meta.isNintTestsuite or false
+      then mkNintCommand target
+      else mkDrvCommand target;
+
+    label =
+      let
+        emoji =
+          if target.meta.isNintTestsuite or false
+          then ":test_tube:"
+          else ":nix:";
+      in "${emoji} ${mkLabel target}";
 
     # Skip build steps if their out path has already been built.
     skip = let
@@ -51,6 +84,8 @@ let
         (getEnv "BUILDKITE_BUILD_ID" != "") &&
         # Always build everything for the canon branch.
         (getEnv "BUILDKITE_BRANCH" != "refs/heads/canon") &&
+        # Never skip nint test suites since they are not executed at eval time
+        !(target.meta.isNintTestsuite or false) &&
         # Discard string context to avoid realising the store path during
         # pipeline construction.
         (pathExists (unsafeDiscardStringContext target.outPath));

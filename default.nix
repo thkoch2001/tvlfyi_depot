@@ -66,7 +66,14 @@ let
   # Any build target that contains `meta.ci = false` will be skipped.
 
   # Is this tree node eligible for build inclusion?
-  eligible = node: (node ? outPath) && (node.meta.ci or true);
+  eligible = node:
+    # CI is enabled
+    (node.meta.ci or true) && (
+      # Is a derivation
+      (node ? outPath)
+      # Is a test suite executable using //nix/nint
+      || (node.meta.isNintTestsuite or false)
+    );
 
 in readTree.fix(self: (readDepot {
   depot = self;
@@ -106,6 +113,6 @@ in readTree.fix(self: (readDepot {
   # Derivation that gcroots all depot targets.
   ci.gcroot = self.third_party.nixpkgs.symlinkJoin {
     name = "depot-gcroot";
-    paths = self.ci.targets;
+    paths = builtins.filter (target: target ? outPath) self.ci.targets;
   };
 })
