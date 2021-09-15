@@ -26,13 +26,8 @@ let
       then "${label}:${target.__subtarget}"
       else label;
 
-  # Create a pipeline step from a single target.
-  #
-  # If the build fails, Buildkite metadata is updated to mark the
-  # pipeline as failed. Buildkite has a concept of a failed pipeline
-  # regardless, but this data is not accessible.
-  mkStep = target: {
-    command = let
+  mkDrvCommand = target:
+    let
       drvPath = builtins.unsafeDiscardStringContext target.drvPath;
     in lib.concatStringsSep " " [
       # First try to realise the drvPath of the target so we don't evaluate twice.
@@ -47,7 +42,43 @@ let
       "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
       "|| (buildkite-agent meta-data set 'failure' '1'; exit 1)"
     ];
-    label = ":nix: ${mkLabel target}";
+
+  mkNintCommand = target:
+    let
+      pathFragment = lib.concatStringsSep "/" target.__readTree;
+      paths = builtins.filter builtins.pathExists (
+        builtins.map (p: depot.path + p) [
+          "/${pathFragment}/default.nix"
+          "/${pathFragment}.nix"
+        ]
+      );
+    in assert paths != [] || throw "Found no nix file for target ${pathFragment}";
+      lib.concatStringsSep " " [
+        "./bin/nint"
+        "--arg" "depot" "'import ./. {}'"
+        "--arg" "pkgs" "'(import ./. {}).third_party.nixpkgs'"
+        "--arg" "lib" "'(import ./. {}).third_party.nixpkgs.lib'"
+        (toString (builtins.head paths))
+      ];
+
+  # Create a pipeline step from a single target.
+  #
+  # If the build fails, Buildkite metadata is updated to mark the
+  # pipeline as failed. Buildkite has a concept of a failed pipeline
+  # regardless, but this data is not accessible.
+  mkStep = target: {
+    command =
+      if target.meta.isNintTestsuite or false
+      then mkNintCommand target
+      else mkDrvCommand target;
+
+    label =
+      let
+        emoji =
+          if target.meta.isNintTestsuite or false
+          then ":test_tube:"
+          else ":nix:";
+      in "${emoji} ${mkLabel target}";
 
     # Skip build steps if their out path has already been built.
     skip = let
