@@ -66,7 +66,14 @@ let
   # Any build target that contains `meta.ci = false` will be skipped.
 
   # Is this tree node eligible for build inclusion?
-  eligible = node: (node ? outPath) && (node.meta.ci or true);
+  eligible = node:
+    # CI is enabled
+    (node.meta.ci or true) && (
+      # Is a derivation
+      (node ? outPath)
+      # Is a test suite executable using //nix/nint
+      || (node.meta.isNintTestsuite or false)
+    );
 
   # Walk the tree starting with 'node', recursively extending the list
   # of build targets with anything that looks buildable.
