@@ -46,6 +46,8 @@ runCommandNoCC "index.html" {
         |
         <a class="uncoloured-link" href="https://cl.tvl.fyi/">reviews</a>
         |
+        <a class="uncoloured-link" href="https://tvl.fyi/builds">ci</a>
+        |
         <a class="uncoloured-link" href="https://b.tvl.fyi/">bugs</a>
         |
         <a class="uncoloured-link" href="https://todo.tvl.fyi/">todos</a>
