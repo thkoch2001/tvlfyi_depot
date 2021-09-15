@@ -8,7 +8,7 @@ with depot.nix.yants;
 let
 
   inherit (depot.nix.runTestsuite)
-    runTestsuite
+    runNintTestsuite
     it
     assertEq
     assertThrows
@@ -144,7 +144,7 @@ let
   ];
 
 in
-  runTestsuite "yants" [
+  runNintTestsuite "yants" [
     testPrimitives
     testPoly
     testStruct
