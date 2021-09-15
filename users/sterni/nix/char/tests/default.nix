@@ -4,7 +4,7 @@ let
   inherit (depot.nix.runTestsuite)
     it
     assertEq
-    runTestsuite
+    runNintTestsuite
     ;
 
   inherit (depot.users.sterni.nix)
@@ -26,6 +26,6 @@ let
   ];
 
 in
-  runTestsuite "char" [
+  runNintTestsuite "char" [
     testAllCharConversion
   ]

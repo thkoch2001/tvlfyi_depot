@@ -66,7 +66,14 @@ let
   # Any build target that contains `meta.ci = false` will be skipped.
 
   # Is this tree node eligible for build inclusion?
-  eligible = node: (node ? outPath) && (node.meta.ci or true);
+  eligible = node:
+    # CI is enabled
+    (node.meta.ci or true) && (
+      # Is a derivation
+      (node ? outPath)
+      # Is a test suite executable using //nix/nint
+      || (node.meta.isNintTestsuite or false)
+    );
 
   # Walk the tree starting with 'node', recursively extending the list
   # of build targets with anything that looks buildable.
@@ -74,6 +81,7 @@ let
   # Any tree node can specify logical targets by exporting a
   # 'meta.targets' attribute containing a list of keys in itself. This
   # enables target specifications that do not exist on disk directly.
+  # TODO(sterni): ignore children of nint testsuites here
   gather = node:
     if node ? __readTree then
       # Include the node itself if it is eligible.
@@ -129,6 +137,6 @@ in fix(self: (readDepot {
   # Derivation that gcroots all depot targets.
   ci.gcroot = self.third_party.nixpkgs.symlinkJoin {
     name = "depot-gcroot";
-    paths = self.ci.targets;
+    paths = builtins.filter (target: target ? outPath) self.ci.targets;
   };
 })
