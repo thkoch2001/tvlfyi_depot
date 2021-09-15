@@ -22,6 +22,30 @@
       },
       "revId": "7527b4d180cb3bc2097eb3ddcca5fbf346bbd0bf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9581bd20_5c11a18a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-15T12:48:52Z",
+      "side": 1,
+      "message": "Better now?\n\nDid also some misc. cleanups: https://cl.tvl.fyi/c/depot/+/3554/1..2",
+      "parentUuid": "c5390ca6_acfea29c",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "7527b4d180cb3bc2097eb3ddcca5fbf346bbd0bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
