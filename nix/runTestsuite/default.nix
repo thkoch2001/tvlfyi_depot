@@ -132,6 +132,11 @@ let
     inherit asserts;
   };
 
+  goodAss = ass: AssertResult.match ass {
+    yep = _: true;
+    nope = _: false;
+  };
+
   # Run a bunch of its and check whether all asserts are yep.
   # If not, abort evaluation with `throw`
   # and print the result of the test suite.
@@ -140,10 +145,6 @@ let
   runTestsuite = defun [ string (list ItResult) drv ]
     (name: itResults:
       let
-        goodAss = ass: AssertResult.match ass {
-          yep = _: true;
-          nope = _: false;
-        };
         res = partitionTests (it:
           (partitionTests goodAss it.asserts).err == []
         ) itResults;
@@ -167,6 +168,53 @@ let
           "exit" "1"
         ]);
 
+  runNintTestsuite = name: itResults:
+    let
+      # TODO(sterni): detect support via COLORTERM
+      green = s: "[1;32m${s}[0m";
+      red = s: "[1;31m${s}[0m";
+      bold = s: "[1m${s}[0m";
+
+      prefixLines = p: s: lib.concatMapStringsSep "\n"
+        (line: lib.optionalString (line != "") "${p}${line}")
+        (lib.splitString "\n" s);
+
+      formatAss = defun [ AssertResult string ]
+        (ass: AssertResult.match ass {
+          yep = yep: "${green "OKAY"} ${yep.test}\n";
+          nope = nope: "${red "FAIL"} ${nope.test}:\n"
+            + prefixLines "  " (lib.generators.toPretty {} nope.context) + "\n";
+        });
+
+      ItStepRes = struct "ItStepRes" {
+        failed = bool;
+        formatted = string;
+      };
+
+      itStep = defun [ ItResult ItStepRes ]
+        (it: let
+          asserts = builtins.foldl' ({ failed ? false, formatted ? "" }: ass: {
+            failed = failed || !(goodAss ass);
+            formatted = formatted + prefixLines "  " (formatAss ass);
+          }) {} it.asserts;
+        in {
+          inherit (asserts) failed;
+          formatted = lib.concatStrings [
+            "it "
+            ((if asserts.failed then red else green) it.it-desc)
+            ":\n"
+            asserts.formatted
+          ];
+        });
+    in builtins.foldl' ({ exit ? 0, stdout ? "# ${bold name}\n\n" }: it: let
+      res = itStep it;
+    in {
+      exit = exit + (if res.failed then 1 else 0);
+      stdout = stdout + res.formatted;
+    }) {} itResults // {
+      meta.isNintTestsuite = true;
+    };
+
 in {
   inherit
     assertEq
@@ -174,5 +222,6 @@ in {
     assertDoesNotThrow
     it
     runTestsuite
+    runNintTestsuite
     ;
 }

@@ -2,7 +2,7 @@
 
 let
   inherit (depot.nix.runTestsuite)
-    runTestsuite
+    runNintTestsuite
     it
     assertEq
     ;
@@ -24,6 +24,6 @@ let
       (fun.hasEllipsis ({ depot, pkgs, ... }: 42)))
   ];
 in
-  runTestsuite "nix.fun" [
+  runNintTestsuite "nix.fun" [
     hasEllipsisTests
   ]

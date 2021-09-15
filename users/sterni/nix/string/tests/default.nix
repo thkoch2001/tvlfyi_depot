@@ -9,7 +9,7 @@ let
   inherit (depot.nix.runTestsuite)
     it
     assertEq
-    runTestsuite
+    runNintTestsuite
     ;
 
   testTakeDrop = it "tests take and drop" [
@@ -63,7 +63,7 @@ let
   ];
 
 in
-  runTestsuite "nix.string" [
+  runNintTestsuite "nix.string" [
     testTakeDrop
     testIndexing
     testFinding
