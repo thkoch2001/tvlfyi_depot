@@ -15,9 +15,8 @@ let
     sha256 = "0v086ybwr71zgs5nv8yr4w2w2d4daxx6in2s1sjb4m41q1r9p0wj";
   }}/crates";
 
-  our-crates = lib.mapAttrsToList (_: lib.id)
-    # this is a bit eh, but no idea how to avoid the readTree thing otherwise
-    (builtins.removeAttrs depot.third_party.rust-crates [ "__readTree" ]);
+  our-crates = lib.filter (v: v ? outPath)
+    (builtins.attrValues depot.third_party.rust-crates);
 
   check-security-advisory = depot.nix.writers.rustSimple {
     name = "parse-security-advisory";
