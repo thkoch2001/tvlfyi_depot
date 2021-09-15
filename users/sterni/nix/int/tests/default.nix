@@ -3,7 +3,7 @@
 let
 
   inherit (depot.nix.runTestsuite)
-    runTestsuite
+    runNintTestsuite
     it
     assertEq
     ;
@@ -193,7 +193,7 @@ let
     ]);
 
 in
-  runTestsuite "nix.int" [
+  runNintTestsuite "nix.int" [
     testBounds
     testHex
     testBasic

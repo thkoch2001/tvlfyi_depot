@@ -7,7 +7,7 @@ let
     ;
 
   inherit (depot.nix.runTestsuite)
-    runTestsuite
+    runNintTestsuite
     it
     assertEq
     assertThrows
@@ -114,7 +114,7 @@ let
       ]));
 
 in
-  runTestsuite "nix.utf8" [
+  runNintTestsuite "nix.utf8" [
     testFailures
     testAscii
     testDecoding
