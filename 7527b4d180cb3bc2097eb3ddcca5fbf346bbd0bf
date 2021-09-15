@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5390ca6_acfea29c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-15T12:19:49Z",
+      "side": 1,
+      "message": "this sentence is a bit hard to parse, I\u0027d write something like \"which contains the keys of this node\u0027s child attributes as read by readTree\". I couldn\u0027t tell from reading this whether it\u0027d be a list of the values, or their key names.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "7527b4d180cb3bc2097eb3ddcca5fbf346bbd0bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
