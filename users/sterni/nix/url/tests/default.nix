@@ -5,7 +5,7 @@ let
   inherit (depot.nix.runTestsuite)
     it
     assertEq
-    runTestsuite
+    runNintTestsuite
     ;
 
   inherit (depot.users.sterni.nix)
@@ -50,7 +50,7 @@ let
       "urn:oasis:names:specification:docbook:dtd:xml:4.1.2"
     ]);
 in
-  runTestsuite "nix.url" [
+  runNintTestsuite "nix.url" [
     testEncode
     testLeaveReserved
   ]

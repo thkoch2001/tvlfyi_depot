@@ -3,7 +3,7 @@
 let
 
   inherit (depot.nix.runTestsuite)
-    runTestsuite
+    runNintTestsuite
     it
     assertEq
     assertThrows
@@ -34,6 +34,6 @@ let
   ];
 
 in
-  runTestsuite "nix.flow" [
+  runNintTestsuite "nix.flow" [
     testCond
   ]
