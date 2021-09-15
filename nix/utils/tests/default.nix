@@ -2,7 +2,7 @@
 
 let
   inherit (depot.nix.runTestsuite)
-    runTestsuite
+    runNintTestsuite
     it
     assertEq
     assertThrows
@@ -73,7 +73,7 @@ let
   ];
 in
 
-runTestsuite "nix.utils" [
+runNintTestsuite "nix.utils" [
   pathPredicates
   storePathNameTests
 ]
