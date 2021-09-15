@@ -30,6 +30,11 @@ self: super: {
       # Use the notmuch from nixpkgs instead of from the Emacs
       # overlay, to avoid versions being out of sync.
       notmuch = super.notmuch.emacs;
+
+      # Build EXWM with the depot sources instead.
+      exwm = esuper.exwm.overrideAttrs(_: {
+        src = "${depot.path + "/third_party/exwm"}";
+      });
     })
   );
 
