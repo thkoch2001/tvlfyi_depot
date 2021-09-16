@@ -16,7 +16,7 @@ let
   cgitConfig = writeText "cgitrc" ''
     # Global configuration
     virtual-root=/
-    enable-http-clone=1
+    enable-http-clone=0
     readme=:README.md
     about-filter=${sourceFilter}/bin/cheddar-about
     source-filter=${depot.tools.cheddar}/bin/cheddar
@@ -31,7 +31,7 @@ let
     repo.url=depot
     repo.path=/var/lib/gerrit/git/depot.git/
     repo.desc=monorepo for the virus lounge
-    repo.owner=tazjin <mail@tazj.in>
+    repo.owner=The Virus Lounge
     repo.clone-url=https://code.tvl.fyi
   '';
 
