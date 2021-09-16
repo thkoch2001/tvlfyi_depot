@@ -16,6 +16,24 @@
       "message": "might be time to lib.concatStringsSep \" \" [\n  …\n]\n\nhere.",
       "revId": "073604821d50f3a1bbc7aea45afb1f505d245ac3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee760bb5_e3c94f51",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 11
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-16T18:32:35Z",
+      "side": 1,
+      "message": "Already filed as https://b.tvl.fyi/issues/147",
+      "parentUuid": "b270514f_5bc5d9bf",
+      "revId": "073604821d50f3a1bbc7aea45afb1f505d245ac3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
