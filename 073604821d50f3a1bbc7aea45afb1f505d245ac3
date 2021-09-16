@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b270514f_5bc5d9bf",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 11
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-09-16T17:37:47Z",
+      "side": 1,
+      "message": "might be time to lib.concatStringsSep \" \" [\n  …\n]\n\nhere.",
+      "revId": "073604821d50f3a1bbc7aea45afb1f505d245ac3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
