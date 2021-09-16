@@ -1,4 +1,4 @@
-{ depot, ... }:
+{ depot, config, ... }:
 
 {
   imports = [
@@ -20,12 +20,22 @@
             alias ${depot.tvix.docs.svg}/component-flow.svg;
         }
 
+        # Git operations on depot.git hit josh
+        location /depot.git {
+            proxy_pass http://localhost:${toString config.services.depot.git-serving.joshPort};
+        }
+
+        # Git clone operations on '/' should be redirected to josh now.
+        location = /info/refs {
+            return 302 https://code.tvl.fyi/depot.git/info/refs;
+        }
+
         # Static assets must always hit the root.
         location ~ ^/(favicon\.ico|cgit\.(css|png))$ {
            proxy_pass http://localhost:2448;
         }
 
-        # Everything else hits the depot directly.
+        # Everything else is forwarded to cgit for the web view
         location / {
             proxy_pass http://localhost:2448/cgit.cgi/depot/;
         }
