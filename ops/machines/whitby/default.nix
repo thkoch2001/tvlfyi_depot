@@ -16,6 +16,7 @@ in {
     "${depot.path}/ops/modules/owothia.nix"
     "${depot.path}/ops/modules/panettone.nix"
     "${depot.path}/ops/modules/paroxysm.nix"
+    "${depot.path}/ops/modules/restic.nix"
     "${depot.path}/ops/modules/smtprelay.nix"
     "${depot.path}/ops/modules/sourcegraph.nix"
     "${depot.path}/ops/modules/tvl-buildkite.nix"
@@ -324,6 +325,23 @@ in {
 
     # Run cgit & josh to serve git
     git-serving.enable = true;
+
+    # Configure backups to Google Cloud Storage
+    restic = {
+      enable = true;
+      paths = [
+        "/var/backup/postgresql"
+        "/var/html/deploys.tvl.fyi"
+        "/var/lib/gerrit"
+        "/var/lib/grafana"
+        "/var/lib/josh"
+        "/var/lib/znc"
+      ];
+
+      exclude = [
+        "/var/lib/gerrit/tmp"
+      ];
+    };
   };
 
   services.postgresql = {
@@ -385,28 +403,6 @@ in {
     zfs
     zfstools
   ];
-
-  # Regularly back up whitby to Google Cloud Storage.
-  systemd.services.restic = {
-    description = "Backups to Google Cloud Storage";
-    script = "${pkgs.restic}/bin/restic backup /var/lib/gerrit /var/backup/postgresql /var/lib/grafana /var/lib/znc /var/html/deploys.tvl.fyi /var/lib/josh";
-
-    environment = {
-      GOOGLE_PROJECT_ID = "tazjins-infrastructure";
-      GOOGLE_APPLICATION_CREDENTIALS = "/var/backup/restic/gcp-key.json";
-      RESTIC_REPOSITORY = "gs:tvl-fyi-backups:/whitby";
-      RESTIC_PASSWORD_FILE = "/var/backup/restic/secret";
-      RESTIC_CACHE_DIR = "/var/backup/restic/cache";
-      RESTIC_EXCLUDE_FILE = builtins.toFile "exclude-files" ''
-        /var/lib/gerrit/tmp
-      '';
-    };
-  };
-
-  systemd.timers.restic = {
-    wantedBy = [ "multi-user.target" ];
-    timerConfig.OnCalendar = "hourly";
-  };
 
   services.journaldriver = {
     enable = true;
