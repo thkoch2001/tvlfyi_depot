@@ -32,7 +32,7 @@ let
     repo.path=/var/lib/gerrit/git/depot.git/
     repo.desc=monorepo for the virus lounge
     repo.owner=The Virus Lounge
-    repo.clone-url=https://code.tvl.fyi
+    repo.clone-url=https://code.tvl.fyi/depot.git
   '';
 
   thttpdConfig = writeText "thttpd.conf" ''
