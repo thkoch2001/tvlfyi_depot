@@ -52,6 +52,24 @@
       "parentUuid": "ee760bb5_e3c94f51",
       "revId": "073604821d50f3a1bbc7aea45afb1f505d245ac3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da096be4_e7ed9895",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 11
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-16T19:17:20Z",
+      "side": 1,
+      "message": "cl/3565",
+      "parentUuid": "7a71256c_c811acc9",
+      "revId": "073604821d50f3a1bbc7aea45afb1f505d245ac3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
