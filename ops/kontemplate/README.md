@@ -111,14 +111,14 @@ Releases are signed with the GPG key `DCF34CFAC1AC44B87E26333136EE34814F6D294A`.
 
 ### Building from source
 
-You can clone Kontemplate either by cloning the full
-[depot][https://git.tazj.in/] or by just cloning the kontemplate
+You can clone Kontemplate either by cloning the full TVL
+[depot][https://code.tvl.fyi] or by just cloning the kontemplate
 subtree like so:
 
-    git clone -b kontemplate https://git.tazj.in kontemplate
+    git clone https://code.tvl.fyi/depot.git:/ops/kontemplate.git
 
 The `go` tooling can be used as normal with this cloned repository. In
-a full clone of the dpeot, Nix can be used to build Kontemplate:
+a full clone of the depot, Nix can be used to build Kontemplate:
 
     nix-build -A ops.kontemplate
 
