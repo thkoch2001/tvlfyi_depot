@@ -9,6 +9,7 @@ in {
     "${depot.path}/ops/modules/atward.nix"
     "${depot.path}/ops/modules/automatic-gc.nix"
     "${depot.path}/ops/modules/clbot.nix"
+    "${depot.path}/ops/modules/git-serving.nix"
     "${depot.path}/ops/modules/irccat.nix"
     "${depot.path}/ops/modules/monorepo-gerrit.nix"
     "${depot.path}/ops/modules/nixery.nix"
@@ -26,8 +27,8 @@ in {
     "${depot.path}/ops/modules/www/cl.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/code.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/cs.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/images.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/deploys.tvl.fyi.nix"
+    "${depot.path}/ops/modules/www/images.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/login.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/nixery.dev.nix"
     "${depot.path}/ops/modules/www/status.tvl.su.nix"
@@ -320,6 +321,9 @@ in {
 
     # Run a Nixery instance
     nixery.enable = true;
+
+    # Run cgit & josh to serve git
+    git-serving.enable = true;
   };
 
   services.postgresql = {
@@ -381,18 +385,6 @@ in {
     zfs
     zfstools
   ];
-
-  # Run cgit for the depot. The onion here is nginx(thttpd(cgit)).
-  systemd.services.cgit = {
-    wantedBy = [ "multi-user.target" ];
-    script = "${depot.web.cgit-taz}/bin/cgit-launch";
-
-    serviceConfig = {
-      Restart = "on-failure";
-      User = "git";
-      Group = "git";
-    };
-  };
 
   # Regularly back up whitby to Google Cloud Storage.
   systemd.services.restic = {
