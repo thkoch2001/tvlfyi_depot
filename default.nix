@@ -110,8 +110,10 @@ in fix(self: (readDepot {
   externalArgs = args;
 }) // {
   # Make the path to the depot available for things that might need it
-  # (e.g. NixOS module inclusions)
-  path = ./.;
+  # (e.g. NixOS module inclusions). Fetched via builtins.fetchGit to
+  # avoid copying in the .git folder as well as untracked files in
+  # unclean worktrees.
+  path = builtins.fetchGit ./.;
 
   # List of all buildable targets, for CI purposes.
   #
