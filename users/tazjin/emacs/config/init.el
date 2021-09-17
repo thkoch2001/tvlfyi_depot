@@ -94,7 +94,19 @@
   :after (ivy counsel)
   :config (prescient-persist-mode))
 
-(use-package rainbow-delimiters :hook (prog-mode . rainbow-delimiters-mode))
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode)
+  :custom-face
+  (rainbow-delimiters-depth-1-face ((t (:foreground "#2aa198"))))
+  (rainbow-delimiters-depth-2-face ((t (:foreground "#b58900"))))
+  (rainbow-delimiters-depth-3-face ((t (:foreground "#268bd2"))))
+  (rainbow-delimiters-depth-4-face ((t (:foreground "#dc322f"))))
+  (rainbow-delimiters-depth-5-face ((t (:foreground "#859900"))))
+  (rainbow-delimiters-depth-6-face ((t (:foreground "#268bd2"))))
+  (rainbow-delimiters-depth-7-face ((t (:foreground "#cb4b16"))))
+  (rainbow-delimiters-depth-8-face ((t (:foreground "#d33682"))))
+  (rainbow-delimiters-depth-9-face ((t (:foreground "#839496")))))
+
 (use-package rainbow-mode)
 (use-package s)
 (use-package string-edit)
@@ -126,7 +138,16 @@
             (setq vterm-shell "fish")
             (setq vterm-exit-functions
                   (lambda (&rest _) (kill-buffer (current-buffer))))
-            (setq vterm-kill-buffer-on-exit t)))
+            (setq vterm-kill-buffer-on-exit t))
+  :custom-face
+  (term-color-black ((t (:background "#282828" :foreground "#282828"))))
+  (term-color-blue ((t (:background "#96a6c8" :foreground "#96a6c8"))))
+  (term-color-cyan ((t (:background "#1fad83" :foreground "#1fad83"))))
+  (term-color-green ((t (:background "#73c936" :foreground "#73c936"))))
+  (term-color-magenta ((t (:background "#9e95c7" :foreground "#9e95c7"))))
+  (term-color-red ((t (:background "#f43841" :foreground "#f43841"))))
+  (term-color-white ((t (:background "#f5f5f5" :foreground "#f5f5f5"))))
+  (term-color-yellow ((t (:background "#ffdd33" :foreground "#ffdd33")))))
 
 ;; vterm removed the ability to set a custom title generator function
 ;; via the public API, so this overrides its private title generation
