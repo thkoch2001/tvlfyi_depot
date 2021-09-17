@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "212799af_91c80461",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-17T14:18:46Z",
+      "side": 1,
+      "message": "Have you compared the speed of this to `builtins.filterSource (_: path: lib.hasPrefix (toString ./.git) path) ./.` (where lib.hasPrefix has to be reimplemented of course). My gut feeling tells me that this might, but doesn\u0027t have to be faster.",
+      "revId": "5529f8841c4c3ed8f6fdfd3308ba18c55976d44b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
