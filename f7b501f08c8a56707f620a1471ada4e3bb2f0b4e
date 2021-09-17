@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ca52b43_49393ee6",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-17T08:36:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dbe2c934_7803c97b",
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffcd37f8_814f923e",
@@ -66,6 +84,30 @@
       "writtenOn": "2021-09-13T09:55:23Z",
       "side": 1,
       "message": "hrm. now I feel like we should really have a function for this.\n\nSomething like \n\n```\nmatchDef false {\n  symlink \u003d s: s \u003d\u003d \"directory\";\n  directory \u003d true;\n}\n```",
+      "range": {
+        "startLine": 103,
+        "startChar": 37,
+        "endLine": 103,
+        "endChar": 84
+      },
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bf16ec5_82c6208d",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-17T08:36:05Z",
+      "side": 1,
+      "message": "I’d like to introduce this function and change the example, then I think this one is good.",
+      "parentUuid": "ffcd37f8_814f923e",
       "range": {
         "startLine": 103,
         "startChar": 37,
