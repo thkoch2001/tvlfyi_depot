@@ -111,7 +111,7 @@ in fix(self: (readDepot {
 }) // {
   # Make the path to the depot available for things that might need it
   # (e.g. NixOS module inclusions)
-  path = ./.;
+  path = builtins.fetchGit ./.;
 
   # List of all buildable targets, for CI purposes.
   #
