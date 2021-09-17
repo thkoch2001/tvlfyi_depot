@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21ddd6be_523ec13d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2021-09-17T07:09:06Z",
+      "side": 1,
+      "message": "Backing up the state is not really necessary. There are no \"peculiar states\" that could happen if that data gets lost.\nThe only reason to keep it between runs is to improve performance after a restart.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 22
+      },
+      "revId": "ec38839c337654637c05af81db1b6f6afdec9102",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4879122d_18ad7eb4",
+        "filename": "ops/modules/www/code.tvl.fyi.nix",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2021-09-17T07:09:06Z",
+      "side": 1,
+      "message": "Josh serves some extra things under paths starting with /~/ it would be good to have them exposed as well:\n\n/~/graphql/...\n   A GraphQL API to introspect the repo without cloning it.\n\n/~/graphiql/...\n   A UI to test out graphql queries and look at auto generated API reference.\n\n/~/browse/... (and some more)\n   A (very much work in progess) repo browser.",
+      "revId": "ec38839c337654637c05af81db1b6f6afdec9102",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
