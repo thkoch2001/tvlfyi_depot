@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e0956dd7_9cc92987",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-18T11:12:50Z",
+      "side": 1,
+      "message": "Interesting, I was under the impression that state is retained for making sure that merges or changes to workspace definitions yield the same hashes. Are all the transformations reproducible?\n\nKeeping it between runs is fine anyways, but not having to back it up might be useful.",
+      "parentUuid": "21ddd6be_523ec13d",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 22
+      },
+      "revId": "ec38839c337654637c05af81db1b6f6afdec9102",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4879122d_18ad7eb4",
         "filename": "ops/modules/www/code.tvl.fyi.nix",
         "patchSetId": 12
@@ -37,6 +61,24 @@
       "writtenOn": "2021-09-17T07:09:06Z",
       "side": 1,
       "message": "Josh serves some extra things under paths starting with /~/ it would be good to have them exposed as well:\n\n/~/graphql/...\n   A GraphQL API to introspect the repo without cloning it.\n\n/~/graphiql/...\n   A UI to test out graphql queries and look at auto generated API reference.\n\n/~/browse/... (and some more)\n   A (very much work in progess) repo browser.",
+      "revId": "ec38839c337654637c05af81db1b6f6afdec9102",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fff03f6c_6bfb23a1",
+        "filename": "ops/modules/www/code.tvl.fyi.nix",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-18T11:12:50Z",
+      "side": 1,
+      "message": "I\u0027ve opened b/148 for this, thanks!",
+      "parentUuid": "4879122d_18ad7eb4",
       "revId": "ec38839c337654637c05af81db1b6f6afdec9102",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
