@@ -9,7 +9,7 @@ let
   description = "Restic backups to GCS";
   mkStringOption = default: lib.mkOption {
     inherit default;
-    type = lib.types.string;
+    type = lib.types.str;
   };
 in {
   options.services.depot.restic = {
@@ -21,12 +21,12 @@ in {
 
     paths = with lib; mkOption {
       description = "Directories that should be backed up";
-      type = types.listOf types.string;
+      type = types.listOf types.str;
     };
 
     exclude = with lib; mkOption {
       description = "Files that should be excluded from backups";
-      type = types.listOf types.string;
+      type = types.listOf types.str;
     };
   };
 
