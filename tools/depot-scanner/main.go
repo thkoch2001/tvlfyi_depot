@@ -165,7 +165,7 @@ func main() {
 	if *modeFlag == "print" {
 		if enabledPathTypes[pb.PathType_STORE] {
 			for k, _ := range results[nixStorePath] {
-				if *relativePath {
+				if *relativeFlag {
 					k = strings.TrimPrefix(k, *nixStoreRoot)
 					k = strings.TrimPrefix(k, "/")
 				}
