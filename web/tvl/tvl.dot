@@ -38,7 +38,7 @@ digraph tvl {
     nikky [href="http://nikky.moe/"];
     nyanotech [href="https://twitter.com/nyanotech"];
     poigon;
-    profpatsch [href="http://profpatsch.de/"];
+    Profpatsch [href="http://profpatsch.de/"];
     qyliss [href="https://alyssa.is"];
     seven [href="https://open.spotify.com/user/so7"];
     spacekookie [href="https://spacekookie.de/"];
@@ -89,7 +89,7 @@ digraph tvl {
     ghuntley -> nix;
     flokli -> nix;
     andi -> nix;
-    profpatsch -> nix;
+    Profpatsch -> nix;
     lassulus -> nix;
 
     // via edef
