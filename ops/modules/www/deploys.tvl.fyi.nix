@@ -16,5 +16,7 @@
       forceSSL = true;
       root = "/var/html/deploys.tvl.fyi";
     };
+
+    services.depot.restic.paths = [ "/var/html/deploys.tvl.fyi" ];
   };
 }
