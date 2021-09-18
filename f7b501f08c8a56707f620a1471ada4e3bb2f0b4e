@@ -120,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a5c1b04_eb7f366f",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-18T12:44:40Z",
+      "side": 1,
+      "message": "I think doing that is valid and even idiomatic nix. Having a specific function for tags is surely nice, but I think we can add that later and update the example",
+      "parentUuid": "1bf16ec5_82c6208d",
+      "range": {
+        "startLine": 103,
+        "startChar": 37,
+        "endLine": 103,
+        "endChar": 84
+      },
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a7dde09_8128b77f",
         "filename": "nix/utils/default.nix",
         "patchSetId": 4
