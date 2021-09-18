@@ -1,8 +1,8 @@
 Kontemplate - A simple Kubernetes templater
 ===========================================
 
-[Kontemplate][] is a simple CLI tool that can take sets of Kubernetes resource
-files with placeholders and insert values per environment.
+Kontemplate is a simple CLI tool that can take sets of Kubernetes resource files
+with placeholders and insert values per environment.
 
 This tool was made because in many cases all I want in terms of Kubernetes
 configuration is simple value interpolation per environment (i.e. Kubernetes
@@ -181,6 +181,5 @@ in the `LICENSE` file.
 
 Please follow the [code of conduct](CODE_OF_CONDUCT.md).
 
-[Kontemplate]: http://kontemplate.works
 [Helm]: https://helm.sh/
 [releases page]: https://github.com/tazjin/kontemplate/releases
