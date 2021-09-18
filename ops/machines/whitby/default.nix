@@ -331,15 +331,8 @@ in {
       enable = true;
       paths = [
         "/var/backup/postgresql"
-        "/var/html/deploys.tvl.fyi"
-        "/var/lib/gerrit"
         "/var/lib/grafana"
-        "/var/lib/josh"
         "/var/lib/znc"
-      ];
-
-      exclude = [
-        "/var/lib/gerrit/tmp"
       ];
     };
   };

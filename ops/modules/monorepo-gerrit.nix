@@ -135,4 +135,9 @@ in {
       Group = "git";
     };
   };
+
+  services.depot.restic = {
+    paths = [ "/var/lib/gerrit" ];
+    exclude = [ "/var/lib/gerrit/tmp" ];
+  };
 }

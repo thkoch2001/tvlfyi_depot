@@ -50,5 +50,6 @@ in {
       };
     };
 
+    services.depot.restic.paths = [ "/var/lib/josh" ];
   };
 }
