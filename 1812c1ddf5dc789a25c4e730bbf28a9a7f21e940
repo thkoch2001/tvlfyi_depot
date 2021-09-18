@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9c76436_7bf31ca2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-18T14:40:50Z",
+      "side": 1,
+      "message": "This breaks the `rebuild-system` script in some curious way.",
+      "revId": "1812c1ddf5dc789a25c4e730bbf28a9a7f21e940",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
