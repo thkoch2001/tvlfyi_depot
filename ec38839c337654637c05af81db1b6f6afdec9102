@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cbd06cde_573c29e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2021-09-19T14:26:04Z",
+      "side": 1,
+      "message": "All transformations are reproducible. It\u0027s always sha_y \u003d f(sha_x). Merges and also workspace definitions are part of the shas.\nThe only thing that is stored on disk is a lookup table to find sha_y quicker for a given f and sha_x. (And the objects those sha\u0027s refer to, but those are also computed as a pure functions of objects in the upsteam repo)",
+      "parentUuid": "e0956dd7_9cc92987",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 22
+      },
+      "revId": "ec38839c337654637c05af81db1b6f6afdec9102",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4879122d_18ad7eb4",
         "filename": "ops/modules/www/code.tvl.fyi.nix",
         "patchSetId": 12
