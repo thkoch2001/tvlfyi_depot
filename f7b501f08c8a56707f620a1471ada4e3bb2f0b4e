@@ -168,6 +168,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "652aa6a1_6501198d",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-20T13:27:42Z",
+      "side": 1,
+      "message": "This is at least an idiom that is really used and not a library function you have to know about:\n\n$ ag -c \"or null(\\))? (\u003d\u003d|!\u003d)\"\nlib/modules.nix:1\nmaintainers/scripts/rebuild-amount.sh:1\nnixos/lib/make-zfs-image.nix:1\nnixos/lib/make-disk-image.nix:2\nnixos/lib/testing-python.nix:1\nnixos/modules/services/networking/nsd.nix:1\nnixos/modules/virtualisation/amazon-options.nix:1\npkgs/applications/networking/browsers/firefox/common.nix:1\npkgs/build-support/buildenv/default.nix:1\npkgs/development/haskell-modules/lib.nix:1\npkgs/development/haskell-modules/make-package-set.nix:1\npkgs/development/interpreters/perl/default.nix:1\npkgs/development/libraries/libjpeg-turbo/default.nix:1\npkgs/games/planetaryannihilation/default.nix:2\npkgs/stdenv/generic/make-derivation.nix:2",
+      "parentUuid": "00862ed2_9d56978b",
+      "range": {
+        "startLine": 103,
+        "startChar": 37,
+        "endLine": 103,
+        "endChar": 84
+      },
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a7dde09_8128b77f",
         "filename": "nix/utils/default.nix",
         "patchSetId": 4
