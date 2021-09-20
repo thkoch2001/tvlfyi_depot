@@ -16,7 +16,8 @@
       # vim-colors-solarized
       # solarized
       (pkgs.vimUtils.buildVimPlugin {
-        name = "vim-colors-solarized";
+        pname = "vim-colors-solarized";
+        version = "git";
         src = pkgs.fetchFromGitHub {
           owner = "glittershark";
           repo = "vim-colors-solarized";

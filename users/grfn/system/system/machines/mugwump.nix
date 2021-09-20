@@ -248,8 +248,4 @@ with lib;
     isSystemUser = true;
     extraGroups = [ "docker" ];
   };
-  users.users."buildkite-agent-mugwump-2" = {
-    isSystemUser = true;
-    extraGroups = [ "docker" ];
-  };
 }

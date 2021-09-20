@@ -235,7 +235,7 @@ in lib.fix(self: {
   };
 
   services.bitlbee = {
-    enable = true;
+    enable = false;
     portNumber = 2337; # bees
   };
 
