@@ -244,12 +244,15 @@ with lib;
     };
   }) (range 1 1));
 
+  users.groups.buildkite-agents = {};
   users.users."buildkite-agent-mugwump-1" = {
     isSystemUser = true;
+    group = "buildkite-agents";
     extraGroups = [ "docker" ];
   };
   users.users."buildkite-agent-mugwump-2" = {
     isSystemUser = true;
+    group = "buildkite-agents";
     extraGroups = [ "docker" ];
   };
 }
