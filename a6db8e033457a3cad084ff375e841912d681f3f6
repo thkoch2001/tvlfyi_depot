@@ -16,6 +16,24 @@
       "message": "Maybe `//garbage` should also be removed, since it is also in `.gitignore`?\n\n`cleanSource` already takes care of the result symlinks and I don\u0027t know of any nix gitignore impls that can handle gitignore files in subdirectories.",
       "revId": "a6db8e033457a3cad084ff375e841912d681f3f6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c62c12f1_f3b266d9",
+        "filename": "default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-20T08:30:02Z",
+      "side": 1,
+      "message": "I think that //garbage thing is not used anymore, we can probably get rid of it from the gitignore (that is from years ago, before the depot even existed in its current form).",
+      "parentUuid": "9582a802_2f44699e",
+      "revId": "a6db8e033457a3cad084ff375e841912d681f3f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
