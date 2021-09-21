@@ -1,0 +1,119 @@
+From 46c52e6b462f9b1c9aa08a1b1bba79dd16302a9c Mon Sep 17 00:00:00 2001
+From: Vincent Ambo <tazjin@google.com>
+Date: Mon, 6 Jan 2020 16:00:52 +0000
+Subject: [PATCH] feat(third_party/git/date): add "dottime" format
+
+Adds dottime (as defined on https://dotti.me) as a timestamp format.
+
+This format is designed to simplify working with timestamps across
+many different timezones by keeping the timestamp format itself in
+UTC (and indicating this with a dot character), but appending the
+local offset.
+
+This is implemented as a new format because the timestamp needs to be
+rendered both as UTC and including the offset, an implementation using
+a strftime formatting string is not sufficient.
+---
+ Documentation/rev-list-options.txt |  3 +++
+ builtin/blame.c                    |  3 +++
+ cache.h                            |  3 ++-
+ date.c                             | 17 +++++++++++++++++
+ t/t0006-date.sh                    |  2 ++
+ 5 files changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/rev-list-options.txt b/Documentation/rev-list-options.txt
+index b7bd27e171..273971bdd0 100644
+--- a/Documentation/rev-list-options.txt
++++ b/Documentation/rev-list-options.txt
+@@ -1052,6 +1052,9 @@ omitted.
+ 1970).  As with `--raw`, this is always in UTC and therefore `-local`
+ has no effect.
+ 
++`--date=dottime` shows the date in dottime format (rendered as UTC,
++but suffixed with the local timezone offset if given)
++
+ `--date=format:...` feeds the format `...` to your system `strftime`,
+ except for %z and %Z, which are handled internally.
+ Use `--date=format:%c` to show the date in your system locale's
+diff --git a/builtin/blame.c b/builtin/blame.c
+index 641523ff9a..fa0240237c 100644
+--- a/builtin/blame.c
++++ b/builtin/blame.c
+@@ -1005,6 +1005,9 @@ int cmd_blame(int argc, const char **argv, const char *prefix)
+ 	case DATE_STRFTIME:
+ 		blame_date_width = strlen(show_date(0, 0, &blame_date_mode)) + 1; /* add the null */
+ 		break;
++	case DATE_DOTTIME:
++		blame_date_width = sizeof("2006-10-19T15·00-0700");
++		break;
+ 	}
+ 	blame_date_width -= 1; /* strip the null */
+ 
+diff --git a/cache.h b/cache.h
+index 0c245d4f10..fa79e37b49 100644
+--- a/cache.h
++++ b/cache.h
+@@ -1570,7 +1570,8 @@ enum date_mode_type {
+ 	DATE_RFC2822,
+ 	DATE_STRFTIME,
+ 	DATE_RAW,
+-	DATE_UNIX
++	DATE_UNIX,
++	DATE_DOTTIME
+ };
+ 
+ struct date_mode {
+diff --git a/date.c b/date.c
+index c55ea47e96..7fe4fb982b 100644
+--- a/date.c
++++ b/date.c
+@@ -347,6 +347,21 @@ const char *show_date(timestamp_t time, int tz, const struct date_mode *mode)
+ 				tm->tm_mday,
+ 				tm->tm_hour, tm->tm_min, tm->tm_sec,
+ 				sign, tz / 100, tz % 100);
++	} else if (mode->type == DATE_DOTTIME) {
++		char sign = (tz >= 0) ? '+' : '-';
++		tz = abs(tz);
++
++		// Time is converted again without the timezone as the
++		// dottime format includes the zone only in offset
++		// position.
++		time_t t = gm_time_t(time, 0);
++		gmtime_r(&t, tm);
++		strbuf_addf(&timebuf, "%04d-%02d-%02dT%02d·%02d%c%02d%02d",
++				tm->tm_year + 1900,
++				tm->tm_mon + 1,
++				tm->tm_mday,
++				tm->tm_hour, tm->tm_min,
++				sign, tz / 100, tz % 100);
+ 	} else if (mode->type == DATE_RFC2822)
+ 		strbuf_addf(&timebuf, "%.3s, %d %.3s %d %02d:%02d:%02d %+05d",
+ 			weekday_names[tm->tm_wday], tm->tm_mday,
+@@ -955,6 +970,8 @@ static enum date_mode_type parse_date_type(const char *format, const char **end)
+ 		return DATE_UNIX;
+ 	if (skip_prefix(format, "format", end))
+ 		return DATE_STRFTIME;
++	if (skip_prefix(format, "dottime", end))
++		return DATE_DOTTIME;
+ 	/*
+ 	 * Please update $__git_log_date_formats in
+ 	 * git-completion.bash when you add new formats.
+diff --git a/t/t0006-date.sh b/t/t0006-date.sh
+index 6b757d7169..5deb558497 100755
+--- a/t/t0006-date.sh
++++ b/t/t0006-date.sh
+@@ -49,9 +49,11 @@ check_show short "$TIME" '2016-06-15'
+ check_show default "$TIME" 'Wed Jun 15 16:13:20 2016 +0200'
+ check_show raw "$TIME" '1466000000 +0200'
+ check_show unix "$TIME" '1466000000'
++check_show dottime "$TIME" '2016-06-15T14·13+0200'
+ check_show iso-local "$TIME" '2016-06-15 14:13:20 +0000'
+ check_show raw-local "$TIME" '1466000000 +0000'
+ check_show unix-local "$TIME" '1466000000'
++check_show dottime-local "$TIME" '2016-06-15T14·13+0000'
+ 
+ check_show 'format:%z' "$TIME" '+0200'
+ check_show 'format-local:%z' "$TIME" '+0000'
+-- 
+2.32.0
+
