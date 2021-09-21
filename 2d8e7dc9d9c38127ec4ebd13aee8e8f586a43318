@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "256f4159_943a5ba1",
+        "filename": "third_party/cgit/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-21T11:27:57Z",
+      "side": 0,
+      "message": "Outdated comment",
+      "revId": "2d8e7dc9d9c38127ec4ebd13aee8e8f586a43318",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
