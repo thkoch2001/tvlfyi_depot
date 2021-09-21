@@ -19,12 +19,15 @@ in stdenv.mkDerivation rec {
         -i ui-snapshot.c
   '';
 
-  # Give cgit the git source tree from the depot. Note that the
-  # versions should be kept in sync (see the Makefile for the current
-  # git version).
+  # Give cgit the git source tree including depot patches. Note that
+  # the version expected by cgit should be kept in sync with the
+  # version available in nixpkgs.
+  #
+  # TODO(tazjin): Add an assert for this somewhere so we notice it on
+  # channel bumps.
   preBuild = ''
     rm -rf git # remove submodule dir ...
-    cp -r --no-preserve=ownership,mode ${depot.third_party.git.src} git
+    cp -r --no-preserve=ownership,mode ${pkgs.srcOnly depot.third_party.git} git
     makeFlagsArray+=(prefix="$out" CGIT_SCRIPT_PATH="$out/cgit/")
     cat tvl-extra.css >> cgit.css
   '';
