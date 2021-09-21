@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (766677 fix(3p/overlays/tvl): Add fix for Steam web view issue)
 # Ignore the garbage folder, in which I slowly assemble a bunch of
 # trash locally that might be valuable in the future.
 garbage/
@@ -5,3 +6,17 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+=======
+# Files I don't care to see in git-status/commit
+/cgit
+cgit.conf
+CGIT-CFLAGS
+VERSION
+cgitrc.5
+cgitrc.5.fo
+cgitrc.5.html
+cgitrc.5.pdf
+cgitrc.5.xml
+*.o
+*.d
+>>>>>>> BRANCH (0065f9 git: update to v2.32.0)
