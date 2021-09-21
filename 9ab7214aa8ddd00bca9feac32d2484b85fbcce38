@@ -22,6 +22,30 @@
       },
       "revId": "9ab7214aa8ddd00bca9feac32d2484b85fbcce38",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76159436_b9cd06d5",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 11
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-21T10:17:45Z",
+      "side": 1,
+      "message": "I was thinking of introducing a `targetType` which is a string or similar, but I fear it may be tricky to solve this in a clean way. With this CL we have two target types:\n\n* derivations (may be a readTree target or a subtarget)\n* nint test suites (may only be a readTree target, i. e. a standalone file)\n\nThat we don\u0027t support subtargets with nints does make this a bit messy. It would be possible to support subtarget execution for nint, I wonder if it is worth it to make this a bit cleaner (which would also mean we could easily convert Profpatsch\u0027s test suites).",
+      "parentUuid": "8088d130_244338b1",
+      "range": {
+        "startLine": 93,
+        "startChar": 17,
+        "endLine": 93,
+        "endChar": 37
+      },
+      "revId": "9ab7214aa8ddd00bca9feac32d2484b85fbcce38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
