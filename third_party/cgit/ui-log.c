@@ -65,8 +65,14 @@ void show_commit_decorations(struct commit *commit)
 		return;
 	html("<span class='decoration'>");
 	while (deco) {
+<<<<<<< HEAD
 		struct object_id peeled;
 		int is_annotated = 0;
+=======
+		struct object_id oid_tag, peeled;
+		int is_annotated = 0;
+
+>>>>>>> subtree-staging
 		strlcpy(buf, prettify_refname(deco->name), sizeof(buf));
 		switch(deco->type) {
 		case DECORATION_NONE:
@@ -79,8 +85,13 @@ void show_commit_decorations(struct commit *commit)
 				ctx.qry.showmsg, 0);
 			break;
 		case DECORATION_REF_TAG:
+<<<<<<< HEAD
 			if (!peel_ref(deco->name, &peeled))
 				is_annotated = !oidcmp(&commit->object.oid, &peeled);
+=======
+			if (!read_ref(deco->name, &oid_tag) && !peel_iterated_oid(&oid_tag, &peeled))
+				is_annotated = !oideq(&oid_tag, &peeled);
+>>>>>>> subtree-staging
 			cgit_tag_link(buf, NULL, is_annotated ? "tag-annotated-deco" : "tag-deco", buf);
 			break;
 		case DECORATION_REF_REMOTE:
