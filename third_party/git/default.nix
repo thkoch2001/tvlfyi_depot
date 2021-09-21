@@ -1,14 +1,9 @@
-# Use the upstream git derivation (there's a lot of stuff happening in
-# there!) and just override the source:
+# git with custom patches. This is also used by cgit via
+# `pkgs.srcOnly`.
 { pkgs, ... }:
 
-(pkgs.git.overrideAttrs(_: {
-  version = "2.29.2";
-  src = ./.;
-  doInstallCheck = false;
-  preConfigure = ''
-    ${pkgs.autoconf}/bin/autoreconf -i
-  '';
-})).override {
-  sendEmailSupport = true;
-}
+pkgs.git.overrideAttrs(old: {
+  patches = (old.patches or []) ++ [
+    ./0001-feat-third_party-git-date-add-dottime-format.patch
+  ];
+})
