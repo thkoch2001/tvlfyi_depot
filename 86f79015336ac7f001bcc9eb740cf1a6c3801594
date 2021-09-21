@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "245102bf_50d538c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-21T11:22:10Z",
+      "side": 1,
+      "message": "CI override because this commit can\u0027t build until a later CL. See b/149 for details.",
+      "revId": "86f79015336ac7f001bcc9eb740cf1a6c3801594",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
