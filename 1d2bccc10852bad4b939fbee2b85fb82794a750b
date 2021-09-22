@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76f5dbec_9a2984a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-22T17:03:01Z",
+      "side": 1,
+      "message": "Did you intentionally remove the header from atward?",
+      "revId": "1d2bccc10852bad4b939fbee2b85fb82794a750b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
