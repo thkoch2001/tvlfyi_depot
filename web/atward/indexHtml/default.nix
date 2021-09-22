@@ -4,6 +4,11 @@ depot.web.tvl.template {
   useUrls = true;
   title = "atward";
   content = ''
+    atward
+    ======
+
+    ----------
+
     **atward** is [TVL's](https://tvl.fyi/) search
     service. It can be configured as a browser search engine for easy
     access to TVL bugs, code reviews, code paths and more.
