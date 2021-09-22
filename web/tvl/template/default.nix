@@ -30,10 +30,6 @@ runCommandNoCC "index.html" {
   '' + lib.optionalString (args ? extraHead) extraHead + ''
     </head>
     <body class="light">
-      <header>
-        <h1><a class="blog-title" href="/">${title}</a> </h1>
-        <hr>
-      </header>
   '';
 
   inherit content;

@@ -12,6 +12,11 @@ let
   homepage = depot.web.tvl.template {
     title = "The Virus Lounge";
     content = ''
+      The Virus Lounge
+      ================
+
+      -------
+
       ![The Virus Lounge](/static/virus_lounge.webp)
 
       Welcome to **The Virus Lounge**. We're a random group of
