@@ -10,6 +10,7 @@
     cargo-flamegraph
     cargo-rr
     cargo-udeps
+    cargo-bloat
     sccache
     evcxr
   ];
