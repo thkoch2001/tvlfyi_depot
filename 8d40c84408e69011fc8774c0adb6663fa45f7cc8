@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45b50da5_fc7bd534",
+        "filename": "web/tvl/logo/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-23T19:23:21Z",
+      "side": 1,
+      "message": "I suppose `100.0 / ((builtins.length colours) - 1)` and using builtins.toJSON instead of toString could yield extra accuracy, but is it worth it?",
+      "revId": "8d40c84408e69011fc8774c0adb6663fa45f7cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e0eedcf_298633a9",
+        "filename": "web/tvl/logo/logo-shapes.svg",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-23T19:23:21Z",
+      "side": 1,
+      "message": "separating the body and the lambdas could be cool.",
+      "revId": "8d40c84408e69011fc8774c0adb6663fa45f7cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
