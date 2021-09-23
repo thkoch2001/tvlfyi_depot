@@ -24,7 +24,6 @@
 
       luks.devices = {
         "cryptroot".device = "/dev/disk/by-uuid/dcfbc22d-e0d2-411b-8dd3-96704d3aae2e";
-        "cryptswap".device = "/dev/disk/by-uuid/48b8a8fd-559c-4759-a617-56f221cfaaec";
       };
     };
 
@@ -62,7 +61,9 @@
     };
   };
 
-  swapDevices = [{ device = "/dev/mapper/cryptswap"; }];
+  swapDevices = [{
+    device = "/dev/disk/by-uuid/b627cb0e-0451-4f25-94d0-6497e01f0da4";
+  }];
 
   services.xserver = {
     exportConfiguration = true;
