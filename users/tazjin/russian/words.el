@@ -4,7 +4,9 @@
 ;; translations :: '(translation ...)
 ;; roots :: '(root ...)
 
-'( ;; 1-50
+(require 'russian-defs)
+
+'(;; 1-50
   ("и" ("and" "though"))
   ("в" ("in" "at"))
   ("не" ("not"))
