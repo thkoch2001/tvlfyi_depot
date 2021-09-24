@@ -28,3 +28,8 @@
     color: #a52714;
     background-color: #fbe9e7;
 }
+
+/* add some padding next to the logo */
+td.logo {
+    padding-right: 10px;
+}
