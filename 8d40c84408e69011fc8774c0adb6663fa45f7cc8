@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8d8d977_91a57bf7",
+        "filename": "web/tvl/logo/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-24T13:54:35Z",
+      "side": 1,
+      "message": "I don\u0027t think so. I\u0027m not even sure if floats work here, so its fine to keep these as rounded values IMO.",
+      "parentUuid": "45b50da5_fc7bd534",
+      "revId": "8d40c84408e69011fc8774c0adb6663fa45f7cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e0eedcf_298633a9",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-23T19:23:21Z",
       "side": 1,
       "message": "separating the body and the lambdas could be cool.",
+      "revId": "8d40c84408e69011fc8774c0adb6663fa45f7cc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e7400ca_47c729c9",
+        "filename": "web/tvl/logo/logo-shapes.svg",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-24T13:54:35Z",
+      "side": 1,
+      "message": "That needs some other layout changes about the exact placement of the lambdas, I\u0027d rather refactor that later.",
+      "parentUuid": "0e0eedcf_298633a9",
       "revId": "8d40c84408e69011fc8774c0adb6663fa45f7cc8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
