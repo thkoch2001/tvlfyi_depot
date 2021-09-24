@@ -4,7 +4,10 @@
 ;; translations :: '(translation ...)
 ;; roots :: '(root ...)
 
-'( ;; 1-50
+(require 'russian-defs)
+
+(define-russian-words
+  ;; 1-50
   ("и" ("and" "though"))
   ("в" ("in" "at"))
   ("не" ("not"))
@@ -412,3 +415,6 @@
   ("оставить" ("to leave" "to abandon"))
   ("войти" ("to enter" "to come in") nil ("-й-"))
   ("длинный" ("long")))
+
+
+(provide 'russian-words)
