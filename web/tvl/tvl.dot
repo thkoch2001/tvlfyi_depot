@@ -53,7 +53,6 @@ digraph tvl {
     node [color="#4285f4" fontcolor="#4285f4"];
     spotify [href="https://www.spotify.com/"];
     google [href="https://www.google.com/"];
-    urbint [href="https://www.urbint.com/"];
   }
 
   // communities? (red)
@@ -112,11 +111,8 @@ digraph tvl {
     fzakaria -> google;
     mdjnsn -> google;
 
-    // via urbint
-    grfn -> urbint;
-
     // random primary
-    urbint -> wpcarro;
+    grfn -> wpcarro;
     anon1 -> google;
     aurora -> eve;
     cynthia -> benjojo;
