@@ -15,14 +15,15 @@ let
       The Virus Lounge
       ================
 
-      -------
+      ----------------
 
-      ![The Virus Lounge](/static/virus_lounge.webp)
+      <img class="tvl-logo" src="/static/tvl-animated.svg"
+           alt="Virus with lambda-shaped spike proteins sitting on an armchair">
 
-      Welcome to **The Virus Lounge**. We're a random group of
-      people who feel undersocialised in these trying times, and
-      we've decided that there isn't enough spontaneous socialising
-      on the internet.
+      Welcome to **The Virus Lounge**. We're a random group of people
+      who feel undersocialised in these trying times, and we've
+      decided that there isn't enough spontaneous socialising on the
+      internet.
 
       <hr>
 
@@ -48,11 +49,19 @@ let
           max-width: inherit;
           height: auto;
         }
+
+        .tvl-logo {
+          width: 60%;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+        }
       </style>
     '';
   };
 in runCommandNoCC "website" {} ''
-  mkdir $out
+  mkdir -p $out/static
   cp ${homepage} $out/index.html
-  cp -r ${depot.web.static} $out/static
+  cp ${depot.web.static}/* $out/static
+  cp ${depot.web.tvl.logo.pastelRainbow} $out/static/tvl-animated.svg
 ''
