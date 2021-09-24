@@ -49,7 +49,5 @@ in {
         ExecStart = "${depot.third_party.josh}/bin/josh-proxy --no-background --local /var/lib/josh --port ${toString cfg.joshPort} --remote https://cl.tvl.fyi/";
       };
     };
-
-    services.depot.restic.paths = [ "/var/lib/josh" ];
   };
 }
