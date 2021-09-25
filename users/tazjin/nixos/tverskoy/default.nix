@@ -317,6 +317,7 @@ in lib.fix(self: {
           ".config/quassel-irc.org"
           ".config/spotify"
           ".config/syncthing"
+          ".elfeed"
           ".gnupg"
           ".local/share/Steam"
           ".local/share/direnv"
