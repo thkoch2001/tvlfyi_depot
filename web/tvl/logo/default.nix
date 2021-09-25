@@ -60,7 +60,8 @@ let
 
   logoShapes = builtins.readFile ./logo-shapes.svg;
   logoSvg = style: ''
-    <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="420 860 1640 1500">
+    <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="420 860 1640 1500"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
       <style>${style}</style>
       ${logoShapes}
     </svg>
