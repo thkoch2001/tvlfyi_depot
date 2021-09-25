@@ -55,6 +55,16 @@
   (eglot-autoshutdown t)
   (eglot-send-changes-idle-time 0.3))
 
+(use-package elfeed
+  :config
+  (setq elfeed-feeds
+        '("https://lobste.rs/rss"
+          "https://www.anti-spiegel.ru/feed/"
+          "https://www.reddit.com/r/lockdownskepticism/.rss"
+          "https://www.reddit.com/r/rust/.rss"
+          "https://news.ycombinator.com/rss"
+          "https://xkcd.com/atom.xml")))
+
 (use-package ht)
 
 (use-package hydra)
