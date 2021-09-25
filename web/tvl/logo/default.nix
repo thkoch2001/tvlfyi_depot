@@ -13,14 +13,6 @@ let
     red = "#FF6663";
   };
 
-  logoShapes = builtins.readFile ./logo-shapes.svg;
-  logoSvg = style: ''
-    <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="420 860 1640 1500">
-      <style>${style}</style>
-      ${logoShapes}
-    </svg>
-  '';
-
   staticCss = colour: ''
     #armchair-background {
       fill: ${colour};
@@ -44,27 +36,57 @@ let
     }
   '';
 
+  # Dark version of the logo, suitable for light backgrounds.
+  darkCss = armchairCss: ''
+    .structure {
+      fill: #383838;
+    }
+    #letters {
+      fill: #fefefe;
+    }
+    ${armchairCss}
+  '';
+
+  # Light version, suitable for dark backgrounds.
+  lightCss = armchairCss: ''
+    .structure {
+      fill: #e4e4ef;
+    }
+    #letters {
+      fill: #181818;
+    }
+    ${armchairCss}
+  '';
+
+  logoShapes = builtins.readFile ./logo-shapes.svg;
+  logoSvg = style: ''
+    <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="420 860 1640 1500">
+      <style>${style}</style>
+      ${logoShapes}
+    </svg>
+  '';
+
 in depot.nix.utils.drvTargets(lib.fix (self: {
-  inherit palette;
+  # Expose the logo construction functions.
+  inherit palette darkCss lightCss animatedCss staticCss;
 
-  # Create a TVL logo SVG with the specified static armchair colour.
-  staticLogoSvg = colour: pkgs.writeText "logo.svg" (logoSvg (staticCss colour));
+  # Create a TVL logo SVG with the specified style.
+  logoSvg = style: pkgs.writeText "logo.svg" (logoSvg style);
 
-  # Create a TVL logo SVG with the specified animated armchair colour set.
-  animatedLogoSvg = colours: pkgs.writeText "logo.svg" (logoSvg (animatedCss colours));
-
-  # Create a PNG of the TVL logo with the specified static armchair colour and DPI.
-  logoPng = colour: dpi: pkgs.runCommandNoCC "logo.png" {} ''
+  # Create a PNG of the TVL logo with the specified style and DPI.
+  logoPng = style: dpi: pkgs.runCommandNoCC "logo.png" {} ''
     ${pkgs.inkscape}/bin/inkscape \
       --export-area-drawing \
       --export-background-opacity 0 \
       --export-dpi ${toString dpi} \
-      ${self.staticLogoSvg colour} -o $out
+      ${self.logoSvg style} -o $out
   '';
 
-  # Animated SVG logo with all colours.
-  pastelRainbow = self.animatedLogoSvg (lib.attrValues palette);
+  # Animated dark SVG logo with all colours.
+  pastelRainbow = self.logoSvg (darkCss (animatedCss (lib.attrValues palette)));
 }
 
-# Add individual outputs for static logos of each colour.
-// (lib.mapAttrs' (k: v: lib.nameValuePair "${k}Png" (self.logoPng v 96)) palette)))
+# Add individual outputs for static dark logos of each colour.
+// (lib.mapAttrs'
+    (k: v: lib.nameValuePair "${k}Png"
+     (self.logoPng (darkCss (staticCss v)) 96)) palette)))
