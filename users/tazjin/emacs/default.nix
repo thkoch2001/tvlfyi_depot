@@ -33,6 +33,7 @@ let
     direnv
     dockerfile-mode
     eglot
+    elfeed
     elixir-mode
     elm-mode
     erlang
