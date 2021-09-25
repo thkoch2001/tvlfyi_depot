@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75581ffb_0f8954b4",
+        "filename": "users/tazjin/emacs/config/init.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-25T19:49:08Z",
+      "side": 1,
+      "message": "iirc elfeed somehow falls over if you use use-package at all.",
+      "revId": "f8adc9c2cc417a3cc3d84a1ee731dd31967c18e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
