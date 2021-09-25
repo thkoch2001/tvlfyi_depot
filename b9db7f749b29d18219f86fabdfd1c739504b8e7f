@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc4a966c_ef85bfd9",
+        "filename": "web/tvl/logo/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-25T14:32:37Z",
+      "side": 1,
+      "message": "note that using this namespace is technically deprecated, but inkscape doesn\u0027t work with the modern version, so I\u0027m keeping it around until I\u0027m completely done with the shape stuff",
+      "range": {
+        "startLine": 64,
+        "startChar": 9,
+        "endLine": 64,
+        "endChar": 51
+      },
+      "revId": "b9db7f749b29d18219f86fabdfd1c739504b8e7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
