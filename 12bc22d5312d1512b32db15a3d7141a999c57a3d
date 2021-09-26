@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "667ef0a1_f10aec92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-26T10:33:22Z",
+      "side": 1,
+      "message": "It\u0027s unlikely somebody is actually going to code-review the SVG, so ...",
+      "revId": "12bc22d5312d1512b32db15a3d7141a999c57a3d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
