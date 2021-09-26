@@ -20,10 +20,28 @@ let
       <img class="tvl-logo" src="/static/tvl-animated.svg"
            alt="Virus with lambda-shaped spike proteins sitting on an armchair">
 
-      Welcome to **The Virus Lounge**. We're a random group of people
-      who feel undersocialised in these trying times, and we've
-      decided that there isn't enough spontaneous socialising on the
-      internet.
+      Welcome to **The Virus Lounge**. We're a group of people who got
+      together in 2020, when we felt that there was not enough
+      spontaneous socialising on the internet.
+
+      Because of our shared interests in topics like **build systems**
+      and **monorepos** we started working on code together, in our
+      monorepo called the *depot*.
+
+      Feel free to explore the tech we have built so far, all our
+      systems are linked in the footer.
+
+      We mostly hang out on IRC. You can find us in [`#tvl`][tvl-irc]
+      on [hackint][], which is also reachable [via XMPP][hackint-xmpp]
+      at [`#tvl@irc.hackint.org`][tvl-xmpp] (sic!).
+
+      Hackint also provide a [web chat][tvl-webchat].
+
+      [tvl-irc]: ircs://irc.hackint.org:6697/#tvl
+      [hackint]: https://hackint.org/
+      [hackint-xmpp]: https://hackint.org/transport/xmpp
+      [tvl-xmpp]: xmpp:#tvl@irc.hackint.org?join
+      [tvl-webchat]: https://webirc.hackint.org/#ircs://irc.hackint.org/#tvl
 
       <hr>
 
