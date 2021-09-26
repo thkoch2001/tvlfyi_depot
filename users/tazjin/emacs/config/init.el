@@ -63,7 +63,11 @@
           "https://www.reddit.com/r/lockdownskepticism/.rss"
           "https://www.reddit.com/r/rust/.rss"
           "https://news.ycombinator.com/rss"
-          "https://xkcd.com/atom.xml")))
+          ("https://xkcd.com/atom.xml" media)
+
+          ;; vlogcreations
+          ("https://www.youtube.com/feeds/videos.xml?channel_id=UCR0VLWitB2xM4q7tjkoJUPw" media)
+          )))
 
 (use-package ht)
 
