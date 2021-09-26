@@ -102,7 +102,7 @@ If you'd like to contribute to any of the tools in here, please check out the
 [contribution guidelines](./docs/CONTRIBUTING.md) and our [code of
 conduct](./docs/CODE_OF_CONDUCT.md).
 
-IRC users can find us in [`#tvl`](tvl-irc) on [hackint][], which is also
+IRC users can find us in [`#tvl`][tvl-irc] on [hackint][], which is also
 reachable [via XMPP][hackint-xmpp] at [`#tvl@irc.hackint.org`][tvl-xmpp] (sic!).
 
 Hackint also provide a [web chat][tvl-webchat].
