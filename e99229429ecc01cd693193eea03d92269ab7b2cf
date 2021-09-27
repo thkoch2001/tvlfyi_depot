@@ -94,6 +94,30 @@
       },
       "revId": "e99229429ecc01cd693193eea03d92269ab7b2cf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e487e68_e324b563",
+        "filename": "web/tvl/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-27T16:20:02Z",
+      "side": 1,
+      "message": "Yeah, you point your XMPP client to a hostname starting with \u0027irc.\u0027 - I thought that was sic-worthy :)",
+      "parentUuid": "159643c0_0f17a1c2",
+      "range": {
+        "startLine": 36,
+        "startChar": 44,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "e99229429ecc01cd693193eea03d92269ab7b2cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
