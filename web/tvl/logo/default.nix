@@ -28,7 +28,7 @@ let
     frameCss = frame: "${toString frame.at}% { fill: ${frame.colour}; }";
   in ''
     #armchair-background {
-      animation: 60s infinite alternate armchairPalette;
+      animation: 30s infinite alternate armchairPalette;
     }
 
     @keyframes armchairPalette {
