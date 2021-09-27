@@ -22,6 +22,30 @@
       },
       "revId": "e99229429ecc01cd693193eea03d92269ab7b2cf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31f93cab_139baa14",
+        "filename": "web/tvl/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-09-27T15:42:10Z",
+      "side": 1,
+      "message": "Oh, it\u0027s written the same way in the README.md - I just thought it\u0027s funny that the IRC is reachable via XMPP officially.",
+      "parentUuid": "c04ff483_4104dcf5",
+      "range": {
+        "startLine": 36,
+        "startChar": 44,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "e99229429ecc01cd693193eea03d92269ab7b2cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
