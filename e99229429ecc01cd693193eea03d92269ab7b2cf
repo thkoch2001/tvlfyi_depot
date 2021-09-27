@@ -70,6 +70,30 @@
       },
       "revId": "e99229429ecc01cd693193eea03d92269ab7b2cf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2285fa_ccd606f6",
+        "filename": "web/tvl/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-09-27T16:19:05Z",
+      "side": 1,
+      "message": "The “apparent mistake” in this case would be that the URL contains `irc.` despite being XMPP.",
+      "parentUuid": "159643c0_0f17a1c2",
+      "range": {
+        "startLine": 36,
+        "startChar": 44,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "e99229429ecc01cd693193eea03d92269ab7b2cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
