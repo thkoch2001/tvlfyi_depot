@@ -6,6 +6,8 @@
 , content
   # optional extra html to inject into <head>
 , extraHead ? null
+  # optional extra html to inject into <footer>
+, extraFooter ? null
   # whether to use global URLs instead of absolute paths
 , useUrls ? false
 }@args:
@@ -49,6 +51,7 @@ runCommandNoCC "index.html" {
         <a class="uncoloured-link" href="https://todo.tvl.fyi/">todos</a>
         |
         <a class="uncoloured-link" href="https://atward.tvl.fyi/">search</a>
+        '' + lib.optionalString (args ? extraFooter) extraFooter + ''
       </p>
       <p class="lod">ಠ_ಠ</p>
     </footer>
