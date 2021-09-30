@@ -2,8 +2,12 @@
 # `drvHash` attribute which can be used for cache-busting.
 { depot, lib, pkgs, ... }:
 
-lib.fix(self: pkgs.runCommand "tvl-static" {} ''
-  cp -r ${./.} $out
+let logo = depot.web.tvl.logo;
+in lib.fix(self: pkgs.runCommand "tvl-static" {} ''
+  mkdir $out
+  cp -r ${./.}/* $out
+  cp ${logo.pastelRainbow} $out/logo-animated.svg
+  cp ${logo.redPng} $out/logo-red.png
 '' // {
   drvHash = lib.substring 11 32 self.drvPath;
 })
