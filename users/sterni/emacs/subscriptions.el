@@ -23,7 +23,6 @@
          ("https://rachelbythebay.com/w/atom.xml" blog)
          ("http://evrl.com/feed.xml" blog)
          ("https://vulns.xyz/feed.xml" blog)
-         ("https://linuxrocks.online/@dnkl.rss" releases)
          ("https://www.german-foreign-policy.com/?type=9818" news)
          ("https://niedzejkob.p4.team/rss.xml" blog)
          ("https://grahamc.com/feed/" blog)
