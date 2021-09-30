@@ -12,7 +12,7 @@ let
   index = depot.web.tvl.template {
     title = "TVL (The Virus Lounge) - Software consulting";
     content = builtins.readFile ./content.md;
-    useUrls = true; # load resources from tvl.fyi
+    staticUrl = "https://tvl.fyi/static";
     extraFooter = "\n|\n © ООО ТВЛ";
 
     # TODO(tazjin): The `.tvl-logo` thing can probably go in the shared CSS.

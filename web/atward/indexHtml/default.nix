@@ -1,8 +1,8 @@
 { depot, ... }:
 
 depot.web.tvl.template {
-  useUrls = true;
   title = "atward";
+  staticUrl = "https://tvl.fyi/static";
   content = ''
     atward
     ======
