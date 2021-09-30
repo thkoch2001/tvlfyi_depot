@@ -8,15 +8,13 @@
 , extraHead ? null
   # optional extra html to inject into <footer>
 , extraFooter ? null
-  # whether to use global URLs instead of absolute paths
-, useUrls ? false
+  # URL at which static assets are located
+, staticUrl ? "/static"
 }@args:
 
 let
   inherit (pkgs) runCommandNoCC lib;
   inherit (depot.tools) cheddar;
-
-  baseUrl = lib.optionalString useUrls "https://tvl.fyi";
 in
 
 runCommandNoCC "index.html" {
@@ -26,8 +24,8 @@ runCommandNoCC "index.html" {
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="description" content="The Virus Lounge">
-      <link rel="stylesheet" type="text/css" href="${baseUrl}/static/tvl.css" media="all">
-      <link rel="icon" type="image/webp" href="${baseUrl}/static/favicon.webp">
+      <link rel="stylesheet" type="text/css" href="${staticUrl}/tvl.css" media="all">
+      <link rel="icon" type="image/webp" href="${staticUrl}/favicon.webp">
       <title>${title}</title>
   '' + lib.optionalString (args ? extraHead) extraHead + ''
     </head>
