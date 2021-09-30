@@ -36,6 +36,7 @@ in {
     "${depot.path}/ops/modules/www/tazj.in.nix"
     "${depot.path}/ops/modules/www/todo.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/tvl.fyi.nix"
+    "${depot.path}/ops/modules/www/tvl.su.nix"
     "${depot.path}/ops/modules/www/wigglydonke.rs.nix"
     "${pkgs.path}/nixos/modules/services/web-apps/gerrit.nix"
   ];
