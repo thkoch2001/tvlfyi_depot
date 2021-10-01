@@ -13,6 +13,7 @@ steps:
         exit
       }
 
-      nix-build -A ops.pipelines.depot -o depot.yaml --show-trace || fallback
+      nix-build -A ops.pipelines.depot -o pipeline --show-trace || fallback
       buildkite-agent meta-data set 'failure' '0'
-      buildkite-agent pipeline upload depot.yaml || fallback
+      buildkite-agent artifact upload "$(readlink pipeline-2)" "drvmap.json"
+      buildkite-agent pipeline upload pipeline || fallback
