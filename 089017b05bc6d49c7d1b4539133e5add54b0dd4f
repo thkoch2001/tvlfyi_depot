@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff818f8e_069edf27",
+        "filename": "web/static/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-10-01T11:15:27Z",
+      "side": 1,
+      "message": "I\u0027d rather pass the drvHash via `passthru` which is accepted by the argument attr set of runCommand.",
+      "revId": "089017b05bc6d49c7d1b4539133e5add54b0dd4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec2144df_0111b864",
+        "filename": "web/static/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-10-01T11:15:27Z",
+      "side": 1,
+      "message": "lib.substring (builtins.length builtins.storeDir) 32 self.drvPath\n\nwould be more “correct”, I suppose.",
+      "revId": "089017b05bc6d49c7d1b4539133e5add54b0dd4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
