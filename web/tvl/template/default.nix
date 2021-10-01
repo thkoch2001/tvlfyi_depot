@@ -9,7 +9,7 @@
   # optional extra html to inject into <footer>
 , extraFooter ? null
   # URL at which static assets are located
-, staticUrl ? "/static"
+, staticUrl ? "https://static.tvl.fyi/${depot.web.static.drvHash}"
 }@args:
 
 let
