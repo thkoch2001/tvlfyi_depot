@@ -7,7 +7,7 @@
 { depot, lib, pkgs, ... }:
 
 let
-  inherit (builtins) concatStringsSep foldl' map toJSON;
+  inherit (builtins) concatStringsSep foldl' listToAttrs toJSON;
   inherit (pkgs) symlinkJoin writeText;
 
   # Create an expression that builds the target at the specified
@@ -77,4 +77,14 @@ let
       # Simultaneously run protobuf checks
       protoCheck
     ];
-in (writeText "depot.yaml" (toJSON pipeline))
+
+    # This data structure maps all build targets to their derivations.
+    # The mapping can be persisted for future use.
+    drvmap = listToAttrs (map (target: {
+      name = mkLabel target;
+      value = builtins.unsafeDiscardStringContext target.drvPath;
+    }) depot.ci.targets);
+in {
+  buildkite = (writeText "depot.yaml" (toJSON pipeline));
+  drvmap = (writeText "drvmap.json" (toJSON drvmap));
+}
