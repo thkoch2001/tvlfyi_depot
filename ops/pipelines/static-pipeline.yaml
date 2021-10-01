@@ -6,6 +6,7 @@
 ---
 steps:
   - label: ":llama:"
+    key: "pipeline-gen"
     command: |
       set -ue
 
@@ -21,6 +22,8 @@ steps:
       ls pipeline/chunk-*.json | tac | while read chunk; do
         buildkite-agent pipeline upload $$chunk
       done
+
+      buildkite-agent artifact upload pipeline/drvmap.json
 
   # Wait for all previous steps to complete.
   - wait: null
