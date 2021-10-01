@@ -33,6 +33,7 @@ in {
         location /${staticHash}/ {
           alias ${depot.web.static}/;
           expires max;
+          add_header Access-Control-Allow-Origin "*";
           add_header Cache-Control "public";
         }
       '';
