@@ -6,10 +6,15 @@
 ---
 steps:
   - label: ":llama:"
+    key: "pipeline-gen"
     command: |
       set -ue
-      nix-build -A ops.pipelines.depot -o depot.yaml --show-trace && \
-        buildkite-agent pipeline upload depot.yaml
+      nix-build -A ops.pipelines.depot -o pipeline --show-trace
+
+      mv pipeline-2 drvmap.json
+      buildkite-agent artifact upload drvmap.json
+
+      buildkite-agent pipeline upload pipeline
 
   # Wait for all previous steps to complete.
   - wait: null
@@ -77,3 +82,15 @@ steps:
     command: |
       git -c 'credential.helper=gerrit-creds' \
         push origin "HEAD:refs/r/$(git rev-list --count --first-parent HEAD)"
+
+  # Persist the derivation/target map as a git note when building
+  # canon.
+  #
+  # These git notes are written back to Gerrit in refs/notes/targets.
+  - label: ":world_map:"
+    # if: "build.branch == 'refs/heads/canon'"
+    command: |
+      buildkite-agent artifact download drvmap.json .
+      git notes --ref targets add HEAD -m $(cat drvmap.json)
+      git -c 'credential.helper=gerrit-creds' \
+        push origin refs/notes/targets:refs/notes/targets
