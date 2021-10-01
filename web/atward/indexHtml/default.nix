@@ -2,7 +2,6 @@
 
 depot.web.tvl.template {
   title = "atward";
-  staticUrl = "https://tvl.fyi/static";
   content = ''
     atward
     ======

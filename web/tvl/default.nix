@@ -17,7 +17,7 @@ let
 
       ----------------
 
-      <img class="tvl-logo" src="/static/tvl-animated.svg"
+      <img class="tvl-logo" src="https://static.tvl.fyi/${depot.web.static.drvHash}/logo-animated.svg"
            alt="Virus with lambda-shaped spike proteins sitting on an armchair">
 
       Welcome to **The Virus Lounge**. We're a group of people who got
@@ -80,6 +80,4 @@ let
 in runCommandNoCC "website" {} ''
   mkdir -p $out/static
   cp ${homepage} $out/index.html
-  cp ${depot.web.static}/* $out/static
-  cp ${depot.web.tvl.logo.pastelRainbow} $out/static/tvl-animated.svg
 ''

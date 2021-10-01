@@ -66,14 +66,16 @@ let
     <hr>
   '';
 
+  staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
+
   todoPage = writeText "index.html" ''
     <!DOCTYPE html>
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="description" content="TVL's todo-list">
-      <link rel="stylesheet" type="text/css" href="static/tvl.css" media="all">
-      <link rel="icon" type="image/webp" href="static/favicon.webp">
+      <link rel="stylesheet" type="text/css" media="all" href="${staticUrl}/tvl.css">
+      <link rel="icon" type="image/webp" href="${staticUrl}/favicon.webp">
       <title>TVL's todo-list</title>
       <style>
         svg {
@@ -106,5 +108,4 @@ let
 in runCommandNoCC "tvl-todos" {} ''
   mkdir $out
   cp ${todoPage} $out/index.html
-  ln -s ${depot.web.tvl}/static $out/static
 ''
