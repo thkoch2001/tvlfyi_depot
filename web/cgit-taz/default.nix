@@ -25,7 +25,7 @@ let
     enable-follow-links=1
     enable-blame=1
     mimetype-file=${mime-types}/etc/mime.types
-    logo=https://tvl.fyi/static/tvl-animated.svg
+    logo=https://static.tvl.fyi/${depot.web.static.drvHash}/tvl-animated.svg
 
     # Repository configuration
     repo.url=depot

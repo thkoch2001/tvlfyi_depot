@@ -7,12 +7,11 @@ let
     "@context" = "https://schema.org";
     "@type" = "Organisation";
     url = "https://tvl.su";
-    logo = "https://tvl.fyi/static/tvl-animated.svg";
+    logo = "https://static.tvl.fyi/${depot.web.static.drvHash}/tvl-animated.svg";
   };
   index = depot.web.tvl.template {
     title = "TVL (The Virus Lounge) - Software consulting";
     content = builtins.readFile ./content.md;
-    staticUrl = "https://tvl.fyi/static";
     extraFooter = "\n|\n © ООО ТВЛ";
 
     # TODO(tazjin): The `.tvl-logo` thing can probably go in the shared CSS.
