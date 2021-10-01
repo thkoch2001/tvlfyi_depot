@@ -60,7 +60,7 @@ in rec {
     skip = if skipIfBuilt then skip headBranch target else false;
 
     command = let
-      drvPath = builtins.unsafeDiscardStringContext target.drvPath;
+      drvPath = unsafeDiscardStringContext target.drvPath;
     in concatStringsSep " " [
       # First try to realise the drvPath of the target so we don't evaluate twice.
       # Nix has no concept of depending on a derivation file without depending on
@@ -162,4 +162,12 @@ in rec {
         (chunk: "cp ${chunk.path} $out/${chunk.filename}") chunks
     }
   '';
+
+  # Create a drvmap structure for the given targets, containing the
+  # mapping of all target paths to their derivations. The mapping can
+  # be persisted for future use.
+  mkDrvmap = drvTargets: writeText "drvmap.json" (toJSON (listToAttrs (map (target: {
+    name = mkLabel target;
+    value = unsafeDiscardStringContext target.drvPath;
+  }) drvTargets)));
 }
