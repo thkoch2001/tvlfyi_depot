@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8ed6a6c_5b5645cf",
+        "filename": "web/static/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-10-01T15:23:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff818f8e_069edf27",
+      "revId": "089017b05bc6d49c7d1b4539133e5add54b0dd4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ec2144df_0111b864",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-10-01T11:15:27Z",
       "side": 1,
       "message": "lib.substring (builtins.length builtins.storeDir) 32 self.drvPath\n\nwould be more “correct”, I suppose.",
+      "revId": "089017b05bc6d49c7d1b4539133e5add54b0dd4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9556e1e7_c27db918",
+        "filename": "web/static/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-10-01T15:23:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec2144df_0111b864",
       "revId": "089017b05bc6d49c7d1b4539133e5add54b0dd4f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
