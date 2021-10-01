@@ -3,7 +3,7 @@ The Virus Lounge
 
 ----------------
 
-<img class="tvl-logo" src="https://tvl.fyi/static/tvl-animated.svg"
+<img class="tvl-logo" src="https://static.tvl.su/latest/logo-animated.svg"
      alt="Virus with lambda-shaped spike proteins sitting on an armchair">
 
 Welcome to the corporate face of [The Virus Lounge][tvl-fyi].
