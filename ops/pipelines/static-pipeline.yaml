@@ -6,6 +6,7 @@
 ---
 steps:
   - label: ":llama:"
+    key: "pipeline-gen"
     command: |
       set -ue
 
@@ -15,6 +16,9 @@ steps:
       fi
 
       nix-build -A ops.pipelines.depot -o pipeline --show-trace
+
+      mv pipeline-2 drvmap.json
+      buildkite-agent artifact upload drvmap.json
 
       # Steps need to be uploaded in reverse order because pipeline
       # upload prepends instead of appending.
