@@ -33,4 +33,5 @@ pub enum OpCode {
     // Variable management
     OpDefineGlobal(usize),
     OpGetGlobal(usize),
+    OpSetGlobal(usize),
 }

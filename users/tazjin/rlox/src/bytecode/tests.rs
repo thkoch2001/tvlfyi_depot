@@ -110,11 +110,24 @@ fn strings() {
 }
 
 #[test]
-fn variables() {
+fn global_variables() {
     expect_num("var a = 5; a;", 5.0);
     expect_num("var a = 5; var b = 2; a * b;", 10.0);
     expect_str(
         "var greeting = \"hello\"; var name = \"Zubnog\"; greeting + \" \" + name;",
         "hello Zubnog",
+    );
+}
+
+#[test]
+fn global_assignment() {
+    expect_str(
+        r#"
+          var breakfast = "beignets";
+          var beverage = "cafe au lait";
+          breakfast = "beignets with " + beverage;
+          breakfast;
+        "#,
+        "beignets with cafe au lait"
     );
 }

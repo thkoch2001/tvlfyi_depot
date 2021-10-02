@@ -181,6 +181,19 @@ impl VM {
                         self.push(val)
                     });
                 }
+
+                OpCode::OpSetGlobal(name_idx) => {
+                    let name = self.chunk.constant(*name_idx).clone();
+                    let new_val = self.pop();
+                    with_type!(self, name, Value::String(name), {
+                        match self.globals.get_mut(&name) {
+                            None => unimplemented!("variable not found error"),
+                            Some(val) => {
+                                *val = new_val;
+                            }
+                        }
+                    });
+                }
             }
 
             #[cfg(feature = "disassemble")]

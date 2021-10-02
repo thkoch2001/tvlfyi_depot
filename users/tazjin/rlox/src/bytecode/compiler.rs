@@ -236,7 +236,8 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     fn expression_statement(&mut self) -> LoxResult<()> {
         self.expression()?;
         self.expect_semicolon("expect ';' after expression")?;
-        self.emit_op(OpCode::OpPop);
+        // TODO(tazjin): Why did I add this originally?
+        // self.emit_op(OpCode::OpPop);
         Ok(())
     }
 
@@ -343,7 +344,14 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         let ident = self.identifier_str(Self::previous)?;
         let constant_id =
             self.emit_constant(Value::String(ident.into()), false);
-        self.emit_op(OpCode::OpGetGlobal(constant_id));
+
+        if self.match_token(&TokenKind::Equal) {
+            self.expression()?;
+            self.emit_op(OpCode::OpSetGlobal(constant_id));
+        } else {
+            self.emit_op(OpCode::OpGetGlobal(constant_id));
+        }
+
         Ok(())
     }
 
