@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dc75ec3_3aee2bf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-10-02T12:16:28Z",
+      "side": 1,
+      "message": "maybe staticUrl should become a passthru attribute of `web.static` as well?",
+      "revId": "fe8ce76496b8b65a2ef8fbe7df3b14bf0999faaa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
