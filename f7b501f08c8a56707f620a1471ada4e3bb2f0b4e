@@ -190,6 +190,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b79cf460_e3a63f6c",
+        "filename": "nix/utils/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-10-02T18:24:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "652aa6a1_6501198d",
+      "range": {
+        "startLine": 103,
+        "startChar": 37,
+        "endLine": 103,
+        "endChar": 84
+      },
+      "revId": "f7b501f08c8a56707f620a1471ada4e3bb2f0b4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a7dde09_8128b77f",
