@@ -1,8 +1,8 @@
-{
+var a = 10;
+var b = 5;
 
 {
-  var a = 5;
-  print a;
-}
-
+  var b = 10;
+  var c = 2;
+  a * b * c;
 }

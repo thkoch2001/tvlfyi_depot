@@ -9,6 +9,7 @@ pub enum ErrorKind {
     ExpectedToken(&'static str),
     InternalError(&'static str),
     TypeError(String),
+    VariableShadowed(String),
 }
 
 #[derive(Debug)]

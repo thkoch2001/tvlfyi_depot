@@ -8,12 +8,47 @@ use crate::scanner::{self, Token, TokenKind};
 #[cfg(feature = "disassemble")]
 use super::chunk;
 
+#[derive(Debug)]
+enum Depth {
+    Unitialised,
+    At(usize),
+}
+
+impl Depth {
+    fn above(&self, theirs: usize) -> bool {
+        match self {
+            Depth::Unitialised => false,
+            Depth::At(ours) => *ours > theirs,
+        }
+    }
+
+    fn below(&self, theirs: usize) -> bool {
+        match self {
+            Depth::Unitialised => false,
+            Depth::At(ours) => *ours < theirs,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct Local {
+    name: Token,
+    depth: Depth,
+}
+
+#[derive(Debug, Default)]
+struct Locals {
+    locals: Vec<Local>,
+    scope_depth: usize,
+}
+
 struct Compiler<T: Iterator<Item = Token>> {
     tokens: T,
     chunk: Chunk,
     panic: bool,
     errors: Vec<Error>,
     strings: Interner,
+    locals: Locals,
 
     current: Option<Token>,
     previous: Option<Token>,
@@ -200,7 +235,14 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     }
 
     fn define_variable(&mut self, var: usize) -> LoxResult<()> {
-        self.emit_op(OpCode::OpDefineGlobal(var));
+        if self.locals.scope_depth == 0 {
+            self.emit_op(OpCode::OpDefineGlobal(var));
+        } else {
+            self.locals.locals.last_mut()
+                .expect("fatal: variable not yet added at definition")
+                .depth = Depth::At(self.locals.scope_depth);
+        }
+
         Ok(())
     }
 
@@ -221,6 +263,11 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     fn statement(&mut self) -> LoxResult<()> {
         if self.match_token(&TokenKind::Print) {
             self.print_statement()
+        } else if self.match_token(&TokenKind::LeftBrace) {
+            self.begin_scope();
+            self.block()?;
+            self.end_scope();
+            Ok(())
         } else {
             self.expression_statement()
         }
@@ -230,6 +277,37 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.expression()?;
         self.expect_semicolon("expect ';' after print statement")?;
         self.emit_op(OpCode::OpPrint);
+        Ok(())
+    }
+
+    fn begin_scope(&mut self) {
+        self.locals.scope_depth += 1;
+    }
+
+    fn end_scope(&mut self) {
+        debug_assert!(self.locals.scope_depth > 0, "tried to end global scope");
+        self.locals.scope_depth -= 1;
+
+        while self.locals.locals.len() > 0
+            && self.locals.locals[self.locals.locals.len() - 1].depth.above(self.locals.scope_depth)
+        {
+            self.emit_op(OpCode::OpPop);
+            self.locals.locals.remove(self.locals.locals.len() - 1);
+        }
+    }
+
+    fn block(&mut self) -> LoxResult<()> {
+        while !self.check(&TokenKind::RightBrace)
+            && !self.check(&TokenKind::Eof)
+        {
+            self.declaration()?;
+        }
+
+        consume!(
+            self,
+            TokenKind::RightBrace,
+            ErrorKind::ExpectedToken("Expected '}' after block.")
+        );
         Ok(())
     }
 
@@ -341,15 +419,29 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     }
 
     fn named_variable(&mut self) -> LoxResult<()> {
-        let ident = self.identifier_str(Self::previous)?;
-        let constant_id =
-            self.emit_constant(Value::String(ident.into()), false);
+        let local_idx = self.resolve_local();
+
+        let ident = if local_idx.is_some() {
+            None
+        } else {
+            Some(self.identifier_constant()?)
+        };
 
         if self.match_token(&TokenKind::Equal) {
             self.expression()?;
-            self.emit_op(OpCode::OpSetGlobal(constant_id));
+            match local_idx {
+                Some(idx) => self.emit_op(OpCode::OpSetLocal(idx)),
+                None => {
+                    self.emit_op(OpCode::OpSetGlobal(ident.unwrap()));
+                }
+            }
         } else {
-            self.emit_op(OpCode::OpGetGlobal(constant_id));
+            match local_idx {
+                Some(idx) => self.emit_op(OpCode::OpGetLocal(idx)),
+                None => {
+                    self.emit_op(OpCode::OpGetGlobal(ident.unwrap()))
+                }
+            }
         }
 
         Ok(())
@@ -401,12 +493,70 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         Ok(self.strings.intern(ident))
     }
 
+    fn identifier_constant(&mut self) -> LoxResult<usize> {
+        let ident = self.identifier_str(Self::previous)?;
+        Ok(self.emit_constant(Value::String(ident.into()), false))
+    }
+
+    fn resolve_local(&mut self) -> Option<usize> {
+        dbg!(&self.locals);
+        for (idx, local) in self.locals.locals.iter().enumerate().rev() {
+            if self.previous().lexeme == local.name.lexeme {
+                if let Depth::Unitialised = local.depth {
+                    // TODO(tazjin): *return* err
+                    panic!("can't read variable in its own initialiser");
+                }
+                return Some(idx);
+            }
+        }
+
+        None
+    }
+
+    fn add_local(&mut self, name: Token) -> LoxResult<()> {
+        let local = Local {
+            name,
+            depth: Depth::Unitialised,
+        };
+
+        self.locals.locals.push(local);
+        Ok(()) // TODO(tazjin): needed?
+    }
+
+    fn declare_variable(&mut self) -> LoxResult<()> {
+        if self.locals.scope_depth == 0 {
+            return Ok(());
+        }
+
+        let name = self.previous().clone();
+
+        for local in self.locals.locals.iter().rev() {
+            if local.depth.below(self.locals.scope_depth) {
+                break;
+            }
+
+            if name.lexeme == local.name.lexeme {
+                return Err(Error {
+                    kind: ErrorKind::VariableShadowed(name.lexeme.into()),
+                    line: name.line,
+                });
+            }
+        }
+
+        self.add_local(name)
+    }
+
     fn parse_variable(&mut self) -> LoxResult<usize> {
         consume!(
             self,
             TokenKind::Identifier(_),
             ErrorKind::ExpectedToken("expected identifier")
         );
+
+        self.declare_variable()?;
+        if self.locals.scope_depth > 0 {
+            return Ok(0); // TODO(tazjin): grr sentinel
+        }
 
         let id = self.identifier_str(Self::previous)?;
         Ok(self.emit_constant(Value::String(id.into()), false))
@@ -520,6 +670,7 @@ pub fn compile(code: &str) -> Result<(Interner, Chunk), Vec<Error>> {
         panic: false,
         errors: vec![],
         strings: Interner::with_capacity(1024),
+        locals: Default::default(),
         current: None,
         previous: None,
     };

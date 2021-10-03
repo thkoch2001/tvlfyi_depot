@@ -128,6 +128,23 @@ fn global_assignment() {
           breakfast = "beignets with " + beverage;
           breakfast;
         "#,
-        "beignets with cafe au lait"
+        "beignets with cafe au lait",
+    );
+}
+
+#[test]
+fn local_variables() {
+    expect_num(
+        r#"
+          var a = 10;
+          var b = 5;
+
+          {
+            var b = 10;
+            var c = 2;
+            a * b * c;
+          }
+        "#,
+        200.0,
     );
 }
