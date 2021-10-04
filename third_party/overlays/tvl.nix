@@ -46,7 +46,7 @@ self: super: {
   });
 
   # Use latest SBCL, nixpkgs hasn't upgraded yet
-  sbcl = self.sbcl_2_1_8;
+  sbcl = self.sbcl_2_1_9;
 
   # Fix Steam issues with web views (nixpkgs#137279)
   steam = super.steam.override {
