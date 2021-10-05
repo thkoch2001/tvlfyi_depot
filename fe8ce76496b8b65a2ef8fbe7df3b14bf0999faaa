@@ -16,6 +16,24 @@
       "message": "maybe staticUrl should become a passthru attribute of `web.static` as well?",
       "revId": "fe8ce76496b8b65a2ef8fbe7df3b14bf0999faaa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f18acd23_9b7324b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-10-05T13:13:53Z",
+      "side": 1,
+      "message": "I was thinking about it, but on the other hand web.static isn\u0027t really tied to a specific serving location (and in fact, *.su pages should embed from static.tvl.su and vice-versa for fyi). What do you think?",
+      "parentUuid": "7dc75ec3_3aee2bf0",
+      "revId": "fe8ce76496b8b65a2ef8fbe7df3b14bf0999faaa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
