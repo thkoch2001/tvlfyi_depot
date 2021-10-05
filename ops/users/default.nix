@@ -139,4 +139,9 @@
     displayName = "Mike Johnson";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$77+f5DFbuzs5myyIUN2nHg$xyXkRhIHFVaPMZUhxPk1uxMpLeEmU3BeyQjDsNPlJVw";
   }
+  {
+    username = "smitop";
+    email = "me@smitop.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$c2FsdHlib2l0bjIwODAycGh0MjBraHlpbmR3$8phIS6531q+zFbKQIhAPgXB5zYxTp3sDLErJFbhDdFU";
+  }
 ]
