@@ -34,6 +34,24 @@
       "parentUuid": "7dc75ec3_3aee2bf0",
       "revId": "fe8ce76496b8b65a2ef8fbe7df3b14bf0999faaa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bce1e179_e59e19d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-10-05T13:24:51Z",
+      "side": 1,
+      "message": "Oh yeah that\u0027s a concern. Maybe we make it a function then?\n\nstaticUrlFor \u003d domain: \"https://static.${domain}/${self.drvHash}\";\n\nor similar. OTOH I\u0027d also be fine with leaving it as is, it\u0027s still easy to refactor with a search and replace, the only risk is that you mistype it somewhere.",
+      "parentUuid": "f18acd23_9b7324b1",
+      "revId": "fe8ce76496b8b65a2ef8fbe7df3b14bf0999faaa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
