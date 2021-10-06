@@ -113,7 +113,7 @@ See the man-page for xrandr for more details."
                   :rotate normal)
 
 (display-register 4k-horizontal
-                  :output "HDMI1"
+                  :output "DP2"
                   :primary t
                   :coords (0 1062)
                   :size (3840 2160)
@@ -121,17 +121,8 @@ See the man-page for xrandr for more details."
                   :dpi 144
                   :rotate normal)
 
-(display-register 4k-vertical
-                  :output "DP2"
-                  :primary nil
-                  :coords (3840 0)
-                  :size (3840 2160)
-                  :rate 30.0
-                  :dpi 144
-                  :rotate right)
-
 (display-arrangement primary
-                     :displays (4k-horizontal 4k-vertical))
+                     :displays (4k-horizontal laptop))
 
 (provide 'display)
 ;;; display.el ends here
