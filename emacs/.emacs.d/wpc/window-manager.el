@@ -72,19 +72,7 @@
         (make-window-manager--named-workspace
          :label "Coding"
          :kbd "d"
-         :display display-4k-horizontal)
-        (make-window-manager--named-workspace
-         :label "Todos"
-         :kbd "o"
-         :display display-4k-horizontal)
-        (make-window-manager--named-workspace
-         :label "Chatter"
-         :kbd "h"
-         :display display-4k-vertical)
-        (make-window-manager--named-workspace
-         :label "Logs"
-         :kbd "t"
-         :display display-4k-vertical))
+         :display display-4k-horizontal))
   "List of `window-manager--named-workspace' structs.")
 
 ;; Assert that no two workspaces share KBDs.
