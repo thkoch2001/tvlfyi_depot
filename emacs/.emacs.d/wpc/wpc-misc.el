@@ -25,19 +25,8 @@
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; I'm borrowing from the dot-time format (i.e. https://dotti.me) to encode the
-;; timestamp. This displays the UTC time and an offset to show the number of
-;; hours East or West of UTC my current timezone is using `current-time-zone'.
-;;
-;; Reminder to me:
-;; LON: +00 (UTC) or +01 (BST)
-;; NYC: -05
-;; SF:  -07
 (setq display-time-string-forms
-      '((format-time-string
-         (concat "%H·%M"
-                 (format "%0+3d" (/ (car (current-time-zone)) 3600))
-                 " %a %d %b") nil t)))
+      '((format-time-string "%H:%M %a %b %d")))
 (display-time-mode 1)
 
 ;; Remove the boilerplate in the *scratch* buffer
