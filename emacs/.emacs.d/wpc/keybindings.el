@@ -267,9 +267,7 @@
    "d0" #'display-enable-laptop
    "D0" #'display-disable-laptop
    "d1" #'display-enable-4k-horizontal
-   "D1" #'display-disable-4k-horizontal
-   "d2" #'display-enable-4k-vertical
-   "D2" #'display-disable-4k-vertical))
+   "D1" #'display-disable-4k-horizontal))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; notmuch
