@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
-let inherit (pkgs) llvmPackages_11 cmake;
-in llvmPackages_11.libcxxStdenv.mkDerivation {
+let inherit (pkgs) fullLlvm11Stdenv cmake;
+in fullLlvm11Stdenv.mkDerivation {
   name = "glog";
   version = "20200527-unstable";
   src = ./.;

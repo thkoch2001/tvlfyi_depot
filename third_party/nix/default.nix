@@ -57,7 +57,7 @@ let
     cp ${pkgs.busybox}/bin/busybox $out/bin
   '';
 
-in lib.fix (self: pkgs.llvmPackages_11.libcxxStdenv.mkDerivation {
+in lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
   pname = "tvix";
   version = "2.3.4";
   inherit src;
@@ -186,9 +186,6 @@ in lib.fix (self: pkgs.llvmPackages_11.libcxxStdenv.mkDerivation {
 
   # TODO(tazjin): integration test setup?
   # TODO(tazjin): docs generation?
-
-  # TODO(b/132): Reenable when linker errors are fixed.
-  meta.ci = false;
 
   passthru = {
     build-shell = self.overrideAttrs (up: rec {
