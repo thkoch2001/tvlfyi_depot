@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 (pkgs.callPackage "${pkgs.path}/pkgs/development/libraries/rapidcheck" {
-  stdenv = pkgs.llvmPackages_11.libcxxStdenv;
+  stdenv = pkgs.fullLlvm11Stdenv;
 }).overrideAttrs (attrs: rec {
   # follows the versioning scheme of nixpkgs, since rapidcheck does not
   # provide versioned releases

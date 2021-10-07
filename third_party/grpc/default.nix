@@ -2,14 +2,11 @@
 
 (pkgs.grpc.override {
   protobuf = depot.third_party.protobuf;
-  stdenv = pkgs.llvmPackages_11.libcxxStdenv;
+  stdenv = pkgs.fullLlvm11Stdenv;
   abseil-cpp = depot.third_party.abseil_cpp;
+  re2 = depot.third_party.re2;
 }).overrideAttrs(orig: rec {
   cmakeFlags = orig.cmakeFlags ++ [
-    "-DCMAKE_CXX_STANDARD=17"
     "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
   ];
-}) // {
-  # TODO(b/132): Reenable when linker errors are fixed.
-  meta.ci = false;
-}
+})
