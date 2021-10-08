@@ -30,8 +30,6 @@
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst irc-enable-tests? t
-  "When t, run the tests defined herein.")
 
 (setq erc-rename-buffers t)
 
@@ -170,14 +168,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(when irc-enable-tests?
-  (prelude-assert
-   (equal
-    (irc-channel->server `(("irc.dairy.com" . ,(cycle-new "#cheese" "#milk"))
-                           ("irc.color.com" . ,(cycle-new "#red" "#blue")))
-                         "#cheese")
-    "irc.dairy.com")))
 
 (provide 'irc)
 ;;; irc.el ends here
