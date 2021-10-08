@@ -72,7 +72,15 @@
         (make-window-manager--named-workspace
          :label "Coding"
          :kbd "d"
-         :display display-4k-horizontal))
+         :display display-4k-horizontal)
+        (make-window-manager--named-workspace
+         :label "Vertical"
+         :kbd "h"
+         :display display-4k-vertical)
+        (make-window-manager--named-workspace
+         :label "Laptop"
+         :kbd "p"
+         :display display-laptop))
   "List of `window-manager--named-workspace' structs.")
 
 ;; Assert that no two workspaces share KBDs.
@@ -337,7 +345,10 @@ predicate."
 ;; Startup Applications in `window-manager--named-workspaces'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-hook 'exwm-init-hook (lambda () (window-manager--switch "Coding")))
+(add-hook 'exwm-init-hook
+          (lambda ()
+            (display-arrange-primary)
+            (window-manager--switch "Coding")))
 
 (provide 'window-manager)
 ;;; window-manager.el ends here
