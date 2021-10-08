@@ -200,7 +200,7 @@ in lib.fix(self: {
   # Do not restart the display manager automatically
   systemd.services.display-manager.restartIfChanged = lib.mkForce false;
 
-  time.timeZone = "Europe/Moscow";
+  time.timeZone = "Europe/Stockholm";
 
   users.users.tazjin = {
     isNormalUser = true;
