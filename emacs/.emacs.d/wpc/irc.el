@@ -119,7 +119,7 @@
   (erc-ssl :server "irc.freenode.net"
            :port 6697
            :nick "wpcarro"
-           :password (password-store-get "programming/irc-freenode")
+           :password (password-store-get "programming/irc/freenode")
            :full-name "William Carroll"))
 
 ;; TODO: Handle failed connections.
