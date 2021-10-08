@@ -30,8 +30,14 @@
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defcustom irc-install-kbds? t
+  "When t, install the keybindings defined herein.")
 
 (setq erc-rename-buffers t)
+
+;; Setting `erc-join-buffer' to 'bury prevents erc from stealing focus of the
+;; current buffer when it connects to IRC servers.
+(setq erc-join-buffer 'bury)
 
 ;; TODO: Find a way to avoid putting "freenode" and "#freenode" as channels
 ;; here.  I'm doing it because when erc first connects, it's `(buffer-name)' is
@@ -39,12 +45,18 @@
 ;; `cycle-contains?' call in `irc-channel->cycle" unless "freenode" is there. To
 ;; make matters even uglier, when `erc-join-channel' is called with "freenode"
 ;; as the value, it connects to the "#freenode" channel, so unless "#freenode"
-;; exists in this cycle also, `irc-next-channel' breaks again.  This doesn't
-;; pass my smell test.
+;; exists in this cycle also, `irc-next-channel' breaks again.
 (defconst irc-server->channels
   `(("irc.freenode.net"    . ,(cycle-new "freenode" "#freenode" "#nixos" "#emacs" "#pass"))
-    ("irc.corp.google.com" . ,(cycle-new "#omg" "#london" "#panic" "#prod-team")))
+    ("irc.corp.google.com" . ,(cycle-new "#drive-prod")))
   "Mapping of IRC servers to a cycle of my preferred channels.")
+
+;; TODO: Here is another horrible hack that should be revisted.
+(setq erc-autojoin-channels-alist
+      (->> irc-server->channels
+           (al-map-values #'cycle-to-list)
+           (al-map-keys (>-> (s-chop-prefix "irc.")
+                             (s-chop-suffix ".net")))))
 
 ;; TODO: Assert that no two servers have a channel with the same name. We need
 ;; this because that's the assumption that underpins the `irc-channel->server'
@@ -70,20 +82,6 @@
   "Using SERVER->CHANNELS, resolve an IRC's channels cycle from CHANNEL."
   (al-get (irc-channel->server server->channels channel)
           server->channels))
-
-;; Setting `erc-join-buffer' to 'bury prevents erc from stealing focus of the
-;; current buffer when it connects to IRC servers.
-(setq erc-join-buffer 'bury)
-
-;; TODO: Here is another horrible hack that should be revisted.
-(setq erc-autojoin-channels-alist
-      (->> irc-server->channels
-           (al-map-values #'cycle-to-list)
-           (al-map-keys (>-> (s-chop-prefix "irc.")
-                             (s-chop-suffix ".net")))))
-
-(defcustom irc-install-kbds? t
-  "When t, install the keybindings defined herein.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
