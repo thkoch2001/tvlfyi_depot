@@ -156,6 +156,7 @@ in lib.fix(self: {
     mullvad-vpn.enable = true;
     tlp.enable = true;
     fwupd.enable = true;
+    printing.enable = true;
 
     # expose i2c device as /dev/i2c-amdgpu-dm and make it user-accessible
     udev.extraRules = ''
