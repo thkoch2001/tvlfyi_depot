@@ -41,7 +41,7 @@ NAME    - the human-readable identifier for the display
 OUTPUT  - the xrandr identifier for the display
 PRIMARY - if true, send --primary flag to xrandr
 COORDS  - X and Y offsets
-SIZE    - the pixel resolution of the display
+SIZE    - the pixel resolution of the display (width height)
 RATE    - the refresh rate
 DPI     - the pixel density in dots per square inch
 rotate  - one of {normal,left,right,inverted}
@@ -107,7 +107,8 @@ See the man-page for xrandr for more details."
 (display-register laptop
                   :output "eDP1"
                   :primary nil
-                  :size (3840 2160)
+                  :coords (2560 1440)
+                  :size (1920 1080)
                   :rate 30.0
                   :dpi 144
                   :rotate normal)
@@ -115,14 +116,23 @@ See the man-page for xrandr for more details."
 (display-register 4k-horizontal
                   :output "DP2"
                   :primary t
-                  :coords (0 1062)
-                  :size (3840 2160)
+                  :coords (0 0)
+                  :size (2560 1440)
                   :rate 30.0
                   :dpi 144
                   :rotate normal)
 
+(display-register 4k-vertical
+                  :output "HDMI1"
+                  :primary nil
+                  :coords (-1440 -560)
+                  :size (2560 1440)
+                  :rate 30.0
+                  :dpi 144
+                  :rotate left)
+
 (display-arrangement primary
-                     :displays (4k-horizontal laptop))
+                     :displays (laptop 4k-horizontal 4k-vertical))
 
 (provide 'display)
 ;;; display.el ends here
