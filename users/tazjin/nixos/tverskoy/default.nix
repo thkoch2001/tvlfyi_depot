@@ -93,6 +93,14 @@ in lib.fix(self: {
     cpu.amd.updateMicrocode = true;
     enableRedistributableFirmware = true;
     bluetooth.enable = true;
+
+    opengl = {
+      enable = true;
+      extraPackages = with pkgs; [
+        vaapiVdpau
+        libvdpau-va-gl
+      ];
+    };
   };
 
   networking = {
