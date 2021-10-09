@@ -14,6 +14,9 @@
 root:
 # list of paths below `root` that should be
 # included in the resulting directory
+#
+# If path, need to refer to the actual file / directory to be included.
+# If a string, it is treated as a string relative to the root.
 paths:
 
 let
@@ -40,8 +43,13 @@ let
   # a leading slash. Additionally some sanity checking is done.
   makeSymlink = path:
     let
-      strPath = toString path;
-      contextPath = "${path}";
+      withLeading = p: if builtins.substring 0 1 p == "/" then p else "/" + p;
+      fullPath =
+        /**/ if builtins.isPath path then path
+        else if builtins.isString path then (root + withLeading path)
+        else builtins.throw "Unsupported path type ${builtins.typeOf path}";
+      strPath = toString fullPath;
+      contextPath = "${fullPath}";
       belowRoot = builtins.substring rootLength (-1) strPath;
       prefix = builtins.substring 0 rootLength strPath;
     in assert toString root == prefix; {
