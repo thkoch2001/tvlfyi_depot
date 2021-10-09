@@ -10,7 +10,7 @@ let
     nint
     ;
 
-  minimalDepot = sparseTree depot.path [
+  minimalDepot = sparseTree depot.path.origSrc [
     # general depot things
     "default.nix"
     "nix/readTree"
