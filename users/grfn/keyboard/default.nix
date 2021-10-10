@@ -24,7 +24,7 @@ rec {
       git
       python3
       pkgsCross.avr.buildPackages.binutils
-      pkgsCross.avr.buildPackages.gcc8
+      pkgsCross.avr.buildPackages.gcc
       avrlibc
       avrdude
     ];
