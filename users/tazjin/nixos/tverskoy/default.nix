@@ -245,7 +245,9 @@ in lib.fix(self: {
       chromium
       curl
       ddcutil
+      dfmt
       direnv
+      dmd
       dnsutils
       emacs27-nox # emacsclient
       exa
