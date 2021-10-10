@@ -30,6 +30,7 @@ let
     company
     counsel
     counsel-notmuch
+    d-mode
     direnv
     dockerfile-mode
     eglot
