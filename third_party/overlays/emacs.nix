@@ -2,10 +2,10 @@
 { ... }:
 
 let
-  # from 2021-09-27
-  commit = "61252f6d58c14eae1d67724c515bc27006df7999";
+  # from 2021-10-10
+  commit = "de51ad003df13d41a1107a1ed766eb226ef9382c";
   src = builtins.fetchTarball {
     url = "https://github.com/nix-community/emacs-overlay/archive/${commit}.tar.gz";
-    sha256 = "1d8869ld8zfq5q1gwx2iknikyymf6nfazrcm9agis1lab22ppp8r";
+    sha256 = "1spfd7wx7lz48kk7cs91gjx6zhvlliqc6376rxkc4idfb0q43xih";
   };
 in import src
