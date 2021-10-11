@@ -1,29 +1,29 @@
 (in-package :panettone.css)
 (declaim (optimize (safety 3)))
 
-(defparameter color/black
-  "rgb(24, 24, 24)")
+(defparameter color/bg
+  "var(--bg)")
+
+(defparameter color/text
+  "var(--text)")
 
 (defparameter color/light-gray
-  "#EEE")
+  "var(--light-gray)")
 
 (defparameter color/gray
-  "#8D8D8D")
+  "var(--gray)")
 
 (defparameter color/primary
-  "rgb(106, 154, 255)")
+  "var(--primary)")
 
 (defparameter color/primary-light
-  "rgb(150, 166, 200)")
+  "var(--primary-light)")
 
 (defparameter color/success
-  "rgb(168, 249, 166)")
-
-(defparameter color/success-2
-  "rgb(168, 249, 166)")
+  "var(--success)")
 
 (defparameter color/failure
-  "rgb(247, 167, 167)")
+  "var(--failure)")
 
 (defun button (selector)
   `((,selector
@@ -174,7 +174,27 @@
 
     (body
      :font-family "sans-serif"
-     :color ,color/black)
+     :color ,color/text
+     :background ,color/bg
+     :--text "rgb(24, 24, 24)"
+     :--bg "white"
+     :--gray "#8D8D8D"
+     :--primary "rgb(106, 154, 255)"
+     :--primary-light "rgb(150, 166, 200)"
+     :--success "rgb(168, 249, 166)"
+     :--failure "rgb(247, 167, 167)"
+     :--light-gray "#EEE")
+
+    (:media "(prefers-color-scheme: dark)"
+      (body
+        :--text "rgb(240, 240, 240)"
+        :--bg "black"
+        :--gray "#8D8D8D"
+        :--primary "rgb(106, 154, 255)"
+        :--primary-light "rgb(150, 166, 200)"
+        :--success "rgb(14, 130, 11)"
+        :--failure "rgb(124, 14, 14)"
+        :--light-gray "#222"))
 
     (a :color "inherit")
 
@@ -185,7 +205,7 @@
     (header
      :display "flex"
      :align-items "center"
-     :border-bottom "1px" "solid" ,color/black
+     :border-bottom "1px" "solid" ,color/text
      :margin-bottom "1rem"
 
      (h1
