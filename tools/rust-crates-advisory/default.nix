@@ -5,6 +5,8 @@ let
   bins =
        depot.nix.getBins pkgs.s6-portable-utils [ "s6-ln" "s6-cat" "s6-echo" "s6-mkdir" "s6-test" "s6-touch" ]
     // depot.nix.getBins pkgs.lr [ "lr" ]
+    // depot.nix.getBins pkgs.cargo-audit [ "cargo-audit" ]
+    // depot.nix.getBins pkgs.jq [ "jq" ]
     ;
 
   crate-advisories = "${depot.third_party.rustsec-advisory-db}/crates";
@@ -77,6 +79,50 @@ let
     bins.s6-touch "$out"
   ];
 
+  # Find all `Cargo.lock` files in the given path which must be a directory
+  allCargoLocks = path: let
+    dir = builtins.readDir path;
+    subdirs = builtins.map (sub: path + "/${sub}") (
+      builtins.attrNames (
+        lib.filterAttrs (_: v: v == "directory") dir
+      )
+    );
+  in
+    lib.optional (dir."Cargo.lock" or null == "regular") (path + "/Cargo.lock")
+    ++ lib.concatLists (
+      builtins.map allCargoLocks subdirs
+    );
+
+  # Converts a nix path below `depot.path.origSrc` into a string path relative
+  # to the depot root indicated using `//`.
+  toDepotPath = path:
+    builtins.replaceStrings [ (toString depot.path.origSrc) ] [ "/" ] (toString path);
+
+  check-all-our-lock-files = depot.nix.runExecline "check-all-our-lock-files" {
+    stdin = lib.concatMapStrings (path:
+      depot.nix.netstring.fromString "${path}"
+      + depot.nix.netstring.fromString (toDepotPath path)
+      + "\n"
+    ) (allCargoLocks depot.path.origSrc);
+  } [
+    "backtick" "-E" "report" [
+      "forstdin" "-E" "-n" "lockFileData"
+      "multidefine" "-d" "" "$lockFileData" [ "lockFile" "depotPath" ]
+      "pipeline" [
+        bins.cargo-audit "audit" "--json"
+        "-n" "--db" depot.third_party.rustsec-advisory-db
+        "-f" "$lockFile"
+      ]
+      bins.jq "-rj" "--arg" "attr" "$depotPath"
+      "-f" ../../users/sterni/nixpkgs-crate-holes/format-audit-result.jq
+    ]
+    "if" [ depot.tools.eprintf "%s\n" "$report" ]
+    # empty report implies success (no vulnerabilities)
+    "if" [ bins.s6-test "-z" "$report" ]
+    "importas" "out" "out"
+    bins.s6-touch "$out"
+  ];
+
 in depot.nix.utils.drvTargets {
 
   check-all-our-crates =
@@ -85,6 +131,7 @@ in depot.nix.utils.drvTargets {
       check-all-our-crates;
 
   inherit
+    check-all-our-lock-files
     check-crate-advisory
     ;
 }
