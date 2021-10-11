@@ -15,6 +15,7 @@ let
     epkgs.melpaPackages.adoc-mode
     epkgs.melpaPackages.dockerfile-mode
     epkgs.melpaPackages.haskell-mode
+    epkgs.melpaPackages.jq-mode
     epkgs.melpaPackages.markdown-mode
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.sly

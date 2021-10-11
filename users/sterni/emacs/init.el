@@ -152,6 +152,8 @@
   :custom bqn-mode-map-prefix "C-s-") ; probably rather using C-\
 (use-package yaml-mode)
 (use-package dockerfile-mode)
+(use-package jq-mode
+  :config (add-to-list 'auto-mode-alist '("\\.jq\\'" . jq-mode)))
 (use-package rust-mode)
 (use-package sly
   :after evil
