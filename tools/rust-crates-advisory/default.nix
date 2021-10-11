@@ -3,8 +3,12 @@
 let
 
   bins =
-    depot.nix.getBins pkgs.s6-portable-utils [ "s6-ln" "s6-cat" "s6-echo" "s6-mkdir" "s6-test" "s6-touch" ]
+    depot.nix.getBins pkgs.s6-portable-utils [ "s6-ln" "s6-cat" "s6-echo" "s6-mkdir" "s6-test" "s6-touch" "s6-dirname" ]
     // depot.nix.getBins pkgs.lr [ "lr" ]
+    // depot.nix.getBins pkgs.cargo-audit [ "cargo-audit" ]
+    // depot.nix.getBins pkgs.jq [ "jq" ]
+    // depot.nix.getBins pkgs.findutils [ "find" ]
+    // depot.nix.getBins pkgs.gnused [ "sed" ]
   ;
 
   crate-advisories = "${depot.third_party.rustsec-advisory-db}/crates";
@@ -132,6 +136,84 @@ let
     "$out"
   ];
 
+  check-all-our-lock-files = depot.nix.writeExecline "check-all-our-lock-files" { } [
+    "backtick"
+    "-E"
+    "report"
+    [
+      "pipeline"
+      [ bins.find "." "-name" "Cargo.lock" "-and" "-type" "f" "-print0" ]
+      "forstdin"
+      "-E"
+      "-0"
+      "lockFile"
+      "backtick"
+      "-E"
+      "depotPath"
+      [
+        "pipeline"
+        [ bins.s6-dirname "$lockFile" ]
+        bins.sed
+        "s|^\\.|/|"
+      ]
+      "pipeline"
+      [
+        bins.cargo-audit
+        "audit"
+        "--json"
+        "-n"
+        "--db"
+        depot.third_party.rustsec-advisory-db
+        "-f"
+        "$lockFile"
+      ]
+      bins.jq
+      "-rj"
+      "--arg"
+      "attr"
+      "$depotPath"
+      "--arg"
+      "maintainers"
+      ""
+      "-f"
+      ../../users/sterni/nixpkgs-crate-holes/format-audit-result.jq
+    ]
+    "if"
+    [ depot.tools.eprintf "%s\n" "$report" ]
+    "ifelse"
+    [ bins.s6-test "-z" "$report" ]
+    # empty report implies success (no advisories)
+    [ "exit" "0" ]
+    # If there are advisories, add the report as an annotation to the pipeline
+    # run if we are running inside buildkite. Otherwise just exit with an error.
+    "ifte"
+    [ "exit" "0" ]
+    [ "exit" "1" ]
+    "if"
+    [
+      "importas"
+      "-D"
+      ""
+      "BUILDKITE_BUILD_ID"
+      "BUILDKITE_BUILD_ID"
+      bins.s6-test
+      "-n"
+      "$BUILDKITE_BUILD_ID"
+    ]
+    "pipeline"
+    [
+      "printf"
+      "%s"
+      "$report"
+    ]
+    "buildkite-agent"
+    "annotate"
+    "--style"
+    "warning"
+    "--context"
+    "check-all-our-lock-files"
+  ];
+
 in
 depot.nix.readTree.drvTargets {
 
@@ -143,4 +225,13 @@ depot.nix.readTree.drvTargets {
   inherit
     check-crate-advisory
     ;
+
+
+  check-all-our-lock-files = check-all-our-lock-files // {
+    meta.ci.extraSteps.run = {
+      label = "Check Cargo.lock files in depot for advisories";
+      alwaysRun = true;
+      command = check-all-our-lock-files;
+    };
+  };
 }
