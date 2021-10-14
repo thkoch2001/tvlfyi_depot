@@ -39,6 +39,30 @@
       },
       "revId": "7accec28db3444bd883ca44830c577f9af69a19e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7a4a283_a2d551b8",
+        "filename": "web/panettone/src/css.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2021-10-14T20:30:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a423e2ad_62dc63b4",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 19
+      },
+      "revId": "7accec28db3444bd883ca44830c577f9af69a19e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
