@@ -237,6 +237,7 @@ in lib.fix(self: {
       screenLock
       tools.nsfv-setup
       users.tazjin.emacs
+      third_party.dfmt
     ]) ++
 
     # programs from nixpkgs
@@ -245,7 +246,6 @@ in lib.fix(self: {
       chromium
       curl
       ddcutil
-      dfmt
       direnv
       dmd
       dnsutils
