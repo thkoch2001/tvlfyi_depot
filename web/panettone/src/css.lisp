@@ -1,33 +1,9 @@
 (in-package :panettone.css)
 (declaim (optimize (safety 3)))
 
-(defparameter color/black
-  "rgb(24, 24, 24)")
-
-(defparameter color/light-gray
-  "#EEE")
-
-(defparameter color/gray
-  "#8D8D8D")
-
-(defparameter color/primary
-  "rgb(106, 154, 255)")
-
-(defparameter color/primary-light
-  "rgb(150, 166, 200)")
-
-(defparameter color/success
-  "rgb(168, 249, 166)")
-
-(defparameter color/success-2
-  "rgb(168, 249, 166)")
-
-(defparameter color/failure
-  "rgb(247, 167, 167)")
-
 (defun button (selector)
   `((,selector
-     :background-color ,color/success
+     :background-color "var(--success)"
      :padding "0.5rem"
      :text-decoration "none"
      :transition "box-shadow" "0.15s" "ease-in-out")
@@ -42,7 +18,7 @@
 
 (defparameter markdown-styles
   `((blockquote
-     :border-left "5px" "solid" ,color/light-gray
+     :border-left "5px" "solid" "var(--light)"-gray
      :padding-left "1rem"
      :margin-left "0rem")
     (pre
@@ -60,7 +36,7 @@
       :padding-bottom "1rem")
 
      ((li + li)
-      :border-top "1px" "solid" ,color/gray)
+      :border-top "1px" "solid" "var(--gray)")
 
      (a
       :text-decoration "none"
@@ -70,20 +46,20 @@
       :outline "none"
 
       (.issue-subject
-       :color ,color/primary)))
+       :color "var(--primary)")))
 
     (.comment-count
-     :color ,color/gray)))
+     :color "var(--gray)")))
 
 (defparameter issue-history-styles
   `((.issue-history
      :list-style "none"
-     :border-top "1px" "solid" ,color/gray
+     :border-top "1px" "solid" "var(--gray)"
      :padding-top "1rem"
      :padding-left "2rem"
 
      (.comment-info
-      :color ,color/gray
+      :color "var(--gray)"
       :margin 0
       :padding-top "1rem"
 
@@ -94,16 +70,16 @@
      ((:or .comment .event)
       :padding-top "1rem"
       :padding-bottom "1rem"
-      :border-bottom "1px" "solid" ,color/gray
+      :border-bottom "1px" "solid" "var(--gray)"
 
       (p :margin 0))
 
      ((:and (:or .comment .event) :target)
-      :border-color ,color/primary
+      :border-color "var(--primary)"
       :border-bottom-width "3px")
 
      (.event
-      :color ,color/gray))))
+      :color "var(--gray)"))))
 
 (defparameter form-styles
   `(((:or (:and input (:or (:= type "text")
@@ -115,7 +91,7 @@
      :border-top "none"
      :border-left "none"
      :border-right "none"
-     :border-bottom "1px" "solid" ,color/gray
+     :border-bottom "1px" "solid" "var(--gray)"
      :margin-bottom "1rem")
 
     (textarea
@@ -158,12 +134,12 @@
       :flex 1)
 
      (.edit-issue
-      :background-color ,color/light-gray
+      :background-color "var(--light)"-gray
       :flex 0
       :margin-right "0.5rem")
 
      (.close-issue
-      :background-color ,color/failure))))
+      :background-color "var(--failure)"))))
 
 (defparameter styles
   `(,@form-styles
@@ -174,7 +150,27 @@
 
     (body
      :font-family "sans-serif"
-     :color ,color/black)
+     :color "var(--text)"
+     :background "var(--bg)"
+     :--text "rgb(24, 24, 24)"
+     :--bg "white"
+     :--gray "#8D8D8D"
+     :--primary "rgb(106, 154, 255)"
+     :--primary-light "rgb(150, 166, 200)"
+     :--success "rgb(168, 249, 166)"
+     :--failure "rgb(247, 167, 167)"
+     :--light-gray "#EEE")
+
+    (:media "(prefers-color-scheme: dark)"
+      (body
+        :--text "rgb(240, 240, 240)"
+        :--bg "black"
+        :--gray "#8D8D8D"
+        :--primary "rgb(106, 154, 255)"
+        :--primary-light "rgb(150, 166, 200)"
+        :--success "rgb(14, 130, 11)"
+        :--failure "rgb(124, 14, 14)"
+        :--light-gray "#222"))
 
     (a :color "inherit")
 
@@ -185,7 +181,7 @@
     (header
      :display "flex"
      :align-items "center"
-     :border-bottom "1px" "solid" ,color/black
+     :border-bottom "1px" "solid" "var(--text)"
      :margin-bottom "1rem"
 
      (h1
@@ -193,12 +189,12 @@
       :flex 1)
 
      (.issue-number
-      :color ,color/gray
+      :color "var(--gray)"
       :font-size "1.5rem"))
 
     (nav
      :display "flex"
-     :color ,color/gray
+     :color "var(--gray)"
      :justify-content "space-between"
 
      (.nav-group
@@ -207,21 +203,21 @@
        :margin-left "0.5rem")))
 
     (footer
-     :border-top "1px" "solid" ,color/gray
+     :border-top "1px" "solid" "var(--gray)"
      :padding-top "1rem"
      :margin-top "1rem"
-     :color ,color/gray)
+     :color "var(--gray)")
 
     ,@(button '.new-issue)
 
     (.alert
      :padding "0.5rem"
      :margin-bottom "1rem"
-     :background-color ,color/failure)
+     :background-color "var(--failure)")
 
     (.login-form
      :max-width "300px"
      :margin "0 auto")
 
     (.created-by-at
-     :color ,color/gray)))
+     :color "var(--gray)")))
