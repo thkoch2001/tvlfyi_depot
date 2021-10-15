@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04f8c982_d1573530",
+        "filename": "third_party/dfmt/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-10-15T10:54:40Z",
+      "side": 1,
+      "message": "Seems like the `dmd` target is with some debug info, but I\u0027m not sure if the `ldc` target is feasible to use. This one seems to be used for release builds with LDC_FLAGS including `-flto\u003dfull`.",
+      "revId": "77941f160213675b30cbeab8afd4aa3ac383c28f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
