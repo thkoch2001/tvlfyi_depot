@@ -17,14 +17,15 @@ pkgs.stdenv.mkDerivation rec {
     dmd
 
     # fake git that will be used to fetch the version string
-    (pkgs.writeShellScriptBin "git" ''
-      echo 'v${version}'
-    '')
+    (pkgs.writeShellScriptBin "git" "echo 'v${version}'")
   ];
+
+  DFLAGS = "-release";
 
   installPhase = ''
     mkdir -p $out/bin
     cp bin/dfmt $out/bin/
+    strip -s $out/bin/dfmt
   '';
 
   meta = {
