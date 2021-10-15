@@ -53,7 +53,9 @@ else
   ([ "- [ ] "
    , "`", $attr, "`: "
    , (.vulnerabilities.count | tostring)
-   , " vulnerabilities in Cargo.lock\n"
+   , " vulnerabilities in Cargo.lock"
+   , if $maintainers != "" then " (cc " + $maintainers + ")" else "" end
+   , "\n"
    ] + (.vulnerabilities.list | map(format_vulnerability))
   ) | add
 end

@@ -24,6 +24,15 @@ let
     eprintf = depot.tools.eprintf;
   };
 
+  # list of maintainers we may @mention on GitHub
+  maintainerWhitelist = builtins.attrValues {
+    inherit (lib.maintainers)
+      sternenseemann
+      qyliss
+      jk
+    ;
+  };
+
   # buildRustPackage handling
 
   /* Predicate by which we identify rust packages we are interested in,
@@ -98,9 +107,12 @@ let
 
   # Report generation and formatting
 
-  reportFor = { attr, lock, ... }: let
+  reportFor = { attr, lock, maintainers ? [] }: let
     # naïve attribute path to Nix syntax conversion
     strAttr = lib.concatStringsSep "." attr;
+    strMaintainers = lib.concatMapStringsSep " " (m: "@${m.github}") (
+      builtins.filter (x: builtins.elem x maintainerWhitelist) maintainers
+    );
   in
     if lock == null
     then pkgs.emptyFile
@@ -113,7 +125,9 @@ let
       ]
       "importas" "out" "out"
       "redirfd" "-w" "1" "$out"
-      bins.jq "-rj" "-f" ./format-audit-result.jq "--arg" "attr" strAttr
+      bins.jq "-rj" "-f" ./format-audit-result.jq
+      "--arg" "attr" strAttr
+      "--arg" "maintainers" strMaintainers
     ];
 
   # GHMF in issues splits paragraphs on newlines
