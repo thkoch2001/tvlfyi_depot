@@ -7,7 +7,8 @@ let
   inherit (builtins) map readFile sort foldl';
   inherit (lib) max singleton;
   inherit (pkgs) writeText;
-  inherit (depot.users.tazjin) atom-feed blog renderMarkdown;
+  inherit (depot.nix) renderMarkdown;
+  inherit (depot.users.tazjin) atom-feed blog;
 
   postToEntry = defun [ blog.post atom-feed.entry ] (post: rec {
     id = "https://tazj.in/blog/${post.key}";
