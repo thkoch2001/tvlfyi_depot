@@ -16,6 +16,24 @@
       "message": "can we do strip -s or does that break anything? I can\u0027t quite figure out what the default behavior of GNU strip is, but we don strip -S in fixupPhase by default.",
       "revId": "e96295cc607e87490ec44a9d796685bf28e01205",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c657e969_9186494b",
+        "filename": "third_party/dfmt/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-10-16T14:32:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd98972b_aa0a7a02",
+      "revId": "e96295cc607e87490ec44a9d796685bf28e01205",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
