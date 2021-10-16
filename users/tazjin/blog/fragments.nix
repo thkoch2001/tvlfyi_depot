@@ -12,7 +12,7 @@
 let
   inherit (builtins) filter map hasAttr replaceStrings;
   inherit (pkgs) runCommandNoCC writeText;
-  inherit (depot.users.tazjin) renderMarkdown;
+  inherit (depot.nix) renderMarkdown;
 
   # Generate a post list for all listed, non-draft posts.
   isDraft = post: (hasAttr "draft" post) && post.draft;
