@@ -1,6 +1,6 @@
 use std::ops::Index;
 
-use super::opcode::OpCode;
+use super::opcode::{ConstantIdx, OpCode};
 use super::value;
 
 // In the book, this type is a hand-rolled dynamic array
@@ -38,8 +38,8 @@ impl Chunk {
         idx
     }
 
-    pub fn constant(&self, idx: usize) -> &value::Value {
-        self.constants.index(idx)
+    pub fn constant(&self, idx: ConstantIdx) -> &value::Value {
+        self.constants.index(idx.0)
     }
 
     fn add_line(&mut self, line: usize) {
@@ -79,7 +79,7 @@ pub fn disassemble_instruction(chunk: &Chunk, offset: usize) {
 
     match chunk.code.index(offset) {
         OpCode::OpConstant(idx) => {
-            println!("OpConstant({}) '{:?}'", *idx, chunk.constant(*idx))
+            println!("OpConstant({:?}) '{:?}'", idx, chunk.constant(*idx))
         }
         op => println!("{:?}", op),
     }

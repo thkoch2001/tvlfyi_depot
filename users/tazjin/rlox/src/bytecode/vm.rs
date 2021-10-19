@@ -196,13 +196,13 @@ impl VM {
                 }
 
                 OpCode::OpGetLocal(local_idx) => {
-                    let value = self.stack[*local_idx].clone();
+                    let value = self.stack[local_idx.0].clone();
                     self.push(value);
                 }
 
                 OpCode::OpSetLocal(local_idx) => {
-                    debug_assert!(self.stack.len() > *local_idx, "stack is not currently large enough for local");
-                    self.stack[*local_idx] = self.stack.last().unwrap().clone();
+                    debug_assert!(self.stack.len() > local_idx.0, "stack is not currently large enough for local");
+                    self.stack[local_idx.0] = self.stack.last().unwrap().clone();
                 }
             }
 
