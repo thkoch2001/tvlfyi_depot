@@ -28,7 +28,7 @@ let
 
   escape = replaceStrings [ "<" ">" "&" "'" ] [ "&lt;" "&gt;" "&amp;" "&#39;" ];
 
-  postToEntry = defun [ users.tazjin.blog.post entry ] (post: {
+  postToEntry = defun [ web.blog.post entry ] (post: {
     class = "blog";
     title = post.title;
     url = "/blog/${post.key}";
