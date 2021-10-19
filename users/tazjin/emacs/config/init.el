@@ -180,7 +180,7 @@
 (use-package cargo
   :hook ((rust-mode . cargo-minor-mode)
          (cargo-process-mode . visual-line-mode))
-  :bind (:map cargo-minor-mode-map ("C-c C-c C-l" . ignore)))
+  :bind (:map cargo-mode-map ("C-c C-c C-l" . ignore)))
 
 (use-package dockerfile-mode)
 
