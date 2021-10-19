@@ -1,7 +1,13 @@
+#[derive(Clone, Copy, Debug)]
+pub struct ConstantIdx(pub usize);
+
+#[derive(Clone, Copy, Debug)]
+pub struct StackIdx(pub usize);
+
 #[derive(Debug)]
 pub enum OpCode {
     /// Push a constant onto the stack.
-    OpConstant(usize),
+    OpConstant(ConstantIdx),
 
     // Literal pushes
     OpNil,
@@ -31,9 +37,9 @@ pub enum OpCode {
     OpPop,
 
     // Variable management
-    OpDefineGlobal(usize),
-    OpGetGlobal(usize),
-    OpSetGlobal(usize),
-    OpGetLocal(usize),
-    OpSetLocal(usize),
+    OpDefineGlobal(ConstantIdx),
+    OpGetGlobal(ConstantIdx),
+    OpSetGlobal(ConstantIdx),
+    OpGetLocal(StackIdx),
+    OpSetLocal(StackIdx),
 }
