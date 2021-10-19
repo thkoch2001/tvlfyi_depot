@@ -8,8 +8,7 @@ let
   inherit (lib) max singleton;
   inherit (pkgs) writeText;
   inherit (depot.nix) renderMarkdown;
-  inherit (depot.users.tazjin) blog;
-  inherit (depot.web) atom-feed;
+  inherit (depot.web) blog atom-feed;
 
   postToEntry = defun [ blog.post atom-feed.entry ] (post: rec {
     id = "https://tazj.in/blog/${post.key}";
@@ -37,7 +36,8 @@ let
     };
   });
 
-  allEntries = (map postToEntry blog.posts) ++ (map pageEntryToEntry pageEntries);
+  allEntries = (map postToEntry depot.users.tazjin.blog.posts)
+             ++ (map pageEntryToEntry pageEntries);
 
   mostRecentlyUpdated = foldl' max 0 (map (e: e.updated) allEntries);
 
