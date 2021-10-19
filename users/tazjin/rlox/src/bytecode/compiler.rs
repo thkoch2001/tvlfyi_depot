@@ -1,7 +1,7 @@
 use super::chunk::Chunk;
 use super::errors::{Error, ErrorKind, LoxResult};
 use super::interner::{InternedStr, Interner};
-use super::opcode::OpCode;
+use super::opcode::{ConstantIdx, OpCode, StackIdx};
 use super::value::Value;
 use crate::scanner::{self, Token, TokenKind};
 
@@ -234,7 +234,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.define_variable(global)
     }
 
-    fn define_variable(&mut self, var: usize) -> LoxResult<()> {
+    fn define_variable(&mut self, var: ConstantIdx) -> LoxResult<()> {
         if self.locals.scope_depth == 0 {
             self.emit_op(OpCode::OpDefineGlobal(var));
         } else {
@@ -493,12 +493,12 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         Ok(self.strings.intern(ident))
     }
 
-    fn identifier_constant(&mut self) -> LoxResult<usize> {
+    fn identifier_constant(&mut self) -> LoxResult<ConstantIdx> {
         let ident = self.identifier_str(Self::previous)?;
         Ok(self.emit_constant(Value::String(ident.into()), false))
     }
 
-    fn resolve_local(&mut self) -> Option<usize> {
+    fn resolve_local(&mut self) -> Option<StackIdx> {
         dbg!(&self.locals);
         for (idx, local) in self.locals.locals.iter().enumerate().rev() {
             if self.previous().lexeme == local.name.lexeme {
@@ -506,21 +506,20 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
                     // TODO(tazjin): *return* err
                     panic!("can't read variable in its own initialiser");
                 }
-                return Some(idx);
+                return Some(StackIdx(idx));
             }
         }
 
         None
     }
 
-    fn add_local(&mut self, name: Token) -> LoxResult<()> {
+    fn add_local(&mut self, name: Token) {
         let local = Local {
             name,
             depth: Depth::Unitialised,
         };
 
         self.locals.locals.push(local);
-        Ok(()) // TODO(tazjin): needed?
     }
 
     fn declare_variable(&mut self) -> LoxResult<()> {
@@ -543,10 +542,11 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             }
         }
 
-        self.add_local(name)
+        self.add_local(name);
+        Ok(())
     }
 
-    fn parse_variable(&mut self) -> LoxResult<usize> {
+    fn parse_variable(&mut self) -> LoxResult<ConstantIdx> {
         consume!(
             self,
             TokenKind::Identifier(_),
@@ -555,7 +555,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
         self.declare_variable()?;
         if self.locals.scope_depth > 0 {
-            return Ok(0); // TODO(tazjin): grr sentinel
+            return Ok(ConstantIdx(0)); // TODO(tazjin): grr sentinel
         }
 
         let id = self.identifier_str(Self::previous)?;
@@ -583,8 +583,8 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         self.current_chunk().add_op(op, line);
     }
 
-    fn emit_constant(&mut self, val: Value, with_op: bool) -> usize {
-        let idx = self.chunk.add_constant(val);
+    fn emit_constant(&mut self, val: Value, with_op: bool) -> ConstantIdx {
+        let idx = ConstantIdx(self.chunk.add_constant(val));
 
         if with_op {
             self.emit_op(OpCode::OpConstant(idx));
