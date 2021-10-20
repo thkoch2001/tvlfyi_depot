@@ -1,4 +1,4 @@
-args@{ pkgs, ... }:
+args@{ pkgs, depot, ... }:
 with pkgs;
 let
   site = import ./site.nix args;
@@ -12,6 +12,11 @@ let
     minify --type css < ${./main.css} > $out
   '';
 
+  keys = runCommand "ssh-keys" {} ''
+    touch $out
+    echo "${depot.users.grfn.keys.main}" >> $out
+  '';
+
   website =
     runCommand "gws.fyi" { } ''
       mkdir -p $out
@@ -19,6 +24,7 @@ let
       cp ${site.index} $out/index.html
       cp -r ${site.recipes} $out/recipes
       cp ${resume} $out/resume.pdf
+      cp ${keys} $out/keys
     '';
 
 in (writeShellScript "deploy.sh" ''
