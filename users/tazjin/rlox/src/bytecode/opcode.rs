@@ -4,6 +4,9 @@ pub struct ConstantIdx(pub usize);
 #[derive(Clone, Copy, Debug)]
 pub struct StackIdx(pub usize);
 
+#[derive(Clone, Copy, Debug)]
+pub struct CodeIdx(pub usize);
+
 #[derive(Debug)]
 pub enum OpCode {
     /// Push a constant onto the stack.
