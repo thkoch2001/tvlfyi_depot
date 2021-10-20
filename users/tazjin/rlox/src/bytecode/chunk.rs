@@ -1,6 +1,6 @@
 use std::ops::Index;
 
-use super::opcode::{ConstantIdx, OpCode};
+use super::opcode::{CodeIdx, ConstantIdx, OpCode};
 use super::value;
 
 // In the book, this type is a hand-rolled dynamic array
@@ -25,11 +25,11 @@ struct Span {
 }
 
 impl Chunk {
-    pub fn add_op(&mut self, data: OpCode, line: usize) -> usize {
+    pub fn add_op(&mut self, data: OpCode, line: usize) -> CodeIdx {
         let idx = self.code.len();
         self.code.push(data);
         self.add_line(line);
-        idx
+        CodeIdx(idx)
     }
 
     pub fn add_constant(&mut self, data: value::Value) -> usize {

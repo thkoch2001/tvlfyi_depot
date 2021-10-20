@@ -1,7 +1,7 @@
 use super::chunk::Chunk;
 use super::errors::{Error, ErrorKind, LoxResult};
 use super::interner::{InternedStr, Interner};
-use super::opcode::{ConstantIdx, OpCode, StackIdx};
+use super::opcode::{CodeIdx, ConstantIdx, OpCode, StackIdx};
 use super::value::Value;
 use crate::scanner::{self, Token, TokenKind};
 
@@ -350,7 +350,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             TokenKind::Bang => self.emit_op(OpCode::OpNot),
             TokenKind::Minus => self.emit_op(OpCode::OpNegate),
             _ => unreachable!("only called for unary operator tokens"),
-        }
+        };
 
         Ok(())
     }
@@ -372,7 +372,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
             TokenKind::BangEqual => {
                 self.emit_op(OpCode::OpEqual);
-                self.emit_op(OpCode::OpNot);
+                self.emit_op(OpCode::OpNot)
             }
 
             TokenKind::EqualEqual => self.emit_op(OpCode::OpEqual),
@@ -380,17 +380,17 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
             TokenKind::GreaterEqual => {
                 self.emit_op(OpCode::OpLess);
-                self.emit_op(OpCode::OpNot);
+                self.emit_op(OpCode::OpNot)
             }
 
             TokenKind::Less => self.emit_op(OpCode::OpLess),
             TokenKind::LessEqual => {
                 self.emit_op(OpCode::OpGreater);
-                self.emit_op(OpCode::OpNot);
+                self.emit_op(OpCode::OpNot)
             }
 
             _ => unreachable!("only called for binary operator tokens"),
-        }
+        };
 
         Ok(())
     }
@@ -401,7 +401,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             TokenKind::True => self.emit_op(OpCode::OpTrue),
             TokenKind::False => self.emit_op(OpCode::OpFalse),
             _ => unreachable!("only called for literal value tokens"),
-        }
+        };
 
         Ok(())
     }
@@ -432,16 +432,16 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             match local_idx {
                 Some(idx) => self.emit_op(OpCode::OpSetLocal(idx)),
                 None => {
-                    self.emit_op(OpCode::OpSetGlobal(ident.unwrap()));
+                    self.emit_op(OpCode::OpSetGlobal(ident.unwrap()))
                 }
-            }
+            };
         } else {
             match local_idx {
                 Some(idx) => self.emit_op(OpCode::OpGetLocal(idx)),
                 None => {
                     self.emit_op(OpCode::OpGetGlobal(ident.unwrap()))
                 }
-            }
+            };
         }
 
         Ok(())
@@ -579,9 +579,9 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         Ok(())
     }
 
-    fn emit_op(&mut self, op: OpCode) {
+    fn emit_op(&mut self, op: OpCode) -> CodeIdx {
         let line = self.previous().line;
-        self.current_chunk().add_op(op, line);
+        self.current_chunk().add_op(op, line)
     }
 
     fn emit_constant(&mut self, val: Value, with_op: bool) -> ConstantIdx {
