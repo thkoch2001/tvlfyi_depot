@@ -138,12 +138,14 @@ fn local_variables() {
         r#"
           var a = 10;
           var b = 5;
-
+          var result = 0;
           {
             var b = 10;
             var c = 2;
-            a * b * c;
+            result = a * b * c;
           }
+
+          result;
         "#,
         200.0,
     );
