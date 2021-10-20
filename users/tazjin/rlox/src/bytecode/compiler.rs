@@ -222,7 +222,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     }
 
     fn var_declaration(&mut self) -> LoxResult<()> {
-        let global = self.parse_variable()?;
+        let idx = self.parse_variable()?;
 
         if self.match_token(&TokenKind::Equal) {
             self.expression()?;
@@ -231,12 +231,12 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         }
 
         self.expect_semicolon("expect ';' after variable declaration")?;
-        self.define_variable(global)
+        self.define_variable(idx)
     }
 
-    fn define_variable(&mut self, var: ConstantIdx) -> LoxResult<()> {
+    fn define_variable(&mut self, var: Option<ConstantIdx>) -> LoxResult<()> {
         if self.locals.scope_depth == 0 {
-            self.emit_op(OpCode::OpDefineGlobal(var));
+            self.emit_op(OpCode::OpDefineGlobal(var.expect("should be global")));
         } else {
             self.locals.locals.last_mut()
                 .expect("fatal: variable not yet added at definition")
@@ -418,13 +418,13 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         Ok(())
     }
 
-    fn named_variable(&mut self) -> LoxResult<()> {
-        let local_idx = self.resolve_local();
+    fn named_variable(&mut self, name: Token) -> LoxResult<()> {
+        let local_idx = self.resolve_local(&name);
 
         let ident = if local_idx.is_some() {
             None
         } else {
-            Some(self.identifier_constant()?)
+            Some(self.identifier_constant(&name)?)
         };
 
         if self.match_token(&TokenKind::Equal) {
@@ -448,7 +448,8 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     }
 
     fn variable(&mut self) -> LoxResult<()> {
-        self.named_variable()
+        let name = self.previous().clone();
+        self.named_variable(name)
     }
 
     fn parse_precedence(&mut self, precedence: Precedence) -> LoxResult<()> {
@@ -478,9 +479,9 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn identifier_str(
         &mut self,
-        token_fn: fn(&Self) -> &Token,
+        token: &Token,
     ) -> LoxResult<InternedStr> {
-        let ident = match &token_fn(self).kind {
+        let ident = match &token.kind {
             TokenKind::Identifier(ident) => ident.to_string(),
             _ => {
                 return Err(Error {
@@ -493,15 +494,14 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         Ok(self.strings.intern(ident))
     }
 
-    fn identifier_constant(&mut self) -> LoxResult<ConstantIdx> {
-        let ident = self.identifier_str(Self::previous)?;
+    fn identifier_constant(&mut self, name: &Token) -> LoxResult<ConstantIdx> {
+        let ident = self.identifier_str(name)?;
         Ok(self.emit_constant(Value::String(ident.into()), false))
     }
 
-    fn resolve_local(&mut self) -> Option<StackIdx> {
-        dbg!(&self.locals);
+    fn resolve_local(&self, name: &Token) -> Option<StackIdx> {
         for (idx, local) in self.locals.locals.iter().enumerate().rev() {
-            if self.previous().lexeme == local.name.lexeme {
+            if name.lexeme == local.name.lexeme {
                 if let Depth::Unitialised = local.depth {
                     // TODO(tazjin): *return* err
                     panic!("can't read variable in its own initialiser");
@@ -546,7 +546,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         Ok(())
     }
 
-    fn parse_variable(&mut self) -> LoxResult<ConstantIdx> {
+    fn parse_variable(&mut self) -> LoxResult<Option<ConstantIdx>> {
         consume!(
             self,
             TokenKind::Identifier(_),
@@ -555,11 +555,12 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
         self.declare_variable()?;
         if self.locals.scope_depth > 0 {
-            return Ok(ConstantIdx(0)); // TODO(tazjin): grr sentinel
+            return Ok(None);
         }
 
-        let id = self.identifier_str(Self::previous)?;
-        Ok(self.emit_constant(Value::String(id.into()), false))
+        let name = self.previous().clone();
+        let id = self.identifier_str(&name)?;
+        Ok(Some(self.emit_constant(Value::String(id.into()), false)))
     }
 
     fn current_chunk(&mut self) -> &mut Chunk {
