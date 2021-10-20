@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61af6269_68fce771",
+        "filename": "web/blog/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-10-20T12:56:41Z",
+      "side": 1,
+      "message": "left over tazjin",
+      "revId": "bc13d166849571637a07f4a7be805992abb0fa9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "862b935d_7ce77245",
+        "filename": "web/blog/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-10-20T12:56:41Z",
+      "side": 1,
+      "message": "rendered is not exposed?",
+      "revId": "bc13d166849571637a07f4a7be805992abb0fa9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
