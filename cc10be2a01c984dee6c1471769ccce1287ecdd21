@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa9d1a32_45911505",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-10-20T13:51:18Z",
+      "side": 1,
+      "message": "I might end up using this too!",
+      "revId": "cc10be2a01c984dee6c1471769ccce1287ecdd21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b38f7ea5_dfef9379",
+        "filename": "web/blog/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-10-20T13:51:18Z",
+      "side": 1,
+      "message": "\u003e the tvl",
+      "range": {
+        "startLine": 1,
+        "startChar": 44,
+        "endLine": 1,
+        "endChar": 48
+      },
+      "revId": "cc10be2a01c984dee6c1471769ccce1287ecdd21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
