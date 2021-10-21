@@ -213,6 +213,10 @@ impl VM {
                     panic!("unpatched jump detected - this is a fatal compiler error!");
                 }
 
+                OpCode::OpJump(offset) => {
+                    self.ip += offset.0;
+                }
+
                 OpCode::OpJumpIfFalse(offset) => {
                     if self
                         .stack

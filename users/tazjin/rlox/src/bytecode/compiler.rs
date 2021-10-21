@@ -343,8 +343,17 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
         );
 
         let then_jump = self.emit_op(OpCode::OpJumpPlaceholder(false));
+        self.emit_op(OpCode::OpPop);
         self.statement()?;
+        let else_jump = self.emit_op(OpCode::OpJumpPlaceholder(true));
         self.patch_jump(then_jump);
+        self.emit_op(OpCode::OpPop);
+
+        if self.match_token(&TokenKind::Else) {
+            self.statement()?;
+        }
+
+        self.patch_jump(else_jump);
 
         Ok(())
     }
@@ -619,6 +628,11 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn patch_jump(&mut self, idx: CodeIdx) {
         let offset = CodeOffset(self.chunk.code.len() - idx.0 - 1);
+
+        if let OpCode::OpJumpPlaceholder(true) = self.chunk.code[idx.0] {
+            self.chunk.code[idx.0] = OpCode::OpJump(offset);
+            return;
+        }
 
         if let OpCode::OpJumpPlaceholder(false) = self.chunk.code[idx.0] {
             self.chunk.code[idx.0] = OpCode::OpJumpIfFalse(offset);

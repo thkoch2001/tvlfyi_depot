@@ -51,5 +51,6 @@ pub enum OpCode {
 
     // Control flow
     OpJumpPlaceholder(bool),
+    OpJump(CodeOffset),
     OpJumpIfFalse(CodeOffset),
 }
