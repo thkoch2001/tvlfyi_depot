@@ -7,6 +7,9 @@ pub struct StackIdx(pub usize);
 #[derive(Clone, Copy, Debug)]
 pub struct CodeIdx(pub usize);
 
+#[derive(Clone, Copy, Debug)]
+pub struct CodeOffset(pub usize);
+
 #[derive(Debug)]
 pub enum OpCode {
     /// Push a constant onto the stack.
@@ -45,4 +48,8 @@ pub enum OpCode {
     OpSetGlobal(ConstantIdx),
     OpGetLocal(StackIdx),
     OpSetLocal(StackIdx),
+
+    // Control flow
+    OpJumpPlaceholder(bool),
+    OpJumpIfFalse(CodeOffset),
 }

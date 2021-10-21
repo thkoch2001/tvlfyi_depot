@@ -201,8 +201,27 @@ impl VM {
                 }
 
                 OpCode::OpSetLocal(local_idx) => {
-                    debug_assert!(self.stack.len() > local_idx.0, "stack is not currently large enough for local");
-                    self.stack[local_idx.0] = self.stack.last().unwrap().clone();
+                    debug_assert!(
+                        self.stack.len() > local_idx.0,
+                        "stack is not currently large enough for local"
+                    );
+                    self.stack[local_idx.0] =
+                        self.stack.last().unwrap().clone();
+                }
+
+                OpCode::OpJumpPlaceholder(_) => {
+                    panic!("unpatched jump detected - this is a fatal compiler error!");
+                }
+
+                OpCode::OpJumpIfFalse(offset) => {
+                    if self
+                        .stack
+                        .last()
+                        .expect("condition should leave a value on the stack")
+                        .is_falsey()
+                    {
+                        self.ip += offset.0;
+                    }
                 }
             }
 
