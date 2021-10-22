@@ -51,6 +51,24 @@
       "message": "rendered is not exposed?",
       "revId": "bc13d166849571637a07f4a7be805992abb0fa9a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "397b13ba_d1af19d5",
+        "filename": "web/blog/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-10-22T09:49:46Z",
+      "side": 1,
+      "message": "Fixed - that wasn\u0027t supposed to be there at all.",
+      "parentUuid": "862b935d_7ce77245",
+      "revId": "bc13d166849571637a07f4a7be805992abb0fa9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
