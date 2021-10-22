@@ -39,6 +39,30 @@
       },
       "revId": "cc10be2a01c984dee6c1471769ccce1287ecdd21",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa7630d_81901b0e",
+        "filename": "web/blog/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-10-22T09:49:21Z",
+      "side": 1,
+      "message": "I\u0027ll fix all of those in a followup, see commit message.",
+      "parentUuid": "b38f7ea5_dfef9379",
+      "range": {
+        "startLine": 1,
+        "startChar": 44,
+        "endLine": 1,
+        "endChar": 48
+      },
+      "revId": "cc10be2a01c984dee6c1471769ccce1287ecdd21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
