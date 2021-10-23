@@ -39,6 +39,8 @@ Below I have outlined a few projects that you might find interesting.
 - Ensure Nix is installed.
 - Ensure direnv is installed.
 - Ensure `~/.password-store` exists.
-- Run `.gnupg/export.sh` from a computer with my gpg credentials. Run
-  `.gnupg/import.sh` from the new machine.
+- Transfer GPG stuffs:
+  - old computer: `configs/.gnupg/export.sh $outdir`
+  - new computer: `configs/.gnupg/import.sh <path-to-zip>`
+  from the new machine.
 - Consult `Makefile`.
