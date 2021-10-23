@@ -113,7 +113,7 @@ See the man-page for xrandr for more details."
                   :rotate normal)
 
 (display-register 4k-horizontal
-                  :output "DP2"
+                  :output "DP-0"
                   :primary t
                   :coords (0 0)
                   :size (2560 1440)
@@ -122,7 +122,7 @@ See the man-page for xrandr for more details."
                   :rotate normal)
 
 (display-register 4k-vertical
-                  :output "HDMI1"
+                  :output "DP-2"
                   :primary nil
                   :coords (-1440 -560)
                   :size (2560 1440)
