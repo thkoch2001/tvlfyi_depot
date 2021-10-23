@@ -1,9 +1,17 @@
-install:
-	source "${WPCARRO}/configs/install"
+install-cli-tools:
+	nix-env -f "${BRIEFCASE}" -iA shared.cliTools
 
-uninstall:
-	source "${WPCARRO}/configs/uninstall"
+install-configs:
+	nix-build -A configs.install && \
+	./result && \
+	rm ./result
+
+uninstall-configs:
+	nix-build -A configs.uninstall && \
+	./result && \
+	rm ./result
 
 list-broken-links:
-	find "${HOME}" -maxdepth 1 -xtype l && \
-	find "${HOME}/.config" -maxdepth 1 -xtype l
+	nix-build -A tools.symlinkManager && \
+	./result/bin/symlink-mgr -audit && \
+	rm ./result
