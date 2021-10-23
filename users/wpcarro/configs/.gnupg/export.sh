@@ -9,13 +9,16 @@ set -e
 
 destination="${1:-$(mktemp -d)}"
 
-if [ ! -d "$destination" ]; then
-  echo "$destination does not exist. Creating it..."
-  mkdir -p "$destination"
+if [ ! -d "${destination}" ]; then
+  echo "${destination} does not exist. Creating it..."
+  mkdir -p "${destination}"
 fi
 
-gpg --armor --export >"$destination/public.asc"
-gpg --armor --export-secret-keys >"$destination/secret.asc"
-gpg --armor --export-ownertrust >"$destination/ownertrust.txt"
+gpg --armor --export >"${destination}/public.asc"
+gpg --armor --export-secret-keys >"${destination}/secret.asc"
+gpg --armor --export-ownertrust >"${destination}/ownertrust.txt"
 
-echo $(realpath "$destination")
+zip -r "${destination}.zip" "${destination}"
+rm -rf "${destination}"
+
+echo $(realpath "${destination}.zip")
