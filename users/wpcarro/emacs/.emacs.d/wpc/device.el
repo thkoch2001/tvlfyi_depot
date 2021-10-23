@@ -23,7 +23,8 @@
 ;; TODO(wpcarro): Consider integrating this with Nix and depot instead of
 ;; denormalizing the state.
 (defconst device-hostname->device
-  '(("zeno.lon.corp.google.com" . work-desktop)
+  '(("zeno.lon.corp.google.com" . work-desktop-lon)
+    ("wpcarro.svl.corp.google.com" . work-desktop-svl)
     ("seneca" . work-laptop)
     ("marcus" . personal-laptop)
     ("diogenes" . personal-vm))
@@ -42,12 +43,16 @@
 
 (defun device-work-desktop? ()
   "Return t if current device is work desktop."
-  (equal 'work-desktop
-         (device-classify)))
+  (-contains? '(work-desktop-lon
+                work-desktop-svl)
+              (device-classify)))
 
 (defun device-corporate? ()
   "Return t if the current device is owned by my company."
-  (or (device-work-laptop?) (device-work-desktop?)))
+  (-contains? '(work-desktop-lon
+                work-desktop-svl
+                work-laptop)
+              (device-classify)))
 
 (defun device-laptop? ()
   "Return t if the current device is a laptop."
