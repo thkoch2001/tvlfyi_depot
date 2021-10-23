@@ -27,11 +27,18 @@ Below I have outlined a few projects that you might find interesting.
 - `tools`: some scripts and projects that simplify my life.
 - `website`: everything required to build my website, https://wpcarro.dev.
 
-## Notes to self
+## Installation
 
-Here are a few reminders when setting up a new machine:
+### Google Machine
 
+- ensure `~/google-briefcase` exists
+- read `~/google-briefcase/README.md`
+
+### NixOS Machine
+
+- Ensure Nix is installed.
+- Ensure direnv is installed.
 - Ensure `~/.password-store` exists.
-- Run `export_gpg` from a computer with my gpg credentials. Run `import_gpg`
-  from the new machine.
-- Ensure the new machine can access my Github.
+- Run `.gnupg/export.sh` from a computer with my gpg credentials. Run
+  `.gnupg/import.sh` from the new machine.
+- Consult `Makefile`.
