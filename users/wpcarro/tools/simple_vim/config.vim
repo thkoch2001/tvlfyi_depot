@@ -48,13 +48,13 @@ nnoremap <C-l> :wincmd l<CR>
 " nnoremap <M-k> :wincmd k<CR>
 " nnoremap <M-l> :wincmd l<CR>
 
-" Use <Enter> instead of G to support:
-"        20<Enter> - to jump to line 20
-"       d20<Enter> - to delete from the current line until line 20
-"   <C-v>20<Enter> - to select from the current line until line 20
-nnoremap <Enter> G
-onoremap <Enter> G
-vnoremap <Enter> G
+" Use <CR> instead of G to support:
+"        20<CR> - to jump to line 20
+"       d20<CR> - to delete from the current line until line 20
+"   <C-v>20<CR> - to select from the current line until line 20
+nnoremap <CR> G
+onoremap <CR> G
+vnoremap <CR> G
 
 " Easily change modes on keyboards that don't have CapsLock mapped to <Esc>
 inoremap jk      <ESC>
