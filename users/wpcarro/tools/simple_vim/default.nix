@@ -1,11 +1,5 @@
 { pkgs, ... }:
 
-let
-  configVim = builtins.path {
-    path = ./config.vim;
-    name = "config.vim";
-  };
-
-in pkgs.writeShellScriptBin "simple_vim" ''
-  ${pkgs.vim}/bin/vim -u ${configVim}
+pkgs.writeShellScriptBin "simple_vim" ''
+  ${pkgs.neovim}/bin/nvim -u ${./config.vim} $@
 ''
