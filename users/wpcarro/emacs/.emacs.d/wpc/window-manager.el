@@ -224,7 +224,7 @@ Ivy is used to capture the user's input."
                       ("Logout" .
                        (lambda ()
                          (let ((default-directory "/sudo::"))
-                           (shell-command "systemctl stop lightdm"))))
+                           (shell-command "systemctl restart gdm.service"))))
                       ("Suspend" .
                        (lambda ()
                          (shell-command "systemctl suspend")))
