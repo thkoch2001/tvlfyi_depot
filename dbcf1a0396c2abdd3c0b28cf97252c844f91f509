@@ -22,6 +22,30 @@
       },
       "revId": "dbcf1a0396c2abdd3c0b28cf97252c844f91f509",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdf1cae4_2f86f8ee",
+        "filename": "project.config",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-10-27T15:05:50Z",
+      "side": 1,
+      "message": "my preference order is:\n\n1. v/ or rev/\n2. c/\n3. tvl/ or depot/",
+      "parentUuid": "f64005ce_f7f38c5d",
+      "range": {
+        "startLine": 52,
+        "startChar": 9,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "dbcf1a0396c2abdd3c0b28cf97252c844f91f509",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
