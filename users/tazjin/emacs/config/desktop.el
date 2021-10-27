@@ -193,9 +193,6 @@
 (exwm-systemtray-enable)
 
 ;; Configure xrandr (multi-monitor setup).
-;;
-;; This makes some assumptions about how my machines are connected to
-;; my home setup during the COVID19 isolation period.
 
 (defun set-randr-config (screens)
   (setq exwm-randr-workspace-monitor-plist
@@ -203,54 +200,24 @@
                           (-map (lambda (screen-id) (list screen-id (car screen))) (cdr screen)))
                         screens))))
 
-;; Layouts for Vauxhall (laptop)
-
-(defun randr-vauxhall-layout-single ()
+;; Layouts for Tverskoy (X13 AMD laptop)
+(defun randr-tverskoy-layout-single ()
   "Laptop screen only!"
   (interactive)
-  (set-randr-config '(("eDP1" (number-sequence 0 9))))
-  (shell-command "xrandr --output eDP1 --auto --primary")
-  (shell-command "xrandr --output HDMI1 --off")
-  (shell-command "xrandr --output DP2 --off")
+  (set-randr-config '(("eDP" (number-sequence 0 9))))
+  (shell-command "xrandr --output eDP --auto --primary")
+  (shell-command "xrandr --output HDMI-A-0 --off")
   (exwm-randr-refresh))
 
-(defun randr-vauxhall-layout-all ()
-  "Use all screens at home."
+(defun randr-tverskoy-split-workspace ()
+  "Split the workspace across two screens, assuming external to the right."
   (interactive)
   (set-randr-config
-   '(("eDP1" 0)
-     ("HDMI1" 1 2 3 4 5)
-     ("DP2" 6 7 8 9)))
+   '(("eDP" 1 2 3 4 5 )
+     ("HDMI-A-0" 6 7 8 9 0)))
 
-  (shell-command "xrandr --output HDMI1 --right-of eDP1 --auto --primary")
-  (shell-command "xrandr --output DP2 --right-of HDMI1 --auto --rotate left")
+  (shell-command "xrandr --output HDMI-A-0 --right-of eDP --auto")
   (exwm-randr-refresh))
-
-(defun randr-vauxhall-layout-wide-only ()
-  "Use only the wide screen at home."
-  (interactive)
-  (set-randr-config
-   '(("eDP1" 8 9 0)
-     ("HDMI1" 1 2 3 4 5 6 7)))
-
-  (shell-command "xrandr --output DP2 --off")
-  (shell-command "xrandr --output HDMI1 --right-of eDP1 --auto --primary")
-  (exwm-randr-refresh))
-
-(defun randr-tverskoy-extend-tv ()
-  "Move the last workspace on the TV to the side."
-  (interactive)
-  (set-randr-config
-   '(("eDP" 1 2 3 4 5 6 7 8 9)
-     ("HDMI-A-0" 0)))
-
-  (shell-command "xrandr --output HDMI-A-0 --above eDP --auto")
-  (exwm-randr-refresh))
-
-(defun randr-vauxhall-layout-remarkable ()
-  "Make the reMarkable the primary screen."
-  (interactive)
-  (shell-command "xrandr --output VIRTUAL1 --primary"))
 
 ;; Layouts for frog (desktop)
 
@@ -271,11 +238,9 @@
   (shell-command "xrandr --output DisplayPort-1 --auto --right-of DisplayPort-0 --rotate left"))
 
 (pcase (s-trim (shell-command-to-string "hostname"))
-  ("vauxhall"
-   (exwm-input-set-key (kbd "s-m s") #'randr-vauxhall-layout-single)
-   (exwm-input-set-key (kbd "s-m a") #'randr-vauxhall-layout-all)
-   (exwm-input-set-key (kbd "s-m w") #'randr-vauxhall-layout-wide-only)
-   (exwm-input-set-key (kbd "s-m r") #'randr-vauxhall-layout-remarkable))
+  ("tverskoy"
+   (exwm-input-set-key (kbd "s-m s") #'randr-tverskoy-layout-single)
+   (exwm-input-set-key (kbd "s-m 2") #'randr-tverskoy-split-workspace))
 
   ("frog"
    (exwm-input-set-key (kbd "s-m b") #'randr-frog-layout-both)
