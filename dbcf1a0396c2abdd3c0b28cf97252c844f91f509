@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f64005ce_f7f38c5d",
+        "filename": "project.config",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-10-27T14:56:51Z",
+      "side": 1,
+      "message": "This is the bikeshed thread!\n\nWe have contenders:\n\n* c/ (change? commit?)\n* tvl/\n* rev/\n* v/ (i.e. \"version\")\n* depot/\n\nmore?\n\nMy preference is something like \"tvl/ or depot/ \u003e rev/ \u003e rest\", others have expressed *displeasure* with the TVL specific naming though so rev/ seems to be the common middle ground.",
+      "range": {
+        "startLine": 52,
+        "startChar": 9,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "dbcf1a0396c2abdd3c0b28cf97252c844f91f509",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
