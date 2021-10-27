@@ -46,6 +46,30 @@
       },
       "revId": "dbcf1a0396c2abdd3c0b28cf97252c844f91f509",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00660ae0_c8f71b4c",
+        "filename": "project.config",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-10-27T19:22:16Z",
+      "side": 1,
+      "message": "Notes from IRC:\n\n* on v/ - some people might think it has something to do with videos, or some other v-word. It\u0027s non-obvious without context.\n* on rev/ - some people will confuse this for something indicating git revisions since they\u0027re often called that",
+      "parentUuid": "cdf1cae4_2f86f8ee",
+      "range": {
+        "startLine": 52,
+        "startChar": 9,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "dbcf1a0396c2abdd3c0b28cf97252c844f91f509",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
