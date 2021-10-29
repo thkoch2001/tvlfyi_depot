@@ -364,5 +364,21 @@
  "M-j" nil
  "K" #'ibuffer-do-delete)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; buffers
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(general-define-key
+ :states '(normal)
+ "C-f" #'buffer-cycle-next
+ "C-b" #'buffer-cycle-prev)
+
+(general-define-key
+ :prefix "<SPC>"
+ :states '(normal)
+ "b" #'buffer-ivy-source-code
+ "<SPC>" #'buffer-show-previous
+ "k" #'kill-buffer)
+
 (provide 'keybindings)
 ;;; keybindings.el ends here
