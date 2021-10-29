@@ -38,9 +38,6 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst buffer-enable-tests? t
-  "When t, run the test suite.")
-
 (defconst buffer-install-kbds? t
   "When t, install the keybindings defined herein.")
 
@@ -186,24 +183,6 @@ This function ignores Emacs-generated buffers, i.e. the ones that look like
    "b" #'buffer-ivy-source-code
    "<SPC>" #'buffer-show-previous
    "k" #'kill-buffer))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tests
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(when buffer-enable-tests?
-  (prelude-assert
-   (list-all? #'buffer-emacs-generated?
-              '("*scratch*"
-                "*Messages*"
-                "*shell*"
-                "*Shell Command Output*"
-                "*Occur*"
-                "*Warnings*"
-                "*Help*"
-                "*Completions*"
-                "*Apropos*"
-                "*info*"))))
 
 (provide 'buffer)
 ;;; buffer.el ends here
