@@ -38,9 +38,6 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst buffer-install-kbds? t
-  "When t, install the keybindings defined herein.")
-
 (defconst buffer-source-code-blacklist
   (set-new 'dired-mode
            'erc-mode
@@ -171,18 +168,6 @@ This function ignores Emacs-generated buffers, i.e. the ones that look like
          (candidate (list-get 1 xs)))
     (prelude-assert (maybe-some? candidate))
     (switch-to-buffer candidate)))
-
-(when buffer-install-kbds?
-  (general-define-key
-   :states '(normal)
-   "C-f" #'buffer-cycle-next
-   "C-b" #'buffer-cycle-prev)
-  (general-define-key
-   :prefix "<SPC>"
-   :states '(normal)
-   "b" #'buffer-ivy-source-code
-   "<SPC>" #'buffer-show-previous
-   "k" #'kill-buffer))
 
 (provide 'buffer)
 ;;; buffer.el ends here
