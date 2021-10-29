@@ -56,6 +56,9 @@
            'fundamental-mode)
   "A blacklist of major-modes to ignore for listing source code buffers.")
 
+(defconst buffer-ivy-source-code-whitelist '("*scratch*" "*Messages*")
+  "A whitelist of buffers to include when listing source code buffers.")
+
 (defconst buffer-source-code-timeout 2
   "Number of seconds to wait before invalidating the cycle.")
 
@@ -156,7 +159,8 @@ Return a reference to that buffer."
   "Use `ivy-read' to choose among all open source code buffers."
   (interactive)
   (ivy-read "Source code buffer: "
-            (-drop 1 (buffer-source-code-buffers))
+            (-concat buffer-ivy-source-code-whitelist
+                     (-drop 1 (buffer-source-code-buffers)))
             :sort nil
             :action #'switch-to-buffer))
 
