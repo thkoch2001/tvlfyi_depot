@@ -100,7 +100,7 @@
    )
 
  org-capture-templates-contexts
- `(("px" ((in-file . "/home/griffin/code/xanthous/.*"))))
+ `(("px" ((in-file . "/home/grfn/code/depot/users/grfn/xanthous/.*"))))
 
  org-deadline-warning-days 1
  org-agenda-skip-scheduled-if-deadline-is-shown 'todo
