@@ -4,6 +4,20 @@ with depot.nix.yants;
 
 let
   inherit (builtins) hasAttr filter;
+
+  blogConfig = {
+    name = "tazjin's blog";
+
+    footer = ''
+      <p class="footer">
+        <a class="uncoloured-link" href="https://tazj.in">homepage</a>
+        |
+        <a class="uncoloured-link" href="https://cs.tvl.fyi/">code</a>
+      </p>
+      <p class="lod">ಠ_ಠ</p>
+    '';
+  };
+
   inherit (depot.web.blog) post includePost renderPost;
 
   posts = filter includePost (list post (import ./posts.nix));
@@ -12,7 +26,7 @@ let
     mkdir -p $out
 
     ${lib.concatStringsSep "\n" (map (post:
-      "cp ${renderPost post} $out/${post.key}.html"
+      "cp ${renderPost blogConfig post} $out/${post.key}.html"
     ) posts)}
   '';
 
