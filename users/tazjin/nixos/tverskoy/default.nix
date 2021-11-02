@@ -367,6 +367,15 @@ in lib.fix(self: {
         lockCmd = "${screenLock}/bin/tazjin-screen-lock";
       };
 
+      services.dunst.enable = true;
+
+      xdg.configFile."dunst/dunstrc" = {
+        source = depot.users.tazjin.dotfiles.dunstrc;
+        onChange = ''
+          ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
+        '';
+      };
+
       systemd.user.startServices = true;
     };
 
