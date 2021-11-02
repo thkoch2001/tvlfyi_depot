@@ -4,7 +4,21 @@ with depot.nix.yants;
 
 let
   inherit (builtins) hasAttr filter;
-  inherit (depot.web.blog) post includePost renderPost;
+
+  blog = depot.web.blog {
+    name = "tazjin's blog";
+
+    footer = ''
+      <p class="footer">
+        <a class="uncoloured-link" href="https://tazj.in">homepage</a>
+        |
+        <a class="uncoloured-link" href="https://cs.tvl.fyi/">code</a>
+      </p>
+      <p class="lod">ಠ_ಠ</p>
+    '';
+  };
+
+  inherit (blog) post includePost renderPost;
 
   posts = filter includePost (list post (import ./posts.nix));
 

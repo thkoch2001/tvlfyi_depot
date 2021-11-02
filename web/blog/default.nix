@@ -9,7 +9,7 @@ with depot.nix.yants;
 let
   # Type definition for a single blog post.
   post = struct "blog-post" {
-    key = string; #
+    key = string;
     title = string;
     date = int;
 
@@ -30,12 +30,10 @@ let
     # IDs, redirects are generated so that old URLs stay compatible.
     oldKey = option string;
   };
-
-  posts = list post (import ./posts.nix);
-  fragments = import ./fragments.nix args;
-
-  includePost = post: !(fragments.isDraft post) && !(fragments.isUnlisted post);
+in blogConfig: let
+  fragments = import ./fragments.nix args blogConfig;
 in {
-  inherit post includePost;
+  inherit post;
   inherit (fragments) renderPost;
+  includePost = post: !(fragments.isDraft post) && !(fragments.isUnlisted post);
 }

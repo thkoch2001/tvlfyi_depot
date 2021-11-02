@@ -10,7 +10,7 @@ let
   inherit (depot.nix) renderMarkdown;
   inherit (depot.web) blog atom-feed;
 
-  postToEntry = defun [ blog.post atom-feed.entry ] (post: rec {
+  postToEntry = defun [ (blog {}).post atom-feed.entry ] (post: rec {
     id = "https://tazj.in/blog/${post.key}";
     title = post.title;
     content = readFile (renderMarkdown post.content);
