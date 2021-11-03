@@ -8,5 +8,6 @@
 }).overrideAttrs(orig: rec {
   cmakeFlags = orig.cmakeFlags ++ [
     "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
+    "-DCMAKE_CXX_STANDARD=17"
   ];
 })
