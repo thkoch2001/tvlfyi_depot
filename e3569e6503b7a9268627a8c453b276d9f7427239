@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e7909d1d_81bc2f66",
+        "filename": "users/tazjin/homepage/feed.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-03T15:39:49Z",
+      "side": 1,
+      "message": "Fixed by refactoring as per your suggestion below.",
+      "parentUuid": "f658d1f4_d4a54571",
+      "revId": "e3569e6503b7a9268627a8c453b276d9f7427239",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "53c4d9f5_0228aa3b",
         "filename": "web/blog/fragments.nix",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2021-11-02T14:54:20Z",
       "side": 1,
       "message": "alternatively you could just take the whole config set as { name, config }: and partially apply it below.",
+      "revId": "e3569e6503b7a9268627a8c453b276d9f7427239",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9518269e_8f7b3246",
+        "filename": "web/blog/fragments.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-03T15:39:49Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "53c4d9f5_0228aa3b",
       "revId": "e3569e6503b7a9268627a8c453b276d9f7427239",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
