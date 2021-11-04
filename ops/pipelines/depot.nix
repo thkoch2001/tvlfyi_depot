@@ -116,5 +116,19 @@ let
           allow_failure = false;
         }];
       })
+
+      # Create a revision number for the current commit for builds on
+      # canon.
+      #
+      # This writes data back to Gerrit using the Buildkite agent
+      # credentials injected through a git credentials helper.
+      #
+      # Revision numbers are defined as the number of commits in the
+      # lineage of HEAD, following only the first parent of merges.
+      ({
+        command = "git -c 'credential.helper=/etc/secrets/buildkite-credential-helper' push origin \"HEAD:refs/r/$(git rev-list --count --first-parent HEAD)\"";
+        label = ":git:";
+        "if" = ''build.branch == "refs/heads/canon"'';
+      })
     ];
 in (writeText "depot.yaml" (toJSON pipeline))
