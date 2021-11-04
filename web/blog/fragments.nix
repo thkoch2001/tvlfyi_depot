@@ -35,7 +35,7 @@ let
     </header>
   '';
 
-  footer = content: ''
+  fullFooter = content: ''
     <hr>
     <footer>
       ${content}
@@ -86,7 +86,7 @@ let
     cat ${renderMarkdown post.content} >> $out
     echo '</article>' >> $out
 
-    cat ${writeText "footer.html" footer} >> $out
+    cat ${writeText "footer.html" (fullFooter footer)} >> $out
   '';
 in {
   inherit isDraft isUnlisted renderPost;
