@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0df9c5e1_92ee869c",
+        "filename": "web/blog/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-04T14:50:40Z",
+      "side": 1,
+      "message": "entry is a bit nondescript at this point.",
+      "revId": "007c40ec2e22f278ba05eed261518e67d2eadcba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
