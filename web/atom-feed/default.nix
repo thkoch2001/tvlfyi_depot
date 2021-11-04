@@ -5,8 +5,8 @@
 with depot.nix.yants;
 
 let
-  inherit (builtins) map readFile replaceStrings;
-  inherit (lib) concatStrings concatStringsSep removeSuffix;
+  inherit (builtins) foldl' map readFile replaceStrings sort;
+  inherit (lib) concatStrings concatStringsSep max removeSuffix;
   inherit (pkgs) runCommandNoCC;
 
   # 'link' describes a related link to a feed, or feed element.
@@ -67,8 +67,9 @@ let
     title = string;
 
     # Indicates the last time the feed was modified in a significant
-    # way (in seconds since epoch). Recommended element.
-    updated = int;
+    # way (in seconds since epoch). Will be calculated based on most
+    # recently updated entry if unset.
+    updated = option int;
 
     # Entries contained within the feed.
     entries = list entry;
@@ -127,17 +128,23 @@ let
     </entry>
   '');
 
+  mostRecentlyUpdated = defun [ (list entry) int ] (entries:
+    foldl' max 0 (map (e: e.updated) entries)
+  );
+
+  sortEntries = sort (a: b: a.published > b.published);
+
   renderFeed = defun [ feed string ] (f: ''
     <?xml version="1.0" encoding="utf-8"?>
     <feed xmlns="http://www.w3.org/2005/Atom">
       ${elem "id" f.id}
       ${elem "title" f.title}
-      ${elem "updated" (renderEpoch f.updated)}
+      ${elem "updated" (renderEpoch (f.updated or (mostRecentlyUpdated f.entries)))}
       ${concatStringsSep "\n" (map renderAuthor (f.authors or []))}
       ${if f ? subtitle then elem "subtitle" f.subtitle else ""}
       ${if f ? rights then elem "rights" f.rights else ""}
       ${concatStrings (map renderLink (f.links or []))}
-      ${concatStrings (map renderEntry f.entries)}
+      ${concatStrings (map renderEntry (sortEntries f.entries))}
     </feed>
   '');
 in {

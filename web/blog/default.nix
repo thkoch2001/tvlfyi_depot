@@ -7,6 +7,11 @@
 with depot.nix.yants;
 
 let
+  inherit (builtins) readFile;
+  inherit (depot.nix) renderMarkdown;
+  inherit (depot.web) atom-feed;
+  inherit (lib) singleton;
+
   # Type definition for a single blog post.
   post = struct "blog-post" {
     key = string;
@@ -31,9 +36,25 @@ let
     oldKey = option string;
   };
 
+  # Rendering fragments for the HTML version of the blog.
   fragments = import ./fragments.nix args;
+
+  # Functions for generating feeds for these blogs using //web/atom-feed.
+  toFeedEntry = defun [ post atom-feed.entry ] (post: rec {
+    id = "https://tazj.in/blog/${post.key}";
+    title = post.title;
+    content = readFile (renderMarkdown post.content);
+    published = post.date;
+    updated = post.updated or post.date;
+
+    links = singleton {
+      rel = "alternate";
+      href = id;
+    };
+  });
+
 in {
-  inherit post;
+  inherit post toFeedEntry;
   inherit (fragments) renderPost;
   includePost = post: !(fragments.isDraft post) && !(fragments.isUnlisted post);
 }
