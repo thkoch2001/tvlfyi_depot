@@ -1,13 +1,42 @@
-{ depot, pkgs, ... }:
+{ depot, lib, pkgs, ... }:
+
+with depot.nix.yants;
 
 let
   inherit (pkgs) graphviz runCommandNoCC writeText;
+  inherit (depot.web) blog atom-feed;
+
+  blogConfig = {
+    name = "TVL's blog";
+    footer = depot.web.tvl.footer {};
+  };
+
+  postRenderingCommands = defun [ (list blog.post) string ] (posts:
+    lib.concatStringsSep "\n"
+      (map (p: "cp ${blog.renderPost blogConfig p} $out/blog/${p.key}.html") posts)
+  );
 
   tvlGraph = runCommandNoCC "tvl.svg" {
     nativeBuildInputs = with pkgs; [ fontconfig freetype cairo jetbrains-mono ];
   } ''
     ${graphviz}/bin/neato -Tsvg ${./tvl.dot} > $out
   '';
+
+  feed = {
+    id = "https://tvl.fyi/";
+    title = "TVL blog";
+    subtitle = "Thoughts and news from The Virus Lounge";
+    authors = [ "tazjin" ]; # TODO(tazjin): Extract from post info
+
+    links = lib.singleton {
+      rel = "self";
+      href = "https://tvl.fyi/feed.atom";
+    };
+
+    entries = map blog.toFeedEntry depot.web.tvl.blog.posts;
+  };
+
+  atomFeed = writeText "feed.atom" (atom-feed.renderFeed feed);
 
   homepage = depot.web.tvl.template {
     title = "The Virus Lounge";
@@ -78,6 +107,8 @@ let
     '';
   };
 in runCommandNoCC "website" {} ''
-  mkdir -p $out/static
+  mkdir -p $out/blog
   cp ${homepage} $out/index.html
+  ${postRenderingCommands depot.web.tvl.blog.posts}
+  cp ${atomFeed} $out/feed.atom
 ''
