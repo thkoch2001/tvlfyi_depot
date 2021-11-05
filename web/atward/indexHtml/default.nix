@@ -29,6 +29,11 @@ depot.web.tvl.template {
     * <kbd>b/42</kbd> - access bugs with ID 42
     * <kbd>cl/3087</kbd> - access changelist with ID 3087
     * <kbd>//web/atward</kbd> - open the **//web/atward** path in TVLs monorepo
+    * <kbd>r/3002</kbd> - access revision 3002 in cgit
+
+    When given a short host name (e.g. <kbd>todo</kbd> or
+    <kbd>cl</kbd>), atward will redirect to the appropriate `tvl.fyi`
+    domain.
 
     ### Configuration
 
