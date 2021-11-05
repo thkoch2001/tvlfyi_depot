@@ -6,6 +6,9 @@ let
   inherit (pkgs) graphviz runCommandNoCC writeText;
   inherit (depot.web) atom-feed blog tvl;
 
+  listPosts = defun [ (list blog.post) string ] (posts:
+    lib.concatStringsSep "\n" (map (p: "* [${p.title}](blog/${p.key})") posts)
+  );
 
   postRenderingCommands = defun [ (list blog.post) string ] (posts:
     lib.concatStringsSep "\n"
@@ -70,7 +73,17 @@ let
       [tvl-xmpp]: xmpp:#tvl@irc.hackint.org?join
       [tvl-webchat]: https://webirc.hackint.org/#ircs://irc.hackint.org/#tvl
 
-      <hr>
+      ----------------
+
+      ## Blog
+
+      Here are the most recent TVL blog posts.
+
+      ${listPosts depot.web.tvl.blog.posts}
+
+      You can also follow our [atom feed](feed.atom).
+
+      ----------------
 
       ## Where did all these people come from?
 
