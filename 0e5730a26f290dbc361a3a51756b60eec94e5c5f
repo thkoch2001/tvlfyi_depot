@@ -16,6 +16,24 @@
       "message": "this line deletion was an accident, wasn\u0027t it?",
       "revId": "0e5730a26f290dbc361a3a51756b60eec94e5c5f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8eb5de3_5fd1ceb0",
+        "filename": "web/atward/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-05T12:26:38Z",
+      "side": 0,
+      "message": "It was rustfmt\u0027s doing, I try not to question it to avoid fighting it.",
+      "parentUuid": "bfb49fc0_0f5e6cff",
+      "revId": "0e5730a26f290dbc361a3a51756b60eec94e5c5f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
