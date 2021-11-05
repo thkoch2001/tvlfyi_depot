@@ -4,16 +4,12 @@ with depot.nix.yants;
 
 let
   inherit (pkgs) graphviz runCommandNoCC writeText;
-  inherit (depot.web) blog atom-feed;
+  inherit (depot.web) atom-feed blog tvl;
 
-  blogConfig = {
-    name = "TVL's blog";
-    footer = depot.web.tvl.footer {};
-  };
 
   postRenderingCommands = defun [ (list blog.post) string ] (posts:
     lib.concatStringsSep "\n"
-      (map (p: "cp ${blog.renderPost blogConfig p} $out/blog/${p.key}.html") posts)
+      (map (p: "cp ${blog.renderPost tvl.blog.config p} $out/blog/${p.key}.html") posts)
   );
 
   tvlGraph = runCommandNoCC "tvl.svg" {
@@ -33,12 +29,12 @@ let
       href = "https://tvl.fyi/feed.atom";
     };
 
-    entries = map blog.toFeedEntry depot.web.tvl.blog.posts;
+    entries = map (blog.toFeedEntry tvl.blog.config) tvl.blog.posts;
   };
 
   atomFeed = writeText "feed.atom" (atom-feed.renderFeed feed);
 
-  homepage = depot.web.tvl.template {
+  homepage = tvl.template {
     title = "The Virus Lounge";
     content = ''
       The Virus Lounge
@@ -109,6 +105,6 @@ let
 in runCommandNoCC "website" {} ''
   mkdir -p $out/blog
   cp ${homepage} $out/index.html
-  ${postRenderingCommands depot.web.tvl.blog.posts}
+  ${postRenderingCommands tvl.blog.posts}
   cp ${atomFeed} $out/feed.atom
 ''

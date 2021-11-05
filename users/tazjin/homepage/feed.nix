@@ -22,7 +22,7 @@ let
     };
   });
 
-  allEntries = (map blog.toFeedEntry depot.users.tazjin.blog.posts)
+  allEntries = (with depot.users.tazjin.blog; map (blog.toFeedEntry config) posts)
              ++ (map pageEntryToEntry pageEntries);
 
   feed = {
