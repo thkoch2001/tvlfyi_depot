@@ -91,7 +91,6 @@ fn cgit_url(path: &str) -> String {
 fn sourcegraph_path_url(path: &str) -> String {
     format!("https://cs.tvl.fyi/depot/-/tree/{}", path)
 }
-
 /// Definition of all supported query handlers in atward.
 fn handlers() -> Vec<Handler> {
     vec![
@@ -110,6 +109,16 @@ fn handlers() -> Vec<Handler> {
             pattern: Regex::new("^(?P<host>b|cl|cs|code|at|todo)$").unwrap(),
             target: |_, captures| Some(format!("https://{}.tvl.fyi/", &captures["host"])),
         },
+        // Depot revisions (e.g. r/3002)
+        Handler {
+            pattern: Regex::new("^r/(?P<rev>\\d+)$").unwrap(),
+            target: |_, captures| {
+                Some(format!(
+                    "https://code.tvl.fyi/commit/?id=refs/r/{}",
+                    &captures["rev"]
+                ))
+            },
+        },
         // Depot paths (e.g. //web/atward or //ops/nixos/whitby/default.nix)
         // TODO(tazjin): Add support for specifying lines in a query parameter
         Handler {
@@ -117,9 +126,7 @@ fn handlers() -> Vec<Handler> {
             target: |query, captures| {
                 // Pass an empty string if the path is missing, to
                 // redirect to the depot root.
-                let path = captures.name("path")
-                    .map(|m| m.as_str())
-                    .unwrap_or("");
+                let path = captures.name("path").map(|m| m.as_str()).unwrap_or("");
 
                 if query.cs {
                     Some(sourcegraph_path_url(path))
@@ -362,5 +369,20 @@ mod tests {
                 cs: false,
             },
         );
+    }
+
+    #[test]
+    fn depot_revision_query() {
+        assert_eq!(
+            dispatch(&handlers(), &"r/3002".into()),
+            Some("https://code.tvl.fyi/commit/?id=refs/r/3002".to_string())
+        );
+
+        assert_eq!(
+            dispatch(&handlers(), &"something only mentioning r/3002".into()),
+            None,
+        );
+
+        assert_eq!(dispatch(&handlers(), &"r/invalid".into()), None,);
     }
 }
