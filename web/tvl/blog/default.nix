@@ -1,6 +1,12 @@
 { depot, ... }:
 
 {
+  config = {
+    name = "TVL's blog";
+    footer = depot.web.tvl.footer {};
+    baseUrl = "https://tvl.fyi/blog";
+  };
+
   posts = [
     {
       key = "kicking-off-tvix";

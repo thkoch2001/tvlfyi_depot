@@ -5,8 +5,9 @@ with depot.nix.yants;
 let
   inherit (builtins) hasAttr filter;
 
-  blogConfig = {
+  config = {
     name = "tazjin's blog";
+    baseUrl = "https://tazj.in/blog";
 
     footer = ''
       <p class="footer">
@@ -26,12 +27,12 @@ let
     mkdir -p $out
 
     ${lib.concatStringsSep "\n" (map (post:
-      "cp ${renderPost blogConfig post} $out/${post.key}.html"
+      "cp ${renderPost config post} $out/${post.key}.html"
     ) posts)}
   '';
 
 in {
-  inherit posts rendered;
+  inherit posts rendered config;
 
   # Generate embeddable nginx configuration for redirects from old post URLs
   oldRedirects = lib.concatStringsSep "\n" (map (post: ''

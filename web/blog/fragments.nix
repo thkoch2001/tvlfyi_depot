@@ -59,7 +59,7 @@ let
     <hr>
   '';
 
-  renderPost = { name, footer }: post: runCommandNoCC "${post.key}.html" {} ''
+  renderPost = { name, footer, ... }: post: runCommandNoCC "${post.key}.html" {} ''
     cat ${writeText "header.html" (header name post.title)} > $out
 
     # Write the post title & date
