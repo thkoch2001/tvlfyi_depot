@@ -28,9 +28,5 @@ steps:
   - label: ":git:"
     if: "build.branch == 'refs/heads/canon'"
     command: |
-      readonly REVISION=$(git rev-list --count --first-parent HEAD)
-
       git -c 'credential.helper=/etc/secrets/buildkite-credential-helper' \
-        push origin "HEAD:refs/r/${REVISION}"
-
-      echo "Marked commit as r/${REVISION}"
+        push origin "HEAD:refs/r/$(git rev-list --count --first-parent HEAD)"
