@@ -16,3 +16,21 @@ steps:
       nix-build -A ops.pipelines.depot -o depot.yaml --show-trace || fallback
       buildkite-agent meta-data set 'failure' '0'
       buildkite-agent pipeline upload depot.yaml || fallback
+
+  # Create a revision number for the current commit for builds on
+  # canon.
+  #
+  # This writes data back to Gerrit using the Buildkite agent
+  # credentials injected through a git credentials helper.
+  #
+  # Revision numbers are defined as the number of commits in the
+  # lineage of HEAD, following only the first parent of merges.
+  - label: ":git:"
+    if: "build.branch == 'refs/heads/canon'"
+    command: |
+      readonly REVISION=$(git rev-list --count --first-parent HEAD)
+
+      git -c 'credential.helper=/etc/secrets/buildkite-credential-helper' \
+        push origin "HEAD:refs/r/${REVISION}"
+
+      echo "Marked commit as r/${REVISION}"
