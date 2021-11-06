@@ -103,7 +103,10 @@
   (setq markdown-command "pandoc")
   (setq markdown-split-window-direction 'right)
   ;; (add-hook 'markdown-mode-hook #'markdown-live-preview-mode)
-  )
+  ;; Use mode-specific syntax highlighting for code blocks.
+  (setq markdown-fontify-code-blocks-natively t)
+  ;; Prevent Emacs from adding a space after the leading 3x-backticks.
+  (setq markdown-spaces-after-code-fence 0))
 
 (use-package alert)
 
