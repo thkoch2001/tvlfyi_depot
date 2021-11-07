@@ -20,4 +20,8 @@ pkgs.haskell.lib.overrideCabal basePkg (default: {
   configureFlags = [
     "--ghc-option=-Wall --ghc-option=-Werror"
   ] ++ (default.configureFlags or []);
+
+  passthru = {
+    meta.targets = ["server"];
+  };
 })
