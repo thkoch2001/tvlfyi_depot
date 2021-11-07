@@ -21,7 +21,8 @@ databases please reach out
 - [[https://windtunnel.ci/][windtunnel]], a continuous benchmarking software-as-a-service currently accepting early alpha users (send me an email if you want to try it out!)
 - [[https://cs.tvl.fyi/depot/-/tree/users/grfn/achilles][achilles]], a compiler for (what I plan to become) a dependently typed, low-level functional programming language targeting LLVM
 - [[https://github.com/glittershark/org-clubhouse][org-clubhouse]], an emacs package for lightweight integration between [[https://orgmode.org/][org-mode]] and [[https://clubhouse.io/][the clubhouse project management tool]]
-- [[https://cs.tvl.fyi/depot/-/tree/users/grfn/xanthous][xanthous]], a terminal roguelike in haskell that I work on intermittently and exclusively for fun
+- [[https://cs.tvl.fyi/depot/-/tree/users/grfn/xanthous][xanthous]], a terminal roguelike in haskell that I work on intermittently and exclusively for fun \\
+  you can now try xanthous out over ssh by running ~ssh -p 2222 xanthous.gws.fyi~. if you do so I'd love if you send me an email about it
 
 * music
 
