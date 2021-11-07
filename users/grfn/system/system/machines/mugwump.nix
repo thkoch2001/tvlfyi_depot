@@ -7,6 +7,7 @@ with lib;
     ../modules/common.nix
     (modulesPath + "/installer/scan/not-detected.nix")
     "${depot.path}/ops/modules/prometheus-fail2ban-exporter.nix"
+    "${depot.path}/users/grfn/xanthous/server/module.nix"
   ];
 
   networking.hostName = "mugwump";
@@ -201,6 +202,12 @@ with lib;
         targets = ["localhost:${toString config.services.prometheus.exporters.nginx.port}"];
       }];
     } {
+      job_name = "xanthous_server";
+      scrape_interval = "1s";
+      static_configs = [{
+        targets = ["localhost:${toString config.services.xanthous-server.metricsPort}"];
+      }];
+    } {
       job_name = "blackbox";
       metrics_path = "/probe";
       params.module = ["https_2xx"];
@@ -225,6 +232,8 @@ with lib;
       }];
     }];
   };
+
+  services.xanthous-server.enable = true;
 
   virtualisation.docker.enable = true;
 
