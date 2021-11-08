@@ -11,6 +11,7 @@ import qualified Xanthous.Data.NestedMapSpec
 import qualified Xanthous.DataSpec
 import qualified Xanthous.Entities.RawsSpec
 import qualified Xanthous.Entities.CharacterSpec
+import qualified Xanthous.Entities.RawTypesSpec
 import qualified Xanthous.GameSpec
 import qualified Xanthous.Game.StateSpec
 import qualified Xanthous.Game.PromptSpec
@@ -26,7 +27,7 @@ import qualified Xanthous.UtilSpec
 --------------------------------------------------------------------------------
 
 main :: IO ()
-main = defaultMain test
+main = defaultMainWithRerun test
 
 test :: TestTree
 test = testGroup "Xanthous"
