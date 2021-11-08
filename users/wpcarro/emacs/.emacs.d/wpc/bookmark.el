@@ -34,22 +34,11 @@
 
 (cl-defstruct bookmark label path kbd)
 
-;; TODO: Consider hosting this function somewhere other than here, since it
-;; feels useful above of the context of bookmarks.
-;; TODO: Assess whether it'd be better to use the existing function:
-;; `counsel-projectile-switch-project-action'.  See the noise I made on GH for
-;; more context: https://github.com/ericdanan/counsel-projectile/issues/137
-
 (defun bookmark-handle-directory-dwim (path)
-  "Open PATH as either a project directory or a regular directory.
-If PATH is `projectile-project-p', open with `counsel-projectile-find-file'.
-Otherwise, open with `counsel-find-file'."
-  (if (projectile-project-p path)
-      (with-temp-buffer
-        (cd (projectile-project-p path))
-        (call-interactively #'counsel-projectile-find-file))
-    (let ((ivy-extra-directories nil))
-      (counsel-find-file path))))
+  "Open PATH as either a project directory or a regular directory."
+  (with-temp-buffer
+    (cd path)
+    (call-interactively #'project-find-file)))
 
 (defconst bookmark-handle-directory #'bookmark-handle-directory-dwim
   "Function to call when a bookmark points to a directory.")
