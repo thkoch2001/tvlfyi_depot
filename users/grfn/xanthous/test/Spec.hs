@@ -39,6 +39,7 @@ test = testGroup "Xanthous"
   , Xanthous.DataSpec.test
   , Xanthous.Entities.RawsSpec.test
   , Xanthous.Entities.CharacterSpec.test
+  , Xanthous.Entities.RawTypesSpec.test
   , Xanthous.GameSpec.test
   , Xanthous.Game.StateSpec.test
   , Xanthous.Game.PromptSpec.test
