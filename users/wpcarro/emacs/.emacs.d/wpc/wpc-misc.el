@@ -268,12 +268,11 @@
           (setq deadgrep--additional-flags '("--multiline"))
           (wpc-misc-deadgrep-region)
         (call-interactively #'deadgrep))))
-  (advice-add
-   'deadgrep--format-command
-   :filter-return
-   (lambda (cmd)
-     (replace-regexp-in-string
-      "^rg " "rg --hidden " cmd))))
+  (advice-add 'deadgrep--arguments
+              :filter-return
+              (lambda (args)
+                (push "--hidden" args)
+                (push "--follow" args))))
 
 ;; TODO: Do I need this when I have swiper?
 (use-package counsel)
