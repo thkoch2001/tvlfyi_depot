@@ -30,7 +30,6 @@ module Xanthous.Entities.Creature
 import           Xanthous.Prelude
 --------------------------------------------------------------------------------
 import           Test.QuickCheck
-import           Test.QuickCheck.Arbitrary.Generic
 import           Data.Aeson.Generic.DerivingVia
 import           Data.Aeson (ToJSON, FromJSON)
 import           Control.Monad.Random (MonadRandom)
@@ -43,20 +42,21 @@ import           Xanthous.Game.State
 import           Xanthous.Data
 import           Xanthous.Data.Entities
 import           Xanthous.Entities.Creature.Hippocampus
+import           Xanthous.Util.QuickCheck (GenericArbitrary(..))
 --------------------------------------------------------------------------------
 
 data Creature = Creature
-  { _creatureType :: !CreatureType
-  , _hitpoints    :: !Hitpoints
-  , _hippocampus  :: !Hippocampus
+  { _creatureType   :: !CreatureType
+  , _hitpoints      :: !Hitpoints
+  , _hippocampus    :: !Hippocampus
   }
   deriving stock (Eq, Show, Ord, Generic)
   deriving anyclass (NFData, CoArbitrary, Function)
   deriving Draw via DrawRawCharPriority "_creatureType" 1000 Creature
+  deriving Arbitrary via GenericArbitrary Creature
   deriving (ToJSON, FromJSON)
        via WithOptions '[ FieldLabelModifier '[Drop 1] ]
                        Creature
-instance Arbitrary Creature where arbitrary = genericArbitrary
 makeLenses ''Creature
 
 instance HasVisionRadius Creature where
