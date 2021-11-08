@@ -102,7 +102,7 @@
 (general-unbind 'normal "s"   "M-." "C-p" "C-n")
 (general-unbind 'insert "C-v" "C-d" "C-a" "C-e" "C-n" "C-p" "C-k")
 
-(setq evil-symbol-word-search t)
+(customize-set-variable 'evil-symbol-word-search t)
 (evil-mode 1)
 (evil-collection-init)
 (evil-commentary-mode)
