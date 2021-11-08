@@ -71,7 +71,7 @@
 
    ("m" "Email" entry
     (file +org-default-todo-file)
-    "* TODO [%l[%:subject]] :email:\n%i")
+    "* TODO [[%L][%:subject]] :email:\n%i")
 
    ("n" "Notes" entry
     (file +org-default-todo-file)
