@@ -166,6 +166,10 @@ in {
               # Notifications
               "${mod}+Shift+n" = "exec killall -SIGUSR1 .dunst-wrapped";
               "${mod}+n" = "exec killall -SIGUSR2 .dunst-wrapped";
+              "Control+space" = "exec ${pkgs.dunst}/bin/dunstctl close";
+              "Control+Shift+space" = "exec ${pkgs.dunst}/bin/dunstctl close-all";
+              "Control+grave" = "exec ${pkgs.dunst}/bin/dunstctl history-pop";
+              "Control+Shift+period" = "exec ${pkgs.dunst}/bin/dunstctl action";
             })]);
 
           fonts = [ decorationFont ];
@@ -331,13 +335,6 @@ in {
           frame = {
             width = 0;
             color = "#aaaaaa";
-          };
-
-          shortcuts = {
-            close = "ctrl+space";
-            close_all = "ctrl+shift+space";
-            history = "ctrl+grave";
-            context = "ctrl+shift+period";
           };
 
           urgency_low = {
