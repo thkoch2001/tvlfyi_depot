@@ -10,8 +10,8 @@
 , quickcheck-text, random, random-extras, random-fu, random-source
 , Rasterific, raw-strings-qq, reflection, semigroupoids, semigroups
 , splitmix, stache, streams, tasty, tasty-hunit, tasty-quickcheck
-, text, text-zipper, tomland, transformers, vector, vty, witherable
-, yaml, zlib
+, tasty-rerun, text, text-zipper, tomland, transformers, vector
+, vty, witherable, yaml, zlib
 }:
 mkDerivation {
   pname = "xanthous";
@@ -57,8 +57,8 @@ mkDerivation {
     quickcheck-instances quickcheck-text random random-extras random-fu
     random-source Rasterific raw-strings-qq reflection semigroupoids
     semigroups splitmix stache streams tasty tasty-hunit
-    tasty-quickcheck text text-zipper tomland transformers vector vty
-    witherable yaml zlib
+    tasty-quickcheck tasty-rerun text text-zipper tomland transformers
+    vector vty witherable yaml zlib
   ];
   benchmarkHaskellDepends = [
     aeson array async base bifunctors brick checkers classy-prelude
