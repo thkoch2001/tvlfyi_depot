@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbe69d4f_d8f456c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-08T10:38:55Z",
+      "side": 1,
+      "message": "Approving, this mostly affects my own stuff at the moment anyways.",
+      "revId": "d7fff5ae23291f6a55203bfe3fd5b43b96f25202",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
