@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2db6cb1320baa23f71c24dff106bf682fb21e38c602d57e7e99297ae6abdc772
+-- hash: 441dff572b5380a2408380523138142917b39c4ff4cb27fda832cffdc7e5aada
 
 name:           xanthous
 version:        0.1.0.0
@@ -59,6 +59,7 @@ library
       Xanthous.Game
       Xanthous.Game.Arbitrary
       Xanthous.Game.Draw
+      Xanthous.Game.Draw.Util
       Xanthous.Game.Env
       Xanthous.Game.Lenses
       Xanthous.Game.Memo
@@ -302,6 +303,7 @@ test-suite test
       Xanthous.DataSpec
       Xanthous.Entities.CharacterSpec
       Xanthous.Entities.RawsSpec
+      Xanthous.Entities.RawTypesSpec
       Xanthous.Game.PromptSpec
       Xanthous.Game.StateSpec
       Xanthous.GameSpec
@@ -405,6 +407,7 @@ test-suite test
     , tasty
     , tasty-hunit
     , tasty-quickcheck
+    , tasty-rerun
     , text
     , text-zipper
     , tomland
