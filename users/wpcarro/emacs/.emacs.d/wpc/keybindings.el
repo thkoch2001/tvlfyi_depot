@@ -53,9 +53,6 @@
 ;; General Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Install KBDs like <SPC>jb to search through my monorepo.
-(bookmark-install-kbds)
-
 ;; Ensure that evil's command mode behaves with readline bindings.
 (general-define-key
  :keymaps 'evil-ex-completion-map
@@ -382,6 +379,9 @@
  "b" #'buffer-ivy-source-code
  "<SPC>" #'buffer-show-previous
  "k" #'kill-buffer)
+
+;; Install KBDs like <SPC>jb to search through my monorepo.
+(bookmark-install-kbds)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here
