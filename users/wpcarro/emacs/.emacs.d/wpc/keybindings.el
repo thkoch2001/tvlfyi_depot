@@ -48,6 +48,7 @@
 (require 'evil-commentary)
 (require 'evil-surround)
 (require 'key-chord)
+(require 'edebug)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Keybindings
@@ -379,6 +380,16 @@
  "b" #'buffer-ivy-source-code
  "<SPC>" #'buffer-show-previous
  "k" #'kill-buffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; edebug
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(general-define-key
+ :states '(normal)
+ :keymaps '(edebug-mode-map)
+ ;; this restores my ability to move-left while debugging
+ "h" nil)
 
 ;; Install KBDs like <SPC>jb to search through my monorepo.
 (bookmark-install-kbds)
