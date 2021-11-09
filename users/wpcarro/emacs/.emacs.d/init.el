@@ -1,4 +1,5 @@
 ;; load order is intentional
+(setq-default debug-on-error t)
 (require 'wpc-package)
 (require 'wpc-misc)
 (require 'ssh)
