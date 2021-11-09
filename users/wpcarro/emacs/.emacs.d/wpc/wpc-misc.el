@@ -210,6 +210,9 @@
 ;; use tabs instead of spaces
 (setq-default indent-tabs-mode nil)
 
+;; prefer shorter tab-widths (e.g. writing Go code)
+(setq-default tab-width 2)
+
 ;; automatically follow symlinks
 (setq vc-follow-symlinks t)
 
