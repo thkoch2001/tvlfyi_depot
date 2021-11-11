@@ -196,8 +196,8 @@ in lib.fix(self: {
     depot.automatic-gc = {
       enable = true;
       interval = "1 hour";
-      diskThreshold = 42; # GiB
-      maxFreed = 100; # GiB
+      diskThreshold = 16; # GiB
+      maxFreed = 10; # GiB
       preserveGenerations = "14d";
     };
   };
