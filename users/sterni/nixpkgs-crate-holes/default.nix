@@ -30,6 +30,8 @@ let
       sternenseemann
       qyliss
       jk
+      symphorien
+      erictapen
     ;
   };
 
