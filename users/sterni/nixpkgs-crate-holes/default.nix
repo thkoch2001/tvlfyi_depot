@@ -30,6 +30,9 @@ let
       sternenseemann
       qyliss
       jk
+      symphorien
+      erictapen
+      expipiplus1
     ;
   };
 
