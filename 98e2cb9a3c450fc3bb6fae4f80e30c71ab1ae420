@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce47ac44_3475d90a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-12T08:35:36Z",
+      "side": 1,
+      "message": "Rubberstamping because reviewing this XML is kind of meaningless ... trust me, it looks better.",
+      "revId": "98e2cb9a3c450fc3bb6fae4f80e30c71ab1ae420",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
