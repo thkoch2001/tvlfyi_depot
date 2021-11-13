@@ -1,4 +1,4 @@
-{ depot, pkgs, ... }:
+{ depot, pkgs, lib, ... }:
 
 { # content of the <title> tag
   title
@@ -17,7 +17,7 @@ let
   inherit (depot.tools) cheddar;
 in
 
-runCommandNoCC "index.html" {
+runCommandNoCC "${lib.strings.sanitizeDerivationName title}-index.html" {
   headerPart = ''
     <!DOCTYPE html>
     <head>
