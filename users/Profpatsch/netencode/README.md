@@ -1,6 +1,6 @@
 # netencode 0.1-unreleased
 
-[bencode][] and [netstring][]-inspired pipe format that should be trivial go generate correctly in every context (only requires a `byte_length()` and a `printf()`), easy to parse (100 lines of code or less), mostly human-decipherable for easy debugging, and support nested record and sum types.
+[bencode][] and [netstring][]-inspired pipe format that should be trivial to generate correctly in every context (only requires a `byte_length()` and a `printf()`), easy to parse (100 lines of code or less), mostly human-decipherable for easy debugging, and support nested record and sum types.
 
 
 ## scalars
