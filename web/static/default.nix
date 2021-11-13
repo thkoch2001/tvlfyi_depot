@@ -7,7 +7,12 @@ let
   logo = depot.web.tvl.logo;
 in lib.fix(self: pkgs.runCommand "tvl-static" {
   passthru = {
-    drvHash = lib.substring storeDirLength 32 self.drvPath;
+    # Preserving the string context here makes little sense: While we are
+    # referencing this derivation, we are not doing so via the nix store,
+    # so it makes little sense for Nix to police the references.
+    drvHash = builtins.unsafeDiscardStringContext (
+      lib.substring storeDirLength 32 self.drvPath
+    );
   };
 } ''
   mkdir $out
