@@ -59,10 +59,19 @@ let
     ];
   };
 
+  # Disallow access to //corp from other depot parts.
+  corpFilter = restrictFolder {
+    folder = "corp";
+    reason = ''
+      Code under //corp may use incompatible licensing terms with
+      other depot parts and should not be used anywhere else.
+    '';
+  };
+
   readDepot = depotArgs: import ./nix/readTree {} {
     args = depotArgs;
     path = ./.;
-    filter = usersFilter;
+    filter = parts: args: corpFilter parts (usersFilter parts args);
     scopedArgs = {
       __findFile = _: _: throw "Do not import from NIX_PATH in the depot!";
     };
