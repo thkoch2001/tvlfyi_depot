@@ -210,13 +210,13 @@
   (exwm-randr-refresh))
 
 (defun randr-tverskoy-split-workspace ()
-  "Split the workspace across two screens, assuming external to the right."
+  "Split the workspace across two screens, assuming external to the left."
   (interactive)
   (set-randr-config
-   '(("eDP" 1 2 3 4 5 )
-     ("HDMI-A-0" 6 7 8 9 0)))
+   '(("HDMI-A-0" 1 2 3 4 5 6 7)
+     ("eDP" 8 9 0)))
 
-  (shell-command "xrandr --output HDMI-A-0 --right-of eDP --auto")
+  (shell-command "xrandr --output HDMI-A-0 --left-of eDP --auto")
   (exwm-randr-refresh))
 
 ;; Layouts for frog (desktop)
