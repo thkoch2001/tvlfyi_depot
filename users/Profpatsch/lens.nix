@@ -6,6 +6,8 @@ let
 
   comp = f: g: x: f (g x);
 
+  _ = v: f: f v;
+
   # Profunctor (p :: Type -> Type -> Type)
   Profunctor = rec {
     # dimap :: (a -> b) -> (c -> d) -> p b c -> p a d
@@ -113,6 +115,7 @@ let
 in {
   inherit
     id
+    _
     const
     comp
     Profunctor
