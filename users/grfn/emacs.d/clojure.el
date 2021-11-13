@@ -10,6 +10,7 @@
 
 (defun +grfn/clojure-setup ()
   ;; (flycheck-select-checker 'clj-kondo)
+  (require 'flycheck)
   (push 'clojure-cider-kibit flycheck-disabled-checkers)
   (push 'clojure-cider-eastwood flycheck-disabled-checkers)
   (push 'clojure-cider-typed flycheck-disabled-checkers)
