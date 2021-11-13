@@ -277,7 +277,6 @@ in lib.fix(self: {
       paperlike-go
       pass
       pavucontrol
-      picom
       pinentry
       pinentry-emacs
       pulseaudioLight # for pactl
@@ -368,6 +367,12 @@ in lib.fix(self: {
       };
 
       services.dunst.enable = true;
+
+      services.picom = {
+        enable = true;
+        vSync = true;
+        backend = "glx";
+      };
 
       xdg.configFile."dunst/dunstrc" = {
         source = depot.users.tazjin.dotfiles.dunstrc;
