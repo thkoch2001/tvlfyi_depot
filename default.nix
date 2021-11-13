@@ -17,48 +17,56 @@ let
   # package set is not available here.
   fix = f: let x = f x; in x;
 
-  # readTree argument filter to generally disallow access to //users
-  # from other depot parts. Exceptions can be added for specific
-  # (full) paths.
-  depotArgsFilter = args: parts:
-    if (elemAt parts 0) == "users" || elem parts [
-      # whitby is allowed to access //users for two reasons:
+  # Create a readTree filter disallowing access to the specified
+  # top-level folder in other parts of the depot, except for specific
+  # exceptions specified by their (full) paths.
+  restrictFolder = { folder, exceptions ? [], reason }: args: parts:
+    if (elemAt parts 0) == folder || elem parts exceptions
+    then args
+    else args // {
+      depot = args.depot // {
+        "${folder}" = throw ''
+          Access to targets under //${folder} is not permitted from
+          other depot paths. Specific exceptions are configured at the
+          top-level.
+
+          ${reason}
+          At location: //${builtins.concatStringsSep "/" parts}
+        '';
+      };
+    };
+
+  # Disallow access to //users from other depot parts.
+  usersFilter = restrictFolder {
+    folder = "users";
+    reason = ''
+      Code under //users is not considered stable or dependable in the
+      wider depot context. If a project under //users is required by
+      something else, please move it to a different depot path.
+    '';
+
+    exceptions = [
+      # whitby is allowed to access //users for several reasons:
       #
-      # 1. Users host their SSH key sets in //users.
-      # 2. tazjin's website is currently hosted on whitby because
-      #    camden is in storage.
-      #
+      # 1. User SSH keys are set in //users.
+      # 2. Some personal websites or demo projects are served from it.
       [ "ops" "machines" "whitby" ]
 
       # Due to evaluation order this also affects these targets.
       # TODO(tazjin): Can this one be removed somehow?
       [ "ops" "nixos" ]
       [ "ops" "machines" "all-systems" ]
-    ]
-    then args
-    else args // {
-      depot = args.depot // {
-        users = throw ''
-          Access to items from the //users folder is not permitted from
-          other depot paths. Code under //users is not considered stable
-          or dependable in the wider depot context.
+    ];
+  };
 
-          If a project under //users is required by something else,
-          please move it to a different depot path.
-
-          At location: //${builtins.concatStringsSep "/" parts}
-        '';
-      };
+  readDepot = depotArgs: import ./nix/readTree {} {
+    args = depotArgs;
+    path = ./.;
+    filter = usersFilter;
+    scopedArgs = {
+      __findFile = _: _: throw "Do not import from NIX_PATH in the depot!";
     };
-
-    readDepot = depotArgs: import ./nix/readTree {} {
-      args = depotArgs;
-      path = ./.;
-      filter = depotArgsFilter;
-      scopedArgs = {
-        __findFile = _: _: throw "Do not import from NIX_PATH in the depot!";
-      };
-    };
+  };
 
   # To determine build targets, we walk through the depot tree and
   # fetch attributes that were imported by readTree and are buildable.
