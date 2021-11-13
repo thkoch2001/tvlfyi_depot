@@ -1,5 +1,9 @@
 ;;; init.el --- Package bootstrapping. -*- lexical-binding: t; -*-
 
+;; Disable annoying warnings from native compilation.
+(setq native-comp-async-report-warnings-errors nil
+      warning-suppress-log-types '((comp)))
+
 ;; Packages are installed via Nix configuration, this file only
 ;; initialises the newly loaded packages.
 
