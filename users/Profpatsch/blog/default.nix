@@ -9,11 +9,12 @@ let
       ;
 
   # /
+  # TODO: use
   toplevel = [
     {
       route = [ "notes" ];
       name = "Notes";
-      page = router;
+      page = {cssFile}: router cssFile;
     }
     {
       route = [ "projects" ];
@@ -27,12 +28,20 @@ let
     {
       route = [ "notes" "preventing-oom" ];
       name = "Preventing out-of-memory (OOM) errors on Linux";
-      page = markdownToHtml "preventing-oom" ./notes/preventing-oom.md;
+      page = {cssFile}: markdownToHtml {
+        name = "preventing-oom";
+        markdown = ./notes/preventing-oom.md;
+        inherit cssFile;
+      };
     }
     {
       route = [ "notes" "rust-string-conversions" ];
       name = "Converting between different String types in Rust";
-      page = markdownToHtml "rust-string-conversions" ./notes/rust-string-conversions.md;
+      page = {cssFile}: markdownToHtml {
+        name = "rust-string-conversions";
+        markdown = ./notes/rust-string-conversions.md;
+        inherit cssFile;
+      };
     }
   ];
 
@@ -60,30 +69,48 @@ let
       title = "Ligature Emulation in Emacs";
       subtitle = "It’s not pretty, but the results are";
       description = "How to set up ligatures using <code>prettify-symbols-mode</code> and the Hasklig/FiraCode fonts.";
-      page = markdownToHtml "2017-05-04-ligature-emluation-in-emacs" ./posts/2017-05-04-ligature-emulation-in-emacs.md;
+      page = {cssFile}: markdownToHtml {
+        name = "2017-05-04-ligature-emluation-in-emacs";
+        markdown = ./posts/2017-05-04-ligature-emulation-in-emacs.md;
+        inherit cssFile;
+      };
       route = [ "posts" "2017-05-04-ligature-emluation-in-emacs" ];
       tags = ["emacs"];
     }
   ];
 
   # convert a markdown file to html via lowdown
-  markdownToHtml = name: note: depot.nix.runExecline "${name}.html" {} [
-    "importas" "out" "out"
-    bins.lowdown "-s" "-Thtml" "-o" "$out" note
-  ];
+  markdownToHtml = {
+    name,
+    # the file to convert
+    markdown,
+    # css file to add to the final result, as { route }
+    cssFile
+  }:
+    depot.nix.runExecline "${name}.html" {} ([
+      "importas" "out" "out"
+      (depot.users.Profpatsch.lib.debugExec "")
+      bins.lowdown
+        "-s" "-Thtml"
+      ] ++
+        (lib.optional (cssFile != null) (["-M" "css=${mkRoute cssFile.route}"]))
+      ++ [
+        "-o" "$out"
+        markdown
+    ]);
 
-  # all notes with `route` converted to an absolute path
-  notesFullRoute = lib.pipe notes [
-    (map (x@{route, ...}: x // { route = mkRoute route; }))
-  ];
-
-  # all posts with `route` converted to an absolute path
-  postsFullRoute = lib.pipe posts [
+  # takes a { route … } attrset and converts the route lists to an absolute path
+  fullRoute = attrs: lib.pipe attrs [
     (map (x@{route, ...}: x // { route = mkRoute route; }))
   ];
 
   # a cdb from route to a netencoded version of data for each route
-  router = lib.pipe (notesFullRoute ++ postsFullRoute) [
+  router = cssFile: lib.pipe (notes ++ posts) [
+    (map (r: with depot.users.Profpatsch.lens;
+      lib.pipe r [
+        (over (field "route") mkRoute)
+        (over (field "page") (_ { inherit cssFile; }))
+      ]))
     (map (x: {
       name = x.route;
       value = depot.users.Profpatsch.netencode.gen.dwim x;
@@ -108,8 +135,8 @@ let
       "https://code.tvl.fyi/tree/${relativePath}";
 
   # look up a route by path ($1)
-  router-lookup = depot.nix.writeExecline "router-lookup" { readNArgs = 1; } [
-    cdbLookup router "$1"
+  router-lookup = cssFile: depot.nix.writeExecline "router-lookup" { readNArgs = 1; } [
+    cdbLookup (router cssFile) "$1"
   ];
 
   runExeclineStdout = name: args: cmd: depot.nix.runExecline name args ([
@@ -118,7 +145,7 @@ let
   ] ++ cmd);
 
   notes-index-html =
-    let o = notesFullRoute;
+    let o = fullRoute notes;
     in ''
       <ul>
       ${scope o (o: ''
@@ -159,7 +186,7 @@ let
   projects-index = pkgs.writeText "projects-index.html" projects-index-html;
 
   posts-index-html =
-  let o = postsFullRoute;
+  let o = fullRoute posts;
   in ''
     <dl>
     ${scope o (o: ''
@@ -177,7 +204,7 @@ let
   ];
 
   # A simple http server that serves the site. Yes, it’s horrible.
-  site-server = { port }: depot.nix.writeExecline "blog-server" {} [
+  site-server = { cssFile, port }: depot.nix.writeExecline "blog-server" {} [
     (depot.users.Profpatsch.lib.runInEmptyEnv [ "PATH" ])
     bins.s6-tcpserver "127.0.0.1" port
     bins.time "--format=time: %es" "--"
@@ -211,7 +238,7 @@ let
           depot.users.Profpatsch.netencode.env-splice-record
         ]
       # TODO: ignore potential query arguments. See 404 message
-      "pipeline" [ router-lookup "$path" ]
+      "pipeline" [ (router-lookup cssFile) "$path" ]
       depot.users.Profpatsch.netencode.record-splice-env
       "importas" "-ui" "page" "page"
       "export" "content-type" "text/html"
@@ -344,7 +371,6 @@ in depot.nix.utils.drvTargets {
     projects-index
     projects-index-html
     posts-index-html
-    router-lookup
     ;
 
 }
