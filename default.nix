@@ -20,7 +20,7 @@ let
   # Create a readTree filter disallowing access to the specified
   # top-level folder in other parts of the depot, except for specific
   # exceptions specified by their (full) paths.
-  restrictFolder = { folder, exceptions ? [], reason }: args: parts:
+  restrictFolder = { folder, exceptions ? [], reason }: parts: args:
     if (elemAt parts 0) == folder || elem parts exceptions
     then args
     else args // {
