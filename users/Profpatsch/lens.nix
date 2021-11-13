@@ -89,6 +89,8 @@ let
       (attrs: a: attrs // { ${name} = a; });
 
   # Setter :: (->) a b -> (->) s t
+  # Setter :: (a -> b) -> (s -> t)
+
 
   # Subclasses of profunctor for (->).
   # We only have Strong for now, but when we implement Choice we need to add it here.
