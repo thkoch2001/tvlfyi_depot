@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12f92e2a_92f08bc2",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-14T15:04:45Z",
+      "side": 1,
+      "message": "side note maybe good to rename this I was confused for a good 3mins why we can use a list as a function here because I thought this was builtins.filter.",
+      "range": {
+        "startLine": 67,
+        "startChar": 23,
+        "endLine": 67,
+        "endChar": 29
+      },
+      "revId": "9c26ee9f9b973358aa9dc8bc5ba19abc0b19fa1f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
