@@ -16,6 +16,24 @@
       "message": "Why can\u0027t we make `folder` a list of parts? Seems a bit arbitrary to _only_ allow filtering top-level folders.",
       "revId": "d525dd99cfbdc001a8bcbe5a8955a8238cbcd677",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a76e1a06_604f52cd",
+        "filename": "default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-15T12:26:16Z",
+      "side": 1,
+      "message": "Hmm, good point. I will fix this in a subsequent CL.",
+      "parentUuid": "c8f3d90d_d50cf8e5",
+      "revId": "d525dd99cfbdc001a8bcbe5a8955a8238cbcd677",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
