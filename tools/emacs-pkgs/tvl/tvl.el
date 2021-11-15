@@ -5,7 +5,7 @@
 ;;
 ;; Author: Griffin Smith <grfn@gws.fyi>
 ;; Version: 0.0.1
-;; Package-Requires: (s magit)
+;; Package-Requires: (s dash magit)
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -89,6 +89,62 @@ rubberstamp operation is dangerous and should only be used in
 (transient-append-suffix
   #'magit-push ["r"]
   (list "P" "push & rubberstamp to Gerrit" #'magit-gerrit-rubberstamp))
+
+(defvar magit-cl-history nil)
+(defun magit-read-cl (remote)
+  (let* ((refs (prog2 (message "Determining available refs...")
+                   (magit-remote-list-refs remote)
+                 (message "Determining available refs...done")))
+         (change-refs (-filter
+                       (apply-partially #'string-prefix-p "refs/changes/")
+                       refs))
+         (cl-number-to-refs
+          (-group-by
+           (lambda (change-ref)
+             ;; refs/changes/34/1234/1
+             ;; ^    ^       ^  ^    ^
+             ;; 1    2       3  4    5
+             ;;                 ^-- this one
+             (fourth
+              (split-string change-ref (rx "/"))))
+           change-refs))
+         (cl-numbers
+          (-map
+           (lambda (cl-to-refs)
+             (let ((latest-patchset-ref
+                    (-max-by
+                     (-on #'> (lambda (ref)
+                                (string-to-number
+                                 (fifth (split-string ref (rx "/"))))))
+                     (-remove
+                      (apply-partially #'s-ends-with-p "meta")
+                      (cdr cl-to-refs)))))
+               (propertize (car cl-to-refs) 'ref latest-patchset-ref)))
+           cl-number-to-refs)))
+    (get-text-property
+     0
+     'ref
+     (magit-completing-read
+      "Checkout CL" cl-numbers nil t nil 'magit-cl-history))))
+
+(transient-define-suffix magit-gerrit-checkout (remote cl-refspec)
+  "Prompt for a CL number and checkout the latest patchset of that CL with
+  detached HEAD"
+  (interactive
+   (let* ((remote tvl-gerrit-remote)
+          (cl (magit-read-cl remote)))
+     (list remote cl)))
+  (magit-fetch-refspec remote cl-refspec (magit-fetch-arguments))
+  ;; That runs async, so wait for it to finish (this is how magit does it)
+  (while (and magit-this-process
+              (eq (process-status magit-this-process) 'run))
+    (sleep-for 0.005))
+  (magit-checkout "FETCH_HEAD" (magit-branch-arguments))
+  (message "HEAD detached at %s" cl-refspec))
+
+(transient-append-suffix
+  #'magit-branch ["l"]
+  (list "g" "gerrit CL" #'magit-gerrit-checkout))
 
 (defun tvl-depot-status ()
   "Open the TVL monorepo in magit."
