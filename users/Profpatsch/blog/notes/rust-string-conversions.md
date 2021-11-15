@@ -14,6 +14,7 @@ From       To         Use                                    Comment
 &str     -> String    String::from(st)
 &str     -> &[u8]     st.as_bytes()
 &str     -> Vec<u8>   st.as_bytes().to_owned()               via &[u8]
+&str     -> &OsStr    OsStr::new(st)
 
 String   -> &str      &s                                     alt. s.as_str()
 String   -> &[u8]     s.as_bytes()
