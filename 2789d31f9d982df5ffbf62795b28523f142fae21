@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6038459_5906c82e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-19T10:36:39Z",
+      "side": 1,
+      "message": "A channel bump including a staging-next cycle without any regressions? Incredible!",
+      "revId": "2789d31f9d982df5ffbf62795b28523f142fae21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
