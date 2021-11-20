@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce7cc392_03af211b",
+        "filename": "ops/modules/restic.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-11-20T20:58:33Z",
+      "side": 1,
+      "message": "what\u0027s the source of this name?",
+      "revId": "42b74762ca77a3682d50629eff30ffe074a0341b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
