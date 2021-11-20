@@ -228,8 +228,8 @@
 (use-package! org-tracker
   :hook (org-mode . org-tracker-mode)
   :config
-  (setq org-tracker-state-alist '(("BACKLOG" . "Backlog")
-                                  ("PLANNED" . "Planned")
+  (setq org-tracker-state-alist '(("INBOX" . "Inbox")
+                                  ("BACKLOG" . "Backlog")
                                   ("TODO" . "Selected for Development")
                                   ("ACTIVE" . "In Progress")
                                   ("PR" . "Code Review")
