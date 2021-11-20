@@ -328,7 +328,7 @@ in {
     # Run cgit & josh to serve git
     git-serving.enable = true;
 
-    # Configure backups to Google Cloud Storage
+    # Configure backups to GleSYS
     restic = {
       enable = true;
       paths = [
