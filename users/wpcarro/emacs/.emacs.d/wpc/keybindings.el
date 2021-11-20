@@ -253,7 +253,10 @@
  "C-S-w" #'vterm-mgt-kill
  "<C-tab>" #'vterm-mgt-next
  "<C-S-iso-lefttab>" #'vterm-mgt-prev
- "<s-backspace>" #'vterm-mgt-rename-buffer)
+ "<s-backspace>" #'vterm-mgt-rename-buffer
+ ;; Without this, typing "+" is effectively no-op. Try for yourself:
+ ;; (vterm-send-key "<kp-add>")
+ "<kp-add>" "+")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Displays
