@@ -26,9 +26,6 @@
 (defconst scrot-screenshot-directory "~/Downloads"
   "The default directory for screenshot outputs.")
 
-(defconst scrot-path-to-executable "/usr/bin/scrot"
-  "Path to the scrot executable.")
-
 (defconst scrot-output-format "screenshot_%H:%M:%S_%Y-%m-%d.png"
   "The format string for the output screenshot file.
 See scrot's man page for more information.")
@@ -48,7 +45,7 @@ The output path is copied to the user's clipboard."
                                  (ts-format scrot-output-format (ts-now)))))
     (make-process
      :name "scrot-select"
-     :command `(,scrot-path-to-executable "--select" ,screenshot-path)
+     :command `("scrot" "--select" ,screenshot-path)
      :sentinel (lambda (proc _err)
                  (when (= 0 (process-exit-status proc))
                    (scrot--copy-image screenshot-path))))))
