@@ -1,12 +1,15 @@
-# Configure restic backups to Google Cloud Storage.
+# Configure restic backups to S3-compatible storage, in our case
+# GleSYS object storage.
 #
-# Conventions: Restic state is kept in /var/backup/restic, with
-# secrets in /var/backup/restic/secret.
+# Conventions:
+# - restic's cache lives in /var/backup/restic/cache
+# - repository password lives in /var/backup/restic/secret
+# - object storage credentials in /var/backup/restic/glesys-key
 { config, lib, pkgs, ... }:
 
 let
   cfg = config.services.depot.restic;
-  description = "Restic backups to GCS";
+  description = "Restic backups to GleSYS";
   mkStringOption = default: lib.mkOption {
     inherit default;
     type = lib.types.str;
@@ -14,9 +17,10 @@ let
 in {
   options.services.depot.restic = {
     enable = lib.mkEnableOption description;
-    project = mkStringOption "tazjins-infrastructure";
-    credentialPath = mkStringOption "/var/backup/restic/gcp-key.json";
-    repository = mkStringOption "gs:tvl-fyi-backups:/whitby";
+    bucketEndpoint = mkStringOption "objects.dc-sto1.glesys.net";
+    bucketName = mkStringOption "aged-resonance";
+    bucketCredentials = mkStringOption "/var/backup/restic/glesys-key";
+    repository = mkStringOption config.networking.hostName;
     interval = mkStringOption "hourly";
 
     paths = with lib; mkOption {
@@ -31,16 +35,14 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # Regularly back up whitby to Google Cloud Storage.
     systemd.services.restic = {
-      description = "Backups to Google Cloud Storage";
+      description = "Backups to GleSYS";
 
       script = "${pkgs.restic}/bin/restic backup ${lib.concatStringsSep " " cfg.paths}";
 
       environment = {
-        GOOGLE_PROJECT_ID = cfg.project;
-        GOOGLE_APPLICATION_CREDENTIALS = cfg.credentialPath;
-        RESTIC_REPOSITORY = cfg.repository;
+        RESTIC_REPOSITORY = "s3:${cfg.bucketEndpoint}/${cfg.bucketName}/${cfg.repository}";
+        AWS_SHARED_CREDENTIALS_FILE = cfg.bucketCredentials;
         RESTIC_PASSWORD_FILE = "/var/backup/restic/secret";
         RESTIC_CACHE_DIR = "/var/backup/restic/cache";
 
@@ -53,5 +55,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       timerConfig.OnCalendar = cfg.interval;
     };
+
+    environment.systemPackages = [ pkgs.restic ];
   };
 }
