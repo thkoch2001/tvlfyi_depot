@@ -3,9 +3,10 @@
 
 with depot.nix;
 
-let src = builtins.fetchGit {
+let src = pkgs.fetchgit {
   url = "https://github.com/cl-plus-ssl/cl-plus-ssl.git";
   rev = "29081992f6d7b4e3aa2c5eeece4cd92b745071f4";
+  hash = "sha256:16lyrixl98b7vy29dbbzkbq0xaz789350dajrr1gdny5i55rkjq0";
 };
 in buildLisp.library {
   name = "cl-plus-ssl";

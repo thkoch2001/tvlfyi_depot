@@ -1,10 +1,12 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildGo.external {
   path = "google.golang.org/grpc";
-  src = builtins.fetchGit {
+
+  src = pkgs.fetchgit {
     url = "https://github.com/grpc/grpc-go";
     rev = "085c980048876e2735d4aba8f0d5bca4d7acaaa5";
+    hash = "sha256:1vl089pv8qgxkbdg10kyd7203psn35wwjzxxbvi22628faqcpg61";
   };
 
   deps = with depot.third_party; [
