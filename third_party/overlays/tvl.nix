@@ -3,6 +3,10 @@
 { depot, ... }:
 
 self: super: {
+  # Rollback Nix to a stable version (2.3) while there is lots of
+  # random ecosystem breakage with the newer versions.
+  nix = super.nix_2_3;
+
   # Required for apereo-cas
   # TODO(lukegb): Document why?
   gradle_6 = (super.gradleGen.override {
