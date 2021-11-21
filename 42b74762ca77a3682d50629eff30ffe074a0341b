@@ -34,6 +34,24 @@
       "parentUuid": "ce7cc392_03af211b",
       "revId": "42b74762ca77a3682d50629eff30ffe074a0341b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f897ad56_4c4b8abb",
+        "filename": "ops/modules/restic.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-11-21T02:57:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9e6a4b34_91854a2b",
+      "revId": "42b74762ca77a3682d50629eff30ffe074a0341b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
