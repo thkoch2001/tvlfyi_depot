@@ -1,13 +1,13 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let
-  inherit (depot) buildGo;
-  inherit (builtins) fetchGit;
-in depot.nix.buildGo.external {
+depot.nix.buildGo.external {
   path = "github.com/googleapis/gax-go";
-  src = fetchGit {
-    url = "https://github.com/googleapis/gax-go";
+
+  src = pkgs.fetchFromGitHub {
+    owner = "googleapis";
+    repo = "gax-go";
     rev = "b443e5a67ec8eeac76f5f384004931878cab24b3";
+    sha256 = pkgs.lib.fakeSha256;
   };
 
   deps = with depot.third_party; [
