@@ -201,10 +201,10 @@ let
 
         # filter out all iteration steps without a codepoint value
         codepoint != null
-          # if we are at the iteration step of the input string, throw
+          # if we are at the iteration step of a non-empty input string, throw
           # an error if no codepoint was returned, as it indicates an incomplete
           # UTF-8 sequence.
-          || (stringIndex == stringLength - 1 && throw earlyEndMsg)
+          || (stringLength > 0 && stringIndex == stringLength - 1 && throw earlyEndMsg)
 
       ) iterResult
     );
