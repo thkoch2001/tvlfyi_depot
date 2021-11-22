@@ -56,7 +56,6 @@ let
     utf8.decode (string.fromBytes (builtins.map int.fromHex l));
 
   testFailures = it "checks UTF-8 decoding failures" [
-    (assertThrows "emtpy bytestring throws" (utf8.decode ""))
     (assertThrows "truncated UTF-8 string throws" (hexDecode [ "F0" "9F" ]))
     # examples from The Unicode Standard
     (assertThrows "ill-formed: C0 AF" (hexDecode [ "C0" "AF" ]))
