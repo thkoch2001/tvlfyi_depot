@@ -207,7 +207,7 @@ let
             else "Unexpected end of input";
         in
 
-        if stringIndex == stringLength - 1
+        if stringLength > 0 && stringIndex == stringLength - 1
         then assert value != null || throw earlyEndMsg; true
         # everywhere else drop all steps without a value
         else value != null
