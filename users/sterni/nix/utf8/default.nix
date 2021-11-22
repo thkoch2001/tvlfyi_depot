@@ -160,31 +160,59 @@ let
   # TODO(sterni): option to fallback to replacement char instead of failure
   decode = s:
     let
-      iter = { codes ? [], ... }@args: byte:
-        let
-          res = step args byte;
-        in
-          # foldl' forceValues the calculate value only at the end
-          # this makes the thunk grow large enough to cause a stack
-          # overflow with sufficiently large strings. To avoid this
-          # we always deepSeq the result which also keeps memory
-          # usage of decode reasonable.
-          builtins.deepSeq res
-            (if res ? result
-            then res // {
-              codes = codes ++ [ res.result ];
+      stringLength = builtins.stringLength s;
+      iterResult = builtins.genericClosure {
+        startSet = [
+          {
+            key = "start";
+            stringIndex = -1;
+            state = {};
+            value = null;
+          }
+        ];
+        operator = { state, stringIndex, ... }:
+          let
+            # updated values for current iteration step
+            newIndex = stringIndex + 1;
+            newState = step state (builtins.substring newIndex 1 s);
+          in lib.optionals (newIndex < stringLength) [
+            {
+              # unique keys to make genericClosure happy
+              key = toString newIndex;
+              # carryover state for the next step
+              stringIndex = newIndex;
+              state = newState;
+              # actual payload for later, steps with value null are filtered out
+              value = newState.result or null;
             }
-            else res);
-      iterResult =
-        builtins.foldl' iter {} (string.toChars s);
-      earlyEndMsg =
-        if iterResult ? count && iterResult ? pos
-        then "Missing ${toString (with iterResult; count - pos)} bytes at end of input"
-        else "Unexpected end of input";
+          ];
+      };
     in
-      if iterResult ? result
-      then iterResult.codes
-      else builtins.throw earlyEndMsg;
+    # extract all steps that yield a code point into a list
+    builtins.map (v: v.value) (
+      builtins.filter (
+        { value, stringIndex, state, ... }:
+
+
+        # for the last step, we expect a value if the string is properly encoded,
+        # otherwise it indicates the string being cut off prematurely.
+        # This check is inlined here in a bit of an awkward place, but triggers
+        # a stack overflow inside genericClosure for a reason I don't quite
+        # understand yet.
+
+        let
+          earlyEndMsg =
+            if state ? count && state ? pos
+            then "Missing ${toString (with state; count - pos)} bytes at end of input"
+            else "Unexpected end of input";
+        in
+
+        if stringIndex == stringLength - 1
+        then assert value != null || throw earlyEndMsg; true
+        # everywhere else drop all steps without a value
+        else value != null
+      ) iterResult
+    );
 
   /* Decodes an UTF-8 string, but doesn't throw on error.
      Instead it returns null.
