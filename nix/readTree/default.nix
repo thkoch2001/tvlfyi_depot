@@ -25,6 +25,8 @@ let
     elem
     elemAt
     filter
+    genericClosure
+    getAttr
     hasAttr
     head
     isAttrs
@@ -126,6 +128,24 @@ let
       then nodeValue // allChildren // (marker parts allChildren)
       else nodeValue;
 
+  # Construct a human-readable name for the parts of a node.
+  nameFor = concatStringsSep ".";
+
+  # Filter function for tree nodes that returns true for readTree
+  # targets.
+  isReadTree = node: isAttrs node && node ? __readTree;
+
+  # Return all readTree children of the given node.
+  treeChildren = node: map (child: getAttr child node) node.__readTreeChildren;
+
+  # Key a readTree node for use with genericClosure.
+  keyNode = node: {
+    package = node;
+    key = if node ? __subtarget
+      then nameFor node.__readTree + ":${node.__subtarget}"
+      else nameFor node.__readTree;
+  };
+
   # Function can be used to find all readTree targets within an
   # attribute set.
   #
@@ -140,23 +160,27 @@ let
   #
   #   eligible: Function to determine whether the given derivation
   #             should be included in the build.
-  gather = eligible: node:
-    if node ? __readTree then
-      # Include the node itself if it is eligible.
-      (if eligible node then [ node ] else [])
+  gather = eligible: root: filter (node: eligible node.package) (genericClosure {
+    # Initial set of nodes to recurse into, i.e. the readTree-children
+    # of the root.
+    startSet = map keyNode (filter isReadTree (treeChildren root));
+
+    # Function that yields the readTree children (including
+    # subtargets) for each node.
+    operator = { key, package }:
       # Include eligible children of the node
-      ++ concatMap (gather eligible) (map (attr: node."${attr}") node.__readTreeChildren)
+      map keyNode (filter isReadTree (treeChildren package))
+
       # Include specified sub-targets of the node
-      ++ filter eligible (map
-           (k: (node."${k}" or {}) // {
-             # Keep the same tree location, but explicitly mark this
-             # node as a subtarget.
-             __readTree = node.__readTree;
-             __readTreeChildren = [];
-             __subtarget = k;
-           })
-           (node.meta.targets or []))
-    else [];
+      ++ map (subtarget: keyNode ((getAttr subtarget package) // {
+        # Keep the same tree location, but explicitly mark this
+        # node as a subtarget.
+        __readTree = package.__readTree;
+        __readTreeChildren = [];
+        __subtarget = subtarget;
+      })) (package.meta.targets or []);
+  });
+
 in {
   inherit gather;
 
@@ -199,7 +223,7 @@ in {
           at the top-level.
 
           ${reason}
-          At location: ${builtins.concatStringsSep "." parts}
+          At location: ${nameFor parts}
         '';
       };
     };
