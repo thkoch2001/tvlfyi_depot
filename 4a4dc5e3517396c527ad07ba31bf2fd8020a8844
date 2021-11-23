@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "474dcd13_fc4419d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-23T11:47:23Z",
+      "side": 1,
+      "message": "I think this is unnecessary now that we downgraded nix globally?",
+      "revId": "4a4dc5e3517396c527ad07ba31bf2fd8020a8844",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
