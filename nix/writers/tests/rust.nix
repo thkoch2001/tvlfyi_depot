@@ -60,7 +60,7 @@ let
   '');
 
 
-in depot.nix.utils.drvTargets {
+in depot.nix.readTree.drvTargets {
   inherit
     rustTransitiveLib
     rustWithLib

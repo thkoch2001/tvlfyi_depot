@@ -14,7 +14,7 @@ let
   };
   package = python3Packages.buildPythonPackage opts;
   script  = python3Packages.buildPythonApplication opts;
-in depot.nix.utils.drvTargets {
+in depot.nix.readTree.drvTargets {
   inherit script;
   python  = python3.withPackages (_: [ package ]);
   setAlarm = pkgs.writeShellScriptBin "set-alarm" ''
