@@ -113,9 +113,19 @@ let
         randomUnicode
       ]));
 
+  testDecodingEncoding = it "checks that decoding and then encoding forms an identity"
+    (builtins.map
+      (s: assertEq "Decoding and then encoding “${s}” yields itself"
+        (utf8.encode (utf8.decode s)) s)
+      (lib.flatten [
+        glassSentences
+        randomUnicode
+      ]));
+
 in
   runTestsuite "nix.utf8" [
     testFailures
     testAscii
     testDecoding
+    testDecodingEncoding
   ]
