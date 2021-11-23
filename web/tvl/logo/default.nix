@@ -67,7 +67,7 @@ let
     </svg>
   '';
 
-in depot.nix.utils.drvTargets(lib.fix (self: {
+in depot.nix.readTree.drvTargets(lib.fix (self: {
   # Expose the logo construction functions.
   inherit palette darkCss lightCss animatedCss staticCss;
 

@@ -2,13 +2,11 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (depot.nix.utils) drvTargets;
-
   checkZone = zone: file: pkgs.runCommandNoCC "${zone}-check" {} ''
     ${pkgs.bind}/bin/named-checkzone -i local ${zone} ${file} | tee $out
   '';
 
-in drvTargets {
+in depot.nix.readTree.drvTargets {
   kontemplate-works = checkZone "kontemplate.works"./kontemplate.works.zone;
   tazj-in = checkZone "tazj.in" ./tazj.in.zone;
 }

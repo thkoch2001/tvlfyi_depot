@@ -77,7 +77,7 @@ let
     bins.s6-touch "$out"
   ];
 
-in depot.nix.utils.drvTargets {
+in depot.nix.readTree.drvTargets {
 
   check-all-our-crates =
     depot.nix.drvSeqL

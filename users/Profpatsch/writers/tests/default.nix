@@ -41,7 +41,7 @@ let
     assert(test_lib.test() == "test 1 2 3")
   '');
 
-in depot.nix.utils.drvTargets {
+in depot.nix.readTree.drvTargets {
   inherit
     pythonWithLib
     ;

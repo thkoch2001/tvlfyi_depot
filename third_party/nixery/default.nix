@@ -3,7 +3,7 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (depot.nix.utils) drvTargets;
+  inherit (depot.nix.readTree) drvTargets;
 
   commit = "6c4a69fa4280f0154ce257a1dfd23fb463c1ec5b";
   src = pkgs.fetchFromGitHub {

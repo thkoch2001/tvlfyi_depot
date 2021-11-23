@@ -53,7 +53,7 @@ let
     }
   '';
 
-in depot.nix.utils.drvTargets {
+in depot.nix.readTree.drvTargets {
   inherit
     python-netstring-test
     rust-netstring-test
