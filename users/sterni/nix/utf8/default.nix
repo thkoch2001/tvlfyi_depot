@@ -206,6 +206,15 @@ let
       ) iterResult
     );
 
+  /* Pretty prints a Unicode codepoint in the U+<HEX> notation.
+
+     Type: integer -> string
+  */
+  formatCodepoint = cp: "U+" + string.fit {
+    width = 4;
+    char = "0";
+  } (int.toHex cp);
+
   encodeCodepoint = cp:
     let
       # Find the amount of bytes needed to encode the given codepoint.
@@ -215,8 +224,13 @@ let
         [ (int.inRange 0 127)         1 ] # 00000000 0xxxxxxx
         [ (int.inRange 128 2047)      2 ] # 00000yyy yyxxxxxx
         [ (int.inRange 2048 65535)    3 ] # zzzzyyyy yyxxxxxx
-        [ (int.inRange 65536 2097151) 4 ] # 000uuuuu zzzzyyyy yyxxxxxx
+        [ (int.inRange 65536 1114111) 4 ] # 000uuuuu zzzzyyyy yyxxxxxx,
+                                          # capped at U+10FFFF
+
+        [ (fun.const true) (builtins.throw invalidCodepointMsg) ]
       ];
+
+      invalidCodepointMsg = "${formatCodepoint cp} is not a Unicode codepoint";
 
       # Extract the bit ranges x, y, z and u from the given codepoint
       # according to Table 3-6. from The Unicode Standard, Version 13.0,
@@ -270,7 +284,20 @@ let
         (x + (if count > 1 then 128 else 0))
       ];
 
-    in string.fromBytes bytes;
+      firstByte = builtins.head bytes;
+
+      unableToEncodeMessage = "Can't encode ${formatCodepoint cp} as UTF-8";
+
+    in string.fromBytes (
+      builtins.genList (i:
+        let
+          byte = builtins.elemAt bytes i;
+        in
+          if wellFormedByte firstByte i byte
+          then byte
+          else builtins.throw unableToEncodeMessage
+      ) count
+    );
 
   /* Encode a list of Unicode codepoints into an UTF-8 string.
 
@@ -283,5 +310,6 @@ in {
     encode
     decode
     step
+    formatCodepoint
     ;
 }
