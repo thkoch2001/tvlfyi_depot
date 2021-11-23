@@ -38,7 +38,7 @@ let
     ;
 
   bins = depot.nix.getBins pkgs.coreutils [ "printf" ]
-      // depot.nix.getBins pkgs.s6-portable-utils [ "s6-touch" "s6-false" ];
+      // depot.nix.getBins pkgs.s6-portable-utils [ "s6-touch" "s6-false" "s6-cat" ];
 
   # Returns true if the given expression throws when `deepSeq`-ed
   throws = expr:
@@ -153,17 +153,18 @@ let
         then depot.nix.runExecline.local "testsuite-${name}-successful" {} [
           "importas" "out" "out"
           # force derivation to rebuild if test case list changes
-          "ifelse" [ bins.s6-false ] [ bins.printf "" prettyRes ]
+          "ifelse" [ bins.s6-false ] [
+            bins.printf "" (builtins.hashString "sha512" prettyRes)
+          ]
           "if" [ bins.printf "%s\n" "testsuite ${name} successful!" ]
           bins.s6-touch "$out"
         ]
-        else depot.nix.runExecline.local "testsuite-${name}-failed" {} [
+        else depot.nix.runExecline.local "testsuite-${name}-failed" {
+          stdin = prettyRes + "\n";
+        } [
           "importas" "out" "out"
-          "if" [
-            bins.printf "%s\n%s\n"
-              "testsuite ${name} failed!"
-              prettyRes
-          ]
+          "if" [ bins.printf "%s\n" "testsuite ${name} failed!" ]
+          "if" [ bins.s6-cat ]
           "exit" "1"
         ]);
 
