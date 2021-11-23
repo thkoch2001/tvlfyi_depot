@@ -10,10 +10,6 @@ let
     filter
     ;
 
-  # This definition of fix is identical to <nixpkgs>.lib.fix, but the global
-  # package set is not available here.
-  fix = f: let x = f x; in x;
-
   readTree = import ./nix/readTree {};
 
   # Disallow access to //users from other depot parts.
@@ -97,7 +93,7 @@ let
            (node.meta.targets or []))
     else [];
 
-in fix(self: (readDepot {
+in readTree.fix(self: (readDepot {
   depot = self;
 
   # Pass third_party as 'pkgs' (for compatibility with external
