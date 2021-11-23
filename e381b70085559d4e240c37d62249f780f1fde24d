@@ -22,6 +22,30 @@
       },
       "revId": "e381b70085559d4e240c37d62249f780f1fde24d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea0deff5_6028c313",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-23T11:41:10Z",
+      "side": 1,
+      "message": "Updated commit message with explanation.",
+      "parentUuid": "a32b23d3_4adf3a56",
+      "range": {
+        "startLine": 168,
+        "startChar": 52,
+        "endLine": 168,
+        "endChar": 53
+      },
+      "revId": "e381b70085559d4e240c37d62249f780f1fde24d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
