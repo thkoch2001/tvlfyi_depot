@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54a7ec89_d46318c5",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-23T13:10:01Z",
+      "side": 1,
+      "message": "Alternative could be `if root ? __readTree then [ root ] else []` to avoid a bit of duplication, but also a bit ugly.",
+      "revId": "f9e5ec5918a9deb8cd8e1a4f6e05783294f7d11c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
