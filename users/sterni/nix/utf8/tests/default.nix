@@ -55,13 +55,23 @@ let
   hexDecode = l:
     utf8.decode (string.fromBytes (builtins.map int.fromHex l));
 
-  testFailures = it "checks UTF-8 decoding failures" [
+  hexEncode = l: utf8.encode (builtins.map int.fromHex l);
+
+  testFailures = it "checks UTF-8 decoding failures" ([
     (assertThrows "truncated UTF-8 string throws" (hexDecode [ "F0" "9F" ]))
     # examples from The Unicode Standard
     (assertThrows "ill-formed: C0 AF" (hexDecode [ "C0" "AF" ]))
     (assertThrows "ill-formed: E0 9F 80" (hexDecode [ "E0" "9F" "80" ]))
     (assertEq "well-formed: F4 80 83 92" (hexDecode [ "F4" "80" "83" "92" ]) [ 1048786 ])
-  ];
+    (assertThrows "Codepoint out of range: 0xFFFFFF" (hexEncode [ "FFFFFF" ]))
+    (assertThrows "Codepoint out of range: -0x02" (hexEncode [ "-02" ]))
+  ] ++ builtins.genList (i:
+    let
+      cp = i + int.fromHex "D800";
+    in
+      assertThrows "Can't encode UTF-16 reserved characters: ${utf8.formatCodepoint cp}"
+        (utf8.encode [ cp ])
+  ) (int.fromHex "07FF"));
 
   testAscii = it "checks decoding of ascii strings"
     (builtins.map (s: assertEq "ASCII decoding is equal to UTF-8 decoding for \"${s}\""
