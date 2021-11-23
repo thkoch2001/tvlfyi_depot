@@ -209,23 +209,9 @@ let
       ) iterResult
     );
 
-  /* Decodes an UTF-8 string, but doesn't throw on error.
-     Instead it returns null.
-
-     Type: string -> ( [ integer ] | null)
-  */
-  decodeSafe = s:
-    let
-      res = builtins.tryEval (decode s);
-    in
-      if res.success
-      then res.value
-      else null;
-
 in {
   inherit
     decode
-    decodeSafe
     step
     ;
 }
