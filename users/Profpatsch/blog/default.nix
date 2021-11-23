@@ -358,7 +358,7 @@ let
     bins.cdbget "$2"
   ];
 
-in depot.nix.utils.drvTargets {
+in depot.nix.readTree.drvTargets {
    inherit
     router
     depotCgitLink

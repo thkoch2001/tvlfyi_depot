@@ -2,7 +2,7 @@
 
 let
   inherit (import ./builder.nix args) buildGerritBazelPlugin;
-in depot.nix.utils.drvTargets {
+in depot.nix.readTree.drvTargets {
   # https://gerrit.googlesource.com/plugins/owners
   owners = buildGerritBazelPlugin rec {
     name = "owners";
