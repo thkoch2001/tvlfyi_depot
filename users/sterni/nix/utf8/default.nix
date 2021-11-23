@@ -38,9 +38,7 @@ let
      Based on table 3-7. from The Unicode Standard,
      Version 13.0, section 3.9.
 
-     Throws if the first byte is invalid.
-
-     Type: integer -> integer -> (integer -> bool)
+     Type: integer -> integer -> integer -> bool
   */
   wellFormedByte =
     # first byte's integer value
@@ -49,16 +47,8 @@ let
     pos:
       let
         defaultRange = int.inRange 128 191;
-      in
-        # The first byte is either ASCII which requires no checks
-        # or we automatically check it when we check the subsequent
-        # bytes. The downside is that this may generate bad error
-        # messages in very rare cases.
-        if pos == 0
-        then lib.const true
-        else if pos > 1 # 3rd and 4th byte have only one validity rule
-        then defaultRange
-        else assert pos == 1; flow.switch first [
+
+        secondBytePredicate = flow.switch first [
           [ (int.inRange 194 223) defaultRange          ] # C2..DF
           [ 224                   (int.inRange 160 191) ] # E0
           [ (int.inRange 225 236) defaultRange          ] # E1..EC
@@ -67,11 +57,18 @@ let
           [ 240                   (int.inRange 144 191) ] # F0
           [ (int.inRange 241 243) defaultRange          ] # F1..F3
           [ 244                   (int.inRange 128 143) ] # F4
-          [
-            (fun.const true)
-            (builtins.throw "Invalid first byte ${int.toHex first}")
-          ]
+          [ (fun.const true)      null                  ]
         ];
+
+        firstBytePredicate = byte: assert first == byte;
+          first < 128 || secondBytePredicate != null;
+      in
+        # Either ASCII or in one of the byte ranges of Table 3-6.
+        if pos == 0 then firstBytePredicate
+        # return predicate according to Table 3-6.
+        else if pos == 1 then assert secondBytePredicate != null; secondBytePredicate
+        # 3rd and 4th byte have only one validity rule
+        else defaultRange;
 
   /* Iteration step for decoding an UTF-8 byte sequence.
      It decodes incrementally, i. e. it has to be fed
