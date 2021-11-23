@@ -6,7 +6,6 @@
 
 let
   inherit (builtins)
-    concatMap
     filter
     ;
 
@@ -69,30 +68,6 @@ let
   # Is this tree node eligible for build inclusion?
   eligible = node: (node ? outPath) && (node.meta.ci or true);
 
-  # Walk the tree starting with 'node', recursively extending the list
-  # of build targets with anything that looks buildable.
-  #
-  # Any tree node can specify logical targets by exporting a
-  # 'meta.targets' attribute containing a list of keys in itself. This
-  # enables target specifications that do not exist on disk directly.
-  gather = node:
-    if node ? __readTree then
-      # Include the node itself if it is eligible.
-      (if eligible node then [ node ] else [])
-      # Include eligible children of the node
-      ++ concatMap gather (map (attr: node."${attr}") node.__readTreeChildren)
-      # Include specified sub-targets of the node
-      ++ filter eligible (map
-           (k: (node."${k}" or {}) // {
-             # Keep the same tree location, but explicitly mark this
-             # node as a subtarget.
-             __readTree = node.__readTree;
-             __readTreeChildren = [];
-             __subtarget = k;
-           })
-           (node.meta.targets or []))
-    else [];
-
 in readTree.fix(self: (readDepot {
   depot = self;
 
@@ -118,7 +93,7 @@ in readTree.fix(self: (readDepot {
   #
   # Note: To prevent infinite recursion, this *must* be a nested
   # attribute set (which does not have a __readTree attribute).
-  ci.targets = gather (self // {
+  ci.targets = readTree.gather eligible (self // {
     # remove the pipelines themselves from the set over which to
     # generate pipelines because that also leads to infinite
     # recursion.
