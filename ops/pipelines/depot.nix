@@ -76,7 +76,7 @@ let
   # Pipeline steps need to stay in order.
   pipeline.steps =
     # Create build steps for each CI target
-    (map mkStep depot.ci.targets)
+    (map (pkg: mkStep pkg.package) depot.ci.targets)
 
     ++ [
       # Simultaneously run protobuf checks
