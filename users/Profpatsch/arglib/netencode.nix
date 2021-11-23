@@ -37,4 +37,4 @@ let
     '';
   };
 
-in depot.nix.utils.drvTargets netencode
+in depot.nix.readTree.drvTargets netencode

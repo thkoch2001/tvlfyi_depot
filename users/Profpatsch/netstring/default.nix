@@ -55,7 +55,7 @@ let
     }
   '';
 
-in depot.nix.utils.drvTargets {
+in depot.nix.readTree.drvTargets {
   inherit
     python-netstring
     rust-netstring
