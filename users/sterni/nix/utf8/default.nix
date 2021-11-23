@@ -209,8 +209,81 @@ let
       ) iterResult
     );
 
+  encodeCodepoint = cp:
+    let
+      # Find the amount of bytes needed to encode the given codepoint.
+      # Note that this doesn't check if the Unicode codepoint is allowed,
+      # but rather allows all theoretically UTF-8-encodeable ones.
+      count = flow.switch cp [
+        [ (int.inRange 0 127)         1 ] # 00000000 0xxxxxxx
+        [ (int.inRange 128 2047)      2 ] # 00000yyy yyxxxxxx
+        [ (int.inRange 2048 65535)    3 ] # zzzzyyyy yyxxxxxx
+        [ (int.inRange 65536 2097151) 4 ] # 000uuuuu zzzzyyyy yyxxxxxx
+      ];
+
+      # Extract the bit ranges x, y, z and u from the given codepoint
+      # according to Table 3-6. from The Unicode Standard, Version 13.0,
+      # section 3.9. u is split into uh and ul since they are used in
+      # different bytes in the end.
+      components = lib.mapAttrs (_: { mask, offset }:
+        int.bitAnd (int.bitShiftR cp offset) mask
+      ) {
+        x = {
+          mask = if count > 1 then 63 else 127;
+          offset = 0;
+        };
+        y = {
+          mask = if count > 2 then 63 else 31;
+          offset = 6;
+        };
+        z = {
+          mask = 15;
+          offset = 12;
+        };
+        # u which belongs into the second byte
+        ul = {
+          mask = 3;
+          offset = 16;
+        };
+        # u which belongs into the first byte
+        uh = {
+          mask = 7;
+          offset = 18;
+        };
+      };
+      inherit (components) x y z ul uh;
+
+      # Finally construct the byte sequence for the given codepoint. This is
+      # usually done by using the component and adding a few bits as a prefix
+      # which depends on the length of the sequence. The longer the sequence,
+      # the further back each component is pushed. To simplify this, we
+      # always construct a 4 element list and take the last `count` elements.
+      # Thanks to laziness the bogus values created by this are never evaluated.
+      #
+      # Based on table 3-6. from The Unicode Standard,
+      # Version 13.0, section 3.9.
+      bytes = lib.sublist (4 - count) count [
+        # 11110uuu
+        (uh + 240)
+        # 10uuzzzz or 1110zzzz
+        (z + (if count > 3 then 128 + int.bitShiftL ul 4 else 224))
+        # 10yyyyyy or 110yyyyy
+        (y + (if count > 2 then 128 else 192))
+        # 10xxxxxx or 0xxxxxxx
+        (x + (if count > 1 then 128 else 0))
+      ];
+
+    in string.fromBytes bytes;
+
+  /* Encode a list of Unicode codepoints into an UTF-8 string.
+
+     Type: [ integer ] -> string
+  */
+  encode = lib.concatMapStrings encodeCodepoint;
+
 in {
   inherit
+    encode
     decode
     step
     ;
