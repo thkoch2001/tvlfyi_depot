@@ -6,10 +6,7 @@
 
 let
   inherit (builtins)
-    attrValues
     concatMap
-    elem
-    elemAt
     filter
     ;
 
@@ -17,27 +14,10 @@ let
   # package set is not available here.
   fix = f: let x = f x; in x;
 
-  # Create a readTree filter disallowing access to the specified
-  # top-level folder in other parts of the depot, except for specific
-  # exceptions specified by their (full) paths.
-  restrictFolder = { folder, exceptions ? [], reason }: parts: args:
-    if (elemAt parts 0) == folder || elem parts exceptions
-    then args
-    else args // {
-      depot = args.depot // {
-        "${folder}" = throw ''
-          Access to targets under //${folder} is not permitted from
-          other depot paths. Specific exceptions are configured at the
-          top-level.
-
-          ${reason}
-          At location: //${builtins.concatStringsSep "/" parts}
-        '';
-      };
-    };
+  readTree = import ./nix/readTree {};
 
   # Disallow access to //users from other depot parts.
-  usersFilter = restrictFolder {
+  usersFilter = readTree.restrictFolder {
     folder = "users";
     reason = ''
       Code under //users is not considered stable or dependable in the
@@ -60,7 +40,7 @@ let
   };
 
   # Disallow access to //corp from other depot parts.
-  corpFilter = restrictFolder {
+  corpFilter = readTree.restrictFolder {
     folder = "corp";
     reason = ''
       Code under //corp may use incompatible licensing terms with
@@ -76,7 +56,7 @@ let
     ];
   };
 
-  readDepot = depotArgs: import ./nix/readTree {} {
+  readDepot = depotArgs: readTree {
     args = depotArgs;
     path = ./.;
     filter = parts: args: corpFilter parts (usersFilter parts args);
