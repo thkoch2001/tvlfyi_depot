@@ -242,6 +242,7 @@ in lib.fix(self: {
 
     # programs from nixpkgs
     (with pkgs; [
+      amber
       bat
       chromium
       curl
@@ -255,6 +256,7 @@ in lib.fix(self: {
       file
       firefox
       gdb
+      gh
       git
       gnupg
       google-chrome
@@ -271,6 +273,7 @@ in lib.fix(self: {
       mullvad-vpn
       networkmanagerapplet
       nix-prefetch-github
+      nmap
       notmuch
       openssh
       openssl
@@ -289,11 +292,14 @@ in lib.fix(self: {
       scrot
       spotify
       syncthing
+      tig
       tokei
       tree
       unzip
       vlc
+      whois
       xsecurelock
+      zoxide
     ]);
 
     systemd.user.services.lieer-tazjin = {
