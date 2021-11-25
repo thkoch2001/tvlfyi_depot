@@ -89,10 +89,21 @@ let
       })
 
       # Wait for all steps to complete, then exit with success or
-      # failure depending on whether any failure status was written.
+      # failure depending on whether any other steps failed.
       # This step must be :duck:! (yes, really!)
       ({
-        command = "exit $(buildkite-agent meta-data get 'failure')";
+        command = let duck = pkgs.writeShellScript "duck" ''
+          set -ueo pipefail
+
+          STATUS=$(${pkgs.curl}/bin/curl 'https://graphql.buildkite.com/v1' --silent \
+            -H "Authorization: Bearer $BUILDKITE_AGENT_ACCESS_TOKEN" \
+            -d "{\"query\": \"query BuildStatusQuery { build(slug: \\\"tvl/depot/$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}" | \
+              ${pkgs.jq}/bin/jq -r '.data.build.jobs.count')
+
+          echo "Status is $STATUS"
+          exit $STATUS
+        ''; in "${duck}";
+
         label = ":duck:";
         key = ":duck:";
       })
