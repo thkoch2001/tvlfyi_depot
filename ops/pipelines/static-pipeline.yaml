@@ -14,7 +14,6 @@ steps:
       }
 
       nix-build -A ops.pipelines.depot -o depot.yaml --show-trace || fallback
-      buildkite-agent meta-data set 'failure' '0'
       buildkite-agent pipeline upload depot.yaml || fallback
 
   # Create a revision number for the current commit for builds on
