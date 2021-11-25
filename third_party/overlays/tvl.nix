@@ -44,7 +44,7 @@ self: super: {
 
       # Build EXWM with the depot sources instead.
       exwm = esuper.exwm.overrideAttrs(_: {
-        src = "${depot.path + "/third_party/exwm"}";
+        src = depot.path.origSrc + "/third_party/exwm";
       });
     })
   );
