@@ -75,8 +75,25 @@ let
   #
   # Pipeline steps need to stay in order.
   pipeline.steps =
+    # Experiment with GraphQL API
+    [{
+      command = let duck = pkgs.writeShellScript "duck" ''
+        set -ueo pipefail
+
+        echo "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}"
+
+        ${pkgs.curl}/bin/curl 'https://graphql.buildkite.com/v1' --silent \
+          -H "Authorization: Bearer $(cat /etc/secrets/buildkite-besadii)" \
+          -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}"
+      ''; in "${duck}";
+
+      label = ":chicken:";
+      key = ":chicken:";
+    }] ++
+
+
     # Create build steps for each CI target
-    (map mkStep depot.ci.targets)
+    # (map mkStep depot.ci.targets)
 
     ++ [
       # Simultaneously run protobuf checks
@@ -89,10 +106,10 @@ let
       })
 
       # Wait for all steps to complete, then exit with success or
-      # failure depending on whether any failure status was written.
+      # failure depending on whether any other steps failed.
       # This step must be :duck:! (yes, really!)
       ({
-        command = "exit $(buildkite-agent meta-data get 'failure')";
+        command = "exit 1";
         label = ":duck:";
         key = ":duck:";
       })
