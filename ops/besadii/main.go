@@ -46,7 +46,7 @@ type refUpdated struct {
 	patchset *string
 }
 
-type Author struct {
+
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }

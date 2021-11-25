@@ -89,10 +89,26 @@ let
       })
 
       # Wait for all steps to complete, then exit with success or
-      # failure depending on whether any failure status was written.
+      # failure depending on whether any other steps failed.
+      #
+      # This information is checked by querying the Buildkite GraphQL
+      # API and fetching the count of failed steps.
+      #
       # This step must be :duck:! (yes, really!)
       ({
-        command = "exit $(buildkite-agent meta-data get 'failure')";
+        command = let duck = pkgs.writeShellScript "duck" ''
+          set -ueo pipefail
+
+          export FAILED_JOBS=$(${pkgs.curl}/bin/curl 'https://graphql.buildkite.com/v1' \
+            --silent \
+            -H "Authorization: Bearer $(cat /etc/secrets/buildkite-besadii)" \
+            -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}" | \
+            ${pkgs.jq}/bin/jq -r '.data.build.jobs.count')
+
+          echo "Number of failed jobs: $FAILED_JOBS"
+          exit $FAILED_JOBS
+        ''; in "${duck}";
+
         label = ":duck:";
         key = ":duck:";
       })
