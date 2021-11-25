@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a2f24c2_f10c8530",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-25T11:03:05Z",
+      "side": 1,
+      "message": "This is because of filterSource which works by dumping a path into store and then deleting stuff from it (I don\u0027t think nix could do it differently). You need to remember to use origSrc for subpaths where the filtering doesn\u0027t matter, a bit cumbersome tbh.",
+      "revId": "923f13247fceff423b71f7c69f42b5cc134ad388",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "292b5b97_22f3b7f1",
         "filename": "third_party/overlays/tvl.nix",
         "patchSetId": 1
