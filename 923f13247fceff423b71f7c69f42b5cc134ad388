@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "292b5b97_22f3b7f1",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-25T11:01:05Z",
+      "side": 1,
+      "message": "`src \u003d depot.path.origSrc + \"/third_party/exwm\";` would work, since this would create the equivalent nix path to ../exwm;",
+      "revId": "923f13247fceff423b71f7c69f42b5cc134ad388",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
