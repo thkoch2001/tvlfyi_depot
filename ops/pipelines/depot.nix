@@ -27,10 +27,6 @@ let
       else label;
 
   # Create a pipeline step from a single target.
-  #
-  # If the build fails, Buildkite metadata is updated to mark the
-  # pipeline as failed. Buildkite has a concept of a failed pipeline
-  # regardless, but this data is not accessible.
   mkStep = target: {
     command = let
       drvPath = builtins.unsafeDiscardStringContext target.drvPath;
@@ -45,7 +41,6 @@ let
       # To handle this case we fall back to an ordinary build if the derivation
       # file is missing.
       "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
-      "|| (buildkite-agent meta-data set 'failure' '1'; exit 1)"
     ];
     label = ":nix: ${mkLabel target}";
 
@@ -89,10 +84,29 @@ let
       })
 
       # Wait for all steps to complete, then exit with success or
-      # failure depending on whether any failure status was written.
+      # failure depending on whether any other steps failed.
+      #
+      # This information is checked by querying the Buildkite GraphQL
+      # API and fetching the count of failed steps.
+      #
       # This step must be :duck:! (yes, really!)
       ({
-        command = "exit $(buildkite-agent meta-data get 'failure')";
+        command = let duck = pkgs.writeShellScript "duck" ''
+          set -ueo pipefail
+
+          readonly FAILED_JOBS=$(${pkgs.curl}/bin/curl 'https://graphql.buildkite.com/v1' \
+            --silent \
+            -H "Authorization: Bearer $(cat /etc/secrets/buildkite-besadii)" \
+            -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}" | \
+            ${pkgs.jq}/bin/jq -r '.data.build.jobs.count')
+
+          echo "$FAILED_JOBS build jobs failed."
+
+          if (( $FAILED_JOBS > 0 )); then
+            exit 1
+          fi
+        ''; in "${duck}";
+
         label = ":duck:";
         key = ":duck:";
       })
