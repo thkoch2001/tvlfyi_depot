@@ -20,7 +20,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"log/syslog"
+	"log"
 	"net/http"
 	"os"
 	"path"
@@ -105,7 +105,7 @@ func updateGerrit(review reviewInput, changeId, patchset string) {
 }
 
 // Trigger a build of a given branch & commit on Buildkite
-func triggerBuild(log *syslog.Writer, token string, trigger *buildTrigger) error {
+func triggerBuild(token string, trigger *buildTrigger) error {
 	env := make(map[string]string)
 
 	// Pass information about the originating Gerrit change to the
@@ -161,7 +161,7 @@ func triggerBuild(log *syslog.Writer, token string, trigger *buildTrigger) error
 		return fmt.Errorf("failed to unmarshal build response: %w", err)
 	}
 
-	fmt.Fprintf(log, "triggered build for ref %q at commit %q: %s", trigger.ref, trigger.commit, buildResp.WebUrl)
+	fmt.Printf("triggered build for ref %q at commit %q: %s", trigger.ref, trigger.commit, buildResp.WebUrl)
 
 	// Report the status back to the Gerrit CL so that users can click
 	// through to the running build.
@@ -281,15 +281,6 @@ func buildTriggerFromChangeMerged() *buildTrigger {
 }
 
 func gerritHookMain(trigger *buildTrigger) {
-	// Logging happens in syslog for Gerrit hooks because we don't want
-	// the hook output to be intermingled with Gerrit's own output
-	// stream
-	log, err := syslog.New(syslog.LOG_INFO|syslog.LOG_USER, "besadii")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to open syslog: %s\n", err)
-		os.Exit(1)
-	}
-
 	if trigger == nil {
 		// The hook was not for something we care about.
 		os.Exit(0)
@@ -297,26 +288,24 @@ func gerritHookMain(trigger *buildTrigger) {
 
 	buildkiteToken, err := ioutil.ReadFile("/etc/secrets/buildkite-besadii")
 	if err != nil {
-		log.Alert(fmt.Sprintf("buildkite token could not be read: %s", err))
-		os.Exit(1)
+		log.Fatalf("buildkite token could not be read: %s", err)
 	}
 
 	sourcegraphToken, err := ioutil.ReadFile("/etc/secrets/sourcegraph-token")
 	if err != nil {
-		log.Alert(fmt.Sprintf("sourcegraph token could not be read: %s", err))
-		os.Exit(1)
+		log.Fatalf("sourcegraph token could not be read: %s", err)
 	}
 
-	err = triggerBuild(log, string(buildkiteToken), trigger)
+	err = triggerBuild(string(buildkiteToken), trigger)
 	if err != nil {
-		log.Err(fmt.Sprintf("failed to trigger Buildkite build: %s", err))
+		log.Printf("failed to trigger Buildkite build: %s", err)
 	}
 
 	err = triggerIndexUpdate(string(sourcegraphToken))
 	if err != nil {
-		log.Err(fmt.Sprintf("failed to trigger sourcegraph index update: %s", err))
+		log.Printf("failed to trigger sourcegraph index update: %s", err)
 	}
-	log.Info("triggered sourcegraph index update")
+	log.Print("triggered sourcegraph index update")
 }
 
 func gerritPassword() string {
@@ -374,6 +363,8 @@ func postCommandMain() {
 }
 
 func main() {
+	log.Print("besadii invoked with %v", os.Args)
+
 	bin := path.Base(os.Args[0])
 
 	if bin == "patchset-created" {
