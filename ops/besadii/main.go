@@ -25,11 +25,11 @@ import (
 	"os"
 	"path"
 	"regexp"
+	"strconv"
 )
 
-var branchRegexp = regexp.MustCompile(`^refs/heads/(.*)$`)
-var metaRegexp = regexp.MustCompile(`^refs/changes/\d{0,2}/(\d+)/meta$`)
-var patchsetRegexp = regexp.MustCompile(`^refs/changes/\d{0,2}/(\d+)/(\d+)$`)
+// Regular expression to extract change ID out of a URL
+var changeIdRegexp = regexp.MustCompile(`^.*/(\d+)$`)
 
 // buildTrigger represents the information passed to besadii when it
 // is invoked as a Gerrit hook.
@@ -39,8 +39,7 @@ type buildTrigger struct {
 	project   string
 	ref       string
 	commit    string
-	submitter string
-	email     string
+	owner string
 
 	changeId *string
 	patchset *string
@@ -127,8 +126,7 @@ func triggerBuild(log *syslog.Writer, token string, trigger *buildTrigger) error
 		Branch: trigger.ref,
 		Env:    env,
 		Author: Author{
-			Name:  trigger.submitter,
-			Email: trigger.email,
+			Name:  trigger.owner,
 		},
 	}
 
@@ -198,52 +196,95 @@ func triggerIndexUpdate(token string) error {
 	return err
 }
 
-func buildTriggerFromFlags() (*buildTrigger, error) {
+// Gerrit passes more flags than we want, but Rob Pike decided[0] in
+// 2013 that the Go art project will not allow users to ignore flags
+// because he "doesn't like it". This function allows users to ignore
+// flags.
+//
+// [0]: https://github.com/golang/go/issues/6112#issuecomment-66083768
+func ignoreFlags(ignore []string) {
+	var _ignore string
+	for _, f := range ignore {
+		flag.StringVar(&_ignore, f, "", "flag to ignore")
+	}
+}
+
+// Extract the buildtrigger struct out of the flags passed to besadii
+// when invoked as Gerrit's 'patchset-created' hook. This hook is used
+// for triggering CI on in-progress CLs.
+func buildTriggerFromPatchsetCreated() (*buildTrigger, error) {
+	// Information that needs to be returned
 	var trigger buildTrigger
 
-	flag.StringVar(&trigger.project, "project", "", "Gerrit project")
-	flag.StringVar(&trigger.commit, "newrev", "", "new revision")
-	flag.StringVar(&trigger.email, "submitter", "", "Submitter email")
-	flag.StringVar(&trigger.submitter, "submitter-username", "", "Submitter username")
-	flag.StringVar(&trigger.ref, "refname", "", "updated reference name")
+	// Information that is only needed for parsing
+	var targetBranch, changeUrl string
 
-	// Gerrit passes more flags than we want, but Rob Pike decided[0] in
-	// 2013 that the Go art project will not allow users to ignore flags
-	// because he "doesn't like it". The following code ignores the
-	// flags.
-	//
-	// [0]: https://github.com/golang/go/issues/6112#issuecomment-66083768
-	var _old string
-	flag.StringVar(&_old, "oldrev", "", "")
+	flag.StringVar(&trigger.project, "project", "", "Gerrit project")
+	flag.StringVar(&trigger.commit, "commit", "", "commit hash")
+	flag.StringVar(&trigger.owner, "change-owner", "", "change owner")
+	flag.StringVar(trigger.patchset, "patchset", "", "patchset ID")
+
+	flag.StringVar(&targetBranch, "branch", "", "CL target branch")
+	flag.StringVar(&changeUrl, "change-url", "", "HTTPS URL of change")
+
+	// patchset-created also passes various flags which we don't need.
+	ignoreFlags([]string{"kind", "change", "topic", "uploader", "uploader-username", "change-owner-username"})
 
 	flag.Parse()
 
-	if trigger.project == "" || trigger.ref == "" || trigger.commit == "" || trigger.submitter == "" {
-		// If we get here, the user is probably being a dummy and invoking
-		// this manually - but incorrectly.
-		return nil, fmt.Errorf("'ref-updated' hook invoked without required arguments")
-	}
-
-	if trigger.project != "depot" || metaRegexp.MatchString(trigger.ref) {
-		// this is not an error, but also not something we handle.
+	// If the patchset is not for depot@canon then we can ignore it. It
+	// might be some other kind of change (refs/meta/config or
+	// Gerrit-internal), but it is not an error.
+	if trigger.project != "depot" || targetBranch != "canon" {
 		return nil, nil
 	}
 
-	if branchRegexp.MatchString(trigger.ref) {
-		// these refs don't need special handling, just move on
-		return &trigger, nil
-	}
+	// Change ID is not directly passed in the numeric format, so we
+	// need to extract it out of the URL
+	matches := changeIdRegexp.FindStringSubmatch(changeUrl)
+	trigger.changeId = &matches[1]
 
-	if matches := patchsetRegexp.FindStringSubmatch(trigger.ref); matches != nil {
-		trigger.changeId = &matches[1]
-		trigger.patchset = &matches[2]
-		return &trigger, nil
-	}
+	// Construct the CL ref from which the build should happen.
+	changeId, _ := strconv.Atoi(*trigger.changeId)
+	trigger.ref = fmt.Sprintf(
+		"refs/changes/%02d/%s/%s",
+		changeId%100, trigger.changeId, trigger.patchset,
+	)
 
-	return nil, fmt.Errorf("besadii does not support updates for this type of ref (%q)", trigger.ref)
+	return &trigger, nil
 }
 
-func refUpdatedMain() {
+// Extract the buildtrigger struct out of the flags passed to besadii
+// when invoked as Gerrit's 'change-merged' hook. This hook is used
+// for triggering canon builds after change submission.
+func buildTriggerFromChangeMerged() *buildTrigger {
+	// Information that needs to be returned
+	var trigger buildTrigger
+
+	// Information that is only needed for parsing
+	var targetBranch string
+
+	flag.StringVar(&trigger.project, "project", "", "Gerrit project")
+	flag.StringVar(&trigger.commit, "newrev", "", "Commit hash")
+	flag.StringVar(&trigger.owner, "change-owner", "", "Change owner")
+	flag.StringVar(&targetBranch, "branch", "", "CL target branch")
+
+	// Ignore extra flags passed by change-merged
+	ignoreFlags([]string{"change", "change-url", "topic", "submitter", "submitter-username", "commit", "change-owner-username"})
+
+	flag.Parse()
+
+	// Skip builds for anything other than depot@canon
+	if trigger.project != "depot" || trigger.ref != "canon" {
+		return nil
+	}
+
+	trigger.ref = "refs/heads/canon"
+
+	return &trigger
+}
+
+func gerritHookMain(trigger *buildTrigger) {
 	// Logging happens in syslog for Gerrit hooks because we don't want
 	// the hook output to be intermingled with Gerrit's own output
 	// stream
@@ -253,14 +294,8 @@ func refUpdatedMain() {
 		os.Exit(1)
 	}
 
-	trigger, err := buildTriggerFromFlags()
-	if err != nil {
-		log.Err(fmt.Sprintf("failed to parse ref update: %s", err))
-		os.Exit(1)
-	}
-
-	if trigger == nil { // the project was not 'depot'
-		log.Err("build triggers are only supported for the 'depot' project")
+	if trigger == nil {
+		// The hook was not for something we care about.
 		os.Exit(0)
 	}
 
@@ -345,8 +380,16 @@ func postCommandMain() {
 func main() {
 	bin := path.Base(os.Args[0])
 
-	if bin == "ref-updated" {
-		refUpdatedMain()
+	if bin == "patchset-created" {
+		trigger, err := buildTriggerFromPatchsetCreated()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to parse 'patchset-created' invocation from args: %v", os.Args)
+			os.Exit(1)
+		}
+		gerritHookMain(trigger)
+	} else if bin == "change-merged" {
+		trigger := buildTriggerFromChangeMerged()
+		gerritHookMain(trigger)
 	} else if bin == "post-command" {
 		postCommandMain()
 	} else {
