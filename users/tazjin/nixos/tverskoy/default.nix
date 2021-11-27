@@ -167,6 +167,7 @@ in lib.fix(self: {
     printing.enable = true;
 
     # expose i2c device as /dev/i2c-amdgpu-dm and make it user-accessible
+    # this is required for sending control commands to the Dasung screen.
     udev.extraRules = ''
       SUBSYSTEM=="i2c-dev", ACTION=="add", DEVPATH=="/devices/pci0000:00/0000:00:08.1/0000:06:00.0/i2c-5/i2c-dev/i2c-5", SYMLINK+="i2c-amdgpu-dm", TAG+="uaccess"
     '';
@@ -380,14 +381,16 @@ in lib.fix(self: {
         lockCmd = "${screenLock}/bin/tazjin-screen-lock";
       };
 
-      services.dunst.enable = true;
-
       services.picom = {
         enable = true;
         vSync = true;
         backend = "glx";
       };
 
+      # Enable the dunst notification daemon, but force the
+      # configuration file separately instead of going via the strange
+      # Nix->dunstrc encoding route.
+      services.dunst.enable = true;
       xdg.configFile."dunst/dunstrc" = {
         source = depot.users.tazjin.dotfiles.dunstrc;
         onChange = ''
