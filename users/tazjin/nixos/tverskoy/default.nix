@@ -339,6 +339,7 @@ in lib.fix(self: {
           ".local/share/Steam"
           ".local/share/direnv"
           ".local/share/fish"
+          ".local/share/zoxide"
           ".mozilla/firefox"
           ".password-store"
           ".rustup"
@@ -364,6 +365,13 @@ in lib.fix(self: {
           init.defaultBranch = "canon";
         };
       };
+
+      programs.fish = {
+        enable = true;
+        interactiveShellInit = ''
+          ${pkgs.zoxide}/bin/zoxide init fish | source
+        '';
+      }
 
       services.screen-locker = {
         enable = true;
