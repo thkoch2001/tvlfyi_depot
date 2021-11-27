@@ -105,7 +105,11 @@ let
     </body>
   '';
 
-in runCommandNoCC "tvl-todos" {} ''
+# in runCommandNoCC "tvl-todos" {} ''
+#   mkdir $out
+#   cp ${todoPage} $out/index.html
+# ''
+in runCommandNoCC "experiment" {} ''
   mkdir $out
-  cp ${todoPage} $out/index.html
+  echo "test" > $out/index.html
 ''
