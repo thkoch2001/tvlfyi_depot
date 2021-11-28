@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eb3d4c6_27e648a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-28T10:48:04Z",
+      "side": 1,
+      "message": "After *much* trial\u0026error I finally got this to work, but writing these hooks is *very* painful.",
+      "revId": "77a1285d052382bb2d580dac4186e8db5c4b16c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
