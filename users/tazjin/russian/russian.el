@@ -1,6 +1,7 @@
 (require 'cl-macs)
 (require 'ht)
 (require 'seq)
+(require 's)
 
 ;; Type definitions for Russian structures
 
@@ -61,5 +62,29 @@
    words)
 
   '(message "Defined %s unique words." (ht-size russian-words)))
+
+;; Helpers to train Russian words when Emacs is idling.
+
+(defun russian--format-word (word)
+  "Format a Russian word suitable for echo display."
+  (apply #'s-concat
+         (-flatten
+          (list (russian-word-word word)
+                " - "
+                (s-join ", " (russian-word-translations word))
+                (when-let ((roots (russian-word-roots word)))
+                  (list " [" (s-join ", " roots) "]"))
+                (when-let ((notes (russian-word-notes word)))
+                  (list " (" (s-join "; " notes) ")"))))))
+
+(defvar russian--last-word nil
+  "Last randomly displayed Russian word")
+
+(defun display-random-russian-word ()
+  (interactive)
+  (message (russian--format-word (seq-random-elt (ht-values russian-words)))))
+
+(defvar russian--display-timer
+  (run-with-idle-timer 5 t #'display-random-russian-word))
 
 (provide 'russian)
