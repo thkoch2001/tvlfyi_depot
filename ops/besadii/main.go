@@ -25,6 +25,7 @@ import (
 	"os"
 	"path"
 	"regexp"
+	"strings"
 )
 
 var branchRegexp = regexp.MustCompile(`^refs/heads/(.*)$`)
@@ -264,12 +265,14 @@ func refUpdatedMain() {
 		log.Alert(fmt.Sprintf("buildkite token could not be read: %s", err))
 		os.Exit(1)
 	}
+	buildkiteToken = strings.TrimSpace(buildkiteToken)
 
 	sourcegraphToken, err := ioutil.ReadFile("/etc/secrets/sourcegraph-token")
 	if err != nil {
 		log.Alert(fmt.Sprintf("sourcegraph token could not be read: %s", err))
 		os.Exit(1)
 	}
+	sourcegraphToken = strings.TrimSpace(sourcegraphToken)
 
 	err = triggerBuild(log, string(buildkiteToken), update)
 	if err != nil {
