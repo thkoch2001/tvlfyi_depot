@@ -3,9 +3,15 @@
 
 let
   cfg = config.services.gerrit;
+  debugHooks = pkgs.writeShellScript "debug-gerrit-hooks" ''
+    echo 'change'
+    echo "Hook ''${0} called with arguments: ''${@}"
+  '';
   gerritHooks = pkgs.runCommandNoCC "gerrit-hooks" {} ''
     mkdir -p $out
     ln -s ${depot.ops.besadii}/bin/besadii $out/ref-updated
+    ln -s ${debugHooks} $out/change-merged
+    ln -s ${debugHooks} $out/patchset-created
   '';
 in {
   services.gerrit = {
