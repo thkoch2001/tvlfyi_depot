@@ -368,8 +368,9 @@
   (setq git-commit-summary-max-length 50))
 
 (after! ivy
-  (setq ivy-re-builders-alist
-        '((t . ivy--regex-fuzzy))))
+  ;; (setq ivy-re-builders-alist
+  ;;       '((t . ivy--regex-fuzzy)))
+  )
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
