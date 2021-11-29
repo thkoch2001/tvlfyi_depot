@@ -117,4 +117,11 @@
     (persist-known-russian-words)
     (message "Marked '%s' as known" word)))
 
+(defun lookup-last-russian-word (in-eww)
+  "Look up the last Russian word in Wiktionary"
+  (interactive "P")
+  (let ((url (concat "https://ru.wiktionary.org/wiki/" (russian-word-word russian--last-word))))
+    (if in-eww (eww url)
+      (browse-url url))))
+
 (provide 'russian)
