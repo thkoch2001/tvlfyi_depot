@@ -3,10 +3,16 @@
 
 let
   cfg = config.services.gerrit;
+
+  besadiiWithConfig = pkgs.writeShellScript "besadii-whitby" ''
+    export BESADII_CONFIG=/etc/secrets/besadii.json
+    exec ${depot.ops.besadii}/bin/besadii
+  '';
+
   gerritHooks = pkgs.runCommandNoCC "gerrit-hooks" {} ''
     mkdir -p $out
-    ln -s ${depot.ops.besadii}/bin/besadii $out/change-merged
-    ln -s ${depot.ops.besadii}/bin/besadii $out/patchset-created
+    ln -s ${besadiiWithConfig} $out/change-merged
+    ln -s ${besadiiWithConfig} $out/patchset-created
   '';
 in {
   services.gerrit = {
