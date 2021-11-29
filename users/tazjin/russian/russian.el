@@ -82,11 +82,39 @@
 
 (defun display-random-russian-word ()
   (interactive)
-  (let ((word (seq-random-elt (ht-values russian-words))))
+  (let* ((word (seq-random-elt (ht-values russian-words))))
+    (while (ht-contains? russian--known-words (russian-word-word word))
+      (setq word (seq-random-elt (ht-values russian-words))))
     (setq russian--last-word word)
     (message (russian--format-word word))))
 
 (defvar russian--display-timer
   (run-with-idle-timer 5 t #'display-random-russian-word))
+
+;; Ability to filter out known words
+
+(defvar russian--known-words (make-hash-table)
+  "Table of words that are already known.")
+
+(defun persist-known-russian-words ()
+  "Persist all known Russian words."
+  (let ((file "/persist/tazjin/known-russian-words.el"))
+    (with-temp-file file
+      (insert (prin1-to-string russian--known-words)))))
+
+(defun load-known-russian-words ()
+  "Load all known Russian words."
+  (let ((file "/persist/tazjin/known-russian-words.el"))
+    (with-temp-buffer
+      (insert-file-contents file)
+      (setq russian--known-words (read (current-buffer))))))
+
+(defun mark-last-russian-word-known ()
+  "Mark the last Russian word that appeared as known."
+  (interactive)
+  (let ((word (russian-word-word russian--last-word)))
+    (ht-set russian--known-words word t)
+    (persist-known-russian-words)
+    (message "Marked '%s' as known" word)))
 
 (provide 'russian)
