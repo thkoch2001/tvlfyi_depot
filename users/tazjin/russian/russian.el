@@ -89,7 +89,7 @@
     (message (russian--format-word word))))
 
 (defvar russian--display-timer
-  (run-with-idle-timer 5 t #'display-random-russian-word))
+  (run-with-idle-timer 4 t #'display-random-russian-word))
 
 ;; Ability to filter out known words
 
