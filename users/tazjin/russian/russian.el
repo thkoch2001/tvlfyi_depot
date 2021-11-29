@@ -82,7 +82,9 @@
 
 (defun display-random-russian-word ()
   (interactive)
-  (message (russian--format-word (seq-random-elt (ht-values russian-words)))))
+  (let ((word (seq-random-elt (ht-values russian-words))))
+    (setq russian--last-word word)
+    (message (russian--format-word word))))
 
 (defvar russian--display-timer
   (run-with-idle-timer 5 t #'display-random-russian-word))
