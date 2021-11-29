@@ -70,4 +70,8 @@ in
 
   xdg.mimeApps.defaultApplications."x-scheme-handler/tg" =
     "telegramdesktop.desktop";
+
+  programs.zsh.shellAliases = {
+    "graph" = "curl -s localhost:6033/graph | dot -Tpng | feh -";
+  };
 }
