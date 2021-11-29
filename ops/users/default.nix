@@ -144,4 +144,9 @@
     email = "me@smitop.com";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$H78rQtmhlzrPEifbXPoCVw$IBg7ePTm/u+e8r2A8aJ4iaaQBzMUw1isS9YJAZ8aT3o";
   }
+  {
+    username = "asmundo";
+    email = "asmundo@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$4MUdaTX8KFWNtgyC7OZBVA$hXO/tbZQA92RfEOfonwM5jr2Rd+B70ZY46SSbCUxjwU";
+  }
 ]
