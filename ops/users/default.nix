@@ -147,6 +147,6 @@
   {
     username = "asmundo";
     email = "asmundo@gmail.com";
-    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$4MUdaTX8KFWNtgyC7OZBVA$hXO/tbZQA92RfEOfonwM5jr2Rd+B70ZY46SSbCUxjwU";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$wUpPczumK9/8z18pCp6QAw$KvAHhIc2ugeiyeLvxBlqlM87fZDjdwKEQpkAzq4aaCs";
   }
 ]
