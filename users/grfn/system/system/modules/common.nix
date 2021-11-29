@@ -32,7 +32,12 @@ with lib;
     lm_sensors
     dnsutils
     htop
+    man-pages
+    man-pages-posix
   ];
+
+  documentation.dev.enable = true;
+  documentation.man.generateCaches = true;
 
   services.openssh.enable = true;
 
