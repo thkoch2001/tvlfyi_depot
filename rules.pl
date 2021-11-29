@@ -8,6 +8,12 @@
 % - No unresolved comments exist.
 % - The CI build has run successfully.
 % - The commit message conforms to our guidelines.
+%
+% It also implements the submit type decision, with the following
+% rules:
+%
+% - subtree changes are submittable as 'merge_if_necessary'
+% - all other changes are submittable as 'rebase_if_necessary'
 
 % Helper predicate which relates a list and an element of that list
 % to the list of elements before the first occurrence of the element.
@@ -37,7 +43,7 @@ unresolved_comments(Check) :-
 
 commit_message(Check) :-
     % Check if the commit message uses the prescribed angular-style commit format
-    gerrit:commit_message_matches('^(feat|fix|docs|style|refactor|test|chore|merge|revert)[\(:]'),
+    gerrit:commit_message_matches('^(feat|fix|docs|style|refactor|test|chore|merge|revert|subtree)[\(:]'),
     % Check if the first line of the commit message is less than 68 characters long
     gerrit:commit_message(Message), name(Message, MessageCodes),
     take_until_equal(10, MessageCodes, FirstLine), length(FirstLine, FirstLineLength),
@@ -89,3 +95,9 @@ submit_rule(S) :-
            CommentsCheck,
            CommitCheck
            | OwnerChecks].
+
+submit_type(merge_if_necessary) :-
+    % Check if the commit type is a subtree commit.
+    gerrit:commit_message_matches('^subtree[\(]'),
+    !.
+submit_type(rebase_if_necessary).
