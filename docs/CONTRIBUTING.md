@@ -55,6 +55,7 @@ Where `type` can be one of:
 * `refactor`: Hopefully self-explanatory!
 * `test`: Added missing tests / fixed tests
 * `chore`: Maintenance work
+* `subtree`: Operations involving `git subtree`
 
 And `scope` should refer to some kind of logical grouping inside of the project.
 
