@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a08438_06e95a04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-11-29T17:02:51Z",
+      "side": 1,
+      "message": "nice",
+      "revId": "b602290ad5ebdc019ca995ef5a2bc20c2fab71f3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29631205_b9173fe2",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-11-29T17:02:51Z",
+      "side": 1,
+      "message": "nit: this export is probably unnecessary",
+      "range": {
+        "startLine": 97,
+        "startChar": 10,
+        "endLine": 97,
+        "endChar": 16
+      },
+      "revId": "b602290ad5ebdc019ca995ef5a2bc20c2fab71f3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
