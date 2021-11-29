@@ -6,11 +6,16 @@ let
   agents = lib.range 1 cfg.agentCount;
   description = "Buildkite agents for TVL";
 
+  besadiiWithConfig = pkgs.writeShellScript "besadii-whitby" ''
+    export BESADII_CONFIG=/etc/secrets/besadii.json
+    exec ${depot.ops.besadii}/bin/besadii
+  '';
+
   # All Buildkite hooks are actually besadii, but it's being invoked
   # with different names.
   buildkiteHooks = pkgs.runCommandNoCC "buildkite-hooks" {} ''
     mkdir -p $out/bin
-    ln -s ${depot.ops.besadii}/bin/besadii $out/bin/post-command
+    ln -s ${besadiiWithConfig} $out/bin/post-command
   '';
 in {
   options.services.depot.buildkite = {
