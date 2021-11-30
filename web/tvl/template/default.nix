@@ -26,6 +26,7 @@ runCommandNoCC "${lib.strings.sanitizeDerivationName title}-index.html" {
       <meta name="description" content="The Virus Lounge">
       <link rel="stylesheet" type="text/css" href="${staticUrl}/tvl.css" media="all">
       <link rel="icon" type="image/webp" href="${staticUrl}/favicon.webp">
+      <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://tvl.fyi/feed.atom">
       <title>${title}</title>
   '' + lib.optionalString (args ? extraHead) extraHead + ''
     </head>

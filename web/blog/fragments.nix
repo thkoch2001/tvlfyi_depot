@@ -11,6 +11,8 @@ let
   inherit (pkgs) runCommandNoCC writeText;
   inherit (depot.nix) renderMarkdown;
 
+  staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
+
   # Generate a post list for all listed, non-draft posts.
   isDraft = post: (hasAttr "draft" post) && post.draft;
   isUnlisted = post: (hasAttr "listed" post) && !post.listed;
@@ -23,9 +25,9 @@ let
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="${escape name}">
-    <link rel="stylesheet" type="text/css" href="/static/tvl.css" media="all">
+    <link rel="stylesheet" type="text/css" href="${staticUrl}/tvl.css" media="all">
     <link rel="icon" type="image/webp" href="/static/favicon.webp">
-    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.atom">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://tvl.fyi/feed.atom">
     <title>${escape name}: ${escape title}</title>
   </head>
   <body class="light">
