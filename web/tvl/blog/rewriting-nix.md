@@ -28,7 +28,7 @@ experiments](https://cl.tvl.fyi/c/depot/+/1123/) aimed at improving
 the current evaluator and fought [gnarly
 bugs](https://cl.tvl.fyi/c/depot/+/1504).
 
-After a while we realised that we are treading water: Some of our
+After a while we realised that we were treading water: Some of our
 ideas are too architecturally divergent from Nix to be done on top of
 the existing codebase, and the memory model of Nix causes significant
 headaches when trying to do any kind of larger change.
@@ -38,10 +38,6 @@ whiteboard in a small flat in Hurghada, Egypt.
 
 ![flokli & tazjin brainstorming](https://static.tvl.fyi/latest/files/flokli_tazjin_tvix.webp)
 
-<!-- TODO(tazjin): Wait for adisbladis approval to use this picture
-![adisbladis & tazjin brainstorming](https://static.tvl.fyi/latest/files/adisbladis_tazjin_tvix.webp)
--->
-
 Half a year later we are now ready to announce our new project:
 **Tvix**, a re-imagined Nix with full nixpkgs compatibility. Tvix is
 generously funded [by NLNet](https://nlnet.nl/project/Tvix/) (thanks!)
@@ -50,30 +46,41 @@ and we are ready to start implementing it.
 The [Tvix
 architecture](https://code.tvl.fyi/about/tvix/docs/components.md) is
 designed to be modular: It should be possible to write an evaluator
-that plugs in the Guix language, to use arbitrary builders, and to
-replace the store implementation.
+that plugs in the Guile language (for compatibility with GNU Guix), to
+use arbitrary builders, and to replace the store implementation.
 
 Tvix has these high-level goals:
 
 * Creating an alternative implementation of Nix that is **fully
-  compatible with nixpkgs**, as we believe that most of the value of
-  Nix currently lives in the massive amount of community contributions
-  to nixpkgs.
-* A new Nix language implementation with a more efficient interpreter,
-  and without the strict separation between evaluation and build
-  phases
+  compatible with nixpkgs**.
+
+  The package collection is an enormous effort with hundreds of
+  thousands of commits, encoding expert knowledge about lots of
+  different software and ways of building and managing it. It is a
+  very valuable piece of software and we must be able to reuse it.
+
+* More efficient Nix language evaluation, leading to greatly increased
+  performance.
+
+* No more strict separation of evaluation and build phases: Generating
+  Nix data structures from build artefacts ("IFD") should be supported
+  first-class and not incur significant performance cost.
+
 * Well-defined interaction protocols for how the three different
   components (evaluator, builder, store) interact.
+
 * A builder implementation using OCI instead of custom sandboxing
   code.
 
+![adisbladis & tazjin brainstorming](https://static.tvl.fyi/latest/files/adisbladis_tazjin_tvix.webp)
+
 Tvix is not intended to *replace* Nix, instead we want to improve the
-ecosystem by offering a diversity of implementations. However, we do
-not intend to support experimental features.
+ecosystem by offering a diversity of implementations. We do not intend
+to support experimental features that are being developed in Nix.
 
 As things ramp up we will be posting more information on this blog,
 for now you can keep an eye on
-[`//tvix`](https://cs.tvl.fyi/depot/-/tree/tvix) in the TVL monorepo,
-subscribe to [our feed](https://tvl.fyi/feed.atom).
+[`//tvix`](https://cs.tvl.fyi/depot/-/tree/tvix) in the TVL monorepo
+and subscribe to [our feed](https://tvl.fyi/feed.atom).
 
 Stay tuned!
