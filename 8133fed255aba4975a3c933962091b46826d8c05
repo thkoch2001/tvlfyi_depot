@@ -43,6 +43,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "02caa6f5_efc28d20",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T22:50:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1588b741_969b3afc",
+      "range": {
+        "startLine": 31,
+        "startChar": 34,
+        "endLine": 31,
+        "endChar": 37
+      },
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "68ba6b6c_3588fb62",
         "filename": "web/tvl/blog/rewriting-nix.md",
         "patchSetId": 5
@@ -81,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfa95cc2_69e230ad",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T22:50:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4c767bb_4dfe9cdf",
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3b8611e_28cab52a",
@@ -94,6 +136,30 @@
       "writtenOn": "2021-11-30T16:35:21Z",
       "side": 1,
       "message": "I\u0027d say this is rather a consequence, so I\u0027d write something along the lines „As such …”",
+      "range": {
+        "startLine": 71,
+        "startChar": 54,
+        "endLine": 71,
+        "endChar": 61
+      },
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53bdeda9_16dc1a3a",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T22:50:06Z",
+      "side": 1,
+      "message": "I think both clauses don\u0027t really fit. I\u0027m just dropping it.",
+      "parentUuid": "c3b8611e_28cab52a",
       "range": {
         "startLine": 71,
         "startChar": 54,
@@ -127,6 +193,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19a551ce_03ce8a07",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T22:50:06Z",
+      "side": 1,
+      "message": "I\u0027d hope that if nixpkgs starts *depending* on it that it\u0027ll leave experimental, but we\u0027ll see what happens.",
+      "parentUuid": "90b2bfb6_503c59d1",
+      "range": {
+        "startLine": 72,
+        "startChar": 14,
+        "endLine": 72,
+        "endChar": 43
+      },
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d60c43c_0362f5ec",
@@ -140,6 +230,30 @@
       "writtenOn": "2021-11-30T16:35:21Z",
       "side": 1,
       "message": "and instead of a comma?",
+      "range": {
+        "startLine": 76,
+        "startChar": 68,
+        "endLine": 76,
+        "endChar": 69
+      },
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "995e322b_a5c38473",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T22:50:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d60c43c_0362f5ec",
       "range": {
         "startLine": 76,
         "startChar": 68,
