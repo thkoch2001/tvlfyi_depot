@@ -5,6 +5,7 @@ depot.nix.buildLisp.program {
 
   srcs = [
     ./packages.lisp
+    ./maildir.lisp
     ./transformer.lisp
     ./note.lisp
     ./cli.lisp

@@ -1,3 +1,10 @@
+(defpackage :maildir
+  (:use :common-lisp)
+  (:shadow :list)
+  (:export :list)
+  (:documentation
+   "Very incomplete package for dealing with maildir(5)."))
+
 (defpackage :mblog
   (:use
    :common-lisp
