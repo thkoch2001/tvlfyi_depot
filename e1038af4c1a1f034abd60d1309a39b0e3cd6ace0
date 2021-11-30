@@ -365,6 +365,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b13e5f16_0cce12fa",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-30T15:14:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2b59bb49_26aa3aab",
+      "range": {
+        "startLine": 69,
+        "startChar": 20,
+        "endLine": 69,
+        "endChar": 44
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1215f75d_8860b815",
@@ -414,6 +438,24 @@
       "side": 1,
       "message": "For now I think it is just #tvl. I was kind of intentionally not linking it from here to avoid too much pressure on IRC while we\u0027re in the bootstrap phase. There are gonna be people who will join just to cause a mess, and I want to keep that as low as possible for now.\n\nThoughts on that?",
       "parentUuid": "6c5deb1a_02e7eaf7",
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77b94601_2df73b08",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-30T15:14:57Z",
+      "side": 1,
+      "message": "I’m slightly afraid the loose friends atmosphere in #tvl is gonna go away once random people join who are interested in tvix. I feel like there needs to be a separate channel once it switches to “arbitrary people from hackernews”.",
+      "parentUuid": "0e04cfa3_6ce65443",
       "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
