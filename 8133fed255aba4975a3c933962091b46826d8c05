@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67bc9101_5f8d3e92",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-30T16:35:21Z",
+      "side": 1,
+      "message": "This was supposed to be a joke at some point… Keeping it is fine, I guess depends on which point you are trying to prove.",
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1588b741_969b3afc",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-30T16:35:21Z",
+      "side": 1,
+      "message": "were? After all the nix fork stopped at some point.",
+      "range": {
+        "startLine": 31,
+        "startChar": 34,
+        "endLine": 31,
+        "endChar": 37
+      },
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68ba6b6c_3588fb62",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-30T16:35:21Z",
+      "side": 1,
+      "message": "I guess that would be guile, technically?",
+      "range": {
+        "startLine": 53,
+        "startChar": 18,
+        "endLine": 53,
+        "endChar": 31
+      },
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4c767bb_4dfe9cdf",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-30T16:35:21Z",
+      "side": 1,
+      "message": "The following bit from //third_party/nix/README.md has kind of stuck with me:\n\nThe package collection is an enormous effort with hundreds of\nthousands of commits, encoding expert knowledge about lots of\ndifferent software and ways of building and managing it. It is a very\nvaluable piece of software.\n\nI think it would maybe be good to borrow from this sentiment here as well. nixpkgs\u0027 value is not only the amount of contributions, but also the technical knowledge wrangling all kinds of software into the functional approach enabled by Nix.",
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3b8611e_28cab52a",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-30T16:35:21Z",
+      "side": 1,
+      "message": "I\u0027d say this is rather a consequence, so I\u0027d write something along the lines „As such …”",
+      "range": {
+        "startLine": 71,
+        "startChar": 54,
+        "endLine": 71,
+        "endChar": 61
+      },
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90b2bfb6_503c59d1",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-30T16:35:21Z",
+      "side": 1,
+      "message": "Clarify: experimental features specific to Tvix or experimental features as present in Nix 2.4 (flakes, ca derivations). The “outsiders” will not really be aware what you are referring to here.\n\n(Additionally, this kinda begs the question: What if nixpkgs doesn\u0027t work anymore with, say, ca derivations or even flakes?)",
+      "range": {
+        "startLine": 72,
+        "startChar": 14,
+        "endLine": 72,
+        "endChar": 43
+      },
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d60c43c_0362f5ec",
+        "filename": "web/tvl/blog/rewriting-nix.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-11-30T16:35:21Z",
+      "side": 1,
+      "message": "and instead of a comma?",
+      "range": {
+        "startLine": 76,
+        "startChar": 68,
+        "endLine": 76,
+        "endChar": 69
+      },
+      "revId": "8133fed255aba4975a3c933962091b46826d8c05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
