@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daaa5685_43c48b77",
+        "filename": "rules.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-11-30T16:43:15Z",
+      "side": 1,
+      "message": "have you checked that this is necessary?",
+      "revId": "77badcca13f679ef47a53165e002413a72867b1c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
