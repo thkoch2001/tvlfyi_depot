@@ -16,6 +16,24 @@
       "message": "have you checked that this is necessary?",
       "revId": "77badcca13f679ef47a53165e002413a72867b1c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fc5db1b_a43ded10",
+        "filename": "rules.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T22:41:52Z",
+      "side": 1,
+      "message": "Yep, it\u0027s also the recommended style in the Gerrit docs.",
+      "parentUuid": "daaa5685_43c48b77",
+      "revId": "77badcca13f679ef47a53165e002413a72867b1c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
