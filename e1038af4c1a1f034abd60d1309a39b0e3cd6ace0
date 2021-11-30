@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1215f75d_8860b815",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-11-30T11:25:53Z",
+      "side": 1,
+      "message": "We should probably also link to IRC here, for people only looking at the blog post, and not scrolling around the rest of the website.",
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
