@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1d1e5501_cd4910d9",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-30T12:41:02Z",
+      "side": 1,
+      "message": "I think it doesn’t strictly apply here, because e.g. the module system is not really general purpose but very narrow purpose, but still slow. Thus why I think the article needs to start with the sentence below.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 60
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0c054ac_94e97fd8",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-30T12:41:02Z",
+      "side": 1,
+      "message": "This should be the first sentence. (minus the “currently”) the “hook”",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 52
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ef22d4b_bf73c928",
         "filename": "web/tvl/blog/kicking-off-tvix.md",
         "patchSetId": 2
@@ -20,6 +66,121 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae000731_35a11fac",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-30T12:41:02Z",
+      "side": 1,
+      "message": "```\nHalf a year later we are happy to announce our new project: *Tvix*, a re-imagined Nix.\n\nThe current state of the project:\n\n* … funding …\n* the architecture …\n```\n\nthat way the important part comes first (announcing tvix), then two bulleted lists (what is already there and what is going to be there)",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 49
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "428d0fed_53093ab1",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-30T12:41:02Z",
+      "side": 1,
+      "message": "I think you can strike this out, it complicates the sentence and should be in the architecture document",
+      "range": {
+        "startLine": 60,
+        "startChar": 2,
+        "endLine": 60,
+        "endChar": 34
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f42c01e_09b22cda",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-30T12:41:02Z",
+      "side": 1,
+      "message": "that’s the same as “a modular architecture”, can be shortened (the examples will make it clear)",
+      "range": {
+        "startLine": 62,
+        "startChar": 25,
+        "endLine": 62,
+        "endChar": 59
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53c0205c_63c792e2",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-30T12:41:02Z",
+      "side": 1,
+      "message": "`s, and` (oxford comma)",
+      "range": {
+        "startLine": 65,
+        "startChar": 10,
+        "endLine": 65,
+        "endChar": 15
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b142f67c_4de46c4a",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-30T12:41:02Z",
+      "side": 1,
+      "message": "`nix’s experimental features (flakes in particular)`",
+      "range": {
+        "startLine": 69,
+        "startChar": 20,
+        "endLine": 69,
+        "endChar": 44
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1215f75d_8860b815",
         "filename": "web/tvl/blog/kicking-off-tvix.md",
         "patchSetId": 2
@@ -31,6 +192,24 @@
       "writtenOn": "2021-11-30T11:25:53Z",
       "side": 1,
       "message": "We should probably also link to IRC here, for people only looking at the blog post, and not scrolling around the rest of the website.",
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c5deb1a_02e7eaf7",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-30T12:41:02Z",
+      "side": 1,
+      "message": "This will be `tvix` on libera?",
+      "parentUuid": "1215f75d_8860b815",
       "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
