@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3f896bd_bec9b7c5",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T15:04:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d1e5501_cd4910d9",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 60
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0c054ac_94e97fd8",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-11-30T12:41:02Z",
       "side": 1,
       "message": "This should be the first sentence. (minus the “currently”) the “hook”",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 52
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78eefeff_9b7cf44c",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T15:04:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0c054ac_94e97fd8",
       "range": {
         "startLine": 16,
         "startChar": 0,
@@ -64,6 +112,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c3ecd22_a17e54a0",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T15:04:32Z",
+      "side": 1,
+      "message": "It\u0027s commented out - adisbladis hasn\u0027t yet told me whether he\u0027s fine with having his photo included.",
+      "parentUuid": "8ef22d4b_bf73c928",
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae000731_35a11fac",
@@ -77,6 +143,30 @@
       "writtenOn": "2021-11-30T12:41:02Z",
       "side": 1,
       "message": "```\nHalf a year later we are happy to announce our new project: *Tvix*, a re-imagined Nix.\n\nThe current state of the project:\n\n* … funding …\n* the architecture …\n```\n\nthat way the important part comes first (announcing tvix), then two bulleted lists (what is already there and what is going to be there)",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 49
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb6880cb_757b6e3b",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T15:04:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae000731_35a11fac",
       "range": {
         "startLine": 47,
         "startChar": 0,
@@ -110,6 +200,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2aa5e77_aaa37bdc",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T15:04:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "428d0fed_53093ab1",
+      "range": {
+        "startLine": 60,
+        "startChar": 2,
+        "endLine": 60,
+        "endChar": 34
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f42c01e_09b22cda",
@@ -123,6 +237,30 @@
       "writtenOn": "2021-11-30T12:41:02Z",
       "side": 1,
       "message": "that’s the same as “a modular architecture”, can be shortened (the examples will make it clear)",
+      "range": {
+        "startLine": 62,
+        "startChar": 25,
+        "endLine": 62,
+        "endChar": 59
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fdd995c_d0f22dc0",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T15:04:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f42c01e_09b22cda",
       "range": {
         "startLine": 62,
         "startChar": 25,
@@ -156,6 +294,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca94c6fb_f07a1977",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T15:04:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53c0205c_63c792e2",
+      "range": {
+        "startLine": 65,
+        "startChar": 10,
+        "endLine": 65,
+        "endChar": 15
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b142f67c_4de46c4a",
@@ -169,6 +331,30 @@
       "writtenOn": "2021-11-30T12:41:02Z",
       "side": 1,
       "message": "`nix’s experimental features (flakes in particular)`",
+      "range": {
+        "startLine": 69,
+        "startChar": 20,
+        "endLine": 69,
+        "endChar": 44
+      },
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b59bb49_26aa3aab",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T15:04:32Z",
+      "side": 1,
+      "message": "I\u0027d rather not go too far in throwing shade here for now. We can do a followup on that.",
+      "parentUuid": "b142f67c_4de46c4a",
       "range": {
         "startLine": 69,
         "startChar": 20,
@@ -210,6 +396,24 @@
       "side": 1,
       "message": "This will be `tvix` on libera?",
       "parentUuid": "1215f75d_8860b815",
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e04cfa3_6ce65443",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T15:04:32Z",
+      "side": 1,
+      "message": "For now I think it is just #tvl. I was kind of intentionally not linking it from here to avoid too much pressure on IRC while we\u0027re in the bootstrap phase. There are gonna be people who will join just to cause a mess, and I want to keep that as low as possible for now.\n\nThoughts on that?",
+      "parentUuid": "6c5deb1a_02e7eaf7",
       "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
