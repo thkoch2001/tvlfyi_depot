@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43b25f1e_329b7e7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T22:39:04Z",
+      "side": 1,
+      "message": "Can you put both of these styles on the `article` element instead? We wrap posts in that and I\u0027d prefer if this change didn\u0027t bleed to other parts of the pages.",
+      "revId": "9935146919572677eb68ee0de87555f78508cb12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
