@@ -9,10 +9,10 @@
 
   posts = [
     {
-      key = "kicking-off-tvix";
-      title = "Kicking off Tvix";
+      key = "rewriting-nix";
+      title = "Tvix: We are rewriting Nix";
       date = 1636038556;
-      content = ./kicking-off-tvix.md;
+      content = ./rewriting-nix.md;
       draft = true;
     }
   ];
