@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8ef22d4b_bf73c928",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2021-11-30T12:33:25Z",
+      "side": 1,
+      "message": "You add the other .webp file but not this one, so this would yield a 404 like it does now, no?",
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1215f75d_8860b815",
         "filename": "web/tvl/blog/kicking-off-tvix.md",
         "patchSetId": 2
