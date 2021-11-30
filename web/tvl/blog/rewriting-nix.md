@@ -36,10 +36,10 @@ headaches when trying to do any kind of larger change.
 We needed an alternative approach and started brainstorming on a bent
 whiteboard in a small flat in Hurghada, Egypt.
 
-![flokli & tazjin brainstorming](https://static.tvl.fyi/latest/flokli_tazjin_tvix.webp)
+![flokli & tazjin brainstorming](https://static.tvl.fyi/latest/files/flokli_tazjin_tvix.webp)
 
 <!-- TODO(tazjin): Wait for adisbladis approval to use this picture
-![adisbladis & tazjin brainstorming](https://static.tvl.fyi/latest/adisbladis_tazjin_tvix.webp)
+![adisbladis & tazjin brainstorming](https://static.tvl.fyi/latest/files/adisbladis_tazjin_tvix.webp)
 -->
 
 Half a year later we are now ready to announce our new project:
