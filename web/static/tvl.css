@@ -29,10 +29,15 @@
 body {
     max-width: 800px;
     margin: 40px auto;
-    line-height: 1.6;
+    line-height: 1.8em;
     font-size: 18px;
     padding: 0 10px;
     font-family: jetbrains-mono, monospace;
+}
+
+p {
+    /* spacing between the paragraphs */
+    margin: 1.5em auto;
 }
 
 p, a :not(.uncoloured-link) {
