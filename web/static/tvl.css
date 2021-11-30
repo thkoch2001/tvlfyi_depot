@@ -43,6 +43,18 @@ h1, h2, h3 {
     line-height: 1.2
 }
 
+/* Blog Posts */
+
+/* for blog posts, we wrap them in <article> */
+article {
+    line-height: 1.7em;
+}
+
+/* spacing between the paragraphs in blog posts */
+article p {
+    margin: 1.5em auto;
+}
+
 /* Homepage styling */
 
 .dark {
