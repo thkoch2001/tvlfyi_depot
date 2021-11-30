@@ -25,6 +25,14 @@
         location ~* \.(webp|woff2)$ {
           add_header Cache-Control "public, max-age=31536000";
         }
+
+        location /blog {
+          if ($request_uri ~ ^/(.*)\.html$) {
+            return 302 /$1;
+          }
+
+          try_files $uri $uri.html $uri/ =404;
+        }
       '';
     };
   };
