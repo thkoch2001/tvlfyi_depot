@@ -458,6 +458,24 @@
       "parentUuid": "0e04cfa3_6ce65443",
       "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "829b491c_d8f9ad41",
+        "filename": "web/tvl/blog/kicking-off-tvix.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-11-30T15:19:52Z",
+      "side": 1,
+      "message": "We have #depot registered for TVL-related software projects, but it is not being used at the moment.",
+      "parentUuid": "77b94601_2df73b08",
+      "revId": "e1038af4c1a1f034abd60d1309a39b0e3cd6ace0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
