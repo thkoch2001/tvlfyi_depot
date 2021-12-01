@@ -75,8 +75,8 @@ Tvix has these high-level goals:
 ![adisbladis & tazjin brainstorming](https://static.tvl.fyi/latest/files/adisbladis_tazjin_tvix.webp)
 
 Tvix is not intended to *replace* Nix, instead we want to improve the
-ecosystem by offering a diversity of implementations. We do not intend
-to support experimental features that are being developed in Nix.
+ecosystem by offering an alternative, fast and reliable implementation
+for Nix features that are in use today.
 
 As things ramp up we will be posting more information on this blog,
 for now you can keep an eye on
