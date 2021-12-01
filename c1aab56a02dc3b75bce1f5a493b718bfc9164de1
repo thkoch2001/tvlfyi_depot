@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18fd2ddc_8401212f",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-01T10:40:24Z",
+      "side": 1,
+      "message": "At this commit, besadii is still TVL-specific - I\u0027m renaming this variable in cl/4082 to `headBuild` (i.e. build of repository HEAD, whatever that is).\n\nIt will probably make sense to rename this to something more descriptive when adding support for multiple branches/repos.",
+      "parentUuid": "52076140_b6cc063a",
+      "range": {
+        "startLine": 120,
+        "startChar": 1,
+        "endLine": 120,
+        "endChar": 11
+      },
+      "revId": "c1aab56a02dc3b75bce1f5a493b718bfc9164de1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8adadf5e_f2132769",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-12-01T10:24:23Z",
       "side": 1,
       "message": "\u0027topic\u0027 and patchset number is in my opinion more informative than \u0027refs/changes/64/5364/7\u0027\n \nSo something like:\n   [nix] Dynamically build a Buildkite pipeline in CI, #7\n\nrefs/heads/\u003cbranch name\u003e is ok.",
+      "range": {
+        "startLine": 238,
+        "startChar": 31,
+        "endLine": 238,
+        "endChar": 36
+      },
+      "revId": "c1aab56a02dc3b75bce1f5a493b718bfc9164de1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7d349b2_314fb4ed",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-01T10:40:24Z",
+      "side": 1,
+      "message": "Which use-case are you thinking about for the change ref or that message? In Buildkite, if no specific build name is specified, the name of the build becomes the commit message of the change. That\u0027s been working well for us so far because you can quickly tell which build is which: https://tvl.fyi/builds\n\nRegarding topics - those are optional on Gerrit changes, in fact we don\u0027t use them at all in TVL (not sure if you do at work?). It\u0027s probably best not to rely on them for anything. \u003d",
+      "parentUuid": "8adadf5e_f2132769",
       "range": {
         "startLine": 238,
         "startChar": 31,
