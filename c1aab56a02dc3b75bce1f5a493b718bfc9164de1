@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52076140_b6cc063a",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-01T10:24:23Z",
+      "side": 1,
+      "message": "IIUC this means build all targets on branch.  If that is true then it should be named accordingly.",
+      "range": {
+        "startLine": 120,
+        "startChar": 1,
+        "endLine": 120,
+        "endChar": 11
+      },
+      "revId": "c1aab56a02dc3b75bce1f5a493b718bfc9164de1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8adadf5e_f2132769",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-01T10:24:23Z",
+      "side": 1,
+      "message": "\u0027topic\u0027 and patchset number is in my opinion more informative than \u0027refs/changes/64/5364/7\u0027\n \nSo something like:\n   [nix] Dynamically build a Buildkite pipeline in CI, #7\n\nrefs/heads/\u003cbranch name\u003e is ok.",
+      "range": {
+        "startLine": 238,
+        "startChar": 31,
+        "endLine": 238,
+        "endChar": 36
+      },
+      "revId": "c1aab56a02dc3b75bce1f5a493b718bfc9164de1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
