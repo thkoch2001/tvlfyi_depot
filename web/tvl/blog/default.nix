@@ -11,7 +11,7 @@
     {
       key = "rewriting-nix";
       title = "Tvix: We are rewriting Nix";
-      date = 1636038556;
+      date = 1638381387;
       content = ./rewriting-nix.md;
     }
   ];
