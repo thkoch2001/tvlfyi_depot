@@ -51,6 +51,23 @@
       "message": "abstaining from reviewing this - I don\u0027t really feel like I have strong enough opinions",
       "revId": "f7d48ef7fbf70d6691492a7d970dfdb45f0879f8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "565cde05_009b330c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-01T08:10:18Z",
+      "side": 1,
+      "message": "I\u0027m gonna vote against this for now, mostly for the reason that I would like if whitby wasn\u0027t \"special\" as a builder in any way.\n\nIMO caches should be *caches* and not required for functionality to work at all, so if we distribute builds a builder *should* be able to use the fallback method rather than substituting a drv file from whitby.",
+      "revId": "f7d48ef7fbf70d6691492a7d970dfdb45f0879f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
