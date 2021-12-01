@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bb6f323_44588e53",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-01T08:41:53Z",
+      "side": 1,
+      "message": "I know this is a monorepo specific tool. But in a contest of moving to monorepo. Or exception when not all is possible wanted to move to it I think making it possible to list of sets with {Repository [Branch2,Branch2]} easier to use.",
+      "range": {
+        "startLine": 305,
+        "startChar": 23,
+        "endLine": 305,
+        "endChar": 67
+      },
+      "revId": "4a2bbb5a32fe0c3ca0666621be7096ff8575a3ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
