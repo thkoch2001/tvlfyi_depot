@@ -22,6 +22,30 @@
       },
       "revId": "c2ff383167ef7cdef8dd1a55b5318d968da8244b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f97468f_67c0c330",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-01T17:16:39Z",
+      "side": 1,
+      "message": "Well, besadii is the name of the program currently. It seems unlikely to lead to a conflict with another envvar, which is why I think it\u0027s a decent choice here.",
+      "parentUuid": "5afbe8a1_f3553be6",
+      "range": {
+        "startLine": 89,
+        "startChar": 26,
+        "endLine": 89,
+        "endChar": 33
+      },
+      "revId": "c2ff383167ef7cdef8dd1a55b5318d968da8244b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
