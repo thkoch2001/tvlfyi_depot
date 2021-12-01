@@ -55,5 +55,8 @@ let
 in {
   inherit post toFeedEntry;
   inherit (fragments) renderPost;
+
+  # Helper function to determine whether a post should be included in
+  # listings (on homepages, feeds, ...)
   includePost = post: !(fragments.isDraft post) && !(fragments.isUnlisted post);
 }

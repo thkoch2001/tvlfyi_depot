@@ -18,6 +18,8 @@ let
     ${graphviz}/bin/neato -Tsvg ${./tvl.dot} > $out
   '';
 
+  publishedPosts = filter blog.includePost tvl.blog.posts;
+
   feed = {
     id = "https://tvl.fyi/";
     title = "TVL blog";
@@ -29,7 +31,7 @@ let
       href = "https://tvl.fyi/feed.atom";
     };
 
-    entries = map (blog.toFeedEntry tvl.blog.config) tvl.blog.posts;
+    entries = map (blog.toFeedEntry tvl.blog.config) publishedPosts;
   };
 
   atomFeed = writeText "feed.atom" (atom-feed.renderFeed feed);
