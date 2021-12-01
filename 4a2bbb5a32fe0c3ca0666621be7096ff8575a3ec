@@ -46,6 +46,30 @@
       },
       "revId": "4a2bbb5a32fe0c3ca0666621be7096ff8575a3ec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "103d285c_ff4b3a56",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-01T09:47:47Z",
+      "side": 1,
+      "message": "I think you\u0027re right about this; there are also cases where multiple refs inside of a single repository might be relevant.\n\nI\u0027ve opened a bug for this: b/160",
+      "parentUuid": "71769858_62333b14",
+      "range": {
+        "startLine": 305,
+        "startChar": 23,
+        "endLine": 305,
+        "endChar": 67
+      },
+      "revId": "4a2bbb5a32fe0c3ca0666621be7096ff8575a3ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
