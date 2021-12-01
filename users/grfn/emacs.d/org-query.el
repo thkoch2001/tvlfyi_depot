@@ -86,7 +86,11 @@
 (defun grfn/org-current-clocked-in-task-message ()
   (if (org-clocking-p)
       (format "(%s) [%s]"
-              (org-element-property :title (grfn/org-element-clocked-in-task))
+              (->> (grfn/org-element-clocked-in-task)
+                   (org-element-property :title)
+                   (car)
+                   (substring-no-properties)
+                   (s-trim))
               (grfn/minutes->hours:minutes
                (org-clock-get-clocked-time)))
     ""))
