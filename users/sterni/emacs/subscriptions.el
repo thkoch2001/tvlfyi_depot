@@ -7,6 +7,7 @@
          ("http://hundimbuero.blogspot.com/feeds/posts/default?alt=rss" blog cool-and-nice)
          ("gopher://text.causal.agency/0feed.atom" blog)
          ("http://xsteadfastx.org/feed/" blog cool-and-nice)
+         ("https://tvl.fyi/feed.atom" blog cool-and-nice)
          ("https://hannes.robur.coop/atom" blog)
          ("https://stevelosh.com/rss.xml" blog)
          ("https://planet.lisp.org/rss20.xml" blog)
