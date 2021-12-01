@@ -49,7 +49,7 @@
 
 (defun grfn/num-inbox-items-message ()
   (let ((n (grfn/num-inbox-items)))
-    (unless (zerop n)
+    (if (zerop n) ""
       (format "%d %s"
               n
               (if (= 1 n) "item" "items")))))
