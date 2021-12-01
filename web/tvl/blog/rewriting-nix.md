@@ -84,3 +84,7 @@ for now you can keep an eye on
 and subscribe to [our feed](https://tvl.fyi/feed.atom).
 
 Stay tuned!
+
+<span style="font-size: small;">PS: TVL is international, but a lot of
+the development will take place in our office in Moscow. Say hi if
+you're around and interested!</span>
