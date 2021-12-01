@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5afbe8a1_f3553be6",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-01T10:30:43Z",
+      "side": 1,
+      "message": "A more generic name? \n\n\u0027besadii\u0027 is used in several places error messages..",
+      "range": {
+        "startLine": 89,
+        "startChar": 26,
+        "endLine": 89,
+        "endChar": 33
+      },
+      "revId": "c2ff383167ef7cdef8dd1a55b5318d968da8244b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
