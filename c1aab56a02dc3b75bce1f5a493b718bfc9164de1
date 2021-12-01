@@ -93,6 +93,30 @@
       },
       "revId": "c1aab56a02dc3b75bce1f5a493b718bfc9164de1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32b56a06_11250837",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-01T12:23:04Z",
+      "side": 1,
+      "message": "I was confused about what I did see in Buildkite. I was searching for commit subject. I found it.",
+      "parentUuid": "c7d349b2_314fb4ed",
+      "range": {
+        "startLine": 238,
+        "startChar": 31,
+        "endLine": 238,
+        "endChar": 36
+      },
+      "revId": "c1aab56a02dc3b75bce1f5a493b718bfc9164de1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
