@@ -16,6 +16,24 @@
       "message": "Can you put both of these styles on the `article` element instead? We wrap posts in that and I\u0027d prefer if this change didn\u0027t bleed to other parts of the pages.",
       "revId": "9935146919572677eb68ee0de87555f78508cb12",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bead305a_b23d5fa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-02T10:57:37Z",
+      "side": 1,
+      "message": "Done. Please note that I’m flying blind here.",
+      "parentUuid": "43b25f1e_329b7e7b",
+      "revId": "9935146919572677eb68ee0de87555f78508cb12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
