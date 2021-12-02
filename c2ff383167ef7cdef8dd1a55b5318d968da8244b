@@ -46,6 +46,30 @@
       },
       "revId": "c2ff383167ef7cdef8dd1a55b5318d968da8244b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8893061d_efdffcc2",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-02T07:34:31Z",
+      "side": 1,
+      "message": "Done\nSorry did not understand that.",
+      "parentUuid": "8f97468f_67c0c330",
+      "range": {
+        "startLine": 89,
+        "startChar": 26,
+        "endLine": 89,
+        "endChar": 33
+      },
+      "revId": "c2ff383167ef7cdef8dd1a55b5318d968da8244b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
