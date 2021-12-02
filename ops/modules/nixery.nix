@@ -32,7 +32,7 @@ in {
 
       environment = {
         PORT = toString cfg.port;
-        NIXERY_PKGS_PATH = "${depot.path}/.nixery";
+        NIXERY_PKGS_PATH = pkgs.path;
         NIXERY_STORAGE_BACKEND = "filesystem";
         NIX_TIMEOUT = "60"; # seconds
         STORAGE_PATH = storagePath;
