@@ -63,7 +63,7 @@
 
   '(message "Defined %s unique words." (ht-size russian-words)))
 
-;; Helpers to train Russian words when Emacs is idling.
+;; Helpers to train Russian words through passively.
 
 (defun russian--format-word (word)
   "Format a Russian word suitable for echo display."
@@ -77,50 +77,20 @@
                 (when-let ((notes (russian-word-notes word)))
                   (list " (" (s-join "; " notes) ")"))))))
 
-(defvar russian--last-word nil
-  "Last randomly displayed Russian word")
-
-(defun display-random-russian-word ()
+(defun display-russian-words ()
+  "Convert Russian words to passively terms and start passively."
   (interactive)
-  (let* ((word (seq-random-elt (ht-values russian-words))))
-    (while (ht-contains? russian--known-words (russian-word-word word))
-      (setq word (seq-random-elt (ht-values russian-words))))
-    (setq russian--last-word word)
-    (message (russian--format-word word))))
-
-(defvar russian--display-timer
-  (run-with-idle-timer 4 t #'display-random-russian-word))
-
-;; Ability to filter out known words
-
-(defvar russian--known-words (make-hash-table)
-  "Table of words that are already known.")
-
-(defun persist-known-russian-words ()
-  "Persist all known Russian words."
-  (let ((file "/persist/tazjin/known-russian-words.el"))
-    (with-temp-file file
-      (insert (prin1-to-string russian--known-words)))))
-
-(defun load-known-russian-words ()
-  "Load all known Russian words."
-  (let ((file "/persist/tazjin/known-russian-words.el"))
-    (with-temp-buffer
-      (insert-file-contents file)
-      (setq russian--known-words (read (current-buffer))))))
-
-(defun mark-last-russian-word-known ()
-  "Mark the last Russian word that appeared as known."
-  (interactive)
-  (let ((word (russian-word-word russian--last-word)))
-    (ht-set russian--known-words word t)
-    (persist-known-russian-words)
-    (message "Marked '%s' as known" word)))
+  (setq passively-learn-terms (make-hash-table))
+  (ht-map
+   (lambda (k v)
+     (ht-set passively-learn-terms k (russian--format-word v)))
+   russian-words)
+  (passively-enable))
 
 (defun lookup-last-russian-word (in-eww)
   "Look up the last Russian word in Wiktionary"
   (interactive "P")
-  (let ((url (concat "https://ru.wiktionary.org/wiki/" (russian-word-word russian--last-word))))
+  (let ((url (concat "https://ru.wiktionary.org/wiki/" passively-last-displayed)))
     (if in-eww (eww url)
       (browse-url url))))
 
