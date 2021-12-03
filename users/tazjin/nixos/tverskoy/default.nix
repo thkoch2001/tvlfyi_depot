@@ -247,6 +247,7 @@ in lib.fix(self: {
       screenLock
       tools.nsfv-setup
       users.tazjin.emacs
+      third_party.agenix.cli
       third_party.dfmt
     ]) ++
 
