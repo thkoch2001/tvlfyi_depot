@@ -105,7 +105,7 @@ rubberstamp operation is dangerous and should only be used in
              ;; ^    ^       ^  ^    ^
              ;; 1    2       3  4    5
              ;;                 ^-- this one
-             (fourth
+             (cadddr
               (split-string change-ref (rx "/"))))
            change-refs))
          (cl-numbers
