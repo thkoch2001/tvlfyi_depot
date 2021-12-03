@@ -46,6 +46,30 @@
       },
       "revId": "b679bb4034a4150a3e75eca789035e69231ba0a7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e07a0906_ceb9f5a0",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-12-03T09:49:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c599659f_38e7f194",
+      "range": {
+        "startLine": 113,
+        "startChar": 10,
+        "endLine": 113,
+        "endChar": 15
+      },
+      "revId": "b679bb4034a4150a3e75eca789035e69231ba0a7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
