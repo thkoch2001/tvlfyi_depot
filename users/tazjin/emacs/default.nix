@@ -94,6 +94,7 @@ let
     # Custom depot packages (either ours, or overridden ones)
     tvlPackages.dottime
     tvlPackages.nix-util
+    tvlPackages.passively
     tvlPackages.rcirc
     tvlPackages.term-switcher
     tvlPackages.tvl
