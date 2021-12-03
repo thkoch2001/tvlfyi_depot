@@ -22,6 +22,30 @@
       },
       "revId": "b679bb4034a4150a3e75eca789035e69231ba0a7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c599659f_38e7f194",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-03T09:48:11Z",
+      "side": 1,
+      "message": "In this case, `error` is the type of the variable - `err` is the name of the variable. It is explicitly declared here to avoid scope conflicts with the variables existing outside of the block, which would occur when using the standard `:\u003d` idiom.\n\nIt\u0027s not strange to get confused here, Go has most things the wrong way around because they wanted to be different or whatever ;-)",
+      "parentUuid": "cf1201d9_d45c7db2",
+      "range": {
+        "startLine": 113,
+        "startChar": 10,
+        "endLine": 113,
+        "endChar": 15
+      },
+      "revId": "b679bb4034a4150a3e75eca789035e69231ba0a7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
