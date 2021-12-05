@@ -258,6 +258,10 @@
 (use-package web-mode)
 (use-package yaml-mode)
 
+(use-package passively
+  :custom
+  (passively-store-state "/persist/tazjin/known-russian-words.el"))
+
 ;; Initialise midnight.el, which by default automatically cleans up
 ;; unused buffers at midnight.
 (require 'midnight)
