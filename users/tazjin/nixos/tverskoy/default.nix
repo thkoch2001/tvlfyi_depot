@@ -162,7 +162,6 @@ in lib.fix(self: {
     redshift.enable = true;
     blueman.enable = true;
     mullvad-vpn.enable = true;
-    tlp.enable = true;
     fwupd.enable = true;
     printing.enable = true;
 
@@ -171,6 +170,14 @@ in lib.fix(self: {
     udev.extraRules = ''
       SUBSYSTEM=="i2c-dev", ACTION=="add", DEVPATH=="/devices/pci0000:00/0000:00:08.1/0000:06:00.0/i2c-5/i2c-dev/i2c-5", SYMLINK+="i2c-amdgpu-dm", TAG+="uaccess"
     '';
+
+    # Configure TLP to keep battery charge between 40-70% while
+    # plugged in to the wall (thanks etu for the recommendation).
+    tlp = {
+      enable = true;
+      settings.START_CHARGE_THRESH_BAT0 = 40;
+      settings.STOP_CHARGE_THRESH_BAT0 = 70;
+    };
 
     xserver = {
       enable = true;
