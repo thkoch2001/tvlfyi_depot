@@ -11,6 +11,8 @@ ReadDec ← 10⊸ReadInt
 
 ReadInput ← {•file.Lines ∾ •path‿"/input/day"‿(•Fmt 𝕩)}
 
+SplitOn ← ((⊢ (-1˙)⍟⊣¨ +`)∘=⊔⊢)
+
 #
 # 2021-12-01
 #
@@ -119,3 +121,30 @@ CO2ScrubberRating ← DebinList 0 >_lifeSupportRating ⊢
 ! 10 = CO2ScrubberRating day3ExampleData
 
 •Out "Day 3.2: "∾•Fmt (OxygenGeneratorRating×CO2ScrubberRating) day3Input
+
+#
+# 2021-12-07
+#
+
+# part 1
+
+day6ExampleData ← ⟨16,1,2,0,4,2,7,1,2,14⟩
+day6Input ← ReadDec¨ ','  SplitOn ⊑ReadInput 6
+
+PossiblePositions ← (⌊´+⟜(↕1⊸+)⌈´)
+FuelConsumption ← +˝∘|∘(-⌜)
+_lowestFuelPossible ← {⌊´∘(𝔽⟜PossiblePositions)˜ 𝕩}
+
+! 37 = FuelConsumption _lowestFuelPossible day6ExampleData
+
+•Out "Day 7.1: "∾•Fmt FuelConsumption _lowestFuelPossible day6Input
+
+# part 2
+
+TriNum ← 1⊸+×÷⟜2
+
+FuelConsumption2 ← +˝∘(TriNum¨)∘|∘(-⌜)
+
+! 168 = FuelConsumption2 _lowestFuelPossible day6ExampleData
+
+•Out "Day 7.2: "∾•Fmt FuelConsumption2 _lowestFuelPossible day6Input
