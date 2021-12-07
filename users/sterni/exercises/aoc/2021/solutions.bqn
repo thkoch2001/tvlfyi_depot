@@ -6,7 +6,8 @@
 
 IsAsciiNum ← ('0'⊸≤∧≤⟜'9')
 
-ReadInt ← (10⊸×+⊣)´∘⌽-⟜'0' # stolen from leah2
+ReadInt ← {(𝕨⊸×+⊣)´∘⌽-⟜'0'𝕩} # stolen from leah2
+ReadDec ← 10⊸ReadInt
 
 ReadInput ← {•file.Lines ∾ •path‿"/input/day"‿(•Fmt 𝕩)}
 
@@ -17,7 +18,7 @@ ReadInput ← {•file.Lines ∾ •path‿"/input/day"‿(•Fmt 𝕩)}
 # part 1
 
 day1ExampleData ← 199‿200‿208‿210‿200‿207‿240‿269‿260‿263
-day1Input ← ReadInt¨ReadInput 1
+day1Input ← ReadDec¨ReadInput 1
 
 # NB: Because distance from the ground is never smaller than zero, it's
 # no problem that nudge inserts a zero at the end of the right list
@@ -50,7 +51,7 @@ day2ExampleData ← ⟨
 
 day2Input ← ReadInput 2
 
-ParseSubmarineCommand ← (((↕2)⊸((((-1)⊸⋆)∘(2⊸|))×(=⟜(⌊∘(÷⟜2))))∘("duf"⊸⊐)∘⊑)×ReadInt∘(IsAsciiNum/⊢))
+ParseSubmarineCommand ← (((↕2)⊸((((-1)⊸⋆)∘(2⊸|))×(=⟜(⌊∘(÷⟜2))))∘("duf"⊸⊐)∘⊑)×ReadDec∘(IsAsciiNum/⊢))
 
 SubmarineDestProduct ← {×´+´ParseSubmarineCommand¨𝕩}
 
