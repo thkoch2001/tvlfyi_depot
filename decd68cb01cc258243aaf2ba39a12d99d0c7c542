@@ -16,6 +16,24 @@
       "message": "Do we rely on this behavior anywhere? Have you checked if any readTree nodes are removed after this change?",
       "revId": "decd68cb01cc258243aaf2ba39a12d99d0c7c542",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d66e823_2d75d7e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-07T10:52:17Z",
+      "side": 1,
+      "message": "No changes with this patch applied:\n\n[nix-shell:/depot]$ sha256sum targets-*\n9c8829a95306871bdf2fc1be38c3a48ee3b79934cc914eb785d076cb6841bf62  targets-4144\n9c8829a95306871bdf2fc1be38c3a48ee3b79934cc914eb785d076cb6841bf62  targets-canon",
+      "parentUuid": "40847f9f_44cff14d",
+      "revId": "decd68cb01cc258243aaf2ba39a12d99d0c7c542",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
