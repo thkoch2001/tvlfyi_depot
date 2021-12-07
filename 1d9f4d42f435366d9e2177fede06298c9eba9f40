@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "825ab62b_89d219f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-07T12:57:28Z",
+      "side": 1,
+      "message": "These aren\u0027t actually used anywhere yet, right?\n\nOTOH this looks fine - people with root on whitby will presumably be able to just see what the secrets are on whitby if they need to reencrypt it.\n\nThis is a little annoying for code-review purposes, though.",
+      "revId": "1d9f4d42f435366d9e2177fede06298c9eba9f40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
