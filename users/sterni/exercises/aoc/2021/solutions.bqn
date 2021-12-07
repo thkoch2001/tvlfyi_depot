@@ -68,3 +68,54 @@ SubmarineAimedDestProduct ← {
 ! 900 = SubmarineAimedDestProduct day2ExampleData
 
 •Out "Day 2.2: "∾•Fmt SubmarineAimedDestProduct day2Input
+
+#
+# 2021-12-03
+#
+
+BinTable ← '0'-˜>
+
+day3ExampleData ← BinTable ⟨
+  "00100",
+  "11110",
+  "10110",
+  "10111",
+  "10101",
+  "01111",
+  "00111",
+  "11100",
+  "10000",
+  "11001",
+  "00010",
+  "01010",
+⟩
+
+day3Input ← BinTable ReadInput 3
+
+DeBinList ← ((2⊸×)+⊣)´⌽
+_tableAggr ← {((÷⟜2)∘(/⟜⥊)´∘⌽∘≢𝔽(+˝))𝕩}
+GammaRate ← < _tableAggr
+
+! 22 = DeBinList GammaRate day3ExampleData
+! 9  = DeBinList ¬GammaRate day3ExampleData
+
+•Out "Day 3.1: "∾•Fmt (¬×○DeBinList⊢) GammaRate day3Input
+
+_lifeSupportRating ← {
+  # Need to rename the arguments, otherwise the ternary expr becomes a function
+  bitPos ← 𝕨
+  Cmp ← 𝔽
+
+  crit ← Cmp _tableAggr 𝕩
+  matchPos ← bitPos ⊑˘ crit ((⥊˜⟜≢)=⊢) 𝕩
+  match ← matchPos/𝕩
+  {1=≠match?⊏match;(bitPos+1) Cmp _lifeSupportRating match}
+}
+
+OxygenGeneratorRating ← DeBinList 0 ≤_lifeSupportRating ⊢
+CO2ScrubberRating ← DebinList 0 >_lifeSupportRating ⊢
+
+! 23 = OxygenGeneratorRating day3ExampleData
+! 10 = CO2ScrubberRating day3ExampleData
+
+•Out "Day 3.2: "∾•Fmt (OxygenGeneratorRating×CO2ScrubberRating) day3Input
