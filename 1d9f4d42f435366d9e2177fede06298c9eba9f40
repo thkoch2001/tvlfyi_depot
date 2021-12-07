@@ -34,6 +34,24 @@
       "parentUuid": "825ab62b_89d219f2",
       "revId": "1d9f4d42f435366d9e2177fede06298c9eba9f40",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76bd3835_fda93be9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-07T22:04:26Z",
+      "side": 1,
+      "message": "\u003e These aren\u0027t actually used anywhere yet, right?\n\nWe have a variety of secrets in use on whitby that are not version-controlled (or, in any way controlled) right now - including these.\n\nThey\u0027re not used anywhere yet *from the repo*, no. The next step is to add whitby configuration that uses the agenix module to do the decryption and placement locally on activation.\n\n\u003e that would be better implemented as a browser extension that does it locally to avoid accidental authn/authz failure\n\nI like this idea. Is there a browser-compatible age implementation? Maybe rage -\u003e wasm or something.",
+      "parentUuid": "18edba4f_5dac518f",
+      "revId": "1d9f4d42f435366d9e2177fede06298c9eba9f40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
