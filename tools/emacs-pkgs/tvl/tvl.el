@@ -142,9 +142,29 @@ rubberstamp operation is dangerous and should only be used in
   (magit-checkout "FETCH_HEAD" (magit-branch-arguments))
   (message "HEAD detached at %s" cl-refspec))
 
+
 (transient-append-suffix
   #'magit-branch ["l"]
   (list "g" "gerrit CL" #'magit-gerrit-checkout))
+
+(transient-define-suffix magit-gerrit-cherry-pick (remote cl-refspec)
+  "Prompt for a CL number and cherry-pick the latest patchset of that CL"
+  (interactive
+   (let* ((remote tvl-gerrit-remote)
+          (cl (magit-read-cl remote)))
+     (list remote cl)))
+  (magit-fetch-refspec remote cl-refspec (magit-fetch-arguments))
+  ;; That runs async, so wait for it to finish (this is how magit does it)
+  (while (and magit-this-process
+              (eq (process-status magit-this-process) 'run))
+    (sleep-for 0.005))
+  (magit-cherry-copy (list "FETCH_HEAD"))
+  (message "HEAD detached at %s" cl-refspec))
+
+
+(transient-append-suffix
+  #'magit-cherry-pick ["m"]
+  (list "g" "Gerrit CL" #'magit-gerrit-cherry-pick))
 
 (defun tvl-depot-status ()
   "Open the TVL monorepo in magit."
