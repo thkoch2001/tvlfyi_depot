@@ -1424,4 +1424,6 @@ If invoked with a prefix ARG eval the expression after inserting it"
    (:localleader
     :n "a" #'lsp-execute-code-action))
 
- )
+ (:map prolog-mode-map
+  :n "g SPC" #'prolog-compile-buffer
+  :n "g \\" #'run-prolog))
