@@ -4,7 +4,7 @@
 # key: atest
 # condition: t
 # --
-#[tokio::test(flavor = "multi_thread")]
-async fn ${1:test_name}() {
+#[tokio::test${1:(flavor = "multi_thread")}]
+async fn ${2:test_name}() {
    `%`$0
 }
