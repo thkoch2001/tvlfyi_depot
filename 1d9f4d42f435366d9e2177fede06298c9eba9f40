@@ -52,6 +52,24 @@
       "parentUuid": "18edba4f_5dac518f",
       "revId": "1d9f4d42f435366d9e2177fede06298c9eba9f40",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05178935_7d74af2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-08T18:21:55Z",
+      "side": 1,
+      "message": "Marking as resolved because this comment thread isn\u0027t technically related to the change itself.",
+      "parentUuid": "76bd3835_fda93be9",
+      "revId": "1d9f4d42f435366d9e2177fede06298c9eba9f40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
