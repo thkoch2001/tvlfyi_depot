@@ -9,6 +9,7 @@ in {
     "${depot.path}/ops/modules/atward.nix"
     "${depot.path}/ops/modules/automatic-gc.nix"
     "${depot.path}/ops/modules/clbot.nix"
+    "${depot.path}/ops/modules/gerrit-queue.nix"
     "${depot.path}/ops/modules/git-serving.nix"
     "${depot.path}/ops/modules/irccat.nix"
     "${depot.path}/ops/modules/monorepo-gerrit.nix"
@@ -337,6 +338,9 @@ in {
         "/var/lib/znc"
       ];
     };
+
+    # Run autosubmit bot for Gerrit
+    gerrit-queue.enable = true;
   };
 
   services.postgresql = {
