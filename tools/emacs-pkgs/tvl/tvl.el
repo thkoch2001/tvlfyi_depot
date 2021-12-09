@@ -64,6 +64,17 @@
   #'magit-push ["r"]
   (list "W" "push to Gerrit as a work-in-progress" #'magit-gerrit-push-wip))
 
+(transient-define-suffix magit-gerrit-push-autosubmit ()
+  "Push to Gerrit with autosubmit enabled."
+  (interactive)
+  (magit-push-refspecs tvl-gerrit-remote
+                       (tvl--gerrit-ref tvl-target-branch '("Autosubmit+1"))
+                       nil))
+
+(transient-append-suffix
+  #'magit-push ["r"]
+  (list "A" "push to Gerrit with autosubmit enabled" #'magit-gerrit-push-autosubmit))
+
 (transient-define-suffix magit-gerrit-submit ()
   "Push to Gerrit for review."
   (interactive)
