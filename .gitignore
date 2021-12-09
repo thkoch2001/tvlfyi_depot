@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (ff10b7 chore(3p): Remove gerrit-queue folder in preparation for ven)
 # Ignore the garbage folder, in which I slowly assemble a bunch of
 # trash locally that might be valuable in the future.
 garbage/
@@ -5,3 +6,9 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+=======
+/.vscode
+/statik
+/.envrc.private
+/gerrit-queue
+>>>>>>> BRANCH (24f5a6 gerrit: Use a Gerrit label instead of hashtag for autosubmit)
