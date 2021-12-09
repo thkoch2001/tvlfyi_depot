@@ -16,6 +16,24 @@
       "message": "Aren\u0027t you immediately adding the Autosubmit label in the downstream relation anyway?\n\nOr is this also about also having adjusted the bot to respect it?",
       "revId": "6893146373fa23948ef286e3d9dc0eec9d13acf4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3884a412_35a3a723",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-09T10:57:23Z",
+      "side": 1,
+      "message": "Honestly it\u0027s just an artefact of how I implemented this, didn\u0027t expect the gerrit-queue patch (cl/4173) to be so minor and now I\u0027m too lazy to rewrite these two.\n\nBut you\u0027re right, the hashtag change will effectively never be in effect.",
+      "parentUuid": "122c5831_3ff7ea8a",
+      "revId": "6893146373fa23948ef286e3d9dc0eec9d13acf4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
