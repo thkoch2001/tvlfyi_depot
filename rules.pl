@@ -87,13 +87,17 @@ submit_rule(S) :-
     % CONTRIBUTING.md
     commit_message(CommitCheck),
 
+    % Allow the Autosubmit label to appear optionally.
+    Autosubmit = label('Autosubmit', may(_)),
+
     code_owners(OwnerChecks),
 
     S =.. [submit,
            ReviewCheck,
            BuildCheck,
            CommentsCheck,
-           CommitCheck
+           CommitCheck,
+           Autosubmit
            | OwnerChecks].
 
 submit_type(merge_if_necessary) :-
