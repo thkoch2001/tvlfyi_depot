@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t this be a nativeBuildInput and then just referenced as statik -f?",
       "revId": "bc92d02cf1462a90320363884125c3dbe907c431",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a989c4ef_fb51228c",
+        "filename": "third_party/gerrit-queue/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-09T10:54:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1de8dfd8_bce3da6a",
+      "revId": "bc92d02cf1462a90320363884125c3dbe907c431",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
