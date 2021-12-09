@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "122c5831_3ff7ea8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-09T10:54:08Z",
+      "side": 1,
+      "message": "Aren\u0027t you immediately adding the Autosubmit label in the downstream relation anyway?\n\nOr is this also about also having adjusted the bot to respect it?",
+      "revId": "6893146373fa23948ef286e3d9dc0eec9d13acf4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
