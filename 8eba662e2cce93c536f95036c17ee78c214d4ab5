@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e0b12dc_e3353015",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-09T12:52:42Z",
+      "side": 1,
+      "message": "I can not resist abusing this permissions issue to fix itself.",
+      "revId": "8eba662e2cce93c536f95036c17ee78c214d4ab5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
