@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f2df133_ce253fae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-09T12:01:51Z",
+      "side": 1,
+      "message": "You said you ran it through test-submit and this looks like it does something relevant to the CL description to LGTM.",
+      "revId": "28edcd0b64f2285b748f63c268fdfd7039231b68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
