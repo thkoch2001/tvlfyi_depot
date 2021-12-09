@@ -251,9 +251,7 @@
 (use-package terraform-mode)
 (use-package toml-mode)
 
-(use-package tvl
-  :custom
-  (tvl-gerrit-remote "gerrit"))
+(use-package tvl)
 
 (use-package web-mode)
 (use-package yaml-mode)
