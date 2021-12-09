@@ -40,6 +40,7 @@ in {
     "${depot.path}/ops/modules/www/tvl.fyi.nix"
     "${depot.path}/ops/modules/www/tvl.su.nix"
     "${depot.path}/ops/modules/www/wigglydonke.rs.nix"
+    "${depot.third_party.agenix.src}/modules/age.nix"
     "${pkgs.path}/nixos/modules/services/web-apps/gerrit.nix"
   ];
 
@@ -199,6 +200,11 @@ in {
     enable = true;
     passwordAuthentication = false;
     challengeResponseAuthentication = false;
+  };
+
+  # Configure secrets for services that need them.
+  age.secrets = {
+    gerrit-queue.file = depot.path.origSrc + "/ops/secrets/gerrit-queue.age";
   };
 
   # Automatically collect garbage from the Nix store.
