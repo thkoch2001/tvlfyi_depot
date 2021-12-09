@@ -13,6 +13,8 @@ ReadInput ← {•file.Lines ∾ •path‿"/input/day"‿(•Fmt 𝕩)}
 
 SplitOn ← ((⊢ (-1˙)⍟⊣¨ +`)∘=⊔⊢)
 
+_fix ← {𝕩≡ 𝔽𝕩?𝕩;𝕊 𝔽 𝕩} # stolen from leah2
+
 #
 # 2021-12-01
 #
@@ -148,3 +150,41 @@ FuelConsumption2 ← +˝∘(TriNum¨)∘|∘(-⌜)
 ! 168 = FuelConsumption2 _lowestFuelPossible day6ExampleData
 
 •Out "Day 7.2: "∾•Fmt FuelConsumption2 _lowestFuelPossible day6Input
+
+#
+# 2021-12-09
+#
+
+# part 1
+
+ParseHeightMap ← ((≠≍(≠⊑))⥊∾)∘-⟜'0'
+
+day9ExampleData ← ParseHeightMap ⟨
+  "2199943210",
+  "3987894921",
+  "9856789892",
+  "8767896789",
+  "9899965678"
+⟩
+day9Input ← ParseHeightMap ReadInput 9
+
+Rotate ← (⍉⌽)∘⊢⍟⊣ # counter clockwise
+LowPoints ← {∧´𝕩⊸(⊣<((-⊢) Rotate 10⊸»˘∘Rotate˜))¨ ↕4}
+
+RiskLevelSum ← (+´⥊)∘(1⊸+×LowPoints)
+
+! 15 = RiskLevelSum day9ExampleData
+
+•Out "Day 9.1: "∾•Fmt RiskLevelSum day9Input
+
+# part 2
+
+NumberBasins ← ((1⊸+⊒⌾⥊)×⊢)∘LowPoints
+_addNeighbors_ ← {𝕗 ((-𝕩)⊸Rotate)∘(⊢⌈((<⟜9⊣)∧»˘∘⊢))○(𝕩⊸Rotate) 𝕘}
+BasinStep ← {⌈´(𝕨 _addNeighbors_ 𝕩)¨ ↕4}
+Basins ← {𝕩⊸BasinStep _fix NumberBasins 𝕩}
+LargestBasinsProduct ← {×´ 3↑ ∨ 1↓ ≠¨ ⊔⥊Basins 𝕩}
+
+! 1134 = LargestBasinsProduct day9ExampleData
+
+•Out "Day 9.2: "∾•Fmt LargestBasinsProduct day9Input
