@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad527ff8_d8ea79a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-12-09T12:02:48Z",
+      "side": 1,
+      "message": "It\u0027d be nicer if most of the fixes will end up upstream, at least generic fixes.\n\nI opened https://github.com/tweag/gerrit-queue/issues/8 to clarify ownership.",
+      "revId": "afa2d08fe7ba4bf62d32735c505047f40747a60f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
