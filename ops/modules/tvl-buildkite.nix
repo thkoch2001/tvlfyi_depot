@@ -33,7 +33,7 @@ in {
       value = {
         inherit name;
         enable = true;
-        tokenPath = "/etc/secrets/buildkite-agent-token";
+        tokenPath = "/run/agenix/buildkite-agent-token";
         runtimePackages = with pkgs; [ curl jq ];
         hooks.post-command = "${buildkiteHooks}/bin/post-command";
       };
