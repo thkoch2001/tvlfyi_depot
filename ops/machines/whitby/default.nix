@@ -221,6 +221,12 @@ in {
         file = secretFile "clbot-ssh";
         owner = "clbot";
       };
+
+      irccat = {
+        file = secretFile "irccat";
+        mode = "0440";
+        group = "irccat";
+      };
     };
 
   # Automatically collect garbage from the Nix store.
