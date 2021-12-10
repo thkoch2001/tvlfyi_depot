@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9decd78b_5d790e9a",
+        "filename": "ops/secrets/grafana.age",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-10T19:10:58Z",
+      "side": 0,
+      "message": "can we call this `grafana-environment` or something like that? just grafana is a little opaque",
+      "revId": "b2d46aed2b6e729ea7be3986f9020a57851ddae1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
