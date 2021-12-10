@@ -34,6 +34,24 @@
       "parentUuid": "9decd78b_5d790e9a",
       "revId": "b2d46aed2b6e729ea7be3986f9020a57851ddae1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "898bc792_3173c280",
+        "filename": "ops/secrets/grafana.age",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-10T19:31:07Z",
+      "side": 0,
+      "message": "Discussed on IRC",
+      "parentUuid": "cc5815a2_6ed7ec0c",
+      "revId": "b2d46aed2b6e729ea7be3986f9020a57851ddae1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
