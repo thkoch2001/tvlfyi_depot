@@ -41,6 +41,8 @@ in {
           coreutils
           curl
           git
+          gnutar
+          gzip
           jq
           nix
         ];
