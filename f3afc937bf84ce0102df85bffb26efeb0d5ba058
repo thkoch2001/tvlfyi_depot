@@ -16,6 +16,24 @@
       "message": "Maybe comment that we\u0027re deliberately not nopinging (or deliberately pinging)?",
       "revId": "f3afc937bf84ce0102df85bffb26efeb0d5ba058",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef504161_3c4ba1cd",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-10T12:35:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcf1c027_5d9c581d",
+      "revId": "f3afc937bf84ce0102df85bffb26efeb0d5ba058",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
