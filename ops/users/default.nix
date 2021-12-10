@@ -54,7 +54,7 @@
   {
     username = "grfn";
     email = "grfn@gws.fyi";
-    password = "{SSHA}i7PSAsXwJT3jjmmvU77aar/tU/YPDCEO";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$5NEYPJ19nDITK5sGr4bzhQ$Xzpzth6y4w+HGvioHiYgzqFiwMDx0B7HAh+PVbkRuuk";
   }
   {
     username = "htbf";
