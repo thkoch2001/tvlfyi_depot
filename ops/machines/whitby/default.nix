@@ -209,6 +209,7 @@ in {
     in {
       clbot.file = secretFile "clbot";
       gerrit-queue.file = secretFile "gerrit-queue";
+      grafana = secretFile "grafana";
       owothia.file = secretFile "owothia";
 
       buildkite-agent-token = {
@@ -528,7 +529,7 @@ in {
     };
   };
   # Contains GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET.
-  systemd.services.grafana.serviceConfig.EnvironmentFile = "/etc/secrets/grafana";
+  systemd.services.grafana.serviceConfig.EnvironmentFile = "/run/agenix/grafana";
 
   security.sudo.extraRules = [
     {
