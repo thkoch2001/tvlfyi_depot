@@ -10,8 +10,9 @@ let
 in {
   "besadii.age" = default;
   "buildkite-agent-token.age" = default;
-  "clbot.age" = default;
   "clbot-ssh.age" = default;
+  "clbot.age" = default;
   "gerrit-queue.age" = default;
+  "irccat.age" = default;
   "owothia.age" = default;
 }
