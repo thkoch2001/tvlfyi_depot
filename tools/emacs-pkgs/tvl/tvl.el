@@ -38,7 +38,7 @@
   :safe (lambda (_) t))
 
 (defun tvl--gerrit-ref (target-branch &optional flags)
-  (let ((flag-suffix (if flags (format "%%l=%s" (s-join "," flags))
+  (let ((flag-suffix (if flags (format "%%%s" (s-join "," flags))
                        "")))
     (format "HEAD:refs/for/%s%s" target-branch flag-suffix)))
 
@@ -68,7 +68,7 @@
   "Push to Gerrit with autosubmit enabled."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
-                       (tvl--gerrit-ref tvl-target-branch '("Autosubmit+1"))
+                       (tvl--gerrit-ref tvl-target-branch '("l=Autosubmit+1"))
                        nil))
 
 (transient-append-suffix
@@ -94,8 +94,8 @@ passes. This is potentially dangerous, use with care."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
                        (tvl--gerrit-ref tvl-target-branch
-                                        '("Code-Review+2"
-                                          "Autosubmit+1"
+                                        '("l=Code-Review+2"
+                                          "l=Autosubmit+1"
                                           "publish-comments"))
                        nil))
 
