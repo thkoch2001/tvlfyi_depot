@@ -3,7 +3,7 @@
 pkgs.buildGoModule {
   pname = "gerrit-queue";
   version = "master";
-  vendorSha256 = "0hivr4yn9aa1vk7z1h1nwg75hzqnsaxypi1wwxdy1l1hnm5k8hhi";
+  vendorSha256 = "1bqllafvd4yy4cy6barpqhycxmhzcx3p5shpzhd8qwxwwg0clxs6";
   src = ./.;
 
   # gerrit-queue embeds static assets which need to be generated
