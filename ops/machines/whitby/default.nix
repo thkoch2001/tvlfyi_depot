@@ -218,6 +218,23 @@ in {
         group = "buildkite-agents";
       };
 
+      buildkite-graphql-token = {
+        file = secretFile "buildkite-graphql-token";
+        mode = "0440";
+        group = "buildkite-agent";
+      };
+
+      buildkite-besadii-config = {
+        file = secretFile "besadii";
+        mode = "0440";
+        group = "buildkite-agent";
+      };
+
+      gerrit-besadii-config = {
+        file = secretFile "besadii";
+        owner = "git";
+      };
+
       clbot-ssh = {
         file = secretFile "clbot-ssh";
         owner = "clbot";
