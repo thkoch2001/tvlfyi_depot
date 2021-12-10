@@ -209,6 +209,7 @@ in {
     in {
       clbot.file = secretFile "clbot";
       gerrit-queue.file = secretFile "gerrit-queue";
+      irccat.file = secretFile "irccat";
       owothia.file = secretFile "owothia";
 
       buildkite-agent-token = {
@@ -220,12 +221,6 @@ in {
       clbot-ssh = {
         file = secretFile "clbot-ssh";
         owner = "clbot";
-      };
-
-      irccat = {
-        file = secretFile "irccat";
-        mode = "0440";
-        group = "irccat";
       };
     };
 

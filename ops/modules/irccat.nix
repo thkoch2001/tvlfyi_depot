@@ -12,13 +12,13 @@ let
   # service launch.
   configJson = pkgs.writeText "irccat.json" (builtins.toJSON cfg.config);
   configMerge = pkgs.writeShellScript "merge-irccat-config" ''
-    if [ ! -f "${cfg.secretsFile}" ]; then
+    if [ ! -f "$CREDENTIALS_DIRECTORY/secrets" ]; then
       echo "irccat secrets file is missing"
       exit 1
     fi
 
     # jq's * is the recursive merge operator
-    ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${configJson} ${cfg.secretsFile} \
+    ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${configJson} "$CREDENTIALS_DIRECTORY/secrets" \
       > /var/lib/irccat/irccat.json
   '';
 in {
@@ -46,14 +46,11 @@ in {
 
       serviceConfig = {
         DynamicUser = true;
-        Group = "irccat";
         StateDirectory = "irccat";
         WorkingDirectory = "/var/lib/irccat";
+        LoadCredential = "secrets:${cfg.secretsFile}"
         Restart = "always";
       };
     };
-
-    # Create a real group to grant access to secrets to.
-    users.groups.irccat = {};
   };
 }
