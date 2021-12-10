@@ -209,6 +209,7 @@ in {
     in {
       clbot.file = secretFile "clbot";
       gerrit-queue.file = secretFile "gerrit-queue";
+      owothia.file = secretFile "owothia";
     };
 
   # Automatically collect garbage from the Nix store.
