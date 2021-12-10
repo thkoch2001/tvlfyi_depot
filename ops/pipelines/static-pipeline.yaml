@@ -7,14 +7,44 @@
 steps:
   - label: ":llama:"
     command: |
-      function fallback() {
-        echo 'Using fallback pipeline ...'
-        buildkite-agent pipeline upload ops/pipelines/fallback.yaml
-        exit
-      }
+      set -ue
+      nix-build -A ops.pipelines.depot -o depot.yaml --show-trace && \
+        buildkite-agent pipeline upload depot.yaml
 
-      nix-build -A ops.pipelines.depot -o depot.yaml --show-trace || fallback
-      buildkite-agent pipeline upload depot.yaml || fallback
+  # Wait for all previous steps to complete.
+  - wait: null
+    continue_on_failure: true
+
+  # Exit with success or failure depending on whether any other steps
+  # failed.
+  #
+  # This information is checked by querying the Buildkite GraphQL API
+  # and fetching the count of failed steps.
+  #
+  # This step must be :duck: (yes, really!) because the post-command
+  # hook will inspect this name.
+  #
+  # Note that this step has requirements for the agent environment, which
+  # are enforced in our NixOS configuration:
+  #
+  #  * curl and jq must be on the $PATH of build agents
+  #  * besadii configuration must be readable to the build agents
+  - label: ":duck:"
+    key: ":duck:"
+    command: |
+      set -ueo pipefail
+
+      readonly FAILED_JOBS=$(curl 'https://graphql.buildkite.com/v1' \
+        --silent \
+        -H "Authorization: Bearer $(cat /etc/secrets/buildkite-besadii)" \
+        -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}" | \
+        jq -r '.data.build.jobs.count')
+
+      echo "$$FAILED_JOBS build jobs failed."
+
+      if (( $$FAILED_JOBS > 0 )); then
+        exit 1
+      fi
 
   # Create a revision number for the current commit for builds on
   # canon.
