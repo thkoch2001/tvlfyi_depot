@@ -203,9 +203,13 @@ in {
   };
 
   # Configure secrets for services that need them.
-  age.secrets = {
-    gerrit-queue.file = depot.path.origSrc + "/ops/secrets/gerrit-queue.age";
-  };
+  age.secrets =
+    let
+      secretFile = name: "${depot.path.origSrc}/ops/secrets/${name}.age";
+    in {
+      clbot.file = secretFile "clbot";
+      gerrit-queue.file = secretFile "gerrit-queue";
+    };
 
   # Automatically collect garbage from the Nix store.
   services.depot.automatic-gc = {

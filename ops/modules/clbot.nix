@@ -37,7 +37,7 @@ let
 
       serviceConfig = {
         User = "clbot";
-        EnvironmentFile = "/etc/secrets/clbot";
+        EnvironmentFile = cfg.secretsFile;
         Restart = "always";
       };
     };
@@ -54,6 +54,12 @@ in {
     channels = mkOption {
       type = with types; listOf str;
       description = "Channels in which to post (generates one unit per channel)";
+    };
+
+    secretsFile = mkOption {
+      type = types.str;
+      description = "EnvironmentFile from which to load secrets";
+      default = "/run/agenix/clbot";
     };
   };
 
