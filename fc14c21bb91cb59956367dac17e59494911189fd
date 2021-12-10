@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "270a4eb6_1901ae4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-10T10:31:18Z",
+      "side": 1,
+      "message": "This is breaking canon builds, so I\u0027m waving it through.",
+      "revId": "fc14c21bb91cb59956367dac17e59494911189fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
