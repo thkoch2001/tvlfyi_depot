@@ -49,6 +49,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
     ./0004-Add-titles-to-CLs-over-HTTP.patch
     ./0005-When-using-local-fonts-always-assume-Gerrit-is-mount.patch
     ./0006-Always-use-Google-Fonts.patch
+    ./0001-Mitigate-CVE-2021-44228.patch
   ];
 
   bazelTarget = "release api-skip-javadoc";
