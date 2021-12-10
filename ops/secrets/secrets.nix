@@ -20,5 +20,7 @@ in {
   "gerrit-queue.age" = default;
   "grafana.age" = default;
   "irccat.age" = default;
+  "nix-cache-priv" = default;
+  "nix-cache-pub" = default;
   "owothia.age" = default;
 }

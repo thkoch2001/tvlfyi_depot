@@ -173,7 +173,7 @@ in {
     nrBuildUsers = 256;
     maxJobs = lib.mkDefault 64;
     extraOptions = ''
-      secret-key-files = /etc/secrets/nix-cache-privkey
+      secret-key-files = /run/agenix/nix-cache-priv
     '';
 
     trustedUsers = [
@@ -212,6 +212,7 @@ in {
       grafana.file = secretFile "grafana";
       irccat.file = secretFile "irccat";
       owothia.file = secretFile "owothia";
+      nix-cache-priv = secretFile "nix-cache-priv";
 
       buildkite-agent-token = {
         file = secretFile "buildkite-agent-token";
@@ -239,6 +240,12 @@ in {
       clbot-ssh = {
         file = secretFile "clbot-ssh";
         owner = "clbot";
+      };
+
+      # Not actually a secret
+      nix-cache-pub = {
+        file = secretFile "nix-cache-pub";
+        mode = "0444";
       };
     };
 
@@ -419,7 +426,7 @@ in {
   services.nix-serve = {
     enable = true;
     port = 6443;
-    secretKeyFile = "/etc/secrets/nix-cache-key.sec";
+    secretKeyFile = "/run/agenix/nix-cache-priv";
     bindAddress = "localhost";
   };
 
