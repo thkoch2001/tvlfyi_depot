@@ -76,25 +76,5 @@ let
     ++ [
       # Simultaneously run protobuf checks
       protoCheck
-
-      # After duck, on success, create a gcroot if the build branch is
-      # canon.
-      #
-      # We care that this anchors *most* of the depot, in practice
-      # it's unimportant if there is a build race and we get +-1 of
-      # the targets.
-      #
-      # Unfortunately this requires a third evaluation of the graph,
-      # but since it happens after :duck: it should not affect the
-      # timing of status reporting back to Gerrit.
-      ({
-        command = "nix-instantiate -A ci.gcroot --add-root /nix/var/nix/gcroots/depot/canon";
-        label = ":anchor:";
-        "if" = ''build.branch == "refs/heads/canon"'';
-        depends_on = [{
-          step = ":duck:";
-          allow_failure = false;
-        }];
-      })
     ];
 in (writeText "depot.yaml" (toJSON pipeline))
