@@ -7,7 +7,7 @@ let
   description = "Buildkite agents for TVL";
 
   besadiiWithConfig = name: pkgs.writeShellScript "besadii-whitby" ''
-    export BESADII_CONFIG=/etc/secrets/besadii.json
+    export BESADII_CONFIG=/run/agenix/buildkite-besadii-config
     exec -a ${name} ${depot.ops.besadii}/bin/besadii "$@"
   '';
 
