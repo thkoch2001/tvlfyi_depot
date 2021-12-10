@@ -77,40 +77,6 @@ let
       # Simultaneously run protobuf checks
       protoCheck
 
-      # Wait for all previous checks to complete
-      ({
-        wait = null;
-        continue_on_failure = true;
-      })
-
-      # Wait for all steps to complete, then exit with success or
-      # failure depending on whether any other steps failed.
-      #
-      # This information is checked by querying the Buildkite GraphQL
-      # API and fetching the count of failed steps.
-      #
-      # This step must be :duck:! (yes, really!)
-      ({
-        command = let duck = pkgs.writeShellScript "duck" ''
-          set -ueo pipefail
-
-          readonly FAILED_JOBS=$(${pkgs.curl}/bin/curl 'https://graphql.buildkite.com/v1' \
-            --silent \
-            -H "Authorization: Bearer $(cat /etc/secrets/buildkite-besadii)" \
-            -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}" | \
-            ${pkgs.jq}/bin/jq -r '.data.build.jobs.count')
-
-          echo "$FAILED_JOBS build jobs failed."
-
-          if (( $FAILED_JOBS > 0 )); then
-            exit 1
-          fi
-        ''; in "${duck}";
-
-        label = ":duck:";
-        key = ":duck:";
-      })
-
       # After duck, on success, create a gcroot if the build branch is
       # canon.
       #
