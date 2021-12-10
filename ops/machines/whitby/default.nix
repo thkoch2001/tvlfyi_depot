@@ -211,8 +211,9 @@ in {
       gerrit-queue.file = secretFile "gerrit-queue";
       grafana.file = secretFile "grafana";
       irccat.file = secretFile "irccat";
-      owothia.file = secretFile "owothia";
       nix-cache-priv.file = secretFile "nix-cache-priv";
+      owothia.file = secretFile "owothia";
+      panettone.file = secretFile "panettone";
 
       buildkite-agent-token = {
         file = secretFile "buildkite-agent-token";
@@ -335,7 +336,6 @@ in {
       enable = true;
       dbUser = "panettone";
       dbName = "panettone";
-      secretsFile = "/etc/secrets/panettone";
       irccatChannel = "#tvl";
     };
 

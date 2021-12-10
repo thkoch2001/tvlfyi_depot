@@ -36,6 +36,7 @@ in {
         by systemd's EnvironmentFile
       '';
       type = types.str;
+      default = "/run/agenix/panettone";
     };
 
     irccatHost = mkOption {

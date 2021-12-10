@@ -23,4 +23,5 @@ in {
   "nix-cache-priv.age" = default;
   "nix-cache-pub.age" = default;
   "owothia.age" = default;
+  "panettone.age" = default;
 }
