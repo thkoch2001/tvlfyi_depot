@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9be10391_e0183c12",
+        "filename": "ops/secrets/secrets.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-10T14:40:13Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 13,
+        "startChar": 31,
+        "endLine": 13,
+        "endChar": 32
+      },
+      "revId": "9743da7bc1d586d8a62fb4cb30085d50c0d8193b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
