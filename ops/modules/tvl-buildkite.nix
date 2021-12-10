@@ -17,6 +17,11 @@ let
     mkdir -p $out/bin
     ln -s ${besadiiWithConfig "post-command"} $out/bin/post-command
   '';
+
+  credentialHelper = pkgs.writeShellScriptBin "gerrit-creds" ''
+    echo 'username=buildkite'
+    echo "password=$(jq -r '.gerritPassword' /run/agenix/buildkite-besadii-config)"
+  '';
 in {
   options.services.depot.buildkite = {
     enable = lib.mkEnableOption description;
@@ -39,6 +44,7 @@ in {
         runtimePackages = with pkgs; [
           bash
           coreutils
+          credentialHelper
           curl
           git
           gnutar
