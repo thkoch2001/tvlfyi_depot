@@ -210,6 +210,12 @@ in {
       clbot.file = secretFile "clbot";
       gerrit-queue.file = secretFile "gerrit-queue";
       owothia.file = secretFile "owothia";
+
+      buildkite-agent-token = {
+        file = secretFile "buildkite-agent-token";
+        mode = "0440";
+        group = "buildkite-agents";
+      };
     };
 
   # Automatically collect garbage from the Nix store.
