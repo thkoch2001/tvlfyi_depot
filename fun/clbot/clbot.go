@@ -156,11 +156,11 @@ func runIRC(ctx context.Context, ircCfg irc.ClientConfig, sendMsg <-chan string)
 	}
 }
 
-func username(p gerritevents.PatchSet) string {
+func username(a gerritevents.Account) string {
 	options := []string{
-		p.Uploader.Username,
-		p.Uploader.Name,
-		p.Uploader.Email,
+		a.Username,
+		a.Name,
+		a.Email,
 	}
 	for _, opt := range options {
 		if opt != "" {
@@ -243,13 +243,13 @@ func main() {
 				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] || e.PatchSet.Number != 1 {
 					continue
 				}
-				user := username(e.PatchSet)
+				user := username(e.PatchSet.Uploader)
 				parsedMsg = nopingAll(user, fmt.Sprintf("CL/%d proposed by %s - %s - %s", e.Change.Number, user, e.Change.Subject, patchSetURL(e.Change, e.PatchSet)))
 			case *gerritevents.ChangeMerged:
 				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] {
 					continue
 				}
-				owner := username(e.PatchSet)
+				owner := username(e.Change.Owner)
 				submitter := e.Submitter.Username
 				url := patchSetURL(e.Change, e.PatchSet)
 
