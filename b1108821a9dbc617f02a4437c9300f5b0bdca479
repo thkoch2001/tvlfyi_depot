@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7674e435_49a5d71d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-10T19:36:19Z",
+      "side": 1,
+      "message": "Re-approving because the rebase nuked it.",
+      "revId": "b1108821a9dbc617f02a4437c9300f5b0bdca479",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
