@@ -88,13 +88,15 @@
 
 
 (transient-define-suffix magit-gerrit-rubberstamp ()
-  "Push, automatically approve and submit to Gerrit. This
-rubberstamp operation is dangerous and should only be used in
-`//users'."
+  "Push, approve and autosubmit to Gerrit. CLs created via this
+rubberstamp method will automatically be submitted after CI
+passes. This is potentially dangerous, use with care."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
                        (tvl--gerrit-ref tvl-target-branch
-                                        '("Code-Review+2" "publish-comments"))
+                                        '("Code-Review+2"
+                                          "Autosubmit+1"
+                                          "publish-comments"))
                        nil))
 
 (transient-append-suffix
