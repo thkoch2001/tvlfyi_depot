@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "443e8dd1_608e5f09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-10T07:22:39Z",
+      "side": 1,
+      "message": "Note that this CI can not succeed before the previous commit is deployed.",
+      "revId": "2bd05d6e36176fd0547c108c941a6652978e484f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
