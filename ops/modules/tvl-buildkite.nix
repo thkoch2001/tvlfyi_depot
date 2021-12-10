@@ -36,9 +36,13 @@ in {
         tokenPath = "/run/agenix/buildkite-agent-token";
         hooks.post-command = "${buildkiteHooks}/bin/post-command";
 
-        runtimePackages = with pkgs; lib.mkAfter [
+        runtimePackages = with pkgs; [
+          bash
+          coreutils
           curl
+          git
           jq
+          nix
         ];
       };
     }) agents);
