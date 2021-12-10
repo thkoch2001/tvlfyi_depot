@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4996ee7b_ae4a740b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-10T14:47:37Z",
+      "side": 1,
+      "message": "nice!\n\nI was sorta thinking of adding this to the \"rubberstamp\" command too - maybe that can happen in this CL?\n\nIf not I\u0027ll just do it myself.",
+      "revId": "77bac4a8e7297e5b6b240f29b85dd9cfcf5b8f51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
