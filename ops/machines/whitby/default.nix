@@ -223,13 +223,13 @@ in {
       buildkite-graphql-token = {
         file = secretFile "buildkite-graphql-token";
         mode = "0440";
-        group = "buildkite-agent";
+        group = "buildkite-agents";
       };
 
       buildkite-besadii-config = {
         file = secretFile "besadii";
         mode = "0440";
-        group = "buildkite-agent";
+        group = "buildkite-agents";
       };
 
       gerrit-besadii-config = {
