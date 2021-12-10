@@ -404,12 +404,6 @@ in {
     ];
   };
 
-  services.shadowsocks = {
-    enable = true;
-    port = 8443;
-    passwordFile = "/etc/secrets/shadowsocks-secret.sec";
-  };
-
   services.nix-serve = {
     enable = true;
     port = 6443;
