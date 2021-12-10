@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcf1c027_5d9c581d",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-10T12:09:24Z",
+      "side": 1,
+      "message": "Maybe comment that we\u0027re deliberately not nopinging (or deliberately pinging)?",
+      "revId": "f3afc937bf84ce0102df85bffb26efeb0d5ba058",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
