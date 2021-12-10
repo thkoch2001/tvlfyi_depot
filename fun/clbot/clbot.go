@@ -249,8 +249,15 @@ func main() {
 				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] {
 					continue
 				}
-				user := username(e.PatchSet)
-				parsedMsg = nopingAll(user, fmt.Sprintf("CL/%d applied by %s - %s - %s", e.Change.Number, user, e.Change.Subject, patchSetURL(e.Change, e.PatchSet)))
+				owner := username(e.PatchSet)
+				submitter := e.Submitter.Username
+				url := patchSetURL(e.Change, e.PatchSet)
+
+				if submitter != owner && submitter == "clbot" {
+					parsedMsg = fmt.Sprintf("CL/%d by %s autosubmitted - %s - %s", e.Change.Number, owner, e.Change.Subject, url)
+				} else {
+					parsedMsg = nopingAll(owner, fmt.Sprintf("CL/%d applied by %s - %s - %s", e.Change.Number, owner, e.Change.Subject, url))
+				}
 			}
 			if parsedMsg != "" {
 				sendMsgChan <- parsedMsg
