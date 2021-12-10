@@ -11,6 +11,7 @@ in {
   "besadii.age" = default;
   "buildkite-agent-token.age" = default;
   "clbot.age" = default;
+  "clbot-ssh.age" = default;
   "gerrit-queue.age" = default;
   "owothia.age" = default;
 }
