@@ -34,8 +34,12 @@ in {
         inherit name;
         enable = true;
         tokenPath = "/run/agenix/buildkite-agent-token";
-        runtimePackages = with pkgs; [ curl jq ];
         hooks.post-command = "${buildkiteHooks}/bin/post-command";
+
+        runtimePackages = with pkgs; lib.mkAfter [
+          curl
+          jq
+        ];
       };
     }) agents);
 
