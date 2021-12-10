@@ -216,6 +216,11 @@ in {
         mode = "0440";
         group = "buildkite-agents";
       };
+
+      clbot-ssh = {
+        file = secretFile "clbot-ssh";
+        owner = "clbot";
+      };
     };
 
   # Automatically collect garbage from the Nix store.
@@ -280,7 +285,7 @@ in {
     flags = {
       gerrit_host = "cl.tvl.fyi:29418";
       gerrit_ssh_auth_username = "clbot";
-      gerrit_ssh_auth_key = "/etc/secrets/id_clbot";
+      gerrit_ssh_auth_key = "/run/agenix/clbot-ssh";
 
       irc_server = "localhost:${toString config.services.znc.config.Listener.l.Port}";
       irc_user = "tvlbot";
@@ -290,7 +295,7 @@ in {
       notify_repo = "depot";
 
       # This secret is read from an environment variable, which is
-      # populated from /etc/secrets/clbot
+      # populated by a systemd EnvironmentFile.
       irc_pass = "$CLBOT_PASS";
     };
   };
