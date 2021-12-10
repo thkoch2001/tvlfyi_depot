@@ -18,7 +18,7 @@ let
     ln -s ${besadiiWithConfig "post-command"} $out/bin/post-command
   '';
 
-  credentialHelper = pkgs.writeShellScriptBin "gerrit-creds" ''
+  credentialHelper = pkgs.writeShellScriptBin "git-credential-gerrit-creds" ''
     echo 'username=buildkite'
     echo "password=$(jq -r '.gerritPassword' /run/agenix/buildkite-besadii-config)"
   '';
