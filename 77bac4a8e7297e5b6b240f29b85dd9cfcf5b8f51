@@ -16,6 +16,24 @@
       "message": "nice!\n\nI was sorta thinking of adding this to the \"rubberstamp\" command too - maybe that can happen in this CL?\n\nIf not I\u0027ll just do it myself.",
       "revId": "77bac4a8e7297e5b6b240f29b85dd9cfcf5b8f51",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46a523a7_4d9ea15b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-10T14:55:28Z",
+      "side": 1,
+      "message": "ohh, good point - but it feels like it should be a separate CL (then it\u0027ll fly by people on IRC at least :))",
+      "parentUuid": "4996ee7b_ae4a740b",
+      "revId": "77bac4a8e7297e5b6b240f29b85dd9cfcf5b8f51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
