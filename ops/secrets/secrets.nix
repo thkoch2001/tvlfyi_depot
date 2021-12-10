@@ -17,6 +17,7 @@ in {
   "clbot-ssh.age" = default;
   "clbot.age" = default;
   "gerrit-queue.age" = default;
+  "grafana.age" = default;
   "irccat.age" = default;
   "owothia.age" = default;
 }
