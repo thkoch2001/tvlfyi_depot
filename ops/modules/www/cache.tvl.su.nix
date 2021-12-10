@@ -14,7 +14,7 @@
 
       extraConfig = ''
         location = /cache-key.pub {
-          alias /etc/secrets/nix-cache-key.pub;
+          alias /run/agenix/nix-cache-pub;
         }
 
         location / {
