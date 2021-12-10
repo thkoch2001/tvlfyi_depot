@@ -9,6 +9,7 @@ let
   default.publicKeys = tazjin ++ [ whitby ];
 in {
   "besadii.age" = default;
-  "gerrit-queue.age" = default;
   "clbot.age" = default;
+  "gerrit-queue.age" = default;
+  "owothia.age" = default;
 }

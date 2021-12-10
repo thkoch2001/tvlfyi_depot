@@ -11,7 +11,7 @@ in {
     secretsFile = lib.mkOption {
       type = lib.types.str;
       description = "File path from which systemd should read secrets";
-      default = "/etc/secrets/owothia";
+      default = "/run/agenix/owothia";
     };
 
     owoChance = lib.mkOption {
