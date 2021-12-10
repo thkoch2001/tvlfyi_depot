@@ -36,7 +36,7 @@ steps:
 
       readonly FAILED_JOBS=$(curl 'https://graphql.buildkite.com/v1' \
         --silent \
-        -H "Authorization: Bearer $(cat /etc/secrets/buildkite-besadii)" \
+        -H "Authorization: Bearer $(cat /run/agenix/buildkite-graphql-token)" \
         -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}" | \
         jq -r '.data.build.jobs.count')
 
@@ -75,5 +75,5 @@ steps:
   - label: ":git:"
     if: "build.branch == 'refs/heads/canon'"
     command: |
-      git -c 'credential.helper=/etc/secrets/buildkite-credential-helper' \
+      git -c 'credential.helper=gerrit-creds' \
         push origin "HEAD:refs/r/$(git rev-list --count --first-parent HEAD)"
