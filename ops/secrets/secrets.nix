@@ -10,4 +10,5 @@ let
 in {
   "besadii.age" = default;
   "gerrit-queue.age" = default;
+  "clbot.age" = default;
 }
