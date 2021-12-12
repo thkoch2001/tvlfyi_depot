@@ -1,9 +1,7 @@
 { depot, config, ... }:
 
 {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config = {
     services.nginx.virtualHosts.cgit = {
@@ -22,7 +20,9 @@
 
         # Git operations on depot.git hit josh
         location /depot.git {
-            proxy_pass http://localhost:${toString config.services.depot.git-serving.joshPort};
+            proxy_pass http://localhost:${
+              toString config.services.depot.git-serving.joshPort
+            };
         }
 
         # Git clone operations on '/' should be redirected to josh now.

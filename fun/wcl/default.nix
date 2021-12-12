@@ -3,12 +3,7 @@
 depot.nix.buildLisp.program {
   name = "wc";
 
-  srcs = [
-    ./wc.lisp
-  ];
+  srcs = [ ./wc.lisp ];
 
-  deps = with depot.third_party.lisp; [
-    unix-opts
-    iterate
-  ];
+  deps = with depot.third_party.lisp; [ unix-opts iterate ];
 }

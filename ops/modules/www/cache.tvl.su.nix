@@ -1,9 +1,7 @@
 { config, ... }:
 
 {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config = {
     services.nginx.virtualHosts."cache.tvl.su" = {
@@ -18,7 +16,9 @@
         }
 
         location / {
-          proxy_pass http://localhost:${toString config.services.nix-serve.port};
+          proxy_pass http://localhost:${
+            toString config.services.nix-serve.port
+          };
         }
       '';
     };

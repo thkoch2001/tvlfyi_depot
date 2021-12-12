@@ -13,15 +13,10 @@ let
 
   cl-unicode-base = depot.nix.buildLisp.library {
     name = "cl-unicode-base";
-    deps = with depot.third_party.lisp; [
-      cl-ppcre
-    ];
+    deps = with depot.third_party.lisp; [ cl-ppcre ];
 
-    srcs = map (f: src + ("/" + f)) [
-      "packages.lisp"
-      "specials.lisp"
-      "util.lisp"
-    ];
+    srcs =
+      map (f: src + ("/" + f)) [ "packages.lisp" "specials.lisp" "util.lisp" ];
   };
 
   cl-unicode-build = depot.nix.buildLisp.program {
@@ -40,7 +35,7 @@ let
       "char-info.lisp"
       "read.lisp"
     ]) ++ [
-      (runCommand "dump.lisp" {} ''
+      (runCommand "dump.lisp" { } ''
         substitute ${src}/build/dump.lisp $out \
           --replace ':defaults *this-file*' ":defaults (uiop:getcwd)"
       '')
@@ -54,8 +49,7 @@ let
     main = "cl-unicode:create-source-files";
   };
 
-
-  generated = runCommand "cl-unicode-generated" {} ''
+  generated = runCommand "cl-unicode-generated" { } ''
     mkdir -p $out/build
     mkdir -p $out/test
     cd $out/build
@@ -63,10 +57,9 @@ let
     ${cl-unicode-build}/bin/cl-unicode-build
   '';
 
-in
-depot.nix.buildLisp.library {
+in depot.nix.buildLisp.library {
   name = "cl-unicode";
-  deps = [cl-unicode-base];
+  deps = [ cl-unicode-base ];
   srcs = [
     "${src}/conditions.lisp"
     "${generated}/lists.lisp"

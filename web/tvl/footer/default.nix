@@ -2,7 +2,8 @@
 # our static pages and also via //web/blog for blog posts.
 { lib, ... }:
 
-args: ''
+args:
+''
   <p class="footer">
     <a class="uncoloured-link" href="https://at.tvl.fyi/?q=%2F%2FREADME.md">code</a>
     |
@@ -16,6 +17,6 @@ args: ''
     |
     <a class="uncoloured-link" href="https://atward.tvl.fyi/">search</a>
     '' + lib.optionalString (args ? extraFooter) args.extraFooter + ''
-  </p>
-  <p class="lod">ಠ_ಠ</p>
-''
+    </p>
+    <p class="lod">ಠ_ಠ</p>
+  ''

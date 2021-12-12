@@ -1,15 +1,14 @@
 { config, lib, pkgs, depot, ... }:
 
-let
-  cfg = config.services.prometheus-fail2ban-exporter;
-in
+let cfg = config.services.prometheus-fail2ban-exporter;
 
-{
+in {
   options.services.prometheus-fail2ban-exporter = with lib; {
     enable = mkEnableOption "Prometheus Fail2ban Exporter";
 
     interval = mkOption {
-      description = "Systemd calendar expression for how often to run the interval";
+      description =
+        "Systemd calendar expression for how often to run the interval";
       type = types.string;
       default = "minutely";
       example = "hourly";
@@ -30,10 +29,7 @@ in
         '';
       };
 
-      path = [
-        pkgs.fail2ban
-        depot.third_party.prometheus-fail2ban-exporter
-      ];
+      path = [ pkgs.fail2ban depot.third_party.prometheus-fail2ban-exporter ];
     };
 
     systemd.timers."prometheus-fail2ban-exporter" = {
@@ -44,9 +40,8 @@ in
     services.prometheus.exporters.node = {
       enabledCollectors = [ "textfile" ];
 
-      extraFlags = [
-        "--collector.textfile.directory=/var/lib/prometheus/node-exporter"
-      ];
+      extraFlags =
+        [ "--collector.textfile.directory=/var/lib/prometheus/node-exporter" ];
     };
   };
 }

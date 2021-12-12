@@ -90,13 +90,14 @@ let
 
   # Feed generation functions:
 
-  renderEpoch = epoch: removeSuffix "\n" (readFile (runCommandNoCC "date-${toString epoch}" {} ''
-    date --date='@${toString epoch}' --utc --iso-8601='seconds' > $out
-  ''));
+  renderEpoch = epoch:
+    removeSuffix "\n" (readFile (runCommandNoCC "date-${toString epoch}" { } ''
+      date --date='@${toString epoch}' --utc --iso-8601='seconds' > $out
+    ''));
 
   escape = replaceStrings [ "<" ">" "&" "'" ] [ "&lt;" "&gt;" "&amp;" "&#39;" ];
 
-  elem = name: content: ''<${name}>${escape content}</${name}>'';
+  elem = name: content: "<${name}>${escape content}</${name}>";
 
   renderLink = defun [ link string ] (l: ''
     <link href="${escape l.href}" rel="${escape l.rel}" />
@@ -105,32 +106,32 @@ let
   # Technically the author element can also contain 'uri' and 'email'
   # fields, but they are not used for the purpose of this feed and are
   # omitted.
-  renderAuthor = author: ''<author><name>${escape author}</name></author>'';
+  renderAuthor = author: "<author><name>${escape author}</name></author>";
 
   renderEntry = defun [ entry string ] (e: ''
     <entry>
       ${elem "title" e.title}
       ${elem "id" e.id}
       ${elem "updated" (renderEpoch e.updated)}
-      ${if e ? published
-        then elem "published" (renderEpoch e.published)
-        else ""
+      ${
+        if e ? published then elem "published" (renderEpoch e.published) else ""
       }
-      ${if e ? content
-        then ''<content type="html">${escape e.content}</content>''
-        else ""
+      ${
+        if e ? content then
+          ''<content type="html">${escape e.content}</content>''
+        else
+          ""
       }
       ${if e ? summary then elem "summary" e.summary else ""}
-      ${concatStrings (map renderAuthor (e.authors or []))}
+      ${concatStrings (map renderAuthor (e.authors or [ ]))}
       ${if e ? subtitle then elem "subtitle" e.subtitle else ""}
       ${if e ? rights then elem "rights" e.rights else ""}
-      ${concatStrings (map renderLink (e.links or []))}
+      ${concatStrings (map renderLink (e.links or [ ]))}
     </entry>
   '');
 
-  mostRecentlyUpdated = defun [ (list entry) int ] (entries:
-    foldl' max 0 (map (e: e.updated) entries)
-  );
+  mostRecentlyUpdated = defun [ (list entry) int ]
+    (entries: foldl' max 0 (map (e: e.updated) entries));
 
   sortEntries = sort (a: b: a.published > b.published);
 
@@ -139,14 +140,15 @@ let
     <feed xmlns="http://www.w3.org/2005/Atom">
       ${elem "id" f.id}
       ${elem "title" f.title}
-      ${elem "updated" (renderEpoch (f.updated or (mostRecentlyUpdated f.entries)))}
-      ${concatStringsSep "\n" (map renderAuthor (f.authors or []))}
+      ${
+        elem "updated"
+        (renderEpoch (f.updated or (mostRecentlyUpdated f.entries)))
+      }
+      ${concatStringsSep "\n" (map renderAuthor (f.authors or [ ]))}
       ${if f ? subtitle then elem "subtitle" f.subtitle else ""}
       ${if f ? rights then elem "rights" f.rights else ""}
-      ${concatStrings (map renderLink (f.links or []))}
+      ${concatStrings (map renderLink (f.links or [ ]))}
       ${concatStrings (map renderEntry (sortEntries f.entries))}
     </feed>
   '');
-in {
-  inherit entry feed renderFeed renderEpoch;
-}
+in { inherit entry feed renderFeed renderEpoch; }

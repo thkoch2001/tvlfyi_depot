@@ -11,12 +11,7 @@ let
 in depot.nix.buildLisp.library {
   name = "parse-float";
 
-  deps = with depot.third_party.lisp; [
-    alexandria
-  ];
+  deps = with depot.third_party.lisp; [ alexandria ];
 
-  srcs = map (f: src + ("/" + f)) [
-    "package.lisp"
-    "parse-float.lisp"
-  ];
+  srcs = map (f: src + ("/" + f)) [ "package.lisp" "parse-float.lisp" ];
 }

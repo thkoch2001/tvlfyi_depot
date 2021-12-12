@@ -1,23 +1,21 @@
 { depot, pkgs, lib, ... }:
 
 { # content of the <title> tag
-  title
-  # main part of the page, usually wrapped with <main>
+title
+# main part of the page, usually wrapped with <main>
 , content
-  # optional extra html to inject into <head>
+# optional extra html to inject into <head>
 , extraHead ? null
   # optional extra html to inject into <footer>
 , extraFooter ? null
   # URL at which static assets are located
-, staticUrl ? "https://static.tvl.fyi/${depot.web.static.drvHash}"
-}@args:
+, staticUrl ? "https://static.tvl.fyi/${depot.web.static.drvHash}" }@args:
 
 let
   inherit (pkgs) runCommandNoCC lib;
   inherit (depot.tools) cheddar;
-in
 
-runCommandNoCC "${lib.strings.sanitizeDerivationName title}-index.html" {
+in runCommandNoCC "${lib.strings.sanitizeDerivationName title}-index.html" {
   headerPart = ''
     <!DOCTYPE html>
     <head>
@@ -36,11 +34,11 @@ runCommandNoCC "${lib.strings.sanitizeDerivationName title}-index.html" {
   inherit content;
 
   footerPart = ''
-    <hr>
-    <footer>
-      ${depot.web.tvl.footer args}
-    </footer>
-  </body>
+      <hr>
+      <footer>
+        ${depot.web.tvl.footer args}
+      </footer>
+    </body>
   '';
 
   passAsFile = [ "headerPart" "content" "footerPart" ];

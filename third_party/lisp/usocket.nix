@@ -31,21 +31,22 @@ in buildLisp.library {
         :version "0.8.3")
     '')
   ] ++
-  # Now for the regularly scheduled programming:
-  (map (f: src + ("/" + f)) [
-    "package.lisp"
-    "usocket.lisp"
-    "condition.lisp"
-  ] ++ [
-    { sbcl = "${src}/backend/sbcl.lisp"; }
+    # Now for the regularly scheduled programming:
+    (map (f: src + ("/" + f)) [ "package.lisp" "usocket.lisp" "condition.lisp" ]
+      ++ [
+        {
+          sbcl = "${src}/backend/sbcl.lisp";
+        }
 
-    # ECL actually has two files, it supports the SBCL backend,
-    # but usocket also has some ECL specific code
-    { ecl = "${src}/backend/sbcl.lisp"; }
-    { ecl = "${src}/backend/ecl.lisp"; }
+        # ECL actually has two files, it supports the SBCL backend,
+        # but usocket also has some ECL specific code
+        { ecl = "${src}/backend/sbcl.lisp"; }
+        {
+          ecl = "${src}/backend/ecl.lisp";
+        }
 
-    # Same for CCL
-    { ccl = "${src}/backend/openmcl.lisp"; }
-    { ccl = "${src}/backend/clozure.lisp"; }
-  ]);
+        # Same for CCL
+        { ccl = "${src}/backend/openmcl.lisp"; }
+        { ccl = "${src}/backend/clozure.lisp"; }
+      ]);
 }

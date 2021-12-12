@@ -27,7 +27,7 @@ in depot.nix.buildLisp.library {
     "${src}/src/package.lisp"
     "${src}/src/utilities.lisp"
     "${src}/src/trivial-utf-16.lisp"
-    (runCommand "precomputed-tables.lisp" {} ''
+    (runCommand "precomputed-tables.lisp" { } ''
       substitute ${src}/src/precomputed-tables.lisp precomputed-tables.lisp \
         --replace "(asdf:system-source-directory (asdf:find-system 'uax-15 nil))" \
                   '"${src}/"'

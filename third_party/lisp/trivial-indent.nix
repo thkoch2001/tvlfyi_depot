@@ -1,4 +1,3 @@
-
 { depot, pkgs, ... }:
 
 let
@@ -11,7 +10,5 @@ let
 in depot.nix.buildLisp.library {
   name = "trivial-indent";
 
-  srcs = map (f: src + ("/" + f)) [
-    "indent.lisp"
-  ];
+  srcs = map (f: src + ("/" + f)) [ "indent.lisp" ];
 }

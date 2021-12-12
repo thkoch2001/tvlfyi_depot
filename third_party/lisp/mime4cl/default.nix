@@ -5,18 +5,10 @@
 depot.nix.buildLisp.library {
   name = "mime4cl";
 
-  deps = [
-    depot.third_party.lisp.sclf
-    depot.third_party.lisp.npg
-  ];
+  deps = [ depot.third_party.lisp.sclf depot.third_party.lisp.npg ];
 
-  srcs = [
-    ./package.lisp
-    ./endec.lisp
-    ./streams.lisp
-    ./mime.lisp
-    ./address.lisp
-  ];
+  srcs =
+    [ ./package.lisp ./endec.lisp ./streams.lisp ./mime.lisp ./address.lisp ];
 
   tests = {
     name = "mime4cl-tests";
@@ -41,8 +33,5 @@ depot.nix.buildLisp.library {
   };
 
   # limited by sclf
-  brokenOn = [
-    "ccl"
-    "ecl"
-  ];
+  brokenOn = [ "ccl" "ecl" ];
 }

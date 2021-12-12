@@ -12,15 +12,8 @@ let
 
 in depot.nix.buildLisp.library {
   name = "checkl";
-  deps = with depot.third_party.lisp; [
-    (bundled "asdf")
-    marshal
-    fiveam
-  ];
+  deps = with depot.third_party.lisp; [ (bundled "asdf") marshal fiveam ];
 
-  srcs = map (f: src + ("/" + f)) [
-    "package.lisp"
-    "checkl.lisp"
-    "formalize.lisp"
-  ];
+  srcs =
+    map (f: src + ("/" + f)) [ "package.lisp" "checkl.lisp" "formalize.lisp" ];
 }

@@ -4,10 +4,11 @@
 let
   cfg = config.services.depot.gerrit-queue;
   description = "gerrit-queue - autosubmit bot for Gerrit";
-  mkStringOption = default: lib.mkOption {
-    inherit default;
-    type = lib.types.str;
-  };
+  mkStringOption = default:
+    lib.mkOption {
+      inherit default;
+      type = lib.types.str;
+    };
 in {
   options.services.depot.gerrit-queue = {
     enable = lib.mkEnableOption description;
@@ -15,17 +16,19 @@ in {
     gerritProject = mkStringOption "depot";
     gerritBranch = mkStringOption "canon";
 
-    interval = with lib; mkOption {
-      type = types.int;
-      default = 60;
-      description = "Interval (in seconds) for submit queue checks";
-    };
+    interval = with lib;
+      mkOption {
+        type = types.int;
+        default = 60;
+        description = "Interval (in seconds) for submit queue checks";
+      };
 
-    secretsFile = with lib; mkOption {
-      description = "Path to a systemd EnvironmentFile containing secrets";
-      default = "/run/agenix/gerrit-queue";
-      type = types.str;
-    };
+    secretsFile = with lib;
+      mkOption {
+        description = "Path to a systemd EnvironmentFile containing secrets";
+        default = "/run/agenix/gerrit-queue";
+        type = types.str;
+      };
   };
 
   config = lib.mkIf cfg.enable {

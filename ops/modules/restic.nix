@@ -10,10 +10,11 @@
 let
   cfg = config.services.depot.restic;
   description = "Restic backups to GleSYS";
-  mkStringOption = default: lib.mkOption {
-    inherit default;
-    type = lib.types.str;
-  };
+  mkStringOption = default:
+    lib.mkOption {
+      inherit default;
+      type = lib.types.str;
+    };
 in {
   options.services.depot.restic = {
     enable = lib.mkEnableOption description;
@@ -23,31 +24,36 @@ in {
     repository = mkStringOption config.networking.hostName;
     interval = mkStringOption "hourly";
 
-    paths = with lib; mkOption {
-      description = "Directories that should be backed up";
-      type = types.listOf types.str;
-    };
+    paths = with lib;
+      mkOption {
+        description = "Directories that should be backed up";
+        type = types.listOf types.str;
+      };
 
-    exclude = with lib; mkOption {
-      description = "Files that should be excluded from backups";
-      type = types.listOf types.str;
-    };
+    exclude = with lib;
+      mkOption {
+        description = "Files that should be excluded from backups";
+        type = types.listOf types.str;
+      };
   };
 
   config = lib.mkIf cfg.enable {
     systemd.services.restic = {
       description = "Backups to GleSYS";
 
-      script = "${pkgs.restic}/bin/restic backup ${lib.concatStringsSep " " cfg.paths}";
+      script = "${pkgs.restic}/bin/restic backup ${
+          lib.concatStringsSep " " cfg.paths
+        }";
 
       environment = {
-        RESTIC_REPOSITORY = "s3:${cfg.bucketEndpoint}/${cfg.bucketName}/${cfg.repository}";
+        RESTIC_REPOSITORY =
+          "s3:${cfg.bucketEndpoint}/${cfg.bucketName}/${cfg.repository}";
         AWS_SHARED_CREDENTIALS_FILE = cfg.bucketCredentials;
         RESTIC_PASSWORD_FILE = "/var/backup/restic/secret";
         RESTIC_CACHE_DIR = "/var/backup/restic/cache";
 
-        RESTIC_EXCLUDE_FILE =
-          builtins.toFile "exclude-files" (lib.concatStringsSep "\n" cfg.exclude);
+        RESTIC_EXCLUDE_FILE = builtins.toFile "exclude-files"
+          (lib.concatStringsSep "\n" cfg.exclude);
       };
     };
 

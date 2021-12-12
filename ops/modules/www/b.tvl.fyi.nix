@@ -1,9 +1,7 @@
 { config, ... }:
 
 {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config = {
     services.nginx.virtualHosts."b-shortlink" = {
@@ -24,7 +22,9 @@
         }
 
         location / {
-          proxy_pass http://localhost:${toString config.services.depot.panettone.port};
+          proxy_pass http://localhost:${
+            toString config.services.depot.panettone.port
+          };
         }
       '';
     };

@@ -1,6 +1,7 @@
 { depot, pkgs, ... }:
 
-let src = pkgs.fetchFromGitHub {
+let
+  src = pkgs.fetchFromGitHub {
     owner = "tokenrove";
     repo = "anaphora";
     rev = "018590df36ffb30ece561fb28ea6521363efc6e2";

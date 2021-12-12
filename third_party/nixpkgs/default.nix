@@ -31,24 +31,27 @@ let
   # bisected against nixpkgs to find the root cause of an issue in a
   # channel bump.
   nixpkgsSrc = externalArgs.nixpkgsBisectPath or (fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/${unstableHashes.commit}.tar.gz";
+    url =
+      "https://github.com/NixOS/nixpkgs/archive/${unstableHashes.commit}.tar.gz";
     sha256 = unstableHashes.sha256;
   });
 
   stableNixpkgsSrc = fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/${stableHashes.commit}.tar.gz";
+    url =
+      "https://github.com/NixOS/nixpkgs/archive/${stableHashes.commit}.tar.gz";
     sha256 = stableHashes.sha256;
   };
 
   # Stable package set is imported, but not exposed, to overlay
   # required packages into the unstable set.
-  stableNixpkgs = import stableNixpkgsSrc {};
+  stableNixpkgs = import stableNixpkgsSrc { };
 
   # Overlay for packages that should come from the stable channel
   # instead (e.g. because something is broken in unstable).
-  stableOverlay = self: super: {
-    # Nothing picked from stable presently.
-  };
+  stableOverlay = self: super:
+    {
+      # Nothing picked from stable presently.
+    };
 
   # Overlay to expose the nixpkgs commits we are using to other Nix code.
   commitsOverlay = _: _: {

@@ -2,8 +2,7 @@
 # Running it outside of a container is a futile endeavour for now.
 { depot, config, pkgs, lib, ... }:
 
-let
-  cfg = config.services.depot.sourcegraph;
+let cfg = config.services.depot.sourcegraph;
 in {
   options.services.depot.sourcegraph = with lib; {
     enable = mkEnableOption "SourceGraph code search engine";
@@ -25,7 +24,9 @@ in {
     # Run a cheddar syntax highlighting server
     systemd.services.cheddar-server = {
       wantedBy = [ "multi-user.target" ];
-      script = "${depot.tools.cheddar}/bin/cheddar --listen 0.0.0.0:${toString cfg.cheddarPort} --sourcegraph-server";
+      script = "${depot.tools.cheddar}/bin/cheddar --listen 0.0.0.0:${
+          toString cfg.cheddarPort
+        } --sourcegraph-server";
 
       serviceConfig = {
         DynamicUser = true;
@@ -36,9 +37,7 @@ in {
     virtualisation.oci-containers.containers.sourcegraph = {
       image = "sourcegraph/server:3.31.2";
 
-      ports = [
-        "127.0.0.1:${toString cfg.port}:7080"
-      ];
+      ports = [ "127.0.0.1:${toString cfg.port}:7080" ];
 
       volumes = [
         "/var/lib/sourcegraph/etc:/etc/sourcegraph"
@@ -50,9 +49,7 @@ in {
 
       # Sourcegraph needs a higher nofile limit, it logs warnings
       # otherwise (unclear whether it actually affects the service).
-      extraOptions = [
-        "--ulimit" "nofile=10000:10000"
-      ];
+      extraOptions = [ "--ulimit" "nofile=10000:10000" ];
     };
   };
 }

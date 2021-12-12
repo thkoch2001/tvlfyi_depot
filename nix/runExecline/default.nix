@@ -7,14 +7,12 @@ let
   };
 
   runExeclineLocal = name: args: execline:
-    runExecline name
-      (args // {
-        derivationArgs = args.derivationArgs or {} // {
-          preferLocalBuild = true;
-          allowSubstitutes = false;
-        };
-      })
-      execline;
+    runExecline name (args // {
+      derivationArgs = args.derivationArgs or { } // {
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+      };
+    }) execline;
 
   tests = import ./tests.nix {
     inherit runExecline runExeclineLocal;

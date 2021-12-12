@@ -10,7 +10,7 @@
 # with `binify { exe = …; name = "hello" }`.
 { exe, name }:
 
-pkgs.runCommandLocal "${name}-bin" {} ''
+pkgs.runCommandLocal "${name}-bin" { } ''
   mkdir -p $out/bin
   ln -sT ${lib.escapeShellArg exe} $out/bin/${lib.escapeShellArg name}
 ''

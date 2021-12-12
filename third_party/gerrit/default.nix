@@ -29,8 +29,7 @@ let
   };
   bazel = bazelTop // { override = x: bazelTop; };
   version = "3.4.0";
-in
-pkgs.lib.makeOverridable pkgs.buildBazelPackage {
+in pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   pname = "gerrit";
   inherit version;
 
@@ -54,10 +53,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   bazelTarget = "release api-skip-javadoc";
   inherit bazel;
 
-  bazelFlags = [
-    "--repository_cache="
-    "--disk_cache="
-  ];
+  bazelFlags = [ "--repository_cache=" "--disk_cache=" ];
   removeRulesCC = false;
   fetchConfigured = true;
 
@@ -125,9 +121,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
       unzip bazel-bin/api-skip-javadoc.zip -d "$out"/share/api
     '';
 
-    nativeBuildInputs = with pkgs; [
-      unzip
-    ];
+    nativeBuildInputs = with pkgs; [ unzip ];
   };
 
   passthru = {

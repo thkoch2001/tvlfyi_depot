@@ -1,5 +1,5 @@
 # Hunchentoot is a web framework for Common Lisp.
-{ depot, pkgs, ...}:
+{ depot, pkgs, ... }:
 
 let
   src = pkgs.fetchFromGitHub {

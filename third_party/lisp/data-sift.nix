@@ -11,12 +11,7 @@ let
 
 in depot.nix.buildLisp.library {
   name = "data-sift";
-  deps = with depot.third_party.lisp; [
-    cl-ppcre
-    parse-number
-    alexandria
-    puri
-  ];
+  deps = with depot.third_party.lisp; [ cl-ppcre parse-number alexandria puri ];
 
   srcs = map (f: src + ("/src/" + f)) [
     "packages.lisp"

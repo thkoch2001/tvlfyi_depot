@@ -5,24 +5,18 @@ pkgs.stdenv.mkDerivation {
 
   phases = [ "installPhase" "installCheckPhase" ];
 
-  nativeBuildInputs = with pkgs; [
-    makeWrapper
-  ];
+  nativeBuildInputs = with pkgs; [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
     makeWrapper ${./deploy-whitby.sh} $out/bin/deploy-whitby.sh \
-      --prefix PATH : ${with pkgs; lib.makeBinPath [
-        ansi2html
-        git
-        jq
-        nix-diff
-      ]}
+      --prefix PATH : ${
+        with pkgs;
+        lib.makeBinPath [ ansi2html git jq nix-diff ]
+      }
   '';
 
-  installCheckInputs = with pkgs; [
-    shellcheck
-  ];
+  installCheckInputs = with pkgs; [ shellcheck ];
 
   doInstallCheck = true;
   installCheckPhase = ''

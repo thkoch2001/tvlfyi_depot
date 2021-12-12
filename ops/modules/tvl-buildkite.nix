@@ -6,14 +6,15 @@ let
   agents = lib.range 1 cfg.agentCount;
   description = "Buildkite agents for TVL";
 
-  besadiiWithConfig = name: pkgs.writeShellScript "besadii-whitby" ''
-    export BESADII_CONFIG=/run/agenix/buildkite-besadii-config
-    exec -a ${name} ${depot.ops.besadii}/bin/besadii "$@"
-  '';
+  besadiiWithConfig = name:
+    pkgs.writeShellScript "besadii-whitby" ''
+      export BESADII_CONFIG=/run/agenix/buildkite-besadii-config
+      exec -a ${name} ${depot.ops.besadii}/bin/besadii "$@"
+    '';
 
   # All Buildkite hooks are actually besadii, but it's being invoked
   # with different names.
-  buildkiteHooks = pkgs.runCommandNoCC "buildkite-hooks" {} ''
+  buildkiteHooks = pkgs.runCommandNoCC "buildkite-hooks" { } ''
     mkdir -p $out/bin
     ln -s ${besadiiWithConfig "post-command"} $out/bin/post-command
   '';
@@ -57,7 +58,7 @@ in {
 
     # Set up a group for all Buildkite agent users
     users = {
-      groups.buildkite-agents = {};
+      groups.buildkite-agents = { };
       users = builtins.listToAttrs (map (n: rec {
         name = "buildkite-agent-whitby-${toString n}";
         value = {

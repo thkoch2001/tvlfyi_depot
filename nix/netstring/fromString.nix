@@ -7,4 +7,5 @@
 #   => "3:foo,"
 #   netstring.fromString ""
 #   => "0:,"
-s: "${toString (builtins.stringLength s)}:${s},"
+s:
+"${toString (builtins.stringLength s)}:${s},"

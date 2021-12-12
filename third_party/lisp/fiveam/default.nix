@@ -7,11 +7,7 @@
 depot.nix.buildLisp.library {
   name = "fiveam";
 
-  deps = with depot.third_party.lisp; [
-    alexandria
-    asdf-flv
-    trivial-backtrace
-  ];
+  deps = with depot.third_party.lisp; [ alexandria asdf-flv trivial-backtrace ];
 
   srcs = [
     ./src/package.lisp

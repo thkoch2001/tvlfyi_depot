@@ -10,7 +10,6 @@ depot.nix.buildGo.external {
     sha256 = "1gd4k4f2mj2dnqcbpdrh9plziz0l29ls6mgyy4mfdcdfijfyd30n";
   };
 
-  deps = with depot.third_party; [
-    gopkgs."github.com".charmbracelet.bubbletea
-  ];
+  deps = with depot.third_party;
+    [ gopkgs."github.com".charmbracelet.bubbletea ];
 }

@@ -13,9 +13,11 @@ let
   secrets = import ./secrets.nix;
 
   # Import a secret to the Nix store
-  declareSecret = name: pkgs.runCommandNoCC name {} ''
-    cp ${./. + "/${name}"} $out
-  '';
-in depot.nix.readTree.drvTargets (listToAttrs (
-  map (name: { inherit name; value = declareSecret name; }) (attrNames secrets)
-))
+  declareSecret = name:
+    pkgs.runCommandNoCC name { } ''
+      cp ${./. + "/${name}"} $out
+    '';
+in depot.nix.readTree.drvTargets (listToAttrs (map (name: {
+  inherit name;
+  value = declareSecret name;
+}) (attrNames secrets)))

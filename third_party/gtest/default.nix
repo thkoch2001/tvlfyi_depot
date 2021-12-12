@@ -1,8 +1,6 @@
 { pkgs, ... }:
 
-(pkgs.gtest.override {
-  stdenv = pkgs.fullLlvm11Stdenv;
-}).overrideAttrs(_: {
+(pkgs.gtest.override { stdenv = pkgs.fullLlvm11Stdenv; }).overrideAttrs (_: {
   src = pkgs.fetchFromGitHub {
     owner = "google";
     repo = "googletest";

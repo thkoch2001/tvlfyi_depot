@@ -11,10 +11,7 @@ let
 
 in depot.nix.buildLisp.library {
   name = "easy-routes";
-  deps = with depot.third_party.lisp; [
-    hunchentoot
-    routes
-  ];
+  deps = with depot.third_party.lisp; [ hunchentoot routes ];
 
   srcs = map (f: src + ("/" + f)) [
     "package.lisp"

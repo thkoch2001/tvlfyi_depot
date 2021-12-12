@@ -8,13 +8,12 @@ let
   inherit (depot.web) atom-feed blog tvl;
 
   listPosts = defun [ (list blog.post) string ] (posts:
-    lib.concatStringsSep "\n" (map (p: "* [${p.title}](blog/${p.key})") posts)
-  );
+    lib.concatStringsSep "\n" (map (p: "* [${p.title}](blog/${p.key})") posts));
 
   postRenderingCommands = defun [ (list blog.post) string ] (posts:
     lib.concatStringsSep "\n"
-      (map (p: "cp ${blog.renderPost tvl.blog.config p} $out/blog/${p.key}.html") posts)
-  );
+    (map (p: "cp ${blog.renderPost tvl.blog.config p} $out/blog/${p.key}.html")
+      posts));
 
   tvlGraph = runCommandNoCC "tvl.svg" {
     nativeBuildInputs = with pkgs; [ fontconfig freetype cairo jetbrains-mono ];
@@ -118,7 +117,7 @@ let
       </style>
     '';
   };
-in runCommandNoCC "website" {} ''
+in runCommandNoCC "website" { } ''
   mkdir -p $out/blog
   cp ${homepage} $out/index.html
   ${postRenderingCommands tvl.blog.posts}

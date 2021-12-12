@@ -7,21 +7,9 @@
 with depot.nix.yants;
 
 let
-  inherit (pkgs)
-    jq
-    ripgrep
-    runCommandNoCC
-    writeText
-    ;
+  inherit (pkgs) jq ripgrep runCommandNoCC writeText;
 
-  inherit (builtins)
-    elem
-    filter
-    fromJSON
-    head
-    readFile
-    map
-    ;
+  inherit (builtins) elem filter fromJSON head readFile map;
 
   inherit (lib) concatStringsSep;
 
@@ -34,17 +22,19 @@ let
     user = string;
   };
 
-  allTodos = fromJSON (readFile (runCommandNoCC "depot-todos.json" {} ''
+  allTodos = fromJSON (readFile (runCommandNoCC "depot-todos.json" { } ''
     ${ripgrep}/bin/rg --json 'TODO\(\w+\):.*$' ${depot.path} | \
       ${jq}/bin/jq -s -f ${./extract-todos.jq} > $out
   ''));
 
   knownUserTodos = filter (todos: elem (head todos).user knownUsers) allTodos;
 
-  fileLink = defun [ todo string ] (t:
-    ''<a style="color: inherit;"
-         href="https://cs.tvl.fyi/depot/-/blob/${t.file}#L${toString t.line}">
-      //${t.file}:${toString t.line}</a>'');
+  fileLink = defun [ todo string ] (t: ''
+    <a style="color: inherit;"
+             href="https://cs.tvl.fyi/depot/-/blob/${t.file}#L${
+               toString t.line
+             }">
+          //${t.file}:${toString t.line}</a>'');
 
   todoElement = defun [ todo string ] (t: ''
     <p>${fileLink t}:</p>
@@ -53,18 +43,18 @@ let
   '');
 
   userParagraph = todos:
-  let user = (head todos).user;
-  in ''
-    <p>
-      <h3>
-        <a style="color:inherit; text-decoration: none;"
-           name="${user}"
-           href="#${user}">${user}</a>
-      </h3>
-      ${concatStringsSep "\n" (map todoElement todos)}
-    </p>
-    <hr>
-  '';
+    let user = (head todos).user;
+    in ''
+      <p>
+        <h3>
+          <a style="color:inherit; text-decoration: none;"
+             name="${user}"
+             href="#${user}">${user}</a>
+        </h3>
+        ${concatStringsSep "\n" (map todoElement todos)}
+      </p>
+      <hr>
+    '';
 
   staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
 
@@ -105,7 +95,7 @@ let
     </body>
   '';
 
-in runCommandNoCC "tvl-todos" {} ''
+in runCommandNoCC "tvl-todos" { } ''
   mkdir $out
   cp ${todoPage} $out/index.html
 ''

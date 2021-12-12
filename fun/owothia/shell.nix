@@ -1,14 +1,8 @@
-{ pkgs ? (import ../../../. {}).third_party, ... }:
+{ pkgs ? (import ../../../. { }).third_party, ... }:
 
-let
-  inherit (pkgs)
-    haskellPackages
-    haskell
-    gitignoreSource
-    ;
-in
+let inherit (pkgs) haskellPackages haskell gitignoreSource;
 
-(haskellPackages.extend (haskell.lib.packageSourceOverrides {
+in (haskellPackages.extend (haskell.lib.packageSourceOverrides {
   owothia = gitignoreSource ./.;
 })).shellFor {
   packages = p: [ p.owothia ];

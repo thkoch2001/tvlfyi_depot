@@ -14,7 +14,7 @@ pkgs.buildGoModule {
 
   meta = with lib; {
     description = "Simple Golang SMTP relay/proxy server";
-    homepage = https://github.com/decke/smtprelay;
+    homepage = "https://github.com/decke/smtprelay";
     license = licenses.mit;
   };
 }

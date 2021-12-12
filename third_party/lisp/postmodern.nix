@@ -43,15 +43,9 @@ let
 
   s-sql = depot.nix.buildLisp.library {
     name = "s-sql";
-    deps = with depot.third_party.lisp; [
-      cl-postgres
-      alexandria
-    ];
+    deps = with depot.third_party.lisp; [ cl-postgres alexandria ];
 
-    srcs = map (f: src + ("/s-sql/" + f)) [
-      "package.lisp"
-      "s-sql.lisp"
-    ];
+    srcs = map (f: src + ("/s-sql/" + f)) [ "package.lisp" "s-sql.lisp" ];
   };
 
   postmodern = depot.nix.buildLisp.library {
@@ -68,9 +62,7 @@ let
       bordeaux-threads
     ];
 
-    srcs = [
-      "${src}/postmodern.asd"
-    ] ++ (map (f: src + ("/postmodern/" + f)) [
+    srcs = [ "${src}/postmodern.asd" ] ++ (map (f: src + ("/postmodern/" + f)) [
       "package.lisp"
       "connect.lisp"
       "query.lisp"
@@ -89,6 +81,4 @@ let
     ];
   };
 
-in postmodern // {
-  inherit s-sql cl-postgres;
-}
+in postmodern // { inherit s-sql cl-postgres; }

@@ -35,9 +35,7 @@ depot.nix.buildLisp.program {
   ];
 
   tests = {
-    deps = with depot.third_party.lisp; [
-      fiveam
-    ];
+    deps = with depot.third_party.lisp; [ fiveam ];
 
     srcs = [
       ./test/package.lisp

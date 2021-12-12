@@ -4,12 +4,13 @@
 let
   cfg = config.services.gerrit;
 
-  besadiiWithConfig = name: pkgs.writeShellScript "besadii-whitby" ''
-    export BESADII_CONFIG=/run/agenix/gerrit-besadii-config
-    exec -a ${name} ${depot.ops.besadii}/bin/besadii "$@"
-  '';
+  besadiiWithConfig = name:
+    pkgs.writeShellScript "besadii-whitby" ''
+      export BESADII_CONFIG=/run/agenix/gerrit-besadii-config
+      exec -a ${name} ${depot.ops.besadii}/bin/besadii "$@"
+    '';
 
-  gerritHooks = pkgs.runCommandNoCC "gerrit-hooks" {} ''
+  gerritHooks = pkgs.runCommandNoCC "gerrit-hooks" { } ''
     mkdir -p $out
     ln -s ${besadiiWithConfig "change-merged"} $out/change-merged
     ln -s ${besadiiWithConfig "patchset-created"} $out/patchset-created
@@ -19,10 +20,7 @@ in {
     enable = true;
     listenAddress = "[::]:4778"; # 4778 - grrt
     serverId = "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36";
-    builtinPlugins = [
-      "download-commands"
-      "hooks"
-    ];
+    builtinPlugins = [ "download-commands" "hooks" ];
 
     plugins = with depot.third_party.gerrit_plugins; [
       owners
@@ -61,12 +59,7 @@ in {
 
       httpd.listenUrl = "proxy-https://${cfg.listenAddress}";
 
-      download.command = [
-        "checkout"
-        "cherry_pick"
-        "format_patch"
-        "pull"
-      ];
+      download.command = [ "checkout" "cherry_pick" "format_patch" "pull" ];
 
       # Configure for cgit.
       gitweb = {
@@ -85,13 +78,13 @@ in {
       # Auto-link panettone bug links
       commentlink.panettone = {
         match = "b/(\\\\d+)";
-        html = "<a href=\"https://b.tvl.fyi/issues/$1\">b/$1</a>";
+        html = ''<a href="https://b.tvl.fyi/issues/$1">b/$1</a>'';
       };
 
       # Auto-link other CLs
       commentlink.gerrit = {
         match = "cl/(\\\\d+)";
-        html = "<a href=\"https://cl.tvl.fyi/$1\">cl/$1</a>";
+        html = ''<a href="https://cl.tvl.fyi/$1">cl/$1</a>'';
       };
 
       # Configures integration with CAS, which then integrates with a variety

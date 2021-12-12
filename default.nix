@@ -5,11 +5,9 @@
 { nixpkgsBisectPath ? null, ... }@args:
 
 let
-  inherit (builtins)
-    filter
-    ;
+  inherit (builtins) filter;
 
-  readTree = import ./nix/readTree {};
+  readTree = import ./nix/readTree { };
 
   # Disallow access to //users from other depot parts.
   usersFilter = readTree.restrictFolder {
@@ -25,7 +23,11 @@ let
       #
       # 1. User SSH keys are set in //users.
       # 2. Some personal websites or demo projects are served from it.
-      [ "ops" "machines" "whitby" ]
+      [
+        "ops"
+        "machines"
+        "whitby"
+      ]
 
       # Due to evaluation order this also affects these targets.
       # TODO(tazjin): Can this one be removed somehow?
@@ -51,14 +53,15 @@ let
     ];
   };
 
-  readDepot = depotArgs: readTree {
-    args = depotArgs;
-    path = ./.;
-    filter = parts: args: corpFilter parts (usersFilter parts args);
-    scopedArgs = {
-      __findFile = _: _: throw "Do not import from NIX_PATH in the depot!";
+  readDepot = depotArgs:
+    readTree {
+      args = depotArgs;
+      path = ./.;
+      filter = parts: args: corpFilter parts (usersFilter parts args);
+      scopedArgs = {
+        __findFile = _: _: throw "Do not import from NIX_PATH in the depot!";
+      };
     };
-  };
 
   # To determine build targets, we walk through the depot tree and
   # fetch attributes that were imported by readTree and are buildable.
@@ -68,44 +71,45 @@ let
   # Is this tree node eligible for build inclusion?
   eligible = node: (node ? outPath) && (node.meta.ci or true);
 
-in readTree.fix(self: (readDepot {
-  depot = self;
+in readTree.fix (self:
+  (readDepot {
+    depot = self;
 
-  # Pass third_party as 'pkgs' (for compatibility with external
-  # imports for certain subdirectories)
-  pkgs = self.third_party.nixpkgs;
+    # Pass third_party as 'pkgs' (for compatibility with external
+    # imports for certain subdirectories)
+    pkgs = self.third_party.nixpkgs;
 
-  # Expose lib attribute to packages.
-  lib = self.third_party.nixpkgs.lib;
+    # Expose lib attribute to packages.
+    lib = self.third_party.nixpkgs.lib;
 
-  # Pass arguments passed to the entire depot through, for packages
-  # that would like to add functionality based on this.
-  #
-  # Note that it is intended for exceptional circumstance, such as
-  # debugging by bisecting nixpkgs.
-  externalArgs = args;
-}) // {
-  # Make the path to the depot available for things that might need it
-  # (e.g. NixOS module inclusions)
-  path = self.third_party.nixpkgs.lib.cleanSource ./.;
+    # Pass arguments passed to the entire depot through, for packages
+    # that would like to add functionality based on this.
+    #
+    # Note that it is intended for exceptional circumstance, such as
+    # debugging by bisecting nixpkgs.
+    externalArgs = args;
+  }) // {
+    # Make the path to the depot available for things that might need it
+    # (e.g. NixOS module inclusions)
+    path = self.third_party.nixpkgs.lib.cleanSource ./.;
 
-  # List of all buildable targets, for CI purposes.
-  #
-  # Note: To prevent infinite recursion, this *must* be a nested
-  # attribute set (which does not have a __readTree attribute).
-  ci.targets = readTree.gather eligible (self // {
-    # remove the pipelines themselves from the set over which to
-    # generate pipelines because that also leads to infinite
-    # recursion.
-    ops = self.ops // { pipelines = null; };
+    # List of all buildable targets, for CI purposes.
+    #
+    # Note: To prevent infinite recursion, this *must* be a nested
+    # attribute set (which does not have a __readTree attribute).
+    ci.targets = readTree.gather eligible (self // {
+      # remove the pipelines themselves from the set over which to
+      # generate pipelines because that also leads to infinite
+      # recursion.
+      ops = self.ops // { pipelines = null; };
 
-    # remove nixpkgs from the set, for obvious reasons.
-    third_party = self.third_party // { nixpkgs = null; };
-  });
+      # remove nixpkgs from the set, for obvious reasons.
+      third_party = self.third_party // { nixpkgs = null; };
+    });
 
-  # Derivation that gcroots all depot targets.
-  ci.gcroot = self.third_party.nixpkgs.symlinkJoin {
-    name = "depot-gcroot";
-    paths = self.ci.targets;
-  };
-})
+    # Derivation that gcroots all depot targets.
+    ci.gcroot = self.third_party.nixpkgs.symlinkJoin {
+      name = "depot-gcroot";
+      paths = self.ci.targets;
+    };
+  })

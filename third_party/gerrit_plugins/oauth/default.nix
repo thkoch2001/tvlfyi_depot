@@ -1,10 +1,10 @@
 { depot, pkgs, ... }@args:
 
-let
-  inherit (import ../builder.nix args) buildGerritBazelPlugin;
+let inherit (import ../builder.nix args) buildGerritBazelPlugin;
 in buildGerritBazelPlugin rec {
   name = "oauth";
-  depsOutputHash = "sha256:0ww88msym6zr5z86k5az1kmw3hv8d9giniwkii4lwnzf3kc5qnrx";
+  depsOutputHash =
+    "sha256:0ww88msym6zr5z86k5az1kmw3hv8d9giniwkii4lwnzf3kc5qnrx";
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/plugins/oauth";
     rev = "4aa7322db5ec221b2419e12a9ec7af5b8c66659c";

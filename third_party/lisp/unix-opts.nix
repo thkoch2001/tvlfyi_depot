@@ -1,5 +1,5 @@
 # unix-opts is a portable command line argument parser
-{ depot, pkgs, ...}:
+{ depot, pkgs, ... }:
 
 let
   src = pkgs.fetchFromGitHub {
@@ -11,7 +11,5 @@ let
 in depot.nix.buildLisp.library {
   name = "unix-opts";
 
-  srcs = [
-    "${src}/unix-opts.lisp"
-  ];
+  srcs = [ "${src}/unix-opts.lisp" ];
 }

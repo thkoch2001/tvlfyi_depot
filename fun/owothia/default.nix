@@ -1,12 +1,8 @@
-{ depot ? (import ../../../. {})
-, pkgs ? depot.third_party.nixpkgs
-, ... }:
+{ depot ? (import ../../../. { }), pkgs ? depot.third_party.nixpkgs, ... }:
 
-let
-  basePkg = pkgs.haskellPackages.callPackage ./pkg.nix { };
-in
+let basePkg = pkgs.haskellPackages.callPackage ./pkg.nix { };
 
-pkgs.haskell.lib.overrideSrc basePkg {
+in pkgs.haskell.lib.overrideSrc basePkg {
   src = depot.third_party.gitignoreSource ./.;
   version = "canon";
 }

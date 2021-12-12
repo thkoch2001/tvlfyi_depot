@@ -14,9 +14,7 @@ stdenv.mkDerivation {
     sha256 = "060xlalfclrda5f1h3svj4v2gr19mdrsc62vrg7hgii0f3lib7j5";
   };
 
-  buildInputs = [
-    (perl.withPackages (ps: with ps; [ DataDump ]))
-  ];
+  buildInputs = [ (perl.withPackages (ps: with ps; [ DataDump ])) ];
 
   installPhase = ''
     mkdir -p $out/bin

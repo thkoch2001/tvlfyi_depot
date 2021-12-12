@@ -42,9 +42,8 @@ let
   };
 
   getSrcs = builtins.map (p: "${src}/${p}");
-in
 
-depot.nix.buildLisp.library {
+in depot.nix.buildLisp.library {
   name = "closure-html";
 
   srcs = getSrcs [

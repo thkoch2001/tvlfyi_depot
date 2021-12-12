@@ -2,9 +2,10 @@
 { depot, pkgs, ... }:
 
 let
-  checkZone = zone: file: pkgs.runCommandNoCC "${zone}-check" {} ''
-    ${pkgs.bind}/bin/named-checkzone -i local ${zone} ${file} | tee $out
-  '';
+  checkZone = zone: file:
+    pkgs.runCommandNoCC "${zone}-check" { } ''
+      ${pkgs.bind}/bin/named-checkzone -i local ${zone} ${file} | tee $out
+    '';
 
 in depot.nix.readTree.drvTargets {
   nixery-dev = checkZone "nixery.dev" ./nixery.dev.zone;

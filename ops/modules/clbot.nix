@@ -5,25 +5,20 @@ let
   inherit (builtins) attrValues concatStringsSep mapAttrs readFile;
   inherit (pkgs) runCommandNoCC;
 
-  inherit (lib)
-    listToAttrs
-    mkEnableOption
-    mkIf
-    mkOption
-    removeSuffix
-    types;
+  inherit (lib) listToAttrs mkEnableOption mkIf mkOption removeSuffix types;
 
   description = "Bot to forward CL notifications";
   cfg = config.services.depot.clbot;
 
   mkFlags = flags:
     concatStringsSep " "
-      (attrValues (mapAttrs (key: value: "-${key} \"${toString value}\"") flags));
+    (attrValues (mapAttrs (key: value: ''-${key} "${toString value}"'') flags));
 
   # Escapes a unit name for use in systemd
-  systemdEscape = name: removeSuffix "\n" (readFile (runCommandNoCC "unit-name" {} ''
-    ${pkgs.systemd}/bin/systemd-escape '${name}' >> $out
-  ''));
+  systemdEscape = name:
+    removeSuffix "\n" (readFile (runCommandNoCC "unit-name" { } ''
+      ${pkgs.systemd}/bin/systemd-escape '${name}' >> $out
+    ''));
 
   mkUnit = flags: channel: {
     name = "clbot-${systemdEscape channel}";
@@ -31,9 +26,9 @@ let
       description = "${description} to ${channel}";
       wantedBy = [ "multi-user.target" ];
 
-      script = "${depot.fun.clbot}/bin/clbot ${mkFlags (cfg.flags // {
-        irc_channel = channel;
-      })} -alsologtostderr";
+      script = "${depot.fun.clbot}/bin/clbot ${
+          mkFlags (cfg.flags // { irc_channel = channel; })
+        } -alsologtostderr";
 
       serviceConfig = {
         User = "clbot";
@@ -53,7 +48,8 @@ in {
 
     channels = mkOption {
       type = with types; listOf str;
-      description = "Channels in which to post (generates one unit per channel)";
+      description =
+        "Channels in which to post (generates one unit per channel)";
     };
 
     secretsFile = mkOption {
@@ -68,7 +64,7 @@ in {
     # (notably the SSH private key) readable by this user outside of
     # the module.
     users = {
-      groups.clbot = {};
+      groups.clbot = { };
 
       users.clbot = {
         group = "clbot";

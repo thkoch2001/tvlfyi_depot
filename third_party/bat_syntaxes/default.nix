@@ -6,9 +6,8 @@
 # syntaxes on top of bat's existing ones.
 { pkgs, ... }:
 
-let
-  inherit (pkgs) bat runCommandNoCC;
-in runCommandNoCC "bat-syntaxes.bin" {} ''
+let inherit (pkgs) bat runCommandNoCC;
+in runCommandNoCC "bat-syntaxes.bin" { } ''
   export HOME=$PWD
   mkdir -p .config/bat/syntaxes
   cp ${./Prolog.sublime-syntax} .config/bat/syntaxes

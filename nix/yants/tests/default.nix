@@ -8,12 +8,7 @@ with depot.nix.yants;
 let
 
   inherit (depot.nix.runTestsuite)
-    runTestsuite
-    it
-    assertEq
-    assertThrows
-    assertDoesNotThrow
-    ;
+    runTestsuite it assertEq assertThrows assertDoesNotThrow;
 
   # this derivation won't throw if evaluated with deepSeq
   # unlike most things even remotely related with nixpkgs
@@ -25,7 +20,7 @@ let
   };
 
   testPrimitives = it "checks that all primitive types match" [
-    (assertDoesNotThrow "unit type" (unit {}))
+    (assertDoesNotThrow "unit type" (unit { }))
     (assertDoesNotThrow "int type" (int 15))
     (assertDoesNotThrow "bool type" (bool false))
     (assertDoesNotThrow "float type" (float 13.37))
@@ -44,7 +39,7 @@ let
   # Test that structures work as planned.
   person = struct "person" {
     name = string;
-    age  = int;
+    age = int;
 
     contact = option (struct {
       email = string;
@@ -55,7 +50,7 @@ let
   testStruct = it "checks that structures work as intended" [
     (assertDoesNotThrow "person struct" (person {
       name = "Brynhjulf";
-      age  = 42;
+      age = 42;
       contact.email = "brynhjulf@yants.nix";
     }))
   ];
@@ -69,13 +64,10 @@ let
   };
 
   testEnum = it "checks enum definitions and matching" [
-    (assertEq "enum is matched correctly"
-      "It is in fact red!" (colour.match "red" colourMatcher))
-    (assertThrows "out of bounds enum fails"
-      (colour.match "alpha" (colourMatcher // {
-        alpha = "This should never happen";
-      }))
-    )
+    (assertEq "enum is matched correctly" "It is in fact red!"
+      (colour.match "red" colourMatcher))
+    (assertThrows "out of bounds enum fails" (colour.match "alpha"
+      (colourMatcher // { alpha = "This should never happen"; })))
   ];
 
   # Test sum type definitions
@@ -96,25 +88,22 @@ let
 
   testSum = it "checks sum types definitions and matching" [
     (assertDoesNotThrow "creature sum type" some-human)
-    (assertEq "sum type is matched correctly"
-      "It's a human named Brynhjulf" (creature.match some-human {
+    (assertEq "sum type is matched correctly" "It's a human named Brynhjulf"
+      (creature.match some-human {
         human = v: "It's a human named ${v.name}";
         pet = v: "It's not supposed to be a pet!";
-      })
-    )
+      }))
   ];
 
   # Test curried function definitions
   func = defun [ string int string ]
-  (name: age: "${name} is ${toString age} years old");
+    (name: age: "${name} is ${toString age} years old");
 
-  testFunctions = it "checks function definitions" [
-    (assertDoesNotThrow "function application" (func "Brynhjulf" 42))
-  ];
+  testFunctions = it "checks function definitions"
+    [ (assertDoesNotThrow "function application" (func "Brynhjulf" 42)) ];
 
   # Test that all types are types.
-  assertIsType = name: t:
-    assertDoesNotThrow "${name} is a type" (type t);
+  assertIsType = name: t: assertDoesNotThrow "${name} is a type" (type t);
   testTypes = it "checks that all types are types" [
     (assertIsType "any" any)
     (assertIsType "bool" bool)
@@ -131,8 +120,14 @@ let
     (assertIsType "list string" (list string))
     (assertIsType "option int" (option int))
     (assertIsType "option (list string)" (option (list string)))
-    (assertIsType "struct { ... }" (struct { a = int; b = option string; }))
-    (assertIsType "sum { ... }" (sum { a = int; b = option string; }))
+    (assertIsType "struct { ... }" (struct {
+      a = int;
+      b = option string;
+    }))
+    (assertIsType "sum { ... }" (sum {
+      a = int;
+      b = option string;
+    }))
   ];
 
   testRestrict = it "checks restrict types" [
@@ -143,14 +138,13 @@ let
       (list (restrict "eq 5" (v: v == 5) any) [ 5 5 5 ]))
   ];
 
-in
-  runTestsuite "yants" [
-    testPrimitives
-    testPoly
-    testStruct
-    testEnum
-    testSum
-    testFunctions
-    testTypes
-    testRestrict
-  ]
+in runTestsuite "yants" [
+  testPrimitives
+  testPoly
+  testStruct
+  testEnum
+  testSum
+  testFunctions
+  testTypes
+  testRestrict
+]

@@ -1,25 +1,22 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (depot.nix.writers)
-    rustSimple
-    rustSimpleLib
-    rustSimpleBin
-    ;
+  inherit (depot.nix.writers) rustSimple rustSimpleLib rustSimpleBin;
 
-  inherit (pkgs)
-    coreutils
-    ;
+  inherit (pkgs) coreutils;
 
-  run = drv: depot.nix.runExecline.local "run-${drv.name}" {} [
-    "if" [ drv ]
-    "importas" "out" "out"
-    "${coreutils}/bin/touch" "$out"
-  ];
+  run = drv:
+    depot.nix.runExecline.local "run-${drv.name}" { } [
+      "if"
+      [ drv ]
+      "importas"
+      "out"
+      "out"
+      "${coreutils}/bin/touch"
+      "$out"
+    ];
 
-  rustTransitiveLib = rustSimpleLib {
-    name = "transitive";
-  } ''
+  rustTransitiveLib = rustSimpleLib { name = "transitive"; } ''
     pub fn transitive(s: &str) -> String {
       let mut new = s.to_string();
       new.push_str(" 1 2 3");
@@ -59,10 +56,4 @@ let
     }
   '');
 
-
-in depot.nix.readTree.drvTargets {
-  inherit
-    rustTransitiveLib
-    rustWithLib
-    ;
-}
+in depot.nix.readTree.drvTargets { inherit rustTransitiveLib rustWithLib; }

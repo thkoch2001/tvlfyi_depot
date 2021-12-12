@@ -6,8 +6,7 @@
 
 { external }:
 
-let
-  inherit (builtins) fetchGit map;
+let inherit (builtins) fetchGit map;
 in rec {
   goProto = external {
     path = "github.com/golang/protobuf";
@@ -25,11 +24,7 @@ in rec {
       rev = "ffdde105785063a81acd95bdf89ea53f6e0aac2d";
     };
 
-    deps = [
-      xtext.secure.bidirule
-      xtext.unicode.bidi
-      xtext.unicode.norm
-    ];
+    deps = [ xtext.secure.bidirule xtext.unicode.bidi xtext.unicode.norm ];
   };
 
   xsys = external {
@@ -55,10 +50,7 @@ in rec {
       rev = "83cc0476cb11ea0da33dacd4c6354ab192de6fe6";
     };
 
-    deps = with goProto; [
-      proto
-      ptypes.any
-    ];
+    deps = with goProto; [ proto ptypes.any ];
   };
 
   goGrpc = external {
@@ -69,12 +61,7 @@ in rec {
       xsys.unix
       xnet.http2.hpack
       genproto.googleapis.rpc.status
-    ] ++ (with goProto; [
-      proto
-      ptypes
-      ptypes.duration
-      ptypes.timestamp
-    ]));
+    ] ++ (with goProto; [ proto ptypes ptypes.duration ptypes.timestamp ]));
 
     src = fetchGit {
       url = "https://github.com/grpc/grpc-go";

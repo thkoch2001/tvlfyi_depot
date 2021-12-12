@@ -2,10 +2,11 @@
 { depot, ... }:
 
 with depot.nix;
-let src = builtins.fetchGit {
-  url = "https://github.com/cffi/cffi.git";
-  rev = "a49ff36a95cb62ffa6cb069d98378d665769926b";
-};
+let
+  src = builtins.fetchGit {
+    url = "https://github.com/cffi/cffi.git";
+    rev = "a49ff36a95cb62ffa6cb069d98378d665769926b";
+  };
 in buildLisp.library {
   name = "cffi";
   deps = with depot.third_party.lisp; [
@@ -15,13 +16,11 @@ in buildLisp.library {
     (buildLisp.bundled "asdf")
   ];
 
-  srcs = [
-    {
-      ecl = src + "/src/cffi-ecl.lisp";
-      sbcl = src + "/src/cffi-sbcl.lisp";
-      ccl = src + "/src/cffi-openmcl.lisp";
-    }
-  ] ++ map (f: src + ("/src/" + f)) [
+  srcs = [{
+    ecl = src + "/src/cffi-ecl.lisp";
+    sbcl = src + "/src/cffi-sbcl.lisp";
+    ccl = src + "/src/cffi-openmcl.lisp";
+  }] ++ map (f: src + ("/src/" + f)) [
     "package.lisp"
     "utils.lisp"
     "libraries.lisp"

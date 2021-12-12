@@ -12,7 +12,5 @@ in {
   __functor = _: gitignoreNix.gitignoreSource;
 
   # expose extra functions here
-  inherit (gitignoreNix)
-    gitignoreFilter
-    ;
+  inherit (gitignoreNix) gitignoreFilter;
 }

@@ -12,15 +12,8 @@ in depot.nix.buildLisp.library {
   name = "bordeaux-threads";
   deps = [ depot.third_party.lisp.alexandria ];
 
-  srcs = map getSrc [
-    "pkgdcl.lisp"
-    "bordeaux-threads.lisp"
-  ] ++ [
-    {
-      sbcl = getSrc "impl-sbcl.lisp";
-      ecl = getSrc "impl-ecl.lisp";
-    }
-  ] ++ map getSrc [
-    "default-implementations.lisp"
-  ];
+  srcs = map getSrc [ "pkgdcl.lisp" "bordeaux-threads.lisp" ] ++ [{
+    sbcl = getSrc "impl-sbcl.lisp";
+    ecl = getSrc "impl-ecl.lisp";
+  }] ++ map getSrc [ "default-implementations.lisp" ];
 }

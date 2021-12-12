@@ -1,9 +1,7 @@
 { pkgs, depot, ... }:
 
 let
-  inherit (depot.nix)
-    getBins
-    ;
+  inherit (depot.nix) getBins;
 
   stableRelease = "21.05";
 
@@ -11,12 +9,9 @@ let
   archiveUrl = "https://github.com/NixOS/nixpkgs/archive/";
 
   bins = getBins pkgs.nix [ "nix-prefetch-url" ]
-    //   getBins pkgs.curl [ "curl" ]
-    ;
+    // getBins pkgs.curl [ "curl" ];
 
-in
-
-pkgs.writers.writeDashBin "depot-nixpkgs-update" ''
+in pkgs.writers.writeDashBin "depot-nixpkgs-update" ''
   set -e
 
   printSet() {

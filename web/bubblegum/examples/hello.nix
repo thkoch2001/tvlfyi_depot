@@ -1,15 +1,9 @@
 { depot, ... }:
 
 let
-  inherit (depot.third_party.nixpkgs)
-    lib
-    ;
+  inherit (depot.third_party.nixpkgs) lib;
 
-  inherit (depot.web.bubblegum)
-    pathInfo
-    respond
-    absolutePath
-    ;
+  inherit (depot.web.bubblegum) pathInfo respond absolutePath;
 
   routes = {
     "/" = {
@@ -55,10 +49,8 @@ let
     '';
   };
 
-  navigation =
-    lib.concatStrings (lib.mapAttrsToList
-      (p: v: "<li><a href=\"${absolutePath p}\">${v.title}</a></li>")
-      routes);
+  navigation = lib.concatStrings (lib.mapAttrsToList
+    (p: v: ''<li><a href="${absolutePath p}">${v.title}</a></li>'') routes);
 
   template = { title, content, ... }: ''
     <!doctype html>
@@ -86,7 +78,4 @@ let
 
   response = routes."${pathInfo}" or notFound;
 
-in
-  respond response.status {
-    "Content-type" = "text/html";
-  } (template response)
+in respond response.status { "Content-type" = "text/html"; } (template response)

@@ -28,10 +28,12 @@ let
 
   injectFrontend = writeText "gemma-frontend.lisp" ''
     (in-package :gemma)
-    (setq *static-file-location* "${runCommandNoCC "frontend" {} ''
-      mkdir -p $out
-      cp ${frontend} $out/index.html
-    ''}/")
+    (setq *static-file-location* "${
+      runCommandNoCC "frontend" { } ''
+        mkdir -p $out
+        cp ${frontend} $out/index.html
+      ''
+    }/")
   '';
 in depot.nix.buildLisp.program {
   name = "gemma";
@@ -43,14 +45,8 @@ in depot.nix.buildLisp.program {
     local-time
   ];
 
-  srcs = [
-    ./src/gemma.lisp
-    injectFrontend
-  ];
+  srcs = [ ./src/gemma.lisp injectFrontend ];
 
   # depends on SBCL
-  brokenOn = [
-    "ccl"
-    "ecl"
-  ];
+  brokenOn = [ "ccl" "ecl" ];
 }

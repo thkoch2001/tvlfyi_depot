@@ -1,7 +1,6 @@
 { depot, lib, pkgs, ... }:
 
-let
-  inherit (pkgs) stdenv gzip bzip2 xz luajit zlib autoconf openssl pkgconfig;
+let inherit (pkgs) stdenv gzip bzip2 xz luajit zlib autoconf openssl pkgconfig;
 in stdenv.mkDerivation rec {
   pname = "cgit";
   version = "master";
@@ -33,8 +32,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://git.zx2c4.com/cgit/about/;
-    repositories.git = git://git.zx2c4.com/cgit;
+    homepage = "https://git.zx2c4.com/cgit/about/";
+    repositories.git = "git://git.zx2c4.com/cgit";
     description = "Web frontend for git repositories";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

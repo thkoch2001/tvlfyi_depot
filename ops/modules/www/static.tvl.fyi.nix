@@ -10,9 +10,7 @@
 
 let staticHash = depot.web.static.drvHash;
 in {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config = {
     services.nginx.virtualHosts."static.tvl.fyi" = {

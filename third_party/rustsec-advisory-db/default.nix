@@ -11,14 +11,10 @@ let
   pin = builtins.fromJSON (builtins.readFile ./pin.json);
 
   date = builtins.head (builtins.split "T" pin.date);
-in
 
-pkgs.fetchFromGitHub {
+in pkgs.fetchFromGitHub {
   name = "advisory-db-${date}";
   owner = "RustSec";
   repo = "advisory-db";
-  inherit (pin)
-    rev
-    sha256
-  ;
+  inherit (pin) rev sha256;
 }

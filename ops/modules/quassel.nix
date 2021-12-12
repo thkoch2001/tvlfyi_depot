@@ -25,12 +25,7 @@ in {
     logLevel = mkOption {
       description = "Log level for Quassel Core";
       default = "Info";
-      type = lib.types.enum [
-        "Debug"
-        "Info"
-        "Warning"
-        "Error"
-      ];
+      type = lib.types.enum [ "Debug" "Info" "Warning" "Error" ];
     };
 
     port = mkOption {
@@ -41,36 +36,37 @@ in {
     };
   };
 
-  config = with lib; mkIf cfg.enable {
-    systemd.services.quassel = {
-      description = "Quassel IRC daemon";
-      wantedBy = [ "multi-user.target" ];
+  config = with lib;
+    mkIf cfg.enable {
+      systemd.services.quassel = {
+        description = "Quassel IRC daemon";
+        wantedBy = [ "multi-user.target" ];
 
-      script = concatStringsSep " " [
-        "${quasselDaemon}/bin/quasselcore"
-        "--listen=${concatStringsSep "," cfg.bindAddresses}"
-        "--port=${toString cfg.port}"
-        "--configdir=/var/lib/quassel"
-        "--require-ssl"
-        "--ssl-cert=/var/lib/acme/${cfg.acmeHost}/full.pem"
-        "--loglevel=${cfg.logLevel}"
-      ];
+        script = concatStringsSep " " [
+          "${quasselDaemon}/bin/quasselcore"
+          "--listen=${concatStringsSep "," cfg.bindAddresses}"
+          "--port=${toString cfg.port}"
+          "--configdir=/var/lib/quassel"
+          "--require-ssl"
+          "--ssl-cert=/var/lib/acme/${cfg.acmeHost}/full.pem"
+          "--loglevel=${cfg.logLevel}"
+        ];
 
-      serviceConfig = {
-        Restart = "always";
-        User = "quassel";
-        Group = "quassel";
-        StateDirectory = "quassel";
-      };
-    };
-
-    users = {
-      users.quassel = {
-        isSystemUser = true;
-        group = "quassel";
+        serviceConfig = {
+          Restart = "always";
+          User = "quassel";
+          Group = "quassel";
+          StateDirectory = "quassel";
+        };
       };
 
-      groups.quassel = {};
+      users = {
+        users.quassel = {
+          isSystemUser = true;
+          group = "quassel";
+        };
+
+        groups.quassel = { };
+      };
     };
-  };
 }

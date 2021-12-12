@@ -14,7 +14,7 @@ let
   # location.
   mkBuildExpr = target:
     let
-      descend = expr: attr: "builtins.getAttr \"${attr}\" (${expr})";
+      descend = expr: attr: ''builtins.getAttr "${attr}" (${expr})'';
       targetExpr = foldl' descend "import ./. {}" target.__readTree;
       subtargetExpr = descend targetExpr target.__subtarget;
     in if target ? __subtarget then subtargetExpr else targetExpr;
@@ -22,14 +22,11 @@ let
   # Create a pipeline label from the targets tree location.
   mkLabel = target:
     let label = concatStringsSep "/" target.__readTree;
-    in if target ? __subtarget
-      then "${label}:${target.__subtarget}"
-      else label;
+    in if target ? __subtarget then "${label}:${target.__subtarget}" else label;
 
   # Create a pipeline step from a single target.
   mkStep = target: {
-    command = let
-      drvPath = builtins.unsafeDiscardStringContext target.drvPath;
+    command = let drvPath = builtins.unsafeDiscardStringContext target.drvPath;
     in lib.concatStringsSep " " [
       # First try to realise the drvPath of the target so we don't evaluate twice.
       # Nix has no concept of depending on a derivation file without depending on
@@ -40,21 +37,23 @@ let
       # there's no guarantee that the derivation file is not garbage collected.
       # To handle this case we fall back to an ordinary build if the derivation
       # file is missing.
-      "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
+      "|| (test ! -f '${drvPath}' && nix-build -E '${
+        mkBuildExpr target
+      }' --show-trace)"
     ];
     label = ":nix: ${mkLabel target}";
 
     # Skip build steps if their out path has already been built.
     skip = let
       shouldSkip = with builtins;
-        # Only skip in real Buildkite builds
+      # Only skip in real Buildkite builds
         (getEnv "BUILDKITE_BUILD_ID" != "") &&
         # Always build everything for the canon branch.
         (getEnv "BUILDKITE_BRANCH" != "refs/heads/canon") &&
         # Discard string context to avoid realising the store path during
         # pipeline construction.
         (pathExists (unsafeDiscardStringContext target.outPath));
-      in if shouldSkip then "Target was already built." else false;
+    in if shouldSkip then "Target was already built." else false;
   };
 
   # Protobuf check step which validates that changes to .proto files

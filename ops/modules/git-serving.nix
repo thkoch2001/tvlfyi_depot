@@ -10,8 +10,7 @@
 # TODO(tazjin): Move //web/cgit-taz configuration in here instead.
 { config, depot, lib, pkgs, ... }:
 
-let
-  cfg = config.services.depot.git-serving;
+let cfg = config.services.depot.git-serving;
 in {
   options.services.depot.git-serving = with lib; {
     enable = mkEnableOption "Enable cgit & josh configuration";
@@ -46,7 +45,10 @@ in {
         DynamicUser = true;
         StateDirectory = "josh";
         Restart = "always";
-        ExecStart = "${depot.third_party.josh}/bin/josh-proxy --no-background --local /var/lib/josh --port ${toString cfg.joshPort} --remote https://cl.tvl.fyi/";
+        ExecStart =
+          "${depot.third_party.josh}/bin/josh-proxy --no-background --local /var/lib/josh --port ${
+            toString cfg.joshPort
+          } --remote https://cl.tvl.fyi/";
       };
     };
   };

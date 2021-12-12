@@ -55,9 +55,8 @@ in {
     supportedFilesystems = [ "zfs" ];
 
     initrd = {
-      availableKernelModules = [
-        "igb" "xhci_pci" "nvme" "ahci" "usbhid" "usb_storage" "sr_mod"
-      ];
+      availableKernelModules =
+        [ "igb" "xhci_pci" "nvme" "ahci" "usbhid" "usb_storage" "sr_mod" ];
 
       # Enable SSH in the initrd so that we can enter disk encryption
       # passwords remotely.
@@ -66,14 +65,10 @@ in {
         ssh = {
           enable = true;
           port = 2222;
-          authorizedKeys =
-            depot.users.tazjin.keys.all
-            ++ depot.users.lukegb.keys.all
-            ++ [ depot.users.grfn.keys.whitby ];
+          authorizedKeys = depot.users.tazjin.keys.all
+            ++ depot.users.lukegb.keys.all ++ [ depot.users.grfn.keys.whitby ];
 
-          hostKeys = [
-            /etc/secrets/initrd_host_ed25519_key
-          ];
+          hostKeys = [ /etc/secrets/initrd_host_ed25519_key ];
         };
 
         # this will launch the zfs password prompt on login and kill the
@@ -84,9 +79,7 @@ in {
       };
     };
 
-    kernel.sysctl = {
-      "net.ipv4.tcp_congestion_control" = "bbr";
-    };
+    kernel.sysctl = { "net.ipv4.tcp_congestion_control" = "bbr"; };
 
     loader.grub = {
       enable = true;
@@ -130,10 +123,7 @@ in {
     useDHCP = false;
 
     # Don't use Hetzner's DNS servers.
-    nameservers = [
-      "8.8.8.8"
-      "8.8.4.4"
-    ];
+    nameservers = [ "8.8.8.8" "8.8.4.4" ];
 
     defaultGateway6 = {
       address = "fe80::1";
@@ -144,19 +134,18 @@ in {
     firewall.allowedUDPPorts = [ 8443 ];
 
     interfaces.enp196s0.useDHCP = true;
-    interfaces.enp196s0.ipv6.addresses = [
-      {
-        address = "2a01:04f8:0242:5b21::feed:edef:beef";
-        prefixLength = 64;
-      }
-    ];
+    interfaces.enp196s0.ipv6.addresses = [{
+      address = "2a01:04f8:0242:5b21::feed:edef:beef";
+      prefixLength = 64;
+    }];
   };
 
   # Generate an immutable /etc/resolv.conf from the nameserver settings
   # above (otherwise DHCP overwrites it):
   environment.etc."resolv.conf" = with lib; {
     source = pkgs.writeText "resolv.conf" ''
-      ${concatStringsSep "\n" (map (ns: "nameserver ${ns}") config.networking.nameservers)}
+      ${concatStringsSep "\n"
+      (map (ns: "nameserver ${ns}") config.networking.nameservers)}
       options edns0
     '';
   };
@@ -176,21 +165,13 @@ in {
       secret-key-files = /run/agenix/nix-cache-priv
     '';
 
-    trustedUsers = [
-      "grfn"
-      "lukegb"
-      "tazjin"
-      "sterni"
-    ];
+    trustedUsers = [ "grfn" "lukegb" "tazjin" "sterni" ];
 
     sshServe = {
       enable = true;
       keys = with depot.users;
-        tazjin.keys.all
-        ++ lukegb.keys.all
-        ++ [ grfn.keys.whitby ]
-        ++ sterni.keys.all
-        ;
+        tazjin.keys.all ++ lukegb.keys.all ++ [ grfn.keys.whitby ]
+        ++ sterni.keys.all;
     };
   };
 
@@ -203,52 +184,50 @@ in {
   };
 
   # Configure secrets for services that need them.
-  age.secrets =
-    let
-      secretFile = name: depot.ops.secrets."${name}.age";
-    in {
-      clbot.file = secretFile "clbot";
-      gerrit-queue.file = secretFile "gerrit-queue";
-      grafana.file = secretFile "grafana";
-      irccat.file = secretFile "irccat";
-      nix-cache-priv.file = secretFile "nix-cache-priv";
-      owothia.file = secretFile "owothia";
-      panettone.file = secretFile "panettone";
+  age.secrets = let secretFile = name: depot.ops.secrets."${name}.age";
+  in {
+    clbot.file = secretFile "clbot";
+    gerrit-queue.file = secretFile "gerrit-queue";
+    grafana.file = secretFile "grafana";
+    irccat.file = secretFile "irccat";
+    nix-cache-priv.file = secretFile "nix-cache-priv";
+    owothia.file = secretFile "owothia";
+    panettone.file = secretFile "panettone";
 
-      buildkite-agent-token = {
-        file = secretFile "buildkite-agent-token";
-        mode = "0440";
-        group = "buildkite-agents";
-      };
-
-      buildkite-graphql-token = {
-        file = secretFile "buildkite-graphql-token";
-        mode = "0440";
-        group = "buildkite-agents";
-      };
-
-      buildkite-besadii-config = {
-        file = secretFile "besadii";
-        mode = "0440";
-        group = "buildkite-agents";
-      };
-
-      gerrit-besadii-config = {
-        file = secretFile "besadii";
-        owner = "git";
-      };
-
-      clbot-ssh = {
-        file = secretFile "clbot-ssh";
-        owner = "clbot";
-      };
-
-      # Not actually a secret
-      nix-cache-pub = {
-        file = secretFile "nix-cache-pub";
-        mode = "0444";
-      };
+    buildkite-agent-token = {
+      file = secretFile "buildkite-agent-token";
+      mode = "0440";
+      group = "buildkite-agents";
     };
+
+    buildkite-graphql-token = {
+      file = secretFile "buildkite-graphql-token";
+      mode = "0440";
+      group = "buildkite-agents";
+    };
+
+    buildkite-besadii-config = {
+      file = secretFile "besadii";
+      mode = "0440";
+      group = "buildkite-agents";
+    };
+
+    gerrit-besadii-config = {
+      file = secretFile "besadii";
+      owner = "git";
+    };
+
+    clbot-ssh = {
+      file = secretFile "clbot-ssh";
+      owner = "clbot";
+    };
+
+    # Not actually a secret
+    nix-cache-pub = {
+      file = secretFile "nix-cache-pub";
+      mode = "0444";
+    };
+  };
 
   # Automatically collect garbage from the Nix store.
   services.depot.automatic-gc = {
@@ -281,16 +260,14 @@ in {
     enable = true;
     useLegacyConfig = false;
     config = {
-      LoadModule = [
-        "webadmin"
-        "adminlog"
-      ];
+      LoadModule = [ "webadmin" "adminlog" ];
 
       User.admin = {
         Admin = true;
         Pass.password = {
           Method = "sha256";
-          Hash = "bb00aa8239de484c2925b1c3f6a196fb7612633f001daa9b674f83abe7e1103f";
+          Hash =
+            "bb00aa8239de484c2925b1c3f6a196fb7612633f001daa9b674f83abe7e1103f";
           Salt = "TiB0Ochb1CrtpMTl;2;j";
         };
       };
@@ -314,7 +291,8 @@ in {
       gerrit_ssh_auth_username = "clbot";
       gerrit_ssh_auth_key = "/run/agenix/clbot-ssh";
 
-      irc_server = "localhost:${toString config.services.znc.config.Listener.l.Port}";
+      irc_server =
+        "localhost:${toString config.services.znc.config.Listener.l.Port}";
       irc_user = "tvlbot";
       irc_nick = "tvlbot";
 
@@ -355,15 +333,14 @@ in {
       config = {
         tcp.listen = ":4722"; # "ircc"
         irc = {
-          server = "localhost:${toString config.services.znc.config.Listener.l.Port}";
+          server =
+            "localhost:${toString config.services.znc.config.Listener.l.Port}";
           tls = false;
           nick = "tvlbot";
           # Note: irccat means 'ident' where it says 'realname', so
           # this is critical for connecting to ZNC.
           realname = "tvlbot";
-          channels = [
-            "#tvl"
-          ];
+          channels = [ "#tvl" ];
         };
       };
     };
@@ -380,11 +357,7 @@ in {
     # Configure backups to GleSYS
     restic = {
       enable = true;
-      paths = [
-        "/var/backup/postgresql"
-        "/var/lib/grafana"
-        "/var/lib/znc"
-      ];
+      paths = [ "/var/backup/postgresql" "/var/lib/grafana" "/var/lib/znc" ];
     };
 
     # Run autosubmit bot for Gerrit
@@ -403,24 +376,17 @@ in {
       hostnossl all all ::1/128  password
     '';
 
-    ensureDatabases = [
-      "panettone"
-    ];
+    ensureDatabases = [ "panettone" ];
 
     ensureUsers = [{
       name = "panettone";
-      ensurePermissions = {
-        "DATABASE panettone" = "ALL PRIVILEGES";
-      };
+      ensurePermissions = { "DATABASE panettone" = "ALL PRIVILEGES"; };
     }];
   };
 
   services.postgresqlBackup = {
     enable = true;
-    databases = [
-      "tvldb"
-      "panettone"
-    ];
+    databases = [ "tvldb" "panettone" ];
   };
 
   services.nix-serve = {
@@ -459,18 +425,16 @@ in {
     exporters.node = {
       enable = true;
 
-      enabledCollectors = [
-        "logind"
-        "processes"
-        "systemd"
-      ];
+      enabledCollectors = [ "logind" "processes" "systemd" ];
     };
 
     scrapeConfigs = [{
       job_name = "node";
       scrape_interval = "5s";
       static_configs = [{
-        targets = ["localhost:${toString config.services.prometheus.exporters.node.port}"];
+        targets = [
+          "localhost:${toString config.services.prometheus.exporters.node.port}"
+        ];
       }];
     }];
   };
@@ -497,7 +461,8 @@ in {
             api_url = "https://login.tvl.fyi/oidc/profile";
 
             # Give lukegb, grfn, tazjin "Admin" rights.
-            role_attribute_path = "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Editor'";
+            role_attribute_path =
+              "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Editor'";
 
             # Allow creating new Grafana accounts from OAuth accounts.
             allow_sign_up = true;
@@ -516,21 +481,27 @@ in {
       inherit (lib) toUpper mapAttrsToList nameValuePair concatStringsSep;
 
       # Take ["auth" "generic_oauth" "enabled"] and turn it into OPTIONS_GENERIC_OAUTH_ENABLED.
-      encodeName = raw: replaceStrings ["."] ["_"] (toUpper (concatStringsSep "_" raw));
+      encodeName = raw:
+        replaceStrings [ "." ] [ "_" ] (toUpper (concatStringsSep "_" raw));
 
       # Turn an option value into a string, but we want bools to be sensible strings and not "1" or "".
       optionToString = value:
         if (typeOf value) == "bool" then
           if value then "true" else "false"
-        else builtins.toString value;
+        else
+          builtins.toString value;
 
       # Turn an nested options attrset into a flat listToAttrs-compatible list.
-      encodeOptions = prefix: inp: concatLists (mapAttrsToList (name: value:
-        if (typeOf value) == "set"
-          then encodeOptions (prefix ++ [name]) value
-          else [ (nameValuePair (encodeName (prefix ++ [name])) (optionToString value)) ]
-        ) inp);
-    in listToAttrs (encodeOptions [] options);
+      encodeOptions = prefix: inp:
+        concatLists (mapAttrsToList (name: value:
+          if (typeOf value) == "set" then
+            encodeOptions (prefix ++ [ name ]) value
+          else
+            [
+              (nameValuePair (encodeName (prefix ++ [ name ]))
+                (optionToString value))
+            ]) inp);
+    in listToAttrs (encodeOptions [ ] options);
 
     provision = {
       enable = true;
@@ -542,14 +513,16 @@ in {
     };
   };
   # Contains GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET.
-  systemd.services.grafana.serviceConfig.EnvironmentFile = "/run/agenix/grafana";
+  systemd.services.grafana.serviceConfig.EnvironmentFile =
+    "/run/agenix/grafana";
 
-  security.sudo.extraRules = [
-    {
-      groups = ["wheel"];
-      commands = [{ command = "ALL"; options = ["NOPASSWD"]; }];
-    }
-  ];
+  security.sudo.extraRules = [{
+    groups = [ "wheel" ];
+    commands = [{
+      command = "ALL";
+      options = [ "NOPASSWD" ];
+    }];
+  }];
 
   users = {
     users.tazjin = {
@@ -568,9 +541,7 @@ in {
     users.grfn = {
       isNormalUser = true;
       extraGroups = [ "git" "wheel" ];
-      openssh.authorizedKeys.keys = [
-        depot.users.grfn.keys.whitby
-      ];
+      openssh.authorizedKeys.keys = [ depot.users.grfn.keys.whitby ];
     };
 
     users.isomer = {
@@ -582,7 +553,8 @@ in {
     users.riking = {
       isNormalUser = true;
       extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.riking.keys.u2f ++ depot.users.riking.keys.passworded;
+      openssh.authorizedKeys.keys = depot.users.riking.keys.u2f
+        ++ depot.users.riking.keys.passworded;
     };
 
     users.edef = {
@@ -628,7 +600,7 @@ in {
     };
 
     # Set up a user & group for git shenanigans
-    groups.git = {};
+    groups.git = { };
     users.git = {
       group = "git";
       isSystemUser = true;

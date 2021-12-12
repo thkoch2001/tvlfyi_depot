@@ -38,7 +38,8 @@ in {
         olcSuffix = "dc=tvl,dc=fyi";
         olcAccess = "to *  by * read";
         olcRootDN = "cn=admin,dc=tvl,dc=fyi";
-        olcRootPW = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$OfcgkOQ96VQ3aJj7NfA9vQ$oS6HQOkYl/bUYg4SejpltQYy7kvqx/RUxvoR4zo1vXU";
+        olcRootPW =
+          "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$OfcgkOQ96VQ3aJj7NfA9vQ$oS6HQOkYl/bUYg4SejpltQYy7kvqx/RUxvoR4zo1vXU";
       };
 
       "cn=module{0}".attrs = {
@@ -47,8 +48,12 @@ in {
       };
 
       "cn=schema".includes =
-        map (schema: "${pkgs.openldap}/etc/schema/${schema}.ldif")
-            [ "core" "cosine" "inetorgperson" "nis" ];
+        map (schema: "${pkgs.openldap}/etc/schema/${schema}.ldif") [
+          "core"
+          "cosine"
+          "inetorgperson"
+          "nis"
+        ];
     };
 
     # Contents are immutable at runtime, and adding user accounts etc.

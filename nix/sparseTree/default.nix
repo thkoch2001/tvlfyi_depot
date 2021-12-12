@@ -25,12 +25,13 @@ let
   # Count slashes in a path.
   #
   # Type: path -> int
-  depth = path: lib.pipe path [
-    toString
-    (builtins.split "/")
-    (builtins.filter builtins.isList)
-    builtins.length
-  ];
+  depth = path:
+    lib.pipe path [
+      toString
+      (builtins.split "/")
+      (builtins.filter builtins.isList)
+      builtins.length
+    ];
 
   # (Parent) directories will be created from deepest to shallowest
   # which should mean no conflicts are caused unless both a child
@@ -44,10 +45,12 @@ let
   makeSymlink = path:
     let
       withLeading = p: if builtins.substring 0 1 p == "/" then p else "/" + p;
-      fullPath =
-        /**/ if builtins.isPath path then path
-        else if builtins.isString path then (root + withLeading path)
-        else builtins.throw "Unsupported path type ${builtins.typeOf path}";
+      fullPath = if builtins.isPath path then
+        path
+      else if builtins.isString path then
+        (root + withLeading path)
+      else
+        builtins.throw "Unsupported path type ${builtins.typeOf path}";
       strPath = toString fullPath;
       contextPath = "${fullPath}";
       belowRoot = builtins.substring rootLength (-1) strPath;
@@ -58,13 +61,11 @@ let
     };
 
   symlinks = builtins.map makeSymlink fromDeepest;
-in
 
-# TODO(sterni): teach readTree to also read symlinked directories,
-# so we ln -sT instead of cp -aT.
-pkgs.runCommandNoCC "sparse-${builtins.baseNameOf root}" {} (
-  lib.concatMapStrings ({ src, dst }: ''
-    mkdir -p "$(dirname "$out${dst}")"
-    cp -aT --reflink=auto "${src}" "$out${dst}"
-  '') symlinks
-)
+  # TODO(sterni): teach readTree to also read symlinked directories,
+  # so we ln -sT instead of cp -aT.
+in pkgs.runCommandNoCC "sparse-${builtins.baseNameOf root}" { }
+(lib.concatMapStrings ({ src, dst }: ''
+  mkdir -p "$(dirname "$out${dst}")"
+  cp -aT --reflink=auto "${src}" "$out${dst}"
+'') symlinks)

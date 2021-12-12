@@ -1,6 +1,7 @@
 { depot, pkgs, ... }:
 
-let src = pkgs.fetchFromGitHub {
+let
+  src = pkgs.fetchFromGitHub {
     owner = "jech";
     repo = "cl-yacc";
     rev = "1334f5469251ffb3f8738a682dc8ee646cb26635";
@@ -9,7 +10,5 @@ let src = pkgs.fetchFromGitHub {
 in depot.nix.buildLisp.library {
   name = "cl-yacc";
 
-  srcs = map (f: src + ("/" + f)) [
-    "yacc.lisp"
-  ];
+  srcs = map (f: src + ("/" + f)) [ "yacc.lisp" ];
 }

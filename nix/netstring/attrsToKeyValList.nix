@@ -25,9 +25,6 @@
 #     foo -> bar
 #     x -> abc
 attrs:
-lib.concatStrings
-  (lib.mapAttrsToList
-    (k: v: depot.nix.netstring.fromString
-       ( depot.nix.netstring.fromString k
-       + depot.nix.netstring.fromString v))
-    attrs)
+lib.concatStrings (lib.mapAttrsToList (k: v:
+  depot.nix.netstring.fromString
+  (depot.nix.netstring.fromString k + depot.nix.netstring.fromString v)) attrs)

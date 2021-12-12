@@ -3,12 +3,7 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (pkgs)
-    mime-types
-    thttpd
-    writeShellScriptBin
-    writeText
-    ;
+  inherit (pkgs) mime-types thttpd writeShellScriptBin writeText;
 
   sourceFilter = writeShellScriptBin "cheddar-about" ''
     exec ${depot.tools.cheddar}/bin/cheddar --about-filter $@
@@ -63,12 +58,8 @@ let
          envp[envn++] = build_env( "PATH=%s", CGI_PATH );
      #ifdef CGI_LD_LIBRARY_PATH
   '';
-  thttpdCgit = thttpd.overrideAttrs(old: {
-    patches = [
-      ./thttpd_cgi_idx.patch
-      thttpdConfigPatch
-    ];
-  });
+  thttpdCgit = thttpd.overrideAttrs
+    (old: { patches = [ ./thttpd_cgi_idx.patch thttpdConfigPatch ]; });
 in writeShellScriptBin "cgit-launch" ''
   exec ${thttpdCgit}/bin/thttpd -D -C ${thttpdConfig}
 ''

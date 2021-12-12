@@ -1,19 +1,13 @@
 { depot, ... }:
 
 let
-  inherit (depot.nix)
-    buildLisp
-    ;
+  inherit (depot.nix) buildLisp;
 
   lib = buildLisp.library {
     name = "lib🕰️";
-    deps = [
-      depot.third_party.lisp.local-time
-    ];
+    deps = [ depot.third_party.lisp.local-time ];
 
-    srcs = [
-      ./lib.lisp
-    ];
+    srcs = [ ./lib.lisp ];
   };
 
   bin = buildLisp.program {
@@ -28,9 +22,7 @@ let
       lib
     ];
 
-    srcs = [
-      ./bin.lisp
-    ];
+    srcs = [ ./bin.lisp ];
 
     main = "🕰️.bin:🚂";
 
@@ -38,6 +30,4 @@ let
       "ecl" # refuses to create non-ASCII paths even on POSIX…
     ];
   };
-in bin // {
-  inherit lib;
-}
+in bin // { inherit lib; }

@@ -11,7 +11,5 @@ let
 
 in depot.nix.buildLisp.library {
   name = "parse-number";
-  srcs = map (f: src + ("/" + f)) [
-    "parse-number.lisp"
-  ];
+  srcs = map (f: src + ("/" + f)) [ "parse-number.lisp" ];
 }

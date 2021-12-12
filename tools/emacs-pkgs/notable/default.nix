@@ -5,11 +5,7 @@ depot.tools.emacs-pkgs.buildEmacsPackage rec {
   version = "1.0";
   src = ./notable.el;
 
-  externalRequires = epkgs: with epkgs; [
-    f ht s
-  ];
+  externalRequires = epkgs: with epkgs; [ f ht s ];
 
-  internalRequires = [
-    depot.tools.emacs-pkgs.dottime
-  ];
+  internalRequires = [ depot.tools.emacs-pkgs.dottime ];
 }

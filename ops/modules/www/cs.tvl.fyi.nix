@@ -1,9 +1,7 @@
 { config, ... }:
 
 {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config = {
     services.nginx.virtualHosts."cs.tvl.fyi" = {
@@ -19,7 +17,9 @@
 
         location / {
           proxy_set_header X-Sg-Auth "Anonymous";
-          proxy_pass http://localhost:${toString config.services.depot.sourcegraph.port};
+          proxy_pass http://localhost:${
+            toString config.services.depot.sourcegraph.port
+          };
         }
 
         location /users/Anonymous/settings {

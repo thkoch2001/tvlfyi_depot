@@ -4,18 +4,11 @@
 # Intended for manual updates, which keeps us honest with what we pull into our closure.
 
 let
-  buildRustCrate = attrs@{
-    edition ? "2018",
-    ...
-  }: pkgs.buildRustCrate (attrs // {
-    inherit
-      edition
-      ;
-   });
-in
+  buildRustCrate = attrs@{ edition ? "2018", ... }:
+    pkgs.buildRustCrate (attrs // { inherit edition; });
 
-# TODO: remove this giant with because it screws with the static analyzer
-with depot.third_party.rust-crates;
+  # TODO: remove this giant with because it screws with the static analyzer
+in with depot.third_party.rust-crates;
 
 {
   cfg-if = buildRustCrate {
@@ -215,15 +208,7 @@ with depot.third_party.rust-crates;
     pname = "imap";
     version = "2.4.0";
     crateName = "imap";
-    dependencies = [
-      base64
-      bufstream
-      chrono
-      imap-proto
-      lazy_static
-      nom
-      regex
-    ];
+    dependencies = [ base64 bufstream chrono imap-proto lazy_static nom regex ];
     sha256 = "1nj6x45qnid98nv637623rrh7imcxk0kad89ry8j5dkkgccvjyc0";
   };
 

@@ -1,18 +1,21 @@
 { depot, pkgs, ... }:
 
-
 let
   # https://developers.google.com/search/docs/advanced/structured-data/logo
   structuredData = {
     "@context" = "https://schema.org";
     "@type" = "Organisation";
     url = "https://tvl.su";
-    logo = "https://static.tvl.fyi/${depot.web.static.drvHash}/logo-animated.svg";
+    logo =
+      "https://static.tvl.fyi/${depot.web.static.drvHash}/logo-animated.svg";
   };
   index = depot.web.tvl.template {
     title = "TVL (The Virus Lounge) - Software consulting";
     content = builtins.readFile ./content.md;
-    extraFooter = "\n|\n © ООО ТВЛ";
+    extraFooter = ''
+
+      |
+       © ООО ТВЛ'';
 
     # TODO(tazjin): The `.tvl-logo` thing can probably go in the shared CSS.
     extraHead = ''
@@ -30,7 +33,7 @@ let
       </style>
     '';
   };
-in pkgs.runCommandNoCC "corp-website" {} ''
+in pkgs.runCommandNoCC "corp-website" { } ''
   mkdir $out
   cp ${index} $out/index.html
 ''

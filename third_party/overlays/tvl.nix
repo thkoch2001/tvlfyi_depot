@@ -13,13 +13,10 @@ self: super: {
     version = "6.5.1";
     nativeVersion = "0.22-milestone-3";
     sha256 = "0jmmipjh4fbsn92zpifa5cqg5ws2a4ha0s4jzqhrg4zs542x79sh";
-  }) {
-    java = self.jdk11;
-  };
+  }) { java = self.jdk11; };
 
-  clang-tools_11 = self.clang-tools.override {
-    llvmPackages = self.llvmPackages_11;
-  };
+  clang-tools_11 =
+    self.clang-tools.override { llvmPackages = self.llvmPackages_11; };
 
   # stdenv which uses clang, lld and libc++; full is a slight exaggeration,
   # we for example don't use LLVM's libunwind
@@ -29,8 +26,8 @@ self: super: {
     });
 
   # Add our Emacs packages to the fixpoint
-  emacsPackagesFor = emacs: (
-    (super.emacsPackagesFor emacs).overrideScope' (eself: esuper: {
+  emacsPackagesFor = emacs:
+    ((super.emacsPackagesFor emacs).overrideScope' (eself: esuper: {
       tvlPackages = depot.tools.emacs-pkgs // depot.third_party.emacs;
 
       # Use the notmuch from nixpkgs instead of from the Emacs
@@ -38,14 +35,12 @@ self: super: {
       notmuch = super.notmuch.emacs;
 
       # Build EXWM with the depot sources instead.
-      exwm = esuper.exwm.overrideAttrs(_: {
-        src = depot.path.origSrc + "/third_party/exwm";
-      });
-    })
-  );
+      exwm = esuper.exwm.overrideAttrs
+        (_: { src = depot.path.origSrc + "/third_party/exwm"; });
+    }));
 
   # dottime support for notmuch
-  notmuch = super.notmuch.overrideAttrs(old: {
+  notmuch = super.notmuch.overrideAttrs (old: {
     passthru = old.passthru // {
       patches = old.patches ++ [ ./patches/notmuch-dottime.patch ];
     };

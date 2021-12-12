@@ -14,8 +14,5 @@
     sha256 = "0khawy2n007yk97ls2qqpna4ly09v6rb6hw72nm16kzk3zbyzh17";
   };
 
-  cmakeFlags = [
-    "-DRC_ENABLE_GTEST=ON"
-    "-DRC_ENABLE_GMOCK=ON"
-  ];
+  cmakeFlags = [ "-DRC_ENABLE_GTEST=ON" "-DRC_ENABLE_GMOCK=ON" ];
 })

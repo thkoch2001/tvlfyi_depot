@@ -1,4 +1,4 @@
-{ depot, pkgs, ...}:
+{ depot, pkgs, ... }:
 
 let
   inherit (pkgs) runCommand;
@@ -24,20 +24,16 @@ in depot.nix.buildLisp.library {
     nibbles
   ];
 
-  srcs = [
-    {
-      # TODO(grfn): Figure out how to get this compiling with the assembly
-      # optimization eventually - see https://cl.tvl.fyi/c/depot/+/1333
-      sbcl = runCommand "package.lisp" {} ''
-        substitute ${src}/src/package.lisp $out \
-          --replace \#-ecl-bytecmp "" \
-          --replace '(pushnew :ironclad-assembly *features*)' ""
-      '';
-      default = getSrc "package.lisp";
-    }
-  ] ++ map getSrc [
-    "macro-utils.lisp"
-  ] ++ [
+  srcs = [{
+    # TODO(grfn): Figure out how to get this compiling with the assembly
+    # optimization eventually - see https://cl.tvl.fyi/c/depot/+/1333
+    sbcl = runCommand "package.lisp" { } ''
+      substitute ${src}/src/package.lisp $out \
+        --replace \#-ecl-bytecmp "" \
+        --replace '(pushnew :ironclad-assembly *features*)' ""
+    '';
+    default = getSrc "package.lisp";
+  }] ++ map getSrc [ "macro-utils.lisp" ] ++ [
     { sbcl = getSrc "opt/sbcl/fndb.lisp"; }
     { sbcl = getSrc "opt/sbcl/cpu-features.lisp"; }
     { sbcl = getSrc "opt/sbcl/x86oid-vm.lisp"; }

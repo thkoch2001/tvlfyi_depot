@@ -2,7 +2,8 @@
 # Seems to be unmaintained (since early 2021)
 { depot, pkgs, ... }:
 
-let src = pkgs.fetchFromGitHub {
+let
+  src = pkgs.fetchFromGitHub {
     owner = "EuAndreh";
     repo = "defclass-std";
     rev = "a4d32260a619eddf3a3e49df3af304f3c07ccec6";
@@ -10,12 +11,7 @@ let src = pkgs.fetchFromGitHub {
   };
 in depot.nix.buildLisp.library {
   name = "defclass-std";
-  deps = with depot.third_party.lisp; [
-    alexandria
-    anaphora
-  ];
+  deps = with depot.third_party.lisp; [ alexandria anaphora ];
 
-  srcs = map (f: src + ("/src/" + f)) [
-    "defclass-std.lisp"
-  ];
+  srcs = map (f: src + ("/src/" + f)) [ "defclass-std.lisp" ];
 }

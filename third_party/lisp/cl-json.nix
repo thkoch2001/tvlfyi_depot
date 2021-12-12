@@ -14,8 +14,7 @@ in buildLisp.library {
   name = "cl-json";
   deps = [ (buildLisp.bundled "asdf") ];
 
-  srcs = [ "${src}/cl-json.asd" ] ++
-  (map (f: src + ("/src/" + f)) [
+  srcs = [ "${src}/cl-json.asd" ] ++ (map (f: src + ("/src/" + f)) [
     "package.lisp"
     "common.lisp"
     "objects.lisp"

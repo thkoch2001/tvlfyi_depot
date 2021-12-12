@@ -3,13 +3,7 @@
 
 let
   inherit (builtins) attrValues mapAttrs;
-  inherit (lib)
-    concatStringsSep
-    mkEnableOption
-    mkIf
-    mkOption
-    types
-;
+  inherit (lib) concatStringsSep mkEnableOption mkIf mkOption types;
 
   cfg = config.services.depot.smtprelay;
   description = "Simple SMTP relay";
@@ -25,9 +19,9 @@ let
 
   # Creates the command line argument string for the service.
   prepareArgs = args:
-    concatStringsSep " "
-      (attrValues (mapAttrs (key: value: "-${key} '${toString value}'")
-                            (args // overrideArgs)));
+    concatStringsSep " " (attrValues
+      (mapAttrs (key: value: "-${key} '${toString value}'")
+        (args // overrideArgs)));
 in {
   options.services.depot.smtprelay = {
     enable = mkEnableOption description;
@@ -40,7 +34,8 @@ in {
   config = mkIf cfg.enable {
     systemd.services.smtprelay = {
       inherit description;
-      script = "${depot.third_party.smtprelay}/bin/smtprelay ${prepareArgs cfg.args}";
+      script =
+        "${depot.third_party.smtprelay}/bin/smtprelay ${prepareArgs cfg.args}";
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

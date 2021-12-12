@@ -6,8 +6,5 @@ buildLisp.library {
   name = "asdf-flv";
   deps = [ (buildLisp.bundled "asdf") ];
 
-  srcs = [
-    ./package.lisp
-    ./asdf-flv.lisp
-  ];
+  srcs = [ ./package.lisp ./asdf-flv.lisp ];
 }

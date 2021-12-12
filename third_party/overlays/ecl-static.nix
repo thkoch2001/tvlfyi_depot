@@ -24,12 +24,14 @@ self: super:
     patches = drv.patches ++ [
       (self.fetchpatch {
         name = "make-bytecode-fasl-concatenatable-1.patch";
-        url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/fbb75a0fc524e3280d89d8abf3be2ee9924955c8.patch";
+        url =
+          "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/fbb75a0fc524e3280d89d8abf3be2ee9924955c8.patch";
         sha256 = "0k6cx1bh835rl0j0wbbi5nj0aa2rwbyfyz5q2jw643iqc62l16kv";
       })
       (self.fetchpatch {
         name = "make-bytecode-fasl-concatenatable-2.patch";
-        url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/a8b1c0da43f89800d09c23a27832d0b4c9dcc1e8.patch";
+        url =
+          "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/a8b1c0da43f89800d09c23a27832d0b4c9dcc1e8.patch";
         sha256 = "18hl79lss0dxglpa34hszqb6ajvs8rs4b4g1qlrqrvgh1gs667n0";
       })
     ];

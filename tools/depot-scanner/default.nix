@@ -1,4 +1,4 @@
-{ depot, pkgs, ...}:
+{ depot, pkgs, ... }:
 
 let
   localProto = depot.nix.buildGo.grpc {
@@ -7,10 +7,9 @@ let
   };
 in depot.nix.buildGo.program {
   name = "depot-scanner";
-  srcs = [
-    ./main.go
-  ];
-  deps = [
-    localProto
-  ];
-} // { inherit localProto; meta.ci = false; }
+  srcs = [ ./main.go ];
+  deps = [ localProto ];
+} // {
+  inherit localProto;
+  meta.ci = false;
+}

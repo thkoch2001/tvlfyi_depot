@@ -2,9 +2,7 @@
 { config, ... }:
 
 {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config = {
     # Short link support (i.e. plain http://at) for users with a
@@ -19,14 +17,11 @@
       enableACME = true;
       forceSSL = true;
 
-      serverAliases = [
-        "atward.tvl.su"
-        "at.tvl.fyi"
-        "at.tvl.su"
-      ];
+      serverAliases = [ "atward.tvl.su" "at.tvl.fyi" "at.tvl.su" ];
 
       locations."/" = {
-        proxyPass = "http://localhost:${toString config.services.depot.atward.port}";
+        proxyPass =
+          "http://localhost:${toString config.services.depot.atward.port}";
       };
     };
   };

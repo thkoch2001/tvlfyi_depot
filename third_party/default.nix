@@ -24,29 +24,25 @@
   # be able to pass `specialArgs`. We depend on this because `depot`
   # needs to be partially evaluated in NixOS configuration before
   # module imports are resolved.
-  nixos = {
-    configuration,
-    specialArgs ? {},
-    system ? builtins.currentSystem,
-    ...
-  }:
-  let
-    eval = import "${pkgs.path}/nixos/lib/eval-config.nix" {
-      inherit specialArgs system;
-      modules = [ configuration ];
-    };
+  nixos =
+    { configuration, specialArgs ? { }, system ? builtins.currentSystem, ... }:
+    let
+      eval = import "${pkgs.path}/nixos/lib/eval-config.nix" {
+        inherit specialArgs system;
+        modules = [ configuration ];
+      };
 
-    # This is for `nixos-rebuild build-vm'.
-    vmConfig = (import "${pkgs.path}/nixos/lib/eval-config.nix" {
-      inherit specialArgs system;
-      modules = [
-        configuration
-        "${pkgs.path}/nixos/modules/virtualisation/qemu-vm.nix"
-      ];
-    }).config;
-  in {
-    inherit (eval) pkgs config options;
-    system = eval.config.system.build.toplevel;
-    vm = vmConfig.system.build.vm;
-  };
+      # This is for `nixos-rebuild build-vm'.
+      vmConfig = (import "${pkgs.path}/nixos/lib/eval-config.nix" {
+        inherit specialArgs system;
+        modules = [
+          configuration
+          "${pkgs.path}/nixos/modules/virtualisation/qemu-vm.nix"
+        ];
+      }).config;
+    in {
+      inherit (eval) pkgs config options;
+      system = eval.config.system.build.toplevel;
+      vm = vmConfig.system.build.vm;
+    };
 }

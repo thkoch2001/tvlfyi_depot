@@ -11,17 +11,9 @@ let
 in depot.third_party.naersk.buildPackage {
   inherit src;
 
-  buildInputs = with pkgs; [
-    libgit2
-    openssl
-    pkgconfig
-  ];
+  buildInputs = with pkgs; [ libgit2 openssl pkgconfig ];
 
-  cargoBuildOptions = x: x ++ [
-    "-p" "josh"
-    "-p" "josh-proxy"
-    "-p" "josh-ui"
-  ];
+  cargoBuildOptions = x: x ++ [ "-p" "josh" "-p" "josh-proxy" "-p" "josh-ui" ];
 
   overrideMain = x: {
     patches = [ ./0001-replace-mentions-of-master-with-canon.patch ];

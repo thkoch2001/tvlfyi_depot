@@ -7,7 +7,5 @@ depot.nix.buildGo.external {
     rev = "e9b2fee46413994441b28dfca259d911d963dfed";
   };
 
-  deps = with depot.third_party; [
-    gopkgs."golang.org".x.sys.unix.gopkg
-  ];
+  deps = with depot.third_party; [ gopkgs."golang.org".x.sys.unix.gopkg ];
 }

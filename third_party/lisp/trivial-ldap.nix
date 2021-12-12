@@ -1,6 +1,7 @@
 { depot, pkgs, ... }:
 
-let src = pkgs.fetchFromGitHub {
+let
+  src = pkgs.fetchFromGitHub {
     owner = "rwiker";
     repo = "trivial-ldap";
     rev = "3b8f1ff85f29ea63e6ab2d0d27029d68b046faf8";
@@ -9,16 +10,9 @@ let src = pkgs.fetchFromGitHub {
 in depot.nix.buildLisp.library {
   name = "trivial-ldap";
 
-  deps = with depot.third_party.lisp; [
-    usocket
-    cl-plus-ssl
-    cl-yacc
-  ];
+  deps = with depot.third_party.lisp; [ usocket cl-plus-ssl cl-yacc ];
 
-  srcs = map (f: src + ("/" + f)) [
-    "package.lisp"
-    "trivial-ldap.lisp"
-  ];
+  srcs = map (f: src + ("/" + f)) [ "package.lisp" "trivial-ldap.lisp" ];
 
   brokenOn = [
     "ecl" # dynamic cffi

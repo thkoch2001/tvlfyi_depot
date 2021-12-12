@@ -2,21 +2,11 @@
 
 let
   inherit (depot.nix.runTestsuite)
-    runTestsuite
-    it
-    assertEq
-    assertThrows
-    assertDoesNotThrow
-    ;
+    runTestsuite it assertEq assertThrows assertDoesNotThrow;
 
   inherit (depot.nix.utils)
-    isDirectory
-    realPathIsDirectory
-    isRegularFile
-    isSymlink
-    pathType
-    storePathName
-    ;
+    isDirectory realPathIsDirectory isRegularFile isSymlink pathType
+    storePathName;
 
   assertUtilsPred = msg: act: exp: [
     (assertDoesNotThrow "${msg} does not throw" act)
@@ -25,12 +15,11 @@ let
 
   pathPredicates = it "judges paths correctly" (lib.flatten [
     # isDirectory
-    (assertUtilsPred "directory isDirectory"
-      (isDirectory ./directory) true)
-    (assertUtilsPred "symlink not isDirectory"
-      (isDirectory ./symlink-directory) false)
-    (assertUtilsPred "file not isDirectory"
-      (isDirectory ./directory/file) false)
+    (assertUtilsPred "directory isDirectory" (isDirectory ./directory) true)
+    (assertUtilsPred "symlink not isDirectory" (isDirectory ./symlink-directory)
+      false)
+    (assertUtilsPred "file not isDirectory" (isDirectory ./directory/file)
+      false)
     # realPathIsDirectory
     (assertUtilsPred "directory realPathIsDirectory"
       (realPathIsDirectory ./directory) true)
@@ -39,25 +28,22 @@ let
     (assertUtilsPred "realPathIsDirectory resolves chained symlinks"
       (realPathIsDirectory ./symlink-symlink-directory) true)
     # isRegularFile
-    (assertUtilsPred "file isRegularFile"
-      (isRegularFile ./directory/file) true)
-    (assertUtilsPred "symlink not isRegularFile"
-      (isRegularFile ./symlink-file) false)
-    (assertUtilsPred "directory not isRegularFile"
-      (isRegularFile ./directory) false)
+    (assertUtilsPred "file isRegularFile" (isRegularFile ./directory/file) true)
+    (assertUtilsPred "symlink not isRegularFile" (isRegularFile ./symlink-file)
+      false)
+    (assertUtilsPred "directory not isRegularFile" (isRegularFile ./directory)
+      false)
     # isSymlink
-    (assertUtilsPred "symlink to file isSymlink"
-      (isSymlink ./symlink-file) true)
+    (assertUtilsPred "symlink to file isSymlink" (isSymlink ./symlink-file)
+      true)
     (assertUtilsPred "symlink to directory isSymlink"
       (isSymlink ./symlink-directory) true)
     (assertUtilsPred "symlink to symlink isSymlink"
       (isSymlink ./symlink-symlink-file) true)
-    (assertUtilsPred "symlink to missing file isSymlink"
-      (isSymlink ./missing) true)
-    (assertUtilsPred "directory not isSymlink"
-      (isSymlink ./directory) false)
-    (assertUtilsPred "file not isSymlink"
-      (isSymlink ./directory/file) false)
+    (assertUtilsPred "symlink to missing file isSymlink" (isSymlink ./missing)
+      true)
+    (assertUtilsPred "directory not isSymlink" (isSymlink ./directory) false)
+    (assertUtilsPred "file not isSymlink" (isSymlink ./directory/file) false)
     # missing files throw
     (assertThrows "isDirectory throws on missing file"
       (isDirectory ./does-not-exist))
@@ -86,18 +72,17 @@ let
     builtins.unsafeDiscardStringContext depot.tools.cheddar.outPath;
 
   storePathNameTests = it "correctly gets the basename of a store path" [
-    (assertEq "base name of a derivation"
-      (storePathName depot.tools.cheddar) depot.tools.cheddar.name)
+    (assertEq "base name of a derivation" (storePathName depot.tools.cheddar)
+      depot.tools.cheddar.name)
     (assertEq "base name of a store path string"
       (storePathName cheddarStorePath) depot.tools.cheddar.name)
     (assertEq "base name of a path within a store path"
       (storePathName "${cheddarStorePath}/bin/cheddar") "cheddar")
-    (assertEq "base name of a path"
-      (storePathName ../default.nix) "default.nix")
+    (assertEq "base name of a path" (storePathName ../default.nix)
+      "default.nix")
   ];
-in
 
-runTestsuite "nix.utils" [
+in runTestsuite "nix.utils" [
   pathPredicates
   symlinkPathTypeTests
   storePathNameTests

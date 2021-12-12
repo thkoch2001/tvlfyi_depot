@@ -39,8 +39,7 @@ let
     outputHashMode = "recursive";
     outputHash = "07wxmgljs8v0pmnryqjz6dr6jl93x3023y8zx3al5314mmqkpaan";
   };
-in
-pkgs.stdenvNoCC.mkDerivation {
+in pkgs.stdenvNoCC.mkDerivation {
   inherit name version meta;
 
   src = overlay;

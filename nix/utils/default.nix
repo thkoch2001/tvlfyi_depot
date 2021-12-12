@@ -17,30 +17,29 @@ let
        => "hello"
   */
   storePathName = p:
-    if lib.isDerivation p
-    then p.name
-    else if builtins.isPath p
-    then builtins.baseNameOf p
-    else if builtins.isString p
-    then
+    if lib.isDerivation p then
+      p.name
+    else if builtins.isPath p then
+      builtins.baseNameOf p
+    else if builtins.isString p then
       let
         # strip leading storeDir and trailing slashes
-        noStoreDir = lib.removeSuffix "/"
-          (lib.removePrefix "${builtins.storeDir}/" p);
+        noStoreDir =
+          lib.removeSuffix "/" (lib.removePrefix "${builtins.storeDir}/" p);
         # a basename of a child of a store path isn't really
         # referring to a store path, so removing the string
         # context is safe (e. g. "hello" for "${hello}/bin/hello").
-        basename = builtins.unsafeDiscardStringContext
-          (builtins.baseNameOf p);
-      in
+        basename = builtins.unsafeDiscardStringContext (builtins.baseNameOf p);
         # If p is a direct child of storeDir, we need to remove
         # the leading hash as well to make sure that:
         # `storePathName drv == storePathName (toString drv)`.
-        if noStoreDir == basename
-        then builtins.substring 33 (-1) basename
-        else basename
-    else builtins.throw "Don't know how to get (base)name of "
-      + lib.generators.toPretty {} p;
+      in if noStoreDir == basename then
+        builtins.substring 33 (-1) basename
+      else
+        basename
+    else
+      builtins.throw "Don't know how to get (base)name of "
+      + lib.generators.toPretty { } p;
 
   /* Query the type of a path exposing the same information as would be by
      `builtins.readDir`, but for a single, specific target path.
@@ -105,7 +104,7 @@ let
       # We need to call toString to prevent unsafeDiscardStringContext
       # from importing a path into store which messes with base- and
       # dirname of course.
-      path'= builtins.unsafeDiscardStringContext (toString path);
+      path' = builtins.unsafeDiscardStringContext (toString path);
       # To read the containing directory we absolutely need
       # to keep the string context, otherwise a derivation
       # would not be realized before our check (at eval time)
@@ -120,19 +119,20 @@ let
       # TODO(sterni): is there a way to check reliably if the symlink target exists?
       isSymlinkDir = builtins.pathExists (path' + "/.");
     in {
-      ${thisPathType} =
-        /**/ if thisPathType != "symlink" then true
-        else if isSymlinkDir              then "directory"
-        else                                   "regular-or-missing";
+      ${thisPathType} = if thisPathType != "symlink" then
+        true
+      else if isSymlinkDir then
+        "directory"
+      else
+        "regular-or-missing";
     };
 
   pathType' = path:
-    let
-      p = pathType path;
-    in
-      if p ? missing
-      then builtins.throw "${lib.generators.toPretty {} path} does not exist"
-      else p;
+    let p = pathType path;
+    in if p ? missing then
+      builtins.throw "${lib.generators.toPretty { } path} does not exist"
+    else
+      p;
 
   /* Check whether the given path is a directory.
      Throws if the path in question doesn't exist.
@@ -150,9 +150,9 @@ let
 
      Type: path(-like) -> bool
   */
-  realPathIsDirectory = path: let
-    pt = pathType' path;
-  in pt ? directory || pt.symlink or null == "directory";
+  realPathIsDirectory = path:
+    let pt = pathType' path;
+    in pt ? directory || pt.symlink or null == "directory";
 
   /* Check whether the given path is a regular file.
      Throws if the path in question doesn't exist.
@@ -169,12 +169,6 @@ let
   isSymlink = path: pathType' path ? symlink;
 
 in {
-  inherit
-    storePathName
-    pathType
-    isDirectory
-    realPathIsDirectory
-    isRegularFile
-    isSymlink
-    ;
+  inherit storePathName pathType isDirectory realPathIsDirectory isRegularFile
+    isSymlink;
 }

@@ -5,9 +5,7 @@
 depot.nix.buildLisp.library {
   name = "sclf";
 
-  deps = [
-    (depot.nix.buildLisp.bundled "sb-posix")
-  ];
+  deps = [ (depot.nix.buildLisp.bundled "sb-posix") ];
 
   srcs = [
     ./package.lisp
@@ -21,8 +19,5 @@ depot.nix.buildLisp.library {
   ];
 
   # TODO(sterni): implement OS interaction for ECL and CCL
-  brokenOn = [
-    "ecl"
-    "ccl"
-  ];
+  brokenOn = [ "ecl" "ccl" ];
 }

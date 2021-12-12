@@ -22,7 +22,8 @@
     # TODO(tazjin): Find a link to the upstream issue and see if
     # they've sorted it after ~20.09
     systemd.services.fix-nginx = {
-      script = "${pkgs.coreutils}/bin/chown -f -R nginx: /var/spool/nginx /var/cache/nginx";
+      script =
+        "${pkgs.coreutils}/bin/chown -f -R nginx: /var/spool/nginx /var/cache/nginx";
 
       serviceConfig = {
         User = "root";
@@ -32,9 +33,7 @@
 
     systemd.timers.fix-nginx = {
       wantedBy = [ "multi-user.target" ];
-      timerConfig = {
-        OnCalendar = "minutely";
-      };
+      timerConfig = { OnCalendar = "minutely"; };
     };
   };
 }

@@ -1,9 +1,7 @@
 { depot, ... }:
 
 {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config = {
     services.nginx.virtualHosts."todo.tvl.fyi" = {

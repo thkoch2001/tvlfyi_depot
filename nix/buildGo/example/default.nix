@@ -8,15 +8,13 @@
 # users a quick introduction to how to use buildGo.
 
 let
-  buildGo = import ../default.nix {};
+  buildGo = import ../default.nix { };
 
   # Example use of buildGo.package, which creates an importable Go
   # package from the specified source files.
   examplePackage = buildGo.package {
     name = "example";
-    srcs = [
-      ./lib.go
-    ];
+    srcs = [ ./lib.go ];
   };
 
   # Example use of buildGo.proto, which generates a Go library from a
@@ -32,16 +30,9 @@ let
 in buildGo.program {
   name = "example";
 
-  srcs = [
-    ./main.go
-  ];
+  srcs = [ ./main.go ];
 
-  deps = [
-    examplePackage
-    exampleProto
-  ];
+  deps = [ examplePackage exampleProto ];
 
-  x_defs = {
-    "main.Flag" = "successfully";
-  };
+  x_defs = { "main.Flag" = "successfully"; };
 }
