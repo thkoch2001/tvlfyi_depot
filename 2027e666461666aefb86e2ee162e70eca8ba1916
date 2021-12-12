@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75501e96_4d31a2d1",
+        "filename": "corp/website/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-12T21:17:11Z",
+      "side": 1,
+      "message": "That reformat is /really/ questionable.",
+      "revId": "2027e666461666aefb86e2ee162e70eca8ba1916",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fb3d2ce_32d69c0d",
+        "filename": "fun/owothia/pkg.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-12T21:17:11Z",
+      "side": 1,
+      "message": "This file is generated, not sure how we would handle that?",
+      "revId": "2027e666461666aefb86e2ee162e70eca8ba1916",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fe6eabc_e2373f88",
+        "filename": "fun/🕰️/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-12T21:17:11Z",
+      "side": 1,
+      "message": "Don\u0027t like such implosions too much.",
+      "revId": "2027e666461666aefb86e2ee162e70eca8ba1916",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
