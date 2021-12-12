@@ -205,7 +205,7 @@ in {
   # Configure secrets for services that need them.
   age.secrets =
     let
-      secretFile = name: "${depot.path.origSrc}/ops/secrets/${name}.age";
+      secretFile = name: depot.ops.secrets."${name}.age";
     in {
       clbot.file = secretFile "clbot";
       gerrit-queue.file = secretFile "gerrit-queue";
