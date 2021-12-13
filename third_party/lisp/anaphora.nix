@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (464bbc feat(sterni/aoc/2021): day 9 solution)
 { depot, pkgs, ... }:
 
 let src = pkgs.fetchFromGitHub {
@@ -14,5 +15,22 @@ in depot.nix.buildLisp.library {
     "early.lisp"
     "symbolic.lisp"
     "anaphora.lisp"
+=======
+{ depot, ... }:
+
+let
+  src = builtins.fetchGit {
+    url = "https://github.com/tokenrove/anaphora.git";
+    rev = "aeace4c68cf55098a67112750b28f8f2dc6d0e30";
+  };
+in depot.nix.buildLisp.library {
+  name = "anaphora";
+  deps = [];
+  srcs = [
+    "${src}/packages.lisp"
+    "${src}/early.lisp"
+    "${src}/symbolic.lisp"
+    "${src}/anaphora.lisp"
+>>>>>>> BRANCH (e8c34a playbooks: add hip_opening_challenge)
   ];
 }
