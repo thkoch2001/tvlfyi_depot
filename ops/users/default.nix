@@ -149,4 +149,9 @@
     email = "asmundo@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$oQvNAAGjshz5Cl8XW5i31A$eurlL9a7e5Ttw5JpTY9tOjSZyivWQsr1iCdTqshdfQU";
   }
+  {
+    username = "wpcarro";
+    email = "wpcarro@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$NQdBVPNwh2ioDq9zWfMusA$2cABJGI8cU2JZirnVU5E5C28sTiePkiOPEAaqNUp/Fk";
+  }
 ]
