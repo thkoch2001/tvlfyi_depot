@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: exactness
+# key: $x
+# --
+$Exact<$Call<typeof $1>>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (464bbc feat(sterni/aoc/2021): day 9 solution)
 # This file defines the root of all external dependency imports (i.e.
 # third-party code) in the TVL package tree.
 #
@@ -50,3 +51,10 @@
     vm = vmConfig.system.build.vm;
   };
 }
+=======
+{ pkgs, briefcase, depot, ... }:
+
+# Exposing these to be available as briefcase.third_party.pkgs for example.
+
+{ inherit pkgs briefcase depot; }
+>>>>>>> BRANCH (6123e9 playbooks: add hip_opening_challenge)

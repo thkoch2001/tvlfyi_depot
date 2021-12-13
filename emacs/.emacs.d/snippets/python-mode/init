@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: dunder init
+# key: ctor
+# --
+def __init__(self$1):
+    $2
