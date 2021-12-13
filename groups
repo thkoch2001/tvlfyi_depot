@@ -1,6 +1,7 @@
 # UUID                                  	Group Name
 #
 0cb622adfecc5b435d358df11d33cf321a4eaab0	depot-ci-bots
+3f0e84e07039e9945279bb6290b764c9e64059f9	depot-subtree-stagers
 85669a3f350abce54c748ede2fc3e78c414c51a6	depot-interventions
 c484414b5354700167d5a9ae2bbf082b9f1bedf5	Administrators
 d2a10fc7ae4367772614cc886e8d6cd256b5bbf7	depot-autosubmit
