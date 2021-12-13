@@ -239,8 +239,7 @@ day13Folds ← ParseFolds 1 ⊑ day13Input
 
 PerformAllFolds ← {(-1)⊸⊑(<𝕩) {(𝕨 _Fold)´𝕩}` 𝕨}
 DotMatrix ← {
-  width ← 1+⌈´⊑¨𝕩
-  height ← 1+⌈´1⊸⊑¨𝕩
+  ⟨width, height⟩ ← 1+⌈´𝕩
   {𝕩? '█';' '}¨ height‿width⥊≠¨⊔((⊣+(width⊸×)∘⊢)´)¨ 𝕩
 }
 
