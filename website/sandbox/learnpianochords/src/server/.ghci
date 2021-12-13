@@ -1,0 +1,7 @@
+:set prompt "> "
+:set -Wall
+
+:set -XOverloadedStrings
+:set -XNoImplicitPrelude
+:set -XRecordWildCards
+:set -XTypeApplications

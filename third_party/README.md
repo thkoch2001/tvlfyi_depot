@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (464bbc feat(sterni/aoc/2021): day 9 solution)
 Third-Party Code
 ================
 
@@ -11,3 +12,10 @@ Code under this folder is one of the following:
    repository via [Copybara][].
 
 [Copybara]: https://github.com/google/copybara
+=======
+# third_party
+
+The `third_party` directory hosts Nix expressions that package software that I
+cannot or have not found in other Nix package repositorys like `nixpkgs` or
+`depot`.
+>>>>>>> BRANCH (6123e9 playbooks: add hip_opening_challenge)
