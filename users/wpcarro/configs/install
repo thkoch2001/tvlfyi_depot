@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+configs="$BRIEFCASE/configs"
+
+(cd "$configs" && stow --target="$HOME" .)
