@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e2d5869_24270dfc",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T12:52:15Z",
+      "side": 0,
+      "message": "can we add kitty.terminfo too?\n\nyes I\u0027m too lazy to make my own cl",
+      "revId": "3a410a78df98fbace3fb3d6c6a570058a2758811",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
