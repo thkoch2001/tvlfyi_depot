@@ -445,6 +445,7 @@ in {
     rxvt_unicode.terminfo
     foot.terminfo
     kitty.terminfo
+    alacritty.terminfo
     vim
     zfs
     zfstools
