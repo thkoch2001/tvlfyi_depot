@@ -440,6 +440,8 @@ in {
     htop
     nano
     rxvt_unicode.terminfo
+    foot.terminfo
+    kitty.terminfo
     vim
     zfs
     zfstools
