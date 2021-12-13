@@ -4,7 +4,7 @@
 ;; translations :: '(translation ...)
 ;; roots :: '(root ...)
 
-(require 'russian-defs)
+(require 'russian)
 
 (define-russian-words
   ;; 1-50

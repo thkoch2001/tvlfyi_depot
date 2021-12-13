@@ -21,9 +21,9 @@
   "Merge two Russian word definitions together. If no previous
   definition exists, only the new one will be returned."
   (if (not previous) new
-    (assert (equal (russian-word-word previous)
-                   (russian-word-word new))
-            "different words passed into merge function")
+    (cl-assert (equal (russian-word-word previous)
+                      (russian-word-word new))
+               "different words passed into merge function")
     (make-russian-word :word (russian-word-word previous)
                        :translations (-concat (russian-word-translations previous)
                                               (russian-word-translations new))
