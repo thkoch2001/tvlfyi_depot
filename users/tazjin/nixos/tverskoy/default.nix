@@ -367,6 +367,10 @@ in lib.fix(self: {
         ];
       };
 
+      home.activation.screenshots = lib.hm.dag.entryAnywhere ''
+        $DRY_RUN_CMD mkdir -p $HOME/screenshots
+      '';
+
       programs.git = {
         enable = true;
         userName = "Vincent Ambo";
