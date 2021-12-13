@@ -186,3 +186,63 @@ LargestBasinsProduct ← {×´ 3↑ ∨ 1↓ ≠¨ ⊔⥊Basins 𝕩}
 ! 1134 = LargestBasinsProduct day9ExampleInput
 
 •Out "Day 9.2: "∾•Fmt LargestBasinsProduct day9Input
+
+#
+# 2021-12-13
+#
+
+SplitFoldingInstructions ← ("fold along"⊸(⊣≡≠⊸↑)¨⊔⊢)∘(0⊸(≠⟜≠¨/⊢))
+day13ExampleInput ← SplitFoldingInstructions ⟨
+  "6,10",
+  "0,14",
+  "9,10",
+  "0,3",
+  "10,4",
+  "4,11",
+  "6,0",
+  "6,12",
+  "4,1",
+  "0,13",
+  "10,12",
+  "3,4",
+  "3,0",
+  "8,4",
+  "1,10",
+  "2,14",
+  "8,10",
+  "9,0",
+  "",
+  "fold along y=7",
+  "fold along x=5",
+⟩
+day13Input ← SplitFoldingInstructions ReadInput 13
+
+ParseDots ← ReadDec¨∘(','⊸SplitOn)¨
+ParseFolds ← (⊑∘'y'⊸∊≍ReadDec∘(IsAsciiNum/⊢))¨
+day13ExampleDots ← ParseDots ⊑ day13ExampleInput
+
+# part 1
+
+# 𝕨=0 => x, 𝕨=1 => y
+# 𝕩 is coordinate to fold around
+# 𝕗 is input dot list (see ParseDots)
+_Fold ← {⍷∘((𝕩⊸(((2⊸×⊣)-⊢)⌊⊢)∘⊑≍1⊸⊑)¨⌾(⌽¨⍟𝕨)) 𝕗}
+
+! 17 = ≠ 1 day13ExampleDots _Fold 7
+
+day13Dots ← ParseDots ⊑ day13Input
+day13Folds ← ParseFolds 1 ⊑ day13Input
+
+•Out "Day 13.1: "∾•Fmt ≠ (day13Dots _Fold)´ ⊑day13Folds
+
+# part 2
+
+PerformAllFolds ← {(-1)⊸⊑(<𝕩) {(𝕨 _Fold)´𝕩}` 𝕨}
+DotMatrix ← {
+  width ← 1+⌈´⊑¨𝕩
+  height ← 1+⌈´1⊸⊑¨𝕩
+  {𝕩? '█';' '}¨ height‿width⥊≠¨⊔((⊣+(width⊸×)∘⊢)´)¨ 𝕩
+}
+
+•Out "Day 13.2:"
+•Out •Fmt DotMatrix day13Folds PerformAllFolds day13Dots
