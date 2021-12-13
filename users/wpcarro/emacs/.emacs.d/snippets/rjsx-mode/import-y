@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: import y
+# key: iy
+# --
+import '$1'

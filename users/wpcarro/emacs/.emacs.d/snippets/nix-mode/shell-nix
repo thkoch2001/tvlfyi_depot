@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: shell.nix boilerplate
+# key: import
+# --
+let
+  briefcase = with import <briefcase> {};
+  pkgs = briefcase.third_party.pkgs;
+in stdenv.mkDerivation {
+  name = "$1";
+  buildInputs = [
+    $2
+  ];
+}
