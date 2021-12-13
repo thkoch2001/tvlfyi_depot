@@ -13,8 +13,12 @@ pkgs.makeOverridable({ emacs ? pkgs.emacsGcc }:
 let
   emacsWithPackages = (pkgs.emacsPackagesGen emacs).emacsWithPackages;
 
+  # If switching telega versions, use this variable because it will
+  # keep the version check, binary path and so on in sync.
+  currentTelega = epkgs: epkgs.melpaPackages.telega;
+
   # $PATH for binaries that need to be available to Emacs
-  emacsBinPath = lib.makeBinPath [ pkgs.emacsPackages.telega ];
+  emacsBinPath = lib.makeBinPath [ (currentTelega pkgs.emacsPackages) ];
 
   identity = x: x;
 
@@ -75,7 +79,6 @@ let
     sly
     string-edit
     swiper
-    telega
     telephone-line
     terraform-mode
     toml-mode
@@ -90,6 +93,9 @@ let
     xelb
     yaml-mode
     yasnippet
+
+    # Wonky stuff
+    (currentTelega epkgs)
 
     # Custom depot packages (either ours, or overridden ones)
     tvlPackages.dottime
