@@ -105,6 +105,28 @@ let
     tvlPackages.term-switcher
     tvlPackages.tvl
   ])));
+
+  # Tired of telega.el runtime breakages through tdlib
+  # incompatibility. Target to make that a build failure instead.
+  tdlibCheck =
+    let
+      tgEmacs = emacsWithPackages(epkgs: [ (currentTelega epkgs) ]);
+      verifyTdlibVersion = builtins.toFile "verify-tdlib-version.el" ''
+        (require 'telega)
+        (defvar tdlib-version "${pkgs.tdlib.version}")
+        (when (or (version< tdlib-version
+                            telega-tdlib-min-version)
+                  (and telega-tdlib-max-version
+                        (version< telega-tdlib-max-version
+                                  (plist-get telega--options :version))))
+           (message "Found TDLib version %s, but require %s to %s"
+                   tdlib-version telega-tdlib-min-version telega-tdlib-max-version)
+          (kill-emacs 1))
+       '';
+    in pkgs.runCommandNoCC "tdlibCheck" {} ''
+      export PATH="${emacsBinPath}:$PATH"
+      ${tgEmacs}/bin/emacs --script ${verifyTdlibVersion} && touch $out
+    '';
 in lib.fix(self: l: f: pkgs.writeShellScriptBin "tazjins-emacs" ''
   export PATH="${emacsBinPath}:$PATH"
   exec ${tazjinsEmacs f}/bin/emacs \
@@ -137,5 +159,10 @@ in lib.fix(self: l: f: pkgs.writeShellScriptBin "tazjins-emacs" ''
         ${if l != null then "--directory ${l}" else ""} \
         --eval "(require 'init)" $@
     '';
+
+    # Expose telega/tdlib version check as a target that is built in
+    # CI.
+    inherit tdlibCheck;
+    meta.targets = [ "tdlibCheck" ];
   }) null identity
 ) {}
