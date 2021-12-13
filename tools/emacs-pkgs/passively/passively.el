@@ -102,6 +102,7 @@ not be displayed again."
   (interactive)
   (if passively--display-timer
       (error "passively: Already running!")
+    (passively--load-known-terms)
     (setq passively--display-timer
           (run-with-idle-timer passively-show-after-idle-for t
                                #'passively--display-random-term))
