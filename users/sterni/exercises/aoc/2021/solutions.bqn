@@ -21,20 +21,20 @@ _fix ← {𝕩 𝕊∘⊢⍟≢ 𝔽 𝕩}
 
 # part 1
 
-day1ExampleData ← 199‿200‿208‿210‿200‿207‿240‿269‿260‿263
+day1ExampleInput ← 199‿200‿208‿210‿200‿207‿240‿269‿260‿263
 day1Input ← ReadDec¨ReadInput 1
 
 # NB: Because distance from the ground is never smaller than zero, it's
 # no problem that nudge inserts a zero at the end of the right list
 PositiveDeltaCount ← +´∘(⊢<«)+˝˘∘↕
 
-! 7 = 1 PositiveDeltaCount day1ExampleData
+! 7 = 1 PositiveDeltaCount day1ExampleInput
 
 •Out "Day 1.1: "∾•Fmt 1 PositiveDeltaCount day1Input
 
 # part 2
 
-! 5 = 3 PositiveDeltaCount day1ExampleData
+! 5 = 3 PositiveDeltaCount day1ExampleInput
 
 •Out "Day 1.2: "∾•Fmt 3 PositiveDeltaCount day1Input
 
@@ -44,7 +44,7 @@ PositiveDeltaCount ← +´∘(⊢<«)+˝˘∘↕
 
 # part 1
 
-day2ExampleData ← ⟨
+day2ExampleInput ← ⟨
   "forward 5",
   "down 5",
   "forward 8",
@@ -59,7 +59,7 @@ ParseSubmarineCommand ← (((↕2)⊸((((-1)⊸⋆)∘(2⊸|))×(=⟜(⌊∘(÷�
 
 SubmarineDestProduct ← {×´+´ParseSubmarineCommand¨𝕩}
 
-! 150 = SubmarineDestProduct day2ExampleData
+! 150 = SubmarineDestProduct day2ExampleInput
 
 •Out "Day 2.1: "∾•Fmt SubmarineDestProduct day2Input
 
@@ -69,7 +69,7 @@ SubmarineAimedDestProduct ← {
   ×´+´((×´)∘(1⊸↓)≍(1⊸⊑))¨ (<0‿0‿0) (⊢∾((⊑∘⌽⊣)+(⊑⊢)))` ParseSubmarineCommand¨𝕩
 }
 
-! 900 = SubmarineAimedDestProduct day2ExampleData
+! 900 = SubmarineAimedDestProduct day2ExampleInput
 
 •Out "Day 2.2: "∾•Fmt SubmarineAimedDestProduct day2Input
 
@@ -79,7 +79,7 @@ SubmarineAimedDestProduct ← {
 
 BinTable ← '0'-˜>
 
-day3ExampleData ← BinTable ⟨
+day3ExampleInput ← BinTable ⟨
   "00100",
   "11110",
   "10110",
@@ -100,8 +100,8 @@ DeBinList ← ((2⊸×)+⊣)´⌽
 _tableAggr ← {((÷⟜2)∘(/⟜⥊)´∘⌽∘≢𝔽(+˝))𝕩}
 GammaRate ← < _tableAggr
 
-! 22 = DeBinList GammaRate day3ExampleData
-! 9  = DeBinList ¬GammaRate day3ExampleData
+! 22 = DeBinList GammaRate day3ExampleInput
+! 9  = DeBinList ¬GammaRate day3ExampleInput
 
 •Out "Day 3.1: "∾•Fmt (¬×○DeBinList⊢) GammaRate day3Input
 
@@ -119,8 +119,8 @@ _lifeSupportRating ← {
 OxygenGeneratorRating ← DeBinList 0 ≤_lifeSupportRating ⊢
 CO2ScrubberRating ← DebinList 0 >_lifeSupportRating ⊢
 
-! 23 = OxygenGeneratorRating day3ExampleData
-! 10 = CO2ScrubberRating day3ExampleData
+! 23 = OxygenGeneratorRating day3ExampleInput
+! 10 = CO2ScrubberRating day3ExampleInput
 
 •Out "Day 3.2: "∾•Fmt (OxygenGeneratorRating×CO2ScrubberRating) day3Input
 
@@ -130,14 +130,14 @@ CO2ScrubberRating ← DebinList 0 >_lifeSupportRating ⊢
 
 # part 1
 
-day6ExampleData ← ⟨16,1,2,0,4,2,7,1,2,14⟩
+day6ExampleInput ← ⟨16,1,2,0,4,2,7,1,2,14⟩
 day6Input ← ReadDec¨ ','  SplitOn ⊑ReadInput 6
 
 PossiblePositions ← (⌊´+⟜(↕1⊸+)⌈´)
 FuelConsumption ← +˝∘|∘(-⌜)
 _lowestFuelPossible ← {⌊´∘(𝔽⟜PossiblePositions)˜ 𝕩}
 
-! 37 = FuelConsumption _lowestFuelPossible day6ExampleData
+! 37 = FuelConsumption _lowestFuelPossible day6ExampleInput
 
 •Out "Day 7.1: "∾•Fmt FuelConsumption _lowestFuelPossible day6Input
 
@@ -147,7 +147,7 @@ TriNum ← 1⊸+×÷⟜2
 
 FuelConsumption2 ← +˝∘(TriNum¨)∘|∘(-⌜)
 
-! 168 = FuelConsumption2 _lowestFuelPossible day6ExampleData
+! 168 = FuelConsumption2 _lowestFuelPossible day6ExampleInput
 
 •Out "Day 7.2: "∾•Fmt FuelConsumption2 _lowestFuelPossible day6Input
 
@@ -159,7 +159,7 @@ FuelConsumption2 ← +˝∘(TriNum¨)∘|∘(-⌜)
 
 ParseHeightMap ← ((≠≍(≠⊑))⥊∾)∘-⟜'0'
 
-day9ExampleData ← ParseHeightMap ⟨
+day9ExampleInput ← ParseHeightMap ⟨
   "2199943210",
   "3987894921",
   "9856789892",
@@ -173,7 +173,7 @@ LowPoints ← {∧´𝕩⊸(⊣<((-⊢) Rotate ∞⊸»˘∘Rotate˜))¨ ↕4}
 
 RiskLevelSum ← (+´⥊)∘(1⊸+×LowPoints)
 
-! 15 = RiskLevelSum day9ExampleData
+! 15 = RiskLevelSum day9ExampleInput
 
 •Out "Day 9.1: "∾•Fmt RiskLevelSum day9Input
 
@@ -183,6 +183,6 @@ NumberBasins ← ((1⊸+⊒⌾⥊)×⊢)∘LowPoints
 Basins ← {𝕩⊸((<⟜9⊣)∧(«⌈»⌈«˘⌈»˘⌈⊢)∘⊢) _fix NumberBasins 𝕩}
 LargestBasinsProduct ← {×´ 3↑ ∨ 1↓ ≠¨ ⊔⥊Basins 𝕩}
 
-! 1134 = LargestBasinsProduct day9ExampleData
+! 1134 = LargestBasinsProduct day9ExampleInput
 
 •Out "Day 9.2: "∾•Fmt LargestBasinsProduct day9Input
