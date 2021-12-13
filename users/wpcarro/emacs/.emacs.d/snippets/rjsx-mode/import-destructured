@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Import destructured
+# key: ids
+# --
+import { $1 } from '$2'
