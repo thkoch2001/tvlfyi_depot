@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Define package
+# key: defp
+# --
+(in-package #:cl-user)
+(defpackage #:$1
+  (:documentation "$2")
+  (:use #:cl))
+(in-package #:$1)
