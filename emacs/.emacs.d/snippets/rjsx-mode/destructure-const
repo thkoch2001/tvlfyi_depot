@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Destructuring a const
+# key: cds
+# --
+const { $1 } = $2

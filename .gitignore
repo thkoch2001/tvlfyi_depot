@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (464bbc feat(sterni/aoc/2021): day 9 solution)
 # Ignore the garbage folder, in which I slowly assemble a bunch of
 # trash locally that might be valuable in the future.
 garbage/
@@ -5,3 +6,36 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+=======
+.vim
+./configs/secrets
+**/*/.emacs.d/quelpa/**/*
+**/*/.emacs.d/elpa/**/*
+**/*/.emacs.d/emojis
+**/*/.emacs.d/auto-save-list/**/*
+**/*/.emacs.d/eshell/
+**/*/.emacs.d/var/**/*
+**/*/.emacs.d/.cache/**/*
+**/*/.emacs.d/request
+**/*/.emacs.d/network-security.data
+**/*/.emacs.d/smex-items
+**/*/.gnupg/random_seed
+.netrwhist
+Vundle.vim
+**/*/.emacs.d/custom.el
+**/*/.emacs.d/projectile-bookmarks.eld
+**/*/.emacs.d/bookmarks
+**/*/transient/history.el
+*.hi
+*.o
+__pycache__
+*.class
+node_modules/
+/configs/.config/fish/config.fish
+/configs/.config/fish/fish_variables
+/website/blog/public/
+/emacs/.emacs.d/tramp
+.gitsecret/keys/random_seed
+!*.secret
+secrets.json
+>>>>>>> BRANCH (6123e9 playbooks: add hip_opening_challenge)
