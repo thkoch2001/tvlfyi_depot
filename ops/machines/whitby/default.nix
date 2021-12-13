@@ -435,10 +435,13 @@ in {
   environment.systemPackages = with pkgs; [
     bb
     curl
+    direnv
     emacs-nox
     git
     htop
+    jq
     nano
+    ripgrep
     rxvt_unicode.terminfo
     vim
     zfs
