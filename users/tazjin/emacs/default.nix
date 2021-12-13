@@ -118,7 +118,7 @@ let
                             telega-tdlib-min-version)
                   (and telega-tdlib-max-version
                         (version< telega-tdlib-max-version
-                                  (plist-get telega--options :version))))
+                                  tdlib-version)))
            (message "Found TDLib version %s, but require %s to %s"
                    tdlib-version telega-tdlib-min-version telega-tdlib-max-version)
           (kill-emacs 1))
