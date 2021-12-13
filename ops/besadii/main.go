@@ -42,6 +42,7 @@ type config struct {
 	GerritUrl        string `json:"gerritUrl"`
 	GerritUser       string `json:"gerritUser"`
 	GerritPassword   string `json:"gerritPassword"`
+	GerritLabel      string `json:"gerritLabel"`
 	BuildkiteOrg     string `json:"buildkiteOrg"`
 	BuildkiteProject string `json:"buildkiteProject"`
 	BuildkiteToken   string `json:"buildkiteToken"`
@@ -145,6 +146,11 @@ func loadConfig() (*config, error) {
 
 	if cfg.BuildkiteOrg == "" || cfg.BuildkiteProject == "" || cfg.BuildkiteToken == "" {
 		return nil, fmt.Errorf("mising Buildkite configuration (required: buildkiteOrg, buildkiteProject, buildkiteToken)")
+	}
+
+	// The default Gerrit label to set is 'Verified', unless specified otherwise.
+	if cfg.GerritLabel == "" {
+		cfg.GerritLabel = "Verified"
 	}
 
 	return &cfg, nil
@@ -457,7 +463,7 @@ func postCommandMain(cfg *config) {
 		Message:               msg,
 		OmitDuplicateComments: true,
 		Labels: map[string]int{
-			"Verified": verified,
+			cfg.GerritLabel: verified,
 		},
 
 		// Update the attention set if we are failing this patchset.
