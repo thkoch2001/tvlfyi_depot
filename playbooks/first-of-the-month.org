@@ -1,0 +1,13 @@
+# In total this should take one hour to complete. This is a substantial amount
+# of time, which may disincentivize me from completing it. This time is
+# amortized over the length of its usefulness (i.e. an entire month), so it
+# should be thought of instead as two-minutes worth of work per day that is all
+# being completed upfront.
+* Tasks
+** TODO [20m] Create habit template in journal.
+*** Spend time choosing a habit that you can accomplish giving known traveling constraints.
+** TODO [45m] Assess previous month's performance.
+** TODO [10m] Book massage for the month.
+** TODO [05m] Register for HotPodYoga classes.
+** TODO [10m] Plan one museum date in London.
+** TODO [20m] Plan each weekend for month.

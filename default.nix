@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (464bbc feat(sterni/aoc/2021): day 9 solution)
 # This file sets up the top-level package set by traversing the package tree
 # (see //nix/readTree for details) and constructing a matching attribute set
 # tree.
@@ -109,3 +110,38 @@ in readTree.fix(self: (readDepot {
     paths = self.ci.targets;
   };
 })
+=======
+{ ... }:
+
+let
+  inherit (builtins) fetchGit readDir path;
+  inherit (pkgs.lib) filterAttrs mapAttrs;
+  inherit (pkgs.lib.strings) hasPrefix;
+
+  briefcasePath = path {
+    path = ./.;
+    name = "briefcase";
+  };
+
+  depot = import (fetchGit {
+    url = "https://cl.tvl.fyi/depot";
+    rev = "2f7b688389058b454ee12adc4b6b47740298f53b";
+  }) {};
+
+  pkgs = import (fetchGit {
+    url = "https://github.com/NixOS/nixpkgs-channels";
+    ref = "nixos-20.03";
+    rev = "afa9ca61924f05aacfe495a7ad0fd84709d236cc";
+  }) {};
+
+  briefcase = import briefcasePath {};
+
+  readTree = depot.nix.readTree {
+    inherit depot pkgs briefcase;
+  };
+in mapAttrs
+  (name: _: readTree (./. + "/${name}"))
+  (filterAttrs
+    (name: type: type == "directory" && !hasPrefix "." name)
+    (readDir briefcasePath))
+>>>>>>> BRANCH (6123e9 playbooks: add hip_opening_challenge)
