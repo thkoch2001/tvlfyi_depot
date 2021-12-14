@@ -16,6 +16,24 @@
       "message": "last time I was using 5.15 my USB driver stopped working, I\u0027ll have to test if that\u0027s fixed now.",
       "revId": "de0db754f52406b2fcdb5d09264821174d2d93c8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd8f99c3_0f061737",
+        "filename": "users/grfn/system/system/machines/yeren.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-14T17:02:10Z",
+      "side": 1,
+      "message": "Alternatively I can offer downgrading to 5.10.x, but 5.14 has been removed sadly.",
+      "parentUuid": "6fbb4cd0_fc7c13fe",
+      "revId": "de0db754f52406b2fcdb5d09264821174d2d93c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
