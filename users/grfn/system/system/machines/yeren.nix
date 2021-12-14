@@ -27,7 +27,7 @@
       };
     };
 
-    kernelPackages = pkgs.linuxPackages_5_14;
+    kernelPackages = pkgs.linuxPackages_5_15;
 
     kernelModules = [ "kvm-intel" ];
     blacklistedKernelModules = [ "psmouse" ];
