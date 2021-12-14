@@ -1,6 +1,6 @@
 { depot, ... }:
 
-depot.buildGo.package {
+depot.nix.buildGo.package {
   name = "utils";
   srcs = [
     ./utils.go
