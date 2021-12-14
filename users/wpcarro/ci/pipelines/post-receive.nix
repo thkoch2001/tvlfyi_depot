@@ -1,8 +1,8 @@
-{ briefcase, pkgs, ... }:
+{ pkgs, depot, ... }:
 
 let
   inherit (builtins) fetchGit path toJSON;
-  inherit (briefcase.emacs) initEl runScript;
+  inherit (depot.users.wpcarro.emacs) initEl runScript;
 
   elispLintSrc = fetchGit {
     url = "https://github.com/gonewest818/elisp-lint";
