@@ -3,7 +3,7 @@
    [bbbg.attendee :as attendee]
    [bbbg.db :as db]
    [bbbg.event :as event]
-   [honeysql.helpers :refer [merge-group-by merge-join merge-select]]
+   [honeysql.helpers :refer [merge-group-by merge-left-join merge-select]]
    [java-time :refer [local-date]]))
 
 (defn create! [db event]
@@ -34,7 +34,7 @@
 (defn with-attendee-counts
   [query]
   (-> query
-      (merge-join :event_attendee [:= :event.id :event_attendee.event-id])
+      (merge-left-join :event_attendee [:= :event.id :event_attendee.event-id])
       (merge-select :%count.event_attendee.attendee_id)
       (merge-group-by :event.id :event_attendee.event-id)))
 
