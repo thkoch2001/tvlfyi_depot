@@ -1,10 +1,7 @@
 # Enables ANSI colors for printing.
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = builtins.fetchGit {
-  url = "https://github.com/pnathan/cl-ansi-text.git";
-  rev = "257a5f19a2dc92d22f8fd772c0a78923b99b36a8";
-};
+let src = with pkgs; srcOnly lispPackages.cl-ansi-text;
 in depot.nix.buildLisp.library {
   name = "cl-ansi-text";
   deps = with depot.third_party.lisp; [
