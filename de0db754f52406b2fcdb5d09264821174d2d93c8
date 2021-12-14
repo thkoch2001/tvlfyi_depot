@@ -34,6 +34,24 @@
       "parentUuid": "6fbb4cd0_fc7c13fe",
       "revId": "de0db754f52406b2fcdb5d09264821174d2d93c8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d9e2a92_f489a680",
+        "filename": "users/grfn/system/system/machines/yeren.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-14T17:04:26Z",
+      "side": 1,
+      "message": "wow, that\u0027s pretty drastic.\n\nNext chance I get to reboot my laptop (after work today likely) I\u0027ll test this, it\u0027s entirely possible that the bug has just been fixed.",
+      "parentUuid": "cd8f99c3_0f061737",
+      "revId": "de0db754f52406b2fcdb5d09264821174d2d93c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
