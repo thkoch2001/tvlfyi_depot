@@ -11,6 +11,10 @@ let
   # then recursively merge it with an on-disk secret using jq on
   # service launch.
   configJson = pkgs.writeText "irccat.json" (builtins.toJSON cfg.config);
+
+  # Right now, merging configuration file with secrets and running the main
+  # application needs to happen both in ExecStart=, due to
+  # https://github.com/systemd/systemd/issues/19604#issuecomment-989279884
   mergeAndLaunch = pkgs.writeShellScript "merge-irccat-config" ''
     if [ ! -f "$CREDENTIALS_DIRECTORY/secrets" ]; then
       echo "irccat secrets file is missing"
