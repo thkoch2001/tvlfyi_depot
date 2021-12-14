@@ -5,7 +5,7 @@ let
     getBins
     ;
 
-  stableRelease = "21.05";
+  stableRelease = "21.11";
 
   channelsUrl = "https://channels.nixos.org";
   archiveUrl = "https://github.com/NixOS/nixpkgs/archive/";
