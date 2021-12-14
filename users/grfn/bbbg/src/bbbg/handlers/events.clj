@@ -5,7 +5,8 @@
    [bbbg.event :as event]
    [bbbg.handlers.core :refer [page-response]]
    [compojure.core :refer [context GET POST]]
-   [ring.util.response :refer [redirect]]))
+   [ring.util.response :refer [redirect]]
+   [bbbg.views.flash :as flash]))
 
 (defn events-index [events]
   [:ul.events-list
@@ -41,4 +42,5 @@
       (let [event (db.event/create! db {::event/date date})]
         (-> (str "/signup-forms/" (::event/id event))
             redirect
-            (assoc-in [:flash :message] "Event Created"))))))
+            (flash/add-flash {:flash/type :success
+                              :flash/message "Event Created"}))))))

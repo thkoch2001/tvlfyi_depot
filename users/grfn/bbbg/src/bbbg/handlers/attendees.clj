@@ -8,7 +8,8 @@
    [cheshire.core :as json]
    [compojure.core :refer [GET POST routes]]
    [honeysql.helpers :refer [merge-where]]
-   [ring.util.response :refer [content-type redirect response]]))
+   [ring.util.response :refer [content-type redirect response]]
+   [bbbg.views.flash :as flash]))
 
 (defn attendees-routes [{:keys [db]}]
   (routes
@@ -38,5 +39,20 @@
          (db.event/attended! db {::event/id event_id
                                  ::attendee/id attendee_id})
          (-> (redirect (str "/signup-forms/" event_id))
-             (assoc :flash "Thank you for signing in! Enjoy the event.")))
+             (assoc-in [:session :test] 1)
+             (flash/add-flash
+              #:flash{:type :success
+                      :message "Thank you for signing in! Enjoy the event."})))
        (response "Something went wrong")))))
+
+(comment
+  (def db (:db bbbg.core/system))
+  (db/list db
+           (->
+            (db.attendee/search "gr")
+            (db.attendee/for-event #uuid "9f4f3eae-3317-41a7-843c-81bcae52aebf")))
+  (honeysql.format/format
+   (->
+    (db.attendee/search "gr")
+    (db.attendee/for-event #uuid "9f4f3eae-3317-41a7-843c-81bcae52aebf")))
+  )

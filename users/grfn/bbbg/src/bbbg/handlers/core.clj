@@ -1,5 +1,6 @@
 (ns bbbg.handlers.core
   (:require
+   [bbbg.views.flash :as flash]
    [hiccup.core :refer [html]]
    [ring.util.response :refer [content-type response]]))
 
@@ -7,7 +8,7 @@
   (let [[{:keys [title]} body]
         (if (map? opts)
           [opts body]
-          [{} (into [opts] body)])]
+          [{} (concat [opts] body)])]
     (html
      [:html {:lang "en"}
       [:head
@@ -19,7 +20,9 @@
                :type "text/css"
                :href "/main.css"}]]
       [:body
-       (into [:div.content] body)
+       [:div.content
+        (flash/render-flash)
+        body]
        [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/tarekraafat-autocomplete.js/10.2.6/autoComplete.js"}]
        [:script {:src "/main.js"}]]])))
 

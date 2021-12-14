@@ -5,6 +5,8 @@
    [bbbg.handlers.home :as home]
    [bbbg.handlers.signup-form :as signup-form]
    [bbbg.styles :refer [stylesheet]]
+   [bbbg.util.core :as u]
+   [bbbg.views.flash :refer [wrap-page-flash]]
    [clojure.spec.alpha :as s]
    [com.stuartsierra.component :as component]
    [compojure.core :refer [GET routes]]
@@ -13,23 +15,44 @@
    [ring.middleware.flash :refer [wrap-flash]]
    [ring.middleware.keyword-params :refer [wrap-keyword-params]]
    [ring.middleware.params :refer [wrap-params]]
-   [ring.util.response :refer [content-type response resource-response]]))
+   [ring.middleware.session :refer [wrap-session]]
+   [ring.middleware.session.cookie :refer [cookie-store]]
+   [ring.util.response :refer [content-type resource-response response]])
+  (:import
+   java.util.Base64))
 
 (s/def ::port pos-int?)
 
+(s/def ::cookie-secret
+  (s/and bytes? #(= 16 (count %))))
+
 (s/def ::config
-  (s/keys :req [::port]))
+  (s/keys :req [::port]
+          :opt [::cookie-secret]))
 
 (s/fdef make-server
   :args (s/cat :config ::config))
 
+
+(defn- string->cookie-secret [raw]
+  (s/assert
+   ::cookie-secret
+   (when raw
+     (.decode (Base64/getDecoder)
+              (.getBytes raw "UTF-8")))))
+
 (defn env->config []
   (s/assert
    ::config
-   {::port (:port env 8888)}))
+   (u/remove-nils
+    {::port (:port env 8888)
+     ::cookie-secret (some-> env :cookie-secret string->cookie-secret)})))
 
 (defn dev-config []
-  (s/assert ::config {::port 8888}))
+  (s/assert
+   ::config
+   {::port 8888
+    ::cookie-secret (into-array Byte/TYPE (repeat 16 0))}))
 
 ;;;
 
@@ -47,17 +70,19 @@
    (events/events-routes env)
    (home/home-routes env)))
 
-(defn middleware [app]
+(defn middleware [app env]
   (-> app
       wrap-keyword-params
       wrap-params
-      wrap-flash))
+      wrap-page-flash
+      wrap-flash
+      (wrap-session {:store (cookie-store {:key (:cookie-secret env)})})))
 
-(defn handler [this]
-  (middleware
-   (app-routes this)))
+(defn handler [env]
+  (-> (app-routes env)
+      (middleware env)))
 
-(defrecord WebServer [port db]
+(defrecord WebServer [port cookie-secret db]
   component/Lifecycle
   (start [this]
     (assoc this
@@ -71,7 +96,8 @@
           (dissoc this ::shutdown-fn))
       this)))
 
-(defn make-server [{::keys [port]}]
+(defn make-server [{::keys [port cookie-secret]}]
   (component/using
-   (map->WebServer {:port port})
+   (map->WebServer {:port port
+                    :cookie-secret cookie-secret})
    [:db]))
