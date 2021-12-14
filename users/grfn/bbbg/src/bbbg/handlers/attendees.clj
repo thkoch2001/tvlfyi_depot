@@ -21,9 +21,11 @@
                   (db.attendee/search q)
                   {:select [:attendee.*] :from [:attendee]})
               event_id (db.attendee/for-event event_id)
-              (some? attended) (merge-where [:= :attended (case attended
-                                                            "true" true
-                                                            "false" false)])))]
+              (some? attended)
+              (merge-where
+               (case attended
+                 "true" :attended
+                 "false" [:or [:= :attended nil] [:not :attended]]))))]
        (-> {:results results}
            json/generate-string
            response
