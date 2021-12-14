@@ -2,12 +2,8 @@
 { depot, pkgs, ...}:
 
 let
-  src = pkgs.fetchFromGitHub {
-    owner = "edicl";
-    repo = "hunchentoot";
-    rev = "585b45b6b873f2da421fdf456b61860ab5868207";
-    sha256 = "13nazwix067mdclq9vgjhsi2vpr57a8dz51dd5d3h99ccsq4mik5";
-  };
+  src = with pkgs; srcOnly lispPackages.hunchentoot;
+
   url-rewrite = depot.nix.buildLisp.library {
     name = "url-rewrite";
 

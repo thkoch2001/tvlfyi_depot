@@ -2,13 +2,7 @@
 
 let
   inherit (depot.nix.buildLisp) bundled;
-
-  src = pkgs.fetchFromGitHub {
-    owner = "marijnh";
-    repo = "Postmodern";
-    rev = "v1.32";
-    sha256 = "0prwmpixcqpzqd67v77cs4zgbs73a10m6hs7q0rpv0z1qm7mqfcb";
-  };
+  src = with pkgs; srcOnly lispPackages.postmodern;
 
   cl-postgres = depot.nix.buildLisp.library {
     name = "cl-postgres";
@@ -24,13 +18,15 @@ let
     srcs = map (f: src + ("/cl-postgres/" + f)) [
       "package.lisp"
       "features.lisp"
+      "config.lisp"
+      "oid.lisp"
       "errors.lisp"
+      "data-types.lisp"
       "sql-string.lisp"
       "trivial-utf-8.lisp"
       "strings-utf-8.lisp"
       "communicate.lisp"
       "messages.lisp"
-      "oid.lisp"
       "ieee-floats.lisp"
       "interpret.lisp"
       "saslprep.lisp"
@@ -50,6 +46,7 @@ let
 
     srcs = map (f: src + ("/s-sql/" + f)) [
       "package.lisp"
+      "config.lisp"
       "s-sql.lisp"
     ];
   };
@@ -72,7 +69,9 @@ let
       "${src}/postmodern.asd"
     ] ++ (map (f: src + ("/postmodern/" + f)) [
       "package.lisp"
+      "config.lisp"
       "connect.lisp"
+      "json-encoder.lisp"
       "query.lisp"
       "prepare.lisp"
       "roles.lisp"
