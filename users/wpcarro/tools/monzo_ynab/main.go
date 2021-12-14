@@ -10,7 +10,8 @@
 package main
 
 import (
-	"fmt"
+	"os"
+	"monzoSerde"
 )
 
 var (
@@ -34,7 +35,7 @@ func toYnab(tx monzoSerde.Transaction) ynabSerde.Transaction {
 
 func main() {
 	txs := monzo.TransactionsLast24Hours()
-	var ynabTxs []ynabSerde.Transaction{}
+	var ynabTxs []ynabSerde.Transaction
 	for tx := range txs {
 		append(ynabTxs, toYnab(tx))
 	}

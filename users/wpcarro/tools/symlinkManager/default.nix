@@ -1,11 +1,13 @@
-{ depot, briefcase, ... }:
+{ depot, ... }:
 
-depot.buildGo.program {
+let
+  inherit (depot.users.wpcarro) gopkgs;
+in depot.nix.buildGo.program {
   name = "symlink-mgr";
   srcs = [
     ./main.go
   ];
-  deps = with briefcase.gopkgs; [
+  deps = with gopkgs; [
     utils
   ];
 }
