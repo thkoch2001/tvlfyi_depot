@@ -1,4 +1,4 @@
-{ depot, briefcase, ... }:
+{ depot, ... }:
 
 let
   src = builtins.fetchGit {
@@ -9,7 +9,7 @@ in depot.nix.buildLisp.library {
   name = "cl-colors";
   deps = [
     depot.third_party.lisp.alexandria
-    briefcase.third_party.lisp.let-plus
+    depot.users.wpcarro.third_party.lisp.let-plus
   ];
   srcs = [
     "${src}/package.lisp"

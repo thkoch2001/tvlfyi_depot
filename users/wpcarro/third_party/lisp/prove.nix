@@ -1,4 +1,4 @@
-{ depot, briefcase, ... }:
+{ depot, ... }:
 
 let
   src = builtins.fetchGit {
@@ -12,7 +12,7 @@ in depot.nix.buildLisp.library {
     depot.third_party.lisp.cl-ansi-text
     depot.third_party.lisp.alexandria
     depot.third_party.lisp.uiop
-    briefcase.third_party.lisp.cl-colors
+    depot.users.wpcarro.third_party.lisp.cl-colors
   ];
   srcs = [
     "${src}/src/asdf.lisp"
