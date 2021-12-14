@@ -31,13 +31,32 @@ let
     epkgs.melpaPackages.magit
     epkgs.tvlPackages.tvl
   ]);
+
+  configDirectory = pkgs.symlinkJoin {
+    name = "emacs.d";
+    paths = [
+      ./.
+      (pkgs.writeTextFile {
+        name = "injected-emacs.d";
+        destination = "/nix-inject.el";
+        text = ''
+          (setq bqn-interpreter-path "${pkgs.cbqn}/bin/BQN")
+
+          (provide 'nix-inject)
+        '';
+      })
+    ];
+    postBuild = ''
+      rm "$out/default.nix"
+    '';
+  };
 in
 
 # sadly we can't give an init-file via the command line
 pkgs.writeShellScriptBin "emacs" ''
-  exec ${emacs}/bin/emacs     \
-    --no-init-file            \
-    --directory ${./.}        \
-    --eval "(require 'init)" \
+  exec ${emacs}/bin/emacs          \
+    --no-init-file                 \
+    --directory ${configDirectory} \
+    --eval "(require 'init)"       \
     "$@"
 ''
