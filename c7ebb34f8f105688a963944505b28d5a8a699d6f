@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d73dcf4_9711e982",
+        "filename": "users/wpcarro/.skip-subtree",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-14T15:38:55Z",
+      "side": 0,
+      "message": "I\u0027d be surprised if this is all you need to change, I think removing this might be a bit premature - but try it out.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 70
+      },
+      "revId": "c7ebb34f8f105688a963944505b28d5a8a699d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
