@@ -1,4 +1,4 @@
-{ pkgs, briefcase, ... }:
+{ pkgs, depot, ... }:
 
 pkgs.stdenv.mkDerivation {
   name = "wpcarro.dev";
@@ -8,6 +8,6 @@ pkgs.stdenv.mkDerivation {
     cp $src/index.html $out
 
     mkdir -p $out/habits
-    cp -r ${briefcase.website.habit-screens} $out/habits/index.html
+    cp -r ${depot.users.wpcarro.website.habit-screens} $out/habits/index.html
   '';
 }
