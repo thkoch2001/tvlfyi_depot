@@ -22,6 +22,30 @@
       },
       "revId": "6255487be8a081b093a6b093a9a6389d0d4b1335",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60fde9f7_3eebbdda",
+        "filename": "third_party/nixpkgs/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-14T14:38:55Z",
+      "side": 1,
+      "message": "I bumped it ahead of nixos-unstable manually, so we\u0027d be able to build NixOS machines with 2.3 again (https://github.com/NixOS/nixpkgs/pull/150631). Channel hasn\u0027t advanced past this point yet, but in this case there where no dramatic changes in between.",
+      "parentUuid": "2cd6762f_027e9573",
+      "range": {
+        "startLine": 16,
+        "startChar": 13,
+        "endLine": 16,
+        "endChar": 27
+      },
+      "revId": "6255487be8a081b093a6b093a9a6389d0d4b1335",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
