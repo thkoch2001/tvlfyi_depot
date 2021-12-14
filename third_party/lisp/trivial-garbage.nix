@@ -1,11 +1,8 @@
 # trivial-garbage provides a portable API to finalizers, weak
 # hash-tables and weak pointers
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-let src = builtins.fetchGit {
-  url = "https://github.com/trivial-garbage/trivial-garbage.git";
-  rev = "dbc8e35acb0176b9a14fdc1027f5ebea93435a84";
-};
+let src = with pkgs; srcOnly lispPackages.trivial-garbage;
 in depot.nix.buildLisp.library {
   name = "trivial-garbage";
   srcs = [ (src + "/trivial-garbage.lisp") ];

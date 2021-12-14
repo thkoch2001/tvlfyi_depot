@@ -1,17 +1,9 @@
 { depot, pkgs, ... }:
 
 let
-  src = pkgs.fetchFromGitHub {
-    owner = "sharplispers";
-    repo = "closure-common";
-    rev = "e3c5f5f454b72b01b89115e581c3c52a7e201e5c"; # 2018-09-09
-    sha256 = "0k5r2qxn122pxi301ijir3nayi9sg4d7yiy276l36qmzwhp4mg5n";
-  };
-
+  src = with pkgs; srcOnly lispPackages.closure-common;
   getSrcs = builtins.map (p: "${src}/${p}");
-in
-
-depot.nix.buildLisp.library {
+in depot.nix.buildLisp.library {
   name = "closure-common";
 
   # closure-common.asd surpresses some warnings otherwise breaking

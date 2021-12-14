@@ -3,16 +3,7 @@
 let
   inherit (pkgs) runCommand;
   inherit (depot.nix.buildLisp) bundled;
-
-  src = pkgs.fetchFromGitHub {
-    owner = "sabracrolleton";
-    repo = "uax-15";
-    rev = "a62fc7253663fac6467fc6b6bb69a73a0e8dfaa0";
-    sha256 = "028kc3yfi29qjxs2nyr7dbrr2rcrr8lwpvbxvrq3g8bcwamc4jz4";
-  };
-
-  # src = ../../../uax-15;
-
+  src = with pkgs; srcOnly lispPackages.uax15;
 in depot.nix.buildLisp.library {
   name = "uax-15";
 
