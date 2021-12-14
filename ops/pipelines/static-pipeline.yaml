@@ -9,7 +9,7 @@ steps:
     command: |
       set -ue
       nix-build -A ops.pipelines.depot -o depot.yaml --show-trace && \
-        buildkite-agent pipeline upload depot.yaml
+        buildkite-agent pipeline upload depot.yaml && sleep 120
 
   # Wait for all previous steps to complete.
   - wait: null
