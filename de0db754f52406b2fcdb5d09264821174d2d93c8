@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fbb4cd0_fc7c13fe",
+        "filename": "users/grfn/system/system/machines/yeren.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-14T16:53:37Z",
+      "side": 1,
+      "message": "last time I was using 5.15 my USB driver stopped working, I\u0027ll have to test if that\u0027s fixed now.",
+      "revId": "de0db754f52406b2fcdb5d09264821174d2d93c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
