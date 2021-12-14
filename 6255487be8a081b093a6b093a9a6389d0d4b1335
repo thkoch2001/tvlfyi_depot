@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cd6762f_027e9573",
+        "filename": "third_party/nixpkgs/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-14T13:57:56Z",
+      "side": 1,
+      "message": "is this currently true? It was supposed to be nixos-unstable normally to avoid bootstrapping evertyhing :thonking:",
+      "range": {
+        "startLine": 16,
+        "startChar": 13,
+        "endLine": 16,
+        "endChar": 27
+      },
+      "revId": "6255487be8a081b093a6b093a9a6389d0d4b1335",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
