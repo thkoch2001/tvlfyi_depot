@@ -1,10 +1,6 @@
+{ depot, pkgs, ... }:
 
-{ depot, ... }:
-
-let src = builtins.fetchGit {
-  url = "https://notabug.org/cage/cl-colors2.git";
-  rev = "795aedee593b095fecde574bd999b520dd03ed24";
-};
+let src = with pkgs; srcOnly lispPackages.cl-colors2;
 in depot.nix.buildLisp.library {
   name = "cl-colors2";
   deps = with depot.third_party.lisp; [
@@ -15,7 +11,8 @@ in depot.nix.buildLisp.library {
   srcs = map (f: src + ("/" + f)) [
     "package.lisp"
     "colors.lisp"
-    "colornames.lisp"
+    "colornames-x11.lisp"
+    "colornames-svg.lisp"
     "hexcolors.lisp"
   ];
 }

@@ -1,12 +1,7 @@
 # Drakma is an HTTP client for Common Lisp.
 { depot, pkgs, ... }:
 
-let src = pkgs.fetchFromGitHub {
-  owner = "edicl";
-  repo = "drakma";
-  rev = "87feb02bef00b11a753d5fb21a5fec526b0d0bbb";
-  sha256 = "01b80am2vrw94xmdj7f21qm7p5ys08mmpzv4nc4icql81hqr1w2m";
-};
+let src = with pkgs; srcOnly lispPackages.drakma;
 in depot.nix.buildLisp.library {
   name = "drakma";
   deps = with depot.third_party.lisp; [
