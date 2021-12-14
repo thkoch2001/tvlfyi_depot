@@ -1,11 +1,6 @@
 { depot, pkgs, ... }:
 
-let
-  src = pkgs.fetchgit {
-    url = "https://github.com/fukamachi/prove.git";
-    rev = "5d71f02795b89e36f34e8c7d50e69b67ec6ca2de";
-    hash = "sha256:0ca6ha3zhmckq3ad9lxm6sbg4i0hg3m81xhan4dkxd3x9898jzpc";
-  };
+let src = with pkgs; srcOnly lispPackages.prove;
 in depot.nix.buildLisp.library {
   name = "prove";
 

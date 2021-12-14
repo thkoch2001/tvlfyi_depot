@@ -3,13 +3,7 @@
 let
   inherit (pkgs) runCommand;
   inherit (depot.nix.buildLisp) bundled;
-  src = pkgs.fetchFromGitHub {
-    owner = "sharplispers";
-    repo = "ironclad";
-    rev = "c3aa33080621abc10fdb0f34acc4655cc4e982a6";
-    sha256 = "0k4bib9mbrzalbl9ivkw4a7g4c7bbad1l5jw4pzkifqszy2swkr5";
-  };
-
+  src = with pkgs; srcOnly lispPackages.ironclad;
   getSrc = f: "${src}/src/${f}";
 
 in depot.nix.buildLisp.library {
@@ -24,19 +18,22 @@ in depot.nix.buildLisp.library {
     nibbles
   ];
 
-  srcs = [
-    {
-      # TODO(grfn): Figure out how to get this compiling with the assembly
-      # optimization eventually - see https://cl.tvl.fyi/c/depot/+/1333
-      sbcl = runCommand "package.lisp" {} ''
-        substitute ${src}/src/package.lisp $out \
-          --replace \#-ecl-bytecmp "" \
-          --replace '(pushnew :ironclad-assembly *features*)' ""
-      '';
-      default = getSrc "package.lisp";
-    }
-  ] ++ map getSrc [
+  srcs = map getSrc [
+    # {
+    #   # TODO(grfn): Figure out how to get this compiling with the assembly
+    #   # optimization eventually - see https://cl.tvl.fyi/c/depot/+/1333
+    #   sbcl = runCommand "package.lisp" {} ''
+    #     substitute ${src}/src/package.lisp $out \
+    #       --replace \#-ecl-bytecmp "" \
+    #       --replace '(pushnew :ironclad-assembly *features*)' ""
+    #   '';
+    #   default = getSrc "package.lisp";
+    # }
+    "package.lisp"
+    "conditions.lisp"
+    "generic.lisp"
     "macro-utils.lisp"
+    "util.lisp"
   ] ++ [
     { sbcl = getSrc "opt/sbcl/fndb.lisp"; }
     { sbcl = getSrc "opt/sbcl/cpu-features.lisp"; }
@@ -46,36 +43,31 @@ in depot.nix.buildLisp.library {
 
     { ccl = getSrc "opt/ccl/x86oid-vm.lisp"; }
   ] ++ map getSrc [
-
     "common.lisp"
-    "conditions.lisp"
-    "generic.lisp"
-    "util.lisp"
 
-    "ciphers/padding.lisp"
     "ciphers/cipher.lisp"
-    "ciphers/chacha.lisp"
+    "ciphers/padding.lisp"
+    "ciphers/make-cipher.lisp"
     "ciphers/modes.lisp"
-    "ciphers/salsa20.lisp"
-    "ciphers/xchacha.lisp"
-    "ciphers/xsalsa20.lisp"
+
+    # subsystem def ironclad/ciphers
     "ciphers/aes.lisp"
-    "ciphers/arcfour.lisp"
     "ciphers/arcfour.lisp"
     "ciphers/aria.lisp"
     "ciphers/blowfish.lisp"
     "ciphers/camellia.lisp"
     "ciphers/cast5.lisp"
+    "ciphers/chacha.lisp"
     "ciphers/des.lisp"
     "ciphers/idea.lisp"
-    "ciphers/keystream.lisp"
     "ciphers/kalyna.lisp"
     "ciphers/kuznyechik.lisp"
-    "ciphers/make-cipher.lisp"
     "ciphers/misty1.lisp"
     "ciphers/rc2.lisp"
     "ciphers/rc5.lisp"
     "ciphers/rc6.lisp"
+    "ciphers/salsa20.lisp"
+    "ciphers/keystream.lisp"
     "ciphers/seed.lisp"
     "ciphers/serpent.lisp"
     "ciphers/sm4.lisp"
@@ -84,10 +76,13 @@ in depot.nix.buildLisp.library {
     "ciphers/tea.lisp"
     "ciphers/threefish.lisp"
     "ciphers/twofish.lisp"
+    "ciphers/xchacha.lisp"
     "ciphers/xor.lisp"
+    "ciphers/xsalsa20.lisp"
     "ciphers/xtea.lisp"
 
     "digests/digest.lisp"
+    # subsystem def ironclad/digests
     "digests/adler32.lisp"
     "digests/blake2.lisp"
     "digests/blake2s.lisp"
@@ -113,14 +108,8 @@ in depot.nix.buildLisp.library {
     "digests/tree-hash.lisp"
     "digests/whirlpool.lisp"
 
-    "prng/prng.lisp"
-    "prng/generator.lisp"
-    "prng/fortuna.lisp"
-    "prng/os-prng.lisp"
-
-    "math.lisp"
-
     "macs/mac.lisp"
+    # subsystem def ironclad/macs
     "macs/blake2-mac.lisp"
     "macs/blake2s-mac.lisp"
     "macs/cmac.lisp"
@@ -130,26 +119,44 @@ in depot.nix.buildLisp.library {
     "macs/siphash.lisp"
     "macs/skein-mac.lisp"
 
-    "kdf/kdf-common.lisp"
-    "kdf/argon2.lisp"
-    "kdf/password-hash.lisp"
-    "kdf/pkcs5.lisp"
-    "kdf/scrypt.lisp"
-    "kdf/hmac.lisp"
+    "prng/prng.lisp"
+    "prng/os-prng.lisp"
+    "prng/generator.lisp"
+    "prng/fortuna.lisp"
+
+    "math.lisp"
+
+    "octet-stream.lisp"
 
     "aead/aead.lisp"
+    # subsystem def ironclad/aead
     "aead/eax.lisp"
     "aead/etm.lisp"
     "aead/gcm.lisp"
 
+    "kdf/kdf.lisp"
+    # subsystem def ironclad/kdfs
+    "kdf/argon2.lisp"
+    "kdf/bcrypt.lisp"
+    "kdf/hmac.lisp"
+    "kdf/pkcs5.lisp"
+    "kdf/password-hash.lisp"
+    "kdf/scrypt.lisp"
+
     "public-key/public-key.lisp"
+    "public-key/pkcs1.lisp"
+    "public-key/elliptic-curve.lisp"
+    # subsystem def ironclad/public-keys
+    "public-key/dsa.lisp"
+    "public-key/rsa.lisp"
+    "public-key/elgamal.lisp"
     "public-key/curve25519.lisp"
     "public-key/curve448.lisp"
-    "public-key/dsa.lisp"
     "public-key/ed25519.lisp"
     "public-key/ed448.lisp"
-    "public-key/elgamal.lisp"
-    "public-key/pkcs1.lisp"
-    "public-key/rsa.lisp"
+    "public-key/secp256k1.lisp"
+    "public-key/secp256r1.lisp"
+    "public-key/secp384r1.lisp"
+    "public-key/secp521r1.lisp"
   ];
 }
