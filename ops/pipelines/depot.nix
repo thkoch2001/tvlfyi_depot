@@ -36,10 +36,9 @@ let
       # at least one of its `outPath`s, so we need to discard the string context
       # if we don't want to build everything during pipeline construction.
       "nix-store --realise '${drvPath}'"
-      # However, Nix doesn't track references of store paths to derivations, so
-      # there's no guarantee that the derivation file is not garbage collected.
-      # To handle this case we fall back to an ordinary build if the derivation
-      # file is missing.
+      # Since we don't gcroot the derivation files, they may be deleted by the
+      # garbage collector. In that case we can reevaluate and build the attribute
+      # using nix-build.
       "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
     ];
     label = ":nix: ${mkLabel target}";
