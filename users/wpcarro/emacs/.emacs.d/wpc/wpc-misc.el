@@ -294,10 +294,6 @@
   :config
   (add-hook 'lsp-mode-hook #'lsp-ui-mode))
 
-(use-package company-lsp
-  :config
-  (push 'company-lsp company-backends))
-
 ;; Wilfred/suggest.el - Tool for discovering functions basesd on declaring your
 ;; desired inputs and outputs.
 (use-package suggest)

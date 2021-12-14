@@ -1,6 +1,6 @@
-let
-  briefcase = import <briefcase> {};
-in briefcase.buildHaskell.program {
+{ depot, ... }:
+
+depot.users.wpcarro.buildHaskell.program {
   name = "server";
   srcs = builtins.path {
     path = ./.;
