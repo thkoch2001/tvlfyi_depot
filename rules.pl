@@ -104,4 +104,4 @@ submit_type(merge_if_necessary) :-
     % Check if the commit type is a subtree commit.
     gerrit:commit_message_matches('^subtree[\(]'),
     !.
-submit_type(rebase_if_necessary).
+submit_type(rebase_always).
