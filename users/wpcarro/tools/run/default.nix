@@ -1,11 +1,11 @@
-{ pkgs, depot, briefcase, ... }:
+{ pkgs, depot, ... }:
 
-depot.buildGo.program {
+depot.nix.buildGo.program {
   name = "run";
   srcs = [
     ./main.go
   ];
-  deps = with briefcase.gopkgs; [
+  deps = with depot.users.wpcarro.gopkgs; [
     utils
   ];
 }

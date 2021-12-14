@@ -1,7 +1,6 @@
-let
-  briefcase = import <briefcase> {};
-  pkgs = briefcase.third_party.pkgs;
-in {
+{ pkgs, depot, ... }:
+
+{
   imports = [ ./hardware.nix ];
 
   # Use the systemd-boot EFI boot loader.
@@ -117,7 +116,7 @@ in {
   systemd.services.zoo = {
     enable = true;
     description = "Run my monoserver";
-    script = "${briefcase.zoo}/zoo";
+    script = "${depot.users.wpcarro.zoo}/zoo";
     environment = {};
     serviceConfig = {
       Restart = "always";
@@ -175,12 +174,12 @@ in {
       "wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
-        root = briefcase.website;
+        root = depot.users.wpcarro.website;
       };
       "learn.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
-        root = briefcase.website.learn;
+        root = depot.users.wpcarro.website.learn;
       };
       "git.wpcarro.dev" = {
         addSSL = true;
@@ -192,17 +191,17 @@ in {
       "blog.wpcarro.dev" = {
         addSSL = true;
         enableACME = true;
-        root = briefcase.website.blog;
+        root = depot.users.wpcarro.website.blog;
       };
       # "sandbox.wpcarro.dev" = {
       #   addSSL = true;
       #   enableACME = true;
-      #   root = briefcase.website.sandbox;
+      #   root = depot.users.wpcarro.website.sandbox;
       # };
       # "learnpianochords.app" = {
       #   addSSL = true;
       #   enableACME = true;
-      #   root = briefcase.website.sandbox.learnpianochords;
+      #   root = depot.users.wpcarro.website.sandbox.learnpianochords;
       # };
       "zoo.wpcarro.dev" = {
         addSSL = true;
