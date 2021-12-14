@@ -1,6 +1,6 @@
-let
-  briefcase = import <briefcase> {};
-in briefcase.buildHaskell.shell {
+{ depot, ... }:
+
+depot.users.wpcarro.buildHaskell.shell {
   deps = hpkgs: with hpkgs; [
     hspec
     servant-server
