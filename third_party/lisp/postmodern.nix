@@ -2,13 +2,7 @@
 
 let
   inherit (depot.nix.buildLisp) bundled;
-
-  src = pkgs.fetchFromGitHub {
-    owner = "marijnh";
-    repo = "Postmodern";
-    rev = "v1.32";
-    sha256 = "0prwmpixcqpzqd67v77cs4zgbs73a10m6hs7q0rpv0z1qm7mqfcb";
-  };
+  src = with pkgs; srcOnly lispPackages.postmodern;
 
   cl-postgres = depot.nix.buildLisp.library {
     name = "cl-postgres";

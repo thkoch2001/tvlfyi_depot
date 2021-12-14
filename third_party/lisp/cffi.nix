@@ -1,11 +1,8 @@
 # CFFI purports to be the Common Foreign Function Interface.
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 with depot.nix;
-let src = builtins.fetchGit {
-  url = "https://github.com/cffi/cffi.git";
-  rev = "a49ff36a95cb62ffa6cb069d98378d665769926b";
-};
+let src = with pkgs; srcOnly lispPackages.cffi;
 in buildLisp.library {
   name = "cffi";
   deps = with depot.third_party.lisp; [

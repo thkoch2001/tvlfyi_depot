@@ -3,13 +3,7 @@
 let
   inherit (pkgs) runCommand;
   inherit (depot.nix.buildLisp) bundled;
-  src = pkgs.fetchFromGitHub {
-    owner = "sharplispers";
-    repo = "ironclad";
-    rev = "c3aa33080621abc10fdb0f34acc4655cc4e982a6";
-    sha256 = "0k4bib9mbrzalbl9ivkw4a7g4c7bbad1l5jw4pzkifqszy2swkr5";
-  };
-
+  src = with pkgs; srcOnly lispPackages.ironclad;
   getSrc = f: "${src}/src/${f}";
 
 in depot.nix.buildLisp.library {
