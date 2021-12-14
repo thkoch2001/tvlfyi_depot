@@ -1,13 +1,6 @@
 { depot, pkgs, ... }:
 
-let
-  src = pkgs.fetchFromGitHub {
-    owner = "mrossini-ethz";
-    repo = "physical-quantities";
-    rev = "v0.2.1";
-    sha256 = "0mb2s94s6fhw5vfa89naalw7ld11sdsszlqpz0c65dvpfyfmmdmh";
-  };
-
+let src = with pkgs; srcOnly lispPackages.physical-quantities;
 in depot.nix.buildLisp.library {
   name = "physical-quantities";
 
