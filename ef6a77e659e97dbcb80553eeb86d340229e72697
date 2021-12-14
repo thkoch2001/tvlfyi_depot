@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e6b6085_02425e2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-14T15:26:38Z",
+      "side": 1,
+      "message": "ptal when you have a minute 😎\n\nI still need to update my `shell.nix` files once I have a better idea of how I\u0027m going to handle those.",
+      "revId": "ef6a77e659e97dbcb80553eeb86d340229e72697",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
