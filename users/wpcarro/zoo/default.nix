@@ -1,6 +1,6 @@
-{ briefcase, ... }:
+{ depot, ... }:
 
-briefcase.buildHaskell.program {
+depot.users.wpcarro.buildHaskell.program {
   name = "zoo";
   srcs = builtins.path {
     path = ./.;
