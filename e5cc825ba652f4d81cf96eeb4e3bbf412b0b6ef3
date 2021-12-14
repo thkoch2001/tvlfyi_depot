@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb16d097_f5f7a9e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-14T15:40:09Z",
+      "side": 1,
+      "message": "I\u0027ll look into making an opt-in mechanism later; Gerrit sends me about 9 million messages per day so I can\u0027t really use those for anything :p",
+      "parentUuid": "6d3e2565_0498060c",
+      "revId": "e5cc825ba652f4d81cf96eeb4e3bbf412b0b6ef3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54001069_80fce569",
