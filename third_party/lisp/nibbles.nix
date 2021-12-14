@@ -2,14 +2,7 @@
 
 let
   inherit (depot.nix.buildLisp) bundled;
-  src = pkgs.fetchFromGitHub {
-    owner = "sharplispers";
-    repo = "nibbles";
-    rev = "dad25240928d5cf8f7df69c4398244e03570bb35";
-    sha256 = "0r6ljlpgjmkf87pmvdwzva8qj15bhznc3ylgcjjqyy4frbx9lygz";
-    name = "nibbles-source";
-  };
-
+  src = with pkgs; srcOnly lispPackages.nibbles;
 in depot.nix.buildLisp.library {
   name = "nibbles";
 
