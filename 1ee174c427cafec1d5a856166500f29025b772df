@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fee44bf_12f35c1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-14T15:38:01Z",
+      "side": 1,
+      "message": "fwiw, you don\u0027t need reviews to submit to //users/wpcarro (that\u0027s the point of the OWNERS file). You can +2 the CL yourself and submit it. In tvl.el we have a \"rubberstamp\" function that will autosubmit a CL you make after CI passes (if CI passes).\n\nYour CI doesn\u0027t pass though ;)",
+      "revId": "1ee174c427cafec1d5a856166500f29025b772df",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
