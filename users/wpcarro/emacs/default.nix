@@ -2,7 +2,7 @@
 
 let
   inherit (builtins) path;
-  inherit (depot.third_party) emacsPackagesGen emacs27;
+  inherit (depot.third_party.nixpkgs) emacsPackagesGen emacs27;
   inherit (pkgs) writeShellScript writeShellScriptBin;
   inherit (pkgs.lib.strings) concatStringsSep makeBinPath;
 
@@ -49,7 +49,6 @@ let
       clipmon # TODO: Prefer an Emacs client for clipmenud.
       evil
       evil-collection
-      evil-magit
       evil-commentary
       evil-surround
       key-chord
@@ -103,7 +102,6 @@ let
       eglot
       dap-mode
       lsp-ui
-      company-lsp
       suggest
       paradox
       flymake-shellcheck

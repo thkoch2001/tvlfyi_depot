@@ -1,6 +1,6 @@
-let
-  pkgs = import <nixpkgs> {};
-in pkgs.mkShell {
+{ pkgs, ... }:
+
+pkgs.mkShell {
   buildInputs = with pkgs; [
     nodejs
     elmPackages.elm
