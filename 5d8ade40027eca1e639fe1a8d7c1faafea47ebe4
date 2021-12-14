@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "693f91df_8d7f9242",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-14T01:27:18Z",
+      "side": 1,
+      "message": "Blocking on https://github.com/NixOS/nixpkgs/pull/150623. Cherry picking this on top of nixos-unstable at least allows building //users/tazjin/nixos:frogSystem again.",
+      "revId": "5d8ade40027eca1e639fe1a8d7c1faafea47ebe4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
