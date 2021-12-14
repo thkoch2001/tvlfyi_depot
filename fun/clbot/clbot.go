@@ -258,7 +258,7 @@ func main() {
 					// is not necessarily an action they would otherwise notice.
 					// We avoid pinging only for actions triggered by the same
 					// user.
-					parsedMsg = fmt.Sprintf("CL/%d by %s autosubmitted - %s - %s", e.Change.Number, owner, e.Change.Subject, url)
+					parsedMsg = nopingAll(owner, fmt.Sprintf("CL/%d by %s autosubmitted - %s - %s", e.Change.Number, owner, e.Change.Subject, url))
 				} else {
 					parsedMsg = nopingAll(owner, fmt.Sprintf("CL/%d applied by %s - %s - %s", e.Change.Number, owner, e.Change.Subject, url))
 				}
