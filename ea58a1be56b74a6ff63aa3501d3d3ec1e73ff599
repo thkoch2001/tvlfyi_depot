@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "065a829e_94155680",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-14T16:11:11Z",
+      "side": 1,
+      "message": "It\u0027s kind of funny how you seemingly ran into this ~2 days before me.\n\nEven if upstream fixed it for ExecStartPre\u003d, I still think they need to rewrite their docs to be much clearer. It\u0027s very hard to figure out the behaviour just by reading the systemd.exec man page.",
+      "revId": "ea58a1be56b74a6ff63aa3501d3d3ec1e73ff599",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
