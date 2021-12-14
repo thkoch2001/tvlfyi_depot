@@ -3,13 +3,7 @@
 
 let
   inherit (depot.nix) buildLisp;
-
-  src = pkgs.fetchFromGitHub {
-    owner = "usocket";
-    repo = "usocket";
-    rev = "fdf4fd1e0051ce83340ccfbbc8a43a462bb19cf2";
-    sha256 = "0x746wr2324l6bn7skqzgkzcbj5kd0zp2ck0c8rldrw0rzabg826";
-  };
+  src = with pkgs; srcOnly lispPackages.usocket;
 in buildLisp.library {
   name = "usocket";
   deps = with depot.third_party.lisp; [
