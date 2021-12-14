@@ -180,5 +180,6 @@
   :mode (("\\.adoc\\'" . adoc-mode)))
 
 (require 'subscriptions)
+(require 'nix-inject)
 
 (provide 'init)
