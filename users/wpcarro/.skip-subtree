@@ -1,2 +1,0 @@
-Do not recurse from top-level readTree, while this is being refactored
-we have a nested tree.

@@ -1,21 +1,23 @@
-{ depot, briefcase, ... }:
+{ depot, ... }:
 
 let
-  auth = depot.buildGo.package {
+  inherit (depot.users.wpcarro) gopkgs;
+
+  auth = depot.nix.buildGo.package {
     name = "auth";
     srcs = [
       ./auth.go
     ];
-    deps = with briefcase.gopkgs; [
+    deps = with gopkgs; [
       utils
     ];
   };
-in depot.buildGo.program {
+in depot.nix.buildGo.program {
   name = "token-server";
   srcs = [
     ./tokens.go
   ];
-  deps = with briefcase.gopkgs; [
+  deps = with gopkgs; [
     kv
     utils
     auth
