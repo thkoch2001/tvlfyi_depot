@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a45227a0_7e658fca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-14T08:05:54Z",
+      "side": 1,
+      "message": "I\u0027m assuming you want this for rubberstamped commits, right?\n\nI still think it\u0027s useful to get pinged if one of your commits is autosubmitted because _someone else_ approved it. Maybe we can make a distinction here?",
+      "revId": "e5cc825ba652f4d81cf96eeb4e3bbf412b0b6ef3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54001069_80fce569",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-14T08:05:54Z",
+      "side": 1,
+      "message": "This comment wouldn\u0027t apply anymore.",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 0
+      },
+      "revId": "e5cc825ba652f4d81cf96eeb4e3bbf412b0b6ef3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
