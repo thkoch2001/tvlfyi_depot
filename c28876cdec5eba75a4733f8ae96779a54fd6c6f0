@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7524e147_92a84dcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2021-12-14T17:04:31Z",
+      "side": 1,
+      "message": "You need to update the `gerrit-queue` derivation to not call statik anymore.",
+      "revId": "c28876cdec5eba75a4733f8ae96779a54fd6c6f0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
