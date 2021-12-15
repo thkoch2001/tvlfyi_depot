@@ -8,8 +8,13 @@ steps:
   - label: ":llama:"
     command: |
       set -ue
-      nix-build -A ops.pipelines.depot -o depot.yaml --show-trace && \
-        buildkite-agent pipeline upload depot.yaml
+      nix-build -A ops.pipelines.depot -o pipeline --show-trace
+
+      # Steps need to be uploaded in reverse order because pipeline
+      # upload prepends instead of appending.
+      ls pipeline/chunk-*.json | tac | while read chunk; do
+        buildkite-agent pipeline upload $$chunk
+      done
 
   # Wait for all previous steps to complete.
   - wait: null
