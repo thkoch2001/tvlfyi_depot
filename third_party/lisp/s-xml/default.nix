@@ -1,17 +1,23 @@
 # XML serialiser for Common Lisp.
-#
-# This system was imported from a Quicklisp tarball at 's-xml-20150608'.
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
-depot.nix.buildLisp.library {
+let src = pkgs.applyPatches {
+  name = "s-xml-source";
+  src = pkgs.lispPackages.s-xml.src;
+
+  patches = [
+    ./0001-fix-definition-order-in-xml.lisp.patch
+  ];
+};
+in depot.nix.buildLisp.library {
   name = "s-xml";
 
-  srcs = [
-    ./src/package.lisp
-    ./src/xml.lisp
-    ./src/dom.lisp
-    ./src/lxml-dom.lisp
-    ./src/sxml-dom.lisp
-    ./src/xml-struct-dom.lisp
+  srcs = map (f: src + ("/src/" + f)) [
+    "package.lisp"
+    "xml.lisp"
+    "dom.lisp"
+    "lxml-dom.lisp"
+    "sxml-dom.lisp"
+    "xml-struct-dom.lisp"
   ];
 }
