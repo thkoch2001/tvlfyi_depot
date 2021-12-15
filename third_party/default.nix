@@ -12,7 +12,7 @@
 #    other folders below //third_party, other than the ones mentioned
 #    above.
 
-{ pkgs, ... }:
+{ pkgs, depot, ... }:
 
 {
   # Expose a partially applied NixOS, expecting an attribute set with
@@ -33,7 +33,10 @@
   let
     eval = import "${pkgs.path}/nixos/lib/eval-config.nix" {
       inherit specialArgs system;
-      modules = [ configuration ];
+      modules = [
+        configuration
+        depot.ops.modules.default-imports
+      ];
     };
 
     # This is for `nixos-rebuild build-vm'.
