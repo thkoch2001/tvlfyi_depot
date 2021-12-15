@@ -18,8 +18,6 @@ config: let
 in lib.fix(self: {
   imports = [
     "${depot.third_party.impermanence}/nixos.nix"
-    "${depot.path + "/ops/modules/automatic-gc.nix"}"
-    "${depot.path + "/ops/modules/tvl-cache.nix"}"
     "${pkgs.home-manager.src}/nixos"
   ];
 
