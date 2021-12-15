@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dcdb08d_7a5ee6a3",
+        "filename": "third_party/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-15T23:25:02Z",
+      "side": 1,
+      "message": "depot.path.origSrc",
+      "range": {
+        "startLine": 38,
+        "startChar": 19,
+        "endLine": 38,
+        "endChar": 29
+      },
+      "revId": "ab2d20a7b7721ad64044305407c654419b0ccdbe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
