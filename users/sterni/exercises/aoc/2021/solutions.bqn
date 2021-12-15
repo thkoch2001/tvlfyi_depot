@@ -245,3 +245,36 @@ DotMatrix ← {
 
 •Out "Day 13.2:"
 •Out •Fmt DotMatrix day13Folds PerformAllFolds day13Dots
+
+#
+# 2021-12-14
+#
+
+day14Polymer ← ⊑ReadInput 14
+day14Mapping ← 2↓ReadInput 14
+
+lp ← (2⊸↑)¨ day14Mapping
+le ← ⍷∾lp
+
+# returns array as long as 𝕨 detailing how many times the element
+# at any given index occurs in 𝕩.
+Counts ← ((≠⊣)↑(/⁼)∘⊐)
+
+deltaPairs ← {
+  addedPairs ← ((-1)⊸⊑¨day14Mapping) (⌽⌾(0⊸⊑))∘(∾¨)¨ lp
+  removedPairs ← ⋈¨ (2⊸↑)¨ lp
+  addedPairs (-○(lp⊸Counts))¨ removedPairs
+}
+
+pairCount ← lp Counts ⥊∘(⋈˘) 2↕day14Polymer
+
+PairInsert ← {𝕩 +´ 𝕩×¨deltaPairs}
+
+pairElementCount ← (le⊸Counts)¨lp
+
+ElementRarityDiff ← {
+ ((-1)⊸⊑-⊑)∧ ⌈2÷˜ +´ pairElementCount×PairInsert⍟𝕩 pairCount
+}
+
+•Out "Day 14.1: "∾•Fmt ElementRarityDiff 10
+•Out "Day 14.2: "∾•Fmt ElementRarityDiff 40
