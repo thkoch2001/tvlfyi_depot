@@ -33,6 +33,24 @@
       "message": "for my own edumication, what does `$$chunk` do?",
       "revId": "7357cd4b532389c9e1e98d0b06432e2fdf05dd38",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "619c55dc_dde3802f",
+        "filename": "ops/pipelines/static-pipeline.yaml",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-15T15:48:51Z",
+      "side": 1,
+      "message": "It escapes the $ for Buildkite, since they otherwise interpolate that variable when the build script is ingested.",
+      "parentUuid": "9a2a5a2f_de326184",
+      "revId": "7357cd4b532389c9e1e98d0b06432e2fdf05dd38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
