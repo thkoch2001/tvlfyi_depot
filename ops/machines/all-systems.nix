@@ -12,4 +12,8 @@
 
 (with depot.users.grfn.system.system; [
   yeren
+]) ++
+
+(with depot.users.wpcarro.nixos; [
+  marcus
 ])
