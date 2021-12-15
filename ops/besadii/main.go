@@ -28,6 +28,7 @@ import (
 	"path"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 // Regular expression to extract change ID out of a URL
@@ -202,9 +203,11 @@ func triggerBuild(cfg *config, log *syslog.Writer, trigger *buildTrigger) error 
 		headBuild = false
 	}
 
+	branch := strings.TrimSuffix(strings.TrimRight(trigger.ref, "0123456789"), "/")
+
 	build := Build{
 		Commit: trigger.commit,
-		Branch: trigger.ref,
+		Branch: branch,
 		Env:    env,
 		Author: Author{
 			Name:  trigger.author,
