@@ -52,6 +52,24 @@
       "parentUuid": "cd8f99c3_0f061737",
       "revId": "de0db754f52406b2fcdb5d09264821174d2d93c8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed6d255a_4cebadc0",
+        "filename": "users/grfn/system/system/machines/yeren.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-15T17:43:21Z",
+      "side": 1,
+      "message": "just tried and it works! seems like the bug has been fixed.",
+      "parentUuid": "9d9e2a92_f489a680",
+      "revId": "de0db754f52406b2fcdb5d09264821174d2d93c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
