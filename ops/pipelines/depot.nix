@@ -7,8 +7,16 @@
 { depot, lib, pkgs, ... }:
 
 let
-  inherit (builtins) concatStringsSep foldl' map toJSON;
-  inherit (pkgs) symlinkJoin writeText;
+  inherit (builtins)
+    attrValues
+    concatStringsSep
+    foldl'
+    length
+    map
+    mapAttrs
+    toJSON;
+
+  inherit (pkgs) runCommandNoCC symlinkJoin writeText;
 
   # Create an expression that builds the target at the specified
   # location.
@@ -64,11 +72,8 @@ let
     label = ":water_buffalo:";
   };
 
-  # This defines the build pipeline, using the pipeline format
-  # documented on https://buildkite.com/docs/pipelines/defining-steps
-  #
-  # Pipeline steps need to stay in order.
-  pipeline.steps =
+  # All pipeline steps before batching them into smaller chunks.
+  allSteps =
     # Create build steps for each CI target
     (map mkStep depot.ci.targets)
 
@@ -76,4 +81,32 @@ let
       # Simultaneously run protobuf checks
       protoCheck
     ];
-in (writeText "depot.yaml" (toJSON pipeline))
+
+  # Helper function to inelegantly divide a list into chunks of at
+  # most n elements.
+  chunksOf = n: list: let
+    chunkId = idx: toString (idx / n + 1);
+    assigned = lib.imap1 (idx: value: { inherit value ; chunk = chunkId idx; }) list;
+    unchunk = mapAttrs (_: elements: map (e: e.value) elements);
+  in unchunk (lib.groupBy (e: e.chunk) assigned);
+
+  # Define a build pipeline chunk as a JSON file, using the pipeline
+  # format documented on
+  # https://buildkite.com/docs/pipelines/defining-steps.
+  makePipelineChunk = chunkId: chunk: rec {
+    filename = "chunk-${chunkId}.json";
+    path = writeText filename (toJSON {
+      pipeline.steps = chunk;
+    });
+  };
+
+  pipelineChunks = attrValues (mapAttrs makePipelineChunk (chunksOf 256 allSteps));
+
+in runCommandNoCC "depot-pipeline" {} ''
+  mkdir $out
+  echo "Generated ${toString (length pipelineChunks)} pipeline chunks"
+  ${
+    lib.concatMapStringsSep "\n"
+      (chunk: "cp ${chunk.path} $out/${chunk.filename}") pipelineChunks
+  }
+''
