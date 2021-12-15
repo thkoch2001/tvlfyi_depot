@@ -128,7 +128,7 @@ passes. This is potentially dangerous, use with care."
                     (-max-by
                      (-on #'> (lambda (ref)
                                 (string-to-number
-                                 (fifth (split-string ref (rx "/"))))))
+                                 (nth 4 (split-string ref (rx "/"))))))
                      (-remove
                       (apply-partially #'s-ends-with-p "meta")
                       (cdr cl-to-refs)))))
