@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "559692ee_5849ece5",
+        "filename": "tools/magrathea/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-15T18:38:20Z",
+      "side": 1,
+      "message": "can this be something slightly more sensible?\n\nor maybe just stick the file in the buildPhase and dontUnpack?",
+      "range": {
+        "startLine": 8,
+        "startChar": 8,
+        "endLine": 8,
+        "endChar": 12
+      },
+      "revId": "ee51c2ba748783294672623676a1a90c58c97c4a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcd8a9b8_96523e4f",
         "filename": "tools/magrathea/mg.scm",
         "patchSetId": 1
