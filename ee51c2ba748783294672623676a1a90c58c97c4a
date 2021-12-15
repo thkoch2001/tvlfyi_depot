@@ -81,6 +81,29 @@
       "parentUuid": "dcd8a9b8_96523e4f",
       "revId": "ee51c2ba748783294672623676a1a90c58c97c4a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f7cfe58_c42f3e57",
+        "filename": "tools/magrathea/mg.scm",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-15T18:48:28Z",
+      "side": 1,
+      "message": "Needs to wrap components containing a `.` with quotes (e. g. gws.fyi -\u003e \"gws.fyi\").",
+      "range": {
+        "startLine": 58,
+        "startChar": 34,
+        "endLine": 58,
+        "endChar": 44
+      },
+      "revId": "ee51c2ba748783294672623676a1a90c58c97c4a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
