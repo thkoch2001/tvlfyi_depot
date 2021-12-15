@@ -19,18 +19,11 @@ in lib.fix(self: {
   imports = [
     "${depot.third_party.impermanence}/nixos.nix"
     "${depot.path + "/ops/modules/automatic-gc.nix"}"
+    "${depot.path + "/ops/modules/tvl-cache.nix"}"
     "${pkgs.home-manager.src}/nixos"
   ];
 
-  nix = {
-    binaryCachePublicKeys = [
-      "cache.tvl.su:kjc6KOMupXc1vHVufJUoDUYeLzbwSr9abcAKdn/U1Jk="
-    ];
-
-    binaryCaches = [
-      "https://cache.tvl.su"
-    ];
-  };
+  tvl.cache.enable = true;
 
   boot = rec {
     initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
