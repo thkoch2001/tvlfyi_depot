@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61f36541_65dbfd6b",
+        "filename": "tools/magrathea/mg.scm",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-15T22:45:59Z",
+      "side": 1,
+      "message": "This still needs to be escaped, no? At least `\"` and `${`, the rest is kinda optional.",
+      "range": {
+        "startLine": 69,
+        "startChar": 53,
+        "endLine": 69,
+        "endChar": 58
+      },
+      "revId": "53f4faea3204a3b243e7b2b22322733d528ed630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
