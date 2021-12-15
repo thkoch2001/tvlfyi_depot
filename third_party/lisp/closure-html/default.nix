@@ -3,12 +3,7 @@
 let
   src = pkgs.applyPatches {
     name = "closure-html-source";
-    src = pkgs.fetchFromGitHub {
-      owner = "bluelisp";
-      repo = "closure-html";
-      rev = "fee42604ae36884d2f7c5e8ffc3441fdb8ec77b7"; # 2017-04-19
-      sha256 = "105vm29qnxh6zj3rh4jwpm8dyp3b9bsva64c8a78cr270p28d032";
-    };
+    src = pkgs.lispPackages.closure-html.src;
 
     patches = [
       # delete unexported and unused double defun in sgml-dtd.lisp
