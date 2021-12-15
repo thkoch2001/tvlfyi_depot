@@ -10,6 +10,7 @@
     ../modules/sound.nix
     ../modules/tvl.nix
     ../modules/development.nix
+    ../modules/kernel.nix
     ../modules/work/kolide.nix
   ];
 
