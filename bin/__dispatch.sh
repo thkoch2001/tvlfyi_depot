@@ -37,6 +37,9 @@ case "${TARGET_TOOL}" in
   meson)
     attr="third_party.nixpkgs.meson"
     ;;
+  mg)
+    attr="tools.magrathea"
+    ;;
   ninja)
     attr="third_party.nixpkgs.ninja"
     ;;
