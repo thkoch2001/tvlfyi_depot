@@ -62,6 +62,17 @@ let
         # pipeline construction.
         (pathExists (unsafeDiscardStringContext target.outPath));
       in if shouldSkip then "Target was already built." else false;
+
+    # Add a "fake" dependency on the initial static pipeline step. When
+    # uploading a pipeline dynamically, an implicit dependency on the uploading
+    # step is added to all newly created build steps. Since we are uploading in
+    # batches this stops the jobs in the first batch from running before all
+    # batches have been uploaded.
+    #
+    # By setting an explicit dependency on a step that has always completed at
+    # this point, we override that behaviour and allow the steps to start
+    # running already.
+    depends_on = ":buildkite:";
   };
 
   # Protobuf check step which validates that changes to .proto files
