@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30aa958c_1ef8e2c9",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-15T13:11:19Z",
+      "side": 1,
+      "message": "Best to wrap with `lib.makeOverrideable`, I think. functionArgs are not easily recoverable in both cases, really an oversight in the design of the whole mechanism.",
+      "revId": "96fdc81c28abe2f66bb8f3ac414c148f1effa515",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
