@@ -104,6 +104,30 @@
       },
       "revId": "ee51c2ba748783294672623676a1a90c58c97c4a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07497b39_c5ec64db",
+        "filename": "tools/magrathea/mg.scm",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-15T22:42:50Z",
+      "side": 1,
+      "message": "fixed by doing it like we do in CI (nesting builtins.getAttr calls, which avoids other weird issues, too)",
+      "parentUuid": "7f7cfe58_c42f3e57",
+      "range": {
+        "startLine": 58,
+        "startChar": 34,
+        "endLine": 58,
+        "endChar": 44
+      },
+      "revId": "ee51c2ba748783294672623676a1a90c58c97c4a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
