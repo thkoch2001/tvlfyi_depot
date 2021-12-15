@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "890d9a58_0dab46fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T15:22:18Z",
+      "side": 1,
+      "message": "Pretty cool 😎",
+      "revId": "7357cd4b532389c9e1e98d0b06432e2fdf05dd38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a2a5a2f_de326184",
+        "filename": "ops/pipelines/static-pipeline.yaml",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-15T15:22:18Z",
+      "side": 1,
+      "message": "for my own edumication, what does `$$chunk` do?",
+      "revId": "7357cd4b532389c9e1e98d0b06432e2fdf05dd38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
