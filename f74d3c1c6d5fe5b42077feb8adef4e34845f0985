@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "56535e11_4267b701",
+        "filename": "users/wpcarro/nixos/marcus/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-16T14:14:03Z",
+      "side": 1,
+      "message": "you get this by default now as of https://cl.tvl.fyi/c/depot/+/4345, so if you rebase on that once it\u0027s merged you should be able to remove this line",
+      "revId": "f74d3c1c6d5fe5b42077feb8adef4e34845f0985",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3379e437_641ca01b",
         "filename": "users/wpcarro/nixos/marcus/default.nix",
         "patchSetId": 1
