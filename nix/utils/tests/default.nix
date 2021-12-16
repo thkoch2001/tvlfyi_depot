@@ -85,6 +85,8 @@ let
   cheddarStorePath =
     builtins.unsafeDiscardStringContext depot.tools.cheddar.outPath;
 
+  cleanedSource = lib.cleanSource ./.;
+
   storePathNameTests = it "correctly gets the basename of a store path" [
     (assertEq "base name of a derivation"
       (storePathName depot.tools.cheddar) depot.tools.cheddar.name)
@@ -94,6 +96,8 @@ let
       (storePathName "${cheddarStorePath}/bin/cheddar") "cheddar")
     (assertEq "base name of a path"
       (storePathName ../default.nix) "default.nix")
+    (assertEq "base name of a cleanSourced path"
+      (storePathName cleanedSource) cleanedSource.name)
   ];
 in
 

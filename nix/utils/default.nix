@@ -21,17 +21,18 @@ let
     then p.name
     else if builtins.isPath p
     then builtins.baseNameOf p
-    else if builtins.isString p
+    else if builtins.isString p || (builtins.isAttrs p && (p ? outPath || p ? __toString))
     then
       let
+        strPath = toString p;
         # strip leading storeDir and trailing slashes
         noStoreDir = lib.removeSuffix "/"
-          (lib.removePrefix "${builtins.storeDir}/" p);
+          (lib.removePrefix "${builtins.storeDir}/" strPath);
         # a basename of a child of a store path isn't really
         # referring to a store path, so removing the string
         # context is safe (e. g. "hello" for "${hello}/bin/hello").
         basename = builtins.unsafeDiscardStringContext
-          (builtins.baseNameOf p);
+          (builtins.baseNameOf strPath);
       in
         # If p is a direct child of storeDir, we need to remove
         # the leading hash as well to make sure that:
