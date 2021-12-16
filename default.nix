@@ -87,7 +87,11 @@ in readTree.fix(self: (readDepot {
 }) // {
   # Make the path to the depot available for things that might need it
   # (e.g. NixOS module inclusions)
-  path = self.third_party.nixpkgs.lib.cleanSource ./.;
+  path = self.third_party.nixpkgs.lib.cleanSourceWith {
+    name = "depot";
+    src = ./.;
+    filter = self.third_party.nixpkgs.lib.cleanSourceFilter;
+  };
 
   # List of all buildable targets, for CI purposes.
   #
