@@ -33,6 +33,10 @@ let
   emacsWithPackages = (emacsPackagesGen emacs27).emacsWithPackages;
 
   wpcarrosEmacs = emacsWithPackages (epkgs:
+    (with epkgs.tvlPackages; [
+      tvl
+    ]) ++
+
     (with epkgs.elpaPackages; [
       exwm
     ]) ++
