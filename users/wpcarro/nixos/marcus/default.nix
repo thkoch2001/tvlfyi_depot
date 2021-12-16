@@ -29,7 +29,7 @@ in {
     enable = true;
     libinput = {
       enable = true;
-      touchpad.naturalScrolling = true;
+      touchpad.naturalScrolling = false;
       touchpad.tapping = false;
     };
     layout = "us";
