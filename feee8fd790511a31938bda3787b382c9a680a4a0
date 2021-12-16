@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be15e5cc_4a28be69",
+        "filename": "users/wpcarro/keys.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-16T09:42:40Z",
+      "side": 1,
+      "message": "semicolon",
+      "range": {
+        "startLine": 5,
+        "startChar": 92,
+        "endLine": 5,
+        "endChar": 93
+      },
+      "revId": "feee8fd790511a31938bda3787b382c9a680a4a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
