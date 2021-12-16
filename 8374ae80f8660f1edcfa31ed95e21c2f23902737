@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f15e4d2_97d14c70",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-16T10:27:05Z",
+      "side": 1,
+      "message": "Should have a comment on here explaining this, imo",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 80
+      },
+      "revId": "8374ae80f8660f1edcfa31ed95e21c2f23902737",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
