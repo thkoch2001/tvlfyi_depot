@@ -195,7 +195,9 @@
 ;; TODO: Is there a shell-command API that accepts an alist and serializes it
 ;; into variables to pass to the shell command?
 (defconst window-manager--xsecurelock
-  "/usr/share/goobuntu-desktop-files/xsecurelock.sh"
+  (if (device-corporate?)
+      "/usr/share/goobuntu-desktop-files/xsecurelock.sh"
+    "xsecurelock")
   "Path to the proper xsecurelock executable.
 The other path to xsecurelock is /usr/bin/xsecurelock, which works fine, but it
 is not optimized for Goobuntu devices.  Goobuntu attempts to check a user's
@@ -347,7 +349,7 @@ predicate."
 
 (add-hook 'exwm-init-hook
           (lambda ()
-            (display-arrange-primary)
+            ;; (display-arrange-primary)
             (window-manager--switch "Coding")))
 
 (provide 'window-manager)
