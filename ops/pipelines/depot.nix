@@ -14,7 +14,24 @@ let
     length
     map
     mapAttrs
-    toJSON;
+    toJSON
+    concatMap
+  ;
+
+  inherit (depot.nix.yants)
+    defun
+    struct
+    string
+    list
+    attrs
+  ;
+
+  extraStep = struct {
+    label = string;
+    command = string;
+  };
+
+  extraSteps = list extraStep;
 
   inherit (pkgs) runCommandNoCC symlinkJoin writeText;
 
@@ -35,7 +52,7 @@ let
       else label;
 
   # Create a pipeline step from a single target.
-  mkStep = target: {
+  mkTargetStep = target: {
     command = let
       drvPath = builtins.unsafeDiscardStringContext target.drvPath;
     in lib.concatStringsSep " " [
@@ -75,6 +92,17 @@ let
     depends_on = ":init:";
   };
 
+  mkExtraStep = defun [ attrs extraSteps attrs ] (parentTarget: { label, command }: {
+    inherit label command;
+    depends_on = parentTarget.label;
+    skip = parentTarget.skip or false;
+  });
+
+  mkSteps = target: let
+    targetStep = mkTargetStep target;
+  in [targetStep]
+     ++ (map (mkExtraStep target) (target.meta.extraSteps or []));
+
   # Protobuf check step which validates that changes to .proto files
   # between revisions don't cause backwards-incompatible or otherwise
   # flawed changes.
@@ -86,7 +114,7 @@ let
   # All pipeline steps before batching them into smaller chunks.
   allSteps =
     # Create build steps for each CI target
-    (map mkStep depot.ci.targets)
+    (concatMap mkSteps depot.ci.targets)
 
     ++ [
       # Simultaneously run protobuf checks
