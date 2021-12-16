@@ -14,7 +14,8 @@ let
     length
     map
     mapAttrs
-    toJSON;
+    toJSON
+    concatMap;
 
   inherit (pkgs) runCommandNoCC symlinkJoin writeText;
 
@@ -34,11 +35,22 @@ let
       then "${label}:${target.__subtarget}"
       else label;
 
+  # Should this target be skipped?
+  shouldSkip = target: with builtins;
+    # Only skip in real Buildkite builds
+    (getEnv "BUILDKITE_BUILD_ID" != "") &&
+    # Always build everything for the canon branch.
+    (getEnv "BUILDKITE_BRANCH" != "refs/heads/canon") &&
+    # Discard string context to avoid realising the store path during
+    # pipeline construction.
+    (pathExists (unsafeDiscardStringContext target.outPath));
+
   # Create a pipeline step from a single target.
-  mkStep = target: {
-    command = let
-      drvPath = builtins.unsafeDiscardStringContext target.drvPath;
-    in lib.concatStringsSep " " [
+  mkTargetStep = target: let
+    drvPath = builtins.unsafeDiscardStringContext target.drvPath;
+  in {
+    key = drvPath;
+    command = lib.concatStringsSep " " [
       # First try to realise the drvPath of the target so we don't evaluate twice.
       # Nix has no concept of depending on a derivation file without depending on
       # at least one of its `outPath`s, so we need to discard the string context
@@ -52,16 +64,9 @@ let
     label = ":nix: ${mkLabel target}";
 
     # Skip build steps if their out path has already been built.
-    skip = let
-      shouldSkip = with builtins;
-        # Only skip in real Buildkite builds
-        (getEnv "BUILDKITE_BUILD_ID" != "") &&
-        # Always build everything for the canon branch.
-        (getEnv "BUILDKITE_BRANCH" != "refs/heads/canon") &&
-        # Discard string context to avoid realising the store path during
-        # pipeline construction.
-        (pathExists (unsafeDiscardStringContext target.outPath));
-      in if shouldSkip then "Target was already built." else false;
+    skip = if shouldSkip target
+           then "Target was already built."
+           else false;
 
     # Add a "fake" dependency on the initial static pipeline step. When
     # uploading a pipeline dynamically, an implicit dependency on the uploading
@@ -75,6 +80,19 @@ let
     depends_on = ":init:";
   };
 
+  mkExtraStep = dependsOn: { label, command }: {
+    inherit label command;
+    depends_on = dependsOn;
+  };
+
+  mkSteps = target: let
+    drvPath = builtins.unsafeDiscardStringContext target.drvPath;
+  in
+    [mkTargetStep target]
+    ++ (if shouldSkip target
+        then []
+        else (map (mkExtraStep drvPath) (target.extraSteps or [])));
+
   # Protobuf check step which validates that changes to .proto files
   # between revisions don't cause backwards-incompatible or otherwise
   # flawed changes.
@@ -86,7 +104,7 @@ let
   # All pipeline steps before batching them into smaller chunks.
   allSteps =
     # Create build steps for each CI target
-    (map mkStep depot.ci.targets)
+    (concatMap mkSteps depot.ci.targets)
 
     ++ [
       # Simultaneously run protobuf checks
