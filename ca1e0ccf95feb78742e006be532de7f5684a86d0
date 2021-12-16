@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bc2f9b3_c44d9fbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-16T18:57:11Z",
+      "side": 1,
+      "message": "This is the relevant changelog: https://github.com/marijnh/Postmodern/blob/v1.33.1/CHANGELOG.md#changelog-v-1331\n\nMaybe you want to link it in the commit message?",
+      "revId": "ca1e0ccf95feb78742e006be532de7f5684a86d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
