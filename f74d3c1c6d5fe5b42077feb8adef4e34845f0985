@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3379e437_641ca01b",
+        "filename": "users/wpcarro/nixos/marcus/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-16T09:17:42Z",
+      "side": 1,
+      "message": "You likely want `(depot.path + \"/users/wpcarro/nixos/marcus/hardware.nix\")` etc. to avoid rebuilding the machine config on every depot commit.",
+      "range": {
+        "startLine": 12,
+        "startChar": 4,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "f74d3c1c6d5fe5b42077feb8adef4e34845f0985",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
