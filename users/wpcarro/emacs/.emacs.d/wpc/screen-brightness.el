@@ -6,11 +6,9 @@
 ;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
-;; Mainly just Elisp wrappers around `xbacklight`.
+;; Control your laptop's screen brightness.
 
 ;;; Code:
-
-;; TODO: Define some isomorphisms. E.g. int->string, string->int.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dependencies
@@ -22,8 +20,19 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst screen-brightness-step-size 15
-  "The size of the increment or decrement step for the screen's brightness.")
+(defgroup screen-brightness nil "Configuration for screen-brightness.")
+
+(defcustom screen-brightness-increase-cmd
+  "light -A 3"
+  "The shell command to run to increase screen brightness."
+  :group 'screen-brightness
+  :type 'string)
+
+(defcustom screen-brightness-decrease-cmd
+  "light -U 3"
+  "The shell command to run to decrease screen brightness."
+  :group 'screen-brightness
+  :type 'string)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -34,7 +43,7 @@
   (interactive)
   (prelude-start-process
    :name "screen-brightness-increase"
-   :command (string-format "xbacklight -inc %s" screen-brightness-step-size))
+   :command screen-brightness-increase-cmd)
   (message "[screen-brightness.el] Increased screen brightness."))
 
 (defun screen-brightness-decrease ()
@@ -42,7 +51,7 @@
   (interactive)
   (prelude-start-process
    :name "screen-brightness-decrease"
-   :command (string-format "xbacklight -dec %s" screen-brightness-step-size))
+   :command screen-brightness-decrease-cmd)
   (message "[screen-brightness.el] Decreased screen brightness."))
 
 (provide 'screen-brightness)
