@@ -14,7 +14,26 @@ let
     length
     map
     mapAttrs
-    toJSON;
+    toJSON
+    concatMap
+  ;
+
+  inherit (depot.nix.yants)
+    any
+    attrs
+    bool
+    defun
+    drv
+    either
+    option
+    string
+    struct
+  ;
+
+  extraStep = struct "extraStep" {
+    label = string;
+    command = either drv string;
+  };
 
   inherit (pkgs) runCommandNoCC symlinkJoin writeText;
 
@@ -34,8 +53,11 @@ let
       then "${label}:${target.__subtarget}"
       else label;
 
+  sanitizeBuildkiteKey = builtins.replaceStrings ["/" "." " "] ["-" "-" "-"];
+
   # Create a pipeline step from a single target.
-  mkStep = target: {
+  mkTargetStep = target: {
+    # key = sanitizeBuildkiteKey (mkLabel target);
     command = let
       drvPath = builtins.unsafeDiscardStringContext target.drvPath;
     in lib.concatStringsSep " " [
@@ -75,6 +97,21 @@ let
     depends_on = ":init:";
   };
 
+  mkExtraStep = defun [
+    (attrs any)
+    extraStep
+    (attrs any)
+  ] (parentTarget: { label, command }: {
+    inherit label command;
+    depends_on = parentTarget.key;
+    skip = parentTarget.skip or false;
+  });
+
+  mkSteps = target: let
+    targetStep = mkTargetStep target;
+  in [targetStep]
+     ++ (map (mkExtraStep targetStep) (target.meta.extraSteps or []));
+
   # Protobuf check step which validates that changes to .proto files
   # between revisions don't cause backwards-incompatible or otherwise
   # flawed changes.
@@ -86,7 +123,12 @@ let
   # All pipeline steps before batching them into smaller chunks.
   allSteps =
     # Create build steps for each CI target
-    (map mkStep depot.ci.targets)
+    (concatMap mkSteps depot.ci.targets)
+
+    ++ [{
+      key = "web-tvl-logo:yellowPng";
+      command = "echo 1";
+    }]
 
     ++ [
       # Simultaneously run protobuf checks
@@ -123,4 +165,4 @@ in runCommandNoCC "depot-pipeline" {} ''
     lib.concatMapStringsSep "\n"
       (chunk: "cp ${chunk.path} $out/${chunk.filename}") pipelineChunks
   }
-''
+'' // { inherit mkSteps mkExtraStep allSteps; }
