@@ -109,6 +109,9 @@ database connection."
   (declare (ignore initargs))
   (created-at->timestamp obj))
 
+(defun keyword->str (kw) (string-downcase (symbol-name kw)))
+(defun str->keyword (st) (alexandria:make-keyword (string-upcase st)))
+
 (defclass issue (has-created-at)
   ((id :col-type serial :initarg :id :accessor id)
    (subject :col-type string :initarg :subject :accessor subject)
@@ -121,7 +124,9 @@ database connection."
            :initarg :status
            :accessor status
            :initform :open
-           :col-default "open"))
+           :col-default "open"
+           :col-export keyword->str
+           :col-import str->keyword))
   (:metaclass dao-class)
   (:keys id)
   (:table-name issues)
