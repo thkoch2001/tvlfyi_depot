@@ -45,7 +45,6 @@
 (general-evil-setup)
 (require 'evil)
 (require 'evil-collection)
-(require 'evil-magit)
 (require 'evil-commentary)
 (require 'evil-surround)
 (require 'key-chord)
