@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17526128_01042aab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-16T14:44:52Z",
+      "side": 1,
+      "message": "before submitting this I want to try it manually, will mark this comment as resolved when done",
+      "revId": "ed0b6b43da877cb5f0c86799678d5f4da6d1a211",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
