@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67785e15_acbac9f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-16T16:30:28Z",
+      "side": 1,
+      "message": "nit: My plan for panettone is to have the syntax for automatically closing bugs on CL submission be:\n\u003e Fixes: b/162\n\nThough in the absence of that feature the specific syntax doesn\u0027t actually matter",
+      "revId": "0d15b8553094ead832a0de5fb15200b236c7a33b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
