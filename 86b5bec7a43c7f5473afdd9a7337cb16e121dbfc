@@ -16,6 +16,23 @@
       "message": "Thanks for the feedback 😎",
       "revId": "86b5bec7a43c7f5473afdd9a7337cb16e121dbfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d17b329_bb82db57",
+        "filename": "users/wpcarro/nixos/marcus/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-16T20:36:28Z",
+      "side": 1,
+      "message": "Actually a relative path like you had originally should also work if you prefer that.",
+      "revId": "86b5bec7a43c7f5473afdd9a7337cb16e121dbfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
