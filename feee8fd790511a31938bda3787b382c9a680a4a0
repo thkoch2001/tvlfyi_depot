@@ -22,6 +22,30 @@
       },
       "revId": "feee8fd790511a31938bda3787b382c9a680a4a0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a31e124_05584639",
+        "filename": "users/wpcarro/keys.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-16T20:30:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be15e5cc_4a28be69",
+      "range": {
+        "startLine": 5,
+        "startChar": 92,
+        "endLine": 5,
+        "endChar": 93
+      },
+      "revId": "feee8fd790511a31938bda3787b382c9a680a4a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
