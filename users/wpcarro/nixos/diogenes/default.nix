@@ -1,19 +1,21 @@
 { depot, pkgs, ... }:
+{ ... }:
 
 let
   inherit (depot.users.wpcarro) keys;
 in {
   imports = [
-    "${depot.path}/ops/modules/tvl.nix"
-    "${pkgs.path}/nixos/modules/virtualisation/google-compute-image.nix"
+    (pkgs.path + "/nixos/modules/virtualisation/google-compute-image.nix")
   ];
+
+  networking.hostName = "diogenes";
 
   # Use the TVL binary cache
   tvl.cache.enable = true;
 
   # Use 100G volume for /nix
   fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/5a65f6c2-7d55-414d-b693-1928480c9b96";
+    device = "/dev/disk/by-uuid/62396bde-9002-4025-83eb-2a6c731b7adc";
     fsType = "ext4";
   };
 
