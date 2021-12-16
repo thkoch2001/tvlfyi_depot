@@ -69,6 +69,24 @@
       "parentUuid": "acbcae6a_7a6d4d98",
       "revId": "fc2f40759b71fabb03759dfc8babd9d0a134de92",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42808b96_868bffc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-16T14:16:02Z",
+      "side": 1,
+      "message": "\u003e More convenient way to write that last bit:\n\u003e \n\u003e  in depot.nix.readTree.drvTargets {\n\u003e    marcusSystem \u003d ...;\n\u003e  }\n\nooh, that\u0027s new! I like it.",
+      "parentUuid": "61c3732c_30147c82",
+      "revId": "fc2f40759b71fabb03759dfc8babd9d0a134de92",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
