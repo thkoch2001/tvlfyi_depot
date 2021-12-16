@@ -7,7 +7,12 @@ let
     briefcasePath = "$HOME/depot/users/wpcarro";
   };
 in {
-  imports = [ ./hardware.nix ];
+  imports = [
+    (depot.path + "/users/wpcarro/nixos/marcus/hardware.nix")
+  ];
+
+  # Use the TVL binary cache
+  tvl.cache.enable = true;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -25,23 +30,33 @@ in {
 
   time.timeZone = "America/New_York";
 
-  services.xserver = {
-    enable = true;
-    libinput = {
+  services = {
+    xserver = {
       enable = true;
-      touchpad.naturalScrolling = false;
-      touchpad.tapping = false;
+      libinput = {
+        enable = true;
+        touchpad.naturalScrolling = false;
+        touchpad.tapping = false;
+      };
+      layout = "us";
+      xkbOptions = "caps:escape";
+      displayManager = {
+        # Give EXWM permission to control the session (from tazjin's setup).
+        sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localhost:$USER";
+        lightdm.enable = true;
+      };
+      windowManager.session = lib.singleton {
+        name = "exwm";
+        start = "${wpcarros-emacs}/bin/wpcarros-emacs";
+      };
     };
-    layout = "us";
-    xkbOptions = "caps:escape";
-    displayManager = {
-      # Give EXWM permission to control the session (from tazjin's setup).
-      sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localhost:$USER";
-      lightdm.enable = true;
-    };
-    windowManager.session = lib.singleton {
-      name = "exwm";
-      start = "${wpcarros-emacs}/bin/wpcarros-emacs";
+
+    depot.automatic-gc = {
+      enable = true;
+      interval = "1 hour";
+      diskThreshold = 16; # GiB
+      maxFreed = 10; # GiB
+      preserveGenerations = "14d";
     };
   };
 
@@ -52,7 +67,7 @@ in {
   users.mutableUsers = true;
   users.users.wpcarro = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" ];
     shell = pkgs.fish;
   };
 
