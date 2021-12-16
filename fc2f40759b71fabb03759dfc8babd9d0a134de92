@@ -33,6 +33,24 @@
       "message": "you likely want to define something in the tree that actually builds the system closure for this and exposes it as a CI target, so that we don\u0027t accidentally break this build in the future. Something like this at `//users/wpcarro/nixos/default.nix` should work:\n```\n{ depot, ... }:\n\nlet\n  systems \u003d depot.users.wpcarro.nixos;\nin\n{\n  marcusSystem \u003d (depot.ops.nixos.nixosFor systems.marcus).system;\n}\n```\n\nThough obviously feel free to tweak at will",
       "revId": "fc2f40759b71fabb03759dfc8babd9d0a134de92",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acbcae6a_7a6d4d98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-16T00:09:25Z",
+      "side": 1,
+      "message": "er, it\u0027ll need to actually be:\n```\n{ depot, ... }:\n\nlet\n  systems \u003d depot.users.wpcarro.nixos;\nin\n{\n  marcusSystem \u003d (depot.ops.nixos.nixosFor systems.marcus).system;\n  meta.targets \u003d [\"marcusSystem\"];\n}\n```",
+      "parentUuid": "1da44e5a_eebb8523",
+      "revId": "fc2f40759b71fabb03759dfc8babd9d0a134de92",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
