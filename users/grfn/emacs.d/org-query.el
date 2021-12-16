@@ -4,6 +4,23 @@
 (require 'org-agenda)
 (require 'inflections)
 
+(defun grfn/org-text-element->string (elt)
+  (cond
+   ((stringp elt) elt)
+   ((and (consp elt)
+         (symbolp (car elt)))
+    (-> elt (caddr) (grfn/org-text-element->string) (s-trim) (concat " ")))))
+
+(defun grfn/org-element-title (elt)
+  (let ((title (org-element-property :title elt)))
+    (cond
+     ((stringp title) title)
+     ((listp title)
+      (->> title
+           (mapcar #'grfn/org-text-element->string)
+           (s-join "")
+           (s-trim))))))
+
 (defun grfn/org-agenda-entry->element (agenda-entry)
   ;; ???
   ())
@@ -87,8 +104,7 @@
   (if (org-clocking-p)
       (format "(%s) [%s]"
               (->> (grfn/org-element-clocked-in-task)
-                   (org-element-property :title)
-                   (car)
+                   (grfn/org-element-title)
                    (substring-no-properties)
                    (s-trim))
               (grfn/minutes->hours:minutes
