@@ -83,6 +83,7 @@ in {
     weechat
     wpcarros-emacs
     xclip
+    xsecurelock
   ];
 
   system.stateVersion = "21.11";
