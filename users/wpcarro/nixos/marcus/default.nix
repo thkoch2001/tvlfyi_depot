@@ -68,7 +68,10 @@ in {
   users.mutableUsers = true;
   users.users.wpcarro = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "video" # needed to control the screen brightness
+    ];
     shell = pkgs.fish;
   };
 
@@ -84,7 +87,10 @@ in {
     };
   };
 
-  programs.fish.enable = true;
+  programs = {
+    fish.enable = true;
+    light.enable = true;
+  };
 
   environment.systemPackages = with pkgs; [
     alacritty
