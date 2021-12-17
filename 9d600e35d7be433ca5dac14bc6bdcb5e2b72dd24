@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e4a1f251_58976c94",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T21:43:12Z",
+      "side": 1,
+      "message": "yeah, I think remote builds can happen later - as a change to rebuild system",
+      "parentUuid": "fee8c974_38c75ac8",
+      "range": {
+        "startLine": 12,
+        "startChar": 11,
+        "endLine": 12,
+        "endChar": 50
+      },
+      "revId": "9d600e35d7be433ca5dac14bc6bdcb5e2b72dd24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d580a853_ffbd854f",
         "filename": "ops/modules/auto-deploy.nix",
         "patchSetId": 1
