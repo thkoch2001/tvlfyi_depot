@@ -100,6 +100,7 @@ in {
     fzf
     git
     ripgrep
+    tdesktop
     vim
     weechat
     wpcarros-emacs
