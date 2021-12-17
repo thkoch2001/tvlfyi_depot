@@ -8,7 +8,10 @@ in {
     (pkgs.path + "/nixos/modules/virtualisation/google-compute-image.nix")
   ];
 
-  networking.hostName = "diogenes";
+  networking = {
+    hostName = "diogenes";
+    firewall.allowedTCPPorts = [ 80 443 ];
+  };
 
   # Use the TVL binary cache
   tvl.cache.enable = true;
@@ -32,7 +35,12 @@ in {
   };
 
 
-  security.sudo.wheelNeedsPassword = false;
+  security = {
+    # Provision SSL certificates to support HTTPS connections.
+    acme.acceptTerms = true;
+    acme.email = "wpcarro@gmail.com";
+  };
+
 
   environment.systemPackages = with pkgs; [
     fd
@@ -51,6 +59,54 @@ in {
       diskThreshold = 16; # GiB
       maxFreed = 10; # GiB
       preserveGenerations = "14d";
+    };
+
+    journaldriver = {
+      enable = true;
+      logStream = "home";
+      googleCloudProject = "wpcarros-infrastructure";
+      applicationCredentials = "/etc/gcp/key.json";
+    };
+
+    nginx = {
+      enable = true;
+      enableReload = true;
+
+      recommendedTlsSettings = true;
+      recommendedGzipSettings = true;
+      recommendedProxySettings = true;
+
+      # for journaldriver
+      commonHttpConfig = ''
+        log_format json_combined escape=json
+        '{'
+            '"remote_addr":"$remote_addr",'
+            '"method":"$request_method",'
+            '"host":"$host",'
+            '"uri":"$request_uri",'
+            '"status":$status,'
+            '"request_size":$request_length,'
+            '"response_size":$body_bytes_sent,'
+            '"response_time":$request_time,'
+            '"referrer":"$http_referer",'
+            '"user_agent":"$http_user_agent"'
+        '}';
+
+        access_log syslog:server=unix:/dev/log,nohostname json_combined;
+      '';
+
+      virtualHosts = {
+        "wpcarro.dev" = {
+          addSSL = true;
+          enableACME = true;
+          root = depot.users.wpcarro.website;
+        };
+        "blog.wpcarro.dev" = {
+          addSSL = true;
+          enableACME = true;
+          root = depot.users.wpcarro.website.blog;
+        };
+      };
     };
   };
 
