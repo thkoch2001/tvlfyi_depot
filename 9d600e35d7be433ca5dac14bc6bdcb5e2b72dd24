@@ -16,6 +16,46 @@
       "message": "Looking to start the conversation",
       "revId": "9d600e35d7be433ca5dac14bc6bdcb5e2b72dd24",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c4c4577_ef09497d",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T20:15:34Z",
+      "side": 1,
+      "message": "This seems like the bulk of things here, and is the thing I\u0027m least clear on how it\u0027s going to happen - specifically, is the idea that every host would have credentials to clone the depot? or would we have some sort of metadata service for fetching the current outPath of a particular depot build taarget? The latter seems kinda cool (albeit unfortunately pretty mutability-based), but I\u0027m moderately worried about the overhead of the former. Maybe it\u0027s fine though",
+      "range": {
+        "startLine": 12,
+        "startChar": 11,
+        "endLine": 12,
+        "endChar": 50
+      },
+      "revId": "9d600e35d7be433ca5dac14bc6bdcb5e2b72dd24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d580a853_ffbd854f",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T20:15:34Z",
+      "side": 1,
+      "message": "90% sure it is",
+      "revId": "9d600e35d7be433ca5dac14bc6bdcb5e2b72dd24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
