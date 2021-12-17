@@ -16,6 +16,24 @@
       "message": "probably want to `pushd ../deploy`, then `popd` after rebuild-system finishes, both for cleanliness and so you\u0027re not trying to remove the current directory",
       "revId": "3b07a3df33efc911cd8424854bff589d843ae5a0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94bb50c7_0399d604",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-17T22:00:32Z",
+      "side": 1,
+      "message": "Agree that pushd and popd are preferable. Latest patchset has a different approach. Lmk what you think",
+      "parentUuid": "2344a2ff_8b78b514",
+      "revId": "3b07a3df33efc911cd8424854bff589d843ae5a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
