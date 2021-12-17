@@ -45,12 +45,19 @@ in {
   ];
 
   services = {
-    depot.automatic-gc = {
-      enable = true;
-      interval = "1 hour";
-      diskThreshold = 16; # GiB
-      maxFreed = 10; # GiB
-      preserveGenerations = "14d";
+    depot = {
+      automatic-gc = {
+        enable = true;
+        interval = "1 hour";
+        diskThreshold = 16; # GiB
+        maxFreed = 10; # GiB
+        preserveGenerations = "14d";
+      };
+
+      auto-deploy = {
+        enable = true;
+        interval = "1h";
+      };
     };
   };
 
