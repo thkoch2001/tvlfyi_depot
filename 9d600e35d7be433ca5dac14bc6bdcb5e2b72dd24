@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fee8c974_38c75ac8",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-17T21:42:23Z",
+      "side": 1,
+      "message": "\u003e [..] is the idea that every host would have credentials to clone the depot\n\nI was thinking `git clone` https.\n\nAs for the registry idea of mapping target-specs (i.e. //foo/bar:baz) to store paths, maybe that can be something to look at for supporting remote builds via rebuild-system. Wdyt?",
+      "parentUuid": "7c4c4577_ef09497d",
+      "range": {
+        "startLine": 12,
+        "startChar": 11,
+        "endLine": 12,
+        "endChar": 50
+      },
+      "revId": "9d600e35d7be433ca5dac14bc6bdcb5e2b72dd24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d580a853_ffbd854f",
         "filename": "ops/modules/auto-deploy.nix",
         "patchSetId": 1
@@ -54,6 +78,24 @@
       "writtenOn": "2021-12-17T20:15:34Z",
       "side": 1,
       "message": "90% sure it is",
+      "revId": "9d600e35d7be433ca5dac14bc6bdcb5e2b72dd24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d8b78b_eda737c6",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-17T21:42:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d580a853_ffbd854f",
       "revId": "9d600e35d7be433ca5dac14bc6bdcb5e2b72dd24",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
