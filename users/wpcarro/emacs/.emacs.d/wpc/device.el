@@ -21,9 +21,13 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; TODO(wpcarro): Consider integrating this with Nix and depot instead of
+;; denormalizing the state.
 (defconst device-hostname->device
   '(("zeno.lon.corp.google.com" . work-desktop)
-    ("seneca" . work-laptop))
+    ("seneca" . work-laptop)
+    ("marcus" . personal-laptop)
+    ("diogenes" . personal-vm))
   "Mapping hostname to a device symbol.")
 
 ;; TODO: Should I generate these predicates?
@@ -45,6 +49,10 @@
 (defun device-corporate? ()
   "Return t if the current device is owned by my company."
   (or (device-work-laptop?) (device-work-desktop?)))
+
+(defun device-laptop? ()
+  "Return t if the current device is a laptop."
+  (-contains? '(work-laptop personal-laptop) (device-classify)))
 
 (provide 'device)
 ;;; device.el ends here
