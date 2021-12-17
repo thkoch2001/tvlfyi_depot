@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74cb7b41_dbe01529",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T21:42:27Z",
+      "side": 1,
+      "message": "perhaps \"rebuild the current system\u0027s NixOS config from the latest checkout of depot\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "4e6a8c5d8499c360ee4a782687ef4b7751502a45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "763144ae_a7833862",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T21:42:27Z",
+      "side": 1,
+      "message": "usually I\u0027d set `git` to include the git directory itself, so:\n```\nreadonly git\u003d\"${pkgs.git}/bin/git -C /run/depot\"\n```\n\nsubstituting /run/depot for what the actual bare checkout ends up being",
+      "revId": "4e6a8c5d8499c360ee4a782687ef4b7751502a45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76cce767_68e24dfc",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T21:42:27Z",
+      "side": 1,
+      "message": "convention is that bare checkouts are suffixed with .git\n\nalso, it\u0027d be nice if all the runtime state for this was nested in one directory - I\u0027m kinda thinking something like\n\n- `/run/depot/depot.git`\n- `/run/depot/deploy`",
+      "range": {
+        "startLine": 21,
+        "startChar": 53,
+        "endLine": 21,
+        "endChar": 63
+      },
+      "revId": "4e6a8c5d8499c360ee4a782687ef4b7751502a45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c1f6354_968ca34c",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T21:42:27Z",
+      "side": 1,
+      "message": "one advantage of doing this with a bare checkout + worktree is that we can have different worktrees for different deploys - it\u0027d be kinda neat to suffix the actual directory with a timestamp or something like that.",
+      "range": {
+        "startLine": 26,
+        "startChar": 25,
+        "endLine": 26,
+        "endChar": 31
+      },
+      "revId": "4e6a8c5d8499c360ee4a782687ef4b7751502a45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef1b487c_4c75c75c",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T21:42:27Z",
+      "side": 1,
+      "message": "this cleanup should go in a `trap EXIT` so if other parts of the script fail the worktree gets cleaned up",
+      "revId": "4e6a8c5d8499c360ee4a782687ef4b7751502a45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a563a135_346d2238",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T21:42:27Z",
+      "side": 1,
+      "message": "I think you want -f here",
+      "range": {
+        "startLine": 29,
+        "startChar": 18,
+        "endLine": 29,
+        "endChar": 24
+      },
+      "revId": "4e6a8c5d8499c360ee4a782687ef4b7751502a45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f89e18a4_c842deca",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T21:42:27Z",
+      "side": 1,
+      "message": "the description passed to a `mkEnableOption` gets put after the word \"Enable\", so should make sense grammatically and not start with a capital letter.",
+      "range": {
+        "startLine": 33,
+        "startChar": 32,
+        "endLine": 33,
+        "endChar": 43
+      },
+      "revId": "4e6a8c5d8499c360ee4a782687ef4b7751502a45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bf1cc45_aa9f46d7",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T21:42:27Z",
+      "side": 1,
+      "message": "specified *in*, probably",
+      "range": {
+        "startLine": 39,
+        "startChar": 37,
+        "endLine": 39,
+        "endChar": 47
+      },
+      "revId": "4e6a8c5d8499c360ee4a782687ef4b7751502a45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
