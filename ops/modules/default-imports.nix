@@ -8,6 +8,7 @@
 {
   imports = [
     ./automatic-gc.nix
+    ./auto-deploy.nix
     ./tvl-cache.nix
   ];
 }
