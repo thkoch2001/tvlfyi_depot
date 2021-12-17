@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d0387f6_08e996ad",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T22:06:15Z",
+      "side": 1,
+      "message": "can this be a (nix-level) config option?",
+      "range": {
+        "startLine": 23,
+        "startChar": 24,
+        "endLine": 23,
+        "endChar": 52
+      },
+      "revId": "72157fe08ee2a041fa12a0957e24d55629021a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eb8494f_55a24a1e",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T22:06:15Z",
+      "side": 1,
+      "message": "this will have to be regular old `${pkgs.git}/bin/git`, since the directory we\u0027re -C\u0027ing doesn\u0027t exist yet",
+      "range": {
+        "startLine": 23,
+        "startChar": 6,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "72157fe08ee2a041fa12a0957e24d55629021a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6811016a_9c402816",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T22:06:15Z",
+      "side": 1,
+      "message": "I think traps should basically always be functions.",
+      "revId": "72157fe08ee2a041fa12a0957e24d55629021a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
