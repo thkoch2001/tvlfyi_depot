@@ -32,7 +32,9 @@ in rec {
       (throw "${hostname} is not a known NixOS host")
       (map nixosFor depot.ops.machines.all-systems));
 
-  rebuild-system = pkgs.writeShellScriptBin "rebuild-system" ''
+  rebuild-system = rebuildSystemWith depot.path;
+
+  rebuildSystemWith = depotPath: pkgs.writeShellScriptBin "rebuild-system" ''
     set -ue
     if [[ $EUID -ne 0 ]]; then
       echo "Oh no! Only root is allowed to rebuild the system!" >&2
@@ -40,9 +42,9 @@ in rec {
     fi
 
     echo "Rebuilding NixOS for $HOSTNAME"
-    system=$(nix-build -E "((import ${toString depot.path} {}).ops.nixos.findSystem \"$HOSTNAME\").system" --no-out-link --show-trace)
+    system=$(${pkgs.nix}/bin/nix-build -E "((import ${depotPath} {}).ops.nixos.findSystem \"$HOSTNAME\").system" --no-out-link --show-trace)
 
-    nix-env -p /nix/var/nix/profiles/system --set $system
+    ${pkgs.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set $system
     $system/bin/switch-to-configuration switch
   '';
 
