@@ -68,6 +68,11 @@ in {
       ];
     };
 
+    depot.auto-deploy = {
+      enable = true;
+      interval = "1h";
+    };
+
     journaldriver = {
       enable = true;
       logStream = "home";
