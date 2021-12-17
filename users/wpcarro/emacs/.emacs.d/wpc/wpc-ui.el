@@ -158,10 +158,9 @@
   :config
   (setq alert-default-style 'notifier))
 
-;; TODO: Should `device-work-laptop?' be a function or a constant that gets set
+;; TODO: Should `device-laptop?' be a function or a constant that gets set
 ;; during initialization?
-(when (device-work-laptop?)
-  (laptop-battery-display))
+(when (device-laptop?) (laptop-battery-display))
 
 (if window-system
     (progn
