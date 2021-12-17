@@ -16,6 +16,23 @@
       "message": "ptal if you have a minute 😊",
       "revId": "52d43240f735ebdaf0256defca2c0f8425ab5b19",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e01da365_a770069c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-17T14:26:09Z",
+      "side": 1,
+      "message": "I think this also needs to be added to //users/wpcarro/nixos/default.nix",
+      "revId": "52d43240f735ebdaf0256defca2c0f8425ab5b19",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
