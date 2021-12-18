@@ -79,6 +79,14 @@ fn highlights_cl_link() {
 }
 
 #[test]
+fn highlights_r_link() {
+    expect_markdown(
+        "Fixed in r/3268.",
+        "<p>Fixed in <a href=\"https://code.tvl.fyi/commit/?id=refs/r/3268\">r/3268</a>.</p>",
+    );
+}
+
+#[test]
 fn highlights_multiple_shortlinks() {
     expect_markdown(
         "Please look at cl/420, b/123.",
