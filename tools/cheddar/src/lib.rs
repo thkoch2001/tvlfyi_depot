@@ -78,6 +78,10 @@ lazy_static! {
         Shortlink {
             pattern: Regex::new(r#"\b(?P<type>b|cl)/(?P<dest>\d+)\b"#).unwrap(),
             replacement: "[$type/$dest](https://$type.tvl.fyi/$dest)",
+        },
+        Shortlink {
+            pattern: Regex::new(r#"\br/(?P<dest>\d+)\b"#).unwrap(),
+            replacement: "[r/$dest](https://code.tvl.fyi/commit/?id=refs/r/$dest)",
         }
     ];
 }
