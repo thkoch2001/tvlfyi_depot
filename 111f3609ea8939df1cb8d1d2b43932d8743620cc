@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ab213b9_70837997",
+        "filename": "bin/__dispatch.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-18T15:10:57Z",
+      "side": 1,
+      "message": "I\u0027m already in the depot, so this name seems slightly redundant - what about just \"fmt\"",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 7
+      },
+      "revId": "111f3609ea8939df1cb8d1d2b43932d8743620cc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
