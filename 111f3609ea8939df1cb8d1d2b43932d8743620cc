@@ -22,6 +22,30 @@
       },
       "revId": "111f3609ea8939df1cb8d1d2b43932d8743620cc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3021d7bd_e3dbda6b",
+        "filename": "bin/__dispatch.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-18T19:15:16Z",
+      "side": 1,
+      "message": "I\u0027d like to keep this name, but plan to integrate it into `mg` so that you just run `mg fmt` from anywhere in the repo. Is that fine by you?",
+      "parentUuid": "2ab213b9_70837997",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 7
+      },
+      "revId": "111f3609ea8939df1cb8d1d2b43932d8743620cc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
