@@ -52,4 +52,12 @@ depot.nix.buildLisp.program {
     "ecl" # dependencies use dynamic cffi
     "ccl" # The value NIL is not of the expected type STRING. when loading model.lisp
   ];
+
+  passthru.meta.extraSteps = [{
+    label = "Example step";
+    command = ''
+      echo "An example failure from an extra step"
+      exit 1
+    '';
+  }];
 }
