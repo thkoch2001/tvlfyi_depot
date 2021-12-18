@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3246758d_d4351fb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-18T14:58:09Z",
+      "side": 1,
+      "message": "Should `mg path` assert that the path actually exists? I\u0027m ambivalent...\n\n```\n$ echo $MG_ROOT\n/does/not/exist\n$ mg path //users/wpcarro/website\n/does/not/exist/users/wpcarro/website\n```",
+      "revId": "3fba61c24180291f5f5c3214d5fe05ce647ab744",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
