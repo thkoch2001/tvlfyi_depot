@@ -18,7 +18,10 @@ let
   currentTelega = epkgs: epkgs.melpaPackages.telega;
 
   # $PATH for binaries that need to be available to Emacs
-  emacsBinPath = lib.makeBinPath [ (currentTelega pkgs.emacsPackages) ];
+  emacsBinPath = lib.makeBinPath [
+    (currentTelega pkgs.emacsPackages)
+    pkgs.libwebp # for dwebp, required by telega
+  ];
 
   identity = x: x;
 
