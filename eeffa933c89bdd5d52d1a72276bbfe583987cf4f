@@ -22,6 +22,23 @@
       },
       "revId": "eeffa933c89bdd5d52d1a72276bbfe583987cf4f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dacf39d_0867229a",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-18T19:40:54Z",
+      "side": 1,
+      "message": "I guess the nixpkgs way of fixing this would be to wrapProgram the shell script with coreutils in PATH.",
+      "revId": "eeffa933c89bdd5d52d1a72276bbfe583987cf4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
