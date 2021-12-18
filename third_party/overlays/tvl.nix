@@ -76,4 +76,14 @@ self: super: {
       outputHash = "19p15gavcjldn1di7yyn80ys6rj4ajaprqk8x34vxslr4y2qychf";
     });
   });
+
+  # TODO(tazjin): determine whether this is the cause of my suspend
+  # bugs, and if so, upstream it to nixpkgs.
+  xsecurelock = super.xsecurelock.overrideAttrs(drv: rec {
+    buildInputs = drv.buildInputs ++ [ self.makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/libexec/xsecurelock/saver_blank \
+        --prefix PATH : ${self.coreutils}/bin
+    '';
+  });
 }
