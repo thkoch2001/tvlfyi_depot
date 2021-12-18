@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ea06ef5_b25b2924",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-18T16:53:07Z",
+      "side": 1,
+      "message": "lol",
+      "revId": "5034e95da6654b87634dcf5616033c8f48d13054",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
