@@ -76,4 +76,13 @@ self: super: {
       outputHash = "19p15gavcjldn1di7yyn80ys6rj4ajaprqk8x34vxslr4y2qychf";
     });
   });
+
+  # TODO(tazjin): determine whether this is the cause of my suspend
+  # bugs, and if so, upstream it to nixpkgs.
+  xsecurelock = super.xsecurelock.overrideAttrs(drv: rec {
+    postInstall = ''
+      sed -i 's|sleep|${super.coreutils}/bin/sleep|g' \
+        $out/libexec/xsecurelock/saver_blank
+    '';
+  });
 }
