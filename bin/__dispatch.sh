@@ -58,6 +58,9 @@ case "${TARGET_TOOL}" in
   stern)
     attr="third_party.nixpkgs.stern"
     ;;
+  depotfmt)
+    attr="tools.depotfmt"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1
