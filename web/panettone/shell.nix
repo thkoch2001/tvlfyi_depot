@@ -1,10 +1,10 @@
 { depot ? import ../.. {} }:
 
-with depot.third_party;
+with depot.third_party.nixpkgs;
 
 mkShell {
   buildInputs = [
-    docker-compose
+    arion
     postgresql
   ];
 
