@@ -39,6 +39,48 @@
       "message": "I guess the nixpkgs way of fixing this would be to wrapProgram the shell script with coreutils in PATH.",
       "revId": "eeffa933c89bdd5d52d1a72276bbfe583987cf4f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef596c98_58d83d96",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-18T20:21:23Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "0dacf39d_0867229a",
+      "revId": "eeffa933c89bdd5d52d1a72276bbfe583987cf4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fa48b9b_9bbb8e63",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-18T20:21:23Z",
+      "side": 1,
+      "message": "Done, but I really hope this doesn\u0027t happen.",
+      "parentUuid": "78750dc4_6de1569d",
+      "range": {
+        "startLine": 84,
+        "startChar": 24,
+        "endLine": 84,
+        "endChar": 29
+      },
+      "revId": "eeffa933c89bdd5d52d1a72276bbfe583987cf4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
