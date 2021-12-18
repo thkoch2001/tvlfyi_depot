@@ -79,4 +79,4 @@
    :issue-comments :num-comments :issue-events)
   (:import-from :panettone.irc :send-irc-notification)
   (:shadow :next)
-  (:export :start-pannetone :config :main))
+  (:export :migrate-db :start-panettone :config :main))
