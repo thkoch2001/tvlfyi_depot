@@ -185,7 +185,7 @@ func TestInsertTemplateFunction(t *testing.T) {
 	resourceSet := context.ResourceSet{
 		Path: "testdata",
 		Values: map[string]interface{}{
-			"testName":        "TestInsertTemplateFunction",
+			"testName": "TestInsertTemplateFunction",
 		},
 	}
 
