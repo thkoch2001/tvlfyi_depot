@@ -8,7 +8,17 @@
 
 let
   inherit (builtins) map elemAt match filter;
-  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl ecl-static ccl;
+  inherit (pkgs)
+    lib
+    runCommandNoCC
+    makeWrapper
+    writeText
+    writeShellScript
+    writeShellScriptBin
+    sbcl
+    ecl-static
+    ccl
+  ;
   inherit (pkgs.stdenv) targetPlatform;
 
   #
@@ -163,27 +173,35 @@ let
           overrideLisp = new: withExtras f (args // new args);
         });
 
-  # 'testSuite' builds a Common Lisp test suite that loads all of srcs and deps,
-  # and then executes expression to check its result
-  testSuite = { name, expression, srcs, deps ? [], native ? [], implementation }:
+  # 'runTestSuite' builds an executable script that runs a Common Lisp test
+  # suite which loads all of srcs and deps, and then executes expression to
+  # check its result.
+  runTestSuite = { name, expression, srcs, deps ? [], native ? [], implementation }:
     let
       lispNativeDeps = allNative native deps;
       lispDeps = allDeps implementation (implFilter implementation deps);
       filteredSrcs = implFilter implementation srcs;
-    in runCommandNoCC name {
-      LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
-      LANG = "C.UTF-8";
-    } ''
-      echo "Running test suite ${name}"
-
+    in writeShellScript name ''
+      set -eo pipefail
+      export LD_LIBRARY_PATH="${lib.makeLibraryPath lispNativeDeps}:$LD_LIBRARY_PATH"
+      export LANG="C.UTF-8"
+      >&2 echo "Running test suite ${name}"
       ${implementation.runScript} ${
         implementation.genTestLisp {
           inherit name expression;
           srcs = filteredSrcs;
           deps = lispDeps;
         }
-      } | tee $out
+      }
 
+      >&2 echo "Test suite ${name} succeeded"
+    '';
+
+  # 'testSuite' builds a Common Lisp test suite that loads all of srcs and deps,
+  # and then executes expression to check its result
+  testSuite = testSuiteArgs @ {name, ...}:
+    runCommandNoCC name {} ''
+      ${runTestSuite testSuiteArgs} | tee $out
       echo "Test suite ${name} succeeded"
     '';
 
@@ -723,6 +741,8 @@ in {
   library = withExtras library;
   program = withExtras program;
   inherit bundled;
+
+  inherit testSuite runTestSuite;
 
   # 'sbclWith' creates an image with the specified libraries /
   # programs loaded in SBCL.
