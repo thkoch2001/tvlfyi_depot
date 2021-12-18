@@ -16,7 +16,7 @@ let
     mapAttrs
     toJSON;
 
-  inherit (pkgs) runCommandNoCC symlinkJoin writeText;
+  inherit (pkgs) runCommandNoCC symlinkJoin writeText lib;
 
   # Create an expression that builds the target at the specified
   # location.
@@ -83,10 +83,18 @@ let
     label = ":water_buffalo:";
   };
 
+  testStep = rec {
+    key = lib.removeSuffix "\n" (builtins.readFile ./key);
+    label = key;
+    command = "echo ${key}";
+  };
+
   # All pipeline steps before batching them into smaller chunks.
   allSteps =
     # Create build steps for each CI target
     (map mkStep depot.ci.targets)
+
+    ++ [testStep]
 
     ++ [
       # Simultaneously run protobuf checks
@@ -123,4 +131,4 @@ in runCommandNoCC "depot-pipeline" {} ''
     lib.concatMapStringsSep "\n"
       (chunk: "cp ${chunk.path} $out/${chunk.filename}") pipelineChunks
   }
-''
+'' // { inherit allSteps testStep; }
