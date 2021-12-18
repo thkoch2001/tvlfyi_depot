@@ -51,11 +51,6 @@ self: super: {
     };
   });
 
-  # Fix Steam issues with web views (nixpkgs#137279)
-  steam = super.steam.override {
-    extraPkgs = pkgs: with pkgs; [ pango harfbuzz libthai ];
-  };
-
   # nix-serve does not work with nix 2.4
   # https://github.com/edolstra/nix-serve/issues/28
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
