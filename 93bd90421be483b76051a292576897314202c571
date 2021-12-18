@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "559c9867_34e7e760",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-18T14:53:26Z",
+      "side": 1,
+      "message": "Invoking from outside of a git repository fails as expected, but is a bit noisy:\n\n```\n/tmp/chicken/bin/mg path //users/wpcarro/website\nfatal: not a git repository (or any of the parent directories): .git\n\nError: (string-chomp) bad argument type - not a string: #!eof\n\n        Call history:\n\n        \u003ceval\u003e    (chicken.load#load-unit (##core#quote library) (##core#quote #f) (##core#quote #f))\n        \u003ceval\u003e    (chicken.load#load-unit (##core#quote library) (##core#quote #f) (##core#quote #f))\n        \u003ceval\u003e    (chicken.load#load-unit (##core#quote expand) (##core#quote #f) (##core#quote #f))\n        \u003csyntax\u003e          (import-syntax scheme chicken.base chicken.memory.representation)\n        \u003csyntax\u003e          (##core#undefined)\n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:102: chicken.base#set-record-printer!          \n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:266: chicken.process-context#command-line-arguments    \n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:266: main      \n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:258: failure3116       \n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:258: failure3127       \n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:258: failure3138       \n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:262: path      \n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:248: repository-root   \n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:172: chicken.process#call-with-input-pipe      \n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:173: chicken.io#read-string    \n        /nix/store/l7lviqac21885djakfagyz37spjnlylb-mg.scm:171: chicken.string#string-chomp             \u003c--\n```",
+      "revId": "93bd90421be483b76051a292576897314202c571",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
