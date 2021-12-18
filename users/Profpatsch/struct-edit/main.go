@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 	"sort"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 	lipgloss "github.com/charmbracelet/lipgloss"
@@ -16,8 +16,8 @@ import (
 
 // Keeps the full data structure and a path that indexes our current position into it.
 type model struct {
-	path          []index
-	data          val
+	path []index
+	data val
 }
 
 // an index into a value, uint for lists and string for maps.
@@ -103,17 +103,17 @@ func makeVal(i interface{}) val {
 	switch i := i.(type) {
 	case string:
 		v = val{
-			tag: tagString,
+			tag:        tagString,
 			last_index: index(nil),
-			doc: "",
-			val: &i,
+			doc:        "",
+			val:        &i,
 		}
 	case float64:
 		v = val{
-			tag: tagFloat,
+			tag:        tagFloat,
 			last_index: index(nil),
-			doc: "",
-			val: &i,
+			doc:        "",
+			val:        &i,
 		}
 	case []interface{}:
 		ls := []val{}
@@ -121,10 +121,10 @@ func makeVal(i interface{}) val {
 			ls = append(ls, makeVal(i))
 		}
 		v = val{
-			tag: tagList,
+			tag:        tagList,
 			last_index: pos1Inner(tagList, &ls),
-			doc: "",
-			val: &ls,
+			doc:        "",
+			val:        &ls,
 		}
 	case map[string]interface{}:
 		ls := map[string]val{}
@@ -132,10 +132,10 @@ func makeVal(i interface{}) val {
 			ls[k] = makeVal(i)
 		}
 		v = val{
-			tag: tagMap,
+			tag:        tagMap,
 			last_index: pos1Inner(tagMap, &ls),
-			doc: "",
-			val: &ls,
+			doc:        "",
+			val:        &ls,
 		}
 	default:
 		log.Fatalf("makeVal: cannot read json of type %T", i)
@@ -245,7 +245,7 @@ func walk(data *val, path []index) (*val, bool, error) {
 				if a, ok := m[p]; ok {
 					res = &a
 				} else {
-				  return nil, false, fmt.Errorf("index %s not in map %s", p, atPath(i))
+					return nil, false, fmt.Errorf("index %s not in map %s", p, atPath(i))
 				}
 			default:
 				return nil, false, fmt.Errorf("not a map index %v %s", p, atPath(i))
@@ -343,8 +343,8 @@ func (m model) Init() tea.Cmd {
 func initialModel(v interface{}) model {
 	val := makeVal(v)
 	return model{
-		path:          []index{},
-		data:          val,
+		path: []index{},
+		data: val,
 	}
 }
 

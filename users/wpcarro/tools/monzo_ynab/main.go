@@ -10,8 +10,8 @@
 package main
 
 import (
-	"os"
 	"monzoSerde"
+	"os"
 )
 
 var (
@@ -25,10 +25,10 @@ var (
 // Convert a Monzo transaction struct, `tx`, into a YNAB transaction struct.
 func toYnab(tx monzoSerde.Transaction) ynabSerde.Transaction {
 	return ynabSerde.Transaction{
-		Id: tx.Id,
-		Date: tx.Created,
-		Amount: tx.Amount,
-		Memo: tx.Notes,
+		Id:        tx.Id,
+		Date:      tx.Created,
+		Amount:    tx.Amount,
+		Memo:      tx.Notes,
 		AccountId: ynabAccountID,
 	}
 }
