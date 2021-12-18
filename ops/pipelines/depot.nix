@@ -88,6 +88,12 @@ let
     # Create build steps for each CI target
     (map mkStep depot.ci.targets)
 
+    ++ [(rec {
+      key = builtins.readFile ./key;
+      label = key;
+      command = "echo ${key}";
+    })]
+
     ++ [
       # Simultaneously run protobuf checks
       protoCheck
