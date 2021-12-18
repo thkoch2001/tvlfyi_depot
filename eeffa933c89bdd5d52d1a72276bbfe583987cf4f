@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78750dc4_6de1569d",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-18T19:39:26Z",
+      "side": 1,
+      "message": "Should be self, in case coreutils is ever touched in this overlay.",
+      "range": {
+        "startLine": 84,
+        "startChar": 24,
+        "endLine": 84,
+        "endChar": 29
+      },
+      "revId": "eeffa933c89bdd5d52d1a72276bbfe583987cf4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
