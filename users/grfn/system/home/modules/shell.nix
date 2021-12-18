@@ -30,7 +30,7 @@ let
 
     # Directories
     stck = "dirs -v";
-    b= "cd ~1";
+    b = "cd ~1";
     ".." = "cd ..";
     "..." = "cd ../..";
     "...." = "cd ../../..";
@@ -63,7 +63,8 @@ let
     "ll" = "ls -al";
     "la" = "ls -a";
   };
-in {
+in
+{
   home.packages = with pkgs; [
     zsh
     autojump

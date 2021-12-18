@@ -3,7 +3,8 @@
 let
   inherit (depot) buildGo;
   inherit (builtins) fetchGit;
-in depot.nix.buildGo.external {
+in
+depot.nix.buildGo.external {
   path = "github.com/googleapis/gax-go";
   src = fetchGit {
     url = "https://github.com/googleapis/gax-go";

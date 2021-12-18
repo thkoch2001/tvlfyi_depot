@@ -11,12 +11,17 @@ let
   getDay = f: head (matchSolution f);
 
   solutionFiles = filter (e: dir."${e}" == "regular" && isSolution e) (attrNames dir);
-  solutions = map (f: let day = getDay f; in {
-    name = day;
-    value = depot.nix.writeElispBin {
-      name = "aoc2019";
-      deps = p: with p; [ dash s ht ];
-      src = ./. + ("/" + f);
-    };
-  }) solutionFiles;
-in listToAttrs solutions
+  solutions = map
+    (f:
+      let day = getDay f; in
+      {
+        name = day;
+        value = depot.nix.writeElispBin {
+          name = "aoc2019";
+          deps = p: with p; [ dash s ht ];
+          src = ./. + ("/" + f);
+        };
+      })
+    solutionFiles;
+in
+listToAttrs solutions

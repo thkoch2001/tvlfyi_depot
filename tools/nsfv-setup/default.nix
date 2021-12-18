@@ -15,7 +15,8 @@
 let
   inherit (pkgs) ripgrep pulseaudio;
   inherit (depot.third_party) nsfv;
-in pkgs.writeShellScriptBin "nsfv-setup" ''
+in
+pkgs.writeShellScriptBin "nsfv-setup" ''
   export PATH="${ripgrep}/bin:${pulseaudio}/bin:$PATH"
 
   if pacmd list-sinks | rg librnnoise_ladspa.so >/dev/null; then

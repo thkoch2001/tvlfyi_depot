@@ -2,13 +2,14 @@
 
 let
   netencode = {
-    rust = depot.nix.writers.rustSimpleLib {
-      name = "arglib-netencode";
-      dependencies = [
-        depot.users.Profpatsch.execline.exec-helpers
-        depot.users.Profpatsch.netencode.netencode-rs
-      ];
-    } ''
+    rust = depot.nix.writers.rustSimpleLib
+      {
+        name = "arglib-netencode";
+        dependencies = [
+          depot.users.Profpatsch.execline.exec-helpers
+          depot.users.Profpatsch.netencode.netencode-rs
+        ];
+      } ''
       extern crate netencode;
       extern crate exec_helpers;
 
@@ -37,4 +38,5 @@ let
     '';
   };
 
-in depot.nix.readTree.drvTargets netencode
+in
+depot.nix.readTree.drvTargets netencode

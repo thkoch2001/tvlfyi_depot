@@ -14,11 +14,13 @@ let
 
   checkEncoding = args: { left, right }:
     assertEq "encode ${builtins.toJSON left} == ${builtins.toJSON right}"
-      (url.encode args left) right;
+      (url.encode args left)
+      right;
 
   checkDecoding = { left, right }:
-  assertEq "${builtins.toJSON left} == decode ${builtins.toJSON right}"
-    (url.decode left) right;
+    assertEq "${builtins.toJSON left} == decode ${builtins.toJSON right}"
+      (url.decode left)
+      right;
 
   unreserved = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_~";
 
@@ -33,7 +35,7 @@ let
   ];
 
   testEncode = it "checks url.encode"
-    (builtins.map (checkEncoding {}) encodeExpected);
+    (builtins.map (checkEncoding { }) encodeExpected);
 
   testDecode = it "checks url.decode"
     (builtins.map checkDecoding encodeExpected);
@@ -50,7 +52,7 @@ let
       "urn:oasis:names:specification:docbook:dtd:xml:4.1.2"
     ]);
 in
-  runTestsuite "nix.url" [
-    testEncode
-    testLeaveReserved
-  ]
+runTestsuite "nix.url" [
+  testEncode
+  testLeaveReserved
+]

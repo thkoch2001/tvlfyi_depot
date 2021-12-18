@@ -24,6 +24,6 @@ let
       (fun.hasEllipsis ({ depot, pkgs, ... }: 42)))
   ];
 in
-  runTestsuite "nix.fun" [
-    hasEllipsisTests
-  ]
+runTestsuite "nix.fun" [
+  hasEllipsisTests
+]

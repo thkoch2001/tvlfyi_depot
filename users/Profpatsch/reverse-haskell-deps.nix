@@ -5,22 +5,27 @@
 
 let
 
-  rev = depot.nix.writeExecline "reverse-haskell-deps" {} [
-    "pipeline" [
-      "${pkgs.curl}/bin/curl" "-L" "https://packdeps.haskellers.com/reverse"
+  rev = depot.nix.writeExecline "reverse-haskell-deps" { } [
+    "pipeline"
+    [
+      "${pkgs.curl}/bin/curl"
+      "-L"
+      "https://packdeps.haskellers.com/reverse"
     ]
     rev-hs
 
   ];
 
-  rev-hs = pkgs.writers.writeHaskell "revers-haskell-deps-hs" {
-    libraries =  [
-      pkgs.haskellPackages.nicify-lib
-      pkgs.haskellPackages.tagsoup
-    ];
+  rev-hs = pkgs.writers.writeHaskell "revers-haskell-deps-hs"
+    {
+      libraries = [
+        pkgs.haskellPackages.nicify-lib
+        pkgs.haskellPackages.tagsoup
+      ];
 
-  }
+    }
     ./reverse-haskell-deps.hs;
 
 
-in rev
+in
+rev

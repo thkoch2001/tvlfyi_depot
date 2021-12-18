@@ -5,11 +5,11 @@ let
   drv2 = writeScriptBin "goodbye" "tschau";
 
   bins = getBins drv [
-            "hello"
-            { use = "hello"; as = "also-hello"; }
-          ]
-      // getBins drv2 [ "goodbye" ]
-      ;
+    "hello"
+    { use = "hello"; as = "also-hello"; }
+  ]
+  // getBins drv2 [ "goodbye" ]
+  ;
 
   simple = it "path is equal to the executable name" [
     (assertEq "path"
@@ -33,8 +33,8 @@ let
   ];
 
 in
-  runTestsuite "getBins" [
-    simple
-    useAs
-    secondDrv
-  ]
+runTestsuite "getBins" [
+  simple
+  useAs
+  secondDrv
+]

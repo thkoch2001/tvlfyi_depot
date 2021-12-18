@@ -12,6 +12,7 @@ let
     networking.firewall.enable = false;
     networking.wireless.enable = lib.mkForce false;
   };
-in (depot.third_party.nixos {
+in
+(depot.third_party.nixos {
   inherit configuration;
 }).config.system.build.isoImage

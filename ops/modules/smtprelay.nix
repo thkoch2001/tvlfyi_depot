@@ -9,7 +9,7 @@ let
     mkIf
     mkOption
     types
-;
+    ;
 
   cfg = config.services.depot.smtprelay;
   description = "Simple SMTP relay";
@@ -27,8 +27,9 @@ let
   prepareArgs = args:
     concatStringsSep " "
       (attrValues (mapAttrs (key: value: "-${key} '${toString value}'")
-                            (args // overrideArgs)));
-in {
+        (args // overrideArgs)));
+in
+{
   options.services.depot.smtprelay = {
     enable = mkEnableOption description;
     args = mkOption {

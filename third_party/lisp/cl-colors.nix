@@ -1,7 +1,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.cl-colors;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "cl-colors";
   deps = [
     depot.third_party.lisp.alexandria

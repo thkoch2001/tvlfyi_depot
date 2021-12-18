@@ -3,7 +3,8 @@
 let
   inherit (depot.nix.buildLisp) bundled;
   src = with pkgs; srcOnly lispPackages.nibbles;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "nibbles";
 
   deps = with depot.third_party.lisp; [

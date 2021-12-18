@@ -2,12 +2,14 @@
 
 let
 
-  clj2nix = pkgs.callPackage (pkgs.fetchFromGitHub {
-    owner = "hlolli";
-    repo = "clj2nix";
-    rev = "3ab3480a25e850b35d1f532a5e4e7b3202232383";
-    sha256 = "1lry026mlpxp1j563qs13nhxf37i2zpl7lh0lgfdwc44afybqka6";
-  }) {};
+  clj2nix = pkgs.callPackage
+    (pkgs.fetchFromGitHub {
+      owner = "hlolli";
+      repo = "clj2nix";
+      rev = "3ab3480a25e850b35d1f532a5e4e7b3202232383";
+      sha256 = "1lry026mlpxp1j563qs13nhxf37i2zpl7lh0lgfdwc44afybqka6";
+    })
+    { };
 
   pg-dump-upsert = pkgs.buildGoModule rec {
     pname = "pg-dump-upsert";
@@ -87,7 +89,7 @@ with lib;
     enable = true;
     package = pkgs.gitFull;
     userEmail = "root@gws.fyi";
-    userName  = "Griffin Smith";
+    userName = "Griffin Smith";
     ignores = [
       "*.sw*"
       ".classpath"
@@ -205,7 +207,7 @@ with lib;
 
     functions = {
       gdelmerged = ''
-      git branch --merged | egrep -v 'master' | tr -d '+ ' | xargs git branch -d
+        git branch --merged | egrep -v 'master' | tr -d '+ ' | xargs git branch -d
       '';
     };
   };

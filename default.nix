@@ -9,7 +9,7 @@ let
     filter
     ;
 
-  readTree = import ./nix/readTree {};
+  readTree = import ./nix/readTree { };
 
   # Disallow access to //users from other depot parts.
   usersFilter = readTree.restrictFolder {
@@ -68,7 +68,8 @@ let
   # Is this tree node eligible for build inclusion?
   eligible = node: (node ? outPath) && (node.meta.ci or true);
 
-in readTree.fix(self: (readDepot {
+in
+readTree.fix (self: (readDepot {
   depot = self;
 
   # Pass third_party as 'pkgs' (for compatibility with external

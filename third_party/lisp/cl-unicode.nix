@@ -40,7 +40,7 @@ let
       "char-info.lisp"
       "read.lisp"
     ]) ++ [
-      (runCommand "dump.lisp" {} ''
+      (runCommand "dump.lisp" { } ''
         substitute ${src}/build/dump.lisp $out \
           --replace ':defaults *this-file*' ":defaults (uiop:getcwd)"
       '')
@@ -55,7 +55,7 @@ let
   };
 
 
-  generated = runCommand "cl-unicode-generated" {} ''
+  generated = runCommand "cl-unicode-generated" { } ''
     mkdir -p $out/build
     mkdir -p $out/test
     cd $out/build
@@ -66,7 +66,7 @@ let
 in
 depot.nix.buildLisp.library {
   name = "cl-unicode";
-  deps = [cl-unicode-base];
+  deps = [ cl-unicode-base ];
   srcs = [
     "${src}/conditions.lisp"
     "${generated}/lists.lisp"

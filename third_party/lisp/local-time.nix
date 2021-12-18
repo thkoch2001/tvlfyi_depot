@@ -4,7 +4,8 @@
 let
   inherit (depot.nix) buildLisp;
   src = with pkgs; srcOnly lispPackages.local-time;
-in buildLisp.library {
+in
+buildLisp.library {
   name = "local-time";
   deps = [
     depot.third_party.lisp.cl-fad

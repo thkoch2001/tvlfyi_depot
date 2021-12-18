@@ -12,9 +12,10 @@ let
         (k: v: toNetstring (toNetstring k + toNetstring v))
         attrs);
 
-  python-netstring = depot.users.Profpatsch.writers.python3Lib {
-    name = "netstring";
-  } ''
+  python-netstring = depot.users.Profpatsch.writers.python3Lib
+    {
+      name = "netstring";
+    } ''
     def read_netstring(bytes):
         (int_length, rest) = bytes.split(sep=b':', maxsplit=1)
         val = rest[:int(int_length)]
@@ -39,9 +40,10 @@ let
         return res
   '';
 
-  rust-netstring = depot.nix.writers.rustSimpleLib {
-    name = "netstring";
-  } ''
+  rust-netstring = depot.nix.writers.rustSimpleLib
+    {
+      name = "netstring";
+    } ''
     pub fn to_netstring(s: &[u8]) -> Vec<u8> {
         let len = s.len();
         // length of the integer as ascii
@@ -55,9 +57,10 @@ let
     }
   '';
 
-in depot.nix.readTree.drvTargets {
+in
+depot.nix.readTree.drvTargets {
   inherit
     python-netstring
     rust-netstring
-      ;
+    ;
 }

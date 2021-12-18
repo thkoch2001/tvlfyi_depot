@@ -3,7 +3,8 @@
 
 let
   inherit (depot.third_party) apereo-cas;
-in {
+in
+{
   config = {
     environment.systemPackages = [ apereo-cas ];
     systemd.services.apereo-cas = {
@@ -23,6 +24,6 @@ in {
       isSystemUser = true;
       group = "apereo-cas";
     };
-    users.groups.apereo-cas = {};
+    users.groups.apereo-cas = { };
   };
 }

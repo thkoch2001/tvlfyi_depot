@@ -3,7 +3,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.alexandria;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "alexandria";
 
   srcs = map (f: src + ("/alexandria-1/" + f)) [

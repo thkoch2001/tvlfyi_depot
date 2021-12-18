@@ -21,7 +21,12 @@ with lib;
     initrd = {
       availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
       kernelModules = [
-        "uas" "usbcore" "usb_storage" "vfat" "nls_cp437" "nls_iso8859_1"
+        "uas"
+        "usbcore"
+        "usb_storage"
+        "vfat"
+        "nls_cp437"
+        "nls_iso8859_1"
       ];
 
       postDeviceCommands = pkgs.lib.mkBefore ''
@@ -58,8 +63,8 @@ with lib;
   networking.firewall.allowedTCPPorts = [ 22 80 443 ];
 
   security.sudo.extraRules = [{
-    groups = ["wheel"];
-    commands = [{ command = "ALL"; options = ["NOPASSWD"]; }];
+    groups = [ "wheel" ];
+    commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
   }];
 
   nix.gc.dates = "monthly";
@@ -131,15 +136,17 @@ with lib;
     DynamicUser = lib.mkForce false;
     ExecStart = lib.mkForce (
       let runtimeDir =
-            config.systemd.services.ddclient.serviceConfig.RuntimeDirectory;
-      in pkgs.writeShellScript "ddclient" ''
+        config.systemd.services.ddclient.serviceConfig.RuntimeDirectory;
+      in
+      pkgs.writeShellScript "ddclient" ''
         set -eo pipefail
 
         ${pkgs.gnused}/bin/sed -i -s s/password=/password=$CLOUDFLARE_API_KEY/ /run/${runtimeDir}/ddclient.conf
         exec ${pkgs.ddclient}/bin/ddclient \
           -file /run/${runtimeDir}/ddclient.conf \
           -login=$CLOUDFLARE_EMAIL \
-      '');
+      ''
+    );
   };
 
   security.acme.certs."metrics.gws.fyi" = {
@@ -193,65 +200,72 @@ with lib;
       job_name = "node";
       scrape_interval = "5s";
       static_configs = [{
-        targets = ["localhost:${toString config.services.prometheus.exporters.node.port}"];
+        targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
       }];
-    } {
-      job_name = "nginx";
-      scrape_interval = "5s";
-      static_configs = [{
-        targets = ["localhost:${toString config.services.prometheus.exporters.nginx.port}"];
+    }
+      {
+        job_name = "nginx";
+        scrape_interval = "5s";
+        static_configs = [{
+          targets = [ "localhost:${toString config.services.prometheus.exporters.nginx.port}" ];
+        }];
+      }
+      {
+        job_name = "xanthous_server";
+        scrape_interval = "1s";
+        static_configs = [{
+          targets = [ "localhost:${toString config.services.xanthous-server.metricsPort}" ];
+        }];
+      }
+      {
+        job_name = "blackbox";
+        metrics_path = "/probe";
+        params.module = [ "https_2xx" ];
+        scrape_interval = "5s";
+        static_configs = [{
+          targets = [
+            "https://gws.fyi"
+            "https://windtunnel.ci"
+            "https://app.windtunnel.ci"
+            "https://metrics.gws.fyi"
+          ];
+        }];
+        relabel_configs = [{
+          source_labels = [ "__address__" ];
+          target_label = "__param_target";
+        }
+          {
+            source_labels = [ "__param_target" ];
+            target_label = "instance";
+          }
+          {
+            target_label = "__address__";
+            replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
+          }];
       }];
-    } {
-      job_name = "xanthous_server";
-      scrape_interval = "1s";
-      static_configs = [{
-        targets = ["localhost:${toString config.services.xanthous-server.metricsPort}"];
-      }];
-    } {
-      job_name = "blackbox";
-      metrics_path = "/probe";
-      params.module = ["https_2xx"];
-      scrape_interval = "5s";
-      static_configs = [{
-        targets = [
-          "https://gws.fyi"
-          "https://windtunnel.ci"
-          "https://app.windtunnel.ci"
-          "https://metrics.gws.fyi"
-        ];
-      }];
-      relabel_configs = [{
-        source_labels = ["__address__"];
-        target_label = "__param_target";
-      } {
-        source_labels = ["__param_target"];
-        target_label = "instance";
-      } {
-        target_label = "__address__";
-        replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
-      }];
-    }];
   };
 
   services.xanthous-server.enable = true;
 
   virtualisation.docker.enable = true;
 
-  services.buildkite-agents = listToAttrs (map (n: rec {
-    name = "mugwump-${toString n}";
-    value = {
-      inherit name;
-      enable = true;
-      tokenPath = "/etc/secrets/buildkite-agent-token";
-      privateSshKeyPath = "/etc/secrets/buildkite-ssh-key";
-      runtimePackages = with pkgs; [
-        docker
-        nix
-        gnutar
-        gzip
-      ];
-    };
-  }) (range 1 1));
+  services.buildkite-agents = listToAttrs (map
+    (n: rec {
+      name = "mugwump-${toString n}";
+      value = {
+        inherit name;
+        enable = true;
+        tokenPath = "/etc/secrets/buildkite-agent-token";
+        privateSshKeyPath = "/etc/secrets/buildkite-ssh-key";
+        runtimePackages = with pkgs; [
+          docker
+          nix
+          gnutar
+          gzip
+        ];
+      };
+    })
+    (range 1 1));
 
   users.users."buildkite-agent-mugwump-1" = {
     isSystemUser = true;

@@ -4,7 +4,8 @@
 let
   cfg = config.services.depot.owothia;
   description = "owothia - i'm a service owo";
-in {
+in
+{
   options.services.depot.owothia = {
     enable = lib.mkEnableOption description;
 

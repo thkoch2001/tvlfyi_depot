@@ -39,7 +39,7 @@
 
   users = {
     # I need a git group to run the git server.
-    groups.git = {};
+    groups.git = { };
 
     users.wpcarro = {
       isNormalUser = true;
@@ -54,7 +54,7 @@
   };
 
   nix = {
-    nixPath = [];
+    nixPath = [ ];
     trustedUsers = [ "root" "wpcarro" ];
   };
 
@@ -117,7 +117,7 @@
     enable = true;
     description = "Run my monoserver";
     script = "${depot.users.wpcarro.zoo}/zoo";
-    environment = {};
+    environment = { };
     serviceConfig = {
       Restart = "always";
     };

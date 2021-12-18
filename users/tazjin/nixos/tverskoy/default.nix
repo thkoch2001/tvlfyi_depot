@@ -1,6 +1,7 @@
 { depot, lib, pkgs, ... }:
 
-config: let
+config:
+let
   quasselClient = pkgs.quassel.override {
     client = true;
     enableDaemon = false;
@@ -15,7 +16,8 @@ config: let
     ${pkgs.xorg.setxkbmap}/bin/setxkbmap -option caps:super
     exec ${pkgs.xsecurelock}/bin/xsecurelock
   '';
-in lib.fix(self: {
+in
+lib.fix (self: {
   imports = [
     "${depot.third_party.impermanence}/nixos.nix"
     "${pkgs.home-manager.src}/nixos"
@@ -43,7 +45,7 @@ in lib.fix(self: {
   };
 
   fileSystems = {
-    "/" =  {
+    "/" = {
       device = "tmpfs";
       fsType = "tmpfs";
       options = [ "defaults" "size=8G" "mode=755" ];
@@ -304,107 +306,107 @@ in lib.fix(self: {
       zoxide
     ]);
 
-    systemd.user.services.lieer-tazjin = {
-      description = "Synchronise mail@tazj.in via lieer";
-      script = "${pkgs.lieer}/bin/gmi sync";
+  systemd.user.services.lieer-tazjin = {
+    description = "Synchronise mail@tazj.in via lieer";
+    script = "${pkgs.lieer}/bin/gmi sync";
 
-      serviceConfig = {
-        WorkingDirectory = "%h/mail/account.tazjin";
-        Type = "oneshot";
+    serviceConfig = {
+      WorkingDirectory = "%h/mail/account.tazjin";
+      Type = "oneshot";
+    };
+  };
+
+  systemd.user.timers.lieer-tazjin = {
+    wantedBy = [ "timers.target" ];
+
+    timerConfig = {
+      OnActiveSec = "1";
+      OnUnitActiveSec = "180";
+    };
+  };
+
+  home-manager.useGlobalPkgs = true;
+  home-manager.users.tazjin = { config, lib, ... }: {
+    imports = [ "${depot.third_party.impermanence}/home-manager.nix" ];
+
+    home.persistence."/persist/tazjin/home" = {
+      allowOther = true;
+
+      directories = [
+        ".cargo"
+        ".config/google-chrome"
+        ".config/quassel-irc.org"
+        ".config/spotify"
+        ".config/syncthing"
+        ".elfeed"
+        ".gnupg"
+        ".local/share/Steam"
+        ".local/share/direnv"
+        ".local/share/fish"
+        ".local/share/zoxide"
+        ".mozilla/firefox"
+        ".password-store"
+        ".rustup"
+        ".ssh"
+        ".steam"
+        ".telega"
+        "go"
+        "mail"
+      ];
+
+      files = [
+        ".config/mimeapps.list"
+        ".notmuch-config"
+      ];
+    };
+
+    home.activation.screenshots = lib.hm.dag.entryAnywhere ''
+      $DRY_RUN_CMD mkdir -p $HOME/screenshots
+    '';
+
+    programs.git = {
+      enable = true;
+      userName = "Vincent Ambo";
+      userEmail = "mail@tazj.in";
+      extraConfig = {
+        pull.rebase = true;
+        init.defaultBranch = "canon";
       };
     };
 
-    systemd.user.timers.lieer-tazjin = {
-      wantedBy = [ "timers.target" ];
-
-      timerConfig = {
-        OnActiveSec = "1";
-        OnUnitActiveSec = "180";
-      };
-    };
-
-    home-manager.useGlobalPkgs = true;
-    home-manager.users.tazjin = { config, lib, ... }: {
-      imports = [ "${depot.third_party.impermanence}/home-manager.nix" ];
-
-      home.persistence."/persist/tazjin/home" = {
-        allowOther = true;
-
-        directories = [
-          ".cargo"
-          ".config/google-chrome"
-          ".config/quassel-irc.org"
-          ".config/spotify"
-          ".config/syncthing"
-          ".elfeed"
-          ".gnupg"
-          ".local/share/Steam"
-          ".local/share/direnv"
-          ".local/share/fish"
-          ".local/share/zoxide"
-          ".mozilla/firefox"
-          ".password-store"
-          ".rustup"
-          ".ssh"
-          ".steam"
-          ".telega"
-          "go"
-          "mail"
-        ];
-
-        files = [
-          ".config/mimeapps.list"
-          ".notmuch-config"
-        ];
-      };
-
-      home.activation.screenshots = lib.hm.dag.entryAnywhere ''
-        $DRY_RUN_CMD mkdir -p $HOME/screenshots
+    programs.fish = {
+      enable = true;
+      interactiveShellInit = ''
+        ${pkgs.zoxide}/bin/zoxide init fish | source
       '';
-
-      programs.git = {
-        enable = true;
-        userName = "Vincent Ambo";
-        userEmail = "mail@tazj.in";
-        extraConfig = {
-          pull.rebase = true;
-          init.defaultBranch = "canon";
-        };
-      };
-
-      programs.fish = {
-        enable = true;
-        interactiveShellInit = ''
-          ${pkgs.zoxide}/bin/zoxide init fish | source
-        '';
-      };
-
-      services.screen-locker = {
-        enable = true;
-        enableDetectSleep = true;
-        inactiveInterval = 10; # minutes
-        lockCmd = "${screenLock}/bin/tazjin-screen-lock";
-      };
-
-      services.picom = {
-        enable = true;
-        vSync = true;
-        backend = "glx";
-      };
-
-      # Enable the dunst notification daemon, but force the
-      # configuration file separately instead of going via the strange
-      # Nix->dunstrc encoding route.
-      services.dunst.enable = true;
-      xdg.configFile."dunst/dunstrc" = {
-        source = depot.users.tazjin.dotfiles.dunstrc;
-        onChange = ''
-          ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
-        '';
-      };
-
-      systemd.user.startServices = true;
     };
 
-    system.stateVersion = "20.09";
+    services.screen-locker = {
+      enable = true;
+      enableDetectSleep = true;
+      inactiveInterval = 10; # minutes
+      lockCmd = "${screenLock}/bin/tazjin-screen-lock";
+    };
+
+    services.picom = {
+      enable = true;
+      vSync = true;
+      backend = "glx";
+    };
+
+    # Enable the dunst notification daemon, but force the
+    # configuration file separately instead of going via the strange
+    # Nix->dunstrc encoding route.
+    services.dunst.enable = true;
+    xdg.configFile."dunst/dunstrc" = {
+      source = depot.users.tazjin.dotfiles.dunstrc;
+      onChange = ''
+        ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
+      '';
+    };
+
+    systemd.user.startServices = true;
+  };
+
+  system.stateVersion = "20.09";
 })

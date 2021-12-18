@@ -6,13 +6,14 @@ let
   bucket = "s3://gws.fyi";
   distributionID = "E2ST43JNBH8C64";
 
-  css = runCommand "main.css" {
-    buildInputs = [ pkgs.minify ];
-  } ''
+  css = runCommand "main.css"
+    {
+      buildInputs = [ pkgs.minify ];
+    } ''
     minify --type css < ${./main.css} > $out
   '';
 
-  keys = runCommand "ssh-keys" {} ''
+  keys = runCommand "ssh-keys" { } ''
     touch $out
     echo "${depot.users.grfn.keys.main}" >> $out
   '';
@@ -27,7 +28,8 @@ let
       cp ${keys} $out/keys
     '';
 
-in (writeShellScript "deploy.sh" ''
+in
+(writeShellScript "deploy.sh" ''
   ${awscli2}/bin/aws --profile personal s3 sync ${website}/ ${bucket}
   echo "Deployed to http://gws.fyi"
 '') // {

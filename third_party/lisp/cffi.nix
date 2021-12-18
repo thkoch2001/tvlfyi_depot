@@ -3,7 +3,8 @@
 
 with depot.nix;
 let src = with pkgs; srcOnly lispPackages.cffi;
-in buildLisp.library {
+in
+buildLisp.library {
   name = "cffi";
   deps = with depot.third_party.lisp; [
     alexandria

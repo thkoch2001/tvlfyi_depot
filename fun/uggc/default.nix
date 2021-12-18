@@ -12,7 +12,8 @@ let
       gopkgs."github.com".pkg.browser.gopkg
     ];
   };
-in uggc.overrideAttrs(old: {
+in
+uggc.overrideAttrs (old: {
   buildCommand = old.buildCommand + ''
     install -D ${./uggc.desktop} $out/share/applications/uggc.desktop
     sed "s|@out@|$out|g" -i $out/share/applications/uggc.desktop

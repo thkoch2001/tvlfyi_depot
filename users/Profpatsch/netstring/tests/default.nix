@@ -2,12 +2,13 @@
 
 let
 
-  python-netstring-test = depot.users.Profpatsch.writers.python3 {
-    name = "python-netstring-test";
-    libraries = p: [
-      depot.users.Profpatsch.netstring.python-netstring
-    ];
-  } ''
+  python-netstring-test = depot.users.Profpatsch.writers.python3
+    {
+      name = "python-netstring-test";
+      libraries = p: [
+        depot.users.Profpatsch.netstring.python-netstring
+      ];
+    } ''
     import netstring
 
     def assEq(left, right):
@@ -33,12 +34,13 @@ let
     )
   '';
 
-  rust-netstring-test = depot.nix.writers.rustSimple {
-    name = "rust-netstring-test";
-    dependencies = [
-      depot.users.Profpatsch.netstring.rust-netstring
-    ];
-  } ''
+  rust-netstring-test = depot.nix.writers.rustSimple
+    {
+      name = "rust-netstring-test";
+      dependencies = [
+        depot.users.Profpatsch.netstring.rust-netstring
+      ];
+    } ''
     extern crate netstring;
 
     fn main() {
@@ -53,7 +55,8 @@ let
     }
   '';
 
-in depot.nix.readTree.drvTargets {
+in
+depot.nix.readTree.drvTargets {
   inherit
     python-netstring-test
     rust-netstring-test

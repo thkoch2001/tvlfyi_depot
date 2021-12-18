@@ -14,9 +14,10 @@ name:
   # "env": don’t substitute, set # and 0…n environment vaariables, where n=$#
   # "none": don’t substitute or set any positional arguments
   # "env-no-push": like "env", but bypass the push-phase. Not recommended.
-  argMode ? "var",
-  # Number of arguments to be substituted as variables (passed to "var"/"-s" or "var-full"/"-S"
-  readNArgs ? 0,
+  argMode ? "var"
+, # Number of arguments to be substituted as variables (passed to "var"/"-s" or "var-full"/"-S"
+  readNArgs ? 0
+,
 }:
 # Nested list of lists of commands.
 # Inner lists are translated to execline blocks.
@@ -24,7 +25,7 @@ argList:
 
 let
   env =
-    if      argMode == "var" then "s${toString readNArgs}"
+    if argMode == "var" then "s${toString readNArgs}"
     else if argMode == "var-full" then "S${toString readNArgs}"
     else if argMode == "env" then ""
     else if argMode == "none" then "P"
@@ -32,7 +33,7 @@ let
     else abort ''"${toString argMode}" is not a valid argMode, use one of "var", "var-full", "env", "none", "env-no-push".'';
 
 in
-  depot.nix.writeScript name ''
-    #!${pkgs.execline}/bin/execlineb -W${env}
-    ${depot.nix.escapeExecline argList}
-  ''
+depot.nix.writeScript name ''
+  #!${pkgs.execline}/bin/execlineb -W${env}
+  ${depot.nix.escapeExecline argList}
+''

@@ -11,15 +11,20 @@ let
     coreutils
     ;
 
-  run = drv: depot.nix.runExecline.local "run-${drv.name}" {} [
-    "if" [ drv ]
-    "importas" "out" "out"
-    "${coreutils}/bin/touch" "$out"
+  run = drv: depot.nix.runExecline.local "run-${drv.name}" { } [
+    "if"
+    [ drv ]
+    "importas"
+    "out"
+    "out"
+    "${coreutils}/bin/touch"
+    "$out"
   ];
 
-  rustTransitiveLib = rustSimpleLib {
-    name = "transitive";
-  } ''
+  rustTransitiveLib = rustSimpleLib
+    {
+      name = "transitive";
+    } ''
     pub fn transitive(s: &str) -> String {
       let mut new = s.to_string();
       new.push_str(" 1 2 3");
@@ -37,10 +42,11 @@ let
     }
   '';
 
-  rustTestLib = rustSimpleLib {
-    name = "test_lib";
-    dependencies = [ rustTransitiveLib ];
-  } ''
+  rustTestLib = rustSimpleLib
+    {
+      name = "test_lib";
+      dependencies = [ rustTransitiveLib ];
+    } ''
     extern crate transitive;
     use transitive::{transitive};
     pub fn test() -> String {
@@ -48,10 +54,11 @@ let
     }
   '';
 
-  rustWithLib = run (rustSimple {
-    name = "rust-with-lib";
-    dependencies = [ rustTestLib ];
-  } ''
+  rustWithLib = run (rustSimple
+    {
+      name = "rust-with-lib";
+      dependencies = [ rustTestLib ];
+    } ''
     extern crate test_lib;
 
     fn main() {
@@ -60,7 +67,8 @@ let
   '');
 
 
-in depot.nix.readTree.drvTargets {
+in
+depot.nix.readTree.drvTargets {
   inherit
     rustTransitiveLib
     rustWithLib

@@ -2,7 +2,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.chipz;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "chipz";
   deps = [ (depot.nix.buildLisp.bundled "asdf") ];
 

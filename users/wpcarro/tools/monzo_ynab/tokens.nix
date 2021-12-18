@@ -12,7 +12,8 @@ let
       utils
     ];
   };
-in depot.nix.buildGo.program {
+in
+depot.nix.buildGo.program {
   name = "token-server";
   srcs = [
     ./tokens.go

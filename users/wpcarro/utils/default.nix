@@ -8,7 +8,8 @@ args@{ pkgs, ... }:
 
 let
   builder = import ./builder.nix args;
-  fs      = import ./fs.nix args;
-in {
+  fs = import ./fs.nix args;
+in
+{
   inherit builder fs;
 }

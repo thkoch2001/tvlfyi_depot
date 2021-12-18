@@ -3,7 +3,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.defclass-std;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "defclass-std";
   deps = with depot.third_party.lisp; [
     alexandria

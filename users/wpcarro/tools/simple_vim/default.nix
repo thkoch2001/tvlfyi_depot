@@ -6,6 +6,7 @@ let
     name = "config.vim";
   };
 
-in pkgs.writeShellScriptBin "simple_vim" ''
+in
+pkgs.writeShellScriptBin "simple_vim" ''
   ${pkgs.vim}/bin/vim -u ${configVim}
 ''

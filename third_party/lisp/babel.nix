@@ -2,7 +2,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.babel;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "babel";
   deps = [
     depot.third_party.lisp.alexandria

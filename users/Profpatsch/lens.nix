@@ -32,7 +32,7 @@ let
     inherit fst snd;
   };
 
-  swap = {fst, snd}: {
+  swap = { fst, snd }: {
     fst = snd;
     snd = fst;
   };
@@ -71,7 +71,7 @@ let
   lensP = strong: to: pab:
     strong.dimap
       to
-      ({fst,snd}: snd fst)
+      ({ fst, snd }: snd fst)
       (strong.firstP pab);
 
   # first element of a tuple
@@ -112,7 +112,8 @@ let
       (map (accessor: accessor profunctorSubclass) accessors);
 
 
-in {
+in
+{
   inherit
     id
     _

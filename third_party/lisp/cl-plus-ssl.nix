@@ -7,7 +7,8 @@ let src = builtins.fetchGit {
   url = "https://github.com/cl-plus-ssl/cl-plus-ssl.git";
   rev = "29081992f6d7b4e3aa2c5eeece4cd92b745071f4";
 };
-in buildLisp.library {
+in
+buildLisp.library {
   name = "cl-plus-ssl";
   deps = with depot.third_party.lisp; [
     alexandria

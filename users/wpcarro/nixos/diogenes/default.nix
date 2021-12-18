@@ -3,7 +3,8 @@
 
 let
   inherit (depot.users.wpcarro) keys;
-in {
+in
+{
   imports = [
     (pkgs.path + "/nixos/modules/virtualisation/google-compute-image.nix")
   ];

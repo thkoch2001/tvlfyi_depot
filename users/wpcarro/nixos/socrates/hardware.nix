@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+    [
+      <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
@@ -14,12 +15,14 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/aadf1a77-1e98-4b5f-8e74-abf8e77bda34";
+    {
+      device = "/dev/disk/by-uuid/aadf1a77-1e98-4b5f-8e74-abf8e77bda34";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/1613-35B9";
+    {
+      device = "/dev/disk/by-uuid/1613-35B9";
       fsType = "vfat";
     };
 

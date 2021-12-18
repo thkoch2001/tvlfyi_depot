@@ -25,7 +25,7 @@ in
   xsession.enable = true;
 
   home.packages = with pkgs; [
-    (import (fetchTarball "https://github.com/ashkitten/nixpkgs/archive/init-glimpse.tar.gz") {}).glimpse
+    (import (fetchTarball "https://github.com/ashkitten/nixpkgs/archive/init-glimpse.tar.gz") { }).glimpse
 
     # Desktop stuff
     arandr

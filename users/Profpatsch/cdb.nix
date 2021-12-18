@@ -1,14 +1,15 @@
 { depot, pkgs, ... }:
 
 let
-  cdbListToNetencode = depot.nix.writers.rustSimple {
-    name = "cdb-list-to-netencode";
-    dependencies = [
-      depot.third_party.rust-crates.nom
-      depot.users.Profpatsch.execline.exec-helpers
-      depot.users.Profpatsch.netencode.netencode-rs
-    ];
-  } ''
+  cdbListToNetencode = depot.nix.writers.rustSimple
+    {
+      name = "cdb-list-to-netencode";
+      dependencies = [
+        depot.third_party.rust-crates.nom
+        depot.users.Profpatsch.execline.exec-helpers
+        depot.users.Profpatsch.netencode.netencode-rs
+      ];
+    } ''
     extern crate nom;
     extern crate exec_helpers;
     extern crate netencode;
@@ -84,7 +85,8 @@ let
 
   '';
 
-in {
+in
+{
   inherit
     cdbListToNetencode
     ;

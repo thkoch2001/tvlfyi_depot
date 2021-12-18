@@ -16,7 +16,7 @@
     "kpa" = "kubectl get pods --all-namespaces";
     "klf" = "kubectl logs -f";
     "kdep" = "kubectl get deployments";
-    "ked" =  "kubectl edit deployment";
+    "ked" = "kubectl edit deployment";
     "kpw" = "kubectl get pods -w";
     "kew" = "kubectl get events -w";
     "kdel" = "kubectl delete";

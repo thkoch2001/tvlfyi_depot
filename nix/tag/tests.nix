@@ -17,7 +17,7 @@ let
         errmsg = null;
       })
     (assertEq "is not Tag"
-      (removeAttrs (verifyTag { foo = "bar"; baz = 42; }) ["errmsg"])
+      (removeAttrs (verifyTag { foo = "bar"; baz = 42; }) [ "errmsg" ])
       {
         isTag = false;
         name = null;
@@ -41,7 +41,8 @@ let
       (discr [
         { bool = lib.isBool; }
         { int = lib.isInt; }
-      ] true)
+      ]
+        true)
       { bool = true; })
     (assertEq "fallback to default"
       (discrDef "def" [
@@ -53,19 +54,24 @@ let
 
   match-test = it "can match things" [
     (assertEq "match example"
-      (let
-        success = { res = 42; };
-        failure = { err = "no answer"; };
-        matcher = {
-          res = i: i + 1;
-          err = _: 0;
-        };
-      in {
-        one = match success matcher;
-        two = match failure matcher;
+      (
+        let
+          success = { res = 42; };
+          failure = { err = "no answer"; };
+          matcher = {
+            res = i: i + 1;
+            err = _: 0;
+          };
+        in
+        {
+          one = match success matcher;
+          two = match failure matcher;
+        }
+      )
+      {
+        one = 43;
+        two = 0;
       })
-      { one = 43;
-        two = 0; })
     (assertEq "matchLam & pipe"
       (lib.pipe { foo = 42; } [
         (matchLam {
@@ -81,8 +87,8 @@ let
   ];
 
 in
-  runTestsuite "tag" [
-    isTag-test
-    discr-test
-    match-test
-  ]
+runTestsuite "tag" [
+  isTag-test
+  discr-test
+  match-test
+]

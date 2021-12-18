@@ -58,10 +58,10 @@ in
       RemainAfterExit = true;
       ExecStart = (
         "${pkgs.xorg.setxkbmap}/bin/setxkbmap "
-          + "-device ${laptopKeyboardId} "
-          + "-option caps:swapescape "
-          + "-option compose:ralt "
-          + "-option altwin:swap_alt_win"
+        + "-device ${laptopKeyboardId} "
+        + "-option caps:swapescape "
+        + "-option compose:ralt "
+        + "-option altwin:swap_alt_win"
       );
     };
   };

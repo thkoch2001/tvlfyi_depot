@@ -3,7 +3,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.trivial-garbage;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "trivial-garbage";
   srcs = [ (src + "/trivial-garbage.lisp") ];
 }

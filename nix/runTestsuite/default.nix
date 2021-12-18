@@ -38,17 +38,18 @@ let
     ;
 
   bins = depot.nix.getBins pkgs.coreutils [ "printf" ]
-      // depot.nix.getBins pkgs.s6-portable-utils [ "s6-touch" "s6-false" "s6-cat" ];
+    // depot.nix.getBins pkgs.s6-portable-utils [ "s6-touch" "s6-false" "s6-cat" ];
 
   # Returns true if the given expression throws when `deepSeq`-ed
   throws = expr:
-    !(builtins.tryEval (builtins.deepSeq expr {})).success;
+    !(builtins.tryEval (builtins.deepSeq expr { })).success;
 
   # rewrite the builtins.partition result
   # to use `ok` and `err` instead of `right` and `wrong`.
   partitionTests = pred: xs:
     let res = builtins.partition pred xs;
-    in {
+    in
+    {
       ok = res.right;
       err = res.wrong;
     };
@@ -99,11 +100,12 @@ let
     (context: desc: res:
       if res
       then { yep = { test = desc; }; }
-      else { nope = {
-        test = desc;
-        inherit context;
-      };
-    });
+      else {
+        nope = {
+          test = desc;
+          inherit context;
+        };
+      });
 
   # assert that left and right values are equal
   assertEq = defun [ string any any AssertResult ]
@@ -111,7 +113,7 @@ let
       let
         context = { not-equal = { inherit left right; }; };
       in
-        assertBoolContext context desc (left == right));
+      assertBoolContext context desc (left == right));
 
   # assert that the expression throws when `deepSeq`-ed
   assertThrows = defun [ string any AssertResult ]
@@ -119,7 +121,7 @@ let
       let
         context = { should-throw = { inherit expr; }; };
       in
-        assertBoolContext context desc (throws expr));
+      assertBoolContext context desc (throws expr));
 
   # assert that the expression does not throw when `deepSeq`-ed
   assertDoesNotThrow = defun [ string any AssertResult ]
@@ -144,31 +146,50 @@ let
           yep = _: true;
           nope = _: false;
         };
-        res = partitionTests (it:
-          (partitionTests goodAss it.asserts).err == []
-        ) itResults;
-        prettyRes = lib.generators.toPretty {} res;
+        res = partitionTests
+          (it:
+            (partitionTests goodAss it.asserts).err == [ ]
+          )
+          itResults;
+        prettyRes = lib.generators.toPretty { } res;
       in
-        if res.err == []
-        then depot.nix.runExecline.local "testsuite-${name}-successful" {} [
-          "importas" "out" "out"
+      if res.err == [ ]
+      then
+        depot.nix.runExecline.local "testsuite-${name}-successful" { } [
+          "importas"
+          "out"
+          "out"
           # force derivation to rebuild if test case list changes
-          "ifelse" [ bins.s6-false ] [
-            bins.printf "" (builtins.hashString "sha512" prettyRes)
+          "ifelse"
+          [ bins.s6-false ]
+          [
+            bins.printf
+            ""
+            (builtins.hashString "sha512" prettyRes)
           ]
-          "if" [ bins.printf "%s\n" "testsuite ${name} successful!" ]
-          bins.s6-touch "$out"
+          "if"
+          [ bins.printf "%s\n" "testsuite ${name} successful!" ]
+          bins.s6-touch
+          "$out"
         ]
-        else depot.nix.runExecline.local "testsuite-${name}-failed" {
-          stdin = prettyRes + "\n";
-        } [
-          "importas" "out" "out"
-          "if" [ bins.printf "%s\n" "testsuite ${name} failed!" ]
-          "if" [ bins.s6-cat ]
-          "exit" "1"
+      else
+        depot.nix.runExecline.local "testsuite-${name}-failed"
+          {
+            stdin = prettyRes + "\n";
+          } [
+          "importas"
+          "out"
+          "out"
+          "if"
+          [ bins.printf "%s\n" "testsuite ${name} failed!" ]
+          "if"
+          [ bins.s6-cat ]
+          "exit"
+          "1"
         ]);
 
-in {
+in
+{
   inherit
     assertEq
     assertThrows

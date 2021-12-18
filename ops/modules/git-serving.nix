@@ -12,7 +12,8 @@
 
 let
   cfg = config.services.depot.git-serving;
-in {
+in
+{
   options.services.depot.git-serving = with lib; {
     enable = mkEnableOption "Enable cgit & josh configuration";
 

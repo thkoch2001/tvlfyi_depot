@@ -20,29 +20,29 @@ let
   escape = replaceStrings [ "<" ">" "&" "'" ] [ "&lt;" "&gt;" "&amp;" "&#39;" ];
 
   header = name: title: ''
-  <!DOCTYPE html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="${escape name}">
-    <link rel="stylesheet" type="text/css" href="${staticUrl}/tvl.css" media="all">
-    <link rel="icon" type="image/webp" href="/static/favicon.webp">
-    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://tvl.fyi/feed.atom">
-    <title>${escape name}: ${escape title}</title>
-  </head>
-  <body class="light">
-    <header>
-      <h1><a class="blog-title" href="/">${escape name}</a> </h1>
-      <hr>
-    </header>
+    <!DOCTYPE html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="${escape name}">
+      <link rel="stylesheet" type="text/css" href="${staticUrl}/tvl.css" media="all">
+      <link rel="icon" type="image/webp" href="/static/favicon.webp">
+      <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://tvl.fyi/feed.atom">
+      <title>${escape name}: ${escape title}</title>
+    </head>
+    <body class="light">
+      <header>
+        <h1><a class="blog-title" href="/">${escape name}</a> </h1>
+        <hr>
+      </header>
   '';
 
   fullFooter = content: ''
-    <hr>
-    <footer>
-      ${content}
-    </footer>
-  </body>
+      <hr>
+      <footer>
+        ${content}
+      </footer>
+    </body>
   '';
 
   draftWarning = writeText "draft.html" ''
@@ -61,7 +61,7 @@ let
     <hr>
   '';
 
-  renderPost = { name, footer, ... }: post: runCommandNoCC "${post.key}.html" {} ''
+  renderPost = { name, footer, ... }: post: runCommandNoCC "${post.key}.html" { } ''
     cat ${writeText "header.html" (header name post.title)} > $out
 
     # Write the post title & date
@@ -90,6 +90,7 @@ let
 
     cat ${writeText "footer.html" (fullFooter footer)} >> $out
   '';
-in {
+in
+{
   inherit isDraft isUnlisted renderPost;
 }

@@ -4,7 +4,7 @@ with lib;
   options = {
     grfn.impure.clonedRepos = mkOption {
       description = "Repositories to clone";
-      default = {};
+      default = { };
       type = with types; loaOf (
         let sm = submodule {
           options = {
@@ -37,7 +37,7 @@ with lib;
             after = mkOption {
               type = listOf str;
               description = "Activation hooks that this repository must be cloned after";
-              default = [];
+              default = [ ];
             };
           };
         };
@@ -49,19 +49,24 @@ with lib;
   config = {
     home.activation =
       mapAttrs
-      (_: {
-        url, path, github, onClone, after, ...
-      }:
-        let repoURL = if isNull url then "git@github.com:${github}" else url;
-        in hm.dag.entryAfter (["writeBoundary"] ++ after) ''
-          $DRY_RUN_CMD mkdir -p $(dirname "${path}")
-          if [[ ! -d ${path} ]]; then
-            $DRY_RUN_CMD git clone "${repoURL}" "${path}"
-            pushd ${path}
-            $DRY_RUN_CMD ${onClone}
-            popd
-          fi
-        '')
-      config.grfn.impure.clonedRepos;
+        (_: { url
+            , path
+            , github
+            , onClone
+            , after
+            , ...
+            }:
+          let repoURL = if isNull url then "git@github.com:${github}" else url;
+          in
+          hm.dag.entryAfter ([ "writeBoundary" ] ++ after) ''
+            $DRY_RUN_CMD mkdir -p $(dirname "${path}")
+            if [[ ! -d ${path} ]]; then
+              $DRY_RUN_CMD git clone "${repoURL}" "${path}"
+              pushd ${path}
+              $DRY_RUN_CMD ${onClone}
+              popd
+            fi
+          '')
+        config.grfn.impure.clonedRepos;
   };
 }

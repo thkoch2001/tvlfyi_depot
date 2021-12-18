@@ -20,5 +20,5 @@ pkgs.fetchFromGitHub {
   inherit (pin)
     rev
     sha256
-  ;
+    ;
 }

@@ -1,6 +1,7 @@
 { depot, lib, pkgs, ... }:
 
-config: let
+config:
+let
   inherit (pkgs) lieer;
 
   quasselClient = pkgs.quassel.override {
@@ -8,7 +9,8 @@ config: let
     enableDaemon = false;
     monolithic = false;
   };
-in lib.fix(self: {
+in
+lib.fix (self: {
   imports = [
     "${depot.path}/ops/modules/v4l2loopback.nix"
   ];
@@ -61,8 +63,8 @@ in lib.fix(self: {
 
   nix = {
     maxJobs = 48;
-    binaryCaches = ["ssh://nix-ssh@whitby.tvl.fyi"];
-    binaryCachePublicKeys = ["cache.tvl.fyi:fd+9d1ceCPvDX/xVhcfv8nAa6njEhAGAEe+oGJDEeoc="];
+    binaryCaches = [ "ssh://nix-ssh@whitby.tvl.fyi" ];
+    binaryCachePublicKeys = [ "cache.tvl.fyi:fd+9d1ceCPvDX/xVhcfv8nAa6njEhAGAEe+oGJDEeoc=" ];
   };
 
   networking = {

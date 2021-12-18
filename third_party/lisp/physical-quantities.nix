@@ -1,7 +1,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.physical-quantities;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "physical-quantities";
 
   deps = with depot.third_party.lisp; [

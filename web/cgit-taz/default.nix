@@ -63,12 +63,13 @@ let
          envp[envn++] = build_env( "PATH=%s", CGI_PATH );
      #ifdef CGI_LD_LIBRARY_PATH
   '';
-  thttpdCgit = thttpd.overrideAttrs(old: {
+  thttpdCgit = thttpd.overrideAttrs (old: {
     patches = [
       ./thttpd_cgi_idx.patch
       thttpdConfigPatch
     ];
   });
-in writeShellScriptBin "cgit-launch" ''
+in
+writeShellScriptBin "cgit-launch" ''
   exec ${thttpdCgit}/bin/thttpd -D -C ${thttpdConfig}
 ''

@@ -12,7 +12,8 @@ let
     rev = commit;
     sha256 = "0g1v7020vjiqa3k07cfm3jzg3gc6nl3hs3vyw4c9s5v0dmmhhsz4";
   };
-in drvTargets (import src {
+in
+drvTargets (import src {
   inherit pkgs;
   commitHash = _: commit;
 })

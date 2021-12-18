@@ -1,4 +1,4 @@
-with (import ../../.. {}).third_party.nixpkgs;
+with (import ../../.. { }).third_party.nixpkgs;
 
 mkShell {
   buildInputs = [

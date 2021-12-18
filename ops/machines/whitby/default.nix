@@ -4,7 +4,8 @@
 let
   inherit (builtins) listToAttrs;
   inherit (lib) range;
-in {
+in
+{
   imports = [
     "${depot.path}/ops/modules/atward.nix"
     "${depot.path}/ops/modules/clbot.nix"
@@ -55,7 +56,13 @@ in {
 
     initrd = {
       availableKernelModules = [
-        "igb" "xhci_pci" "nvme" "ahci" "usbhid" "usb_storage" "sr_mod"
+        "igb"
+        "xhci_pci"
+        "nvme"
+        "ahci"
+        "usbhid"
+        "usb_storage"
+        "sr_mod"
       ];
 
       # Enable SSH in the initrd so that we can enter disk encryption
@@ -189,7 +196,7 @@ in {
         ++ lukegb.keys.all
         ++ [ grfn.keys.whitby ]
         ++ sterni.keys.all
-        ;
+      ;
     };
   };
 
@@ -205,7 +212,8 @@ in {
   age.secrets =
     let
       secretFile = name: depot.ops.secrets."${name}.age";
-    in {
+    in
+    {
       clbot.file = secretFile "clbot";
       gerrit-queue.file = secretFile "gerrit-queue";
       grafana.file = secretFile "grafana";
@@ -475,7 +483,7 @@ in {
       job_name = "node";
       scrape_interval = "5s";
       static_configs = [{
-        targets = ["localhost:${toString config.services.prometheus.exporters.node.port}"];
+        targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
       }];
     }];
   };
@@ -486,56 +494,60 @@ in {
     domain = "status.tvl.su";
     rootUrl = "https://status.tvl.su";
     analytics.reporting.enable = false;
-    extraOptions = let
-      options = {
-        auth = {
-          generic_oauth = {
-            enabled = true;
-            client_id = "OAUTH-TVL-grafana-f1A1EmHLDT";
-            scopes = "openid profile email";
-            name = "TVL";
-            email_attribute_path = "mail";
-            login_attribute_path = "sub";
-            name_attribute_path = "displayName";
-            auth_url = "https://login.tvl.fyi/oidc/authorize";
-            token_url = "https://login.tvl.fyi/oidc/accessToken";
-            api_url = "https://login.tvl.fyi/oidc/profile";
+    extraOptions =
+      let
+        options = {
+          auth = {
+            generic_oauth = {
+              enabled = true;
+              client_id = "OAUTH-TVL-grafana-f1A1EmHLDT";
+              scopes = "openid profile email";
+              name = "TVL";
+              email_attribute_path = "mail";
+              login_attribute_path = "sub";
+              name_attribute_path = "displayName";
+              auth_url = "https://login.tvl.fyi/oidc/authorize";
+              token_url = "https://login.tvl.fyi/oidc/accessToken";
+              api_url = "https://login.tvl.fyi/oidc/profile";
 
-            # Give lukegb, grfn, tazjin "Admin" rights.
-            role_attribute_path = "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Editor'";
+              # Give lukegb, grfn, tazjin "Admin" rights.
+              role_attribute_path = "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Editor'";
 
-            # Allow creating new Grafana accounts from OAuth accounts.
-            allow_sign_up = true;
+              # Allow creating new Grafana accounts from OAuth accounts.
+              allow_sign_up = true;
+            };
+            anonymous = {
+              enabled = true;
+              org_name = "The Virus Lounge";
+              org_role = "Viewer";
+            };
+            basic.enabled = false;
+            oauth_auto_login = true;
+            disable_login_form = true;
           };
-          anonymous = {
-            enabled = true;
-            org_name = "The Virus Lounge";
-            org_role = "Viewer";
-          };
-          basic.enabled = false;
-          oauth_auto_login = true;
-          disable_login_form = true;
         };
-      };
-      inherit (builtins) typeOf replaceStrings listToAttrs concatLists;
-      inherit (lib) toUpper mapAttrsToList nameValuePair concatStringsSep;
+        inherit (builtins) typeOf replaceStrings listToAttrs concatLists;
+        inherit (lib) toUpper mapAttrsToList nameValuePair concatStringsSep;
 
-      # Take ["auth" "generic_oauth" "enabled"] and turn it into OPTIONS_GENERIC_OAUTH_ENABLED.
-      encodeName = raw: replaceStrings ["."] ["_"] (toUpper (concatStringsSep "_" raw));
+        # Take ["auth" "generic_oauth" "enabled"] and turn it into OPTIONS_GENERIC_OAUTH_ENABLED.
+        encodeName = raw: replaceStrings [ "." ] [ "_" ] (toUpper (concatStringsSep "_" raw));
 
-      # Turn an option value into a string, but we want bools to be sensible strings and not "1" or "".
-      optionToString = value:
-        if (typeOf value) == "bool" then
-          if value then "true" else "false"
-        else builtins.toString value;
+        # Turn an option value into a string, but we want bools to be sensible strings and not "1" or "".
+        optionToString = value:
+          if (typeOf value) == "bool" then
+            if value then "true" else "false"
+          else builtins.toString value;
 
-      # Turn an nested options attrset into a flat listToAttrs-compatible list.
-      encodeOptions = prefix: inp: concatLists (mapAttrsToList (name: value:
-        if (typeOf value) == "set"
-          then encodeOptions (prefix ++ [name]) value
-          else [ (nameValuePair (encodeName (prefix ++ [name])) (optionToString value)) ]
-        ) inp);
-    in listToAttrs (encodeOptions [] options);
+        # Turn an nested options attrset into a flat listToAttrs-compatible list.
+        encodeOptions = prefix: inp: concatLists (mapAttrsToList
+          (name: value:
+            if (typeOf value) == "set"
+            then encodeOptions (prefix ++ [ name ]) value
+            else [ (nameValuePair (encodeName (prefix ++ [ name ])) (optionToString value)) ]
+          )
+          inp);
+      in
+      listToAttrs (encodeOptions [ ] options);
 
     provision = {
       enable = true;
@@ -551,8 +563,8 @@ in {
 
   security.sudo.extraRules = [
     {
-      groups = ["wheel"];
-      commands = [{ command = "ALL"; options = ["NOPASSWD"]; }];
+      groups = [ "wheel" ];
+      commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
     }
   ];
 
@@ -633,7 +645,7 @@ in {
     };
 
     # Set up a user & group for git shenanigans
-    groups.git = {};
+    groups.git = { };
     users.git = {
       group = "git";
       isSystemUser = true;

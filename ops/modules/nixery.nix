@@ -6,7 +6,8 @@ let
   cfg = config.services.depot.nixery;
   description = "Nixery - container images on-demand";
   storagePath = "/var/lib/nixery/${pkgs.nixpkgsCommits.unstable}";
-in {
+in
+{
   options.services.depot.nixery = {
     enable = lib.mkEnableOption description;
 

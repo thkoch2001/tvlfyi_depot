@@ -5,7 +5,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.fiveam;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "fiveam";
 
   deps = with depot.third_party.lisp; [

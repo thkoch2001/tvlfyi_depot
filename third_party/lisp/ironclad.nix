@@ -1,4 +1,4 @@
-{ depot, pkgs, ...}:
+{ depot, pkgs, ... }:
 
 let
   inherit (pkgs) runCommand;
@@ -6,7 +6,8 @@ let
   src = with pkgs; srcOnly lispPackages.ironclad;
   getSrc = f: "${src}/src/${f}";
 
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "ironclad";
 
   deps = with depot.third_party.lisp; [

@@ -8,26 +8,27 @@ let
   deps = import ./deps.nix {
     inherit (pkgs) fetchMavenArtifact fetchgit lib;
   };
-in rec {
+in
+rec {
   meta.targets = [
     "db-util"
     "server"
   ];
 
-  depsPaths = deps.makePaths {};
+  depsPaths = deps.makePaths { };
 
   resources = builtins.filterSource (_: type: type != "symlink") ./resources;
 
   classpath.dev = concatStringsSep ":" (
-    (map gitignoreSource [./src ./test ./env/dev]) ++ [resources] ++ depsPaths
+    (map gitignoreSource [ ./src ./test ./env/dev ]) ++ [ resources ] ++ depsPaths
   );
 
   classpath.test = concatStringsSep ":" (
-    (map gitignoreSource [./src ./test ./env/test]) ++ [resources] ++ depsPaths
+    (map gitignoreSource [ ./src ./test ./env/test ]) ++ [ resources ] ++ depsPaths
   );
 
   classpath.prod = concatStringsSep ":" (
-    (map gitignoreSource [./src ./env/prod]) ++ [resources] ++ depsPaths
+    (map gitignoreSource [ ./src ./env/prod ]) ++ [ resources ] ++ depsPaths
   );
 
   testClojure = pkgs.writeShellScript "test-clojure" ''

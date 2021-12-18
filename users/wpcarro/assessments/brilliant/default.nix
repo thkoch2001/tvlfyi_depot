@@ -12,5 +12,5 @@ depot.users.wpcarro.buildHaskell.program {
     split
     rio
   ];
-  ghcExtensions = [];
+  ghcExtensions = [ ];
 }

@@ -42,7 +42,7 @@ let
 
   # Stable package set is imported, but not exposed, to overlay
   # required packages into the unstable set.
-  stableNixpkgs = import stableNixpkgsSrc {};
+  stableNixpkgs = import stableNixpkgsSrc { };
 
   # Overlay for packages that should come from the stable channel
   # instead (e.g. because something is broken in unstable).
@@ -57,7 +57,8 @@ let
       stable = stableHashes.commit;
     };
   };
-in import nixpkgsSrc {
+in
+import nixpkgsSrc {
   config.allowUnfree = true;
   config.allowBroken = true;
   overlays = [

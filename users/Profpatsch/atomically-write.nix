@@ -25,4 +25,5 @@ let
     mv "$tmp/out" "$to"
   '';
 
-in atomically-write
+in
+atomically-write

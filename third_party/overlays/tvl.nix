@@ -9,13 +9,15 @@ self: super: {
 
   # Required for apereo-cas
   # TODO(lukegb): Document why?
-  gradle_6 = self.callPackage (super.gradleGen {
-    version = "6.5.1";
-    nativeVersion = "0.22-milestone-3";
-    sha256 = "0jmmipjh4fbsn92zpifa5cqg5ws2a4ha0s4jzqhrg4zs542x79sh";
-  }) {
-    java = self.jdk11;
-  };
+  gradle_6 = self.callPackage
+    (super.gradleGen {
+      version = "6.5.1";
+      nativeVersion = "0.22-milestone-3";
+      sha256 = "0jmmipjh4fbsn92zpifa5cqg5ws2a4ha0s4jzqhrg4zs542x79sh";
+    })
+    {
+      java = self.jdk11;
+    };
 
   clang-tools_11 = self.clang-tools.override {
     llvmPackages = self.llvmPackages_11;
@@ -38,14 +40,14 @@ self: super: {
       notmuch = super.notmuch.emacs;
 
       # Build EXWM with the depot sources instead.
-      exwm = esuper.exwm.overrideAttrs(_: {
+      exwm = esuper.exwm.overrideAttrs (_: {
         src = depot.path.origSrc + "/third_party/exwm";
       });
     })
   );
 
   # dottime support for notmuch
-  notmuch = super.notmuch.overrideAttrs(old: {
+  notmuch = super.notmuch.overrideAttrs (old: {
     passthru = old.passthru // {
       patches = old.patches ++ [ ./patches/notmuch-dottime.patch ];
     };
@@ -61,7 +63,7 @@ self: super: {
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
 
   # Avoid builds of mkShell derivations in CI.
-  mkShell = super.lib.makeOverridable(args: (super.mkShell args) // {
+  mkShell = super.lib.makeOverridable (args: (super.mkShell args) // {
     meta.ci = false;
   });
 }

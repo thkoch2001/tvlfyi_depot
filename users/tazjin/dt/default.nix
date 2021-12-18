@@ -1,7 +1,8 @@
 { depot, pkgs, ... }:
 
 let stdenv = with pkgs; overrideCC clangStdenv clang_11;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "dt";
   src = ./.;
   nativeBuildInputs = [ pkgs.cmake ];

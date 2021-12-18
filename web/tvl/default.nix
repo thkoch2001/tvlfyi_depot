@@ -16,9 +16,10 @@ let
       (map (p: "cp ${blog.renderPost tvl.blog.config p} $out/blog/${p.key}.html") posts)
   );
 
-  tvlGraph = runCommandNoCC "tvl.svg" {
-    nativeBuildInputs = with pkgs; [ fontconfig freetype cairo jetbrains-mono ];
-  } ''
+  tvlGraph = runCommandNoCC "tvl.svg"
+    {
+      nativeBuildInputs = with pkgs; [ fontconfig freetype cairo jetbrains-mono ];
+    } ''
     ${graphviz}/bin/neato -Tsvg ${./tvl.dot} > $out
   '';
 
@@ -118,7 +119,8 @@ let
       </style>
     '';
   };
-in runCommandNoCC "website" {} ''
+in
+runCommandNoCC "website" { } ''
   mkdir -p $out/blog
   cp ${homepage} $out/index.html
   ${postRenderingCommands tvl.blog.posts}

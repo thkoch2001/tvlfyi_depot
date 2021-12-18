@@ -11,7 +11,7 @@
 
 let
   bins = getBins pkgs.s6-portable-utils [ "s6-touch" ]
-      // getBins pkgs.execline [ "importas" "exec" ];
+    // getBins pkgs.execline [ "importas" "exec" ];
 
   emptiness = {
     name = "empty-derivation";
@@ -21,12 +21,16 @@ let
 
     builder = bins.exec;
     args = [
-      bins.importas "out" "out"
-      bins.s6-touch "$out"
+      bins.importas
+      "out"
+      "out"
+      bins.s6-touch
+      "$out"
     ];
   };
 
-in (derivation emptiness) // {
+in
+(derivation emptiness) // {
   # This allows us to call the empty derivation
   # like a function and override fields/add new fields.
   __functor = _: overrides:

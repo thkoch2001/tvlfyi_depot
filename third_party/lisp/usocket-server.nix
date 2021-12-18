@@ -4,7 +4,8 @@
 let
   inherit (depot.nix) buildLisp;
   src = with pkgs; srcOnly lispPackages.usocket-server;
-in buildLisp.library {
+in
+buildLisp.library {
   name = "usocket-server";
 
   deps = with depot.third_party.lisp; [

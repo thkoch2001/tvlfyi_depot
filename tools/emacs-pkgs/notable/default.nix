@@ -6,7 +6,9 @@ depot.tools.emacs-pkgs.buildEmacsPackage rec {
   src = ./notable.el;
 
   externalRequires = epkgs: with epkgs; [
-    f ht s
+    f
+    ht
+    s
   ];
 
   internalRequires = [

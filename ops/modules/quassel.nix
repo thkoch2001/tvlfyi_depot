@@ -8,7 +8,8 @@ let
     enableDaemon = true;
     withKDE = false;
   };
-in {
+in
+{
   options.services.depot.quassel = with lib; {
     enable = mkEnableOption "Quassel IRC daemon";
 
@@ -70,7 +71,7 @@ in {
         group = "quassel";
       };
 
-      groups.quassel = {};
+      groups.quassel = { };
     };
   };
 }

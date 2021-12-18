@@ -10,7 +10,7 @@ with lib;
       pinentry_mac
     ];
 
-    home.activation.linkApplications = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    home.activation.linkApplications = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       $DRY_RUN_CMD ln -sf $VERBOSE_ARG \
         ~/.nix-profile/Applications/* ~/Applications/
     '';

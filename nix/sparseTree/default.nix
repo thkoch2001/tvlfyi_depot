@@ -45,14 +45,16 @@ let
     let
       withLeading = p: if builtins.substring 0 1 p == "/" then p else "/" + p;
       fullPath =
-        /**/ if builtins.isPath path then path
+        /**/
+        if builtins.isPath path then path
         else if builtins.isString path then (root + withLeading path)
         else builtins.throw "Unsupported path type ${builtins.typeOf path}";
       strPath = toString fullPath;
       contextPath = "${fullPath}";
       belowRoot = builtins.substring rootLength (-1) strPath;
       prefix = builtins.substring 0 rootLength strPath;
-    in assert toString root == prefix; {
+    in
+    assert toString root == prefix; {
       src = contextPath;
       dst = belowRoot;
     };
@@ -61,10 +63,12 @@ let
 in
 
 # TODO(sterni): teach readTree to also read symlinked directories,
-# so we ln -sT instead of cp -aT.
-pkgs.runCommandNoCC "sparse-${builtins.baseNameOf root}" {} (
-  lib.concatMapStrings ({ src, dst }: ''
-    mkdir -p "$(dirname "$out${dst}")"
-    cp -aT --reflink=auto "${src}" "$out${dst}"
-  '') symlinks
+  # so we ln -sT instead of cp -aT.
+pkgs.runCommandNoCC "sparse-${builtins.baseNameOf root}" { } (
+  lib.concatMapStrings
+    ({ src, dst }: ''
+      mkdir -p "$(dirname "$out${dst}")"
+      cp -aT --reflink=auto "${src}" "$out${dst}"
+    '')
+    symlinks
 )

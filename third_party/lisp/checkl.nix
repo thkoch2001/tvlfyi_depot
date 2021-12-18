@@ -10,7 +10,8 @@ let
     sha256 = "0bpisihx1gay44xmyr1dmhlwh00j0zzi04rp9fy35i95l2r4xdlx";
   };
 
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "checkl";
   deps = with depot.third_party.lisp; [
     (bundled "asdf")

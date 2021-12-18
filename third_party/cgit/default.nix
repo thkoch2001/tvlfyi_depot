@@ -2,7 +2,8 @@
 
 let
   inherit (pkgs) stdenv gzip bzip2 xz luajit zlib autoconf openssl pkgconfig;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "cgit";
   version = "master";
   src = ./.;

@@ -37,7 +37,7 @@
     key = "the-smu-problem";
     title = "The SMU-problem of messaging apps";
     date = 1450354078;
-    content =./posts/the-smu-problem.md;
+    content = ./posts/the-smu-problem.md;
     oldKey = "1450354078";
   }
   {

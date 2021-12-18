@@ -4,7 +4,7 @@
 # buildLisp is designed to enforce conventions and do away with the
 # free-for-all of existing Lisp build systems.
 
-{ pkgs ? import <nixpkgs> {}, ... }:
+{ pkgs ? import <nixpkgs> { }, ... }:
 
 let
   inherit (builtins) map elemAt match filter;
@@ -70,11 +70,16 @@ let
   implFilter = impl: xs:
     let
       isFilterSet = x: builtins.isAttrs x && !(lib.isDerivation x);
-    in builtins.map (
-      x: if isFilterSet x then x.${impl.name} or x.default else x
-    ) (builtins.filter (
-      x: !(isFilterSet x) || x ? ${impl.name} || x ? default
-    ) xs);
+    in
+    builtins.map
+      (
+        x: if isFilterSet x then x.${impl.name} or x.default else x
+      )
+      (builtins.filter
+        (
+          x: !(isFilterSet x) || x ? ${impl.name} || x ? default
+        )
+        xs);
 
   # Generates lisp code which instructs the given lisp implementation to load
   # all the given dependencies.
@@ -103,17 +108,21 @@ let
   # 'allDeps' flattens the list of dependencies (and their
   # dependencies) into one ordered list of unique deps which
   # all use the given implementation.
-  allDeps = impl: deps: let
-    # The override _should_ propagate itself recursively, as every derivation
-    # would only expose its actually used dependencies. Use implementation
-    # attribute created by withExtras if present, override in all other cases
-    # (mainly bundled).
-    deps' = builtins.map (dep: dep."${impl.name}" or (dep.overrideLisp (_: {
-      implementation = impl;
-    }))) deps;
-  in (lib.toposort dependsOn (lib.unique (
-    lib.flatten (deps' ++ (map (d: d.lispDeps) deps'))
-  ))).result;
+  allDeps = impl: deps:
+    let
+      # The override _should_ propagate itself recursively, as every derivation
+      # would only expose its actually used dependencies. Use implementation
+      # attribute created by withExtras if present, override in all other cases
+      # (mainly bundled).
+      deps' = builtins.map
+        (dep: dep."${impl.name}" or (dep.overrideLisp (_: {
+          implementation = impl;
+        })))
+        deps;
+    in
+    (lib.toposort dependsOn (lib.unique (
+      lib.flatten (deps' ++ (map (d: d.lispDeps) deps'))
+    ))).result;
 
   # 'allNative' extracts all native dependencies of a dependency list
   # to ensure that library load paths are set correctly during all
@@ -138,42 +147,49 @@ let
   withExtras = f: args:
     let
       drv = (makeOverridable f) args;
-    in lib.fix (self:
-      drv.overrideLisp (old:
-        let
-          implementation = old.implementation or defaultImplementation;
-          brokenOn = old.brokenOn or [];
-          targets = lib.subtractLists brokenOn
-            (builtins.attrNames impls);
-        in {
-          passthru = (old.passthru or {}) // {
-            repl = implementation.lispWith [ self ];
+    in
+    lib.fix (self:
+      drv.overrideLisp
+        (old:
+          let
+            implementation = old.implementation or defaultImplementation;
+            brokenOn = old.brokenOn or [ ];
+            targets = lib.subtractLists brokenOn
+              (builtins.attrNames impls);
+          in
+          {
+            passthru = (old.passthru or { }) // {
+              repl = implementation.lispWith [ self ];
 
-            # meta is done via passthru to minimize rebuilds caused by overriding
-            meta = (old.passthru.meta or {}) // {
-              inherit targets;
-            };
-          } // builtins.listToAttrs (builtins.map (impl: {
-            inherit (impl) name;
-            value = self.overrideLisp (_: {
-              implementation = impl;
-            });
-          }) (builtins.attrValues impls));
-        }) // {
-          overrideLisp = new: withExtras f (args // new args);
-        });
+              # meta is done via passthru to minimize rebuilds caused by overriding
+              meta = (old.passthru.meta or { }) // {
+                inherit targets;
+              };
+            } // builtins.listToAttrs (builtins.map
+              (impl: {
+                inherit (impl) name;
+                value = self.overrideLisp (_: {
+                  implementation = impl;
+                });
+              })
+              (builtins.attrValues impls));
+          }) // {
+        overrideLisp = new: withExtras f (args // new args);
+      });
 
   # 'testSuite' builds a Common Lisp test suite that loads all of srcs and deps,
   # and then executes expression to check its result
-  testSuite = { name, expression, srcs, deps ? [], native ? [], implementation }:
+  testSuite = { name, expression, srcs, deps ? [ ], native ? [ ], implementation }:
     let
       lispNativeDeps = allNative native deps;
       lispDeps = allDeps implementation (implFilter implementation deps);
       filteredSrcs = implFilter implementation srcs;
-    in runCommandNoCC name {
-      LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
-      LANG = "C.UTF-8";
-    } ''
+    in
+    runCommandNoCC name
+      {
+        LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
+        LANG = "C.UTF-8";
+      } ''
       echo "Running test suite ${name}"
 
       ${implementation.runScript} ${
@@ -323,7 +339,8 @@ let
 
       lispWith = deps:
         let lispDeps = filter (d: !d.lispBinary) (allDeps impls.sbcl deps);
-        in writeShellScriptBin "sbcl" ''
+        in
+        writeShellScriptBin "sbcl" ''
           export LD_LIBRARY_PATH="${lib.makeLibraryPath (allNative [] lispDeps)}"
           export LANG="C.UTF-8"
           exec ${sbcl}/bin/sbcl ${
@@ -446,22 +463,24 @@ let
 
       lispWith = deps:
         let lispDeps = filter (d: !d.lispBinary) (allDeps impls.ecl deps);
-        in writeShellScriptBin "ecl" ''
+        in
+        writeShellScriptBin "ecl" ''
           exec ${ecl-static}/bin/ecl ${
             lib.optionalString (deps != [])
               "--load ${writeText "load.lisp" (impls.ecl.genLoadLisp lispDeps)}"
           } $@
         '';
 
-      bundled = name: runCommandNoCC "${name}-cllib" {
-        passthru = {
-          lispName = name;
-          lispNativeDeps = [];
-          lispDeps = [];
-          lispBinary = false;
-          repl = impls.ecl.lispWith [ (impls.ecl.bundled name) ];
-        };
-      } ''
+      bundled = name: runCommandNoCC "${name}-cllib"
+        {
+          passthru = {
+            lispName = name;
+            lispNativeDeps = [ ];
+            lispDeps = [ ];
+            lispBinary = false;
+            repl = impls.ecl.lispWith [ (impls.ecl.bundled name) ];
+          };
+        } ''
         mkdir -p "$out"
         ln -s "${ecl-static}/lib/ecl-${ecl-static.version}/${name}.${impls.ecl.faslExt}" -t "$out"
         ln -s "${ecl-static}/lib/ecl-${ecl-static.version}/lib${name}.a" "$out/${name}.a"
@@ -490,7 +509,8 @@ let
 
       # See https://ccl.clozure.com/docs/ccl.html#building-definitions
       faslExt =
-        /**/ if targetPlatform.isPowerPC && targetPlatform.is32bit then "pfsl"
+        /**/
+        if targetPlatform.isPowerPC && targetPlatform.is32bit then "pfsl"
         else if targetPlatform.isPowerPC && targetPlatform.is64bit then "p64fsl"
         else if targetPlatform.isx86_64 && targetPlatform.isLinux then "lx64fsl"
         else if targetPlatform.isx86_32 && targetPlatform.isLinux then "lx32fsl"
@@ -567,13 +587,14 @@ let
 
       lispWith = deps:
         let lispDeps = filter (d: !d.lispBinary) (allDeps impls.ccl deps);
-        in writeShellScriptBin "ccl" ''
+        in
+        writeShellScriptBin "ccl" ''
           export LD_LIBRARY_PATH="${lib.makeLibraryPath (allNative [] lispDeps)}"
           exec ${ccl}/bin/ccl ${
             lib.optionalString (deps != [])
               "--load ${writeText "load.lisp" (impls.ccl.genLoadLisp lispDeps)}"
           } "$@"
-      '';
+        '';
     };
   };
 
@@ -587,37 +608,42 @@ let
   library =
     { name
     , implementation ? defaultImplementation
-    , brokenOn ? [] # TODO(sterni): make this a warning
+    , brokenOn ? [ ] # TODO(sterni): make this a warning
     , srcs
-    , deps ? []
-    , native ? []
+    , deps ? [ ]
+    , native ? [ ]
     , tests ? null
-    , passthru ? {}
+    , passthru ? { }
     }:
     let
       filteredDeps = implFilter implementation deps;
       filteredSrcs = implFilter implementation srcs;
       lispNativeDeps = (allNative native filteredDeps);
       lispDeps = allDeps implementation filteredDeps;
-      testDrv = if ! isNull tests
-        then testSuite {
-          name = tests.name or "${name}-test";
-          srcs = filteredSrcs ++ (tests.srcs or []);
-          deps = filteredDeps ++ (tests.deps or []);
-          expression = tests.expression;
-          inherit implementation;
-        }
+      testDrv =
+        if ! isNull tests
+        then
+          testSuite
+            {
+              name = tests.name or "${name}-test";
+              srcs = filteredSrcs ++ (tests.srcs or [ ]);
+              deps = filteredDeps ++ (tests.deps or [ ]);
+              expression = tests.expression;
+              inherit implementation;
+            }
         else null;
-    in lib.fix (self: runCommandNoCC "${name}-cllib" {
-      LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
-      LANG = "C.UTF-8";
-      passthru = passthru // {
-        inherit lispNativeDeps lispDeps;
-        lispName = name;
-        lispBinary = false;
-        tests = testDrv;
-      };
-    } ''
+    in
+    lib.fix (self: runCommandNoCC "${name}-cllib"
+      {
+        LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
+        LANG = "C.UTF-8";
+        passthru = passthru // {
+          inherit lispNativeDeps lispDeps;
+          lispName = name;
+          lispBinary = false;
+          tests = testDrv;
+        };
+      } ''
       ${if ! isNull testDrv
         then "echo 'Test ${testDrv} succeeded'"
         else "echo 'No tests run'"}
@@ -638,13 +664,13 @@ let
   program =
     { name
     , implementation ? defaultImplementation
-    , brokenOn ? [] # TODO(sterni): make this a warning
+    , brokenOn ? [ ] # TODO(sterni): make this a warning
     , main ? "${name}:main"
     , srcs
-    , deps ? []
-    , native ? []
+    , deps ? [ ]
+    , native ? [ ]
     , tests ? null
-    , passthru ? {}
+    , passthru ? { }
     }:
     let
       filteredSrcs = implFilter implementation srcs;
@@ -657,45 +683,53 @@ let
         deps = lispDeps;
         srcs = filteredSrcs;
       };
-      testDrv = if ! isNull tests
-        then testSuite {
-          name = tests.name or "${name}-test";
-          srcs =
-            ( # testSuite does run implFilter as well
-              filteredSrcs ++ (tests.srcs or []));
-          deps = filteredDeps ++ (tests.deps or []);
-          expression = tests.expression;
-          inherit implementation;
-        }
+      testDrv =
+        if ! isNull tests
+        then
+          testSuite
+            {
+              name = tests.name or "${name}-test";
+              srcs =
+                (
+                  # testSuite does run implFilter as well
+                  filteredSrcs ++ (tests.srcs or [ ])
+                );
+              deps = filteredDeps ++ (tests.deps or [ ]);
+              expression = tests.expression;
+              inherit implementation;
+            }
         else null;
-    in lib.fix (self: runCommandNoCC "${name}" {
-      nativeBuildInputs = [ makeWrapper ];
-      LD_LIBRARY_PATH = libPath;
-      LANG = "C.UTF-8";
-      passthru = passthru // {
-        lispName = name;
-        lispDeps = [ selfLib ];
-        lispNativeDeps = native;
-        lispBinary = true;
-        tests = testDrv;
-      };
-    } (''
-      ${if ! isNull testDrv
-        then "echo 'Test ${testDrv} succeeded'"
-        else ""}
-      mkdir -p $out/bin
-
-      ${implementation.runScript} ${
-        implementation.genDumpLisp {
-          inherit name main;
-          deps = ([ selfLib ] ++ lispDeps);
-        }
+    in
+    lib.fix (self: runCommandNoCC "${name}"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+        LD_LIBRARY_PATH = libPath;
+        LANG = "C.UTF-8";
+        passthru = passthru // {
+          lispName = name;
+          lispDeps = [ selfLib ];
+          lispNativeDeps = native;
+          lispBinary = true;
+          tests = testDrv;
+        };
       }
-    '' + lib.optionalString implementation.wrapProgram ''
-      wrapProgram $out/bin/${name} \
-        --prefix LD_LIBRARY_PATH : "${libPath}" \
-        --add-flags "\$NIX_BUILDLISP_LISP_ARGS --"
-    ''));
+      (''
+        ${if ! isNull testDrv
+          then "echo 'Test ${testDrv} succeeded'"
+          else ""}
+        mkdir -p $out/bin
+
+        ${implementation.runScript} ${
+          implementation.genDumpLisp {
+            inherit name main;
+            deps = ([ selfLib ] ++ lispDeps);
+          }
+        }
+      '' + lib.optionalString implementation.wrapProgram ''
+        wrapProgram $out/bin/${name} \
+          --prefix LD_LIBRARY_PATH : "${libPath}" \
+          --add-flags "\$NIX_BUILDLISP_LISP_ARGS --"
+      ''));
 
   # 'bundled' creates a "library" which makes a built-in package available,
   # such as any of SBCL's sb-* packages or ASDF. By default this is done
@@ -715,11 +749,13 @@ let
         }:
         implementation.bundled or (defaultBundled implementation) name;
 
-    in (makeOverridable bundled') {
+    in
+    (makeOverridable bundled') {
       inherit name;
     };
 
-in {
+in
+{
   library = withExtras library;
   program = withExtras program;
   inherit bundled;

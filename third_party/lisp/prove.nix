@@ -1,7 +1,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.prove;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "prove";
 
   deps = [

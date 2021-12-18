@@ -25,16 +25,18 @@ let
     }
     {
       key = "init-emacs";
-      command = let
-        scriptEl = path {
-          path = ./script.el;
-          name = "script.el";
-        };
-        runScriptEl = runScript {
-          script = scriptEl;
-          briefcasePath = "$(pwd)";
-        };
-      in "${runScriptEl} ${initEl}";
+      command =
+        let
+          scriptEl = path {
+            path = ./script.el;
+            name = "script.el";
+          };
+          runScriptEl = runScript {
+            script = scriptEl;
+            briefcasePath = "$(pwd)";
+          };
+        in
+        "${runScriptEl} ${initEl}";
       label = ":gnu: initialize Emacs";
       depends_on = "build-briefcase";
     }
@@ -53,4 +55,5 @@ let
       depends_on = "build-briefcase";
     }
   ];
-in pkgs.writeText "pipeline.yaml" (toJSON pipeline)
+in
+pkgs.writeText "pipeline.yaml" (toJSON pipeline)

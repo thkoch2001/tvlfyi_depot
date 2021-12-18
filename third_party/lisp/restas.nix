@@ -9,7 +9,8 @@ let
     sha256 = "00ng6jik1lwjw3bbxhijy8s0ml24lgm73liwrr01gcsb0r6wrjjn";
   };
 
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "restas";
   deps = with depot.third_party.lisp; [
     cffi

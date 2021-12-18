@@ -2,7 +2,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.cl-ansi-text;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "cl-ansi-text";
   deps = with depot.third_party.lisp; [
     alexandria

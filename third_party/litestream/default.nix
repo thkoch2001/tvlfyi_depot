@@ -2,7 +2,8 @@
 { pkgs, lib, ... }:
 
 let inherit (pkgs) buildGoModule fetchFromGitHub;
-in pkgs.buildGoModule rec {
+in
+pkgs.buildGoModule rec {
   pname = "litestream";
   version = "0.3.4";
   vendorSha256 = "1dcb5f06cq484i9m9pi5l4banygh3s4bz5964hy7ypmm1z2pcmrv";

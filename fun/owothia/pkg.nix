@@ -1,5 +1,15 @@
-{ mkDerivation, base, bytestring, chatter, containers, envy
-, irc-client, lens, lib, random, relude, text
+{ mkDerivation
+, base
+, bytestring
+, chatter
+, containers
+, envy
+, irc-client
+, lens
+, lib
+, random
+, relude
+, text
 }:
 mkDerivation {
   pname = "owothia";
@@ -8,8 +18,16 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    base bytestring chatter containers envy irc-client lens random
-    relude text
+    base
+    bytestring
+    chatter
+    containers
+    envy
+    irc-client
+    lens
+    random
+    relude
+    text
   ];
   license = "unknown";
   hydraPlatforms = lib.platforms.none;

@@ -4,7 +4,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.closer-mop;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "closer-mop";
 
   srcs = [

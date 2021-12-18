@@ -20,7 +20,8 @@ let
     ];
   };
 
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "routes";
 
   deps = with depot.third_party.lisp; [

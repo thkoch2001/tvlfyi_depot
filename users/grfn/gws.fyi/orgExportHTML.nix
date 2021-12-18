@@ -25,15 +25,16 @@ let
   outName =
     if isNull headline
     then
-      let bn = builtins.baseNameOf src;
-          filename = elemAt (splitString "." bn) 0;
+      let
+        bn = builtins.baseNameOf src;
+        filename = elemAt (splitString "." bn) 0;
       in
-        if depot.nix.utils.isDirectory src
-        then filename
-        else filename + ".html"
+      if depot.nix.utils.isDirectory src
+      then filename
+      else filename + ".html"
     else "${filename}-${replaceStrings [" "] ["-"] filename}.html";
 
-  escapeDoubleQuotes = replaceStrings ["\""] ["\\\""];
+  escapeDoubleQuotes = replaceStrings [ "\"" ] [ "\\\"" ];
 
   navToHeadline = optionalString (! isNull headline) ''
     (search-forward "${escapeDoubleQuotes headline}")

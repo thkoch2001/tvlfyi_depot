@@ -21,7 +21,7 @@ let
       (cond [ [ true 1 2 ] [ false 1 ] ]))
     (assertEq "last is true" "last"
       (cond [
-        [ false dontEval]
+        [ false dontEval ]
         [ false dontEval ]
         [ true "last" ]
       ]))
@@ -34,6 +34,6 @@ let
   ];
 
 in
-  runTestsuite "nix.flow" [
-    testCond
-  ]
+runTestsuite "nix.flow" [
+  testCond
+]

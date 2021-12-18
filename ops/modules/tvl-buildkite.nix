@@ -13,7 +13,7 @@ let
 
   # All Buildkite hooks are actually besadii, but it's being invoked
   # with different names.
-  buildkiteHooks = pkgs.runCommandNoCC "buildkite-hooks" {} ''
+  buildkiteHooks = pkgs.runCommandNoCC "buildkite-hooks" { } ''
     mkdir -p $out/bin
     ln -s ${besadiiWithConfig "post-command"} $out/bin/post-command
   '';
@@ -22,7 +22,8 @@ let
     echo 'username=buildkite'
     echo "password=$(jq -r '.gerritPassword' /run/agenix/buildkite-besadii-config)"
   '';
-in {
+in
+{
   options.services.depot.buildkite = {
     enable = lib.mkEnableOption description;
     agentCount = lib.mkOption {
@@ -33,39 +34,43 @@ in {
 
   config = lib.mkIf cfg.enable {
     # Run the Buildkite agents using the default upstream module.
-    services.buildkite-agents = builtins.listToAttrs (map (n: rec {
-      name = "whitby-${toString n}";
-      value = {
-        inherit name;
-        enable = true;
-        tokenPath = "/run/agenix/buildkite-agent-token";
-        hooks.post-command = "${buildkiteHooks}/bin/post-command";
+    services.buildkite-agents = builtins.listToAttrs (map
+      (n: rec {
+        name = "whitby-${toString n}";
+        value = {
+          inherit name;
+          enable = true;
+          tokenPath = "/run/agenix/buildkite-agent-token";
+          hooks.post-command = "${buildkiteHooks}/bin/post-command";
 
-        runtimePackages = with pkgs; [
-          bash
-          coreutils
-          credentialHelper
-          curl
-          git
-          gnutar
-          gzip
-          jq
-          nix
-        ];
-      };
-    }) agents);
+          runtimePackages = with pkgs; [
+            bash
+            coreutils
+            credentialHelper
+            curl
+            git
+            gnutar
+            gzip
+            jq
+            nix
+          ];
+        };
+      })
+      agents);
 
     # Set up a group for all Buildkite agent users
     users = {
-      groups.buildkite-agents = {};
-      users = builtins.listToAttrs (map (n: rec {
-        name = "buildkite-agent-whitby-${toString n}";
-        value = {
-          isSystemUser = true;
-          group = lib.mkForce "buildkite-agents";
-          extraGroups = [ name ];
-        };
-      }) agents);
+      groups.buildkite-agents = { };
+      users = builtins.listToAttrs (map
+        (n: rec {
+          name = "buildkite-agent-whitby-${toString n}";
+          value = {
+            isSystemUser = true;
+            group = lib.mkForce "buildkite-agents";
+            extraGroups = [ name ];
+          };
+        })
+        agents);
     };
   };
 }

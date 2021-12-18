@@ -3,7 +3,7 @@
 let
   src = with pkgs; srcOnly lispPackages.trivial-mimes;
 
-  mime-types = pkgs.runCommand "mime-types.lisp" {} ''
+  mime-types = pkgs.runCommand "mime-types.lisp" { } ''
     substitute ${src}/mime-types.lisp $out \
       --replace /etc/mime.types ${src}/mime.types \
       --replace "(asdf:system-source-directory :trivial-mimes)" '"/bogus-dir"'
@@ -11,7 +11,8 @@ let
       # generally fail — we are not using ASDF after all.
   '';
 
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "trivial-mimes";
 
   deps = [

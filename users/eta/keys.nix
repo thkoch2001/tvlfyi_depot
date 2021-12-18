@@ -9,4 +9,4 @@ let
     whitby = [ keys.yubikey4 keys.yubikey5 ];
   };
 in
-  configs
+configs

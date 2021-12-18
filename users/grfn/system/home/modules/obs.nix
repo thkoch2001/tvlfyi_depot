@@ -19,7 +19,9 @@ let
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [
-      libtool autoconf automake
+      libtool
+      autoconf
+      automake
       x11
       xorg.libXtst
       xorg.libXinerama

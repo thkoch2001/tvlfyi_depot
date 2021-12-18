@@ -1,31 +1,36 @@
 { depot, pkgs, lib, ... }:
 
 let
-  netencode-rs = depot.nix.writers.rustSimpleLib {
+  netencode-rs = depot.nix.writers.rustSimpleLib
+    {
       name = "netencode";
       dependencies = [
         depot.third_party.rust-crates.nom
         depot.users.Profpatsch.execline.exec-helpers
       ];
-    } (builtins.readFile ./netencode.rs);
+    }
+    (builtins.readFile ./netencode.rs);
 
   gen = import ./gen.nix { inherit lib; };
 
-  pretty-rs = depot.nix.writers.rustSimpleLib {
-    name = "netencode-pretty";
-    dependencies = [
-      netencode-rs
-    ];
-  } (builtins.readFile ./pretty.rs);
+  pretty-rs = depot.nix.writers.rustSimpleLib
+    {
+      name = "netencode-pretty";
+      dependencies = [
+        netencode-rs
+      ];
+    }
+    (builtins.readFile ./pretty.rs);
 
-  pretty = depot.nix.writers.rustSimple {
-    name = "netencode-pretty";
-    dependencies = [
-      netencode-rs
-      pretty-rs
-      depot.users.Profpatsch.execline.exec-helpers
-    ];
-  } ''
+  pretty = depot.nix.writers.rustSimple
+    {
+      name = "netencode-pretty";
+      dependencies = [
+        netencode-rs
+        pretty-rs
+        depot.users.Profpatsch.execline.exec-helpers
+      ];
+    } ''
     extern crate netencode;
     extern crate netencode_pretty;
     extern crate exec_helpers;
@@ -41,24 +46,27 @@ let
     }
   '';
 
-  netencode-mustache = depot.nix.writers.rustSimple {
-    name = "netencode_mustache";
-    dependencies = [
-      depot.users.Profpatsch.arglib.netencode.rust
-      netencode-rs
-      depot.third_party.rust-crates.mustache
-    ];
-  } (builtins.readFile ./netencode-mustache.rs);
+  netencode-mustache = depot.nix.writers.rustSimple
+    {
+      name = "netencode_mustache";
+      dependencies = [
+        depot.users.Profpatsch.arglib.netencode.rust
+        netencode-rs
+        depot.third_party.rust-crates.mustache
+      ];
+    }
+    (builtins.readFile ./netencode-mustache.rs);
 
 
-  record-get = depot.nix.writers.rustSimple {
-    name = "record-get";
-    dependencies = [
-      netencode-rs
-      depot.users.Profpatsch.execline.exec-helpers
-      depot.users.Profpatsch.arglib.netencode.rust
-    ];
-  } ''
+  record-get = depot.nix.writers.rustSimple
+    {
+      name = "record-get";
+      dependencies = [
+        netencode-rs
+        depot.users.Profpatsch.execline.exec-helpers
+        depot.users.Profpatsch.arglib.netencode.rust
+      ];
+    } ''
     extern crate netencode;
     extern crate arglib_netencode;
     extern crate exec_helpers;
@@ -80,13 +88,14 @@ let
     }
   '';
 
-  record-splice-env = depot.nix.writers.rustSimple {
-    name = "record-splice-env";
-    dependencies = [
-      netencode-rs
-      depot.users.Profpatsch.execline.exec-helpers
-    ];
-  } ''
+  record-splice-env = depot.nix.writers.rustSimple
+    {
+      name = "record-splice-env";
+      dependencies = [
+        netencode-rs
+        depot.users.Profpatsch.execline.exec-helpers
+      ];
+    } ''
     extern crate netencode;
     extern crate exec_helpers;
     use netencode::dec::{Record, Try, ScalarAsBytes, Decoder, DecodeError};
@@ -109,13 +118,14 @@ let
     }
   '';
 
-  env-splice-record = depot.nix.writers.rustSimple {
-    name = "env-splice-record";
-    dependencies = [
-      netencode-rs
-      depot.users.Profpatsch.execline.exec-helpers
-    ];
-  } ''
+  env-splice-record = depot.nix.writers.rustSimple
+    {
+      name = "env-splice-record";
+      dependencies = [
+        netencode-rs
+        depot.users.Profpatsch.execline.exec-helpers
+      ];
+    } ''
     extern crate netencode;
     extern crate exec_helpers;
     use netencode::{T};
@@ -135,7 +145,8 @@ let
     }
   '';
 
-in depot.nix.readTree.drvTargets {
+in
+depot.nix.readTree.drvTargets {
   inherit
     netencode-rs
     pretty-rs

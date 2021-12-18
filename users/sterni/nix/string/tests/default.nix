@@ -63,10 +63,10 @@ let
   ];
 
 in
-  runTestsuite "nix.string" [
-    testTakeDrop
-    testIndexing
-    testFinding
-    testMatch
-    testPrintf
-  ]
+runTestsuite "nix.string" [
+  testTakeDrop
+  testIndexing
+  testFinding
+  testMatch
+  testPrintf
+]

@@ -167,7 +167,8 @@ let
         --load ${initEl} \
         "$@"
     '';
-in {
+in
+{
   inherit initEl withEmacsPath;
 
   # I need to start my Emacs from CI without the call to `--load ${initEl}`.

@@ -8,4 +8,5 @@ let
     url = "https://github.com/nix-community/emacs-overlay/archive/${commit}.tar.gz";
     sha256 = "16i16pm3bm43fj85n5bafghak0asi7p9xpyshpls6yyh85chcdb5";
   };
-in import src
+in
+import src

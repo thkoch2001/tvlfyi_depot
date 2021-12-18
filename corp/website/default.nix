@@ -30,7 +30,8 @@ let
       </style>
     '';
   };
-in pkgs.runCommandNoCC "corp-website" {} ''
+in
+pkgs.runCommandNoCC "corp-website" { } ''
   mkdir $out
   cp ${index} $out/index.html
 ''

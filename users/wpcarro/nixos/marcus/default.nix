@@ -6,7 +6,8 @@ let
   wpcarros-emacs = depot.users.wpcarro.emacs.nixos {
     briefcasePath = "$HOME/depot/users/wpcarro";
   };
-in {
+in
+{
   imports = [
     (depot.path + "/users/wpcarro/nixos/marcus/hardware.nix")
   ];

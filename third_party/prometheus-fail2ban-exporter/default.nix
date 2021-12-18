@@ -10,7 +10,8 @@ let
     p.prometheus_client
   ]);
 
-in pkgs.writeShellScriptBin "prometheus-fail2ban-exporter" ''
+in
+pkgs.writeShellScriptBin "prometheus-fail2ban-exporter" ''
   set -eo pipefail
 
   exec "${python}/bin/python" "${script}"

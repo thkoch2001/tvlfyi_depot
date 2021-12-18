@@ -25,43 +25,49 @@ let
       descend = expr: attr: "builtins.getAttr \"${attr}\" (${expr})";
       targetExpr = foldl' descend "import ./. {}" target.__readTree;
       subtargetExpr = descend targetExpr target.__subtarget;
-    in if target ? __subtarget then subtargetExpr else targetExpr;
+    in
+    if target ? __subtarget then subtargetExpr else targetExpr;
 
   # Create a pipeline label from the targets tree location.
   mkLabel = target:
     let label = concatStringsSep "/" target.__readTree;
-    in if target ? __subtarget
-      then "${label}:${target.__subtarget}"
-      else label;
+    in
+    if target ? __subtarget
+    then "${label}:${target.__subtarget}"
+    else label;
 
   # Create a pipeline step from a single target.
   mkStep = target: {
-    command = let
-      drvPath = builtins.unsafeDiscardStringContext target.drvPath;
-    in lib.concatStringsSep " " [
-      # First try to realise the drvPath of the target so we don't evaluate twice.
-      # Nix has no concept of depending on a derivation file without depending on
-      # at least one of its `outPath`s, so we need to discard the string context
-      # if we don't want to build everything during pipeline construction.
-      "nix-store --realise '${drvPath}'"
-      # Since we don't gcroot the derivation files, they may be deleted by the
-      # garbage collector. In that case we can reevaluate and build the attribute
-      # using nix-build.
-      "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
-    ];
+    command =
+      let
+        drvPath = builtins.unsafeDiscardStringContext target.drvPath;
+      in
+      lib.concatStringsSep " " [
+        # First try to realise the drvPath of the target so we don't evaluate twice.
+        # Nix has no concept of depending on a derivation file without depending on
+        # at least one of its `outPath`s, so we need to discard the string context
+        # if we don't want to build everything during pipeline construction.
+        "nix-store --realise '${drvPath}'"
+        # Since we don't gcroot the derivation files, they may be deleted by the
+        # garbage collector. In that case we can reevaluate and build the attribute
+        # using nix-build.
+        "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
+      ];
     label = ":nix: ${mkLabel target}";
 
     # Skip build steps if their out path has already been built.
-    skip = let
-      shouldSkip = with builtins;
-        # Only skip in real Buildkite builds
-        (getEnv "BUILDKITE_BUILD_ID" != "") &&
-        # Always build everything for the canon branch.
-        (getEnv "BUILDKITE_BRANCH" != "refs/heads/canon") &&
-        # Discard string context to avoid realising the store path during
-        # pipeline construction.
-        (pathExists (unsafeDiscardStringContext target.outPath));
-      in if shouldSkip then "Target was already built." else false;
+    skip =
+      let
+        shouldSkip = with builtins;
+          # Only skip in real Buildkite builds
+          (getEnv "BUILDKITE_BUILD_ID" != "") &&
+          # Always build everything for the canon branch.
+          (getEnv "BUILDKITE_BRANCH" != "refs/heads/canon") &&
+          # Discard string context to avoid realising the store path during
+          # pipeline construction.
+          (pathExists (unsafeDiscardStringContext target.outPath));
+      in
+      if shouldSkip then "Target was already built." else false;
 
     # Add a "fake" dependency on the initial static pipeline step. When
     # uploading a pipeline dynamically, an implicit dependency on the uploading
@@ -98,11 +104,13 @@ let
   #
   # This works by assigning each element a chunk ID based on its
   # index, and then grouping all elements by their chunk ID.
-  chunksOf = n: list: let
-    chunkId = idx: toString (idx / n + 1);
-    assigned = lib.imap1 (idx: value: { inherit value ; chunk = chunkId idx; }) list;
-    unchunk = mapAttrs (_: elements: map (e: e.value) elements);
-  in unchunk (lib.groupBy (e: e.chunk) assigned);
+  chunksOf = n: list:
+    let
+      chunkId = idx: toString (idx / n + 1);
+      assigned = lib.imap1 (idx: value: { inherit value; chunk = chunkId idx; }) list;
+      unchunk = mapAttrs (_: elements: map (e: e.value) elements);
+    in
+    unchunk (lib.groupBy (e: e.chunk) assigned);
 
   # Define a build pipeline chunk as a JSON file, using the pipeline
   # format documented on
@@ -116,7 +124,8 @@ let
 
   pipelineChunks = attrValues (mapAttrs makePipelineChunk (chunksOf 256 allSteps));
 
-in runCommandNoCC "depot-pipeline" {} ''
+in
+runCommandNoCC "depot-pipeline" { } ''
   mkdir $out
   echo "Generated ${toString (length pipelineChunks)} pipeline chunks"
   ${

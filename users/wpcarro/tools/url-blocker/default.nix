@@ -12,11 +12,11 @@ let
     name = "url-blocker";
     src = builtins.path { path = ./.; name = "url-blocker"; };
     buildPhase = ''
-    ${ghc}/bin/ghc Main.hs
-  '';
+      ${ghc}/bin/ghc Main.hs
+    '';
     installPhase = ''
-    mv ./Main $out
-  '';
+      mv ./Main $out
+    '';
   };
 
   # This is the systemd timer unit.
@@ -26,8 +26,9 @@ let
     systemd = {
       timers.simple-timer = {
         wantedBy = [ "timers.target" ];
-        partOf = [];
+        partOf = [ ];
       };
     };
   };
-in null
+in
+null

@@ -13,9 +13,9 @@ let
     ;
 
   bins = getBins mandoc [ "mandoc" ]
-      // getBins gzip   [ "gzip" ]
-      // getBins coreutils [ "mkdir" "ln" "cp" ]
-      ;
+    // getBins gzip [ "gzip" ]
+    // getBins coreutils [ "mkdir" "ln" "cp" ]
+  ;
 
   defaultGzip = true;
 
@@ -35,41 +35,68 @@ let
     }:
     { content
     , ...
-    }@page: let
+    }@page:
+    let
       source = builtins.toFile (basename false page) content;
-    in runExecline (basename gzip page) {} ([
-      (if requireLint then "if" else "foreground") [
-        bins.mandoc "-mdoc" "-T" "lint" source
+    in
+    runExecline (basename gzip page) { } ([
+      (if requireLint then "if" else "foreground")
+      [
+        bins.mandoc
+        "-mdoc"
+        "-T"
+        "lint"
+        source
       ]
-      "importas" "out" "out"
+      "importas"
+      "out"
+      "out"
     ] ++ (if gzip then [
-      "redirfd" "-w" "1" "$out"
-      bins.gzip "-c" source
+      "redirfd"
+      "-w"
+      "1"
+      "$out"
+      bins.gzip
+      "-c"
+      source
     ] else [
-      bins.cp "--reflink=auto" source "$out"
+      bins.cp
+      "--reflink=auto"
+      source
+      "$out"
     ]));
 
   buildManPages =
     name:
-    { derivationArgs ? {}
+    { derivationArgs ? { }
     , gzip ? defaultGzip
     , ...
     }@args:
     pages:
-    runExecline "${name}-man-pages" {
-      inherit derivationArgs;
-    } ([
-      "importas" "out" "out"
-    ] ++ lib.concatMap ({ name, section, content }@page: [
-      "if" [ bins.mkdir "-p" (manDir page) ]
-      "if" [
-        bins.ln "-s"
-        (buildManPage args page)
-        (target gzip page)
-      ]
-    ]) pages);
+    runExecline "${name}-man-pages"
+      {
+        inherit derivationArgs;
+      }
+      ([
+        "importas"
+        "out"
+        "out"
+      ] ++ lib.concatMap
+        ({ name, section, content }@page: [
+          "if"
+          [ bins.mkdir "-p" (manDir page) ]
+          "if"
+          [
+            bins.ln
+            "-s"
+            (buildManPage args page)
+            (target gzip page)
+          ]
+        ])
+        pages);
 
-in {
+in
+{
   __functor = _: buildManPages;
 
   single = buildManPage;

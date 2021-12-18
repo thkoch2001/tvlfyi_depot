@@ -40,7 +40,7 @@ let
   fragments = import ./fragments.nix args;
 
   # Functions for generating feeds for these blogs using //web/atom-feed.
-  toFeedEntry = { baseUrl, ...}: defun [ post atom-feed.entry ] (post: rec {
+  toFeedEntry = { baseUrl, ... }: defun [ post atom-feed.entry ] (post: rec {
     id = "${baseUrl}/${post.key}";
     title = post.title;
     content = readFile (renderMarkdown post.content);
@@ -52,7 +52,8 @@ let
       href = id;
     };
   });
-in {
+in
+{
   inherit post toFeedEntry;
   inherit (fragments) renderPost;
 

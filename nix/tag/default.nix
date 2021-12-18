@@ -4,22 +4,25 @@ let
   # if so sets `isTag` to `true` and sets the name and value.
   # If not, sets `isTag` to `false` and sets `errmsg`.
   verifyTag = tag:
-    let cases = builtins.attrNames tag;
-        len = builtins.length cases;
+    let
+      cases = builtins.attrNames tag;
+      len = builtins.length cases;
     in
     if builtins.length cases == 1
-    then let name = builtins.head cases; in {
-      isTag = true;
-      name = name;
-      val = tag.${name};
-      errmsg = null;
-    }
+    then
+      let name = builtins.head cases; in
+      {
+        isTag = true;
+        name = name;
+        val = tag.${name};
+        errmsg = null;
+      }
     else {
       isTag = false;
       errmsg =
-        ( "match: an instance of a sum is an attrset "
-        + "with exactly one element, yours had ${toString len}"
-        + ", namely: ${lib.generators.toPretty {} cases}" );
+        ("match: an instance of a sum is an attrset "
+          + "with exactly one element, yours had ${toString len}"
+          + ", namely: ${lib.generators.toPretty {} cases}");
       name = null;
       val = null;
     };
@@ -64,20 +67,20 @@ let
   #   => { smol = 1; }
   discrDef = defTag: fs: v:
     let res = lib.findFirst
-                (t: t.val v)
-                null
-                (map assertIsTag fs);
+      (t: t.val v)
+      null
+      (map assertIsTag fs);
     in
-      if res == null
-      then { ${defTag} = v; }
-      else { ${res.name} = v; };
+    if res == null
+    then { ${defTag} = v; }
+    else { ${res.name} = v; };
 
   # Like `discrDef`, but fail if there is no match.
   discr = fs: v:
     let res = discrDef null fs v; in
-      assert lib.assertMsg (res != null)
-        "tag.discr: No predicate found that matches ${lib.generators.toPretty {} v}";
-      res;
+    assert lib.assertMsg (res != null)
+      "tag.discr: No predicate found that matches ${lib.generators.toPretty {} v}";
+    res;
 
   # The canonical pattern matching primitive.
   # A sum value is an attribute set with one element,
@@ -103,18 +106,20 @@ let
   #
   match = sum: matcher:
     let cases = builtins.attrNames sum;
-    in assert
-      let len = builtins.length cases; in
-        lib.assertMsg (len == 1)
-          ( "match: an instance of a sum is an attrset "
-          + "with exactly one element, yours had ${toString len}"
-          + ", namely: ${lib.generators.toPretty {} cases}" );
+    in
+    assert
+    let len = builtins.length cases; in
+    lib.assertMsg (len == 1)
+      ("match: an instance of a sum is an attrset "
+        + "with exactly one element, yours had ${toString len}"
+        + ", namely: ${lib.generators.toPretty {} cases}");
     let case = builtins.head cases;
-    in assert
-        lib.assertMsg (matcher ? ${case})
-        ( "match: \"${case}\" is not a valid case of this sum, "
+    in
+    assert
+    lib.assertMsg (matcher ? ${case})
+      ("match: \"${case}\" is not a valid case of this sum, "
         + "the matcher accepts: ${lib.generators.toPretty {}
-            (builtins.attrNames matcher)}" );
+            (builtins.attrNames matcher)}");
     matcher.${case} sum.${case};
 
   # A `match` with the arguments flipped.
@@ -148,15 +153,16 @@ let
       ;
   };
 
-in {
-   inherit
-     verifyTag
-     tagName
-     tagValue
-     discr
-     discrDef
-     match
-     matchLam
-     tests
-     ;
+in
+{
+  inherit
+    verifyTag
+    tagName
+    tagValue
+    discr
+    discrDef
+    match
+    matchLam
+    tests
+    ;
 }

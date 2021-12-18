@@ -29,7 +29,8 @@ let
     let f = x:
       # TODO(Profpatsch): typecheck
       let x' = if builtins.isString x then { use = x; as = x; } else x;
-      in {
+      in
+      {
         name = x'.as;
         value = "${lib.getBin drv}/bin/${x'.use}";
       };
@@ -42,7 +43,8 @@ let
     inherit (depot.nix.runTestsuite) assertEq it runTestsuite;
   };
 
-in {
+in
+{
   __functor = _: getBins;
   inherit tests;
 }

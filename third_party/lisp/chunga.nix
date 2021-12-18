@@ -2,7 +2,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.chunga;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "chunga";
   deps = with depot.third_party.lisp; [
     trivial-gray-streams

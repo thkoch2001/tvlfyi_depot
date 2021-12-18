@@ -4,14 +4,14 @@
 # Intended for manual updates, which keeps us honest with what we pull into our closure.
 
 let
-  buildRustCrate = attrs@{
-    edition ? "2018",
-    ...
-  }: pkgs.buildRustCrate (attrs // {
-    inherit
-      edition
-      ;
-   });
+  buildRustCrate =
+    attrs@{ edition ? "2018"
+    , ...
+    }: pkgs.buildRustCrate (attrs // {
+      inherit
+        edition
+        ;
+    });
 in
 
 # TODO: remove this giant with because it screws with the static analyzer

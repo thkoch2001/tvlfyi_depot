@@ -27,4 +27,5 @@ let
     # Actual ACL entries
     ACLs = list acl;
   };
-in config: pkgs.writeText "tailscale-acl.json" (toJSON (aclConfig config))
+in
+config: pkgs.writeText "tailscale-acl.json" (toJSON (aclConfig config))
