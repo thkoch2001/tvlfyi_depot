@@ -1,8 +1,6 @@
-{ depot, ... }:
+{ depot, lib, pkgs, ... }:
 
-depot.nix.buildLisp.program {
-  name = "panettone";
-
+let
   deps = with depot.third_party.lisp; [
     bordeaux-threads
     cl-json
@@ -19,6 +17,8 @@ depot.nix.buildLisp.program {
     trivial-ldap
 
     depot.lisp.klatre
+
+      fiveam
   ];
 
   srcs = [
@@ -33,6 +33,10 @@ depot.nix.buildLisp.program {
     ./src/irc.lisp
     ./src/panettone.lisp
   ];
+in depot.nix.buildLisp.program {
+  name = "panettone";
+
+  inherit deps srcs;
 
   tests = {
     deps = with depot.third_party.lisp; [
@@ -52,4 +56,38 @@ depot.nix.buildLisp.program {
     "ecl" # dependencies use dynamic cffi
     "ccl" # The value NIL is not of the expected type STRING. when loading model.lisp
   ];
+
+  passthru = rec {
+    integrationTests = depot.nix.buildLisp.runTestSuite {
+      implementation = depot.nix.buildLisp.sbcl;
+      name = "panettone-integration-tests";
+
+      srcs = srcs ++ [
+        ./test/package.lisp
+        ./test/integration_test.lisp
+      ];
+
+      deps = deps ++ (with depot.third_party.lisp; [
+        fiveam
+      ]);
+
+      expression = "(fiveam:run!)";
+    };
+
+    meta.extraSteps = [{
+      label = "Panettone Integration Tests";
+      command = let
+        inherit (pkgs)
+          arion
+          writeShellScript
+        ;
+
+      in writeShellScript "panettone-tests.sh" ''
+        set -euo pipefail
+        cd "${builtins.path { path = ./.; name = "panettone"; }}"
+        trap "${arion}/bin/arion down" EXIT
+        ${arion}/bin/arion run panettone-integration-tests
+      '';
+    }];
+  };
 }
