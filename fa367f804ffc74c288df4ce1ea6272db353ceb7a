@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20313eb4_55af5fc6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-19T19:10:13Z",
+      "side": 1,
+      "message": "It\u0027d be cleaner, I think in general to just disable the extra target in buildLisp in the first place, the information necessary for this is available, so it should be a simple change.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 1
+      },
+      "revId": "fa367f804ffc74c288df4ce1ea6272db353ceb7a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9cbb253_33fe7c07",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
