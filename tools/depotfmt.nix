@@ -1,6 +1,6 @@
 # Builds treefmt for depot, with a hardcoded configuration that
 # includes the right paths to formatters.
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
 let
   config = pkgs.writeText "depot-treefmt-config" ''
@@ -9,8 +9,21 @@ let
     options = [ "-w" ]
     includes = ["*.go"]
   '';
-in pkgs.writeShellScriptBin "depotfmt" ''
-  exec ${pkgs.treefmt}/bin/treefmt ''${@} \
-    --config-file ${config} \
-    --tree-root $(${pkgs.git}/bin/git rev-parse --show-toplevel)
-''
+
+  # helper tool for formatting the depot interactively
+  depotfmt = pkgs.writeShellScriptBin "depotfmt" ''
+    exec ${pkgs.treefmt}/bin/treefmt ''${@} \
+      --config-file ${config} \
+      --tree-root $(${pkgs.git}/bin/git rev-parse --show-toplevel)
+  '';
+
+  # wrapper for running formatting checks in CI
+  check = pkgs.runCommandNoCC "depotfmt-check" {} ''
+    ${pkgs.git}/bin/git clone ${depot.path.origSrc} depot
+    export HOME="$(${pkgs.coreutils}/bin/realpath .)"
+    ${pkgs.treefmt}/bin/treefmt \
+      --fail-on-change \
+      --config-file ${config} \
+      --tree-root depot && : > $out
+  '';
+in depotfmt // depot.nix.readTree.drvTargets { inherit check; }
