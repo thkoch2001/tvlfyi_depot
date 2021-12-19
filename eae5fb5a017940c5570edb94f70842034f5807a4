@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cf3208a_2b69fd2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-19T16:38:50Z",
+      "side": 1,
+      "message": "lol, go stdlib\n\nLGTM besides the missing comma, but CI will tell you about that",
+      "revId": "eae5fb5a017940c5570edb94f70842034f5807a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
