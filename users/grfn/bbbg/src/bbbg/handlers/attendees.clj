@@ -12,11 +12,12 @@
    [ring.util.response :refer [content-type redirect response]]
    [bbbg.views.flash :as flash]))
 
-(defn- attendees-page [{:keys [attendees]}]
+(defn- attendees-page [{:keys [attendees q]}]
   [:div
    [:form.search-form {:method :get :action "/attendees"}
     [:input {:type "search"
-             :name "q"}]
+             :name "q"
+             :value q}]
     [:input {:type "submit"
              :value "Search Attendees"}]]
    [:table.attendees
@@ -40,9 +41,11 @@
   (routes
    (wrap-auth-required
     (routes
-     (GET "/attendees" []
-       (let [attendees (db/list db (db.attendee/with-stats))]
-         (page-response (attendees-page {:attendees attendees}))))))
+     (GET "/attendees" [q]
+       (let [attendees (db/list db (cond-> (db.attendee/with-stats)
+                                     q (db.attendee/search q)))]
+         (page-response (attendees-page {:attendees attendees
+                                         :q q}))))))
 
    (GET "/attendees.json" [q event_id attended]
      (let [results

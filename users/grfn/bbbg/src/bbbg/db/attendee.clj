@@ -9,17 +9,16 @@
     [merge-group-by merge-join merge-left-join merge-select merge-where]]))
 
 (defn search
-  ([query]
-   (cond->
-       {:select [:attendee.*]
-        :from [:attendee]}
-     query
-     (assoc
-      :where [:or
-              [:ilike :meetup_name (str "%" query "%")]
-              [:ilike :discord_name (str "%" query "%")]])))
-  ([db query]
-   (db/list db (search query))))
+  ([q] (search {:select [:attendee.*] :from [:attendee]} q))
+  ([db-or-query q]
+   (if (db/database? db-or-query)
+     (db/list db-or-query (search q))
+     (cond-> db-or-query
+       q [:or
+          [:ilike :meetup_name (str "%" q "%")]
+          [:ilike :discord_name (str "%" q "%")]])))
+  ([db query q]
+   (db/list db (search query q))))
 
 (defn for-event
   ([query event-id]
@@ -44,10 +43,17 @@
 
 (comment
   (def db (:db bbbg.core/system))
+  (db/database? db)
   (search db "gri")
   (db/insert! db :attendee {::attendee/meetup-name "Griffin Smith"
                             ::attendee/discord-name "grfn"
                             })
 
+  (search db (with-stats) "gri")
+
+  (search (with-stats) "gri")
+
   (db/list db (with-stats))
+
+  (map? db)
   )
