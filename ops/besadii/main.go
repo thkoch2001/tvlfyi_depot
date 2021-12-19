@@ -207,10 +207,11 @@ func triggerBuild(cfg *config, log *syslog.Writer, trigger *buildTrigger) error 
 		env["GERRIT_CHANGE_ID"] = trigger.changeId
 		env["GERRIT_PATCHSET"] = trigger.patchset
 		headBuild = false
-	}
 
-    // The branch doesn't have to be a real ref (it's just used to group builds), so make it the identifier for the CL
-	branch := fmt.Sprintf("cl/%v", strings.Split(trigger.ref, "/")[3])
+    // The branch doesn't have to be a real ref (it's just used to
+    // group builds), so make it the identifier for the CL
+		branch := fmt.Sprintf("cl/%v", strings.Split(trigger.ref, "/")[3])
+	}
 
 	build := Build{
 		Commit: trigger.commit,
