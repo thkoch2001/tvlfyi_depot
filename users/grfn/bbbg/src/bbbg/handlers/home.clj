@@ -2,10 +2,10 @@
   (:require
    [bbbg.db.user :as db.user]
    [bbbg.discord.auth :as discord.auth]
-   [bbbg.handlers.core :refer [page-response]]
+   [bbbg.handlers.core :refer [page-response authenticated?]]
    [bbbg.user :as user]
    [bbbg.views.flash :as flash]
-   [compojure.core :refer [GET routes]]
+   [compojure.core :refer [GET POST routes]]
    [ring.util.response :refer [redirect]]
    [bbbg.discord :as discord]))
 
@@ -14,7 +14,11 @@
    [:ul
     [:li [:a {:href "/signup-forms"}
           "Event Signup Form"]]
-    (when-not authenticated?
+    (if authenticated?
+      [:li [:form {:method :post
+                   :action "/auth/sign-out"}
+            [:input {:type "submit"
+                     :value "Sign Out"}]]]
       [:li [:a {:href "/auth/discord"}
             "Sign In"]])]])
 
@@ -28,8 +32,16 @@
 (defn home-routes [{:keys [db] :as env}]
   (routes
    (GET "/" request
-     (let [authenticated? (some? (get-in request [:session ::user/id]))]
-       (page-response (home-page {:authenticated? authenticated?}))))
+     (page-response (home-page {:authenticated? (authenticated? request)})))
+
+   (POST "/auth/sign-out" request
+     (if (authenticated? request)
+       (-> (redirect "/")
+           (update :session dissoc ::user/id)
+           (flash/add-flash
+            {:flash/message "Successfully Signed Out"
+             :flash/type :success}))
+       (redirect "/")))
 
    (GET "/auth/success" request
      (let [token (get-in request [:oauth2/access-tokens :discord])]
