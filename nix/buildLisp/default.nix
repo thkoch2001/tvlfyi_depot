@@ -160,9 +160,9 @@ let
             repl = implementation.lispWith [ self ];
 
             # meta is done via passthru to minimize rebuilds caused by overriding
-            meta = (old.passthru.meta or {}) // {
+            meta =  {
               inherit targets;
-            };
+            } // (old.passthru.meta or {});
           } // builtins.listToAttrs (builtins.map (impl: {
             inherit (impl) name;
             value = self.overrideLisp (_: {

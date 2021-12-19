@@ -74,6 +74,9 @@ in depot.nix.buildLisp.program {
       expression = "(fiveam:run!)";
     };
 
+    # Only build one copy
+    meta.targets = [];
+
     meta.extraSteps = [{
       label = "Panettone Integration Tests";
       command = let
