@@ -96,6 +96,11 @@
 (defn make-database [config]
   (map->Database {:config config}))
 
+(defn database? [x]
+  (or
+   (instance? Database x)
+   (and (map? x) (contains? x :pool))))
+
 ;;;
 ;;; Migrations
 ;;;
