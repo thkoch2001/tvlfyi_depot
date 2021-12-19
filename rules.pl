@@ -30,11 +30,23 @@ take_until_equal(S, [X|Xs], Init) :-
     take_until_equal(S, Xs, Rest)
   ).
 
+% Determine the most applicable change owner.
+%
+% This is usually the Uploader, unless the Uploader is clbot in which
+% case the change owner is used instead.
+applicable_owner(Owner) :-
+    gerrit:uploader(user(1000015)), % clbot!
+    !,
+    gerrit:change_owner(Owner).
+
+applicable_owner(Owner) :-
+    gerrit:uploader(Owner).
+
 unresolved_comments(Check) :-
     gerrit:unresolved_comments_count(0),
     !,
-    gerrit:uploader(Uploader),
-    Check = label('All-Comments-Resolved', ok(Uploader)).
+    applicable_owner(Owner),
+    Check = label('All-Comments-Resolved', ok(Owner)).
 
 unresolved_comments(Check) :-
     gerrit:unresolved_comments_count(Count),
@@ -49,24 +61,24 @@ commit_message(Check) :-
     take_until_equal(10, MessageCodes, FirstLine), length(FirstLine, FirstLineLength),
     FirstLineLength =< 68,
     !,
-    gerrit:uploader(Uploader),
-    Check = label('Conformant-Commit-Message', ok(Uploader)).
+    applicable_owner(Owner),
+    Check = label('Conformant-Commit-Message', ok(Owner)).
 
 commit_message(Check) :-
     Check = label('Conformant-Commit-Message', need(_)).
 
 code_owners(Checks) :-
     % Retrieve all `Code-Review: +2` approvers, as well as the
-    % uploader, and run the owners check against these.
+    % change owner, and run the owners check against these.
     findall(U, gerrit:commit_label(label('Code-Review', 2), U), Approvers),
-    gerrit:uploader(Uploader),
-    gerrit_owners:add_owner_approval([Uploader | Approvers], [], OwnerChecks),
+    applicable_owner(ChangeOwner),
+    gerrit_owners:add_owner_approval([ChangeOwner | Approvers], [], OwnerChecks),
     ( OwnerChecks = [] ->
       % gerrit_owners:add_owner_approval/3 only adds the label if there *isn't*
       % code-review from owners, but it's nice for UI consistency if we also
       % have an ok label if there *is* - so we check for no output from
-      % gerrit_owners:add_owner_approval/3 and add an ok(Uploader) if so.
-      Checks = [label('Code-Review-from-owners', ok(Uploader))]
+      % gerrit_owners:add_owner_approval/3 and add an ok(ChangeOwner) if so.
+      Checks = [label('Code-Review-from-owners', ok(ChangeOwner))]
     ; Checks = OwnerChecks
     ).
 
