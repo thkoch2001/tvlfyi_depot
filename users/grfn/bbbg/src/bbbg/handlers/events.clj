@@ -3,15 +3,19 @@
    [bbbg.db :as db]
    [bbbg.db.event :as db.event]
    [bbbg.event :as event]
-   [bbbg.handlers.core :refer [page-response]]
+   [bbbg.handlers.core :refer [page-response authenticated? wrap-auth-required]]
    [compojure.core :refer [context GET POST]]
    [ring.util.response :refer [redirect]]
    [bbbg.views.flash :as flash]))
 
-(defn events-index [events]
-  [:ul.events-list
-   (for [event events]
-     [:li (::event/date event)])])
+(defn events-index [{:keys [events authenticated?]}]
+  [:div
+   (when authenticated?
+     [:a {:href "/events/new"}
+      "Create New Event"])
+   [:ul.events-list
+    (for [event events]
+      [:li (::event/date event)])]])
 
 (defn event-form
   ([] (event-form {}))
@@ -29,9 +33,11 @@
 
 (defn events-routes [{:keys [db]}]
   (context "/events" []
-    (GET "/" []
+    (GET "/" request
       (let [events (db/list db :event)]
-        (events-index events)))
+        (page-response
+         (events-index {:events events
+                        :authenticated? (authenticated? request)}))))
 
     (GET "/new" [date]
       (page-response

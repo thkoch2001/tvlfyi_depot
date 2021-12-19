@@ -12,6 +12,8 @@
 (defn- home-page [{:keys [authenticated?]}]
   [:nav.home-nav
    [:ul
+    [:li [:a {:href "/events"}
+          "Events"]]
     [:li [:a {:href "/signup-forms"}
           "Event Signup Form"]]
     (if authenticated?
