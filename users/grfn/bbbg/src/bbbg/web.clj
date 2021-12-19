@@ -1,5 +1,6 @@
 (ns bbbg.web
   (:require
+   [bbbg.discord.auth :as discord.auth :refer [wrap-discord-auth]]
    [bbbg.handlers.attendees :as attendees]
    [bbbg.handlers.events :as events]
    [bbbg.handlers.home :as home]
@@ -7,6 +8,7 @@
    [bbbg.styles :refer [stylesheet]]
    [bbbg.util.core :as u]
    [bbbg.views.flash :refer [wrap-page-flash]]
+   clj-time.coerce
    [clojure.spec.alpha :as s]
    [com.stuartsierra.component :as component]
    [compojure.core :refer [GET routes]]
@@ -27,8 +29,10 @@
   (s/and bytes? #(= 16 (count %))))
 
 (s/def ::config
-  (s/keys :req [::port]
-          :opt [::cookie-secret]))
+  (s/merge
+   (s/keys :req [::port]
+           :opt [::cookie-secret])
+   ::discord.auth/config))
 
 (s/fdef make-server
   :args (s/cat :config ::config))
@@ -45,14 +49,18 @@
   (s/assert
    ::config
    (u/remove-nils
-    {::port (:port env 8888)
-     ::cookie-secret (some-> env :cookie-secret string->cookie-secret)})))
+    (merge
+     {::port (:port env 8888)
+      ::cookie-secret (some-> env :cookie-secret string->cookie-secret)}
+     (discord.auth/env->config)))))
 
 (defn dev-config []
   (s/assert
    ::config
-   {::port 8888
-    ::cookie-secret (into-array Byte/TYPE (repeat 16 0))}))
+   (merge
+    {::port 8888
+     ::cookie-secret (into-array Byte/TYPE (repeat 16 0))}
+    (discord.auth/dev-config))))
 
 ;;;
 
@@ -72,11 +80,16 @@
 
 (defn middleware [app env]
   (-> app
+      (wrap-discord-auth env)
       wrap-keyword-params
       wrap-params
       wrap-page-flash
       wrap-flash
-      (wrap-session {:store (cookie-store {:key (:cookie-secret env)})})))
+      (wrap-session {:store (cookie-store
+                             {:key (:cookie-secret env)
+                              :readers {'clj-time/date-time
+                                        clj-time.coerce/from-string}})
+                     :cookie-attrs {:same-site :lax}})))
 
 (defn handler [env]
   (-> (app-routes env)
@@ -96,8 +109,12 @@
           (dissoc this ::shutdown-fn))
       this)))
 
-(defn make-server [{::keys [port cookie-secret]}]
+(defn make-server [{::keys [port cookie-secret]
+                    :as env}]
   (component/using
-   (map->WebServer {:port port
-                    :cookie-secret cookie-secret})
+   (map->WebServer
+    (merge
+     {:port port
+      :cookie-secret cookie-secret}
+     env))
    [:db]))
