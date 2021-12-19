@@ -101,6 +101,7 @@ in {
     firefox
     fzf
     git
+    pavucontrol
     ripgrep
     tdesktop
     vim
