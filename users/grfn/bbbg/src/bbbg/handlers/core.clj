@@ -1,5 +1,6 @@
 (ns bbbg.handlers.core
   (:require
+   [bbbg.user :as user]
    [bbbg.views.flash :as flash]
    [hiccup.core :refer [html]]
    [ring.util.response :refer [content-type response]]))
@@ -30,6 +31,9 @@
   (-> (apply render-page render-page-args)
       response
       (content-type "text/html")))
+
+(defn authenticated? [request]
+  (some? (get-in request [:session ::user/id])))
 
 (comment
   (render-page
