@@ -55,6 +55,19 @@ let repos = [
   }
 
   rec {
+    name = "joda-time/joda-time";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "joda-time";
+      groupId = "joda-time";
+      sha512 = "012fb9aa9b00b456f72a92374855a7f062f8617c026c436eee2cda67dffa2f8622201909c0f4f454bb346ff5a3ed6f60c236fafb19fa66f612d9861f27b38d3a";
+      version = "2.10";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
     name = "commons-codec/commons-codec";
     src = fetchMavenArtifact {
       inherit repos;
@@ -302,6 +315,19 @@ let repos = [
   }
 
   rec {
+    name = "httpasyncclient/org.apache.httpcomponents";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "httpasyncclient";
+      groupId = "org.apache.httpcomponents";
+      sha512 = "0a80db5dbf772f02d02ba6c7c163e8da9517dd7195714b495acb845c429580c1fc926d3e71c115e75be8c145651dce2fdfa0dc380132f7809c14b3ad95492aee";
+      version = "4.1.4";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
     name = "logback-jackson/ch.qos.logback.contrib";
     src = fetchMavenArtifact {
       inherit repos;
@@ -335,6 +361,19 @@ let repos = [
       groupId = "io.netty";
       sha512 = "74e04cf1a78f0066fc96b43f87562f231def49300665b679208314c2df96889835ba71f2dcd90c43fe88bf51583aaa6c868bde90cab8419e0f51702c0cadfc23";
       version = "4.1.42.Final";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "ring-oauth2/ring-oauth2";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "ring-oauth2";
+      groupId = "ring-oauth2";
+      sha512 = "3ed765b4bbb5749fcdcdb501b93ab656a413ade5af24c7aa34639718ed1fd0a5f325b05bd135540d56e55cbb456a2cb7852ba0e45bc5233e28229986eef75bb9";
+      version = "0.2.0";
       
     };
     paths = [ src ];
@@ -413,6 +452,32 @@ let repos = [
       groupId = "io.netty";
       sha512 = "931d0933886888c6729617bd6ebae105683dad6d8ad17b8b70d02df0f406660b003533c370b83fb0aac2d0edb4b182adc7fbb1a38d7e325e6c150ba723c17605";
       version = "4.1.42.Final";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "slingshot/slingshot";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "slingshot";
+      groupId = "slingshot";
+      sha512 = "ff2b2a27b441d230261c7f3ec8c38aa551865e05ab6438a74bd12bfcbc5f6bdc88199d42aaf5932b47df84f3d2700c8f514b9f4e9b5da28d29da7ff6b09a7fb5";
+      version = "0.12.2";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "httpcore-nio/org.apache.httpcomponents";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "httpcore-nio";
+      groupId = "org.apache.httpcomponents";
+      sha512 = "002af5f72b68a4ff1b1ff46b788013283d195e1d62ee1d7b102aa930b30f77f7e215a6d18edbea0fccd18fb1fa3a66cc4aef6070d72d6d1886f0044dfe0e16c7";
+      version = "4.4.10";
       
     };
     paths = [ src ];
@@ -536,6 +601,32 @@ let repos = [
   }
 
   rec {
+    name = "clj-time/clj-time";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "clj-time";
+      groupId = "clj-time";
+      sha512 = "cfeb46af59fd4112aa5a5d0087a39355f0fc19514b4c02bc6c3d9f81c9bda40491686207836e9a7943aebeb82a3b36f4e8b7407a8908c5ef151122644b278d75";
+      version = "0.15.2";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "clj-http/clj-http";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "clj-http";
+      groupId = "clj-http";
+      sha512 = "9884557d4f38068cb3234aec80acc0de8f9716645529693ffd9bd6db8221f5d1cf9e2d1b8bf7c7df4215d71372b02d83043ebf8fc27dc422552b32c9bdba1602";
+      version = "3.12.3";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
     name = "jul-to-slf4j/org.slf4j";
     src = fetchMavenArtifact {
       inherit repos;
@@ -556,6 +647,32 @@ let repos = [
       groupId = "migratus";
       sha512 = "ee5ce8601930d063e0d9d90fc8e165b78fc1587bfd7e0fc9922735bc2f9fc27f8cf8bf10d49d6fd57b899ac4b250145bd653915ed770424416e026ba37d1b604";
       version = "1.3.5";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "httpcore/org.apache.httpcomponents";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "httpcore";
+      groupId = "org.apache.httpcomponents";
+      sha512 = "f16a652f4a7b87dbf7cb16f8590d54a3f719c4c7b2f8883ce59db2d73be4701b64f2ca8a2c45aca6a5dbeaddeedff0c280a03722f70c076e239b645faa54eff9";
+      version = "4.4.14";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "httpclient-cache/org.apache.httpcomponents";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "httpclient-cache";
+      groupId = "org.apache.httpcomponents";
+      sha512 = "e150e8dc49c8c9972d8b324b56bb292b15e2f0e686f1292c4edac975615dfb16e5edb8ab325e614732a7d43a03061ca4fe93fe1e1f7487851a4d4d3af50a61f9";
+      version = "4.5.13";
       
     };
     paths = [ src ];
@@ -627,6 +744,19 @@ let repos = [
   }
 
   rec {
+    name = "riddley/riddley";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "riddley";
+      groupId = "riddley";
+      sha512 = "b478ecba9d1ab9d38c84a42354586fcece763000907b40c97bc43c0f16dc560b0860144efe410193cb3b7cb0149fbc1724fdd737cc3ba53de23618f5b30e6f9f";
+      version = "0.1.12";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
     name = "java.classpath/org.clojure";
     src = fetchMavenArtifact {
       inherit repos;
@@ -673,6 +803,19 @@ let repos = [
       groupId = "clout";
       sha512 = "99d6e1a8c5726ca4e5d12b280a39e6d1182d734922600f27d588d3d65fbc830c5e03f9e0421ff25c819deee4d1f389fd3906222716ace1eb17ce70ef9c5e8f4b";
       version = "2.2.1";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "commons-logging/commons-logging";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "commons-logging";
+      groupId = "commons-logging";
+      sha512 = "ed00dbfabd9ae00efa26dd400983601d076fe36408b7d6520084b447e5d1fa527ce65bd6afdcb58506c3a808323d28e88f26cb99c6f5db9ff64f6525ecdfa557";
+      version = "1.2";
       
     };
     paths = [ src ];
@@ -803,6 +946,19 @@ let repos = [
       groupId = "ch.qos.logback.contrib";
       sha512 = "2a826036f21997e2979fda83ae3e33cf62f3b2b2df15a7b11d1fd8a52163b09f0f2f8d72f5fdcea0ec1289b3d27727ed5e6b0bcdf4c5d741f4bac07b7b6139e8";
       version = "0.1.5";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "httpclient/org.apache.httpcomponents";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "httpclient";
+      groupId = "org.apache.httpcomponents";
+      sha512 = "3567739186e551f84cad3e4b6b270c5b8b19aba297675a96bcdff3663ff7d20d188611d21f675fe5ff1bfd7d8ca31362070910d7b92ab1b699872a120aa6f089";
+      version = "4.5.13";
       
     };
     paths = [ src ];
@@ -959,6 +1115,19 @@ let repos = [
       groupId = "javax.servlet";
       sha512 = "32f7e3565c6cdf3d9a562f8fd597fe5059af0cf6b05b772a144a74bbc95927ac275eb38374538ec1c72adcce4c8e1e2c9f774a7b545db56b8085af0065e4a1e5";
       version = "3.1.0";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "potemkin/potemkin";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "potemkin";
+      groupId = "potemkin";
+      sha512 = "5abc050bf7ff0b27d8c45aaa5e378201980815b711b2db99735db73304576c17e285026ea48a714bf0b0df7ad7a008de38b7d182cdc0e8989f4be1e6b3afa8aa";
+      version = "0.4.5";
       
     };
     paths = [ src ];
@@ -1128,6 +1297,19 @@ let repos = [
       groupId = "org.eclipse.jetty";
       sha512 = "b347f8a6e5b84e0f460037027e238a61edec710ade768c95e7be13dcea498abe43d5e622ee69ac7494138d1a8fcf92e07b7deab569c554831c57baad71c53b9b";
       version = "9.4.42.v20210604";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "httpmime/org.apache.httpcomponents";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "httpmime";
+      groupId = "org.apache.httpcomponents";
+      sha512 = "e1b0ee84bce78576074dc1b6836a69d8f5518eade38562e6890e3ddaa72b7f54bf735c8e2286142c58cddf45f745da31261e5d73b7d8092eb6ecfb20946eb36c";
+      version = "4.5.13";
       
     };
     paths = [ src ];

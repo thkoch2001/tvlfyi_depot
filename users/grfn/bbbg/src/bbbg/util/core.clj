@@ -1,5 +1,9 @@
 (ns bbbg.util.core
-  (:import java.util.UUID))
+  (:require
+   [clojure.java.shell :refer [sh]]
+   [clojure.string :as str])
+  (:import
+   java.util.UUID))
 
 (defn remove-nils
   "Remove all keys with nil values from m"
@@ -115,3 +119,12 @@
                        (cons f (step (rest s) (conj seen (distinction-fn f)))))))
                  xs seen)))]
     (step coll #{})))
+
+(defn pass [n]
+  (let [{:keys [exit out err]} (sh "pass" n)]
+    (if (= 0 exit)
+      (str/trim out)
+      (throw (Exception.
+              (format "`pass` command failed\nStandard output:%s\nStandard Error:%s"
+                      out
+                      err))))))

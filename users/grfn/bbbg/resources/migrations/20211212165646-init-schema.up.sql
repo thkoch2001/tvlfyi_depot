@@ -26,6 +26,7 @@ CREATE TABLE "event_attendee" (
 -- ;;
 CREATE TABLE "user" (
     "id" UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+    "username" TEXT NOT NULL,
     "discord_user_id" TEXT NOT NULL,
     "created_at" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now()
 );
