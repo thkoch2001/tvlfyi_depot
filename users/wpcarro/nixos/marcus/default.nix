@@ -101,8 +101,9 @@ in {
     firefox
     fzf
     git
+    pavucontrol
     ripgrep
-    tdesktop
+    telegram-desktop
     vim
     weechat
     wpcarros-emacs
