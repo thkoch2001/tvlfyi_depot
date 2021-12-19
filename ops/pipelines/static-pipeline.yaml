@@ -8,6 +8,12 @@ steps:
   - label: ":llama:"
     command: |
       set -ue
+
+      if test -n "$${GERRIT_CHANGE_URL-}"; then
+        echo "This is a build of [cl/$$GERRIT_CHANGE_ID]($$GERRIT_CHANGE_URL) (at patchset #$$GERRIT_PATCHSET)" | \
+          buildkite-agent annotate
+      fi
+
       nix-build -A ops.pipelines.depot -o pipeline --show-trace
 
       # Steps need to be uploaded in reverse order because pipeline
