@@ -681,4 +681,5 @@ given subject an body (in a thread, to avoid blocking)"
  (start-panettone :port 6161
                   :ldap-port 3899
                   :session-secret "session-secret")
+
  )
