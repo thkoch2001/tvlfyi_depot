@@ -3,18 +3,19 @@
    [bbbg.db :as db]
    [bbbg.db.event :as db.event]
    [bbbg.event :as event]
-   [bbbg.handlers.core :refer [page-response]]
+   [bbbg.handlers.core :refer [page-response authenticated?]]
    [compojure.core :refer [GET context]]
    [java-time :refer [local-date]]
    [ring.util.response :refer [redirect]]))
 
-(defn no-events-page []
+(defn no-events-page [{:keys [authenticated?]}]
   [:div.no-events
    [:p
     "There are no events for today"]
-   [:p
-    [:a {:href (str "/events/new?date=" (str (local-date)))} "Create Event"]
-    [:a {:href "/events"} "All Events"]]])
+   (when authenticated?
+     [:p
+      [:a {:href (str "/events/new?date=" (str (local-date)))} "Create Event"]
+      [:a {:href "/events"} "All Events"]])])
 
 (defn signup-page [event]
   [:div.signup-page
@@ -46,10 +47,11 @@
 
 (defn signup-form-routes [{:keys [db]}]
   (context "/signup-forms" []
-   (GET "/" []
+   (GET "/" request
      (if-let [event (db/fetch db (db.event/today))]
        (redirect (str "/signup-forms/" (::event/id event)))
-       (page-response (no-events-page))))
+       (page-response (no-events-page
+                       {:authenticated? (authenticated? request)}))))
 
    (GET "/:event-id" [event-id]
      (if-let [event (db/get db :event event-id)]

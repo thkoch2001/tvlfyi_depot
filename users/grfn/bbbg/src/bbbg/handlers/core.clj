@@ -35,6 +35,11 @@
 (defn authenticated? [request]
   (some? (get-in request [:session ::user/id])))
 
+(defn wrap-auth-required [handler]
+  (fn [req]
+    (when (authenticated? req)
+      (handler req))))
+
 (comment
   (render-page
    [:h1 "hi"])
