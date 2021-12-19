@@ -21,8 +21,8 @@
         +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
        ligatures         ; replace bits of code with pretty symbols
-       ;;tabbar            ; FIXME an (incomplete) tab bar for Emacs
-       ;;treemacs          ; a project drawer, like neotree but cooler
+       ;; tabbar            ; FIXME an (incomplete) tab bar for Emacs
+       ;; treemacs          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
@@ -170,64 +170,3 @@
        ;; provides a Spacemacs-inspired keybinding scheme and a smartparens
        ;; config. Use it as a reference for your own modules.
        (default +bindings +smartparens))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(doom-big-font-mode nil)
- '(flycheck-javascript-flow-args nil)
- '(org-agenda-files
-   '("/home/griffin/notes/personal.org" "/home/griffin/notes/2020-01-27-data-pipeline-deploy-mismatch.org" "/home/griffin/notes/architecture.org" "/home/griffin/notes/cooking.org" "/home/griffin/notes/culture-survey.org" "/home/griffin/notes/dir-structure.org" "/home/griffin/notes/dnd.org" "/home/griffin/notes/inbox.org" "/home/griffin/notes/misc-todo.org" "/home/griffin/notes/nix-talk.org" "/home/griffin/notes/notes.org" "/home/griffin/notes/one-on-one.org" "/home/griffin/notes/work.org" "/home/griffin/notes/xanthous.org" "/home/griffin/notes/xgboost.org"))
- '(safe-local-variable-values
-   '((intero-stack-yaml . "/home/griffin/code/mlem/stack.yaml")
-     (elisp-lint-indent-specs
-      (if-let* . 2)
-      (when-let* . 1)
-      (let* . defun)
-      (nrepl-dbind-response . 2)
-      (cider-save-marker . 1)
-      (cider-propertize-region . 1)
-      (cider-map-repls . 1)
-      (cider--jack-in . 1)
-      (cider--make-result-overlay . 1)
-      (insert-label . defun)
-      (insert-align-label . defun)
-      (insert-rect . defun)
-      (cl-defun . 2)
-      (with-parsed-tramp-file-name . 2)
-      (thread-first . 1)
-      (thread-last . 1))
-     (checkdoc-package-keywords-flag)
-     (cider-jack-in-default . "shadow-cljs")
-     (projectile-project-root . "/home/griffin/code/urb/grid/backend/src")
-     (python-pytest-executable . "/home/griffin/code/urb/grid/backend/src/.venv/bin/pytest"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 89)) (:foreground "#657b83" :background "#fdf6e3"))))
- '(agda2-highlight-bound-variable-face ((t nil)))
- '(agda2-highlight-coinductive-constructor-face ((t (:foreground "#b58900"))))
- '(agda2-highlight-datatype-face ((t (:foreground "#268bd2"))))
- '(agda2-highlight-dotted-face ((t nil)))
- '(agda2-highlight-error-face ((t (:foreground "#dc322f" :underline t))))
- '(agda2-highlight-field-face ((t (:foreground "#dc322f"))))
- '(agda2-highlight-function-face ((t (:foreground "#268bd2"))))
- '(agda2-highlight-incomplete-pattern-face ((t (:background "#cb4b16" :foreground "#002b36"))))
- '(agda2-highlight-inductive-constructor-face ((t (:foreground "#859900"))))
- '(agda2-highlight-keyword-face ((t (:foreground "#859900"))))
- '(agda2-highlight-module-face ((t (:foreground "#b58900"))))
- '(agda2-highlight-number-face ((t (:foreground "#6c71c4"))))
- '(agda2-highlight-operator-face ((t nil)))
- '(agda2-highlight-postulate-face ((t (:foreground "#268bd2"))))
- '(agda2-highlight-primitive-face ((t (:foreground "#268bd2"))))
- '(agda2-highlight-primitive-type-face ((t (:foreground "#268bd2"))))
- '(agda2-highlight-record-face ((t (:foreground "#268bd2"))))
- '(agda2-highlight-string-face ((t (:foreground "#2aa198"))))
- '(agda2-highlight-symbol-face ((((background "#fdf6e3")) (:foreground "#586e75"))))
- '(agda2-highlight-termination-problem-face ((t (:background "#cb4b16" :foreground "#002b36"))))
- '(agda2-highlight-typechecks-face ((t (:background "#2aa198" :foreground "#002b36"))))
- '(agda2-highlight-unsolved-constraint-face ((t (:background "#eee8d5"))))
- '(agda2-highlight-unsolved-meta-face ((t (:background "#eee8d5")))))
