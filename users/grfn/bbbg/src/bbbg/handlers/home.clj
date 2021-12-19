@@ -35,7 +35,7 @@
      (let [token (get-in request [:oauth2/access-tokens :discord])]
        (if (discord.auth/check-discord-auth env token)
          (let [discord-user (discord/me token)
-               user (db.user/create!
+               user (db.user/find-or-create!
                      db
                      #::user{:username (:username discord-user)
                              :discord-user-id (:id discord-user)})]
