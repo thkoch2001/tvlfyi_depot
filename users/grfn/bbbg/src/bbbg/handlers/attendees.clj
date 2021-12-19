@@ -8,11 +8,42 @@
    [cheshire.core :as json]
    [compojure.core :refer [GET POST routes]]
    [honeysql.helpers :refer [merge-where]]
+   [bbbg.handlers.core :refer [page-response wrap-auth-required]]
    [ring.util.response :refer [content-type redirect response]]
    [bbbg.views.flash :as flash]))
 
+(defn- attendees-page [{:keys [attendees]}]
+  [:div
+   [:form.search-form {:method :get :action "/attendees"}
+    [:input {:type "search"
+             :name "q"}]
+    [:input {:type "submit"
+             :value "Search Attendees"}]]
+   [:table.attendees
+    [:thead
+     [:tr
+      [:th "Meetup Name"]
+      [:th "Discord Name"]
+      [:th "Events RSVPd"]
+      [:th "Events Attended"]
+      [:th "No-Shows"]]]
+    [:tbody
+     (for [attendee attendees]
+       [:tr
+        [:td (::attendee/meetup-name attendee)]
+        [:td (::attendee/discord-name attendee)]
+        [:td (:events-rsvpd attendee)]
+        [:td (:events-attended attendee)]
+        [:td (:no-shows attendee)]])]]])
+
 (defn attendees-routes [{:keys [db]}]
   (routes
+   (wrap-auth-required
+    (routes
+     (GET "/attendees" []
+       (let [attendees (db/list db (db.attendee/with-stats))]
+         (page-response (attendees-page {:attendees attendees}))))))
+
    (GET "/attendees.json" [q event_id attended]
      (let [results
            (db/list
@@ -47,6 +78,7 @@
 
 (comment
   (def db (:db bbbg.core/system))
+  (db/list db :attendee)
   (db/list db
            (->
             (db.attendee/search "gr")
