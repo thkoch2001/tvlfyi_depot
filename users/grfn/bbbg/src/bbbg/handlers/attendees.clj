@@ -5,14 +5,16 @@
    [bbbg.db.attendee :as db.attendee]
    [bbbg.db.event :as db.event]
    [bbbg.event :as event]
+   [bbbg.handlers.core :refer [page-response wrap-auth-required]]
+   [bbbg.views.flash :as flash]
    [cheshire.core :as json]
+   [compojure.coercions :refer [as-uuid]]
    [compojure.core :refer [GET POST routes]]
    [honeysql.helpers :refer [merge-where]]
-   [bbbg.handlers.core :refer [page-response wrap-auth-required]]
-   [ring.util.response :refer [content-type redirect response]]
-   [bbbg.views.flash :as flash]))
+   [ring.util.response :refer [content-type redirect response not-found]])
+  (:import java.util.UUID))
 
-(defn- attendees-page [{:keys [attendees q]}]
+(defn- attendees-page [{:keys [attendees q edit-notes]}]
   [:div
    [:form.search-form {:method :get :action "/attendees"}
     [:input {:type "search"
@@ -27,25 +29,51 @@
       [:th "Discord Name"]
       [:th "Events RSVPd"]
       [:th "Events Attended"]
-      [:th "No-Shows"]]]
+      [:th "No-Shows"]
+      [:th "Notes"]]]
     [:tbody
-     (for [attendee attendees]
+     (for [attendee attendees
+           :let [id (::attendee/id attendee)]]
        [:tr
         [:td (::attendee/meetup-name attendee)]
         [:td (::attendee/discord-name attendee)]
         [:td (:events-rsvpd attendee)]
         [:td (:events-attended attendee)]
-        [:td (:no-shows attendee)]])]]])
+        [:td (:no-shows attendee)]
+        (if (= edit-notes id)
+          [:td
+           [:form.organizer-notes {:method :post
+                                   :action (str "/attendees/" id "/notes")}
+            [:input {:type :text :name "notes"
+                     :value (::attendee/organizer-notes attendee)}]
+            [:input {:type "Submit" :value "Save Notes"}]]]
+          [:td
+           (::attendee/organizer-notes attendee)
+           [:a {:href (str "/attendees?edit-notes=" id)}
+            "Edit Notes"]])])]]])
 
 (defn attendees-routes [{:keys [db]}]
   (routes
    (wrap-auth-required
     (routes
-     (GET "/attendees" [q]
+     (GET "/attendees" [q edit-notes]
        (let [attendees (db/list db (cond-> (db.attendee/with-stats)
-                                     q (db.attendee/search q)))]
+                                     q (db.attendee/search q)))
+             edit-notes (some-> edit-notes UUID/fromString)]
          (page-response (attendees-page {:attendees attendees
-                                         :q q}))))))
+                                         :q q
+                                         :edit-notes edit-notes}))))
+
+     (POST "/attendees/:id/notes" [id :<< as-uuid notes]
+       (if (seq (db/update! db
+                            :attendee
+                            {::attendee/organizer-notes notes}
+                            [:= :id id]))
+         (-> (redirect "/attendees")
+             (flash/add-flash
+              #:flash{:type :success
+                      :message "Notes updated successfully"}))
+         (not-found "Attendee not found")))))
 
    (GET "/attendees.json" [q event_id attended]
      (let [results
@@ -55,12 +83,12 @@
                 (if q
                   (db.attendee/search q)
                   {:select [:attendee.*] :from [:attendee]})
-              event_id (db.attendee/for-event event_id)
-              (some? attended)
-              (merge-where
-               (case attended
-                 "true" :attended
-                 "false" [:or [:= :attended nil] [:not :attended]]))))]
+                event_id (db.attendee/for-event event_id)
+                (some? attended)
+                (merge-where
+                 (case attended
+                   "true" :attended
+                   "false" [:or [:= :attended nil] [:not :attended]]))))]
        (-> {:results results}
            json/generate-string
            response
