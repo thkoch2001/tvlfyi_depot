@@ -39,6 +39,24 @@
       "message": "Hmmmm, I\u0027m a bit concerned by this actually. My intuition before was that subtargets are just extremely dumb \"build these attributes\" type of things for which the CI pipeline *would definitely ignore meta*, so you can\u0027t e. g. have nested subtargets. Feels like an inconsistency that the pipeline would look at extraSteps for subtargets, but not at subtargets and other meta fields (although that would I guess be useful to add subtarget support to e. g. cl/3551).\n\nI\u0027ll try and review the extraSteps stuff later or tomorrow, just leaving this here, because I guess this is the instance where it shows.",
       "revId": "fa367f804ffc74c288df4ce1ea6272db353ceb7a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01b31851_50d89aa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-19T20:01:07Z",
+      "side": 1,
+      "message": "I think that regardless of how the extraSteps stuff shakes out, it\u0027s silly to build both //web/panettone and //web/panettone:sbcl, which is why this cl stands alone",
+      "parentUuid": "a9cbb253_33fe7c07",
+      "revId": "fa367f804ffc74c288df4ce1ea6272db353ceb7a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
