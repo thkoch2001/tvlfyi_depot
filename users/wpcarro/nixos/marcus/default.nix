@@ -74,6 +74,8 @@ in {
     shell = pkgs.fish;
   };
 
+  security.sudo.wheelNeedsPassword = false;
+
   fonts = {
     fonts = with pkgs; [
       jetbrains-mono
