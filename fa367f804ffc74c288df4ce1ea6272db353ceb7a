@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9cbb253_33fe7c07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-19T19:08:53Z",
+      "side": 1,
+      "message": "Hmmmm, I\u0027m a bit concerned by this actually. My intuition before was that subtargets are just extremely dumb \"build these attributes\" type of things for which the CI pipeline *would definitely ignore meta*, so you can\u0027t e. g. have nested subtargets. Feels like an inconsistency that the pipeline would look at extraSteps for subtargets, but not at subtargets and other meta fields (although that would I guess be useful to add subtarget support to e. g. cl/3551).\n\nI\u0027ll try and review the extraSteps stuff later or tomorrow, just leaving this here, because I guess this is the instance where it shows.",
+      "revId": "fa367f804ffc74c288df4ce1ea6272db353ceb7a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
