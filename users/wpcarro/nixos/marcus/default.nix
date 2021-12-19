@@ -68,6 +68,7 @@ in {
   users.users.wpcarro = {
     isNormalUser = true;
     extraGroups = [
+      "networkmanager"
       "wheel"
       "video" # needed to control the screen brightness
     ];
