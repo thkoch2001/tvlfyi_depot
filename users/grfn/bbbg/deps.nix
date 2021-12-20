@@ -120,6 +120,19 @@ let repos = [
   }
 
   rec {
+    name = "commons-lang3/org.apache.commons";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "commons-lang3";
+      groupId = "org.apache.commons";
+      sha512 = "c1f6b5cb9ac47cfb612423a71b347568f3697cf88018b5808678be5234c50b22888db23cb833b7d8d458d39707ab9e4d839107d1d3306de2e4e422010c95180f";
+      version = "3.11";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
     name = "tools.logging/org.clojure";
     src = fetchMavenArtifact {
       inherit repos;
@@ -1193,6 +1206,19 @@ let repos = [
       groupId = "org.slf4j";
       sha512 = "db7440b47e87215f9cc88c9521bce7a0f2ffa81b07e5f53c5f8afa90a0ab61168755ee6d136245461b57a01f0a857fe0d509c60baa7838c4eb6be1f885438049";
       version = "2.0.0-alpha1";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "test.check/org.clojure";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "test.check";
+      groupId = "org.clojure";
+      sha512 = "68caa189e7292da5dfde92d795ce35ff1980108a579dc11ca618bf0e480101b8ded16fc8ab816b30f364afbccbb8f02fc9194271e7f5323b8042d468164ecb64";
+      version = "1.1.0";
       
     };
     paths = [ src ];

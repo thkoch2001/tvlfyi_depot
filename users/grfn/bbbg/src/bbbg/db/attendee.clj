@@ -55,5 +55,6 @@
 
   (db/list db (with-stats))
 
-  (map? db)
+  (db/insert! db :attendee {::attendee/meetup-name "Rando Guy"
+                            ::attendee/discord-name "rando"})
   )
