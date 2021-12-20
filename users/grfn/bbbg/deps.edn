@@ -40,11 +40,13 @@
   yogthos/config {:mvn/version "1.1.8"}
   clojure.java-time/clojure.java-time {:mvn/version "0.3.3"}
   cheshire/cheshire {:mvn/version "5.10.1"}
+  org.apache.commons/commons-lang3 {:mvn/version "3.11"}
 
   ;; Spec
   org.clojure/spec.alpha {:mvn/version "0.3.214"}
   org.clojure/core.specs.alpha {:mvn/version "0.2.62"}
-  expound/expound {:mvn/version "0.8.10"}}
+  expound/expound {:mvn/version "0.8.10"}
+  org.clojure/test.check {:mvn/version "1.1.0"}}
 
  :paths
  ["src"

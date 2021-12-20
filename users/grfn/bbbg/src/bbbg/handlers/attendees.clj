@@ -1,18 +1,23 @@
 (ns bbbg.handlers.attendees
   (:require
    [bbbg.attendee :as attendee]
+   [bbbg.attendee-check :as attendee-check]
    [bbbg.db :as db]
    [bbbg.db.attendee :as db.attendee]
+   [bbbg.db.attendee-check :as db.attendee-check]
    [bbbg.db.event :as db.event]
    [bbbg.event :as event]
    [bbbg.handlers.core :refer [page-response wrap-auth-required]]
+   [bbbg.user :as user]
+   [bbbg.util.display :refer [format-date]]
    [bbbg.views.flash :as flash]
    [cheshire.core :as json]
    [compojure.coercions :refer [as-uuid]]
    [compojure.core :refer [GET POST routes]]
    [honeysql.helpers :refer [merge-where]]
-   [ring.util.response :refer [content-type redirect response not-found]])
-  (:import java.util.UUID))
+   [ring.util.response :refer [content-type not-found redirect response]])
+  (:import
+   java.util.UUID))
 
 (defn- attendees-page [{:keys [attendees q edit-notes]}]
   [:div
@@ -30,6 +35,7 @@
       [:th "Events RSVPd"]
       [:th "Events Attended"]
       [:th "No-Shows"]
+      [:th "Last Vaccination Check"]
       [:th "Notes"]]]
     [:tbody
      (for [attendee attendees
@@ -40,6 +46,15 @@
         [:td (:events-rsvpd attendee)]
         [:td (:events-attended attendee)]
         [:td (:no-shows attendee)]
+        (if-let [last-check (:last-check attendee)]
+          [:td (str (-> last-check
+                        ::attendee-check/checked-at
+                        format-date)
+                    ", by "
+                    (get-in last-check [:user ::user/username]))]
+          [:td "Not Checked"
+           [:a {:href (str "/attendees/" id "/checks/edit")}
+            "Edit"]])
         (if (= edit-notes id)
           [:td
            [:form.organizer-notes {:method :post
@@ -59,6 +74,9 @@
      (GET "/attendees" [q edit-notes]
        (let [attendees (db/list db (cond-> (db.attendee/with-stats)
                                      q (db.attendee/search q)))
+             attendees (db.attendee-check/attendees-with-last-checks
+                        db
+                        attendees)
              edit-notes (some-> edit-notes UUID/fromString)]
          (page-response (attendees-page {:attendees attendees
                                          :q q
