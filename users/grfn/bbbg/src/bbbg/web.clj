@@ -1,6 +1,7 @@
 (ns bbbg.web
   (:require
    [bbbg.discord.auth :as discord.auth :refer [wrap-discord-auth]]
+   [bbbg.handlers.attendee-checks :as attendee-checks]
    [bbbg.handlers.attendees :as attendees]
    [bbbg.handlers.events :as events]
    [bbbg.handlers.home :as home]
@@ -74,6 +75,7 @@
          (content-type "text/javascript")))
 
    (attendees/attendees-routes env)
+   (attendee-checks/attendee-checks-routes env)
    (signup-form/signup-form-routes env)
    (events/events-routes env)
    (home/home-routes env)))

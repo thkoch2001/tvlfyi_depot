@@ -355,8 +355,6 @@
 
 (comment
   (def db (:db bbbg.core/system))
-  (generate-migration db "init-schema")
+  (generate-migration db "add-attendee-checks")
   (migrate! db)
-
-
   )
