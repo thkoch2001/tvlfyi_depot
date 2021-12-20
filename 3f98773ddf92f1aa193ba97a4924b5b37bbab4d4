@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3bc1c72_469f6b37",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-20T10:50:21Z",
+      "side": 1,
+      "message": "Why aren\u0027t we copying -1 forward?",
+      "revId": "3f98773ddf92f1aa193ba97a4924b5b37bbab4d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
