@@ -1,5 +1,7 @@
 { pkgs, depot, ... }:
 
+# TODO(wpcarro): See if it's possible to expose emacsclient on PATH, so that I
+# don't need to depend on wpcarros-emacs and emacs in my NixOS configurations.
 let
   inherit (builtins) path;
   inherit (depot.third_party.nixpkgs) emacsPackagesGen emacs27;
