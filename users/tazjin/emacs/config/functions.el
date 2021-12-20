@@ -325,4 +325,9 @@ the GPG agent correctly."
                     (if-let ((pr (project-current)))
                         (project-root pr)))))
 
+(defun zoxide-open-magit ()
+  "Query Zoxide for paths and open magit in the result."
+  (interactive)
+  (zoxide-open-with nil #'magit-status-setup-buffer))
+
 (provide 'functions)
