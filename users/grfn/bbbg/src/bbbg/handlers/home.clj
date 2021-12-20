@@ -9,23 +9,10 @@
    [ring.util.response :refer [redirect]]
    [bbbg.discord :as discord]))
 
-(defn- home-page [{:keys [authenticated?]}]
-  [:nav.home-nav
-   [:ul
-    (when authenticated?
-      [:li [:a {:href "/attendees"}
-            "Attendees"]])
-    [:li [:a {:href "/events"}
-          "Events"]]
-    [:li [:a {:href "/signup-forms"}
-          "Event Signup Form"]]
-    (if authenticated?
-      [:li [:form {:method :post
-                   :action "/auth/sign-out"}
-            [:input {:type "submit"
-                     :value "Sign Out"}]]]
-      [:li [:a {:href "/auth/discord"}
-            "Sign In"]])]])
+(defn- home-page []
+  [:div.home-page
+   [:a {:href "/signup-forms"}
+    "Event Signup Form"]])
 
 (defn auth-failure []
   [:div.auth-failure
@@ -36,8 +23,7 @@
 
 (defn home-routes [{:keys [db] :as env}]
   (routes
-   (GET "/" request
-     (page-response (home-page {:authenticated? (authenticated? request)})))
+   (GET "/" [] (page-response (home-page)))
 
    (POST "/auth/sign-out" request
      (if (authenticated? request)
