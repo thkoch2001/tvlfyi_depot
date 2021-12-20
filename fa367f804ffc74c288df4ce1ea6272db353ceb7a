@@ -57,6 +57,24 @@
       "parentUuid": "a9cbb253_33fe7c07",
       "revId": "fa367f804ffc74c288df4ce1ea6272db353ceb7a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a60d3abb_2f2d5536",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-20T10:14:30Z",
+      "side": 1,
+      "message": "I think cl/4515 would be the better fix for this (since it benefits all buildLisp packages).",
+      "parentUuid": "01b31851_50d89aa6",
+      "revId": "fa367f804ffc74c288df4ce1ea6272db353ceb7a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
