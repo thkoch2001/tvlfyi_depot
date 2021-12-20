@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "067e74e5_6f561312",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-20T10:16:49Z",
+      "side": 1,
+      "message": "Since the pipeline shrinking for CL builds hides this change, e. g.:\n\n\nnix-repl\u003e web.panettone.meta.targets\n[ ]\nnix-repl\u003e third_party.lisp.alexandria.meta.targets\n[ \"ccl\" \"ecl\" ]\nnix-repl\u003e third_party.lisp.alexandria.sbcl \u003d\u003d third_party.lisp.alexandria\ntrue",
+      "revId": "437e1cc9dc42e7c49cdb55efa2e4ea219d440944",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
