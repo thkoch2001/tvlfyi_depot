@@ -96,6 +96,7 @@ let
     xelb
     yaml-mode
     yasnippet
+    zoxide
 
     # Wonky stuff
     (currentTelega epkgs)

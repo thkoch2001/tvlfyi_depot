@@ -255,6 +255,7 @@
 
 (use-package web-mode)
 (use-package yaml-mode)
+(use-package zoxide)
 
 (use-package passively
   :custom
