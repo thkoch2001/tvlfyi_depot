@@ -104,7 +104,7 @@ passes. This is potentially dangerous, use with care."
   (list "P" "push & rubberstamp to Gerrit" #'magit-gerrit-rubberstamp))
 
 (defvar magit-cl-history nil)
-(defun magit-read-cl (remote)
+(defun magit-read-cl (prompt remote)
   (let* ((refs (prog2 (message "Determining available refs...")
                    (magit-remote-list-refs remote)
                  (message "Determining available refs...done")))
@@ -138,14 +138,14 @@ passes. This is potentially dangerous, use with care."
      0
      'ref
      (magit-completing-read
-      "Checkout CL" cl-numbers nil t nil 'magit-cl-history))))
+      prompt cl-numbers nil t nil 'magit-cl-history))))
 
 (transient-define-suffix magit-gerrit-checkout (remote cl-refspec)
   "Prompt for a CL number and checkout the latest patchset of that CL with
   detached HEAD"
   (interactive
    (let* ((remote tvl-gerrit-remote)
-          (cl (magit-read-cl remote)))
+          (cl (magit-read-cl "Checkout CL" remote)))
      (list remote cl)))
   (magit-fetch-refspec remote cl-refspec (magit-fetch-arguments))
   ;; That runs async, so wait for it to finish (this is how magit does it)
@@ -164,7 +164,7 @@ passes. This is potentially dangerous, use with care."
   "Prompt for a CL number and cherry-pick the latest patchset of that CL"
   (interactive
    (let* ((remote tvl-gerrit-remote)
-          (cl (magit-read-cl remote)))
+          (cl (magit-read-cl "Cherry-pick CL" remote)))
      (list remote cl)))
   (magit-fetch-refspec remote cl-refspec (magit-fetch-arguments))
   ;; That runs async, so wait for it to finish (this is how magit does it)
