@@ -143,7 +143,7 @@ let
         let
           implementation = old.implementation or defaultImplementation;
           brokenOn = old.brokenOn or [];
-          targets = lib.subtractLists brokenOn
+          targets = lib.subtractLists (brokenOn ++ [ implementation.name ])
             (builtins.attrNames impls);
         in {
           passthru = (old.passthru or {}) // {
