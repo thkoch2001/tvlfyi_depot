@@ -3,6 +3,7 @@
    [bbbg.discord.auth :as discord.auth :refer [wrap-discord-auth]]
    [bbbg.handlers.attendee-checks :as attendee-checks]
    [bbbg.handlers.attendees :as attendees]
+   [bbbg.handlers.core :refer [wrap-dynamic-auth]]
    [bbbg.handlers.events :as events]
    [bbbg.handlers.home :as home]
    [bbbg.handlers.signup-form :as signup-form]
@@ -82,6 +83,7 @@
 
 (defn middleware [app env]
   (-> app
+      wrap-dynamic-auth
       (wrap-discord-auth env)
       wrap-keyword-params
       wrap-params
