@@ -16,6 +16,24 @@
       "message": "Why aren\u0027t we copying -1 forward?",
       "revId": "3f98773ddf92f1aa193ba97a4924b5b37bbab4d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "192b3841_2ae8aa58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-20T13:03:55Z",
+      "side": 1,
+      "message": "-1 typically means \"Needs changes\", so it should go away after changes were made. It\u0027s more informational than anything else anyways.",
+      "parentUuid": "d3bc1c72_469f6b37",
+      "revId": "3f98773ddf92f1aa193ba97a4924b5b37bbab4d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
