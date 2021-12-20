@@ -74,6 +74,8 @@
    (GET "/main.js" []
      (-> (resource-response "main.js")
          (content-type "text/javascript")))
+   (GET "/robots.txt" []
+     (resource-response "robots.txt"))
 
    (attendees/attendees-routes env)
    (attendee-checks/attendee-checks-routes env)
