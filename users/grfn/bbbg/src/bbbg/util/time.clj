@@ -58,6 +58,9 @@
   LocalDate
   (->LocalDate [ld] ld)
 
+  java.sql.Date
+  (->LocalDate [sd] (.toLocalDate sd))
+
   java.util.Date
   (->LocalDate [d]
     (-> d .toInstant (LocalDate/ofInstant (ZoneId/of "UTC")))))

@@ -3,6 +3,7 @@
    [bbbg.attendee :as attendee]
    [bbbg.db :as db]
    [bbbg.event :as event]
+   [bbbg.util.sql :refer [count-where]]
    [honeysql.helpers :refer [merge-group-by merge-left-join merge-select]]
    [java-time :refer [local-date]]))
 
@@ -37,6 +38,15 @@
       (merge-left-join :event_attendee [:= :event.id :event_attendee.event-id])
       (merge-select :%count.event_attendee.attendee_id)
       (merge-group-by :event.id :event_attendee.event-id)))
+
+(defn with-stats
+  [query]
+  (-> query
+      (merge-left-join :event_attendee [:= :event.id :event_attendee.event-id])
+      (merge-select
+       [(count-where :event-attendee.rsvpd_attending) :num-rsvps]
+       [(count-where :event-attendee.attended) :num-attendees])
+      (merge-group-by :event.id)))
 
 (comment
   (def db (:db bbbg.core/system))
