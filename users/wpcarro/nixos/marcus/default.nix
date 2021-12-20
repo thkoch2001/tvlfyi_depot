@@ -93,10 +93,17 @@ in {
     light.enable = true;
   };
 
+  environment.variables = {
+    EDITOR = "emacsclient";
+    ALTERNATE_EDITOR = "emacs -q -nw";
+    VISUAL = "emacsclient";
+  };
+
   environment.systemPackages = with pkgs; [
     alacritty
     dig
     direnv
+    emacs
     fd
     firefox
     fzf
