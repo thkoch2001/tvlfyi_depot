@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "379889bc_3bf2d5bd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-20T15:36:36Z",
+      "side": 1,
+      "message": "it looks like you may have re-pushed the first patchset as patchset 25?",
+      "revId": "40a07606027adcb428bb45fa2f28e140841efb9f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cac19ab1_80e5c661",
         "filename": "ops/modules/auto-deploy.nix",
         "patchSetId": 25
