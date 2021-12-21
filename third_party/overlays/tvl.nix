@@ -60,23 +60,6 @@ self: super: {
     meta.ci = false;
   });
 
-  # bump treefmt to a newer version that includes our config file patch
-  treefmt = super.treefmt.overrideAttrs(drv: rec {
-    version = "0.3.0";
-
-    src = super.fetchFromGitHub {
-      owner = "numtide";
-      repo = "treefmt";
-      rev = "v${version}";
-      sha256 = "0jnfak6wmqpqwymja9bsw54al50yqzdy7lxfx66rqamqsvngqd1x";
-    };
-
-    cargoDeps = drv.cargoDeps.overrideAttrs(_: {
-      inherit src;
-      outputHash = "19p15gavcjldn1di7yyn80ys6rj4ajaprqk8x34vxslr4y2qychf";
-    });
-  });
-
   # TODO(tazjin): determine whether this is the cause of my suspend
   # bugs, and if so, upstream it to nixpkgs.
   xsecurelock = super.xsecurelock.overrideAttrs(drv: rec {
