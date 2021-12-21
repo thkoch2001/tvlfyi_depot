@@ -25,17 +25,31 @@ let
     sha256 = "0inzy97dp5988cwjwpn41219rir4c7qp7wwg7v4abcs9lypg8is4";
   };
 
+  vendoredSrcs = builtins.foldl' (prev: channelType:
+    prev // (
+      let
+        path = ./. + "/${channelType}";
+      in
+        if builtins.pathExists path
+        then { ${channelType} = path; }
+        else {}
+    )
+  ) {} [
+    "unstable"
+    "stable"
+  ];
+
   # import the nixos-unstable package set, or optionally use the
   # source (e.g. a path) specified by the `nixpkgsBisectPath`
   # argument. This is intended for use-cases where the depot is
   # bisected against nixpkgs to find the root cause of an issue in a
   # channel bump.
-  nixpkgsSrc = externalArgs.nixpkgsBisectPath or (fetchTarball {
+  nixpkgsSrc = externalArgs.nixpkgsBisectPath or vendoredSrcs.unstable or (fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${unstableHashes.commit}.tar.gz";
     sha256 = unstableHashes.sha256;
   });
 
-  stableNixpkgsSrc = fetchTarball {
+  stableNixpkgsSrc = vendoredSrcs.stable or fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${stableHashes.commit}.tar.gz";
     sha256 = stableHashes.sha256;
   };
