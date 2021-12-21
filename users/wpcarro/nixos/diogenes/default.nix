@@ -34,11 +34,12 @@ in {
     };
   };
 
-
   security = {
     # Provision SSL certificates to support HTTPS connections.
     acme.acceptTerms = true;
     acme.email = "wpcarro@gmail.com";
+
+    sudo.wheelNeedsPassword = false;
   };
 
 
