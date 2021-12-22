@@ -130,6 +130,7 @@
 
 ;; TVL depot stuff
 (use-package tvl
+  :config
   (customize-set-variable 'tvl-depot-path "/home/wpcarro/depot"))
 
 ;; perl-compatible regular expressions
