@@ -101,6 +101,7 @@ with lib;
       github.user = "glittershark";
       merge.conflictstyle = "diff3";
       rerere.enabled = "true";
+      advice.skippedCherryPicks = "false";
     };
 
     delta = {
