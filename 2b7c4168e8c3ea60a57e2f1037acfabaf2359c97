@@ -50,6 +50,24 @@
       "message": "For some reason, even with this set to false, nix sends a SIGINT to the service. Any ideas?",
       "revId": "2b7c4168e8c3ea60a57e2f1037acfabaf2359c97",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c87ae585_b98dd661",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 20
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-22T23:42:38Z",
+      "side": 1,
+      "message": "I figured out the problem: `git fetch origin \u0026\u0026 git worktree add $deploy` stopped `auto-deploy.{service,timer}` because neither are part of origin/canon (yet), so this was a false negative result for the test.",
+      "parentUuid": "8790f7c7_bd6f067b",
+      "revId": "2b7c4168e8c3ea60a57e2f1037acfabaf2359c97",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
