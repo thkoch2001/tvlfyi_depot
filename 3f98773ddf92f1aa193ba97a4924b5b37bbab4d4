@@ -34,6 +34,24 @@
       "parentUuid": "d3bc1c72_469f6b37",
       "revId": "3f98773ddf92f1aa193ba97a4924b5b37bbab4d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54c33427_6a4e6c1b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-22T11:30:59Z",
+      "side": 1,
+      "message": "One slight Issue I see with this is that potentially the -1 reviewer doesn\u0027t get to judge if it has been adressed again:\n\n* The author can mark comments as resolved.\n* Someone else (who maybe already had a +2) can +2 (again)\n* The change is submittable.",
+      "parentUuid": "192b3841_2ae8aa58",
+      "revId": "3f98773ddf92f1aa193ba97a4924b5b37bbab4d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
