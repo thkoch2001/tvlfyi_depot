@@ -33,6 +33,24 @@
       "message": "How should/does this differentiate between \"change to $HOSTNAME in not-yet-merged PR, shouldn\u0027t be deployed\" (especially because this would be a security vulnerability) and \"change to $HOSTNAME merged into canon, should be deployed\"? I am unsure how the binary cache can/could know that.",
       "revId": "40a07606027adcb428bb45fa2f28e140841efb9f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aae04de4_06ca03c4",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 25
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-22T17:35:24Z",
+      "side": 1,
+      "message": "patchset 25 was a mistake - sorry for the noise",
+      "parentUuid": "cac19ab1_80e5c661",
+      "revId": "40a07606027adcb428bb45fa2f28e140841efb9f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
