@@ -39,6 +39,29 @@
       },
       "revId": "42f5aad36e3e2163d6083f815bebccef03e346e6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85855131_c92746b2",
+        "filename": "rules.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-22T12:02:53Z",
+      "side": 1,
+      "message": "Maybe use ChangeOwner here as well and in unresolved_comments for consistency?",
+      "range": {
+        "startLine": 48,
+        "startChar": 21,
+        "endLine": 48,
+        "endChar": 26
+      },
+      "revId": "42f5aad36e3e2163d6083f815bebccef03e346e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
