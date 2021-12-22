@@ -18,5 +18,10 @@ in lib.fix(self: pkgs.runCommand "tvl-static" {
   mkdir $out
   cp -r ${./.}/* $out
   cp ${logo.pastelRainbow} $out/logo-animated.svg
+  cp ${logo.bluePng} $out/logo-blue.png
+  cp ${logo.greenPng} $out/logo-green.png
+  cp ${logo.orangePng} $out/logo-orange.png
+  cp ${logo.purplePng} $out/logo-purple.png
   cp ${logo.redPng} $out/logo-red.png
+  cp ${logo.yellowPng} $out/logo-yellow.png
 '')
