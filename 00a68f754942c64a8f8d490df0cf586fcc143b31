@@ -16,6 +16,23 @@
       "message": "Should be ready to submit 😎",
       "revId": "00a68f754942c64a8f8d490df0cf586fcc143b31",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86b6ede3_e41cb288",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 28
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-22T23:55:25Z",
+      "side": 1,
+      "message": "The script uses network, so I think it should depend (`Require`?) on some appropriate network target; I don\u0027t know if `network-online` would be an appropriate dependency.",
+      "revId": "00a68f754942c64a8f8d490df0cf586fcc143b31",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
