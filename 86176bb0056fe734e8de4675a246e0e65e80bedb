@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "077cad90_9d41e561",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-23T00:51:01Z",
+      "side": 1,
+      "message": "ok, managed to patch it, it works now.\nI was initially confused that gerrit didn\u0027t display the intermediate failing build, etc.",
+      "revId": "86176bb0056fe734e8de4675a246e0e65e80bedb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
