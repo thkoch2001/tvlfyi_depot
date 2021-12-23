@@ -45,6 +45,13 @@ in {
         sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localhost:$USER";
         lightdm.enable = true;
       };
+      extraConfig = ''
+        Section "InputClass"
+            Identifier "Touchscreen catchall"
+            MatchIsTouchscreen "on"
+            Option "Ignore" "on"
+        EndSection
+      '';
       windowManager.session = lib.singleton {
         name = "exwm";
         start = "${wpcarros-emacs}/bin/wpcarros-emacs";
