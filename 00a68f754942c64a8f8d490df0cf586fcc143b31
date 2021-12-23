@@ -52,6 +52,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2138f276_6134c200",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 28
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-23T02:13:32Z",
+      "side": 1,
+      "message": "Good thinking. Adding:\n\n{After,Wants}\u003dnetwork-online.target\n\nsource: https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/",
+      "parentUuid": "86b6ede3_e41cb288",
+      "revId": "00a68f754942c64a8f8d490df0cf586fcc143b31",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc9e05be_390b5580",
@@ -65,6 +83,24 @@
       "writtenOn": "2021-12-23T00:00:38Z",
       "side": 1,
       "message": "what exactly should `OnActiveSec` do? (not what it does, but what the purpose/intention is).\n\n(systemd.timer(5) snip follows)\n\u003e OnActiveSec\u003d\tDefines a timer relative to the moment the timer unit itself is activated.",
+      "revId": "00a68f754942c64a8f8d490df0cf586fcc143b31",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b5df441_b8b3be13",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 28
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-23T02:13:32Z",
+      "side": 1,
+      "message": "I\u0027m not sure I fully understand your question, but I\u0027ll take a stab at it nonetheless.\n\nafaiu OnActiveSec represents the offset at which to trigger the service unit from the interval when the timer begins.\n\nE.g. if a timer runs every 1h and is activated at 3:03 then:\n\n3:03:00 timer activated\n3:03:01 triggers service\n4:03:00 timer activated\n4:03:01 triggers service\n...\n\n\nDoes that answer your question?",
+      "parentUuid": "dc9e05be_390b5580",
       "revId": "00a68f754942c64a8f8d490df0cf586fcc143b31",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
