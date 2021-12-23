@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a55d3491_34518c7f",
+        "filename": "third_party/gopkgs/github.com/googleapis/gax-go/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-23T00:04:42Z",
+      "side": 1,
+      "message": "sha256 \u003d \"075s8b76l14c9vlchly38hsf28bnr7vzq9q57g2kg1025h004lzw\";\n\n(should fix CI failure, if nothing else is broken)",
+      "revId": "fbbab890e6233e7bc2334007d06137163b8468d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
