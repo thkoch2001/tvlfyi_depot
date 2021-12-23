@@ -2,7 +2,6 @@
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
-;; URL: https://git.wpcarro.dev/wpcarro/briefcase
 ;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
@@ -15,6 +14,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'constants)
+(require 'tvl)
 (require 'prelude)
 (require 'al)
 (require 'fonts)
@@ -71,7 +71,7 @@
 (tool-bar-mode -1)
 
 ;; set default buffer for Emacs
-(setq initial-buffer-choice constants-current-project)
+(setq initial-buffer-choice tvl-depot-path)
 
 ;; premium Emacs themes
 (use-package doom-themes
@@ -131,13 +131,13 @@
 ;; reduce noisiness of auto-revert-mode
 (setq auto-revert-verbose nil)
 
-;; highlight lines that are over `constants-fill-column' characters long
+;; highlight lines that are over 80 characters long
 (use-package whitespace
   :config
   ;; TODO: This should change depending on the language and project. For
   ;; example, Google Java projects prefer 100 character width instead of 80
   ;; character width.
-  (setq whitespace-line-column constants-fill-column)
+  (setq whitespace-line-column 80)
   (setq whitespace-style '(face lines-tail))
   (add-hook 'prog-mode-hook #'whitespace-mode))
 

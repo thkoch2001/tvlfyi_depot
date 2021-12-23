@@ -10,7 +10,7 @@ Let's say that you would like to create a game for
 following:
 
 ```shell
-$ cp ~/briefcase/boilerplate/typescript ~/briefcase/website/sandbox/game
+$ cp -r typescript path/to/new-project
 ```
 
 This initializes the project. To start developing, run:

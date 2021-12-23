@@ -24,7 +24,7 @@ Or you can install using `nix-env` if you'd like to create the `monzo_ynab`
 symlink.
 
 ```shell
-> nix-env -f ~/briefcase/monzo_ynab -i
+> nix-env -iA users.wpcarro.monzo_ynab
 ```
 
 ## Deployment

@@ -2,7 +2,6 @@
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
-;; URL: https://git.wpcarro.dev/wpcarro/briefcase
 ;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
@@ -59,12 +58,9 @@ Otherwise, open with `counsel-find-file'."
 
 (defconst bookmark-whitelist
   (list
-   (make-bookmark :label "briefcase"
-                  :path constants-briefcase
-                  :kbd "b")
-   (make-bookmark :label "current project"
-                  :path constants-current-project
-                  :kbd "p"))
+   (make-bookmark :label "depot"
+                  :path constants-depot
+                  :kbd "d"))
   "List of registered bookmarks.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
