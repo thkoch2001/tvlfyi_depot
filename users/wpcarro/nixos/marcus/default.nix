@@ -1,11 +1,8 @@
 { depot, pkgs, lib, ... }:
-{ config, ... }:
+{ ... }:
 
 let
-  # TODO(wpcarro): Drop dependency on the briefcase concept.
-  wpcarros-emacs = depot.users.wpcarro.emacs.nixos {
-    briefcasePath = "$HOME/depot/users/wpcarro";
-  };
+  wpcarrosEmacs = depot.users.wpcarro.emacs.nixos;
 in {
   imports = [
     (depot.path + "/users/wpcarro/nixos/marcus/hardware.nix")
@@ -54,7 +51,7 @@ in {
       '';
       windowManager.session = lib.singleton {
         name = "exwm";
-        start = "${wpcarros-emacs}/bin/wpcarros-emacs";
+        start = "${wpcarrosEmacs}/bin/wpcarros-emacs";
       };
     };
 
@@ -127,7 +124,7 @@ in {
     tdesktop
     vim
     weechat
-    wpcarros-emacs
+    wpcarrosEmacs
     xclip
     xsecurelock
   ];

@@ -1,8 +1,8 @@
 install:
-	source "${BRIEFCASE}/configs/install"
+	source "${WPCARRO}/configs/install"
 
 uninstall:
-	source "${BRIEFCASE}/configs/uninstall"
+	source "${WPCARRO}/configs/uninstall"
 
 list-broken-links:
 	find "${HOME}" -maxdepth 1 -xtype l && \

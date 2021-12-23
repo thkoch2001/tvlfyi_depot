@@ -154,10 +154,9 @@ let
     "${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
   ];
 
-  withEmacsPath = { emacsBin, briefcasePath ? "$HOME/briefcase" }:
+  withEmacsPath = { emacsBin }:
     writeShellScriptBin "wpcarros-emacs" ''
       export XMODIFIERS=emacs
-      export BRIEFCASE=${briefcasePath}
       export GOOGLE_BRIEFCASE="$HOME/google-briefcase"
       export PATH="${emacsBinPath}:$PATH"
       export EMACSLOADPATH="${loadPath}"
@@ -173,9 +172,8 @@ in {
   inherit initEl withEmacsPath;
 
   # I need to start my Emacs from CI without the call to `--load ${initEl}`.
-  runScript = { script, briefcasePath }:
+  runScript = { script }:
     writeShellScript "run-emacs-script" ''
-      export BRIEFCASE=${briefcasePath}
       export PATH="${emacsBinPath}:$PATH"
       export EMACSLOADPATH="${wpcDir}:${vendorDir}:${wpcarrosEmacs.deps}/share/emacs/site-lisp"
       exec ${wpcarrosEmacs}/bin/emacs \
@@ -186,10 +184,9 @@ in {
         "$@"
     '';
 
-  # Use `nix-env -f '<briefcase>' emacs.nixos` to install `wpcarros-emacs` on
-  # NixOS machines.
-  nixos = { briefcasePath ? "$HOME/briefcase" }: withEmacsPath {
-    inherit briefcasePath;
+  nixos = withEmacsPath {
     emacsBin = "${wpcarrosEmacs}/bin/emacs";
   };
+
+  meta.targets = [ "nixos" ];
 }

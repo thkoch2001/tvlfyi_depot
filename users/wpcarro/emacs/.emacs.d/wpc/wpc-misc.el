@@ -3,7 +3,6 @@
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1"))
-;; URL: https://git.wpcarro.dev/wpcarro/briefcase
 
 ;;; Commentary:
 ;; This is the home of any configuration that couldn't find a better home.
@@ -17,7 +16,7 @@
 (require 'project)
 (require 'f)
 (require 'dash)
-(require 'constants)
+(require 'tvl)
 (require 'region)
 (require 'general)
 
@@ -190,7 +189,7 @@
       create-lockfiles nil)
 
 ;; ensure code wraps at 80 characters by default
-(setq-default fill-column constants-fill-column)
+(setq-default fill-column 80)
 
 (put 'narrow-to-region 'disabled nil)
 
@@ -201,7 +200,10 @@
 (add-hook 'after-save-hook
           (lambda ()
             (when (f-equal? (buffer-file-name)
-                            (f-join constants-briefcase "secrets.json"))
+                            (f-join tvl-depot-path
+                                    "users"
+                                    "wpcarro"
+                                    "secrets.json"))
               (shell-command "git secret hide"))))
 
 ;; use tabs instead of spaces
@@ -222,21 +224,21 @@
   :config
   (projectile-mode t))
 
-;; TODO: Consider moving this into a briefcase.el module.
-(defun wpc-misc--briefcase-find (dir)
+;; TODO(wpcarro): Consider replacing this with a TVL version if it exists.
+(defun wpc-misc--depot-find (dir)
   "Find the default.nix nearest to DIR."
   ;; I use 'vc only at the root of my monorepo because 'transient doesn't use my
   ;; .gitignore, which slows things down. Ideally, I could write a version that
   ;; behaves like 'transient but also respects my monorepo's .gitignore and any
   ;; ancestor .gitignore files.
-  (if (f-equal? constants-briefcase dir)
+  (if (f-equal? tvl-depot-path dir)
       (cons 'vc dir)
-    (when (f-ancestor-of? constants-briefcase dir)
+    (when (f-ancestor-of? tvl-depot-path dir)
       (if (f-exists? (f-join dir "default.nix"))
           (cons 'transient dir)
-        (wpc-misc--briefcase-find (f-parent dir))))))
+        (wpc-misc--depot-find (f-parent dir))))))
 
-(add-to-list 'project-find-functions #'wpc-misc--briefcase-find)
+(add-to-list 'project-find-functions #'wpc-misc--depot-find)
 
 (defun wpc-misc-pkill (name)
   "Call the pkill executable using NAME as its argument."

@@ -3,7 +3,6 @@
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "24.3"))
-;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; Some of these ideas are scattered across other modules like `fs',

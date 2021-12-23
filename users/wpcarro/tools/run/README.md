@@ -26,5 +26,5 @@ file.ts` will run.
 Install `run` using Nix.
 
 ```shell
-> nix-env -iA briefcase.run
+> nix-env -iA users.wpcarro.run
 ```
