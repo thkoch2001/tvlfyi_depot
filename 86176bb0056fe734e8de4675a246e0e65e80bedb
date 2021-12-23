@@ -16,6 +16,23 @@
       "message": "ok, managed to patch it, it works now.\nI was initially confused that gerrit didn\u0027t display the intermediate failing build, etc.",
       "revId": "86176bb0056fe734e8de4675a246e0e65e80bedb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "636eea66_dec61256",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-23T16:23:17Z",
+      "side": 1,
+      "message": "I think it doesn\u0027t make sense to submit the patch upstream, because the error doesn\u0027t seem to occur with rustc 1.57.0 (stable).",
+      "revId": "86176bb0056fe734e8de4675a246e0e65e80bedb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
