@@ -5,9 +5,9 @@ as central to my workflow as `git` and `nix`.
 
 ## Installing
 
-If you already have `briefcase` on your local file system, run the following
-from the top-level `briefcase` directory:
+If you already have `depot` on your local file system, run the following from
+the top-level `depot` directory:
 
 ```shell
-$ nix-build -f . -iA emacs.nixos
+$ nix-env -iA users.wpcarro.emacs.nixos
 ```

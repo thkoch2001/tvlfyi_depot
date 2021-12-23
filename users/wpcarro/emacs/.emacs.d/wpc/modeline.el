@@ -3,7 +3,6 @@
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "25.1"))
-;; Homepage: https://user.git.corp.google.com/wpcarro/briefcase
 
 ;;; Commentary:
 ;; Because I use EXWM, I treat my Emacs mode-line like my system bar: I need to

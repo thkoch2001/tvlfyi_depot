@@ -36,7 +36,7 @@ file `~/.config/url-blocker/rules.json` with the following contents and
 ## Installation
 
 ```shell
-$ nix-env -iA 'briefcase.tools.url-blocker'
+$ nix-env -iA users.wpcarro.tools.url-blocker
 ```
 
 ## How does it work?
