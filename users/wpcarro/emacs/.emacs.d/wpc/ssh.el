@@ -42,7 +42,7 @@
 ;; enables ControlMaster.
 (setq tramp-use-ssh-controlmaster-options nil)
 
-(defcustom ssh-hosts '("desktop" "socrates")
+(defcustom ssh-hosts '("desktop")
   "List of hosts to which I commonly connect.
 Note: It could be interesting to read these values from ~/.ssh-config, but
   that's more than I need at the moment.")
