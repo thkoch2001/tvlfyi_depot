@@ -7,7 +7,7 @@ This boilerplate uses `lein` to manage the project.
 To use this boilerplate, run the following in a shell:
 
 ```shell
-$ cp ~/briefcase/boilerplate/clojure path/to/new-project
+$ cp -r . path/to/new-project
 ```
 
 After running the above command, change the following files to remove the

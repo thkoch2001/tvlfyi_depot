@@ -2,7 +2,6 @@
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
-;; URL: https://git.wpcarro.dev/wpcarro/briefcase
 ;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
@@ -19,7 +18,6 @@
 
 (require 'prelude)
 (require 'cycle)
-(require 'device)
 (require 'maybe)
 (require 'cl-lib)
 
@@ -31,11 +29,8 @@
 
 ;; TODO: Consider having a different font size when I'm using my 4K monitor.
 
-(defconst fonts-size
-  (pcase (device-classify)
-    ('work-laptop "10")
-    ('work-desktop "10"))
-  "My preferred default font-size, which is device specific.")
+(defconst fonts-size "10"
+  "My preferred default font-size.")
 
 (defconst fonts-size-step 10
   "The amount (%) by which to increase or decrease a font.")

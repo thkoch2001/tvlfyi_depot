@@ -2,7 +2,6 @@
 
 ;; Author: William Carroll <wpcarro@gmail.com>
 ;; Version: 0.0.1
-;; URL: https://git.wpcarro.dev/wpcarro/briefcase
 ;; Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
@@ -36,7 +35,7 @@
 (require 'device)
 (require 'fonts)
 (require 'bookmark)
-(require 'constants)
+(require 'tvl)
 (require 'window-manager)
 
 ;; Note: The following lines must be sorted this way.
@@ -222,9 +221,7 @@
  "N" #'smerge-next
  "W" #'balance-windows
  "gss" #'magit-status
- "gsb" (lambda ()
-         (interactive)
-         (magit-status constants-briefcase))
+ "gsd" #'tvl-depot-status
  "E" #'refine
  "es" #'functions-create-snippet
  "l" #'linum-mode
