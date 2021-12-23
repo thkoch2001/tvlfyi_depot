@@ -99,6 +99,12 @@ in {
   programs = {
     fish.enable = true;
     light.enable = true;
+    ssh = {
+      startAgent = true;
+      extraConfig = ''
+        AddKeysToAgent yes
+      '';
+    };
   };
 
   environment.variables = {
