@@ -60,6 +60,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "79817656_095a19d0",
+        "filename": "rules.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-24T19:35:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9a1a60a_0c14cd08",
+      "range": {
+        "startLine": 38,
+        "startChar": 20,
+        "endLine": 38,
+        "endChar": 33
+      },
+      "revId": "42f5aad36e3e2163d6083f815bebccef03e346e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4313a2d1_438db48e",
         "filename": "rules.pl",
         "patchSetId": 1
@@ -118,6 +142,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "85855131_c92746b2",
+      "range": {
+        "startLine": 48,
+        "startChar": 21,
+        "endLine": 48,
+        "endChar": 26
+      },
+      "revId": "42f5aad36e3e2163d6083f815bebccef03e346e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e81b55ff_69301b2c",
+        "filename": "rules.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-24T19:35:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fdae99e_a1d6655a",
       "range": {
         "startLine": 48,
         "startChar": 21,
