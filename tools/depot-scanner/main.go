@@ -94,6 +94,11 @@ func consumeOutput(stdout, stderr io.ReadCloser) (map[fileScanType]map[string]st
 		line := scanner.Text()
 		if strings.HasPrefix(line, depotTraceString) {
 			addPath(strings.TrimPrefix(line, depotTraceString), result)
+		} else {
+			// print remaining stderr output of nix-instantiate
+			// to prevent silent swallowing of possible important
+			// error messages (e.g. about command line interface changes)
+			fmt.Fprintf(os.Stderr, "nix-inst> %s\n", line)
 		}
 	}
 	if scanner.Err() != nil {
