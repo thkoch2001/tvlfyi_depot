@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d1bda05_35659f3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-24T18:17:44Z",
+      "side": 1,
+      "message": "Resolving since I haven\u0027t heard anything in awhile and IIUC this doesn\u0027t seem like a blocking issue.",
+      "revId": "92c85c6e8bee30215175056a24fb054bd51273fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6abb9015_eb0bb49b",

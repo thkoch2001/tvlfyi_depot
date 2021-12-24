@@ -177,6 +177,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c513a2c4_1e8bcedd",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-12-24T18:17:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8527243_0c2069a5",
+      "range": {
+        "startLine": 26,
+        "startChar": 25,
+        "endLine": 26,
+        "endChar": 31
+      },
+      "revId": "4e6a8c5d8499c360ee4a782687ef4b7751502a45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef1b487c_4c75c75c",
