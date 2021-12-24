@@ -20,3 +20,17 @@ resource "glesys_objectstorage_instance" "tvl-backups" {
   description = "tvl-backups"
   datacenter = "dc-sto1"
 }
+
+resource "glesys_objectstorage_instance" "tvl-state" {
+  description = "tvl-state"
+  datacenter = "dc-sto1"
+
+  lifecycle {
+    ignore_changes = [ accesskey ]
+  }
+}
+
+resource "glesys_objectstorage_credential" "terraform-state" {
+  instanceid = glesys_objectstorage_instance.tvl-state.id
+  description = "key for terraform state"
+}
