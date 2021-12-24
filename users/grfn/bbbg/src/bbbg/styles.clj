@@ -4,7 +4,9 @@
    [garden.color :as color]
    [garden.compiler :refer [compile-css]]
    [garden.def :refer [defstyles]]
-   [garden.selectors :refer [& active attr= descendant hover visited]]))
+   [garden.selectors :refer [& active attr= descendant hover]]
+   [garden.stylesheet :refer [at-media]]
+   [garden.units :refer [px]]))
 
 (def black "#342e37")
 
@@ -34,6 +36,17 @@
 
 ;;;
 
+(def content-width (px 1600))
+
+(defn not-mobile [& rules]
+  (at-media
+   {:screen true
+    :min-width content-width}
+   [:&
+    rules]))
+
+;;;
+
 (defstyles global-nav
   [:.global-nav
    {:background-color silver}
@@ -41,7 +54,11 @@
    [:>ul
     {:display :flex
      :flex-direction :row
-     :list-style :none}]
+     :list-style :none}
+
+    (not-mobile
+     {:width content-width
+      :margin "0 auto"})]
 
    [:a (descendant :.link-form (attr= "type" "submit"))
     {:padding "1rem 1.5rem"
