@@ -61,6 +61,10 @@ case "${TARGET_TOOL}" in
   depotfmt)
     attr="tools.depotfmt"
     ;;
+  tf-glesys)
+    TARGET_TOOL="terraform"
+    attr="ops.glesys.terraform"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1
