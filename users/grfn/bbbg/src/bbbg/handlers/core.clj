@@ -28,7 +28,7 @@
             "Attendees"]])
     [:li [:a {:href "/events"}
           "Events"]]
-    (if authenticated?
+    (if *authenticated?*
       [:li [:form {:method :post
                    :action "/auth/sign-out"}
             [:input {:type "submit"
