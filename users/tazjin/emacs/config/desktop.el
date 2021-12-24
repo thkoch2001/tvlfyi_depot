@@ -4,13 +4,14 @@
 ;; window-management (EXWM) as well as additional system-wide
 ;; commands.
 
-(require 's)
-(require 'f)
 (require 'dash)
 (require 'exwm)
 (require 'exwm-config)
 (require 'exwm-randr)
 (require 'exwm-systemtray)
+(require 'exwm-xim )
+(require 'f)
+(require 's)
 
 (defcustom tazjin--screen-lock-command "tazjin-screen-lock"
   "Command to execute for locking the screen."
@@ -52,6 +53,7 @@
 (defun lock-screen ()
   (interactive)
   (set-xkb-layout "us")
+  (deactivate-input-method)
   (shell-command tazjin--screen-lock-command))
 
 (defun create-window-name ()
@@ -179,6 +181,11 @@
 (bind-xkb "de" "л в")
 (bind-xkb "no" "л т")
 (bind-xkb "ru" "л к")
+
+;; Configuration of EXWM input method handling for X applications
+(exwm-xim-enable)
+(setq default-input-method "russian-computer")
+(push ?\C-\\ exwm-input-prefix-keys)
 
 ;; Line-editing shortcuts
 (exwm-input-set-simulation-keys
