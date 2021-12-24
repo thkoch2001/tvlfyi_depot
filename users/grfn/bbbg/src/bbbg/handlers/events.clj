@@ -4,13 +4,14 @@
    [bbbg.db.event :as db.event]
    [bbbg.event :as event]
    [bbbg.handlers.core :refer [authenticated? page-response]]
+   [bbbg.meetup.import :refer [import-data!]]
    [bbbg.util.display :refer [format-date]]
+   [bbbg.util.time :as t]
    [bbbg.views.flash :as flash]
    [compojure.coercions :refer [as-uuid]]
    [compojure.core :refer [context GET POST]]
    [java-time :refer [local-date]]
-   [ring.util.response :refer [not-found redirect]]
-   [bbbg.util.time :as t]))
+   [ring.util.response :refer [not-found redirect]]))
 
 (defn events-index [{:keys [events authenticated?]}]
   [:div
@@ -33,8 +34,19 @@
      (if (= (t/->LocalDate (::event/date event))
             (local-date))
        " Signed In"
-       (str " Attendee" (when-not (= 1 (:num-attendees event)) "s")))]
-    ]])
+       (str " Attendee" (when-not (= 1 (:num-attendees event)) "s")))]]
+   [:div
+    [:form {:method :post
+            :action (str "/events/" (::event/id event) "/attendees")
+            :enctype "multipart/form-data"}
+     [:div.form-group
+      [:label "Import Attendee List"
+       [:br]
+       [:input {:type :file
+                :name :attendees}]]]
+     [:div.form-group
+      [:input {:type :submit
+               :value "Import"}]]]]])
 
 (defn event-form
   ([] (event-form {}))
@@ -58,15 +70,24 @@
          (events-index {:events events
                         :authenticated? (authenticated? request)}))))
 
-    (GET "/:id" [id :<< as-uuid]
-      (if-let [event (db/fetch db
-                               (-> {:select [:event.*]
-                                    :from [:event]
-                                    :where [:= :event.id id]}
-                                   (db.event/with-stats)))]
-        (page-response
-         (event-page {:event event}))
-        (not-found "Event Not Found")))
+    (context "/:id" [id :<< as-uuid]
+      (GET "/" []
+        (if-let [event (db/fetch db
+                                 (-> {:select [:event.*]
+                                      :from [:event]
+                                      :where [:= :event.id id]}
+                                     (db.event/with-stats)))]
+          (page-response
+           (event-page {:event event}))
+          (not-found "Event Not Found")))
+
+      (POST "/attendees" [attendees]
+        (let [num-imported (import-data! db id (:tempfile attendees))]
+          (-> (redirect (str "/events/" id))
+              (flash/add-flash
+               #:flash{:type :success
+                       :message (format "Successfully imported %d attendees"
+                                        num-imported)})))))
 
     (GET "/new" [date]
       (page-response
