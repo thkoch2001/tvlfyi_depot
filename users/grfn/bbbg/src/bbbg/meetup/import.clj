@@ -88,7 +88,7 @@
 
 ;;;
 
-(defn import-data! [db event-id f]
+(defn import-attendees! [db event-id f]
   (let [rows (read-attendees f)
         attendees (db.attendee/upsert-all! db (map row->attendee rows))
         meetup-id->attendee-id (into {}
@@ -120,6 +120,6 @@
   (def event-id #uuid "09f8fed6-7480-451b-89a2-bb4edaeae657")
 
   (read-attendees -filename-)
-  (import-data! (:db bbbg.core/system) event-id -filename-)
+  (import-attendees! (:db bbbg.core/system) event-id -filename-)
 
   )
