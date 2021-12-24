@@ -50,6 +50,12 @@ in {
     sudo.wheelNeedsPassword = false;
   };
 
+  programs.ssh = {
+    startAgent = true;
+    extraConfig = ''
+      AddKeysToAgent yes
+    '';
+  };
 
   environment.systemPackages = with pkgs; [
     fd
