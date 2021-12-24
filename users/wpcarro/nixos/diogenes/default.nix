@@ -58,6 +58,7 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
+    dig
     fd
     fzf
     mkpasswd
