@@ -20,6 +20,46 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b99fbda5_0c942636",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-24T18:30:33Z",
+      "side": 1,
+      "message": "style nits, but the logic itself seems solid to me.",
+      "revId": "42f5aad36e3e2163d6083f815bebccef03e346e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9a1a60a_0c14cd08",
+        "filename": "rules.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-24T18:30:33Z",
+      "side": 1,
+      "message": "should probably be exported to a top-level fact, like:\n\n```\nclbot(user(1000015)).\n```\n\nwhich would then make this\n\n```\napplicable_owner(Owner) :-\n    gerrit:uploader(Uploader),\n    clbot(Uploader),\n```",
+      "range": {
+        "startLine": 38,
+        "startChar": 20,
+        "endLine": 38,
+        "endChar": 33
+      },
+      "revId": "42f5aad36e3e2163d6083f815bebccef03e346e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4313a2d1_438db48e",
         "filename": "rules.pl",
         "patchSetId": 1
@@ -54,6 +94,30 @@
       "writtenOn": "2021-12-22T12:02:53Z",
       "side": 1,
       "message": "Maybe use ChangeOwner here as well and in unresolved_comments for consistency?",
+      "range": {
+        "startLine": 48,
+        "startChar": 21,
+        "endLine": 48,
+        "endChar": 26
+      },
+      "revId": "42f5aad36e3e2163d6083f815bebccef03e346e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fdae99e_a1d6655a",
+        "filename": "rules.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-24T18:30:33Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "85855131_c92746b2",
       "range": {
         "startLine": 48,
         "startChar": 21,
