@@ -2,7 +2,7 @@
 { ... }:
 
 let
-  inherit (depot.users.wpcarro) keys;
+  inherit (depot.users) wpcarro;
 in {
   imports = [
     "${depot.path}/ops/modules/quassel.nix"
@@ -29,7 +29,7 @@ in {
       wpcarro = {
         isNormalUser = true;
         extraGroups = [ "wheel" "quassel" ];
-        openssh.authorizedKeys.keys = keys.all;
+        openssh.authorizedKeys.keys = wpcarro.keys.all;
         shell = pkgs.fish;
       };
     };
@@ -57,16 +57,7 @@ in {
     '';
   };
 
-  environment.systemPackages = with pkgs; [
-    dig
-    fd
-    fzf
-    mkpasswd
-    ripgrep
-    tldr
-    tree
-    vim
-  ];
+  environment.systemPackages = wpcarro.common.shell-utils;
 
   services = {
     depot.automatic-gc = {
@@ -123,12 +114,12 @@ in {
         "wpcarro.dev" = {
           addSSL = true;
           enableACME = true;
-          root = depot.users.wpcarro.website;
+          root = wpcarro.website;
         };
         "blog.wpcarro.dev" = {
           addSSL = true;
           enableACME = true;
-          root = depot.users.wpcarro.website.blog;
+          root = wpcarro.website.blog;
         };
       };
     };
