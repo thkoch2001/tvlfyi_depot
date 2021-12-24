@@ -11,16 +11,10 @@ import (
 	"utils"
 )
 
-var hostnames = map[string]string{
-	os.Getenv("DESKTOP"): "desktop",
-	os.Getenv("LAPTOP"):  "work_laptop",
-}
-
 func main() {
 	audit := flag.Bool("audit", false, "Output all symlinks that would be deleted. This is the default behavior. This option is mutually exclusive with the --seriously option.")
 	seriously := flag.Bool("seriously", false, "Actually delete the symlinks. This option is mutually exclusive with the --audit option.")
 	repoName := flag.String("repo-name", "briefcase", "The name of the repository.")
-	deviceOnly := flag.Bool("device-only", false, "Only output the device-specific dotfiles.")
 	flag.Parse()
 
 	if !*audit && !*seriously {
@@ -39,23 +33,8 @@ func main() {
 			dest, err := os.Readlink(path)
 			utils.FailOn(err)
 
-			var predicate func(string) bool
-
-			if *deviceOnly {
-				predicate = func(dest string) bool {
-					var hostname string
-					hostname, err = os.Hostname()
-					utils.FailOn(err)
-					seeking, ok := hostnames[hostname]
-					if !ok {
-						log.Fatal(fmt.Sprintf("Hostname \"%s\" not supported in the hostnames map.", hostname))
-					}
-					return strings.Contains(dest, *repoName) && strings.Contains(dest, seeking)
-				}
-			} else {
-				predicate = func(dest string) bool {
-					return strings.Contains(dest, *repoName)
-				}
+			predicate := func(dest string) bool {
+				return strings.Contains(dest, *repoName)
 			}
 
 			if predicate(dest) {
