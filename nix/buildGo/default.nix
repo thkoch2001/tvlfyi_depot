@@ -32,7 +32,16 @@ let
   includeDepLib = dep: "-L ${dep}";
   includeLibs = deps: spaceOut (map includeDepLib deps);
 
-  srcBasename = src: elemAt (match "([a-z0-9]{32}\-)?(.*\.go)" (baseNameOf src)) 1;
+  # the if condition allows us to explicitly specify a basename for the
+  # special case that we use content-addressed derivations and the ${src}
+  # is a path directly residing in the store, which leads to nix just giving us
+  # a weird "/${outhash}" path, without filename or suffix.
+  srcBasename = src:
+    let
+      matches = match "([a-z0-9]{32}\-)?(.*\.go)" (baseNameOf src);
+    in
+      if matches != null then elemAt matches 1 else src.name;
+
   srcCopy = path: src: "cp ${src} $out/${path}/${srcBasename src}";
   srcList = path: srcs: lib.concatStringsSep "\n" (map (srcCopy path) srcs);
 
@@ -85,7 +94,7 @@ let
 
     gopkg = (runCommand "golib-${name}" {} ''
       mkdir -p $out/${path}
-      ${srcList path (map (s: "${s}") srcs)}
+      ${srcList path srcs}
       ${asmBuild}
       ${go}/bin/go tool compile -pack ${asmLink} -o $out/${path}.a -trimpath=$PWD -trimpath=${go} -p ${path} ${includeSources uniqueDeps} ${spaceOut srcs}
       ${asmPack}
