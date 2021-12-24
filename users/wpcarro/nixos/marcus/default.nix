@@ -3,6 +3,12 @@
 
 let
   wpcarrosEmacs = depot.users.wpcarro.emacs.nixos;
+
+  quasselClient = pkgs.quassel.override {
+    client = true;
+    enableDaemon = false;
+    monolithic = false;
+  };
 in {
   imports = [
     (depot.path + "/users/wpcarro/nixos/marcus/hardware.nix")
@@ -120,6 +126,7 @@ in {
     fzf
     git
     pavucontrol
+    quasselClient
     ripgrep
     tdesktop
     tree

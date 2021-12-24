@@ -5,6 +5,7 @@ let
   inherit (depot.users.wpcarro) keys;
 in {
   imports = [
+    "${depot.path}/ops/modules/quassel.nix"
     (pkgs.path + "/nixos/modules/virtualisation/google-compute-image.nix")
   ];
 
@@ -27,7 +28,7 @@ in {
     users = {
       wpcarro = {
         isNormalUser = true;
-        extraGroups = [ "wheel" ];
+        extraGroups = [ "wheel" "quassel" ];
         openssh.authorizedKeys.keys = keys.all;
         shell = pkgs.fish;
       };
@@ -35,9 +36,17 @@ in {
   };
 
   security = {
-    # Provision SSL certificates to support HTTPS connections.
-    acme.acceptTerms = true;
-    acme.email = "wpcarro@gmail.com";
+    acme = {
+      acceptTerms = true;
+      email = "wpcarro@gmail.com";
+
+      certs."quassel.wpcarro.dev" = {
+        email = "wpcarro@gmail.com";
+        webroot = "/var/lib/acme/challenge-quassel";
+        user = "nginx";
+        group = "quassel";
+      };
+    };
 
     sudo.wheelNeedsPassword = false;
   };
@@ -60,6 +69,14 @@ in {
       diskThreshold = 16; # GiB
       maxFreed = 10; # GiB
       preserveGenerations = "14d";
+    };
+
+    depot.quassel = {
+      enable = true;
+      acmeHost = "quassel.wpcarro.dev";
+      bindAddresses = [
+        "0.0.0.0"
+      ];
     };
 
     journaldriver = {
