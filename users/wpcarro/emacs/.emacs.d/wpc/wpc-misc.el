@@ -128,9 +128,7 @@
 (use-package request)
 
 ;; TVL depot stuff
-(use-package tvl
-  :config
-  (customize-set-variable 'tvl-depot-path "/home/wpcarro/depot"))
+(use-package tvl)
 
 ;; perl-compatible regular expressions
 (use-package pcre2el)
