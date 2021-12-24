@@ -52,6 +52,24 @@
       "parentUuid": "192b3841_2ae8aa58",
       "revId": "3f98773ddf92f1aa193ba97a4924b5b37bbab4d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51dea71e_7333bb24",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-24T19:35:18Z",
+      "side": 1,
+      "message": "FWIW the current config is already not copying -1 (which mimics the way it works at that search engine company, ish). We could maybe move this discussion to panettone to unblock this CL.",
+      "parentUuid": "54c33427_6a4e6c1b",
+      "revId": "3f98773ddf92f1aa193ba97a4924b5b37bbab4d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
