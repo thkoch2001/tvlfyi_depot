@@ -3,7 +3,8 @@
    [bbbg.user :as user]
    [bbbg.views.flash :as flash]
    [hiccup.core :refer [html]]
-   [ring.util.response :refer [content-type response]]))
+   [ring.util.response :refer [content-type response]]
+   [clojure.string :as str]))
 
 (def ^:dynamic *authenticated?* false)
 
@@ -20,14 +21,29 @@
     (binding [*authenticated?* (authenticated? req)]
       (handler req))))
 
+(def ^:dynamic *current-uri*)
+
+(defn wrap-current-uri [handler]
+  (fn [req]
+    (binding [*current-uri* (:uri req)]
+      (handler req))))
+
+(defn nav-item [href label]
+  (let [active?
+        (when *current-uri*
+          (str/starts-with?
+           *current-uri*
+           href))]
+    [:li {:class (when active? "active")}
+     [:a {:href href}
+      label]]))
+
 (defn global-nav []
   [:nav.global-nav
    [:ul
-    [:li [:a {:href "/events"}
-          "Events"]]
+    (nav-item "/events" "Events")
     (when *authenticated?*
-      [:li [:a {:href "/attendees"}
-            "Attendees"]])
+      (nav-item "/attendees" "Attendees"))
     [:li.spacer]
     [:li
      (if *authenticated?*

@@ -69,6 +69,10 @@
      [(& hover)
       {:color blue}]]
 
+   [:li.active
+    {:font-weight "bold"
+     :border-bottom [["1px" "solid" black]]}]
+
    [:.spacer
     {:flex 1}]])
 

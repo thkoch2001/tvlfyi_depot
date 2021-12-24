@@ -3,7 +3,7 @@
    [bbbg.discord.auth :as discord.auth :refer [wrap-discord-auth]]
    [bbbg.handlers.attendee-checks :as attendee-checks]
    [bbbg.handlers.attendees :as attendees]
-   [bbbg.handlers.core :refer [wrap-dynamic-auth]]
+   [bbbg.handlers.core :refer [wrap-dynamic-auth wrap-current-uri]]
    [bbbg.handlers.events :as events]
    [bbbg.handlers.home :as home]
    [bbbg.handlers.signup-form :as signup-form]
@@ -23,7 +23,7 @@
    [ring.middleware.resource :refer [wrap-resource]]
    [ring.middleware.session :refer [wrap-session]]
    [ring.middleware.session.cookie :refer [cookie-store]]
-   [ring.util.response :refer [content-type resource-response response]]
+   [ring.util.response :refer [content-type response]]
    [clojure.java.io :as io])
   (:import
    java.util.Base64))
@@ -89,6 +89,7 @@
 (defn middleware [app env]
   (-> app
       (wrap-resource "public")
+      wrap-current-uri
       wrap-dynamic-auth
       (wrap-discord-auth env)
       wrap-keyword-params
