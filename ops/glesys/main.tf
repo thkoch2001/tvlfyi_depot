@@ -45,3 +45,8 @@ resource "glesys_objectstorage_credential" "terraform-state" {
   instanceid = glesys_objectstorage_instance.tvl-state.id
   description = "key for terraform state"
 }
+
+resource "glesys_objectstorage_credential" "litestream" {
+  instanceid = glesys_objectstorage_instance.tvl-state.id
+  description = "key for litestream"
+}
