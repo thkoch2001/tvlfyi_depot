@@ -168,7 +168,8 @@ If there is no currently focused item, add X to the beginning of XS."
       (if curr-i
           (progn
             (struct-set! cycle xs (-insert-at curr-i x (cycle-xs xs)) xs)
-            (when (>= prev-i curr-i) (struct-set! cycle previous-index (1+ prev-i) xs))
+            (when (and prev-i (>= prev-i curr-i))
+              (struct-set! cycle previous-index (1+ prev-i) xs))
             (when curr-i (struct-set! cycle current-index (1+ curr-i) xs)))
         (progn
           (struct-set! cycle xs (cons x (cycle-xs xs)) xs)

@@ -246,6 +246,9 @@
 
 (general-define-key
  :keymaps '(vterm-mode-map)
+ ;; For some reason vterm captures this KBD instead of EXWM
+ "C-S-f" nil
+ "s-x" #'vterm-mgt-select
  "C-S-n" #'vterm-mgt-instantiate
  "C-S-w" #'vterm-mgt-kill
  "<C-tab>" #'vterm-mgt-next
