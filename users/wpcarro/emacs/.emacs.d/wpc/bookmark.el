@@ -26,6 +26,7 @@
 (require 'set)
 (require 'constants)
 (require 'general)
+(require 'tvl)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
@@ -59,7 +60,7 @@ Otherwise, open with `counsel-find-file'."
 (defconst bookmark-whitelist
   (list
    (make-bookmark :label "depot"
-                  :path constants-depot
+                  :path tvl-depot-path
                   :kbd "d"))
   "List of registered bookmarks.")
 
