@@ -41,10 +41,8 @@
 ;; enables ControlMaster.
 (setq tramp-use-ssh-controlmaster-options nil)
 
-(defcustom ssh-hosts '("desktop")
-  "List of hosts to which I commonly connect.
-Note: It could be interesting to read these values from ~/.ssh-config, but
-  that's more than I need at the moment.")
+(defcustom ssh-hosts '("wpcarro@wpcarro.dev")
+  "List of hosts to which I commonly connect.")
 
 (defun ssh-sudo-buffer ()
   "Open the current buffer with sudo rights."
@@ -58,7 +56,7 @@ Note: It could be interesting to read these values from ~/.ssh-config, but
   "Prompt for an SSH host and open a dired buffer for wpcarro on that machine."
   (interactive)
   (let ((machine (completing-read "Machine: " ssh-hosts)))
-    (find-file (format "/ssh:wpcarro@%s:~" machine))))
+    (find-file (format "/ssh:%s:~" machine))))
 
 (provide 'ssh)
 ;;; ssh.el ends here
