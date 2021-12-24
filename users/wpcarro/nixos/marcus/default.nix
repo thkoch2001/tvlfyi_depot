@@ -126,6 +126,7 @@ in {
     fzf
     git
     pavucontrol
+    python3
     quasselClient
     ripgrep
     tdesktop
