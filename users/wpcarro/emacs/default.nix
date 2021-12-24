@@ -9,27 +9,28 @@ let
   inherit (pkgs.lib.strings) concatStringsSep makeBinPath;
 
   emacsBinPath = makeBinPath (with pkgs; [
-    ripgrep
     bat
+    clipmenu
+    direnv
+    diskus
+    exa
     fd
     fzf
-    pass
-    tokei
-    nmap
-    tldr
-    diskus
-    jq
-    pup
-    exa
     gitAndTools.hub
-    kubectl
     google-cloud-sdk
-    xsv
-    scrot
-    clipmenu
-    xorg.xset
-    direnv
+    ispell
+    jq
+    kubectl
     nix
+    nmap
+    pass
+    pup
+    ripgrep
+    scrot
+    tldr
+    tokei
+    xorg.xset
+    xsv
   ]);
 
   emacsWithPackages = (emacsPackagesGen emacs27).emacsWithPackages;
