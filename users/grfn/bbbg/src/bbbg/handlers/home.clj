@@ -11,7 +11,7 @@
 
 (defn- home-page []
   [:div.home-page
-   [:a {:href "/signup-forms"}
+   [:a.signup-form-link {:href "/signup-forms"}
     "Event Signup Form"]])
 
 (defn auth-failure []

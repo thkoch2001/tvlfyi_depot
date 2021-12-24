@@ -107,13 +107,39 @@
       :background-color (color/lighten color 30)
       :border-radius "5px"}]))
 
+(defstyles home-page
+  [:.home-page
+   {:display :flex
+    :flex 1
+    :justify-content :center
+    :align-items :center}
+   [:.signup-form-link
+    {:display :block
+     :padding "5rem"
+     :border [["1px" :solid blue]]
+     :border-radius "5px"
+     :color black
+     :font-size "2rem"
+     :background-color (color/lighten blue 50)}
+    [(& hover) (& active)
+     {:text-decoration :none}]
+    [(& active)
+     {:background-color (color/lighten blue 30)}]]])
+
 (defstyles styles
   global-nav
   link-form
   flash
+  home-page
 
   [:body
    {:color black}]
+
+  [:.content
+   {:display :flex
+    :flex-direction :column
+    :height "100%"
+    :width "100%"}]
 
   [:a {:color blue
        :text-decoration :none}
