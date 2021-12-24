@@ -57,16 +57,7 @@ in {
     '';
   };
 
-  environment.systemPackages = with pkgs; [
-    dig
-    fd
-    fzf
-    mkpasswd
-    ripgrep
-    tldr
-    tree
-    vim
-  ];
+  environment.systemPackages = wpcarro.common.shell-utils;
 
   services = {
     depot.automatic-gc = {

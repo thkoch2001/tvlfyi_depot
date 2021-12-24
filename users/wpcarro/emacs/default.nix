@@ -5,33 +5,20 @@
 let
   inherit (builtins) path;
   inherit (depot.third_party.nixpkgs) emacsPackagesGen emacs27;
+  inherit (depot.users) wpcarro;
   inherit (pkgs) writeShellScript writeShellScriptBin;
   inherit (pkgs.lib.strings) concatStringsSep makeBinPath;
 
-  emacsBinPath = makeBinPath (with pkgs; [
-    bat
-    clipmenu
-    direnv
-    diskus
-    exa
-    fd
-    fzf
-    gitAndTools.hub
-    google-cloud-sdk
-    ispell
-    jq
-    kubectl
-    nix
-    nmap
-    pass
-    pup
-    ripgrep
-    scrot
-    tldr
-    tokei
-    xorg.xset
-    xsv
-  ]);
+  emacsBinPath = makeBinPath (
+    wpcarro.common.shell-utils ++
+    (with pkgs; [
+      clipmenu
+      ispell
+      nix
+      pass
+      scrot
+      xorg.xset
+    ]));
 
   emacsWithPackages = (emacsPackagesGen emacs27).emacsWithPackages;
 

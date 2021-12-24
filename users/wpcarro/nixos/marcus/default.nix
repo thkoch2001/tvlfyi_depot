@@ -2,7 +2,8 @@
 { ... }:
 
 let
-  wpcarrosEmacs = depot.users.wpcarro.emacs.nixos;
+  inherit (depot.users) wpcarro;
+  wpcarrosEmacs = wpcarro.emacs.nixos;
 
   quasselClient = pkgs.quassel.override {
     client = true;
@@ -116,27 +117,18 @@ in {
     VISUAL = "emacsclient";
   };
 
-  environment.systemPackages = with pkgs; [
-    alacritty
-    dig
-    direnv
-    emacs
-    fd
-    firefox
-    fzf
-    git
-    pavucontrol
-    python3
-    quasselClient
-    ripgrep
-    tdesktop
-    tree
-    vim
-    weechat
-    wpcarrosEmacs
-    xclip
-    xsecurelock
-  ];
+  environment.systemPackages =
+    wpcarro.common.shell-utils ++
+    (with pkgs; [
+      alacritty
+      firefox
+      pavucontrol
+      quasselClient
+      tdesktop
+      weechat
+      wpcarrosEmacs
+      xsecurelock
+    ]);
 
   system.stateVersion = "21.11";
 }
