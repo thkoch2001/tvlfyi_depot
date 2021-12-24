@@ -52,6 +52,14 @@
   ([f] (map-kv f identity))
   ([f m] (map-kv f identity m)))
 
+(defn keep-keys
+  "Map f over the keys of m, keeping only those entries for which f does not
+  return nil. Preserves metadata on the incoming map. The one-argument form
+  returns a transducer that yields map-entries."
+  ([f] (keep (fn [[k v]] (when-let [k' (f k)]
+                          (first {k' v})))))
+  ([f m] (into (empty m) (keep-keys f) m)))
+
 (defn map-vals
   "Map f over the values of m. Preserves metadata on the incoming map. The
   one-argument form returns a transducer that yields map-entries."
