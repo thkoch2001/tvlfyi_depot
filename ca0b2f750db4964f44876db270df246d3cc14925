@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42dc3823_7c62e6d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-24T06:32:10Z",
+      "side": 1,
+      "message": "This is the write-up about the main part of our last meeting, and I would be interesting how usable it is, e.g. if it explains the issue properly and if I missed anything which is/was important as context or such.",
+      "revId": "ca0b2f750db4964f44876db270df246d3cc14925",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
