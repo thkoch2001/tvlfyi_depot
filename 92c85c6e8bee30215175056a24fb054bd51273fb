@@ -88,6 +88,24 @@
       "parentUuid": "8f20695e_a9a05963",
       "revId": "92c85c6e8bee30215175056a24fb054bd51273fb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65af4341_037a7523",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 30
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-24T10:21:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b3a1124_daab0847",
+      "revId": "92c85c6e8bee30215175056a24fb054bd51273fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
