@@ -122,6 +122,7 @@ in {
     pavucontrol
     ripgrep
     tdesktop
+    tree
     vim
     weechat
     wpcarrosEmacs
