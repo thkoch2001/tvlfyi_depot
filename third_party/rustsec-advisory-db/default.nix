@@ -1,27 +1,19 @@
 # RustSec's advisory db for crates
-#
-# Update using:
-#
-#   nix-prefetch-git --quiet --url https://github.com/RustSec/advisory-db.git > third_party/rustsec-advisory-db/pin.json
-#
-# TODO(Profpatsch): automatically update in regular intervals
-{ pkgs, ... }:
+{ pkgs, depot, ... }:
 
 let
-  pin = builtins.fromJSON (builtins.readFile ./pin.json);
-
-  date = builtins.head (builtins.split "T" pin.date);
+  inherit (depot.third_party.sources) rustsec-advisory-db;
 in
 
 pkgs.fetchFromGitHub {
-  name = "advisory-db-${date}";
-  owner = "RustSec";
-  repo = "advisory-db";
-  inherit (pin)
-    rev
+  inherit (rustsec-advisory-db)
+    owner
+    repo
     sha256
+    rev
     ;
+
   passthru = {
-    inherit (pin) rev;
+    inherit (rustsec-advisory-db) rev;
   };
 }
