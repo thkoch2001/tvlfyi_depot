@@ -13,13 +13,13 @@ terraform {
 
   backend "s3" {
     endpoint = "https://objects.dc-sto1.glesys.net"
-    bucket = "tvl-state"
-    key = "terraform/tvl-glesys"
-    region = "glesys"
+    bucket   = "tvl-state"
+    key      = "terraform/tvl-glesys"
+    region   = "glesys"
 
     skip_credentials_validation = true
-    skip_region_validation = true
-    skip_metadata_api_check = true
+    skip_region_validation      = true
+    skip_metadata_api_check     = true
   }
 }
 
@@ -29,24 +29,24 @@ provider "glesys" {
 
 resource "glesys_objectstorage_instance" "tvl-backups" {
   description = "tvl-backups"
-  datacenter = "dc-sto1"
+  datacenter  = "dc-sto1"
 }
 
 resource "glesys_objectstorage_instance" "tvl-state" {
   description = "tvl-state"
-  datacenter = "dc-sto1"
+  datacenter  = "dc-sto1"
 
   lifecycle {
-    ignore_changes = [ accesskey ]
+    ignore_changes = [accesskey]
   }
 }
 
 resource "glesys_objectstorage_credential" "terraform-state" {
-  instanceid = glesys_objectstorage_instance.tvl-state.id
+  instanceid  = glesys_objectstorage_instance.tvl-state.id
   description = "key for terraform state"
 }
 
 resource "glesys_objectstorage_credential" "litestream" {
-  instanceid = glesys_objectstorage_instance.tvl-state.id
+  instanceid  = glesys_objectstorage_instance.tvl-state.id
   description = "key for litestream"
 }
