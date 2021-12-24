@@ -8,28 +8,31 @@
 
 (defn attendees-with-last-checks
   [db attendees]
-  (let [ids (map ::attendee/id attendees)
-        checks
-        (db/list db {:select [:attendee-check.*]
-                     :from [:attendee-check]
-                     :join [[{:select [:%max.attendee-check.checked-at
-                                       :attendee-check.attendee-id]
-                              :from [:attendee-check]
-                              :group-by [:attendee-check.attendee-id]
-                              :where [:in :attendee-check.attendee-id ids]}
-                             :last-check]
-                            [:=
-                             :attendee-check.attendee-id
-                             :last-check.attendee-id]]})
-        users (u/key-by
-               ::user/id
-               (db/list db {:select [:public.user.*]
-                            :from [:public.user]
-                            :where [:in :id (map ::user/id checks)]}))
-        checks (map #(assoc % :user (users (::user/id %))) checks)
-        attendee-id->check (u/key-by ::attendee/id checks)]
-    (map #(assoc % :last-check (attendee-id->check (::attendee/id %)))
-         attendees)))
+  (when (seq attendees)
+    (let [ids (map ::attendee/id attendees)
+          checks
+          (db/list db {:select [:attendee-check.*]
+                       :from [:attendee-check]
+                       :join [[{:select [:%max.attendee-check.checked-at
+                                         :attendee-check.attendee-id]
+                                :from [:attendee-check]
+                                :group-by [:attendee-check.attendee-id]
+                                :where [:in :attendee-check.attendee-id ids]}
+                               :last-check]
+                              [:=
+                               :attendee-check.attendee-id
+                               :last-check.attendee-id]]})
+          users (if (seq checks)
+                  (u/key-by
+                   ::user/id
+                   (db/list db {:select [:public.user.*]
+                                :from [:public.user]
+                                :where [:in :id (map ::user/id checks)]}))
+                  {})
+          checks (map #(assoc % :user (users (::user/id %))) checks)
+          attendee-id->check (u/key-by ::attendee/id checks)]
+      (map #(assoc % :last-check (attendee-id->check (::attendee/id %)))
+           attendees))))
 
 (comment
   (def db (:db bbbg.core/system))

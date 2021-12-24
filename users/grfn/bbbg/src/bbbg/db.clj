@@ -355,6 +355,7 @@
 
 (comment
   (def db (:db bbbg.core/system))
-  (generate-migration db "add-attendee-checks")
+  (generate-migration db "add-attendee-unique-meetup-id")
   (migrate! db)
+
   )

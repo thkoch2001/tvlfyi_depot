@@ -3,10 +3,8 @@
 
 (s/def ::id uuid?)
 
-(s/def ::meetup-name string?)
+(s/def ::meetup-name (s/and string? seq))
 
 (s/def ::discord-name (s/nilable string?))
-
-(s/def ::meetup-user-id (s/nilable string?))
 
 (s/def ::organizer-notes string?)

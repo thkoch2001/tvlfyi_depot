@@ -848,6 +848,19 @@ let repos = [
   }
 
   rec {
+    name = "data.csv/org.clojure";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "data.csv";
+      groupId = "org.clojure";
+      sha512 = "b039775a859ed27eca8f8ae74ccb6afde3ad1fe2b3cbe542240c324d60fe1237e495eb1300ee9eb4ff4ef59f01faf7aec6ef1dd6a025ee4fe556c1d91acfcf1b";
+      version = "1.0.0";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
     name = "simpleclient_tracer_otel_agent/io.prometheus";
     src = fetchMavenArtifact {
       inherit repos;
