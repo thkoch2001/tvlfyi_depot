@@ -8,6 +8,11 @@ let
     command = "${pkgs.go}/bin/gofmt"
     options = [ "-w" ]
     includes = ["*.go"]
+
+    [formatter.tf]
+    command = "${pkgs.terraform}/bin/terraform"
+    options = [ "fmt" ]
+    includes = [ "*.tf" ]
   '';
 in pkgs.writeShellScriptBin "depotfmt" ''
   exec ${pkgs.treefmt}/bin/treefmt ''${@} \
