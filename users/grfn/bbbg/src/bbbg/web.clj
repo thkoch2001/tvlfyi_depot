@@ -18,6 +18,7 @@
    [org.httpkit.server :as http-kit]
    [ring.middleware.flash :refer [wrap-flash]]
    [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+   [ring.middleware.multipart-params :refer [wrap-multipart-params]]
    [ring.middleware.params :refer [wrap-params]]
    [ring.middleware.session :refer [wrap-session]]
    [ring.middleware.session.cookie :refer [cookie-store]]
@@ -88,6 +89,7 @@
       wrap-dynamic-auth
       (wrap-discord-auth env)
       wrap-keyword-params
+      wrap-multipart-params
       wrap-params
       wrap-page-flash
       wrap-flash
