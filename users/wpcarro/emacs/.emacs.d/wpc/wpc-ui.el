@@ -165,7 +165,6 @@
 (if window-system
     (progn
       (fonts-whitelist-set "JetBrainsMono")
-      (fonts-enable-ligatures)
       (colorscheme-whitelist-set 'doom-one-light)
       ;; the doom-acario-dark theme uses "Monospace Serif" as the font for
       ;; comments, and I'd prefer JetBrainsMono (no italics).
