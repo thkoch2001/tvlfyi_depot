@@ -125,21 +125,36 @@ CO2ScrubberRating ← DebinList 0 >_lifeSupportRating ⊢
 •Out "Day 3.2: "∾•Fmt (OxygenGeneratorRating×CO2ScrubberRating) day3Input
 
 #
+# 2021-12-06
+#
+
+day6ExampleInput ← ⟨3,4,3,1,2⟩
+day6Input ← ReadDec¨ ',' SplitOn ⊑ReadInput 6
+
+LanternfishPopulation ← {+´ (1⊸⌽+(⊑×((6⊸=)∘↕∘≠)))⍟𝕨 9↑≠¨⊔ 𝕩}
+
+! 26 = 18 LanternfishPopulation day6ExampleInput
+! 5934 = 80 LanternfishPopulation day6ExampleInput
+
+•Out "Day 6.1: "∾•Fmt 80 LanternfishPopulation day6Input
+•Out "Day 6.2: "∾•Fmt 256 LanternfishPopulation day6Input
+
+#
 # 2021-12-07
 #
 
 # part 1
 
-day6ExampleInput ← ⟨16,1,2,0,4,2,7,1,2,14⟩
-day6Input ← ReadDec¨ ','  SplitOn ⊑ReadInput 6
+day7ExampleInput ← ⟨16,1,2,0,4,2,7,1,2,14⟩
+day7Input ← ReadDec¨ ','  SplitOn ⊑ReadInput 7
 
 PossiblePositions ← (⌊´+⟜(↕1⊸+)⌈´)
 FuelConsumption ← +˝∘|∘(-⌜)
 _lowestFuelPossible ← {⌊´∘(𝔽⟜PossiblePositions)˜ 𝕩}
 
-! 37 = FuelConsumption _lowestFuelPossible day6ExampleInput
+! 37 = FuelConsumption _lowestFuelPossible day7ExampleInput
 
-•Out "Day 7.1: "∾•Fmt FuelConsumption _lowestFuelPossible day6Input
+•Out "Day 7.1: "∾•Fmt FuelConsumption _lowestFuelPossible day7Input
 
 # part 2
 
@@ -147,9 +162,9 @@ TriNum ← 1⊸+×÷⟜2
 
 FuelConsumption2 ← +˝∘(TriNum¨)∘|∘(-⌜)
 
-! 168 = FuelConsumption2 _lowestFuelPossible day6ExampleInput
+! 168 = FuelConsumption2 _lowestFuelPossible day7ExampleInput
 
-•Out "Day 7.2: "∾•Fmt FuelConsumption2 _lowestFuelPossible day6Input
+•Out "Day 7.2: "∾•Fmt FuelConsumption2 _lowestFuelPossible day7Input
 
 #
 # 2021-12-09
