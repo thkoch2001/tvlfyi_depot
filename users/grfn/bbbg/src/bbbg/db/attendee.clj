@@ -6,7 +6,8 @@
    honeysql-postgres.helpers
    [honeysql.helpers
     :refer
-    [merge-group-by merge-join merge-left-join merge-select merge-where]]))
+    [merge-group-by merge-join merge-left-join merge-select merge-where]]
+   [bbbg.util.core :as u]))
 
 (defn search
   ([q] (search {:select [:attendee.*] :from [:attendee]} q))
@@ -40,6 +41,19 @@
                        :event_attendee.rsvpd_attending
                        [:not :event_attendee.attended]])
          :no-shows]))))
+
+(defn upsert-all!
+  [db attendees]
+  (db/list
+   db
+   {:insert-into :attendee
+    :values (map #(->> %
+                       (db/process-key-map :attendee)
+                       (u/map-keys keyword))
+                 attendees)
+    :upsert {:on-conflict [:meetup-user-id]
+             :do-update-set [:meetup-name]}
+    :returning [:id :meetup-user-id]}))
 
 (comment
   (def db (:db bbbg.core/system))
