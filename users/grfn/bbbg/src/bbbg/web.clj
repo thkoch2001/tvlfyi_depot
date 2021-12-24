@@ -20,9 +20,11 @@
    [ring.middleware.keyword-params :refer [wrap-keyword-params]]
    [ring.middleware.multipart-params :refer [wrap-multipart-params]]
    [ring.middleware.params :refer [wrap-params]]
+   [ring.middleware.resource :refer [wrap-resource]]
    [ring.middleware.session :refer [wrap-session]]
    [ring.middleware.session.cookie :refer [cookie-store]]
-   [ring.util.response :refer [content-type resource-response response]])
+   [ring.util.response :refer [content-type resource-response response]]
+   [clojure.java.io :as io])
   (:import
    java.util.Base64))
 
@@ -70,13 +72,13 @@
 (defn app-routes [env]
   (routes
    (GET "/main.css" []
-     (-> (response stylesheet)
+     (-> (response
+          (str
+           "\n/* begin base.css */\n"
+           (slurp (io/resource "base.css"))
+           "\n/* end base.css */\n"
+           stylesheet))
          (content-type "text/css")))
-   (GET "/main.js" []
-     (-> (resource-response "main.js")
-         (content-type "text/javascript")))
-   (GET "/robots.txt" []
-     (resource-response "robots.txt"))
 
    (attendees/attendees-routes env)
    (attendee-checks/attendee-checks-routes env)
@@ -86,6 +88,7 @@
 
 (defn middleware [app env]
   (-> app
+      (wrap-resource "public")
       wrap-dynamic-auth
       (wrap-discord-auth env)
       wrap-keyword-params
