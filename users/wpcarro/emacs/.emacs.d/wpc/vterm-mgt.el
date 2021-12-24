@@ -133,11 +133,10 @@ If for whatever reason, the state of `vterm-mgt--instances' is corrupted and
   (interactive)
   (vterm-mgt-reconcile-state)
   (switch-to-buffer
-   (buffer-find-or-create
-    (completing-read "Switch to vterm: "
-                     (->> vterm-mgt--instances
-                          cycle-to-list
-                          (-map #'buffer-name))))))
+   (completing-read "Switch to vterm: "
+                    (->> vterm-mgt--instances
+                         cycle-to-list
+                         (-map #'buffer-name)))))
 
 (provide 'vterm-mgt)
 ;;; vterm-mgt.el ends here
