@@ -16,6 +16,24 @@
       "message": "worth checking this in CI too?\n\nGuess that\u0027d be depotfmt\u0027s job...",
       "revId": "a113875bceacd8dfd5868e9d15bd1196f29d6a42",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4142d68_5a6b8c28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-24T18:36:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0152d064_93bc9520",
+      "revId": "a113875bceacd8dfd5868e9d15bd1196f29d6a42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
