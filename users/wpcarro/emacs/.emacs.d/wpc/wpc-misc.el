@@ -191,6 +191,9 @@
 ;; ensure code wraps at 80 characters by default
 (setq-default fill-column 80)
 
+;; render tabs 2x-chars wide
+(setq tab-width 2)
+
 (put 'narrow-to-region 'disabled nil)
 
 ;; trim whitespace on save
