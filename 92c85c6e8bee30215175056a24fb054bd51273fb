@@ -52,6 +52,24 @@
       "parentUuid": "95e6fb34_8f6d78d6",
       "revId": "92c85c6e8bee30215175056a24fb054bd51273fb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f20695e_a9a05963",
+        "filename": "ops/modules/auto-deploy.nix",
+        "patchSetId": 30
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-24T08:19:32Z",
+      "side": 1,
+      "message": "oh sorry, I think I meant something else: how does the timer get activated by systemd after reboots? (assuming that it is already present in the system derivation and linked into /etc).\n\ne.g. I usually use \"OnCalender\" for activation on my own hosts, but if that is not used, and the timer only restarts itself automatically after an initial timer activation, it is afaik not automatically activated, but I don\u0027t know if timer activation information is persisted across reboots (in this case no change is necessary).",
+      "parentUuid": "5b388598_42c9cfda",
+      "revId": "92c85c6e8bee30215175056a24fb054bd51273fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
