@@ -23,11 +23,6 @@
 
 ;; TODO: Support jumping to go source code for fmt.Println, etc.
 
-;; I'm unsure if this belongs in wpc-golang.el because it's a generic setting,
-;; but because go is the first languages I've encountered that enforces tab
-;; usage (I think) I'm configuring it.
-(setq-default tab-width 4)
-
 (use-package go-mode
   :config
   (setq gofmt-command "goimports")
@@ -39,8 +34,8 @@
    "M-." #'godef-jump)
   ;; Support calling M-x `compile'.
   (add-hook 'go-mode-hook (lambda ()
-                            (set (make-local-variable 'compile-command)
-                                 "go build -v")))
+                            (setq-local tab-width 2)
+                            (setq-local compile-command "go build -v")))
   (macros-add-hook-before-save 'go-mode-hook #'gofmt-before-save))
 
 (provide 'wpc-golang)
