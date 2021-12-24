@@ -23,18 +23,21 @@
 (defn global-nav []
   [:nav.global-nav
    [:ul
+    [:li [:a {:href "/events"}
+          "Events"]]
     (when *authenticated?*
       [:li [:a {:href "/attendees"}
             "Attendees"]])
-    [:li [:a {:href "/events"}
-          "Events"]]
-    (if *authenticated?*
-      [:li [:form {:method :post
-                   :action "/auth/sign-out"}
-            [:input {:type "submit"
-                     :value "Sign Out"}]]]
-      [:li [:a {:href "/auth/discord"}
-            "Sign In"]])]])
+    [:li.spacer]
+    [:li
+     (if *authenticated?*
+       [:form.link-form
+        {:method :post
+         :action "/auth/sign-out"}
+        [:input {:type "submit"
+                 :value "Sign Out"}]]
+       [:a {:href "/auth/discord"}
+        "Sign In"])]]])
 
 (defn render-page [opts & body]
   (let [[{:keys [title]} body]
