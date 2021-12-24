@@ -1,9 +1,10 @@
 ;; -*- eval: (rainbow-mode) -*-
 (ns bbbg.styles
   (:require
+   [garden.color :as color]
    [garden.compiler :refer [compile-css]]
    [garden.def :refer [defstyles]]
-   [garden.selectors :refer [attr= visited hover active & descendant]]))
+   [garden.selectors :refer [& active attr= descendant hover visited]]))
 
 (def black "#342e37")
 
@@ -23,9 +24,9 @@
 
 (def blue "#026fb1")
 
-(def green "#BEEF9E")
+(def green "#87E24B")
 
-(def contextual
+(def contextual-colors
   {:success green
    :info blue
    :warning yellow
@@ -73,9 +74,26 @@
      :cursor :pointer}
     link-conditional-styles]])
 
+(defstyles flash
+  [:.flash-messages
+   {:width "800px"
+    :margin "1rem auto"}]
+
+  [:.flash-message
+   {:padding "1rem 1.5rem"
+    :border "1px solid"
+    :margin-bottom "1rem"}]
+
+  (for [[context color] contextual-colors]
+    [(& (keyword (str ".flash-" (name context))))
+     {:border-color color
+      :background-color (color/lighten color 30)
+      :border-radius "5px"}]))
+
 (defstyles styles
   global-nav
   link-form
+  flash
 
   [:body
    {:color black}]
