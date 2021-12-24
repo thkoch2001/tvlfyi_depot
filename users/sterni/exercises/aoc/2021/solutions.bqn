@@ -328,3 +328,32 @@ FiveByFiveMap ← {(9⊸|)⌾(-⟜1) ∾(<𝕩)+ +⌜˜↕5}
 ! 315 = LowestRiskLevel FiveByFiveMap day15ExampleInput
 
 •Out "Day 15.2: "∾•Fmt LowestRiskLevel FiveByFiveMap day15Input
+
+#
+# 2021-12-20
+#
+
+ParsePic ← (⋈⟜0)∘('#'⊸=)∘>
+
+day20ExampleAlgo ← '#'="..#.#..#####.#.#.#.###.##.....###.##.#..###.####..#####..#....#..#..##..###..######.###...####..#..#####..##..#.#####...##.#.#..#.##..#.#......#.###.######.###.####...#.##.##..#..#..#####.....#.#....###..#.##......#.....#..#..#..##..#...##.######.####.####.#.#...#.......#..#.#.#...####.##.#......#..#...##.#.##..#...##.#.##..###.#......#.#.......#.#.#.####.###.##...#.....####.#..#..#.##.#....##..#.####....##...##..#...#......#.#.......#.......##..####..#...#.#.#...##..#.#..###..#####........#..####......#..#"
+day20ExamplePic ← ParsePic ⟨"#..#.", "#....", "##..#", "..#..", "..###"⟩
+day20Input ← ReadInput 20
+day20Algo ← '#'=⊑day20Input
+day20Pic ← ParsePic 2↓day20Input
+
+GrowAxis ← {(⊢ (-1)⊸⌽∘∾ (⥊⟜𝕨)∘(2˙⌾⊑)∘≢) 𝕩}
+Grow ← {𝕨 GrowAxis 𝕨 GrowAxis˘ 𝕩}
+
+Enhance ← {
+  inf ← 1⊑𝕩
+  npic ← ((⊑⟜𝕨)∘DebinList∘⥊)˘˘ 3‿3↕ (inf⊸Grow)⍟2 ⊑𝕩
+  ninf ← 𝕨⊑˜511×inf
+  npic⋈ninf
+}
+_EnhancedPixelCount ← {+´⥊⊑ (𝕨⊸Enhance)⍟𝕗 𝕩}
+
+! 35 = day20ExampleAlgo 2 _EnhancedPixelCount day20ExamplePic
+! 3351 = day20ExampleAlgo 50 _EnhancedPixelCount day20ExamplePic
+
+•Out "Day 20.1: "∾•Fmt day20Algo 2 _EnhancedPixelCount day20Pic
+•Out "Day 20.2: "∾•Fmt day20algo 50 _EnhancedPixelCount day20Pic
