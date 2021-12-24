@@ -4,7 +4,7 @@
    [bbbg.db.event :as db.event]
    [bbbg.event :as event]
    [bbbg.handlers.core :refer [authenticated? page-response]]
-   [bbbg.meetup.import :refer [import-data!]]
+   [bbbg.meetup.import :refer [import-attendees!]]
    [bbbg.util.display :refer [format-date]]
    [bbbg.util.time :as t]
    [bbbg.views.flash :as flash]
@@ -24,6 +24,13 @@
        [:a {:href (str "/events/" (::event/id event))}
         (format-date (::event/date event))]])]])
 
+(defn- import-attendee-list-form-group []
+  [:div.form-group
+   [:label "Import Attendee List"
+    [:br]
+    [:input {:type :file
+             :name :attendees}]]])
+
 (defn event-page [{:keys [event]}]
   [:div.event-page
    [:h1 (format-date (::event/date event))]
@@ -39,11 +46,7 @@
     [:form {:method :post
             :action (str "/events/" (::event/id event) "/attendees")
             :enctype "multipart/form-data"}
-     [:div.form-group
-      [:label "Import Attendee List"
-       [:br]
-       [:input {:type :file
-                :name :attendees}]]]
+     (import-attendee-list-form-group)
      [:div.form-group
       [:input {:type :submit
                :value "Import"}]]]]])
@@ -51,13 +54,16 @@
 (defn event-form
   ([] (event-form {}))
   ([event]
-   [:form {:method "POST" :action "/events"}
+   [:form {:method "POST"
+           :action "/events"
+           :enctype "multipart/form-data"}
     [:div.form-group
      [:label "Date"
       [:input {:type "date"
                :id "date"
                :name "date"
                :value (str (::event/date event))}]]]
+    (import-attendee-list-form-group)
     [:div.form-group
      [:input {:type "submit"
               :value "Create Event"}]]]))
@@ -69,6 +75,27 @@
         (page-response
          (events-index {:events events
                         :authenticated? (authenticated? request)}))))
+
+    (GET "/new" [date]
+      (page-response
+       {:title "New Event"}
+       (event-form {::event/date date})))
+
+    (POST "/" [date attendees]
+      (let [event (db.event/create! db {::event/date date})
+            message
+            (if attendees
+              (let [num-attendees
+                    (import-attendees! db
+                                       (::event/id event)
+                                       (:tempfile attendees))]
+                (format "Event created with %d attendees"
+                        num-attendees))
+              "Event created")]
+        (-> (str "/signup-forms/" (::event/id event))
+            redirect
+            (flash/add-flash {:flash/type :success
+                              :flash/message message}))))
 
     (context "/:id" [id :<< as-uuid]
       (GET "/" []
@@ -82,24 +109,12 @@
           (not-found "Event Not Found")))
 
       (POST "/attendees" [attendees]
-        (let [num-imported (import-data! db id (:tempfile attendees))]
+        (let [num-imported (import-attendees! db id (:tempfile attendees))]
           (-> (redirect (str "/events/" id))
               (flash/add-flash
                #:flash{:type :success
                        :message (format "Successfully imported %d attendees"
-                                        num-imported)})))))
-
-    (GET "/new" [date]
-      (page-response
-       {:title "New Event"}
-       (event-form {::event/date date})))
-
-    (POST "/" [date]
-      (let [event (db.event/create! db {::event/date date})]
-        (-> (str "/signup-forms/" (::event/id event))
-            redirect
-            (flash/add-flash {:flash/type :success
-                              :flash/message "Event Created"}))))))
+                                        num-imported)})))))))
 
 (comment
   (def db (:db bbbg.core/system))
