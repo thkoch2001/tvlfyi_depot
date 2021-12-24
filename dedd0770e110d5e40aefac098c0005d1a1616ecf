@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "549be8cb_6387f980",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-24T10:17:34Z",
+      "side": 1,
+      "message": "Marking for submit, last patchset was by zseri and reviewed by me.",
+      "revId": "dedd0770e110d5e40aefac098c0005d1a1616ecf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
