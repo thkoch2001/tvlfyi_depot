@@ -16,6 +16,24 @@
       "message": "ok, I don\u0027t know how to fix the next error tho...\n\n    Resolved derivation: \u0027/nix/store/0y692kbxqmc31khrjrdw932l9z75gj5d-google.golang.org_genproto-structure.json.drv\u0027 -\u003e \u0027/nix/store/x043ppiv9mv1a89zmjxsidy40wfw4zk0-google.golang.org_genproto-structure.json.drv\u0027...\n    building \u0027/nix/store/x043ppiv9mv1a89zmjxsidy40wfw4zk0-google.golang.org_genproto-structure.json.drv\u0027...\n    Resolved derivation: \u0027/nix/store/szbi45gk2x9p4rrsilmwmcfzl5rs4pks-golang.org_x_text-structure.json.drv\u0027 -\u003e \u0027/nix/store/crcis5b6dj8ab48iifj20prmh33m5763-golang.org_x_text-structure.json.drv\u0027...\n    building \u0027/nix/store/crcis5b6dj8ab48iifj20prmh33m5763-golang.org_x_text-structure.json.drv\u0027...\n    error: value is null while a list was expected\n\n       at /home/zseri/devel/depot/nix/buildGo/default.nix:35:22:\n\n           34|\n           35|   srcBasename \u003d src: elemAt (match \"([a-z0-9]{32}\\-)?(.*\\.go)\" (baseNameOf src)) 1;\n             |                      ^\n           36|   srcCopy \u003d path: src: \"cp ${src} $out/${path}/${srcBasename src}\";\n\n       … while evaluating \u0027srcBasename\u0027",
       "revId": "435d2ed79931a6f587b5dde1d2b090a5a7fb963c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dabecda_4c3a485d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-24T08:08:29Z",
+      "side": 1,
+      "message": "fixed in https://cl.tvl.fyi/c/depot/+/4551, because it only happens when building with contentAddressedByDefault \u003d true;",
+      "parentUuid": "6b9a9e9b_42701d75",
+      "revId": "435d2ed79931a6f587b5dde1d2b090a5a7fb963c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
