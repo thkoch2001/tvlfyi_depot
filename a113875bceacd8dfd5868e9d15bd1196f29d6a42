@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0152d064_93bc9520",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-24T18:32:55Z",
+      "side": 1,
+      "message": "worth checking this in CI too?\n\nGuess that\u0027d be depotfmt\u0027s job...",
+      "revId": "a113875bceacd8dfd5868e9d15bd1196f29d6a42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
