@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74a419ae_b0dbd834",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-24T12:06:57Z",
+      "side": 1,
+      "message": "bikeshed: maybe self?",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 3
+      },
+      "revId": "7143ffeac408e109b583aa1e1bb5696cd311d9b1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
