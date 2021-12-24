@@ -99,7 +99,8 @@
      (map (partial row->event-attendee
                    {::event/id event-id
                     :meetup-id->attendee-id meetup-id->attendee-id})
-          rows))))
+          rows))
+    (count rows)))
 
 ;;; Spreadsheet columns:
 ;;;
