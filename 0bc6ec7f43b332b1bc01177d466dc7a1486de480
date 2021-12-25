@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d04b361_34cb6880",
+        "filename": "ops/modules/monorepo-gerrit.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-25T23:28:43Z",
+      "side": 1,
+      "message": "Keycloak",
+      "range": {
+        "startLine": 97,
+        "startChar": 39,
+        "endLine": 97,
+        "endChar": 40
+      },
+      "revId": "0bc6ec7f43b332b1bc01177d466dc7a1486de480",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
