@@ -50,15 +50,7 @@ in {
     sudo.wheelNeedsPassword = false;
   };
 
-  programs = {
-    fish.enable = true;
-    ssh = {
-      startAgent = true;
-      extraConfig = ''
-        AddKeysToAgent yes
-      '';
-    };
-  };
+  programs = wpcarro.common.programs;
 
   # I won't have an Emacs server running on diogenes, and I'll likely be in an
   # SSH session from within vterm. As such, Vim is one of the few editors that I
