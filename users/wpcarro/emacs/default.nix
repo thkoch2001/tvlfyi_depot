@@ -40,13 +40,15 @@ let
       vterm
       base16-theme
       password-store
-      clipmon # TODO: Prefer an Emacs client for clipmenud.
+      # TODO(wpcarro): Prefer an Emacs client for clipmenud.
+      clipmon
       evil
       evil-collection
       evil-commentary
       evil-surround
       key-chord
-      add-node-modules-path # TODO: Assess whether or not I need this with Nix.
+      # TODO(wpcarro): Assess whether or not I need this with Nix.
+      add-node-modules-path
       web-mode
       rjsx-mode
       tide
@@ -86,13 +88,15 @@ let
       request
       pcre2el
       helpful
-      exec-path-from-shell # TODO: Determine if Nix solves this problem.
+      # TODO(wpcarro): Determine if Nix solves this problem.
+      exec-path-from-shell
       yasnippet
       projectile
       deadgrep
       counsel
       counsel-projectile
-      engine-mode # TODO: Learn what this is.
+      # TODO(wpcarro): Learn what this is.
+      engine-mode
       eglot
       dap-mode
       lsp-ui
@@ -119,7 +123,7 @@ let
     name = "emacs-vendor";
   };
 
-  # TODO: byte-compile these by packaging each as an Elisp library.
+  # TODO(wpcarro): byte-compile these by packaging each as an Elisp library.
   wpcDir = path {
     path = ./.emacs.d/wpc;
     name = "emacs-libs";
@@ -138,7 +142,7 @@ let
   loadPath = concatStringsSep ":" [
     wpcDir
     vendorDir
-    # TODO: Explain why the trailing ":" is needed.
+    # TODO(wpcarro): Explain why the trailing ":" is needed.
     "${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
   ];
 
