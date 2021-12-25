@@ -94,12 +94,13 @@ in {
         html = "<a href=\"https://cl.tvl.fyi/$1\">cl/$1</a>";
       };
 
-      # Configures integration with CAS, which then integrates with a variety
-      # of backends.
+      # Configures integration with Keycloak, which then integrates with a
+      # variety of backends.
       auth.type = "OAUTH";
-      plugin.gerrit-oauth-provider-cas-oauth = {
-        root-url = "https://login.tvl.fyi";
-        client-id = "OAUTH-TVL-gerrit-Fv0d8Aizz5";
+      plugin.gerrit-oauth-provider-keycloak-oauth = {
+        root-url = "https://auth.tvl.fyi";
+        realm = "TVL";
+        client-id = "gerrit";
         # client-secret is set in /var/lib/gerrit/etc/secure.config.
       };
 
