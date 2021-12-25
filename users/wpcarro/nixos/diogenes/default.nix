@@ -50,11 +50,14 @@ in {
     sudo.wheelNeedsPassword = false;
   };
 
-  programs.ssh = {
-    startAgent = true;
-    extraConfig = ''
+  programs = {
+    fish.enable = true;
+    ssh = {
+      startAgent = true;
+      extraConfig = ''
       AddKeysToAgent yes
     '';
+    };
   };
 
   environment.systemPackages = wpcarro.common.shell-utils;
