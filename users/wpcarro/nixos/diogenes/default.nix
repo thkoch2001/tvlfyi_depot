@@ -55,8 +55,8 @@ in {
     ssh = {
       startAgent = true;
       extraConfig = ''
-      AddKeysToAgent yes
-    '';
+        AddKeysToAgent yes
+      '';
     };
   };
 
