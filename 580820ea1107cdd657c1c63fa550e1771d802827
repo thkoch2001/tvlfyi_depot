@@ -22,6 +22,30 @@
       },
       "revId": "580820ea1107cdd657c1c63fa550e1771d802827",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f4fe68e_dc823197",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 14
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-25T21:06:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f25a3e0_01bf9c16",
+      "range": {
+        "startLine": 580,
+        "startChar": 33,
+        "endLine": 580,
+        "endChar": 37
+      },
+      "revId": "580820ea1107cdd657c1c63fa550e1771d802827",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
