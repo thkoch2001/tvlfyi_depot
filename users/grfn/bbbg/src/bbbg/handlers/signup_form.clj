@@ -25,15 +25,15 @@
      :disabled "disabled"}
     [:input#event-id {:type "hidden" :name "event_id" :value (::event/id event)}]
     [:input#attendee-id {:type "hidden" :name "attendee_id"}]
-    [:label "Name"
-     [:input#name-autocomplete
-      {:type "search"
-       :name "name"
-       :spellcheck "false"
-       :autocorrect "off"
-       :autocomplete "off"
-       :autocapitalize "off"
-       :maxlength "2048"}]]
+    [:input#name-autocomplete
+     {:type "search"
+      :title "Name"
+      :name "name"
+      :spellcheck "false"
+      :autocorrect "off"
+      :autocomplete "off"
+      :autocapitalize "off"
+      :maxlength "2048"}]
     [:input {:type "submit"
              :value "Sign In"
              :disabled "disabled"}]]])
