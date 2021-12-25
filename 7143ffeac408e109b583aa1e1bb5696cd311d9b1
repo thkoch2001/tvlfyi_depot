@@ -46,6 +46,30 @@
       },
       "revId": "7143ffeac408e109b583aa1e1bb5696cd311d9b1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03e88296_0a7204aa",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-25T10:45:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b257d165_b95355a5",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 3
+      },
+      "revId": "7143ffeac408e109b583aa1e1bb5696cd311d9b1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
