@@ -239,6 +239,13 @@ in {
         owner = "git";
       };
 
+      gerrit-secrets = {
+        file = secretFile "gerrit-secrets";
+        path = "/var/lib/gerrit/etc/secure.config";
+        owner = "git";
+        mode = "0400";
+      };
+
       clbot-ssh = {
         file = secretFile "clbot-ssh";
         owner = "clbot";
