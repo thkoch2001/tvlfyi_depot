@@ -24,6 +24,7 @@ in {
   "gerrit-queue.age" = default;
   "grafana.age" = default;
   "irccat.age" = default;
+  "keycloak-db.age" = default;
   "nix-cache-priv.age" = default;
   "nix-cache-pub.age" = default;
   "owothia.age" = default;
