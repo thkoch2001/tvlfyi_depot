@@ -1,4 +1,6 @@
-// TODO: make this no_std if possible
+#![no_std]
+#![forbid(clippy::cast_ptr_alignment, trivial_casts, unconditional_recursion)]
+#![deny(clippy::as_conversions)]
 
 mod hbm;
 pub use hbm::HalfBytesMask;
@@ -34,7 +36,7 @@ impl ScannerInput for &mut [u8] {
     fn split_to(&mut self, at: usize) -> Self {
         // Lifetime dance taken from `impl Write for &mut [u8]`.
         // Taken from crate `std`.
-        let (a, b) = std::mem::take(self).split_at_mut(at);
+        let (a, b) = core::mem::take(self).split_at_mut(at);
         *self = b;
         a
     }
@@ -114,6 +116,8 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    extern crate alloc;
+    use alloc::{vec, vec::Vec};
 
     #[test]
     fn simple_nix2() {

@@ -1,8 +1,7 @@
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct HalfBytesMask(pub [u8; 16]);
 
-// fires erronously
-#[allow(clippy::zero_prefixed_literal)]
+#[allow(clippy::as_conversions, clippy::zero_prefixed_literal)]
 impl HalfBytesMask {
     pub const B32_REVSHA256: HalfBytesMask =
         HalfBytesMask([0, 0, 0, 0, 0, 0, 255, 3, 0, 0, 0, 0, 222, 127, 207, 7]);

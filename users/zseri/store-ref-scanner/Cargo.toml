@@ -13,4 +13,4 @@ proc_unroll = "0.1"
 [dev-dependencies.proptest]
 version = "1.0"
 default-features = false
-features = ["std"]
+features = ["alloc"]
