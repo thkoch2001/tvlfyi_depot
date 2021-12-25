@@ -311,6 +311,15 @@
   :config
   (paradox-enable))
 
+;; render emojis in Emacs 🕺
+(use-package emojify
+  :config
+  (add-hook 'after-init-hook #'global-emojify-mode)
+  (defun wpc-misc-copy-emoji ()
+    "Select an emoji from the completing-read menu."
+    (interactive)
+    (clipboard-copy (emojify-completing-read "Copy: "))))
+
 ;; Start the Emacs server
 (when (not (server-running-p))
   (server-start))

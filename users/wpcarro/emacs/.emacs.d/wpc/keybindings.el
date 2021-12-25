@@ -37,6 +37,7 @@
 (require 'bookmark)
 (require 'tvl)
 (require 'window-manager)
+(require 'wpc-misc)
 
 ;; Note: The following lines must be sorted this way.
 (setq evil-want-integration t)
@@ -175,6 +176,7 @@
 (keybindings-exwm "<M-tab>" #'window-manager-next-workspace)
 (keybindings-exwm "<M-S-iso-lefttab>" #'window-manager-prev-workspace)
 (keybindings-exwm "C-M-\\" #'ivy-pass)
+(keybindings-exwm "s-e" #'wpc-misc-copy-emoji)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Workspaces

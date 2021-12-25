@@ -28,6 +28,7 @@ let
     ]) ++
 
     (with epkgs.elpaPackages; [
+      emojify
       exwm
     ]) ++
 
