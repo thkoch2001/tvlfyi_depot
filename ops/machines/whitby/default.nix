@@ -23,6 +23,7 @@ in {
     "${depot.path}/ops/modules/tvl-slapd/default.nix"
     "${depot.path}/ops/modules/tvl-sso/default.nix"
     "${depot.path}/ops/modules/www/atward.tvl.fyi.nix"
+    "${depot.path}/ops/modules/www/auth.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/b.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/cache.tvl.su.nix"
     "${depot.path}/ops/modules/www/cl.tvl.fyi.nix"
@@ -210,6 +211,7 @@ in {
       gerrit-queue.file = secretFile "gerrit-queue";
       grafana.file = secretFile "grafana";
       irccat.file = secretFile "irccat";
+      keycloak-db.file = secretFile "keycloak-db";
       nix-cache-priv.file = secretFile "nix-cache-priv";
       owothia.file = secretFile "owothia";
       panettone.file = secretFile "panettone";
@@ -417,8 +419,9 @@ in {
   services.postgresqlBackup = {
     enable = true;
     databases = [
-      "tvldb"
+      "keycloak"
       "panettone"
+      "tvldb"
     ];
   };
 
@@ -546,8 +549,38 @@ in {
       }];
     };
   };
+
   # Contains GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET.
   systemd.services.grafana.serviceConfig.EnvironmentFile = "/run/agenix/grafana";
+
+  services.keycloak = {
+    enable = true;
+    httpPort = "5925"; # "kycl"
+    frontendUrl = "https://auth.tvl.fyi/auth/";
+
+    database = {
+      type = "postgresql";
+      passwordFile = "/run/agenix/keycloak-db";
+      createLocally = false;
+    };
+
+    # Configure Keycloak to look at forwarded headers from the reverse
+    # proxy.
+    extraConfig = {
+      "subsystem=undertow" = {
+        "server=default-server" = {
+          "http-listener=default" = {
+            proxy-address-forwarding = "true";
+          };
+        };
+      };
+    };
+  };
+
+  # Allow Keycloak access to the JVM module by forcing in the JVM
+  # configuration
+  systemd.services.keycloak.environment.PREPEND_JAVA_OPTS =
+    "--add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED";
 
   security.sudo.extraRules = [
     {
