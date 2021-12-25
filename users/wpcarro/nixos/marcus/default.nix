@@ -92,15 +92,8 @@ in {
     };
   };
 
-  programs = {
-    fish.enable = true;
+  programs = wpcarro.common.programs // {
     light.enable = true;
-    ssh = {
-      startAgent = true;
-      extraConfig = ''
-        AddKeysToAgent yes
-      '';
-    };
   };
 
   environment.variables = {
