@@ -16,6 +16,24 @@
       "message": "What is the purpose of the `uchitel/registry.dat` file?",
       "revId": "8561f5b650bc5b08c5aaf6dd8c4a442650876299",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d54735d_7201f6a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-25T05:31:08Z",
+      "side": 1,
+      "message": "or better: why is it necessary to put the `registry.dat` file into the project (I think if it works, `third_party` would make more sense as location), and not reuse the one from nixpkgs?",
+      "parentUuid": "a013ab74_8dc042d1",
+      "revId": "8561f5b650bc5b08c5aaf6dd8c4a442650876299",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
