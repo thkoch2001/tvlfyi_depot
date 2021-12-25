@@ -69,15 +69,7 @@ in {
 
   environment.systemPackages = wpcarro.common.shell-utils;
 
-  services = {
-    depot.automatic-gc = {
-      enable = true;
-      interval = "1 hour";
-      diskThreshold = 16; # GiB
-      maxFreed = 10; # GiB
-      preserveGenerations = "14d";
-    };
-
+  services = wpcarro.common.services // {
     depot.quassel = {
       enable = true;
       acmeHost = "quassel.wpcarro.dev";

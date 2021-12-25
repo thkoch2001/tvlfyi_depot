@@ -34,7 +34,7 @@ in {
 
   time.timeZone = "America/New_York";
 
-  services = {
+  services = wpcarro.common.services // {
     xserver = {
       enable = true;
       libinput = {
@@ -60,14 +60,6 @@ in {
         name = "exwm";
         start = "${wpcarrosEmacs}/bin/wpcarros-emacs";
       };
-    };
-
-    depot.automatic-gc = {
-      enable = true;
-      interval = "1 hour";
-      diskThreshold = 16; # GiB
-      maxFreed = 10; # GiB
-      preserveGenerations = "14d";
     };
   };
 
