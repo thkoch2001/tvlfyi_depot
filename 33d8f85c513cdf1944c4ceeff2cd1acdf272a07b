@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7621f61e_1005335f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-25T22:53:20Z",
+      "side": 1,
+      "message": "This is now working. Note that it required an update in the notesdb of All-Users.",
+      "revId": "33d8f85c513cdf1944c4ceeff2cd1acdf272a07b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
