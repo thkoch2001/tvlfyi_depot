@@ -7,16 +7,6 @@ self: super: {
   # random ecosystem breakage with the newer versions.
   nix = super.nix_2_3;
 
-  # Required for apereo-cas
-  # TODO(lukegb): Document why?
-  gradle_6 = self.callPackage (super.gradleGen {
-    version = "6.5.1";
-    nativeVersion = "0.22-milestone-3";
-    sha256 = "0jmmipjh4fbsn92zpifa5cqg5ws2a4ha0s4jzqhrg4zs542x79sh";
-  }) {
-    java = self.jdk11;
-  };
-
   clang-tools_11 = self.clang-tools.override {
     llvmPackages = self.llvmPackages_11;
   };
