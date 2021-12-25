@@ -357,3 +357,23 @@ _EnhancedPixelCount ← {+´⥊⊑ (𝕨⊸Enhance)⍟𝕗 𝕩}
 
 •Out "Day 20.1: "∾•Fmt day20Algo 2 _EnhancedPixelCount day20Pic
 •Out "Day 20.2: "∾•Fmt day20algo 50 _EnhancedPixelCount day20Pic
+
+#
+# 2021-12-25
+#
+
+day25Input ← ".>v" ⊐ > ReadInput 25
+day25ExampleInput ← ".>v"⊐∘‿10⥊"v...>>.vv>.vv>>.vv..>>.>v>...v>>v>>.>.v.v>v.vv.v..>.>>..v....vv..>.>v.v.v..>>v.v....v..v.>"
+
+Xor ← (¬⊸∧∨∧⟜¬)
+MoveHerd ← {(𝕩∧𝕩≠𝕨)+𝕨× (𝕨=𝕩) (Xor⟜(1⊸⌽)∨⊢) (0=𝕩)∧(-1)⌽𝕨=𝕩}
+
+_fixCount ← {
+  1 𝕊 𝕩;
+  𝕩 ≡◶⟨(𝕨+1)⊸𝕊, 𝕨˙⟩ 𝔽 𝕩
+}
+
+MoveAllHerds ← (2⊸MoveHerd)∘(1⊸MoveHerd˘)
+
+! 58 = MoveAllHerds _fixCount day25ExampleInput
+•Out "Day 25.1: "∾•Fmt MoveAllHerds _fixCount day25Input
