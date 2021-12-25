@@ -211,6 +211,27 @@
     [(& active)
      {:background-color (color/lighten blue 30)}]]])
 
+(defstyles signup-page
+  [:.signup-page
+   {:margin "1rem"}
+   (not-mobile
+    {:width content-width
+     :margin "1rem auto"})]
+
+  [:#signup-form
+   {:display :flex
+    :flex-direction :row
+    :width "100%"}
+
+   [:*
+    {:flex 1}]
+
+   [:*+*
+    {:margin-left "1rem"}]
+
+   [(attr= "type" "submit")
+    {:flex 0}]])
+
 (defstyles styles
   forms
   tables
@@ -219,6 +240,7 @@
   search-form
   flash
   home-page
+  signup-page
 
   [:body
    {:color black}]
