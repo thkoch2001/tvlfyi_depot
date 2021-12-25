@@ -1,6 +1,25 @@
 { pkgs, ... }:
 
 {
+  programs = {
+    fish.enable = true;
+
+    ssh = {
+      startAgent = true;
+      extraConfig = ''
+        AddKeysToAgent yes
+      '';
+    };
+
+    git = {
+      enable = true;
+      config = {
+        user.name = "William Carroll";
+        user.email = "wpcarro@gmail.com";
+      };
+    };
+  };
+
   services = {
     depot.automatic-gc = {
       enable = true;
