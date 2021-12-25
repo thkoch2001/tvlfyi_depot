@@ -315,6 +315,10 @@
 (use-package emojify
   :config
   (add-hook 'after-init-hook #'global-emojify-mode)
+  ;; Disable the default styles of:
+  ;; - ascii  :P (When this is enabled, the vim command, :x, renders as 😶)
+  ;; - github :smile:
+  (setq emojify-emoji-styles '(unicode))
   (defun wpc-misc-copy-emoji ()
     "Select an emoji from the completing-read menu."
     (interactive)
