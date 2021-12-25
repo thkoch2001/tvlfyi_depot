@@ -121,7 +121,6 @@ rec {
         features = {
           "default" = [ "std" ];
         };
-        resolvedDefaultFeatures = [ "std" ];
       };
       "camino" = rec {
         crateName = "camino";
@@ -136,75 +135,6 @@ rec {
         ];
         features = {
           "serde1" = [ "serde" ];
-        };
-      };
-      "cfg-if" = rec {
-        crateName = "cfg-if";
-        version = "1.0.0";
-        edition = "2018";
-        sha256 = "1za0vb97n4brpzpv8lsbnzmq5r8f2b0cpqqr0sy8h5bn751xxwds";
-        authors = [
-          "Alex Crichton <alex@alexcrichton.com>"
-        ];
-        features = {
-          "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
-        };
-      };
-      "getrandom" = rec {
-        crateName = "getrandom";
-        version = "0.2.3";
-        edition = "2018";
-        sha256 = "0lr7mnkvnzdh1xxmwmhhbm4gwg29k3m2rzhpjmjm4k2jcfa9kkbz";
-        authors = [
-          "The Rand Project Developers"
-        ];
-        dependencies = [
-          {
-            name = "cfg-if";
-            packageId = "cfg-if";
-          }
-          {
-            name = "libc";
-            packageId = "libc";
-            usesDefaultFeatures = false;
-            target = { target, features }: (target."unix" or false);
-          }
-          {
-            name = "wasi";
-            packageId = "wasi";
-            target = { target, features }: (target."os" == "wasi");
-          }
-        ];
-        features = {
-          "js" = [ "wasm-bindgen" "js-sys" ];
-          "rustc-dep-of-std" = [ "compiler_builtins" "core" "libc/rustc-dep-of-std" "wasi/rustc-dep-of-std" ];
-        };
-        resolvedDefaultFeatures = [ "std" ];
-      };
-      "lazy_static" = rec {
-        crateName = "lazy_static";
-        version = "1.4.0";
-        edition = "2015";
-        sha256 = "0in6ikhw8mgl33wjv6q6xfrb5b9jr16q8ygjy803fay4zcisvaz2";
-        authors = [
-          "Marvin Löbel <loebel.marvin@gmail.com>"
-        ];
-        features = {
-          "spin_no_std" = [ "spin" ];
-        };
-      };
-      "libc" = rec {
-        crateName = "libc";
-        version = "0.2.112";
-        edition = "2015";
-        sha256 = "09bik7pcck869kfr5i9hjhnck0mzpd9v0ijxbqnh8fja6rzx20qv";
-        authors = [
-          "The Rust Project Developers"
-        ];
-        features = {
-          "default" = [ "std" ];
-          "rustc-dep-of-std" = [ "align" "rustc-std-workspace-core" ];
-          "use_std" = [ "std" ];
         };
       };
       "num-traits" = rec {
@@ -224,7 +154,6 @@ rec {
         features = {
           "default" = [ "std" ];
         };
-        resolvedDefaultFeatures = [ "std" ];
       };
       "once_cell" = rec {
         crateName = "once_cell";
@@ -252,7 +181,7 @@ rec {
         features = {
           "default" = [ "std" ];
         };
-        resolvedDefaultFeatures = [ "simd" "std" ];
+        resolvedDefaultFeatures = [ "simd" ];
       };
       "proc-macro-error" = rec {
         crateName = "proc-macro-error";
@@ -390,19 +319,9 @@ rec {
             usesDefaultFeatures = false;
           }
           {
-            name = "lazy_static";
-            packageId = "lazy_static";
-            optional = true;
-          }
-          {
             name = "num-traits";
             packageId = "num-traits";
             usesDefaultFeatures = false;
-          }
-          {
-            name = "quick-error";
-            packageId = "quick-error";
-            optional = true;
           }
           {
             name = "rand";
@@ -419,11 +338,6 @@ rec {
             name = "rand_xorshift";
             packageId = "rand_xorshift";
           }
-          {
-            name = "regex-syntax";
-            packageId = "regex-syntax";
-            optional = true;
-          }
         ];
         features = {
           "default" = [ "std" "fork" "timeout" "bit-set" "break-dead-code" ];
@@ -433,18 +347,7 @@ rec {
           "std" = [ "rand/std" "byteorder/std" "lazy_static" "quick-error" "regex-syntax" "num-traits/std" ];
           "timeout" = [ "fork" "rusty-fork/timeout" ];
         };
-        resolvedDefaultFeatures = [ "lazy_static" "quick-error" "regex-syntax" "std" ];
-      };
-      "quick-error" = rec {
-        crateName = "quick-error";
-        version = "2.0.1";
-        edition = "2018";
-        sha256 = "18z6r2rcjvvf8cn92xjhm2qc3jpd1ljvcbf12zv0k9p565gmb4x9";
-        authors = [
-          "Paul Colomiets <paul@colomiets.name>"
-          "Colin Kiegel <kiegel@gmx.de>"
-        ];
-
+        resolvedDefaultFeatures = [ "alloc" ];
       };
       "quote" = rec {
         crateName = "quote";
@@ -478,20 +381,6 @@ rec {
         ];
         dependencies = [
           {
-            name = "libc";
-            packageId = "libc";
-            optional = true;
-            usesDefaultFeatures = false;
-            target = { target, features }: (target."unix" or false);
-          }
-          {
-            name = "rand_chacha";
-            packageId = "rand_chacha";
-            optional = true;
-            usesDefaultFeatures = false;
-            target = { target, features }: (!(target."os" == "emscripten"));
-          }
-          {
             name = "rand_core";
             packageId = "rand_core";
           }
@@ -505,7 +394,7 @@ rec {
           "std" = [ "rand_core/std" "rand_chacha/std" "alloc" "getrandom" "libc" ];
           "std_rng" = [ "rand_chacha" "rand_hc" ];
         };
-        resolvedDefaultFeatures = [ "alloc" "getrandom" "libc" "rand_chacha" "std" ];
+        resolvedDefaultFeatures = [ "alloc" ];
       };
       "rand_chacha" = rec {
         crateName = "rand_chacha";
@@ -534,7 +423,6 @@ rec {
           "serde1" = [ "serde" ];
           "std" = [ "ppv-lite86/std" ];
         };
-        resolvedDefaultFeatures = [ "std" ];
       };
       "rand_core" = rec {
         crateName = "rand_core";
@@ -545,18 +433,11 @@ rec {
           "The Rand Project Developers"
           "The Rust Project Developers"
         ];
-        dependencies = [
-          {
-            name = "getrandom";
-            packageId = "getrandom";
-            optional = true;
-          }
-        ];
         features = {
           "serde1" = [ "serde" ];
           "std" = [ "alloc" "getrandom" "getrandom/std" ];
         };
-        resolvedDefaultFeatures = [ "alloc" "getrandom" "std" ];
+        resolvedDefaultFeatures = [ "alloc" ];
       };
       "rand_xorshift" = rec {
         crateName = "rand_xorshift";
@@ -576,20 +457,6 @@ rec {
         features = {
           "serde1" = [ "serde" ];
         };
-      };
-      "regex-syntax" = rec {
-        crateName = "regex-syntax";
-        version = "0.6.25";
-        edition = "2018";
-        sha256 = "16y87hz1bxmmz6kk360cxwfm3jnbsxb3x4zw9x1gzz7khic2i5zl";
-        authors = [
-          "The Rust Project Developers"
-        ];
-        features = {
-          "default" = [ "unicode" ];
-          "unicode" = [ "unicode-age" "unicode-bool" "unicode-case" "unicode-gencat" "unicode-perl" "unicode-script" "unicode-segment" ];
-        };
-        resolvedDefaultFeatures = [ "default" "unicode" "unicode-age" "unicode-bool" "unicode-case" "unicode-gencat" "unicode-perl" "unicode-script" "unicode-segment" ];
       };
       "store-ref-scanner" = rec {
         crateName = "store-ref-scanner";
@@ -615,7 +482,7 @@ rec {
             name = "proptest";
             packageId = "proptest";
             usesDefaultFeatures = false;
-            features = [ "std" ];
+            features = [ "alloc" ];
           }
         ];
 
@@ -676,20 +543,6 @@ rec {
           "Sergio Benitez <sb@sergio.bz>"
         ];
 
-      };
-      "wasi" = rec {
-        crateName = "wasi";
-        version = "0.10.2+wasi-snapshot-preview1";
-        edition = "2018";
-        sha256 = "1ii7nff4y1mpcrxzzvbpgxm7a1nn3szjf1n21jnx37c2g6dbsvzx";
-        authors = [
-          "The Cranelift Project Developers"
-        ];
-        features = {
-          "default" = [ "std" ];
-          "rustc-dep-of-std" = [ "compiler_builtins" "core" "rustc-std-workspace-alloc" ];
-        };
-        resolvedDefaultFeatures = [ "default" "std" ];
       };
     };
 
