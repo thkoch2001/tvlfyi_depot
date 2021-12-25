@@ -112,6 +112,7 @@ let
       company
       counsel
       flycheck
+      emojify
     ]));
 
   vendorDir = path {
