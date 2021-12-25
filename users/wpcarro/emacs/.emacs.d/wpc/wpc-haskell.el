@@ -24,14 +24,6 @@
   :config
   (macros-add-hook-before-save 'haskell-mode #'haskell-align-imports))
 
-;; LSP support
-(use-package lsp-haskell
-  :after (haskell-mode)
-  :config
-  (setq lsp-haskell-process-path-hie "hie-wrapper")
-  (add-hook 'haskell-mode-hook #'lsp-haskell-enable)
-  (add-hook 'haskell-mode-hook #'flycheck-mode))
-
 ;; Test toggling
 (defun wpc-haskell-module->test ()
   "Jump from a module to a test."
