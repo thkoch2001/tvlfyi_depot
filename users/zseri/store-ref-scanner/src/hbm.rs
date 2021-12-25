@@ -15,17 +15,19 @@ impl HalfBytesMask {
     ]);
 
     #[inline]
-    #[proc_unroll::unroll]
     pub const fn from_expanded(x: [bool; 128]) -> Self {
         let mut ret = [0u8; 16];
-        for idx in 0..16 {
-            let mut tmp = 0;
+        let mut idx = 0;
+        while idx < 16 {
             let fin = idx * 8;
-            macro_rules! bitx {
-                ($($a:expr),+) => {{ $( if x[fin + $a] { tmp += (1 << $a) as u8; } )+ }}
+            let mut idx2 = 0;
+            while idx2 < 8 {
+                if x[fin + idx2] {
+                    ret[idx] += (1 << idx2) as u8;
+                }
+                idx2 += 1;
             }
-            bitx!(0, 1, 2, 3, 4, 5, 6, 7);
-            ret[idx] = tmp;
+            idx += 1;
         }
         Self(ret)
     }
@@ -38,17 +40,19 @@ impl HalfBytesMask {
         })
     }
 
-    #[proc_unroll::unroll]
     pub const fn into_expanded(self) -> [bool; 128] {
         let Self(ihbm) = self;
         let mut ret = [false; 128];
-        for idx in 0..16 {
+        let mut idx = 0;
+        while idx < 16 {
             let fin = idx * 8;
             let curi = ihbm[idx];
-            macro_rules! bitx {
-                ($($a:expr),+) => {{ $( ret[fin + $a] = (curi >> $a) & 0b1 != 0; )+ }}
+            let mut idx2 = 0;
+            while idx2 < 8 {
+                ret[fin + idx2] = (curi >> idx2) & 0b1 != 0;
+                idx2 += 1;
             }
-            bitx!(0, 1, 2, 3, 4, 5, 6, 7);
+            idx += 1;
         }
         ret
     }
