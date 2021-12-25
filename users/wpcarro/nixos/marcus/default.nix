@@ -32,10 +32,8 @@ in {
     interfaces.wlp0s20f3.useDHCP = true;
   };
 
-  time.timeZone = "America/New_York";
-
   services = wpcarro.common.services // {
-    localtime.enable = true;
+    tzupdate.enable = true;
 
     xserver = {
       enable = true;
