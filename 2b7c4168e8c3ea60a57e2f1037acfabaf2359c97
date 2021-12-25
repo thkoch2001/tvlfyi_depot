@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d3e9a27_35b26479",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-25T10:44:31Z",
+      "side": 1,
+      "message": "To elaborate, the advantages would basically be:\n\n* We don\u0027t need to evaluate a system hourly (or at some kind of schedule) to see if we need to redeploy which I can imagine could be a nuisance, since evaluating the module system is quite resource hungry.\n* If there\u0027s a bad canon revision due to some unfortunate flakiness, we would avoid building a bad revision.\n\nIn any case, we could probably just replace auto-deploy with a channel based solution later if we so desire.",
+      "parentUuid": "0ff1fc80_d0a51970",
+      "revId": "2b7c4168e8c3ea60a57e2f1037acfabaf2359c97",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8790f7c7_bd6f067b",
         "filename": "ops/modules/auto-deploy.nix",
         "patchSetId": 20
