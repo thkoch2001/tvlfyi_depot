@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a013ab74_8dc042d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-25T05:27:09Z",
+      "side": 1,
+      "message": "What is the purpose of the `uchitel/registry.dat` file?",
+      "revId": "8561f5b650bc5b08c5aaf6dd8c4a442650876299",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
