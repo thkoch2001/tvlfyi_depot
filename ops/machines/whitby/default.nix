@@ -210,6 +210,7 @@ in {
       gerrit-queue.file = secretFile "gerrit-queue";
       grafana.file = secretFile "grafana";
       irccat.file = secretFile "irccat";
+      keycloak-db.file = secretFile "keycloak-db";
       nix-cache-priv.file = secretFile "nix-cache-priv";
       owothia.file = secretFile "owothia";
       panettone.file = secretFile "panettone";
@@ -546,8 +547,28 @@ in {
       }];
     };
   };
+
   # Contains GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET.
   systemd.services.grafana.serviceConfig.EnvironmentFile = "/run/agenix/grafana";
+
+  services.keycloak = {
+    enable = true;
+    httpPort = "5925"; # "login"
+    initialAdminPassword = "Hae3wahthahxeiReikuG";
+    # frontendUrl = "https://login.tvl.fyi/auth/";
+    frontendUrl = "http://localhost:5925/auth/";
+
+    database = {
+      type = "postgresql";
+      passwordFile = "/run/agenix/keycloak-db";
+      createLocally = false;
+    };
+  };
+
+  # Allow Keycloak access to the JVM module by forcing in the JVM
+  # configuration
+  systemd.services.keycloak.serviceConfig.Environment.SERVER_OPTS =
+    "--add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED";
 
   security.sudo.extraRules = [
     {
