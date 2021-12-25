@@ -20,11 +20,13 @@
    java.util.UUID))
 
 (defn- attendees-page [{:keys [attendees q edit-notes]}]
-  [:div
+  [:div.page
    [:form.search-form {:method :get :action "/attendees"}
-    [:input {:type "search"
-             :name "q"
-             :value q}]
+    [:input.search-input
+     {:type "search"
+      :name "q"
+      :value q
+      :title "Search Attendees"}]
     [:input {:type "submit"
              :value "Search Attendees"}]]
    [:table.attendees
