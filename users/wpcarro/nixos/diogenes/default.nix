@@ -60,6 +60,13 @@ in {
     };
   };
 
+  # I won't have an Emacs server running on diogenes, and I'll likely be in an
+  # SSH session from within vterm. As such, Vim is one of the few editors that I
+  # tolerably navigate this way.
+  environment.variables = {
+    EDITOR = "vim";
+  };
+
   environment.systemPackages = wpcarro.common.shell-utils;
 
   services = {
