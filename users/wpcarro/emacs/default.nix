@@ -103,7 +103,6 @@ let
       fish-mode
       tuareg
       haskell-mode
-      lsp-haskell
       use-package
       general
       clojure-mode
