@@ -1,6 +1,8 @@
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct HalfBytesMask(pub [u8; 16]);
 
+// fires erronously
+#[allow(clippy::zero_prefixed_literal)]
 impl HalfBytesMask {
     pub const B32_REVSHA256: HalfBytesMask =
         HalfBytesMask([0, 0, 0, 0, 0, 0, 255, 3, 0, 0, 0, 0, 222, 127, 207, 7]);
@@ -17,7 +19,7 @@ impl HalfBytesMask {
             let mut tmp = 0;
             let fin = idx * 8;
             macro_rules! bitx {
-            ($($a:expr),+) => {{ $( if x[fin + $a] { tmp += (1 << $a) as u8; } )+ }}
+                ($($a:expr),+) => {{ $( if x[fin + $a] { tmp += (1 << $a) as u8; } )+ }}
             }
             bitx!(0, 1, 2, 3, 4, 5, 6, 7);
             ret[idx] = tmp;
@@ -63,7 +65,7 @@ impl HalfBytesMask {
                 return;
             }
         }
-        let mut block = &mut self.0[usize::from(byte / 8)];
+        let block = &mut self.0[usize::from(byte / 8)];
         let bitpat = (1 << u32::from(byte % 8)) as u8;
         if allow {
             *block |= bitpat;

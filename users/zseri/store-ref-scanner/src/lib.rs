@@ -1,7 +1,5 @@
 // TODO: make this no_std if possible
 
-use camino::Utf8PathBuf;
-
 mod hbm;
 pub use hbm::HalfBytesMask;
 
@@ -36,7 +34,7 @@ impl ScannerInput for &mut [u8] {
     fn split_to(&mut self, at: usize) -> Self {
         // Lifetime dance taken from `impl Write for &mut [u8]`.
         // Taken from crate `std`.
-        let (a, b) = core::mem::replace(self, &mut []).split_at_mut(at);
+        let (a, b) = std::mem::take(self).split_at_mut(at);
         *self = b;
         a
     }
@@ -53,17 +51,6 @@ impl ScannerInput for &mut [u8] {
 pub struct StoreRefScanner<'x, Input: 'x> {
     input: Input,
     spec: &'x StoreSpec,
-}
-
-/// Taken from crate `yz-string-utils`.
-fn get_offset_of<T>(whole_buffer: &T, part: &T) -> usize
-where
-    T: AsRef<[u8]> + ?Sized,
-{
-    // NOTE: originally I wanted to use offset_from() here once it's stable,
-    // but according to https://github.com/rust-lang/rust/issues/41079#issuecomment-657163887
-    // this would be UB in cases where the code below isn't.
-    part.as_ref().as_ptr() as usize - whole_buffer.as_ref().as_ptr() as usize
 }
 
 impl<'x, Input> StoreRefScanner<'x, Input>
@@ -115,7 +102,7 @@ where
                     .skip(hbl)
                     .find(|&(_, &i)| !self.spec.valid_restbytes.contains(i))
                     .map(|(eosp, _)| eosp)
-                    .unwrap_or(core::cmp::min(BASENAME_MAXLEN, self.input.as_ref().len()));
+                    .unwrap_or_else(|| core::cmp::min(BASENAME_MAXLEN, self.input.as_ref().len()));
                 return Some(self.input.split_to(rlen));
             }
         }
