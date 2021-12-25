@@ -31,6 +31,15 @@
     [:input {:type :file
              :name :attendees}]]])
 
+(defn import-attendees-form [event]
+  [:form {:method :post
+          :action (str "/events/" (::event/id event) "/attendees")
+          :enctype "multipart/form-data"}
+   (import-attendee-list-form-group)
+   [:div.form-group
+    [:input {:type :submit
+             :value "Import"}]]])
+
 (defn event-page [{:keys [event]}]
   [:div.event-page
    [:h1 (format-date (::event/date event))]
@@ -46,13 +55,12 @@
     [:a {:href (str "/signup-forms/" (::event/id event) )}
      "Go to Signup Form"]]
    [:div
-    [:form {:method :post
-            :action (str "/events/" (::event/id event) "/attendees")
-            :enctype "multipart/form-data"}
-     (import-attendee-list-form-group)
-     [:div.form-group
-      [:input {:type :submit
-               :value "Import"}]]]]])
+    (import-attendees-form event)]])
+
+(defn import-attendees-page [{:keys [event]}]
+  [:div.page
+   [:h1 "Import Attendees for " (format-date (::event/date event))]
+   (import-attendees-form event)])
 
 (defn event-form
   ([] (event-form {}))
@@ -109,6 +117,12 @@
                                      (db.event/with-stats)))]
           (page-response
            (event-page {:event event}))
+          (not-found "Event Not Found")))
+
+      (GET "/attendees/import" []
+        (if-let [event (db/get db :event id)]
+          (page-response
+           (import-attendees-page {:event event}))
           (not-found "Event Not Found")))
 
       (POST "/attendees" [attendees]
