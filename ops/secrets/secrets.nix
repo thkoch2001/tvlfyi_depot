@@ -22,6 +22,7 @@ in {
   "clbot-ssh.age" = default;
   "clbot.age" = default;
   "gerrit-queue.age" = default;
+  "gerrit-secrets.age" = default;
   "grafana.age" = default;
   "irccat.age" = default;
   "nix-cache-priv.age" = default;
