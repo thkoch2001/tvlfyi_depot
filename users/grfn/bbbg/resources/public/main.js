@@ -1,41 +1,59 @@
 window.onload = () => {
-  console.log("loaded");
   const input = document.getElementById("name-autocomplete");
   if (input != null) {
-    const eventID = document.getElementById("event-id").value;
+    const attendeeList = document.getElementById("attendees-list");
+    const filterAttendees = (filter) => {
+      if (filter == "") {
+        for (let elt of attendeeList.querySelectorAll("li")) {
+          elt.classList.remove("hidden");
+        }
 
-    const autocomplete = new autoComplete({
-      selector: "#name-autocomplete",
-      placeHolder: "Enter your name",
-      data: {
-        src: async (query) => {
-          const resp = await fetch(
-            `/attendees.json?q=${query}&event_id=${eventID}&attended=false`
-          );
-          console.log("got resp");
-          const { results } = await resp.json();
-          return results;
-        },
-        keys: ["bbbg.attendee/meetup-name"],
-      },
-      resultItem: {
-        highlight: {
-          render: true,
-        },
-      },
-    });
+        return;
+      }
 
-    input.addEventListener("selection", function (event) {
-      const attendee = event.detail.selection.value;
-      event.target.value = attendee["bbbg.attendee/meetup-name"];
+      let re = "";
+      for (let c of filter) {
+        re += `${c}.*`;
+      }
+      let filterRe = new RegExp(re, "i");
 
-      const attendeeID = attendee["bbbg.attendee/id"];
-      document.getElementById("attendee-id").value = attendeeID;
-      document.getElementById("signup-form").removeAttribute("disabled");
-      document
-        .getElementById("signup-form")
-        .querySelector('input[type="submit"]')
-        .removeAttribute("disabled");
+      for (let elt of attendeeList.querySelectorAll("li")) {
+        const attendee = JSON.parse(elt.dataset.attendee);
+        if (attendee["bbbg.attendee/meetup-name"].match(filterRe) == null) {
+          elt.classList.add("hidden");
+        } else {
+          elt.classList.remove("hidden");
+        }
+      }
+    };
+
+    const attendeeIDInput = document.getElementById("attendee-id");
+    const submit = document.querySelector("#submit-button");
+    const signupForm = document.getElementById("signup-form");
+
+    input.oninput = (e) => {
+      filterAttendees(e.target.value);
+      attendeeIDInput.value = null;
+      submit.classList.add("hidden");
+      submit.setAttribute("disabled", "disabled");
+      signupForm.setAttribute("disabled", "disabled");
+    };
+
+    attendeeList.addEventListener("click", (e) => {
+      if (!(e.target instanceof HTMLLIElement)) {
+        return;
+      }
+      if (e.target.dataset.attendee == null) {
+        return;
+      }
+
+      const attendee = JSON.parse(e.target.dataset.attendee);
+      input.value = attendee["bbbg.attendee/meetup-name"];
+      attendeeIDInput.value = attendee["bbbg.attendee/id"];
+
+      submit.classList.remove("hidden");
+      submit.removeAttribute("disabled");
+      signupForm.removeAttribute("disabled");
     });
   }
 

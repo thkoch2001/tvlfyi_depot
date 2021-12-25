@@ -76,7 +76,6 @@
         #_(flash/render-flash flash/test-flash)
         (flash/render-flash)
         body]
-       [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/tarekraafat-autocomplete.js/10.2.6/autoComplete.js"}]
        [:script {:src "/main.js"}]]])))
 
 (defn page-response [& render-page-args]

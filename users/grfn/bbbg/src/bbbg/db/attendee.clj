@@ -23,10 +23,17 @@
    (db/list db (search query q))))
 
 (defn for-event
-  ([query event-id]
-   (-> query
-       (merge-join :event_attendee [:= :attendee.id :event_attendee.attendee_id])
-       (merge-where [:= :event_attendee.event_id event-id]))))
+  ([db-or-query event-id]
+   (if (db/database? db-or-query)
+     (for-event db-or-query
+                {:select [:attendee.*]
+                 :from [:attendee]}
+                event-id)
+     (-> db-or-query
+         (merge-join :event_attendee [:= :attendee.id :event_attendee.attendee_id])
+         (merge-where [:= :event_attendee.event_id event-id]))))
+  ([db query event-id]
+   (db/list db (for-event query event-id))))
 
 (defn with-stats
   ([] (with-stats {:select [:attendee.*]
