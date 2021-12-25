@@ -39,12 +39,6 @@ in {
     acme = {
       acceptTerms = true;
       email = "wpcarro@gmail.com";
-
-      certs."quassel.wpcarro.dev" = {
-        email = "wpcarro@gmail.com";
-        webroot = "/var/lib/acme/challenge-quassel";
-        group = "quassel";
-      };
     };
 
     sudo.wheelNeedsPassword = false;
@@ -64,7 +58,7 @@ in {
   services = wpcarro.common.services // {
     depot.quassel = {
       enable = true;
-      acmeHost = "quassel.wpcarro.dev";
+      acmeHost = "wpcarro.dev";
       bindAddresses = [
         "0.0.0.0"
       ];
