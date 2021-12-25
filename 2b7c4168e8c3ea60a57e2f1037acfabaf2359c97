@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c0804323_eb2493f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-25T11:44:10Z",
+      "side": 1,
+      "message": "I\u0027d like to figure out how this channel system works exactly (see also sterni\u0027s cl/4517), but I think we can figure that out independently from this CL since all machines that use this CL will be in the depot - so refactoring is easy.",
+      "parentUuid": "2d3e9a27_35b26479",
+      "revId": "2b7c4168e8c3ea60a57e2f1037acfabaf2359c97",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8790f7c7_bd6f067b",
         "filename": "ops/modules/auto-deploy.nix",
         "patchSetId": 20
