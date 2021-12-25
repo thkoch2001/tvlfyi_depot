@@ -35,6 +35,8 @@ in {
   time.timeZone = "America/New_York";
 
   services = wpcarro.common.services // {
+    localtime.enable = true;
+
     xserver = {
       enable = true;
       libinput = {
