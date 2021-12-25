@@ -1,14 +1,17 @@
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct HalfBytesMask(pub [u8; 16]);
 
-// fires erronously
-#[allow(clippy::zero_prefixed_literal)]
+#[allow(clippy::as_conversions, clippy::zero_prefixed_literal)]
 impl HalfBytesMask {
     pub const B32_REVSHA256: HalfBytesMask =
         HalfBytesMask([0, 0, 0, 0, 0, 0, 255, 3, 0, 0, 0, 0, 222, 127, 207, 7]);
 
     pub const B64_BLAKE2B256: HalfBytesMask = HalfBytesMask([
         0, 0, 0, 0, 0, 8, 255, 3, 254, 255, 255, 135, 254, 255, 255, 7,
+    ]);
+
+    pub const DFL_REST: HalfBytesMask = HalfBytesMask([
+        0, 0, 0, 0, 0, 104, 255, 163, 254, 255, 255, 135, 254, 255, 255, 7,
     ]);
 
     #[inline]
@@ -51,7 +54,11 @@ impl HalfBytesMask {
     }
 
     pub fn contains(&self, byte: u8) -> bool {
-        (self.0[usize::from(byte / 8)] >> u32::from(byte % 8)) & 0b1 != 0
+        if byte >= 0x80 {
+            false
+        } else {
+            (self.0[usize::from(byte / 8)] >> u32::from(byte % 8)) & 0b1 != 0
+        }
     }
 
     pub fn set(&mut self, byte: u8, allow: bool) {
@@ -93,6 +100,13 @@ mod tests {
     fn maskbase() {
         assert_eq!(HalfBytesMask::B32_REVSHA256.count_ones(), 32);
         assert_eq!(HalfBytesMask::B64_BLAKE2B256.count_ones(), 64);
+    }
+
+    #[test]
+    fn non_ascii() {
+        for i in 0x80..=0xff {
+            assert!(!HalfBytesMask::DFL_REST.contains(i));
+        }
     }
 
     #[test]
@@ -138,15 +152,12 @@ mod tests {
             ),
             HalfBytesMask::B64_BLAKE2B256,
         );
-    }
 
-    proptest::proptest! {
-        #[test]
-        fn hbm_roundtrip(s: [u8; 16]) {
-            let a = HalfBytesMask(s);
-            let b = a.into_expanded();
-            let c = HalfBytesMask::from_expanded(b);
-            assert_eq!(a, c);
-        }
+        assert_eq!(
+            HalfBytesMask::from_bytes(
+                b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-._?="
+            ),
+            HalfBytesMask::DFL_REST,
+        );
     }
 }
