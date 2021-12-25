@@ -16,4 +16,8 @@ in depot.nix.buildLisp.library {
       ccl = "${src}/closer-clozure.lisp";
     }
   ];
+
+  brokenOn = [
+    "ecl" # https://github.com/pcostanza/closer-mop/issues/20
+  ];
 }
