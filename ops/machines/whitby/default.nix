@@ -210,6 +210,7 @@ in {
       gerrit-queue.file = secretFile "gerrit-queue";
       grafana.file = secretFile "grafana";
       irccat.file = secretFile "irccat";
+      keycloak-db.file = secretFile "keycloak-db";
       nix-cache-priv.file = secretFile "nix-cache-priv";
       owothia.file = secretFile "owothia";
       panettone.file = secretFile "panettone";
@@ -546,6 +547,19 @@ in {
       }];
     };
   };
+
+  services.keycloak = {
+    enable = true;
+    httpPort = "5925"; # "login"
+    initialAdminPassword = "Hae3wahthahxeiReikuG";
+    frontendUrl = "https://login.tvl.fyi/auth/";
+
+    database = {
+      type = "postgresql";
+      passwordFile = "/run/agenix/keycloak-db";
+    };
+  };
+
   # Contains GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET.
   systemd.services.grafana.serviceConfig.EnvironmentFile = "/run/agenix/grafana";
 
