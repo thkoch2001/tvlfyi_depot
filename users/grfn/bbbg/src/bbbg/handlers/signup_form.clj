@@ -3,10 +3,13 @@
    [bbbg.db :as db]
    [bbbg.db.event :as db.event]
    [bbbg.event :as event]
-   [bbbg.handlers.core :refer [page-response authenticated?]]
+   [bbbg.handlers.core :refer [page-response authenticated? *authenticated?*]]
    [compojure.core :refer [GET context]]
    [java-time :refer [local-date]]
-   [ring.util.response :refer [redirect]]))
+   [ring.util.response :refer [redirect]]
+   [bbbg.db.attendee :as db.attendee]
+   [cheshire.core :as json]
+   [bbbg.attendee :as attendee]))
 
 (defn no-events-page [{:keys [authenticated?]}]
   [:div.no-events
@@ -17,14 +20,12 @@
       [:a {:href (str "/events/new?date=" (str (local-date)))} "Create Event"]
       [:a {:href "/events"} "All Events"]])])
 
-(defn signup-page [event]
+(defn signup-page [{:keys [event attendees]}]
   [:div.signup-page
    [:form#signup-form
     {:method "POST"
      :action "/event_attendees"
      :disabled "disabled"}
-    [:input#event-id {:type "hidden" :name "event_id" :value (::event/id event)}]
-    [:input#attendee-id {:type "hidden" :name "attendee_id"}]
     [:input#name-autocomplete
      {:type "search"
       :title "Name"
@@ -34,9 +35,29 @@
       :autocomplete "off"
       :autocapitalize "off"
       :maxlength "2048"}]
-    [:input {:type "submit"
-             :value "Sign In"
-             :disabled "disabled"}]]])
+    [:input#attendee-id {:type "hidden" :name "attendee_id"}]
+    [:input#event-id {:type "hidden" :name "event_id" :value (::event/id event)}]
+    [:input#submit-button.hidden
+     {:type "submit"
+      :value "Sign In"
+      :disabled "disabled"}]]
+   [:ul#attendees-list
+    (if (seq attendees)
+      (for [attendee attendees]
+        [:li {:data-attendee (json/generate-string attendee)
+              :role "button"}
+         (::attendee/meetup-name attendee)])
+      [:li.no-attendees
+       [:p
+        "Nobody has RSVPed to this event yet, or no attendee list has been
+         imported"]
+       (when *authenticated?*
+         [:p
+          [:a.button
+           {:href (str "/events/"
+                       (::event/id event)
+                       "/attendees/import")}
+           "Import Attendee List"]])])]])
 
 (defn event-not-found []
   [:div.event-not-found
@@ -55,5 +76,8 @@
 
    (GET "/:event-id" [event-id]
      (if-let [event (db/get db :event event-id)]
-       (page-response (signup-page event))
+       (let [attendees (db.attendee/for-event db event-id)]
+         (page-response
+          (signup-page {:event event
+                        :attendees attendees})))
        (event-not-found)))))

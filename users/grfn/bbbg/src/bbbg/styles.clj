@@ -145,17 +145,25 @@
       {:outline "none"
        :border-color purple}]))
 
-  [(attr= "type" "submit") :button
+  [(attr= "type" "submit") :button :.button
    {:background-color (color/lighten blue 30)
     :padding "0.6rem 0.75rem"
     :border-radius "3px"
     :border [[(px 1) "solid" (color/lighten blue 30)]]
-    :cursor :pointer}
+    :cursor :pointer
+    :display :inline-block}
    [(& hover)
-    {:border-color blue}]
+    {:border-color blue
+     :text-decoration :none
+     :box-shadow [[0 "1px" "5px" "rgba(0,0,0,0.075)"]]}
+    [(& :a)
+     {:text-decoration :none}]]
    [(& active)
     {:background-color blue
-     :color :white}]])
+     :color :white
+     :box-shadow :none}
+    [(& :a)
+     {:text-decoration :none}]]])
 
 (defstyles tables
   [:table
@@ -230,7 +238,28 @@
     {:margin-left "1rem"}]
 
    [(attr= "type" "submit")
-    {:flex 0}]])
+    {:flex 0}]]
+
+  [:#attendees-list
+   {:list-style "none"
+    :overflow-y "auto"
+    :height "calc(100vh - 8.32425rem)"}
+
+   [:li
+    {:padding "0.75rem 1rem"
+     :margin "0.35rem 0"
+     :border-radius "3px"
+     :background-color silver}]]
+
+  [:.no-attendees
+   {:text-align "center"
+    :margin-top "6rem"}
+
+   [:.button
+    {:margin-top "0.5rem"}]]
+
+  [:.hidden
+   {:display :none}])
 
 (defstyles styles
   forms
@@ -258,6 +287,9 @@
     {:width content-width
      :margin-left "auto"
      :margin-right "auto"})]
+
+  [(attr= "role" "button")
+   {:cursor :pointer}]
 
   [:a {:color blue
        :text-decoration :none}
