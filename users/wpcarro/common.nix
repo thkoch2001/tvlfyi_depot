@@ -22,6 +22,8 @@
   };
 
   services = {
+    locate.enable = true;
+
     depot.automatic-gc = {
       enable = true;
       interval = "1 hour";
