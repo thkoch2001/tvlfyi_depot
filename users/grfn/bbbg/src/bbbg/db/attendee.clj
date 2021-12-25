@@ -15,9 +15,10 @@
    (if (db/database? db-or-query)
      (db/list db-or-query (search q))
      (cond-> db-or-query
-       q [:or
-          [:ilike :meetup_name (str "%" q "%")]
-          [:ilike :discord_name (str "%" q "%")]])))
+       q (merge-where
+          [:or
+           [:ilike :meetup_name (str "%" q "%")]
+           [:ilike :discord_name (str "%" q "%")]]))))
   ([db query q]
    (db/list db (search query q))))
 

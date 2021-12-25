@@ -4,7 +4,7 @@
    [garden.color :as color]
    [garden.compiler :refer [compile-css]]
    [garden.def :refer [defstyles]]
-   [garden.selectors :refer [& active attr= descendant hover]]
+   [garden.selectors :refer [& active attr= descendant hover focus nth-child]]
    [garden.stylesheet :refer [at-media]]
    [garden.units :refer [px]]))
 
@@ -36,7 +36,7 @@
 
 ;;;
 
-(def content-width (px 1600))
+(def content-width (px 1200))
 
 (defn not-mobile [& rules]
   (at-media
@@ -95,6 +95,87 @@
      :cursor :pointer}
     link-conditional-styles]])
 
+(defstyles search-form
+  [:.search-form
+   {:display :flex
+    :flex-direction :row
+    :width "100%"
+    :padding "0 1rem"}
+
+   [:>*+*
+    {:margin-left "0.75rem"}]
+
+   [:input
+    {:flex 1}]
+
+   [(attr= "type" "submit")
+    {:flex 0}]])
+
+(defstyles forms
+  (let [text-input-types
+        #{"date"
+          "datetime-local"
+          "email"
+          "month"
+          "number"
+          "password"
+          "search"
+          "tel"
+          "text"
+          "time"
+          "url"
+          "week"}
+        each-text-type (fn [& rules]
+                         (into
+                          []
+                          (concat
+                           (map (comp & (partial attr= "type"))
+                                text-input-types)
+                           rules)))]
+    (each-text-type
+     {:width "100%"
+      :display "block"
+      :padding "0.6rem 0.75rem"
+      :border [["1px" "solid" gray-light]]
+      :border-radius "3px"
+      :box-shadow [["inset" 0 "1px" "5px" "rgba(0,0,0,0.075)"]]
+      :transition "border-color 150ms"
+      :background "none"}
+     [(& focus)
+      {:outline "none"
+       :border-color purple}]))
+
+  [(attr= "type" "submit") :button
+   {:background-color (color/lighten blue 30)
+    :padding "0.6rem 0.75rem"
+    :border-radius "3px"
+    :border [[(px 1) "solid" (color/lighten blue 30)]]
+    :cursor :pointer}
+   [(& hover)
+    {:border-color blue}]
+   [(& active)
+    {:background-color blue
+     :color :white}]])
+
+(defstyles tables
+  [:table
+   {:width "100%"
+    :border-collapse "collapse"}]
+
+  [:th
+   {:text-align "left"}]
+
+  [:td :th
+   {:padding "0.75rem 1rem"
+    :border-spacing 0
+    :border "none"}]
+
+  [:tr
+   {:border-spacing 0
+    :border "none"}
+   [(& (nth-child :even))
+    {:background-color silver}]])
+
 (defstyles flash
   [:.flash-messages
    {:width "800px"
@@ -109,7 +190,7 @@
     [(& (keyword (str ".flash-" (name context))))
      {:border-color color
       :background-color (color/lighten color 30)
-      :border-radius "5px"}]))
+      :border-radius "3px"}]))
 
 (defstyles home-page
   [:.home-page
@@ -121,7 +202,7 @@
     {:display :block
      :padding "5rem"
      :border [["1px" :solid blue]]
-     :border-radius "5px"
+     :border-radius "3px"
      :color black
      :font-size "2rem"
      :background-color (color/lighten blue 50)}
@@ -131,8 +212,11 @@
      {:background-color (color/lighten blue 30)}]]])
 
 (defstyles styles
+  forms
+  tables
   global-nav
   link-form
+  search-form
   flash
   home-page
 
@@ -144,6 +228,14 @@
     :flex-direction :column
     :height "100%"
     :width "100%"}]
+
+  [:.page
+   {:margin-top "1rem"}
+
+   (not-mobile
+    {:width content-width
+     :margin-left "auto"
+     :margin-right "auto"})]
 
   [:a {:color blue
        :text-decoration :none}
