@@ -43,6 +43,9 @@
        " Signed In"
        (str " Attendee" (when-not (= 1 (:num-attendees event)) "s")))]]
    [:div
+    [:a {:href (str "/signup-forms/" (::event/id event) )}
+     "Go to Signup Form"]]
+   [:div
     [:form {:method :post
             :action (str "/events/" (::event/id event) "/attendees")
             :enctype "multipart/form-data"}
