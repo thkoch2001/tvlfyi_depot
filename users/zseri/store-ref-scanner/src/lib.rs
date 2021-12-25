@@ -1,4 +1,6 @@
-// TODO: make this no_std if possible
+#![no_std]
+#![forbid(clippy::cast_ptr_alignment, trivial_casts, unconditional_recursion)]
+#![deny(clippy::as_conversions)]
 
 mod hbm;
 pub use hbm::HalfBytesMask;
@@ -34,7 +36,7 @@ impl ScannerInput for &mut [u8] {
     fn split_to(&mut self, at: usize) -> Self {
         // Lifetime dance taken from `impl Write for &mut [u8]`.
         // Taken from crate `std`.
-        let (a, b) = std::mem::take(self).split_at_mut(at);
+        let (a, b) = core::mem::take(self).split_at_mut(at);
         *self = b;
         a
     }
@@ -50,14 +52,14 @@ impl ScannerInput for &mut [u8] {
 /// and implements an iterator interfaces which returns these as byte slices.
 pub struct StoreRefScanner<'x, Input: 'x> {
     input: Input,
-    spec: &'x StoreSpec,
+    spec: &'x StoreSpec<'x>,
 }
 
 impl<'x, Input> StoreRefScanner<'x, Input>
 where
     Input: ScannerInput + 'x,
 {
-    pub fn new(input: Input, spec: &'x StoreSpec) -> Self {
+    pub fn new(input: Input, spec: &'x StoreSpec<'x>) -> Self {
         for i in [&spec.valid_hashbytes, &spec.valid_restbytes] {
             for j in [b'\0', b' ', b'\t', b'\n', b'/', b'\\'] {
                 assert!(!i.contains(j));
@@ -74,11 +76,10 @@ where
     type Item = Input;
 
     fn next(&mut self) -> Option<Input> {
-        let empty_path = camino::Utf8Path::new("");
         let hbl: usize = self.spec.hashbytes_len.into();
         while !self.input.as_ref().is_empty() {
-            if self.spec.path_to_store != empty_path {
-                let p2sas = self.spec.path_to_store.as_str();
+            if !self.spec.path_to_store.is_empty() {
+                let p2sas = self.spec.path_to_store;
                 if self.input.as_ref().starts_with(p2sas.as_bytes()) {
                     self.input.split_to(p2sas.len());
                 } else {
@@ -87,6 +88,9 @@ where
                 }
             }
             let hsep = matches!(self.input.as_ref().iter().next(), Some(b'/') | Some(b'\\'));
+            if self.input.as_ref().is_empty() {
+                break;
+            }
             self.input.split_to(1);
             if hsep && self.spec.check_rest(self.input.as_ref()) {
                 // we have found a valid hash
@@ -114,6 +118,8 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    extern crate alloc;
+    use alloc::{vec, vec::Vec};
 
     #[test]
     fn simple_nix2() {
@@ -121,7 +127,7 @@ mod tests {
             Derive([("out","","r:sha256","")],[("/nix/store/2ax7bvjdfkzim69q957i0jlg0nvmapg0-util-linux-2.37.2.drv",["dev"]),("/nix/store/6b55ssmh8pzqsc4q4kw1yl3kqvr4fvqj-bash-5.1-p12.drv",["out"]),("/nix/store/fp2vx24kczlzv84avds28wyzsmrn8kyv-source.drv",["out"]),("/nix/store/s6c2lm5hpsvdwnxq9y1g3ngncghjzc3k-stdenv-linux.drv",["out"]),("/nix/store/xlnzpf4mzghi8vl0krabrgcbnqk5qjf3-pkg-config-wrapper-0.29.2.drv",["out"])],["/nix/store/03sl46khd8gmjpsad7223m32ma965vy9-fix-static.patch","/nix/store/2q3z7587yhlz0i2xvfvvap42zk5carlv-bcache-udev-modern.patch","/nix/store/9krlzvny65gdc8s7kpb6lkx8cd02c25b-default-builder.sh"],"x86_64-linux","/0g15yibzzi3rmw29gqlbms05x9dbghbvh61v1qggydvmzh3bginw/bin/bash",["-e","/nix/store/9krlzvny65gdc8s7kpb6lkx8cd02c25b-default-builder.sh"],[("buildInputs","/0sdk1r4l43yw4g6lmqdhd92vhdfhlwz3m76jxzvzsqsv63czw2km"),("builder","/0g15yibzzi3rmw29gqlbms05x9dbghbvh61v1qggydvmzh3bginw/bin/bash"),("configureFlags",""),("depsBuildBuild",""),("depsBuildBuildPropagated",""),("depsBuildTarget",""),("depsBuildTargetPropagated",""),("depsHostHost",""),("depsHostHostPropagated",""),("depsTargetTarget",""),("depsTargetTargetPropagated",""),("doCheck",""),("doInstallCheck",""),("makeFlags","PREFIX=/1rz4g4znpzjwh1xymhjpm42vipw92pr73vdgl6xs1hycac8kf2n9 UDEVLIBDIR=/1rz4g4znpzjwh1xymhjpm42vipw92pr73vdgl6xs1hycac8kf2n9/lib/udev/"),("name","bcache-tools-1.0.7"),("nativeBuildInputs","/1kw0rwgdyq9q69wmmsa5d2kap6p52b0yldbzi4w17bhcq5g5cp2f"),("out","/1rz4g4znpzjwh1xymhjpm42vipw92pr73vdgl6xs1hycac8kf2n9"),("outputHashAlgo","sha256"),("outputHashMode","recursive"),("outputs","out"),("patches","/nix/store/2q3z7587yhlz0i2xvfvvap42zk5carlv-bcache-udev-modern.patch /nix/store/03sl46khd8gmjpsad7223m32ma965vy9-fix-static.patch"),("pname","bcache-tools"),("preBuild","sed -e \"s|/bin/sh|/0g15yibzzi3rmw29gqlbms05x9dbghbvh61v1qggydvmzh3bginw/bin/sh|\" -i *.rules\n"),("preInstall","mkdir -p \"$out/sbin\" \"$out/lib/udev/rules.d\" \"$out/share/man/man8\"\n"),("prePatch","sed -e \"/INSTALL.*initramfs\\/hook/d\" \\\n    -e \"/INSTALL.*initcpio\\/install/d\" \\\n    -e \"/INSTALL.*dracut\\/module-setup.sh/d\" \\\n    -e \"s/pkg-config/$PKG_CONFIG/\" \\\n    -i Makefile\n"),("propagatedBuildInputs",""),("propagatedNativeBuildInputs",""),("src","/nix/store/6izcafvfcbz19chi7hl20834g0fa043n-source"),("stdenv","/01ncyv8bxibj0imgfvmxgqy648n697bachil6aw6i46g1jk0bbds"),("strictDeps",""),("system","x86_64-linux"),("version","1.0.7")])
         "#;
         // we convert everything into strings because it is way easier to compare elements in error messages
-        let refs: Vec<&str> = StoreRefScanner::new(drv, &*SPEC_DFL_NIX2)
+        let refs: Vec<&str> = StoreRefScanner::new(drv, &StoreSpec::DFL_NIX2)
             .map(|i| core::str::from_utf8(i).unwrap())
             .collect();
         let refs_expect: Vec<&[u8]> = vec![
@@ -168,7 +174,7 @@ mod tests {
             /yzixs/xvwEcXIob_rQynUEtQiQbwaDXEobTVKEGaBMir9oH9k:         unified diff output, ASCII text
             /yzixs/ZPvQbRJrtyeSITvW3FUZvw99hhNOO3CFqGgmWgScxcg:         ASCII text
         "#;
-        let refs: Vec<&str> = StoreRefScanner::new(fake, &*SPEC_DFL_YZIX1)
+        let refs: Vec<&str> = StoreRefScanner::new(fake, &StoreSpec::DFL_YZIX1)
             .map(|i| core::str::from_utf8(i).unwrap())
             .collect();
         let refs_expect: Vec<&[u8]> = vec![
@@ -198,15 +204,11 @@ mod tests {
         assert_eq!(refs, refs_expect);
     }
 
-    proptest::proptest! {
-        #[test]
-        fn nocrash_nix2(s: Vec<u8>) {
-            let _ = StoreRefScanner::new(&s[..], &*SPEC_DFL_NIX2).count();
-        }
-
-        #[test]
-        fn nocrash_yzix1(s: Vec<u8>) {
-            let _ = StoreRefScanner::new(&s[..], &*SPEC_DFL_YZIX1).count();
+    #[test]
+    fn just_store() {
+        for i in [&StoreSpec::DFL_NIX2, &StoreSpec::DFL_YZIX1] {
+            let refs: Vec<&[u8]> = StoreRefScanner::new(i.path_to_store.as_bytes(), i).collect();
+            assert!(refs.is_empty());
         }
     }
 }
