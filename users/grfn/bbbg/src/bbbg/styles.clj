@@ -52,6 +52,12 @@
     :max-width mobile-width}
    [:& rules]))
 
+(defn not-mobile [& rules]
+  (at-media
+   {:screen true
+    :min-width mobile-width}
+   [:& rules]))
+
 
 ;;;
 
@@ -321,7 +327,11 @@
 
     [:.attendee-name
      {:font-weight "bold"
-      :margin-bottom "0.9rem"}])])
+      :margin-bottom "0.9rem"}])
+
+   (not-mobile
+    [:.mobile-label
+     {:display :none}])])
 
 (defstyles events
   [:.events-list

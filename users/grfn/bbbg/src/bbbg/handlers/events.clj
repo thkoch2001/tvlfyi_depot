@@ -102,8 +102,7 @@
       [:th "Meetup Name"]
       [:th "Discord Name"]
       [:th "Signed In"]
-      [:th "Last Vaccination Check"]
-      [:th "Notes"]]
+      [:th "Last Vaccination Check"]]
      [:tbody
       (for [attendee attendees]
         [:tr
