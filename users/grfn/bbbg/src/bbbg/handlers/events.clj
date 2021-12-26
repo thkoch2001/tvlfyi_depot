@@ -1,6 +1,7 @@
 (ns bbbg.handlers.events
   (:require
    [bbbg.db :as db]
+   [bbbg.db.attendee :as db.attendee]
    [bbbg.db.event :as db.event]
    [bbbg.event :as event]
    [bbbg.handlers.core :refer [*authenticated?* page-response]]
@@ -11,7 +12,12 @@
    [compojure.coercions :refer [as-uuid]]
    [compojure.core :refer [context GET POST]]
    [java-time :refer [local-date]]
-   [ring.util.response :refer [not-found redirect]])
+   [ring.util.response :refer [not-found redirect]]
+   [bbbg.attendee :as attendee]
+   [bbbg.event-attendee :as event-attendee]
+   [bbbg.db.attendee-check :as db.attendee-check]
+   [bbbg.attendee-check :as attendee-check]
+   [bbbg.user :as user])
   (:import
    java.time.format.FormatStyle))
 
@@ -78,7 +84,7 @@
     [:input {:type :submit
              :value "Import"}]]])
 
-(defn event-page [{:keys [event]}]
+(defn event-page [{:keys [event attendees]}]
   [:div.page
    [:div.page-header
     [:h1 (format-date (::event/date event)
@@ -89,7 +95,44 @@
     [:p (pluralize (:num-rsvps event) "RSVP")]
     [:p (num-attendees event)]]
    [:div
-    (import-attendees-form event)]])
+    (import-attendees-form event)]
+   [:div
+    [:table.attendees
+     [:thead
+      [:th "Meetup Name"]
+      [:th "Discord Name"]
+      [:th "Signed In"]
+      [:th "Last Vaccination Check"]
+      [:th "Notes"]]
+     [:tbody
+      (for [attendee attendees]
+        [:tr
+         [:td.attendee-name (::attendee/meetup-name attendee)]
+         [:td
+          [:label.mobile-label "Discord Name: "]
+          (or (not-empty (::attendee/discord-name attendee))
+              "—")]
+         [:td
+          [:label.mobile-label "Signed In: "]
+          (if (::event-attendee/attended? attendee)
+            [:span {:title "Yes"} "✔️"]
+            [:span {:title "No"} "❌"])]
+         [:td
+          [:label.mobile-label "Last Vaccination Check: "]
+          (if-let [last-check (:last-check attendee)]
+            (str "✔️ "(-> last-check
+                         ::attendee-check/checked-at
+                         format-date)
+                 ", by "
+                 (get-in last-check [:user ::user/username]))
+            (list
+             [:span {:title "Not Checked"}
+              "❌"]
+             " "
+             [:a {:href (str "/attendees/"
+                             (::attendee/id attendee)
+                             "/checks/edit")}
+              "Edit"]))]])]]]])
 
 (defn import-attendees-page [{:keys [event]}]
   [:div.page
@@ -160,8 +203,12 @@
                                       :from [:event]
                                       :where [:= :event.id id]}
                                      (db.event/with-stats)))]
-          (page-response
-           (event-page {:event event}))
+          (let [attendees (db.attendee-check/attendees-with-last-checks
+                           db
+                           (db/list db (db.attendee/for-event id)))]
+            (page-response
+             (event-page {:event event
+                          :attendees attendees})))
           (not-found "Event Not Found")))
 
       (GET "/attendees/import" []
