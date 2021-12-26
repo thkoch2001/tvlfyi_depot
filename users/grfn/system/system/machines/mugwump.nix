@@ -9,6 +9,7 @@ with lib;
     "${depot.path}/ops/modules/prometheus-fail2ban-exporter.nix"
     "${depot.path}/users/grfn/xanthous/server/module.nix"
     "${depot.third_party.agenix.src}/modules/age.nix"
+    "${depot.path}/users/grfn/bbbg/module.nix"
   ];
 
   networking.hostName = "mugwump";
@@ -68,6 +69,7 @@ with lib;
   age.secrets = let
     secret = name: depot.users.grfn.secrets."${name}.age";
   in {
+    bbbg.file = secret "bbbg";
     cloudflare.file = secret "cloudflare";
   };
 
@@ -246,6 +248,11 @@ with lib;
   };
 
   services.xanthous-server.enable = true;
+
+  services.bbbg.enable = true;
+  services.bbbg.domain = "staging.bbbg.gws.fyi";
+  services.bbbg.database.enable = true;
+  services.bbbg.proxy.enable = true;
 
   virtualisation.docker.enable = true;
 
