@@ -239,12 +239,18 @@
     :align-items :center}
    [:.signup-form-link
     {:display :block
-     :padding "5rem"
      :border [["1px" :solid blue]]
      :border-radius "3px"
      :color black
      :font-size "2rem"
-     :background-color (color/lighten blue 50)}
+     :background-color (color/lighten blue 50)
+     :margin-left "auto"
+     :margin-right "auto"
+     :padding "2rem"}
+    (desktop
+     {:padding "5rem"
+      :margin-left 0
+      :margin-right 0})
     [(& hover) (& active)
      {:text-decoration :none}]
     [(& active)

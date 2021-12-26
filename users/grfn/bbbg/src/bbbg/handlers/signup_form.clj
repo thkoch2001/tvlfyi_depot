@@ -14,13 +14,13 @@
    [ring.util.response :refer [redirect]]))
 
 (defn no-events-page [{:keys [authenticated?]}]
-  [:div.no-events
+  [:div.page
    [:p
     "There are no events for today"]
    (when authenticated?
      [:p
-      [:a {:href (str "/events/new?date=" (str (local-date)))} "Create Event"]
-      [:a {:href "/events"} "All Events"]])])
+      [:a.button {:href (str "/events/new?date=" (str (local-date)))}
+       "Create New Event"]])])
 
 (defn signup-page [{:keys [event attendees]}]
   [:div.signup-page
