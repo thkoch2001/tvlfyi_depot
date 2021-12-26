@@ -62,9 +62,11 @@ in {
     systemd.services.auto-deploy = {
       inherit description;
       script = "${deployScript}";
-      path = [
-        pkgs.bash
-        pkgs.git
+      path = with pkgs; [
+        bash
+        git
+        gnutar
+        gzip
       ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
