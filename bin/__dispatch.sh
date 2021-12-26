@@ -65,6 +65,10 @@ case "${TARGET_TOOL}" in
     TARGET_TOOL="terraform"
     attr="ops.glesys.terraform"
     ;;
+  tf-keycloak)
+    TARGET_TOOL="terraform"
+    attr="ops.keycloak.terraform"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1
