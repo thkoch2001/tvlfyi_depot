@@ -1378,11 +1378,12 @@ If invoked with a prefix ARG eval the expression after inserting it"
      :n "g SPC" 'cider-eval-buffer
      :n "g \\"  'cider-switch-to-repl-buffer
      :n "K"     'cider-doc
-     :n "g K"   'cider-grimoire
+     :n "g K"   'cider-apropos
      :n "g d"   'cider-find-dwim
      :n "C-w ]" 'cider-find-dwim-other-window
      ;; :n "g RET" 'cider-test-run-ns-tests
      :n "g RET" 'grfn/run-clj-or-cljs-test
+     :n "g r" #'cljr-rename-symbol
 
      "C-c C-r r" 'cljr-add-require-to-ns
      "C-c C-r i" 'cljr-add-import-to-ns
