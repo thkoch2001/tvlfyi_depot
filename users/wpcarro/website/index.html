@@ -19,16 +19,16 @@
     </script>
   </head>
   <body class="font-mono bg-gray-100">
-    <header class="sticky top-0 pt-6">
-      <div class="flex max-w-3xl mx-auto">
-        <div class="flex-1">
+    <header class="sticky bg-gray-100 top-0 pt-6">
+      <div class="flex max-w-sm md:max-w-3xl mx-auto">
+        <div class="flex-1 text-center md:text-left text-xl md:text-base">
           <a href="https://cs.tvl.fyi/depot/-/blob/users/wpcarro/website/index.html">
             <h1 class="font-bold">
               <span class="text-black">(</span><a class="text-purple-600 hover:underline" href="https://cs.tvl.fyi/depot/-/blob/users/wpcarro/website/index.html">def</a>&nbsp;<a class="text-green-600 hover:underline text-bold" href="https://wpcarro.dev">"wpcarro.dev"</a><span class="text-black">)</span>
             </h1>
           </a>
         </div>
-        <nav class="flex-1">
+        <nav class="flex-1 hidden md:block">
           <ul class="list-reset flex justify-end space-x-8">
             <li>
               <a class="hover:underline" href="https://wpcarro.dev/habits">
@@ -55,9 +55,9 @@
       </div>
     </header>
 
-    <div class="max-w-prose mx-auto">
+    <div class="max-w-sm md:max-w-prose mx-auto">
       <section class="leading-7">
-        <p class="relative text-3xl text-center font-bold pt-14 pb-10">
+        <p class="relative text-3xl text-center font-bold pt-10 md:pt-14 pb-10">
           Hey! I'm William.<span class="pl-10 relative"><span class="block absolute right-0 top-0 transition-transform hover:rotate-90">👋</span></span>
         </p>
         <p class="pb-4">
@@ -76,6 +76,28 @@
           fumbling around on the piano or drums.
         </p>
       </section>
+
+      <footer class="md:hidden">
+        <h2 class="text-2xl font-bold pt-4 pb-6">Other Links</h2>
+        <ul>
+          <li class="pb-6">
+            <a class="text-blue-600 font-bold" href="https://blog.wpcarro.dev">
+              Blog <span class="text-blue-300">-></span>
+            </a>
+          </li>
+          <li class="pb-6">
+            <a class="text-blue-600 font-bold" href="https://github.com/wpcarro">
+              GitHub <span class="text-blue-300">-></span>
+            </a>
+          </li>
+          <li class="pb-6">
+            <a class="text-blue-600 font-bold" href="https://linkedin.com/in/williampatrickcarroll">
+              LinkedIn <span class="text-blue-300">-></span>
+            </a>
+          </li>
+        </ul>
+      </footer>
     </div>
+
   </body>
 </html>
