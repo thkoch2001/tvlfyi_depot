@@ -49,14 +49,14 @@ resource "keycloak_openid_client" "oauth2_proxy" {
   standard_flow_enabled = true
 
   valid_redirect_uris = [
-    "https://login.tvl.fyi/oauth2/callback"
+    "https://login.tvl.fyi/oauth2/callback",
+    "http://localhost:4774/oauth2/callback",
   ]
 }
 
-resource "keycloak_openid_audience_protocol_mapper" "panettone_audience" {
-  realm_id  = keycloak_realm.tvl.id
-  client_id = keycloak_openid_client.oauth2_proxy.id
-  name      = "panettone-audience"
-
-  included_custom_audience = "b"
+resource "keycloak_openid_audience_protocol_mapper" "oauth2_proxy_audience" {
+  realm_id                 = keycloak_realm.tvl.id
+  client_id                = keycloak_openid_client.oauth2_proxy.id
+  name                     = "oauth2-proxy-audience"
+  included_custom_audience = keycloak_openid_client.oauth2_proxy.client_id
 }
