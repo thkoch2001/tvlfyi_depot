@@ -60,8 +60,8 @@
                        (db/process-key-map :attendee)
                        (u/map-keys keyword))
                  attendees)
-    :upsert [[:on-conflict [:meetup-user-id]]
-             [:do-update-set [:meetup-name]]]
+    :upsert {:on-conflict [:meetup-user-id]
+             :do-update-set [:meetup-name]}
     :returning [:id :meetup-user-id]}))
 
 (comment
