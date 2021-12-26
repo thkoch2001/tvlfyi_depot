@@ -32,6 +32,7 @@ resource "keycloak_ldap_user_federation" "tvl_ldap" {
   uuid_ldap_attribute     = "cn"
   rdn_ldap_attribute      = "cn"
   full_sync_period        = 86400
+  trust_email             = true
 
   user_object_classes = [
     "inetOrgPerson",
