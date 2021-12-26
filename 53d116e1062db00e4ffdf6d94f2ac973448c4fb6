@@ -16,6 +16,24 @@
       "message": "currently, this doesn\u0027t work like expected, in fact, it even looks like it completely broke and now builds neither...\nhttps://buildkite.com/tvl/depot/builds/10713",
       "revId": "53d116e1062db00e4ffdf6d94f2ac973448c4fb6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f8f3988_c38701cc",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-26T08:51:12Z",
+      "side": 1,
+      "message": "Nope, both work just fine. Builds get removed from the CI pipeline if their outPath is already in the /nix/store (i. e. outPath didn\u0027t change + build succeeded before which was the case for patchset 1 here).",
+      "parentUuid": "9d9cef29_9177a28d",
+      "revId": "53d116e1062db00e4ffdf6d94f2ac973448c4fb6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
