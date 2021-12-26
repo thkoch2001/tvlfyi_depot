@@ -6,6 +6,12 @@
    [bbbg.user :as user]
    [bbbg.util.core :as u]))
 
+(defn create! [db params]
+  (db/insert! db :attendee-check
+              (select-keys params [::attendee/id
+                                   ::user/id
+                                   ::attendee-check/last-dose-at])))
+
 (defn attendees-with-last-checks
   [db attendees]
   (when (seq attendees)

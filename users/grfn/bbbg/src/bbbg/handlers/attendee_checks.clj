@@ -1,14 +1,16 @@
 (ns bbbg.handlers.attendee-checks
   (:require
    [bbbg.attendee :as attendee]
+   [bbbg.attendee-check :as attendee-check]
    [bbbg.db :as db]
+   [bbbg.db.attendee-check :as db.attendee-check]
    [bbbg.handlers.core :refer [page-response wrap-auth-required]]
+   [bbbg.user :as user]
    [bbbg.util.display :refer [format-date]]
    [compojure.coercions :refer [as-uuid]]
    [compojure.core :refer [context GET POST]]
-   [ring.util.response :refer [not-found]]
-   [bbbg.attendee-check :as attendee-check]
-   [bbbg.user :as user]))
+   [ring.util.response :refer [not-found redirect]]
+   [bbbg.views.flash :as flash]))
 
 (defn- edit-attendee-checks-page [{:keys [existing-check]
                                    attendee-id ::attendee/id}]
@@ -53,4 +55,14 @@
              {:existing-check existing-check
               ::attendee/id attendee-id})))
          (not-found "Attendee not found")))
-     (POST "/" []))))
+     (POST "/" {{:keys [last-dose-at]} :params
+                {user-id ::user/id} :session}
+       (db.attendee-check/create!
+        db
+        {::attendee/id attendee-id
+         ::user/id user-id
+         ::attendee-check/last-dose-at last-dose-at})
+       (-> (redirect "/attendees")
+           (flash/add-flash
+            #:flash{:type :success
+                    :message "Successfully updated vaccination status"}))))))
