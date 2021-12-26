@@ -100,6 +100,8 @@
   ([] (event-form {}))
   ([event]
    [:div.page
+    [:div.page-header
+     [:h1 "Create New Event"]]
     [:form {:method "POST"
             :action "/events"
             :enctype "multipart/form-data"}

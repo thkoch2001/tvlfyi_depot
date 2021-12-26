@@ -210,8 +210,15 @@
 
 (defstyles flash
   [:.flash-messages
-   {:width "800px"
-    :margin "1rem auto"}]
+   {:max-width "800px"
+    :margin "1rem auto"}
+
+   (at-media
+    {:screen true
+     :max-width "800px"}
+    [:&
+     {:margin-left "1rem"
+      :margin-right "1rem"}])]
 
   [:.flash-message
    {:padding "1rem 1.5rem"
