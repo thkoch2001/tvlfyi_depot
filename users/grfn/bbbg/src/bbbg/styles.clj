@@ -4,7 +4,8 @@
    [garden.color :as color]
    [garden.compiler :refer [compile-css]]
    [garden.def :refer [defstyles]]
-   [garden.selectors :refer [& active attr= descendant hover focus nth-child]]
+   [garden.selectors
+    :refer [& active attr= descendant focus hover nth-child]]
    [garden.stylesheet :refer [at-media]]
    [garden.units :refer [px]]))
 
@@ -37,13 +38,20 @@
 ;;;
 
 (def content-width (px 1200))
+(def mobile-width (px 480))
 
-(defn not-mobile [& rules]
+(defn desktop [& rules]
   (at-media
    {:screen true
     :min-width content-width}
-   [:&
-    rules]))
+   [:& rules]))
+
+(defn mobile [& rules]
+  (at-media
+   {:screen true
+    :max-width mobile-width}
+   [:& rules]))
+
 
 ;;;
 
@@ -56,7 +64,7 @@
      :flex-direction :row
      :list-style :none}
 
-    (not-mobile
+    (desktop
      {:width content-width
       :margin "0 auto"})]
 
@@ -238,7 +246,7 @@
 (defstyles signup-page
   [:.signup-page
    {:margin "1rem"}
-   (not-mobile
+   (desktop
     {:width content-width
      :margin "1rem auto"})]
 
@@ -281,7 +289,26 @@
   [:.attendee-checks-form
    {:max-width "340px"
     :margin-left "auto"
-    :margin-right "auto"}])
+    :margin-right "auto"}]
+
+  [:.attendees
+   (mobile
+    {:display :block}
+
+    [:thead {:display :none}]
+    [:tbody :tr :td
+     {:display :block}]
+
+    [:tr
+     {:background-color silver
+      :padding "0.5rem 0.8rem"
+      :margin-bottom "1rem"
+      :border-radius "3px"}]
+    [:td {:padding "0.2rem 0"}]
+
+    [:.attendee-name
+     {:font-weight "bold"
+      :margin-bottom "0.9rem"}])])
 
 (defstyles styles
   forms
@@ -308,7 +335,7 @@
     :margin-left "1rem"
     :margin-right "1rem"}
 
-   (not-mobile
+   (desktop
     {:width content-width
      :margin-left "auto"
      :margin-right "auto"})]
