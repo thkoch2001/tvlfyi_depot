@@ -125,6 +125,26 @@ CO2ScrubberRating ← DebinList 0 >_lifeSupportRating ⊢
 •Out "Day 3.2: "∾•Fmt (OxygenGeneratorRating×CO2ScrubberRating) day3Input
 
 #
+# 2021-12-04
+#
+
+day4Numbers ← ReadDec¨ ',' SplitOn ⊑ReadInput 4
+day4Boards ← ReadDec¨>˘(' '⊸SplitOn¨)> (<⟨⟩) SplitOn 2↓ReadInput 4
+
+BoardWins ← {C ← ∨´∘(∧´˘) ⋄ (C∨C∘⍉)𝕩}
+
+_CallNumber ← {(𝕗∊⥊𝕩) (∨⍟(¬∘BoardWins∘⊢))˘ 𝕨}
+
+BoardWinScores ← {
+  𝕩 (0⊸</×) (⊢-») (+´)∘(BoardWins˘/(+´⥊)˘∘(𝕨⊸×⟜¬))¨ (<0⥊˜≢𝕨) (𝕨 _CallNumber)`𝕩
+}
+
+day4WinScores ← day4Boards BoardWinScores day4Numbers
+
+•Out "Day 4.1: "∾•Fmt ⊑day4WinScores
+•Out "Day 4.2: "∾•Fmt ⊑⌽day4WinScores
+
+#
 # 2021-12-06
 #
 
