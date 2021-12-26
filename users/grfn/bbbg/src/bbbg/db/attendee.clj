@@ -31,6 +31,7 @@
    (if (db/database? db-or-query)
      (db/list db-or-query (for-event event-id))
      (-> db-or-query
+         (merge-select :event-attendee.*)
          (merge-join :event_attendee [:= :attendee.id :event_attendee.attendee_id])
          (merge-where [:= :event_attendee.event_id event-id]))))
   ([db query event-id]
