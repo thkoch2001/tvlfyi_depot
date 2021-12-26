@@ -353,7 +353,7 @@
        ~@body)))
 
 (defn -main [& args]
-  (let [db (component/start (make-database {::config (env->config)}))]
+  (let [db (component/start (make-database (env->config)))]
     (case (first args)
       "migrate" (migrate! db)
       "rollback" (rollback! db))))

@@ -4,5 +4,6 @@ let
 in
 
 {
+  "bbbg.age".publicKeys = [ grfn mugwump ];
   "cloudflare.age".publicKeys = [ grfn mugwump ];
 }
