@@ -3,6 +3,12 @@
 { depot, pkgs, ... }:
 
 let
+  # terraform fmt can't handle multiple paths at once, but treefmt
+  # expects this
+  terraformat = pkgs.writeShellScript "terraformat" ''
+    echo $@ | xargs -n1 ${pkgs.terraform}/bin/terraform fmt
+  '';
+
   config = pkgs.writeText "depot-treefmt-config" ''
     [formatter.go]
     command = "${pkgs.go}/bin/gofmt"
@@ -10,8 +16,7 @@ let
     includes = ["*.go"]
 
     [formatter.tf]
-    command = "${pkgs.terraform}/bin/terraform"
-    options = [ "fmt" ]
+    command = "${terraformat}"
     includes = [ "*.tf" ]
   '';
 
