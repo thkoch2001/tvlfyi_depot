@@ -49,12 +49,15 @@
         [:td (:events-attended attendee)]
         [:td (:no-shows attendee)]
         (if-let [last-check (:last-check attendee)]
-          [:td (str (-> last-check
+          [:td (str "✔️ "(-> last-check
                         ::attendee-check/checked-at
                         format-date)
                     ", by "
                     (get-in last-check [:user ::user/username]))]
-          [:td "Not Checked"
+          [:td
+           [:span {:title "Not Checked"}
+            "❌"]
+           " "
            [:a {:href (str "/attendees/" id "/checks/edit")}
             "Edit"]])
         (if (= edit-notes id)

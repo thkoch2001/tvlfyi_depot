@@ -99,8 +99,7 @@
   [:.search-form
    {:display :flex
     :flex-direction :row
-    :width "100%"
-    :padding "0 1rem"}
+    :width "100%"}
 
    [:>*+*
     {:margin-left "0.75rem"}]
@@ -163,7 +162,24 @@
      :color :white
      :box-shadow :none}
     [(& :a)
-     {:text-decoration :none}]]])
+     {:text-decoration :none}]]]
+
+  [:label
+   {:font-weight 600
+    :width "100%"}
+
+   [:input
+    {:font-weight "initial"
+     :margin-top "0.3rem"}]]
+
+  [:.form-group
+   {:display :flex
+    :margin-bottom "0.8rem"
+    :flex-direction :column}
+
+   [(attr= "type" "submit")
+    {:text-align :right
+     :align-self :flex-end}]])
 
 (defstyles tables
   [:table
@@ -261,6 +277,12 @@
   [:.hidden
    {:display :none}])
 
+(defstyles attendees
+  [:.attendee-checks-form
+   {:max-width "340px"
+    :margin-left "auto"
+    :margin-right "auto"}])
+
 (defstyles styles
   forms
   tables
@@ -270,6 +292,7 @@
   flash
   home-page
   signup-page
+  attendees
 
   [:body
    {:color black}]
@@ -281,7 +304,9 @@
     :width "100%"}]
 
   [:.page
-   {:margin-top "1rem"}
+   {:margin-top "1rem"
+    :margin-left "1rem"
+    :margin-right "1rem"}
 
    (not-mobile
     {:width content-width

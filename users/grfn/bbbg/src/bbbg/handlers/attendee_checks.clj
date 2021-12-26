@@ -12,15 +12,16 @@
 
 (defn- edit-attendee-checks-page [{:keys [existing-check]
                                    attendee-id ::attendee/id}]
-  [:div
+  [:div.page
    (when existing-check
      [:p
       "Already checked on "
       (-> existing-check ::attendee-check/checked-at format-date)
       " by "
       (::user/username existing-check)])
-   [:form {:method :post
-           :action (str "/attendees/" attendee-id "/checks")}
+   [:form.attendee-checks-form
+    {:method :post
+     :action (str "/attendees/" attendee-id "/checks")}
     [:div.form-group
      [:label
       "Last Dose"
