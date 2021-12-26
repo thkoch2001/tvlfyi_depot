@@ -1,32 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
     <title>wpcarro.dev</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=JetBrains+Mono">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+                mono: ["JetBrains Mono", "normal"]
+            },
+          },
+        },
+      };
+    </script>
   </head>
-  <body>
-    <h1>Sitemap</h1>
+  <body class="font-mono bg-gray-100">
+    <header class="sticky top-0 pt-6">
+      <div class="flex max-w-3xl mx-auto">
+        <div class="flex-1">
+          <a href="https://cs.tvl.fyi/depot/-/blob/users/wpcarro/website/index.html">
+            <h1 class="font-bold">
+              <span class="text-black">(</span><a class="text-purple-600 hover:underline" href="https://cs.tvl.fyi/depot/-/blob/users/wpcarro/website/index.html">def</a>&nbsp;<a class="text-green-600 hover:underline text-bold" href="https://wpcarro.dev">"wpcarro.dev"</a><span class="text-black">)</span>
+            </h1>
+          </a>
+        </div>
+        <nav class="flex-1">
+          <ul class="list-reset flex justify-end space-x-8">
+            <li>
+              <a class="hover:underline" href="https://wpcarro.dev/habits">
+                Habits
+              </a>
+            </li>
+            <li>
+              <a class="hover:underline" href="https://blog.wpcarro.dev">
+                Blog
+              </a>
+            </li>
+            <li>
+              <a class="hover:underline" href="https://github.com/wpcarro">
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a class="hover:underline" href="https://linkedin.com/in/williampatrickcarroll">
+                LinkedIn
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-    <ul>
-      <li>Miscellaneous</li>
-      <ul>
-        <li>
-          <a href="/habits">Habits</a>
-        </li>
-        <li>
-          <a href="https://blog.wpcarro.dev">blog.wpcarro.dev</a>
-        </li>
-      </ul>
-      <li>Social</li>
-      <ul>
-        <li>
-          <a href="https://github.com/wpcarro">Github</a>
-        </li>
-        <li>
-          <a href="https://linkedin.com/in/williampatrickcarroll">LinkedIn</a>
-        </li>
-      </ul>
-    </ul>
-
+    <div class="max-w-prose mx-auto">
+      <section class="leading-7">
+        <p class="relative text-3xl text-center font-bold pt-14 pb-10">
+          Hey! I'm William.<span class="pl-10 relative"><span class="block absolute right-0 transition-transform hover:rotate-90">👋</span></span>
+        </p>
+        <p class="pb-4">
+          I write software. Currently I work as a <b>Site Reliability Engineer</b> for
+          <a class="text-blue-600 font-bold hover:underline" href="https://drive.google.com">Google Drive</a>.
+        </p>
+        <p class="pb-4">
+          I'm <b>wpcarro</b> on
+          <a class="font-bold text-blue-600 hover:underline" href="https://github.com/wpcarro">GitHub</a>
+          (and elsewhere), but if you're looking for code samples, the majority of
+          my open-source work resides in a magical place called the
+          <a class="font-bold text-blue-600 hover:underline" href="https://cs.tvl.fyi">depot</a>.
+        </p>
+        <p class="pb-4">
+          If I'm not coding, I'm likely meditating, training Jiu Jitsu, or
+          fumbling around on the piano or drums.
+        </p>
+      </section>
+    </div>
   </body>
 </html>
