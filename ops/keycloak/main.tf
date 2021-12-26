@@ -38,3 +38,24 @@ resource "keycloak_ldap_user_federation" "tvl_ldap" {
     "organizationalPerson",
   ]
 }
+
+resource "keycloak_openid_client" "oauth2_proxy" {
+  realm_id              = keycloak_realm.tvl.id
+  client_id             = "oauth2-proxy"
+  name                  = "TVL OAuth2 Proxy"
+  enabled               = true
+  access_type           = "CONFIDENTIAL"
+  standard_flow_enabled = true
+
+  valid_redirect_uris = [
+    "https://login.tvl.fyi/oauth2/callback"
+  ]
+}
+
+resource "keycloak_openid_audience_protocol_mapper" "panettone_audience" {
+  realm_id  = keycloak_realm.tvl.id
+  client_id = keycloak_openid_client.oauth2_proxy.id
+  name      = "panettone-audience"
+
+  included_custom_audience = "b"
+}
