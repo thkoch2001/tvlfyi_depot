@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "530cf826_4eda3f7b",
         "filename": "third_party/nix/src/libmain/stack.cc",
@@ -20,8 +21,31 @@
         "endChar": 50
       },
       "revId": "5e4e85574f47c92ab300f89a39b88464300a0424",
-      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
-      "unresolved": true
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9b04dc9_170dcb3e",
+        "filename": "third_party/nix/src/libmain/stack.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-26T00:49:03Z",
+      "side": 1,
+      "message": "partial ack. the compiler won\u0027t \"just ignore it\" usually, so if the selected code is pulled out of the if blocks, it might result in compile failures (if the `uc_mcontext` field isn\u0027t present) or in a segfault (if the `ctx` pointer is invalid).",
+      "parentUuid": "530cf826_4eda3f7b",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 50
+      },
+      "revId": "5e4e85574f47c92ab300f89a39b88464300a0424",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
