@@ -22,6 +22,30 @@
       },
       "revId": "0bc6ec7f43b332b1bc01177d466dc7a1486de480",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb2b3c53_5035c80e",
+        "filename": "ops/modules/monorepo-gerrit.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-26T00:08:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d04b361_34cb6880",
+      "range": {
+        "startLine": 97,
+        "startChar": 39,
+        "endLine": 97,
+        "endChar": 40
+      },
+      "revId": "0bc6ec7f43b332b1bc01177d466dc7a1486de480",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
