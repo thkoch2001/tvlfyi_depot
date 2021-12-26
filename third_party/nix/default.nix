@@ -125,10 +125,6 @@ in lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
     export NIX_DATA_DIR=$out/share
     export NIX_TEST_VAR=foo # this is required by a language test
     make test
-
-    # Ensure formatting is coherent, but do this after the rest of the
-    # tests run so that developers get all the useful feedback
-    fd . $src -e hh -e cc | xargs clang-format --dry-run --Werror
   '';
 
   preBuild = ''
@@ -201,6 +197,35 @@ in lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
         export NIX_TEST_VAR=foo
       '';
     });
+
+    # Ensure formatting is coherent,
+    # but do this in parallel to the main build because:
+    #  - (in favor of building this after tvix)
+    #    tests run so that developers get all the useful feedback
+    #  - (in favor of building this before tvix)
+    #    if the formatting is broken, and this build was submitted to CI
+    #    it would be a good idea to get this feedback rather sooner than later
+    #  - we don't want builds to differ between local and CI runs
+    checkfmt = pkgs.fullLlvm11Stdenv.mkDerivation {
+      name = "tvix-checkfmt";
+      inherit src;
+      nativeBuildInputs = with pkgs; [ clang-tools_11 fd ];
+      SANDBOX_SHELL = "${pkgs.busybox}/bin/busybox";
+
+      buildPhase = ''
+        set -e
+        runHook preBuild
+        fd . $src -e hh -e cc | xargs clang-format --dry-run --Werror
+        runHook postBuild
+      '';
+    };
+
     test-vm = import ./test-vm.nix args;
+  };
+
+  meta = {
+    targets = [
+      "checkfmt"
+    ];
   };
 })
