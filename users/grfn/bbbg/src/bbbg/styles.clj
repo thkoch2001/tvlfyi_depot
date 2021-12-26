@@ -376,7 +376,9 @@
     :flex-wrap :wrap
     :padding-bottom "0.7rem"
     :margin-bottom "1rem"
-    :border-bottom [["1px" "solid" silver]]}]
+    :border-bottom [["1px" "solid" silver]]
+    :align-items :center
+    :justify-content :space-between}]
 
   [(attr= "role" "button")
    {:cursor :pointer}]
