@@ -52,6 +52,24 @@
       "parentUuid": "7f8f3988_c38701cc",
       "revId": "53d116e1062db00e4ffdf6d94f2ac973448c4fb6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "087fc7c8_43565f66",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-26T23:17:58Z",
+      "side": 1,
+      "message": "@sterni: In https://buildkite.com/tvl/depot/builds/10712, tvix is built, but tvix/checkfmt afaik isn\u0027t.",
+      "parentUuid": "c97e0b97_693f0bb6",
+      "revId": "53d116e1062db00e4ffdf6d94f2ac973448c4fb6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
