@@ -70,6 +70,24 @@
       "parentUuid": "c97e0b97_693f0bb6",
       "revId": "53d116e1062db00e4ffdf6d94f2ac973448c4fb6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ce98bc0_96b40229",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-26T23:37:20Z",
+      "side": 1,
+      "message": "Now it works as expected: https://buildkite.com/tvl/depot/builds/10823",
+      "parentUuid": "087fc7c8_43565f66",
+      "revId": "53d116e1062db00e4ffdf6d94f2ac973448c4fb6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
