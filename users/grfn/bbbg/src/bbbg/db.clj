@@ -1,6 +1,6 @@
 (ns bbbg.db
   (:gen-class)
-  (:refer-clojure :exclude [get list])
+  (:refer-clojure :exclude [get list count])
   (:require [camel-snake-kebab.core :as csk :refer [->kebab-case ->snake_case]]
             [bbbg.util.core :as u]
             [clojure.set :as set]
@@ -293,13 +293,18 @@
         sql-map-or-table)
       (merge jdbc-opts opts)))))
 
+(defn count
+  [db sql-map]
+  (binding [*meta-db* db]
+    (:count
+     (fetch db {:select [[:%count.* :count]], :from [[sql-map :sq]]}))))
+
 (defn exists?
   "Returns true if the given sql query-map would return any results"
   [db sql-map]
   (binding [*meta-db* db]
     (pos?
-     (:count
-      (fetch db {:select [[:%count.* :count]], :from [[sql-map :sq]]})))))
+     (count db sql-map))))
 
 (defn execute!
   "Given a database and a honeysql query map, perform an operation on the

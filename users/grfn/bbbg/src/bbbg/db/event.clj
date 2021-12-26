@@ -4,7 +4,8 @@
    [bbbg.db :as db]
    [bbbg.event :as event]
    [bbbg.util.sql :refer [count-where]]
-   [honeysql.helpers :refer [merge-group-by merge-left-join merge-select]]
+   [honeysql.helpers
+    :refer [merge-group-by merge-left-join merge-select merge-where]]
    [java-time :refer [local-date]]))
 
 (defn create! [db event]
@@ -31,6 +32,16 @@
 (defn today
   ([] (on-day (local-date)))
   ([db] (db/list db (today))))
+
+(defn upcoming
+  ([] (upcoming {:select [:event.*] :from [:event]}))
+  ([query]
+   (merge-where query [:>= :date (local-date)])))
+
+(defn past
+  ([] (past {:select [:event.*] :from [:event]}))
+  ([query]
+   (merge-where query [:< :date (local-date)])))
 
 (defn with-attendee-counts
   [query]
