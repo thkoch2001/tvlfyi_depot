@@ -143,7 +143,6 @@
          (db.event/attended! db {::event/id event_id
                                  ::attendee/id attendee_id})
          (-> (redirect (str "/signup-forms/" event_id))
-             (assoc-in [:session :test] 1)
              (flash/add-flash
               #:flash{:type :success
                       :message "Thank you for signing in! Enjoy the event."})))
