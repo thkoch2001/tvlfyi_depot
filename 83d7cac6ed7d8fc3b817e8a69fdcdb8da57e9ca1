@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7b8c63c_75d16b03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-26T05:13:59Z",
+      "side": 1,
+      "message": "\u003e 01:54:42: zseri: About https://buildkite.com/tvl/depot/builds/10701: why is the code formatting check the last thing in the build and not the first? I think that probably wastes quite a bit of resources, because we can\u0027t even reuse the previous build results if the content of some input file changes.\n\nProblem: the proposal would have a significant downside, because the tests would no longer run,\nand some solution where we swap the order when compiling in CI vs local also doesn\u0027t sound good.",
+      "revId": "83d7cac6ed7d8fc3b817e8a69fdcdb8da57e9ca1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
