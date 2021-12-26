@@ -11,7 +11,11 @@ in {
 
   networking = {
     hostName = "diogenes";
-    firewall.allowedTCPPorts = [ 80 443 ];
+    firewall.allowedTCPPorts = [
+      80   # http
+      443  # https
+      6698 # quassel
+    ];
   };
 
   # Use the TVL binary cache
