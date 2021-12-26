@@ -64,6 +64,11 @@ with lib;
 
   nix.gc.dates = "monthly";
 
+  services.depot.auto-deploy = {
+    enable = true;
+    interval = "1d";
+  };
+
   services.fail2ban = {
     enable = true;
     ignoreIP = [
