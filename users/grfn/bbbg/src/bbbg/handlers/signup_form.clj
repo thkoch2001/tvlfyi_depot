@@ -1,15 +1,17 @@
 (ns bbbg.handlers.signup-form
   (:require
+   [bbbg.attendee :as attendee]
    [bbbg.db :as db]
+   [bbbg.db.attendee :as db.attendee]
    [bbbg.db.event :as db.event]
    [bbbg.event :as event]
-   [bbbg.handlers.core :refer [page-response authenticated? *authenticated?*]]
-   [compojure.core :refer [GET context]]
-   [java-time :refer [local-date]]
-   [ring.util.response :refer [redirect]]
-   [bbbg.db.attendee :as db.attendee]
+   [bbbg.handlers.core
+    :refer [*authenticated?* authenticated? page-response]]
    [cheshire.core :as json]
-   [bbbg.attendee :as attendee]))
+   [compojure.core :refer [context GET]]
+   [honeysql.helpers :refer [merge-where]]
+   [java-time :refer [local-date]]
+   [ring.util.response :refer [redirect]]))
 
 (defn no-events-page [{:keys [authenticated?]}]
   [:div.no-events
@@ -76,7 +78,12 @@
 
    (GET "/:event-id" [event-id]
      (if-let [event (db/get db :event event-id)]
-       (let [attendees (db.attendee/for-event db event-id)]
+       (let [attendees (db/list db
+                                (->
+                                 (db.attendee/for-event event-id)
+                                 (merge-where [:or
+                                               [:= :attended nil]
+                                               [:not :attended]])))]
          (page-response
           (signup-page {:event event
                         :attendees attendees})))
