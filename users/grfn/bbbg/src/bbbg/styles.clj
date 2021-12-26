@@ -310,6 +310,13 @@
      {:font-weight "bold"
       :margin-bottom "0.9rem"}])])
 
+(defstyles events
+  [:.events-list
+   {:margin-top "1rem"}
+
+   [:li
+    {:margin-bottom "1rem"}]])
+
 (defstyles styles
   forms
   tables
@@ -320,6 +327,7 @@
   home-page
   signup-page
   attendees
+  events
 
   [:body
    {:color black}]
@@ -339,6 +347,13 @@
     {:width content-width
      :margin-left "auto"
      :margin-right "auto"})]
+
+  [:.page-header
+   {:display :flex
+    :flex-wrap :wrap
+    :padding-bottom "0.7rem"
+    :margin-bottom "1rem"
+    :border-bottom [["1px" "solid" silver]]}]
 
   [(attr= "role" "button")
    {:cursor :pointer}]
