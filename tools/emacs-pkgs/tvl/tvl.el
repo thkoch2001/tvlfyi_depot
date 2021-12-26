@@ -57,7 +57,7 @@
   "Push to Gerrit as a work-in-progress."
   (interactive)
   (magit-push-refspecs tvl-gerrit-remote
-                       (concat (tvl--gerrit-ref tvl-target-branch) "%wip")
+                       (tvl--gerrit-ref tvl-target-branch '("wip"))
                        nil))
 
 (transient-append-suffix
