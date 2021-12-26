@@ -46,23 +46,34 @@
                      attendees)
            :let [id (::attendee/id attendee)]]
        [:tr
-        [:td (::attendee/meetup-name attendee)]
-        [:td (::attendee/discord-name attendee)]
-        [:td (:events-rsvpd attendee)]
-        [:td (:events-attended attendee)]
-        [:td (:no-shows attendee)]
-        (if-let [last-check (:last-check attendee)]
-          [:td (str "✔️ "(-> last-check
+        [:td.attendee-name (::attendee/meetup-name attendee)]
+        [:td
+         [:label.mobile-label "Discord Name: "]
+         (or (not-empty (::attendee/discord-name attendee))
+             "—")]
+        [:td
+         [:label.mobile-label "Events RSVPd: "]
+         (:events-rsvpd attendee)]
+        [:td
+         [:label.mobile-label "Events Attended: "]
+         (:events-attended attendee)]
+        [:td
+         [:label.mobile-label "No-shows: "]
+         (:no-shows attendee)]
+        [:td
+         [:label.mobile-label "Last Vaccination Check: "]
+         (if-let [last-check (:last-check attendee)]
+           (str "✔️ "(-> last-check
                         ::attendee-check/checked-at
                         format-date)
-                    ", by "
-                    (get-in last-check [:user ::user/username]))]
-          [:td
-           [:span {:title "Not Checked"}
-            "❌"]
-           " "
-           [:a {:href (str "/attendees/" id "/checks/edit")}
-            "Edit"]])
+                ", by "
+                (get-in last-check [:user ::user/username]))
+           (list
+            [:span {:title "Not Checked"}
+             "❌"]
+            " "
+            [:a {:href (str "/attendees/" id "/checks/edit")}
+             "Edit"] ))]
         (if (= edit-notes id)
           [:td
            [:form.organizer-notes {:method :post
