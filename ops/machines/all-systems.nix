@@ -12,6 +12,7 @@
 
 (with depot.users.grfn.system.system; [
   yeren
+  mugwump
 ]) ++
 
 (with depot.users.wpcarro.nixos; [
