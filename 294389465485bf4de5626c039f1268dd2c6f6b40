@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be81dc15_11c6f8ff",
+        "filename": "web/static/tvl.css",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-26T01:23:08Z",
+      "side": 1,
+      "message": "although I think that the `article p` change definitively improves the blog, I\u0027m not sure if this isn\u0027t a bit \"too much\", especially because the lines in blog posts are relatively short (max ~76 chars).",
+      "revId": "294389465485bf4de5626c039f1268dd2c6f6b40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
