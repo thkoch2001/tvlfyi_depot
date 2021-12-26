@@ -8,6 +8,7 @@ with lib;
     (modulesPath + "/installer/scan/not-detected.nix")
     "${depot.path}/ops/modules/prometheus-fail2ban-exporter.nix"
     "${depot.path}/users/grfn/xanthous/server/module.nix"
+    "${depot.third_party.agenix.src}/modules/age.nix"
   ];
 
   networking.hostName = "mugwump";
@@ -63,6 +64,12 @@ with lib;
   }];
 
   nix.gc.dates = "monthly";
+
+  age.secrets = let
+    secret = name: depot.users.grfn.secrets."${name}.age";
+  in {
+    cloudflare.file = secret "cloudflare";
+  };
 
   services.depot.auto-deploy = {
     enable = true;
@@ -132,7 +139,7 @@ with lib;
   };
 
   systemd.services.ddclient.serviceConfig = {
-    EnvironmentFile = "/etc/secrets/cloudflare.env";
+    EnvironmentFile = "/run/secrets/cloudflare.env";
     DynamicUser = lib.mkForce false;
     ExecStart = lib.mkForce (
       let runtimeDir =
@@ -149,7 +156,7 @@ with lib;
 
   security.acme.certs."metrics.gws.fyi" = {
     dnsProvider = "cloudflare";
-    credentialsFile = "/etc/secrets/cloudflare.env";
+    credentialsFile = "/run/secrets/cloudflare.env";
     webroot = mkForce null;
   };
 
