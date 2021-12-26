@@ -40,7 +40,10 @@
       [:th "Last Vaccination Check"]
       [:th "Notes"]]]
     [:tbody
-     (for [attendee attendees
+     (for [attendee (sort-by
+                     (comp #{edit-notes} ::attendee/id)
+                     (comp - compare)
+                     attendees)
            :let [id (::attendee/id attendee)]]
        [:tr
         [:td (::attendee/meetup-name attendee)]
@@ -64,13 +67,18 @@
           [:td
            [:form.organizer-notes {:method :post
                                    :action (str "/attendees/" id "/notes")}
-            [:input {:type :text :name "notes"
-                     :value (::attendee/organizer-notes attendee)}]
-            [:input {:type "Submit" :value "Save Notes"}]]]
+            [:div.form-group
+             [:input {:type :text :name "notes"
+                      :value (::attendee/organizer-notes attendee)
+                      :autofocus true}]]
+            [:div.form-group
+             [:input {:type "Submit" :value "Save Notes"}]]]]
           [:td
-           (::attendee/organizer-notes attendee)
-           [:a {:href (str "/attendees?edit-notes=" id)}
-            "Edit Notes"]])])]]])
+           [:p
+            (::attendee/organizer-notes attendee)]
+           [:p
+            [:a {:href (str "/attendees?edit-notes=" id)}
+             "Edit Notes"]]])])]]])
 
 (defn attendees-routes [{:keys [db]}]
   (routes
