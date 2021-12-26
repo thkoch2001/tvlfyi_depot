@@ -19,7 +19,7 @@
     </script>
   </head>
   <body class="font-mono bg-gray-100">
-    <header class="sticky bg-gray-100 top-0 py-6">
+    <header class="sticky z-10 transition duration-300 bg-gray-100 top-0 py-6">
       <div class="flex max-w-sm md:max-w-3xl mx-auto">
         <div class="flex-1 text-center md:text-left text-xl md:text-base">
           <a href="https://cs.tvl.fyi/depot/-/blob/users/wpcarro/website/index.html">
@@ -99,5 +99,15 @@
       </footer>
     </div>
 
+    <script>
+      const $header = document.querySelector("header");
+      const dropShadow = "drop-shadow-md";
+      const update = () => window.scrollY !== 0 ?
+        $header.classList.add(dropShadow) :
+        $header.classList.remove(dropShadow);
+
+      update();
+      document.addEventListener("scroll", update);
+    </script>
   </body>
 </html>
