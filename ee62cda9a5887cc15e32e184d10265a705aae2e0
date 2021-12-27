@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91719e7d_8a8473e8",
+        "filename": "third_party/gerrit/0001-Use-detzip-in-download_bower.py.patch",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-27T08:19:16Z",
+      "side": 0,
+      "message": "Why is this one no longer required?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 70
+      },
+      "revId": "ee62cda9a5887cc15e32e184d10265a705aae2e0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
