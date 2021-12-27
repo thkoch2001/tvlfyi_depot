@@ -87,7 +87,7 @@ with builtins; let
 
   checkEach = name: t: l: foldl' (acc: e:
     let res = t.checkType e;
-        isT = t.checkToBool res;
+        isT = builtins.trace res (t.checkToBool res);
     in {
       ok = acc.ok && isT;
       err = if isT
