@@ -1,0 +1,99 @@
+# DNS configuration for tvl.fyi
+
+resource "glesys_dnsdomain" "tvl_fyi" {
+  name = "tvl.fyi"
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_NS1" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "@"
+  type   = "NS"
+  data   = "ns1.namesystem.se."
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_NS2" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "@"
+  type   = "NS"
+  data   = "ns2.namesystem.se."
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_NS3" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "@"
+  type   = "NS"
+  data   = "ns3.namesystem.se."
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_apex_A" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "@"
+  type   = "A"
+  data   = var.whitby_ipv4
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_apex_AAAA" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "@"
+  type   = "AAAA"
+  data   = var.whitby_ipv6
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_whitby_A" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "whitby"
+  type   = "A"
+  data   = var.whitby_ipv4
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_whitby_AAAA" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "whitby"
+  type   = "AAAA"
+  data   = var.whitby_ipv6
+}
+
+# This record is responsible for hosting ~all TVL services. Be
+# mindful!
+resource "glesys_dnsdomain_record" "tvl_fyi_wildcard" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "*"
+  type   = "CNAME"
+  data   = "whitby.tvl.fyi."
+}
+
+# Google Domains mail forwarding configuration (no sending)
+resource "glesys_dnsdomain_record" "tvl_fyi_MX_5" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "@"
+  type   = "MX"
+  data   = "5 gmr-smtp-in.l.google.com."
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_MX_10" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "@"
+  type   = "MX"
+  data   = "10 alt1.gmr-smtp-in.l.google.com."
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_MX_20" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "@"
+  type   = "MX"
+  data   = "20 alt2.gmr-smtp-in.l.google.com."
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_MX_30" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "@"
+  type   = "MX"
+  data   = "30 alt3.aspmx.l.google.com."
+}
+
+resource "glesys_dnsdomain_record" "tvl_fyi_MX_40" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  host   = "@"
+  type   = "MX"
+  data   = "40 alt4.gmr-smtp-in.l.google.com."
+}

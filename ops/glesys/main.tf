@@ -50,3 +50,13 @@ resource "glesys_objectstorage_credential" "litestream" {
   instanceid  = glesys_objectstorage_instance.tvl-state.id
   description = "key for litestream"
 }
+
+variable "whitby_ipv4" {
+  type    = string
+  default = "49.12.129.211"
+}
+
+variable "whitby_ipv6" {
+  type    = string
+  default = "2a01:4f8:242:5b21:0:feed:edef:beef"
+}
