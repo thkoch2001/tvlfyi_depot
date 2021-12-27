@@ -28,7 +28,7 @@
     ::bbbg-organizer-role (:bbbg-organizer-role
                            env
                            ;; TODO this might not be the right id
-                           "902593101758091294")}))
+                           "908428000817725470")}))
 
 (defn dev-config []
   (s/assert
