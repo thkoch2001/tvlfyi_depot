@@ -500,15 +500,15 @@ in {
         auth = {
           generic_oauth = {
             enabled = true;
-            client_id = "OAUTH-TVL-grafana-f1A1EmHLDT";
+            client_id = "grafana";
             scopes = "openid profile email";
             name = "TVL";
             email_attribute_path = "mail";
             login_attribute_path = "sub";
             name_attribute_path = "displayName";
-            auth_url = "https://login.tvl.fyi/oidc/authorize";
-            token_url = "https://login.tvl.fyi/oidc/accessToken";
-            api_url = "https://login.tvl.fyi/oidc/profile";
+            auth_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/auth";
+            token_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/token";
+            api_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/userinfo";
 
             # Give lukegb, grfn, tazjin "Admin" rights.
             role_attribute_path = "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Editor'";
@@ -516,11 +516,13 @@ in {
             # Allow creating new Grafana accounts from OAuth accounts.
             allow_sign_up = true;
           };
+
           anonymous = {
             enabled = true;
             org_name = "The Virus Lounge";
             org_role = "Viewer";
           };
+
           basic.enabled = false;
           oauth_auto_login = true;
           disable_login_form = true;
