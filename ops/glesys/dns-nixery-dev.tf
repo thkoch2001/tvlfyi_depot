@@ -12,14 +12,14 @@ resource "glesys_dnsdomain_record" "nixery_dev_apex_A" {
   domain = glesys_dnsdomain.nixery_dev.id
   host   = "@"
   type   = "A"
-  data   = "49.12.129.211"
+  data   = var.whitby_ipv4
 }
 
 resource "glesys_dnsdomain_record" "nixery_dev_apex_AAAA" {
   domain = glesys_dnsdomain.nixery_dev.id
   host   = "@"
   type   = "AAAA"
-  data   = "2a01:4f8:242:5b21:0:feed:edef:beef"
+  data   = var.whitby_ipv6
 }
 
 resource "glesys_dnsdomain_record" "nixery_dev_NS1" {
