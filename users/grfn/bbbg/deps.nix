@@ -34,8 +34,8 @@ let repos = [
       inherit repos;
       artifactId = "cambium.logback.json";
       groupId = "cambium";
-      sha512 = "a19e990652749f02a258da3ca30fee126e324a2c6969667fcdbfd7e0b313997d729efb83ccf54a500e7af7476b4bbe0e511b37540fb6f7bc9f117d2db8c4fe99";
-      version = "0.4.3";
+      sha512 = "8e3f32bc1e11071ddc8700204333ba653585de7985c03d14c351950a7896975092e9deffd658bfec7b0b8b9cc72dc025d8e5179a185bd25da26e500218ec37a5";
+      version = "0.4.5";
       
     };
     paths = [ src ];
@@ -138,8 +138,8 @@ let repos = [
       inherit repos;
       artifactId = "tools.logging";
       groupId = "org.clojure";
-      sha512 = "d846b3032f5350af7e8847e94dea223ef8a644d353e45d6ec44c2ffa1f0df96b90cfe7afc0610cd0a13b52527ff2fe71003fbd5cbc2dd60320a1be5979b62e80";
-      version = "1.1.0";
+      sha512 = "b7a9680f1156fc7c1574a4364ca550d47668ba727fc80110fdd00c159bedb45c5be82f09cdfb8e8e988e3381e2cf8881ea70651e38001e3eaa4ece31ad0bf0c5";
+      version = "1.2.2";
       
     };
     paths = [ src ];
@@ -281,8 +281,8 @@ let repos = [
       inherit repos;
       artifactId = "janino";
       groupId = "org.codehaus.janino";
-      sha512 = "e0bbae3511a2b9cc134afff4fa6c38b6cf0fc1761f233e842df78ba9e25b26f6932e8ee590c7567c0ee86b91472c6b95c49547c034cda98d862e2f00916cd98a";
-      version = "3.0.12";
+      sha512 = "6853d7d53d3629df43a3a17ff5c989f59ec14e9030be5f67426deb9d0797fa3996b0609d582c65f22a4f7680c941b39ab6d466c480b2fea4bf92218a9b89651d";
+      version = "3.1.2";
       
     };
     paths = [ src ];
@@ -294,8 +294,8 @@ let repos = [
       inherit repos;
       artifactId = "jcl-over-slf4j";
       groupId = "org.slf4j";
-      sha512 = "aed539305114718bd76da54f29a391362eb331108d9c033956bf68df29c62a44874c73ae39d19a25342625b6092326d39b4d8720aed6c62234a234e0855b00b5";
-      version = "1.7.30";
+      sha512 = "c51f26858179d4c3fecc137bd2673c5b5a37ccd7745eba5cf10e0a19c8c9cff18130ff8680c8bcd56068c571b863e287f547a211477fd094389ca003b4849e53";
+      version = "1.8.0-beta4";
       
     };
     paths = [ src ];
@@ -320,8 +320,8 @@ let repos = [
       inherit repos;
       artifactId = "cambium.logback.core";
       groupId = "cambium";
-      sha512 = "b7b5eda0a455e36e3ba2b1cb978f0c87a3db10f7ff504437f22ca92af26ac762b1e5943b8d748e1a623036bfdad8da70e718f7a4c9e5198c31a4d27954444a19";
-      version = "0.4.3";
+      sha512 = "83ee9a583dd8a7b2e82e0981b4e51b005095a27257eb1b07165d9701645609060c466ae67fb9431f524a544d52b71fa00009b8acf05aadbeb549043515f9b382";
+      version = "0.4.5";
       
     };
     paths = [ src ];
@@ -437,8 +437,8 @@ let repos = [
       inherit repos;
       artifactId = "logback-core";
       groupId = "ch.qos.logback";
-      sha512 = "bd1a7512647fe61b90cfd18bedf2a33f3f16f334f8f8ce947cdd353c0b0b7a7cce203070f0d2183f6583e0f2b2fe6e0b12eb93bd5b2dc29076e7b466447f6dc5";
-      version = "1.2.3";
+      sha512 = "b849277d48eaae5d78999e1100644b5aa3ee07627a7e9d6b6acfb8c9112638be21f7eb3712845a3c0dcc953891839843ee2045b8bed58d800a9ac12d85c531e6";
+      version = "1.2.8";
       
     };
     paths = [ src ];
@@ -645,8 +645,8 @@ let repos = [
       inherit repos;
       artifactId = "jul-to-slf4j";
       groupId = "org.slf4j";
-      sha512 = "82d77af8c4db84d6b35b8138dc73e6d8c5ebbc6907f77295627d8402a5c63aa3fea05bfc0f8982b3a2120615d8edc4fcb947468c1de3dd33cf943690737e652d";
-      version = "1.7.30";
+      sha512 = "56f6ce36e3d6f1b8155862e5960ab47028067a2313b2d28dfceb8ab3e2c9510b3bf8a621d9e315347ddb42d58c36dd601ed286bf76b078ea5246a658255a0b07";
+      version = "1.8.0-beta4";
       
     };
     paths = [ src ];
@@ -686,6 +686,19 @@ let repos = [
       groupId = "org.apache.httpcomponents";
       sha512 = "e150e8dc49c8c9972d8b324b56bb292b15e2f0e686f1292c4edac975615dfb16e5edb8ab325e614732a7d43a03061ca4fe93fe1e1f7487851a4d4d3af50a61f9";
       version = "4.5.13";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
+    name = "slf4j-simple/org.slf4j";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "slf4j-simple";
+      groupId = "org.slf4j";
+      sha512 = "00c21c27264b9a95712cbd733cc0cab15c9704be260232a68cac2259a2bb7eb220a92624f0a8f592e29cd520727018ad8f42798d7c282fe8b2ff319a87163104";
+      version = "1.8.0-beta4";
       
     };
     paths = [ src ];
@@ -1100,8 +1113,8 @@ let repos = [
       inherit repos;
       artifactId = "commons-compiler";
       groupId = "org.codehaus.janino";
-      sha512 = "51fc5542e05d9a310413677855456a3e08f318210d54e24aa209826ed8f4e524a691bcabccab085d091634827fa656b110ab75ee444808e1a5a9b670cd4ff138";
-      version = "3.0.12";
+      sha512 = "f0778b891ef14d8ee6776747eab0b25da716cdc530752a81aedec2a77570e2f66402179b9408a6efde8125c808eb060a720d2f4977c1f1d022bdaae7eac8d011";
+      version = "3.1.2";
       
     };
     paths = [ src ];
@@ -1204,8 +1217,8 @@ let repos = [
       inherit repos;
       artifactId = "cambium.codec-cheshire";
       groupId = "cambium";
-      sha512 = "33732ebdbc257b7679f705a20d4fbe41860763f67b0d338e9c8eb23839016464cf2fe7c312317ad9b1b47b3fc604fe5039e30172ee73df09faead9aa7ec6dff6";
-      version = "0.9.3";
+      sha512 = "614491cf752a597f29ae29885db6c1ed191341303d89183bee52e4e2c76eb8eb14693562ad09484f379a074b36d97085e848ec3845e069440e6422506c1636f1";
+      version = "1.0.0";
       
     };
     paths = [ src ];
@@ -1238,6 +1251,19 @@ let repos = [
   }
 
   rec {
+    name = "ring-logger/ring-logger";
+    src = fetchMavenArtifact {
+      inherit repos;
+      artifactId = "ring-logger";
+      groupId = "ring-logger";
+      sha512 = "b675a61c173289fc610d84920ba40178bf62b3bc680923cb66866d78ee2a508296b27a1ab14b66bfbe0304a64166a7e3c3ddee36564dd4a2f988861bce455a3a";
+      version = "1.0.1";
+      
+    };
+    paths = [ src ];
+  }
+
+  rec {
     name = "ring-servlet/ring";
     src = fetchMavenArtifact {
       inherit repos;
@@ -1256,8 +1282,8 @@ let repos = [
       inherit repos;
       artifactId = "logback-classic";
       groupId = "ch.qos.logback";
-      sha512 = "9ad5df9055e74c1db67e10422774e740903477c821591702d2709a4c1f73e3fc3fa6b1a871b6985901817bc2bdeba916849035dc2bbf518f308637b0586e36f1";
-      version = "1.2.3";
+      sha512 = "36cb235a81f625d06710470005747c87327805513bfa0b85109359da85d124ca77b37a6fcfa1888c57965b76bcd507b5c1e38835297252c43aa98389d4aef9e9";
+      version = "1.2.8";
       
     };
     paths = [ src ];
@@ -1360,8 +1386,8 @@ let repos = [
       inherit repos;
       artifactId = "log4j-over-slf4j";
       groupId = "org.slf4j";
-      sha512 = "c70a080409a2741dd1977318ce78b61f86fc8e02a2120e934e91cc3b8b0f9bb67e0bac3d3753a0e7a195ff1866bead77e3fc51e1ede89bb537a6869ec58a5724";
-      version = "1.7.30";
+      sha512 = "607bb053a155a790ba4278c6ac2d6e8e759102e71523c784df4cde56acecee1d50ef2b1069507ba031dd67a5d3668bbd1d845659811353ff21600f3f459806f8";
+      version = "1.8.0-beta4";
       
     };
     paths = [ src ];
@@ -1386,8 +1412,8 @@ let repos = [
       inherit repos;
       artifactId = "cambium.core";
       groupId = "cambium";
-      sha512 = "c355fcd2855f9639155ea8ecf310e42bbe3cac4e9f1b305590284f25ffda25bd2fb76908b39bb947293d7af0fd3beba8b76b55d79c115c1222a5c0944c2ba47a";
-      version = "0.9.3";
+      sha512 = "0e1fe626c6d0b31aad84ea2e4466273065925548ee5915f442b7997ebfe795faea36dbeac50a0f8c16bbd20d877511e3f8c4ff4f2b916a4538513aaa5cc20112";
+      version = "1.1.1";
       
     };
     paths = [ src ];
