@@ -71,6 +71,7 @@ in {
           PGUSER = cfg.database.user;
           PGDATABASE = cfg.database.name;
           PORT = toString cfg.port;
+          BASE_URL = "https://${cfg.domain}";
         };
 
         script = "${bbbg.server}/bin/bbbg-server";

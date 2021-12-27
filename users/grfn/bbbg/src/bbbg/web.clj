@@ -38,7 +38,8 @@
 (s/def ::config
   (s/merge
    (s/keys :req [::port]
-           :opt [::cookie-secret])
+           :opt [::cookie-secret
+                 ::base-url])
    ::discord.auth/config))
 
 (s/fdef make-server
@@ -58,7 +59,8 @@
    (u/remove-nils
     (merge
      {::port (:port env 8888)
-      ::cookie-secret (some-> env :cookie-secret string->cookie-secret)}
+      ::cookie-secret (some-> env :cookie-secret string->cookie-secret)
+      ::base-url (:base-url env)}
      (discord.auth/env->config)))))
 
 (defn dev-config []
