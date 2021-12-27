@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed1716e_02fec5e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T23:21:00Z",
+      "side": 1,
+      "message": "added top-level `nixpkgsConfig` argument",
+      "revId": "4198f7832dd0156441075c7e637543d8309e399a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

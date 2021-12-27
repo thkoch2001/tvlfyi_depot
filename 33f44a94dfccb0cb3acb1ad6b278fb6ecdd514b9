@@ -16,6 +16,24 @@
       "message": "Currently in //default.nix there is a facility for introducing a nixpkgs-related impurity (injecting a nixpkgs path for bisecting). On second thought, for something as fundamental as nixpkgs itself we may want to keep control of these impurities at the top-level (i.e. pass it in via externalArgs in //default.nix).\n\nThis is because, in general, I\u0027d like to move depot towards being able to do things like overriding `builtins.getEnv` to an error to make things more self-contained.\n\nWould be curious to hear grfn\u0027s thoughts, too.",
       "revId": "33f44a94dfccb0cb3acb1ad6b278fb6ecdd514b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15d042f1_bf401539",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T23:21:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dfdac6a8_df09a313",
+      "revId": "33f44a94dfccb0cb3acb1ad6b278fb6ecdd514b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
