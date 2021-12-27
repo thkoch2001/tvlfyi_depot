@@ -60,3 +60,17 @@ resource "keycloak_openid_audience_protocol_mapper" "oauth2_proxy_audience" {
   name                     = "oauth2-proxy-audience"
   included_custom_audience = keycloak_openid_client.oauth2_proxy.client_id
 }
+
+resource "keycloak_openid_client" "grafana" {
+  realm_id              = keycloak_realm.tvl.id
+  client_id             = "grafana"
+  name                  = "Grafana"
+  enabled               = true
+  access_type           = "CONFIDENTIAL"
+  standard_flow_enabled = true
+  base_url              = "https://status.tvl.su"
+
+  valid_redirect_uris = [
+    "https://status.tvl.su/*",
+  ]
+}
