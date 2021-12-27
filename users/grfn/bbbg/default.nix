@@ -1,4 +1,4 @@
-{ depot, pkgs, ... }:
+args@{ depot, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -12,6 +12,7 @@ in rec {
   meta.targets = [
     "db-util"
     "server"
+    "tf"
   ];
 
   depsPaths = deps.makePaths {};
@@ -75,4 +76,6 @@ in rec {
   server = pkgs.writeShellScriptBin "bbbg-server" ''
     exec ${pkgs.openjdk17_headless}/bin/java -jar ${server-jar} "$@"
   '';
+
+  tf = import ./tf.nix args;
 }
