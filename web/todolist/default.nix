@@ -4,14 +4,12 @@
 # only for users that are known to us.
 { depot, lib, pkgs, ... }:
 
-with depot.nix.yants;
-
 let
   inherit (pkgs)
     jq
     ripgrep
     runCommandNoCC
-    writeText
+    writeTextFile
     ;
 
   inherit (builtins)
@@ -24,6 +22,13 @@ let
     ;
 
   inherit (lib) concatStringsSep;
+
+  inherit (depot.nix.yants)
+    defun
+    int
+    string
+    struct
+    ;
 
   knownUsers = map (u: u.username) depot.ops.users;
 
@@ -68,7 +73,10 @@ let
 
   staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
 
-  todoPage = writeText "index.html" ''
+in writeTextFile {
+  name = "tvl-todos";
+  destination = "/index.html";
+  text = ''
     <!DOCTYPE html>
     <head>
       <meta charset="utf-8">
@@ -104,8 +112,4 @@ let
       </footer>
     </body>
   '';
-
-in runCommandNoCC "tvl-todos" {} ''
-  mkdir $out
-  cp ${todoPage} $out/index.html
-''
+}
