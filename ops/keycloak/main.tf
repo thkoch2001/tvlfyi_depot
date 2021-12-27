@@ -106,3 +106,24 @@ resource "keycloak_openid_client" "gerrit" {
     "https://cl.tvl.fyi",
   ]
 }
+
+resource "keycloak_openid_client" "buildkite" {
+  realm_id                                 = keycloak_realm.tvl.id
+  client_id                                = "https://buildkite.com"
+  name                                     = "Buildkite"
+  enabled                                  = true
+  access_type                              = "CONFIDENTIAL"
+  standard_flow_enabled                    = true
+  base_url                                 = "https://buildkite.com/sso/tvl"
+  direct_access_grants_enabled             = false
+  exclude_session_state_from_auth_response = false
+  backchannel_logout_session_required      = false
+
+  valid_redirect_uris = [
+    "https://buildkite.com/sso/~/1531aca5-f49c-4151-8832-a451e758af4c/saml/consume",
+  ]
+
+  web_origins = [
+    "https://buildkite.com",
+  ]
+}
