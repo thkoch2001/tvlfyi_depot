@@ -48,7 +48,9 @@ in {
     sudo.wheelNeedsPassword = false;
   };
 
-  programs = wpcarro.common.programs;
+  programs = wpcarro.common.programs // {
+    mosh.enable = true;
+  };
 
   # I won't have an Emacs server running on diogenes, and I'll likely be in an
   # SSH session from within vterm. As such, Vim is one of the few editors that I
