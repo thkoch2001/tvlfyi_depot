@@ -11,7 +11,7 @@ TARGET_TOOL=$(basename "$0")
 
 case "${TARGET_TOOL}" in
   age)
-    attr="third_party.nixpkgs-age"
+    attr="third_party.nixpkgs.age"
     ;;
   age-keygen)
     attr="third_party.nixpkgs.age"
