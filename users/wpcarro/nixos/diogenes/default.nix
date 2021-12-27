@@ -109,12 +109,7 @@ in {
         "wpcarro.dev" = {
           addSSL = true;
           enableACME = true;
-          root = wpcarro.website;
-        };
-        "blog.wpcarro.dev" = {
-          addSSL = true;
-          enableACME = true;
-          root = wpcarro.website.blog.rendered;
+          root = wpcarro.website.root;
         };
       };
     };

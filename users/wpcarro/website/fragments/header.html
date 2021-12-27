@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>wpcarro.dev</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=JetBrains+Mono">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+                mono: ["JetBrains Mono", "normal"]
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-mono bg-gray-100">
+    <header class="sticky z-10 transition duration-300 bg-gray-100 top-0 py-6">
+      <div class="flex max-w-sm md:max-w-3xl mx-auto">
+        <div class="flex-1 text-center md:text-left text-xl md:text-base">
+          <a href="https://cs.tvl.fyi/depot/-/blob/users/wpcarro/website/index.html">
+            <h1 class="font-bold">
+              <span class="text-black">(</span><a class="text-purple-600 hover:underline" href="https://cs.tvl.fyi/depot/-/blob/users/wpcarro/website/index.html">def</a>&nbsp;<a class="text-green-600 hover:underline text-bold" href="https://wpcarro.dev">"wpcarro.dev"</a><span class="text-black">)</span>
+            </h1>
+          </a>
+        </div>
+        <nav class="flex-1 hidden md:block">
+          <ul class="list-reset flex justify-end space-x-8">
+            <li>
+              <a class="hover:underline" href="https://wpcarro.dev/habits">
+                Habits
+              </a>
+            </li>
+            <li>
+              <a class="hover:underline" href="https://wpcarro.dev/blog">
+                Blog
+              </a>
+            </li>
+            <li>
+              <a class="hover:underline" href="https://github.com/wpcarro">
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a class="hover:underline" href="https://linkedin.com/in/williampatrickcarroll">
+                LinkedIn
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="max-w-sm px-2 md:px-0 md:max-w-prose mx-auto">
