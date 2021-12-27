@@ -85,3 +85,24 @@ resource "keycloak_openid_client" "grafana" {
     "https://status.tvl.su/*",
   ]
 }
+
+resource "keycloak_openid_client" "gerrit" {
+  realm_id                                 = keycloak_realm.tvl.id
+  client_id                                = "gerrit"
+  name                                     = "TVL Gerrit"
+  enabled                                  = true
+  access_type                              = "CONFIDENTIAL"
+  standard_flow_enabled                    = true
+  base_url                                 = "https://cl.tvl.fyi"
+  description                              = "TVL's code review tool"
+  direct_access_grants_enabled             = true
+  exclude_session_state_from_auth_response = false
+
+  valid_redirect_uris = [
+    "https://cl.tvl.fyi/*",
+  ]
+
+  web_origins = [
+    "https://cl.tvl.fyi",
+  ]
+}
