@@ -5,12 +5,12 @@
 let
   inherit (depot.nix.readTree) drvTargets;
 
-  commit = "6c4a69fa4280f0154ce257a1dfd23fb463c1ec5b";
+  commit = "601cd998077f77f257ad1a40fa488add8464650f";
   src = pkgs.fetchFromGitHub {
     owner = "google";
     repo = "nixery";
     rev = commit;
-    sha256 = "0g1v7020vjiqa3k07cfm3jzg3gc6nl3hs3vyw4c9s5v0dmmhhsz4";
+    sha256 = "195rz25y3hfxcmniysajzjg7g69qhz7w06lql8fn0dbcdcxsq6g4";
   };
 in drvTargets (import src {
   inherit pkgs;
