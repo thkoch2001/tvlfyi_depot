@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63a7a54c_b12073d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T03:42:46Z",
+      "side": 1,
+      "message": "I fixed the dependency hash mismatches, now just the `owners` plugin fails to compile with:\n    ERROR: /build/owners-src/plugins/owners/BUILD:9:13: Building plugins/owners/libgerrit-owners-predicates.jar (6 source files) and running annotation processors (AutoAnnotationProcessor, AutoValueProcessor, AutoOneOfProcessor, AutoValueGsonAdapterFactoryProcessor) failed (Exit 1): java failed: error executing command external/local_jdk/bin/java \u0027--add-exports\u003djdk.compiler/com.sun.tools.javac.api\u003dALL-UNNAMED\u0027 \u0027--add-exports\u003djdk.compiler/com.sun.tools.javac.code\u003dALL-UNNAMED\u0027 ... (remaining 14 argument(s) skipped)\n    plugins/owners/src/main/java/com/googlesource/gerrit/owners/OwnersStoredValues.java:44: error: cannot find symbol\n                PatchList patchList \u003d StoredValues.PATCH_LIST.get(engine);\n                                                  ^\n      symbol:   variable PATCH_LIST\n      location: class StoredValues\n    Target //plugins/owners:owners failed to build",
+      "revId": "c42a7e3ab8c37ec41df5636a198c259be68c73e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
