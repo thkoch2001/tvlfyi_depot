@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ce5bbad_3d96f36e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T22:14:57Z",
+      "side": 1,
+      "message": "TODO: split changes which modify HTML,\nor just reduce this CL to a fix of HTML,\nas this CL doesn\u0027t have any noticeable\nperformance benefit.",
+      "revId": "48fd90cdf5c98b55aacfa79389e2676d4d9c2c24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
