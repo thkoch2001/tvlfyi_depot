@@ -16,6 +16,46 @@
       "message": "got rid of yants\u0027 drvTargets type",
       "revId": "17064eec3cb74aacd4201dd479d99a24cdef443c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc35a1a3_5f089c6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-27T22:59:00Z",
+      "side": 1,
+      "message": "Naming nitpick, otherwise LGTM.",
+      "revId": "17064eec3cb74aacd4201dd479d99a24cdef443c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6308965e_79c0861e",
+        "filename": "ops/secrets/mkSecrets.nix",
+        "patchSetId": 18
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-27T22:59:00Z",
+      "side": 1,
+      "message": "I\u0027d name this something like \"agenixSecret\" and pass that as `struct \"agenixSecret\"` as well (which creates nicer error messages)",
+      "range": {
+        "startLine": 20,
+        "startChar": 2,
+        "endLine": 20,
+        "endChar": 23
+      },
+      "revId": "17064eec3cb74aacd4201dd479d99a24cdef443c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
