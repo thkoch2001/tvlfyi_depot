@@ -75,6 +75,23 @@
       "parentUuid": "01b31851_50d89aa6",
       "revId": "fa367f804ffc74c288df4ce1ea6272db353ceb7a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b553cb6_90efd709",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T04:32:11Z",
+      "side": 1,
+      "message": "as cl/4515 is merged, can/should this CL be abandoned?",
+      "revId": "fa367f804ffc74c288df4ce1ea6272db353ceb7a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
