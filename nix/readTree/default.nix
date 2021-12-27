@@ -221,6 +221,8 @@ in {
   # derivations.
   #
   # Type: attrs -> attrs
+  # TODO: use yants for type-checking of this function,
+  #  but this requires moving it out of readTree, which is cumbersome.
   drvTargets = attrs: attrs // {
     meta = {
       targets = builtins.filter

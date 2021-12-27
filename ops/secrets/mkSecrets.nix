@@ -3,17 +3,16 @@
 #
 # Note that encrypted secrets end up in the Nix store, but this is
 # fine since they're publicly available anyways.
-{ depot, pkgs, ... }:
-path: secrets:
+{ depot, lib, ... }:
 
 let
-  inherit (builtins) attrNames listToAttrs;
+  y = depot.nix.yants;
+  ssh-pubkey = y.restrict "SSH pubkey" (lib.hasPrefix "ssh-") y.string;
+  secret-bunch = y.struct { publicKeys = y.list ssh-pubkey; };
+in
 
-  # Import a secret to the Nix store
-  declareSecret = name: pkgs.runCommandNoCC name {} ''
-    cp ${path + "/${name}"} $out
-  '';
-in depot.nix.readTree.drvTargets (listToAttrs (
-  map (name: { inherit name; value = declareSecret name; })
-    (attrNames secrets)
-))
+y.defun [ y.path (y.attrs secret-bunch) (y.drvTargets) ]
+  (path: secrets:
+    depot.nix.readTree.drvTargets
+      # Import each secret into the Nix store
+      (builtins.mapAttrs (name: _: "${path}/${name}") secrets))
