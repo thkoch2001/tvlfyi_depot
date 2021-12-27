@@ -3,19 +3,22 @@
    [bbbg.discord.auth :as discord.auth :refer [wrap-discord-auth]]
    [bbbg.handlers.attendee-checks :as attendee-checks]
    [bbbg.handlers.attendees :as attendees]
-   [bbbg.handlers.core :refer [wrap-dynamic-auth wrap-current-uri]]
+   [bbbg.handlers.core :refer [wrap-current-uri wrap-dynamic-auth]]
    [bbbg.handlers.events :as events]
    [bbbg.handlers.home :as home]
    [bbbg.handlers.signup-form :as signup-form]
    [bbbg.styles :refer [stylesheet]]
    [bbbg.util.core :as u]
    [bbbg.views.flash :refer [wrap-page-flash]]
+   [cambium.core :as log]
    clj-time.coerce
+   [clojure.java.io :as io]
    [clojure.spec.alpha :as s]
    [com.stuartsierra.component :as component]
    [compojure.core :refer [GET routes]]
    [config.core :refer [env]]
    [org.httpkit.server :as http-kit]
+   [ring.logger :refer [wrap-with-logger]]
    [ring.middleware.flash :refer [wrap-flash]]
    [ring.middleware.keyword-params :refer [wrap-keyword-params]]
    [ring.middleware.multipart-params :refer [wrap-multipart-params]]
@@ -23,8 +26,7 @@
    [ring.middleware.resource :refer [wrap-resource]]
    [ring.middleware.session :refer [wrap-session]]
    [ring.middleware.session.cookie :refer [cookie-store]]
-   [ring.util.response :refer [content-type response]]
-   [clojure.java.io :as io])
+   [ring.util.response :refer [content-type response]])
   (:import
    java.util.Base64))
 
@@ -89,6 +91,10 @@
 (defn middleware [app env]
   (-> app
       (wrap-resource "public")
+      (wrap-with-logger
+       {:log-fn
+        (fn [{:keys [level throwable message]}]
+          (log/log level {} throwable message))})
       wrap-current-uri
       wrap-dynamic-auth
       (wrap-discord-auth env)
