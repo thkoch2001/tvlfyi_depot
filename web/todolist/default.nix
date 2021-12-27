@@ -9,19 +9,13 @@ let
     jq
     ripgrep
     runCommandNoCC
-    writeTextFile
+    writeText
     ;
 
   inherit (builtins)
-    elem
-    filter
-    fromJSON
-    head
-    readFile
     map
+    toJSON
     ;
-
-  inherit (lib) concatStringsSep;
 
   inherit (depot.nix.yants)
     defun
@@ -30,7 +24,8 @@ let
     struct
     ;
 
-  knownUsers = map (u: u.username) depot.ops.users;
+  knownUsers = writeText "known-users.json"
+    (toJSON (map (u: u.username) depot.ops.users));
 
   todo = struct {
     file = string;
@@ -39,45 +34,16 @@ let
     user = string;
   };
 
-  allTodos = fromJSON (readFile (runCommandNoCC "depot-todos.json" {} ''
+  allTodos = runCommandNoCC "depot-todos.json" {} ''
     ${ripgrep}/bin/rg --json 'TODO\(\w+\):.*$' ${depot.path} | \
       ${jq}/bin/jq -s -f ${./extract-todos.jq} > $out
-  ''));
-
-  knownUserTodos = filter (todos: elem (head todos).user knownUsers) allTodos;
-
-  fileLink = defun [ todo string ] (t:
-    ''<a style="color: inherit;"
-         href="https://cs.tvl.fyi/depot/-/blob/${t.file}#L${toString t.line}">
-      //${t.file}:${toString t.line}</a>'');
-
-  todoElement = defun [ todo string ] (t: ''
-    <p>${fileLink t}:</p>
-    <blockquote>${t.todo}</blockquote>
-
-  '');
-
-  userParagraph = todos:
-  let user = (head todos).user;
-  in ''
-    <p>
-      <h3>
-        <a style="color:inherit; text-decoration: none;"
-           name="${user}"
-           href="#${user}">${user}</a>
-      </h3>
-      ${concatStringsSep "\n" (map todoElement todos)}
-    </p>
-    <hr>
   '';
 
   staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
 
-in writeTextFile {
-  name = "tvl-todos";
-  destination = "/index.html";
-  text = ''
+  header = writeText "tvl-todo-header.html" ''
     <!DOCTYPE html>
+    <html>
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -90,6 +56,9 @@ in writeTextFile {
           max-width: inherit;
           height: auto;
         }
+        main h3 > a {
+          text-decoration: none;
+        }
       </style>
     </head>
     <body class="dark">
@@ -98,7 +67,9 @@ in writeTextFile {
         <hr>
       </header>
       <main>
-      ${concatStringsSep "\n" (map userParagraph knownUserTodos)}
+  '';
+
+  footer = writeText "tvl-todo-footer.html" ''
       </main>
       <footer>
         <p class="footer">
@@ -111,5 +82,24 @@ in writeTextFile {
         <p class="lod">ಠ_ಠ</p>
       </footer>
     </body>
+    </html>
   '';
-}
+
+in runCommandNoCC "tvl-todos" {} ''
+  set -e
+  mkdir -p $out
+
+  (
+    echo "{ \"allTodos\": "
+    cat "${allTodos}"
+    echo ", \"knownUsers\": "
+    cat "${knownUsers}"
+    echo "}"
+  ) > input.json
+
+  (
+    cat ${header}
+    ${jq}/bin/jq -r -f ${./render-todos.jq} < input.json | sed -E -e 's/^(.)/    \1/'
+    cat ${footer}
+  ) > $out/index.html
+''
