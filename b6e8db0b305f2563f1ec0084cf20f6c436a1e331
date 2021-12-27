@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b34e2c5b_4bc9e34c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-27T08:25:29Z",
+      "side": 1,
+      "message": "Is this a stable release?\n\nIf not - last time we used an unstable one we ended up with the builds plugin that is incompatible with the final API, maybe it is better to stick to stable ones.",
+      "range": {
+        "startLine": 7,
+        "startChar": 18,
+        "endLine": 7,
+        "endChar": 45
+      },
+      "revId": "b6e8db0b305f2563f1ec0084cf20f6c436a1e331",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b79aa2d8_4e29ab56",
         "filename": "third_party/gerrit/default.nix",
         "patchSetId": 6
