@@ -107,6 +107,27 @@ in lib.fix (self: {
   function = typedef "function" (x: isFunction x || (isAttrs x && x ? "__functor"
                                                  && isFunction x.__functor));
 
+  drvTargets = typedef' rec {
+    name = "drvTargets";
+
+    checkType = vset: if isAttrs vset && vset ? "meta" && vset.meta ? "targets"
+      then
+        let
+          inherit (builtins) filter;
+          inherit (lib) concatMap optionals;
+          inherit (vset.meta) targets;
+          is-target = name: [] != (filter (x: x == name) targets);
+          filtered = concatMap
+            (name: optionals (is-target name) [vset.${name}])
+            (attrNames vset);
+        in
+          checkEach name (self.type drv) filtered
+      else {
+        ok = false;
+        err = typeError name vset;
+      };
+  };
+
   # Type for types themselves. Useful when defining polymorphic types.
   type = typedef "type" (x:
     isAttrs x
