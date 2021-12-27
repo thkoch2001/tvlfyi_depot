@@ -89,7 +89,7 @@ with builtins; let
     let res = t.checkType e;
         isT = t.checkToBool res;
     in {
-      ok = acc.ok && isT;
+      ok = builtins.trace isT (acc.ok && isT);
       err = if isT
         then acc.err
         else acc.err + "${prettyPrint e}: ${t.toError e res}\n";
