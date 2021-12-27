@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5618411e_5c38e8e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T04:05:42Z",
+      "side": 1,
+      "message": "I also split out the debug-aid change to `yants.restrict`, because it is strictly independent.",
+      "revId": "c8625a0f40e9c2d215ea54f6c1fb31475671db44",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
