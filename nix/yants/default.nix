@@ -35,7 +35,9 @@ with builtins; let
   # This function is the low-level primitive used to create types. For
   # many cases the higher-level 'typedef' function is more appropriate.
   typedef' = { name, checkType
-             , checkToBool ? (result: result.ok)
+             , checkToBool ? (result: if isBool result.ok
+                 then result.ok
+                 else throw "invalid .ok value: ${builtins.toXML result.ok}")
              , toError ? (_: result: result.err)
              , def ? null
              , match ? null }: {
