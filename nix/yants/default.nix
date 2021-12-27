@@ -35,7 +35,9 @@ with builtins; let
   # This function is the low-level primitive used to create types. For
   # many cases the higher-level 'typedef' function is more appropriate.
   typedef' = { name, checkType
-             , checkToBool ? (result: result.ok)
+             , checkToBool ? (result: if isBool result.ok
+                 then result.ok
+                 else throw "invalid .ok value: ${builtins.toXML result.ok}")
              , toError ? (_: result: result.err)
              , def ? null
              , match ? null }: {
@@ -318,7 +320,13 @@ in lib.fix (self: {
         if !(t.checkToBool res)
         then res
         else {
-          ok = pred v;
+          ok =
+            let
+              inherit (builtins) toXML;
+              iok = pred v;
+            in if isBool iok
+              then iok
+              else throw "got invalid .ok value (${toXML iok}) from restrict predicate (${toXML pred}) with applied argument (${toXML v})";
           err = "${prettyPrint v} does not conform to restriction '${restriction}'";
         };
   };
