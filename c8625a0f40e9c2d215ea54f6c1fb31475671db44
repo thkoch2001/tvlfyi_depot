@@ -41,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cea9e87_dd8438d8",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 17
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T20:10:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d00c04e2_c13cb234",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 226,
+        "endChar": 0
+      },
+      "revId": "c8625a0f40e9c2d215ea54f6c1fb31475671db44",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ada5421a_21556b8b",
@@ -78,6 +102,30 @@
       "side": 1,
       "message": "Also I think this type is relatively unnecessary as it just checks things that are already guaranteed to be the case when using drvTargets. With the performance penalty of yants I don\u0027t think this is really worth it.",
       "parentUuid": "ada5421a_21556b8b",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 29
+      },
+      "revId": "c8625a0f40e9c2d215ea54f6c1fb31475671db44",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e704ba1e_55ad080b",
+        "filename": "nix/yants/default.nix",
+        "patchSetId": 17
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T20:10:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f34b9ab1_822afe35",
       "range": {
         "startLine": 110,
         "startChar": 0,
