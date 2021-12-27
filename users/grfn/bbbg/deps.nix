@@ -125,8 +125,8 @@ let repos = [
       inherit repos;
       artifactId = "commons-lang3";
       groupId = "org.apache.commons";
-      sha512 = "c1f6b5cb9ac47cfb612423a71b347568f3697cf88018b5808678be5234c50b22888db23cb833b7d8d458d39707ab9e4d839107d1d3306de2e4e422010c95180f";
-      version = "3.11";
+      sha512 = "fbdbc0943cb3498b0148e86a39b773f97c8e6013740f72dbc727faeabea402073e2cc8c4d68198e5fc6b08a13b7700236292e99d4785f2c9989f2e5fac11fd81";
+      version = "3.12.0";
       
     };
     paths = [ src ];
@@ -164,8 +164,8 @@ let repos = [
       inherit repos;
       artifactId = "netty-common";
       groupId = "io.netty";
-      sha512 = "1c0baeff9f2cc687612aca4d4e4ca671eae99ac34bd91f22b1c550e5cc6ab98984bef059923248004ad92013a79503a59a89a1779ae2499116bc35f6ef7db634";
-      version = "4.1.42.Final";
+      sha512 = "7efc2f6774a3dbe8408fe182e19830b5b7a994a0d1b0eb50699df691c2450befa05ac205bbf341ad57bef3a04281ce435031e97e725c5c4edfc705a418828ce8";
+      version = "4.1.63.Final";
       
     };
     paths = [ src ];
@@ -203,8 +203,8 @@ let repos = [
       inherit repos;
       artifactId = "spec.alpha";
       groupId = "org.clojure";
-      sha512 = "0bc22505d8aadb8eda3c46af88ef2f572494b553a68333e4d9787714d5ad383c2a21c56e1c81ce47aa2e07d7d9b268236eb57edc5adf6394250f30ce2fad087d";
-      version = "0.3.214";
+      sha512 = "ddfe4fa84622abd8ac56e2aa565a56e6bdc0bf330f377ff3e269ddc241bb9dbcac332c13502dfd4c09c2c08fe24d8d2e8cf3d04a1bc819ca5657b4e41feaa7c2";
+      version = "0.3.218";
       
     };
     paths = [ src ];
@@ -294,8 +294,8 @@ let repos = [
       inherit repos;
       artifactId = "jcl-over-slf4j";
       groupId = "org.slf4j";
-      sha512 = "c51f26858179d4c3fecc137bd2673c5b5a37ccd7745eba5cf10e0a19c8c9cff18130ff8680c8bcd56068c571b863e287f547a211477fd094389ca003b4849e53";
-      version = "1.8.0-beta4";
+      sha512 = "23662fe407fcdbcba8865a8cd3f8bb09d4eb178a2a6511a32e35b995722b345e73f5dc1dd85d2d0a5c707db05aa57e0b3d0b96b59e55403fc486343d5ca4c0d6";
+      version = "2.0.0-alpha4";
       
     };
     paths = [ src ];
@@ -372,8 +372,8 @@ let repos = [
       inherit repos;
       artifactId = "netty-codec";
       groupId = "io.netty";
-      sha512 = "74e04cf1a78f0066fc96b43f87562f231def49300665b679208314c2df96889835ba71f2dcd90c43fe88bf51583aaa6c868bde90cab8419e0f51702c0cadfc23";
-      version = "4.1.42.Final";
+      sha512 = "f6d9c4a5b508ca0d5f0e213473088f5d7b2e184e447dc092e69227109e28da9b8e68b2238ca6ab4e9915bacacf59cc0dce6ebcbbb05dad34a03b7976d9670c51";
+      version = "4.1.63.Final";
       
     };
     paths = [ src ];
@@ -437,8 +437,8 @@ let repos = [
       inherit repos;
       artifactId = "logback-core";
       groupId = "ch.qos.logback";
-      sha512 = "b849277d48eaae5d78999e1100644b5aa3ee07627a7e9d6b6acfb8c9112638be21f7eb3712845a3c0dcc953891839843ee2045b8bed58d800a9ac12d85c531e6";
-      version = "1.2.8";
+      sha512 = "fc554548f499e284007eeecf76bf4e1995effb6ac8a6262aa96118f623bf9085a9d5bec3741833dd3cae6a76b2ff78c6d0a1fe68bc01213207c93d8e2da345ca";
+      version = "1.3.0-alpha12";
       
     };
     paths = [ src ];
@@ -463,8 +463,8 @@ let repos = [
       inherit repos;
       artifactId = "netty-buffer";
       groupId = "io.netty";
-      sha512 = "931d0933886888c6729617bd6ebae105683dad6d8ad17b8b70d02df0f406660b003533c370b83fb0aac2d0edb4b182adc7fbb1a38d7e325e6c150ba723c17605";
-      version = "4.1.42.Final";
+      sha512 = "181b55d99d8d46bbf5f67f05bdccb0381af23a9fca3e6d935e6cde727b132c67133de1c3d81ed19b04c1a5b232be0de16ec1de7e81b532878bc69564237c15dc";
+      version = "4.1.63.Final";
       
     };
     paths = [ src ];
@@ -541,8 +541,8 @@ let repos = [
       inherit repos;
       artifactId = "netty-handler";
       groupId = "io.netty";
-      sha512 = "73c446fef8fb2cc08bc35ce11f37c88a51d9f0b15bc2bb0cda9d51964ac868bcb211eb23c267ba6facf221790bf29633edda04150b37e254edd9439338b951f7";
-      version = "4.1.42.Final";
+      sha512 = "48874727553dd7084f5c48d90de123704ae334837c3a103f598887bb21405dd62c57603b59300ac2fcdd936f0af99ed0730487fb9fb8917d236b8fe3f78f3c02";
+      version = "4.1.63.Final";
       
     };
     paths = [ src ];
@@ -593,8 +593,8 @@ let repos = [
       inherit repos;
       artifactId = "honeysql";
       groupId = "com.github.seancorfield";
-      sha512 = "0c611a1d14d18226b7796bd3e5c774a58d03af0329b83dd4ca4324f8a3ffc6e8dbab81dd4eadb4c76dbce2c88f29dd7722590ad8b865d57655e5cb0d0122c480";
-      version = "2.1.833";
+      sha512 = "a0e5ebbf922aaf170c2d74ec0efc0df7e3bda92d0b8cc5f40ee4c8ddcb8c7e0e46556fac381513e0ac76b10f681c14c2d2569010c2f8eab4ff04f6373c2bf229";
+      version = "2.2.840";
       
     };
     paths = [ src ];
@@ -645,8 +645,8 @@ let repos = [
       inherit repos;
       artifactId = "jul-to-slf4j";
       groupId = "org.slf4j";
-      sha512 = "56f6ce36e3d6f1b8155862e5960ab47028067a2313b2d28dfceb8ab3e2c9510b3bf8a621d9e315347ddb42d58c36dd601ed286bf76b078ea5246a658255a0b07";
-      version = "1.8.0-beta4";
+      sha512 = "350cfb889248d724b27dce697f635f12d9db463f107830b9518ce184dc4cc1ab3933eb5bdab08515e69766c3d5be24547dac289d6406c44eca90717230714b91";
+      version = "2.0.0-alpha4";
       
     };
     paths = [ src ];
@@ -686,19 +686,6 @@ let repos = [
       groupId = "org.apache.httpcomponents";
       sha512 = "e150e8dc49c8c9972d8b324b56bb292b15e2f0e686f1292c4edac975615dfb16e5edb8ab325e614732a7d43a03061ca4fe93fe1e1f7487851a4d4d3af50a61f9";
       version = "4.5.13";
-      
-    };
-    paths = [ src ];
-  }
-
-  rec {
-    name = "slf4j-simple/org.slf4j";
-    src = fetchMavenArtifact {
-      inherit repos;
-      artifactId = "slf4j-simple";
-      groupId = "org.slf4j";
-      sha512 = "00c21c27264b9a95712cbd733cc0cab15c9704be260232a68cac2259a2bb7eb220a92624f0a8f592e29cd520727018ad8f42798d7c282fe8b2ff319a87163104";
-      version = "1.8.0-beta4";
       
     };
     paths = [ src ];
@@ -892,8 +879,8 @@ let repos = [
       inherit repos;
       artifactId = "next.jdbc";
       groupId = "com.github.seancorfield";
-      sha512 = "1bcaa7092d4a082851b3d0d3daed171d8eb76f9b1f485de91d93cf32c617cf9869ab16a134e932f7813782cbc6c1585b15d2f2ae2fa24633a59bebf72a14d60e";
-      version = "1.2.753";
+      sha512 = "0b4b01ba126bb8b1e2c14262db9fca75456b274d09535d9a7bb386699bf20dc9ac11590d210769e7429ca59ebfdfbb06916b3ff275cc817d74eac5bbabdab8f2";
+      version = "1.2.761";
       
     };
     paths = [ src ];
@@ -918,8 +905,8 @@ let repos = [
       inherit repos;
       artifactId = "netty-transport";
       groupId = "io.netty";
-      sha512 = "21c12294fc82e7032ce25b2f25769a93f75777021fd6e30cc5c450d41cb3ad5c1ea79c02291c9a8b6dd30c40a8388a00bac95983495df01fb1a539138b3b46db";
-      version = "4.1.42.Final";
+      sha512 = "c11d690ffeaf3267b2166f73a43108fb89d588fcef3f6d3053bf4b6f6669483baa618fd97438010692a6fa28334372d5a31b7c0996961d4eabb60cbdc358a536";
+      version = "4.1.63.Final";
       
     };
     paths = [ src ];
@@ -944,8 +931,8 @@ let repos = [
       inherit repos;
       artifactId = "netty-transport-native-unix-common";
       groupId = "io.netty";
-      sha512 = "62843f4fade55ea84cc831ef4f0cba75b068d15ccf2bccf7abf8813b41d75b593d5d761f35852420f8440e7b41bef631af4394df0b17666007c9ce7476a10bd9";
-      version = "4.1.42.Final";
+      sha512 = "b63e5f8a44b7f37f3dba378bd06af64dd1d7be3f0b1a7d47ad139ff06e0212b4c7081275b1b5b12183aeb72eb5f9bf9ef03ed8c78bc302aeb4817dca7bd89f3a";
+      version = "4.1.63.Final";
       
     };
     paths = [ src ];
@@ -970,8 +957,8 @@ let repos = [
       inherit repos;
       artifactId = "spy";
       groupId = "com.impossibl.pgjdbc-ng";
-      sha512 = "68efbf7a80acdaaefebc8e9693d1a1246cdd422472791f663422b4a5f7c6fa953a3030250e7874f97621ffd3bc844a05bdbbede67f852a0c02cca4658cc8a044";
-      version = "0.8.4";
+      sha512 = "173615c39aa6015a732e329217b40e3ea1c304c9c168d2764d6ef23ab8775e2f4432339bc22d049662561f09d3fd890b5415738620d64dcedb762d5da26b4ebb";
+      version = "0.8.9";
       
     };
     paths = [ src ];
@@ -1048,8 +1035,8 @@ let repos = [
       inherit repos;
       artifactId = "config";
       groupId = "yogthos";
-      sha512 = "af0a73e168d24864a97e4698b993ee21a86cecd5c020975257af4f5e6fb2d3741a78eb3072b235a2f601558dd5d165bfc40839c0c154ff50aee6cf38eb0bf7c8";
-      version = "1.1.8";
+      sha512 = "3437992d192465edc74aec5259d5e0c0ad7e631dff860b2ee14cef27f13cee7c60487202cf00fc160a95fb0b85ce1ddf56cbdd0c008b47ac598061bf115f6a23";
+      version = "1.1.9";
       
     };
     paths = [ src ];
@@ -1178,8 +1165,8 @@ let repos = [
       inherit repos;
       artifactId = "netty-resolver";
       groupId = "io.netty";
-      sha512 = "2ec515e4191b10caa78d34efffba4fbe4bf6c08badff26cd619c591eb514abba1447258181fcf61c59cd912c5d7df65bca99f092235e679ccbe04575bc41584d";
-      version = "4.1.42.Final";
+      sha512 = "fabf893de74264caa1799c15d184ed8f20b7bf9b1c41abb29f29adf728a934951f97892a4924634f9efbda17c8cf74ea3ff97bafca616711e3c5f79b8ed9ef3e";
+      version = "4.1.63.Final";
       
     };
     paths = [ src ];
@@ -1191,8 +1178,8 @@ let repos = [
       inherit repos;
       artifactId = "netty-transport-native-epoll";
       groupId = "io.netty";
-      sha512 = "cdcf04b0ba953f98b09737b100394cfc2b755ae334c5897703508ce5ecc6a0c94792040bc21e2af59509a7b61f838a92b64949468c7c6f72fffe5c7574d52a25";
-      version = "4.1.42.Final";
+      sha512 = "6fbc2dd2622699f3fc1f329acbd94baf7f1d8923c5cfcae262e6f2d64b4fd71b606561bce5e2b511dff8e052cdade930091fab683fd98713f6b62a622a2c6254";
+      version = "4.1.63.Final";
       
     };
     paths = [ src ];
@@ -1230,8 +1217,8 @@ let repos = [
       inherit repos;
       artifactId = "slf4j-api";
       groupId = "org.slf4j";
-      sha512 = "db7440b47e87215f9cc88c9521bce7a0f2ffa81b07e5f53c5f8afa90a0ab61168755ee6d136245461b57a01f0a857fe0d509c60baa7838c4eb6be1f885438049";
-      version = "2.0.0-alpha1";
+      sha512 = "ad705ab6fd5cd904ef6861c0adf08af19593cf6a486b18de548fe3d68e57b1baa7e02947584fd4dcc350ddcddcf906c01e8d9ba7943a202690d0d788627696b5";
+      version = "2.0.0-alpha4";
       
     };
     paths = [ src ];
@@ -1243,8 +1230,8 @@ let repos = [
       inherit repos;
       artifactId = "test.check";
       groupId = "org.clojure";
-      sha512 = "68caa189e7292da5dfde92d795ce35ff1980108a579dc11ca618bf0e480101b8ded16fc8ab816b30f364afbccbb8f02fc9194271e7f5323b8042d468164ecb64";
-      version = "1.1.0";
+      sha512 = "b8d7a330b0b5514cd6a00c4382052fab51c3c9d3bc53133f8506791fa670e7c5ecd65094977ea5ced91f59623b0abd1ab8feeec96d63c5c6e459b265a655c577";
+      version = "1.1.1";
       
     };
     paths = [ src ];
@@ -1282,8 +1269,8 @@ let repos = [
       inherit repos;
       artifactId = "logback-classic";
       groupId = "ch.qos.logback";
-      sha512 = "36cb235a81f625d06710470005747c87327805513bfa0b85109359da85d124ca77b37a6fcfa1888c57965b76bcd507b5c1e38835297252c43aa98389d4aef9e9";
-      version = "1.2.8";
+      sha512 = "f9fe0f126061f4abe3973b631b8d8244ba9e9d77783479a6500d629d772050dee508a001fc14d2131407fbdd0d33dd6b8aeb9b1ea9125b471bb8412e8de659e6";
+      version = "1.3.0-alpha12";
       
     };
     paths = [ src ];
@@ -1334,8 +1321,8 @@ let repos = [
       inherit repos;
       artifactId = "netty-transport-native-kqueue";
       groupId = "io.netty";
-      sha512 = "054ec02b78cbfe5cee6e96e3d8aeff35b2283f5f08e88456c9946c36c86f2a5b35074d333ad87a3f002a15e5816e3d51fbceb4134a91930dae83fee1ce80e5f4";
-      version = "4.1.42.Final";
+      sha512 = "87e10c06e394a1698d65381d3be8336f753c55e3e899e297510161d0c72540023f30f9032322957e035ead793204a084b988bc21a2bc312fcf7567a22d02a3c4";
+      version = "4.1.63.Final";
       
     };
     paths = [ src ];
@@ -1347,8 +1334,8 @@ let repos = [
       inherit repos;
       artifactId = "java.data";
       groupId = "org.clojure";
-      sha512 = "7fea02e1620e44602b806174d3500051a1ce45d8464fe4600dc19dce06e24bafa071cdbb0e4ae858e8dc01eda77f3e01269c1b1e21b42709b432f38828b39f2d";
-      version = "1.0.92";
+      sha512 = "225e1eafd1a659278212d831f7cd8609359f8c880ef3d69b4ade6301ce3c511307ce31d94cb82d5407314b990bd04714ec26273bb3036b248116a7a75fa75e1f";
+      version = "1.0.95";
       
     };
     paths = [ src ];
@@ -1386,8 +1373,8 @@ let repos = [
       inherit repos;
       artifactId = "log4j-over-slf4j";
       groupId = "org.slf4j";
-      sha512 = "607bb053a155a790ba4278c6ac2d6e8e759102e71523c784df4cde56acecee1d50ef2b1069507ba031dd67a5d3668bbd1d845659811353ff21600f3f459806f8";
-      version = "1.8.0-beta4";
+      sha512 = "48fa023c57294b73b9bd2f53e3dd3169e03426e5b3aa9d80e1bb1a9abf927fc26ef9f64d02b9769d5577d83094d0f41f044d35bb3b4f6037d66d6b2f19b484a1";
+      version = "2.0.0-alpha4";
       
     };
     paths = [ src ];
@@ -1477,8 +1464,8 @@ let repos = [
       inherit repos;
       artifactId = "pgjdbc-ng";
       groupId = "com.impossibl.pgjdbc-ng";
-      sha512 = "d19ddde1c700972531df24f4ea9326772f74210e5489ee340d81c6f2c6963788d0f4c86aeb869450ef599c741f91154079168e12c26c32f3e926abedc6b9c2a2";
-      version = "0.8.4";
+      sha512 = "a34ac9146257329f6e9b354f13f564c65dbea6463addae383e3918d3a64c90c67f5f7fda6b5c3866de991a568d6690edb3fb09f2507593390a6e30ec0c79e02c";
+      version = "0.8.9";
       
     };
     paths = [ src ];
