@@ -30,5 +30,6 @@ in {
   "nix-cache-pub.age" = default;
   "owothia.age" = default;
   "panettone.age" = default;
+  "tf-glesys.age" = default;
   "tf-keycloak.age" = default;
 }
