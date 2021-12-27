@@ -107,6 +107,26 @@ in lib.fix (self: {
   function = typedef "function" (x: isFunction x || (isAttrs x && x ? "__functor"
                                                  && isFunction x.__functor));
 
+  drvTargets = typedef' rec {
+    name = "drvTargets";
+
+    checkType = vset: if isAttrs vset && vset ? "meta" && vset.meta ? "targets"
+      then
+        let
+          inherit (builtins) filter;
+          inherit (lib) concatMap optionals;
+          inherit (vset.meta) targets;
+          filtered = concatMap
+            (name: optionals (filter (x: x == name) targets) [vset.${name}])
+            (attrNames vset);
+        in
+          checkEach name (self.type drv) filtered
+      else {
+        ok = false;
+        err = typeError name vset;
+      };
+  };
+
   # Type for types themselves. Useful when defining polymorphic types.
   type = typedef "type" (x:
     isAttrs x
@@ -318,7 +338,13 @@ in lib.fix (self: {
         if !(t.checkToBool res)
         then res
         else {
-          ok = pred v;
+          ok =
+            let
+              inherit (builtins) toXML;
+              iok = pred v;
+            in if isBool iok
+              then iok
+              else throw "restriction '${restriction}' predicate returned unexpected value '${prettyPrint v}' instead of boolean";
           err = "${prettyPrint v} does not conform to restriction '${restriction}'";
         };
   };
