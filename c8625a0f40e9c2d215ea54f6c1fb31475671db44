@@ -16,6 +16,52 @@
       "message": "I also split out the debug-aid change to `yants.restrict`, because it is strictly independent.",
       "revId": "c8625a0f40e9c2d215ea54f6c1fb31475671db44",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d00c04e2_c13cb234",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 17
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-27T08:08:05Z",
+      "side": 1,
+      "message": "This is part of readTree\u0027s external interface (which is used outside of depot) and should not use yants.",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 226,
+        "endChar": 0
+      },
+      "revId": "c8625a0f40e9c2d215ea54f6c1fb31475671db44",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ada5421a_21556b8b",
+        "filename": "nix/yants/default.nix",
+        "patchSetId": 17
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-27T08:08:05Z",
+      "side": 1,
+      "message": "I don\u0027t think this should be here, it isn\u0027t really part of yants\u0027 core. Maybe there should be a //nix/typed or something where we put wrappers and other types for otherwise untyped Nix constructs?",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 29
+      },
+      "revId": "c8625a0f40e9c2d215ea54f6c1fb31475671db44",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
