@@ -22,6 +22,30 @@
       },
       "revId": "28ccda05cd956d6f73015220e56e338790027076",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc81f8db_4ba2dd28",
+        "filename": "ops/glesys/main.tf",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-27T16:40:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d8318d11_e8710a21",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 1
+      },
+      "revId": "28ccda05cd956d6f73015220e56e338790027076",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
