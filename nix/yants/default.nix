@@ -317,10 +317,16 @@ in lib.fix (self: {
       in
         if !(t.checkToBool res)
         then res
-        else {
-          ok = pred v;
-          err = "${prettyPrint v} does not conform to restriction '${restriction}'";
-        };
+        else
+          let
+            iok = pred v;
+          in if isBool iok then {
+            ok = iok;
+            err = "${prettyPrint v} does not conform to restriction '${restriction}'";
+          } else {
+            ok = false;
+            err = "restriction '${restriction}' predicate returned unexpected value '${prettyPrint iok}' instead of boolean";
+          };
   };
 
 })
