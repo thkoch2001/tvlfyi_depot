@@ -1,10 +1,6 @@
-{ depot, pkgs, ... }:
+{ pkgs, ... }:
 
 let
-  detzip = depot.nix.buildGo.program {
-    name = "detzip";
-    srcs = [ ./detzip.go ];
-  };
   bazelRunScript = pkgs.writeShellScriptBin "bazel-run" ''
     yarn config set cache-folder "$bazelOut/external/yarn_cache"
     export HOME="$bazelOut/external/home"
@@ -15,10 +11,9 @@ let
     name = "bazel";
     targetPkgs = pkgs: [
       (pkgs.bazel.override { enableNixHacks = true; })
-      detzip
       pkgs.jdk11_headless
       pkgs.zlib
-      pkgs.python
+      pkgs.python3
       pkgs.curl
       pkgs.nodejs
       pkgs.yarn
@@ -28,7 +23,7 @@ let
     runScript = "/bin/bazel-run";
   };
   bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.4.0";
+  version = "3.4.1";
 in
 pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   pname = "gerrit";
@@ -36,19 +31,19 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
 
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "471c1c15a7bc294d10e246df43812942b5ac8a13";
+    rev = "5197a32488733e6b4ee4bd80eb3959da4b7b46f6";
     branchName = "v${version}";
-    sha256 = "sha256:0ayj0bcsxjln8qydkj9j7yiqibmjgd3bcpqvgsdzdx072wzx01c0";
+    sha256 = "sha256:1a5fxkd0sn1kfnlifz3xyl1xjyimg7x42d2vzws35fkv2qy3dz3k";
     fetchSubmodules = true;
   };
 
   patches = [
-    ./0001-Use-detzip-in-download_bower.py.patch
-    ./0002-Syntax-highlight-nix.patch
-    ./0003-Syntax-highlight-rules.pl.patch
-    ./0004-Add-titles-to-CLs-over-HTTP.patch
-    ./0005-When-using-local-fonts-always-assume-Gerrit-is-mount.patch
-    ./0006-Always-use-Google-Fonts.patch
+    ./0001-Syntax-highlight-nix.patch
+    ./0002-Syntax-highlight-rules.pl.patch
+    ./0003-Add-titles-to-CLs-over-HTTP.patch
+    ./0004-When-using-local-fonts-always-assume-Gerrit-is-mount.patch
+    ./0005-Always-use-Google-Fonts.patch
+    ./0006-Delete-miscellaneous-patch-to-launchpad-that-doesn-t.patch
   ];
 
   bazelTarget = "release api-skip-javadoc";
@@ -62,7 +57,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:1q4sclf18zzh8hsnccg1y7vqnhgavq62mqp4xx50zxfcnixfkpbx";
+    sha256 = "sha256:069mchcwlckb5d1ps5h6inn3bcbkavljrzax5fdh5bxjdvzindf7";
     preBuild = ''
       rm .bazelversion
     '';
@@ -105,7 +100,6 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
       # Gerrit fixups:
       # Remove polymer-bridges and ba-linkify, they're in-repo
       rm -rf $bazelOut/external/yarn_cache/v6/npm-polymer-bridges-*
-      rm -rf $bazelOut/external/yarn_cache/v6/npm-ba-linkify-*
       # Normalize permissions on .yarn-{tarball,metadata} files
       find $bazelOut/external/yarn_cache \( -name .yarn-tarball.tgz -or -name .yarn-metadata.json \) -exec chmod 644 {} +
 

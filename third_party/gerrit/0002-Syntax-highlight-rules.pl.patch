@@ -1,17 +1,17 @@
-From be348f64eda257ae0af1f89552548d3e8eca3688 Mon Sep 17 00:00:00 2001
+From 855e379fabc827da5498464285d71d5ae615312d Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:43 +0100
-Subject: [PATCH 3/7] Syntax highlight rules.pl
+Subject: [PATCH 2/6] Syntax highlight rules.pl
 
 ---
  .../diff/gr-syntax-layer/gr-syntax-layer.ts         | 13 ++++++++++++-
  1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts
-index 2762ccc625..598e14589f 100644
+index d2d2104437..d8585b5cd4 100644
 --- a/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts
 +++ b/polygerrit-ui/app/elements/diff/gr-syntax-layer/gr-syntax-layer.ts
-@@ -103,6 +103,10 @@ const LANGUAGE_MAP = new Map<string, string>([
+@@ -105,6 +105,10 @@ const LANGUAGE_MAP = new Map<string, string>([
  ]);
  const ASYNC_DELAY = 10;
  
@@ -22,7 +22,7 @@ index 2762ccc625..598e14589f 100644
  const CLASS_SAFELIST = new Set<string>([
    'gr-diff gr-syntax gr-syntax-attr',
    'gr-diff gr-syntax gr-syntax-attribute',
-@@ -241,10 +245,17 @@ export class GrSyntaxLayer implements DiffLayer {
+@@ -244,10 +248,17 @@ export class GrSyntaxLayer implements DiffLayer {
      }
    }
  
@@ -42,5 +42,5 @@ index 2762ccc625..598e14589f 100644
  
    /**
 -- 
-2.32.0
+2.34.0
 

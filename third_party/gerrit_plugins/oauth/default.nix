@@ -4,7 +4,7 @@ let
   inherit (import ../builder.nix args) buildGerritBazelPlugin;
 in buildGerritBazelPlugin rec {
   name = "oauth";
-  depsOutputHash = "sha256:0j86amkw54y177s522hc988hqg034fsrkywbsb9a7h14zwcqbran";
+  depsOutputHash = "sha256:00bvj4sgysigrqlc78rddybg1yj463vppbf83z9npc4r2xcvjfy6";
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/plugins/oauth";
     rev = "4aa7322db5ec221b2419e12a9ec7af5b8c66659c";
