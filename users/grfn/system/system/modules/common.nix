@@ -62,7 +62,6 @@ with lib;
 
   nix = {
     trustedUsers = [ "grfn" ];
-    autoOptimiseStore = true;
     distributedBuilds = true;
 
     gc = {
