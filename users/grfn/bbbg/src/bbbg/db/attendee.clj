@@ -54,16 +54,17 @@
 
 (defn upsert-all!
   [db attendees]
-  (db/list
-   db
-   {:insert-into :attendee
-    :values (map #(->> %
-                       (db/process-key-map :attendee)
-                       (u/map-keys keyword))
-                 attendees)
-    :upsert {:on-conflict [:meetup-user-id]
-             :do-update-set [:meetup-name]}
-    :returning [:id :meetup-user-id]}))
+  (when (seq attendees)
+    (db/list
+     db
+     {:insert-into :attendee
+      :values (map #(->> %
+                         (db/process-key-map :attendee)
+                         (u/map-keys keyword))
+                   attendees)
+      :upsert {:on-conflict [:meetup-user-id]
+               :do-update-set [:meetup-name]}
+      :returning [:id :meetup-user-id]})))
 
 (comment
   (def db (:db bbbg.core/system))
