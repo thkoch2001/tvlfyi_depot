@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b79aa2d8_4e29ab56",
+        "filename": "third_party/gerrit/default.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-27T08:17:46Z",
+      "side": 1,
+      "message": "Doesn\u0027t match the commit message",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 20
+      },
+      "revId": "b6e8db0b305f2563f1ec0084cf20f6c436a1e331",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4573a13e_13c65cc6",
+        "filename": "third_party/gerrit/default.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-27T08:17:46Z",
+      "side": 1,
+      "message": "Is this commit really the target release? If the branchName below is used but it\u0027s actually 3.5 I\u0027m not sure how that works. But also it seems unlikely that the breaking change would be from 3.4.2\n\nDo they have tags we can use instead?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 53
+      },
+      "revId": "b6e8db0b305f2563f1ec0084cf20f6c436a1e331",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
