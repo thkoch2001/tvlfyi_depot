@@ -3,17 +3,10 @@
 #
 # Note that encrypted secrets end up in the Nix store, but this is
 # fine since they're publicly available anyways.
-{ depot, pkgs, ... }:
+#
+# Type: mkSecrets :: <path> -> [<secrets>] -> <attrset including meta.targets>
+{ depot, ... }:
 path: secrets:
-
-let
-  inherit (builtins) attrNames listToAttrs;
-
-  # Import a secret to the Nix store
-  declareSecret = name: pkgs.runCommandNoCC name {} ''
-    cp ${path + "/${name}"} $out
-  '';
-in depot.nix.readTree.drvTargets (listToAttrs (
-  map (name: { inherit name; value = declareSecret name; })
-    (attrNames secrets)
-))
+depot.nix.readTree.drvTargets
+  # Import each secret into the Nix store
+  (builtins.mapAttrs (name: _: "${path}/${name}") secrets)
