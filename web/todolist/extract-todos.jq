@@ -24,7 +24,10 @@ def simplify_match:
 # order on the website.
 def group_by_user: .
     | group_by(.user)
-    | map(sort_by(.file));
+    | map(. | {
+      user: .[0].user,
+      todos: map(del(.user)) | sort_by(.file),
+    });
 
 # main:
 map(select(.type == "match") | simplify_match) | group_by_user
