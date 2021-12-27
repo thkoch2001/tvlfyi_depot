@@ -318,7 +318,13 @@ in lib.fix (self: {
         if !(t.checkToBool res)
         then res
         else {
-          ok = pred v;
+          ok =
+            let
+              inherit (builtins) toXML;
+              iok = pred v;
+            in if isBool iok
+              then iok
+              else throw "got invalid .ok value (${toXML iok}) from restrict (${name}) predicate";
           err = "${prettyPrint v} does not conform to restriction '${restriction}'";
         };
   };
