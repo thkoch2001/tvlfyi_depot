@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "860ca2c7_d00b0d93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T04:26:50Z",
+      "side": 1,
+      "message": "example output: https://buildkite.com/tvl/depot/builds/10900#4ba849e6-9351-466d-8299-937b7ddd4c0a\n\n\u003e restriction \u0027string[SSH pubkey]\u0027 predicate returned unexpected value \u0027\u003cfunction\u003e\u0027 instead of boolean",
+      "revId": "0291bb4c618551876a207202372043e55bb698bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
