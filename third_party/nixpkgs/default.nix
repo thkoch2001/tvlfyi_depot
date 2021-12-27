@@ -57,9 +57,23 @@ let
       stable = stableHashes.commit;
     };
   };
+
+  usernpcfg =
+    let
+      homeDir = builtins.getEnv "HOME";
+      configFile = builtins.getEnv "NIXPKGS_CONFIG";
+      configFile2 = homeDir + "/.config/nixpkgs/config.nix";
+    in
+      if configFile != "" && builtins.pathExists configFile then import configFile
+      else if homeDir != "" && builtins.pathExists configFile2 then import configFile2
+      else {};
+
 in import nixpkgsSrc {
-  config.allowUnfree = true;
-  config.allowBroken = true;
+  # allow users to inject their config into builds (e.g. to test CA derivations)
+  config = usernpcfg // {
+    allowUnfree = true;
+    allowBroken = true;
+  };
   overlays = [
     commitsOverlay
     stableOverlay
