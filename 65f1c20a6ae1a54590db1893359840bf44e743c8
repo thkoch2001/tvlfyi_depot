@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad60d415_da5313a7",
+        "filename": "ops/secrets/mkSecrets.nix",
+        "patchSetId": 15
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-27T03:48:08Z",
+      "side": 1,
+      "message": "I think inherit\u0027ing things from `y` would make this all a bit more readable",
+      "revId": "65f1c20a6ae1a54590db1893359840bf44e743c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
