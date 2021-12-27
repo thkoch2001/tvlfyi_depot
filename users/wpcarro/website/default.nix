@@ -1,13 +1,27 @@
 { pkgs, depot, ... }:
 
-pkgs.stdenv.mkDerivation {
-  name = "wpcarro.dev";
-  src = builtins.path { path = ./.; name = "website"; };
-  installPhase = ''
-    mkdir -p $out
-    cp $src/index.html $out
+rec {
+  inherit (depot.users) wpcarro;
 
-    mkdir -p $out/habits
-    cp -r ${depot.users.wpcarro.website.habit-screens} $out/habits/index.html
-  '';
+  header = "${./fragments/header.html}";
+  footer = "${./fragments/footer.html}";
+  addendum = "${./fragments/addendum.html}";
+
+  root = pkgs.stdenv.mkDerivation {
+    name = "wpcarro.dev";
+    src = builtins.path { path = ./.; name = "website"; };
+    installPhase = ''
+      mkdir -p $out
+
+      cat ${header} \
+          ${./fragments/homepage.html} \
+          ${footer} \
+          ${addendum} > $out/index.html
+
+      mkdir -p $out/habits
+      cp -r ${wpcarro.website.habit-screens} $out/habits/index.html
+
+      cp -r ${wpcarro.website.blog.root} $out/blog
+    '';
+  };
 }
