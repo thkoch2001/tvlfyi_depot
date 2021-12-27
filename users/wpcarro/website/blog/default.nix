@@ -10,8 +10,7 @@ let
 
   config = {
     name = "wpcarro's blog";
-    baseUrl = "https://blog.wpcarro.dev";
-    footer = "";
+    baseUrl = "https://wpcarro.dev/blog";
   };
 
   posts = filter includePost (list post (import ./posts.nix));
