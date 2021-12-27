@@ -16,6 +16,24 @@
       "message": "It would be nice if this got yants\u0027d, but it wasn\u0027t before so...",
       "revId": "5532dcafee99ce1c6d4ddd472c672ded85ef3f7c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39b369fe_0073cead",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T01:59:15Z",
+      "side": 1,
+      "message": "What should be/is the return type of `drvTargets`?",
+      "parentUuid": "77c46b27_4299b874",
+      "revId": "5532dcafee99ce1c6d4ddd472c672ded85ef3f7c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
