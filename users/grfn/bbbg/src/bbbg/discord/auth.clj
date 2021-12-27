@@ -54,15 +54,22 @@
              "guilds.members.read"
              "identify"])
 
-(defn discord-oauth-profile [env]
+(defn discord-oauth-profile [{:keys [base-url] :as env}]
   {:authorize-uri authorization-url
    :access-token-uri access-token-url
    :client-id (::client-id env)
    :client-secret (::client-secret env)
    :scopes scopes
    :launch-uri "/auth/discord"
-   :redirect-uri "/auth/discord/redirect"
-   :landing-uri "/auth/success"})
+   :redirect-uri (str base-url "/auth/discord/redirect")
+   :landing-uri (str base-url "/auth/success")})
+
+(comment
+  (-> "https://bbbg-staging.gws.fyi/auth/login"
+      (java.net.URI/create)
+      (.resolve "https://bbbg.gws.fyi/auth/discord/redirect")
+      str)
+  )
 
 (defn wrap-discord-auth [handler env]
   (wrap-oauth2 handler {:discord (discord-oauth-profile env)}))
