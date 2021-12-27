@@ -56,6 +56,30 @@
       },
       "revId": "17064eec3cb74aacd4201dd479d99a24cdef443c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa618a3e_7825ee05",
+        "filename": "ops/secrets/mkSecrets.nix",
+        "patchSetId": 18
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T23:15:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6308965e_79c0861e",
+      "range": {
+        "startLine": 20,
+        "startChar": 2,
+        "endLine": 20,
+        "endChar": 23
+      },
+      "revId": "17064eec3cb74aacd4201dd479d99a24cdef443c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
