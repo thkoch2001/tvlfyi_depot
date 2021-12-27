@@ -16,6 +16,24 @@
       "message": "this looks unused?",
       "revId": "db1e5d92ea6ab57a54a79bc1740c6e569ed2b800",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7184e424_b165d4d7",
+        "filename": "nix/yants/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-27T04:14:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "62823656_aa3f6dc7",
+      "revId": "db1e5d92ea6ab57a54a79bc1740c6e569ed2b800",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
