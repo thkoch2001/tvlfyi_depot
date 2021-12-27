@@ -1,12 +1,27 @@
-{ pkgs, ... }:
+{ depot, lib, pkgs, ... }:
 
-pkgs.stdenv.mkDerivation {
-  name = "blog.wpcarro.dev";
-  buildInputs = with pkgs; [ hugo ];
-  src = builtins.path { path = ./.; name = "blog"; };
-  buildPhase = ''
+with depot.nix.yants;
+
+let
+  inherit (builtins) hasAttr filter;
+  inherit (depot.web.blog) post includePost renderPost;
+
+  config = {
+    name = "wpcarro's blog";
+    baseUrl = "https://blog.wpcarro.dev";
+    footer = "";
+  };
+
+  posts = filter includePost (list post (import ./posts.nix));
+
+  rendered = pkgs.runCommandNoCC "wpcarros-blog" {} ''
     mkdir -p $out
-    ${pkgs.hugo}/bin/hugo --minify --destination $out
+
+    ${lib.concatStringsSep "\n" (map (post:
+      "cp ${renderPost config post} $out/${post.key}.html"
+    ) posts)}
   '';
-  dontInstall = true;
+
+in {
+  inherit posts rendered config;
 }

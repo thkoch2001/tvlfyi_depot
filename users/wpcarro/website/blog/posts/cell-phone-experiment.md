@@ -1,9 +1,3 @@
----
-title: "Cell Phone Experiment"
-date: 2020-04-02T02:02:07Z
-draft: false
----
-
 ### TL;DR
 
 I will not use my cell phone during March to learn more about how much I depend
