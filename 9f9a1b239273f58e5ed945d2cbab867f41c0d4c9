@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f44f205d_45360aee",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-28T10:47:32Z",
+      "side": 1,
+      "message": "Chunking doesn\u0027t happen here - this is a single build step (content of chunks). I\u0027ll mention it in some other place.",
+      "parentUuid": "6c3e5c6f_04966d95",
+      "revId": "9f9a1b239273f58e5ed945d2cbab867f41c0d4c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b934456b_466aa32a",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2021-12-28T10:43:31Z",
       "side": 1,
       "message": "I think this file is based on an outdated version of //ops/pipelines/depot.nix, since this comment has changed on canon for example.",
+      "revId": "9f9a1b239273f58e5ed945d2cbab867f41c0d4c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9a3e720_39df503a",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-28T10:47:32Z",
+      "side": 1,
+      "message": "Strange, taking a look.",
+      "parentUuid": "b934456b_466aa32a",
       "revId": "9f9a1b239273f58e5ed945d2cbab867f41c0d4c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -60,6 +96,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ef585242_80704ca1",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-28T10:47:32Z",
+      "side": 1,
+      "message": "It\u0027s actually the derivations as read by readTree (i.e. expected to have the readTree-specific attributes). Will update.",
+      "parentUuid": "c6b28f6c_cd0dca93",
+      "range": {
+        "startLine": 113,
+        "startChar": 14,
+        "endLine": 113,
+        "endChar": 32
+      },
+      "revId": "9f9a1b239273f58e5ed945d2cbab867f41c0d4c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c54e4f98_b819f8ac",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 1
@@ -71,6 +131,30 @@
       "writtenOn": "2021-12-28T10:43:31Z",
       "side": 1,
       "message": "This is not guaranteed though, right? Since there\u0027s no wait in between.",
+      "range": {
+        "startLine": 124,
+        "startChar": 55,
+        "endLine": 124,
+        "endChar": 60
+      },
+      "revId": "9f9a1b239273f58e5ed945d2cbab867f41c0d4c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ea2d387_63f1bd91",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-28T10:47:32Z",
+      "side": 1,
+      "message": "The guarantee is \"will not start running until all drv build steps have started running\" (since it\u0027s in the same \"group\", at the end, but without a wait step). Will reword.",
+      "parentUuid": "c54e4f98_b819f8ac",
       "range": {
         "startLine": 124,
         "startChar": 55,
