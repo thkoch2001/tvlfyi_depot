@@ -223,6 +223,51 @@ LargestBasinsProduct ← {×´ 3↑ ∨ 1↓ ≠¨ ⊔⥊Basins 𝕩}
 •Out "Day 9.2: "∾•Fmt LargestBasinsProduct day9Input
 
 #
+# 2021-12-10
+#
+
+day10ExampleInput ← ⟨
+  "[({(<(())[]>[[{[]{<()<>>",
+  "[(()[<>])]({[<{<<[]>>(",
+  "{([(<{}[<>[]}>{[]{[(<()>",
+  "(((({<>}<{<{<>}{[]{[]{}",
+  "[[<[([]))<([[{}[[()]]]",
+  "[{[{({}]{}}([{[{{{}}([]",
+  "{<[[]]>}<{[{[{[]{()[[[]",
+  "[<(<(<(<{}))><([]([]()",
+  "<{([([[(<>()){}]>(<<{{",
+  "<{([{{}}[<[[[<>{}]]]>[]]",
+⟩
+day10Input ← ReadInput 10
+
+# part 1
+
+opp ← "([{<"
+clp ← ")]}>"
+SwapParen ← (opp∾⌽clp)⊸((⊑⊐)⊑(⌽⊣))
+
+ParenStacks ← ((<⟨⟩)⊸(((⊑∊)⟜clp⊢)◶(∾˜⟜SwapParen)‿(1⊸↓⊣)`))
+LegalParens ← ((1⊸↑)¨∘»∘ParenStacks ((∊⟜opp⊢)∨(≡⟜⋈)¨) ⊢)
+
+_ScoreFor_ ← {𝕗⊸(𝕘⊸⊐⊏⊣) 𝕩}
+
+SyntaxScore ← +´∘(0‿3‿57‿1197‿25137 _ScoreFor_ (" "∾clp))∘∾∘(1⊸↑∘(¬∘LegalParens/⊢)¨)
+
+! 26397 = SyntaxScore day10ExampleInput
+•Out "Day 10.1: "∾•Fmt SyntaxScore day10Input
+
+# part 2
+
+AutocompleteScore ← {
+  Score ← (5⊸×⊸+)˜´∘⌽∘((1+↕4) _ScoreFor_ clp)
+  # TODO(sterni): we compute ParenStacks twice here
+  ((⌊÷⟜2)∘≠⊑⊢) ∧ Score∘(⊑⌽)∘ParenStacks¨ (∧´∘LegalParens¨/⊢) 𝕩
+}
+
+! 288957 = AutocompleteScore day10ExampleInput
+•Out "Day 10.2: "∾•Fmt AutocompleteScore day10Input
+
+#
 # 2021-12-11
 #
 
