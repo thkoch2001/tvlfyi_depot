@@ -13,6 +13,7 @@ let
 in {
   imports = [
     (depot.path + "/users/wpcarro/nixos/marcus/hardware.nix")
+    "${pkgs.home-manager.src}/nixos"
   ];
 
   # Use the TVL binary cache
@@ -100,6 +101,34 @@ in {
     EDITOR = "emacsclient";
     ALTERNATE_EDITOR = "emacs -q -nw";
     VISUAL = "emacsclient";
+  };
+
+  home-manager.useGlobalPkgs = true;
+  home-manager.users.wpcarro = { config, lib, ... }: {
+    programs.git = {
+      enable = true;
+      userName = "William Carroll";
+      userEmail = "wpcarro@gmail.com";
+      extraConfig = {
+        pull.rebase = true;
+      };
+    };
+
+    services.picom = {
+      enable = true;
+      vSync = true;
+      backend = "glx";
+    };
+
+    services.dunst.enable = true;
+    xdg.configFile."dunst/dunstrc" = {
+      source = wpcarro.dotfiles.dunstrc;
+      onChange = ''
+        ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
+      '';
+    };
+
+    systemd.user.startServices = true;
   };
 
   environment.systemPackages =
