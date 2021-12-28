@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb0e8b3d_ceff8391",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-28T10:45:56Z",
+      "side": 1,
+      "message": "Fixing wpcarro\u0027s formatting in cl/4728, for some reason the previous check didn\u0027t properly enforce this.",
+      "revId": "8efcd6646ffabb0bed6bc97b39cba932e2b52dea",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
