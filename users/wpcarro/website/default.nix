@@ -22,6 +22,6 @@ in {
     cp -r ${wpcarro.website.habit-screens} $out/habits/index.html
 
     # /blog
-    cp -r ${wpcarro.website.blog.root} $out/blog
+    cp -r ${wpcarro.website.blog} $out/blog
   '';
 }
