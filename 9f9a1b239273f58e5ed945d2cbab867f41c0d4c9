@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b754ecd_c085673e",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-28T10:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f44f205d_45360aee",
+      "revId": "9f9a1b239273f58e5ed945d2cbab867f41c0d4c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b934456b_466aa32a",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Strange, taking a look.",
       "parentUuid": "b934456b_466aa32a",
+      "revId": "9f9a1b239273f58e5ed945d2cbab867f41c0d4c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0da9fc56_fdec9465",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-28T10:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9a3e720_39df503a",
       "revId": "9f9a1b239273f58e5ed945d2cbab867f41c0d4c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -118,6 +154,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df55c4c6_ca3f7426",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-28T10:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef585242_80704ca1",
+      "range": {
+        "startLine": 113,
+        "startChar": 14,
+        "endLine": 113,
+        "endChar": 32
+      },
+      "revId": "9f9a1b239273f58e5ed945d2cbab867f41c0d4c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c54e4f98_b819f8ac",
@@ -155,6 +215,30 @@
       "side": 1,
       "message": "The guarantee is \"will not start running until all drv build steps have started running\" (since it\u0027s in the same \"group\", at the end, but without a wait step). Will reword.",
       "parentUuid": "c54e4f98_b819f8ac",
+      "range": {
+        "startLine": 124,
+        "startChar": 55,
+        "endLine": 124,
+        "endChar": 60
+      },
+      "revId": "9f9a1b239273f58e5ed945d2cbab867f41c0d4c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "308fb12f_fa7b2e60",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2021-12-28T10:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ea2d387_63f1bd91",
       "range": {
         "startLine": 124,
         "startChar": 55,
