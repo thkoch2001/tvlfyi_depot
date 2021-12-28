@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b012d83c_807787e6",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2021-12-28T11:07:00Z",
+      "side": 1,
+      "message": "alongside? not sure, but along sounds a bit wrong to me.",
+      "range": {
+        "startLine": 127,
+        "startChar": 55,
+        "endLine": 127,
+        "endChar": 60
+      },
+      "revId": "12015edaf973c66af28531cbc9efef0ad7a8c41e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
