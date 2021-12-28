@@ -1,0 +1,11 @@
+[package]
+name = "tvix"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3"
+
+[dependencies.clap]
+version = "2.34"
+
+[[bin]]
+name = "nix-store"
