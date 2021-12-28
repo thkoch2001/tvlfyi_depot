@@ -10,9 +10,16 @@ let
     command = "${depot.nix.bufCheck}/bin/ci-buf-check";
     label = ":water_buffalo:";
   };
+
+  # Formatting check which validates that all supported auto-formatted
+  # files are formatted correctly. See //tools/depotfmt for details.
+  depotfmtCheck = {
+    command = "${depot.tools.depotfmt.check}";
+    label = ":evergreen_tree: (tools/depotfmt)";
+  };
 in depot.nix.buildkite.mkPipeline {
   headBranch = "refs/heads/canon";
   drvTargets = depot.ci.targets;
   skipIfBuilt = true;
-  additionalSteps = [ protoCheck ];
+  additionalSteps = [ depotfmtCheck protoCheck ];
 }

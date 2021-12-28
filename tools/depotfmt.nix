@@ -27,13 +27,13 @@ let
       --tree-root $(${pkgs.git}/bin/git rev-parse --show-toplevel)
   '';
 
-  # wrapper for running formatting checks in CI
-  check = pkgs.runCommandNoCC "depotfmt-check" {} ''
-    ${pkgs.git}/bin/git clone ${depot.path.origSrc} depot
-    export HOME="$(${pkgs.coreutils}/bin/realpath .)"
+  # wrapper script for running formatting checks in CI
+  check = pkgs.writeShellScript "depotfmt-check" ''
     ${pkgs.treefmt}/bin/treefmt \
       --fail-on-change \
       --config-file ${config} \
-      --tree-root depot && : > $out
+      --tree-root .
   '';
-in depotfmt // depot.nix.readTree.drvTargets { inherit check; }
+in depotfmt.overrideAttrs(_: {
+  passthru.check = check;
+})
