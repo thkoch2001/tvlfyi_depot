@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7711d1c6_804c3850",
+        "filename": "tvix/.envrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-28T18:48:19Z",
+      "side": 1,
+      "message": "Is this compatible with the main .envrc?",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f78321fb_52865515",
+        "filename": "tvix/.gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-28T18:48:19Z",
+      "side": 1,
+      "message": "I think it would be a better idea to add this to the main .gitignore.",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57fb765c_96308a44",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-28T18:48:19Z",
+      "side": 1,
+      "message": "`license` key is missing and should be added matching the already present LICENSE file.",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff1ed2ea_00475fa3",
+        "filename": "tvix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-28T18:48:19Z",
+      "side": 1,
+      "message": "This should be replaced with either:\n- an `naersk` invocation\n- import and delegate to an `crate2nix`-generated `Cargo.nix` file\n- or manual invocation of `pkgs.buildRustCrate`.",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "708b9fb4_dd983137",
+        "filename": "tvix/shell.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-28T18:48:19Z",
+      "side": 1,
+      "message": "we probably also need an protobuf compiler.",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db8c6804_a5c0b63d",
+        "filename": "tvix/src/bin/nix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-28T18:48:19Z",
+      "side": 1,
+      "message": "If we are following a custom style here, a matching `rustfmt.toml` should be provided if possible. \n\nimo: I wouldn\u0027t like following some style which isn\u0027t enforceable via rustfmt, as it increases unnecessary churn.",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e78bb2f0_b7beb7b3",
+        "filename": "tvix/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-28T18:48:19Z",
+      "side": 1,
+      "message": "Maybe delete this file, or follow a similar approach as `uutils` (https://github.com/uutils/coreutils), or other multi-call binaries.",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
