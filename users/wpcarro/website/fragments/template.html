@@ -55,3 +55,42 @@
       </div>
     </header>
     <div class="max-w-sm px-2 md:px-0 md:max-w-prose mx-auto">
+      @contentHtml@
+      <footer class="md:hidden pb-6">
+        <h2 class="text-xl font-bold py-4">More wpcarro?</h2>
+        <ul>
+          <li class="pb-6">
+            <a class="text-blue-600 font-bold" href="https://wpcarro.dev">
+              Home <span class="text-blue-300">-></span>
+            </a>
+          </li>
+          <li class="pb-6">
+            <a class="text-blue-600 font-bold" href="https://wpcarro.dev/blog">
+              Blog <span class="text-blue-300">-></span>
+            </a>
+          </li>
+          <li class="pb-6">
+            <a class="text-blue-600 font-bold" href="https://github.com/wpcarro">
+              GitHub <span class="text-blue-300">-></span>
+            </a>
+          </li>
+          <li class="pb-6">
+            <a class="text-blue-600 font-bold" href="https://linkedin.com/in/williampatrickcarroll">
+              LinkedIn <span class="text-blue-300">-></span>
+            </a>
+          </li>
+        </ul>
+      </footer>
+    </div>
+    <script>
+      const $header = document.querySelector("header");
+      const dropShadow = "drop-shadow-md";
+      const update = () => window.scrollY !== 0 ?
+        $header.classList.add(dropShadow) :
+        $header.classList.remove(dropShadow);
+
+      update();
+      document.addEventListener("scroll", update);
+    </script>
+  </body>
+</html>

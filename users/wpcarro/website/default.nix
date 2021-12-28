@@ -1,27 +1,27 @@
 { pkgs, depot, ... }:
 
-rec {
+let
+  inherit (builtins) readFile;
   inherit (depot.users) wpcarro;
 
-  header = "${./fragments/header.html}";
-  footer = "${./fragments/footer.html}";
-  addendum = "${./fragments/addendum.html}";
-
-  root = pkgs.stdenv.mkDerivation {
-    name = "wpcarro.dev";
-    src = builtins.path { path = ./.; name = "website"; };
-    installPhase = ''
-      mkdir -p $out
-
-      cat ${header} \
-          ${./fragments/homepage.html} \
-          ${footer} \
-          ${addendum} > $out/index.html
-
-      mkdir -p $out/habits
-      cp -r ${wpcarro.website.habit-screens} $out/habits/index.html
-
-      cp -r ${wpcarro.website.blog.root} $out/blog
-    '';
+  render = contentHtml: pkgs.substituteAll {
+    inherit contentHtml;
+    src = ./fragments/template.html;
   };
+in {
+  inherit render;
+
+  root = pkgs.runCommandNoCC "wpcarro.dev" {} ''
+    mkdir -p $out
+
+    # /
+    cp ${render (readFile ./fragments/homepage.html)} $out/index.html
+
+    # /habits
+    mkdir -p $out/habits
+    cp -r ${wpcarro.website.habit-screens} $out/habits/index.html
+
+    # /blog
+    cp -r ${wpcarro.website.blog.root} $out/blog
+  '';
 }
