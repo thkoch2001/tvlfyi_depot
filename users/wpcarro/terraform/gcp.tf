@@ -15,8 +15,7 @@ resource "google_compute_instance" "default" {
   tags = [
     "http-server",
     "https-server",
-    "mosh-server",
-    "quassel-core",
+    "diogenes-firewall"
   ]
 
   boot_disk {
@@ -44,4 +43,23 @@ resource "google_compute_instance" "default" {
   service_account {
     scopes = ["cloud-platform"]
   }
+}
+
+resource "google_compute_firewall" "default" {
+  name = "diogenes-firewall"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports = ["6698"]
+  }
+
+  allow {
+    protocol = "udp"
+    ports = [
+      "60000-61000" # mosh
+    ]
+  }
+
+  source_tags = ["diogenes-firewall"]
 }
