@@ -34,15 +34,12 @@ let
 
   toPostHtml = post: readFile (pkgs.substituteAll {
     src = ./fragments/post.html;
-    postUrl = "${config.baseUrl}/${post.key}.html";
+    postUrl = "${config.baseUrl}/posts/${post.key}.html";
     postTitle = post.title;
     postDate = formatDate post.date;
   });
-in {
-  inherit posts rendered config;
-
-  root = pkgs.runCommandNoCC "wpcarros-blog" {} ''
-    mkdir -p $out
-    cp ${wpcarro.website.render postsHtml} $out/index.html
-  '';
-}
+in pkgs.runCommandNoCC "wpcarros-blog" {} ''
+  mkdir -p $out
+  cp ${wpcarro.website.render postsHtml} $out/index.html
+  cp -r ${rendered} $out/posts
+''
