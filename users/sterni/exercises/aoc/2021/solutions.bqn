@@ -223,6 +223,52 @@ LargestBasinsProduct ← {×´ 3↑ ∨ 1↓ ≠¨ ⊔⥊Basins 𝕩}
 •Out "Day 9.2: "∾•Fmt LargestBasinsProduct day9Input
 
 #
+# 2021-12-11
+#
+
+day11Input ← '0'-˜> ReadInput 11
+day11ExampleInput ← >⟨
+  ⟨5,4,8,3,1,4,3,2,2,3,⟩,
+  ⟨2,7,4,5,8,5,4,7,1,1,⟩,
+  ⟨5,2,6,4,5,5,6,1,7,3,⟩,
+  ⟨6,1,4,1,3,3,6,1,4,6,⟩,
+  ⟨6,3,5,7,3,8,5,4,7,8,⟩,
+  ⟨4,1,6,7,5,2,4,6,4,5,⟩,
+  ⟨2,1,7,6,8,4,1,7,2,1,⟩,
+  ⟨6,8,8,2,8,8,1,1,3,4,⟩,
+  ⟨4,8,4,6,8,4,8,5,5,4,⟩,
+  ⟨5,2,8,3,7,5,1,5,2,6,⟩,
+⟩
+
+# part 1
+
+OctopusFlash ← {
+  ((⥊⟜0)∘≢𝕊⊢) 𝕩;
+  flashing ← (¬𝕨)∧9<𝕩
+  energy ← ((«˘»)+(»˘«)+(»˘»)+(«˘«)+(»˘)+(«˘)+«+») flashing
+  ((𝕨∨flashing)⊸𝕊)⍟(0<+´⥊flashing) energy+𝕩
+}
+
+OctopusStep ← ((9⊸≥)×⊢)∘OctopusFlash∘(1⊸+)
+OctopusFlashCount ← {+´⥊0=>(OctopusStep⊣)`(1+𝕨)⥊<𝕩}
+
+! 1656 = 100 OctopusFlashCount day11ExampleInput
+•Out "Day 11.1: "∾•Fmt 100 OctopusFlashCount day11Input
+
+# part 2
+
+_iterCountUntil_ ← {
+  0 𝕊 𝕩;
+  𝔾◶⟨((𝕨+1)⊸𝕊)∘𝔽, 𝕨˙⟩ 𝕩
+}
+
+OctopusAllFlashing ← OctopusStep _iterCountUntil_ (∧´∘⥊∘(0⊸=))
+
+! 195 = OctopusAllFlashing day11ExampleInput
+
+•Out "Day 11.2: "∾•Fmt OctopusAllFlashing day11Input
+
+#
 # 2021-12-13
 #
 
