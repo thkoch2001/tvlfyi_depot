@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a510112d_8f0cde32",
+        "filename": "tvix/.gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-29T02:31:38Z",
+      "side": 1,
+      "message": "see also CL/4735, which would make this file redundant.",
+      "parentUuid": "f78321fb_52865515",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2f6bbbf7_5e476a7a",
         "filename": "tvix/Cargo.toml",
         "patchSetId": 2
