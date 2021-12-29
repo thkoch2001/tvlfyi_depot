@@ -5,3 +5,19 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+
+# Ignore Rust build products/results
+target/
+
+# Ignore file editor files, temporaries, settings, backups, etc.
+*~
+**/*.rs.bk
+
+## JetBrains IDEA
+.idea/
+
+## Midnight Commander
+.#*
+
+## VS Code
+.vscode/
