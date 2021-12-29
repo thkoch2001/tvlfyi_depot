@@ -19,12 +19,8 @@ cabal.sandbox.config
 *.eventlog
 .stack-work/
 cabal.project.local
-cabal.project.local~
 .HTF/
 .ghc.environment.*
-
-# from nix-build
-result
 
 # grr
 *_flymake.hs

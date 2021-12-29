@@ -1,5 +1,3 @@
-/target
 irc.toml
 paroxysm-irc.toml
 paroxysm.toml
-**/*.rs.bk
