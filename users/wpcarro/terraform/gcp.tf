@@ -27,6 +27,11 @@ resource "google_compute_instance" "default" {
     }
   }
 
+  attached_disk {
+    source      = "diogenes-2-disk"
+    device_name = "diogenes-2-disk"
+  }
+
   network_interface {
     network    = "default"
     subnetwork = "default"
@@ -65,4 +70,10 @@ resource "google_compute_firewall" "default" {
   }
 
   source_tags = ["diogenes-firewall"]
+}
+
+resource "google_compute_disk" "default" {
+  name = "diogenes-2-disk"
+  zone = "us-central1-a"
+  size = 100
 }
