@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "2d5b8a12_59c288f8",
         "filename": "third_party/nix/src/libutil/thread-pool.cc",
@@ -20,10 +21,10 @@
         "endChar": 18
       },
       "revId": "3f2f9145c185c7dc5606b94714c0decdcbeeac51",
-      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
-      "unresolved": true
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "b2a6f6ff_e435b842",
         "filename": "third_party/nix/src/libutil/thread-pool.cc",
@@ -44,10 +45,34 @@
         "endChar": 18
       },
       "revId": "3f2f9145c185c7dc5606b94714c0decdcbeeac51",
-      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
-      "unresolved": true
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "daacab63_84769ebe",
+        "filename": "third_party/nix/src/libutil/thread-pool.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-29T23:24:18Z",
+      "side": 1,
+      "message": "`interruptCheck` is global, but\n\n    ../libutil/util.cc:1155:thread_local std::function\u003cbool()\u003e interruptCheck;\n\nit is thread-local, so bound to the lifetime of the thread, so this should be ok.",
+      "parentUuid": "b2a6f6ff_e435b842",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 18
+      },
+      "revId": "3f2f9145c185c7dc5606b94714c0decdcbeeac51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "0dd31bd7_90aa430b",
         "filename": "third_party/nix/src/libutil/thread-pool.cc",
@@ -61,8 +86,25 @@
       "side": 1,
       "message": "doesn\u0027t this need a value?",
       "revId": "3f2f9145c185c7dc5606b94714c0decdcbeeac51",
-      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
-      "unresolved": true
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4050b520_4e4bbd2f",
+        "filename": "third_party/nix/src/libutil/thread-pool.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-29T23:24:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dd31bd7_90aa430b",
+      "revId": "3f2f9145c185c7dc5606b94714c0decdcbeeac51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
