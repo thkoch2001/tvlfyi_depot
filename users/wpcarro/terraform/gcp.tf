@@ -22,8 +22,8 @@ resource "google_compute_instance" "default" {
     device_name = "boot"
 
     initialize_params {
-      size  = 10
-      image = "nixos-20-03"
+      size = 10
+      image = "projects/nixos-cloud/global/images/nixos-image-20-09-3531-3858fbc08e6-x86-64-linux"
     }
   }
 
@@ -31,13 +31,16 @@ resource "google_compute_instance" "default" {
     network    = "default"
     subnetwork = "default"
 
-    access_config {
-      public_ptr_domain_name = "wpcarro.dev"
-    }
+    access_config {}
   }
 
   metadata = {
-    enable-oslogin = "TRUE"
+    # sshKeys is deprecated, but the GCE NixOS image relies on it, so we need
+    # both values:
+    # - deprecation: https://cloud.google.com/compute/docs/metadata/default-metadata-values
+    # - NixOS bug: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/fetch-instance-ssh-keys.bash#L14
+    ssh-keys = "wpcarro:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJkNQJBXekuSzZJ8+gxT+V1+eXTm3hYsfigllr/ARXkf wpcarro@gmail.com"
+    sshKeys = "wpcarro:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJkNQJBXekuSzZJ8+gxT+V1+eXTm3hYsfigllr/ARXkf wpcarro@gmail.com"
   }
 
   service_account {
