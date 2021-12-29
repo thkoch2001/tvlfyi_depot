@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2f6bbbf7_5e476a7a",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-29T01:55:55Z",
+      "side": 1,
+      "message": "Oh, I think it might also be a good idea to make this a `workspace` instead, and split the code into multiple crates, especially because it is already clear that we want multiple clearly separable components, and already splitting it into multiple crates would both make future refactoring\u0027s easier, and probably also make overall development a bit faster (which I\u0027m also particularly involved in because of https://riir-nix.github.io/).\n\ne.g.\n\n    [workspace]\n    members \u003d [\"crates/*\"]\n\nor such.",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "57fb765c_96308a44",
         "filename": "tvix/Cargo.toml",
         "patchSetId": 2
