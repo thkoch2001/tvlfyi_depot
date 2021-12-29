@@ -90,7 +90,15 @@ in readTree.fix(self: (readDepot {
   path = self.third_party.nixpkgs.lib.cleanSourceWith {
     name = "depot";
     src = ./.;
-    filter = self.third_party.nixpkgs.lib.cleanSourceFilter;
+    filter = name: type:
+      let
+        basename = builtins.baseNameOf name;
+      in
+      (self.third_party.nixpkgs.lib.cleanSourceFilter name type)
+        # additionally filter popular compile output directories
+        && (basename != "dist")
+        && (basename != "target")
+    ;
   };
 
   # List of all buildable targets, for CI purposes.
