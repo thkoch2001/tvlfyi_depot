@@ -22,9 +22,14 @@ resource "google_compute_instance" "default" {
     device_name = "boot"
 
     initialize_params {
-      size = 10
+      size  = 10
       image = "projects/nixos-cloud/global/images/nixos-image-20-09-3531-3858fbc08e6-x86-64-linux"
     }
+  }
+
+  attached_disk {
+    source      = "diogenes-2-disk"
+    device_name = "diogenes-2-disk"
   }
 
   network_interface {
@@ -40,7 +45,7 @@ resource "google_compute_instance" "default" {
     # - deprecation: https://cloud.google.com/compute/docs/metadata/default-metadata-values
     # - NixOS bug: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/fetch-instance-ssh-keys.bash#L14
     ssh-keys = "wpcarro:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJkNQJBXekuSzZJ8+gxT+V1+eXTm3hYsfigllr/ARXkf wpcarro@gmail.com"
-    sshKeys = "wpcarro:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJkNQJBXekuSzZJ8+gxT+V1+eXTm3hYsfigllr/ARXkf wpcarro@gmail.com"
+    sshKeys  = "wpcarro:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJkNQJBXekuSzZJ8+gxT+V1+eXTm3hYsfigllr/ARXkf wpcarro@gmail.com"
   }
 
   service_account {
@@ -65,4 +70,10 @@ resource "google_compute_firewall" "default" {
   }
 
   source_tags = ["diogenes-firewall"]
+}
+
+resource "google_compute_disk" "default" {
+  name = "diogenes-2-disk"
+  zone = "us-central1-a"
+  size = 100
 }
