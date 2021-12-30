@@ -123,7 +123,7 @@ in {
           ];
         }
       ];
-      source_tags = ["${name}-firewall"];
+      source_ranges = ["0.0.0.0/0"];
     };
   
     resource.google_compute_disk."${name}" = {
