@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b2b701e_8c8a26cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-30T14:15:14Z",
+      "side": 1,
+      "message": "I\u0027ve pretty consistently been of the opinion historically that editor-specific files should not be in project-specific .gitignores, instead belonging in user-local global gitignore configuration. This covers jetbrains and vscode, but there are *any number* of other editors that people might use that they might want to ignore.",
+      "revId": "3bea97217c33b98e3394a349b0789c37e21139cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
