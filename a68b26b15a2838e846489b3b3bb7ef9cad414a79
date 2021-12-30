@@ -33,6 +33,24 @@
       "message": "I’m sorry, I find it slightly irritating that you pushed changes to my CL here, I’m not sure if that’s a part of Gerrit culture and to be expected, but now I have to take extra steps to bring it into sync with my mind again, especially since I have no idea what that workspace stuff is about and how it works (I don’t think it’s particularly interesting to the goal here tbh).",
       "revId": "a68b26b15a2838e846489b3b3bb7ef9cad414a79",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaa77fa1_f1927854",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-30T02:34:10Z",
+      "side": 1,
+      "message": "sorry.\n\nusually I use the power to amend arbitrary CLs just to fix formatting errors and small compilation errors, this case was entirely different and I should\u0027ve just opened another CL based on this one instead.\n\nI don\u0027t known if it\u0027s \"part of Gerrit culture\", especially because I\u0027ve never worked on any other project/repo which used Gerrit besides depot / this one. On Github I would\u0027ve probably created a branch on the tip of the original PR (pull request) branch, and created a PR {on: the original PR branch, from: my \"sub\"branch}, I think the Gerrit equivalent is opening a CL based on the tip of the \"upper\" CL.\n\nI overstepped that boundary here because I thought that this was basically the first step forward to lay out some basic infrastructure, and changing the directory structure later results in some churn (particular merge conflicts), which can be partially mitigated by initially setting up a folder structure which makes later, likely modularisation of the code easier.\n\nI recognize that it was a mistake and try to avoid this in the future (the boundary is somewhat fuzzy so I can\u0027t guarantee it). Maybe it something similar will be statically enforced in the future (see also: b/167).\n\nworkspace stuff : https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html",
+      "parentUuid": "c3e2e615_810b1e22",
+      "revId": "a68b26b15a2838e846489b3b3bb7ef9cad414a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
