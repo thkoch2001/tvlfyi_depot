@@ -70,21 +70,24 @@
 
 (defn signup-form-routes [{:keys [db]}]
   (context "/signup-forms" []
-   (GET "/" request
-     (if-let [event (db/fetch db (db.event/today))]
-       (redirect (str "/signup-forms/" (::event/id event)))
-       (page-response (no-events-page
-                       {:authenticated? (authenticated? request)}))))
+    (GET "/" request
+      (if-let [event (db/fetch db (db.event/today))]
+        (redirect (str "/signup-forms/" (::event/id event)))
+        (page-response (no-events-page
+                        {:authenticated? (authenticated? request)}))))
 
-   (GET "/:event-id" [event-id]
-     (if-let [event (db/get db :event event-id)]
-       (let [attendees (db/list db
-                                (->
-                                 (db.attendee/for-event event-id)
-                                 (merge-where [:or
-                                               [:= :attended nil]
-                                               [:not :attended]])))]
-         (page-response
-          (signup-page {:event event
-                        :attendees attendees})))
-       (event-not-found)))))
+    (GET "/:event-id" [event-id]
+      (if-let [event (db/get db :event event-id)]
+        (let [attendees (db/list db
+                                 (->
+                                  (db.attendee/for-event event-id)
+                                  (merge-where
+                                   [:and
+                                    [:or
+                                     [:= :attended nil]
+                                     [:not :attended]]
+                                    :rsvpd_attending])))]
+          (page-response
+           (signup-page {:event event
+                         :attendees attendees})))
+        (event-not-found)))))
