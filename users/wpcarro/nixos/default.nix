@@ -2,8 +2,22 @@
 
 let systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 in {
-  diogenesSystem = systemFor depot.users.wpcarro.nixos.diogenes;
   marcusSystem = systemFor depot.users.wpcarro.nixos.marcus;
 
-  meta.targets = [ "diogenesSystem" "marcusSystem" ];
+  deploy-diogenes = pkgs.writeShellScriptBin "deploy-diogenes" ''
+    set -euo pipefail
+    readonly TF_STATE_DIR=/depot/users/wpcarro/terraform
+    rm -f $TF_STATE_DIR/*.json
+    readonly STORE_PATH="$(nix-build /depot -A users.wpcarro.nixos.diogenes)"
+    cp $STORE_PATH $TF_STATE_DIR
+
+    function cleanup() {
+      rm -f "$TF_STATE_DIR/$(basename $STORE_PATH)"
+    }
+    trap cleanup EXIT
+
+    ${pkgs.terraform}/bin/terraform -chdir="$TF_STATE_DIR" apply
+  '';
+
+  meta.targets = [ "marcusSystem" ];
 }

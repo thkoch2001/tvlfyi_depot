@@ -1,119 +1,150 @@
 { depot, pkgs, ... }:
-{ ... }:
 
 let
   inherit (depot.users) wpcarro;
-in {
-  imports = [
-    "${depot.path}/ops/modules/quassel.nix"
-    (pkgs.path + "/nixos/modules/virtualisation/google-compute-image.nix")
-  ];
+  name = "diogenes";
+  domainName = "billandhiscomputer.com";
+in wpcarro.terraform.googleCloudVM {
+  project = "wpcarros-infrastructure";
+  name = "diogenes";
+  region = "us-central1";
+  zone = "us-central1-a";
 
-  networking = {
-    hostName = "diogenes";
-    firewall.enable = false;
-  };
+  # DNS configuration
+  extraConfig = {
+    resource.google_dns_managed_zone."${name}" = {
+      inherit name;
+      dns_name = "${domainName}.";
+    };
 
-  # Use the TVL binary cache
-  tvl.cache.enable = true;
-
-  # Use 100G volume for /nix
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/62396bde-9002-4025-83eb-2a6c731b7adc";
-    fsType = "ext4";
-  };
-
-  users = {
-    mutableUsers = true;
-    users = {
-      wpcarro = {
-        isNormalUser = true;
-        extraGroups = [ "wheel" "quassel" ];
-        openssh.authorizedKeys.keys = wpcarro.keys.all;
-        shell = pkgs.fish;
-      };
+    resource.google_dns_record_set."${name}" = {
+      name = "${name}.${domainName}.";
+      type = "A";
+      ttl = 300; # 5m
+      managed_zone = "\${google_dns_managed_zone.${name}.name}";
+      rrdatas = ["\${google_compute_instance.${name}.network_interface[0].access_config[0].nat_ip}"];
     };
   };
 
-  security = {
-    acme = {
-      acceptTerms = true;
-      email = "wpcarro@gmail.com";
-    };
+  configuration = {
+    imports = [
+      "${depot.path}/ops/modules/quassel.nix"
+    ];
 
-    sudo.wheelNeedsPassword = false;
-  };
-
-  programs = wpcarro.common.programs // {
-    mosh.enable = true;
-  };
-
-  # I won't have an Emacs server running on diogenes, and I'll likely be in an
-  # SSH session from within vterm. As such, Vim is one of the few editors that I
-  # tolerably navigate this way.
-  environment.variables = {
-    EDITOR = "vim";
-  };
-
-  environment.systemPackages = wpcarro.common.shell-utils;
-
-  services = wpcarro.common.services // {
-    depot.quassel = {
-      enable = true;
-      acmeHost = "wpcarro.dev";
-      bindAddresses = [
-        "0.0.0.0"
+    networking = {
+      firewall.allowedTCPPorts = [
+        22   # ssh
+        80   # http
+        443  # https
+        6698 # quassel
+      ];
+      firewall.allowedUDPPortRanges = [
+        { from = 60000; to = 61000; } # mosh
       ];
     };
 
-    depot.auto-deploy = {
-      enable = true;
-      interval = "1h";
-    };
+    # Use the TVL binary cache
+    tvl.cache.enable = true;
 
-    journaldriver = {
-      enable = true;
-      logStream = "home";
-      googleCloudProject = "wpcarros-infrastructure";
-      applicationCredentials = "/etc/gcp/key.json";
-    };
-
-    nginx = {
-      enable = true;
-      enableReload = true;
-
-      recommendedTlsSettings = true;
-      recommendedGzipSettings = true;
-      recommendedProxySettings = true;
-
-      # for journaldriver
-      commonHttpConfig = ''
-        log_format json_combined escape=json
-        '{'
-            '"remote_addr":"$remote_addr",'
-            '"method":"$request_method",'
-            '"host":"$host",'
-            '"uri":"$request_uri",'
-            '"status":$status,'
-            '"request_size":$request_length,'
-            '"response_size":$body_bytes_sent,'
-            '"response_time":$request_time,'
-            '"referrer":"$http_referer",'
-            '"user_agent":"$http_user_agent"'
-        '}';
-
-        access_log syslog:server=unix:/dev/log,nohostname json_combined;
-      '';
-
-      virtualHosts = {
-        "wpcarro.dev" = {
-          addSSL = true;
-          enableACME = true;
-          root = wpcarro.website.root;
+    users = {
+      mutableUsers = true;
+      users = {
+        root = {
+          openssh.authorizedKeys.keys = wpcarro.keys.all;
+        };
+        wpcarro = {
+          isNormalUser = true;
+          extraGroups = [ "wheel" "quassel" ];
+          openssh.authorizedKeys.keys = wpcarro.keys.all;
+          shell = pkgs.fish;
         };
       };
     };
-  };
 
-  system.stateVersion = "21.11";
+    security = {
+      acme = {
+        acceptTerms = true;
+        email = "wpcarro@gmail.com";
+      };
+
+      sudo.wheelNeedsPassword = false;
+    };
+
+    programs = wpcarro.common.programs // {
+      mosh.enable = true;
+    };
+
+    # I won't have an Emacs server running on diogenes, and I'll likely be in an
+    # SSH session from within vterm. As such, Vim is one of the few editors that
+    # I tolerably navigate this way.
+    environment.variables = {
+      EDITOR = "vim";
+    };
+
+    environment.systemPackages = wpcarro.common.shell-utils;
+
+    services = wpcarro.common.services // {
+      # TODO(wpcarro): Re-enable this when rebuild-system better supports
+      # terraform deployments.
+      # depot.auto-deploy = {
+      #   enable = true;
+      #   interval = "1h";
+      # };
+
+      # TODO(wpcarro): Re-enable this after debugging ACME and NXDOMAIN.
+      # depot.quassel = {
+      #   enable = true;
+      #   acmeHost = domainName;
+      #   bindAddresses = [
+      #     "0.0.0.0"
+      #   ];
+      # };
+      #
+      # journaldriver = {
+      #   enable = true;
+      #   logStream = "home";
+      #   googleCloudProject = "wpcarros-infrastructure";
+      #   applicationCredentials = "/etc/gcp/key.json";
+      # };
+      #
+      #
+      # nginx = {
+      #   enable = true;
+      #   enableReload = true;
+      #
+      #   recommendedTlsSettings = true;
+      #   recommendedGzipSettings = true;
+      #   recommendedProxySettings = true;
+      #
+      #   # for journaldriver
+      #   commonHttpConfig = ''
+      #     log_format json_combined escape=json
+      #     '{'
+      #         '"remote_addr":"$remote_addr",'
+      #         '"method":"$request_method",'
+      #         '"host":"$host",'
+      #         '"uri":"$request_uri",'
+      #         '"status":$status,'
+      #         '"request_size":$request_length,'
+      #         '"response_size":$body_bytes_sent,'
+      #         '"response_time":$request_time,'
+      #         '"referrer":"$http_referer",'
+      #         '"user_agent":"$http_user_agent"'
+      #     '}';
+      #
+      #     access_log syslog:server=unix:/dev/log,nohostname json_combined;
+      #   '';
+      #
+      #   virtualHosts = {
+      #     "${domainName}" = {
+      #       addSSL = true;
+      #       enableACME = true;
+      #       root = wpcarro.website.root;
+      #     };
+      #   };
+      # };
+    };
+
+    system.stateVersion = "21.11";
+  };
 }
