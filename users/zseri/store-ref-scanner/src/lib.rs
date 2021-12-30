@@ -77,20 +77,21 @@ where
 
     fn next(&mut self) -> Option<Input> {
         let hbl: usize = self.spec.hashbytes_len.into();
-        while !self.input.as_ref().is_empty() {
+        'outer: while !self.input.as_ref().is_empty() {
             if !self.spec.path_to_store.is_empty() {
                 let p2sas = self.spec.path_to_store;
-                if self.input.as_ref().starts_with(p2sas.as_bytes()) {
-                    self.input.split_to(p2sas.len());
-                } else {
+                while !self.input.as_ref().starts_with(p2sas.as_bytes()) {
+                    if self.input.as_ref().is_empty() {
+                        break 'outer;
+                    }
                     self.input.split_to(1);
-                    continue;
+                }
+                self.input.split_to(p2sas.len());
+                if self.input.as_ref().is_empty() {
+                    break 'outer;
                 }
             }
             let hsep = matches!(self.input.as_ref().iter().next(), Some(b'/') | Some(b'\\'));
-            if self.input.as_ref().is_empty() {
-                break;
-            }
             self.input.split_to(1);
             if hsep && self.spec.check_rest(self.input.as_ref()) {
                 // we have found a valid hash
