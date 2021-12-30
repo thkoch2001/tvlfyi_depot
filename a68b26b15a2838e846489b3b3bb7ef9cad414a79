@@ -51,6 +51,24 @@
       "parentUuid": "c3e2e615_810b1e22",
       "revId": "a68b26b15a2838e846489b3b3bb7ef9cad414a79",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d1248c6_a1e33c5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-30T16:02:47Z",
+      "side": 1,
+      "message": "Yeah, no problems, it can be helpful at times. I think you kinda need the “ok” of the author first otherwise it leads to merge conflicts and lost work.\n\nEasiest is just to create another commit on top of the CL (see `magit-gerrit-cherry-pick` if you use tvl.el) and then push it as a new CL.",
+      "parentUuid": "eaa77fa1_f1927854",
+      "revId": "a68b26b15a2838e846489b3b3bb7ef9cad414a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
