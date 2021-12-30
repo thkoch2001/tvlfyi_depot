@@ -53,6 +53,7 @@
     tokei
     tree
     vim
+    whois
     xclip
   ];
 }
