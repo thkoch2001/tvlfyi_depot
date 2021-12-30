@@ -266,6 +266,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc78bd16_edf35797",
+        "filename": "tvix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-30T16:05:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ff1ed2ea_00475fa3",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "708b9fb4_dd983137",
@@ -314,6 +332,24 @@
       "writtenOn": "2021-12-28T18:48:19Z",
       "side": 1,
       "message": "If we are following a custom style here, a matching `rustfmt.toml` should be provided if possible. \n\nimo: I wouldn\u0027t like following some style which isn\u0027t enforceable via rustfmt, as it increases unnecessary churn.",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15efeefc_4a47ff48",
+        "filename": "tvix/src/bin/nix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-30T16:05:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "db8c6804_a5c0b63d",
       "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
