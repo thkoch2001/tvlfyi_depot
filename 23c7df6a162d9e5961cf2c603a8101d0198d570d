@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e880e262_b227b218",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-30T01:59:14Z",
+      "side": 1,
+      "message": "I undid your changes for now, I don’t think there’s any need for multi-crate shenanigans until we have a clear need for such things. I find over-compartmentalization tendency of rust projects a bit silly.",
+      "revId": "23c7df6a162d9e5961cf2c603a8101d0198d570d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
