@@ -24,6 +24,12 @@ in wpcarro.terraform.googleCloudVM {
       managed_zone = "\${google_dns_managed_zone.${name}.name}";
       rrdatas = ["\${google_compute_instance.${name}.network_interface[0].access_config[0].nat_ip}"];
     };
+
+    resource.google_compute_instance."${name}" = {
+      network_interface.access_config = {
+        public_ptr_domain_name = domainName;
+      };
+    };
   };
 
   configuration = {
