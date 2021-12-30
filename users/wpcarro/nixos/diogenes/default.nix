@@ -58,6 +58,9 @@ in wpcarro.terraform.googleCloudVM {
           openssh.authorizedKeys.keys = wpcarro.keys.all;
           shell = pkgs.fish;
         };
+        # This is required so that quasselcore can read the ACME cert in
+        # /var/lib/acme, which is only available to user=acme or group=nginx.
+        quassel.extraGroups = [ "nginx" ];
       };
     };
 
