@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97a03301_594d0877",
+        "filename": ".gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-30T14:16:54Z",
+      "side": 1,
+      "message": "I would much rather only rust crates ignore this directory specifically, as there\u0027s nothing preventing some other language or project from actually *wanting* to commit a directory called target/, and having it be globally ignored would be really confusing in that case.",
+      "revId": "3bea97217c33b98e3394a349b0789c37e21139cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8b2b701e_8c8a26cd",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
