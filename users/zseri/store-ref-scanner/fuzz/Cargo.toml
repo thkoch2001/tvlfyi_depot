@@ -29,3 +29,8 @@ name = "nocrash"
 path = "fuzz_targets/nocrash.rs"
 test = false
 doc = false
+
+[profile.release]
+incremental = false
+overflow-checks = true
+panic = "abort"
