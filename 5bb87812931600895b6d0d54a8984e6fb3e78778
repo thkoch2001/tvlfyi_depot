@@ -225,6 +225,24 @@
       "message": "Maybe delete this file, or follow a similar approach as `uutils` (https://github.com/uutils/coreutils), or other multi-call binaries.",
       "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0468521a_ae3d75f2",
+        "filename": "tvix/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-30T02:01:36Z",
+      "side": 1,
+      "message": "This is literally the result of running `cargo init`. Also it doesn’t really matter since it’s a stub.",
+      "parentUuid": "e78bb2f0_b7beb7b3",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
