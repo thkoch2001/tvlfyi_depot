@@ -87,6 +87,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e360f6f_30473270",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-30T01:01:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57fb765c_96308a44",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff1ed2ea_00475fa3",
@@ -117,6 +135,24 @@
       "writtenOn": "2021-12-28T18:48:19Z",
       "side": 1,
       "message": "we probably also need an protobuf compiler.",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f2fdfd0_e6b142e7",
+        "filename": "tvix/shell.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-30T01:01:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "708b9fb4_dd983137",
       "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },

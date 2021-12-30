@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "905985e3_a778f349",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2021-12-30T01:01:25Z",
+      "side": 1,
+      "message": "I already fixed some stuff...\n\nIt would be interesting to write some baseline Tvix nix evaluation via Nix to JavaScript transpilation, define a small \"library\" for javascript which wraps protobuf stuff and networking code, then let that talk to a builder (.proto not tested yet) implementation (perhaps reusing parts from Yzix), and try to run that against some simpler Nix exprs to get baseline perf information...\n\nLazy evaluation in JavaScript can be easily emulated via something like https://www.codementor.io/@agustinchiappeberrini/lazy-evaluation-and-javascript-a5m7g8gs3 / https://www.npmjs.com/package/lazy-eval .\n\nalso: Do we have some way to do proper project planning and such? Or maybe extend panettone with some basic kanban-like project overview, which allows an overview over a bigger number of related issues.",
+      "revId": "a68b26b15a2838e846489b3b3bb7ef9cad414a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
