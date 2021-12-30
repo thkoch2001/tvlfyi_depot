@@ -16,6 +16,23 @@
       "message": "I’d leave it as-is for now, we can add more stuff later. I just want to get coding.",
       "revId": "b59f67eb9ac3f7b2dbc645773c0370ae58a6bd01",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa58c785_f8486c4c",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2021-12-30T17:26:04Z",
+      "side": 1,
+      "message": "it might be beta, but the new structopt derive-macro stuff in clap 3 is *really* good - imo good enough to be worth the cost of a non-major release",
+      "revId": "b59f67eb9ac3f7b2dbc645773c0370ae58a6bd01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
