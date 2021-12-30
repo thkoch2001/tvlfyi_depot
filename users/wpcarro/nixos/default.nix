@@ -1,4 +1,4 @@
-{ depot, lib, ... }:
+{ depot, pkgs, lib, ... }:
 
 let systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 in {
