@@ -101,16 +101,26 @@
      [:thead
       [:th "Meetup Name"]
       [:th "Discord Name"]
+      [:th "RSVP"]
       [:th "Signed In"]
       [:th "Last Vaccination Check"]]
      [:tbody
-      (for [attendee attendees]
+      (for [attendee (sort-by (juxt (comp not ::event-attendee/rsvpd-attending?)
+                                    (comp not ::event-attendee/attended?)
+                                    (comp some? :last-check)
+                                    ::attendee/meetup-name)
+                              attendees)]
         [:tr
          [:td.attendee-name (::attendee/meetup-name attendee)]
          [:td
           [:label.mobile-label "Discord Name: "]
           (or (not-empty (::attendee/discord-name attendee))
               "—")]
+         [:td
+          [:label.mobile-label "Signed In: "]
+          (if (::event-attendee/rsvpd-attending? attendee)
+            [:span {:title "Yes"} "✔️"]
+            [:span {:title "No"} "❌"])]
          [:td
           [:label.mobile-label "Signed In: "]
           (if (::event-attendee/attended? attendee)
