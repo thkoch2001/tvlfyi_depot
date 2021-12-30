@@ -5,17 +5,17 @@ with depot.nix.yants;
 let
   inherit (builtins) hasAttr filter readFile;
   inherit (depot.web.blog) post includePost renderPost;
-  inherit (depot.users) wpcarro;
+  inherit (depot.users.wpcarro.website) domain renderTemplate withBrand;
 
   config = {
-    name = "wpcarro's blog";
-    baseUrl = "https://wpcarro.dev/blog";
+    name = "bill and his blog";
+    baseUrl = "https://${domain}/blog";
     footer = "";
   };
 
   posts = filter includePost (list post (import ./posts.nix));
 
-  rendered = pkgs.runCommandNoCC "wpcarros-blog-posts" {} ''
+  rendered = pkgs.runCommandNoCC "blog-posts" {} ''
     mkdir -p $out
 
     ${lib.concatStringsSep "\n" (map (post:
@@ -27,19 +27,17 @@ let
     date --date='@${toString date}' '+%B %e, %Y' > $out
   '');
 
-  postsHtml = readFile (pkgs.substituteAll {
-    src = ./fragments/posts.html;
+  postsHtml = renderTemplate ./fragments/posts.html {
     postsHtml = lib.concatStringsSep "\n" (map toPostHtml posts);
-  });
+  };
 
-  toPostHtml = post: readFile (pkgs.substituteAll {
-    src = ./fragments/post.html;
+  toPostHtml = post: readFile (renderTemplate ./fragments/post.html {
     postUrl = "${config.baseUrl}/posts/${post.key}.html";
     postTitle = post.title;
     postDate = formatDate post.date;
   });
-in pkgs.runCommandNoCC "wpcarros-blog" {} ''
+in pkgs.runCommandNoCC "blog" {} ''
   mkdir -p $out
-  cp ${wpcarro.website.render postsHtml} $out/index.html
+  cp ${withBrand (readFile postsHtml)} $out/index.html
   cp -r ${rendered} $out/posts
 ''
