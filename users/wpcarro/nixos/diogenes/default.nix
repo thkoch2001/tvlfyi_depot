@@ -18,7 +18,7 @@ in wpcarro.terraform.googleCloudVM {
     };
 
     resource.google_dns_record_set."${name}" = {
-      name = "${name}.${domainName}.";
+      name = "${domainName}.";
       type = "A";
       ttl = 300; # 5m
       managed_zone = "\${google_dns_managed_zone.${name}.name}";
@@ -92,57 +92,56 @@ in wpcarro.terraform.googleCloudVM {
       # };
 
       # TODO(wpcarro): Re-enable this after debugging ACME and NXDOMAIN.
-      # depot.quassel = {
-      #   enable = true;
-      #   acmeHost = domainName;
-      #   bindAddresses = [
-      #     "0.0.0.0"
-      #   ];
-      # };
-      #
-      # journaldriver = {
-      #   enable = true;
-      #   logStream = "home";
-      #   googleCloudProject = "wpcarros-infrastructure";
-      #   applicationCredentials = "/etc/gcp/key.json";
-      # };
-      #
-      #
-      # nginx = {
-      #   enable = true;
-      #   enableReload = true;
-      #
-      #   recommendedTlsSettings = true;
-      #   recommendedGzipSettings = true;
-      #   recommendedProxySettings = true;
-      #
-      #   # for journaldriver
-      #   commonHttpConfig = ''
-      #     log_format json_combined escape=json
-      #     '{'
-      #         '"remote_addr":"$remote_addr",'
-      #         '"method":"$request_method",'
-      #         '"host":"$host",'
-      #         '"uri":"$request_uri",'
-      #         '"status":$status,'
-      #         '"request_size":$request_length,'
-      #         '"response_size":$body_bytes_sent,'
-      #         '"response_time":$request_time,'
-      #         '"referrer":"$http_referer",'
-      #         '"user_agent":"$http_user_agent"'
-      #     '}';
-      #
-      #     access_log syslog:server=unix:/dev/log,nohostname json_combined;
-      #   '';
-      #
-      #   virtualHosts = {
-      #     "${domainName}" = {
-      #       addSSL = true;
-      #       enableACME = true;
-      #       root = wpcarro.website.root;
-      #     };
-      #   };
-      # };
+      depot.quassel = {
+        enable = true;
+        acmeHost = domainName;
+        bindAddresses = [
+          "0.0.0.0"
+        ];
+      };
+
+      journaldriver = {
+        enable = true;
+        logStream = "home";
+        googleCloudProject = "wpcarros-infrastructure";
+        applicationCredentials = "/etc/gcp/key.json";
+      };
+
+      nginx = {
+        enable = true;
+        enableReload = true;
+
+        recommendedTlsSettings = true;
+        recommendedGzipSettings = true;
+        recommendedProxySettings = true;
+
+        # for journaldriver
+        commonHttpConfig = ''
+          log_format json_combined escape=json
+          '{'
+              '"remote_addr":"$remote_addr",'
+              '"method":"$request_method",'
+              '"host":"$host",'
+              '"uri":"$request_uri",'
+              '"status":$status,'
+              '"request_size":$request_length,'
+              '"response_size":$body_bytes_sent,'
+              '"response_time":$request_time,'
+              '"referrer":"$http_referer",'
+              '"user_agent":"$http_user_agent"'
+          '}';
+
+          access_log syslog:server=unix:/dev/log,nohostname json_combined;
+        '';
+
+        virtualHosts = {
+          "${domainName}" = {
+            addSSL = true;
+            enableACME = true;
+            root = wpcarro.website.root;
+          };
+        };
+      };
     };
 
     system.stateVersion = "21.11";
