@@ -27,7 +27,7 @@ in wpcarro.terraform.googleCloudVM {
 
     resource.google_compute_instance."${name}" = {
       network_interface.access_config = {
-        public_ptr_domain_name = domainName;
+        public_ptr_domain_name = "${domainName}.";
       };
     };
   };
