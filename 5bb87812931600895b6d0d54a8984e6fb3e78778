@@ -90,6 +90,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61604275_d0befc5e",
+        "filename": "tvix/.envrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-30T16:04:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "047fc397_d45b5976",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f78321fb_52865515",
@@ -143,6 +161,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10e986f9_0e2296a4",
+        "filename": "tvix/.gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-30T16:04:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1b7ee9aa_3324f7b6",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f6bbbf7_5e476a7a",
@@ -156,6 +192,24 @@
       "writtenOn": "2021-12-29T01:55:55Z",
       "side": 1,
       "message": "Oh, I think it might also be a good idea to make this a `workspace` instead, and split the code into multiple crates, especially because it is already clear that we want multiple clearly separable components, and already splitting it into multiple crates would both make future refactoring\u0027s easier, and probably also make overall development a bit faster (which I\u0027m also particularly involved in because of https://riir-nix.github.io/).\n\ne.g.\n\n    [workspace]\n    members \u003d [\"crates/*\"]\n\nor such.",
+      "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e146938_b66c91d8",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-12-30T16:04:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2f6bbbf7_5e476a7a",
       "revId": "5bb87812931600895b6d0d54a8984e6fb3e78778",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
