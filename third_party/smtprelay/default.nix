@@ -1,15 +1,16 @@
 # A simple SMTP relay without the kitchen sink.
 { pkgs, lib, ... }:
 
-pkgs.buildGoModule {
-  name = "smtprelay";
-  vendorSha256 = "0kv9cv2jca2r90qsf40qmqpw84kgxvbxlf39bfw8rvs2lnmqc2dg";
+pkgs.buildGoModule rec {
+  pname = "smtprelay";
+  version = "1.7.0";
+  vendorSha256 = "00nb81hdg5pv5l0q7w5lv08dv4v72vml7jha351frani0gpg27pn";
 
   src = pkgs.fetchFromGitHub {
     owner = "decke";
     repo = "smtprelay";
-    rev = "ed1c3a98889e752291aaca6c64149e48452d0583";
-    sha256 = "16q2d2ja2cipjvsnfxmdzixkg85sh15rh9r95w6bw2r1gjqr65hr";
+    rev = "v${version}";
+    sha256 = "0js18xhk64g0g82dx8ii8vhbbssj3pxf1hqv1zadnckdgwfwlj2r";
   };
 
   meta = with lib; {
