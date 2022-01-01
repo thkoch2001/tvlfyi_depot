@@ -9,31 +9,37 @@ let
     mkIf
     mkOption
     types
-;
+    ;
 
   cfg = config.services.depot.smtprelay;
   description = "Simple SMTP relay";
 
-  # Configuration values that are always overridden. In particular,
-  # `config` is specified to always load $StateDirectory/secure.config
-  # (so that passwords can be loaded from there) and logging is pinned
-  # to stdout for journald compatibility.
+  # Configuration values that are always overridden.
+  #
+  # - logging is pinned to stdout for journald compatibility
+  # - secret config is loaded through systemd's credential loading facility
   overrideArgs = {
     logfile = "";
-    config = "/var/lib/smtprelay/secure.config";
+    config = "$CREDENTIALS_DIRECTORY/secrets";
   };
 
   # Creates the command line argument string for the service.
   prepareArgs = args:
     concatStringsSep " "
-      (attrValues (mapAttrs (key: value: "-${key} '${toString value}'")
+      (attrValues (mapAttrs (key: value: "-${key} \"${toString value}\"")
                             (args // overrideArgs)));
 in {
   options.services.depot.smtprelay = {
     enable = mkEnableOption description;
+
     args = mkOption {
       type = types.attrsOf types.str;
       description = "Key value pairs for command line arguments";
+    };
+
+    secretsFile = mkOption {
+      type = types.str;
+      default = "/run/agenix/smtprelay";
     };
   };
 
@@ -47,6 +53,7 @@ in {
         Restart = "always";
         StateDirectory = "smtprelay";
         DynamicUser = true;
+        LoadCredential = "secrets:${cfg.secretsFile}";
       };
     };
   };
