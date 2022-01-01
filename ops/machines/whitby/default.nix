@@ -214,6 +214,7 @@ in {
       nix-cache-priv.file = secretFile "nix-cache-priv";
       owothia.file = secretFile "owothia";
       panettone.file = secretFile "panettone";
+      smtprelay.file = secretFile "smtprelay";
 
       buildkite-agent-token = {
         file = secretFile "buildkite-agent-token";
