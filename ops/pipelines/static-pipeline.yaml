@@ -22,10 +22,6 @@ steps:
         buildkite-agent pipeline upload $$chunk
       done
 
-  # Wait for all previous steps to complete.
-  - wait: null
-    continue_on_failure: true
-
   # Exit with success or failure depending on whether any other steps
   # failed.
   #
