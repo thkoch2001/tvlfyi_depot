@@ -6,4 +6,4 @@ edition = "2018"
 
 [dependencies]
 regex = "1.5"
-rouille = "3.0"
+rouille = "3.5"
