@@ -66,7 +66,7 @@ steps:
   - label: ":anchor:"
     if: "build.branch == 'refs/heads/canon'"
     command: |
-      nix-instantiate -A ci.gcroot --add-root /nix/var/nix/gcroots/depot/canon
+      nix-build -A ci.gcroot --out-link /nix/var/nix/gcroots/depot/canon
     depends_on:
       - step: ":duck:"
         allow_failure: false
