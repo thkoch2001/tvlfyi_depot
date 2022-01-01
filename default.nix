@@ -108,8 +108,8 @@ in readTree.fix(self: (readDepot {
   });
 
   # Derivation that gcroots all depot targets.
-  ci.gcroot = self.third_party.nixpkgs.symlinkJoin {
+  ci.gcroot = with self.third_party.nixpkgs; makeSetupHook {
     name = "depot-gcroot";
-    paths = self.ci.targets;
-  };
+    deps = self.ci.targets;
+  } emptyFile;
 })
