@@ -68,7 +68,7 @@
 
 (defun nix/sly-from-depot (attribute)
   "Start a Sly REPL configured with a Lisp matching a derivation
-  from my depot.
+  from the depot.
 
   The derivation invokes nix.buildLisp.sbclWith and is built
   asynchronously. The build output is included in the error
@@ -76,11 +76,9 @@
 
   (interactive "sAttribute: ")
   (lexical-let* ((outbuf (get-buffer-create (format "*depot-out/%s*" attribute)))
-         (errbuf (get-buffer-create (format "*depot-errors/%s*" attribute)))
-         (expression (format "let depot = import <depot> {}; in depot.nix.buildLisp.sbclWith [ depot.%s ]" attribute))
-         ;; TODO(tazjin): use <depot>
-         (command (list "nix-build" "--no-out-link" "-I" (format "depot=%s" nix-depot-path) "-E" expression)))
-
+                 (errbuf (get-buffer-create (format "*depot-errors/%s*" attribute)))
+                 (expression (format "(import <depot> {}).%s.repl" attribute))
+                 (command (list "nix-build" "--no-out-link" "-I" (format "depot=%s" tvl-depot-path) "-E" expression)))
     (message "Acquiring Lisp for <depot>.%s" attribute)
     (make-process :name (format "depot-nix-build/%s" attribute)
                   :buffer outbuf
