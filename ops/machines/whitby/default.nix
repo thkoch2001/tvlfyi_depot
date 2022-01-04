@@ -401,6 +401,7 @@ in {
 
     # Run oauth2_proxy for internal service auth
     oauth2_proxy.enable = true;
+    oauth2_proxy.withAuth = _: builtins.currentTime;
   };
 
   services.postgresql = {
