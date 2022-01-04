@@ -28,6 +28,7 @@ in {
   "keycloak-db.age" = default;
   "nix-cache-priv.age" = default;
   "nix-cache-pub.age" = default;
+  "oauth2_proxy.age" = default;
   "owothia.age" = default;
   "panettone.age" = default;
   "smtprelay.age" = default;
