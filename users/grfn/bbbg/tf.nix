@@ -72,7 +72,7 @@ in terraform.workspace "bbbg" {
       services.bbbg.proxy.enable = true;
       services.bbbg.domain = "bbbg.gws.fyi";
 
-      security.acme.email = "root@gws.fyi";
+      security.acme.defaults.email = "root@gws.fyi";
       security.acme.acceptTerms = true;
     };
   };
