@@ -19,6 +19,13 @@ let
     reverse_proxy = true
     set_xauthrequest = true
   '';
+
+  # We need to prevent people from (accidentally?) overriding the
+  # withAuth function. This method makes overriding it very hard.
+  sentinel = builtins.currentTime;
+  withAuthChecked = x: if x == sentinel then sentinel else withAuth x;
+
+  withAuth = {}: otherConfig: otherConfig // {};
 in {
   options.services.depot.oauth2_proxy = {
     enable = lib.mkEnableOption description;
@@ -34,9 +41,20 @@ in {
       description = "EnvironmentFile from which to load secrets";
       default = "/run/agenix/oauth2_proxy";
     };
+
+    withAuth = lib.mkOption {
+      description = "Helper function to configure authentication";
+      default = withAuth;
+    };
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = lib.singleton {
+      # Note that this depends on Nix' weird pointer equality checks.
+      assertion = sentinel == cfg.withAuth sentinel;
+      message = "Must not override oauth2_proxy.withAuth!";
+    };
+
     systemd.services.oauth2_proxy2 = {
       inherit description;
       wantedBy = [ "multi-user.target" ];
