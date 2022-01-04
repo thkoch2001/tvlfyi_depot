@@ -13,6 +13,7 @@ in {
     "${depot.path}/ops/modules/irccat.nix"
     "${depot.path}/ops/modules/monorepo-gerrit.nix"
     "${depot.path}/ops/modules/nixery.nix"
+    "${depot.path}/ops/modules/oauth2_proxy.nix"
     "${depot.path}/ops/modules/owothia.nix"
     "${depot.path}/ops/modules/panettone.nix"
     "${depot.path}/ops/modules/paroxysm.nix"
@@ -211,6 +212,7 @@ in {
       irccat.file = secretFile "irccat";
       keycloak-db.file = secretFile "keycloak-db";
       nix-cache-priv.file = secretFile "nix-cache-priv";
+      oauth2_proxy.file = secretFile "oauth2_proxy";
       owothia.file = secretFile "owothia";
       panettone.file = secretFile "panettone";
       smtprelay.file = secretFile "smtprelay";
@@ -396,6 +398,9 @@ in {
 
     # Run autosubmit bot for Gerrit
     gerrit-queue.enable = true;
+
+    # Run oauth2_proxy for internal service auth
+    oauth2_proxy.enable = true;
   };
 
   services.postgresql = {
