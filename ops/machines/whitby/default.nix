@@ -30,7 +30,6 @@ in {
     "${depot.path}/ops/modules/www/cs.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/deploys.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/images.tvl.fyi.nix"
-    # "${depot.path}/ops/modules/www/login.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/nixery.dev.nix"
     "${depot.path}/ops/modules/www/static.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/status.tvl.su.nix"
