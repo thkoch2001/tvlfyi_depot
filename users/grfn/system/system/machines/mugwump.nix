@@ -109,7 +109,7 @@ with lib;
     };
   };
 
-  security.acme.email = "root@gws.fyi";
+  security.acme.defaults.email = "root@gws.fyi";
   security.acme.acceptTerms = true;
 
   services.nginx = {
