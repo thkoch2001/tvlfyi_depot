@@ -33,6 +33,24 @@
       "message": "it might be beta, but the new structopt derive-macro stuff in clap 3 is *really* good - imo good enough to be worth the cost of a non-major release",
       "revId": "b59f67eb9ac3f7b2dbc645773c0370ae58a6bd01",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b67abef2_c3a9a245",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-05T14:56:23Z",
+      "side": 1,
+      "message": "now out of beta!",
+      "parentUuid": "aa58c785_f8486c4c",
+      "revId": "b59f67eb9ac3f7b2dbc645773c0370ae58a6bd01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
