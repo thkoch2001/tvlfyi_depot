@@ -1,5 +1,5 @@
 # To format the date, run:
-#   $ date -d "2020-04-02" +%s
+#   $ date -d "today" +%s
 [
   {
     key = "cell-phone-experiment";
