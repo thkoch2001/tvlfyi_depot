@@ -117,7 +117,7 @@
           (or (not-empty (::attendee/discord-name attendee))
               "—")]
          [:td
-          [:label.mobile-label "Signed In: "]
+          [:label.mobile-label "RSVP: "]
           (if (::event-attendee/rsvpd-attending? attendee)
             [:span {:title "Yes"} "✔️"]
             [:span {:title "No"} "❌"])]
