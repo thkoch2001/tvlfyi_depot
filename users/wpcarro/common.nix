@@ -1,6 +1,8 @@
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
-{
+let
+  inherit (depot.users) wpcarro;
+in {
   programs = {
     fish.enable = true;
 
@@ -54,6 +56,7 @@
     tree
     vim
     whois
+    wpcarro.tools.simple_vim
     xclip
   ];
 }
