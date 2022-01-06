@@ -162,16 +162,16 @@
 ;; during initialization?
 (when (device-laptop?) (laptop-battery-display))
 
-(if window-system
-    (progn
-      (fonts-whitelist-set "JetBrainsMono")
-      (colorscheme-whitelist-set 'doom-one-light)
-      ;; the doom-acario-dark theme uses "Monospace Serif" as the font for
-      ;; comments, and I'd prefer JetBrainsMono (no italics).
-      (set-face-attribute font-lock-comment-face nil
-                          :family "JetBrainsMono"
-                          :slant 'normal))
-  (load-theme 'wombat))
+(colorscheme-whitelist-set 'doom-one-light)
+
+(when window-system
+  (let ((font "Monospace"))
+    (fonts-whitelist-set font)
+    ;; Some themes (e.g. doom-acario-*) change the font for comments. This
+    ;; should prevent that.
+    (set-face-attribute font-lock-comment-face nil
+                        :family font
+                        :slant 'normal)))
 
 (modeline-setup)
 
