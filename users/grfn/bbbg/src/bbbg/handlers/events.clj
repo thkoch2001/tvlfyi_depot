@@ -89,8 +89,15 @@
    [:div.page-header
     [:h1 (format-date (::event/date event)
                       FormatStyle/FULL)]
-    [:a {:href (str "/signup-forms/" (::event/id event) )}
-     "Go to Signup Form"]]
+    [:div.spacer]
+    [:a.button {:href (str "/signup-forms/" (::event/id event) )}
+     "Go to Signup Form"]
+    [:form#delete-event
+     {:method :post
+      :action (str "/events/" (::event/id event) "/delete")
+      :data-confirm "Are you sure you want to delete this event?"}
+     [:input.error {:type "submit"
+                    :value "Delete Event"}]]]
    [:div.stats
     [:p (pluralize (:num-rsvps event) "RSVP")]
     [:p (num-attendees event)]]
@@ -219,6 +226,14 @@
              (event-page {:event event
                           :attendees attendees})))
           (not-found "Event Not Found")))
+
+      (POST "/delete" []
+        (db/delete! db :event_attendee [:= :event-id id])
+        (db/delete! db :event [:= :id id])
+        (-> (redirect "/events")
+            (flash/add-flash
+             #:flash {:type :success
+                      :message "Successfully deleted event"})))
 
       (GET "/attendees/import" []
         (if-let [event (db/get db :event id)]
