@@ -21,7 +21,7 @@
 
 (require 'f)
 (require 'buffer)
-(require 'list)
+(require 'dash)
 (require 'string)
 (require 'set)
 (require 'constants)
@@ -67,20 +67,18 @@
       (funcall bookmark-handle-file path)))))
 
 
+(defun bookmark-install-kbd (x)
+  "Install the keybindings for a bookmark, X."
+  (general-define-key
+    :prefix "<SPC>"
+    :states '(normal)
+    (format "J%s" (bookmark-kbd x)) (lambda () (interactive) (find-file (bookmark-path x)))
+    (format "j%s" (bookmark-kbd x)) (lambda () (interactive) (bookmark-open (bookmark-path x)))))
+
 (defun bookmark-install-kbds ()
   "Install the keybindings defined herein."
   (->> bookmark-whitelist
-       (list-map
-        (lambda (b)
-          (general-define-key
-           :prefix "<SPC>"
-           :states '(normal)
-           (format "J%s" (bookmark-kbd b))
-           (lambda () (interactive) (find-file (bookmark-path b)))
-           (format "j%s" (bookmark-kbd b))
-           ;; TODO: Consider `cl-labels' so `which-key' minibuffer is more
-           ;; helpful.
-           (lambda () (interactive) (bookmark-open b)))))))
+       (-map #'bookmark-install-kbd)))
 
 (provide 'bookmark)
 ;;; bookmark.el ends here
