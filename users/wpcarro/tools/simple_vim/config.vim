@@ -28,6 +28,9 @@ nnoremap - :e .<CR>
 " Turn line numbers on.
 set number
 
+" Prevent lines from wrapping
+set nowrap
+
 " Easily create vertical, horizontal window splits.
 nnoremap sh :vsplit<CR>
 nnoremap sj :split<CR>:wincmd j<CR>
