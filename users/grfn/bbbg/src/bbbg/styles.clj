@@ -80,15 +80,15 @@
      :color black
      :text-decoration :none}
 
-     [(& hover)
-      {:color blue}]]
+    [(& hover)
+     {:color blue}]]
 
    [:li.active
     {:font-weight "bold"
-     :border-bottom [["1px" "solid" black]]}]
+     :border-bottom [["1px" "solid" black]]}]]
 
-   [:.spacer
-    {:flex 1}]])
+  [:.spacer
+   {:flex 1}])
 
 (def link-conditional-styles
   (list
@@ -165,18 +165,29 @@
     :border [[(px 1) "solid" (color/lighten blue 30)]]
     :cursor :pointer
     :display :inline-block}
+
    [(& hover)
     {:border-color blue
      :text-decoration :none
      :box-shadow [[0 "1px" "5px" "rgba(0,0,0,0.075)"]]}
-    [(& :a)
+    [(:a &)
      {:text-decoration :none}]]
+
    [(& active)
     {:background-color blue
      :color :white
      :box-shadow :none}
     [(& :a)
-     {:text-decoration :none}]]]
+     {:text-decoration :none}]]
+
+   (for [[context color] contextual-colors]
+     [(& (keyword (str "." (name context))))
+      {:background-color (color/lighten color 30)
+       :border-color (color/lighten color 30)
+       :color black}
+
+      [(& hover)
+       {:border-color color}]])]
 
   [:label
    {:font-weight 600
@@ -377,8 +388,13 @@
     :padding-bottom "0.7rem"
     :margin-bottom "1rem"
     :border-bottom [["1px" "solid" silver]]
-    :align-items :center
-    :justify-content :space-between}]
+    :align-items :center}
+
+   [:*+*
+    {:margin-left "0.5rem"}]
+
+   [:form
+    {:margin-block-end 0}]]
 
   [(attr= "role" "button")
    {:cursor :pointer}]

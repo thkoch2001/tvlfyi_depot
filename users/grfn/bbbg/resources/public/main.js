@@ -58,10 +58,16 @@ window.onload = () => {
   }
 
   document.querySelectorAll("form").forEach((form) => {
-    form.onsubmit = (e) => {
+    form.addEventListener("submit", (e) => {
       if (e.target.attributes.disabled) {
         e.preventDefault();
       }
-    };
+
+      const confirmMessage = e.target.dataset.confirm;
+      if (confirmMessage != null && !confirm(confirmMessage)) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    });
   });
 };
