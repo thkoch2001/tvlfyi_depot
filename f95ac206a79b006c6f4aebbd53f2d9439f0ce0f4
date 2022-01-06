@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b639b731_12303578",
+        "filename": "tvix/src/bin/nix-store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-06T16:31:33Z",
+      "side": 1,
+      "message": "Add a comment saying that this is to enforce that the file lives until here, otherwise it looks confusing since it happens at the end of the scope.",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 22
+      },
+      "revId": "f95ac206a79b006c6f4aebbd53f2d9439f0ce0f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
