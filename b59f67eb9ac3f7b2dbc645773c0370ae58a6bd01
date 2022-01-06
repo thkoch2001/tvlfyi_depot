@@ -51,6 +51,24 @@
       "parentUuid": "aa58c785_f8486c4c",
       "revId": "b59f67eb9ac3f7b2dbc645773c0370ae58a6bd01",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3be73cf_8a1eb9a7",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-06T14:46:45Z",
+      "side": 1,
+      "message": "Removed from this CL and added as clap 3 to the next one",
+      "parentUuid": "b67abef2_c3a9a245",
+      "revId": "b59f67eb9ac3f7b2dbc645773c0370ae58a6bd01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
