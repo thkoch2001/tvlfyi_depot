@@ -15,4 +15,11 @@
     content = ./posts/quassel-google-vm.md;
     draft = true;
   }
+  {
+    key = "send-mail-as-2fa";
+    title = "2FA and Gmail's \"Send mail as\"";
+    date = 1641497483;
+    content = ./posts/send-mail-as-2fa.md;
+    draft = false;
+  }
 ]
