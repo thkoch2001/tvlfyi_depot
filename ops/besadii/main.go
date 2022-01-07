@@ -38,15 +38,16 @@ var changeIdRegexp = regexp.MustCompile(`^.*/(\d+)$`)
 type config struct {
 	// Required configuration for Buildkite<>Gerrit monorepo
 	// integration.
-	Repository       string `json:"repository"`
-	Branch           string `json:"branch"`
-	GerritUrl        string `json:"gerritUrl"`
-	GerritUser       string `json:"gerritUser"`
-	GerritPassword   string `json:"gerritPassword"`
-	GerritLabel      string `json:"gerritLabel"`
-	BuildkiteOrg     string `json:"buildkiteOrg"`
-	BuildkiteProject string `json:"buildkiteProject"`
-	BuildkiteToken   string `json:"buildkiteToken"`
+	Repository        string `json:"repository"`
+	Branch            string `json:"branch"`
+	GerritUrl         string `json:"gerritUrl"`
+	GerritUser        string `json:"gerritUser"`
+	GerritPassword    string `json:"gerritPassword"`
+	GerritLabel       string `json:"gerritLabel"`
+	BuildkiteOrg      string `json:"buildkiteOrg"`
+	BuildkiteProject  string `json:"buildkiteProject"`
+	BuildkiteToken    string `json:"buildkiteToken"`
+	GenericChangeName string `json:"genericChangeName"`
 
 	// Optional configuration for Sourcegraph trigger updates.
 	SourcegraphUrl   string `json:"sourcegraphUrl"`
@@ -138,6 +139,11 @@ func loadConfig() (*config, error) {
 		cfg.GerritLabel = "Verified"
 	}
 
+	// The text default text referring a Gerrit Change in BuildKite.
+	if cfg.GenericChangeName == "" {
+		cfg.GenericChangeName = "cl"
+	}
+
 	// Rudimentary config validation logic
 	if cfg.SourcegraphUrl != "" && cfg.SourcegraphToken == "" {
 		return nil, fmt.Errorf("'SourcegraphToken' must be set if 'SourcegraphUrl' is set")
@@ -180,7 +186,7 @@ func updateGerrit(cfg *config, review reviewInput, changeId, patchset string) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		fmt.Errorf("failed to update CL on Gerrit: %w", err)
+		fmt.Errorf("failed to update %s on %s: %w", cfg.GenericChangeName, cfg.GerritUrl, err)
 	}
 	defer resp.Body.Close()
 
@@ -210,8 +216,10 @@ func triggerBuild(cfg *config, log *syslog.Writer, trigger *buildTrigger) error 
 		headBuild = false
 
 		// The branch doesn't have to be a real ref (it's just used to
-		// group builds), so make it the identifier for the CL
-		branch = fmt.Sprintf("cl/%v", strings.Split(trigger.ref, "/")[3])
+		// group builds), so make it the identifier for the CL. Removing
+		// space " " from branch as git branch names with space in not
+		// supported.
+		branch = fmt.Sprintf("%s/%v", strings.Replace(cfg.GenericChangeName, " ", "", -1), strings.Split(trigger.ref, "/")[3])
 	}
 
 	build := Build{
@@ -267,7 +275,7 @@ func triggerBuild(cfg *config, log *syslog.Writer, trigger *buildTrigger) error 
 
 	// Report the status back to the Gerrit CL so that users can click
 	// through to the running build.
-	msg := fmt.Sprintf("Started build for patchset #%s of cl/%s: %s", trigger.patchset, trigger.changeId, buildResp.WebUrl)
+	msg := fmt.Sprintf("Started build for patchset #%s of %s/%s: %s", cfg.GenericChangeName, trigger.patchset, trigger.changeId, buildResp.WebUrl)
 	review := reviewInput{
 		Message:               msg,
 		OmitDuplicateComments: true,
@@ -453,7 +461,7 @@ func postCommandMain(cfg *config) {
 		// If these variables are unset, but the hook was invoked, the
 		// build was most likely for a branch and not for a CL - no status
 		// needs to be reported back to Gerrit!
-		fmt.Println("This isn't a CL build, nothing to do. Have a nice day!")
+		fmt.Println("This isn't a %s build, nothing to do. Have a nice day!", cfg.GenericChangeName)
 		return
 	}
 
