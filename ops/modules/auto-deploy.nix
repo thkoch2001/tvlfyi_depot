@@ -1,5 +1,9 @@
 # Defines a service for automatically and periodically calling depot's
 # rebuild-system on a NixOS machine.
+#
+# Deploys can be stopped in emergency situations by creating an empty
+# file called `stop` in the state directory of the auto-deploy service
+# (typically /var/lib/auto-deploy).
 { depot, config, lib, pkgs, ... }:
 
 let
@@ -12,6 +16,11 @@ let
 
     if [[ $EUID -ne 0 ]]; then
       echo "Oh no! Only root is allowed to run auto-deploy!" >&2
+      exit 1
+    fi
+
+    if [[ -f $STATE_DIRECTORY/stop ]]; then
+      echo "stop file exists in $STATE_DIRECTORY, not deploying!" >&2
       exit 1
     fi
 
