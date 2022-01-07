@@ -337,6 +337,12 @@ in {
   };
 
   services.depot = {
+    # Automatically deploy whitby
+    auto-deploy = {
+      enable = true;
+      interval = "1h";
+    };
+
     # Run a SourceGraph code search instance
     sourcegraph.enable = true;
 
