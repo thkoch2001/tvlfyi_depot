@@ -688,6 +688,9 @@ in {
     };
   };
 
+  # Don't run Docker
+  virtualisation.oci-containers.backend = "podman";
+
   security.acme = {
     acceptTerms = true;
     email = "certs@tvl.fyi";
