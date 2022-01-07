@@ -166,7 +166,9 @@ in lib.fix(self: l: f: pkgs.writeShellScriptBin "tazjins-emacs" ''
 
     # Expose telega/tdlib version check as a target that is built in
     # CI.
+    #
+    # TODO(tazjin): uncomment when telega works again
     inherit tdlibCheck;
-    meta.targets = [ "tdlibCheck" ];
+    # meta.targets = [ "tdlibCheck" ];
   }) null identity
 ) {}
