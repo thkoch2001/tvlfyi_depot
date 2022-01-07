@@ -688,6 +688,10 @@ in {
     };
   };
 
+  # Don't run Docker
+  virtualisation.oci-containers.backend = "podman";
+  virtualisation.podman.extraPackages = [ pkgs.zfs ];
+
   security.acme = {
     acceptTerms = true;
     email = "certs@tvl.fyi";
