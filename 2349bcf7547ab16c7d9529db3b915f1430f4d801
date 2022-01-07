@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "168f4357_ddc5c367",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-07T12:18:39Z",
+      "side": 1,
+      "message": "I think we could s/generic/gerrit here, since it\u0027s always about Gerrit and `gerritChangeName` sounds more descriptive",
+      "range": {
+        "startLine": 50,
+        "startChar": 33,
+        "endLine": 50,
+        "endChar": 40
+      },
+      "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7af1d9a_c1ffab53",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-07T12:18:39Z",
+      "side": 1,
+      "message": "referring to",
+      "range": {
+        "startLine": 142,
+        "startChar": 26,
+        "endLine": 142,
+        "endChar": 35
+      },
+      "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "667433bf_ce6a8e75",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-07T12:18:39Z",
+      "side": 1,
+      "message": "I think having spaces in these is a bad idea in general, we should probably disallow that. Having something simple like [a-z0-9]* means that it\u0027s trivial to turn these terms into something that can be used as a short URL.",
+      "range": {
+        "startLine": 220,
+        "startChar": 5,
+        "endLine": 220,
+        "endChar": 24
+      },
+      "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
