@@ -16,6 +16,5 @@
 ]) ++
 
 (with depot.users.wpcarro.nixos; [
-  diogenes
   marcus
 ])
