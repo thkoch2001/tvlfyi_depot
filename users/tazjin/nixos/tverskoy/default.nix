@@ -254,6 +254,7 @@ in lib.fix(self: {
     # programs from nixpkgs
     (with pkgs; [
       amber
+      audacity
       bat
       chromium
       curl
