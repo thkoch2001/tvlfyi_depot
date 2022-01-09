@@ -341,6 +341,7 @@ in lib.fix(self: {
 
         directories = [
           ".cargo"
+          ".config/audacity"
           ".config/google-chrome"
           ".config/quassel-irc.org"
           ".config/spotify"
@@ -348,6 +349,7 @@ in lib.fix(self: {
           ".elfeed"
           ".gnupg"
           ".local/share/Steam"
+          ".local/share/audacity"
           ".local/share/direnv"
           ".local/share/fish"
           ".local/share/zoxide"
