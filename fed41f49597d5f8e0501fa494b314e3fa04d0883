@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcbecf47_ed997ff7",
+        "filename": "users/Profpatsch/netstring/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-09T11:00:08Z",
+      "side": 1,
+      "message": "why don\u0027t you use //nix/netstring\u0027s fromString?",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 15
+      },
+      "revId": "fed41f49597d5f8e0501fa494b314e3fa04d0883",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
