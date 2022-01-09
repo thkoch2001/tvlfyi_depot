@@ -85,16 +85,19 @@ let
 
 in
 
-# TODO: temp
+# TODO: temp setup
 lib.pipe {} [
   (_: makeStowDir [{
-    stowPackage = "hello";
-    originalDir = pkgs.hello;
+    stowPackage = "scripts";
+    originalDir = pkgs.linkFarm "scripts-farm" [
+        { name = "scripts/ytextr";
+          path = depot.users.Profpatsch.ytextr; }
+      ];
   }])
   (d: runStow {
     stowDir = d;
-    stowPackage = "hello";
-    targetDir = "/home/philip/tmp/stowed";
-    stowDirOriginPath = "/home/philip/tmp/stowOrigin";
+    stowPackage = "scripts";
+    targetDir = "/home/philip";
+    stowDirOriginPath = "/home/philip/.local/share/nix-home/stow-origin";
   })
 ]
