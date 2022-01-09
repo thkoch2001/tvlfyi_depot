@@ -6,6 +6,7 @@ let
   inherit (builtins) hasAttr filter readFile;
   inherit (depot.web.blog) post includePost renderPost;
   inherit (depot.users.wpcarro.website) domain renderTemplate withBrand;
+  inherit (lib.lists) sort;
 
   config = {
     name = "bill and his blog";
@@ -13,7 +14,8 @@ let
     footer = "";
   };
 
-  posts = filter includePost (list post (import ./posts.nix));
+  posts = sort (x: y: x.date > y.date)
+    (filter includePost (list post (import ./posts.nix)));
 
   rendered = pkgs.runCommandNoCC "blog-posts" {} ''
     mkdir -p $out
