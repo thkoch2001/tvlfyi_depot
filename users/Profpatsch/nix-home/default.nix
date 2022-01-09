@@ -5,6 +5,7 @@ let
       // depot.nix.getBins pkgs.coreutils [ "mkdir" "ln" "printenv" "rm" ]
       // depot.nix.getBins pkgs.xe [ "xe" ]
       // depot.nix.getBins pkgs.lr [ "lr" ]
+      // depot.nix.getBins pkgs.nix [ "nix-store" ]
       ;
 
   # run stow to populate the target directory with the given stow package, read from stowDir.
@@ -29,6 +30,14 @@ let
         bins.lr "-0" "-t" "depth == 1 && type == l" stowDirOriginPath
       ]
       bins.xe "-0" bins.rm
+    ]
+    # create an indirect gc root so our config is not cleaned under our asses by a garbage collect
+    "if" [
+      bins.nix-store
+        "--realise"
+        "--indirect"
+        "--add-root" "${stowDirOriginPath}/.nix-stowdir-gc-root"
+        stowDir
     ]
     # populate with new stow targets
     "if" [
@@ -85,7 +94,7 @@ lib.pipe {} [
   (d: runStow {
     stowDir = d;
     stowPackage = "hello";
-    targetDir = "/home/philip/tmp";
+    targetDir = "/home/philip/tmp/stowed";
     stowDirOriginPath = "/home/philip/tmp/stowOrigin";
   })
 ]
