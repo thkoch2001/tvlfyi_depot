@@ -129,18 +129,38 @@ let
           "\${out}/\${stowPackage}"
         ]);
 
+  # this is a dumb way of generating a pure list of packages from a depot namespace.
+  readTreeNamespaceDrvs = namespace:
+    lib.pipe namespace [
+      (lib.filterAttrs (_: v: lib.isDerivation v))
+      (lib.mapAttrsToList (k: v: {
+        name = k;
+        drv = v;
+      }))
+    ];
+
 in
+
 
 # TODO: temp setup
 lib.pipe { } [
   (_: makeStowDir [{
     stowPackage = "scripts";
-    originalDir = pkgs.linkFarm "scripts-farm" [
-      {
-        name = "scripts/ytextr";
-        path = depot.users.Profpatsch.ytextr;
-      }
-    ];
+    originalDir = pkgs.linkFarm "scripts-farm"
+      ([
+        {
+          name = "scripts/ytextr";
+          path = depot.users.Profpatsch.ytextr;
+        }
+      ]
+      ++
+      (lib.pipe depot.users.Profpatsch.aliases [
+        readTreeNamespaceDrvs
+        (map ({ name, drv }: {
+          name = "scripts/${name}";
+          path = drv;
+        }))
+      ]));
   }])
   (d: runStow {
     stowDir = d;
