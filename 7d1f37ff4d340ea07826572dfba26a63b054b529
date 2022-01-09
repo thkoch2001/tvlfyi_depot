@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "810b9ba9_fbcbff07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 47
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-09T09:34:32Z",
+      "side": 1,
+      "message": "sterni I think this was essentially fine as-is, the tests succeed.",
+      "revId": "7d1f37ff4d340ea07826572dfba26a63b054b529",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
