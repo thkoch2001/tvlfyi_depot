@@ -17,7 +17,11 @@ name:
   argMode ? "var"
 , # Number of arguments to be substituted as variables (passed to "var"/"-s" or "var-full"/"-S"
   readNArgs ? 0
-,
+, # Meta arguments, with the same semantics as in nixpkgs.
+  # See https://nixos.org/manual/nixpkgs/stable/#chap-meta
+  # We are not checking the contents (yet) but might in the future.
+  # TODO: actually add the meta arguments to runExecline!
+  meta ? { }
 }:
 # Nested list of lists of commands.
 # Inner lists are translated to execline blocks.
