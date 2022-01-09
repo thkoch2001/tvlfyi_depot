@@ -57,6 +57,9 @@ let
 
 in depot.nix.readTree.drvTargets {
   inherit
+    toNetstring
+    toNetstringList
+    toNetstringKeyVal
     python-netstring
     rust-netstring
       ;
