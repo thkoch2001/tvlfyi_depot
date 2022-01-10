@@ -16,6 +16,7 @@ let
     epkgs.melpaPackages.dockerfile-mode
     epkgs.melpaPackages.haskell-mode
     epkgs.melpaPackages.jq-mode
+    epkgs.melpaPackages.languagetool
     epkgs.melpaPackages.markdown-mode
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.sly
@@ -40,7 +41,12 @@ let
         name = "injected-emacs.d";
         destination = "/nix-inject.el";
         text = ''
+          ;; bqn-mode
           (setq bqn-interpreter-path "${pkgs.cbqn}/bin/BQN")
+
+          ;; languagetool
+          (setq languagetool-java-bin "${pkgs.jre}/bin/java")
+          (setq languagetool-language-tool-jar "${pkgs.languagetool}/share/languagetool-commandline.jar")
 
           (provide 'nix-inject)
         '';

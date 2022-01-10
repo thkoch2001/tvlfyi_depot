@@ -178,6 +178,17 @@
   :mode (("\\.md\\'" . markdown-mode)))
 (use-package adoc-mode
   :mode (("\\.adoc\\'" . adoc-mode)))
+(use-package languagetool
+  :after evil
+  :custom
+  languagetool-java-arguments '("-Dfile.encoding=UTF-8")
+  languagetool-default-language "en-GB"
+  languagetool-mother-tongue "de-DE"
+  :config
+  (evil-define-key 'normal 'global (kbd "<leader>ll") 'languagetool-check)
+  (evil-define-key 'normal 'global (kbd "<leader>lc") 'languagetool-correct-at-point)
+  (evil-define-key 'normal 'global (kbd "<leader>ls") 'languagetool-set-language)
+  (evil-define-key 'normal 'global (kbd "<leader>lr") 'languagetool-clear-buffer))
 
 (require 'subscriptions)
 (require 'nix-inject)
