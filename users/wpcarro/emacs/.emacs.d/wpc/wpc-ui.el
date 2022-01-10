@@ -162,7 +162,7 @@
 ;; during initialization?
 (when (device-laptop?) (laptop-battery-display))
 
-(colorscheme-whitelist-set 'doom-one-light)
+(colorscheme-whitelist-set 'doom-peacock)
 
 (when window-system
   (let ((font "Monospace"))
