@@ -38,7 +38,7 @@
 ;; integrate Emacs with X11 clipboard
 (customize-set-variable 'select-enable-primary t)
 (customize-set-variable 'select-enable-clipboard t)
-(fset 'evil-visual-update-x-selection 'ignore)
+(customize-set-variable 'evil-visual-update-x-selection-p nil)
 (general-def 'insert
   "s-v" #'clipboard-yank
   "C-S-v" #'clipboard-yank)
