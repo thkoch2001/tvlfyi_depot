@@ -69,6 +69,7 @@
          ("https://mgsloan.com/feed.xml" blog)
          ("https://notes.sterni.lv/atom.xml" me)
          ("http://arduina.net/feed/" defunct blog)
+         ("http://beza1e1.tuxen.de/blog_en.atom" blog)
          ("https://anchor.fm/s/94bb000/podcast/rss" podcast))
          ;; http://www.wollenzin.de/feed/ ;_;
 
