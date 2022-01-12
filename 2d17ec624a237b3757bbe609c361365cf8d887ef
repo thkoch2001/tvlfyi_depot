@@ -16,6 +16,23 @@
       "message": "Example output: https://deploys.tvl.fyi/diff/4xmyvkr9nw0cwkn5q38p0cfc58x3jdyz..vni8l52s9rm9vxhfav5syv5wa7hf696f.html\n\nTODO:\n- somehow list depot things that changed (since we don\u0027t set versions)\n- force it to output colours",
       "revId": "2d17ec624a237b3757bbe609c361365cf8d887ef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0e98314_c534dbd7",
+        "filename": "ops/deploy-whitby/deploy-whitby.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-12T21:17:06Z",
+      "side": 1,
+      "message": "nvd accepts --color always (at least on master: https://gitlab.com/khumba/nvd/-/blob/master/src/nvd#L605).",
+      "revId": "2d17ec624a237b3757bbe609c361365cf8d887ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
