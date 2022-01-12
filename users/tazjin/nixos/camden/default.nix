@@ -13,7 +13,7 @@ in lib.fix(self: {
   # Disable the current ACME module and use the old one from 19.09
   # instead, until the various regressions have been sorted out.
   # TODO(tazjin): Remove this once the new ACME module works.
-  disabledModules = [ "security/acme.nix" ];
+  disabledModules = [ "security/acme" ];
   imports =
     let oldChannel = fetchTarball {
       # NixOS 19.09 on 2020-10-04
