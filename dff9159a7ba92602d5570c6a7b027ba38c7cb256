@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a55930aa_88e960fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-12T13:48:15Z",
+      "side": 1,
+      "message": "Note this is a big bump (staging iteration included)",
+      "revId": "dff9159a7ba92602d5570c6a7b027ba38c7cb256",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
