@@ -49,14 +49,4 @@ self: super: {
   mkShell = super.lib.makeOverridable(args: (super.mkShell args) // {
     meta.ci = false;
   });
-
-  # TODO(tazjin): determine whether this is the cause of my suspend
-  # bugs, and if so, upstream it to nixpkgs.
-  xsecurelock = super.xsecurelock.overrideAttrs(drv: rec {
-    buildInputs = drv.buildInputs ++ [ self.makeWrapper ];
-    postInstall = ''
-      wrapProgram $out/libexec/xsecurelock/saver_blank \
-        --prefix PATH : ${self.coreutils}/bin
-    '';
-  });
 }
