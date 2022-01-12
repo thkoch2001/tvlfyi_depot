@@ -23,8 +23,8 @@
   to determine if a given mime message is an Apple Note."
   (when-let (uniform-id (assoc "X-Uniform-Type-Identifier"
                                (mime:mime-message-headers msg)
-                               :test #'string=))
-    (string= (cdr uniform-id) "com.apple.mail-note")))
+                               :test #'string-equal))
+    (string-equal (cdr uniform-id) "com.apple.mail-note")))
 
 (defun apple-note-html-fragment (msg out)
   "Takes a MIME:MIME-MESSAGE and writes its text content as HTML to
@@ -42,10 +42,10 @@
       ((not text) (error "Malformed Apple Note: no text part"))
       ;; notemap creates text/plain notes we need to handle properly.
       ;; Additionally we *could* check X-Mailer which notemap sets
-      ((string= (mime:mime-subtype text) "plain")
+      ((string-equal (mime:mime-subtype text) "plain")
        (html-escape-stream (mime:mime-body-stream text :binary nil) out))
       ;; Notes.app creates text/html parts
-      ((string= (mime:mime-subtype text) "html")
+      ((string-equal (mime:mime-subtype text) "html")
        (closure-html:parse
         (mime:mime-body-stream text)
         (make-instance
