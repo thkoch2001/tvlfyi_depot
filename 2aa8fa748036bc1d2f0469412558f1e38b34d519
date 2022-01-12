@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "497410ba_6782319b",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-12T14:59:51Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we ignore `NOCH_CHANGE` as well?",
+      "range": {
+        "startLine": 365,
+        "startChar": 13,
+        "endLine": 365,
+        "endChar": 27
+      },
+      "revId": "2aa8fa748036bc1d2f0469412558f1e38b34d519",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
