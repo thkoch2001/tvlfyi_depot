@@ -188,6 +188,30 @@
       },
       "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a190484d_2df39680",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-12T15:25:41Z",
+      "side": 1,
+      "message": "Just to be sure. Allow all that is possible in this link?",
+      "parentUuid": "695883f8_b8410c57",
+      "range": {
+        "startLine": 220,
+        "startChar": 5,
+        "endLine": 220,
+        "endChar": 24
+      },
+      "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
