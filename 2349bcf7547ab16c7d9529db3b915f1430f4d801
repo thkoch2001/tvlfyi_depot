@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b879ba9e_c97eb893",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-12T12:25:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "168f4357_ddc5c367",
+      "range": {
+        "startLine": 50,
+        "startChar": 33,
+        "endLine": 50,
+        "endChar": 40
+      },
+      "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7af1d9a_c1ffab53",
@@ -47,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e27e3e4c_aceb4b97",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-12T12:25:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7af1d9a_c1ffab53",
+      "range": {
+        "startLine": 142,
+        "startChar": 26,
+        "endLine": 142,
+        "endChar": 35
+      },
+      "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "667433bf_ce6a8e75",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-01-07T12:18:39Z",
       "side": 1,
       "message": "I think having spaces in these is a bad idea in general, we should probably disallow that. Having something simple like [a-z0-9]* means that it\u0027s trivial to turn these terms into something that can be used as a short URL.",
+      "range": {
+        "startLine": 220,
+        "startChar": 5,
+        "endLine": 220,
+        "endChar": 24
+      },
+      "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3893f922_a25ba01f",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-12T12:25:27Z",
+      "side": 1,
+      "message": "I will try to implement something. Could we allow for \u0027-\u0027. IMO it is easier to read Gerrit-Change than GerrtiChange. From what I can find \u0027-\u0027 is allowed in urls.",
+      "parentUuid": "667433bf_ce6a8e75",
       "range": {
         "startLine": 220,
         "startChar": 5,
