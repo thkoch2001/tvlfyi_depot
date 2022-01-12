@@ -16,7 +16,7 @@ pkgs.stdenv.mkDerivation {
         ansi2html
         git
         jq
-        nix-diff
+        nvd
       ]}
   '';
 
