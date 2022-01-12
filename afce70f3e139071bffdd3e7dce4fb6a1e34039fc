@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a392d22_fba9ff5d",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-12T18:41:43Z",
+      "side": 1,
+      "message": "I think this should hold:\n\n{\n  drvPath \u003d unsafeDiscardStringContext target.drvPath;\n  attrPath \u003d target.__readTree ++ lib.optionals target ? __subtarget [ target.__subtarget ];\n}\n\nSo it is possible to reobtain the derivation without parsing the label, even if the drv is gc\u0027d (or you are on another machine).",
+      "revId": "afce70f3e139071bffdd3e7dce4fb6a1e34039fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
