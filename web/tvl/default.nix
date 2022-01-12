@@ -64,7 +64,8 @@ let
 
       We mostly hang out on IRC. You can find us in [`#tvl`][tvl-irc]
       on [hackint][], which is also reachable [via XMPP][hackint-xmpp]
-      at [`#tvl@irc.hackint.org`][tvl-xmpp] (sic!).
+      at [`#tvl@irc.hackint.org`][tvl-xmpp] (sic!) and [via
+      Matrix][hackint-matrix] at [`#tvl:hackint.org`][tvl-matrix].
 
       Hackint also provide a [web chat][tvl-webchat].
 
@@ -72,6 +73,8 @@ let
       [hackint]: https://hackint.org/
       [hackint-xmpp]: https://hackint.org/transport/xmpp
       [tvl-xmpp]: xmpp:#tvl@irc.hackint.org?join
+      [hackint-matrix]: https://hackint.org/transport/matrix
+      [tvl-matrix]: https://matrix.to/#/#tvl:hackint.org
       [tvl-webchat]: https://webirc.hackint.org/#ircs://irc.hackint.org/#tvl
 
       ----------------
