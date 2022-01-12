@@ -1,4 +1,4 @@
-(in-package :mblog)
+(in-package :note)
 (declaim (optimize (safety 3)))
 
 ;; Throw away these tags and all of their children

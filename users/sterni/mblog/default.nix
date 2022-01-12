@@ -18,6 +18,7 @@ depot.nix.buildLisp.program {
     }
     depot.third_party.lisp.alexandria
     depot.third_party.lisp.closure-html
+    depot.third_party.lisp.cl-date-time-parser
     depot.third_party.lisp.cl-who
     depot.third_party.lisp.mime4cl
   ];

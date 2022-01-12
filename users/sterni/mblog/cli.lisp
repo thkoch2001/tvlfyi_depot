@@ -13,5 +13,6 @@
                               args))))
     (if help-p (format *error-output* "Usage: ~A~%" +synopsis+)
       (loop for arg in args
-            do (apple-note-html-fragment
-                (mime:mime-message (pathname arg)) *standard-output*)))))
+            do (note:apple-note-html-fragment
+                (note:make-apple-note (mime:mime-message (pathname arg)))
+                *standard-output*)))))
