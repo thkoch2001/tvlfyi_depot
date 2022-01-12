@@ -59,4 +59,11 @@ self: super: {
         --prefix PATH : ${self.coreutils}/bin
     '';
   });
+
+  # Lift upper version bound on the cryptography library
+  yubikey-manager = super.yubikey-manager.overrideAttrs (drv: {
+    postPatch = ''
+      substituteInPlace pyproject.toml --replace "^2.1 || ^3.0" "*"
+    '';
+  });
 }
