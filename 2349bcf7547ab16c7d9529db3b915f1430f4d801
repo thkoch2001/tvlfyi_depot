@@ -164,6 +164,30 @@
       },
       "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "695883f8_b8410c57",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-12T12:30:49Z",
+      "side": 1,
+      "message": "We should probably go with the intersection of https://git-scm.com/docs/git-check-ref-format \u0026 characters that can be present in URLs without special encoding.",
+      "parentUuid": "3893f922_a25ba01f",
+      "range": {
+        "startLine": 220,
+        "startChar": 5,
+        "endLine": 220,
+        "endChar": 24
+      },
+      "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
