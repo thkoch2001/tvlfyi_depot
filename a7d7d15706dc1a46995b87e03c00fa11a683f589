@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef253fa3_80a8375e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-12T14:17:36Z",
+      "side": 1,
+      "message": "maybe set autosubmit on this, since wpcarro is in ${other_timezone}",
+      "revId": "a7d7d15706dc1a46995b87e03c00fa11a683f589",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
