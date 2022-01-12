@@ -60,7 +60,7 @@
 
 (defun parse-content-id (attrlist)
   (when-let (data (find-if (lambda (x)
-                             (string= (hax:attribute-name x) "DATA"))
+                             (string-equal (hax:attribute-name x) "DATA"))
                            attrlist))
     (multiple-value-bind (starts-with-cid-p suffix)
         (starts-with-subseq "cid:" (hax:attribute-value data)
@@ -81,16 +81,16 @@
       ;; If we are not discarding any outer elements, we can set
       ;; up a new discard condition if we encounter an appropriate
       ;; element.
-      ((member name +discard-tags-with-children+ :test #'string=)
+      ((member name +discard-tags-with-children+ :test #'string-equal)
        (setf discard-until (cons name depth)))
       ;; Only drop this event, must be mirrored in END-ELEMENT to
       ;; avoid invalidly nested HTML.
-      ((member name +discard-tags-only+ :test #'string=) nil)
+      ((member name +discard-tags-only+ :test #'string-equal) nil)
       ;; If we encounter an object tag, we drop it and its contents,
       ;; but only after inspecting its attributes and emitting new
       ;; events representing an img tag which includes the respective
       ;; attachment via its filename.
-      ((string= name "OBJECT")
+      ((string-equal name "OBJECT")
        (progn
          (setf discard-until (cons "OBJECT" depth))
          ;; TODO(sterni): check type and only resolve images, raise error
@@ -116,12 +116,12 @@
       ;; If we are discarding and encounter the same tag again at the same
       ;; depth, we can stop, but still have to discard the current tag.
       ((and discard-until
-            (string= (car discard-until) name)
+            (string-equal (car discard-until) name)
             (= (cdr discard-until) depth))
        (setf discard-until nil))
       ;; In all other cases, we drop properly.
       (discard-until nil)
       ;; Mirrored tag stripping as in START-ELEMENT
-      ((member name +discard-tags-only+ :test #'string=) nil)
+      ((member name +discard-tags-only+ :test #'string-equal) nil)
       ;; In all other cases, we use HAX-PROXY-HANDLER to pass the event on.
       (t (call-next-method)))))
