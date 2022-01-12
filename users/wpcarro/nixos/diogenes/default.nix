@@ -88,7 +88,7 @@ in wpcarro.terraform.googleCloudVM {
     security = {
       acme = {
         acceptTerms = true;
-        email = "wpcarro@gmail.com";
+        defaults.email = "wpcarro@gmail.com";
       };
 
       sudo.wheelNeedsPassword = false;
