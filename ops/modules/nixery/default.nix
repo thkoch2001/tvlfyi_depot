@@ -38,5 +38,30 @@ in {
         STORAGE_PATH = storagePath;
       };
     };
+
+    systemd.services.depot-nixery = let storagePath = "/var/lib/depot-nixery/${pkgs.nixpkgsCommits.unstable}"; in {
+      inherit description;
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig = {
+        DynamicUser = true;
+        StateDirectory = "depot-nixery";
+        Restart = "always";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${storagePath}";
+        ExecStart = "${depot.third_party.nixery.nixery-bin}/bin/nixery";
+      };
+
+      environment = {
+        HOME = "/tmp"; # Nix puts its .cache here
+        PORT = toString (cfg.port + 1);
+        NIXERY_STORAGE_BACKEND = "filesystem";
+        NIX_TIMEOUT = "60"; # seconds
+        STORAGE_PATH = storagePath;
+        NIXERY_PKGS_PATH = (pkgs.runCommandNoCC "nixery-import-folder" {} ''
+          mkdir $out
+          cp ${./nixery-pkgs.nix} $out/default.nix
+        '').outPath;
+      };
+    };
   };
 }

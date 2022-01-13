@@ -1,9 +1,9 @@
-Nixery set
-==========
+Nixery package set
+==================
 
-This folder exports a special import of the depot Nix structure that is
-compatible with Nixery, by extending nixpkgs with a `tvl` attribute containing
-the depot.
+The file `nixery-pkgs.nix` exports a special import of the depot Nix structure
+that is compatible with Nixery, by extending nixpkgs with a `tvl` attribute
+containing the depot.
 
 This is required because Nixery expects its package set to look like nixpkgs at
 the top-level.
