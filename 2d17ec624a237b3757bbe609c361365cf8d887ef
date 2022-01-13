@@ -18,6 +18,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcbb4318_aa5e6b23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-13T00:58:23Z",
+      "side": 1,
+      "message": "this is fine I guess, the diff is only really a sanity-check anyway\n\ncolors would be nice though",
+      "revId": "2d17ec624a237b3757bbe609c361365cf8d887ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0e98314_c534dbd7",
