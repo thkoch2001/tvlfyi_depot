@@ -445,24 +445,32 @@ in {
 
   services.fail2ban.enable = true;
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = (with pkgs; [
+    alacritty.terminfo
+    bat
     bb
     curl
     direnv
     emacs-nox
+    fd
+    foot.terminfo
     git
     htop
+    hyperfine
     jq
+    kitty.terminfo
     nano
+    nvd
     ripgrep
     rxvt_unicode.terminfo
-    foot.terminfo
-    kitty.terminfo
-    alacritty.terminfo
+    tree
+    unzip
     vim
     zfs
     zfstools
-  ];
+  ]) ++ (with depot; [
+    ops.deploy-whitby
+  ]);
 
   services.journaldriver = {
     enable = true;
