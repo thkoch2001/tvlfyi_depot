@@ -1,6 +1,7 @@
 # See README.md
-{ depot ? import ../. {}, ... }:
+{ ... }:
 
-depot.third_party.nixpkgs.extend(_: _: {
+let depot = import (builtins.fetchGit "https://cl.tvl.fyi/depot") {};
+in depot.third_party.nixpkgs.extend(_: _: {
   tvl = depot;
 })
