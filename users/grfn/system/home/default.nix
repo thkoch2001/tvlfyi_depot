@@ -3,7 +3,7 @@
 with lib;
 
 rec {
-  home = confPath: (import "${pkgs.home-manager.src}/modules" {
+  home = confPath: (import (pkgs.home-manager.src + "/modules") {
     inherit pkgs;
 
     configuration = { config, lib, ... }: {
