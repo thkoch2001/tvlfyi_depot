@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-(pkgs.callPackage "${pkgs.path}/pkgs/development/libraries/rapidcheck" {
+(pkgs.callPackage (pkgs.path + "/pkgs/development/libraries/rapidcheck") {
   stdenv = pkgs.fullLlvm11Stdenv;
 }).overrideAttrs (attrs: rec {
   # follows the versioning scheme of nixpkgs, since rapidcheck does not
