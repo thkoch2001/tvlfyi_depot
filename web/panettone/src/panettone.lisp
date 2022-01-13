@@ -56,7 +56,8 @@
 
 (defvar *title* "Panettone")
 
-(setf (who:html-mode) :html5)
+(eval-when (:compile-toplevel :load-toplevel)
+  (setf (who:html-mode) :html5))
 
 (defun render/nav ()
   (who:with-html-output (*standard-output*)
