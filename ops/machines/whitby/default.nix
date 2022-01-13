@@ -12,7 +12,7 @@ in {
     "${depot.path}/ops/modules/git-serving.nix"
     "${depot.path}/ops/modules/irccat.nix"
     "${depot.path}/ops/modules/monorepo-gerrit.nix"
-    "${depot.path}/ops/modules/nixery.nix"
+    "${depot.path}/ops/modules/nixery/default.nix"
     "${depot.path}/ops/modules/oauth2_proxy.nix"
     "${depot.path}/ops/modules/owothia.nix"
     "${depot.path}/ops/modules/panettone.nix"
