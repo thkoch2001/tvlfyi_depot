@@ -16,6 +16,23 @@
       "message": "Thought about this a bit, and actually I don\u0027t think we *should* use commit message metadata in builds, since our commit message linting is relatively straightforward to do via prolog submit rules.\n\nGiven the current evaluation performance (rather poor) I think this change is a relatively cheap way of saving a little bit of time on no-op builds.",
       "revId": "d9f445c8ee4aaa563065f6edd71aef91f60c1050",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b2ceebc_855155a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-13T08:40:17Z",
+      "side": 1,
+      "message": "As long as all we can assume that all that is executed is nix derivations this is a good idea. But at the moment when there are something is not inside a nix derivation it should be possible to skip this type of optimization. These are often less stable.. ",
+      "revId": "d9f445c8ee4aaa563065f6edd71aef91f60c1050",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
