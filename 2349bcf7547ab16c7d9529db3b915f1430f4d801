@@ -236,6 +236,30 @@
       },
       "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cd1275a_7dadac75",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-13T08:54:59Z",
+      "side": 1,
+      "message": "I suggest add capital letters and \u0027/\u0027 but not [-\\/_] as first character:\n [a-zA-Z0-9][a-zA-Z0-9\\-\\_\\/]*",
+      "parentUuid": "0242f61b_9c5c080a",
+      "range": {
+        "startLine": 220,
+        "startChar": 5,
+        "endLine": 220,
+        "endChar": 24
+      },
+      "revId": "2349bcf7547ab16c7d9529db3b915f1430f4d801",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
