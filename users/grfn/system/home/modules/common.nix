@@ -13,6 +13,7 @@
     ../modules/lib/cloneRepo.nix
   ];
 
+  home.username = "grfn";
   home.homeDirectory = "/home/grfn";
 
   programs.password-store.enable = true;
