@@ -15,7 +15,7 @@
 let
   os = depot.ops.nixos.nixosFor ({ modulesPath, ... }: {
     imports = [
-      "${pkgs.path}/nixos/modules/virtualisation/amazon-image.nix"
+      (pkgs.path + "/nixos/modules/virtualisation/amazon-image.nix")
       configuration
     ];
 
@@ -31,7 +31,7 @@ let
 
   targetUser = "root";
 
-  ec2Amis = import "${pkgs.path}/nixos/modules/virtualisation/ec2-amis.nix";
+  ec2Amis = import (pkgs.path + "/nixos/modules/virtualisation/ec2-amis.nix");
 
   osRoot = os.config.system.build.toplevel;
 

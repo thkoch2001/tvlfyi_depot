@@ -8,8 +8,8 @@ in rec {
     # Ensure that pkgs == third_party.nix
     nixpkgs.pkgs = depot.third_party.nixpkgs;
     nix.nixPath = [
-      "nixos=${pkgs.path}"
-      "nixpkgs=${pkgs.path}"
+      ("nixos=" + pkgs.path)
+      ("nixpkgs=" + pkgs.path)
     ];
   };
 
