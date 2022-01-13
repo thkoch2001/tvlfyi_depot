@@ -3,7 +3,7 @@
 let
   configuration = { ... }: {
     imports = [
-      "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+      (pkgs.path + "/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
     ];
 
     nix.package = depot.third_party.nix;
