@@ -14,7 +14,7 @@ steps:
           buildkite-agent annotate
       fi
 
-      nix-build -A ops.pipelines.depot -o pipeline --show-trace
+      nix-build --option restrict-eval true --include "depot=${PWD}" --allowed-uris 'https://' -A ops.pipelines.depot -o pipeline --show-trace
 
       # Steps need to be uploaded in reverse order because pipeline
       # upload prepends instead of appending.
