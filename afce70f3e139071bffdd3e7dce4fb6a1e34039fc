@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f6c6d70e_2ef8b51d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-13T07:49:27Z",
+      "side": 1,
+      "message": "The motivation for doing this and the requirement for how long it needs to stay as artifact?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 0
+      },
+      "revId": "afce70f3e139071bffdd3e7dce4fb6a1e34039fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8a392d22_fba9ff5d",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 16
