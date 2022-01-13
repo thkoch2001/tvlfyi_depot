@@ -20,6 +20,8 @@
     path = ".local/share/password-store";
   };
 
+  home.homeDirectory = "/home/grfn";
+
   home.packages = with pkgs; [
     # System utilities
     bat
