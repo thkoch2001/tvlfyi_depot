@@ -3,8 +3,8 @@
 let
   configuration = { ... }: {
     imports = [
-      "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
-      "${pkgs.path}/nixos/modules/installer/cd-dvd/channel.nix"
+      (pkgs.path + "/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
+      (pkgs.path + "/nixos/modules/installer/cd-dvd/channel.nix")
     ];
 
     networking.networkmanager.enable = true;
