@@ -22,6 +22,9 @@
     path = ".local/share/password-store";
   };
 
+  home.username = "grfn";
+  home.homeDirectory = "/home/grfn";
+
   home.packages = with pkgs; [
     # System utilities
     bat

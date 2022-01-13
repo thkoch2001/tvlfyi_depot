@@ -4,44 +4,45 @@
 let
   inherit (builtins) listToAttrs;
   inherit (lib) range;
+  depotModule = module: depot.path.origSrc + ("/ops/modules/" + module);
 in
 {
   imports = [
-    "${depot.path}/ops/modules/atward.nix"
-    "${depot.path}/ops/modules/clbot.nix"
-    "${depot.path}/ops/modules/gerrit-queue.nix"
-    "${depot.path}/ops/modules/git-serving.nix"
-    "${depot.path}/ops/modules/irccat.nix"
-    "${depot.path}/ops/modules/monorepo-gerrit.nix"
-    "${depot.path}/ops/modules/nixery.nix"
-    "${depot.path}/ops/modules/oauth2_proxy.nix"
-    "${depot.path}/ops/modules/owothia.nix"
-    "${depot.path}/ops/modules/panettone.nix"
-    "${depot.path}/ops/modules/paroxysm.nix"
-    "${depot.path}/ops/modules/restic.nix"
-    "${depot.path}/ops/modules/smtprelay.nix"
-    "${depot.path}/ops/modules/sourcegraph.nix"
-    "${depot.path}/ops/modules/tvl-buildkite.nix"
-    "${depot.path}/ops/modules/tvl-slapd/default.nix"
-    "${depot.path}/ops/modules/www/atward.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/auth.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/b.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/cache.tvl.su.nix"
-    "${depot.path}/ops/modules/www/cl.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/code.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/cs.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/deploys.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/images.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/nixery.dev.nix"
-    "${depot.path}/ops/modules/www/static.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/status.tvl.su.nix"
-    "${depot.path}/ops/modules/www/tazj.in.nix"
-    "${depot.path}/ops/modules/www/todo.tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/tvl.fyi.nix"
-    "${depot.path}/ops/modules/www/tvl.su.nix"
-    "${depot.path}/ops/modules/www/wigglydonke.rs.nix"
-    "${depot.third_party.agenix.src}/modules/age.nix"
-    "${pkgs.path}/nixos/modules/services/web-apps/gerrit.nix"
+    (depotModule "atward.nix")
+    (depotModule "clbot.nix")
+    (depotModule "gerrit-queue.nix")
+    (depotModule "git-serving.nix")
+    (depotModule "irccat.nix")
+    (depotModule "monorepo-gerrit.nix")
+    (depotModule "nixery.nix")
+    (depotModule "oauth2_proxy.nix")
+    (depotModule "owothia.nix")
+    (depotModule "panettone.nix")
+    (depotModule "paroxysm.nix")
+    (depotModule "restic.nix")
+    (depotModule "smtprelay.nix")
+    (depotModule "sourcegraph.nix")
+    (depotModule "tvl-buildkite.nix")
+    (depotModule "tvl-slapd/default.nix")
+    (depotModule "www/atward.tvl.fyi.nix")
+    (depotModule "www/auth.tvl.fyi.nix")
+    (depotModule "www/b.tvl.fyi.nix")
+    (depotModule "www/cache.tvl.su.nix")
+    (depotModule "www/cl.tvl.fyi.nix")
+    (depotModule "www/code.tvl.fyi.nix")
+    (depotModule "www/cs.tvl.fyi.nix")
+    (depotModule "www/deploys.tvl.fyi.nix")
+    (depotModule "www/images.tvl.fyi.nix")
+    (depotModule "www/nixery.dev.nix")
+    (depotModule "www/static.tvl.fyi.nix")
+    (depotModule "www/status.tvl.su.nix")
+    (depotModule "www/tazj.in.nix")
+    (depotModule "www/todo.tvl.fyi.nix")
+    (depotModule "www/tvl.fyi.nix")
+    (depotModule "www/tvl.su.nix")
+    (depotModule "www/wigglydonke.rs.nix")
+    (depot.third_party.agenix.src + "/modules/age.nix")
+    (pkgs.path + "/nixos/modules/services/web-apps/gerrit.nix")
   ];
 
   hardware = {
