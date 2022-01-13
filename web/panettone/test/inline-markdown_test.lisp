@@ -21,7 +21,7 @@
 (inline-markdown-unit-test
   inline-markdown-html-escaping-test
   "<tag>öäü"
-  "&lt;tag&gt;&#246;&#228;&#252;")
+  "&lt;tag&gt;&#xF6;&#xE4;&#xFC;")
 
 (inline-markdown-unit-test
   inline-markdown-nesting-test
@@ -51,4 +51,4 @@
 (inline-markdown-unit-test
   inline-markdown-unicode-safe
   "Does Unicode 👨‍👨‍👧‍👦 break \\👩🏾‍🦰 tokenization?"
-  "Does Unicode &#128104;&#8205;&#128104;&#8205;&#128103;&#8205;&#128102; break \\&#128105;&#127998;&#8205;&#129456; tokenization?")
+  "Does Unicode &#x1F468;&#x200D;&#x1F468;&#x200D;&#x1F467;&#x200D;&#x1F466; break \\&#x1F469;&#x1F3FE;&#x200D;&#x1F9B0; tokenization?")
