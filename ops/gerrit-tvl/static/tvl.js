@@ -116,6 +116,12 @@ const tvlChecksProvider = {
           continue;
         }
 
+        // Skip jobs marked as 'broken' (this means they were skipped
+        // intentionally)
+        if (job.state === 'broken') {
+          continue;
+        }
+
         // TODO(lukegb): add the ability to retry these
         const checkRun = {
           patchset: parseInt(build.env.GERRIT_PATCHSET, 10),
@@ -150,7 +156,7 @@ const tvlChecksProvider = {
         }
         checkRun.statusDescription = statusDescription;
 
-        if (['failed', 'broken', 'timed_out'].includes(job.state)) {
+        if (['failed', 'timed_out'].includes(job.state)) {
           const result = {
             // TODO(lukegb): get the log as the message here (the Gerrit
             // implementation doesn't yet seem to support newlines in message
