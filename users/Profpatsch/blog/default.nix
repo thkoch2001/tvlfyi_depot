@@ -127,8 +127,8 @@ let
   }:
     assert
       (lib.assertMsg
-        (builtins.pathExists (depot.path + "/" + relativePath))
-        "depotCgitLink: path /${relativePath} does not exist in depot");
+        (builtins.pathExists (depot.path.origSrc + "/" + relativePath))
+        "depotCgitLink: path /${relativePath} does not exist in depot, and depot.path was ${toString depot.path}");
       "https://code.tvl.fyi/tree/${relativePath}";
 
   # look up a route by path ($1)
