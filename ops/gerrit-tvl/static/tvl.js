@@ -144,7 +144,7 @@ const tvlChecksProvider = {
         }
         checkRun.statusDescription = statusDescription;
 
-        if (job.state === 'failed') {
+        if (['failed', 'broken', 'timed_out'].includes(job.state)) {
           const result = {
             // TODO(lukegb): get the log as the message here (the Gerrit
             // implementation doesn't yet seem to support newlines in message
