@@ -113,6 +113,7 @@ const tvlChecksProvider = {
       for (let job of build.jobs) {
         // TODO(lukegb): add the ability to retry these
         const checkRun = {
+          patchset: parseInt(build.env.GERRIT_PATCHSET, 10),
           attempt: attempt,
           externalId: job.id,
           checkName: job.name,
