@@ -41,8 +41,8 @@ const tvlChecksProvider = {
     }
 
     const params = {
-      // besadii uses the patchset ref as the branch name.
-      branch: `refs/changes/${changeNumber.toString().slice(-2)}/${changeNumber}/${patchsetNumber}`,
+      // besadii groups different patchsets of the same CL under this fake ref
+      branch: `cl/${changeNumber.toString()}`,
     };
     const url = `https://api.buildkite.com/v2/organizations/tvl/pipelines/depot/builds?${encodeParams(params)}`;
     const resp = await fetch(url, {
@@ -115,7 +115,6 @@ const tvlChecksProvider = {
           checkRun.results = [result];
         }
 
-        console.log(checkRun);
         runs.push(checkRun);
       }
     }
