@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65d6258e_a8361bd9",
+        "filename": "users/Profpatsch/blog/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-14T10:02:34Z",
+      "side": 1,
+      "message": "Use origSrc still, it\u0027s a lot cheaper to evaluate.",
+      "range": {
+        "startLine": 130,
+        "startChar": 36,
+        "endLine": 130,
+        "endChar": 40
+      },
+      "revId": "823fde285d7f6dc8076e362a509dc8de2c0f76e4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
