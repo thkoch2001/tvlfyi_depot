@@ -24,6 +24,59 @@ function formatDuration(from, to) {
   return `${hoursTook}hr ${minutesRemainder}min`;
 }
 
+// Maps the status of a Buildkite *job* to the statuses available for
+// a Gerrit check.
+//
+// Note that jobs can have statuses that, according to the Buildkite
+// documentation, are only available for builds, and maybe vice-versa.
+// To deal with this we simply cover all statuses for all types here.
+//
+// Buildkite job statuses: https://buildkite.com/docs/pipelines/notifications#job-states
+//
+// Gerrit check statuses: https://gerrit.googlesource.com/gerrit/+/v3.4.0/polygerrit-ui/app/api/checks.ts#167
+//
+// TODO(tazjin): Use SCHEDULED status once we have upgraded Gerrit
+// past 3.4
+function jobStateToCheckRunStatus(state) {
+  const status = {
+    // Statuses documented for both types
+    'blocked': 'RUNNABLE',
+    'canceled': 'COMPLETED',
+    'canceling': 'RUNNING',
+    'running': 'RUNNING',
+    'scheduled': 'RUNNABLE',
+    'skipped': 'COMPLETED',
+
+    // Statuses only documented for builds
+    'creating': 'RUNNABLE',
+    'failed': 'COMPLETED',
+    'not_run': 'COMPLETED',
+    'passed': 'COMPLETED',
+
+    // Statuses only documented for jobs
+    'accepted': 'RUNNABLE',
+    'assigned': 'RUNNABLE',
+    'blocked_failed': 'COMPLETED',
+    'broken': 'COMPLETED',
+    'finished': 'COMPLETED',
+    'limited': 'RUNNABLE',
+    'limiting': 'RUNNABLE',
+    'pending': 'RUNNABLE',
+    'timed_out': 'COMPLETED',
+    'timing_out': 'RUNNING',
+    'unblocked': 'RUNNABLE',
+    'unblocked_failed': 'COMPLETED',
+    'waiting': 'RUNNABLE',
+    'waiting_failed': 'COMPLETED',
+  }[state];
+
+  if (!status) {
+    console.log(`unknown Buildkite job state: ${state}`);
+  }
+
+  return status;
+}
+
 const tvlChecksProvider = {
   async fetch(change) {
     let {changeNumber, patchsetNumber, repo} = change;
@@ -58,32 +111,25 @@ const tvlChecksProvider = {
       const build = respJSON[i];
 
       for (let job of build.jobs) {
-        // TODO(lukegb): add the ability to retry these (sometimes whitby runs out of disk...)
+        // TODO(lukegb): add the ability to retry these
         const checkRun = {
           attempt: attempt,
           externalId: job.id,
           checkName: job.name,
           checkDescription: job.command,
           checkLink: job.web_url,
-          status: {
-            'running': 'RUNNING',
-            'scheduled': 'RUNNABLE',
-            'passed': 'COMPLETED',
-            'failed': 'COMPLETED',
-            'blocked': 'RUNNABLE',
-            'canceled': 'COMPLETED',
-            'canceling': 'RUNNING',
-            'skipped': 'COMPLETED',
-            'not_run': 'COMPLETED',
-          }[job.state],
+          status: jobStateToCheckRunStatus(job.state),
           labelName: 'Verified',
         };
+
         if (job.scheduled_at) {
           checkRun.scheduledTimestamp = new Date(job.scheduled_at);
         }
+
         if (job.started_at) {
           checkRun.startedTimestamp = new Date(job.started_at);
         }
+
         if (job.finished_at) {
           checkRun.finishedTimestamp = new Date(job.finished_at);
         }
