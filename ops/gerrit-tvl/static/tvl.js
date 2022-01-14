@@ -111,6 +111,11 @@ const tvlChecksProvider = {
       const build = respJSON[i];
 
       for (let job of build.jobs) {
+        // Skip non-command jobs (e.g. waiting/grouping jobs)
+        if (job.type !== 'script') {
+          continue;
+        }
+
         // TODO(lukegb): add the ability to retry these
         const checkRun = {
           patchset: parseInt(build.env.GERRIT_PATCHSET, 10),
