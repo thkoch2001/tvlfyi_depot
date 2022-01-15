@@ -16,8 +16,6 @@
 (require 'map)
 (require 'cl)
 
-(defvar nix-depot-path "/home/tazjin/depot")
-
 (defun nix/prefetch-github (owner repo) ; TODO(tazjin): support different branches
   "Fetch the master branch of a GitHub repository and insert the
   call to `fetchFromGitHub' at point."
