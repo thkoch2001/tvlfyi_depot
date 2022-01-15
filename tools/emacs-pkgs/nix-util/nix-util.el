@@ -1,18 +1,21 @@
 ;;; nix-util.el --- Utilities for dealing with Nix code. -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2019 Google Inc.
+;; Copyright (C) 2022 The TVL Authors
 ;;
 ;; Author: Vincent Ambo <tazjin@google.com>
 ;; Version: 1.0
-;; Package-Requires: (json map)
+;; Package-Requires: (cl json map s)
 ;;
 ;;; Commentary:
 ;;
 ;; This package adds some functionality that I find useful when
 ;; working in Nix buffers or programs installed from Nix.
 
+(require 'cl)
 (require 'json)
 (require 'map)
+(require 's)
 
 (defvar nix-depot-path "/home/tazjin/depot")
 
