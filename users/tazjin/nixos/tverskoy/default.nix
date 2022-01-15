@@ -269,6 +269,7 @@ in lib.fix(self: {
       fd
       file
       firefox
+      fractal
       gdb
       gh
       git
@@ -367,7 +368,6 @@ in lib.fix(self: {
         ];
 
         files = [
-          ".config/mimeapps.list"
           ".notmuch-config"
         ];
       };
