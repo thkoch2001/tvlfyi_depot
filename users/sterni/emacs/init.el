@@ -88,7 +88,9 @@
   ; gerrit doesn't like 80 column commit messages…
   (add-hook 'git-commit-mode-hook (lambda () (setq fill-column 72)))
   (evil-define-key 'normal 'global (kbd "<leader>gr") 'magit-status))
-(use-package tvl :after magit)
+(use-package tvl
+  :after magit
+  :custom tvl-depot-path (concat (getenv "HOME") "/src/depot"))
 
 (setq ediff-split-window-function 'split-window-horizontally)
 
