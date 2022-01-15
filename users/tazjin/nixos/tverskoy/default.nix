@@ -417,6 +417,10 @@ in lib.fix(self: {
         '';
       };
 
+      # Force the mimeapps.list to be overridden because Chrome keeps
+      # meddling with it.
+      xdg.configFile."mimeapps.list".force = true;
+
       systemd.user.startServices = true;
     };
 
