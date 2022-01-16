@@ -17,11 +17,15 @@ let
     command = "${depot.tools.depotfmt.check}";
     label = ":evergreen_tree: (tools/depotfmt)";
   };
+
   pipeline = depot.nix.buildkite.mkPipeline {
     headBranch = "refs/heads/canon";
     drvTargets = depot.ci.targets;
-    skipIfBuilt = true;
     additionalSteps = [ depotfmtCheck protoCheck ];
+
+    parentTargetMap = if !(builtins.isNull depot.externalArgs.parentTargetMap)
+      then depot.externalArgs.parentTargetMap
+      else {};
   };
 
   drvmap = depot.nix.buildkite.mkDrvmap depot.ci.targets;
