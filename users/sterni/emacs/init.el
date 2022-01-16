@@ -74,6 +74,7 @@
 (add-hook 'prog-mode-hook #'whitespace-mode)
 (setq-default indicate-empty-lines t)
 (setq-default indicate-buffer-boundaries 'left)
+(setq sentence-end-double-space nil)
 
 ;;; Configure built in modes
 
