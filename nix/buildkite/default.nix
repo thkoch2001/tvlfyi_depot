@@ -57,7 +57,7 @@ in rec {
     # Skip build if it was part of a parent commit already. This means
     # that only targets which changed between the parent and this
     # commit will be built.
-    skip = (parentTargetMap ? label) && parentTargetMap."${label}".drvPath == drvPath;
+    skip = (parentTargetMap ? "${label}") && parentTargetMap."${label}".drvPath == drvPath;
 
     command = concatStringsSep " " [
       # First try to realise the drvPath of the target so we don't evaluate twice.
