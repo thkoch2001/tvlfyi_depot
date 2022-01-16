@@ -117,6 +117,7 @@
   ;; buffer management
   (evil-define-key 'normal 'global (kbd "<leader>bk") 'kill-buffer)
   (evil-define-key 'normal 'global (kbd "<leader>bb") 'switch-to-buffer)
+  (evil-define-key 'normal 'global (kbd "<leader>bl") 'list-buffers)
   ;; window management
   (evil-define-key 'normal 'global (kbd "<leader>wk") 'delete-window)
   (evil-define-key 'normal 'global (kbd "<leader>wo") 'delete-other-window)
