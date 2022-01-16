@@ -143,8 +143,18 @@
   :config
   (evil-collection-init))
 
+;; parens
 (use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+  :hook ((prog-mode . rainbow-delimiters-mode)))
+
+(setq show-paren-delay 0)
+(show-paren-mode)
+
+(use-package paredit
+  :hook ((emacs-lisp-mode . paredit-mode)
+         (lisp-mode . paredit-mode)
+         (ielm-mode . paredit-mode)
+         (lisp-interaction-mode . paredit-mode)))
 
 (use-package nix-mode :mode "\\.nix\\'")
 (use-package nix-drv-mode :mode "\\.drv\\'")
@@ -161,7 +171,9 @@
 (use-package rust-mode)
 (use-package sly
   :after evil
-  :hook ((sly-mrepl-mode . (lambda () (rainbow-delimiters-mode-enable))))
+  :hook ((sly-mrepl-mode . (lambda ()
+                             (enable-paredit-mode)
+                             (rainbow-delimiters-mode-enable))))
   :config
   (evil-define-key '(normal insert) sly-mrepl-mode-map (kbd "C-r") 'isearch-backward))
 
