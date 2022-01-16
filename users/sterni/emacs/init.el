@@ -163,7 +163,7 @@
   :after evil
   :hook ((sly-mrepl-mode . (lambda () (rainbow-delimiters-mode-enable))))
   :config
-  (evil-define-key 'normal sly-mrepl-mode-map (kbd "C-r") 'isearch-backward))
+  (evil-define-key '(normal insert) sly-mrepl-mode-map (kbd "C-r") 'isearch-backward))
 
 (use-package ada-mode)
 
