@@ -72,6 +72,8 @@
 (setq whitespace-style '(face trailing tabs)
       whitespace-line-column fill-column)
 (add-hook 'prog-mode-hook #'whitespace-mode)
+(setq-default indicate-empty-lines t)
+(setq-default indicate-buffer-boundaries 'left)
 
 ;;; Configure built in modes
 
