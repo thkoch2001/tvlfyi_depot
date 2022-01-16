@@ -56,6 +56,12 @@
 ;; unique component should come first for better completion
 (setq uniquify-buffer-name-style 'forward)
 
+;; completions
+(ido-mode 1)
+(setq ido-enable-flex-matching t)
+(ido-everywhere)
+(fido-mode)
+
 ;; Display column numbers
 (column-number-mode t)
 (setq-default fill-column 80)
