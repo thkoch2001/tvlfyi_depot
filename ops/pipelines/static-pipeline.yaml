@@ -15,6 +15,13 @@ steps:
           buildkite-agent annotate
       fi
 
+      # Attempt to fetch a target map from a parent commit on canon
+      if [[ -f ./parent-target-map.json ]]; then
+        echo "found a target map"
+      else
+        echo "did not find a target map"
+      fi
+
       nix-build -A ops.pipelines.depot -o pipeline --show-trace
 
       # Steps need to be uploaded in reverse order because pipeline
