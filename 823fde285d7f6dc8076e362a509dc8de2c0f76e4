@@ -22,6 +22,30 @@
       },
       "revId": "823fde285d7f6dc8076e362a509dc8de2c0f76e4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1efbb28_7e26f234",
+        "filename": "users/Profpatsch/blog/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-16T13:41:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65d6258e_a8361bd9",
+      "range": {
+        "startLine": 130,
+        "startChar": 36,
+        "endLine": 130,
+        "endChar": 40
+      },
+      "revId": "823fde285d7f6dc8076e362a509dc8de2c0f76e4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
