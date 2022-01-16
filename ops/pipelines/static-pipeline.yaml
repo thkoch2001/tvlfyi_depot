@@ -15,7 +15,16 @@ steps:
           buildkite-agent annotate
       fi
 
-      nix-build -A ops.pipelines.depot -o pipeline --show-trace
+      # Attempt to fetch a target map from a parent commit on canon
+      ops/pipelines/fetch-parent-targets.sh
+
+      PIPELINE_ARGS=""
+      if [[ -f ./parent-target-map.json ]]; then
+        nix-build -A ops.pipelines.depot -o pipeline --show-trace \
+          --arg parentTargetMap ./parent-target-map.json
+      else
+        nix-build -A ops.pipelines.depot -o pipeline --show-trace
+      fi
 
       # Steps need to be uploaded in reverse order because pipeline
       # upload prepends instead of appending.
