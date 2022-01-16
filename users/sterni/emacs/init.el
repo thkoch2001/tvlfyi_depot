@@ -49,6 +49,8 @@
       `((".*" ,temporary-file-directory t)))
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
+(setq backup-by-copying t)
+(setq create-lockfiles nil)
 
 ;; buffers
 ;; unique component should come first for better completion
