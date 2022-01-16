@@ -2,7 +2,9 @@
 # (see //nix/readTree for details) and constructing a matching attribute set
 # tree.
 
-{ nixpkgsBisectPath ? null, nixpkgsConfig ? {}, ... }@args:
+{ nixpkgsBisectPath ? null
+, parentTargetMap ? null
+, nixpkgsConfig ? {}, ... }@args:
 
 let
   inherit (builtins)
