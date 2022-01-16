@@ -1,6 +1,6 @@
 # This file configures the primary build pipeline used for the
 # top-level list of depot targets.
-{ depot, pkgs, ... }:
+{ depot, pkgs, externalArgs, ... }:
 
 let
   # Protobuf check step which validates that changes to .proto files
@@ -17,11 +17,15 @@ let
     command = "${depot.tools.depotfmt.check}";
     label = ":evergreen_tree: (tools/depotfmt)";
   };
+
   pipeline = depot.nix.buildkite.mkPipeline {
     headBranch = "refs/heads/canon";
     drvTargets = depot.ci.targets;
-    skipIfBuilt = true;
     additionalSteps = [ depotfmtCheck protoCheck ];
+
+    parentTargetMap = if (externalArgs ? parentTargetMap)
+      then builtins.fromJSON (builtins.readFile externalArgs.parentTargetMap)
+      else {};
   };
 
   drvmap = depot.nix.buildkite.mkDrvmap depot.ci.targets;
