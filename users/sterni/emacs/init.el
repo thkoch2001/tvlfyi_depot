@@ -14,7 +14,7 @@
 (global-auto-revert-mode 1)
 
 ;; Indent
-(set-default 'indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 (setq tab-width 2)
 
 ;; UTF-8
