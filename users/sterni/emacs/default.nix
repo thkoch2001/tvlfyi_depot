@@ -25,6 +25,7 @@ let
     epkgs.urweb-mode
     # misc
     epkgs.melpaPackages.hl-todo
+    epkgs.melpaPackages.paredit
     epkgs.elpaPackages.rainbow-mode
     epkgs.melpaPackages.rainbow-delimiters
     # beyond text editing
