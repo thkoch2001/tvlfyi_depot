@@ -37,7 +37,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.oauth2_proxy2 = {
+    systemd.services.oauth2_proxy = {
       inherit description;
       wantedBy = [ "multi-user.target" ];
 
