@@ -13,7 +13,7 @@
   (setq doom-font (font-spec :family font-family :size 14)
         doom-big-font (font-spec :family font-family :size 24)
         doom-big-font-increment 5
-        doom-variable-pitch-font (font-spec :family "DejaVu Sans")
+        doom-variable-pitch-font (font-spec :family font-family)
         doom-unicode-font (font-spec :family font-family)))
 
 (require 's)
@@ -758,45 +758,45 @@
   (when (eq 'headline (car elt))
     (plist-get (cadr elt) :raw-value)))
 
-(setq +ligatures-extra-symbols
-      (append +ligatures-extra-symbols
-              '(:equal     "≡"
-                :not-equal "≠"
-                :is        "≣"
-                :isnt      "≢"
-                :lte       "≤"
-                :gte       "≥"
-                :subseteq  "⊆"
-                )))
+;; (setq +ligatures-extra-symbols
+;;       (append +ligatures-extra-symbols
+;;               '(:equal     "≡"
+;;                 :not-equal "≠"
+;;                 :is        "≣"
+;;                 :isnt      "≢"
+;;                 :lte       "≤"
+;;                 :gte       "≥"
+;;                 :subseteq  "⊆"
+;;                 )))
 
-(after! python
-  (set-pretty-symbols! 'python-mode :merge t
-    :equal      "=="
-    :not-equal "!="
-    :lte "<="
-    :gte ">="
-    :is  "is"
-    :isnt "is not"
-    :subseteq "issubset"
+;; (after! python
+;;   (set-pretty-symbols! 'python-mode :merge t
+;;     :equal      "=="
+;;     :not-equal "!="
+;;     :lte "<="
+;;     :gte ">="
+;;     :is  "is"
+;;     :isnt "is not"
+;;     :subseteq "issubset"
 
-    ;; doom builtins
+;;     ;; doom builtins
 
-    ;; Functional
-    :def "def"
-    :lambda "lambda"
-    ;; Types
-    :null "None"
-    :true "True" :false "False"
-    :int "int" :str "str"
-    :float "float"
-    :bool "bool"
-    :tuple "tuple"
-    ;; Flow
-    :not "not"
-    :in "in" :not-in "not in"
-    :and "and" :or "or"
-    :for "for"
-    :return "return" :yield "yield"))
+;;     ;; Functional
+;;     :def "def"
+;;     :lambda "lambda"
+;;     ;; Types
+;;     :null "None"
+;;     :true "True" :false "False"
+;;     :int "int" :str "str"
+;;     :float "float"
+;;     :bool "bool"
+;;     :tuple "tuple"
+;;     ;; Flow
+;;     :not "not"
+;;     :in "in" :not-in "not in"
+;;     :and "and" :or "or"
+;;     :for "for"
+;;     :return "return" :yield "yield"))
 
 (use-package! sqlup-mode
   :hook
