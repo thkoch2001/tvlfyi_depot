@@ -5,7 +5,7 @@
 ;;
 ;; Author: Griffin Smith <grfn@gws.fyi>
 ;; Version: 0.0.1
-;; Package-Requires: (s dash magit)
+;; Package-Requires: (cl s magit)
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -17,6 +17,7 @@
 
 (require 'magit)
 (require 's)
+(require 'cl) ; TODO(tazjin): replace lexical-let* with non-deprecated alternative
 
 (defgroup tvl nil
   "Customisation options for TVL functionality.")
@@ -183,6 +184,39 @@ passes. This is potentially dangerous, use with care."
   "Open the TVL monorepo in magit."
   (interactive)
   (magit-status-setup-buffer tvl-depot-path))
+
+(eval-after-load 'sly
+  '(defun tvl-sly-from-depot (attribute)
+     "Start a Sly REPL configured with a Lisp matching a derivation
+     from the depot.
+
+     The derivation invokes nix.buildLisp.sbclWith and is built
+     asynchronously. The build output is included in the error
+     thrown on build failures."
+
+     (interactive "sAttribute: ")
+     (lexical-let* ((outbuf (get-buffer-create (format "*depot-out/%s*" attribute)))
+                    (errbuf (get-buffer-create (format "*depot-errors/%s*" attribute)))
+                    (expression (format "(import <depot> {}).%s.repl" attribute))
+                    (command (list "nix-build" "--no-out-link" "-I" (format "depot=%s" tvl-depot-path) "-E" expression)))
+       (message "Acquiring Lisp for <depot>.%s" attribute)
+       (make-process :name (format "depot-nix-build/%s" attribute)
+                     :buffer outbuf
+                     :stderr errbuf
+                     :command command
+                     :sentinel
+                     (lambda (process event)
+                       (unwind-protect
+                           (pcase event
+                             ("finished\n"
+                              (let* ((outpath (s-trim (with-current-buffer outbuf (buffer-string))))
+                                     (lisp-path (s-concat outpath "/bin/sbcl")))
+                                (message "Acquired Lisp for <depot>.%s at %s" attribute lisp-path)
+                                (sly lisp-path)))
+                             (_ (with-current-buffer errbuf
+                                  (error "Failed to build '%s':\n%s" attribute (buffer-string)))))
+                         (kill-buffer outbuf)
+                         (kill-buffer errbuf)))))))
 
 (provide 'tvl)
 ;;; tvl.el ends here
