@@ -90,7 +90,8 @@
 
 (use-package undo-tree
   :config
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  (setq undo-tree-auto-save-history t))
 
 (use-package magit
   :after evil
