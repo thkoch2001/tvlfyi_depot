@@ -44,7 +44,10 @@
   (mouse-wheel-mode t)
   (blink-cursor-mode -1))
 
-;; TODO(sterni): prevent some remaining backup files
+;; /tmp is a tmpfs, but we may want to recover from power loss
+(custom-set-variables
+ `(temporary-file-directory ,(concat (getenv "HOME") "/.emacs/tmp")))
+
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 (setq backup-directory-alist
