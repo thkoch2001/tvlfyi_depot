@@ -81,6 +81,24 @@
       "parentUuid": "8a392d22_fba9ff5d",
       "revId": "afce70f3e139071bffdd3e7dce4fb6a1e34039fc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da3cfc36_6c760633",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T10:19:40Z",
+      "side": 1,
+      "message": "I guess it is not strictly necessary, seeing the following CLs, but shouldn\u0027t hurt either.",
+      "parentUuid": "5a60cb75_ba646393",
+      "revId": "afce70f3e139071bffdd3e7dce4fb6a1e34039fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

@@ -16,6 +16,29 @@
       "message": "This should",
       "revId": "fd5fcbec7fdc08eff754e5f3f13f32fe6ecae03c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0f79711_075ac3d4",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 19
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T10:19:40Z",
+      "side": 1,
+      "message": "Maybe it\u0027d be cleaner to add an `extraCommands` (or `postBuild`?) argument to `mkPipeline`, so we can inject this in the same drv without needing a wrapper. Could also be useful for downstream consumers in principle, e.g. to run json2yaml if you want proper™ yaml or something along those lines.",
+      "range": {
+        "startLine": 28,
+        "startChar": 8,
+        "endLine": 28,
+        "endChar": 22
+      },
+      "revId": "fd5fcbec7fdc08eff754e5f3f13f32fe6ecae03c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
