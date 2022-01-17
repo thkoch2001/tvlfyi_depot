@@ -41,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a82bd888_33f54f9f",
+        "filename": "ops/pipelines/fetch-parent-targets.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-17T10:05:35Z",
+      "side": 1,
+      "message": "It\u0027s what Buildkite\u0027s own scripts use, so I think it is guaranteed, but I haven\u0027t seen it written down anywhere explicitly.",
+      "parentUuid": "07712c28_d4907899",
+      "range": {
+        "startLine": 18,
+        "startChar": 17,
+        "endLine": 18,
+        "endChar": 23
+      },
+      "revId": "125d2401d7e63352623d0dbb2eeaf82f76bc4922",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7ba879cc_78a0e488",
