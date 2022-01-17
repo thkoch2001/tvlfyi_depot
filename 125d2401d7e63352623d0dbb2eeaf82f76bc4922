@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d5107b0_046177b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-17T08:59:59Z",
+      "side": 1,
+      "message": "Note that the build of this CL will use fallback behaviour (build everything) until cl/3662 is submitted, since there are no builds with drvmap structures on canon.",
+      "revId": "125d2401d7e63352623d0dbb2eeaf82f76bc4922",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
