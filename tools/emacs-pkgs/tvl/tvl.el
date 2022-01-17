@@ -135,11 +135,8 @@ passes. This is potentially dangerous, use with care."
                       (cdr cl-to-refs)))))
                (propertize (car cl-to-refs) 'ref latest-patchset-ref)))
            cl-number-to-refs)))
-    (get-text-property
-     0
-     'ref
-     (magit-completing-read
-      prompt cl-numbers nil t nil 'magit-cl-history))))
+    (magit-completing-read
+     prompt cl-numbers nil t nil 'magit-cl-history)))
 
 (transient-define-suffix magit-gerrit-checkout (remote cl-refspec)
   "Prompt for a CL number and checkout the latest patchset of that CL with
