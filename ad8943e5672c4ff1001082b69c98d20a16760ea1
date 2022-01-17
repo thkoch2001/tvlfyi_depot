@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a61e5594_cf391101",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T10:05:58Z",
+      "side": 1,
+      "message": "it\u0027s a bit confusing that this is named the same as the *path* to the parentTargetMap passed in at the top level, OTOH this is probably not as bad as in the CL view since they are separate files…",
+      "range": {
+        "startLine": 51,
+        "startChar": 23,
+        "endLine": 51,
+        "endChar": 38
+      },
+      "revId": "ad8943e5672c4ff1001082b69c98d20a16760ea1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d180e45d_9289aa51",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T10:05:58Z",
+      "side": 1,
+      "message": "We no longer emit a reason for skipping? May be fine, I personally never knew where that would be displayed.",
+      "revId": "ad8943e5672c4ff1001082b69c98d20a16760ea1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "021bef44_e3f78be0",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T10:05:58Z",
+      "side": 1,
+      "message": "An alternative design could be to make this file return a function taking a parentTargetMap after being imported by readTree. `nix-build` should then be able to supply the path via `--arg(str)` as well (see e.g. //users/sterni/nixpkgs-crate-holes).\n\nThis would have the advantage that we don\u0027t need to add a global argument which is only used in one place. In principle though, either is fine to me.",
+      "range": {
+        "startLine": 3,
+        "startChar": 15,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "ad8943e5672c4ff1001082b69c98d20a16760ea1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
