@@ -71,6 +71,7 @@ with lib;
   in {
     bbbg.file = secret "bbbg";
     cloudflare.file = secret "cloudflare";
+    ddclient-password.file = secret "ddclient-password";
   };
 
   services.depot.auto-deploy = {
@@ -137,23 +138,8 @@ with lib;
     zone = "gws.fyi";
     protocol = "cloudflare";
     username = "root@gws.fyi";
+    passwordFile = "/run/agenix/ddclient-password";
     quiet = true;
-  };
-
-  systemd.services.ddclient.serviceConfig = {
-    EnvironmentFile = "/run/agenix/cloudflare";
-    DynamicUser = lib.mkForce false;
-    ExecStart = lib.mkForce (
-      let runtimeDir =
-            config.systemd.services.ddclient.serviceConfig.RuntimeDirectory;
-      in pkgs.writeShellScript "ddclient" ''
-        set -eo pipefail
-
-        ${pkgs.gnused}/bin/sed -i -s s/password=/password=$CLOUDFLARE_API_KEY/ /run/${runtimeDir}/ddclient.conf
-        exec ${pkgs.ddclient}/bin/ddclient \
-          -file /run/${runtimeDir}/ddclient.conf \
-          -login=$CLOUDFLARE_EMAIL \
-      '');
   };
 
   security.acme.certs."metrics.gws.fyi" = {
