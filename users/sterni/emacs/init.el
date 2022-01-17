@@ -49,6 +49,8 @@
       `((".*" ,temporary-file-directory t)))
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
+(setq undo-tree-history-directory-alist
+      `((".*" . ,temporary-file-directory)))
 (setq backup-by-copying t)
 (setq create-lockfiles nil)
 
@@ -90,7 +92,8 @@
 
 (use-package undo-tree
   :config
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  (setq undo-tree-auto-save-history t))
 
 (use-package magit
   :after evil
