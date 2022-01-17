@@ -16,6 +16,52 @@
       "message": "Note that the build of this CL will use fallback behaviour (build everything) until cl/3662 is submitted, since there are no builds with drvmap structures on canon.",
       "revId": "125d2401d7e63352623d0dbb2eeaf82f76bc4922",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07712c28_d4907899",
+        "filename": "ops/pipelines/fetch-parent-targets.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T10:03:52Z",
+      "side": 1,
+      "message": "Is this guaranteed? I checked Buildkite docs, my guess would be that they just vanilla clone the repository, so I guess the remote would always be origin?",
+      "range": {
+        "startLine": 18,
+        "startChar": 17,
+        "endLine": 18,
+        "endChar": 23
+      },
+      "revId": "125d2401d7e63352623d0dbb2eeaf82f76bc4922",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ba879cc_78a0e488",
+        "filename": "ops/pipelines/fetch-parent-targets.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T10:03:52Z",
+      "side": 1,
+      "message": "Would be cool to have something more readable and neater than these ad-hoc curls at some point in the future.",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 8
+      },
+      "revId": "125d2401d7e63352623d0dbb2eeaf82f76bc4922",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
