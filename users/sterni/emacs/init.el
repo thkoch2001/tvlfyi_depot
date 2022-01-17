@@ -54,6 +54,10 @@
 (setq backup-by-copying t)
 (setq create-lockfiles nil)
 
+;; save history
+(savehist-mode)
+(setq savehist-additional-variables '(search-ring regexp-search-ring magit-cl-history))
+
 ;; buffers
 ;; unique component should come first for better completion
 (setq uniquify-buffer-name-style 'forward)
