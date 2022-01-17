@@ -1,13 +1,8 @@
 { pkgs, depot, ... }:
 
 let
-  inherit (builtins) fetchGit path toJSON;
+  inherit (builtins) path toJSON;
   inherit (depot.users.wpcarro.emacs) initEl runScript;
-
-  elispLintSrc = fetchGit {
-    url = "https://github.com/gonewest818/elisp-lint";
-    rev = "2b645266be8010a6a49c6d0ebf6a3ad5bd290ff4";
-  };
 
   pipeline.steps = [
     {
