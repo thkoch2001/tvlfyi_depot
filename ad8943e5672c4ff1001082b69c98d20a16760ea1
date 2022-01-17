@@ -41,6 +41,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4442673f_be20a816",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-17T10:27:54Z",
+      "side": 1,
+      "message": "It\u0027s displayed somewhere in a mouseover hover box. It might actually make sense to have it, will add it again since there is a semantic difference to before.",
+      "parentUuid": "d180e45d_9289aa51",
+      "revId": "ad8943e5672c4ff1001082b69c98d20a16760ea1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "021bef44_e3f78be0",
