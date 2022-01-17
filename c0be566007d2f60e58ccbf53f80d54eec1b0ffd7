@@ -16,6 +16,24 @@
       "message": "it\u0027s set as \u0027ref (not \u0027refs) right here",
       "revId": "c0be566007d2f60e58ccbf53f80d54eec1b0ffd7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "651b6145_fe7fb334",
+        "filename": "tools/emacs-pkgs/tvl/tvl.el",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T13:18:33Z",
+      "side": 1,
+      "message": "Hmmm, right. Somehow the property gets lost for me always, i.e. magit-read-cl will always return nil for me.",
+      "parentUuid": "41f88e35_9ce4b25a",
+      "revId": "c0be566007d2f60e58ccbf53f80d54eec1b0ffd7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
