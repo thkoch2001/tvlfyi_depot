@@ -67,6 +67,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8e1484b0_945cdc76",
+        "filename": "ops/pipelines/fetch-parent-targets.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T10:24:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a82bd888_33f54f9f",
+      "range": {
+        "startLine": 18,
+        "startChar": 17,
+        "endLine": 18,
+        "endChar": 23
+      },
+      "revId": "125d2401d7e63352623d0dbb2eeaf82f76bc4922",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7ba879cc_78a0e488",
         "filename": "ops/pipelines/fetch-parent-targets.sh",
         "patchSetId": 20
