@@ -137,7 +137,7 @@ passes. This is potentially dangerous, use with care."
            cl-number-to-refs)))
     (get-text-property
      0
-     'ref
+     'refs
      (magit-completing-read
       prompt cl-numbers nil t nil 'magit-cl-history))))
 
