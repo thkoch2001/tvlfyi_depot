@@ -46,6 +46,30 @@
       },
       "revId": "9035196271e49edcc753e20ffdd3ef5d654dcf12",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e12558b_603e88cd",
+        "filename": "nix/writeExecline/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T10:27:38Z",
+      "side": 1,
+      "message": "Why not right away?",
+      "parentUuid": "45852a9a_43ad148a",
+      "range": {
+        "startLine": 24,
+        "startChar": 2,
+        "endLine": 24,
+        "endChar": 6
+      },
+      "revId": "9035196271e49edcc753e20ffdd3ef5d654dcf12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
