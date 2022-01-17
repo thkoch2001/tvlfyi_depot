@@ -39,6 +39,30 @@
       },
       "revId": "fd5fcbec7fdc08eff754e5f3f13f32fe6ecae03c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e61507f_6dbb57cd",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 19
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-17T10:26:03Z",
+      "side": 1,
+      "message": "Ack. I have some plans for streamlining some of this stuff for downstream consumers, but I\u0027ll do that later.",
+      "parentUuid": "a0f79711_075ac3d4",
+      "range": {
+        "startLine": 28,
+        "startChar": 8,
+        "endLine": 28,
+        "endChar": 22
+      },
+      "revId": "fd5fcbec7fdc08eff754e5f3f13f32fe6ecae03c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

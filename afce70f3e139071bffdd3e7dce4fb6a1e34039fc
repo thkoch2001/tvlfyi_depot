@@ -99,6 +99,24 @@
       "parentUuid": "5a60cb75_ba646393",
       "revId": "afce70f3e139071bffdd3e7dce4fb6a1e34039fc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c7d2dcc_216c506d",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-17T10:26:03Z",
+      "side": 1,
+      "message": "It actually will become necessary for another use-case (release diffing), where more exact comparisons are needed (i.e. create the drvmap if we don\u0027t have it \"cached\").",
+      "parentUuid": "da3cfc36_6c760633",
+      "revId": "afce70f3e139071bffdd3e7dce4fb6a1e34039fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
