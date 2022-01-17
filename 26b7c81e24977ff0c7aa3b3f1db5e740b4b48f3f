@@ -16,6 +16,24 @@
       "message": "Does this mean tvl.el needs to be loaded after sly?",
       "revId": "26b7c81e24977ff0c7aa3b3f1db5e740b4b48f3f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf6c0492_a991fdf6",
+        "filename": "tools/emacs-pkgs/tvl/tvl.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-17T12:29:10Z",
+      "side": 1,
+      "message": "It shouldn\u0027t:\n\n\u003e Arrange that if FILE is loaded, FORM will be run immediately afterwards.\n\u003e If FILE is already loaded, evaluate FORM right now.",
+      "parentUuid": "465410a3_4ffa193d",
+      "revId": "26b7c81e24977ff0c7aa3b3f1db5e740b4b48f3f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
