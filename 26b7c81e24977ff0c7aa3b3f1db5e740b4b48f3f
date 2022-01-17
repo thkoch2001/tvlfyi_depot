@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "465410a3_4ffa193d",
+        "filename": "tools/emacs-pkgs/tvl/tvl.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-17T12:26:38Z",
+      "side": 1,
+      "message": "Does this mean tvl.el needs to be loaded after sly?",
+      "revId": "26b7c81e24977ff0c7aa3b3f1db5e740b4b48f3f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
