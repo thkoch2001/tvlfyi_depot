@@ -31,8 +31,8 @@ Below I have outlined a few projects that you might find interesting.
 
 ### Google Machine
 
-- ensure `~/google-briefcase` exists
-- read `~/google-briefcase/README.md`
+- ensure `/google-briefcase` exists
+- read `/google-briefcase/README.md`
 
 ### NixOS Machine
 
