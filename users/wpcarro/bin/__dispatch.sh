@@ -12,6 +12,12 @@ case "${TARGET_TOOL}" in
   deploy-diogenes)
     attr="users.wpcarro.nixos.deploy-diogenes"
     ;;
+  import-gpg)
+    attr="users.wpcarro.configs.import-gpg"
+    ;;
+  export-gpg)
+    attr="users.wpcarro.configs.export-gpg"
+    ;;
   *)
     echo "The tool '${TARGET_TOOL}' is currently not installed in this repository."
     exit 1
