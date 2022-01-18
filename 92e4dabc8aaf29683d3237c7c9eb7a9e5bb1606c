@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d0e3802_e206f246",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-18T16:49:06Z",
+      "side": 1,
+      "message": "Particularly curious about the bikeshed of how to name this. \"stack\" may not be ideal. Maybe \"external\" instead? Feel free to dump random opinions on me 😊",
+      "revId": "92e4dabc8aaf29683d3237c7c9eb7a9e5bb1606c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
