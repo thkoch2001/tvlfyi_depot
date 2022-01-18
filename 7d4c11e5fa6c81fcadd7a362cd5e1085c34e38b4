@@ -39,6 +39,30 @@
       },
       "revId": "7d4c11e5fa6c81fcadd7a362cd5e1085c34e38b4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffd6abe7_c887ad08",
+        "filename": "ops/pipelines/fetch-parent-targets.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-18T11:44:48Z",
+      "side": 1,
+      "message": "The results are always in the order of builds, descending. We create builds in the order in which they hit canon (ensured by Gerrit), so this means that (unless there\u0027s some serious error or manual rebuild of specific commits) builds are in the order of these commits.",
+      "parentUuid": "9ee28bb6_364a3e2b",
+      "range": {
+        "startLine": 26,
+        "startChar": 71,
+        "endLine": 26,
+        "endChar": 131
+      },
+      "revId": "7d4c11e5fa6c81fcadd7a362cd5e1085c34e38b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
