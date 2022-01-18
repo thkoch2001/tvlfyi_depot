@@ -1,4 +1,4 @@
-{ pkgs, depot, ... }:
+{ depot, pkgs, lib, ... }:
 
 # TODO(wpcarro): See if it's possible to expose emacsclient on PATH, so that I
 # don't need to depend on wpcarros-emacs and emacs in my NixOS configurations.
@@ -7,7 +7,8 @@ let
   inherit (depot.third_party.nixpkgs) emacsPackagesGen emacs27;
   inherit (depot.users) wpcarro;
   inherit (pkgs) writeShellScript writeShellScriptBin;
-  inherit (pkgs.lib.strings) concatStringsSep makeBinPath;
+  inherit (lib) mapAttrsToList;
+  inherit (lib.strings) concatStringsSep makeBinPath;
 
   emacsBinPath = makeBinPath (
     wpcarro.common.shell-utils ++
@@ -146,12 +147,16 @@ let
     "${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
   ];
 
-  withEmacsPath = { emacsBin }:
+  # Transform an attrset into "export k=v" statements.
+  makeEnvVars = env: concatStringsSep "\n"
+    (mapAttrsToList (k: v: "export ${k}=\"${v}\"") env);
+
+  withEmacsPath = { emacsBin, env ? {} }:
     writeShellScriptBin "wpcarros-emacs" ''
       export XMODIFIERS=emacs
-      export GOOGLE_BRIEFCASE="$HOME/google-briefcase"
       export PATH="${emacsBinPath}:$PATH"
       export EMACSLOADPATH="${loadPath}"
+      ${makeEnvVars env}
       exec ${emacsBin} \
         --debug-init \
         --no-init-file \
