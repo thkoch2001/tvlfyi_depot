@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ee28bb6_364a3e2b",
+        "filename": "ops/pipelines/fetch-parent-targets.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2022-01-18T11:10:39Z",
+      "side": 1,
+      "message": "is it ensured that query returns it in a correct order?",
+      "range": {
+        "startLine": 26,
+        "startChar": 71,
+        "endLine": 26,
+        "endChar": 131
+      },
+      "revId": "7d4c11e5fa6c81fcadd7a362cd5e1085c34e38b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
