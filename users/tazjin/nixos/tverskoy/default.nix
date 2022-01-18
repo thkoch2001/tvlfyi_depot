@@ -220,6 +220,12 @@ in lib.fix(self: {
   # Do not restart the display manager automatically
   systemd.services.display-manager.restartIfChanged = lib.mkForce false;
 
+  # If something needs more than 10s to stop it should probably be
+  # killed.
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=10s
+  '';
+
   time.timeZone = "Europe/Moscow";
 
   users.users.tazjin = {
