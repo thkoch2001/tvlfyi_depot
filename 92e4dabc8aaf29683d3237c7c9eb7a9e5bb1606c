@@ -39,6 +39,30 @@
       },
       "revId": "92e4dabc8aaf29683d3237c7c9eb7a9e5bb1606c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccf44b2b_adb5d914",
+        "filename": "stack/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-18T17:08:35Z",
+      "side": 1,
+      "message": "It doesn\u0027t, the tree looks like this:\n\n .\n ├── besadii\n │   ├── default.nix\n │   └── main.go\n ├── buildGo\n │   ├── default.nix\n │   ├── example\n │   ├── external\n │   ├── proto.nix\n │   └── README.md\n ├── buildkite\n │   └── default.nix\n ├── default.nix\n ├── LICENSE\n ├── nixpkgs\n │   └── default.nix\n ├── README.md\n ├── readTree\n │   ├── default.nix\n │   ├── README.md\n │   └── tests\n └── workspace.josh",
+      "parentUuid": "4276545d_555aa49f",
+      "range": {
+        "startLine": 19,
+        "startChar": 44,
+        "endLine": 20,
+        "endChar": 45
+      },
+      "revId": "92e4dabc8aaf29683d3237c7c9eb7a9e5bb1606c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
