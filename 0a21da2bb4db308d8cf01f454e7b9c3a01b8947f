@@ -16,6 +16,24 @@
       "message": "IIUC this will be uploaded before the actual build having complied.  \n\nIf this is true:\n\nUnlikely but possible we may have broken HEAD Branch. Then the following cl verification may be faulty optimized. \n\nMoving the upload of this file below line 61:\n\nif (( $$FAILED_JOBS \u003e 0 )); then\n  exit 1\nfi",
       "revId": "0a21da2bb4db308d8cf01f454e7b9c3a01b8947f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aebd0866_74b00088",
+        "filename": "ops/pipelines/static-pipeline.yaml",
+        "patchSetId": 20
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-18T10:44:51Z",
+      "side": 1,
+      "message": "This is true, but the data (target mapping) is still correct. I think making the upload of the drvmap conditional is the wrong fix. What I would suggest instead is adding a filter to the GraphQL query on retrieval to avoid broken builds.",
+      "parentUuid": "ee72bdcd_38c1647f",
+      "revId": "0a21da2bb4db308d8cf01f454e7b9c3a01b8947f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
