@@ -22,6 +22,30 @@
       },
       "revId": "1841d27635b4b141caf69c141b3e39cac3e674aa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3122bdca_ff0ed39b",
+        "filename": "third_party/nixpkgs/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-18T17:15:12Z",
+      "side": 1,
+      "message": "I didn\u0027t know it\u0027s coupled to ecl-static in this way. We probably want to change buildLisp so it works with a vanilla nixpkgs anyways (like buildGo does), but that\u0027s not something that changes with this CL either way.",
+      "parentUuid": "e646e128_5c41b7c9",
+      "range": {
+        "startLine": 73,
+        "startChar": 11,
+        "endLine": 73,
+        "endChar": 24
+      },
+      "revId": "1841d27635b4b141caf69c141b3e39cac3e674aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
