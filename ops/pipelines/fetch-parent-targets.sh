@@ -23,7 +23,7 @@ function most_relevant_builds {
     curl 'https://graphql.buildkite.com/v1' \
          --silent \
          -H "Authorization: Bearer $(cat /run/agenix/buildkite-graphql-token)" \
-         -d "{\"query\": \"query { pipeline(slug: \\\"tvl/depot\\\") { builds(commit: [\\\"$FIRST\\\",\\\"$SECOND\\\",\\\"$THIRD\\\"]) { edges { node { uuid }}}}}\"}" | \
+         -d "{\"query\": \"query { pipeline(slug: \\\"tvl/depot\\\") { builds(commit:[\\\"$FIRST\\\",\\\"$SECOND\\\",\\\"$THIRD\\\"],state:[PASSED, BLOCKED]) { edges { node { uuid }}}}}\"}" | \
          jq -r '.data.pipeline.builds.edges[] | .node.uuid'
 }
 
