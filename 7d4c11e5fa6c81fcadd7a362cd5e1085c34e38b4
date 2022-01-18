@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ddeaacb_2779d91c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-18T11:29:11Z",
+      "side": 1,
+      "message": "I think hiding a broken canon is a good thing when the CL doesn\u0027t touch anything that is broken. E.g. you shouldn\u0027t be required to fix a flaky test on canon (in say a user dir to come up with the extremest example) before submitting completely unrelated changes.\n\nEspecially if some specific CRFO is required for a fix, this could mean that CL submission is blocked on a single person.",
+      "revId": "7d4c11e5fa6c81fcadd7a362cd5e1085c34e38b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ee28bb6_364a3e2b",
         "filename": "ops/pipelines/fetch-parent-targets.sh",
         "patchSetId": 1
