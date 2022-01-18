@@ -356,6 +356,7 @@ in lib.fix(self: {
           ".local/share/audacity"
           ".local/share/direnv"
           ".local/share/fish"
+          ".local/share/keyrings"
           ".local/share/zoxide"
           ".mozilla/firefox"
           ".password-store"
