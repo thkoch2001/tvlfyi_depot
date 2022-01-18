@@ -5,8 +5,8 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "esrlabs";
     repo = "josh";
-    rev = "4a70f2914260066b2db44f4cabe9b80acdd556af";
-    sha256 = "0gwn3daj24538h5ddksvnyhq4lyjh0br9k49jhbd7r1sm6ly2cwl";
+    rev = "69dc986e506ba5631c8bbf52835da076a18ec8dc";
+    hash = "sha256:0ybc6ivjkm7bchaszs9lhbl1gbjnyhwq7a3vw6jml3ama84l52lb";
   };
 in depot.third_party.naersk.buildPackage {
   inherit src;
@@ -22,8 +22,4 @@ in depot.third_party.naersk.buildPackage {
     "-p" "josh-proxy"
     "-p" "josh-ui"
   ];
-
-  overrideMain = x: {
-    patches = [ ./0001-replace-mentions-of-master-with-canon.patch ];
-  };
 }
