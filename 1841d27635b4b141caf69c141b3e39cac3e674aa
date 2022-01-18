@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e646e128_5c41b7c9",
+        "filename": "third_party/nixpkgs/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-18T16:54:59Z",
+      "side": 1,
+      "message": "Hmmm, this /does/ stop us from exposing buildLisp, which kinda is sad.",
+      "range": {
+        "startLine": 73,
+        "startChar": 11,
+        "endLine": 73,
+        "endChar": 24
+      },
+      "revId": "1841d27635b4b141caf69c141b3e39cac3e674aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
