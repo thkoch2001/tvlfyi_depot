@@ -10,6 +10,7 @@ alias la 'exa --long --all --sort=type'
 alias gst 'git status'
 alias gsh 'git show HEAD'
 alias gpf 'git push --force-with-lease'
+alias glp 'git log --pretty --oneline --graph'
 alias gd 'git diff'
 alias edit 'emacsclient -n'
 # fs navigation
