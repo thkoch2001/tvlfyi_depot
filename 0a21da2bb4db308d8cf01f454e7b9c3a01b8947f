@@ -34,6 +34,24 @@
       "parentUuid": "ee72bdcd_38c1647f",
       "revId": "0a21da2bb4db308d8cf01f454e7b9c3a01b8947f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43725fdb_aa38b1a7",
+        "filename": "ops/pipelines/static-pipeline.yaml",
+        "patchSetId": 20
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-18T11:08:33Z",
+      "side": 1,
+      "message": "That would absolutely work.",
+      "parentUuid": "aebd0866_74b00088",
+      "revId": "0a21da2bb4db308d8cf01f454e7b9c3a01b8947f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
