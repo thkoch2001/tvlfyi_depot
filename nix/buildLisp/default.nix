@@ -167,7 +167,7 @@ let
   # and then executes expression to check its result
   testSuite = { name, expression, srcs, deps ? [], native ? [], implementation }:
     let
-      lispNativeDeps = allNative native deps;
+      lispNativeDeps = allNative native lispDeps;
       lispDeps = allDeps implementation (implFilter implementation deps);
       filteredSrcs = implFilter implementation srcs;
     in runCommandNoCC name {
