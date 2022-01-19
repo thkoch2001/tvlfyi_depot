@@ -63,6 +63,29 @@
       },
       "revId": "92e4dabc8aaf29683d3237c7c9eb7a9e5bb1606c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4666503_beb93bea",
+        "filename": "stack/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T08:19:34Z",
+      "side": 1,
+      "message": "Should a short explanation of why be added?",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 61
+      },
+      "revId": "92e4dabc8aaf29683d3237c7c9eb7a9e5bb1606c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
