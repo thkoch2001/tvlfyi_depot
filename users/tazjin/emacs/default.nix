@@ -1,12 +1,5 @@
 # This file builds an Emacs pre-configured with the packages I need
 # and my personal Emacs configuration.
-#
-# On NixOS machines, this Emacs currently does not support
-# Imagemagick, see https://github.com/NixOS/nixpkgs/issues/70631.
-#
-# Forcing Emacs to link against Imagemagick currently causes libvterm
-# to segfault, which is a lot less desirable than not having telega
-# render images correctly.
 { lib, pkgs, ... }:
 
 pkgs.makeOverridable({ emacs ? pkgs.emacsGcc }:
