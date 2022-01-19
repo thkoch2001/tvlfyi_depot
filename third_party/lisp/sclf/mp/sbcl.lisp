@@ -24,8 +24,8 @@
 (in-package :sclf)
 
 (defstruct (process
-	     (:constructor %make-process)
-	     (:predicate processp))
+             (:constructor %make-process)
+             (:predicate processp))
   name
   state
   whostate
@@ -53,10 +53,10 @@
 (defmacro get-mutex (mutex &optional (wait t))
   `(
     #+#.(cl:if (cl:find-symbol "GRAB-MUTEX" "SB-THREAD") '(and) '(or))
-	sb-thread:grab-mutex
-	#-#.(cl:if (cl:find-symbol "GRAB-MUTEX" "SB-THREAD") '(and) '(or))
-	sb-thread:get-mutex
-	,mutex :waitp ,wait))
+        sb-thread:grab-mutex
+        #-#.(cl:if (cl:find-symbol "GRAB-MUTEX" "SB-THREAD") '(and) '(or))
+        sb-thread:get-mutex
+        ,mutex :waitp ,wait))
 
 (defvar *permanent-queue*
   (sb-thread:make-mutex :name "Lock for disabled threads"))
@@ -65,7 +65,7 @@
 
 (defun make-process (function &key name)
   (let ((p (%make-process :name name
-			  :function function)))
+                          :function function)))
     (sb-thread:with-mutex (*all-processes-lock*)
       (pushnew p *all-processes*))
     (restart-process p)))
@@ -73,7 +73,7 @@
 (defun process-kill-thread (process)
   (let ((thread (process-thread process)))
     (when (and thread
-	       (sb-thread:thread-alive-p thread))
+               (sb-thread:thread-alive-p thread))
       (assert (not (eq thread sb-thread:*current-thread*)))
       (sb-thread:terminate-thread thread)
       ;; Wait until all the clean-up forms are done.
@@ -85,13 +85,13 @@
 
 (defun restart-process (p)
   (labels ((boing ()
-	     (let ((*current-process* p)
-		   (function (process-function p)))
-	       (when function
-		 (funcall function)))))
+             (let ((*current-process* p)
+                   (function (process-function p)))
+               (when function
+                 (funcall function)))))
     (process-kill-thread p)
     (when (setf (process-thread p)
-		(sb-thread:make-thread #'boing :name (process-name p)))
+                (sb-thread:make-thread #'boing :name (process-name p)))
       p)))
 
 (defun destroy-process (process)
@@ -115,26 +115,26 @@
 (defun process-wait (reason predicate)
   (let ((old-state (process-whostate *current-process*)))
     (unwind-protect
-	 (progn
-	   (setf old-state (process-whostate *current-process*)
-		 (process-whostate *current-process*) reason)
-	   (until (funcall predicate)
-	     (process-yield)))
+         (progn
+           (setf old-state (process-whostate *current-process*)
+                 (process-whostate *current-process*) reason)
+           (until (funcall predicate)
+             (process-yield)))
       (setf (process-whostate *current-process*) old-state))))
 
 (defun process-wait-with-timeout (reason timeout predicate)
   (let ((old-state (process-whostate *current-process*))
-	(end-time (+ (get-universal-time) timeout)))
+        (end-time (+ (get-universal-time) timeout)))
     (unwind-protect
-	 (progn
-	   (setf old-state (process-whostate *current-process*)
-		 (process-whostate *current-process*) reason)
-	   (loop 
-	      for result = (funcall predicate)
-	      until (or result
-			(> (get-universal-time) end-time))
-	      do (process-yield)
-	      finally (return result)))
+         (progn
+           (setf old-state (process-whostate *current-process*)
+                 (process-whostate *current-process*) reason)
+           (loop 
+              for result = (funcall predicate)
+              until (or result
+                        (> (get-universal-time) end-time))
+              do (process-yield)
+              finally (return result)))
       (setf (process-whostate *current-process*) old-state))))
 
 (defun process-interrupt (process function)
@@ -175,13 +175,13 @@
   (let ((old-state (gensym "OLD-STATE")))
     `(sb-thread:with-mutex (,place :wait-p ,wait)
        (let (,old-state)
-	 (unwind-protect
-	      (progn
-		(when ,state
-		  (setf ,old-state (process-state *current-process*))
-		  (setf (process-state *current-process*) ,state))
-		,@body)
-	   (setf (process-state *current-process*) ,old-state))))))
+         (unwind-protect
+              (progn
+                (when ,state
+                  (setf ,old-state (process-state *current-process*))
+                  (setf (process-state *current-process*) ,state))
+                ,@body)
+           (setf (process-state *current-process*) ,old-state))))))
 
 
 (defun make-recursive-lock (&optional name)
@@ -193,24 +193,24 @@
   `(sb-thread:with-recursive-lock (,place)
     (let (,old-state)
       (unwind-protect
-	   (progn
-	     (when ,state
-	       (setf ,old-state (process-state *current-process*))
-	       (setf (process-state *current-process*) ,state))
-	     ,@body)
-	(setf (process-state *current-process*) ,old-state))))))
+           (progn
+             (when ,state
+               (setf ,old-state (process-state *current-process*))
+               (setf (process-state *current-process*) ,state))
+             ,@body)
+        (setf (process-state *current-process*) ,old-state))))))
 
 (defun make-condition-variable () (sb-thread:make-waitqueue))
 
 (defun condition-wait (cv lock &optional timeout)
   (if timeout
       (handler-case 
-	  (sb-ext:with-timeout timeout
-	    (sb-thread:condition-wait cv lock)
-	    t)
-	(sb-ext:timeout (c)
-	  (declare (ignore c))
-	  nil))
+          (sb-ext:with-timeout timeout
+            (sb-thread:condition-wait cv lock)
+            t)
+        (sb-ext:timeout (c)
+          (declare (ignore c))
+          nil))
       (progn (sb-thread:condition-wait cv lock) t)))
 
 (defun condition-notify (cv)

@@ -24,5 +24,5 @@
 
 (defpackage :mime4cl-tests
   (:use :common-lisp
-	:rtest :mime4cl)
+        :rtest :mime4cl)
   (:export))

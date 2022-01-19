@@ -33,28 +33,28 @@
   (be class (class-of object)
     (pprint-logical-block (stream (copy-list (class-slots class)) :prefix "#.(" :suffix ")")
       (flet ((spc ()
-	       (write-char #\space stream)))
-	(write 'reconstruct-object :stream stream)
-	(spc)
-	(write (class-name class) :stream stream :escape t :readably t :pretty t)
-	(pprint-exit-if-list-exhausted)
-	(spc)
-	(loop
-	   (be* slot (pprint-pop)
-		slot-name (slot-definition-name slot)
-		initarg (car (slot-definition-initargs slot))
-	     (when (and initarg
-			(slot-boundp object slot-name))
-	       (write initarg :stream stream)
-	       (spc)
-	       (when *print-pretty*
-		 (pprint-newline :miser stream))
-	       (write (slot-value object slot-name)
-		      :stream stream)
-	       (pprint-exit-if-list-exhausted)
-	       (if *print-pretty*
-		   (pprint-newline :linear stream)
-		   (spc)))))))))
+               (write-char #\space stream)))
+        (write 'reconstruct-object :stream stream)
+        (spc)
+        (write (class-name class) :stream stream :escape t :readably t :pretty t)
+        (pprint-exit-if-list-exhausted)
+        (spc)
+        (loop
+           (be* slot (pprint-pop)
+                slot-name (slot-definition-name slot)
+                initarg (car (slot-definition-initargs slot))
+             (when (and initarg
+                        (slot-boundp object slot-name))
+               (write initarg :stream stream)
+               (spc)
+               (when *print-pretty*
+                 (pprint-newline :miser stream))
+               (write (slot-value object slot-name)
+                      :stream stream)
+               (pprint-exit-if-list-exhausted)
+               (if *print-pretty*
+                   (pprint-newline :linear stream)
+                   (spc)))))))))
 
 (defmethod print-object ((object printable-object-mixin) stream)
   (if *print-readably*

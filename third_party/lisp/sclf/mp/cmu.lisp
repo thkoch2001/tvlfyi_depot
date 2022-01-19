@@ -30,14 +30,14 @@
 
 (defmacro with-lock-held ((lock &key whostate (wait t) timeout) &body forms)
   `(mp:with-lock-held (,lock ,(or whostate "Lock Wait")
-			     :wait wait
-			     ,@(when timeout (list :timeout timeout)))
+                             :wait wait
+                             ,@(when timeout (list :timeout timeout)))
      ,@forms))
 
 (defmacro with-recursive-lock-held ((lock &key wait timeout) &body forms)
   `(mp:with-lock-held (,lock
-		       ,@(when wait (list :wait wait))
-		       ,@(when timeout (list :timeout timeout)))
+                       ,@(when wait (list :wait wait))
+                       ,@(when timeout (list :timeout timeout)))
      ,@forms))
 
 (defstruct condition-variable
@@ -47,31 +47,31 @@
 
 (defun %release-lock (lock) ; copied from with-lock-held in multiproc.lisp
   #+i486 (kernel:%instance-set-conditional
-	  lock 2 mp:*current-process* nil)
+          lock 2 mp:*current-process* nil)
   #-i486 (when (eq (lock-process lock) mp:*current-process*)
-	   (setf (lock-process lock) nil)))
+           (setf (lock-process lock) nil)))
 
 (defun condition-wait (cv lock &optional timeout)
   (declare (ignore timeout))		;For now
   (loop
      (let ((cv-lock (condition-variable-lock cv)))
        (with-lock-held (cv-lock)
-	 (when (condition-variable-value cv)
-	   (setf (condition-variable-value cv) nil)
-	   (return-from condition-wait t))
-	 (setf (condition-variable-process-queue cv)
-	       (nconc (condition-variable-process-queue cv)
-		      (list mp:*current-process*)))
-	 (%release-lock lock))
+         (when (condition-variable-value cv)
+           (setf (condition-variable-value cv) nil)
+           (return-from condition-wait t))
+         (setf (condition-variable-process-queue cv)
+               (nconc (condition-variable-process-queue cv)
+                      (list mp:*current-process*)))
+         (%release-lock lock))
        (mp:process-add-arrest-reason mp:*current-process* cv)
        (let ((cv-val nil))
-	 (with-lock-held (cv-lock)
-	   (setq cv-val (condition-variable-value cv))
-	   (when cv-val
-	     (setf (condition-variable-value cv) nil)))
-	 (when cv-val
-	   (mp::lock-wait lock "waiting for condition variable lock")
-	   (return-from condition-wait t))))))
+         (with-lock-held (cv-lock)
+           (setq cv-val (condition-variable-value cv))
+           (when cv-val
+             (setf (condition-variable-value cv) nil)))
+         (when cv-val
+           (mp::lock-wait lock "waiting for condition variable lock")
+           (return-from condition-wait t))))))
 
 (defun condition-notify (cv)
   (with-lock-held ((condition-variable-lock cv))
@@ -79,12 +79,12 @@
       ;; The waiting process may have released the CV lock but not
       ;; suspended itself yet
       (when proc
-	(loop
-	 for activep = (mp:process-active-p proc)
-	 while activep
-	 do (mp:process-yield))
-	(setf (condition-variable-value cv) t)
-	(mp:process-revoke-arrest-reason proc cv))))
+        (loop
+         for activep = (mp:process-active-p proc)
+         while activep
+         do (mp:process-yield))
+        (setf (condition-variable-value cv) t)
+        (mp:process-revoke-arrest-reason proc cv))))
   ;; Give the other process a chance
   (mp:process-yield))
 
@@ -100,7 +100,7 @@
 (defun destroy-process (process)
   ;; silnetly ignore a process that is trying to destroy itself
   (unless (eq (mp:current-process)
-	      process)
+              process)
     (mp:destroy-process process)))
 
 (defun restart-process (process)

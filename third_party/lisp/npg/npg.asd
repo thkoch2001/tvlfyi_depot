@@ -44,12 +44,12 @@ left recursive rules."
    (:doc-file "COPYING")
    (:doc-file ".project")
    (:module :examples
-	    :components
-	    ((:sample-file "python")
-	     (:sample-file "vs-cobol-ii")))
+            :components
+            ((:sample-file "python")
+             (:sample-file "vs-cobol-ii")))
    (:module :src
-	    :components
-	    ((:file "package")
-	     (:file "common" :depends-on ("package"))
-	     (:file "define" :depends-on ("package" "common"))
-	     (:file "parser" :depends-on ("package" "common"))))))
+            :components
+            ((:file "package")
+             (:file "common" :depends-on ("package"))
+             (:file "define" :depends-on ("package" "common"))
+             (:file "parser" :depends-on ("package" "common"))))))

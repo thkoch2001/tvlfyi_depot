@@ -101,10 +101,10 @@
 
 (defun parser-make-mailbox (description address-list)
   (make-mailbox :description description
-		:user (car address-list)
-		:host (cadr address-list)
-		:domain (when (cddr address-list)
-			  (string-concat (cddr address-list) "."))))
+                :user (car address-list)
+                :host (cadr address-list)
+                :domain (when (cddr address-list)
+                          (string-concat (cddr address-list) "."))))
 
 
 (defun populate-grammar ()
@@ -164,7 +164,7 @@
 
 (deflazy define-grammar
   (let ((*package* #.*package*)
-	(*compile-print* (when npg::*debug* t)))
+        (*compile-print* (when npg::*debug* t)))
     (reset-grammar)
     (format t "~&creating e-mail address grammar...~%")
     (populate-grammar)
@@ -183,36 +183,36 @@
 
 (defun read-delimited-string (stream end-char &key nesting-start-char (escape-char #\\))
   (labels ((collect ()
-	     (with-output-to-string (out)
-	       (loop
-		  for c = (read-char stream nil)
-		  while (and c (not (char= c end-char)))
-		  do (cond ((char= c escape-char)
-			    (awhen (read-char stream nil)
-			      (write-char it out)))
-			   ((and nesting-start-char
-				 (char= c nesting-start-char))
-			    (write-char nesting-start-char out)
-			    (write-string (collect) out)
-			    (write-char end-char out))
-			   (t (write-char c out)))))))
+             (with-output-to-string (out)
+               (loop
+                  for c = (read-char stream nil)
+                  while (and c (not (char= c end-char)))
+                  do (cond ((char= c escape-char)
+                            (awhen (read-char stream nil)
+                              (write-char it out)))
+                           ((and nesting-start-char
+                                 (char= c nesting-start-char))
+                            (write-char nesting-start-char out)
+                            (write-string (collect) out)
+                            (write-char end-char out))
+                           (t (write-char c out)))))))
     (collect)))
 
 
 (defun read-string (cursor)
   (make-token :type 'string
-	      :value (read-delimited-string (cursor-stream cursor) #\")
-	      :position (incf (cursor-position cursor))))
+              :value (read-delimited-string (cursor-stream cursor) #\")
+              :position (incf (cursor-position cursor))))
 
 (defun read-domain-literal (cursor)
   (make-token :type 'domain-literal
-	      :value (read-delimited-string (cursor-stream cursor) #\])
-	      :position (incf (cursor-position cursor))))
+              :value (read-delimited-string (cursor-stream cursor) #\])
+              :position (incf (cursor-position cursor))))
 
 (defun read-comment (cursor)
   (make-token :type 'comment
-	      :value (read-delimited-string (cursor-stream cursor) #\) :nesting-start-char #\()
-	      :position (incf (cursor-position cursor))))
+              :value (read-delimited-string (cursor-stream cursor) #\) :nesting-start-char #\()
+              :position (incf (cursor-position cursor))))
 
 (declaim (inline atom-component-p))
 (defun atom-component-p (c)
@@ -221,40 +221,40 @@
 
 (defun read-atext (first-character cursor)
   (be string (with-output-to-string (out)
-	       (write-char first-character out)
-	       (loop
-		  for c = (read-char (cursor-stream cursor) nil)
-		  while (and c (atom-component-p c))
-		  do (write-char c out)
-		  finally (when c
-			    (unread-char c (cursor-stream cursor)))))
+               (write-char first-character out)
+               (loop
+                  for c = (read-char (cursor-stream cursor) nil)
+                  while (and c (atom-component-p c))
+                  do (write-char c out)
+                  finally (when c
+                            (unread-char c (cursor-stream cursor)))))
     (make-token :type 'atext
-		:value string
-		:position (incf (cursor-position cursor)))))
+                :value string
+                :position (incf (cursor-position cursor)))))
 
 (defmethod read-next-tokens ((cursor cursor))
   (flet ((make-keyword (c)
-	   (make-token :type 'keyword
-		       :value (string c)
-		       :position (incf (cursor-position cursor)))))
+           (make-token :type 'keyword
+                       :value (string c)
+                       :position (incf (cursor-position cursor)))))
     (be in (cursor-stream cursor)
       (loop
-	 for c = (read-char in nil)
-	 while c
-	 unless (whitespace-p c)
-	 return (list
-		 (cond ((char= #\( c)
-			(read-comment cursor))
-		       ((char= #\" c)
-			(read-string cursor))
-		       ((char= #\[ c)
-			(read-domain-literal cursor))
-		       ((find c "@.<>:;,")
-			(make-keyword c))
-		       (t
-			;; anything else is considered a text atom even
-			;; though it's just a single character
-			(read-atext c cursor))))))))
+         for c = (read-char in nil)
+         while c
+         unless (whitespace-p c)
+         return (list
+                 (cond ((char= #\( c)
+                        (read-comment cursor))
+                       ((char= #\" c)
+                        (read-string cursor))
+                       ((char= #\[ c)
+                        (read-domain-literal cursor))
+                       ((find c "@.<>:;,")
+                        (make-keyword c))
+                       (t
+                        ;; anything else is considered a text atom even
+                        ;; though it's just a single character
+                        (read-atext c cursor))))))))
 
 (defun analyse-string (string)
   "Return the list of tokens produced by a lexical analysis of
@@ -262,9 +262,9 @@ STRING.  These are the tokens that would be seen by the parser."
   (with-input-from-string (stream string)
     (be cursor (make-cursor :stream stream)
       (loop
-	 for tokens = (read-next-tokens cursor)
-	 until (endp tokens)
-	 append tokens))))
+         for tokens = (read-next-tokens cursor)
+         until (endp tokens)
+         append tokens))))
 
 (defun mailboxes-only (list-of-mailboxes-and-groups)
   "Return a flat list of MAILBOX-ADDRESSes from
@@ -273,10 +273,10 @@ by PARSE-ADDRESSES.  This turns out to be useful when your
 program is not interested in mailbox groups and expects the user
 addresses only."
   (mapcan #'(lambda (mbx)
-	      (if (typep mbx 'mailbox-group)
-		  (mbxg-mailboxes mbx)
-		  (list mbx)))
-	  list-of-mailboxes-and-groups))
+              (if (typep mbx 'mailbox-group)
+                  (mbxg-mailboxes mbx)
+                  (list mbx)))
+          list-of-mailboxes-and-groups))
 
 (defun parse-addresses (string &key no-groups)
   "Parse STRING and return a list of MAILBOX-ADDRESSes or
@@ -286,16 +286,16 @@ the group containers, if any."
   (be grammar (force define-grammar)
     (with-input-from-string (stream string)
       (be* cursor (make-cursor :stream stream)
-	   mailboxes (ignore-errors	; ignore parsing errors
-		       (parse grammar 'address-list cursor))
-	(if no-groups
-	    (mailboxes-only mailboxes)
-	    mailboxes)))))
+           mailboxes (ignore-errors	; ignore parsing errors
+                       (parse grammar 'address-list cursor))
+        (if no-groups
+            (mailboxes-only mailboxes)
+            mailboxes)))))
 
 (defun debug-addresses (string)
   "More or less like PARSE-ADDRESSES, but don't ignore parsing errors."
   (be grammar (force define-grammar)
     (with-input-from-string (stream string)
       (be cursor (make-cursor :stream stream)
-	(parse grammar 'address-list cursor)))))
+        (parse grammar 'address-list cursor)))))
 
