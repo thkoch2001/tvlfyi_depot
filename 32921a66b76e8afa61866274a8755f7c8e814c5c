@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e715adce_eb9c9a6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T08:00:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a48ae64f_f090d487",
+      "revId": "32921a66b76e8afa61866274a8755f7c8e814c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79500b77_41f5f6e2",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-01-19T07:47:14Z",
       "side": 1,
       "message": "extra \"text\"",
+      "range": {
+        "startLine": 150,
+        "startChar": 8,
+        "endLine": 150,
+        "endChar": 12
+      },
+      "revId": "32921a66b76e8afa61866274a8755f7c8e814c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c00570b8_2546fae8",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T08:00:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79500b77_41f5f6e2",
       "range": {
         "startLine": 150,
         "startChar": 8,
@@ -64,6 +106,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cae5b57a_b50dba0e",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T08:00:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28ec83ec_89ed1abb",
+      "range": {
+        "startLine": 154,
+        "startChar": 4,
+        "endLine": 154,
+        "endChar": 25
+      },
+      "revId": "32921a66b76e8afa61866274a8755f7c8e814c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "253fcaef_cdab419b",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-01-19T07:47:14Z",
       "side": 1,
       "message": "I wouldn\u0027t put the regex in the error message (since it\u0027s static), but I would echo the configured change name back out. So something like:\n\n fmt.Errorf(\"invalid \u0027gerritChangeName\u0027: %s\", cfg.GerritChangeName)",
+      "range": {
+        "startLine": 155,
+        "startChar": 45,
+        "endLine": 155,
+        "endChar": 67
+      },
+      "revId": "32921a66b76e8afa61866274a8755f7c8e814c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afca97cd_999bc613",
+        "filename": "ops/besadii/main.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-19T08:00:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "253fcaef_cdab419b",
       "range": {
         "startLine": 155,
         "startChar": 45,
