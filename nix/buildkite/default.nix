@@ -17,6 +17,9 @@ let
     foldl'
     getEnv
     hasAttr
+    hashString
+    isNull
+    isString
     length
     listToAttrs
     mapAttrs
@@ -54,6 +57,20 @@ in rec {
     then "Target has not changed."
     else false;
 
+  # Create build command for a derivation target.
+  mkBuildCommand = target: drvPath: concatStringsSep " " [
+    # First try to realise the drvPath of the target so we don't evaluate twice.
+    # Nix has no concept of depending on a derivation file without depending on
+    # at least one of its `outPath`s, so we need to discard the string context
+    # if we don't want to build everything during pipeline construction.
+    "nix-store --realise '${drvPath}' --add-root result --indirect"
+
+    # Since we don't gcroot the derivation files, they may be deleted by the
+    # garbage collector. In that case we can reevaluate and build the attribute
+    # using nix-build.
+    "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
+  ];
+
   # Create a pipeline step from a single target.
   mkStep = headBranch: parentTargetMap: target:
   let
@@ -62,19 +79,10 @@ in rec {
     shouldSkip' = shouldSkip parentTargetMap;
   in {
     label = ":nix: " + label;
+    key = hashString "sha1" label;
     skip = shouldSkip' label drvPath;
-
-    command = concatStringsSep " " [
-      # First try to realise the drvPath of the target so we don't evaluate twice.
-      # Nix has no concept of depending on a derivation file without depending on
-      # at least one of its `outPath`s, so we need to discard the string context
-      # if we don't want to build everything during pipeline construction.
-      "nix-store --realise '${drvPath}'"
-      # Since we don't gcroot the derivation files, they may be deleted by the
-      # garbage collector. In that case we can reevaluate and build the attribute
-      # using nix-build.
-      "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr target}' --show-trace)"
-    ];
+    command = mkBuildCommand target drvPath;
+    env.READTREE_TARGET = label;
 
     # Add a dependency on the initial static pipeline step which
     # always runs. This allows build steps uploaded in batches to
@@ -141,10 +149,20 @@ in rec {
     # Can be used for status reporting steps and the like.
     postBuildSteps ? []
   }: let
-    mkStep' = mkStep headBranch parentTargetMap;
-    steps =
+    mkStep' = target: rec {
+      step = mkStep headBranch parentTargetMap target;
+      extraSteps = attrValues
+        (mapAttrs (mkExtraStep step) (target.meta.ci.extraSteps or {}));
+    };
+
+    steps = map mkStep' drvTargets;
+
+    allSteps =
       # Add build steps for each derivation target.
-      (map mkStep' drvTargets)
+      (map (x: x.step) steps)
+
+      # Add all extra steps from derivation targets.
+      ++ (foldl' (acc: x: acc ++ x.extraSteps) [] steps)
 
       # Add additional steps (if set).
       ++ additionalSteps
@@ -157,7 +175,8 @@ in rec {
 
       # Run post-build steps for status reporting and co.
       ++ postBuildSteps;
-    chunks = pipelineChunks steps;
+
+    chunks = pipelineChunks allSteps;
   in runCommandNoCC "buildkite-pipeline" {} ''
     mkdir $out
     echo "Generated ${toString (length chunks)} pipeline chunks"
@@ -182,4 +201,89 @@ in rec {
       ];
     };
   }) drvTargets)));
+
+  # Implementation of extra step logic.
+  #
+  # Each target extra step is an attribute specified in
+  # `meta.ci.extraSteps`. Its attribute name will be used as the step
+  # name on Buildkite.
+  #
+  #   script (required): A shell script that will be run in the depot
+  #     checkout when this step is executed. Should be a derivation
+  #     resulting in a single file, e.g. through pkgs.writeShellScript.
+  #
+  #   label (optional): Optional, human-readable label for this step
+  #     to display in the Buildkite UI instead of the attribute name.
+  #
+  #   gated (optional): If set to a string, this step will need to be
+  #     confirmed by a human before running. The string is used as the
+  #     prompt.
+  #
+  #   postCheck (optional): If set to true, this step will run only
+  #     after the primary pipeline (i.e. all derivation builds) have
+  #     completed.
+  #
+  #   needsOutput (optional): If set to true, the build output of the
+  #     derivation to which this step is attached will be made
+  #     available with the out-link "result" in the build directory.
+  #
+  #   condition (optional): Any other Buildkite condition, such as
+  #     specific branch requirements, for this step.
+  #
+  #   alwaysRun (optional): If set to true, this step will always run,
+  #     even if its parent has not been rebuilt.
+  #
+  # Note that gated steps are independent of each other.
+
+  # Create a gated step in a step group, independent from any other
+  # steps.
+  mkGatedStep = { step, label, parent, prompt, condition }: {
+    group = label;
+    depends_on = parent.key;
+    skip = parent.skip or false;
+    "if" = condition;
+
+    steps = [
+      {
+        inherit prompt;
+        block = ":radio_button: Run ${label}? (from ${parent.env.READTREE_TARGET})";
+        "if" = condition;
+      }
+
+      step
+    ];
+  };
+
+  # Create the Buildkite configuration for an extra step, optionally
+  # wrapping it in a gate group.
+  mkExtraStep = parent: key: {
+    script,
+    label ? key,
+    gated ? false,
+    postCheck ? false,
+    needsOutput ? false,
+    condition ? null,
+    alwaysRun ? false
+  }@cfg: let
+    step = {
+      label = ":gear: ${label} (from ${parent.env.READTREE_TARGET})";
+      skip = if alwaysRun then false else parent.skip or false;
+      "if" = condition;
+
+      command = pkgs.writeShellScript "${key}-script" ''
+        set -ueo pipefail
+        ${lib.optionalString needsOutput parent.command}
+        exec ${script}
+      '';
+
+      depends_on =
+        (lib.optional (!alwaysRun && !needsOutput) [ parent.key])
+        ++ (lib.optional postCheck [ ":duck:" ]);
+    };
+  in if (isString gated)
+    then mkGatedStep {
+      inherit step label parent condition;
+      prompt = gated;
+    }
+    else step;
 }
